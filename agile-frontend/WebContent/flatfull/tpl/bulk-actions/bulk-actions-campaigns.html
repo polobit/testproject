@@ -5,12 +5,12 @@
         <form id="campaignsBulkForm" class="form-horizontal">
             <fieldset>
                       
-                    <legend>{{agile_translate "contacts-view" "add-contacts-bulk-to-campaign"}}</legend>  
+                    <legend>{{translate 'contacts-view' 'add-contacts-bulk-to-campaign'}}</legend>  
 <div class="control-group form-group">   
-                    <label class="control-label col-sm-3">{{agile_translate "contact-details" "select-campaign"}}<span class="field_req">*</span></label>
+                    <label class="control-label col-sm-3">{{translate 'contact-details' 'select-campaign'}} <span class="field_req">*</span></label>
                     <div class="controls col-sm-9">
                         <select class="campaignBulkSelect required form-control" id='campaignBulkSelect'>
-                            <option class="campaignBulkSelectOption" value="">Select..</option>
+                            <option class="campaignBulkSelectOption" value="">{{translate 'contact-details' 'select'}}</option>
                         </select>
                     </div>
                 </div>
@@ -18,8 +18,8 @@
 <div class="row">
 <div class="col-sm-offset-3 col-sm-9">
                 <div class="form-actions">          
-					<a href="#contacts" class="btn btn-sm btn-danger">{{agile_translate "contact-details" "CLOSE"}}</a>
-                    <a href="#" type="submit" id="addBulkTocampaign" class="btn btn-sm btn-primary">{{agile_translate "other" "add"}}</a> 
+					<a href="#contacts" class="btn btn-sm btn-danger">{{translate 'report-add' 'close'}}</a>
+                    <a href="#" type="submit" id="addBulkTocampaign" class="btn btn-sm btn-primary">{{translate 'portlets' 'add'}}</a> 
                     <span class="save-status"></span>
                 </div>
 </div>

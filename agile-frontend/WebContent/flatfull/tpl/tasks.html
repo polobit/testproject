@@ -2,7 +2,7 @@
 <header class="b-b m-b">
     <h3 class="inline-block m-t-none">
         <!--<span><i class="icon-edit"></i></span>--> 
-        {{agile_translate "tasks" "My Tasks"}}<small> {{count}}</small>
+        My Tasks<small> {{count}}</small>
         <span>         
         	<img border="0" src="{{getS3ImagePath '/img/help.png'}}" style="height:6px;vertical-align:top;" rel="popover" data-placement="right" data-content="Tasks are like to-dos. Result oriented. You can assign a category such as call, email etc and add them to your calendar." id="element" data-trigger="hover" />
         </span>
@@ -15,7 +15,7 @@
 {{#unless this.length}}
 <div class="slate m-t-sm" style="padding:5px 2px;">
     <div class="slate-content" style="text-align:center;">
-		<h4>{{agile_translate "portlets" "dashboard-tasks-title"}}</h4>
+		<h4>You have no tasks due</h4>
 	</div>
 </div>
 {{/unless}}
@@ -24,26 +24,26 @@
 <section>
     <form>
         <table class="table agile-ellipsis-dynamic overflow-hidden">
-            <div id="overdue-heading" style="display:none;"><b >{{agile_translate "tasks" "Overdue"}}</b>
+            <div id="overdue-heading" style="display:none;"><b >Overdue</b>
 			&nbsp<small class="count" count="0">(10)</small></div>
 			<colgroup><col width="30px"><col width="99%"></colgroup>
             <tbody id="overdue" style="display: inline;" route="task/" class="agile-edit-row"></tbody>
         </table>
         <table class="table hide agile-ellipsis-dynamic" style="overflow:hidden!important;">
-            <div id="today-heading" style="display: none"><b >{{agile_translate "calendar" "Today"}}</b>	
+            <div id="today-heading" style="display: none"><b >Today</b>	
 			&nbsp<small class="count" count="0">(10)</small></div>
 			<colgroup><col width="30px"><col width="99%"></colgroup>
             <tbody id="today" style="display: inline;" route="task/" class="agile-edit-row"></tbody>
         </table>
         <table class="table hide agile-ellipsis-dynamic" style="overflow:hidden!important;">
-            <div id="tomorrow-heading" style="display: none"><b >{{agile_translate "tasks" "Tomorrow"}}</b>
+            <div id="tomorrow-heading" style="display: none"><b >Tomorrow</b>
 			&nbsp<small class="count" count="0">(10)</small></div>
 			<colgroup><col width="30px"><col width="99%"></colgroup>
             <tbody id="tomorrow" style="display: inline;" route="task/" class="agile-edit-row"></tbody>
         </table>
         <table class="table hide agile-ellipsis-dynamic" style="overflow:hidden!important;">
 		<div id="next-week-heading" style="display: none">
-            <b >{{agile_translate "tasks" "Later"}}</b>
+            <b >Later</b>
 			&nbsp<small class="count" count="0">(10)</small></div>
 			<colgroup><col width="30px"><col width="99%"></colgroup>
             <tbody id="next-week" style="display: inline;" route="task/" class="agile-edit-row"></tbody>

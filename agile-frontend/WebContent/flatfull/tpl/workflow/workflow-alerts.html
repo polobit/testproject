@@ -13,7 +13,7 @@
     </div>
     <div class="modal-footer">
     <span class="contacts-export-csv-message m-r-xs"></span>
-    <a href="#" class="btn btn-sm btn-primary" data-dismiss="modal">{{agile_translate "admin-settings-integrations" "ok"}}</a>
+    <a href="#" class="btn btn-sm btn-primary" data-dismiss="modal">OK</a>
     </div>
 </div>
 </div>
@@ -42,7 +42,7 @@
 		</div>
 		<div class="modal-footer">
 			<span class="contacts-export-csv-message m-r-xs"></span>
-			<a href="#" class="btn btn-sm btn-primary" data-dismiss="modal">{{agile_translate "admin-settings-integrations" "ok"}}</a>
+			<a href="#" class="btn btn-sm btn-primary" data-dismiss="modal">OK</a>
 		</div>
 	</div>
 </div>
@@ -64,7 +64,7 @@
 		</div>
 		<div class="modal-footer">
 			<span class="m-r-xs"></span>
-			<a href="#" class="btn btn-sm btn-primary" data-dismiss="modal">{{agile_translate "admin-settings-integrations" "ok"}}</a>
+			<a href="#" class="btn btn-sm btn-primary" data-dismiss="modal">OK</a>
 		</div>
 	</div>
 </div>
@@ -85,7 +85,7 @@
                 		<div class="control-group form-group">
 	                		<div class="row">
 	                			<div class="col-md-5">
-		                    		<label class="control-label"><b>{{agile_translate "modals" "email"}}</b> <span class="field_req">*</span></label>
+		                    		<label class="control-label"><b>Email</b> <span class="field_req">*</span></label>
 		                    		<div class="controls">
 		                        		<span><input name="email" class="email form-control required" type="text" placeholder="Enter the From email address" value="{{email}}" autofocus></span>
 		                    		</div>
@@ -98,8 +98,8 @@
 		</div>
 		<div class="modal-footer">
 			<span class="m-r-xs"></span>
- 			<button type="button" class="btn btn-danger" data-dismiss="modal" id="verify-ignore" style="display:none;">{{agile_translate "contacts-view" "ignore"}}</button>
-			<a href="#" class="btn btn-sm btn-primary" id="verify-email-send">Send verification {{agile_translate "modals" "email"}}</a>
+ 			<button type="button" class="btn btn-danger" data-dismiss="modal" id="verify-ignore" style="display:none;">Ignore</button>
+			<a href="#" class="btn btn-sm btn-primary" id="verify-email-send">Send verification Email</a>
 		</div>
 	</div>
 </div>
@@ -112,7 +112,7 @@
     <div class="modal-content">
 		<div class="modal-header">
 			<button class="close" data-dismiss="modal">x</button>
-			<h3 class="modal-title"><i class="icon-edit"></i> {{agile_translate "campaigns" "share-with"}}</h3>
+			<h3 class="modal-title"><i class="icon-edit"></i> Share with</h3>
 		</div>
 		<div class="modal-body">
 				<form id="verify-email">
@@ -120,7 +120,7 @@
                 		<div class="control-group form-group">
 	                		<div class="row">
 	                			<div class="col-md-5">
-		                    		<label class="control-label"><b>{{agile_translate "modals" "email"}}</b> <span class="field_req">*</span></label>
+		                    		<label class="control-label"><b>Email</b> <span class="field_req">*</span></label>
 		                    		<div class="controls">
 		                        		<span><input name="email" id="emailId" onkeypress="return event.keyCode != 13;" class="email form-control required" type="text" placeholder="Enter the email address" autofocus></span>
 		                    		</div>
@@ -133,8 +133,8 @@
 		</div>
 		<div class="modal-footer">
 			<span class="m-r-xs"></span>
- 			<button type="button" class="btn btn-danger" data-dismiss="modal" id="verify-ignore" style="display:none;">{{agile_translate "contacts-view" "ignore"}}</button>
-			<a href="javascript:void(0)" class="btn btn-sm btn-primary" id="verify-email" onclick="createJSON()">{{agile_translate "deal-view" "done"}}</a>
+ 			<button type="button" class="btn btn-danger" data-dismiss="modal" id="verify-ignore" style="display:none;">Ignore</button>
+			<a href="javascript:void(0)" class="btn btn-sm btn-primary" id="verify-email" onclick="createJSON()">Done</a>
 		</div>
 	</div>
 </div>
@@ -155,8 +155,8 @@
   								<table  class="table table-condensed">
     	 							<thead>
 							      		<th class="col-xs-1"> Points </h>
-							      		<th class="col-xs-1"> Rules {{agile_translate "deal-view" "name"}}</th>
-							      		<th class="col-xs-10"> {{agile_translate "other" "description"}}</th>
+							      		<th class="col-xs-1"> Rules Name </th>
+							      		<th class="col-xs-10"> Description </th>
 							    	 </thead>
     								 <tbody>
     	  								{{#each reason}}
@@ -173,8 +173,8 @@
 					</div>
 				<div class="modal-footer" style="padding-right: 15px;">
 					<span class="m-r-xs"></span>
-					<span style="float: left;">Powered by Spamassass{{agile_translate "contacts-view" "in"}}</span>
-					<a href="#" class="btn btn-sm btn-primary" data-dismiss="modal">{{agile_translate "admin-settings-integrations" "ok"}}</a>
+					<span style="float: left;">Powered by Spamassassin</span>
+					<a href="#" class="btn btn-sm btn-primary" data-dismiss="modal">OK</a>
 				</div>
 			</div>
 		</div>
@@ -189,7 +189,7 @@
 					<button class="close" data-dismiss="modal">x</button>
 					<h3 class="modal-title">
 						<h6 id="popup-msg" style="margin:5px"><span style="color: green;">Campaign saved successfully</span></h6>
-						<i class="glyphicon glyphicon-arrow-right"></i> <strong> {{title}} </strong> Assign contact(s) to the {{agile_translate "contact-details" "campaign"}}</h3>
+						<i class="glyphicon glyphicon-arrow-right"></i> <strong> {{title}} </strong> Assign contact(s) to the Campaign</h3>
 				</div> 
 				<div class="modal-body">
 					<form id="workflow-save-popup-form" >
@@ -201,7 +201,7 @@
 								</div>
 								<div class="radio col-sm-6" style="margin-top:11px;" >
    							  		<label onclick="popupCampaignTrigger();">
-   								 		<i class="fa fa-bullseye icon-4x" style="margin-left: 40px;"></i><br> Add Trigger {{agile_translate "contact-details" "to-campaign"}}</label>
+   								 		<i class="fa fa-bullseye icon-4x" style="margin-left: 40px;"></i><br> Add Trigger to Campaign</label>
 								</div>
 							</div>
 						</fieldset>
@@ -209,10 +209,10 @@
 				</div>
 				<div class="modal-footer">
 					<div class="checkbox col-sm-6" style="margin-top:4px; margin-bottom:4px;">
-    					<label class="pull-left" onclick="hideCampaignPopup();"><input type="checkbox" id="campaign-save-popup" value="false">Don't show me aga{{agile_translate "contacts-view" "in"}}</label>
+    					<label class="pull-left" onclick="hideCampaignPopup();"><input type="checkbox" id="campaign-save-popup" value="false">Don't show me again</label>
 					</div>
   					<div class="col-sm-6">	
- 						<button type="button" class="btn btn-sm btn-primary" data-dismiss="modal" id="ok">{{agile_translate "contact-details" "CLOSE"}}</button>
+ 						<button type="button" class="btn btn-sm btn-primary" data-dismiss="modal" id="ok">Close</button>
   					</div>
   				</div>	
 			</div>
@@ -254,7 +254,7 @@
 		</div>
 		<div class="modal-footer">
 			<span class="contacts-export-csv-message m-r-xs"></span>
-			<a href="#" class="btn btn-sm btn-primary" data-dismiss="modal">{{agile_translate "admin-settings-integrations" "ok"}}</a>
+			<a href="#" class="btn btn-sm btn-primary" data-dismiss="modal">OK</a>
 		</div>
 	</div>
 </div>

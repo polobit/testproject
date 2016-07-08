@@ -11,20 +11,22 @@
 		<div class=" pull-left m-r-xs" style="display:inline;">
 			
 		</div>
-		<div class="pull-left"><a href="#" id="add-new-tag" class="btn btn-default btn-addon btn-sm"><i class="icon-plus-sign" ></i> {{agile_translate "web-rules" "add-tag"}}</a>
+		<div class="pull-left"><a href="#" id="add-new-tag" class="btn btn-default btn-addon btn-sm"><i class="icon-plus-sign" ></i> {{translate 'web-rules' 'add-tag'}}</a>
 		<label class="btn btn-default btn-sm m-l-xs allow_users_switch" id="disable_new_tags" >
 			{{#hasTagPermission}}
-		 	<span  id="disable_new_tags" > Disable {{agile_translate "widgets" "access"}}</span><input type="checkbox" id="new_tag_acl" class="left hidden" name="new_tag_acl" value="true" checked="checked"> 
+		 	<span  id="disable_new_tags" > Disable Access </span><input type="checkbox" id="new_tag_acl" class="left hidden" name="new_tag_acl" value="true" checked="checked"> 
 		 	{{else}}
 		 	
-<span  id="disable_new_tags" > Enable {{agile_translate "widgets" "access"}}</span><input type="checkbox" id="new_tag_acl" class="left hidden" name="new_tag_acl" value="true" checked="checked"> 
+<span  id="disable_new_tags" > Enable Access </span><input type="checkbox" id="new_tag_acl" class="left hidden" name="new_tag_acl" value="true" checked="checked"> 
 		 	{{/hasTagPermission}}
 			</label></div>
-		<div id="new_tag_field_block" style="display:none;" class="inline pull-right"><input id="new_tag" type="text" class="form-control pull-left m-r-sm w" placeholder="New Tag"/><a class="btn btn-info pull-left v-top  btn-sm" id="add_new_tag" href="#">{{agile_translate "other" "add"}}</a></div>
+		<div id="new_tag_field_block" style="display:none;" class="inline pull-right"><input id="new_tag" type="text" class="form-control pull-left m-r-sm w" placeholder="{{translate 'admin-settings-tags' 'new-tag'}}"/><a class="btn btn-info pull-left v-top  btn-sm" id="add_new_tag" href="#">Add</a></div>
 		<div class="clearfix"></div>
 	</div>
 	<div class="clearfix"></div>
-		
+		<div class="alert alert-warning" role="alert">
+	  		{{translate 'widgets' 'tag-note-desc'}}
+	 	</div>
 	</div>
 	<div class="col-md-3 data-block pull-right m-t-md m-r-n-md">
 	  		<h4>Important</h4> <p>We have made some changes to Tag management. Tag name should start with an alphabet and cannot contain special characters except underscore and space. Please review your tags and rename them accordingly.</p>
@@ -53,13 +55,13 @@
 
 </span>
 <span id="actions" class="agile-custom-hide text-xs">
-	<span><a class="close delete right" href="#">&{{agile_translate "contact-details" "times"}}</a></span>
+	<span><a class="close delete right" href="#">&times</a></span>
 	<span><a class="edit right" href="#"><i class="icon-pencil"></i></a></span>
 <span>
 </div>
 <div class="agile-custom-hide" id="editing">
 	<input type="text" class="edit-input input-medium form-control" value='{{this.tag}}' >  
-	<a class="btn btn-sm btn-default" id="add_milestone" href="#">{{agile_translate "other" "add"}}</a>
+	<a class="btn btn-sm btn-default" id="add_milestone" href="#">{{translate 'admin-settings-custom-fields' 'add'}}</a>
 </div>
 </span>
 </script>
@@ -93,7 +95,7 @@
 	<div class='col-md-8'>
 <div class="well">
 
-    		<legend>{{agile_translate "contact-edit" "tag"}}</legend>
+    		<legend>{{translate 'contact-edit' 'edit'}}</legend>
                     <div id="tag-cloud">
 						<ul id="tag-cloud-model-list"></ul>
                     </div>
@@ -108,7 +110,7 @@
 <div id="tag-solid-state" class="w-15em">
 	<a href="#" id="{{tag}}" data-toggle="popover" title="" data-content="And here's some amazing content. It's very engaging. right?" data-original-title="A Title"><span style="white-space: nowrap; text-overflow: ellipsis; ; overflow: hidden; width: 12em; display: inline-block;">{{this.tag}} </span></a>
 <span id="actions" class="agile-custom-hide text-xs">
-	<span><a class="delete right" href="#">&{{agile_translate "contact-details" "times"}}</a></span>
+	<span><a class="delete right" href="#">&times</a></span>
 	<span><a class="edit right" href="#"><i class="icon-pencil"></i></a></span>
 <span>
 </div>
@@ -120,7 +122,7 @@
 <span>
 <a href="#" class="tag1" data-trigger="click" data-toggle="popover" title="" data-content="And here's some amazing content. It's very engaging. right?" data-original-title="A Title"><span class="text-ellipsis inline-block w-12em"  count="{{availableCount}}">{{tag}}</a>
 <span id="actions" class="agile-custom-hide text-xs">
-	<span><a class="delete right" href="#">&{{agile_translate "contact-details" "times"}}</a></span>
+	<span><a class="delete right" href="#">&times</a></span>
 	<span><a class="edit right" href="#"><i class="icon-pencil"></i></a></span>
 </span>
 </span>

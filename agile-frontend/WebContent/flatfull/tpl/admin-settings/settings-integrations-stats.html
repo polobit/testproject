@@ -1,7 +1,7 @@
 
 <script type="text/html" id="admin-settings-integrations-stats-template">
 <div class="m-b-sm" id="account-stats">
-<h4>{{agile_translate "admin-settings-integrations" "account-stats"}}</h4>
+<h4>{{translate 'admin-settings-integrations' 'account-stats'}}</h4>
 <div class="row">
 <div class="col-md-6 b-r b-light">
 <div class="panel panel-default">
@@ -9,29 +9,30 @@
    
     <thead class="panel-heading">
         <tr>
-            <th style="width:46%" class="font-normal">{{agile_translate "deal-view" "name"}}</th>
-            <th style="width:54%" class="font-normal">{{agile_translate "admin-settings-stats" "count"}}<span class="text-right block m-t-n-md text-muted">{{agile_translate "admin-settings-stats" "your-plan-limits"}}</span></th>
+            <th style="width:46%" class="font-normal">{{translate 'other' 'name'}}</th>
+            <th style="width:54%" class="font-normal">{{translate 'admin-settings-stats' 'count'}} 
+            <span class="text-right block m-t-n-md text-muted">{{translate 'admin-settings-stats' 'your-plan-limits'}}</span></th>
         </tr>
     </thead>
     <tbody>
         <tr>
-            <td>{{agile_translate "admin-settings-stats" "contacts-and-companies"}}</td>
+            <td>{{translate 'admin-settings-stats' 'contacts-and-companies'}}</td>
             <td>{{contact_count}} <span class="text-right block m-t-n-md text-muted">{{getPlanLimits 'contactLimit'}}</span></td>
         </tr>
         <tr>
-            <td>{{agile_translate "deal-view" "Deals?"}}</td>
-            <td>{{deals_count}} <span class="text-right block m-t-n-md text-muted">{{agile_translate "admin-settings-stats" "unlimited"}}</span></td>
+            <td>{{translate 'deal-view' 'deals'}}</td>
+            <td>{{deals_count}} <span class="text-right block m-t-n-md text-muted">{{translate 'admin-settings-stats' 'unlimited'}}</span></td>
         </tr>
 		<tr>
-            <td>{{agile_translate "report-view" "campaigns"}}</td>
+            <td>{{translate 'report-view' 'campaigns'}}</td>
             <td>{{compaign_count}} <span class="text-right block m-t-n-md text-muted">{{getPlanLimits 'workflowLimit'}}</span></td>
         </tr>
         <tr>
-            <td>{{agile_translate "campaigns" "triggers"}}</td>
+            <td>{{translate 'campaigns' 'triggers'}}</td>
             <td>{{triggers_count}} <span class="text-right block m-t-n-md text-muted">{{getPlanLimits 'triggersLimit'}}</span></td>
         </tr>
 		<tr>
-            <td>{{agile_translate "web-rules" "web-rules"}}</td>
+            <td>{{translate 'web-rules' 'web-rules'}}</td>
             <td>{{webrule_count}} <span class="text-right block m-t-n-md text-muted">{{getPlanLimits 'webRuleLimit'}}</span></td>
         </tr>
     </tbody>
@@ -41,7 +42,7 @@
 </div>
 </div>		
 <div class="m-b-sm">
-<h4 class="h4 pull-left"> {{agile_translate "campaigns" "email-stats"}}</h4>
+<h4 class="h4 pull-left"> {{translate 'campaigns' 'email-stats'}} </h4>
 				<div  class="pull-right">
 					{{#if this.id}}Reputation {{{get_subaccount_reputation reputation}}}
 					{{/if}}
@@ -51,30 +52,30 @@
 		{{#unless _agile_email_gateway}}
 			{{#if_equals "paused" status}}
 				<div class="alert alert-danger m-t" role="alert">
-  					Important: Emails from your account are blocked due to poor reputation. Please contact our <a href="#contact-us">support</a> team if you wish to correct this.
+  					{{translate 'admin-settings-stats' 'emails-alert'}}
 				</div>
 			{{/if_equals}}
 		{{/unless}}
 		<div>
 		
 		{{#if_equals "SEND_GRID" _agile_email_gateway}}
-			<div class="text-md">SendGrid stats are shown <a class="text-info" href="https://sendgrid.com/statistics" target="_blank">{{agile_translate "contact-details" "here"}}</a></div><br/>
+			{{translate 'admin-settings-stats' 'sendgrid-msg'}}
 		{{/if_equals}}
 		{{!--SES Stats--}}
 		{{#if_equals "SES" _agile_email_gateway}}
-			<div class="text-md">Amazon SES stats are shown <a class="text-info" href="https://aws.amazon.com/" target="_blank">{{agile_translate "contact-details" "here"}}</a></div><br/>
+			{{translate 'admin-settings-stats' 'amazon-stats-msg'}}
 		{{else}}
 		<div class="row">
         	<div class="col-md-6 b-r b-light">
         	<div class="panel panel-default">
-            	<div class="panel-heading">{{agile_translate "portlets" "emails-sent"}}</div>
+            	<div class="panel-heading">{{translate 'portlets' 'emails-sent'}}</div>
             	
 				<table class="table table-bordered table-hover">
 					<tbody>
-						<tr><td>{{agile_translate "admin-settings-stats" "this-hour"}}</td><td>{{numberWithCommas sent_hourly}}</td></tr>
-						<tr><td>{{agile_translate "portlets" "this-week"}}</td><td>{{numberWithCommas sent_weekly}}</td></tr>
-						<tr><td>{{agile_translate "portlets" "this-month"}}</td><td>{{numberWithCommas sent_monthly}}</td></tr>
-						<tr><td>{{agile_translate "admin-settings-stats" "overall"}}</td><td>{{numberWithCommas sent_total}}</td></tr>
+						<tr><td>{{translate 'admin-settings-stats' 'this-hour'}}</td><td>{{numberWithCommas sent_hourly}}</td></tr>
+						<tr><td>{{translate 'portlets' 'this-week'}}</td><td>{{numberWithCommas sent_weekly}}</td></tr>
+						<tr><td>{{translate 'portlets' 'this-month'}}</td><td>{{numberWithCommas sent_monthly}}</td></tr>
+						<tr><td>{{translate 'admin-settings-stats' 'overall'}}</td><td>{{numberWithCommas sent_total}}</td></tr>
 					</tbody>
 				</table>
 				
@@ -82,14 +83,14 @@
         	</div>
         	<div class="col-md-6">
         	<div class="panel panel-default">
-            	<div class="panel-heading">Bounces (Last 30 Days)</div>
+            	<div class="panel-heading">{{translate 'admin-settings-stats' 'bounces-last-30-days'}}</div>
             	
 				<table class="table table-bordered table-hover">
 					<tbody>
-						<tr><td>{{agile_translate "campaigns" "hard-bounce"}}</td><td>{{numberWithCommas last_30_days.hard_bounces}}</td></tr>
-						<tr><td>{{agile_translate "campaigns" "soft-bounce"}}</td><td>{{numberWithCommas last_30_days.soft_bounces}}</td></tr>
-						<tr><td>{{agile_translate "admin-settings-stats" "rejects"}}</td><td>{{numberWithCommas last_30_days.rejects}}</td></tr>
-						<tr><td>{{agile_translate "campaigns" "spam-complaints"}}</td><td>{{numberWithCommas last_30_days.complaints}}</td></tr>
+						<tr><td>{{translate 'campaigns' 'hard-bounce'}}</td><td>{{numberWithCommas last_30_days.hard_bounces}}</td></tr>
+						<tr><td>{{translate 'campaigns' 'soft-bounce'}}</td><td>{{numberWithCommas last_30_days.soft_bounces}}</td></tr>
+						<tr><td>{{translate 'admin-settings-stats' 'rejects'}}</td><td>{{numberWithCommas last_30_days.rejects}}</td></tr>
+						<tr><td>{{translate 'admin-settings-stats' 'spam-complaints'}}</td><td>{{numberWithCommas last_30_days.complaints}}</td></tr>
 					</tbody>
 				</table>
 				
@@ -100,26 +101,27 @@
     	</div>
     	
 		<div class="m-b-sm"> 
-			<h4 class="h4"> {{agile_translate "admin-settings-stats" "sms-stats"}}</h4>
+			<h4 class="h4"> {{translate 'admin-settings-stats' 'sms-stats'}} </h4>
 			<span class="inline" ></span>
 		</div>
 		<div>
 					{{#unless Stats-Type}}
-					<div class="text-md">{{agile_translate "admin-settings-stats" "no-sms-gateway-configured"}}<a class="text-info" href="#integrations">{{agile_translate "admin-settings-stats" "configure-now"}}</a></div>
+					<div class="text-md">{{translate 'admin-settings-stats' 'no-sms-gateway-configured'}} <a class="text-info" href="#integrations">{{translate 'admin-settings-stats' 'configure-now'}}</a></div>
 					{{/unless}}
 		{{#if_equals "TWILIO" Stats-Type}}
 		
 		<div class="row">
         	<div class="col-md-6 b-r">
              <div class="panel panel-default">
-            	<div class="panel-heading">{{agile_translate "admin-settings-stats" "sms-sent"}}</div>
+            	<div class="panel-heading">{{translate 'admin-settings-stats' 'sms-sent'}}</div>
                  
 				<table class="table table-bordered table-hover bg-white">
 					<tbody>
-						<tr><td>{{agile_translate "calendar" "Today"}}</td><td>{{numberWithCommas Today}}</td></tr>
-						<tr><td>{{agile_translate "portlets" "yesterday"}}</td><td> {{numberWithCommas Yesterday}}</td></tr>
-						<tr><td>{{agile_translate "portlets" "this-month"}}</td><td>{{numberWithCommas ThisMonth}} </td></tr>
-						<tr><td>{{agile_translate "calendar" "Last Month"}}</td><td>{{numberWithCommas LastMonth}} </td></tr>
+						<tr><td>{{translate 'portlets' 'today'}}</td><td>{{numberWithCommas Today}}
+						</td></tr>
+						<tr><td>{{translate 'portlets' 'yesterday'}}</td><td> {{numberWithCommas Yesterday}}</td></tr>
+						<tr><td>{{translate 'portlets' 'this-month'}}</td><td>{{numberWithCommas ThisMonth}} </td></tr>
+						<tr><td>{{translate 'portlets' 'last-month'}}</td><td>{{numberWithCommas LastMonth}} </td></tr>
 					</tbody>
 				</table>
         	
@@ -127,20 +129,22 @@
             </div>
         	<div class="col-md-6">
             <div class="panel panel-default">
-            <div class="panel-heading">Delivery Status (Last 50 Messages)</div>
+            <div class="panel-heading">{{translate 'admin-settings-stats' 'delivery-status-last-50-messages'}}</div>
             
 				<table class="table table-bordered table-hover bg-white">
 					<tbody>
-						<tr><td>{{agile_translate "admin-settings-stats" "queued"}}</td><td>{{numberWithCommas Queued}} </td></tr>
-						<tr><td>{{agile_translate "admin-settings-stats" "delivered"}}</td><td> {{numberWithCommas Delivered}}</td></tr>
-						<tr><td>{{agile_translate "admin-settings-stats" "undelivered"}}<span class="v-top">
+						<tr><td>{{translate 'admin-settings-stats' 'queued'}}</td><td>{{numberWithCommas Queued}} </td></tr>
+						<tr><td>{{translate 'admin-settings-stats' 'delivered'}}</td><td> {{numberWithCommas Delivered}}</td></tr>
+						<tr><td>{{translate 'admin-settings-stats' 'undelivered'}}
+						<span class="v-top">
 						<img border="0" src="{{getS3ImagePath '/img/help.png'}}" class="question-tag-tiny v-top" rel="popover" data-placement="right" data-title:"="" 
-						data-content="This can happen for a number of reasons including carrier content filtering, availability of the destination handset, etc." 
+						data-content="{{translate 'admin-settings-stats' 'this-can-happen-for-number-of-reasons'}}" 
 						id="element" data-trigger="hover" data-original-title=""></span>
 						</td><td>{{numberWithCommas Undelivered}}</td></tr>
-						<tr><td>{{agile_translate "campaigns" "failed"}}<span class="v-top">
+						<tr><td>Failed
+						<span class="v-top">
 						<img border="0" src="{{getS3ImagePath '/img/help.png'}}" class="question-tag-tiny v-top" rel="popover" data-placement="right" data-title:"="" 
-						data-content="This can happen for various reasons including incorrect number, improper number format, queue overflows or  account suspensions. Twilio does not charge you for failed messages." 
+						data-content="{{translate 'admin-settings-stats' 'this-can-happen-for-various-reasons'}}" 
 						id="element" data-trigger="hover" data-original-title=""></span>
 						</td><td>{{numberWithCommas Failed}} </td></tr>
 					</tbody>
@@ -152,7 +156,7 @@
     	
 		{{/if_equals}}
 		{{#if_equals "PLIVO" Stats-Type}}
-		<div class="text-md">{{agile_translate "admin-settings-stats" "no-stats-available-for-plivo-sms-gateway"}}</div>			
+		<div class="text-md">{{translate 'admin-settings-stats' 'no-stats-available-for-plivo-sms-gateway'}}</div>			
 		{{/if_equals}}
 		</div>
 

@@ -3,7 +3,8 @@
 		<div class="wrapper-sm">
 
 			<div class="word-break p-n text-base" id="bria_no_phone">
-				{{agile_translate "widgets" "no-phone-number-associated"}}</div>
+				{{translate 'widgets' 'no-phone-number-associated'}}
+			</div>
 
 		</div>
 {{else}}
@@ -52,7 +53,8 @@
 						<i class="icon pull-left icon-phone text-muted text-md m-r-xs m-t-xxs v-middle twilio-widget-answer"></i>
 					{{/if_equals}}
 				
-<div class="pull-left text-sm">{{#if_equals duration "0"}}{{#if_equals direction "Missed"}}Call missed {{else}}Call unanswered{{/if_equals}}{{else}}Call connected{{/if_equals}}</div>
+<div class="pull-left text-sm">{{#if_equals duration "0"}}{{#if_equals direction "Missed"}}{{translate 'widgets' 'call-missed'}} {{else}}{{translate 'widgets' 'call-unanswered'}}{{/if_equals}}{{else}}{{translate 'widgets' 'call-connected'}}{{/if_equals}}
+</div>
 				
 <div class="pull-right">{{#is_string duration}}{{toProperFormat duration}}{{else}}0s{{/is_string}}</div>
 				
@@ -64,7 +66,8 @@
 		{{/each}}
 	{{else}}
 		<li class="list-group-item wrapper-md r-none b-l-none b-r-none text-center">
-	    	{{agile_translate "widgets" "sorry-we-could-not-find-any-call-data"}}</li>
+	    	{{translate 'widgets' 'sorry-we-could-not-find-any-call-data'}}
+		</li>
 	{{/if}}
 
 
@@ -77,28 +80,31 @@
 	<form class="p-xs" id="bria_login_form" name="bria_login_form" method="post">
     	<fieldset>
 				<p class="m-t-sm" style=" margin: 0px;margin-bottom: 20px;">
-                    {{agile_translate "widgets" "make-and-receive-calls-using-your-bria-client"}}</p>	
+                    {{translate 'widgets' 'make-and-receive-calls-using-your-bria-client'}}
+			  </p>	
 
 			  
 			<p style="font-size: 13px;margin-bottom: 15px">
-				{{agile_translate "widgets" "please-follow-these-steps"}}</p>
+				{{translate 'widgets' 'please-follow-these-steps'}}
+			</p>
 
 				<div class="m-t-sm m-b-none text-sm" style="font-size: 12px;">
-				<p>1) Agile needs an executable on your Windows PC to communicate with Bria. You can download it <a href="#" class="text-info" target="_blank" id="downloadCallJar" style="color:red;"> {{agile_translate "widgets" "here"}}</a> 
-				<span>*&nbsp;</span><span style="font-size: 9px;color:grey;">{{agile_translate "widgets" "support-for-windows-only"}}</span>
+				<p>{{translate 'widgets' 'bria-download-desc'}} <a href="#" class="text-info" target="_blank" id="downloadCallJar" style="color:red;"> {{translate 'widgets' 'here'}}</a> 
+				<span>*&nbsp;</span><span style="font-size: 9px;color:grey;">{{translate 'widgets' 'support-for-windows-only'}}</span>
 				</p>
-  				<p>2) Save the widget by clicking on the save button below. </p>
-				<p>3) Open Bria executable and follow the steps.</p>
+  				<p>{{translate 'widgets' 'bria-desc-2'}} </p>
+				<p>{{translate 'widgets' 'bria-desc-3'}}</p>
 				</div>
 
 
 
               	<div style="margin-top: 18px">
 			<p style="font-size: 13px; margin-top:5px;">
-				{{agile_translate "widgets" "bria-desc-4"}}</p>
+				{{translate 'widgets' 'bria-desc-4'}}	
+			</p>
 				<div class="text-center">
-				<a href="#add-widget" class="btn btn-default btn-sm ml_5">{{agile_translate "other" "cancel"}}</a>
-				<a href="#" id="save_prefs" class="save-agile-widget btn btn-sm btn-primary">{{agile_translate "modals" "save"}}</a>
+				<a href="#add-widget" class="btn btn-default btn-sm ml_5">{{translate 'other' 'cancel'}}</a>
+				<a href="#" id="save_prefs" class="save-agile-widget btn btn-sm btn-primary">{{translate 'portlets' 'save'}}</a>
 				</div>
               </div>
 

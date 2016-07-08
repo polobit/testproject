@@ -4,9 +4,9 @@
 <div class="row">
     <div class="col-sm-12 col-md-12">
         
-            <h3 class="pull-left font-thin h3">{{agile_translate "web-rules" "web-rules"}}</h3>
+            <h3 class="pull-left font-thin h3">{{translate 'web-rules' 'web-rules'}}</h3>
             <div class="pull-right">
-   <a href="#webrules-templates" class="btn btn-sm btn-default btn-addon "><span><i class="fa fa-plus-circle"></i></span>  {{agile_translate "web-rules" "add-web-rule"}}</a>
+   <a href="#webrules-templates" class="btn btn-sm btn-default btn-addon "><span><i class="fa fa-plus-circle"></i></span>  {{translate 'web-rules' 'add-web-rule'}}</a>
             </div>
 			<div class="clearfix"></div>
         
@@ -20,13 +20,13 @@
         {{#if this.length}}
 		{{add_tag "Web Rules"}}
 		<div class="panel panel-default">
-			<div class="panel-heading">{{agile_translate "web-rules" "web-rules-list"}}</div>
+			<div class="panel-heading">{{translate 'web-rules' 'web-rules-list'}}</div>
             <div class="table-responsive">
         	<table class="table table-bordered table-striped showCheckboxes no-sorting m-b-none panel agile-table table-layout-mob-view" url="core/api/webrule/bulk">
 				<thead>
              	   <tr>
-               	 	    <th style="width:40%">{{agile_translate "deal-view" "name"}}</th>
-						<th style="width:40%">{{agile_translate "web-rules" "action"}}</th>
+               	 	    <th style="width:40%">{{translate 'other' 'name'}}</th>
+						<th style="width:40%">{{translate 'web-rules' 'action'}}</th>
 						<th style="width:10%"></th>
 						<th style="width:10%"></th>
               	  </tr>
@@ -43,10 +43,11 @@
  	           			<img alt="Clipboard" src="{{getS3ImagePath '/img/clipboard.png'}}">
 					</div>
 					<div class="box-right">
-            			<h4 class="m-t-none font-thin">{{agile_translate "web-rules" "engage-visitors-on-website"}}</h4>
-            			<div class="text">Define web rules and engage your website visitors with smart popups, or perform automatic actions when contacts do (or don't do) something in your application or website. Checkout the <a href="https://github.com/agilecrm/agile-popups">{{agile_translate "web-rules" "documentation"}}</a></div>
-            			<a href="#webrules-templates" class="m-t-xs btn blue btn-slate-action btn-info btn-addon btn-sm"><i class="fa fa-plus-circle"></i>  {{agile_translate "web-rules" "add-web-rule"}}</a><br><br>
-						<p>For Web Rules to work, please copy and paste the code below on your web pages before the <code class="text-black">&lt;/body&gt;</code> {{agile_translate "web-rules" "tag"}}</p>
+            			<h4 class="m-t-none font-thin">{{translate 'web-rules' 'engage-visitors-on-website'}}</h4>
+            			<div class="text">{{translate 'web-rules' 'define-web-rules-and-engage-your-website'}} <a href="https://github.com/agilecrm/agile-popups">{{translate 'web-rules' 'documentation'}}</a></div>
+            			<a href="#webrules-templates" class="m-t-xs btn blue btn-slate-action btn-info btn-addon btn-sm"><i class="fa fa-plus-circle">
+                        </i>  {{translate 'web-rules' 'add-web-rule'}}</a><br><br>
+						<p>{{translate 'web-rules' 'web-rules-to-work'}} <code class="text-black">&lt;/body&gt;</code> {{translate 'web-rules' 'tag'}}</p>
 						<div id="whitelist-disabled"><!--<a class="right btn" id="api_track_webrules_code_icon" style="margin:5px 10px 0px 0px;cursor:pointer;"><i class="icon-copy"></i></a>-->
 <pre class="prettyprint" id="api_track_webrules_code">
 &lt;script type="text/javascript" src="https://{{getCurrentDomain}}.agilecrm.com/stats/min/agile-min.js"&gt;
@@ -91,8 +92,9 @@
     <div class="col-md-3">
         
             <h4 class="m-t-none h4 m-b-sm">
-                {{agile_translate "web-rules" "setup-tracking-code"}}</h4>
-			<div>To start using Web Rules, please setup our <a href="#analytics-code/analytics">tracking code</a>.</div>
+                {{translate 'web-rules' 'setup-tracking-code'}}
+            </h4>
+			<div>{{translate 'web-rules' 'to-start-using-web-rules'}} <a href="#analytics-code/analytics">{{translate 'admin-settings-api-analytics' 'tracking-code'}}</a>.</div>
             <br>
             {{#if this.length}}
 			<p>
@@ -105,15 +107,15 @@
 		<br>
         {{/if}}
             <h4 class="m-t-none h4 m-b-sm">
-                What are Web Rules?
+                {{translate 'web-rules' 'what-are-web-rules'}}
             </h4>
            
             <p>
-{{agile_translate "web-rules" "web-rules-desc-1"}}<br><br>
-{{agile_translate "web-rules" "web-rules-desc-2"}}</p>
+{{translate 'web-rules' 'web-rules-desc-1'}} <br><br>
+{{translate 'web-rules' 'web-rules-desc-2'}}</p>
 <p></p>
 <img src="{{getS3ImagePath '/img/web-rules/web-grabbers-demo.png'}}" class="img-responsive">
-<div class="p-t-sm"><center><a href="https://github.com/agilecrm/agile-popups" target="_blank" class="text-info">{{agile_translate "web-rules" "get-started"}}</a></center></div>
+<div class="p-t-sm"><center><a href="https://github.com/agilecrm/agile-popups" target="_blank" class="text-info">{{translate 'web-rules' 'get-started'}}</a></center></div>
         </div>
     </div>
 </div>
@@ -132,7 +134,7 @@
 <td>
 <div>
 {{#if disabled}} 
-	<label class="label label-danger m-b-none">{{agile_translate "campaigns" "disabled"}}</label>
+	<label class="label label-danger m-b-none">{{translate 'web-rules' 'disabled'}}</label>
 {{/if}}
 </div>
 </td>

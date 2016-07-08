@@ -1,21 +1,22 @@
 <!-- Cusrom fields add modal -->
 <div id="custom-field-modal"></div>
 <!-- New (Contact) Modal views -->
-<div class="modal  fade" id="companyModal">
+<script type="text/html" id="new-company-modal-template">
   <div class="modal-dialog">
     <div class="modal-content">
     <div class="modal-header">
         <button class="close" data-dismiss="modal">&times;</button>
-        <h3 class="modal-title">&nbsp;{{agile_translate "prefs-settings" "new-company"}}</h3>
+        <h3 class="modal-title">&nbsp;{{translate 'prefs-settings' 'new-company'}}</h3>
     </div>
     <div class="modal-body">
         <form id="companyForm" name="companyForm" method="post" class="form-horizontal">
             <fieldset>
                 
                 <div class="control-group form-group">
-                    <label class="control-label col-sm-3">{{agile_translate "deal-view" "name"}}<span class="field_req">*</span></label>
+                    <label class="control-label col-sm-3">{{translate 'other' 'name'}}
+                    <span class="field_req">*</span></label>
                     <div class="controls col-sm-7">
-                        <input name="name" type="text" field="test company" class="required form-control field_length" max_len="100" id="company_name" placeholder="Company Name" />
+                        <input name="name" type="text" field="test company" class="required form-control field_length" max_len="100" id="company_name" placeholder="{{translate 'modals' 'company-name'}}" />
                     </div>
                 </div>
                 <div class="row">
@@ -23,7 +24,7 @@
                     </div>
                 </div>
                 <div class="control-group form-group">
-                    <label class="control-label col-sm-3">{{agile_translate "widgets" "url"}}</label>
+                    <label class="control-label col-sm-3">{{translate 'modals' 'url'}}</label>
                     <div class="controls col-sm-7">
                         <input class="input-large form-control field_length" max_len="500" name="url" type="text" id="company_url" placeholder="http://www." />
                     </div>
@@ -35,14 +36,14 @@
     </div>
  <div class="modal-footer">
     	<span class="form-action-error"></span>
-        <a href="#continue-company" class="btn btn-sm btn-default" id="continue-company">Continue
-        Editing</a> 
-        <a href="#" class="save btn btn-sm btn-primary" id="company_validate">{{agile_translate "modals" "save"}}</a>
+        <a href="#continue-company" class="btn btn-sm btn-default" id="continue-company">{{translate 'modals' 'continue-editing'}}</a> 
+        <a href="#" class="save btn btn-sm btn-primary" id="company_validate">{{translate 'modals' 'save'}}
+        </a>
         <span class="save-status"></span>
     </div>
     </div>
 </div>
-</div>
+</script>
 
 <!-- End of Modal views -->
 	

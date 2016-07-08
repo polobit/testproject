@@ -3,34 +3,34 @@
 <div class="col-md-8">
 	<div class="tab-content wrapper-md">
 	<div class="panel panel-default">
-	<div class="panel-heading"><h4 class="h4">{{agile_translate "contacts-view" "add-tags-to-selected-contacts"}}</h4></div>
+	<div class="panel-heading"><h4 class="h4">{{translate 'contacts-view' 'add-tags-to-selected-contacts'}}</h4></div>
 	<div class="panel-body">
         <form id="tagsBulkForm" class="form-horizontal">
             <fieldset>
                 <div class="control-group form-group">         
-                    <label class="control-label col-sm-2">Add {{agile_translate "web-rules" "tag"}}<span class="field_req">*</span></label>
+                    <label class="control-label col-sm-2">{{translate 'contacts-view' 'add-tags'}} 
+                    <span class="field_req">*</span></label>
                     <div class="controls col-sm-10">
                         <div class="pull-left">
                         <ul name="tags" class= "tagsinput tags p-n"></ul>
                         </div>              
-                        <input name="tags" type="text" id="addBulkTags" class="tags-typeahead form-control" placeholder="Enter tags separated by comma"/>
-						<span class="error-tags" style="display:none;color:red;">{{agile_translate "validation-msgs" "this-field-is-required"}}</span>
+                        <input name="tags" type="text" id="addBulkTags" class="tags-typeahead form-control" placeholder="{{translate 'portlets' 'tags-desc'}}"/>
+						<span class="error-tags" style="display:none;color:red;">{{translate 'prefs-email-templates' 'this-field-is-required'}}</span>
 						<input class="hide"/>      
               		</div>
                 </div>
-				<div class="invalid-tags" style="display:none;color:red;">{{agile_translate "contact-edit" "invalid-tag"}}</div>
+				<div class="invalid-tags" style="display:none;color:red;">{{translate 'contact-edit' 'invalid-tag'}}</div>
               
-<hr class="m-t-none">
-<div class="row">
-<div class="col-sm-offset-2 col-sm-10">
-  <div class="form-actions">       
-					<a href="#contacts" class="btn btn-default btn-sm">{{agile_translate "contact-details" "CLOSE"}}</a>   
-                    <a href="#" type="submit" id="addTagsToContactsBulk" class="btn btn-primary btn-sm">{{agile_translate "web-rules" "add-tag"}}</a> 
+                <hr class="m-t-none">
+                <div class="row">
+                <div class="col-sm-offset-2 col-sm-10">
+                  <div class="form-actions">       
+					<a href="#contacts" class="btn btn-default btn-sm">{{translate 'contact-details' 'close'}}</a>   
+                    <a href="#" type="submit" id="addTagsToContactsBulk" class="btn btn-primary btn-sm">{{translate 'web-rules' 'add-tag'}}</a> 
                     <span class="save-status"></span>
-              
-</div>
-</div>
-</div>
+                </div>
+                </div>
+                </div>
             </fieldset>
         </form>
     </div>
@@ -45,29 +45,29 @@
 <div class="col-md-8">
     <div class="tab-content wrapper-md">
     <div class="panel panel-default">
-    <div class="panel-heading"><h4 class="h4">{{agile_translate "companies-view" "add-tags-to-selected-companies"}}</h4></div>
+    <div class="panel-heading"><h4 class="h4">{{translate 'companies-view' 'add-tags-to-selected-companies'}}</h4></div>
     <div class="panel-body">
         <form id="tagsBulkForm" class="form-horizontal">
             <fieldset>
                 <div class="control-group form-group">         
-                    <label class="control-label col-sm-2">Add {{agile_translate "web-rules" "tag"}}<span class="field_req">*</span></label>
+                    <label class="control-label col-sm-2">{{translate 'contacts-view' 'add-tags'}} <span class="field_req">*</span></label>
                     <div class="controls col-sm-10">
                         <div class="pull-left">
                         <ul name="tags" class= "tagsinput tags p-n"></ul>
                         </div>              
-                        <input name="tags" type="text" id="addBulkTags" class="tags-typeahead form-control" placeholder="Enter tags separated by comma"/>
-                        <span class="error-tags" style="display:none;color:red;">{{agile_translate "validation-msgs" "this-field-is-required"}}</span>
+                        <input name="tags" type="text" id="addBulkTags" class="tags-typeahead form-control" placeholder="{{translate 'portlets' 'tags-desc'}}"/>
+                        <span class="error-tags" style="display:none;color:red;">{{translate 'prefs-email-templates' 'this-field-is-required'}}</span>
                         <input class="hide"/>      
                     </div>
                 </div>
-                <div class="invalid-tags" style="display:none;color:red;">{{agile_translate "contact-edit" "invalid-tag"}}</div>
+                <div class="invalid-tags" style="display:none;color:red;">{{translate 'contact-edit' 'invalid-tag'}}</div>
               
 <hr class="m-t-none">
 <div class="row">
 <div class="col-sm-offset-2 col-sm-10">
   <div class="form-actions">       
-                    <a href="#companies" class="btn btn-default btn-sm">{{agile_translate "contact-details" "CLOSE"}}</a>   
-                    <a href="#" type="submit" id="addTagsToContactsBulk" class="btn btn-primary btn-sm">{{agile_translate "web-rules" "add-tag"}}</a> 
+                    <a href="#companies" class="btn btn-default btn-sm">{{translate 'contact-details' 'close'}}</a>   
+                    <a href="#" type="submit" id="addTagsToContactsBulk" class="btn btn-primary btn-sm">{{translate 'web-rules' 'add-tag'}}</a> 
                     <span class="save-status"></span>
               
 </div>

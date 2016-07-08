@@ -2,8 +2,10 @@
 <div class="wrapper-md lter bg-light b-b">
 	<div class="row">
     	<div class="col-md-12">
-        	<h3 class="pull-left font-thin h3">{{agile_translate "portlets" "dashboards"}}</h3>
-            <a href="#add-dashboard" class="btn btn-sm btn-default right" id="addDashboard"><span><i class='icon-plus-sign'/></span>  {{agile_translate "portlets" "add-dashboard"}}</a>
+        	<h3 class="pull-left font-thin h3">{{translate 'portlets' 'dashboards'}}</h3>
+            <a href="#add-dashboard" class="btn btn-sm btn-default right" id="addDashboard">
+            <span><i class='icon-plus-sign'/></span>  {{translate 'portlets' 'add-dashboard'}}
+            </a>
             <div class="clearfix"></div>
            
         </div>
@@ -18,8 +20,8 @@
 	        			<table class="table table-bordered showCheckboxes agile-table panel table-layout-mob-view" url="core/api/dashboards/bulk" id="dashboard-list">  
 	            			<thead>
 	                			<tr>   
-	                    			<th style="width:50%">{{agile_translate "deal-view" "name"}}</th>
-	                    			<th style="width:25%">{{agile_translate "other" "created-time"}}</th>
+	                    			<th style="width:50%">{{translate 'contacts-view' 'name'}}</th>
+	                    			<th style="width:25%">{{translate 'other' 'created-time'}}</th>
 	                			</tr>
 	            			</thead>
 	            			<tbody id='dashboard-model-list' route='edit-dashboard/'></tbody>
@@ -32,9 +34,9 @@
     	<div class='col-md-3'>
         	<div class="wrapper" id='addview'>
              	<h4 class="m-t-none m-b-sm">
-              		What are User-Defined Dashboards?
+              		{{translate 'portlets' 'what-are-user-defined-dashboards'}}
              	</h4>
-            	<p>{{agile_translate "portlets" "user-defined-dashboards-desc"}}</p>
+            	<p>{{translate 'portlets' 'user-defined-dashboards-desc'}}</p>
         	</div>
     	</div>
 	</div>

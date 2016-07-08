@@ -4,7 +4,7 @@
 	<div class="col-md-10">
 <div class="panel panel-default">
 <div class="panel-heading">
-			<div class="text-lg">{{agile_translate "plan-and-upgrade" "invoices"}}</div>
+			<div class="text-lg">Invoices</div>
 		</div>
 <div class="row">
     <div class="col-md-12">
@@ -12,9 +12,9 @@
         <table class="table table-striped agile-table" id="sort-table">
             <thead>
                 <tr>
-                    <th style="padding-left:15px;">{{agile_translate "portlets" "plan"}}</th>
-                    <th style="padding-left:15px;">{{agile_translate "plan-and-upgrade" "bill-date"}}</th>
-                    <th style="padding-left:15px;">{{agile_translate "plan-and-upgrade" "amount"}}</th>
+                    <th style="padding-left:15px;">Plan</th>
+                    <th style="padding-left:15px;">Bill Date</th>
+                    <th style="padding-left:15px;">Amount</th>
                 </tr>
             </thead>
 
@@ -71,7 +71,7 @@ ${{numeric_operation ../../amountDue 100 "/"}}
     </td>
 {{/if_greater}}
 {{else}}
-<div>No Recent {{agile_translate "campaigns" "payments"}}</div>
+<div>No Recent Payments</div>
 {{/each}}
 </script>
 
@@ -79,10 +79,10 @@ ${{numeric_operation ../../amountDue 100 "/"}}
         <table class="table table-striped" id="sort-table">
             <thead>
                 <tr>
-                    <th>{{agile_translate "other" "description"}}</th>
-                    <th>From {{agile_translate "contacts-view" "date"}}</th>
-                    <th>To {{agile_translate "contacts-view" "date"}}</th>
-                    <th>{{agile_translate "plan-and-upgrade" "amount"}}</th>
+                    <th>Description</th>
+                    <th>From Date</th>
+                    <th>To Date</th>
+                    <th>Amount</th>
                 </tr>
             </thead>
             <tbody id="invoice-partial-model-list" class="model-list-cursor">

@@ -3,24 +3,25 @@
 <div class="row">
     <div class="col-md-12">
         
-			<h4 class="pull-left font-light h4">Active {{agile_translate "report-view" "subscribers"}}<!-- <small> - <span id="subscribers-campaign-name"></span></small>--> 
+			<h4 class="pull-left font-light h4">Active Subscribers
+				<!-- <small> - <span id="subscribers-campaign-name"></span></small>--> 
 				<span class="badge bg-primary">{{subscribers_count}}</span>
 			</h3>
             <div class="pull-right m-b-sm">
 				<div class="btn-group">
-  					<a class="btn btn-sm btn-default m-l-xs">{{get_subscribers_type_from_hash}} {{agile_translate "report-view" "subscribers"}}</a>
+  					<a class="btn btn-sm btn-default m-l-xs">{{get_subscribers_type_from_hash}} Subscribers</a>
   					<button class="btn btn-sm dropdown-toggle btn-default" data-toggle="dropdown">
     					<span class="caret"></span>
   					</button>
   					<ul class="dropdown-menu" role="menu">
-    					<li><a href="#workflow/all-subscribers/{{get_id_from_hash}}">{{agile_translate "portlets" "All"}}</a></li>
-						<li><a href="#workflow/active-subscribers/{{get_id_from_hash}}">{{agile_translate "deal-view" "active"}}</a></li>
-						<li><a href="#workflow/completed-subscribers/{{get_id_from_hash}}">{{agile_translate "portlets" "completed"}}</a></li>
+    					<li><a href="#workflow/all-subscribers/{{get_id_from_hash}}">All</a></li>
+						<li><a href="#workflow/active-subscribers/{{get_id_from_hash}}">Active</a></li>
+						<li><a href="#workflow/completed-subscribers/{{get_id_from_hash}}">Completed</a></li>
                         <li><a href="#workflow/removed-subscribers/{{get_id_from_hash}}">Removed</a></li>
-                        <li><a href="#workflow/unsubscribed-subscribers/{{get_id_from_hash}}">{{agile_translate "contacts-view" "unsubscribed"}}</a></li>
-                        <li><a href="#workflow/hardbounced-subscribers/{{get_id_from_hash}}">{{agile_translate "contacts-view" "hard-bounced"}}</a></li>
-						<li><a href="#workflow/softbounced-subscribers/{{get_id_from_hash}}">{{agile_translate "contacts-view" "soft-bounced"}}</a></li>
-						<li><a href="#workflow/spam-reported-subscribers/{{get_id_from_hash}}">{{agile_translate "contacts-view" "spam-reported"}}</a></li>
+                        <li><a href="#workflow/unsubscribed-subscribers/{{get_id_from_hash}}">Unsubscribed</a></li>
+                        <li><a href="#workflow/hardbounced-subscribers/{{get_id_from_hash}}">Hard Bounced</a></li>
+						<li><a href="#workflow/softbounced-subscribers/{{get_id_from_hash}}">Soft Bounced</a></li>
+						<li><a href="#workflow/spam-reported-subscribers/{{get_id_from_hash}}">Spam Reported</a></li>
 					</ul>
 				</div>
 			</div>
@@ -41,13 +42,13 @@
         	<div class="data-container">
             	<div class="table-responsive m-t-sm">
             	<div class="panel panel-default">
-            	<div class="panel-heading">Active Subscribers {{agile_translate "admin-settings-custom-fields" "LIST"}}</div>
+            	<div class="panel-heading">Active Subscribers List</div>
             	<table class="table table-striped  panel agile-table showCheckboxes" url="core/api/bulk/update?workflow_id={{get_id_from_hash}}&action_type=REMOVE_ACTIVE_SUBSCRIBERS" id="active-campaign">
                 	<thead>
                     	<tr>
-                        	<th style="width:40%;" class="header">{{agile_translate "contact-details" "Contact"}}</th>
-                        	<th style="width:25%;" class="header">{{agile_translate "campaigns" "campaign-date"}}</th>
-                        	<th style="width:30%;" class="header">{{agile_translate "report-view" "campaigns"}}</th>
+                        	<th style="width:40%;" class="header">Contact</th>
+                        	<th style="width:25%;" class="header">Campaign Date</th>
+                        	<th style="width:30%;" class="header">Campaigns</th>
                     	</tr>
                 	</thead>
                 	<tbody id="workflow-active-contacts-model-list" route="contact/">

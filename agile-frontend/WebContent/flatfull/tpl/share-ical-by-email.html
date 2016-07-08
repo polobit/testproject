@@ -4,14 +4,14 @@
     <div class="modal-content">
 		<div class="modal-header">
             <button class="close" data-dismiss="modal">x</button>
-			<h3 class="modal-title"><i class="icon-envelope-alt"></i> Mail your Calendar Feed {{agile_translate "widgets" "url"}}</h3>
+			<h3 class="modal-title"><i class="icon-envelope-alt"></i> Mail your Calendar Feed URL</h3>
 		</div>
 		<div class="modal-body">
 		<form id='shareIcalMailForm' name="shareIcalMailForm" class="form-horizontal">
 			<fieldset>
 				<input type="hidden" name="from" value="{{email}}"/>
 				<div class="control-group">
-					<label class="control-label">{{agile_translate "other" "to"}}<span
+					<label class="control-label">To<span
 						class="field_req">*</span></label>
 					<div class="controls ">
 						<input type="text" class="email required input-xlarge form-control" name="to"
@@ -19,7 +19,7 @@
 					</div>
 				</div>
 				<div class="control-group">
-					<label class="control-label">{{agile_translate "widgets" "subject"}}<span
+					<label class="control-label">Subject <span
 						class="field_req">*</span></label>
 					<div class="controls">
 						<input type="text" class="required input-xlarge form-control" name="subject"
@@ -27,7 +27,7 @@
 					</div>
 				</div>
 				<div class="control-group">
-					<label class="control-label">{{agile_translate "other" "message"}}<span
+					<label class="control-label">Message <span
 						class="field_req">*</span></label>
 					<div class="controls">
 						<textarea class="required input-xlarge form-control w-full" rows="14" name="body" id="body" placeholder="Description">Sync your AgileCRM Calendar with Apple iCal, Google Calendar, Microsoft Outlook 2007 (or later) or another application that supports iCalendar format using the url below. <br/><br/>{{ical_url}}</textarea>
@@ -37,8 +37,8 @@
 		</form>
         </div>
 		<div class="modal-footer">
-			<a href="#" data-dismiss="modal" class="btn btn-sm btn-default">{{agile_translate "contact-details" "CLOSE"}}</a>
-            <a href="#" id="shareIcalMail" class="save btn btn-sm btn-primary">{{agile_translate "tasks" "Send"}}</a>
+			<a href="#" data-dismiss="modal" class="btn btn-sm btn-default">Close</a>
+            <a href="#" id="shareIcalMail" class="save btn btn-sm btn-primary">Send</a>
 			&nbsp;&nbsp;<span id="msg"></span>
 		</div>
 </div>

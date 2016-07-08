@@ -18,10 +18,10 @@
 			{{/if_equals}}
 		</div>
 		<div class="row-fluid">
-			<a href="#call" class="btn btn-sm btn-default pull-right" id="twilio_call" style="display:none;"><i class="icon-phone"></i>{{agile_translate "admin-settings-tasks" "call"}}</a>
+			<a href="#call" class="btn btn-sm btn-default pull-right" id="twilio_call" style="display:none;"><i class="icon-phone"></i>Call</a>
 			<a href="#hangup" class="btn btn-sm btn-danger pull-right" id="twilio_hangup" style="display:none;">Hang up</a>
             <a href="#dialpad" class="btn btn-sm btn-default pull-right m-r-xs" id="twilio_dialpad" style="display:none;">Dialpad</a>
-			<a href="#note" class="right contact-add-note m-xs" id="twilio_note" style="display:none;">{{agile_translate "deal-view" "add-note"}}</a>
+			<a href="#note" class="right contact-add-note m-xs" id="twilio_note" style="display:none;">Add Note</a>
 		</div>
 
 
@@ -87,7 +87,8 @@
 		{{/each}}
 	{{else}}
 		<li class="p-sm r-none b-l-none b-r-none">
-	    	No {{agile_translate "report-view" "calls"}}</li>
+	    	No Calls
+		</li>
 	{{/if}}
 </script>
 
@@ -100,7 +101,7 @@
 				
 				<div class="control-group" ><div class="controls"><input type="text" placeholder="Enter number" name="twilio_from" id="twilio_from" onkeydown="if (event.keyCode == 13) { event.preventDefault(); }" class="required form-control" style="width:90%" maxlength="15"/></div</div>	
 				<p>You will receive a verification call asking for a code. Enter the code you see after clicking verify.</p>
-				<a href="#verify" id="twilio_verify" class="btn btn-sm btn-default text-l-none">{{agile_translate "landing-pages" "verify"}}</a>	
+				<a href="#verify" id="twilio_verify" class="btn btn-sm btn-default text-l-none">Verify</a>	
 			</fieldset>
 	    </form>				
 	</div>
@@ -135,8 +136,8 @@
 		</p>
 	</div>
 	<div class="modal-footer" >
-		<a href="#" class="btn btn-sm btn-default close enable-call" make_call="no">{{agile_translate "portlets" "no"}}</a>
-		<a href="#" class="btn btn-sm btn-primary enable-call" make_call="yes">{{agile_translate "portlets" "yes"}}</a>
+		<a href="#" class="btn btn-sm btn-default close enable-call" make_call="no">No</a>
+		<a href="#" class="btn btn-sm btn-primary enable-call" make_call="yes">Yes</a>
 	</div>
 </div>
 </div>
@@ -163,8 +164,8 @@
 
 <script id="twilio-login-template" type="text/html">
 <div class="m-t">
-	<p>Call your contacts directly using your Twilio {{agile_translate "contact-details" "account"}}</p>
-	<a id="twilio-connect-button" class="btn btn-sm btn-default m-b-sm m-t-sm" href="https://www.twilio.com/authorize/CNf63bca035414be121d517a116066a5f8?state={{url}}" >Link your {{agile_translate "widgets" "Twilio"}}</a>
+	<p>Call your contacts directly using your Twilio account.</p>
+	<a id="twilio-connect-button" class="btn btn-sm btn-default m-b-sm m-t-sm" href="https://www.twilio.com/authorize/CNf63bca035414be121d517a116066a5f8?state={{url}}" >Link your Twilio</a>
 </div>
 </script>
 
@@ -184,7 +185,7 @@
 <form id="reportsForm">
 <fieldset class="m-l-md">
 		<div class="control-group m-l-n-md">
-				<label class="control-label">Current outgoing {{agile_translate "admin-settings-custom-fields" "NUMBER"}}</label>
+				<label class="control-label">Current outgoing Number</label>
 				<div class="controls" id="contactTypeAhead">
 			<select name="verified_number" id="twilio_from_number" class="required form-control col-md-12 w-full">
 				{{#each outgoing_numbers}}
@@ -208,9 +209,9 @@
 				</p>
 	{{/if_equals}}
 				<p class="m-t-sm m-r-none m-b-xs m-l-none text-center">
-					<a class='btn btn-sm btn-primary p-xs' widget-name="Twilio" id="widget-prefs-save">{{agile_translate "modals" "save"}}</a>
-					<a class='btn btn-sm btn-danger revoke-widget ml_5' widget-name="Twilio">{{agile_translate "widgets" "revoke-access"}}</a>
-					<a href="#add-widget" class='btn btn-default btn-sm ml_5' widget-name="Twilio">{{agile_translate "other" "cancel"}}</a>
+					<a class='btn btn-sm btn-primary p-xs' widget-name="Twilio" id="widget-prefs-save">Save</a>
+					<a class='btn btn-sm btn-danger revoke-widget ml_5' widget-name="Twilio">Revoke Access</a>
+					<a href="#add-widget" class='btn btn-default btn-sm ml_5' widget-name="Twilio">Cancel</a>
 				</p> 
 	</div>
 </form>

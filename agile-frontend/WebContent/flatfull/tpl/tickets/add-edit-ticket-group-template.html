@@ -4,34 +4,36 @@
     	<div class="col-md-9">
         	<div class="panel panel-default">
         		<div class="panel-heading">
-        			{{#if id}}Edit{{else}}Add{{/if}} {{agile_translate "tickets" "ticket-group"}}</div>
+        			{{#if id}}{{translate 'contact-details' 'edit'}}{{else}}{{translate 'portlets' 'add'}}{{/if}} {{translate 'tickets' 'ticket-group'}}
+    			</div>
                 <form id="userForm" name="userForm" method="get" action="" class="form-horizontal">
                     {{#if id}}
                         <input type="text" name="id" class="hide" value="{{id}}"/>
                     {{/if}}
                     <fieldset class="wrapper"><br/>
                         <div class="control-group form-group">
-                            <label class="control-label col-md-3" for="group_name">{{agile_translate "deal-view" "name"}}<span class="field_req">*</span></label> 
+                            <label class="control-label col-md-3" for="group_name">Name<span class="field_req">*</span></label> 
                             <div class="col-md-6">
                                 <div class="controls">
-                                    <input type="text" name="group_name" id="group_name" value="{{group_name}}" class="required form-control tickets_group_name" placeholder="Group" minlength="4" maxlength="30">
+                                    <input type="text" name="group_name" id="group_name" value="{{group_name}}" class="required form-control tickets_group_name" placeholder="{{translate 'tickets' 'group'}}" minlength="4" maxlength="30">
                                 </div>
                             </div>
                         </div>
                         {{#if group_email}}
                             <div class="control-group form-group">
-                                <label class="control-label col-sm-3">{{agile_translate "tickets" "forwarding-email"}}</label>
+                                <label class="control-label col-sm-3">{{translate 'tickets' 'forwarding-email'}}</label>
                                 <div class="col-md-6">
                                     <div class="well bg-transparent m-b-none p-sm">
                                         <span id="source-{{id}}" data-clipboard-text="{{group_email}}">{{group_email}}</span>
-                                        <a onclick="function(e){e.stopPropagation();}" id="grp-{{id}}" class="btn btn-xs btn-primary grp-btn-cpy-email" data-original-title="Copy to Cliboard" data-toggle="tooltip" data-placement="top" data-copied-text="Email copied to clipboard">
-                                            {{agile_translate "referrals" "copy"}}</a>
+                                        <a onclick="function(e){e.stopPropagation();}" id="grp-{{id}}" class="btn btn-xs btn-primary grp-btn-cpy-email" data-original-title="{{translate 'tickets' 'copy-to-clipboard'}}" data-toggle="tooltip" data-placement="top" data-copied-text="Email copied to clipboard">
+                                            {{translate 'referrals' 'copy'}}
+                                        </a>
                                     </div>
                                 </div>
                             </div>
                         {{/if}}
                         <div class="control-group form-group">
-                            <label class="control-label col-md-3" for="name">{{agile_translate "admin-settings" "users"}}<span class="field_req">*</span></label> 
+                            <label class="control-label col-md-3" for="name">{{translate 'admin-settings' 'users'}} <span class="field_req">*</span></label> 
                             <div class="col-md-8 m-t-xs">
                                 <div class="controls">
                                     <div id="users-collection" class="controls multiple-checkbox" name="agents_keys">
@@ -40,15 +42,15 @@
                             </div>
                         </div>
                         <div class="control-group form-group">
-                            <label class="control-label col-md-3" for="send_as">{{agile_translate "tickets" "send-as"}}</label> 
+                            <label class="control-label col-md-3" for="send_as">{{translate 'tickets' 'send-as'}}</label> 
                             <div class="col-md-6">
                                 <div class="controls">
-                                    <input type="text" name="send_as" id="send_as" value="{{send_as}}" class="form-control tickets_email" placeholder="Email" minlength="4"/>
+                                    <input type="text" name="send_as" id="send_as" value="{{send_as}}" class="form-control tickets_email" placeholder="{{translate 'menu' 'email'}}" minlength="4"/>
                                 </div>
                             </div>
                         </div>
                         <div class="control-group form-group">
-                            <label class="control-label col-md-3" for="send_as">{{agile_translate "tickets" "email-template"}}</label> 
+                            <label class="control-label col-md-3" for="send_as">{{translate 'tickets' 'email-template'}}</label> 
                             <div class="col-md-6">
                                 <div class="controls">
                                     <select id="template_id" name="template_id" class="form-control">
@@ -63,8 +65,8 @@
                         <div class="form-group">
                             <div class="form-actions col-sm-offset-3 col-md-9">
                                 <div class="form-actions">
-                                    <a type="reset" href='#ticket-groups' class="btn btn-default btn-sm">{{agile_translate "other" "cancel"}}</a>
-                                    <button type="submit" class="save btn btn-sm btn-primary m-l-xs">{{agile_translate "prefs-settings" "save-changes"}}</button>
+                                    <a type="reset" href='#ticket-groups' class="btn btn-default btn-sm">{{translate 'contact-details' 'cancel'}}</a>
+                                    <button type="submit" class="save btn btn-sm btn-primary m-l-xs">{{translate 'prefs-settings' 'save-changes'}}</button>
                                 </div>
                             </div>
                         </div>

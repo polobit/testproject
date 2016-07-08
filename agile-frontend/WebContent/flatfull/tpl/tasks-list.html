@@ -9,7 +9,7 @@
 <div class="data-block">
     <div class="table-responsive">
 		<div class="panel panel-default">
-		<div class="panel-heading">Tasks {{agile_translate "admin-settings-custom-fields" "LIST"}}</div>
+		<div class="panel-heading">Tasks List</div>
         <div class="table-responsive">
         <table class="table table-striped showCheckboxes no-sorting panel m-b-none 
         {{#is_mobile}} {{else}} agile-table {{/is_mobile}} table-layout-mob-view" url="core/api/tasks/bulk" id="task-list">
@@ -17,12 +17,12 @@
             {{#is_mobile}}
             <thead>
                 <tr>
-					<th style="width:10%;" class="header text-ellipsis">{{agile_translate "contact-details" "owner"}}</th>
-					<th style="width:30%;" class="header text-ellipsis">{{agile_translate "tasks" "task-name"}}</th>
-                    <th style="width:10%;" class="header text-ellipsis">{{agile_translate "portlets" "category"}}</th>
-                   	<th style="width:10%;" class="header text-ellipsis">{{agile_translate "widgets" "priority"}}</th>
-					<th style="width:10%;" class="header text-ellipsis">{{agile_translate "portlets" "due-date"}}</th>
-                    <th style="width:30%;" class="header text-ellipsis">{{agile_translate "deal-view" "related-to"}}</th>
+					<th style="width:10%;" class="header text-ellipsis">Owner</th>
+					<th style="width:30%;" class="header text-ellipsis">Task Name</th>
+                    <th style="width:10%;" class="header text-ellipsis">Category</th>
+                   	<th style="width:10%;" class="header text-ellipsis">Priority</th>
+					<th style="width:10%;" class="header text-ellipsis">Due Date</th>
+                    <th style="width:30%;" class="header text-ellipsis">Related To</th>
                 </tr>
             </thead>
 
@@ -30,12 +30,12 @@
 
             <thead>
                 <tr>
-                    <th style="width:10%;" class="header">{{agile_translate "contact-details" "owner"}}</th>
-                    <th style="width:30%;" class="header">{{agile_translate "tasks" "task-name"}}</th>
-                    <th style="width:10%;" class="header">{{agile_translate "portlets" "category"}}</th>
-                    <th style="width:10%;" class="header">{{agile_translate "widgets" "priority"}}</th>
-                    <th style="width:10%;" class="header">{{agile_translate "portlets" "due-date"}}</th>
-                    <th style="width:15%;" class="header">{{agile_translate "deal-view" "related-to"}}</th>
+                    <th style="width:10%;" class="header">Owner</th>
+                    <th style="width:30%;" class="header">Task Name</th>
+                    <th style="width:10%;" class="header">Category</th>
+                    <th style="width:10%;" class="header">Priority</th>
+                    <th style="width:10%;" class="header">Due Date</th>
+                    <th style="width:15%;" class="header">Related To</th>
                 </tr>
             </thead>
 
@@ -46,7 +46,7 @@
         </table>
         </div>
 		</div>
-		<a href="#" class="btn btn-sm btn-default m-b m-l-md"  style="display:none;" id="bulk-complete">{{agile_translate "tasks" "complete"}}</a>
+		<a href="#" class="btn btn-sm btn-default m-b m-l-md"  style="display:none;" id="bulk-complete">Complete</a>
     </div>
 </div>
 {{/unless}}
@@ -112,29 +112,29 @@
 <div class="row">
     <div class="m-l-lg">
         
-            <h3 class="task-heading font-thin h3"><span>{{agile_translate "tasks" "My Pending Tasks"}}</span>&nbsp<small class="tasks-count"></small> <span class="text-sm p-xxs" style="color: #525252; background-color: rgb(255,255,204);  border: 1px solid rgb(211,211,211);border-radius: 3px;">Try our <a href="#tasks-new">new look</a></span></h3>
+            <h3 class="task-heading font-thin h3"><span>My Pending Tasks</span>&nbsp<small class="tasks-count"></small> <span class="text-sm p-xxs" style="color: #525252; background-color: rgb(255,255,204);  border: 1px solid rgb(211,211,211);border-radius: 3px;">Try our <a href="#tasks-new">new look</a></span></h3>
             <div class="btn-group pull-right owner-task-button c-p m-r m-t-n-lg">
-                <div class="btn btn-sm btn-default selected_name">{{agile_translate "tasks" "My Pending Tasks"}}</div>
+                <div class="btn btn-sm btn-default selected_name">My Pending Tasks</div>
                 <a class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" href="#">
                 	<span class="caret"></span>
                 </a>
                 <ul class="dropdown-menu" id="owner-tasks"></ul>
             </div>
             <div class="btn-group pull-right type-task-button c-p m-r m-t-n-lg">
-                <div class="btn btn-sm btn-default selected_name">All {{agile_translate "admin-settings-tasks" "categories"}}</div>
+                <div class="btn btn-sm btn-default selected_name">All Categories</div>
                 <a class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" href="#">
                 <span class="caret"></span>
                 </a>
                 <ul class="dropdown-menu" id="type-tasks">
-					 <li><a href="">All {{agile_translate "admin-settings-tasks" "categories"}}</a></li>
-                     <li><a href="CALL">{{agile_translate "admin-settings-tasks" "call"}}</a></li>
-                     <li><a href="EMAIL">{{agile_translate "modals" "email"}}</a></li>
+					 <li><a href="">All Categories</a></li>
+                     <li><a href="CALL">Call</a></li>
+                     <li><a href="EMAIL">Email</a></li>
                      <li><a href="FOLLOW_UP">Follow-up</a></li>
-                     <li><a href="MEETING">{{agile_translate "admin-settings-tasks" "Meeting"}}</a></li>
-                     <li><a href="MILESTONE">{{agile_translate "admin-settings-tasks" "Milestone"}}</a></li>
-                     <li><a href="SEND">{{agile_translate "tasks" "Send"}}</a></li>
-                     <li><a href="TWEET">{{agile_translate "admin-settings-tasks" "Tweet"}}</a></li>
-					 <li><a href="OTHER">{{agile_translate "admin-settings-tasks" "Other"}}</a></li>
+                     <li><a href="MEETING">Meeting</a></li>
+                     <li><a href="MILESTONE">Milestone</a></li>
+                     <li><a href="SEND">Send</a></li>
+                     <li><a href="TWEET">Tweet</a></li>
+					 <li><a href="OTHER">Other</a></li>
                 </ul>
             </div>
         
@@ -147,7 +147,7 @@
         <div class="data-block">
             <div class="well">
                 <header>
-                    <h3><span><i class="icon-tasks"></i></span> {{agile_translate "portlets" "tasks"}}</h3>
+                    <h3><span><i class="icon-tasks"></i></span> Tasks</h3>
                 </header>
                 <div id="pie-tasks-chart" class="w-full" style="height:400px"></div>
                 <h4 class="m-t-none">

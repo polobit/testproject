@@ -4,8 +4,8 @@
 <div class="row">
     <div class="col-sm-12 col-md-12" id="cases-add-div">
        
-            <h3 class="pull-left font-thin h3">{{agile_translate "contact-details" "cases"}}</h3>
-            <a href="#cases-add" class="cases-add btn pull-right btn-default btn-addon btn-sm"><i class="fa fa-plus-circle"></i> {{agile_translate "contact-details" "add-case"}}</a>
+            <h3 class="pull-left font-thin h3">{{translate 'contact-details' 'cases'}}</h3>
+            <a href="#cases-add" class="cases-add btn pull-right btn-default btn-addon btn-sm"><i class="fa fa-plus-circle"></i> {{translate 'contact-details' 'add-case'}}</a>
 			<div class="clearfix"></div>
     </div>
 </div>
@@ -20,10 +20,11 @@
                     <img alt="Clipboard" src="/img/clipboard.png">
                 </div>
                 <div class="box-right pull-left">
-                    <h4 class="text-lg" style="opacity:0.8;">{{agile_translate "cases" "there-are-no-pending-cases"}}</h4>
+                    <h4 class="text-lg" style="opacity:0.8;">{{translate 'cases' 'there-are-no-pending-cases'}} </h4>
                     <div class="text-base" style="opacity:0.5">
-						{{agile_translate "cases" "you-can-add-case-by-clicking"}}</div>
-                    <a href="#" class="cases-add btn btn-default btn-sm blue m-t-xs"><i class="icon-plus-sign"></i>  {{agile_translate "contact-details" "add-case"}}</a>
+						{{translate 'cases' 'you-can-add-case-by-clicking'}}
+                    </div>
+                    <a href="#" class="cases-add btn btn-default btn-sm blue m-t-xs"><i class="icon-plus-sign"></i>  {{translate 'contact-details' 'add-case'}}</a>
                 </div>
 				<div class="clearfix">
 				</div>
@@ -33,16 +34,16 @@
         {{#if this.length}}
         <div class="data-block">
             <div class="panel panel-default">
-			    <div class="panel-heading">{{agile_translate "cases" "cases-list"}}</div>
+			    <div class="panel-heading">{{translate 'cases' 'cases-list'}}</div>
                 <div class="table-responsive">
                 <table class="table table-striped showCheckboxes m-b-none agile-table panel table-layout-mob-view" url="core/api/cases/bulk" id="case-list">				 
 				   <thead>
                         <tr>
-                            <th style="width:10%">{{agile_translate "contact-details" "owner"}}</th>
-							<th style="width:30%">{{agile_translate "report-add" "title"}}</th>
-							<th style="width:20%">{{agile_translate "contacts-view" "Updated time"}}</th>
-                            <th style="width:20%">{{agile_translate "deal-view" "related-to"}}</th>
-                            <th style="width:20%">{{agile_translate "widgets" "status"}}</th>
+                            <th style="width:10%">{{translate 'contact-details' 'owner'}}</th>
+							<th style="width:30%">{{translate 'other' 'title'}}</th>
+							<th style="width:20%">{{translate 'cases' 'updated-time'}}</th>
+                            <th style="width:20%">{{translate 'cases' 'related-to'}}</th>
+                            <th style="width:20%">{{translate 'portlets' 'status'}}</th>
                         </tr>
                     </thead>
                     <tbody id="cases-model-list" class="c-p"><!--route="cases/"-->
@@ -57,11 +58,11 @@
         <div class="data-block">
             
                 <h4 class="m-t-none m-b-sm h4">
-                    What are Cases?
+                    {{translate 'cases' 'what-are-cases'}}
                 </h4>
      
                 <p>
-                    {{agile_translate "cases" "cases-desc"}}</p>
+                    {{translate 'cases' 'cases-desc'}}</p>
             
         </div>
     </div>
@@ -124,10 +125,12 @@
 
 	{{#if_equals status "OPEN"}}
 	<div class=" text-center label label-danger text-xs">
-		{{agile_translate "contact-details" "OPEN"}}</div>
+		{{translate 'contact-details' 'OPEN'}}
+	</div>
 	{{else}}
 	<div class="text-center  label label-default text-xs">
-		{{agile_translate "contact-details" "CLOSE"}}</div>
+		{{translate 'contact-details' 'CLOSE'}}
+	</div>
 	{{/if_equals}}
 </td>
 </script>
@@ -142,12 +145,11 @@
                 {{description}}
             </div>
             <div class='m-xs'>
-                <p class="m-b-xs"><span class="block"><strong>{{agile_translate "contact-details" "owner"}}</strong></span><span>{{owner.name}}</span></p>
+                <p class="m-b-xs"><span class="block"><strong>{{translate 'deal-view' 'owner'}} </strong></span><span>{{owner.name}}</span></p>
 
 				{{#if contacts}}
-                
                 <div>
-                <p><b>{{agile_translate "deal-view" "related-to"}}</b></p> 
+                <p><b>{{translate 'deal-view' 'related-to'}}  </b></p> 
 				{{#each_with_index contacts}}
                 	<div class='m-b-sm pull-left m-r-sm'>
 					<div class="pull-left thumb-xs m-r-xs cases-popover-thumb-xs">

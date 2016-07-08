@@ -4,15 +4,16 @@
     <div class="well">
         <form id="tagsRemoveBulkForm" class="form-horizontal">
             <fieldset>
-                <legend>{{agile_translate "contacts-view" "remove-tags-from-selected-contacts"}}</legend>
+                <legend>{{translate 'contacts-view' 'remove-tags-from-selected-contacts'}}</legend>
                 <div class="control-group form-group">         
-                    <label class="control-label col-sm-2">{{agile_translate "contacts-view" "enter-tags"}}<span class="field_req">*</span></label>
+                    <label class="control-label col-sm-2">{{translate 'contacts-view' 'enter-tags'}} 
+                    <span class="field_req">*</span></label>
                     <div class="controls col-sm-10">
                         <div class="pull-left">
                         <ul name="tags" class= "tagsinput tags p-n"></ul>
                         </div>              
-                        <input name="tags" type="text" id="removeBulkTags" class="tags-typeahead form-control" placeholder="Enter tags separated by comma"/>
-						<span class="error-tags text-danger" style="display:none;">{{agile_translate "validation-msgs" "this-field-is-required"}}</span>
+                        <input name="tags" type="text" id="removeBulkTags" class="tags-typeahead form-control" placeholder="{{translate 'portlets' 'tags-desc'}}"/>
+						<span class="error-tags text-danger" style="display:none;">{{translate 'prefs-email-templates' 'this-field-is-required'}}</span>
 	<input class="hide"/>      
               </div>
                 </div>
@@ -20,8 +21,8 @@
 <div class="row">
 <div class="col-sm-offset-2 col-sm-10">
                 <div class="form-actions">          
-					<a href="#contacts" class="btn btn-sm btn-danger">{{agile_translate "contact-details" "CLOSE"}}</a>
-                    <a href="#" type="submit" id="removeTagsToContactsBulk" class="btn btn-sm btn-primary">{{agile_translate "contacts-view" "remove"}}</a> 
+					<a href="#contacts" class="btn btn-sm btn-danger">{{translate 'report-add' 'close'}}</a>
+                    <a href="#" type="submit" id="removeTagsToContactsBulk" class="btn btn-sm btn-primary">{{translate 'contacts-view' 'remove'}}</a> 
                     <span class="save-status"></span>
                 </div>
 </div>
@@ -38,15 +39,16 @@
     <div class="well">
         <form id="tagsRemoveBulkForm" class="form-horizontal">
             <fieldset>
-                <legend>{{agile_translate "companies-view" "remove-tags-from-selected-companies"}}</legend>
+                <legend>{{translate 'companies-view' 'remove-tags-from-selected-companies'}}
+                </legend>
                 <div class="control-group form-group">         
-                    <label class="control-label col-sm-2">{{agile_translate "contacts-view" "enter-tags"}}<span class="field_req">*</span></label>
+                    <label class="control-label col-sm-2">{{translate 'contacts-view' 'enter-tags'}} <span class="field_req">*</span></label>
                     <div class="controls col-sm-10">
                         <div class="pull-left">
                         <ul name="tags" class= "tagsinput tags p-n"></ul>
                         </div>              
-                        <input name="tags" type="text" id="removeBulkTags" class="tags-typeahead form-control" placeholder="Enter tags separated by comma"/>
-                        <span class="error-tags text-danger" style="display:none;">{{agile_translate "validation-msgs" "this-field-is-required"}}</span>
+                        <input name="tags" type="text" id="removeBulkTags" class="tags-typeahead form-control" placeholder="{{translate 'portlets' 'tags-desc'}}"/>
+                        <span class="error-tags text-danger" style="display:none;">{{translate 'prefs-email-templates' 'this-field-is-required'}}</span>
     <input class="hide"/>      
               </div>
                 </div>
@@ -54,8 +56,8 @@
 <div class="row">
 <div class="col-sm-offset-2 col-sm-10">
                 <div class="form-actions">          
-                    <a href="#companies" class="btn btn-sm btn-danger">{{agile_translate "contact-details" "CLOSE"}}</a>
-                    <a href="#" type="submit" id="removeTagsToContactsBulk" class="btn btn-sm btn-primary">{{agile_translate "contacts-view" "remove"}}</a> 
+                    <a href="#companies" class="btn btn-sm btn-danger">{{translate 'report-add' 'close'}}</a>
+                    <a href="#" type="submit" id="removeTagsToContactsBulk" class="btn btn-sm btn-primary">{{translate 'contacts-view' 'remove'}}</a> 
                     <span class="save-status"></span>
                 </div>
 </div>

@@ -7,18 +7,17 @@
 				      	<label class="i-checks i-checks-sm" style="margin-left: 3px;">
 					      <input class="ticket-checkbox select-all" type="checkbox" disabled><i></i>
 					    </label>
-					    <button class="btn btn-default bulk-action-btn btn-sm m-l-sm m-r-xs disabled">{{agile_translate "tickets" "assignee"}}</button>
-					    <button class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled">{{agile_translate "contacts-view" "workflow"}}</button>
-					    <button class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled">{{agile_translate "tickets" "manage-labels"}}</button>
-					    <button class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled">{{agile_translate "contact-details" "CLOSE"}}</button>
-					    <button class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled">{{agile_translate "contact-details" "delete"}}</button>
+					    <button class="btn btn-default bulk-action-btn btn-sm m-l-sm m-r-xs disabled">{{translate 'tickets' 'assignee'}}</button>
+					    <button class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled">{{translate 'contacts-view' 'workflow'}}</button>
+					    <button class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled">{{translate 'tickets' 'manage-labels'}}</button>
+					    <button class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled">{{translate 'contact-details' 'close'}}</button>
+					    <button class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled">{{translate 'contact-details' 'delete'}}</button>
 					    <div class="btn-group dropdown">
-				          <button class="btn btn-default btn-sm bulk-action-btn disabled" data-toggle="dropdown" aria-expanded="false">{{agile_translate "plan-and-upgrade" "more"}}<span class="caret"></span></button>
+				          <button class="btn btn-default btn-sm bulk-action-btn disabled" data-toggle="dropdown" aria-expanded="false">{{translate 'plan-and-upgrade' 'more'}} 
+				          <span class="caret"></span></button>
 				        </div>
 
 					    <div class="btn-group dropdown pull-right">
-					      <!--<a href="javascript:void(0);" class="btn btn-default m-r-sm btn-sm"
-					    		onclick="App_Ticket_Module.renderNewTicketModalView();">{{agile_translate "tickets" "new-ticket"}}</a>-->
 				          <button class="btn btn-sm btn-default toggle-collection-view {{#is_single_row_view}}single-line{{else}}multi-line{{/is_single_row_view}}">
 					    		{{#is_single_row_view}}
 					    			<i class="fa fa-ellipsis-h"></i>
@@ -33,23 +32,26 @@
 			    			<div class="col-sm-12 p-n">
 			    				{{#is_helpdesk_enabled}}
 				    				<div class="text-center padder-v b-t">
-										<h4 class="m-t-none m-b-xs">You don&#39;t have any {{agile_translate "contacts-view" "tickets"}}</h4>
+										<h4 class="m-t-none m-b-xs">{{translate 'tickets' 'you-do-not-have-any-tickets'}}</h4>
 										<div class="m-b-xs">
-											You can create new views {{agile_translate "contacts-view" "from"}}<a class="link-color" href="/#add-ticket-view">Help Desk settings</a>
+											{{translate 'tickets' 'you-can-create-new-views-from'}}
 										</div>
 										<!-- <div>
 											<a href="#ticket-groups" class="btn btn-sm btn-default blue btn-slate-action m-t-xs">
-												{{agile_translate "tickets" "configure-help-desk"}}</a>
+												Configure Help Desk
+											</a>
 										</div> -->
 									</div>
 								{{else}}
 									<div class="text-center padder-v b-t">
-										<h4 class="m-t-none m-b-xs">{{agile_translate "tickets" "configure-email-forwarding-desc"}}</h4>
+										<h4 class="m-t-none m-b-xs">{{translate 'tickets' 'configure-email-forwarding-desc'}}</h4>
 										<div class="m-b-sm text-muted">
-											{{agile_translate "tickets" "configure-your-help-desk-system-desc"}}</div>
+											{{translate 'tickets' 'configure-your-help-desk-system-desc'}}
+										</div>
 										<div>
 											<a href="#ticket-groups" class="btn btn-sm btn-default blue btn-slate-action m-t-xs">
-												{{agile_translate "tickets" "configure-help-desk"}}</a>
+												{{translate 'tickets' 'configure-help-desk'}}
+											</a>
 										</div>
 									</div>
 									<div class="embed-responsive embed-responsive-16by9">
@@ -73,27 +75,29 @@
 				      	<label class="i-checks i-checks-sm select-all" style="margin-left: 1px;vertical-align: text-top;">
 					      <input class="ticket-checkbox select-all" type="checkbox"><i></i>
 					    </label>
-					    <a href="#tickets/bulk-actions/change-assignee" class="btn btn-default bulk-action-btn btn-sm m-l-sm m-r-xs disabled">{{agile_translate "tickets" "assignee"}}</a>
-					    <a href="#tickets/bulk-actions/execute-workflows" class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled">{{agile_translate "contacts-view" "workflow"}}</a>
-					    <a href="#tickets/bulk-actions/manage-labels" class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled">Manage {{agile_translate "tickets" "labels"}}</a>
-					    <button class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled bulk-ticket-close">{{agile_translate "contact-details" "CLOSE"}}</button>
-					    <button class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled bulk-ticket-delete">{{agile_translate "contact-details" "delete"}}</button>
+					    <a href="#tickets/bulk-actions/change-assignee" class="btn btn-default bulk-action-btn btn-sm m-l-sm m-r-xs disabled">{{translate 'tickets' 'assignee'}}</a>
+					    <a href="#tickets/bulk-actions/execute-workflows" class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled">{{translate 'contacts-view' 'workflow'}}</a>
+					    <a href="#tickets/bulk-actions/manage-labels" class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled">{{translate 'tickets' 'manage-labels'}}
+					    </a>
+					    <button class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled bulk-ticket-close">{{translate 'contact-details' 'close'}}</button>
+					    <button class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled bulk-ticket-delete">{{translate 'contact-details' 'delete'}}</button>
 					    <div class="btn-group dropdown m-r-xs">
-				          <button class="btn btn-default btn-sm bulk-action-btn" data-toggle="dropdown" aria-expanded="false">{{agile_translate "plan-and-upgrade" "more"}}<span class="caret"></span></button>
+				          <button class="btn btn-default btn-sm bulk-action-btn" data-toggle="dropdown" aria-expanded="false">{{translate 'plan-and-upgrade' 'more'}}  
+				          <span class="caret"></span></button>
 				          <ul class="dropdown-menu dropdown-menu-right">
 				            <li><a href="javascript:void(0);" class="bulk-favorite-tickets">
-				            		{{agile_translate "tickets" "mark-as-favorite"}}</a>
+				            		{{translate 'tickets' 'mark-as-favorite'}}
+				            	</a>
 				            </li>
 				            <li>
 				            	<a href="javascript:void(0);" class="bulk-spam-tickets">
-				            		{{agile_translate "tickets" "mark-as-spam"}}</a>
+				            		{{translate 'tickets' 'mark-as-spam'}}
+				            	</a>
 				            </li>
 				          </ul>
 				        </div>
 					    
 					    <div class="btn-group dropdown pull-right">
-					    	<!--<a href="javascript:void(0);" class="btn btn-default m-r-sm btn-sm"
-					    		onclick="App_Ticket_Module.renderNewTicketModalView();">{{agile_translate "tickets" "new-ticket"}}</a>-->
 					    	<button class="btn btn-sm btn-default toggle-collection-view {{#is_single_row_view}}single-line{{else}}multi-line{{/is_single_row_view}}">
 					    		{{#is_single_row_view}}
 					    			<i class="fa fa-ellipsis-h"></i>
@@ -128,18 +132,16 @@
 					      	<label class="i-checks i-checks-sm" style="margin-left: 3px;">
 						      <input class="ticket-checkbox select-all" type="checkbox" disabled><i></i>
 						    </label>
-						    <button class="btn btn-default bulk-action-btn btn-sm m-l-sm m-r-xs disabled">{{agile_translate "tickets" "assignee"}}</button>
-						    <button class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled">{{agile_translate "contacts-view" "workflow"}}</button>
-						    <button class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled">Manage {{agile_translate "tickets" "labels"}}</button>
-						    <button class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled">{{agile_translate "contact-details" "CLOSE"}}</button>
-						    <button class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled">{{agile_translate "contact-details" "delete"}}</button>
+						    <button class="btn btn-default bulk-action-btn btn-sm m-l-sm m-r-xs disabled">{{translate 'tickets' 'assignee'}}</button>
+						    <button class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled">{{translate 'contacts-view' 'workflow'}}</button>
+						    <button class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled">{{translate 'tickets' 'manage-labels'}}</button>
+						    <button class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled">{{translate 'contact-details' 'close'}}</button>
+						    <button class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled">{{translate 'contact-details' 'delete'}}</button>
 						    <div class="btn-group dropdown">
-					          <button class="btn btn-default btn-sm bulk-action-btn disabled" data-toggle="dropdown" aria-expanded="false">{{agile_translate "plan-and-upgrade" "more"}}<span class="caret"></span></button>
+					          <button class="btn btn-default btn-sm bulk-action-btn disabled" data-toggle="dropdown" aria-expanded="false">{{translate 'plan-and-upgrade' 'more'}} <span class="caret"></span></button>
 					        </div>
 
 						    <div class="btn-group dropdown pull-right">
-						      <!--<a href="javascript:void(0);" class="btn btn-default btn-sm m-r-sm"
-					    			onclick="App_Ticket_Module.renderNewTicketModalView();">{{agile_translate "tickets" "new-ticket"}}</a>-->
 					          <button class="btn btn-sm btn-default toggle-collection-view {{#is_single_row_view}}single-line{{else}}multi-line{{/is_single_row_view}}">
 						    		{{#is_single_row_view}}
 						    			<i class="fa fa-ellipsis-h"></i>
@@ -154,23 +156,26 @@
 				    			<div class="col-sm-12 p-n">
 				    				{{#is_helpdesk_enabled}}
 					    				<div class="text-center padder-v b-t">
-											<h4 class="m-t-none m-b-xs">You don&#39;t have any {{agile_translate "contacts-view" "tickets"}}</h4>
+											<h4 class="m-t-none m-b-xs">{{translate 'tickets' 'you-do-not-have-any-tickets'}}</h4>
 											<div class="m-b-xs">
-												You can create new views {{agile_translate "contacts-view" "from"}}<a class="link-color" href="/#add-ticket-view">Help Desk settings</a>
+												{{translate 'tickets' 'you-can-create-new-views-from'}}
 											</div>
 											<!-- <div>
 												<a href="#ticket-groups" class="btn btn-sm btn-default blue btn-slate-action m-t-xs">
-													{{agile_translate "tickets" "configure-help-desk"}}</a>
+													Configure Help Desk
+												</a>
 											</div> -->
 										</div>
 									{{else}}
 										<div class="text-center padder-v b-t">
-											<h4 class="m-t-none m-b-xs ">{{agile_translate "tickets" "configure-email-forwarding-desc"}}</h4>
+											<h4 class="m-t-none m-b-xs ">{{translate 'tickets' 'configure-email-forwarding-desc'}}</h4>
 											<div class="m-b-sm text-muted">
-												{{agile_translate "tickets" "configure-your-help-desk-system-desc"}}</div>
+												{{translate 'tickets' 'configure-your-help-desk-system-desc'}}
+											</div>
 											<div>
 												<a href="#ticket-groups" class="btn btn-sm btn-default blue btn-slate-action m-t-xs">
-													{{agile_translate "tickets" "configure-help-desk"}}</a>
+													{{translate 'tickets' 'configure-help-desk'}}
+												</a>
 											</div>
 										</div>
 										<div class="embed-responsive embed-responsive-16by9">
@@ -194,27 +199,29 @@
 						<label class="i-checks i-checks-sm m-b-none select-all" style="margin-left: 1px;vertical-align: text-top;">
 							<input type="checkbox" class="ticket-checkbox select-all"><i></i>
 						</label>
-				      	<a href="#tickets/bulk-actions/change-assignee" class="btn btn-default bulk-action-btn btn-sm m-r-xs m-l-sm disabled">{{agile_translate "tickets" "assignee"}}</a>
-					    <a href="#tickets/bulk-actions/execute-workflows" class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled">{{agile_translate "contacts-view" "workflow"}}</a>
-					    <a href="#tickets/bulk-actions/manage-labels" class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled">Manage {{agile_translate "tickets" "labels"}}</a>
-					    <button class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled bulk-ticket-close">{{agile_translate "contact-details" "CLOSE"}}</button>
-					    <button class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled bulk-ticket-delete">{{agile_translate "contact-details" "delete"}}</button>
+				      	<a href="#tickets/bulk-actions/change-assignee" class="btn btn-default bulk-action-btn btn-sm m-r-xs m-l-sm disabled">{{translate 'tickets' 'assignee'}}</a>
+					    <a href="#tickets/bulk-actions/execute-workflows" class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled">{{translate 'contacts-view' 'workflow'}}</a>
+					    <a href="#tickets/bulk-actions/manage-labels" class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled">{{translate 'tickets' 'manage-labels'}}
+					    </a>
+					    <button class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled bulk-ticket-close">{{translate 'contact-details' 'close'}}</button>
+					    <button class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled bulk-ticket-delete">{{translate 'contact-details' 'delete'}}</button>
 					    <div class="btn-group dropdown m-r-xs">
-				          <button class="btn btn-default btn-sm bulk-action-btn" data-toggle="dropdown" aria-expanded="false">{{agile_translate "plan-and-upgrade" "more"}}<span class="caret"></span></button>
+				          <button class="btn btn-default btn-sm bulk-action-btn" data-toggle="dropdown" aria-expanded="false">{{translate 'plan-and-upgrade' 'more'}} 
+				          <span class="caret"></span></button>
 				          <ul class="dropdown-menu dropdown-menu-right">
 				            <li><a href="javascript:void(0);" class="bulk-favorite-tickets">
-				            		{{agile_translate "tickets" "mark-as-favorite"}}</a>
+				            		{{translate 'tickets' 'mark-as-favorite'}}
+				            	</a>
 				            </li>
 				            <li>
 				            	<a href="javascript:void(0);" class="bulk-spam-tickets">
-				            		{{agile_translate "tickets" "mark-as-spam"}}</a>
+				            		{{translate 'tickets' 'mark-as-spam'}}
+				            	</a>
 				            </li>
 				          </ul>
 				        </div>
 
 					    <div class="btn-group dropdown pull-right">
-					    	<!--<a href="javascript:void(0);" class="btn btn-default btn-sm m-r-sm"
-					    		onclick="App_Ticket_Module.renderNewTicketModalView();">{{agile_translate "tickets" "new-ticket"}}</a>-->
 				          <button class="btn btn-sm btn-default toggle-collection-view {{#is_single_row_view}}single-line{{else}}multi-line{{/is_single_row_view}}">
 					    		{{#is_single_row_view}}
 					    			<i class="fa fa-ellipsis-h"></i>
@@ -224,66 +231,81 @@
 					    	</button>
 					    	
 				          	<ul class="dropdown-menu dropdown-menu-right choose-columns m-t-none">
-					          	<li class="dropdown-header text-base">{{agile_translate "tickets" "choose-columns"}}</li>
+					          	<li class="dropdown-header text-base">{{translate 'tickets' 'choose-columns'}}</li>
 								<li><a href="javascript:void(0);" class="p-b-none">
 										<label class="i-checks i-checks-sm">
-				                        <input name="id" type="checkbox" class="choose-column-chbx" {{#is_single_row_view}}{{else}}disabled {{/is_single_row_view}}{{#is_column_selected 'id'}}checked{{/is_column_selected}}><i></i></label> {{agile_translate "tickets" "id"}}</a>
+				                        <input name="id" type="checkbox" class="choose-column-chbx" {{#is_single_row_view}}{{else}}disabled {{/is_single_row_view}}{{#is_column_selected 'id'}}checked{{/is_column_selected}}><i></i></label> {{translate 'tickets' 'id'}}
+				                    </a>
 				                </li>
 				                <li><a href="javascript:void(0);" class="p-b-none">
 					                	<label class="i-checks i-checks-sm">
-					                    <input name="subject" type="checkbox" class="choose-column-chbx" {{#is_single_row_view}}{{else}}disabled {{/is_single_row_view}}{{#is_column_selected 'subject'}}checked{{/is_column_selected}}><i></i></label> {{agile_translate "widgets" "subject"}}</a>
+					                    <input name="subject" type="checkbox" class="choose-column-chbx" {{#is_single_row_view}}{{else}}disabled {{/is_single_row_view}}{{#is_column_selected 'subject'}}checked{{/is_column_selected}}><i></i></label> {{translate 'contact-details' 'subject'}}
+				                    </a>
 				                </li>
 				                <li><a href="javascript:void(0);" class="p-b-none">
 				                		<label class="i-checks i-checks-sm">
-				                        <input name="requester_name" type="checkbox" class="choose-column-chbx" {{#is_single_row_view}}{{else}}disabled {{/is_single_row_view}}{{#is_column_selected 'requester_name'}}checked{{/is_column_selected}}><i></i></label> {{agile_translate "tickets" "requester-name"}}</a>
+				                        <input name="requester_name" type="checkbox" class="choose-column-chbx" {{#is_single_row_view}}{{else}}disabled {{/is_single_row_view}}{{#is_column_selected 'requester_name'}}checked{{/is_column_selected}}><i></i></label> {{translate 'tickets' 'requester-name'}}
+				                    </a>
 				                </li>
 				                <li><a href="javascript:void(0);" class="p-b-none">
 				                		<label class="i-checks i-checks-sm">
-				                        <input name="requester_email" type="checkbox" class="choose-column-chbx" {{#is_single_row_view}}{{else}}disabled {{/is_single_row_view}}{{#is_column_selected 'requester_email'}}checked{{/is_column_selected}}><i></i></label> {{agile_translate "tickets" "requester-email"}}</a>
+				                        <input name="requester_email" type="checkbox" class="choose-column-chbx" {{#is_single_row_view}}{{else}}disabled {{/is_single_row_view}}{{#is_column_selected 'requester_email'}}checked{{/is_column_selected}}><i></i></label> {{translate 'tickets' 'requester-email'}}
+				                    </a>
 				                </li>
 				                <li><a href="javascript:void(0);" class="p-b-none">
 				                		<label class="i-checks i-checks-sm">
-				                        <input name="due_date" type="checkbox" class="choose-column-chbx" {{#is_single_row_view}}{{else}}disabled {{/is_single_row_view}}{{#is_column_selected 'due_date'}}checked{{/is_column_selected}}><i></i></label> {{agile_translate "portlets" "due-date"}}</a>
+				                        <input name="due_date" type="checkbox" class="choose-column-chbx" {{#is_single_row_view}}{{else}}disabled {{/is_single_row_view}}{{#is_column_selected 'due_date'}}checked{{/is_column_selected}}><i></i></label> {{translate 'portlets' 'due-date'}}
+				                    </a>
 				                </li>
 				                <li><a href="javascript:void(0);" class="p-b-none">
 				                		<label class="i-checks i-checks-sm">
-				                        <input name="priority" type="checkbox" class="choose-column-chbx" {{#is_single_row_view}}{{else}}disabled {{/is_single_row_view}}{{#is_column_selected 'priority'}}checked{{/is_column_selected}}><i></i></label> {{agile_translate "widgets" "priority"}}</a>
+				                        <input name="priority" type="checkbox" class="choose-column-chbx" {{#is_single_row_view}}{{else}}disabled {{/is_single_row_view}}{{#is_column_selected 'priority'}}checked{{/is_column_selected}}><i></i></label> {{translate 'tasks' 'priority'}}
+				                    </a>
 				                </li>
 				                <li><a href="javascript:void(0);" class="p-b-none">
 				                		<label class="i-checks i-checks-sm">
-				                        <input name="status" type="checkbox" class="choose-column-chbx" {{#is_single_row_view}}{{else}}disabled {{/is_single_row_view}}{{#is_column_selected 'status'}}checked{{/is_column_selected}}><i></i></label> {{agile_translate "widgets" "status"}}</a>
+				                        <input name="status" type="checkbox" class="choose-column-chbx" {{#is_single_row_view}}{{else}}disabled {{/is_single_row_view}}{{#is_column_selected 'status'}}checked{{/is_column_selected}}><i></i></label> {{translate 'portlets' 'status'}}
+				                    </a>
 				                </li>
 				                <li><a href="javascript:void(0);" class="p-b-none">
 				                		<label class="i-checks i-checks-sm">
-				                        <input name="assignee" type="checkbox" class="choose-column-chbx" {{#is_single_row_view}}{{else}}disabled {{/is_single_row_view}}{{#is_column_selected 'assignee'}}checked{{/is_column_selected}}><i></i></label> {{agile_translate "tickets" "assignee"}}</a>
+				                        <input name="assignee" type="checkbox" class="choose-column-chbx" {{#is_single_row_view}}{{else}}disabled {{/is_single_row_view}}{{#is_column_selected 'assignee'}}checked{{/is_column_selected}}><i></i></label> {{translate 'tickets' 'assignee'}}
+				                    </a>
 				                </li>
 				                <li><a href="javascript:void(0);" class="p-b-none">
 				                		<label class="i-checks i-checks-sm">
-				                        <input name="group" type="checkbox" class="choose-column-chbx" {{#is_single_row_view}}{{else}}disabled {{/is_single_row_view}}{{#is_column_selected 'group'}}checked{{/is_column_selected}}><i></i></label> {{agile_translate "tickets" "group"}}</a>
+				                        <input name="group" type="checkbox" class="choose-column-chbx" {{#is_single_row_view}}{{else}}disabled {{/is_single_row_view}}{{#is_column_selected 'group'}}checked{{/is_column_selected}}><i></i></label> {{translate 'tickets' 'group'}}
+				                    </a>
 				                </li>
 				                <li><a href="javascript:void(0);" class="p-b-none">
 				                		<label class="i-checks i-checks-sm">
-				                        <input name="assigned_time" type="checkbox" class="choose-column-chbx" {{#is_single_row_view}}{{else}}disabled {{/is_single_row_view}}{{#is_column_selected 'assigned_time'}}checked{{/is_column_selected}}><i></i></label> {{agile_translate "tickets" "assigned-date"}}</a>
+				                        <input name="assigned_time" type="checkbox" class="choose-column-chbx" {{#is_single_row_view}}{{else}}disabled {{/is_single_row_view}}{{#is_column_selected 'assigned_time'}}checked{{/is_column_selected}}><i></i></label> {{translate 'tickets' 'assigned-date'}}
+				                    </a>
 				                </li>
 				               	<li><a href="javascript:void(0);" class="p-b-none">
 				                		<label class="i-checks i-checks-sm">
-				                        <input name="ticket_type" type="checkbox" class="choose-column-chbx" {{#is_single_row_view}}{{else}}disabled {{/is_single_row_view}}{{#is_column_selected 'ticket_type'}}checked{{/is_column_selected}}><i></i></label> {{agile_translate "tickets" "Ticket&nbsp;Type"}}</a>
+				                        <input name="ticket_type" type="checkbox" class="choose-column-chbx" {{#is_single_row_view}}{{else}}disabled {{/is_single_row_view}}{{#is_column_selected 'ticket_type'}}checked{{/is_column_selected}}><i></i></label> {{translate 'tickets' 'ticket-type'}}
+				                    </a>
 				                </li>
 				                <li><a href="javascript:void(0);" class="p-b-none">
 				                		<label class="i-checks i-checks-sm">
-				                        <input name="last_updated_time" type="checkbox" class="choose-column-chbx" {{#is_single_row_view}}{{else}}disabled {{/is_single_row_view}}{{#is_column_selected 'last_updated_time'}}checked{{/is_column_selected}}><i></i></label> {{agile_translate "tickets" "last-updated-date"}}</a>
+				                        <input name="last_updated_time" type="checkbox" class="choose-column-chbx" {{#is_single_row_view}}{{else}}disabled {{/is_single_row_view}}{{#is_column_selected 'last_updated_time'}}checked{{/is_column_selected}}><i></i></label> {{translate 'tickets' 'last-updated-date'}}
+				                    </a>
 				                </li>
 				               <!-- <li><a href="javascript:void(0);" class="p-b-none">
 				                		<label class="i-checks i-checks-sm">
-				                        <input name="organization" type="checkbox" class="choose-column-chbx" {{#is_single_row_view}}{{else}}disabled {{/is_single_row_view}}{{#is_column_selected 'organization'}}checked{{/is_column_selected}}><i></i></label> {{agile_translate "companies-edit" "organization"}}</a>
+				                        <input name="organization" type="checkbox" class="choose-column-chbx" {{#is_single_row_view}}{{else}}disabled {{/is_single_row_view}}{{#is_column_selected 'organization'}}checked{{/is_column_selected}}><i></i></label> Organization
+				                    </a>
 				                </li> -->
 				                <li><a href="javascript:void(0);" class="p-b-none">
 				                		<label class="i-checks i-checks-sm">
-				                        <input name="closed_time" type="checkbox" class="choose-column-chbx" {{#is_single_row_view}}{{else}}disabled {{/is_single_row_view}}{{#is_column_selected 'closed_time'}}checked{{/is_column_selected}}><i></i></label> {{agile_translate "tickets" "Closed&nbsp;Date"}}</a>
+				                        <input name="closed_time" type="checkbox" class="choose-column-chbx" {{#is_single_row_view}}{{else}}disabled {{/is_single_row_view}}{{#is_column_selected 'closed_time'}}checked{{/is_column_selected}}><i></i></label> {{translate 'tickets' 'closed-date'}}
+				                    </a>
 				                </li>
 				                <li><a href="javascript:void(0);" class="p-b-none">
 				                		<label class="i-checks i-checks-sm">
-				                        <input name="created_time" type="checkbox" class="choose-column-chbx" {{#is_single_row_view}}{{else}}disabled {{/is_single_row_view}}{{#is_column_selected 'created_time'}}checked{{/is_column_selected}}><i></i></label> {{agile_translate "tickets" "Created&nbsp;Date"}}</a>
+				                        <input name="created_time" type="checkbox" class="choose-column-chbx" {{#is_single_row_view}}{{else}}disabled {{/is_single_row_view}}{{#is_column_selected 'created_time'}}checked{{/is_column_selected}}><i></i></label> {{translate 'contacts-view' 'created-date'}}
+				                    </a>
 				                </li>
 					          </ul>
 				            </li>
@@ -301,48 +323,49 @@
 											<th></th>
 											<th></th>
 											{{#is_column_selected 'id'}}
-												<th class="id">{{agile_translate "tickets" "id"}}</th>
+												<th class="id">{{translate 'tickets' 'id'}}</th>
 											{{/is_column_selected}}
 											{{#is_column_selected 'subject'}}
-												<th class="subject">{{agile_translate "widgets" "subject"}}</th>
+												<th class="subject">{{translate 'contact-details' 'subject'}}</th>
 											{{/is_column_selected}}
 											{{#is_column_selected 'requester_name'}}
-												<th class="requester_name">Requester&nbsp;{{agile_translate "deal-view" "name"}}</th>
+												<th class="requester_name">{{translate 'tickets' 'Requester&nbsp;Name'}}</th>
 											{{/is_column_selected}}
 											{{#is_column_selected 'requester_email'}}
-												<th class="requester_email">Requester&nbsp;{{agile_translate "modals" "email"}}</th>
+												<th class="requester_email">{{translate 'tickets' 'Requester&nbsp;Email'}}</th>
 											{{/is_column_selected}}
 											{{#is_column_selected 'due_date'}}
-												<th class="due_date">Due&nbsp;{{agile_translate "contacts-view" "date"}}</th>
+												<th class="due_date">{{translate 'tickets' 'Due&nbsp;Date'}}</th>
 											{{/is_column_selected}}
 											{{#is_column_selected 'priority'}}
-												<th class="priority">{{agile_translate "widgets" "priority"}}</th>
+												<th class="priority">{{translate 'tasks' 'priority'}}</th>
 											{{/is_column_selected}}
 											{{#is_column_selected 'status'}}
-												<th class="status">{{agile_translate "widgets" "status"}}</th>
+												<th class="status">{{translate 'portlets' 'status'}}</th>
 											{{/is_column_selected}}
 											{{#is_column_selected 'assignee'}}
-												<th class="assignee">{{agile_translate "tickets" "assignee"}}</th>
+												<th class="assignee">{{translate 'tickets' 'assignee'}}</th>
 											{{/is_column_selected}}
 											{{#is_column_selected 'group'}}
-												<th class="group">{{agile_translate "tickets" "group"}}</th>
+												<th class="group">{{translate 'tickets' 'group'}}
+												</th>
 											{{/is_column_selected}}
 											{{#is_column_selected 'assigned_time'}}
-												<th class="assigned_time">Assigned&nbsp;{{agile_translate "contacts-view" "date"}}</th>
+												<th class="assigned_time">{{translate 'tickets' 'Assigned&nbsp;Date'}}</th>
 											{{/is_column_selected}}
 											{{#is_column_selected 'ticket_type'}}
-												<th class="ticket_type">Ticket&nbsp;{{agile_translate "contacts-view" "type"}}</th>
+												<th class="ticket_type">{{translate 'tickets' 'Ticket&nbsp;Type'}}</th>
 											{{/is_column_selected}}
 											{{#is_column_selected 'last_updated_time'}}
-												<th class="last_updated_time ">Last&nbsp;Updated&nbsp;{{agile_translate "contacts-view" "date"}}</th>
+												<th class="last_updated_time ">{{translate 'tickets' 'Last&nbsp;Updated&nbsp;Date'}}</th>
 											{{/is_column_selected}}
 											
-											<!--<th class="organization {{#is_column_selected 'organization'}}{{else}}display-none{{/is_column_selected}}">{{agile_translate "companies-edit" "organization"}}</th>-->
+											<!--<th class="organization {{#is_column_selected 'organization'}}{{else}}display-none{{/is_column_selected}}">Organization</th>-->
 											{{#is_column_selected 'closed_time'}}
-												<th class="closed_time">Closed&nbsp;{{agile_translate "contacts-view" "date"}}</th>
+												<th class="closed_time">{{translate 'tickets' 'Closed&nbsp;Date'}}</th>
 											{{/is_column_selected}}
 											{{#is_column_selected 'created_time'}}
-											    <th class="created_time">Created&nbsp;{{agile_translate "contacts-view" "date"}}</th>
+											    <th class="created_time">{{translate 'tickets' 'Created&nbsp;Date'}}</th>
 											{{/is_column_selected}}
 											<!-- <th class="contact_details {{#is_column_selected 'contact_details'}}{{else}}display-none{{/is_column_selected}}">Contact&nbsp;details</th> -->
 										</tr>
@@ -367,27 +390,28 @@
 				<label class="i-checks i-checks-sm" style="margin-left: 1px;vertical-align: text-top;">
 			      <input class="ticket-checkbox select-all" type="checkbox"><i></i>
 			    </label>
-				<button class="btn btn-default bulk-action-btn btn-sm {{#is_single_row_view}}{{else}}m-l-sm{{/is_single_row_view}} m-r-xs disabled m-l-sm">{{agile_translate "tickets" "assignee"}}</button>
-				<button class="btn btn-default btn-sm m-r-xs disabled">{{agile_translate "contacts-view" "workflow"}}</button>
-		      	<button class="btn btn-default btn-sm m-r-xs disabled">Manage {{agile_translate "tickets" "labels"}}</button>
-			    <button class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled bulk-ticket-close">{{agile_translate "contact-details" "CLOSE"}}</button>
-			    <button class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled bulk-ticket-delete">{{agile_translate "contact-details" "delete"}}</button>
+				<button class="btn btn-default bulk-action-btn btn-sm {{#is_single_row_view}}{{else}}m-l-sm{{/is_single_row_view}} m-r-xs disabled m-l-sm">{{translate 'tickets' 'assignee'}}</button>
+				<button class="btn btn-default btn-sm m-r-xs disabled">{{translate 'contacts-view' 'workflow'}}</button>
+		      	<button class="btn btn-default btn-sm m-r-xs disabled">{{translate 'tickets' 'manage-labels'}}</button>
+			    <button class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled bulk-ticket-close">{{translate 'contact-details' 'close'}}</button>
+			    <button class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled bulk-ticket-delete">{{translate 'contact-details' 'delete'}}</button>
 			    <div class="btn-group dropdown m-r-xs">
-		          <button class="btn btn-default btn-sm disabled bulk-action-btn" data-toggle="dropdown" aria-expanded="false">{{agile_translate "plan-and-upgrade" "more"}}<span class="caret"></span></button>
+		          <button class="btn btn-default btn-sm disabled bulk-action-btn" data-toggle="dropdown" aria-expanded="false">{{translate 'plan-and-upgrade' 'more'}}  
+		          <span class="caret"></span></button>
 		          <ul class="dropdown-menu dropdown-menu-right">
 		            <li><a href="javascript:void(0);" class="bulk-favorite-tickets">
-		            		{{agile_translate "tickets" "mark-as-favorite"}}</a>
+		            		{{translate 'tickets' 'mark-as-favorite'}}
+		            	</a>
 		            </li>
 		            <li>
 		            	<a href="javascript:void(0);" class="bulk-spam-tickets">
-		            		{{agile_translate "tickets" "mark-as-spam"}}</a>
+		            		{{translate 'tickets' 'mark-as-spam'}}
+		            	</a>
 		            </li>
 		          </ul>
 		        </div>
 
 			    <div class="btn-group dropdown pull-right">
-			      <!--<a href="javascript:void(0);" class="btn btn-default btn-sm m-r-sm disabled"
-					    			onclick="App_Ticket_Module.renderNewTicketModalView();">{{agile_translate "tickets" "new-ticket"}}</a>-->
 		          <button class="btn btn-sm btn-default toggle-collection-view disabled {{#is_single_row_view}}single-line{{else}}multi-line{{/is_single_row_view}}">
 			    		{{#is_single_row_view}}
 			    			<i class="fa fa-ellipsis-h"></i>

@@ -8,12 +8,13 @@
                <div class="control-group lhs-row-filter p-n" style="border-bottom:1px solid #dee5e7;position:relative;border-bottom-width:0px;margin-bottom:0px">
                   <a  id="lhs-filters-header" 
                      class="c-p text-l-none text-l-none-hover" >
-                  {{agile_translate "visitors" "page-viewed"}}<span
+                  {{translate 'visitors' 'page-viewed'}}
+                  <span
                      style="color: grey; vertical-align: text-top; margin-left: -3px"> <img
                      border="0" src="{{getS3ImagePath '/img/help.png'}}"
                      style="height: 6px; vertical-align: top" rel="popover"
                      data-placement="right"
-                     data-title:" data-content="  A web page viewed on the website"
+                     data-title:" data-content="{{translate 'visitors' 'web-page-viewed-on-the-website'}}"
                      id="element" data-trigger="hover" " />
                   </span>
                   <i class="fa inline pos-abs pos-r-0 fa-plus-square-o"></i></a>
@@ -21,14 +22,15 @@
                      <div class="lhs-contact-filter-row pos-rlt m-t-xs">
                         <input class="form-control" type="hidden" name="LHS" value="page_viewed" />
                         <select id="between_filter" class="form-control" name="CONDITION">
-                           <option value="CONTAINS">{{agile_translate "tickets" "contains"}}</option>
-                           <option value="DOES_NOT_CONTAIN">{{agile_translate "visitors" "does-not-contain"}}</option>
-                           <option value="IS_EQUAL_TO">{{agile_translate "visitors" "is-equal-to"}}</option>
-                           <option value="IS_NOT_EQUAL_TO">{{agile_translate "visitors" "is-not-equal-to"}}</option>
+                           <option value="CONTAINS">{{translate 'tickets' 'contains'}}
+                           </option>
+                           <option value="DOES_NOT_CONTAIN">{{translate 'visitors' 'does-not-contain'}}</option>
+                           <option value="IS_EQUAL_TO">{{translate 'visitors' 'is-equal-to'}}</option>
+                           <option value="IS_NOT_EQUAL_TO">{{translate 'visitors' 'is-not-equal-to'}}</option>
                         </select>
                         <div class="IS_EQUAL_TO IS_NOT_EQUAL_TO CONTAINS DOES_NOT_CONTAIN condition_container m-t-xs">
                            <span id="RHS">
-                           <input type="text"  placeholder="Value" prev-val="" class="form-control required">
+                           <input type="text"  placeholder="{{translate 'contacts-view' 'value'}}" prev-val="" class="form-control required">
                            </span>
                         </div>
                         <div class="m-t-xs"><a class="hide pull-right clear-filter-condition-lhs"><i class="icon-trash text-l-none-hover c-p text-muted text-sm" id="removeBtn"></i></a></div>
@@ -45,12 +47,13 @@
                <div class="control-group lhs-row-filter p-n" style="border-bottom:1px solid #dee5e7;position:relative;border-bottom-width:0px;margin-bottom:0px">
                   <a  id="lhs-filters-header" 
                      class="c-p text-l-none text-l-none-hover" >
-                  {{agile_translate "admin-settings-deals" "Referral"}}<span
+                  {{translate 'visitors' 'referral'}} 
+                  <span
                      style="color: grey; vertical-align: text-top; margin-left: -3px"> <img
                      border="0" src="{{getS3ImagePath '/img/help.png'}}"
                      style="height: 6px; vertical-align: top" rel="popover"
                      data-placement="right"
-                     data-title:" data-content="&nbsp;A link clicked on a page that led to  your &nbsp;  site "
+                     data-title:" data-content="&nbsp;{{translate 'visitors' 'link-clicked-on-page'}} &nbsp;  {{translate 'visitors' 'site'}} "
                      id="element" data-trigger="hover" " />
                   </span> 
                   <i class="fa inline pos-abs pos-r-0 fa-plus-square-o"></i></a>
@@ -58,14 +61,15 @@
                      <div class="lhs-contact-filter-row pos-rlt">
                         <input type="hidden" name="LHS" class="form-control" value="referred_from" />
                         <select id="between_filter" name="CONDITION" class="form-control" >
-                           <option value="CONTAINS">{{agile_translate "tickets" "contains"}}</option>
-                           <option value="DOES_NOT_CONTAIN">{{agile_translate "visitors" "does-not-contain"}}</option>
-                           <option value="IS_EQUAL_TO">{{agile_translate "visitors" "is-equal-to"}}</option>
-                           <option value="IS_NOT_EQUAL_TO">{{agile_translate "visitors" "is-not-equal-to"}}</option>
+                           <option value="CONTAINS">{{translate 'tickets' 'contains'}}
+                           </option>
+                           <option value="DOES_NOT_CONTAIN">{{translate 'visitors' 'does-not-contain'}}</option>
+                           <option value="IS_EQUAL_TO">{{translate 'visitors' 'is-equal-to'}}</option>
+                           <option value="IS_NOT_EQUAL_TO">{{translate 'visitors' 'is-not-equal-to'}}</option>
                         </select>
                         <div class="IS_EQUAL_TO IS_NOT_EQUAL_TO  CONTAINS DOES_NOT_CONTAIN condition_container m-t-xs">
                            <span id="RHS">
-                           <input type="text"  placeholder="Value" prev-val="" class="form-control required">
+                           <input type="text"  placeholder="{{translate 'contacts-view' 'value'}}" prev-val="" class="form-control required">
                            </span>
                         </div>
                         <div class="m-t-xs"><a class="hide pull-right clear-filter-condition-lhs"><i class="icon-trash text-l-none-hover c-p text-muted text-sm" id="removeBtn"></i></a></div>
@@ -81,12 +85,13 @@
             <div class="panel-body">
                <div class="control-group lhs-row-filter p-n" style="border-bottom:1px solid #dee5e7;position:relative;border-bottom-width:0px;margin-bottom:0px">
                   <a  id="lhs-filters-header"  class="c-p text-l-none text-l-none-hover" >
-                  {{agile_translate "visitors" "sessions"}}<span
+                  {{translate 'visitors' 'sessions'}}
+                  <span
                      style=" color: grey; vertical-align: text-top; margin-left: -3px"> <img
                      border="0" src="{{getS3ImagePath '/img/help.png'}}"
                      style="height: 6px; vertical-align: top" rel="popover"
                      data-placement="right"
-                     data-title:" data-content=" Number of times website is visited "
+                     data-title:" data-content=" {{translate 'visitors' 'number-of-times-website-is-visited'}} "
                      id="element" data-trigger="hover" " />
                   </span> 
                   <i class="fa inline pos-abs pos-r-0 fa-plus-square-o"></i></a>
@@ -94,23 +99,24 @@
                      <div class="lhs-contact-filter-row pos-rlt">
                         <input type="hidden" name="LHS" class="form-control" value="webstats" />
                         <select id="between_filter" name="CONDITION" class="form-control" >
-                           <option value="IS_GREATER_THAN">{{agile_translate "visitors" "is-greater-than"}}</option>
-                           <option value="IS_LESS_THAN">{{agile_translate "visitors" "is-less-than"}}</option>
-                           <option value="IN_BETWEEN">{{agile_translate "visitors" "in-between"}}</option>
-                           <option value="IS_EQUAL_TO">{{agile_translate "visitors" "is-equal-to"}}</option>
+                           <option value="IS_GREATER_THAN">{{translate 'visitors' 'is-greater-than'}}</option>
+                           <option value="IS_LESS_THAN">{{translate 'visitors' 'is-less-than'}}</option>
+                           <option value="IN_BETWEEN">{{translate 'visitors' 'in-between'}}
+                           </option>
+                           <option value="IS_EQUAL_TO">{{translate 'visitors' 'is-equal-to'}}</option>
                         </select>
                         <div class="IS_EQUAL_TO IS_NOT_EQUAL_TO  IS_GREATER_THAN_OR_EQUAL_TO IS_LESS_THAN_OR_EQUAL_TO IS_GREATER_THAN IS_LESS_THAN condition_container m-t-xs">
                            <span id="RHS">
-                           <input type="number" placeholder="Value" prev-val="" class="form-control required">
+                           <input type="number" placeholder="{{translate 'contacts-view' 'value'}}" prev-val="" class="form-control required">
                            </span>
                         </div>
                         <div class="IN_BETWEEN condition_container hide m-t-xs">
                            <div class="clear"></div>
                            <span id="RHS">
-                           <input type="number" min="0" class="required form-control text-xs" prev-val="" placeholder="Min Value" name="temp-3" id="temp-3" style="height:30px;"> 
+                           <input type="number" min="0" class="required form-control text-xs" prev-val="" placeholder="{{translate 'contacts-view' 'min-value'}}" name="temp-3" id="temp-3" style="height:30px;"> 
                            </span>
                            <span id="RHS_NEW">
-                           <input type="number" min="0" placeholder="Max Value" prev-val="" class="required form-control text-xs" name="temp-4" id="temp-4" style="height:30px;">
+                           <input type="number" min="0" placeholder="{{translate 'contacts-view' 'max-value'}}" prev-val="" class="required form-control text-xs" name="temp-4" id="temp-4" style="height:30px;">
                            </span>
                         </div>
                         <div class="m-t-xs"><a class="hide pull-right clear-filter-condition-lhs"><i class="icon-trash text-l-none-hover c-p text-muted text-sm" id="removeBtn"></i></a></div>
@@ -127,267 +133,270 @@
                <div class="control-group lhs-row-filter p-n" style="border-bottom:1px solid #dee5e7;position:relative;border-bottom-width:0px;margin-bottom:0px">
                   <a  id="lhs-filters-header" 
                      class="c-p text-l-none text-l-none-hover" >
-                  {{agile_translate "contacts-view" "country"}}<i class="fa inline pos-abs pos-r-0 fa-plus-square-o"></i></a>
+                  {{translate 'contacts-view' 'country'}}
+                  <i class="fa inline pos-abs pos-r-0 fa-plus-square-o"></i></a>
                   <div class="controls m-t-xs hide" id="ip_country_div">
                      <div class="lhs-contact-filter-row pos-rlt">
                         <input type="hidden" name="LHS" value="ip_country" class="form-control"/>
                         <select id="between_filter" name="CONDITION" class="form-control" >
-                           <option value="IS_EQUAL_TO">{{agile_translate "visitors" "is-equal-to"}}</option>
-                           <option value="IS_NOT_EQUAL_TO">{{agile_translate "visitors" "is-not-equal-to"}}</option>
+                           <option value="IS_EQUAL_TO">{{translate 'visitors' 'is-equal-to'}}</option>
+                           <option value="IS_NOT_EQUAL_TO">{{translate 'visitors' 'is-not-equal-to'}}</option>
                         </select>
                         <div class="IS_EQUAL_TO IS_NOT_EQUAL_TO  condition_container  m-t-xs">
                            <span id="RHS">
                               <select id="countryList" name="countryList" class="form-control" >
-                                 <option value="">{{agile_translate "visitors" "choose-country"}}</option>
-                                 <option value="AF">{{agile_translate "countries" "AF"}}</option>
-                                 <option value="AX">{{agile_translate "countries" "AX"}}</option>
-                                 <option value="AL">{{agile_translate "countries" "AL"}}</option>
-                                 <option value="DZ">{{agile_translate "countries" "DZ"}}</option>
-                                 <option value="AS">{{agile_translate "countries" "AS"}}</option>
-                                 <option value="AD">{{agile_translate "countries" "AD"}}</option>
-                                 <option value="AO">{{agile_translate "countries" "AO"}}</option>
-                                 <option value="AI">{{agile_translate "countries" "AI"}}</option>
-                                 <option value="AQ">{{agile_translate "countries" "AQ"}}</option>
-                                 <option value="AG">{{agile_translate "countries" "AG"}}</option>
-                                 <option value="AR">{{agile_translate "countries" "AR"}}</option>
-                                 <option value="AM">{{agile_translate "countries" "AM"}}</option>
-                                 <option value="AW">{{agile_translate "countries" "AW"}}</option>
-                                 <option value="AU">{{agile_translate "countries" "AU"}}</option>
-                                 <option value="AT">{{agile_translate "countries" "AT"}}</option>
-                                 <option value="AZ">{{agile_translate "countries" "AZ"}}</option>
-                                 <option value="BS">{{agile_translate "countries" "BS"}}</option>
-                                 <option value="BH">{{agile_translate "countries" "BH"}}</option>
-                                 <option value="BD">{{agile_translate "countries" "BD"}}</option>
-                                 <option value="BB">{{agile_translate "countries" "BB"}}</option>
-                                 <option value="BY">{{agile_translate "countries" "BY"}}</option>
-                                 <option value="BE">{{agile_translate "countries" "BE"}}</option>
-                                 <option value="BZ">{{agile_translate "countries" "BZ"}}</option>
-                                 <option value="BJ">{{agile_translate "countries" "BJ"}}</option>
-                                 <option value="BM">{{agile_translate "countries" "BM"}}</option>
-                                 <option value="BT">{{agile_translate "countries" "BT"}}</option>
-                                 <option value="BO">Bolivia, Plurinational State of</option>
-                                 <option value="BQ">{{agile_translate "countries" "BQ"}}</option>
-                                 <option value="BA">{{agile_translate "countries" "BA"}}</option>
-                                 <option value="BW">{{agile_translate "countries" "BW"}}</option>
-                                 <option value="BV">{{agile_translate "countries" "BV"}}</option>
-                                 <option value="BR">{{agile_translate "countries" "BR"}}</option>
-                                 <option value="IO">{{agile_translate "countries" "IO"}}</option>
-                                 <option value="BN">{{agile_translate "countries" "BN"}}</option>
-                                 <option value="BG">{{agile_translate "countries" "BG"}}</option>
-                                 <option value="BF">{{agile_translate "countries" "BF"}}</option>
-                                 <option value="BI">{{agile_translate "countries" "BI"}}</option>
-                                 <option value="KH">{{agile_translate "countries" "KH"}}</option>
-                                 <option value="CM">{{agile_translate "countries" "CM"}}</option>
-                                 <option value="CA">{{agile_translate "countries" "CA"}}</option>
-                                 <option value="CV">{{agile_translate "countries" "CV"}}</option>
-                                 <option value="KY">{{agile_translate "countries" "KY"}}</option>
-                                 <option value="CF">{{agile_translate "countries" "CF"}}</option>
-                                 <option value="TD">{{agile_translate "countries" "TD"}}</option>
-                                 <option value="CL">{{agile_translate "countries" "CL"}}</option>
-                                 <option value="CN">{{agile_translate "countries" "CN"}}</option>
-                                 <option value="CX">{{agile_translate "countries" "CX"}}</option>
-                                 <option value="CC">Cocos (Keeling) Islands</option>
-                                 <option value="CO">{{agile_translate "countries" "CO"}}</option>
-                                 <option value="KM">{{agile_translate "countries" "KM"}}</option>
-                                 <option value="CG">{{agile_translate "countries" "CG"}}</option>
-                                 <option value="CD">Congo, the Democratic Republic of the</option>
-                                 <option value="CK">{{agile_translate "countries" "CK"}}</option>
-                                 <option value="CR">{{agile_translate "countries" "CR"}}</option>
-                                 <option value="CI">Côte d'Ivoire</option>
-                                 <option value="HR">{{agile_translate "countries" "HR"}}</option>
-                                 <option value="CU">{{agile_translate "countries" "CU"}}</option>
-                                 <option value="CW">{{agile_translate "countries" "CW"}}</option>
-                                 <option value="CY">{{agile_translate "countries" "CY"}}</option>
-                                 <option value="CZ">{{agile_translate "countries" "CZ"}}</option>
-                                 <option value="DK">{{agile_translate "countries" "DK"}}</option>
-                                 <option value="DJ">{{agile_translate "countries" "DJ"}}</option>
-                                 <option value="DM">{{agile_translate "countries" "DM"}}</option>
-                                 <option value="DO">{{agile_translate "countries" "DO"}}</option>
-                                 <option value="EC">{{agile_translate "countries" "EC"}}</option>
-                                 <option value="EG">{{agile_translate "countries" "EG"}}</option>
-                                 <option value="SV">{{agile_translate "countries" "SV"}}</option>
-                                 <option value="GQ">{{agile_translate "countries" "GQ"}}</option>
-                                 <option value="ER">{{agile_translate "countries" "ER"}}</option>
-                                 <option value="EE">{{agile_translate "countries" "EE"}}</option>
-                                 <option value="ET">{{agile_translate "countries" "ET"}}</option>
-                                 <option value="FK">Falkland Islands (Malvinas)</option>
-                                 <option value="FO">{{agile_translate "countries" "FO"}}</option>
-                                 <option value="FJ">{{agile_translate "countries" "FJ"}}</option>
-                                 <option value="FI">{{agile_translate "countries" "FI"}}</option>
-                                 <option value="FR">{{agile_translate "countries" "FR"}}</option>
-                                 <option value="GF">{{agile_translate "countries" "GF"}}</option>
-                                 <option value="PF">{{agile_translate "countries" "PF"}}</option>
-                                 <option value="TF">{{agile_translate "countries" "TF"}}</option>
-                                 <option value="GA">{{agile_translate "countries" "GA"}}</option>
-                                 <option value="GM">{{agile_translate "countries" "GM"}}</option>
-                                 <option value="GE">{{agile_translate "countries" "GE"}}</option>
-                                 <option value="DE">{{agile_translate "countries" "DE"}}</option>
-                                 <option value="GH">{{agile_translate "countries" "GH"}}</option>
-                                 <option value="GI">{{agile_translate "countries" "GI"}}</option>
-                                 <option value="GR">{{agile_translate "countries" "GR"}}</option>
-                                 <option value="GL">{{agile_translate "countries" "GL"}}</option>
-                                 <option value="GD">{{agile_translate "countries" "GD"}}</option>
-                                 <option value="GP">{{agile_translate "countries" "GP"}}</option>
-                                 <option value="GU">{{agile_translate "countries" "GU"}}</option>
-                                 <option value="GT">{{agile_translate "countries" "GT"}}</option>
-                                 <option value="GG">{{agile_translate "countries" "GG"}}</option>
-                                 <option value="GN">{{agile_translate "countries" "GN"}}</option>
-                                 <option value="GW">{{agile_translate "countries" "GW"}}</option>
-                                 <option value="GY">{{agile_translate "countries" "GY"}}</option>
-                                 <option value="HT">{{agile_translate "countries" "HT"}}</option>
-                                 <option value="HM">Heard Island and McDonald Islands</option>
-                                 <option value="VA">Holy See (Vatican City State)</option>
-                                 <option value="HN">{{agile_translate "countries" "HN"}}</option>
-                                 <option value="HK">{{agile_translate "countries" "HK"}}</option>
-                                 <option value="HU">{{agile_translate "countries" "HU"}}</option>
-                                 <option value="IS">{{agile_translate "countries" "IS"}}</option>
-                                 <option value="IN">{{agile_translate "countries" "IN"}}</option>
-                                 <option value="ID">{{agile_translate "countries" "ID"}}</option>
-                                 <option value="IR">Iran, Islamic Republic of</option>
-                                 <option value="IQ">{{agile_translate "countries" "IQ"}}</option>
-                                 <option value="IE">{{agile_translate "countries" "IE"}}</option>
-                                 <option value="IM">{{agile_translate "countries" "IM"}}</option>
-                                 <option value="IL">{{agile_translate "countries" "IL"}}</option>
-                                 <option value="IT">{{agile_translate "countries" "IT"}}</option>
-                                 <option value="JM">{{agile_translate "countries" "JM"}}</option>
-                                 <option value="JP">{{agile_translate "countries" "JP"}}</option>
-                                 <option value="JE">{{agile_translate "countries" "JE"}}</option>
-                                 <option value="JO">{{agile_translate "countries" "JO"}}</option>
-                                 <option value="KZ">{{agile_translate "countries" "KZ"}}</option>
-                                 <option value="KE">{{agile_translate "countries" "KE"}}</option>
-                                 <option value="KI">{{agile_translate "countries" "KI"}}</option>
-                                 <option value="KP">Korea, Democratic People's Republic of</option>
-                                 <option value="KR">{{agile_translate "countries" "KR"}}</option>
-                                 <option value="KW">{{agile_translate "countries" "KW"}}</option>
-                                 <option value="KG">{{agile_translate "countries" "KG"}}</option>
-                                 <option value="LA">{{agile_translate "countries" "LA"}}</option>
-                                 <option value="LV">{{agile_translate "countries" "LV"}}</option>
-                                 <option value="LB">{{agile_translate "countries" "LB"}}</option>
-                                 <option value="LS">{{agile_translate "countries" "LS"}}</option>
-                                 <option value="LR">{{agile_translate "countries" "LR"}}</option>
-                                 <option value="LY">Libya</option>
-                                 <option value="LI">{{agile_translate "countries" "LI"}}</option>
-                                 <option value="LT">{{agile_translate "countries" "LT"}}</option>
-                                 <option value="LU">{{agile_translate "countries" "LU"}}</option>
-                                 <option value="MO">{{agile_translate "countries" "MO"}}</option>
-                                 <option value="MK">Macedonia, the former Yugoslav Republic of</option>
-                                 <option value="MG">{{agile_translate "countries" "MG"}}</option>
-                                 <option value="MW">{{agile_translate "countries" "MW"}}</option>
-                                 <option value="MY">{{agile_translate "countries" "MY"}}</option>
-                                 <option value="MV">{{agile_translate "countries" "MV"}}</option>
-                                 <option value="ML">{{agile_translate "countries" "ML"}}</option>
-                                 <option value="MT">{{agile_translate "countries" "MT"}}</option>
-                                 <option value="MH">{{agile_translate "countries" "MH"}}</option>
-                                 <option value="MQ">{{agile_translate "countries" "MQ"}}</option>
-                                 <option value="MR">{{agile_translate "countries" "MR"}}</option>
-                                 <option value="MU">{{agile_translate "countries" "MU"}}</option>
-                                 <option value="YT">{{agile_translate "countries" "YT"}}</option>
-                                 <option value="MX">{{agile_translate "countries" "MX"}}</option>
-                                 <option value="FM">{{agile_translate "countries" "FM"}}</option>
-                                 <option value="MD">{{agile_translate "countries" "MD"}}</option>
-                                 <option value="MC">{{agile_translate "countries" "MC"}}</option>
-                                 <option value="MN">{{agile_translate "countries" "MN"}}</option>
-                                 <option value="ME">{{agile_translate "countries" "ME"}}</option>
-                                 <option value="MS">{{agile_translate "countries" "MS"}}</option>
-                                 <option value="MA">{{agile_translate "countries" "MA"}}</option>
-                                 <option value="MZ">{{agile_translate "countries" "MZ"}}</option>
-                                 <option value="MM">{{agile_translate "countries" "MM"}}</option>
-                                 <option value="NA">{{agile_translate "countries" "NA"}}</option>
-                                 <option value="NR">{{agile_translate "countries" "NR"}}</option>
-                                 <option value="NP">{{agile_translate "countries" "NP"}}</option>
-                                 <option value="NL">{{agile_translate "countries" "NL"}}</option>
-                                 <option value="NC">{{agile_translate "countries" "NC"}}</option>
-                                 <option value="NZ">{{agile_translate "countries" "NZ"}}</option>
-                                 <option value="NI">{{agile_translate "countries" "NI"}}</option>
-                                 <option value="NE">{{agile_translate "countries" "NE"}}</option>
-                                 <option value="NG">{{agile_translate "countries" "NG"}}</option>
-                                 <option value="NU">{{agile_translate "countries" "NU"}}</option>
-                                 <option value="NF">{{agile_translate "countries" "NF"}}</option>
-                                 <option value="MP">{{agile_translate "countries" "MP"}}</option>
-                                 <option value="NO">{{agile_translate "countries" "NO"}}</option>
-                                 <option value="OM">{{agile_translate "countries" "OM"}}</option>
-                                 <option value="PK">{{agile_translate "countries" "PK"}}</option>
-                                 <option value="PW">{{agile_translate "countries" "PW"}}</option>
-                                 <option value="PS">{{agile_translate "countries" "PS"}}</option>
-                                 <option value="PA">{{agile_translate "countries" "PA"}}</option>
-                                 <option value="PG">{{agile_translate "countries" "PG"}}</option>
-                                 <option value="PY">{{agile_translate "countries" "PY"}}</option>
-                                 <option value="PE">{{agile_translate "countries" "PE"}}</option>
-                                 <option value="PH">{{agile_translate "countries" "PH"}}</option>
-                                 <option value="PN">{{agile_translate "countries" "PN"}}</option>
-                                 <option value="PL">{{agile_translate "countries" "PL"}}</option>
-                                 <option value="PT">{{agile_translate "countries" "PT"}}</option>
-                                 <option value="PR">{{agile_translate "countries" "PR"}}</option>
-                                 <option value="QA">{{agile_translate "countries" "QA"}}</option>
-                                 <option value="RE">Réuni{{agile_translate "contacts-view" "on"}}</option>
-                                 <option value="RO">{{agile_translate "countries" "RO"}}</option>
-                                 <option value="RU">{{agile_translate "countries" "RU"}}</option>
-                                 <option value="RW">{{agile_translate "countries" "RW"}}</option>
-                                 <option value="BL">Saint Barthélemy</option>
-                                 <option value="SH">Saint Helena, Ascension and Tristan da Cunha</option>
-                                 <option value="KN">{{agile_translate "countries" "KN"}}</option>
-                                 <option value="LC">{{agile_translate "countries" "LC"}}</option>
-                                 <option value="MF">Saint Martin (French part)</option>
-                                 <option value="PM">{{agile_translate "countries" "PM"}}</option>
-                                 <option value="VC">{{agile_translate "countries" "VC"}}</option>
-                                 <option value="WS">{{agile_translate "countries" "WS"}}</option>
-                                 <option value="SM">{{agile_translate "countries" "SM"}}</option>
-                                 <option value="ST">{{agile_translate "countries" "ST"}}</option>
-                                 <option value="SA">{{agile_translate "countries" "SA"}}</option>
-                                 <option value="SN">{{agile_translate "countries" "SN"}}</option>
-                                 <option value="RS">{{agile_translate "countries" "RS"}}</option>
-                                 <option value="SC">{{agile_translate "countries" "SC"}}</option>
-                                 <option value="SL">{{agile_translate "countries" "SL"}}</option>
-                                 <option value="SG">{{agile_translate "countries" "SG"}}</option>
-                                 <option value="SX">Sint Maarten (Dutch part)</option>
-                                 <option value="SK">{{agile_translate "countries" "SK"}}</option>
-                                 <option value="SI">{{agile_translate "countries" "SI"}}</option>
-                                 <option value="SB">{{agile_translate "countries" "SB"}}</option>
-                                 <option value="SO">{{agile_translate "countries" "SO"}}</option>
-                                 <option value="ZA">{{agile_translate "countries" "ZA"}}</option>
-                                 <option value="GS">{{agile_translate "countries" "GS"}}</option>
-                                 <option value="SS">South {{agile_translate "countries" "SD"}}</option>
-                                 <option value="ES">{{agile_translate "countries" "ES"}}</option>
-                                 <option value="LK">{{agile_translate "countries" "LK"}}</option>
-                                 <option value="SD">{{agile_translate "countries" "SD"}}</option>
-                                 <option value="SR">{{agile_translate "countries" "SR"}}</option>
-                                 <option value="SJ">{{agile_translate "countries" "SJ"}}</option>
-                                 <option value="SZ">{{agile_translate "countries" "SZ"}}</option>
-                                 <option value="SE">{{agile_translate "countries" "SE"}}</option>
-                                 <option value="CH">{{agile_translate "countries" "CH"}}</option>
-                                 <option value="SY">{{agile_translate "countries" "SY"}}</option>
-                                 <option value="TW">Taiwan, Province of {{agile_translate "countries" "CN"}}</option>
-                                 <option value="TJ">{{agile_translate "countries" "TJ"}}</option>
-                                 <option value="TZ">{{agile_translate "countries" "TZ"}}</option>
-                                 <option value="TH">{{agile_translate "countries" "TH"}}</option>
-                                 <option value="TL">{{agile_translate "countries" "TL"}}</option>
-                                 <option value="TG">{{agile_translate "countries" "TG"}}</option>
-                                 <option value="TK">{{agile_translate "countries" "TK"}}</option>
-                                 <option value="TO">{{agile_translate "countries" "TO"}}</option>
-                                 <option value="TT">{{agile_translate "countries" "TT"}}</option>
-                                 <option value="TN">{{agile_translate "countries" "TN"}}</option>
-                                 <option value="TR">{{agile_translate "countries" "TR"}}</option>
-                                 <option value="TM">{{agile_translate "countries" "TM"}}</option>
-                                 <option value="TC">{{agile_translate "countries" "TC"}}</option>
-                                 <option value="TV">{{agile_translate "countries" "TV"}}</option>
-                                 <option value="UG">{{agile_translate "countries" "UG"}}</option>
-                                 <option value="UA">{{agile_translate "countries" "UA"}}</option>
-                                 <option value="AE">{{agile_translate "countries" "AE"}}</option>
-                                 <option value="GB">{{agile_translate "countries" "GB"}}</option>
-                                 <option value="US">{{agile_translate "countries" "US"}}</option>
-                                 <option value="UM">{{agile_translate "countries" "UM"}}</option>
-                                 <option value="UY">{{agile_translate "countries" "UY"}}</option>
-                                 <option value="UZ">{{agile_translate "countries" "UZ"}}</option>
-                                 <option value="VU">{{agile_translate "countries" "VU"}}</option>
-                                 <option value="VE">Venezuela, Bolivarian Republic of</option>
-                                 <option value="VN">{{agile_translate "countries" "VN"}}</option>
-                                 <option value="VG">{{agile_translate "countries" "VG"}}</option>
-                                 <option value="VI">{{agile_translate "countries" "VI"}}</option>
-                                 <option value="WF">{{agile_translate "countries" "WF"}}</option>
-                                 <option value="EH">{{agile_translate "countries" "EH"}}</option>
-                                 <option value="YE">{{agile_translate "countries" "YE"}}</option>
-                                 <option value="ZM">{{agile_translate "countries" "ZM"}}</option>
-                                 <option value="ZW">{{agile_translate "countries" "ZW"}}</option>
+                                 <option value="">{{translate 'visitors' 'choose-country'}}
+                                 </option>
+                                 <option value="AF">{{translate 'countries' 'AF'}}</option>
+                                 <option value="AX">{{translate 'countries' 'AX'}}</option>
+                                 <option value="AL">{{translate 'countries' 'AL'}}</option>
+                                 <option value="DZ">{{translate 'countries' 'DZ'}}</option>
+                                 <option value="AS">{{translate 'countries' 'AS'}}</option>
+                                 <option value="AD">{{translate 'countries' 'AD'}}</option>
+                                 <option value="AO">{{translate 'countries' 'AO'}}</option>
+                                 <option value="AI">{{translate 'countries' 'AI'}}</option>
+                                 <option value="AQ">{{translate 'countries' 'AQ'}}</option>
+                                 <option value="AG">{{translate 'countries' 'AG'}}</option>
+                                 <option value="AR">{{translate 'countries' 'AR'}}</option>
+                                 <option value="AM">{{translate 'countries' 'AM'}}</option>
+                                 <option value="AW">{{translate 'countries' 'AW'}}</option>
+                                 <option value="AU">{{translate 'countries' 'AU'}}</option>
+                                 <option value="AT">{{translate 'countries' 'AT'}}</option>
+                                 <option value="AZ">{{translate 'countries' 'AZ'}}</option>
+                                 <option value="BS">{{translate 'countries' 'BS'}}</option>
+                                 <option value="BH">{{translate 'countries' 'BH'}}</option>
+                                 <option value="BD">{{translate 'countries' 'BD'}}</option>
+                                 <option value="BB">{{translate 'countries' 'BB'}}</option>
+                                 <option value="BY">{{translate 'countries' 'BY'}}</option>
+                                 <option value="BE">{{translate 'countries' 'BE'}}</option>
+                                 <option value="BZ">{{translate 'countries' 'BZ'}}</option>
+                                 <option value="BJ">{{translate 'countries' 'BJ'}}</option>
+                                 <option value="BM">{{translate 'countries' 'BM'}}</option>
+                                 <option value="BT">{{translate 'countries' 'BT'}}</option>
+                                 <option value="BO">{{translate 'countries' 'BO'}}</option>
+                                 <option value="BQ">{{translate 'countries' 'BQ'}}</option>
+                                 <option value="BA">{{translate 'countries' 'BA'}}</option>
+                                 <option value="BW">{{translate 'countries' 'BW'}}</option>
+                                 <option value="BV">{{translate 'countries' 'BV'}}</option>
+                                 <option value="BR">{{translate 'countries' 'BR'}}</option>
+                                 <option value="IO">{{translate 'countries' 'IO'}}</option>
+                                 <option value="BN">{{translate 'countries' 'BN'}}</option>
+                                 <option value="BG">{{translate 'countries' 'BG'}}</option>
+                                 <option value="BF">{{translate 'countries' 'BF'}}</option>
+                                 <option value="BI">{{translate 'countries' 'BI'}}</option>
+                                 <option value="KH">{{translate 'countries' 'KH'}}</option>
+                                 <option value="CM">{{translate 'countries' 'CM'}}</option>
+                                 <option value="CA">{{translate 'countries' 'CA'}}</option>
+                                 <option value="CV">{{translate 'countries' 'CV'}}</option>
+                                 <option value="KY">{{translate 'countries' 'KY'}}</option>
+                                 <option value="CF">{{translate 'countries' 'CF'}}</option>
+                                 <option value="TD">{{translate 'countries' 'TD'}}</option>
+                                 <option value="CL">{{translate 'countries' 'CL'}}</option>
+                                 <option value="CN">{{translate 'countries' 'CN'}}</option>
+                                 <option value="CX">{{translate 'countries' 'CX'}}</option>
+                                 <option value="CC">{{translate 'countries' 'CC'}}</option>
+                                 <option value="CO">{{translate 'countries' 'CO'}}</option>
+                                 <option value="KM">{{translate 'countries' 'KM'}}</option>
+                                 <option value="CG">{{translate 'countries' 'CG'}}</option>
+                                 <option value="CD">{{translate 'countries' 'CD'}}
+                                 </option>
+                                 <option value="CK">{{translate 'countries' 'CK'}}</option>
+                                 <option value="CR">{{translate 'countries' 'CR'}}</option>
+                                 <option value="CI">{{translate 'countries' 'CI'}}</option>
+                                 <option value="HR">{{translate 'countries' 'HR'}}</option>
+                                 <option value="CU">{{translate 'countries' 'CU'}}</option>
+                                 <option value="CW">{{translate 'countries' 'CW'}}</option>
+                                 <option value="CY">{{translate 'countries' 'CY'}}</option>
+                                 <option value="CZ">{{translate 'countries' 'CZ'}}</option>
+                                 <option value="DK">{{translate 'countries' 'DK'}}</option>
+                                 <option value="DJ">{{translate 'countries' 'DJ'}}</option>
+                                 <option value="DM">{{translate 'countries' 'DM'}}</option>
+                                 <option value="DO">{{translate 'countries' 'DO'}}</option>
+                                 <option value="EC">{{translate 'countries' 'EC'}}</option>
+                                 <option value="EG">{{translate 'countries' 'EG'}}</option>
+                                 <option value="SV">{{translate 'countries' 'SV'}}</option>
+                                 <option value="GQ">{{translate 'countries' 'GQ'}}</option>
+                                 <option value="ER">{{translate 'countries' 'ER'}}</option>
+                                 <option value="EE">{{translate 'countries' 'EE'}}</option>
+                                 <option value="ET">{{translate 'countries' 'ET'}}</option>
+                                 <option value="FK">{{translate 'countries' 'FK'}}</option>
+                                 <option value="FO">{{translate 'countries' 'FO'}}</option>
+                                 <option value="FJ">{{translate 'countries' 'FJ'}}</option>
+                                 <option value="FI">{{translate 'countries' 'FI'}}</option>
+                                 <option value="FR">{{translate 'countries' 'FR'}}</option>
+                                 <option value="GF">{{translate 'countries' 'GF'}}</option>
+                                 <option value="PF">{{translate 'countries' 'PF'}}</option>
+                                 <option value="TF">{{translate 'countries' 'TF'}}</option>
+                                 <option value="GA">{{translate 'countries' 'GA'}}</option>
+                                 <option value="GM">{{translate 'countries' 'GM'}}</option>
+                                 <option value="GE">{{translate 'countries' 'GE'}}</option>
+                                 <option value="DE">{{translate 'countries' 'DE'}}</option>
+                                 <option value="GH">{{translate 'countries' 'GH'}}</option>
+                                 <option value="GI">{{translate 'countries' 'GI'}}</option>
+                                 <option value="GR">{{translate 'countries' 'GR'}}</option>
+                                 <option value="GL">{{translate 'countries' 'GL'}}</option>
+                                 <option value="GD">{{translate 'countries' 'GD'}}</option>
+                                 <option value="GP">{{translate 'countries' 'GP'}}</option>
+                                 <option value="GU">{{translate 'countries' 'GU'}}</option>
+                                 <option value="GT">{{translate 'countries' 'GT'}}</option>
+                                 <option value="GG">{{translate 'countries' 'GG'}}</option>
+                                 <option value="GN">{{translate 'countries' 'GN'}}</option>
+                                 <option value="GW">{{translate 'countries' 'GW'}}</option>
+                                 <option value="GY">{{translate 'countries' 'GY'}}</option>
+                                 <option value="HT">{{translate 'countries' 'HT'}}</option>
+                                 <option value="HM">{{translate 'countries' 'HM'}}</option>
+                                 <option value="VA">{{translate 'countries' 'VA'}}</option>
+                                 <option value="HN">{{translate 'countries' 'HN'}}</option>
+                                 <option value="HK">{{translate 'countries' 'HK'}}</option>
+                                 <option value="HU">{{translate 'countries' 'HU'}}</option>
+                                 <option value="IS">{{translate 'countries' 'IS'}}</option>
+                                 <option value="IN">{{translate 'countries' 'IN'}}</option>
+                                 <option value="ID">{{translate 'countries' 'ID'}}</option>
+                                 <option value="IR">{{translate 'countries' 'IR'}}</option>
+                                 <option value="IQ">{{translate 'countries' 'IQ'}}</option>
+                                 <option value="IE">{{translate 'countries' 'IE'}}</option>
+                                 <option value="IM">{{translate 'countries' 'IM'}}</option>
+                                 <option value="IL">{{translate 'countries' 'IL'}}</option>
+                                 <option value="IT">{{translate 'countries' 'IT'}}</option>
+                                 <option value="JM">{{translate 'countries' 'JM'}}</option>
+                                 <option value="JP">{{translate 'countries' 'JP'}}</option>
+                                 <option value="JE">{{translate 'countries' 'JE'}}</option>
+                                 <option value="JO">{{translate 'countries' 'JO'}}</option>
+                                 <option value="KZ">{{translate 'countries' 'KZ'}}</option>
+                                 <option value="KE">{{translate 'countries' 'KE'}}</option>
+                                 <option value="KI">{{translate 'countries' 'KI'}}</option>
+                                 <option value="KP">{{translate 'countries' 'KP'}}</option>
+                                 <option value="KR">{{translate 'countries' 'KR'}}</option>
+                                 <option value="KW">{{translate 'countries' 'KW'}}</option>
+                                 <option value="KG">{{translate 'countries' 'KG'}}</option>
+                                 <option value="LA">{{translate 'countries' 'LA'}}</option>
+                                 <option value="LV">{{translate 'countries' 'LV'}}</option>
+                                 <option value="LB">{{translate 'countries' 'LB'}}</option>
+                                 <option value="LS">{{translate 'countries' 'LS'}}</option>
+                                 <option value="LR">{{translate 'countries' 'LR'}}</option>
+                                 <option value="LY">{{translate 'countries' 'LY'}}</option>
+                                 <option value="LI">{{translate 'countries' 'LI'}}</option>
+                                 <option value="LT">{{translate 'countries' 'LT'}}</option>
+                                 <option value="LU">{{translate 'countries' 'LU'}}</option>
+                                 <option value="MO">{{translate 'countries' 'MO'}}</option>
+                                 <option value="MK">{{translate 'countries' 'MK'}}</option>
+                                 <option value="MG">{{translate 'countries' 'MG'}}</option>
+                                 <option value="MW">{{translate 'countries' 'MW'}}</option>
+                                 <option value="MY">{{translate 'countries' 'MY'}}</option>
+                                 <option value="MV">{{translate 'countries' 'MV'}}</option>
+                                 <option value="ML">{{translate 'countries' 'ML'}}</option>
+                                 <option value="MT">{{translate 'countries' 'MT'}}</option>
+                                 <option value="MH">{{translate 'countries' 'MH'}}</option>
+                                 <option value="MQ">{{translate 'countries' 'MQ'}}</option>
+                                 <option value="MR">{{translate 'countries' 'MR'}}</option>
+                                 <option value="MU">{{translate 'countries' 'MU'}}</option>
+                                 <option value="YT">{{translate 'countries' 'YT'}}</option>
+                                 <option value="MX">{{translate 'countries' 'MX'}}</option>
+                                 <option value="FM">{{translate 'countries' 'FM'}}</option>
+                                 <option value="MD">{{translate 'countries' 'MD'}}</option>
+                                 <option value="MC">{{translate 'countries' 'MC'}}</option>
+                                 <option value="MN">{{translate 'countries' 'MN'}}</option>
+                                 <option value="ME">{{translate 'countries' 'ME'}}</option>
+                                 <option value="MS">{{translate 'countries' 'MS'}}</option>
+                                 <option value="MA">{{translate 'countries' 'MA'}}</option>
+                                 <option value="MZ">{{translate 'countries' 'MZ'}}</option>
+                                 <option value="MM">{{translate 'countries' 'MM'}}</option>
+                                 <option value="NA">{{translate 'countries' 'NA'}}</option>
+                                 <option value="NR">{{translate 'countries' 'NR'}}</option>
+                                 <option value="NP">{{translate 'countries' 'NP'}}</option>
+                                 <option value="NL">{{translate 'countries' 'NL'}}</option>
+                                 <option value="NC">{{translate 'countries' 'NC'}}</option>
+                                 <option value="NZ">{{translate 'countries' 'NZ'}}</option>
+                                 <option value="NI">{{translate 'countries' 'NI'}}</option>
+                                 <option value="NE">{{translate 'countries' 'NE'}}</option>
+                                 <option value="NG">{{translate 'countries' 'NG'}}</option>
+                                 <option value="NU">{{translate 'countries' 'NU'}}</option>
+                                 <option value="NF">{{translate 'countries' 'NF'}}</option>
+                                 <option value="MP">{{translate 'countries' 'MP'}}</option>
+                                 <option value="NO">{{translate 'countries' 'NO'}}</option>
+                                 <option value="OM">{{translate 'countries' 'OM'}}</option>
+                                 <option value="PK">{{translate 'countries' 'PK'}}</option>
+                                 <option value="PW">{{translate 'countries' 'PW'}}</option>
+                                 <option value="PS">{{translate 'countries' 'PS'}}</option>
+                                 <option value="PA">{{translate 'countries' 'PA'}}</option>
+                                 <option value="PG">{{translate 'countries' 'PG'}}</option>
+                                 <option value="PY">{{translate 'countries' 'PY'}}</option>
+                                 <option value="PE">{{translate 'countries' 'PE'}}</option>
+                                 <option value="PH">{{translate 'countries' 'PH'}}</option>
+                                 <option value="PN">{{translate 'countries' 'PN'}}</option>
+                                 <option value="PL">{{translate 'countries' 'PL'}}</option>
+                                 <option value="PT">{{translate 'countries' 'PT'}}</option>
+                                 <option value="PR">{{translate 'countries' 'PR'}}</option>
+                                 <option value="QA">{{translate 'countries' 'QA'}}</option>
+                                 <option value="RE">{{translate 'countries' 'RE'}}</option>
+                                 <option value="RO">{{translate 'countries' 'RO'}}</option>
+                                 <option value="RU">{{translate 'countries' 'RU'}}</option>
+                                 <option value="RW">{{translate 'countries' 'RW'}}</option>
+                                 <option value="BL">{{translate 'countries' 'BL'}}</option>
+                                 <option value="SH">{{translate 'countries' 'SH'}}</option>
+                                 <option value="KN">{{translate 'countries' 'KN'}}</option>
+                                 <option value="LC">{{translate 'countries' 'LC'}}</option>
+                                 <option value="MF">{{translate 'countries' 'MF'}}</option>
+                                 <option value="PM">{{translate 'countries' 'PM'}}</option>
+                                 <option value="VC">{{translate 'countries' 'VC'}}</option>
+                                 <option value="WS">{{translate 'countries' 'WS'}}</option>
+                                 <option value="SM">{{translate 'countries' 'SM'}}</option>
+                                 <option value="ST">{{translate 'countries' 'ST'}}</option>
+                                 <option value="SA">{{translate 'countries' 'SA'}}</option>
+                                 <option value="SN">{{translate 'countries' 'SN'}}</option>
+                                 <option value="RS">{{translate 'countries' 'RS'}}</option>
+                                 <option value="SC">{{translate 'countries' 'SC'}}</option>
+                                 <option value="SL">{{translate 'countries' 'SL'}}</option>
+                                 <option value="SG">{{translate 'countries' 'SG'}}</option>
+                                 <option value="SX">{{translate 'countries' 'SX'}}</option>
+                                 <option value="SK">{{translate 'countries' 'SK'}}</option>
+                                 <option value="SI">{{translate 'countries' 'SI'}}</option>
+                                 <option value="SB">{{translate 'countries' 'SB'}}</option>
+                                 <option value="SO">{{translate 'countries' 'SO'}}</option>
+                                 <option value="ZA">{{translate 'countries' 'ZA'}}</option>
+                                 <option value="GS">{{translate 'countries' 'GS'}}</option>
+                                 <option value="SS">{{translate 'countries' 'SS'}}</option>
+                                 <option value="ES">{{translate 'countries' 'ES'}}</option>
+                                 <option value="LK">{{translate 'countries' 'LK'}}</option>
+                                 <option value="SD">{{translate 'countries' 'SD'}}</option>
+                                 <option value="SR">{{translate 'countries' 'SR'}}</option>
+                                 <option value="SJ">{{translate 'countries' 'SJ'}}</option>
+                                 <option value="SZ">{{translate 'countries' 'SZ'}}</option>
+                                 <option value="SE">{{translate 'countries' 'SE'}}</option>
+                                 <option value="CH">{{translate 'countries' 'CH'}}</option>
+                                 <option value="SY">{{translate 'countries' 'SY'}}</option>
+                                 <option value="TW">{{translate 'countries' 'TW'}}</option>
+                                 <option value="TJ">{{translate 'countries' 'TJ'}}</option>
+                                 <option value="TZ">{{translate 'countries' 'TZ'}}</option>
+                                 <option value="TH">{{translate 'countries' 'TH'}}</option>
+                                 <option value="TL">{{translate 'countries' 'TL'}}</option>
+                                 <option value="TG">{{translate 'countries' 'TG'}}</option>
+                                 <option value="TK">{{translate 'countries' 'TK'}}</option>
+                                 <option value="TO">{{translate 'countries' 'TO'}}</option>
+                                 <option value="TT">{{translate 'countries' 'TT'}}</option>
+                                 <option value="TN">{{translate 'countries' 'TN'}}</option>
+                                 <option value="TR">{{translate 'countries' 'TR'}}</option>
+                                 <option value="TM">{{translate 'countries' 'TM'}}</option>
+                                 <option value="TC">{{translate 'countries' 'TC'}}</option>
+                                 <option value="TV">{{translate 'countries' 'TV'}}</option>
+                                 <option value="UG">{{translate 'countries' 'UG'}}</option>
+                                 <option value="UA">{{translate 'countries' 'UA'}}</option>
+                                 <option value="AE">{{translate 'countries' 'AE'}}</option>
+                                 <option value="GB">{{translate 'countries' 'GB'}}</option>
+                                 <option value="US">{{translate 'countries' 'US'}}</option>
+                                 <option value="UM">{{translate 'countries' 'UM'}}</option>
+                                 <option value="UY">{{translate 'countries' 'UY'}}</option>
+                                 <option value="UZ">{{translate 'countries' 'UZ'}}</option>
+                                 <option value="VU">{{translate 'countries' 'VU'}}</option>
+                                 <option value="VE">{{translate 'countries' 'VE'}}</option>
+                                 <option value="VN">{{translate 'countries' 'VN'}}</option>
+                                 <option value="VG">{{translate 'countries' 'VG'}}</option>
+                                 <option value="VI">{{translate 'countries' 'VI'}}</option>
+                                 <option value="WF">{{translate 'countries' 'WF'}}</option>
+                                 <option value="EH">{{translate 'countries' 'EH'}}</option>
+                                 <option value="YE">{{translate 'countries' 'YE'}}</option>
+                                 <option value="ZM">{{translate 'countries' 'ZM'}}</option>
+                                 <option value="ZW">{{translate 'countries' 'ZW'}}</option>
                               </select>
                            </span>
                         </div>
@@ -405,19 +414,23 @@
                <div class="control-group lhs-row-filter p-n" style="border-bottom:1px solid #dee5e7;position:relative;border-bottom-width:0px;margin-bottom:0px">
                   <a  id="lhs-filters-header" 
                      class="c-p text-l-none text-l-none-hover" >
-                  {{agile_translate "visitors" "region"}}<i class="fa inline pos-abs pos-r-0 fa-plus-square-o"></i></a>
+                  {{translate 'visitors' 'region'}}
+                  <i class="fa inline pos-abs pos-r-0 fa-plus-square-o"></i></a>
                   <div class="controls m-t-xs hide" id="ip_states_div">
                      <div class="lhs-contact-filter-row pos-rlt">
                         <input type="hidden" name="LHS" value="ip_states" class="form-control"/>
                         <select id="between_filter" name="CONDITION" class="form-control" >
-                           <option value="IS_EQUAL_TO">{{agile_translate "visitors" "is-equal-to"}}</option>
-                           <option value="STARTS_WITH">{{agile_translate "visitors" "starts-with"}}</option>
-                           <option value="ENDS_WITH">{{agile_translate "visitors" "ends-with"}}</option>
-                           <option value="CONTAINS">{{agile_translate "tickets" "contains"}}</option>
+                           <option value="IS_EQUAL_TO">{{translate 'visitors' 'is-equal-to'}}
+                           </option>
+                           <option value="STARTS_WITH">{{translate 'visitors' 'starts-with'}}</option>
+                           <option value="ENDS_WITH">{{translate 'visitors' 'ends-with'}}
+                           </option>
+                           <option value="CONTAINS">{{translate 'tickets' 'contains'}}
+                           </option>
                         </select>
                         <div class="IS_EQUAL_TO IS_NOT_EQUAL_TO   STARTS_WITH  ENDS_WITH  CONTAINS DOES_NOT_CONTAIN condition_container  m-t-xs">
                            <span id="RHS">
-                           <input type="text" placeholder="Value" prev-val="" class="form-control required">
+                           <input type="text" placeholder="{{translate 'contacts-view' 'value'}}" prev-val="" class="form-control required">
                            </span>
                         </div>
                         <div class="m-t-xs"><a class="hide pull-right clear-filter-condition-lhs"><i class="icon-trash text-l-none-hover c-p text-muted text-sm" id="removeBtn"></i></a></div>
@@ -434,19 +447,22 @@
                <div class="control-group lhs-row-filter p-n" style="border-bottom:1px solid #dee5e7;position:relative;border-bottom-width:0px;margin-bottom:0px">
                   <a  id="lhs-filters-header" 
                      class="c-p text-l-none text-l-none-hover" >
-                  {{agile_translate "contact-edit" "city"}}<i class="fa inline pos-abs pos-r-0 fa-plus-square-o"></i></a>
+                  {{translate 'contact-edit' 'city'}}
+                  <i class="fa inline pos-abs pos-r-0 fa-plus-square-o"></i></a>
                   <div class="controls m-t-xs hide" id="ip_city_div">
                      <div class="lhs-contact-filter-row pos-rlt">
                         <input type="hidden" name="LHS" value="ip_city" class="form-control"/>
                         <select id="between_filter" name="CONDITION" class="form-control" >
-                           <option value="IS_EQUAL_TO">{{agile_translate "visitors" "is-equal-to"}}</option>
-                           <option value="STARTS_WITH">{{agile_translate "visitors" "starts-with"}}</option>
-                           <option value="ENDS_WITH">{{agile_translate "visitors" "ends-with"}}</option>
-                           <option value="CONTAINS">{{agile_translate "tickets" "contains"}}</option>
+                           <option value="IS_EQUAL_TO">{{translate 'visitors' 'is-equal-to'}}</option>
+                           <option value="STARTS_WITH">{{translate 'visitors' 'starts-with'}}</option>
+                           <option value="ENDS_WITH">{{translate 'visitors' 'ends-with'}}
+                           </option>
+                           <option value="CONTAINS">{{translate 'tickets' 'contains'}}
+                           </option>
                         </select>
                         <div class="IS_EQUAL_TO IS_NOT_EQUAL_TO   STARTS_WITH  ENDS_WITH  CONTAINS DOES_NOT_CONTAIN condition_container  m-t-xs">
                            <span id="RHS">
-                           <input type="text" placeholder="Value" prev-val="" class="form-control required">
+                           <input type="text" placeholder="{{translate 'contacts-view' 'value'}}" prev-val="" class="form-control required">
                            </span>
                         </div>
                         <div class="m-t-xs"><a class="hide pull-right clear-filter-condition-lhs"><i class="icon-trash text-l-none-hover c-p text-muted text-sm" id="removeBtn"></i></a></div>
@@ -458,14 +474,14 @@
          </div>      
          <div class="bg-light">
                <span class="pull-left ">  
-               <a id="clear-lhs-segmentation-filters" href="#" class="c-p txt-small link-color" style="color: #337ab7!important;">{{agile_translate "deal-view" "clear"}}</a>
+               <a id="clear-lhs-segmentation-filters" href="#" class="c-p txt-small link-color" style="color: #337ab7!important;">{{translate 'contacts-view' 'clear'}}</a>
                </span>
                 <span class="pull-right ">  
-               <a id="save-segment-filter" class="c-p txt-small link-color ">{{agile_translate "tickets" "save-as"}}</a>
+               <a id="save-segment-filter" class="c-p txt-small link-color ">{{translate 'visitors' 'save-as'}}</a>
                </span>
                <div class="clearfix"></div>
          </div>
-         <span class="pull-left hide" id="error-message">{{agile_translate "visitors" "choose-atleast-one-criteria"}}</span>
+         <span class="pull-left hide" id="error-message">{{translate 'visitors' 'choose-atleast-one-criteria'}}</span>
       </div>
    </fieldset>
 </form>
@@ -476,7 +492,7 @@
    <div class="modal-content">
       <div class="modal-header">
          <button class="close" data-dismiss="modal">x</button>
-         <h3 class="modal-title"><i class="icon icon-save"></i> {{agile_translate "tickets" "save-as"}}</h3>
+         <h3 class="modal-title"><i class="icon icon-save"></i> {{translate 'visitors' 'save-as'}}</h3>
       </div>
       <div class="modal-body">
          <form id="saveSegmentFilterForm" name="saveSegmentFilterForm" class="form-horizontal">
@@ -484,25 +500,29 @@
                <div class="col-lg-3 col-md-offset-1">
                   <div class="radio new-segment">
                      <label class="i-checks">
-                     <input type="radio" class="create-new-filter" id= "save-new-type" name="save-type" value="new" checked><i></i> {{agile_translate "tickets" "create-new"}}</label>
+                     <input type="radio" class="create-new-filter" id= "save-new-type" name="save-type" value="new" checked><i></i> {{translate 'ticktes' 'create-new'}}
+                     </label>
                   </div>
                </div>
                <div class="col-lg-6">
                   <div class="radio replace-segment" >
                      <label class="i-checks">
-                     <input type="radio" class="update-filter" id= "save-replace-type" name="save-type" value="replace"><i></i> {{agile_translate "tickets" "replace-existing"}}</label>
+                     <input type="radio" class="update-filter" id= "save-replace-type" name="save-type" value="replace"><i></i> {{translate 'ticktes' 'replace-existing'}}
+                     </label>
                   </div>
                </div>
             </div>
             <div class="form-group update-segment-name">
-               <label class="col-lg-3 control-label">{{agile_translate "visitors" "filter-name"}}<span class="field_req">*</span></label>
+               <label class="col-lg-3 control-label">{{translate 'visitors' 'filter-name'}}
+               <span class="field_req">*</span></label>
                <div class="col-lg-7">
-                  <input type="text" name="name" class="form-control required"  placeholder="Filter name" 
+                  <input type="text" name="name" class="form-control required"  placeholder="{{translate 'visitors' 'filter-name'}}" 
                      value="">
                </div>
             </div>
             <div class="form-group choose-segment-filter display-none">
-               <label class="col-lg-3 control-label">{{agile_translate "tickets" "replace"}}<span class="field_req">*</span></label>
+               <label class="col-lg-3 control-label">{{translate 'tickets' 'replace'}} 
+               <span class="field_req">*</span></label>
                <div class="col-lg-7">
                   <select name="filter-collection" class="form-control required">
                      {{#each this}}
@@ -514,9 +534,9 @@
          </form>
       </div>
       <div class="modal-footer">
-         <span class="pull-left hide" id="duplicate-name">{{agile_translate "visitors" "filter-with-this-name-already-exist"}}</span>
-         <a href="javascript:void(0);" data-dismiss="modal" class="btn btn-sm btn-default">{{agile_translate "contact-details" "CLOSE"}}</a>
-         <a href="javascript:void(0);" class="save btn btn-sm btn-primary">{{agile_translate "modals" "save"}}</a>
+         <span class="pull-left hide" id="duplicate-name">{{translate 'visitors' 'filter-with-this-name-already-exist'}}</span>
+         <a href="javascript:void(0);" data-dismiss="modal" class="btn btn-sm btn-default">{{translate 'contact-details' 'close'}}</a>
+         <a href="javascript:void(0);" class="save btn btn-sm btn-primary">{{translate 'report-add' 'save'}}</a>
          &nbsp;&nbsp;<span id="msg"></span>
       </div>
    </div>

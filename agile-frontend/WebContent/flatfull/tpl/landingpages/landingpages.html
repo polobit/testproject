@@ -4,15 +4,15 @@
 <div class="row">
     <div class="col-sm-12 col-md-12">
         
-            	<h3 class="pull-left font-thin h3">{{agile_translate "landing-pages" "landing-pages"}}<small><span class="label label-sm bg-danger">{{agile_translate "deal-view" "beta"}}</span></small></h3>
+            	<h3 class="pull-left font-thin h3">{{translate 'landing-pages' 'landing-pages'}} <small><span class="label label-sm bg-danger">{{translate 'deal-view' 'beta'}}</span></small></h3>
 			
 			<div class="pull-right">
 				<div class="btn-group right pos-rlt pull-right">
-            		<a href="#landing-page-templates" class="btn btn-default btn-addon pull-right btn-sm" id="addLandingPage"><i class="icon-plus-sign"></i> {{agile_translate "landing-pages" "add-landing-page"}}</a>
+            		<a href="#landing-page-templates" class="btn btn-default btn-addon pull-right btn-sm" id="addLandingPage"><i class="icon-plus-sign"></i>  {{translate 'landing-pages' 'add-landing-page'}}</a>
 				</div> 	
 			</div>
             <div class="m-r-sm pull-right">
-                <a href="#forms" class="btn btn-default btn-sm btn-addon"><i class="icon-cog"></i>Manage {{agile_translate "form-builder" "forms"}}</a>
+                <a href="#forms" class="btn btn-default btn-sm btn-addon"><i class="icon-cog"></i>Manage Forms</a>
             </div>
 			<div class="clearfix"></div>
         
@@ -29,11 +29,11 @@
                     <img alt="Clipboard" src="/img/clipboard.png" />
                 </div>
                 <div class="box-right pull-left">
-                    <h4 class="m-t-none">You do not have any Landing Pages currently.</h4>
+                    <h4 class="m-t-none">{{translate 'landing-pages' 'there-are-no-landing-pages'}}</h4>
                     <div class="text">
-                        Landing page is a web page created to gather leads online.
+                        {{translate 'landing-pages' 'landing-pages-desc-2'}}
                     </div>
-                    <a href="#landing-page-templates" class="m-t-xs btn btn-default btn-sm"><i class="icon-plus-sign"></i>  {{agile_translate "landing-pages" "add-landing-page"}}</a>
+                    <a href="#landing-page-templates" class="m-t-xs btn btn-default btn-sm"><i class="icon-plus-sign"></i>  {{translate 'landing-pages' 'add-landing-page'}}</a>
                 </div>
                 <div class="clearfix">
                 </div>
@@ -52,12 +52,12 @@
 {{/unless}}
 {{#if this.length}}
         <div class="panel panel-default">
-            <div class="panel-heading">{{agile_translate "landing-pages" "landing-pages-list"}}</div>
+            <div class="panel-heading">{{translate 'landing-pages' 'landing-pages-list'}}</div>
             <div class="table-responsive">                
                 <table class="table table-striped showCheckboxes m-b-none agile-table panel" url="core/api/landingpages/bulk" id="landingpages-list" style="table-layout:auto;">
                     <thead>
                         <tr>
-                            <th style="width:45%">{{agile_translate "deal-view" "name"}}</th>
+                            <th style="width:45%">{{translate 'contact-details' 'name'}}</th>
                             <th style="width:10%"></th>
                             <th style="width:10%"></th>
                             <th style="width:30%"></th>
@@ -75,11 +75,12 @@
     <div class="col-md-3" id="learn-workflows">
         
             <h4 class="m-t-none h4 m-b-sm">
-                How to use Landing Pages?
+                {{translate 'landing-pages' 'how-to-use-landing-pages'}}
             </h4>
             
             <p>
-            {{agile_translate "landing-pages" "landing-pages-desc-1"}}</p>
+            {{translate 'landing-pages' 'landing-pages-desc-1'}}
+            </p>
             <br>
             {{#if this.length}}
             <p>
@@ -104,19 +105,19 @@
 </td>
 <td>
 <div class="table-resp">
-<a href="/landing/{{id}}" class="stop-propagation" target="_blank">{{agile_translate "landing-pages" "view"}}</a></div>
+<a href="/landing/{{id}}" class="stop-propagation" target="_blank">{{translate 'landing-pages' 'view'}}</a></div>
 </td>
 <td>
 <div class="table-resp">
-<a href="#landing-page-settings/{{id}}" class="stop-propagation">{{agile_translate "landing-pages" "publish"}}</a></div>
+<a href="#landing-page-settings/{{id}}" class="stop-propagation">{{translate 'landing-pages' 'publish'}}</a></div>
 </td>
 <td class="text-muted">
 <i class="fa fa-clock-o m-r-xs"></i>
 {{#if updated_time}}
-&nbsp;<span><em>{{agile_translate "campaigns" "modified"}}</em>&nbsp;</span>
+&nbsp;<span><em>{{translate 'contact-details' 'modified'}}</em>&nbsp;</span>
 <time class="document-created-time" value="{{updated_time}}" datetime="{{epochToHumanDate "" updated_time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" updated_time}}</time>
 {{else}}
-&nbsp;<span><em>{{agile_translate "contact-details" "created"}}</em>&nbsp;</span>
+&nbsp;<span><em>{{translate 'campaigns' 'created'}}</em>&nbsp;</span>
 <time class="document-created-time" value="{{created_time}}" datetime="{{epochToHumanDate "" created_time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created_time}}</time>
 {{/if}}
 </td>
@@ -139,18 +140,18 @@
                         <fieldset>            
                                    <div class="radio col-sm-6" style="margin-top:11px;" >
                                     <a href="#landing-page-settings/{{id}}" class="stop-propagation" onclick="hideLandingPopup();">
-                                       <i class="icon-cloud-upload icon-5x" style="margin-left: -12px;"></i><br>{{agile_translate "landing-pages" "publish"}}</a>
+                                       <i class="icon-cloud-upload icon-5x" style="margin-left: -12px;"></i><br>Publish</a>
                                      </div>
                         </fieldset>
                     </form>
                 </div>
                 <div class="modal-footer">
                     <div class="checkbox col-sm-8" style="margin-top:4px; margin-bottom:4px;">
-                       <label class="pull-left" onclick="hideLandingpagePopup();" style="margin-left:-43px;margin-left:2px;"><input type="checkbox" id="landingpages-save-popup" value="false">Don't show me aga{{agile_translate "contacts-view" "in"}}</label>
+                       <label class="pull-left" onclick="hideLandingpagePopup();" style="margin-left:-43px;margin-left:2px;"><input type="checkbox" id="landingpages-save-popup" value="false">Don't show me again</label>
                 
                         </div>
                     <div class="col-sm-3" style="margin-left:27px;">  
-                        <button type="button" class="btn btn-sm btn-primary" data-dismiss="modal" id="ok">{{agile_translate "contact-details" "CLOSE"}}</button>
+                        <button type="button" class="btn btn-sm btn-primary" data-dismiss="modal" id="ok">Close</button>
                     </div>
                 </div>  
             </div>

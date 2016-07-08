@@ -15,36 +15,39 @@
                              <input type ="hidden" name="type" value = "SALESFORCE" name ="id">
                           
                         <div class="form-group">
-                            <label for="username">{{agile_translate "admin-settings-integrations" "username"}}</label>
-                            <input type="text" required="required" class="form-control" id="username" name="userName" placeholder="Email" value="{{username}}">
+                            <label for="username">{{translate 'admin-settings-integrations' 'username'}}</label>
+                            <input type="text" required="required" class="form-control" id="username" name="userName" placeholder="{{translate 'other' 'email'}}" value="{{username}}">
                         </div>
                         <div class="form-group">
-                            <label for="password">{{agile_translate "prefs-settings" "password"}}</label>
-                            <input type="password" required="required" class="form-control" id="password" name="password" placeholder="Password" value="{{password}}">
+                            <label for="password">{{translate 'prefs-settings' 'password'}}</label>
+                            <input type="password" required="required" class="form-control" id="password" name="password" placeholder="{{translate 'prefs-settings' 'password'}}" value="{{password}}">
                         </div>
                         <div class="form-group">
-                            <label for="apiKey">{{agile_translate "prefs-data-sync" "api-token"}}</label>
-                            <input id="apiKey" required="required" name="apiKey" class="form-control"  type="text" placeholder="API Key" value="{{apiKey}}">
+                            <label for="apiKey">{{translate 'prefs-data-sync' 'api-token'}}</label>
+                            <input id="apiKey" required="required" name="apiKey" class="form-control"  type="text" placeholder="{{translate 'admin-settings-integrations' 'api-key'}}" value="{{apiKey}}">
                         </div>
 
                         <div class="control-group form-group multiple-checkbox" name="importOptions">
-                            <label class="control-label">{{agile_translate "admin-settings-integrations" "import-options"}}</label>
+                            <label class="control-label">{{translate 'admin-settings-integrations' 'import-options'}}</label>
                             <div class="controls">
                                 <div class="checkbox">
                                     <label class="i-checks i-checks-sm">
-                                    <input id="accounts" type="checkbox" value="accounts" {{#unless id}}checked="checked"{{/unless}}><i></i> {{agile_translate "admin-settings-integrations" "accounts"}}</label>
+                                    <input id="accounts" type="checkbox" value="accounts" {{#unless id}}checked="checked"{{/unless}}><i></i> {{translate 'admin-settings-integrations' 'accounts'}}
+                                    </label>
                                 </div>       
                             </div>
                             <div class="controls">
                                 <div class="checkbox">
                                     <label class="i-checks i-checks-sm">
-                                    <input id="contacts" type="checkbox" value="contacts" {{#unless id}}checked="checked"{{/unless}}><i></i> {{agile_translate "companies-view" "Contacts"}}</label>
+                                    <input id="contacts" type="checkbox" value="contacts" {{#unless id}}checked="checked"{{/unless}}><i></i> {{translate 'contacts-view' 'contacts'}}
+                                    </label>
                                 </div>       
                             </div>
                             <div class="controls">
                                 <div class="checkbox">
                                     <label class="i-checks i-checks-sm">
-                                    <input id="tasks" type="checkbox" value="tasks" {{#unless id}}checked="checked"{{/unless}}><i></i> {{agile_translate "portlets" "tasks"}}</label>
+                                    <input id="tasks" type="checkbox" value="tasks" {{#unless id}}checked="checked"{{/unless}}><i></i> {{translate 'deal-view' 'tasks'}}
+                                    </label>
                                 </div>       
                             </div>
                         </div>
@@ -52,8 +55,8 @@
 
                 </form>
                 <div class="form-actions text-center">
-                    <a type="reset" class="btn btn-default btn-sm" href="#importcrm">{{agile_translate "other" "cancel"}}</a>
-                    <a type="submit" class="save btn btn-sm btn-primary">{{agile_translate "contacts-view" "import"}}</a>
+                    <a type="reset" class="btn btn-default btn-sm" href="#importcrm">{{translate 'other' 'cancel'}}</a>
+                    <a type="submit" class="save btn btn-sm btn-primary">{{translate 'contacts-view' 'import'}}</a>
                 </div>  
             </div>
         </div>

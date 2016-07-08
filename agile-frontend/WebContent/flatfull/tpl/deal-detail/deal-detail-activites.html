@@ -6,7 +6,7 @@
                     <img alt="Clipboard" src="{{getS3ImagePath '/img/clipboard.png'}}" />
                 </div>
                 <div class="box-right pull-left">
-                    <h4 class="m-t-none">{{agile_translate "deal-view" "no-activity-on-deal"}}</h4>
+                    <h4 class="m-t-none">No activity on this deal yet.</h4>
                 </div>
 				<div class="clearfix">
 				</div>
@@ -51,7 +51,7 @@
      {{/if_equals}}
 
 {{#if_equals "DEAL_EDIT" activity_type}}
-        <div>{{displayActivityFieldText custom3}} {{agile_translate "contacts-view" "modified"}}</div>
+        <div>{{displayActivityFieldText custom3}} modified.</div>
      {{/if_equals}}
 
 {{#if_equals "DEAL_CLOSE" activity_type}}

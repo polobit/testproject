@@ -1,5 +1,5 @@
 <script id="dashboard-template" type="text/html">
-<h1>{{agile_translate "portlets" "dashboard"}}</h1>
+<h1>Dashboard </h1>
 <div class="btn-group right m-t-n-lg pos-rlt m-r-xs">
     <button class="btn btn-sm btn-default">
     	<i class="icon-list m-r-xs"></i>
@@ -9,10 +9,10 @@
     </button>
     <ul id="contact-view-model-list" class="pull-right dropdown-menu">
         <li>
-            <a href="#contacts" url="core/api/timeline/contact" class="dashboard-timeline-filter">{{agile_translate "companies-view" "Contacts"}}</a>
+            <a href="#contacts" url="core/api/timeline/contact" class="dashboard-timeline-filter">Contacts</a>
 		</li>
 		<li>
-			<a href="#task" url="core/api/timeline/tasks" class="dashboard-timeline-filter">{{agile_translate "menu" "task"}}</a>
+			<a href="#task" url="core/api/timeline/tasks" class="dashboard-timeline-filter">Task</a>
         </li>
     </ul>
 </div>
@@ -21,17 +21,17 @@
 	<div class="col-md-6 m-t-sm">
 	    <ul class="nav nav-tabs" id="dashboardTabs" style="list-style: none;">
 			<li class="active"><a data-toggle="tab" href="#recentContacts">Recently Viewed</a></li>
-	        <li ><a data-toggle="tab" href="#deals">{{agile_translate "deal-view" "Deals?"}}</a></li>
-	        <li class=""><a data-toggle="tab" href="#notes">{{agile_translate "prefs-notifications" "notes"}}</a></li>
-	        <li class=""><a data-toggle="tab" href="#tasks">{{agile_translate "portlets" "tasks"}}</a></li>
-	        <li class=""><a data-toggle="tab" href="#campaigns">{{agile_translate "report-view" "campaigns"}}</a></li>
-	    <!--<li class="active"><a data-toggle="tab" href="#activities">{{agile_translate "deal-view" "activity"}}<sup><span class="badge badge-success">3</span></sup> </a></li>-->
+	        <li ><a data-toggle="tab" href="#deals">Deals</a></li>
+	        <li class=""><a data-toggle="tab" href="#notes">Notes</a></li>
+	        <li class=""><a data-toggle="tab" href="#tasks">Tasks</a></li>
+	        <li class=""><a data-toggle="tab" href="#campaigns">Campaigns</a></li>
+	    <!--<li class="active"><a data-toggle="tab" href="#activities">Activity <sup><span class="badge badge-success">3</span></sup> </a></li>-->
 	    </ul>	
 		<div class="tab-content">
-			<div class="tab-pane" id="recentContacts">Recent {{agile_translate "companies-view" "Contacts"}}</div>
-			<div class="tab-pane" id="notes">{{agile_translate "prefs-notifications" "notes"}}</div>
-	              <div class="tab-pane" id="tasks">{{agile_translate "portlets" "tasks"}}</div>
-	              <div class="tab-pane" id="deals">{{agile_translate "deal-view" "Deals?"}}</div>
+			<div class="tab-pane" id="recentContacts">Recent Contacts</div>
+			<div class="tab-pane" id="notes">Notes</div>
+	              <div class="tab-pane" id="tasks">Tasks</div>
+	              <div class="tab-pane" id="deals">Deals</div>
 	              <div class="tab-pane" id="campaigns">camaigns</div>
 		</div>
 	</div>	
@@ -43,16 +43,16 @@
 <script id="user-billing-template" type="text/html">
 <div class="m-b-sm p" style="background-color: #F8F8B9;">
 {{#if_equals users_count "2"}}
-	<h3 class="text-lg">Oops. You are out of {{agile_translate "portlets" "users"}}</h3>
+	<h3 class="text-lg">Oops. You are out of users.</h3>
 	<p class="p-t-sm">
-		Plan: Free {{agile_translate "portlets" "plan"}}<br/>
-		Users: {{users_count}} of 2 &nbsp;<a class="text-u-l" href="#subscribe">{{agile_translate "admin-settings-users" "add-user"}}</a><br/><br/>
+		Plan: Free Plan <br/>
+		Users: {{users_count}} of 2 &nbsp;<a class="text-u-l" href="#subscribe">Add User</a><br/><br/>
 	</p>
 {{else}}
-	<h3 class="text-lg text-u-l">{{agile_translate "portlets" "account-info"}}</h3>
+	<h3 class="text-lg text-u-l">Account Info</h3>
 	<p class="p-t-sm">
-		Plan: Free {{agile_translate "portlets" "plan"}}<br/>
-		Users: {{users_count}} of 2 &nbsp;<a class="text-u-l" href="#users-add">{{agile_translate "admin-settings-users" "add-user"}}</a><br/>
+		Plan: Free Plan <br/>
+		Users: {{users_count}} of 2 &nbsp;<a class="text-u-l" href="#users-add">Add User</a><br/>
 	</p>
 {{/if_equals}}
 <p>
@@ -64,14 +64,14 @@
 
 <script id="dashboard-account-info-template" type="text/html">
 <div class="m-b-sm p" style="background-color: #F8F8B9;">
-	<h3 class="text-lg text-u-l">{{agile_translate "portlets" "account-info"}}</h3>
+	<h3 class="text-lg text-u-l">Account Info</h3>
 	<p class="p-t-sm">
 		Plan: {{titleFromEnums plan.plan_type}}<br />
 		Users: {{userCount}} of {{plan.quantity}} 
 		{{#if_equals userCount plan.quantity}}
-			 &nbsp;<a class="text-u-l" href="#subscribe">{{agile_translate "admin-settings-users" "add-user"}}</a> <br />
+			 &nbsp;<a class="text-u-l" href="#subscribe">Add User</a> <br />
 		{{else}}
-		 	&nbsp;<a class="text-u-l" href="#users-add">{{agile_translate "admin-settings-users" "add-user"}}</a> <br />
+		 	&nbsp;<a class="text-u-l" href="#users-add">Add User</a> <br />
 		{{/if_equals}}
 		<br />
 		<a class="text-u-l" href="#subscribe">Please
@@ -92,10 +92,10 @@
 	</div>
 	<ul>
 			{{#unless Email}}
-		<li>Sync your email with {{agile_translate "contact-details" "agile"}}<a href="#email">{{agile_translate "contact-details" "here"}}</a></li>
+		<li>Sync your email with Agile <a href="#email">here</a></li>
 			{{/unless}}
 			{{#unless User_invited}}
-		<li>Invite New colleagues to {{agile_translate "contact-details" "agile"}}<a href="#users">{{agile_translate "contact-details" "here"}}</a></li>
+		<li>Invite New colleagues to Agile <a href="#users">here</a></li>
 			{{/unless}}
 			{{#unless shared}}
 		<li>Spread the love</li>
@@ -107,14 +107,15 @@
 <div class="row">
 	<div class="col-lg-12 p-none">
 		<div class="row text-center m-t-n-xs">
-			<span class="inline-block pos-abs text-center p-t-xs p-b-xs p-l p-r r" style="background-color: rgb(249, 237, 190); border: 1px solid rgb(240, 195, 109);">Try the <a href="#portlets" style="color: #222222">new {{agile_translate "portlets" "dashboard"}}</a> (beta).</span>
+			<span class="inline-block pos-abs text-center p-t-xs p-b-xs p-l p-r r" style="background-color: rgb(249, 237, 190); border: 1px solid rgb(240, 195, 109);">Try the <a href="#portlets" style="color: #222222">new Dashboard</a> (beta).</span>
 		</div>
 		<div class=" b-b m-b b-light">
 			<div id="reportrange" class="pull-right p-t-xs p-b-xs p-r-sm p-l-sm"
 				style="box-shadow: 0 0px 2px rgba(0, 0, 0, .25), inset 0 -1px 0 rgba(0, 0, 0, .1); display: none;">
 				<i class="icon-calendar icon-large"></i> <span id="range"></span>
 			</div>
-			<h1>{{agile_translate "portlets" "welcome-msg"}}<div class="pull-right">
+			<h1>Welcome to Agile CRM
+				<div class="pull-right">
             		<small style="font-size:0.5em; ">Last login :  <time id="last-login-time"  value="{{time_format}}" datetime="{{epochToHumanDate "" time_format}}">{{epochToHumanDate "ddd mmm dd yyyy" time_format}}</time></small>
         		</div>
 			</h1>					
@@ -134,7 +135,8 @@
 								<div class="p-t-md p-l p-r p-b-sm">
 									<i class="icon-group icon-3x"></i>
 								</div>							
-									{{agile_translate "companies-view" "Contacts"}}</a>
+									Contacts
+							</a>
 						</li>
 						{{#hasMenuScope "CALENDAR"}}
 						<li>
@@ -142,7 +144,8 @@
 								<div class="p-t-md p-r-sm p-b-sm p-l">
 									<i class="icon-edit icon-3x"></i>
 								</div>
-									{{agile_translate "portlets" "tasks"}}</a>
+									Tasks
+							</a>
 						</li>
 						{{/hasMenuScope}}
 						{{#hasMenuScope "DEALS"}}
@@ -151,7 +154,8 @@
 								<div class="p-t-md p-l p-r p-b-sm">
 									<i class="icon-money icon-3x"></i>
 								</div>
-									{{agile_translate "deal-view" "Deals?"}}</a>
+									Deals
+							</a>
 						</li>
 						{{/hasMenuScope}}
 						{{#hasMenuScope "CAMPAIGN"}}
@@ -160,7 +164,8 @@
 								<div class="p-t-md p-l p-r p-b-sm">
 									<i class="icon-sitemap icon-3x"></i>
 								</div>
-								{{agile_translate "report-view" "campaigns"}}</a>
+								Campaigns
+							</a>
 						</li>
 						{{/hasMenuScope}}
 						{{#hasMenuScope "ACTIVITY"}}
@@ -169,7 +174,8 @@
 								<div class="p-t-md p-l p-r p-b-sm">
 									<i class="icon-cogs icon-3x"></i>
 								</div>							
-									{{agile_translate "portlets" "activities"}}</a>
+									Activities
+							</a>
 						</li>
 						{{/hasMenuScope}}
 						<li>
@@ -178,7 +184,8 @@
 									<i class="icon-wrench icon-3x "></i><br/>
 								</div>
 								<div>
-									{{agile_translate "preferences" "settings"}}</div>
+									Settings
+								</div>
 							</a>
 						</li>
 					</ul>
@@ -235,5 +242,6 @@
 
 <script id="" type="text/html">
 	<div>
-		{{agile_translate "prefs-data-sync" "alpha"}}</div>
+		Alpha
+	</div>
 </script>

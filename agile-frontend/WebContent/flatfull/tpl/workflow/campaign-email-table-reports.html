@@ -3,8 +3,8 @@
 	<table class="table table-bordered table-layout-mob-view">
 		<tbody>
 			<tr>
-				<th>{{agile_translate "portlets" "emails-sent"}}</th>
-				<th>Emails {{agile_translate "admin-settings-stats" "skipped"}}<span
+				<th>{{translate 'portlets' 'emails-sent'}}</th>
+				<th>Emails Skipped<span
 							style="vertical-align: text-top; margin-left: -3px"> <img
 							border="0" src="{{getS3ImagePath '/img/help.png'}}"
 							style="height: 6px; vertical-align: top" rel="popover"
@@ -12,36 +12,38 @@
 							data-title:" data-content="Total email skipped recorded & unique skipped."
 							id="element" data-trigger="hover" />
 						</span></th>
-				<th>{{agile_translate "portlets" "emails-opened"}}<span
+				<th>{{translate 'portlets' 'emails-opened'}}<span
 							style="vertical-align: text-top; margin-left: -3px"> <img
 							border="0" src="{{getS3ImagePath '/img/help.png'}}"
 							style="height: 6px; vertical-align: top" rel="popover"
 							data-placement="right"
-							data-title:" data-content="Total email opens recorded & unique opens."
+							data-title:" data-content="{{translate 'campaigns' 'total-email-opens-recorded-desc'}}"
 							id="element" data-trigger="hover" />
 						</span></th>
-				
-				<th>{{agile_translate "campaigns" "clicks"}}<span
+				<th>{{translate 'campaigns' 'clicks'}}<span
+
 							style="vertical-align: text-top; margin-left: -3px"> <img
 							border="0" src="{{getS3ImagePath '/img/help.png'}}"
 							style="height: 6px; vertical-align: top" rel="popover"
 							data-placement="right"
-							data-title:" data-content="Total email link clicks recorded & unique clicks"
+							data-title:" data-content="{{translate 'campaigns' 'total-email-link-clicks-recorded-desc'}}"
 							id="element" data-trigger="hover" /></th>
-				<th>{{agile_translate "campaigns" "unsubscriptions"}}</th>
-				<th>{{agile_translate "campaigns" "hard-bounces"}}<span class="v-top m-l-n-xs">
+				<th>{{translate 'campaigns' 'unsubscriptions'}}</th>
+				<th>{{translate 'campaigns' 'hard-bounces'}} 
+					<span class="v-top m-l-n-xs">
 						<img border="0" src="{{getS3ImagePath '/img/help.png'}}"	class="v-top" style="height: 6px;" rel="popover"
-							data-placement="right" data-title:" data-content="A hard bounce occurs when the recipient's email is invalid."
+							data-placement="right" data-title:" data-content="{{translate 'campaigns' 'hard-bounce-occurs-desc'}}"
 							id="element" data-trigger="hover" />
 					</span>
 				</th>
-				<th>{{agile_translate "campaigns" "soft-bounces"}}<span class="v-top m-l-n-xs"> 
+				<th>{{translate 'campaigns' 'soft-bounces'}} 
+					<span class="v-top m-l-n-xs"> 
 						<img border="0" src="{{getS3ImagePath '/img/help.png'}}" class="v-top" style="height: 6px;" rel="popover"
-							data-placement="right" data-title:" data-content="A soft bounce occurs when the sender's email box is full or for other reasons."
+							data-placement="right" data-title:" data-content="{{translate 'campaigns' 'soft-bounce-occurs-desc'}}"
 							id="element" data-trigger="hover" />
 					</span>
 				</th>
-				<th>{{agile_translate "campaigns" "spam-complaints"}}</th>
+				<th>{{translate 'campaigns' 'spam-complaints'}}</th>
 			</tr>
             <tr>
 				<td>{{#if sent}}{{sent}}{{else}} - {{/if}}</td>

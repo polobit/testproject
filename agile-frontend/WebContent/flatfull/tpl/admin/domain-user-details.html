@@ -5,13 +5,13 @@
 <td>
 {{email}}
 {{#if is_account_owner}}
-            <span class="label bg-light m-l-xs dk text-tiny">{{agile_translate "contact-details" "owner"}}</span>
-            {{#check_admin_ip}}	<a href="https://{{domain}}.agilecrm.com/custLogin?d={{id}}" target="_blank" class="text-info p-l-xs">Login To {{agile_translate "prefs-settings" "domain"}}</a>{{/check_admin_ip}}	
+            <span class="label bg-light m-l-xs dk text-tiny">Owner</span>
+            {{#check_admin_ip}}	<a href="https://{{domain}}.agilecrm.com/custLogin?d={{id}}" target="_blank" class="text-info p-l-xs">Login To Domain</a>{{/check_admin_ip}}	
     {{/if}}
 </td>
 <td class="text-muted"><i class="fa fa-clock-o m-r-xs"></i><time class="last-login-time" datetime="{{epochToDate info_json_string "logged_in_time"}}" style="border-bottom:dotted 1px #999">{{epochToDate info_json_string "logged_in_time"}}</time></td>
 <td ><a href="/#change-password-admin/{{id}}"  >Reset password</a></td>
-<td><a href="#" data="{{id}}" class="delete_user btn-mini btn-danger">{{agile_translate "contact-details" "delete"}}</a></td>
+<td><a href="#" data="{{id}}" class="delete_user btn-mini btn-danger">Delete</a></td>
 <td>{{#if is_account_owner}}<i class="agilecrm-profile-dropdown"></i>{{/if}}</td>
  
 
@@ -32,13 +32,13 @@
         <div class="slate-content">
                 <h3>Domain Not Found.</h3>
                 <br />
-                <a href="#" class="btn btn-default btn-sm blue btn-slate-action"><i class="icon-plus-sign"></i> Domain {{agile_translate "admin-settings" "users"}}</a>
+                <a href="#" class="btn btn-default btn-sm blue btn-slate-action"><i class="icon-plus-sign"></i> Domain Users </a>
             
         </div>
     </div>
     {{/unless}}
     {{#if this.length}}
-<div ><h3  style="color:#069">{{agile_translate "admin-settings" "users"}}<small>{{count}}</small></h3> 
+<div ><h3  style="color:#069">Users <small>{{count}}</small></h3> 
 
     <div class="">
         <div class="panel">
@@ -46,11 +46,11 @@
                 <thead>
                     <tr>
                         <th></th>
-                        <th>{{agile_translate "deal-view" "name"}}</th>
-                        <th>{{agile_translate "modals" "email"}}</th>
-                        <th>{{agile_translate "admin-settings-users" "last-logged-in"}}</th>
-                        <th>Reset {{agile_translate "prefs-settings" "password"}}</th>
-						<th>Delete {{agile_translate "portlets" "user"}}</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Last Logged In</th>
+                        <th>Reset Password</th>
+						<th>Delete User</th>
                     </tr>
                 </thead>
                 <tbody id="all-domain-model-list" ></tbody>
@@ -73,17 +73,17 @@
 </script>
 
 <script id="plan-info-template" type="text/html">
-<div class="header"><a id="login_id"   href='https://{{description}}.agilecrm.com/login'  target='_blank'><strong><u>Login To {{agile_translate "prefs-settings" "domain"}}</u></strong></a></div>
+<div class="header"><a id="login_id"   href='https://{{description}}.agilecrm.com/login'  target='_blank'><strong><u>Login To Domain</u></strong></a></div>
 {{#if this.subscription}}
 <div class="">
 <p>
-	<strong><u>Your Current {{agile_translate "plan-and-upgrade" "plans"}}</u>:</strong>
+	<strong><u>Your Current Plans</u>:</strong>
 </p>
 {{#each subscriptions.data}}
 
 {{#is_userPlan plan.id}}
 <div id="user_sub" class="panel wrapper">
-<p><strong><u>User {{agile_translate "portlets" "plan"}}</u></strong></p>
+<p><strong><u>User Plan</u></strong></p>
 <p>
      Start Date: <i class="text-muted fa fa-clock-o m-r-xs"></i><time class="time-ago text-muted" datetime="{{epochToHumanDate "" start}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" start}}</time>     
 </p>
@@ -109,9 +109,9 @@ Plan Type: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{plan.name}}
 <p>
 	Users: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{quantity}}
 </p><br/><p>
-	<span style="width: auto;max-width: 40%;display: inline-block;"><a href="/#domainSubscribe/{{../../description}}"><strong><u> {{agile_translate "plan-and-upgrade" "change-plan"}}</strong></u> </a> </span>
+	<span style="width: auto;max-width: 40%;display: inline-block;"><a href="/#domainSubscribe/{{../../description}}"><strong><u> Change Plan</strong></u> </a> </span>
 	<span id="deleteUserPlanSpan" class="pull-right" style="text-overflow: ellipsis;overflow: hidden;height: auto;white-space: nowrap;max-width: 55%;display: inline-block;">
-	<a href="#" id="delete_userplan" sub_id={{id}} cus_id={{../../id}}> <strong><u>{{agile_translate "plan-and-upgrade" "cancel-subscription"}}</u></strong> </a></span>
+	<a href="#" id="delete_userplan" sub_id={{id}} cus_id={{../../id}}> <strong><u>Cancel Subscription</u></strong> </a></span>
 </p><br/><br/>
 </div>
 {{/is_userPlan}}
@@ -123,7 +123,7 @@ Plan Type: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{plan.name}}
 {{#is_emailPlan plan.id}}
 
 <div id="email_sub" class="panel wrapper">
-<p><strong><u>Email {{agile_translate "portlets" "plan"}}</u></strong></p>
+<p><strong><u>Email Plan</u></strong></p>
 
 
 <p>
@@ -152,7 +152,7 @@ Plan Type: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{plan.name}}
 </p>
 <p>
 	<span class="pull-right" id="deleteEmailPlanSpan">
-	<a href="#" id="delete_emailplan" sub_id={{id}} cus_id={{../../id}}> <strong><u>{{agile_translate "plan-and-upgrade" "cancel-subscription"}}</u></strong> </a></span>
+	<a href="#" id="delete_emailplan" sub_id={{id}} cus_id={{../../id}}> <strong><u>Cancel Subscription</u></strong> </a></span>
 </p>
 <br/><br/>
 </div>
@@ -160,7 +160,7 @@ Plan Type: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{plan.name}}
 {{/each}}
 
   {{else}}
-        <div ><strong>{{agile_translate "widgets" "no-active-subscription"}}</strong></div>
+        <div ><strong>No active subscription</strong></div>
 </div>
 {{/if}}
 
@@ -179,53 +179,53 @@ Plan Type: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{plan.name}}
 
 <script id="domain-info-template" type="text/html">
 <div style=" float:right;" >
-<legend>{{agile_translate "admin-settings-integrations" "account-stats"}}</legend>
+<legend>Account Stats</legend>
 <div class="stats-content panel" style="width:280px">
 <table class="table table-bordered">    
     <thead>
         <tr>
-            <th>{{agile_translate "deal-view" "name"}}</th>
+            <th>Name</th>
             <th>Details</th>
         </tr>
     </thead>
     <tbody>
         <tr>
-            <td>Campaigns {{agile_translate "admin-settings-stats" "count"}}</td>
+            <td>Campaigns Count</td>
             <td >{{compaign_count}}</td>
         </tr>
       
  <tr>
-            <td>Webrules {{agile_translate "admin-settings-stats" "count"}}</td>
+            <td>Webrules Count</td>
             <td>{{webrule_count}}</td>
         </tr>
         <tr>
-            <td>Emails {{agile_translate "admin-settings-stats" "count"}}</td>
+            <td>Emails Count</td>
             <td id="emailcount" ></td>
         </tr>
 
         <tr>
-            <td>Web-stats {{agile_translate "admin-settings-stats" "count"}}</td>
+            <td>Web-stats Count</td>
             <td >{{webstats_count}}</td>
         </tr>
  <tr>
-            <td>Contacts {{agile_translate "admin-settings-stats" "count"}}</td>
+            <td>Contacts Count</td>
             <td >{{contact_count}}</td>
         </tr>
 
  <tr>
-            <td>Deals {{agile_translate "admin-settings-stats" "count"}}</td>
+            <td>Deals Count</td>
             <td >{{deals_count}}</td>
         </tr>
  <tr>
-            <td>Documents {{agile_translate "admin-settings-stats" "count"}}</td>
+            <td>Documents Count</td>
             <td >{{docs_count}}</td>
         </tr>
  <tr>
-            <td>Events {{agile_translate "admin-settings-stats" "count"}}</td>
+            <td>Events Count</td>
             <td >{{events_count}}</td>
         </tr>
  <tr>
-            <td>Triggers {{agile_translate "admin-settings-stats" "count"}}</td>
+            <td>Triggers Count</td>
             <td >{{triggers_count}}</td>
         </tr>
 
@@ -236,7 +236,7 @@ Plan Type: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{plan.name}}
 {{#if emailcount}}
 	{{#if_equals emailcount.status "paused"}}<div class="text-danger" id="unPauseMandrillDiv">Email sending on this domain is paused.<a href="#" class="btn" id="unpause_mandrill" domain={{emailcount.name}}>Resume</a></div><br/>{{/if_equals}}
 {{/if}}
-<a  align="center" data="" class="delete-namespace data btn btn-danger">Delete  {{agile_translate "admin-settings-stats" "account"}}</a>
+<a  align="center" data="" class="delete-namespace data btn btn-danger">Delete  Account</a>
 
 </div>
 </div>

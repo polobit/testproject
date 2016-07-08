@@ -23,7 +23,7 @@
 <input id="callWidgetName" type="hidden" value = ""/>
 
                 <div class="control-group form-group">
-                    <label class="control-label"><b>{{agile_translate "widgets" "subject"}}</b> <span class="field_req">*</span></label>
+                    <label class="control-label"><b>Subject</b> <span class="field_req">*</span></label>
                     <div class="controls">
                         <input type="text" placeholder="About" name="subject" id="subject" class="form-control" />
                     </div>
@@ -31,13 +31,13 @@
                 </div>
                 
                 <div class="control-group form-group">
-                    <label class="control-label col-lg-3 pull-left p-l-none"><b>{{agile_translate "widgets" "phone-number"}}</b> <span class="field_req">*</span></label>
+                    <label class="control-label col-lg-3 pull-left p-l-none"><b>Phone Number</b> <span class="field_req">*</span></label>
                      <div class="controls contact_phone_controls">
 
 
 	{{#if_equals num.length "0"}}
 		<span  title="Add Phone" class="add_logPhone_span">
-			<a id="contact_logPhone_number" class="contact_logPhone_number add_logPhone text-info text-l-none" name="contact_logPhone_number" value = ""> {{agile_translate "contact-edit" "add-phone"}}</a>
+			<a id="contact_logPhone_number" class="contact_logPhone_number add_logPhone text-info text-l-none" name="contact_logPhone_number" value = ""> Add Phone</a>
         </span>
 	{{else}}
 		{{#if_equals num.length "1"}}
@@ -45,13 +45,13 @@
 				<span id="contact_logPhone_number" name="contact_logPhone_number" value="{{num.[0]}}" >{{num.[0]}}</span>
 			{{else}}
 				<span  title="Add Phone" class="add_logPhone_span">
-					<a id="contact_logPhone_number" class="contact_logPhone_number add_logPhone text-info text-l-none" name="contact_logPhone_number" value = ""> {{agile_translate "contact-edit" "add-phone"}}</a>
+					<a id="contact_logPhone_number" class="contact_logPhone_number add_logPhone text-info text-l-none" name="contact_logPhone_number" value = ""> Add Phone</a>
         		</span>
 			{{/if}}
 		{{else}}
 				<a class="dropdown-toggle " data-toggle="dropdown" aria-expanded="false"> 
 	     		      <button id="phoneButton" type="button" class="btn btn-default">
-							<span  id="contact_logPhone_number" class="contact_logPhone_number" name="contact_logPhone_number" value = ""> {{agile_translate "deal-view" "select"}}</span>
+							<span  id="contact_logPhone_number" class="contact_logPhone_number" name="contact_logPhone_number" value = ""> Select </span>
        				   		<span class="caret"></span>
 	                  </button>
 				</a>
@@ -62,7 +62,7 @@
 	{{/if_equals}}	
 						<span id="contact-add-phone-span" class="none"> 
 								<input type="text" id="contact_phone" style="border: 1px solid #CFDADD;height:30px;" /> 
-								<a class= "btn btn-primary btn-sm contact_phone_add" style="height:30px;margin-top:-3px;"> {{agile_translate "other" "add"}}</a>   
+								<a class= "btn btn-primary btn-sm contact_phone_add" style="height:30px;margin-top:-3px;"> Add </a>   
 						</span>
 						
 					</div>
@@ -70,7 +70,7 @@
                 </div>
                 
                 <div class="control-group form-group">
-                    <label class="control-label col-lg-3 pull-left p-l-none"><b>Call {{agile_translate "contacts-view" "type"}}</b> <span class="field_req">*</span></label>
+                    <label class="control-label col-lg-3 pull-left p-l-none"><b>Call Type</b> <span class="field_req">*</span></label>
                     <div class="controls">
                       <label class="i-checks">
                					  <input type="radio" name="callType" id="callType" checked="checked" value="inbound" title="Inbound">
@@ -87,29 +87,29 @@
                 </div>
                 
                  <div class="control-group form-group">
-                    <label class="control-label col-lg-3 pull-left p-l-none"><b>{{agile_translate "widgets" "status"}}</b> <span class="field_req">*</span></label>
+                    <label class="control-label col-lg-3 pull-left p-l-none"><b>Status</b> <span class="field_req">*</span></label>
                     <div class="controls">
                     
                     <a href="" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false"> 
     				      <button id="statusButton" type="button" class="btn btn-default">
     						  				  
-								<span  id="callStatus" class="callStatus" name="status" value = ""> {{agile_translate "deal-view" "select"}}</span>
+								<span  id="callStatus" class="callStatus" name="status" value = ""> Select </span>
          				   		<span class="caret"></span>
 							
  							</button>
 						</a>
 								<ul class="dropdown-menu" style="top:196px;left: 157px;" role="menu">
-									<li><a id = "statusValue"  value = "answered">{{agile_translate "campaigns" "answered"}}</a></li>
-									<li><a id = "statusValue"  value = "busy">{{agile_translate "campaigns" "busy"}}</a></li>
-									<li><a id = "statusValue"  value = "failed">{{agile_translate "campaigns" "failed"}}</a></li>
-									<li><a id = "statusValue"  value = "missed">{{agile_translate "campaigns" "missed"}}</a></li>
-									<li><a id = "statusValue"  value = "inquiry">{{agile_translate "campaigns" "inquiry"}}</a></li>
-									<li><a id = "statusValue"  value = "interest">{{agile_translate "campaigns" "interest"}}</a></li>
-									<li><a id = "statusValue"  value = "no interest">{{agile_translate "campaigns" "no-interest"}}</a></li>
-									<li><a id = "statusValue"  value = "incorrect referral">{{agile_translate "campaigns" "incorrect-referral"}}</a></li>
-									<li><a id = "statusValue"  value = "meeting scheduled">{{agile_translate "campaigns" "meeting-scheduled"}}</a></li>
-									<li><a id = "statusValue"  value = "new opportunity">{{agile_translate "campaigns" "new-opportunity"}}</a></li>
-									<li><a id = "statusValue"  value = "voicemail">{{agile_translate "campaigns" "voicemail"}}</a></li>
+									<li><a id = "statusValue"  value = "answered">Answered</a></li>
+									<li><a id = "statusValue"  value = "busy">Busy</a></li>
+									<li><a id = "statusValue"  value = "failed">Failed</a></li>
+									<li><a id = "statusValue"  value = "missed">Missed</a></li>
+									<li><a id = "statusValue"  value = "inquiry">Inquiry</a></li>
+									<li><a id = "statusValue"  value = "interest">Interest</a></li>
+									<li><a id = "statusValue"  value = "no interest">No Interest</a></li>
+									<li><a id = "statusValue"  value = "incorrect referral">Incorrect Referral</a></li>
+									<li><a id = "statusValue"  value = "meeting scheduled">Meeting Scheduled</a></li>
+									<li><a id = "statusValue"  value = "new opportunity">New Opportunity</a></li>
+									<li><a id = "statusValue"  value = "voicemail">Voicemail</a></li>
 								</ul>
 								
                     </div>
@@ -117,7 +117,7 @@
                 </div>
                 
                  <div class="control-group form-group">
-                    <label class="control-label"><b>{{agile_translate "portlets" "duration"}}</b> <span class="field_req">*</span></label>
+                    <label class="control-label"><b>Duration</b> <span class="field_req">*</span></label>
                     <div class="controls">
                         <input type="text" name="hour" id="hour" value="0" style = "max-width:42px;"/>&nbsp;<span class="label label-default">hours</span> &nbsp;&nbsp;
                         <input type="text" name="min" id="min" value="0" style = "max-width:42px;"/>&nbsp;<span class="label label-default">minutes</span> &nbsp;&nbsp;
@@ -130,7 +130,7 @@
                 
                 
 	                <div class="control-group form-group">
-	                    <label class="control-label"><b>{{agile_translate "other" "description"}}</b></label>
+	                    <label class="control-label"><b>Description</b></label>
 	                    <div class="controls">
 	                        <textarea rows="3" class="form-control-F-width form-control" placeholder="Detailed Note" name="description" id="description" style="max-width:400px;"></textarea> 
 	                    </div>
@@ -138,7 +138,7 @@
                 
                 
                 <div class="control-group form-group">
-                    <label class="control-label pull-left p-l-none"><b>{{agile_translate "deal-view" "related-to"}}</b><span class="field_req">*</span> </label>
+                    <label class="control-label pull-left p-l-none"><b>Related To</b><span class="field_req">*</span> </label>
                     <div class="controls">
                         <div>
                      <input type="text" placeholder="Contact Name" id="call_related_to" class="typeahead typeahead_contacts form-control" data-provide="typeahead" data-mode="multiple" size="40" />

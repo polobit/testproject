@@ -5,14 +5,14 @@
             <div class="well">
                 <form id="addAutomationForm" name="addAutomationForm" class="form-horizontal">
                    {{#if id}}
-                        <legend>Edit Automati{{agile_translate "contacts-view" "on"}}</legend>
+                        <legend>Edit Automation</legend>
                         <input name="id" type="hidden" value="{{id}}" />
                     {{else}}
-                        <legend><i class="icon-plus-sign"></i> Add Automati{{agile_translate "contacts-view" "on"}}</legend>
+                        <legend><i class="icon-plus-sign"></i> Add Automation</legend>
                     {{/if}} 
                    <fieldset>
                         <div class="control-group">
-                            <label class="control-label w">{{agile_translate "deal-view" "name"}}<span class="field_req">*</span></label>
+                            <label class="control-label w">Name <span class="field_req">*</span></label>
                             <div class="controls" style="margin-left:220px!important;">
                                 <input type="text" id="name" class="required form-control" name="name" />
                             </div>
@@ -21,15 +21,15 @@
                             <label class="control-label w">Select Filter type <span class="field_req">*</span></label>
                                 <div class="controls" style="margin-left:220px!important;">
                                     <select id="filter-select" name="contactFilter_id" class="required form-control"> 
-                                    <option value="">{{agile_translate "contacts-view" "select"}}</option>
+                                    <option value="">Select...</option>
                                     </select>
                                 </div>
                         </div>
                         <div class="control-group">
-                            <label class="control-label w">Run this Campaign on the {{agile_translate "companies-view" "Contacts"}}<span class="field_req">*</span></label>
+                            <label class="control-label w">Run this Campaign on the Contacts<span class="field_req">*</span></label>
                             <div class="controls" style="margin-left:220px!important;">
                                 <select id="campaign-select" name="campaign_id" class="required form-control">
-                                    <option value="">{{agile_translate "contacts-view" "select"}}</option>
+                                    <option value="">Select...</option>
                                 </select>
                             </div>
                         </div>
@@ -37,16 +37,16 @@
                             <label class="control-label w">Select period <span class="field_req">*</span></label>
                                   <div class="controls" style="margin-left:220px!important;">
                                     <select id="period-type" name="durationType" class="required form-control">
-				        				<option value="">{{agile_translate "contacts-view" "select"}}</option>
-                                        <option value="DAILY">{{agile_translate "report-add" "daily"}}</option>
-                                        <option value="WEEKLY">{{agile_translate "report-add" "weekly"}}</option>
-                                        <option value="MONTHLY">{{agile_translate "plan-and-upgrade" "monthly"}}</option>
+				        				<option value="">Select...</option>
+                                        <option value="DAILY">Daily</option>
+                                        <option value="WEEKLY">Weekly</option>
+                                        <option value="MONTHLY">Monthly</option>
                                     </select>
                                 </div>
                         </div>
                         <div class="form-actions">          							 
-                            <a href="#automations" id="automation-save" class="save btn btn-sm btn-primary">{{agile_translate "modals" "save"}}</a>
-							<a href="#automations" id="automation-cancel" class="btn btn-default btn-sm">{{agile_translate "other" "cancel"}}</a>
+                            <a href="#automations" id="automation-save" class="save btn btn-sm btn-primary">Save</a>
+							<a href="#automations" id="automation-cancel" class="btn btn-default btn-sm">Cancel</a>
                         </div>
                     </fieldset>
                 </form>

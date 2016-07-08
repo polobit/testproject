@@ -3,12 +3,15 @@
     <div class="col panel wrapper">
         <div class="hbox h-auto m-b-sm">
             <div class="text-center padder-v">
-                <h4 class="m-t-none m-b-xs">You don&#39;t have any filters</h4>
+                <h4 class="m-t-none m-b-xs">{{translate 'tickets' 'you-do-not-have-any-filters'}}
+                </h4>
                 <div class="m-b-xs">
-                    {{agile_translate "tickets" "ticket-filters-desc"}}</div>
+                    {{translate 'tickets' 'ticket-filters-desc'}} 
+                </div>
                 <div>
                     <a href="#add-ticket-filter" class="btn btn-sm btn-default blue btn-slate-action m-t-xs">
-                        {{agile_translate "portlets" "contact-filters-btn-text"}}</a>
+                        {{translate 'contacts-view' 'add-filter'}}
+                    </a>
                 </div>
             </div>
         </div>
@@ -18,13 +21,14 @@
     <div class="panel-defaut panel">
         <div class="pull-right">
             <a href="#add-ticket-view" class="btn btn-sm btn-default btn-addon" style="margin-top:20px;margin-right:20px;">
-                <span><i class="icon-plus-sign"></i></span> {{agile_translate "contacts-view" "add-view"}}</a>
+                <span><i class="icon-plus-sign"></i></span> {{translate 'contacts-view' 'add-view'}}
+            </a>
         </div>
         <table class="table table-striped showCheckboxes m-b-none agile-table panel table-layout-mob-view show-delete-modal" url="core/api/tickets/filters/bulk" data-bulk-delete-title="Delete" data-bulk-delete-msg="Are you sure you want to delete?">
             <thead>
                 <tr>
-                    <th class="hide">{{agile_translate "tickets" "id"}}</th>
-                    <th style="width: 35%">View {{agile_translate "deal-view" "name"}}</th>
+                    <th class="hide">Id</th>
+                    <th style="width: 35%">View Name</th>
                     <th style="width: 40%">&nbsp;</th>
                 </tr>
             </thead>

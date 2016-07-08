@@ -3,29 +3,35 @@
     
         <div class="pull-right col w-md">
                 <a href="#add-ticket-group" class="btn btn-sm btn-default btn-addon invisible">
-                    <span><i class="icon-plus-sign"></i></span> {{agile_translate "report-view" "add-group"}}</a>
+                    <span><i class="icon-plus-sign"></i></span> Add Group
+                </a>
             </div>
         <div class="pull-right invisible">
                 <a href="#helpcenter" class="btn btn-sm btn-default btn-addon">
-                    <span><i class="icon-settings"></i></span> Help {{agile_translate "web-rules" "center"}}</a>
+                    <span><i class="icon-settings"></i></span> Help Center
+                </a>
             </div>
     	
         <ul class="nav nav-tabs b-b-none col">
         	<li {{#if groups}}class="active"{{/if}}>
          		<a href="#ticket-groups" class="b-l-none">
-         			{{agile_translate "tickets" "groups"}}</a>
+         			{{translate 'tickets' 'groups'}}
+         		</a>
          	</li>
             <li {{#if labels}}class="active"{{/if}}>
                 <a href="#ticket-labels" class="b-l-none">
-                    {{agile_translate "tickets" "labels"}}</a>
+                    {{translate 'tickets' 'labels'}}
+                </a>
             </li>
          	<li {{#if canned_responses}}class="active"{{/if}}>
          		<a href="#canned-responses">
-         			{{agile_translate "tickets" "canned-responses"}}</a>
+         			{{translate 'tickets' 'canned-responses'}}
+         		</a>
          	</li>
 		 	<li {{#if filters}}class="active"{{/if}}>
 		 		<a href="#ticket-views">
-		 			{{agile_translate "contacts-view" "views"}}</a>
+		 			{{translate 'tickets' 'views'}}
+		 		</a>
 		 	</li>
        </ul>
 	</div>

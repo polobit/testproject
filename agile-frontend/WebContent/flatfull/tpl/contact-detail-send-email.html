@@ -1,6 +1,6 @@
 <script id="send-email-template" type="text/html">
 <div class="bg-light lter b-b wrapper-md">
-	<h3 class=" pull-left h3 font-thin m-n">{{agile_translate "contact-details" "send-email"}}</h3>
+	<h3 class=" pull-left h3 font-thin m-n">{{translate 'other' 'send-email'}}</h3>
 <div class="clearfix"></div>               
 </div>
 <div class="wrapper-md">
@@ -8,18 +8,18 @@
 <div class="col-md-10">
 	
     <div class="panel panel-default">
-    <div class="panel-heading">{{agile_translate "modals" "email"}}</div>
+    <div class="panel-heading">{{translate 'other' 'email'}}</div>
     <div class="panel-body">
         <form id='emailForm' name="emailForm" class="form-horizontal" accept-charset="UTF-8">
             <fieldset>
                 <input type="hidden"  id="agile_attachment_name" name="attachment_name"/>
                 <input type="hidden"  id="agile_attachment_url" name="attachment_url"/>
-                 <input type="hidden"  id="contact_type"  name="contact_type" value="{{type}}"/>
-                <div id="bulk-count" style="margin-left: 17%; padding-bottom: 5px; display: none;"><p></p></div>
+                <div id="bulk-count" style="margin-left: 17%; padding-bottom: 5px; display: none;">
+                <p></p></div>
 				<div class="control-group form-group">
-                    <label class="control-label col-sm-2 col-xs-12">{{agile_translate "contact-details" "from"}}<span class="field_req">*</span></label>
+                    <label class="control-label col-sm-2 col-xs-12">{{translate 'other' 'from'}} <span class="field_req">*</span></label>
                     <div class="controls p-r-none col-sm-3 col-xs-6">
-                        <input type="text" placeholder="From Name" class="form-control b-r-none" id="from_name" name="from_name"/>
+                        <input type="text" placeholder="{{translate 'prefs-email' 'from-name'}}" class="form-control b-r-none" id="from_name" name="from_name"/>
                     </div>
                     <div class="controls p-l-none col-sm-5 col-xs-6">
                         <select class="email required form-control verified-email" id="from_email" 
@@ -32,45 +32,45 @@
 			<!--	<div class="control-group form-group">
                     <div class="controls col-sm-offset-2 col-sm-8">
                     	<div style="line-height:0px;">
-						<a href="#" id="from_email_link" class="text-info">{{agile_translate "contact-details" "from"}}</a>
+						<a href="#" id="from_email_link" class="text-info">From</a>
  						</div>
                      </div> 
 				</div>  -->
 				
                 <div class="control-group form-group m-b-sm">
-                    <label class="control-label col-sm-2 p-t">{{agile_translate "other" "to"}}<span class="field_req">*</span></label>
+                    <label class="control-label col-sm-2 p-t">{{translate 'other' 'to'}} <span class="field_req">*</span></label>
 					<div class="controls col-sm-8" class="contactTypeAhead">
 						<div>
 							<div>
 								<ul name="contact_to_ids" class="contacts tagsinput tags p-n"></ul>
 							</div>
 							<input type="text" id="to" name="to"
-								placeholder="Contact Email" class="typeahead typeahead_contacts multipleEmails form-control"
+								placeholder="{{translate 'other' 'contact-email'}}" class="typeahead typeahead_contacts multipleEmails form-control"
 								data-provide="typeahead" data-mode="multiple" /><!--  {{#if properties}} value="{{getPropertyValue properties "email"}}" {{/if}} -->
 						</div>
 					</div>
                 </div>
                
                 <div class="control-group form-group" style="display: none;">
-                    <label class="control-label col-sm-2 p-t">{{agile_translate "contact-details" "cc"}}</label>
+                    <label class="control-label col-sm-2 p-t">{{translate 'other' 'cc'}}</label>
                     <div class="controls col-sm-8" class="contactTypeAhead">
 						<div>
 							<div>
 								<ul name="contact_cc_ids" class="contacts tagsinput tags"></ul>
 							</div>
-                        	<input type="text" class="typeahead typeahead_contacts multipleEmails form-control" name="cc" id="email_cc" placeholder="Cc" data-provide="typeahead" data-mode="multiple"/>
+                        	<input type="text" class="typeahead typeahead_contacts multipleEmails form-control" name="cc" id="email_cc" placeholder="{{translate 'other' 'cc'}}" data-provide="typeahead" data-mode="multiple"/>
                     	</div>
 					</div>
                 </div>
                 
                 <div class="control-group form-group" style="display: none;">
-                    <label class="control-label col-sm-2 p-t">{{agile_translate "contact-details" "bcc"}}</label>
+                    <label class="control-label col-sm-2 p-t">{{translate 'other' 'bcc'}}</label>
                     <div class="controls col-sm-8" class="contactTypeAhead">
 						<div>
 							<div>
 								<ul name="contact_bcc_ids" class="contacts tagsinput tags"></ul>
 							</div>
-                        	<input type="text" class="typeahead typeahead_contacts multipleEmails form-control" name="bcc" id="email_bcc" placeholder="Bcc" data-provide="typeahead" data-mode="multiple"/>
+                        	<input type="text" class="typeahead typeahead_contacts multipleEmails form-control" name="bcc" id="email_bcc" placeholder="{{translate 'other' 'bcc'}}" data-provide="typeahead" data-mode="multiple"/>
 						</div>
                     </div>
                 </div>
@@ -78,16 +78,16 @@
 				<div class="control-group form-group">
                     <div class="controls  col-sm-10 ">
                     	<div style="line-height:0px;" class="text-xs pull-right">
-						<a href="#" id="cc-link" class="text-info ">{{agile_translate "contact-details" "cc"}}</a>
- 						<a href="#" id="bcc-link" style="padding-left: 5px;" class="text-info">{{agile_translate "contact-details" "bcc"}}</a>
+						<a href="#" id="cc-link" class="text-info ">{{translate 'other' 'cc'}}</a>
+ 						<a href="#" id="bcc-link" style="padding-left: 5px;" class="text-info">{{translate 'other' 'bcc'}}</a>
                         </div>
                      </div>
 				</div>
 
                 <div class="control-group form-group m-b-sm">
-                    <label class="control-label col-sm-2">{{agile_translate "other" "choose-template"}}</label>
+                    <label class="control-label col-sm-2">{{translate 'other' 'choose-template'}} </label>
                     <div class="controls col-sm-8">
-                        <select class="emailSelect form-control pull-left" id="sendEmailSelect" title="Fill from Template" name="sendEmailSelect"><option class="default-select" value="">{{agile_translate "other" "fill-from-template"}}</option></select>
+                        <select class="emailSelect form-control pull-left" id="sendEmailSelect" title="{{translate 'other' 'fill-from-template'}}" name="sendEmailSelect"><option class="default-select" value="">- {{translate 'other' 'fill-from-template'}} -</option></select>
                     </div>
                     
                 </div>
@@ -95,30 +95,31 @@
                 <div class="control-group form-group">
                     <div class="controls  col-sm-10 ">
                         <div style="line-height:0px;" class="text-xs pull-right">
-                             <a class="text-info pull-right" href="#emailbuilder-templates">{{agile_translate "other" "create-new-template"}}</a>
+                             <a class="text-info pull-right" href="#emailbuilder-templates">{{translate 'other' 'create-new-template'}}</a>
                         </div>
                      </div>
                 </div>
 
                 <div class="control-group form-group">
-                    <label class="control-label col-sm-2">{{agile_translate "widgets" "subject"}}<span class="field_req">*</span></label>
+                    <label class="control-label col-sm-2">{{translate 'other' 'subject'}} <span class="field_req">*</span></label>
                     <div class="controls col-sm-8">
-                        <input type="text" class="form-control required" name="subject" id="subject" placeholder="Subject" />
+                        <input type="text" class="form-control required" name="subject" id="subject" placeholder="{{translate 'other' 'subject'}}" />
                     </div>
                 </div>
                     
                 <div class="control-group form-group">
-                    <label class="control-label col-sm-2">{{agile_translate "other" "message"}}</label>
+                    <label class="control-label col-sm-2">{{translate 'other' 'message'}} </label>
                     <div class="controls col-sm-8 email-editor-custom-scroll-bar">
                         <div id="loading-editor"></div>
-                        <textarea class="form-control required" name="message" id="email-body" placeholder="Description" style="width: 75%; height: 45%; display: none;"></textarea>
+                        <textarea class="form-control required" name="message" id="email-body" placeholder="{{translate 'other' 'description'}}" style="width: 75%; height: 45%; display: none;"></textarea>
                     </div>
                 </div>   
                 
 
                 <div class="control-group form-group" id="eattachment_error" style="display:none">
                     <div class="controls col-sm-8 col-sm-offset-2 text-danger">
-                        {{agile_translate "other" "email-template-has-an-attached-document"}}</div>
+                        {{translate 'other' 'email-template-has-an-attached-document'}}     
+                    </div>
                 </div>
 
 				<div class="control-group form-group" style="display:none">
@@ -132,13 +133,14 @@
                         <div class="checkbox p-t-none pull-left" id="enable_tracking">
                             <label class="i-checks i-checks-sm">
                             <input type="checkbox" name="track_clicks" checked="checked"><i></i>
-                            {{agile_translate "other" "enable-tracking"}}</label>
+                           {{translate 'other' 'enable-tracking'}}
+                            </label>
                         </div>
                         <div class="pull-right">
                             <select name="push_param" class="form-control">
-                                <option value="YES">{{agile_translate "portlets" "yes"}}</option>
-                                <option value="YES_AND_PUSH_EMAIL_ONLY"> Yes & Push (Email only)</option>
-                                <option value="YES_AND_PUSH">{{agile_translate "prefs-email" "yes-and-push"}}</option>
+                                <option value="YES">{{translate 'portlets' 'yes'}}</option>
+                                <option value="YES_AND_PUSH_EMAIL_ONLY"> {{translate 'prefs-email' 'yes-and-push-email-only'}}</option>
+                                <option value="YES_AND_PUSH">{{translate 'prefs-email' 'yes-and-push'}}</option>
                             </select>
                         </div>
                     </div>
@@ -157,12 +159,12 @@
                <div class="control-group form-group">
 					<div class="col-sm-offset-2 col-sm-8">
                	        	<div class="controls">
-               	       		<a href="#" class="add-attachment-select text-info"><i class="fa fa-paperclip m-r-xs"></i>{{agile_translate "other" "attach-file"}}</a>
+               	       		<a href="#" class="add-attachment-select text-info"><i class="fa fa-paperclip m-r-xs"></i>{{translate 'other' 'attach-file'}}</a>
 					   		<span class="attachment-document-select" style="display:none;">
 								<select id="attachment-select" style="margin-bottom: -1px;" name="document_id" class="form-control pull-left w overflow-auto text-xs input-xs">
 								</select>
-                            	<a href="#" class="add-attachment-confirm pull-left text-info text-xs  m-l-xs m-t-sm">{{agile_translate "other" "add"}}</a> 
-                                <a href="#" class="add-attachment-cancel text-info pull-left text-xs m-l-xs m-t-sm">{{agile_translate "other" "cancel"}}</a>
+                            	<a href="#" class="add-attachment-confirm pull-left text-info text-xs  m-l-xs m-t-sm">{{translate 'other' 'add'}}</a> 
+                                <a href="#" class="add-attachment-cancel text-info pull-left text-xs m-l-xs m-t-sm">{{translate 'other' 'cancel'}}</a>
 								<!--&nbsp;
                             	<a href="#" class="add-attachment-cancel"><i class="icon-remove-circle"></i></a>-->
                             	<span class="attachment-status"></span>
@@ -176,8 +178,8 @@
                 <input name="signature" type="hidden" value="{{#getCurrentUserPrefs}}{{signature}}{{/getCurrentUserPrefs}}"/>
 				<div class="line ling-lg b-b"></div>
                 <div class="form-actions col-sm-offset-2 col-sm-8">          
-					<a href="#contacts" class="btn btn-sm btn-danger" id="send-email-close">{{agile_translate "contact-details" "CLOSE"}}</a>
-                    <a href="#"  id="sendEmail" class="btn btn-sm btn-primary">{{agile_translate "tasks" "Send"}}</a>
+					<a href="#contacts" class="btn btn-sm btn-danger" id="send-email-close">{{translate 'report-add' 'close'}}</a>
+                    <a href="#"  id="sendEmail" class="btn btn-sm btn-primary">{{translate 'tasks' 'send'}}</a>
                     &nbsp;&nbsp;<span id="msg"></span>  
                 </div>
             </fieldset>
@@ -191,7 +193,7 @@
 
 <script id="send-email-company-template" type="text/html">
 <div class="bg-light lter b-b wrapper-md">
-	<h3 class=" pull-left h3 font-thin m-n">{{agile_translate "contact-details" "send-email"}}</h3>
+	<h3 class=" pull-left h3 font-thin m-n">{{translate 'other' 'send-email'}}</h3>
 <div class="clearfix"></div>               
 </div>
 <div class="wrapper-md">
@@ -199,10 +201,11 @@
 <div class="col-md-10">
 	<div class="control-group form-group pull-right">
     	<div class="controls col-md-12 p-r-none">
-			<select class="emailSelect form-control m-b" id="sendEmailSelect" title="Fill from Template" name="sendEmailSelect"><option class="default-select" value="">- Fill from Template -</option></select>
+			<select class="emailSelect form-control m-b" id="sendEmailSelect" title="{{translate 'other' 'fill-from-template'}}" name="sendEmailSelect"><option class="default-select" value="">- {{translate 'other' 'fill-from-template'}} -</option>
+            </select>
 		</div>
 		<br>
-		<a class="right text-info" {{#isSafariBrowser}} style="margin-top: 10px;" {{else}} style="margin-top: -10px;" {{/isSafariBrowser}} href="#emailbuilder-templates">{{agile_translate "other" "create-new-template"}}</a>
+		<a class="right text-info" {{#isSafariBrowser}} style="margin-top: 10px;" {{else}} style="margin-top: -10px;" {{/isSafariBrowser}} href="#emailbuilder-templates">{{translate 'other' 'create-new-template'}}</a>
 	</div>
 	<div class="clearfix"></div>
     <div class="panel wrapper">
@@ -212,57 +215,57 @@
                 <input type="hidden"  id="from" name="from"/>
                 <div id="bulk-count" style="margin-left: 17%; padding-bottom: 5px; display: none;"><p></p></div>
 				<div class="control-group form-group" style="display: none;">
-                    <label class="control-label col-sm-2">{{agile_translate "contact-details" "from"}}<span class="field_req">*</span></label>
+                    <label class="control-label col-sm-2">{{translate 'other' 'from'}} <span class="field_req">*</span></label>
                     <div class="controls col-sm-8">
-                        <input type="text" placeholder="From Email" class="email required form-control" id="from_email" name="from" />
+                        <input type="text" placeholder="{{translate 'prefs-email' 'from-email'}}" class="email required form-control" id="from_email" name="from" />
                     </div>
                 </div>
 				<div class="control-group form-group">
                     <div class="controls col-sm-offset-2 col-sm-8">
                     	<div style="line-height:0px;">
-						<a href="#" id="from_email_link" class="text-info">{{agile_translate "contact-details" "from"}}</a>
+						<a href="#" id="from_email_link" class="text-info">{{translate 'other' 'from'}}</a>
  						</div>
                      </div>
 				</div>
 				<div class="control-group form-group" style="display: none;">
                     <div class="controls col-sm-8 col-sm-offset-2">
-                        <input type="text" placeholder="From Name" class="form-control" id="from_name" name="from_name"/>
+                        <input type="text" placeholder="{{translate 'prefs-email' 'from-name'}}" class="form-control" id="from_name" name="from_name"/>
                     </div>
                 </div>
                 <div class="control-group form-group">
-                    <label class="control-label col-sm-2">{{agile_translate "other" "to"}}<span class="field_req">*</span></label>
+                    <label class="control-label col-sm-2">{{translate 'other' 'to'}} <span class="field_req">*</span></label>
 					<div class="controls col-sm-8" class="contactTypeAhead">
 						<div>
 							<div>
 								<ul name="contact_to_ids" class="contacts tagsinput tags p-n"></ul>
 							</div>
 							<input type="text" id="to" name="to"
-								placeholder="Contact Email" class="typeahead typeahead_contacts multipleEmails form-control"
+								placeholder="{{translate 'other' 'contact-email'}}" class="typeahead typeahead_contacts multipleEmails form-control"
 								data-provide="typeahead" data-mode="multiple" /><!--  {{#if properties}} value="{{getPropertyValue properties "email"}}" {{/if}} -->
 						</div>
 					</div>
                 </div>
                
                 <div class="control-group form-group" style="display: none;">
-                    <label class="control-label col-sm-2">{{agile_translate "contact-details" "cc"}}</label>
+                    <label class="control-label col-sm-2">{{translate 'other' 'cc'}}</label>
                     <div class="controls col-sm-8" class="contactTypeAhead">
 						<div>
 							<div>
 								<ul name="contact_cc_ids" class="contacts tagsinput tags"></ul>
 							</div>
-                        	<input type="text" class="typeahead typeahead_contacts multipleEmails form-control" name="cc" id="email_cc" placeholder="Cc" data-provide="typeahead" data-mode="multiple"/>
+                        	<input type="text" class="typeahead typeahead_contacts multipleEmails form-control" name="cc" id="email_cc" placeholder="{{translate 'other' 'cc'}}" data-provide="typeahead" data-mode="multiple"/>
                     	</div>
 					</div>
                 </div>
                 
                 <div class="control-group form-group" style="display: none;">
-                    <label class="control-label col-sm-2">{{agile_translate "contact-details" "bcc"}}</label>
+                    <label class="control-label col-sm-2">{{translate 'other' 'bcc'}}</label>
                     <div class="controls col-sm-8" class="contactTypeAhead">
 						<div>
 							<div>
 								<ul name="contact_bcc_ids" class="contacts tagsinput tags"></ul>
 							</div>
-                        	<input type="text" class="typeahead typeahead_contacts multipleEmails form-control" name="bcc" id="email_bcc" placeholder="Bcc" data-provide="typeahead" data-mode="multiple"/>
+                        	<input type="text" class="typeahead typeahead_contacts multipleEmails form-control" name="bcc" id="email_bcc" placeholder="{{translate 'other' 'bcc'}}" data-provide="typeahead" data-mode="multiple"/>
 						</div>
                     </div>
                 </div>
@@ -270,24 +273,24 @@
 				<div class="control-group form-group">
                     <div class="controls col-sm-offset-2 col-sm-8">
                     	<div style="line-height:0px;">
-						<a href="#" id="cc-link" class="text-info">{{agile_translate "other" "add-cc"}}</a>
- 						<a href="#" id="bcc-link" style="padding-left: 5px;" class="text-info">{{agile_translate "other" "add-bcc"}}</a>
+						<a href="#" id="cc-link" class="text-info">{{translate 'other' 'add-cc'}}</a>
+ 						<a href="#" id="bcc-link" style="padding-left: 5px;" class="text-info">{{translate 'other' 'add-bcc'}}</a>
                         </div>
                      </div>
 				</div>
 
                 <div class="control-group form-group">
-                    <label class="control-label col-sm-2">{{agile_translate "widgets" "subject"}}<span class="field_req">*</span></label>
+                    <label class="control-label col-sm-2">{{translate 'other' 'subject'}} <span class="field_req">*</span></label>
                     <div class="controls col-sm-8">
-                        <input type="text" class="form-control required" name="subject" id="subject" placeholder="Subject" />
+                        <input type="text" class="form-control required" name="subject" id="subject" placeholder="{{translate 'other' 'subject'}}" />
                     </div>
                 </div>
                     
                 <div class="control-group form-group">
-                    <label class="control-label col-sm-2">{{agile_translate "other" "message"}}</label>
+                    <label class="control-label col-sm-2">{{translate 'other' 'message'}} </label>
                     <div class="controls col-sm-8">
                         <div id="loading-editor"></div>
-                        <textarea class="form-control required" name="message" id="email-body" placeholder="Description" style="width: 75%; height: 45%; display: none;"></textarea>
+                        <textarea class="form-control required" name="message" id="email-body" placeholder="{{translate 'other' 'description'}}" style="width: 75%; height: 45%; display: none;"></textarea>
                     </div>
                 </div>   
                 
@@ -302,7 +305,8 @@
 
                 <div class="control-group form-group" id="eattachment_error" style="display:none">
                     <div class="controls col-sm-8 col-sm-offset-2 text-danger">
-                        {{agile_translate "other" "email-template-has-an-attached-document"}}</div>
+                        {{translate 'other' 'email-template-has-an-attached-document'}}     
+                    </div>
                 </div>
 
 				<div class="control-group form-group" style="display:none">
@@ -316,16 +320,17 @@
 						<div class="checkbox pull-right" id="enable_tracking" style="margin-top:-7px;">
                    			<label class="i-checks i-checks-sm">
                        		<input type="checkbox" name="track_clicks" checked="checked"><i></i>
-                       		{{agile_translate "other" "enable-tracking"}}</label>
+                       		{{translate 'other' 'enable-tracking'}}
+                   			</label>
 						</div>
 						<div class="pull-left"> 
                	        	<div class="controls">
-               	       		<a href="#" class="add-attachment-select text-info"><i class='icon-plus-sign'/></i> {{agile_translate "prefs-email-templates" "add-attachment"}}</a>
+               	       		<a href="#" class="add-attachment-select text-info"><i class='icon-plus-sign'/></i> {{translate 'prefs-email-templates' 'add-attachment'}}</a>
 					   		<span class="attachment-document-select" style="display:none;">
 								<select id="attachment-select" style="margin-bottom: -1px;" name="document_id" class="form-control inline-block w overflow-auto">
 								</select>
-                            	<a href="#" class="btn btn-default btn-sm add-attachment-cancel">{{agile_translate "other" "cancel"}}</a>
-                    			<a href="#" class="btn btn-sm btn-primary add-attachment-confirm">{{agile_translate "other" "add"}}</a> 
+                            	<a href="#" class="btn btn-default btn-sm add-attachment-cancel">{{translate 'other' 'cancel'}}</a>
+                    			<a href="#" class="btn btn-sm btn-primary add-attachment-confirm">{{translate 'other' 'add'}}</a> 
 								<!--&nbsp;
                             	<a href="#" class="add-attachment-cancel"><i class="icon-remove-circle"></i></a>-->
                             	<span class="attachment-status"></span>
@@ -338,8 +343,8 @@
                 <input name="signature" type="hidden" value="{{#getCurrentUserPrefs}}{{signature}}{{/getCurrentUserPrefs}}"/>
 				<div class="line ling-lg b-b"></div>
                 <div class="form-actions col-sm-offset-2 col-sm-8">          
-					<a href="#companies" class="btn btn-sm btn-danger" id="send-email-close">{{agile_translate "contact-details" "CLOSE"}}</a>
-                    <a href="#"  id="sendEmail" class="btn btn-sm btn-primary">{{agile_translate "tasks" "Send"}}</a>
+					<a href="#companies" class="btn btn-sm btn-danger" id="send-email-close">{{translate 'report-add' 'close'}}</a>
+                    <a href="#"  id="sendEmail" class="btn btn-sm btn-primary">{{translate 'tasks' 'send'}}</a>
                     &nbsp;&nbsp;<span id="msg"></span>  
                 </div>
             </fieldset>

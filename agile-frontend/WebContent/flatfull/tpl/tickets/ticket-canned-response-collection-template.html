@@ -3,12 +3,14 @@
     <div class="col panel wrapper">
         <div class="hbox h-auto m-b-sm">
             <div class="text-center padder-v">
-                <h4 class="m-t-none m-b-xs">You don&#39;t have any canned responses</h4>
+                <h4 class="m-t-none m-b-xs">{{translate 'tickets' 'you-do-not-have-any-canned-responses'}}</h4>
                 <div class="m-b-xs">
-                    {{agile_translate "tickets" "tickets-canned-responses-desc"}}</div>
+                    {{translate 'tickets' 'tickets-canned-responses-desc'}}
+                </div>
                 <div>
                     <a href="#add-canned-response" class="btn btn-sm btn-default blue btn-slate-action m-t-xs">
-                        {{agile_translate "tickets" "add-canned-response"}}</a>
+                        {{translate 'tickets' 'add-canned-response'}}
+                    </a>
                 </div>
             </div>
         </div>
@@ -19,15 +21,16 @@
         <div class="hbox h-auto m-b-sm">
             <div class="pull-right">
                 <a href="#add-canned-response" class="btn btn-sm btn-default btn-addon">
-                    <span><i class="icon-plus-sign"></i></span> {{agile_translate "tickets" "add-canned-response"}}</a>
+                    <span><i class="icon-plus-sign"></i></span> {{translate 'tickets' 'add-canned-response'}}
+                </a>
             </div>
-            <table class="table table-striped showCheckboxes m-b-none agile-table panel table-layout-mob-view show-delete-modal" url="core/api/tickets/canned-messages/bulk" data-bulk-delete-title="Delete" data-bulk-delete-msg="Are you sure you want to delete?">
+            <table class="table table-striped showCheckboxes m-b-none agile-table panel table-layout-mob-view show-delete-modal" url="core/api/tickets/canned-messages/bulk" data-bulk-delete-title="{{translate 'contacts-view' 'delete'}}" data-bulk-delete-msg="Are you sure you want to delete?">
                     <thead>
                         <tr>
-                            <th class="hide">{{agile_translate "tickets" "id"}}</th>
-                            <th style="width:33%">{{agile_translate "report-add" "title"}}</th>
-                            <th style="width:30%">{{agile_translate "other" "message"}}</th>
-                             <!--<th style="width:30%">{{agile_translate "tickets" "labels"}}</th> -->
+                            <th class="hide">{{translate 'tickets' 'id'}}</th>
+                            <th style="width:33%">{{translate 'other' 'title'}}</th>
+                            <th style="width:30%">{{translate 'other' 'message'}}</th>
+                             <!--<th style="width:30%">Labels</th> -->
                             <th style="width:36%">&nbsp;</th>
                         </tr>
                     </thead>
@@ -38,9 +41,10 @@
     <div class="col w-md  wrapper pos-rlt track-milestone-text p-t-none">
         <div class="data-block">
             <div class="p-l p-r">
-                <h4 class="m-t-none">What are Recommendations?</h4>           
+                <h4 class="m-t-none">{{translate 'tickets' 'what-are-recommendations'}}</h4>           
                 <p>
-                    {{agile_translate "tickets" "get-recommendations-desc"}}</p>
+                    {{translate 'tickets' 'get-recommendations-desc'}}
+                </p>
                 <br/>
                 <p>
                     <iframe width="254" height="142" src="https://www.youtube.com/embed/I4mj_MpQsUI" frameborder="0" allowfullscreen></iframe>

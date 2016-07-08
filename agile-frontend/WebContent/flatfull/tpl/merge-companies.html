@@ -1,7 +1,7 @@
 <script id="merge-companies-template" type="text/html">
 	<div class="custom-animated custom-fadeInUp">
 		<div class="wrapper-md">
-			<h3 class="font-thin h3"><span id="contact-heading">Merge Duplicate {{agile_translate "companies-view" "Companies"}}</span></h3>
+			<h3 class="font-thin h3"><span id="contact-heading">Merge Duplicate Companies</span></h3>
 		<div>
 		<table id="merge-companies-table" width="100%" border="0" cellpadding="4" cellspacing="0" class="mergeTable panel" table-layout: fixed;>
 			<tr>
@@ -15,7 +15,7 @@
 				{{/each_with_index}}
 			</tr>
 			<tr>
-				<td class="table-td-focus">{{agile_translate "deal-view" "name"}}</td>
+				<td class="table-td-focus">Name</td>
 				{{#each_with_index  contacts}}
 					{{#property_is_exists "name" properties}}
 						{{#if_equals index "1"}}
@@ -39,7 +39,7 @@
 				{{/each_with_index}}
 			</tr>
 			<tr>
-				<td class="table-td-focus">{{agile_translate "widgets" "url"}}</td>
+				<td class="table-td-focus">URL</td>
 				{{#each_with_index  contacts}}
 					{{#property_is_exists "url" properties}}
 						{{#if_equals index "1"}}
@@ -63,7 +63,7 @@
 				{{/each_with_index}}
 			</tr>
 			<tr>
-				<td class="table-td-focus">{{agile_translate "contacts-view" "Phone"}}</td>
+				<td class="table-td-focus">Phone</td>
 				{{#each_with_index  contacts}}
 					{{#if_equals index "1"}}
 						<td>
@@ -77,7 +77,7 @@
 				{{/each_with_index}}
 			</tr>			
 			<tr>
-				<td class="table-td-focus">{{agile_translate "report-add" "tags"}}</td>
+				<td class="table-td-focus">Tags</td>
 				{{#each_with_index  contacts}}
 					{{#if_equals index "1"}}
 						<td>
@@ -99,7 +99,7 @@
 				{{/each_with_index}}
 			</tr>
 			<tr>
-				<td class="table-td-focus">{{agile_translate "contact-details" "address"}}</td>
+				<td class="table-td-focus">Address</td>
 				{{#each_with_index  contacts}}
 					{{#property_is_exists "address" properties}}
 						{{#if_equals index "1"}}
@@ -123,7 +123,7 @@
 				{{/each_with_index}}
 			</tr>
 			<tr>
-				<td class="table-td-focus">{{agile_translate "other" "website"}}</td>
+				<td class="table-td-focus">Website</td>
 				{{#each_with_index  contacts}}
 					{{#if_equals index "1"}}
 						<td>
@@ -139,7 +139,7 @@
 				{{/each_with_index}}
 			</tr>
 			<tr>
-				<td class="table-td-focus">{{agile_translate "modals" "email"}}</td>
+				<td class="table-td-focus">Email</td>
 				{{#each_with_index  contacts}}
 					{{#if_equals index "1"}}
 						<td>
@@ -162,7 +162,7 @@
 		<div class="col-md-6  select-none"></div>
 	</div>
 	<div align="center">
-		<a href="#" class="btn btn-default btn-sm m-b pos-rlt" id="companies-merge-cancel">{{agile_translate "other" "cancel"}}</a>
-		<a href="#" class="btn btn-sm btn-primary m-b pos-rlt" id="merge-companies-model">{{agile_translate "other" "merge"}}</a>
+		<a href="#" class="btn btn-default btn-sm m-b pos-rlt" id="companies-merge-cancel">Cancel</a>
+		<a href="#" class="btn btn-sm btn-primary m-b pos-rlt" id="merge-companies-model">Merge</a>
 	</div>
 </script>

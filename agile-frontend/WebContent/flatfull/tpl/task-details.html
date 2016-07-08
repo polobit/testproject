@@ -27,11 +27,11 @@
                     	
 								<ul class="dropdown-menu pull-right text-sm" role="menu">
 
-                                   <li><a  href="javascript:void(0)" data="{{id}}" id="task_edit" ><i class="fa fa-edit" style="margin-right:2px"></i> {{agile_translate "contact-details" "edit"}}</a></li>
+                                   <li><a  href="javascript:void(0)" data="{{id}}" id="task_edit" ><i class="fa fa-edit" style="margin-right:2px"></i> Edit</a></li>
                                    <li class="divider"></li>
-									<li><a href="#new-task-modal"  data-toggle="modal"><i class="icon-note" style="margin-right:2px"></i> {{agile_translate "deal-view" "add-note"}}</a></li>
+									<li><a href="#new-task-modal"  data-toggle="modal"><i class="icon-note" style="margin-right:2px"></i> Add Note</a></li>
                                     
-									<li><a href='javascript:void(0)'  data="{{id}}" class ="delete_task"><i	class="icon-trash" style="margin-right:2px"></i> {{agile_translate "contact-details" "delete"}}</a></li>
+									<li><a href='javascript:void(0)'  data="{{id}}" class ="delete_task"><i	class="icon-trash" style="margin-right:2px"></i> Delete</a></li>
 								</ul>
 					 </div>
 					
@@ -75,19 +75,19 @@
   <div title="Owner" class="contact-owner-view">
       	<div class="contact-owner" id="change-owner-element">
 <div>
-        	<small class="text-xs text-muted">{{agile_translate "contact-details" "owner"}}</small>
+        	<small class="text-xs text-muted">Owner</small>
 </div>
 			{{#if taskOwner}}
         	<!-- <span class="contact-owner-pic"><img class="user-img"  alt="" src="{{defaultGravatarurl 40}}" /></span> -->
 			{{else}}
 			<!-- <span class="contact-owner-pic"><img class="user-img"  alt="" src="{{defaultGravatarurl 40}}" /></span> -->
-            <span class="task-owner-add text-sm"><a style="cursor:pointer;">{{agile_translate "contact-details" "assign-owner"}}</a></span>
+            <span class="task-owner-add text-sm"><a style="cursor:pointer;">Assign Owner</a></span>
  			{{/if}}
         	<a href="#" id="task-owner" data={{taskOwner.id}} class="task-owner-name contact-owner-name">{{taskOwner.name}}</a>
         
         	{{#canEditContact taskOwner.id}}
         	<div class="btn-group v-middle" id="change-task-owner-ul" style="display: none">
-        		 <button class="btn btn-xs dropdown-toggle btn-default" data-toggle="dropdown">{{agile_translate "contacts-view" "change-owner"}}<span class="caret"></span></button>
+        		 <button class="btn btn-xs dropdown-toggle btn-default" data-toggle="dropdown">Change Owner <span class="caret"></span></button>
         		 <ul id='task-detail-owner' class="dropdown-menu" role="menu"></ul>
         	</div> 
 			{{/canEditContact}}
@@ -103,7 +103,7 @@
 <div id="task-contact-img">
 {{#if contacts}}        	
 <div class="m-b-xs">
-        	<small class="text-xs text-muted">{{agile_translate "companies-view" "Contacts"}}</small>
+        	<small class="text-xs text-muted">Contacts</small>
 </div>
 {{/if}}
 
@@ -122,7 +122,7 @@
 <div id="task-contact-img">
 {{#if deals}}        	
 <div class="m-b-xs">
-        	<small class="text-xs text-muted">{{agile_translate "deal-view" "Deals?"}}</small>
+        	<small class="text-xs text-muted">Deals</small>
 </div>
 {{/if}}
 
@@ -131,13 +131,14 @@
   		<div style="width:60%" class="text-ellipsis pull-left">
 			<a href="#deal/{{id}}" class="activate-link thumb m-b-xs text-cap text-ellipsis" style="width: 100%;">{{name}}</a>
 		</div>
+  		<div style="width:40%" class="pull-left text-ellipsis">({{currencySymbol}}{{numberWithCommas expected_value}}, {{probability}}%)</div>
 	</div>
 {{/each}}
 <div class="clearfix"></div>
 {{#if taskDescription}} 
 <div class="m-t-sm task-view-description-outbox">
   	<div>
-    	<small class="text-xs text-muted">{{agile_translate "other" "description"}}</small>
+    	<small class="text-xs text-muted">Description</small>
 	</div>
 	<p  class="task-view-description">{{taskDescription}}</p>
 </div>
@@ -154,10 +155,10 @@
 <div class="row-row" style="display:block">
 		<div id="task-tab-container-header" class="tab-container">
 			<ul class="nav nav-tabs bg-light" id="taskDetailsTab">
-                <li  class="active"><a data-toggle="tab" href="#activity">{{agile_translate "deal-view" "activity"}}</a></li>
-				<li><a data-toggle="tab" href="#notes">{{agile_translate "prefs-notifications" "notes"}}</a></li>
-				<li><a data-toggle="tab" href="#contacts">{{agile_translate "companies-view" "Contacts"}}</a></li>
-				<li><a data-toggle="tab" href="#deals">{{agile_translate "deal-view" "Deals?"}}</a></li>
+                <li  class="active"><a data-toggle="tab" href="#activity">Activity</a></li>
+				<li><a data-toggle="tab" href="#notes">Notes</a></li>
+				<li><a data-toggle="tab" href="#contacts">Contacts</a></li>
+				<li><a data-toggle="tab" href="#deals">Deals</a></li>
 			</ul>
           </div>
 			<div class="tab-content no-tab-cell" id="task_tab_detail">
@@ -180,7 +181,8 @@
 {{#if this.length}}
 	<div class="m-b-md m-t-md m-r-sm" align="right">
 		<a href="#" class="task-add-contact btn btn-sm btn-default">
-			<span><i class="icon-plus-sign"></i></span> {{agile_translate "modals" "add-contact"}}</a>
+			<span><i class="icon-plus-sign"></i></span> Add Contact
+		</a>
 	</div>
 	<br/>
 	<div class="table-responsive">
@@ -188,10 +190,10 @@
 				
 				<thead>
 					<tr><th></th>
-						<th style="width:36%;">{{agile_translate "deal-view" "name"}}</th>
-						<th style="width:25%;">{{agile_translate "contact-details" "work"}}</th>
-						<th style="width:31%;">{{agile_translate "report-add" "tags"}}</th>
-						<th style="width:12%;">{{agile_translate "contacts-view" "Lead score"}}</th>
+						<th style="width:36%;">Name</th>
+						<th style="width:25%;">Work</th>
+						<th style="width:31%;">Tags</th>
+						<th style="width:12%;">Lead Score</th>
 					</tr>
 				</thead>
 				<tbody id="task-related-model-list" class="task-related-model-list agile-edit-row overflow-scroll"
@@ -206,11 +208,13 @@
                     	<img alt="Clipboard" src="{{getS3ImagePath '/img/clipboard.png'}}">
                 	</div>
                 	<div class="box-right pull-left">
-                    	<h4 class="m-t-none">Task {{agile_translate "company-details" "is-not-associated-with-any-person"}}</h4>
+                    	<h4 class="m-t-none">Task is not associated with any person/contact. </h4>
                     	<div class="text">
-							All Contacts which are related to this task are shown {{agile_translate "widgets" "here"}}<br/>
+							All Contacts which are related to this task are shown here.
+							<br/>
 							<a href="#" class="task-add-contact btn btn-default btn-sm left m-t-xs">
-								<i class="icon-plus-sign"></i> {{agile_translate "modals" "add-contact"}}</a>
+								<i class="icon-plus-sign"></i> Add Contact
+							</a>
                     	</div>
                 	</div>
 					<div class="clear-fix">
@@ -374,7 +378,8 @@
 {{#if this.length}}
 	<div class="m-b-md m-t-md m-r-sm" align="right">
 		<a href="#" class="task-add-deal btn btn-sm btn-default">
-			<span><i class="icon-plus-sign"></i></span> {{agile_translate "contact-details" "add-deal"}}</a>
+			<span><i class="icon-plus-sign"></i></span> Add Deal
+		</a>
 	</div>
 	<br/>
 	<div class="table-responsive">
@@ -383,12 +388,12 @@
 				<thead>
 					<tr>
 						<th style="width:0.1%;"></th>
-						<th>{{agile_translate "deal-view" "opportunity"}}</th>
-                        <!-- <th>{{agile_translate "deal-view" "related-to"}}</th> -->
-                        <th>{{agile_translate "contacts-view" "value"}}</th>
-                        <th>{{agile_translate "admin-settings-tasks" "Milestone"}}</th>
-                        <th>{{agile_translate "deal-view" "close-date"}}</th>
-                        <th>{{agile_translate "contact-details" "owner"}}</th>
+						<th>Opportunity</th>
+                        <!-- <th>Related To</th> -->
+                        <th>Value</th>
+                        <th>Milestone</th>
+                        <th>Close Date</th>
+                        <th>Owner</th>
 					</tr>
 				</thead>
 				<tbody id="task-related-deals-model-list" class="task-related-deals-model-list agile-edit-row overflow-scroll"
@@ -405,9 +410,11 @@
                 	<div class="box-right pull-left">
                     	<h4 class="m-t-none">Task is not associated with any deal. </h4>
                     	<div class="text">
-							All deals which are related to this task are shown {{agile_translate "widgets" "here"}}<br/>
+							All deals which are related to this task are shown here.
+							<br/>
 							<a href="#" class="task-add-deal btn btn-default btn-sm left m-t-xs">
-								<i class="icon-plus-sign"></i> {{agile_translate "contact-details" "add-deal"}}</a>
+								<i class="icon-plus-sign"></i> Add Deal
+							</a>
                     	</div>
                 	</div>
 					<div class="clear-fix">
@@ -463,7 +470,8 @@
 	<div class="modal-header">
 		<button class="close" data-dismiss="modal">x</button>
 		<h3 class="modal-title">
-			<i class="icon-plus-sign"></i>&nbsp;{{agile_translate "modals" "edit-note"}}</h3>
+			<i class="icon-plus-sign"></i>&nbsp;Edit Note
+		</h3>
 	</div>
 	<div class="modal-body">
 		<form id="tasknoteUpdateForm" name="tasknoteUpdateForm" method="post">
@@ -474,7 +482,7 @@
 					value="{{created_time}}" />
 
 				<div class="control-group form-group">
-					<label class="control-label"><b>{{agile_translate "widgets" "subject"}}</b> <span
+					<label class="control-label"><b>Subject</b> <span
 						class="field_req">*</span></label>
 					<div class="controls">
 						<input type="text" placeholder="About" name="subject" id="subject"
@@ -483,7 +491,7 @@
 				</div>
 				
 					<div class="control-group form-group">
-						<label class="control-label"><b>{{agile_translate "other" "description"}}</b></label>
+						<label class="control-label"><b>Description</b></label>
 						<div class="controls">
 							<textarea rows="3" class=" form-control" placeholder="Detailed Note"
 								name="description" id="description"></textarea>
@@ -496,7 +504,7 @@
 	</div>
 
 	<div class="modal-footer">
-		<a href="#" class="btn btn-sm btn-primary" id="task_note_update">{{agile_translate "modals" "save"}}</a> <span
+		<a href="#" class="btn btn-sm btn-primary" id="task_note_update">Save </a> <span
 			class="save-status"></span>
 	</div>
 </div>
@@ -512,13 +520,14 @@
 	<div class="modal-header">
 		<button class="close" data-dismiss="modal">x</button>
 		<h3 class="modal-title">
-			<i class="icon-plus-sign"></i>&nbsp;{{agile_translate "deal-view" "add-note"}}</h3>
+			<i class="icon-plus-sign"></i>&nbsp;Add Note
+		</h3>
 	</div>
 	<div class="modal-body">
 		<form id="tasknoteForm" name="tasknoteForm" method="post">
 			<fieldset>
 				<div class="control-group form-group">
-					<label class="control-label"><b>{{agile_translate "widgets" "subject"}}</b> <span
+					<label class="control-label"><b>Subject</b> <span
 						class="field_req">*</span></label>
 					<div class="controls">
 						<input type="text" placeholder="About" name="subject" id="subject"
@@ -527,7 +536,7 @@
 				</div>
 				
 					<div class="control-group form-group">
-						<label class="control-label"><b>{{agile_translate "other" "description"}}</b></label>
+						<label class="control-label"><b>Description</b></label>
 						<div class="controls">
 							<textarea rows="3" class="form-control" placeholder="Detailed Note"
 								name="description" id="description"></textarea>
@@ -539,7 +548,7 @@
 		</form>
 	</div>
 	<div class="modal-footer">
-		<a href="#" class="btn btn-sm btn-primary" id="tasknote_validate">{{agile_translate "modals" "save"}}</a> <span
+		<a href="#" class="btn btn-sm btn-primary" id="tasknote_validate">Save </a> <span
 			class="save-status"></span>
 	</div>
 </div>

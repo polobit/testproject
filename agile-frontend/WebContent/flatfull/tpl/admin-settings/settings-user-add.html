@@ -5,10 +5,10 @@
       <div class="panel panel-default">
         <div class="panel-heading">
           {{#if id}}
-                 Edit User Details
+                 {{translate 'admin-settings-users' 'edit-user-details'}}
             
         {{else}}
-          New User Details
+          {{translate 'admin-settings-users' 'new-user-details'}}
           {{/if}}
       </div>
         <form id="userForm" name="userForm" method="get" action="" class="form-horizontal">
@@ -22,36 +22,32 @@
                 {{/if}}
           <fieldset class="wrapper">          
             <br/> 
-                    <div class="control-group form-group">
-
-              <label class="control-label col-md-3" for="cname">{{agile_translate "deal-view" "name"}}<span class="field_req">*</span></label>
+            <div class="control-group form-group">
+              <label class="control-label col-md-3" for="cname">{{translate 'other' 'name'}} <span class="field_req">*</span></label>
                
               <div class="col-md-9">
                       <div class="controls">
-                      <input type="text" id="cname" name="name" class="required form-control" placeholder="Name" autocapitalize="off"/>
+                      <input type="text" id="cname" name="name" class="required form-control" placeholder="{{translate 'other' 'name'}}" autocapitalize="off"/>
                       </div>
               </div>
-             
-             
-            
-            </div> 
+              </div> 
           
             <div class="control-group form-group">
 
-              <label class="control-label col-md-3" for="eaddress">{{agile_translate "contacts-view" "email-address"}}<span class="field_req">*</span></label> 
+              <label class="control-label col-md-3" for="eaddress">{{translate 'contacts-view' 'email-address'}} <span class="field_req">*</span></label> 
 
 <div class="col-md-9">                      
 <div class="controls">
-                <input type="text" id="eaddress" class="email required form-control" name='email' placeholder="Email address" autocapitalize="off"/> 
+                <input type="text" id="eaddress" class="email required form-control" name='email' placeholder="{{translate 'contacts-view' 'email-address'}}" autocapitalize="off"/> 
               </div>
             </div>
     </div>
                        <div class="control-group form-group">
 
-              <label class="control-label col-md-3" for="password">{{agile_translate "prefs-settings" "password"}}<span class="field_req">*</span></label> 
+              <label class="control-label col-md-3" for="password">{{translate 'prefs-settings' 'password'}} <span class="field_req">*</span></label> 
 <div class="col-md-9">                      
 <div class="controls">
-                <input type="password" class="required form-control" id="password" value="{{password}}" name='password' maxlength="20" minlength="4" placeholder="Password" autocapitalize="off"/> 
+                <input type="password" class="required form-control" id="password" value="{{password}}" name='password' maxlength="20" minlength="4" placeholder="{{translate 'prefs-settings' 'password'}}" autocapitalize="off"/> 
               </div>
               
             </div>
@@ -61,7 +57,8 @@
                 <div class="checkbox">
 <label class="i-checks i-checks-sm">
                   <input type="checkbox" id="Disabled" name="is_send_password" value="true" checked><i></i>
-                            {{agile_translate "admin-settings-users" "include-password-in-email"}}</label>
+                            {{translate 'admin-settings-users' 'include-password-in-email'}}
+</label>
                 </div>
               </div>
             </div>
@@ -71,18 +68,17 @@
 
 
 <div class="control-group form-group">
+    					<label class="control-label col-md-3" for="phone">{{translate 'other' 'phone'}}</label> 
 
-    					<label class="control-label col-md-3" for="phone">{{agile_translate "contacts-view" "Phone"}}</label> 
-
-<div class="col-md-9">                   		
+<div class="col-md-9">                      
 <div class="controls">
-    						<input type="text" id="cphone" class="allow-char-phone form-control" name='phone' placeholder="Phone Number"/> 
+    						<input type="text" id="cphone" class="allow-char-phone form-control" name='phone' placeholder="{{translate 'modals' 'phone-number'}}"/> 
     					</div>
     				</div>
     </div>
     <div class="control-group form-group">
 
-              <label class="control-label col-md-3" for="user-img">{{agile_translate "prefs-settings" "avatar"}}</label> 
+              <label class="control-label col-md-3" for="user-img">Avatar</label> 
 
               <div class="col-md-9">                      
               <div class="controls">
@@ -111,7 +107,7 @@
                 <div class="checkbox">
 <label class="i-checks i-checks-sm">
                   <input type="checkbox" id="securelogin" name='is_secure' value='true' checked/><i></i>
-                              Secure Log{{agile_translate "contacts-view" "in"}}<br/><div style="margin-left:6px;"><small>Sends verification code if unusual login activity is detected</small></div>
+                              Secure Login<br/><div style="margin-left:6px;"><small>Sends verification code if unusual login activity is detected</small></div>
 </label>
                 </div>
               </div>
@@ -125,7 +121,7 @@
                 <div class="checkbox">
 <label class="i-checks i-checks-sm">
                   <input type="checkbox" id="Disabled" name='is_disabled' value='true'/><i></i>
-                              {{agile_translate "admin-settings-users" "disable-this-user"}}<br/><div style="margin-left:6px;"><small>{{agile_translate "admin-settings-users" "prevents-the-user-access"}}</small></div>
+                              {{translate 'admin-settings-users' 'disable-this-user'}}<br/><div style="margin-left:6px;"><small>{{translate 'admin-settings-users' 'prevents-the-user-access'}}</small></div>
 </label>
                 </div>
               </div>
@@ -138,7 +134,7 @@
                 <div class="checkbox">
 <label class="i-checks i-checks-sm">
                   <input type="checkbox" id="Admin" name='is_admin' value='true'/><i></i> 
-                              {{agile_translate "admin-settings-users" "administrator"}}<br/><div style="margin-left:6px;"><small>Allow access to admin settings (configuration and user management)</small></div>
+                              {{translate 'admin-settings-users' 'administrator'}}<br/><div style="margin-left:6px;"><small>{{translate 'admin-settings-users' 'allow-access-to-admin-settings'}}</small></div>
                 </label>
 </div>
               </div>
@@ -155,7 +151,7 @@
                                 {{else}}
                                 <input type="checkbox" id="owner" name='is_account_owner' value='true'/><i></i> 
                                 {{/if}}
-                                {{agile_translate "contact-details" "owner"}}<br/><div style="margin-left:6px;"><small>{{agile_translate "admin-settings-users" "transfer-ownership"}}</small></div>
+                                {{translate 'deal-view' 'owner'}}<br/><div style="margin-left:6px;"><small>{{translate 'admin-settings-users' 'transfer-ownership'}}</small></div>
                             </label>
 </div>
                         </div>
@@ -166,16 +162,16 @@
 {{/is_domain_owner}}
 <div class="col-sm-offset-3 col-md-9 p-l-xs" id="admin-previlages">
 <div class="tab-container m-b-none">
-<label class="p-b-xs" style="color:#363f44;"> {{agile_translate "admin-settings-users" "permissions"}}</label>
+<label class="p-b-xs" style="color:#363f44;"> {{translate 'admin-settings-users' 'permissions'}}</label>
   <ul class="nav nav-tabs b-b-none">
 
         <li class="p-none active">
-        <a id="Sales_previlages" class="text-center  m-r-none"href="#sales-previlages" data-toggle="tab"style="border-left:0px" aria-expanded="true">{{agile_translate "menu" "sales"}}</a></li>
+        <a id="Sales_previlages" class="text-center  m-r-none"href="#sales-previlages" data-toggle="tab"style="border-left:0px" aria-expanded="true">{{translate 'help' 'sales'}}</a></li>
         <li class=" p-none">
 
-        <a class="text-center m-r-none"href="#marketing-previlages" data-toggle="tab" id="marketing_previlages">{{agile_translate "menu" "menu-marketing"}}</a></li>
+        <a class="text-center m-r-none"href="#marketing-previlages" data-toggle="tab" id="marketing_previlages">{{translate 'menu' 'menu-marketing'}}</a></li>
         <li class="p-none">
-        <a id="service_previlages" class="text-center  m-r-none" href="#service-previlages" data-toggle="tab">{{agile_translate "campaigns" "service"}}</a></li>
+        <a id="service_previlages" class="text-center  m-r-none" href="#service-previlages" data-toggle="tab">{{translate 'menu' 'service'}}</a></li>
         
     </ul>
     </div>
@@ -197,65 +193,76 @@
                         <div class="multiple-checkbox" name="newscopes" style="margin-top: 10px;">
                             <label class="i-checks i-checks-sm checkbox">
                                 <input type="checkbox" name="temp"  value="CREATE_CONTACT" checked {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
-                                    {{agile_translate "admin-settings-users" "create-contacts"}}<br/>
-                                    <div style="margin-left:6px;"><small> {{agile_translate "admin-settings-users" "add-contacts"}}</small></div>
+                                    {{translate 'admin-settings-users' 'create-contacts'}}
+                                    <br/>
+                                    <div style="margin-left:6px;"><small> {{translate 'admin-settings-users' 'add-contacts'}}</small></div>
                             </label>
                             <label class="i-checks i-checks-sm checkbox">
                                 <input type="checkbox" name="temp"  value="IMPORT_CONTACTS" checked {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
-                                    {{agile_translate "admin-settings-users" "import-contacts"}}<br/>
-                                    <div style="margin-left:6px;"><small> {{agile_translate "admin-settings-users" "import-from-csv-file"}}</small>
+                                    {{translate 'admin-settings-users' 'import-contacts'}}  
+                                    <br/>
+                                    <div style="margin-left:6px;"><small> {{translate 'admin-settings-users' 'import-from-csv-file'}} </small>
                                     </div>
                             </label>
                             <label class="i-checks i-checks-sm checkbox">
                                 <input type="checkbox" name="temp"  value="EXPORT_CONTACTS" checked {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
-                                    {{agile_translate "admin-settings-users" "export-contacts"}}<br/>
-                                    <div style="margin-left:6px;"><small> {{agile_translate "admin-settings-users" "export-contacts-as-csv-file"}}</small>
+                                    {{translate 'admin-settings-users' 'export-contacts'}}  
+                                    <br/>
+                                    <div style="margin-left:6px;"><small> {{translate 'admin-settings-users' 'export-contacts-as-csv-file'}} </small>
                                     </div>
                             </label>
                             <label class="i-checks i-checks-sm checkbox">
                                 <input type="checkbox" name="temp"  value="VIEW_CONTACTS" checked {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
-                                    {{agile_translate "admin-settings-users" "view-all-contacts"}}<br/>
-                                    <div style="margin-left:6px;"><small> {{agile_translate "admin-settings-users" "view-contacts-owned-by-other-users"}}</small>
+                                    {{translate 'admin-settings-users' 'view-all-contacts'}}  <br/>
+                                    <div style="margin-left:6px;"><small> {{translate 'admin-settings-users' 'view-contacts-owned-by-other-users'}}
+                                    </small>
                                     </div>
                             </label>
                             <label class="i-checks i-checks-sm checkbox">
                                 <input type="checkbox" name="temp" value="EDIT_CONTACT" checked {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
-                                    {{agile_translate "admin-settings-users" "update-all-contacts"}}<br/>
-                                    <div style="margin-left:6px;"><small>  {{agile_translate "admin-settings-users" "update-contacts-owned-by-other-users"}}</small>
+                                    {{translate 'admin-settings-users' 'update-all-contacts'}}  <br/>
+                                    <div style="margin-left:6px;"><small>  {{translate 'admin-settings-users' 'update-contacts-owned-by-other-users'}}
+                                    </small>
                                     </div>
                             </label>
                             <label class="i-checks i-checks-sm checkbox">
                                 <input type="checkbox" name="temp" value="DELETE_CONTACT" checked {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
-                                    {{agile_translate "admin-settings-users" "delete-all-contacts"}}<br/>
-                                    <div style="margin-left:6px;"><small>  {{agile_translate "admin-settings-users" "delete-own-contacts-and-other-user-contacts"}}</small>
+                                    {{translate 'admin-settings-users' 'delete-all-contacts'}}  <br/>
+                                    <div style="margin-left:6px;"><small>  {{translate 'admin-settings-users' 'delete-own-contacts-and-other-user-contacts'}}</small>
                                     </div>
                             </label>
                             <div>
                                 <div class="pull-left" style="width:40%;">
                                     <label class="i-checks i-checks-sm checkbox">
                                         <input type="checkbox" name="temp" value="VIEW_DEALS" checked {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
-                                        {{agile_translate "admin-settings-users" "view-all-deals"}}</label>
+                                        {{translate 'admin-settings-users' 'view-all-deals'}}
+                                    
+                                    </label>
                                 </div>
                                 <div class="pull-left" style="width:60%;">
                                     <label class="i-checks i-checks-sm checkbox">
                                         <input type="checkbox" name="temp" value="MANAGE_DEALS" checked {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
-                                    {{agile_translate "admin-settings-users" "manage-deals"}}</label>
+                                    {{translate 'admin-settings-users' 'manage-deals'}}
+                                    </label>
                                 </div>
-                                <div style="margin-left:26px;"><small>  {{agile_translate "admin-settings-users" "add-deals-to-others"}}</small>
+                                <div style="margin-left:26px;"><small>  {{translate 'admin-settings-users' 'add-deals-to-others'}}</small>
                                 </div>
                             </div>
                             <div>
                                 <div class="pull-left" style="width:40%;">
                                     <label class="i-checks i-checks-sm checkbox">
                                         <input type="checkbox" name="temp" value="VIEW_CALENDAR" checked {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
-                                        {{agile_translate "admin-settings-users" "view-all-events"}}</label>
+                                        {{translate 'admin-settings-users' 'view-all-events'}}
+                                    
+                                    </label>
                                 </div>
                                 <div class="pull-left" style="width:60%;">
                                     <label class="i-checks i-checks-sm checkbox">
                                         <input type="checkbox" name="temp" value="MANAGE_CALENDAR" checked {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
-                                        {{agile_translate "admin-settings-users" "manage-events"}}</label>
+                                        {{translate 'admin-settings-users' 'manage-events'}}
+                                    </label>
                                 </div>
-                                <div style="margin-left:26px;"><small>  {{agile_translate "admin-settings-users" "add-events-to-others"}}</small>
+                                <div style="margin-left:26px;"><small>  {{translate 'admin-settings-users' 'add-events-to-others'}}</small>
                                 </div>
                             </div>
                             </div>
@@ -268,59 +275,65 @@
                                 <div class="multiple-checkbox"  name="newscopes" style="padding-top:10px">
                                         <label class="i-checks i-checks-sm checkbox">
                                         <input type="checkbox" name="temp"  value="CREATE_CONTACT" {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
-                                            {{agile_translate "admin-settings-users" "create-contacts"}}<br/>
-                                            <div style="margin-left:6px;"><small> {{agile_translate "admin-settings-users" "add-contacts"}}</small></div>
+                                            {{translate 'admin-settings-users' 'create-contacts'}} <br/>
+                                            <div style="margin-left:6px;"><small> {{translate 'admin-settings-users' 'add-contacts'}}</small>
+                                            </div>
                                         </label>
                                         <label class="i-checks i-checks-sm checkbox">
                                             <input type="checkbox" name="temp"  value="IMPORT_CONTACTS" {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i>
-                                            {{agile_translate "admin-settings-users" "import-contacts"}}<br/>
-                                            <div style="margin-left:6px;"><small> {{agile_translate "admin-settings-users" "import-from-csv-file"}}</small></div>
+                                            {{translate 'admin-settings-users' 'import-contacts'}}  <br/>
+                                            <div style="margin-left:6px;"><small> {{translate 'admin-settings-users' 'import-from-csv-file'}}
+                                            </small></div>
                                        </label>
                                        <label class="i-checks i-checks-sm checkbox">
                                             <input type="checkbox" name="temp"  value="EXPORT_CONTACTS" {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i>
-                                            {{agile_translate "admin-settings-users" "export-contacts"}}<br/>
-                                            <div style="margin-left:6px;"><small> {{agile_translate "admin-settings-users" "export-contacts-as-csv-file"}}</small></div>
+                                            {{translate 'admin-settings-users' 'export-contacts'}}  <br/>
+                                            <div style="margin-left:6px;"><small> {{translate 'admin-settings-users' 'export-contacts-as-csv-file'}}</small></div>
                                        </label>
                                         <label class="i-checks i-checks-sm checkbox">
                                             <input type="checkbox" name="temp"  value="VIEW_CONTACTS" {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
-                                            {{agile_translate "admin-settings-users" "view-all-contacts"}}<br/>
-                                            <div style="margin-left:6px;"><small> {{agile_translate "admin-settings-users" "view-contacts-owned-by-other-users"}}</small></div>
+                                            {{translate 'admin-settings-users' 'view-all-contacts'}}  <br/>
+                                            <div style="margin-left:6px;"><small> {{translate 'admin-settings-users' 'view-contacts-owned-by-other-users'}} </small></div>
                                         </label>
                                         <label class="i-checks i-checks-sm checkbox">
                                             <input type="checkbox" name="temp" value="EDIT_CONTACT" {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
-                                            {{agile_translate "admin-settings-users" "update-all-contacts"}}<br/>
-                                            <div style="margin-left:6px;"><small>  {{agile_translate "admin-settings-users" "update-contacts-owned-by-other-users"}}</small></div>
+                                            {{translate 'admin-settings-users' 'update-all-contacts'}}  <br/>
+                                            <div style="margin-left:6px;"><small>  {{translate 'admin-settings-users' 'update-contacts-owned-by-other-users'}}</small></div>
                                        </label>
                                        <label class="i-checks i-checks-sm checkbox">
                                             <input type="checkbox" name="temp" value="DELETE_CONTACT" {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
-                                            {{agile_translate "admin-settings-users" "delete-all-contacts"}}<br/>
-                                            <div style="margin-left:6px;"><small>  {{agile_translate "admin-settings-users" "delete-own-contacts-and-other-user-contacts"}}</small></div>
+                                            {{translate 'admin-settings-users' 'delete-all-contacts'}}  <br/>
+                                            <div style="margin-left:6px;"><small>  {{translate 'admin-settings-users' 'delete-own-contacts-and-other-user-contacts'}}</small></div>
                                        </label>
                                      <div>
                                       <div class="pull-left" style="width:40%;">
                                        <label class="i-checks i-checks-sm checkbox">
                                             <input type="checkbox" name="temp" value="VIEW_DEALS" {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
-                                            {{agile_translate "admin-settings-users" "view-all-deals"}}</label>
+                                            {{translate 'admin-settings-users' 'view-all-deals'}}
+                                       </label>
                                        </div>
                                        <div class="pull-left" style="width:60%;">
                                        <label class="i-checks i-checks-sm checkbox">
                                             <input type="checkbox" name="temp" value="MANAGE_DEALS" {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
-                                            {{agile_translate "admin-settings-users" "manage-deals"}}</label>
+                                            {{translate 'admin-settings-users' 'manage-deals'}}
+                                       </label>
                                        </div>
-                                       <div style="margin-left:26px;"><small>  {{agile_translate "admin-settings-users" "add-deals-to-others"}}</small></div>
+                                       <div style="margin-left:26px;"><small>  {{translate 'admin-settings-users' 'add-deals-to-others'}}</small></div>
                                       </div>
                                       <div>
                                       <div class="pull-left" style="width:40%;">
                                        <label class="i-checks i-checks-sm checkbox">
                                             <input type="checkbox" name="temp" value="VIEW_CALENDAR" {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
-                                            {{agile_translate "admin-settings-users" "view-all-events"}}</label>
+                                            {{translate 'admin-settings-users' 'view-all-events'}}
+                                       </label>
                                        </div>
                                        <div class="pull-left" style="width:60%;">
                                        <label class="i-checks i-checks-sm checkbox">
                                             <input type="checkbox" name="temp" value="MANAGE_CALENDAR" {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
-                                            {{agile_translate "admin-settings-users" "manage-events"}}</label>
+                                            {{translate 'admin-settings-users' 'manage-events'}}
+                                       </label>
                                        </div>
-                                       <div style="margin-left:26px;"><small>  {{agile_translate "admin-settings-users" "add-events-to-others"}}</small></div>
+                                       <div style="margin-left:26px;"><small>  {{translate 'admin-settings-users' 'add-events-to-others'}}</small></div>
                                       </div>
                                 </div>
                             </div>
@@ -331,59 +344,68 @@
                             <div class="multiple-checkbox"  name="newscopes" style="padding-top:10px">
                                 <label class="i-checks i-checks-sm checkbox" >
                                     <input type="checkbox" name="temp"  value="CREATE_CONTACT" disabled {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
-                                    {{agile_translate "admin-settings-users" "create-contacts"}}<br/>
-                                    <div style="margin-left:6px;"><small> {{agile_translate "admin-settings-users" "add-contacts"}}</small></div>
+                                    {{translate 'admin-settings-users' 'create-contacts'}}
+                                    <br/>
+                                    <div style="margin-left:6px;"><small> {{translate 'admin-settings-users' 'add-contacts'}}</small></div>
                                 </label>
                                 <label class="i-checks i-checks-sm checkbox" >
                                     <input type="checkbox" name="temp"  value="IMPORT_CONTACTS" disabled {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
-                                    {{agile_translate "admin-settings-users" "import-contacts"}}<br/>
-                                    <div style="margin-left:6px;"><small> {{agile_translate "admin-settings-users" "import-from-csv-file"}}</small></div>
+                                    {{translate 'admin-settings-users' 'import-contacts'}}
+                                    <br/>
+                                    <div style="margin-left:6px;"><small> {{translate 'admin-settings-users' 'import-from-csv-file'}} </small></div>
                                 </label>
                                 <label class="i-checks i-checks-sm checkbox" >
                                     <input type="checkbox" name="temp"  value="EXPORT_CONTACTS" disabled {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
-                                    {{agile_translate "admin-settings-users" "export-contacts"}}<br/>
-                                    <div style="margin-left:6px;"><small> {{agile_translate "admin-settings-users" "export-contacts-as-csv-file"}}</small></div>
+                                    {{translate 'admin-settings-users' 'export-contacts'}}  
+                                    <br/>
+                                    <div style="margin-left:6px;"><small> {{translate 'admin-settings-users' 'export-contacts-as-csv-file'}} </small>
+                                    </div>
                                 </label>
                                 <label class="i-checks i-checks-sm checkbox">
                                     <input type="checkbox" name="temp"  value="VIEW_CONTACTS" disabled {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
-                                    {{agile_translate "admin-settings-users" "view-all-contacts"}}<br/>
-                                    <div style="margin-left:6px;"><small> {{agile_translate "admin-settings-users" "view-contacts-owned-by-other-users"}}</small></div>
+                                    {{translate 'admin-settings-users' 'view-all-contacts'}}  <br/>
+                                    <div style="margin-left:6px;"><small> {{translate 'admin-settings-users' 'view-contacts-owned-by-other-users'}}
+                                    </small></div>
                                 </label>
                                 <label class="i-checks i-checks-sm checkbox">
                                     <input type="checkbox" name="temp" value="EDIT_CONTACT" disabled {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
-                                    {{agile_translate "admin-settings-users" "update-all-contacts"}}<br/>
-                                        <div style="margin-left:6px;"><small>  {{agile_translate "admin-settings-users" "update-contacts-owned-by-other-users"}}</small></div>
+                                    {{translate 'admin-settings-users' 'update-all-contacts'}}  <br/>
+                                        <div style="margin-left:6px;"><small>  {{translate 'admin-settings-users' 'update-contacts-owned-by-other-users'}}</small></div>
                                 </label>
                                 <label class="i-checks i-checks-sm checkbox">
                                     <input type="checkbox" name="temp" value="DELETE_CONTACT" disabled {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
-                                    {{agile_translate "admin-settings-users" "delete-all-contacts"}}<br/>
-                                        <div style="margin-left:6px;"><small>  {{agile_translate "admin-settings-users" "delete-own-contacts-and-other-user-contacts"}}</small></div>
+                                    {{translate 'admin-settings-users' 'delete-all-contacts'}}  <br/>
+                                        <div style="margin-left:6px;"><small>  {{translate 'admin-settings-users' 'delete-own-contacts-and-other-user-contacts'}}</small></div>
                                 </label>
                                 <div>
                                     <div class="pull-left" style="width:40%;">
                                         <label class="i-checks i-checks-sm checkbox">
                                             <input type="checkbox" name="temp" value="VIEW_DEALS" disabled {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
-                                                {{agile_translate "admin-settings-users" "view-all-deals"}}</label>
+                                                {{translate 'admin-settings-users' 'view-all-deals'}}
+                                        </label>
                                     </div>
                                     <div class="pull-left" style="width:60%;">
                                         <label class="i-checks i-checks-sm checkbox">
                                             <input type="checkbox" name="temp" value="MANAGE_DEALS" disabled {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
-                                            {{agile_translate "admin-settings-users" "manage-deals"}}</label>
+                                            {{translate 'admin-settings-users' 'manage-deals'}}
+                                        </label>
                                     </div>
-                                    <div style="margin-left:26px;"><small>  {{agile_translate "admin-settings-users" "add-deals-to-others"}}</small></div>
+                                    <div style="margin-left:26px;"><small>  {{translate 'admin-settings-users' 'add-deals-to-others'}}</small></div>
                                 </div>
                                 <div>
                                     <div class="pull-left" style="width:40%;">
                                         <label class="i-checks i-checks-sm checkbox">
                                             <input type="checkbox" name="temp" value="VIEW_CALENDAR" disabled {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
-                                                {{agile_translate "admin-settings-users" "view-all-events"}}</label>
+                                                {{translate 'admin-settings-users' 'view-all-events'}}
+                                        </label>
                                     </div>
                                     <div class="pull-left" style="width:60%;">
                                         <label class="i-checks i-checks-sm checkbox">
                                             <input type="checkbox" name="temp" value="MANAGE_CALENDAR" disabled {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
-                                                {{agile_translate "admin-settings-users" "manage-events"}}</label>
+                                                {{translate 'admin-settings-users' 'manage-events'}}
+                                        </label>
                                     </div>
-                                    <div style="margin-left:26px;"><small>  {{agile_translate "admin-settings-users" "add-events-to-others"}}</small>
+                                    <div style="margin-left:26px;"><small>  {{translate 'admin-settings-users' 'add-events-to-others'}}</small>
                                     </div>
                                 </div>
                             </div>
@@ -397,52 +419,58 @@
                             {{#if id}}
                                 <label class="i-checks i-checks-sm checkbox hide">
                                     <input type="checkbox" name="scopes-temp" class="required hide" value="CONTACT" checked {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
-                                    {{agile_translate "companies-view" "Contacts"}}<br/>
-                                        <div style="margin-left:6px;"><small>{{agile_translate "admin-settings-users" "manage-contacts"}}</small></div>
+                                    {{translate 'portlets' 'contacts'}}<br/>
+                                        <div style="margin-left:6px;"><small>{{translate 'admin-settings-users' 'manage-contacts'}}</small>
+                                        </div>
                                 </label> 
                                 <label class="i-checks i-checks-sm checkbox">
                                     <input type="checkbox" name="scopes-temp" class="required" value="CALENDAR" id="calendar-privilege" {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
-                                    {{agile_translate "portlets" "calendar"}}<br/>
-                                     <div style="margin-left:6px;"><small>{{agile_translate "admin-settings-users" "manage-your-tasks-and-events"}}</small></div>
+                                    {{translate 'portlets' 'calendar'}}<br/>
+                                     <div style="margin-left:6px;"><small>{{translate 'admin-settings-users' 'manage-your-tasks-and-events'}}</small></div>
                                 </label> 
                                 <label class="i-checks i-checks-sm checkbox">
                                     <input type="checkbox" name="scopes-temp" class="required" value="DEALS" id="deals-privilege" {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
-                                    {{agile_translate "deal-view" "Deals?"}}<br/>
-                                        <div style="margin-left:6px;"><small> {{agile_translate "admin-settings-users" "track-sales-opportunities"}}</small></div>
+                                    {{translate 'deal-view' 'deals'}}<br/>
+                                        <div style="margin-left:6px;"><small> {{translate 'admin-settings-users' 'track-sales-opportunities'}}
+                                        </small></div>
                                </label>
                                 <label class="i-checks i-checks-sm checkbox">
                                     <input type="checkbox" name="scopes-temp" class="required" value="CASES" {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
-                                    {{agile_translate "contact-details" "cases"}}<br/>
-                                    <div style="margin-left:6px;"><small>{{agile_translate "admin-settings-users" "log-and-address-customer-issues"}}</small></div>
+                                    {{translate 'contact-details' 'cases'}}<br/>
+                                    <div style="margin-left:6px;"><small>{{translate 'admin-settings-users' 'log-and-address-customer-issues'}}
+                                    </small></div>
                                 </label>
                                 <label class="i-checks i-checks-sm checkbox">
                                     <input type="checkbox" name="scopes-temp" class="required" value="DOCUMENT" {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
-                                    {{agile_translate "deal-view" "documents"}}<br/>
-                                    <div style="margin-left:6px;"><small> {{agile_translate "admin-settings-users" "upload-and-attach-documents-to-contacts"}}</small></div>
+                                    {{translate 'contact-details' 'documents'}}<br/>
+                                    <div style="margin-left:6px;"><small> {{translate 'admin-settings-users' 'upload-and-attach-documents-to-contacts'}}</small></div>
                                 </label>
                         {{else}}
                                 <label class="i-checks i-checks-sm checkbox"  >
                                     <input type="checkbox" name="scopes-temp" class="required hide" value="CONTACT" checked {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
-                                    {{agile_translate "companies-view" "Contacts"}}<br/><div style="margin-left:6px;"><small>{{agile_translate "admin-settings-users" "manage-contacts"}}</small></div>
+                                    {{translate 'portlets' 'contacts'}}<br/><div style="margin-left:6px;"><small>{{translate 'admin-settings-users' 'manage-contacts'}}</small></div>
                                 </label>
                                 <label class="i-checks i-checks-sm checkbox">
                                     <input type="checkbox" name="scopes-temp" class="required" value="CALENDAR" id="calendar-privilege" checked {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
-                                    {{agile_translate "portlets" "calendar"}}<br/><div style="margin-left:6px;"><small>{{agile_translate "admin-settings-users" "manage-your-tasks-and-events"}}</small></div>
+                                    {{translate 'portlets' 'calendar'}}<br/><div style="margin-left:6px;"><small>{{translate 'admin-settings-users' 'manage-your-tasks-and-events'}}</small></div>
                                 </label> 
                                 <label class="i-checks i-checks-sm checkbox">
                                     <input type="checkbox" name="scopes-temp" class="required" value="DEALS" id="deals-privilege" checked {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
-                                    {{agile_translate "deal-view" "Deals?"}}<br/>
-                                    <div style="margin-left:6px;"><small> {{agile_translate "admin-settings-users" "track-sales-opportunities"}}</small></div>
+                                    {{translate 'portlets' 'deals'}}<br/>
+                                    <div style="margin-left:6px;"><small> {{translate 'admin-settings-users' 'track-sales-opportunities'}}</small>
+                                    </div>
                                 </label>
                                 <label class="i-checks i-checks-sm checkbox">
                                     <input type="checkbox" name="scopes-temp" class="required" value="CASES" checked {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
-                                    {{agile_translate "contact-details" "cases"}}<br/>
-                                    <div style="margin-left:6px;"><small>{{agile_translate "admin-settings-users" "log-and-address-customer-issues"}}</small></div>
+                                    {{translate 'contact-details' 'cases'}}<br/>
+                                    <div style="margin-left:6px;"><small>{{translate 'admin-settings-users' 'log-and-address-customer-issues'}}
+                                    </small></div>
                                 </label>
                                 </label><label class="i-checks i-checks-sm checkbox">
                                     <input type="checkbox" name="scopes-temp" class="required" value="DOCUMENT" checked {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
-                                    {{agile_translate "deal-view" "documents"}}<br/>
-                                <div style="margin-left:6px;"><small> {{agile_translate "admin-settings-users" "upload-and-attach-documents-to-contacts"}}</small></div>
+                                    {{translate 'contact-details' 'documents'}}<br/>
+                                <div style="margin-left:6px;"><small> {{translate 'admin-settings-users' 'upload-and-attach-documents-to-contacts'}}
+                                </small></div>
                                 </label>
                             {{/if}}
                         </div>
@@ -456,55 +484,59 @@
                             {{#if id}}
                                 <label class="i-checks i-checks-sm checkbox">
                                     <input type="checkbox" name="scopes-temp" class="required pos-rlt m-t-sm" style="margin-right:-115px;"value="CAMPAIGN" {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
-                                    {{agile_translate "report-view" "campaigns"}}<br/>
-                                        <div style="margin-left:6px;"><small> {{agile_translate "admin-settings-users" "automate-marketing"}}</small></div>
+                                    {{translate 'contact-details' 'campaigns'}}<br/>
+                                        <div style="margin-left:6px;"><small> {{translate 'admin-settings-users' 'automate-marketing'}}</small></div>
                                 </label>
                                 <label class="i-checks i-checks-sm checkbox">
                                     <input type="checkbox" name="scopes-temp"  class="required" value="SOCIAL" {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
-                                    {{agile_translate "social" "social-suite"}}<br/>
-                                    <div style="margin-left:6px;"><small> {{agile_translate "admin-settings-users" "monitor-your-brand-on-social-media"}}</small></div>
+                                    {{translate 'social' 'social-suite'}}<br/>
+                                    <div style="margin-left:6px;"><small> {{translate 'admin-settings-users' 'monitor-your-brand-on-social-media'}}
+                                    </small></div>
                                 </label>
                                 </label><label class="i-checks i-checks-sm checkbox">
                                     <input type="checkbox" name="scopes-temp" class="required" value="WEBRULE" {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
-                                    {{agile_translate "admin-settings-users" "web-rule"}}<br/>
-                                    <div style="margin-left:6px;"><small> {{agile_translate "admin-settings-users" "enagage-your-website-visitors"}}</small></div>
+                                    {{translate 'admin-settings-users' 'web-rule'}}<br/>
+                                    <div style="margin-left:6px;"><small> {{translate 'admin-settings-users' 'enagage-your-website-visitors'}} </small></div>
                                 </label>
                                 </label><label class="i-checks i-checks-sm checkbox">
                                     <input type="checkbox" name="scopes-temp"  class="required" value="ACTIVITY" {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
-                                    {{agile_translate "portlets" "activities"}}<br/>
-                                    <div style="margin-left:6px;"><small> {{agile_translate "admin-settings-users" "know-what-other-users-are-doing"}}</small></div>
+                                    {{translate 'portlets' 'activities'}}<br/>
+                                    <div style="margin-left:6px;"><small> {{translate 'admin-settings-users' 'know-what-other-users-are-doing'}}
+                                    </small></div>
                                 </label>
                                 </label><label class="i-checks i-checks-sm checkbox">
                                     <input type="checkbox" name="scopes-temp"  class="required" value="REPORT" {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
-                                    {{agile_translate "campaigns" "reports"}}<br/>
-                                    <div style="margin-left:6px;"><small> {{agile_translate "admin-settings-users" "stay-on-top-of-your-data"}}</small></div>
+                                    {{translate 'campaigns' 'reports'}}<br/>
+                                    <div style="margin-left:6px;"><small> {{translate 'admin-settings-users' 'stay-on-top-of-your-data'}}</small></div>
                                 </label>
 
                         {{else}} 
                                 <label class="i-checks i-checks-sm checkbox">
                                     <input type="checkbox" name="scopes-temp" class="required" value="CAMPAIGN" checked {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
-                                    {{agile_translate "report-view" "campaigns"}}<br/>
-                                        <div style="margin-left:6px;"><small> {{agile_translate "admin-settings-users" "automate-marketing"}}</small></div>
+                                    {{translate 'contact-details' 'campaigns'}}<br/>
+                                        <div style="margin-left:6px;"><small> {{translate 'admin-settings-users' 'automate-marketing'}}</small></div>
                                 </label>
                                 <label class="i-checks i-checks-sm checkbox">
                                     <input type="checkbox" name="scopes-temp"  class="required" value="SOCIAL" checked {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
-                                    {{agile_translate "social" "social-suite"}}<br/>
-                                    <div style="margin-left:6px;"><small> {{agile_translate "admin-settings-users" "monitor-your-brand-on-social-media"}}</small></div>
+                                    {{translate 'social' 'social-suite'}}<br/>
+                                    <div style="margin-left:6px;"><small> {{translate 'admin-settings-users' 'monitor-your-brand-on-social-media'}}
+                                    </small></div>
                                 </label>
                                <label class="i-checks i-checks-sm checkbox">
                                     <input type="checkbox" name="scopes-temp" class="required" value="WEBRULE" checked {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
-                                    {{agile_translate "admin-settings-users" "web-rule"}}<br/>
-                                    <div style="margin-left:6px;"><small> {{agile_translate "admin-settings-users" "enagage-your-website-visitors"}}</small></div>
+                                    {{translate 'admin-settings-users' 'web-rule'}}<br/>
+                                    <div style="margin-left:6px;"><small> {{translate 'admin-settings-users' 'enagage-your-website-visitors'}} </small></div>
                                 </label>
                                 <label class="i-checks i-checks-sm checkbox">
                                     <input type="checkbox" name="scopes-temp"  class="required" value="ACTIVITY" checked {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
-                                    {{agile_translate "portlets" "activities"}}<br/>
-                                    <div style="margin-left:6px;"><small> {{agile_translate "admin-settings-users" "know-what-other-users-are-doing"}}</small></div>
+                                    {{translate 'portlets' 'activities'}}<br/>
+                                    <div style="margin-left:6px;"><small> {{translate 'admin-settings-users' 'know-what-other-users-are-doing'}}
+                                    </small></div>
                                 </label>
                                 <label class="i-checks i-checks-sm checkbox">
                                     <input type="checkbox" name="scopes-temp"  class="required" value="REPORT" checked {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
-                                    {{agile_translate "campaigns" "reports"}}<br/>
-                                    <div style="margin-left:6px;"><small> {{agile_translate "admin-settings-users" "stay-on-top-of-your-data"}}</small></div>
+                                    {{translate 'campaigns' 'reports'}}<br/>
+                                    <div style="margin-left:6px;"><small> {{translate 'admin-settings-users' 'stay-on-top-of-your-data'}}</small></div>
                                 </label>
 
                         {{/if}}
@@ -520,16 +552,18 @@
                             {{#if id}}
                                 <label class="i-checks i-checks-sm checkbox">
                                     <input type="checkbox" name="scopes-temp" class="required pos-rlt m-t-sm" style="margin-right:-115px;"value="HELPDESK" {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
-                                    {{agile_translate "menu" "help-desk"}}<br/>
-                                        <div style="margin-left:6px;"><small> {{agile_translate "admin-settings-users" "answer-customer-queries"}}</small></div>
-                                        <div style="margin-left:6px;visibility: hidden;"><small> {{agile_translate "admin-settings-users" "import-from-csv-file"}}</small></div>
+                                    {{translate 'report-view' 'help-desk'}}<br/>
+                                        <div style="margin-left:6px;"><small> {{translate 'admin-settings-users' 'answer-customer-queries'}}
+                                        </small></div>
+                                        <div style="margin-left:6px;visibility: hidden;"><small> {{translate 'admin-settings-users' 'import-from-csv-file'}}</small></div>
                                 </label>
                         {{else}} 
                                 <label class="i-checks i-checks-sm checkbox">
                                     <input type="checkbox" name="scopes-temp" class="required" value="HELPDESK" checked {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
-                                    {{agile_translate "menu" "help-desk"}}<br/>
-                                        <div style="margin-left:6px;"><small> {{agile_translate "admin-settings-users" "answer-customer-queries"}}</small></div>
-                                        <div style="margin-left:6px;visibility: hidden;"><small> {{agile_translate "admin-settings-users" "import-from-csv-file"}}</small></div>
+                                    {{translate 'report-view' 'help-desk'}}<br/>
+                                        <div style="margin-left:6px;"><small> {{translate 'admin-settings-users' 'answer-customer-queries'}}
+                                        </small></div>
+                                        <div style="margin-left:6px;visibility: hidden;"><small> {{translate 'admin-settings-users' 'import-from-csv-file'}}</small></div>
                                 </label>
                         {{/if}}
                         </div>
@@ -550,8 +584,8 @@
             <div class="form-actions col-sm-offset-3 col-md-9">
 
             <div class="form-actions">
-            <a type="reset" href='#users' class="btn btn-default btn-sm">{{agile_translate "other" "cancel"}}</a>
-                    <button type="submit" class="save saveAuth btn btn-sm btn-primary">{{agile_translate "prefs-settings" "save-changes"}}</button>
+            <a type="reset" href='#users' class="btn btn-default btn-sm">{{translate 'other' 'cancel'}}</a>
+                    <button type="submit" class="save saveAuth btn btn-sm btn-primary">{{translate 'prefs-settings' 'save-changes'}}</button>
                   </div>
 </div>
 </div>
@@ -570,15 +604,15 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button class="close" data-dismiss="modal">x</button>
-                <h3 class="modal-title">Transfer Ownership</h3>
+                <h3 class="modal-title">{{translate 'admin-settings-users' 'transfer-ownership'}}</h3>
             </div>
             <div class="modal-body help-text">
-                <p>Are you sure you want to transfer the ownership to the selected user?</p>
+                <p>{{translate 'admin-settings-users' 'transfer-ownership-desc'}}</p>
                 
             </div>
             <div class="modal-footer">
-                <a href="#" data-dismiss="modal" class="btn btn-sm btn-default">{{agile_translate "portlets" "no"}}</a>
-                <a href="#" data-dismiss="modal" class="saveAuthConform btn btn-sm btn-primary">{{agile_translate "portlets" "yes"}}</a>
+                <a href="#" data-dismiss="modal" class="btn btn-sm btn-default">{{translate 'portlets' 'no'}}</a>
+                <a href="#" data-dismiss="modal" class="saveAuthConform btn btn-sm btn-primary">{{translate 'portlets' 'yes'}}</a>
             </div>
         </div>
     </div>

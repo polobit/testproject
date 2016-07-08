@@ -3,10 +3,10 @@
     <div class="hbox h-auto m-b-lg">
 	  <div class="panel panel-default">
 		<div class="panel-heading">
-            <div class="pull-left m-t-xs">{{agile_translate "voice-mail" "voicemail-list"}}</div>
+            <div class="pull-left m-t-xs">{{translate 'voice-mail' 'voicemail-list'}}</div>
 			<div class="pull-right">
             	<a href="#voice-mail-add" class="voice-mail-add btn btn-default btn-sm btn-addon" id="addEmailTemplate">
-           		 <span><i class="icon-plus-sign"></i></span> {{agile_translate "voice-mail" "add-voicemail"}}</a>
+           		 <span><i class="icon-plus-sign"></i></span> {{translate 'voice-mail' 'add-voicemail'}}</a>
 			</div>
 			<div class="clearfix"></div>
         </div>
@@ -18,10 +18,11 @@
                     <img alt="Clipboard" src="{{getS3ImagePath '/img/clipboard.png'}}" />
                 </div>
                 <div class="box-right pull-left">
-                    <h4 class="m-t-none">{{agile_translate "voice-mail" "there-are-no-voicemails"}}</h4>
+                    <h4 class="m-t-none">{{translate 'voice-mail' 'there-are-no-voicemails'}} </h4>
                     <div class="text">
-						{{agile_translate "voice-mail" "voicemail-desc"}}</div>
-                    <a href="#" class="m-t-xs voice-mail-add btn btn-default btn-sm"><i class="icon-plus-sign"></i>  {{agile_translate "voice-mail" "add-voicemail"}}</a>
+						{{translate 'voice-mail' 'voicemail-desc'}}
+                    </div>
+                    <a href="#" class="m-t-xs voice-mail-add btn btn-default btn-sm"><i class="icon-plus-sign"></i>  {{translate 'voice-mail' 'add-voicemail'}}</a>
                 </div>
 				<div class="clearfix">
 				</div>
@@ -35,9 +36,9 @@
 				 <col width="30px"><col width="35%"><col width="35%"><col width="20%"><col width="10%">
                     <thead>
                         <tr>
-                            <th>{{agile_translate "report-add" "title"}}</th>
-                            <th>{{agile_translate "voice-mail" "file-name"}}</th>
-                            <th>{{agile_translate "voice-mail" "uploaded"}}</th>
+                            <th>{{translate 'voice-mail' 'title'}}</th>
+                            <th>{{translate 'voice-mail' 'file-name'}}</th>
+                            <th>{{translate 'voice-mail' 'uploaded'}}</th>
 							<th></th>
                         </tr>
                     </thead>
@@ -54,8 +55,8 @@
 <div class="col w-md">
 	<div class="data-block">
         <div class="p-l p-r">
-            <h4 class="m-t-none">How to use Voicemails?</h4>
-			<p>When you call customers from Agile's telephony widgets, you have the option to leave a pre-recorded voicemail. You can manage your pre-recorded voicemail messages (WAV files) here and choose one of them when leaving a voicemails.</p>
+            <h4 class="m-t-none">{{translate 'voice-mail' 'how-to-use-voicemails'}}</h4>
+			<p>{{translate 'voice-mail' 'voicemail-desc-1'}}</p>
 		</div>
 	</div>	
 </div>

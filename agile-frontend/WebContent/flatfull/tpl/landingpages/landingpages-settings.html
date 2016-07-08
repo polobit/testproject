@@ -4,7 +4,8 @@
 <div class="wrapper-md lter bg-light b-b">
 <div class="row">
     <div class="col-md-12">
-       <h3 class="pull-left font-thin h3">{{agile_translate "landing-pages" "landing-pages"}}<small><span class="label label-sm bg-danger">{{agile_translate "deal-view" "beta"}}</span></small></h3>
+       <h3 class="pull-left font-thin h3">{{translate 'landing-pages' 'landing-pages'}} <small>
+       <span class="label label-sm bg-danger">{{translate 'deal-view' 'beta'}}</span></small></h3>
 	   <div class="pull-right"></div>
 	   <div class="clearfix"></div>
     </div>
@@ -19,7 +20,7 @@
 <div class="col-md-9">
 <form id="landingPageSettingForm">
 <div class="panel panel-default">
-  <div class="panel-heading">{{agile_translate "landing-pages" "custom-domain-setup"}}</div>
+  <div class="panel-heading">{{translate 'landing-pages' 'custom-domain-setup'}}</div>
   <div class="panel-body">
 
   <a id="cname" href="{{cname}}" class="text-info" style="display:none;">{{cname}}</a>
@@ -28,38 +29,38 @@
     <div>
 
 <div id="cnameSettingsFields">
-      <p>{{agile_translate "landing-pages" "enter-the-domain-setup"}}</p>
+      <p>{{translate 'landing-pages' 'enter-the-domain-setup'}}</p>
 
     <div class="form-group">
       <div class="col-md-12">
         <div class="form-group row m-b-xs">
             <label class="col-md-1 form-control input-group-addon" style="min-width:60px;border-right:none;border-radius:0px;">http://</label>
             <div class="col-md-3 p-n">
-              <input type="text" value="" class="form-control" style="border-radius:0px;" id="sub_domain" name="sub_domain" placeholder="Sub Domain(Eg: page)">
+              <input type="text" value="" class="form-control" style="border-radius:0px;" id="sub_domain" name="sub_domain" placeholder="{{translate 'landing-pages' 'sub-domain'}}">
               <label for="sub_domain" generated="true" class="error" style="display: inline-block;color: #d9534f;"></label>
             </div>
             <label class="col-md-1 form-control input-group-addon" style="border-left:none;border-right:none;border-radius:0px;">.</label>
             <div class="col-md-3 p-n">
-              <input type="text" value="" class="form-control" style="border-radius:0px;" id="domain" name="domain" placeholder="Domain(Eg: example.com)">
+              <input type="text" value="" class="form-control" style="border-radius:0px;" id="domain" name="domain" placeholder="{{translate 'landing-pages' 'domain-eg'}}">
               <label for="domain" generated="true" class="error" style="display: inline-block;color: #d9534f;"></label>
             </div>
             <label class="col-md-1 form-control input-group-addon" style="border-left:none;border-right:none;border-radius:0px;">/</label>
             <div class="col-md-3 p-n">
-              <input type="text" value="" class="form-control" style="border-radius:0px;" id="directory_path" name="directory_path" placeholder="Optional Directory">
+              <input type="text" value="" class="form-control" style="border-radius:0px;" id="directory_path" name="directory_path" placeholder="{{translate 'landing-pages' 'optional-directory'}}">
               <label for="directory_path" generated="true" class="error" style="display: inline-block;color: #d9534f;"></label>
             </div>
         </div>
       </div>
     </div>
 
-  <p id="cnameInstructionMessage" style="display:none;">Create a CNAME record in your DNS settings with HOST as &quot;<strong id="cnameHostVal"></strong>&quot; and DESTINATION as &quot;<strong>landing.agilecrm.com.</strong>&quot;</p>
+  <p id="cnameInstructionMessage" style="display:none;">{{translate 'landing-pages' 'create-a-cname-record'}} &quot;<strong id="cnameHostVal"></strong>&quot; {{translate 'landing-pages' 'and-DESTINATION-as'}} &quot;<strong>landing.agilecrm.com.</strong>&quot;</p>
 </div>
 
   <div class="row">
     <div class="col-md-12" id="statusMessageHolder"></div>
     <div class="col-md-12">
-      <button class="btn btn-sm btn-primary" id="landingPageSettingBtn" data-pageid="{{pageid}}" data-loading-text="Saving...">{{agile_translate "modals" "save"}}</button>
-      &nbsp;<a href="#" class="text-info" id="landingPageVerifyBtn" {{#unless cname}} style="display:none;" {{/unless}}>{{agile_translate "landing-pages" "verify"}}</a>
+      <button class="btn btn-sm btn-primary" id="landingPageSettingBtn" data-pageid="{{pageid}}" data-loading-text="Saving...">{{translate 'modals' 'save'}}</button>
+      &nbsp;<a href="#" class="text-info" id="landingPageVerifyBtn" {{#unless cname}} style="display:none;" {{/unless}}>{{translate 'landing-pages' 'verify'}}</a>
     </div>
   </div>
 
@@ -74,20 +75,22 @@
 <div class="data-block">
          <div class="p-l p-r">
             <h4 class="m-t-none">
-               {{agile_translate "landing-pages" "setup-instructions"}}</h4>
-<p>{{agile_translate "landing-pages" "publish-your-landing-pages-desc"}}</p>
+               {{translate 'landing-pages' 'setup-instructions'}}
+            </h4>
+<p>{{translate 'landing-pages' 'publish-your-landing-pages-desc'}}</p>
 <ul class="p-l-md">
-<li>Tell your domain to show the pages hosted by Agile CRM.(Create a CNAME record in your DNS settings with HOST as "page" and DESTINATION as "landing.agilecrm.com.")</li>
-<li>{{agile_translate "landing-pages" "publish-your-landing-page"}}</li>
+<li>{{translate 'landing-pages' 'tell-your-domain-desc'}}</li>
+<li>{{translate 'landing-pages' 'publish-your-landing-page'}}</li>
 </ul>
    
    <h4 class="m-t-md">
-    {{agile_translate "landing-pages" "dns-instructions"}}</h4>
-   <p>{{agile_translate "landing-pages" "below-are-links-to-CNAME-setup"}}</p>
+    {{translate 'landing-pages' 'dns-instructions'}}
+   </h4>
+   <p>{{translate 'landing-pages' 'below-are-links-to-CNAME-setup'}}</p>
    <ul class="p-l-md">
-   <li><a class="text-info" target="_blank" href="https://in.godaddy.com/help/add-a-cname-record-19236">{{agile_translate "landing-pages" "go-daddy"}}</a></li>
-  <li><a class="text-info" target="_blank" href="https://my.bluehost.com/cgi/help/cname">{{agile_translate "landing-pages" "blueHost"}}</a></li>
-   <li><a class="text-info" target="_blank" href="https://www.youtube.com/watch?v=5TwLD2t9b7U">{{agile_translate "landing-pages" "nameCheap"}}</a></li>
+   <li><a class="text-info" target="_blank" href="https://in.godaddy.com/help/add-a-cname-record-19236">{{translate 'landing-pages' 'go-daddy'}}</a></li>
+  <li><a class="text-info" target="_blank" href="https://my.bluehost.com/cgi/help/cname">{{translate 'landing-pages' 'blueHost'}}</a></li>
+   <li><a class="text-info" target="_blank" href="https://www.youtube.com/watch?v=5TwLD2t9b7U">{{translate 'landing-pages' 'nameCheap'}}</a></li>
    </ul>
    
      </div>

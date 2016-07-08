@@ -6,7 +6,7 @@
             <form id="notificationsForm" name="notificationsForm" class="form-horizontal">
                 <fieldset>
                 <div class="panel-heading">
-					<span class="pull-left m-r-sm m-t-xs text-head-black">{{agile_translate "preferences" "notifications"}}</span>
+					<span class="pull-left m-r-sm m-t-xs text-head-black">{{translate 'preferences' 'notifications'}}</span>
 					<div class="pull-left safari_only">                                          
                         <div id="notification-switch">
 							<label class="i-switch m-t-xs m-r">
@@ -25,7 +25,7 @@
                     {{#is_mobile}}
 
                     {{else}}
-                    <a href="#notification-prefs" class="btn pull-right btn-sm btn-default btn-addon" id="set-desktop-notification"><i class="icon-bullhorn"></i> {{agile_translate "prefs-notifications" "set-desktop-notifications"}}</a>
+                    <a href="#notification-prefs" class="btn pull-right btn-sm btn-default btn-addon" id="set-desktop-notification"><i class="icon-bullhorn"></i> {{translate 'prefs-notifications' 'set-desktop-notifications'}}</a>
                     {{/is_mobile}}
                     {{/if}}
                     <input name="id" type="hidden" value="{{id}}" /> 
@@ -36,92 +36,100 @@
                   {{#if control_notifications}}
                   
                     <div class="control-group form-group">
-                        <label class="control-label col-sm-3">{{agile_translate "prefs-notifications" "browsing"}}</label>
+                        <label class="control-label col-sm-3">{{translate 'prefs-notifications' 'browsing'}}</label>
                         <div class="controls col-sm-8">
                             <select id="browsing" name="browsing" class="form-control">
-                                <option value="ANY_CONTACT">{{agile_translate "prefs-notifications" "any-contact"}}</option>
-                                <option value="CONTACT_ASSIGNED">{{agile_translate "prefs-notifications" "contact-assigned-to-me"}}</option>
-                                <option value="CONTACT_ASSIGNED_AND_STARRED">{{agile_translate "prefs-notifications" "contact-assigned-to-me-starred"}}</option>
+                                <option value="ANY_CONTACT">{{translate 'prefs-notifications' 'any-contact'}}</option>
+                                <option value="CONTACT_ASSIGNED">{{translate 'prefs-notifications' 'contact-assigned-to-me'}}</option>
+                                <option value="CONTACT_ASSIGNED_AND_STARRED">{{translate 'prefs-notifications' 'contact-assigned-to-me-starred'}}</option>
                             </select>
-<p class="help-block m-b-none">{{agile_translate "prefs-notifications" "get-notified-when-a-contact-is-browsing"}}</p>
+<p class="help-block m-b-none">{{translate 'prefs-notifications' 'get-notified-when-a-contact-is-browsing'}}</p>
                         </div>
                         
                     </div>
                    
                     
                     <div class="control-group form-group">
-                        <label class="control-label col-sm-3">{{agile_translate "contact-details" "email-opened"}}</label>
+                        <label class="control-label col-sm-3">{{translate 'contact-details' 'email-opened'}}</label>
                         <div class="controls col-sm-8">
                             <select id="email-opened" name="email_opened" class="form-control">
-                                <option value="ANY_CONTACT">{{agile_translate "prefs-notifications" "any-contact"}}</option>
-                                <option value="CONTACT_ASSIGNED">{{agile_translate "prefs-notifications" "contact-assigned-to-me"}}</option>
-                                <option value="CONTACT_ASSIGNED_AND_STARRED">{{agile_translate "prefs-notifications" "contact-assigned-to-me-starred"}}</option>
+                                <option value="ANY_CONTACT">{{translate 'prefs-notifications' 'any-contact'}}</option>
+                                <option value="CONTACT_ASSIGNED">{{translate 'prefs-notifications' 'contact-assigned-to-me'}}</option>
+                                <option value="CONTACT_ASSIGNED_AND_STARRED">{{translate 'prefs-notifications' 'contact-assigned-to-me-starred'}}</option>
                             </select>
- <p class="help-block m-b-none">{{agile_translate "prefs-notifications" "get-notified-when-a-contact-opens-email"}}</p>
+ <p class="help-block m-b-none">{{translate 'prefs-notifications' 'get-notified-when-a-contact-opens-email'}}</p>
                         </div>
                        
                     </div>
                    
                   
                     <div class="control-group form-group">
-                        <label class="control-label col-sm-3">{{agile_translate "prefs-notifications" "link-clicked"}}</label>
+                        <label class="control-label col-sm-3">{{translate 'prefs-notifications' 'link-clicked'}}</label>
                         <div class="controls col-sm-8">
                             <select id="link-clicked" name="link_clicked" class="form-control">
-                                <option value="ANY_CONTACT">{{agile_translate "prefs-notifications" "any-contact"}}</option>
-                                <option value="CONTACT_ASSIGNED">{{agile_translate "prefs-notifications" "contact-assigned-to-me"}}</option>
-                                <option value="CONTACT_ASSIGNED_AND_STARRED">{{agile_translate "prefs-notifications" "contact-assigned-to-me-starred"}}</option>
+                                <option value="ANY_CONTACT">{{translate 'prefs-notifications' 'any-contact'}}</option>
+                                <option value="CONTACT_ASSIGNED">{{translate 'prefs-notifications' 'contact-assigned-to-me'}}</option>
+                                <option value="CONTACT_ASSIGNED_AND_STARRED">{{translate 'prefs-notifications' 'contact-assigned-to-me-starred'}}</option>
                             </select>
-<p class="help-block m-b-none">Get notified when a contact clicks a link in email (via a campaign).</p>
+<p class="help-block m-b-none">{{translate 'prefs-notifications' 'get-notified-when-a-contact-clicks-link-in-email'}}</p>
                         </div>
                         
                     </div>
                     <div class="control-group form-group">
-                        <label class="control-label col-sm-3">{{agile_translate "deal-view" "Deals?"}}</label>
+                        <label class="control-label col-sm-3">{{translate 'campaigns' 'deal'}}</label>
                         <div class="controls col-sm-8">
                             <div class="checkbox">
 <label class="i-checks i-checks-sm">
                             <input type="checkbox" id="deal_created" name="deal_created" value="true" /><i></i> 
-                            {{agile_translate "prefs-notifications" "deal-is-created"}}</label>
+                            {{translate 'prefs-notifications' 'deal-is-created'}}
+                            </label>
 </div>
                             <div class="checkbox">
 <label class="i-checks i-checks-sm">
                             <input type="checkbox" id="deal_closed" name="deal_closed" value="true" /><i></i> 
-                            {{agile_translate "prefs-notifications" "deal-is-closed"}}</label>
+                           {{translate 'prefs-notifications' 'deal-is-closed'}}
+                            </label>
 </div>
                         </div>
                     </div>
                     <div class="control-group form-group">
-                        <label class="control-label col-sm-3">{{agile_translate "contact-edit" "tag"}}</label>
+                        <label class="control-label col-sm-3">{{translate 'contact-edit' 'tag'}}</label>
                         <div class="controls col-sm-8">
                             <div class="checkbox"><label class="i-checks i-checks-sm">
                             <input type="checkbox" id="tag_added" name="tag_added" value="true" /><i></i> 
-                            {{agile_translate "prefs-notifications" "tag-is-created"}}</label>
+                            {{translate 'prefs-notifications' 'tag-is-created'}}
+                            </label>
 </div>
                             <div class="checkbox"><label class="i-checks i-checks-sm">
                             <input type="checkbox" id="tag_deleted" name="tag_deleted" value="true" /><i></i> 
-                            {{agile_translate "campaigns" "tag-is-deleted"}}</label>
+                            {{translate 'campaigns' 'tag-is-deleted'}}
+                            </label>
 </div>
                         </div>
                     </div>
                     <div class="control-group form-group">
-                        <label class="control-label col-sm-3">{{agile_translate "contact-details" "Contact"}}</label>
+                        <label class="control-label col-sm-3">{{translate 'contacts-view' 'contact'}}</label>
                         <div class="controls col-sm-8">
                             <div class="checkbox"><label class="i-checks i-checks-sm">
                             <input type="checkbox" id="contact_added" name="contact_added" value="true" /><i></i> 
-                            {{agile_translate "prefs-notifications" "contact-is-created"}}</label>
+                            {{translate 'prefs-notifications' 'contact-is-created'}}
+                            </label>
 </div>
                             <div class="checkbox"><label class="i-checks i-checks-sm">
                             <input type="checkbox" id="contact_deleted" name="contact_deleted" value="true" /><i></i> 
-                            {{agile_translate "prefs-notifications" "contact-is-deleted"}}</label>
+                            {{translate 'prefs-notifications' 'contact-is-deleted'}}
+                            </label>
 </div>
                         </div>
                     </div>
                     <div class="control-group form-group">
-                        <label class="control-label col-sm-3">{{agile_translate "admin-settings-tasks" "call"}}</label>
+                        <label class="control-label col-sm-3">{{translate 'campaigns' 'call'}}
+                        </label>
                         <div class="controls col-sm-8">
                             <div class="checkbox"><label class="i-checks i-checks-sm">
                             <input type="checkbox" id="call" name="call" value="true"/><i></i> 
-                            {{agile_translate "prefs-notifications" "incoming-call"}}</label>
+                            {{translate 'prefs-notifications' 'incoming-call'}}
+                            </label>
 </div>
                         </div>
                     </div>
@@ -129,100 +137,109 @@
                    {{else}}
 
                     <div class="control-group form-group">
-                        <label class="control-label col-sm-3">{{agile_translate "prefs-notifications" "browsing"}}</label>
+                        <label class="control-label col-sm-3">{{translate 'prefs-notifications' 'browsing'}}</label>
                         <div class="controls col-sm-8">
                             <select id="browsing" name="browsing" disabled="disabled" class="form-control">
-                                <option value="ANY_CONTACT">{{agile_translate "prefs-notifications" "any-contact"}}</option>
-                                <option value="CONTACT_ASSIGNED">{{agile_translate "prefs-notifications" "contact-assigned-to-me"}}</option>
-                                <option value="CONTACT_ASSIGNED_AND_STARRED">{{agile_translate "prefs-notifications" "contact-assigned-to-me-starred"}}</option>
+                                <option value="ANY_CONTACT">{{translate 'prefs-notifications' 'any-contact'}}</option>
+                                <option value="CONTACT_ASSIGNED">{{translate 'prefs-notifications' 'contact-assigned-to-me'}}</option>
+                                <option value="CONTACT_ASSIGNED_AND_STARRED">{{translate 'prefs-notifications' 'contact-assigned-to-me-starred'}}</option>
                             </select>
-<p class="help-block m-b-none">{{agile_translate "prefs-notifications" "get-notified-when-a-contact-is-browsing"}}</p>
+<p class="help-block m-b-none">{{translate 'prefs-notifications' 'get-notified-when-a-contact-is-browsing'}}</p>
                         </div>
                         
                     </div>
                     <div class="control-group form-group">
-                        <label class="control-label col-sm-3">{{agile_translate "contact-details" "email-opened"}}</label>
+                        <label class="control-label col-sm-3">{{translate 'contact-details' 'email-opened'}}</label>
                         <div class="controls col-sm-8">
                             <select id="email-opened" name="email_opened" disabled="disabled" class="form-control">
-                                <option value="ANY_CONTACT">{{agile_translate "prefs-notifications" "any-contact"}}</option>
-                                <option value="CONTACT_ASSIGNED">{{agile_translate "prefs-notifications" "contact-assigned-to-me"}}</option>
-                                <option value="CONTACT_ASSIGNED_AND_STARRED">{{agile_translate "prefs-notifications" "contact-assigned-to-me-starred"}}</option>
+                                <option value="ANY_CONTACT">{{translate 'prefs-notifications' 'any-contact'}}</option>
+                                <option value="CONTACT_ASSIGNED">{{translate 'prefs-notifications' 'contact-assigned-to-me'}}</option>
+                                <option value="CONTACT_ASSIGNED_AND_STARRED">{{translate 'prefs-notifications' 'contact-assigned-to-me-starred'}}</option>
                             </select>
-<p class="help-block m-b-none">{{agile_translate "prefs-notifications" "get-notified-when-a-contact-opens-email"}}</p>
+<p class="help-block m-b-none">{{translate 'prefs-notifications' 'get-notified-when-a-contact-opens-email'}}</p>
                         </div>
                     
                     </div>
                     <div class="control-group form-group">
-                        <label class="control-label col-sm-3">{{agile_translate "prefs-notifications" "link-clicked"}}</label>
+                        <label class="control-label col-sm-3">{{translate 'prefs-notifications' 'link-clicked'}}</label>
                         <div class="controls col-sm-8">
                             <select id="link-clicked" name="link_clicked" disabled="disabled" class="form-control">
-                                <option value="ANY_CONTACT">{{agile_translate "prefs-notifications" "any-contact"}}</option>
-                                <option value="CONTACT_ASSIGNED">{{agile_translate "prefs-notifications" "contact-assigned-to-me"}}</option>
-                                <option value="CONTACT_ASSIGNED_AND_STARRED">{{agile_translate "prefs-notifications" "contact-assigned-to-me-starred"}}</option>
+                                <option value="ANY_CONTACT">{{translate 'prefs-notifications' 'any-contact'}}</option>
+                                <option value="CONTACT_ASSIGNED">{{translate 'prefs-notifications' 'contact-assigned-to-me'}}</option>
+                                <option value="CONTACT_ASSIGNED_AND_STARRED">{{translate 'prefs-notifications' 'contact-assigned-to-me-starred'}}</option>
                             </select>
-<p class="help-block m-b-none">Get notified when a contact clicks a link in email (via a campaign).</p>
+<p class="help-block m-b-none">{{translate 'prefs-notifications' 'get-notified-when-a-contact-clicks-link-in-email'}}</p>
                         </div>
                         
                     </div>
                     <div class="control-group form-group">
-                        <label class="control-label col-sm-3">{{agile_translate "deal-view" "Deals?"}}</label>
+                        <label class="control-label col-sm-3">{{translate 'campaigns' 'deal'}}
+                        </label>
                         <div class="controls col-sm-8">
                             <div class="checkbox"><label class="i-checks i-checks-sm">
                             <input type="checkbox" id="deal_created" name="deal_created" value="true" disabled="disabled"/><i></i> 
-                            {{agile_translate "prefs-notifications" "deal-is-created"}}</label>
+                            {{translate 'prefs-notifications' 'deal-is-created'}}
+                            </label>
 </div>
                             <div class="checkbox"><label class="i-checks i-checks-sm">
                             <input type="checkbox" id="deal_closed" name="deal_closed" value="true" disabled="disabled"/><i></i> 
-                            {{agile_translate "prefs-notifications" "deal-is-closed"}}</label>
+                            {{translate 'prefs-notifications' 'deal-is-closed'}}
+                            </label>
 </div>
                         </div>
                     </div>
                     <div class="control-group form-group">
-                        <label class="control-label col-sm-3">{{agile_translate "contact-edit" "tag"}}</label>
+                        <label class="control-label col-sm-3">Ta{{translate 'contact-edit' 'tag'}}g</label>
                         <div class="controls col-sm-8">
                             <div class="checkbox"><label class="i-checks i-checks-sm">
                             <input type="checkbox" id="tag_added" name="tag_added" value="true" disabled="disabled"/><i></i> 
-                            {{agile_translate "prefs-notifications" "tag-is-created"}}</label>
+                            {{translate 'prefs-notifications' 'tag-is-created'}}
+                            </label>
 </div>
                             <div class="checkbox"><label class="i-checks i-checks-sm">
                             <input type="checkbox" id="tag_deleted" name="tag_deleted" value="true" disabled="disabled"/><i></i> 
-                            {{agile_translate "campaigns" "tag-is-deleted"}}</label>
+                            {{translate 'campaigns' 'tag-is-deleted'}}
+                            </label>
 </div>
                         </div>
                     </div>
                     <div class="control-group form-group">
-                        <label class="control-label col-sm-3">{{agile_translate "contact-details" "Contact"}}</label>
+                        <label class="control-label col-sm-3">{{translate 'contacts-view' 'contact'}}</label>
                         <div class="controls col-sm-8">
                             <div class="checkbox"><label class="i-checks i-checks-sm">
                             <input type="checkbox" id="contact_added" name="contact_added" value="true" disabled="disabled"/><i></i> 
-                            {{agile_translate "prefs-notifications" "contact-is-created"}}</label>
+                            {{translate 'prefs-notifications' 'contact-is-created'}}
+                            </label>
 </div>
                             <div class="checkbox"><label class="i-checks i-checks-sm">
                             <input type="checkbox" id="contact_deleted" name="contact_deleted" value="true" disabled="disabled"/><i></i> 
-                            {{agile_translate "prefs-notifications" "contact-is-deleted"}}</label>
+                             {{translate 'prefs-notifications' 'contact-is-deleted'}}
+                            </label>
 </div>
                         </div>
                     </div>
                     <div class="control-group form-group">
-                        <label class="control-label col-sm-3">{{agile_translate "admin-settings-tasks" "call"}}</label>
+                        <label class="control-label col-sm-3">{{translate 'campaigns' 'call'}}
+                        </label>
                         <div class="controls col-sm-8">
                             <div class="checkbox"><label class="i-checks i-checks-sm">
                             <input type="checkbox" id="call" name="call" value="true" disabled="disabled"/><i></i> 
-                            {{agile_translate "prefs-notifications" "incoming-call"}}</label>
+                            {{translate 'prefs-notifications' 'incoming-call'}}
+                            </label>
 </div>
                         </div>
                     </div>
                     {{/if}}
                     <div class="control-group form-group">
-                        <label class="control-label col-sm-3">{{agile_translate "prefs-notifications" "sound"}}</label>
+                        <label class="control-label col-sm-3">{{translate 'prefs-notifications' 'sound'}}</label>
                         <div class="controls col-sm-8" >
                                     <select id="notification_sound" name="notification_sound" class="form-control inline-block" style="width:75%;">
-                                        <option value="alert_1">{{agile_translate "prefs-notifications" "notes"}}</option>
-                                        <option value="alert_2">{{agile_translate "prefs-notifications" "twinkle"}}</option>
-                                        <option value="alert_3">{{agile_translate "prefs-notifications" "bubble"}}</option>
-                                        <option value="alert_4">{{agile_translate "prefs-notifications" "triple-tone"}}</option>
-                                        <option value="alert_5">{{agile_translate "prefs-notifications" "chime"}}</option>
-                                        <option value="no_sound">{{agile_translate "prefs-notifications" "silent"}}</option>
+                                        <option value="alert_1">{{translate 'prefs-notifications' 'notes'}}</option>
+                                        <option value="alert_2">{{translate 'prefs-notifications' 'twinkle'}}</option>
+                                        <option value="alert_3">{{translate 'prefs-notifications' 'bubble'}}</option>
+                                        <option value="alert_4">{{translate 'prefs-notifications' 'triple-tone'}}</option>
+                                        <option value="alert_5">{{translate 'prefs-notifications' 'chime'}}</option>
+                                        <option value="no_sound">{{translate 'prefs-notifications' 'silent'}}</option>
                                     </select>
                         <button class="btn btn-default  m-l-sm inline-block" id="notification-sound-play"><i class="icon-play"></i></button>
                         </div>
@@ -230,8 +247,8 @@
 <div class="line line-lg b-b"></div>
                   <div class="row">
                     <div class="col-sm-offset-3 col-sm-8">                      
-                        <button type="submit" class="save btn btn-sm btn-primary">{{agile_translate "prefs-settings" "save-changes"}}</button>
-                        <!--<a href="#settings" class="btn btn-sm btn-default">{{agile_translate "other" "cancel"}}</a>-->
+                        <button type="submit" class="save btn btn-sm btn-primary">{{translate 'prefs-settings' 'save-changes'}}</button>
+                        <!--<a href="#settings" class="btn btn-sm btn-default">Cancel</a>-->
                     </div>
                     </div>
                     </div>
@@ -244,19 +261,19 @@
 	<div class="col w-md">
        <div class="data-block">
 		<div class="p-l p-r">
-			<h4 class="m-t-none">What are Notifications?</h4>
-            <p>{{agile_translate "prefs-notifications" "notifications-desc-1"}}</p>
-            <p>{{agile_translate "prefs-notifications" "notifications-desc-2"}}</p>
+			<h4 class="m-t-none">{{translate 'prefs-notifications' 'what-are-notifications'}}</h4>
+            <p>{{translate 'prefs-notifications' 'notifications-desc-1'}} </p>
+            <p>{{translate 'prefs-notifications' 'notifications-desc-2'}}</p>
 	        
 
-            <strong>{{agile_translate "prefs-notifications" "default-notifications"}}</strong>
+            <strong>{{translate 'prefs-notifications' 'default-notifications'}}</strong>
 
-            <p>{{agile_translate "prefs-notifications" "default-notifications-appears-as-below"}}</p>
+            <p>{{translate 'prefs-notifications' 'default-notifications-appears-as-below'}}</p>
             <div class="m-b"><img src="{{getS3ImagePath 'img/sample-notification.png'}}"/ class="img-responsive"></div>
-            <strong>{{agile_translate "prefs-notifications" "desktop-notifications"}}</strong>
-            <p>{{agile_translate "prefs-notifications" "desktop-notifications-appears-as-below"}}</p>
+            <strong>{{translate 'prefs-notifications' 'desktop-notifications'}}</strong>
+            <p>{{translate 'prefs-notifications' 'desktop-notifications-appears-as-below'}}</p>
             <div><img src="{{getS3ImagePath 'img/sample-html-notification.png'}}"/ class="img-responsive"></div>
-            <p class="m-t-xs" style="font-size:10px;">{{agile_translate "prefs-notifications" "all-browsers-do-not-support-desktop-notifications"}}</p>    
+            <p class="m-t-xs" style="font-size:10px;">{{translate 'prefs-notifications' 'all-browsers-do-not-support-desktop-notifications'}}</p>    
 	</div>  
 </div>		
 	</div>

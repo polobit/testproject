@@ -4,18 +4,18 @@
 <div class="row">  
 	<div class="col-md-12">
 		     
-			<h3 id="new-task-heading" class="task-heading pull-left font-thin h3">{{agile_translate "tasks" "My Pending Tasks"}}<small class="tasks-count"></small></h3>
+			<h3 id="new-task-heading" class="task-heading pull-left font-thin h3">{{translate 'tasks' 'My Pending Tasks'}}<small class="tasks-count"></small></h3>
 		<div class="pull-right">
     <div class="inline-block m-r hide" id="calendarTasksButtons">
-      <button type="button" class="btn btn-sm btn-default" onclick="taskCalendarToday()">{{agile_translate "calendar" "Today"}}</button>
+      <button type="button" class="btn btn-sm btn-default" onclick="taskCalendarToday()">Today</button>
       <div class="btn-group m-l-xs">
-        <button id="agendaDay" class="btn btn-sm btn-default taskDayWeekMonth" >{{agile_translate "calendar" "day"}}</button>
-        <!-- <button id="agendaWeek" class="btn btn-sm btn-default taskDayWeekMonth" >{{agile_translate "calendar" "week"}}</button> -->
-        <button id="month" class="btn btn-sm btn-default taskDayWeekMonth" >{{agile_translate "calendar" "month"}}</button>
+        <button id="agendaDay" class="btn btn-sm btn-default taskDayWeekMonth" >{{translate 'calendar' 'day'}}</button>
+        <!-- <button id="agendaWeek" class="btn btn-sm btn-default taskDayWeekMonth" >Week</button> -->
+        <button id="month" class="btn btn-sm btn-default taskDayWeekMonth" >{{translate 'calendar' 'month'}}</button>
       </div>
     </div>
 		<div class="btn-group owner-task-button m-r">
-	            <button class="btn btn-default btn-sm selected_name">{{agile_translate "tasks" "My Pending Tasks"}}</button>
+	            <button class="btn btn-default btn-sm selected_name">{{translate 'tasks' 'My Pending Tasks'}}</button>
 	            <a class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" href="#">
 	            <span class="caret"></span>
 	            </a>
@@ -25,30 +25,31 @@
           {{#is_mobile}}
           {{else}}
 			<div class="btn-group type-task-button c-p m-r">
-		        <button class="btn btn-default btn-sm selected_name">{{agile_translate "contact-details" "due"}}</button>
+		        <button class="btn btn-default btn-sm selected_name">{{translate 'tasks' 'due'}}</button>
 		        <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" href="#">
 		        <span class="caret"></span>
 		        </button>
 		        <ul class="dropdown-menu main-menu" id="new-type-tasks" role="menu">
 		           <li class="dropdown-submenu do-onclick-nothing">
-		               <a data-toggle="dropdown">{{agile_translate "tasks" "group-by"}}</a>
+		               <a data-toggle="dropdown">{{translate 'tasks' 'group-by'}}</a>
 		               <ul class="dropdown-menu w-xs" id="new-type-tasks" style="left:-159px">
-		                  <li><a href="CATEGORY" class="new-type-task">{{agile_translate "portlets" "category"}}</a></li>
-		                  <li><a href="OWNER" class="hide-on-pending hide-on-my-task new-type-task">{{agile_translate "contact-details" "owner"}}</a></li>
-		                  <li><a href="DUE" class="new-type-task">{{agile_translate "contact-details" "due"}}</a></li>
-		                  <li><a href="PRIORITY" class="new-type-task">{{agile_translate "widgets" "priority"}}</a></li>
-		                  <li><a href="STATUS" class="hide-on-pending hide-on-all-pending new-type-task">{{agile_translate "widgets" "status"}}</a></li>
+		                  <li><a href="CATEGORY" class="new-type-task">{{translate 'portlets' 'category'}}</a></li>
+		                  <li><a href="OWNER" class="hide-on-pending hide-on-my-task new-type-task">{{translate 'portlets' 'owner'}}</a></li>
+		                  <li><a href="DUE" class="new-type-task">{{translate 'tasks' 'due'}}</a></li>
+		                  <li><a href="PRIORITY" class="new-type-task">{{translate 'tasks' 'priority'}}</a></li>
+		                  <li><a href="STATUS" class="hide-on-pending hide-on-all-pending new-type-task">{{translate 'portlets' 'status'}}</a></li>
 		               </ul>
 		           </li>
 
-		           <li><a href="LIST" class="list-view new-type-task">{{agile_translate "deal-view" "list-view"}}</a></li>
-		           <li><a href="GroupView" class="group-view" style="display:none;">{{agile_translate "tasks" "group-view"}}</a></li>
-               <li><a href="CALENDAR" class="calendar-view new-type-task">{{agile_translate "report-view" "calendar-view"}}</a></li>                     
+		           <li><a href="LIST" class="list-view new-type-task">{{translate 'tasks' 'list-view'}}</a></li>
+		           <li><a href="GroupView" class="group-view" style="display:none;">{{translate 'tasks' 'group-view'}}</a></li>
+               <li><a href="CALENDAR" class="calendar-view new-type-task">{{translate 'report-view' 'calendar-view'}}</a></li>                     
 		        </ul>
 		    </div>
         <div class="btn-group type-task-button c-p pull-right">
         <a href="#add-dashlet" id="add-portlet" class="btn btn-default btn-sm btn-addon add-portlet add-stream-tab pos-rlt">
-          <i class="icon icon-plus-sign"></i> {{agile_translate "portlets" "add-dashlet"}}</a>
+          <i class="icon icon-plus-sign"></i> {{translate 'portlets' 'add-dashlet'}}
+        </a>
         </div>
 	        {{/is_mobile}}		
 
@@ -104,7 +105,7 @@
         
      </div>  
      <div id="show_loader"></div>      
-     <div class="list-bottom left add-task panel-footer" heading="{{heading}}" ownerID={{owner_id}}><a class="text-info" href="#"><i class="icon-plus" /> {{agile_translate "tasks" "add-a-task"}}</a></div>     
+     <div class="list-bottom left add-task panel-footer" heading="{{heading}}" ownerID={{owner_id}}><a class="text-info" href="#"><i class="icon-plus" /> {{translate 'tasks' 'add-a-task'}}</a></div>     
 </script>
 
 <script id="task-collection-template" type="text/html">
@@ -148,11 +149,11 @@
       {{/if}}      
 </div>
 <div class="task-right text-ellipsis" style="width:30%">
-      <label class="label bg-light dk text-tiny" title="Category">{{get_normal_name type}}</label>
+      <label class="label bg-light dk text-tiny" title="{{translate 'portlets' 'category'}}">{{get_normal_name type}}</label>
   </div>
     <div class="clearfix"></div>
       {{#if contacts}}  
-         <div class="task-related-to task-related-contacts" title="Related To">
+         <div class="task-related-to task-related-contacts" title="{{translate 'cases' 'related-to'}}">
         	{{#each contacts}}
             {{#if_contact_type "PERSON"}}
               <a href="#contact/{{id}}" class="activate-link text-sm text-muted popover_contact text-cap" data="{{id}}">{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</a>
@@ -190,18 +191,18 @@
 </div>    
 <div class="pull-right pos-rlt pos-t-xs"> 
  <div class="task-actions text-sm">
-           <i class="task-action icon icon-check is-task-complete m-r-xs" data="{{id}}" title="Mark as Complete"></i>
-           <i class="task-action icon icon-edit edit-task" data="{{id}}" title="Edit Task"></i>          
-          <i class="task-action icon icon-trash delete-task" data="{{id}}" title="Delete Task"></i>
+           <i class="task-action icon icon-check is-task-complete m-r-xs" data="{{id}}" title="{{translate 'report-view' 'mark-as-complete'}}"></i>
+           <i class="task-action icon icon-edit edit-task" data="{{id}}" title="{{translate 'modals' 'edit-task'}}"></i>          
+          <i class="task-action icon icon-trash delete-task" data="{{id}}" title="{{translate 'report-view' 'delete-task'}}"></i>
            {{#if notes}} 
-             <i class="task-action icon icon-comment notes-task-popover edit-task" data="{{id}}" title="Notes"></i>
-             <span class="txt-small note-count" title="Notes">{{notes.length}}</span>
+             <i class="task-action icon icon-comment notes-task-popover edit-task" data="{{id}}" title="{{translate 'contact-details' 'notes'}}"></i>
+             <span class="txt-small note-count" title="{{translate 'contact-details' 'notes'}}">{{notes.length}}</span>
            {{/if}}
       </div>
       {{#if notes}} 
            <div class="task-note-action text-sm">
-             <i class="task-action icon icon-comment" data="{{id}}" title="Notes"></i>
-             <span class="txt-small note-count" title="Notes">{{notes.length}}</span>
+             <i class="task-action icon icon-comment" data="{{id}}" title="{{translate 'contact-details' 'notes'}}"></i>
+             <span class="txt-small note-count" title="{{translate 'contact-details' 'notes'}}">{{notes.length}}</span>
            </div>
       {{/if}}
 </div>
@@ -230,5 +231,5 @@
 </script>
 
 <script id="note-form-template" type="text/html">
-   <textarea placeholder="Detailed Note" name="note_description" rows="3" class="input form-control form-control-F-width" id="note_description"></textarea> 
+   <textarea placeholder="{{translate 'deal-view' 'detailed-note'}}" name="note_description" rows="3" class="input form-control form-control-F-width" id="note_description"></textarea> 
 </script>

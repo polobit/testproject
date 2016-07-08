@@ -2,14 +2,14 @@
 	<div>
 		<form id="clickdesk_login_form" name="clickdesk_login_form" method="post">
 	    	<fieldset>
-				<p>{{agile_translate "widgets" "clickdesk-desc"}}</p>
+				<p>{{translate 'widgets' 'clickdesk-desc'}}</p>
 				
-				<label>Enter your ClickDesk details </label>
-				<div class="control-group form-group"><div class="controls"><input type="text" id="clickdesk_username" class="input-medium required widget_input_box form-control" placeholder="User Name" value="" name="clickdesk_username"></input></div></div>
-				<div class="control-group form-group"><div class="controls"><input type="text" id="clickdesk_api_key" class="input-medium required widget_input_box form-control"  placeholder="API Key" value="" name="clickdesk_api_key"></input></div></div>
+				<label>{{translate 'widgets' 'enter-your-widget-details' 'ClickDesk'}}</label>
+				<div class="control-group form-group"><div class="controls"><input type="text" id="clickdesk_username" class="input-medium required widget_input_box form-control" placeholder="{{translate 'prefs-email' 'user-name'}}" value="" name="clickdesk_username"></input></div></div>
+				<div class="control-group form-group"><div class="controls"><input type="text" id="clickdesk_api_key" class="input-medium required widget_input_box form-control"  placeholder="{{translate 'admin-settings-integrations' 'api-key'}}" value="" name="clickdesk_api_key"></input></div></div>
 				<div class="text-center">			
-				<a href="#add-widget" class=" btn btn-default btn-sm">{{agile_translate "other" "cancel"}}</a>
-				<a href="#" id="save_clickdesk_prefs" class="save-agile-widget btn btn-sm btn-primary ml_5">{{agile_translate "modals" "save"}}</a>
+				<a href="#add-widget" class=" btn btn-default btn-sm">{{translate 'other' 'cancel'}}</a>
+				<a href="#" id="save_clickdesk_prefs" class="save-agile-widget btn btn-sm btn-primary ml_5">{{translate 'portlets' 'save'}}</a>
 				</div>
 			 </fieldset>
 	    </form>
@@ -20,8 +20,8 @@
 <p class="wrapper-sm m-n text-base">Conversations and tickets related to {{getCurrentContactProperty "first_name"}} {{getCurrentContactProperty "last_name"}}</p>
 <div class="nav-tabs-alt">
 <ul class="nav nav-tabs clickdeskTab text-base" id="myTab">
-	<li class="active text-center" style="width:48%; margin-left: 2%;" align="center"><a data-toggle="tab" href="#chats" id="clickdesk_chats"><h4 class="h4 text-base">{{agile_translate "widgets" "chats"}}</h4><small></small></a></li>
-	<li class="text-center" style="width:48%;" align="center"><a data-toggle="tab" href="#c_tickets" id="clickdesk_tickets"><h4 class="h4 text-base">{{agile_translate "report-view" "tickets"}}</h4><small></small></a></li>
+	<li class="active text-center" style="width:48%; margin-left: 2%;" align="center"><a data-toggle="tab" href="#chats" id="clickdesk_chats"><h4 class="h4 text-base">{{translate 'widgets' 'chats'}}</h4><small></small></a></li>
+	<li class="text-center" style="width:48%;" align="center"><a data-toggle="tab" href="#c_tickets" id="clickdesk_tickets"><h4 class="h4 text-base">{{translate 'report-view' 'tickets'}}</h4><small></small></a></li>
 </ul>
 </div>
 <div class="tab-content" id="myTabContent">
@@ -32,8 +32,9 @@
 		<div class="clearfix" id="clickdesk-chats-error-panel" style="display:none;">
 		</div>
 		<div class="widget_tab_footer click-chat-footer hide" align="center">
-			<a class="more_chats_link text-info c-p" id="more_chats_link" rel="tooltip" title="Click to see more chats">{{agile_translate "widgets" "show-more"}}</a>
-			<a data-toggle="collapse" data-target="#clickdesk_chats_panel" id="less_chats_link" class="c-p" style="display:none;">{{agile_translate "widgets" "show-less"}}</a>
+			<a class="more_chats_link text-info c-p" id="more_chats_link" rel="tooltip" title="{{translate 'widgets' 'click-to-see-more-chats'}}">{{translate 'widgets' 'show-more'}}
+			</a>
+			<a data-toggle="collapse" data-target="#clickdesk_chats_panel" id="less_chats_link" class="c-p" style="display:none;">{{translate 'widgets' 'show-less'}}</a>
 			<img src="{{getS3ImagePath 'img/ajax-spinner.gif'}}" id="spinner-clickdesk-chats" style="display:none;"></img>
 		</div>
 	</div>
@@ -44,8 +45,8 @@
 		<div class="clearfix" id="clickdesk-tickets-error-panel" style="display:none;">
 		</div>
 		<div class="widget_tab_footer click-tickets-footer hide" align="center">
-			<a class="more_tickets_link c-p text-info" id="more_tickets_link" rel="tooltip" title="Click to see more tickets">{{agile_translate "widgets" "show-more"}}</a>
-			<a data-toggle="collapse" data-target="#clickdesk_tickets_panel" id="less_tickets_link" class="c-p" style="display:none;">{{agile_translate "widgets" "show-less"}}</a>
+			<a class="more_tickets_link c-p text-info" id="more_tickets_link" rel="tooltip" title="{{translate 'widgets' 'click-to-see-more-tickets'}}">{{translate 'widgets' 'show-more'}}</a>
+			<a data-toggle="collapse" data-target="#clickdesk_tickets_panel" id="less_tickets_link" class="c-p" style="display:none;">{{translate 'widgets' 'show-less'}}</a>
 			<img src="{{getS3ImagePath 'img/ajax-spinner.gif'}}" id="spinner-clickdesk-tickets" style="display:none;"></img>
 		</div>
 	</div>
@@ -60,7 +61,7 @@
 			 <div class="clear">
 				<p class="text-flow-ellipsis"><a href="{{chat_history_url}}" target="_blank" >{{user_message}}</a></p>				
 				<div class="clickdesk_chat_tab_link m-n" style="float:left;display:none;">
-					<a url="{{chat_history_url}}" class="c-p btn btn-xs btn-default" id="clickdesk_chat_show" rel="tooltip" title="Show chat transcript" data-attr="{{bindData this}}">{{agile_translate "widgets" "show"}}</a>
+					<a url="{{chat_history_url}}" class="c-p btn btn-xs btn-default" id="clickdesk_chat_show" rel="tooltip" title="{{translate 'widgets' 'show-chat-transcript'}}" data-attr="{{bindData this}}">{{translate 'widgets' 'show'}}</a>
 				</div>
 			  </div>
               <small class="text-muted"><i class="fa fa-clock-o m-r-xs"></i><time class="time-ago" datetime="{{epochToHumanDate "" start_time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" start_time}}</time></small>
@@ -76,7 +77,7 @@
 			<div class="clear">
 				<p class="text-flow-ellipsis"><a href="{{ticket_url}}" target="_blank">{{subject}}</a></p>
 				<div class="clickdesk_ticket_tab_link m-n" style="float:left;display:none;">
-					<a url="{{ticket_url}}" id="clickdesk_ticket_show" class="c-p btn btn-xs btn-default" rel="tooltip" title="Show more information of ticket" data-attr="{{bindData this}}">{{agile_translate "widgets" "show"}}</a>
+					<a url="{{ticket_url}}" id="clickdesk_ticket_show" class="c-p btn btn-xs btn-default" rel="tooltip" title="{{translate 'widgets' 'show-more-information-of-ticket'}}" data-attr="{{bindData this}}">{{translate 'widgets' 'show'}}</a>
 				</div>
 			</div>			
 			<small class="text-muted"><i class="fa fa-clock-o m-r-xs"></i><time class="time-ago" datetime="{{epochToHumanDate "" received_at}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" received_at}}</time></small>
@@ -106,62 +107,62 @@
   <div class="modal-content"> 
 	    <div class="modal-header">
 	        <button class="close" data-dismiss="modal">x</button>
-			<h3><i class="icon-info-sign"></i> {{agile_translate "widgets" "chat-transcript"}}</h3>			
+			<h3><i class="icon-info-sign"></i> {{translate 'widgets' 'chat-transcript'}}</h3>			
 	    </div>
 	    <div class="modal-body">
 	        <table class="row-fluid table table-bordered l-h-xs m-b-xs word-break w-full" style="table-layout:fixed;">
-						<tr><th class="p-xs">{{agile_translate "widgets" "visitor-name"}}</th>
+						<tr><th class="p-xs">{{translate 'widgets' 'visitor-name'}}</th>
 							<td class="p-xs">{{name}}</td>
 						</tr>
-						<tr><th class="p-xs">{{agile_translate "widgets" "visitor-email"}}</th>
+						<tr><th class="p-xs">{{translate 'widgets' 'visitor-email'}}</th>
 							<td class="p-xs">{{email}}</td>
 						</tr>
 						<tr>
-							<th class="p-xs">{{agile_translate "widgets" "first-message"}}</th>
+							<th class="p-xs">{{translate 'widgets' 'first-message'}}</th>
 							<td class="p-xs">{{user_message}}</td>
 						</tr>
 						<tr>
-							<th class="p-xs">{{agile_translate "widgets" "chat-history-url"}}</th>
+							<th class="p-xs">{{translate 'widgets' 'chat-history-url'}}</th>
 							<td class="p-xs"><a href="{{chat_history_url}}" target="_blank">{{chat_history_url}}</a></td>
 						</tr>	
 						<tr>
-							<th class="p-xs">{{agile_translate "widgets" "started-at"}}</th>
+							<th class="p-xs">{{translate 'widgets' 'started-at'}}</th>
 							<td class="p-xs text-muted"><i class="fa fa-clock-o m-r-xs"></i><time class="time-ago" datetime="{{epochToHumanDate "" start_time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" start_time}}</time></td>
 						</tr>
 						<tr>
-							<th class="p-xs">{{agile_translate "widgets" "ended-at"}}</th>
+							<th class="p-xs">{{translate 'widgets' 'ended-at'}}</th>
 							<td class="p-xs text-muted"><i class="fa fa-clock-o m-r-xs"></i><time class="time-ago" datetime="{{epochToHumanDate "" end_time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" end_time}}</time></td>
 						</tr>	
 						<tr>
-							<th class="p-xs">{{agile_translate "widgets" "status"}}</th>
+							<th class="p-xs">{{translate 'widgets' 'status'}}</th>
 							<td class="p-xs">{{status}}</td>
 						</tr>
 						<tr>
-							<th class="p-xs">{{agile_translate "widgets" "initiated-chat-type"}}</th>
+							<th class="p-xs">{{translate 'widgets' 'initiated-chat-type'}}</th>
 							<td class="p-xs">{{initiated_chat_type}}</td>
 						</tr>	
 						<tr>
-							<th class="p-xs">{{agile_translate "widgets" "chat-type"}}</th>
+							<th class="p-xs">{{translate 'widgets' 'chat-type'}}</th>
 							<td class="p-xs">{{chat_type}}</td>
 						</tr>
 						<tr>
-							<th class="p-xs">{{agile_translate "widgets" "IM-type"}}</th>
+							<th class="p-xs">{{translate 'widgets' 'IM-type'}}</th>
 							<td class="p-xs">{{im_type}}</td>
 						</tr>
 						<tr>
-							<th class="p-xs">{{agile_translate "widgets" "closed-by"}}</th>
+							<th class="p-xs">{{translate 'widgets' 'closed-by'}}</th>
 							<td class="p-xs">{{closed_by}}</td>
 						</tr>
 						<tr>
-							<th class="p-xs">{{agile_translate "portlets" "duration"}}</th>
+							<th class="p-xs">{{translate 'widgets' 'duration'}}</th>
 							<td class="p-xs">{{millSecondsToMinutes duration}}</td>
 						</tr>
 						<tr>
-							<th class="p-xs">{{agile_translate "widgets" "chat-length"}}</th>
+							<th class="p-xs">{{translate 'widgets' 'chat-length'}}</th>
 							<td class="p-xs">{{chat_length}}</td>
 						</tr>
 						<tr>
-							<th class="p-xs">{{agile_translate "widgets" "department-name"}}</th>
+							<th class="p-xs">{{translate 'widgets' 'department-name'}}</th>
 							<td class="p-xs">{{widget_name}}</td>
 						</tr>
 			</table>
@@ -179,50 +180,50 @@
   <div class="modal-content"> 
 	    <div class="modal-header">
 	        <button class="close" data-dismiss="modal">x</button>
-			<h3><i class="icon-info-sign"></i> {{agile_translate "contact-details" "ticket"}}</h3>			
+			<h3><i class="icon-info-sign"></i> Ticket</h3>			
 	    </div>
 	    <div class="modal-body">
 	        <table class="row-fluid table table-bordered m-b-xs word-break w-full l-h-xs" style="table-layout:fixed;">
-						<tr><th class="p-xs">{{agile_translate "contact-details" "from"}}</th>
+						<tr><th class="p-xs">{{translate 'widgets' 'from'}}</th>
 							<td class="p-xs">{{from}}</td>
 						</tr>
-						<tr><th class="p-xs">{{agile_translate "widgets" "created-by"}}</th>
+						<tr><th class="p-xs">{{translate 'widgets' 'created-by'}}</th>
 							<td class="p-xs">{{from_name}}</td>
 						</tr>	
 						<tr>
-							<th class="p-xs">{{agile_translate "widgets" "subject"}}</th>
+							<th class="p-xs">{{translate 'widgets' 'subject'}}</th>
 							<td class="p-xs">{{subject}}</td>
 						</tr>						
 						<tr>
-							<th class="p-xs">{{agile_translate "widgets" "priority"}}</th>
+							<th class="p-xs">{{translate 'widgets' 'priority'}}</th>
 							<td class="p-xs">{{priority}}</td>
 						</tr>
 						<tr>
-							<th class="p-xs">{{agile_translate "widgets" "status"}}</th>
+							<th class="p-xs">{{translate 'widgets' 'status'}}</th>
 							<td class="p-xs">{{status}}</td>
 						</tr>				
 						<tr>
-							<th class="p-xs">{{agile_translate "widgets" "created-at"}}</th>
+							<th class="p-xs">{{translate 'widgets' 'created-at'}}</th>
 							<td class="p-xs text-muted"><i class="fa fa-clock-o m-r-xs"></i><time class="time-ago" datetime="{{epochToHumanDate "" received_at}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" received_at}}</time></td>
 						</tr>
 						<tr>
-							<th class="p-xs">{{agile_translate "widgets" "updated-at"}}</th>
+							<th class="p-xs">{{translate 'widgets' 'updated-at'}}</th>
 							<td class="p-xs text-muted"><i class="fa fa-clock-o m-r-xs"></i><time class="time-ago" datetime="{{epochToHumanDate "" updated_at}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" updated_at}}</time></td>
 						</tr>
 						<tr>
-							<th class="p-xs">{{agile_translate "widgets" "department"}}</th>
+							<th class="p-xs">{{translate 'widgets' 'department'}}</th>
 							<td class="p-xs">{{widget_name}}</td>
 						</tr>
 						<tr>
-							<th class="p-xs">{{agile_translate "widgets" "agent-name"}}</th>
+							<th class="p-xs">{{translate 'widgets' 'agent-name'}}</th>
 							<td class="p-xs">{{agent_name}}</td>
 						</tr>
 						<tr>
-							<th class="p-xs">{{agile_translate "widgets" "asignee-type"}}</th>
+							<th class="p-xs">{{translate 'widgets' 'asignee-type'}}</th>
 							<td class="p-xs">{{assignee_type}}</td>
 						</tr>
 						<tr>
-							<th class="p-xs">{{agile_translate "widgets" "channel"}}</th>
+							<th class="p-xs">{{translate 'widgets' 'channel'}}</th>
 							<td class="p-xs">{{channel}}</td>
 						</tr>
 			</table>

@@ -2,8 +2,8 @@
 <div class="wrapper-md lter bg-light b-b">
 <div class="row">
     <div class="col-md-12">
-            <h3 class="font-thin h3 pull-left">{{agile_translate "form-builder" "forms"}}</h3>
-			<a href="#form-builder-templates" class="btn btn-sm btn-default pull-right btn-addon" style="position:relative"><span><i class="icon-plus-sign" /></span> {{agile_translate "form-builder" "add-form"}}</a>
+            <h3 class="font-thin h3 pull-left">{{translate 'form-builder' 'forms'}}</h3>
+			<a href="#form-builder-templates" class="btn btn-sm btn-default pull-right btn-addon" style="position:relative"><span><i class="icon-plus-sign" /></span> {{translate 'form-builder' 'add-form'}}</a>
 			<div class="clearfix"></div> 
     </div>
 </div>
@@ -19,11 +19,11 @@
 				<img alt="Clipboard" src="{{getS3ImagePath '/img/clipboard.png'}}" />
 			</div>
 			<div class="box-right pull-left">
-				<h4 class="m-t-none">{{agile_translate "form-builder" "you-do-not-have-any-forms-currently"}}</h4>
+				<h4 class="m-t-none">{{translate 'form-builder' 'you-do-not-have-any-forms-currently'}}</h4>
 				<div class="text">
-				     Create and place the form on a website or landing page. Whenever a visitor fills the form, a contact is created automatically. 
+				     {{translate 'form-builder' 'create-and-place-the-form-desc'}} 
 				</div>
-				<a href="#form-builder-templates" class="btn btn-default m-t-xs btn-sm blue btn-slate-action"><i class="icon-plus-sign"></i> {{agile_translate "form-builder" "add-form"}}</a>
+				<a href="#form-builder-templates" class="btn btn-default m-t-xs btn-sm blue btn-slate-action"><i class="icon-plus-sign"></i> {{translate 'form-builder' 'add-form'}}</a>
 			</div>
 			<div class="clearfix">
 			</div>
@@ -35,14 +35,15 @@
 	<div class="data-block">
 		<div class="data-container">
 			<div class="panel panel-default">
-			<div class="panel-heading">{{agile_translate "form-builder" "forms-list"}}</div>
-			<table class="table table-striped showCheckboxes c-p agile-table tableHeader tab-layout" url="core/api/forms/bulk" data-resizable-columns-id="form-template">
+			<div class="panel-heading">{{translate 'form-builder' 'forms-list'}}</div>
+			<table class="table table-striped showCheckboxes c-p agile-table" url="core/api/forms/bulk">
 				
 				<thead>
 					<tr>
-						<th data-resizable-column-id="form_title" class="text-ellipsis">{{agile_translate "form-builder" "form-title"}}</th>
-						<th data-resizable-column-id="last_modified" class="text-ellipsis">{{agile_translate "form-builder" "last-modified"}}</th>
-						<th data-resizable-column-id="share" style="display:none"></th>
+						<th class="text-ellipsis">{{translate 'form-builder' 'form-title'}}
+						</th>
+						<th class="text-ellipsis">{{translate 'form-builder' 'last-modified'}}</th>
+						<th style="display:none"></th>
 					</tr>
 				</thead>
 				<tbody id="forms-model-list" class="c-p"></tbody>
@@ -57,11 +58,12 @@
         <div class="data-block">
 			
             	<h4 class="h4 m-t-none m-b-sm">
-                	What are Forms?
+                	{{translate 'form-builder' 'what-are-forms'}}
             	</h4>
             	
 				<p>
-					{{agile_translate "form-builder" "forms-created-using-the"}}<a target="_blank" href="formbuilder">{{agile_translate "admin-settings-integrations" "form-builder"}}</a> {{agile_translate "form-builder" "form-builder-desc"}}</p>
+					{{translate 'form-builder' 'forms-created-using-the'}} <a target="_blank" href="formbuilder">{{translate 'admin-settings-integrations' 'form-builder'}}</a> {{translate 'form-builder' 'form-builder-desc'}}
+				</p>
 			
     </div>
 </div>

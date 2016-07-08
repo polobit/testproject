@@ -6,7 +6,7 @@
 	</td>        
 	<td><div class="table-resp">{{triggerType type}}</div></td>
 	<td><div class="table-resp">{{#if custom_score}}{{custom_score}} {{/if}} {{#if custom_tags}}{{custom_tags}}{{/if}} {{#if trigger_deal_milestone}}{{trigger_milestone trigger_deal_milestone}}{{/if}} {{#if trigger_stripe_event}}{{trigger_stripe_event}}{{/if}}{{#if trigger_shopify_event}}{{trigger_shopify_event}}{{/if}} {{#if contactFilter}}{{contactFilter}}{{/if}}{{#if trigger_form_event}}{{getFormNameFromId trigger_form_event}}{{/if}}</div></td>
-	<td><div class="table-resp"><div class="pull-left text-ellipsis" style="width: 70%;">{{campaign}}</div>{{#if is_disabled}}<div class="pull-right"><label class="label label-danger m-b-none">{{agile_translate "campaigns" "disabled"}}</label></div>{{/if}}</div></td>
+	<td><div class="table-resp"><div class="pull-left text-ellipsis" style="width: 70%;">{{campaign}}</div>{{#if is_disabled}}<div class="pull-right"><label class="label label-danger m-b-none">{{translate 'campaigns' 'disabled'}}</label></div>{{/if}}</div></td>
 	<br />
 </script>
 <script id="triggers-collection-template" type="text/html">
@@ -15,11 +15,12 @@
     <div class="col-sm-12 col-md-12">
         
 			
-            	<h3 class="pull-left font-thin h3">{{agile_translate "campaigns" "list-of-triggers"}}</h3>
+            	<h3 class="pull-left font-thin h3">{{translate 'campaigns' 'list-of-triggers'}}</h3>
 			
 			<div class="pull-right">
             	<a href="#trigger-add" class="btn right btn-default btn-sm btn-addon" id="addTrigger">
-					<i class="icon-plus-sign"></i> {{agile_translate "campaigns" "add-trigger"}}</a>
+					<i class="icon-plus-sign"></i> {{translate 'campaigns' 'add-trigger'}}
+				</a>
 			</div>
            <div class="clearfix"></div>
        
@@ -36,11 +37,13 @@
                     <img alt="Clipboard" src="{{getS3ImagePath '/img/clipboard.png'}}">
                 </div>
                 <div class="box-right pull-left">
-                    <h4 class="h4 m-t-none">{{agile_translate "campaigns" "you-do-not-have-any-triggers"}}</h4>
+                    <h4 class="h4 m-t-none">{{translate 'campaigns' 'you-do-not-have-any-triggers'}}
+                    </h4>
                     <p class="m-b-none">
-                        {{agile_translate "campaigns" "no-triggers-desc"}}</p>
+                        {{translate 'campaigns' 'no-triggers-desc'}}
+                    </p>
                     <a href="#trigger-add" class="btn btn-slate-action btn-default btn-sm m-t-xs">
-						<i class="icon-plus-sign"></i>  Add trigger 
+						<i class="icon-plus-sign"></i>  {{translate 'campaigns' 'add-trigger'}} 
 					</a>
                 </div>
 				<div class="clearfix">
@@ -52,14 +55,14 @@
         {{#if this.length}}
             <div class="col-md-9 col-sm-9 table-responsive">
 				<div class="panel panel-default">
-			    <div class="panel-heading">{{agile_translate "campaigns" "triggers-list"}}</div>
+			    <div class="panel-heading">{{translate 'campaigns' 'triggers-list'}}</div>
                 <table class="table table-striped showCheckboxes m-b-none agile-table panel" url="core/api/triggers/bulk">
                     <thead>
                         <tr>
-                            <th style="width:25%">{{agile_translate "deal-view" "name"}}</th>
-                            <th style="width:25%">{{agile_translate "contacts-view" "condition"}}</th>
-                            <th style="width:20%">{{agile_translate "contacts-view" "value"}}</th>
-                            <th style="width:36%">{{agile_translate "contact-details" "campaign"}}</th>
+                            <th style="width:25%">{{translate 'other' 'name'}}</th>
+                            <th style="width:25%">{{translate 'report-add' 'condition'}}</th>
+                            <th style="width:20%">{{translate 'contacts-view' 'value'}}</th>
+                            <th style="width:36%">{{translate 'contact-details' 'campaign'}}</th>
                         </tr>
                     </thead>
                     <tbody id="triggers-model-list" route="trigger/"> </tbody>
@@ -70,19 +73,22 @@
     <div class="col-sm-3 col-md-3 p-none">
         <div class="wrapper-sm">
             <h4 class="m-t-none h4 m-b-sm">
-                What are Triggers?
+                {{translate 'campaigns' 'what-are-triggers'}}
             </h4>
             
             <p>
-                {{agile_translate "campaigns" "triggers-desc-1"}}</p>
+                {{translate 'campaigns' 'triggers-desc-1'}}
+            </p>
             <p>
-                {{agile_translate "campaigns" "triggers-desc-2"}}</p>
+                {{translate 'campaigns' 'triggers-desc-2'}}
+            </p>
 			<p>
-				{{agile_translate "campaigns" "triggers-desc-3"}}</p>
+				{{translate 'campaigns' 'triggers-desc-3'}}
+			</p>
             <p>Advanced triggers can be customized<br>
              further in the workflow based on their
               values (eg:&#123&#123 deal.value&#125&#125). Complete list is provided
-              <a href="#triggers" class="text-info" onClick="window.open('https://github.com/agilecrm/campaigns-merge-fields#detailed-list-of-trigger-event-and-properties','blank')">{{agile_translate "contact-details" "here"}}</a>
+              <a href="#triggers" class="text-info" onClick="window.open('https://github.com/agilecrm/campaigns-merge-fields#detailed-list-of-trigger-event-and-properties','blank')">here</a>
              </p>
 
         </div>

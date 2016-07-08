@@ -3,41 +3,41 @@
 	<div class="wrapper-md lter bg-light b-b">
 		<div class="row">
 			<div class="col-md-12">
-				<h3 class="pull-left font-thin h3">{{agile_translate "portlets" "calendar"}}<small></small></h3>
+				<h3 class="pull-left font-thin h3">{{translate 'portlets' 'calendar'}} <small></small></h3>
 				<a id="refrecal" class="text-md btn m-l-none bg-transparent refresh-tickets no-shadow p-t-xs p-l-xs" onclick="refreshcal()">
 					<i class="fa fa-refresh" data-toggle="tooltip" data-placement="bottom" data-original-title="Refresh" style="vertical-align: text-top;"></i>
 				</a>     	
 				<div class="pull-right">
-<!-- <div id="event-list-filters" class="btn-group inline-block m-r">
-<img class="loading_img p-r-xs thumb-xs"  src= "{{getS3ImagePath 'img/21-0.gif'}}"></img>
-</div> -->
-<!-- 	<div class="btn-group  inline-block m-r" id="">
-<div class="btn btn-sm btn-default"><i class="icon-list"></i></div>
-<a class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" href="#">
-<span class="caret"></span>
-</a>
-<ul class="dropdown-menu pull-right">
-<li><a href="#" class="c_list">{{agile_translate "admin-settings-custom-fields" "LIST"}}</a></li>
-<li><a href="#" class="c_cal">{{agile_translate "portlets" "calendar"}}</a></li>
-</ul>
-</div> -->
+					<!-- <div id="event-list-filters" class="btn-group inline-block m-r">
+					<img class="loading_img p-r-xs thumb-xs"  src= "{{getS3ImagePath 'img/21-0.gif'}}"></img>
+					</div> -->
+					<!-- 	<div class="btn-group  inline-block m-r" id="">
+					<div class="btn btn-sm btn-default"><i class="icon-list"></i></div>
+					<a class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" href="#">
+					<span class="caret"></span>
+					</a>
+					<ul class="dropdown-menu pull-right">
+					<li><a href="#" class="c_list">List</a></li>
+					<li><a href="#" class="c_cal">Calendar</a></li>
+					</ul>
+					</div> -->
 					<div class="inline-block m-r" id="calendarAgendaButtons">
-						<button type="button" class="btn btn-sm btn-default" onclick="today()">{{agile_translate "calendar" "Today"}}</button>
+						<button type="button" class="btn btn-sm btn-default" onclick="today()">{{translate 'portlets' 'today'}}</button>
 						<div class="btn-group m-l-xs">
-							<button id="agendaDay" class="btn btn-sm btn-default agendaDayWeekMonth" >{{agile_translate "calendar" "day"}}</button>
-							<button id="agendaWeek" class="btn btn-sm btn-default agendaDayWeekMonth" >{{agile_translate "calendar" "week"}}</button>
-							<button id="month" class="btn btn-sm btn-default agendaDayWeekMonth" >{{agile_translate "calendar" "month"}}</button>
+							<button id="agendaDay" class="btn btn-sm btn-default agendaDayWeekMonth" >{{translate 'calendar' 'day'}}</button>
+							<button id="agendaWeek" class="btn btn-sm btn-default agendaDayWeekMonth" >{{translate 'calendar' 'week'}}</button>
+							<button id="month" class="btn btn-sm btn-default agendaDayWeekMonth" >{{translate 'calendar' 'month'}}</button>
 						</div>
 					</div>
 					<div class="btn-group  inline-block" id="add-event-div">
-						<div class="btn btn-sm btn-default add-event" data-toggle="modal"><i class="icon-plus-sign"></i> {{agile_translate "deal-view" "add-event"}}</div>
+						<div class="btn btn-sm btn-default add-event" data-toggle="modal"><i class="icon-plus-sign"></i> {{translate 'contact-details' 'add-event'}}</div>
 						<a class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown">
 							<span class="caret"></span>
 						</a>             
 						<ul class="dropdown-menu pull-right c-p">
-							<li><a data-toggle="modal" class="add-event">{{agile_translate "deal-view" "add-event"}}</a></li>
-							<li><a data-toggle="modal" class="add-task">{{agile_translate "contact-details" "add-task"}}</a></li>
-							<li><a href="#add-dashlet">{{agile_translate "portlets" "add-dashlet"}}</a></li>
+							<li><a data-toggle="modal" class="add-event">{{translate 'contact-details' 'add-event'}}</a></li>
+							<li><a data-toggle="modal" class="add-task">{{translate 'contact-details' 'add-task'}}</a></li>
+							<li><a href="#add-dashlet">{{translate 'portlets' 'add-dashlet'}}</a></li>
 						</ul>
 					</div>
 				</div>
@@ -62,10 +62,10 @@
 						<div class="data-container">
 							<div id="calendar-filters"></div><br/><br/><br/><br/>
 							<div id="ical_appointment_links">
-								<a  href="#scheduler-prefs"  id="show-schedule-url1"><i class="icon-time" style="margin-right:3px;"></i> {{agile_translate "calendar" "online-scheduling"}}</a>
+								<a  href="#scheduler-prefs"  id="show-schedule-url1"><i class="icon-time" style="margin-right:3px;"></i> {{translate 'calendar' 'online-scheduling'}}</a>
 								<br />
 								<br />
-								<a  href="#icalModal" data-toggle="modal" id="subscribe-ical"><i class="icon-calendar" style="margin-right:4px;"></i>{{agile_translate "calendar" "subscribe-to-ical"}}</a>
+								<a  href="#icalModal" data-toggle="modal" id="subscribe-ical"><i class="icon-calendar" style="margin-right:4px;"></i>{{translate 'calendar' 'subscribe-to-ical'}}</a>
 							</div>
 						</div>
 					</div>
@@ -73,19 +73,20 @@
 			</div>
 			<div class="col-md-10">
 				<div class="bg-light lter">
-<!--<div class="clearfix m-b" id="calendar-view-button" style="display:none;">
-<button type="button" tooltip="Double click on calendar day to create event" class="btn btn-sm btn-primary btn-addon add-event">
-<i class="fa fa-plus"></i>{{agile_translate "other" "add"}}</button>
-<div class="pull-right">
+					<!--<div class="clearfix m-b" id="calendar-view-button" style="display:none;">
+					<button type="button" tooltip="Double click on calendar day to create event" class="btn btn-sm btn-primary btn-addon add-event">
+					<i class="fa fa-plus"></i>Add
+					</button>
+					<div class="pull-right">
 
-<button type="button" class="btn btn-sm btn-default" onclick="today()">today</button>
-<div class="btn-group m-l-xs">
-<button id="agendaDay" class="btn btn-sm btn-default agendaDayWeekMonth" >{{agile_translate "calendar" "day"}}</button>
-<button id="agendaWeek" class="btn btn-sm btn-default agendaDayWeekMonth" >{{agile_translate "calendar" "week"}}</button>
-<button id="month" class="btn btn-sm btn-default agendaDayWeekMonth" >{{agile_translate "calendar" "month"}}</button>
-</div>
-</div>
-</div> -->
+					<button type="button" class="btn btn-sm btn-default" onclick="today()">today</button>
+					<div class="btn-group m-l-xs">
+					<button id="agendaDay" class="btn btn-sm btn-default agendaDayWeekMonth" >Day</button>
+					<button id="agendaWeek" class="btn btn-sm btn-default agendaDayWeekMonth" >Week</button>
+					<button id="month" class="btn btn-sm btn-default agendaDayWeekMonth" >Month</button>
+					</div>
+					</div>
+					</div> -->
 					<div id="calendar_event"></div>
 				</div>
 			</div>
@@ -106,11 +107,11 @@
 				<div class="arrow"></div>
 				<div id="popover-content" class="popover-content">
 					<div id="popup_header" class="popup_header p-b-xs">
-						<span id="filters-heading" class="heading text-xs">{{agile_translate "deal-view" "filters"}}</span> <span
+						<span id="filters-heading" class="heading text-xs">{{translate 'deal-view' 'filters'}}</span> <span
 							id="clear-event-filters" class="btn btn-xs btn-default pull-left"
-							style="color: #475b6f; text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);">{{agile_translate "deal-view" "clear"}}</span>
+							style="color: #475b6f; text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);">{{translate 'deal-view' 'clear'}}</span>
 						<span id="event-filter-validate" class="btn btn-primary btn-xs pull-right save"
-							style="color: #fff; text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.3);">{{agile_translate "deal-view" "done"}}</span>
+							style="color: #fff; text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.3);">{{translate 'deal-view' 'done'}}</span>
 					</div>
 					<style>
 						.ticket-filter-container select, .ticket-filter-container input{
@@ -132,32 +133,35 @@
 		<form id="eventsFilterForm" class="m-b-none" name="dealsFilterForm" role="form">
 			<fieldset>
 				<div class="control-group row-filter">
-					<label class="control-label"><b>{{agile_translate "contact-details" "owner"}}</b> 
+					<label class="control-label"><b>{{translate 'deal-view' 'owner'}} </b> 
 					</label>
 					<div class="controls" id="owners">
 						<select id="event-owner" name="owner_id" class="form-control">
-							<option value="all">{{agile_translate "portlets" "any"}}</option>
+							<option value="all">{{translate 'portlets' 'any'}}</option>
 						</select>
 					</div>
 				</div>
 				<div class="control-group row-filter calendar-view">
-					<label class="control-label"><b>{{agile_translate "contacts-view" "type"}}</b>
+					<label class="control-label"><b>{{translate 'contacts-view' 'type'}} </b>
 					</label>
 					<div class="controls" id="type_div">
 						<span><select id="event_type" name="type" class="form-control">
-								<option value="">{{agile_translate "portlets" "All"}}</option>
-								<option value="google">{{agile_translate "contact-edit" "google-plus"}}</option>
-								<option value="agile">{{agile_translate "contact-details" "agile"}}</option>
+								<option value="">{{translate 'contacts-view' 'all'}}</option>
+								<option value="google">{{translate 'prefs-data-sync' 'google'}}
+								</option>
+								<option value="agile">{{translate 'contact-details' 'agile'}}
+								</option>
 						</select></span>
 					</div>
 				</div>
 				<div class="control-group row-filter list-view">
-					<label class="control-label"><b>{{agile_translate "report-add" "time"}}</b>
+					<label class="control-label"><b>{{translate 'report-add' 'time'}} </b>
 					</label>
 					<div class="controls" id="time_div">
 						<span><select id="event_time" name="time" class="form-control">
-								<option value="">{{agile_translate "calendar" "all-events"}}</option>
-								<option value="future">{{agile_translate "calendar" "future-events"}}</option>
+								<option value="">{{translate 'calendar' 'all-events'}}</option>
+								<option value="future">{{translate 'calendar' 'future-events'}}
+								</option>
 						</select></span>
 					</div>
 				</div>
@@ -179,26 +183,31 @@
 <div>
 <!--<span id="heading"><h4></h4></span><br/>-->
 <div id="user_calendars">
-<label><h4 class="m-b-n-sm">{{agile_translate "calendar" "my-calendars"}}</label></h4><br/>
+<label><h4 class="m-b-n-sm">{{translate 'calendar' 'my-calendars'}}</label></h4><br/>
 	  <div><label class="i-checks i-checks-sm">
         <input type="checkbox" class="calendar_check" value="agile">
-        <i></i>    {{agile_translate "contact-details" "agile"}}</label></div>
+        <i></i>    {{translate 'contact-details' 'agile'}}             
+      </label></div>
 	  <div><label class="i-checks i-checks-sm hide" id="office_cal">
          <input type="checkbox" class="calendar_check" value="office">
-         <i></i>     {{agile_translate "calendar" "office365"}}</label></div>
+         <i></i>     {{translate 'calendar' 'office365'}}          
+      </label></div>
 	  <div><label class="i-checks i-checks-sm hide" id="google_cal">
         <input type="checkbox" class="calendar_check" value="google">
-        <i></i>     {{agile_translate "contact-edit" "google-plus"}}</label></div>
+        <i></i>     {{translate 'prefs-data-sync' 'google'}}           
+      </label></div>
 	  <div class="hide" id="google_cal_link">
-      	<span style="margin-left:26px;font-size: 12px;"> <a  href="#sync" class="text-muted"><i class="fa fa-plus-square"></i> {{agile_translate "calendar" "add-google-calendar"}}</a></span>           
+      	<span style="margin-left:26px;font-size: 12px;"> <a  href="#sync" class="text-muted">
       </div>
       <div class="hide" id="office_cal_link">
-                    	<span style="margin-left:26px;font-size: 12px;"> <a  href="#sync" class="text-muted"><i class="fa fa-plus-square"></i> {{agile_translate "calendar" "add-office-365-calendar"}}</a></span>           
+        <span style="margin-left:26px;font-size: 12px;"> <a  href="#sync" class="text-muted">
+        <i class="fa fa-plus-square"></i> {{translate 'calendar' 'add-office-365-calendar'}}</a>
+        </span>           
               </div>
 </div><br/>
 <div id="user_cal_sub">
 {{#if this.length}}
-<label><h4 class="m-b-n-sm">{{agile_translate "calendar" "team"}}</label></h4><br/>
+<label><h4 class="m-b-n-sm">{{translate 'calendar' 'team'}}</label></h4><br/>
 {{/if}}
 {{#each this}}
 <label class="i-checks i-checks-sm">
@@ -207,11 +216,13 @@
               </label><br/>{{/each}}
 </div><br/>
 <div id="list_event_time" class='m-b-md hide'>
-<label class="control-label">{{agile_translate "calendar" "showing"}}</label>
+<label class="control-label">{{translate 'calendar' 'showing'}} 
+					</label>
 					
 						<span><select id="event_time" name="event_time" class="form-control">
-								<option value="">{{agile_translate "calendar" "all-events"}}</option>
-								<option value="future">{{agile_translate "calendar" "future-events"}}</option>
+								<option value="">{{translate 'calendar' 'all-events'}}</option>
+								<option value="future">{{translate 'calendar' 'future-events'}}
+								</option>
 						</select></span>
 					</div>
 
@@ -223,12 +234,11 @@
     {{#if event.description}}
         {{#if event.meeting_type}}
 	    	<i class="icon-comment-alt text-muted m-r-xs pull-left"></i>
-	    	<span>Meeting Type - {{event.meeting_type}}</span><br/>
+	    	<span>{{translate 'calendar' 'meeting-type'}} - {{event.meeting_type}}</span><br/>
 	    	<div  style="-webkit-line-clamp : 5; overflow: hidden;
     text-overflow: ellipsis;
     display: -webkit-box; -webkit-box-orient:vertical; margin-left:18px;
  " title="{{event.description}}">{{event.description}}</div>
-
 	    {{else}}
 	         <i class="icon-comment-alt text-muted m-r-xs pull-left"></i>
 		         <div  style="-webkit-line-clamp : 5; overflow: hidden;
@@ -302,7 +312,7 @@
 	    <div class="panel bg-white b-a pos-rlt p-sm">
 	       	<span class="arrow {{leftorright}} {{pullupornot}}" style="top:11px;"></span>
 	       	<div class="h4 font-thin m-b-sm">
-	       		<div class="pull-left text-ellipsis p-b-xs" style="width:100%;">{{event.title}} </div>
+	       		<div class="pull-left text-ellipsis p-b-xs" style="width:100%;">{{event.title}}</div>
 	       	</div>
 	       	<div class="line b-b b-light"></div>
 	       	<div><i class="icon-clock text-muted m-r-xs"></i>{{event_format_time event.start 'dd-mmm-yyyy HH:MM'}}

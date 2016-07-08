@@ -3,18 +3,18 @@
 <div class="row">
     <div class="col-md-12">
         
-            <h3 class="pull-left font-thin h3">{{agile_translate "contact-details" "campaign"}}<small>analys{{agile_translate "contacts-view" "is"}}</small></h3>
+            <h3 class="pull-left font-thin h3">{{translate 'campaigns' 'campaign-analysis'}}</h3>
 
 			<!--Shown only in Subscribers block-->
 			<div id="subscribers-block" class="pull-left" style="margin-top: 2px; margin-left: 11px;">
-				<div class="btn btn-sm btn-default m-l-lg delete-checked-contacts pull-left" id="remove-active-from-campaign" style="display: none;">{{agile_translate "contact-details" "remove-from-campaign"}}</div>
+				<div class="btn btn-sm btn-default m-l-lg delete-checked-contacts pull-left" id="remove-active-from-campaign" style="display: none;">{{translate 'web-rules' 'remove-from-campaign'}}</div>
             	<!-- Shows selected contacts list and offer to select all if current list is more than the page-size -->
             	<div class="pull-left m-l-sm"  style="margin-top: 6px;" id="subscribers-bulk-select"></div>
 			</div>
 
             <div class="right">
         		<select id="campaign-reports-select" class="required form-control">
-        			<option value="">{{agile_translate "contacts-view" "select"}}</option>
+        			<option value="">{{translate 'contacts-view' 'select'}}</option>
         		</select>
 			</div>
             <div class="clearfix"></div>
@@ -32,9 +32,9 @@
    		<div class="vbox">
      	<div class="row-row">
 		<div id="campaign-tabs" class="list-group list-group-lg no-radius no-border no-bg m-b-none">
-			<a href="#email-reports/{{id}}" class="campaign-stats-tab list-group-item select" data-campaign-tab-active="STATS">{{agile_translate "campaigns" "reports"}}</a>
-			<a href="#workflow/all-subscribers/{{id}}" class="campaign-subscribers-tab list-group-item" data-campaign-tab-active="SUBSCRIBERS">{{agile_translate "report-view" "subscribers"}}</a>
-			<a href="#workflows/logs/{{id}}" class="campaign-logs-tab list-group-item" data-campaign-tab-active="LOGS">{{agile_translate "report-view" "logs"}}</a>
+			<a href="#email-reports/{{id}}" class="campaign-stats-tab list-group-item select" data-campaign-tab-active="STATS">{{translate 'report-view' 'reports'}}</a>
+			<a href="#workflow/all-subscribers/{{id}}" class="campaign-subscribers-tab list-group-item" data-campaign-tab-active="SUBSCRIBERS">{{translate 'report-view' 'subscribers'}}</a>
+			<a href="#workflows/logs/{{id}}" class="campaign-logs-tab list-group-item" data-campaign-tab-active="LOGS">{{translate 'report-view' 'logs'}}</a>
 		</div>
 		</div>
 		</div>

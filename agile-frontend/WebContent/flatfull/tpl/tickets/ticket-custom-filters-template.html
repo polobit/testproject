@@ -2,39 +2,41 @@
 <div class="wrapper hidden-sm hidden-xs p-b-xs">
   <div class="panel panel-default m-b-none">
     <div class="panel-body">
-        <div class="col-md-12 p-n m-b-xs">{{agile_translate "tickets" "assignees"}}</div>
-        <div class="col-md-12 p-n assignee-select txt-small" style="max-height: 230px; overflow-y: auto;"><small>{{agile_translate "tickets" "loading"}}</small></div>
-        <div class="col-md-12 p-n m-t-xs m-b-xs">{{agile_translate "tickets" "groups"}}</div>
-        <div class="col-md-12 p-n group-select txt-small"><small>{{agile_translate "tickets" "loading"}}</small></div>
+        <div class="col-md-12 p-n m-b-xs">{{translate 'tickets' 'assignees'}}</div>
+        <div class="col-md-12 p-n assignee-select txt-small" style="max-height: 230px; overflow-y: auto;"><small>{{translate 'tickets' 'loading'}}</small></div>
+        <div class="col-md-12 p-n m-t-xs m-b-xs">{{translate 'tickets' 'groups'}}</div>
+        <div class="col-md-12 p-n group-select txt-small"><small>{{translate 'tickets' 'loading'}}</small></div>
     </div>
   </div>
 </div>
 <div class="wrapper hidden-sm hidden-xs p-b-xs">
   <div class="panel panel-default m-b-none">
     <div class="panel-body">
-      <div class="col-md-12 p-n m-b-xs">{{agile_translate "tickets" "labels"}}</div>
+      <div class="col-md-12 p-n m-b-xs">{{translate 'tickets' 'labels'}}</div>
       <div class="col-md-12 p-n m-b-xs cusom-filter-labels choose-labels txt-small">
-        <select data-placeholder="Search Labels" class="chosen-select form-control" multiple class="w-md"></select>
+        <select data-placeholder="{{translate 'tickets' 'search-labels'}}" class="chosen-select form-control" multiple class="w-md"></select>
       </div>
       <div class="col-md-12 p-n m-t-xs">
-        {{agile_translate "tickets" "Created&nbsp;Date"}}<a class="pull-right txt-small display-none m-t-xs link-color" href="javascript:void(0);" id="clear-created-date" style="font-size: 10px;">{{agile_translate "deal-view" "clear"}}</a>
+        {{translate 'contacts-view' 'created-date'}} 
+        <a class="pull-right txt-small display-none m-t-xs link-color" href="javascript:void(0);" id="clear-created-date" style="font-size: 10px;">{{translate 'contacts-view' 'clear'}}</a>
       </div>
       <div class="col-md-12 p-n m-t-xs">
-        <input id="created-date-input" name="created-date-input" type="text" class="form-control input-sm created-date-input" placeholder="Choose Date">
+        <input id="created-date-input" name="created-date-input" type="text" class="form-control input-sm created-date-input" placeholder="{{translate 'tickets' 'choose-date'}}">
       </div>
       <div class="col-md-12 p-n m-t-sm">
-        {{agile_translate "portlets" "due-date"}}<a class="pull-right txt-small display-none m-t-xs link-color" href="javascript:void(0);" id="clear-due-date" style="font-size: 10px;">{{agile_translate "deal-view" "clear"}}</a>
+        {{translate 'portlets' 'due-date'}}
+        <a class="pull-right txt-small display-none m-t-xs link-color" href="javascript:void(0);" id="clear-due-date" style="font-size: 10px;">{{translate 'contacts-view' 'clear'}}</a>
       </div>
       <div class="col-md-12 p-n m-t-xs">
-        <input type="text" name="due-date-input" class="form-control input-sm due-date-input" placeholder="Choose Date">
+        <input type="text" name="due-date-input" class="form-control input-sm due-date-input" placeholder="{{translate 'tickets' 'choose-date'}}">
       </div>
       <div class="col-md-12 p-n">
         <div class="col-md-2 p-n text-center">
-          <a href="javascript:void(0);" class="c-p choose-due-date txt-small link-color" data-value="overdue">{{agile_translate "tasks" "Overdue"}}</a>
+          <a href="javascript:void(0);" class="c-p choose-due-date txt-small link-color" data-value="overdue">{{translate 'tasks' 'Overdue'}}</a>
         </div>
         <div class="col-md-1 p-n text-center m-l-xs"> | </div>
         <div class="col-md-3 p-n">
-          <a href="javascript:void(0);" class="c-p choose-due-date txt-small link-color" data-value="tomorrow">{{agile_translate "tasks" "Tomorrow"}}</a>
+          <a href="javascript:void(0);" class="c-p choose-due-date txt-small link-color" data-value="tomorrow">{{translate 'tasks' 'Tomorrow'}}</a>
         </div>
         <!--<div class="col-md-1 p-n text-center"> | </div>
         <div class="col-md-1 p-n text-center">
@@ -55,45 +57,52 @@
 <div class="wrapper hidden-sm hidden-xs p-b-xs">
   <div class="panel panel-default m-b-none">
       <div class="panel-body">
-        <div class="col-md-12 p-n m-b-xs">{{agile_translate "widgets" "status"}}</div>
+        <div class="col-md-12 p-n m-b-xs">{{translate 'widgets' 'status'}}</div>
         <div class="col-md-12 p-n txt-small">
           <div class="col-md-6 p-n">
             <label class="i-checks i-checks-sm">
               <input class="status" name="status" value="NEW" type="checkbox">
               <i></i>
-            </label> {{agile_translate "menu" "new"}}</div>
+            </label> {{translate 'menu' 'new'}}
+          </div>
           <div class="col-md-6 p-n">
             <label class="i-checks i-checks-sm">
               <input class="status" name="status" value="OPEN" type="checkbox">
               <i></i>
-            </label> {{agile_translate "contact-details" "OPEN"}}</div>
+            </label> {{translate 'contact-details' 'OPEN'}}
+          </div>
         </div>
         <div class="col-md-12 p-n txt-small">
           <div class="col-md-6 p-n">
             <label class="i-checks i-checks-sm">
               <input class="status" name="status" value="PENDING" type="checkbox">
               <i></i>
-            </label> {{agile_translate "tickets" "pending"}}</div>
+            </label> {{translate 'tickets' 'pending'}}
+          </div>
           <div class="col-md-6 p-n">
             <label class="i-checks i-checks-sm">
               <input class="status" name="status" value="CLOSED" type="checkbox">
               <i></i>
-            </label> {{agile_translate "cases" "closed"}}</div>
+            </label> {{translate 'cases' 'closed'}}
+          </div>
         </div>
-        <div class="col-md-12 p-n m-t-xs m-b-xs">{{agile_translate "widgets" "priority"}}</div>
+        <div class="col-md-12 p-n m-t-xs m-b-xs">{{translate 'tasks' 'priority'}}</div>
         <div class="col-md-12 p-n txt-small">
           <div class="col-md-4 p-n">
             <label class="i-checks i-checks-sm">
               <input class="priority" name="priority" value="LOW" type="checkbox"><i></i>
-            </label> {{agile_translate "tasks" "Low"}}</div>
+            </label> {{translate 'tasks' 'Low'}}
+          </div>
           <div class="col-md-5 p-n">
             <label class="i-checks i-checks-sm">
               <input class="priority" name="priority" value="MEDIUM" type="checkbox"><i></i>
-            </label> {{agile_translate "tickets" "medium"}}</div>
+            </label> {{translate 'tickets' 'medium'}}
+          </div>
           <div class="col-md-3 p-n">
             <label class="i-checks i-checks-sm">
               <input class="priority" name="priority" value="HIGH" type="checkbox"><i></i>
-            </label> {{agile_translate "tasks" "High"}}</div>
+            </label> {{translate 'tasks' 'High'}}
+          </div>
         </div>
         
       </div>
@@ -102,50 +111,56 @@
 <div class="wrapper hidden-sm hidden-xs">
   <div class="panel panel-default m-b-none">
       <div class="panel-body">
-        <div class="col-md-12 p-n m-b-xs">{{agile_translate "contacts-view" "type"}}</div>
+        <div class="col-md-12 p-n m-b-xs">{{translate 'contacts-view' 'type'}}</div>
         <div class="col-md-12 p-n txt-small">
           <div class="col-md-12 p-n">
           <div class="col-md-6 p-n">
             <label class="i-checks i-checks-sm">
               <input class="ticket_type" name="ticket_type" value="INCIDENT" type="checkbox">
               <i></i>
-            </label> {{agile_translate "tickets" "incident"}}</div>
+            </label> {{translate 'tickets' 'incident'}}
+          </div>
           <div class="col-md-6 p-n">
             <label class="i-checks i-checks-sm">
               <input class="ticket_type" name="ticket_type" value="PROBLEM" type="checkbox">
               <i></i>
-            </label> {{agile_translate "tickets" "problem"}}</div>
+            </label> {{translate 'tickets' 'problem'}}
+          </div>
         </div>
         <div class="col-md-12 p-n">
           <div class="col-md-6 p-n">
             <label class="i-checks i-checks-sm">
               <input class="ticket_type" name="ticket_type" value="TASK" type="checkbox">
               <i></i>
-            </label> {{agile_translate "menu" "task"}}</div>
+            </label> {{translate 'menu' 'task'}}
+          </div>
           <div class="col-md-6 p-n">
             <label class="i-checks i-checks-sm">
               <input class="ticket_type" name="ticket_type" value="QUESTION" type="checkbox">
               <i></i>
-            </label> {{agile_translate "tickets" "question"}}</div>
+            </label> {{translate 'tickets' 'question'}}
+          </div>
         </div>
         <div class="col-md-12 p-n">
           <div class="col-md-6 p-n">
             <label class="i-checks i-checks-sm">
               <input class="favorite" name="ticket_favorite" value="true" type="checkbox">
               <i></i>
-            </label> {{agile_translate "tickets" "favorite"}}</div>
+            </label> {{translate 'tickets' 'favorite'}}
+          </div>
           <div class="col-md-6 p-n">
             <label class="i-checks i-checks-sm">
               <input class="spam" name="ticket_spam" value="true" type="checkbox">
               <i></i>
-            </label> {{agile_translate "tickets" "spam"}}</div>
+            </label> {{translate 'tickets' 'spam'}}
+          </div>
         </div>
       </div>
     </div>
 </div>
 <div class="save-as-filter-container">
-  <a href="javascript:void(0);" class="c-p txt-small link-color clear-custom-filter">{{agile_translate "deal-view" "clear"}}</a>
-  <a href="javascript:void(0);" class="c-p txt-small link-color pull-right save-new-filter">{{agile_translate "tickets" "save-as"}}</a>
+  <a href="javascript:void(0);" class="c-p txt-small link-color clear-custom-filter">{{translate 'contacts-view' 'clear'}}</a>
+  <a href="javascript:void(0);" class="c-p txt-small link-color pull-right save-new-filter">{{translate 'tickets' 'save-as'}}</a>
 </div>
 </script>
 
@@ -174,7 +189,7 @@
       <div class="modal-content">
           <div class="modal-header">
               <button class="close" data-dismiss="modal">x</button>
-              <h3 class="modal-title"><i class="icon icon-save"></i> {{agile_translate "tickets" "save-as"}}</h3>
+              <h3 class="modal-title"><i class="icon icon-save"></i> {{translate 'tickets' 'save-as'}}</h3>
           </div>
           <div class="modal-body">
             <form id="saveFilterForm" name="saveFilterForm" class="form-horizontal">
@@ -182,26 +197,28 @@
                 <div class="col-lg-3 col-md-offset-1">
                   <div class="radio">
                     <label class="i-checks">
-                      <input type="radio" class="create-new-filter" name="save-type" value="new" checked><i></i> Create {{agile_translate "menu" "new"}}</label>
+                      <input type="radio" class="create-new-filter" name="save-type" value="new" checked><i></i> {{translate 'tickets' 'create-new'}}
+                    </label>
                   </div>
                 </div>
                 <div class="col-lg-6">
                   <div class="radio">
                     <label class="i-checks">
-                      <input type="radio" class="update-filter" name="save-type" value="replace"><i></i> Replace Existing
+                      <input type="radio" class="update-filter" name="save-type" value="replace"><i></i> {{translate 'tickets' 'replace-existing'}}
                     </label>
                   </div>
                 </div>
               </div>
               <div class="form-group update-name">
-                <label class="col-lg-3 control-label">View {{agile_translate "deal-view" "name"}}<span class="field_req">*</span></label>
+                <label class="col-lg-3 control-label">{{translate 'tickets' 'view-name'}}<span class="field_req">*</span></label>
                 <div class="col-lg-7">
-                <input type="text" name="name" class="form-control required"  placeholder="View name" 
+                <input type="text" name="name" class="form-control required"  placeholder="{{translate 'tickets' 'view-name'}}" 
                   value="{{get_current_filter_name}}">
                 </div>
               </div>
               <div class="form-group choose-filter display-none">
-                <label class="col-lg-3 control-label">{{agile_translate "tickets" "replace"}}<span class="field_req">*</span></label>
+                <label class="col-lg-3 control-label">{{translate 'tickets' 'replace'}} 
+                <span class="field_req">*</span></label>
                 <div class="col-lg-7">
                   <select name="filter-collection" class="form-control required">
                     {{{get_filters_select_options}}}
@@ -211,8 +228,8 @@
             </form>
           </div>
           <div class="modal-footer">
-              <a href="javascript:void(0);" data-dismiss="modal" class="btn btn-sm btn-default">{{agile_translate "contact-details" "CLOSE"}}</a>
-              <a href="javascript:void(0);" data-loading-text="Save" class="save btn btn-sm btn-primary">{{agile_translate "modals" "save"}}</a>
+              <a href="javascript:void(0);" data-dismiss="modal" class="btn btn-sm btn-default">{{translate 'contact-details' 'close'}}</a>
+              <a href="javascript:void(0);" data-loading-text="Save" class="save btn btn-sm btn-primary">{{translate 'report-add' 'save'}}</a>
               &nbsp;&nbsp;<span id="msg"></span>
           </div>
       </div>

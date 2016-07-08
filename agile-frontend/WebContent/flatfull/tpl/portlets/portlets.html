@@ -38,7 +38,8 @@
 	</div>
 {{else}}
 	<div class="portlet-error-message">
-		{{agile_translate "portlets" "no-contacts-found"}}</div>
+		{{translate 'portlets' 'no-contacts-found'}}
+	</div>
 {{/if}}
 </script>
 
@@ -79,7 +80,8 @@
 	</table>
 {{else}}
 	<!-- <div class="portlet-error-message">
-		{{agile_translate "portlets" "no-email-activity"}}</div> -->
+		No email activity
+	</div> -->
 {{/if}}
 </script>
 
@@ -113,9 +115,9 @@
 				<!-- <div class="filter-criteria"></div> -->
 				<!-- <thead>
 					<tr>
-						<th>{{agile_translate "deal-view" "name"}}</th>
-						<th>{{agile_translate "contacts-view" "Star value"}}</th>
-						<th>{{agile_translate "contact-details" "owner"}}</th>
+						<th>Name</th>
+						<th>Star Value</th>
+						<th>Owner</th>
 					</tr>
 				</thead> -->
 				<tbody id="portlets-companies-model-list" class="portlets-companies-model-list overflow-scroll"
@@ -139,7 +141,8 @@
 	</table>
 {{else}}
 	<div class="portlet-error-message">
-      {{agile_translate "portlets" "no-deals-pending"}}</div>
+      {{translate 'portlets' 'no-deals-pending'}}
+	</div>
 {{/if}}
 </script>
 
@@ -182,7 +185,8 @@
 </div>
 {{else}}
 <div class="portlet-error-message">
-	{{agile_translate "portlets" "no-tasks"}}</div>
+	{{translate 'portlets' 'no-tasks'}}
+</div>
 {{/if}}
 </script>
 <script id="portlets-tasks-model-template" type="text/html">
@@ -221,7 +225,8 @@
 </div>
 {{else}}
 	<!-- <div class="portlet-error-message">
-		{{agile_translate "portlets" "no-calendar-events"}}</div> -->
+		No calendar events
+	</div> -->
 {{/if}}
 </script>
 <script id="portlets-events-model-template" type="text/html">
@@ -290,7 +295,7 @@
 	<div class="col-xs-6">
 		<div class="panel padder-v item m-l-none overflow-hidden" style="cursor:auto;">
 			<div class="h1 text-info font-thin h1">{{numberWithCommasForActivities newContactsCount}}</div>
-			<span class="text-muted text-xs">New {{agile_translate "contact-details" "contacts"}}</span>
+			<span class="text-muted text-xs">New contacts</span>
 			<div class="top text-right w-full">
 				<!-- <i class="fa fa-caret-down text-warning m-r-sm"></i> -->
 			</div>
@@ -309,7 +314,7 @@
 	<div class="col-xs-6">
 		<div class="block panel padder-v bg-info item m-l-none overflow-hidden" style="cursor:auto;">
 			<span class="text-white font-thin h1 block">{{numberWithCommasForActivities emailsSentCount}}</span>
-			<span class="text-muted text-xs">{{agile_translate "portlets" "campaign-emails-sent"}}</span>
+			<span class="text-muted text-xs">Campaign emails sent</span>
 			<span class="top text-left">
 				<!-- <i class="fa fa-caret-up text-warning m-l-sm m-l-none"></i> -->
 			</span>
@@ -333,7 +338,7 @@
 		{{#if revenue}}
 		<li class="pull-left">
 		<div class="panel-heading visible-xs b-b b-light" style="background:white;">
-				<div class="text-ellipsis text-lg font-thin" style="color: #98a6ad;"><span class="inline-block">{{agile_translate "portlets" "revenue"}}</span>
+				<div class="text-ellipsis text-lg font-thin" style="color: #98a6ad;"><span class="inline-block">Revenue</span>
 				</div>
 				</div>
 		    {{#each revenueJson}}
@@ -374,7 +379,7 @@
 		{{#if dealsWon}}
 		<li class="pull-left">
 		<div class="panel-heading visible-xs b-b b-light" style="background:white;">
-				<div class="text-ellipsis text-lg font-thin" style="color: #98a6ad;"><span class="inline-block">{{agile_translate "deal-view" "Deals?"}}</span>
+				<div class="text-ellipsis text-lg font-thin" style="color: #98a6ad;"><span class="inline-block">Deals</span>
 				</div>
 				</div>
 			{{#each dealsWonJson}}
@@ -389,7 +394,7 @@
 					</div>
 					<div class="agile-thumb agile-thumb-view p-b-xs">
 						<div>You</div>
-						<div class="text-xlg">{{numberWithCommasForActivities value}}<small class="m-l-xs">{{agile_translate "admin-settings-deals" "Won"}}</small></div>
+						<div class="text-xlg">{{numberWithCommasForActivities value}}<small class="m-l-xs">Won</small></div>
 					</div>
 				</div>
 			{{else}}
@@ -404,7 +409,7 @@
 					</div>
 					<div class="agile-thumb agile-thumb-view p-b-xs">
 						<div>{{userName}}</div>
-						<div class="text-xlg">{{numberWithCommasForActivities value}}<small class="m-l-xs">{{agile_translate "admin-settings-deals" "Won"}}</small></div>
+						<div class="text-xlg">{{numberWithCommasForActivities value}}<small class="m-l-xs">Won</small></div>
 					</div>
 					</div>
 				</div>
@@ -415,7 +420,7 @@
 		{{#if calls}}
 		<li class="pull-left">
 		<div class="panel-heading visible-xs b-b b-light" style="background:white;">
-				<div class="text-ellipsis text-lg font-thin" style="color: #98a6ad;"><span class="inline-block">{{agile_translate "report-view" "calls"}}</span>
+				<div class="text-ellipsis text-lg font-thin" style="color: #98a6ad;"><span class="inline-block">Calls</span>
 				
 				</div>
 				
@@ -492,7 +497,7 @@
 		{{#if tasks}}
 		<li class="pull-left">
 		<div class="panel-heading visible-xs b-b b-light" style="background:white;">
-				<div class="text-ellipsis text-lg font-thin" style="color: #98a6ad;"><span class="inline-block">{{agile_translate "portlets" "tasks"}}</span>
+				<div class="text-ellipsis text-lg font-thin" style="color: #98a6ad;"><span class="inline-block">Tasks</span>
 				</div>
 				</div>
 			{{#each tasksJson}}
@@ -507,7 +512,7 @@
 					</div>
 					<div class="agile-thumb agile-thumb-view p-b-xs">
 						<div>You</div>
-						<div class="text-xlg">{{numberWithCommasForActivities value}}<small class="m-l-xs">{{agile_translate "deal-view" "done"}}</small></div>
+						<div class="text-xlg">{{numberWithCommasForActivities value}}<small class="m-l-xs">Done</small></div>
 					</div>
 				</div>
 			{{else}}
@@ -522,7 +527,7 @@
 					</div>
 					<div class="agile-thumb agile-thumb-view p-b-xs">
 						<div>{{userName}}</div>
-						<div class="text-xlg">{{numberWithCommasForActivities value}}<small class="m-l-xs">{{agile_translate "deal-view" "done"}}</small></div>
+						<div class="text-xlg">{{numberWithCommasForActivities value}}<small class="m-l-xs">Done</small></div>
 					</div>
 					</div>
 				</div>
@@ -553,7 +558,7 @@
 <script id="portlets-contacts-emails-opened-model-template" type="text/html">
 		<div class="portlet_header portlet_edit_icons panel-heading">
 			<h4 class="h4 text-ellipsis">
-				<span class="pull-left inline-block text-ellipsis" style="width:70%;">{{agile_translate "portlets" "emails-opened"}}</span>
+				<span class="pull-left inline-block text-ellipsis" style="width:70%;">{{translate 'portlets' 'emails-opened'}}</span>
 				<small class="pull-right text-right p-t-xs portlet-header-small-text text-ellipsis" style="width: 30%;">
 					{{get_portlet_duration settings.duration}}
 				</small>
@@ -574,7 +579,7 @@
 <script id="portlets-contacts-emails-sent-model-template" type="text/html">
 		<div class="portlet_header portlet_edit_icons panel-heading">
 			<h4 class="h4 text-ellipsis">
-				<span class="pull-left inline-block text-ellipsis" style="width:70%;">{{agile_translate "portlets" "emails-sent"}}</span>
+				<span class="pull-left inline-block text-ellipsis" style="width:70%;">{{translate 'portlets' 'emails-sent'}}</span>
 				<small class="pull-right text-right p-t-xs portlet-header-small-text text-ellipsis" style="width: 30%;">
 					{{get_portlet_duration settings.duration}}
 				</small>
@@ -592,7 +597,7 @@
 <script id="portlets-contacts-growth-graph-model-template" type="text/html">
 		<div class="portlet_header portlet_edit_icons panel-heading">
 			<h4 class="h4 text-ellipsis">
-				<span class="pull-left inline-block text-ellipsis" style="width:70%;">{{agile_translate "portlets" "tag-graph"}}</span>
+				<span class="pull-left inline-block text-ellipsis" style="width:70%;">{{translate 'portlets' 'tag-graph'}}</span>
 				<small class="pull-right text-right p-t-xs portlet-header-small-text text-ellipsis" style="width: 30%;">
 					{{get_portlet_duration settings.duration}}
 				</small>
@@ -614,10 +619,10 @@
 			<h4 class="h4 text-ellipsis">
 				<span class="pull-left inline-block text-ellipsis" style="width:90%;">
 					{{#if_equals settings.deals "all-deals"}}
-						All Pending Deals
+						{{translate 'portlets' 'all-pending-deals'}}
 					{{/if_equals}}
 					{{#if_equals settings.deals "my-deals"}}
-						My Pending Deals
+						{{translate 'portlets' 'my-pending-deals'}}
 					{{/if_equals}}
 				</span>
 			</h4>
@@ -636,10 +641,10 @@
 			<h4 class="h4 text-ellipsis">
 				<span class="pull-left inline-block text-ellipsis" style="width:70%;">
 					{{#if_equals settings.deals "all-deals"}}
-						All Deals by Milestone
+						{{translate 'portlets' 'all-deals-by-milestone'}}
 					{{/if_equals}}
 					{{#if_equals settings.deals "my-deals"}}
-						My Deals by Milestone
+						{{translate 'portlets' 'my-deals-by-milestone'}}
 					{{/if_equals}}
 				</span>
 				<small class="pull-right text-right p-t-xs portlet-header-small-text text-ellipsis deals_funnel_portlet_header" style="width: 30%;">
@@ -658,7 +663,7 @@
 <script id="portlets-deals-closures-per-person-model-template" type="text/html">
 		<div class="portlet_header portlet_edit_icons panel-heading">
 			<h4 class="h4 text-ellipsis">
-				<span class="pull-left inline-block text-ellipsis" style="width:90%;">{{agile_translate "portlets" "closures-per-person"}}</span>
+				<span class="pull-left inline-block text-ellipsis" style="width:90%;">{{translate 'portlets' 'closures-per-person'}}</span>
 			</h4>
 			<div class="portlet_header_icons pull-right clear-fix text-muted p-t-xs pos-abs pos-r-0 pos-t-xs vis-hide">
 				<i id="{{id}}-settings" class="portlet-settings fa fa-wrench p-r-xs c-p"></i>
@@ -673,7 +678,7 @@
 <script id="portlets-deals-deals-won-model-template" type="text/html">
 		<div class="portlet_header portlet_edit_icons panel-heading">
 			<h4 class="h4 text-ellipsis">
-				<span class="pull-left inline-block text-ellipsis" style="width:70%;">{{agile_translate "portlets" "deals-won"}}</span>
+				<span class="pull-left inline-block text-ellipsis" style="width:70%;">{{translate 'portlets' 'deals-won'}}</span>
 				<small class="pull-right text-right p-t-xs portlet-header-small-text text-ellipsis" style="width: 30%;">
 					{{get_portlet_duration settings.duration}}
 				</small>
@@ -693,10 +698,10 @@
 			<h4 class="h4 text-ellipsis">
 				<span class="pull-left inline-block text-ellipsis" style="width:70%;">
 					{{#if_equals settings.deals "all-deals"}}
-						All Deals Funnel
+						{{translate 'portlets' 'all-deals-funnel'}}
 					{{/if_equals}}
 					{{#if_equals settings.deals "my-deals"}}
-						My Deals Funnel
+						{{translate 'portlets' 'my-deals-funnel'}}
 					{{/if_equals}}
 				</span>
 				<small class="pull-right text-right p-t-xs portlet-header-small-text text-ellipsis deals_funnel_portlet_header" style="width: 30%;">
@@ -716,7 +721,7 @@
 <script id="portlets-deals-deals-assigned-model-template" type="text/html">
 		<div class="portlet_header portlet_edit_icons panel-heading">
 			<h4 class="h4 text-ellipsis">
-				<span class="pull-left inline-block text-ellipsis" style="width:70%;">{{agile_translate "portlets" "deals-assigned"}}</span>
+				<span class="pull-left inline-block text-ellipsis" style="width:70%;">{{translate 'portlets' 'deals-assigned'}}</span>
 				<small class="pull-right text-right p-t-xs portlet-header-small-text text-ellipsis" style="width: 30%;">
 					{{get_portlet_duration settings.duration}}
 				</small>
@@ -734,7 +739,7 @@
 <script id="portlets-contacts-calls-per-person-model-template" type="text/html">
 		<div class="portlet_header portlet_edit_icons panel-heading">
 			<h4 class="h4 text-ellipsis">
-				<span class="pull-left inline-block text-ellipsis" style="width:70%;">{{agile_translate "report-view" "calls"}}</span>
+				<span class="pull-left inline-block text-ellipsis" style="width:70%;">{{translate 'portlets' 'calls'}}</span>
 				<small class="pull-right text-right p-t-xs portlet-header-small-text text-ellipsis" style="width: 30%;">
 					{{get_portlet_duration settings.duration}}
 				</small>
@@ -752,7 +757,7 @@
 <script id="portlets-tasksandevents-agenda-model-template" type="text/html">
 		<div class="portlet_header portlet_edit_icons panel-heading">
 			<h4 class="h4 text-ellipsis">
-				<span class="pull-left inline-block text-ellipsis" style="width:50%;">{{agile_translate "deal-view" "events"}}</span>
+				<span class="pull-left inline-block text-ellipsis" style="width:50%;">{{translate 'portlets' 'events'}}</span>
 				<small class="pull-right text-right p-t-xs portlet-header-small-text text-ellipsis" style="width: 50%;">
 					{{get_portlet_duration settings.duration}}
 				</small>
@@ -773,7 +778,7 @@
 <script id="portlets-tasksandevents-today-tasks-model-template" type="text/html">
 		<div class="portlet_header portlet_edit_icons panel-heading">
 			<h4 class="h4 text-ellipsis">
-				<span class="pull-left inline-block text-ellipsis" style="width:50%;">{{agile_translate "portlets" "tasks"}}</span>
+				<span class="pull-left inline-block text-ellipsis" style="width:50%;">{{translate 'portlets' 'tasks'}}</span>
 				<small class="pull-right text-right p-t-xs portlet-header-small-text text-ellipsis" style="width: 50%;">
 					{{get_portlet_duration settings.duration}}
 				</small>
@@ -791,7 +796,7 @@
 <script id="portlets-useractivity-blog-model-template" type="text/html">
 		<div class="portlet_header portlet_edit_icons panel-heading">
 			<h4 class="h4 text-ellipsis">
-				<span class="pull-left inline-block text-ellipsis" style="width:90%;">{{agile_translate "portlets" "agile-crm-blog"}}</span>
+				<span class="pull-left inline-block text-ellipsis" style="width:90%;">{{translate 'portlets' 'agile-crm-blog'}}</span>
 			</h4>
 			<div class="portlet_header_icons pull-right clear-fix text-muted p-t-xs pos-abs pos-r-0 pos-t-xs vis-hide">
 				<i id="{{id}}-close" class="c-p fa fa-times {{remove_spaces name}}-close p-r-sm" onclick="deletePortlet(this);"></i>
@@ -807,10 +812,10 @@
 <script id="portlets-tasksandevents-task-report-model-template" type="text/html">
 		<div class="portlet_header portlet_edit_icons panel-heading">
 			<h4 class="h4 text-ellipsis">
-				<span class="pull-left inline-block text-ellipsis" style="width:50%;">{{agile_translate "portlets" "task-report"}}</span>
+				<span class="pull-left inline-block text-ellipsis" style="width:50%;">{{translate 'portlets' 'task-report'}}</span>
 				<span class="pull-right text-right" style="width: 50%;">
 					<small class="p-t-xs portlet-header-small-text text-ellipsis">
-						{{#if_equals settings.tasks "all-tasks"}}All{{else}}Completed{{/if_equals}}
+						{{#if_equals settings.tasks "all-tasks"}}{{translate 'portlets' 'all'}}{{else}}{{translate 'portlets' 'completed'}}{{/if_equals}}
 					</small>
 					<small class="portlet-header-small-text text-ellipsis" style="font-size:18px;">
 						|
@@ -885,14 +890,14 @@
 <script id="portlets-admin-onboarding-model-template" type="text/html">
 	<div class="portlet_header portlet_edit_icons panel-heading b-b bg-light panel-heading getting-started-header">
 		<h4 class="h4 text-ellipsis">
-			<span class="pull-left inline-block text-ellipsis" style="width:90%;">{{agile_translate "portlets" "getting-started"}}</span>
+			<span class="pull-left inline-block text-ellipsis" style="width:90%;">{{translate 'portlets' 'getting-started'}}</span>
 		</h4>
 		<div class="portlet_header_icons pull-right clear-fix text-muted p-t-xs pos-abs pos-r-0 pos-t-xs vis-hide">
 			<i id="{{id}}-close" class="c-p fa fa-times {{remove_spaces name}}-close p-r-sm" onclick="deletePortlet(this);"></i>
 		</div>
 	</div>
 	<div class="portlet_body  text-lg getting-started-body bg-white ">
-	<div style="font-size: 15px;margin: 10px 0px 7px;" class="text-muted">{{agile_translate "portlets" "few-steps-kick-start"}}</div>
+	<div style="font-size: 15px;margin: 10px 0px 7px;" class="text-muted">{{translate 'portlets' 'few-steps-kick-start'}}</div>
 		<div>
 			{{#if settings.addUsers.done}}
 				<label class="i-checks i-checks-sm m-b-none   onboarding-check" value="addUsers">
@@ -904,12 +909,12 @@
 				</label>
 			{{/if}}
 			{{#if settings.addUsers.done}}
-				<span class="text-muted inline-block v-text-bottom" style="text-decoration:line-through;"><a  href="#users-add">{{agile_translate "portlets" "invite-users"}}</a></span>
+				<span class="text-muted inline-block v-text-bottom" style="text-decoration:line-through;"><a  href="#users-add"></a></span>
 			{{else}}
-				<span class="inline-block v-text-bottom"><a href="#users-add">{{agile_translate "portlets" "invite-users"}}</a></span>
+				<span class="inline-block v-text-bottom"><a href="#users-add">{{translate 'portlets' 'invite-users'}}</a></span>
 			{{/if}}
 			<div class="text-muted text-base m-t-n-xs m-b-n-sm m-l-lg">
-				<p>{{agile_translate "portlets" "more-fun-with-colleagues"}}</p>
+				<p>{{translate 'portlets' 'more-fun-with-colleagues'}}</p>
 			</div>
 		</div>
 		<div>
@@ -931,12 +936,12 @@
 				</label> 
 			{{/if}}
 			{{#if settings.importContacts.done}}
-				<span class="text-muted inline-block v-text-bottom" style="text-decoration:line-through;"><a  href="#import">{{agile_translate "admin-settings-users" "import-contacts"}}</a></span>
+				<span class="text-muted inline-block v-text-bottom" style="text-decoration:line-through;"><a  href="#import">{{translate 'admin-settings-users' 'import-contacts'}}</a></span>
 			{{else}}
-				<span class="inline-block v-text-bottom"><a href="#import">{{agile_translate "admin-settings-users" "import-contacts"}}</a></span>
+				<span class="inline-block v-text-bottom"><a href="#import">{{translate 'admin-settings-users' 'import-contacts'}}</a></span>
 			{{/if}}
 			<div class="text-muted text-base m-t-n-xs m-b-n-sm m-l-lg">
-				<p>{{agile_translate "admin-settings-users" "start-your-list-from-csv"}}</p>
+				<p>{{translate 'admin-settings-users' 'start-your-list-from-csv'}}</p>
 			</div>
 		</div>
 		<div>
@@ -950,12 +955,12 @@
 				</label>
 			{{/if}}
 			{{#if settings.setupIntegrations.done}}
-				<span class="text-muted inline-block v-text-bottom" style="text-decoration:line-through;"><a  href="#integrations">{{agile_translate "admin-settings-users" "setup-integrations"}}</a></span>
+				<span class="text-muted inline-block v-text-bottom" style="text-decoration:line-through;"><a  href="#integrations">{{translate 'admin-settings-users' 'setup-integrations'}}</a></span>
 			{{else}}
-				<span class="inline-block v-text-bottom"><a href="#integrations">{{agile_translate "admin-settings-users" "setup-integrations"}}</a></span>
+				<span class="inline-block v-text-bottom"><a href="#integrations">{{translate 'admin-settings-users' 'setup-integrations'}}</a></span>
 			{{/if}}
 			<div class="text-muted text-base m-t-n-xs m-b-n-sm m-l-lg">
-				<p>{{agile_translate "admin-settings-users" "configure-agile-cms"}}</p>
+				<p>{{translate 'admin-settings-users' 'configure-agile-cms'}}</p>
 			</div>
 		</div>
 		<div>
@@ -969,12 +974,12 @@
 				</label>
 			{{/if}}
 			{{#if settings.createCampaign.done}}
-				<span class="text-muted inline-block v-text-bottom" style="text-decoration:line-through;"><a  href="#workflow-templates">{{agile_translate "campaigns" "marketing-automation"}}</a></span>
+				<span class="text-muted inline-block v-text-bottom" style="text-decoration:line-through;"><a  href="#workflow-templates">{{translate 'campaigns' 'marketing-automation'}}</a></span>
 			{{else}}
-				<span class="inline-block v-text-bottom"><a href="#workflow-templates">{{agile_translate "campaigns" "marketing-automation"}}</a></span>
+				<span class="inline-block v-text-bottom"><a href="#workflow-templates">{{translate 'campaigns' 'marketing-automation'}}</a></span>
 			{{/if}}
 			<div class="text-muted text-base m-t-n-xs m-b-n-sm m-l-lg">
-				<p>{{agile_translate "campaigns" "engage-your-customers"}}</p>
+				<p>{{translate 'campaigns' 'engage-your-customers'}}</p>
 			</div>
 		</div>
 		<div>
@@ -988,12 +993,12 @@
 				</label>
 			{{/if}}
 			{{#if settings.setupTrackingCode.done}}
-				<span class="text-muted inline-block v-text-bottom" style="text-decoration:line-through;"><a  href="#analytics-code">{{agile_translate "campaigns" "add-tracking-code-to-your-site"}}</a></span>
+				<span class="text-muted inline-block v-text-bottom" style="text-decoration:line-through;"><a  href="#analytics-code">{{translate 'campaigns' 'add-tracking-code-to-your-site'}}</a></span>
 			{{else}}
-				<span inline-block v-text-bottom"><a href="#analytics-code">{{agile_translate "campaigns" "add-tracking-code-to-your-site"}}</a></span>
+				<span inline-block v-text-bottom"><a href="#analytics-code">{{translate 'campaigns' 'add-tracking-code-to-your-site'}}</a></span>
 			{{/if}}
 			<div class="text-muted text-base m-t-n-xs m-b-n-sm m-l-lg">
-				<p>{{agile_translate "campaigns" "track-who-is-visiting"}}</p>
+				<p>{{translate 'campaigns' 'track-who-is-visiting'}}</p>
 			</div>
 		</div>
 		<div>
@@ -1007,12 +1012,12 @@
 				</label>
 			{{/if}}
 			{{#if settings.addWebrule.done}}
-				<span class="text-muted inline-block v-text-bottom" style="text-decoration:line-through;"><a  href="#webrules-add">{{agile_translate "campaigns" "web-engagement"}}</a></span>
+				<span class="text-muted inline-block v-text-bottom" style="text-decoration:line-through;"><a  href="#webrules-add">{{translate 'campaigns' 'web-engagement'}}</a></span>
 			{{else}}
-				<span class="inline-block v-text-bottom"><a href="#webrules-add">{{agile_translate "campaigns" "web-engagement"}}</a></span>
+				<span class="inline-block v-text-bottom"><a href="#webrules-add">{{translate 'campaigns' 'web-engagement'}}</a></span>
 			{{/if}}
 			<div class="text-muted text-base m-t-n-xs m-b-n-sm m-l-lg">
-				<p>{{agile_translate "campaigns" "show-personalized-popup-messages"}}</p>
+				<p>{{translate 'campaigns' 'show-personalized-popup-messages'}}</p>
 			</div>
 		</div>
 		<div>
@@ -1026,9 +1031,9 @@
 				</label>
 			{{/if}}
 			{{#if settings.upgradePlan.done}}
-				<span class="text-muted inline-block v-text-bottom" style="text-decoration:line-through;"><a  href="#subscribe-plan">{{agile_translate "campaigns" "show-some-love"}}</a></span>
+				<span class="text-muted inline-block v-text-bottom" style="text-decoration:line-through;"><a  href="#subscribe-plan">{{translate 'campaigns' 'show-some-love'}}</a></span>
 			{{else}}
-				<span class="inline-block v-text-bottom"><a href="#subscribe-plan">{{agile_translate "campaigns" "show-some-love"}}</a></span>
+				<span class="inline-block v-text-bottom"><a href="#subscribe-plan">{{translate 'campaigns' 'show-some-love'}}</a></span>
 			{{/if}}
 			<!-- {{#if settings.upgradePlan.done}}
 				<small class="p-l-sm onboarding-undo c-p">(undo)</small>
@@ -1044,7 +1049,7 @@
 				{{/if}}
 			{{/if}} -->
 			<div class="text-muted text-base m-t-n-xs m-b-n-sm m-l-lg">
-				<p>{{agile_translate "campaigns" "support-agile-developers"}}</p>
+				<p>{{translate 'campaigns' 'support-agile-developers'}}</p>
 			</div>
 		</div>
 	</div>
@@ -1055,14 +1060,14 @@
 <script id="portlets-user-onboarding-model-template" type="text/html">
 	<div class="portlet_header portlet_edit_icons panel-heading b-b">
 		<h4 class="h4 text-ellipsis">
-			<span class="pull-left inline-block text-ellipsis" style="width:90%;">{{agile_translate "portlets" "getting-started"}}</span>
+			<span class="pull-left inline-block text-ellipsis" style="width:90%;">{{translate 'portlets' 'getting-started'}}</span>
 		</h4>
 		<div class="portlet_header_icons pull-right clear-fix text-muted p-t-xs pos-abs pos-r-0 pos-t-xs vis-hide">
 			<i id="{{id}}-close" class="c-p fa fa-times {{remove_spaces name}}-close p-r-sm" onclick="deletePortlet(this);"></i>
 		</div>
 	</div>
 	<div class="portlet_body m-l text-lg getting-started-body bg-white">
-	<div style="font-size: 15px;margin: 10px 0px 7px;" class="text-muted">{{agile_translate "portlets" "few-steps-kick-start"}}</div>
+	<div style="font-size: 15px;margin: 10px 0px 7px;" class="text-muted">{{translate 'portlets' 'few-steps-kick-start'}}</div>
 		<div>
 			{{#if settings.setupProfile.done}}
 				<label class="i-checks i-checks-sm m-b-none onboarding-check" value="setupProfile">
@@ -1076,12 +1081,12 @@
 				</label>
 			{{/if}}
 			{{#if settings.setupProfile.done}}
-				<span class="text-muted inline-block v-text-bottom" style="text-decoration:line-through;"><a class="text-muted" href="#user-prefs">{{agile_translate "portlets" "setup-your-profile"}}</a></span>
+				<span class="text-muted inline-block v-text-bottom" style="text-decoration:line-through;"><a class="text-muted" href="#user-prefs">{{translate 'portlets' 'setup-your-profile'}}</a></span>
 			{{else}}
-				<span class="inline-block v-text-bottom"><a href="#user-prefs">{{agile_translate "portlets" "setup-your-profile"}}</a></span>
+				<span class="inline-block v-text-bottom"><a href="#user-prefs">{{translate 'portlets' 'setup-your-profile'}}</a></span>
 			{{/if}}
 			<div class="text-muted text-base m-t-n-xs m-b-n-sm m-l-lg">
-				<p>{{agile_translate "portlets" "update-your-pic-email-sign-reminders"}}</p>
+				<p>{{translate 'portlets' 'update-your-pic-email-sign-reminders'}}</p>
 			</div>
 		</div>
 		<div>
@@ -1095,12 +1100,12 @@
 				</label>
 			{{/if}}
 			{{#if settings.linkEmailAccount.done}}
-				<span class="text-muted inline-block v-text-bottom" style="text-decoration:line-through;"><a class="text-muted" href="#email">{{agile_translate "portlets" "bring-your-emails"}}</a></span>
+				<span class="text-muted inline-block v-text-bottom" style="text-decoration:line-through;"><a class="text-muted" href="#email">{{translate 'portlets' 'bring-your-emails'}}</a></span>
 			{{else}}
-				<span class="inline-block v-text-bottom"><a href="#email">{{agile_translate "portlets" "bring-your-emails"}}</a></span>
+				<span class="inline-block v-text-bottom"><a href="#email">{{translate 'portlets' 'bring-your-emails'}}</a></span>
 			{{/if}}
 			<div class="text-muted text-base m-t-n-xs m-b-n-sm m-l-lg">
-				<p>{{agile_translate "portlets" "no-more-tedious-cc-emails"}}</p>
+				<p>{{translate 'portlets' 'no-more-tedious-cc-emails'}}</p>
 			</div>
 		</div>
 		<div>
@@ -1114,12 +1119,12 @@
 				</label>
 			{{/if}}
 			{{#if settings.addWidgets.done}}
-				<span class="text-muted inline-block v-text-bottom" style="text-decoration:line-through;"><a class="text-muted" href="#add-widget">{{agile_translate "contact-details" "add-widgets"}}</a></span>
+				<span class="text-muted inline-block v-text-bottom" style="text-decoration:line-through;"><a class="text-muted" href="#add-widget">{{translate 'contact-details' 'add-widgets'}}</a></span>
 			{{else}}
-				<span class="inline-block v-text-bottom"><a href="#add-widget">{{agile_translate "contact-details" "add-widgets"}}</a></span>
+				<span class="inline-block v-text-bottom"><a href="#add-widget">{{translate 'contact-details' 'add-widgets'}}</a></span>
 			{{/if}}
 			<div class="text-muted text-base m-t-n-xs m-b-n-sm m-l-lg">
-				<p>{{agile_translate "contact-details" "setup-telephony-social-helpdesk"}}</p>
+				<p>{{translate 'contact-details' 'setup-telephony-social-helpdesk'}}</p>
 			</div>
 		</div>
 		<div>
@@ -1133,12 +1138,12 @@
 				</label>
 			{{/if}}
 			{{#if settings.importContacts.done}}
-				<span class="text-muted inline-block v-text-bottom" style="text-decoration:line-through;"><a class="text-muted" href="#import">{{agile_translate "admin-settings-users" "import-contacts"}}</a></span>
+				<span class="text-muted inline-block v-text-bottom" style="text-decoration:line-through;"><a class="text-muted" href="#import">{{transalte 'admin-settings-users' 'import-contacts'}}</a></span>
 			{{else}}
-				<span class="inline-block v-text-bottom"><a href="#import">{{agile_translate "admin-settings-users" "import-contacts"}}</a></span>
+				<span class="inline-block v-text-bottom"><a href="#import">{{transalte 'admin-settings-users' 'import-contacts'}}</a></span>
 			{{/if}}
 			<div class="text-muted text-base m-t-n-xs m-b-n-sm m-l-lg">
-				<p>{{agile_translate "admin-settings-users" "start-your-list-from-csv"}}</p>
+				<p>{{translate 'admin-settings-users' 'start-your-list-from-csv'}}</p>
 			</div>
 		</div>
 		<div>
@@ -1152,12 +1157,12 @@
 				</label>
 			{{/if}}
 			{{#if settings.createCampaign.done}}
-				<span class="text-muted inline-block v-text-bottom" style="text-decoration:line-through;"><a class="text-muted" href="#workflow-templates">{{agile_translate "campaigns" "marketing-automation"}}</a></span>
+				<span class="text-muted inline-block v-text-bottom" style="text-decoration:line-through;"><a class="text-muted" href="#workflow-templates">{{translate 'campaigns' 'marketing-automation'}}</a></span>
 			{{else}}
-				<span class="inline-block v-text-bottom"><a href="#workflow-templates">{{agile_translate "campaigns" "marketing-automation"}}</a></span>
+				<span class="inline-block v-text-bottom"><a href="#workflow-templates">{{translate 'campaigns' 'marketing-automation'}}</a></span>
 			{{/if}}
 			<div class="text-muted text-base m-t-n-xs m-b-n-sm m-l-lg">
-				<p>{{agile_translate "campaigns" "engage-your-customers"}}</p>
+				<p>{{translate 'campaigns' 'engage-your-customers'}}</p>
 			</div>
 		</div>
 	</div>
@@ -1172,7 +1177,7 @@
 		{{#if settings.category.revenue}}
 		<li class="pull-left">
 			<div class="panel-heading">
-				<h4 class="h4 text-ellipsis"><span class="pull-left inline-block" style="width:50px;">{{agile_translate "portlets" "revenue"}}</span>
+				<h4 class="h4 text-ellipsis"><span class="pull-left inline-block" style="width:50px;">{{translate 'portlets' 'revenue'}}</span>
 				{{#if settings.category.dealsWon}}
 				</h4>
 				{{else}}
@@ -1198,7 +1203,7 @@
 		{{#if settings.category.dealsWon}}
 		<li class="pull-left">
 			<div class="panel-heading">
-				<h4 class="h4 text-ellipsis"><span class="pull-left inline-block" style="width:50px;">{{agile_translate "deal-view" "Deals?"}}</span>
+				<h4 class="h4 text-ellipsis"><span class="pull-left inline-block" style="width:50px;">{{translate 'portlets' 'deals'}}</span>
 				{{#if settings.category.calls}}
 				</h4>
 				{{else}}
@@ -1220,7 +1225,7 @@
 		{{#if settings.category.calls}}
 		<li class="pull-left">
 			<div class="panel-heading">
-				<h4 class="h4 text-ellipsis"><span class="pull-left inline-block" style="width:50px;">{{agile_translate "report-view" "calls"}}</span>
+				<h4 class="h4 text-ellipsis"><span class="pull-left inline-block" style="width:50px;">{{translate 'portlets' 'calls'}}</span>
 				{{#if settings.category.tasks}}
 				</h4>
 				{{else}}
@@ -1238,8 +1243,8 @@
 		{{#if settings.category.tasks}}
 		<li class="pull-left leader-board-text-mobile">
 			<div class="panel-heading" style='min-height:39px'>
-			   <h4 class="h4 text-ellipsis visible-xs"><span class="pull-left inline-block">{{agile_translate "report-view" "leader-board"}}</span></h4>
-				<h4 class="h4 text-ellipsis hidden-xs"><span class="pull-left inline-block" style="width:50px;">{{agile_translate "portlets" "tasks"}}</span>
+			   <h4 class="h4 text-ellipsis visible-xs"><span class="pull-left inline-block">{{translate 'report-view' 'leader-board'}}</span></h4>
+				<h4 class="h4 text-ellipsis hidden-xs"><span class="pull-left inline-block" style="width:50px;">{{translate 'portlets' 'tasks'}}</span>
 				<small class="pull-right text-right p-t-xs portlet-header-small-text text-ellipsis" style="width:calc(100% - 50px);">
 					{{get_portlet_duration settings.duration}}
 				</small></h4>
@@ -1262,7 +1267,7 @@
 <script id="portlets-deals-revenue-graph-model-template" type="text/html">
 		<div class="portlet_header portlet_edit_icons panel-heading">
 			<h4 class="h4 text-ellipsis text-muted">
-				<span class="pull-left inline-block text-ellipsis" style="width:60%;">{{agile_translate "portlets" "revenue-graph"}}</span>
+				<span class="pull-left inline-block text-ellipsis" style="width:60%;">{{translate 'portlets' 'revenue-graph'}}</span>
 				<small class="pull-right text-right p-t-xs portlet-header-small-text text-ellipsis" style="width: 40%;">
 					{{get_portlet_duration settings.duration}}
 				</small>
@@ -1286,12 +1291,14 @@
             <img alt="Clipboard" src="{{getS3ImagePath '/img/clipboard.png'}}" />
        </div>
        <div class="box-right pull-left">
-            <h4 class="m-t-none">{{agile_translate "portlets" "do-not-have-dashlets"}}</h4>
+            <h4 class="m-t-none">{{translate 'portlets' 'do-not-have-dashlets'}}</h4>
             <div class="text">
-               	{{agile_translate "portlets" "dashlets-help-msg"}}</div>
-          		{{agile_translate "portlets" "get-start-by-add-dashlet"}}<br>
+               	{{translate 'portlets' 'dashlets-help-msg'}}  
+            </div>
+          		{{translate 'portlets' 'get-start-by-add-dashlet'}}<br>
                 <a href="#add-dashlet" id="add-portlet" class="add-portlet add-stream-tab btn btn-default btn-sm m-t-xs">
- 		          <i class="icon icon-plus-sign"></i> {{agile_translate "portlets" "add-dashlet"}}</a> 
+ 		          <i class="icon icon-plus-sign"></i> {{translate 'portlets' 'add-dashlet'}}
+		        </a> 
 	   </div>
 	   <div class="clearfix">
 	   </div>
@@ -1304,12 +1311,14 @@
             <img alt="Clipboard" src="{{getS3ImagePath '/img/clipboard.png'}}" />
        </div>
        <div class="box-right pull-left">
-            <h4 class="m-t-none">{{agile_translate "portlets" "do-not-have-dashlets"}}</h4>
+            <h4 class="m-t-none">{{translate 'portlets' 'do-not-have-dashlets'}}</h4>
             <div class="text">
-               	{{agile_translate "portlets" "dashlets-help-msg"}}</div>
-          		{{agile_translate "portlets" "get-start-by-add-dashlet"}}<br>
+               	{{translate 'portlets' 'dashlets-help-msg'}}  
+            </div>
+          		{{translate 'portlets' 'get-start-by-add-dashlet'}}<br>
                 <a href="#add-dashlet" id="add-portlet" class="add-portlet add-stream-tab btn btn-default btn-sm m-t-xs">
- 		          <i class="icon icon-plus-sign"></i> {{agile_translate "portlets" "add-dashlet"}}</a> 
+ 		          <i class="icon icon-plus-sign"></i> {{translate 'portlets' 'add-dashlet'}}
+		        </a> 
 	   </div>
 	   <div class="clearfix">
 	   </div>
@@ -1365,7 +1374,7 @@
 	{{else}}
 				<div class="btn-group">
 					<h1 class="m-n font-thin h3 text-black pull-left c-p" data-toggle="dropdown" data-value="{{#if id}}{{id}}{{/if}}" id="dashboard-name" title="{{#if name}}{{trim_space name}}{{/if}}">
-						{{#if name}}{{getTruncatedDashboardName name}}{{else}}Dashboard{{/if}}
+						{{#if name}}{{getTruncatedDashboardName name}}{{else}}{{translate 'portlets' 'dashboard'}}{{/if}}
 					</h1>
 					<button class="btn btn-sm dropdown-toggle no-shadow bg-transparent b-n p-l-xs" data-toggle="dropdown" aria-expanded="true">
 						<span class="caret"></span>
@@ -1375,7 +1384,7 @@
 					</ul>
 				</div>
 				<div class="text-ellipsis" style="max-width:300px;">
-					<small class="text-muted" id="dashboard-desc" title="{{#if description}}{{description}}{{/if}}">{{#if description}}{{description}}{{else}}Welcome to Agile CRM{{/if}}</small>
+					<small class="text-muted" id="dashboard-desc" title="{{#if description}}{{description}}{{/if}}">{{#if description}}{{description}}{{else}}{{translate 'portlets' 'welcome-msg'}}{{/if}}</small>
 				</div>
 		{{/is_mobile}}		
 			</div>
@@ -1390,9 +1399,11 @@
 					<i class="fa fa-graduation-cap"></i>
 				</a>-->
 				<a href="#add-dashlet" id="add-portlet" class="btn btn-default btn-sm btn-addon add-portlet add-stream-tab pos-rlt">
-					<i class="icon icon-plus-sign"></i> {{agile_translate "portlets" "add-dashlet"}}</a>
+					<i class="icon icon-plus-sign"></i> {{translate 'portlets' 'add-dashlet'}}
+				</a>
 				<!-- <a href="#dashboards" id="dashboards" class="btn btn-default btn-sm btn-addon dashboards add-stream-tab pos-rlt">
-					<i class="icon icon-plus-sign"></i> Add/{{agile_translate "portlets" "edit-dashboard"}}</a> -->
+					<i class="icon icon-plus-sign"></i> Add/Edit Dashboard
+				</a> -->
 				
 			</div>
 			<div class="clearfix"></div>      	
@@ -1414,10 +1425,10 @@
 
 <script id="portlets-contact-filter-list-collection-template" type="text/html">
 <select id="filter" name="filter" class="required form-control">
-	<option value="">{{agile_translate "contacts-view" "select"}}</option>
-	<option value="contacts">{{agile_translate "portlets" "all-contacts"}}</option>
-	<!-- <option value="companies">{{agile_translate "companies-view" "Companies"}}</option> -->
-	<option value="myContacts">{{agile_translate "contacts-view" "my-contacts"}}</option>
+	<option value="">Select...</option>
+	<option value="contacts">All Contacts</option>
+	<!-- <option value="companies">Companies</option> -->
+	<option value="myContacts">My Contacts</option>
 	<!-- <option value="leads">Leads</option> -->
 	{{#if this.length}}
 		{{#each this}}
@@ -1429,22 +1440,22 @@
 
 <script id="portlets-account-body-model-template" type="text/html">
 <div class="row">
-				<label class="control-label  col-xs-2 p-t-none font-bold">{{agile_translate "portlets" "plan"}}</label>
+				<label class="control-label  col-xs-2 p-t-none font-bold">{{translate 'portlets' 'plan'}}</label>
 				<div class="control-label text-left col-xs-8 p-t-none">
-					 {{Plan}} <small class="p-l-xs">{{ucfirst Plan_Interval}} </small>(<a href="#subscribe" class="text-sm text-info">{{agile_translate "portlets" "change"}}</a>)<br>
-						{{Count}} users.
+					 {{translate 'portlets' 'free'}} <small class="p-l-xs">{{ucfirst Plan_Interval}} </small>(<a href="#subscribe" class="text-sm text-info">{{translate 'portlets' 'change'}}</a>)<br>
+						{{Count}} {{translate 'portlets' 'users'}}
 					{{#if Email}}
-							 {{numberWithCommas Email}} emails per month
+							 {{numberWithCommas Email}} {{translate 'portlets' 'emails-per-month'}}
 					{{else}}
-							5,000 Branded emails
+							5,000 {{translate 'portlets' 'branded-emails'}}
 					{{/if}}</div>
 			</div>
 		<div class="row m-t-sm m-b-xs">
 			{{#if Owner_name}}
-				<label class="m-l font-bold">Need help? </label><label class="m-l">Talk to your Account Representative</label>
+				<label class="m-l font-bold">{{translate 'portlets' 'need-help?'}}</label><label class="m-l">Talk to your Account Representative</label>
 				<div class="clearfix"></div>
 			{{else}}
-				<label class="m-l font-bold">Need help? </label><label class="m-l">{{agile_translate "portlets" "talk-to-agile-support"}}</label>
+				<label class="m-l font-bold">{{translate 'portlets' 'need-help?'}}</label><label class="m-l">{{translate 'portlets' 'talk-to-agile-support'}}</label>
 				<div class="clearfix"></div>
 			{{/if}}
 	</div>
@@ -1455,13 +1466,13 @@
 			<div class="control-label col-xs-10 p-t-none m-l-n">
 			<label>{{Owner_name}}</label>
 			<div>
-			<a href="{{Owner_url}}" target="_blank" class="text-info .p-xs">Schedule a call</a></div>
+			<a href="{{Owner_url}}" target="_blank" class="text-info .p-xs">{{translate 'help' 'schedule-a-call'}}</a></div>
 			
 			</div>
 </div>
 {{else}}
 	<div>
-			<a href="https://our.agilecrm.com/calendar/Raja_Shekar,Natesh,Abhishek_Pandey" target="_blank" class="text-info .p-xs">Schedule a call</a></div>
+			<a href="https://our.agilecrm.com/calendar/Raja_Shekar,Natesh,Abhishek_Pandey" target="_blank" class="text-info .p-xs">{{translate 'help' 'schedule-a-call'}}</a></div>
 
 {{/if}}
 
@@ -1469,7 +1480,7 @@
 <script id="portlets-account-model-template" type="text/html">
 		<div class="portlet_header portlet_edit_icons panel-heading">
 			<h4 class="h4 text-ellipsis">
-				<span class="pull-left inline-block text-ellipsis" style="width:90%;">{{agile_translate "portlets" "account-information"}}</span>
+				<span class="pull-left inline-block text-ellipsis" style="width:90%;">{{translate 'portlets' 'account-information'}}</span>
 			</h4>
 			<div class="portlet_header_icons pull-right clear-fix text-muted p-t-xs pos-abs pos-r-0 pos-t-xs vis-hide">
 				<i id="{{id}}-close" class="c-p fa fa-times {{remove_spaces name}}-close p-r-sm" onclick="deletePortlet(this);"></i>
@@ -1486,19 +1497,20 @@
 {{#if this.length}}
 <div>
 <section class="scroll">
-			 <div id="today-heading" style="display: none" class="p-sm"><b >{{agile_translate "calendar" "Today"}}</b>	</div>
+			 <div id="today-heading" style="display: none" class="p-sm"><b >{{translate 'portlets' 'today'}}</b>	</div>
             <div id="today-activity" style="display: inline;"></div>
-            <div id="tomorrow-heading" style="display: none" class="p-sm"><b >{{agile_translate "portlets" "yesterday"}}</b></div>
+            <div id="tomorrow-heading" style="display: none" class="p-sm"><b >{{translate 'portlets' 'yesterday'}}</b></div>
             <div id="tomorrow-activity" style="display: inline;"></div>
 		<div id="next-week-heading" style="display: none" class="p-sm">
-            <b id="earllier" style="display:none">{{agile_translate "portlets" "earlier"}}</b>
+            <b id="earllier" style="display:none">{{translate 'portlets' 'earlier'}}</b>
 			</div>
             <div id="next-week-activity" style="display: inline;"></div>
     </section>
 </div>
 {{else}}
 <div class="portlet-error-message">
-      {{agile_translate "portlets" "no-customer-activities"}}</div>
+     {{translate 'portlets' 'no-customer-activities'}}
+	</div>
 {{/if}}
 
 </script>
@@ -1521,9 +1533,9 @@ Created Task {{#if this.entityObject}}<a href="#task/{{this.entity_id}}">{{safe_
 <div class="activities_second_line p-t-xs m-t-none text-ellipsis"><small>
 
 {{#if custom2}}
-<i class="icon-tasks"></i>  {{#unless this.entityObject}}Task deleted later. {{/unless}}Task assigned to {{custom1}} {{agile_translate "contacts-view" "due"}}<span class="time-ago" datetime="{{epochToHumanDate "ddd mmm dd yyyy h:MM TT" entityObject.due}}">{{epochToHumanDate "ddd mmm dd yyyy h:MM TT" custom2}}</span>. {{#if related_contact_ids}}Task related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}" data="{{this.contactid}}" class="popover_contact">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}}
+<i class="icon-tasks"></i>  {{#unless this.entityObject}}Task deleted later. {{/unless}}Task assigned to {{custom1}} due <span class="time-ago" datetime="{{epochToHumanDate "ddd mmm dd yyyy h:MM TT" entityObject.due}}">{{epochToHumanDate "ddd mmm dd yyyy h:MM TT" custom2}}</span>. {{#if related_contact_ids}}Task related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}" data="{{this.contactid}}" class="popover_contact">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}}
 {{else}}
-<i class="icon-tasks"></i> {{#unless this.entityObject}}Task deleted later. {{/unless}}Task assigned to {{entityObject.taskOwner.name}} {{agile_translate "contacts-view" "due"}}<span class="time-ago" datetime="{{epochToHumanDate "ddd mmm dd yyyy h:MM TT" entityObject.due}}">{{epochToHumanDate "ddd mmm dd yyyy h:MM TT" entityObject.due}}</span>. {{#if related_contact_ids}}Task related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}" data="{{this.contactid}}" class="popover_contact">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}}
+<i class="icon-tasks"></i> {{#unless this.entityObject}}Task deleted later. {{/unless}}Task assigned to {{entityObject.taskOwner.name}} due <span class="time-ago" datetime="{{epochToHumanDate "ddd mmm dd yyyy h:MM TT" entityObject.due}}">{{epochToHumanDate "ddd mmm dd yyyy h:MM TT" entityObject.due}}</span>. {{#if related_contact_ids}}Task related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}" data="{{this.contactid}}" class="popover_contact">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}}
 
 {{/if}}
 </small>
@@ -1549,13 +1561,13 @@ Completed Task {{#if this.entityObject}}<a href="#task/{{entity_id}}">{{safe_str
 {{#if_equals "TASK_EDIT" activity_type}}
 {{#if this.entityObject}}	
 {{#get_event_rescheduled custom3}} 
-{{agile_translate "contacts-view" "changed-due-date-of-task"}}<a href="#task/{{../entity_id}}" >{{safe_string ../label}}</a><br/>
+Changed Due date of Task <a href="#task/{{../entity_id}}" >{{safe_string ../label}}</a><br/>
 
 <div class="activities_second_line p-t-xs m-t-none text-ellipsis"><small>
 <i class="icon-tasks icon-white"></i> Task Due time changed to {{epochToHumanDate "ddd mmm dd yyyy h:MM TT" ../entityObject.due}}.{{#if ../../related_contact_ids}} Task related to {{#stringToJSON ../../this "related_contact_ids"}} {{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}" data="{{this.contactid}}" class="popover_contact">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}{{/if}}
 </small></div> 
 {{else}}
- {{agile_translate "contacts-view" "modified-task"}}<a href="#task/{{../entity_id}}" >{{safe_string ../label}}</a><br/>
+ Modified Task <a href="#task/{{../entity_id}}" >{{safe_string ../label}}</a><br/>
 <div class="activities_second_line p-t-xs m-t-none text-ellipsis"><small>
 <i class="icon-tasks icon-white"></i> Task {{displayActivityFieldText ../custom3}} modified. {{#if ../../related_contact_ids}} Task related to {{#stringToJSON ../../this "related_contact_ids"}} {{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}" data="{{this.contactid}}" class="popover_contact">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}{{/if}} 
 </small></div>
@@ -1592,12 +1604,14 @@ Reassigned Task {{#if this.entityObject}}<a href="#task/{{entity_id}}">{{safe_st
 {{#if_equals "removed_all_relatedcontacts" custom3}}
 Removed Contact(s) from Task {{#if this.entityObject}}<a href="#task/{{entity_id}}">{{safe_string label}}</a>{{else}}'{{safe_string label}}'{{/if}}<br/>
 <div class="activities_second_line p-t-xs m-t-none text-ellipsis"><small>
-<i class="icon-tasks"></i> {{#unless this.entityObject}}Task deleted later. {{/unless}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}" data="{{this.contactid}}" class="popover_contact">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} {{agile_translate "contacts-view" "removed-from-task"}}</small></div>
+<i class="icon-tasks"></i> {{#unless this.entityObject}}Task deleted later. {{/unless}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}" data="{{this.contactid}}" class="popover_contact">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} removed from Task.
+</small></div>
 {{/if_equals}} 
 {{#if_equals "removed_relatedcontacts" custom3}}
 Removed Contact(s) from Task {{#if this.entityObject}}<a href="#task/{{entity_id}}">{{safe_string label}}</a>{{else}}'{{safe_string label}}'{{/if}}<br/>
 <div class="activities_second_line p-t-xs m-t-none text-ellipsis"><small>
-<i class="icon-tasks"></i> {{#unless this.entityObject}}Task deleted later. {{/unless}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}" data="{{this.contactid}}" class="popover_contact">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} {{agile_translate "contacts-view" "removed-from-task"}}</small></div>
+<i class="icon-tasks"></i> {{#unless this.entityObject}}Task deleted later. {{/unless}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}" data="{{this.contactid}}" class="popover_contact">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} removed from Task.
+</small></div>
 {{/if_equals}} 
 {{#if_equals "added_relatedcontacts" custom3}}
 Added Contact(s) to Task {{#if this.entityObject}}<a href="#task/{{entity_id}}">{{safe_string label}}</a>{{else}}'{{safe_string label}}'{{/if}}<br/>
@@ -1605,8 +1619,10 @@ Added Contact(s) to Task {{#if this.entityObject}}<a href="#task/{{entity_id}}">
 <i class="icon-tasks"></i> {{#unless this.entityObject}}Task deleted later. {{/unless}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}" data="{{this.contactid}}" class="popover_contact">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} added to Task. 
 {{/if_equals}}
 {{else}}
-{{agile_translate "contacts-view" "modified-task"}}<div class="activities_second_line p-t-xs m-t-none text-ellipsis"><small>
-<i class="icon-tasks"></i> <a href="" data="{{entity_id}}" class="activity-task-edit">{{label}}</a> {{agile_translate "campaigns" "modified"}}</small></div>
+Modified Task.
+<div class="activities_second_line p-t-xs m-t-none text-ellipsis"><small>
+<i class="icon-tasks"></i> <a href="" data="{{entity_id}}" class="activity-task-edit">{{label}}</a> Modified  
+</small></div>
 {{/if}} 
 </small></div>
 {{/if_equals}}
@@ -1630,11 +1646,13 @@ Changed Status of Task {{#if this.entityObject}}<a href="#task/{{entity_id}}">{{
 
 {{#if_equals "BULK_DELETE" activity_type}}
 {{#if_equals "1" custom1}}
-  Deleted {{custom1}} {{agile_translate "menu" "task"}}<div class="activities_second_line p-t-xs m-t-none text-ellipsis"><small>  
+  Deleted {{custom1}} Task 
+<div class="activities_second_line p-t-xs m-t-none text-ellipsis"><small>  
 {{#if custom2}}<i class="icon-tasks"></i> {{custom2}}{{/if}}
 </small></div> 
 {{else}} 
-	Deleted {{custom1}} {{agile_translate "portlets" "tasks"}}<div class="activities_second_line p-t-xs m-t-none text-ellipsis"><small>    
+	Deleted {{custom1}} Tasks 
+<div class="activities_second_line p-t-xs m-t-none text-ellipsis"><small>    
 {{#if custom2}}<i class="icon-tasks"></i> {{custom2}}. {{/if}} 
 </small></div>
 {{/if_equals}}
@@ -1753,11 +1771,11 @@ Changed Milestone of Deal {{#if this.entityObject}}<a  href="#deal/{{entity_id}}
 {{/if_equals}}
 
  {{#if_equals "DEAL_IMPORT" activity_type}}
-Imported {{custom1}} {{agile_translate "deal-view" "Deals"}}<br/>	
+Imported {{custom1}} Deals <br/>	
 {{/if_equals}}
 
 {{#if_equals "DEAL_EXPORT" activity_type}}
-Exported {{custom1}} {{agile_translate "deal-view" "Deals"}}<br/>	
+Exported {{custom1}} Deals <br/>	
 {{/if_equals}}
 
 
@@ -1771,12 +1789,12 @@ Lost Deal {{#if this.entityObject}}<a  href="#deal/{{entity_id}}" >{{label}}</a>
 {{#if_equals "BULK_ACTION" activity_type}}
 
 {{#if_equals "BULK_DEAL_ARCHIVE" custom1}}
-Archived {{custom3}} {{agile_translate "deal-view" "Deals?"}}<br/>
+Archived {{custom3}} Deals<br/>
 {{/if_equals}}
 
 
 {{#if_equals "BULK_DEAL_RESTORE" custom1}}
- Restored {{custom3}} {{agile_translate "deal-view" "Deals?"}}<br/>
+ Restored {{custom3}} Deals<br/>
 
 {{/if_equals}}
 
@@ -1784,11 +1802,13 @@ Archived {{custom3}} {{agile_translate "deal-view" "Deals?"}}<br/>
 {{#if_equals "BULK_DEAL_OWNER_CHANGE" custom1}}
 
 {{#if_equals "1" custom3}}
-Changed owner for {{custom3}} {{agile_translate "deal-view" "Deals?"}}<div class="activities_second_line p-t-xs m-t-none text-ellipsis"><small>
+Changed owner for {{custom3}} Deal 
+<div class="activities_second_line p-t-xs m-t-none text-ellipsis"><small>
 <i class="icon-money icon-white"></i> Deal assigned to {{custom2}}.
 </small></div>
 {{else}}
-Changed owner for {{custom3}} {{agile_translate "deal-view" "Deals"}}<div class="activities_second_line p-t-xs m-t-none text-ellipsis"><small>
+Changed owner for {{custom3}} Deals 
+<div class="activities_second_line p-t-xs m-t-none text-ellipsis"><small>
 <i class="icon-money icon-white"></i> Deals assigned to {{custom2}}.
 </small></div>
 {{/if_equals}}
@@ -1797,24 +1817,24 @@ Changed owner for {{custom3}} {{agile_translate "deal-view" "Deals"}}<div class=
 {{#if_equals "BULK_DEAL_MILESTONE_CHANGE" custom1}}
 {{#getTracksCount}}
 {{#if_equals "1" custom3}}
-Changed track/milestone for {{custom3}} {{agile_translate "deal-view" "Deals?"}}<br/>
+Changed track/milestone for {{custom3}} Deal <br/>
 <div class="activities_second_line p-t-xs m-t-none text-sm text-ellipsis"><small>
 <i class="icon-money icon-white"></i> Deal track/milestone changed to {{custom4}} - {{custom2}}.
 </small></div>
 {{else}}
-	Changed track/milestone for {{custom3}} {{agile_translate "deal-view" "Deals"}}<br/>
+	Changed track/milestone for {{custom3}} Deals <br/>
 <div class="activities_second_line p-t-xs m-t-none text-sm text-ellipsis"><small>
 <i class="icon-money icon-white"></i> Deals track/milestone changed to {{custom4}} - {{custom2}}.
 </small></div>
 {{/if_equals}}
 {{else}}
 {{#if_equals "1" custom3}}
-Changed milestone for {{custom3}} {{agile_translate "deal-view" "Deals?"}}<br/>
+Changed milestone for {{custom3}} Deal <br/>
 <div class="activities_second_line p-t-xs m-t-none text-sm text-ellipsis"><small>
 <i class="icon-money icon-white"></i> Deal milestone changed to {{custom2}}.
 </small></div>
 {{else}}
-	Changed milestone for {{custom3}} {{agile_translate "deal-view" "Deals"}}<br/>
+	Changed milestone for {{custom3}} Deals <br/>
 <div class="activities_second_line p-t-xs m-t-none text-sm text-ellipsis"><small>
 <i class="icon-money icon-white"></i> Deals milestone changed to {{custom2}}.
 </small></div>
@@ -1826,12 +1846,12 @@ Changed milestone for {{custom3}} {{agile_translate "deal-view" "Deals?"}}<br/>
 
 {{#if_equals "BULK_DELETE" activity_type}}
   {{#if_equals "1" custom1}}
-  Deleted {{custom1}} {{agile_translate "deal-view" "Deals?"}}<br/>
+  Deleted {{custom1}} Deal<br/>
 <div class="activities_second_line p-t-xs m-t-none text-sm text-ellipsis"><small>
   {{#if custom2}}<i class="icon-money icon-white"></i> {{custom2}}.{{/if}}
 </small></div>
 {{else}} 
-	Deleted {{custom1}} {{agile_translate "deal-view" "Deals"}}<br/>
+	Deleted {{custom1}} Deals <br/>
 <div class="activities_second_line p-t-xs m-t-none text-sm text-ellipsis"><small>
  {{#if custom2}}<i class="icon-money icon-white"></i> {{custom2}}.{{/if}}
 </small></div>
@@ -1861,7 +1881,8 @@ Changed milestone for {{custom3}} {{agile_translate "deal-view" "Deals?"}}<br/>
 {{#if_equals "removed_all_relatedcontacts" custom3}}
 Removed Contact(s) from Event {{#if entityObject}}<a href="" data={{entity_id}} class='activity-event-edit'">{{label}}</a>{{else}}'{{label}}'{{/if}}<br/> 
 <div class="activities_second_line p-t-xs m-t-none text-sm text-ellipsis"><small>
-<i class="icon-calendar icon-white"></i> {{#unless this.entityObject}}Event deleted later. {{/unless}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}"  data="{{this.contactid}}" class="popover_contact">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} {{agile_translate "contacts-view" "removed-from-event"}}</small></div>
+<i class="icon-calendar icon-white"></i> {{#unless this.entityObject}}Event deleted later. {{/unless}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}"  data="{{this.contactid}}" class="popover_contact">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} removed from Event. 
+</small></div>
 {{/if_equals}} 
 {{#if_equals "removed_relatedcontacts" custom3}}
 Removed Contact(s) from Event {{#if entityObject}}<a href="" data={{entity_id}} class='activity-event-edit'">{{label}}</a>{{else}}'{{label}}'{{/if}}<br/> 
@@ -1888,14 +1909,14 @@ Modified Event {{#if entityObject}}<a href="" data={{entity_id}} class='activity
 
 {{#if_equals "BULK_DELETE" activity_type}}
  {{#if_equals "1" custom1}}
-  Deleted {{custom1}} {{agile_translate "menu" "event"}}<br/>
+  Deleted {{custom1}} Event <br/>
 {{#if custom2}}
 <div class="activities_second_line p-t-xs m-t-none text-sm text-ellipsis"><small>
 <i class="icon-calendar icon-white"></i> {{custom2}}.
 </small></div>
  {{/if}} 
 {{else}} 
-	Deleted {{custom1}} {{agile_translate "deal-view" "events"}}<br/>
+	Deleted {{custom1}} Events <br/>
 {{#if custom2}}
 <div class="activities_second_line p-t-xs m-t-none text-sm text-ellipsis"><small>
 <i class="icon-calendar icon-white"></i> {{custom2}}.
@@ -1921,12 +1942,12 @@ Deleted Event '{{label}}'<br/>
 
 {{#if this.entityObject}}	
 {{#get_event_rescheduled custom3}} 
-{{agile_translate "contacts-view" "rescheduled-event"}}<a href="" data={{../entity_id}} class='activity-event-edit'">{{../label}}</a><br/>
+Rescheduled Event <a href="" data={{../entity_id}} class='activity-event-edit'">{{../label}}</a><br/>
 <div class="activities_second_line p-t-xs m-t-none text-sm text-ellipsis"><small>
 <i class="icon-calendar icon-white"></i> Event Start time changed to {{epochToHumanDate "ddd mmm dd yyyy h:MM TT" ../entityObject.start}}.{{#if ../../related_contact_ids}} Task related to {{#stringToJSON ../../this "related_contact_ids"}} {{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}" data="{{this.contactid}}" class="popover_contact">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}{{/if}}
 </small> </div>
 {{else}}
-{{agile_translate "contacts-view" "modified-event"}}<a href="" data={{../entity_id}} class='activity-event-edit'">{{../label}}</a> <br/>
+Modified Event <a href="" data={{../entity_id}} class='activity-event-edit'">{{../label}}</a> <br/>
 <div class="activities_second_line p-t-xs m-t-none text-sm text-ellipsis"><small>
 <i class="icon-calendar icon-white"></i> Event {{displayActivityFieldText ../custom3}} modified.{{#if ../../related_contact_ids}} Task related to {{#stringToJSON ../../this "related_contact_ids"}} {{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}"  data="{{this.contactid}}" class="popover_contact">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}{{/if}}
 </small></div>
@@ -2092,7 +2113,7 @@ Imported {{custom1}} Contact(s) <br/>
 {{/if_equals}}
 
  {{#if_equals "COMPANY_IMPORT" activity_type}}
-Imported {{custom1}} {{agile_translate "companies-view" "Companies"}}<br/>	
+Imported {{custom1}} Companies <br/>	
 <div class="activities_second_line p-t-xs m-t-none text-sm text-ellipsis"><small>
 {{#if custom2}}<i class="icon-user"></i> {{custom2}} companies were updated during the import.{{/if}} 
 </small></div>
@@ -2104,9 +2125,9 @@ Exported {{custom1}} Contact(s) <br/>
 
 {{#if_equals "COMPANY_EXPORT" activity_type}}
 {{#if_equals "1" custom1}}
-Exported {{custom1}} {{agile_translate "contacts-view" "Company"}}<br/>
+Exported {{custom1}} Company <br/>
 {{else}}
-Exported {{custom1}} {{agile_translate "companies-view" "Companies"}}<br/>
+Exported {{custom1}} Companies <br/>
 {{/if_equals}}	
 {{/if_equals}}
 
@@ -2137,42 +2158,46 @@ Sent email to {{#if this.entityObject}}<a href="#contact/{{entity_id}}"  data="{
 
 {{#if_equals "contacts" label}}	
 {{#if_equals "ADD_TAG" custom1}}
-Added  tag to {{custom3}} {{agile_translate "companies-view" "Contacts"}}<br/>
+Added  tag to {{custom3}} Contacts<br/>
 <small class="activities_second_line m-t-none text-sm text-ellipsis">
-<i class="icon-tag"></i> {{removeDoubleCoutes custom2}} {{agile_translate "contacts-view" "added"}}</small>
+<i class="icon-tag"></i> {{removeDoubleCoutes custom2}} added.
+</small>
 {{/if_equals}}
 
 
 {{#if_equals "REMOVE_TAG" custom1}}
-Removed tag from {{custom3}} {{agile_translate "companies-view" "Contacts"}}<br/>
+Removed tag from {{custom3}} Contacts<br/>
 <small class="activities_second_line m-t-none text-sm text-ellipsis">
-<i class="icon-tag"></i> {{removeDoubleCoutes custom2}} {{agile_translate "contacts-view" "removed"}}</small>
+<i class="icon-tag"></i> {{removeDoubleCoutes custom2}} removed.
+</small>
 {{/if_equals}}
 
 {{else}}
 
 {{#if_equals "ADD_TAG" custom1}}
-Added  tag to {{custom3}} {{agile_translate "companies-view" "Companies"}}<br/>
+Added  tag to {{custom3}} Companies<br/>
 <small class="activities_second_line m-t-none text-sm text-ellipsis">
-<i class="icon-tag"></i> {{removeDoubleCoutes custom2}} {{agile_translate "contacts-view" "added"}}</small>
+<i class="icon-tag"></i> {{removeDoubleCoutes custom2}} added.
+</small>
 {{/if_equals}}
 
 
 {{#if_equals "REMOVE_TAG" custom1}}
-Removed tag from {{custom3}} {{agile_translate "companies-view" "Companies"}}<br/>
+Removed tag from {{custom3}} Companies<br/>
 <small class="activities_second_line m-t-none text-sm text-ellipsis">
-<i class="icon-tag"></i> {{removeDoubleCoutes custom2}} {{agile_translate "contacts-view" "removed"}}</small>
+<i class="icon-tag"></i> {{removeDoubleCoutes custom2}} removed.
+</small>
 {{/if_equals}}
 {{/if_equals}}
 
 {{#if_equals "ASIGN_WORKFLOW" custom1}}
 {{#if_equals "1" custom3}}
-		Added {{custom3}} {{agile_translate "contacts-view" "contact-to-campaign"}}<br/>
+		Added {{custom3}} Contact to Campaign<br/>
 <div class="activities_second_line p-t-xs m-t-none text-sm text-ellipsis"><small>  
 <i class="icon-sitemap icon-white"></i> {{custom2}}. 
 </small></div>
 {{else}}
-Added {{custom3}} Contacts {{agile_translate "contact-details" "to-campaign"}}<br/>
+Added {{custom3}} Contacts to Campaign<br/>
 <div class="activities_second_line p-t-xs m-t-none text-sm text-ellipsis"><small>   
 <i class="icon-sitemap icon-white"></i> {{custom2}}. 
 </small></div>
@@ -2183,24 +2208,24 @@ Added {{custom3}} Contacts {{agile_translate "contact-details" "to-campaign"}}<b
 
 {{#if_equals "contacts" label}}	
 {{#if_equals "1" custom3}}	
-Sent a email to {{custom3}} {{agile_translate "contact-details" "Contact"}}<br/>
+Sent a email to {{custom3}} Contact<br/>
 <div class="activities_second_line p-t-xs m-t-none text-sm text-ellipsis"><small>
 <i class="icon-envelope-alt"></i> Email subject- <a href="" class="email-details" data={{id}}>{{custom4}}</a>
 </small></div> 
 {{else}}
-Sent a bulk email to {{custom3}} {{agile_translate "companies-view" "Contacts"}}<br/>
+Sent a bulk email to {{custom3}} Contacts<br/>
 <div class="activities_second_line p-t-xs m-t-none text-sm text-ellipsis"><small>
 <i class="icon-envelope-alt"></i> Email subject- <a href="" class="email-details" data={{id}}>{{custom4}}</a> 
 </small></div>
 {{/if_equals}}
 {{else}}
 {{#if_equals "1" custom3}}
-Sent a email to {{custom3}} {{agile_translate "contact-details" "company"}}<br/>
+Sent a email to {{custom3}} company<br/>
 <div class="activities_second_line p-t-xs m-t-none text-sm text-ellipsis"><small>
 <i class="icon-envelope-alt"></i> Email subject - <a href="" class="email-details" data={{id}}>{{custom4}}</a>
 </small></div>
 {{else}}
-Sent a bulk email to {{custom3}} {{agile_translate "companies-view" "Companies"}}<br/>
+Sent a bulk email to {{custom3}} Companies<br/>
 <div class="activities_second_line p-t-xs m-t-none text-sm text-ellipsis"><small>
 <i class="icon-envelope-alt"></i> Email subject - <a href="" class="email-details" data={{id}}>{{custom4}}</a>
 </small></div>
@@ -2212,12 +2237,12 @@ Sent a bulk email to {{custom3}} {{agile_translate "companies-view" "Companies"}
 
 {{#if_equals "contacts" label}}	
 {{#if_equals "1" custom3}}
-Changed owner for {{custom3}} {{agile_translate "contact-details" "Contact"}}<br/>
+Changed owner for {{custom3}} Contact <br/>
 <div class="activities_second_line p-t-xs m-t-none text-sm text-ellipsis"><small>
 <i class="icon-user icon-white"></i> Contact assigned to {{custom2}}.
 </small></div>
 {{else}}
-	Changed owner for {{custom3}} {{agile_translate "companies-view" "Contacts"}}<br/>
+	Changed owner for {{custom3}} Contacts <br/>
 <div class="activities_second_line p-t-xs m-t-none text-sm text-ellipsis"><small>
 <i class="icon-user icon-white"></i> Contacts assigned to {{custom2}}.
 </small></div>
@@ -2225,12 +2250,12 @@ Changed owner for {{custom3}} {{agile_translate "contact-details" "Contact"}}<br
 {{else}}
 
 {{#if_equals "1" custom3}}
-Changed owner for {{custom3}} {{agile_translate "contacts-view" "Company"}}<br/>
+Changed owner for {{custom3}} Company <br/>
 <div class="activities_second_line p-t-xs m-t-none text-sm text-ellipsis"><small>
 <i class="icon-user icon-white"></i> Company assigned to {{custom2}}.
 </small></div>
 {{else}}
-	Changed owner for {{custom3}} {{agile_translate "companies-view" "Companies"}}<br/>
+	Changed owner for {{custom3}} Companies <br/>
 <div class="activities_second_line p-t-xs m-t-none text-sm text-ellipsis"><small>
 <i class="icon-user icon-white"></i> Companies assigned to {{custom2}}.
 </small></div>
@@ -2260,7 +2285,7 @@ Changed owner for {{custom3}} {{agile_translate "contacts-view" "Company"}}<br/>
 
 
 {{#if_equals "CAMPAIGN" activity_type}}
-Added {{#if this.entityObject}}<a href="#contact/{{entity_id}}"  data="{{entity_id}}" class="popover_contact">{{label}}</a>{{else}}'{{label}}'{{/if}} {{agile_translate "contact-details" "to-campaign"}}<br/>
+Added {{#if this.entityObject}}<a href="#contact/{{entity_id}}"  data="{{entity_id}}" class="popover_contact">{{label}}</a>{{else}}'{{label}}'{{/if}} to Campaign <br/>
 <div class="activities_second_line p-t-xs m-t-none text-sm text-ellipsis"><small> 
 <i class="icon-sitemap icon-white"></i> {{#unless this.entityObject}}Contact deleted later. {{/unless}} {{custom2}}.
 </small></div>
@@ -2338,12 +2363,12 @@ Called {{#if entity_id}}<a href="#contact/{{entity_id}}"  data="{{entity_id}}" c
 
 {{#if_equals "BULK_DELETE" activity_type}}
   {{#if_equals "1" custom1}}
-  Deleted {{custom1}} {{agile_translate "contacts-view" "document"}}<br/>
+  Deleted {{custom1}} Document <br/>
 <div class="activities_second_line p-t-xs m-t-none text-sm text-ellipsis"><small>
  <i class="icon-file icon-white"></i> {{custom2}}.
 </small></div>
 {{else}} 
-Deleted  {{custom1}} {{agile_translate "deal-view" "documents"}}<br/>
+Deleted  {{custom1}} Documents<br/>
 <div class="activities_second_line p-t-xs m-t-none text-sm text-ellipsis"><small>
 <i class="icon-file icon-white"></i> {{custom2}}.
  </small></div>
@@ -2395,13 +2420,15 @@ Deleted Campaign '{{label}}'
 
 {{#if_equals "BULK_DELETE" activity_type}}
   {{#if_equals "1" custom1}}
-  Deleted {{custom1}} {{agile_translate "contact-details" "campaign"}}<br/>
+  Deleted {{custom1}} Campaign <br/>
 <div class="activities_second_line p-t-xs m-t-none text-sm"><small>
- <i class="icon-sitemap icon-white"></i> Campaign {{custom2}} {{agile_translate "contacts-view" "deleted"}}</small></div>  
+ <i class="icon-sitemap icon-white"></i> Campaign {{custom2}} deleted.
+</small></div>  
 {{else}} 
-Deleted  {{custom1}} {{agile_translate "report-view" "campaigns"}}<br/>
+Deleted  {{custom1}} Campaigns<br/>
 <div class="activities_second_line p-t-xs m-t-none text-sm"><small>
- <i class="icon-sitemap icon-white"></i> Campaign {{custom2}} {{agile_translate "contacts-view" "deleted"}}</small></div>  
+ <i class="icon-sitemap icon-white"></i> Campaign {{custom2}} deleted.
+</small></div>  
 {{/if_equals}}	
 {{/if_equals}}
 
@@ -2419,7 +2446,7 @@ Deleted  {{custom1}} {{agile_translate "report-view" "campaigns"}}<br/>
 		<div class="portlet_header portlet_edit_icons panel-heading">
 		
 		<h4 class="h4 text-ellipsis">
-				<span class="pull-left inline-block text-ellipsis" style="width:70%;">{{agile_translate "portlets" "activities"}}</span>
+				<span class="pull-left inline-block text-ellipsis" style="width:70%;">{{translate 'portlets' 'activites'}}</span>
 				<small class="pull-right text-right p-t-xs portlet-header-small-text text-ellipsis" style="width: 30%;">
 
 	{{get_portlet_duration settings.duration}}
@@ -2523,7 +2550,7 @@ Deleted  {{custom1}} {{agile_translate "report-view" "campaigns"}}<br/>
 
 <!--<div class="portlet_header portlet_edit_icons panel-heading">
 			<h4 class="h4 text-ellipsis">
-				<span class="pull-left inline-block text-ellipsis deal_goals_header" style="width:70%;">{{agile_translate "portlets" "Deal Goals"}}</span>
+				<span class="pull-left inline-block text-ellipsis deal_goals_header" style="width:70%;">Deal Goals</span>
 				 <small class="pull-right text-right p-t-xs portlet-header-small-text text-ellipsis" style="width: 30%;">
 					{{get_portlet_duration settings.duration}}
 				</small> 
@@ -2576,7 +2603,7 @@ Deleted  {{custom1}} {{agile_translate "report-view" "campaigns"}}<br/>
 <script id="portlets-incoming-deals-model-template" type="text/html">
 		<div class="portlet_header portlet_edit_icons panel-heading">
 			<h4 class="h4 text-ellipsis text-muted">
-				<span class="pull-left inline-block text-ellipsis" style="width:60%;">{{agile_translate "report-view" "incoming-deals"}}</span>
+				<span class="pull-left inline-block text-ellipsis" style="width:60%;">{{translate 'report-view' 'incoming-deals'}}</span>
 				<small class="pull-right text-right p-t-xs portlet-header-small-text text-ellipsis" style="width: 40%;">
 					{{get_portlet_duration settings.duration}}
 				</small>
@@ -2596,7 +2623,7 @@ Deleted  {{custom1}} {{agile_translate "report-view" "campaigns"}}<br/>
 <script id="portlets-lost-deal-analysis-model-template" type="text/html">
 		<div class="portlet_header portlet_edit_icons panel-heading">
 			<h4 class="h4 text-ellipsis text-muted">
-				<span class="pull-left inline-block text-ellipsis" style="width:60%;">Deals Lost by {{agile_translate "widgets" "reason"}}</span>
+				<span class="pull-left inline-block text-ellipsis" style="width:60%;">Deals Lost by Reason</span>
 				<small class="pull-right text-right p-t-xs portlet-header-small-text text-ellipsis" style="width: 40%;">
 					{{get_portlet_duration settings.duration}}
 				</small>
@@ -2618,7 +2645,7 @@ Deleted  {{custom1}} {{agile_translate "report-view" "campaigns"}}<br/>
 <script id="portlets-Tasks-Deviation-model-template" type="text/html">
 		<div class="portlet_header portlet_edit_icons panel-heading">
 			<h4 class="h4 text-ellipsis">
-				<span class="pull-left inline-block text-ellipsis" style="width:70%;">{{agile_translate "report-view" "tasks-completion-time-deviation"}}</span>
+				<span class="pull-left inline-block text-ellipsis" style="width:70%;">{{translate 'report-view' 'tasks-completion-time-deviation'}}</span>
 				<small class="pull-right text-right p-t-xs portlet-header-small-text text-ellipsis" style="width: 30%;">
 
 	{{get_portlet_duration settings.duration}}
@@ -2638,7 +2665,7 @@ Deleted  {{custom1}} {{agile_translate "report-view" "campaigns"}}<br/>
 <script id="portlets-webstat-visits-model-template" type="text/html">
 		<div class="portlet_header portlet_edit_icons panel-heading">
 			<h4 class="h4 text-ellipsis">
-				<span class="pull-left inline-block text-ellipsis" style="width:50%;">{{agile_translate "tickets" "visits"}}</span>
+				<span class="pull-left inline-block text-ellipsis" style="width:50%;">{{translate 'tickets' 'visits'}}</span>
 				<small class="pull-right text-right p-t-xs portlet-header-small-text text-ellipsis" style="width: 50%;">
 					{{get_portlet_duration settings.duration}}
 				</small>
@@ -2660,7 +2687,8 @@ Deleted  {{custom1}} {{agile_translate "report-view" "campaigns"}}<br/>
 		<div class="portlet_header portlet_edit_icons panel-heading">
 			<h4 class="h4 text-ellipsis">
 				<span class="pull-left inline-block text-ellipsis referralurl_stats_header" style="width:70%;">
-				Referral {{agile_translate "widgets" "url"}}</span>
+				Referral URL 
+				</span>
 				 <small class="pull-right text-right p-t-xs portlet-header-small-text text-ellipsis" style="width: 30%;">
 					{{get_portlet_duration settings.duration}}
 				</small> 
@@ -2681,7 +2709,7 @@ Deleted  {{custom1}} {{agile_translate "report-view" "campaigns"}}<br/>
 <script id="portlets-marketing-onboarding-model-template" type="text/html">
 	<div class="portlet_header portlet_edit_icons panel-heading b-b">
 		<h4 class="h4 text-ellipsis">
-			<span class="pull-left inline-block text-ellipsis" style="width:90%;">{{agile_translate "portlets" "getting-started"}}</span>
+			<span class="pull-left inline-block text-ellipsis" style="width:90%;">Getting Started</span>
 		</h4>
 		<div class="portlet_header_icons pull-right clear-fix text-muted p-t-xs pos-abs pos-r-0 pos-t-xs vis-hide">
 			<i id="{{id}}-close" class="c-p fa fa-times {{remove_spaces name}}-close p-r-sm" onclick="deletePortlet(this);"></i>
@@ -2722,9 +2750,9 @@ Deleted  {{custom1}} {{agile_translate "report-view" "campaigns"}}<br/>
 				</label>
 			{{/if}}
 			{{#if settings.setUpIntegration.done}}
-				<span class="text-muted inline-block v-text-bottom" style="text-decoration:line-through;"><a class="text-muted" href="#integrations">{{agile_translate "admin-settings-users" "setup-integrations"}}</a></span>
+				<span class="text-muted inline-block v-text-bottom" style="text-decoration:line-through;"><a class="text-muted" href="#integrations">Setup Integrations</a></span>
 			{{else}}
-				<span class="inline-block v-text-bottom"><a href="#integrations">{{agile_translate "admin-settings-users" "setup-integrations"}}</a></span>
+				<span class="inline-block v-text-bottom"><a href="#integrations">Setup Integrations</a></span>
 			{{/if}}
 			<div class="text-muted text-base m-t-n-xs m-b-n-sm m-l-lg">
 				<p>Configure Agile with your Email, SMS & Telephony gateways.</p>
@@ -2741,9 +2769,9 @@ Deleted  {{custom1}} {{agile_translate "report-view" "campaigns"}}<br/>
 				</label>
 			{{/if}}
 			{{#if settings.emailTemplate.done}}
-				<span class="text-muted inline-block v-text-bottom" style="text-decoration:line-through;"><a class="text-muted" href="#email-templates">Create {{agile_translate "preferences" "email-templates"}}</a></span>
+				<span class="text-muted inline-block v-text-bottom" style="text-decoration:line-through;"><a class="text-muted" href="#email-templates">Create Email Templates</a></span>
 			{{else}}
-				<span class="inline-block v-text-bottom"><a href="#email-templates">Create {{agile_translate "preferences" "email-templates"}}</a></span>
+				<span class="inline-block v-text-bottom"><a href="#email-templates">Create Email Templates</a></span>
 			{{/if}}
 			<div class="text-muted text-base m-t-n-xs m-b-n-sm m-l-lg">
 				<p>Create your own Email Templates with easy drag and drop visual designer</p>
@@ -2760,9 +2788,9 @@ Deleted  {{custom1}} {{agile_translate "report-view" "campaigns"}}<br/>
 				</label>
 			{{/if}}
 			{{#if settings.setUpMarketingAutomation.done}}
-				<span class="text-muted inline-block v-text-bottom" style="text-decoration:line-through;"><a class="text-muted" href="#workflows">{{agile_translate "campaigns" "marketing-automation"}}</a></span>
+				<span class="text-muted inline-block v-text-bottom" style="text-decoration:line-through;"><a class="text-muted" href="#workflows">Marketing Automation</a></span>
 			{{else}}
-				<span class="inline-block v-text-bottom"><a href="#workflows">{{agile_translate "campaigns" "marketing-automation"}}</a></span>
+				<span class="inline-block v-text-bottom"><a href="#workflows">Marketing Automation</a></span>
 			{{/if}}
 			<div class="text-muted text-base m-t-n-xs m-b-n-sm m-l-lg">
 				<p>Engage your customers with the world’s easiest visual designer</p>
@@ -2779,9 +2807,9 @@ Deleted  {{custom1}} {{agile_translate "report-view" "campaigns"}}<br/>
 				</label>
 			{{/if}}
 			{{#if settings.addTrackingCode.done}}
-				<span class="text-muted inline-block v-text-bottom" style="text-decoration:line-through;"><a class="text-muted" href="#analytics-code">Add Tracking Code To Your {{agile_translate "other" "website"}}</a></span>
+				<span class="text-muted inline-block v-text-bottom" style="text-decoration:line-through;"><a class="text-muted" href="#analytics-code">Add Tracking Code To Your Website</a></span>
 			{{else}}
-				<span class="inline-block v-text-bottom"><a href="#analytics-code">Add Tracking Code To Your {{agile_translate "other" "website"}}</a></span>
+				<span class="inline-block v-text-bottom"><a href="#analytics-code">Add Tracking Code To Your Website</a></span>
 			{{/if}}
 			<div class="text-muted text-base m-t-n-xs m-b-n-sm m-l-lg">
 				<p>Track who is visiting and get real time notifications</p>
@@ -2799,9 +2827,9 @@ Deleted  {{custom1}} {{agile_translate "report-view" "campaigns"}}<br/>
 				</label>
 			{{/if}}
 			{{#if settings.webEngagement.done}}
-				<span class="text-muted inline-block v-text-bottom" style="text-decoration:line-through;"><a class="text-muted" href="#web-rules">{{agile_translate "campaigns" "web-engagement"}}</a></span>
+				<span class="text-muted inline-block v-text-bottom" style="text-decoration:line-through;"><a class="text-muted" href="#web-rules">Web Engagement</a></span>
 			{{else}}
-				<span class="inline-block v-text-bottom"><a href="#web-rules">{{agile_translate "campaigns" "web-engagement"}}</a></span>
+				<span class="inline-block v-text-bottom"><a href="#web-rules">Web Engagement</a></span>
 			{{/if}}
 			<div class="text-muted text-base m-t-n-xs m-b-n-sm m-l-lg">
 				<p>Show the personalised popup messages to your visitors to keep them coming back
@@ -2819,9 +2847,9 @@ Deleted  {{custom1}} {{agile_translate "report-view" "campaigns"}}<br/>
 				</label>
 			{{/if}}
 			{{#if settings.landingPage.done}}
-				<span class="text-muted inline-block v-text-bottom" style="text-decoration:line-through;"><a class="text-muted" href="#landing-pages">{{agile_translate "menu" "menu-landing-pages"}}</a></span>
+				<span class="text-muted inline-block v-text-bottom" style="text-decoration:line-through;"><a class="text-muted" href="#landing-pages">Landing Pages</a></span>
 			{{else}}
-				<span class="inline-block v-text-bottom"><a href="#landing-pages">{{agile_translate "menu" "menu-landing-pages"}}</a></span>
+				<span class="inline-block v-text-bottom"><a href="#landing-pages">Landing Pages</a></span>
 			{{/if}}
 			<div class="text-muted text-base m-t-n-xs m-b-n-sm m-l-lg">
 				<p>Easy Drag and Drop builder helps you build your own Landing pages </p>
@@ -2838,9 +2866,9 @@ Deleted  {{custom1}} {{agile_translate "report-view" "campaigns"}}<br/>
 				</label>
 			{{/if}}
 			{{#if settings.addForms.done}}
-				<span class="text-muted inline-block v-text-bottom" style="text-decoration:line-through;"><a class="text-muted" href="#forms">{{agile_translate "form-builder" "forms"}}</a></span>
+				<span class="text-muted inline-block v-text-bottom" style="text-decoration:line-through;"><a class="text-muted" href="#forms">Forms</a></span>
 			{{else}}
-				<span class="inline-block v-text-bottom"><a href="#forms">{{agile_translate "form-builder" "forms"}}</a></span>
+				<span class="inline-block v-text-bottom"><a href="#forms">Forms</a></span>
 			{{/if}}
 			<div class="text-muted text-base m-t-n-xs m-b-n-sm m-l-lg">
 				<p>Easy Drag and Drop builder helps you build your own forms in No Time. </p>
@@ -2857,9 +2885,9 @@ Deleted  {{custom1}} {{agile_translate "report-view" "campaigns"}}<br/>
 				</label>
 			{{/if}}
 			{{#if settings.socialSuite.done}}
-				<span class="text-muted inline-block v-text-bottom" style="text-decoration:line-through;"><a class="text-muted" href="#social">{{agile_translate "social" "social-suite"}}</a></span>
+				<span class="text-muted inline-block v-text-bottom" style="text-decoration:line-through;"><a class="text-muted" href="#social">Social Suite</a></span>
 			{{else}}
-				<span class="inline-block v-text-bottom"><a href="#social">{{agile_translate "social" "social-suite"}}</a></span>
+				<span class="inline-block v-text-bottom"><a href="#social">Social Suite</a></span>
 			{{/if}}
 			<div class="text-muted text-base m-t-n-xs m-b-n-sm m-l-lg">
 				<p>Engage your customers on Twitter by setting up different streams.</p>

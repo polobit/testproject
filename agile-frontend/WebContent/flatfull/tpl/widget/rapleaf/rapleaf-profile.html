@@ -5,7 +5,8 @@
 		<li class="list-group-item r-none b-l-none b-r-none text-base">	
 		<div class="row">
 			<div class="col-md-5">
-				<div class="pull-right">:</div> {{agile_translate "widgets" "gender"}}</div>
+				<div class="pull-right">:</div> {{translate 'widgets' 'gender'}}
+			</div>
 			<div class="col-md-6">
 				{{gender}}
 			</div>
@@ -16,7 +17,8 @@
 		<li class="list-group-item r-none b-l-none b-r-none text-base">	
 		<div class="row">
 			<div class="col-md-5">
-				<div class="pull-right">:</div> {{agile_translate "widgets" "age"}}</div>
+				<div class="pull-right">:</div> {{translate 'widgets' 'age'}}
+			</div>
 			<div class="col-md-6">
 				{{age}}
 			</div>
@@ -27,7 +29,8 @@
 		<li class="list-group-item r-none b-l-none b-r-none text-base">
 		<div class="row">	
 			<div class="col-md-5">
-				<div class="pull-right">:</div> {{agile_translate "widgets" "occupation"}}</div>
+				<div class="pull-right">:</div> {{translate 'widgets' 'occupation'}}
+			</div>
 							
 			<div class="col-md-6">
 				{{occupation}}
@@ -39,7 +42,8 @@
 		<li class="list-group-item r-none b-l-none b-r-none text-base">	
 		<div class="row">
 			<div class="col-md-5">
-				<div class="pull-right">:</div> {{agile_translate "widgets" "education"}}</div>
+				<div class="pull-right">:</div> {{translate 'widgets' 'education'}}
+			</div>
 			<div class="col-md-6">
 				{{education}}
 			</div>
@@ -50,7 +54,8 @@
 		<li class="list-group-item r-none b-l-none b-r-none text-base">		
 		<div class="row">
 			<div class="col-md-5">
-				<div class="pull-right">:</div> {{agile_translate "widgets" "marital-status"}}</div>
+				<div class="pull-right">:</div> {{translate 'widgets' 'marital-status'}}
+			</div>
 			<div class="col-md-6">
 				{{marital_status}}
 			</div>
@@ -61,7 +66,8 @@
 		<li class="list-group-item r-none b-l-none b-r-none text-base">		
 		<div class="row">
 			<div class="col-md-5">
-				<div class="pull-right">:</div> {{agile_translate "widgets" "household-income"}}</div>
+				<div class="pull-right">:</div> {{translate 'widgets' 'household-income'}}
+			</div>
 			<div class="col-md-6">
 				{{household_income}}
 			</div>
@@ -72,7 +78,8 @@
 		<li class="list-group-item r-none b-l-none b-r-none text-base">		
 		<div class="row">
 			<div class="col-md-5">
-				<div class="pull-right">:</div> {{agile_translate "widgets" "home-owner-status"}}</div>
+				<div class="pull-right">:</div> {{translate 'widgets' 'home-owner-status'}}
+			</div>
 			<div class="col-md-6" style="text-align:bottom;">
 				{{home_owner_status}}
 			</div>
@@ -83,7 +90,8 @@
 		<li class="list-group-item r-none b-l-none b-r-none text-base">		
 		<div class="row">
 			<div class="col-md-5">
-				<div class="pull-right">:</div> {{agile_translate "widgets" "interests"}}</div>
+				<div class="pull-right">:</div> {{translate 'widgets' 'interests'}}
+			</div>
 			<div class="col-md-6">
 				{{#iterate_json this.interests}}
 						{{#if value}}{{property}}{{#unless last}}, {{/unless}}{{/if}}
@@ -94,7 +102,8 @@
 	{{/if}}
 	{{else}}
 		<li class="list-group-item r-none b-l-none b-r-none text-base">
-	    	{{agile_translate "widgets" "no-details-available"}}</li>
+	    	{{translate 'widgets' 'no-details-available'}}
+		</li>
 	{{/if_equals}}
 </ul>
 </script>
@@ -103,14 +112,14 @@
 	<div>
 		<form  id="rapleaf_login_form" name="rapleaf_login_form">
 	    	<fieldset>
-				<p >Towerdata helps you learn more about your customers, provides data (age, gender, marital status, income, etc.,) on US consumer email addresses.To access, </p>
+				<p >{{translate 'widgets' 'towerdata-helps-desc'}} </p>
 				
-				<label>{{agile_translate "widgets" "enter-your-api-key"}}</label>
-				<div class="control-group form-group" ><div class="controls"><input type="text" id="rapleaf_api_key" class="input-medium required form-control" placeholder="API Key" value="" name="rapleaf_api_key" onkeydown="if (event.keyCode == 13) { event.preventDefault(); }"></input></div></div>
+				<label>{{translate 'widgets' 'enter-your-api-key'}}</label>
+				<div class="control-group form-group" ><div class="controls"><input type="text" id="rapleaf_api_key" class="input-medium required form-control" placeholder="{{translate 'admin-settings-integrations' 'api-key'}}" value="" name="rapleaf_api_key" onkeydown="if (event.keyCode == 13) { event.preventDefault(); }"></input></div></div>
 				<div class="text-center">
-				<a href="#add-widget" class="btn btn-default btn-sm">{{agile_translate "other" "cancel"}}</a>
-				<a href="#" id="save_api_key" class="save-agile-widget btn btn-sm btn-primary ml_5">{{agile_translate "modals" "save"}}</a>
-				<p class="m-t-md">Don't have an API key? <a href="http://www.towerdata.com/" class="text-info" target="_blank"> {{agile_translate "widgets" "signup"}}</a></p>
+				<a href="#add-widget" class="btn btn-default btn-sm">{{translate 'other' 'cancel'}}</a>
+				<a href="#" id="save_api_key" class="save-agile-widget btn btn-sm btn-primary ml_5">{{translate 'portlets' 'save'}}</a>
+				<p class="m-t-md">{{translate 'widgets' 'do-not-have-an-api-key'}} <a href="http://www.towerdata.com/" class="text-info" target="_blank"> {{translate 'widgets' 'signup'}} </a></p>
 				</div>
 				</div>
 			</fieldset>

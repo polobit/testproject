@@ -10,7 +10,8 @@
 		                        <label class="i-checks">
 					                <input type="radio" name="ticket_view_type" value="MULTILINE" {{#if_equals ticket_view_type 'MULTILINE'}}checked{{/if_equals}}>
 					                <i></i>
-					                {{agile_translate "tickets" "multiline-view"}}</label>
+					                {{translate 'tickets' 'multiline-view'}}
+					              </label>
 		                    </div>
 		                </div>
 		            </div>
@@ -20,81 +21,82 @@
 		                        <label class="i-checks">
 					                <input type="radio" name="ticket_view_type" value="SINGLELINE" {{#if_equals ticket_view_type 'SINGLELINE'}}checked{{/if_equals}}>
 					                <i></i>
-					                {{agile_translate "tickets" "single-line-view"}}</label>
+					                {{translate 'tickets' 'single-line-view'}}
+					              </label>
 		                    </div>
 		                </div>
 		                <div class="col-md-8 m-l-lg p-l-sm">
 		                	<div class="col-md-5 p-n">
-		                		<span class="m-l-xs">{{agile_translate "tickets" "columns-not-included-in-table"}}</span>
+		                		<span class="m-l-xs">{{translate 'tickets' 'columns-not-included-in-table'}}</span>
 			                	<ul id="sortable1" class="connectedSortable">
 			                		{{#array_contains selected_columns 'ID'}}
 			                		{{else}}
-			                	  		<li class="ui-state-highlight" id="ID">{{agile_translate "tickets" "id"}}</li>
+			                	  		<li class="ui-state-highlight" id="ID">{{translate 'tickets' 'id'}}</li>
 			                		{{/array_contains}}
 			                		{{#array_contains selected_columns 'SUBJECT'}}
 			                		{{else}}
-			                	  		<li class="ui-state-highlight" id="SUBJECT">{{agile_translate "widgets" "subject"}}</li>
+			                	  		<li class="ui-state-highlight" id="SUBJECT">{{translate 'other' 'subject'}}</li>
 			                		{{/array_contains}}
 			                		{{#array_contains selected_columns 'REQUESTER_NAME'}}
 			                		{{else}}
-			                	  		<li class="ui-state-highlight" id="REQUESTER_NAME">Requester name</li>
+			                	  		<li class="ui-state-highlight" id="REQUESTER_NAME">{{translate 'tickets' 'requester-name'}}</li>
 			                		{{/array_contains}}
 			                		{{#array_contains selected_columns 'DUE_DATE'}}
 			                		{{else}}
-			                	  		<li class="ui-state-highlight" id="DUE_DATE">{{agile_translate "portlets" "due-date"}}</li>
+			                	  		<li class="ui-state-highlight" id="DUE_DATE">{{translate 'portlets' 'due-date'}}</li>
 			                		{{/array_contains}}
 			                		{{#array_contains selected_columns 'PRIORITY'}}
 			                		{{else}}
-			                	  		<li class="ui-state-highlight" id="PRIORITY">priority</li>
+			                	  		<li class="ui-state-highlight" id="PRIORITY">{{translate 'tasks' 'priority'}}</li>
 			                		{{/array_contains}}
 			                		{{#array_contains selected_columns 'STATUS'}}
 			                		{{else}}
-			                	  		<li class="ui-state-highlight" id="STATUS">{{agile_translate "widgets" "status"}}</li>
+			                	  		<li class="ui-state-highlight" id="STATUS">{{translate 'portlets' 'status'}}</li>
 			                		{{/array_contains}}
 			                		{{#array_contains selected_columns 'ASSIGNEE'}}
 			                		{{else}}
-			                	  		 <li class="ui-state-highlight" id="ASSIGNEE">{{agile_translate "tickets" "assignee"}}</li>
+			                	  		 <li class="ui-state-highlight" id="ASSIGNEE">{{translate 'tickets' 'assignee'}}</li>
 			                		{{/array_contains}}
 			                		{{#array_contains selected_columns 'GROUP'}}
 			                		{{else}}
-			                	  		 <li class="ui-state-highlight" id="GROUP">{{agile_translate "tickets" "group"}}</li>
+			                	  		 <li class="ui-state-highlight" id="GROUP">{{translate 'tickets' 'group'}}</li>
 			                		{{/array_contains}}
 			                		{{#array_contains selected_columns 'ASSIGNED_DATE'}}
 			                		{{else}}
-			                	  		<li class="ui-state-highlight" id="ASSIGNED_DATE">{{agile_translate "tickets" "assigned-date"}}</li>
+			                	  		<li class="ui-state-highlight" id="ASSIGNED_DATE">{{translate 'tickets' 'assigned-date'}}</li>
 			                		{{/array_contains}}
 			                		{{#array_contains selected_columns 'REQUESTER_EMAIL'}}
 			                		{{else}}
-			                	  		  <li class="ui-state-highlight" id="REQUESTER_EMAIL">{{agile_translate "tickets" "requester-email"}}</li>
+			                	  		  <li class="ui-state-highlight" id="REQUESTER_EMAIL">{{translate 'tickets' 'requester-email'}}</li>
 			                		{{/array_contains}}
 			                		{{#array_contains selected_columns 'TYPE'}}
 			                		{{else}}
-			                	  		  <li class="ui-state-highlight" id="TYPE">Ticket type</li>
+			                	  		  <li class="ui-state-highlight" id="TYPE">{{translate 'tickets' 'ticket-type'}}</li>
 			                		{{/array_contains}}
 			                		{{#array_contains selected_columns 'LAST_UPDATED_DATE'}}
 			                		{{else}}
-			                	  		 <li class="ui-state-highlight" id="LAST_UPDATED_DATE">{{agile_translate "tickets" "last-updated-date"}}</li>
+			                	  		 <li class="ui-state-highlight" id="LAST_UPDATED_DATE">{{translate 'tickets' 'last-updated-date'}}</li>
 			                		{{/array_contains}}
 			                		{{#array_contains selected_columns 'ORGANIZATION'}}
 			                		{{else}}
-			                	  		<li class="ui-state-highlight" id="ORGANIZATION">{{agile_translate "companies-edit" "organization"}}</li>
+			                	  		<li class="ui-state-highlight" id="ORGANIZATION">{{translate 'companies-edit' 'organization'}}</li>
 			                		{{/array_contains}}
 			                		{{#array_contains selected_columns 'CLOSED_DATE'}}
 			                		{{else}}
-			                	  		<li class="ui-state-highlight" id="CLOSED_DATE">{{agile_translate "tickets" "Closed&nbsp;Date"}}</li>
+			                	  		<li class="ui-state-highlight" id="CLOSED_DATE">{{translate 'tickets' 'closed-date'}}</li>
 			                		{{/array_contains}}
 			                		{{#array_contains selected_columns 'CONTACT_DETAILS'}}
 			                		{{else}}
-			                	  		<li class="ui-state-highlight" id="CONTACT_DETAILS">{{agile_translate "tickets" "contact-details"}}</li>
+			                	  		<li class="ui-state-highlight" id="CONTACT_DETAILS">{{translate 'tickets' 'contact-details'}}</li>
 			                		{{/array_contains}}
 			                		{{#array_contains selected_columns 'CREATED_DATE'}}
 			                		{{else}}
-			                	  		<li class="ui-state-highlight" id="CREATED_DATE">{{agile_translate "tickets" "Created&nbsp;Date"}}</li>
+			                	  		<li class="ui-state-highlight" id="CREATED_DATE">{{translate 'contacts-view' 'created-date'}}</li>
 			                		{{/array_contains}}
 								</ul>
 							</div>
 							<div class="col-md-5 p-n m-l-sm">
-								<span class="m-l-xs">{{agile_translate "tickets" "columns-included-in-table"}}</span>
+								<span class="m-l-xs">{{translate 'tickets' 'columns-included-in-table'}}</span>
 								<ul name="selected_columns" id="sortable2" class="connectedSortable selected_columns">
 									{{#selected_columns}}
 									  <li class="ui-state-default first-letter-cap" id="{{this}}">{{this}}</li>
@@ -109,8 +111,8 @@
 		            <div class="form-group">
 		                <div class="form-actions col-sm-offset-3 col-md-9">
 		                    <div class="form-actions">
-		                        <a type="reset" href='#ticket-groups' class="btn btn-default btn-sm">{{agile_translate "other" "cancel"}}</a>
-		                        <button type="submit" class="save btn btn-sm btn-primary m-l-xs">{{agile_translate "prefs-settings" "save-changes"}}</button>
+		                        <a type="reset" href='#ticket-groups' class="btn btn-default btn-sm">{{translate 'contact-details' 'cancel'}}</a>
+		                        <button type="submit" class="save btn btn-sm btn-primary m-l-xs">{{translate 'prefs-settings' 'save-changes'}}</button>
 		                    </div>
 		                </div>
 		            </div>

@@ -6,10 +6,11 @@
                     <img alt="Clipboard" src="{{getS3ImagePath '/img/clipboard.png'}}" />
                 </div>
                 <div class="box-right pull-left">
-                    <h4 class="m-t-none">{{agile_translate "deal-view" "no-events-for-deal"}}</h4>
+                    <h4 class="m-t-none">{{translate 'deal-view' 'no-events-for-deal'}}</h4>
                     <div class="text">
-                        {{agile_translate "deal-view" "save-specific-event-information"}}</div>
-                    <a href="#" class="btn blue btn-slate-action btn-default btn-sm m-t-xs deal-add-event"><i class="icon-plus-sign"></i>  {{agile_translate "deal-view" "add-event"}}</a>
+                        {{translate 'deal-view' 'save-specific-event-information'}}
+                    </div>
+                    <a href="#" class="btn blue btn-slate-action btn-default btn-sm m-t-xs deal-add-event"><i class="icon-plus-sign"></i>  {{translate 'deal-view' 'add-event'}}</a>
                 </div>
 				<div class="clearfix">
 				</div>
@@ -18,7 +19,7 @@
         {{/unless}}
         {{#if this.length}}
 	<div class="m-b-md m-t-md m-r-sm" align="right">
-		<a href="#" class="btn btn-sm btn-default deal-add-event pos-rlt btn-addon"><span><i class='icon-plus-sign'/></span> {{agile_translate "deal-view" "add-event"}}</a>
+		<a href="#" class="btn btn-sm btn-default deal-add-event pos-rlt btn-addon"><span><i class='icon-plus-sign'/></span> {{translate 'deal-view' 'add-event'}}</a>
 	</div>
 			<ul id="deal-events-model-list" class="ativity-block-ul list-group list-group-lg no-radius m-b-none m-t-n-xxs"></ul>
 		{{/if}} 

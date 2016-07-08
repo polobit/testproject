@@ -5,38 +5,54 @@
     <form id="userPrefs" class="form-horizontal" role="form">
         <fieldset>
             <input name="id" type="hidden" value="{{id}}" /> 		
-            <!-- <legend>Personal {{agile_translate "preferences" "settings"}}</legend> -->
+            <!-- <legend>Personal Settings</legend> -->
             <div class="row hidden">
                 <div class="col-md-6 col-sm-6 col-xs-6">
                     <div class="control-group form-group hidden">
-                        <label class="control-label col-sm-4">{{agile_translate "deal-view" "name"}}<span class="field_req">*</span></label>
+                        <label class="control-label col-sm-4">{{translate 'other' 'name'}} <span class="field_req">*</span></label>
                         <div class="controls col-sm-8">
                             <input name="name" type="text" class="required form-control" value="{{currentDomainUserName}}" autocapitalize="off" />
                         </div>
                     </div>
                     <div class="control-group form-group hidden">
-                        <label class="control-label col-sm-4">{{agile_translate "prefs-settings" "color-theme"}}<span class="field_req">*</span></label> 
+                        <label class="control-label col-sm-4">{{translate 'prefs-settings' 'color-theme'}} <span class="field_req">*</span></label> 
                         <div class="controls col-sm-8">
                             <select name="template" id="userPrefsTemplate" class="required form-control">
-								<option value="pink">{{agile_translate "prefs-settings" "purple"}}</option>
-                                <option value="blue">{{agile_translate "prefs-settings" "blue"}}</option>
-                                <option value="green">{{agile_translate "prefs-settings" "green"}}</option>
-                                <option value="brown">{{agile_translate "prefs-settings" "brown"}}</option>
+								<option value="pink">{{translate 'prefs-settings' 'purple'}}
+								</option>
+                                <option value="blue">{{translate 'prefs-settings' 'blue'}}</option>
+                                <option value="green">{{translate 'prefs-settings' 'green'}}
+                                </option>
+                                <option value="brown">{{translate 'prefs-settings' 'brown'}}
+                                </option>
                             </select>
                         </div>
                     </div>
                     <div class="control-group form-group hidden">
-                        <label class="control-label col-sm-4">{{agile_translate "prefs-settings" "width"}}</label> 
+                        <label class="control-label col-sm-4">{{translate 'prefs-settings' 'width'}}</label> 
                         <div class="controls col-sm-8">
                             <select name="width" id="userPrefsWidth" class="form-control">
-                                <option value="">{{agile_translate "prefs-settings" "fixed"}}</option>
-                                <option value="-fluid">{{agile_translate "prefs-settings" "fluid"}}</option>
+                                <option value="">{{translate 'prefs-settings' 'fixed'}}</option>
+                                <option value="-fluid">{{translate 'prefs-settings' 'fluid'}}
+                                </option>
                             </select>
                         </div>
                     </div>
 
-<div class="control-group form-group">
-						<label class="control-label col-sm-4">{{agile_translate "report-add" "time-zone"}}</label>
+                    <div class="control-group form-group">
+                        <label class="control-label col-sm-4">{{translate 'prefs-settings' 'language'}}</label> 
+                        <div class="controls col-sm-8">
+                            <select name="language" id="language" class="form-control">
+                                <option value="en">{{translate 'prefs-settings' 'english'}}</option>
+                                <option value="hi">{{translate 'prefs-settings' 'hindi'}}</option>
+                                <option value="te">{{translate 'prefs-settings' 'telugu'}}</option>
+                                <option value="es">{{translate 'prefs-settings' 'spanish'}}</option>
+                            </select>
+                        </div>
+                    </div>
+
+					<div class="control-group form-group">
+						<label class="control-label col-sm-4">{{translate 'prefs-settings' 'time-zone'}}</label>
 						<div class="controls col-sm-8">
 							<select name="timezone" id="timezone" class="form-control">
 								   <option value="Africa/Abidjan">Africa/Abidjan</option>
@@ -68,7 +84,7 @@
 								<option value="Africa/Dar_es_Salaam">
 									Africa/Dar es Salaam</option>
 								<option value="Africa/Djibouti">
-									Africa/{{agile_translate "countries" "DJ"}}</option>
+									Africa/Djibouti</option>
 
 								<option value="Africa/El_Aaiun"> Africa/El
 									Aaiun</option>
@@ -98,7 +114,7 @@
 
 								<option value="Africa/Monrovia">
 									Africa/Monrovia</option>
-								<option value="Africa/Maputo"> Africa/Mapu{{agile_translate "contacts-view" "to"}}</option>
+								<option value="Africa/Maputo"> Africa/Maputo</option>
 								<option value="Africa/Maseru"> Africa/Maseru</option>
 								<option value="Africa/Mbabane">
 									Africa/Mbabane</option>
@@ -119,7 +135,7 @@
 									Africa/Porto-Novo</option>
 								<option value="Africa/Sao_Tome"> Africa/Sao
 									Tome</option>
-								<option value="Africa/Tunis"> Africa/Tun{{agile_translate "contacts-view" "is"}}</option>
+								<option value="Africa/Tunis"> Africa/Tunis</option>
 								<option value="Africa/Tripoli">
 									Africa/Tripoli</option>
 								<option value="Africa/Windhoek">
@@ -133,10 +149,10 @@
 								<option value="America/Atikokan">
 									America/Atikokan</option>
 								<option value="America/Anguilla">
-									America/{{agile_translate "countries" "AI"}}</option>
+									America/Anguilla</option>
 								<option value="America/Antigua">
 									America/Antigua</option>
-								<option value="America/Aruba"> America/{{agile_translate "countries" "AW"}}</option>
+								<option value="America/Aruba"> America/Aruba</option>
 								<option value="America/Araguaina">
 									America/Araguaina</option>
 								<option value="America/Argentina/Buenos_Aires">
@@ -158,24 +174,24 @@
 								<option value="America/Argentina/San_Juan">
 									America/Argentina/San Juan</option>
 								<option value="America/Argentina/San_Luis">
-									America/Argentina/San Lu{{agile_translate "contacts-view" "is"}}</option>
+									America/Argentina/San Luis</option>
 								<option value="America/Argentina/Tucuman">
 									America/Argentina/Tucuman</option>
 								<option value="America/Argentina/Ushuaia">
 									America/Argentina/Ushuaia</option>
 								<option value="America/Asuncion">
-									America/Asunci{{agile_translate "contacts-view" "on"}}</option>
+									America/Asuncion</option>
 								<option value="America/Boise"> America/Boise</option>
 								<option value="America/Bogota">
 									America/Bogota</option>
 								<option value="America/Bahia_Banderas">
 									America/Bahia Banderas</option>
 								<option value="America/Belize">
-									America/{{agile_translate "countries" "BZ"}}</option>
+									America/Belize</option>
 								<option value="America/Barbados">
-									America/{{agile_translate "countries" "BB"}}</option>
+									America/Barbados</option>
 								<option value="America/Blanc-Sablon">
-									America/Blanc-Sabl{{agile_translate "contacts-view" "on"}}</option>
+									America/Blanc-Sablon</option>
 								<option value="America/Boa_Vista">
 									America/Boa Vista</option>
 								<option value="America/Bahia"> America/Bahia</option>
@@ -185,13 +201,13 @@
 								<option value="America/Chicago">
 									America/Chicago</option>
 								<option value="America/Costa_Rica">
-									America/{{agile_translate "countries" "CR"}}</option>
+									America/Costa Rica</option>
 								<option value="America/Cambridge_Bay">America/Cambridge
 									Bay</option>
 								<option value="America/Chihuahua">
 									America/Chihuahua</option>
 								<option value="America/Creston">
-									America/Crest{{agile_translate "contacts-view" "on"}}</option>
+									America/Creston</option>
 								<option value="America/Cayman">
 									America/Cayman</option>
 								<option value="America/Caracas">
@@ -207,25 +223,25 @@
 								<option value="America/Dawson_Creek">
 									America/Dawson Creek</option>
 								<option value="America/Dawson">
-									America/Daws{{agile_translate "contacts-view" "on"}}</option>
+									America/Dawson</option>
 								<option value="America/Denver">
 									America/Denver</option>
 								<option value="America/Detroit">
 									America/Detroit</option>
 								<option value="America/Dominica">
-									America/{{agile_translate "countries" "DM"}}</option>
+									America/Dominica</option>
 								<option value="America/Danmarkshavn">
 									America/Danmarkshavn</option>
 								<option value="America/Edmonton">
-									America/Edmont{{agile_translate "contacts-view" "on"}}</option>
+									America/Edmonton</option>
 								<option value="America/El_Salvador">
-									America/{{agile_translate "countries" "SV"}}</option>
+									America/El Salvador</option>
 								<option value="America/Eirunepe">
 									America/Eirunepe</option>
 								<option value="America/Fortaleza">
 									America/Fortaleza</option>
 								<option value="America/Guatemala">
-									America/{{agile_translate "countries" "GT"}}</option>
+									America/Guatemala</option>
 								<option value="America/Grand_Turk">
 									America/Grand Turk</option>
 								<option value="America/Guayaquil">
@@ -235,11 +251,11 @@
 								<option value="America/Goose_Bay">
 									America/Goose Bay</option>
 								<option value="America/Grenada">
-									America/{{agile_translate "countries" "GD"}}</option>
+									America/Grenada</option>
 								<option value="America/Guadeloupe">
-									America/{{agile_translate "countries" "GP"}}</option>
+									America/Guadeloupe</option>
 								<option value="America/Guyana">
-									America/{{agile_translate "countries" "GY"}}</option>
+									America/Guyana</option>
 								<option value="America/Godthab">
 									America/Godthab</option>
 								<option value="America/Hermosillo">
@@ -253,9 +269,9 @@
 								<option value="America/Indiana/Knox">
 									America/Indiana/Knox</option>
 								<option value="America/Indiana/Tell_City">
-									America/Indiana/Tell {{agile_translate "contact-edit" "city"}}</option>
+									America/Indiana/Tell City</option>
 								<option value="America/Indiana/Indianapolis">
-									America/Indiana/Indianapol{{agile_translate "contacts-view" "is"}}</option>
+									America/Indiana/Indianapolis</option>
 								<option value="America/Indiana/Marengo">
 									America/Indiana/Marengo</option>
 								<option value="America/Indiana/Petersburg">
@@ -271,7 +287,7 @@
 								<option value="America/Juneau">
 									America/Juneau</option>
 								<option value="America/Jamaica">
-									America/{{agile_translate "countries" "JM"}}</option>
+									America/Jamaica</option>
 								<option value="America/Kentucky/Louisville">
 									America/Kentucky/Louisville</option>
 								<option value="America/Kentucky/Monticello">
@@ -298,7 +314,7 @@
 								<option value="America/Merida">
 									America/Merida</option>
 								<option value="America/Mexico_City">
-									America/Mexico {{agile_translate "contact-edit" "city"}}</option>
+									America/Mexico City</option>
 								<option value="America/Monterrey">
 									America/Monterrey</option>
 								<option value="America/Montreal">
@@ -306,17 +322,17 @@
 								<option value="America/Maceio">
 									America/Maceio</option>
 								<option value="America/Miquelon">
-									America/Miquel{{agile_translate "contacts-view" "on"}}</option>
+									America/Miquelon</option>
 								<option value="America/Manaus">
 									America/Manaus</option>
 								<option value="America/Marigot">
 									America/Marigot</option>
 								<option value="America/Martinique">
-									America/{{agile_translate "countries" "MQ"}}</option>
+									America/Martinique</option>
 								<option value="America/Moncton">
-									America/Monct{{agile_translate "contacts-view" "on"}}</option>
+									America/Moncton</option>
 								<option value="America/Montserrat">
-									America/{{agile_translate "countries" "MS"}}</option>
+									America/Montserrat</option>
 								<option value="America/Montevideo">
 									America/Montevideo</option>
 								<option value="America/Nome"> America/Nome</option>
@@ -325,7 +341,7 @@
 								<option value="America/North_Dakota/Beulah">
 									America/North Dakota/Beulah</option>
 								<option value="America/North_Dakota/Center">
-									America/North Dakota/{{agile_translate "web-rules" "center"}}</option>
+									America/North Dakota/Center</option>
 								<option value="America/North_Dakota/New_Salem">
 									America/North Dakota/New Salem</option>
 								<option value="America/Nassau">
@@ -333,25 +349,25 @@
 								<option value="America/New_York"> America/New
 									York</option>
 								<option value="America/Nipigon">
-									America/Nipig{{agile_translate "contacts-view" "on"}}</option>
+									America/Nipigon</option>
 								<option value="America/Ojinaga">
 									America/Ojinaga</option>
 								<option value="America/Phoenix">
 									America/Phoenix</option>
 								<option value="America/Panama">
-									America/{{agile_translate "countries" "PA"}}</option>
+									America/Panama</option>
 								<option value="America/Pangnirtung">
 									America/Pangnirtung</option>
 								<option value="America/Port-au-Prince">
 									America/Port-au-Prince</option>
 								<option value="America/Port_of_Spain">
-									America/Port of {{agile_translate "countries" "ES"}}</option>
+									America/Port of Spain</option>
 								<option value="America/Porto_Velho">
 									America/Porto Velho</option>
 								<option value="America/Paramaribo">
 									America/Paramaribo</option>
 								<option value="America/Puerto_Rico">
-									America/{{agile_translate "countries" "PR"}}</option>
+									America/Puerto Rico</option>
 								<option value="America/Rainy_River">
 									America/Rainy River</option>
 								<option value="America/Rankin_Inlet">
@@ -404,7 +420,7 @@
 								<option value="America/Thunder_Bay">
 									America/Thunder Bay</option>
 								<option value="America/Toronto">
-									America/Toron{{agile_translate "contacts-view" "to"}}</option>
+									America/Toronto</option>
 								<option value="America/Thule"> America/Thule</option>
 								<option value="America/Tortola">
 									America/Tortola</option>
@@ -425,11 +441,11 @@
 
 
 								<option value="Antarctica/Davis">
-									Antarctica/Dav{{agile_translate "contacts-view" "is"}}</option>
+									Antarctica/Davis</option>
 								<option value="Antarctica/DumontDUrville">
 									Antarctica/DumontDUrville</option>
 
-								<option value="Antarctica/Mawson">Antarctica/Maws{{agile_translate "contacts-view" "on"}}</option>
+								<option value="Antarctica/Mawson">Antarctica/Mawson</option>
 								<option value="Antarctica/Macquarie">
 									Antarctica/Macquarie</option>
 								<option value="Antarctica/McMurdo">
@@ -459,7 +475,7 @@
 								<option value="Asia/Almaty"> Asia/Almaty</option>
 								<option value="Asia/Anadyr"> Asia/Anadyr</option>
 								<option value="Asia/Baghdad"> Asia/Baghdad</option>
-								<option value="Asia/Bahrain"> Asia/{{agile_translate "countries" "BH"}}</option>
+								<option value="Asia/Bahrain"> Asia/Bahrain</option>
 								<option value="Asia/Beirut"> Asia/Beirut</option>
 								<option value="Asia/Baku"> Asia/Baku</option>
 								<option value="Asia/Bishkek"> Asia/Bishkek</option>
@@ -481,11 +497,11 @@
 
 
 								<option value="Asia/Gaza"> Asia/Gaza</option>
-								<option value="Asia/Hebron"> Asia/Hebr{{agile_translate "contacts-view" "on"}}</option>
+								<option value="Asia/Hebron"> Asia/Hebron</option>
 								<option value="Asia/Hovd"> Asia/Hovd</option>
 								<option value="Asia/Ho_Chi_Minh"> Asia/Ho Chi
 									Minh</option>
-								<option value="Asia/Harbin"> Asia/Harb{{agile_translate "contacts-view" "in"}}</option>
+								<option value="Asia/Harbin"> Asia/Harbin</option>
 								<option value="Asia/Hong_Kong"> Asia/Hong
 									Kong</option>
 
@@ -495,7 +511,7 @@
 									Asia/Jerusalem</option>
 								<option value="Asia/Jakarta"> Asia/Jakarta</option>
 								<option value="Asia/Jayapura"> Asia/Jayapura</option>
-								<option value="Asia/Kuwait"> Asia/{{agile_translate "countries" "KW"}}</option>
+								<option value="Asia/Kuwait"> Asia/Kuwait</option>
 								<option value="Asia/Kabul"> Asia/Kabul</option>
 								<option value="Asia/Karachi"> Asia/Karachi</option>
 								<option value="Asia/Kolkata"> Asia/Kolkata</option>
@@ -530,18 +546,18 @@
 									Asia/Pontianak</option>
 								<option value="Asia/Pyongyang">
 									Asia/Pyongyang</option>
-								<option value="Asia/Qatar"> Asia/{{agile_translate "countries" "QA"}}</option>
+								<option value="Asia/Qatar"> Asia/Qatar</option>
 								<option value="Asia/Qyzylorda">
 									Asia/Qyzylorda</option>
 								<option value="Asia/Riyadh"> Asia/Riyadh</option>
-								<option value="Asia/Rangoon"> Asia/Rango{{agile_translate "contacts-view" "on"}}</option>
+								<option value="Asia/Rangoon"> Asia/Rangoon</option>
 								<option value="Asia/Samarkand">
-									Asia/Samark{{agile_translate "contacts-view" "and"}}</option>
+									Asia/Samarkand</option>
 								<option value="Asia/Shanghai"> Asia/Shanghai</option>
 								<option value="Asia/Singapore">
-									Asia/{{agile_translate "countries" "SG"}}</option>
+									Asia/Singapore</option>
 								<option value="Asia/Seoul"> Asia/Seoul</option>
-								<option value="Asia/Sakhalin"> Asia/Sakhal{{agile_translate "contacts-view" "in"}}</option>
+								<option value="Asia/Sakhalin"> Asia/Sakhalin</option>
 								<option value="Asia/Tashkent"> Asia/Tashkent</option>
 								<option value="Asia/Tokyo"> Asia/Tokyo</option>
 								<option value="Asia/Taipei"> Asia/Taipei</option>
@@ -571,7 +587,7 @@
 								<option value="Australia/Currie">
 									Australia/Currie</option>
 								<option value="Australia/Darwin">
-									Australia/Darw{{agile_translate "contacts-view" "in"}}</option>
+									Australia/Darwin</option>
 								<option value="Australia/Eucla">
 									Australia/Eucla</option>
 								<option value="Australia/Hobart">
@@ -589,9 +605,9 @@
 								<option value="Atlantic/Azores">
 									Atlantic/Azores</option>
 								<option value="Atlantic/Bermuda">
-									Atlantic/{{agile_translate "countries" "BM"}}</option>
+									Atlantic/Bermuda</option>
 								<option value="Atlantic/Cape_Verde">
-									Atlantic/{{agile_translate "countries" "CV"}}</option>
+									Atlantic/Cape Verde</option>
 								<option value="Atlantic/Canary">
 									Atlantic/Canary</option>
 								<option value="Atlantic/Faroe">
@@ -603,7 +619,7 @@
 								<option value="Atlantic/Reykjavik">
 									Atlantic/Reykjavik</option>
 								<option value="Atlantic/South_Georgia">
-									Atlantic/South {{agile_translate "countries" "GE"}}</option>
+									Atlantic/South Georgia</option>
 								<option value="Atlantic/Stanley">
 									Atlantic/Stanley</option>
 
@@ -617,9 +633,9 @@
 								<option value="Canada/Eastern">
 									Canada/Eastern</option>
 								<option value="Canada/Mountain">
-									Canada/Mounta{{agile_translate "contacts-view" "in"}}</option>
+									Canada/Mountain</option>
 								<option value="Canada/Newfoundland">
-									Canada/Newfoundl{{agile_translate "contacts-view" "and"}}</option>
+									Canada/Newfoundland</option>
 								<option value="Canada/Pacific">
 									Canada/Pacific</option>
 
@@ -627,11 +643,11 @@
 								<option value="Europe/Amsterdam">
 									Europe/Amsterdam</option>
 								<option value="Europe/Andorra">
-									Europe/{{agile_translate "countries" "AD"}}</option>
+									Europe/Andorra</option>
 								<option value="Europe/Athens"> Europe/Athens</option>
 								<option value="Europe/Belgrade">
 									Europe/Belgrade</option>
-								<option value="Europe/Berlin"> Europe/Berl{{agile_translate "contacts-view" "in"}}</option>
+								<option value="Europe/Berlin"> Europe/Berlin</option>
 								<option value="Europe/Bratislava">
 									Europe/Bratislava</option>
 								<option value="Europe/Brussels">
@@ -646,37 +662,37 @@
 									Europe/Copenhagen</option>
 								<option value="Europe/Chisinau">
 									Europe/Chisinau</option>
-								<option value="Europe/Dublin"> Europe/Dubl{{agile_translate "contacts-view" "in"}}</option>
+								<option value="Europe/Dublin"> Europe/Dublin</option>
 								<option value="Europe/Guernsey">
-									Europe/{{agile_translate "countries" "GG"}}</option>
+									Europe/Guernsey</option>
 								<option value="Europe/Gibraltar">
-									Europe/{{agile_translate "countries" "GI"}}</option>
+									Europe/Gibraltar</option>
 								<option value="Europe/Helsinki">
 									Europe/Helsinki</option>
 
 								<option value="Europe/Isle_of_Man">
-									Europe/{{agile_translate "countries" "IM"}}</option>
+									Europe/Isle of Man</option>
 								<option value="Europe/Istanbul">
 									Europe/Istanbul</option>
-								<option value="Europe/Jersey"> Europe/{{agile_translate "countries" "JE"}}</option>
+								<option value="Europe/Jersey"> Europe/Jersey</option>
 								<option value="Europe/Kaliningrad">
 									Europe/Kaliningrad</option>
 								<option value="Europe/Kiev"> Europe/Kiev</option>
-								<option value="Europe/Lisbon"> Europe/Lisb{{agile_translate "contacts-view" "on"}}</option>
-								<option value="Europe/London"> Europe/Lond{{agile_translate "contacts-view" "on"}}</option>
+								<option value="Europe/Lisbon"> Europe/Lisbon</option>
+								<option value="Europe/London"> Europe/London</option>
 								<option value="Europe/Ljubljana">
 									Europe/Ljubljana</option>
 								<option value="Europe/Luxembourg">
-									Europe/{{agile_translate "countries" "LU"}}</option>
+									Europe/Luxembourg</option>
 								<option value="Europe/Madrid"> Europe/Madrid</option>
-								<option value="Europe/Malta"> Europe/{{agile_translate "countries" "MT"}}</option>
-								<option value="Europe/Monaco"> Europe/{{agile_translate "countries" "MC"}}</option>
+								<option value="Europe/Malta"> Europe/Malta</option>
+								<option value="Europe/Monaco"> Europe/Monaco</option>
 								<option value="Europe/Mariehamn">
 									Europe/Mariehamn</option>
 								<option value="Europe/Minsk"> Europe/Minsk</option>
 								<option value="Europe/Moscow"> Europe/Moscow</option>
 								<option value="Europe/Oslo"> Europe/Oslo</option>
-								<option value="Europe/Paris"> Europe/Par{{agile_translate "contacts-view" "is"}}</option>
+								<option value="Europe/Paris"> Europe/Paris</option>
 								<option value="Europe/Podgorica">
 									Europe/Podgorica</option>
 								<option value="Europe/Prague"> Europe/Prague</option>
@@ -726,18 +742,18 @@
 								<option value="Indian/Kerguelen">
 									Indian/Kerguelen</option>
 								<option value="Indian/Mayotte">
-									Indian/{{agile_translate "countries" "YT"}}</option>
+									Indian/Mayotte</option>
 								<option value="Indian/Mahe"> Indian/Mahe</option>
 								<option value="Indian/Mauritius">
-									Indian/{{agile_translate "countries" "MU"}}</option>
+									Indian/Mauritius</option>
 								<option value="Indian/Maldives">
-									Indian/{{agile_translate "countries" "MV"}}</option>
+									Indian/Maldives</option>
 								<option value="Indian/Reunion">
-									Indian/{{agile_translate "countries" "RE"}}</option>
+									Indian/Reunion</option>
 
 
 								<option value="Pacific/Auckland">
-									Pacific/Auckl{{agile_translate "contacts-view" "and"}}</option>
+									Pacific/Auckland</option>
 								<option value="Pacific/Apia"> Pacific/Apia</option>
 
 
@@ -751,7 +767,7 @@
 									Pacific/Enderbury</option>
 
 
-								<option value="Pacific/Fiji"> Pacific/{{agile_translate "countries" "FJ"}}</option>
+								<option value="Pacific/Fiji"> Pacific/Fiji</option>
 								<option value="Pacific/Funafuti">
 									Pacific/Funafuti</option>
 								<option value="Pacific/Fakaofo">
@@ -761,18 +777,18 @@
 									Pacific/Galapagos</option>
 								<option value="Pacific/Gambier">
 									Pacific/Gambier</option>
-								<option value="Pacific/Guam"> Pacific/{{agile_translate "countries" "GU"}}</option>
+								<option value="Pacific/Guam"> Pacific/Guam</option>
 								<option value="Pacific/Guadalcanal">
 									Pacific/Guadalcanal</option>
 								<option value="Pacific/Honolulu">
 									Pacific/Honolulu</option>
 								<option value="US/Hawaii"> US/Hawaii</option>
 								<option value="Pacific/Johnston">
-									Pacific/Johnst{{agile_translate "contacts-view" "on"}}</option>
+									Pacific/Johnston</option>
 								<option value="Pacific/Kosrae">
 									Pacific/Kosrae</option>
 								<option value="Pacific/Kwajalein">
-									Pacific/Kwajale{{agile_translate "contacts-view" "in"}}</option>
+									Pacific/Kwajalein</option>
 								<option value="Pacific/Kiritimati">
 									Pacific/Kiritimati</option>
 
@@ -785,22 +801,22 @@
 									Pacific/Midway</option>
 								<option value="Pacific/Majuro">
 									Pacific/Majuro</option>
-								<option value="Pacific/Niue"> Pacific/{{agile_translate "countries" "NU"}}</option>
+								<option value="Pacific/Niue"> Pacific/Niue</option>
 
 
 								<option value="Pacific/Noumea">
 									Pacific/Noumea</option>
 								<option value="Pacific/Norfolk">
 									Pacific/Norfolk</option>
-								<option value="Pacific/Nauru"> Pacific/{{agile_translate "countries" "NR"}}</option>
+								<option value="Pacific/Nauru"> Pacific/Nauru</option>
 
 								<option value="Pacific/Pitcairn">
-									Pacific/{{agile_translate "countries" "PN"}}</option>
+									Pacific/Pitcairn</option>
 								<option value="Pacific/Pago_Pago">
 									Pacific/Pago Pago</option>
-								<option value="Pacific/Palau"> Pacific/{{agile_translate "countries" "PW"}}</option>
+								<option value="Pacific/Palau"> Pacific/Palau</option>
 								<option value="Pacific/Port_Moresby">
-									Pacific/Port Mores{{agile_translate "contact-details" "by"}}</option>
+									Pacific/Port Moresby</option>
 								<option value="Pacific/Pohnpei">
 									Pacific/Pohnpei</option>
 
@@ -816,12 +832,12 @@
 									Pacific/Tongatapu</option>
 								<option value="Pacific/Wake"> Pacific/Wake</option>
 								<option value="Pacific/Wallis">
-									Pacific/Wall{{agile_translate "contacts-view" "is"}}</option>
+									Pacific/Wallis</option>
 								<option value="US/Arizona"> US/Arizona</option>
 								<option value="US/Pacific"> US/Pacific</option>
 								<option value="US/Central"> US/Central</option>
 								<option value="US/Alaska"> US/Alaska</option>
-								<option value="US/Mountain"> US/Mounta{{agile_translate "contacts-view" "in"}}</option>
+								<option value="US/Mountain"> US/Mountain</option>
 								<option value="US/Eastern"> US/Eastern</option>
 
 
@@ -833,108 +849,109 @@
 						</div>
 					</div>
             <div class="control-group form-group">
-                <label class="control-label col-sm-4">{{agile_translate "prefs-settings" "currency"}}</label>
+                <label class="control-label col-sm-4">{{translate 'prefs-settings' 'currency'}}
+                </label>
                 <div class="controls col-sm-8">
                    <select id="target_list" name="currency" class="form-control">
-                        <option value="USD-$" selected="1">{{agile_translate "currency" "United States Dollar"}}</option>
-                        <option value="EUR-&euro;">{{agile_translate "currency" "Euro"}}</option>
-                        <option value="DZD-DA">{{agile_translate "currency" "Algerian Dinar"}}</option>
-                        <option value="ARS-$">{{agile_translate "currency" "Argentina Peso"}}</option>
-                        <option value="AUD-$">{{agile_translate "currency" "Australian Dollar"}}</option>
-                        <option value="BHD-BD">{{agile_translate "currency" "Bahraini Dinar"}}</option>
-                        <option value="BOB-$b">{{agile_translate "currency" "Bolivian Boliviano"}}</option>
-                        <option value="BWP-P">{{agile_translate "currency" "Botswanan Pula"}}</option>
-                        <option value="BRL-R$">{{agile_translate "currency" "Brazilian Real"}}</option>
-                        <option value="GBP-&pound;">{{agile_translate "currency" "British Pound Sterling"}}</option>
-                        <option value="BND-$">{{agile_translate "currency" "Brunei Dollar"}}</option>
-                        <option value="BGN-&#1083;&#1074;">{{agile_translate "currency" "Bulgarian Lev"}}</option>
-                        <option value="CAD-$">{{agile_translate "currency" "Canadian Dollar"}}</option>
-                        <option value="KYD-$">{{agile_translate "currency" "Cayman Islands Dollar"}}</option>
-                        <option value="XOF-CFAF">{{agile_translate "currency" "CFA Franc BCEAO"}}</option>
-                        <option value="CLP-$">{{agile_translate "currency" "Chilean Peso"}}</option>
-                        <option value="CNY-&yen;">{{agile_translate "currency" "Chinese Yuan"}}</option>
-                        <option value="COP-$">{{agile_translate "currency" "Colombian Peso"}}</option>
-                        <option value="CRC-&#8353;">{{agile_translate "currency" "Costa Rican Colon"}}</option>
-                        <option value="HRK-kn">{{agile_translate "currency" "Croatian Kuna"}}</option>
-                        <option value="CZK-K&#269;">{{agile_translate "currency" "Czech Republic Koruna"}}</option>
-                        <option value="DKK-kr">{{agile_translate "currency" "Danish Krone"}}</option>
-                        <option value="DOP-RD$">{{agile_translate "currency" "Dominican Peso"}}</option>
-                        <option value="EGP-&pound;">{{agile_translate "currency" "Egyptian Pound"}}</option>
-                        <option value="EEK-kr">{{agile_translate "currency" "Estonian Kroon"}}</option>
-                        <option value="FJD-$">{{agile_translate "currency" "Fijian Dollar"}}</option>
-                        <option value="HNL-L">{{agile_translate "currency" "Honduran Lempira"}}</option>
-                        <option value="HKD-$">{{agile_translate "currency" "Hong Kong Dollar"}}</option>
-                        <option value="HUF-Ft">{{agile_translate "currency" "Hungarian Forint"}}</option>
+                        <option value="USD-$" selected="1">United States Dollar</option>
+                        <option value="EUR-&euro;">Euro</option>
+                        <option value="DZD-DA">Algerian Dinar</option>
+                        <option value="ARS-$">Argentina Peso</option>
+                        <option value="AUD-$">Australian Dollar</option>
+                        <option value="BHD-BD">Bahraini Dinar</option>
+                        <option value="BOB-$b">Bolivian Boliviano</option>
+                        <option value="BWP-P">Botswanan Pula</option>
+                        <option value="BRL-R$">Brazilian Real</option>
+                        <option value="GBP-&pound;">British Pound Sterling</option>
+                        <option value="BND-$">Brunei Dollar</option>
+                        <option value="BGN-&#1083;&#1074;">Bulgarian Lev</option>
+                        <option value="CAD-$">Canadian Dollar</option>
+                        <option value="KYD-$">Cayman Islands Dollar</option>
+                        <option value="XOF-CFAF">CFA Franc BCEAO</option>
+                        <option value="CLP-$">Chilean Peso</option>
+                        <option value="CNY-&yen;">Chinese Yuan</option>
+                        <option value="COP-$">Colombian Peso</option>
+                        <option value="CRC-&#8353;">Costa Rican Colon</option>
+                        <option value="HRK-kn">Croatian Kuna</option>
+                        <option value="CZK-K&#269;">Czech Republic Koruna</option>
+                        <option value="DKK-kr">Danish Krone</option>
+                        <option value="DOP-RD$">Dominican Peso</option>
+                        <option value="EGP-&pound;">Egyptian Pound</option>
+                        <option value="EEK-kr">Estonian Kroon</option>
+                        <option value="FJD-$">Fijian Dollar</option>
+                        <option value="HNL-L">Honduran Lempira</option>
+                        <option value="HKD-$">Hong Kong Dollar</option>
+                        <option value="HUF-Ft">Hungarian Forint</option>
                         <option value="ISK-ISK">Icelandic Krona</option>
-                        <option value="INR-Rs">{{agile_translate "currency" "Indian Rupee"}}</option>
-                        <option value="IDR-Rp">{{agile_translate "currency" "Indonesian Rupiah"}}</option>
-                        <option value="ILS-&#8362;">{{agile_translate "currency" "Israeli New Sheqel"}}</option>
-                        <option value="JMD-J$">{{agile_translate "currency" "Jamaican Dollar"}}</option>
-                        <option value="JPY-&yen;">{{agile_translate "currency" "Japanese Yen"}}</option>
-                        <option value="JOD-JOD">{{agile_translate "currency" "Jordanian Dinar"}}</option>
-                        <option value="KZT-&#1083;&#1074;">{{agile_translate "currency" "Kazakhstani Tenge"}}</option>
-                        <option value="KES-KSh">{{agile_translate "currency" "Kenyan Shilling"}}</option>
-                        <option value="KWD-KD">{{agile_translate "currency" "Kuwaiti Dinar"}}</option>
-                        <option value="LVL-Ls">{{agile_translate "currency" "Latvian Lats"}}</option>
-                        <option value="LBP-&pound;">{{agile_translate "currency" "Lebanese Pound"}}</option>
-						<option value="LYD-LD">{{agile_translate "currency" "Libyan Dinar"}}</option>
-                        <option value="LTL-Lt">{{agile_translate "currency" "Lithuanian Litas"}}</option>
-                        <option value="MKD-&#1076;&#1077;&#1085;">{{agile_translate "currency" "Macedonian Denar"}}</option>
-                        <option value="MYR-RM">{{agile_translate "currency" "Malaysian Ringgit"}}</option>
-                        <option value="MUR-&#8360;">{{agile_translate "currency" "Mauritian Rupee"}}</option>
-                        <option value="MXN-$">{{agile_translate "currency" "Mexican Peso"}}</option>
-                        <option value="MDL-MDL">{{agile_translate "currency" "Moldovan Leu"}}</option>
-                        <option value="MAD-DH">{{agile_translate "currency" "Moroccan Dirham"}}</option>
-                        <option value="NAD-$">{{agile_translate "currency" "Namibian Dollar"}}</option>
-                        <option value="NPR-&#8360;">{{agile_translate "currency" "Nepalese Rupee"}}</option>
-                        <option value="ANG-&fnof;">{{agile_translate "currency" "Netherlands Antillean Guilder"}}</option>
-                        <option value="TWD-NT$">{{agile_translate "currency" "New Taiwan Dollar"}}</option>
-                        <option value="NZD-$">{{agile_translate "currency" "New Zealand Dollar"}}</option>
-                        <option value="NIO-C$">{{agile_translate "currency" "Nicaraguan Cordoba"}}</option>
-                        <option value="NGN-&#8358;">{{agile_translate "currency" "Nigerian Naira"}}</option>
-                        <option value="NOK-kr">{{agile_translate "currency" "Norwegian Krone"}}</option>
-                        <option value="OMR-RO">{{agile_translate "currency" "Omani Rial"}}</option>
-                        <option value="PKR-&#8360;">{{agile_translate "currency" "Pakistani Rupee"}}</option>
-                        <option value="PGK-K">{{agile_translate "currency" "Papua New Guinean Kina"}}</option>
-                        <option value="PYG-Gs">{{agile_translate "currency" "Paraguayan Guarani"}}</option>
-                        <option value="PEN-S/.">{{agile_translate "currency" "Peruvian Nuevo Sol"}}</option>
-                        <option value="PHP-&#8369;">{{agile_translate "currency" "Philippine Peso"}}</option>
-                        <option value="PLN-z&#322;">{{agile_translate "currency" "Polish Zloty"}}</option>
-                        <option value="QAR-QR">{{agile_translate "currency" "Qatari Rial"}}</option>
-                        <option value="RON-lei">{{agile_translate "currency" "Romanian Leu"}}</option>
-                        <option value="RUB-&#1088;&#1091;&#1073;">{{agile_translate "currency" "Russian Ruble"}}</option>
-                        <option value="SVC-&#8353;">{{agile_translate "currency" "Salvadoran Colon"}}</option>
-                        <option value="SAR-SR">{{agile_translate "currency" "Saudi Riyal"}}</option>
-                        <option value="RSD-&#1044;&#1080;&#1085;.">{{agile_translate "currency" "Serbian Dinar"}}</option>
-                        <option value="SCR-&#8360;">{{agile_translate "currency" "Seychellois Rupee"}}</option>
-                        <option value="SLL-Le">{{agile_translate "currency" "Sierra Leonean Leone"}}</option>
-                        <option value="SGD-$">{{agile_translate "currency" "Singapore Dollar"}}</option>
-                        <option value="SKK-Sk">{{agile_translate "currency" "Slovak Koruna"}}</option>
-                        <option value="ZAR-R">{{agile_translate "currency" "South African Rand"}}</option>
-                        <option value="KRW-&#8361;">{{agile_translate "currency" "South Korean Won"}}</option>
-                        <option value="LKR-&#8360;">{{agile_translate "currency" "Sri Lankan Rupee"}}</option>
-                        <option value="SEK-kr">{{agile_translate "currency" "Swedish Krona"}}</option>
-                        <option value="CHF-CHF">{{agile_translate "currency" "Swiss Franc"}}</option>
-                        <option value="TZS-TSh">{{agile_translate "currency" "Tanzanian Shilling"}}</option>
-                        <option value="THB-&#3647;">{{agile_translate "currency" "Thai Baht"}}</option>
-                        <option value="TTD-TT$">{{agile_translate "currency" "Trinidad and Tobago Dollar"}}</option>
-                        <option value="TND-TD">{{agile_translate "currency" "Tunisian Dinar"}}</option>
-                        <option value="TRY-YTL">{{agile_translate "currency" "Turkish Lira"}}</option>
-                        <option value="UGX-USh">{{agile_translate "currency" "Ugandan Shilling"}}</option>
-                        <option value="UAH-UAH">{{agile_translate "currency" "Ukrainian Hryvnia"}}</option>
-                        <option value="AED-Dh">{{agile_translate "currency" "United Arab Emirates Dirham"}}</option>
-                        <option value="UYU-$U">{{agile_translate "currency" "Uruguayan Peso"}}</option>
-                        <option value="UZS-&#1083;&#1074;">{{agile_translate "currency" "Uzbekistan Som"}}</option>
+                        <option value="INR-Rs">Indian Rupee</option>
+                        <option value="IDR-Rp">Indonesian Rupiah</option>
+                        <option value="ILS-&#8362;">Israeli New Sheqel</option>
+                        <option value="JMD-J$">Jamaican Dollar</option>
+                        <option value="JPY-&yen;">Japanese Yen</option>
+                        <option value="JOD-JOD">Jordanian Dinar</option>
+                        <option value="KZT-&#1083;&#1074;">Kazakhstani Tenge</option>
+                        <option value="KES-KSh">Kenyan Shilling</option>
+                        <option value="KWD-KD">Kuwaiti Dinar</option>
+                        <option value="LVL-Ls">Latvian Lats</option>
+                        <option value="LBP-&pound;">Lebanese Pound</option>
+						<option value="LYD-LD">Libyan Dinar</option>
+                        <option value="LTL-Lt">Lithuanian Litas</option>
+                        <option value="MKD-&#1076;&#1077;&#1085;">Macedonian Denar</option>
+                        <option value="MYR-RM">Malaysian Ringgit</option>
+                        <option value="MUR-&#8360;">Mauritian Rupee</option>
+                        <option value="MXN-$">Mexican Peso</option>
+                        <option value="MDL-MDL">Moldovan Leu</option>
+                        <option value="MAD-DH">Moroccan Dirham</option>
+                        <option value="NAD-$">Namibian Dollar</option>
+                        <option value="NPR-&#8360;">Nepalese Rupee</option>
+                        <option value="ANG-&fnof;">Netherlands Antillean Guilder</option>
+                        <option value="TWD-NT$">New Taiwan Dollar</option>
+                        <option value="NZD-$">New Zealand Dollar</option>
+                        <option value="NIO-C$">Nicaraguan Cordoba</option>
+                        <option value="NGN-&#8358;">Nigerian Naira</option>
+                        <option value="NOK-kr">Norwegian Krone</option>
+                        <option value="OMR-RO">Omani Rial</option>
+                        <option value="PKR-&#8360;">Pakistani Rupee</option>
+                        <option value="PGK-K">Papua New Guinean Kina</option>
+                        <option value="PYG-Gs">Paraguayan Guarani</option>
+                        <option value="PEN-S/.">Peruvian Nuevo Sol</option>
+                        <option value="PHP-&#8369;">Philippine Peso</option>
+                        <option value="PLN-z&#322;">Polish Zloty</option>
+                        <option value="QAR-QR">Qatari Rial</option>
+                        <option value="RON-lei">Romanian Leu</option>
+                        <option value="RUB-&#1088;&#1091;&#1073;">Russian Ruble</option>
+                        <option value="SVC-&#8353;">Salvadoran Colon</option>
+                        <option value="SAR-SR">Saudi Riyal</option>
+                        <option value="RSD-&#1044;&#1080;&#1085;.">Serbian Dinar</option>
+                        <option value="SCR-&#8360;">Seychellois Rupee</option>
+                        <option value="SLL-Le">Sierra Leonean Leone</option>
+                        <option value="SGD-$">Singapore Dollar</option>
+                        <option value="SKK-Sk">Slovak Koruna</option>
+                        <option value="ZAR-R">South African Rand</option>
+                        <option value="KRW-&#8361;">South Korean Won</option>
+                        <option value="LKR-&#8360;">Sri Lankan Rupee</option>
+                        <option value="SEK-kr">Swedish Krona</option>
+                        <option value="CHF-CHF">Swiss Franc</option>
+                        <option value="TZS-TSh">Tanzanian Shilling</option>
+                        <option value="THB-&#3647;">Thai Baht</option>
+                        <option value="TTD-TT$">Trinidad and Tobago Dollar</option>
+                        <option value="TND-TD">Tunisian Dinar</option>
+                        <option value="TRY-YTL">Turkish Lira</option>
+                        <option value="UGX-USh">Ugandan Shilling</option>
+                        <option value="UAH-UAH">Ukrainian Hryvnia</option>
+                        <option value="AED-Dh">United Arab Emirates Dirham</option>
+                        <option value="UYU-$U">Uruguayan Peso</option>
+                        <option value="UZS-&#1083;&#1074;">Uzbekistan Som</option>
                         <option value="VEF-VEF">Venezuelan Bolivar</option>
-                        <option value="VND-&#8363;">{{agile_translate "currency" "Vietnamese Dong"}}</option>
-                        <option value="YER-YER">{{agile_translate "currency" "Yemeni Rial"}}</option>
-                        <option value="ZMK-ZK">{{agile_translate "currency" "Zambian Kwacha"}}</option>
+                        <option value="VND-&#8363;">Vietnamese Dong</option>
+                        <option value="YER-YER">Yemeni Rial</option>
+                        <option value="ZMK-ZK">Zambian Kwacha</option>
                     </select>
                         
                 </div>
             </div>
             <div class="control-group form-group">
-            	<label class="control-label col-sm-4">{{agile_translate "prefs-settings" "date-format"}}<span class="field_req">*</span></label> 
+            	<label class="control-label col-sm-4">{{translate 'prefs-settings' 'date-format'}} <span class="field_req">*</span></label> 
                 <div class="controls col-sm-8">
                 	<select name="dateFormat" id="date-format" class="required form-control">
 						<option value="mm/dd/yyyy">{{currentDateInFormat "mm/dd/yyyy"}}</option>
@@ -968,7 +985,7 @@
                                 <p>
 									<input type="hidden" id="upload_url" name="pic"/>  
                                     <!--<input style="margin: 10px 0px 0px;" class="upload_s3 btn" type="button" id="user_prefs_image" value="Upload"/>-->
-									<a href="#choose-avatar-modal" class="text-info" data-toggle="modal">{{agile_translate "prefs-settings" "change-avatar"}}</a>
+									<a href="#choose-avatar-modal" class="text-info" data-toggle="modal">{{translate 'prefs-settings' 'change-avatar'}}</a>
                                 </p>
                             </div>
                         
@@ -978,10 +995,10 @@
             <div class="row hidden">
 <div class="col-md-12">
             <div class="control-group form-group">
-                <label class="control-label col-sm-2">{{agile_translate "prefs-settings" "signature"}}</label> 
+                <label class="control-label col-sm-2">{{translate 'prefs-settings' 'signature'}}</label> 
                 <div class="controls col-sm-9">
 					<div id="loading-editor"></div>
-                    <textarea class="col-md-12 form-control" id="WYSItextarea" rows="10" name="signature" style="display: none;" placeholder="Enter text ..."></textarea>
+                    <textarea class="col-md-12 form-control" id="WYSItextarea" rows="10" name="signature" style="display: none;" placeholder="{{translate 'prefs-settings' 'enter-text'}}"></textarea>
                 </div>
             </div>
             </div>
@@ -989,41 +1006,44 @@
 <div class="row">
 <div class="col-md-12">            
 <div class="control-group form-group hidden">
-            	<label class="control-label col-sm-2">{{agile_translate "prefs-settings" "Calendar-Week-starts-on"}}</label> 
+            	<label class="control-label col-sm-2">{{translate 'prefs-settings' 'Calendar-Week-starts-on'}}</label> 
                 <div class="controls col-sm-9">
                 	<select name="calendar_wk_start_day" id="calendar_wk_start_day" class="required form-control">
-						<option value="0">{{agile_translate "prefs-settings" "sunday"}}</option>
-                        <option value="1">{{agile_translate "prefs-settings" "monday"}}</option>
+						<option value="0">{{translate 'prefs-settings' 'sunday'}}</option>
+                        <option value="1">{{translate 'prefs-settings' 'monday'}}</option>
                      </select>
                  </div>
              </div>
 	  <div class="control-group form-group">
-                <label class="control-label col-sm-2">{{agile_translate "prefs-settings" "task-reminders"}}</label>
+                <label class="control-label col-sm-2">{{translate 'prefs-settings' 'task-reminders'}}</label>
                 <div class="controls col-sm-9">
 <div class="checkbox">
                     <label class="i-checks i-checks-sm">
                     <input id="task_remainder" type="checkbox" name="task_reminder" value="true" /><i></i>
-                    {{agile_translate "prefs-settings" "task-reminders-content"}}</label>
+                    {{translate 'prefs-settings' 'task-reminders-content'}} 
+                    </label>
 </div>       
                 </div>
             </div>
 <div class="control-group form-group">
-                <label class="control-label col-sm-2">{{agile_translate "prefs-settings" "event-reminder"}}</label>
+                <label class="control-label col-sm-2">{{translate 'prefs-settings' 'event-reminder'}}</label>
                 <div class="controls col-sm-9">
                     <div class="checkbox">
 <label class="i-checks i-checks-sm">
                     <input id="event_remainder" type="checkbox" name="event_reminder" value="true" /><i></i>
-                    {{agile_translate "prefs-settings" "event-reminder-content"}}</label>
+                    {{translate 'prefs-settings' 'event-reminder-content'}}
+                    </label>
 </div>       
                 </div>
             </div>
                 <div class="control-group form-group hidden">
-                <label class="control-label col-sm-2">{{agile_translate "prefs-settings" "shortcuts"}}</label>
+                <label class="control-label col-sm-2">{{translate 'prefs-settings' 'shortcuts'}}
+                </label>
                 <div class="controls col-sm-9">
                     <div class="checkbox">
 <label class="i-checks i-checks-sm">
                     <input id="keyboard_shotcuts" type="checkbox" name="keyboard_shotcuts" /><i></i>
-                    {{agile_translate "prefs-settings" "enable-keyboard-shortcuts"}}<a href="#" data-dismiss="modal" class="t-l-none data-toggle="modal" id="keyboard-shortcuts"><i class="icon-info-sign"></i></a>
+                    {{translate 'prefs-settings' 'enable-keyboard-shortcuts'}} <a href="#" data-dismiss="modal" class="t-l-none data-toggle="modal" id="keyboard-shortcuts"><i class="icon-info-sign"></i></a>
                     </label> 
 </div>      
                 </div>
@@ -1031,7 +1051,7 @@
             <div class="control-group form-group hidden">
 <label class="col-sm-2">&nbsp;</label>
                 <div class="controls col-sm-9">
-					<a href="#change-password" class="text-info">{{agile_translate "prefs-settings" "change-password"}}</a>      
+					<a href="#change-password" class="text-info">{{translate 'prefs-settings' 'change-password'}}</a>      
                 </div>
             </div>
 </div>
@@ -1041,8 +1061,8 @@
 <div class="col-md-12">
 <div class="form-group">
             <div class="col-sm-offset-2 col-sm-9">
-                <a href="#" type="submit" class="save btn btn-sm btn-primary">{{agile_translate "prefs-settings" "save-changes"}}</a>
-                <!--<a href="#settings" class="btn btn-default btn-sm ">{{agile_translate "other" "cancel"}}</a>-->
+                <a href="#" type="submit" class="save btn btn-sm btn-primary">{{translate 'prefs-settings' 'change-password'}}</a>
+                <!--<a href="#settings" class="btn btn-default btn-sm ">Cancel</a>-->
             </div>
 </div>
 </div>
@@ -1067,7 +1087,7 @@
                    <input type="hidden" name="custom-avatar" value="{{#getCurrentUserPrefs}}{{#if pic}}{{pic}}{{/if}}{{/getCurrentUserPrefs}}">
                    <tr>
                      <!--<td><a href="#"><img class="thumbnail" src="https://d1gwclp1pmzk26.cloudfront.net/img/gravatar/pic.png" style="width:58px;height:58px;"/></a>
-                         <p class="help-block" style="color:#999;padding-top:5px;opacity:0">{{agile_translate "campaigns" "for"}}</p>
+                         <p class="help-block" style="color:#999;padding-top:5px;opacity:0">For</p>
                      </td>-->
                      <td colspan="3">
                       	 <div id="upload-in-modal" messg="User image has been uploaded">

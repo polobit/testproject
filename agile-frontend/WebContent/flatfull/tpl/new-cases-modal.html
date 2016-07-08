@@ -5,7 +5,8 @@
 	<div class="modal-header">
 		<button class="close" data-dismiss="modal">&times;</button>
 		<h3 class="modal-title">
-			&nbsp;{{agile_translate "modals" "new-case"}}</h3>
+			&nbsp;{{translate 'modals' 'new-case'}}
+		</h3>
 	</div>
 
 	<div class="modal-body">
@@ -13,17 +14,19 @@
 		<form id="casesForm" name="casesForm" method="post" class="form-horizontal">
 			<fieldset>
 				<div class="control-group form-group">
-	                <label class="control-label col-sm-3">{{agile_translate "report-add" "title"}}<span class="field_req">*</span></label>
+	                <label class="control-label col-sm-3">{{translate 'other' 'title'}}
+	                <span class="field_req">*</span></label>
 	                <div class="col-sm-7">
 		                 <div class="controls">
-							<span><input id="title" name="title" type="text" class="required form-control" placeholder="Case Title"></span>
+							<span><input id="title" name="title" type="text" class="required form-control" placeholder="{{translate 'modals' 'case-title'}}">
+							</span>
 						</div>
 
 		             </div>
 		         </div>
 
 		         <div class="form-group control-group">
-						<label class="control-label col-sm-3">{{agile_translate "contact-details" "owner"}}<span class="field_req">*</span></label>
+						<label class="control-label col-sm-3">{{translate 'deal-view' 'owner'}}<span class="field_req">*</span></label>
 						<div class="controls col-sm-7" id="owners">
 							<select id="owners-list" class="required form-control" name="owner_id"></select>
 						</div>
@@ -31,24 +34,25 @@
 
 
 				<div class=" form-group control-group">
-						<label class="control-label col-sm-3">{{agile_translate "widgets" "status"}}<span class="field_req">*</span></label>
+						<label class="control-label col-sm-3">{{translate 'portlets' 'status'}}<span class="field_req">*</span></label>
 						<div class="controls col-sm-7" id="status">
 							<span>
 								<select id="status-list" class="required form-control" name="status">
-									<option value="OPEN">{{agile_translate "contact-details" "OPEN"}}</option>
-									<option value="CLOSE">{{agile_translate "cases" "closed"}}</option>
+									<option value="OPEN">{{translate 'contact-details' 'OPEN'}}
+									</option>
+									<option value="CLOSE">{{translate 'cases' 'closed'}}</option>
 								</select>
 							</span>
 						</div>
 					</div>
 
 				<div class="control-group form-group">
-					<label class="control-label col-sm-3">{{agile_translate "documents" "related-contacts"}}</label>
+					<label class="control-label col-sm-3">{{translate 'documents' 'related-contacts'}}</label>
 					<div class="controls col-sm-7" id="contactTypeAhead">
 						<div>
 							<div>
 								<input type="text" id="contacts-typeahead-input"
-								placeholder="Contact Name" class="typeahead form-control typeahead_contacts"
+								placeholder="{{translate 'cases' 'contact-name'}}" class="typeahead form-control typeahead_contacts"
 								data-provide="typeahead" data-mode="multiple" />
 							</div>
 							<div style="padding-top:3px;">
@@ -60,17 +64,16 @@
 
 				<div id="custom-field-case"></div>
 				<div class="form-group control-group">
-					<label class="control-label col-sm-3">{{agile_translate "other" "description"}}</label>
+					<label class="control-label col-sm-3">{{translate 'other' 'description'}}</label>
 					<div class="controls col-sm-7" style="margin-right:10px;">
-						<textarea id="description" name="description" rows="3" class="input form-control w-full" placeholder="Add Comment.."></textarea>
+						<textarea id="description" name="description" rows="3" class="input form-control w-full" placeholder="{{translate 'cases' 'add-comment'}}"></textarea>
 					</div>
 				</div>
 			</fieldset>
 		</form>
 	</div>
 	<div class="modal-footer" id="cases-add-save">
-		<a href="#" class="btn btn-sm btn-primary" id="cases_validate">Save
-			Changes</a> <span class="save-status"></span>
+		<a href="#" class="btn btn-sm btn-primary" id="cases_validate">{{translate 'prefs-settings' 'save-changes'}}</a> <span class="save-status"></span>
 	</div>
 </div>
 </div>
