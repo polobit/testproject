@@ -2317,7 +2317,7 @@ color:#484848!important;
 .pos-t-1{ top: 1px;}
 .icons-text-sm .actions i, .icons-text-sm .actions span.icon-trash{ font-size: 13px;}
 .icons-text-sm.actions i, .icons-text-sm.actions span.icon-trash{ font-size: 13px !important;}
-.app-aside-folded:not(.app-aside-dock) .navi > ul > li#landing-pages-menu a span{ padding-top: 10%;}
+.app-aside-folded:not(.app-aside-dock) .navi > ul > li#landing-pages-menu a span, .app-aside-folded:not(.app-aside-dock) .navi > ul > li#tickets a span, .app-aside-folded:not(.app-aside-dock) .navi > ul > li#ticketcannedmessagesmenu a span, .app-aside-folded:not(.app-aside-dock) .navi > ul > li#email-templates-menu a span{ padding-top: 10%;}
 .recent-list-text-color a{ color: #363f44 !important;}
 
 .editicon{ border: 1px solid #dee5e7; height: 13px; padding: 0 2px; border-radius: 2px;}
@@ -2372,6 +2372,6 @@ color:#484848!important;
 .grid_custom_popover {max-width: 100%; position: fixed; border: 1px solid rgba(0, 0, 0, .1);}
 .grid_custom_popover .popover-content{ padding: 9px 20px;}
 .grid_custom_popover.bottom .arrow{border-bottom-color: #ccc;}
-.grid_icon_center{ position: absolute; left: 50%; top: 0px; z-index: 1031;}
+.grid_icon_center{ position: absolute; left: 46%; top: 0px; z-index: 1031;}
 .grid-icon-header:hover, .grid-icon-header:focus{background-color: #f6f8f8;}
 /*end custom css code*/
