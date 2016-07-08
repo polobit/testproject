@@ -173,7 +173,7 @@ public class WorkflowUtil
 			set.add(1L);
 			set.add(userId);
 			
-			map.put("access_level in", set);
+			// map.put("access_level in", set);
 		}
 		
 		return dao.fetchAllByOrder(max, cursor, map, true, false, orderBy);

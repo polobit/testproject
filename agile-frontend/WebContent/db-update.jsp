@@ -1,3 +1,5 @@
+<%@page import="com.agilecrm.user.util.DomainUserUtil"%>
+<%@page import="com.agilecrm.user.DomainUser"%>
 <%@page import="com.agilecrm.workflows.util.WorkflowUtil"%>
 <%@page import="org.apache.commons.lang.StringUtils"%>
 <%@page import="com.agilecrm.activities.Activity.ActivityType"%>
@@ -9,5 +11,10 @@
 <%@page import="com.agilecrm.db.ObjectifyGenericDao"%>
 <%@page import="com.google.appengine.api.NamespaceManager"%>
 <%
-	out.println(WorkflowUtil.getAllWorkflows(20, null, null));
+	List<DomainUser> domainUsers = DomainUserUtil.dao.fetchAll();
+	for (DomainUser user : domainUsers){
+		user.domain = "";
+		user.save();
+	}
+		
 %>

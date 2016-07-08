@@ -257,10 +257,10 @@ public class NamespaceFilter implements Filter
 	System.out.println(request.getServerName());
 
 	
-	 /* DomainUser domainUser = new DomainUser(null, "govind@invox.com",
+	 /*DomainUser domainUser = new DomainUser(null, "govind@invox.com",
 	  "hungry", "password", true, true); try { domainUser.save(); } catch
 	  (Exception e) { // TODO Auto-generated catch block
-	  e.printStackTrace(); } */
+	  e.printStackTrace(); }*/
 
 	/*
 	 * AliasDomain aliasDomain = new AliasDomain("testDomain", "testAlias");

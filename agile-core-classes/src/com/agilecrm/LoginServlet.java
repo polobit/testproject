@@ -29,6 +29,7 @@ import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.MD5Util;
 import com.agilecrm.util.NamespaceUtil;
 import com.agilecrm.util.RegisterUtil;
+import com.agilecrm.util.VersioningUtil;
 import com.agilecrm.util.email.AppengineMail;
 import com.agilecrm.util.email.SendMail;
 import com.google.appengine.api.NamespaceManager;
@@ -108,7 +109,7 @@ public class LoginServlet extends HttpServlet {
 		
 		// Check if this subdomain even exists
 
-		if (DomainUserUtil.count() == 0) {
+		if (!VersioningUtil.isDevelopmentEnv() && DomainUserUtil.count() == 0) {
 			response.sendRedirect(Globals.CHOOSE_DOMAIN);
 			return;
 		}
