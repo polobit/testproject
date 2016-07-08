@@ -1325,6 +1325,14 @@
 
 	<servlet-mapping>
 		<servlet-name>QuerySubmitServlet</servlet-name>
-		<url-pattern>/querysubmit</url-pattern>
+		<url-pattern>/backend/cron/deleteContactsFromTextSearch</url-pattern>
+	</servlet-mapping>
+	 <servlet>
+		<servlet-name>ContactsDeleteServlet</servlet-name>
+		<servlet-class>com.agilecrm.DeleteContactsFromTextSearchServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ContactsDeleteServlet</servlet-name>
+		<url-pattern>/backend/cron/deleteContactsFromTextSearch</url-pattern>
 	</servlet-mapping>
 </web-app>
