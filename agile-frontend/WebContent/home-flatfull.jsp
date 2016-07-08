@@ -194,6 +194,26 @@ content="<%=domainUser.getInfo(DomainUser.LAST_LOGGED_IN_TIME)%>" />
   display: none !important;
 }
 
+.search label { position:absolute; margin:5px 0 0 5px; }
+.search input[type="text"]{
+    text-indent:1px;
+    padding:0 0 0 22px;
+    width:0;
+    height:22px;
+    
+    border:1px solid #ccc;
+    color:#000;
+   
+    -webkit-transition:width 0.5s ease-in-out;
+    -moz-transition:width 0.5s ease-in-out;
+    cursor:pointer;
+}
+.search input[type="text"]:focus{
+    width:200px;
+    outline:none;
+    cursor:text;
+}
+
 </style>
 <!--  responsive table js -->
 <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
