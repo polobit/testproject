@@ -199,19 +199,15 @@
 							<li class="nav-bar-search">
 								<form id="searchForm" class=" navbar-search  navbar-search navbar-form navbar-form-sm navbar-left shift">
 					<div class="input-group">
+						    <label for="searchText" class="fa fa-search global-search-label" id="search-results"></label>
 							<input id="searchText" type="text"
 										data-provide="typeahead"
-										class="typeahead typeahead_contacts search-query form-control-custom input-sm bg-light no-border rounded padder"
+										class="typeahead typeahead_contacts search-query form-control-custom input-sm bg-light no-border no-border-radius"
 										placeholder="Search" onclick="Agile_GA_Event_Tracker.track_event('Search option in Nav Bar')">
-										
-										 <!-- <input id="search-results" 
-										type="image" src="img/SearchIcon.png" class="searchbox hidden" /> -->
-						<span class="input-group-btn">
-                <button type="submit" class="btn btn-sm bg-light rounded" id="search-results" style="height:30px;"><i class="fa fa-search"></i></button>
-              </span>
-              </div>				
+              		</div>				
 								</form>
 							</li>
+
 						 	<li id="homemenu" class="active"></li>
 							<%
 							    if ("admin".equals(domainUser.domain)) {

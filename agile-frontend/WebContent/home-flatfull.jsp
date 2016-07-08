@@ -194,6 +194,26 @@ content="<%=domainUser.getInfo(DomainUser.LAST_LOGGED_IN_TIME)%>" />
   display: none !important;
 }
 
+.search label { position:absolute; margin:5px 0 0 5px; }
+.search input[type="text"]{
+    text-indent:1px;
+    padding:0 0 0 22px;
+    width:0;
+    height:22px;
+    
+    border:1px solid #ccc;
+    color:#000;
+   
+    -webkit-transition:width 0.5s ease-in-out;
+    -moz-transition:width 0.5s ease-in-out;
+    cursor:pointer;
+}
+.search input[type="text"]:focus{
+    width:200px;
+    outline:none;
+    cursor:text;
+}
+
 </style>
 <!--  responsive table js -->
 <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
@@ -524,25 +544,25 @@ if(currentUserPrefs.menuPosition.equals("top")){
   <li id="ticketgroupsmenu">
     <a href="#ticket-groups">
       <i class="icon icon-users"></i>
-      <span style="padding-top: 9%;">Groups</span>
+      <span>Groups</span>
     </a>
   </li>
   <li id="ticketlabelsmenu">
     <a href="#ticket-labels">
       <i class="icon icon-flag"></i>
-      <span style="padding-top: 9%;">Labels</span>
+      <span>Labels</span>
     </a>
   </li>
   <li id="ticketcannedmessagesmenu">
     <a href="#canned-responses">
       <i class="icon icon-cursor"></i>
-      <span style="padding-top: 9%;">Canned Responses</span>
+      <span>Canned Responses</span>
     </a>
   </li>
   <li id="ticketviewsmenu">
     <a href="#ticket-views">
       <i class="icon icon-directions"></i>
-      <span style="padding-top: 9%;">Views</span>
+      <span>Views</span>
     </a>
   </li>
 
