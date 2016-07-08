@@ -133,7 +133,8 @@ if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Produ
 }
 
 %>
-
+<link rel="stylesheet" type="text/css" href="flatfull/css/min/css-all-min.css?_=<%=_AGILE_VERSION%>"></link>
+  <link rel="stylesheet" type="text/css" href="flatfull/css/min/helpcenter-custom.css?_=<%=_AGILE_VERSION%>"></link>
 <script src='//cdnjs.cloudflare.com/ajax/libs/headjs/1.0.3/head.min.js'></script>
 <script>
 

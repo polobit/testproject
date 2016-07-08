@@ -8,6 +8,8 @@ import java.util.Map;
 import com.agilecrm.knowledgebase.entity.Article;
 import com.agilecrm.knowledgebase.entity.Categorie;
 import com.agilecrm.knowledgebase.entity.Section;
+import com.agilecrm.search.document.HelpcenterArticleDocument;
+import com.agilecrm.search.document.TicketsDocument;
 import com.googlecode.objectify.Key;
 
 /**
@@ -91,6 +93,8 @@ public class ArticleUtil
 	{
 		// Deleting section
 		Article.dao.deleteKey(new Key<Article>(Article.class, id));
+		// Deleting document from text search
+				new HelpcenterArticleDocument().delete(id + "");
 	}
 	
 	public static Article getArticle(Long id)
