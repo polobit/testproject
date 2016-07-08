@@ -6,10 +6,9 @@
 	{{#if_equals visible_to "CUSTOMER"}}
 		<div class="col-md-6 m-b-md">
 			<a href="#category/{{categorie_id}}/section/{{id}}">
-				<h4 class="m-b-none">{{name}} ({{articles_count}}) </h4></a>
-			
+				<h4 class="m-b-none">{{name}} ({{articles_count}}) </h4></a>	
 			<small class="text-muted">
-				<h5>Created on {{epochToHumanDate "ddd mmm dd, yyyy" created_time}}<h5>
+				Created on {{epochToHumanDate "ddd mmm dd, yyyy" created_time}}
 			</small>
 		</div>
 	{{/if_equals}}
