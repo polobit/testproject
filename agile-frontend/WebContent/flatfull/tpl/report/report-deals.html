@@ -1,7 +1,7 @@
 <script id="report-deals-template" type="text/html">
 <div class="custom-animated custom-fadeInUp">
 {{#hasMenuScope 'DEALS'}}
-<div class="wrapper-md b-b lter bg-light">
+<div class="wrapper bg-light padder-md padder-v m-r-sm p-r-none" style="border-bottom: 1px solid rgba(140, 139, 139, 0.2);">
 <div class="row">
     <div class="col-sm-12 col-md-12">
               <div class="col-md-3 col-sm-6" style="padding-left:0px;padding-bottom:8px">
@@ -9,7 +9,7 @@
                 
             </div>
             <div id="plan-limit-error" class="pull-left p-t-4" style="display:none"></div> 
-             <div class="clearfix"></div>            
+             <!-- <div class="clearfix"></div> -->            
              <div id="reportrange" class="pull-right" style="box-shadow: 0 0px 0px rgba(0, 0, 0, 0), inset 0 -0 0 rgba(0, 0, 0, .1);
 			border:1px solid #cfdadd;height:34px;padding:5px">
 			<i class="icon-calendar icon-large"></i>
@@ -42,7 +42,7 @@
 </div>
 <div>   
     <!-- Deal Reports -->
-    <div id="deal-graph" class="wrapper-md">    
+    <div id="deal-graph" style="padding:10px">    
         <div class="row">
             <div class="col-md-12">
                 <div id="deals-chart" class="panel"></div>
