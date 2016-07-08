@@ -218,7 +218,7 @@ function saveCallNoteBria(call){
 				
 	    	}else{
 	    		var note = {"subject" : noteSub, "message" : "", "contactid" : contact.id,"phone": number, "callType": "inbound", "status": callStatus, "duration" : 0 };
-				autosaveNoteByUser(note,call,"/core/api/widgets/bria/");
+				autosaveNoteByUser(note,call,"/core/api/widgets/bria");
 	    	}
 	    });
 	}else{
@@ -255,7 +255,7 @@ function saveCallNoteBria(call){
 					});
 				}else{
 					var note = {"subject" : noteSub, "message" : "", "contactid" : cntId,"phone": number,"callType": "outbound-dial", "status": callStatus, "duration" : 0 };
-					autosaveNoteByUser(note,call,"/core/api/widgets/bria/");
+					autosaveNoteByUser(note,call,"/core/api/widgets/bria");
 				}
 		}else{
 			resetCallLogVariables();
