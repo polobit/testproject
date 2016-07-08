@@ -42,9 +42,20 @@
 
 <%@page	import="com.agilecrm.db.ObjectifyGenericDao"%>
 <%@page	import="com.agilecrm.account.APIKey"%>
+
   // Download the template the user likes
   
-  <%String template = "default";
+  <%
+  Long  landingpageid = new LandingPageKnowledgebase().getkbLandingpageid() ;
+
+	if(landingpageid == null)%>
+		<%@ include file="/knowledgebase.jsp"%>
+	
+	
+	<% System.out.println(landingpageid + "test");
+
+  
+  String template = "default";
 
   boolean is_fluid = false;
 
@@ -53,10 +64,8 @@
   String _VERSION_ID = VersioningUtil.getVersion();
 
   
-	Long  landingpageid = new LandingPageKnowledgebase().getkbLandingpageid() ;
-
-	System.out.println(landingpageid + "test");
-	try{
+		try{
+	if(landingpageid !=null){
 	LandingPageUtil lpUtil = new LandingPageUtil();
 	LandingPage landingPage = lpUtil.getLandingPage(landingpageid);
 	if(landingPage == null)
@@ -81,6 +90,7 @@
 		
 
 	out.write(fullXHtml);
+		}
 	} catch (Exception e) {
 	out.print("<h1>"+e.getMessage()+"</h1>");
 	} finally {
@@ -112,6 +122,7 @@
 %>
 <!-- Determine Console.logging - we log in local boxes -->
 <%
+
 boolean debug = true;
 boolean production = false;
 boolean HANDLEBARS_PRECOMPILATION = false;
@@ -124,12 +135,11 @@ if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Produ
 }
 
 %>
-<link rel="stylesheet" type="text/css"
-	href="flatfull/css/min/css-all-min.css?_=<%=_AGILE_VERSION%>"></link>
-<link rel="stylesheet" type="text/css"
-	href="flatfull/css/lib/helpcenter.css?_=<%=_AGILE_VERSION%>"></link>
+
 <script src='//cdnjs.cloudflare.com/ajax/libs/headjs/1.0.3/head.min.js'></script>
 <script>
+
+var landingpageid = <%=landingpageid %>
 
 try{console.time("startbackbone");}catch(e){}
 

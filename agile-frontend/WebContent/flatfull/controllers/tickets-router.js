@@ -1052,7 +1052,14 @@
 								
 								if(optionSelected == "" ){
 
-									$('#template_id',el).data('id',kb_id);
+									$.ajax({ 
+									type : "DELETE", 
+									url : '/core/api/knowledgebase/KBlandingpage/'+kb_id, 
+									success: function(data){
+										
+										$('#template_id',el).data('id','')
+									}
+								});									
 									$(".access_kb",el).attr('disabled','disabled');
 									_agile_set_prefs('kbid','');
 									return;
@@ -1068,6 +1075,7 @@
 									type = "PUT";
 									kblp_json.id = $('#template_id',el).data('id') ;
 								}	
+								$(".access_kb",el).removeAttr('disabled');
 								$.ajax({ 
 									type : type, 
 									url : '/core/api/knowledgebase/KBlandingpage', 
@@ -1075,7 +1083,6 @@
 									contentType : 'application/json',
 									dataType : 'json', 
 									success: function(data){
-										$(".access_kb",el).removeAttr('disabled');
 										$('#template_id',el).data('id',data.id)
 										_agile_set_prefs('kbid',data.kbLandingpageid);
 										if(type=="POST")

@@ -17,10 +17,17 @@ public static ObjectifyGenericDao<LandingPageKnowledgebase> dao = new ObjectifyG
 
 public  Long getkbLandingpageid()
 {
+	try{
 	List<LandingPageKnowledgebase> landingpagekblist = LandingPageKnowledgebase.dao.fetchAll();
 	Long lpkbid =  landingpagekblist.get(0).kbLandingpageid;
-	System.out.println(lpkbid+"xyz");
 	return lpkbid;
+	}
+	catch(Exception e){
+			return null;
+	}
+	
+	
+	
 }
 
 }

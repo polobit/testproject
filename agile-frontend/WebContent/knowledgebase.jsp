@@ -49,61 +49,45 @@ pageEncoding="UTF-8"%>
 
 
 <%
-  KnowledgebaseUserInfo kuserInfo = KnowledgebaseManager.get();
-  
-  //Get current user prefs
-  UserPrefs currentUserPrefs = null;
-  DomainUser domainUser = null;
   ObjectMapper mapper = new ObjectMapper();
-  
-  //Not using these prefs
-  if(kuserInfo != null){
-	  
-	  if(!(kuserInfo.role == Role.CUSTOMER)){
-		  currentUserPrefs = UserPrefsUtil.getCurrentUserPrefs();
-	  	  domainUser =  DomainUserUtil.getCurrentDomainUser();
-	  }
-  }
-  
   
   
   // Download the template the user likes
-  String template = "default";
+  String templated = "default";
 
-  boolean is_fluid = false;
+  boolean is_fluidd = false;
 
-  String _AGILE_VERSION = SystemProperty.applicationVersion.get();
+  String _AGILE_VERSIONd = SystemProperty.applicationVersion.get();
 
-  String _VERSION_ID = VersioningUtil.getVersion();
+  String _VERSION_IDd = VersioningUtil.getVersion();
 
-  boolean is_user_loggedin = (kuserInfo != null);
 %>
 
 <%
-  String CSS_PATH = "/";
-  String FLAT_FULL_PATH = "flatfull/";
+  String CSS_PATHd = "/";
+  String FLAT_FULL_PATHd = "flatfull/";
 
-  String CLOUDFRONT_TEMPLATE_LIB_PATH = VersioningUtil.getCloudFrontBaseURL();
+  String CLOUDFRONT_TEMPLATE_LIB_PATHd = VersioningUtil.getCloudFrontBaseURL();
   
-  System.out.println(CLOUDFRONT_TEMPLATE_LIB_PATH);
+  System.out.println(CLOUDFRONT_TEMPLATE_LIB_PATHd);
     
-  String CLOUDFRONT_STATIC_FILES_PATH = VersioningUtil.getStaticFilesBaseURL();
+  String CLOUDFRONT_STATIC_FILES_PATHd = VersioningUtil.getStaticFilesBaseURL();
 
-  CSS_PATH = CLOUDFRONT_STATIC_FILES_PATH;
+  CSS_PATHd = CLOUDFRONT_STATIC_FILES_PATHd;
   
   // Static images s3 path
-  String S3_STATIC_IMAGE_PATH = CLOUDFRONT_STATIC_FILES_PATH.replace("flatfull/", "");
+  String S3_STATIC_IMAGE_PATHd = CLOUDFRONT_STATIC_FILES_PATHd.replace("flatfull/", "");
   
   if(SystemProperty.environment.value() == SystemProperty.Environment.Value.Development)
   {
-	  CLOUDFRONT_STATIC_FILES_PATH = FLAT_FULL_PATH;
-	  CLOUDFRONT_TEMPLATE_LIB_PATH = "";	
-	  CSS_PATH = FLAT_FULL_PATH;
+	  CLOUDFRONT_STATIC_FILES_PATHd = FLAT_FULL_PATHd;
+	  CLOUDFRONT_TEMPLATE_LIB_PATHd = "";	
+	  CSS_PATHd = FLAT_FULL_PATHd;
   }
 %>
 
-<link rel="stylesheet" type="text/css" href="flatfull/css/min/css-all-min.css?_=<%=_AGILE_VERSION%>"></link>
-<link rel="stylesheet" type="text/css" href="flatfull/css/lib/helpcenter.css?_=<%=_AGILE_VERSION%>"></link>
+<link rel="stylesheet" type="text/css" href="flatfull/css/min/css-all-min.css?_=<%=_AGILE_VERSIONd%>"></link>
+<link rel="stylesheet" type="text/css" href="flatfull/css/lib/helpcenter.css?_=<%=_AGILE_VERSIONd%>"></link>
 <!--  responsive table js -->
 <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
 <!--[if lt IE 9]>
@@ -156,14 +140,14 @@ Use = [<]%@ include file="tpl/min/tpl.js" %[>] -->
 
 <!-- Determine Console.logging - we log in local boxes -->
 <%
-boolean debug = true;
-boolean production = false;
-boolean HANDLEBARS_PRECOMPILATION = false;
+boolean debugd = true;
+boolean productiond = false;
+boolean HANDLEBARS_PRECOMPILATIONd = false;
 if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Production)
 {
-    debug = false;
-    HANDLEBARS_PRECOMPILATION = true;
-    production = true;
+    debugd = false;
+    HANDLEBARS_PRECOMPILATIONd = true;
+    productiond = true;
    
 }
 
@@ -178,69 +162,54 @@ if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Produ
 
 try{console.time("startbackbone");}catch(e){}
 
-var USER_IP_ADDRESS = '<%=request.getRemoteAddr()%>'
+var USER_IP_ADDRESSd = '<%=request.getRemoteAddr()%>'
 
-var S3_STATIC_IMAGE_PATH = '<%=S3_STATIC_IMAGE_PATH%>';
+var S3_STATIC_IMAGE_PATHd = '<%=S3_STATIC_IMAGE_PATHd%>';
 //var LIB_PATH = "//-dpm72z3r2fvl4.cloudfront.net/js/";
 //var LIB_PATH = "//cdnapp.agilecrm.com/";
-var LIB_PATH = '<%=CLOUDFRONT_STATIC_FILES_PATH%>';
+var LIB_PATHd = '<%=CLOUDFRONT_STATIC_FILES_PATHd%>';
 
-var FLAT_FULL_PATH = '<%=FLAT_FULL_PATH%>';
+var FLAT_FULL_PATHd = '<%=FLAT_FULL_PATHd%>';
 
 // Target to cloudfront URL
-var LIB_PATH_FLATFULL = '<%=CLOUDFRONT_TEMPLATE_LIB_PATH + FLAT_FULL_PATH%>'
+var LIB_PATH_FLATFULLd = '<%=CLOUDFRONT_TEMPLATE_LIB_PATHd + FLAT_FULL_PATHd%>'
 
-var CLOUDFRONT_PATH = '<%=CLOUDFRONT_TEMPLATE_LIB_PATH%>';
+var CLOUDFRONT_PATHd = '<%=CLOUDFRONT_TEMPLATE_LIB_PATHd%>';
 
-var FLAT_FULL_UI = "flatfull/";  
+var FLAT_FULL_UId = "flatfull/";  
 
-var _AGILE_VERSION = <%="\"" + _AGILE_VERSION + "\""%>;
+var _AGILE_VERSIONd = <%="\"" + _AGILE_VERSIONd + "\""%>;
 
-var HANDLEBARS_PRECOMPILATION = false || <%=production%>;
+var HANDLEBARS_PRECOMPILATIONd = false || <%=productiond%>;
 
-var CSS_PATH = '<%=CSS_PATH%>';
+var CSS_PATHd = '<%=CSS_PATHd%>';
 // var CSS_PATH = "//dpm72z3r2fvl4.cloudfront.net/";
 
-var IS_CONSOLE_ENABLED = <%=debug%>;
-var LOCAL_SERVER = <%=debug%>;
+var IS_CONSOLE_ENABLEDd = <%=debugd%>;
+var LOCAL_SERVERd = <%=debugd%>;
 
-var IS_FLUID = <%=is_fluid %>
+var IS_FLUIDd = <%=is_fluidd %>
 
-var CLICKDESK_CODE_LOADED = false;
+var HANDLEBARS_LIBd = LOCAL_SERVERd ? "/lib/handlebars-v1.3.0.js" : "//cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.3.0/handlebars.min.js";
 
-//Get current user prefs json
-var CURRENT_USER_PREFS = <%=SafeHtmlUtil.sanitize(UserPrefsUtil.getMapperString(currentUserPrefs))%>;
-
-//Get current domain user json
-var CURRENT_DOMAIN_USER = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(domainUser))%>;
-
-var IS_USER_LOGGED_IN = <%=is_user_loggedin %>
-;
-var USERINFO = JSON.parse('<%= kuserInfo%>');
-
-var HANDLEBARS_LIB = LOCAL_SERVER ? "/lib/handlebars-v1.3.0.js" : "//cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.3.0/handlebars.min.js";
-
-head.load(LIB_PATH + 'final-lib/min/lib-all-min-1.js?_=' + _AGILE_VERSION, function(){
+head.load(LIB_PATH + 'final-lib/min/lib-all-min-1.js?_=' + _AGILE_VERSIONd, function(){
         load_globalize();
 });
 
 // head.js({ library  : LIB_PATH + 'final-lib/min/lib-all-min-1.js?_=' + _AGILE_VERSION });
 
-if(HANDLEBARS_PRECOMPILATION)
-head.js(CLOUDFRONT_PATH + "tpl/min/precompiled/" + FLAT_FULL_PATH + "helpcenter-tpl.js" + "?_=" + _AGILE_VERSION);	
+if(HANDLEBARS_PRECOMPILATIONd)
+head.js(CLOUDFRONT_PATHd + "tpl/min/precompiled/" + FLAT_FULL_PATHd + "helpcenter-tpl.js" + "?_=" + _AGILE_VERSIONd);	
 
 var en;
-
-// Fetch/Create contact from our domain
-var Agile_Contact = {};
 
 
 // head.ready('library', function() {
 
 head.ready(function() {
 
-if(!HANDLEBARS_PRECOMPILATION){
-    head.js(HANDLEBARS_LIB, FLAT_FULL_PATH + "jscore/handlebars/download-template.js" + "?_=" + _AGILE_VERSION, function()
+if(!HANDLEBARS_PRECOMPILATIONd){
+    head.js(HANDLEBARS_LIBd, FLAT_FULL_PATHd + "jscore/handlebars/download-template.js" + "?_=" + _AGILE_VERSIONd, function()
     {
         downloadTemplate("helpcenter-tpl.js");
     });
@@ -250,10 +219,10 @@ if(!HANDLEBARS_PRECOMPILATION){
 $('body').css('background-image', 'none');
 
 //$('#content').html('ready');
-$("img.init-loading", $('#content')).attr("src", "<%=CLOUDFRONT_TEMPLATE_LIB_PATH%>/img/ajax-loader-cursor.gif");
-head.js({"core" :   CLOUDFRONT_PATH + 'jscore/min/' + FLAT_FULL_PATH +'helpcenter-all-min.js' + "?_=" + _AGILE_VERSION});
+$("img.init-loading", $('#content')).attr("src", "<%=CLOUDFRONT_TEMPLATE_LIB_PATHd%>/img/ajax-loader-cursor.gif");
+head.js({"core" :   CLOUDFRONT_PATH + 'jscore/min/' + FLAT_FULL_PATHd +'helpcenter-all-min.js' + "?_=" + _AGILE_VERSIONd});
 
-// head.js({"stats" : '<%=CLOUDFRONT_TEMPLATE_LIB_PATH%>stats/min/agile-min.js' + "?_=" + _AGILE_VERSION});
+// head.js({"stats" : '<%=CLOUDFRONT_TEMPLATE_LIB_PATHd%>stats/min/agile-min.js' + "?_=" + _AGILE_VERSIONd});
 head.ready(["core"], function(){
 
    try{
@@ -267,12 +236,6 @@ head.ready(["core"], function(){
 	   session.removeAttribute("widgetMsg"); 
   %>
 	
-	try{
-      var sig = CURRENT_USER_PREFS.signature;
-      sig = sig.replace(/&lt;/g, "<").replace(/&gt;/g, ">");
-      CURRENT_USER_PREFS.signature = sig;
-	}catch(e){}
-
 });
 
 });    

@@ -262,6 +262,7 @@ var HelpcenterRouter = Backbone.Router.extend({
 				individual_tag_name : 'div',
 				slateKey : 'articles',
 				postRenderCallback : function(el, collection) {
+					$(".search_kb").val('');
 
 					Helpcenter_Util.setBreadcrumbPath();
 				}
