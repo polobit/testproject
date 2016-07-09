@@ -48,30 +48,62 @@ var WorkflowsRouter = Backbone.Router
 			 */
 			workflows : function()
 			{
+				$(".active").removeClass("active");
+				$("#workflowsmenu").addClass("active");
 
-				if (this.workflow_list_view && this.workflow_list_view.collection && this.workflow_list_view.collection.length > 0)
-				{
-					//$('body').trigger('agile_collection_loaded');
-					$("#content").html('<div id="workflows-listener-container"></div>').find('#workflows-listener-container').html(this.workflow_list_view.render(true).el);
-					$(".active").removeClass("active");
-					$("#workflowsmenu").addClass("active");
-					return;
-				}
+				// Render static template
+				$("#content").html(getTemplate("workflows-static-container"));
 
+				// Add top view
 				var sortKey = _agile_get_prefs("workflow_sort_key");
 				if(sortKey == undefined || sortKey == null){
 					sortKey = "name_dummy";
 					_agile_set_prefs("workflow_sort_key", sortKey);
 				}
-				this.workflow_list_view = new Workflow_Collection_Events({ url : '/core/api/workflows', restKey : "workflow", sort_collection : false,
-					templateKey : "workflows", individual_tag_name : 'tr', cursor : true, page_size : 20, global_sort_key : sortKey, postRenderCallback : function(el)
+
+				var that = this;
+				var workflowTopModal = new Workflow_Top_Header_Model_Events({
+					template : 'workflows-top-header',
+					isNew : true,
+					model : new Backbone.Model({"sortKey" : sortKey}),
+					postRenderCallback : function(el){
+						// Add collection view
+						console.log("Load collection");
+						that.loadworkflows($("#content"));
+					}
+				});
+
+				$("#content").find("#workflows-top-view").html(workflowTopModal.render().el);
+				
+			},
+
+			loadworkflows : function(el){
+
+				var sortKey = _agile_get_prefs("workflow_sort_key");
+				if (this.workflow_list_view && this.workflow_list_view.options.global_sort_key == sortKey && this.workflow_list_view.collection && this.workflow_list_view.collection.length > 0)
+				{
+					$(el).find("#workflows-collection-container").html(this.workflow_list_view.render(true).el);
+					return;
+				}
+
+				this.workflow_list_view = new Base_Collection_View({ 
+					url : '/core/api/workflows', 
+					restKey : "workflow", 
+					sort_collection : false,
+					templateKey : "workflows", 
+					individual_tag_name : 'tr', 
+					cursor : true, 
+					page_size : 20, 
+					global_sort_key : sortKey, 
+					postRenderCallback : function(col_el)
 					{
 						head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
 						{
-							$("time.campaign-created-time", el).timeago();
+							$("time.campaign-created-time", col_el).timeago();
 
 						});
-						updateSortKeyTemplate(sortKey, el);
+
+						// updateSortKeyTemplate(sortKey, el);
 						start_tour(undefined, el);
 
 						// If workflows not empty, show triggers
@@ -105,14 +137,8 @@ var WorkflowsRouter = Backbone.Router
 
 					} });
 
-				this.workflow_list_view.collection.fetch();
-			
-				$("#content").html('<div id="workflows-listener-container"></div>').find('#workflows-listener-container').html(this.workflow_list_view.el);
-				// initializeWorkflowsListeners();
-				
-				$(".active").removeClass("active");
-				$("#workflowsmenu").addClass("active");
-				
+					App_Workflows.workflow_list_view.collection.fetch();
+					$("#content").find("#workflows-collection-container").html(App_Workflows.workflow_list_view.el);
 			},
 
 			/**
