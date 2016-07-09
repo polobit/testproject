@@ -1031,63 +1031,7 @@
 							
 
 						});	
-								var optionTemplate = "<option value='{{id}}'>{{name}}</option>";
 								
-								fillSelect('template_id', '/core/api/landingpages?page_size=20', '', 
-								function(){
-											var kb_id = _agile_get_prefs('kb_id');
-											var kblpid =_agile_get_prefs("kbid");
-											$('#template_id option[value="'+kblpid+'"]',el).attr("selected",true);
-											$('#template_id',el).data('id',kb_id);
-																							
-								}, optionTemplate, false, el,"Select Landing Page");
-										
-							$('#template_id',el).on('change', function (e) {
-								kb_id = _agile_get_prefs('kb_id');
-    							kblpid =_agile_get_prefs("kbid");
-    							var optionSelected = $("#template_id :selected").val();
-								
-								if(optionSelected == "" ){
-
-									$.ajax({ 
-									type : "DELETE", 
-									url : '/core/api/knowledgebase/KBlandingpage/'+kb_id, 
-									success: function(data){
-										
-										$('#template_id',el).data('id','')
-									}
-								});									
-									_agile_set_prefs('kbid','');
-									return;
-								}
-								var kblp_json = {}; 
-								kblp_json.kbLandingpageid = optionSelected;
-
-								
-								kblpid =_agile_get_prefs("kbid");
-								
-								var type = "POST";
-								if($('#template_id',el).data('id'))	{
-									type = "PUT";
-									kblp_json.id = $('#template_id',el).data('id') ;
-								}	
-								
-								$.ajax({ 
-									type : type, 
-									url : '/core/api/knowledgebase/KBlandingpage', 
-									data : JSON.stringify(kblp_json),
-									contentType : 'application/json',
-									dataType : 'json', 
-									success: function(data){
-										$('#template_id',el).data('id',data.id)
-										_agile_set_prefs('kbid',data.kbLandingpageid);
-										if(type=="POST")
-										_agile_set_prefs('kb_id',data.id);
-										
-									}
-								});
-
-							});
 				}
 			});	
 			//Fetching groups collections
@@ -1451,6 +1395,85 @@
 			});	
 		});	
 	}, 
+
+	addLandingpage : function(){
+
+			loadServiceLibrary(function(){
+			 	//Rendering root template
+			 	App_Ticket_Module.loadAdminsettingsTemplate(function(callback){
+	  
+					var addLandingpageView = new Base_Model_View({
+						isNew : true,
+						template : "ticket-helpcenter-select-landingpage",
+						url : "/core/api/knowledgebase/KBlandingpage",
+						window:'back',
+					    postRenderCallback : function(el){
+					        var optionTemplate = "<option value='{{id}}'>{{name}}</option>";
+								
+								fillSelect('template_id', '/core/api/landingpages?page_size=20', '', 
+								function(){
+											var kb_id = _agile_get_prefs('kb_id');
+											var kblpid =_agile_get_prefs("kbid");
+											$('#template_id option[value="'+kblpid+'"]',el).attr("selected",true);
+											$('#template_id',el).data('id',kb_id);
+																							
+								}, optionTemplate, false, el,"Select Landing Page");
+										
+							$('#template_id',el).on('change', function (e) {
+								kb_id = _agile_get_prefs('kb_id');
+    							kblpid =_agile_get_prefs("kbid");
+    							var optionSelected = $("#template_id :selected").val();
+								
+								if(optionSelected == "" ){
+
+									$.ajax({ 
+									type : "DELETE", 
+									url : '/core/api/knowledgebase/KBlandingpage/'+kb_id, 
+									success: function(data){
+										
+										$('#template_id',el).data('id','')
+									}
+								});									
+									_agile_set_prefs('kbid','');
+									return;
+								}
+								var kblp_json = {}; 
+								kblp_json.kbLandingpageid = optionSelected;
+
+								
+								kblpid =_agile_get_prefs("kbid");
+								
+								var type = "POST";
+								if($('#template_id',el).data('id'))	{
+									type = "PUT";
+									kblp_json.id = $('#template_id',el).data('id') ;
+								}	
+								
+								$.ajax({ 
+									type : type, 
+									url : '/core/api/knowledgebase/KBlandingpage', 
+									data : JSON.stringify(kblp_json),
+									contentType : 'application/json',
+									dataType : 'json', 
+									success: function(data){
+										$('#template_id',el).data('id',data.id)
+										_agile_set_prefs('kbid',data.kbLandingpageid);
+										if(type=="POST")
+										_agile_set_prefs('kb_id',data.id);
+										
+									}
+								});
+
+							});
+		 				}
+					   
+				    });
+
+					$('#admin-prefs-tabs-content').html(addLandingpageView.render().el);			
+				});	
+			});	
+		}, 
+
 
 	addCategory : function(){
 

@@ -26,15 +26,9 @@
                 </a>
              </div>
              <div class="pull-right">
-                <select id="template_id" class="form-control text-xs" style="height: 30px;padding: 3px 6px; margin-left: 5px;">
-                 
-                </select>
-
-               </div>
-             <div class="pull-right">
-                <a href="/help" target="_blank" class="btn btn-sm btn-default btn-addon access_kb">
-                    Access Your Knowledge Base
-                </a>
+                <button onclick="App_Ticket_Module.addLandingpage()"  class="btn btn-sm btn-default btn-addon access_kb">
+                    knowledgebase Settings
+                </button>
             </div>
             <table class="table table-striped showCheckboxes m-b-none agile-table panel table-layout-mob-view show-delete-modal" url="core/api/knowledgebase/categorie/bulk" data-bulk-delete-title="Delete"
                 data-bulk-delete-msg="Are you sure you want to delete?" id="ticket-categorie-table">
