@@ -8,17 +8,27 @@ function warpFullContactToAgileContact(agileContact, fullContact){
 		//Data from full contact.
 		var contactInfo = fullContact["contactInfo"];
 		var PhotosArray = fullContact["Photos"];
-		var organisationArray = fullContact["organisation"];
+		var organisationArray = fullContact["organizations"];
 
 		// Agile Contact fields.
 		var first_name;
 		var last_name;
-		var company
-		var email //- home, work
-		var phone //- home, work, mobile
-		var website // SKYPE, TWITTER, FACEBOOK, GOOGLE-PLUS, LINKEDIN, URL, YOUTUBE, FEED, GITHUB
-		var address
-		var photo //- image
+		var company;
+		var email; //- home, work
+		var phone; //- home, work, mobile
+		var website; // SKYPE, TWITTER, FACEBOOK, GOOGLE-PLUS, LINKEDIN, URL, YOUTUBE, FEED, GITHUB
+		var address;
+		var photo; //- image
+
+
+		// 
+		// ------------------------ Full contact fields ---------------------
+		// 
+		// Photos: Array - for profile pic ( linkedin, twitter, facebook, other)
+		// contactInfo - Chats Array - skype, gtalk, googletalk
+		// contactInfo - websites Array - websites										
+		// demographics- locationDeduced - country, state, city
+		// socialProfiles - youtube, facebook, twitter, GooglePlus, LinkedIn, xing, GitHub, Flickr
 
 		if(contactInfo){
 			first_name = contactInfo["givenName"];
@@ -26,9 +36,19 @@ function warpFullContactToAgileContact(agileContact, fullContact){
 		} 		
 
 		if(organisationArray){
+			organisationArray.forEach(item, index) {
+				var companyObj = organisationArray[index];
+				if(companyObj["isPrimary"] == true){
+					company = companyObj["name"];
+				}								
+    		}
+		}
 
-		}		
+		console.log(first_name + " : "+ last_name + " : "+ company);
+
 	}
+ 	//App_Contacts.contactDetailView.model.set(new BaseModel());
+
 	return result;
 }
 
@@ -36,34 +56,20 @@ function loadFullContactData(apikey, emailID){
 	head.js(LIB_PATH + 'lib/jquery.fullcontact.2.2.js', function(){		
 		$.fullcontact.emailLookup(apikey, emailID, function(fullContactObj){
 			if(fullContactObj){	
-
  				var status = fullContactObj.status;
  				var displayData = "";
  				if(status == 200){ 					
  					var currentContactJson = App_Contacts.contactDetailView.model.toJSON();
- 					displayData = warpFullContactToAgileContact()
-
-
-	  				// 
-	  				// ------------------------ Full contact fields ---------------------
-	  				// 
-					// Photos: Array - for profile pic ( linkedin, twitter, facebook, other)
-					// contactInfo - Chats Array - skype, gtalk, googletalk
-					// contactInfo - websites Array - websites										
-					// organisation - Array - company ( primary true)
-					// demographics- locationDeduced - country, state, city
-					// socialProfiles - youtube, facebook, twitter, GooglePlus, LinkedIn, xing, GitHub, Flickr
-
+ 					displayData = warpFullContactToAgileContact(currentContactJson, fullContactObj);
 
  					if(displayData.length > 0){
- 						displayData = "<span class='p-sm'>"+udpatedFields+"</span>";
+ 						displayData = "<span class='p-sm'>"+displayData+"</span>";
  					}else{
- 						displayData = "<span class='p-sm'>Noting to update</span>";
+ 						displayData = "<span class='p-sm'>Nothing to update</span>";
  					}
  				}else{
  					displayData = "<span class='p-sm'>"+fullContactObj.message+"</span>";
  				}
-
 				$('#FullContact').html(displayData);
 			}            
         });
