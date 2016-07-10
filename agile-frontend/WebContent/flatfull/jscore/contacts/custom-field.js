@@ -233,7 +233,7 @@ function bindCustomFiledChangeEvent(el){
 			$("#custom-field-formula-data").hide();
 			$('.required-and-searchable').show();
 			//$("#searchable").prop('checked', true);
-			//$("#searchable").prop('disabled', false);
+			$("#searchable").prop('disabled', false);
 		}
 		
 	});
