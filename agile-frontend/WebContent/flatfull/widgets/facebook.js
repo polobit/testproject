@@ -325,8 +325,10 @@ function startFacebookWidget(contact_id)
 	$("#"+WIDGET_PARENT_ID).on("click", "#Facebook_plugin_delete", function(e)
 	{
 		e.preventDefault();
-		$('#Facebook').html(FACEBOOK_PROFILE_LOAD_IMAGE);
 		facebook_web_url = agile_crm_get_contact_property_by_subtype('website', 'FACEBOOK');
+		if(facebook_web_url){
+			$('#Facebook').html(FACEBOOK_PROFILE_LOAD_IMAGE);	
+		}
 		console.log('deleting facebook acct.',facebook_web_url);		
 		agile_crm_delete_contact_property_by_subtype('website', 'FACEBOOK', facebook_web_url, function(data){
 			console.log("In facebook delete callback");

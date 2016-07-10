@@ -295,9 +295,11 @@ function startGooglePlusWidget(contact_id) {
 	$("#"+WIDGET_PARENT_ID).off("click", "#GooglePlus_plugin_delete");
 	$("#"+WIDGET_PARENT_ID).on("click", "#GooglePlus_plugin_delete", function(e)
 	{
-		e.preventDefault();
-		$('#GooglePlus').html(LODING_IMAGE);
-		contactGooglePlusId = agile_crm_get_contact_property_by_subtype('website', 'GOOGLE-PLUS');		
+		e.preventDefault();		
+		contactGooglePlusId = agile_crm_get_contact_property_by_subtype('website', 'GOOGLE-PLUS');	
+		if(contactGooglePlusId){
+			$('#GooglePlus').html(LODING_IMAGE);	
+		}	
 		agile_crm_delete_contact_property_by_subtype('website', 'GOOGLE-PLUS', contactGooglePlusId, function(data){
 			showMatchedPeople(searchDetails['keywords']);
 		});

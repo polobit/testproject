@@ -132,11 +132,12 @@ public class WidgetUtil {
 						// Fix for mini logo url is missing.
 						if(widget.mini_logo_url == null || widget.mini_logo_url.length() == 0){
 							if(customWidget == null){
-								customWidget = WidgetUtil.getCustomWidget(currentWidget.name, Long.parseLong(userID));
-								if(customWidget != null){
-									widget.mini_logo_url = customWidget.mini_logo_url;
-								}									
+								customWidget = WidgetUtil.getCustomWidget(currentWidget.name, Long.parseLong(userID));									
 							}							
+							
+							if(customWidget != null){
+								widget.mini_logo_url = customWidget.mini_logo_url;
+							}
 						}
 					}
 					

@@ -81,8 +81,11 @@ function setUpStripeCustomField(stripe_widget_prefs, contact_id)
 		// Get the selected value from list of custom fields
 		var stripe_custom_field_name = $('#stripe_custom_field_name').val();
 		
-		if(!stripe_custom_field_name)
+		if(!stripe_custom_field_name){
+			showAlertModal("stripe_customfield_selection_error", undefined, function(){					
+			});	
 			return;
+		}
 
 		// Include 'stripe_field_name' to stripe_widget_prefs and save
 		stripe_widget_prefs['stripe_field_name'] = stripe_custom_field_name;
