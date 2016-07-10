@@ -1518,10 +1518,10 @@ function sendMail(id,subject,body,cc,bcc,that,custom_view,id_type)
 		}	
 	}
 	
-		var el = $("#content").html('<div id="send-email-listener-container"></div>').find('#send-email-listener-container').html(getTemplate("send-email", model));
+//		var el = $("#content").html('<div id="send-email-listener-container"></div>').find('#send-email-listener-container').html(getTemplate("send-email", model));
 		
 		// Call setupTypeAhead to get contacts
-		agile_type_ahead("to", el, contacts_typeahead, null, null, "email-search", null, true, null, true);
+//		agile_type_ahead("to", el, contacts_typeahead, null, null, "email-search", null, true, null, true);
 
 
 		$("#content").html('<div id="send-email-listener-container"></div>');
@@ -1549,6 +1549,8 @@ function sendMail(id,subject,body,cc,bcc,that,custom_view,id_type)
 				{
 					if(id_type=="documents" && model.id!=null)
 					{
+						
+						$('#emailForm').find('.add-attachment-select').addClass('hide');
 						$('#emailForm').find('#eattachment').css('display','block');
 						$('#emailForm').find('#attachment_id').css("display",'block');
 						$('#emailForm').find('#attachment_id').find("#attachment_fname").removeClass("text-ellipsis")
@@ -1576,6 +1578,10 @@ function sendMail(id,subject,body,cc,bcc,that,custom_view,id_type)
 									model_json=data;
 									var email=getPropertyValue(model_json.properties, "email");
 									var first_name = getPropertyValue(model_json.properties, "first_name");
+									if(model_json.type=="COMPANY")
+									{
+										first_name = getPropertyValue(model_json.properties, "name");
+									}
 									var last_name = getPropertyValue(model_json.properties, "last_name");
 									var name="";
 									if (first_name || last_name)

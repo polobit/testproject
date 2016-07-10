@@ -53,7 +53,7 @@
 </script>
 <script id="documents-collection-template" type="text/html">
 {{#unless this.length}}
-        <div class="alert bg-white">
+        <div class="alert bg-white documents-collection">
             <div class="slate-content  p-md">
                 <div class="box-left pull-left m-r-md">
                     <img alt="Clipboard" src="{{getS3ImagePath '/img/clipboard.png'}}" />
@@ -63,7 +63,7 @@
                     <div class="text">
                         You can add document by clicking the button below or the one on the right side of the page.
                     </div>
-                    <a href="#documents/edoc" class="edocuments-add btn btn-default btn-addon btn-sm m-t-xs"><i class="fa fa-plus-circle" /> Add eDoc</a> <a href="#documents/attachment" class="documents-add btn btn-default btn-addon  btn-sm m-t-xs m-l-xs"><i class="fa fa-plus-circle"></i>  Add Document</a>
+                    <a href="#documents/edoc" class="edocuments-add btn btn-default btn-addon btn-sm m-t-xs"><i class="fa fa-plus-circle" /> Add eDocument</a> <a href="#documents/attachment" class="documents-add btn btn-default btn-addon  btn-sm m-t-xs m-l-xs"><i class="fa fa-plus-circle"></i>  Add Document</a>
                 </div>
                 <div class="clearfix">
                 </div>
@@ -71,7 +71,7 @@
         </div>
         {{/unless}}
         {{#if this.length}}
-            <div class="panel panel-default">
+            <div class="panel panel-default  documents-collection">
                 <div class="panel-heading">Documents List</div>
                 <div class="table-responsive">
                 <table data-resizable-columns-id="document-list" class="table table-striped tableHeader showCheckboxes m-b-none panel agile-table table-layout-mob-view" url="core/api/documents/bulk" id="document-list" style="table-layout:auto">
@@ -93,7 +93,7 @@
 
 <script id="documents-model-template" type="text/html">
 <td data="{{id}}" class="data">
-<div class="pull-left inline-block table-resp" style="max-width:90%;width:auto;"><a class="text-cap">{{name}}</a></div>
+<div class="pull-left inline-block table-resp" style="max-width:90%;width:auto;"><a class="text-cap document-url" href="#documents/{{id}}" data="{{id}}">{{name}}</a></div>
 <div class="pull-left m-l-xs">
 <b class="activate-link" style="display:none;">{{#if url}}<a href="{{url}}" target="_blank"><i class="icon-external-link" title="Open Document"></i></a>{{/if}}</b>
 </div>
@@ -222,12 +222,12 @@
 <script id="document-notes-collection-template" type="text/html">
 
 {{#unless this.length}}
-        <div class="data-block">
+        <div class="data-block noactivitypanel">
         
         
-            <div class="panel wrapper m-b-none">
+            <div class="panel wrapper m-b-none ">
                 <header>
-                    <h4 class="m-t-none font-thin"><span><i class="icon-flag"></i></span>  Discussion</h4>
+                    <h4 class="m-t-none font-thin"><span><i class="icon-flag"></i></span>Latest Comments</h4>
                 </header>
                 <div id="pie-deals-chart" class="w-full" style="height:400px" data-highcharts-chart="5"><div class="highcharts-container" id="highcharts-6" style="position: relative; overflow: hidden; width: 271px; height: 400px; text-align: left; line-height: normal; z-index: 0; -webkit-tap-highlight-color: rgba(0, 0, 0, 0); font-family: 'Lucida Grande', 'Lucida Sans Unicode', Verdana, Arial, Helvetica, sans-serif; font-size: 12px;"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="271" height="400"><desc>Created with Highcharts 3.0.7</desc><defs><clipPath id="highcharts-7"><rect fill="none" x="0" y="0" width="251" height="335"></rect></clipPath></defs><image preserveAspectRatio="none" x="30" y="5" width="200" height="80" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="//doxhze3l6s7v9.cloudfront.net/beta/static/img/donut-tooltip-frame.png"></image><text x="50" y="40" style="font-family:&quot;Lucida Grande&quot;, &quot;Lucida Sans Unicode&quot;, Verdana, Arial, Helvetica, sans-serif;font-size:12px;" class="tooltip-default-message"><tspan x="50">No Comments History</tspan><tspan x="50" dy="16">.</tspan></text><g class="highcharts-series-group" zIndex="3"><g class="highcharts-series highcharts-tracker" visibility="visible" zIndex="0.1" transform="translate(10,50) scale(1 1)" style="cursor:pointer;"><path fill="#7266ba" d="M 230.45 167.5 A 104.95 104.95 0 0 1 230.44994752500438 167.39505001749166 L 188.79996835000264 167.43670001055 A 63.3 63.3 0 0 0 188.8 167.5 Z" stroke-linejoin="round" transform="translate(0,0)"></path><path fill="#23b7e5" d="M 230.45 167.5 A 104.95 104.95 0 0 1 230.44994752500438 167.39505001749166 L 188.79996835000264 167.43670001055 A 63.3 63.3 0 0 0 188.8 167.5 Z" stroke-linejoin="round" transform="translate(0,0)"></path><path fill="#27c24c" d="M 230.45 167.5 A 104.95 104.95 0 0 1 230.44994752500438 167.39505001749166 L 188.79996835000264 167.43670001055 A 63.3 63.3 0 0 0 188.8 167.5 Z" stroke-linejoin="round" transform="translate(0,0)"></path><path fill="#fad733" d="M 230.45 167.5 A 104.95 104.95 0 0 1 230.44994752500438 167.39505001749166 L 188.79996835000264 167.43670001055 A 63.3 63.3 0 0 0 188.8 167.5 Z" stroke-linejoin="round" transform="translate(0,0)"></path><path fill="#f05050" d="M 230.45 167.5 A 104.95 104.95 0 0 1 230.44994752500438 167.39505001749166 L 188.79996835000264 167.43670001055 A 63.3 63.3 0 0 0 188.8 167.5 Z" stroke-linejoin="round" transform="translate(0,0)"></path></g><g class="highcharts-markers" visibility="visible" zIndex="0.1" transform="translate(10,50) scale(1 1)"></g></g><g class="highcharts-data-labels highcharts-tracker" visibility="visible" zIndex="6" transform="translate(10,50) scale(1 1)" style="cursor:pointer;"><g zIndex="1" style="cursor:pointer;" transform="translate(242,147)" visibility="visible"><text x="3" y="15" style="font-family:&quot;Lucida Grande&quot;, &quot;Lucida Sans Unicode&quot;, Verdana, Arial, Helvetica, sans-serif;font-size:11px;color:#000000;line-height:14px;fill:#000000;" zIndex="1"></text></g><g zIndex="1" style="cursor:pointer;" transform="translate(242,153)" visibility="visible"><text x="3" y="15" style="font-family:&quot;Lucida Grande&quot;, &quot;Lucida Sans Unicode&quot;, Verdana, Arial, Helvetica, sans-serif;font-size:11px;color:#000000;line-height:14px;fill:#000000;" zIndex="1"></text></g><g zIndex="1" style="cursor:pointer;" transform="translate(242,159)" visibility="visible"><text x="3" y="15" style="font-family:&quot;Lucida Grande&quot;, &quot;Lucida Sans Unicode&quot;, Verdana, Arial, Helvetica, sans-serif;font-size:11px;color:#000000;line-height:14px;fill:#000000;" zIndex="1"></text></g><g zIndex="1" style="cursor:pointer;" transform="translate(242,165)" visibility="visible"><text x="3" y="15" style="font-family:&quot;Lucida Grande&quot;, &quot;Lucida Sans Unicode&quot;, Verdana, Arial, Helvetica, sans-serif;font-size:11px;color:#000000;line-height:14px;fill:#000000;" zIndex="1"></text></g><g zIndex="1" style="cursor:pointer;" transform="translate(242,171)" visibility="visible"><text x="3" y="15" style="font-family:&quot;Lucida Grande&quot;, &quot;Lucida Sans Unicode&quot;, Verdana, Arial, Helvetica, sans-serif;font-size:11px;color:#000000;line-height:14px;fill:#000000;" zIndex="1"></text></g></g><g class="highcharts-legend" zIndex="7"><g zIndex="1"><g></g></g></g><g class="highcharts-tooltip" zIndex="8" style="cursor:default;padding:0;white-space:nowrap;" transform="translate(0,-999)"><rect rx="0" ry="0" fill="none" x="0" y="0" width="16" height="16"></rect></g></svg><div class="highcharts-tooltip" style="position: absolute; left: 0px; top: -999px;"><span style="position: absolute; white-space: nowrap; font-family: 'Lucida Grande', 'Lucida Sans Unicode', Verdana, Arial, Helvetica, sans-serif; font-size: 12px; color: rgb(239, 239, 239); margin-left: 0px; margin-top: 0px; left: 8px; top: 8px;" zindex="1"></span></div></div></div>
             </div>
@@ -235,10 +235,28 @@
 
             
         </div>
-        
+        <div class="latestactivitypanel panel b-a panel-default hide" style1="height:90%;">
+            <div class="panel-heading" >Latest Comments</div>
+                <div class="list-group list-group-sp" id="documents-comments-history" style="overflow-y:scroll;max-height:calc(100vh - 400px);">
+                    <section class="scroll">
+                        <form>
+                          <div class="ref-log">  
+                                <div id="today-heading" style="display: none;border-top:none;" class="b-b p-b-xs m-b-xs b-light wrapper-sm todays-comments"><b >Today</b>   </div>
+                                <div id="today-activity" style="display: inline;"></div>
+                                <div id="tomorrow-heading" style="display: none;border-top:none;" class="b-b p-b-xs m-b-xs b-light wrapper-sm"><b >Yesterday</b></div>
+                                <div id="tomorrow-activity" style="display: inline;"></div>
+                                <div id="next-week-heading" style="display: none;border-top:none;" class="b-b p-b-xs m-b-xs b-light wrapper-sm b-t-none" style="">
+                                    <b id="earllier" >Earlier</b>
+                                </div>
+                                <div id="next-week-activity" style="display: inline;"></div>
+                            </div>
+                        </form>
+                    </section>
+                </div>
+       </div>          
         {{/unless}}
         {{#if this.length}}
-       <div class="panel b-a panel-default" style1="height:90%;">
+       <div class="latestactivitypanel panel b-a panel-default" style1="height:90%;">
             <div class="panel-heading" >Latest Comments</div>
                 <div class="list-group list-group-sp" id="documents-comments-history" style="overflow-y:scroll;max-height:calc(100vh - 400px);">
                     <section class="scroll">

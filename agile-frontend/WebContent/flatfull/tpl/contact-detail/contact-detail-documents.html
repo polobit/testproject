@@ -1,6 +1,6 @@
 <script id="contact-documents-collection-template" type="text/html">
 		{{#unless this.length}}
-        <div class="wrapper p-t-none">
+        <div class="wrapper p-t-none documents-collection">
             <div class="slate-content mobile-pad-content">
                 <div class="box-left pull-left m-r-md">
                     <img alt="Clipboard" src="{{getS3ImagePath '/img/clipboard.png'}}" />
@@ -12,69 +12,51 @@
                         You can add a document related to a {{#isCompany}}company{{else}}contact{{/isCompany}}.
                     </div>
                     {{/hasMenuScope}}
-					
 						<div class="btn-group">
-						<div>{{#hasMenuScope 'DOCUMENT'}}
-							{{#isCompany}}
-							        <a href="#" class="btn btn-default btn-sm add-company-document-select m-t-xs" class1="btn btn-default btn-sm"><i class="icon-plus-sign"></i> Add Document</a>
+							{{#hasMenuScope 'DOCUMENT'}}
+								{{#isCompany}}
+							        <a href="#" class="btn btn-default btn-sm add-document-select m-t-xs" class1="btn btn-default btn-sm"><i class="icon-plus-sign"></i> Add Document</a>
 							        <a class="btn btn-default btn-sm dropdown-toggle m-t-xs" data-toggle="dropdown"><span class="caret"></span></a>
 
 									<ul class="dropdown-menu pull-right" style="margin-top:3px;">
 										<li style="padding:0px 0px;border:0px;"><a href="#" class="add-company-edocument-select">Add eDocument</a></li>
 									</ul>
-							{{else}}					
+								{{else}}					
 							        <a href="#" class="btn btn-default btn-sm add-document-select m-t-xs" class1="btn btn-default btn-sm"><i class="icon-plus-sign"></i> Add Document</a>
 							        <a class="btn btn-default btn-sm dropdown-toggle m-t-xs" data-toggle="dropdown"><span class="caret"></span></a>
 
 									<ul class="dropdown-menu pull-right" style="margin-top:3px;">
 										<li style="padding:0px 0px;border:0px;"><a href="#" class="add-contact-edocument-select">Add eDocument</a></li>
 									</ul>
-							{{/isCompany}}
-						
-						{{/hasMenuScope}}
-						<span class="contact-document-select upload-doc-field" style="display:none;">
-							<select id="document-select" class="form-control inline-block w">
-								<option value="">Select...</option>
-							</select>
-		 					<div class="m-t-sm">
-									<a href="#" class="btn btn-default btn-sm add-document-cancel m-r-sm">Cancel</a>
-		                    		{{#isCompany}}
-		                    		<a href="#" class="btn btn-sm btn-primary add-company-document-confirm">Add</a> 
-		                    		{{else}}	
-		                    		<a href="#" class="btn btn-sm btn-primary add-contact-document-confirm">Add</a> 
-									{{/isCompany}}
-									<span class="save-status"></span>
-							</div>
-						</span>	
-						</div>	
-					</div>
-         			<!--<div class="btn-group" style="margin-top:12px;">
-        				<a href="#" class="btn btn-default btn-sm right contact-add-document"><i class="icon-plus-sign"></i> Add Document</a>
-        				<a class="btn btn-sm dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
-						<ul class="dropdown-menu" style="text-shadow:0px 0px;">
-							<li><a href="#" class="document-exist">Existing Document</a></li>
-						</ul>
-					</div>-->
+								{{/isCompany}}
+							{{/hasMenuScope}}
+							<span class="contact-document-select upload-doc-field" style="display:none;">
+								<select id="document-select" class="form-control inline-block w">
+									<option value="">Select...</option>
+								</select>
+			 					<div class="m-t-sm">
+										<a href="#" class="btn btn-default btn-sm add-document-cancel m-r-sm">Cancel</a>
+			                    		{{#isCompany}}
+			                    		<a href="#" class="btn btn-sm btn-primary add-company-document-confirm">Add</a> 
+			                    		{{else}}	
+			                    		<a href="#" class="btn btn-sm btn-primary add-contact-document-confirm">Add</a> 
+										{{/isCompany}}
+										<span class="save-status"></span>
+								</div>
+							</span>	
+						</div>
                 </div>
-				<div class="clearfix">
-				</div>
+				<div class="clearfix"></div>
             </div>
         </div>
         {{/unless}}
         {{#if this.length}}
-	<div class="m-b-md m-t-md m-r-sm" align="right">
-        <!--<div class="btn-group right">
-        	<a href="#" class="btn btn-sm btn-default right contact-add-document"><i class="icon-plus-sign"></i> Add Document</a>
-        	<a class="btn btn-sm dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
-			<ul class="dropdown-menu pull-right">
-				<li><a href="#" class="document-exist">Existing Document</a></li>
-			</ul>
-		</div>-->
-		<div>{{#hasMenuScope 'DOCUMENT'}}
-				<div class="btn-group">
+	<div  class="documents-collection">
+        <div class="m-b-md m-t-md m-r-sm" >{{#hasMenuScope 'DOCUMENT'}}
+				<div class="btn-group right">
 					{{#isCompany}}
 							
-						        <a href="#" class="btn btn-default btn-sm add-company-document-select m-t-xs" class1="btn btn-default btn-sm"><i class="icon-plus-sign"></i> Add Document</a>
+						        <a href="#" class="btn btn-default btn-sm add-document-select m-t-xs" class1="btn btn-default btn-sm"><i class="icon-plus-sign"></i> Add Document</a>
 						        <a class="btn btn-default btn-sm dropdown-toggle m-t-xs" data-toggle="dropdown"><span class="caret"></span></a>
 
 								<ul class="dropdown-menu pull-right" style="margin-top:3px;">
@@ -127,22 +109,22 @@
 		<span class="owner-name hide">{{owner.name}}</span>
 	</div>
 	<div class="pull-left rightThumbView">
-	<div class="document-title text-md text-cap pull-left contact-title-dynamic custom-color text-ellipsis">{{name}}</div>
-	<div class="pull-right">	
-		 <small class="edit-hover text-muted"> 
-		 <i class="fa fa-clock-o m-r-xs"></i>
-			<time class="document-created-time  text-base" datetime="{{epochToHumanDate "" uploaded_time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" uploaded_time}}</time>
-		</small>
-		</div>
-		<div class="clearfix"></div>
-    <div>
-    {{#if url}}
-		{{network network_type}}{{#hasMenuScope 'DOCUMENT'}}&nbsp;&nbsp;<a href="{{url}}" target="_blank"><i class="icon-external-link" title="Open Document"></i></a>{{/hasMenuScope}}
-	{{/if}}		
+		<div class="document-title text-md text-cap pull-left contact-title-dynamic custom-color text-ellipsis">{{name}}</div>
+		<div class="pull-right">	
+			 <small class="edit-hover text-muted"> 
+			 <i class="fa fa-clock-o m-r-xs"></i>
+				<time class="document-created-time  text-base" datetime="{{epochToHumanDate "" uploaded_time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" uploaded_time}}</time>
+			</small>
+			</div>
+			<div class="clearfix"></div>
+	    <div>
+	    {{#if url}}
+			{{network network_type}}{{#hasMenuScope 'DOCUMENT'}}&nbsp;&nbsp;<a href="{{url}}" target="_blank"><i class="icon-external-link" title="Open Document"></i></a>{{/hasMenuScope}}
+		{{/if}}		
 	</div>
-<div class="clearfix"></div>
+	<div class="clearfix"></div>
 	
-		<div class="agile-thumb">	
+	<div class="agile-thumb">	
 		{{#each contacts}}
            	{{#if id}}
 				{{#isDuplicateContactProperty properties "email"}}

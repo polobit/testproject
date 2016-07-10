@@ -305,9 +305,18 @@ public class DocumentsAPI
 	JSONArray docsJSONArray = new JSONArray();
 	List<String> contactIdsList = new ArrayList<String>();
 	if(documentsJSONArray!=null && documentsJSONArray.length()>0){
-		for (int i = 0; i < documentsJSONArray.length(); i++) { 
+		for (int i = 0; i < documentsJSONArray.length(); i++) {
+			try{
+				
+				DocumentUtil.deleteDocumentNotes(documentsJSONArray.getString(i));
+			}
+			catch (Exception e)
+		    {
+				e.printStackTrace();
+		    }
 			try
 			   {
+				
 				String eventId =  documentsJSONArray.getString(i);
 				Document doc = DocumentUtil.getDocument(Long.parseLong(eventId));
 				

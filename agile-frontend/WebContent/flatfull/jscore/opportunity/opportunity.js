@@ -615,6 +615,515 @@ function populateLostReasons(el, value){
 	}); 
 }
 
+function serialize_deal_products(form_id)
+{
+				if(!App_Deal_Details.deal_products_collection_view)
+					return App_Deal_Details.savedproducts;
+				var arr = [];
+				if(App_Deal_Details.deal_products_collection_view && App_Deal_Details.deal_products_collection_view.collection)
+				{
+					var arrCheckedProdcts=App_Deal_Details.deal_products_collection_view.collection.where({"isChecked":true});
+					$.each(arrCheckedProdcts,function(index,value){
+						arr.push(value.toJSON());	
+					});
+				}
+				return arr;
+}
+function populate_deal_products(el, value,form_id){
+	var me=this;
+	me._el=el;
+	me._value=value;
+	App_Deal_Details.savedproducts=value?value.products:null;
+	me._form_id=form_id;
+
+	//Reset 
+	$(form_id).off('click');
+	$(form_id).off('keyup');
+	$(form_id).off('keypress');
+	$(form_id).off('blur');
+	$(".modal-body").off('click');
+	
+	$("#deal_products_div",el).html("");
+	App_Deal_Details.deal_products_collection_view=null;
+
+	$(".discounttype-input-group-btn ul",form_id).html("<li><a >Percent</a></li><li><a >Value</a></li>")
+	if($(".toggleHead i[class='icon-minus-sign']",form_id))
+	{
+		$(".toggleHead",form_id).find('i').removeClass('icon-minus-sign');	
+	}
+
+	$(".toggleHead",form_id).next().addClass("hide");
+	$(".toggleHead",form_id).find('i').addClass('icon-plus-sign');	
+
+	if($("#discount_type",form_id).val()==""  )
+		$("#discount_type",form_id).val("Value");
+	$("#discount_type_btn span:first-child",form_id).text($("#discount_type",form_id).val());
+	//Init
+
+	$(".modal-body").on(
+			"click",form_id,
+			function(e)
+			{
+				var source = e.target || e.srcElement;
+				if(source.id=="discount_type_btn" || $(source).hasClass("caret") || $(source).hasClass("m-r-xs"))
+					return;
+				if($(source).hasClass("caret"))
+					return;
+				if($(".discounttype-input-group-btn",me._form_id).hasClass("open"))
+				{
+					$(".discounttype-input-group-btn",me._form_id).removeClass("open");
+				}	
+			});
+	$(form_id).on(
+			"click",".toggleHead",
+			function(e)
+			{
+				$(this).find('i').toggleClass('icon-plus-sign').toggleClass('icon-minus-sign');
+				$(this).next().toggleClass("hide");
+				//$(this).next().slideToggle('fast');
+				me.Process();
+			});
+		this.Process=function()
+		{
+			if(App_Deal_Details.deal_products_collection_view !=null)
+				return;
+				App_Deal_Details.deal_products_collection_view=new Base_Collection_View({ url : '/core/api/products', 
+					templateKey : "deal-products",
+					individual_tag_name : 'tr',className:'deal-products_tr',sort_collection : false,
+					errorCallback:function(e)
+					{
+						console.log(e)
+					},
+					postRenderCallback : function(el)
+					{
+						//$(el).addClass("table-responsive");
+						console.log("loaded products : ", el);
+						$(me._form_id).on("click",".dealproducts_td_checkbox",
+						function(e)
+						{
+							me.processProductsClick(e);
+						});
+						$(me._form_id).on("click",".dealproducts_td_qty_span",
+						function(e)
+						{
+							me.processProductQtyClick(e);
+						});
+						$(me._form_id).on("click",".discountcheck",
+						function(e)
+						{
+							
+							me.calculateGrandTotal(e);
+						});
+						$(me._form_id).on("keyup",".discountvalue",
+						function(e)
+						{
+							me.calculateGrandTotal(e);
+						});
+						$(me._form_id).on("keypress",".dealproducts_qty_input",
+								function(e)
+								{
+									me.updateOnEnter(e);
+								});
+						$(me._form_id).on("blur",".dealproducts_qty_input",
+								function(e)
+								{
+									me.close(e,"blur");
+								});
+						$(me._form_id).on("blur",".discounttype-input-group-btn ul",
+								function(e)
+								{
+									$(".discounttype-input-group-btn",me._form_id).removeClass("open");
+								});
+						$(me._form_id).on("click",".discounttype-input-group-btn ul li a",
+								function(e)
+								{
+									me.toggleDiscountOptionsClick(e);
+								});
+						$(me._form_id).on("click",".discounttype-select",
+								function(e)
+								{
+									me.toggleDiscountButton(e);
+								});
+						$(me._form_id).on("click",".dealproducts_th_checkbox",
+								function(e)
+								{
+									me.toggleAllProducts(e);
+								});
+						
+					}});
+					App_Deal_Details.deal_products_collection_view.collection.fetch({
+					success : function(data)
+					{
+						var bProductsFound=false;
+						for(var key in data.models)
+						{
+							var _found=false;
+							bProductsFound=true;
+							var _id=data.models[key].get("id");
+							if(me._value && me._value.products)
+							{
+								
+								for(var key1 in me._value.products)
+								{
+									if(me._value.products[key1].id	==_id)
+									{
+										data.models[key].set("qty",me._value.products[key1].qty);
+										data.models[key].set("total",me._value.products[key1].total);
+										data.models[key].set("price",me._value.products[key1].price);
+										data.models[key].set("isChecked",true);	
+										_found=true;
+									}
+								}
+								
+							}
+
+							if(!data.models[key].get("qty"))
+							{	
+								data.models[key].set("qty",1);
+								data.models[key].set("total",data.models[key].get("price"));
+								data.models[key].set("isChecked",false);
+							}	
+						}
+						if(me._value && me._value.products)
+						{
+							for(var key1 in me._value.products)
+							{
+								bProductsFound=true;
+								var _found=false;
+								var _id=me._value.products[key1].id; 
+								
+								for(var key in data.models)
+								{
+									if(data.models[key].id	==_id)
+									{
+										_found=true;
+									}
+								}
+								if(!_found)
+								{	
+									var deletedProduct=new Backbone.Model();
+									data.add(deletedProduct)
+									deletedProduct.set("qty",me._value.products[key1].qty)
+									deletedProduct.set("id",me._value.products[key1].id)
+									deletedProduct.set("total",me._value.products[key1].total)
+									deletedProduct.set("price",me._value.products[key1].price)
+									deletedProduct.set("isChecked",true)
+									deletedProduct.set("name",me._value.products[key1].name)
+									deletedProduct.set("description",me._value.products[key1].description)
+									
+
+									//var deletedProduct=new Backbone.model()
+									//deletedProduct.id = url;
+									//data.models[key].set("qty",1);
+									//data.models[key].set("total",data.models[key].get("price"));
+									//data.models[key].set("isChecked",false);
+								}	
+							}
+						}
+						if(bProductsFound==false)
+						{
+
+							var sHTML='<tr><td colspan="6"><center>You do not have any Products currently setup.</center></td></tr>';
+							$("#deal-products-model-list").append(sHTML);
+						}
+					}
+				});
+				
+				App_Deal_Details.deal_products_collection_view.render(); 
+				$("#deal_products_div",el).append(App_Deal_Details.deal_products_collection_view.el);
+			}	
+						
+				this.toggleAllProducts=function(e)
+				{
+					if($(".dealproducts_th_checkbox",me._form_id).is(":checked"))
+					{	
+						$(".dealproducts_td_checkbox",me._form_id).each(function(index,value){
+							if(!$(value).is(":checked"))			
+							{	
+								var _id=$(value).attr("data")
+								var objModel= App_Deal_Details.deal_products_collection_view.collection.get(_id)
+			
+								
+								objModel.set("isChecked",true)	
+									
+								//$(value).prop('checked',true);
+								//$(value).trigger("click")
+							}	
+						});
+					}
+					else
+					{
+						$(".dealproducts_td_checkbox",me._form_id).each(function(index,value){
+							if($(value).is(":checked"))			
+							{
+								var _id=$(value).attr("data")
+								var objModel= App_Deal_Details.deal_products_collection_view.collection.get(_id)
+			
+								
+								objModel.set("isChecked",false)	
+								//$(value).prop('checked',false);
+								//$(value).trigger("click")
+							}	
+						});
+					}
+					me.calculateGrandTotal();
+				}
+				this.updateOnEnter=function (e)
+				{
+					if(e.keyCode==13)this.close(e,"enter");
+
+				}
+				this.toggleDiscountButton=function(e)
+				{
+					//$(".discounttype-input-group-btn","#opportunityForm").removeClass("open").addClass("open")
+					//return;
+					var source = e.target || e.srcElement;
+					if($(".discounttype-input-group-btn",me._form_id).hasClass("open"))
+						$(".discounttype-input-group-btn",me._form_id).removeClass("open")
+					else
+						$(".discounttype-input-group-btn",me._form_id).addClass("open")
+				}
+				this.toggleDiscountOptionsClick=function (e)
+				{
+					var source = e.target || e.srcElement;
+					var sText=$(source).text();
+					var objButtonGroup=$(source).closest(".discounttype-input-group-btn")
+
+					var objButtonInput=objButtonGroup.children().eq(2);
+					var objButton=objButtonGroup.children().eq(0);
+					var objButtonSpan=objButton.children().eq(0);
+					objButtonSpan.text(sText);
+					objButtonInput.val(sText);	
+					//$(".discounttype-select","#opportunityForm").trigger("click");
+					me.toggleDiscountButton(e);
+					me.calculateGrandTotal();
+				}
+				this.processProductsClick=function(e)
+				{
+					var source = e.target || e.srcElement;
+					var checked = false;
+					var iTotal=0;
+					var objTR=$(source).closest('tr');
+					var objData=objTR.data();
+					var _id=$(source).attr("data")
+					var objModel= App_Deal_Details.deal_products_collection_view.collection.get(_id)
+			
+					if($(source).is(':checked'))
+					{
+						if(!objTR.hasClass("pseduo-row"))
+						{
+							objModel.set("isChecked",true)	
+						}
+						
+					}
+					else
+					{
+						objModel.set("isChecked",false)	
+						var id=objData.get('id')
+					}
+					me.calculateGrandTotal();
+				}
+				
+				this.onEdit=function(e)
+				{
+
+					this.$el.addClass("editing");
+
+					this.input.focus();
+					$(this.input).val($(this.input).val());
+
+				}
+				this.close=function(e,type)
+				{
+					var source = e.target || e.srcElement;		
+					var value=$(source).val();
+					
+					//type-enter/blur
+					if(type=="blur")
+					{
+						if(!$.isNumeric(value) || parseFloat(value)<=0)
+						{
+							value=$(source).attr("prev_val");
+							if(!$.isNumeric(value))
+							{
+								value=1;
+							}
+						}
+						$(source).removeClass('block').addClass('hide');	
+						var objTD=$(source).parent('td');
+						objTD.children().eq(0).removeClass('hide').addClass('block');
+					}
+					else
+					{
+						if(!$.isNumeric(value) || parseFloat(value)<=1)
+						{
+							return;
+						}
+						if($.isNumeric(value) && parseFloat(value)>=1)
+						{
+							$(source).removeClass('block').addClass('hide');			
+							var objTD=$(source).parent('td');
+							objTD.children().eq(0).removeClass('hide').addClass('block');
+						}		
+
+					}
+						
+					if($.isNumeric(value) && parseFloat(value)>=1)
+					{
+
+						
+						var objTR=$(source).closest('tr');
+						var objData=objTR.data();
+						var objModel= App_Deal_Details.deal_products_collection_view.collection.get(objData.id)
+						var inputCheckbox=objTD.parent().children().eq(0).children().eq(0).children().eq(0);
+						if(!$(inputCheckbox).is(':checked'))
+						{	
+							objModel.set("isChecked",true)
+						}	
+						objModel.set("qty",value)
+					}
+					me.calculateGrandTotal();
+
+				}
+				this.processProductQtyClick=function(e)
+				{
+					var source = e.target || e.srcElement;
+					var jSpan=$(source)
+					if($(source).prop("tagName")=="SPAN")
+					{
+						this.input=jSpan.next()
+					}
+					else if($(source).prop("tagName")=="TD")
+					{
+						this.input=$(source).children().eq(1);
+						jSpan=$(source).children().eq(0)
+					}
+						
+					this.input.removeClass('hide').addClass('block');
+					this.input.focus();
+					$(this.input).attr("prev_val",$(this.input).val())
+					$(this.input).val($(this.input).val())
+					jSpan.removeClass('block').addClass('hide');
+					
+
+				}
+				this.calculateGrandTotal=function ()
+				{
+				//	var currentDeal = App_Deal_Details.dealDetailView.model	
+					var iTotal=0;
+					for(var key in App_Deal_Details.deal_products_collection_view.collection.models)
+					{
+						var iQtyPriceTotal= parseFloat( App_Deal_Details.deal_products_collection_view.collection.models[key].get("qty")) *parseFloat( App_Deal_Details.deal_products_collection_view.collection.models[key].get("price"))
+						if(iQtyPriceTotal.toFixed)
+							iQtyPriceTotal=iQtyPriceTotal.toFixed(2)
+						App_Deal_Details.deal_products_collection_view.collection.models[key].set("total",iQtyPriceTotal)
+						var sId=App_Deal_Details.deal_products_collection_view.collection.models[key].get("id")
+						if(App_Deal_Details.deal_products_collection_view.collection.models[key].get("isChecked"))
+							iTotal+=parseFloat(iQtyPriceTotal);		
+					}
+					var iDiscountAmt=0;
+					if($("#apply_discount",me._form_id).is(':checked'))
+					{
+						iDiscountAmt=$("#discount_value",me._form_id).val();
+						if(iDiscountAmt=="")
+							iDiscountAmt=0
+						if(iDiscountAmt!=null && iDiscountAmt!=undefined )
+							{
+								if($(".discounttype-input-group-btn span",me._form_id).eq(0).text()=="Percent")
+								{
+									iDiscountAmt=(iTotal *  iDiscountAmt)/100;
+								}
+							}
+					}
+					if(iDiscountAmt.toFixed)
+						iDiscountAmt=iDiscountAmt.toFixed(2)
+					$("input[name='discount_amt']",$(me._form_id)).val(iDiscountAmt);
+					iTotal-=iDiscountAmt
+					if($("input[name='currency_conversion_value']",$(me._form_id)).length)
+						$("input[name='currency_conversion_value']",$(me._form_id)).val(iTotal);
+					else
+						$("input[name='expected_value']",$(me._form_id)).val(iTotal);
+					
+					ValidateDealDiscountAmt(me._form_id);
+				}
+				
+}
+
+function ValidateDealDiscountAmt(_form_id)
+{
+	
+	var iTotal=0;
+	try{
+		var iDiscountValue=$("#discount_value",_form_id).val();
+		$(".calculation-error-status",_form_id).html("")
+		var iDiscountValue=$("#discount_value",_form_id).val();
+			if(iDiscountValue.trim() && !$.isNumeric(iDiscountValue))
+			{
+				$(".calculation-error-status",_form_id).html("Discount should be numeric")
+				return false;
+			}
+		if($("#apply_discount",_form_id).is(':checked'))
+		{
+			
+			if(!$.isNumeric(iDiscountValue))
+			{
+				$(".calculation-error-status",_form_id).html("Discount should be numeric")
+				return false;
+			}
+			if(iDiscountValue!=null && iDiscountValue!=undefined )
+			{
+				if($(".discounttype-input-group-btn span",_form_id).eq(0).text()=="Percent")
+				{
+					if(parseFloat(iDiscountValue)>100)
+					{
+						
+						$(".calculation-error-status",_form_id).html("Discount percent cannot be greater than 100")
+						return false;
+					}
+					else if(parseFloat(iDiscountValue)<0)
+					{
+						$(".calculation-error-status",_form_id).html("Discount percent cannot be less than 0")
+						return false;
+					}	
+				}
+				else
+				{
+					var iTotal=0;
+					for(var key in App_Deal_Details.deal_products_collection_view.collection.models)
+					{
+						var iQtyPriceTotal= parseFloat( App_Deal_Details.deal_products_collection_view.collection.models[key].get("qty")) *parseFloat( App_Deal_Details.deal_products_collection_view.collection.models[key].get("price"))
+						var sId=App_Deal_Details.deal_products_collection_view.collection.models[key].get("id")
+						if(App_Deal_Details.deal_products_collection_view.collection.models[key].get("isChecked"))
+						{
+						
+							iTotal+=iQtyPriceTotal;		
+						}	
+					}
+					if(iTotal ==0 )
+					{
+						$(".calculation-error-status",_form_id).html("Atleast one product should be selected to apply discount")
+						return false;		
+					}
+					if(parseFloat(iDiscountValue)>parseFloat(iTotal))
+					{
+						$(".calculation-error-status",_form_id).html("Discount value cannot be greater than total products value")
+						return false;	
+					}
+					if(parseFloat(iDiscountValue)<0)
+					{
+						$(".calculation-error-status",_form_id).html("Discount value cannot be less than 0")
+						return false;	
+					}	
+				}
+			}
+
+		}	
+	}catch(e)
+	{
+
+	}	
+	return true;
+}
 function populateDealSources(el, value){
 	if(!$('#deal_deal_source',el).hasClass("hidden")){
 		$('#deal_deal_source',el).addClass("hidden");

@@ -402,6 +402,11 @@ function get_merge_field_objs()
 	if(custom_fields && !$.isEmptyObject(custom_fields))
 		json['Custom'] = custom_fields;
 
+	if((Current_Route.indexOf('document-template') != -1 || Current_Route.indexOf('document') != -1))
+	{
+		json['Products']={"Pricing Table":"{{{pricing_table}}}"}
+	}
+
 	//Return json if path isn't email-template
 	if(Current_Route.indexOf('emailbuilder-add') == -1 && 
 		Current_Route.indexOf('email-template-add') == -1 &&
@@ -422,6 +427,7 @@ function get_merge_field_objs()
 	};
 
 	json['Ticket'] = ticket_merge_fields
+
 
 	return json;
 }

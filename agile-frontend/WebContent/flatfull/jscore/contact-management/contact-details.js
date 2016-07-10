@@ -372,6 +372,7 @@ var Contact_Details_Model_Events = Base_Model_View.extend({
     	'click .document-edit-company-tab' : 'navigateToCompanyeditDocument',
     	'click .document-unlink-contact-tab' : 'unlinkDocument',
     	'click .add-document-select' : 'listDocuments',
+      
     	'click .add-company-edocument-select' : 'navigateToCompanyeDocument',
     	'click .add-contact-edocument-select' : 'navigateToContacteDocument',
     	'click .add-document-cancel' : 'cancelDocuments',
@@ -1282,7 +1283,7 @@ enterCompanyScore: function(e){
 		el.find(".contact-document-select").css("display", "none");
 
 		el.find(".add-document-select").css("display", "inline-block");
-		el.find(".add-contact-edocument-select,.add-company-edocument-select").css("display", "inline-block");
+		el.find(".add-contact-edocument-select,.add-company-edocument-select,.dropdown-toggle").css("display", "inline-block");
 	},
 
 	/**

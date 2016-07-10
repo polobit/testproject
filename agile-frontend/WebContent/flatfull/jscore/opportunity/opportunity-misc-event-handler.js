@@ -106,6 +106,9 @@ $(function()
                     return false;
             }
         }
+
+        json["products"] = serialize_deal_products(form_id);
+        
 		console.log(json);
 		if (form_id == "opportunityForm")
 			saveDeal(form_id, modal_id, this, json, false);

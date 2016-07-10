@@ -8,25 +8,6 @@
     </div>
     <div class="clearfix"></div>
  </div>
-{{#unless this.length}}
-    <div id="slate">
-        <div class="alert bg-white ">
-            <div class="slate-content p-md">        
-                    <div class="box-left pull-left m-r-md">
-                        <img alt="Clipboard" src="//doxhze3l6s7v9.cloudfront.net/beta/static//img/clipboard.png">
-                    </div>
-                     <div class="box-right pull-left">
-                        <h4 class="m-t-none">You do not have any Products currently.</h4>
-                         <div class="text">You can add product by clicking the button below or the one on the right side of the page.</div>
-                            <a href="#product-add" role="button" data-toggle="modal" type="submit" class="btn product-add btn-sm btn-default blue btn-slate-action m-t-xs"><i class="icon-plus-sign"></i>  Add Products</a>
-                    </div>
-                    <div class="clearfix"></div>
-        </div>
-    </div>
-
-    
- {{/unless}}
-{{#if this.length}}
     <div class="row">
         <div class="col-md-12 col-sm-12">
                     <div class=" table-responsive" style="overflow:hidden;"> 
@@ -47,7 +28,6 @@
             </div>
         </div>
     </div>
- {{/if}}    
 </script>
 <script id="admin-settings-products-model-template" type="text/html">
     <td class='data' data='{{id}}'>

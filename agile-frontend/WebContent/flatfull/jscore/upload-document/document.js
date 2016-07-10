@@ -192,13 +192,17 @@ function saveDocument(form_id, modal_id, saveBtn, isUpdate, json, contact_id)
 			// reset document size 
 			CUSTOM_DOCUMENT_SIZE = 0;
 
+			if(data.doc_type=="SENDDOC")
+			{
+				$(".email-send-doc",'#uploadDocumentForm,#uploadDocumentUpdateForm').removeClass("hide");				
+			}
 			// Removes disabled attribute of save button
 			enable_save_button($(saveBtn));//$(saveBtn).removeAttr('disabled');
 			var id=$('#' + form_id).find("#id")
 			$(id).attr("name","id");
 			$(id).val(data.toJSON().id);
 			// While attaching document is from existing documenst list, no need of form verification.
-			if(form_id)
+			/*if(form_id)
 			{
 				$('#' + form_id).find("#network_type").val("");
 				$('#' + form_id).find('#network_type').closest(".controls").find(".icon-ok").css("display", "none");
@@ -206,10 +210,8 @@ function saveDocument(form_id, modal_id, saveBtn, isUpdate, json, contact_id)
 				$('#' + form_id).find("#upload_url").val("");
 				$('#' + form_id).find("#extension").val("");
 				
-				/*$('#' + form_id).each(function() {
-					this.reset();
-				});*/
-			}
+				
+			}*/
 			
 			//$('#' + modalId).find('span.save-status img').remove();
 			//if(form_id)
@@ -356,7 +358,7 @@ function saveDocument(form_id, modal_id, saveBtn, isUpdate, json, contact_id)
 				
 			}
 			
-			if (Current_Route == 'documents') 
+			if (Current_Route.indexOf("documents") == 0) 
 			{
 				if (isUpdate)
 					App_Documents.DocumentCollectionView.collection.remove(json);

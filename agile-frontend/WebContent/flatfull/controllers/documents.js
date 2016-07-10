@@ -210,7 +210,13 @@ var DocumentsRouter = Backbone.Router.extend({
 		that.DocumentCollectionView = new Document_Collection_Events({ url : 'core/api/documents', templateKey : "documents", cursor : true, page_size : 20,
 		individual_tag_name : 'tr', postRenderCallback : function(el)
 		{
-		includeTimeAgo(el);
+			includeTimeAgo(el);
+			$(".documents-collection").on('click', '.document-url', function(e)
+				{
+						var source = e.target || e.srcElement;
+						var id =$(source).attr("data");
+						Backbone.history.navigate('documents/' + id, { trigger : true });
+				});		 
 		}, appendItemCallback : function(el)
 		{
 		// To show timeago for models appended by infini scroll
@@ -227,7 +233,7 @@ var DocumentsRouter = Backbone.Router.extend({
 
 		head.js(LIB_PATH + 'lib/date-charts.js', function() {
 		renderDocumentsActivityView();
-		 
+				
 		});
 		}, "#content");
 	} 
@@ -372,7 +378,7 @@ function process_add_document_templatemodel(template_model)
 
 function initializeDocumentsListeners()
 {
-	$('#uploadDocumentUpdateForm,#uploadDocumentModalForm').on('click', '#document-send-comments', function(e)
+	$('#uploadDocumentUpdateForm,#uploadDocumentForm').on('click', '#document-send-comments', function(e)
 	{
 		e.preventDefault();
 		var source = event.target || event.srcElement;
@@ -381,7 +387,7 @@ function initializeDocumentsListeners()
 			sId=$(source).attr("data");
 		if(sId=="")
 			return;
-						var sCommentsVal=$("#comments",'#uploadDocumentUpdateForm,#uploadDocumentModalForm').val();
+						var sCommentsVal=$("#comments",'#uploadDocumentUpdateForm,#uploadDocumentForm').val();
 						if(!sCommentsVal.trim())
 						{
 							alert("Enter comments");
@@ -410,9 +416,21 @@ function initializeDocumentsListeners()
 							},
 							success:function(res){
 								var sComments=$("#comments").val();
+								$(".latestactivitypanel").removeClass("hide");
+								$(".noactivitypanel").addClass("hide");
+								if($("#today-activity"))
+								{
+									var sHTML='<li><li class="wrapper-sm b-b"><div title="'+ sComments + '" class="m-b-none text-flow-ellipsis line-clamp" style="display:-moz-box;">' + sComments +'</div><small class="block text-muted"> <div class="m-b-none text-flow-ellipsis line-clamp">by ' + CURRENT_DOMAIN_USER.name + '</div><small class="block text-muted"><i class="fa fa-fw fa-clock-o"></i>&nbsp;<time class="text-sm" datetime="" title="">less than a minute ago</time></small></small></li><small class="block text-muted"></small></li>'
+									$("#today-activity").prepend(sHTML)
+								}
+								else
+								{
+									var sHTML='<li><li class="wrapper-sm b-b"><div title="'+ sComments + '" class="m-b-none text-flow-ellipsis line-clamp" style="display:-moz-box;">' + sComments +'</div><small class="block text-muted"> <div class="m-b-none text-flow-ellipsis line-clamp">by ' + CURRENT_DOMAIN_USER.name + '</div><small class="block text-muted"><i class="fa fa-fw fa-clock-o"></i>&nbsp;<time class="text-sm" datetime="" title="">less than a minute ago</time></small></small></li><small class="block text-muted"></small></li>'	
+									$("#documents-comments-history").append(sHTML)
+								}		
+
 								//var sHTML='<ul class="list-group"><li class="list-group-item document-notes"><p class="line-clamp line-clamp-3 activity-tag" style="display:-moz-box;word-wrap: break-word;overflow:hidden;">'+ sComments +'</p><small class="block text-muted"><i class="fa fa-fw fa-clock-o"></i> <time class="timeago" datetime="Feb 19 2016 19:02:53" title="1455888773">less than a minute ago</time></small></li></ul>'
-								var sHTML='<li><li class="wrapper-sm b-b"><div title="'+ sComments + '" class="m-b-none text-flow-ellipsis line-clamp" style="display:-moz-box;">' + sComments +'</div><small class="block text-muted"> <div class="m-b-none text-flow-ellipsis line-clamp">by ' + CURRENT_DOMAIN_USER.name + '</div><small class="block text-muted"><i class="fa fa-fw fa-clock-o"></i>&nbsp;<time class="text-sm" datetime="" title="">less than a minute ago</time></small></small></li><small class="block text-muted"></small></li>'
-								$("#today-activity").prepend(sHTML)
+								
 								$("#comments").val("")
 								$('#comments').focus();
 							}
@@ -424,12 +442,12 @@ function initializeDocumentsListeners()
 						});			
 
 	});
-	$('#uploadDocumentUpdateForm,#uploadDocumentModalForm').on('click', '.generate-send-doc', function(e)
+	$('#uploadDocumentUpdateForm,#uploadDocumentForm').on('click', '.generate-send-doc', function(e)
 	{	
 
-		$(".generate-send-doc",'#uploadDocumentModalForm,#uploadDocumentUpdateForm').addClass("hide");			
-		$(".senddoc",'#uploadDocumentModalForm,#uploadDocumentUpdateForm').removeClass("hide");			
-		$(".email-send-doc",'#uploadDocumentModalForm,#uploadDocumentUpdateForm').removeClass("hide");			
+		$(".generate-send-doc",'#uploadDocumentForm,#uploadDocumentUpdateForm').addClass("hide");			
+		$(".senddoc",'#uploadDocumentForm,#uploadDocumentUpdateForm').removeClass("hide");			
+		
 		setupTinyMCEEditor('textarea#signdoc-template-html', false, undefined, function()
 		{
 
@@ -483,12 +501,12 @@ function initializeDocumentsListeners()
 			return contact_json;
 		});		
 
-		$(".generate-send-doc",'#uploadDocumentModalForm,#uploadDocumentUpdateForm').addClass("hide");
-		$("#document_validate",'#uploadDocumentModalForm,#uploadDocumentUpdateForm').removeClass("hide");
-		$(".email-send-doc",'#uploadDocumentModalForm,#uploadDocumentUpdateForm').removeClass("hide");
+		$(".generate-send-doc",'#uploadDocumentForm,#uploadDocumentUpdateForm').addClass("hide");
+		$("#document_validate",'#uploadDocumentForm,#uploadDocumentUpdateForm').removeClass("hide");
+		
 		
 	});
-	$('#uploadDocumentUpdateForm,#uploadDocumentModalForm').on('click', '.cancel-document', function(e)
+	$('#uploadDocumentUpdateForm,#uploadDocumentForm').on('click', '.cancel-document', function(e)
 	{
  		e.preventDefault();
 
@@ -525,13 +543,12 @@ function initializeDocumentsListeners()
 		}
 		if (App_Deal_Details.dealDetailView)
 		{
-				if(Current_Route.indexOf( "deal" + "/" +App_Deal_Details.dealDetailView.model.id)>-1)	
+				if((Current_Route.indexOf( "deal" + "/" +App_Deal_Details.dealDetailView.model.id)>-1) ||	( Current_Route.indexOf( App_Deal_Details.dealDetailView.model.get('id'))>-1))
 				{
 					var sURL="deal/" + App_Deal_Details.dealDetailView.model.id ;
 					Backbone.history.navigate(sURL, { trigger : true });
 					return;			
 				}
-
 		}		
 		if (Current_Route == 'documents') 
 		{
@@ -551,20 +568,23 @@ function initializeDocumentsListeners()
 			});
 		}
 	});
-	$('#uploadDocumentUpdateForm,#uploadDocumentModalForm').on('click', '.email-send-doc', function(e)
+	$('#uploadDocumentUpdateForm,#uploadDocumentForm').on('click', '.email-send-doc', function(e)
 	{
  		e.preventDefault();
- 		var sURL="#send-email/documents/" + $('#uploadDocumentUpdateForm,#uploadDocumentModalForm').find("#id").val();
+
+ 		var sURL="#send-email/documents/" + $('#uploadDocumentUpdateForm,#uploadDocumentForm').find("#id").val();
 		Backbone.history.navigate(sURL, { trigger : true });
  		return;
  		
 	});
-	$('#uploadDocumentUpdateForm,#uploadDocumentModalForm').on('click', '#document_validate, #document_update_validate', function(e)
+	$('#uploadDocumentUpdateForm,#uploadDocumentForm').on('click', '#document_validate, #document_update_validate', function(e)
 	{
  		e.preventDefault();
  	
  		var modal_id = $(this).closest('.upload-document-modal').attr("id");
     	var form_id = $(this).closest('#documents-listener-container').find('form').attr("id");
+
+    	
     	
     	save_content_to_textarea('signdoc-template-html');
 
@@ -577,7 +597,7 @@ function initializeDocumentsListeners()
     	else
     		saveDocument(form_id, modal_id, this, true, json);
 	});
-	$('#uploadDocumentUpdateModalForm,#uploadDocumentModalForm').on('click', '.link', function(e)
+	$('#uploadDocumentUpdateModalForm,#uploadDocumentForm').on('click', '.link', function(e)
 	{
 		e.preventDefault();
 		$(this).closest('form').find('#error').html("");
@@ -595,8 +615,8 @@ function initializeDocumentsListeners()
 		}
 		return false;
 	});
-	$('#uploadDocumentModalForm').on('hidden.bs.modal', function(e){
-		$('#GOOGLE',$('#uploadDocumentModalForm')).parent().show();
+	$('#uploadDocumentForm').on('hidden.bs.modal', function(e){
+		$('#GOOGLE',$('#uploadDocumentForm')).parent().show();
 	});	
 }
 function proc_add_document(model_json)
@@ -613,7 +633,7 @@ function proc_add_document(model_json)
 
 			var el = $("#documents-listener-container").html($(template_ui));
 
-			var el_form	= $("#uploadDocumentModalForm")
+			var el_form	= $("#uploadDocumentForm")
 			var sPricingTable="";	
 			if(model_json && model_json.id)
 			{	
@@ -625,7 +645,7 @@ function proc_add_document(model_json)
 				else 
 				{
 					var contact_name = getContactName(model_json);
-					$('.contacts', "#uploadDocumentModalForm").append('<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="' + model_json.id + '">' + contact_name + '</li>');
+					$('.contacts', "#uploadDocumentForm").append('<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="' + model_json.id + '">' + contact_name + '</li>');
 				}
 			}
 			
@@ -676,17 +696,17 @@ function proc_add_document(model_json)
 						agile_type_ahead("document_relates_to_deals", el_form, deals_typeahead, fxn_process_added_deal, null, null, "core/api/search/deals", false, true);	
 
 
-						$("#network_type",'#uploadDocumentModalForm,#uploadDocumentUpdateForm').val("NONE");
-						$("#doc_type",'#uploadDocumentModalForm,#uploadDocumentUpdateForm').val("SENDDOC");
+						$("#network_type",'#uploadDocumentForm,#uploadDocumentUpdateForm').val("NONE");
+						$("#doc_type",'#uploadDocumentForm,#uploadDocumentUpdateForm').val("SENDDOC");
 					
 						
 						
 					
-					$(".generate-send-doc",'#uploadDocumentModalForm,#uploadDocumentUpdateForm').removeClass("hide ");
-					$("#document_validate",'#uploadDocumentModalForm,#uploadDocumentUpdateForm').addClass("hide ");
-					$(".email-send-doc",'#uploadDocumentModalForm,#uploadDocumentUpdateForm').addClass("hide ");
+					$(".generate-send-doc",'#uploadDocumentForm,#uploadDocumentUpdateForm').removeClass("hide ");
+					$("#document_validate",'#uploadDocumentForm,#uploadDocumentUpdateForm').addClass("hide ");
+					$(".email-send-doc",'#uploadDocumentForm,#uploadDocumentUpdateForm').addClass("hide ");
 					
-					$(".attachment",'#uploadDocumentModalForm,#uploadDocumentUpdateForm').addClass("hide");
+					$(".attachment",'#uploadDocumentForm,#uploadDocumentUpdateForm').addClass("hide");
 				}	
 				else
 				{
@@ -695,10 +715,10 @@ function proc_add_document(model_json)
 						// Deals type-ahead
 						agile_type_ahead("document_relates_to_deals", el_form, deals_typeahead, false, null, null, "core/api/search/deals", false, true);
 
-					$("#doc_type",'#uploadDocumentModalForm,#uploadDocumentUpdateForm').val("ATTACHMENT");	
-					$(".senddoc",'#uploadDocumentModalForm,#uploadDocumentUpdateForm').addClass("hide ");
-					$(".send-doc-button",'#uploadDocumentModalForm,#uploadDocumentUpdateForm').addClass("hide ");
-					$(".attachment",'#uploadDocumentModalForm,#uploadDocumentUpdateForm').removeClass("hide");	
+					$("#doc_type",'#uploadDocumentForm,#uploadDocumentUpdateForm').val("ATTACHMENT");	
+					$(".senddoc",'#uploadDocumentForm,#uploadDocumentUpdateForm').addClass("hide ");
+					$(".send-doc-button",'#uploadDocumentForm,#uploadDocumentUpdateForm').addClass("hide ");
+					$(".attachment",'#uploadDocumentForm,#uploadDocumentUpdateForm').removeClass("hide");	
 				}
 			
 				initializeDocumentsListeners();	
@@ -895,13 +915,13 @@ function load_document_from_edit_model(model)
 				var documentUpdateForm = $("#uploadDocumentUpdateForm");
 				deserializeForm(model, $("#uploadDocumentUpdateForm"));
 				var 	template_type=model.template_type;
-				if($("#doc_type",'#uploadDocumentModalForm,#uploadDocumentUpdateForm').val()=="SENDDOC")
+				if($("#doc_type",'#uploadDocumentForm,#uploadDocumentUpdateForm').val()=="SENDDOC")
 				{
 
-						$(".email-send-doc",'#uploadDocumentModalForm,#uploadDocumentUpdateForm').removeClass("hide ");
-						$(".senddoc",'#uploadDocumentModalForm,#uploadDocumentUpdateForm').removeClass("hide ");
-						$(".send-doc-button",'#uploadDocumentModalForm,#uploadDocumentUpdateForm').removeClass("hide ");
-						$(".attachment",'#uploadDocumentModalForm,#uploadDocumentUpdateForm').addClass("hide ");
+						$(".email-send-doc",'#uploadDocumentForm,#uploadDocumentUpdateForm').removeClass("hide ");
+						$(".senddoc",'#uploadDocumentForm,#uploadDocumentUpdateForm').removeClass("hide ");
+						$(".send-doc-button",'#uploadDocumentForm,#uploadDocumentUpdateForm').removeClass("hide ");
+						$(".attachment",'#uploadDocumentForm,#uploadDocumentUpdateForm').addClass("hide ");
 						setupTinyMCEEditor('textarea#signdoc-template-html', false, undefined, function()
 						{
 							set_tinymce_content('signdoc-template-html', model.text);
@@ -951,6 +971,7 @@ function load_document_from_edit_model(model)
 									}
 								});
 						}
+						$(".documents-activities-container",'#uploadDocumentForm,#uploadDocumentUpdateForm').removeClass("hide")
 						renderDocumentsActivityView(model.id)
 						
 						var fxn_process_added_contact = function(data, item)
@@ -991,14 +1012,19 @@ function load_document_from_edit_model(model)
 								});
 					     }
 
-						// Deals type-ahead
+							// Deals type-ahead
 						agile_type_ahead("document_relates_to_deals", uploadDocumentUpdateForm, deals_typeahead, fxn_process_added_deal, null, null, "core/api/search/deals", false, true);	
 				}
 				else
 				{
-						$(".senddoc",'#uploadDocumentModalForm,"#uploadDocumentUpdateForm').addClass("hide ");
-						$(".send-doc-button",'#uploadDocumentModalForm,#uploadDocumentUpdateForm').addClass("hide ");
-						$(".attachment",'#uploadDocumentModalForm,#uploadDocumentUpdateForm').removeClass("hide ");				
+						if(model.network_type)
+						{
+							$('#uploadDocumentUpdateForm').find("#" + model.network_type).closest(".link").find(".icon-ok").css("display", "inline");
+							$('#uploadDocumentUpdateForm').find("#" + model.network_type).closest(".link").css("background-color", "#EDEDED");
+						}
+						$(".senddoc",'#uploadDocumentForm,#uploadDocumentUpdateForm').addClass("hide ");
+						$(".send-doc-button",'#uploadDocumentForm,#uploadDocumentUpdateForm').addClass("hide ");
+						$(".attachment",'#uploadDocumentForm,#uploadDocumentUpdateForm').removeClass("hide ");				
 
 						agile_type_ahead("document_relates_to_contacts", uploadDocumentUpdateForm, contacts_typeahead);
 
@@ -1008,11 +1034,7 @@ function load_document_from_edit_model(model)
 						//agile_type_ahead("document_relates_to_contacts", uploadDocumentUpdateForm, contacts_typeahead,fxn_process_added_contact);
 						//agile_type_ahead("document_relates_to_deals", uploadDocumentUpdateForm, deals_typeahead, fxn_process_added_deal, null, null, "core/api/search/deals", false, true);	
 				}
-
-				$('#uploadDocumentUpdateForm').find("#" + model.network_type).closest(".link").find(".icon-ok").css("display", "inline");
-				$('#uploadDocumentUpdateForm').find("#" + model.network_type).closest(".link").css("background-color", "#EDEDED");
-
-				
+			
 			
 
 			initializeDocumentsListeners();	

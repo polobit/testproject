@@ -110,27 +110,21 @@ public class JerseyApplication extends Application
 	s.add(com.agilecrm.core.api.calendar.CategoriesAPI.class);
 	s.add(com.agilecrm.core.api.widgets.BriaWidgetAPI.class);
 	s.add(com.agilecrm.core.api.widgets.SkypeWidgetAPI.class);
+	
+	s.add(com.agilecrm.core.api.products.ProductsAPI.class);
+	s.add(com.agilecrm.core.api.prefs.DocumentTemplatesPrefsAPI.class);
+	s.add(com.agilecrm.core.api.contacts.DocumentViewerAPI.class);
+	
 	// Email Unsubscription
 	s.add(com.agilecrm.core.api.campaigns.UnsubscribeEmailAPI.class);
 	s.add(com.agilecrm.core.api.landingpages.LandingPagesAPI.class);
 	// s.add(com.agilecrm.core.api.webpage.WebPageAPI.class);
 	s.add(com.agilecrm.core.api.deals.DealFilterAPI.class);
 	s.add(com.agilecrm.core.api.widgets.GoogleWidgetsAPI.class);
-<<<<<<< HEAD
-
-=======
 	s.add(com.agilecrm.core.api.widgets.BrainTreeWidgetAPI.class);
->>>>>>> sandbox_flatfull_modules
 	s.add(com.agilecrm.core.api.deals.GoalsAPI.class);
 	s.add(com.agilecrm.core.api.dashboards.DashboardsAPI.class);
 	s.add(com.agilecrm.core.api.widgets.PaypalWidgetApi.class);
-<<<<<<< HEAD
-
-	s.add(com.agilecrm.core.api.products.ProductsAPI.class);
-	s.add(com.agilecrm.core.api.prefs.DocumentTemplatesPrefsAPI.class);
-	s.add(com.agilecrm.core.api.contacts.DocumentViewerAPI.class);
-	s.add(com.agilecrm.webhooks.triggers.util.AgileWebhookAPI.class);
-=======
 	s.add(com.agilecrm.webhooks.triggers.util.AgileWebhookAPI.class);	
 	//Ticket Rest classes
 	s.add(com.agilecrm.ticket.rest.TicketsRest.class);
@@ -159,7 +153,6 @@ public class JerseyApplication extends Application
 	
 	// JS Permission
 	s.add(com.agilecrm.core.api.JavaScriptPermissionAPI.class);
->>>>>>> sandbox_flatfull_modules
 	return s;
     }
 }
