@@ -259,6 +259,6 @@ var MODAL_MESSAGES = {
 	},
 	"stripe_customfield_selection_error" : {
 		"title": "Stripe Custom Fields",
-		"message" : "Please select custom field to load data in widgets."
+		"message" : "Please select one custom field to save the Stripe ID."
 	}
 };
