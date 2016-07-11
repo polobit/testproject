@@ -38,7 +38,7 @@ public class AmazonSESWebhook extends HttpServlet
     
     public static final String SPAM = "complaint";
 
-    public static final String MESSAGE = "message";
+    public static final String MESSAGE = "Message";
     
     public static final String SUBSCRIPTION_URL = "SubscribeURL";
     
