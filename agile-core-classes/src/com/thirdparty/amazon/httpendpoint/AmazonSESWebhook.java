@@ -111,7 +111,7 @@ public class AmazonSESWebhook extends HttpServlet
 	    		  else if(webhookJSON.getString(NOTIFICATION_TYPE).equalsIgnoreCase(SPAM))
 	    		  {
 	    			  	 event = SPAM;
-	    			  	email = webhookJSON.getJSONObject(SPAM).getJSONArray("complaintRecipients").getJSONObject(0).getString(EMAIL);
+	    			  	email = webhookJSON.getJSONObject(SPAM).getJSONArray("complainedRecipients").getJSONObject(0).getString(EMAIL);
 	    		  }
 	    		  
 	    		  System.out.println("Metadata of Amazon SES : "+campaignId+"   " +domainName+"    "+event+ "   " +email);
