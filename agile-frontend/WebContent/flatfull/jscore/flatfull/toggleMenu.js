@@ -303,6 +303,15 @@ $("#activityModal").on("click", "#eventDescriptionLink", function(e){
     				var $target = $(e.target);
     				$(this).data("bs.popover").tip().addClass($target.data("custom-popover-class"));
     			}); 
+
+    $('#searchText').on('focus', function () {
+	    $(this).parent().find("label").toggleClass('active');
+	});
+
+	$('#searchText').on('blur', function () {
+	    $(this).parent().find("label").toggleClass('active');
+	});
+
    });
 
 // Click handlers to role menu items

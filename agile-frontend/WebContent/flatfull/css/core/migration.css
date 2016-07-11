@@ -630,6 +630,7 @@ label#search-results{
   margin: 7px 0px 0px 10px;
   cursor: pointer;
 }
+label#search-results.active{color: #58666e;}
 #searchText
 {
   width:0px;
@@ -2382,5 +2383,14 @@ color:#484848!important;
 .grid_custom_popover.bottom .arrow{border-bottom-color: #ccc;}
 .grid_icon_center{ position: fixed; left: 50%; top: 0px; z-index: 1031; -webkit-transform: translateX(-50%);
 transform: translateX(-50%);}
-/*.grid-icon-header:hover, .grid-icon-header:focus{background-color: #f6f8f8;}*/
+
+.grid-icon-header:hover, .grid-icon-header:focus{background-color: #f6f8f8;}
+.bg-black .grid-icon-header:hover, .bg-black .grid-icon-header:focus{background-color: #16232d;}
+.bg-dark .grid-icon-header:hover, .bg-dark .grid-icon-header:focus{background-color: #32374a;}
+.bg-info .grid-icon-header:hover, .bg-info .grid-icon-header:focus{background-color: #17b2e2;}
+.bg-primary .grid-icon-header:hover, .bg-primary .grid-icon-header:focus{background-color: #6658b8;}
+.bg-success .grid-icon-header:hover, .bg-success .grid-icon-header:focus{background-color: #22b846;}
+.bg-danger .grid-icon-header:hover, .bg-danger .grid-icon-header:focus{background-color: #f13f3f;}
+
+
 /*end custom css code*/
