@@ -257,4 +257,9 @@ public abstract class ContactWrapper implements IContactWrapper
 	}
 	return tagName;
     }
+    
+    public void updateContact(Contact contact)
+    {
+    	this.contact=contact;
+    }
 }
