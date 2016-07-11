@@ -30,12 +30,14 @@
   
 
   {{#isRestrictedMenuScope "CASES"}} {{else}}
-   <!-- <li id="casesmenu">
+  {{#isNewVersionDomainUser}} {{else}}
+  <li id="casesmenu">
     <a  href="#cases">
       <i class="icon icon-folder"></i>
       <span>Cases</span>
     </a>
-  </li> -->
+  </li>
+  {{/isNewVersionDomainUser}}
   {{/isRestrictedMenuScope}} 
 
   {{#isRestrictedMenuScope "DOCUMENT"}} {{else}}

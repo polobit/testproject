@@ -391,14 +391,14 @@ if(currentUserPrefs.menuPosition.equals("top")){
       }
   %>
   <%
-      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.CASES)){
+      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.CASES) && domainUser.version == null){
   %>
-   <!-- <li id="casesmenu">
+  <li id="casesmenu">
     <a  href="#cases">
       <i class="icon icon-folder"></i>
       <span>Cases</span>
     </a>
-  </li>  -->
+  </li> 
   <%
       }
   %>
