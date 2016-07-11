@@ -4,14 +4,14 @@
   <li class="hidden-folded padder m-t-xs m-b-xs text-muted text-xs">
     <span>Sales</span>
   </li>
-  {{#hasRestrictedMenuScope "CONTACT"}} {{else}}
+  {{#isRestrictedMenuScope "CONTACT"}} {{else}}
     <li id="contactsmenu">
       <a  href="#contacts">
         <i class="icon icon-user"></i>
         <span>Contacts</span>
       </a>
     </li>
-  {{/hasRestrictedMenuScope}} 
+  {{/isRestrictedMenuScope}} 
   <li id="companiesmenu">
     <a  href="#companies">
       <i class="icon icon-building"></i>
@@ -19,47 +19,50 @@
     </a>
   </li>
 
-  {{#hasRestrictedMenuScope "DEALS"}} {{else}}
+  {{#isRestrictedMenuScope "DEALS"}} {{else}}
    <li  id="dealsmenu">
     <a  href="#deals">
       <i class="fa fa-money"></i>
       <span>Deals</span>
     </a>
   </li>
-  {{/hasRestrictedMenuScope}} 
+  {{/isRestrictedMenuScope}} 
   
 
-  {{#hasRestrictedMenuScope "CASES"}} {{else}}
+  {{#isRestrictedMenuScope "CASES"}} {{else}}
    <!-- <li id="casesmenu">
     <a  href="#cases">
       <i class="icon icon-folder"></i>
       <span>Cases</span>
     </a>
   </li> -->
-  {{/hasRestrictedMenuScope}} 
+  {{/isRestrictedMenuScope}} 
 
-  {{#hasRestrictedMenuScope "DOCUMENT"}} {{else}}
+  {{#isRestrictedMenuScope "DOCUMENT"}} {{else}}
    <li id="documentsmenu">
     <a  href="#documents">
       <i class="icon icon-doc"></i>
       <span>Documents</span>
     </a>
   </li>
-  {{/hasRestrictedMenuScope}} 
+  {{/isRestrictedMenuScope}} 
 
-  {{#hasRestrictedMenuScope "CALENDAR"}} {{else}}
+  {{#isRestrictedMenuScope "CALENDAR"}} {{else}}
    <li id="calendarmenu">
     <a href="#calendar" onclick="Agile_GA_Event_Tracker.track_event('Calendar Option in Nav Bar')">
       <i class="icon icon-calendar"></i> 
       <span>Calendar</span> 
     </a>
   </li>
-  {{/hasRestrictedMenuScope}}  
+  {{/isRestrictedMenuScope}}  
   
   <li id="tasksmenu">
     <a href="#tasks" onclick="Agile_GA_Event_Tracker.track_event('Tasks Option in Nav Bar')">
       <i class="icon-list" data-original-title="" title=""></i>
       <span>Tasks</span>
+      <span title="Tasks due" class="navbar_due_tasks pull-right">
+          <span  id="due_tasks_count" class="badge badge-sm bg-danger"></span>
+      </span>
     </a>
   </li>
 
@@ -70,23 +73,23 @@
     </a>
   </li>
 
-  {{#hasRestrictedMenuScope "ACTIVITY"}} {{else}}
+  {{#isRestrictedMenuScope "ACTIVITY"}} {{else}}
    <li id="activitiesmenu">
     <a  href="#activities">
       <i class="icon-speedometer icon-white"></i>
       <span>Activities</span>
     </a>
   </li>
-  {{/hasRestrictedMenuScope}}
+  {{/isRestrictedMenuScope}}
 
-  {{#hasRestrictedMenuScope "REPORT"}} {{else}}
+  {{#isRestrictedMenuScope "REPORT"}} {{else}}
    <li id="reportsmenu">
     <a  href="#reports">
       <i class="icon-bar-chart icon-white"></i>
       <span>Reports</span>
     </a>
   </li>
-  {{/hasRestrictedMenuScope}}
+  {{/isRestrictedMenuScope}}
 
   </ul>
 
@@ -101,7 +104,7 @@
                 <span>Marketing</span>
               </li>
 
-   {{#hasRestrictedMenuScope "CAMPAIGN"}} {{else}}
+   {{#isRestrictedMenuScope "CAMPAIGN"}} {{else}}
     <li id="workflowsmenu">
       <a  href="#workflows">
         <i class="icon icon-sitemap"></i>
@@ -114,25 +117,25 @@
         <span>Triggers</span>
       </a>
     </li>
-   {{/hasRestrictedMenuScope}}
+   {{/isRestrictedMenuScope}}
 
-   {{#hasRestrictedMenuScope "SOCIAL"}} {{else}}
+   {{#isRestrictedMenuScope "SOCIAL"}} {{else}}
     <li id="socialsuitemenu">
       <a  href="#social">
         <i class="icon-bubbles"></i>
         <span>Social</span>
       </a>
     </li>
-   {{/hasRestrictedMenuScope}}
+   {{/isRestrictedMenuScope}}
 
-   {{#hasRestrictedMenuScope "WEBRULE"}} {{else}}
+   {{#isRestrictedMenuScope "WEBRULE"}} {{else}}
     <li id="web-rules-menu">
       <a  href="#web-rules">
         <i class="icon icon-globe"></i>
         <span>Web Rules</span>
       </a>
     </li>
-   {{/hasRestrictedMenuScope}}
+   {{/isRestrictedMenuScope}}
   
    <li id="segmentationmenu">
     <a  href="#visitors">
@@ -147,12 +150,15 @@
     </a>
   </li>
 
+  {{#isAdmin}}
   <li id="formsmenu">
     <a  href="#forms">
        <i class="icon-large1 icon-docs"></i>
       <span>Forms</span>  
     </a>
   </li>
+  {{/isAdmin}}
+
   <li id="email-templates-menu">
     <a href="#email-templates">
       <i class="fa icon-envelope-letter"></i>
@@ -160,23 +166,23 @@
     </a>
   </li>
 
-  {{#hasRestrictedMenuScope "ACTIVITY"}} {{else}}
+  {{#isRestrictedMenuScope "ACTIVITY"}} {{else}}
     <li id="activitiesmenu">
       <a  href="#activities">
         <i class="icon-speedometer icon-white"></i>
         <span>Activities</span>
       </a>
     </li>
-   {{/hasRestrictedMenuScope}}
+   {{/isRestrictedMenuScope}}
     
-   {{#hasRestrictedMenuScope "REPORT"}} {{else}}
+   {{#isRestrictedMenuScope "REPORT"}} {{else}}
     <li id="reportsmenu">
       <a  href="#reports">
         <i class="icon-bar-chart icon-white"></i>
         <span>Reports</span>
       </a>
     </li> 
-   {{/hasRestrictedMenuScope}}
+   {{/isRestrictedMenuScope}}
              
   </ul>
 
@@ -192,7 +198,6 @@
     <span>Service</span>
   </li>
 
-  {{#hasRestrictedMenuScope "HELPDESK"}} {{else}}
     <li id="tickets">
       <a href="#tickets">
         <i class="icon icon-ticket"></i>
@@ -200,6 +205,7 @@
       </a>
     </li>
 
+    {{#isAdmin}}
     <li id="ticketgroupsmenu">
     <a href="#ticket-groups">
       <i class="icon icon-users"></i>
@@ -224,25 +230,25 @@
       <span style="padding-top: 9%;">Views</span>
     </a>
   </li>
-   {{/hasRestrictedMenuScope}} 
+  {{/isAdmin}}
 
-   {{#hasRestrictedMenuScope "ACTIVITY"}} {{else}}
+   {{#isRestrictedMenuScope "ACTIVITY"}} {{else}}
     <li id="activitiesmenu">
       <a  href="#activities">
         <i class="icon-speedometer icon-white"></i>
         <span>Activities</span>
       </a>
     </li>
-   {{/hasRestrictedMenuScope}}
+   {{/isRestrictedMenuScope}}
     
-   {{#hasRestrictedMenuScope "REPORT"}} {{else}}
+   {{#isRestrictedMenuScope "REPORT"}} {{else}}
     <li id="reportsmenu">
       <a  href="#reports">
         <i class="icon-bar-chart icon-white"></i>
         <span>Reports</span>
       </a>
     </li> 
-   {{/hasRestrictedMenuScope}}        
+   {{/isRestrictedMenuScope}}        
 </ul>
 
 </script>

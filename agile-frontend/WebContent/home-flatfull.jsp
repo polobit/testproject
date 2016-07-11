@@ -382,6 +382,9 @@ if(currentUserPrefs.menuPosition.equals("top")){
     <a href="#tasks" onclick="Agile_GA_Event_Tracker.track_event('Tasks Option in Nav Bar')">
       <i class="icon-list" data-original-title="" title=""></i>
       <span>Tasks</span>
+      <span title="Tasks due" class="navbar_due_tasks pull-right">
+          <span  id="due_tasks_count" class="badge badge-sm bg-danger"></span>
+      </span>
     </a>
   </li>
 
@@ -483,12 +486,18 @@ if(currentUserPrefs.menuPosition.equals("top")){
       <span>Landing Pages</span>
     </a>
   </li>
+
+  <%
+  if(domainUser.is_admin){
+  %>
   <li id="formsmenu">
     <a  href="#forms">
        <i class="icon-large1 icon-docs"></i>
       <span>Forms</span>  
     </a>
   </li>
+  <%}%>
+  
   <li id="email-templates-menu">
     <a href="#email-templates">
       <i class="fa icon-envelope-letter"></i>
@@ -528,9 +537,6 @@ if(currentUserPrefs.menuPosition.equals("top")){
   <!-- Service menu -->  	
   <%if(domainUser.role == ROLE.SERVICE){ %>
   
-  <%
-      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.HELPDESK)){
-  %>
   <li class="hidden-folded padder m-t-xs m-b-xs text-muted text-xs">
     <span>Service</span>
   </li>
@@ -541,6 +547,10 @@ if(currentUserPrefs.menuPosition.equals("top")){
       <span style="padding-top: 9%;">Help Desk</span>
     </a>
   </li>
+
+  <%
+  if(domainUser.is_admin){
+  %>
   <li id="ticketgroupsmenu">
     <a href="#ticket-groups">
       <i class="icon icon-users"></i>
@@ -565,6 +575,9 @@ if(currentUserPrefs.menuPosition.equals("top")){
       <span>Views</span>
     </a>
   </li>
+   <%
+      }
+  %> 
 
   <%
       if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.ACTIVITY)){
@@ -590,12 +603,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
     <%
           }
     %> 
-
-
-  <%
-      }
-  %>  
-  
+ 
   <!-- End of Service menu -->
   <%} %>
              
