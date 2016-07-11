@@ -6,13 +6,14 @@ package com.thirdparty.quickbook;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.codehaus.jettison.json.JSONException;
-import org.codehaus.jettison.json.JSONObject;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.Note;
 import com.agilecrm.contact.sync.wrapper.ContactWrapper;
+import com.agilecrm.util.CountryUtil;
 
 /**
  * @author jitendra
@@ -282,7 +283,8 @@ public class QuickBookContactWrapperImpl extends ContactWrapper
 
 		    if (billingAddrss.has("Country"))
 		    {
-			address.put("country", billingAddrss.getString("Country"));
+		    String qCountry = billingAddrss.getString("Country");
+		    CountryUtil.setCountryCode(address, null, qCountry);
 		    }
 		    if (billingAddrss.has("CountrySubDivisionCode"))
 		    {

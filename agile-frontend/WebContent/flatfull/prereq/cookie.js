@@ -77,6 +77,7 @@ function readCookie(name)
 	return null;
 }
 
+
 /**
  * Used to delete a variable from document.cookie
  * 

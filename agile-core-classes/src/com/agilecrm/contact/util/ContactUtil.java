@@ -365,6 +365,19 @@ public class ContactUtil
 	}
 
     }
+    
+    public static Contact searchContactByEmailID(String email)
+    {
+		if (StringUtils.isBlank(email))
+		    return null;
+	
+		Map<String, Object> searchMap = new HashMap<String, Object>();
+		searchMap.put("properties.name", Contact.EMAIL);
+		searchMap.put("type", Type.PERSON);
+		searchMap.put("properties.value", email.toLowerCase());
+		return dao.getByProperty(searchMap);
+
+    }
 
     public static Contact searchCompanyByEmail(String email)
     {
@@ -421,11 +434,21 @@ public class ContactUtil
 	    return null;
 
 	Map<String, Object> searchMap = new HashMap<String, Object>();
-	searchMap.put("properties.name", "name");
-	searchMap.put("properties.value", companyName);
+	searchMap.put("name", companyName);
 	searchMap.put("type", Type.COMPANY);
 	return dao.getByProperty(searchMap);
 
+    }
+    
+    public static Contact searchContactByPesonName(String personName)
+    {
+    	if (StringUtils.isBlank(personName))
+		    return null;
+	
+		Map<String, Object> searchMap = new HashMap<String, Object>();
+		searchMap.put("first_name", personName);		
+		searchMap.put("type", Type.PERSON);
+		return dao.getByProperty(searchMap);
     }
 
     public static Contact searchContactByPhoneNumber(String phoneNumber)
