@@ -86,6 +86,9 @@ var WorkflowsRouter = Backbone.Router
 					return;
 				}
 
+				// Loading icon
+				$(el).find("#workflows-collection-container").html(LOADING_HTML);
+
 				this.workflow_list_view = new Base_Collection_View({ 
 					url : '/core/api/workflows', 
 					restKey : "workflow", 
