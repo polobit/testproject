@@ -14,11 +14,14 @@ import org.apache.commons.lang.StringUtils;
 import com.agilecrm.session.SessionCache;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
+import com.agilecrm.ssologin.SingleSignOn;
+import com.agilecrm.ssologin.SingleSignOnUtil;
 import com.agilecrm.subscription.limits.cron.deferred.AccountLimitsRemainderDeferredTask;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.AliasDomainUtil;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.MD5Util;
+import com.agilecrm.util.MobileUADetector;
 import com.agilecrm.util.NamespaceUtil;
 import com.agilecrm.util.RegisterUtil;
 import com.agilecrm.util.VersioningUtil;
@@ -97,6 +100,22 @@ public class LoginServlet extends HttpServlet {
 			response.sendRedirect(Globals.CHOOSE_DOMAIN);
 			return;
 		}
+		
+		String targetLogin = "login.jsp";
+		
+		// Check if SSO enable
+		String s = request.getRequestURI();
+		SingleSignOn sso = SingleSignOnUtil.getSecreteKey();
+		if(!MobileUADetector.isMobileOrTablet(request.getHeader("user-agent")) && !s.contains("/normal") && sso != null){
+		if (sso.url != null) {
+		    response.sendRedirect(sso.url);
+		    return;
+		    }
+		}
+		
+		if(s.contains("/normal"))
+		    targetLogin = "../login.jsp";		
+				
 					
 		// If request is due to multiple logins, page is redirected to error
 		// page
@@ -130,15 +149,13 @@ public class LoginServlet extends HttpServlet {
 			e.printStackTrace();
 
 			// Send to Login Page
-			request.getRequestDispatcher(
-					"login.jsp?error=" + URLEncoder.encode(e.getMessage()))
-					.forward(request, response);
+			request.getRequestDispatcher(targetLogin + "?error=" + URLEncoder.encode(e.getMessage())).forward(request, response);
 
 			return;
 		}
 
 		// Return to Login Page
-		request.getRequestDispatcher("login.jsp").forward(request, response);
+		request.getRequestDispatcher(targetLogin).forward(request, response);
 		
 	}
 
