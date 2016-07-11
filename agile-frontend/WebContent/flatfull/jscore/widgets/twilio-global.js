@@ -1288,7 +1288,10 @@ function showNoteAfterCall(callRespJson,messageObj)
 			console.log(callRespJson);
 			var json = resp;
 			if(json == null) {
-				return showNewContactModal(phoneNumber);
+				var jsonObj = {};
+				jsonObj['phoneNumber'] = phoneNumber;
+				return showContactMergeOption(jsonObj);
+			//	return showNewContactModal(phoneNumber);
 			}
 			var contact_name = getContactName(json);
 					if(TWILIO_DIRECTION == "outbound-dial") {
@@ -1387,8 +1390,10 @@ function showNoteAfterCall(callRespJson,messageObj)
 				status : callRespJson.status,
 				duration : callRespJson.duration 
 				});*/
-
-		return showNewContactModal(phoneNumber);
+		var jsonObj = {};
+		jsonObj['phoneNumber'] = phoneNumber;
+		return showContactMergeOption(jsonObj);
+		//return showNewContactModal(phoneNumber);
 	}
 	
 	

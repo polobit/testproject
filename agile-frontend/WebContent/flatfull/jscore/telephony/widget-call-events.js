@@ -180,8 +180,59 @@ $(function()
 	$('body #wrap #agilecrm-container').on('click', '#dialpad_btns', function(e)	{
 		e.stopPropagation();
 	});
+// this is to call onclick of checkbox in add/update contact	
+	$('body').on('click', '#call_newNumber_check', function(e)
+			{
+							var opt = $(this).val();
+							if(opt == "update"){
+								$("#call_newNumber_relatedTo_div").show();
+								//$("#rampTimeButton").removeAttr('disabled');
+							}else{
+								$("#call_newNumber_relatedTo_div").hide();
+							}
+			});
 	
-	
+	$('body').on("click","#call_newNumber_btn_continue",function(e)
+	{
+		var opt = $("#call_newNumber_check:checked").val();
+		//var phoneNumber = $("#diallerInfoModal","#call_newNumber_btn_continue").data("phoneNumber");
+		var phoneNumber = $(this).data("phoneNumber");
+		$("#diallerInfoModal").modal('hide');
+		if(!phoneNumber){
+			return;
+		}
+		
+		if(opt == "new"){
+		
+			showNewContactModal(phoneNumber);
+		}else{
+			//take the contact and move to edit contact page
+			/*if update show new contact and log call
+			if selected contact is type contact then 
+			1)if continue - show log call
+			2)if cance - save activities
+			if selected is type companies then
+			1) if continue - show log call 
+			2)if cancel - save activities;*/
+			
+			//var contactId = $("#call_newNumber_relatedTo_div").find(".tagsinput:first li:nth-child(1)").attr("data");
+			var contactId = $("#relates_to_call_contact").attr("data");
+			if(!contactId){
+				console.log("error");
+				return;
+			}
+			
+			accessUrlUsingAjax("core/api/contacts/"+contactId, function(data){
+				if(!data){
+					console.log("no contact found");
+					return;
+				}
+				var json = {};
+				json['phoneNumber'] = phoneNumber;
+				proessEditPage(data,json);
+			});
+		}
+	});
 });
 
 function makeCallAction(json){

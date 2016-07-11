@@ -673,3 +673,76 @@ function newCallLogVariables (json){
 		}
 	});
 }
+
+function showContactMergeOption(jsonObj){
+	
+	var phoneNumber = jsonObj.phoneNumber;
+	showModal($("#diallerInfoModal"),"newContactAddPhone");
+	$("#call_newNumber_btn_continue", "#diallerInfoModal").data("phoneNumber",phoneNumber);
+	var el = $("#diallerInfoModal");
+	var contact_display = function(data, item)
+	  {
+	   setTimeout(function(){
+		$("#relates_to_call_contact").val(item);
+		$("#relates_to_call_contact").attr("data",data);
+	   },10);
+	  }
+	agile_type_ahead("relates_to_call_contact", el, contacts_typeahead, contact_display, "type=PERSON");
+}
+
+function showModal(modal, templateName){
+	modal.html(getTemplate(templateName));
+	modal.modal('show');
+}
+
+function proessEditPage(contact,jsonParam){
+	
+	var phoneNumber;
+	if(!contact){
+		console.log("cant show editpage as the contactsent is empty");
+		return;
+	}
+	if(jsonParam){
+		if(!jQuery.isEmptyObject(jsonParam)){
+			phoneNumber = jsonParam.phoneNumber;
+		}
+	}
+	
+	if(!phoneNumber){
+		console.log("Phone number not available in proessEditPage")
+	}
+	if(window.location.hash.indexOf("#contact/") != -1 || window.location.hash.indexOf("#contact/") != -1){
+		routeToPage("contacts");
+	}
+	
+	showEditContactPage(contact, function(){
+		if (contact.type == 'COMPANY'){
+			var el  = $("#phone").closest("div.control-group");
+			if($($("#phone,el")[1]).val()){
+				el.append(el.find("div.controls:first").clone().removeClass('hide').addClass('col-sm-offset-3'));
+				$($("#phone,el")[($("#phone,el").length-2)]).val(phoneNumber);
+				}else{
+				$($("#phone,el")[1]).val(phoneNumber);
+				}
+		}else{
+			var el  = $("#phone").closest("div.control-group");
+			if($($("#phone,el")[1]).val()){
+				el.append(el.find("div.controls:first").clone().removeClass('hide').addClass('col-sm-offset-3'));
+				$($("#phone,el")[($("#phone,el").length-2)]).val(phoneNumber);
+				}else{
+				$($("#phone,el")[1]).val(phoneNumber);
+				}
+		}
+	});
+	
+}
+
+function showEditContactPage(contact, callback){
+	add_custom_fields_to_form(contact, function(contact)
+			{
+				if (contact.type == 'COMPANY')
+					deserialize_contact(contact, 'continue-company', callback);
+				else
+					deserialize_contact(contact, 'continue-contact', callback);
+			}, contact.type);
+}
