@@ -12,6 +12,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.apache.commons.lang.exception.ExceptionUtils;
 
 import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.Note;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.cursor.Cursor;
 import com.agilecrm.db.ObjectifyGenericDao;
@@ -85,6 +86,14 @@ public class Activity extends Cursor
      */
     @NotSaved(IfDefault.class)
     public List<String> contacts = null;
+    
+    
+    /**
+     * Key object of DomainUser.
+     */
+    @NotSaved(IfDefault.class)
+    @Indexed
+    public String note_id_call = null;
 
     /**
      * List of contact keys related to a task

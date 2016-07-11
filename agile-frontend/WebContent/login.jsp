@@ -42,8 +42,16 @@ request.setAttribute("agile_email", email);
 String error = request.getParameter("error");
 if(error != null)
   System.out.println(error);
-else
-  error = "";
+else {
+	String sessionError = (String)request.getSession().getAttribute("sso_error");
+	if(sessionError != null)
+	{
+	    error = sessionError; 
+		request.getSession().removeAttribute("sso_error");
+	} 
+	else
+		error = "";	 
+}
 
 if("multi-login".equalsIgnoreCase(error)){
 Cookie[] cookies = request.getCookies();
@@ -359,7 +367,10 @@ if(isSafari && isWin)
 		$(document).ready(function()
 		{
 
-
+			// Reset form action param
+			if(window.location.href.indexOf("/normal") != -1)
+				$("form#agile").attr("action", "/login/normal");
+			
 			var login_hash = window.location.hash;
 
 			// Sets location hash in hidden fields
