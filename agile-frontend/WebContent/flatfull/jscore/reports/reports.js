@@ -9,6 +9,13 @@ $(function()
   $('body').on('mouseout','.highcharts-container',function(e){
       $(this).find('.highcharts-button').hide();
   });
+  $('body').on('click','.maintab',function(e){
+     /*var c = $(this).find(".sub-nav-tab").children()[0];
+     var d = c.children;
+     var route = $(d).attr("href").split("#")[1];
+     Backbone.history.navigate(route, true)*/
+     $(this).find(".sub-nav-tab>li:first").trigger('click')
+  });
 });
 /**
  * Initializes listener to perform various event function related to contact
@@ -17,6 +24,22 @@ $(function()
 function initializeReportsListeners(){
 
 
+	$('#reports-listerners-container')
+			.on(
+					'click',
+					'#reports-email-now',
+					function(e)
+					{
+						// e.preventDefault();
+						e.stopPropagation();
+
+						var id = $(this).attr('data');
+						var url='core/api/reports/send/' + id;
+						$("#report-send-confirmation").find('input').attr("data",url);
+						$('#report-send-confirmation').modal('show');
+						initializeReportSendConfirm();
+						
+					});
 	$('#reports-listerners-container')
 			.on(
 					'click',
