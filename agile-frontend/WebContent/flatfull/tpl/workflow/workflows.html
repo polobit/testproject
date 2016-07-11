@@ -52,91 +52,55 @@
     </td> 
 <br />
 </script>
+
+<script id="workflows-static-container-template" type="text/html">
+<div id="workflows-listener-container">
+   <div class="custom-animated custom-fadeInUp">
+      <!-- Top header view -->
+      <div id="workflows-top-view"></div>
+      <!-- End of Top header view -->
+      <div class="wrapper-md">
+         <div class="row">
+            <div class="col-md-9 col-sm-9" id="workflows-collection-container"></div>
+            <div class="col-md-3" id="learn-workflows">
+               <h4 class="m-t-none h4 m-b-sm">
+                  What is Workflow Automation?
+               </h4>
+               <p>
+                  Workflow is a smart sales & marketing automation process to send your contacts the relevant information at just the right time. Leverage on it to automate most of your follow-up activities.
+               </p>
+               <p>
+                  eg: You can send an email to all contacts who have signed up on your website. Then, based on their behaviour in the control panel, you can nurture them with targeted messages periodically.
+               </p>
+               <br>
+               {{#if this.length}}
+               <p>
+                  <a href="https://www.youtube.com/watch?v=pXwKUnQa5Ec" target="_blank">
+                  <img src="{{getS3ImagePath '../../img/campaign-info.png'}}" class="img-responsive w-full">
+                  </a>
+               </p>
+               <br>
+               {{/if}}
+               <h4 class="m-t-none h4 m-b-sm">
+                  What are Triggers?
+               </h4>
+               <p>
+                  Triggers are pre-defined conditions set up by you. If a condition is satisfied, you can choose an action to follow using workflow automation.
+               </p>
+               <p>
+                  e.g. If a user registers on your website, you can automate the workflow to send a welcome email. The user registering on site is the trigger.
+               </p>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+</script>
+
+
 <script id="workflows-collection-template" type="text/html">
-<div class="custom-animated custom-fadeInUp">
-
-
-<div class="wrapper bg-light padder-md padder-v m-r-sm p-r-none" style="border-bottom: 1px solid rgba(140, 139, 139, 0.2);">
-        <div class="btn-toolbar m-l-none">
-            <div class="btn-group dropdown m-l-none workflow-heading" style="float: none;">
-                <div class="">
-
-                    <h4 class="inline-block m-n">
-                    Campaigns <small>{{#campaigns_heading this}}{{/campaigns_heading}}</small></h4>
-                    <br>
-                
-                </div>
-                <div class="btn-group m-r-xs p-t-n-sm workflow-sortby">
-                <div class="btn-group dropdown">
-                                <button class="btn btn-sm no-shadow p-n b-n bg-transparent text-base" style="font-size: 11px;" data-toggle="dropdown" id="contact-sort">
-                                        <span class="text-muted">Sort by </span>
-                                        <span class="sort-field-txt"></span>
-                                    </button>
-                                    <button class="btn btn-sm no-shadow dropdown-toggle bg-transparent b-n p-t-none p-b-none p-l-xs" data-toggle="dropdown" aria-expanded="false">
-                                        <span class="caret"></span>
-                                    </button>
-
-                                    <ul class="dropdown-menu " id="sort_menu" role="menu">
-                                        <li>
-                                        <a class="sort-link sort-field pos-rlt text-ellipsis" style="width:185px;" href="javascript:void(0);" data="name_dummy" label_name="Name">
-                                        Name
-                                            <i class="fa fa-check pos-abs pos-r-sm txt-small m-t-xs sort-field-check  display-none"></i> 
-                                            </a>
-                                    </li>
-                                    <li>
-                                        <a class="sort-link sort-field pos-rlt text-ellipsis" style="width:185px;" href="javascript:void(0);" data="created_time" label_name="Created Time">
-                                        Created Time
-                                        <i class="fa fa-check pos-abs pos-r-sm txt-small m-t-xs sort-field-check  display-none"></i> 
-                                        </a>
-                                    </li>
-                                    <li class="divider" id="sort-divider"></li>
-                                            <li>
-                                                <a class="order-by pos-rlt" data="" href="javascript:void(0);">Ascending <i class="fa fa-check pos-abs pos-r-sm txt-small m-t-xs sort-by-check  display-none"></i> </a>
-                                            </li>
-                                            <li><a class="order-by pos-rlt" data="-" href="javascript:void(0);">Descending  <i class="fa fa-check pos-abs pos-r-sm txt-small m-t-xs sort-by-check display-none"></i> </a></li>
-                                    </ul>
-                                </div>
-            </div>
-            </div>
-            
-            
-                <div class="pull-right m-t-xs">
-            <div>
-                <a id="campaign_logs" class="btn btn-default btn-sm {{#is_mobile}} m-r-xs {{else}} m-r-sm {{/is_mobile}} pull-left" href="#">Reports</a>
-                
-                 <a href="#email-templates" class="btn right btn-default btn-sm pos-rlt {{#is_mobile}} m-r-xs {{else}} m-r-sm {{/is_mobile}} pull-left btn-addon"><i class="icon-cog"></i> Manage Email Templates</a>
-
-                <a href="#triggers" class="btn right btn-default btn-sm pos-rlt {{#is_mobile}} m-r-xs {{else}} m-r-sm {{/is_mobile}} pull-left btn-addon" id="add-trigger"><i class="icon-cog"></i> Manage Triggers</a>
-               
-
-
-                <div class="btn-group right pos-rlt pull-left">
-                    <a href="#workflow-templates" class="btn btn-default btn-sm" id="addWorkflow"><i class="icon-plus-sign"></i> Add Campaign</a>
-                    <a id="campaign-stats" class="btn dropdown-toggle btn-sm btn-default" data-toggle="dropdown"><span class="caret"></span></a>
-                    <ul class="dropdown-menu pull-right">
-                        <li><a href="#campaign-stats" id="campaign-stats"><i class="icon-bar-chart"></i> Compare Campaigns</a></li>
-                    </ul>
-
-                </div>
-                
-
-                
-            </div>
-            </div>
-            <div class="clearfix"></div>
-            
-        </div>
-    
-    </div>
-
-<div class="wrapper-md">
-<div class="row">
-     
-
-        {{#unless this.length}}
-        <div class="col-md-9 col-sm-9">
-            <div id="slate">
-        </div>
+    {{#unless this.length}}
+        <div id="slate"></div>
         <div class="embed-responsive embed-responsive-16by9">
         <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/pXwKUnQa5Ec?rel=0&amp;" frameborder="0" style="
                 width: 58%;
@@ -146,13 +110,12 @@
                 margin: -75px 0 0 -135px;
                 height: 304px;
                 " allowfullscreen=""></iframe>
-            </div>
         </div>
-        {{/unless}}
-        {{#if this.length}}
-            {{add_tag "Campaigns"}}
-            <div class="col-md-9">
-             <!-- Pending Triggers Content -->
+    {{/unless}}
+
+    {{#if this.length}}
+        {{add_tag "Campaigns"}}
+         <!-- Pending Triggers Content -->
         <div id="triggers-verification" class="m-t-n-sm" style="display:none;">
             <div class="alert danger info-block alert-warning text-black">
                 <div>
@@ -166,64 +129,87 @@
             </div>
         </div>
         <!-- End of Pending Triggers Content -->
-            <div class="panel panel-default">
-                <div class="panel-heading">Campaigns List
-                    
-                </div>
-                <div class="table-responsive">
-                <table class="table table-striped showCheckboxes m-b-none agile-table panel table-layout-mob-view no-sorting" url="core/api/workflows/bulk" id="workflows-tour-step">
-                    <thead>
-                        <tr>
-                            <th class="hide">Id</th>
-                            <th style="width:30%">Name</th>
-                            <th style="width:20%">Triggers</th>
-                            <th style="width:23%">&nbsp;</th>
-                            <th style="width:9%">&nbsp;</th>
-                            <th style="width:9%">&nbsp;</th>
-                            <th style="width:9%"> </th>
-                        </tr>
-                    </thead>
-                    <tbody id="workflows-model-list" route="workflow/" class="c-p"> </tbody>
-                </table>
-                </div>
-                </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">Campaigns List </div>
+            <div class="table-responsive">
+            <table class="table table-striped showCheckboxes m-b-none agile-table panel table-layout-mob-view no-sorting" url="core/api/workflows/bulk" id="workflows-tour-step">
+                <thead>
+                    <tr>
+                        <th class="hide">Id</th>
+                        <th style="width:30%">Name</th>
+                        <th style="width:20%">Triggers</th>
+                        <th style="width:23%">&nbsp;</th>
+                        <th style="width:9%">&nbsp;</th>
+                        <th style="width:9%">&nbsp;</th>
+                        <th style="width:9%"> </th>
+                    </tr>
+                </thead>
+                <tbody id="workflows-model-list" route="workflow/" class="c-p"> </tbody>
+            </table>
             </div>
-        {{/if}}
-    <div class="col-md-3" id="learn-workflows">
-        
-            <h4 class="m-t-none h4 m-b-sm">
-                What is Workflow Automation?
-            </h4>
-            
-            <p>
-                Workflow is a smart sales & marketing automation process to send your contacts the relevant information at just the right time. Leverage on it to automate most of your follow-up activities.
+        </div>
+    {{/if}}
+</script>
 
-            </p>
-            <p>
-                eg: You can send an email to all contacts who have signed up on your website. Then, based on their behaviour in the control panel, you can nurture them with targeted messages periodically.
-            </p>
-            <br>
-            {{#if this.length}}
-             <p>
-            <a href="https://www.youtube.com/watch?v=pXwKUnQa5Ec" target="_blank">
-<img src="{{getS3ImagePath '../../img/campaign-info.png'}}" class="img-responsive w-full">
-            </a>
-            </p>
-            <br>
-            {{/if}}
-            <h4 class="m-t-none h4 m-b-sm">
-                What are Triggers?
+<script id="workflows-top-header-template" type="text/html">
+<div class="wrapper bg-light padder-md padder-v m-r-sm p-r-none" style="border-bottom: 1px solid rgba(140, 139, 139, 0.2);">
+   <div class="btn-toolbar m-l-none">
+      <div class="btn-group dropdown m-l-none workflow-heading" style="float: none;">
+         <div class="">
+            <h4 class="inline-block m-n">
+               Campaigns <small>{{#campaigns_heading this}}{{/campaigns_heading}}</small>
             </h4>
-            
-            <p>
-                Triggers are pre-defined conditions set up by you. If a condition is satisfied, you can choose an action to follow using workflow automation.
-            </p>
-            <p>
-                e.g. If a user registers on your website, you can automate the workflow to send a welcome email. The user registering on site is the trigger.
-            </p>
-        
-    </div>
-</div>
-</div>
+            <br>
+         </div>
+         <div class="btn-group m-r-xs p-t-n-sm workflow-sortby">
+            <div class="btn-group dropdown">
+               <button class="btn btn-sm no-shadow p-n b-n bg-transparent text-base" style="font-size: 11px;" data-toggle="dropdown" id="contact-sort">
+               <span class="text-muted">Sort by </span>
+               <span class="sort-field-txt">
+                     {{#if_equals_sork_key sortKey "name_dummy" }}Name{{/if_equals_sork_key}}
+                     {{#if_equals_sork_key sortKey "created_time" }}Created Time{{/if_equals_sork_key}}
+               </span>
+               </button>
+               <button class="btn btn-sm no-shadow dropdown-toggle bg-transparent b-n p-t-none p-b-none p-l-xs" data-toggle="dropdown" aria-expanded="false">
+               <span class="caret"></span>
+               </button>
+               <ul class="dropdown-menu " id="sort_menu" role="menu">
+                  <li>
+                     <a class="sort-link sort-field pos-rlt text-ellipsis" style="width:185px;" href="javascript:void(0);" data="name_dummy" label_name="Name">
+                     Name
+                     <i class="fa fa-check pos-abs pos-r-sm txt-small m-t-xs sort-field-check {{#if_equals_sork_key sortKey "name_dummy" }}{{else}}display-none {{/if_equals_sork_key}}"></i> 
+                     </a>
+                  </li>
+                  <li>
+                     <a class="sort-link sort-field pos-rlt text-ellipsis" style="width:185px;" href="javascript:void(0);" data="created_time" label_name="Created Time">
+                     Created Time
+                     <i class="fa fa-check pos-abs pos-r-sm txt-small m-t-xs sort-field-check  {{#if_equals_sork_key sortKey "created_time"}}{{else}}display-none {{/if_equals_sork_key}}"></i> 
+                     </a>
+                  </li>
+                  <li class="divider" id="sort-divider"></li>
+                  <li>
+                     <a class="order-by pos-rlt" data="" href="javascript:void(0);">Ascending <i class="fa fa-check pos-abs pos-r-sm txt-small m-t-xs sort-by-check  {{#if_asc_sork_key sortKey}}{{else}}display-none {{/if_asc_sork_key}}"></i> </a>
+                  </li>
+                  <li><a class="order-by pos-rlt" data="-" href="javascript:void(0);">Descending  <i class="fa fa-check pos-abs pos-r-sm txt-small m-t-xs sort-by-check {{#if_asc_sork_key sortKey}}display-none{{else}} {{/if_asc_sork_key}}"></i> </a></li>
+               </ul>
+            </div>
+         </div>
+      </div>
+      <div class="pull-right m-t-xs">
+         <div>
+            <a id="campaign_logs" class="btn btn-default btn-sm {{#is_mobile}} m-r-xs {{else}} m-r-sm {{/is_mobile}} pull-left" href="#">Reports</a>
+            <a href="#email-templates" class="btn right btn-default btn-sm pos-rlt {{#is_mobile}} m-r-xs {{else}} m-r-sm {{/is_mobile}} pull-left btn-addon"><i class="icon-cog"></i> Manage Email Templates</a>
+            <a href="#triggers" class="btn right btn-default btn-sm pos-rlt {{#is_mobile}} m-r-xs {{else}} m-r-sm {{/is_mobile}} pull-left btn-addon" id="add-trigger"><i class="icon-cog"></i> Manage Triggers</a>
+            <div class="btn-group right pos-rlt pull-left">
+               <a href="#workflow-templates" class="btn btn-default btn-sm" id="addWorkflow"><i class="icon-plus-sign"></i> Add Campaign</a>
+               <a id="campaign-stats" class="btn dropdown-toggle btn-sm btn-default" data-toggle="dropdown"><span class="caret"></span></a>
+               <ul class="dropdown-menu pull-right">
+                  <li><a href="#campaign-stats" id="campaign-stats"><i class="icon-bar-chart"></i> Compare Campaigns</a></li>
+               </ul>
+            </div>
+         </div>
+      </div>
+      <div class="clearfix"></div>
+   </div>
 </div>
 </script>

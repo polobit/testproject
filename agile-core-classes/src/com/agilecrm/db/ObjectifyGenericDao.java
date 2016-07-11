@@ -770,40 +770,6 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	    // Add to list
 	    results.add(result);
 
-	    // Send totalCount if first time
-	    if (cursor == null && index == 0)
-	    {
-		// First time query - let's get the count
-		if (result instanceof com.agilecrm.cursor.Cursor)
-		{
-
-		    String className = this.clazz.getSimpleName().toLowerCase();
-
-		    com.agilecrm.cursor.Cursor agileCursor = (com.agilecrm.cursor.Cursor) result;
-		    Object object = forceLoad ? null : CacheUtil.getCache(this.clazz.getSimpleName() + "_"
-			    + NamespaceManager.get() + "_count");
-
-		    if (object != null)
-		    {
-			if (!Arrays.asList(countRestrictedClassNames).contains(className))
-			    agileCursor.count = (Integer) object;
-		    }
-
-		    else
-		    {
-			long startTime = System.currentTimeMillis();
-			if (!Arrays.asList(countRestrictedClassNames).contains(className))
-			    agileCursor.count = query.count();
-
-			long endTime = System.currentTimeMillis();
-			if ((endTime - startTime) > 15 * 1000 && cache)
-			    CacheUtil.setCache(this.clazz.getSimpleName() + "_" + NamespaceManager.get() + "_count",
-				    agileCursor.count, 1 * 60 * 60 * 1000);
-		    }
-		    
-		}
-	    }
-
 	    // Check if we have reached the limit
 	    if (++index == max)
 	    {
@@ -835,6 +801,46 @@ public class ObjectifyGenericDao<T> extends DAOBase
 		break;
 	    }
 	}
+	// Add count for the first time if next cursor is null
+	if(results != null && results.size() > 0 && cursor == null)
+	{
+		
+		T result = results.get(0);
+		// Send totalCount if first time
+	    if (result != null)
+	    {
+		// First time query - let's get the count
+		if (result instanceof com.agilecrm.cursor.Cursor)
+		{
+
+		    String className = this.clazz.getSimpleName().toLowerCase();
+
+		    com.agilecrm.cursor.Cursor agileCursor = (com.agilecrm.cursor.Cursor) result;
+		    Object object = forceLoad ? null : CacheUtil.getCache(this.clazz.getSimpleName() + "_"
+			    + NamespaceManager.get() + "_count");
+
+		    if (object != null)
+		    {
+			if (!Arrays.asList(countRestrictedClassNames).contains(className))
+			    agileCursor.count = (Integer) object;
+		    }
+
+		    else
+		    {
+			long startTime = System.currentTimeMillis();
+			if (!Arrays.asList(countRestrictedClassNames).contains(className))
+			    agileCursor.count = (newCursor == null ? results.size() : query.count());
+
+			long endTime = System.currentTimeMillis();
+			if ((endTime - startTime) > 15 * 1000 && cache)
+			    CacheUtil.setCache(this.clazz.getSimpleName() + "_" + NamespaceManager.get() + "_count",
+				    agileCursor.count, 1 * 60 * 60 * 1000);
+		    }
+		    
+		}
+	    }
+	}
+	
 	return results;
     }
     
