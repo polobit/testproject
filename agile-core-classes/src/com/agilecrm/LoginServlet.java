@@ -2,23 +2,15 @@ package com.agilecrm;
 
 import java.io.IOException;
 import java.net.URLEncoder;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.POST;
-import javax.ws.rs.QueryParam;
 
 import org.apache.commons.lang.StringUtils;
 
-import com.agilecrm.ipaccess.AllowAccessMailServlet;
-import com.agilecrm.ipaccess.IpAccess;
-import com.agilecrm.ipaccess.IpAccessUtil;
 import com.agilecrm.session.SessionCache;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
@@ -36,14 +28,6 @@ import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
 import com.google.appengine.api.utils.SystemProperty;
-import java.util.Properties;
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.AddressException;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
 
 /**
  * <code>LoginServlet</code> class checks or validates the user who is
@@ -326,6 +310,8 @@ public class LoginServlet extends HttpServlet {
 
 		request.getSession().setAttribute("account_timezone", timezone);
 		
+		// Set Account Timezone, User Timezone, Browser Fingerprint and OnlineCalendarPrefs
+		LoginUtil.setMiscValuesAtLogin(request, domainUser);
 
 		response.sendRedirect("/");
 
