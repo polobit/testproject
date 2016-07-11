@@ -84,12 +84,12 @@ public class AmazonSESUtil
 							"Powered by", emailSender.isEmailWhiteLabelEnabled());
 			
 				long start = System.currentTimeMillis();
-				ses.sendEmail(mailDeferredTask.fromEmail, mailDeferredTask.fromName, mailDeferredTask.to, mailDeferredTask.cc, mailDeferredTask.bcc, mailDeferredTask.subject, mailDeferredTask.replyTo, mailDeferredTask.html, mailDeferredTask.text);
+				ses.sendRawEmail(mailDeferredTask.fromEmail, mailDeferredTask.fromName, mailDeferredTask.to, mailDeferredTask.cc, mailDeferredTask.bcc, mailDeferredTask.subject, mailDeferredTask.replyTo, mailDeferredTask.html, mailDeferredTask.text, mailDeferredTask.campaignId, mailDeferredTask.domain);
 				System.out.println("Sent time - " + (System.currentTimeMillis() - start));
 			}
 			catch(Exception ex)
 			{
-				System.err.println("Exception occured in sendSESMails..." + ex.getMessage());
+				System.err.println("Exception occured in sendSESMails..." + ex.getMessage()); 
 			}
 		}
 	}
