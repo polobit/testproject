@@ -22,7 +22,7 @@ var CONTACTS_SORT_LIST={"created_time":"Created Date","lead_score":"Score","star
 var ifFromRender=false;
 function contactTableView(base_model,customDatefields,view,customContactfields,customCompanyfields) {
 	
-	var templateKey = 'contacts-custom-view-model';
+	var templateKey = 'contacts-list-view-model';
 	var gridViewEl = _agile_get_prefs("agile_contact_view");
 	if (gridViewEl) {
 		templateKey = 'contacts-grid';
@@ -213,7 +213,7 @@ function contactTableView(base_model,customDatefields,view,customContactfields,c
 		
 
 	} else  {
-		getTemplate('contacts-grid-model', contact, undefined, function(template_ui){
+		getTemplate('contacts-grid-view-model', contact, undefined, function(template_ui){
 				if(!template_ui)
 					  return;
 				$(el).append($(template_ui));

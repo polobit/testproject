@@ -16,17 +16,7 @@ var _BULKACTION_FILTER = undefined;
 */
 var Contacts_Events_Collection_View = Base_Collection_View.extend({
     events: {
-    	/** Contacts bulk actions */
-    	'click #bulk-owner' : 'bulkActionAddOwner',
-    	'click #bulk-campaigns' : 'bulkActionAssignToCampaign',
-    	'click #bulk-tags' : 'bulkActionAddTags',
-    	'click #bulk-tags-remove' : 'bulkActionRemoveTags',
-    	'click #bulk-email' : 'bulkActionSendEmail',
-    	'click #bulk-contacts-export' : 'bulkActionExportContacts',
-    	'click #bulk-companies-export' : 'bulkActionExportCompanies',
-    	'click #select-all-available-contacts' : 'bulkActionSelectAvailContacts',
-    	'click #select-all-revert' : 'bulkActionRevertAvailContacts',
-
+    	
     	/** Company bulk actions */
     	'click .default_company_filter' : 'bulkActionCompanyDefaultFilter',
     	'click #companies-filter' : 'bulkActionCompaniesFilter',
@@ -295,9 +285,7 @@ var Contacts_Events_Collection_View = Base_Collection_View.extend({
 		{
 			Backbone.history.navigate("company/" + currentObjId, { trigger : true });
 		}
-    } 
-
-   
+    }
 });
 
 $(function(){

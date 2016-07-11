@@ -175,7 +175,7 @@ function loadCustomFiledsFilters(fields, cel, is_company)
 
 function submitLhsFilter()
 {
-	$("#contacts-view-options").css( 'pointer-events', 'none' );
+	//$("#contacts-view-options").css( 'pointer-events', 'none' );
 	var formData = serializeLhsFilters($('#lhs-contact-filter-form'))
 	// erase filter cookies
 	var contact_type = formData.contact_type;
@@ -205,7 +205,7 @@ function submitLhsFilter()
 		if (formData != null && (formData.rules.length > 0 || formData.or_rules.length > 0))
 			_agile_set_prefs('dynamic_contact_filter', JSON.stringify(formData));
 		CONTACTS_HARD_RELOAD=true;
-		App_Contacts.contacts(undefined, undefined, undefined, true);
+		contacts_view_loader.getContacts(App_Contacts.contactViewModel, $("#contacts-listener-container"));
 	}
 }
 
@@ -272,7 +272,8 @@ $('#' + container_id).on('click', '#clear-lhs-contact-filters', function(e)
 
 	_agile_delete_prefs('dynamic_contact_filter');
 	CONTACTS_HARD_RELOAD = true;
-	App_Contacts.contacts();
+	clearLhsFilters();
+	contacts_view_loader.getContacts(App_Contacts.contactViewModel, $("#contacts-listener-container"));
 });
 
 $('#' + container_id).on('click', '#clear-lhs-company-filters', function(e)
@@ -651,28 +652,6 @@ $('#' + container_id).on('change keyup', '#lhs-contact-filter-form #RHS_NEW inpu
 			}
 
 		});
-     	
-
-
-      $('#' + container_id).on('click', '.contacts-view', function(e)
-    		{
-				e.preventDefault();
-
-    				var data=$(this).attr("data");
-    				if(data=="list"){
-    					CONTACTS_HARD_RELOAD=true;
-    					_agile_delete_prefs("agile_contact_view");
-    				}
-    				else if(data=="grid"){
-    					_agile_set_prefs("agile_contact_view","grid-view");
-    					CONTACTS_HARD_RELOAD=true;
-    				}
-    				if(window.location.hash.indexOf("tags")==1){
-    					App_Contacts.contacts(window.location.hash.substr(window.location.hash.lastIndexOf("/")+1));
-    					return;
-    				}
-    				App_Contacts.contacts();
-    	   });
 
     $('#' + container_id).on('click', '#save-segment-filter', function(e)
             {
@@ -849,4 +828,13 @@ function bindChangeEvent(ele){
 									
 		}, $('#lhs_filters_segmentation', cel));
   }
+
+function clearLhsFilters()
+{
+	$("#lhs-contact-filter-form")[0].reset();
+	$("#lhs-filters-header", $("#lhs-contact-filter-form")).each(function(){
+		$(this).removeClass("bold-text");
+		$(this).trigger("click");
+	});
+}
 

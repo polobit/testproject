@@ -1,37 +1,6 @@
 var timer = undefined;
 
   	$(function(){
-  	
-
-		$('body').on('click','.contactcoloumn',function(e){
-			var json = serializeForm("contact-static-fields");
-			console.log(json)
-			$.ajax({
-					url : 'core/api/contact-view-prefs',
-					type : 'PUT',
-					contentType : 'application/json',
-					dataType : 'json',
-					data :JSON.stringify(json),
-					success : function(data)
-						{
-							
-							location.reload()
-						} 
-					});
-
-					
-			
-		});
-
-		$("body").on('click','#contactTabelView',function(el){
-			
-			if(_agile_get_prefs("contactTabelView"))
-				_agile_delete_prefs("contactTabelView");
-			else
-				_agile_set_prefs("contactTabelView","true");
-			CONTACTS_HARD_RELOAD = true;
-			App_Contacts.contacts();
-	});
 		$("body").on('click','#companiesTabelView',function(el){
 
 		if(_agile_get_prefs("companyTabelView"))
@@ -156,8 +125,8 @@ var timer = undefined;
 	});
 function contactListener(el)
 {
-	$('#contacts-custom-view-model-list , #contacts-custom-view-table-model-list,#companies-custom-view-model-list , #companies-custom-view-table-model-list').off('mouseenter','tr > td:not(":first-child")');
-		$('#contacts-custom-view-model-list , #contacts-custom-view-table-model-list,#companies-custom-view-model-list , #companies-custom-view-table-model-list').on('mouseenter','tr > td:not(":first-child")',function(e){
+	$('#contacts-list-view-model-list, #companies-custom-view-model-list , #companies-custom-view-table-model-list').off('mouseenter','tr > td:not(":first-child")');
+		$('#contacts-list-view-model-list, #companies-custom-view-model-list , #companies-custom-view-table-model-list').on('mouseenter','tr > td:not(":first-child")',function(e){
 			//e.stopPropagation();
 				var left=e.pageX;
 				left=left-100;
@@ -171,8 +140,8 @@ function contactListener(el)
 
 		
 });
-		$('#contacts-custom-view-model-list , #contacts-custom-view-table-model-list,#companies-custom-view-model-list , #companies-custom-view-table-model-list').off('mouseleave','tr > td:not(":first-child")');
-	$('#contacts-custom-view-model-list , #contacts-custom-view-table-model-list,#companies-custom-view-model-list , #companies-custom-view-table-model-list').on('mouseleave','tr > td:not(":first-child")',function(){
+		$('#contacts-list-view-model-list,#companies-custom-view-model-list , #companies-custom-view-table-model-list').off('mouseleave','tr > td:not(":first-child")');
+	$('#contacts-list-view-model-list,#companies-custom-view-model-list , #companies-custom-view-table-model-list').on('mouseleave','tr > td:not(":first-child")',function(){
 		var that=$(this).parent();
 		popout(that);
 		

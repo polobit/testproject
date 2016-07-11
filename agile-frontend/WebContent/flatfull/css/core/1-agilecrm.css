@@ -4043,6 +4043,10 @@ padding-left:0px;
     display: block;
     margin-top: 0; 
  }
+ div#contact-custom-coloumns .dropdown-menu{
+    display: none;
+    margin-top: 0; 
+ }
 
 .delete-checked-contacts .bulk-delete-loading
 {
