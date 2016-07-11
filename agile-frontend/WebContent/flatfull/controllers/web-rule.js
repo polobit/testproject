@@ -113,7 +113,19 @@ var WebreportsRouter = Backbone.Router.extend({
 
 				})
 				count++;
-			} });
+			},
+			form_custom_validate : function(){
+				if($('#action select').val()=="CALL_POPUP"){
+				 	if(App_WebReports.isTwilioSMS=="TWILIO")
+						return true;
+					else{
+						$('#twilio_call_setup').show();
+						return false;
+					}
+				}
+				return true;
+			}
+			});
 
 		$("#content").html(getRandomLoadingImg());
 		web_reports_add.render();
