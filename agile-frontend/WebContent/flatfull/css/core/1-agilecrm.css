@@ -3722,7 +3722,7 @@ opacity: .3;
 
 	}
 
-.app-aside-dock #segmentationmenu a i{
+/*.app-aside-dock #segmentationmenu a i{
 
 	    margin-bottom: -4px;
 
@@ -3734,7 +3734,7 @@ opacity: .3;
 }
 .app-aside-folded #segmentationmenu a span{
 	line-height: 2.6em;
-}
+}*/
 #lhs_filters_segmentation .panel-body{
 	padding: 5px 15px;
 	min-height: 35px;

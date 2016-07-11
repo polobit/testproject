@@ -241,6 +241,58 @@ function isIE() {
 
 </script>
 <div id="alert-message" style="display:none;"></div>
+
+<div rel="popover" data-custom-popover-class='grid_custom_popover' data-trigger="click"  data-original-title="" title="" data-placement="bottom" class="need_help grid_icon_center hidden-xs <%
+          switch (Integer.parseInt(currentUserPrefs.theme)) {
+            case 1:  out.print("bg-white-only ");
+                   break;
+            case 2:  out.print("bg-white-only ");
+                 break;
+            case 3:  out.print("bg-white-only ");
+                 break;
+            case 4:  out.print("bg-white-only ");
+                 break;
+            case 5:  out.print("bg-white-only ");
+                 break;
+            case 6:  out.print("bg-white-only ");
+                 break;
+            case 7:  out.print("bg-black ");
+                 break;
+            case 8:  out.print("bg-info dker ");
+                 break;
+            case 9:  out.print("bg-primary ");
+                 break;
+            case 10:  out.print("bg-info dk ");
+                 break;
+            case 11:  out.print("bg-success ");
+                 break;
+            case 12:  out.print("bg-danger dker ");
+                 break;
+            case 13:  out.print("bg-white-only ");
+                 break;
+            case 14:  out.print("bg-dark ");
+                 break;
+            default:
+                    break;
+         
+          }
+              
+         %>" screen_name="Need Help? We are one click away." data-content="<div class='row' id='need_help_header'>
+                  <ul class='col-xs-12 col-sm-12 grid-sub-nav text-center m-t-md p-l-md p-r-md'>
+                    
+                <li class='pull-left m-b-sm'><a href='#' class='menu-service-select' data-service-name='SALES' data-dashboard='dashboard'><i class='thumb'><img src='img/sales.svg'></i><span class='block'>Sales</span></a></li>
+
+                <li class='pull-left m-b-sm'><a href='#' class='menu-service-select' data-service-name='MARKETING' data-dashboard='MarketingDashboard'><i class='thumb'><img src='img/marketing.svg'></i> <span class='block'>Marketing</span></a></li>
+
+                <li class='pull-left m-b-sm'><a href='#' class='menu-service-select' data-service-name='SERVICE' data-dashboard='dashboard'><i class='thumb'><img src='img/service.svg'></i> <span class='block'>Service</span></a></li>
+
+                </ul>
+                </div>
+                
+                  </div>">
+                   <a href="#" class='grid-icon-header block wrapper' onclick="return false;"><i class="glyphicon glyphicon-th"></i></a>    
+               </div>
+
 <div id="wrap" class="app app-aside-folded-inactive app-header-fixed app-aside-fixed 
 <% 
 if(currentUserPrefs.menuPosition.equals("top")){
@@ -476,7 +528,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
     %>
    <li id="segmentationmenu">
     <a  href="#visitors">
-       <i class="icon-large icon-screenshot"></i>
+       <i class="icon-eye"></i>
       <span>Visitors</span>  
     </a>
   </li>
@@ -544,7 +596,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
   <li id="tickets">
     <a href="#tickets">
       <i class="icon icon-ticket"></i>
-      <span style="padding-top: 9%;">Help Desk</span>
+      <span>Help Desk</span>
     </a>
   </li>
 
@@ -708,7 +760,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
               </li> 
               --%>
               
-              <li class="line dk"></li>
+             <!--  <li class="line dk"></li>
             <li class="hidden-folded padder m-t m-b-sm text-muted text-xs">
                 <span>More</span>
               </li>
@@ -716,12 +768,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
                 <li id="due_tasks"  data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Tasks"><a class="pos-rlt" href="#tasks"><i class="icon-list"></i>
                   <span class="visible-xs">Tasks</span>
 
-                      <span title="Tasks due" class="navbar_due_tasks pull-right-xs"><span  id="due_tasks_count" class="badge badge-sm up bg-danger"></span></span></a></li>
-               <!-- <li id="recent-menu" class="dropdown" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Activity"><a
-                class="dropdown-toggle" data-toggle="dropdown" href=""> <i class='fa fa-history' style="opacity:0.8"></i>
-                <span class="visible-xs">Recent Activity</span>
-              </a><ul class="dropdown-menu animated fadeInRight recent-view" style="width:23em; right:-11px;"></ul>
-              </li>  -->
+                      <span title="Tasks due" class="navbar_due_tasks pull-right-xs"><span  id="due_tasks_count" class="badge badge-sm up bg-danger"></span></span></a></li> -->
               
               
             </ul>

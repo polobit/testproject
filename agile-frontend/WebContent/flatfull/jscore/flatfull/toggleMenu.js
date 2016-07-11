@@ -303,13 +303,22 @@ $("#activityModal").on("click", "#eventDescriptionLink", function(e){
     				var $target = $(e.target);
     				$(this).data("bs.popover").tip().addClass($target.data("custom-popover-class"));
     			}); 
+
+    $('#searchText').on('focus', function () {
+	    $(this).parent().find("label").toggleClass('active');
+	});
+
+	$('#searchText').on('blur', function () {
+	    $(this).parent().find("label").toggleClass('active');
+	});
+
    });
 
 // Click handlers to role menu items
 function initRolehandlers(){
 
 	// Reset active state from DomainUser.role
-	$(".menu-service-select[data-service-name='" + CURRENT_DOMAIN_USER.role + "']").closest("li").addClass("active");
+	$(".menu-service-select[data-service-name='" + CURRENT_DOMAIN_USER.role + "']").addClass("active");
 
 	// Menu Items select
 	$(".menu-service-select").unbind("click").click(function(e){
@@ -338,11 +347,6 @@ function initRolehandlers(){
  						error: function(model, response){
 							console.log("error");
  						}});
-
- 			// Update active class
- 			var $liitems = $(".menu-service-select").closest("li");
- 			$liitems.removeClass("active");
- 			$liitems.find("a[data-service-name='" + serviceName + "']").closest("li").addClass("active");
 
  			// Close popup
  			// $("div.app-content-body div:first-child").click();
