@@ -9,48 +9,66 @@ var LandingPageRouter = Backbone.Router.extend({
     "landing-page-copy/:id" : "copySelectedLandingPage"
 	},
 
-	getListOfLandingPages : function(){
-
-        $('#content').html("<div id='landingpages-listeners'></div>");
+	getListOfLandingPages : function()
+    {
+    $('#content').html("<div id='landingpages-listeners'></div>");
+    // Render static template
+    //$("#landingpages-listeners").html(getTemplate("landingpages-static-container"));   
+        var sortKey = _agile_get_prefs("landingpage_sort_menu");
+            if(sortKey == undefined || sortKey == null)
+            {
+                sortKey = "name_dummy";
+                _agile_set_prefs("landingpage_sort_menu", sortKey);
+            }  
+        var that = this;    
+        var landingpagesStaticModelview = new LandingPages_Top_Header_Modal_Events
+        ({
+        template : "landingpages-static-container",
+        isNew : true,
+        model : new Backbone.Model({"sortKey" : sortKey}),
+        postRenderCallback : function(el)
+        {
+        includeTimeAgo(el);
+        var staticcollection = ($("#content"),el) ;
+        that.loadLandingPagesCollection(staticcollection);
+        }
+        });
+        $("#content").find("#landingpages-listeners").html(landingpagesStaticModelview.render().el);
+       	},
+    
+    loadLandingPagesCollection : function(el){
 
         var sortKey = _agile_get_prefs("landingpage_sort_menu");
-                if(sortKey == undefined || sortKey == null){
-                    sortKey = "name";
-                    _agile_set_prefs("landingpage_sort_menu", sortKey);
+                if (this.LandingPageCollectionView && this.LandingPageCollectionView.options.global_sort_key == sortKey && this.LandingPageCollectionView.collection && this.LandingPageCollectionView.collection.length > 0)
+                {
+                    $(el).find("#landingpages-collection-container").html(this.LandingPageCollectionView.render(true).el);
+                    return;
                 }
-        this.LandingPageCollectionView = new LandingPage_Collection_Events({ url : 'core/api/landingpages',sort_collection : false, templateKey : "landingpages", cursor : true, page_size : 20,  
-            individual_tag_name : 'tr', global_sort_key : sortKey, postRenderCallback : function(el)
+        this.LandingPageCollectionView = new landingpage_collection_events({ 
+            url : 'core/api/landingpages',
+            sort_collection : false,
+            templateKey : "landingpages",
+            cursor : true,
+            page_size : 20,  
+            individual_tag_name : 'tr',
+            global_sort_key : sortKey,
+            postRenderCallback : function(el)
             {
                 includeTimeAgo(el);
-                updateSortKeyTemplate(sortKey, el);
-                var title = sortKey.replace("-" , "") ; 
-                if(title == "created_time" || title == undefined)
-                {
-                    printSortByName("Created Time",el);
-                    return;
-                }
-                if(title == "updated_time" || title == undefined)
-                {
-                    printSortByName("Updated Time",el);
-                    return;
-                }
-                else
-                    printSortByName("Name",el);
+               // updateSortKeyTemplate(sortKey, el);
+               // $("#landingpages-list").html(collectiondata);
+                $(".active").removeClass("active");
+                $("#landing-pages-menu").addClass("active");
+                
             },
             appendItemCallback : function(el)
             { 
                 // To show time ago for models appended by infinite scroll
                 includeTimeAgo(el);
-            } });
-        
+            }});
         this.LandingPageCollectionView.collection.fetch();
-
-        $("#landingpages-listeners").html(this.LandingPageCollectionView.render().el);
-        
-        $(".active").removeClass("active");
-	$("#landing-pages-menu").addClass("active");
-
-	},
+       $("#content").find("#landingpages-collection-container").html(App_LandingPageRouter.LandingPageCollectionView.el);
+    },
 
 	showLandingPageBuilder : function() {
         $('#content').html("<div id='landingpages-listeners'></div>");

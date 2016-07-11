@@ -7597,3 +7597,22 @@ Handlebars.registerHelper('if_equals_lowerCase', function(value, target, options
 	else
 		return options.inverse(this);
 });
+
+Handlebars.registerHelper('if_equals_sork_key', function(value, target, options)
+{
+	if(value && value.startsWith("-"))
+		value = value.substr(1);
+
+	if(value && target && target == value)
+		return options.fn(this);
+	else
+		return options.inverse(this); 
+});
+
+Handlebars.registerHelper('if_asc_sork_key', function(value, options)
+{
+	if(value && value.startsWith("-"))
+		return options.inverse(this);
+	else
+		return options.fn(this); 
+});

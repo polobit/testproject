@@ -1,5 +1,6 @@
-<script id="landingpages-collection-template" type="text/html">
+<script id="landingpages-static-container-template" type="text/html">
 <div class="custom-animated custom-fadeInUp">
+ <div id="Landingpages-top-view"></div>
 <div class="wrapper-md lter bg-light b-b">
 <div class="row">
     <div class="col-sm-12 col-md-12">
@@ -14,36 +15,44 @@
                 <div class="btn-group dropdown">
                                 <button class="btn btn-sm no-shadow p-n b-n bg-transparent text-base" style="font-size: 11px;" data-toggle="dropdown" id="contact-sort">
                                         <span class="text-muted">Sort by </span>
-                                        <span class="sort-field-txt">Name</span>
+                                        <span class="sort-field-txt"> 
+                                        {{#if_equals_sork_key sortKey "name_dummy" }}Name{{/if_equals_sork_key}}
+                                        {{#if_equals_sork_key sortKey "created_time" }}
+                                        Created Time
+                                        {{/if_equals_sork_key}}
+                                        {{#if_equals_sork_key sortKey "updated_time" }}
+                                        Updated Time
+                                        {{/if_equals_sork_key}}
+                                    </span>
                                     </button>
                                     <button class="btn btn-sm no-shadow dropdown-toggle bg-transparent b-n p-t-none p-b-none p-l-xs" data-toggle="dropdown" aria-expanded="false">
                                         <span class="caret"></span>
                                     </button>
 
-                                    <ul class="pull-left dropdown-menu " id="landingpage_sort_menu" role="menu">
+                                    <ul class="pull-left dropdown-menu " id="sort_menu" role="menu">
                                         <li>
-                                        <a class="sort-link sort-field pos-rlt text-ellipsis" style="width:185px;" href="javascript:void(0);" data="name" label_name="name">
+                                        <a class="sort-link sort-field pos-rlt text-ellipsis" style="width:185px;" href="javascript:void(0);" data="name_dummy" label_name="name_dummy">
                                         Name
-                                            <i class="fa fa-check pos-abs pos-r-sm txt-small m-t-xs sort-field-check"></i> 
+                                            <i class="fa fa-check pos-abs pos-r-sm txt-small m-t-xs sort-field-check {{#if_equals_sork_key sortKey 'name_dummy' }}{{else}}display-none {{/if_equals_sork_key}}"></i> 
                                             </a>
                                     </li>
                                     <li>
                                         <a class="sort-link sort-field pos-rlt text-ellipsis" style="width:185px;" href="javascript:void(0);" data="created_time" label_name="created_time">
                                         Created Time
-                                        <i class="fa fa-check pos-abs pos-r-sm txt-small m-t-xs sort-field-check  display-none"></i> 
+                                        <i class="fa fa-check pos-abs pos-r-sm txt-small m-t-xs sort-field-check  {{#if_equals_sork_key sortKey 'created_time' }} {{else}} display-none {{/if_equals_sork_key}}"></i> 
                                         </a>
                                     </li>
                                     <li>
                                         <a class="sort-link sort-field pos-rlt text-ellipsis" style="width:185px;" href="javascript:void(0);" data="updated_time" label_name="updated_time">
                                         Updated Time
-                                        <i class="fa fa-check pos-abs pos-r-sm txt-small m-t-xs sort-field-check  display-none"></i> 
+                                        <i class="fa fa-check pos-abs pos-r-sm txt-small m-t-xs sort-field-check  {{#if_equals_sork_key sortKey 'updated_time' }}{{else}}display-none {{/if_equals_sork_key}}"></i> 
                                         </a>
                                     </li>
                                     <li class="divider" id="sort-divider"></li>
                                             <li>
-                                                <a class="order-by pos-rlt" data="" href="javascript:void(0);">Ascending <i class="fa fa-check pos-abs pos-r-sm txt-small m-t-xs sort-by-check  display-none"></i> </a>
+                                                <a class="order-by pos-rlt" data="" href="javascript:void(0);">Ascending <i class="fa fa-check pos-abs pos-r-sm txt-small m-t-xs sort-by-check  {{#if_asc_sork_key sortKey}}{{else}}display-none {{/if_asc_sork_key}}"></i> </a>
                                             </li>
-                                            <li><a class="order-by pos-rlt" data="-" href="javascript:void(0);">Descending  <i class="fa fa-check pos-abs pos-r-sm txt-small m-t-xs sort-by-check"></i> </a></li>
+                                            <li><a class="order-by pos-rlt" data="-" href="javascript:void(0);">Descending  <i class="fa fa-check pos-abs pos-r-sm txt-small m-t-xs sort-by-check {{#if_asc_sork_key sortKey}} display-none {{else}}{{/if_asc_sork_key}}"></i> </a></li>
                                     </ul>
                                 </div>
             </div>
@@ -62,6 +71,9 @@
     </div>
 </div>
 </div>
+<div id="landingpages-collection-container"></div>
+</script>
+<script id="landingpages-collection-template" type="text/html">
 <div class="wrapper-md">
 <div class="row">
 <div class="col-md-9">
