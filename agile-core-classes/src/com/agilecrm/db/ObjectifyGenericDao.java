@@ -60,6 +60,7 @@ import com.agilecrm.portlets.Portlet;
 import com.agilecrm.reports.ActivityReports;
 import com.agilecrm.reports.Reports;
 import com.agilecrm.shopify.ShopifyApp;
+import com.agilecrm.ssologin.SingleSignOn;
 import com.agilecrm.subscription.Subscription;
 import com.agilecrm.subscription.restrictions.db.BillingRestriction;
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
@@ -290,6 +291,9 @@ public class ObjectifyGenericDao<T> extends DAOBase
      *  the maximum 25 tweet message in a day 
      * */
 	ObjectifyService.register(DomainLimits.class);
+	
+	//SSO feature
+	ObjectifyService.register(SingleSignOn.class);
 
     }
 
