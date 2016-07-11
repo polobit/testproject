@@ -126,7 +126,8 @@ public class WidgetUtil {
 											widget.url = customWidget.url;
 										}
 								}
-							}
+							}					
+							widget.save();
 						}	
 						
 						// Fix for mini logo url is missing.
@@ -137,6 +138,7 @@ public class WidgetUtil {
 							
 							if(customWidget != null){
 								widget.mini_logo_url = customWidget.mini_logo_url;
+								widget.save();
 							}
 						}
 					}

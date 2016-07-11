@@ -23,7 +23,7 @@ public class CustomWidget extends Widget {
 
 	public void save() {
 		this.widget_type = WidgetType.CUSTOM;
-		this.save();
+		super.save();
 	}
 
 	public static List<Widget> getCurrentWidgets() {
