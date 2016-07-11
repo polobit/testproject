@@ -627,7 +627,7 @@ modal li:nth-child(odd),.milestones li:nth-child(odd)
 @media all and (min-width: 768px) {
 label#search-results{
   position: absolute;
-  margin: 7px 0px 0px 5px;
+  margin: 7px 0px 0px 10px;
   cursor: pointer;
 }
 #searchText
@@ -635,10 +635,8 @@ label#search-results{
   width:0px;
   transition:width 0.5s  ease-in-out;
  -webkit-transition:width 0.5s  ease-in-out;
-  padding: 0px 0 0 22px;
-  background-color: #fff;
-  border-bottom: 1px solid #fff;
-  border-radius: 0;
+  padding: 0px 12px 0 28px;
+  background-color: inherit;
 }
 
 #searchText:focus
@@ -647,6 +645,7 @@ label#search-results{
   outline: none;
   cursor: text;
   border-bottom: 1px solid #eee;
+  background-color: #edf1f2;
 }
 
 }
@@ -2383,5 +2382,5 @@ color:#484848!important;
 .grid_custom_popover.bottom .arrow{border-bottom-color: #ccc;}
 .grid_icon_center{ position: fixed; left: 50%; top: 0px; z-index: 1031; -webkit-transform: translateX(-50%);
 transform: translateX(-50%);}
-.grid-icon-header:hover, .grid-icon-header:focus{background-color: #f6f8f8;}
+/*.grid-icon-header:hover, .grid-icon-header:focus{background-color: #f6f8f8;}*/
 /*end custom css code*/
