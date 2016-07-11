@@ -66,10 +66,12 @@ public class AmazonSESWebhook extends HttpServlet
     	if(jsonData.has(TYPE))
     	{
     	  String webhookJsonType = jsonData.getString(TYPE);
+    	  System.out.println("type : "+webhookJsonType);
     	  
 	    	//Check if JSON contains subscription URl then subscribe the webhooks endpoint
 	    	  if(webhookJsonType.equalsIgnoreCase(SUBSCRIPTION_CONFIRMATION))
 	    	  {
+	    		  System.out.println("subscription url : "+SUBSCRIPTION_URL);
 	    		  if(jsonData.has(SUBSCRIPTION_URL))
 	    			  AmazonSESWebhookUtil.subscribeAmazonSNSEndpoint(jsonData.getString(SUBSCRIPTION_URL));
 	    		  return;

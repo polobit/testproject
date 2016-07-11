@@ -108,7 +108,8 @@ public class AmazonSESUtil
 	public static String verifySESKeys(final String accessKey, final String secretKey, final String region) throws Exception
 	{
 		
-		String host = "http://54.87.153.50:8080/";
+		//String host = "http://54.87.153.50:8080/";
+		String host = "http://54.84.112.13/";
 		
 		if(SystemProperty.environment.value() == SystemProperty.Environment.Value.Development)
 			host = "http://localhost:8080/ses-beta-app";

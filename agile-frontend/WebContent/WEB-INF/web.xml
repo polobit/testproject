@@ -1329,7 +1329,7 @@
 	</servlet-mapping>
 	 <servlet>
 		<servlet-name>AmazonSESWebhook</servlet-name>
-		<servlet-class>com.thirdparty.ses.util.AmazonSESWebhook</servlet-class>
+		<servlet-class>com.thirdparty.amazon.httpendpoint.AmazonSESWebhook</servlet-class>
 	</servlet>
 
 	<servlet-mapping>
