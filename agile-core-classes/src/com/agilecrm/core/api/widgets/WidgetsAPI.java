@@ -374,7 +374,8 @@ public class WidgetsAPI {
 	 */
 	@Path("saveWidgetPrivilages")
 	@POST
-	public void saveWidgetPrivilages(String obj) throws Exception {
+	public String saveWidgetPrivilages(String obj) throws Exception {
+		List<String> finalUserList = new ArrayList<String>();
 		if (obj != null) {			
 			//Gets current agile user.
 			AgileUser agileUser = AgileUser.getCurrentAgileUser();
@@ -423,7 +424,9 @@ public class WidgetsAPI {
 									 }
 								}
 							}
-						}
+						}else{
+							finalUserList.add(oldUserID);
+  						}
 					}
 					
 					// Creating widget.
@@ -445,15 +448,19 @@ public class WidgetsAPI {
 										continue;
 									}
 								}								
-								widget.add_by_admin = true;										
+								widget.add_by_admin = true;	
+								widget.isActive = true;
 								widget.id = null;
 								widget.saveByUserKey(userKey, widget);
 							}							
-						}
+						}else{						
+							finalUserList.add(newUserID);						
+  						}
 					}					
 				}
 			}			
 		}
+		return finalUserList.toString();
 	}
 
 	public static void checkValidDetails(Widget widget) throws Exception {
