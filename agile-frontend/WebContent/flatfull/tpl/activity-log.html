@@ -742,7 +742,7 @@ Changed owner for Contact {{#if this.entityObject}}<a href="#contact/{{entity_id
 
   {{#if_equals "NOTE_ADD" activity_type}}
 {{#if custom4}}
-Added call log to Contact {{#if this.entityObject}}<a href="#contact/{{entity_id}}" data="{{entity_id}}" class="popover_contact">{{label}}</a>{{else}}'{{label}}'{{/if}} <br/>
+Added call log to {{#if_equals "company_entity" this.entityObject.entity_type}} Company {{else}} Contact{{/if_equals}}  {{#if this.entityObject}}<a href="#contact/{{entity_id}}" data="{{entity_id}}" class="popover_contact">{{label}}</a>{{else}}'{{label}}'{{/if}} <br/>
 <small class="activities_second_line m-t-none text-sm">
  <i class="icon-pencil"></i>{{#unless this.entityObject}} Contact deleted later. {{/unless}} {{custom1}} {{#if custom2}}- {{custom2}}{{/if}}
 </small> <br/>
@@ -750,7 +750,7 @@ Added call log to Contact {{#if this.entityObject}}<a href="#contact/{{entity_id
  <i class="icon-pencil"></i>{{custom4}}
 </small>
 {{else}}
-Added note to Contact {{#if this.entityObject}}<a href="#contact/{{entity_id}}" data="{{entity_id}}" class="popover_contact">{{label}}</a>{{else}}'{{label}}'{{/if}} <br/>
+Added note to {{#if_equals "company_entity" this.entityObject.entity_type}} Company {{else}} Contact{{/if_equals}} {{#if this.entityObject}}<a href="#contact/{{entity_id}}" data="{{entity_id}}" class="popover_contact">{{label}}</a>{{else}}'{{label}}'{{/if}} <br/>
 <small class="activities_second_line m-t-none text-sm">
  <i class="icon-pencil"></i>{{#unless this.entityObject}} Contact deleted later. {{/unless}} {{custom1}} {{#if custom2}}- {{custom2}}{{/if}}
 </small>  
