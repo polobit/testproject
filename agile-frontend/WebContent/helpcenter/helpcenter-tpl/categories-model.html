@@ -6,9 +6,9 @@
 	{{#sections}}
 	{{#if_equals visible_to "CUSTOMER"}}
 		
-		<div class="col-md-6 m-b-md">
-			<a href="#category/{{categorie_id}}/section/{{id}}">
-				<h4 class="m-b-none">{{name}} ({{articles_count}}) </h4></a>	
+		<div class="col-md-6 m-b-md" data-id="{{id}}">
+			<a href="#section/{{name}}">
+				<h4 class="m-b-none" >{{name}} ({{articles_count}}) </h4></a>	
 		</div>
 	{{/if_equals}}
 	{{/sections}}

@@ -8,8 +8,8 @@ var HelpcenterRouter = Backbone.Router.extend({
 		"" : "categories",
 		"section/:id" : "sectionArticles",
 		"category/:categorie_id" : "categorieSections",
-		"category/:categorie_id/section/:section_id" : "sectionArticles",
-		"article/:article_id" : "viewArticle",
+		"section/:name" : "sectionArticles",
+		"article/:name" : "viewArticle",
 
 		/*Search articles*/
 		"search-article/:search_term" : "searchArticle"  
@@ -69,21 +69,21 @@ var HelpcenterRouter = Backbone.Router.extend({
 	 	});
 	},
 
-	sectionArticles: function(categorie_id, section_id){
+	sectionArticles: function(name){
 
 		App_Helpcenter.renderHomeTemplate(function(){
 
 			var sectionView = new Base_Model_View({
 				isNew : false,
 				template : "section",
-				url : "/helpcenterapi/api/knowledgebase/section?id=" + section_id,
+				url : "/helpcenterapi/api/knowledgebase/section?name=" + name,
 		        postRenderCallback: function(el, data){
 
 		        	Helpcenter_Util.setBreadcrumbPath('section-articles-breadcrumb', data);
 
 		        	//Initializing base collection with groups URL
 					App_Helpcenter.articlesCollection = new Base_Collection_View({
-						url : '/helpcenterapi/api/knowledgebase/article?section_id=' + section_id + '&categorie_id=' + categorie_id,
+						url : '/helpcenterapi/api/knowledgebase/article?section_name=' + name,
 						templateKey : "helpcenter-articles",
 						individual_tag_name : 'div',
 						postRenderCallback : function(el){
@@ -102,18 +102,18 @@ var HelpcenterRouter = Backbone.Router.extend({
 	 	});
 	},
 
-	viewArticle:function(article_id){
+	viewArticle:function(name){
 
 		App_Helpcenter.renderHomeTemplate(function(){
 
 			var articleView = new Base_Model_View({
 				isNew : false,
 				template : "article",
-				url : "/helpcenterapi/api/knowledgebase/article/" + article_id,
+				url : "/helpcenterapi/api/knowledgebase/article/" + name,
 		        postRenderCallback: function(el, data){
 
 		        	Helpcenter_Util.setBreadcrumbPath('article-breadcrumb', data);
-		            App_Helpcenter.renderComment(el,article_id); 		    
+		            //App_Helpcenter.renderComment(el,article_id); 		    
 				    
 				}
 			});

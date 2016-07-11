@@ -26,6 +26,7 @@ import org.json.JSONObject;
 import com.agilecrm.knowledgebase.entity.Categorie;
 import com.agilecrm.knowledgebase.entity.Section;
 import com.agilecrm.knowledgebase.util.SectionUtil;
+import com.agilecrm.ticket.entitys.TicketGroups;
 import com.googlecode.objectify.Key;
 
 /**
@@ -38,11 +39,11 @@ public class SectionAPI
 {
 	@GET
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public Section getSection(@QueryParam("id") Long id)
+	public Section getSection(@QueryParam("name") String name)
 	{
 		try
 		{
-			Section section = Section.dao.get(id);
+			Section section = Section.dao.getByProperty("name",name);
 			section.categorie = Categorie.dao.get(section.categorie_key);
 			
 			return section;
@@ -82,6 +83,11 @@ public class SectionAPI
 			if (StringUtils.isBlank(section.name) || section.categorie_id == null)
 				throw new Exception("Required params missing.");
 
+			Section existingsection = Section.dao.getByProperty("name", section.name);
+			if (existingsection != null && !existingsection.equals(section.name)){
+				throw new Exception("Section with name " + section.name
+						+ " already exists.");
+			}
 			Key<Categorie> categorie_key = new Key<Categorie>(Categorie.class, section.categorie_id);
 
 			section.categorie_key = categorie_key;
@@ -129,8 +135,15 @@ public class SectionAPI
 			if (StringUtils.isBlank(section.name) || section.categorie_id == null)
 				throw new Exception("Required params missing.");
 
-			Key<Categorie> categorie_key = new Key<Categorie>(Categorie.class, section.categorie_id);
+			
 
+			Section existingsection = Section.dao.getByProperty("name", section.name);
+			if (existingsection != null && !existingsection.equals(section.name)){
+				throw new Exception("Section with name " + section.name
+						+ " already exists. Please choose a different name.");
+			}
+			
+			Key<Categorie> categorie_key = new Key<Categorie>(Categorie.class, section.categorie_id);
 			section.categorie_key = categorie_key;
 			section.save();
 		}

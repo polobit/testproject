@@ -40,18 +40,18 @@ public class ArticleAPI
 {
 	/**
 	 * 
-	 * @param id
+	 * @param title
 	 * @return
 	 * @throws Exception
 	 */
 	@GET
-	@Path("/{id}")
+	@Path("/{title}")
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public Article getArticle(@PathParam("id") Long id) throws Exception
+	public Article getArticle(@PathParam("title") String title) throws Exception
 	{
 		try
 		{
-			Article article = Article.dao.get(id);
+			Article article = Article.dao.getByProperty("title",title);
 			article.categorie = Categorie.dao.get(article.categorie_key);
 			article.section = Section.dao.get(article.section_key);
 
@@ -67,15 +67,14 @@ public class ArticleAPI
 	
 	/**
 	 * 
-	 * @param categorie_id
-	 * @param section_id
+	 * @param section_name
 	 * @return
 	 */
 	@GET
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public List<Article> getArticles(@QueryParam("section_id") Long section_id)
+	public List<Article> getArticles(@QueryParam("section_name") String section_name)
 	{
-		return ArticleUtil.getArticles(section_id);
+		return ArticleUtil.getArticles(section_name);
 	}
 	
 	/**
@@ -177,6 +176,11 @@ public class ArticleAPI
 	{
 		try
 		{
+			Article existingArticle = Article.dao.getByProperty("title", article.title);
+			if (existingArticle != null && !existingArticle.equals(article.title)){
+				throw new Exception("Article with name " + article.title
+						+ " already exists. Please choose a different name.");
+			}
 			Key<Section> section_key = new Key<Section>(Section.class, article.section_id);
 			article.section_key = section_key;
 
@@ -230,7 +234,14 @@ public class ArticleAPI
 	{
 		try
 		{
+			Article existingArticle = Article.dao.getByProperty("title", article.title);
+			if (existingArticle != null && !existingArticle.equals(article.title)){
+				throw new Exception("Article with name " + article.title
+						+ " already exists. Please choose a different name.");
+			}
+			
 			Article dbArticle = Article.dao.get(article.id);
+			
 			
 			Key<Section> section_key = new Key<Section>(Section.class, article.section_id);
 			article.section_key = section_key;

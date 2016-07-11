@@ -21,17 +21,19 @@ public class ArticleUtil
 {
 	/**
 	 * 
-	 * @param categorieID
-	 * @param sectionID
+	 * @param sectionname
 	 * @return
 	 */
-	public static List<Article> getArticles( Long sectionID)
-	{
+	public static List<Article> getArticles( String sectionName){
+	
 		Map<String, Object> map = new HashMap<String, Object>();
 
-		if (sectionID != null)
+		if (sectionName != null){
+			
+			Long sectionID = Section.dao.getByProperty("name",sectionName).id;
+			
 			map.put("section_key", new Key<>(Section.class, sectionID));
-
+		}		
 		return Article.dao.listByProperty(map);
 	}
 	
