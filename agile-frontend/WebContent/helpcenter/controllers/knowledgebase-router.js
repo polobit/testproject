@@ -103,6 +103,7 @@ var HelpcenterRouter = Backbone.Router.extend({
 	},
 
 	viewArticle:function(name){
+		name	= encodeURIComponent(name);
 
 		App_Helpcenter.renderHomeTemplate(function(){
 
@@ -252,7 +253,7 @@ var HelpcenterRouter = Backbone.Router.extend({
 	},
 	 
 	searchArticle: function(search_term){
-
+		search_term	= encodeURIComponent(search_term);
 		App_Helpcenter.renderHomeTemplate(function(){
 
 			//Initializing base collection with groups URL
@@ -262,7 +263,8 @@ var HelpcenterRouter = Backbone.Router.extend({
 				individual_tag_name : 'div',
 				slateKey : 'articles',
 				postRenderCallback : function(el,data) {
-					$(".search_kb").val('');
+					
+					$("#hc_query").val('');
 
 					Helpcenter_Util.setBreadcrumbPath('categorie-sections-breadcrumb', data);
 				}

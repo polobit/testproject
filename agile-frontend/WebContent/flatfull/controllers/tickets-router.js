@@ -49,7 +49,7 @@
 		"knowledgebase/section/:section_id/article/:id" : "showArticle",
 		"knowledgebase/add-section" : "addSection",
 		"knowledgebase/add-section/:id" : "addSection",
-		"knowledgebase/catogery/:categorie_id/section/:id/edit-section" : "editSection",	
+		"knowledgebase/category/:categorie_id/section/:id/edit-section" : "editSection",	
 		"knowledgebase/add-category":"addCategory",
 		"knowledgebase/:id/edit-category":"editCategory",
 
