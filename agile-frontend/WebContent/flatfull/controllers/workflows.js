@@ -88,15 +88,14 @@ var WorkflowsRouter = Backbone.Router
 					return;
 				}
 
-				// Loading icon
-				$("#content").find("#workflows-collection-container").html(LOADING_ON_CURSOR);
-
 				this.workflow_list_view = new Base_Collection_View({ 
 					url : '/core/api/workflows', 
 					restKey : "workflow", 
 					sort_collection : false,
 					templateKey : "workflows", 
 					individual_tag_name : 'tr', 
+					customLoader : true,
+					customLoaderTemplate : 'agile-app-collection-loader',
 					cursor : true, 
 					page_size : 20, 
 					global_sort_key : sortKey, 
