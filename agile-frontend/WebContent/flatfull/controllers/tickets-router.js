@@ -1251,9 +1251,9 @@
 
 				                $('#catogery', el).html($(template_ui));
 
-				                if(section_id)
-									$('#catogery option[text="'+section_id+'"]',el).attr("selected",true);
-
+				                if(section_id){
+									var section_names = $('#catogery option:contains("'+section_id+'")').attr('selected','selected');
+								}	
 								if(callback)
 					 				callback();
 			               	} );		

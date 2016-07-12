@@ -27,6 +27,7 @@ import com.agilecrm.knowledgebase.entity.Categorie;
 import com.agilecrm.knowledgebase.entity.Section;
 import com.agilecrm.knowledgebase.util.SectionUtil;
 import com.agilecrm.ticket.entitys.TicketGroups;
+import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.googlecode.objectify.Key;
 
 /**
@@ -128,8 +129,9 @@ public class SectionAPI
 	@PUT
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	public Section updateSection(Section section) throws WebApplicationException
+	public Section updateSection(Section section) throws WebApplicationException, EntityNotFoundException
 	{
+		Section dbsection = Section.dao.get(section.id) ;
 		try
 		{
 			if (StringUtils.isBlank(section.name) || section.categorie_id == null)
@@ -138,10 +140,11 @@ public class SectionAPI
 			
 
 			Section existingsection = Section.dao.getByProperty("name", section.name);
-			if (existingsection != null && !existingsection.equals(section.name)){
+			if (existingsection != null && (existingsection.name.equals(section.name)) && !(dbsection.name.equals(section.name))) {
 				throw new Exception("Section with name " + section.name
-						+ " already exists. Please choose a different name.");
+						+ " already exists. Please choose a different name." );
 			}
+			
 			
 			Key<Categorie> categorie_key = new Key<Categorie>(Categorie.class, section.categorie_id);
 			section.categorie_key = categorie_key;

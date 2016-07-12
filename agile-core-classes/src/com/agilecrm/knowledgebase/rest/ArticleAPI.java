@@ -177,7 +177,8 @@ public class ArticleAPI
 		try
 		{
 			Article existingArticle = Article.dao.getByProperty("title", article.title);
-			if (existingArticle != null && !existingArticle.title.equalsIgnoreCase(article.title)){
+			
+			if (existingArticle != null && existingArticle.title.equalsIgnoreCase(article.title)){
 				throw new Exception("Article with name " + article.title
 						+ " already exists. Please choose a different name.");
 			}
@@ -234,13 +235,15 @@ public class ArticleAPI
 	{
 		try
 		{
+			Article dbArticle = Article.dao.get(article.id);
+			
 			Article existingArticle = Article.dao.getByProperty("title", article.title);
-			if (existingArticle != null && !existingArticle.equals(article.title)){
+			if (existingArticle != null && !existingArticle.equals(article.title) && !(dbArticle.title.equalsIgnoreCase(article.title))){
 				throw new Exception("Article with name " + article.title
 						+ " already exists. Please choose a different name.");
 			}
 			
-			Article dbArticle = Article.dao.get(article.id);
+			
 			
 			
 			Key<Section> section_key = new Key<Section>(Section.class, article.section_id);

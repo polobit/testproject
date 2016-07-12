@@ -261,10 +261,10 @@ var HelpcenterRouter = Backbone.Router.extend({
 				templateKey : "helpcenter-search-articles",
 				individual_tag_name : 'div',
 				slateKey : 'articles',
-				postRenderCallback : function(el, collection) {
+				postRenderCallback : function(el,data) {
 					$(".search_kb").val('');
 
-					Helpcenter_Util.setBreadcrumbPath();
+					Helpcenter_Util.setBreadcrumbPath('categorie-sections-breadcrumb', data);
 				}
 			});
 
