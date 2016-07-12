@@ -1401,6 +1401,16 @@
 	addLandingpage : function(){
 
 			loadServiceLibrary(function(){
+			 		
+			 		$.ajax({ 
+							type : "GET", 
+							url : '/core/api/knowledgebase/KBlandingpage',
+							success: function(data){
+								console.log(data);
+								 kblpid = data[0].kbLandingpageid;
+								 kb_id = data[0].id;
+							}
+						});	
 			 	//Rendering root template
 			 	App_Ticket_Module.loadAdminsettingsTemplate(function(callback){
 	  
@@ -1414,16 +1424,11 @@
 								
 								fillSelect('template_id', '/core/api/landingpages?page_size=20', '', 
 								function(){
-											var kb_id = _agile_get_prefs('kb_id');
-											var kblpid =_agile_get_prefs("kbid");
-											$('#template_id option[value="'+kblpid+'"]',el).attr("selected",true);
-											$('#template_id',el).data('id',kb_id);
+									$('#template_id option[value="'+kblpid+'"]',el).attr("selected",true);
 																							
 								}, optionTemplate, false, el,"Select Landing Page");
 										
 							$('#template_id',el).on('change', function (e) {
-								kb_id = _agile_get_prefs('kb_id');
-    							kblpid =_agile_get_prefs("kbid");
     							var optionSelected = $("#template_id :selected").val();
 								
 								if(optionSelected == "" ){
@@ -1433,22 +1438,17 @@
 									url : '/core/api/knowledgebase/KBlandingpage/'+kb_id, 
 									success: function(data){
 										
-										$('#template_id',el).data('id','')
+										
 									}
 								});									
-									_agile_set_prefs('kbid','');
-									return;
 								}
 								var kblp_json = {}; 
 								kblp_json.kbLandingpageid = optionSelected;
-
-								
-								kblpid =_agile_get_prefs("kbid");
-								
+																
 								var type = "POST";
-								if($('#template_id',el).data('id'))	{
+								if(kb_id)	{
 									type = "PUT";
-									kblp_json.id = $('#template_id',el).data('id') ;
+									kblp_json.id = kb_id;
 								}	
 								
 								$.ajax({ 
@@ -1458,11 +1458,6 @@
 									contentType : 'application/json',
 									dataType : 'json', 
 									success: function(data){
-										$('#template_id',el).data('id',data.id)
-										_agile_set_prefs('kbid',data.kbLandingpageid);
-										if(type=="POST")
-										_agile_set_prefs('kb_id',data.id);
-										
 									}
 								});
 

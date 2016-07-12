@@ -1,6 +1,9 @@
 package com.agilecrm.knowledgebase.rest;
+import java.util.List;
+
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -10,15 +13,42 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import net.sf.json.JSON;
+
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.agilecrm.knowledgebase.entity.LandingPageKnowledgebase;
+import com.amazonaws.util.json.JSONArray;
 
 @Path("/api/knowledgebase/KBlandingpage")
 public class LandingPageKnowledgebaseAPI
 {
+	
+	@GET
+    @Produces(MediaType.APPLICATION_JSON)
+	
+	public  List<LandingPageKnowledgebase> getKbLandingpageid(){		
+		
+		try{	
+			
+			
+			List<LandingPageKnowledgebase> lpKb =  LandingPageKnowledgebase.dao.fetchAll();
+			
+			
+			return lpKb;
+	
+		}
+	    	catch(Exception e){
+				System.out.println(ExceptionUtils.getFullStackTrace(e));
+				throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+						.build());
+			}
+	}
+	
+	
+	
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)

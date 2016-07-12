@@ -47,6 +47,12 @@ public Void deletekblpid(Long id) throws EntityNotFoundException{
 
 	return null;
 	
+}
+
+@Override
+public String toString()
+{
+	return "LandingPageKnowledgebase [id=" + id + ", kbLandingpageid=" + kbLandingpageid + "]";
 }	
 
 }
