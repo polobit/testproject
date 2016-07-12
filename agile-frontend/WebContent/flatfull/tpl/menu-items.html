@@ -220,6 +220,7 @@
     </li>
 
     {{#isAdmin}}
+    {{#isRestrictedMenuScope "HELPDESK"}}  {{else}}
     <li id="ticketgroupsmenu">
     <a href="#ticket-groups">
       <i class="icon icon-users"></i>
@@ -244,6 +245,7 @@
       <span>Views</span>
     </a>
   </li>
+  {{/isRestrictedMenuScope}}
   {{/isAdmin}}
 
    {{#isRestrictedMenuScope "ACTIVITY"}} {{else}}

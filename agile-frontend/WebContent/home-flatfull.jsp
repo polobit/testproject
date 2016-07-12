@@ -601,7 +601,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
   </li>
 
   <%
-  if(domainUser.is_admin){
+  if(domainUser.is_admin && !domainUser.restricted_menu_scopes.contains(NavbarConstants.HELPDESK)){
   %>
   <li id="ticketgroupsmenu">
     <a href="#ticket-groups">
