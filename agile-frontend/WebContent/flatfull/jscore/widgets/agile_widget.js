@@ -611,8 +611,7 @@ function agile_crm_save_contact_property(propertyName, subtype, value, type)
 
 }
 
-function agile_crm_save_contact_properties(properties)
-{
+function agile_crm_save_contact_properties(properties){
 	// Reads current contact model form the contactDetailView
 	var contact_model = App_Contacts.contactDetailView.model;
 

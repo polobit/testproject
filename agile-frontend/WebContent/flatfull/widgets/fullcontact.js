@@ -47,18 +47,21 @@ function warpFullContactToAgileContact(agileContact, fullContact){
 			if(!first_name){				
 				if(contactInfo["givenName"]){
 					first_name = contactInfo["givenName"];
+					resultArray.push("First Name");
+					newProperties.push(setPropertyForContact("first_name", first_name, null));
 				}else{
 					first_name = contactInfo["fullName"];
+					resultArray.push("First Name");
+					newProperties.push(setPropertyForContact("first_name", first_name, null));
 				}
-				resultArray.push("First Name");
-				newProperties.push(setPropertyForContact("first_name", first_name, null));
 			}
 
 			last_name = getPropertyValue(properties, "last_name");
 			if(!last_name){
 				if(contactInfo["familyName"]){
 					last_name = contactInfo["familyName"];	
-					agile_crm_save_contact_property("last_name", "", last_name, "SYSTEM");
+					resultArray.push("Last Name");
+					newProperties.push(setPropertyForContact("last_name", last_name, null));
 				}				
 			}
 		} 
@@ -78,11 +81,13 @@ function warpFullContactToAgileContact(agileContact, fullContact){
 			}
 		}
 
-		//App_Contacts.contactDetailView.model.set(new BaseModel());
+		if(newProperties.length > 0){
+			agile_crm_save_contact_properties(newProperties);			
 
-		$.each(resultArray, function(index,value){
-			result += "<p>"+value+"</p>";
-		});
+			$.each(resultArray, function(index,value){
+				result += "<p>"+value+"</p>";
+			});
+		}
 
 	}
 
