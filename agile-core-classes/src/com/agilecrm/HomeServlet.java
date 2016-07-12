@@ -77,6 +77,10 @@ public class HomeServlet extends HttpServlet
 	}
 
 	req.setAttribute(FIRST_TIME_USER_ATTRIBUTE, true);
+	
+	// Delete first time user session attribute
+	req.getSession().removeAttribute(RegisterServlet.IS_NEWLY_REGISTERED_USER_ATTR);
+	
 
 	// It load defaults. If request is for the first user in the domain then
 	// default are created or else only tour cookie is set
@@ -155,8 +159,17 @@ public class HomeServlet extends HttpServlet
      */
     public boolean isNewUser(HttpServletRequest request)
     {
-    Boolean isNewUserAttr = (Boolean) request.getAttribute(RegisterServlet.IS_NEWLY_REGISTERED_USER_ATTR);
+    System.out.println("isNewUser = ");
     
+    Boolean isNewUserSessionAttr = (Boolean) request.getSession().getAttribute(RegisterServlet.IS_NEWLY_REGISTERED_USER_ATTR);
+    System.out.println("isNewUserSessionAttr = " + isNewUserSessionAttr);
+    if( isNewUserSessionAttr != null && isNewUserSessionAttr.booleanValue() == true )
+    {
+    	return true;
+    }
+    
+    Boolean isNewUserAttr = (Boolean) request.getAttribute(RegisterServlet.IS_NEWLY_REGISTERED_USER_ATTR);
+    System.out.println("isNewUser = " + isNewUserAttr);
     if( isNewUserAttr != null && isNewUserAttr.booleanValue() == true )
     {
     	return true;

@@ -275,6 +275,9 @@ public class RegisterServlet extends HttpServlet
 	// Identify this user as being a newly registered user in HomeServlet.java
 	request.setAttribute(IS_NEWLY_REGISTERED_USER_ATTR, new Boolean(true));
 	
+	// New user param to save defaults
+	request.getSession().setAttribute(IS_NEWLY_REGISTERED_USER_ATTR, new Boolean(true));
+	
 	// Set misc values at Register before sending user to home page.
 	LoginUtil.setMiscValuesAtLogin(request, domainUser);
 	
