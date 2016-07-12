@@ -486,10 +486,10 @@ $(function()
 		$("#chrome-extension-modal").modal('show');
 	});
 
-	  $("#chrome-extension-modal").on('click',".chromeExtension",function(e){
+	  $('body').on('click',".chromeExtension",function(e){
 	  	// e.stopImmediatePropagation();
 	  	e.stopPropagation();
-
+	  	//$("#chrome-extension-modal").addClass("hide")
 	  	console.log("before the chrome installation");
 	  	try{
 	  		chrome.webstore.install("https://chrome.google.com/webstore/detail/eofoblinhpjfhkjlfckmeidagfogclib", 
