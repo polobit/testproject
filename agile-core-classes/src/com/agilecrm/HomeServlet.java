@@ -69,6 +69,7 @@ public class HomeServlet extends HttpServlet
 	    return;
 	}
 
+	System.out.println("setUpAgileUser inside");
 	// Create new user only if this user is not newly registered user
 	if( req.getAttribute(RegisterServlet.IS_NEWLY_REGISTERED_USER_ATTR) == null )
 	{
@@ -155,12 +156,17 @@ public class HomeServlet extends HttpServlet
      */
     public boolean isNewUser(HttpServletRequest request)
     {
+    System.out.println("isNewUser = ");
+    
     Boolean isNewUserAttr = (Boolean) request.getAttribute(RegisterServlet.IS_NEWLY_REGISTERED_USER_ATTR);
     
+    System.out.println("isNewUser = " + isNewUserAttr);
     if( isNewUserAttr != null && isNewUserAttr.booleanValue() == true )
     {
     	return true;
     }
+    
+    System.out.println("AgileUser.getCurrentAgileUser()");
     
 	// Gets current AgileUser
 	return AgileUser.getCurrentAgileUser() == null;
@@ -239,6 +245,7 @@ public class HomeServlet extends HttpServlet
     	    return;
     	}
 
+    	System.out.println("setUpAgileUser");
     	// If user is new user it will create new AgileUser and set cookie for
     	// initial page tour. It also calls to initialize defaults, if user is
     	// first user in the domain.
