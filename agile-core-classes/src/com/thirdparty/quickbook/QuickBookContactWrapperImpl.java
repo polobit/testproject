@@ -27,7 +27,7 @@ public class QuickBookContactWrapperImpl extends ContactWrapper
     public void wrapContact()
     {
 	customer = (JSONObject) object;
-
+	System.out.println("customer in wrap contact is " + customer);
     }
 
     /*
