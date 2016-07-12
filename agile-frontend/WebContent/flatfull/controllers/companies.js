@@ -13,7 +13,7 @@ var CompaniesRouter = Backbone.Router
 	routes : {
 	
 		/* Companies */
-		"companies" : "companies",
+		"companies" : "companiesNew",
 	
 		"company/:id" : "companyDetails",
 		
@@ -607,5 +607,23 @@ var CompaniesRouter = Backbone.Router
 			$("#companiesmenu").addClass("active");
 
 		}, master_record.type);	
+	},
+
+	companiesNew : function(tag_id)
+	{
+		$('#content').html('<div id="companies-listener-container"></div>');
+		var companiesHeader = new Contacts_Events_View({ data : {}, template : "companies-header", isNew : true,
+			postRenderCallback : function(el)
+			{
+				companies_view_loader.buildCompaniesView(el, tag_id);
+				
+				companies_view_loader.setUpCompaniesCount(el);
+			} 
+		});
+		$('#companies-listener-container').html(companiesHeader.render().el);
+
+		$(".active").removeClass("active");
+		$("#companiesmenu").addClass("active");
+		$('[data-toggle="tooltip"]').tooltip();
 	}
 });

@@ -30,6 +30,8 @@ var Contacts_Events_View = Base_Model_View.extend({
     	'click .contacts-view' : 'toggleContactsView',
     	'click #contactTabelView' : 'toggleContactsListView',
     	'click .contactcoloumn' : 'addOrRemoveContactColumns',
+    	'click #companiesTabelView' : 'toggleCompaniesListView',
+    	'click .companycoloumn' : 'addOrRemoveCompanyColumns',
     	
     },
 
@@ -161,7 +163,7 @@ var Contacts_Events_View = Base_Model_View.extend({
 		filter_name = $(e.currentTarget).attr('data');
 
 		COMPANIES_HARD_RELOAD=true;
-		App_Companies.companies();
+		companies_view_loader.getCompanies(App_Companies.companyViewModel, $('#companies-listener-container'));
 		return;
 		// /removed old code from below,
 		// now filters will work only on contact, not company
@@ -300,6 +302,7 @@ var Contacts_Events_View = Base_Model_View.extend({
 			contacts_view_loader.getContacts(App_Contacts.contactViewModel, $("#contacts-listener-container"), _agile_get_prefs("contacts_tag"));
 			return;
 		}
+		$(".thead_check", $("#contacts-listener-container")).prop("checked", false);
 		contacts_view_loader.getContacts(App_Contacts.contactViewModel, $("#contacts-listener-container"));
     },
 
@@ -315,6 +318,7 @@ var Contacts_Events_View = Base_Model_View.extend({
     		$(e.currentTarget).find("i").addClass("fa fa-ellipsis-h");
     	}
     	$(e.currentTarget).parent().parent().toggleClass("compact");
+    	$(".thead_check", $("#contacts-listener-container")).prop("checked", false);
 		contacts_view_loader.getContacts(App_Contacts.contactViewModel, $("#contacts-listener-container"));
     },
 
@@ -341,6 +345,50 @@ var Contacts_Events_View = Base_Model_View.extend({
 				App_Contacts.contactViewModel = data;
 				contacts_view_loader.fetchHeadings(function(modelData){
 					contacts_view_loader.getContacts(modelData, $("#contacts-listener-container"));
+				});
+			} 
+		});
+    },
+
+    toggleCompaniesListView : function(e){
+    	if(_agile_get_prefs("companyTabelView")){
+    		_agile_delete_prefs("companyTabelView");
+    		$(e.currentTarget).find("i").removeClass("fa fa-ellipsis-h");
+    		$(e.currentTarget).find("i").addClass("fa fa-navicon");
+    	}
+    	else{
+    		_agile_set_prefs("companyTabelView","true");
+    		$(e.currentTarget).find("i").removeClass("fa fa-navicon");
+    		$(e.currentTarget).find("i").addClass("fa fa-ellipsis-h");
+    	}
+    	$(e.currentTarget).parent().toggleClass("compact");
+    	$(".thead_check", $("#companies-listener-container")).prop("checked", false);
+		companies_view_loader.getCompanies(App_Companies.companyViewModel, $("#companies-listener-container"));
+    },
+
+    addOrRemoveCompanyColumns : function(e){
+    	e.preventDefault();
+    	var $checkboxInput = $(e.currentTarget).find("input");
+    	if($checkboxInput.is(":checked"))
+    	{
+    		$checkboxInput.prop("checked", false);
+    	}
+    	else
+    	{
+    		$checkboxInput.prop("checked", true);
+    	}
+    	var array = serializeForm('companies-static-fields');
+		$.ajax({
+			url : 'core/api/contact-view-prefs/company',
+			type : 'PUT',
+			contentType : 'application/json',
+			dataType : 'json',
+			data :JSON.stringify(array),
+			success : function(data)
+			{
+				App_Companies.companyViewModel = data;
+				companies_view_loader.fetchHeadings(function(modelData){
+					companies_view_loader.getCompanies(modelData, $("#companies-listener-container"));
 				});
 			} 
 		});

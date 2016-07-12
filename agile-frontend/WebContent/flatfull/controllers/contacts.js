@@ -1406,6 +1406,8 @@ $('#content').html('<div id="import-contacts-event-listener"></div>');
 				contacts_view_loader.buildContactsView(el, tag_id);
 				
 				contacts_view_loader.setUpContactsCount(el);
+				
+				loadPortlets('Contacts',el);
 			} 
 		});
 		$('#contacts-listener-container').html(contactsHeader.render().el);

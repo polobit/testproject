@@ -188,7 +188,7 @@ function submitLhsFilter()
 			//_agile_set_prefs('company_filter', "Companies");
 		}
 		COMPANIES_HARD_RELOAD=true;
-		App_Companies.companies(undefined, undefined, undefined, true);
+		companies_view_loader.getCompanies(App_Companies.companyViewModel, $('#companies-listener-container'));
 	} else if(contact_type == 'VISITOR') {
 		_agile_delete_prefs('visitor_filter');
 		_agile_delete_prefs('dynamic_visitors_filter');
@@ -281,7 +281,8 @@ $('#' + container_id).on('click', '#clear-lhs-company-filters', function(e)
 	e.preventDefault();
 	_agile_delete_prefs('dynamic_company_filter');
 	COMPANIES_HARD_RELOAD=true;
-	App_Companies.companies();
+	clearLhsFilters();
+	companies_view_loader.getCompanies(App_Companies.companyViewModel, $('#companies-listener-container'));
 });
 $('#' + container_id).on('click', '#clear-lhs-segmentation-filters', function(e)
 {

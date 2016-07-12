@@ -1,7 +1,7 @@
 <script id="contacts-grid-view-model-template" type="text/html">
-	<div class="custom-animated custom-fadeInUp">
-		<div class="contacts-grid-view-temp p-b col-md-4 {{id}}">
-			{{#if_contact_type "PERSON"}}
+	{{#if_contact_type "PERSON"}}
+		<div class="custom-animated custom-fadeInUp">
+			<div class="contacts-grid-view-temp p-b col-md-4 {{id}}">
 				<div class="b r-5x p-sm bg-white" id="{{id}}" style="height: 110px;">
 					<div class="left pos-abs">
 						<label class="i-checks i-checks-sm">
@@ -47,9 +47,9 @@
 						{{/each}}
 					</div>
 				</div>
-			{{/if_contact_type}}
+			</div>
 		</div>
-	</div>
+	{{/if_contact_type}}
 </script>
 
 <script id="contacts-grid-view-collection-template" type="text/html">

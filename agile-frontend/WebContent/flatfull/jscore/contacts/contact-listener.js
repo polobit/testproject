@@ -1,18 +1,7 @@
 var timer = undefined;
 
   	$(function(){
-		$("body").on('click','#companiesTabelView',function(el){
-
-		if(_agile_get_prefs("companyTabelView"))
-			_agile_delete_prefs("companyTabelView");
-		else
-			_agile_set_prefs("companyTabelView","true");
-
-		COMPANIES_HARD_RELOAD = true;
-		App_Companies.companies();
-
-		});
-
+		
  		$("body").on("click", ".toggle-contact-filters", function(b) {
             if (_agile_get_prefs("hide_contacts_lhs_filter")) {
                 _agile_delete_prefs("hide_contacts_lhs_filter");
@@ -35,24 +24,6 @@ var timer = undefined;
             }
             
         });
-
-
-			$('body').on('click','.companycoloumn',function(e){
-				var array = serializeForm('companies-static-fields');
-				
-				$.ajax({
-					url : 'core/api/contact-view-prefs/company',
-					type : 'PUT',
-					contentType : 'application/json',
-					dataType : 'json',
-					data :JSON.stringify(array),
-					success : function(data)
-						{
-							location.reload()
-							
-						} 
-					});
-			});
 
 	$('body').off('mouseover','.popover_contact');
 		$('body').on('mouseover','.popover_contact',function(e){
