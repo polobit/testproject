@@ -480,6 +480,30 @@ $(function()
 	 		highlight_event();
 	  		
 	  });
+	  $("body").on('click','#chrome-extension',function(e){
+		
+		$("#chrome-extension-modal").html(getTemplate("chrome-modal"));
+		$("#chrome-extension-modal").modal('show');
+	});
+
+	  $("#chrome-extension-modal").on('click',".chromeExtension",function(e){
+	  	// e.stopImmediatePropagation();
+	  	e.stopPropagation();
+
+	  	console.log("before the chrome installation");
+	  	try{
+	  		chrome.webstore.install("https://chrome.google.com/webstore/detail/eofoblinhpjfhkjlfckmeidagfogclib", 
+		        function(d){
+		          console.log("installed")
+		        },function(e){
+		          console.log("not installed: "+ e)
+		        });
+	  	}catch(e){
+	  		console.log(e);
+	  	}
+      	
+      	console.log("after the chrome installation")
+	  })
 
 	/**
 	 * Sets the start time with current time and end time half an hour more than
