@@ -659,8 +659,8 @@ var ContactsRouter = Backbone.Router.extend({
 
 			load_contact_tab(el, contact.toJSON());
 
-			loadWidgets(el, contact.toJSON());
-						
+			loadWidgets(el, contact.toJSON(), "widgets");
+			
 			/*
 			 * // To get QR code and download Vcard
 			 * $.get('/core/api/VCard/' + contact.toJSON().id,

@@ -205,7 +205,7 @@ public abstract class ContactSyncService implements IContactSyncService
 	    {
 		e.printStackTrace();
 	    }
-
+	System.out.println("contact wrapper is " + contactWrapper);
 	return contactWrapper.getWrapper(object).buildContact();
     }
 
