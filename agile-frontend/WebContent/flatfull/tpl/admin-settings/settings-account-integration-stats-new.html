@@ -84,12 +84,12 @@
 
 </script>
 
-<script id="email-stats-new-template" type="text/html" >
+<script id="email-stats-new-template" type="text/html">
 
 <div class="m-b-sm">
 <!--<h4 class="h4 pull-left"> Email Stats </h4>-->
 				<div  class="pull-right">
-					{{#if this.id}}Reputation {{{get_subaccount_reputation reputation}}}
+					{{#if this.id}}<span>Reputation</span>{{{get_subaccount_reputation reputation}}}
 					{{/if}}
 				</div>
 <div class="clearfix"></div>
@@ -273,4 +273,14 @@
 </div>
 </div>
 </div>
+</script>
+
+<script id="reputation-progress-template" type="text/html" >
+	<span style="padding-bottom:3px !important" class="text-muted pull-right">{{reputation}}</span>
+	<div class="progress" style="width:300px;height:5px !important;margin-bottom:10px !important" title="{{value}}%">
+        <div class="progress-bar {{badge}}" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: {{value}}%;">
+            <!-- <div class="sr-only">{{value}}% {{reputation}}</div> -->
+        </div>
+        <!-- <span class="progress-completed">{{value}}% ({{reputation}})</span> -->
+    </div>
 </script>
