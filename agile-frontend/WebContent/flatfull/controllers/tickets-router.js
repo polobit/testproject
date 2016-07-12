@@ -42,10 +42,10 @@
          /*Help center Routes*/
 		"knowledgebase" : "categories",
         "knowledgebase/:id/sections":"sections",  
-       	"knowledgebase/articles/:id":"articles",
+       	"knowledgebase/:name/articles":"articles",
 		"knowledgebase/add-article" : "addArticle",
 		"knowledgebase/add-article/:id" : "addArticle",
-		"knowledgebase/section/:section_id/edit-article/:article_id" : "editArticle",	
+		"knowledgebase/section/:section_id/edit-article/:name" : "editArticle",	
 		"knowledgebase/section/:section_id/article/:id" : "showArticle",
 		"knowledgebase/add-section" : "addSection",
 		"knowledgebase/add-section/:id" : "addSection",
@@ -1126,7 +1126,7 @@
 		});
 	},
     
-    articles: function(section_id){
+    articles: function(name){
 
 		loadServiceLibrary(function(){
 		 	//Rendering root template
@@ -1134,7 +1134,7 @@
 				//Initializing base collection with groups URL
 			App_Ticket_Module.articlesCollection = new Base_Collection_View({
 
-				url : '/core/api/knowledgebase/article?section_id=' + section_id, 		
+				url : '/core/api/knowledgebase/article?section_name=' + name, 		
 				templateKey : "ticket-helpcenter-articles",
 				individual_tag_name : 'tr',
 				sort_collection : true, 
@@ -1252,7 +1252,7 @@
 				                $('#catogery', el).html($(template_ui));
 
 				                if(section_id)
-									$('#catogery option[value="'+section_id+'"]',el).attr("selected",true);
+									$('#catogery option[text="'+section_id+'"]',el).attr("selected",true);
 
 								if(callback)
 					 				callback();
@@ -1273,7 +1273,7 @@
 
 	},
 
-	editArticle : function(section_id,article_id){
+	editArticle : function(section_id,name){
 
 		loadServiceLibrary(function(){
 		 	//Rendering root template
@@ -1281,7 +1281,7 @@
 
 		 		var editarticleView = new Base_Model_View({
  				isNew : false, 
- 				url : "/core/api/knowledgebase/article/" +article_id,
+ 				url : "/core/api/knowledgebase/article/" +name,
  				template : "ticket-helpcenter-add-article",
  				window : "back",
 		        
@@ -1373,6 +1373,7 @@
 
     editSection : function(category_id,section_id){
 
+    	var name = $("#"+section_id).data("id");
 		loadServiceLibrary(function(){
 		 	//Rendering root template
 		 	App_Ticket_Module.loadAdminsettingsTemplate(function(callback){
@@ -1380,7 +1381,7 @@
 				var editSectionView = new Base_Model_View({
 					isNew : false,
 					template : "ticket-helpcenter-add-section",
-					url : "/core/api/knowledgebase/section?id=" + section_id,
+					url : "/core/api/knowledgebase/section?name=" + name,
 					window:'back',
 				    postRenderCallback : function(el){
 				        var optionsTemplate = "<option value={{id}}>{{name}}</option>";

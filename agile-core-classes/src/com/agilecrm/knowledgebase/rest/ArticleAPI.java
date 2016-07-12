@@ -177,7 +177,7 @@ public class ArticleAPI
 		try
 		{
 			Article existingArticle = Article.dao.getByProperty("title", article.title);
-			if (existingArticle != null && !existingArticle.equals(article.title)){
+			if (existingArticle != null && !existingArticle.title.equalsIgnoreCase(article.title)){
 				throw new Exception("Article with name " + article.title
 						+ " already exists. Please choose a different name.");
 			}

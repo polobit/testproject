@@ -2,13 +2,16 @@
 <td class="hide data" data="{{id}}">{{id}}</td>
 	<td>
      <div class="text-ellipsis" style="max-width: 20em;">
-           {{title}}
+      <a href="#knowledgebase/section/{{section_id}}/edit-article/{{title}}">{{title}}
+      </a>
                             
      </div>
   </td>
   <td>
     <div class="text-ellipsis">
-       {{domainUser.name}}
+      <a href="#knowledgebase/section/{{section_id}}/edit-article/{{title}}">
+      {{domainUser.name}}
+      </a>
     </div>   
   </td>  
 	<td>
@@ -16,7 +19,9 @@
       <small class="edit-hover text-muted"> 
         <i class="fa fa-clock-o m-r-xs"></i>
       <span>Last updated on&nbsp;</span>
+         <a href="#knowledgebase/section/{{section_id}}/edit-article/{{title}}"> 
           <time class="b-b-dotted" datetime="{{epochToHumanDate "" updated_time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM" updated_time}}</time>
+          </a>
       </small>
     </div>
   </td> 
