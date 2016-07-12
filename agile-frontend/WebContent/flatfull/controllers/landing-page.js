@@ -12,36 +12,39 @@ var LandingPageRouter = Backbone.Router.extend({
 	getListOfLandingPages : function()
     {
     $('#content').html("<div id='landingpages-listeners'></div>");
-    // Render static template
-    //$("#landingpages-listeners").html(getTemplate("landingpages-static-container"));   
-        var sortKey = _agile_get_prefs("landingpage_sort_menu");
-            if(sortKey == undefined || sortKey == null)
-            {
-                sortKey = "name_dummy";
-                _agile_set_prefs("landingpage_sort_menu", sortKey);
-            }  
-        var that = this;    
-        var landingpagesStaticModelview = new LandingPages_Top_Header_Modal_Events
-        ({
-        template : "landingpages-static-container",
-        isNew : true,
-        model : new Backbone.Model({"sortKey" : sortKey}),
-        postRenderCallback : function(el)
-        {
-        includeTimeAgo(el);
-        var staticcollection = ($("#content"),el) ;
-        that.loadLandingPagesCollection(staticcollection);
-        }
-        });
-        $("#content").find("#landingpages-listeners").html(landingpagesStaticModelview.render().el);
-       	},
-    
+
+        getTemplate('landingpages-static-container', {}, undefined, function(template_ui) {
+                    
+                    $("#content").html(getTemplate("landingpages-static-container"));
+                    // Add top view
+                    var sortKey = _agile_get_prefs("landingpage_sort_menu");
+                    if(sortKey == undefined || sortKey == null){
+                        sortKey = "name";
+                        _agile_set_prefs("landingpage_sort_menu", sortKey);
+                    }
+
+                    var that = this;
+                    var landingpagesStaticModelview = new  LandingPages_Top_Header_Modal_Events({
+                        template : 'landing-pages-top-header',
+                        isNew : true,
+                        model : new Backbone.Model({"sortKey" : sortKey}),
+                        postRenderCallback : function(el){
+                            // Add collection view
+                            console.log("Load collection");
+                            App_LandingPageRouter.loadLandingPagesCollection($("#content"));
+                        }
+                    });
+
+                    $("#content").find("#Landingpages-top-view").html(landingpagesStaticModelview.render().el);
+
+                }, $("#content"));
+            },
     loadLandingPagesCollection : function(el){
 
         var sortKey = _agile_get_prefs("landingpage_sort_menu");
                 if (this.LandingPageCollectionView && this.LandingPageCollectionView.options.global_sort_key == sortKey && this.LandingPageCollectionView.collection && this.LandingPageCollectionView.collection.length > 0)
                 {
-                    $(el).find("#landingpages-collection-container").html(this.LandingPageCollectionView.render(true).el);
+                    $(el).find("#landing-pages-collection-container").html(this.LandingPageCollectionView.render(true).el);
                     return;
                 }
         this.LandingPageCollectionView = new landingpage_collection_events({ 
@@ -67,7 +70,7 @@ var LandingPageRouter = Backbone.Router.extend({
                 includeTimeAgo(el);
             }});
         this.LandingPageCollectionView.collection.fetch();
-       $("#content").find("#landingpages-collection-container").html(App_LandingPageRouter.LandingPageCollectionView.el);
+       $("#content").find("#landing-pages-collection-container").html(App_LandingPageRouter.LandingPageCollectionView.el);
     },
 
 	showLandingPageBuilder : function() {
