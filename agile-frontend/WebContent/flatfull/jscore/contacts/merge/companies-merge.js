@@ -241,11 +241,11 @@ function merge_duplicate_companies(master_record, properties, selected_fields, c
 		}
 	}
 	master_record.set({ "properties" : properties });
-	merge_related_entity_in_master_record(master_record, dup_companies_array);
+	merge_related_entity_in_master_record_companies(master_record, dup_companies_array);
 }
 
 
-function merge_related_entity_in_master_record(master_record, duplicate_companies){
+function merge_related_entity_in_master_record_companies(master_record, duplicate_companies){
 	master_record.save({}, { url : '/core/api/contacts/companies/merge/'+ duplicate_companies.toString(), 
 		success : function(){
 			$(".companies-merge-loading").remove();
