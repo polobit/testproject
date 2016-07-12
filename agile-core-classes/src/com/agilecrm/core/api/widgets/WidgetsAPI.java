@@ -440,7 +440,24 @@ public class WidgetsAPI {
 								DomainUser localDomainUser = agileLocalUser.getDomainUser();
 								
 								//Making admin widget clone for new users.
-								Widget widget = WidgetUtil.getWidget(widgetName, agileUser.id);								
+								Widget widget = WidgetUtil.getWidget(widgetName, agileUser.id);	
+								
+								if(widget == null){
+									Widget customwidget = WidgetUtil.getCustomWidget(widgetName, agileLocalUser.id);
+									widget = new Widget();
+									widget.prefs = customwidget.prefs;
+									widget.logo_url = customwidget.logo_url;
+									widget.mini_logo_url = customwidget.mini_logo_url;
+									widget.description = customwidget.description;
+									widget.display_name = customwidget.display_name;
+									widget.name = customwidget.name;
+									widget.fav_ico_url = customwidget.fav_ico_url;
+									widget.integration_type = customwidget.integration_type;									
+									widget.script = customwidget.script;
+									widget.script_type = customwidget.script_type;
+									widget.url = customwidget.url;
+								}
+								
 								if(localDomainUser != null && localDomainUser.is_admin){
 									Widget adminWidget = WidgetUtil.getWidget(widgetName, agileLocalUser.id);
 									if(adminWidget != null){
