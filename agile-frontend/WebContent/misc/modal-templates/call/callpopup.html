@@ -119,7 +119,7 @@ margin-bottom: 5px!important;
 				<div id="popup-content">
 
 					<p>Looking to talk to our friendly reps? You can call from here.</p>
-					<button data-webruleid='' onclick="parent._agile_call_webrules(this,document.getElementById('agile-twilioio-dialpad'));">Call Now</button>
+					<button data-webruleid onclick="parent._agile_call_webrules(this,document.getElementById('agile-twilioio-dialpad'));">Call Now</button>
 
 				</div>
 				<div id="popup-close">x</div>
@@ -183,6 +183,7 @@ margin-bottom: 5px!important;
     z-index: 1;
     left: 1rem;
     bottom: -13px;
+    z-index: 9999;
 }
 
 #campaign_dialpad_btns input[type="button"]:hover, .dialpad_btns input[type="button"]:hover {
