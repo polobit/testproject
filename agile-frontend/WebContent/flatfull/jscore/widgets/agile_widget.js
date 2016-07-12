@@ -611,6 +611,22 @@ function agile_crm_save_contact_property(propertyName, subtype, value, type)
 
 }
 
+function agile_crm_save_contact_properties(properties)
+{
+	// Reads current contact model form the contactDetailView
+	var contact_model = App_Contacts.contactDetailView.model;
+
+	contact_model.set("properties", properties);
+
+	console.log(properties);
+
+	contact_model.url = "core/api/contacts"
+
+	// Save updated contact model
+	contact_model.save()
+
+}
+
 /**
  * Saves the given property to widget_properties field in contact as key value
  * pair, which is saved as JSON string object in field name widget_properties.

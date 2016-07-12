@@ -1,7 +1,8 @@
  var fullContactObj = {};
 
 function warpFullContactToAgileContact(agileContact, fullContact){
-	var result = "Called warpper";
+	var result = "";
+	var resultArray = [];
 	if(agileContact && fullContact){
 		//Agile contact data;
 		var properties = agileContact.properties;
@@ -49,6 +50,7 @@ function warpFullContactToAgileContact(agileContact, fullContact){
 				}else{
 					first_name = contactInfo["fullName"];
 				}
+				resultArray.push("First Name");
 				newProperties.push(setPropertyForContact("first_name", first_name, null));
 			}
 
@@ -56,8 +58,8 @@ function warpFullContactToAgileContact(agileContact, fullContact){
 			if(!last_name){
 				if(contactInfo["familyName"]){
 					last_name = contactInfo["familyName"];	
-					newProperties.push(setPropertyForContact("last_name", last_name, null));
-				}
+					agile_crm_save_contact_property("last_name", "", last_name, "SYSTEM");
+				}				
 			}
 		} 
 
@@ -69,14 +71,18 @@ function warpFullContactToAgileContact(agileContact, fullContact){
 			        var companyObj = organisationArray[index];
 				    if(companyObj["isPrimary"] == true){
 					  company = companyObj["name"];
+					  resultArray.push("Company");
 					  newProperties.push(setPropertyForContact("company", company, null));
 				    }	
 				});
 			}
 		}
 
-		//console.log(first_name + " : "+ last_name + " : "+ company);
 		//App_Contacts.contactDetailView.model.set(new BaseModel());
+
+		$.each(resultArray, function(index,value){
+			result += "<p>"+value+"</p>";
+		});
 
 	}
 
@@ -95,12 +101,12 @@ function loadFullContactData(apikey, emailID){
  					displayData = warpFullContactToAgileContact(currentContactJson, contactObj);
 
  					if(displayData.length > 0){
- 						displayData = "<span class='p-sm'>"+displayData+"</span>";
+ 						displayData = "<div class='p-sm'>"+displayData+"</div>";
  					}else{
- 						displayData = "<span class='p-sm'>Nothing to update</span>";
+ 						displayData = "<div class='p-sm'>Nothing to update</div>";
  					}
  				}else{
- 					displayData = "<span class='p-sm'>"+contactObj.message+"</span>";
+ 					displayData = "<div class='p-sm'>"+contactObj.message+"</div>";
  				}
 				$('#FullContact').html(displayData);
 			}            
