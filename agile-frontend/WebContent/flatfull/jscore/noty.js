@@ -11,7 +11,7 @@ function showUpgradeNoty()
 	{
 		$(".free-user-alert-message").hide();
 	}else{
-		$(".free-user-alert-message").show();
+		//$(".free-user-alert-message").show();
 	}
 
 	// Returns if account if paid account

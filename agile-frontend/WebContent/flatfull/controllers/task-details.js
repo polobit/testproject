@@ -444,10 +444,9 @@ function update_task(value)
 		showNoteOnForm("updateTaskForm", value.notes);
 
 	});
-	//deserializeForm(value, $("#updateTaskForm"));
-	$('.update-task-timepicker').val(fillTimePicker(value.due));
-
 	
+	// deserializeForm(value, $("#updateTaskForm"));
+	$('.update-task-timepicker', $("#updateTaskModal")).val(fillTimePicker(value.due));	
 }
 
 /**
@@ -528,7 +527,7 @@ function saveTaskNote(form, noteModal, element, note)
 				// Replace contacts object with contact ids
 				var taskJSON = taskDetailView.toJSON();
 				var contacts = [];
-				$.each(taskJSON.contacts, function(index, contact)
+				$.each(taskJSON.taskContacts, function(index, contact)
 				{
 					contacts.push(contact.id);
 				});

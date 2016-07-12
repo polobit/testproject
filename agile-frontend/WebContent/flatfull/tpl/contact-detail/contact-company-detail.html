@@ -829,7 +829,10 @@
 			<ul class="nav nav-tabs  bg-light" id="contactDetailsTab">
 				<li class="active"><a data-toggle="tab" href="#company-contacts">Contacts</a></li>
 				<li class=""><a data-toggle="tab" href="#company-deals">Deals</a></li>
+				{{#isNewVersionDomainUser}} {{else}}
 				<li class=""><a data-toggle="tab" href="#company-cases">Cases</a></li>
+				{{/isNewVersionDomainUser}}
+
                 <li class=""><a data-toggle="tab" href="#company-notes">Notes</a></li>
                 <li class=""><a data-toggle="tab" role="tab" href="#company-events">Events</a></li>
 				<li class=""><a data-toggle="tab" role="tab" href="#company-tasks">Tasks</a></li>
