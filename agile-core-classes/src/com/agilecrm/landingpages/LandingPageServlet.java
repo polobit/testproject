@@ -12,8 +12,11 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.agilecrm.account.APIKey;
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.util.DomainUserUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.utils.SystemProperty;
+import com.googlecode.objectify.Key;
 
 /**
  * Servlet implementation class LandingPageServlet
@@ -77,8 +80,10 @@ public class LandingPageServlet extends HttpServlet {
 				
 				NamespaceManager.set(lpUtil.requestingDomain);
 				
-				ObjectifyGenericDao<APIKey> dao = new ObjectifyGenericDao<APIKey>(APIKey.class);
-				APIKey apiKey = dao.ofy().query(APIKey.class).get();
+				Key<DomainUser> userKey = DomainUserUtil.getDomainOwnerKey(lpUtil.requestingDomain);
+				Long domainUserId = userKey.getId();
+				APIKey apiKey = APIKey.getAPIKeyRelatedToUser(domainUserId);
+				
 				if(apiKey != null && apiKey.js_api_key != null) {
 					analyticsCode = String.format(analyticsCode, apiKey.js_api_key);
 				}					
