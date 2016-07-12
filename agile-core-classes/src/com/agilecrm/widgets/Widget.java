@@ -268,6 +268,7 @@ public class Widget {
 				if (widgetList != null && widgetList.size() > 0) {
 					for (Widget widget : widgetList) {						
 						widget.prefs = this.prefs;
+						widget.widget_type = this.widget_type;
 						widget.logo_url = this.logo_url;
 						widget.mini_logo_url = this.mini_logo_url;
 						widget.description = this.description;
