@@ -614,8 +614,6 @@ function callscript_save_widget_prefs() {
 	
 }
 
-
-
 function build_custom_widget_form(el)
 {
 	var divClone;

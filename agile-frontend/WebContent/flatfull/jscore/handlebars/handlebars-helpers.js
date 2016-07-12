@@ -7512,6 +7512,19 @@ Handlebars.registerHelper('getSuggestionName', function(suggestionId){
 		}		
 });
 
+Handlebars.registerHelper('stringifyObject', function(data){
+	var obj ={};
+	obj.id = data.id;
+	obj.name = data.name;
+	if(data.display_name){
+		obj.display_name = data.display_name;
+	}else{
+		obj.display_name = data.name;
+	}
+	obj.listOfUsers = data.listOfUsers;
+	return JSON.stringify(obj);
+});
+
 Handlebars.registerHelper('removeSpecialCharacter',function(value){
           var value = value.replace(/[^\w\s]/gi, '-');
           return value;

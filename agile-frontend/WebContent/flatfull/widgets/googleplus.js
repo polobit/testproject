@@ -292,19 +292,21 @@ function startGooglePlusWidget(contact_id) {
 	// handling all events related to this widget
 
 	// Deletes GooglePlus profile on click of delete button in template
-	$("#widgets").on("click", "#GooglePlus_plugin_delete", function(e)
+	$("#"+WIDGET_PARENT_ID).off("click", "#GooglePlus_plugin_delete");
+	$("#"+WIDGET_PARENT_ID).on("click", "#GooglePlus_plugin_delete", function(e)
 	{
-		e.preventDefault();
-		contactGooglePlusId = agile_crm_get_contact_property_by_subtype('website', 'GOOGLE-PLUS');
-
-		agile_crm_delete_contact_property_by_subtype('website', 'GOOGLE-PLUS', contactGooglePlusId, function(data)
-		{
+		e.preventDefault();		
+		contactGooglePlusId = agile_crm_get_contact_property_by_subtype('website', 'GOOGLE-PLUS');	
+		if(contactGooglePlusId){
+			$('#GooglePlus').html(LODING_IMAGE);	
+		}	
+		agile_crm_delete_contact_property_by_subtype('website', 'GOOGLE-PLUS', contactGooglePlusId, function(data){
 			showMatchedPeople(searchDetails['keywords']);
 		});
-
 	});
 
-	$("#widgets").on("click", ".peoplesearch", function(e)
+	$("#"+WIDGET_PARENT_ID).off("click", ".peoplesearch");
+	$("#"+WIDGET_PARENT_ID).on("click", ".peoplesearch", function(e)
 	{
 		e.preventDefault();
 		getTemplate('googleplus-modified-search', {}, undefined, function(template_ui){
@@ -315,7 +317,8 @@ function startGooglePlusWidget(contact_id) {
 
 	});
 	
-	$("#widgets").on("click", "#gpsearchbtn", function(e)
+	$("#"+WIDGET_PARENT_ID).off("click", "#gpsearchbtn");
+	$("#"+WIDGET_PARENT_ID).on("click", "#gpsearchbtn", function(e)
 	{
 		e.preventDefault();
 
@@ -331,7 +334,8 @@ function startGooglePlusWidget(contact_id) {
 		showMatchedPeople(searchDetails['keywords']);
 	});
 
-	$("#widgets").on("keypress", "#searchkeywords", function(event)
+	$("#"+WIDGET_PARENT_ID).off("keypress", "#searchkeywords");
+	$("#"+WIDGET_PARENT_ID).on("keypress", "#searchkeywords", function(event)
 	{
 		if (event.keyCode == 13)
 		{
@@ -340,13 +344,15 @@ function startGooglePlusWidget(contact_id) {
 		}
 	});
 
-	$("#widgets").on("click", "#gpsearchclose", function(e)
+	$("#"+WIDGET_PARENT_ID).off("click", "#gpsearchclose");
+	$("#"+WIDGET_PARENT_ID).on("click", "#gpsearchclose", function(e)
 	{
 		showMatchedPeople(searchDetails['keywords']);
 		e.preventDefault();
 	});
 
-	$("#widgets").on("mouseover", ".GoogleplusDisplayPic", function(e)
+	$("#"+WIDGET_PARENT_ID).off("mouseover", ".GoogleplusDisplayPic");
+	$("#"+WIDGET_PARENT_ID).on("mouseover", ".GoogleplusDisplayPic", function(e)
 	{
 
 		// Unique Google Plus User Id from widget
@@ -386,9 +392,7 @@ function startGooglePlusWidget(contact_id) {
 				{ "name" : "website", "value" : profileID, "subtype" : "GOOGLE-PLUS" }
 			];
 
-			if (!agile_crm_get_contact_property("image"))// If no contact
-			// image
-			{
+			if (!agile_crm_get_contact_property("image")){
 				// Get image link which can be used to save image for contact
 				var displayImage = $(this).attr('src');
 				propertiesArray.push({ "name" : "image", "value" : displayImage });
@@ -418,7 +422,8 @@ function startGooglePlusWidget(contact_id) {
 
 	});
 
-	$("#widgets").on("click", "#gplusstreammore", function(e)
+	$("#"+WIDGET_PARENT_ID).off("click", "#gplusstreammore");
+	$("#"+WIDGET_PARENT_ID).on("click", "#gplusstreammore", function(e)
 	{
 		e.preventDefault();
 		var nextPageToken = $(this).attr("ntoken");
