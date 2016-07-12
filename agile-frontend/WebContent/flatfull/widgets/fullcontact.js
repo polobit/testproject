@@ -75,13 +75,10 @@ function warpFullContactToAgileContact(agileContact, fullContact){
 			}
 		}
 
-
-
-
-		console.log(first_name + " : "+ last_name + " : "+ company);
+		//console.log(first_name + " : "+ last_name + " : "+ company);
+		//App_Contacts.contactDetailView.model.set(new BaseModel());
 
 	}
-  	//App_Contacts.contactDetailView.model.set(new BaseModel());
 
  	return result;
 }
