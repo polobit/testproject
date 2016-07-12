@@ -4239,3 +4239,12 @@ background-color : #522E2E;
     padding-bottom: 10px;
     max-width: 180px;
 }
+ #chrome-extension
+ {
+        display:none;
+}
+@media all and (-webkit-min-device-pixel-ratio:0) and (min-resolution: .001dpcm) {
+    #chrome-extension{
+        display:inline-block;
+    }
+}
