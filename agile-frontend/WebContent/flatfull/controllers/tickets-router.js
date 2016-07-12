@@ -1277,6 +1277,7 @@
 
 		loadServiceLibrary(function(){
 		 	//Rendering root template
+		 	name = encodeURIComponent(name);
 		 	App_Ticket_Module.loadAdminsettingsTemplate(function(callback){
 
 		 		var editarticleView = new Base_Model_View({
