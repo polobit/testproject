@@ -63,7 +63,7 @@
       <i class="icon-list" data-original-title="" title=""></i>
       <span>Tasks</span>
       <span title="Tasks due" class="navbar_due_tasks pull-right">
-          <span  id="due_tasks_count" class="badge badge-sm bg-danger"></span>
+          <span  id="due_tasks_count" class="badge badge-sm bg-danger">{{due_tasks_count}}</span>
       </span>
     </a>
   </li>
@@ -185,6 +185,18 @@
       </a>
     </li> 
    {{/isRestrictedMenuScope}}
+
+   <!-- Dont Delete This -->
+   <li id="tasksmenu" class="hide">
+    <a href="#tasks" onclick="Agile_GA_Event_Tracker.track_event('Tasks Option in Nav Bar')">
+      <i class="icon-list" data-original-title="" title=""></i>
+      <span>Tasks</span>
+      <span title="Tasks due" class="navbar_due_tasks pull-right">
+          <span  id="due_tasks_count" class="badge badge-sm bg-danger">{{due_tasks_count}}</span>
+      </span>
+    </a>
+   </li>
+   <!-- End of dont Delete This -->
              
   </ul>
 
@@ -250,7 +262,20 @@
         <span>Reports</span>
       </a>
     </li> 
-   {{/isRestrictedMenuScope}}        
+   {{/isRestrictedMenuScope}}  
+
+   <!-- Dont Delete This -->
+   <li id="tasksmenu" class="hide">
+    <a href="#tasks" onclick="Agile_GA_Event_Tracker.track_event('Tasks Option in Nav Bar')">
+      <i class="icon-list" data-original-title="" title=""></i>
+      <span>Tasks</span>
+      <span title="Tasks due" class="navbar_due_tasks pull-right">
+          <span  id="due_tasks_count" class="badge badge-sm bg-danger">{{due_tasks_count}}</span>
+      </span>
+    </a>
+   </li>
+   <!-- End of dont Delete This -->
+
 </ul>
 
 </script>

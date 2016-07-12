@@ -361,9 +361,12 @@ function initRolehandlers(){
 
  			// Update dashboard name here
  			_agile_set_prefs("dashboard_" + CURRENT_DOMAIN_USER.id, dashboardName);
- 			
+
+ 			var due_tasks_count = $("#due_tasks_count").text();
+ 			due_tasks_count = due_tasks_count ? due_tasks_count : "";
+
  			// Update UI
- 			$("#agile-menu-navigation-container").html(getTemplate(serviceName.toLowerCase() + "-menu-items"));
+ 			$("#agile-menu-navigation-container").html(getTemplate(serviceName.toLowerCase() + "-menu-items", {due_tasks_count : due_tasks_count}));
 
  			// Call dashboard route
  			Backbone.history.navigate("#navigate-dashboard", {
