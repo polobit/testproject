@@ -446,7 +446,7 @@ public class WidgetsAPI {
 									Widget customwidget = WidgetUtil.getCustomWidget(widgetName, agileLocalUser.id);
 									widget = new Widget();
 									widget.prefs = customwidget.prefs;
-									widget.widget_type = WidgetType.CUSTOM;
+									widget.widget_type = Widget.WidgetType.CUSTOM;
 									widget.logo_url = customwidget.logo_url;
 									widget.mini_logo_url = customwidget.mini_logo_url;
 									widget.description = customwidget.description;
