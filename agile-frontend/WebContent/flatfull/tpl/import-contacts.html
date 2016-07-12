@@ -54,6 +54,7 @@
 								{{#canSyncContacts}}
 				{{#if ../type}}
 						<span class="btn btn-sm btn-default inline-block" disabled="">{{translate 'contacts-view' 'upload-csv-file'}}</span>
+						<a href="/flatfull/images/SampleContacts.csv" title="Sample scv file" download><i class="fa fa-download btn btn-sm  btn-default inline-block" style="margin-left: -2px;border-left: 0px;border-radius: 0px 2px 2px 0px;"></i></a>
 						<span class="m-l-xs"><i>
 							{{#if total_count}}
 										{{translate 'contacts-view' 'import-in-process'}}
@@ -65,9 +66,11 @@
 						
 					{{else}}
            				<div class="btn btn-sm upload upload-contacts-ele btn-default inline-block">{{translate 'contacts-view' 'upload-csv-file'}}</div>
+           				<a href="/flatfull/images/SampleContacts.csv" title="Sample scv file" download><i class="fa fa-download btn btn-sm  btn-default inline-block" style="margin-left: -2px;border-left: 0px;border-radius: 0px 2px 2px 0px;"></i></a>
            		{{/if}}
 					{{else}}
            				<span class="btn btn-sm btn-default inline-block" disabled="">{{translate 'contacts-view' 'upload-csv-file'}}</span>
+           				<a href="/flatfull/images/SampleContacts.csv" title="Sample scv file" download><i class="fa fa-download btn btn-sm  btn-default inline-block" style="margin-left: -2px;border-left: 0px;border-radius: 0px 2px 2px 0px;"></i></a>
 						<span class="m-l-xs"><i>{{translate 'prefs-data-sync' 'needs-import-privilege'}}</i></span>
 			{{/canSyncContacts}}
 	        					</fieldset>
@@ -91,9 +94,11 @@
         					<fieldset>
 							{{#canSyncContacts}}
            					<div class="btn btn-sm upload upload-contacts-ele btn-default inline-block">{{translate 'contacts-view' 'upload-csv-file'}}</div>
+           					<a href="/flatfull/images/SampleCompanies.csv" title="Sample scv file" download><i class="fa fa-download btn btn-sm  btn-default inline-block" style="margin-left: -3px;border-left: 0px;    border-radius: 0px 2px 2px 0px;"></i></a>
 							{{else}}
            					<span class="btn btn-sm btn-default inline-block"  disabled="">{{translate 'contacts-view' 'upload-csv-file'}}</span>
 							<span style="margin-left:5px"><i>{{translate 'prefs-data-sync' 'needs-import-privilege'}}</i></span>
+							<a href="/flatfull/images/SampleCompanies.csv" title="Sample scv file" download><i class="fa fa-download btn btn-sm  btn-default inline-block" style="margin-left: -3px;border-left: 0px;    border-radius: 0px 2px 2px 0px;"></i></a>
 							{{/canSyncContacts}}
            					</fieldset>
     					</form>
@@ -650,6 +655,7 @@
 <option value="properties__ignore_">-{{translate 'contacts-view' 'ignore'}}-</option>
 <option value="properties_name">{{translate 'companies-edit' 'organization'}}</option>
 <option value="tags">Tag</option>
+<option value="note">Note</option>
 <optgroup label="Email">
     <option value="properties_primary-email">{{translate 'contacts-view' 'email-primary'}}</option>
     <option value="properties_alternate-email">{{translate 'contacts-view' 'email-alternative'}}

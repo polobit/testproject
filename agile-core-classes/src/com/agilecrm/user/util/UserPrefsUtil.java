@@ -60,6 +60,9 @@ public class UserPrefsUtil
      */
     public static UserPrefs getUserPrefs(AgileUser agileUser)
     {
+    if(agileUser == null)
+    	  return null;
+    
 	Objectify ofy = ObjectifyService.begin();
 	Key<AgileUser> userKey = new Key<AgileUser>(AgileUser.class, agileUser.id);
 
@@ -117,8 +120,9 @@ public class UserPrefsUtil
 				continue;
 			
 			AgileUser agileUser1 = AgileUser.getCurrentAgileUserFromDomainUser(key.getId());
-			if(!isUserHavingPrefs(agileUser1))
-				continue;
+			
+			if(agileUser1 == null || !isUserHavingPrefs(agileUser1))
+				 continue;
 			
 			UserPrefs agileUserPrefs = getUserPrefs(agileUser1);
 			if(agileUserPrefs == null)

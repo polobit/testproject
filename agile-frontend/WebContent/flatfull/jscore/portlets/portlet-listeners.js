@@ -985,10 +985,10 @@ $('.portlet_body')
 		    	$('#dashboard-desc').text("Welcome to Agile CRM Marketing Automation.");
 		    	$('#dashboard-desc').attr("title", "Welcome to Agile CRM Marketing Automation.");
 		    }
-		    // if(id == "SalesDashboard"){
-		    // 	$('#dashboard-desc').text("Welcome to Agile CRM Sales Dashboard.");
-		    // 	$('#dashboard-desc').attr("title", "Welcome to Agile CRM Sales Dashboard.");
-		    // }
+		    if(id == "SalesDashboard"){
+		    	$('#dashboard-desc').text("Welcome to Agile CRM Sales Dashboard.");
+		    	$('#dashboard-desc').attr("title", "Welcome to Agile CRM Sales Dashboard.");
+		    }
 		    if(id == "Dashboard")
 		    {
 		    	$('#dashboard-desc').text("Welcome to Agile CRM");

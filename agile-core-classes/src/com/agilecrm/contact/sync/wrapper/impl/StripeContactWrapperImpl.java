@@ -20,6 +20,7 @@ import com.agilecrm.contact.sync.wrapper.ContactWrapper;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.CustomFieldDefUtil;
 import com.agilecrm.subscription.stripe.StripeUtil;
+import com.agilecrm.util.CountryUtil;
 import com.agilecrm.widgets.Widget;
 import com.agilecrm.widgets.util.WidgetUtil;
 import com.stripe.model.Card;
@@ -102,8 +103,11 @@ public class StripeContactWrapperImpl extends ContactWrapper
 
 			if (card.getAddressState() != null)
 				address.put("state", card.getAddressState());
-
-			address.put("country", card.getAddressCountry());
+			if(card != null && card.getAddressCountry() != null)
+			{
+				String sCountry = card.getAddressCountry();
+				CountryUtil.setCountryCode(address, null, sCountry);
+			}
 			address.put("zip", card.getAddressZip());
 		}
 		catch (JSONException e)

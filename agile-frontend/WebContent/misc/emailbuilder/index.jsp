@@ -215,10 +215,11 @@ AGILE_EB_OPTIONS['templateId'] = "";
                                 <li class="list-group-item" style="font-family:comic sans ms,marker felt-thin,arial,sans-serif;">Comic Sans MS</li>
                                 <li class="list-group-item" style="font-family:courier new,courier,monospace;">Courier New</li>
                                 <li class="list-group-item" style="font-family:lucida sans unicode,lucida grande,sans-serif;">Lucida</li>
-                                <li class="list-group-item" style="font-family: Trebuchet MS,Helvetica, sans-serif">Trebuchet MS</li>
+                                <li class="list-group-item" style="font-family: Trebuchet MS,sans-serif">Trebuchet MS</li>
                                 <li class="list-group-item" style="font-family: Tahoma, Geneva, sans-serif;">Tahoma</li>
                                 <li class="list-group-item" style="font-family: Impact,Charcoal, sans-serif">Impact</li>
                                 <li class="list-group-item" style="font-family: Arial Black,Gadget, sans-serif">Arial Black</li>
+                                <li class="list-group-item" style="font-family: Helvetica, sans-serif">Helvetica</li>
                             </ul>
                         </div>
                     </div>

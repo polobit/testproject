@@ -2228,7 +2228,6 @@ public class OpportunityUtil
 	{
 	    sourcecount.put(source.getId().toString(), type.equalsIgnoreCase("deals") ? 0 : 0.0);
 	}
-	System.out.println(sources.get(0).getId());
 	newDealsObject = ReportsUtil.initializeFrequencyForReports(minTime, maxTime, frequency, timeZone, sourcecount);
 
 	System.out.println("Total opportunitite....." + opportunitiesList.size());
@@ -2244,7 +2243,6 @@ public class OpportunityUtil
 		 * Date(opportunity.close_date * 1000));
 		 */
 		Long source_id = opportunity.getDeal_source_id();
-		System.out.println(categoriesUtil.getCategory(source_id));
 		List<Category> sources_id = categoriesUtil.getCategoriesByType("DEAL_SOURCE");
 		for (Category source_temp : sources_id)
 		{

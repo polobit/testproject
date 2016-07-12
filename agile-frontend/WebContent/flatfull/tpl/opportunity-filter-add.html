@@ -14,23 +14,13 @@
 <div class="wrapper-md">
 	<div class="row">
 		<div class="col-md-12">
-			<form id="dealsFilterForm" name="dealsFilterForm" class="form-horizontal">
-				<fieldset>
-					<div class="control-group form-group">
-						<label class="control-label col-sm-2">{{translate 'other' 'name'}}
-						<span class="field_req">*</span></label>
-						<div class="controls col-sm-6">
-							<input type="text" name="name" class="required form-control" autofocus/>
-						</div>
-					</div>
-					<!-- <div class="control-group form-group">
-						<label class="control-label col-sm-2">View Type<span class="field_req">*</span></label>
-						<div class="controls col-sm-6">
-							<div id="contact_type_filter" name="contact_type_filter">
-								<select name="view_type" id="view_type" class="form-control">
-									<option value="list">List View</option>
-									<option value="milestone">Milestone View</option>
-								</select>
+			<form id="filterOpportunityForm" class="form-horizontal">
+				<div name="rules" class="formsection chainedSelect">	
+					<fieldset>
+						<div class="control-group form-group">
+							<label class="control-label col-sm-2">{{translate 'other' 'name'}}<span class="field_req">*</span></label>
+							<div class="controls col-sm-8">
+								<input type="text" name="name" class="required form-control" maxlength="120" placeholder="Max Length: 120" />
 							</div>
 						</div>
 					</div> -->

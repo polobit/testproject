@@ -3,6 +3,7 @@
            <ul class="nav nav-tabs b-b-none">
             <li class="settings-account-prefs"><a href="#account-prefs" class="b-l-none">Preferences</a></li>
             <li class="settings-account-ips"><a href="#account-ipaccess" class="b-l-none">Security</a></li>
+            <li class="settings-sso-login"><a href="#sso-login" class="b-l-none">Single Sign-On (SSO)</a></li>
            </ul>
     </div>
     <div class="tab-pane active" id="settings-account-tab-content">
@@ -365,5 +366,71 @@
         </fieldset>
     </form>
 
+</div>
+</script>
+
+<!--  SSO Login Test -->
+<script id="admin-settings-sso-login-template" type="text/html">
+<div class="col-sm-9 panel ">
+    <!--<div class="panel-heading">Webhook URL </div>-->
+    <div class="panel-body">
+    <form id="ssoPrefs" class="form-horizontal" style="margin-top: 16px;">
+        <fieldset>
+            {{#if id}}
+            <input name="id" class="form-control" type="hidden" value="">
+            {{/if}}
+            <div class="row">
+                <div class="col-md-8 col-xs-12">
+                    
+                    <div class="control-group form-group">
+                        <label class="control-label col-sm-4 col-xs-4" style="padding-left: 5px;">Remote Login URL<span class="field_req">*</span></label> 
+                        <div class="controls col-sm-8 col-xs-8">
+                            <input name="url" id="url" class="input-medium required form-control" type="url" value="" placeholder="https://">
+                        </div>
+                    </div>
+                    
+                    <div class="control-group form-group">
+                        <label class="control-label col-sm-4 col-xs-4">Shared Secret</label> 
+                        <div class="controls col-sm-8 col-xs-8">
+                            <div>
+                                <input type="hidden" name="secretKey" value="{{secretKey}}">
+                                <pre class="prettyprint pln" id="secret_key_sso_code">{{secretKey}}</pre>
+                                </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+                <div class="clearfix"></div>
+            <div class="line ling-lg b-b"></div>
+            <div class="row">
+            <div class="col-md-8 col-xs-8">
+            <div class="col-sm-offset-4 col-sm-8 col-xs-offset-4 col-xs-8">
+                {{#if id}}
+                    {{#if url}}
+                    <a href="#" type="submit" class="delete btn btn-sm btn-danger">Delete</a>
+                    {{/if}}
+                {{/if}}
+
+                <a href="#" type="submit" class="save btn btn-sm btn-primary">Submit</a>
+           
+
+            </div>
+            </div>
+            </div>
+                
+            </fieldset></form>
+</div>
+</div>
+<div class="col w-md  wrapper pos-rlt track-milestone-text" style="padding-top: 0px;">
+ <div class="data-block">
+  <div class="p-l p-r">
+   <h4 class="m-t-none">SSO Help</h4>   
+   <p>Admins and other users can use the SSO option to login into your Agile CRM. Agile CRM SSO is implemented using JWT, a widely adopted service that provides a flexible framework for creating a custom SSO solution. <br/>
+<a href="https://github.com/agilecrm/sso" target="_blank">Learn More</a></p>
+   <br>
+   
+  </div>
+ </div>
 </div>
 </script>

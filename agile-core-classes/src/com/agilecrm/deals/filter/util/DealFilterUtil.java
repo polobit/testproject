@@ -89,6 +89,11 @@ public class DealFilterUtil {
 	    rule.CONDITION = RuleCondition.EQUALS;
 	    rule.RHS = "Opportunity";
 	    filter.rules.add(rule);
+	    rule = new SearchRule();
+	    rule.LHS = "schema_version";
+	    rule.CONDITION = RuleCondition.EQUALS;
+	    rule.RHS = "1.0";	    
+	    filter.rules.add(rule);
 
 	    // Sets ACL condition
 	    UserAccessControlUtil.checkReadAccessAndModifyTextSearchQuery(UserAccessControl.AccessControlClasses.Opportunity.toString(), filter.rules, null);

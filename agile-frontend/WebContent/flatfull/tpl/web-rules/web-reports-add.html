@@ -477,6 +477,7 @@
 												<option value="MODAL_POPUP" class="POPUP">{{translate 'web-rules' 'modal-popup'}}</option>
 												<option value="CORNER_NOTY" class="POPUP">{{translate 'web-rules' 'noty-message'}}</option>
 												<option value="CALL_POPUP" class="POPUP">Call Popup</option>
+												<option value="SITE_BAR" class="POPUP">Site Bar</option>
 											</optgroup>
 											<optgroup label="{{translate 'contact-details' 'campaign'}}">
 												<option value="ASSIGN_CAMPAIGN" class="campaign" 
@@ -551,6 +552,9 @@
 
 
 }()</textarea>
+
+<textarea  cols="" name="webrule-custom-html" id="agile-bar-code"  class="custom_html required SITE_BAR w-full form-control" rows="10" placeholder="Paste HTML context"></textarea>
+
 									<input type="text" name="temp-title class="FORM input form-control required w-xs" placeholder="{{translate 'web-rules' 'form-id'}}">
 													<div style="float:right;display:none" class="web-rule-preview"><a href="#" class="text-info">{{translate 'web-rules' 'preview'}}</a></div> 
 												</div>
@@ -576,6 +580,8 @@
 													<option value="CENTER" class="MODAL_POPUP CALL_POPUP">{{translate 'web-rules' 'center'}}</option>
 													<option value="RIGHT_BOTTOM" class="MODAL_POPUP CALL_POPUP">{{translate 'web-rules' 'right-bottom'}}</option>
 													<option value="LEFT_BOTTOM" class="MODAL_POPUP CALL_POPUP">{{translate 'web-rules' 'left-bottom'}}</option>
+													<option value="TOP" class="SITE_BAR">Top</option>
+													<option value="BOTTOM" class="SITE_BAR">Bottom</option>
 												</select>
 											</div>
 										</td>
@@ -585,11 +591,11 @@
 											<div name="delay" id="delay">
 												<div class="pull-left p-t-sm"><span style="color:#474444">{{translate 'web-rules' 'when-to-show'}}</span></div></br></br>
 												<select class="required form-control m-t-n-xxs">
-														<option value="IMMEDIATE" class="MODAL_POPUP FORM CORNER_NOTY CALL_POPUP">{{translate 'web-rules' 'immediately'}}</option>
-														<option value="AFTER_SECS" class="MODAL_POPUP FORM CORNER_NOTY CALL_POPUP">{{translate 'web-rules' 'after-certain-time'}}</option>
-														<option value="FIRST_SCROLL" class="MODAL_POPUP FORM CORNER_NOTY CALL_POPUP">{{translate 'web-rules' 'on-starting-scroll'}}</option>
-														<option value="END_OF_PAGE" class="MODAL_POPUP FORM CORNER_NOTY CALL_POPUP">{{translate 'web-rules' 'on-reaching-end-of-page'}}</option>
-														<option value="EXIT" class="MODAL_POPUP FORM CORNER_NOTY CALL_POPUP">{{translate 'web-rules' 'about-to-exit-page'}}</option> 
+														<option value="IMMEDIATE" class="MODAL_POPUP FORM CORNER_NOTY CALL_POPUP SITE_BAR">{{translate 'web-rules' 'immediately'}}</option>
+														<option value="AFTER_SECS" class="MODAL_POPUP FORM CORNER_NOTY CALL_POPUP SITE_BAR">{{translate 'web-rules' 'after-certain-time'}}</option>
+														<option value="FIRST_SCROLL" class="MODAL_POPUP FORM CORNER_NOTY CALL_POPUP SITE_BAR">{{translate 'web-rules' 'on-starting-scroll'}}</option>
+														<option value="END_OF_PAGE" class="MODAL_POPUP FORM CORNER_NOTY CALL_POPUP SITE_BAR">{{translate 'web-rules' 'on-reaching-end-of-page'}}</option>
+														<option value="EXIT" class="MODAL_POPUP FORM CORNER_NOTY CALL_POPUP SITE_BAR">{{translate 'web-rules' 'about-to-exit-page'}}</option> 
 												</select>
 											</div>
 										

@@ -92,7 +92,7 @@ public class LogUtil
 	{
 	    //System.out.println("using push queue for campaign logs");
 	    LogDeferredTask logDeferredTask = new LogDeferredTask(campaignId, subscriberId, message, logType, domain,
-		    GoogleSQL.getFutureDate());
+		    GoogleSQL.getCurrentDate());
 	   // Add to queue
 	   Queue queue = QueueFactory.getQueue(AgileQueues.CAMPAIGN_LOG_QUEUE);
 	   queue.add(TaskOptions.Builder.withPayload(logDeferredTask));
@@ -102,78 +102,78 @@ public class LogUtil
 	}
     }
     
-    public static void sendCampaignLogs(List<TaskHandle> tasks)
-    {
-	
-	addCampaignLogs(convertTaskHandlestoMailDeferredTasks(tasks));
-    }
+//    public static void sendCampaignLogs(List<TaskHandle> tasks)
+//    {
+//	
+//	addCampaignLogs(convertTaskHandlestoMailDeferredTasks(tasks));
+//    }
     
-    public static List<LogDeferredTask> convertTaskHandlestoMailDeferredTasks(List<TaskHandle> tasks)
-    {
-	List<LogDeferredTask> logDeferredTasks = new ArrayList<LogDeferredTask>();
-	for (TaskHandle handle : tasks)
-	{
-	    try
-	    {
-		logDeferredTasks.add((LogDeferredTask) SerializationUtils.deserialize(handle.getPayload()));
-	    }
-	    catch (Exception e)
-	    {
-		e.printStackTrace();
-	    }
-	    
-	}
-	return logDeferredTasks;
-    }
+//    public static List<LogDeferredTask> convertTaskHandlestoMailDeferredTasks(List<TaskHandle> tasks)
+//    {
+//	List<LogDeferredTask> logDeferredTasks = new ArrayList<LogDeferredTask>();
+//	for (TaskHandle handle : tasks)
+//	{
+//	    try
+//	    {
+//		logDeferredTasks.add((LogDeferredTask) SerializationUtils.deserialize(handle.getPayload()));
+//	    }
+//	    catch (Exception e)
+//	    {
+//		e.printStackTrace();
+//	    }
+//	    
+//	}
+//	return logDeferredTasks;
+//    }
     
-    public static void addCampaignLogs(List<LogDeferredTask> tasks)
-    {
-	Map<String, String> campaignNameMap = new HashMap<String, String>();
-	List<Object[]> queryList = new ArrayList<Object[]>();
-	for (LogDeferredTask logDeferredTask : tasks)
-	{
-	    String campaignName = null;
-	    String oldNamespace = NamespaceManager.get();
-	    try
-	    {
-		NamespaceManager.set(logDeferredTask.domain);
-		if (StringUtils.isEmpty(logDeferredTask.campaignId))
-		{
-		    continue;
-		}
-		
-		if (!campaignNameMap.containsKey(logDeferredTask.campaignId + "-" + logDeferredTask.domain))
-		{
-		    campaignName = WorkflowUtil.getCampaignName(logDeferredTask.campaignId);
-		    campaignNameMap.put(logDeferredTask.campaignId + "-" + logDeferredTask.domain, campaignName);
-		}
-		else
-		{
-		    campaignName = campaignNameMap.get(logDeferredTask.campaignId + "-" + logDeferredTask.domain);
-		}
-		
-		Object[] newLog = new Object[] { logDeferredTask.domain, logDeferredTask.campaignId, campaignName,
-			logDeferredTask.subscriberId, GoogleSQL.getFutureDate(), logDeferredTask.message,
-			logDeferredTask.logType };
-		
-		queryList.add(newLog);
-	    }
-	    finally
-	    {
-		NamespaceManager.set(oldNamespace);
-	    }
-	}
-	
-	if (queryList.size() > 0)
-	{
-	    Long start_time = System.currentTimeMillis();
-	    CampaignLogsSQLUtil.addToCampaignLogs(queryList);
-	    // CampaignLogsSQLUtil.addCampaignLogsToNewInstance(queryList);
-	    System.out.println("batch request completed : " + (System.currentTimeMillis() - start_time));
-	    System.out.println("Logs size : " + queryList.size());
-	}
-	
-    }
+//    public static void addCampaignLogs(List<LogDeferredTask> tasks)
+//    {
+//	Map<String, String> campaignNameMap = new HashMap<String, String>();
+//	List<Object[]> queryList = new ArrayList<Object[]>();
+//	for (LogDeferredTask logDeferredTask : tasks)
+//	{
+//	    String campaignName = null;
+//	    String oldNamespace = NamespaceManager.get();
+//	    try
+//	    {
+//		NamespaceManager.set(logDeferredTask.domain);
+//		if (StringUtils.isEmpty(logDeferredTask.campaignId))
+//		{
+//		    continue;
+//		}
+//		
+//		if (!campaignNameMap.containsKey(logDeferredTask.campaignId + "-" + logDeferredTask.domain))
+//		{
+//		    campaignName = WorkflowUtil.getCampaignName(logDeferredTask.campaignId);
+//		    campaignNameMap.put(logDeferredTask.campaignId + "-" + logDeferredTask.domain, campaignName);
+//		}
+//		else
+//		{
+//		    campaignName = campaignNameMap.get(logDeferredTask.campaignId + "-" + logDeferredTask.domain);
+//		}
+//		
+//		Object[] newLog = new Object[] { logDeferredTask.domain, logDeferredTask.campaignId, campaignName,
+//			logDeferredTask.subscriberId, GoogleSQL.getFutureDate(), logDeferredTask.message,
+//			logDeferredTask.logType };
+//		
+//		queryList.add(newLog);
+//	    }
+//	    finally
+//	    {
+//		NamespaceManager.set(oldNamespace);
+//	    }
+//	}
+//	
+//	if (queryList.size() > 0)
+//	{
+//	    Long start_time = System.currentTimeMillis();
+//	    CampaignLogsSQLUtil.addToCampaignLogs(queryList);
+//	    // CampaignLogsSQLUtil.addCampaignLogsToNewInstance(queryList);
+//	    System.out.println("batch request completed : " + (System.currentTimeMillis() - start_time));
+//	    System.out.println("Logs size : " + queryList.size());
+//	}
+//	
+//    }
     
     /**
      * Returns logs with respect to both campaign and subscriber.

@@ -123,8 +123,18 @@ public class JSAPI
 	    if (contact == null)
 	    	return JSAPIUtil.generateContactMissingError();
 	    
-	    String contactEmail = contact.getContactFieldValue("EMAIL");
-	    if(!contactEmail.equalsIgnoreCase(email))
+	    List<ContactField> fields = contact.getContactPropertiesList("email");
+	    System.out.println("Email Fields = " +fields);
+	    
+	    List<String> emails = new ArrayList<String>();
+	    if(fields.size() == 0)
+		return JSAPIUtil.generateContactMissingError();
+	    
+	    for(ContactField field : fields){
+		emails.add(field.value);
+	    }
+	    
+	    if(!emails.contains(email.toLowerCase()))
 		return JSAPIUtil.generateContactMissingError();
 	    
 	    return JSAPIUtil.limitPropertiesInContactForJSAPI(contact);
@@ -132,7 +142,7 @@ public class JSAPI
 	}
 	catch (Exception e)
 	{
-	    System.out.println("EXCEPPPPPPPPPPPPPPPPPPPPPPPPTION"+e);
+	    System.out.println("Exception Message : "+e);
 	    e.printStackTrace();
 	    return null;
 	}

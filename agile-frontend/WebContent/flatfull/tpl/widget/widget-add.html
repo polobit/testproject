@@ -6,6 +6,7 @@
     <span style="font-size: 24px; height: 47px; text-align:center;vertical-align: middle; display:inline-block;">
     <span style="margin-top:6px; display:inline-block;"><img src="{{logo_url}}"  class="img-responsive inline-block" 
     style="margin-right: 4px; margin-top:-5px; width:25px; height:25px;">SIP</span>
+	<span class="label label-sm bg-danger" style="margin: 5px;font-size: 11px;top: -6px;position: relative;">Beta</span>
     </span>
 
    </center>
@@ -21,7 +22,7 @@
 			{{#if_equals name "Bria"}}
 				<center>  
   				<span style="font-size: 24px;width: 113px;height: 50px; text-align:center;vertical-align: middle;"><span><img src="{{logo_url}}" style="width: 40px; height: 40px;margin-right: 4px;margin-top: 1px;">{{translate 'widgets' 'bria'}}</span></span>
-				<span class="label label-sm bg-danger" style="margin: 5px;">{{translate 'deal-view' 'beta'}}</span>
+				<span class="label label-sm bg-danger"  style="margin: 5px;">{{translate 'deal-view' 'beta'}}</span>
 				</center>  
         	{{else}}
 			{{#if_equals name "Skype"}}
@@ -69,6 +70,12 @@
 		<br/>
 		<span style="font-size: 12px;position: relative;top: 2px;">*</span>
 		<span style="font-size: 10px;">{{translate 'widgets' 'support-for-windows-only'}}</span>
+	{{else}}
+		{{#if_equals name "Sip"}}
+			<br/>
+			<span style="font-size: 12px;position: relative;top: 2px;">*</span>
+			<span style="font-size: 10px;">We recommend Bria</span>
+		{{/if_equals}}
 	{{/if_equals}}
 	{{/if_equals}}
 
@@ -564,7 +571,9 @@
 			<div class="panel panel-default" style="min-height: 220px;">
 			<div class="panel-heading">
 			{{#if_equals name "Sip"}}
-			    <center><img class="m-b-none img-responsive thumb-xl bg-transparent" style="height:47px;" src="{{getS3ImagePath '/img/plugins/sip.png'}}" /></center>
+			    <center><img class="m-b-none img-responsive thumb-xl bg-transparent" style="height:47px;" src="{{getS3ImagePath '/img/plugins/sip.png'}}" />
+					<span class="label label-sm bg-danger" style="margin: 5px;margin-left: -30px;">Beta</span>
+				</center>
 			{{else}}
 			    {{#if_equals name "CallScript"}}
 			        <center><img class="m-b-none img-responsive thumb-xl bg-transparent" style="height:47px;" src="{{getS3ImagePath '/img/plugins/call_script.png'}}" /></center>

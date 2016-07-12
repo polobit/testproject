@@ -2,33 +2,29 @@ package com.agilecrm;
 
 import java.io.IOException;
 import java.net.URLEncoder;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.POST;
-import javax.ws.rs.QueryParam;
 
 import org.apache.commons.lang.StringUtils;
 
-import com.agilecrm.ipaccess.AllowAccessMailServlet;
-import com.agilecrm.ipaccess.IpAccess;
-import com.agilecrm.ipaccess.IpAccessUtil;
 import com.agilecrm.session.SessionCache;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
+import com.agilecrm.ssologin.SingleSignOn;
+import com.agilecrm.ssologin.SingleSignOnUtil;
 import com.agilecrm.subscription.limits.cron.deferred.AccountLimitsRemainderDeferredTask;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.AliasDomainUtil;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.MD5Util;
+import com.agilecrm.util.MobileUADetector;
 import com.agilecrm.util.NamespaceUtil;
 import com.agilecrm.util.RegisterUtil;
+import com.agilecrm.util.VersioningUtil;
 import com.agilecrm.util.email.AppengineMail;
 import com.agilecrm.util.email.SendMail;
 import com.google.appengine.api.NamespaceManager;
@@ -36,14 +32,6 @@ import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
 import com.google.appengine.api.utils.SystemProperty;
-import java.util.Properties;
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.AddressException;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
 
 /**
  * <code>LoginServlet</code> class checks or validates the user who is
@@ -108,10 +96,26 @@ public class LoginServlet extends HttpServlet {
 		
 		// Check if this subdomain even exists
 
-		if (DomainUserUtil.count() == 0) {
+		if (!VersioningUtil.isDevelopmentEnv() && DomainUserUtil.count() == 0) {
 			response.sendRedirect(Globals.CHOOSE_DOMAIN);
 			return;
 		}
+		
+		String targetLogin = "login.jsp";
+		
+		// Check if SSO enable
+		String s = request.getRequestURI();
+		SingleSignOn sso = SingleSignOnUtil.getSecreteKey();
+		if(!MobileUADetector.isMobileOrTablet(request.getHeader("user-agent")) && !s.contains("/normal") && sso != null){
+		if (sso.url != null) {
+		    response.sendRedirect(sso.url);
+		    return;
+		    }
+		}
+		
+		if(s.contains("/normal"))
+		    targetLogin = "../login.jsp";		
+				
 					
 		// If request is due to multiple logins, page is redirected to error
 		// page
@@ -145,15 +149,13 @@ public class LoginServlet extends HttpServlet {
 			e.printStackTrace();
 
 			// Send to Login Page
-			request.getRequestDispatcher(
-					"login.jsp?error=" + URLEncoder.encode(e.getMessage()))
-					.forward(request, response);
+			request.getRequestDispatcher(targetLogin + "?error=" + URLEncoder.encode(e.getMessage())).forward(request, response);
 
 			return;
 		}
 
 		// Return to Login Page
-		request.getRequestDispatcher("login.jsp").forward(request, response);
+		request.getRequestDispatcher(targetLogin).forward(request, response);
 		
 	}
 
@@ -326,6 +328,8 @@ public class LoginServlet extends HttpServlet {
 
 		request.getSession().setAttribute("account_timezone", timezone);
 		
+		// Set Account Timezone, User Timezone, Browser Fingerprint and OnlineCalendarPrefs
+		LoginUtil.setMiscValuesAtLogin(request, domainUser);
 
 		response.sendRedirect("/");
 
@@ -363,10 +367,10 @@ public class LoginServlet extends HttpServlet {
 				subject =  "New sign-in from " + data.get("browser_name") + " on " + data.get("browser_os"); 
 			}
 			
-			// if(resend)
+			if(resend)
+				SendMail.sendMail(email, subject, template, data);
+			else 
 				AppengineMail.sendMail(email, subject, template, data);
-			// else 
-				// SendMail.sendMail(email, subject, template, data);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
