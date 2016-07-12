@@ -425,7 +425,7 @@
                                     Deals<br/>
                                         <div style="margin-left:6px;"><small> Track sales opportunities</small></div>
                                </label>
-                               {{if_equals this.version "v1"}} {{else}}
+                               {{#if_equals this.version "v1"}} {{else}}
                                 <label class="i-checks i-checks-sm checkbox">
                                     <input type="checkbox" name="scopes-temp" class="required" value="CASES" {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
                                     Cases<br/>
@@ -451,7 +451,7 @@
                                     Deals<br/>
                                     <div style="margin-left:6px;"><small> Track sales opportunities</small></div>
                                 </label>
-                                {{if_equals this.version "v1"}} {{else}}
+                                {{#if_equals this.version "v1"}} {{else}}
                                 <label class="i-checks i-checks-sm checkbox">
                                     <input type="checkbox" name="scopes-temp" class="required" value="CASES" checked {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
                                     Cases<br/>
