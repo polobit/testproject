@@ -193,7 +193,7 @@ function bindCustomFiledChangeEvent(el){
 			$("textarea",  $("#custom-field-formula-data")).removeAttr("name");
 			$('.required-and-searchable').show();
 			//$("#searchable").prop('checked', true);
-			//$("#searchable").prop('disabled', false);
+			$("#searchable").prop('disabled', false);
 		}
 		else if(value == "TEXTAREA")
 		{
@@ -205,7 +205,7 @@ function bindCustomFiledChangeEvent(el){
 			$("textarea",  $("#custom-field-formula-data")).removeAttr("name");
 			$('.required-and-searchable').show();
 			//$("#searchable").prop('checked', true);
-			//$("#searchable").prop('disabled', false);
+			$("#searchable").prop('disabled', false);
 		}
 		else if(value == "FORMULA")
 		{
