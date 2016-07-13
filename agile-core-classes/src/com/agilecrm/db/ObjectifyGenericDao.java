@@ -508,9 +508,11 @@ public class ObjectifyGenericDao<T> extends DAOBase
     public T getByProperty(Map<String, Object> map)
     {
 	Query<T> q = ofy().query(clazz);
-	for (String propName : map.keySet())
-	{
-	    q.filter(propName, map.get(propName));
+	if(map != null){
+		for (String propName : map.keySet())
+		{
+		    q.filter(propName, map.get(propName));
+		}
 	}
 
 	return fetch(q);

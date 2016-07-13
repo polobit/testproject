@@ -1401,67 +1401,43 @@
 	addLandingpage : function(){
 		
 
-			loadServiceLibrary(function(){
-			 		
-			 		$.ajax({ 
-							type : "GET", 
-							url : '/core/api/knowledgebase/KBlandingpage',
-							success: function(data){
-								console.log(data);
-								 kblpid = data[0].kbLandingpageid;
-								 kb_id = data[0].id;
-							}
-						});	
+			loadServiceLibrary(function(){	
 			 	//Rendering root template
 			 	App_Ticket_Module.loadAdminsettingsTemplate(function(callback){
 	  
 					var addLandingpageView = new Base_Model_View({
-						isNew : true,
+						isNew : false,
 						template : "ticket-helpcenter-select-landingpage",
 						url : "/core/api/knowledgebase/KBlandingpage",
 						window:'back',
-					    postRenderCallback : function(el){
+					    postRenderCallback : function(el,json){
+					        console.log(json);
+					        var kblpid = json.kb_landing_page_id;
+					        var kb_id = json.id;
 					        var optionTemplate = "<option value='{{id}}'>{{name}}</option>";
 								
+
 								fillSelect('template_id', '/core/api/landingpages?page_size=20', '', 
 								function(){
+									$('#template_id option[value=""]',el).attr("value",0);
 									$('#template_id option[value="'+kblpid+'"]',el).attr("selected",true);
 																							
 								}, optionTemplate, false, el,"Select Landing Page");
 										
+							
+							var newKbmodel = new BaseModel();
+							newKbmodel.url = "/core/api/knowledgebase/KBlandingpage";
+
 							$('#template_id',el).on('change', function (e) {
     							var optionSelected = $("#template_id :selected").val();
 								
-								if(optionSelected == "" ){
-
-									$.ajax({ 
-									type : "DELETE", 
-									url : '/core/api/knowledgebase/KBlandingpage/'+kb_id, 
-									success: function(data){
-										
-										
-									}
-								});									
-								}
 								var kblp_json = {}; 
-								kblp_json.kbLandingpageid = optionSelected;
+								kblp_json.kb_landing_page_id = optionSelected;
 																
-								var type = "POST";
 								if(kb_id)	{
-									type = "PUT";
 									kblp_json.id = kb_id;
 								}	
-								
-								$.ajax({ 
-									type : type, 
-									url : '/core/api/knowledgebase/KBlandingpage', 
-									data : JSON.stringify(kblp_json),
-									contentType : 'application/json',
-									dataType : 'json', 
-									success: function(data){
-									}
-								});
-
+								newKbmodel.save(kblp_json);
 							});
 		 				}
 					   

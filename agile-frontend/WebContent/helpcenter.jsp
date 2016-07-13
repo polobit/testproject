@@ -42,17 +42,19 @@
 
 <%@page	import="com.agilecrm.db.ObjectifyGenericDao"%>
 <%@page	import="com.agilecrm.account.APIKey"%>
+<%@page	import="com.agilecrm.knowledgebase.util.KbLandingPageUtil"%>
+
   
   <%
-  Long  landingpageid = new LandingPageKnowledgebase().getkbLandingpageid() ;
+  LandingPageKnowledgebase  kbpage = KbLandingPageUtil.get(); ;
 
-	if(landingpageid == null){%>
+	if(kbpage == null ||kbpage.kb_landing_page_id == 0 ){%>
 		<%@ include file="/knowledgebase.jsp"%>
 	<%}%> 
 	
-	<% System.out.println(landingpageid + "test");
-
+	<% 
   
+	
   String template = "default";
 
   boolean is_fluid = false;
@@ -63,7 +65,9 @@
 
   
 		try{
-	if(landingpageid !=null){
+	
+	if(kbpage !=null){
+		Long landingpageid = kbpage.kb_landing_page_id;
 	LandingPageUtil lpUtil = new LandingPageUtil();
 	LandingPage landingPage = lpUtil.getLandingPage(landingpageid);
 	if(landingPage == null)
@@ -138,7 +142,7 @@ if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Produ
 <script src='//cdnjs.cloudflare.com/ajax/libs/headjs/1.0.3/head.min.js'></script>
 <script>
 
-var landingpageid = <%=landingpageid %>
+<%-- var landingpageid = <%=landingpageid %> --%>
 
 try{console.time("startbackbone");}catch(e){}
 

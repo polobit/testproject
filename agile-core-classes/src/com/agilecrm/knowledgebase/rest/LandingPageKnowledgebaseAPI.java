@@ -1,114 +1,71 @@
 package com.agilecrm.knowledgebase.rest;
-import java.util.List;
 
 import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import net.sf.json.JSON;
-
 import org.apache.commons.lang.exception.ExceptionUtils;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import com.agilecrm.knowledgebase.entity.LandingPageKnowledgebase;
-import com.amazonaws.util.json.JSONArray;
+import com.agilecrm.knowledgebase.util.KbLandingPageUtil;
 
 @Path("/api/knowledgebase/KBlandingpage")
 public class LandingPageKnowledgebaseAPI
 {
-	
+
 	@GET
-    @Produces(MediaType.APPLICATION_JSON)
-	
-	public  List<LandingPageKnowledgebase> getKbLandingpageid(){		
-		
-		try{	
-			
-			
-			List<LandingPageKnowledgebase> lpKb =  LandingPageKnowledgebase.dao.fetchAll();
-			
-			
-			return lpKb;
-	
-		}
-	    	catch(Exception e){
-				System.out.println(ExceptionUtils.getFullStackTrace(e));
-				throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-						.build());
-			}
+	@Produces(MediaType.APPLICATION_JSON)
+	public LandingPageKnowledgebase get()
+	{
+		return KbLandingPageUtil.get();
 	}
-	
-	
-	
+
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-	
-	public  LandingPageKnowledgebase saveKbLandingpageid(LandingPageKnowledgebase lpKb ){		
-		
-		try{	
-			if(lpKb.kbLandingpageid == null)
-				return null;
-			
-			LandingPageKnowledgebase.dao.put(lpKb);
-		    	return lpKb;
-	
+	@Produces(MediaType.APPLICATION_JSON)
+	public void save(LandingPageKnowledgebase lpKb)
+	{
+		try
+		{
+			upsert(lpKb);
 		}
-	    	catch(Exception e){
-				System.out.println(ExceptionUtils.getFullStackTrace(e));
-				throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-						.build());
-			}
+		catch (Exception e)
+		{
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+					.build());
+		}
 	}
-	
+
 	@PUT
 	@Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-	
-	public  LandingPageKnowledgebase updateKbLandingpageid(LandingPageKnowledgebase lpKb ){		
-		
-		try{
-			if(lpKb.kbLandingpageid == null)
-				return null;
-			
-			LandingPageKnowledgebase.dao.put(lpKb);
-		    	return lpKb;
+	@Produces(MediaType.APPLICATION_JSON)
+	public void update(LandingPageKnowledgebase lpKb)
+	{
+		try
+		{
+			upsert(lpKb);
 		}
-		catch(Exception e){
-			System.out.println(ExceptionUtils.getFullStackTrace(e));
-			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-					.build());
-		}
-		
-		}
-	
-	@DELETE
-	@Path("/{id}")
-    @Produces(MediaType.APPLICATION_JSON)	
-	public  String deleteKbLandingpageid(@PathParam("id") long id) throws JSONException{		
-		
-		try{
-			LandingPageKnowledgebase lbkbobj = LandingPageKnowledgebase.dao.get(id);
-			
-			LandingPageKnowledgebase.dao.delete(lbkbobj);
-			
-		   	return new JSONObject().put("status", "success").toString();
-		}
-		catch(Exception e){
+		catch (Exception e)
+		{
 			System.out.println(ExceptionUtils.getFullStackTrace(e));
 			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
 					.build());
 		}
 	}
-	
-	
+
+	private void upsert(LandingPageKnowledgebase lpKb) throws Exception
+	{
+		if (lpKb.kb_landing_page_id.equals(0))
+			lpKb.kb_landing_page_id = null;
+
+		lpKb.save();
+
+	}
 }
