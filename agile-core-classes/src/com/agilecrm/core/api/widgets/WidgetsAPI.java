@@ -105,7 +105,11 @@ public class WidgetsAPI {
 				widget.display_name = widget.name;
 				widget.name = widget.name.replaceAll("[^a-zA-Z]+", "");
 			}
-
+			
+			if (WidgetUtil.checkIfWidgetNameExists(widget.name)) {
+				return null;
+			}
+			
 			WidgetsAPI.checkValidDetails(widget);
 			AgileUser agileUser = AgileUser.getCurrentAgileUser();
 			if (agileUser != null) {
@@ -165,6 +169,16 @@ public class WidgetsAPI {
 	public Widget updateWidget(Widget widget) throws Exception {
 		if (widget != null) {
 			WidgetsAPI.checkValidDetails(widget);
+			
+			if (widget.widget_type == WidgetType.CUSTOM) {
+				widget.display_name = widget.name;
+				widget.name = widget.name.replaceAll("[^a-zA-Z]+", "");
+			}
+			
+			if (WidgetUtil.checkIfWidgetNameExists(widget.name)) {
+				return null;
+			}
+			
 			AgileUser agileUser = AgileUser.getCurrentAgileUser();
 			if (agileUser != null) {
 				Key<AgileUser> currentUser = new Key<AgileUser>(AgileUser.class, agileUser.id);
@@ -443,7 +457,7 @@ public class WidgetsAPI {
 								Widget widget = WidgetUtil.getWidget(widgetName, agileUser.id);	
 								
 								if(widget == null){
-									Widget customwidget = WidgetUtil.getCustomWidget(widgetName, agileLocalUser.id);
+									Widget customwidget = WidgetUtil.getCustomWidget(widgetName, agileUser.id);							
 									widget = new Widget();
 									widget.prefs = customwidget.prefs;
 									widget.widget_type = Widget.WidgetType.CUSTOM;
@@ -457,6 +471,12 @@ public class WidgetsAPI {
 									widget.script = customwidget.script;
 									widget.script_type = customwidget.script_type;
 									widget.url = customwidget.url;
+									
+									widget.add_by_admin = true;	
+									widget.isActive = false;
+									widget.id = null;			
+									Key<AgileUser> adminUserKey = AgileUser.getCurrentAgileUserKeyFromDomainUser(agileUser.domain_user_id);
+									widget.saveByUserKey(adminUserKey, widget);
 								}
 								
 								if(localDomainUser != null && localDomainUser.is_admin){

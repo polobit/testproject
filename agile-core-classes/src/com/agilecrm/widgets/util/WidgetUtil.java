@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javassist.expr.Instanceof;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -17,6 +19,7 @@ import com.agilecrm.widgets.CustomWidget;
 import com.agilecrm.widgets.Widget;
 import com.agilecrm.widgets.Widget.IntegrationType;
 import com.agilecrm.widgets.Widget.WidgetType;
+import com.amazonaws.services.autoscaling.model.Instance;
 import com.google.appengine.api.NamespaceManager;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Objectify;
@@ -70,6 +73,15 @@ public class WidgetUtil {
 		for (Widget widget : widgets) {
 			for (Widget currentWidget : currentWidgets) {
 				if (currentWidget.name.equals(widget.name)) {
+					
+					if(currentWidget instanceof CustomWidget){
+						Widget tempWidget = WidgetUtil.getWidget(widget.name, agileUser.id);
+						if(tempWidget != null){
+							widgets.remove(widget);
+							continue;
+						}
+					}
+					
 					String userID = agileUser.id.toString();	
 					
 					// Logic to find the admin user are active for widget or not.
@@ -77,7 +89,7 @@ public class WidgetUtil {
 						JSONArray currentUsers = new JSONArray();
 												
 						List<JSONObject> widgetsList = WidgetUtil.getWigdetsObjectList(widget.name);
-						if(widgetsList != null && widgetsList.size() > 0){									
+						if(widgetsList != null){									
 							for (int i = 0; i < widgetsList.size(); i++) {
 								JSONObject widgetObj = widgetsList.get(i);																				
 								try {
@@ -98,7 +110,7 @@ public class WidgetUtil {
 								}																
 							}
 							currentWidget.listOfUsers = currentUsers.toString();
-						}															
+						}	
 					}
 					
 					// Setting true to know that widget is configured.
@@ -570,7 +582,11 @@ public class WidgetUtil {
 
 		if (CustomWidgets.getCount("name", name) != 0)
 			return true;
-
+		
+		
+		if (WidgetUtil.getWidgetCount("name", name) != 0)
+			return true;
+		
 		return false;
 	}
 
@@ -593,5 +609,10 @@ public class WidgetUtil {
 				.filter("widget_type", WidgetType.EMAIL).list());
 
 		return listOfIntegrations;
+	}
+	
+	public static int getWidgetCount(String propertyName, Object propertyValue) {
+		ObjectifyGenericDao<Widget> widgetDao = new ObjectifyGenericDao<Widget>(Widget.class);
+		return widgetDao.getCountByProperty(propertyName, propertyValue);
 	}
 }
