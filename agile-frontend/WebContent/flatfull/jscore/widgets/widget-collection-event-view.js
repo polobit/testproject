@@ -14,9 +14,13 @@ var Widget_Model_Events = Base_Model_View.extend({
   options : {
     saveCallback : function(e){            
       var widgetType = $('#widget-settings').attr('widget-type');
-      if(widgetType == "CUSTOM"){        
-        showNotyPopUp("success" , "Custom widget saved successfully", "bottomRight");
-        window.location.href = "#add-widget";
+      if(widgetType == "CUSTOM"){  
+        if(e){      
+          showNotyPopUp("success" , "Custom widget saved successfully.", "bottomRight");
+          window.location.href = "#add-widget";
+        }else{
+          showNotyPopUp("error" , "Widget name already in use.", "bottomRight");
+        }
       }
     }
   },
