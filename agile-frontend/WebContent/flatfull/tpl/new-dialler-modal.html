@@ -24,23 +24,22 @@
     <div class="modal-content">
     <div class="modal-header">
         <button class="close" data-dismiss="modal">&times;</button>
-        <h3 class="modal-title">&nbsp;New/Update Contact</h3>
+        <h3 class="modal-title">&nbsp;New Call</h3>
     </div>
     <div class="modal-body">
 		<form class="bs-example form-horizontal">
     	 <div class="form-group">
-         	<label class="col-lg-3 control-label">Action</label>
+         	<div class="col-lg-1 p-t-8"></div>
            	 <div class="col-lg-9 p-t-8">
             	<label class="i-checks">
                		<input type="radio" name="call_newNumber_check" id="call_newNumber_check" checked="checked" value="new" title="New Contact">
-						<i></i>New Contact
+						<i></i>Add New Contact
  				</label>
 				&nbsp;&nbsp;&nbsp;
 				<label class="i-checks">
 					 <input type="radio" name="call_newNumber_check" id="call_newNumber_check" value="update" title="Update Contact">
-						<i></i>Update Contact
+						<i></i>Update Existing Contact
               	</label>
-				<i class="icon-question-sign m-l-xs" style="color:#A09898;" data-toggle="tooltip" data-placement="top" title="" data-original-title="For new number, You can create a new contact or merge in an eisting one."></i>
              </div>
          </div>
 
@@ -48,10 +47,11 @@
         	<label class="col-lg-3 control-label">Related To</label>
 			<div class="controls col-lg-7" id="contactTypeAhead"> 
         		<div> 
+					
          			<input type="text" id="relates_to_call_contact" name="relates_to_call_contact" placeholder="Contact Name" class="typeahead typeahead_contacts form-control" data-provide="typeahead" data-mode="multiple" autocomplete="off"><ul class="typeahead dropdown-menu" style="width: 300px; top: 34px; left: 15px; display: none;"></ul> 
          			<div style="padding-top:1px;"> 
-         				<ul name="contact_ids" class="contacts tagsinput tags p-n"></ul> 
-        			</div> 
+        				<ul id="relates_to_call_contact_ul" class="contacts tagsinput tags p-n"></ul> 
+					</div> 
         		</div> 
      		</div>
   		</div>

@@ -683,8 +683,10 @@ function showContactMergeOption(jsonObj){
 	var contact_display = function(data, item)
 	  {
 	   setTimeout(function(){
-		$("#relates_to_call_contact").val(item);
-		$("#relates_to_call_contact").attr("data",data);
+	 	var template = Handlebars.compile('<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="{{id}}">{{name}}</li>');
+	 	// Adds contact name to tags ul as li element
+	 	$("#relates_to_call_contact_ul").html(template({name : item, id : data}));
+	 	$("#relates_to_call_contact").attr("data",data);
 	   },10);
 	  }
 	agile_type_ahead("relates_to_call_contact", el, contacts_typeahead, contact_display, "type=PERSON");
