@@ -104,7 +104,7 @@ public class WidgetsAPI {
 			if (widget.widget_type == WidgetType.CUSTOM) {
 				widget.display_name = widget.name;
 				widget.name = widget.name.replaceAll("[^a-zA-Z]+", "");
-				if (WidgetUtil.checkIfWidgetNameExists(widget.name) > 0) {
+				if (WidgetUtil.checkIfWidgetNameExists(widget.name)) {
 					return null;
 				}
 			}
@@ -142,7 +142,7 @@ public class WidgetsAPI {
 			if (widget.widget_type == WidgetType.CUSTOM) {
 				widget.display_name = widget.name;
 				widget.name = widget.name.replaceAll("[^a-zA-Z]+", "");
-				if (WidgetUtil.checkIfWidgetNameExists(widget.name) > 0) {
+				if (WidgetUtil.checkIfWidgetNameExists(widget.name)) {
 					return null;
 				}
 			}
@@ -168,13 +168,13 @@ public class WidgetsAPI {
 		if (widget != null) {
 			WidgetsAPI.checkValidDetails(widget);
 			
-			if (widget.widget_type == WidgetType.CUSTOM) {
-				widget.display_name = widget.name;
-				widget.name = widget.name.replaceAll("[^a-zA-Z]+", "");
-				if (WidgetUtil.checkIfWidgetNameExists(widget.name) > 1) {
-					return null;
-				}
-			}			
+//			if (widget.widget_type == WidgetType.CUSTOM) {
+//				widget.display_name = widget.name;
+//				widget.name = widget.name.replaceAll("[^a-zA-Z]+", "");
+//				if (WidgetUtil.checkIfWidgetNameExists(widget.name) > 1) {
+//					return null;
+//				}
+//			}			
 			
 			AgileUser agileUser = AgileUser.getCurrentAgileUser();
 			if (agileUser != null) {
