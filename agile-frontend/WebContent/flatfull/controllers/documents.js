@@ -14,30 +14,67 @@ var DocumentsRouter = Backbone.Router.extend({
 	 */
 	documents : function()
 	{
+		getTemplate('documents-static-container', {}, undefined, function(template_ui) {
+					$("#content").html(getTemplate("documents-static-container"));
+
+					// Add top view
+					var sortKey = _agile_get_prefs("Documentssort_Key");
+					if(sortKey == undefined || sortKey == null){
+						sortKey = "name";
+						_agile_set_prefs("Documentssort_Key", sortKey);
+					}
+
+					var that = this;
+					var documentsStaticModelview = new Document_Model_Events({
+						template : 'documents-top-header',
+						isNew : true,
+						model : new Backbone.Model({"sortKey" : sortKey}),
+						postRenderCallback : function(el){
+							// Add collection view
+							console.log("Load collection");
+							App_Documents.loadDocuments($("#content"));
+						}
+					});
+
+					$("#content").find("#documents-top-view").html(documentsStaticModelview.render().el);
+
+				}, $("#content"));
+
+	},
+
+	loadDocuments : function(e)
+	{
 
 		var sortKey = _agile_get_prefs("Documentssort_Key");
-				if(sortKey == undefined || sortKey == null)
+				if (this.DocumentCollectionView && this.DocumentCollectionView.options.global_sort_key == sortKey && this.DocumentCollectionView.collection && this.DocumentCollectionView.collection.length > 0)
 				{
-					sortKey = "name";
-					_agile_set_prefs("Documentssort_Key", sortKey);
-				}
-		var documentsStaticModelview = new Document_Model_Events({url : 'core/api/documents',template : "documents-static", data : {}, isNew : true,order_by : sortKey , postRenderCallback : function(el)
-			{
-				includeTimeAgo(el);
-				updateSortKeyTemplate(sortKey, el);
-				var title = sortKey; 
-				if(title == "uploaded_time" || title == "-uploaded_time")
-				{
-					printSortByName("Uploaded Time",el);
+					$(el).find("#documents-collection-container").html(this.DocumentCollectionView.render(true).el);
 					return;
 				}
-				else
-					printSortByName("Name",el);
 
-				
-			}})
-		$('#content').html(documentsStaticModelview.render().el);
+				// Loading icon
+				$("#content").find("#documents_collection_container").html(LOADING_HTML);
 
-		 // Fetches documents as list
-		documentsCollection (sortKey);
-	} });
+				this.DocumentCollectionView = new Document_Collection_Events({ 
+					url : 'core/api/documents', 
+					sort_collection : false,
+					templateKey : "documents", 
+					individual_tag_name : 'tr', 
+					cursor : true, 
+					page_size : 20, 
+					global_sort_key : sortKey, 
+					postRenderCallback : function(col_el)
+					{
+					//includeTimeAgo(el);
+					//updateSortKeyTemplate(sortField, el);
+					$(".active").removeClass("active");
+					$("#documentsmenu").addClass("active");
+					}});
+					App_Documents.DocumentCollectionView.collection.fetch();
+					// Shows deals as list view
+					$("#content").find("#documents_collection_container").html(App_Documents.DocumentCollectionView.el);
+
+	
+	}
+
+});

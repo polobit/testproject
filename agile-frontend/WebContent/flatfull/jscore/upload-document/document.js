@@ -6,35 +6,8 @@ var Document_Collection_Events = Base_Collection_View.extend({
 	events: {
 		
 		'click #documents-model-list > tr > td:not(":first-child")': 'onDocumentListSelect',
-		'click #Documents_sort_menu > li': 'documentsSort',		
+				
 	},
-	documentsSort : function(e){
-
-		e.preventDefault();
-        var targetEl = $(e.currentTarget);
-        var ele = $(targetEl).find("a").attr("data");
-        if($(targetEl).find("a").hasClass("sort-field")){
-            $("#Documents_sort_menu").find(".sort-field i").addClass("display-none");
-            console.log("finding the target el")
-        }else{
-            $("#Documents_sort_menu").find(".order-by i").addClass("display-none");
-        }
-        $(targetEl).find("i").removeClass("display-none");
-        var sort_key = $("#Documents_sort_menu").find(".order-by i:not(.display-none)").closest(".order-by").attr("data");
-        console.log(sort_key);
-        sort_key = sort_key + $("#Documents_sort_menu").find(".sort-field i:not(.display-none)").closest(".sort-field").attr("data");
-        console.log(sort_key);
-        var previous_sortKey = _agile_get_prefs("Documentssort_Key");
-        if(sort_key == previous_sortKey)
-            return;
-        _agile_set_prefs("Documentssort_Key", sort_key);
-        printSortByName($(".sort-field[data='"+sort_key+"']").attr("label_name"), $(targetEl).closest(".custom-animated custom-fadeInUp"));
-        console.log("before resetting the collection")
-        App_Documents.DocumentCollectionView.collection.reset()
-        Backbone.history.loadUrl(Backbone.history.fragment);
-	},
-	
-
 	 /** 
      * Document list view edit
      */
@@ -51,36 +24,31 @@ var Document_Collection_Events = Base_Collection_View.extend({
 
 var Document_Model_Events = Base_Model_View.extend({
  			events: {
- 						'click #Documents_sort_menu > li': 'documentsSort',
+ 						'click #sort_menu > li': 'documentsSort',
  						'click .documents-add': 'onAddDocument',		
 					},
 			documentsSort : function(e)
 				{
-					e.preventDefault();
-					var targetEl = $(e.currentTarget);
-					var ele = $(targetEl).find("a").attr("data");
-					if($(targetEl).find("a").hasClass("sort-field")){
-					$("#Documents_sort_menu").find(".sort-field i").addClass("display-none");
-					console.log("finding the target el")
-					}else{
-					$("#Documents_sort_menu").find(".order-by i").addClass("display-none");
-					}
-					$(targetEl).find("i").removeClass("display-none");
-					var sort_key = $("#Documents_sort_menu").find(".order-by i:not(.display-none)").closest(".order-by").attr("data");
-					console.log(sort_key);
-					sort_key = sort_key + $("#Documents_sort_menu").find(".sort-field i:not(.display-none)").closest(".sort-field").attr("data");
-					console.log(sort_key);
-					var previous_sortKey = _agile_get_prefs("Documentssort_Key");
-					if(sort_key == previous_sortKey)
-					return;
-					_agile_set_prefs("Documentssort_Key", sort_key);
-					printSortByName($(".sort-field[data='"+sort_key+"']").attr("label_name"), $(targetEl).closest(".custom-animated custom-fadeInUp"));
-					console.log("before resetting the collection");
-					/*App_Documents.DocumentCollectionView.collection.reset();
-					App_Documents.DocumentCollectionView.options.order_by = _agile_get_prefs("Documentssort_Key");
-					App_Documents.DocumentCollectionView.collection.fetch();
-					App_Documents.DocumentCollectionView.render(true);*/
-					documentsCollection(_agile_get_prefs("Documentssort_Key"))
+					 e.preventDefault();
+
+		        var targetEl = $(e.currentTarget);
+		        var sortkey = "", $sort_menu = $("#sort_menu");
+		        if($(targetEl).find("a").hasClass("sort-field"))
+		        {
+		            $sort_menu.find("li").not(targetEl).find("a.sort-field i").addClass("display-none");
+		            $(targetEl).find("a.sort-field i").removeClass("display-none");
+		        } 
+		        else 
+		        {
+		            $sort_menu.find("li").not(targetEl).find("a.order-by i").addClass("display-none");
+		            $(targetEl).find("a.order-by i").removeClass("display-none");
+		        }
+
+		        sortkey = $sort_menu.find(".order-by i:not(.display-none)").closest(".order-by").attr("data");
+		        sortkey += $sort_menu.find(".sort-field i:not(.display-none)").closest(".sort-field").attr("data");
+		        
+		        _agile_set_prefs("Documentssort_Key", sortkey);
+		        this.model.set({"sortKey" : sortkey});
 				},
 				/**
 				 * For adding new document
