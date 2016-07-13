@@ -1513,6 +1513,10 @@ body {
     margin-left: -6px;
     line-height: 1;
   }
+  .app-aside-dock .app-aside .navi > ul > li > a > span.tasks-span-top {
+    top: 2px;
+    margin-left: 0px;
+  }
   .app-aside-dock .app-aside .navi > ul > li > a > span.pull-right i {
     width: 12px;
     font-size: 12px;

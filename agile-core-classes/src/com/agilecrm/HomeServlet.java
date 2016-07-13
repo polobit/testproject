@@ -69,6 +69,7 @@ public class HomeServlet extends HttpServlet
 	    return;
 	}
 
+	System.out.println("setUpAgileUser inside");
 	// Create new user only if this user is not newly registered user
 	if( (req.getSession().getAttribute(RegisterServlet.IS_NEWLY_REGISTERED_USER_ATTR)) == null )
 	{
@@ -245,6 +246,7 @@ public class HomeServlet extends HttpServlet
     	    return;
     	}
 
+    	System.out.println("setUpAgileUser");
     	// If user is new user it will create new AgileUser and set cookie for
     	// initial page tour. It also calls to initialize defaults, if user is
     	// first user in the domain.

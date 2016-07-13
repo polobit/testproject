@@ -38,8 +38,13 @@
 											class="fa fa-file-text"></i> Add Note</a></li>
 									<li><a href='#' class="contact-add-task"><i
 											class="icon-tasks"></i> Add Task</a></li>
+									{{#isRestrictedMenuScope "CASES"}} {{else}}
+									{{#isNewVersionDomainUser}} {{else}}
 									<li><a href='#' class="contact-add-case"><i
 											class="icon-folder" style="margin-right:2px"></i> Add Case</a></li>
+									{{/isNewVersionDomainUser}}
+									{{/isRestrictedMenuScope}}
+
 									{{#hasMenuScope 'DEALS'}}
 									<li><a href='#' class="contact-add-deal"><i class="icon-money" style="margin-right:2px"></i>
 											Add Opportunity</a></li>
@@ -452,8 +457,13 @@
 								<ul class="dropdown-menu pull-right text-sm"  role="menu">
 <li> <a href="#company-edit"><i class="fa fa-edit" style="margin-right:2px"></i> Edit</a></li>
 <li class="divider"></li>
+									{{#isRestrictedMenuScope "CASES"}} {{else}}
+										{{#isNewVersionDomainUser}} {{else}}
 									<li><a href='#' class="contact-add-case"><i
 											class="icon-folder" style="margin-right:2px"></i> Add Case</a></li>
+										{{/isNewVersionDomainUser}}
+									{{/isRestrictedMenuScope}}
+
 									{{#hasMenuScope 'DEALS'}}
 									<li><a href='#' class="contact-add-deal"><i class="icon-money" style="margin-right:2px"></i>
 											Add Deal</a></li>

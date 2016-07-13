@@ -280,7 +280,7 @@ function isIE() {
          %>" screen_name="Need Help? We are one click away." data-content="<div class='row' id='need_help_header'>
                   <ul class='col-xs-12 col-sm-12 grid-sub-nav text-center m-t-md p-l-md p-r-md'>
                     
-                <li class='pull-left m-b-sm'><a href='#' class='menu-service-select' data-service-name='SALES' data-dashboard='dashboard'><i class='thumb'><img src='img/sales.svg'></i><span class='block'>Sales</span></a></li>
+                <li class='pull-left m-b-sm'><a href='#' class='menu-service-select' data-service-name='SALES' data-dashboard='SalesDashboard'><i class='thumb'><img src='img/sales.svg'></i><span class='block'>Sales</span></a></li>
 
                 <li class='pull-left m-b-sm'><a href='#' class='menu-service-select' data-service-name='MARKETING' data-dashboard='MarketingDashboard'><i class='thumb'><img src='img/marketing.svg'></i> <span class='block'>Marketing</span></a></li>
 
@@ -434,7 +434,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
     <a href="#tasks" onclick="Agile_GA_Event_Tracker.track_event('Tasks Option in Nav Bar')">
       <i class="icon-list" data-original-title="" title=""></i>
       <span>Tasks</span>
-      <span title="Tasks due" class="navbar_due_tasks pull-right">
+      <span title="Tasks due" class="navbar_due_tasks pull-right tasks-span-top">
           <span  id="due_tasks_count" class="badge badge-sm bg-danger"></span>
       </span>
     </a>
@@ -578,6 +578,15 @@ if(currentUserPrefs.menuPosition.equals("top")){
       <span>Reports</span>
     </a>
   </li> 
+  <li id="tasksmenu" class="hide">
+    <a href="#tasks" onclick="Agile_GA_Event_Tracker.track_event('Tasks Option in Nav Bar')">
+      <i class="icon-list" data-original-title="" title=""></i>
+      <span>Tasks</span>
+      <span title="Tasks due" class="navbar_due_tasks pull-right tasks-span-top">
+          <span  id="due_tasks_count" class="badge badge-sm bg-danger"></span>
+      </span>
+    </a>
+  </li>
     <%
           }
     %> 
@@ -597,6 +606,16 @@ if(currentUserPrefs.menuPosition.equals("top")){
     <a href="#tickets">
       <i class="icon icon-ticket"></i>
       <span>Help Desk</span>
+    </a>
+  </li>
+
+  <li id="tasksmenu" class="hide">
+    <a href="#tasks" onclick="Agile_GA_Event_Tracker.track_event('Tasks Option in Nav Bar')">
+      <i class="icon-list" data-original-title="" title=""></i>
+      <span>Tasks</span>
+      <span title="Tasks due" class="navbar_due_tasks pull-right tasks-span-top">
+          <span  id="due_tasks_count" class="badge badge-sm bg-danger"></span>
+      </span>
     </a>
   </li>
 
