@@ -1,0 +1,85 @@
+<style>
+
+.search-box {
+	margin: 0 auto 35px;
+	padding: 80px;
+	text-align: center;
+}
+
+.search-box .input-append {
+	padding: 0 20px;
+}
+
+.search-box h1 {
+	font-weight: bold;
+}
+
+.search-box h1,.search-box h3 {
+	padding: 0 0 15px;
+	color: #fff;
+}
+
+.search-box .input-append {
+	min-width: 800px;
+	margin-top: 20px;
+}
+
+.margin-btm30 {
+	margin-bottom: 30px;
+}
+
+.margin-btm15 {
+	margin-bottom: 15px;
+}
+
+body,input,button,select,textarea {
+	font-family: Arial, sans-serif;
+}
+
+.search-box input[name='hc_query'] {
+	border-radius: 8px 0 0 8px;
+	background: #fff;
+	font-size: 20px;
+	padding: 20px 30px;
+	width: 500px;
+	line-height: 1em;
+	width: 550px;
+}
+
+.search-box input[type="submit"] {
+	font-size: 20px;
+	line-height: 1.4em;
+	border-radius: 0 8px 8px 0 !important;
+	padding: 19px 50px;
+	margin-left: -5px;
+	vertical-align: top;
+}
+	
+</style>
+
+    <div class="search-box">
+        <h1>Have a question?</h1>
+        <h3>If you have any question you can enter what you are looking for!</h3>
+		<form id="article_search_form" name="article_search_form" method="get" 
+			onsubmit="Helpcenter_Util.searchArticles();return false;">	
+			<div class="If you have any question you can enter what you are looking forinput-append">
+				<input id="hc_query" name="hc_query" type="text" placeholder="Search">
+				<input name="commit" type="submit" value="Search" class="btn btn-primary">
+			</div>
+		</form>	
+	</div>
+	
+<script>
+	({
+		name: 'Knowledge Base Search',
+	 	frameworks: ['base'],
+	 	nodes: ['div'],
+	 	html: '<div></div>',
+	 	types: ['flow'],
+	 	validChildren: ['flow'],
+	 	category: 'knowledgebase',
+	    dragHelper: true,
+	 	previewScale: '0.7',
+	    icon: 'info-circled'
+	})
+</script>
