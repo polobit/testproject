@@ -1,7 +1,11 @@
 <script id="helpcenter-categories-collection-template" type="text/html">
+{{#unless this.length}}
+		<h4>No categories found.</h4>
+	{{else}}
 	<h1 class="m-n font-thin h3 text-black m-b-sm">Categories</h1>
 	<div class="row">
     	<div class="col-md-8 m-t-lg" id="helpcenter-categories-model-list">
     	</div>
 	</div>
+{{/unless}} 	
 </script>

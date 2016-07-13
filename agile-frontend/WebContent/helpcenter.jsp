@@ -5,7 +5,8 @@
 <%@page import="com.google.appengine.api.taskqueue.Queue"%>
 <%@page import="com.agilecrm.subscription.Subscription"%>
 <%@page import="com.google.appengine.api.NamespaceManager"%>
-<%@page import="com.campaignio.servlets.deferred.DomainUserAddPicDeferredTask"%>
+<%@page
+	import="com.campaignio.servlets.deferred.DomainUserAddPicDeferredTask"%>
 <%@page import="com.google.appengine.api.taskqueue.TaskOptions"%>
 <%@page import="com.google.appengine.api.taskqueue.QueueFactory"%>
 <%@page import="com.agilecrm.activities.util.TaskUtil"%>
@@ -18,8 +19,10 @@
 <%@page import="com.agilecrm.HomeServlet"%>
 <%@page import="com.agilecrm.account.util.AccountPrefsUtil"%>
 <%@page import="com.agilecrm.account.AccountPrefs"%>
-<%@page import="com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil"%>
-<%@page import="com.agilecrm.subscription.restrictions.db.BillingRestriction"%>
+<%@page
+	import="com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil"%>
+<%@page
+	import="com.agilecrm.subscription.restrictions.db.BillingRestriction"%>
 <%@page import="com.agilecrm.user.util.DomainUserUtil"%>
 <%@page import="com.agilecrm.user.DomainUser"%>
 <%@page import="org.apache.commons.lang.StringUtils"%>
@@ -29,43 +32,29 @@
 <%@page import="com.agilecrm.user.UserPrefs"%>
 <%@page import="com.agilecrm.user.util.UserPrefsUtil"%>
 <%@page import="org.codehaus.jackson.map.ObjectMapper"%>
+<%@page import="com.agilecrm.landingpages.LandingPageUtil"%>
+<%@page	import="com.agilecrm.knowledgebase.entity.LandingPageKnowledgebase"%>
+<%@page	import="com.agilecrm.landingpages.LandingPage"%>
+<%@page	import="com.agilecrm.landingpages.LandingPageServlet"%>
+
 <%@page language="java" contentType="text/html; charset=UTF-8"
-pageEncoding="UTF-8"%>
+	pageEncoding="UTF-8"%>
 
+<%@page	import="com.agilecrm.db.ObjectifyGenericDao"%>
+<%@page	import="com.agilecrm.account.APIKey"%>
+<%@page	import="com.agilecrm.knowledgebase.util.KbLandingPageUtil"%>
 
-
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<title>Helpcenter | Agile CRM</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0 maximum-scale=1.0">
-<meta name="description" content="">
-<meta name="author" content="">
-<meta name="globalsign-domain-verification" content="-r3RJ0a7Q59atalBdQQIvI2DYIhVYtVrtYuRdNXENx" />
-<link rel="chrome-webstore-item" href="https://chrome.google.com/webstore/detail/eofoblinhpjfhkjlfckmeidagfogclib">
-
-<!-- Include ios meta tags -->
-<%@ include file="ios-native-app-meta-tags.jsp"%>
-
-
-<%
-  KnowledgebaseUserInfo kuserInfo = KnowledgebaseManager.get();
   
-  //Get current user prefs
-  UserPrefs currentUserPrefs = null;
-  DomainUser domainUser = null;
-  ObjectMapper mapper = new ObjectMapper();
+  <%
+  LandingPageKnowledgebase  kbpage = KbLandingPageUtil.get(); ;
+
+	if(kbpage == null ||kbpage.kb_landing_page_id == 0 ){%>
+		<%@ include file="/knowledgebase.jsp"%>
+	<%}%> 
+	
+	<% 
   
-  //Not using these prefs
-  if(kuserInfo != null){
-	  
-	  if(!(kuserInfo.role == Role.CUSTOMER)){
-		  currentUserPrefs = UserPrefsUtil.getCurrentUserPrefs();
-	  	  domainUser =  DomainUserUtil.getCurrentDomainUser();
-	  }
-  }
-  
-  // Download the template the user likes
+	
   String template = "default";
 
   boolean is_fluid = false;
@@ -74,9 +63,43 @@ pageEncoding="UTF-8"%>
 
   String _VERSION_ID = VersioningUtil.getVersion();
 
-  boolean is_user_loggedin = (kuserInfo != null);
-%>
+  
+		try{
+	
+	if(kbpage !=null){
+		Long landingpageid = kbpage.kb_landing_page_id;
+	LandingPageUtil lpUtil = new LandingPageUtil();
+	LandingPage landingPage = lpUtil.getLandingPage(landingpageid);
+	if(landingPage == null)
+	throw new Exception("No landing page found.");
 
+	String fullXHtml = landingPage.html;
+	fullXHtml =  new LandingPageServlet().getResponsiveMediaIFrame(fullXHtml);
+
+	String domainHost = "http://localhost:8888";
+	if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Production) {
+		domainHost = "https://" + lpUtil.requestingDomain +  ".agilecrm.com";		
+		//domainHost = "https://" + lpUtil.requestingDomain + "-dot-sandbox-dot-agilecrmbeta.appspot.com";
+	}
+
+	String analyticsCode = "";
+			
+	if(landingPage.elements_css != null){
+		fullXHtml = fullXHtml.replace("</head>", "<style id=\"elements-css\">"+landingPage.elements_css+"</style></head>");	
+	}
+	fullXHtml = fullXHtml.replace("</head>", "<style>"+landingPage.css+"</style></head>");
+	fullXHtml = fullXHtml.replace("</body></html>", landingPage.js+"</script>");		
+		
+
+	out.write(fullXHtml);
+		}
+	} catch (Exception e) {
+	out.print("<h1>"+e.getMessage()+"</h1>");
+	} finally {
+	}
+
+  
+%>
 <%
   String CSS_PATH = "/";
   String FLAT_FULL_PATH = "flatfull/";
@@ -99,61 +122,9 @@ pageEncoding="UTF-8"%>
 	  CSS_PATH = FLAT_FULL_PATH;
   }
 %>
-
-<link rel="stylesheet" type="text/css" href="flatfull/css/min/css-all-min.css?_=<%=_AGILE_VERSION%>"></link>
-<link rel="stylesheet" type="text/css" href="flatfull/css/lib/helpcenter.css?_=<%=_AGILE_VERSION%>"></link>
-<!--  responsive table js -->
-<!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
-<!--[if lt IE 9]>
-<script src="lib/ie/html5.js"></script>
-<![endif]-->
-
-<!--[if lt IE 8]>
-<script src="lib/ie/json.js"></script>
-<![endif]-->
-</head>
-
-
-
-<body>
-
-<script type="text/javascript">
-function isIE() {
-  var myNav = navigator.userAgent.toLowerCase();
-  return (myNav.indexOf('msie') != -1) ? parseInt(myNav.split('msie')[1]) : false;
-}
-
- if(isIE() && isIE() < 10)
- {window.location='/error/not-supported.jsp';}
-
-</script>
-<div id="alert-message" style="display:none;"></div>
-<div id="wrap" class="app app-aside-folded-inactive app-header-fixed app-aside-fixed" style="background-color: white;">
-
-<!-- Including header(Navigation Bar) page -->
-<%@ include file="/helpcenter/header.html"%>
-
-<div class="app-content" id="agilecrm-container" style="margin-left: 0px;">
-	<!-- <div class="butterbar animation-active" style="z-index:99;"><span class="bar"></span></div>-->
-	<div id="content" class="app-content-body"></div>
-</div>
-<div id="push"></div>
-
-<!-- Notifications -->
-<div class='notifications top-left'></div>
-<div class='notifications top-right'></div>
-<div class='notifications bottom-left'></div>
-<div class='notifications bottom-right'></div>
-
-<div id='templates'></div>
-
-<!-- Templates
-Use = [<]%@ include file="tpl/min/tpl.js" %[>] -->
-    
-  
-
 <!-- Determine Console.logging - we log in local boxes -->
 <%
+
 boolean debug = true;
 boolean production = false;
 boolean HANDLEBARS_PRECOMPILATION = false;
@@ -166,13 +137,12 @@ if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Produ
 }
 
 %>
-
-</div>
-<!-- Including Footer page -->
-<jsp:include page="flatfull/footer.jsp" />
-
+<link rel="stylesheet" type="text/css" href="flatfull/css/min/css-all-min.css?_=<%=_AGILE_VERSION%>"></link>
+  <link rel="stylesheet" type="text/css" href="flatfull/css/min/helpcenter-custom.css?_=<%=_AGILE_VERSION%>"></link>
 <script src='//cdnjs.cloudflare.com/ajax/libs/headjs/1.0.3/head.min.js'></script>
 <script>
+
+<%-- var landingpageid = <%=landingpageid %> --%>
 
 try{console.time("startbackbone");}catch(e){}
 
@@ -192,7 +162,7 @@ var CLOUDFRONT_PATH = '<%=CLOUDFRONT_TEMPLATE_LIB_PATH%>';
 
 var FLAT_FULL_UI = "flatfull/";  
 
-var _AGILE_VERSION = <%="\"" + _AGILE_VERSION + "\""%>;
+var _AGILE_VERSION = "<%=_AGILE_VERSION%>";
 
 var HANDLEBARS_PRECOMPILATION = false || <%=production%>;
 
@@ -204,17 +174,7 @@ var LOCAL_SERVER = <%=debug%>;
 
 var IS_FLUID = <%=is_fluid %>
 
-var CLICKDESK_CODE_LOADED = false;
 
-//Get current user prefs json
-var CURRENT_USER_PREFS = <%=SafeHtmlUtil.sanitize(UserPrefsUtil.getMapperString(currentUserPrefs))%>;
-
-//Get current domain user json
-var CURRENT_DOMAIN_USER = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(domainUser))%>;
-
-var IS_USER_LOGGED_IN = <%=is_user_loggedin %>
-;
-var USERINFO = JSON.parse('<%= kuserInfo%>');
 
 var HANDLEBARS_LIB = LOCAL_SERVER ? "/lib/handlebars-v1.3.0.js" : "//cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.3.0/handlebars.min.js";
 

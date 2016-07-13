@@ -45,6 +45,11 @@ public class Section implements Serializable
 	public Long created_time = null;
 
 	public Long updated_time = null;
+	
+	/**
+     * Order of the categorie in the list.
+     */
+    public Integer order = 0;
 
 	/**
 	 * Stores Categorie key

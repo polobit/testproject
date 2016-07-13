@@ -1,9 +1,14 @@
 <script id="helpcenter-sections-model-template" type="text/html">
-<div>
+{{#if_equals visible_to "CUSTOMER"}}
+<div style="padding-top:10px">
+
+	<div class="col-md-12 m-b-md">
 	<i class="fa fa-chevron-right" aria-hidden="true"></i>
-	<a class="h5" href="#categorie/{{categorie_id}}/section/{{id}}" 
+	<a class="h5" href="#section/{{name}}" 
 		style="font-size: 16px; vertical-align: top;">
 		{{name}}
 	</a>
+	</div>
 </div>
+{{/if_equals}}
 </script>

@@ -46,6 +46,11 @@ public class Categorie implements Serializable
 	public Long updated_time = null;
 
 	/**
+     * Order of the categorie in the list.
+     */
+    public Integer order = 0;
+	
+    /**
 	 * Stores user ID to whom ticket is assigned
 	 */
 	@JsonIgnore
@@ -115,6 +120,16 @@ public class Categorie implements Serializable
 
 		updated_by_key = key;
 	}
+	
+	/**
+     * @param order
+     *            the order to set
+     */
+    public void setOrder(Integer order)
+    {
+	this.order = order;
+    }
+
 
 	public Key<Categorie> save()
 	{

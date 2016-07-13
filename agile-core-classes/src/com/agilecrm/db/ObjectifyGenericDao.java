@@ -52,6 +52,7 @@ import com.agilecrm.knowledgebase.entity.Article;
 import com.agilecrm.knowledgebase.entity.Categorie;
 import com.agilecrm.knowledgebase.entity.Comment;
 import com.agilecrm.knowledgebase.entity.HelpcenterUser;
+import com.agilecrm.knowledgebase.entity.LandingPageKnowledgebase;
 import com.agilecrm.knowledgebase.entity.Section;
 import com.agilecrm.ipaccess.IpAccess;
 import com.agilecrm.landingpages.LandingPage;
@@ -283,6 +284,7 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	ObjectifyService.register(Article.class);
 	ObjectifyService.register(Comment.class);
 	ObjectifyService.register(HelpcenterUser.class);
+	ObjectifyService.register(LandingPageKnowledgebase.class);
 
 	ObjectifyService.register(IpAccess.class);
     /**
@@ -516,9 +518,11 @@ public class ObjectifyGenericDao<T> extends DAOBase
     public T getByProperty(Map<String, Object> map)
     {
 	Query<T> q = ofy().query(clazz);
-	for (String propName : map.keySet())
-	{
-	    q.filter(propName, map.get(propName));
+	if(map != null){
+		for (String propName : map.keySet())
+		{
+		    q.filter(propName, map.get(propName));
+		}
 	}
 
 	return fetch(q);

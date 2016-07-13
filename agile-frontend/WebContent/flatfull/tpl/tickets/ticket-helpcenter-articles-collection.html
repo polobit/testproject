@@ -1,0 +1,67 @@
+<script id="ticket-helpcenter-articles-collection-template" type="text/html">
+{{#unless this.length}}
+    <div class="col panel wrapper">
+    <div class="hbox h-auto m-b-sm">
+        <div class="text-center padder-v">
+            <h4 class="m-t-none m-b-xs">You don&#39;t have any articles</h4>
+            <div class="m-b-xs text-muted">
+                You can add article for your section by clicking the button below.
+            </div>
+            <div>
+                <a href="#knowledgebase/add-article{{#helpcenter_url_section}}{{/helpcenter_url_section}}" class="btn btn-sm btn-default btn-slate-action">
+                    <span><i class="icon-plus-sign"></i></span> Add Article
+                </a>
+            </div>
+        </div>
+    </div>
+{{/unless}}
+{{#if this.length}}
+    <div class="col panel wrapper">
+        <div class="hbox h-auto m-b-sm">
+            <div class="pull-right">
+                <a href="#knowledgebase/add-article{{#helpcenter_url_section}}{{/helpcenter_url_section}}" class="btn btn-sm btn-default btn-addon">
+                    <span><i class="icon-plus-sign"></i></span> Add Article
+                </a>
+            </div>
+            <table class="table table-striped showCheckboxes m-b-none agile-table panel table-layout-mob-view show-delete-modal" url="core/api/knowledgebase/article/bulk" data-bulk-delete-title="Delete"
+                data-bulk-delete-msg="Are you sure you want to delete?" id="ticket-article-table">
+                    <thead>
+                        <tr>
+                            <th class="hide">Id</th>
+                            <th style="width:25%">Title</th>
+                            <th style="width:22%">Created By</th>
+                            <th style="width:40%"></th>
+                        </tr>
+                    </thead>
+                    <tbody id="ticket-helpcenter-articles-model-list" class="c-p"> </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="col w-md  wrapper pos-rlt track-milestone-text p-t-none" >
+            <h4 class="m-t-none h4 m-b-sm">
+               Knowledge Base
+            </h4>
+            <p>
+              Configure your knowledge base by adding categories, sections and articles, select a landing page in knowledge base settings and access your knowledge base.
+            </p> 
+            <ul>
+              <li>
+                 Click on category to see how many sections you have.
+              </li>
+              <li>
+                 Click on section to see how many articles you have.
+              </li>
+            </ul>
+            <br>
+            {{#if this.length}}
+            <p  class="invisible">
+               <a href="https://www.youtube.com/watch?v=vrxV_52QQTc" target="_blank">
+               <img src="{{getS3ImagePath '../../img/landingpage-info.png'}}" class="img-responsive w-full">
+               </a>
+            </p>
+            <br>
+            {{/if}}
+      
+    </div>
+    {{/if}}
+</script>

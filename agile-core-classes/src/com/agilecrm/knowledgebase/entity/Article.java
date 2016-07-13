@@ -59,6 +59,11 @@ public class Article extends Cursor implements Serializable
 	public Long updated_time = null;
 
 	/**
+     * Order of the categorie in the list.
+     */
+    public Integer order = 0;
+    
+	/**
 	 * Stores Categorie key
 	 */
 	@JsonIgnore
@@ -82,7 +87,7 @@ public class Article extends Cursor implements Serializable
 	@NotSaved
 	public Long section_id = null;
 
-	public Boolean is_article_published = Boolean.FALSE;
+	public Boolean is_article_published = Boolean.TRUE;
 
 	public Boolean comments_disabled = Boolean.FALSE;
 
