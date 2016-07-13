@@ -572,22 +572,28 @@ public class WidgetUtil {
 	 * @param name
 	 * @return
 	 */
-	public static boolean checkIfWidgetNameExists(String name) {
+	public static int checkIfWidgetNameExists(String name) {
 		if (name == null)
-			return false;
+			return 0;
 		
-		for (Widget defaultWidget : DefaultWidgets.getAvailableDefaultWidgets())
-			if (defaultWidget.name.equals(name))
-				return true;
-
-		if (CustomWidgets.getCount("name", name) != 0)
-			return true;
+		for (Widget defaultWidget : DefaultWidgets.getAvailableDefaultWidgets()){
+			if (defaultWidget.name.equals(name)){
+				return 2;
+			}
+		}
 		
+		int customCount = CustomWidgets.getCount("name", name);
+		int widgetCount = WidgetUtil.getWidgetCount("name", name);
 		
-		if (WidgetUtil.getWidgetCount("name", name) != 0)
-			return true;
+		if (customCount > 0 || widgetCount > 0){
+			if(widgetCount > 0){
+				return widgetCount;
+			}else{
+				return customCount;
+			}
+		}
 		
-		return false;
+		return 0;
 	}
 
 	/**
