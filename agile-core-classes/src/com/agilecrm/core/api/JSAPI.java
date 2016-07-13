@@ -19,6 +19,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.DeserializationConfig;
@@ -1367,6 +1368,7 @@ public class JSAPI
 	catch (Exception e)
 	{
 	    e.printStackTrace();
+	    System.out.println(ExceptionUtils.getFullStackTrace(e));
 	    return null;
 	}
 	
