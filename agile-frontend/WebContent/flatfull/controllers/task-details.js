@@ -527,7 +527,7 @@ function saveTaskNote(form, noteModal, element, note)
 				// Replace contacts object with contact ids
 				var taskJSON = taskDetailView.toJSON();
 				var contacts = [];
-				$.each(taskJSON.taskContacts, function(index, contact)
+				$.each(taskJSON.contacts, function(index, contact)
 				{
 					contacts.push(contact.id);
 				});

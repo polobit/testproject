@@ -449,7 +449,7 @@ function save_task(formId, modalId, isUpdate, saveBtn)
 							 * Verifies whether the added task is related to the
 							 * contact in contact detail view or not
 							 */
-							$.each(task.taskContacts, function(index, contact)
+							$.each(task.contacts, function(index, contact)
 							{
 								if (contact.id == App_Contacts.contactDetailView.model.get('id'))
 								{
@@ -769,7 +769,7 @@ function complete_task(taskId, collection, ui, callback)
 	var taskJSON = collection.get(taskId).toJSON();
 	// Replace contacts object with contact ids
 	var contacts = [];
-	$.each(taskJSON.taskContacts, function(index, contact)
+	$.each(taskJSON.contacts, function(index, contact)
 	{
 		contacts.push(contact.id);
 	});
