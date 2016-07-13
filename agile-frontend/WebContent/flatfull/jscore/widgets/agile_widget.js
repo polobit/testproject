@@ -618,6 +618,7 @@ function agile_crm_save_contact_properties(newproperties){
 	var properties = contact_model.get('properties');
 	
 	$.each(newproperties, function(index,value){
+		console.log("contact details : *** " + value)
 		properties.push(value);
 	});
 
@@ -630,7 +631,7 @@ function agile_crm_save_contact_properties(newproperties){
 	// Save updated contact model
 	contact_model.save();
 
-	App_Contacts.contactDetailView.render(true);
+	//App_Contacts.contactDetailView.render(true);
 
 }
 

@@ -87,6 +87,8 @@ function warpFullContactToAgileContact(agileContact, fullContact){
 			$.each(resultArray, function(index,value){
 				result += "<p>"+value+"</p>";
 			});
+		}else{
+			alert("nothing");
 		}
 
 	}
