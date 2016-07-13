@@ -1108,15 +1108,17 @@ head.load([{'js-core-1': CLOUDFRONT_PATH + 'jscore/min/' + FLAT_FULL_PATH +'js-a
 				var sig = CURRENT_USER_PREFS.signature;
 				sig = sig.replace(/&lt;/g, "<").replace(/&gt;/g, ">");
 				CURRENT_USER_PREFS.signature = sig;
+
+        //Turn off all animations if this is mobile
+        if( agile_is_mobile_browser() )
+        {
+          $("body")[0].addClass('disable-anim');
+        }
+
 			} catch(e) {
 				
 			}
 
-			//Turn off all animations if this is mobile
-			if( agile_is_mobile_browser() )
-			{
-				$("body")[0].addClass('disable-anim');
-			}
 	});
 
 // head.js({"stats" : '<%=CLOUDFRONT_TEMPLATE_LIB_PATH%>stats/min/agile-min.js' + "?_=" + _AGILE_VERSION});
