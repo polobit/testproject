@@ -70,7 +70,7 @@ public class HomeServlet extends HttpServlet
 	}
 
 	// Create new user only if this user is not newly registered user
-	if( req.getAttribute(RegisterServlet.IS_NEWLY_REGISTERED_USER_ATTR) == null )
+	if( (req.getSession().getAttribute(RegisterServlet.IS_NEWLY_REGISTERED_USER_ATTR)) == null )
 	{
 		// Create New User - AgileUser (for this namespace)
 		new AgileUser(SessionManager.get().getDomainId()).save();
@@ -164,13 +164,6 @@ public class HomeServlet extends HttpServlet
     Boolean isNewUserSessionAttr = (Boolean) request.getSession().getAttribute(RegisterServlet.IS_NEWLY_REGISTERED_USER_ATTR);
     System.out.println("isNewUserSessionAttr = " + isNewUserSessionAttr);
     if( isNewUserSessionAttr != null && isNewUserSessionAttr.booleanValue() == true )
-    {
-    	return true;
-    }
-    
-    Boolean isNewUserAttr = (Boolean) request.getAttribute(RegisterServlet.IS_NEWLY_REGISTERED_USER_ATTR);
-    System.out.println("isNewUser = " + isNewUserAttr);
-    if( isNewUserAttr != null && isNewUserAttr.booleanValue() == true )
     {
     	return true;
     }
