@@ -6,7 +6,7 @@
 					<div class="m-l-sm" id="slate"></div>
 				{{/unless}}
 				{{#if this.length}}
-					<table id="companies" class="table showCheckboxes  no-sorting panel agile-table noDelete"  url="core/api/contacts/delete?action=DELETE" style="table-layout:auto">
+					<table id="companies" class="table no-sorting panel agile-table noDelete"  url="core/api/contacts/delete?action=DELETE" style="table-layout:auto">
 						<div class="filter-criteria"></div>
 						<tbody id="companies-list-view-model-list" route="company/"></tbody>
             		</table>
@@ -21,7 +21,7 @@
 					<div class="m-l-sm" id="slate"></div>
 		        {{/unless}}
 		        {{#if this.length}}
-		        	<table id="companies" class="table table-striped companies-custom tableNewView noDelete showCheckboxes no-sorting panel agile-table {{#is_mobile}} noDelete {{/is_mobile}}"  url="core/api/contacts/delete?action=DELETE" style="table-layout:auto">                
+		        	<table id="companies" class="table table-striped companies-custom tableNewView noDelete showCheckboxes no-sorting panel agile-table {{#is_mobile}} noDelete {{/is_mobile}} no-header-checkbox"  url="core/api/contacts/delete?action=DELETE" style="table-layout:auto">                
 						<div class="filter-criteria"></div>
 						<thead>
 							<tr style="text-transform: capitalize;">

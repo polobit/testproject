@@ -52,10 +52,10 @@ $(function(){
 
 		
 		// Remove, if rendere of a collection is called multiple times 
-		if(table_headers.length == 0 && $(table).attr("id") != "contacts-table" && $(table).attr("id") != "companies")
+		if(table_headers.length == 0 && !$(table).hasClass("no-header-checkbox"))
 			$(table_header_row).prepend('<th style="width:5%;"><label class="i-checks i-checks-sm m-b-none"><input type="checkbox" class="thead_check" value=""><i></i></label></th>');
 		
-		if(table_headers.length == 0 && ($(table).attr("id") == "contacts-table" || $(table).attr("id") == "companies"))
+		if(table_headers.length == 0 && $(table).hasClass("no-header-checkbox"))
 			$(table_header_row).prepend('<th style="width:5%;"></th>');
 
 		if(table_cell.length == 0)
