@@ -27,7 +27,7 @@ function campaignAlert(alertType)
 	if(alertType == "Empty_Widget")
 		{
 		alertJSON["title"]="No Twilio Number";
-		alertJSON["message"]="The Twilio call widget you configured does not have a purchased number. Please purchase a number from Twilio to start calling.";
+		alertJSON["message"]="The Twilio integration you configured does not have a purchased number. Please purchase a number from Twilio to start calling.";
 		templateName = "CallWidget-integration-alert-modal";
 		}
 
@@ -40,8 +40,8 @@ function campaignAlert(alertType)
 
 	if(alertType == "Unauthorised_Call_Widget")
 		{
-		alertJSON["title"]="Call Widget  not Configured";
-		alertJSON["message"]="You need to enable Twilio Call widget to use this option. Please enable it in Preferences -> Widgets";
+		alertJSON["title"]="Twilio Integration not Configured";
+		alertJSON["message"]="You need to enable Twilio Integration to use this option. Please enable in Admin Settings -> Integrations";
 		templateName = "CallWidget-integration-alert-modal";
 		}
 
