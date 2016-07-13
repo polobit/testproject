@@ -2812,6 +2812,16 @@ $(function()
 		 
 	});
 
+	Handlebars.registerHelper('isNewVersionDomainUser',function(options)
+	{
+		if(CURRENT_DOMAIN_USER.version){
+			return options.fn(this);
+		}else{
+			return options.inverse(this);
+		}
+		 
+	});
+
 	Handlebars.registerHelper("check_plan", function(plan, options)
 	{
 		console.log(plan);
@@ -2933,6 +2943,17 @@ $(function()
 	Handlebars.registerHelper("hasRestrictedMenuScope", function(scope_constant, options)
 	{
 		if (CURRENT_DOMAIN_USER.restricted_scopes && $.inArray(scope_constant, CURRENT_DOMAIN_USER.restricted_scopes) != -1){
+			return options.fn(this);
+		}
+		return options.inverse(this);
+	});
+
+	/**
+	 * Helps to check the restricted permissions of the user based on the ACL.
+	 */
+	Handlebars.registerHelper("isRestrictedMenuScope", function(scope_constant, options)
+	{
+		if (CURRENT_DOMAIN_USER.restricted_menu_scopes && $.inArray(scope_constant, CURRENT_DOMAIN_USER.restricted_menu_scopes) != -1){
 			return options.fn(this);
 		}
 		return options.inverse(this);

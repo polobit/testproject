@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<%@page import="com.agilecrm.user.DomainUser.ROLE"%>
 <%@page import="com.campaignio.servlets.deferred.WorkflowAddAccessLevelDeferredTask"%>
 <%@page import="com.google.appengine.api.taskqueue.Queue"%>
 <%@page import="com.agilecrm.ipaccess.IpAccessUtil"%>
@@ -193,6 +194,26 @@ content="<%=domainUser.getInfo(DomainUser.LAST_LOGGED_IN_TIME)%>" />
   display: none !important;
 }
 
+.search label { position:absolute; margin:5px 0 0 5px; }
+.search input[type="text"]{
+    text-indent:1px;
+    padding:0 0 0 22px;
+    width:0;
+    height:22px;
+    
+    border:1px solid #ccc;
+    color:#000;
+   
+    -webkit-transition:width 0.5s ease-in-out;
+    -moz-transition:width 0.5s ease-in-out;
+    cursor:pointer;
+}
+.search input[type="text"]:focus{
+    width:200px;
+    outline:none;
+    cursor:text;
+}
+
 </style>
 <!--  responsive table js -->
 <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
@@ -220,6 +241,58 @@ function isIE() {
 
 </script>
 <div id="alert-message" style="display:none;"></div>
+
+<div rel="popover" data-custom-popover-class='grid_custom_popover' data-trigger="click"  data-original-title="" title="" data-placement="bottom" class="need_help grid_icon_center hidden-xs <%
+          switch (Integer.parseInt(currentUserPrefs.theme)) {
+            case 1:  out.print("bg-white-only ");
+                   break;
+            case 2:  out.print("bg-white-only ");
+                 break;
+            case 3:  out.print("bg-white-only ");
+                 break;
+            case 4:  out.print("bg-white-only ");
+                 break;
+            case 5:  out.print("bg-white-only ");
+                 break;
+            case 6:  out.print("bg-white-only ");
+                 break;
+            case 7:  out.print("bg-black ");
+                 break;
+            case 8:  out.print("bg-info dker ");
+                 break;
+            case 9:  out.print("bg-primary ");
+                 break;
+            case 10:  out.print("bg-info dk ");
+                 break;
+            case 11:  out.print("bg-success ");
+                 break;
+            case 12:  out.print("bg-danger dker ");
+                 break;
+            case 13:  out.print("bg-white-only ");
+                 break;
+            case 14:  out.print("bg-dark ");
+                 break;
+            default:
+                    break;
+         
+          }
+              
+         %>" screen_name="Need Help? We are one click away." data-content="<div class='row' id='need_help_header'>
+                  <ul class='col-xs-12 col-sm-12 grid-sub-nav text-center m-t-md p-l-md p-r-md'>
+                    
+                <li class='pull-left m-b-sm'><a href='#' class='menu-service-select' data-service-name='SALES' data-dashboard='dashboard'><i class='thumb'><img src='img/sales.svg'></i><span class='block'>Sales</span></a></li>
+
+                <li class='pull-left m-b-sm'><a href='#' class='menu-service-select' data-service-name='MARKETING' data-dashboard='MarketingDashboard'><i class='thumb'><img src='img/marketing.svg'></i> <span class='block'>Marketing</span></a></li>
+
+                <li class='pull-left m-b-sm'><a href='#' class='menu-service-select' data-service-name='SERVICE' data-dashboard='dashboard'><i class='thumb'><img src='img/service.svg'></i> <span class='block'>Service</span></a></li>
+
+                </ul>
+                </div>
+                
+                  </div>">
+                   <a href="#" class='grid-icon-header block wrapper' onclick="return false;"><i class="glyphicon glyphicon-th"></i></a>    
+               </div>
+
 <div id="wrap" class="app app-aside-folded-inactive app-header-fixed app-aside-fixed 
 <% 
 if(currentUserPrefs.menuPosition.equals("top")){
@@ -276,11 +349,14 @@ if(currentUserPrefs.menuPosition.equals("top")){
           <div class="aside-wrap">
         <div class="navi-wrap">
   
-  <nav  class="navi clearfix">
-            <ul class="nav">
-              <li class="hidden-folded padder m-t-xs m-b-xs text-muted text-xs">
-                <span>Sales</span>
-              </li>
+  <nav  class="navi clearfix" id="agile-menu-navigation-container">
+  	<ul class="nav">
+  	
+	<!-- Sales menu -->  	
+  <%if(domainUser.role == ROLE.SALES){ %>
+   <li class="hidden-folded padder m-t-xs m-b-xs text-muted text-xs">
+     <span>Sales</span>
+   </li>
         
   <%
       if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.CONTACT)){
@@ -315,14 +391,14 @@ if(currentUserPrefs.menuPosition.equals("top")){
       }
   %>
   <%
-      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.CASES)){
+      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.CASES) && domainUser.version == null){
   %>
-   <li id="casesmenu">
+  <li id="casesmenu">
     <a  href="#cases">
       <i class="icon icon-folder"></i>
       <span>Cases</span>
     </a>
-  </li>
+  </li> 
   <%
       }
   %>
@@ -339,9 +415,72 @@ if(currentUserPrefs.menuPosition.equals("top")){
   <%
         }
   %>  
+  
+  <%
+      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.CALENDAR)){
+  %>
+  
+  <li id="calendarmenu">
+    <a href="#calendar" onclick="Agile_GA_Event_Tracker.track_event('Calendar Option in Nav Bar')">
+    	<i class="icon icon-calendar"></i> 
+    	<span>Calendar</span> 
+    </a>
+  </li>
+  <%
+        }
+  %>  
+  
+  <li id="tasksmenu">
+    <a href="#tasks" onclick="Agile_GA_Event_Tracker.track_event('Tasks Option in Nav Bar')">
+      <i class="icon-list" data-original-title="" title=""></i>
+      <span>Tasks</span>
+      <span title="Tasks due" class="navbar_due_tasks pull-right">
+          <span  id="due_tasks_count" class="badge badge-sm bg-danger"></span>
+      </span>
+    </a>
+  </li>
 
-  <li class="line dk  m-t-none m-b-none" style="height: 1px;"></li>
-    <li class="hidden-folded padder m-t-xs m-b-xs text-muted text-xs">
+  <li id="schedulingmenu">
+    <a href="#scheduler-prefs" onclick="Agile_GA_Event_Tracker.track_event('Appointment scheduling Option in Nav Bar')">
+      <i class="icon-tag" data-original-title="" title=""></i>
+      <span>Online Calendar</span>
+    </a>
+  </li>
+
+  <%
+      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.ACTIVITY)){
+    %>
+    <li id="activitiesmenu">
+    <a  href="#activities">
+      <i class="icon-speedometer icon-white"></i>
+      <span>Activities</span>
+    </a>
+  </li>
+    <%
+          }
+    %>
+    <%
+      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.REPORT)){
+    %>
+  <li id="reportsmenu">
+    <a  href="#reports">
+      <i class="icon-bar-chart icon-white"></i>
+      <span>Reports</span>
+    </a>
+  </li> 
+    <%
+          }
+    %> 
+  
+  <!-- End of Sales menu -->
+  <%} %>
+
+  
+  <!--  <li class="line dk  m-t-none m-b-none" style="height: 1px;"></li> -->
+  
+  <!-- Marketing menu -->  	
+  <%if(domainUser.role == ROLE.MARKETING){ %>
+  <li class="hidden-folded padder m-t-xs m-b-xs text-muted text-xs">
                 <span>Marketing</span>
               </li>
    <%
@@ -351,6 +490,13 @@ if(currentUserPrefs.menuPosition.equals("top")){
     <a  href="#workflows">
       <i class="icon icon-sitemap"></i>
       <span>Campaigns</span>
+    </a>
+  </li>
+
+  <li id="triggersmenu">
+    <a  href="#triggers">
+      <i class="icon icon-magic-wand"></i>
+      <span>Triggers</span>
     </a>
   </li>
     <%
@@ -382,7 +528,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
     %>
    <li id="segmentationmenu">
     <a  href="#visitors">
-       <i class="icon-large icon-screenshot"></i>
+       <i class="icon-eye"></i>
       <span>Visitors</span>  
     </a>
   </li>
@@ -392,6 +538,25 @@ if(currentUserPrefs.menuPosition.equals("top")){
       <span>Landing Pages</span>
     </a>
   </li>
+
+  <%
+  if(domainUser.is_admin){
+  %>
+  <li id="formsmenu">
+    <a  href="#forms">
+       <i class="icon-large1 icon-docs"></i>
+      <span>Forms</span>  
+    </a>
+  </li>
+  <%}%>
+  
+  <li id="email-templates-menu">
+    <a href="#email-templates">
+      <i class="fa icon-envelope-letter"></i>
+      <span>Email Templates</span>
+    </a>
+  </li>
+
     <%
       if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.ACTIVITY)){
     %>
@@ -416,14 +581,14 @@ if(currentUserPrefs.menuPosition.equals("top")){
     <%
           }
     %> 
+    
+  <!-- End of Marketing menu -->
+  <%} %>
   
-  <!-- <li class='<%if(currentUserPrefs.menuPosition.equals("top")){out.print("dockedicons ");} else{out.print("fixedicons ");} %>' id="planView"> <a href="#subscribe"><i class="icon-shopping-cart"></i> <span> Plan &amp; Upgrade </span></a></li>
-  <li class='pos-b-0 <%if(currentUserPrefs.menuPosition.equals("top")){out.print("dockedicons ");} else{out.print("fixedicons ");} %>' id ="helpView"><a href="#help"><i class="icon-question"></i>
-                      <span> Help </span></a></li> -->
-  <li class="line dk m-t-none m-b-none" style="height: 1px;"></li>
-  <%
-      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.HELPDESK)){
-  %>
+  <!-- <li class="line dk m-t-none m-b-none" style="height: 1px;"></li> -->
+  <!-- Service menu -->  	
+  <%if(domainUser.role == ROLE.SERVICE){ %>
+  
   <li class="hidden-folded padder m-t-xs m-b-xs text-muted text-xs">
     <span>Service</span>
   </li>
@@ -431,12 +596,69 @@ if(currentUserPrefs.menuPosition.equals("top")){
   <li id="tickets">
     <a href="#tickets">
       <i class="icon icon-ticket"></i>
-      <span style="padding-top: 9%;">Help Desk</span>
+      <span>Help Desk</span>
     </a>
   </li>
+
   <%
+  if(domainUser.is_admin && !domainUser.restricted_menu_scopes.contains(NavbarConstants.HELPDESK)){
+  %>
+  <li id="ticketgroupsmenu">
+    <a href="#ticket-groups">
+      <i class="icon icon-users"></i>
+      <span>Groups</span>
+    </a>
+  </li>
+  <li id="ticketlabelsmenu">
+    <a href="#ticket-labels">
+      <i class="icon icon-flag"></i>
+      <span>Labels</span>
+    </a>
+  </li>
+  <li id="ticketcannedmessagesmenu">
+    <a href="#canned-responses">
+      <i class="icon icon-cursor"></i>
+      <span>Canned Responses</span>
+    </a>
+  </li>
+  <li id="ticketviewsmenu">
+    <a href="#ticket-views">
+      <i class="icon icon-directions"></i>
+      <span>Views</span>
+    </a>
+  </li>
+   <%
       }
-  %>             
+  %> 
+
+  <%
+      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.ACTIVITY)){
+    %>
+    <li id="activitiesmenu">
+    <a  href="#activities">
+      <i class="icon-speedometer icon-white"></i>
+      <span>Activities</span>
+    </a>
+  </li>
+    <%
+          }
+    %>
+    <%
+      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.REPORT)){
+    %>
+  <li id="reportsmenu">
+    <a  href="#reports">
+      <i class="icon-bar-chart icon-white"></i>
+      <span>Reports</span>
+    </a>
+  </li> 
+    <%
+          }
+    %> 
+ 
+  <!-- End of Service menu -->
+  <%} %>
+             
   </ul>
 
 
@@ -538,7 +760,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
               </li> 
               --%>
               
-              <li class="line dk"></li>
+             <!--  <li class="line dk"></li>
             <li class="hidden-folded padder m-t m-b-sm text-muted text-xs">
                 <span>More</span>
               </li>
@@ -546,12 +768,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
                 <li id="due_tasks"  data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Tasks"><a class="pos-rlt" href="#tasks"><i class="icon-list"></i>
                   <span class="visible-xs">Tasks</span>
 
-                      <span title="Tasks due" class="navbar_due_tasks pull-right-xs"><span  id="due_tasks_count" class="badge badge-sm up bg-danger"></span></span></a></li>
-               <!-- <li id="recent-menu" class="dropdown" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Activity"><a
-                class="dropdown-toggle" data-toggle="dropdown" href=""> <i class='fa fa-history' style="opacity:0.8"></i>
-                <span class="visible-xs">Recent Activity</span>
-              </a><ul class="dropdown-menu animated fadeInRight recent-view" style="width:23em; right:-11px;"></ul>
-              </li>  -->
+                      <span title="Tasks due" class="navbar_due_tasks pull-right-xs"><span  id="due_tasks_count" class="badge badge-sm up bg-danger"></span></span></a></li> -->
               
               
             </ul>

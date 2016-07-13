@@ -18,6 +18,8 @@ var FormsRouter = Backbone.Router.extend({
 			} })
 		this.formsListView.collection.fetch();
 		$("#content").html(this.formsListView.el);
+
+		make_menu_item_active("formsmenu");
 	},
 
 	getListOfTemplates : function()

@@ -373,6 +373,7 @@ function show_triggers_of_each_workflow(el)
 	{
 		append_triggers_to_workflow(el);
 		return;
+		
 	}
 
 	App_Workflows.triggersCollectionView = new Base_Collection_View({ url : '/core/api/triggers', restKey : "triggers", templateKey : "triggers",
