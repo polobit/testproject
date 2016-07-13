@@ -50,8 +50,10 @@ $(function() {
 			// Save functionality for event
 			save_event('activityForm', 'activityModal', false, this,currentDiv,function(data){
 						//	eventCollectionView.collection.comparator ='start';
+						if(eventCollectionView){
 									eventCollectionView.collection.add(data.toJSON());
 									eventCollectionView.collection.sort();
+						}
 							
 			});
 		}

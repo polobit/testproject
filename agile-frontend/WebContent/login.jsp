@@ -202,7 +202,9 @@ var isIENew = (window.navigator.userAgent.indexOf("rv:11") != -1);
 if(isIE || isIENew)
  window.location = '/error/not-supported.jsp';
 */
-
+var S3_STATIC_IMAGE_PATH = undefined;
+var _billing_restriction = undefined;
+var CURRENT_DOMAIN_USER = undefined;
 var isSafari = (Object.prototype.toString.call(window.HTMLElement).indexOf('Constructor') > 0);
 var isWin = (window.navigator.userAgent.indexOf("Windows") != -1);
 if(isSafari && isWin) 

@@ -30,7 +30,7 @@ var Document_Collection_Events = Base_Collection_View.extend({
      * Document list view edit
      */
 	onDocumentListSelect : function(e){
-		if(e.target.parentElement.attributes[0].name!="href" && e.target.parentElement.attributes[1].name!="href"){
+		if(e.target.parentElement.attributes[0] && e.target.parentElement.attributes[0].name!="href" && e.target.parentElement.attributes[1].name!="href"){
      		e.preventDefault();
 
      	 	updateDocument($(e.currentTarget).closest('tr').data());

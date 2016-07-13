@@ -7,7 +7,9 @@
  * @module Search author: Yaswanth
  */
 var opportunity_filter_name;
-var OPPORTUNITY_DYNAMIC_FILTER_COOKIE_STATUS = "toggle_dynamic_filter_" + CURRENT_DOMAIN_USER.id;
+var OPPORTUNITY_DYNAMIC_FILTER_COOKIE_STATUS = undefined;
+if(CURRENT_DOMAIN_USER)
+	OPPORTUNITY_DYNAMIC_FILTER_COOKIE_STATUS = "toggle_dynamic_filter_" + CURRENT_DOMAIN_USER.id;
 var OPPORTUNITY_TRACK_MILESTONES;
 
 /**

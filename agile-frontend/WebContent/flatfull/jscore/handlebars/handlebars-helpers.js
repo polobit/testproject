@@ -1256,48 +1256,51 @@ $(function()
 		}
 
 		// Replaces '_' with ' '
-		var str = this.notification.replace(/_/, ' ');
+		if(this.notification){
 
-		switch (str) {
-		case "IS BROWSING":
-			return str.toLowerCase() + " " + this.custom_value;
+			var str = this.notification.replace(/_/, ' ');
 
-		case "CLICKED LINK":
-			var customJSON = JSON.parse(this.custom_value);
+			switch (str) {
+			case "IS BROWSING":
+				return str.toLowerCase() + " " + this.custom_value;
 
-			if (customJSON["workflow_name"] == undefined)
-				return str.toLowerCase() + " " + customJSON.url_clicked;
+			case "CLICKED LINK":
+				var customJSON = JSON.parse(this.custom_value);
 
-			return str.toLowerCase() + " " + customJSON.url_clicked + " " + " of campaign " + "\"" + customJSON.workflow_name + "\""
+				if (customJSON["workflow_name"] == undefined)
+					return str.toLowerCase() + " " + customJSON.url_clicked;
 
-		case "OPENED EMAIL":
-			var customJSON = JSON.parse(this.custom_value);
+				return str.toLowerCase() + " " + customJSON.url_clicked + " " + " of campaign " + "\"" + customJSON.workflow_name + "\""
 
-			if (customJSON.hasOwnProperty("workflow_name"))
-				return str.toLowerCase() + " " + " of campaign " + "\"" + customJSON.workflow_name + "\"";
+			case "OPENED EMAIL":
+				var customJSON = JSON.parse(this.custom_value);
 
-			return str.toLowerCase() + " with subject " + "\"" + customJSON.email_subject + "\"";
+				if (customJSON.hasOwnProperty("workflow_name"))
+					return str.toLowerCase() + " " + " of campaign " + "\"" + customJSON.workflow_name + "\"";
 
-		case "CONTACT ADDED":
-			return " - " + ucfirst(str.split(' ')[0]) + " " + ucfirst(str.split(' ')[1]);
+				return str.toLowerCase() + " with subject " + "\"" + customJSON.email_subject + "\"";
 
-		case "CONTACT DELETED":
-			return " - " + ucfirst(str.split(' ')[0]) + " " + ucfirst(str.split(' ')[1]);
+			case "CONTACT ADDED":
+				return " - " + ucfirst(str.split(' ')[0]) + " " + ucfirst(str.split(' ')[1]);
 
-		case "DEAL CREATED":
-			return " - " + ucfirst(str.split(' ')[0]) + " " + ucfirst(str.split(' ')[1]);
+			case "CONTACT DELETED":
+				return " - " + ucfirst(str.split(' ')[0]) + " " + ucfirst(str.split(' ')[1]);
 
-		case "DEAL CLOSED":
-			return " - " + ucfirst(str.split(' ')[0]) + " " + ucfirst(str.split(' ')[1]);
+			case "DEAL CREATED":
+				return " - " + ucfirst(str.split(' ')[0]) + " " + ucfirst(str.split(' ')[1]);
 
-		case "TAG ADDED":
-			return " - " + "\"" + this.custom_value + "\" " + str.toLowerCase().split(' ')[0] + " has been " + str.toLowerCase().split(' ')[1];
+			case "DEAL CLOSED":
+				return " - " + ucfirst(str.split(' ')[0]) + " " + ucfirst(str.split(' ')[1]);
 
-		case "TAG DELETED":
-			return " - " + "\"" + this.custom_value + "\" " + str.toLowerCase().split(' ')[0] + " has been " + str.toLowerCase().split(' ')[1];
+			case "TAG ADDED":
+				return " - " + "\"" + this.custom_value + "\" " + str.toLowerCase().split(' ')[0] + " has been " + str.toLowerCase().split(' ')[1];
 
-		default:
-			return str.toLowerCase();
+			case "TAG DELETED":
+				return " - " + "\"" + this.custom_value + "\" " + str.toLowerCase().split(' ')[0] + " has been " + str.toLowerCase().split(' ')[1];
+
+			default:
+				return str.toLowerCase();
+			}
 		}
 	});
 

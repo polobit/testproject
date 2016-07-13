@@ -3,10 +3,12 @@ var Portlets_View, gridster;
 /** If CURRENT_AGILE_USER is not set, set it from user.domain **/
 $(function()
 {
-	$.getJSON('/core/api/users/current-agile-user', function(user)
-	{
-		CURRENT_AGILE_USER = user;
-	});
+	if(CURRENT_DOMAIN_USER){
+		$.getJSON('/core/api/users/current-agile-user', function(user)
+		{
+			CURRENT_AGILE_USER = user;
+		});
+	}
 });
 
 /**
