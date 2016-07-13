@@ -104,6 +104,13 @@ var ContactsRouter = Backbone.Router.extend({
 		}
 
 		var dashboard_name = _agile_get_prefs("dashboard_"+CURRENT_DOMAIN_USER.id);
+		// Reset dashboard with role selected
+		if(!dashboard_name){
+			if(CURRENT_DOMAIN_USER.role == "SALES")
+				  dashboard_name = "SalesDashboard";
+			else if(CURRENT_DOMAIN_USER.role == "MARKETING")
+				dashboard_name = "MarketingDashboard";
+		}
 
 		dashboard_name = dashboard_name ? dashboard_name : "DashBoard";
 
