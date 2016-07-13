@@ -134,7 +134,7 @@ tasks_new : function()
 		$('.loading').remove();
 
 		$(".active").removeClass("active");
-		$("#calendarmenu").addClass("active");
+		$("#tasksmenu").addClass("active");
 
 		// Hide owner's and status task selection options from dropdown
 		$(".hide-on-pending").hide();

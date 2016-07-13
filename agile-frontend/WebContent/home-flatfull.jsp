@@ -552,7 +552,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
   
   <li id="email-templates-menu">
     <a href="#email-templates">
-      <i class="fa icon-envelope-letter"></i>
+      <i class="icon-envelope-letter"></i>
       <span>Email Templates</span>
     </a>
   </li>

@@ -82,13 +82,13 @@ var WorkflowsRouter = Backbone.Router
 			loadworkflows : function(el){
 
 				var sortKey = _agile_get_prefs("workflow_sort_key");
-				if (this.workflow_list_view && this.workflow_list_view.options.global_sort_key == sortKey && this.workflow_list_view.collection && this.workflow_list_view.collection.length > 0)
+				if (App_Workflows.workflow_list_view && App_Workflows.workflow_list_view.options.global_sort_key == sortKey && App_Workflows.workflow_list_view.collection && App_Workflows.workflow_list_view.collection.length > 0)
 				{
-					$(el).find("#workflows-collection-container").html(this.workflow_list_view.render(true).el);
+					$(el).find("#workflows-collection-container").html(App_Workflows.workflow_list_view.render(true).el);
 					return;
 				}
 
-				this.workflow_list_view = new Base_Collection_View({ 
+				App_Workflows.workflow_list_view = new Base_Collection_View({ 
 					url : '/core/api/workflows', 
 					restKey : "workflow", 
 					sort_collection : false,
