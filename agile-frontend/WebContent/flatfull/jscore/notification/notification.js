@@ -57,12 +57,6 @@ function getDomainFromCurrentUser()
 		});
 }
 
-var _Agile_PubNub_Notification;
-function _agile_get_channel_name(domain){
-	if(!domain)
-		  domain = "localhost";
-	return domain;
-}
 /**
  * Subscribes to Pubnub.
  * 
@@ -71,8 +65,6 @@ function _agile_get_channel_name(domain){
  */
 function subscribeToPubNub(domain)
 {
-	domain = _agile_get_channel_name(domain);
-
 	// Put http or https
 	// var protocol = document.location.protocol;
 	var protocol = 'https';
@@ -88,14 +80,6 @@ function subscribeToPubNub(domain)
 			if(message.type  == "LOGIN_INSTANCE")
 			{
 				check_login_instance(message);
-				return;
-			}
-
-			//Show notificaiton for also viewing
-
-			if(message.type  == "PAGE_ALSO_VIEWING")
-			{
-				handlePageAlsoViewingMessage(message);
 				return;
 			}
 			
@@ -197,7 +181,6 @@ function subscribeToPubNub(domain)
 		{
 			console.log("connected");
 			publishLoginEvent(pubnub);
-			_Agile_PubNub_Notification = pubnub;
 		}
 		
 		});
