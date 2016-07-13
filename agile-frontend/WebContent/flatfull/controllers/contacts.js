@@ -1400,7 +1400,7 @@ $('#content').html('<div id="import-contacts-event-listener"></div>');
 			_agile_set_prefs("contacts_tag", tag_id);
 		}
 		$('#content').html('<div id="contacts-listener-container"></div>');
-		var contactsHeader = new Contacts_Events_View({ data : {}, template : "contacts-header", isNew : true,
+		var contactsHeader = new Contacts_And_Companies_Events_View({ data : {}, template : "contacts-header", isNew : true,
 			postRenderCallback : function(el)
 			{
 				contacts_view_loader.buildContactsView(el, tag_id);

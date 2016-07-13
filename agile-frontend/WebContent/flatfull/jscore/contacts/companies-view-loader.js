@@ -46,7 +46,7 @@ var companies_view_loader = {
 		
 		if(!App_Companies.companiesListView)
 		{
-			App_Companies.companiesListView = new  Base_Collection_View({ url : url, modelData : modelData, sort_collection : false, templateKey : templateKey, individual_tag_name : individual_tag_name,
+			App_Companies.companiesListView = new  Contacts_Events_Collection_View({ url : url, modelData : modelData, sort_collection : false, templateKey : templateKey, individual_tag_name : individual_tag_name,
 				post_data: postData, cursor : true, page_size : 25, global_sort_key : sortKey, slateKey : slateKey, request_method : 'POST', postRenderCallback : function(cel, collection)
 				{	
 					that.setupCompanyFilterName(cel, tag_id);

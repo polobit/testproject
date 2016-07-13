@@ -612,7 +612,7 @@ var CompaniesRouter = Backbone.Router
 	companiesNew : function(tag_id)
 	{
 		$('#content').html('<div id="companies-listener-container"></div>');
-		var companiesHeader = new Contacts_Events_View({ data : {}, template : "companies-header", isNew : true,
+		var companiesHeader = new Contacts_And_Companies_Events_View({ data : {}, template : "companies-header", isNew : true,
 			postRenderCallback : function(el)
 			{
 				companies_view_loader.buildCompaniesView(el, tag_id);

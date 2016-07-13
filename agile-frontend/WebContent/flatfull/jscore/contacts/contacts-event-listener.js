@@ -1,4 +1,4 @@
-var Contacts_Events_View = Base_Model_View.extend({
+var Contacts_And_Companies_Events_View = Base_Model_View.extend({
     events: {
     	/** Contacts bulk actions */
     	'click #bulk-owner' : 'bulkActionAddOwner',
@@ -22,11 +22,8 @@ var Contacts_Events_View = Base_Model_View.extend({
     	
     	'click .filter' : 'filterResults',
     	'click .default_filter' : 'defaultFilterResults',
-    	// 'click #companies-filter' : 'companyFilterResults',
     	'click .default_contact_remove_tag' : 'defaultContactRemoveTag',
 
-    	//'click .contact-actions-delete-mobile' : 'onContactDelete'
-    	'click .contact-type-image, .company-type-image' : 'navigateToProperContact',
     	'click .contacts-view' : 'toggleContactsView',
     	'click #contactTabelView' : 'toggleContactsListView',
     	'click .contactcoloumn' : 'addOrRemoveContactColumns',
@@ -271,19 +268,6 @@ var Contacts_Events_View = Base_Model_View.extend({
 			html = "Selected " + resultCount + " contacts. <a href='#'  id='select-all-available-contacts' class='c-p text-info'>Select all " + appCount + " contacts</a>";
 		}
 		$('body').find('#bulk-select').html(html);
-    },
-
-    navigateToProperContact : function(e){
-    	e.stopPropagation();
-		var currentObjId = $(e.currentTarget).attr("id");
-		if($(e.currentTarget).hasClass("contact-type-image"))
-		{
-			Backbone.history.navigate("contact/" + currentObjId, { trigger : true });
-		}
-		else
-		{
-			Backbone.history.navigate("company/" + currentObjId, { trigger : true });
-		}
     },
 
     toggleContactsView : function(e){
