@@ -19,9 +19,9 @@ git checkout .
 
 git stash
 
-git checkout version27-1
+git checkout sandbox_live
 
-git pull origin version27-1
+git pull origin sandbox_live
 
 ant create-target  -DRELEASE_VERSION=$2 -DPRODUCTION=true;
 
