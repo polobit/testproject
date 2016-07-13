@@ -159,12 +159,8 @@ var ContactsRouter = Backbone.Router.extend({
 				$('[data-toggle="tooltip"]').tooltip();
 				if ((navigator.userAgent.toLowerCase().indexOf('chrome') > -1&&navigator.userAgent.toLowerCase().indexOf('opr/') == -1) && !document.getElementById('agilecrm_extension'))
 				{
-					$("#chrome-extension-button").removeClass('hide');
-				}
-				if (chrome.app.isInstalled) 
-				{
-				  var element = document.getElementsByClassName('chromeExtension');
-				  $(c).addClass("hide") ; 
+					if (typeof chrome && !chrome.app.isInstalled) 
+							$("#chrome-extension-button").removeClass('hide');
 				}
 
 				loadPortlets(dashboard_name,el);
