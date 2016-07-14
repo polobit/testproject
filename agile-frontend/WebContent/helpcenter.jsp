@@ -48,7 +48,9 @@
   <%
   LandingPageKnowledgebase  kbpage = KbLandingPageUtil.get(); ;
 
-	if(kbpage == null ||kbpage.kb_landing_page_id == 0 ){%>
+	if(kbpage == null ||kbpage.kb_landing_page_id == 0 
+			|| LandingPageUtil.getLandingPage(kbpage.kb_landing_page_id) == null){
+	%>
 		<%@ include file="/knowledgebase.jsp"%>
 	<%}%> 
 	
