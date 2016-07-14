@@ -434,6 +434,70 @@
 			</div>
 		</div>
 		<!-- End of SES -->
+		<!-- Mailgun Mail Getway -->
+		<div class="col-md-4 col-sm-6 col-xs-12" id="mandrill-email-api-integration">
+				<div class="panel panel-default b-a" style="height:230px;">
+				<div class="panel-heading">
+					<div class="pos-rlt">
+						<!--<span class="label label-danger pos-abs pos-r-0">Beta</span>-->
+                        <center>
+							<img alt="cms-integration" src="{{getS3ImagePath 'img/crm-plugins/mailgun.png?v=v2'}}" class="thumb-xl img-responsive">
+						</center>	
+                        <div class="clearfix"></div>
+					</div>
+					</div>
+					<div class="panel-body">
+					<div class="text-flow-ellipsis line-clamp line-clamp-4 widget-text m-b" style="height:75px" rel="tooltip" title="Mailgun is a transactional email product by MailChimp.">
+					Send your emails via your Mailgun account. Mailgun is a scalable and affordable email infrastructure service.
+					</div>
+					<div class="text-center">
+						{{#if this.length}}	
+							{{#gateway_exists "MAILGUN" this}}
+								<a href="#" class="btn btn-sm btn-danger " id="email-gateway-delete">Disable</a>
+								<a href="#email-gateways/mailgun" class="btn btn-sm btn-default">Settings</a>
+							{{else}}
+								 {{#isAllowedInCurrentPlan "is_email_gateway_allowed"}}
+					                <div>
+                      					<a href="#email-gateways/mailgun" class="btn btn-sm btn-default">Enable</a> 
+                					</div>
+           						 {{else}}
+            						<div>
+            						<div style="display:none;width: 65%;left: 18%;z-index: 9;border: 1px solid #E2E29C;background-color: #F7F7D0;" class="mailgun-upgrade fade in p-xs m-b-xs pos-abs">
+        									Please  
+        									<strong><a href="#subscribe-plan" style="color:#337ab7;" class='c-p'>upgrade</a></strong> to Enterprise plan
+        							</div>
+
+        							<div class="clearfix"></div>
+            						<div class="btn btn-sm btn-default _upgrade" id="mailgun-upgrade">Enable</div>
+                 					<!--<div style="display:inline;float:right;display:none;" class="text-right mandrill-upgrade" ><p><i>{{toSafeString message}}</i><p>
+	                 						</div>-->
+	                 				</div>
+            					 {{/isAllowedInCurrentPlan}}
+							{{/gateway_exists}}
+						{{else}}
+							 {{#isAllowedInCurrentPlan "is_email_gateway_allowed"}}
+					                <div>
+                      					<a href="#email-gateways/mailgun" class="btn btn-sm btn-default">Enable</a> 
+                					</div>
+           						 {{else}}
+            						<div>
+            						<div style="display:none;width: 65%;left: 18%;z-index: 9;border: 1px solid #E2E29C;background-color: #F7F7D0;" class="mailgun-upgrade fade in p-xs m-b-xs pos-abs">
+        								Please  
+        									<strong><a href="#subscribe-plan" style="color:#337ab7;" class='c-p'>upgrade</a></strong> to Enterprise plan
+        							</div>
+
+        							<div class="clearfix"></div>
+            						<div class="btn btn-sm btn-default _upgrade" id="mailgun-upgrade">Enable</div>
+                 					<!--<div style="display:inline;float:right;display:none;" class="text-right mandrill-upgrade" ><p><i>{{toSafeString message}}</i><p>
+	                 						</div>-->
+	                 				</div>
+            				{{/isAllowedInCurrentPlan}}
+						{{/if}}
+					</div>
+					<div class="clearfix"></div>
+				</div>
+				</div>
+			</div>
 		
 	</div>
 		</div>
