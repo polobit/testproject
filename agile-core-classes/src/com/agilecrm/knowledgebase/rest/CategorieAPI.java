@@ -1,5 +1,6 @@
 package com.agilecrm.knowledgebase.rest;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
@@ -15,11 +16,13 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import com.agilecrm.knowledgebase.entity.Categorie;
+import com.agilecrm.knowledgebase.entity.Section;
 import com.agilecrm.knowledgebase.util.CategorieUtil;
 import com.agilecrm.knowledgebase.util.SectionUtil;
 import com.agilecrm.ticket.entitys.TicketCannedMessages;
@@ -27,6 +30,7 @@ import com.agilecrm.ticket.entitys.Tickets;
 import com.agilecrm.ticket.utils.TicketGroupUtil;
 import com.agilecrm.ticket.utils.TicketsUtil;
 import com.agilecrm.user.util.DomainUserUtil;
+
 /**
  * 
  * @author Sasi
@@ -41,6 +45,9 @@ public class CategorieAPI
 	{
 		List<Categorie> categories = CategorieUtil.getCategories();
 
+		if (categories == null)
+			return null;
+
 		for (Categorie categorie : categories)
 			categorie.sections = SectionUtil.getSectionByCategorie(categorie.id);
 
@@ -48,7 +55,7 @@ public class CategorieAPI
 	}
 
 	@GET
-	@Path("/{id}")
+	@Path("{id}")
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public Categorie getCategorie(@PathParam("id") Long id)
 	{
@@ -83,6 +90,74 @@ public class CategorieAPI
 		}
 
 		return categorie;
+	}
+
+	@POST
+	@Path("/bulk")
+	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	@Produces(MediaType.APPLICATION_JSON)
+	public String deleteCategories(@FormParam("ids") String model_ids) throws JSONException
+	{
+		try
+		{
+			Categorie.dao.deleteBulkByIds(new JSONArray(model_ids));
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+					.build());
+		}
+
+		return new JSONObject().put("status", "success").toString();
+	}
+
+	/**
+	 * Save the category order based on the order of the category id's sent.
+	 * 
+	 * @param ids
+	 *            category ids.
+	 * @return successes message after saving or else error message.
+	 */
+	@Path("position")
+	@POST
+	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	public String setCategorieOrder(String ids)
+	{
+		System.out.println("-----------" + ids);
+		JSONObject result = new JSONObject();
+		try
+		{
+			JSONArray idsArray = null;
+			if (StringUtils.isNotEmpty(ids))
+			{
+				idsArray = new JSONArray(ids);
+				System.out.println("------------" + idsArray.length());
+				List<Long> catIds = new ArrayList<Long>();
+				for (int i = 0; i < idsArray.length(); i++)
+				{
+					catIds.add(Long.parseLong(idsArray.getString(i)));
+				}
+				CategorieUtil.saveCategorieOrder(catIds);
+				result.put("message", "Order changes sucessfully.");
+			}
+			return result.toString();
+		}
+		catch (Exception je)
+		{
+			je.printStackTrace();
+			try
+			{
+				result.put("error", "Unable to update the order. Please check the input.");
+				throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(result).build());
+			}
+			catch (JSONException e)
+			{
+				e.printStackTrace();
+			}
+			return null;
+		}
 	}
 
 	@PUT
@@ -131,7 +206,5 @@ public class CategorieAPI
 		}
 
 	}
-	
-	
-	
+
 }
