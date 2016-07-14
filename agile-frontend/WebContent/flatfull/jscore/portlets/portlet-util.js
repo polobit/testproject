@@ -2553,6 +2553,13 @@ var portlet_utility = {
 		if (!add_flag)
 			return;
 
+		if(Portlets_View.model_list_element_fragment.childElementCount>0)
+		{
+			gridster.add_widget($(Portlets_View.model_list_element_fragment.querySelector('[id="'+portletId+'"]'))
+			, base_model.get("size_x"),
+				base_model.get("size_y"), base_model.get("column_position"),
+				base_model.get("row_position"));
+		}
 		gridster.add_widget($('#' + portletId), base_model.get("size_x"),
 				base_model.get("size_y"), base_model.get("column_position"),
 				base_model.get("row_position"));
