@@ -15,6 +15,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.json.JSONArray;
 
+import com.agilecrm.AgileGlobalProperties;
 import com.agilecrm.AllDomainStats;
 import com.agilecrm.ContactSchemaUpdateStats;
 import com.agilecrm.OpportunitySchemaUpdateStats;
@@ -294,6 +295,9 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	
 	//SSO feature
 	ObjectifyService.register(SingleSignOn.class);
+	
+	// AgileGlobalProperties
+	ObjectifyService.register(AgileGlobalProperties.class);
 
     }
 
@@ -478,6 +482,11 @@ public class ObjectifyGenericDao<T> extends DAOBase
     {
 	Key<T> key = new Key<T>(this.clazz, id);
 	return get(key);
+    }
+    
+    public T get() throws EntityNotFoundException
+    {
+    	return ofy().query(this.clazz).get();
     }
 
     /**

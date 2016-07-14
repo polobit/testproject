@@ -1228,6 +1228,16 @@
     </servlet-mapping>
     
     <servlet>
+		<servlet-name>AgileGlobalPropertyServlet</servlet-name>
+		<servlet-class>com.agilecrm.AgileGlobalPropertyServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+
+		<servlet-name>AgileGlobalPropertyServlet</servlet-name>
+		<url-pattern>/ag-global-props/*</url-pattern>
+	</servlet-mapping>
+    
+    <servlet>
 		<servlet-name>OpportunitySchemaChange</servlet-name>
 		<servlet-class>com.agilecrm.OpportunitySchemaChangeServlet</servlet-class>
 	</servlet>

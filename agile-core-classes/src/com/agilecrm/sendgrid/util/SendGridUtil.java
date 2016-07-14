@@ -1,6 +1,7 @@
 package com.agilecrm.sendgrid.util;
 
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -20,6 +21,7 @@ import com.agilecrm.util.HTTPUtil;
 import com.agilecrm.util.HttpClientUtil;
 import com.thirdparty.mandrill.exception.RetryException;
 import com.thirdparty.sendgrid.SendGrid;
+import com.thirdparty.sendgrid.lib.SendGridException;
 import com.thirdparty.sendgrid.subusers.SendGridSubUser;
 
 /**
@@ -180,12 +182,40 @@ public class SendGridUtil
 		
 			try
 			{
-				String response = HttpClientUtil.accessPostURLUsingHttpClient(SendGrid.SENDGRID_API_POST_URL,
-				"application/x-www-form-urlencoded", postData);
+				boolean retry = false;
+				int count = 0, maxRetries = 2;
+				String response = null;
 				
-				// If response consists of 'Bad Username', throws Retry exception
-        		if(StringUtils.contains(apiUser, SendGridSubUser.AGILE_SUB_USER_NAME_TOKEN) && StringUtils.containsIgnoreCase(response, "Bad username"))
-						throw new RetryException(response);
+				// Retry 
+				do{
+					try
+					{
+						response = HttpClientUtil.accessPostURLUsingHttpClient(SendGrid.SENDGRID_API_POST_URL,
+					"application/x-www-form-urlencoded", postData);
+					
+						// If response consists of 'Bad Username', throws Retry exception
+		        		if(StringUtils.contains(apiUser, SendGridSubUser.AGILE_SUB_USER_NAME_TOKEN) && StringUtils.containsIgnoreCase(response, "Bad username"))
+						{
+		        			// Update password and retry again
+		        			SendGridSubUser.updateSendGridSubUserPassword(firstSendGridDefferedTask.domain);
+		        			retry = true;
+						}
+		        		else
+		        			retry = false;
+		        			
+					}
+					catch (SendGridException e) // To handle new sub user
+					{
+						System.err.println("SendGrid exception occured " + e.getMessage());
+						break;
+					}
+					
+					count++;
+					
+				}while(retry && count < maxRetries);
+        			
+				if(StringUtils.contains(apiUser, SendGridSubUser.AGILE_SUB_USER_NAME_TOKEN) && StringUtils.containsIgnoreCase(response, "Bad username"))
+					throw new RetryException(response);
 				
 			}
 			catch(RetryException rex)
@@ -195,7 +225,7 @@ public class SendGridUtil
 				// Create SubUser
 				SendGridUtil.createSendGridSubUser(StringUtils.remove(apiUser, SendGridSubUser.AGILE_SUB_USER_NAME_TOKEN));
 	        	
-				System.out.println("Retrying again for sending email in bulk emails....");
+				System.out.println("Retrying again after creating subuser in bulk emails....");
 				
 				String res = HttpClientUtil.accessPostURLUsingHttpClient(SendGrid.SENDGRID_API_POST_URL,
 						"application/x-www-form-urlencoded", postData);
@@ -581,7 +611,12 @@ public static String validateSendgridWhiteLabelDomain(String emailDomain, EmailG
 }
 	
 	public static void main(String asd[]){
-		System.out.println(validateSendgridWhiteLabelDomain("batman1.com", null,"hi"));
+		MailDeferredTask mt = new MailDeferredTask(null, null, null, "naresh", "naresh@agilecrm.com", "Naresh", "naresh@faxdesk.com", null, null, "Hello", null, "<b>Hello</b>", null, null, "333", "222");
+		
+		List<MailDeferredTask> lt = new ArrayList<MailDeferredTask>();
+		lt.add(mt);
+		
+		sendSendGridMails(lt, null);
 	}
     
 }

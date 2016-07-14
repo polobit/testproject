@@ -25,6 +25,7 @@ import org.json.JSONObject;
 import com.agilecrm.sendgrid.util.SendGridUtil;
 import com.agilecrm.util.Base64Encoder;
 import com.agilecrm.util.HttpClientUtil;
+import com.google.appengine.api.NamespaceManager;
 import com.thirdparty.mandrill.exception.RetryException;
 import com.thirdparty.sendgrid.SendGrid;
 import com.thirdparty.sendgrid.subusers.SendGridSubUser;
@@ -215,12 +216,36 @@ public class SendGridLib {
         	urlBuilder.setHeaders(headers);
         	
         	String response = null;
+        	boolean retry = false;
+        	int count = 0, maxRetries = 2;
         	
         	try
 			{
-        		response = HttpClientUtil.accessURLUsingHttpClient(urlBuilder, this.buildBody(email));
-        	
-        		System.out.println("Response for first attempt is " + response);
+				do{
+	        		try
+					{
+						response = HttpClientUtil.accessURLUsingHttpClient(urlBuilder, this.buildBody(email));
+						
+						System.out.println("Response of email sent: " + response);
+     	
+						// Try again with updated password
+						if(StringUtils.contains(this.username, SendGridSubUser.AGILE_SUB_USER_NAME_TOKEN) && StringUtils.containsIgnoreCase(response, "Bad username"))
+						{
+							SendGridSubUser.updateSendGridSubUserPassword(NamespaceManager.get()); // Updates password
+							retry = true;
+						}
+						else
+							retry = false;
+					}
+					catch (SendGridException e) // To handle new sub user
+					{
+						System.err.println("SendGrid exception occured " + e.getMessage());
+						break;
+					}
+	        		
+	        		count++; // To restrict iterations
+	        		
+				}while(retry && count < maxRetries);
         		
 	        	// If response consists of 'Bad Username', throws Retry exception
         		if(StringUtils.contains(this.username, SendGridSubUser.AGILE_SUB_USER_NAME_TOKEN) && StringUtils.containsIgnoreCase(response, "Bad username"))
@@ -238,7 +263,7 @@ public class SendGridLib {
 				{
 					e1.printStackTrace();
 				}
-				System.out.println("Retrying again for sending email....");
+				System.out.println("Retrying again after creating subuser...");
 				
 				response = HttpClientUtil.accessURLUsingHttpClient(urlBuilder, this.buildBody(email));
 				
@@ -266,7 +291,7 @@ public class SendGridLib {
 		
 		JSONObject SMTPJSON=new JSONObject(SMTPHeaderJSON);
 		SMTPJSON.put(SendGrid.SENDGRID_API_PARAM_UNIQUE_ARGUMENTS, subjectJSON);
-		System.out.println("nnnnnnnnnnnnnnnnnn"+SMTPJSON.toString());
+		System.out.println("SMTP json " +SMTPJSON.toString());
 		return SMTPJSON.toString();
 		 } 
    	catch (JSONException e) {
