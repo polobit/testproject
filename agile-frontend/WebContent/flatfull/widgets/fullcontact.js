@@ -17,8 +17,9 @@ function loadFullContactData(apikey, emailID){
 
 					//Data from full contact.
 					var contactInfo = contactObj["contactInfo"];
-					var PhotosArray = contactObj["Photos"];
+					var PhotosArray = contactObj["photos"];
 					var organisationArray = contactObj["organizations"];
+
 
 
 					// Agile Contact fields.
@@ -55,11 +56,11 @@ function loadFullContactData(apikey, emailID){
 							if(contactInfo["givenName"]){
 								first_name = contactInfo["givenName"];
 								resultArray.push("First Name");
-								newProperties.push(setPropertyForContact("first_name", first_name, null));
+								newProperties.push(setPropertyForContact("first_name", first_name, null, "SYSTEM"));
 							}else{
 								first_name = contactInfo["fullName"];
 								resultArray.push("First Name");
-								newProperties.push(setPropertyForContact("first_name", first_name, null));
+								newProperties.push(setPropertyForContact("first_name", first_name, null, "SYSTEM"));
 							}
 						}
 
@@ -68,7 +69,7 @@ function loadFullContactData(apikey, emailID){
 							if(contactInfo["familyName"]){
 								last_name = contactInfo["familyName"];	
 								resultArray.push("Last Name");
-								newProperties.push(setPropertyForContact("last_name", last_name, null));
+								newProperties.push(setPropertyForContact("last_name", last_name, null, "SYSTEM"));
 							}				
 						}
 					} 
@@ -82,11 +83,36 @@ function loadFullContactData(apikey, emailID){
 							    if(companyObj["isPrimary"] == true){
 								  company = companyObj["name"];
 								  resultArray.push("Company");
-								  newProperties.push(setPropertyForContact("company", company, null));
+								  newProperties.push(setPropertyForContact("company", company, null, "SYSTEM"));
 							    }	
 							});
 						}
 					}
+
+					if(PhotosArray){
+						photo = getPropertyValue(properties, "image");
+						if(!photo){
+							var photoObject = {};
+							var tempUrl = "";			
+							$.each(PhotosArray, function (index,value) {						        
+						        tempUrl = value.url;
+							    photoObject[value.typeId] = value.url;
+							});
+
+							if(photoObject["linkedin"]){
+								photo = photoObject["linkedin"];
+							}else if(photoObject["twitter"]){
+								photo = photoObject["twitter"];
+							}else if(photo = photoObject["facebook"]){
+								photo = photoObject["facebook"];
+							}else{
+								photo = tempUrl;
+							}							
+							resultArray.push("Photo");
+							newProperties.push(setPropertyForContact("image", photo, null, "CUSTOM"));
+						}
+					}
+
 
 					if(newProperties.length > 0){
 						// Reads current contact model form the contactDetailView
@@ -171,7 +197,7 @@ function startFullContactWidget(contact_id){
 	}
 }
 
-function setPropertyForContact(propertyName, value, subtype){
+function setPropertyForContact(propertyName, value, subtype, type){
 	var propertyObj = {};
 
 	if(propertyName){
@@ -182,7 +208,9 @@ function setPropertyForContact(propertyName, value, subtype){
 		if(subtype){
 			propertyObj.subtype = subtype;
 		}
-		propertyObj.type = "SYSTEM";
+		if(type){
+			propertyObj.type = type;
+		}
 	}
 
 	return propertyObj;
