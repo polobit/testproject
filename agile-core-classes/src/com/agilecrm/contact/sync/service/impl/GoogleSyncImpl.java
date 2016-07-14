@@ -162,6 +162,7 @@ public class GoogleSyncImpl extends TwoWaySyncService
 	    // Builds query without access key
 	    Query nextQuery = buildBasicQueryWithoutAccessKey();
 	    DateTime dateTime = new DateTime(last_synced_from_client);
+	    System.out.println("Last_synced from client time"+dateTime);
 	    nextQuery.setUpdatedMin(dateTime);
 
 	    // Sets start index
@@ -201,6 +202,8 @@ public class GoogleSyncImpl extends TwoWaySyncService
 	System.out.println("existing next link " + nextLink);
 
 	resultFeed = getFeed();
+	
+	System.out.println("ResultFeed" + resultFeed);
 
 	List<ContactEntry> entries = resultFeed.getEntries();
 
@@ -321,6 +324,7 @@ public class GoogleSyncImpl extends TwoWaySyncService
 
 	for (ContactEntry entry : entries)
 	{
+		System.out.println("Google entry to agile"+entry);
 	    etag = entry.getEtag();
 
 	    if (currentEtagInSync == null)
@@ -431,6 +435,7 @@ public class GoogleSyncImpl extends TwoWaySyncService
 	 */
     private void saveNewContactsToGoogle(List<Contact> contacts) throws Exception
     {
+    	System.out.println("New contacts from Agile" + contacts);
 	String token = prefs.token;
 
 	// Feed that hold s all the batch request entries.
@@ -460,6 +465,8 @@ public class GoogleSyncImpl extends TwoWaySyncService
 	    // Create google supported contact entry based on current contact
 	    // data
 	    ContactEntry createContact = ContactSyncUtil.createContactEntry(contact, group, prefs);
+	    
+	    System.out.println("Google contact entry" + createContact);
 
 	    // Check if contact saving should be skipped. It is required if last
 	    // contact is null then to avoid rest of contacts to being saved
@@ -536,6 +543,8 @@ public class GoogleSyncImpl extends TwoWaySyncService
      */
     private void saveUpdatedContactsToGoogle(List<Contact> contacts) throws Exception
     {
+    
+    System.out.println("Updated contacts from Agile" + contacts);
 	String token = prefs.token;
 
 	// Feed that hold s all the batch request entries.
@@ -561,7 +570,7 @@ public class GoogleSyncImpl extends TwoWaySyncService
 	    // Create google supported contact entry based on current contact
 	    // data
 	    ContactEntry createContact = ContactSyncUtil.createContactEntry(contact, group, prefs);
-
+	    System.out.println("Contact entity for google"+createContact);
 	    // Check if contact saving should be skipped. It is required if last
 	    // contact is null then to avoid rest of contacts to being saved
 
@@ -730,6 +739,7 @@ public class GoogleSyncImpl extends TwoWaySyncService
 	    
 	    // Saves contacts in agile matching accordingly based on entity
 	    // names
+	    System.out.println("Entries size " + entries.size());
 	    saveContactsInAgile(entries);
 
 	    // If fetched contacts size is less than 200, next request is not
