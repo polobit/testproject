@@ -49,6 +49,10 @@ $(document).ready(function(){
 
 
 //addDescriptionInfo();
+
+$(".free_plan_strip_close").click(function(e){
+	$(this).closest("#free_plan_alert_info").hide();
+});
 	
  $("#addDescriptionLink").click(function(e){
  e.preventDefault();
