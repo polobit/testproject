@@ -646,9 +646,9 @@ if(currentUserPrefs.menuPosition.equals("top")){
       <span>Views</span>
     </a>
   </li>
-  <li id="ticketknowledgebasemenu">
+  <li id="ticketcannedmessagesmenu">
     <a href="#knowledgebase">
-      <i class="fa fa-search" aria-hidden="true"></i>
+      <i class="fa fa-search"></i>
       <span>Knowledge Base</span>
     </a>
   </li>
