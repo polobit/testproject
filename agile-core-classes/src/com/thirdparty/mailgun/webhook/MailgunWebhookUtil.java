@@ -16,6 +16,7 @@ import org.json.JSONObject;
 
 import com.agilecrm.util.HTTPUtil;
 import com.agilecrm.util.VersioningUtil;
+import com.google.appengine.api.NamespaceManager;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
@@ -34,7 +35,7 @@ import com.thirdparty.mailgun.util.MailgunUtil;
 
 public class MailgunWebhookUtil {
 
-	public static final String AGILE_MAILGUN_WEBHOOK_URL = "https://prashannjeet.agilecrm.com/backend/mailgunwebhook";
+	public static final String AGILE_MAILGUN_WEBHOOK_URL = ".agilecrm.com/backend/mailgunwebhook";
 
 	public static final String KEY = "api";
 	public static final String ID = "id";
@@ -65,7 +66,11 @@ public class MailgunWebhookUtil {
 		if (isWebhookAlreadyExists(apiKey, domainName))
 			return "Agile Mailgun Webhook already exists for given api key or  "
 					+ apiKey;
-
+       //Getting domain name
+		
+		String webhookURl = "https://" + NamespaceManager.get() + AGILE_MAILGUN_WEBHOOK_URL;
+		
+		
 		try {
 			Client client = new Client();
 			client.addFilter(new HTTPBasicAuthFilter(KEY, apiKey));
@@ -74,7 +79,7 @@ public class MailgunWebhookUtil {
 
 			MultivaluedMapImpl formData = new MultivaluedMapImpl();
 
-			formData.add("url", AGILE_MAILGUN_WEBHOOK_URL);
+			formData.add("url", webhookURl);
 
 			// This is for bounce events webhook
 			formData.add("id", "bounce");
@@ -185,16 +190,14 @@ public class MailgunWebhookUtil {
 		System.out.println(webhooks.toString());
 		try {
 			if (webhooks.has("webhooks")) {
-				if (webhooks.getJSONObject("webhooks").getJSONObject("bounce")
-						.getString("url").equals(AGILE_MAILGUN_WEBHOOK_URL))
+				if (StringUtils.contains(webhooks.getJSONObject("webhooks").getJSONObject("bounce")
+						.getString("url"), AGILE_MAILGUN_WEBHOOK_URL))
 					return webhooks;
-				else if (webhooks.getJSONObject("webhooks")
-						.getJSONObject("drop").getString("url")
-						.equals(AGILE_MAILGUN_WEBHOOK_URL))
+				else if (StringUtils.contains(webhooks.getJSONObject("webhooks")
+						.getJSONObject("drop").getString("url"), AGILE_MAILGUN_WEBHOOK_URL))
 					return webhooks;
-				else if (webhooks.getJSONObject("webhooks")
-						.getJSONObject("spam").getString("url")
-						.equals(AGILE_MAILGUN_WEBHOOK_URL))
+				else if (StringUtils.contains(webhooks.getJSONObject("webhooks")
+						.getJSONObject("spam").getString("url"), AGILE_MAILGUN_WEBHOOK_URL))
 					return webhooks;
 			}
 		} catch (Exception e) {
