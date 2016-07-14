@@ -82,6 +82,7 @@ body,input,button,select,textarea {
 	padding: 19px 50px;
 	margin-left: -5px;
 	vertical-align: top;
+	height: 69px;
 }
 
 /* /.Search box */
