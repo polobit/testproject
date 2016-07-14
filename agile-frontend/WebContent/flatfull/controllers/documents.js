@@ -44,7 +44,7 @@ var DocumentsRouter = Backbone.Router.extend({
 
 	loadDocuments : function(e)
 	{
-
+		var that  = this ;
 		var sortKey = _agile_get_prefs("Documentssort_Key");
 				if (this.DocumentCollectionView && this.DocumentCollectionView.options.global_sort_key == sortKey && this.DocumentCollectionView.collection && this.DocumentCollectionView.collection.length > 0)
 				{

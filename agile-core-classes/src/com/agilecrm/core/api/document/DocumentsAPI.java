@@ -51,7 +51,7 @@ public class DocumentsAPI
      */
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public List<Document> getAllDocuments(@QueryParam("cursor") String cursor, @QueryParam("page_size") String count ,@QueryParam("order_by") String fieldName )
+    public List<Document> getAllDocuments(@QueryParam("cursor") String cursor, @QueryParam("page_size") String count ,@QueryParam("global_sort_key") String fieldName )
     {
 	if (count != null)
 	{
