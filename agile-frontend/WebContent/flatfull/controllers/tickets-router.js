@@ -1223,9 +1223,14 @@
 	 				window : "back",
 			        
 					prePersist : function(model){
+						
+						var title = model.toJSON().title;
+						 title = title.replace(/\s+$/, '');
+						console.log(title.replace(/\s+$/, ''));
+						
 						var json = {};
 						var catogery_id = $("#catogery option:selected").data('catogery-id');
-						json = {"categorie_id" : catogery_id };
+						json = {"categorie_id" : catogery_id,"title" : title };
 
 						var plain_content = '';
 
@@ -1277,6 +1282,7 @@
 
 		loadServiceLibrary(function(){
 		 	//Rendering root template
+
 		 	name = encodeURIComponent(name);
 		 	App_Ticket_Module.loadAdminsettingsTemplate(function(callback){
 
@@ -1352,6 +1358,13 @@
 	 				url : '/core/api/knowledgebase/section',
 	 				template : "ticket-helpcenter-add-section",
 			        window:'back',
+			        prePersist : function(model){
+			        	var json = {};
+			        	var name = model.toJSON().name;
+			        	 name = name.replace(/\s+$/, '');
+			        	 json = {'name':name};
+			        	 model.set(json, { silent : true });
+			        },
 			        postRenderCallback : function(el){
 			        	 var optionsTemplate = "<option value={{id}}>{{name}}</option>";
 							 fillSelect('catogery', '/core/api/knowledgebase/categorie', '',function(){
