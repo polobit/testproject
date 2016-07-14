@@ -6,8 +6,8 @@ package com.thirdparty.quickbook;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import org.codehaus.jettison.json.JSONException;
+import org.codehaus.jettison.json.JSONObject;	
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
@@ -268,7 +268,7 @@ public class QuickBookContactWrapperImpl extends ContactWrapper
 	    if (customer.has("BillAddr"))
 	    {
 		JSONObject billingAddrss = (JSONObject) customer.get("BillAddr");
-		JSONObject address = new JSONObject();
+		org.json.JSONObject address = new org.json.JSONObject();
 		if (billingAddrss != null)
 		{
 		    if (billingAddrss.has("Line1"))
@@ -305,6 +305,11 @@ public class QuickBookContactWrapperImpl extends ContactWrapper
 	{
 
 	    e.printStackTrace();
+	}
+	catch (org.json.JSONException e)
+	{
+		// TODO Auto-generated catch block
+		e.printStackTrace();
 	}
 	return field;
     }
