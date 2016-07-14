@@ -240,7 +240,10 @@ function saveCallNoteSkype(){
 		    		CallLogVariables.phone = number;
 		    		CallLogVariables.duration = duration;
 		    		CallLogVariables.status = callStatus;
-	    		return showNewContactModal(number);
+		    		var jsonObj = {};
+		    		jsonObj['phoneNumber'] = phoneNumber;
+		    		return showContactMergeOption(jsonObj);
+	    		//return showNewContactModal(number);
 	    	}
 	    	id = responseJson.id;
 	    	contact = responseJson;
@@ -326,8 +329,10 @@ function saveCallNoteSkype(){
 	    		CallLogVariables.phone = number;
 	    		CallLogVariables.duration = duration;
 	    		CallLogVariables.status = callStatus;
-    		
-    		return showNewContactModal(number);
+	    		var jsonObj = {};
+	    		jsonObj['phoneNumber'] = phoneNumber;
+	    		return showContactMergeOption(jsonObj);
+    		//return showNewContactModal(number);
 	}
 	}
 }

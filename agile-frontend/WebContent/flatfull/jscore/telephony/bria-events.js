@@ -184,8 +184,10 @@ function saveCallNoteBria(){
 		    		CallLogVariables.phone = number;
 		    		CallLogVariables.duration = duration;
 		    		CallLogVariables.status = callStatus;
-	    		
-	    		return showNewContactModal(number);
+		    		var jsonObj = {};
+		    		jsonObj['phoneNumber'] = phoneNumber;
+		    		return showContactMergeOption(jsonObj);
+	    		//return showNewContactModal(number);
 	    		
 	    	}
 	    	contact = responseJson;
@@ -278,8 +280,10 @@ function saveCallNoteBria(){
 	    		CallLogVariables.phone = number;
 	    		CallLogVariables.duration = duration;
 	    		CallLogVariables.status = callStatus;
-    		
-    		return showNewContactModal(number);
+	    		var jsonObj = {};
+	    		jsonObj['phoneNumber'] = phoneNumber;
+	    		return showContactMergeOption(jsonObj);
+    		//return showNewContactModal(number);
 		}
 	}
 }
