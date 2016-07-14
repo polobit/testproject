@@ -17,6 +17,7 @@ import com.agilecrm.session.UserInfo;
 import com.agilecrm.ssologin.SingleSignOn;
 import com.agilecrm.ssologin.SingleSignOnUtil;
 import com.agilecrm.subscription.limits.cron.deferred.AccountLimitsRemainderDeferredTask;
+import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.AliasDomainUtil;
 import com.agilecrm.user.util.DomainUserUtil;
@@ -327,6 +328,15 @@ public class LoginServlet extends HttpServlet {
 		}
 
 		request.getSession().setAttribute("account_timezone", timezone);
+		
+		if( AgileUser.getCurrentAgileUserFromDomainUser(domainUser.id) == null )
+		{
+			// Create new Agile User
+			new AgileUser(domainUser.id).save();
+			
+			// New user param to save defaults
+			request.getSession().setAttribute(RegisterServlet.IS_NEWLY_REGISTERED_USER_ATTR, new Boolean(true));
+		}
 		
 		// Set Account Timezone, User Timezone, Browser Fingerprint and OnlineCalendarPrefs
 		LoginUtil.setMiscValuesAtLogin(request, domainUser);
