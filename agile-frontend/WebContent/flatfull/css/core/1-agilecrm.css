@@ -4274,3 +4274,29 @@ background-color : #522E2E;
 }
 @keyframes pulse-location{0%{transform:scale(1);opacity:1}100%{transform:scale(5);opacity:0}}
 @-webkit-keyframes pulse-location{0%{transform:scale(1);opacity:1}100%{transform:scale(5);opacity:0}}
+.downloadExtension {
+    background: white;
+   
+}
+.downloadExtension:hover {
+    background: #7266ba!important;
+}
+.downloadExtension:hover>a {
+    color: #ffffff !important;
+}
+
+.downloadExtension a{
+    color: #23b7e5 !important;
+   
+}
+.downloadExtension a:hover {
+    color: #ffffff !important;
+}
+#betasuccess .slate-content h4{
+  font-size: 15px;
+  opacity:0.8;
+}
+#betasuccess .slate-content p{
+  font-size: 14px;
+  opacity:0.7;
+}

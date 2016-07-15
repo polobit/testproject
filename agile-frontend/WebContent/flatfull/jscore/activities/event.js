@@ -486,10 +486,41 @@ $(function()
 		$("#chrome-extension-modal").modal('show');
 	});
 
+	  $("body").on("click" , ".betaAccess", function(e){
+	  	//$(".BetaAccessForm").removeClass('hide');
+	  	$(".model-etensions").addClass("hide");
+	  		console.log("inside the sending request for the betarequest");
+	 
+	  	var json = {};
+		json.from=CURRENT_DOMAIN_USER.email;
+		json.to = "Kiran@agilecrm.com";
+		json.subject = "Request for getting the Beta Access";	
+		json.body = "Name: " +CURRENT_DOMAIN_USER.name+"<br>"+"Useremail: "+CURRENT_DOMAIN_USER.email+"<br>Domain: "+CURRENT_DOMAIN_USER.domain;
+		sendEmail(json);
+		$("#betasuccess").removeClass("hide");
+	  });
+
+	  $("body").on('click','#betarequest',function(e){
+
+
+	 //form for validationand sending the email and the domani name for the user
+	/*  	
+	  if(! validateEmail($("#betaAccessForm").find("#email").val()))
+	  	return;
+	  		
+	  		unindexed_array = $("#betaAccessForm").serializeArray();
+			var indexed_array = {};
+
+			$.map(unindexed_array, function(n, i) {
+				indexed_array[n['name']] = n['value'];
+			});
+			return indexed_array;	*/
+	  });
+
 	  $('body').on('click',".chromeExtension",function(e){
 	  	// e.stopImmediatePropagation();
 	  	e.stopPropagation();
-	  	//$("#chrome-extension-modal").addClass("hide")
+	  	$("#chrome-extension-modal").addClass("hide")
 	  	console.log("before the chrome installation");
 	  	try{
 	  		chrome.webstore.install("https://chrome.google.com/webstore/detail/eofoblinhpjfhkjlfckmeidagfogclib", 

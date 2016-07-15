@@ -1,17 +1,80 @@
 <script id="chrome-modal-template" type="text/html">
-    <div class="modal-dialog modal-xs">
-      <form id="extension-add-modal" class="form-horizontal">
+    <div class="modal-dialog">
+      <div  id="extension-add-modal" class="form-horizontal">
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal">&times;</button>
           <h4 class="modal-title">Download</h4>
         </div>
-        <div class="modal-body text-center">
-            <img src="//doxhze3l6s7v9.cloudfront.net/app/static/images/chromeExtensionImage.jpg" class="chromeExtension" alt="chrome image" width="150">
-           <div  class="m-b" > <a id="installExtension" class="btn btn-sm m-t-sm chromeExtension btn-primary">Download Chrome Extension</a></div>
+        <div class="modal-body">
+        <div class="m-t-md m-b-md">
+        <div class="model-etensions">
+        <div class="col-md-4 col-sm-4 col-xs-4 inline-block">
+        <div style="border: 1px solid #e5e5e5;text-align: center;" >
+            <img src="/img/agile-chrome.png" class="chromeExtension" alt="chrome image" width="100"height="110" class="m-t-xxs m-b-xxs" onclick="Agile_GA_Event_Tracker.track_event('Chrome Extension Download')">
+           <div  class="downloadExtension" style="border-top: 1px solid #e5e5e5;"> <a id="installExtension" class="chromeExtension  m-t-sm m-b-sm  inline-block dashboart_tooltip" onclick="Agile_GA_Event_Tracker.track_event('Chrome Extension Download')" style="font-weight:bold;">Chrome Extension</a></div>
+           </div>
+           </div>
+             <div class="col-md-4 col-sm-4 col-xs-4 inline-block">
+        <div style="border: 1px solid #e5e5e5;text-align: center;" >
+          <a href=" https://play.google.com/store/apps/details?id=agile.agile.crm" target="_blank" >
+            <img src="/img/android-logo-transparent-background.png" class="" alt="chrome image" width="100"height="110" class="m-t-xxs m-b-xxs" onclick="Agile_GA_Event_Tracker.track_event('Android App Download')"></a>
+           <div  class="downloadExtension" style="border-top: 1px solid #e5e5e5" > <a id="installExtension"href=" https://play.google.com/store/apps/details?id=agile.agile.crm" data-toggle="tooltip" data-placement="bottom" title="" data-original-title=" Agile CRM App is avaliable in play store . Click the above link to download" class=" m-t-sm m-b-sm  inline-block dashboart_tooltip" target="_blank" onclick="Agile_GA_Event_Tracker.track_event('Android App Download')" style="font-weight:bold;" >Android App</a></div>
+           </div>
+           </div>
+            <div class="col-md-4 col-sm-4 col-xs-4 inline-block">
+             <div style="border: 1px solid #e5e5e5;text-align: center;" >
+            <img src="/img/apple-download.png" class="betaAccess" alt="chrome image" width="100" height="110" class="m-t-xxs m-b-xxs" onclick="Agile_GA_Event_Tracker.track_event('IOS App Request')">
+           <div  class="downloadExtension" style="border-top: 1px solid #e5e5e5;"> <a id="installExtension"  class=" betaAccess m-t-sm m-b-sm  inline-block dashboart_tooltip" data-toggle="tooltip" data-placement="bottom" title="" data-original-title=" Get Beta Access" onclick="Agile_GA_Event_Tracker.track_event('IOS App Request')" style="font-weight:bold;" >Get Beta Access</a></div>
+           </div>
+           </div>
+           <div class="clearfix"></div>
+           </div>
+         <!-- <form id="betaAccessForm" class="BetaAccessForm form-group hide" style="margin-right:0;margin-left:0;" >
+          <div class="form-group control-group">
+                      <label class="control-label col-sm-3">Name</label>
+                      <div class="controls col-sm-7">
+                          <input name="Name" type="text"  id="Name" placeholder="Name" class="form-control field_length" max_len="500" required>
+                      </div>
+                  </div>
+              <div class="form-group control-group">
+                      <label class="control-label col-sm-3">Domain Name</label>
+                      <div class="controls col-sm-7">
+                          <input name="Domain_Name" type="text"  id="domain_name" placeholder="Domain Name" class="form-control field_length" max_len="500" required>
+                      </div>
+                  </div>
+              <div class="form-group control-group">
+                      <label class="control-label col-sm-3">Email ID</label>
+                      <div class="controls col-sm-7">
+                          <input name="Email" type="Email" id="email" required placeholder="Email ID" class="form-control field_length" max_len="500" required>
+                      </div>
+                  </div>
+              <div class="pull-right" style="margin-right:17%;" >                      
+                <button id="betarequest"  class="btn btn-sm btn-primary"> Beta Access</button>
+          </div>
+         
+           </form> --><div id="betasuccess" class="col-md-12 hide col-sm-12 table-responsive">
+        <div class="alert bg-white p-md">
+            <div class="slate-content">
+                <div class="box-right pull-left">
+                <h4 class="m-t-none" >Thank you for requesting Beta Access.</h4>
+                    <p class="m-b-none text-base">
+                        One of our support team members will send you the Beta Access.
+                    </p>
+                </div>
+        
+        </div>
+          
+        </div>
+    </div>
+    <div class="clearfix"></div></div></div>
+
         </div>
       </div>
     </div>
-    </form>
+    </div>
+    </div>
+  
+
   </div>
 </script>
