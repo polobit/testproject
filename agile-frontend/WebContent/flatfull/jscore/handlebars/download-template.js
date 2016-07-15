@@ -21,7 +21,7 @@ function downloadTemplate(url, callback)
 		url = "tpl/min/precompiled/" + FLAT_FULL_UI +  url;
 	}
 	else
-		url = "tpl/min/" + FLAT_FULL_UI +  url;
+		url = "tpl/min/locales/" + _LANGUAGE + "/" + url;
 
 	// If JS
 	if (url.endsWith("js") && HANDLEBARS_PRECOMPILATION)

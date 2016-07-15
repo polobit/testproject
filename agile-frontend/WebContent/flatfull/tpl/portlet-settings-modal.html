@@ -17,8 +17,68 @@
         <option {{#if_equals id existed_filter}} selected='selected' {{/if_equals}} value="{{id}}">{{this.name}}</option>
    {{/each}}
 </script>
+<script id="portlets-contacts-growthGraph-Settings-tags-template" type="text/html">
+{{#each this}}
+   {{#if this}}
+        <li data='{{this}}' class='tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block'>
+        	{{this}}<a id='remove_tag' class='close m-l-xs'>&times</a>
+        </li>
+   {{/if}}
+{{/each}}
+</script>
 
-<script id="portletsContactsFilterBasedSettingsModal-template" type="text/html">
+<script id="portletsPendingDealsSettingsModal-tracks-template" type="text/html">
+
+    <option value="anyTrack" {{#if_equals track "anyTrack"}} selected="selected" {{/if_equals}}>{{agile_lng_translate 'portlets' 'any'}}</option>
+
+    {{#each data}}	
+         <option value='{{id}}' {{#if_equals track "anyTrack"}} selected="selected" {{/if_equals}}>{{agile_lng_translate 'portlets' name}}
+             </option>
+    {{/each}}	
+  
+</script>
+
+<script id="portletsPendingDealsSettingsModal-milestones-template" type="text/html">
+    <option value="anyMilestone">{{agile_lng_translate 'portlets' 'any'}}</option>
+    {{#each milestonesList}}
+         {{#if_not_equals this ../lost}}
+         	{{#if_not_equals this ../won}}
+                <option value="{{this}}">{{milestone}}</option>
+                {{else}}
+                     {{#if_not_equals this "Won"}}
+                     		{{#if_not_equals this "Lost"}}
+                     		     <option value="{{this}}">{{milestone}}</option>
+                     		{{/if_not_equals}}
+                     {{/if_not_equals}}
+         	{{/if_not_equals}}
+           {{else}}
+       			 {{#if_not_equals this "Won"}}
+                 		{{#if_not_equals this "Lost"}}
+                 		     <option value="{{this}}">{{milestone}}</option>
+                 		{{/if_not_equals}}
+                 {{/if_not_equals}}
+         {{/if_not_equals}}
+    {{/each}}
+</script>
+
+<script id="portlets-deals-track-options-template" type="text/html">
+   <option value="{{id}}">{{agile_lng_translate 'portlets' name}}</option>
+</script>
+
+<script id="portlets-deals-revenueGraph-options-template" type="text/html">
+  <option value="anyTrack">{{agile_lng_translate 'portlets' 'any'}}</option>
+  {{#each tracks}}
+     <option value="{{id}}" {{#if_equals ../track id}} selected="selected" {{/if_equals}}>{{name}}</option>
+  {{/each}}
+</script>
+<script id="portletsCampaignStatsSettingsModal-options-template"  type="text/html">
+	<option value='All'>{{agile_lng_translate 'campaigns' 'all-campaigns'}}</option>
+	{{#each this}}
+	    <option value="{{id}}">{{name}}</option>
+	{{/each}}
+</script>
+
+<div id="portletsContactsFilterBasedSettingsModal" class="modal fade">
 	<div class="modal-dialog">
     <div class="modal-content">
 	<div class="modal-header">
@@ -30,11 +90,10 @@
 		<input type="hidden" id="portlet-name" />
 		<form id="portletsContactsFilterBasedSettingsForm" name="portletsContactsFilterBasedSettingsForm" method="post" class="form-horizontal" style="margin-top:15px;">
 			<div class="control-group form-group">
-				<label class="control-label col-sm-3">{{agile_lng_translate 'portlets' 'filter'}}
-				</label>
+				<label class="control-label col-sm-3">{{agile_lng_translate 'portlets' 'filter'}}</label>
 				<div class="controls col-sm-7" id="filterControls">
 					<select id="filter" name="filter" class="required form-control">
-						  
+						
 					</select>
 					<img class="loading-img" src="//doxhze3l6s7v9.cloudfront.net/app/static/img/21-0.gif"></img>
 				</div>
@@ -43,13 +102,13 @@
 	</div>
 	<div class="modal-footer">
 		<a id="save-modal" class="portlet-settings-save-modal save-modal btn btn-sm btn-primary" href="#">{{agile_lng_translate 'portlets' 'save'}}</a>
-		<!--  <a id="cancel-modal" href="#portlets" class="btn" data-dismiss="modal" onclick="hidePortletSettings(this);">Cancel</a>  -->
 	</div>
 </div>
 </div>
-</script>
+</div>
 
-<script id="portletsContactsEmailsOpenedSettingsModal-template" type="text/html">
+
+<div id="portletsContactsEmailsOpenedSettingsModal" class="modal  fade">
 <div class="modal-dialog">
     <div class="modal-content">
 	<div class="modal-header">
@@ -71,7 +130,7 @@
 						<option value="1-week">{{agile_lng_translate 'portlets' 'last-7-days'}}</option>
 						<option value="this-month" >{{agile_lng_translate 'portlets' 'this-month'}}</option>
 						<option value="1-month">{{agile_lng_translate 'portlets' 'last-30-days'}}</option>
-					<option value="Custom" class="Custom_range">Custom</option>
+						<option value="Custom" class="Custom_range">Custom</option>
 					</select>
 				</div>
 			</div>
@@ -95,9 +154,11 @@
 	</div>
 </div>
 </div>
-</script>
+</div>
 
-<script id="portletsContactsEmailsSentSettingsModal-template" type="text/html">
+
+
+<div id="portletsContactsEmailsSentSettingsModal" class="modal fade">
 <div class="modal-dialog">
     <div class="modal-content">
 	<div class="modal-header">
@@ -137,22 +198,15 @@
 	</div>
 	<div class="modal-footer">
 		<a id="save-modal" class="portlet-settings-save-modal save-modal btn btn-sm btn-primary" href="#">{{agile_lng_translate 'portlets' 'save'}}</a>
-		<!--  <a id="cancel-modal" href="#portlets" class="btn" data-dismiss="modal" onclick="hidePortletSettings(this);">Cancel</a>  -->
 	</div>
 </div>
 </div>
-</script>
+</div>
 
-<script id="portlets-contacts-growthGraph-Settings-tags-template" type="text/html">
-{{#each this}}
-   {{#if this}}
-        <li data='{{this}}' class='tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block'>
-        	{{this}}<a id='remove_tag' class='close m-l-xs'>&times</a>
-        </li>
-   {{/if}}
-{{/each}}
-</script>
-<script id="portletsContactsGrowthGraphSettingsModal-template" type="text/html">
+
+
+
+<div id="portletsContactsGrowthGraphSettingsModal" class="modal fade">
 <div class="modal-dialog">
     <div class="modal-content">
 	<div class="modal-header">
@@ -167,8 +221,7 @@
 				<label class="control-label col-sm-3" style="margin-top: 8px;">{{agile_lng_translate 'other' 'tags'}}<span class="field_req">*</span></label>
 				<div class="controls col-sm-7">
 					<div  id="portlet-tags">
-						<ul id="portlet-ul-tags" name="tags" class= "tagsinput tags p-n">
-						</ul>
+						<ul id="portlet-ul-tags" name="tags" class= "tagsinput tags p-n"></ul>
 					</div>
 					<input name="tags" type="text" id="addPortletBulkTags" class="tags-typeahead multi-tags form-control" placeholder="{{agile_lng_translate 'portlets' 'tags-desc'}}" onkeyup="hidePortletErrors(this);" />      
 				</div>
@@ -188,11 +241,9 @@
 				<label class="control-label col-sm-3">{{agile_lng_translate 'portlets' 'duration'}}</label>
 				<div class="controls col-sm-7">
 					<select id="duration" name="duration" class="required form-control">
-						<!-- <option value="today" >Today</option>
-						<option value="yesterday">Yesterday</option> -->
 						<option value="1-week">{{agile_lng_translate 'portlets' 'last-7-days'}}</option>
 						<option value="1-month">{{agile_lng_translate 'portlets' 'last-30-days'}}</option>
-						<option value="Custom" class="Custom_range">Custom</option>
+					<option value="Custom" class="Custom_range">Custom</option>
 					</select>
 				</div>
 			</div>
@@ -213,46 +264,13 @@
 	</div>
 	<div class="modal-footer">
 		<a id="save-modal" class="portlet-settings-save-modal save-modal btn btn-sm btn-primary" href="#">{{agile_lng_translate 'portlets' 'save'}}</a>
-		<!--  <a id="cancel-modal" href="#portlets" class="btn" data-dismiss="modal" onclick="hidePortletSettings(this);">Cancel</a>  -->
 	</div>
 </div>
 </div>
-</script> 
+</div>
 
-<script id="portletsPendingDealsSettingsModal-tracks-template" type="text/html">
 
-    <option value="anyTrack" {{#if_equals track "anyTrack"}} selected="selected" {{/if_equals}}>{{agile_lng_translate 'portlets' 'any'}}</option>
-
-    {{#each data}}	
-         <option value='{{id}}' {{#if_equals track "anyTrack"}} selected="selected" {{/if_equals}}>{{agile_lng_translate 'portlets' name}}
-             </option>
-    {{/each}}	
-  
-</script>
-<script id="portletsPendingDealsSettingsModal-milestones-template" type="text/html">
-    <option value="anyMilestone">{{agile_lng_translate 'portlets' 'any'}}</option>
-    {{#each milestonesList}}
-         {{#if_not_equals this ../lost}}
-         	{{#if_not_equals this ../won}}
-                <option value="{{this}}">{{milestone}}</option>
-                {{else}}
-                     {{#if_not_equals this "Won"}}
-                     		{{#if_not_equals this "Lost"}}
-                     		     <option value="{{this}}">{{milestone}}</option>
-                     		{{/if_not_equals}}
-                     {{/if_not_equals}}
-         	{{/if_not_equals}}
-           {{else}}
-       			 {{#if_not_equals this "Won"}}
-                 		{{#if_not_equals this "Lost"}}
-                 		     <option value="{{this}}">{{milestone}}</option>
-                 		{{/if_not_equals}}
-                 {{/if_not_equals}}
-         {{/if_not_equals}}
-    {{/each}}
-</script>
-
-<script id="portletsPendingDealsSettingsModal-template" type="text/html">
+<div id="portletsPendingDealsSettingsModal" class="modal fade">
 <div class="modal-dialog">
     <div class="modal-content">
 	<div class="modal-header">
@@ -295,17 +313,14 @@
 	</div>
 	<div class="modal-footer">
 		<a id="save-modal" class="portlet-settings-save-modal save-modal btn btn-sm btn-primary" href="#">{{agile_lng_translate 'portlets' 'save'}}</a>
-		<!--  <a id="cancel-modal" href="#portlets" class="btn" data-dismiss="modal" onclick="hidePortletSettings(this);">Cancel</a>  -->
 	</div>
 </div>
 </div>
-</script>
+</div>
 
-<script id="portlets-deals-track-options-template" type="text/html">
-   <option value="{{id}}">{{agile_lng_translate 'portlets' name}}</option>
-</script>
 
-<script id="portletsDealsByMilestoneSettingsModal-template" type="text/html">
+
+<div id="portletsDealsByMilestoneSettingsModal" class="modal  fade">
 <div class="modal-dialog">
     <div class="modal-content">
 	<div class="modal-header">
@@ -339,13 +354,12 @@
 	</div>
 	<div class="modal-footer">
 		<a id="save-modal" class="portlet-settings-save-modal save-modal btn btn-sm btn-primary" href="#">{{agile_lng_translate 'portlets' 'save'}}</a>
-		<!--  <a id="cancel-modal" href="#portlets" class="btn" data-dismiss="modal" onclick="hidePortletSettings(this);">Cancel</a>  -->
 	</div>
 </div>
 </div>
-</script> 
+</div>
 
-<script id="portletsDealsClosuresPerPersonSettingsModal-template"  type="text/html">
+<div id="portletsDealsClosuresPerPersonSettingsModal" class="modal fade">
 <div class="modal-dialog">
     <div class="modal-content">
 	<div class="modal-header">
@@ -377,13 +391,12 @@
 	</div>
 	<div class="modal-footer">
 		<a id="save-modal" class="portlet-settings-save-modal save-modal btn btn-sm btn-primary" href="#">{{agile_lng_translate 'portlets' 'save'}}</a>
-		<!--  <a id="cancel-modal" href="#portlets" class="btn" data-dismiss="modal" onclick="hidePortletSettings(this);">Cancel</a>  -->
 	</div>
 </div>
 </div>
-</script> 
+</div>
 
-<script id="portletsDealsWonSettingsModal-template" type="text/html">
+<div id="portletsDealsWonSettingsModal" class="modal  fade">
 <div class="modal-dialog">
     <div class="modal-content">
 	<div class="modal-header">
@@ -402,7 +415,7 @@
 						<option value="1-month">{{agile_lng_translate 'portlets' '1-month'}}</option>
 						<option value="3-months">{{agile_lng_translate 'portlets' '3-months'}}</option>
 						<option value="6-months">{{agile_lng_translate 'portlets' '6-months'}}</option>
-						<option value="12-months">{{agile_lng_translate 'portlets' '12-months'}}</option> 
+						<option value="12-months">{{agile_lng_translate 'portlets' '12-months'}}</option>
 					<option value="Custom" class="Custom_range">Custom</option>
 					</select>
 				</div>
@@ -427,9 +440,9 @@
 	</div>
 </div>
 </div>
-</script>
+</div>
 
-<script id="portletsDealsFunnelSettingsModal-template" type="text/html">
+<div id="portletsDealsFunnelSettingsModal" class="modal  fade">
 <div class="modal-dialog">
     <div class="modal-content">
 	<div class="modal-header">
@@ -467,6 +480,12 @@
 					</select>
 				</div>
 			</div>
+			<!-- <div class="control-group">
+				<label class="control-label">Due Date</label>
+				<div class="controls">
+                    <span><input id="due-date" type="text" name="due-date" class="required date form-control" placeholder="MM/DD/YYYY" /></span>
+                </div>
+			</div> -->
 			
 		</form>
 	</div>
@@ -476,7 +495,7 @@
 	</div>
 </div>
 </div>
-</script>
+</div>
 
 <div class="modal  fade" id="portletsIncomingDealsSettingsModal">
 <div class="modal-dialog">
@@ -544,6 +563,7 @@
 </div>
 </div>
 </div>
+
 <div class="modal  fade" id="portletsLostDealAnalysisSettingsModal">
 <div class="modal-dialog">
     <div class="modal-content">
@@ -611,7 +631,8 @@
 </div>
 </div>
 
-<script id="portletsDealsAssignedSettingsModal-template" type="text/html">
+
+<div id="portletsDealsAssignedSettingsModal" class="modal  fade">
 <div class="modal-dialog">
     <div class="modal-content">
 	<div class="modal-header">
@@ -650,13 +671,12 @@
 	</div>
 	<div class="modal-footer">
 		<a id="save-modal" class="portlet-settings-save-modal save-modal btn btn-sm btn-primary" href="#">{{agile_lng_translate 'portlets' 'save'}}</a>
-		<!--  <a id="cancel-modal" href="#portlets" class="btn" data-dismiss="modal" onclick="hidePortletSettings(this);">Cancel</a>  -->
 	</div>
 </div>
 </div>
-</script>
+</div>
 
-<script id="portletsCallsPerPersonSettingsModal-template" type="text/html">
+<div id="portletsCallsPerPersonSettingsModal" class="modal fade">
 <div class="modal-dialog">
     <div class="modal-content">
 	<div class="modal-header">
@@ -726,9 +746,10 @@
 	</div>
 </div>
 </div>
-</script>
+</div>
 
-<script id="portletsTaskReportSettingsModal-template" type="text/html">
+
+<div id="portletsTaskReportSettingsModal" class="modal fade">
 <div class="modal-dialog">
     <div class="modal-content">
 	<div class="modal-header">
@@ -818,9 +839,9 @@
 	</div>
 </div>
 </div>
-</script>
+</div>
 
-<script id="portletsStatsReportSettingsModal-template" type="text/html">
+<div id="portletsStatsReportSettingsModal" class="modal fade">
 <div class="modal-dialog">
     <div class="modal-content">
 	<div class="modal-header">
@@ -870,9 +891,9 @@
 	</div>
 </div>
 </div>
-</script>
+</div>
 
-<script id="portletsAgendaSettingsModal-template" type="text/html">
+<div id="portletsAgendaSettingsModal" class="modal fade">
 <div class="modal-dialog">
     <div class="modal-content">
 	<div class="modal-header">
@@ -916,9 +937,9 @@
 	</div>
 </div>
 </div>
-</script>
+</div>
 
-<script id="portletsTodayTasksSettingsModal-template" type="text/html">
+<div id="portletsTodayTasksSettingsModal" class="modal fade">
 <div class="modal-dialog">
     <div class="modal-content">
 	<div class="modal-header">
@@ -964,9 +985,9 @@
 	</div>
 </div>
 </div>
-</script>
+</div>
 
-<script id="portletsLeaderboardSettingsModal-template" type="text/html">
+<div id="portletsLeaderboardSettingsModal" class="modal fade">
 <div class="modal-dialog">
     <div class="modal-content">
 	<div class="modal-header">
@@ -1051,15 +1072,9 @@
 	</div>
 </div>
 </div>
-</script>
+</div>
 
-<script id="portlets-deals-revenueGraph-options-template" type="text/html">
-  <option value="anyTrack">{{agile_lng_translate 'portlets' 'any'}}</option>
-  {{#each tracks}}
-     <option value="{{id}}" {{#if_equals ../track id}} selected="selected" {{/if_equals}}>{{name}}</option>
-  {{/each}}
-</script>
-<script id="portletsDealsRevenueGraphSettingsModal-template" type="text/html">
+<div id="portletsDealsRevenueGraphSettingsModal" class="modal fade">
 <div class="modal-dialog">
     <div class="modal-content">
 	<div class="modal-header">
@@ -1117,9 +1132,9 @@
 	</div>
 </div>
 </div>
-</script>
+</div>
 
-<script id="portletDeleteModal-template" type="text/html">
+<div id="portletDeleteModal" class="modal fade">
 <div class="modal-dialog">
     <div class="modal-content">
 	<div class="modal-header">
@@ -1135,15 +1150,9 @@
 	</div>
 </div>
 </div>
-</script>
+</div>
 
-<script id="portletsCampaignStatsSettingsModal-options-template"  type="text/html">
-	<option value='All'>{{agile_lng_translate 'campaigns' 'all-campaigns'}}</option>
-	{{#each this}}
-	    <option value="{{id}}">{{name}}</option>
-	{{/each}}
-</script>
-<script id="portletsCampaignStatsSettingsModal-template"  type="text/html">
+<div id="portletsCampaignStatsSettingsModal" class="modal fade">
 <div class="modal-dialog">
     <div class="modal-content">
 	<div class="modal-header">
@@ -1196,7 +1205,7 @@
 		</form>
 	</div>
 	<div class="modal-footer">
-		<a id="save-modal" class="portlet-settings-save-modal save-modal btn btn-sm btn-primary" href="#">Save</a>
+		<a id="save-modal" class="portlet-settings-save-modal save-modal btn btn-sm btn-primary" href="#">{{agile_lng_translate 'portlets' 'save'}}</a>
 		<!--  <a id="cancel-modal" href="#portlets" class="btn" data-dismiss="modal" onclick="hidePortletSettings(this);">Cancel</a>  -->
 	</div>
 </div>
@@ -1209,7 +1218,7 @@
     <div class="modal-content">
 	<div class="modal-header">
 		<button class="close" data-dismiss="modal">x</button>
-		<h3 class="modal-title">Dashlet Settings</h3>
+		<h3 class="modal-title">{{agile_lng_translate 'portlets' 'dashlet-settings'}}</h3>
 	</div>
 	<div class="modal-body">
 		<input type="hidden" id="portlet-type" />
@@ -1250,9 +1259,9 @@
 	</div>
 </div>
 </div>
-</script>
+</div>
 
-<script id="portletsGoalsSettingsModal-template" type="text/html">
+<div id="portletsGoalsSettingsModal" class="modal fade">
 <div class="modal-dialog">
     <div class="modal-content">
 	<div class="modal-header">
@@ -1297,9 +1306,9 @@
 	</div>
 </div>
 </div>
-</script>
+</div>
 
-<script id="portletsIncomingDealsSettingsModal-template" type="text/html">
+<div id="portletsIncomingDealsSettingsModal" class="modal fade">
 <div class="modal-dialog">
     <div class="modal-content">
 	<div class="modal-header">
@@ -1378,9 +1387,9 @@
 	</div>
 </div>
 </div>
-</script>
+</div>
 
-<script id="portletsLostDealAnalysisSettingsModal-template" type="text/html">
+<div id="portletsLostDealAnalysisSettingsModal" class="modal fade">
 <div class="modal-dialog">
     <div class="modal-content">
 	<div class="modal-header">
@@ -1458,9 +1467,9 @@
 	</div>
 </div>
 </div>
-</script>
+</div>
 
-<script id="portletsTaskClosureSettingsModal-template" type="text/html">
+<div id="portletsTaskClosureSettingsModal" class="modal fade">
 <div class="modal-dialog">
     <div class="modal-content">
 	<div class="modal-header">
@@ -1507,9 +1516,9 @@
 	</div>
 </div>
 </div>
-</script>
+</div>
 
-<script type="text/html" id="portletsUserActivitiesSettingsModal-template">
+<div id="portletsUserActivitiesSettingsModal" class="modal fade">
 <div class="modal-dialog">
     <div class="modal-content">
 	<div class="modal-header">
@@ -1603,9 +1612,9 @@
 	</div>
 </div>
 </div>
-</script>
+</div>
 
-<script type="text/html" id="portletsWebstatVisitsSettingsModal-template">
+<div id="portletsWebstatVisitsSettingsModal" class="modal fade">
 <div class="modal-dialog">
     <div class="modal-content">
 	<div class="modal-header">
@@ -1651,8 +1660,9 @@
 	</div>
 </div>
 </div>
-</script>
-<script type="text/html" id="portletsCampaignGraphSettingsModal-template">
+</div>
+
+<div id="portletsCampaignGraphSettingsModal" class="modal fade">
 <div class="modal-dialog">
     <div class="modal-content">
 	<div class="modal-header">
@@ -1700,7 +1710,7 @@
 	</div>
 </div>
 </div>
-</script>
+</div>
 
 <div id="portletsReferralurlStatsSettingsModal" class="modal  fade">
 <div class="modal-dialog">

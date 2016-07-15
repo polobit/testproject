@@ -317,7 +317,7 @@
             "sales"     :     "Sales",
             "support"   :     "Support",
             "recent-activity" :     "Recent Activity",
-            "still-on-free-plan"   :     "Still on FREE Plan?"
+            "still-on-free-plan"   :     "Still on FREE Plan?",
         },
         "contacts-view": {
             "contacts-list": "Contacts List",
