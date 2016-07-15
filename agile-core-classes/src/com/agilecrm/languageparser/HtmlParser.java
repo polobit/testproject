@@ -4,9 +4,12 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
@@ -15,7 +18,7 @@ import java.util.regex.Pattern;
 import org.apache.commons.io.IOUtils;
 
 public class HtmlParser {
-
+	public static int fileCount = 0;
 	static Pattern pattern = Pattern.compile(Pattern.quote("{{agile_lng_translate") + "(.*?)" + Pattern.quote("}}"));
 
 	public static void parseAndLocalizeFiles(Map<String, String> map, String inputFolderPath, String outputFolderPath) {
@@ -38,6 +41,10 @@ public class HtmlParser {
 
 					constructHandlebarsTemplate(targetFileStr, map, fileEntry, outputFolderPath);
 
+					/*
+					 * if (++fileCount > 0) break;
+					 */
+
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -49,10 +56,8 @@ public class HtmlParser {
 			String outputFolderPath) throws IOException {
 		System.out.println(fileEntry.getName());
 
-		HashSet newLinePositions = newLinePositions(fileInput);
-
 		// Replace all newlines into single lines
-		fileInput = fileInput.replace("\n", "");
+		// fileInput = fileInput.replace("\n", "");
 
 		Matcher m = pattern.matcher(fileInput);
 		HashMap<String, String> agilemap = getKeysMapOfFile(m, map);
@@ -62,26 +67,10 @@ public class HtmlParser {
 			fileInput = fileInput.replace(type, agilemap.get(type));
 		}
 
-		fileInput = updatePositionsInFileString(fileInput, newLinePositions);
-
 		// Write into file
 		PrintWriter pw = new PrintWriter(new File(outputFolderPath + "/" + fileEntry.getName()));
 		pw.write(fileInput);
 		pw.close();
-	}
-
-	static String updatePositionsInFileString(String fileInput, HashSet newLinePositions) {
-		System.out.println(newLinePositions);
-		return fileInput;
-	}
-
-	static HashSet newLinePositions(String str) {
-		String newLine = "\n";
-		HashSet set = new HashSet();
-		for (int index = str.indexOf(newLine); index >= 0; index = str.indexOf(newLine, index + 1)) {
-			set.add(index);
-		}
-		return set;
 	}
 
 	static HashMap<String, String> getKeysMapOfFile(Matcher m, Map<String, String> map) {
