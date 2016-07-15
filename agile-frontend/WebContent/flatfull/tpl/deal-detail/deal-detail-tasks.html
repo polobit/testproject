@@ -6,11 +6,11 @@
                     <img alt="Clipboard" src="{{getS3ImagePath '/img/clipboard.png'}}" />
                 </div>
                 <div class="box-right pull-left">
-                    <h4 class="m-t-none">{{translate 'deal-view' 'no-tasks-for-deal'}}</h4>
+                    <h4 class="m-t-none">{{agile_lng_translate 'deal-view' 'no-tasks-for-deal'}}</h4>
                     <div class="text">
-                        {{translate 'deal-view' 'save-specific-task-information'}}
+                        {{agile_lng_translate 'deal-view' 'save-specific-task-information'}}
                     </div>
-                    <a href="#" class="btn blue btn-slate-action btn-default btn-sm deal-add-task m-t-xs"><i class="icon-plus-sign"></i>  {{translate 'deal-view' 'add-task'}}</a>
+                    <a href="#" class="btn blue btn-slate-action btn-default btn-sm deal-add-task m-t-xs"><i class="icon-plus-sign"></i>  {{agile_lng_translate 'deal-view' 'add-task'}}</a>
                 </div>
 				<div class="clearfix">
 				</div>
@@ -19,7 +19,7 @@
         {{/unless}}
         {{#if this.length}}
 	<div class="m-b-md m-t-md m-r-sm" align="right">
-		<a href="#" class="btn btn-default btn-sm deal-add-task pos-rlt m-t-xs btn-addon"><span><i class='icon-plus-sign'/></span> {{translate 'deal-view' 'add-task'}}</a>
+		<a href="#" class="btn btn-default btn-sm deal-add-task pos-rlt m-t-xs btn-addon"><span><i class='icon-plus-sign'/></span> {{agile_lng_translate 'deal-view' 'add-task'}}</a>
 	</div>
 			<ul id="deal-tasks-model-list" class="ativity-block-ul list-group list-group-lg no-radius m-b-none m-t-n-xxs" url="core/api/notes/bulk"></ul>
 		{{/if}} 

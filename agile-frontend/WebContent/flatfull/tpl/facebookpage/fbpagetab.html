@@ -13,19 +13,19 @@ color:red;
 	<div class="panel-body">
 <div id="fbPageSettingsHolder">
 
-<p>{{translate 'admin-settings-integrations' 'capture-leads-desc'}}</p>
+<p>{{agile_lng_translate 'admin-settings-integrations' 'capture-leads-desc'}}</p>
 
 <div id="fbFormsHolder"></div>
 
-{{#if linked_pages.length}}<p class="font-bold">{{translate 'admin-settings-integrations' 'current-facebook-pages'}}</p>
+{{#if linked_pages.length}}<p class="font-bold">{{agile_lng_translate 'admin-settings-integrations' 'current-facebook-pages'}}</p>
 
 <table class="table" id="fbFormsTable">
 <tbody>
 {{#each linked_pages}}
 	<tr id="connectedFormHolder_{{page_id}}">
-		<td colspan="3" style="padding-left:0px;"><a target="_blank" href="/form.jsp?id={{form_id}}" class="text-info">{{form_name}}</a> {{translate 'admin-settings-integrations' 'form-has-been-added-to'}}<br>
-		<a target="_blank" href="https://www.facebook.com/pages/null/{{page_id}}?sk=app_{{../app_id}}" class="text-info">{{page_name}}</a> {{translate 'deal-view' 'page'}}</td>
-		<td style="padding-top:18px;"><a href="#" data-pageid="{{page_id}}" id="connectedForm_{{form_id}}" class="deleteFacebookLinkedpage" title="{{translate 'admin-settings-integrations' 'to-delete-the-form-from-fb-page'}}"><i class="icon-trash"></i></a></td>
+		<td colspan="3" style="padding-left:0px;"><a target="_blank" href="/form.jsp?id={{form_id}}" class="text-info">{{form_name}}</a> {{agile_lng_translate 'admin-settings-integrations' 'form-has-been-added-to'}}<br>
+		<a target="_blank" href="https://www.facebook.com/pages/null/{{page_id}}?sk=app_{{../app_id}}" class="text-info">{{page_name}}</a> {{agile_lng_translate 'deal-view' 'page'}}</td>
+		<td style="padding-top:18px;"><a href="#" data-pageid="{{page_id}}" id="connectedForm_{{form_id}}" class="deleteFacebookLinkedpage" title="{{agile_lng_translate 'admin-settings-integrations' 'to-delete-the-form-from-fb-page'}}"><i class="icon-trash"></i></a></td>
 	</tr>
 {{/each}}
 </tbody>
@@ -34,49 +34,49 @@ color:red;
 <div id="delStatusMessageHolder"></div>
 
 {{#if_equals is_authenticated "false"}}
-<p><a  class="btn btn-sm btn-primary" href="{{oauth_url}}" id="AddFormLinkFacebookAccount">{{translate 'admin-settings-integrations' 'link-facebook-account'}}</a></p><br>
+<p><a  class="btn btn-sm btn-primary" href="{{oauth_url}}" id="AddFormLinkFacebookAccount">{{agile_lng_translate 'admin-settings-integrations' 'link-facebook-account'}}</a></p><br>
 {{/if_equals}}
 {{else}}
 {{#if_equals is_authenticated "false"}}
-<p><a class="btn btn-sm btn-primary" href="{{oauth_url}}">{{translate 'admin-settings-integrations' 'link-facebook-account'}}</a></p><br>
+<p><a class="btn btn-sm btn-primary" href="{{oauth_url}}">{{agile_lng_translate 'admin-settings-integrations' 'link-facebook-account'}}</a></p><br>
 {{/if_equals}}
 {{/if}}
 
 {{#if_equals is_authenticated "true"}}
-<p id="{{userInfo.id}}">{{translate 'admin-settings-integrations' 'your-facebook'}} - {{userInfo.first_name}} {{userInfo.last_name}} (<a href="#" id="unlinkFacebookAccount" class="text-info" title="{{translate 'admin-settings-integrations' 'your-facebook-title'}}">{{translate 'admin-settings-integrations' 'unlink'}}</a>)</p>
+<p id="{{userInfo.id}}">{{agile_lng_translate 'admin-settings-integrations' 'your-facebook'}} - {{userInfo.first_name}} {{userInfo.last_name}} (<a href="#" id="unlinkFacebookAccount" class="text-info" title="{{agile_lng_translate 'admin-settings-integrations' 'your-facebook-title'}}">{{agile_lng_translate 'admin-settings-integrations' 'unlink'}}</a>)</p>
 <hr class="m-xs">
-<p><a class="btn btn-sm btn-default" href="#" id="addFacebookFormLink"><i class="icon-plus-sign"></i> {{translate 'form-builder' 'add-form'}}</a></p>
+<p><a class="btn btn-sm btn-default" href="#" id="addFacebookFormLink"><i class="icon-plus-sign"></i> {{agile_lng_translate 'form-builder' 'add-form'}}</a></p>
 <div id="statusMessageHolder"></div>
 <div id="facebookFormAddHolder" style="display:none;">
-<p>{{translate 'admin-settings-integrations' 'select-form-desc'}}</p>
+<p>{{agile_lng_translate 'admin-settings-integrations' 'select-form-desc'}}</p>
 <form id="facebookPageTabSettingForm">
   <fieldset>
 	<input type="hidden" id="AgileFacebookAppId" value="{{app_id}}">
-	<label for="formToUse">{{translate 'admin-settings-integrations' 'add-this-agile-crm-form'}} 
+	<label for="formToUse">{{agile_lng_translate 'admin-settings-integrations' 'add-this-agile-crm-form'}} 
 	{{#unless forms}}
-	<a href="#forms" class="text-info">{{translate 'admin-settings-integrations' 'create-a-form'}}</a>
+	<a href="#forms" class="text-info">{{agile_lng_translate 'admin-settings-integrations' 'create-a-form'}}</a>
 	{{/unless}}
 	</label>
     <select id="formToUse" name="formToUse" required="" class="form-control">
-	<option value="">{{translate 'plan-and-upgrade' 'select'}}</option>
+	<option value="">{{agile_lng_translate 'plan-and-upgrade' 'select'}}</option>
 	{{#each forms}}
       <option value="{{id}}">{{formName}}</option>
 	{{/each}}
     </select><br>
 
-    <label for="facebookTabPage">{{translate 'admin-settings-integrations' 'to-this-facebook-page'}}
+    <label for="facebookTabPage">{{agile_lng_translate 'admin-settings-integrations' 'to-this-facebook-page'}}
     {{#unless pages}}
-    <a href="https://www.facebook.com/pages/create/" class="text-info">{{translate 'admin-settings-integrations' 'create-a-page'}}</a>
+    <a href="https://www.facebook.com/pages/create/" class="text-info">{{agile_lng_translate 'admin-settings-integrations' 'create-a-page'}}</a>
     {{/unless}}
     </label>
     <select id="facebookTabPage" name="facebookTabPage" required="" class="form-control">
-	<option value="">{{translate 'plan-and-upgrade' 'select'}}</option>
+	<option value="">{{agile_lng_translate 'plan-and-upgrade' 'select'}}</option>
 	{{#each pages}}
       <option data-token="{{access_token}}" value="{{id}}">{{name}}</option>
 	{{/each}}
     </select><br>
 
-    <div><a href="#" id="facebookPageTabSave" class="btn btn-primary">{{translate 'report-add' 'save'}}</a></div>
+    <div><a href="#" id="facebookPageTabSave" class="btn btn-primary">{{agile_lng_translate 'report-add' 'save'}}</a></div>
   </fieldset>
 </form>
 </div>

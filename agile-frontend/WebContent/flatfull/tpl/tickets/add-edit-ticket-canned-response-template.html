@@ -4,7 +4,7 @@
     	<div class="col-md-10">
         	<div class="panel panel-default">
         		<div class="panel-heading">
-        			{{#if id}}{{translate 'contact-details' 'edit'}}{{else}}{{translate 'portlets' 'add'}}{{/if}} {{translate 'tickets' 'canned-response'}}
+        			{{#if id}}{{agile_lng_translate 'contact-details' 'edit'}}{{else}}{{agile_lng_translate 'portlets' 'add'}}{{/if}} {{agile_lng_translate 'tickets' 'canned-response'}}
     			</div>
                 <form id="userForm" name="userForm" method="get" action="" class="form-horizontal">
                     {{#if id}}
@@ -12,15 +12,15 @@
                     {{/if}}
                     <fieldset class="wrapper"><br/>
                         <div class="control-group form-group">
-                            <label class="control-label col-md-3" for="title">{{translate 'other' 'title'}} <span class="field_req">*</span></label> 
+                            <label class="control-label col-md-3" for="title">{{agile_lng_translate 'other' 'title'}} <span class="field_req">*</span></label> 
                             <div class="col-md-5">
                                 <div class="controls">
-                                    <input type="text" name="title" id="title" value="{{title}}" placeholder="{{translate 'contacts-view' 'Title'}}" class="required form-control" maxlength="60">
+                                    <input type="text" name="title" id="title" value="{{title}}" placeholder="{{agile_lng_translate 'contacts-view' 'Title'}}" class="required form-control" maxlength="60">
                                 </div>
                             </div>
                         </div>
                         <div class="control-group form-group">
-                            <label class="control-label col-md-3" for="message">{{translate 'other' 'message'}} <span class="field_req">*</span></label> 
+                            <label class="control-label col-md-3" for="message">{{agile_lng_translate 'other' 'message'}} <span class="field_req">*</span></label> 
                             <div class="col-md-6 m-t-xs">
                                 <div class="controls">
                                     <textarea id="canned-response-message" class="form-control required" name="message" style="min-height: 100px;">{{message}}</textarea>
@@ -33,16 +33,16 @@
                                 <div class="controls">
                                     <div style="line-height:0px;" class="text-xs pull-right">
                                         <div class="pull-right btn-group dropdown dropup">
-                                          <a class="text-info" data-toggle="dropdown" aria-expanded="false">{{translate 'tickets' 'add-a-merge-field'}} </a>
+                                          <a class="text-info" data-toggle="dropdown" aria-expanded="false">{{agile_lng_translate 'tickets' 'add-a-merge-field'}} </a>
                                           <ul id="canned-response-merge-fields" class="dropdown-menu">
-                                            <li><a href="javascript:void(0);" data-field-val="id">{{translate 'tickets' 'ticket-id'}}</a></li>
-                                            <li><a href="javascript:void(0);" data-field-val="requester_name">{{translate 'tickets' 'requester-name'}}
+                                            <li><a href="javascript:void(0);" data-field-val="id">{{agile_lng_translate 'tickets' 'ticket-id'}}</a></li>
+                                            <li><a href="javascript:void(0);" data-field-val="requester_name">{{agile_lng_translate 'tickets' 'requester-name'}}
                                             </a></li>
-                                            <li><a href="javascript:void(0);" data-field-val="requester_email">{{translate 'tickets' 'requester-email'}}</a></li>
-                                            <li><a href="javascript:void(0);" data-field-val="status">{{translate 'portlets' 'status'}}</a></li>
-                                            <li><a href="javascript:void(0);" data-field-val="priority">{{translate 'tasks' 'priority'}}</a></li>
-                                            <li><a href="javascript:void(0);" data-field-val="type">{{translate 'tickets' 'ticket-type'}}</a></li>
-                                            <li><a href="javascript:void(0);" data-field-val="subject">{{translate 'contact-details' 'subject'}}</a></li>
+                                            <li><a href="javascript:void(0);" data-field-val="requester_email">{{agile_lng_translate 'tickets' 'requester-email'}}</a></li>
+                                            <li><a href="javascript:void(0);" data-field-val="status">{{agile_lng_translate 'portlets' 'status'}}</a></li>
+                                            <li><a href="javascript:void(0);" data-field-val="priority">{{agile_lng_translate 'tasks' 'priority'}}</a></li>
+                                            <li><a href="javascript:void(0);" data-field-val="type">{{agile_lng_translate 'tickets' 'ticket-type'}}</a></li>
+                                            <li><a href="javascript:void(0);" data-field-val="subject">{{agile_lng_translate 'contact-details' 'subject'}}</a></li>
                                             
                                           </ul>
                                         </div>
@@ -51,10 +51,10 @@
                             </div>
                         </div>
                         <div class="control-group form-group">
-                            <label class="control-label col-md-3" for="message">{{translate 'tickets' 'add-label'}} </label> 
+                            <label class="control-label col-md-3" for="message">{{agile_lng_translate 'tickets' 'add-label'}} </label> 
                             <div class="col-md-6 m-t-xs">
                                 <div class="controls">
-                                    <select data-placeholder="{{translate 'contacts-view' 'label'}}" name="labels" id="labels" class="chosen-select form-control multiSelect" multiple 
+                                    <select data-placeholder="{{agile_lng_translate 'contacts-view' 'label'}}" name="labels" id="labels" class="chosen-select form-control multiSelect" multiple 
                                         class="w-md"></select>
                                 </div>
                             </div>
@@ -65,8 +65,8 @@
                         <div class="form-group">
                             <div class="form-actions col-sm-offset-3 col-md-9">
                                 <div class="form-actions">
-                                    <a type="reset" href='#canned-responses' class="btn btn-default btn-sm">{{translate 'contact-details' 'cancel'}}</a>
-                                    <button type="submit" class="save btn btn-sm btn-primary m-l-xs">{{translate 'prefs-settings' 'save-changes'}}</button>
+                                    <a type="reset" href='#canned-responses' class="btn btn-default btn-sm">{{agile_lng_translate 'contact-details' 'cancel'}}</a>
+                                    <button type="submit" class="save btn btn-sm btn-primary m-l-xs">{{agile_lng_translate 'prefs-settings' 'save-changes'}}</button>
                                 </div>
                             </div>
                         </div>

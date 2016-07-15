@@ -4,9 +4,9 @@
 <div class="row">
     <div class="col-md-12">
         
-            <h3 class="pull-left font-thin h3">{{translate 'deal-view' 'deals'}} <small>{{translate 'deal-view' 'opportunities'}}</small>
+            <h3 class="pull-left font-thin h3">{{agile_lng_translate 'deal-view' 'deals'}} <small>{{agile_lng_translate 'deal-view' 'opportunities'}}</small>
 			<div id="milestone-set-msg" class="alert alert-warning p-sm" role="alert" style="margin-left:100px;display:none;">
-  				{{translate 'deal-view' 'for-better-deal-reports-and-sales'}} <a href="#milestones" style="font-style:italic;text-decoration: initial;color: #337ab7;">{{translate 'deal-view' 'deal-settings'}}</a> {{translate 'deal-view' 'page'}}
+  				{{agile_lng_translate 'deal-view' 'for-better-deal-reports-and-sales'}} <a href="#milestones" style="font-style:italic;text-decoration: initial;color: #337ab7;">{{agile_lng_translate 'deal-view' 'deal-settings'}}</a> {{agile_lng_translate 'deal-view' 'page'}}
 			</div>
 			</h3>
 <div class="pull-right">
@@ -21,13 +21,13 @@
 						<span class="caret deals-view-caret"></span>
 					</a>
 					<ul class="dropdown-menu pull-right" role="menu">
-						<li><a href="#deal-rc-0" class="deals-list-view">{{translate 'deal-view' 'list-view'}}</a></li>
-						<li class="dropdown-submenu do-onclick-nothing"><a href="#deal-rc-1" data-toggle="dropdown" class="deals-pipelined-view">{{translate 'deal-view' 'milestone-view'}}</a>
+						<li><a href="#deal-rc-0" class="deals-list-view">{{agile_lng_translate 'deal-view' 'list-view'}}</a></li>
+						<li class="dropdown-submenu do-onclick-nothing"><a href="#deal-rc-1" data-toggle="dropdown" class="deals-pipelined-view">{{agile_lng_translate 'deal-view' 'milestone-view'}}</a>
 
 							<ul class="dropdown-menu" style="min-width:130px" role="menu">
-								<li><a href="#deal-rc-1" id="deal-milestone-regular">{{translate 'deal-view' 'relaxed'}}</a></li>
-								<li><a href="#deal-rc-2" id="deal-milestone-compact">{{translate 'deal-view' 'compact'}}</a></li>
-								<li><a href="#deal-rc-3" id="deal-milestone-fit">{{translate 'deal-view' 'fit'}}</a></li>
+								<li><a href="#deal-rc-1" id="deal-milestone-regular">{{agile_lng_translate 'deal-view' 'relaxed'}}</a></li>
+								<li><a href="#deal-rc-2" id="deal-milestone-compact">{{agile_lng_translate 'deal-view' 'compact'}}</a></li>
+								<li><a href="#deal-rc-3" id="deal-milestone-fit">{{agile_lng_translate 'deal-view' 'fit'}}</a></li>
 							</ul>
 						</li>
 					</ul>
@@ -41,14 +41,14 @@
 					{{#hasScope "MANAGE_DEALS"}}
 
 					<ul class="dropdown-menu pull-right" role="menu">
-						<li><a href="#import-deals" onclick="Agile_GA_Event_Tracker.track_event('Deals Import from CSV')">{{translate 'contacts-view' 'import'}}</a></li>
-						<li><a href="#" class="deals-export-csv" onclick="Agile_GA_Event_Tracker.track_event('Deals Export as CSV')">{{translate 'deal-view' 'export'}}</a></li>
-						<li><a href="#add-dashlet" onclick="Agile_GA_Event_Tracker.track_event('Deals Add Dashlet')">{{translate 'portlets' 'add-dashlet'}}</a></li>
+						<li><a href="#import-deals" onclick="Agile_GA_Event_Tracker.track_event('Deals Import from CSV')">{{agile_lng_translate 'contacts-view' 'import'}}</a></li>
+						<li><a href="#" class="deals-export-csv" onclick="Agile_GA_Event_Tracker.track_event('Deals Export as CSV')">{{agile_lng_translate 'deal-view' 'export'}}</a></li>
+						<li><a href="#add-dashlet" onclick="Agile_GA_Event_Tracker.track_event('Deals Add Dashlet')">{{agile_lng_translate 'portlets' 'add-dashlet'}}</a></li>
 					</ul>
 
 					{{else}}
 					<ul class="dropdown-menu pull-right" role="menu">
-					<li><a href="#add-dashlet">{{translate 'portlets' 'add-dashlet'}}</a></li>
+					<li><a href="#add-dashlet">{{agile_lng_translate 'portlets' 'add-dashlet'}}</a></li>
 					</ul>
 					{{/hasScope}}
 					<!--
@@ -97,20 +97,20 @@
     <div class="modal-content">
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-    <h3>{{translate 'deal-view' 'archive-deal'}}</h3>
+    <h3>{{agile_lng_translate 'deal-view' 'archive-deal'}}</h3>
   </div>
   <div class="modal-body">
     <div id="deal-bulk-confirm">
 		<input id="archived-deal-id" name="id" type="hidden" value="{{id}}" />
 		<input id="archived-deal-milestone" name="milestone" type="hidden" value="{{milestone}}"/>
-		{{translate 'deal-view' 'deals-can-be-archived-desc'}}  
-		<br/> {{translate 'deal-view' 'are-you-sure-to-archive-this-deal'}}
+		{{agile_lng_translate 'deal-view' 'deals-can-be-archived-desc'}}  
+		<br/> {{agile_lng_translate 'deal-view' 'are-you-sure-to-archive-this-deal'}}
 	</div>
   </div>
   <div class="modal-footer">
   	<span class="error-status text-danger"></span>
-	<button type="button" class="btn btn-sm btn-default" data-dismiss="modal" aria-hidden="true">{{translate 'portlets' 'no'}}</button>
-    <a href="#" id="deal-quick-archive" class="btn btn-sm btn-primary">{{translate 'portlets' 'yes'}}</a>
+	<button type="button" class="btn btn-sm btn-default" data-dismiss="modal" aria-hidden="true">{{agile_lng_translate 'portlets' 'no'}}</button>
+    <a href="#" id="deal-quick-archive" class="btn btn-sm btn-primary">{{agile_lng_translate 'portlets' 'yes'}}</a>
   </div>
  </div>
   </div>
@@ -122,19 +122,19 @@
     <div class="modal-content">
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-    <h3>{{translate 'deal-view' 'restore-deal'}}</h3>
+    <h3>{{agile_lng_translate 'deal-view' 'restore-deal'}}</h3>
   </div>
   <div class="modal-body">
 	<input id="restored-deal-id" name="id" type="hidden"/>
 	<input id="restored-deal-milestone" name="milestone" type="hidden"/>
     <div id="deal-bulk-confirm">
-		{{translate 'deal-view' 'restoring-the-deal-desc'}}
+		{{agile_lng_translate 'deal-view' 'restoring-the-deal-desc'}}
 	</div>
   </div>
   <div class="modal-footer">
   	<span class="error-status"></span>
-	<button type="button" class="btn btn-sm btn-default" data-dismiss="modal" aria-hidden="true">{{translate 'portlets' 'no'}}</button>
-    <a href="#" id="deal-quick-restore" class="btn btn-sm btn-primary">{{translate 'portlets' 'yes'}}</a>
+	<button type="button" class="btn btn-sm btn-default" data-dismiss="modal" aria-hidden="true">{{agile_lng_translate 'portlets' 'no'}}</button>
+    <a href="#" id="deal-quick-restore" class="btn btn-sm btn-primary">{{agile_lng_translate 'portlets' 'yes'}}</a>
   </div>
 	</div>
   </div>
@@ -155,12 +155,12 @@
 		 <div class="pull-right">
 		    <div style="font-size:14px; float:left">
 		       <input type="hidden" id="{{remove_spaces heading}}_totalvalue" name="0" />	  
-			{{#if lost_milestone}}<i data-toogle="tooltip" title="" class="icon-dislike mark-lost" data-original-title="{{translate 'admin-settings-deals' 'lost-message'}}" style="font-size: 14px;position: relative;top: 2px;"></i>{{/if}}
-			{{#if won_milestone}}<i data-toogle="tooltip" title="" class="icon-like mark-won" data-original-title="{{translate 'admin-settings-deals' 'won-message'}}" style="font-size: 14px;position: relative;top: 2px;"></i>{{/if}}
+			{{#if lost_milestone}}<i data-toogle="tooltip" title="" class="icon-dislike mark-lost" data-original-title="{{agile_lng_translate 'admin-settings-deals' 'lost-message'}}" style="font-size: 14px;position: relative;top: 2px;"></i>{{/if}}
+			{{#if won_milestone}}<i data-toogle="tooltip" title="" class="icon-like mark-won" data-original-title="{{agile_lng_translate 'admin-settings-deals' 'won-message'}}" style="font-size: 14px;position: relative;top: 2px;"></i>{{/if}}
 
 			<span id="{{remove_spaces heading}}_count" class="txt-mute badge"></span><span class="pull-right pos-abs pos-r-sm pos-t-xs"><img class="loading_img" src="{{getS3ImagePath '/img/ajax-loader-cursor.gif'}}" width="12px"></span> </div>
 		</div>
-		 <span class="miltstone-title text-base text-ellipsis">{{translate 'admin-settings-deals' heading}}</span>
+		 <span class="miltstone-title text-base text-ellipsis">{{heading}}</span>
 		   </div>
 		<span></span>
 	</div>
@@ -202,7 +202,7 @@
 	<span class="pull-right  dealnotes-view">
 			{{#if notes}}
 
-             <span class="txt-small note-count" title="{{translate 'deal-view' 'notes'}}" >{{notes.length}}</span><a title="{{translate 'deal-view' 'notes'}}" data-toggle="tooltip" data-placement="top" data-trigger="hover" data-container="No Notes" class="deal-notes deal-edit c-p text-l-none"><i class="deal-action icon icon-comment-alt deal-notes" data="{{id}}"></i></a>
+             <span class="txt-small note-count" title="{{agile_lng_translate 'deal-view' 'notes'}}" >{{notes.length}}</span><a title="{{agile_lng_translate 'deal-view' 'notes'}}" data-toggle="tooltip" data-placement="top" data-trigger="hover" data-container="No Notes" class="deal-notes deal-edit c-p text-l-none"><i class="deal-action icon icon-comment-alt deal-notes" data="{{id}}"></i></a>
               
 			{{/if}}
 		</span>
@@ -240,7 +240,7 @@
 				<a class="archived-deal vis-hide" data-archive="true" />
 			{{/if_equals}}
 			{{#if_equals archived false}}
-			<a title="{{translate 'contact-details' 'edit'}}" class="deal-edit" style="cursor:pointer;text-decoration:none;"> <i style="width: 0.9em!important;" class="fa fa-edit"></i> </a>
+			<a title="{{agile_lng_translate 'contact-details' 'edit'}}" class="deal-edit" style="cursor:pointer;text-decoration:none;"> <i style="width: 0.9em!important;" class="fa fa-edit"></i> </a>
             {{/if_equals}}
 			<!-- <a title="Delete" class="deal-delete" style="cursor:pointer;text-decoration:none;"><i style="width: 0.9em!important;" class="icon-trash"></i></a> -->
 			{{#if_equals archived false}}
@@ -266,7 +266,7 @@
 
 	<div class="pull-right dealnotes-view" style="margin-top:-3px;padding-right:1px;">
 			{{#if notes}}
-             <span class="txt-small note-count" title="{{translate 'deal-view' 'notes'}}" >{{notes.length}}</span><a title="{{translate 'deal-view' 'notes'}}" data-toggle="tooltip" data-placement="top" data-trigger="hover" data-container="No Notes" class="deal-notes deal-edit" style="cursor:pointer;text-decoration:none;"><i class="deal-action icon icon-comment-alt deal-notes" data="{{id}}"></i></a>
+             <span class="txt-small note-count" title="{{agile_lng_translate 'deal-view' 'notes'}}" >{{notes.length}}</span><a title="{{agile_lng_translate 'deal-view' 'notes'}}" data-toggle="tooltip" data-placement="top" data-trigger="hover" data-container="No Notes" class="deal-notes deal-edit" style="cursor:pointer;text-decoration:none;"><i class="deal-action icon icon-comment-alt deal-notes" data="{{id}}"></i></a>
               
 			{{/if}}
 		</div>
@@ -291,25 +291,25 @@
 
 	{{#if_equals pipeline.won_milestone milestone}}
 		{{#if won_date}}
-			<div style="cursor:default;" class="pull-left inline-block deal_won_date" id="deal_won_date_{{id}}" data-toggle="tooltip" title="{{translate 'deal-view' 'won-date'}}">
+			<div style="cursor:default;" class="pull-left inline-block deal_won_date" id="deal_won_date_{{id}}" data-toggle="tooltip" title="{{agile_lng_translate 'deal-view' 'won-date'}}">
       			<small>{{epochToHumanDateInFormat won_date}}</small>
       		</div>
       		<div class="clearfix"></div>
       	{{else}}
       		{{#if milestone_changed_time}}
-      			<div style="cursor:default;" class="pull-left inline-block deal_won_date" id="deal_won_date_{{id}}" data-toggle="tooltip" title="{{translate 'deal-view' 'won-date'}}">
+      			<div style="cursor:default;" class="pull-left inline-block deal_won_date" id="deal_won_date_{{id}}" data-toggle="tooltip" title="{{agile_lng_translate 'deal-view' 'won-date'}}">
       				<small>{{epochToHumanDateInFormat milestone_changed_time}}</small>
       			</div>
       			<div class="clearfix"></div>
       		{{else}}
-      			<div style="cursor:default;" class="pull-left inline-block hide deal_won_date" id="deal_won_date_{{id}}" data-toggle="tooltip" title="{{translate 'deal-view' 'won-date'}}">
+      			<div style="cursor:default;" class="pull-left inline-block hide deal_won_date" id="deal_won_date_{{id}}" data-toggle="tooltip" title="{{agile_lng_translate 'deal-view' 'won-date'}}">
       				<small></small>
       			</div>
       			<div class="clearfix"></div>
       		{{/if}}
 		{{/if}}
 	{{else}}
-		<div style="cursor:default;" class="pull-left inline-block hide deal_won_date" id="deal_won_date_{{id}}" data-toggle="tooltip" title="{{translate 'deal-view' 'won-date'}}">
+		<div style="cursor:default;" class="pull-left inline-block hide deal_won_date" id="deal_won_date_{{id}}" data-toggle="tooltip" title="{{agile_lng_translate 'deal-view' 'won-date'}}">
       		<small></small>
       	</div>
       	<div class="clearfix"></div>
@@ -331,7 +331,7 @@
 				<a class="archived-deal vis-hide" data-archive="true" />
 			{{/if_equals}}
 			{{#if_equals archived false}}
-			<a title="{{translate 'contact-details' 'edit'}}" class="deal-edit c-p text-l-none" style="text-decoration:none;color:#727272;"> <i style="width: 0.9em!important;" class="fa fa-edit"></i> </a>
+			<a title="{{agile_lng_translate 'contact-details' 'edit'}}" class="deal-edit c-p text-l-none" style="text-decoration:none;color:#727272;"> <i style="width: 0.9em!important;" class="fa fa-edit"></i> </a>
             {{/if_equals}}
 			<!-- <a title="Delete" class="deal-delete c-p text-l-none" style="text-decoration:none;color:#727272;"><i style="width: 0.9em!important;" class="icon-trash"></i></a> -->
 			{{#if_equals archived false}}
@@ -371,7 +371,7 @@
 {{#if name}}
 <a id='{{id}}' class="pipeline c-p" data="{{name}}">{{name}}</a>
  {{else}}
-<a id='{{id}}' class="pipeline c-p" data="Default">{{translate 'companies-view' 'default'}}</a>
+<a id='{{id}}' class="pipeline c-p" data="Default">{{agile_lng_translate 'companies-view' 'default'}}</a>
 {{/if}}
 </script>
 
@@ -381,12 +381,12 @@
 <div id='deal_detail_popover-div' style="font-size:12px;">
     <div style="background-color:#edf1f2;font-weight:bold;max-width:100%;padding: 2px;">
     <p class="deal-popover-p" style="margin:2px;overflow:hidden !important;text-overflow: ellipsis;">
-    	<span>{{translate 'admin-settings-deals' heading}}</span></p>
+    	<span>{{heading}}</span></p>
     <p class="deal-popover-p pull-left" style="margin:2px;overflow:hidden !important;text-overflow:ellipsis;max-width:calc(100% - 35px);">
-    	<span>{{translate 'admin-settings-deals' heading}}</span ></p><span class="pull-right">{{dealNumber}}</span><div class="clearfix"></div>
+    	<span>{{heading}}</span ></p><span class="pull-right">{{dealNumber}}</span><div class="clearfix"></div>
      </div>
-    <p class="deal-popover-p" style="margin:2px;margin-top:4px;"><span>{{translate 'contacts-view' 'total'}}:</span><span> {{symbol}}{{dealcount}}</span></p>
-    <p class="deal-popover-p" style="margin:2px"><span>{{translate 'deal-view' 'average'}}:
+    <p class="deal-popover-p" style="margin:2px;margin-top:4px;"><span>{{agile_lng_translate 'contacts-view' 'total'}}:</span><span> {{symbol}}{{dealcount}}</span></p>
+    <p class="deal-popover-p" style="margin:2px"><span>{{agile_lng_translate 'deal-view' 'average'}}:
     </span><span> {{symbol}}{{avgDeal}}</span></p>
 </div>
 </script>
@@ -396,8 +396,8 @@
 <script id = "deal-detail-popover-template" type="text/html" > 
        <div class="data panel-default" style="min-width:200px;max-width:280px;">
 	   
-       	<div class="text-cap panel-heading text-ellipsis" style="padding:6px;"><div class="text-ellipsis inline-block" style="width:100%;" title="{{track}}"><strong>{{translate 'admin-settings-deals' dealTrack}}</strong></div>
-				 <div class="pull-left" style="max-width:60%;overflow:hidden !important;text-overflow: ellipsis;">{{translate 'admin-settings-deals' heading}}</div>
+       	<div class="text-cap panel-heading text-ellipsis" style="padding:6px;"><div class="text-ellipsis inline-block" style="width:100%;" title="{{track}}"><strong>{{dealTrack}}</strong></div>
+				 <div class="pull-left" style="max-width:60%;overflow:hidden !important;text-overflow: ellipsis;">{{heading}}</div>
         		<div>
 	   	  <div class="unselectable m-t-n-xs" id="score" unselectable="on" onselectstart="return false">
 							<div  class="text-lg score-view">
@@ -414,11 +414,11 @@
        		<div class="b-b b-light p-b-xs">
        			
        	<div class="contact-owner text-base" id="change-owner-element">
-		<p class="deal-popover-p" style="margin:2px;margin-top:4px;"><span>{{translate 'contacts-view' 'total'}}:</span><span> {{symbol}}{{dealcount}}</span></p>
+		<p class="deal-popover-p" style="margin:2px;margin-top:4px;"><span>{{agile_lng_translate 'contacts-view' 'total'}}:</span><span> {{symbol}}{{dealcount}}</span></p>
        </div>
        </div>
        		<div class=" p-b-xs">
-			<p class="deal-popover-p" style="margin:2px"><span>{{translate 'deal-view' 'average'}}:</span><span> {{symbol}}{{avgDeal}}</span></p>
+			<p class="deal-popover-p" style="margin:2px"><span>{{agile_lng_translate 'deal-view' 'average'}}:</span><span> {{symbol}}{{avgDeal}}</span></p>
        		</div>
                    </div>
 	   	          </div>	

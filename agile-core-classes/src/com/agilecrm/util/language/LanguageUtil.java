@@ -26,7 +26,7 @@ public class LanguageUtil {
 					+ "locales/" + language + "/"
 					+ language
 					+ ".json");
-			str = str.replace("var resources =", "").trim();
+			str = str.replace("var _Agile_Resources_Json =", "").trim();
 			
 			System.out.println(str);
 			

@@ -6,12 +6,12 @@
                     <img alt="Clipboard" src="{{getS3ImagePath '/img/clipboard.png'}}" />
                 </div>
                 <div class="box-right pull-left">
-                    <h4 class="m-t-none">{{contactShortName}} {{translate 'contact-details' 'is-not-associated-with-any-deals'}} </h4>
+                    <h4 class="m-t-none">{{contactShortName}} {{agile_lng_translate 'contact-details' 'is-not-associated-with-any-deals'}} </h4>
                     <div class="text">
-						{{translate 'contact-details' 'all-deals-that-have-this'}} {{#isCompany}}company{{else}}contact{{/isCompany}} {{translate 'contact-details' 'in-the-related-to-field-are-shown-here'}}
+						{{agile_lng_translate 'contact-details' 'all-deals-that-have-this'}} {{#isCompany}}company{{else}}contact{{/isCompany}} {{agile_lng_translate 'contact-details' 'in-the-related-to-field-are-shown-here'}}
                     </div>
                     {{#hasMenuScope 'DEALS'}}
-                    <a href="#" class="contact-add-deal btn-default btn-sm btn blue btn-slate-action m-t-xs"><i class="icon-plus-sign"></i>  {{translate 'contact-details' 'add-deal'}}</a>
+                    <a href="#" class="contact-add-deal btn-default btn-sm btn blue btn-slate-action m-t-xs"><i class="icon-plus-sign"></i>  {{agile_lng_translate 'contact-details' 'add-deal'}}</a>
                     {{/hasMenuScope}}
                 </div>
 				<div class="clearfix">
@@ -23,7 +23,7 @@
 {{#if this.length}}
 <div class="m-b-md m-t-md m-r-sm" align="right">
 {{#hasMenuScope 'DEALS'}}
-   <a href="#" class="contact-add-deal btn btn-sm btn-default pos-rlt btn-addon"><span><i class='icon-plus-sign'/></span> {{translate 'contact-details' 'add-deal'}}</a> 
+   <a href="#" class="contact-add-deal btn btn-sm btn-default pos-rlt btn-addon"><span><i class='icon-plus-sign'/></span> {{agile_lng_translate 'contact-details' 'add-deal'}}</a> 
 {{/hasMenuScope}}
 </div>
 	<ul id="deals-model-list" class="ativity-block-ul list-group list-group-lg no-radius m-b-none m-t-n-xxs"></ul>

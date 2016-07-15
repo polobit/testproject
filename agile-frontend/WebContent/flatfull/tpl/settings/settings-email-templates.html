@@ -3,10 +3,10 @@
 	<div class="hbox h-auto m-b-lg">
     <div class="panel panel-default">
         <div class="panel-heading">
-            <div class="pull-left m-t-xs">{{translate 'preferences' 'email-templates'}}</div>
+            <div class="pull-left m-t-xs">{{agile_lng_translate 'preferences' 'email-templates'}}</div>
 			<div class="pull-right">
             	<a href="#emailbuilder-templates" class="btn btn-default btn-sm btn-addon" id="addEmailTemplate">
-           		 <span><i class="icon-plus-sign" /></span> {{translate 'menu' 'new'}}</a>
+           		 <span><i class="icon-plus-sign" /></span> {{agile_lng_translate 'menu' 'new'}}</a>
 			</div>
 			<div class="clearfix"></div>
         </div>
@@ -19,10 +19,10 @@
             <thead>
                 <tr>
                     <th class="hide">Id</th>                    
-					<th style="width:30%;" class="{{#is_mobile}} namethead {{/is_mobile}}">{{translate 'other' 'name'}} {{#is_mobile}} & Subject {{/is_mobile}} </th>
+					<th style="width:30%;" class="{{#is_mobile}} namethead {{/is_mobile}}">{{agile_lng_translate 'other' 'name'}} {{#is_mobile}} & Subject {{/is_mobile}} </th>
                     {{#is_mobile}}
                     {{else}}
-                    <th style="width:30%;">{{translate 'other' 'subject'}}</th>
+                    <th style="width:30%;">{{agile_lng_translate 'other' 'subject'}}</th>
                     <th style="width:40%;"></th>
                     {{/is_mobile}}
                 </tr>
@@ -40,14 +40,14 @@
         <div class="data-block">
         <div class="p-l p-r">
             <h4 class="m-t-none">
-                {{translate 'preferences' 'email-templates'}}
+                {{agile_lng_translate 'preferences' 'email-templates'}}
             </h4>
             
             <p>
-                {{translate 'prefs-email-templates' 'email-templates-desc-1'}}
+                {{agile_lng_translate 'prefs-email-templates' 'email-templates-desc-1'}}
             </p>
             <p>
-                {{translate 'prefs-email-templates' 'email-templates-desc-2'}}
+                {{agile_lng_translate 'prefs-email-templates' 'email-templates-desc-2'}}
             </p>
            </div>
         </div>

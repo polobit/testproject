@@ -3,7 +3,7 @@
 		<div class="wrapper-sm">
 
 			<div class="word-break p-n text-base" id="bria_no_phone">
-				{{translate 'widgets' 'no-phone-number-associated'}}
+				{{agile_lng_translate 'widgets' 'no-phone-number-associated'}}
 			</div>
 
 		</div>
@@ -53,7 +53,7 @@
 						<i class="icon pull-left icon-phone text-muted text-md m-r-xs m-t-xxs v-middle twilio-widget-answer"></i>
 					{{/if_equals}}
 				
-<div class="pull-left text-sm">{{#if_equals duration "0"}}{{#if_equals direction "Missed"}}{{translate 'widgets' 'call-missed'}} {{else}}{{translate 'widgets' 'call-unanswered'}}{{/if_equals}}{{else}}{{translate 'widgets' 'call-connected'}}{{/if_equals}}
+<div class="pull-left text-sm">{{#if_equals duration "0"}}{{#if_equals direction "Missed"}}{{agile_lng_translate 'widgets' 'call-missed'}} {{else}}{{agile_lng_translate 'widgets' 'call-unanswered'}}{{/if_equals}}{{else}}{{agile_lng_translate 'widgets' 'call-connected'}}{{/if_equals}}
 </div>
 				
 <div class="pull-right">{{#is_string duration}}{{toProperFormat duration}}{{else}}0s{{/is_string}}</div>
@@ -66,7 +66,7 @@
 		{{/each}}
 	{{else}}
 		<li class="list-group-item wrapper-md r-none b-l-none b-r-none text-center">
-	    	{{translate 'widgets' 'sorry-we-could-not-find-any-call-data'}}
+	    	{{agile_lng_translate 'widgets' 'sorry-we-could-not-find-any-call-data'}}
 		</li>
 	{{/if}}
 
@@ -80,31 +80,31 @@
 	<form class="p-xs" id="bria_login_form" name="bria_login_form" method="post">
     	<fieldset>
 				<p class="m-t-sm" style=" margin: 0px;margin-bottom: 20px;">
-                    {{translate 'widgets' 'make-and-receive-calls-using-your-bria-client'}}
+                    {{agile_lng_translate 'widgets' 'make-and-receive-calls-using-your-bria-client'}}
 			  </p>	
 
 			  
 			<p style="font-size: 13px;margin-bottom: 15px">
-				{{translate 'widgets' 'please-follow-these-steps'}}
+				{{agile_lng_translate 'widgets' 'please-follow-these-steps'}}
 			</p>
 
 				<div class="m-t-sm m-b-none text-sm" style="font-size: 12px;">
-				<p>{{translate 'widgets' 'bria-download-desc'}} <a href="#" class="text-info" target="_blank" id="downloadCallJar" style="color:red;"> {{translate 'widgets' 'here'}}</a> 
-				<span>*&nbsp;</span><span style="font-size: 9px;color:grey;">{{translate 'widgets' 'support-for-windows-only'}}</span>
+				<p>{{agile_lng_translate 'widgets' 'bria-download-desc'}} <a href="#" class="text-info" target="_blank" id="downloadCallJar" style="color:red;"> {{agile_lng_translate 'widgets' 'here'}}</a> 
+				<span>*&nbsp;</span><span style="font-size: 9px;color:grey;">{{agile_lng_translate 'widgets' 'support-for-windows-only'}}</span>
 				</p>
-  				<p>{{translate 'widgets' 'bria-desc-2'}} </p>
-				<p>{{translate 'widgets' 'bria-desc-3'}}</p>
+  				<p>{{agile_lng_translate 'widgets' 'bria-desc-2'}} </p>
+				<p>{{agile_lng_translate 'widgets' 'bria-desc-3'}}</p>
 				</div>
 
 
 
               	<div style="margin-top: 18px">
 			<p style="font-size: 13px; margin-top:5px;">
-				{{translate 'widgets' 'bria-desc-4'}}	
+				{{agile_lng_translate 'widgets' 'bria-desc-4'}}	
 			</p>
 				<div class="text-center">
-				<a href="#add-widget" class="btn btn-default btn-sm ml_5">{{translate 'other' 'cancel'}}</a>
-				<a href="#" id="save_prefs" class="save-agile-widget btn btn-sm btn-primary">{{translate 'portlets' 'save'}}</a>
+				<a href="#add-widget" class="btn btn-default btn-sm ml_5">{{agile_lng_translate 'other' 'cancel'}}</a>
+				<a href="#" id="save_prefs" class="save-agile-widget btn btn-sm btn-primary">{{agile_lng_translate 'portlets' 'save'}}</a>
 				</div>
               </div>
 

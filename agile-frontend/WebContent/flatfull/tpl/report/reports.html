@@ -3,8 +3,8 @@
 <div class="wrapper-md lter bg-light b-b">
 <div class="row">
     <div class="col-md-12">
-    <h3 class="pull-left font-thin h3">{{translate 'report-add' 'email-reports'}}</h3>
-            <a href="#report-add" class="btn btn-default btn-sm pull-right btn-addon" id="addReport"><span><i class="icon-plus-sign" /></span>  {{translate 'report-view' 'add-report'}}</a>
+    <h3 class="pull-left font-thin h3">{{agile_lng_translate 'report-add' 'email-reports'}}</h3>
+            <a href="#report-add" class="btn btn-default btn-sm pull-right btn-addon" id="addReport"><span><i class="icon-plus-sign" /></span>  {{agile_lng_translate 'report-view' 'add-report'}}</a>
             <div class="clearfix">
     </div>
    
@@ -18,14 +18,14 @@
         {{#if this.length}}
         <div class="col-md-9 col-sm-9">
         <div class="panel panel-default">
-        <div class="panel-heading">{{translate 'report-view' 'email-reports-list'}}</div>
+        <div class="panel-heading">{{agile_lng_translate 'report-view' 'email-reports-list'}}</div>
        <div class="table-responsive">
         <table class="table table-bordered table-striped showCheckboxes agile-table panel table-layout-mob-view " url="core/api/reports/bulk">
             <thead>
                 <tr>
-                    <th>{{translate 'report-view' 'name'}}</th>
-                    <th>{{translate 'report-view' 'duration'}}</th>
-                    <th>{{translate 'report-view' 'fields'}}</th>
+                    <th>{{agile_lng_translate 'report-view' 'name'}}</th>
+                    <th>{{agile_lng_translate 'report-view' 'duration'}}</th>
+                    <th>{{agile_lng_translate 'report-view' 'fields'}}</th>
                 </tr>
             </thead>
             <tbody id="report-model-list" route="report-edit/">
@@ -39,10 +39,10 @@
         <div class="data-block">
         <div class="wrapper-xs " id="addview">
             <h4 class="m-t-none h4 m-b-sm">
-                {{translate 'report-view' 'what-email-reports'}}
+                {{agile_lng_translate 'report-view' 'what-email-reports'}}
             </h4>
           
-            <p>{{translate 'report-view' 'what-email-reports-answer'}}
+            <p>{{agile_lng_translate 'report-view' 'what-email-reports-answer'}}
             </p>
         </div>
         </div>
@@ -62,12 +62,12 @@
     <td><div class="table-resp" style="text-transform:capitalize;">{{#field_Element fields_set}}{{/field_Element}}</div></td>
     <td>
         <div class="table-resp">
-            <a href="#report-results/{{id}}" class="text-info" data={{id}} id="report-instant-results">{{translate 'report-view' 'show-results'}}</a>             
+            <a href="#report-results/{{id}}" class="text-info" data={{id}} id="report-instant-results">{{agile_lng_translate 'report-view' 'show-results'}}</a>             
         </div>
     </td>
     <td>
         <div class="table-resp">
-            <a  data={{id}} class="text-info" id="reports-email-now" >{{translate 'report-view' 'send-now'}}</a>
+            <a  data={{id}} class="text-info" id="reports-email-now" >{{agile_lng_translate 'report-view' 'send-now'}}</a>
         </div>
     </td>
 <br />
@@ -79,10 +79,10 @@
 <div class="wrapper-md lter bg-light b-b">
 <div class="row">
     <div class="col-sm-12 col-md-12">
-        <h3 class="pull-left font-thin h3">{{translate 'report-view' 'reports'}}</h3>
+        <h3 class="pull-left font-thin h3">{{agile_lng_translate 'report-view' 'reports'}}</h3>
 
         <div class="pull-right">
-            <a href="#add-dashlet" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="You can also configure more reports as dashlets on your dashboard" class="text-info m-t-sm inline-block" onclick="Agile_GA_Event_Tracker.track_event('Configure Dashlet Reports')">{{translate 'report-view' 'configure-dashlet'}}</a>
+            <a href="#add-dashlet" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="You can also configure more reports as dashlets on your dashboard" class="text-info m-t-sm inline-block" onclick="Agile_GA_Event_Tracker.track_event('Configure Dashlet Reports')">{{agile_lng_translate 'report-view' 'configure-dashlet'}}</a>
         </div>
     </div>
 </div>
@@ -98,7 +98,7 @@
        <ul class="nav nav-tabs" id="subTab">
                                             {{#hasMenuScope 'DEALS'}}
                                             <li role="presentation" data-tab="6" id="dealstab" class="maintab">
-                                                <a href="#deals-tab" role="tab" data-toggle="tab">{{translate 'report-view' 'deals'}}</a>
+                                                <a href="#deals-tab" role="tab" data-toggle="tab">{{agile_lng_translate 'report-view' 'deals'}}</a>
                                                  <ul class="nav nav-tabs sub-nav-tab" id="subTab1" style="display:none;">
                                                  <li><a href="#IncomingDeals" role="tab" data-toggle="tab"><i class="m-r-sm icon-graph v-middle"></i> Incoming Deals</a></li>
                                                  <li><a href="#LostDeal" role="tab" data-toggle="tab"><i class="m-r-sm icon-pie-chart v-middle"></i>Deals Lost by Reason</a></li>
@@ -181,7 +181,7 @@
                    <div class="text-center show_screenshot">
                    <!-- Description -->
         <div class="m-b-sm" rel="tooltip" title="{{description}}">
-            {{translate 'report-view' 'contact-reports-details'}}
+            {{agile_lng_translate 'report-view' 'contact-reports-details'}}
         </div>
                    <img src='flatfull/img/reports_images/Incoming-Deals.png'></img>
         <br />

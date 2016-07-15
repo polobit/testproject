@@ -8,23 +8,23 @@
 
                 <fieldset>
                     <div class="control-group form-group">
-                        <label class="control-label"><b>{{translate 'tickets' 'name-of-macro'}}:</b> 
+                        <label class="control-label"><b>{{agile_lng_translate 'tickets' 'name-of-macro'}}:</b> 
                         <span class="field_req">*</span></label>
                         
 						<div class="controls">
                             <div class="row">
                                 <div class="col-md-5 col-sm-4 col-xs-4">
 									{{#if id}}<input name="id" type="hidden" value="{{id}}"/>{{/if}}
-                                    <input name="name" type="text" id="macro-name" class="col-md-3 form-control required w-md" placeholder="{{translate 'tickets' 'name-of-macro'}}" value="{{name}}"/>
+                                    <input name="name" type="text" id="macro-name" class="col-md-3 form-control required w-md" placeholder="{{agile_lng_translate 'tickets' 'name-of-macro'}}" value="{{name}}"/>
 									<input name="actions" id="macro-actions" type="hidden" value=""/>
                                 </div>
                                 <div class="col-md-3 col-sm-3 col-xs-4">
                                     <span id="macro-msg" class="text-center"></span>
                                 </div>
                                 <div class="col-md-4 col-sm-5 col-xs-4">
-                                    <a data-toggle="modal" id="macro-designer-help" class="right m-t-n-md c-p text-xs text-info" style="clear:both;">{{translate 'tickets' 'need-help-watch-our-tutorial'}}</a>
+                                    <a data-toggle="modal" id="macro-designer-help" class="right m-t-n-md c-p text-xs text-info" style="clear:both;">{{agile_lng_translate 'tickets' 'need-help-watch-our-tutorial'}}</a>
                                     
-                                        <button class="btn btn-primary btn-sm  right pos-rlt m-r-xs" id="save-ticket-macro">{{translate 'tickets' 'save-macro'}}
+                                        <button class="btn btn-primary btn-sm  right pos-rlt m-r-xs" id="save-ticket-macro">{{agile_lng_translate 'tickets' 'save-macro'}}
                                         </button>
                                   
                                 </div>
@@ -55,10 +55,10 @@
 <div class="row">
     <div class="col-sm-12 col-md-12">
             
-            <h3 class="pull-left font-thin h3">{{translate 'tickets' 'macros'}}</h3>
+            <h3 class="pull-left font-thin h3">{{agile_lng_translate 'tickets' 'macros'}}</h3>
             
             <div class="pull-right">
-                <a href="#macro-add" class="btn btn-default btn-sm"><i class="icon-plus-sign"></i> {{translate 'tickets' 'add-macro'}}</a>
+                <a href="#macro-add" class="btn btn-default btn-sm"><i class="icon-plus-sign"></i> {{agile_lng_translate 'tickets' 'add-macro'}}</a>
             </div>
             <div class="clearfix"></div>
         
@@ -77,13 +77,13 @@
         {{#if this.length}}
             <div class="col-md-9 col-sm-9">
             <div class="panel panel-default">
-                <div class="panel-heading">{{translate 'tickets' 'macros-list'}}</div>
+                <div class="panel-heading">{{agile_lng_translate 'tickets' 'macros-list'}}</div>
                 <div class="table-responsive">
                 <table class="table table-striped showCheckboxes m-b-none agile-table panel table-layout-mob-view" url="core/api/ticket/macros/delete" id="macros-tour-step">
                     <thead>
                         <tr>
-                            <th class="hide">{{translate 'tickets' 'id'}}</th>
-                            <th style="width:35%">{{translate 'tickets' 'name'}}</th>
+                            <th class="hide">{{agile_lng_translate 'tickets' 'id'}}</th>
+                            <th style="width:35%">{{agile_lng_translate 'tickets' 'name'}}</th>
                             <th style="width:25%">&nbsp;</th>
                         </tr>
                     </thead>
@@ -96,14 +96,14 @@
     <div class="col-md-3 col-sm-3" id="learn-macros">
                     
             <h4 class="m-t-none h4 m-b-sm">
-                {{translate 'tickets' 'what-are-macros'}}
+                {{agile_lng_translate 'tickets' 'what-are-macros'}}
             </h4>
             
             <p>
-                {{translate 'tickets' 'macros-desc'}}
+                {{agile_lng_translate 'tickets' 'macros-desc'}}
             </p>
             <p>
-                {{translate 'tickets' 'macros-desc-1'}}
+                {{agile_lng_translate 'tickets' 'macros-desc-1'}}
             </p>
         
     </div>
@@ -122,7 +122,7 @@
         <div class="table-resp">
             <small class="edit-hover text-muted"> 
 				<i class="fa fa-clock-o m-r-xs"></i>
-		        <span><em>{{translate 'campaigns' 'modified'}}</em>&nbsp;</span>
+		        <span><em>{{agile_lng_translate 'campaigns' 'modified'}}</em>&nbsp;</span>
                 <time class="campaign-created-time b-b-dotted" datetime="{{epochToHumanDate "" updated_time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" updated_time}}</time>
             </small>
         </div>
@@ -130,7 +130,7 @@
         <div>
             <small class="edit-hover text-muted"> 
 				<i class="fa fa-clock-o m-r-xs"></i>
-		       <span><em>{{translate 'contact-details' 'created'}}</em>&nbsp;</span>
+		       <span><em>{{agile_lng_translate 'contact-details' 'created'}}</em>&nbsp;</span>
                <time class="macro-created-time b-b-dotted" datetime="{{epochToHumanDate "" created_time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created_time}}</time>
          	</small>
         </div>

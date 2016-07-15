@@ -183,7 +183,8 @@ function existing_deal_document_attach(document_id, saveBtn)
     }
     else
     {
-    	saveBtn.closest("span").find(".save-status").html("<span style='color:red;margin-left:10px;'>Linked Already</span>");
+    	var linkedtext = _agile_get_translated_val("misc-keys", "link-already");
+    	saveBtn.closest("span").find(".save-status").html("<span style='color:red;margin-left:10px;'>" + linkedtext + "</span>");
     	saveBtn.closest("span").find('span.save-status').find("span").fadeOut(5000);
     	return;
     }

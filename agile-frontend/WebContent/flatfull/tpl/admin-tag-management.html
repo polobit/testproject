@@ -11,7 +11,7 @@
 		<div class=" pull-left m-r-xs" style="display:inline;">
 			
 		</div>
-		<div class="pull-left"><a href="#" id="add-new-tag" class="btn btn-default btn-addon btn-sm"><i class="icon-plus-sign" ></i> {{translate 'web-rules' 'add-tag'}}</a>
+		<div class="pull-left"><a href="#" id="add-new-tag" class="btn btn-default btn-addon btn-sm"><i class="icon-plus-sign" ></i> {{agile_lng_translate 'web-rules' 'add-tag'}}</a>
 		<label class="btn btn-default btn-sm m-l-xs allow_users_switch" id="disable_new_tags" >
 			{{#hasTagPermission}}
 		 	<span  id="disable_new_tags" > Disable Access </span><input type="checkbox" id="new_tag_acl" class="left hidden" name="new_tag_acl" value="true" checked="checked"> 
@@ -20,12 +20,12 @@
 <span  id="disable_new_tags" > Enable Access </span><input type="checkbox" id="new_tag_acl" class="left hidden" name="new_tag_acl" value="true" checked="checked"> 
 		 	{{/hasTagPermission}}
 			</label></div>
-		<div id="new_tag_field_block" style="display:none;" class="inline pull-right"><input id="new_tag" type="text" class="form-control pull-left m-r-sm w" placeholder="{{translate 'admin-settings-tags' 'new-tag'}}"/><a class="btn btn-info pull-left v-top  btn-sm" id="add_new_tag" href="#">Add</a></div>
+		<div id="new_tag_field_block" style="display:none;" class="inline pull-right"><input id="new_tag" type="text" class="form-control pull-left m-r-sm w" placeholder="{{agile_lng_translate 'admin-settings-tags' 'new-tag'}}"/><a class="btn btn-info pull-left v-top  btn-sm" id="add_new_tag" href="#">Add</a></div>
 		<div class="clearfix"></div>
 	</div>
 	<div class="clearfix"></div>
 		<div class="alert alert-warning" role="alert">
-	  		{{translate 'widgets' 'tag-note-desc'}}
+	  		{{agile_lng_translate 'widgets' 'tag-note-desc'}}
 	 	</div>
 	</div>
 	<div class="col-md-3 data-block pull-right m-t-md m-r-n-md">
@@ -61,7 +61,7 @@
 </div>
 <div class="agile-custom-hide" id="editing">
 	<input type="text" class="edit-input input-medium form-control" value='{{this.tag}}' >  
-	<a class="btn btn-sm btn-default" id="add_milestone" href="#">{{translate 'admin-settings-custom-fields' 'add'}}</a>
+	<a class="btn btn-sm btn-default" id="add_milestone" href="#">{{agile_lng_translate 'admin-settings-custom-fields' 'add'}}</a>
 </div>
 </span>
 </script>
@@ -95,7 +95,7 @@
 	<div class='col-md-8'>
 <div class="well">
 
-    		<legend>{{translate 'contact-edit' 'edit'}}</legend>
+    		<legend>{{agile_lng_translate 'contact-edit' 'update'}}</legend>
                     <div id="tag-cloud">
 						<ul id="tag-cloud-model-list"></ul>
                     </div>

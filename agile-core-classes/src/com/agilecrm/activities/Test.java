@@ -210,13 +210,13 @@ public class Test {
 	}
 
 	public static void main(String[] args) {
-		// parseLanguageJSON();
-		long time = Calendar.getInstance().getTimeInMillis();
+		parseLanguageJSON();
+		/*long time = Calendar.getInstance().getTimeInMillis();
 		// readFiles();
 		templatize();
 		
 		System.out.println(filesCount);
-		System.out.println(Calendar.getInstance().getTimeInMillis() - time);
+		System.out.println(Calendar.getInstance().getTimeInMillis() - time); */
 	}
 
 }

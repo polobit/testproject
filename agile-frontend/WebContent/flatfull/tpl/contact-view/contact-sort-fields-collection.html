@@ -2,20 +2,20 @@
 <div class="btn-group pull-left m-r-xs contacts-toolbar">
 	   <div class="btn-group dropdown m-l-none" style="float: none;">
                 <button class="btn btn-sm no-shadow p-n b-n bg-transparent text-base" style="font-size: 11px;" data-toggle="dropdown" id="contact-sort" aria-expanded="false">
-                    <span class="text-muted">{{translate 'contacts-view' 'sort-by'}} </span>
+                    <span class="text-muted">{{agile_lng_translate 'contacts-view' 'sort-by'}} </span>
                     <span class="sort-field-txt"></span>
                 </button>
                 <button class="btn btn-sm no-shadow dropdown-toggle bg-transparent b-n p-t-none p-b-none p-l-xs" data-toggle="dropdown" aria-expanded="true">
                     <i class="fa fa-sort-desc" style="position:absolute;"></i>
                 </button>
                 <ul class="dropdown-menu" id="contact-view-sort-model-list" role="menu">
-                    <li class="dropdown-header hide" id="system-fields" >{{translate 'contacts-view' 'system-fields'}}</li>
-                    <li class="dropdown-header display-none" id="custom-fields">{{translate 'contacts-view' 'custom-fields'}}</li>
+                    <li class="dropdown-header hide" id="system-fields" >{{agile_lng_translate 'contacts-view' 'system-fields'}}</li>
+                    <li class="dropdown-header display-none" id="custom-fields">{{agile_lng_translate 'contacts-view' 'custom-fields'}}</li>
                     <li class="divider" id="sort-divider"></li>
                     <li>
-                        <a class="order-by pos-rlt" data="" href="javascript:void(0);">{{translate 'contacts-view' 'ascending'}} <i class="fa fa-check pos-abs pos-r-sm txt-small m-t-xs sort-by-check "></i> </a>
+                        <a class="order-by pos-rlt" data="" href="javascript:void(0);">{{agile_lng_translate 'contacts-view' 'ascending'}} <i class="fa fa-check pos-abs pos-r-sm txt-small m-t-xs sort-by-check "></i> </a>
                     </li>
-                    <li><a class="order-by pos-rlt" data="-" href="javascript:void(0);">{{translate 'contacts-view' 'descending'}}  <i class="fa fa-check pos-abs pos-r-sm txt-small m-t-xs sort-by-check "></i> </a></li>
+                    <li><a class="order-by pos-rlt" data="-" href="javascript:void(0);">{{agile_lng_translate 'contacts-view' 'descending'}}  <i class="fa fa-check pos-abs pos-r-sm txt-small m-t-xs sort-by-check "></i> </a></li>
                 </ul>
             </div>
         </div>
@@ -25,13 +25,13 @@
 
 {{#if scope}}
     <a class="sort-link sort-field pos-rlt text-ellipsis" style="width:185px;" href="javascript:void(0);" data="{{search_key}}_AGILE_CUSTOM_{{field_type}}" type="custom">
-        {{translate 'contacts-view' field_label}}
+        {{field_label}}
         <i class="fa fa-check pos-abs pos-r-sm txt-small m-t-xs sort-field-check {{selected}} {{#if selected}}{{else}}display-none{{/if}}" ></i> 
     </a>
     {{else}}
 
     <a class="sort-link sort-field pos-rlt text-ellipsis" style="width:185px;" href="javascript:void(0);" data="{{field_value}}">
-        {{translate 'contacts-view' field_label}}
+        {{field_label}}
         <i class="fa fa-check pos-abs pos-r-sm txt-small m-t-xs sort-field-check {{selected}} {{#if selected}}{{else}}display-none{{/if}}"></i> 
     </a>
 {{/if}}

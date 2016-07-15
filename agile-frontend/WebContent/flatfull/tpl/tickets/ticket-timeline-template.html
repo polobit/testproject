@@ -51,7 +51,7 @@
 			            <a href="javascript:;">
 
 			           	 {{#if_equals activity_type 'TICKET_ASSIGNEE_REPLIED'}}
-				            <span class="inline-block">{{user_name}}</span> {{translate 'tickets' 'replied-to-ticket'}}
+				            <span class="inline-block">{{user_name}}</span> {{agile_lng_translate 'tickets' 'replied-to-ticket'}}
 				         {{/if_equals}}
 
 				         {{#if_equals activity_type 'TICKET_REQUESTER_REPLIED'}}
@@ -60,13 +60,13 @@
 					                {{getPropertyValue contact.properties "first_name"}} 
 					                    {{getPropertyValue contact.properties "last_name"}}
 					                 {{else}}
-					                    {{translate 'tickets' 'requester'}}
+					                    {{agile_lng_translate 'tickets' 'requester'}}
 					                {{/if}}
-					        </span> {{translate 'tickets' 'replied-to-ticket'}}
+					        </span> {{agile_lng_translate 'tickets' 'replied-to-ticket'}}
 				         {{/if_equals}}
 
 				         {{#if_equals activity_type 'TICKET_CREATED'}}
-				    		{{translate 'contact-details' 'ticket-created'}}
+				    		{{agile_lng_translate 'contact-details' 'ticket-created'}}
 				    	 {{/if_equals}}
 			            </a>
 			          </div>
@@ -115,65 +115,65 @@
 			            <a href="javascript:;">
 
 			               {{#if_equals activity_type 'TICKET_ASSIGNED'}}
-						        {{translate 'tickets' 'ticket-assigned-to'}} <span>{{custom2}}</span>
+						        {{agile_lng_translate 'tickets' 'ticket-assigned-to'}} <span>{{custom2}}</span>
 						    {{/if_equals}}
 
 						    {{#if_equals activity_type 'TICKET_ASSIGNEE_CHANGED'}}
-				            	{{translate 'tickets' 'ticket-assignee-changed-to'}} 
+				            	{{agile_lng_translate 'tickets' 'ticket-assignee-changed-to'}} 
 				            	<span>{{custom2}}</span>
 						    {{/if_equals}}
 
 						    {{#if_equals activity_type 'TICKET_GROUP_CHANGED'}}
-					                {{translate 'tickets' 'ticket-group-changed-to'}} 
+					                {{agile_lng_translate 'tickets' 'ticket-group-changed-to'}} 
 					                <span>{{custom2}}</span>
 						    {{/if_equals}}
 
 						    {{#if_equals activity_type 'TICKET_STATUS_CHANGE'}}
-			                    {{translate 'tickets' 'status-changed-from'}} {{uc_first custom1}} {{translate 'contacts-view' 'to'}} {{uc_first custom2}}
+			                    {{agile_lng_translate 'tickets' 'status-changed-from'}} {{uc_first custom1}} {{agile_lng_translate 'contacts-view' 'to'}} {{uc_first custom2}}
 			                {{/if_equals}}
 
 			                {{#if_equals activity_type 'TICKET_PRIORITY_CHANGE'}}
-		                       {{translate 'tickets' 'priority-changed-from'}} <span class="first-letter-cap inline-block">{{custom1}}</span> {{translate 'contacts-view' 'to'}} <span class="first-letter-cap inline-block">{{custom2}}</span>
+		                       {{agile_lng_translate 'tickets' 'priority-changed-from'}} <span class="first-letter-cap inline-block">{{custom1}}</span> {{agile_lng_translate 'contacts-view' 'to'}} <span class="first-letter-cap inline-block">{{custom2}}</span>
 		                    {{/if_equals}}
 
 						    {{#if_equals activity_type 'TICKET_TYPE_CHANGE'}}
-		                        {{translate 'tickets' 'type-changed-from'}} <span class="first-letter-cap inline-block">{{custom1}}</span> {{translate 'contacts-view' 'to'}} <span class="first-letter-cap inline-block">{{custom2}}</span>
+		                        {{agile_lng_translate 'tickets' 'type-changed-from'}} <span class="first-letter-cap inline-block">{{custom1}}</span> {{agile_lng_translate 'contacts-view' 'to'}} <span class="first-letter-cap inline-block">{{custom2}}</span>
 		                     {{/if_equals}}
 						                        
 		                    {{#if_equals activity_type 'TICKET_LABEL_ADD'}}
-		                        {{translate 'campaigns' 'label-added'}} - <label class="label bg-success m-l-xs">{{custom2}}</label>
+		                        {{agile_lng_translate 'campaigns' 'label-added'}} - <label class="label bg-success m-l-xs">{{custom2}}</label>
 		                     {{/if_equals}}
 
 		                    {{#if_equals activity_type 'TICKET_LABEL_REMOVE'}}
-		                        {{translate 'tickets' 'label-removed'}} - <label class="label bg-info m-l-xs">{{custom2}}</label>
+		                        {{agile_lng_translate 'tickets' 'label-removed'}} - <label class="label bg-info m-l-xs">{{custom2}}</label>
 		                     {{/if_equals}}
 
 		                     {{#if_equals activity_type 'TICKET_CC_EMAIL_ADD'}}
-		                        {{translate 'tickets' 'cc-email-added'}} - <label class="label bg-success m-l-xs">{{custom2}}</label>
+		                        {{agile_lng_translate 'tickets' 'cc-email-added'}} - <label class="label bg-success m-l-xs">{{custom2}}</label>
 		                     {{/if_equals}}
 
 		                    {{#if_equals activity_type 'TICKET_CC_EMAIL_REMOVE'}}
-		                        {{translate 'tickets' 'cc-email-removed'}} - <label class="label bg-info m-l-xs">{{custom2}}</label>
+		                        {{agile_lng_translate 'tickets' 'cc-email-removed'}} - <label class="label bg-info m-l-xs">{{custom2}}</label>
 		                     {{/if_equals}}
 
 
 		                    {{#if_equals activity_type 'TICKET_PRIVATE_NOTES_ADD'}}
-		                        <span>{{domainUser.name}}</span>  {{translate 'tickets' 'added-a-note'}}
+		                        <span>{{domainUser.name}}</span>  {{agile_lng_translate 'tickets' 'added-a-note'}}
 		                    {{/if_equals}}
 
 		                    {{#if_equals activity_type 'TICKET_MARKED_FAVORITE'}}
 		                    	<!-- <span class="first-letter-cap inline-block">{{domainUser.name}}</span>--> 
-		                        {{translate 'contacts-view' 'marked-as-favorite'}}
+		                        {{agile_lng_translate 'contacts-view' 'marked-as-favorite'}}
 		                    {{/if_equals}}
 
 		                    {{#if_equals activity_type 'TICKET_MARKED_UNFAVORITE'}}
 		                        <!-- <span class="first-letter-cap inline-block">{{domainUser.name}}</span>-->
-		                        {{translate 'contacts-view' 'marked-as-unfavorite'}}
+		                        {{agile_lng_translate 'contacts-view' 'marked-as-unfavorite'}}
 		                    {{/if_equals}}
 
 		                    {{#if_equals activity_type 'TICKET_MARKED_SPAM'}}
 		                        <!--<span class="first-letter-cap inline-block">{{domainUser.name}}</span>-->
-		                        {{translate 'contacts-view' 'marked-as-spam'}}
+		                        {{agile_lng_translate 'contacts-view' 'marked-as-spam'}}
 		                    {{/if_equals}}
 
 		                    {{#if_equals activity_type 'TICKET_MARKED_UNSPAM'}}
@@ -182,18 +182,18 @@
 		                    {{/if_equals}}
 		                    {{#if_equals activity_type 'SET_DUE_DATE'}}
 		                        <!--<span class="first-letter-cap inline-block">{{domainUser.name}}</span>-->
-		                        {{translate 'tickets' 'due-date-set-to'}} {{epochToHumanDate "mmm dd, yyyy HH:MM" custom2}}
+		                        {{agile_lng_translate 'tickets' 'due-date-set-to'}} {{epochToHumanDate "mmm dd, yyyy HH:MM" custom2}}
 		                    {{/if_equals}}
 		                    {{#if_equals activity_type 'DUE_DATE_CHANGED'}}
 		                        <!--<span class="first-letter-cap inline-block">{{domainUser.name}}</span>-->
-		                        {{translate 'tickets' 'changed-due-date-to'}} {{epochToHumanDate "mmm dd, yyyy HH:MM" custom2}}
+		                        {{agile_lng_translate 'tickets' 'changed-due-date-to'}} {{epochToHumanDate "mmm dd, yyyy HH:MM" custom2}}
 		                    {{/if_equals}}
 		                    {{#if_equals activity_type 'DUE_DATE_REMOVED'}}
 		                        <!--<span class="first-letter-cap inline-block">{{domainUser.name}}</span>-->
-		                        {{translate 'tickets' 'due-date-removed'}}
+		                        {{agile_lng_translate 'tickets' 'due-date-removed'}}
 		                    {{/if_equals}}
 		                    {{#if_equals activity_type 'TICKET_NOTES_FORWARD'}}
-		                       {{translate 'tickets' 'ticket-has-been-forwarded-to'}} {{custom2}}
+		                       {{agile_lng_translate 'tickets' 'ticket-has-been-forwarded-to'}} {{custom2}}
 		                    {{/if_equals}}
 				        </a>
 			          </div>

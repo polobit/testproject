@@ -15,12 +15,12 @@
 		<a class="text-cap text-base m-b-xs">{{user_info.email}}</a>
 	{{/if}}
 </div>
-<div class="clearfix"><a  class="btn btn-xs btn-default" id="add_ticket">{{translate 'tickets' 'new-ticket'}}</a></div>						
+<div class="clearfix"><a  class="btn btn-xs btn-default" id="add_ticket">{{agile_lng_translate 'tickets' 'new-ticket'}}</a></div>						
 </div>
 <div class="clearfix" id="add-ticket-error-panel" style="display:none; color:red;">
 </div>
 <div class="wrapper-sm b-t b-light">
-	<h4 class="h4 text-sm">{{translate 'report-view' 'tickets'}}</h4>
+	<h4 class="h4 text-sm">{{agile_lng_translate 'report-view' 'tickets'}}</h4>
 </div>
 <ul class="list-group m-n text-base" id="all_tickets_panel">
 	
@@ -45,15 +45,15 @@
 				<small class="text-muted"><i class="fa fa-clock-o m-r-xs"></i><time class="time-ago" datetime="{{created_at}}">{{created_at}}</time></small>
 			</div>
 			<div class="sub_header_tab_link zendesk_tab_link  m-n" style="float:left;display:none;">
-				<div><a href="#show" class="btn btn-xs btn-default" ticket_status="{{status}}" ticket_id="{{id}}" id="ticket_show" rel="tooltip" title="Show more information of ticket" data-attr="{{bindData this}}">{{translate 'widgets' 'show'}}</a></div>
-				<div><a class="l_border btn btn-xs btn-default" href="#update" update_id="{{id}}" id="ticket_update" rel="tooltip" title="{{translate 'widgets' 'update-ticket-in-zendesk'}}">{{translate 'widgets' 'comment'}}</a></div>										
+				<div><a href="#show" class="btn btn-xs btn-default" ticket_status="{{status}}" ticket_id="{{id}}" id="ticket_show" rel="tooltip" title="Show more information of ticket" data-attr="{{bindData this}}">{{agile_lng_translate 'widgets' 'show'}}</a></div>
+				<div><a class="l_border btn btn-xs btn-default" href="#update" update_id="{{id}}" id="ticket_update" rel="tooltip" title="{{agile_lng_translate 'widgets' 'update-ticket-in-zendesk'}}">{{agile_lng_translate 'widgets' 'comment'}}</a></div>										
 			</div>
 			<div class="clearfix"></div>
 		</li>
 	{{/each}}
 {{else}}
 	{{#if_equals this "There are no tickets for this user"}}
-		<li class="list-group-item r-none b-l-none b-r-none" >{{translate 'widgets' 'no-tickets'}}</li>
+		<li class="list-group-item r-none b-l-none b-r-none" >{{agile_lng_translate 'widgets' 'no-tickets'}}</li>
 	{{else}}
 		<li class="list-group-item r-none b-l-none b-r-none word-break">{{this}}</li>
 	{{/if_equals}}
@@ -64,15 +64,15 @@
 	<div>
 		<form  id="zendesk_login_form" name="zendesk_login_form" method="post">
 	    	<fieldset>
-				<p>{{translate 'widgets' 'zendesk-profile-desc'}}</p>
+				<p>{{agile_lng_translate 'widgets' 'zendesk-profile-desc'}}</p>
 				
-				<label>{{translate 'widgets' 'enter-your-widget-details' 'Zendesk'}} </label>
+				<label>{{agile_lng_translate 'widgets' 'enter-your-widget-details' 'Zendesk'}} </label>
 				<div class="control-group form-group"><div class="controls"><input type="url" id="zendesk_url" class="input-medium required widget_input_box form-control" placeholder="https://yourdomain.zendesk.com" value="" name="zendesk_url"></input></div></div>
-				<div class="control-group form-group"><div class="controls"><input type="text" id="zendesk_username" class="input-medium required widget_input_box form-control"  placeholder="{{translate 'prefs-email' 'user-name'}}" value="" name="zendesk_username"></input></div></div>
-				<div class="control-group form-group"><div class="controls"><input type="password" id="zendesk_password" class="input-medium required widget_input_box form-control"  placeholder="{{translate 'prefs-settings' 'password'}}" value="" name="zendesk_password"></input></div></div>	
+				<div class="control-group form-group"><div class="controls"><input type="text" id="zendesk_username" class="input-medium required widget_input_box form-control"  placeholder="{{agile_lng_translate 'prefs-email' 'user-name'}}" value="" name="zendesk_username"></input></div></div>
+				<div class="control-group form-group"><div class="controls"><input type="password" id="zendesk_password" class="input-medium required widget_input_box form-control"  placeholder="{{agile_lng_translate 'prefs-settings' 'password'}}" value="" name="zendesk_password"></input></div></div>	
 				<div class="text-center">		
-				<a href="#add-widget" class="btn btn-default btn-sm">{{translate 'other' 'cancel'}}</a>
-				<a href="#" id="save_prefs" class="save-agile-widget btn btn-sm btn-primary ml_5">{{translate 'portlets' 'save'}}</a>
+				<a href="#add-widget" class="btn btn-default btn-sm">{{agile_lng_translate 'other' 'cancel'}}</a>
+				<a href="#" id="save_prefs" class="save-agile-widget btn btn-sm btn-primary ml_5">{{agile_lng_translate 'portlets' 'save'}}</a>
 				</div>
 			 </fieldset>
 	    </form>
@@ -101,25 +101,25 @@
 	                <div class="control-group">	                    
 	                    <div class="controls">
 							{{#if_equals headline "Update Ticket"}}	                        
-								<input type="hidden" placeholder="{{translate 'tickets' 'ticket-id'}}" name="ticketNumber" id="ticketNumber" class="required span4" value="{{id}}"/>
+								<input type="hidden" placeholder="{{agile_lng_translate 'tickets' 'ticket-id'}}" name="ticketNumber" id="ticketNumber" class="required span4" value="{{id}}"/>
 							{{else}}
-								<label class="control-label"><b>{{translate 'contact-details' 'subject'}}: </b><span class="field_req">*</span></label>	                        
-								<input type="text" placeholder="{{translate 'contact-details' 'subject'}}" name="subject" id="subject" class="required span4 form-control" onkeydown="if (event.keyCode == 13) { event.preventDefault(); }"/>
+								<label class="control-label"><b>{{agile_lng_translate 'contact-details' 'subject'}}: </b><span class="field_req">*</span></label>	                        
+								<input type="text" placeholder="{{agile_lng_translate 'contact-details' 'subject'}}" name="subject" id="subject" class="required span4 form-control" onkeydown="if (event.keyCode == 13) { event.preventDefault(); }"/>
 							{{/if_equals}}							
 	                    </div>
 	                </div>
 	                <div class="control-group">
-	                    <label class="control-label"><b>{{translate 'other' 'message'}}: </b>
+	                    <label class="control-label"><b>{{agile_lng_translate 'other' 'message'}}: </b>
 	                    <span class="field_req">*</span></label>
 	                    <div class="controls">
-							<textarea rows="4" class="required span4 form-control" placeholder="{{translate 'widgets' 'detailed-message'}}" name="message" id="message" ></textarea>
+							<textarea rows="4" class="required span4 form-control" placeholder="{{agile_lng_translate 'widgets' 'detailed-message'}}" name="message" id="message" ></textarea>
 	                    </div>
 	                </div>
 	            </fieldset>
 	        </form>
 	    </div>
 	    <div class="modal-footer">
-	        <a href="#" class="btn btn-sm btn-primary" id="send_request">{{translate 'tasks' 'Send'}}</a>
+	        <a href="#" class="btn btn-sm btn-primary" id="send_request">{{agile_lng_translate 'tasks' 'Send'}}</a>
 	        <span class="save-status"></span>
 	    </div>
 </div>
@@ -140,31 +140,31 @@
 	    <div class="modal-body"> 
 	        <table class="row-fluid table table-bordered m-b-xs word-break l-h-xs w-full" style="table-layout:fixed;">
 					
-						<tr><th class="p-xs">{{translate 'tickets' 'ticket-id'}}</th>
+						<tr><th class="p-xs">{{agile_lng_translate 'tickets' 'ticket-id'}}</th>
 							<td class="p-xs">{{id}}</td>
 						</tr>					
 						<tr>
-							<th class="p-xs">{{translate 'widgets' 'created-at'}}</th>
+							<th class="p-xs">{{agile_lng_translate 'widgets' 'created-at'}}</th>
 							<td class="p-xs">{{string_to_date "mm-dd-yyyy" created_at}}</td>
 						</tr>
 						<tr>
-							<th class="p-xs">{{translate 'widgets' 'updated-at'}}</th>
+							<th class="p-xs">{{agile_lng_translate 'widgets' 'updated-at'}}</th>
 							<td class="p-xs">{{string_to_date "mm-dd-yyyy" updated_at}}</td>
 						</tr>
 						<tr>
-							<th class="p-xs">{{translate 'portlets' 'status'}}</th>
+							<th class="p-xs">{{agile_lng_translate 'portlets' 'status'}}</th>
 							<td class="p-xs">{{status}}</td>
 						</tr>
 						<tr>
-							<th class="p-xs">{{translate 'companies-edit' 'url'}}</th>
+							<th class="p-xs">{{agile_lng_translate 'companies-edit' 'url'}}</th>
 							<td class="p-xs"><a href="{{url}}" target="_blank">{{url}}</a></td>
 						</tr>
 						<tr>
-							<th class="p-xs">{{translate 'widgets' 'subject'}}</th>
+							<th class="p-xs">{{agile_lng_translate 'widgets' 'subject'}}</th>
 							<td class="p-xs">{{subject}}</td>
 						</tr>
 						<tr>
-							<th class="p-xs">{{translate 'other' 'description'}}</th>
+							<th class="p-xs">{{agile_lng_translate 'other' 'description'}}</th>
 							{{#if desc_len}}	
 								<td class="p-xs">
 									<div style="height: 140px;overflow-y: scroll;"> 

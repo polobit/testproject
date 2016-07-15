@@ -3,31 +3,31 @@
     <div class="col-md-8">
         <div class="tab-content wrapper-md">
             <div class="panel panel-default">
-                <div class="panel-heading"><h4 class="h4">{{translate 'tickets' 'manage-labels'}}</h4></div>
+                <div class="panel-heading"><h4 class="h4">{{agile_lng_translate 'tickets' 'manage-labels'}}</h4></div>
                     <div class="panel-body">
                         <form id="bulk-labels" class="form-horizontal" onsubmit="return false;">
                             <fieldset>
                                 <div class="control-group form-group">         
                                     <label class="control-label col-sm-3">
-                                        {{translate 'tickets' 'select-labels'}} <span class="field_req">*</span>
+                                        {{agile_lng_translate 'tickets' 'select-labels'}} <span class="field_req">*</span>
                                     </label>
                                     <div class="controls col-sm-7">
-                                        <select name="labels" data-placeholder="{{translate 'tickets' 'labels'}}" class="chosen-select form-control" multiple class="w-md">
+                                        <select name="labels" data-placeholder="{{agile_lng_translate 'tickets' 'labels'}}" class="chosen-select form-control" multiple class="w-md">
                                         </select>
                                         <span class="error-tags display-none" style="color: red;">
-                                            {{translate 'prefs-email-templates' 'this-field-is-required'}}
+                                            {{agile_lng_translate 'prefs-email-templates' 'this-field-is-required'}}
                                         </span>  
                                     </div>
                                 </div>
                                 <div class="control-group form-group">         
                                     <label class="control-label col-sm-3">
-                                        {{translate 'tickets' 'choose-action'}} <span class="field_req">*</span>
+                                        {{agile_lng_translate 'tickets' 'choose-action'}} <span class="field_req">*</span>
                                     </label>
                                     <div class="controls col-sm-7">
                                         <select name="manage_lables" class="form-control" class="w-md">
-                                            <option value="add">{{translate 'portlets' 'add'}}
+                                            <option value="add">{{agile_lng_translate 'portlets' 'add'}}
                                             </option>
-                                            <option value="remove">{{translate 'contacts-view' 'remove'}}</option>
+                                            <option value="remove">{{agile_lng_translate 'contacts-view' 'remove'}}</option>
                                         </select> 
                                     </div>
                                 </div>
@@ -35,9 +35,9 @@
                                 <div class="row">
                                     <div class="col-sm-offset-3 col-sm-9">
                                         <div class="form-actions">       
-                                            <a href="#tickets" class="btn btn-default btn-sm">{{translate 'contact-details' 'close'}}</a>   
+                                            <a href="#tickets" class="btn btn-default btn-sm">{{agile_lng_translate 'contact-details' 'close'}}</a>   
                                              <a href="javascript:void(0);" class="btn btn-primary btn-sm save m-l-xs">
-                                                {{translate 'report-add' 'save'}}
+                                                {{agile_lng_translate 'report-add' 'save'}}
                                             </a> 
                                             <span class="save-status"></span>
                                         </div>
@@ -57,19 +57,19 @@
     <div class="col-md-8">
         <div class="tab-content wrapper-md">
             <div class="panel panel-default">
-                <div class="panel-heading"><h4 class="h4">{{translate 'tickets' 'remove-labels-from-selected-tickets'}}</h4></div>
+                <div class="panel-heading"><h4 class="h4">{{agile_lng_translate 'tickets' 'remove-labels-from-selected-tickets'}}</h4></div>
                     <div class="panel-body">
                         <form id="bulk-labels" class="form-horizontal" onsubmit="return false;">
                             <fieldset>
                                 <div class="control-group form-group">         
                                     <label class="control-label col-sm-3 m-t-xs">
-                                        {{translate 'tickets' 'remove-labels'}} <span class="field_req">*</span>
+                                        {{agile_lng_translate 'tickets' 'remove-labels'}} <span class="field_req">*</span>
                                     </label>
                                     <div class="controls col-sm-9">
-                                        <select name="labels" data-placeholder="{{translate 'tickets' 'labels'}}" class="chosen-select form-control" multiple class="w-md">
+                                        <select name="labels" data-placeholder="{{agile_lng_translate 'tickets' 'labels'}}" class="chosen-select form-control" multiple class="w-md">
                                         </select>
                                         <span class="error-tags display-none" style="color: red;">
-                                            {{translate 'prefs-email-templates' 'this-field-is-required'}}
+                                            {{agile_lng_translate 'prefs-email-templates' 'this-field-is-required'}}
                                         </span>  
                                     </div>
                                 </div>
@@ -77,9 +77,9 @@
                                 <div class="row">
                                     <div class="col-sm-offset-3 col-sm-9">
                                         <div class="form-actions">       
-                                            <a href="#tickets" class="btn btn-default btn-sm">{{translate 'contact-details' 'close'}}</a>   
+                                            <a href="#tickets" class="btn btn-default btn-sm">{{agile_lng_translate 'contact-details' 'close'}}</a>   
                                             <a href="javascript:void(0);"
-                                                class="btn btn-primary btn-sm bulk-manage-labels m-l-xs">{{translate 'tickets' 'remove-labels'}}</a> 
+                                                class="btn btn-primary btn-sm bulk-manage-labels m-l-xs">{{agile_lng_translate 'tickets' 'remove-labels'}}</a> 
                                             <span class="save-status"></span>
                                         </div>
                                     </div>
@@ -99,13 +99,13 @@
     <div class="col-md-8">
         <div class="tab-content wrapper-md">
             <div class="panel panel-default">
-                <div class="panel-heading"><h4 class="h4">{{translate 'tickets' 'change-assignee'}}</h4></div>
+                <div class="panel-heading"><h4 class="h4">{{agile_lng_translate 'tickets' 'change-assignee'}}</h4></div>
                     <div class="panel-body">
                         <form id="bulk-labels" class="form-horizontal" onsubmit="return false;">
                             <fieldset>
                                 <div class="control-group form-group">         
                                     <label class="control-label col-sm-2">
-                                        {{translate 'tickets' 'select-assignee'}}
+                                        {{agile_lng_translate 'tickets' 'select-assignee'}}
                                     </label>
                                     <div class="controls col-sm-6">
                                         <select class="form-control" name="groupID" id="groupID">
@@ -116,9 +116,9 @@
                                 <div class="row">
                                     <div class="col-sm-offset-2 col-sm-10">
                                         <div class="form-actions">       
-                                            <a href="#tickets" class="btn btn-default btn-sm">{{translate 'contact-details' 'close'}}</a>   
+                                            <a href="#tickets" class="btn btn-default btn-sm">{{agile_lng_translate 'contact-details' 'close'}}</a>   
                                             <a href="javascript:void(0);"
-                                                class="btn btn-primary btn-sm save m-l-xs">{{translate 'tickets' 'change-assignee'}}</a> 
+                                                class="btn btn-primary btn-sm save m-l-xs">{{agile_lng_translate 'tickets' 'change-assignee'}}</a> 
                                             <span class="save-status"></span>
                                         </div>
                                     </div>
@@ -137,13 +137,13 @@
     <div class="col-md-8">
         <div class="tab-content wrapper-md">
             <div class="panel panel-default">
-                <div class="panel-heading"><h4 class="h4">{{translate 'tickets' 'execute-workflow-on-selected-tickets'}}</h4></div>
+                <div class="panel-heading"><h4 class="h4">{{agile_lng_translate 'tickets' 'execute-workflow-on-selected-tickets'}}</h4></div>
                     <div class="panel-body">
                         <form id="bulk-labels" class="form-horizontal" onsubmit="return false;">
                             <fieldset>
                                 <div class="control-group form-group">         
                                     <label class="control-label col-sm-3">
-                                        {{translate 'tickets' 'select-workflow'}}
+                                        {{agile_lng_translate 'tickets' 'select-workflow'}}
                                     </label>
                                     <div class="controls col-sm-6">
                                         <select id="workflowID" name="workflowID" class="form-control required">                                            
@@ -154,9 +154,9 @@
                                 <div class="row">
                                     <div class="col-sm-offset-3 col-sm-9">
                                         <div class="form-actions">       
-                                            <a href="#tickets" class="btn btn-default btn-sm">{{translate 'contact-details' 'close'}}</a>   
+                                            <a href="#tickets" class="btn btn-default btn-sm">{{agile_lng_translate 'contact-details' 'close'}}</a>   
                                             <a href="javascript:void(0);"
-                                                class="btn btn-primary btn-sm save m-l-xs">{{translate 'tickets' 'execute-workflow'}}</a> 
+                                                class="btn btn-primary btn-sm save m-l-xs">{{agile_lng_translate 'tickets' 'execute-workflow'}}</a> 
                                             <span class="save-status"></span>
                                         </div>
                                     </div>
@@ -176,15 +176,15 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button class="close" data-dismiss="modal">x</button>
-                <h3 class="modal-title"><i class="icon icon-copyright"></i> {{translate 'tickets' 'close-tickets'}}</h3>
+                <h3 class="modal-title"><i class="icon icon-copyright"></i> {{agile_lng_translate 'tickets' 'close-tickets'}}</h3>
             </div>
             <div class="modal-body">
-                {{translate 'tickets' 'close-selected-tickets'}}<br/><br/>
+                {{agile_lng_translate 'tickets' 'close-selected-tickets'}}<br/><br/>
             </div>
             <div class="modal-footer">
-                <a href="javascript:void(0);" data-dismiss="modal" class="btn btn-sm btn-default">{{translate 'contact-details' 'close'}}</a>
+                <a href="javascript:void(0);" data-dismiss="modal" class="btn btn-sm btn-default">{{agile_lng_translate 'contact-details' 'close'}}</a>
                 <a href="javascript:void(0);" data-loading-text="Close Tickets" class="save btn btn-sm btn-primary m-l-xs">
-                    {{translate 'tickets' 'close-tickets'}}
+                    {{agile_lng_translate 'tickets' 'close-tickets'}}
                 </a>
                 &nbsp;&nbsp;<span id="msg"></span>
             </div>
@@ -198,15 +198,15 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button class="close" data-dismiss="modal">x</button>
-                <h3 class="modal-title"><i class="icon icon-trash"></i> {{translate 'tickets' 'delete-tickets'}}</h3>
+                <h3 class="modal-title"><i class="icon icon-trash"></i> {{agile_lng_translate 'tickets' 'delete-tickets'}}</h3>
             </div>
             <div class="modal-body">
-                {{translate 'tickets' 'delete-selected-tickets'}}<br/><br/>
+                {{agile_lng_translate 'tickets' 'delete-selected-tickets'}}<br/><br/>
             </div>
             <div class="modal-footer">
-                <a href="javascript:void(0);" data-dismiss="modal" class="btn btn-sm btn-default">{{translate 'contact-details' 'close'}}</a>
+                <a href="javascript:void(0);" data-dismiss="modal" class="btn btn-sm btn-default">{{agile_lng_translate 'contact-details' 'close'}}</a>
                 <a href="javascript:void(0);" data-loading-text="Delete Tickets" class="save btn btn-sm btn-primary">
-                    {{translate 'tickets' 'delete-tickets'}}
+                    {{agile_lng_translate 'tickets' 'delete-tickets'}}
                 </a>
                 &nbsp;&nbsp;<span id="msg"></span>
             </div>
@@ -220,15 +220,15 @@
         <form id="closeTicketsForm" name="closeTicketsForm" class="form-horizontal">
             <div class="modal-header">
                 <button class="close" data-dismiss="modal">x</button>
-                <h3 class="modal-title"><i class="icon icon-copyright"></i> {{translate 'tickets' 'spam-tickets'}}</h3>
+                <h3 class="modal-title"><i class="icon icon-copyright"></i> {{agile_lng_translate 'tickets' 'spam-tickets'}}</h3>
             </div>
             <div class="modal-body">
-                {{translate 'tickets' 'mark-selected-tickets-as-spam'}}<br/><br/>
+                {{agile_lng_translate 'tickets' 'mark-selected-tickets-as-spam'}}<br/><br/>
             </div>
             <div class="modal-footer">
-                <a href="javascript:void(0);" data-dismiss="modal" class="btn btn-sm btn-default">{{translate 'contact-details' 'close'}}</a>
+                <a href="javascript:void(0);" data-dismiss="modal" class="btn btn-sm btn-default">{{agile_lng_translate 'contact-details' 'close'}}</a>
                 <a href="javascript:void(0);" data-loading-text="Mark Spam" class="save btn btn-sm btn-primary m-l-xs">
-                    {{translate 'tickets' 'mark-spam'}}
+                    {{agile_lng_translate 'tickets' 'mark-spam'}}
                 </a>
                 &nbsp;&nbsp;<span id="msg"></span>
             </div>
@@ -242,15 +242,15 @@
         <form id='executeWorkFlowForm' name="executeWorkFlowForm" class="form-horizontal">
             <div class="modal-header">
                 <button class="close" data-dismiss="modal">x</button>
-                <h3 class="modal-title">{{translate 'tickets' 'favorite-tickets'}}</h3>
+                <h3 class="modal-title">{{agile_lng_translate 'tickets' 'favorite-tickets'}}</h3>
             </div>
             <div class="modal-body">
-                {{translate 'tickets' 'mark-selected-tickets-as-favorite'}}<br/><br/>
+                {{agile_lng_translate 'tickets' 'mark-selected-tickets-as-favorite'}}<br/><br/>
             </div>
             <div class="modal-footer">
-                <a href="javascript:void(0);" data-dismiss="modal" class="btn btn-sm btn-default">{{translate 'contact-details' 'close'}}</a>
+                <a href="javascript:void(0);" data-dismiss="modal" class="btn btn-sm btn-default">{{agile_lng_translate 'contact-details' 'close'}}</a>
                 <a href="javascript:void(0);" data-loading-text="Mark favorite" class="save btn btn-sm btn-primary">
-                    {{translate 'tickets' 'mark-favorite'}}
+                    {{agile_lng_translate 'tickets' 'mark-favorite'}}
                 </a>
                 &nbsp;&nbsp;<span id="msg"></span>
             </div>

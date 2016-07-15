@@ -1,19 +1,19 @@
 <script id="email-account-types-template" type="text/html">
     <div  class="m-b-md m-t-md m-r-sm" align="right">
-	<a href="#send-email/{{getCurrentContactProperty "email"}}" id="send-new-email" class="btn btn-default btn-sm blue btn-slate-action m-t-none"><i class="icon-envelope pos-rlt pos-t-1"></i> &nbsp; {{translate 'contact-details' 'send-email'}}
+	<a href="#send-email/{{getCurrentContactProperty "email"}}" id="send-new-email" class="btn btn-default btn-sm blue btn-slate-action m-t-none"><i class="icon-envelope pos-rlt pos-t-1"></i> &nbsp; {{agile_lng_translate 'contact-details' 'send-email'}}
 	</a>
 	<div class="btn-group pos-rlt">
-	<button class="btn btn-sm btn-default filter-dropdown" id="email-type-select">{{translate 'contact-details' 'agile'}}</button>
+	<button class="btn btn-sm btn-default filter-dropdown" id="email-type-select">{{agile_lng_translate 'contact-details' 'agile'}}</button>
 	<button class="btn btn-sm btn-default dropdown-toggle" id="email-type-select-dropdown" data-toggle="dropdown">
 	<span class="caret"></span>
 	</button>
 	<ul id = "mail-account-type-select" class="pull-right dropdown-menu" role="menu">
     <li>
-	<a href="" class="agile-emails" email-server="all" data-url="all" email-server-type="all">{{translate 'contact-details' 'all-mail'}}</a>
+	<a href="" class="agile-emails" email-server="all" data-url="all" email-server-type="all">{{agile_lng_translate 'contact-details' 'all-mail'}}</a>
 	</li>
 	{{#if agileUserName}}
 	<li>
-	<a href="" class="agile-emails" email-server="agile" data-url="core/api/emails/agile-emails?search_email=" email-server-type={{this}}><i class="icon-cloud" style="margin-right:4px;font-size: 1.2em"></i>{{translate 'contact-details' 'agile'}}</a>
+	<a href="" class="agile-emails" email-server="agile" data-url="core/api/emails/agile-emails?search_email=" email-server-type={{this}}><i class="icon-cloud" style="margin-right:4px;font-size: 1.2em"></i>{{agile_lng_translate 'contact-details' 'agile'}}</a>
 	</li>
 	{{/if}}
 	{{#if gmailUserNames}}
@@ -74,12 +74,12 @@
                     <img alt="Clipboard" src="{{getS3ImagePath '/img/clipboard.png'}}" />
                 </div>
                 <div class="box-right pull-left">
-                    <h4 class="m-t-none">{{translate 'contact-details' 'you-have-no-emails-for'}} {{contactShortName}}.</h4>
+                    <h4 class="m-t-none">{{agile_lng_translate 'contact-details' 'you-have-no-emails-for'}} {{contactShortName}}.</h4>
                     <div class="text">
-                        {{translate 'contact-details' 'you-have-no-emails-for'}} {{contactShortName}} {{translate 'contact-details' 'in'}} {{read_global_var}} {{translate 'contact-details' 'account'}}
+                        {{agile_lng_translate 'contact-details' 'you-have-no-emails-for'}} {{contactShortName}} {{agile_lng_translate 'contact-details' 'in'}} {{read_global_var}} {{agile_lng_translate 'contact-details' 'account'}}
                     </div>
                     {{#if_email_type_is_agile "agilecrm"}}
-                    <a href="#send-email/{{getCurrentContactProperty "email"}}" class="btn btn-default btn-sm blue btn-slate-action m-t-xs"><i class="icon-envelope pos-rlt pos-t-1"></i>&nbsp; {{translate 'contact-details' 'send-email'}}</a>
+                    <a href="#send-email/{{getCurrentContactProperty "email"}}" class="btn btn-default btn-sm blue btn-slate-action m-t-xs"><i class="icon-envelope pos-rlt pos-t-1"></i>&nbsp; {{agile_lng_translate 'contact-details' 'send-email'}}</a>
                     {{/if_email_type_is_agile}}
                 </div>
 				<div class="clearfix">
@@ -92,12 +92,12 @@
        <ul id="email-prefs-verification" class="p-n m-t-n-xs" style="display:none;">
             <div class="alert alert-warning info-block b">
                 <div>
-                <i class="icon-warning-sign"></i><strong style="">{{translate 'contact-details' 'pending-email-configuration'}}</strong>
-                <p>{{translate 'contact-details' 'you-have-not-yet-configured-your-email'}} <a href='#email'>{{translate 'contact-details' 'here'}}</a> {{translate 'contact-details' 'to-get-started'}}</p>
+                <i class="icon-warning-sign"></i><strong style="">{{agile_lng_translate 'contact-details' 'pending-email-configuration'}}</strong>
+                <p>{{agile_lng_translate 'contact-details' 'you-have-not-yet-configured-your-email'}} <a href='#email'>{{agile_lng_translate 'contact-details' 'here'}}</a> {{agile_lng_translate 'contact-details' 'to-get-started'}}</p>
                 </div>
             </div>
         	 <div  class="m-b-md m-t-md m-r-sm" align="right">
-				<a href="#send-email/{{getCurrentContactProperty "email"}}" id="send-new-email" class="btn btn-default btn-sm blue btn-slate-action m-t-none"><i class="icon-envelope pos-rlt pos-t-1"></i>&nbsp; {{translate 'contact-details' 'send-email'}}
+				<a href="#send-email/{{getCurrentContactProperty "email"}}" id="send-new-email" class="btn btn-default btn-sm blue btn-slate-action m-t-none"><i class="icon-envelope pos-rlt pos-t-1"></i>&nbsp; {{agile_lng_translate 'contact-details' 'send-email'}}
 				</a>
 			</div>
         </ul>
@@ -111,7 +111,7 @@
 <script id="email-social-model-template" type="text/html">
 <div class="block pos-rlt">
 	{{#if errormssg}}
-    <span class="text-dark">{{translate 'contact-details' 'error'}}: {{errormssg}}</span>
+    <span class="text-dark">{{agile_lng_translate 'contact-details' 'error'}}: {{errormssg}}</span>
     {{else}}
     <div class="activity-block-owner thumb-xs m-r-sm avatar pull-left">	
 			<img class="user-img r r-2x" src="{{#extractEmail from}}{{emailGravatarurl 40 this}}{{/extractEmail}}">
@@ -149,17 +149,17 @@
       		</div>
 			<div id="collapse-{{removeSpecialCharacter id}}" class="collapse activity-email-collapse">
 				<ul class="email-headers p-n">
-                	<li class="b-n-imp p-n m-t-xs"><strong>{{translate 'contact-details' 'from'}}:</strong> {{from}}</li> 
+                	<li class="b-n-imp p-n m-t-xs"><strong>{{agile_lng_translate 'contact-details' 'from'}}:</strong> {{from}}</li> 
 						
                 	<li class="b-n-imp p-n m-t-xs">
 						<div class="caption to-emails text-ellipsis" data-to="{{to}}" id="tl-mail-to-popover"  rel="popover" data-placement="right" data-content="message:" data-trigger="hover">
-							<strong>{{translate 'contact-details' 'to'}}:</strong> {{to}}
+							<strong>{{agile_lng_translate 'contact-details' 'to'}}:</strong> {{to}}
 						</div>
 					</li>
                     {{#if cc}}
                     <li class="b-n-imp p-n m-t-xs">
                     <div class="caption cc-emails text-ellipsis" data-cc="{{cc}}" id="tl-mail-to-popover"  rel="popover" data-placement="right" data-content="message:" data-trigger="hover">
-                    	<strong>{{translate 'contact-details' 'cc'}}:</strong> {{cc}}
+                    	<strong>{{agile_lng_translate 'contact-details' 'cc'}}:</strong> {{cc}}
             		</div>
           			</li>
 					{{/if}}
@@ -167,7 +167,7 @@
                     {{#if bcc}}
                     <li class="b-n-imp p-n m-t-xs">
             		<div class="caption bcc-emails text-ellipsis" data-bcc="{{bcc}}" id="tl-mail-to-popover"  rel="popover" data-placement="right" data-content="message:" data-trigger="hover">
-              			<strong>{{translate 'contact-details' 'bcc'}}:</strong> {{bcc}}
+              			<strong>{{agile_lng_translate 'contact-details' 'bcc'}}:</strong> {{bcc}}
             		</div>
           			</li>
                     {{/if}}
@@ -177,7 +177,7 @@
 		<div class="m-t-xs">
 
 <div class="pull-right pos-abs pos-r-0 pos-b-0">
-		<a href="#"  data-from ="{{#extractEmail from}}{{this}}{{/extractEmail}}" id='email-reply'><i class="icon-mail-reply-all"></i> {{translate 'contact-details' 'reply'}}</a>
+		<a href="#"  data-from ="{{#extractEmail from}}{{this}}{{/extractEmail}}" id='email-reply'><i class="icon-mail-reply-all"></i> {{agile_lng_translate 'contact-details' 'reply'}}</a>
  </div>
 <div class="clearfix"></div>      
 {{/if}}

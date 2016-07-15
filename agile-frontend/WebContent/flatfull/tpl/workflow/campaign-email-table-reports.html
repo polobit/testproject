@@ -3,7 +3,7 @@
 	<table class="table table-bordered table-layout-mob-view">
 		<tbody>
 			<tr>
-				<th>{{translate 'portlets' 'emails-sent'}}</th>
+				<th>{{agile_lng_translate 'portlets' 'emails-sent'}}</th>
 				<th>Emails Skipped<span
 							style="vertical-align: text-top; margin-left: -3px"> <img
 							border="0" src="{{getS3ImagePath '/img/help.png'}}"
@@ -12,38 +12,38 @@
 							data-title:" data-content="Total email skipped recorded & unique skipped."
 							id="element" data-trigger="hover" />
 						</span></th>
-				<th>{{translate 'portlets' 'emails-opened'}}<span
+				<th>{{agile_lng_translate 'portlets' 'emails-opened'}}<span
 							style="vertical-align: text-top; margin-left: -3px"> <img
 							border="0" src="{{getS3ImagePath '/img/help.png'}}"
 							style="height: 6px; vertical-align: top" rel="popover"
 							data-placement="right"
-							data-title:" data-content="{{translate 'campaigns' 'total-email-opens-recorded-desc'}}"
+							data-title:" data-content="{{agile_lng_translate 'campaigns' 'total-email-opens-recorded-desc'}}"
 							id="element" data-trigger="hover" />
 						</span></th>
-				<th>{{translate 'campaigns' 'clicks'}}<span
+				<th>{{agile_lng_translate 'campaigns' 'clicks'}}<span
 
 							style="vertical-align: text-top; margin-left: -3px"> <img
 							border="0" src="{{getS3ImagePath '/img/help.png'}}"
 							style="height: 6px; vertical-align: top" rel="popover"
 							data-placement="right"
-							data-title:" data-content="{{translate 'campaigns' 'total-email-link-clicks-recorded-desc'}}"
+							data-title:" data-content="{{agile_lng_translate 'campaigns' 'total-email-link-clicks-recorded-desc'}}"
 							id="element" data-trigger="hover" /></th>
-				<th>{{translate 'campaigns' 'unsubscriptions'}}</th>
-				<th>{{translate 'campaigns' 'hard-bounces'}} 
+				<th>{{agile_lng_translate 'campaigns' 'unsubscriptions'}}</th>
+				<th>{{agile_lng_translate 'campaigns' 'hard-bounces'}} 
 					<span class="v-top m-l-n-xs">
 						<img border="0" src="{{getS3ImagePath '/img/help.png'}}"	class="v-top" style="height: 6px;" rel="popover"
-							data-placement="right" data-title:" data-content="{{translate 'campaigns' 'hard-bounce-occurs-desc'}}"
+							data-placement="right" data-title:" data-content="{{agile_lng_translate 'campaigns' 'hard-bounce-occurs-desc'}}"
 							id="element" data-trigger="hover" />
 					</span>
 				</th>
-				<th>{{translate 'campaigns' 'soft-bounces'}} 
+				<th>{{agile_lng_translate 'campaigns' 'soft-bounces'}} 
 					<span class="v-top m-l-n-xs"> 
 						<img border="0" src="{{getS3ImagePath '/img/help.png'}}" class="v-top" style="height: 6px;" rel="popover"
-							data-placement="right" data-title:" data-content="{{translate 'campaigns' 'soft-bounce-occurs-desc'}}"
+							data-placement="right" data-title:" data-content="{{agile_lng_translate 'campaigns' 'soft-bounce-occurs-desc'}}"
 							id="element" data-trigger="hover" />
 					</span>
 				</th>
-				<th>{{translate 'campaigns' 'spam-complaints'}}</th>
+				<th>{{agile_lng_translate 'campaigns' 'spam-complaints'}}</th>
 			</tr>
             <tr>
 				<td>{{#if sent}}{{sent}}{{else}} - {{/if}}</td>

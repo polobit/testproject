@@ -2,30 +2,30 @@
 	<div>
 		<form  id="braintree_login_form" name="braintree_login_form" method="post">
 	    	<fieldset>			
-				<label>{{translate 'widgets' 'enter-your-braintree-details'}} </label>
+				<label>{{agile_lng_translate 'widgets' 'enter-your-braintree-details'}} </label>
 				<div class="control-group form-group">
 					<div class="controls">
-						<input type="text" id="merchant_id" placeholder="{{translate 'widgets' 'merchant-id'}}" class="input-medium required widget_input_box form-control" value="" name="merchant_id">
+						<input type="text" id="merchant_id" placeholder="{{agile_lng_translate 'widgets' 'merchant-id'}}" class="input-medium required widget_input_box form-control" value="" name="merchant_id">
 						</input>
 					</div>
 				</div>
 				<div class="control-group form-group">
 					<div class="controls">
-						<input type="text" id="public_key" class="input-medium required widget_input_box form-control"  placeholder="{{translate 'widgets' 'public-key'}}" value="" name="public_key">
+						<input type="text" id="public_key" class="input-medium required widget_input_box form-control"  placeholder="{{agile_lng_translate 'widgets' 'public-key'}}" value="" name="public_key">
 						</input>
 					</div>
 				</div>
 				<div class="control-group form-group">
 					<div class="controls">
-						<input type="text" id="private_key" class="input-medium required widget_input_box form-control"  placeholder="{{translate 'widgets' 'private-key'}}" value="" name="private_key">
+						<input type="text" id="private_key" class="input-medium required widget_input_box form-control"  placeholder="{{agile_lng_translate 'widgets' 'private-key'}}" value="" name="private_key">
 						</input>
 					</div>
 				</div>	
 				<div class="control-group form-group">					
 			  		<div class="controls">
 			    		<select name="braintree_custom_field" id="braintree_custom_field" class="required col-md-10 form-control w-full m-b-sm">
-			      			<option class="default-select" value="">{{translate 'widgets' 'select'}}</option>	
-			      			<option value="email">{{translate 'other' 'email'}}</option>
+			      			<option class="default-select" value="">{{agile_lng_translate 'widgets' 'select'}}</option>	
+			      			<option value="email">{{agile_lng_translate 'other' 'email'}}</option>
 			      			{{#each this.custom_fields}}
 								<option value="{{field_label}}">{{field_label}} </option>
 							{{/each}}			      
@@ -33,18 +33,18 @@
 			  		</div>
 				</div>
 				<p class="text-sm">
-					{{translate 'widgets' 'braintree-note-desc'}} 
-					{{translate 'portlets' 'please'}} 
+					{{agile_lng_translate 'widgets' 'braintree-note-desc'}} 
+					{{agile_lng_translate 'portlets' 'please'}} 
 					{{#isAdmin}}
-						<a class="text-info" href="#custom-fields">{{translate 'widgets' 'create-one'}}</a>
+						<a class="text-info" href="#custom-fields">{{agile_lng_translate 'widgets' 'create-one'}}</a>
 					{{else}}
-						{{translate 'widgets' 'create-one'}}
+						{{agile_lng_translate 'widgets' 'create-one'}}
 					{{/isAdmin}}
-					 {{translate 'widgets' 'if-necessary'}}
+					 {{agile_lng_translate 'widgets' 'if-necessary'}}
 				</p>
 				<div class="text-center">		
-				<a href="#add-widget" class="btn btn-default btn-sm">{{translate 'other' 'cancel'}}</a>
-				<a href="#" id="save_prefs" class="save-agile-widget btn btn-sm btn-primary ml_5">{{translate 'portlets' 'save'}}</a>
+				<a href="#add-widget" class="btn btn-default btn-sm">{{agile_lng_translate 'other' 'cancel'}}</a>
+				<a href="#" id="save_prefs" class="save-agile-widget btn btn-sm btn-primary ml_5">{{agile_lng_translate 'portlets' 'save'}}</a>
 				</div>
 			 </fieldset>
 	    </form>
@@ -58,11 +58,11 @@
 			<div class="clear">							
 				<a class="col-md-7 p-none text-left text-ellipsis c-p text-info" title="{{orderId}}" data-toggle="collapse" 
 				href="#collapse-{{id}}">
-					{{translate 'widgets' 'order-id'}}: #{{orderId}}
+					{{agile_lng_translate 'widgets' 'order-id'}}: #{{orderId}}
 				</a>
 				<div class="col-md-5 p-none text-right">$ {{amount}}</div>	
 				<div class="clearfix"></div>	
-				<div class="pull-left">{{translate 'portlets' 'status'}}</div>
+				<div class="pull-left">{{agile_lng_translate 'portlets' 'status'}}</div>
 				<div class="pull-right text-ellipsis text-right" style="width: 165px;" title="{{brainTreeStatus status}}">
 					{{brainTreeStatus status}}
 				</div>
@@ -70,7 +70,7 @@
 			</div>		
 			<div class="clearfix"></div>					
 			<div id="collapse-{{id}}" class="collapse" style="color: rgba(0, 0, 0, 0.5);">
-				<div class="col-md-5 p-none text-left">{{translate 'widgets' 'tax-amount'}}
+				<div class="col-md-5 p-none text-left">{{agile_lng_translate 'widgets' 'tax-amount'}}
 				</div>
 				<div class="col-md-7 p-none text-right text-ellipsis" title="{{taxAmount}}">
 					${{#if taxAmount}}
@@ -80,11 +80,11 @@
 					{{/if}}
 				</div>
 				<div class="clearfix"></div>
-				<div class="col-md-5 p-none text-left">{{translate 'widgets' 'order-id'}}</div>
+				<div class="col-md-5 p-none text-left">{{agile_lng_translate 'widgets' 'order-id'}}</div>
 				<div class="col-md-7 p-none text-right text-ellipsis" title="{{orderId}}">{{orderId}}</div>
 				<div class="clearfix"></div>
 
-				<div class="col-md-7 p-none text-left">{{translate 'widgets' 'purchase-order-no'}}</div>
+				<div class="col-md-7 p-none text-left">{{agile_lng_translate 'widgets' 'purchase-order-no'}}</div>
 				<div class="col-md-5 p-none text-right text-ellipsis" title="{{purchaseId}}">{{purchaseId}}</div>
 				<div class="clearfix"></div>								
 			</div>
@@ -92,6 +92,6 @@
 		</li>
 	{{/each}}
 {{else}}
-	<li class="list-group-item r-none b-l-none b-r-none"> {{translate 'widgets' 'no-transactions-found'}} </li>
+	<li class="list-group-item r-none b-l-none b-r-none"> {{agile_lng_translate 'widgets' 'no-transactions-found'}} </li>
 {{/if}}
 </script>

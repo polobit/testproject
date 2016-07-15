@@ -141,7 +141,7 @@
 	    <div class="btn-toolbar m-l-none pos-rlt">
 	    	<div class="filters-drp-down btn-group dropdown m-l-none" style="float: none;"><div class="">
 	    		<h4 class="inline-block m-n">
-	    		{{translate 'contacts-view' 'contacts'}}
+	    		{{agile_lng_translate 'contacts-view' 'contacts'}}
 	    		<div class="inline-block" id="filter-list"></div>
 	    		<span id="contacts-count" class="">{{contacts_count}}</span>
 	    			 
@@ -171,41 +171,41 @@
 			<li class="divider"></li>-->
 			<li class="dropdown-submenu"><a data-toggle="dropdown" id="mobile-dropdown-click-sort">Sort By</a>
 				<ul class="dropdown-menu" id="contact-sort-views" role="menu">
-					<li><a class="sort bold-text" id="sort-by-created_time-desc" data="-created_time" href="#">{{translate 'contacts-view' 'newest'}}</a>
+					<li><a class="sort bold-text" id="sort-by-created_time-desc" data="-created_time" href="#">{{agile_lng_translate 'contacts-view' 'newest'}}</a>
 					</li>
-					<li><a class="sort" id="sort-by-created_time-asc" data="created_time" href="#">{{translate 'contacts-view' 'oldest'}}</a></li>
+					<li><a class="sort" id="sort-by-created_time-asc" data="created_time" href="#">{{agile_lng_translate 'contacts-view' 'oldest'}}</a></li>
 					<li class="divider"></li>
-					<li><a class="sort" id="sort-by-lead_score-desc" data="-lead_score" href="#">{{translate 'contacts-view' 'highest-score'}}</a></li>
-					<li><a class="sort" id="sort-by-lead_score-asc" data="lead_score" href="#">{{translate 'contacts-view' 'lowest-score'}}</a></li>
+					<li><a class="sort" id="sort-by-lead_score-desc" data="-lead_score" href="#">{{agile_lng_translate 'contacts-view' 'highest-score'}}</a></li>
+					<li><a class="sort" id="sort-by-lead_score-asc" data="lead_score" href="#">{{agile_lng_translate 'contacts-view' 'lowest-score'}}</a></li>
 					<li class="divider"></li>
-					<li><a class="sort" id="sort-by-star_value-desc" data="-star_value" href="#">{{translate 'contacts-view' 'highest-starred'}}</a></li>
-					<li><a class="sort" id="sort-by-star_value-asc" data="star_value" href="#">{{translate 'contacts-view' 'lowest-starred'}}</a></li>
+					<li><a class="sort" id="sort-by-star_value-desc" data="-star_value" href="#">{{agile_lng_translate 'contacts-view' 'highest-starred'}}</a></li>
+					<li><a class="sort" id="sort-by-star_value-asc" data="star_value" href="#">{{agile_lng_translate 'contacts-view' 'lowest-starred'}}</a></li>
 					<li class="divider"></li>
-					<li><a class="sort" id="sort-by-first_name-desc" data="-first_name" href="#">{{translate 'contacts-view' 'first-name-desc'}}</a></li>
-					<li><a class="sort" id="sort-by-first_name-asc" data="first_name" href="#">{{translate 'contacts-view' 'first-name-asc'}}</a></li>
+					<li><a class="sort" id="sort-by-first_name-desc" data="-first_name" href="#">{{agile_lng_translate 'contacts-view' 'first-name-desc'}}</a></li>
+					<li><a class="sort" id="sort-by-first_name-asc" data="first_name" href="#">{{agile_lng_translate 'contacts-view' 'first-name-asc'}}</a></li>
 					<li class="divider"></li>
-					<li><a class="sort" id="sort-by-last_name-desc" data="-last_name" href="#">{{translate 'contacts-view' 'last-name-desc'}}</a></li>
-					<li><a class="sort" id="sort-by-last_name-asc" data="last_name" href="#">{{translate 'contacts-view' 'last-name-asc'}}</a></li>
+					<li><a class="sort" id="sort-by-last_name-desc" data="-last_name" href="#">{{agile_lng_translate 'contacts-view' 'last-name-desc'}}</a></li>
+					<li><a class="sort" id="sort-by-last_name-asc" data="last_name" href="#">{{agile_lng_translate 'contacts-view' 'last-name-asc'}}</a></li>
 					<li class="divider"></li>
-					<li><a class="sort" id="sort-by-last_contacted-desc" data="-last_contacted" href="#">{{translate 'contacts-view' 'contacted-date-desc'}}</a></li>
-					<li><a class="sort" id="sort-by-last_contacted-asc" data="last_contacted" href="#">{{translate 'contacts-view' 'contacted-date-asc'}}</a></li>
+					<li><a class="sort" id="sort-by-last_contacted-desc" data="-last_contacted" href="#">{{agile_lng_translate 'contacts-view' 'contacted-date-desc'}}</a></li>
+					<li><a class="sort" id="sort-by-last_contacted-asc" data="last_contacted" href="#">{{agile_lng_translate 'contacts-view' 'contacted-date-asc'}}</a></li>
 				</ul>
 			</li>
         	<li class="divider"></li>
         	<li>
-            	<a href="#contact-view-prefs">{{translate 'contacts-view' 'add-remove-columns'}}</a>
+            	<a href="#contact-view-prefs">{{agile_lng_translate 'contacts-view' 'add-remove-columns'}}</a>
         	</li>
     	</ul>
     	
 	</div>
 	{{#hasRestrictedMenuScope 'CREATE_CONTACT'}} {{else}}
     <div class="btn-group">
-        <a href="#contacts" onclick="Agile_GA_Event_Tracker.track_event('Add Contact');" class="person btn btn-default btn-sm"><i class="icon-plus-sign"></i> {{translate 'contacts-view' 'add-contact'}}</a>
+        <a href="#contacts" onclick="Agile_GA_Event_Tracker.track_event('Add Contact');" class="person btn btn-default btn-sm"><i class="icon-plus-sign"></i> {{agile_lng_translate 'contacts-view' 'add-contact'}}</a>
         <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
 		<ul class="dropdown-menu pull-right" role="menu">
-			<li><a href="#import" onclick="Agile_GA_Event_Tracker.track_event('Import Contact');">{{translate 'contacts-view' 'import-from-csv'}}</a></li>
+			<li><a href="#import" onclick="Agile_GA_Event_Tracker.track_event('Import Contact');">{{agile_lng_translate 'contacts-view' 'import-from-csv'}}</a></li>
 
-			<li><a href="#import">{{translate 'contacts-view' 'import-from-salesforce'}}</a></li>
+			<li><a href="#import">{{agile_lng_translate 'contacts-view' 'import-from-salesforce'}}</a></li>
 		</ul>
 	</div>
 	{{/hasRestrictedMenuScope}}
@@ -227,19 +227,19 @@
 <div id="bulk-action-btns" class="panel-heading no-shadow p-r-none b-r m-r-sm" style="border-bottom: 0;background-color: rgba(246,248,248,1);position:relative;">
 				      	
 				      	
-					    <button id="bulk-tags" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled txt-small">{{translate 'contacts-view' 'add-tags'}}</button>
-					    <button id="bulk-tags-remove" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled txt-small">{{translate 'contacts-view' 'remove-tags'}}</button>
+					    <button id="bulk-tags" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled txt-small">{{agile_lng_translate 'contacts-view' 'add-tags'}}</button>
+					    <button id="bulk-tags-remove" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled txt-small">{{agile_lng_translate 'contacts-view' 'remove-tags'}}</button>
 					    {{#hasMenuScope 'CAMPAIGN'}}
-					    <button id="bulk-campaigns" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled txt-small" onclick="Agile_GA_Event_Tracker.track_event('Add to Campaign');">{{translate 'contacts-view' 'add-to-campaign'}}</button>
+					    <button id="bulk-campaigns" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled txt-small" onclick="Agile_GA_Event_Tracker.track_event('Add to Campaign');">{{agile_lng_translate 'contacts-view' 'add-to-campaign'}}</button>
 					    {{/hasMenuScope}}
-					    <button id="show-callcampaignModal" class="btn btn-default bulk-action-btn btn-sm disabled txt-small">{{translate 'contacts-view' 'start-call-campaign'}}</button>
-					    <button id="bulk-email" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled txt-small" onclick="Agile_GA_Event_Tracker.track_event('Send Email');">{{translate 'contacts-view' 'send-email'}}</button>
-					    <button id="bulk-owner" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled txt-small">{{translate 'contacts-view' 'change-owner'}}</button>
+					    <button id="show-callcampaignModal" class="btn btn-default bulk-action-btn btn-sm disabled txt-small">{{agile_lng_translate 'contacts-view' 'start-call-campaign'}}</button>
+					    <button id="bulk-email" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled txt-small" onclick="Agile_GA_Event_Tracker.track_event('Send Email');">{{agile_lng_translate 'contacts-view' 'send-email'}}</button>
+					    <button id="bulk-owner" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled txt-small">{{agile_lng_translate 'contacts-view' 'change-owner'}}</button>
 					    {{#hasScope "EXPORT_CONTACTS"}}
-					    <button id="bulk-contacts-export" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled txt-small" onclick="Agile_GA_Event_Tracker.track_event('Export as CSV');">{{translate 'deal-view' 'export-as-csv'}}</button>
+					    <button id="bulk-contacts-export" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled txt-small" onclick="Agile_GA_Event_Tracker.track_event('Export as CSV');">{{agile_lng_translate 'deal-view' 'export-as-csv'}}</button>
 					    {{/hasScope}}
 					    {{#hasRestrictedMenuScope 'DELETE_CONTACT'}} {{else}}
-					    <button class="btn btn-default bulk-action-btn delete-checked-contacts btn-sm disabled txt-small">{{translate 'contacts-view' 'delete'}}</button>
+					    <button class="btn btn-default bulk-action-btn delete-checked-contacts btn-sm disabled txt-small">{{agile_lng_translate 'contacts-view' 'delete'}}</button>
 
 					     {{/hasRestrictedMenuScope}}
 

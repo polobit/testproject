@@ -13,44 +13,44 @@
 	<form class="p-xs" id="sip_login_form" name="sip_login_form" method="post">
     	<fieldset>
 		      <p class="m-t-sm">
-                   {{translate 'widgets' 'sip-desc'}}
+                   {{agile_lng_translate 'widgets' 'sip-desc'}}
               </p>
 			  
-				<label><b>{{translate 'widgets' 'enter-your-widget-details' 'SIP'}} </b></label>
+				<label><b>{{agile_lng_translate 'widgets' 'enter-your-widget-details' 'SIP'}} </b></label>
                 <label id="sip_reg_status"></label>
 				<div class="control-group form-group">
                      <div class="controls">
-                         <input type="text" id="sip_username" class="form-control input-medium required widget_input_box"  title="{{translate 'widgets' 'full-friendly-display-title'}}" value="" name="sip_username" placeholder="{{translate 'widgets' 'full-friendly-display-name'}}"></input>
+                         <input type="text" id="sip_username" class="form-control input-medium required widget_input_box"  title="{{agile_lng_translate 'widgets' 'full-friendly-display-title'}}" value="" name="sip_username" placeholder="{{agile_lng_translate 'widgets' 'full-friendly-display-name'}}"></input>
                      </div>
                 </div>
                 <div class="control-group form-group">
                      <div class="controls">
-                          <input type="text" id="sip_realm" class="form-control input-medium required widget_input_box"  title="{{translate 'widgets' 'server-sip-proxy-title'}}" value="" name="sip_realm" placeholder="{{translate 'widgets' 'server-sip-proxy'}}"></input>
+                          <input type="text" id="sip_realm" class="form-control input-medium required widget_input_box"  title="{{agile_lng_translate 'widgets' 'server-sip-proxy-title'}}" value="" name="sip_realm" placeholder="{{agile_lng_translate 'widgets' 'server-sip-proxy'}}"></input>
                      </div>
                 </div>				
                 <div class="control-group form-group">
                      <div class="controls">
-                          <input type="text" id="sip_privateid" class="form-control input-medium required widget_input_box"  title="{{translate 'widgets' 'sip-number-title'}}" value="" name="sip_privateid" placeholder="{{translate 'widgets' 'sip-number'}}"></input>
+                          <input type="text" id="sip_privateid" class="form-control input-medium required widget_input_box"  title="{{agile_lng_translate 'widgets' 'sip-number-title'}}" value="" name="sip_privateid" placeholder="{{agile_lng_translate 'widgets' 'sip-number'}}"></input>
                      </div>
                 </div>				
                 <div class="control-group form-group">
                      <div class="controls">
-                          <input type="password" id="sip_password" class="form-control input-medium required widget_input_box"  title="{{translate 'prefs-settings' 'password'}}" value="" name="sip_password" placeholder="{{translate 'prefs-settings' 'password'}}"></input>
+                          <input type="password" id="sip_password" class="form-control input-medium required widget_input_box"  title="{{agile_lng_translate 'prefs-settings' 'password'}}" value="" name="sip_password" placeholder="{{agile_lng_translate 'prefs-settings' 'password'}}"></input>
                      </div>
                 </div>
 <div class="checkbox">
 <label class="i-checks i-checks-sm">
-              <input type="checkbox" id="sip_wsenable" name="sip_wsenable" title="{{translate 'widgets' 'websocket-url'}}"></input><i></i> {{translate 'widgets' 'enable-sip-legacy-mode'}}
+              <input type="checkbox" id="sip_wsenable" name="sip_wsenable" title="{{agile_lng_translate 'widgets' 'websocket-url'}}"></input><i></i> {{agile_lng_translate 'widgets' 'enable-sip-legacy-mode'}}
 </label>
 </div>
               <div class="text-center">
-			  <a href="#add-widget" class="btn btn-default btn-sm">{{translate 'other' 'cancel'}}</a>
-			  <a href="#" id="save_prefs" class="save-agile-widget btn btn-sm btn-primary ml_5">{{translate 'portlets' 'save'}}</a>
+			  <a href="#add-widget" class="btn btn-default btn-sm">{{agile_lng_translate 'other' 'cancel'}}</a>
+			  <a href="#" id="save_prefs" class="save-agile-widget btn btn-sm btn-primary ml_5">{{agile_lng_translate 'portlets' 'save'}}</a>
 </div>
               
               <p class="m-t-sm m-b-none">
-                  {{translate 'widgets' 'do-not-have-an-sip-account'}} 
-                  <a href="http://www.voip-info.org/wiki/view/Sip+Trunking+Providers" target="_blank" class="text-info"> {{translate 'widgets' 'signup'}} </a>
+                  {{agile_lng_translate 'widgets' 'do-not-have-an-sip-account'}} 
+                  <a href="http://www.voip-info.org/wiki/view/Sip+Trunking+Providers" target="_blank" class="text-info"> {{agile_lng_translate 'widgets' 'signup'}} </a>
               </p>
 		 </fieldset>
     </form>

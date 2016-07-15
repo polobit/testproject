@@ -25,7 +25,7 @@
 			<p class="m-b-none c-p" id="add_credits"><i class="icon-plus-sign"></i></p>
 		</div>
 		<div class="col-md-5">
-			{{translate 'widgets' 'credits'}}<div class="pull-right"> :</div>
+			{{agile_lng_translate 'widgets' 'credits'}}<div class="pull-right"> :</div>
 		</div>
 		<div class="col-md-6">
   			<span>$ </span>
@@ -39,27 +39,27 @@
 			<input class="form-control input-sm" id="credit_amount" type="number" value="0" name="credit_amount">
 		</div>
 		<div class="col-md-3 p-none">
-			<button href="#" class="btn btn-sm btn-primary" id="stripe_credits_add" style="" name="stripe_credits_add">{{translate 'other' 'add'}}</button>
+			<button href="#" class="btn btn-sm btn-primary" id="stripe_credits_add" style="" name="stripe_credits_add">{{agile_lng_translate 'other' 'add'}}</button>
 		</div>
 		<div class="col-md-3 p-none">
-			<button href="#" class="btn btn-sm btn-default" id="stripe_credits_cancel" style="" name="stripe_credits_cancel">{{translate 'other' 'cancel'}}</button>
+			<button href="#" class="btn btn-sm btn-default" id="stripe_credits_cancel" style="" name="stripe_credits_cancel">{{agile_lng_translate 'other' 'cancel'}}</button>
 		</div>
 	{{else}}
 		<div class="col-md-12 p-l-none p-r-sm">
-			<p>{{translate 'widgets' 'revoke-stripe-desc'}}</p>
+			<p>{{agile_lng_translate 'widgets' 'revoke-stripe-desc'}}</p>
 		</div>
 {{/if_hasWriteAccess}}
 </div>
 <div class="clearfix"></div>
 <div class="b-t">
 	<div class=" wrapper-xs">
-		<span>{{translate 'widgets' 'subscription-details'}}</span>
+		<span>{{agile_lng_translate 'widgets' 'subscription-details'}}</span>
 	</div>
 </div>
 <div class="b-t b-b wrapper-sm">
 	{{#if customer.subscription}}
 		<div class="row">	
-			<div class="col-md-5 p-r-none">{{translate 'tasks' 'start-date'}}
+			<div class="col-md-5 p-r-none">{{agile_lng_translate 'tasks' 'start-date'}}
 				<div class="pull-right"> :</div>
 			</div>
 			<div class="col-md-7 text-muted p-r-none p-l-xxs">
@@ -69,7 +69,7 @@
 		</div>
 		{{#if customer.subscription.currentPeriodEnd}}
 		<div class="row">	
-			<div class="col-md-5 p-r-none">{{translate 'tasks' 'end-date'}}
+			<div class="col-md-5 p-r-none">{{agile_lng_translate 'tasks' 'end-date'}}
 				<div class="pull-right">:</div>
 			</div>
 			<div class="col-md-7 text-muted p-r-none p-l-xxs">
@@ -79,7 +79,7 @@
 		</div>
 		{{/if}}
 		<div class="row">	
-			<div class="col-md-5 p-r-none">{{translate 'plan-and-upgrade' 'current-plan'}}
+			<div class="col-md-5 p-r-none">{{agile_lng_translate 'plan-and-upgrade' 'current-plan'}}
 				<div class="pull-right">:</div>
 			</div>							
 			<div class="col-md-7 p-r-none word-break p-l-xxs">
@@ -87,7 +87,7 @@
 			</div>
 		</div>
 		<div class="row">	
-			<div class="col-md-5 p-r-none">{{translate 'widgets' 'interval'}}
+			<div class="col-md-5 p-r-none">{{agile_lng_translate 'widgets' 'interval'}}
 				<div class="pull-right">:</div>
 			</div>							
 			<div class="col-md-7 p-r-none p-l-xxs">
@@ -95,7 +95,7 @@
 			</div>
 		</div>
 		<div class="row">	
-			<div class="col-md-5 p-r-none">{{translate 'plan-and-upgrade' 'amount'}}
+			<div class="col-md-5 p-r-none">{{agile_lng_translate 'plan-and-upgrade' 'amount'}}
 				<div class="pull-right">:</div>
 			</div>							
 			<div class="col-md-7 p-r-none p-l-xxs">
@@ -104,15 +104,15 @@
 		</div>
 	{{else}}
 		<div>
-	    	{{translate 'widgets' 'no-active-subscription'}}
+	    	{{agile_lng_translate 'widgets' 'no-active-subscription'}}
 		</div>
 	{{/if}}
 </div>
 
 <div class="nav-tabs-alt">
 <ul class="nav nav-tabs text-base" id="myTab">
-	<li class="active text-center" style="width:48%; margin-left: 2%;" align="center"><a data-toggle="tab" href="#invoices"><h4 class="h4 text-base">{{translate 'plan-and-upgrade' 'invoices'}}</h4><small></small></a></li>
-	<li class="text-center" style="width:48%;" align="center"><a data-toggle="tab" href="#payments"><h4 class="h4 text-base">{{translate 'campaigns' 'payments'}}</h4><small>
+	<li class="active text-center" style="width:48%; margin-left: 2%;" align="center"><a data-toggle="tab" href="#invoices"><h4 class="h4 text-base">{{agile_lng_translate 'plan-and-upgrade' 'invoices'}}</h4><small></small></a></li>
+	<li class="text-center" style="width:48%;" align="center"><a data-toggle="tab" href="#payments"><h4 class="h4 text-base">{{agile_lng_translate 'campaigns' 'payments'}}</h4><small>
 	</small></a></li>
 </ul>
 </div>
@@ -150,7 +150,7 @@
 						<div class="pull-left">{{plan.name}}</div>					
 						<div class="pull-right">$ {{numeric_operation plan.amount 100 "/"}}
 						</div><br>
-						<div class="pull-left">{{translate 'plan-and-upgrade' 'quantity'}}
+						<div class="pull-left">{{agile_lng_translate 'plan-and-upgrade' 'quantity'}}
 						</div>					
 						<div class="pull-right">{{quantity}}</div><br>
 						<div class="text-ellipsis w-full">
@@ -166,7 +166,7 @@
 		</li>
 	{{/each}}
 {{else}}
-	<li class="list-group-item r-none b-l-none b-r-none"> {{translate 'widgets' 'no-invoices'}} </li>
+	<li class="list-group-item r-none b-l-none b-r-none"> {{agile_lng_translate 'widgets' 'no-invoices'}} </li>
 {{/if}}
 </script>
 
@@ -183,38 +183,38 @@
 			</div>					
 			<div id="collapse-{{id}}" class="collapse" style="color: rgba(0, 0, 0, 0.5);">
 				{{#each lines.data}}	
-					{{translate 'plan-and-upgrade' 'amount'}} : {{amount}}{{currency}}<br>
-					{{translate 'widgets' 'receipt'}}: {{receipt_number}}<br>
-					{{translate 'widgets' 'balance'}}: {{balance_transaction}}<br>
-					{{translate 'widgets' 'reason'}} : {{reason}}
-					{{translate 'report-add' 'time'}}   : {{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created}}
+					{{agile_lng_translate 'plan-and-upgrade' 'amount'}} : {{amount}}{{currency}}<br>
+					{{agile_lng_translate 'widgets' 'receipt'}}: {{receipt_number}}<br>
+					{{agile_lng_translate 'widgets' 'balance'}}: {{balance_transaction}}<br>
+					{{agile_lng_translate 'widgets' 'reason'}} : {{reason}}
+					{{agile_lng_translate 'report-add' 'time'}}   : {{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created}}
 					{{else}}
-					{{translate 'widgets' 'no-refund-transactions'}}
+					{{agile_lng_translate 'widgets' 'no-refund-transactions'}}
 				{{/each}}
 			</div>
 			<small class="text-muted"><i class="fa fa-clock-o m-r-xs"></i><time class="time-ago" datetime="{{epochToHumanDate "" created}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created}}</time></small>
 		</li>
 	{{/each}}
 {{else}}
-	<li class="list-group-item r-none b-l-none b-r-none"> {{translate 'widgets' 'no-payments'}} </li>
+	<li class="list-group-item r-none b-l-none b-r-none"> {{agile_lng_translate 'widgets' 'no-payments'}} </li>
 {{/if}}
 </script>
 
 <script id="stripe-custom-field-template" type="text/html">
 <div class="wrapper-sm">
 {{#if_equals this.custom_fields.length "0"}}
-	<p>{{translate 'widgets' 'stripe-each-contact-desc'}} <a class="text-info" href="#custom-fields">{{translate 'widgets' 'create-one'}}</a>.</p>
+	<p>{{agile_lng_translate 'widgets' 'stripe-each-contact-desc'}} <a class="text-info" href="#custom-fields">{{agile_lng_translate 'widgets' 'create-one'}}</a>.</p>
 {{else}}
-	<p>{{translate 'widgets' 'select-the-custom-field'}}</p>
+	<p>{{agile_lng_translate 'widgets' 'select-the-custom-field'}}</p>
 	<select name="stripe_field" id="stripe_custom_field_name" class="required form-control col-md-10 w-full">
-     		<option class="default-select" value="">{{translate 'widgets' 'select'}}</option>
+     		<option class="default-select" value="">{{agile_lng_translate 'widgets' 'select'}}</option>
 		{{#each this.custom_fields}}
 			<option value="{{field_label}}">{{field_label}} 
 			</option>
 		{{/each}}
 	</select>
-	<p>{{translate 'widgets' 'or-you-can'}} <a href="#custom-fields">{{translate 'tickets' 'create'}} </a> {{translate 'widgets' 'new-text-custom-field'}}</p>
-	<a href="#" class="btn btn-sm btn-default text-l-none" id="save_stripe_name">{{translate 'portlets' 'save'}}</a>
+	<p>{{agile_lng_translate 'widgets' 'or-you-can'}} <a href="#custom-fields">{{agile_lng_translate 'tickets' 'create'}} </a> {{agile_lng_translate 'widgets' 'new-text-custom-field'}}</p>
+	<a href="#" class="btn btn-sm btn-default text-l-none" id="save_stripe_name">{{agile_lng_translate 'portlets' 'save'}}</a>
 {{/if_equals}}
 </div>
 </script>
@@ -235,20 +235,20 @@
 
 <script id="stripe-login-template" type="text/html">
 <div class="m-t">
-	{{translate 'widgets' 'stripe-profile-desc'}}
+	{{agile_lng_translate 'widgets' 'stripe-profile-desc'}}
 <br>
 	<div class="col-sm-12 text-center m-t-sm">
-		<p><b>{{translate 'widgets' 'access'}} <i class="icon-question c-p" data-toggle="tooltip" data-placement="top" title="{{translate 'widgets' 'select-the-access-mode-desc'}}" ></i></b></p>
+		<p><b>{{agile_lng_translate 'widgets' 'access'}} <i class="icon-question c-p" data-toggle="tooltip" data-placement="top" title="{{agile_lng_translate 'widgets' 'select-the-access-mode-desc'}}" ></i></b></p>
 	    <div class="btn-group" data-toggle="buttons">
 	        <label class="btn btn-default active">
-	            <input type="radio" class="stripe_scopes" checked="checked" id="read_only" name="scope" value="read_only"/> {{translate 'widgets' 'read'}}
+	            <input type="radio" class="stripe_scopes" checked="checked" id="read_only" name="scope" value="read_only"/> {{agile_lng_translate 'widgets' 'read'}}
 	        </label> 
 	        <label class="btn btn-default">
-	            <input type="radio" class="stripe_scopes" id="read_write" name="scope" value="read_write"/> {{translate 'widgets' 'write'}}
+	            <input type="radio" class="stripe_scopes" id="read_write" name="scope" value="read_write"/> {{agile_lng_translate 'widgets' 'write'}}
 	        </label> 	      
 	    </div>	   
 	</div>
-<div class="text-center"><button class="btn btn-sm btn-primary m-t-sm" url="{{url}}" id="stripe_url">{{translate 'widgets' 'link-your Stripe'}}</button></div>
+<div class="text-center"><button class="btn btn-sm btn-primary m-t-sm" url="{{url}}" id="stripe_url">{{agile_lng_translate 'widgets' 'link-your Stripe'}}</button></div>
 </div>
 </script>
 
@@ -258,10 +258,10 @@
 <div>
 
 {{#if_equals custom_data.length "0"}}
-				<p>{{translate 'widgets' 'stripe-each-contact-desc'}} <a class="text-info" href="#custom-fields">{{translate 'widgets' 'create-one'}}</a>.</p>
+				<p>{{agile_lng_translate 'widgets' 'stripe-each-contact-desc'}} <a class="text-info" href="#custom-fields">{{agile_lng_translate 'widgets' 'create-one'}}</a>.</p>
 {{else}}
 
-<p>{{translate 'widgets' 'select-the-custom-field'}}</p>
+<p>{{agile_lng_translate 'widgets' 'select-the-custom-field'}}</p>
 <form id="reportsForm">
 
 <input name="scope"  id="scope" value="{{prefs.scope}}" hidden/>
@@ -274,12 +274,12 @@
 
 <fieldset class="m-l-md">
 		<div class="control-group m-l-n-md">
-				<label class="control-label">{{translate 'widgets' 'current-custom-field'}}
+				<label class="control-label">{{agile_lng_translate 'widgets' 'current-custom-field'}}
 				</label>
 				<div class="controls" id="contactTypeAhead">
 			
 			<select name="stripe_field_name" id="stripe_custom_field" class="required col-md-10 form-control w-full">
-     				<option class="default-select" value="">{{translate 'widgets' 'select'}}
+     				<option class="default-select" value="">{{agile_lng_translate 'widgets' 'select'}}
      				</option>
 				{{#each custom_data}}
 					{{#if_equals ../prefs.stripe_field_name field_label}}
@@ -294,11 +294,11 @@
 			</div>
 		</fieldset>
 				<div class="m-t-sm m-r-none m-b-xs m-l-none text-center">
-					<a class='btn btn-default btn-sm  p-t-xs p-b-xs p-l-xs p-r-xs m-l-xs save-agile-widget' widget-name="Stripe" id="widget-prefs-save">{{translate 'portlets' 'save'}}</a>
-					<a class='btn btn-danger btn-sm revoke-widget m-l-xs' widget-name="Stripe">{{translate 'widgets' 'revoke-access'}}</a>
+					<a class='btn btn-default btn-sm  p-t-xs p-b-xs p-l-xs p-r-xs m-l-xs save-agile-widget' widget-name="Stripe" id="widget-prefs-save">{{agile_lng_translate 'portlets' 'save'}}</a>
+					<a class='btn btn-danger btn-sm revoke-widget m-l-xs' widget-name="Stripe">{{agile_lng_translate 'widgets' 'revoke-access'}}</a>
 
 					
-					<a href="#add-widget" class='btn btn-default btn-sm' widget-name="Stripe">{{translate 'other' 'cancel'}}</a>
+					<a href="#add-widget" class='btn btn-default btn-sm' widget-name="Stripe">{{agile_lng_translate 'other' 'cancel'}}</a>
 				</div> 
 	</div>
 </form>

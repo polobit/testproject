@@ -38,11 +38,11 @@
 			<div class="pull-right grid-view-actions grid-view-action-button">
 				<span class="m-r-xs c-p"><a href="#contact/{{id}}"><i
 						data-toggle="tooltip" data-placement="left" title=""
-						data-original-title="{{translate 'contact-details' 'edit'}}"
+						data-original-title="{{agile_lng_translate 'contact-details' 'edit'}}"
 						class="fa fa-pencil-square grid-edit-color"></i></a></span><span class='c-p'
 					con_id="{{id}}" id="contact-actions-grid-delete"><i
 					data-toggle="tooltip" data-placement="left" title=""
-					data-original-title="{{translate 'deal-view' 'delete'}}" class="fa fa-trash grid-delete-color"></i></span>
+					data-original-title="{{agile_lng_translate 'deal-view' 'delete'}}" class="fa fa-trash grid-delete-color"></i></span>
 			</div>
 
 		</div>
@@ -98,11 +98,11 @@
 			<div class="pull-right grid-view-actions grid-view-action-button">
 				<span class="m-r-xs c-p"><a href="#contact/{{id}}"><i
 						data-toggle="tooltip" data-placement="left" title=""
-						data-original-title="{{translate 'contact-details' 'edit'}}"
+						data-original-title="{{agile_lng_translate 'contact-details' 'edit'}}"
 						class="fa fa-pencil-square grid-edit-color"></i></a></span><span class='c-p'
 					con_id="{{id}}" id="contact-actions-grid-delete"><i
 					data-toggle="tooltip" data-placement="left" title=""
-					data-original-title="{{translate 'deal-view' 'delete'}}" class="fa fa-trash grid-delete-color"></i></span>
+					data-original-title="{{agile_lng_translate 'deal-view' 'delete'}}" class="fa fa-trash grid-delete-color"></i></span>
 			</div>
 			<div class="clearfix"></div>
 		</div>
@@ -135,8 +135,8 @@
 		
     	<div class="btn-toolbar m-l-none pos-rlt">
 	    	<div class="filters-drp-down btn-group dropdown m-l-none" style="float: none;"><div class="">
-	    		<div class="inline-block" style="font-size: 18px;color: rgb(88, 102, 110);"><div>{{translate 'contacts-view' 'contacts'}} <div class="inline-block" id="filter-list"></div><span id="contacts-count" class="">{{contacts_count}}</span>
-	    			<a id="contacts-left-filters-toggle" class="" data-toggle="tooltip" data-placement="right" title="" data-original-title="{{translate 'contacts-view' 'filters'}}" onclick="Agile_GA_Event_Tracker.track_event('Hide/Expand Filters')">
+	    		<div class="inline-block" style="font-size: 18px;color: rgb(88, 102, 110);"><div>{{agile_lng_translate 'contacts-view' 'contacts'}} <div class="inline-block" id="filter-list"></div><span id="contacts-count" class="">{{contacts_count}}</span>
+	    			<a id="contacts-left-filters-toggle" class="" data-toggle="tooltip" data-placement="right" title="" data-original-title="{{agile_lng_translate 'contacts-view' 'filters'}}" onclick="Agile_GA_Event_Tracker.track_event('Hide/Expand Filters')">
             			<i id="icon-filter" class="fa fa-filter icon-white text-base" style="color: rgb(88, 102, 110);"></i>
           			</a>
           			</div>
@@ -178,18 +178,18 @@
 				          </label></span>
 				  		{{/if}}
 				      	
-					    <button id="bulk-tags" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled" style="font-size:10px">{{translate 'contacts-view' 'add-tags'}}</button>
-					    <button id="bulk-tags-remove" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled" style="font-size:10px">{{translate 'contacts-view' 'remove-tags'}}</button>
+					    <button id="bulk-tags" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled" style="font-size:10px">{{agile_lng_translate 'contacts-view' 'add-tags'}}</button>
+					    <button id="bulk-tags-remove" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled" style="font-size:10px">{{agile_lng_translate 'contacts-view' 'remove-tags'}}</button>
 					    {{#hasMenuScope 'CAMPAIGN'}}
-					    <button id="bulk-campaigns" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled" style="font-size:10px">{{translate 'contacts-view' 'add-to-campaign'}}</button>
+					    <button id="bulk-campaigns" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled" style="font-size:10px">{{agile_lng_translate 'contacts-view' 'add-to-campaign'}}</button>
 					    {{/hasMenuScope}}
-					    <button id="show-callcampaignModal" class="btn btn-default bulk-action-btn btn-sm disabled" style="font-size:10px">{{translate 'contacts-view' 'start-call-campaign'}}</button>
-					    <button id="bulk-email" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled" style="font-size:10px">{{translate 'contacts-view' 'send-email'}}</button>
-					    <button id="bulk-owner" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled" style="font-size:10px">{{translate 'contacts-view' 'change-owner'}}</button>
+					    <button id="show-callcampaignModal" class="btn btn-default bulk-action-btn btn-sm disabled" style="font-size:10px">{{agile_lng_translate 'contacts-view' 'start-call-campaign'}}</button>
+					    <button id="bulk-email" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled" style="font-size:10px">{{agile_lng_translate 'contacts-view' 'send-email'}}</button>
+					    <button id="bulk-owner" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled" style="font-size:10px">{{agile_lng_translate 'contacts-view' 'change-owner'}}</button>
 					    {{#hasScope "EXPORT_CONTACTS"}}
-					    <button id="bulk-contacts-export" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled" style="font-size:10px">{{translate 'deal-view' 'export-as-csv'}}</button>
+					    <button id="bulk-contacts-export" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled" style="font-size:10px">{{agile_lng_translate 'deal-view' 'export-as-csv'}}</button>
 					    {{/hasScope}}
-					    <button id="delete-checked-grid" class="btn btn-default bulk-action-btn btn-sm disabled" style="font-size:10px">{{translate 'contacts-view' 'delete'}}</button>
+					    <button id="delete-checked-grid" class="btn btn-default bulk-action-btn btn-sm disabled" style="font-size:10px">{{agile_lng_translate 'contacts-view' 'delete'}}</button>
 				    </div>
 
       <div class="m-l-sm filter-criteria"></div>

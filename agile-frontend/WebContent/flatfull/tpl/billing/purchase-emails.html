@@ -2,7 +2,7 @@
 <div class="wrapper-md lter bg-light b-b">
 		<div class="row">
   			<div class="col-md-12">
-				<h3 class="pull-left h3 font-thin">{{translate 'plan-and-upgrade' 'secure-payment'}}</h3>
+				<h3 class="pull-left h3 font-thin">{{agile_lng_translate 'plan-and-upgrade' 'secure-payment'}}</h3>
 			</div>
 		</div>
 </div>
@@ -11,8 +11,8 @@
 
 <div class="col-md-9">
 <div class="panel panel-default">
-			<div class="panel-heading">{{translate 'plan-and-upgrade' 'confirm-your-emails'}}
-<a href="#subscribe"  class="pull-right m-r-sm text-info">{{translate 'plan-and-upgrade' 'change-emails'}}</a>
+			<div class="panel-heading">{{agile_lng_translate 'plan-and-upgrade' 'confirm-your-emails'}}
+<a href="#subscribe"  class="pull-right m-r-sm text-info">{{agile_lng_translate 'plan-and-upgrade' 'change-emails'}}</a>
 			</div>
 		<div class="panel-body">
 			<form id="email-plan-form" class="form-horizontal" name="emailPlan">
@@ -22,7 +22,7 @@
           <div class="row">
 			<div class="col-md-12">
 						<div class="control-group form-group">
-							<label class="control-label col-sm-4 p-t-none">{{translate 'plan-and-upgrade' 'number-of-emails'}} :</label>
+							<label class="control-label col-sm-4 p-t-none">{{agile_lng_translate 'plan-and-upgrade' 'number-of-emails'}} :</label>
 							<div class="controls col-sm-8">
 <input type="hidden" name="quantity" class="input form-control"
 									value="{{quantity}}" />
@@ -30,13 +30,13 @@
 </div>
 						</div>
 						<div class="control-group form-group">
-							<label class="control-label col-sm-4 p-t-none">{{translate 'plan-and-upgrade' 'charge-per-1000-emails'}} :</label>
+							<label class="control-label col-sm-4 p-t-none">{{agile_lng_translate 'plan-and-upgrade' 'charge-per-1000-emails'}} :</label>
 							<div class="controls col-sm-8">{{emailRate}}</div>
 						</div>
 						
 <div class="line line-dashed b-b line-lg"></div>
 <div class="control-group form-group m-b-none">
-								<label class="col-sm-4 control-label">{{translate 'plan-and-upgrade' 'total-cost'}} : </label>
+								<label class="col-sm-4 control-label">{{agile_lng_translate 'plan-and-upgrade' 'total-cost'}} : </label>
 								<div class="controls col-sm-6">
 									<span style="
     font-size: 22px;
@@ -46,7 +46,7 @@
 color: #FA782D;"></b>
 									<p class="help-block m-b-none">
 	{{numeric_operation quantity "1000" "*"}}									 
- × <span>{{emailRate}}</span>/{{translate 'plan-and-upgrade' '1000-emails'}}
+ × <span>{{emailRate}}</span>/{{agile_lng_translate 'plan-and-upgrade' '1000-emails'}}
 									</p>
 
 								</div>
@@ -70,23 +70,23 @@ color: #FA782D;"></b>
 			<fieldset>
 				
 					<div class="control-group form-group">
-						<label class="control-label col-sm-4">{{translate 'plan-and-upgrade' 'card-number'}} <span class="field_req">*</span></label>
+						<label class="control-label col-sm-4">{{agile_lng_translate 'plan-and-upgrade' 'card-number'}} <span class="field_req">*</span></label>
 						<div class="controls col-sm-6">
-							<input type="text" name="number" class="input required  digits form-control" placeholder="{{translate 'plan-and-upgrade' 'enter-your-card-number'}}">
+							<input type="text" name="number" class="input required  digits form-control" placeholder="{{agile_lng_translate 'plan-and-upgrade' 'enter-your-card-number'}}">
 						</div>
 					</div>
 						<div class="control-group form-group">
-						<label class="control-label col-sm-4">{{translate 'plan-and-upgrade' 'expiry'}}<span class="field_req">*</span></label>
+						<label class="control-label col-sm-4">{{agile_lng_translate 'plan-and-upgrade' 'expiry'}}<span class="field_req">*</span></label>
 						<div class="controls col-sm-6">
-							<select name="exp_month" id="exp_month" class="input form-control exp_month inline-block" style="width: 50%;" placeholder="{{translate 'plan-and-upgrade' 'expiry-month'}}"></select>
-							 <select name="exp_year" id="exp_year" class="input required form-control  digits  exp_year atleastThreeMonths inline-block" style="width: 49%;" placeholder="{{translate 'plan-and-upgrade' 'expiry-year'}}"></select>
+							<select name="exp_month" id="exp_month" class="input form-control exp_month inline-block" style="width: 50%;" placeholder="{{agile_lng_translate 'plan-and-upgrade' 'expiry-month'}}"></select>
+							 <select name="exp_year" id="exp_year" class="input required form-control  digits  exp_year atleastThreeMonths inline-block" style="width: 49%;" placeholder="{{agile_lng_translate 'plan-and-upgrade' 'expiry-year'}}"></select>
 						</div>
 					</div>
 				
 				<div class="control-group form-group">
-					<label class="control-label col-sm-4">{{translate 'plan-and-upgrade' 'cvc'}}<span class="field_req">*</span></label>
+					<label class="control-label col-sm-4">{{agile_lng_translate 'plan-and-upgrade' 'cvc'}}<span class="field_req">*</span></label>
 					<div class="controls col-sm-5">
-						<input type="text" name="cvc" class="input required  digits form-control" placeholder="{{translate 'plan-and-upgrade' 'card-security-code'}}" />
+						<input type="text" name="cvc" class="input required  digits form-control" placeholder="{{agile_lng_translate 'plan-and-upgrade' 'card-security-code'}}" />
 
 					</div>
  <img src="{{getS3ImagePath '/flatfull/img/cvc.png'}}" style="width: 60px;">
@@ -117,12 +117,12 @@ color: #FA782D;"></b>
 <div class="col-sm-4">
 </div>
 <div class="col-sm-8">
-<a href="#" type="submit" id="purchaseemail" data-loading-text="{{translate 'plan-and-upgrade' 'processing'}}" class="save btn btn-sm btn-primary">{{translate 'plan-and-upgrade' 'pay-now'}}</a>
+<a href="#" type="submit" id="purchaseemail" data-loading-text="{{agile_lng_translate 'plan-and-upgrade' 'processing'}}" class="save btn btn-sm btn-primary">{{agile_lng_translate 'plan-and-upgrade' 'pay-now'}}</a>
 <div class="pull-right">
 <img src="{{getS3ImagePath '/flatfull/img/credit-cards.png'}}" style="width: 188px;opacity: 0.5;">
 </div>
 	<small class="help-block" id="subscribe_plan_tooltext">
-		<i class="fa fa-lock"></i> {{translate 'plan-and-upgrade' 'all-transactions-are-secure-and-encrypted'}}
+		<i class="fa fa-lock"></i> {{agile_lng_translate 'plan-and-upgrade' 'all-transactions-are-secure-and-encrypted'}}
 </small>            
  </div>
 			</div>

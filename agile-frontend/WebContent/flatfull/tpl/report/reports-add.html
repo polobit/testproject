@@ -3,7 +3,7 @@
 <div class="wrapper-md lter bg-light b-b">
 <div class="row">
     <div class="col-sm-12 col-md-12">
-      <h3 class="pull-left font-thin h3">{{translate 'report-add' 'email-reports'}}</h3>
+      <h3 class="pull-left font-thin h3">{{agile_lng_translate 'report-add' 'email-reports'}}</h3>
     </div>
 </div>
 </div>
@@ -14,23 +14,23 @@
 		<form id="reportsForm" class="form-horizontal">
 			<div name="rules" class="formsection chainedSelect">
  					{{#if id}} 
-                       <div class="panel-heading">{{translate 'report-add' 'edit-email-report'}}</div>
+                       <div class="panel-heading">{{agile_lng_translate 'report-add' 'edit-email-report'}}</div>
                       {{else}}
-                        <div class="panel-heading"><i class="icon-plus-sign"></i> {{translate 'report-add' 'add-email-reports'}}</div>
+                        <div class="panel-heading"><i class="icon-plus-sign"></i> {{agile_lng_translate 'report-add' 'add-email-reports'}}</div>
                     {{/if}}
 				<div class="panel-body">
 				<fieldset>
 					<div class="control-group form-group">
-						<label class="control-label col-sm-2">{{translate 'report-add' 'name'}}<span class="field_req">*</span></label>
+						<label class="control-label col-sm-2">{{agile_lng_translate 'report-add' 'name'}}<span class="field_req">*</span></label>
 						<div class="controls col-sm-8">
 							<input type="text" name="name" class="required form-control" />
 						</div>
 					</div>
 
 					<div class="control-group form-group" id="report-settings" >
-						<label class="control-label col-sm-2">{{translate 'report-add' 'condition'}}</label>
+						<label class="control-label col-sm-2">{{agile_lng_translate 'report-add' 'condition'}}</label>
 						<div class="controls col-sm-8">
-							<div>{{translate 'report-add' 'meet-all-condition'}}</div>
+							<div>{{agile_lng_translate 'report-add' 'meet-all-condition'}}</div>
 							<table class="chained-table bg-transparent m-b-xs contact and_rules">
 								<tbody>
 									<tr class="chained controls hide" name="rules">
@@ -43,38 +43,38 @@
 										<td class="lhs-block">
 											<div id="LHS" name="LHS">
 												<select name="temp" class="lhs form-control" id="LHS">
-													<optgroup label="{{translate 'contact-edit' 'tag'}}">
-														<option value="tags" selected="selected">{{translate 'contact-edit' 'tag'}}</option>
-														<option value="tags_time">{{translate 'contacts-view' 'tag-and-created-date'}}</option>
+													<optgroup label="{{agile_lng_translate 'contact-edit' 'tag'}}">
+														<option value="tags" selected="selected">{{agile_lng_translate 'contact-edit' 'tag'}}</option>
+														<option value="tags_time">{{agile_lng_translate 'contacts-view' 'tag-and-created-date'}}</option>
 													</optgroup>
-													<optgroup label="{{translate 'contacts-view' 'date'}}">
-														<option value="created_time">{{translate 'contacts-view' 'created'}}</option>
-														<option value="updated_time">{{translate 'contacts-view' 'updated'}}</option>
-														<option value="last_contacted">{{translate 'contacts-view' 'last-contacted'}}</option>
-														<option value="last_emailed">{{translate 'contacts-view' 'last-emailed'}}</option>
-														<option value="last_called">{{translate 'contacts-view' 'last-called'}}</option>
-														<option value="last_campaign_emaild">{{translate 'contacts-view' 'last-campaign-emailed'}}
+													<optgroup label="{{agile_lng_translate 'contacts-view' 'date'}}">
+														<option value="created_time">{{agile_lng_translate 'contacts-view' 'created'}}</option>
+														<option value="updated_time">{{agile_lng_translate 'contacts-view' 'updated'}}</option>
+														<option value="last_contacted">{{agile_lng_translate 'contacts-view' 'last-contacted'}}</option>
+														<option value="last_emailed">{{agile_lng_translate 'contacts-view' 'last-emailed'}}</option>
+														<option value="last_called">{{agile_lng_translate 'contacts-view' 'last-called'}}</option>
+														<option value="last_campaign_emaild">{{agile_lng_translate 'contacts-view' 'last-campaign-emailed'}}
 														</option>
 													</optgroup>
- 													<optgroup label="{{translate 'contacts-view' 'properties'}}">
-														<option value="first_name">{{translate 'contacts-view' 'First name'}}</option>
-														<option value="last_name">{{translate 'contacts-view' 'Last name'}}</option>
-														<option value="email">{{translate 'contacts-view' 'email-address'}}</option>
-														<option value="company">{{translate 'contacts-view' 'Company'}}</option>
-														<option value="title">{{translate 'contact-edit' 'job-title'}}</option>
-														<option value="phone">{{translate 'contact-edit' 'phone-number'}}</option>
-														<option value="lead_score">{{translate 'deal-view' 'score'}}</option>
-														<option value="owner_id">{{translate 'deal-view' 'owner'}}</option>
-														<option value="address">{{translate 'contacts-view' 'Address'}}</option>
+ 													<optgroup label="{{agile_lng_translate 'contacts-view' 'properties'}}">
+														<option value="first_name">{{agile_lng_translate 'contacts-view' 'First name'}}</option>
+														<option value="last_name">{{agile_lng_translate 'contacts-view' 'Last name'}}</option>
+														<option value="email">{{agile_lng_translate 'contacts-view' 'email-address'}}</option>
+														<option value="company">{{agile_lng_translate 'contacts-view' 'Company'}}</option>
+														<option value="title">{{agile_lng_translate 'contact-edit' 'job-title'}}</option>
+														<option value="phone">{{agile_lng_translate 'contact-edit' 'phone-number'}}</option>
+														<option value="lead_score">{{agile_lng_translate 'deal-view' 'score'}}</option>
+														<option value="owner_id">{{agile_lng_translate 'deal-view' 'owner'}}</option>
+														<option value="address">{{agile_lng_translate 'contacts-view' 'Address'}}</option>
 														<!--<option value="city">City</option>
 														<option value="state">State</option>
 														<option value="country">Country</option>
 														<option value="zip">Zip</option>-->
 													</optgroup>
-													<optgroup label="{{translate 'contact-details' 'campaigns'}}">
-														<option value="campaign_status">{{translate 'contacts-view' 'campaign-status'}}</option>
+													<optgroup label="{{agile_lng_translate 'contact-details' 'campaigns'}}">
+														<option value="campaign_status">{{agile_lng_translate 'contacts-view' 'campaign-status'}}</option>
 													</optgroup>
-													 <optgroup label="{{translate 'contacts-view' 'custom-fields'}}" id="custom-fields" class="hide">
+													 <optgroup label="{{agile_lng_translate 'contacts-view' 'custom-fields'}}" id="custom-fields" class="hide">
 													</optgroup>
 												</select>
 											</div>
@@ -84,48 +84,48 @@
 											<div id="condition" name="CONDITION">
 												<select name="temp" class="form-control">
 													<option value="EQUALS"
-														class="first_name last_name phone company title org_tag jobtitle email phone city state zip country org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf">{{translate 'contacts-view' 'is'}}</option>
-													<option value="EQUALS" class="owner_id" related="RHS" url="core/api/users" parse_key="id" parse_value="name">{{translate 'contacts-view' 'is'}}</option>
-													<option value="NOTEQUALS" class="owner_id" related="RHS" url="core/api/users" parse_key="id" parse_value="name">{{translate 'contacts-view' 'is-not'}}</option>
+														class="first_name last_name phone company title org_tag jobtitle email phone city state zip country org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf">{{agile_lng_translate 'contacts-view' 'is'}}</option>
+													<option value="EQUALS" class="owner_id" related="RHS" url="core/api/users" parse_key="id" parse_value="name">{{agile_lng_translate 'contacts-view' 'is'}}</option>
+													<option value="NOTEQUALS" class="owner_id" related="RHS" url="core/api/users" parse_key="id" parse_value="name">{{agile_lng_translate 'contacts-view' 'is-not'}}</option>
 													<option value="NOTEQUALS"
-														class="first_name last_name company owner org_tag title email phone city state zip country org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf">{{translate 'contacts-view' 'is-not'}}
+														class="first_name last_name company owner org_tag title email phone city state zip country org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf">{{agile_lng_translate 'contacts-view' 'is-not'}}
 														</option>
-													<option value="EQUALS" class="tags tags_time">{{translate 'contacts-view' 'is'}}</option>
-													<option value="NOTEQUALS" class="tags">{{translate 'contacts-view' 'is-not'}}</option>
-													<option value="EQUALS" class="lead_score">{{translate 'contacts-view' 'equals'}}</option>
-													<option value="BETWEEN_NUMBER" class="lead_score">{{translate 'contacts-view' 'between'}}</option>
-													<option value="IS_GREATER_THAN" class="lead_score">{{translate 'contacts-view' 'greater-than'}}
+													<option value="EQUALS" class="tags tags_time">{{agile_lng_translate 'contacts-view' 'is'}}</option>
+													<option value="NOTEQUALS" class="tags">{{agile_lng_translate 'contacts-view' 'is-not'}}</option>
+													<option value="EQUALS" class="lead_score">{{agile_lng_translate 'contacts-view' 'equals'}}</option>
+													<option value="BETWEEN_NUMBER" class="lead_score">{{agile_lng_translate 'contacts-view' 'between'}}</option>
+													<option value="IS_GREATER_THAN" class="lead_score">{{agile_lng_translate 'contacts-view' 'greater-than'}}
 													</option>
-													<option value="IS_LESS_THAN" class="lead_score">{{translate 'contacts-view' 'less-than'}}</option>
-													<option value="ON" class="updated_time created_time last_contacted last_emailed last_called last_campaign_emaild">{{translate 'contacts-view' 'on'}}
+													<option value="IS_LESS_THAN" class="lead_score">{{agile_lng_translate 'contacts-view' 'less-than'}}</option>
+													<option value="ON" class="updated_time created_time last_contacted last_emailed last_called last_campaign_emaild">{{agile_lng_translate 'contacts-view' 'on'}}
 													</option>
-													<option value="AFTER" class="created_time updated_time last_contacted last_emailed last_called last_campaign_emaild">{{translate 'contacts-view' 'is-after'}}</option>
-													<option value="BEFORE" class="created_time updated_time last_contacted last_emailed last_called last_campaign_emaild">{{translate 'contacts-view' 'is-before'}}</option>
-													<option value="BETWEEN" class="created_time updated_time last_contacted last_emailed last_called last_campaign_emaild">{{translate 'contacts-view' 'is-between'}}</option>
-													<option value="LAST" class="created_time updated_time last_contacted last_emailed last_called last_campaign_emaild">{{translate 'contacts-view' 'in-last'}}</option>
-													<option value="NEXT" class="created_time updated_time">{{translate 'contacts-view' 'in-next'}}
+													<option value="AFTER" class="created_time updated_time last_contacted last_emailed last_called last_campaign_emaild">{{agile_lng_translate 'contacts-view' 'is-after'}}</option>
+													<option value="BEFORE" class="created_time updated_time last_contacted last_emailed last_called last_campaign_emaild">{{agile_lng_translate 'contacts-view' 'is-before'}}</option>
+													<option value="BETWEEN" class="created_time updated_time last_contacted last_emailed last_called last_campaign_emaild">{{agile_lng_translate 'contacts-view' 'is-between'}}</option>
+													<option value="LAST" class="created_time updated_time last_contacted last_emailed last_called last_campaign_emaild">{{agile_lng_translate 'contacts-view' 'in-last'}}</option>
+													<option value="NEXT" class="created_time updated_time">{{agile_lng_translate 'contacts-view' 'in-next'}}
 														</option>
-													<option value="EQUALS" class="tag org_tag">{{translate 'contacts-view' 'is'}}</option>
-													<option value="ANYOF" class="tag">{{translate 'contacts-view' 'is-any-of'}}</option>
-													<option value="CONTAINS" class="address">{{translate 'contacts-view' 'contains-word'}}</option>
-													<option value="NOT_CONTAINS" class="address">{{translate 'contacts-view' 'not-contains-word'}}</option>
-													<option value="NOT_ADDED" class="campaign_status" related="RHS" url="core/api/workflows" parse_key="id" parse_value="name">{{translate 'contacts-view' 'never-added'}}
+													<option value="EQUALS" class="tag org_tag">{{agile_lng_translate 'contacts-view' 'is'}}</option>
+													<option value="ANYOF" class="tag">{{agile_lng_translate 'contacts-view' 'is-any-of'}}</option>
+													<option value="CONTAINS" class="address">{{agile_lng_translate 'contacts-view' 'contains-word'}}</option>
+													<option value="NOT_CONTAINS" class="address">{{agile_lng_translate 'contacts-view' 'not-contains-word'}}</option>
+													<option value="NOT_ADDED" class="campaign_status" related="RHS" url="core/api/workflows" parse_key="id" parse_value="name">{{agile_lng_translate 'contacts-view' 'never-added'}}
 													</option>
-													<option value="ACTIVE" class="campaign_status" related="RHS" url="core/api/workflows" parse_key="id" parse_value="name">{{translate 'contacts-view' 'active'}}</option>
-													<option value="DONE" class="campaign_status" related="RHS" url="core/api/workflows" parse_key="id" parse_value="name">{{translate 'contacts-view' 'completed'}}
+													<option value="ACTIVE" class="campaign_status" related="RHS" url="core/api/workflows" parse_key="id" parse_value="name">{{agile_lng_translate 'contacts-view' 'active'}}</option>
+													<option value="DONE" class="campaign_status" related="RHS" url="core/api/workflows" parse_key="id" parse_value="name">{{agile_lng_translate 'contacts-view' 'completed'}}
 													</option>
-													<option value="REMOVED" class="campaign_status" related="RHS" url="core/api/workflows" parse_key="id" parse_value="name">{{translate 'contacts-view' 'removed'}}</option>
-													<option value="SOFTBOUNCED" class="campaign_status" related="RHS" url="core/api/workflows" parse_key="id" parse_value="name">{{translate 'contacts-view' 'soft-bounced'}}
+													<option value="REMOVED" class="campaign_status" related="RHS" url="core/api/workflows" parse_key="id" parse_value="name">{{agile_lng_translate 'contacts-view' 'removed'}}</option>
+													<option value="SOFTBOUNCED" class="campaign_status" related="RHS" url="core/api/workflows" parse_key="id" parse_value="name">{{agile_lng_translate 'contacts-view' 'soft-bounced'}}
 													</option>
-													<option value="HARDBOUNCED" class="campaign_status" related="RHS" url="core/api/workflows" parse_key="id" parse_value="name">{{translate 'contacts-view' 'hard-bounced'}}
+													<option value="HARDBOUNCED" class="campaign_status" related="RHS" url="core/api/workflows" parse_key="id" parse_value="name">{{agile_lng_translate 'contacts-view' 'hard-bounced'}}
 													</option>
-													<option value="UNSUBSCRIBED" class="campaign_status" related="RHS" url="core/api/workflows" parse_key="id" parse_value="name">{{translate 'contacts-view' 'unsubscribed'}}
+													<option value="UNSUBSCRIBED" class="campaign_status" related="RHS" url="core/api/workflows" parse_key="id" parse_value="name">{{agile_lng_translate 'contacts-view' 'unsubscribed'}}
 													</option>
-													<option value="SPAM" class="campaign_status" related="RHS" url="core/api/workflows" parse_key="id" parse_value="name">{{translate 'contacts-view' 'spam-reported'}}
+													<option value="SPAM" class="campaign_status" related="RHS" url="core/api/workflows" parse_key="id" parse_value="name">{{agile_lng_translate 'contacts-view' 'spam-reported'}}
 													</option>
-													<option value="DEFINED" class="email phone company title address city state zip country custom_label custom_sfsadf org_custom_label org_custom_sfsadf">{{translate 'contacts-view' 'is-defined'}}
+													<option value="DEFINED" class="email phone company title address city state zip country custom_label custom_sfsadf org_custom_label org_custom_sfsadf">{{agile_lng_translate 'contacts-view' 'is-defined'}}
 													</option>
-													<option value="NOT_DEFINED" class="email phone company title address city state zip country custom_label custom_sfsadf org_custom_label org_custom_sfsadf">{{translate 'contacts-view' 'is-not-defined'}}
+													<option value="NOT_DEFINED" class="email phone company title address city state zip country custom_label custom_sfsadf org_custom_label org_custom_sfsadf">{{agile_lng_translate 'contacts-view' 'is-not-defined'}}
 													</option>
 												
 												</select>
@@ -134,7 +134,7 @@
 										<td class="rhs-block  controls v-top">
 											<div id="RHS" class="rhs" name="RHS">
 												<input type="text" name="temp"
-													class="LAST NEXT required form-control" placeholder="{{translate 'contacts-view' 'number-of-days'}}"/>
+													class="LAST NEXT required form-control" placeholder="{{agile_lng_translate 'contacts-view' 'number-of-days'}}"/>
 												<input type="text" name="temp" 
 													class="EQUALS NOTEQUALS ANYOF CONTAINS NOT_CONTAINS required form-control"/>
 												<input type="text" name="temp" 
@@ -162,17 +162,17 @@
 										<td class="nested-condition-block v-top" >
 											<div id="nested_condition" name="nested_condition">
 												<select name="temp" class="form-control">
-													<option value="EQUALS" class="tags_time">{{translate 'contacts-view' 'on'}}</option>
-													<option value="AFTER" class="tags_time">{{translate 'contacts-view' 'is-after'}}</option>
-													<option value="BEFORE" class="tags_time">{{translate 'contacts-view' 'is-before'}}</option>
-													<option value="BETWEEN" class="tags_time">{{translate 'contacts-view' 'is-between'}}</option>
-													<option value="LAST" class="tags_time">{{translate 'contacts-view' 'in-last'}}</option>
+													<option value="EQUALS" class="tags_time">{{agile_lng_translate 'contacts-view' 'on'}}</option>
+													<option value="AFTER" class="tags_time">{{agile_lng_translate 'contacts-view' 'is-after'}}</option>
+													<option value="BEFORE" class="tags_time">{{agile_lng_translate 'contacts-view' 'is-before'}}</option>
+													<option value="BETWEEN" class="tags_time">{{agile_lng_translate 'contacts-view' 'is-between'}}</option>
+													<option value="LAST" class="tags_time">{{agile_lng_translate 'contacts-view' 'in-last'}}</option>
 												</select>
 											</div>
 										</td>
 										<td class="controls v-top" >
 											<div id="nested_lhs" name="nested_lhs">
-												<input type="text" name="temp" class="LAST required form-control" placeholder="{{translate 'contacts-view' 'number-of-days'}}" /> 
+												<input type="text" name="temp" class="LAST required form-control" placeholder="{{agile_lng_translate 'contacts-view' 'number-of-days'}}" /> 
 												<input
 													id="date_between" type="text" 
 													name="temp"
@@ -198,9 +198,9 @@
 								</tbody>
 									
 							</table>
-								<a href="#" class="filter-contacts-multiple-add text-l-none m-t-xs text-info"><i class="icon-plus"></i> {{translate 'contacts-view' 'add-condition'}}</a>
-							<br/><br/><small>{{translate 'contacts-view' 'and'}}</small><br/>
-							<div>{{translate 'report-add' 'meet-any-of-the-foll-cond'}}</div>
+								<a href="#" class="filter-contacts-multiple-add text-l-none m-t-xs text-info"><i class="icon-plus"></i> {{agile_lng_translate 'contacts-view' 'add-condition'}}</a>
+							<br/><br/><small>{{agile_lng_translate 'contacts-view' 'and'}}</small><br/>
+							<div>{{agile_lng_translate 'report-add' 'meet-any-of-the-foll-cond'}}</div>
 
 							<table class="bg-transparent m-b-xs chained-table contact or_rules">
 								<tbody>
@@ -214,38 +214,38 @@
 										<td class="lhs-block">
 											<div id="LHS" name="LHS">
 												<select name="temp" class="lhs form-control" id="LHS" >
-													<optgroup label="{{translate 'contact-edit' 'tag'}}">
-														<option value="tags" selected="selected">{{translate 'contact-edit' 'tag'}}</option>
-														<option value="tags_time">{{translate 'contacts-view' 'tag-and-created-date'}}</option>
+													<optgroup label="{{agile_lng_translate 'contact-edit' 'tag'}}">
+														<option value="tags" selected="selected">{{agile_lng_translate 'contact-edit' 'tag'}}</option>
+														<option value="tags_time">{{agile_lng_translate 'contacts-view' 'tag-and-created-date'}}</option>
 													</optgroup>
-													<optgroup label="{{translate 'contacts-view' 'date'}}">
-														<option value="created_time">{{translate 'contacts-view' 'created'}}</option>
-														<option value="updated_time">{{translate 'contacts-view' 'updated'}}</option>
-														<option value="last_contacted">{{translate 'contacts-view' 'last-contacted'}}</option>
-														<option value="last_emailed">{{translate 'contacts-view' 'last-emailed'}}</option>
-														<option value="last_called">{{translate 'contacts-view' 'last-called'}}</option>
-														<option value="last_campaign_emaild"> {{translate 'contacts-view' 'last-campaign-emailed'}}
+													<optgroup label="{{agile_lng_translate 'contacts-view' 'date'}}">
+														<option value="created_time">{{agile_lng_translate 'contacts-view' 'created'}}</option>
+														<option value="updated_time">{{agile_lng_translate 'contacts-view' 'updated'}}</option>
+														<option value="last_contacted">{{agile_lng_translate 'contacts-view' 'last-contacted'}}</option>
+														<option value="last_emailed">{{agile_lng_translate 'contacts-view' 'last-emailed'}}</option>
+														<option value="last_called">{{agile_lng_translate 'contacts-view' 'last-called'}}</option>
+														<option value="last_campaign_emaild"> {{agile_lng_translate 'contacts-view' 'last-campaign-emailed'}}
 														</option>
 													</optgroup>
- 													<optgroup label="{{translate 'contacts-view' 'properties'}}">
-														<option value="first_name">{{translate 'contacts-view' 'First name'}}</option>
-														<option value="last_name">{{translate 'contacts-view' 'Last name'}}</option>
-														<option value="email">{{translate 'contacts-view' 'email-address'}}</option>
-														<option value="company">{{translate 'contacts-view' 'Company'}}</option>
-														<option value="title">{{translate 'contact-edit' 'job-title'}}</option>
-														<option value="phone">{{translate 'contact-edit' 'phone-number'}}</option>
-														<option value="lead_score">{{translate 'deal-view' 'score'}}</option>
-														<option value="owner_id">{{translate 'deal-view' 'owner'}}</option>
-														<option value="address">{{translate 'contacts-view' 'Address'}}</option>
+ 													<optgroup label="{{agile_lng_translate 'contacts-view' 'properties'}}">
+														<option value="first_name">{{agile_lng_translate 'contacts-view' 'First name'}}</option>
+														<option value="last_name">{{agile_lng_translate 'contacts-view' 'Last name'}}</option>
+														<option value="email">{{agile_lng_translate 'contacts-view' 'email-address'}}</option>
+														<option value="company">{{agile_lng_translate 'contacts-view' 'Company'}}</option>
+														<option value="title">{{agile_lng_translate 'contact-edit' 'job-title'}}</option>
+														<option value="phone">{{agile_lng_translate 'contact-edit' 'phone-number'}}</option>
+														<option value="lead_score">{{agile_lng_translate 'deal-view' 'score'}}</option>
+														<option value="owner_id">{{agile_lng_translate 'deal-view' 'owner'}}</option>
+														<option value="address">{{agile_lng_translate 'contacts-view' 'Address'}}</option>
 														<!--<option value="city">City</option>
 														<option value="state">State</option>
 														<option value="country">Country</option>
 														<option value="zip">Zip</option>-->
 													</optgroup>
-													<optgroup label="{{translate 'contact-details' 'campaigns'}}">
-														<option value="campaign_status">{{translate 'contacts-view' 'campaign-status'}}</option>
+													<optgroup label="{{agile_lng_translate 'contact-details' 'campaigns'}}">
+														<option value="campaign_status">{{agile_lng_translate 'contacts-view' 'campaign-status'}}</option>
 													</optgroup>
-													 <optgroup label="{{translate 'contacts-view' 'custom-fields'}}" id="custom-fields" class="hide">
+													 <optgroup label="{{agile_lng_translate 'contacts-view' 'custom-fields'}}" id="custom-fields" class="hide">
 													</optgroup>
 												</select>
 											</div>
@@ -254,44 +254,44 @@
 											<div id="condition" name="CONDITION">
 												<select name="temp" class="w-full form-control">
 													<option value="EQUALS"
-														class="first_name last_name phone company title org_tag jobtitle email phone city state zip country org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf">{{translate 'contacts-view' 'is'}}</option>
-													<option value="EQUALS" class="owner_id" related="RHS" url="core/api/users" parse_key="id" parse_value="name">{{translate 'contacts-view' 'is'}}</option>
-													<option value="NOTEQUALS" class="owner_id" related="RHS" url="core/api/users" parse_key="id" parse_value="name">{{translate 'contacts-view' 'is-not'}}</option>
+														class="first_name last_name phone company title org_tag jobtitle email phone city state zip country org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf">{{agile_lng_translate 'contacts-view' 'is'}}</option>
+													<option value="EQUALS" class="owner_id" related="RHS" url="core/api/users" parse_key="id" parse_value="name">{{agile_lng_translate 'contacts-view' 'is'}}</option>
+													<option value="NOTEQUALS" class="owner_id" related="RHS" url="core/api/users" parse_key="id" parse_value="name">{{agile_lng_translate 'contacts-view' 'is-not'}}</option>
 													<option value="NOTEQUALS"
-														class="first_name last_name company owner org_tag title email phone city state zip country org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf">{{translate 'contacts-view' 'is-not'}}
+														class="first_name last_name company owner org_tag title email phone city state zip country org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf">{{agile_lng_translate 'contacts-view' 'is-not'}}
 														</option>
-													<option value="EQUALS" class="tags tags_time">{{translate 'contacts-view' 'is'}}</option>
-													<option value="NOTEQUALS" class="tags">{{translate 'contacts-view' 'is-not'}}</option>
-													<option value="BETWEEN_NUMBER" class="lead_score">{{translate 'contacts-view' 'between'}}</option>
-													<option value="IS_GREATER_THAN" class="lead_score">{{translate 'contacts-view' 'greater-than'}}</option>
-													<option value="IS_LESS_THAN" class="lead_score">{{translate 'contacts-view' 'less-than'}}</option>
-													<option value="ON" class="updated_time created_time last_contacted last_emailed last_called last_campaign_emaild">{{translate 'contacts-view' 'on'}}</option>
-													<option value="AFTER" class="created_time updated_time last_contacted last_emailed last_called last_campaign_emaild">{{translate 'contacts-view' 'is-after'}}</option>
-													<option value="BEFORE" class="created_time updated_time last_contacted last_emailed last_called last_campaign_emaild">{{translate 'contacts-view' 'is-before'}}</option>
-													<option value="BETWEEN" class="created_time updated_time last_contacted last_emailed last_called last_campaign_emaild">{{translate 'contacts-view' 'is-between'}}</option>
-													<option value="LAST" class="created_time updated_time last_contacted last_emailed last_called last_campaign_emaild">{{translate 'contacts-view' 'in-last'}}</option>
-													<option value="NEXT" class="created_time updated_time">{{translate 'contacts-view' 'in-next'}}
+													<option value="EQUALS" class="tags tags_time">{{agile_lng_translate 'contacts-view' 'is'}}</option>
+													<option value="NOTEQUALS" class="tags">{{agile_lng_translate 'contacts-view' 'is-not'}}</option>
+													<option value="BETWEEN_NUMBER" class="lead_score">{{agile_lng_translate 'contacts-view' 'between'}}</option>
+													<option value="IS_GREATER_THAN" class="lead_score">{{agile_lng_translate 'contacts-view' 'greater-than'}}</option>
+													<option value="IS_LESS_THAN" class="lead_score">{{agile_lng_translate 'contacts-view' 'less-than'}}</option>
+													<option value="ON" class="updated_time created_time last_contacted last_emailed last_called last_campaign_emaild">{{agile_lng_translate 'contacts-view' 'on'}}</option>
+													<option value="AFTER" class="created_time updated_time last_contacted last_emailed last_called last_campaign_emaild">{{agile_lng_translate 'contacts-view' 'is-after'}}</option>
+													<option value="BEFORE" class="created_time updated_time last_contacted last_emailed last_called last_campaign_emaild">{{agile_lng_translate 'contacts-view' 'is-before'}}</option>
+													<option value="BETWEEN" class="created_time updated_time last_contacted last_emailed last_called last_campaign_emaild">{{agile_lng_translate 'contacts-view' 'is-between'}}</option>
+													<option value="LAST" class="created_time updated_time last_contacted last_emailed last_called last_campaign_emaild">{{agile_lng_translate 'contacts-view' 'in-last'}}</option>
+													<option value="NEXT" class="created_time updated_time">{{agile_lng_translate 'contacts-view' 'in-next'}}
 														</option>
-													<option value="EQUALS" class="tag org_tag">{{translate 'contacts-view' 'is'}}</option>
-													<option value="ANYOF" class="tag">{{translate 'contacts-view' 'is-any-of'}}</option>
-													<option value="CONTAINS" class="address">{{translate 'contacts-view' 'contains-word'}}</option>
-													<option value="NOT_CONTAINS" class="address">{{translate 'contacts-view' 'not-contains-word'}}</option>
-													<option value="NOT_ADDED" class="campaign_status" related="RHS" url="core/api/workflows" parse_key="id" parse_value="name">{{translate 'contacts-view' 'never-added'}}</option>
-													<option value="ACTIVE" class="campaign_status" related="RHS" url="core/api/workflows" parse_key="id" parse_value="name">{{translate 'contacts-view' 'active'}}</option>
-													<option value="DONE" class="campaign_status" related="RHS" url="core/api/workflows" parse_key="id" parse_value="name">{{translate 'contacts-view' 'completed'}}
+													<option value="EQUALS" class="tag org_tag">{{agile_lng_translate 'contacts-view' 'is'}}</option>
+													<option value="ANYOF" class="tag">{{agile_lng_translate 'contacts-view' 'is-any-of'}}</option>
+													<option value="CONTAINS" class="address">{{agile_lng_translate 'contacts-view' 'contains-word'}}</option>
+													<option value="NOT_CONTAINS" class="address">{{agile_lng_translate 'contacts-view' 'not-contains-word'}}</option>
+													<option value="NOT_ADDED" class="campaign_status" related="RHS" url="core/api/workflows" parse_key="id" parse_value="name">{{agile_lng_translate 'contacts-view' 'never-added'}}</option>
+													<option value="ACTIVE" class="campaign_status" related="RHS" url="core/api/workflows" parse_key="id" parse_value="name">{{agile_lng_translate 'contacts-view' 'active'}}</option>
+													<option value="DONE" class="campaign_status" related="RHS" url="core/api/workflows" parse_key="id" parse_value="name">{{agile_lng_translate 'contacts-view' 'completed'}}
 													</option>
-													<option value="REMOVED" class="campaign_status" related="RHS" url="core/api/workflows" parse_key="id" parse_value="name">{{translate 'contacts-view' 'removed'}}</option>
-													<option value="SOFTBOUNCED" class="campaign_status" related="RHS" url="core/api/workflows" parse_key="id" parse_value="name">{{translate 'contacts-view' 'soft-bounced'}}
+													<option value="REMOVED" class="campaign_status" related="RHS" url="core/api/workflows" parse_key="id" parse_value="name">{{agile_lng_translate 'contacts-view' 'removed'}}</option>
+													<option value="SOFTBOUNCED" class="campaign_status" related="RHS" url="core/api/workflows" parse_key="id" parse_value="name">{{agile_lng_translate 'contacts-view' 'soft-bounced'}}
 													</option>
-													<option value="HARDBOUNCED" class="campaign_status" related="RHS" url="core/api/workflows" parse_key="id" parse_value="name">{{translate 'contacts-view' 'hard-bounced'}}
+													<option value="HARDBOUNCED" class="campaign_status" related="RHS" url="core/api/workflows" parse_key="id" parse_value="name">{{agile_lng_translate 'contacts-view' 'hard-bounced'}}
 													</option>
-													<option value="UNSUBSCRIBED" class="campaign_status" related="RHS" url="core/api/workflows" parse_key="id" parse_value="name">{{translate 'contacts-view' 'unsubscribed'}}
+													<option value="UNSUBSCRIBED" class="campaign_status" related="RHS" url="core/api/workflows" parse_key="id" parse_value="name">{{agile_lng_translate 'contacts-view' 'unsubscribed'}}
 													</option>
-													<option value="SPAM" class="campaign_status" related="RHS" url="core/api/workflows" parse_key="id" parse_value="name">{{translate 'contacts-view' 'spam-reported'}}
+													<option value="SPAM" class="campaign_status" related="RHS" url="core/api/workflows" parse_key="id" parse_value="name">{{agile_lng_translate 'contacts-view' 'spam-reported'}}
 													</option>
-													<option value="DEFINED" class="email phone company title address city state zip country custom_label custom_sfsadf org_custom_label org_custom_sfsadf">{{translate 'contacts-view' 'is-defined'}}
+													<option value="DEFINED" class="email phone company title address city state zip country custom_label custom_sfsadf org_custom_label org_custom_sfsadf">{{agile_lng_translate 'contacts-view' 'is-defined'}}
 													</option>
-													<option value="NOT_DEFINED" class="email phone company title address city state zip country custom_label custom_sfsadf org_custom_label org_custom_sfsadf">{{translate 'contacts-view' 'is-not-defined'}}
+													<option value="NOT_DEFINED" class="email phone company title address city state zip country custom_label custom_sfsadf org_custom_label org_custom_sfsadf">{{agile_lng_translate 'contacts-view' 'is-not-defined'}}
 													</option>
 												</select>
 											</div>
@@ -300,7 +300,7 @@
 											<div id="RHS" class="rhs" name="RHS">
 
 												<input type="text" name="temp"
-													class="LAST NEXT required form-control" placeholder="{{translate 'contacts-view' 'number-of-days'}}"/>
+													class="LAST NEXT required form-control" placeholder="{{agile_lng_translate 'contacts-view' 'number-of-days'}}"/>
 												<input type="text" name="temp"
 													class="EQUALS NOTEQUALS ANYOF CONTAINS NOT_CONTAINS required form-control"/>
 												 
@@ -330,16 +330,16 @@
 										<td class="nested-condition-block v-top" >
 											<div id="nested_condition" name="nested_condition">
 												<select name="temp" class="form-control w-full">
-													<option value="EQUALS" class="tags_time">{{translate 'contacts-view' 'on'}}</option>
-													<option value="AFTER" class="tags_time">{{translate 'contacts-view' 'is-after'}}</option>
-													<option value="BEFORE" class="tags_time">{{translate 'contacts-view' 'is-before'}}</option>
-													<option value="BETWEEN" class="tags_time">{{translate 'contacts-view' 'is-between'}}</option>
-													<option value="LAST" class="tags_time">{{translate 'contacts-view' 'in-last'}}</option>
+													<option value="EQUALS" class="tags_time">{{agile_lng_translate 'contacts-view' 'on'}}</option>
+													<option value="AFTER" class="tags_time">{{agile_lng_translate 'contacts-view' 'is-after'}}</option>
+													<option value="BEFORE" class="tags_time">{{agile_lng_translate 'contacts-view' 'is-before'}}</option>
+													<option value="BETWEEN" class="tags_time">{{agile_lng_translate 'contacts-view' 'is-between'}}</option>
+													<option value="LAST" class="tags_time">{{agile_lng_translate 'contacts-view' 'in-last'}}</option>
 											</div>
 										</td>
 										<td class="controls v-top">
 											<div id="nested_lhs" name="nested_lhs">
-												<input type="text" name="temp" class="LAST required form-control" placeholder="{{translate 'contacts-view' 'number-of-days'}}" /> 
+												<input type="text" name="temp" class="LAST required form-control" placeholder="{{agile_lng_translate 'contacts-view' 'number-of-days'}}" /> 
 												<input
 													id="date_between" type="text" 
 													name="temp"
@@ -362,7 +362,7 @@
 								
 								</tbody>
 							</table>
-								<a href="#" class="filter-contacts-multiple-add-or-rules text-l-none m-t-xs text-info"><i class="icon-plus"></i> {{translate 'contacts-view' 'add-condition'}}</a>
+								<a href="#" class="filter-contacts-multiple-add-or-rules text-l-none m-t-xs text-info"><i class="icon-plus"></i> {{agile_lng_translate 'contacts-view' 'add-condition'}}</a>
 							
 
 						</div>
@@ -370,62 +370,62 @@
 			
 
 			<div class="control-group form-group">
-				<label class="control-label col-sm-2">{{translate 'report-view' 'fields'}} <span class="field_req">*</span></label>
+				<label class="control-label col-sm-2">{{agile_lng_translate 'report-view' 'fields'}} <span class="field_req">*</span></label>
 				<div class="controls col-sm-8" id="contactTypeAhead">
 					<select id="multipleSelect" class="required form-control" multiple="multiple">
-					<optgroup label='{{translate 'contacts-view' 'contact-fields'}}'>
-							<option value="properties_first_name">{{translate 'contacts-view' 'First name'}}</option>
-							<option value="properties_last_name">{{translate 'contacts-view' 'Last name'}}</option>
-							<option value="properties_email">{{translate 'report-view' 'email'}}</option>
-							<option value="properties_company">{{translate 'contacts-view' 'Company'}}</option>
-							<option value="tags">{{translate 'report-add' 'tags'}}
+					<optgroup label='{{agile_lng_translate 'contacts-view' 'contact-fields'}}'>
+							<option value="properties_first_name">{{agile_lng_translate 'contacts-view' 'First name'}}</option>
+							<option value="properties_last_name">{{agile_lng_translate 'contacts-view' 'Last name'}}</option>
+							<option value="properties_email">{{agile_lng_translate 'report-view' 'email'}}</option>
+							<option value="properties_company">{{agile_lng_translate 'contacts-view' 'Company'}}</option>
+							<option value="tags">{{agile_lng_translate 'report-add' 'tags'}}
 							</option>
-							<option value="properties_title">{{translate 'contact-edit' 'job-title'}}</option>
-							<option value="properties_phone">{{translate 'report-add' 'Phone'}}</option>
-							<option value="properties_website">{{translate 'report-add' 'website'}}</option>
-							<option value="created_time">{{translate 'report-add' 'created-date'}}</option>
-							<option value="updated_time">{{translate 'report-add' 'updated-date'}}</option>
-							<option value="properties_image">{{translate 'report-add' 'image'}}</option>
-							<option value="lead_owner">{{translate 'report-add' 'owner'}}</option>
-							<option value="lead_score">{{translate 'report-add' 'score'}}</option>
-							<option value="last_contacted">{{translate 'contacts-view' 'last-contacted'}}</option>
-							<option value="last_emailed">{{translate 'contacts-view' 'last-emailed'}}</option>
-							<option value="last_called">{{translate 'contacts-view' 'last-called'}}</option>
+							<option value="properties_title">{{agile_lng_translate 'contact-edit' 'job-title'}}</option>
+							<option value="properties_phone">{{agile_lng_translate 'report-add' 'Phone'}}</option>
+							<option value="properties_website">{{agile_lng_translate 'report-add' 'website'}}</option>
+							<option value="created_time">{{agile_lng_translate 'report-add' 'created-date'}}</option>
+							<option value="updated_time">{{agile_lng_translate 'report-add' 'updated-date'}}</option>
+							<option value="properties_image">{{agile_lng_translate 'report-add' 'image'}}</option>
+							<option value="lead_owner">{{agile_lng_translate 'report-add' 'owner'}}</option>
+							<option value="lead_score">{{agile_lng_translate 'report-add' 'score'}}</option>
+							<option value="last_contacted">{{agile_lng_translate 'contacts-view' 'last-contacted'}}</option>
+							<option value="last_emailed">{{agile_lng_translate 'contacts-view' 'last-emailed'}}</option>
+							<option value="last_called">{{agile_lng_translate 'contacts-view' 'last-called'}}</option>
 						</optgroup>
-						<optgroup id="custom-fields-optgroup" label="{{translate 'contacts-view' 'custom-fields'}}">
+						<optgroup id="custom-fields-optgroup" label="{{agile_lng_translate 'contacts-view' 'custom-fields'}}">
 						</optgroup>
 					</select>
 				</div>
 			</div>
 
 			<div class="control-group form-group">
-				<label class="control-label col-sm-2">{{translate 'report-add' 'send-report-to'}}<span
+				<label class="control-label col-sm-2">{{agile_lng_translate 'report-add' 'send-report-to'}}<span
 					class="field_req">*</span></label>
 				<div class="controls col-sm-8">
-					<input type="text" name="sendTo" class="required multipleEmails form-control" placeholder="{{translate 'report-add' 'email-address-sep-by-comma'}}"/>
+					<input type="text" name="sendTo" class="required multipleEmails form-control" placeholder="{{agile_lng_translate 'report-add' 'email-address-sep-by-comma'}}"/>
 				</div>
 			</div>
 			<div class="control-group form-group">
-				<label class="control-label col-sm-2">{{translate 'report-add' 'duration'}}<span
+				<label class="control-label col-sm-2">{{agile_lng_translate 'report-add' 'duration'}}<span
 					class="field_req">*</span></label>
 				<div class="controls col-sm-8">
 					<select class="required form-control" name="duration" id="duration">
-					<option value="DAILY">{{translate 'report-add' 'daily'}}</option>
-						<option value="WEEKLY">{{translate 'report-add' 'weekly'}}
+					<option value="DAILY">{{agile_lng_translate 'report-add' 'daily'}}</option>
+						<option value="WEEKLY">{{agile_lng_translate 'report-add' 'weekly'}}
 						</option>
-						<option value="MONTHLY">{{translate 'report-add' 'monthly'}}
+						<option value="MONTHLY">{{agile_lng_translate 'report-add' 'monthly'}}
 						</option>
 					</select>
 				</div>
 			</div>			
 <div class="control-group form-group">
-				<label class="control-label col-sm-2" ><a href="" id="report_advanced" data-toggle="collapse" data-target="#report-advanced-block" class="text-info"><span><i class="fa fa-plus"></i></span>&nbsp;{{translate 'report-add' 'advanced'}}</a></label>
+				<label class="control-label col-sm-2" ><a href="" id="report_advanced" data-toggle="collapse" data-target="#report-advanced-block" class="text-info"><span><i class="fa fa-plus"></i></span>&nbsp;{{agile_lng_translate 'report-add' 'advanced'}}</a></label>
 			</div>
 			<div class="row">
 			<div class="collapse col-sm-12" id="report-advanced-block">
 
 <div class="control-group form-group">
-						<label class="control-label col-sm-2">{{translate 'report-add' 'time-zone'}}</label>
+						<label class="control-label col-sm-2">{{agile_lng_translate 'report-add' 'time-zone'}}</label>
 						<div class="controls col-sm-8">
 							<select name="report_timezone" id="report_timezone" class="form-control">
 					         <option value="Africa/Abidjan">
@@ -1222,7 +1222,7 @@
 						</div>
 					</div>
             <div class="control-group form-group" id="contact_report_day" style="display:none;">
-				<label class="control-label col-sm-2">{{translate 'report-add' 'day-of-month'}}</label>
+				<label class="control-label col-sm-2">{{agile_lng_translate 'report-add' 'day-of-month'}}</label>
 				<div class="controls col-sm-8">
 					<select name="activity_day" class="form-control"> 
                     <option value="1">1</option>
@@ -1260,26 +1260,26 @@
 				</div>
 			</div>
             <div class="control-group form-group" id="contact_report_weekday" style="display:none;">
-				<label class="control-label col-sm-2">{{translate 'calendar' 'day'}}
+				<label class="control-label col-sm-2">{{agile_lng_translate 'calendar' 'day'}}
 				</label>
 				<div class="controls col-sm-8">
 					<select name="activity_weekday" class="form-control"> 
-						<option value="2">{{translate 'prefs-settings' 'monday'}}
+						<option value="2">{{agile_lng_translate 'prefs-settings' 'monday'}}
 						</option>
-					    <option value="3">{{translate 'calendar' 'tuesday'}}</option>
-					    <option value="4">{{translate 'calendar' 'wednesday'}}</option>
-						<option value="5">{{translate 'calendar' 'thursday'}}</option>
-						<option value="6">{{translate 'calendar' 'friday'}}</option>
-						<option value="7">{{translate 'calendar' 'saturday'}}</option>
-                        <option value="1">{{translate 'prefs-settings' 'sunday'}}
+					    <option value="3">{{agile_lng_translate 'calendar' 'tuesday'}}</option>
+					    <option value="4">{{agile_lng_translate 'calendar' 'wednesday'}}</option>
+						<option value="5">{{agile_lng_translate 'calendar' 'thursday'}}</option>
+						<option value="6">{{agile_lng_translate 'calendar' 'friday'}}</option>
+						<option value="7">{{agile_lng_translate 'calendar' 'saturday'}}</option>
+                        <option value="1">{{agile_lng_translate 'prefs-settings' 'sunday'}}
                         </option>						
                    </select>
 				</div>
 			</div>	
 			<div class="control-group form-group" id="contact_report_time">
-				<label class="control-label col-sm-2">{{translate 'report-add' 'time'}}</label>
+				<label class="control-label col-sm-2">{{agile_lng_translate 'report-add' 'time'}}</label>
 				<div class="controls col-sm-8">
-					 <input type="text" name="activity_time" class="report_time_timepicker input-small form-control" id="activity_time"  placeholder="{{translate 'report-add' 'placeholder-time'}}" />
+					 <input type="text" name="activity_time" class="report_time_timepicker input-small form-control" id="activity_time"  placeholder="{{agile_lng_translate 'report-add' 'placeholder-time'}}" />
 				</div>
 			</div>	
 			
@@ -1295,8 +1295,8 @@
 <div class="row">
 <div class="col-sm-offset-2 col-sm-8">
 			<div class="form-actions">
-				<a href="#contact-reports" class="btn btn-sm btn-default">{{translate 'report-add' 'close'}}</a>
-				<a href="#" type="submit" class="save btn btn-sm btn-primary" id="filtersAdd">{{translate 'report-add' 'save'}}</a>
+				<a href="#contact-reports" class="btn btn-sm btn-default">{{agile_lng_translate 'report-add' 'close'}}</a>
+				<a href="#" type="submit" class="save btn btn-sm btn-primary" id="filtersAdd">{{agile_lng_translate 'report-add' 'save'}}</a>
 			</div>
 </div>
 </div>

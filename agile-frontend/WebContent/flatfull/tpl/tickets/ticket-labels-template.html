@@ -3,13 +3,13 @@
 <div class="col panel wrapper">
     <div class="hbox h-auto m-b-sm">
         <div class="text-center padder-v">
-            <h4 class="m-t-none m-b-xs">{{translate 'tickets' 'you-do-not-have-any-labels'}}</h4>
+            <h4 class="m-t-none m-b-xs">{{agile_lng_translate 'tickets' 'you-do-not-have-any-labels'}}</h4>
             <div class="m-b-xs text-muted">
-                {{translate 'tickets' 'create-lables-to-streamline-your-tickets'}}<small>
+                {{agile_lng_translate 'tickets' 'create-lables-to-streamline-your-tickets'}}<small>
             </div>
             <div>
                 <a href="#add-ticket-label" class="btn btn-sm btn-default blue btn-slate-action m-t-xs">
-                   <span><i class="icon-plus-sign"></i></span> {{translate 'tickets' 'add-label'}}
+                   <span><i class="icon-plus-sign"></i></span> {{agile_lng_translate 'tickets' 'add-label'}}
                 </a>
             </div>
         </div>
@@ -20,7 +20,7 @@
     <div class="panel panel-default">
         <div class="pull-right m-b-2">
             <a href="#add-ticket-label" class="btn btn-sm btn-default btn-addon"
-                style="margin-top:20px;margin-right:20px"><span><i class="icon-plus-sign"></i></span> {{translate 'tickets' 'add-label'}}
+                style="margin-top:20px;margin-right:20px"><span><i class="icon-plus-sign"></i></span> {{agile_lng_translate 'tickets' 'add-label'}}
             </a>
         </div>
         <table class="table table-striped showCheckboxes m-b-none agile-table panel table-layout-mob-view show-delete-modal tableHeader tab-layout tickets-border" url="core/api/tickets/labels/bulk" data-bulk-delete-title="Delete"
@@ -49,7 +49,7 @@
     <div class="table-resp overflow-hidden line-clamp no-wrap">
         <small class="edit-hover text-muted"> 
             <i class="fa fa-clock-o m-r-xs"></i>
-            <span>{{translate 'tickets' 'last-updated-on'}}&nbsp;</span>
+            <span>{{agile_lng_translate 'tickets' 'last-updated-on'}}&nbsp;</span>
             <time class="campaign-created-time b-b-dotted" datetime="{{epochToHumanDate "" updated_time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM" updated_time}}</time>
         </small>
     </div>
@@ -61,7 +61,7 @@
         <div class="col-md-10">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    {{#if id}}Edit{{else}}Add{{/if}} {{translate 'tickets' 'ticket-label'}}
+                    {{#if id}}Edit{{else}}Add{{/if}} {{agile_lng_translate 'tickets' 'ticket-label'}}
                 </div>
                 <form id="userForm" name="userForm" method="get" action="" class="form-horizontal">
                     {{#if id}}
@@ -69,10 +69,10 @@
                     {{/if}}
                     <fieldset class="wrapper"><br/>
                         <div class="control-group form-group">
-                            <label class="control-label col-md-3" for="label">{{translate 'contacts-view' 'label'}} <span class="field_req">*</span></label> 
+                            <label class="control-label col-md-3" for="label">{{agile_lng_translate 'contacts-view' 'label'}} <span class="field_req">*</span></label> 
                             <div class="col-md-6">
                                 <div class="controls">
-                                     <input type="text" name="label" id="label" value="{{label}}" placeholder="{{translate 'contacts-view' 'label'}}" class="required form-control" maxlength="15">
+                                     <input type="text" name="label" id="label" value="{{label}}" placeholder="{{agile_lng_translate 'contacts-view' 'label'}}" class="required form-control" maxlength="15">
                                 </div>
                             </div>
                         </div>
@@ -82,8 +82,8 @@
                         <div class="form-group">
                             <div class="form-actions col-sm-offset-3 col-md-9">
                                 <div class="form-actions">
-                                    <a type="reset" href='#ticket-labels' class="btn btn-default btn-sm">{{translate 'contact-details' 'cancel'}}</a>
-                                    <button type="submit" class="save btn btn-sm btn-primary m-l-xs">{{translate 'prefs-settings' 'save-changes'}}</button>
+                                    <a type="reset" href='#ticket-labels' class="btn btn-default btn-sm">{{agile_lng_translate 'contact-details' 'cancel'}}</a>
+                                    <button type="submit" class="save btn btn-sm btn-primary m-l-xs">{{agile_lng_translate 'prefs-settings' 'save-changes'}}</button>
                                     <div class="text-base error_message_label inline-block err-msg-color">
                                     </div>
                                 </div>

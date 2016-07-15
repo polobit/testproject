@@ -6,15 +6,15 @@
         </center>
     </div>
     <div class="panel-body">
-        <div class="text-flow-ellipsis line-clamp line-clamp-4" style="height:85px" rel="tooltip" title="{{translate 'prefs-data-sync' 'Office365-calendar-desc'}}">
-            {{translate 'prefs-data-sync' 'Office365-calendar-desc'}}
+        <div class="text-flow-ellipsis line-clamp line-clamp-4" style="height:85px" rel="tooltip" title="{{agile_lng_translate 'prefs-data-sync' 'Office365-calendar-desc'}}">
+            {{agile_lng_translate 'prefs-data-sync' 'Office365-calendar-desc'}}
         </div>
     <div class="text-center"> 
         {{#if id}}
-            <a class="btn btn-sm btn-danger delete" id="office-calendar-sync-delete">{{translate 'prefs-email' 'disable'}}</a>            
-            <a class="btn btn-sm btn-default inline-block" href="#sync/officeCalendar">{{translate 'preferences' 'settings'}}</a>
+            <a class="btn btn-sm btn-danger delete" id="office-calendar-sync-delete">{{agile_lng_translate 'prefs-email' 'disable'}}</a>            
+            <a class="btn btn-sm btn-default inline-block" href="#sync/officeCalendar">{{agile_lng_translate 'preferences' 'settings'}}</a>
         {{else}}
-            <a class="btn btn-sm btn-default inline-block" href="#sync/officeCalendar" id="data-sync-type">{{translate 'prefs-email' 'enable'}}</a> 
+            <a class="btn btn-sm btn-default inline-block" href="#sync/officeCalendar" id="data-sync-type">{{agile_lng_translate 'prefs-email' 'enable'}}</a> 
         {{/if}}            
     </div>
     </div>
@@ -38,23 +38,23 @@
                 </form>
                 <form id="calendar-office365-prefs" name="prefs">
                 <div class="form-group">
-                            <label for="office365-calendar-usrname">{{translate 'admin-settings-integrations' 'username'}}</label>
-                            <input type="text" required="required" class="form-control" id="office365-calendar-usrname" name="office365-calendar-usrname" placeholder="{{translate 'other' 'email'}}" value="{{username}}">
+                            <label for="office365-calendar-usrname">{{agile_lng_translate 'admin-settings-integrations' 'username'}}</label>
+                            <input type="text" required="required" class="form-control" id="office365-calendar-usrname" name="office365-calendar-usrname" placeholder="{{agile_lng_translate 'other' 'email'}}" value="{{username}}">
                         </div>
                         <div class="form-group">
-                            <label for="office365-calendar-pwd">{{translate 'prefs-settings' 'password'}}</label>
-                            <input type="password" required="required" class="form-control" id="office365-calendar-pwd" name="office365-calendar-pwd" placeholder="{{translate 'prefs-settings' 'password'}}" value="{{password}}">
+                            <label for="office365-calendar-pwd">{{agile_lng_translate 'prefs-settings' 'password'}}</label>
+                            <input type="password" required="required" class="form-control" id="office365-calendar-pwd" name="office365-calendar-pwd" placeholder="{{agile_lng_translate 'prefs-settings' 'password'}}" value="{{password}}">
                         </div>
                         <div class="form-group">
-                            <label for="office365-calendar-outlook-url">{{translate 'prefs-settings' 'outlook-url'}}</label>
+                            <label for="office365-calendar-outlook-url">{{agile_lng_translate 'prefs-settings' 'outlook-url'}}</label>
                             <input id="office365-calendar-outlook-url" required="required" name="office365-calendar-outlook-url" class="form-control isHttpsURL"  type="text" placeholder="https://outlook.office365.com" value="{{serverUrl}}">
                         </div>
 
                 </form>
                    <!-- <a href ="#" id ="office365-calendar-save" class="btn btn-sm btn-primary m-t save">Save</a> -->
                     <div class="form-actions text-center">
-                        <a type="reset" class="btn btn-default btn-sm" href="#sync">{{translate 'other' 'cancel'}}</a>
-                        <a type="submit" class="save btn btn-sm btn-primary">{{translate 'portlets' 'save'}}</a>
+                        <a type="reset" class="btn btn-default btn-sm" href="#sync">{{agile_lng_translate 'other' 'cancel'}}</a>
+                        <a type="submit" class="save btn btn-sm btn-primary">{{agile_lng_translate 'portlets' 'save'}}</a>
                     </div>  
             </div>
         </div>

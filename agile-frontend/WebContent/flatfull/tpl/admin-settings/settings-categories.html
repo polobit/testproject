@@ -13,7 +13,7 @@
 		<div id="{{id}}-deal-track" class="accordion-group overflow-hidden">
 		<div class="panel-heading pos-rlt" role="tab" id="headingOne">
 		<div class="accordion-heading">
-			<div class="panel-title">{{translate 'admin-settings-tasks' 'categories'}}</div>
+			<div class="panel-title">{{agile_lng_translate 'admin-settings-tasks' 'categories'}}</div>
 			<div class="clearfix"></div>
 			</div>
 		</div>
@@ -30,10 +30,10 @@
 					</tbody>
 					</table>
 					</div>
-					<div class="p-l p-t p-b"><a href="#" class="show_task_category_field text-info"><i class="icon-plus-sign"></i> {{translate 'admin-settings-tasks' 'add-category'}} </a></div>
+					<div class="p-l p-t p-b"><a href="#" class="show_task_category_field text-info"><i class="icon-plus-sign"></i> {{agile_lng_translate 'admin-settings-tasks' 'add-category'}} </a></div>
 					<div class="show_field p-l p-t p-b" style="display:none;">
-						<input id="add_new_task_category" class="add_new_category form-control input-sm" style="width:145px;display:inline-block" type="text" placeholder="{{translate 'admin-settings-tasks' 'new-category'}}">
-						<a class="btn btn-info btn-addon btn-sm add_task_category" data-toggle="modal" id="add_task_category" href="#">{{translate 'admin-settings-custom-fields' 'add'}}</a>
+						<input id="add_new_task_category" class="add_new_category form-control input-sm" style="width:145px;display:inline-block" type="text" placeholder="{{agile_lng_translate 'admin-settings-tasks' 'new-category'}}">
+						<a class="btn btn-info btn-addon btn-sm add_task_category" data-toggle="modal" id="add_task_category" href="#">{{agile_lng_translate 'admin-settings-custom-fields' 'add'}}</a>
 						<span class="save-status"></span>
 					</div>
     				<div class="hidden"><input name="milestones" type="text" class="required form-control" value="{{milestones}}"/></div>
@@ -60,9 +60,9 @@
 <div class="col w-md">
 	<div class="data-block">
 		<div class="p-l p-r">
-			<h4 class="m-t-none">{{translate 'admin-settings-tasks' 'what-are-tasks'}}
+			<h4 class="m-t-none">{{agile_lng_translate 'admin-settings-tasks' 'what-are-tasks'}}
 			</h4>			
-			<p>{{translate 'admin-settings-tasks' 'task-categories-desc'}}</p>
+			<p>{{agile_lng_translate 'admin-settings-tasks' 'task-categories-desc'}}</p>
 		</div>
 	</div>
 </div>
@@ -71,19 +71,19 @@
     <div class="modal-content">
 	<div class="modal-header">
         <button class="close" data-dismiss="modal">x</button>
-        <h3>{{translate 'admin-settings-tasks' 'delete-category'}}</h3>
+        <h3>{{agile_lng_translate 'admin-settings-tasks' 'delete-category'}}</h3>
     </div>
 	<div class="modal-body">
         <div id="delete-category-confirm-dialog">
 			<input type="hidden" name="id"></input>
-             <p>{{translate 'admin-settings-tasks' 'confirm-delete-category'}} - <span id="category-name"></span> ? </p>
-			<p>{{translate 'admin-settings-tasks' 'all-existing-tasks-desc'}}</p>
+             <p>{{agile_lng_translate 'admin-settings-tasks' 'confirm-delete-category'}} - <span id="category-name"></span> ? </p>
+			<p>{{agile_lng_translate 'admin-settings-tasks' 'all-existing-tasks-desc'}}</p>
         </div>
     </div>
     <div class="modal-footer">
     <span class="category-delete-message" style="margin-right:5px;color:red;"></span>
-	<a href="#" id="category-delete-confirm" class="btn btn-primary">{{translate 'portlets' 'yes'}}</a>
-	<a href="#" class="btn btn-default" data-dismiss="modal">{{translate 'portlets' 'no'}}</a>
+	<a href="#" id="category-delete-confirm" class="btn btn-primary">{{agile_lng_translate 'portlets' 'yes'}}</a>
+	<a href="#" class="btn btn-default" data-dismiss="modal">{{agile_lng_translate 'portlets' 'no'}}</a>
     </div>
 </div>
 </div>
@@ -93,14 +93,14 @@
 <script id="admin-settings-categories-model-template" type="text/html">
     	
 	<td>
-		<div class="inline-block v-top text-ellipsis" style="width:80%">{{translate 'admin-settings-tasks' label}}</div>
+		<div class="inline-block v-top text-ellipsis" style="width:80%">{{label}}</div>
 		<input type="hidden" name="id" value="{{id}}">
 	</td>
 	<td class="b-r-none">
 		<div class="m-b-n-xs" style="display:none;">
-			<a class="text-l-none-hover c-p text-xs"><i title="{{translate 'admin-settings-custom-fields' 'drag'}}" class="icon-move"></i></a>
+			<a class="text-l-none-hover c-p text-xs"><i title="{{agile_lng_translate 'admin-settings-custom-fields' 'drag'}}" class="icon-move"></i></a>
 			<a id="{{id}}" class="category-delete c-p text-l-none text-xs" data-toggle="modal" role="button" href="#" data="{{label}}">
-				<i title="{{translate 'admin-settings-tasks' 'delete-category'}}" class="task-action icon icon-trash"></i>
+				<i title="{{agile_lng_translate 'admin-settings-tasks' 'delete-category'}}" class="task-action icon icon-trash"></i>
 			</a>
 		</div>
 	</td>

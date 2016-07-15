@@ -13,10 +13,10 @@
 				<li><a href="#meeting-types-tab" data-toggle="tab"><i class="icon icon-users"></i></a></li>
 				<li><a href="#advanced-tab" data-toggle="tab"><i class="icon icon-magnifier"></i></a></li>
 				{{else}}
-				<li><a href="#calendar-tab" class="b-l-none"  data-toggle="tab">{{translate 'portlets' 'calendar'}}</a></li>
-				<li><a href="#businesshours-tab" data-toggle="tab">{{translate 'prefs-online-calendar' 'business-hours'}}</a></li>
-				<li><a href="#meeting-types-tab" data-toggle="tab">{{translate 'prefs-online-calendar' 'meeting-types'}}</a></li>
-				<li><a href="#advanced-tab" data-toggle="tab">{{translate 'prefs-settings' 'advanced'}}</a></li>
+				<li><a href="#calendar-tab" class="b-l-none"  data-toggle="tab">{{agile_lng_translate 'portlets' 'calendar'}}</a></li>
+				<li><a href="#businesshours-tab" data-toggle="tab">{{agile_lng_translate 'prefs-online-calendar' 'business-hours'}}</a></li>
+				<li><a href="#meeting-types-tab" data-toggle="tab">{{agile_lng_translate 'prefs-online-calendar' 'meeting-types'}}</a></li>
+				<li><a href="#advanced-tab" data-toggle="tab">{{agile_lng_translate 'prefs-settings' 'advanced'}}</a></li>
 				{{/is_mobile}}
 
 			</ul>
@@ -32,7 +32,7 @@
 									<fieldset>
 
 										<div class="row control-group form-group m-b-n-xs">
-											<label class="control-label col-sm-3"><b>{{translate 'prefs-online-calendar' 'scheduling-url'}} </b></label>
+											<label class="control-label col-sm-3"><b>{{agile_lng_translate 'prefs-online-calendar' 'scheduling-url'}} </b></label>
 											<div class="col-sm-9">
 
 												<div
@@ -43,18 +43,18 @@
 													<div class="inline" id="edit">
 														<a href="" id="edit-schedule-id"
 															class="edit-schedule-id nounderline m-t-xs m-l-sm text-sm"><i
-															title="{{translate 'contact-details' 'edit'}}" class="fa fa-edit"></i></a>
+															title="{{agile_lng_translate 'contact-details' 'edit'}}" class="fa fa-edit"></i></a>
 													</div>
 												</div>
 												<div id="specialchar" class="m-t-xs text-danger"
-													style="display: none;">{{translate 'prefs-online-calendar' 'special-chars-are-not-allowed'}}</div>
+													style="display: none;">{{agile_lng_translate 'prefs-online-calendar' 'special-chars-are-not-allowed'}}</div>
 												<div id="charlength" class="m-t-xs text-danger"
-													style="display: none;">{{translate 'prefs-online-calendar' 'please-enter-at-least-4-letters'}}</div>
+													style="display: none;">{{agile_lng_translate 'prefs-online-calendar' 'please-enter-at-least-4-letters'}}</div>
 												<div id="schedule_error_message" class="m-t-xs text-danger"
 													style="display: none;"></div>
 												<div class="clearfix"></div>
 												<div class="tip">
-													<p class="text-muted">{{translate 'prefs-online-calendar' 'put-this-link-in-signature'}}</p>
+													<p class="text-muted">{{agile_lng_translate 'prefs-online-calendar' 'put-this-link-in-signature'}}</p>
 												</div>
 											</div>
 										</div>
@@ -84,11 +84,11 @@
 												<div>
 													<a
 														class="onlineCalendarAddToSite btn btn-default btn-sm btn-addon">
-														<i class="icon icon-plus-sign"></i> {{translate 'prefs-online-calendar' 'add-to-site'}}
+														<i class="icon icon-plus-sign"></i> {{agile_lng_translate 'prefs-online-calendar' 'add-to-site'}}
 													</a>
 												</div>
 												<div>
-													<span class="text-muted help-block m-b-none"><span>{{translate 'prefs-online-calendar' 'get-more-appointments-automatically'}}</span></span>
+													<span class="text-muted help-block m-b-none"><span>{{agile_lng_translate 'prefs-online-calendar' 'get-more-appointments-automatically'}}</span></span>
 												</div>
 
 											</div>
@@ -122,13 +122,13 @@
 								<form class="form-horizontal">
 									<fieldset>
 										<div class="control-group form-group">
-											<label class="control-label col-sm-3" for="cname">{{translate 'prefs-online-calendar' 'business-hours'}}</label>
+											<label class="control-label col-sm-3" for="cname">{{agile_lng_translate 'prefs-online-calendar' 'business-hours'}}</label>
 											<div class="controls col-sm-9 m-t-xs">
 												<div id="define-business-hours"></div>
 											</div>
 											<div class="col-md-3"></div>
 											<div class="col-md-9 m-t-xs col-xs-12">
-												<span class="text-muted">{{translate 'prefs-online-calendar' 'for-more-granularity-please-configure-google-calendar'}} </span>
+												<span class="text-muted">{{agile_lng_translate 'prefs-online-calendar' 'for-more-granularity-please-configure-google-calendar'}} </span>
 											</div>
 
 										</div>
@@ -138,7 +138,7 @@
 											<div class="col-sm-offset-3 col-sm-9 m-t-xs">
 												<button type="submit"
 													class="btnSerialize btn-sm btn btn-primary no-outline"
-													id="btnSerialize">{{translate 'portlets' 'save'}}</button>
+													id="btnSerialize">{{agile_lng_translate 'portlets' 'save'}}</button>
 												<span class="m-l-sm text-danger" id="error_message"></span>
 											</div>
 										</div>
@@ -167,16 +167,16 @@
 
 										<div class="control-group form-group">
 
-											<label class="control-label col-sm-3" for="cname">{{translate 'contact-details' 'location'}}
+											<label class="control-label col-sm-3" for="cname">{{agile_lng_translate 'contact-details' 'location'}}
 											</label>
 											<div class="controls col-sm-9 ">
 												<input class="input-xlarge form-control" type="text"
 													id="meeting_types" name="meeting_types"
 													value="{{meeting_types}}"
-													placeholder="{{translate 'prefs-online-calendar' 'enter-comma-separated-meeting-types'}}"
+													placeholder="{{agile_lng_translate 'prefs-online-calendar' 'enter-comma-separated-meeting-types'}}"
 													autocapitalize="off" />
 												<div id="meeting_type_error" class="text-danger"
-													style="display: none;">{{translate 'prefs-online-calendar' 'spl-chars-not-allowed-except-comma'}}</div>
+													style="display: none;">{{agile_lng_translate 'prefs-online-calendar' 'spl-chars-not-allowed-except-comma'}}</div>
 											</div>
 										</div>
 									</fieldset>
@@ -186,7 +186,7 @@
 
 										{{#stringToJSON this "meeting_durations"}}
 										<div class="control-group form-group">
-											<label class="control-label col-sm-3" for="cname">{{translate 'prefs-online-calendar' 'types'}}
+											<label class="control-label col-sm-3" for="cname">{{agile_lng_translate 'prefs-online-calendar' 'types'}}
 											</label>
 
 											<div class="controls col-sm-9">
@@ -195,14 +195,14 @@
 													<div class="col-sm-8">
 														<input type="text" class="form-control inline-block"
 															id="15mins" name="15mins"
-															placeholder="{{translate 'prefs-online-calendar' 'add-multiple-meeting-names-comma-separated'}}"
-															value="{{translate 'prefs-online-calendar' 15mins}}">
+															placeholder="{{agile_lng_translate 'prefs-online-calendar' 'add-multiple-meeting-names-comma-separated'}}"
+															value="{{agile_lng_translate 'prefs-online-calendar' '15-mins'}}">
 													</div>
 													<div class="col-sm-4 text-right">
 														<div>
 															<div class="m-t-xs">
-																<span>{{translate 'prefs-online-calendar' 'slot'}} </span> <span
-																	class="text-sm online-meeting-padding online-padding">{{translate 'prefs-online-calendar' 15mins}}</span>
+																<span>{{agile_lng_translate 'prefs-online-calendar' 'slot'}} </span> <span
+																	class="text-sm online-meeting-padding online-padding">{{agile_lng_translate 'prefs-online-calendar' '15-mins'}}</span>
 															</div>
 														</div>
 													</div>
@@ -212,14 +212,14 @@
 													<div class="col-sm-8">
 														<input type="text" class="form-control inline-block"
 															id="30mins" name="30mins"
-															placeholder="{{translate 'prefs-online-calendar' 'add-multiple-meeting-names-comma-separated'}}"
-															value="{{translate 'prefs-online-calendar' 30mins}}">
+															placeholder="{{agile_lng_translate 'prefs-online-calendar' 'add-multiple-meeting-names-comma-separated'}}"
+															value="{{agile_lng_translate 'prefs-online-calendar' '30-mins'}}">
 													</div>
 													<div class="col-sm-4 text-right">
 														<div>
 															<div class="m-t-xs">
-																<span>{{translate 'prefs-online-calendar' 'slot'}}</span> <span
-																	class="text-sm online-meeting-padding online-padding">{{translate 'prefs-online-calendar' 30mins}}</span>
+																<span>{{agile_lng_translate 'prefs-online-calendar' 'slot'}}</span> <span
+																	class="text-sm online-meeting-padding online-padding">{{agile_lng_translate 'prefs-online-calendar' '30-mins'}}</span>
 															</div>
 														</div>
 													</div>
@@ -230,14 +230,14 @@
 													<div class="col-sm-8">
 														<input type="text" class="form-control inline-block"
 															id="60mins" name="60mins"
-															placeholder="{{translate 'prefs-online-calendar' 'add-multiple-meeting-names-comma-separated'}}"
-															value="{{translate 'prefs-online-calendar' 60mins}}">
+															placeholder="{{agile_lng_translate 'prefs-online-calendar' 'add-multiple-meeting-names-comma-separated'}}"
+															value="{{agile_lng_translate 'prefs-online-calendar' '60-mins'}}">
 													</div>
 													<div class="col-sm-4 text-right">
 														<div>
 															<div class="m-t-xs">
-																<span>{{translate 'prefs-online-calendar' 'slot'}} </span><span
-																	class="text-sm online-meeting-padding online-padding">{{translate 'prefs-online-calendar' '60-mins'}}</span>
+																<span>{{agile_lng_translate 'prefs-online-calendar' 'slot'}} </span><span
+																	class="text-sm online-meeting-padding online-padding">{{agile_lng_translate 'prefs-online-calendar' '60-mins'}}</span>
 															</div>
 														</div>
 													</div>
@@ -248,14 +248,14 @@
 											{{/stringToJSON}}
 
 											<div id="meeting_duration_message" class="text-danger"
-												style="display: none;">{{translate 'prefs-online-calendar' 'please-enable-at-least-one-option'}}</div>
+												style="display: none;">{{agile_lng_translate 'prefs-online-calendar' 'please-enable-at-least-one-option'}}</div>
 										</div>
 										<div class="line line-lg b-b"></div>
 										<div class="control-group form-group">
 											<div class="col-sm-offset-3 col-sm-9 m-t-xs">
 												<button type="submit"
 													class="btnSerialize btn-sm btn btn-primary no-outline"
-													id="btnSerialize">{{translate 'portlets' 'save'}}</button>
+													id="btnSerialize">{{agile_lng_translate 'portlets' 'save'}}</button>
 												<span class="m-l-sm text-danger" id="error_message"></span>
 											</div>
 										</div>
@@ -292,25 +292,25 @@
 												<div class="col-sm-12" id="calendar_advanced_block1">
 													<div class="control-group form-group">
 
-														<label class="control-label col-sm-3" for="cname">{{translate 'prefs-online-calendar' 'buffer-time'}}</label>
+														<label class="control-label col-sm-3" for="cname">{{agile_lng_translate 'prefs-online-calendar' 'buffer-time'}}</label>
 														<div class="controls col-sm-9">
 															<div class="row m-b-sm">
 
 																<div class="col-sm-6 m-t-xs">
 																	<input type="text" class="form-control inline-block"
 																		name="bufferTime" id="bufferTime"
-																		placeholder="{{translate 'prefs-online-calendar' 'buffer-time'}}">
+																		placeholder="{{agile_lng_translate 'prefs-online-calendar' 'buffer-time'}}">
 																</div>
 																<div class="col-sm-3 m-t-xs">
 																	<select class="form-control" id="bufferTimeUnit"
 																		name="bufferTimeUnit">
-																		<option value="minutes">{{translate 'web-rules' 'minutes'}}</option>
-																		<option value="hours">{{translate 'prefs-online-calendar' 'hours'}}</option>
+																		<option value="minutes">{{agile_lng_translate 'web-rules' 'minutes'}}</option>
+																		<option value="hours">{{agile_lng_translate 'prefs-online-calendar' 'hours'}}</option>
 																	</select>
 																</div>
 															</div>
 															<span style="margin-top: -7px;"
-																class="text-muted help-block m-b-none  p-t-xs">{{translate 'prefs-online-calendar' 'not-ready-to-take-surprise-appointments'}}</span>
+																class="text-muted help-block m-b-none  p-t-xs">{{agile_lng_translate 'prefs-online-calendar' 'not-ready-to-take-surprise-appointments'}}</span>
 
 
 														</div>
@@ -321,11 +321,11 @@
 											
 										<div class="control-group form-group">
 
-											<label class="control-label col-sm-3" for="cname">{{translate 'other' 'message'}}
+											<label class="control-label col-sm-3" for="cname">{{agile_lng_translate 'other' 'message'}}
 											</label>
 											<div class="controls col-sm-9 ">
 												<div class="online_summer_note"></div>
-												<span class="text-muted help-block m-b-none">{{translate 'prefs-online-calendar' 'appears-on-your-scheduled-page'}}</span>
+												<span class="text-muted help-block m-b-none">{{agile_lng_translate 'prefs-online-calendar' 'appears-on-your-scheduled-page'}}</span>
 											</div>
 										</div>
 											<div class="line line-lg b-b"></div>
@@ -333,7 +333,7 @@
 												<div class="col-sm-offset-3 col-sm-9 m-t-xs">
 													<button type="submit"
 														class="btnSerialize btn-sm btn btn-primary no-outline"
-														id="btnSerialize">{{translate 'portlets' 'save'}}</button>
+														id="btnSerialize">{{agile_lng_translate 'portlets' 'save'}}</button>
 													<span class="m-l-sm text-danger" id="error_message"></span>
 												</div>
 											</div>
@@ -350,16 +350,16 @@
 	<div class="word-break-full col-sm-12 col-lg-3">
 		<div class="data-block">
 			<div class="p-l p-r">
-				<h4 class="m-t-none">{{translate 'prefs-online-calendar' 'online-appointment-scheduling'}}</h4>
+				<h4 class="m-t-none">{{agile_lng_translate 'prefs-online-calendar' 'online-appointment-scheduling'}}</h4>
 
-				<p>{{translate 'prefs-online-calendar' 'online-appointment-scheduling-desc'}}</p>
+				<p>{{agile_lng_translate 'prefs-online-calendar' 'online-appointment-scheduling-desc'}}</p>
 			</div>
 		</div>
 		<div class="data-block">
 			<div class="p-l p-r">
-				<h4 class="m-t-none">{{translate 'prefs-online-calendar' 'group-calendar'}}</h4>
+				<h4 class="m-t-none">{{agile_lng_translate 'prefs-online-calendar' 'group-calendar'}}</h4>
 
-				<p>{{translate 'prefs-online-calendar' 'group-calendar-desc'}}</p>
+				<p>{{agile_lng_translate 'prefs-online-calendar' 'group-calendar-desc'}}</p>
 			</div>
 		</div>
 	</div>

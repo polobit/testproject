@@ -4,7 +4,7 @@
     <div class="modal-content">
     <div class="modal-header">
         <button class="close" data-dismiss="modal">&times;</button>
-        <h3 class="modal-title">&nbsp;{{translate 'prefs-settings' 'new-note'}}</h3>
+        <h3 class="modal-title">&nbsp;{{agile_lng_translate 'prefs-settings' 'new-note'}}</h3>
     </div>
     <div class="modal-body">
         <form id="noteForm" name="noteForm" method="post" class="form-horizontal">
@@ -13,30 +13,30 @@
                 <input name="task_form" id="task_form" type="hidden" value="" />
                 	            
                 <div class="control-group form-group">
-                    <label class="control-label col-sm-3">{{translate 'contact-details' 'subject'}}<span class="field_req">*</span></label>
+                    <label class="control-label col-sm-3">{{agile_lng_translate 'contact-details' 'subject'}}<span class="field_req">*</span></label>
                     <div class="controls col-sm-7">
-                        <input type="text" placeholder="{{translate 'help' 'about'}}" name="subject" id="subject" class="required form-control" />
+                        <input type="text" placeholder="{{agile_lng_translate 'help' 'about'}}" name="subject" id="subject" class="required form-control" />
                     </div>
                 </div>
                 
 	                <div class="control-group form-group">
-	                    <label class="control-label col-sm-3">{{translate 'other' 'description'}}</label>
+	                    <label class="control-label col-sm-3">{{agile_lng_translate 'other' 'description'}}</label>
 	                    <div class="controls col-sm-7">
-	                        <textarea rows="3" class="form-control-F-width form-control" placeholder="{{translate 'deal-view' 'detailed-note'}}" name="description" id="description"></textarea> 
+	                        <textarea rows="3" class="form-control-F-width form-control" placeholder="{{agile_lng_translate 'deal-view' 'detailed-note'}}" name="description" id="description"></textarea> 
 	                    </div>
 	                </div>
                 
                 <div class="control-group form-group">
-                    <label class="control-label col-sm-3">{{translate 'deal-view' 'related-to'}}<span class="field_req">*</span></label>
+                    <label class="control-label col-sm-3">{{agile_lng_translate 'deal-view' 'related-to'}}<span class="field_req">*</span></label>
                     <div class="controls col-sm-7">
                         <div>
-                            <input type="text" placeholder="{{translate 'cases' 'contact-name'}}" id="note_related_to" class="typeahead typeahead_contacts form-control" data-provide="typeahead" data-mode="multiple" size="40" />
+                            <input type="text" placeholder="{{agile_lng_translate 'cases' 'contact-name'}}" id="note_related_to" class="typeahead typeahead_contacts form-control" data-provide="typeahead" data-mode="multiple" size="40" />
                             
                             <div style="padding-top:1px;">
                                 <ul id="note_relatedto_tag" name="contact_ids" class="contacts tags tagsinput p-none m-n"></ul>
                             </div>
                             <div class="clearfix"></div>
-                            <span id="note_relatedto_error" style="color:#d9534f;display:none;">{{translate 'contacts-view' 'relate-contact-desc'}}</span>
+                            <span id="note_relatedto_error" style="color:#d9534f;display:none;">{{agile_lng_translate 'contacts-view' 'relate-contact-desc'}}</span>
                         </div>
                     </div>
                 </div>
@@ -44,7 +44,7 @@
         </form>
     </div>
     <div class="modal-footer">
-        <a href="#" class="btn btn-sm btn-primary pull-right" id="note_validate">{{translate 'report-add' 'save'}}
+        <a href="#" class="btn btn-sm btn-primary pull-right" id="note_validate">{{agile_lng_translate 'report-add' 'save'}}
         </a>
         <span class="save-status"></span>
     </div>

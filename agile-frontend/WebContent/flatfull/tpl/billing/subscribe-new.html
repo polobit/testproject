@@ -202,8 +202,8 @@ For a startup that relies a lot on on-line business, Agile CRM has been an inval
 {{#stringToJSON this "billingData"}}{{/stringToJSON}}
 {{#if billingData}}
 	<div class="card-details">
-		{{translate 'plan-and-upgrade' 'card'}}: **** {{billingData.cards.data.0.last4}} <br/>
-		{{translate 'plan-and-upgrade' 'expiration'}}: {{#if_less_than billingData.cards.data.0.expMonth 9}}0{{billingData.cards.data.0.expMonth}}{{else}}{{billingData.cards.data.0.expMonth}}{{/if_less_than}}/{{billingData.cards.data.0.expYear}}  
+		{{agile_lng_translate 'plan-and-upgrade' 'card'}}: **** {{billingData.cards.data.0.last4}} <br/>
+		{{agile_lng_translate 'plan-and-upgrade' 'expiration'}}: {{#if_less_than billingData.cards.data.0.expMonth 9}}0{{billingData.cards.data.0.expMonth}}{{else}}{{billingData.cards.data.0.expMonth}}{{/if_less_than}}/{{billingData.cards.data.0.expYear}}  
 	</div>
 
 {{/if}}

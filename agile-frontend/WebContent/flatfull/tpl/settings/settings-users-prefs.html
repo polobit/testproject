@@ -7,9 +7,9 @@
          <li class="prefs-reminders"><a href="#settings-reminders" data-toggle="tab" ><i class="icon icon-note"></i></a></li>
 		 <li class="prefs-advanced"><a href="#settings-advanced" data-toggle="tab" ><i class="icon-magnifier"></i></a></li>
 		 {{else}}
-		  <li class="prefs-profile"><a href="#settings-user-prefs" data-toggle="tab"  class="b-l-none">{{translate 'prefs-settings' 'profile'}}</a></li>
-         <li class="prefs-reminders"><a href="#settings-reminders" data-toggle="tab" >{{translate 'prefs-settings' 'reminders'}}</a></li>
-		 <li class="prefs-advanced"><a href="#settings-advanced" data-toggle="tab" >{{translate 'prefs-settings' 'advanced'}}</a></li>
+		  <li class="prefs-profile"><a href="#settings-user-prefs" data-toggle="tab"  class="b-l-none">{{agile_lng_translate 'prefs-settings' 'profile'}}</a></li>
+         <li class="prefs-reminders"><a href="#settings-reminders" data-toggle="tab" >{{agile_lng_translate 'prefs-settings' 'reminders'}}</a></li>
+		 <li class="prefs-advanced"><a href="#settings-advanced" data-toggle="tab" >{{agile_lng_translate 'prefs-settings' 'advanced'}}</a></li>
 		 {{/is_mobile}}
        </ul>
 	</div>
@@ -29,21 +29,21 @@
             <div class="row">
                 <div class="col-md-6 col-sm-6 col-xs-12">
                     <div class="control-group form-group">
-                        <label class="control-label col-sm-4">{{translate 'other' 'name'}} <span class="field_req">*</span></label>
+                        <label class="control-label col-sm-4">{{agile_lng_translate 'other' 'name'}} <span class="field_req">*</span></label>
                         <div class="controls col-sm-8">
                             <input name="name" type="text" class="required form-control" value="{{currentDomainUserName}}" autocapitalize="off" />
                         </div>
                     </div>
                     
                     <div class="control-group form-group">
-						<label class="control-label col-sm-4">{{translate 'prefs-settings' 'password'}}</label>
+						<label class="control-label col-sm-4">{{agile_lng_translate 'prefs-settings' 'password'}}</label>
                 		<div class="control-label text-left col-sm-8">
-							<a href="#change-password" class="text-info">{{translate 'prefs-settings' 'change-password'}}</a>      
+							<a href="#change-password" class="text-info">{{agile_lng_translate 'prefs-settings' 'change-password'}}</a>      
                 		</div>
             		</div>
 
             		<div class="control-group form-group">
-						<label class="control-label col-sm-4">{{translate 'prefs-settings' 'avatar'}}</label>
+						<label class="control-label col-sm-4">{{agile_lng_translate 'prefs-settings' 'avatar'}}</label>
                 		<div id="upload-container" class="control-label text-left col-sm-8">
 							<a href="#choose-avatar-modal" data-toggle="modal" class="pull-left">
 								<div class="imgholder user_img form-whitelabel-user-image thumb-wrapper thumb-lg" style="width:50px;height:50px;">
@@ -55,44 +55,44 @@
             		</div>
 
                     <div class="control-group form-group hidden">
-                        <label class="control-label col-sm-4">{{translate 'prefs-settings' 'color-theme'}} <span class="field_req">*</span></label> 
+                        <label class="control-label col-sm-4">{{agile_lng_translate 'prefs-settings' 'color-theme'}} <span class="field_req">*</span></label> 
                         <div class="controls col-sm-8">
                             <select name="template" id="userPrefsTemplate" class="required form-control">
-								<option value="pink">{{translate 'prefs-settings' 'purple'}}
+								<option value="pink">{{agile_lng_translate 'prefs-settings' 'purple'}}
 								</option>
-                                <option value="blue">{{translate 'prefs-settings' 'blue'}}</option>
-                                <option value="green">{{translate 'prefs-settings' 'green'}}
+                                <option value="blue">{{agile_lng_translate 'prefs-settings' 'blue'}}</option>
+                                <option value="green">{{agile_lng_translate 'prefs-settings' 'green'}}
                                 </option>
-                                <option value="brown">{{translate 'prefs-settings' 'brown'}}
+                                <option value="brown">{{agile_lng_translate 'prefs-settings' 'brown'}}
                                 </option>
                             </select>
                         </div>
                     </div>
                     <div class="control-group form-group hidden">
-                        <label class="control-label col-sm-4">{{translate 'prefs-settings' 'width'}}</label> 
+                        <label class="control-label col-sm-4">{{agile_lng_translate 'prefs-settings' 'width'}}</label> 
                         <div class="controls col-sm-8">
                             <select name="width" id="userPrefsWidth" class="form-control">
-                                <option value="">{{translate 'prefs-settings' 'fixed'}}</option>
-                                <option value="-fluid">{{translate 'prefs-settings' 'fluid'}}
+                                <option value="">{{agile_lng_translate 'prefs-settings' 'fixed'}}</option>
+                                <option value="-fluid">{{agile_lng_translate 'prefs-settings' 'fluid'}}
                                 </option>
                             </select>
                         </div>
                     </div>
 
                     <div class="control-group form-group hidden">
-                        <label class="control-label col-sm-4">{{translate 'prefs-settings' 'language'}}</label> 
+                        <label class="control-label col-sm-4">{{agile_lng_translate 'prefs-settings' 'language'}}</label> 
                         <div class="controls col-sm-8">
                             <select name="language" id="language" class="form-control">
-                                <option value="en">{{translate 'prefs-settings' 'english'}}</option>
-                                <option value="hi">{{translate 'prefs-settings' 'hindi'}}</option>
-                                <option value="te">{{translate 'prefs-settings' 'telugu'}}</option>
-                                <option value="es">{{translate 'prefs-settings' 'spanish'}}</option>
+                                <option value="en">{{agile_lng_translate 'prefs-settings' 'english'}}</option>
+                                <option value="hi">{{agile_lng_translate 'prefs-settings' 'hindi'}}</option>
+                                <option value="te">{{agile_lng_translate 'prefs-settings' 'telugu'}}</option>
+                                <option value="es">{{agile_lng_translate 'prefs-settings' 'spanish'}}</option>
                             </select>
                         </div>
                     </div>
 
 					<div class="control-group form-group hidden">
-						<label class="control-label col-sm-4">{{translate 'prefs-settings' 'time-zone'}}</label>
+						<label class="control-label col-sm-4">{{agile_lng_translate 'prefs-settings' 'time-zone'}}</label>
 						<div class="controls col-sm-8">
 							<select name="timezone" id="timezone" class="form-control">
 								   <option value="Africa/Abidjan">Africa/Abidjan</option>
@@ -889,7 +889,7 @@
 						</div>
 					</div>
             <div class="control-group form-group hidden">
-                <label class="control-label col-sm-4">{{translate 'prefs-settings' 'currency'}}
+                <label class="control-label col-sm-4">{{agile_lng_translate 'prefs-settings' 'currency'}}
                 </label>
                 <div class="controls col-sm-8">
                    <select id="target_list" name="currency" class="form-control">
@@ -991,7 +991,7 @@
                 </div>
             </div>
             <div class="control-group form-group hidden">
-            	<label class="control-label col-sm-4">{{translate 'prefs-settings' 'date-format'}} 
+            	<label class="control-label col-sm-4">{{agile_lng_translate 'prefs-settings' 'date-format'}} 
             	<span class="field_req">*</span></label> 
                 <div class="controls col-sm-8">
                 	<select name="dateFormat" id="date-format" class="required form-control">
@@ -1020,11 +1020,11 @@
             <div class="row m-t-sm">
 <div class="col-md-12">
             <div class="control-group form-group">
-                <label class="control-label col-sm-2">{{translate 'prefs-settings' 'signature'}}
+                <label class="control-label col-sm-2">{{agile_lng_translate 'prefs-settings' 'signature'}}
                 </label> 
                 <div class="controls col-sm-8">
 					<div id="loading-editor"></div>
-                    <textarea class="col-md-12 form-control" id="WYSItextarea" rows="10" name="signature" style="display: none;" placeholder="{{translate 'prefs-settings' 'enter-text'}}"></textarea>
+                    <textarea class="col-md-12 form-control" id="WYSItextarea" rows="10" name="signature" style="display: none;" placeholder="{{agile_lng_translate 'prefs-settings' 'enter-text'}}"></textarea>
                 </div>
             </div>
             </div>
@@ -1033,44 +1033,44 @@
 <div class="row">
 <div class="col-md-12">            
 <div class="control-group form-group hidden">
-            	<label class="control-label col-sm-2">{{translate 'prefs-settings' 'Calendar-Week-starts-on'}}</label> 
+            	<label class="control-label col-sm-2">{{agile_lng_translate 'prefs-settings' 'Calendar-Week-starts-on'}}</label> 
                 <div class="controls col-sm-9">
                 	<select name="calendar_wk_start_day" id="calendar_wk_start_day" class="required form-control">
-						<option value="0">{{translate 'prefs-settings' 'sunday'}}</option>
-                        <option value="1">{{translate 'prefs-settings' 'monday'}}</option>
+						<option value="0">{{agile_lng_translate 'prefs-settings' 'sunday'}}</option>
+                        <option value="1">{{agile_lng_translate 'prefs-settings' 'monday'}}</option>
                      </select>
                  </div>
              </div>
 	  <div class="control-group form-group hidden">
-                <label class="control-label col-sm-2">{{translate 'prefs-settings' 'task-reminders'}}</label>
+                <label class="control-label col-sm-2">{{agile_lng_translate 'prefs-settings' 'task-reminders'}}</label>
                 <div class="controls col-sm-9">
 <div class="checkbox">
                     <label class="i-checks i-checks-sm">
                     <input id="task_remainder" type="checkbox" name="task_reminder" value="true" /><i></i>
-                    {{translate 'prefs-settings' 'task-reminders-content'}}
+                    {{agile_lng_translate 'prefs-settings' 'task-reminders-content'}}
                     </label>
 </div>       
                 </div>
             </div>
 <div class="control-group form-group hidden">
-                <label class="control-label col-sm-2">{{translate 'prefs-settings' 'event-reminder'}}</label>
+                <label class="control-label col-sm-2">{{agile_lng_translate 'prefs-settings' 'event-reminder'}}</label>
                 <div class="controls col-sm-9">
                     <div class="checkbox">
 <label class="i-checks i-checks-sm">
                     <input id="event_remainder" type="checkbox" name="event_reminder" value="true" /><i></i>
-                    {{translate 'prefs-settings' 'event-reminder-content'}}
+                    {{agile_lng_translate 'prefs-settings' 'event-reminder-content'}}
                     </label>
 </div>       
                 </div>
             </div>
                 <div class="control-group form-group hidden">
-                <label class="control-label col-sm-2">{{translate 'prefs-settings' 'shortcuts'}}
+                <label class="control-label col-sm-2">{{agile_lng_translate 'prefs-settings' 'shortcuts'}}
                 </label>
                 <div class="controls col-sm-9">
                     <div class="checkbox">
 <label class="i-checks i-checks-sm">
                     <input id="keyboard_shotcuts" type="checkbox" name="keyboard_shotcuts" /><i></i>
-                    {{translate 'prefs-settings' 'enable-keyboard-shortcuts'}} <a href="#" data-dismiss="modal" class="t-l-none data-toggle="modal" id="keyboard-shortcuts"><i class="icon-info-sign"></i></a>
+                    {{agile_lng_translate 'prefs-settings' 'enable-keyboard-shortcuts'}} <a href="#" data-dismiss="modal" class="t-l-none data-toggle="modal" id="keyboard-shortcuts"><i class="icon-info-sign"></i></a>
                     </label> 
 </div>      
                 </div>
@@ -1083,7 +1083,7 @@
 <div class="col-md-12">
 <div class="form-group">
             <div class="col-sm-offset-2 col-sm-9">
-                <a href="#" type="submit" class="save btn btn-sm btn-primary">{{translate 'prefs-settings' 'save-changes'}}</a>
+                <a href="#" type="submit" class="save btn btn-sm btn-primary">{{agile_lng_translate 'prefs-settings' 'save-changes'}}</a>
                 <!--<a href="#settings" class="btn btn-default btn-sm ">Cancel</a>-->
             </div>
 </div>

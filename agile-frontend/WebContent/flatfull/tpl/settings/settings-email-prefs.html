@@ -37,8 +37,8 @@ You can integrate a maximum of 3 email accounts irrespective of the type of acco
 			  <div class="l-h word-break">Email: {{user_name}}</div>
 		   </div>
 		{{else}}
-    	<div class="m-b-sm" rel="tooltip" title="{{translate 'prefs-email' 'imap-content'}}">
-			{{translate 'prefs-email' 'imap-content'}}
+    	<div class="m-b-sm" rel="tooltip" title="{{agile_lng_translate 'prefs-email' 'imap-content'}}">
+			{{agile_lng_translate 'prefs-email' 'imap-content'}}
 		</div>
 		
         {{/if}}
@@ -53,12 +53,12 @@ You can integrate a maximum of 3 email accounts irrespective of the type of acco
 			<div>
 			    {{#has_email_account_limit_reached}}
 			    {{#if_non_pro_plan}}
-				<div class="p-xs" style="border: 1px solid #E2E29C;background-color: #F7F7D0;"> {{translate 'portlets' 'please'}} <strong><a class="text-info" href="#subscribe">{{translate 'portlets' 'upgrade'}}</a></strong> {{translate 'widgets' 'to-enterprise-plan'}}</div>
+				<div class="p-xs" style="border: 1px solid #E2E29C;background-color: #F7F7D0;"> {{agile_lng_translate 'portlets' 'please'}} <strong><a class="text-info" href="#subscribe">{{agile_lng_translate 'portlets' 'upgrade'}}</a></strong> {{agile_lng_translate 'widgets' 'to-enterprise-plan'}}</div>
 				{{/if_non_pro_plan}}
 				<!--<a class="btn btn-sm btn-default m-t-sm" disabled="disabled">Enable</a>-->
 				
 				{{else}}
-				<a class="btn btn-sm btn-default" href="#imap">{{translate 'prefs-email' 'enable'}}
+				<a class="btn btn-sm btn-default" href="#imap">{{agile_lng_translate 'prefs-email' 'enable'}}
 				</a>
 				{{/has_email_account_limit_reached}}
 			</div>
@@ -88,8 +88,8 @@ You can integrate a maximum of 3 email accounts irrespective of the type of acco
 		   	  <div class="l-h word-break">Email: {{user_name}}</div>
 		   </div>
 			{{else}}
-			<div class="m-b-sm" rel="tooltip" title="{{translate 'prefs-email' 'office365-content'}}">
-				{{translate 'prefs-email' 'office365-content'}}
+			<div class="m-b-sm" rel="tooltip" title="{{agile_lng_translate 'prefs-email' 'office365-content'}}">
+				{{agile_lng_translate 'prefs-email' 'office365-content'}}
 			</div>
 			{{/if}}
 		</div>
@@ -101,11 +101,11 @@ You can integrate a maximum of 3 email accounts irrespective of the type of acco
 				<div>
 			    {{#has_email_account_limit_reached}}
 			    {{#if_non_pro_plan}}
-				<div class="p-xs" style="border: 1px solid #E2E29C;background-color: #F7F7D0;"> {{translate 'portlets' 'please'}} <strong><a class="text-info" href="#subscribe">{{translate 'portlets' 'upgrade'}}</a></strong> {{translate 'widgets' 'to-enterprise-plan'}}</div>				
+				<div class="p-xs" style="border: 1px solid #E2E29C;background-color: #F7F7D0;"> {{agile_lng_translate 'portlets' 'please'}} <strong><a class="text-info" href="#subscribe">{{agile_lng_translate 'portlets' 'upgrade'}}</a></strong> {{agile_lng_translate 'widgets' 'to-enterprise-plan'}}</div>				
 				{{/if_non_pro_plan}}
 				<!--<a class="btn m-t-sm btn-sm btn-default" disabled="disabled">Enable</a>-->
 				{{else}}
-				<a class="btn btn-sm btn-default" href="#office">{{translate 'prefs-email' 'enable'}}</a>
+				<a class="btn btn-sm btn-default" href="#office">{{agile_lng_translate 'prefs-email' 'enable'}}</a>
 				{{/has_email_account_limit_reached}}
 				</div>
 			{{/if}}

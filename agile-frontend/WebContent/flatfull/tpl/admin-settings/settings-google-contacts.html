@@ -7,19 +7,19 @@
 	    </center>
     </div>
     <div class="panel-body">
-	    <div style="height:120px"  rel="tooltip" title="{{translate 'prefs-data-sync' 'google-sync-desc'}}">
-			{{translate 'prefs-data-sync' 'google-sync-desc'}}
+	    <div style="height:120px"  rel="tooltip" title="{{agile_lng_translate 'prefs-data-sync' 'google-sync-desc'}}">
+			{{agile_lng_translate 'prefs-data-sync' 'google-sync-desc'}}
 		</div>
 	    <div class="text-center">
 				{{#if id}}
 	    			<a class="btn btn-sm btn-danger delete"  id="google-import-prefs-delete" >Disable</a>
-					<a href="#sync/contacts" class="btn btn-sm btn-default" id="setting-widget">{{translate 'preferences' 'settings'}}</a>
+					<a href="#sync/contacts" class="btn btn-sm btn-default" id="setting-widget">{{agile_lng_translate 'preferences' 'settings'}}</a>
 	    		{{else}}
 					{{#canSyncContacts}}
-	    					<div class="btn btn-sm btn-default inline-block" id="google-import">{{translate 'prefs-email' 'enable'}}</div>
+	    					<div class="btn btn-sm btn-default inline-block" id="google-import">{{agile_lng_translate 'prefs-email' 'enable'}}</div>
 						{{else}}
-							<span class="btn btn-sm btn-primary inline-block" disabled>{{translate 'prefs-email' 'enable'}}</span>
-							<span class="m-l-xs"><i>{{translate 'prefs-data-sync' 'needs-import-privilege'}}</i></span>
+							<span class="btn btn-sm btn-primary inline-block" disabled>{{agile_lng_translate 'prefs-email' 'enable'}}</span>
+							<span class="m-l-xs"><i>{{agile_lng_translate 'prefs-data-sync' 'needs-import-privilege'}}</i></span>
 					{{/canSyncContacts}}
 	    		{{/if}}
 		</div>
@@ -32,15 +32,15 @@
 <div class="row">
 <div class="col-md-4 col-sm-6 col-xs-12">
 	<div class="panel panel-default" >
- 	<!-- <legend>{{translate 'menu' 'menu-contacts'}} <span class="label label-danger m-b-sm">{{translate 'deal-view' 'beta'}}</span>{{#if id}}<span style="font-size:14px;float:right" title="{{translate 'prefs-data-sync' 'sync-contacts'}}" title="{{translate 'prefs-data-sync' 'sync-contacts'}}"><a class="icon-refresh save-contact-prefs" href="#" sync = "true" id="google-import-sync"  style="cursor:pointer;text-decoration:none"></a></span>{{/if}}</legend> -->
+ 	<!-- <legend>{{agile_lng_translate 'menu' 'menu-contacts'}} <span class="label label-danger m-b-sm">{{agile_lng_translate 'deal-view' 'beta'}}</span>{{#if id}}<span style="font-size:14px;float:right" title="{{agile_lng_translate 'prefs-data-sync' 'sync-contacts'}}" title="{{agile_lng_translate 'prefs-data-sync' 'sync-contacts'}}"><a class="icon-refresh save-contact-prefs" href="#" sync = "true" id="google-import-sync"  style="cursor:pointer;text-decoration:none"></a></span>{{/if}}</legend> -->
 	<div class="panel-heading">
-	<span class="label label-danger pull-right m-b-sm">{{translate 'deal-view' 'beta'}}</span>
+	<span class="label label-danger pull-right m-b-sm">{{agile_lng_translate 'deal-view' 'beta'}}</span>
    <center> <img class="m-b-none img-responsive thumb-xl bg-transparent" style="height="47px;" src="{{getS3ImagePath '/img/icons/google-contacts-sync.png'}}" /></center>
 	</div>
 	<div class="panel-body">
 {{#unless id}}
     <div class="ellipsis-multiline"  rel="tooltip" >
-		{{translate 'prefs-data-sync' 'setup-contact-sync-with-your-gmail-account'}}
+		{{agile_lng_translate 'prefs-data-sync' 'setup-contact-sync-with-your-gmail-account'}}
 	</div>
 </div>
 {{/unless}}
@@ -49,13 +49,13 @@
     <form id="google-contacts-import-form">
         <fieldset>
 	<div class="control-group form-group">
-		<label class="control-label">{{translate 'deal-view' 'type'}}</label> 
+		<label class="control-label">{{agile_lng_translate 'deal-view' 'type'}}</label> 
            <div class="controls">
 				<select class="required form-control" name="sync_type" id="sync-type">
-					<option value="">{{translate 'prefs-data-sync' 'select'}}</option>
-					<option value="CLIENT_TO_AGILE">{{translate 'prefs-data-sync' 'google-to-agile'}}</option>
-					<option value="AGILE_TO_CLIENT">{{translate 'prefs-data-sync' 'agile-to-google'}}</option>
-					<option value="TWO_WAY">{{translate 'prefs-data-sync' 'both-ways'}}</option>
+					<option value="">{{agile_lng_translate 'prefs-data-sync' 'select'}}</option>
+					<option value="CLIENT_TO_AGILE">{{agile_lng_translate 'prefs-data-sync' 'google-to-agile'}}</option>
+					<option value="AGILE_TO_CLIENT">{{agile_lng_translate 'prefs-data-sync' 'agile-to-google'}}</option>
+					<option value="TWO_WAY">{{agile_lng_translate 'prefs-data-sync' 'both-ways'}}</option>
 				</select>
 			</div>
 	</div>
@@ -65,14 +65,14 @@
 {{else}}
 	<div class="control-group form-group" id="sync_from_group_controlgroup">
 {{/if_equals}}
-		<label class="control-label">{{translate 'prefs-data-sync' 'sync-from'}}</label> 
+		<label class="control-label">{{agile_lng_translate 'prefs-data-sync' 'sync-from'}}</label> 
            <div class="controls">
 				<select name="sync_from_group" class="required form-control">
 				{{#each groups}}
 					{{#if_equals groupName "Agile"}}
 						{{else}}
 					{{#if_equals groupName "Contacts"}}
-						<option value="{{atomIdDecoded}}">{{translate 'prefs-data-sync' 'my-contacts-(Recommended)'}}</option>
+						<option value="{{atomIdDecoded}}">{{agile_lng_translate 'prefs-data-sync' 'my-contacts-(Recommended)'}}</option>
 						{{else}}
 						<option value="{{atomIdDecoded}}">{{groupName}}</option>
 				{{/if_equals}}
@@ -80,7 +80,7 @@
 				{{/each}}
 				</select>
 			</div>
-<span class="help-block"><small>{{translate 'prefs-data-sync' 'google-contact-group-to-sync-from'}}
+<span class="help-block"><small>{{agile_lng_translate 'prefs-data-sync' 'google-contact-group-to-sync-from'}}
 </small></span>
 	</div>
 
@@ -94,41 +94,41 @@
 {{/if_equals}}
 {{/if_equals}}
 
-		<label class="control-label">{{translate 'prefs-data-sync' 'sync-to'}}</label> 
+		<label class="control-label">{{agile_lng_translate 'prefs-data-sync' 'sync-to'}}</label> 
            <div class="controls">
 				<select name="sync_to_group" class="required form-control">
 				{{#each groups}}
 					{{#if_equals groupName "Agile"}}
 						{{#if atomIdDecoded}}
-								<option value="{{atomIdDecoded}}" selected="selected">{{groupName}}  {{translate 'prefs-data-sync' 'recommended'}}</option>
+								<option value="{{atomIdDecoded}}" selected="selected">{{groupName}}  {{agile_lng_translate 'prefs-data-sync' 'recommended'}}</option>
 							{{else}}
-								<option value="{{groupName}}" selected="selected">{{groupName}}  {{translate 'prefs-data-sync' 'recommended'}}</option>
+								<option value="{{groupName}}" selected="selected">{{groupName}}  {{agile_lng_translate 'prefs-data-sync' 'recommended'}}</option>
 						{{/if}}
 					{{/if_equals}}
 					{{#if_equals groupName "Contacts"}}
-						<option value="{{atomIdDecoded}}">{{translate 'contacts-view' 'my-contacts'}}</option>
+						<option value="{{atomIdDecoded}}">{{agile_lng_translate 'contacts-view' 'my-contacts'}}</option>
 					{{/if_equals}}
 				{{/each}}
 				</select>
 			</div>
-	<span class="help-block"><small>{{translate 'prefs-data-sync' 'google-contact-group-to-sync-to'}}</small></span>
+	<span class="help-block"><small>{{agile_lng_translate 'prefs-data-sync' 'google-contact-group-to-sync-to'}}</small></span>
 	</div>
 
 		<div class="control-group form-group">
-		<label class="control-label" style="text-align:">{{translate 'portlets' 'frequency'}}</label> 
+		<label class="control-label" style="text-align:">{{agile_lng_translate 'portlets' 'frequency'}}</label> 
            <div class="controls">
 				<select class="required form-control" name="duration">
 
 {{#check_plan "FREE"}}
-					<option value="" disabled>{{translate 'prefs-data-sync' 'only-once-paid-plans'}}
+					<option value="" disabled>{{agile_lng_translate 'prefs-data-sync' 'only-once-paid-plans'}}
 					</option>
-					<option value="" disabled>{{translate 'prefs-data-sync' 'daily-paid-plans'}}</option>
+					<option value="" disabled>{{agile_lng_translate 'prefs-data-sync' 'daily-paid-plans'}}</option>
 {{else}}
-					s<option value="ONCE">{{translate 'web-rules' 'only-once'}}</option>
-					<option value="DAILY">{{translate 'report-add' 'daily'}}</option>
+					s<option value="ONCE">{{agile_lng_translate 'web-rules' 'only-once'}}</option>
+					<option value="DAILY">{{agile_lng_translate 'report-add' 'daily'}}</option>
 {{/check_plan}}
-					<option value="WEEKLY">{{translate 'report-add' 'weekly'}}</option>
-					<option value="MONTHLY">{{translate 'report-add' 'monthly'}}</option>
+					<option value="WEEKLY">{{agile_lng_translate 'report-add' 'weekly'}}</option>
+					<option value="MONTHLY">{{agile_lng_translate 'report-add' 'monthly'}}</option>
 				</select>
 			</div>
 	</div>
@@ -148,7 +148,7 @@
        <div class="checkbox">
 <label class="i-checks i-checks-sm">
           <input  type="checkbox" name="my_contacts" value="true" checked="checked"><i></i>
-            {{translate 'prefs-data-sync' 'only-sync-agile-contacts-owned-by-me'}}
+            {{agile_lng_translate 'prefs-data-sync' 'only-sync-agile-contacts-owned-by-me'}}
         </label> 
 </div>      
     </div>
@@ -157,7 +157,7 @@
 
 
       <div class="form-actions text-center">
-<a href="#sync" class="btn btn-default btn-sm ml_5">{{translate 'other' 'cancel'}}</a>
+<a href="#sync" class="btn btn-default btn-sm ml_5">{{agile_lng_translate 'other' 'cancel'}}</a>
 <div class="btn btn-sm btn-primary save-contact-prefs inline-block" id="google-import-prefs-save">Sync</div>	
 
 	 </div>
@@ -177,43 +177,43 @@
 <div class="col-md-4 col-sm-6 col-xs-12">
 <div class="panel panel-default" >
 <div class="panel-heading">
-<span class="label label-danger pull-right m-b">{{translate 'deal-view' 'beta'}}</span>
+<span class="label label-danger pull-right m-b">{{agile_lng_translate 'deal-view' 'beta'}}</span>
 <center> <img class="m-b-none img-responsive thumb-xl bg-transparent" style="height:47px;" src="{{getS3ImagePath '/img/plugins/Stripe.png'}}" /></center>
 </div>
 <div class="panel-body">
 {{#unless id}}
     <div class="m-t m-b"  rel="tooltip" >
-		{{translate 'prefs-data-sync' 'setup-contact-sync-with-stripe'}}
+		{{agile_lng_translate 'prefs-data-sync' 'setup-contact-sync-with-stripe'}}
 	</div>
 
 {{/unless}} 
     {{#if id}}
 <form id="stripe-prefs-form" class="m-b">
 <input type ="hidden" value = "{{id}}" name ="id">
-          <div>{{translate 'prefs-data-sync' 'account-linked'}}: <div class="text-ellipsis" title={{userName}}>{{userName}}</div></div>
+          <div>{{agile_lng_translate 'prefs-data-sync' 'account-linked'}}: <div class="text-ellipsis" title={{userName}}>{{userName}}</div></div>
 			<br>
           
              	<div class="control-group form-group">
-					<label class="control-label">{{translate 'portlets' 'frequency'}}</label> 
+					<label class="control-label">{{agile_lng_translate 'portlets' 'frequency'}}</label> 
            				<div class="controls">
 							<select class="required form-control" name="duration" id="freq">
 
 						{{#check_plan "FREE"}}
-							<option value="" disabled>{{translate 'prefs-data-sync' 'only-once-paid-plans'}}</option>
-							<option value="" disabled>{{translate 'prefs-data-sync' 'daily-paid-plans'}}</option>
+							<option value="" disabled>{{agile_lng_translate 'prefs-data-sync' 'only-once-paid-plans'}}</option>
+							<option value="" disabled>{{agile_lng_translate 'prefs-data-sync' 'daily-paid-plans'}}</option>
 						{{else}}
-							<option value="ONCE">{{translate 'web-rules' 'only-once'}}</option>
-							<option value="DAILY">{{translate 'portlets' 'daily'}}</option>
+							<option value="ONCE">{{agile_lng_translate 'web-rules' 'only-once'}}</option>
+							<option value="DAILY">{{agile_lng_translate 'portlets' 'daily'}}</option>
 						{{/check_plan}}
-							<option value="WEEKLY">{{translate 'portlets' 'weekly'}}</option>
-							<option value="MONTHLY">{{translate 'portlets' 'monthly'}}</option>
+							<option value="WEEKLY">{{agile_lng_translate 'portlets' 'weekly'}}</option>
+							<option value="MONTHLY">{{agile_lng_translate 'portlets' 'monthly'}}</option>
 						</select>
 					</div>
 		   		</div>
 
 			<div class="form-actions text-center">
-<a href="#sync" class="btn btn-default btn-sm inline-block">{{translate 'other' 'cancel'}}</a>
-<button class="btn btn-sm btn-primary ml_5" id="stripe_sync_prefs">{{translate 'prefs-data-sync' 'sync'}}</button>
+<a href="#sync" class="btn btn-default btn-sm inline-block">{{agile_lng_translate 'other' 'cancel'}}</a>
+<button class="btn btn-sm btn-primary ml_5" id="stripe_sync_prefs">{{agile_lng_translate 'prefs-data-sync' 'sync'}}</button>
 
        	  	</div>
 
@@ -221,7 +221,7 @@
        
     </form>
 {{else}}
-<div class="btn btn-primary btn-sm inline-block" sync_type="STRIPE" id="data-sync-type">{{translate 'prefs-email' 'enable'}}</div>
+<div class="btn btn-primary btn-sm inline-block" sync_type="STRIPE" id="data-sync-type">{{agile_lng_translate 'prefs-email' 'enable'}}</div>
 {{/if}}
 </div>
 </div>
@@ -238,19 +238,19 @@
 		</center>
 	</div>
 	<div class="panel-body">
-	    <div class="text-flow-ellipsis line-clamp line-clamp-4 widget-text" style="height:85px" rel="tooltip" title="{{translate 'prefs-data-sync' 'stripe-sync-desc'}}">
-	    {{translate 'prefs-data-sync' 'stripe-sync-desc'}}
+	    <div class="text-flow-ellipsis line-clamp line-clamp-4 widget-text" style="height:85px" rel="tooltip" title="{{agile_lng_translate 'prefs-data-sync' 'stripe-sync-desc'}}">
+	    {{agile_lng_translate 'prefs-data-sync' 'stripe-sync-desc'}}
 	    </div>
 	    <div class="text-center">
 				{{#if id}}
-	    			<a class="btn btn-sm btn-danger delete"  id="stripe-import-prefs-delete" >{{translate 'prefs-email' 'disable'}}</a>
-					<a href="#sync/stripe-import" class="btn btn-sm btn-default" id="setting-widget">{{translate 'preferences' 'settings'}}</a>
+	    			<a class="btn btn-sm btn-danger delete"  id="stripe-import-prefs-delete" >{{agile_lng_translate 'prefs-email' 'disable'}}</a>
+					<a href="#sync/stripe-import" class="btn btn-sm btn-default" id="setting-widget">{{agile_lng_translate 'preferences' 'settings'}}</a>
 	    		{{else}}
 					{{#canSyncContacts}}
-	    						<div class="btn btn-sm btn-default inline-block" id="stripe_import">{{translate 'prefs-email' 'enable'}}</div>
+	    						<div class="btn btn-sm btn-default inline-block" id="stripe_import">{{agile_lng_translate 'prefs-email' 'enable'}}</div>
 						{{else}}
-								<span class="btn btn-sm btn-default inline-block"  disabled>{{translate 'prefs-email' 'enable'}}</span>
-								<span class="m-l-xs"><i>{{translate 'prefs-data-sync' 'needs-import-privilege'}}</i></span>
+								<span class="btn btn-sm btn-default inline-block"  disabled>{{agile_lng_translate 'prefs-email' 'enable'}}</span>
+								<span class="m-l-xs"><i>{{agile_lng_translate 'prefs-data-sync' 'needs-import-privilege'}}</i></span>
 					{{/canSyncContacts}}
 	    		
 	    		{{/if}}
@@ -264,24 +264,24 @@
 <div class="col-md-6 col-sm-6 col-xs-12">
 <div class="panel panel-default" >
 <div class="panel-heading">
-<span class="label label-danger pull-right m-b-sm">{{translate 'deal-view' 'beta'}}</span>
+<span class="label label-danger pull-right m-b-sm">{{agile_lng_translate 'deal-view' 'beta'}}</span>
 <center> <img class="m-b-none img-responsive thumb-xl bg-transparent" style="height:47px;" src="{{getS3ImagePath 'img/crm-plugins/shopify.png'}}" /></center>
 </div>
 <div class="panel-body">
 {{#unless id}}
     <div class="m-b-md"   rel="tooltip" >
-		{{translate 'prefs-data-sync' 'setup-contact-sync-with-shopify'}}
+		{{agile_lng_translate 'prefs-data-sync' 'setup-contact-sync-with-shopify'}}
 	</div>
 
 
 <div class='input-group'>
 	<span class="input-group-addon">https://</span>
-	  <input id="shop" required="required" name="shopname" class="form-control"  type="text" placeholder="{{translate 'prefs-data-sync' 'enter-shop-domain'}}">
+	  <input id="shop" required="required" name="shopname" class="form-control"  type="text" placeholder="{{agile_lng_translate 'prefs-data-sync' 'enter-shop-domain'}}">
     <span class="input-group-addon">.myshopify.com</span>
     
     </div>
 <div class="text-center">
-<a href ="#" id ="import_shopify" class="btn btn-sm btn-primary m-t">{{translate 'prefs-data-sync' 'connect'}}</a>
+<a href ="#" id ="import_shopify" class="btn btn-sm btn-primary m-t">{{agile_lng_translate 'prefs-data-sync' 'connect'}}</a>
 </div>
   {{/unless}}
 
@@ -293,32 +293,32 @@
 	
            {{#if id}}
               <div>
-                   {{translate 'prefs-data-sync' 'shop'}}: <span>{{othersParams}}</span>
+                   {{agile_lng_translate 'prefs-data-sync' 'shop'}}: <span>{{othersParams}}</span>
                 
                       
 					</div>
                  <br>
              	<div class="control-group form-group">
-					<label class="control-label">{{translate 'portlets' 'frequency'}}</label> 
+					<label class="control-label">{{agile_lng_translate 'portlets' 'frequency'}}</label> 
            				<div class="controls">
 							<select class="required form-control" name="duration" id="freq">
 
 						{{#check_plan "FREE"}}
-							<option value="" disabled>{{translate 'prefs-data-sync' 'only-once-paid-plans'}}</option>
-							<option value="" disabled>{{translate 'prefs-data-sync' 'daily-paid-plans'}}</option>
+							<option value="" disabled>{{agile_lng_translate 'prefs-data-sync' 'only-once-paid-plans'}}</option>
+							<option value="" disabled>{{agile_lng_translate 'prefs-data-sync' 'daily-paid-plans'}}</option>
 						{{else}}
-							<option value="ONCE">{{translate 'web-rules' 'only-once'}}</option>
-							<option value="DAILY">{{translate 'report-add' 'daily'}}</option>
+							<option value="ONCE">{{agile_lng_translate 'web-rules' 'only-once'}}</option>
+							<option value="DAILY">{{agile_lng_translate 'report-add' 'daily'}}</option>
 						{{/check_plan}}
-							<option value="WEEKLY">{{translate 'report-add' 'weekly'}}</option>
-							<option value="MONTHLY">{{translate 'report-add' 'monthly'}}</option>
+							<option value="WEEKLY">{{agile_lng_translate 'report-add' 'weekly'}}</option>
+							<option value="MONTHLY">{{agile_lng_translate 'report-add' 'monthly'}}</option>
 						</select>
 					</div>
 		   		</div>
 
 			<div class="form-actions text-center">
-<a href="#sync" class="btn btn-default btn-sm inline-block">{{translate 'other' 'cancel'}}</a>
-<button class="btn btn-sm btn-primary ml_5" id="shopify-setting">{{translate 'prefs-data-sync' 'sync'}}</button>
+<a href="#sync" class="btn btn-default btn-sm inline-block">{{agile_lng_translate 'other' 'cancel'}}</a>
+<button class="btn btn-sm btn-primary ml_5" id="shopify-setting">{{agile_lng_translate 'prefs-data-sync' 'sync'}}</button>
 
        	  	</div>
 
@@ -339,19 +339,19 @@
 		</center>
 	</div>
 	<div class="panel-body">
-	    <div class="text-flow-ellipsis line-clamp line-clamp-4 widget-text" style="height:85px" rel="tooltip" title="{{translate 'prefs-data-sync' 'shopify-sync-desc'}}">
-			{{translate 'prefs-data-sync' 'shopify-sync-desc'}}
+	    <div class="text-flow-ellipsis line-clamp line-clamp-4 widget-text" style="height:85px" rel="tooltip" title="{{agile_lng_translate 'prefs-data-sync' 'shopify-sync-desc'}}">
+			{{agile_lng_translate 'prefs-data-sync' 'shopify-sync-desc'}}
 		</div>
 	   	<div class="text-center">
 			{{#if id}}
-	    	   <a class="btn btn-sm btn-danger delete"  id="shopify-import-prefs-delete" >{{translate 'prefs-email' 'disable'}}</a>
-				<a href="#sync/shopify" class="btn btn-sm btn-default">{{translate 'preferences' 'settings'}}</a>
+	    	   <a class="btn btn-sm btn-danger delete"  id="shopify-import-prefs-delete" >{{agile_lng_translate 'prefs-email' 'disable'}}</a>
+				<a href="#sync/shopify" class="btn btn-sm btn-default">{{agile_lng_translate 'preferences' 'settings'}}</a>
 			{{else}}
 					{{#canSyncContacts}}
-							   <a href="#sync/shopify"  class="btn btn-sm btn-default inline-block">{{translate 'prefs-email' 'enable'}}</a>
+							   <a href="#sync/shopify"  class="btn btn-sm btn-default inline-block">{{agile_lng_translate 'prefs-email' 'enable'}}</a>
 						{{else}}
-							   <a class="btn btn-sm btn-default inline-block" disabled>{{translate 'prefs-email' 'enable'}}</a>
-								<span class="m-l-xs"><i>{{translate 'prefs-data-sync' 'needs-import-privilege'}}</i></span>
+							   <a class="btn btn-sm btn-default inline-block" disabled>{{agile_lng_translate 'prefs-email' 'enable'}}</a>
+								<span class="m-l-xs"><i>{{agile_lng_translate 'prefs-data-sync' 'needs-import-privilege'}}</i></span>
 					{{/canSyncContacts}}
 			
 			{{/if}}
@@ -365,23 +365,23 @@
 	type="text/html">
 <div class="span4 well" style="height: 200px;">
     <form id="imap-prefs-form">
-        <legend>{{translate 'prefs-data-sync' 'import-from-zoho'}} <span class="label label-important">{{translate 'prefs-data-sync' 'alpha'}}</span></legend>
+        <legend>{{agile_lng_translate 'prefs-data-sync' 'import-from-zoho'}} <span class="label label-important">{{agile_lng_translate 'prefs-data-sync' 'alpha'}}</span></legend>
 		<div>
-			{{translate 'prefs-data-sync' 'import-customers-from-zoho'}}
+			{{agile_lng_translate 'prefs-data-sync' 'import-customers-from-zoho'}}
 		</div>
 
            {{#if id}}
           <div class="form-actions">
-        	   <a class="btn btn-sm btn-danger delete"  id="zoho-prefs-delete" >{{translate 'prefs-email' 'disable'}}</a>
+        	   <a class="btn btn-sm btn-danger delete"  id="zoho-prefs-delete" >{{agile_lng_translate 'prefs-email' 'disable'}}</a>
 				<a href="#sync/zoho-import" class="btn btn-sm btn-primary" id="setting-widget">
-				{{translate 'preferences' 'settings'}}</a>
+				{{agile_lng_translate 'preferences' 'settings'}}</a>
 			</div>
          {{else}}
 				{{#canSyncContacts}}
-    						   <button class="btn btn-sm" id="zoho-import" style="display:inline-block;">{{translate 'prefs-email' 'enable'}}</button>
+    						   <button class="btn btn-sm" id="zoho-import" style="display:inline-block;">{{agile_lng_translate 'prefs-email' 'enable'}}</button>
 						{{else}}
 							   <a href="#" class="btn btn-sm" style="display:inline-block;" disabled>Enable</a>
-								<span class="m-r-xs"><i>{{translate 'prefs-data-sync' 'needs-import-privilege'}}</i></span>
+								<span class="m-r-xs"><i>{{agile_lng_translate 'prefs-data-sync' 'needs-import-privilege'}}</i></span>
 					{{/canSyncContacts}}
          <div>
            
@@ -398,42 +398,42 @@
 <div class="col-md-4 col-sm-6 col-xs-12">
 <div class="panel panel-default" >
 <div class="panel-heading">
-<span class="label label-danger pull-right">{{translate 'deal-view' 'beta'}}</span>
+<span class="label label-danger pull-right">{{agile_lng_translate 'deal-view' 'beta'}}</span>
 <center> <img class="m-b-none img-responsive thumb-xl bg-transparent" height="47px;" src="{{getS3ImagePath '/widgets/QuickBooks210x70.png'}}" /></center>
 </div>
 <div class="panel-body">
 {{#unless id}}
     <div class="ellipsis-multiline m-b-md"   rel="tooltip" >
-		{{translate 'prefs-data-sync' 'setup-contact-sync-with-quickbook'}}
+		{{agile_lng_translate 'prefs-data-sync' 'setup-contact-sync-with-quickbook'}}
 	</div>
 {{/unless}} 
     {{#if id}}
 <form id="quickbook-form">
 <input type ="hidden" value = "{{id}}" name ="id">
-          <div>{{translate 'prefs-data-sync' 'account-linked'}}: <div class="text-ellipsis" title={{userName}}>{{userName}}</div> </div>
+          <div>{{agile_lng_translate 'prefs-data-sync' 'account-linked'}}: <div class="text-ellipsis" title={{userName}}>{{userName}}</div> </div>
 	
           <br>
              	<div class="control-group form-group">
-					<label class="control-label">{{translate 'portlets' 'frequency'}}</label> 
+					<label class="control-label">{{agile_lng_translate 'portlets' 'frequency'}}</label> 
            				<div class="controls">
 							<select class="required form-control" name="duration" id="freq">
 
 						{{#check_plan "FREE"}}
-							<option value="" disabled>{{translate 'prefs-data-sync' 'only-once-paid-plans'}}</option>
-							<option value="" disabled>{{translate 'prefs-data-sync' 'daily-paid-plans'}}</option>
+							<option value="" disabled>{{agile_lng_translate 'prefs-data-sync' 'only-once-paid-plans'}}</option>
+							<option value="" disabled>{{agile_lng_translate 'prefs-data-sync' 'daily-paid-plans'}}</option>
 						{{else}}
-							<option value="ONCE">{{translate 'web-rules' 'only-once'}}</option>
-							<option value="DAILY">{{translate 'report-add' 'daily'}}</option>
+							<option value="ONCE">{{agile_lng_translate 'web-rules' 'only-once'}}</option>
+							<option value="DAILY">{{agile_lng_translate 'report-add' 'daily'}}</option>
 						{{/check_plan}}
-							<option value="WEEKLY">{{translate 'report-add' 'weekly'}}</option>
-							<option value="MONTHLY">{{translate 'report-add' 'weekly'}}</option>
+							<option value="WEEKLY">{{agile_lng_translate 'report-add' 'weekly'}}</option>
+							<option value="MONTHLY">{{agile_lng_translate 'report-add' 'weekly'}}</option>
 						</select>
 					</div>
 		   		</div>
 
 			<div class="form-actions m-t-md text-center">
-<a href="#sync" class="btn btn-default btn-sm inline-block">{{translate 'other' 'cancel'}}</a>
-<button class="btn btn-sm btn-primary ml_5" id="quickbook_sync_prefs">{{translate 'prefs-data-sync' 'sync'}}</button>
+<a href="#sync" class="btn btn-default btn-sm inline-block">{{agile_lng_translate 'other' 'cancel'}}</a>
+<button class="btn btn-sm btn-primary ml_5" id="quickbook_sync_prefs">{{agile_lng_translate 'prefs-data-sync' 'sync'}}</button>
 
        	  	</div>
 
@@ -441,7 +441,7 @@
        
     </form>
 {{else}}
- <a  sync_type="QUICKBOOK" id="data-sync-type"  class="btn btn-sm btn-primary inline-block">{{translate 'prefs-email' 'enable'}}</a>
+ <a  sync_type="QUICKBOOK" id="data-sync-type"  class="btn btn-sm btn-primary inline-block">{{agile_lng_translate 'prefs-email' 'enable'}}</a>
 {{/if}}
 </div>
 </div>
@@ -457,22 +457,22 @@
 		</center>
 	 </div>
 	 <div class="panel-body">
-    <div   rel="tooltip" class="text-flow-ellipsis line-clamp line-clamp-4" style="height:85px;" title="{{translate 'prefs-data-sync' 'quickbooks-sync-desc'}}">
-		{{translate 'prefs-data-sync' 'quickbooks-sync-desc'}}
+    <div   rel="tooltip" class="text-flow-ellipsis line-clamp line-clamp-4" style="height:85px;" title="{{agile_lng_translate 'prefs-data-sync' 'quickbooks-sync-desc'}}">
+		{{agile_lng_translate 'prefs-data-sync' 'quickbooks-sync-desc'}}
 	</div>
     	<div class="text-center">
 			{{#if id}}
-        	   <a class="btn btn-sm btn-danger delete"  id="quick-book-delete" >{{translate 'prefs-email' 'disable'}}</a>
-				<a href="#sync/quickbook" class="btn btn-sm btn-default">{{translate 'preferences' 'settings'}}</a>
+        	   <a class="btn btn-sm btn-danger delete"  id="quick-book-delete" >{{agile_lng_translate 'prefs-email' 'disable'}}</a>
+				<a href="#sync/quickbook" class="btn btn-sm btn-default">{{agile_lng_translate 'preferences' 'settings'}}</a>
 			{{else}}
 
 			  
 				{{#canSyncContacts}}
-    						 <a href="/OAuthServlet?service=quickbook-import&return_url=' + encodeURIComponent(window.location.href) + "/quickbooks""  class="btn btn-sm btn-default inline-block">{{translate 'prefs-email' 'enable'}}
+    						 <a href="/OAuthServlet?service=quickbook-import&return_url=' + encodeURIComponent(window.location.href) + "/quickbooks""  class="btn btn-sm btn-default inline-block">{{agile_lng_translate 'prefs-email' 'enable'}}
     						 </a>
 						{{else}}
-							   <a href="#"  class="btn btn-sm btn-default inline-block" disabled>{{translate 'prefs-email' 'enable'}}</a>
-								<span class="m-l-xs"><i>{{translate 'prefs-data-sync' 'needs-import-privilege'}}</i></span>
+							   <a href="#"  class="btn btn-sm btn-default inline-block" disabled>{{agile_lng_translate 'prefs-email' 'enable'}}</a>
+								<span class="m-l-xs"><i>{{agile_lng_translate 'prefs-data-sync' 'needs-import-privilege'}}</i></span>
 					{{/canSyncContacts}}
 
 			{{/if}}
@@ -491,20 +491,20 @@
 	</center>
     <br />
     <div class="ellipsis-multiline" style="-webkit-line-clamp: 3;word-break: break-word;width: 220px !important;"  rel="tooltip" >
-		{{translate 'prefs-data-sync' 'sync-xero-customers-desc'}}
+		{{agile_lng_translate 'prefs-data-sync' 'sync-xero-customers-desc'}}
 	</div>
     
 			{{#if id}}
-        	   <a class="btn btn-sm btn-danger delete" >{{translate 'prefs-email' 'disable'}}</a>
-				<a href="#sync/xero" class="btn btn-default btn-sm">{{translate 'preferences' 'settings'}}</a>
+        	   <a class="btn btn-sm btn-danger delete" >{{agile_lng_translate 'prefs-email' 'disable'}}</a>
+				<a href="#sync/xero" class="btn btn-default btn-sm">{{agile_lng_translate 'preferences' 'settings'}}</a>
 			{{else}}
 
 			   
 			{{#canSyncContacts}}
-    						 <a href="#" id ="xeroconnect"class="btn btn-default btn-sm" style="display:inline-block;">{{translate 'prefs-email' 'enable'}}</a>
+    						 <a href="#" id ="xeroconnect"class="btn btn-default btn-sm" style="display:inline-block;">{{agile_lng_translate 'prefs-email' 'enable'}}</a>
 						{{else}}
-							   <a href="#"  class="btn btn-default"  style="display:inline-block;" disabled>{{translate 'prefs-email' 'enable'}}</a>
-								<span style="margin-left:5px"><i>{{translate 'prefs-data-sync' 'needs-import-privilege'}}</i></span>
+							   <a href="#"  class="btn btn-default"  style="display:inline-block;" disabled>{{agile_lng_translate 'prefs-email' 'enable'}}</a>
+								<span style="margin-left:5px"><i>{{agile_lng_translate 'prefs-data-sync' 'needs-import-privilege'}}</i></span>
 					{{/canSyncContacts}}
 			{{/if}}
 
@@ -517,50 +517,50 @@
 <script id="admin-settings-import-xero-settings-template"
 	type="text/html">
 <div class="col-md-4 panel wrapper" >
-<span class="label label-important" style="float:right">{{translate 'deal-view' 'beta'}}</span>
+<span class="label label-important" style="float:right">{{agile_lng_translate 'deal-view' 'beta'}}</span>
 <center> <img class="thumbnail" src="{{getS3ImagePath '/widgets/xero210x70.png'}}"  style="width:210px; height:70px;margin-left:40px" /></center>
 <br/>
 {{#unless id}}
     <div class="ellipsis-multiline" style="-webkit-line-clamp: 3;word-break: break-word;width: 220px !important;height: 55px !important;margin-bottom: 20px;"  rel="tooltip" >
-		{{translate 'prefs-data-sync' 'setup-contact-sync-with-your-xero-account'}}
+		{{agile_lng_translate 'prefs-data-sync' 'setup-contact-sync-with-your-xero-account'}}
 	</div>
 {{/unless}} 
     {{#if id}}
 <form id="xero-form" class="form-horizontal">
 <input type ="hidden" value = "{{id}}" name ="id">
-          <div>{{translate 'prefs-data-sync' 'account-linked'}}: <div class="text-ellipsis" title={{userName}}>{{userName}} </div></div>
+          <div>{{agile_lng_translate 'prefs-data-sync' 'account-linked'}}: <div class="text-ellipsis" title={{userName}}>{{userName}} </div></div>
 	
           
              	<div class="control-group" style="margin-left: -80px;margin-top:20px;">
-					<label class="control-label">{{translate 'portlets' 'frequency'}}</label> 
+					<label class="control-label">{{agile_lng_translate 'portlets' 'frequency'}}</label> 
            				<div class="controls">
 							<select class="required form-control" name="duration" id="freq">
 
 						{{#check_plan "FREE"}}
-							<option value="" disabled>{{translate 'prefs-data-sync' 'only-once-paid-plans'}}</option>
-							<option value="" disabled>{{translate 'prefs-data-sync' 'daily-paid-plans'}}</option>
+							<option value="" disabled>{{agile_lng_translate 'prefs-data-sync' 'only-once-paid-plans'}}</option>
+							<option value="" disabled>{{agile_lng_translate 'prefs-data-sync' 'daily-paid-plans'}}</option>
 						{{else}}
-							<option value="ONCE">{{translate 'web-rules' 'only-once'}}</option>
-							<option value="DAILY">{{translate 'report-add' 'daily'}}</option>
+							<option value="ONCE">{{agile_lng_translate 'web-rules' 'only-once'}}</option>
+							<option value="DAILY">{{agile_lng_translate 'report-add' 'daily'}}</option>
 						{{/check_plan}}
-							<option value="WEEKLY">{{translate 'report-add' 'weekly'}}</option>
-							<option value="MONTHLY">{{translate 'report-add' 'weekly'}}</option>
+							<option value="WEEKLY">{{agile_lng_translate 'report-add' 'weekly'}}</option>
+							<option value="MONTHLY">{{agile_lng_translate 'report-add' 'weekly'}}</option>
 						</select>
 					</div>
 		   		</div>
 
 			<div class="form-actions" style="margin-left: -68px;border-top: 0px;">
 
-<button class="btn btn-sm btn-primary" id="xero_sync_prefs" style="display:inline-block;">{{translate 'prefs-data-sync' 'sync'}}</button>
+<button class="btn btn-sm btn-primary" id="xero_sync_prefs" style="display:inline-block;">{{agile_lng_translate 'prefs-data-sync' 'sync'}}</button>
 
-           		<a href="#sync" class="btn btn-default btn-sm ml_5" style="text-decoration:none;">{{translate 'other' 'cancel'}}</a>
+           		<a href="#sync" class="btn btn-default btn-sm ml_5" style="text-decoration:none;">{{agile_lng_translate 'other' 'cancel'}}</a>
        	  	</div>
 
 
        
     </form>
 {{else}}
- <a href="#" id ="xeroconnect" class="btn btn-default btn-sm" style="display:inline-block;">{{translate 'prefs-email' 'enable'}}</a>
+ <a href="#" id ="xeroconnect" class="btn btn-default btn-sm" style="display:inline-block;">{{agile_lng_translate 'prefs-email' 'enable'}}</a>
 {{/if}}
 
 </div>
@@ -578,36 +578,36 @@
 <div class="panel-body">
 {{#unless id}}
     <div class="m-t m-b"  rel="tooltip" >
-		{{translate 'prefs-data-sync' 'setup-contacts-sync-with-freshbooks'}}
+		{{agile_lng_translate 'prefs-data-sync' 'setup-contacts-sync-with-freshbooks'}}
 	</div>
 {{/unless}} 
 
     {{#if id}}
 <form id="freshbooks-form">
 <input type ="hidden" value = "{{id}}" name ="id">
-          <div><span>{{translate 'prefs-data-sync' 'account-linked'}} </span>  <span>{{othersParams}}.freshbooks.com </span></div>
+          <div><span>{{agile_lng_translate 'prefs-data-sync' 'account-linked'}} </span>  <span>{{othersParams}}.freshbooks.com </span></div>
 			<br>
              	<div class="control-group form-group">
-					<label class="control-label">{{translate 'portlets' 'frequency'}}</label> 
+					<label class="control-label">{{agile_lng_translate 'portlets' 'frequency'}}</label> 
            				<div class="controls">
 							<select class="required form-control" name="duration" id="freq">
 
 						{{#check_plan "FREE"}}
-							<option value="" disabled>{{translate 'prefs-data-sync' 'only-once-paid-plans'}}</option>
-							<option value="" disabled>{{translate 'prefs-data-sync' 'daily-paid-plans'}}</option>
+							<option value="" disabled>{{agile_lng_translate 'prefs-data-sync' 'only-once-paid-plans'}}</option>
+							<option value="" disabled>{{agile_lng_translate 'prefs-data-sync' 'daily-paid-plans'}}</option>
 						{{else}}
-							<option value="ONCE">{{translate 'web-rules' 'only-once'}}</option>
-							<option value="DAILY">{{translate 'report-add' 'daily'}}</option>
+							<option value="ONCE">{{agile_lng_translate 'web-rules' 'only-once'}}</option>
+							<option value="DAILY">{{agile_lng_translate 'report-add' 'daily'}}</option>
 						{{/check_plan}}
-							<option value="WEEKLY">{{translate 'report-add' 'weekly'}}</option>
-							<option value="MONTHLY">{{translate 'report-add' 'monthly'}}</option>
+							<option value="WEEKLY">{{agile_lng_translate 'report-add' 'weekly'}}</option>
+							<option value="MONTHLY">{{agile_lng_translate 'report-add' 'monthly'}}</option>
 						</select>
 					</div>
 		   		</div>
 
 			<div class="form-actions text-center">
-<a href="#sync" class="btn btn-default btn-sm inline-block">{{translate 'other' 'cancel'}}</a>
-<button class="btn btn-sm btn-primary ml_5" id="freshbooks_sync_prefs">{{translate 'prefs-data-sync' 'sync'}}</button>
+<a href="#sync" class="btn btn-default btn-sm inline-block">{{agile_lng_translate 'other' 'cancel'}}</a>
+<button class="btn btn-sm btn-primary ml_5" id="freshbooks_sync_prefs">{{agile_lng_translate 'prefs-data-sync' 'sync'}}</button>
        	  	</div>
 
 
@@ -626,20 +626,20 @@
 
 <div class='input-group'>
 	<span class="input-group-addon">https://</span>
-	  <input type="url" id="freshbooks_url" class="input-medium form-control" placeholder="{{translate 'prefs-data-sync' 'freshbooks-domain-name'}}" value="" id="freshbooks_url">
+	  <input type="url" id="freshbooks_url" class="input-medium form-control" placeholder="{{agile_lng_translate 'prefs-data-sync' 'freshbooks-domain-name'}}" value="" id="freshbooks_url">
     <span class="input-group-addon">.freshBooks.com</span>
                 </div>  
-<div id="domainerror" class="hide text-danger">{{translate 'prefs-data-sync' 'enter-domain-name'}}
+<div id="domainerror" class="hide text-danger">{{agile_lng_translate 'prefs-data-sync' 'enter-domain-name'}}
 </div>
          </div>
 			</div>	
                
            <div class="control-group form-group"><div class="controls">
-              <input type="text" id="freshbooks_apiKey" class="input-medium form-control"   placeholder="{{translate 'prefs-data-sync' 'api-token'}}" value="" id="freshbooks_apiKey"></input>
-            <div id="apierror" class="hide text-danger">{{translate 'prefs-data-sync' 'enter-valid-api-token'}}</div>
+              <input type="text" id="freshbooks_apiKey" class="input-medium form-control"   placeholder="{{agile_lng_translate 'prefs-data-sync' 'api-token'}}" value="" id="freshbooks_apiKey"></input>
+            <div id="apierror" class="hide text-danger">{{agile_lng_translate 'prefs-data-sync' 'enter-valid-api-token'}}</div>
     </div></div>
 				
-               <a href ="#" id ="freshbooks" class="btn btn-sm btn-primary">{{translate 'prefs-data-sync' 'connect'}}</a>
+               <a href ="#" id ="freshbooks" class="btn btn-sm btn-primary">{{agile_lng_translate 'prefs-data-sync' 'connect'}}</a>
 				
 	    </form>
 </div>
@@ -662,20 +662,20 @@
 	    </center>
 	 </div>
 	 <div class="panel-body">
-	    <div class="text-flow-ellipsis line-clamp line-clamp-4" style="height:85px;" rel="tooltip" title="{{translate 'prefs-data-sync' 'freshbooks-sync-desc'}}">
-			{{translate 'prefs-data-sync' 'freshbooks-sync-desc'}}
+	    <div class="text-flow-ellipsis line-clamp line-clamp-4" style="height:85px;" rel="tooltip" title="{{agile_lng_translate 'prefs-data-sync' 'freshbooks-sync-desc'}}">
+			{{agile_lng_translate 'prefs-data-sync' 'freshbooks-sync-desc'}}
 		</div>
     	<div class="text-center">
 			{{#if id}}
         	   <a class="btn btn-sm btn-danger delete">Disable</a>
-				<a href="#sync/freshbooks/setting" class="btn btn-sm btn-default">{{translate 'preferences' 'settings'}}</a>
+				<a href="#sync/freshbooks/setting" class="btn btn-sm btn-default">{{agile_lng_translate 'preferences' 'settings'}}</a>
 			{{else}}
 
 	  	{{#canSyncContacts}}
-	            <a href="#sync/freshbooks" class="btn btn-sm btn-default inline-block">{{translate 'prefs-email' 'enable'}}</a>
+	            <a href="#sync/freshbooks" class="btn btn-sm btn-default inline-block">{{agile_lng_translate 'prefs-email' 'enable'}}</a>
            {{else}}
-		         <span class="btn btn-sm btn-default inline-block" disabled>{{translate 'prefs-email' 'enable'}}</span>
-				 <span class="m-l-xs"><i>{{translate 'prefs-data-sync' 'needs-import-privilege'}}</i></span>
+		         <span class="btn btn-sm btn-default inline-block" disabled>{{agile_lng_translate 'prefs-email' 'enable'}}</span>
+				 <span class="m-l-xs"><i>{{agile_lng_translate 'prefs-data-sync' 'needs-import-privilege'}}</i></span>
 		{{/canSyncContacts}}
 			{{/if}}
 		</div>
@@ -691,13 +691,13 @@
 <div class="col-md-6 col-sm-6 col-xs-12">
 <div class="panel panel-default" >
 <div class="panel-heading">
-<span class="label label-danger pull-right m-b">{{translate 'deal-view' 'beta'}}</span>
+<span class="label label-danger pull-right m-b">{{agile_lng_translate 'deal-view' 'beta'}}</span>
 <center> <img class="m-b-none img-responsive thumb-xl bg-transparent" style="height:47px;" src="{{getS3ImagePath 'img/plugins/freshbooks-logo.png'}}" /></center>
 </div>
 <div class="panel-body">
 {{#unless id}}
     <div class="m-t m-b"  rel="tooltip" >
-		{{translate 'prefs-data-sync' 'setup-contacts-sync-with-freshbooks'}}
+		{{agile_lng_translate 'prefs-data-sync' 'setup-contacts-sync-with-freshbooks'}}
 	</div>
 {{/unless}}
 
@@ -711,22 +711,22 @@
 
 <div class='input-group'>
 	<span class="input-group-addon">https://</span>
-	  <input type="url" id="freshbooks_url" class="input-medium form-control"  placeholder="{{translate 'prefs-data-sync' 'freshbooks-domain-name'}}" value="" id="freshbooks_url">
+	  <input type="url" id="freshbooks_url" class="input-medium form-control"  placeholder="{{agile_lng_translate 'prefs-data-sync' 'freshbooks-domain-name'}}" value="" id="freshbooks_url">
     <span class="input-group-addon">.freshBooks.com</span>
 
                 </div>  
-<div id="domainerror" class="hide text-danger">{{translate 'prefs-data-sync' 'enter-domain-name'}}
+<div id="domainerror" class="hide text-danger">{{agile_lng_translate 'prefs-data-sync' 'enter-domain-name'}}
 </div>
          </div>
 </div>
 				
                
            <div class="control-group form-group"><div class="controls">
-              <input type="text" id="freshbooks_apiKey" class="input-medium form-control"  placeholder="{{translate 'prefs-data-sync' 'api-token'}}" value="" id="freshbooks_apiKey"></input>
-           <div id="apierror" class="hide text-danger">{{translate 'prefs-data-sync' 'enter-valid-api-token'}}</div>
+              <input type="text" id="freshbooks_apiKey" class="input-medium form-control"  placeholder="{{agile_lng_translate 'prefs-data-sync' 'api-token'}}" value="" id="freshbooks_apiKey"></input>
+           <div id="apierror" class="hide text-danger">{{agile_lng_translate 'prefs-data-sync' 'enter-valid-api-token'}}</div>
        </div></div>
 				<div class="m-t-md text-center">
-               <a href ="#" id ="freshbooks" class="btn btn-sm btn-primary">{{translate 'prefs-data-sync' 'connect'}}</a>
+               <a href ="#" id ="freshbooks" class="btn btn-sm btn-primary">{{agile_lng_translate 'prefs-data-sync' 'connect'}}</a>
 				</div>
 	    </form>
 </div>

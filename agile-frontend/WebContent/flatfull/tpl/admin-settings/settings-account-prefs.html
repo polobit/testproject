@@ -23,18 +23,18 @@
             <div class="row">
                 <div class="col-md-8 col-xs-12">
                     <div class="control-group form-group">
-                        <label class="control-label col-sm-4 col-xs-4">{{translate 'admin-settings-prefs' 'plan'}}</label> 
+                        <label class="control-label col-sm-4 col-xs-4">{{agile_lng_translate 'admin-settings-prefs' 'plan'}}</label> 
                         <div class="controls col-sm-8 col-xs-8" style="margin-top:7px;">
                             {{#if plan.plan_id}}
                             {{getFullAccountPlanName plan.plan_type}} <!--<a href="#subscribe" style="font-size:11px;" class="text-info">Upgrade</a> -->
                             {{else}}
-                            {{translate 'portlets' 'free'}} <a href="#" id="cancel-account" class="text-info p-l-sm text-xs">{{translate 'plan-and-upgrade' 'cancel-account'}}</a>
+                            {{agile_lng_translate 'portlets' 'free'}} <a href="#" id="cancel-account" class="text-info p-l-sm text-xs">{{agile_lng_translate 'plan-and-upgrade' 'cancel-account'}}</a>
                              <!--<a href="#subscribe" class="text-info">Upgrade</a>-->
                             {{/if}}
                         </div>
                     </div>
                     <div class="control-group form-group">
-                        <label class="control-label col-sm-4 col-xs-4">{{translate 'admin-settings' 'users'}}</label>
+                        <label class="control-label col-sm-4 col-xs-4">{{agile_lng_translate 'admin-settings' 'users'}}</label>
                         <div class="controls col-sm-8 col-xs-8" style="margin-top:7px;">
                             {{#if plan.quantity}}
                             {{plan.quantity}}
@@ -174,16 +174,16 @@
 
 
                     <div class="control-group form-group">
-                        <label class="control-label col-sm-4 col-xs-4">{{translate 'prefs-settings' 'domain'}}</label>
+                        <label class="control-label col-sm-4 col-xs-4">{{agile_lng_translate 'prefs-settings' 'domain'}}</label>
                         <div class="controls col-sm-8 col-xs-8" style="margin-top:7px;">
-                            {{get_current_domain}} {{#unless aliasNames}}<a href="#change-domain" class="text-info p-l-xs text-xs"><i class="icon-plus alias-icon"></i> {{translate 'admin-settings' 'add-alias'}}</a>{{/unless}}                           
+                            {{get_current_domain}} {{#unless aliasNames}}<a href="#change-domain" class="text-info p-l-xs text-xs"><i class="icon-plus alias-icon"></i> {{agile_lng_translate 'admin-settings' 'add-alias'}}</a>{{/unless}}                           
                         </div>
                     </div>
                     {{#if aliasNames}}
                     <div class="control-group form-group">
-                        <label class="control-label col-sm-4 col-xs-4">{{translate 'prefs-settings' 'domain-alias'}}</label>
+                        <label class="control-label col-sm-4 col-xs-4">{{agile_lng_translate 'prefs-settings' 'domain-alias'}}</label>
                         <div class="controls col-sm-8 col-xs-8" style="margin-top:7px;">
-                            {{getAliasFromArry aliasNames}} <a href="#change-domain" class="text-info p-l-xs">{{translate 'portlets' 'change'}}
+                            {{getAliasFromArry aliasNames}} <a href="#change-domain" class="text-info p-l-xs">{{agile_lng_translate 'portlets' 'change'}}
                             </a>                           
                         </div>
                     </div>
@@ -201,7 +201,7 @@
 <div class="col-md-8 col-xs-8">
 <div class="col-sm-offset-4 col-sm-8 col-xs-offset-4 col-xs-8">
             
-                <a href="#" type="submit" class="save btn btn-sm btn-primary">{{translate 'prefs-settings' 'save-changes'}}</a>
+                <a href="#" type="submit" class="save btn btn-sm btn-primary">{{agile_lng_translate 'prefs-settings' 'save-changes'}}</a>
            
 
 </div>
@@ -217,7 +217,7 @@
 
 <script id="admin-settings-domain-alias-template" type="text/html">
 <div id="alias_domain" class="panel panel-default">
-    <div class="panel-heading">{{translate 'prefs-settings' 'domain-alias'}}</div>
+    <div class="panel-heading">{{agile_lng_translate 'prefs-settings' 'domain-alias'}}</div>
     <div class="panel-body">
     <form id="aliasDomain" class="form-horizontal">
         <fieldset>
@@ -231,9 +231,9 @@
                     
                     
                     <div class="control-group form-group">
-                        <label class="control-label col-sm-4 col-xs-4">{{translate 'prefs-settings' 'alias'}}<span class="field_req">*</span></label> 
+                        <label class="control-label col-sm-4 col-xs-4">{{agile_lng_translate 'prefs-settings' 'alias'}}<span class="field_req">*</span></label> 
                         <div class="controls col-sm-8 col-xs-8">
-                            <input name="alias" id="alias" class="input-medium required domain_format form-control" type="text" placeholder="{{translate 'prefs-settings' 'domain-alias'}}" value="{{alias}}" />
+                            <input name="alias" id="alias" class="input-medium required domain_format form-control" type="text" placeholder="{{agile_lng_translate 'prefs-settings' 'domain-alias'}}" value="{{alias}}" />
                             <span for="alias" generated="true" class="help-inline text-xs"> </span>
                         </div>
                     </div>
@@ -246,7 +246,7 @@
 <div class="col-md-7 col-xs-8">
 <div class="col-sm-offset-4 col-sm-8 col-xs-offset-4 col-xs-8">
             
-                <a href="#" type="submit" class="save saveAuth btn btn-sm btn-primary">{{translate 'report-add' 'save'}}</a>
+                <a href="#" type="submit" class="save saveAuth btn btn-sm btn-primary">{{agile_lng_translate 'report-add' 'save'}}</a>
            
 
 </div>
@@ -266,15 +266,15 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button class="close" data-dismiss="modal">&times;</button>
-                <h3 class="modal-title">{{translate 'prefs-settings' 'domain-alias'}}</h3>
+                <h3 class="modal-title">{{agile_lng_translate 'prefs-settings' 'domain-alias'}}</h3>
             </div>
             <div class="modal-body help-text">
-                <p>{{translate 'prefs-settings' 'delete-alias-domain-desc'}}</p>
-                <p>{{translate 'prefs-settings' 'delete-alias-domain-desc-1'}}</p>
+                <p>{{agile_lng_translate 'prefs-settings' 'delete-alias-domain-desc'}}</p>
+                <p>{{agile_lng_translate 'prefs-settings' 'delete-alias-domain-desc-1'}}</p>
             </div>
             <div class="modal-footer">
-                <a href="#" data-dismiss="modal" class="btn btn-sm btn-default">{{translate 'portlets' 'no'}}</a>
-                <a href="#" data-dismiss="modal" class="saveAuthConform btn btn-sm btn-primary">{{translate 'portlets' 'yes'}}</a>
+                <a href="#" data-dismiss="modal" class="btn btn-sm btn-default">{{agile_lng_translate 'portlets' 'no'}}</a>
+                <a href="#" data-dismiss="modal" class="saveAuthConform btn btn-sm btn-primary">{{agile_lng_translate 'portlets' 'yes'}}</a>
             </div>
         </div>
     </div>

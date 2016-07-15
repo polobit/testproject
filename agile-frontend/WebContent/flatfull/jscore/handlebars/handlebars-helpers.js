@@ -931,7 +931,7 @@ $(function()
 				"Jan", "Feb", "March", "April", "May", "June", "July", "Aug", "Sept", "Oct", "Nov", "Dec"
 		];
 
-		return (monthArray[intMonth] + " " + intDay);
+		return (_agile_get_translated_val("months-xs", monthArray[intMonth]) + " " + intDay);
 	});
 
 	/**
@@ -1023,7 +1023,7 @@ $(function()
 					"Jan", "Feb", "March", "April", "May", "June", "July", "Aug", "Sept", "Oct", "Nov", "Dec"
 			];
 
-			return (monthArray[intMonth] + " " + intDay + ", " + intYear);
+			return (_agile_get_translated_val("months-xs", monthArray[intMonth]) + " " + intDay + ", " + intYear);
 		}
 	});
 
@@ -1400,25 +1400,6 @@ $(function()
 		return options.inverse(this);
 	});
 
-
-	/*Handlebars.registerHelper('property_json_is_remote_addr', function(name, properties, options)
-	{
-
-        var value = getPropertyValue(properties, name);
-        if(!value)
-        {
-        	return options.inverse(this);
-        }
-        try{
-        	value = JSON.parse(value);
-        }catch(e){}
-
-		if (value && Object.keys(value) && Object.keys(value).length == 1 && value.remote_add!=undefined)
-			return options.fn(this);
-		
-		return options.inverse(this);
-	});*/
-
 	/**
 	 * returns online scheduling url of current user
 	 */
@@ -1646,9 +1627,9 @@ $(function()
 			else if (value.indexOf("CUSTOM_") != -1)
 				value = value.split("CUSTOM_")[1];
 			else if (value == "created_time")
-				value = "Created Date";
+				value = _agile_get_translated_val("misc-keys", "created_time");
 			else if (value == "updated_time")
-				value = "Updated Date";
+				value = _agile_get_translated_val("misc-keys", "updated_time");
 
 			value = value.replace("_", " ");
 
@@ -1754,7 +1735,7 @@ $(function()
 	{
 		var val = value.split("_").join("").trim().toLowerCase();
 		if (val == "yettostart")
-			return "Not Started";
+			return _agile_get_translated_val("misc-keys", "yet-to-start");
 		else
 			return ucfirst(value.split("_").join(" ").trim());
 
@@ -2698,10 +2679,11 @@ $(function()
 
 		name = name.trim();
 
+		var result = name;
 		if (name_json[name])
-			return name_json[name];
+			 result = name_json[name];
 
-		return name;
+		return _agile_get_translated_val("tasks", result); 
 
 	});
 	/** put the users according to the plan
@@ -2748,48 +2730,6 @@ $(function()
 		return value.trim();
 	});
 
-	/**
-	 * Returns reputation name based on value
-	 * 
-	 */
-	Handlebars.registerHelper('get_subaccount_reputation', function(value)
-	{
-		var type = "bg-light dk text-tiny";
-		var reputation = "Unknown";
-		var badge="";
-
-		if (value > 1 && value < 40)
-		{
-			type = "label-danger text-tiny";
-			reputation = "Poor";
-			badge="red;";
-		}
-		else if (value >= 40 && value < 75)
-		{
-			type = "label-warning text-tiny";
-			reputation = "Ok";
-			badge="yellow";
-		}
-		else if (value >= 75 && value < 90)
-		{
-			type = "label-primary text-tiny";
-			reputation = "Good";
-			badge="blue";
-		}
-		else if (value >= 90)
-		{
-			type = "label-success text-tiny";
-			reputation = "Excellent";
-			badge="green"
-		}
-
-		return "<span style='font-weight: bold;font-size: 12px;position: relative;' class='label " + type
-
-		+ "'>" + reputation + " <span style='margin: 0px -2px 0px 5px; padding:1px 5px 1px 5px ; background-color:white; color:"+ badge +"' class='badge " 
-		+ type + "'>" + value + " %</span> </span>";
-
-	});
-
 
 	/**
 	 * Returns id from hash. It returns id from hash iff id exists at last.
@@ -2810,87 +2750,6 @@ $(function()
 			return options.inverse(this);
 		}
 		 
-	});
-
-	Handlebars.registerHelper("check_plan", function(plan, options)
-	{
-		console.log(plan);
-
-		if (!_billing_restriction)
-			return options.fn(this);
-
-		if (_billing_restriction.currentLimits.planName == plan)
-			return options.fn(this);
-
-		return options.inverse(this);
-
-	});
-
-	/**
-	 * Safari browser doesn't supporting few CSS properties like margin-top,
-	 * margin-bottom etc. So this helper is used to add compatible CSS
-	 * properties to Safari
-	 */
-	Handlebars.registerHelper("isSafariBrowser", function(options)
-	{
-
-		if (navigator.userAgent.indexOf('Safari') !== -1 && navigator.userAgent.indexOf('Chrome') === -1)
-			return options.fn(this);
-
-		return options.inverse(this);
-	});
-
-	/**
-	 * give custome status base on xerotype
-	 */
-
-	Handlebars.registerHelper('xeroType', function(type)
-	{
-		return (type == "ACCPAY") ? "Payable" : "Receivable";
-	});
-
-	/**
-	 * give custom type to xero type
-	 */
-	Handlebars.registerHelper('xeroTypeToolTip', function(type)
-	{
-		return (type == "ACCPAY") ? "Payable" : "Receivable";
-	});
-
-	/**
-	 * gives first latter capital for given input
-	 */
-	Handlebars.registerHelper('capFirstLetter', function(data)
-	{
-		if(data){
-			if (data === "DEFAULT"){
-				// console.log("return empty");
-				return "";
-			}else{
-				var temp = data.toLowerCase();
-				return temp.charAt(0).toUpperCase() + temp.slice(1);
-			}
-		}
-	});
-
-	Handlebars.registerHelper('qbStatus', function(Balance)
-	{
-		console.log(this);
-		console.log(this.TotalAmt);
-		if (Balance == 0)
-		{
-			return "Paid"
-		}
-		else
-		{
-			return "Due"
-		}
-	});
-	Handlebars.registerHelper('currencyFormat', function(data)
-	{
-
-		return Number(data).toLocaleString('en');
-		// data.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");
 	});
 
 	Handlebars.registerHelper('formatAmount', function(data){
@@ -3191,10 +3050,13 @@ $(function()
 		var monthArray = [
 				"January", "february", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"
 		];
+		var name = "";
 		if (month_index > 12)
-			return monthArray[11];
+			name = monthArray[11];
 
-		return monthArray[month_index - 1];
+		name =  monthArray[month_index - 1];
+
+		return _agile_get_translated_val("months", name);
 	});
 
 	Handlebars.registerHelper('xeroOrganisationShortCode', function(block)
@@ -3271,48 +3133,6 @@ $(function()
 
 	});
 
-	function getCustomFormatedDate(date)
-	{
-
-		var months = [
-				'Jan', 'Feb', 'March', 'April', 'May', 'Jun', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'
-		];
-
-		if (!date)
-			return;
-
-		if ((date / 100000000000) > 1)
-		{
-			var d = new Date(parseInt(date));
-			var hours = d.getHours();
-			var year = d.getFullYear();
-			var date = d.getDate();
-			var month = d.getMonth();
-			var min = d.getMinutes();
-			if (min == 0)
-				min = "00"
-			var ampm = hours >= 12 ? "PM" : "AM";
-			if (hours > 12)
-				hours = hours - 12;
-			return months[month] + " " + date + ", " + year + " " + hours + ":" + min + " " + ampm;
-
-		}
-		// date form milliseconds
-
-		var d = new Date(parseInt(date) * 1000);
-		var hours = d.getHours();
-		var year = d.getFullYear();
-		var date = d.getDate();
-		var month = d.getMonth();
-		var min = d.getMinutes();
-		if (min == 0)
-			min = "00"
-		var ampm = hours >= 12 ? "PM" : "AM";
-		if (hours > 12)
-			hours = hours - 12;
-		return months[month] + " " + date + ", " + year + " " + hours + ":" + min + " " + ampm;
-
-	}
 	function extractTimeFromDate(date)
 	{
 		if (!date)
@@ -3466,42 +3286,6 @@ $(function()
 	{
 		if (value)
 			return value.toFixed(2).toString().replace(/\B(?=(?:\d{3})+(?!\d))/g, ",").replace('.00', '');
-	});
-
-	/**
-	 * Converts reports/view field element as comma seprated values and returns
-	 * as handlebars safe string.
-	 */
-	Handlebars.registerHelper('field_Element', function(properties)
-	{
-		var el = "";
-		var count = properties.length;
-
-		$.each(properties, function(key, value)
-		{
-
-			if (value.indexOf("properties_") != -1)
-				value = value.split("properties_")[1];
-			else if (value.indexOf("custom_") != -1)
-				value = value.split("custom_")[1];
-			else if (value.indexOf("CUSTOM_") != -1)
-				value = value.split("CUSTOM_")[1];
-			else if (value == "created_time")
-				value = "Created Date";
-			else if (value == "updated_time")
-				value = "Updated Date";
-
-			value = value.replace("_", " ");
-
-			if (--count == 0)
-			{
-				el = el.concat(value);
-				return;
-			}
-			el = el.concat(value + ", ");
-		});
-
-		return new Handlebars.SafeString(el);
 	});
 
 	/**
@@ -4810,46 +4594,16 @@ $(function()
 	});
 
 	/**
-	 * Get task list name without underscore and caps, for new task UI.
-	 */
-	Handlebars.registerHelper('get_normal_name', function(name)
-	{
-		if (!name)
-			return;
-
-		var name_json = { "HIGH" : "High", "LOW" : "Low", "NORMAL" : "Normal", "YET_TO_START" : "Yet To Start",
-			"IN_PROGRESS" : "In Progress", "COMPLETED" : "Completed", "TODAY" : "Today", "TOMORROW" : "Tomorrow", "OVERDUE" : "Overdue", "LATER" : "Later" };
-
-		$.extend(name_json,categories.CATEGORIES,name_json);
-
-		name = name.trim();
-
-		if (name_json[name])
-			return name_json[name];
-
-		return name;
-
-	});
-
-	/**
 	 * Get activity type without underscore and caps, for deal _details page.
 	 */
 	Handlebars.registerHelper('get_normal_activity_type', function(name)
 	{
 		if (!name)
 			return;
-
-		var name_json = { "DEAL_ADD" : "Deal Created", "DEAL_EDIT" : "Deal Edited", "DEAL_CLOSE" : "Deal Closed", "DEAL_LOST" : "Deal Lost",
-			"DEAL_RELATED_CONTACTS" : " Deal Contacts Changed", "DEAL_OWNER_CHANGE" : "Deal Owner Changed", "DEAL_MILESTONE_CHANGE" : "Deal Milestone Changed",
-			"DEAL_ARCHIVE" : "Deal Archived", "DEAL_RESTORE" : "Deal Restored","DEAL_TAG_CHANGE" : "Deal Tags Changed","DEAL_TAG_ADD" : "Deal Tags Added","DEAL_TAG_DELETE" : "Deal Tags Deleted",
-			"User_Email_Changed" : "User email","User_Name_Changed" :"User Name Changed","User_Created" : "New User Created","User_Deleted" : "User Deleted","User_Permissions_Change" : "User Permissions Changed",
-
-			"NOTE_ADD" : "Note Added", "TASK_ADD" : "Task Created", "TASK_EDIT" : "Task Updated", "TASK_PROGRESS_CHANGE" : "Progress Changed",
-			"TASK_OWNER_CHANGE" : "Owner Changed", "TASK_STATUS_CHANGE" : "Status Changed", "TASK_COMPLETED" : "Task Completed",
-			"TASK_DELETE" : "Task Deleted", "TASK_RELATED_CONTACTS" : "Contacts Modified" };
-
+	
 		name = name.trim();
 
+		var name_json = _agile_get_translated_val("activity_type");
 		if (name_json[name])
 			return name_json[name];
 
@@ -4917,6 +4671,8 @@ $(function()
 							reputation = "Excellent";
 						}
 
+						reputation = _agile_get_translated_val("reputation", reputation);
+
 						return "<span style='top: -3px' class='text-sm pos-rlt label " + type + "'>" + reputation + "</span> <!--<span class='badge badge-" + type + "'>" + value + "</span>-->";
 
 					});
@@ -4938,29 +4694,11 @@ $(function()
 		// Returns "workflows" from "#workflows"
 		var hash = window.location.hash.substr(1);
 
-		if (hash.indexOf("all") != -1)
-			return "All";
-
-		if (hash.indexOf("active") != -1)
-			return "Active";
-
-		if (hash.indexOf("completed") != -1)
-			return "Completed";
-
-		if (hash.indexOf("removed") != -1)
-			return "Removed";
-
-		if (hash.indexOf("unsubscribed") != -1)
-			return "Unsubscribed";
-
-		if (hash.indexOf("hardbounced") != -1)
-			return "Hard Bounced";
-
-		if (hash.indexOf("softbounced") != -1)
-			return "Soft Bounced";
-
-		if (hash.indexOf("spam-reported") != -1)
-			return "Spam Reported";
+		var types = _agile_get_translated_val("subscriber_type");
+		for(var key in types){
+			if (hash.indexOf(key) != -1)
+				  return types[key];			
+		}
 	});
 
 	Handlebars.registerHelper("check_plan", function(plan, options)
@@ -5326,12 +5064,15 @@ $(function()
 	Handlebars.registerHelper("getMonthFromIndex", function(month_index)
 	{
 		var monthArray = [
-				"January", "february", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"
+				"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"
 		];
+		var name = "";
 		if (month_index > 12)
-			return monthArray[11];
+			name =  monthArray[11];
+		else 
+			name =  monthArray[month_index - 1];
 
-		return monthArray[month_index - 1];
+		return _agile_get_translated_val("months", name);
 	});
 
 	Handlebars.registerHelper('xeroOrganisationShortCode', function(block)
@@ -5546,7 +5287,7 @@ $(function()
 			var ampm = hours >= 12 ? "PM" : "AM";
 			if (hours > 12)
 				hours = hours - 12;
-			return months[month] + " " + date + ", " + year + " " + hours + ":" + min + " " + ampm;
+			return _agile_get_translated_val("months-xs", months[month]) + " " + date + ", " + year + " " + hours + ":" + min + " " + ampm;
 
 		}
 		// date form milliseconds
@@ -5562,7 +5303,7 @@ $(function()
 		var ampm = hours >= 12 ? "PM" : "AM";
 		if (hours > 12)
 			hours = hours - 12;
-		return months[month] + " " + date + ", " + year + " " + hours + ":" + min + " " + ampm;
+		return _agile_get_translated_val("months-xs", months[month]) + " " + date + ", " + year + " " + hours + ":" + min + " " + ampm;
 
 	}
 	function extractTimeFromDate(date)
@@ -5884,27 +5625,27 @@ $(function()
 		case "incorrect referral":
 		case "meeting scheduled":
 		case "new oppurtunity":
-			return "Call duration";
+			return _agile_get_translated_val("call_activity", "duration");
 			break;
 		case "busy":
 		case "no-answer":
 			if (direction == 'outgoing')
-				return "Contact busy";
+				return _agile_get_translated_val("call_activity", "busy");
 			else
-				return "Not answered";
+				return _agile_get_translated_val("call_activity", "no_answer");
 			break;
 		case "failed":
-			return "Failed";
+			return _agile_get_translated_val("call_activity", "fail");
 			break;
 		case "missed":
-			return "Call Missed";
+			return _agile_get_translated_val("call_activity", "missed");
 			break;	
 		case "in-progress":
 		case "voicemail":
-			return "Left voicemail";
+			return _agile_get_translated_val("call_activity", "voicemail");
 			break;
 		case "missed":
-			return "Call missed";
+			return _agile_get_translated_val("call_activity", "missed");
 			break;
 		default:
 			return "";
@@ -5933,52 +5674,53 @@ $(function()
 	{
 		var portlet_name = '';
 		if (p_name == 'Filter Based')
-			portlet_name = 'Contact List';
+			portlet_name = 'contact_list';
 		else if (p_name == 'Emails Opened')
-			portlet_name = 'Email Opens';
+			portlet_name = 'email_open';
 		else if (p_name == 'Emails Sent')
-			portlet_name = 'Emails';
+			portlet_name = 'emails';
 		else if (p_name == 'Growth Graph')
-			portlet_name = 'Tag Graph';
+			portlet_name = 'tag_graph';
 		else if (p_name == 'Calls Per Person')
-			portlet_name = 'Calls';
+			portlet_name = 'calls';
 		else if (p_name == 'Pending Deals')
-			portlet_name = 'Pending Deals';
+			portlet_name = 'pending_deals';
 		else if (p_name == 'Deals By Milestone')
-			portlet_name = 'Deals by Milestone';
+			portlet_name = 'deals_by_ml';
 		else if (p_name == 'Closures Per Person')
-			portlet_name = 'Closures per Person';
+			portlet_name = 'cls_person';
 		else if (p_name == 'Deals Won')
-			portlet_name = 'Deals Won';
+			portlet_name = 'deal_won';
 		else if (p_name == 'Deals Funnel')
-			portlet_name = 'Deals Funnel';
+			portlet_name = 'deal_funnel';
 		else if (p_name == 'Deals Assigned')
-			portlet_name = 'Deals Assigned';
+			portlet_name = 'deal_assigned';
 		else if (p_name == 'Agenda')
-			portlet_name = "Events";
+			portlet_name = "events";
 		else if (p_name == 'Today Tasks')
-			portlet_name = "Tasks";
+			portlet_name = "tasks";
 		else if (p_name == 'Agile CRM Blog')
-			portlet_name = "Agile CRM Blog";
+			portlet_name = "agile_blog";
 		else if (p_name == 'Task Report')
-			portlet_name = "Task Report";
+			portlet_name = "task_report";
 		else if(p_name=='Stats Report')
-			portlet_name = "Activity Overview";
+			portlet_name = "act_overview";
 		else if(p_name=='Campaign stats')
-			portlet_name = "Campaign Stats";
+			portlet_name = "camp_stats";
 		else if(p_name=='Campaign graph')
-			portlet_name = "Campaign Status";
+			portlet_name = "camp_status";
 		else if(p_name=='Average Deviation')
-			portlet_name = "Tasks Completion Time Deviation";
+			portlet_name = "task_deviation";
 		else if(p_name == 'Webstat Visits')
-			portlet_name = "Visits";
+			portlet_name = "visits";
 		else if(p_name=='Referralurl stats')
- 			portlet_name = "Referral URL Stats";
+ 			portlet_name = "ref_stats";
  		else if (p_name == 'Lost Deal Analysis')
-			portlet_name = "Deals Lost by Reason";
+			portlet_name = "deal_lost_reason";
 		else
 			portlet_name = p_name;
-		return portlet_name;
+
+		return _agile_get_translated_val("portlets", portlet_name);
 	});
 	/**
 	 * getting portlet icons
@@ -6461,103 +6203,9 @@ $(function()
 	 */
 	Handlebars.registerHelper('get_portlet_duration', function(duration)
 	{
-		var time_period = 'Today';
-		if (duration == 'yesterday')
-		{
-			time_period = 'Yesterday';
-		}
-		else if (duration == '1-day' || duration == 'today')
-		{
-			time_period = 'Today';
-		}
-		else if (duration == '2-days')
-		{
-			time_period = 'Last 2 Days';
-		}
-		else if (duration == 'this-week')
-		{
-			time_period = 'This Week';
-		}
-		else if (duration == 'last-week')
-		{
-			time_period = 'Last Week';
-		}
-		else if (duration == '1-week')
-		{
-			time_period = 'Last 7 Days';
-		}
-		else if (duration == 'this-month')
-		{
-			time_period = 'This Month';
-		}
-		else if (duration == 'last-month')
-		{
-			time_period = 'Last Month';
-		}
-		else if (duration == '1-month')
-		{
-			time_period = 'Last 30 Days';
-		}
-		else if (duration == 'this-quarter')
-		{
-			time_period = 'This Quarter';
-		}
-		else if (duration == 'last-quarter')
-		{
-			time_period = 'Last Quarter';
-		}
-		else if (duration == '3-months')
-		{
-			time_period = 'Last 3 Months';
-		}
-		else if (duration == '6-months')
-		{
-			time_period = 'Last 6 Months';
-		}
-		else if (duration == '12-months')
-		{
-			time_period = 'Last 12 Months';
-		}
-		else if (duration == 'today-and-tomorrow')
-		{
-			time_period = 'Today and Tomorrow';
-		}
-		else if (duration == 'all-over-due')
-		{
-			time_period = 'All Over Due';
-		}
-		else if (duration == 'next-7-days')
-		{
-			time_period = 'Next 7 Days';
-		}
-		else if (duration == '24-hours')
-		{
-			time_period = 'Last 24 Hours';
-		}
-		else if (duration == 'next-quarter')
-		{
-			time_period = 'Next Quarter';
-		}
-		else if (duration == 'this-and-next-quarter')
-		{
-			time_period = 'This and Next Quarter';
-		}
-		else if (duration == 'this-year')
-		{
-			time_period = 'This Year';
-		}
-		else if (duration == 'next-year')
-		{
-			time_period = 'Next Year';
-		}
-		else if (duration == 'last-year')
-		{
-			time_period = 'Last Year';
-		}
-		else if (duration == 'Custom')
-		{
-			time_period = 'Custom';
-		}
+		var time_period = _agile_get_translated_val("portlets", duration);
+		if(!time_period)
+			  time_period = _agile_get_translated_val("portlets", "1-day");
 		
 		return time_period;
 	});
@@ -6586,30 +6234,27 @@ $(function()
 	    var seconds = Math.floor((new Date() - date) / 1000);
 
 	    var interval = Math.floor(seconds / 31536000);
-
+	    
 	    if (interval > 1) {
-	        return interval + " years ago";
+	        return interval + " " + _agile_get_translated_val("misc-keys", "yrs_ago");
 	    }
 	    interval = Math.floor(seconds / 2592000);
 	    if (interval > 1) {
-	        return interval + " months ago";
+	        return interval + " " + _agile_get_translated_val("misc-keys", "mnths_ago");
 	    }
 	    interval = Math.floor(seconds / 86400);
 	    if (interval > 1) {
-	        return interval + " days ago";
+	        return interval + " " + _agile_get_translated_val("misc-keys", "days_ago");
 	    }
 	    interval = Math.floor(seconds / 3600);
 	    if (interval > 1) {
-	        return interval + " hours ago";
+	        return interval + " " + _agile_get_translated_val("misc-keys", "hrs_ago");
 	    }
 	    interval = Math.floor(seconds / 60);
 	    if (interval > 1) {
-	        return interval + " minutes ago";
+	        return interval + " " + _agile_get_translated_val("misc-keys", "mins_ago");
 	    }
-	    return new Handlebars.SafeString(Math.floor(seconds) + " seconds ago");
-
-		
-	
+	    return new Handlebars.SafeString(Math.floor(seconds) + " " + _agile_get_translated_val("misc-keys", "secs_ago"));
 		
 	});
 	
@@ -6784,61 +6429,63 @@ Handlebars.registerHelper('SALES_CALENDAR_URL', function()
 
 });
 
-	Handlebars.registerHelper('get_portlet_description', function(p_name)
-			{
+Handlebars.registerHelper('get_portlet_description', function(p_name)
+{
+
 	var description = '';
 	if (p_name == 'Filter Based')
-		description = 'See a list of 50 recently added contacts customizable by filters.';
+		description = 'filter_based_des';
 	else if (p_name == 'Emails Opened')
-		description = 'See what percentage of people open your direct emails.';
+		description = 'email_opened_des';
 	else if (p_name == 'Growth Graph')
-		description = 'Gain a quick insight on how contacts with specific tag(s) have changed over time.';
+		description = 'growth_graph_des';
 	else if (p_name == 'Calls Per Person')
-		description = 'Detailed reports on call activity of your team.';
+		description = 'calls_per_person_des';
 	else if (p_name == 'Pending Deals')
-		description = 'Gives you a heads up on all your pending Deals.';
+		description = 'pending_deals_des';
 	else if (p_name == 'Deals By Milestone')
-		description = 'A pie-chart of Deals grouped by Milestone.';
+		description = 'deals_by_milstone_des';
 	else if (p_name == 'Deals Funnel')
-		description = 'A funnel report of total Deals value in each Milestone.';
+		description = 'deal_funnel_des';
 	else if (p_name == 'Agenda')
-		description = 'A quick view of events from your calendar.';
+		description = 'agenda_des';
 	else if (p_name == 'Today Tasks')
-		description = 'A list of your upcoming or due Tasks';
+		description = 'today_tasks_des';
 	else if (p_name == 'Task Report')
-		description = 'Get a quick view of tasks by all users reported by status and duration.';
+		description = 'task_report_des';
 	else if (p_name == 'Agile CRM Blog')
-		description = "A feed of what's happening at our end including updates on new features.";
+		description = "agile_blog_des";
 	else if(p_name=='Stats Report')
-		description = 'Detailed list of activities done by your team members.';
+		description = 'stat_rep_des';
 	else if (p_name == 'Leaderboard')
-		description = ' A leaderboard for your team based on revenue won, tasks done, calls etc.';
+		description = 'leaderboard_des';
 	else if (p_name== 'User Activities')
-		description = 'See a timeline of user actions in Agile CRM.';
+		description = 'user_activity_des';
 	else if (p_name== 'Account Details')
-		description = 'Find current plan information, number of users and more.';
+		description = 'account_details_des';
 	else if (p_name== 'Revenue Graph')
-		description = 'Forecasted revenue graph based on your Deals.';
+		description = 'rev_graph_des';
 	else if (p_name== 'Mini Calendar')
-		description = 'A mini calendar with an overview of your agenda for the day.'
+		description = 'min_cal_des'
 	else if (p_name == 'Campaign stats')
-		description = 'See how your campaigns are performing with stats on email opens and link clicks.'
+		description = 'camp_stats_des'
 	else if (p_name == 'Campaign graph')
-		description = 'A pie chart of active, completed and removed subscribers of Campaigns'
+		description = 'camp_graph_des'
 	else if(p_name == 'Deal Goals')
-		description = 'See how much sales target you have achieved.'
+		description = 'deal_goal_des'
 	else if(p_name == 'Incoming Deals')
-		description = 'See how your deal sources are performing over time.'
+		description = 'incoming_deal_des'
 	else if(p_name == 'Lost Deal Analysis')
-		description = 'Get insights into why deals were lost. Filter by owner, track and source.'
+		description = 'loast_analy_des'
 	else if(p_name == 'Average Deviation')
-		description = 'A quick view of deviation in tasks completion times.'
+		description = 'avg_dev_des'
 	else if (p_name== 'Webstat Visits')
-		description = 'A pie chart of Known and Unknown Visits on your website.';
+		description = 'webstats_des';
 	else if(p_name == 'Referralurl stats')
-		description = 'A quick view of Top 5 Referral URL’s for your website traffic.'
-	return description;
-			});
+		description = 'ref_stats_des'
+
+	return _agile_get_translated_val("portlets", description);
+});
 
 	Handlebars.registerHelper('trialEndDate', function(billingData, options)
 			{

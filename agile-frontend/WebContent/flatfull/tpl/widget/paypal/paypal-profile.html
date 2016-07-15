@@ -1,8 +1,8 @@
 <script id="paypal-login-template" type="text/html">
 	<div class="m-t">
-		{{translate 'widgets' 'paypal-desc'}}
+		{{agile_lng_translate 'widgets' 'paypal-desc'}}
 		<br/>
-		<div class="text-center"><a href="{{url}}" class="btn btn-sm btn-primary m-t-sm" >{{translate 'widgets' 'link-your-payPal'}}</a></div>
+		<div class="text-center"><a href="{{url}}" class="btn btn-sm btn-primary m-t-sm" >{{agile_lng_translate 'widgets' 'link-your-payPal'}}</a></div>
 	</div>
 </script>
 
@@ -12,21 +12,21 @@
 		<li class="list-group-item r-none b-l-none b-r-none">
 			<div class="clear">					
 				<a class="pull-left text-info" data-toggle="collapse" href="#collapse-{{id}}">
-					{{translate 'plan-and-upgrade' 'invoice'}}: {{number}}
+					{{agile_lng_translate 'plan-and-upgrade' 'invoice'}}: {{number}}
 				</a>
 				<div class="pull-right font-bold">${{total_amount.value}}</div>	
 				<div class="clearfix"></div>
-				<div class="pull-left text-xs">{{translate 'widgets' 'status'}}</div>	
+				<div class="pull-left text-xs">{{agile_lng_translate 'widgets' 'status'}}</div>	
 				<div class="pull-right text-xs">{{status}}</div>
 				<div class="clearfix"></div>				
 				{{#if metadata.payer_view_url}}			
-					<div class="pull-left"><a class="btn btn-xs btn-default" target="_blank" href="{{metadata.payer_view_url}}">{{translate 'landing-pages' 'view'}}</a></div>
+					<div class="pull-left"><a class="btn btn-xs btn-default" target="_blank" href="{{metadata.payer_view_url}}">{{agile_lng_translate 'landing-pages' 'view'}}</a></div>
 				{{/if}}
 				<div class="clearfix"></div>
 			</div>		
 			<div class="clearfix"></div>					
 			<div id="collapse-{{id}}" class="collapse" style="color: rgba(0, 0, 0, 0.5);">
-				<span>{{translate 'menu' 'note'}}: </span><p>{{note}} </p>
+				<span>{{agile_lng_translate 'menu' 'note'}}: </span><p>{{note}} </p>
 				{{#each lines.data}}
 					// {{#if_equals type "invoiceitem"}}
 					// 	<div class="pull-left">{{description}}</div>					
@@ -35,7 +35,7 @@
 					// {{#if_equals type "subscription"}}
 					// 	<div class="pull-left">{{plan.name}}</div>					
 					// 	<div class="pull-right">$ {{numeric_operation plan.amount 100 "/"}}</div><br>
-					// 	<div class="pull-left">{{translate 'plan-and-upgrade' 'quantity'}}
+					// 	<div class="pull-left">{{agile_lng_translate 'plan-and-upgrade' 'quantity'}}
 					</div>					
 					// 	<div class="pull-right">{{quantity}}</div><br>
 					// 	<div class="text-ellipsis w-full">
@@ -57,10 +57,10 @@
 
 <script id="paypal-revoke-access-template" type="text/html">
 	<div class="m-b-lg">
-		<p>{{translate 'widgets' 'reconfigure-your-payPal-desc'}}</p>
+		<p>{{agile_lng_translate 'widgets' 'reconfigure-your-payPal-desc'}}</p>
 	</div>
 	<div class="m-t-sm m-r-none m-b-xs m-l-none text-center">
-		<a class='btn btn-danger btn-sm revoke-widget m-l-xs' widget-name="Stripe">{{translate 'widgets' 'revoke-access'}}</a>
-		<a href="#add-widget" class='btn btn-default btn-sm' widget-name="Stripe">{{translate 'other' 'cancel'}}</a>
+		<a class='btn btn-danger btn-sm revoke-widget m-l-xs' widget-name="Stripe">{{agile_lng_translate 'widgets' 'revoke-access'}}</a>
+		<a href="#add-widget" class='btn btn-default btn-sm' widget-name="Stripe">{{agile_lng_translate 'other' 'cancel'}}</a>
 	</div> 
 </script>

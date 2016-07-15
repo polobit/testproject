@@ -88,11 +88,11 @@
             <div class="title"><div class="text-base"><span><a class="no-line"><i class="icon-inbox text-muted"></i></a></span> {{titleFromEnums log_type}}</div></div>
             <div class="date">{{epochToTaskDate time}}</div>
             <div class="body">
-                <div class="caption" style="margin-top:-8px">{{translate 'contact-details' 'campaign'}} - {{campaign_name}}</div>
+                <div class="caption" style="margin-top:-8px">{{agile_lng_translate 'contact-details' 'campaign'}} - {{campaign_name}}</div>
 
             {{#if message}}
-                    <div class="text-xs text-ellipsis">{{#if_email_sent this "log_type"}} {{translate 'contact-details' 'subject'}}: {{Subject}} {{else}} {{{message}}} {{/if_email_sent}}
-                        <div class="right" data="{{#if_email_sent this "log_type"}} {{translate 'contact-details' 'subject'}}: {{Subject}} {{else}} {{{message}}} {{/if_email_sent}}"><a href="#" id="tl-log-popover"><i class="glyphicon glyphicon-plus-sign"></i></a></div>
+                    <div class="text-xs text-ellipsis">{{#if_email_sent this "log_type"}} {{agile_lng_translate 'contact-details' 'subject'}}: {{Subject}} {{else}} {{{message}}} {{/if_email_sent}}
+                        <div class="right" data="{{#if_email_sent this "log_type"}} {{agile_lng_translate 'contact-details' 'subject'}}: {{Subject}} {{else}} {{{message}}} {{/if_email_sent}}"><a href="#" id="tl-log-popover"><i class="glyphicon glyphicon-plus-sign"></i></a></div>
                     </div>   
             {{/if}}        
             </div>
@@ -110,8 +110,8 @@
             </span> {{subject}}</div></div>
             <div class="date">{{epochToTaskDate date_secs}}</div>
             <div class="body">
-                <div class="text-xs text-ellipsis"><b>{{translate 'contact-details' 'from'}}:</b> {{from}}</div>
-                <div class="text-xs text-ellipsis" id="tl-mail-to-popover" rel="popover" data-placement="right" data-content="message:" data-trigger="hover"><b>{{translate 'contact-details' 'to'}}:</b> {{to}}
+                <div class="text-xs text-ellipsis"><b>{{agile_lng_translate 'contact-details' 'from'}}:</b> {{from}}</div>
+                <div class="text-xs text-ellipsis" id="tl-mail-to-popover" rel="popover" data-placement="right" data-content="message:" data-trigger="hover"><b>{{agile_lng_translate 'contact-details' 'to'}}:</b> {{to}}
                 </div>            
             {{#if message}}
                 <div class="text-xs"><div class="ellipsis-multi-line" id="autoellipsis" style="height:70px;"><div> <p>{{{message}}}</p></div></div>
@@ -125,7 +125,7 @@
 
      {{#if_entity "guid"}}
             <div class="timestamp">{{created_time}}</div>
-            <div class="title"><div class="text-base"><span><a class="no-line"><i class="icon-list-alt text-muted"></i></a></span> {{translate 'contact-details' 'web'}}</div></div>
+            <div class="title"><div class="text-base"><span><a class="no-line"><i class="icon-list-alt text-muted"></i></a></span> {{agile_lng_translate 'contact-details' 'web'}}</div></div>
             <div class="date">{{epochToTaskDate created_time}}</div>
             <div class="body">
                 <div>
@@ -157,12 +157,12 @@
                     </div>
                 </div>
                 {{#if ref}}
-                     <div>{{translate 'contact-details' 'referred'}}: </div>
+                     <div>{{agile_lng_translate 'contact-details' 'referred'}}: </div>
 					 <div class="text-xs">{{ref}}</div>
                 {{/if}}
 
                 {{#if city}}
-                   <div>{{translate 'contact-details' 'address'}}: </div>
+                   <div>{{agile_lng_translate 'contact-details' 'address'}}: </div>
 				   <div class="text-xs">{{ucfirst city}}, {{ucfirst region}}, {{getCountryName country}}</div>
                 {{/if}}
 
@@ -264,7 +264,7 @@
             <!-- <div class="title"><div class="text-base"><span><a class="no-line"><i class="icon-tasks"></i></a></span> Task Added</div></div> -->
 			<div class="text-md text-cap pull-left">	
 				<div class="contact-job-title text-base custom-color">
-					<i class="icon-tasks text-muted p-r-xs"></i>{{translate 'contact-details' 'task-added'}}
+					<i class="icon-tasks text-muted p-r-xs"></i>{{agile_lng_translate 'contact-details' 'task-added'}}
 				</div>
 			</div>
             <div class="pull-right" style="font-size:11px;margin-top: 3px;"><i class="fa fa-clock-o m-r-xs"></i>{{epochToHumanDate "hh:MM tt" created_time}}</div><div class="clearfix"></div>
@@ -280,7 +280,7 @@
             <!-- <div class="title"><div class="text-base"><span><a class="no-line"><i class="icon-tasks"></i></a></span> Created</div></div> -->
 			<div class="text-md text-cap pull-left">	
 				<div class="contact-job-title text-base custom-color">
-					<i class="icon-tasks text-muted p-r-xs"></i>{{translate 'contact-details' 'created'}}
+					<i class="icon-tasks text-muted p-r-xs"></i>{{agile_lng_translate 'contact-details' 'created'}}
 				</div>
 			</div>
             <div class="pull-right" style="font-size:11px;margin-top: 3px;"><i class="fa fa-clock-o m-r-xs"></i>{{epochToHumanDate "hh:MM tt" created_time}}</div><div class="clearfix"></div>
@@ -296,7 +296,7 @@
             <!-- <div class="title"><div class="text-base"><span><a class="no-line"><i class="icon-tag"></i></a></span> Tag Added</div> - {{tag}}</div> -->
 			<div class="text-md text-cap pull-left">	
 				<div class="contact-job-title text-base custom-color">
-					<i class="icon-tag text-muted p-r-xs"></i>{{translate 'contact-details' 'tag-added'}} - {{tag}}
+					<i class="icon-tag text-muted p-r-xs"></i>{{agile_lng_translate 'contact-details' 'tag-added'}} - {{tag}}
 				</div>
 			</div>
             <div class="pull-right" style="font-size:11px;margin-top: 3px;"><i class="fa fa-clock-o m-r-xs"></i>{{epochToHumanDate "hh:MM tt" createdTime}}</div><div class="clearfix"></div>
@@ -331,7 +331,7 @@
             <!-- <div class="title"><div class="text-base"><span><a class="no-line"><i class="icon-money"></i></a></span> Deal Added</div></div> -->
 			<div class="text-md text-cap pull-left">	
 				<div class="contact-job-title text-base custom-color">
-					<i class="icon-money text-muted p-r-xs"></i>{{translate 'contact-details' 'deal-added'}}
+					<i class="icon-money text-muted p-r-xs"></i>{{agile_lng_translate 'contact-details' 'deal-added'}}
 				</div>
 			</div>
             <div class="pull-right" style="font-size:11px;margin-top: 3px;"><i class="fa fa-clock-o m-r-xs"></i>{{epochToHumanDate "hh:MM tt" created_time}}</div><div class="clearfix"></div>
@@ -368,7 +368,7 @@
 								{{/if_equals}}
 							{{/if_equals}}
 						{{/if_equals_lowerCase}}
-					<i class="icon-phone text-muted p-r-xs"></i>{{translate 'contact-details' 'incoming-call'}}
+					<i class="icon-phone text-muted p-r-xs"></i>{{agile_lng_translate 'contact-details' 'incoming-call'}}
 				</div>
 			</div>
              <div class="pull-right" style="font-size:11px;margin-top: 3px;"><i class="fa fa-clock-o m-r-xs"></i>{{epochToHumanDate "hh:MM tt" time}}</div><div class="clearfix"></div>
@@ -403,7 +403,7 @@
 								{{/if_equals}}
 							{{/if_equals}}
 						{{/if_equals_lowerCase}}
-					<i class="icon-phone text-muted p-r-xs"></i>{{translate 'contact-details' 'outgoing-call'}}
+					<i class="icon-phone text-muted p-r-xs"></i>{{agile_lng_translate 'contact-details' 'outgoing-call'}}
 				</div>
 			</div>
              <div class="pull-right" style="font-size:11px;margin-top: 3px;"><i class="fa fa-clock-o m-r-xs"></i>{{epochToHumanDate "hh:MM tt" time}}</div><div class="clearfix"></div>
@@ -420,7 +420,7 @@
         <!-- <div class="title"><h3><span><a class="no-line"><i class="icon-user"></i></a></span> Owner Changed</h3></div>-->
            <div class="text-md text-cap pull-left">	
 				<div class="contact-job-title text-base custom-color ">
-					<i class="icon-user text-muted p-r-xs"></i>{{translate 'contact-details' 'owner-changed'}}
+					<i class="icon-user text-muted p-r-xs"></i>{{agile_lng_translate 'contact-details' 'owner-changed'}}
 				</div>
                </div>
                <div class="pull-right" style="font-size:11px;margin-top: 3px;"><i class="fa fa-clock-o m-r-xs"></i>{{epochToHumanDate "hh:MM tt" time}}</div><div class="clearfix"></div>
@@ -437,14 +437,14 @@
             <!-- <div class="title"><div class="text-base"><span><a class="no-line"><i class="icon-folder-close"></i></a></span> Event Added</div></div> -->
 			<div class="text-md text-cap pull-left">	
 				<div class="contact-job-title text-base custom-color">
-					<i class="icon icon-calendar text-muted p-r-xs"></i>{{translate 'contact-details' 'event-completed'}}
+					<i class="icon icon-calendar text-muted p-r-xs"></i>{{agile_lng_translate 'contact-details' 'event-completed'}}
 				</div>
 			</div>
             <div class="pull-right" style="font-size:11px;margin-top: 3px;"><i class="fa fa-clock-o m-r-xs"></i>{{epochToHumanDate "hh:MM tt" start}}</div><div class="clearfix"></div>
             <div class="date">{{epochToTaskDate start}}</div>
             <div class="body">
                 <div class="text-xs ">{{title}}</div>
-                <div class="text-xs ">{{translate 'contact-details' 'started-at'}} {{epochToHumanDate "h:MM TT" start}} on {{epochToHumanDate "ddd mmm dd yyyy" start}}</div>
+                <div class="text-xs ">{{agile_lng_translate 'contact-details' 'started-at'}} {{epochToHumanDate "h:MM TT" start}} on {{epochToHumanDate "ddd mmm dd yyyy" start}}</div>
             </div>
         {{/if_entity}}
 
@@ -454,7 +454,7 @@
             <!-- <div class="title"><div class="text-base"><span><a class="no-line"><i class="icon-folder-close"></i></a></span> Case Added</div></div> -->
 			<div class="text-md text-cap pull-left">	
 				<div class="contact-job-title text-base custom-color">
-					<i class="icon-folder-close text-muted p-r-xs"></i>{{translate 'contact-details' 'case-added'}}
+					<i class="icon-folder-close text-muted p-r-xs"></i>{{agile_lng_translate 'contact-details' 'case-added'}}
 				</div>
 			</div>
             <div class="pull-right" style="font-size:11px;margin-top: 3px;"><i class="fa fa-clock-o m-r-xs"></i>{{epochToHumanDate "hh:MM tt" created_time}}</div><div class="clearfix"></div>
@@ -590,7 +590,7 @@
             <!-- <div class="title"><h3><span><a class="no-line"><i class="icon-phone" title="You Called"></i></a></span>{{title}}</h3></div> -->
 			<div class="text-md text-cap pull-left">	
 				<div class="contact-job-title text-base custom-color">
-					<i class="icon-phone text-muted p-r-xs" title="{{translate 'contact-details' 'you-called'}}"></i>{{title}}
+					<i class="icon-phone text-muted p-r-xs" title="{{agile_lng_translate 'contact-details' 'you-called'}}"></i>{{title}}
 				</div>
 			</div>
              <div class="pull-right" style="font-size:11px;margin-top: 3px;"><i class="fa fa-clock-o m-r-xs"></i>{{epochToHumanDate "hh:MM tt" created_time}}</div><div class="clearfix"></div>
@@ -606,7 +606,7 @@
             <!-- <div class="title"><h3><span><a class="no-line"><i class="icon-folder-open-alt" title="Email Opened"></i></a></span>{{title}}</h3></div> -->
 			<div class="text-md text-cap pull-left">	
 				<div class="contact-job-title text-base custom-color">
-					<i class="icon-folder-open-alt text-muted p-r-xs" title="{{translate 'contact-details' 'email-opened'}}"></i>{{title}}
+					<i class="icon-folder-open-alt text-muted p-r-xs" title="{{agile_lng_translate 'contact-details' 'email-opened'}}"></i>{{title}}
 				</div>
 			</div>
              <div class="pull-right" style="font-size:11px;margin-top: 3px;"><i class="fa fa-clock-o m-r-xs"></i>{{epochToHumanDate "hh:MM tt" created_time}}</div><div class="clearfix"></div>
@@ -620,7 +620,7 @@
             <div class="timestamp">{{created_time}}</div>
             <div class="text-md text-cap">  
                 <div class="contact-job-title text-base custom-color" style="max-width: initial;">
-                    <i class="fa fa-ticket text-muted text-muted p-r-xs" title="{{translate 'contact-details' 'ticket-created'}}">
+                    <i class="fa fa-ticket text-muted text-muted p-r-xs" title="{{agile_lng_translate 'contact-details' 'ticket-created'}}">
                     </i> Ticket#{{id}} created
                     <div class="pull-right" style="font-size:11px;margin-top: 3px; text-transform: initial;">
                         <i class="fa fa-clock-o m-r-xs"></i> {{epochToHumanDate "hh:MM tt" created_time}}

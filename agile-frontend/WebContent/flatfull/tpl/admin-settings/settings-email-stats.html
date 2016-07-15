@@ -2,7 +2,7 @@
 <div class="col">
 	<div class="col-md-12">
 		<div class="panel wrapper-md m-t-sm"> 
-		<legend class="m-b-sm"> {{translate 'campaigns' 'email-stats'}}
+		<legend class="m-b-sm"> {{agile_lng_translate 'campaigns' 'email-stats'}}
 				<span class="pull-right inline">
 					{{#if this.id}}Reputation {{{get_subaccount_reputation reputation}}}
 					{{/if}}
@@ -10,79 +10,79 @@
 		</legend>
 		<div class="row">
         	<div class="col-md-6">
-            	<h4 class="text-center">{{translate 'portlets' 'emails-sent'}}</h4>
+            	<h4 class="text-center">{{agile_lng_translate 'portlets' 'emails-sent'}}</h4>
 				<table class="table table-bordered">
 					<tbody>
 						{{#if this.id}}
-						<tr><th>{{translate 'admin-settings-stats' 'this-hour'}}</th><td>{{numberWithCommas sent_hourly}}</td></tr>
-						<tr><th>{{translate 'portlets' 'this-week'}}</th><td>{{numberWithCommas sent_weekly}}</td></tr>
-						<tr><th>{{translate 'portlets' 'this-month'}}</th><td>{{numberWithCommas sent_monthly}}</td></tr>
-						<tr><th>{{translate 'admin-settings-stats' 'overall'}}</th><td>{{numberWithCommas sent_total}}</td></tr>
+						<tr><th>{{agile_lng_translate 'admin-settings-stats' 'this-hour'}}</th><td>{{numberWithCommas sent_hourly}}</td></tr>
+						<tr><th>{{agile_lng_translate 'portlets' 'this-week'}}</th><td>{{numberWithCommas sent_weekly}}</td></tr>
+						<tr><th>{{agile_lng_translate 'portlets' 'this-month'}}</th><td>{{numberWithCommas sent_monthly}}</td></tr>
+						<tr><th>{{agile_lng_translate 'admin-settings-stats' 'overall'}}</th><td>{{numberWithCommas sent_total}}</td></tr>
 						{{else}}
-						<tr><th>{{translate 'admin-settings-stats' 'this-hour'}}</th><td>0</td></tr>
-						<tr><th>{{translate 'portlets' 'this-week'}}</th><td>0</td></tr>
-						<tr><th>{{translate 'portlets' 'this-month'}}</th><td>0</td></tr>
-						<tr><th>{{translate 'admin-settings-stats' 'overall'}}</th><td>0</td></tr>
+						<tr><th>{{agile_lng_translate 'admin-settings-stats' 'this-hour'}}</th><td>0</td></tr>
+						<tr><th>{{agile_lng_translate 'portlets' 'this-week'}}</th><td>0</td></tr>
+						<tr><th>{{agile_lng_translate 'portlets' 'this-month'}}</th><td>0</td></tr>
+						<tr><th>{{agile_lng_translate 'admin-settings-stats' 'overall'}}</th><td>0</td></tr>
 						{{/if}}
 					</tbody>
 				</table>
         	</div>
         	<div class="col-md-6">
-            	<h4 class="text-center">{{translate 'admin-settings-stats' 'bounces-last-30-days'}}
+            	<h4 class="text-center">{{agile_lng_translate 'admin-settings-stats' 'bounces-last-30-days'}}
             	</h4>
 				<table class="table table-bordered">
 					<tbody>
 						{{#if this.id}}
-						<tr><th>{{translate 'campaigns' 'hard-bounce'}}</th><td>{{numberWithCommas last_30_days.hard_bounces}}</td></tr>
-						<tr><th>{{translate 'campaigns' 'soft-bounce'}}</th><td>{{numberWithCommas last_30_days.soft_bounces}}</td></tr>
-						<tr><th>{{translate 'admin-settings-stats' 'rejects'}}</th><td>{{numberWithCommas last_30_days.rejects}}</td></tr>
-						<tr><th>{{translate 'admin-settings-stats' 'spam-complaints'}}</th><td>{{numberWithCommas last_30_days.complaints}}</td></tr>
+						<tr><th>{{agile_lng_translate 'campaigns' 'hard-bounce'}}</th><td>{{numberWithCommas last_30_days.hard_bounces}}</td></tr>
+						<tr><th>{{agile_lng_translate 'campaigns' 'soft-bounce'}}</th><td>{{numberWithCommas last_30_days.soft_bounces}}</td></tr>
+						<tr><th>{{agile_lng_translate 'admin-settings-stats' 'rejects'}}</th><td>{{numberWithCommas last_30_days.rejects}}</td></tr>
+						<tr><th>{{agile_lng_translate 'admin-settings-stats' 'spam-complaints'}}</th><td>{{numberWithCommas last_30_days.complaints}}</td></tr>
 						{{else}}
-						<tr><th>{{translate 'campaigns' 'hard-bounce'}}</th><td>0</td></tr>
-						<tr><th>{{translate 'campaigns' 'soft-bounce'}}</th><td>0</td></tr>
-						<tr><th>{{translate 'admin-settings-stats' 'rejects'}}</th><td>0</td></tr>
-						<tr><th>{{translate 'admin-settings-stats' 'spam-complaints'}}</th><td>0</td></tr>
+						<tr><th>{{agile_lng_translate 'campaigns' 'hard-bounce'}}</th><td>0</td></tr>
+						<tr><th>{{agile_lng_translate 'campaigns' 'soft-bounce'}}</th><td>0</td></tr>
+						<tr><th>{{agile_lng_translate 'admin-settings-stats' 'rejects'}}</th><td>0</td></tr>
+						<tr><th>{{agile_lng_translate 'admin-settings-stats' 'spam-complaints'}}</th><td>0</td></tr>
 						{{/if}}
 					</tbody>
 				</table>
         	</div>
     	</div>
-		<legend class="m-b-sm"> {{translate 'admin-settings-stats' 'sms-stats'}}
+		<legend class="m-b-sm"> {{agile_lng_translate 'admin-settings-stats' 'sms-stats'}}
 				<span class="inline" ></span>
 		</legend>
 					{{#unless Stats-Type}}
-					<div class="text-md">{{translate 'admin-settings-stats' 'no-sms-gateway-configured'}} <a class="text-info" href="#integrations">{{translate 'admin-settings-stats' 'configure-now'}}</a></div>
+					<div class="text-md">{{agile_lng_translate 'admin-settings-stats' 'no-sms-gateway-configured'}} <a class="text-info" href="#integrations">{{agile_lng_translate 'admin-settings-stats' 'configure-now'}}</a></div>
 					{{/unless}}
 		{{#if_equals "SMS-Stats" Stats-Type}}
 		<div class="row">
         	<div class="col-md-6">
-            	<h4 class="text-center">{{translate 'admin-settings-stats' 'sms-sent'}}</h4>
+            	<h4 class="text-center">{{agile_lng_translate 'admin-settings-stats' 'sms-sent'}}</h4>
 				<table class="table table-bordered">
 					<tbody>
-						<tr><th>{{translate 'portlets' 'today'}}</th><td>{{numberWithCommas Today}} 
+						<tr><th>{{agile_lng_translate 'portlets' 'today'}}</th><td>{{numberWithCommas Today}} 
 						</td></tr>
-						<tr><th>{{translate 'portlets' 'yesterday'}}</th><td> {{numberWithCommas Yesterday}}</td></tr>
-						<tr><th>{{translate 'portlets' 'this-month'}}</th><td>{{numberWithCommas ThisMonth}} </td></tr>
-						<tr><th>{{translate 'portlets' 'last-month'}}</th><td>{{numberWithCommas LastMonth}} </td></tr>
+						<tr><th>{{agile_lng_translate 'portlets' 'yesterday'}}</th><td> {{numberWithCommas Yesterday}}</td></tr>
+						<tr><th>{{agile_lng_translate 'portlets' 'this-month'}}</th><td>{{numberWithCommas ThisMonth}} </td></tr>
+						<tr><th>{{agile_lng_translate 'portlets' 'last-month'}}</th><td>{{numberWithCommas LastMonth}} </td></tr>
 					</tbody>
 				</table>
         	</div>
         	<div class="col-md-6">
-            	<h4 class="text-center">{{translate 'admin-settings-stats' 'sms-details-last-30-days'}}</h4>
+            	<h4 class="text-center">{{agile_lng_translate 'admin-settings-stats' 'sms-details-last-30-days'}}</h4>
 				<table class="table table-bordered">
 					<tbody>
-						<tr><th>{{translate 'admin-settings-stats' 'queued'}}</th><td>{{Queued}} </td></tr>
-						<tr><th>{{translate 'admin-settings-stats' 'delivered'}}</th><td> {{Delivered}}</td></tr>
-						<tr><th>{{translate 'admin-settings-stats' 'undelivered'}}
+						<tr><th>{{agile_lng_translate 'admin-settings-stats' 'queued'}}</th><td>{{Queued}} </td></tr>
+						<tr><th>{{agile_lng_translate 'admin-settings-stats' 'delivered'}}</th><td> {{Delivered}}</td></tr>
+						<tr><th>{{agile_lng_translate 'admin-settings-stats' 'undelivered'}}
 						<span class="v-top">
 						<img border="0" src="{{getS3ImagePath '/img/help.png'}}" class="question-tag-tiny v-top"  rel="popover" data-placement="right" data-title:"="" 
-						data-content="{{translate 'admin-settings-stats' 'twilio-has-received-a-delivery-desc'}}" 
+						data-content="{{agile_lng_translate 'admin-settings-stats' 'twilio-has-received-a-delivery-desc'}}" 
 						id="element" data-trigger="hover" data-original-title=""></span>
 						</th><td>{{Undelivered}}</td></tr>
 						<tr><th>Failed
 						<span class="v-top">
 						<img border="0" src="{{getS3ImagePath '/img/help.png'}}" class="question-tag-tiny v-top" rel="popover" data-placement="right" data-title:"="" 
-						data-content="{{translate 'admin-settings-stats' 'message-could-not-be-sent-desc'}}" 
+						data-content="{{agile_lng_translate 'admin-settings-stats' 'message-could-not-be-sent-desc'}}" 
 						id="element" data-trigger="hover" data-original-title=""></span>
 						</th><td>{{Failed}} </td></tr>
 					</tbody>

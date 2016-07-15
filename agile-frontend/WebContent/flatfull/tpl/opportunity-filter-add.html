@@ -1,12 +1,12 @@
 <script id="filter-deals-template" type="text/html">
 <div class="bg-light lter b-b wrapper-md">
 	{{#if id}} 
-		<h3  class="formheading h3 font-thin m-n">{{translate 'deal-view' 'edit-deal-filter'}}
-			<span style="vertical-align: text-top; margin-left: -3px"> <img border="0" src="/img/help.png" style="height: 6px;" rel="popover" data-placement="bottom" data-content="{{translate 'deal-view' 'edit-deal-filter-popover-content-1'}}" id="element" data-trigger="hover"></span>
+		<h3  class="formheading h3 font-thin m-n">{{agile_lng_translate 'deal-view' 'edit-deal-filter'}}
+			<span style="vertical-align: text-top; margin-left: -3px"> <img border="0" src="/img/help.png" style="height: 6px;" rel="popover" data-placement="bottom" data-content="{{agile_lng_translate 'deal-view' 'edit-deal-filter-popover-content-1'}}" id="element" data-trigger="hover"></span>
 		</h3>
 	{{else}}
         <h3 class="formheading h3 font-thin m-n"><i class="icon-plus-sign"></i> Add Deal Filter
-        	<span style="vertical-align: text-top; margin-left: -3px"> <img border="0" src="/img/help.png" style="height: 6px;" rel="popover" data-placement="bottom" data-content="{{translate 'deal-view' 'edit-deal-filter-popover-content-1'}}" id="element" data-trigger="hover">
+        	<span style="vertical-align: text-top; margin-left: -3px"> <img border="0" src="/img/help.png" style="height: 6px;" rel="popover" data-placement="bottom" data-content="{{agile_lng_translate 'deal-view' 'edit-deal-filter-popover-content-1'}}" id="element" data-trigger="hover">
 			</span>
 		</h3>
      {{/if}}
@@ -18,28 +18,28 @@
 				<div name="rules" class="formsection chainedSelect">	
 					<fieldset>
 						<div class="control-group form-group">
-							<label class="control-label col-sm-2">{{translate 'other' 'name'}}<span class="field_req">*</span></label>
+							<label class="control-label col-sm-2">{{agile_lng_translate 'other' 'name'}}<span class="field_req">*</span></label>
 							<div class="controls col-sm-8">
 								<input type="text" name="name" class="required form-control" maxlength="120" placeholder="Max Length: 120" />
 							</div>
 						</div>
 					</div> -->
 					<div class="control-group form-group">
-						<label class="control-label col-sm-2">{{translate 'deal-view' 'owner'}}</label>
+						<label class="control-label col-sm-2">{{agile_lng_translate 'deal-view' 'owner'}}</label>
 						<div class="controls col-sm-6" >
 							<select id="owners-list-filters" name="owner_id" class="form-control"></select>
 							<img class="loading-img" src="img/21-0.gif"></img>
 						</div>
 					</div>
 					<div class="control-group form-group" id="filter-track">
-						<label class="control-label col-sm-2">{{translate 'deal-view' 'track'}}</label>
+						<label class="control-label col-sm-2">{{agile_lng_translate 'deal-view' 'track'}}</label>
 						<div class="controls col-sm-6" id="track_div">
 							<select id="filter_pipeline" name="pipeline_id" class="form-control"></select>
 							<img class="loading-img" src="img/21-0.gif"></img>
 						</div>
 					</div>
 					<div class="control-group form-group" id="filter-milestone">
-						<label class="control-label col-sm-2">{{translate 'deal-view' 'milestone'}}</label>
+						<label class="control-label col-sm-2">{{agile_lng_translate 'deal-view' 'milestone'}}</label>
 						<div class="controls col-sm-6" id="milestone_div">
 							<select id="milestone" name="milestone" class="form-control">
 							</select>
@@ -48,21 +48,21 @@
 					</div>
 						
 					<div class="control-group form-group" id="deal-value-filter">
-						<label class="control-label col-sm-2">{{translate 'contacts-view' 'value'}}</label>
+						<label class="control-label col-sm-2">{{agile_lng_translate 'contacts-view' 'value'}}</label>
 						<div class="controls col-sm-2" id="value_div">
 								<select id="value_filter" name="value_filter" class="filter_type form-control m-b-sm" data="expected_value">
-									<option value="equals">{{translate 'deal-view' 'equals'}}</option>
-									<option value="between">{{translate 'deal-view' 'between'}}</option>
+									<option value="equals">{{agile_lng_translate 'deal-view' 'equals'}}</option>
+									<option value="between">{{agile_lng_translate 'deal-view' 'between'}}</option>
 								</select>
 						</div>
 						<div class="controls col-sm-4 equals">
-							<input type="number" id="value" name="value" placeholder="{{translate 'contacts-view' 'value'}}" class="equals form-control positive_number"/>
+							<input type="number" id="value" name="value" placeholder="{{agile_lng_translate 'contacts-view' 'value'}}" class="equals form-control positive_number"/>
 						</div>
 						<div class="controls col-sm-2 hide between">
-							<input type="number" id="value_start" name="value_start" class="between form-control positive_number" placeholder="{{translate 'contacts-view' 'min-value'}}"/>
+							<input type="number" id="value_start" name="value_start" class="between form-control positive_number" placeholder="{{agile_lng_translate 'contacts-view' 'min-value'}}"/>
 						</div>
 						<div class="controls col-sm-2 hide between"> 
-								<input type="number" id="value_end" name="value_end" placeholder="{{translate 'contacts-view' 'max-value'}}" 
+								<input type="number" id="value_end" name="value_end" placeholder="{{agile_lng_translate 'contacts-view' 'max-value'}}" 
 								class="between form-control positive_number" />
 						</div>
 					</div>
@@ -100,12 +100,12 @@
 						</div>
 					</div>
 					<div class="control-group form-group">
-						<label class="control-label col-sm-2">{{translate 'contact-edit' 'state'}}</label>
+						<label class="control-label col-sm-2">{{agile_lng_translate 'contact-edit' 'state'}}</label>
 						<div class="controls col-sm-6" id="archived_div">
 							<span><select id="archived" name="archived" class="form-control">
-									<option value="true">{{translate 'deal-view' 'archived'}}</option>
-									<option value="false" selected>{{translate 'deal-view' 'active'}}</option>
-									<option value="all">{{translate 'deal-view' 'all'}}
+									<option value="true">{{agile_lng_translate 'deal-view' 'archived'}}</option>
+									<option value="false" selected>{{agile_lng_translate 'deal-view' 'active'}}</option>
+									<option value="all">{{agile_lng_translate 'deal-view' 'all'}}
 									</option>
 							</select></span>
 						</div>
@@ -113,8 +113,8 @@
 					<div class="line line-lg b-b"></div>
 					<div class="row">
 						<div class="form-actions col-sm-offset-2 col-sm-10">
-							<a href="#deal-filters" class="btn btn-sm btn-default">{{translate 'other' 'cancel'}}</a>
-							<a href="#" type="submit" class="save btn btn-sm btn-primary" id="filtersAdd">{{translate 'report-add' 'save'}}</a> 
+							<a href="#deal-filters" class="btn btn-sm btn-default">{{agile_lng_translate 'other' 'cancel'}}</a>
+							<a href="#" type="submit" class="save btn btn-sm btn-primary" id="filtersAdd">{{agile_lng_translate 'report-add' 'save'}}</a> 
 						</div>
 					</div>
 					{{#if id}}

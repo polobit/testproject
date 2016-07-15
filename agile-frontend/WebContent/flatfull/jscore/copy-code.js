@@ -64,7 +64,7 @@ function initZeroClipboard2($id, $source){
 	var clip = new ZeroClipboard($id);
  
     clip.on("ready", function(e) {
-        $id.data("placement", "top").attr("title", "Copy to clipboard").tooltip();
+        $id.data("placement", "top").attr("title", _agile_get_translated_val("misc-keys", "cpy-to-clip")).tooltip();
     });
  
     clip.on("copy", function(e) {
@@ -73,9 +73,9 @@ function initZeroClipboard2($id, $source){
  
     clip.on("aftercopy", function(e) {
 
-    	var txt = $id.attr("data-copied-text") ? $id.attr("data-copied-text") : 'Copied!';
+    	var txt = $id.attr("data-copied-text") ? $id.attr("data-copied-text") : _agile_get_translated_val("misc-keys", "clip-copied");
     	
-        $id.attr("title", txt).tooltip("fixTitle").tooltip("show").attr("title", "Copy to clipboard").tooltip("fixTitle");
+        $id.attr("title", txt).tooltip("fixTitle").tooltip("show").attr("title", _agile_get_translated_val("misc-keys", "cpy-to-clip")).tooltip("fixTitle");
     });
  
     clip.on("error", function(e) {
@@ -85,22 +85,21 @@ function initZeroClipboard2($id, $source){
 
 function getTitleForClip(id) {
 
- var title = "Code copied to clipboard";
+ var title = _agile_get_translated_val("misc-keys", "clip-code-copied");
  switch (id) {
  case "copy_email_to_clip_button":
-  title = "Email copied to clipboard";
+  title = _agile_get_translated_val("misc-keys", "clip-email-copied");
   break;
  case "api_key_code_icon":
-  title = "Key copied to clipboard";
+  title = _agile_get_translated_val("misc-keys", "clip-email-copied");
   break;
  case "popup_clip_button":
-  title = "Code copied to clipboard";
+  title = _agile_get_translated_val("misc-keys", "clip-code-copied");
   break;
  case "url_clip_button":
-  title = "URl copied to clipboard";
+  title = _agile_get_translated_val("misc-keys", "clip-url-copied");
   break;
  }
-
  return title;
 
 }
