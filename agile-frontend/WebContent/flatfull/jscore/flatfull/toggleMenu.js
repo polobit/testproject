@@ -51,7 +51,7 @@ $(document).ready(function(){
 //addDescriptionInfo();
 
 $(".free_plan_strip_close").click(function(e){
-	$(this).closest(".free_plan_alert_info").hide().removeAttr("id");
+	$(this).closest(".free_plan_alert").hide().removeAttr("id");
 });
 	
  $("#addDescriptionLink").click(function(e){
