@@ -5904,7 +5904,7 @@ $(function()
 		case "no interest":
 		case "incorrect referral":
 		case "meeting scheduled":
-		case "new oppurtunity":
+		case "new opportunity":
 			return "Call duration";
 			break;
 		case "busy":
