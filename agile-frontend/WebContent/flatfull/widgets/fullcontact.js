@@ -1,7 +1,7 @@
 var fullContactObjects = {};
 
 function loadFullContactData(apikey, emailID){	
-	head.js(LIB_PATH + 'lib/jquery.fullcontact.2.2.js', function(){		
+	head.js('/lib/jquery.fullcontact.2.2.js', function(){		
 		var testEmail = "bart@fullcontact.com";
 		$.fullcontact.emailLookup(apikey, testEmail, function(contactObj){			
 			if(contactObj){	
