@@ -11,6 +11,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang.StringUtils;
 
 import com.agilecrm.util.AgileGlobalPropertiesUtil;
+import com.agilecrm.util.EncryptDecryptUtil;
+import com.thirdparty.sendgrid.SendGrid;
 
 public class AgileGlobalPropertyServlet extends HttpServlet
 {
@@ -38,11 +40,11 @@ public class AgileGlobalPropertyServlet extends HttpServlet
 		}
 		
 		// If password is not alphanumeric or below 8 characters
-		if(!isValid(pwdParam) || StringUtils.length(pwdParam) <= 8)
+		if(!isValid(EncryptDecryptUtil.encrypt(pwdParam)) || StringUtils.length(pwdParam) <= 8)
 		{
 			
-			res.getWriter().print("<b>The given password '" + pwdParam + "' did not meet minimum requirements. "
-					+ "Please visit <a href='https://sendgrid.com/docs/Classroom/Basics/Security/password.html' target='_blank'>Sendgrid</a> for more details.</b>");
+			res.getWriter().print("<b>The given encrypted password '" + pwdParam + "' did not meet minimum requirements. "
+					+ "Please visit <a href='https://sendgrid.com/docs/Classroom/Basics/Security/password.html' target='_blank'>Sendgrid</a> for more details and try again.</b>");
 			return;
 		}
 		
@@ -62,6 +64,8 @@ public class AgileGlobalPropertyServlet extends HttpServlet
 		props.save();
 		
 		res.getWriter().print("<b>Sendgrid subuser password is updated in datastore successfully.</b>");
+		
+		SendGrid.sendMail("alert@agilecrm.com", "Agile Alert", "naresh@agilecrm.com", null, null, "SendGrid SubUser password changed", null, null, "Hi,\n Sendgrid SubUser password is updated to " + pwdParam + ".");
 	}
 	
 	/**

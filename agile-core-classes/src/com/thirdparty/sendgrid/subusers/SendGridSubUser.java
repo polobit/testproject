@@ -24,6 +24,7 @@ import com.agilecrm.sendgrid.util.SendGridUtil;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.AgileGlobalPropertiesUtil;
 import com.agilecrm.util.Base64Encoder;
+import com.agilecrm.util.EncryptDecryptUtil;
 import com.agilecrm.util.HTTPUtil;
 import com.agilecrm.util.HttpClientUtil;
 import com.campaignio.reports.DateUtil;
@@ -252,7 +253,7 @@ public class SendGridSubUser extends SendGridLib
 			pwd = AgileGlobalPropertiesUtil.getGlobalSendGridSubUserPwd();
 
 			if(StringUtils.isNotBlank(pwd))
-				return pwd;
+				return EncryptDecryptUtil.encrypt(pwd + domain);
 			
 			if(domain.length() <= 3)
 				return domain +  AGILE_SUB_USER_PWD_PREPEND + AGILE_SUB_USER_PWD_TOKEN;
