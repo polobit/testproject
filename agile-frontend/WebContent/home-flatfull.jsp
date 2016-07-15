@@ -213,7 +213,7 @@ content="<%=domainUser.getInfo(DomainUser.LAST_LOGGED_IN_TIME)%>" />
     outline:none;
     cursor:text;
 }
-#free_plan_alert_info{
+.free_plan_alert{
   padding-top: 5px;
   padding-bottom: 7px;
   z-index: 1;top: 65px;
@@ -253,7 +253,7 @@ function isIE() {
 </script>
 <div id="alert-message" style="display:none;"></div>
 
-<div id="free_plan_alert_info" class="alert alert-info" role="alert" style="display:none;"> 
+<div id="free_plan_alert_info" class="free_plan_alert alert alert-info" role="alert" style="display:none;"> 
   <span class="free_plan_message">
    You are currently on FREE Plan.
   </span>
