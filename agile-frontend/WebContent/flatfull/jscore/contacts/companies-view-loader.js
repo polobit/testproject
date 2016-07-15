@@ -34,7 +34,7 @@ var companies_view_loader = {
 		}
 		var that = this;
 		var url = this.getCompaniesUrl(tag_id);
-		var slateKey = getContactPadcontentKey(url);
+		var slateKey = getCompanyPadcontentKey(url);
 		var templateKey = this.getCompaniesTemplateKey();
 		var individual_tag_name = this.getCompaniesIndividualTagName();
 		var postData = {'filterJson': this.getPostData()};

@@ -27,8 +27,10 @@ var Contacts_And_Companies_Events_View = Base_Model_View.extend({
     	'click .contacts-view' : 'toggleContactsView',
     	'click #contactTabelView' : 'toggleContactsListView',
     	'click .contactcoloumn' : 'addOrRemoveContactColumns',
+    	'click .toggle-contact-filters' : 'toggleContactFilters',
     	'click #companiesTabelView' : 'toggleCompaniesListView',
     	'click .companycoloumn' : 'addOrRemoveCompanyColumns',
+    	'click .toggle-company-filters' : 'toggleCompanyFilters',
     	
     },
 
@@ -135,7 +137,7 @@ var Contacts_And_Companies_Events_View = Base_Model_View.extend({
 
 		//_agile_set_prefs('company_filter', "Companies");
 		COMPANIES_HARD_RELOAD = true;
-		App_Companies.companies(); // /Show Companies list, explicitly hard
+		companies_view_loader.getCompanies(App_Companies.companyViewModel, $('#companies-listener-container'));
 		// reload
 		return;
 	},
@@ -334,6 +336,27 @@ var Contacts_And_Companies_Events_View = Base_Model_View.extend({
 		});
     },
 
+    toggleContactFilters : function(e){
+    	if (_agile_get_prefs("hide_contacts_lhs_filter")) {
+            _agile_delete_prefs("hide_contacts_lhs_filter");
+            $(e.currentTarget).attr("data-original-title", "Hide Filters").tooltip("hide");
+        } else {
+            _agile_set_prefs("hide_contacts_lhs_filter", true);
+            $(e.currentTarget).attr("data-original-title", "Show Filters").tooltip("hide");
+        }
+
+        if ($('#contacts-lhs-filters-toggle', $("#contacts-listener-container")).is(':visible'))
+		{
+			$('#contacts-lhs-filters-toggle', $("#contacts-listener-container")).hide("slow");
+			_agile_set_prefs(CONTACTS_DYNAMIC_FILTER_COOKIE_STATUS, "hide");
+		}
+		else
+		{
+			$('#contacts-lhs-filters-toggle', $("#contacts-listener-container")).show("slow");
+			_agile_set_prefs(CONTACTS_DYNAMIC_FILTER_COOKIE_STATUS, "show");
+		}
+    },
+
     toggleCompaniesListView : function(e){
     	if(_agile_get_prefs("companyTabelView")){
     		_agile_delete_prefs("companyTabelView");
@@ -376,6 +399,17 @@ var Contacts_And_Companies_Events_View = Base_Model_View.extend({
 				});
 			} 
 		});
+    },
+
+    toggleCompanyFilters : function(e){
+    	if (_agile_get_prefs("companiesFilterStatus") == "display:none") 
+        {
+            _agile_delete_prefs("companiesFilterStatus");
+            $(e.currentTarget).attr("data-original-title", "Hide Filters").tooltip("hide");
+        } else {
+            _agile_set_prefs("companiesFilterStatus", "display:none");
+            $(e.currentTarget).attr("data-original-title", "Show Filters").tooltip("hide");
+        }
     }
 
    

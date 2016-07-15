@@ -1,30 +1,6 @@
 var timer = undefined;
 
   	$(function(){
-		
- 		$("body").on("click", ".toggle-contact-filters", function(b) {
-            if (_agile_get_prefs("hide_contacts_lhs_filter")) {
-                _agile_delete_prefs("hide_contacts_lhs_filter");
-                $(this).attr("data-original-title", "Hide Filters").tooltip("hide");
-            } else {
-                _agile_set_prefs("hide_contacts_lhs_filter", true);
-                $(this).attr("data-original-title", "Show Filters").tooltip("hide");
-            }
-            
-        });
-
-		 $("body").on("click", ".toggle-company-filters", function(b) {
-            if (_agile_get_prefs("companiesFilterStatus") == "display:none") 
-            {
-                _agile_delete_prefs("companiesFilterStatus");
-                $(this).attr("data-original-title", "Hide Filters").tooltip("hide");
-            } else {
-                _agile_set_prefs("companiesFilterStatus", "display:none");
-                $(this).attr("data-original-title", "Show Filters").tooltip("hide");
-            }
-            
-        });
-
 	$('body').off('mouseover','.popover_contact');
 		$('body').on('mouseover','.popover_contact',function(e){
 			//e.stopPropagation();
