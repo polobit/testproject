@@ -1,14 +1,19 @@
 package com.agilecrm.languageparser;
 
-import org.apache.commons.lang.StringUtils;
-
 public class ParserUtil {
 	public static String encodeDelimeter(String value) {
-		return StringUtils.replace(value, ",", "&#44;");
+		if (value != null)
+			return value.replace(",", "&#44;");
+
+		return value;
 	}
 
 	public static String decodeDelimeter(String value) {
-		return StringUtils.replace(value, "&#44;", ",");
+		if (value != null)
+			return value.replace("&#44;", ",");
+
+		return value;
+
 	}
 
 	public static String replaceEdgeChars(String str) {
