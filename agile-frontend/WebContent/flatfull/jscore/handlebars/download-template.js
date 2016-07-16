@@ -18,7 +18,7 @@ function downloadTemplate(url, callback)
 	// pre-compiled flat is set true then template path is sent accordingly
 	if (HANDLEBARS_PRECOMPILATION)
 	{
-		url = "tpl/min/precompiled/" + FLAT_FULL_UI +  url;
+		url = "tpl/min/precompiled/locales/" + _LANGUAGE +  "/" + url;
 	}
 	else
 		url = "tpl/min/locales/" + _LANGUAGE + "/" + url;

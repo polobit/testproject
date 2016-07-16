@@ -636,7 +636,7 @@ if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Produ
 
 %>
 
-    <%@ include file="tpl/min/precompiled/flatfull/tpl.html"%>  
+    <%@ include file="tpl/min/precompiled/locales/" + _LANGUAGE + "/" + _LANGUAGE + ".html"%>  
  
   <!-- Include bootstrap modal divs-->
  <%@ include file="flatfull/modals.html"%>
@@ -747,7 +747,7 @@ head.load(	"https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js",
 // head.js({ library  : LIB_PATH + 'final-lib/min/lib-all-min-1.js?_=' + _AGILE_VERSION });
 
 if(HANDLEBARS_PRECOMPILATION)
-head.js(CLOUDFRONT_PATH + "tpl/min/precompiled/" + FLAT_FULL_PATH + "tpl.js" + "?_=" + _agile_get_file_hash('tpl.js'));	
+head.js(CLOUDFRONT_PATH + "tpl/min/precompiled/locales/" + _LANGUAGE + "/" + "tpl.js" + "?_=" + _agile_get_file_hash('tpl.js'));	
 
 var en;
 
@@ -776,7 +776,7 @@ head.load([{'js-core-1': CLOUDFRONT_PATH + 'jscore/min/' + FLAT_FULL_PATH +'js-a
 		{'js-core-2': CLOUDFRONT_PATH + 'jscore/min/' + FLAT_FULL_PATH +'js-all-min-2.js' + "?_=" + _agile_get_file_hash('js-all-min-2.js')}, 
 		{'js-core-3': CLOUDFRONT_PATH + 'jscore/min/' + FLAT_FULL_PATH +'js-all-min-3.js' + "?_=" + _agile_get_file_hash('js-all-min-3.js')}, 
 		{'js-core-4': CLOUDFRONT_PATH + 'jscore/min/' + FLAT_FULL_PATH +'js-all-min-4.js' + "?_=" + _agile_get_file_hash('js-all-min-4.js')}, 
-		CLOUDFRONT_PATH + "tpl/min/precompiled/" + FLAT_FULL_PATH + "contact-view.js" + "?_=" + _agile_get_file_hash('contact-view.js')], function(){
+		CLOUDFRONT_PATH + "tpl/min/precompiled/locales/" + _LANGUAGE + "contact-view.js" + "?_=" + _agile_get_file_hash('contact-view.js')], function(){
 			console.log("All files loaded. Now continuing with script");
 			try{
 				$('[data-toggle="tooltip"]').tooltip();  
