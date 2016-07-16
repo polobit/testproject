@@ -633,11 +633,9 @@ if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Produ
     production = true;
    
 }
-
+String tplFile = "tpl/min/precompiled/locales/" + _LANGUAGE + "/" + _LANGUAGE + ".html";
 %>
-
-    <%@ include file="tpl/min/precompiled/locales/" + _LANGUAGE + "/" + _LANGUAGE + ".html"%>  
- 
+  
   <!-- Include bootstrap modal divs-->
  <%@ include file="flatfull/modals.html"%>
 
@@ -737,8 +735,10 @@ head.load(	"https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js",
 			LIB_PATH + 'final-lib/min/lib-all-new-1.js?_=' + _agile_get_file_hash('lib-all-new-1.js'),
 			"https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.3.0/handlebars.min.js",
 			LIB_PATH + 'final-lib/min/backbone-min.js',
-			LIB_PATH + 'final-lib/min/lib-all-new-2.js?_=' + _agile_get_file_hash('lib-all-new-2.js')+'_', 
+			LIB_PATH + 'final-lib/min/lib-all-new-2.js?_=' + _agile_get_file_hash('lib-all-new-2.js'), FLAT_FULL_PATH + "jscore/handlebars/download-template.js" + "?_=" + _agile_get_file_hash('download-template.js'),  
 			function(){
+            // Load tpl.html
+            load_tpl_html();
             // load_lng_json();
 		        load_globalize();
 		        showVideoForRegisteredUser();
@@ -760,7 +760,7 @@ var Agile_Contact = {};
 head.ready(function() {
 
 if(!HANDLEBARS_PRECOMPILATION){
-    head.js(HANDLEBARS_LIB, FLAT_FULL_PATH + "jscore/handlebars/download-template.js" + "?_=" + _agile_get_file_hash('download-template.js'), function()
+    head.js(HANDLEBARS_LIB, function()
     {
         downloadTemplate("tpl.js");
         downloadTemplate("contact-view.js");
@@ -776,7 +776,7 @@ head.load([{'js-core-1': CLOUDFRONT_PATH + 'jscore/min/' + FLAT_FULL_PATH +'js-a
 		{'js-core-2': CLOUDFRONT_PATH + 'jscore/min/' + FLAT_FULL_PATH +'js-all-min-2.js' + "?_=" + _agile_get_file_hash('js-all-min-2.js')}, 
 		{'js-core-3': CLOUDFRONT_PATH + 'jscore/min/' + FLAT_FULL_PATH +'js-all-min-3.js' + "?_=" + _agile_get_file_hash('js-all-min-3.js')}, 
 		{'js-core-4': CLOUDFRONT_PATH + 'jscore/min/' + FLAT_FULL_PATH +'js-all-min-4.js' + "?_=" + _agile_get_file_hash('js-all-min-4.js')}, 
-		CLOUDFRONT_PATH + "tpl/min/precompiled/locales/" + _LANGUAGE + "contact-view.js" + "?_=" + _agile_get_file_hash('contact-view.js')], function(){
+		CLOUDFRONT_PATH + "tpl/min/precompiled/locales/" + _LANGUAGE + "/contact-view.js" + "?_=" + _agile_get_file_hash('contact-view.js')], function(){
 			console.log("All files loaded. Now continuing with script");
 			try{
 				$('[data-toggle="tooltip"]').tooltip();  
@@ -809,6 +809,10 @@ head.load([{'js-core-1': CLOUDFRONT_PATH + 'jscore/min/' + FLAT_FULL_PATH +'js-a
 // head.js({"stats" : '<%=CLOUDFRONT_TEMPLATE_LIB_PATH%>stats/min/agile-min.js' + "?_=" + _AGILE_VERSION});
 	
 }); //End of head.ready() function. Check above.
+
+function load_tpl_html(){
+    downloadTemplate('<%=tplFile%>');
+}
 
 function load_globalize()
 {
