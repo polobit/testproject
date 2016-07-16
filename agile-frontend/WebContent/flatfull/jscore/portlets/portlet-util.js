@@ -1239,16 +1239,16 @@ var portlet_utility = {
 		}
 		case "Mini Calendar": {
 
-								$('.portlet_body_calendar', $("#ui-id-"+column_position+"-"+row_position))
+								$('.portlet_body_calendar', $(model_list_element_fragment_portlets.querySelector('#ui-id-' + column_position + '-' + row_position)))
 										.attr(
 												'id',
 												'p-body-calendar'
 														+ column_position + '-'
 														+ row_position)
-								$(
+								$(model_list_element_fragment_portlets.querySelector(
 										'#p-body-calendar' + column_position
-												+ '-' + row_position,
-										$('#portlet-res'))
+												+ '-' + row_position
+										))
 										.each(
 												function() {
 													$(this)
