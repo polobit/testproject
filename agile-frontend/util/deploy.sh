@@ -6,9 +6,17 @@
 
 #java -jar precompile.jar ../WebContent/tpl ../../../tmp/handlebars ../WebContent/tpl/min/precompiled
 
+##Localization language support
+java -jar agilelocalize.jar ../WebContent/flatfull/tpl ../WebContent/tpl/localestmp en
+java -jar agilelocalize.jar ../WebContent/helpcenter/helpcenter-tpl ../WebContent/tpl/localestmp en
 
-java -jar precompile.jar ../WebContent/flatfull/tpl ../../../tmp/handlebars ../WebContent/tpl/min/precompiled/flatfull
-java -jar precompile.jar ../WebContent/helpcenter/helpcenter-tpl ../../../tmp/handlebars ../WebContent/tpl/min/precompiled/flatfull
+##English precompilation
+java -jar precompile.jar ../WebContent/tpl/localestmp/locales/en ../../../tmp/handlebars ../WebContent/tpl/min/precompiled/locales/en
+
+##End of localization support
+
+#java -jar precompile.jar ../WebContent/flatfull/tpl ../../../tmp/handlebars ../WebContent/tpl/min/precompiled/flatfull
+#java -jar precompile.jar ../WebContent/helpcenter/helpcenter-tpl ../../../tmp/handlebars ../WebContent/tpl/min/precompiled/flatfull
 
 
 sh yui.sh
