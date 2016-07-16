@@ -7,11 +7,23 @@
 #java -jar precompile.jar ../WebContent/tpl ../../../tmp/handlebars ../WebContent/tpl/min/precompiled
 
 ##Localization language support
-java -jar agilelocalize.jar ../WebContent/flatfull/tpl ../WebContent/tpl/localestmp en
-java -jar agilelocalize.jar ../WebContent/helpcenter/helpcenter-tpl ../WebContent/tpl/localestmp en
 
-##English precompilation
-java -jar precompile.jar ../WebContent/tpl/localestmp/locales/en ../../../tmp/handlebars ../WebContent/tpl/min/precompiled/locales/en
+## declare an array variable (Ex : ("en" "sp" "fn"))
+declare -a agile_languages=("en")
+
+## now loop through the above array
+for i in "${agile_languages[@]}"
+do
+   echo "$i"
+   # or do whatever with individual element of the array
+   java -jar agilelocalize.jar ../WebContent/flatfull/tpl ../WebContent/tpl/localestmp "$i"
+   java -jar agilelocalize.jar ../WebContent/helpcenter/helpcenter-tpl ../WebContent/tpl/localestmp "$i"
+
+   ##precompilation
+   mkdir ../WebContent/tpl/min/precompiled/locales
+   mkdir ../WebContent/tpl/min/precompiled/locales/"$i"
+   java -jar precompile.jar ../WebContent/tpl/localestmp/locales/"$i" ../../../tmp/handlebars ../WebContent/tpl/min/precompiled/locales/"$i"
+done
 
 ##End of localization support
 
