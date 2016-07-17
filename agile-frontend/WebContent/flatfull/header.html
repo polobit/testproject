@@ -105,11 +105,11 @@
         <div rel="popover" data-custom-popover-class='grid_custom_popover' data-trigger="click"  data-original-title="" title="" data-placement="bottom" class="need_help grid_icon_center visible-xs" screen_name="Need Help? We are one click away." data-content="<div class='row' id='need_help_header'>
 									<ul class='col-xs-12 col-sm-12 grid-sub-nav text-center m-t-md p-l-md p-r-md'>
 										
-								<li class='pull-left m-b-sm'><a href='#' class='menu-service-select' data-service-name='SALES' data-dashboard='dashboard'><i class='thumb'><img src='img/sales.svg'></i><span class='block'><%=LanguageUtil.getLocaleJSONValue(localesJSON, "sales") %></span></a></li>
+								<li class='pull-left m-b-sm'><a href='#' class='menu-service-select' data-service-name='SALES' data-dashboard='dashboard'><i class='thumb'><img src='img/sales.svg'></i><span class='block'><%=LanguageUtil.getLocaleJSONValue(localeJSON, "sales") %></span></a></li>
 
-								<li class='pull-left m-b-sm'><a href='#' class='menu-service-select' data-service-name='MARKETING' data-dashboard='MarketingDashboard'><i class='thumb'><img src='img/marketing.svg'></i> <span class='block'><%=LanguageUtil.getLocaleJSONValue(localesJSON, "menu-marketing") %></span></a></li>
+								<li class='pull-left m-b-sm'><a href='#' class='menu-service-select' data-service-name='MARKETING' data-dashboard='MarketingDashboard'><i class='thumb'><img src='img/marketing.svg'></i> <span class='block'><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-marketing") %></span></a></li>
 
-								<li class='pull-left m-b-sm'><a href='#' class='menu-service-select' data-service-name='SERVICE' data-dashboard='dashboard'><i class='thumb'><img src='img/service.svg'></i> <span class='block'><%=LanguageUtil.getLocaleJSONValue(localesJSON, "service") %></span></a></li>
+								<li class='pull-left m-b-sm'><a href='#' class='menu-service-select' data-service-name='SERVICE' data-dashboard='dashboard'><i class='thumb'><img src='img/service.svg'></i> <span class='block'><%=LanguageUtil.getLocaleJSONValue(localeJSON, "service") %></span></a></li>
 
 								</ul>
 								</div>
@@ -129,7 +129,7 @@
 							<input id="searchText" type="text"
 										data-provide="typeahead"
 										class="typeahead typeahead_contacts search-query form-control-custom input-sm bg-light no-border rounded padder"
-										placeholder='<%=LanguageUtil.getLocaleJSONValue(localesJSON, "search")%>' onclick="Agile_GA_Event_Tracker.track_event('Search option in Nav Bar')">
+										placeholder='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "search")%>' onclick="Agile_GA_Event_Tracker.track_event('Search option in Nav Bar')">
 										
 										 <!-- <input id="search-results" 
 										type="image" src="img/SearchIcon.png" class="searchbox hidden" /> -->
@@ -163,7 +163,7 @@
 				   %>
 				    
 				    
-				    <i class="fa fa-cloud hidden-xs"></i> <span class="hidden-folded m-l-xs"> <%=LanguageUtil.getLocaleJSONValue(localesJSON, "agile-crm") %> </span></a>     
+				    <i class="fa fa-cloud hidden-xs"></i> <span class="hidden-folded m-l-xs"> <%=LanguageUtil.getLocaleJSONValue(localeJSON, "agile-crm") %> </span></a>     
 
 </div>
 					<div id="navbar" class="collapse pos-rlt hide-xs  navbar-collapse box-shadow   
@@ -219,7 +219,7 @@
 							<input id="searchText" type="text"
 										data-provide="typeahead"
 										class="typeahead typeahead_contacts search-query form-control-custom input-sm no-border no-border-radius rounded bg-light"
-										placeholder='<%=LanguageUtil.getLocaleJSONValue(localesJSON, "search")%>' onclick="Agile_GA_Event_Tracker.track_event('Search option in Nav Bar')">
+										placeholder='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "search")%>' onclick="Agile_GA_Event_Tracker.track_event('Search option in Nav Bar')">
               		</div>				
 								</form>
 							</li>
@@ -383,7 +383,7 @@
 
 						     <li id="recent-menu" class="dropdown" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Recent"><a
 								class="dropdown-toggle" data-toggle="dropdown" href="" onclick="Agile_GA_Event_Tracker.track_event('Activity Option in Nav Bar')"> <i class='icon-clock'></i>
-								<span class="visible-xs"><%=LanguageUtil.getLocaleJSONValue(localesJSON, "recent-activity") %></span>
+								<span class="visible-xs"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "recent-activity") %></span>
 							</a><ul class="dropdown-menu animated fadeInRight recent-view" style="width:23em; right:-11px;"></ul>
 							</li>  
 									
@@ -394,27 +394,27 @@
 								      if(domainUser.restricted_scopes == null || !domainUser.restricted_scopes.contains(UserAccessScopes.CREATE_CONTACT)){
 								    %>
 									<li><a href="#personModal"  class="person" id="person">
-											<div class="pull-left"><%=LanguageUtil.getLocaleJSONValue(localesJSON, "contact") %></div><div class='pull-right shortcuts'>Shift + N</div><div class="clearfix"></div></a></li>
+											<div class="pull-left"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "contact") %></div><div class='pull-right shortcuts'>Shift + N</div><div class="clearfix"></div></a></li>
 									<li><a href="#companyModal"  data-toggle="modal"
-										id="company"> <div class="pull-left"><%=LanguageUtil.getLocaleJSONValue(localesJSON, "company") %></div><div class='pull-right shortcuts'>Shift + C</div><div class="clearfix"></div></a></li>
+										id="company"> <div class="pull-left"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "company") %></div><div class='pull-right shortcuts'>Shift + C</div><div class="clearfix"></div></a></li>
 									<%
 								          }
 								    %> 
 										<%
 										if(domainUser.menu_scopes.contains(NavbarConstants.DEALS) &&          !domainUser.restricted_menu_scopes.contains(NavbarConstants.DEALS)){
 									%>
-									<li><a href="#" class="font-bold deals-add"> <div class="pull-left"><%=LanguageUtil.getLocaleJSONValue(localesJSON, "deal") %></div><div class='pull-right shortcuts'>Shift + D</div><div class="clearfix"></div></a></li>
+									<li><a href="#" class="font-bold deals-add"> <div class="pull-left"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "deal") %></div><div class='pull-right shortcuts'>Shift + D</div><div class="clearfix"></div></a></li>
 									<%
 										}
 									%>
-									<li><a href="#"  id="show-activity"> <div class="pull-left"><%=LanguageUtil.getLocaleJSONValue(localesJSON, "event") %></div><div class='pull-right shortcuts'>Shift + V</div><div class="clearfix"></div></a></li>
+									<li><a href="#"  id="show-activity"> <div class="pull-left"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "event") %></div><div class='pull-right shortcuts'>Shift + V</div><div class="clearfix"></div></a></li>
 									<li><a href="#" class=" add-task"> <div class="pull-left">Task</div><div class='pull-right shortcuts'>Shift + T</div><div class="clearfix"></div></a></li>
 
 									
-									<li><a href="#" id="show-note"> <div class="pull-left"><%=LanguageUtil.getLocaleJSONValue(localesJSON, "note") %></div><div class='pull-right shortcuts'>Shift + O</div><div class="clearfix"></div></a></li>
-									<li><a href="#send-email"> <div class="pull-left"><%=LanguageUtil.getLocaleJSONValue(localesJSON, "email") %></div><div class='pull-right shortcuts'>Shift + M</div><div class="clearfix"></div></a></li>
+									<li><a href="#" id="show-note"> <div class="pull-left"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "note") %></div><div class='pull-right shortcuts'>Shift + O</div><div class="clearfix"></div></a></li>
+									<li><a href="#send-email"> <div class="pull-left"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "email") %></div><div class='pull-right shortcuts'>Shift + M</div><div class="clearfix"></div></a></li>
 									<%if(domainUser.menu_scopes.contains(NavbarConstants.HELPDESK)){%>
-									  <li><a href="javascript:void(0);" onclick="App_Ticket_Module.renderNewTicketModalView();"> <div class="pull-left"><%=LanguageUtil.getLocaleJSONValue(localesJSON, "ticket") %></div><div class="clearfix"></div></a></li>
+									  <li><a href="javascript:void(0);" onclick="App_Ticket_Module.renderNewTicketModalView();"> <div class="pull-left"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "ticket") %></div><div class="clearfix"></div></a></li>
 								    <%}%>
 									<li><a href="#" class="show-dialler"> <div class="pull-left">Call</div><div class="clearfix"></div></a></li>
 								</ul> <!-- 
@@ -457,36 +457,36 @@
 
 									<li><a href="#user-prefs" onclick="Agile_GA_Event_Tracker.track_event('Preferences in Profile Dropdown')"><!-- <i class="icon-cog"></i> -->
 
-											<div class="pull-left"><%=LanguageUtil.getLocaleJSONValue(localesJSON, "preferences") %></div><div class='pull-right shortcuts'>Shift + P</div><div class="clearfix"></div></a></li>
+											<div class="pull-left"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "preferences") %></div><div class='pull-right shortcuts'>Shift + P</div><div class="clearfix"></div></a></li>
 
 									<%
 									    if (domainUser != null && domainUser.is_admin)
 									    {
-														out.print("<li><a href='#account-prefs' onclick=\"Agile_GA_Event_Tracker.track_event('Admin Settings in Profile Dropdown')\"><div class='pull-left'>" + LanguageUtil.getLocaleJSONValue(localesJSON, "admin-settings")+ "</div><div class='pull-right shortcuts'>Shift + A</div><div class='clearfix'></div></a></li>");
+														out.print("<li><a href='#account-prefs' onclick=\"Agile_GA_Event_Tracker.track_event('Admin Settings in Profile Dropdown')\"><div class='pull-left'>" + LanguageUtil.getLocaleJSONValue(localeJSON, "admin-settings")+ "</div><div class='pull-right shortcuts'>Shift + A</div><div class='clearfix'></div></a></li>");
 													//	out.println("<li><a href='#subscribe'><i class='icon-shopping-cart'></i> Plan & Upgrade</a></li>");
 									    }
 									%>
 									<li><a href="#themeandlayout"><!-- <i class="icon-off"></i> -->
-											<div class="pull-left"><%=LanguageUtil.getLocaleJSONValue(localesJSON, "theme-and-layout") %></div><div class='pull-right shortcuts'>Shift + L</div><div class="clearfix"></div></a></li>
+											<div class="pull-left"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "theme-and-layout") %></div><div class='pull-right shortcuts'>Shift + L</div><div class="clearfix"></div></a></li>
 									<li class="divider"></li>
 									<li><a href="#subscribe" onclick="Agile_GA_Event_Tracker.track_event('Plan & Upgrade in Profile Dropdown')"><!-- <i class="icon-cog"></i> -->
-											<div class="pull-left"><%=LanguageUtil.getLocaleJSONValue(localesJSON, "upgrade") %></div><div class='pull-right shortcuts'>Shift + U</div><div class="clearfix"></div></a></li>
+											<div class="pull-left"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "upgrade") %></div><div class='pull-right shortcuts'>Shift + U</div><div class="clearfix"></div></a></li>
 
 											<li><a href="https://www.agilecrm.com/product-updates" target="_blank" onclick=\"Agile_GA_Event_Tracker.track_event('Product Updates in Profile Dropdown')\"><!-- <i class="icon-off"></i> -->
-											<div class="pull-left"><%=LanguageUtil.getLocaleJSONValue(localesJSON, "product-updates") %></div><div class='pull-right shortcuts'>Shift + R</div><div class="clearfix"></div></a></li>
+											<div class="pull-left"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "product-updates") %></div><div class='pull-right shortcuts'>Shift + R</div><div class="clearfix"></div></a></li>
 											
 									<li><a href="#refer" id="referrals_link"><!-- <i class="icon-cog"></i> -->
-											<div class="pull-left"><%=LanguageUtil.getLocaleJSONValue(localesJSON, "refer") %></div><div class='pull-right shortcuts'></div><div class="clearfix"></div></a></li>
+											<div class="pull-left"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "refer") %></div><div class='pull-right shortcuts'></div><div class="clearfix"></div></a></li>
 									
 									<li><a href="https://www.agilecrm.com/support" target= "_blank" onclick="Agile_GA_Event_Tracker.track_event('Help in Profile Dropdown')"><!-- <i class="icon-off"></i> -->
-											<div class="pull-left"><%=LanguageUtil.getLocaleJSONValue(localesJSON, "help") %></div><div class='pull-right shortcuts'>Shift + H</div><div class="clearfix"></div></a></li>
+											<div class="pull-left"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "help") %></div><div class='pull-right shortcuts'>Shift + H</div><div class="clearfix"></div></a></li>
 									<!-- <li><a href="https://www.agilecrm.com/support.html" target="_blank"><i class="icon-facetime-video"></i> Help
 											Videos</a></li>
 								 	<li><a href="#" onclick="$('li#fat-menu').removeClass('open');clickdesk_show_livechat_popup();"><i class="icon-comment"></i> Live Chat</a></li>  -->
 									<!-- <li><a href="#help"><i class="icon-question"></i>
 											Help</a></li> -->
 									<li><a href="<%=logoutURL%>"><!-- <i class="icon-off"></i> -->
-											<div class="pull-left"><%=LanguageUtil.getLocaleJSONValue(localesJSON, "logout") %></div><div class='pull-right shortcuts'>Shift + G</div><div class="clearfix"></div></a></li>
+											<div class="pull-left"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "logout") %></div><div class='pull-right shortcuts'>Shift + G</div><div class="clearfix"></div></a></li>
 
 								</ul></li>
 							<%
