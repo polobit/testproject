@@ -5674,49 +5674,49 @@ $(function()
 	{
 		var portlet_name = '';
 		if (p_name == 'Filter Based')
-			portlet_name = 'contact_list';
+			portlet_name = 'contact-list';
 		else if (p_name == 'Emails Opened')
-			portlet_name = 'email_open';
+			portlet_name = 'email-opens';
 		else if (p_name == 'Emails Sent')
 			portlet_name = 'emails';
 		else if (p_name == 'Growth Graph')
-			portlet_name = 'tag_graph';
+			portlet_name = 'tag-graph';
 		else if (p_name == 'Calls Per Person')
 			portlet_name = 'calls';
 		else if (p_name == 'Pending Deals')
-			portlet_name = 'pending_deals';
+			portlet_name = 'pending-deals';
 		else if (p_name == 'Deals By Milestone')
-			portlet_name = 'deals_by_ml';
+			portlet_name = 'deals-by-milestone';
 		else if (p_name == 'Closures Per Person')
-			portlet_name = 'cls_person';
+			portlet_name = 'closures-per-person';
 		else if (p_name == 'Deals Won')
-			portlet_name = 'deal_won';
+			portlet_name = 'deals-won';
 		else if (p_name == 'Deals Funnel')
-			portlet_name = 'deal_funnel';
+			portlet_name = 'deals-funnel';
 		else if (p_name == 'Deals Assigned')
-			portlet_name = 'deal_assigned';
+			portlet_name = 'deals-assigned';
 		else if (p_name == 'Agenda')
 			portlet_name = "events";
 		else if (p_name == 'Today Tasks')
 			portlet_name = "tasks";
 		else if (p_name == 'Agile CRM Blog')
-			portlet_name = "agile_blog";
+			portlet_name = "agile-crm-blog";
 		else if (p_name == 'Task Report')
-			portlet_name = "task_report";
+			portlet_name = "task-report";
 		else if(p_name=='Stats Report')
-			portlet_name = "act_overview";
+			portlet_name = "activity-overview";
 		else if(p_name=='Campaign stats')
-			portlet_name = "camp_stats";
+			portlet_name = "campaign-stats";
 		else if(p_name=='Campaign graph')
-			portlet_name = "camp_status";
+			portlet_name = "campaign-status";
 		else if(p_name=='Average Deviation')
 			portlet_name = "task_deviation";
 		else if(p_name == 'Webstat Visits')
 			portlet_name = "visits";
 		else if(p_name=='Referralurl stats')
- 			portlet_name = "ref_stats";
+ 			portlet_name = "ref-url-stats";
  		else if (p_name == 'Lost Deal Analysis')
-			portlet_name = "deal_lost_reason";
+			portlet_name = "deals-lost-reason";
 		else
 			portlet_name = p_name;
 
@@ -6434,55 +6434,55 @@ Handlebars.registerHelper('get_portlet_description', function(p_name)
 
 	var description = '';
 	if (p_name == 'Filter Based')
-		description = 'filter_based_des';
+		description = 'contact-list-desc';
 	else if (p_name == 'Emails Opened')
-		description = 'email_opened_des';
+		description = 'email-opens-desc';
 	else if (p_name == 'Growth Graph')
-		description = 'growth_graph_des';
+		description = 'tag-graph-desc';
 	else if (p_name == 'Calls Per Person')
-		description = 'calls_per_person_des';
+		description = 'calls-desc';
 	else if (p_name == 'Pending Deals')
-		description = 'pending_deals_des';
+		description = 'pending-deals-desc';
 	else if (p_name == 'Deals By Milestone')
-		description = 'deals_by_milstone_des';
+		description = 'deals-by-milestone-desc';
 	else if (p_name == 'Deals Funnel')
-		description = 'deal_funnel_des';
+		description = 'deals-funnel-desc';
 	else if (p_name == 'Agenda')
-		description = 'agenda_des';
+		description = 'events-desc';
 	else if (p_name == 'Today Tasks')
-		description = 'today_tasks_des';
+		description = 'tasks-desc';
 	else if (p_name == 'Task Report')
-		description = 'task_report_des';
+		description = 'task-report-desc';
 	else if (p_name == 'Agile CRM Blog')
-		description = "agile_blog_des";
+		description = "agile-crm-blog-desc";
 	else if(p_name=='Stats Report')
-		description = 'stat_rep_des';
+		description = 'stats-report-desc';
 	else if (p_name == 'Leaderboard')
-		description = 'leaderboard_des';
+		description = 'leaderboard-desc';
 	else if (p_name== 'User Activities')
-		description = 'user_activity_des';
+		description = 'user-activities-desc';
 	else if (p_name== 'Account Details')
-		description = 'account_details_des';
+		description = 'account-details-desc';
 	else if (p_name== 'Revenue Graph')
-		description = 'rev_graph_des';
+		description = 'revenue-graph-desc';
 	else if (p_name== 'Mini Calendar')
-		description = 'min_cal_des'
+		description = 'mini-calendar-desc'
 	else if (p_name == 'Campaign stats')
-		description = 'camp_stats_des'
+		description = 'campaign-stats-desc'
 	else if (p_name == 'Campaign graph')
-		description = 'camp_graph_des'
+		description = 'campaign-graph-desc'
 	else if(p_name == 'Deal Goals')
-		description = 'deal_goal_des'
+		description = 'deal-goals-desc'
 	else if(p_name == 'Incoming Deals')
-		description = 'incoming_deal_des'
+		description = 'incoming-deals-desc'
 	else if(p_name == 'Lost Deal Analysis')
-		description = 'loast_analy_des'
+		description = 'lost-deals-description'
 	else if(p_name == 'Average Deviation')
-		description = 'avg_dev_des'
+		description = 'average-deviation-desc'
 	else if (p_name== 'Webstat Visits')
-		description = 'webstats_des';
+		description = 'webstat-visits-desc';
 	else if(p_name == 'Referralurl stats')
-		description = 'ref_stats_des'
+		description = 'top-ref-url-desc'
 
 	return _agile_get_translated_val("portlets", description);
 });

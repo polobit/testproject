@@ -25,10 +25,10 @@ cat flatfull/tpl/segmentation/*.html > tpl/min/flatfull/segmentation.js
 cat flatfull/tpl/referals/*.html > tpl/min/flatfull/referals.js
 cat flatfull/tpl/helpcenter/*.html  > tpl/min/flatfull/helpcenter.js
 cat ../WebContent/helpcenter/helpcenter-tpl/*.html  > ../WebContent/tpl/min/flatfull/helpcenter-tpl.js
+
 cd ../util
 
 #Local Dev
 java -jar agilelocalize.jar ../WebContent/tpl/min/flatfull ../WebContent/tpl/min en
-
-#Production
-#java -jar agilelocalize.jar ../WebContent/flatfull/tpl ../WebContent/tpl/localestmp en
+#cat ../WebContent/tpl/min/flatfull/js-localize.js > ../WebContent/local
+#End of Local Dev

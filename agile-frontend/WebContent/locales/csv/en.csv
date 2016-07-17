@@ -1795,6 +1795,27 @@ validation-msgs.email,Please enter a valid email address.
 validation-msgs.this-field-is-required,This field is required.
 validation-msgs.dateISO,Please enter a valid date (ISO).
 validation-msgs.rangelength,Please enter a value between {0} and {1} characters long.
+validation-msgs.verify-email,From email is not verified. Please verify it.
+validation-msgs.card-3months-valid,Card should be atleast 3 months valid
+validation-msgs.deal_name_missing,Deal Name' is mandatory!
+validation-msgs.deal_duplicated,'Name' already exists!
+validation-msgs.deal_value_duplicated,'Value' already exists!
+validation-msgs.deal_track_duplicated,'Track' already exists!
+validation-msgs.deal_related_contact_duplicated,'Related to' already exists!
+validation-msgs.deal_milestone_duplicated,'Milestone' already exists!
+validation-msgs.deal_probability_duplicated,'Probability' already exists!
+validation-msgs.deal_close_date_duplicated,'Close date' already exists!
+validation-msgs.deal_note_duplicated,'Note' already exists!
+validation-msgs.deal_description_duplicated,'Description' already exists!
+validation-msgs.last_name_missing,Last Name is mandatory. Please select last name.
+validation-msgs.first_name_missing,First Name is mandatory. Please select first name.
+validation-msgs.email_missing,Email is mandatory. Please select Email.
+validation-msgs.first_name_duplicate,You have assigned First Name to more than one element. Please ensure that first name is assigned to only one element.
+validation-msgs.last_name_duplicate,You have assigned Last Name to more than one element. Please ensure that last name is assigned to only one element.
+validation-msgs.company_duplicate,You have assigned Company to more than one element. Please ensure that company is assigned to only one element.
+validation-msgs.job_title_duplicate,You have assigned job description to more than one element. Please ensure that job description is assigned to only one element.
+validation-msgs.invalid_tag,Tag name should start with an alphabet and can not contain special characters other than underscore and space.
+validation-msgs.ipaddress,Please enter a valid IP Address.
 contact-edit.update,Update
 contact-edit.home,Home
 contact-edit.other,Other
@@ -2630,6 +2651,8 @@ currency.New Taiwan Dollar,New Taiwan Dollar
 currency.Bolivian Boliviano,Bolivian Boliviano
 currency.Peruvian Nuevo Sol,Peruvian Nuevo Sol
 portlets.bring-your-emails,Bring your emails
+portlets.ref-url-stats,Referral URL Stats
+portlets.deals-lost-reason,Deals Lost by Reason
 portlets.getting-started,Getting Started
 portlets.this-and-next-quarter,This and Next Quarter
 portlets.webpages-pad-content-desc,You can create a page easily by using our smart builder.
@@ -2897,6 +2920,7 @@ portlets.next-7-days,Next 7 Days
 portlets.filter-results-companies-pad-content-title,No companies matching this criteria.
 portlets.contact-views-btn-text,Add View
 portlets.user,User
+portlets.top-ref-url-desc,A quick view of Top 5 Referral URL’s for your website traffic.
 portlets.lost-deal-analysis,Lost Deal Analysis
 admin-settings-integrations.shopify-content,Shopify is a powerful ecommerce solution that includes everything you need to create an online store.
 admin-settings-integrations.zapier-content,Zapier is the easiest way to connect hundreds of SaaS apps you use to easily move your data and automate tedious tasks.
@@ -3592,3 +3616,95 @@ companies-view.filter-companies,Filter Companies
 companies-view.Contacts,Contact(s)
 companies-view.export-companies-as-csv,Export Companies as CSV
 companies-view.select-contact-fields-to-view,Select Contact fields to view
+misc-keys.local-time,Local time
+misc-keys.cpy-to-clip,Copy to clipboard
+misc-keys.clip-copied,Copied!
+misc-keys.clip-email-copied,Email copied to clipboard
+misc-keys.clip-key-copied,Key copied to clipboard
+misc-keys.clip-code-copied,Code copied to clipboard
+misc-keys.clip-url-copied,URl copied to clipboard
+misc-keys.sync-init,Sync initiated
+misc-keys.sync-conatcts-init,Contacts sync initiated
+misc-keys.sync-in-progress,Sync in progress
+misc-keys.link-already,Linked Already
+misc-keys.add-new-doc,Add New Doc
+misc-keys.description,Description
+misc-keys.add-description,Add Description
+misc-keys.companies-imported,Companies are now being imported. You will be notified on email when it is done
+misc-keys.created_date,Created Date
+misc-keys.updated_date,Updated Date
+misc-keys.yet-to-start,Not Started
+misc-keys.yrs_ago,years ago
+misc-keys.mnths_ago,months ago
+misc-keys.days_ago,days ago
+misc-keys.hrs_ago,hours ago
+misc-keys.mins_ago,minutes ago
+misc-keys.secs_ago,seconds ago
+reputation.Poor,Poor
+reputation.Ok,Ok
+reputation.Excellent,Excellent
+reputation.Good,Good
+months.January,.January
+months.february,.February
+months.March,.March
+months.April,.April
+months.May,.May
+months.June,.June
+months.July,.July
+months.August,.August
+months.September,.September
+months.October,.October
+months.November,.November
+months.December,.December
+months-xs.Jan,.Jan
+months-xs.Feb,.Feb
+months-xs.March,.March
+months-xs.April,.April
+months-xs.May,.May
+months-xs.June,.June
+months-xs.July,.July
+months-xs.Aug,.Aug
+months-xs.Sept,.Sept
+months-xs.Oct,.Oct
+months-xs.Nov,.Nov
+months-xs.Dec,.Dec
+activity_type.DEAL_ADD,Deal Created
+activity_type.DEAL_EDIT,Deal Edited
+activity_type.DEAL_CLOSE,Deal Closed
+activity_type.DEAL_LOST,Deal Lost
+activity_type.DEAL_RELATED_CONTACTS,Deal Contacts Changed
+activity_type.DEAL_OWNER_CHANGE,Deal Owner Changed
+activity_type.DEAL_MILESTONE_CHANGE,Deal Milestone Changed
+activity_type.DEAL_ARCHIVE,Deal Archived
+activity_type.DEAL_RESTORE,Deal Restored
+activity_type.DEAL_TAG_CHANGE,Deal Tags Changed
+activity_type.DEAL_TAG_ADD,Deal Tags Added
+activity_type.DEAL_TAG_DELETE,Deal Tags Deleted
+activity_type.User_Email_Changed,User email
+activity_type.User_Name_Changed,User Name Changed
+activity_type.User_Created,New User Created
+activity_type.User_Deleted,User Deleted
+activity_type.User_Permissions_Change,User Permissions Changed
+activity_type.NOTE_ADD,Note Added
+activity_type.TASK_ADD,Task Created
+activity_type.TASK_EDIT,Task Updated
+activity_type.TASK_PROGRESS_CHANGE,Progress Changed
+activity_type.TASK_OWNER_CHANGE,Owner Changed
+activity_type.TASK_STATUS_CHANGE,Status Changed
+activity_type.TASK_COMPLETED,Task Completed
+activity_type.TASK_DELETE,Task Deleted
+activity_type.TASK_RELATED_CONTACTS,Contacts Modified
+subscriber_type.all,All
+subscriber_type.active,Active
+subscriber_type.removed,Removed
+subscriber_type.hardbounced,Hard Bounced
+subscriber_type.spam-reported,Spam Reported
+subscriber_type.completed,Completed
+subscriber_type.unsubscribed,Unsubscribed
+subscriber_type.softbounced,Soft Bounced
+call_activity.duration,Call duration
+call_activity.busy,Contact busy
+call_activity.no_answer,Not answered
+call_activity.fail,Failed
+call_activity.missed,Call Missed
+call_activity.voicemail,Left voicemail
