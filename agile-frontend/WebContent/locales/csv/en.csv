@@ -12,6 +12,7 @@ prefs-email-templates.no-email-tpl-desc,Personalize and customize email template
 prefs-email-templates.email-templates-desc-2,You can create custom email template for every sales scenario.
 prefs-email-templates.email-templates-desc-1,Personalize and customize email templates for every scenario in the sales cycle. Make sure you send a great looking email every single time.
 widgets.no-payments,No payments
+widgets.edit-widget-users,Edit users for widget
 widgets.drag-drop-call-script-rule,Drag-Drop Call Script Rule
 widgets.do-not-have-an-sip-account,Don't have an SIP account?
 widgets.general-user,General User
@@ -24,7 +25,7 @@ widgets.support-for-windows-only,Support for Windows only
 widgets.chat-transcript,Chat Transcript
 widgets.zendesk-desc,Zendesk streamlines communication within a ticket that has organized workflow towards resolution of the customer issue.
 widgets.stripe-id-for-each-contact,Stripe id for each contact is stored in a text custom field. You have no custom fields defined. Please create one.
-widgets.documentation-for-widget-api,Documentation for widget backend API.
+widgets.widget-backend-api,widget backend API
 widgets.associate-twitter-profile-to-contact,Associate Twitter profile to contact?
 widgets.QuickBooks-delete-message,Are you sure to delete QuickBooks
 widgets.characters-left,Characters Left
@@ -240,6 +241,7 @@ widgets.telephony,Telephony
 widgets.no-comments,No Comments
 widgets.create-new-text-custom-field,Or&#44; you can create a new text custom field.
 widgets.zendesk-profile-desc,View and respond to support tickets from contact using your Zendesk account.
+widgets.zendesk-profile-desc-new,Resolve issues&#44; create tickets&#44; and manage ticket history of your customers.
 widgets.widget-name,Widget name
 widgets.sorry-we-could-not-find-any-call-data,Sorry&#44; we could not find any call data
 widgets.view-on-uservoice,View on Uservoice
@@ -326,6 +328,8 @@ widgets.link-your-twitter,Link Your Twitter
 widgets.marital-status,Marital status
 widgets.sip-number-title,e.g. 555123456 (or John.Doe)
 widgets.documentation-for-js-api,Documentation for widget JS API.
+widgets.documentation-for,Documentation for
+widgets.widget-js-api,widget JS API
 widgets.FreshBooks,FreshBooks
 widgets.GooglePlus-delete-message,Are you sure to delete GooglePlus
 widgets.chat-length,Chat Length
@@ -1314,6 +1318,7 @@ menu.preferences,Preferences
 menu.admin-settings,Admin Settings
 menu.help-desk,Help Desk
 menu.support,Support
+menu.refer,Refer a Friend
 menu.task,Task
 menu.tasks,Tasks
 menu.upgrade,Plan & Upgrade
