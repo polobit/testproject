@@ -625,20 +625,28 @@ modal li:nth-child(odd),.milestones li:nth-child(odd)
 /*animation for search box field*/
 
 @media all and (min-width: 768px) {
-
+label#search-results{
+  position: absolute;
+  margin: 7px 0px 0px 10px;
+  cursor: pointer;
+}
+label#search-results.active{color: #58666e;}
 #searchText
 {
-  border-top-right-radius: 0px;
-  border-bottom-right-radius: 0px;
-  width:141px;
-  transition:width 0.8s  ease-in-out 0.2s;
- -webkit-transition:width 0.8s  ease-in-out 0.2s;
+  width:0px;
+  transition:width 0.5s  ease-in-out;
+ -webkit-transition:width 0.5s  ease-in-out;
+  padding: 0px 12px 0 28px;
+  background-color: inherit;
 }
 
 #searchText:focus
-{
-  
+{ 
   width:200px;
+  outline: none;
+  cursor: text;
+  border-bottom: 1px solid #eee;
+  background-color: #edf1f2;
 }
 
 }
@@ -1987,6 +1995,8 @@ display: block!important;
 .workflow-heading{ text-align: center; width: 100%; }
 .workflow-sortby{ float: none!important; }
 
+.grid-icon-header:hover, .grid-icon-header:focus{background-color:inherit !important;}
+.grid_icon_center{ z-index: 0 !important;}
 }
 
 @media all and (min-width: 768px) {
@@ -2210,6 +2220,7 @@ display: block!important;
   #wrap:not(.app-aside-folded) .need_help{
   display: none;
   }
+  #wrap:not(.app-aside-folded) .grid_icon_center{ display: block;}
 }
  /* Safari 6.1+ (9.0 is the latest version of Safari at this time) */
 @media screen and (min-color-index:0) and (-webkit-min-device-pixel-ratio:0) { @media
@@ -2262,6 +2273,7 @@ display: block!important;
 @media (max-width: 420px){
 .companytabListCenter .nav li a{ padding: 10px 4px !important;}
 .taskTabListCenter .nav li a{ padding-left: 12px; padding-right: 12px;}
+.grid_custom_popover .grid-sub-nav li{ width: 75px;}
 }
 
 
@@ -2314,7 +2326,7 @@ color:#484848!important;
 .pos-t-1{ top: 1px;}
 .icons-text-sm .actions i, .icons-text-sm .actions span.icon-trash{ font-size: 13px;}
 .icons-text-sm.actions i, .icons-text-sm.actions span.icon-trash{ font-size: 13px !important;}
-.app-aside-folded:not(.app-aside-dock) .navi > ul > li#landing-pages-menu a span{ padding-top: 10%;}
+.app-aside-folded:not(.app-aside-dock) .navi > ul > li#landing-pages-menu a span, .app-aside-folded:not(.app-aside-dock) .navi > ul > li#tickets a span, .app-aside-folded:not(.app-aside-dock) .navi > ul > li#ticketcannedmessagesmenu a span, .app-aside-folded:not(.app-aside-dock) .navi > ul > li#email-templates-menu a span, .app-aside-folded:not(.app-aside-dock) .navi > ul > li#schedulingmenu a span{ padding-top: 10%;}
 .recent-list-text-color a{ color: #363f44 !important;}
 
 .editicon{ border: 1px solid #dee5e7; height: 13px; padding: 0 2px; border-radius: 2px;}
@@ -2360,5 +2372,25 @@ color:#484848!important;
 .goal-icon-calendar{ left: 8px; top: 8px; z-index: 1;}
 
 /*end goals tab css code*/
+
+.grid-sub-nav{ list-style: none;}
+.grid-sub-nav li{ width: 100px; margin-right: 2px;}
+.grid-sub-nav li a{ display: block; padding-top: 5px; padding-bottom: 5px;}
+.grid-sub-nav li a.active, .grid-sub-nav li a:hover{ background-color: #fafafa;border-radius: 3px;}
+.grid-sub-nav i{height: 50px; display: inline-block;}
+.grid_custom_popover {max-width: 100%; position: fixed; border: 1px solid rgba(0, 0, 0, .1);}
+.grid_custom_popover .popover-content{ padding: 9px 20px;}
+.grid_custom_popover.bottom .arrow{border-bottom-color: #ccc;}
+.grid_icon_center{ position: fixed; left: 50%; top: 0px; z-index: 1029; -webkit-transform: translateX(-50%);
+transform: translateX(-50%);}
+
+.grid-icon-header:hover, .grid-icon-header:focus{background-color: #f6f8f8;}
+.bg-black .grid-icon-header:hover, .bg-black .grid-icon-header:focus{background-color: #16232d;}
+.bg-dark .grid-icon-header:hover, .bg-dark .grid-icon-header:focus{background-color: #32374a;}
+.bg-info .grid-icon-header:hover, .bg-info .grid-icon-header:focus{background-color: #17b2e2;}
+.bg-primary .grid-icon-header:hover, .bg-primary .grid-icon-header:focus{background-color: #6658b8;}
+.bg-success .grid-icon-header:hover, .bg-success .grid-icon-header:focus{background-color: #22b846;}
+.bg-danger .grid-icon-header:hover, .bg-danger .grid-icon-header:focus{background-color: #f13f3f;}
+
 
 /*end custom css code*/

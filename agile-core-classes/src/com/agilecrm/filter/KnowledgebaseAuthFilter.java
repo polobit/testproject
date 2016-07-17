@@ -9,6 +9,7 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import com.agilecrm.session.KnowledgebaseManager;
 import com.agilecrm.session.KnowledgebaseUserInfo;
@@ -44,6 +45,8 @@ public class KnowledgebaseAuthFilter implements Filter
 	public void doFilter(final ServletRequest request, final ServletResponse response, final FilterChain chain)
 			throws IOException, ServletException
 	{
+		
+		
 		System.out.println("Helpcenter Auth Filter.......");
 
 		// Reset the thread local
@@ -52,6 +55,11 @@ public class KnowledgebaseAuthFilter implements Filter
 
 		HttpServletRequest httpRequest = (HttpServletRequest) request;
 
+		HttpServletResponse httpresponse = (HttpServletResponse) response; 
+		
+		httpresponse.addHeader("Access-Control-Allow-Origin", "*");
+		
+		
 		// Check if UserInfo is already there
 		KnowledgebaseUserInfo userInfo = (KnowledgebaseUserInfo) httpRequest.getSession().getAttribute(
 				KnowledgebaseManager.AUTH_SESSION_COOKIE_NAME);

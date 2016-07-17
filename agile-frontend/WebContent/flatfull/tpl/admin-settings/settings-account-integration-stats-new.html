@@ -138,6 +138,9 @@
 		    	</div>
 		    	</div>
 		{{else}}
+			{{#if_equals "MAILGUN" _agile_email_gateway}}
+				<div class="text-md">Mailgun stats are shown <a class="text-info" href="https://mailgun.com" target="_blank">here</a></div><br/>
+			{{else}}
 			{{!--SES Stats--}}
 			{{#if_equals "SES" _agile_email_gateway}}
 				<div class="text-md">{{agile_lng_translate 'admin-settings-stats' 'amazon-stats-msg'}}</div><br/>
@@ -177,6 +180,7 @@
 		        	</div>
 		    	</div>
 		    	</div>
+		    	{{/if_equals}}	
 			{{/if_equals}}	
 		{{/if_equals}}
     	</div>

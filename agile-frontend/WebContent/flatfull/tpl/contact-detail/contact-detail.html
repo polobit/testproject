@@ -1406,12 +1406,15 @@ class="icon-plus"></i> <span >Add</span></a>
 				<li class=""><a data-toggle="tab" role="tab" href="#events">{{agile_lng_translate 'contact-details' 'events'}}</a></li>
 				<li class=""><a data-toggle="tab" role="tab" href="#tasks">{{agile_lng_translate 'contact-details' 'tasks'}}</a></li>
 				<li class=""><a data-toggle="tab" role="tab" href="#deals">{{agile_lng_translate 'contact-details' 'deals'}}</a></li>
+				{{#isNewVersionDomainUser}} {{else}}
 				<li class=""><a data-toggle="tab" role="tab" href="#cases">{{agile_lng_translate 'contact-details' 'cases'}}</a></li>
+				{{/isNewVersionDomainUser}}
 				<li class=""><a data-toggle="tab" role="tab" href="#campaigns">{{agile_lng_translate 'contact-details' 'campaigns'}}</a></li>
 				<li class=""><a data-toggle="tab" role="tab" href="#stats">{{agile_lng_translate 'contact-details' 'web-stats'}}</a></li>
 				<li class=""><a data-toggle="tab" role="tab" href="#mail">{{agile_lng_translate 'contact-details' 'mail'}}</a></li>
 				<li id="custom-contact-document" class=""><a data-toggle="tab" role="tab" href="#documents">{{agile_lng_translate 'contact-details' 'documents'}}</a></li>
 				<li><a data-toggle="tab" role="tab" href="#tickets">{{agile_lng_translate 'report-view' 'tickets'}}</a></li>
+
               <!--  <li role="presentation" class="dropdown custom-contact-menu">
         <a id="drop6" href="#" class="dropdown-toggle" data-toggle="dropdown">
           
@@ -1496,7 +1499,7 @@ class="icon-plus"></i> <span >Add</span></a>
  <div class="wrapper">
  						
  
- 				<div id="widgets" class="contact_{{id}}"></div>
+ 				<div id="widgets" class="contact_{{id}}" style="max-width:250px"></div>
  					</div>
  					</div>
  					</div>

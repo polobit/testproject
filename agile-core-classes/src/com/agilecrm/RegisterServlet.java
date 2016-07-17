@@ -16,7 +16,6 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.json.JSONObject;
 
-import com.agilecrm.account.APIKey;
 import com.agilecrm.account.AccountPrefs;
 import com.agilecrm.account.util.APIKeyUtil;
 import com.agilecrm.account.util.AccountPrefsUtil;
@@ -26,9 +25,6 @@ import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.Note;
 import com.agilecrm.contact.Tag;
 import com.agilecrm.contact.util.ContactUtil;
-import com.agilecrm.sendgrid.util.SendGridUtil;
-import com.agilecrm.ipaccess.AllowAccessMailServlet;
-import com.agilecrm.ipaccess.IpAccessUtil;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.subscription.SubscriptionUtil;
@@ -47,7 +43,6 @@ import com.agilecrm.util.VersioningUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.utils.SystemProperty;
 import com.googlecode.objectify.Key;
-import com.thirdparty.mandrill.subaccounts.MandrillSubAccounts;
 import com.thirdparty.sendgrid.subusers.SendGridSubUser;
 
 /**
@@ -272,8 +267,14 @@ public class RegisterServlet extends HttpServlet
 	// Create new Agile User
 	new AgileUser(domainUser.id).save();
 	
-	// Identify this user as being a newly registered user in HomeServlet.java
-	request.setAttribute(IS_NEWLY_REGISTERED_USER_ATTR, new Boolean(true));
+	// New user param to save defaults
+	request.getSession().setAttribute(IS_NEWLY_REGISTERED_USER_ATTR, new Boolean(true));
+	
+	// New user param to save defaults
+	request.getSession().setAttribute(IS_NEWLY_REGISTERED_USER_ATTR, new Boolean(true));
+	
+	// New user param to save defaults
+	request.getSession().setAttribute(IS_NEWLY_REGISTERED_USER_ATTR, new Boolean(true));
 	
 	// Set misc values at Register before sending user to home page.
 	LoginUtil.setMiscValuesAtLogin(request, domainUser);
@@ -555,6 +556,10 @@ public class RegisterServlet extends HttpServlet
 	domainUser.setInfo(DomainUser.COUNTRY, request.getHeader("X-AppEngine-Country"));
 	domainUser.setInfo(DomainUser.CITY, request.getHeader("X-AppEngine-City"));
 	domainUser.setInfo(DomainUser.LAT_LONG, request.getHeader("X-AppEngine-CityLatLong"));
+	
+	
+	// Set Role
+	domainUser.role = DomainUserUtil.getDomainUserRole(((String) request.getParameter(RegistrationGlobals.USER_ROLE)));
 	domainUser.save();
 
 	if (domainUser != null && reference_domain != null)

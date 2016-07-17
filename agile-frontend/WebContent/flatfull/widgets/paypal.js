@@ -20,6 +20,9 @@ function loadPaypalInvoices(offSet){
 
 		getTemplate('paypal-invoices', result, undefined, function(template_inv){						
 			$('#PayPal').html(template_inv);
+			head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
+				$( ".time-ago", $('#PayPal')).timeago();
+			});
 		},null);
 
 		if(paypalOBJ.invoices && paypalOBJ.invoices.length > 5){
@@ -29,13 +32,19 @@ function loadPaypalInvoices(offSet){
 		var result = {};
 		result.invoices = paypalOBJ.invoices.slice(offSet, (offSet+5));
 		$('.paypal_inv_show_more').remove();
-		$('#PayPal').apped(getTemplate('paypal-invoices', result));
-		$('#PayPal').append(showMorePaypalINV);
+		getTemplate('paypal-invoices', result, undefined, function(template_inv){
+			$('#PayPal').apped(template_inv);			
+			$( ".time-ago", $('#PayPal')).timeago();						
+			$('#PayPal').append(showMorePaypalINV);
+		});		
 	}else{
 		var result = {};
 		result.invoices = paypalOBJ.invoices.slice(offSet, paypalOBJ.invoices.length);
 		$('.paypal_inv_show_more').remove();
-		$('#PayPal').append(getTemplate('paypal-invoices', result));
+		getTemplate('paypal-invoices', result, undefined, function(template_inv){
+			$('#PayPal').append(template_inv);
+			$( ".time-ago", $('#PayPal')).timeago();									
+		});
 	}
 
 }
@@ -98,8 +107,8 @@ function startPayPalWidget(contact_id){
 	Email = agile_crm_get_contact_property('email');
 
 
-	$("#widgets").off("click", "#paypal_inv_show_more");
-	$("#widgets").on("click", "#paypal_inv_show_more", function(e){
+	$("#"+WIDGET_PARENT_ID).off("click", "#paypal_inv_show_more");
+	$("#"+WIDGET_PARENT_ID).on("click", "#paypal_inv_show_more", function(e){
 		e.preventDefault();
 		var offSet = paymentINVCount * 5;
 		loadPaypalInvoices(offSet);

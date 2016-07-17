@@ -1,0 +1,288 @@
+<script id="sales-menu-items-template" type="text/html">
+<ul class="nav">
+  <li class="hidden-folded padder m-t-xs m-b-xs text-muted text-xs">
+    <span>{{agile_lng_translate 'menu' 'sales'}}</span>
+  </li>
+  {{#isRestrictedMenuScope "CONTACT"}} {{else}}
+    <li id="contactsmenu">
+      <a  href="#contacts">
+        <i class="icon icon-user"></i>
+        <span>{{agile_lng_translate 'menu' 'menu-contacts'}}</span>
+      </a>
+    </li>
+  {{/isRestrictedMenuScope}} 
+  <li id="companiesmenu">
+    <a  href="#companies">
+      <i class="icon icon-building"></i>
+      <span>{{agile_lng_translate 'menu' 'menu-companies'}}</span>
+    </a>
+  </li>
+
+  {{#isRestrictedMenuScope "DEALS"}} {{else}}
+   <li  id="dealsmenu">
+    <a  href="#deals">
+      <i class="fa fa-money"></i>
+      <span>{{agile_lng_translate 'menu' 'menu-deals'}}</span>
+    </a>
+  </li>
+  {{/isRestrictedMenuScope}} 
+  
+
+  {{#isRestrictedMenuScope "CASES"}} {{else}}
+  {{#isNewVersionDomainUser}} {{else}}
+  <li id="casesmenu">
+    <a  href="#cases">
+      <i class="icon icon-folder"></i>
+      <span>{{agile_lng_translate 'menu' 'menu-cases'}}</span>
+    </a>
+  </li>
+  {{/isNewVersionDomainUser}}
+  {{/isRestrictedMenuScope}} 
+
+  {{#isRestrictedMenuScope "DOCUMENT"}} {{else}}
+   <li id="documentsmenu">
+    <a  href="#documents">
+      <i class="icon icon-doc"></i>
+      <span>{{agile_lng_translate 'menu' 'menu-documents'}}</span>
+    </a>
+  </li>
+  {{/isRestrictedMenuScope}} 
+
+  {{#isRestrictedMenuScope "CALENDAR"}} {{else}}
+   <li id="calendarmenu">
+    <a href="#calendar" onclick="Agile_GA_Event_Tracker.track_event('Calendar Option in Nav Bar')">
+      <i class="icon icon-calendar"></i> 
+      <span>{{agile_lng_translate 'menu' 'calendar'}}</span> 
+    </a>
+  </li>
+  {{/isRestrictedMenuScope}}  
+  
+  <li id="tasksmenu">
+    <a href="#tasks" onclick="Agile_GA_Event_Tracker.track_event('Tasks Option in Nav Bar')">
+      <i class="icon-list" data-original-title="" title=""></i>
+      <span>{{agile_lng_translate 'menu' 'tasks'}}</span>
+      <span title="Tasks due" class="navbar_due_tasks pull-right tasks-span-top">
+          <span  id="due_tasks_count" class="badge badge-sm bg-danger">{{due_tasks_count}}</span>
+      </span>
+    </a>
+  </li>
+
+  <li id="schedulingmenu">
+    <a href="#scheduler-prefs" onclick="Agile_GA_Event_Tracker.track_event('Appointment scheduling Option in Nav Bar')">
+      <i class="icon-tag" data-original-title="" title=""></i>
+      <span>Online Calendar</span>
+    </a>
+  </li>
+
+  {{#isRestrictedMenuScope "ACTIVITY"}} {{else}}
+   <li id="activitiesmenu">
+    <a  href="#activities">
+      <i class="icon-speedometer icon-white"></i>
+      <span>{{agile_lng_translate 'menu' 'menu-activities'}}</span>
+    </a>
+  </li>
+  {{/isRestrictedMenuScope}}
+
+  {{#isRestrictedMenuScope "REPORT"}} {{else}}
+   <li id="reportsmenu">
+    <a  href="#reports">
+      <i class="icon-bar-chart icon-white"></i>
+      <span>{{agile_lng_translate 'menu' 'menu-reports'}}</span>
+    </a>
+  </li>
+  {{/isRestrictedMenuScope}}
+
+  </ul>
+
+</script>
+
+<script id="marketing-menu-items-template" type="text/html">
+
+<ul class="nav">
+              
+  <li class="line dk  m-t-none m-b-none" style="height: 1px;"></li>
+    <li class="hidden-folded padder m-t-xs m-b-xs text-muted text-xs">
+                <span>{{agile_lng_translate 'menu' 'menu-marketing'}}</span>
+              </li>
+
+   {{#isRestrictedMenuScope "CAMPAIGN"}} {{else}}
+    <li id="workflowsmenu">
+      <a  href="#workflows">
+        <i class="icon icon-sitemap"></i>
+        <span>{{agile_lng_translate 'menu' 'menu-campaigns'}}</span>
+      </a>
+    </li>
+    <li id="triggersmenu">
+      <a  href="#triggers">
+        <i class="icon icon-magic-wand"></i>
+        <span>Triggers</span>
+      </a>
+    </li>
+   {{/isRestrictedMenuScope}}
+
+   {{#isRestrictedMenuScope "SOCIAL"}} {{else}}
+    <li id="socialsuitemenu">
+      <a  href="#social">
+        <i class="icon-bubbles"></i>
+        <span>{{agile_lng_translate 'menu' 'menu-social'}}</span>
+      </a>
+    </li>
+   {{/isRestrictedMenuScope}}
+
+   {{#isRestrictedMenuScope "WEBRULE"}} {{else}}
+    <li id="web-rules-menu">
+      <a  href="#web-rules">
+        <i class="icon icon-globe"></i>
+        <span>{{agile_lng_translate 'menu' 'menu-web-rules'}}</span>
+      </a>
+    </li>
+   {{/isRestrictedMenuScope}}
+  
+   <li id="segmentationmenu">
+    <a  href="#visitors">
+       <i class="icon-eye"></i>
+      <span>{{agile_lng_translate 'menu' 'menu-visitors'}}</span>  
+    </a>
+  </li>
+  <li id="landing-pages-menu">
+    <a href="#landing-pages">
+      <i class="fa fa-file-code-o"></i>
+      <span>{{agile_lng_translate 'menu' 'menu-landing-pages'}}</span>
+    </a>
+  </li>
+
+  {{#isAdmin}}
+  <li id="formsmenu">
+    <a  href="#forms">
+       <i class="icon-large1 icon-docs"></i>
+      <span>Forms</span>  
+    </a>
+  </li>
+  {{/isAdmin}}
+
+  <li id="email-templates-menu">
+    <a href="#email-templates">
+      <i class="icon-envelope-letter"></i>
+      <span>Email Templates</span>
+    </a>
+  </li>
+
+  {{#isRestrictedMenuScope "ACTIVITY"}} {{else}}
+    <li id="activitiesmenu">
+      <a  href="#activities">
+        <i class="icon-speedometer icon-white"></i>
+        <span>{{agile_lng_translate 'menu' 'menu-activities'}}</span>
+      </a>
+    </li>
+   {{/isRestrictedMenuScope}}
+    
+   {{#isRestrictedMenuScope "REPORT"}} {{else}}
+    <li id="reportsmenu">
+      <a  href="#reports">
+        <i class="icon-bar-chart icon-white"></i>
+        <span>{{agile_lng_translate 'menu' 'menu-reports'}}</span>
+      </a>
+    </li> 
+   {{/isRestrictedMenuScope}}
+
+   <!-- Dont Delete This -->
+   <li id="tasksmenu" class="hide">
+    <a href="#tasks" onclick="Agile_GA_Event_Tracker.track_event('Tasks Option in Nav Bar')">
+      <i class="icon-list" data-original-title="" title=""></i>
+      <span>Tasks</span>
+      <span title="Tasks due" class="navbar_due_tasks pull-right tasks-span-top">
+          <span  id="due_tasks_count" class="badge badge-sm bg-danger">{{due_tasks_count}}</span>
+      </span>
+    </a>
+   </li>
+   <!-- End of dont Delete This -->
+             
+  </ul>
+
+</script>
+
+
+<script id="service-menu-items-template" type="text/html">
+
+<ul class="nav">
+ 
+  <li class="line dk m-t-none m-b-none" style="height: 1px;"></li>
+  <li class="hidden-folded padder m-t-xs m-b-xs text-muted text-xs">
+    <span>{{agile_lng_translate 'menu' 'service'}}</span>
+  </li>
+
+    <li id="tickets">
+      <a href="#tickets">
+        <i class="icon icon-ticket"></i>
+        <span>{{agile_lng_translate 'menu' 'help-desk'}}</span>
+      </a>
+    </li>
+
+    {{#isAdmin}}
+    {{#isRestrictedMenuScope "HELPDESK"}}  {{else}}
+    <li id="ticketgroupsmenu">
+    <a href="#ticket-groups">
+      <i class="icon icon-users"></i>
+      <span>Groups</span>
+    </a>
+  </li>
+  <li id="ticketlabelsmenu">
+    <a href="#ticket-labels">
+      <i class="icon icon-flag"></i>
+      <span>Labels</span>
+    </a>
+  </li>
+  <li id="ticketcannedmessagesmenu">
+    <a href="#canned-responses">
+      <i class="icon icon-cursor"></i>
+      <span>Canned Responses</span>
+    </a>
+  </li>
+  <li id="ticketviewsmenu">
+    <a href="#ticket-views">
+      <i class="icon icon-directions"></i>
+      <span>Views</span>
+    </a>
+  </li>
+  <li id="ticketcannedmessagesmenu">
+    <a href="#knowledgebase">
+      <i class="fa fa-search"></i>
+      <span>Knowledge Base</span>
+    </a>
+  </li>
+  {{/isRestrictedMenuScope}}
+  {{/isAdmin}}
+
+   {{#isRestrictedMenuScope "ACTIVITY"}} {{else}}
+    <li id="activitiesmenu">
+      <a  href="#activities">
+        <i class="icon-speedometer icon-white"></i>
+        <span>{{agile_lng_translate 'menu' 'menu-activities'}}</span>
+      </a>
+    </li>
+   {{/isRestrictedMenuScope}}
+    
+   {{#isRestrictedMenuScope "REPORT"}} {{else}}
+    <li id="reportsmenu">
+      <a  href="#reports">
+        <i class="icon-bar-chart icon-white"></i>
+        <span>{{agile_lng_translate 'menu' 'menu-reports'}}</span>
+      </a>
+    </li> 
+   {{/isRestrictedMenuScope}}  
+
+   <!-- Dont Delete This -->
+   <li id="tasksmenu" class="hide">
+    <a href="#tasks" onclick="Agile_GA_Event_Tracker.track_event('Tasks Option in Nav Bar')">
+      <i class="icon-list" data-original-title="" title=""></i>
+      <span>Tasks</span>
+      <span title="Tasks due" class="navbar_due_tasks pull-right tasks-span-top">
+          <span  id="due_tasks_count" class="badge badge-sm bg-danger">{{due_tasks_count}}</span>
+      </span>
+    </a>
+   </li>
+   <!-- End of dont Delete This -->
+
+</ul>
+
+</script>

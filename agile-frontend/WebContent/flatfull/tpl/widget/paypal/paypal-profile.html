@@ -47,7 +47,12 @@
 					// {{/if_equals}}	         
 				{{/each}}
 			</div>
-			<small class="text-muted"><i class="fa fa-clock-o m-r-xs"></i><time class="time-ago" datetime="{{paypalInvoiceDate "" invoice_date}}">{{paypalInvoiceDate "ddd mmm dd yyyy" invoice_date}}</time></small>
+			<small class="text-muted">
+				<i class="fa fa-clock-o m-r-xs"></i>
+				<time class="time-ago" datetime="{{paypalInvoiceDate "" invoice_date}}">					
+					{{paypalInvoiceDate "ddd mmm dd yyyy" invoice_date}}
+				</time>
+			</small>
 		</li>
 	{{/each}}
 {{else}}
@@ -60,7 +65,7 @@
 		<p>{{agile_lng_translate 'widgets' 'reconfigure-your-payPal-desc'}}</p>
 	</div>
 	<div class="m-t-sm m-r-none m-b-xs m-l-none text-center">
-		<a class='btn btn-danger btn-sm revoke-widget m-l-xs' widget-name="Stripe">{{agile_lng_translate 'widgets' 'revoke-access'}}</a>
-		<a href="#add-widget" class='btn btn-default btn-sm' widget-name="Stripe">{{agile_lng_translate 'other' 'cancel'}}</a>
+		<a class='btn btn-danger btn-sm revoke-widget m-l-xs' widget-name="Paypal">{{agile_lng_translate 'widgets' 'revoke-access'}}</a>
+		<a href="#add-widget" class='btn btn-default btn-sm' widget-name="Paypal">{{agile_lng_translate 'other' 'cancel'}}</a>
 	</div> 
 </script>

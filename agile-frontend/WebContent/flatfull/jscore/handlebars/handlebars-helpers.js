@@ -2752,6 +2752,97 @@ $(function()
 		 
 	});
 
+	Handlebars.registerHelper('isNewVersionDomainUser',function(options)
+	{
+		if(CURRENT_DOMAIN_USER.version){
+			return options.fn(this);
+		}else{
+			return options.inverse(this);
+		}
+		 
+	});
+
+	Handlebars.registerHelper("check_plan", function(plan, options)
+	{
+		console.log(plan);
+
+		if (!_billing_restriction)
+			return options.fn(this);
+
+		if (_billing_restriction.currentLimits.planName == plan)
+			return options.fn(this);
+
+		return options.inverse(this);
+
+	});
+
+	/**
+	 * Safari browser doesn't supporting few CSS properties like margin-top,
+	 * margin-bottom etc. So this helper is used to add compatible CSS
+	 * properties to Safari
+	 */
+	Handlebars.registerHelper("isSafariBrowser", function(options)
+	{
+
+		if (navigator.userAgent.indexOf('Safari') !== -1 && navigator.userAgent.indexOf('Chrome') === -1)
+			return options.fn(this);
+
+		return options.inverse(this);
+	});
+
+	/**
+	 * give custome status base on xerotype
+	 */
+
+	Handlebars.registerHelper('xeroType', function(type)
+	{
+		return (type == "ACCPAY") ? "Payable" : "Receivable";
+	});
+
+	/**
+	 * give custom type to xero type
+	 */
+	Handlebars.registerHelper('xeroTypeToolTip', function(type)
+	{
+		return (type == "ACCPAY") ? "Payable" : "Receivable";
+	});
+
+	/**
+	 * gives first latter capital for given input
+	 */
+	Handlebars.registerHelper('capFirstLetter', function(data)
+	{
+		if(data){
+			if (data === "DEFAULT"){
+				// console.log("return empty");
+				return "";
+			}else{
+				var temp = data.toLowerCase();
+				return temp.charAt(0).toUpperCase() + temp.slice(1);
+			}
+		}
+	});
+
+	Handlebars.registerHelper('qbStatus', function(Balance)
+	{
+		console.log(this);
+		console.log(this.TotalAmt);
+		if (Balance == 0)
+		{
+			return "Paid"
+		}
+		else
+		{
+			return "Due"
+		}
+	});
+	Handlebars.registerHelper('currencyFormat', function(data)
+	{
+
+		return Number(data).toLocaleString('en');
+		// data.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");
+	});
+
 	Handlebars.registerHelper('formatAmount', function(data){
 		data = parseFloat(data);
 		return data.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, "$1,");
@@ -2792,6 +2883,17 @@ $(function()
 	Handlebars.registerHelper("hasRestrictedMenuScope", function(scope_constant, options)
 	{
 		if (CURRENT_DOMAIN_USER.restricted_scopes && $.inArray(scope_constant, CURRENT_DOMAIN_USER.restricted_scopes) != -1){
+			return options.fn(this);
+		}
+		return options.inverse(this);
+	});
+
+	/**
+	 * Helps to check the restricted permissions of the user based on the ACL.
+	 */
+	Handlebars.registerHelper("isRestrictedMenuScope", function(scope_constant, options)
+	{
+		if (CURRENT_DOMAIN_USER.restricted_menu_scopes && $.inArray(scope_constant, CURRENT_DOMAIN_USER.restricted_menu_scopes) != -1){
 			return options.fn(this);
 		}
 		return options.inverse(this);
@@ -7157,6 +7259,19 @@ Handlebars.registerHelper('getSuggestionName', function(suggestionId){
 		if(suggestionId){
 			return uservoiceOBJ.suggestions[suggestionId];
 		}		
+});
+
+Handlebars.registerHelper('stringifyObject', function(data){
+	var obj ={};
+	obj.id = data.id;
+	obj.name = data.name;
+	if(data.display_name){
+		obj.display_name = data.display_name;
+	}else{
+		obj.display_name = data.name;
+	}
+	obj.listOfUsers = data.listOfUsers;
+	return JSON.stringify(obj);
 });
 
 Handlebars.registerHelper('removeSpecialCharacter',function(value){

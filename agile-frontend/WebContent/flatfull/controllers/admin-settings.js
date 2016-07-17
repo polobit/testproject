@@ -939,6 +939,8 @@ var AdminSettingsRouter = Backbone.Router.extend({
 					value = 'MANDRILL';
 				else if (id == 'ses')
 	                value = 'SES';
+	            else if(id=='mailgun')
+	            	value='MAILGUN';
 
 				var emailGateway;
 				$.each(that.integrations.collection.where({name:"EmailGateway"}),function(key,value){
@@ -978,6 +980,9 @@ var AdminSettingsRouter = Backbone.Router.extend({
 
 						if(id=="ses"){
 							$("#integrations-image",el).attr("src","img/crm-plugins/ses_logo.png");
+					    }
+					    if(id=="mailgun"){
+							$("#integrations-image",el).attr("src","img/crm-plugins/mailgun.png");
 					    }
 						
 					}, saveCallback : function()

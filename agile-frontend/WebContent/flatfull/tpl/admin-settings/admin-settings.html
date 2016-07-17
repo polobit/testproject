@@ -35,9 +35,12 @@
 			<a href="#milestones" class="milestones-tab list-group-item">{{agile_lng_translate 'contact-details' 'deals'}}</a>
 			<a href="#tag-management" class="tag-management-tab list-group-item">{{agile_lng_translate 'contact-details' 'tags'}}</a>
 			<a href="#categories" class="categories-tab list-group-item">{{agile_lng_translate 'deal-view' 'tasks'}}</a>
+			{{#isAdmin}}
 			<a href="#ticket-groups" class="helpdesk-tab list-group-item">{{agile_lng_translate 'report-view' 'help-desk'}}</a>
+			{{/isAdmin}}
 			<a href="#integrations" class="integrations-tab list-group-item">{{agile_lng_translate 'admin-settings' 'integrations'}}</a>
 			<a href="#analytics-code" class="analytics-code-tab list-group-item">{{agile_lng_translate 'admin-settings' 'api-and-analytics'}}</a>		
+
 		<!-- <a href="#menu-settings" class="menu-settings-tab list-group-item">Menu Settings</a> -->
             <a href="#integrations-stats" class="stats-tab list-group-item">{{agile_lng_translate 'admin-settings' 'stats'}}</a>
 

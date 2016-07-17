@@ -434,12 +434,14 @@
                                         <div style="margin-left:6px;"><small> {{agile_lng_translate 'admin-settings-users' 'track-sales-opportunities'}}
                                         </small></div>
                                </label>
+                               {{#if_equals this.version "v1"}} {{else}}
                                 <label class="i-checks i-checks-sm checkbox">
                                     <input type="checkbox" name="scopes-temp" class="required" value="CASES" {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
                                     {{agile_lng_translate 'contact-details' 'cases'}}<br/>
                                     <div style="margin-left:6px;"><small>{{agile_lng_translate 'admin-settings-users' 'log-and-address-customer-issues'}}
                                     </small></div>
                                 </label>
+                                {{/if_equals}}
                                 <label class="i-checks i-checks-sm checkbox">
                                     <input type="checkbox" name="scopes-temp" class="required" value="DOCUMENT" {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
                                     {{agile_lng_translate 'contact-details' 'documents'}}<br/>
@@ -460,12 +462,15 @@
                                     <div style="margin-left:6px;"><small> {{agile_lng_translate 'admin-settings-users' 'track-sales-opportunities'}}</small>
                                     </div>
                                 </label>
+                                {{#if_equals this.version "v1"}} {{else}}
                                 <label class="i-checks i-checks-sm checkbox">
                                     <input type="checkbox" name="scopes-temp" class="required" value="CASES" checked {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
                                     {{agile_lng_translate 'contact-details' 'cases'}}<br/>
                                     <div style="margin-left:6px;"><small>{{agile_lng_translate 'admin-settings-users' 'log-and-address-customer-issues'}}
                                     </small></div>
                                 </label>
+                                {{/if_equals}}
+
                                 </label><label class="i-checks i-checks-sm checkbox">
                                     <input type="checkbox" name="scopes-temp" class="required" value="DOCUMENT" checked {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
                                     {{agile_lng_translate 'contact-details' 'documents'}}<br/>

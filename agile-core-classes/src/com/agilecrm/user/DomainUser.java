@@ -286,7 +286,14 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 		
 	@NotSaved(IfDefault.class)
 	public HashSet<String> jsrestricted_propertiess = null;
-
+	
+	// Add User Roll
+	public ROLE role = ROLE.SALES;
+	public enum ROLE {SALES, MARKETING, SERVICE};
+	
+	// Added Role version
+	public String version = null;
+	
 	// Dao
 	private static ObjectifyGenericDao<DomainUser> dao = new ObjectifyGenericDao<DomainUser>(DomainUser.class);
 
@@ -295,7 +302,6 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 	 */
 	public DomainUser()
 	{
-
 	}
 
 	/**
@@ -646,7 +652,17 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 		
 	    if (StringUtils.isBlank(pic))
 	    pic = new UserPrefs().chooseRandomAvatar();
-
+	    
+	    // Reset Role
+	    if(role == null && this.id != null && domainUser != null)
+	    	role = domainUser.role;
+	    
+	    // Set user version
+	    if(this.id == null)
+	    	version = "v1";
+	    else if(domainUser != null && domainUser.version != null)
+	    	version = domainUser.version;
+	    
 		String oldNamespace = NamespaceManager.get();
 		NamespaceManager.set("");
 
