@@ -214,6 +214,7 @@ public class SendGridLib {
         	}
         	
         	urlBuilder.setHeaders(headers);
+        	HttpEntity emailEntity = this.buildBody(email);
         	
         	String response = null;
         	boolean retry = false;
@@ -224,7 +225,8 @@ public class SendGridLib {
 				do{
 	        		try
 					{
-						response = HttpClientUtil.accessURLUsingHttpClient(urlBuilder, this.buildBody(email));
+	        			
+						response = HttpClientUtil.accessURLUsingHttpClient(urlBuilder, emailEntity);
 						
 						System.out.println("Response of email sent: " + response);
      	
@@ -265,7 +267,7 @@ public class SendGridLib {
 				}
 				System.out.println("Retrying again after creating subuser...");
 				
-				response = HttpClientUtil.accessURLUsingHttpClient(urlBuilder, this.buildBody(email));
+				response = HttpClientUtil.accessURLUsingHttpClient(urlBuilder, emailEntity);
 				
 				System.out.println("Response after second attempt..." + response);
 			}
