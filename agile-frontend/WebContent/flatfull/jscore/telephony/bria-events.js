@@ -185,7 +185,7 @@ function saveCallNoteBria(){
 		    		CallLogVariables.duration = duration;
 		    		CallLogVariables.status = callStatus;
 		    		var jsonObj = {};
-		    		jsonObj['phoneNumber'] = phoneNumber;
+		    		jsonObj['phoneNumber'] = number;
 		    		return showContactMergeOption(jsonObj);
 	    		//return showNewContactModal(number);
 	    		
@@ -281,7 +281,7 @@ function saveCallNoteBria(){
 	    		CallLogVariables.duration = duration;
 	    		CallLogVariables.status = callStatus;
 	    		var jsonObj = {};
-	    		jsonObj['phoneNumber'] = phoneNumber;
+	    		jsonObj['phoneNumber'] = number;
 	    		return showContactMergeOption(jsonObj);
     		//return showNewContactModal(number);
 		}
