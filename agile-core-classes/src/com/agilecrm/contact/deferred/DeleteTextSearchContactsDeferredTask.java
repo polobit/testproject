@@ -15,15 +15,18 @@ import com.google.appengine.api.taskqueue.DeferredTask;
 public class DeleteTextSearchContactsDeferredTask  implements DeferredTask{
 	
 	String domain;
+	String type ; 
 
-	public DeleteTextSearchContactsDeferredTask(String domain)
+	public DeleteTextSearchContactsDeferredTask(String domain,String type)
 	{
 		this.domain = domain;
+		this.type = type;
+		
 	}
 	@Override
 	public void run()
 	{
-		if(!domain.isEmpty() && !domain.equalsIgnoreCase(null) && !domain.equalsIgnoreCase("null")){
+		if(!domain.isEmpty() && !domain.equalsIgnoreCase(null) && !domain.equalsIgnoreCase("null") && !type.isEmpty() && !type.equalsIgnoreCase(null) && !type.equalsIgnoreCase("null") ){
 			NamespaceManager.set(domain);
 			AppengineSearch<Contact> search = new AppengineSearch<Contact>(Contact.class);
 			QueryDocument<Contact> q = new QueryDocument<Contact>(search.index, Contact.class);
@@ -31,7 +34,7 @@ public class DeleteTextSearchContactsDeferredTask  implements DeferredTask{
 			SearchRule rule = new SearchRule();
 			rule.LHS = "type";
 			rule.CONDITION = SearchRule.RuleCondition.EQUALS;
-			rule.RHS = "PERSON";
+			rule.RHS = type ;
 			cf.rules.add(rule);
 			String query = QueryDocumentUtil.constructFilterQuery(cf);
 			List <ScoredDocument> scoredDocs = q.getDocuments(query, null);

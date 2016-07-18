@@ -17,10 +17,12 @@ public class DeleteContactsFromTextSearchServlet {
 	public void doGet(HttpServletRequest request, HttpServletResponse response)
 	{
 		String domain = request.getParameter("domain");
+		String type = request.getParameter("type");
+		System.out.println("domain is "+ domain + " and type is "+ type);
 		System.out.println("given domain is "+domain);
 		if(!domain.isEmpty() && !domain.equalsIgnoreCase(null) && !domain.equalsIgnoreCase("null")){
 			//set domain to the deferred task
-			DeleteTextSearchContactsDeferredTask deleteContacts = new DeleteTextSearchContactsDeferredTask(domain);
+			DeleteTextSearchContactsDeferredTask deleteContacts = new DeleteTextSearchContactsDeferredTask(domain,type);
 			 // Create Task and push it into Task Queue
 		    TaskOptions taskOptions = TaskOptions.Builder.withPayload(deleteContacts);		
 			// Add to queue
