@@ -217,11 +217,12 @@ if(idPath != null && !StringUtils.isEmpty(idPath) && !idPath.equals("/")) {
             </ul>
             
             <ul class="nav nav-tabs" id="detailTabs">
-                <li class="active"><a href="#tab1"><span class="fui-new"></span> Style</a></li>
+                <li class="active"><a href="#tab1" id="default-tab1"><span class="fui-new"></span> Style</a></li>
                 <li style="display: none;"><a href="#link_Tab" id="link_Link"><span class="fui-clip"></span> Link</a></li>
                 <li style="display: none;"><a href="#image_Tab" id="img_Link"><span class="fui-image"></span> Image</a></li>
                 <li style="display: none;"><a href="#icon_Tab" id="icon_Link"><span class="fa fa-flag"></span> Icons</a></li>
                 <li style="display: none;"><a href="#video_Tab" id="video_Link"><span class="fa fa-youtube-play"></span> Video</a></li>
+                <li style="display: none;"><a href="#agileform_Tab" id="agileform_link">Agile Form</a></li>
             </ul><!-- /tabs -->
             
             <div class="tab-content">
@@ -289,6 +290,12 @@ if(idPath != null && !StringUtils.isEmpty(idPath) && !idPath.equals("/")) {
                     <a href="#imageModal" data-toggle="modal" type="button" class="btn btn-default btn-embossed btn-block margin-bottom-20"><span class="fui-image"></span> Open image library</a>
                     
                 </div><!-- /.tab-pane -->
+
+                <div class="tab-pane agileFormTab" id="agileform_Tab">
+                    <select id="agileform_id" name="agileformlist" class="btn btn-default btn-embossed btn-block margin-bottom-20">
+                        <option value="default">Select form</option>
+                    </select>            
+                </div> 
                 
                 <!-- /tabs -->
                 <div class="tab-pane iconTab" id="icon_Tab">
@@ -2554,6 +2561,23 @@ if(idPath != null && !StringUtils.isEmpty(idPath) && !idPath.equals("/")) {
     <div class="sandboxes" id="sandboxes" style="display: none"></div>
   
   <!-- Load JS here for greater good =============================-->
+<script>
+
+  function showAgileCRMForm(formJson,formHolderId) {  
+    var iframe="";
+    $("iframe").each(function(i) { 
+      if($("iframe")[i].src.includes("agileform")){
+        var iframe=$("iframe")[i]; 
+        var iframe_id=iframe.getAttribute("id");
+        if($('#'+iframe_id).contents().find('#agileform').css("cursor")==="pointer"){
+            $('#'+iframe_id).contents().find('#agileform_div').html(formJson.formHtml);           
+            return;
+          }       
+      }
+    });    
+  }
+
+</script>
     <script src="<%=BUILD_PATH%>js/builder.min.js"></script>
   </body>
 </html>

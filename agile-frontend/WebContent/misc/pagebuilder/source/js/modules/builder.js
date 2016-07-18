@@ -1697,6 +1697,14 @@
                 $("#publishPage").addClass("disabled");
                 $("#buttonPreview").addClass("disabled");
             }
+
+            $.getJSON(appUI.siteUrl+"core/api/forms", function(respData){
+               
+               for(var i=0;i<respData.length;i++){
+                 $('#agileform_id').append("<option value= "+respData[i].id +">"+respData[i].formName+"</option>");
+               }    
+                
+            });
             
             $(this.buttonNewPage).on('click', site.newPage);
             $(this.modalPageSettings).on('show.bs.modal', site.loadPageSettings);

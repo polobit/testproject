@@ -5,6 +5,7 @@
 	var bConfig = require('./config.js');
 	var siteBuilder = require('./builder.js');
     var publisher = require('../vendor/publisher');
+    var current_agileform;
 
     var styleeditor = {
 
@@ -195,6 +196,16 @@
 
             $('#editingElement').text( theSelector );
 
+            if($(this.activeElement.element).parent().attr("id")=== 'agileform_div' || $(this.activeElement.element).attr("id") === 'agileform_div')
+                $('#editingElement').text("Agile Form");
+
+            if(!$('#tab1').hasClass("active")){                
+                $('.agileFormTab').removeClass("active");
+                $('.videoTab').removeClass("active");
+                $('a#default-tab1').css('display','');  
+                $('#tab1').addClass("active");
+            }
+
             //activate first tab
             $('#detailTabs a:first').click();
 
@@ -226,8 +237,15 @@
 
 			if( $(this.activeElement.element).prop('tagName') === 'IMG' ){
 
-                this.editImage(this.activeElement.element);
+                if($(this.activeElement.element).parent().attr("id")=== 'agileform_div')
+                    this.editAgileForm(this.activeElement.element);
+                else
+                    this.editImage(this.activeElement.element);
 
+            }
+
+            if($(this.activeElement.element).attr("id")=== "agileform_div"){
+                this.editAgileForm(this.activeElement.element);
             }
 
 			if( $(this.activeElement.element).attr('data-type') === 'video' ) {
@@ -518,6 +536,16 @@
 
             }
 
+             //agile form
+            if(($(styleeditor.activeElement.element).parent().attr('id') || $(styleeditor.activeElement.element).attr('id')) ==='agileform_div'){
+
+                var form_id=$('select[id=agileform_id]').val();
+                if(form_id==='default')                 
+                    return;
+                current_agileform=$(styleeditor.activeElement.element).closest("#page").children().attr("id");
+                styleeditor.loadAgileCRMFormInLandingPage($(styleeditor.activeElement.element),form_id);
+            }
+
             $('#detailsAppliedMessage').fadeIn(600, function(){
 
                 setTimeout(function(){ $('#detailsAppliedMessage').fadeOut(1000); }, 3000);
@@ -780,6 +808,7 @@
 
             $('a#video_Link').parent().show();
             $('a#video_Link').click();
+            $('a#tab1').css("display","none");
 
             //inject current video ID,check if we're dealing with Youtube or Vimeo
 
@@ -1039,6 +1068,18 @@
 
             }
 
+            //agile form reset 
+           if($(styleeditor.activeElement.element).attr('id')==='agileform'){
+            $("iframe").each(function(i) { 
+                if($("iframe")[i].src.includes(current_agileform)){
+                   var iframe_id=$("iframe")[i].getAttribute("id");
+                   $('#'+iframe_id).contents().find('#agileform_div').empty();
+                   $('#'+iframe_id).contents().find('#agileform_div').append($(styleeditor.activeElement.element));
+                   return;
+                }
+            }); 
+           } 
+
             setTimeout( function(){styleeditor.buildeStyleElements( $(styleeditor.activeElement.element).attr('data-selector') );}, 550);
 
             siteBuilder.site.setPendingChanges(true);
@@ -1112,6 +1153,19 @@
             }
 
         },
+
+        editAgileForm: function(){
+            $('a#agileform_link').parent().show();
+            $('a#agileform_link').click();
+            $('a#default-tab1').css('display','none');           
+        },
+
+        loadAgileCRMFormInLandingPage: function(element,formId){
+            element.parent().addClass('agile_crm_form_embed');
+            var script = document.createElement('script');
+            script.src = window.siteUrl+'core/api/forms/form/js/'+formId;
+            document.body.appendChild(script);
+        }
 
     };
 

@@ -18,3 +18,9 @@ p.text-light {
 	border-bottom: 1px solid #d3d9dd;
 	padding: 80px 0px;
 }
+
+.wrapper.white {
+	border-top: 1px solid #d3d9dd;
+	border-bottom: 1px solid #d3d9dd;
+	padding: 80px 0px;
+}

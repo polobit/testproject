@@ -60,6 +60,13 @@
     	{"url":"elements/footer1.html","height":294, "thumbnail":"elements/images/thumbs/footer1.png"},
     	{"url":"elements/footer2.html","height":107, "thumbnail":"elements/images/thumbs/footer2.png"},
     	{"url":"elements/footer3.html","height":260, "thumbnail":"elements/images/thumbs/footer3.png"}
+    ],
+    "Forms":[
+        {"url":"elements/agileform1.html","height":700, "thumbnail":"elements/images/thumbs/agileform1.png"},
+        {"url":"elements/agileform2.html","height":700, "thumbnail":"elements/images/thumbs/agileform2.png"},
+        {"url":"elements/agileform3.html","height":700, "thumbnail":"elements/images/thumbs/agileform3.png"},     
+        {"url":"elements/agileform4.html","height":700, "thumbnail":"elements/images/thumbs/agileform4.png"},
+        {"url":"elements/agileform5.html","height":700, "thumbnail":"elements/images/thumbs/agileform5.png"}
     ]
     }
 }
