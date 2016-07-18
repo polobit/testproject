@@ -42,20 +42,20 @@ var DocumentsRouter = Backbone.Router.extend({
 
 	},
 
-	loadDocuments : function(e)
+	loadDocuments : function(el)
 	{
 		var that  = this ;
 		var sortKey = _agile_get_prefs("Documentssort_Key");
-				if (this.DocumentCollectionView && this.DocumentCollectionView.options.global_sort_key == sortKey && this.DocumentCollectionView.collection && this.DocumentCollectionView.collection.length > 0)
+				if (App_Documents.DocumentCollectionView && App_Documents.DocumentCollectionView.options.global_sort_key == sortKey && App_Documents.DocumentCollectionView.collection && App_Documents.DocumentCollectionView.collection.length > 0)
 				{
-					$(el).find("#documents-collection-container").html(this.DocumentCollectionView.render(true).el);
+					$(el).find("#documents-collection-container").html(App_Documents.DocumentCollectionView.render(true).el);
 					return;
 				}
 
 				// Loading icon
 				$("#content").find("#documents_collection_container").html(LOADING_HTML);
 
-				this.DocumentCollectionView = new Document_Collection_Events({ 
+				App_Documents.DocumentCollectionView = new Document_Collection_Events({ 
 					url : 'core/api/documents', 
 					sort_collection : false,
 					templateKey : "documents", 
