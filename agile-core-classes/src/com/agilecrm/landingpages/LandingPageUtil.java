@@ -10,9 +10,14 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.json.JSONArray;
+import org.json.JSONObject;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.util.FileStreamUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.utils.SystemProperty;
 import com.googlecode.objectify.Query;
@@ -367,5 +372,31 @@ public class LandingPageUtil
 		
 	}
 	
+	public static String  getFullHtmlCode(String fullXHtml) {
+		
+	    String fullheadHtml="";
+	    String fullbodyHtml="<body> <div id='page' class='page'> ";
+	    String totalHtml="<!DOCTYPE html><html lang='en'>";
+	   
+		try
+		{
+		    //String fileContent=FileStreamUtil.readResource("/home/agile21/eclipsestore/workplace(luna)/.metadata/.plugins/org.eclipse.wst.server.core/tmp0/agile-java-server/agile-frontend.war/misc/pagebuilder/elements/skeleton.html");
+		    String fileContent=FileStreamUtil.readResource("misc/pagebuilder/elements/skeleton.html");
+		    fullheadHtml=Jsoup.parse(fileContent).getElementsByTag("head").toString();		    
+		    JSONArray jsonArray = new JSONArray(fullXHtml); 
+		    for (int i = 0; i < jsonArray.length(); i++) {					
+		        JSONObject lpElements = jsonArray.getJSONObject(i);				        
+		        Document doc = Jsoup.parse(lpElements.getString("frameContent"));
+		        fullbodyHtml=fullbodyHtml+doc.body().getElementById("page").children();				        
+		    }
+		    totalHtml=totalHtml+fullheadHtml+fullbodyHtml+"</body></html>";
+		    return totalHtml;
+		}
+		catch (Exception e) {
+	    	    System.out.println(ExceptionUtils.getFullStackTrace(e));
+	    	    return null;
+		}
+		
+	}
 	
 }

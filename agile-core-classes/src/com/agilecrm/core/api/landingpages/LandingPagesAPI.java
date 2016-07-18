@@ -205,6 +205,9 @@ public class LandingPagesAPI
 	public LandingPage createLandingPage(LandingPage landingPage)
 	{
 		System.out.println(landingPage);
+		if(landingPage.version >= 2.0) {	    
+        	landingPage.html = LandingPageUtil.getFullHtmlCode(landingPage.blocks);
+        }
 		landingPage.save();
 		
 		//Increase count of Campaign for AllDomainstats report in database
@@ -220,6 +223,9 @@ public class LandingPagesAPI
     @Produces(MediaType.APPLICATION_JSON)
 	public LandingPage updateLandingPage(LandingPage landingPage)
 	{
+		if(landingPage.version >= 2.0) {	    
+        	landingPage.html = LandingPageUtil.getFullHtmlCode(landingPage.blocks);
+        }
 		landingPage.updated_time = System.currentTimeMillis() / 1000;
 		landingPage.save();
 		return landingPage;
