@@ -19,7 +19,7 @@ var LandingPageRouter = Backbone.Router.extend({
                     // Add top view
                     var sortKey = _agile_get_prefs("landingpage_sort_menu");
                     if(sortKey == undefined || sortKey == null){
-                        sortKey = "name";
+                        sortKey = "name_dummy";
                         _agile_set_prefs("landingpage_sort_menu", sortKey);
                     }
 
