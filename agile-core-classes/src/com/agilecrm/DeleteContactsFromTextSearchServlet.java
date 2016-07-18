@@ -1,5 +1,6 @@
 package com.agilecrm;
 
+import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -8,7 +9,7 @@ import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
 
-public class DeleteContactsFromTextSearchServlet {
+public class DeleteContactsFromTextSearchServlet extends HttpServlet {
 	public void doPost(HttpServletRequest req, HttpServletResponse res)
 	{
 		doGet(req, res);
