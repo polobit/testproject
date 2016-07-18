@@ -1236,7 +1236,7 @@
 					prePersist : function(model){
 						
 						var title = model.toJSON().title;
-						 title = title.replace(/\s+$/, '');
+						 title = $.trim(title);
 						var json = {};
 						var catogery_id = $("#catogery option:selected").data('catogery-id');
 						json = {"categorie_id" : catogery_id,"title" : title};
@@ -1255,18 +1255,12 @@
 
 			        postRenderCallback : function(el){
 					
-						setupTinyMCEEditor('textarea#description-article', true, undefined, function(){});
+						setupTinyMCEEditor('textarea#description-article', true, undefined, function(){
+							$("textarea#description-article").css("display", "none");
+						});
   
-						// setup TinyMCE
-						setupTinyMCEEditor('textarea#description-article', true, [
-							"textcolor link image preview code"
-						], function()
-						{
-
-							// Register focus
-							register_focus_on_tinymce('description-article');
-						}); 
-						fillSelect('catogery', '/core/api/knowledgebase/categorie', '', function(collection){
+						 
+						fillSelect('catogery', '/core/api/knowledgebase/categorie/kb-admin', '', function(collection){
 			 	 			getTemplate("helpcenter-section-category", collection.toJSON(), undefined, function(template_ui){						
 
 								if(!template_ui)
@@ -1322,7 +1316,7 @@
 					$("textarea#description-article").css("display", "none");
 				});
 
-				fillSelect('catogery', '/core/api/knowledgebase/categorie', '', function(collection){
+				fillSelect('catogery', '/core/api/knowledgebase/categorie/kb-admin', '', function(collection){
 
 		 	 		$('#catogery', el).html(getTemplate('helpcenter-section-category', collection.toJSON()));
    					$('#catogery option[value="'+section_id+'"]',el).attr("selected",true);                    
@@ -1379,7 +1373,7 @@
 			        prePersist : function(model){
 			        	var json = {};
 			        	var name = model.toJSON().name;
-			        	 name = name.replace(/\s+$/, '');
+			        	 name = $.trim(name);
 			        	 json = {'name':name};
 			        	 model.set(json, { silent : true });
 			        },

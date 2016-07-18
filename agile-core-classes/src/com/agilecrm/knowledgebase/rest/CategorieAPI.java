@@ -53,6 +53,24 @@ public class CategorieAPI
 
 		return categories;
 	}
+	
+    
+	@GET
+	@Path("/kb-admin")
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	public List<Categorie> getAdminCategories()
+	{
+		List<Categorie> categories = CategorieUtil.getCategories();
+
+		if (categories == null)
+			return null;
+
+		for (Categorie categorie : categories)
+			categorie.sections = SectionUtil.getSectionByCategorie(categorie.id,true);
+
+		return categories;
+	}
+
 
 	@GET
 	@Path("{id}")
