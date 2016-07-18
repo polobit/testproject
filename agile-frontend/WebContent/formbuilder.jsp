@@ -27,12 +27,12 @@ String template = request.getParameter("template");
       input[type=url],textarea{border:1px solid #ccc;border-radius:4px;box-shadow:0 1px 1px rgba(0,0,0,.075) inset;color:#555;font-size:14px;line-height:1.42857;transition:border-color .15s ease-in-out 0s,box-shadow .15s ease-in-out 0s;width:100%;margin:0}
          .agile-label{float:left;overflow:hidden;padding:7px 25px 0 0;text-align:left;word-wrap:break-word;width:100%;font-size:15px}
       </style>
-	<script>
-		var formNumber = <%=formId%>;
+  <script>
+    var formNumber = <%=formId%>;
    <% if(template != null) { %>
    var formTemplate = '<%=template%>';
    <% } %>
-	</script>
+  </script>
 
    </head>
    <body>
@@ -44,15 +44,15 @@ String template = request.getParameter("template");
                <div class="clearfix">
                   <h2 id="form-label">Your Form</h2>
                   
-                  	 <input id="choose-Theme" type="button" class="btn btn-info" onclick="chooseThemeFunc()" style="margin-top: -40px;margin-left: 210px;padding-right: 10px;" value="Choose Theme">
-					 <div class="dropdown-content" style="display:none;padding-left: 10px;margin-left: 205px;position: absolute;background-color: #f9f9f9;min-width: 160px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);">
-	                       	    <div><input type="radio" id="createCustThemeRadio" name="theme" value="createCustThemeRadio" data-toggle="modal" data-target="#customThemeModal" onclick="selectedThemeFunc()">Create Custom Theme</div>
-	                       	    <div><input type="radio" name="theme" id="default" value="default" onclick="selectedThemeFunc()" checked><label for="default">default</label></div>
-	                       	    <div><input type="radio" name="theme" id= "theme1" value="theme1" onclick="selectedThemeFunc()"><label for="default">theme1</label></div>
-	                       	    <div><input type="radio" name="theme" id= "theme2" value="theme2" onclick="selectedThemeFunc()"><label for="default">theme2</label></div>
-	                       	    <div><input type="radio" name="theme" id= "theme3" value="theme3" onclick="selectedThemeFunc()"><label for="default">theme3</label></div>
-	                       	    <div id="lable4"><input type="radio" name="theme" id= "theme4" value="theme4" onclick="selectedThemeFunc()"><label for="default">theme4</label></div>
-	                       	    
+                     <input id="choose-Theme" type="button" class="btn btn-info" onclick="chooseThemeFunc()" style="margin-top: -40px;margin-left: 210px;padding-right: 10px;" value="Choose Theme">
+           <div class="dropdown-content" style="display:none;padding-left: 10px;margin-left: 205px;position: absolute;background-color: #f9f9f9;min-width: 160px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);">
+                              <div><input type="radio" id="createCustThemeRadio" name="theme" value="createCustThemeRadio" data-toggle="modal" data-target="#customThemeModal" onclick="selectedThemeFunc()">Create Custom Theme</div>
+                              <div><input type="radio" name="theme" id="default" value="default" onclick="selectedThemeFunc()" checked><label for="default">default</label></div>
+                              <div><input type="radio" name="theme" id= "theme1" value="theme1" onclick="selectedThemeFunc()"><label for="default">theme1</label></div>
+                              <div><input type="radio" name="theme" id= "theme2" value="theme2" onclick="selectedThemeFunc()"><label for="default">theme2</label></div>
+                              <div><input type="radio" name="theme" id= "theme3" value="theme3" onclick="selectedThemeFunc()"><label for="default">theme3</label></div>
+                              <div id="lable4"><input type="radio" name="theme" id= "theme4" value="theme4" onclick="selectedThemeFunc()"><label for="default">theme4</label></div>
+                              
             </div>
             <div class="modal fade" id="customThemeModal" role="dialog">
                       <div class="modal-dialog" style="width: 1032px;height: 365px;">
@@ -187,7 +187,7 @@ String template = request.getParameter("template");
         <!--Font Form Elements End -->
         <div class="arrow">-></div>
         <!--Font Type Start -->
-        <dir class="innerFontTheme innerFontFamilyTheme">
+        <div class="innerFontTheme innerFontFamilyTheme">
           <label>Font</label>
           <div>
               <select>
@@ -207,7 +207,7 @@ String template = request.getParameter("template");
 
               </select>
             </div>
-        </dir>
+        </div>
         <!--Font Type End -->
         <div class="arrow fontThemeArrow">-></div>
         <!--Font Style Start -->
