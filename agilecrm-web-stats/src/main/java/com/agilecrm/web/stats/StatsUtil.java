@@ -1,7 +1,9 @@
 package com.agilecrm.web.stats;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.URLDecoder;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -12,6 +14,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import com.googlecode.objectify.Objectify;
+import com.googlecode.objectify.ObjectifyService;
+import static com.googlecode.objectify.ObjectifyService.ofy;
 
 /**
  * <code>AnalyticsUtil</code> is the utility class for Analytics. It merges page
@@ -81,8 +87,8 @@ public class StatsUtil
 	if (StringUtils.isBlank(domain))
 	    return;
 	
-	// if(isBlockedIp(ip, domain))
-	// return;
+	if (isBlockedIp(ip, domain))
+	    return;
 	
 	Long timeBeforeLog = System.currentTimeMillis();
 	System.out.println("Before log " + timeBeforeLog);
@@ -117,7 +123,40 @@ public class StatsUtil
 	    timeAfterLog = System.currentTimeMillis();
 	    System.out.println("After log " + timeAfterLog + " Diff " + (timeAfterLog - timeBeforeLog));
 	}
-	
+    }
+    
+    public static Boolean isBlockedIp(String clientIp, String domain)
+    {
+	try
+	{
+	    StatsAccess statsAccess = null;
+	    statsAccess = ofy().load().type(StatsAccess.class).filter("domain", domain).first().now();
+	    String[] blockedIps = statsAccess.blocked_ips.split(",");
+	    
+	    for (int i = 0; i < blockedIps.length; i++)
+	    {
+		if (ipMatch(clientIp, blockedIps[i].trim()))
+		    return true;
+	    }
+	    return false;
+	}
+	catch (Exception e)
+	{
+	    return false;
+	}
+    }
+    
+    public static Boolean ipMatch(String clientIp, String blockedIp)
+    {
+	String[] clientIpTokens = clientIp.split("\\.");
+	String[] blockedIpTokens = blockedIp.split("\\.");
+	for (int i = 0; i < clientIpTokens.length; i++)
+	{
+	    if (!(StringUtils.equals("*", blockedIpTokens[i]) || StringUtils.equals(clientIpTokens[i],
+		    blockedIpTokens[i])))
+		return false;
+	}
+	return true;
     }
     
     /**
@@ -374,6 +413,49 @@ public class StatsUtil
 	    result = true;
 	}
 	return result;
+    }
+    
+    /**
+     * Responsible for reading data from http post request and converts data
+     * into map object
+     * 
+     * @param req
+     * @return
+     * @throws Exception
+     */
+    public static Map<String, String> readPostData(HttpServletRequest req) throws Exception
+    {
+	StringBuilder stringBuilder = new StringBuilder();
+	Map<String, String> params = new LinkedHashMap<String, String>();
+	try
+	{
+	    BufferedReader bufferedReader = req.getReader();
+	    if (bufferedReader != null)
+	    {
+		char[] charBuffer = new char[128];
+		int bytesRead = -1;
+		while ((bytesRead = bufferedReader.read(charBuffer)) > 0)
+		{
+		    stringBuilder.append(charBuffer, 0, bytesRead);
+		}
+	    }
+	    else
+		stringBuilder.append("");
+	    
+	    String[] paramsArray = stringBuilder.toString().split("&");
+	    for (int i = 0; i < paramsArray.length; i++)
+	    {
+		String param = URLDecoder.decode(paramsArray[i], "UTF-8");
+		String[] paramSplit = param.split("=");
+		params.put(paramSplit[0], paramSplit[1]);
+	    }
+	}
+	catch (Exception e)
+	{
+	    System.out.println(e.getMessage());
+	    return null;
+	}
+	return params;
     }
     
 }
