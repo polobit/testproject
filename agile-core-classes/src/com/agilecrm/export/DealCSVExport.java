@@ -44,6 +44,7 @@ public class DealCSVExport
     public static final String LOSSREASON = "Loss Reason";
     public static final String CREATED_DATE = "Created Date";
     public static final String WON_DATE = "Won Date";
+    public static final String ID = "Id";
 
     private static final DateFormat date = new SimpleDateFormat("MM/dd/yyyy");
 
@@ -65,6 +66,10 @@ public class DealCSVExport
 
 	try
 	{
+		if(deal.id != null)
+		{
+			str[indexMap.get(ID)] = String.valueOf(deal.id);
+		}
 	    str[indexMap.get(NAME)] = deal.name;
 	    str[indexMap.get(DESCRIPTION)] = deal.description;
 	    try
