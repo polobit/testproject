@@ -1534,18 +1534,20 @@ function sendVoiceAndEndCall(fileSelected) {
 										subject: TWILIO_CALLTYPE + " call - Left voicemail",
 										message: "",
 										contactid: TWILIO_CONTACT_ID
-										,success:function(data){
+									},function(data){
 												if(TWILIO_CALLED_NO != "") {
 										$.post( "/core/api/widgets/twilio/savecallactivityById?note_id="+
-											logPhone.id,{
+											data.id,{
 											id:TWILIO_CONTACT_ID,
 											direction: TWILIO_DIRECTION, 
 											phone: TWILIO_CALLED_NO, 
 											status : "voicemail",
 											duration : 0 
+											},function(d){
+												console.log(d);
 											});
 									}
-								}
+								
 										});
 									
 								
