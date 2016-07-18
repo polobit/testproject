@@ -117,6 +117,9 @@ public class ContactExportCSVUtil
 	    	{
 	    		headersList.add(customField.field_label);
 	    	}
+	    	if(customField.field_type.equals(CustomFieldDef.Type.CONTACT) || customField.field_type.equals(CustomFieldDef.Type.COMPANY)){
+	    		headersList.add(customField.field_label+"_name");
+	    	}
 	    }
 
 	    // Converts ArrayList to String array before return
