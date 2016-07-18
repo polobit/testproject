@@ -55,6 +55,8 @@ var DocumentsRouter = Backbone.Router.extend({
 				// Loading icon
 				$("#content").find("#documents_collection_container").html(LOADING_HTML);
 
+				
+
 				App_Documents.DocumentCollectionView = new Document_Collection_Events({ 
 					url : 'core/api/documents', 
 					sort_collection : false,
