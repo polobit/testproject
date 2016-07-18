@@ -4300,3 +4300,10 @@ background-color : #522E2E;
   font-size: 14px;
   opacity:0.7;
 }
+.chromeextensionborder
+{
+border-bottom-left-radius:3px;
+border-bottom-right-radius:3px;
+text-align:center;
+border: 1px solid #e5e5e5;
+}
