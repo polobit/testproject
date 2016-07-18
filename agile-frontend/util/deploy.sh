@@ -24,7 +24,8 @@ do
    mkdir ../WebContent/tpl/min/precompiled/locales/"$i"
    java -jar precompile.jar ../WebContent/tpl/localestmp/locales/"$i" ../../../tmp/handlebars ../WebContent/tpl/min/precompiled/locales/"$i"
 done
-
+#Delete locales
+rm -r ../WebContent/tpl/localestmp
 ##End of localization support
 
 #java -jar precompile.jar ../WebContent/flatfull/tpl ../../../tmp/handlebars ../WebContent/tpl/min/precompiled/flatfull
