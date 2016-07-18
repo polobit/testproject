@@ -49,7 +49,7 @@ public class CategorieAPI
 			return null;
 
 		for (Categorie categorie : categories)
-			categorie.sections = SectionUtil.getSectionByCategorie(categorie.id);
+			categorie.sections = SectionUtil.getSectionByCategorie(categorie.id,false);
 
 		return categories;
 	}

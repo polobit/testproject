@@ -62,18 +62,15 @@ public class SectionAPI
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public List<Section> getSectionsByCategorie(@PathParam("id") Long categorieID)
 	{
-		try
-		{
-			return SectionUtil.getSectionByCategorie(categorieID);
-		}
-		catch (Exception e)
-		{
-			System.out.println(ExceptionUtils.getFullStackTrace(e));
-			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-					.build());
-		}
+			return SectionUtil.getSectionByCategorie(categorieID,false);
 	}
-	
+	@GET
+	@Path("/{id}")
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	public List<Section> getSections(@PathParam("id") Long categorieID)
+	{
+			return SectionUtil.getSectionByCategorie(categorieID,true);
+	}
 	@POST
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })

@@ -51,7 +51,7 @@ public class ArticleAPI
 	{
 		try
 		{
-			Article article = Article.dao.getByProperty("title",title);
+			Article article = Article.dao.getByProperty("title", title);
 			article.categorie = Categorie.dao.get(article.categorie_key);
 			article.section = Section.dao.get(article.section_key);
 
@@ -64,7 +64,7 @@ public class ArticleAPI
 					.build());
 		}
 	}
-	
+
 	/**
 	 * 
 	 * @param section_name
@@ -76,7 +76,19 @@ public class ArticleAPI
 	{
 		return ArticleUtil.getArticles(section_name);
 	}
-	
+	/**
+	 * 
+	 * @param section_name
+	 * @return
+	 */
+	@Path("/admin-articles")
+	@GET
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	public List<Article> getAdminArticles(@QueryParam("section_name") String section_name)
+	{
+		return ArticleUtil.getAdminArticles(section_name);
+	}
+
 	/**
 	 * 
 	 * @param search_term
@@ -101,9 +113,18 @@ public class ArticleAPI
 			for (int i = 0; i < keysArray.length(); i++)
 				keys.add((Key<Article>) keysArray.get(i));
 
-			System.out.println("keys: " + keys);
+			List<Article> articleList = Article.dao.fetchAllByKeys(keys);
+			List<Article> articleListreturn = new ArrayList<Article>();
 
-			return Article.dao.fetchAllByKeys(keys);
+			for (Article ac : articleList)
+			{
+				if (ac.is_article_published == false)
+				{
+					articleListreturn.add(ac);
+				}
+			}
+			return articleListreturn;
+
 		}
 		catch (Exception e)
 		{
@@ -112,8 +133,7 @@ public class ArticleAPI
 					.build());
 		}
 	}
-	
-	
+
 	/**
 	 * Save the article order based on the order of the article id's sent.
 	 * 
@@ -162,7 +182,6 @@ public class ArticleAPI
 		}
 	}
 
-
 	/**
 	 * 
 	 * @param article
@@ -177,8 +196,9 @@ public class ArticleAPI
 		try
 		{
 			Article existingArticle = Article.dao.getByProperty("title", article.title);
-			
-			if (existingArticle != null && existingArticle.title.equalsIgnoreCase(article.title)){
+
+			if (existingArticle != null && existingArticle.title.equalsIgnoreCase(article.title))
+			{
 				throw new Exception("Article with name " + article.title
 						+ " already exists. Please choose a different name.");
 			}
@@ -200,7 +220,7 @@ public class ArticleAPI
 
 		return article;
 	}
-	
+
 	@POST
 	@Path("/bulk")
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
@@ -220,10 +240,11 @@ public class ArticleAPI
 
 		return new JSONObject().put("status", "success").toString();
 	}
-	
+
 	/**
 	 * 
-	 * @param article,id
+	 * @param article
+	 *            ,id
 	 * @return
 	 * @throws WebApplicationException
 	 */
@@ -236,26 +257,25 @@ public class ArticleAPI
 		try
 		{
 			Article dbArticle = Article.dao.get(article.id);
-			
+
 			Article existingArticle = Article.dao.getByProperty("title", article.title);
-			if (existingArticle != null && !existingArticle.equals(article.title) && !(dbArticle.title.equalsIgnoreCase(article.title))){
+			if (existingArticle != null && !existingArticle.equals(article.title)
+					&& !(dbArticle.title.equalsIgnoreCase(article.title)))
+			{
 				throw new Exception("Article with name " + article.title
 						+ " already exists. Please choose a different name.");
 			}
-			
-			
-			
-			
+
 			Key<Section> section_key = new Key<Section>(Section.class, article.section_id);
 			article.section_key = section_key;
 
 			Key<Categorie> categorie_key = new Key<Categorie>(Categorie.class, article.categorie_id);
 			article.categorie_key = categorie_key;
 
-			article.created_by_key = dbArticle.created_by_key ;
-			
+			article.created_by_key = dbArticle.created_by_key;
+
 			article.created_time = dbArticle.created_time;
-		
+
 			article.save();
 		}
 		catch (Exception e)
@@ -268,10 +288,11 @@ public class ArticleAPI
 
 		return article;
 	}
-	
+
 	/**
 	 * 
-	 * @param article,id
+	 * @param article
+	 *            ,id
 	 * @return
 	 * @throws WebApplicationException
 	 */
@@ -283,13 +304,13 @@ public class ArticleAPI
 	{
 		try
 		{
-			if(article.id == null)
+			if (article.id == null)
 				throw new Exception("Required params missing.");
-			
+
 			Article dbArticle = Article.dao.get(article.id);
 
 			dbArticle.is_article_published = article.is_article_published;
-			
+
 			dbArticle.save();
 		}
 		catch (Exception e)
@@ -302,13 +323,13 @@ public class ArticleAPI
 
 		return article;
 	}
-	
+
 	/**
 	 * Deletes Articles by IDs
 	 * 
 	 */
 	@Path("/{id}")
-	@DELETE 
+	@DELETE
 	public String deleteArticle(@PathParam("id") Long id)
 	{
 		try
