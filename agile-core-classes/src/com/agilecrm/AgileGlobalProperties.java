@@ -38,16 +38,11 @@ public class AgileGlobalProperties implements Serializable
 
 	public String getSendgridSubUserPwd()
 	{
-		sendgridSubUserPwd = Rot13.convertStringUsingRot13(sendgridSubUserPwd);
-		
 		return sendgridSubUserPwd;
 	}
 
 	public void setSendgridSubUserPwd(String sendgridSubUserPwd)
 	{
-		// Encode password using Rot13
-		sendgridSubUserPwd = Rot13.convertStringUsingRot13(sendgridSubUserPwd);
-		
 		this.sendgridSubUserPwd = sendgridSubUserPwd;
 	}
 
