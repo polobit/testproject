@@ -45,12 +45,12 @@
 
     module.exports.mediumCssUrls = [
         '//cdn.jsdelivr.net/medium-editor/latest/css/medium-editor.min.css',
-        '/css/medium-bootstrap.css'
+        'https://s3.amazonaws.com/agilecrm/pagebuilder/static/css/medium-bootstrap.css'
     ];
     module.exports.mediumButtons = ['bold', 'italic', 'underline', 'anchor', 'orderedlist', 'unorderedlist', 'h1', 'h2', 'h3', 'h4', 'removeFormat'];
 
     module.exports.externalJS = [
-        'js/builder_in_block.js'
+        'https://s3.amazonaws.com/agilecrm/pagebuilder/static/js/builder_in_block.js'
     ];
                     
 }());

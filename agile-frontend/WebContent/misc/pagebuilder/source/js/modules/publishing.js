@@ -17,7 +17,7 @@
     
         init: function() {
         
-            $(this.buttonPublish).on('click', this.loadPublishModal);
+            // $(this.buttonPublish).on('click', this.loadPublishModal);
             $(this.buttonSavePendingBeforePublishing).on('click', this.saveBeforePublishing);
             $(this.publishModal).on('change', 'input[type=checkbox]', this.publishCheckboxEvent);
             $(this.buttonPublishSubmit).on('click', this.publishSite);
@@ -87,7 +87,7 @@
                     $('#pages li:visible').each(function(){
                         
                         var thePage = $(this).find('a:first').text();
-                        var theRow = $('<tr><td class="text-center" style="width: 30px;"><label class="checkbox no-label"><input type="checkbox" value="'+thePage+'" id="" data-type="page" name="pages[]" data-toggle="checkbox"></label></td><td>'+thePage+'<span class="publishing"><span class="working">Publishing... <img src="'+appUI.baseUrl+'images/publishLoader.gif"></span><span class="done text-primary">Published &nbsp;<span class="fui-check"></span></span></span></td></tr>');
+                        var theRow = $('<tr><td class="text-center" style="width: 30px;"><label class="checkbox no-label"><input type="checkbox" value="'+thePage+'" id="" data-type="page" name="pages[]" data-toggle="checkbox"></label></td><td>'+thePage+'<span class="publishing"><span class="working">Publishing... <img src="'+appUI.s3BaseUrl+'images/publishLoader.gif"></span><span class="done text-primary">Published &nbsp;<span class="fui-check"></span></span></span></td></tr>');
                         
                         //checkboxify
                         theRow.find('input').radiocheck();
@@ -176,7 +176,7 @@
                     $('#pages li:visible').each(function(){
 				
                         var thePage = $(this).find('a:first').text();
-                        var theRow = $('<tr><td class="text-center" style="width: 0px;"><label class="checkbox"><input type="checkbox" value="'+thePage+'" id="" data-type="page" name="pages[]" data-toggle="checkbox"></label></td><td>'+thePage+'<span class="publishing"><span class="working">Publishing... <img src="'+appUI.baseUrl+'images/publishLoader.gif"></span><span class="done text-primary">Published &nbsp;<span class="fui-check"></span></span></span></td></tr>');
+                        var theRow = $('<tr><td class="text-center" style="width: 0px;"><label class="checkbox"><input type="checkbox" value="'+thePage+'" id="" data-type="page" name="pages[]" data-toggle="checkbox"></label></td><td>'+thePage+'<span class="publishing"><span class="working">Publishing... <img src="'+appUI.s3BaseUrl+'images/publishLoader.gif"></span><span class="done text-primary">Published &nbsp;<span class="fui-check"></span></span></span></td></tr>');
                         
                         //checkboxify
                         theRow.find('input').radiocheck();

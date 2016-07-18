@@ -121,11 +121,11 @@
                                 loaderFunction = 'data-loaderfunction="'+this.allBlocks.elements[key][x].loaderFunction+'"';
                             }
                             
-                            newItem = $('<li class="element '+niceKey+'"><img src="'+appUI.baseUrl+this.allBlocks.elements[key][x].thumbnail+'" data-srcc="'+appUI.baseUrl+this.allBlocks.elements[key][x].url+'" data-height="'+this.allBlocks.elements[key][x].height+'" data-sandbox="" '+loaderFunction+'></li>');
+                            newItem = $('<li class="element '+niceKey+'"><img src="'+appUI.s3BaseUrl+this.allBlocks.elements[key][x].thumbnail+'" data-srcc="'+appUI.baseUrl+this.allBlocks.elements[key][x].url+'" data-height="'+this.allBlocks.elements[key][x].height+'" data-sandbox="" '+loaderFunction+'></li>');
                             
                         } else {
                                 
-                            newItem = $('<li class="element '+niceKey+'"><img src="'+appUI.baseUrl+this.allBlocks.elements[key][x].thumbnail+'" data-srcc="'+appUI.baseUrl+this.allBlocks.elements[key][x].url+'" data-height="'+this.allBlocks.elements[key][x].height+'"></li>');
+                            newItem = $('<li class="element '+niceKey+'"><img src="'+appUI.s3BaseUrl+this.allBlocks.elements[key][x].thumbnail+'" data-srcc="'+appUI.baseUrl+this.allBlocks.elements[key][x].url+'" data-height="'+this.allBlocks.elements[key][x].height+'"></li>');
                                 
                         }
                     }
@@ -297,7 +297,7 @@
         this.scripts = [];//tracks script URLs used on this page
         
         this.pageSettings = {
-            title: page.pages_title || '',
+            title: page.pages_title || 'My Landing Page',
             meta_description: page.meta_description || '',
             meta_keywords: page.meta_keywords || '',
             header_includes: page.header_includes || '',
@@ -338,7 +338,7 @@
             site.inputPageSettingsPageCss.value = this.pageSettings.page_css;
                           
             //trigger custom event
-            $('body').trigger('changePage');
+            // $('body').trigger('changePage');
             
             //reset the heights for the blocks on the current page
             for( var i in this.blocks ) {
@@ -540,12 +540,14 @@
             page.name = this.name;
             page.pageSettings = this.pageSettings;
             page.status = this.status;
-            page.pageID = this.pageID;
+            // page.pageID = this.pageID;
+            page.pageID = appUI.agilePageId;
             page.blocks = [];
                     
             //process the blocks
-                    
-            for( var x = 0; x < this.blocks.length; x++ ) {
+
+            var noOfBlocks = this.blocks.length;                    
+            for( var x = 0; x < noOfBlocks; x++ ) {
                         
                 var block = {};
                         
@@ -566,6 +568,8 @@
                 block.frameHeight = this.blocks[x].frameHeight;
                 block.originalUrl = this.blocks[x].originalUrl;
                 if ( this.blocks[x].global ) block.frames_global = true;
+
+                block.frames_id = noOfBlocks + x;
                                                                 
                 page.blocks.push(block);
                         
@@ -753,7 +757,8 @@
             
                 var newBlock = new Block();
             
-                page.blocks[x].src = appUI.siteUrl+"sites/getframe/"+page.blocks[x].frames_id;
+                page.blocks[x].frames_original_url = page.blocks[x].originalUrl;
+                page.blocks[x].src = appUI.siteUrl+"core/api/landingpages/getframe/"+appUI.agilePageId+"/"+page.blocks[x].frames_id;
                 
                 //sandboxed block?
                 if( page.blocks[x].frames_sandbox === '1') {
@@ -1651,30 +1656,47 @@
 		autoSaveTimer: {},
         
         init: function() {
-                        
-            $.getJSON(appUI.siteUrl+"sites/siteData", function(data){
-                
-                if( data.site !== undefined ) {
-                    site.data = data.site;
-                }
-                if( data.pages !== undefined ) {
-                    site.pages = data.pages;
-                }
-                
-                site.is_admin = data.is_admin;
-                
-				if( $('#pageList').size() > 0 ) {
-                	builderUI.populateCanvas();
-				}
 
-                if( data.site.viewmode ) {
-                    publisher.publish('onSetMode', data.site.viewmode);
-                }
+            if(appUI.agilePageId !== 0) {
+                $.getJSON(appUI.siteUrl+"core/api/landingpages/"+appUI.agilePageId, function(respData){
+                    var data = {
+                        "pages": {
+                            "index": {
+                                "blocks": JSON.parse(respData.blocks),
+                                "page_id": respData.id,
+                                "pages_title": respData.title,
+                                "meta_description": respData.description,
+                                "meta_keywords": respData.tags,
+                                "header_includes": respData.header_includes,
+                                "page_css": respData.css
+                            }
+                        },
+                        "is_admin": 1
+                    };
+                    
+                    if( data.site !== undefined ) {
+                        site.data = data.site;
+                    }
+                    if( data.pages !== undefined ) {
+                        site.pages = data.pages;
+                    }
+                    
+                    site.is_admin = data.is_admin;
+                    
+                    if( $('#pageList').size() > 0 ) {
+                        builderUI.populateCanvas();
+                    }
+                    
+                    //fire custom event
+                    $('body').trigger('siteDataLoaded');
                 
-                //fire custom event
-                $('body').trigger('siteDataLoaded');
-                
-            });
+                });
+            } else {
+                site.newPage();
+
+                $("#publishPage").addClass("disabled");
+                $("#buttonPreview").addClass("disabled");
+            }
             
             $(this.buttonNewPage).on('click', site.newPage);
             $(this.modalPageSettings).on('show.bs.modal', site.loadPageSettings);
@@ -1783,45 +1805,67 @@
             serverData.siteData = this.data;
 
             //store current responsive mode as well
-            serverData.siteData.responsiveMode = builderUI.currentResponsiveMode;
+            // serverData.siteData.responsiveMode = builderUI.currentResponsiveMode;
+
+            var pageObject = {
+                "name": serverData.pages["index"]["pageSettings"]["title"],
+                "blocks": JSON.stringify(serverData.pages["index"]["blocks"]),
+                "css": serverData.pages["index"]["pageSettings"]["page_css"],
+                "title": serverData.pages["index"]["pageSettings"]["title"],
+                "tags": serverData.pages["index"]["pageSettings"]["meta_keywords"],
+                "description": serverData.pages["index"]["pageSettings"]["meta_description"],
+                "header_includes": serverData.pages["index"]["pageSettings"]["header_includes"],
+                "js": "",
+                "elements_css": "",
+                "version": 2.0
+            };
+
+            var reqMethod = "POST";
+            if(appUI.agilePageId !== 0) {
+                pageObject["id"] = appUI.agilePageId;
+                reqMethod = "PUT";
+            }
 
             $.ajax({
-                url: appUI.siteUrl+"sites/save",
-                type: "POST",
+                url: appUI.siteUrl+"core/api/landingpages",
+                type: reqMethod,
                 dataType: "json",
-                data: serverData,
+                contentType: "application/json",
+                data: JSON.stringify(pageObject),
             }).done(function(res){
 	
                 //enable button
                 $("a#savePage").removeClass('disabled');
 	
-                if( res.responseCode === 0 ) {
-			
+                if(res.id) {
+
+                    appUI.agilePageId = res.id;
+        
                     if( showConfirmModal ) {
-				
-                        $('#errorModal .modal-body').append( $(res.responseHTML) );
-                        $('#errorModal').modal('show');
-				
-                    }
-		
-                } else if( res.responseCode === 1 ) {
-		
-                    if( showConfirmModal ) {
-		
-                        $('#successModal .modal-body').append( $(res.responseHTML) );
+
+                        var publishPageBtn = $("#publishPage");
+                        var buttonPreviewBtn = $("#buttonPreview");
+                        publishPageBtn.removeClass("disabled");
+                        buttonPreviewBtn.removeClass("disabled");
+
+                        $("#markupPreviewForm").attr("action", window.location.origin+"/landing/"+appUI.agilePageId);
+                        publishPageBtn.attr("href", window.location.origin+"/#landing-page-settings/"+appUI.agilePageId);
+        
+                        $('#successModal .modal-body').html("Landing page have been saved successfully!");
                         $('#successModal').modal('show');
-				
+                
                     }
-			
-			
+            
+            
                     //no more pending changes
                     site.setPendingChanges(false);
-			
+            
 
                     //update revisions?
-                    $('body').trigger('changePage');
+                    // $('body').trigger('changePage');
                 
                 }
+
             });
     
         },
@@ -1905,7 +1949,9 @@
             };
             pageData[0] = temp;
             
-            var newPageName = 'page'+(site.sitePages.length+1);
+            // var newPageName = 'page'+(site.sitePages.length+1);
+
+            var newPageName = 'index';
             
             var newPage = new Page(newPageName, pageData, site.sitePages.length+1);
             

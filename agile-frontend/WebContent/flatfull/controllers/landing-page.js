@@ -98,6 +98,19 @@ var LandingPageRouter = Backbone.Router.extend({
 
     //remove pageId from here
     loadSavedLandingPage : function(pageId) {
+
+        if (typeof this.LandingPageCollectionView == "undefined") {
+            this.navigate("landing-pages", { trigger : true });
+            return;
+        }
+
+        var lp = this.LandingPageCollectionView.collection.get(pageId).toJSON();
+        if(lp.version > 0) {
+            window.location = "pagebuilder/"+pageId;
+            return;
+        }
+
+
         $('#content').html("<div id='landingpages-listeners'></div>");
         initializeLandingPageListeners(pageId);
 

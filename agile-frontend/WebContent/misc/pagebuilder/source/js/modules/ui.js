@@ -1,6 +1,6 @@
 (function () {
 
-/* globals siteUrl:false, baseUrl:false */
+/* globals siteUrl:false, baseUrl:false, agilePageId:false, s3BaseUrl:false */
     "use strict";
         
     var appUI = {
@@ -11,6 +11,8 @@
         secondMenuTriggerContainers: $('#menu #main #elementCats, #menu #main #templatesUl'),
         siteUrl: siteUrl,
         baseUrl: baseUrl,
+        agilePageId: agilePageId,
+        s3BaseUrl: s3BaseUrl,
         
         setup: function(){
             
