@@ -439,7 +439,7 @@ public class ContactSyncUtil
 				+ prefs.token);
 
 		Query query = new Query(feedURL);
-
+		
 		query.setStringCustomParameter("q", query_text);
 		query.setMaxResults(1);
 

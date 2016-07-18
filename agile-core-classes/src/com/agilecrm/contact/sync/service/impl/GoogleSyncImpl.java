@@ -578,13 +578,21 @@ public class GoogleSyncImpl extends TwoWaySyncService
 		}
 		if (!skip)
 		{
-			if(createContact.getId()!=null)
-			{
-				BatchUtils.setBatchId(createContact, contact.id.toString());
-				BatchUtils.setBatchOperationType(createContact, BatchOperationType.UPDATE);
-				updateFeed.getEntries().add(createContact);
+			 if(createContact.getId() == null)
+			    {
+					BatchUtils.setBatchOperationType(createContact, BatchOperationType.INSERT);
+					BatchUtils.setBatchId(createContact,"create");
+					updateFeed.getEntries().add(createContact);
+			    }
+			    else
+			    {
+			    	//If contact already present in google with this email, we just update this
+			    	//instead of creating new contact
+					BatchUtils.setBatchOperationType(createContact, BatchOperationType.UPDATE);
+					BatchUtils.setBatchId(createContact,"update");
+					updateFeed.getEntries().add(createContact);
+			    }
 				updateRequestCount++;
-			}
 		}
 		    
 		if (updateRequestCount >= 95 || ((i >= (contacts.size() - 1) && updateRequestCount != 0)))
