@@ -1307,7 +1307,7 @@
                 prePersist : function(model){
 					var json = {};
 					var catogery_id = $("#catogery option:selected").data('catogery-id');
-					json = {"categorie_id" : catogery_id,"section_id":section_id};
+					json = {"categorie_id" : catogery_id};
 					model.set(json, { silent : true });
 			    },
 
