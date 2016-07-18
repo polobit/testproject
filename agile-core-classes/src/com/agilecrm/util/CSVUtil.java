@@ -115,14 +115,14 @@ public class CSVUtil
 	dBbillingRestriction = (ContactBillingRestriction) DaoBillingRestriction.getInstace(
 		Contact.class.getSimpleName(), this.billingRestriction);
 
-	if (!VersioningUtil.isLocalHost())
-	{
+	//if (!VersioningUtil.isLocalHost())
+	//{
 	    GcsFileOptions options = new GcsFileOptions.Builder().mimeType("text/csv").contentEncoding("UTF-8")
 		    .acl("public-read").addUserMetadata("domain", NamespaceManager.get()).build();
 
 	    service = new GCSServiceAgile(NamespaceManager.get() + "_failed_contacts_" + GoogleSQL.getFutureDate()
 		    + ".csv", "agile-exports", options);
-	}
+	//}
 
 	this.accessControl = accessControl;
 
@@ -1630,19 +1630,33 @@ public class CSVUtil
 	    writeFailedContactsInCSV(getCSVWriterForFailedContacts(), failedContacts, headings);
 
 	    System.out.println("wrote files to CSV");
+	    byte[] data=null;
+	    
+	    try{
 
 	    service.getOutputchannel().close();
 
 	    System.out.println("closing stream");
 
-	    byte[] data = service.getDataFromFile();
+	    
+	    data = service.getDataFromFile();
 
 	    System.out.println("byte data");
 
 	    System.out.println(data.length);
+	    }
+	    catch(Exception e)
+	    {
+	    	e.printStackTrace();
+	    }
 	    System.out.println(domainUser.email);
-
+	    
+	    if(data==null)
+	    {
+	    	sendFailedContactImportFile(domainUser, "", failedContacts.size(), status);
+	    }
 	    // Send every partition as separate email
+	    else
 	    sendFailedContactImportFile(domainUser, new String(data, "UTF-8"), failedContacts.size(), status);
 
 	    service.deleteFile();
@@ -1852,10 +1866,17 @@ public class CSVUtil
 
     private CSVWriter getCSVWriterForFailedContacts() throws IOException
     {
+    	try{
 	if (failedContactsWriter != null)
 	    return failedContactsWriter;
 
 	System.out.println("building failed contacts service");
 	return failedContactsWriter = new CSVWriter(service.getOutputWriter());
+    	}
+    	catch(Exception e)
+    	{
+    		e.printStackTrace();
+    		return failedContactsWriter;
+    	}
     }
 }
