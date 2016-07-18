@@ -10,9 +10,11 @@ define([
 			type: 'GET',
 			dataType: 'json',
 			success: function(data){
-				
 				saveform = JSON.parse(data.formJson);
-				
+				$("#formContent").html(data.formHtml);
+				formClasses=$("#formContent .form-view").attr("class");
+				console.log("formClassesList:::"+formClasses);
+				$("#formContent .form-view").remove();
 				//Loads form view in form.jsp page
 				if($('#agileFormHolder').length != 0) {
 					$('#form-label').text('Edit Form');
@@ -20,9 +22,8 @@ define([
 					var formHtml = $("#render").val();
 			    	  if(formHtml != '') {
 			    		  $('#agileFormHolder').html(formHtml);
-			    		  // $('#agileFormHolder style').remove();
-
-			    		  if(typeof data.formHtml == "undefined" || data.formHtml == "") {
+			    		 
+							if(typeof data.formHtml == "undefined" || data.formHtml == "") {
 			    		  	data.formHtml = formHtml;
 			    		  	try{window.parent.updateAgileFormDB(data);}catch(err){}
 			    		  }

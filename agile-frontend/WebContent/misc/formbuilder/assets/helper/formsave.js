@@ -11,7 +11,29 @@ define([
 		var form = {};
 		form.formName = saveform[0].fields.name.value;
 		form.formJson = saveform;
+		var themeVal= $( "input:checked" ).val();
+		 $("#formContent").html($("#render").val());
+		 $("#formContent .form-view").addClass(themeVal);
+		 console.log("Before::::"+$("#formContent .form-view"));
+		 $.ajax({
+			type : 'POST',
+			url :  window.location.protocol + '//' + window.location.host + '/' + 'core/api/themes/getCustomThemeByName',
+			async : false,
+			contentType : 'application/json',
+			data : themeVal,
+			success: function(data){
+				console.log("DATA COMING!!!"+data);
+				var style='<style id="'+data.name+data.id+'" type="text/css">'+data.themeCss+'</style>';
+				$("#formContent").append(style);
+			},
+			error: function(){
+				alert("Theme style not been appended!!");
+			}
+		});
+
+		$("#render").val($("#formContent").html());
 		form.formHtml = $("#render").val();
+		console.log("render val:::"+form.formHtml);
 		if(formNumber){
 			form.id = formNumber;
 		}

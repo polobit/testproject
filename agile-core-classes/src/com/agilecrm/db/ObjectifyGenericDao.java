@@ -41,6 +41,7 @@ import com.agilecrm.contact.email.ContactEmail;
 import com.agilecrm.contact.filter.ContactFilter;
 import com.agilecrm.dashboards.Dashboard;
 import com.agilecrm.contact.upload.blob.status.ImportStatus;
+import com.agilecrm.customthemes.CustomTheme;
 import com.agilecrm.deals.Goals;
 import com.agilecrm.deals.Milestone;
 import com.agilecrm.deals.Opportunity;
@@ -290,7 +291,7 @@ public class ObjectifyGenericDao<T> extends DAOBase
      *  the maximum 25 tweet message in a day 
      * */
 	ObjectifyService.register(DomainLimits.class);
-
+	ObjectifyService.register(CustomTheme.class);
     }
 
     /**

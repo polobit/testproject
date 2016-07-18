@@ -12,6 +12,11 @@
 <b style="font-size: 12px;color: #1a1a1a;font-weight: 100;padding:12px">Powered</b>
 </a>
 <style>
+.form-view legend{
+margin-left: -14px;
+width: 415px;
+padding: 15px;
+}
 .theme1 legend,.theme2 legend,.theme3 legend,.theme4 legend{
 margin-left: -15px;
 width: 418px;

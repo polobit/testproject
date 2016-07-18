@@ -148,6 +148,8 @@ public class JerseyApplication extends Application
 	
 	// JS Permission
 	s.add(com.agilecrm.core.api.JavaScriptPermissionAPI.class);
+	//CustomTheme
+	s.add(com.agilecrm.core.api.customthemes.CustomThemesAPI.class);
 	return s;
     }
 }
