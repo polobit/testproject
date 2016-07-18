@@ -23,7 +23,7 @@ public class LanguageUtil {
 			String str = FileStreamUtil.readResource(application
 					.getRealPath("/")
 					+ "/"
-					+ "locales/" + language + "/"
+					+ "locales/menu/"
 					+ language
 					+ ".json");
 			str = str.replace("var _Agile_Resources_Json =", "").trim();

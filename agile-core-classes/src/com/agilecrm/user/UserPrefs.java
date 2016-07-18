@@ -48,7 +48,6 @@ public class UserPrefs
 	@Id
 	public Long id;
 	
-	@NotSaved
 	public String language = DEFAULT_LANGUAGE;
 
 	/**

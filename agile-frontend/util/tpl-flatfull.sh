@@ -29,6 +29,6 @@ cat ../WebContent/helpcenter/helpcenter-tpl/*.html  > ../WebContent/tpl/min/flat
 cd ../util
 
 #Local Dev
-java -jar agilelocalize.jar ../WebContent/tpl/min/flatfull ../WebContent/tpl/min en
+java -jar agilelocalize.jar ../WebContent/tpl/min/flatfull ../WebContent/tpl/min en,es
 #cat ../WebContent/tpl/min/flatfull/js-localize.js > ../WebContent/local
 #End of Local Dev
