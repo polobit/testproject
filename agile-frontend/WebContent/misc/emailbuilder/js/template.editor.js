@@ -858,6 +858,12 @@ $('div.buttonStyleTxt').on('shown.bs.popover', function () {
         var $currentEl = $('#' + $('#path').val()).find($('#selector').val() + ' a.' + $(this).attr('name'));
         var $imgEl = $currentEl.find("img");
         if ($(this).is(':checked')) {
+            if ($currentEl.val() == undefined) {
+                var currentElName = $(this).attr('name');
+                var tempHtml = '<a href="#" style="border: none; text-decoration: none;" class="'+currentElName+'">';
+                tempHtml += '<img border="0" src="https://s3.amazonaws.com/agilecrm/editor/email/staticfiles/'+currentElName+'.png" width="35" height="35"></a>';
+                $('#' + $('#path').val() + ' tbody tr td').append(tempHtml);
+            }
             $currentEl.show();
             $imgEl.attr("width","35");
             $imgEl.attr("height","35");
