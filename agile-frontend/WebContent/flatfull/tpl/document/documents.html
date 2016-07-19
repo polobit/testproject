@@ -28,7 +28,7 @@
                                 <button class="btn btn-sm no-shadow p-n b-n bg-transparent text-base" style="font-size: 11px;" data-toggle="dropdown" id="contact-sort">
                                         <span class="text-muted">Sort by </span>
                                         <span class="sort-field-txt">
-                                        {{#if_equals_sork_key sortKey 'name_dummy' }}Name{{/if_equals_sork_key}}
+                                        {{#if_equals_sork_key sortKey 'dummy_name' }}Name{{/if_equals_sork_key}}
         {{#if_equals_sork_key sortKey 'uploaded_time' }}Uploaded Time{{/if_equals_sork_key}}</span>
                                     </button>
                                     <button class="btn btn-sm no-shadow dropdown-toggle bg-transparent b-n p-t-none p-b-none p-l-xs" data-toggle="dropdown" aria-expanded="false">
@@ -36,10 +36,10 @@
                                     </button>
                                     <ul class="dropdown-menu " id="sort_menu" role="menu">
                                         <li>
-                                        <a class="sort-link sort-field pos-rlt text-ellipsis" style="width:185px;" href="javascript:void(0);" data="name_dummy" label_name="name_dummy">
+                                        <a class="sort-link sort-field pos-rlt text-ellipsis" style="width:185px;" href="javascript:void(0);" data="dummy_name" label_name="dummy_name">
                                         Name
                                             <i class="fa fa-check pos-abs pos-r-sm txt-small m-t-xs sort-field-check  
-                                {{#if_equals_sork_key sortKey 'name_dummy'}}{{else}}display-none {{/if_equals_sork_key}}"></i> 
+                                {{#if_equals_sork_key sortKey 'dummy_name'}}{{else}}display-none {{/if_equals_sork_key}}"></i> 
                                             </a>
                                     </li>
                                     <li>
