@@ -63,6 +63,8 @@ var DocumentsRouter = Backbone.Router.extend({
 					templateKey : "documents", 
 					individual_tag_name : 'tr', 
 					cursor : true, 
+					customLoader : true,
+					customLoaderTemplate : 'agile-app-collection-loader',
 					page_size : 20, 
 					global_sort_key : sortKey, 
 					postRenderCallback : function(col_el)
