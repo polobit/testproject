@@ -576,7 +576,24 @@ public class GoogleSyncImpl extends TwoWaySyncService
 	
 	for (int i = 0; i < contacts_list_size; i++)
 	{
-	    Contact contact = contacts.get(i);	    
+	    Contact contact = contacts.get(i);
+	    
+	    List<ContactField> emails = contact.getContactPropertiesList(Contact.EMAIL);
+	    // Added condition to mandate emails. It is added here as other sync
+	    // allows contacts without email
+	    if (emails == null || emails.size() == 0)
+	    	continue;
+	    boolean no_email=false;
+	    for(ContactField emailField:emails){
+	    if (!StringUtils.isBlank(emailField.value) || ContactUtil.isValidEmail(emailField.value))
+	    {
+	    	no_email=true;
+	    	break;
+	    }
+	    }
+	    
+	    if(!no_email)
+	    	continue;   
 	    // Create google supported contact entry based on current contact
 	    // data
 	    ContactEntry createContact = ContactSyncUtil.createContactEntry(contact, group, prefs);
