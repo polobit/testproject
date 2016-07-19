@@ -215,6 +215,15 @@ var Report_Filters_Event_View = Base_Model_View.extend({
 		e.preventDefault();
 		var targetEl = $(e.currentTarget);
 
+		if($(targetEl).closest('td').siblings('td.lhs-block').find("option:selected").parent().attr("label")== "Properties")
+		{
+
+		var $rhs_ele_new = $(targetEl).closest('td').siblings('td.rhs-new-block').find("#RHS-NEW");
+		var selected_val=targetEl.parents("tr").find("#LHS > select").find(':selected').text();
+		$rhs_ele_new.find('input').attr('placeholder','Enter '+selected_val);
+
+		}
+
 		if ($(targetEl).find("option:selected").hasClass('tags'))
 		{
 			var element = $(targetEl).parents().closest('tr').find('div#RHS');
@@ -486,6 +495,18 @@ function show_chained_fields(el, data, forceShow)
 	NESTED_LHS = $("#nested_lhs", el);
 	
 	RHS.chained(condition, function(chained_el, self){
+
+		LHS = $("#LHS", el);
+		RHS = $("#RHS", el);
+		RHS_NEW = $("#RHS-NEW", el);
+		var Filtre_label =$(':selected',LHS).closest('optgroup').prop('label');
+		if(Filtre_label == "Properties" || Filtre_label== "UTM Parameter")
+		{
+			var lh = LHS.find("> select").find(':selected').text();
+			$('input', $(LHS).closest('td').siblings('td.rhs-block')).attr("placeholder", "Enter "+ lh);
+			$($(LHS).closest('td').siblings('td.rhs-new-block').find("#RHS-NEW")).attr('placeholder','Enter ');
+		}
+
 		var selected_field = $(chained_el).find('option:selected');
 		var placeholder = $(selected_field).attr("placeholder");
 		var is_custom_field = $(selected_field).hasClass("custom_field");
@@ -541,7 +562,12 @@ function show_chained_fields(el, data, forceShow)
 		e.preventDefault();
 		var value = $(this).val();
 
-		
+	var Filtre_label =$(':selected',LHS).closest('optgroup').prop('label');
+		if(Filtre_label == "Properties" || Filtre_label== "UTM Parameter")
+		{
+	var v=$(':selected',this).text();
+	$('input', $(this).closest('td').siblings('td.rhs-block')).attr("placeholder", "Enter "+ v);		
+		}
 		if(value=="country"){
 			//var appenditem = $('#div_country_options').html();
 			var appenditem = getTemplate("country-list", {});
