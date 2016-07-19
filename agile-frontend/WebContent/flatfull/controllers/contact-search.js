@@ -17,9 +17,9 @@ var ContactSearchRouter = Backbone.Router.extend({
 	searchResults : function(query)
 	{
 	
-		var search_list_filters = serializeForm("advanced-search-filter").fields_set;	
-		$("#delete-checked").css("display","none");
-		$("#delete-checked").addClass("hide")
+		//var search_list_filters = serializeForm("advanced-search-filter").fields_set;	
+		 var search_filters = _agile_get_prefs('agile_search_filter_'+CURRENT_DOMAIN_USER.id);
+		  var search_list_filters = JSON.parse(search_filters);
 		if(search_list_filters){
 			$("#content").html("<div id='search-results-container'></div>")
 			for(var j=0;j<search_list_filters.length;j++){
