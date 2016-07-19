@@ -447,7 +447,10 @@ public class StatsUtil
 	    {
 		String param = URLDecoder.decode(paramsArray[i], "UTF-8");
 		String[] paramSplit = param.split("=");
-		params.put(paramSplit[0], paramSplit[1]);
+		if (paramSplit.length == 2)
+		    params.put(paramSplit[0], paramSplit[1]);
+		else if (paramSplit.length == 1)
+		    params.put(paramSplit[0], "");
 	    }
 	}
 	catch (Exception e)
