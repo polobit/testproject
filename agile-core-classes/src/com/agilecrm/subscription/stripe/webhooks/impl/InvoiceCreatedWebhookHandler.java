@@ -29,9 +29,10 @@ public class InvoiceCreatedWebhookHandler extends StripeWebhookHandler
 	 * 
 	 * if "request" parameter is null then only do the process 
 	 */
-    	System.out.println("");
+    	System.out.println("InvoiceCreatedWebhookHandler");
 	if (eventType.equals(StripeWebhookServlet.STRIPE_INVOICE_CREATED) && getEvent().getRequest() == null)
 	{
+		System.out.println("InvoiceCreatedWebhookHandler success");
 
 	    // Get domain owner
 	    DomainUser user = getUser();
@@ -73,7 +74,7 @@ public class InvoiceCreatedWebhookHandler extends StripeWebhookHandler
 	    JSONObject lines = obj.getJSONObject("lines");
 	    JSONObject data = lines.getJSONArray("data").getJSONObject(0);
 
-	    System.out.println(data);
+	    System.out.println("data is:::"+data);
 	    if (data.has("quantity"))
 	    	plan.put("quantity", data.get("quantity"));
 	    plan.put("invoice_id", obj.get("id"));
@@ -105,7 +106,7 @@ public class InvoiceCreatedWebhookHandler extends StripeWebhookHandler
 	    	return null;
 	    plan.put("amount", amount / 100);
 
-	    System.out.println(plan);
+	    System.out.println("Plan is :::"+plan);
 
 	    return plan;
 	}
@@ -128,6 +129,7 @@ public class InvoiceCreatedWebhookHandler extends StripeWebhookHandler
 	if(details == null)
 		return null;
 	AccountPrefs prefs = getAccountPrefs();
+	System.out.println("Got the Account prefs");
 	if(prefs != null && !prefs.company_name.toLowerCase().equals("mycompany"))
 		details.put("company", prefs.company_name);
 	details.put("user_name", user.name);
