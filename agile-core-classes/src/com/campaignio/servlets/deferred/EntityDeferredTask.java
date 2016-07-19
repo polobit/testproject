@@ -50,7 +50,7 @@ public class EntityDeferredTask implements DeferredTask {
 				break;
 			case "landingpages":
 				dao = new ObjectifyGenericDao<LandingPage>(LandingPage.class);
-				updateDocuments(dao.fetchAll(), dao);
+				updatePages(dao.fetchAll(), dao);
 				break;
 			case "workflows":
 				break;
