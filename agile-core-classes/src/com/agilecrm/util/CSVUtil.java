@@ -1170,7 +1170,7 @@ public class CSVUtil
 	    List<Milestone> list = null;
 	    List<Category> source_list = null;
 	    List<Category> reason_list = null;
-	    Set<Long> relatedContactIds = new HashSet<Long>();
+	    Set<String> relatedContactIds = new HashSet<String>();
 	    for (int i = 0; i < dealPropValues.length; i++)
 	    {
 
@@ -1190,6 +1190,14 @@ public class CSVUtil
 		    	{
 		    		opportunity = OpportunityUtil.getOpportunity(opportunityId);
 		    	}
+	    		if(opportunity != null)
+	    		{
+	    			List<String> conIdsList = opportunity.getContact_ids();
+	    			if(conIdsList != null && conIdsList.size() > 0)
+	    			{
+	    				relatedContactIds.addAll(conIdsList);
+	    			}
+	    		}
 	    		if(opportunity == null)
 	    		{
 	    			opportunity = new Opportunity();
@@ -1396,10 +1404,10 @@ public class CSVUtil
 					try
 					{
 					    Contact contact = ContactUtil.searchContactByEmail(emails[k]);
-					    if (contact != null && contact.id != null && !relatedContactIds.contains(contact.id))
+					    if (contact != null && contact.id != null && !relatedContactIds.contains(contact.id.toString()))
 					    {
 						opportunity.addContactIds(contact.id.toString());
-						relatedContactIds.add(contact.id);
+						relatedContactIds.add(contact.id.toString());
 					    }
 					}
 					catch (NullPointerException e)
