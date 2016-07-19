@@ -1193,6 +1193,7 @@ public class CSVUtil
 	    		if(opportunity != null)
 	    		{
 	    			List<String> conIdsList = opportunity.getContact_ids();
+	    			System.out.println("conIdsList in deals import-----------"+conIdsList);
 	    			if(conIdsList != null && conIdsList.size() > 0)
 	    			{
 	    				relatedContactIds.addAll(conIdsList);
@@ -1403,6 +1404,7 @@ public class CSVUtil
 				    {
 					try
 					{
+						System.out.println("Related contact email in deals import----"+emails[k]);
 					    Contact contact = ContactUtil.searchContactByEmail(emails[k]);
 					    if (contact != null && contact.id != null && !relatedContactIds.contains(contact.id.toString()))
 					    {
