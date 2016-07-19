@@ -116,7 +116,8 @@ public class DealCSVExport
 				// this is either contact or company type
 				//fetch the conntact r company
 			List<Contact> customContacts = ContactUtil.getContactsBulk(new JSONArray(field.value));
-			StringBuffer nameString = new StringBuffer("[");
+			if(customContacts.size() > 0){
+				StringBuffer nameString = new StringBuffer("[");
 				for(Contact cont : customContacts){
 					if(cont.type.equals(Contact.Type.PERSON)){
 						nameString.append(cont.first_name);
@@ -131,8 +132,8 @@ public class DealCSVExport
 				nameString.append("]");
 				str[indexMap.get(field.name+"_name")] = nameString.toString();
 			}
+			}
 		}catch(Exception e){
-			
 		}
 	    }
 	    if(deal.getDeal_source_id()!=null && deal.getDeal_source_id()!=0)

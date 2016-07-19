@@ -257,21 +257,23 @@ public class ContactCSVExport
 			    	Integer index = indexMap.get(field.name + "_name");
 			    	if(index != null){  // if the dynamic index is present then it denotes that the custom filed is contact or company type
 			    		List<Contact> contacts = ContactUtil.getContactsBulk(new JSONArray(field.value)) ;
-			    		StringBuilder contactName = new StringBuilder("[");
-			    		for(Contact cont : contacts){
-			    			if(cont.type.equals(Contact.Type.PERSON)){
-			    				contactName.append(cont.first_name);
-				    			contactName.append(cont.last_name);
-			    			}else{
-			    				contactName.append(cont.name);
-			    			}
-			    			
-			    			contactName.append(",");
+			    		if (contacts.size() > 0) {
+			    			StringBuilder contactName = new StringBuilder("[");
+				    		for(Contact cont : contacts){
+				    			if(cont.type.equals(Contact.Type.PERSON)){
+				    				contactName.append(cont.first_name);
+					    			contactName.append(cont.last_name);
+				    			}else{
+				    				contactName.append(cont.name);
+				    			}
+				    			
+				    			contactName.append(",");
+				    		}
+				    		contactName.replace(contactName.length()-1, contactName.length(),"");
+				    		contactName.append("]");
+				    		setFieldAtIndex(field.name+"_name", contactName.toString(), str, indexMap); // this is to show the name of the contact	
 			    		}
-			    		contactName.replace(contactName.length()-1, contactName.length(),"");
-			    		contactName.append("]");
-			    		setFieldAtIndex(field.name+"_name", contactName.toString(), str, indexMap); // this is to show the name of the contact
-			    	}		    		
+			    	}		    			
 		    	}catch(Exception e){}
 		    }
 		}
