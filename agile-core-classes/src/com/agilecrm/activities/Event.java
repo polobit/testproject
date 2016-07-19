@@ -117,7 +117,12 @@ public class Event extends Cursor
      */
     @NotSaved(IfDefault.class)
     public String color = "blue";
-
+    /**
+     * Event background color
+     * 
+     */
+    @NotSaved(IfDefault.class)
+    public String backgroundColor = "";
     /**
      * Created time of the event
      */
@@ -392,6 +397,23 @@ public class Event extends Cursor
 		this.related_deals.add(new Key<Opportunity>(Opportunity.class, Long.parseLong(deal_id)));
 	    }
 	}
+	String status=this.status;
+	if(status.equals("Cancelled")){
+		this.backgroundColor="rgb(212,255,207)";
+	}
+	if(status.equals("completed")){
+		this.backgroundColor="rgb(253,173,158)";
+	}
+	if(status.equals("rescheduled")){
+		this.backgroundColor="rgb(255,255,183)";
+	}
+	if(status.equals("no-show")){
+		this.backgroundColor="rgb(221,221,221)";
+	}
+	
+	
+	
+	
     }
 
     public String toString()
