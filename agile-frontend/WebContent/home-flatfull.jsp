@@ -233,7 +233,6 @@ content="<%=domainUser.getInfo(DomainUser.LAST_LOGGED_IN_TIME)%>" />
   margin: 0px auto;
   width: 280px;
 }
->>>>>>> 59575de22b23ad0fb67e2b577d169ce366982e26
 
 </style>
 <!--  responsive table js -->
