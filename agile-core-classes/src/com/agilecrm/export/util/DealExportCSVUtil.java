@@ -64,7 +64,7 @@ public class DealExportCSVUtil
     public static String[] getCSVHeadersForDeal()
     {
 	// CSV Header will get initialized in the same order
-	String[] headers = { DealCSVExport.NAME, DealCSVExport.DESCRIPTION, DealCSVExport.PIPELINE,
+	String[] headers = { DealCSVExport.ID, DealCSVExport.NAME, DealCSVExport.DESCRIPTION, DealCSVExport.PIPELINE,
 		DealCSVExport.MILESTONE, DealCSVExport.PROBABILITY, DealCSVExport.EXPECTED_VALUE,
 		DealCSVExport.CLOSE_DATE, DealCSVExport.OWNER, DealCSVExport.RELATED_TO,DealCSVExport.SOURCE,
 		DealCSVExport.LOSSREASON,DealCSVExport.CREATED_DATE,DealCSVExport.WON_DATE};

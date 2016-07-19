@@ -66,10 +66,7 @@ public class DealCSVExport
 
 	try
 	{
-		if(deal.id != null)
-		{
-			str[indexMap.get(ID)] = String.valueOf(deal.id);
-		}
+		str[indexMap.get(ID)] = String.valueOf(deal.id);
 	    str[indexMap.get(NAME)] = deal.name;
 	    str[indexMap.get(DESCRIPTION)] = deal.description;
 	    try
