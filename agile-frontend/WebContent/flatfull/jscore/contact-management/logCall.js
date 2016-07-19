@@ -418,7 +418,7 @@ try{
 		}
 		
 	}
-	if(logPhone.status == 'answered' || logPhone.status == 'inquiry' || logPhone.status == 'interest' || logPhone.status == 'new opportunity' || logPhone.status == 'meeting scheduled'){
+	if(logPhone.status == 'answered' || logPhone.status == 'inquiry' || logPhone.status == 'interest' || logPhone.status == 'no interest' || logPhone.status == 'incorrect referral' || logPhone.status == 'voicemail' || logPhone.status == 'new opportunity' || logPhone.status == 'meeting scheduled'){
 		if(!$("#callWidgetName",form).val()){
 			twilioIOSaveContactedTime(contactDetailsObj.id);
 		}
