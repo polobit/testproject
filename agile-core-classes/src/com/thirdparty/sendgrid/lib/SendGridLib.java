@@ -112,7 +112,7 @@ public class SendGridLib {
         return this;
     }
 
-    public HttpEntity buildBody(Email email) {
+    public HttpEntity buildBody(Email email) throws IOException {
         MultipartEntityBuilder builder = MultipartEntityBuilder.create();
 
         // We are using an API key
@@ -145,7 +145,10 @@ public class SendGridLib {
             Iterator it = email.getAttachments().entrySet().iterator();
             while (it.hasNext()) {
                 Map.Entry entry = (Map.Entry) it.next();
-                builder.addBinaryBody(String.format(PARAM_FILES, entry.getKey()), (InputStream) entry.getValue());
+                InputStream is = (InputStream) entry.getValue();
+                
+					if(is.read() != -1) // to know if inputstream got closed or not
+						builder.addBinaryBody(String.format(PARAM_FILES, entry.getKey()), is);
             }
         }
 
@@ -197,7 +200,7 @@ public class SendGridLib {
         return builder.build();
     }
 
-    public String send(Email email) {
+    public String send(Email email) throws Exception {
     	
         	HttpClientUtil.URLBuilder urlBuilder = new HttpClientUtil.URLBuilder(this.url + this.endpoint);
         	urlBuilder.setMethod("POST");
@@ -214,7 +217,6 @@ public class SendGridLib {
         	}
         	
         	urlBuilder.setHeaders(headers);
-        	HttpEntity emailEntity = this.buildBody(email);
         	
         	String response = null;
         	boolean retry = false;
@@ -225,8 +227,7 @@ public class SendGridLib {
 				do{
 	        		try
 					{
-	        			
-						response = HttpClientUtil.accessURLUsingHttpClient(urlBuilder, emailEntity);
+						response = HttpClientUtil.accessURLUsingHttpClient(urlBuilder, this.buildBody(email));
 						
 						System.out.println("Response of email sent: " + response);
      	
@@ -265,9 +266,17 @@ public class SendGridLib {
 				{
 					e1.printStackTrace();
 				}
+				
 				System.out.println("Retrying again after creating subuser...");
 				
-				response = HttpClientUtil.accessURLUsingHttpClient(urlBuilder, emailEntity);
+				try
+				{
+					response = HttpClientUtil.accessURLUsingHttpClient(urlBuilder, this.buildBody(email));
+				}
+				catch (IOException e1)
+				{
+					throw e1;
+				}
 				
 				System.out.println("Response after second attempt..." + response);
 			}
@@ -286,21 +295,32 @@ public class SendGridLib {
      * @return subject jsonobject
      */
    public static String getSMTPHeadersSubject(String SMTPHeaderJSON, String subject){
-	 try 
-	   {
+	 try
+	 {
 		JSONObject subjectJSON=new JSONObject();
 		subjectJSON.put(PARAM_SUBJECT, subject);
 		
 		JSONObject SMTPJSON=new JSONObject(SMTPHeaderJSON);
-		SMTPJSON.put(SendGrid.SENDGRID_API_PARAM_UNIQUE_ARGUMENTS, subjectJSON);
+		
+		if(SMTPJSON.has(SendGrid.SENDGRID_API_PARAM_UNIQUE_ARGUMENTS))
+			SMTPJSON.getJSONObject(SendGrid.SENDGRID_API_PARAM_UNIQUE_ARGUMENTS).put(PARAM_SUBJECT, subject);
+		else
+			SMTPJSON.put(SendGrid.SENDGRID_API_PARAM_UNIQUE_ARGUMENTS, subjectJSON);
+		
 		System.out.println("SMTP json " +SMTPJSON.toString());
 		return SMTPJSON.toString();
-		 } 
-   	catch (JSONException e) {
+	 } 
+     catch(JSONException e){
 			System.out.println("Error ocurred while creating SMTPJSON...."+e.getMessage());
-		}	
-	return null;
+     }
+	 catch(Exception e)
+	 {
+		 e.getStackTrace();
+	 }
+	 
+	return SMTPHeaderJSON;
  }
+   
     public static class Email implements Serializable {
         /**
 		 * 

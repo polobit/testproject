@@ -2,7 +2,16 @@ package com.thirdparty.sendgrid.deferred;
 
 import java.io.IOException;
 
+import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.exception.ExceptionUtils;
+
+import com.agilecrm.document.Document;
+import com.agilecrm.document.util.DocumentUtil;
+import com.agilecrm.file.readers.BlobFileInputStream;
+import com.agilecrm.file.readers.DocumentFileInputStream;
 import com.agilecrm.file.readers.IFileInputStream;
+import com.google.appengine.api.blobstore.BlobKey;
+import com.google.appengine.api.blobstore.BlobstoreInputStream.ClosedStreamException;
 import com.google.appengine.api.taskqueue.DeferredTask;
 import com.thirdparty.sendgrid.lib.SendGridLib;
 
@@ -30,17 +39,51 @@ public class SendGridAttachmentDeferredTask implements DeferredTask
 	@Override
 	public void run()
 	{
-		SendGridLib sendgrid = new SendGridLib(username, password);
+		
 		try
 		{
+			SendGridLib sendgrid = new SendGridLib(username, password);
 			email.addAttachment(inputStream.getFileName(), inputStream.getInputStream());
+			
+			try
+			{
+				sendgrid.send(email);
+			}
+			catch(ClosedStreamException ex)
+			{
+				// If stream got closed, get again
+				if(inputStream != null)
+				{
+					email.addAttachment(inputStream.getFileName(), inputStream.getInputStream());
+					
+					try
+					{
+						sendgrid.send(email);
+					}
+					catch (Exception e)
+					{
+						System.out.println("Exception occured in ClosedStreamException handler...");
+						System.out.println(ExceptionUtils.getFullStackTrace(e));
+					}
+				}
+				
+			}
+			catch (Exception e)
+			{
+				System.out.println("Exception occured while sending email...");
+				System.out.println(ExceptionUtils.getFullStackTrace(e));
+			}
+			
 		}
 		catch (IOException e)
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		sendgrid.send(email);
+		finally
+		{
+			if(inputStream != null)
+				inputStream.closeResources();
+		}
 	}
 }
 

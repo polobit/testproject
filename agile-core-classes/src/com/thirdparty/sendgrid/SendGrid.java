@@ -262,8 +262,9 @@ public class SendGrid
 	
 	// Add SMTP Header
 	if (SMTPHeaderJSON != null)
-	    queryString += "&" + SENDGRID_API_PARAM_X_SMTPAPI + "=" + URLEncoder.encode(SMTPHeaderJSON, "UTF-8");
-	
+	{
+		queryString += "&" + SENDGRID_API_PARAM_X_SMTPAPI + "=" + URLEncoder.encode(SMTPHeaderJSON, "UTF-8");
+	}
 	else
 	 {
 		JSONObject subjectJSON=new JSONObject();
@@ -386,7 +387,7 @@ public class SendGrid
     
     public static String sendMail(String apiUser, String apiKey, String fromEmail, String fromName, String to,
     	    String cc, String bcc, String subject, String replyTo, String html, String text, String SMTPHeaderJSON, List<Long> documentIds, List<BlobKey> blobKeys,
-    	    String... attachmentData)
+    	    String... attachmentData) throws Exception
     {
     	if(apiUser == null && apiKey == null)
     	{

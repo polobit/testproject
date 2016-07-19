@@ -71,9 +71,9 @@ public class SendGridSubUser extends SendGridLib
 	/**
 	 * @param subUser
 	 * @return
-	 * @throws UnsupportedEncodingException
+	 * @throws Exception 
 	 */
-	public String createSubUser(SubUser subUser) throws UnsupportedEncodingException
+	public String createSubUser(SubUser subUser) throws Exception
 	{
     	HttpClientUtil.URLBuilder urlBuilder = new HttpClientUtil.URLBuilder(super.url + super.endpoint);
     	urlBuilder.setMethod("POST");
@@ -103,7 +103,7 @@ public class SendGridSubUser extends SendGridLib
 		return webhookResponse;
 	}
 	
-	public String associateAgileWhiteLabel(SubUser subUser)
+	public String associateAgileWhiteLabel(SubUser subUser) throws Exception
 	{
 		String DEFAULT_WHITELABEL_ID = "455116";
 		String url = "https://api.sendgrid.com/v3/whitelabel/domains/"+DEFAULT_WHITELABEL_ID+"/subuser";

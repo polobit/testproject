@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -323,15 +324,22 @@ public class SendGridUtil
 					new JSONObject().put("domain", sendGridDeferred.domain).put("subject", sendGridDeferred.subject)
 						.put("campaign_id", sendGridDeferred.campaignId));
 			SMTPJSON.put(FILTERS, getFilterJSON());
+			
+			SendGrid.sendMail(apiUser, apiKey, sendGridDeferred.fromEmail, sendGridDeferred.fromName, sendGridDeferred.to, sendGridDeferred.cc, sendGridDeferred.bcc, 
+	    			sendGridDeferred.subject, sendGridDeferred.replyTo, sendGridDeferred.html, sendGridDeferred.text, SMTPJSON.toString(), null, null, new String[]{});
 		}
 		catch (JSONException e)
 		{
 			e.printStackTrace();
 			System.err.println("Exception occured while building SMTP JSON..." + e.getMessage());
 		}
+    	catch(Exception ex)
+    	{
+    		System.err.println("Exception occured while sending emails without merging...");
+    		System.out.println(ExceptionUtils.getFullStackTrace(ex));
+    	}
     	
-    	SendGrid.sendMail(apiUser, apiKey, sendGridDeferred.fromEmail, sendGridDeferred.fromName, sendGridDeferred.to, sendGridDeferred.cc, sendGridDeferred.bcc, 
-    			sendGridDeferred.subject, sendGridDeferred.replyTo, sendGridDeferred.html, sendGridDeferred.text, SMTPJSON.toString(), null, null, new String[]{});
+    	
     }
 
     /**
