@@ -522,18 +522,6 @@ if(currentUserPrefs.menuPosition.equals("top")){
         }
     %>
     <%
-      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.SOCIAL)){
-   %>
-   <li id="socialsuitemenu">
-    <a  href="#social">
-      <i class="icon-bubbles"></i>
-      <span>Social</span>
-    </a>
-  </li>
-    <%
-          }
-    %>
-    <%
       if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.WEBRULE)){
     %>
    <li id="web-rules-menu">
@@ -576,6 +564,19 @@ if(currentUserPrefs.menuPosition.equals("top")){
     </a>
   </li>
 
+  <%
+      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.SOCIAL)){
+   %>
+   <li id="socialsuitemenu">
+    <a  href="#social">
+      <i class="icon-bubbles"></i>
+      <span>Social</span>
+    </a>
+  </li>
+    <%
+          }
+    %>
+    
     <%
       if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.ACTIVITY)){
     %>
