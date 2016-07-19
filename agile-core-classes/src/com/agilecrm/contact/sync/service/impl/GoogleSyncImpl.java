@@ -13,6 +13,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.sync.ImportStatus;
 import com.agilecrm.contact.sync.service.TwoWaySyncService;
 import com.agilecrm.contact.sync.wrapper.IContactWrapper;
@@ -456,6 +457,24 @@ public class GoogleSyncImpl extends TwoWaySyncService
 	{
 
 	    Contact contact = contacts.get(i);
+	    
+	    List<ContactField> emails = contact.getContactPropertiesList(Contact.EMAIL);
+
+	    // Added condition to mandate emails. It is added here as other sync
+	    // allows contacts without email
+	    if (emails == null || emails.size() == 0)
+	    	continue;
+	    boolean no_email=false;
+	    for(ContactField emailField:emails){
+	    if (!StringUtils.isBlank(emailField.value) || ContactUtil.isValidEmail(emailField.value))
+	    {
+	    	no_email=true;
+	    	break;
+	    }
+	    }
+	    
+	    if(!no_email)
+	    	continue;
 	    
 	    // Create google supported contact entry based on current contact
 	    // data
