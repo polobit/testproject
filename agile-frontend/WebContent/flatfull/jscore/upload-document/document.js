@@ -6,7 +6,7 @@ var Document_Collection_Events = Base_Collection_View.extend({
 	events: {
 		
 		'click #documents-model-list > tr > td:not(":first-child")': 'onDocumentListSelect',
-				
+		'click .documents-add': 'onAddDocument',	
 	},
 	 /** 
      * Document list view edit
@@ -18,6 +18,20 @@ var Document_Collection_Events = Base_Collection_View.extend({
      	 	updateDocument($(e.currentTarget).closest('tr').data());
      	 }
 	},
+	onAddDocument: function(e){
+					e.preventDefault();
+
+					// Show modal
+					$('#uploadDocumentModal').html(getTemplate("upload-document-modal", {})).modal('show');
+				
+					// Add type a head actions
+					var el = $("#uploadDocumentForm");
+					// Contacts type-ahead
+					agile_type_ahead("document_relates_to_contacts", el, contacts_typeahead);
+					
+					// Deals type-ahead
+					agile_type_ahead("document_relates_to_deals", el, deals_typeahead, false,null,null,"core/api/search/deals",false, true);
+				},
 
 });
 
