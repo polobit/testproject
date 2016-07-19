@@ -38,13 +38,15 @@ public class CustomThemesUtil {
 	public static boolean deleteCustomThemeByName(String propertyName,String propertyVal){
 		CustomTheme ct1=fetchThmsByProperty(propertyName,propertyVal);
 		   System.out.println("OUTPUT OF deleteCustomTheme before deletion::::::"+ct1);
-		   ct1.deleteTheme();
-		   CustomTheme ct2=fetchThmsByProperty(propertyName,propertyVal);
-		   System.out.println("OUTPUT OF deleteCustomTheme after deletion::::::"+ct2);
-		   if(ct2==null){
-			   return true;
+		   if(ct1!=null){
+			   ct1.deleteTheme();   
+			   CustomTheme ct2=fetchThmsByProperty(propertyName,propertyVal);
+			   System.out.println("OUTPUT OF deleteCustomTheme after deletion::::::"+ct2);
+			   if(ct2==null){
+				   return true;
+			   }
 		   }
-		
+		   
 		   return false;
 	}
 	

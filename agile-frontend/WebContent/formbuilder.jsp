@@ -591,11 +591,8 @@ String template = request.getParameter("template");
                   var parentDiv=$(identifier).parent();
                      console.log("Requsted deleteThemeVal is:"+deleteThemeVal+"\t"+parentDiv);
                      $.ajax({
-                                type : 'DELETE',
-                                url :  window.location.protocol + '//' + window.location.host + '/' + 'core/api/themes',
-                                async : false,
-                                contentType : 'application/json',
-                                data : deleteThemeVal,
+                                type : 'GET',
+                                url :  window.location.protocol + '//' + window.location.host + '/' + 'core/api/themes/deleteTheme?themeName='+deleteThemeVal,
                                 success: function(data){
                                   console.log("DATA COMING!!!"+data);
                                   
