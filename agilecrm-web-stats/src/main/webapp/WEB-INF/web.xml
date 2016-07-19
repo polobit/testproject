@@ -28,11 +28,31 @@
 		<url-pattern>/visitors</url-pattern>
 	</servlet-mapping>
 	<servlet>
-	      <servlet-name>ReportsServlet</servlet-name>
-	      <servlet-class>com.agilecrm.web.stats.ReportsServlet</servlet-class>
+		<servlet-name>ReportsServlet</servlet-name>
+		<servlet-class>com.agilecrm.web.stats.ReportsServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
-	       <servlet-name>ReportsServlet</servlet-name>
-	       <url-pattern>/reports</url-pattern>
+		<servlet-name>ReportsServlet</servlet-name>
+		<url-pattern>/reports</url-pattern>
 	</servlet-mapping>
+	<servlet>
+		<servlet-name>StatsServerApiServlet</servlet-name>
+		<servlet-class>com.agilecrm.web.stats.StatsServerApiServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>StatsServerApiServlet</servlet-name>
+		<url-pattern>/api</url-pattern>
+	</servlet-mapping>
+
+	<filter>
+		<filter-name>ObjectifyFilter</filter-name>
+		<filter-class>com.googlecode.objectify.ObjectifyFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>ObjectifyFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	<listener>
+		<listener-class>com.agilecrm.web.stats.OfyHelper</listener-class>
+	</listener>
 </web-app>
