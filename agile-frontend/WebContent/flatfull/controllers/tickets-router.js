@@ -1303,7 +1303,6 @@
  				url : "/core/api/knowledgebase/article/" +name,
  				template : "ticket-helpcenter-add-article",
  				window : "back",
-		        
                 prePersist : function(model){
 					var json = {};
 					var catogery_id = $("#catogery option:selected").data('catogery-id');
