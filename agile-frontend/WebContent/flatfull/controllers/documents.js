@@ -14,23 +14,69 @@ var DocumentsRouter = Backbone.Router.extend({
 	 */
 	documents : function()
 	{
-		 // Fetches documents as list
-		this.DocumentCollectionView = new Document_Collection_Events({ url : 'core/api/documents', templateKey : "documents", cursor : true, page_size : 20,
-			individual_tag_name : 'tr', postRenderCallback : function(el)
-			{
-				includeTimeAgo(el);
+		getTemplate('documents-static-container', {}, undefined, function(template_ui) {
+					$("#content").html(getTemplate("documents-static-container"));
+
+					// Add top view
+					var sortKey = _agile_get_prefs("Documentssort_Key");
+					if(sortKey == undefined || sortKey == null){
+						sortKey = "dummy_name";
+						_agile_set_prefs("Documentssort_Key", sortKey);
+					}
+
+					var that = this;
+					var documentsStaticModelview = new Document_Model_Events({
+						template : 'documents-top-header',
+						isNew : true,
+						model : new Backbone.Model({"sortKey" : sortKey}),
+						postRenderCallback : function(el){
+							// Add collection view
+							console.log("Load collection");
+							App_Documents.loadDocuments($("#content"));
+						}
+					});
+
+					$("#content").find("#documents-top-view").html(documentsStaticModelview.render().el);
+
+				}, $("#content"));
+
+	},
+
+	loadDocuments : function(el)
+	{
+		var that  = this ;
+		var sortKey = _agile_get_prefs("Documentssort_Key");
+				if (App_Documents.DocumentCollectionView && App_Documents.DocumentCollectionView.options.global_sort_key == sortKey && App_Documents.DocumentCollectionView.collection && App_Documents.DocumentCollectionView.collection.length > 0)
+				{
+					$(el).find("#documents_collection_container").html(App_Documents.DocumentCollectionView.render(true).el);
+					return;
+				}
+
+				// Loading icon
+				$("#content").find("#documents_collection_container").html(LOADING_HTML);
+
 				
-			}, appendItemCallback : function(el)
-			{
-				// To show timeago for models appended by infini scroll
-				includeTimeAgo(el);
-			} });
 
-		this.DocumentCollectionView.collection.fetch();
+				App_Documents.DocumentCollectionView = new Document_Collection_Events({ 
+					url : 'core/api/documents', 
+					sort_collection : false,
+					templateKey : "documents", 
+					individual_tag_name : 'tr', 
+					cursor : true, 
+					page_size : 20, 
+					global_sort_key : sortKey, 
+					postRenderCallback : function(col_el)
+					{
+					//includeTimeAgo(el);
+					//updateSortKeyTemplate(sortField, el);
+					$(".active").removeClass("active");
+					$("#documentsmenu").addClass("active");
+					}});
+					App_Documents.DocumentCollectionView.collection.fetch();
+					// Shows deals as list view
+					$("#content").find("#documents_collection_container").html(App_Documents.DocumentCollectionView.el);
 
-		// Shows deals as list view
-		$('#content').html(this.DocumentCollectionView.render().el);
+	
+	}
 
-		$(".active").removeClass("active");
-		$("#documentsmenu").addClass("active");
-	} });
+});

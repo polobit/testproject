@@ -1,18 +1,78 @@
-<script id="documents-collection-template" type="text/html">
+<script id="documents-static-container-template" type="text/html">
 <div class="custom-animated custom-fadeInUp">
-<div class="wrapper-md lter bg-light b-b">
-<div class="row">
-    <div class="col-md-12" id="document-add">
-            <h3 class="pull-left font-thin h3">Documents </h3>
-            <a href="#documents-add" class="documents-add btn btn-default btn-addon pull-right btn-sm"><i class="fa fa-plus-circle" /> Add Document</a>
-			<div class="clearfix"></div>
-    </div>
-</div>
-</div>
+<div id="documents-top-view"></div>
 <div class="wrapper-md">
 <div class="row">
+<div id="documents_collection_container" class="col-md-9 col-sm-9" ></div>
+<div class="col-md-3">
+        <div class="data-block">
+                <h4 class="m-t-none m-b-sm h4">
+                    How to use Documents?
+                </h4>                
+                <p>Documents add more context to Contacts or Deals. To add documents, upload them from your computer or append them from a cloud storage like Google Drive.</p>
+            
+        </div>
+    </div>
+    </div>
+    </div>
+    </div>
+</script>
+<script id="documents-top-header-template" type="text/html">
+<div class="wrapper-md lter bg-light b-b">
+<div class="btn-toolbar m-l-none">
+<div class="btn-group dropdown m-l-none documentsheading" style="float:none;">
+<div>
+<h3 class="pull-left font-thin h3">Documents </h3></div>
+    <div class="btn-group   p-t-n-sm workflow-sortby">
+                <div class="btn-group dropdown">
+                                <button class="btn btn-sm no-shadow p-n b-n bg-transparent text-base" style="font-size: 11px;" data-toggle="dropdown" id="contact-sort">
+                                        <span class="text-muted">Sort by </span>
+                                        <span class="sort-field-txt">
+                                        {{#if_equals_sork_key sortKey 'name_dummy' }}Name{{/if_equals_sork_key}}
+        {{#if_equals_sork_key sortKey 'uploaded_time' }}Uploaded Time{{/if_equals_sork_key}}</span>
+                                    </button>
+                                    <button class="btn btn-sm no-shadow dropdown-toggle bg-transparent b-n p-t-none p-b-none p-l-xs" data-toggle="dropdown" aria-expanded="false">
+                                        <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu " id="sort_menu" role="menu">
+                                        <li>
+                                        <a class="sort-link sort-field pos-rlt text-ellipsis" style="width:185px;" href="javascript:void(0);" data="name_dummy" label_name="name_dummy">
+                                        Name
+                                            <i class="fa fa-check pos-abs pos-r-sm txt-small m-t-xs sort-field-check  
+                                {{#if_equals_sork_key sortKey 'name_dummy'}}{{else}}display-none {{/if_equals_sork_key}}"></i> 
+                                            </a>
+                                    </li>
+                                    <li>
+                                        <a class="sort-link sort-field pos-rlt text-ellipsis" style="width:185px;" href="javascript:void(0);" data="uploaded_time" label_name="uploaded_time">
+                                        Uploaded Time
+                        <i class="fa fa-check pos-abs pos-r-sm txt-small m-t-xs sort-field-check 
+                {{#if_equals_sork_key sortKey 'uploaded_time'}}{{else}}display-none {{/if_equals_sork_key}}"></i> 
+                                        </a>
+                                    </li>
+                                    <li class="divider" id="sort-divider"></li>
+                                            <li>
+                                                <a class="order-by pos-rlt" data="" href="javascript:void(0);">Ascending 
+                        <i class="fa fa-check pos-abs pos-r-sm txt-small m-t-xs sort-by-check  
+                        {{#if_asc_sork_key sortKey}}{{else}}display-none {{/if_asc_sork_key}}"></i> </a>
+                                            </li>
+                                            <li><a class="order-by pos-rlt" data="-" href="javascript:void(0);">Descending  
+            <i class="fa fa-check pos-abs pos-r-sm txt-small m-t-xs sort-by-check 
+            {{#if_asc_sork_key sortKey}}display-none{{else}} {{/if_asc_sork_key}}"></i> </a></li>
+                                    </ul>
+                                    </div>
+                                    </div>
+                                    </div>
+                                    <div class="pull-right m-t-xs" id="document-add">
+            <a href="#documents-add" class="documents-add btn btn-default btn-addon  btn-sm"><i class="fa fa-plus-circle" /> Add Document</a>
+
+            <div class="clearfix"></div>
+    </div>
+</div>
+</script>
+<script id="documents-collection-template" type="text/html">
+
 		{{#unless this.length}}
-		<div class="col-md-9">
+		<div class="col-md-12">
 		<div class="alert bg-white">
             <div class="slate-content  p-md">
                 <div class="box-left pull-left m-r-md">
@@ -32,11 +92,11 @@
 		</div>
 		{{/unless}}
         {{#if this.length}}
-          <div class="col-md-9">
+          
 			<div class="panel panel-default">
 			    <div class="panel-heading"> Documents List</div>
                 <div class="table-responsive">
-                <table class="table table-striped showCheckboxes m-b-none panel agile-table table-layout-mob-view" url="core/api/documents/bulk" id="document-list">
+                <table class="table table-striped showCheckboxes m-b-none panel agile-table table-layout-mob-view no-sorting" url="core/api/documents/bulk" id="document-list">
                     <thead>
                         <tr>
                             <th style="width:30%">Title</th>
@@ -50,21 +110,9 @@
                 </table>
                 </div>
 			</div>
-		</div>
+		
         {{/if}}
-    <div class="col-md-3">
-        <div class="data-block">
-            
-                <h4 class="m-t-none m-b-sm h4">
-                    How to use Documents?
-                </h4>                
-                <p>Documents add more context to Contacts or Deals. To add documents, upload them from your computer or append them from a cloud storage like Google Drive.</p>
-            
-        </div>
-    </div>
-</div>
-</div>
-</div>
+    
 </script>
 
 <script id="documents-model-template" type="text/html">

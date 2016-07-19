@@ -7645,6 +7645,7 @@ Handlebars.registerHelper('if_equals_sork_key', function(value, target, options)
 {
 
 	if(value && value.lastIndexOf("-", 0) === 0)
+
 		value = value.substr(1);
 
 	if(value && target && target == value)
@@ -7652,9 +7653,9 @@ Handlebars.registerHelper('if_equals_sork_key', function(value, target, options)
 	else
 		return options.inverse(this); 
 });
-
 Handlebars.registerHelper('if_asc_sork_key', function(value, options)
 {
+
 	if(value && value.lastIndexOf("-", 0) === 0)
 		return options.inverse(this);
 	else
