@@ -1185,17 +1185,15 @@ public class CSVUtil
 		    {
 		    if(value != null && value.equalsIgnoreCase("id") && StringUtils.isNotEmpty(dealPropValues[i]))
 		    {
-		    	try {
-		    		Long opportunityId = Long.valueOf(dealPropValues[i]);
-		    		if(opportunityId != null)
-			    	{
-			    		opportunity = OpportunityUtil.getOpportunity(opportunityId);
-			    	}
-				} catch (Exception e) {
-					opportunity = new Opportunity();
-					System.out.println("Error while fetching Deal with id in import");
-					e.printStackTrace();
-				}
+		    	Long opportunityId = Long.valueOf(dealPropValues[i]);
+	    		if(opportunityId != null)
+		    	{
+		    		opportunity = OpportunityUtil.getOpportunity(opportunityId);
+		    	}
+	    		if(opportunity == null)
+	    		{
+	    			opportunity = new Opportunity();
+	    		}
 		    	
 		    }
 		    else if (value.equalsIgnoreCase("name"))
