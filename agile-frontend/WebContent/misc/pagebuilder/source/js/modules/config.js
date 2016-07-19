@@ -4,7 +4,7 @@
     module.exports.pageContainer = "#page";
     
     module.exports.editableItems = {
-        'div.agile_crm_form_embed' : [],
+        'div#agileform_div' : [],
         'span.fa': ['color', 'font-size'],
         '.bg.bg1': ['background-color'],
         'nav a': ['color', 'font-weight', 'text-transform'],

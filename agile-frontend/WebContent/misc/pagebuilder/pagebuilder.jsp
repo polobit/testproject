@@ -2566,13 +2566,18 @@ if(idPath != null && !StringUtils.isEmpty(idPath) && !idPath.equals("/")) {
   function showAgileCRMForm(formJson,formHolderId) {  
     var iframe="";
     $("iframe").each(function(i) { 
-      if($("iframe")[i].src.includes("agileform")){
+      if($("iframe")[i].hasAttribute('data-originalurl') && 
+        $("iframe")[i].getAttribute('data-originalurl').includes("agileform")){
         var iframe=$("iframe")[i]; 
         var iframe_id=iframe.getAttribute("id");
         if($('#'+iframe_id).contents().find('#agileform').css("cursor")==="pointer"){
             $('#'+iframe_id).contents().find('#agileform_div').html(formJson.formHtml);           
             return;
-          }       
+        } 
+        else if($('#'+iframe_id).contents().find('#agileform_div').css("cursor")==="pointer"){
+            $('#'+iframe_id).contents().find('#agileform_div').html(formJson.formHtml);           
+            return;
+        }             
       }
     });    
   }

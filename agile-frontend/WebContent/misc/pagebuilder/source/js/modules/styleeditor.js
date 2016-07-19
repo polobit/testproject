@@ -537,7 +537,7 @@
             }
 
              //agile form
-            if(($(styleeditor.activeElement.element).parent().attr('id') || $(styleeditor.activeElement.element).attr('id')) ==='agileform_div'){
+            if($(styleeditor.activeElement.element).attr('id') ==='agileform_div' || $(styleeditor.activeElement.element).attr('id') ==='agileform'){
 
                 var form_id=$('select[id=agileform_id]').val();
                 if(form_id==='default')                 
