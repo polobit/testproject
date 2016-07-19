@@ -291,8 +291,8 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 	public ROLE role = ROLE.SALES;
 	public enum ROLE {SALES, MARKETING, SERVICE};
 	
-	// Added Role version
-	public String version = null;
+	// Added Role version (Make it default version v2)
+	public String version = "v1";
 	
 	// Dao
 	private static ObjectifyGenericDao<DomainUser> dao = new ObjectifyGenericDao<DomainUser>(DomainUser.class);
@@ -945,6 +945,10 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 			
 			//if no javascrupt permission set, load default
 			loadJavaScriptScope();
+			
+			// Add version
+			if(this.version == null)
+				version = "v1";
 		}
 		catch (Exception e)
 		{
