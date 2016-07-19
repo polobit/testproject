@@ -1,4 +1,4 @@
-<html lang="en" style="overflow:hidden;">
+<html lang="en" data-modal-type="agile-modal-sm" style="overflow:hidden;">
    <head>
       <meta http-equiv="content-type" content="text/html;charset=utf-8" />
       <title>Popup</title>
@@ -60,6 +60,21 @@
          #popup-content-copyright a {
          color: #058dc7;
          }
+         #popup-footer {
+  color: #fff !important;
+  font: bold 10px/10px "Montserat", Arial, Helvetica,
+    sans-serif !important;
+  letter-spacing: 1px;
+  padding: 8px 0;
+  text-align: right;
+  text-transform: uppercase;
+  /*display: none;*/
+}
+#popup-footer a {
+  color: #fff;
+  text-decoration: none;
+}
+
          @media (max-width:480px) {
             #popup-buttons a{ font: 20px/20px 'Open Sans', Arial, sans-serif!important; padding: 12px 50px;}
          }
@@ -76,5 +91,11 @@
             </div>
          </div>
       </div>
+
+      <div id="popup-footer">
+            <div id="agile-copyright">Powered by <a href="https://www.agilecrm.com" target="_blank">AGILE
+               CRM</a></div>
+         </div>
+
    </body>
 </html>

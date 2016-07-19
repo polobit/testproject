@@ -1,42 +1,40 @@
-<html lang="en">
+<html lang="en" data-modal-type="agile-modal-sm agile-modal-radiant">
    <head>
       <meta http-equiv="content-type" content="text/html;charset=utf-8" />
       <title>Popup</title>
       <link href="https://fonts.googleapis.com/css?family=Lato:300,700" rel="stylesheet" type="text/css" />
       <style>
          body {
-         background: #a02417;
-         width: 620px;
-         height: 381px;
+        
          }
          #popup {
          background: #e74c3c;
-         -webkit-border-radius: 3px;
-         -moz-border-radius: 3px;
-         border-radius: 3px;
+         -webkit-border-radius: 5px;
+         -moz-border-radius: 5px;
+         border-radius: 5px;
          color: #fff!important;
          font: 300 18px/24px 'Lato', Calibri, Arial, sans-serif!important;
          letter-spacing: 0;
-         position: fixed;
-         width: 620px;
+         
          }
-         #popup-body {
+        /* #popup-body {
          padding: 30px 40px;
-         }
+         }*/
+         #popup-content{padding: 30px 40px;}
          #popup-header {
          background: rgba(0,0,0,0.1);
          -webkit-border-radius: 3px 3px 0 0;
          -moz-border-radius: 3px 3px 0 0;
          border-radius: 3px 3px 0 0;
-         font-size: 38px!important;
-         line-height: 38px!important;
-         margin: -30px -40px 30px;
+         font-size: 32px!important;
+         line-height: 32px!important;
          opacity: 0.8;
          padding: 20px 40px;
          text-align: center;
          }
          #popup-content p  {
          margin: 0 0 15px;
+         font: 300 16px/22px 'Lato', Calibri, Arial, sans-serif!important;
          }
          #popup-content ul  {
          margin: 0 0 15px;
@@ -44,6 +42,7 @@
          }
          #popup-content ul li {
          padding: 5px 0;
+         font: 300 16px/22px 'Lato', Calibri, Arial, sans-serif!important;
          }
          #popup-buttons {
          margin-top: 30px;
@@ -66,6 +65,25 @@
          #popup-buttons a:hover, #popup-buttons a:focus {
          background: #a5281b;
          }
+         #popup-footer {
+         color: #fff !important;
+         font: bold 10px/10px "Montserat", Arial, Helvetica,
+         sans-serif !important;
+         letter-spacing: 1px;
+         padding: 8px 0;
+         text-align: right;
+         text-transform: uppercase;
+         /*display: none;*/
+         }
+         #popup-footer a {
+         color: #fff;
+         text-decoration: none;
+         }
+         @media (max-width:480px) {
+
+            #popup-header{font-size: 26px!important; line-height: 26px!important;}
+
+         }
       </style>
    </head>
    <body>
@@ -85,5 +103,11 @@
             </div>
          </div>
       </div>
+
+      <div id="popup-footer">
+        <div id="agile-copyright">Powered by <a href="https://www.agilecrm.com" target="_blank">AGILE
+          CRM</a></div>
+      </div>
+
    </body>
 </html>
