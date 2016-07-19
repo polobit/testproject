@@ -19,14 +19,11 @@
 </script>
 <script id="documents-top-header-template" type="text/html">
 <div class="wrapper-md lter bg-light b-b">
-<div class="row">
-    <div class="col-md-12" id="document-add">
-            <h3 class="pull-left font-thin h3">Documents </h3>
-            <a href="#documents-add" class="documents-add btn btn-default btn-addon pull-right btn-sm"><i class="fa fa-plus-circle" /> Add Document</a>
-
-            <div class="clearfix"></div>
-    </div>
-    <div class="btn-group m-r-xs m-l p-t-n-sm workflow-sortby">
+<div class="btn-toolbar m-l-none">
+<div class="btn-group dropdown m-l-none documentsheading" style="float:none;">
+<div>
+<h3 class="pull-left font-thin h3">Documents </h3></div>
+    <div class="btn-group   p-t-n-sm workflow-sortby">
                 <div class="btn-group dropdown">
                                 <button class="btn btn-sm no-shadow p-n b-n bg-transparent text-base" style="font-size: 11px;" data-toggle="dropdown" id="contact-sort">
                                         <span class="text-muted">Sort by </span>
@@ -64,6 +61,12 @@
                                     </ul>
                                     </div>
                                     </div>
+                                    </div>
+                                    <div class="pull-right m-t-xs" id="document-add">
+            <a href="#documents-add" class="documents-add btn btn-default btn-addon  btn-sm"><i class="fa fa-plus-circle" /> Add Document</a>
+
+            <div class="clearfix"></div>
+    </div>
 </div>
 </script>
 <script id="documents-collection-template" type="text/html">
