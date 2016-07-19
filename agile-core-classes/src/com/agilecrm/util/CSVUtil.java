@@ -1408,6 +1408,8 @@ public class CSVUtil
 					    Contact contact = ContactUtil.searchContactByEmail(emails[k]);
 					    if (contact != null && contact.id != null && !relatedContactIds.contains(contact.id.toString()))
 					    {
+					    System.out.println("Related contct id in deals import-----"+contact.id);
+					    System.out.println("Contains Id------"+relatedContactIds.contains(contact.id.toString()));
 						opportunity.addContactIds(contact.id.toString());
 						relatedContactIds.add(contact.id.toString());
 					    }
