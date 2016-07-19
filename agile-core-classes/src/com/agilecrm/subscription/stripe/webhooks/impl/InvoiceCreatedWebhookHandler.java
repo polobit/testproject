@@ -92,14 +92,13 @@ public class InvoiceCreatedWebhookHandler extends StripeWebhookHandler
 	    {
 		System.out.println("plan details not found ");
 	    }
-	    SimpleDateFormat formatter = new SimpleDateFormat("MMM dd, yyyy");
-	    plan.put("date", formatter.format(new Date(Long.parseLong(obj.getString("date")) * 1000).toString()));
+	    plan.put("date", new Date(Long.parseLong(obj.getString("date")) * 1000).toString());
 	    if (data.has("period"))
 	    {
 		JSONObject period = data.getJSONObject("period");
 		
-		plan.put("start_date", formatter.format(new Date(Long.parseLong(period.getString("start")) * 1000).toString()));
-		plan.put("end_date", formatter.format(new Date(Long.parseLong(period.getString("end")) * 1000).toString()));
+		plan.put("start_date", new Date(Long.parseLong(period.getString("start")) * 1000).toString());
+		plan.put("end_date", new Date(Long.parseLong(period.getString("end")) * 1000).toString());
 	    }
 	    Float amount = Float.valueOf(obj.getString("amountDue"));
 	    if(amount <= 0)
