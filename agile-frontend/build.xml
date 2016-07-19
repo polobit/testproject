@@ -77,6 +77,7 @@
         <copy todir="${TARGET_DIR}/${ant.project.name}.war">
               <fileset dir="WebContent">
                 <exclude name="flatfull/tpl/**/*"/>
+                <exclude name="flatfull/jscore/**/*"/>
             </fileset>
         </copy>
         <!--Copy application libraries to target -->
