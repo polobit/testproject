@@ -17,12 +17,19 @@
 	</td>
 
 	<td class="overflow-hidden no-wrap">
-        {{requester_name}}
+        {{assignee.name}}
 	</td>
 
 	<td class="text-muted">
-		 {{group.group_name}}
+		 {{priority}}
 	</td>
+
+    <td class="text-muted">
+         {{status}}
+    </td>
+     <td class="text-muted">
+         {{group.group_name}}
+    </td>
 
 	<td>
     <div class="table-resp">
@@ -79,7 +86,9 @@
                         <tr>
 							<th style="width:2%"></th>
                             <th style="width:20%">Id</th>
-                            <th style="width:20%">Requester Name</th>
+                            <th style="width:20%">Assignee</th>
+                            <th style="width:20%">Priority</th>
+                            <th style="width:20%">Status</th>
                             <th style="width:20%">Group</th>
                             <th style="width:20%">Created Date</th>
                         </tr>

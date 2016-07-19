@@ -226,7 +226,16 @@ $("#activityModal").on("click", "#eventDescriptionLink", function(e){
    }
    });
 
+   $('#searchForm').hover(
+	function () {
+		  $("#advanced-search-filter").removeClass("hide");
+		}, 
+		function () {
+		  $("#advanced-search-filter").addClass("hide");
+		}
+   );
 
+  
    $("#mobile-menu").on("click",function(){
    if( $("#navbar").hasClass("show")) {
    	$("#navbar").removeClass("show");

@@ -18,7 +18,8 @@ var ContactSearchRouter = Backbone.Router.extend({
 	{
 	
 		var search_list_filters = serializeForm("advanced-search-filter").fields_set;	
-
+		$("#delete-checked").css("display","none");
+		$("#delete-checked").addClass("hide")
 		if(search_list_filters){
 			$("#content").html("<div id='search-results-container'></div>")
 			for(var j=0;j<search_list_filters.length;j++){
@@ -29,7 +30,7 @@ var ContactSearchRouter = Backbone.Router.extend({
 		  	   	if(search_list_filters[i] != undefined && search_list_filters[i] != ""){
 		  	   		if(search_list_filters[i]=="person"){
 		  	   			var searchResultsView = new Base_Collection_View({ url : "core/api/search/seachlist?q=" + encodeURIComponent(query)+"&type="+ search_list_filters[i], templateKey : "search", individual_tag_name : 'tr', cursor : true,
-						data : QUERY_RESULTS, sort_collection : false, page_size : 15, postRenderCallback : function(el)
+						data : QUERY_RESULTS, sort_collection : false, page_size : 10, postRenderCallback : function(el)
 						{
 							// Shows the query string as heading of search results
 							if (searchResultsView.collection.length == 0)
@@ -62,8 +63,9 @@ var ContactSearchRouter = Backbone.Router.extend({
 
 	  	   		if(search_list_filters[i]=="company"){
 	  	   		var companySearchResultsView = new Base_Collection_View({ url : "core/api/search/seachlist?q=" + encodeURIComponent(query)+"&type="+ search_list_filters[i], templateKey : "company-search", individual_tag_name : 'tr', cursor : true,
-					data : QUERY_RESULTS, sort_collection : false, page_size : 5, postRenderCallback : function(el)
+					data : QUERY_RESULTS, sort_collection : false, page_size : 10, postRenderCallback : function(el)
 					{
+						el.find("#companies").removeClass("showCheckboxes");
 						// Shows the query string as heading of search results
 						if (companySearchResultsView.collection.length == 0)
 							$("#search-query-heading", el).html('No matches found for "' + query + '" in <span style="font-weight:600;">Companies');
@@ -77,8 +79,11 @@ var ContactSearchRouter = Backbone.Router.extend({
 
 		  	   	if(search_list_filters[i]=="opportunity"){
 		  	   		var dealSearchResultsView = new Base_Collection_View({ url : "core/api/search/seachlist?q=" + encodeURIComponent(query)+"&type="+ search_list_filters[i], templateKey : "deal-search", individual_tag_name : 'tr', cursor : true,
-						data : QUERY_RESULTS, sort_collection : false, page_size : 5, postRenderCallback : function(el)
+						data : QUERY_RESULTS, sort_collection : false, page_size : 10, postRenderCallback : function(el)
 						{
+							
+							el.find(".deals-table").removeClass("showCheckboxes");
+							el.find(".panel-heading").css("display","none");
 							initializeDealDetailSearch();
 							// Shows the query string as heading of search results
 							if (dealSearchResultsView.collection.length == 0)
@@ -86,6 +91,7 @@ var ContactSearchRouter = Backbone.Router.extend({
 							else
 								$("#search-query-heading", el).html('Search results for "' + query + '" in <span style="font-weight:600;">Deals');
 						} });
+		  	   			
 		  	   			dealSearchResultsView.collection.fetch();
 						$('#search-results-container').find('#search_content_'+search_list_filters[i]).html(dealSearchResultsView.render().el);
 
@@ -93,7 +99,7 @@ var ContactSearchRouter = Backbone.Router.extend({
 		  	   	if(search_list_filters[i]=="document"){
 
 		  	   		var documentSearchResultsView = new Base_Collection_View({ url : "core/api/search/seachlist?q=" + encodeURIComponent(query)+"&type="+ search_list_filters[i], templateKey : "documents-search", individual_tag_name : 'tr', cursor : true,
-						data : QUERY_RESULTS, sort_collection : false, page_size : 5, postRenderCallback : function(el)
+						data : QUERY_RESULTS, sort_collection : false, page_size : 10, postRenderCallback : function(el)
 						{
 							initializeDocumentSearch(el);
 							// Shows the query string as heading of search results
@@ -111,8 +117,9 @@ var ContactSearchRouter = Backbone.Router.extend({
 		  	   	if(search_list_filters[i]=="tickets"){
 
 		  	   		var ticketSearchResultsView = new Base_Collection_View({ url : "core/api/search/seachlist?q=" + encodeURIComponent(query)+"&type="+ search_list_filters[i], templateKey : "tickets-search", individual_tag_name : 'tr', cursor : true,
-						data : QUERY_RESULTS, sort_collection : false, page_size : 5, postRenderCallback : function(el)
+						data : QUERY_RESULTS, sort_collection : false, page_size : 10, postRenderCallback : function(el)
 						{
+							el.find(".deals-table").removeClass("showCheckboxes");
 							// Shows the query string as heading of search results
 							if (ticketSearchResultsView.collection.length == 0)
 								$("#search-query-heading", el).html('No matches found for "' + query + '" in <span style="font-weight:600;">Tickets');
@@ -125,7 +132,7 @@ var ContactSearchRouter = Backbone.Router.extend({
 
 		  	   	}
 
-		  	   	if(search_list_filters[i]=="cases"){
+		  	   	/*if(search_list_filters[i]=="cases"){
 
 		  	   		var caseSearchResultsView = new Base_Collection_View({ url : "core/api/search/seachlist?q=" + encodeURIComponent(query)+"&type="+ search_list_filters[i], templateKey : "case-search", individual_tag_name : 'tr', cursor : true,
 						data : QUERY_RESULTS, sort_collection : false, page_size : 5, postRenderCallback : function(el)
@@ -141,7 +148,7 @@ var ContactSearchRouter = Backbone.Router.extend({
 						$('#search-results-container').find('#search_content_'+search_list_filters[i]).html(caseSearchResultsView.render().el);
 
 
-		  	   	}
+		  	   	}*/
 		  	   
 		  	   		
 		  	   }
