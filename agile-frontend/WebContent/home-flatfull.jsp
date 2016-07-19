@@ -62,6 +62,9 @@ pageEncoding="UTF-8"%>
 	
 	function _agile_get_file_hash(filename)
 	{
+    if(true)
+        return _AGILE_VERSION;
+      
 		if( !filename || filename == '' )	return _AGILE_VERSION;
 		
 		if( _AGILE_FILE_HASH && _AGILE_FILE_HASH[filename] )	return _AGILE_FILE_HASH[filename];
