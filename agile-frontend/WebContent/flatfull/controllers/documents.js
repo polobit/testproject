@@ -20,7 +20,7 @@ var DocumentsRouter = Backbone.Router.extend({
 					// Add top view
 					var sortKey = _agile_get_prefs("Documentssort_Key");
 					if(sortKey == undefined || sortKey == null){
-						sortKey = "name_dummy";
+						sortKey = "dummy_name";
 						_agile_set_prefs("Documentssort_Key", sortKey);
 					}
 
