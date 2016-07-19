@@ -1,0 +1,89 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>AgileCRM</title>
+    
+  </head>
+  <body>
+    <table border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color:#edf1f2;padding:6% 10%">
+      <tr>
+        <td>
+        	<div style="padding:0 15px;overflow:hidden;background-color:#fff">
+		      <table cellpadding="0" cellspacing="0" border="0" width="100%">
+		        <tbody><tr>
+		          <td style="padding:20px 10px 20px 10px;font-size:12px" valign="top">
+		            <img width="150" alt="AgileCRM" src="https://s3.amazonaws.com/agilecrm/panel/uploaded-logo/1383722651000?id=upload-container" class="CToWUd">
+		          </td>
+		          <td style="padding:20px 10px 10px;font-size:12px;text-align:right" colspan="2" valign="top">
+		            <p>
+		              Billing date: {{date}}<br>
+		                Invoice #: {{invoice_id}}
+		            </p>
+		          </td>
+		        </tr>
+		      </tbody></table>
+
+		      <table cellpadding="0" cellspacing="0" border="0" width="100%">
+		        <tbody><tr>
+		          <td style="padding:10px;font-size:12px;border-top:1px solid #ccc" valign="top">
+		            <p>
+		              Agile CRM<br>
+		              440 N Wolfe Road<br>
+		              Sunnyvale, CA, 94085
+		            </p>
+		          </td>
+		          <td style="padding:10px;font-size:12px;border-top:1px solid #ccc" colspan="2" valign="top">
+		            <p>
+		              <strong>Bill To</strong><br>
+		                {{user_name}}<br>
+		                {{company}}
+		            </p>
+		            
+		          </td>
+		        </tr>
+		        <tr>
+		          <td style="padding:20px 10px 5px 10px;border-bottom:1px solid #cccccc;font-size:12px;font-weight:bold" valign="top">
+		            <p>Duration</p>
+		          </td>
+		          <td style="padding:20px 10px 5px 10px;border-bottom:1px solid #cccccc;font-size:12px;font-weight:bold" valign="top">
+		            <p>Description</p>
+		          </td>
+		          <td style="padding:20px 10px 5px 10px;border-bottom:1px solid #cccccc;font-size:12px;font-weight:bold" valign="top">
+		            <p>Price</p>
+		          </td>
+		        </tr>
+		          <tr>
+		            </tr><tr>
+		      <td style="padding:10px;font-size:12px" valign="top">
+		        <p>{{start_date}} — <span class="aBn" data-term="goog_1249426583" tabindex="0"><span class="aQJ">{{end_date}}</span></span></p>
+		      </td>
+		      <td style="padding:10px;font-size:12px" valign="top">
+		        <p>{{quantity}} x {{plan}}</p>
+		      </td>
+		      <td style="padding:10px;font-size:12px" valign="top">
+		        <p style="text-align:right">${{amount}}</p>
+		      </td>
+		    </tr>
+		              
+		            
+
+
+		        <tr>
+		          <td>&nbsp;</td>
+		          <td style="padding:10px 10px 5px 10px;font-size:12px;font-weight:bold">Amount due:</td>
+		          <td style="padding:10px 10px 5px 10px;font-size:12px;font-weight:bold;text-align:right">${{amount}}</td>
+		        </tr>
+		          <tr>
+		            <td colspan="3" style="padding:20px 5px 20px 0;font-size:12px" valign="top">
+		              <p>This charge will appear on your credit card statement as "AgileCRM.com"</p>
+		            </td>
+		          </tr>
+		      </tbody></table>
+		    </div>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>
