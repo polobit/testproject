@@ -129,7 +129,7 @@ public class InvoiceCreatedWebhookHandler extends StripeWebhookHandler
 		return null;
 	AccountPrefs prefs = getAccountPrefs();
 	System.out.println("Got the Account prefs");
-	if(prefs != null && !prefs.company_name.toLowerCase().equals("mycompany"))
+	if(prefs != null && !prefs.company_name.toLowerCase().equals("my company"))
 		details.put("company", prefs.company_name);
 	details.put("user_name", user.name);
 	details.put("domain", getDomain());
