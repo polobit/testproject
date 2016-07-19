@@ -33,9 +33,9 @@ var ContactSearchRouter = Backbone.Router.extend({
 						{
 							// Shows the query string as heading of search results
 							if (searchResultsView.collection.length == 0)
-								$("#search-query-heading", el).html('No matches found for "' + query + '" in contacts');
+								$("#search-query-heading", el).html('No matches found for "' + query + '" in <span style="font-weight:600;">Contacts');
 							else
-								$("#search-query-heading", el).html('Search results for "' + query + '" in contacts');
+								$("#search-query-heading", el).html('Search results for "' + query + '" in <span style="font-weight:600;">Contacts');
 						} });
 
 						// If QUERY_RESULTS is defined which are set by agile_typeahead
@@ -66,9 +66,9 @@ var ContactSearchRouter = Backbone.Router.extend({
 					{
 						// Shows the query string as heading of search results
 						if (companySearchResultsView.collection.length == 0)
-							$("#search-query-heading", el).html('No matches found for "' + query + '" in companies');
+							$("#search-query-heading", el).html('No matches found for "' + query + '" in <span style="font-weight:600;">Companies');
 						else
-							$("#search-query-heading", el).html('Search results for "' + query + '" in companies');
+							$("#search-query-heading", el).html('Search results for "' + query + '" in <span style="font-weight:600;">Companies');
 					} });
 	  	   			companySearchResultsView.collection.fetch();
 					$('#search-results-container').find('#search_content_'+search_list_filters[i]).html(companySearchResultsView.render().el);
@@ -82,9 +82,9 @@ var ContactSearchRouter = Backbone.Router.extend({
 							initializeDealDetailSearch();
 							// Shows the query string as heading of search results
 							if (dealSearchResultsView.collection.length == 0)
-								$("#search-query-heading", el).html('No matches found for "' + query + '" in deals');
+								$("#search-query-heading", el).html('No matches found for "' + query + '" in <span style="font-weight:600;">Deals');
 							else
-								$("#search-query-heading", el).html('Search results for "' + query + '" in deals');
+								$("#search-query-heading", el).html('Search results for "' + query + '" in <span style="font-weight:600;">Deals');
 						} });
 		  	   			dealSearchResultsView.collection.fetch();
 						$('#search-results-container').find('#search_content_'+search_list_filters[i]).html(dealSearchResultsView.render().el);
@@ -98,9 +98,9 @@ var ContactSearchRouter = Backbone.Router.extend({
 							initializeDocumentSearch(el);
 							// Shows the query string as heading of search results
 							if (documentSearchResultsView.collection.length == 0)
-								$("#search-query-heading", el).html('No matches found for "' + query + '" in documents');
+								$("#search-query-heading", el).html('No matches found for "' + query + '" in <span style="font-weight:600;">Documents</span>');
 							else
-								$("#search-query-heading", el).html('Search results for "' + query + '" in documents');
+								$("#search-query-heading", el).html('Search results for "' + query + '" in <span style="font-weight:600;">Documents');
 						} });
 		  	   			documentSearchResultsView.collection.fetch();
 						$('#search-results-container').find('#search_content_'+search_list_filters[i]).html(documentSearchResultsView.render().el);
@@ -115,9 +115,9 @@ var ContactSearchRouter = Backbone.Router.extend({
 						{
 							// Shows the query string as heading of search results
 							if (ticketSearchResultsView.collection.length == 0)
-								$("#search-query-heading", el).html('No matches found for "' + query + '" in tickets');
+								$("#search-query-heading", el).html('No matches found for "' + query + '" in <span style="font-weight:600;">Tickets');
 							else
-								$("#search-query-heading", el).html('Search results for "' + query + '" in tickets');
+								$("#search-query-heading", el).html('Search results for "' + query + '" in <span style="font-weight:600;">Tickets');
 						} });
 		  	   			ticketSearchResultsView.collection.fetch();
 						$('#search-results-container').find('#search_content_'+search_list_filters[i]).html(ticketSearchResultsView.render().el);
