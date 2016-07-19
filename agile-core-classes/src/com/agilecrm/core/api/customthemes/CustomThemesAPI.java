@@ -54,8 +54,8 @@ public class CustomThemesAPI {
 	
 	
 	@DELETE
-	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	@Produces({ MediaType.APPLICATION_JSON})
+	@Consumes({ MediaType.APPLICATION_JSON})
 	public boolean deleteCustomTheme(String themeName) throws JSONException{
 	
 		return CustomThemesUtil.deleteCustomThemeByName("name",themeName);

@@ -427,7 +427,7 @@ String template = request.getParameter("template");
                         themesListAsArr.push(custName);
                         var custCss=customthemes[i].themeCss;
                         var custIdName=custName+":"+custId;
-                        var inputRadio='<div><input type="radio" onclick="selectedThemeFunc()" name="theme" id="'+custId+'" value="'+custName+'"'+'><label for="'+custId+'">'+custName+'</label><a href="#" class="themespan" onclick="deleteTheme(this);" style="margin-left: 40px;border-style: groove;border-radius: 5px;"><abbr title="delete">&times;</abbr></a></div>';
+                        var inputRadio='<div><input type="radio" onclick="selectedThemeFunc()" name="theme" id="'+custId+'" value="'+custName+'"'+'><label for="'+custId+'">'+custName+'</label><a href="#" class="themespan" onclick="deleteTheme(this);" style="border-style: solid;border-radius: 8px;float: right;"><abbr title="delete">&times;</abbr></a></div>';
                               
                          $(inputRadio).insertAfter("#lable4");
                         }
@@ -482,6 +482,7 @@ String template = request.getParameter("template");
                            if(formtheme!=null && formtheme!="default"){
                               if(formtheme=="theme1"||formtheme=="theme2"||formtheme=="theme3"||formtheme=="theme4"){
                                   $(".form-view").addClass(formtheme);
+                                  $(".form-view fieldset").css("border","1px solid #ccc");
                               }
                               else {
                                 $(".form-view").addClass(formtheme);
@@ -541,7 +542,7 @@ String template = request.getParameter("template");
                             if(data!=undefined && data!=""){
                               customthemes.push(data);
                               themesListAsArr.push(data.name);
-                            var inputRadio='<div><input type="radio" onclick="selectedThemeFunc()" name="theme" id="'+data.id+'" value="'+data.name+'"'+'><label for="'+data.id+'">'+data.name+'</label><a href="#" class="themespan" onclick="deleteTheme(this);" style="margin-left: 40px;border-style: groove;border-radius: 5px;"><abbr title="delete">&times;</abbr></a></div>';
+                            var inputRadio='<div><input type="radio" onclick="selectedThemeFunc()" name="theme" id="'+data.id+'" value="'+data.name+'"'+'><label for="'+data.id+'">'+data.name+'</label><a href="#" class="themespan" onclick="deleteTheme(this);" style="border-style: solid;border-radius: 8px;float: right;"><abbr title="delete">&times;</abbr></a></div>';
                              $("#themeName").val("");
                               
                          $(inputRadio).insertAfter("#lable4");
@@ -611,9 +612,8 @@ String template = request.getParameter("template");
                                     });
                                   
                                 },
-                                error: function(){
-                                  alert("Theme style not been appended!!");
-                                  
+                                error: function(err){
+                                  alert("Theme is not getting deleted AJAX ERROR is::"+JSON.stringify(err, null, 2));
                                 }
                       });
                   }
