@@ -1197,6 +1197,7 @@ public class CSVUtil
 	    			if(conIdsList != null && conIdsList.size() > 0)
 	    			{
 	    				relatedContactIds.addAll(conIdsList);
+	    				opportunity.setContact_ids(new ArrayList<String>());
 	    			}
 	    		}
 	    		if(opportunity == null)
