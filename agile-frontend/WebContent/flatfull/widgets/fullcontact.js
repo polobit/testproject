@@ -1,9 +1,9 @@
 var fullContactObjects = {};
 
 function loadFullContactData(apikey, emailID){	
-	head.js('/lib/jquery.fullcontact.2.2.js', function(){		
+	head.js('/flatfull/lib/jquery.fullcontact.2.2.js', function(){		
 		var testEmail = "bart@fullcontact.com";
-		$.fullcontact.emailLookup(apikey, testEmail, function(contactObj){			
+		$.fullcontact.emailLookup(apikey, emailID, function(contactObj){			
 			if(contactObj){	
  				var status = contactObj.status;
  				var displayData = "";
@@ -17,10 +17,15 @@ function loadFullContactData(apikey, emailID){
 
 					//Data from full contact.
 					var contactInfo = contactObj["contactInfo"];
-					var PhotosArray = contactObj["photos"];
 					var organisationArray = contactObj["organizations"];
+					var PhotosArray = contactObj["photos"];			
 
+					var socialProfilesArray = contactObj["socialProfiles"];
+					var websitesArray =  contactInfo["websites"];
+					var chatsArray = contactInfo["chats"];
 
+					var addressObject = contactObj["demographics"];
+					var locationObject = addressObject["demographics"];
 
 					// Agile Contact fields.
 					var first_name;
@@ -40,11 +45,9 @@ function loadFullContactData(apikey, emailID){
 
 					// 
 					// ------------------------ Full contact fields ---------------------
-					// 
-					// Photos: Array - for profile pic ( linkedin, twitter, facebook, other)
+					// demographics- locationDeduced - country, state, city
 					// contactInfo - Chats Array - skype, gtalk, googletalk
 					// contactInfo - websites Array - websites										
-					// demographics- locationDeduced - country, state, city
 					// socialProfiles - youtube, facebook, twitter, GooglePlus, LinkedIn, xing, GitHub, Flickr
 
 					//newArray.push.apply(newArray, newCode);
@@ -113,6 +116,70 @@ function loadFullContactData(apikey, emailID){
 						}
 					}
 
+					if(socialProfilesArray){
+						var web_url = getPropertyValueBySubtype(properties, "website", "URL");
+						if(web_url){
+
+						}
+
+						var web_skype = getPropertyValueBySubtype(properties, "website", "SKYPE");
+						if(web_skype){
+
+						}
+
+						var web_twitter = getPropertyValueBySubtype(properties, "website", "TWITTER");
+						if(web_twitter){
+
+						}
+
+						var web_linkedIn = getPropertyValueBySubtype(properties, "website", "LINKEDIN");
+						if(web_linkedIn){
+
+						}
+
+						var web_facebook = getPropertyValueBySubtype(properties, "website", "FACEBOOK");
+						if(web_facebook){
+
+						}
+
+						var web_xing = getPropertyValueBySubtype(properties, "website", "XING");
+						if(web_xing){
+
+						}
+
+						var web_feed = getPropertyValueBySubtype(properties, "website", "FEED");
+						if(web_feed){
+
+						}
+
+						var web_googleplus = getPropertyValueBySubtype(properties, "website", "GOOGLE_PLUS");
+						if(web_googleplus){
+
+						}
+
+						var web_flickr = getPropertyValueBySubtype(properties, "website", "FLICKR");
+						if(web_flickr){
+
+						}
+
+						var web_github = getPropertyValueBySubtype(properties, "website", "GITHUB");
+						if(web_github){
+
+						}
+
+						var web_youtube = getPropertyValueBySubtype(properties, "website", "YOUTUBE");
+						if(web_youtube){
+
+						}						
+					}
+
+					if(websitesArray){
+
+					}
+
+					if(chatsArray){
+
+					}
 
 					if(newProperties.length > 0){
 						// Reads current contact model form the contactDetailView
