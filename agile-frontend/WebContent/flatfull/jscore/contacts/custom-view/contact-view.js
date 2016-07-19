@@ -75,7 +75,7 @@ function contactTableView(base_model,customDatefields,view,customContactfields,c
 					if(field_name.indexOf("CUSTOM_") != -1)
 					{
 						field_name = field_name.split("CUSTOM_")[1]; 			
-						var property = getProperty(contact.properties, field_name);
+						var property = getCustomProperty(contact.properties, field_name);
 						var json = {};
 						if(!property)
 						{

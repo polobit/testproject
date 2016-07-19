@@ -4,27 +4,27 @@
     	<div class="table-resp" {{#is_mobile}} style="width:calc(100vw - 60px);" {{else}} style="width:15em;" {{/is_mobile}}>
     	<div class="agile-img m-r-sm {{#is_mobile}} thumb {{else}} thumb-sm {{/is_mobile}}" style="margin-right:10px">
         	{{#if_contact_type "PERSON"}}
-        		<img class="img-inital r r-2x"  title="{{getPropertyValue properties 'first_name'}} {{getPropertyValue properties 'last_name'}}" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"/>
+        		<img class="img-inital r r-2x"  title="{{getSystemPropertyValue properties 'first_name'}} {{getSystemPropertyValue properties 'last_name'}}" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"/>
         	{{/if_contact_type}}
         
 			{{#if_contact_type "COMPANY"}}
-        		<img class="r r-2x" title="{{getPropertyValue properties 'name'}}" {{getCompanyImage "40" "display:inline;"}}/>
+        		<img class="r r-2x" title="{{getSystemPropertyValue properties 'name'}}" {{getCompanyImage "40" "display:inline;"}}/>
         	{{/if_contact_type}}
     	</div>
   		<div class="agile-thumb agile-thumb-view" {{#is_mobile}} style="width:calc(100% - 60px); margin-top:-5px;" {{else}} style="width:calc(100% - 60px);" {{/is_mobile}}>
         	{{#if_contact_type "PERSON"}}
-        		<a class="text-cap custom-link">{{getPropertyValue properties "first_name"}}
-        		{{getPropertyValue properties "last_name"}} </a>
-        		<div><small class="text-muted  block text-ellipsis">{{getPropertyValue properties "email"}}</small></div>
+        		<a class="text-cap custom-link">{{getSystemPropertyValue properties "first_name"}}
+        		{{getSystemPropertyValue properties "last_name"}} </a>
+        		<div><small class="text-muted  block text-ellipsis">{{getSystemPropertyValue properties "email"}}</small></div>
         	{{/if_contact_type}}
         
 			{{#if_contact_type "COMPANY"}}
-        		<a class="text-cap">{{getPropertyValue properties "name"}}</a>
-        		<div><small class="text-muted  block text-ellipsis">{{getPropertyValue properties "url"}}</small></div>
+        		<a class="text-cap">{{getSystemPropertyValue properties "name"}}</a>
+        		<div><small class="text-muted  block text-ellipsis">{{getSystemPropertyValue properties "url"}}</small></div>
         	{{/if_contact_type}}
         	{{#is_mobile}}
         	 <div>
-	      	<a class="text-muted  block text-ellipsis text-xs text-cap">{{getPropertyValue properties "company"}}</a>
+	      	<a class="text-muted  block text-ellipsis text-xs text-cap">{{getSystemPropertyValue properties "company"}}</a>
     		 </div>
     		{{/is_mobile}}
 
@@ -56,29 +56,29 @@
     	<div class="table-resp" {{#is_mobile}} style="width:calc(100vw - 60px);" {{else}} style="width:15em;" {{/is_mobile}}>
     	<div class="agile-img m-r-sm {{#is_mobile}} thumb {{else}} thumb-sm {{/is_mobile}}" style="margin-right:10px">
         	{{#if_contact_type "PERSON"}}
-        		<img class="img-inital r r-2x"  title="{{getPropertyValue properties 'first_name'}} {{getPropertyValue properties 'last_name'}}" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"/>
+        		<img class="img-inital r r-2x"  title="{{getSystemPropertyValue properties 'first_name'}} {{getSystemPropertyValue properties 'last_name'}}" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"/>
         	{{/if_contact_type}}
         
 			{{#if_contact_type "COMPANY"}}
 
-        		<img class="r r-2x" style="height:35px!important; width:35px!important;" title="{{getPropertyValue properties 'name'}}" {{getCompanyImage "40" "display:inline;"}}/>
+        		<img class="r r-2x" style="height:35px!important; width:35px!important;" title="{{getSystemPropertyValue properties 'name'}}" {{getCompanyImage "40" "display:inline;"}}/>
 
         	{{/if_contact_type}}
     	</div>
   		<div class="agile-thumb agile-thumb-view" {{#is_mobile}} style="width:calc(100% - 60px); margin-top:-5px;" {{else}} style="width:calc(100% - 60px);" {{/is_mobile}}>
         	{{#if_contact_type "PERSON"}}
-        		<a class="text-cap custom-link">{{getPropertyValue properties "first_name"}}
-        		{{getPropertyValue properties "last_name"}} </a>
-        		<div><small class="text-muted  block text-ellipsis">{{getPropertyValue properties "email"}}</small></div>
+        		<a class="text-cap custom-link">{{getSystemPropertyValue properties "first_name"}}
+        		{{getSystemPropertyValue properties "last_name"}} </a>
+        		<div><small class="text-muted  block text-ellipsis">{{getSystemPropertyValue properties "email"}}</small></div>
         	{{/if_contact_type}}
         
 			{{#if_contact_type "COMPANY"}}
-        		<a class="text-cap">{{getPropertyValue properties "name"}}</a>
-        		<div><small class="text-muted  block text-ellipsis">{{getPropertyValue properties "url"}}</small></div>
+        		<a class="text-cap">{{getSystemPropertyValue properties "name"}}</a>
+        		<div><small class="text-muted  block text-ellipsis">{{getSystemPropertyValue properties "url"}}</small></div>
         	{{/if_contact_type}}
         	{{#is_mobile}}
         	 <div>
-	      	<a class="text-muted  block text-ellipsis text-xs text-cap">{{getPropertyValue properties "company"}}</a>
+	      	<a class="text-muted  block text-ellipsis text-xs text-cap">{{getSystemPropertyValue properties "company"}}</a>
     		 </div>
     		{{/is_mobile}}
 
@@ -92,7 +92,7 @@
 <script id = "contacts-custom-view-name-template" type="text/html">
 	<td class="data" data="{{id}}">
     	<div class="text-ellipsis "style="width:12em;">
-    		<a class="text-cap">{{getPropertyValue properties "name"}}</>
+    		<a class="text-cap">{{getSystemPropertyValue properties "name"}}</>
     	</div>
 	</td>
 </script>
@@ -100,7 +100,7 @@
 <script id = "contacts-custom-view-first_name-template" type="text/html">
 	<td class="data" data="{{id}}">
     	<div class="text-ellipsis "  style="width:12em;">
-    		<a class="text-cap">{{getPropertyValue properties "first_name"}}</>
+    		<a class="text-cap">{{getSystemPropertyValue properties "first_name"}}</>
     	</div>
 	</td>
 </script>
@@ -108,7 +108,7 @@
 <script id = "contacts-custom-view-last_name-template" type="text/html">
 	<td class="data" data="{{id}}">
     	<div class="text-ellipsis"style="width:12em;" >
-        	<a class="text-cap">{{getPropertyValue properties "last_name"}}</a>
+        	<a class="text-cap">{{getSystemPropertyValue properties "last_name"}}</a>
         </div>
 	</td>
 </script>
@@ -116,7 +116,7 @@
 <script id = "contacts-custom-view-phone-template" type="text/html">
 	<td class="data" data="{{id}}">
         <div class="text-ellipsis" style="width:12em;" >
-    		<a class="text-cap">{{getPropertyValue properties "phone"}}</a>
+    		<a class="text-cap">{{getSystemPropertyValue properties "phone"}}</a>
         </div>
 	</td>
 </script>
@@ -132,7 +132,7 @@
 <script id = "contacts-custom-view-website-template" type="text/html">
 	<td class="data" data="{{id}}">
         <div class="text-ellipsis" style="width:12em;" >
-    		<a class="text-cap">{{getPropertyValue properties "website"}}</a>
+    		<a class="text-cap">{{getSystemPropertyValue properties "website"}}</a>
         </div>
 	</td>
 </script>
@@ -140,7 +140,7 @@
 <script id = "contacts-custom-view-email-template" type="text/html">
 	<td class="data" data="{{id}}">
         <div class="text-ellipsis"  style="width:12em;" >
-    		<a class="">{{getPropertyValue properties "email"}}</a>
+    		<a class="">{{getSystemPropertyValue properties "email"}}</a>
         </div>
 	</td>
 </script>
@@ -148,7 +148,7 @@
 <script id = "contacts-custom-view-company-template" type="text/html">
 	<td class="data" data="{{id}}">
       <div class="text-ellipsis" style="width:12em;">
-      	<a class="text-cap">{{getPropertyValue properties "company"}}</a>
+      	<a class="text-cap">{{getSystemPropertyValue properties "company"}}</a>
       </div>
 	</td>
 </script>
@@ -184,7 +184,7 @@
 <script id = "contacts-custom-view-title-template" type="text/html">
 	<td class='data' data='{{id}}'>
     <div class="text-ellipsis " style="width:12em;" >
-		<a class="text-cap">{{getPropertyValue properties "title"}}</a>
+		<a class="text-cap">{{getSystemPropertyValue properties "title"}}</a>
     </div>
 	</td>
 </script>
@@ -192,7 +192,7 @@
 <script id = "contacts-custom-view-url-template" type="text/html">
 	<td class='data' data='{{id}}'>
     <div class="text-ellipsis" style="width:12em;" >
-		<a href="{{getPropertyValue properties 'url'}}" class="text-cap">{{getPropertyValue properties "url"}}</a>
+		<a href="{{getSystemPropertyValue properties 'url'}}" class="text-cap">{{getSystemPropertyValue properties "url"}}</a>
     </div>
 	</td>
 </script>
@@ -262,7 +262,7 @@
 		<div class="table-resp "  style="width:12em;" >
        		{{#each this}}
 				<div id="{{id}}" class="thumb-sm agile-img m-r-sm contact-type-image">
-					<img class="img-inital r-2x" title="{{getPropertyValue properties 'first_name'}} {{getPropertyValue properties 'last_name'}}" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"/>
+					<img class="img-inital r-2x" title="{{getSystemPropertyValue properties 'first_name'}} {{getSystemPropertyValue properties 'last_name'}}" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"/>
 				</div>
    			{{/each}}
    		</div>
@@ -274,7 +274,7 @@
 		<div class="table-resp "  style="width:12em;" >
        		{{#each this}}
 				<div id="{{id}}" class="thumb-sm agile-img m-r-sm company-type-image">
-					<img class="r r-2x" title="{{getPropertyValue properties 'name'}}" {{getCompanyImage "24" "display:inline;"}}/>
+					<img class="r r-2x" title="{{getSystemPropertyValue properties 'name'}}" {{getCompanyImage "24" "display:inline;"}}/>
 				</div>
    			{{/each}}
    		</div>
@@ -328,10 +328,10 @@
        <div class="data panel-default" data={{id}} style="width:260px">
 	   
        <div class="text-cap panel-heading text-ellipsis">
-         {{#if_contact_type "PERSON"}}<div class="text-ellipsis inline-block" style="width:80%" title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}">{{getPropertyValue properties "first_name"}}
-        		{{getPropertyValue properties "last_name"}}</div>{{/if_contact_type}}
+         {{#if_contact_type "PERSON"}}<div class="text-ellipsis inline-block" style="width:80%" title="{{getSystemPropertyValue properties "first_name"}} {{getSystemPropertyValue properties "last_name"}}">{{getSystemPropertyValue properties "first_name"}}
+        		{{getSystemPropertyValue properties "last_name"}}</div>{{/if_contact_type}}
              {{#if_contact_type "COMPANY"}}
-             <div class="text-ellipsis inline-block" style="width:80%" title="{{getPropertyValue properties "name"}}">{{getPropertyValue properties "name"}}
+             <div class="text-ellipsis inline-block" style="width:80%" title="{{getSystemPropertyValue properties "name"}}">{{getSystemPropertyValue properties "name"}}
             </div>{{/if_contact_type}}
 				 <div class="pull-left" style="width:75%"><div id='star' class="contact-star"></div></div>
         		<div style="height: 35px;">
@@ -400,14 +400,14 @@
        		{{#property_is_exists "company" properties}}
        		<div class="b-b b-light p-b-xs">
        		<div class="pull-left"><i class="icon icon-building text-sm v-middle"></i></div>
-       		<span class="text-cap m-l-sm" title="{{getPropertyValue properties "title"}}">{{getPropertyValue properties "title"}}</span> 
-       		<span class="text-cap" href="#company/{{contact_company_id}}" title="{{getPropertyValue properties "company"}}">{{getPropertyValue properties "company"}}</span></div>
+       		<span class="text-cap m-l-sm" title="{{getSystemPropertyValue properties "title"}}">{{getSystemPropertyValue properties "title"}}</span> 
+       		<span class="text-cap" href="#company/{{contact_company_id}}" title="{{getSystemPropertyValue properties "company"}}">{{getSystemPropertyValue properties "company"}}</span></div>
 
        		{{else}}
        			{{#property_is_exists "title" properties}}
        		<div class="b-b b-light p-b-xs">
        		<div class="pull-left"><i class="icon icon-building text-sm v-middle"></i></div>
-       		<span class="text-cap m-l-sm" title="{{getPropertyValue properties "title"}}">{{getPropertyValue properties "title"}}</span> 
+       		<span class="text-cap m-l-sm" title="{{getSystemPropertyValue properties "title"}}">{{getSystemPropertyValue properties "title"}}</span> 
        		</div>
      		{{/property_is_exists}}
        		
@@ -419,7 +419,7 @@
           <div class="b-b b-light p-b-xs">
           <div class="pull-left"><i class="fa fa-globe text-sm v-middle"></i></div>
           <div class="text-ellipsis">
-          <a class="m-l-sm" title="{{getPropertyValue properties "url"}}" href="{{getPropertyValue properties "url"}}" target="_blank">{{getPropertyValue properties "url"}}</a> 
+          <a class="m-l-sm" title="{{getSystemPropertyValue properties "url"}}" href="{{getSystemPropertyValue properties "url"}}" target="_blank">{{getSystemPropertyValue properties "url"}}</a> 
           </div>
          </div>
           

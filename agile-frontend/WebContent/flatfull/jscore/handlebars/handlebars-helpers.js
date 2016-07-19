@@ -16,6 +16,10 @@ $(function()
 	{
 		return getPropertyValue(items, name);
 	});
+	Handlebars.registerHelper('getSystemPropertyValue', function(items, name)
+	{
+		return getSystemPropertyValue(items, name);
+	});
 
 	Handlebars.registerHelper('stripeCreditConvertion', function(amount)
 	{

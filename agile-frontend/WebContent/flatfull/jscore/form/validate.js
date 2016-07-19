@@ -6,6 +6,7 @@
  * @param form
  * @returns
  */
+ 
 function isValidForm(form) {
 
     jQuery.validator.addMethod("choosen-select-input", function(value, element){
@@ -274,6 +275,39 @@ function isValidForm(form) {
 		var custvals = /^\s*[_a-zA-Z0-9\s]+\s*$/;
 		return custvals.test(value);
 	}," Label should start with an alphabet and special characters except underscore are not allowed.");
+
+	jQuery.validator.addMethod("duplicateWithSystemName", function(value, element){
+		var labelJson = [];
+		labelJson.cases = 'title,owner_id,status,description' ;
+		labelJson.contact = 'first_name,last_name,email,company,title,name,url,website,address,phone,skypePhone,image,city,state,zip,country,tags' ;
+		labelJson.deal = 'name,probability,description,pipeline_milestone,close_date,deal_source_id,color1,relates_to,tags,expected_value' ;
+		var scope = $("#textModalForm").find("input[name='scope']").val();
+		var i;
+		if(scope && (scope == "CONTACT" || scope == "COMPANY")){
+			var array = labelJson.contact.split(',');
+			for(i=0 ; i < array.length ; i++){
+				if(value.toLowerCase() == array[i])
+					return false;
+			}
+		}
+		else if(scope && scope == "DEAL"){
+			var array = labelJson.deal.split(',');
+			for(i=0 ; i < array.length ; i++){
+				if(value.toLowerCase() == array[i])
+					return false;
+			}	
+		}
+		else if(scope && scope == "CASE"){
+			var array = labelJson.cases.split(',');
+			for(i=0 ; i < array.length ; i++){
+				if(value.toLowerCase() == array[i])
+					return false;
+			}
+
+		}
+		return true;
+	},"Given name is a system field name. Please choose another name.");
+
     jQuery.validator.addMethod("tickets_group_name", function(value, element){
 
 		return /^[a-zA-Z0-9._]*$/.test(value);
