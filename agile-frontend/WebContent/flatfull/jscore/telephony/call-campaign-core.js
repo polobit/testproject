@@ -739,10 +739,16 @@ function getNextContactsId(callback)
  */
 function getCursor()
 {
-	console.log("In getCursor");
-	var contactsJson = App_Contacts.contactsListView.collection.toJSON();
-	var indexOfCursor = CALL_CAMPAIGN.contact_id_list.length-1;
-	return contactsJson[indexOfCursor].cursor;
+	try{
+		console.log("In getCursor");
+		var contactsJson = App_Contacts.contactsListView.collection.toJSON();
+		var indexOfCursor = CALL_CAMPAIGN.contact_id_list.length-1;
+		
+		return contactsJson[indexOfCursor].cursor;
+	}catch(e){
+		return 0;
+	}
+
 }
 
 /**
