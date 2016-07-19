@@ -1,13 +1,13 @@
 package com.campaignio.tasklets.agile;
 
 import java.util.HashMap;
+import java.util.Iterator;
 
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.agilecrm.contact.Contact;
-import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.notification.push.PushNotificationMessage;
 import com.agilecrm.util.HTTPUtil;
@@ -32,7 +32,7 @@ public class PushNotification extends TaskletAdapter
 	/**
 	 * API url for send a push notification to chrome
 	 */
-	public static String NOTIFICATION_CHROME_URL = "https://android.googleapis.com/gcm/send";
+	public static String NOTIFICATION_CHROME_URL = "https://fcm.googleapis.com/fcm/send";
 	
 	/**
 	 * API url for send a push notification to mozilla
@@ -40,14 +40,24 @@ public class PushNotification extends TaskletAdapter
 	public static String NOTIFICATION_MOZILLA_URL = "https://updates.push.services.mozilla.com/push/v1/";
 	
 	/**
+	 * API url for send a push notification to mozilla
+	 */
+	public static String NOTIFICATION_REGISTRATION_IDS = "registration_ids";
+	
+	/**
 	 * Push Notification Authorization Key
 	 */
 	public static String NOTIFICATION_AUTHORIZATION = "Authorization";
 	
 	/**
+	 * Firebase Cloud Messaging API key
+	 */
+	public static String FCM_API_KEY = "key=AIzaSyBwft-pRREwaryzyVD1j9HLF4JUELrOoI4";
+	
+	/**
 	 * Google Cloud Messaging API key
 	 */
-	public static String GCM_API_KEY = "key=AIzaSyCk-w152hepg2pmVWT7MEbEq64GNhnbfik";
+    public static String GCM_API_KEY = "key=AIzaSyCk-w152hepg2pmVWT7MEbEq64GNhnbfik";
 
 	/**
 	 * Given Push Notification Title
@@ -72,14 +82,12 @@ public class PushNotification extends TaskletAdapter
 	/**
 	 * Browser field name for Chrome
 	 */
-	public static String CHROME_BROWSER = "chrome id";
+	public static String CHROME_BROWSER = "chrome";
 	
 	/**
 	 * Browser field name for Mozilla
 	 */
-	public static String MOZILLA_BROWSER = "mozilla id";
-	
-	
+	public static String MOZILLA_BROWSER = "mozilla";
 	
 	 public void run(JSONObject campaignJSON, JSONObject subscriberJSON, JSONObject data, JSONObject nodeJSON) throws Exception
 	    {
@@ -98,14 +106,10 @@ public class PushNotification extends TaskletAdapter
 		    if (contact != null)
 		    {
 		    	//Getting browser id from contact 
-		    	ContactField browser_id=contact.getContactField(CHROME_BROWSER);
-		    	
-		    	//if browser is not chrome then fetch mozilla id
-		    	if(browser_id==null)
-		    		  browser_id = contact.getContactField(MOZILLA_BROWSER);
-		    	
+		    	Iterator<String> browser_ids = contact.browserId.iterator();
+		    		    	
 		    	//If contact doesn't having any id then add a logs
-		    	if(browser_id==null)
+		    	if(browser_ids.hasNext())
 		    	{
 		    		LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON), "Contact didn't subscribe for push notification. ",
 		    				    LogType.PUSH_NOTIFICATION_SKIPPED.toString());
@@ -125,14 +129,24 @@ public class PushNotification extends TaskletAdapter
 		    	notification_message.put(NOTIFICATION_ICON_URL_VALUE, iconURL);
 		    	long created_time = System.currentTimeMillis()/1000l;
 		    	
-		    	PushNotificationMessage pushNotificationMessage = new PushNotificationMessage(created_time, browser_id.value, notification_message.toString(),AgileTaskletUtil.getId(campaignJSON), contactId );
 		    	
-		    	//Sending to chrome browser push notification
-		    	if(browser_id.name.equalsIgnoreCase(CHROME_BROWSER))
+		    	//Itreting each browser id and sending push notification
+		    	while(browser_ids.hasNext())
 		    	{
-		    		if(sendPushNotificationToChrome(browser_id.value, title, message, iconURL, linkURL))
+		    		//fetch id and check which browser id is there
+		    		String browser_id = browser_ids.next();
+		    		
+		    	//Sending to chrome browser push notification
+		    	if(browser_id.contains(CHROME_BROWSER))
+		    	{
+		    		//Subtracting actual browser id of Chrome browser
+		    		browser_id = StringUtils.substringAfter(browser_id, CHROME_BROWSER);
+		    		
+		    		if(sendPushNotificationToChrome(browser_id))
 		    		{
-		    			System.out.println("success");
+		    			System.out.println("Push Notifiacation sent to Chrome successfully : " + browser_id);
+		    			
+		    			PushNotificationMessage pushNotificationMessage = new PushNotificationMessage(created_time, browser_id, notification_message.toString(),AgileTaskletUtil.getId(campaignJSON), contactId );
 		    			pushNotificationMessage.save();
 		    			
 		    			LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON), "Push notification sent successfully sent to the Chrome Browser.",
@@ -145,10 +159,16 @@ public class PushNotification extends TaskletAdapter
 		    	}
 		    	else
 		    	{
-		    		if(sendPushNotificationToMozilla(browser_id.value, title, message, iconURL, linkURL))
+		    		///Subtracting actual browser id of Mozilla browser
+		    		browser_id = StringUtils.substringAfter(browser_id, MOZILLA_BROWSER);
+		    		
+		    		if(sendPushNotificationToMozilla(browser_id))
 		    		{
-		    			System.out.println("success");
+		    			System.out.println("Push Notifiacation sent to Mozilla successfully : " + browser_id);
+		    			
+		    			PushNotificationMessage pushNotificationMessage = new PushNotificationMessage(created_time, browser_id, notification_message.toString(),AgileTaskletUtil.getId(campaignJSON), contactId );
 		    			pushNotificationMessage.save();
+		    			
 		    			LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON), "Push notification sent successfully to the Mozilla Browser.",
 		    				    LogType.PUSH_NOTIFICATION_SENT.toString());
 		    		}
@@ -156,6 +176,7 @@ public class PushNotification extends TaskletAdapter
 		    		else
 		    		LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON),"The browser is not open or contact has blocked the notifications. ", LogType.PUSH_NOTIFICATION_SENDING_FAILED.toString());
 		    	}
+		    }//end of while loop
 		    	
 		    }
 		    	
@@ -176,16 +197,18 @@ public class PushNotification extends TaskletAdapter
 	  * @param data
 	 * @throws Exception 
 	  */
-	 public static boolean sendPushNotificationToChrome(String registration_id, String title, String message, String iconURL, String linkURL)
+	 public static boolean sendPushNotificationToChrome(String registration_id)
 	 {
 			 JSONObject data=new JSONObject();
 			 String response=null;
 			 try
 			 {
-				data.put("registration_ids", new JSONArray().put(registration_id));
+				data.put(NOTIFICATION_REGISTRATION_IDS, new JSONArray().put(registration_id));
 			 
 				HashMap<String, String> headers=new HashMap<String, String>();
-				headers.put(NOTIFICATION_AUTHORIZATION, GCM_API_KEY);
+				
+				headers.put(NOTIFICATION_AUTHORIZATION, FCM_API_KEY);
+				
 				headers.put("Content-Type", "application/json");
 			
 				System.out.println("Time in Milisecond Before : "+ System.currentTimeMillis());
@@ -217,7 +240,7 @@ public class PushNotification extends TaskletAdapter
 	  * @param data
 	 * @throws Exception 
 	  */
-	 public static boolean sendPushNotificationToMozilla(String registration_id, String title, String message, String iconURL, String linkURL)
+	 public static boolean sendPushNotificationToMozilla(String registration_id)
 	  {
 		
 		 String response=null;
@@ -227,7 +250,7 @@ public class PushNotification extends TaskletAdapter
 		
 			System.out.println("Time in Milisecond Before : "+ System.currentTimeMillis());
 			
-			response = HTTPUtil.accessURLWithHeaderUsingPost(NOTIFICATION_MOZILLA_URL+registration_id, null, headers);
+			response = HTTPUtil.accessURLWithHeaderUsingPost(NOTIFICATION_MOZILLA_URL + registration_id, null, headers);
 			
 			System.out.println("Time in Milisecond After : "+ System.currentTimeMillis());
 		    
@@ -249,7 +272,7 @@ public class PushNotification extends TaskletAdapter
 		 //String str="https://android.googleapis.com/gcm/send/zW1vgKGlds/:APA91bHrg6ULcPskmV58IkYsveZwjH97UYXGSNfoNb_k-q5N9rg4ELS_NR";
 		 //System.out.println(StringUtils.substringAfterLast(str, "/"));
 		 while(i<1){
-		 sendPushNotificationToChrome("fkuvrfohmoo:APA91bH03B7yrlXsrTeulEpIErpULAHvjUhTlwEX5QZpnOIVuniBXDtQ0KvLHWe7Ba1xiWomLuRPfqIn1plbDGHynRJAggR9xiGgavldx-NxqFFNUMmvjQTn6pSe81AhJNnA_neNe5kQ", null, null, null, null);
+		 sendPushNotificationToChrome("erqk5SmfYjw:APA91bGRRVfKrx3dn2I41J5qZ85pSZzl7FsZvNqVZ6CNLrkfrejVsn3pFx5QZjFSXbCJKmYsuS_r_g41C2G0BFSd4hzfFZ4kP28i-UFT8bMnFLYK-X1eAFTt37hAixRJhYrDPcyQuZW_");
 		 i++;}
 	 }
 }
