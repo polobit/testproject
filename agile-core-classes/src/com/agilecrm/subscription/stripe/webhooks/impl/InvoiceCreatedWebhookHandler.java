@@ -101,7 +101,7 @@ public class InvoiceCreatedWebhookHandler extends StripeWebhookHandler
 		plan.put("start_date", formatter.format(new Date(Long.parseLong(period.getString("start")) * 1000).toString()));
 		plan.put("end_date", formatter.format(new Date(Long.parseLong(period.getString("end")) * 1000).toString()));
 	    }
-	    Float amount = Float.valueOf(obj.getString("amount_due"));
+	    Float amount = Float.valueOf(obj.getString("amountDue"));
 	    if(amount <= 0)
 	    	return null;
 	    plan.put("amount", amount / 100);
