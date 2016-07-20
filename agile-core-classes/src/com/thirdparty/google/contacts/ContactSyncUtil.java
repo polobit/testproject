@@ -407,6 +407,21 @@ public class ContactSyncUtil
 		for (ContactField email : emails)
 		{
 			query_text = " " + email.value;
+			try
+			{
+
+				// Queries in google contact based on query string built with emails
+				List<ContactEntry> entries=retrieveContactBasedOnQuery(query_text, prefs);
+				if(entries.size()>0)
+					return entries;
+				continue;
+			}
+			catch (Exception e)
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return new ArrayList<ContactEntry>();
+			}
 		}
 
 		try
