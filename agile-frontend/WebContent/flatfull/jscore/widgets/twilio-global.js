@@ -1533,7 +1533,11 @@ function sendVoiceAndEndCall(fileSelected) {
 									$.post( "/core/api/widgets/twilio/autosavenote", {
 										subject: TWILIO_CALLTYPE + " call - Left voicemail",
 										message: "",
-										contactid: TWILIO_CONTACT_ID
+										contactid: TWILIO_CONTACT_ID,
+										phone: TWILIO_CALLED_NO,
+										callType: TWILIO_DIRECTION,
+										status : "voicemail",
+										duration : 0
 									},function(data){
 												if(TWILIO_CALLED_NO != "") {
 										$.post( "/core/api/widgets/twilio/savecallactivityById?note_id="+
