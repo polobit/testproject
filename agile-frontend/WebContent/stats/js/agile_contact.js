@@ -48,7 +48,11 @@ function agile_createContact(data, callback)
 	var utm_params_from_cookie = agile_getUtmParamsAsProperties();
 
 	//Get Browser id of push notification
-	var push_notification_browser_id = agile_getPushNotificationBrowserId();
+	var push_notification_browser_id = "";
+
+	agile_getPushNotificationBrowserId(function(browserId) {
+		push_notification_browser_id = browserId;
+	});
 
 	// Add properties to model
 	model.properties = properties;
@@ -130,7 +134,7 @@ function agile_createContact(data, callback)
 	}
 
 	//adding Browser id in params
-	if(push_notification_browser_id)
+	if(push_notification_browser_id != "")
 		  params = params + "&browserId="+encodeURIComponent(push_notification_browser_id);
 
 

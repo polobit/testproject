@@ -41,7 +41,7 @@ public class JSAPIUtil
 	        "API key missing"), DUPLICATE_CONTACT("Duplicate found for \"%s\""), CONTACT_LIMIT_REACHED(
 	        "Contacts limit reached"), PROPERTY_MISSING("Property not found for contact"), INVALID_TAGS(
 	        "Invalid tags"), ID_NOT_FOUND("ID missing in \"%s\" data"), ENTITY_NOT_FOUND("\"%s\" not found with ID"),CONTACT_CREATE_RESTRICT(
-			"Contact cannot be created due to security"), CONTACT_UPDATE_RESTRICT("Contact cannot be updated due to security");
+			"Contact cannot be created due to security"), CONTACT_UPDATE_RESTRICT("Contact cannot be updated due to security"), INVALID_BROWSER_ID("Contact cannot subscribe Push Notification");
 
 	String errorMessage;
 

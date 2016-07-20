@@ -78,7 +78,7 @@ function regiseterServiceWorkers()  {
       else
         browser_id = "chrome" + browser_id;
 
-     var params = "broserId=" +encodeURIComponent(browser_id);
+     var params = "browserId=" +encodeURIComponent(browser_id);
 
      var properties = [];
 
@@ -125,16 +125,16 @@ function regiseterServiceWorkers()  {
 
   ///Get push notification browser id from browser
 
-  function agile_getPushNotificationBrowserId(){
+  function agile_getPushNotificationBrowserId(callback){
     try
     {
+      var browser_id="";
       navigator.serviceWorker.register('notification/agile-service-workers.js',{ scope: './notification/'}).then(function (registration) 
         {
 
           registration.pushManager.getSubscription().then(
           function(subscription) 
           { 
-             console.log("Browser id : "+subscription.endpoint);
              browser_id = subscription.endpoint.substring(subscription.endpoint.lastIndexOf("/")+1)
 
              if(subscription.endpoint.indexOf("mozilla")>0)
@@ -142,15 +142,16 @@ function regiseterServiceWorkers()  {
              else
                browser_id = "chrome" + browser_id;
 
-             return browser_id;
-
+            console.log(browser_id);
+             callback(browser_id);
           });
         });
 
      }
       catch(err)
       {
-        return;
+        console.log(err);
+        callback("");
       }
 
   }

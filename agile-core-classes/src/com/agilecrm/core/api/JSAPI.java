@@ -169,7 +169,7 @@ public class JSAPI
 	    Contact contact=null;
 	    
 	    //If browser id exist
-	     if(!StringUtils.isBlank(browserId)){
+	     if(!StringUtils.isBlank(browserId) || browserId !="null"){
 	    	 contact = ContactUtil.searchContactByBrowserId(browserId);
 	     }
 	     
@@ -268,13 +268,16 @@ public class JSAPI
 	    if(!js_scopes.contains("create_contact"))
 	    	return JSAPIUtil.generateJSONErrorResponse(Errors.CONTACT_CREATE_RESTRICT);
 	    
+	    if(browserId == "null" || StringUtils.isBlank(browserId))
+	    	return JSAPIUtil.generateJSONErrorResponse(Errors.INVALID_BROWSER_ID);
+	    
 	    //check if contact already exist
 	    if (!StringUtils.isBlank(email))
 	    {
 	    	System.out.println(email.toLowerCase());
 	    	Contact contact =ContactUtil.searchContactByEmail(email);
 	    	
-	    	if(contact !=null){
+	    	if(contact !=null ){
 	    		contact.addBrowserId(browserId);
 	    		contact.save();
 	    		contact.addTags("Push Notification");
