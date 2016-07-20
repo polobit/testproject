@@ -394,7 +394,7 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 			if (is_disabled)
 				sendEmail(SendMail.USER_DISABLED_SUBJECT, SendMail.USER_DISABLED_NOTIFICATION);
 			else
-				sendEmail(SendMail.USER_ENABLED_NOTIFICATION, SendMail.USER_ENABLED_NOTIFICATION);
+				sendEmail(SendMail.USER_ENABLED_SUBJECT, SendMail.USER_ENABLED_NOTIFICATION);
 		}
 		catch (Exception e)
 		{
