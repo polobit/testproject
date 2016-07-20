@@ -254,7 +254,7 @@ public class ContactCSVExport
 		    if (field.value != null){
 		    	setFieldAtIndex(field.name, field.value, str, indexMap);
 		    	try{
-			    	Integer index = indexMap.get(field.name + "_name");
+			    	Integer index = indexMap.get(field.name + " Name");
 			    	if(index != null){  // if the dynamic index is present then it denotes that the custom filed is contact or company type
 			    		List<Contact> contacts = ContactUtil.getContactsBulk(new JSONArray(field.value)) ;
 			    		if (contacts.size() > 0) {

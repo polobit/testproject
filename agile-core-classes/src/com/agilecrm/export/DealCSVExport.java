@@ -111,7 +111,7 @@ public class DealCSVExport
 	    {
 		str[indexMap.get(field.name)] = field.value;
 		try{
-			boolean index = indexMap.containsKey(field.name+"_name");
+			boolean index = indexMap.containsKey(field.name+" Name");
 			if(index){
 				// this is either contact or company type
 				//fetch the conntact r company
