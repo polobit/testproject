@@ -864,9 +864,14 @@ public class QueryDocumentUtil {
 				{
 					SearchFilter newfilter = new DealFilter();
 					newfilter.rules.add(filter.or_rules.get(i));
-					newfilter.rules.add(filter.or_rules.get(i+1));
 					filter.or_rules.remove(i);
+					if(filter.or_rules.size()>0)
+					{
+					if(filter.or_rules.get(i).LHS.equalsIgnoreCase("milestone")){
+					newfilter.rules.add(filter.or_rules.get(i));
 					filter.or_rules.remove(i);
+					}
+					}
 					dealsrules.add(constructQuery(newfilter.rules, "AND"));
 					i--;
 				}
