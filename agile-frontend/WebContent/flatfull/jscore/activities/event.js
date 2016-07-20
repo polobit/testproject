@@ -516,9 +516,14 @@ $(function()
 			});
 			return indexed_array;	*/
 	  });
+	    
+	    $('body').on('click',".AndroidExtension",function(e){
+	    	$(this).parents(".popover").popover('hide');
+	    });
 
 	  $('body').on('click',".chromeExtension",function(e){
 	  	// e.stopImmediatePropagation();
+	  	$(this).parents(".popover").popover('hide');
 	  	e.stopPropagation();
 	  	$("#chrome-extension-modal").addClass("hide")
 	  	console.log("before the chrome installation");
