@@ -134,7 +134,7 @@ public class DefaultWidgets {
 		"/widgets/skype.js", "/img/plugins/skype-call.png", "/img/plugins/skype-call.png", null,WidgetType.CALL));
 		
 		widgets.add(new Widget("FullContact", 
-				"FullContact hepls to fetch the contact details based on email.",
+				"Stay updated on customer’s profile through FullContact integration with information like name, photo, company, address and websites.",
 				"/widgets/fullcontact.js", "/img/plugins/fullcontact-lg-logo.png",
 				"/img/plugins/fullcontact-sm-logo.png", null,WidgetType.SOCIAL));
 

@@ -2,7 +2,7 @@ var fullContactObjects = {};
 
 function loadFullContactData(apikey, emailID){	
 	head.js('/flatfull/lib/jquery.fullcontact.2.2.js', function(){		
-		var testEmail = "bart@fullcontact.com";
+		//emailID = "bart@fullcontact.com";
 		$.fullcontact.emailLookup(apikey, emailID, function(contactObj){			
 			if(contactObj){	
  				var status = contactObj.status;
@@ -24,8 +24,11 @@ function loadFullContactData(apikey, emailID){
 					var websitesArray =  contactInfo["websites"];
 					var chatsArray = contactInfo["chats"];
 
-					var addressObject = contactObj["demographics"];
-					var locationObject = addressObject["demographics"];
+					var addressObject = contactObj["demographics"];					
+					var locationObject;
+					if(addressObject){
+						locationObject = addressObject["locationDeduced"];
+					}	
 
 					// Agile Contact fields.
 					var first_name;
@@ -42,15 +45,6 @@ function loadFullContactData(apikey, emailID){
 
 					// console.log("fullContact **** 2 ");
 			 		// console.log(contactObj);
-
-					// 
-					// ------------------------ Full contact fields ---------------------
-					// demographics- locationDeduced - country, state, city
-					// contactInfo - Chats Array - skype, gtalk, googletalk
-					// contactInfo - websites Array - websites										
-					// socialProfiles - youtube, facebook, twitter, GooglePlus, LinkedIn, xing, GitHub, Flickr
-
-					//newArray.push.apply(newArray, newCode);
 
 					// First name and last name.
 					if(contactInfo){
@@ -71,7 +65,7 @@ function loadFullContactData(apikey, emailID){
 						if(!last_name){
 							if(contactInfo["familyName"]){
 								last_name = contactInfo["familyName"];	
-								resultArray.push("Last Name");
+								resultArray.push("Last name");
 								newProperties.push(setPropertyForContact("last_name", last_name, null, "SYSTEM"));
 							}				
 						}
@@ -117,117 +111,132 @@ function loadFullContactData(apikey, emailID){
 					}
 
 					if(socialProfilesArray){
-						var web_url = getPropertyValueBySubtype(properties, "website", "URL");
-						if(web_url){
+						var fullSocialArray = ["youtube", "github", "facebook", "google", "xing"];
+						var agileSocialArray = ["YOUTUBE", "GITHUB", "FACEBOOK", "GOOGLE-PLUS", "XING"];	
+						var flagText = ["Youtube", "Github", "Facebook", "Google+", "xing"];					
 
-						}
-
-						var web_skype = getPropertyValueBySubtype(properties, "website", "SKYPE");
-						if(web_skype){
-
-						}
-
-						var web_twitter = getPropertyValueBySubtype(properties, "website", "TWITTER");
-						if(web_twitter){
-
-						}
-
-						var web_linkedIn = getPropertyValueBySubtype(properties, "website", "LINKEDIN");
-						if(web_linkedIn){
-
-						}
-
-						var web_facebook = getPropertyValueBySubtype(properties, "website", "FACEBOOK");
-						if(web_facebook){
-
-						}
-
-						var web_xing = getPropertyValueBySubtype(properties, "website", "XING");
-						if(web_xing){
-
-						}
-
-						var web_feed = getPropertyValueBySubtype(properties, "website", "FEED");
-						if(web_feed){
-
-						}
-
-						var web_googleplus = getPropertyValueBySubtype(properties, "website", "GOOGLE_PLUS");
-						if(web_googleplus){
-
-						}
-
-						var web_flickr = getPropertyValueBySubtype(properties, "website", "FLICKR");
-						if(web_flickr){
-
-						}
-
-						var web_github = getPropertyValueBySubtype(properties, "website", "GITHUB");
-						if(web_github){
-
-						}
-
-						var web_youtube = getPropertyValueBySubtype(properties, "website", "YOUTUBE");
-						if(web_youtube){
-
-						}						
+						$.each(socialProfilesArray, function (index,value) {
+							var webValue = value;
+							var arrayIndex = fullSocialArray.indexOf(webValue.type);
+							if(arrayIndex >= 0){
+								var agileKey = agileSocialArray[arrayIndex];								
+								var webData = getPropertyValueBySubtype(properties, "website", agileKey);
+								if(!webData){
+									if(agileKey && agileKey != null){
+										resultArray.push(flagText[arrayIndex]);								
+										newProperties.push(setPropertyForContact("website", webValue.url, agileKey, "SYSTEM"));
+									}
+								}
+							}							
+						});						
 					}
 
 					if(websitesArray){
+						var web_url = getPropertyValueBySubtype(properties, "website", "URL");
+							if(!web_url){
+								var websiteURL;
+								if(websitesArray.length > 0){
+									websiteURL = websitesArray[0].url;
+								}
 
+								if(websiteURL){
+									resultArray.push("Website");	
+									newProperties.push(setPropertyForContact("website", websiteURL, "URL", "SYSTEM"));
+								}
+							}
 					}
 
 					if(chatsArray){
+						var web_skype = getPropertyValueBySubtype(properties, "website", "SKYPE");
+						if(!web_skype){
+							var webSkype;							
+							$.each(chatsArray, function (index,value) {
+								var tempObject = value;
+								if(value.client == "skype"){									
+									webSkype = value.handle;
+									resultArray.push("Skype");	
+									newProperties.push(setPropertyForContact("website", webSkype, "SKYPE", "SYSTEM"));
+									return false;
+								}
+							});
+						}
+					}
+
+					if(locationObject){
+						//office 
+						// {"address":"d 9-42-40","city":"Hyderabad","state":"Telengana","zip":"500003","country":"IN","countryname":"India"}
+						var contact_address;
+						var subTypes = [null, "office", "home", "postal"];
+						var i = 0;
+						while(!contact_address && i < subTypes.length){
+							var key = subTypes[i];
+							contact_address = getPropertyValueBySubtype(properties, "address", key);
+							i++;
+						}
+
+						if(!contact_address){
+							var addressObj = {};
+
+							var city = locationObject.city;
+							if(city){
+								addressObj.city = city.name;
+							}
+
+							var state = locationObject.state;
+							if(state){
+								addressObj.state = state.name;
+							}
+
+							var country = locationObject.country;
+							if(country){
+								addressObj.country = country.code;
+							}					
+
+							var addressString = JSON.stringify(addressObj);
+							resultArray.push("Address");	
+							console.log(addressString);
+							newProperties.push(setPropertyForContact("address", addressString, "postal", "SYSTEM"));
+						}
 
 					}
 
-					if(newProperties.length > 0){
-						// Reads current contact model form the contactDetailView
-						var contact_model = App_Contacts.contactDetailView.model;
-						var contactId = contact_model.id;
-						// Gets properties list field from contact
-						var properties = contact_model.get('properties');
-
-						$.each(newProperties, function(index,value){
-							console.log("contact details : *** " + value)
-							properties.push(value);
-						});
-
-						contact_model.set("properties", properties);
-						console.log(newProperties);
-						contact_model.url = "core/api/contacts";
-
-						// Save updated contact model
-						contact_model.save();							
-						fullContactObjects[contactId] = resultArray;
-
-						var stringArray = JSON.stringify(fullContactObjects);
-						_agile_set_prefs("fullcontact_log", stringArray);
-
+					if(newProperties.length > 0){						
 						$.each(resultArray, function(index,value){
-							displayData += "<p>"+value+"</p>";
-						});						 							
- 						$('#FullContact').html("<div class='p-sm'>"+displayData+"</div>");
+							if(value && value != null) {
+								if(index == 0){
+									displayData += value; 	
+								}else{
+									displayData += ", "+value ;
+								}
+							}
+						});			
 
-					}else{		
-
-						// Reads current contact model form the contactDetailView
-						var contact_model = App_Contacts.contactDetailView.model;
-						var contactId = contact_model.id;
-
-						resultArray = fullContactObjects[contactId];
-
-						//delete fullContactObjects[contactId];
+ 						$('#FullContact').html("<div class='p-sm'><p> New data - "+displayData+"</p></div>");
 
 
-						if(resultArray && resultArray.length > 0){
-							$.each(resultArray, function(index,value){
-								displayData += "<p>"+value+"</p>";
+ 						showAlertModal("New data is available for customer profile. Do you want to update the profile? <p>New data - " + displayData + "</p>", "confirm", function(){
+							// Reads current contact model form the contactDetailView
+							var contact_model = App_Contacts.contactDetailView.model;
+							var contactId = contact_model.id;
+							// Gets properties list field from contact
+							var properties = contact_model.get('properties');
+
+							$.each(newProperties, function(index,value){
+								console.log("contact details : *** " + value)
+								properties.push(value);
 							});
-							$('#FullContact').html("<div class='p-sm'>"+displayData+"</div>");
-						}else{
-							$('#FullContact').html("<div class='p-sm'>Nothing to update</div>");
-						}										
+
+							contact_model.set("properties", properties);
+							console.log(newProperties);
+							contact_model.url = "core/api/contacts";
+							console.log(contact_model);
+							
+							// Save updated contact model
+							contact_model.save();	
+						},undefined, "FullContact"); 						
+
+					}else{								
+						$('#FullContact').html("<div class='p-sm'>No new data available for update.</div>");										
 					}					
  				}else{ 					
  					$('#FullContact').html("<div class='p-sm'>"+contactObj.message+"</div>");
@@ -237,14 +246,8 @@ function loadFullContactData(apikey, emailID){
 	});
 }
 
-function startFullContactWidget(contact_id){
-	//console.log("FullContact loaded : "+contact_id);	
-	var fullContactLogArray = JSON.parse(_agile_get_prefs("fullcontact_log"));	
-	if(fullContactLogArray){
-		fullContactObjects = fullContactLogArray;
-	}else{
-		fullContactObjects = {};
-	}
+function startFullContactWidget(contact_id){	
+	fullContactObjects = {};	
 
 	FULLCONTACT_PLUGIN_NAME = "FullContact";
 
@@ -260,7 +263,7 @@ function startFullContactWidget(contact_id){
 	if(contact_email){		
 		loadFullContactData(fcApiKey, contact_email);
 	}else{
-		$('#FullContact').html('<div>Email not found for this contact.</div>');	
+		$('#FullContact').html('<div class="p-sm">Please update the email address to get any new information from FullContact.</div>');	
 	}
 }
 
