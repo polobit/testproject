@@ -282,6 +282,20 @@ $("#activityModal").on("click", "#eventDescriptionLink", function(e){
 		});
 		
 	});
+	$("body").on("click" , ".betaAccess", function(e){
+	  	//$(".BetaAccessForm").removeClass('hide');
+	  	$(".model-etensions").addClass("hide");
+	  		console.log("inside the sending request for the betarequest");
+	 
+	  	var json = {};
+		json.from=CURRENT_DOMAIN_USER.email;
+		json.to = "narmadha@agilecrm.com";
+		json.subject = "Request for getting the Beta Access";	
+		json.body = "Name: " +CURRENT_DOMAIN_USER.name+"<br>"+"Useremail: "+CURRENT_DOMAIN_USER.email+"<br>Domain: "+CURRENT_DOMAIN_USER.domain;
+		sendEmail(json);
+		$("#betasuccess").removeClass("hide");
+	  });
+
 
     $('body').on('click', function (e) {
 	    $('.popover').each(function () {

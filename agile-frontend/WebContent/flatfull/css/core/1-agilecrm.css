@@ -4307,3 +4307,27 @@ border-bottom-right-radius:3px;
 text-align:center;
 border: 1px solid #e5e5e5;
 }
+.extensionPopovers
+{
+
+  width:60px !important;
+}
+
+ @media screen and (-webkit-min-device-pixel-ratio:0) and (min-resolution:.001dpcm){
+    #chrome-extension a:link:after,a:visited:after {
+        content: "" !important;
+    }
+
+}
+.grid-sub-nav li#betasuccess {
+    width: 213px;
+}
+@-moz-document url-prefix(){
+    .grid-sub-nav li{
+      width:72px;
+      margin-right: 2px;
+    }
+    .grid-sub-nav li#betasuccess {
+    width: 150px;
+}
+}
