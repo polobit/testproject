@@ -111,6 +111,9 @@ if(idPath != null && !StringUtils.isEmpty(idPath) && !idPath.equals("/")) {
                     <button class="btn btn-inverse dropdown-toggle" data-toggle="dropdown">
                         <i class="caret"></i>
                     </button>
+                    <button class="btn btn-inverse">
+                        <a href="<%=MAIN_URL%>#landing-pages" id="backButton" style="color: #fff"><i class="fui-arrow-left"></i> Back</a>
+                    </button>
                     <span class="dropdown-arrow dropdown-arrow-inverse"></span>
                     <ul class="dropdown-menu dropdown-menu-inverse dropdown-menu-right">
                         <li>
@@ -118,13 +121,13 @@ if(idPath != null && !StringUtils.isEmpty(idPath) && !idPath.equals("/")) {
                                 <span class="fui-arrow-right"></span> 
                                 Page Settings                            </a>
                         </li>
-                        <li class="divider"></li>
+                        <!-- <li class="divider"></li>
                         
                         <li>
                             <a href="<%=MAIN_URL%>#landing-pages" id="backButton">
                                 <span class="fui-arrow-left"></span>
                                 Back to Landing Pages                  </a>
-                        </li>
+                        </li> -->
 
                         
                     </ul>
