@@ -62,29 +62,7 @@ function regiseterServiceWorkers()  {
        console.log("The current browser doesn't support service workers.");
 
     }
-    //storing the browser id in datastore
-  function sendSubscription(sub)
-  {
-     console.log('endpoint:'+ sub.endpoint);
-
-     var property = {};
-     if(sub.endpoint.indexOf("mozilla")>0)
-        property.name = "mozilla id";
-      else
-        property.name = "chrome id";
-
-     property.value = sub.endpoint.substring(sub.endpoint.lastIndexOf("/")+1);
-
-     _agile.get(
-     success: function (data) {
-          console.log("success");
-      },
-      error: function (data) {
-          console.log("error");
-      }
-    });
-  }
-
+   
   //Create or update contact if visitors click on allow notification
 
   function sendPushNotificationSubscription(subscription)
@@ -134,13 +112,45 @@ function regiseterServiceWorkers()  {
       }
     }
 
-    params = params+ "&contact{0}=".format(encodeURIComponent(JSON.stringify(model)));
+    params = params+ "&contact={0}".format(encodeURIComponent(JSON.stringify(model)));
 
      if(email != null || email != undefined)
-          params = params + "&email=" + encodeURIComponent(email);
+        params = params + "&email=" + encodeURIComponent(email);
 
      var agile_url = agile_id.getURL() + "/contacts/push-notification?&id=" + agile_id.get() + "&" + params;
 
      agile_json(agile_url);
            
+  }
+
+  ///Get push notification browser id from browser
+
+  function agile_getPushNotificationBrowserId(){
+    try
+    {
+      navigator.serviceWorker.register('notification/agile-service-workers.js',{ scope: './notification/'}).then(function (registration) 
+        {
+
+          registration.pushManager.getSubscription().then(
+          function(subscription) 
+          { 
+             console.log("Browser id : "+subscription.endpoint);
+             browser_id = subscription.endpoint.substring(subscription.endpoint.lastIndexOf("/")+1)
+
+             if(subscription.endpoint.indexOf("mozilla")>0)
+                 browser_id = "mozilla" + browser_id;
+             else
+               browser_id = "chrome" + browser_id;
+
+             return browser_id;
+
+          });
+        });
+
+     }
+      catch(err)
+      {
+        return;
+      }
+
   }

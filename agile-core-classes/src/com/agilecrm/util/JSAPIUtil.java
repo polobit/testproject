@@ -1,12 +1,18 @@
 package com.agilecrm.util;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.WebApplicationException;
+
 import org.apache.commons.lang.StringUtils;
+import org.codehaus.jackson.JsonGenerationException;
+import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -18,6 +24,7 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.ContactField.FieldType;
 import com.agilecrm.contact.js.JSContact;
+import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.TagUtil;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
@@ -212,5 +219,102 @@ public class JSAPIUtil
 	    
 	    return false;
     }
+    
+    /**
+     * 
+     * @param contact1
+     * @param json
+     * @param request 
+     * @param campaignIds 
+     * @param apiKey 
+     * @return contact
+     */
+    public static String updateContactPushNotification(Contact contact, String json, String campaignIds, HttpServletRequest request, String apiKey)
+    {
+	  try
+		 {
+		     ObjectMapper mapper = new ObjectMapper();
+		     
+		     String tags[] = new String[0];
+		     JSONObject obj = new JSONObject(json);
+		     
+		     Iterator<?> keys = obj.keys();
+		     while (keys.hasNext())
+		     {
+			    String key = (String) keys.next();
+				 if (key.equals("tags"))
+				  {
+				      String tagString = obj.getString(key);
+				      tagString = tagString.trim().replaceAll(" +", " ");
+				      tagString = tagString.replaceAll(", ", ",");
+				      tags = tagString.split(",");
+				  }
+				  else
+				  {
+				      JSONObject jobj = new JSONObject();
+				      jobj.put("name", key);
+				      jobj.put("value", obj.getString(key));
+				      ContactField field = mapper.readValue(jobj.toString(), ContactField.class);
+				      contact.addProperty(field);
+				  }
+		     }
+		     
+		     // Get Contact count by email
+			  String email = contact.getContactFieldValue(Contact.EMAIL);
+		     int count = ContactUtil.searchContactCountByEmail(email.toLowerCase());
+			 System.out.println("count = " + count);
+			 if (count != 0)
+			    {
+				 	return JSAPIUtil.generateJSONErrorResponse(Errors.DUPLICATE_CONTACT, email);
+			    }
+
+			 String address = contact.getContactFieldValue(Contact.ADDRESS);
+			 System.out.println("Address = " + address);
+			 
+			 if (StringUtils.isBlank(address))
+			    {
+				 	System.out.println("Adding location");
+
+				 	org.json.simple.JSONObject locJSON = GeoLocationUtil.getLocation(request);
+				 	contact.addProperty(new ContactField(Contact.ADDRESS, locJSON.toString(), null));
+			    }
+
+			    // Sets owner key to contact before saving
+			    contact.setContactOwner(JSAPIUtil.getDomainUserKeyFromInputKey(apiKey));
+
+		   if (tags.length > 0)
+		   {
+			  try
+				  {
+				    contact.addTags(tags);
+				   }
+				  catch (WebApplicationException e) {
+				      return JSAPIUtil.generateJSONErrorResponse(Errors.INVALID_TAGS);
+				  }
+			 }
+			else
+			  contact.save();
+				
+		  System.out.println("Browser Id  Contact :" + contact);
+		  
+		  return JSAPIUtil.limitPropertiesInContactForJSAPI(contact);
+	    }
+ catch (JsonGenerationException e) {
+			e.printStackTrace();
+			return null;
+		} catch (JsonMappingException e) {
+			e.printStackTrace();
+			return null;
+		} catch (IOException e) {
+			e.printStackTrace();
+			return null;
+		} catch (JSONException e) {
+			e.printStackTrace();
+			return null;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 
 }

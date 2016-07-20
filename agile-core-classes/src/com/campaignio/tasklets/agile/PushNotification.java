@@ -109,7 +109,7 @@ public class PushNotification extends TaskletAdapter
 		    	Iterator<String> browser_ids = contact.browserId.iterator();
 		    		    	
 		    	//If contact doesn't having any id then add a logs
-		    	if(browser_ids.hasNext())
+		    	if(!browser_ids.hasNext())
 		    	{
 		    		LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON), "Contact didn't subscribe for push notification. ",
 		    				    LogType.PUSH_NOTIFICATION_SKIPPED.toString());

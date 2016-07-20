@@ -155,7 +155,7 @@ public class JSAPI
     @GET
     @Produces("application/x-javascript;charset=UTF-8;")
     public String createContact(@QueryParam("contact") String json, @QueryParam("campaigns") String campaignIds,
-	    @QueryParam("id") String apiKey, @Context HttpServletRequest request)
+	    @QueryParam("id") String apiKey, @QueryParam("browserId") String browserId, @Context HttpServletRequest request)
     {
 	try
 	{
@@ -166,8 +166,18 @@ public class JSAPI
 	    if(!js_scopes.contains("create_contact"))
 		return JSAPIUtil.generateJSONErrorResponse(Errors.CONTACT_CREATE_RESTRICT);
 	    
+	    Contact contact=null;
+	    
+	    //If browser id exist
+	     if(!StringUtils.isBlank(browserId)){
+	    	 contact = ContactUtil.searchContactByBrowserId(browserId);
+	     }
+	     
+	     if(contact!=null)
+	    	return JSAPIUtil.updateContactPushNotification(contact, json, campaignIds, request, apiKey);
+	    
 	    ObjectMapper mapper = new ObjectMapper();
-	    Contact contact = mapper.readValue(json, Contact.class);
+	    contact = mapper.readValue(json, Contact.class);
 	    System.out.println(mapper.writeValueAsString(contact));
 
 	    // Get Contact count by email
@@ -252,6 +262,8 @@ public class JSAPI
 	    UserInfo userInfo = SessionManager.get();
 		
 	    HashSet<String> js_scopes = userInfo.getJsrestricted_scopes();
+	    
+	    System.out.println("Contact details : "+ContactUtil.searchContactByBrowserId(browserId));
 	    
 	    if(!js_scopes.contains("create_contact"))
 	    	return JSAPIUtil.generateJSONErrorResponse(Errors.CONTACT_CREATE_RESTRICT);
