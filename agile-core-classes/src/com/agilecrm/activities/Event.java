@@ -399,16 +399,16 @@ public class Event extends Cursor
 	}
 	String status=this.status;
 	if(status.equals("Cancelled")){
-		this.backgroundColor="rgb(212,255,207)";
+		this.backgroundColor="#FDAD9E";
 	}
 	if(status.equals("completed")){
-		this.backgroundColor="rgb(253,173,158)";
+		this.backgroundColor="#D4FFCF";
 	}
 	if(status.equals("rescheduled")){
-		this.backgroundColor="rgb(255,255,183)";
+		this.backgroundColor="#FFFFB7";
 	}
 	if(status.equals("no-show")){
-		this.backgroundColor="rgb(221,221,221)";
+		this.backgroundColor="#DDDDDD";
 	}
 	
 	
