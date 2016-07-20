@@ -292,7 +292,7 @@ jQuery.validator.setDefaults({
 					 }
 					});
 		  
-  		$("#resend-password").click(function(e) {
+  		$("body").on("click", "#resend-password", function(e) {
 			e.preventDefault();
 			$("#resend_password_form").submit();
 		});
