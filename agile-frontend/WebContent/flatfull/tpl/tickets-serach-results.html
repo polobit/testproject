@@ -21,7 +21,7 @@
 	</td>
 
 	<td class="text-muted">
-		 {{group.group_name}}
+		 {{priority}}, {{status}}
 	</td>
 
 	<td>
@@ -78,10 +78,11 @@
                     <thead>
                         <tr>
 							<th style="width:2%"></th>
-                            <th style="width:20%">Id</th>
-                            <th style="width:20%">Requester Name</th>
-                            <th style="width:20%">Group</th>
-                            <th style="width:20%">Created Date</th>
+
+                            <th style="width:25%">ID</th>
+                            <th style="width:25%">Assignee</th>
+                            <th style="width:30%">Priority & Status</th>
+                            <th style="width:25%">Created Date</th>
                         </tr>
                     </thead>
                     <tbody id="tickets-search-model-list" class="model-list-cursor" route="ticket/">
