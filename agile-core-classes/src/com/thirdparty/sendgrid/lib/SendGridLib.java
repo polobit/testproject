@@ -271,6 +271,8 @@ public class SendGridLib {
 				
 				try
 				{
+					Thread.sleep(3000); // Wait for 3 secs after creating subuser to fix emails drop
+					
 					response = HttpClientUtil.accessURLUsingHttpClient(urlBuilder, this.buildBody(email));
 				}
 				catch (IOException e1)

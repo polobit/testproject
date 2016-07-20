@@ -228,6 +228,8 @@ public class SendGridUtil
 	        	
 				System.out.println("Retrying again after creating subuser in bulk emails....");
 				
+				Thread.sleep(3000); // Wait for 3 secs after creating subuser to fix emails drop
+				
 				String res = HttpClientUtil.accessPostURLUsingHttpClient(SendGrid.SENDGRID_API_POST_URL,
 						"application/x-www-form-urlencoded", postData);
 				
