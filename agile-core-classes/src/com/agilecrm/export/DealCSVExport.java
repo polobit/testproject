@@ -130,7 +130,7 @@ public class DealCSVExport
 				}
 				nameString.replace(nameString.length()-1, nameString.length(), "");
 				nameString.append("]");
-				str[indexMap.get(field.name+"_name")] = nameString.toString();
+				str[indexMap.get(field.name+" Name")] = nameString.toString();
 			}
 			}
 		}catch(Exception e){

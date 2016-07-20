@@ -271,7 +271,7 @@ public class ContactCSVExport
 				    		}
 				    		contactName.replace(contactName.length()-1, contactName.length(),"");
 				    		contactName.append("]");
-				    		setFieldAtIndex(field.name+"_name", contactName.toString(), str, indexMap); // this is to show the name of the contact	
+				    		setFieldAtIndex(field.name+" Name", contactName.toString(), str, indexMap); // this is to show the name of the contact	
 			    		}
 			    	}		    			
 		    	}catch(Exception e){}
