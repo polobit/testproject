@@ -13,7 +13,11 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.search.AppengineSearch;
 import com.agilecrm.search.document.ContactDocument;
+import com.agilecrm.session.SessionManager;
+import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.CountryUtil;
+import com.agilecrm.util.email.SendMail;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.search.Document.Builder;
 import com.google.appengine.api.taskqueue.DeferredTask;
@@ -192,6 +196,17 @@ public class UpdateContactsOfDomainDeferredTask implements DeferredTask
 			contactSchemaUpdateStats.status = status;
 			contactSchemaUpdateStats.failedIds = failedIds;
 			contactSchemaUpdateStats.save();
+			
+			if(status.equalsIgnoreCase("COMPLETED"))
+					{
+				//SessionManager.get().getDomainId();
+				
+					DomainUser domainUser = DomainUserUtil.getCurrentDomainUser();
+					System.out.print("Domain user "+domainUser);
+					
+					SendMail.sendMail(domainUser.email, "CSV Companies Import Status", SendMail.CSV_IMPORT_NOTIFICATION,
+							new Object[] { domainUser, status });
+					}
 		} catch(Exception e) {
 			System.err.println("Exception while updating stats for domain: "+ domain);
 			e.printStackTrace();
@@ -199,6 +214,7 @@ public class UpdateContactsOfDomainDeferredTask implements DeferredTask
 			NamespaceManager.set(domain);
 		}
 	}
+	
 	
 	private void updateCountry(Contact contact)
 	{
