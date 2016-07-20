@@ -5,8 +5,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
-import org.json.JSONException;
-import org.json.JSONObject;
+import org.codehaus.jettison.json.JSONException;
+import org.codehaus.jettison.json.JSONObject;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
@@ -182,7 +182,7 @@ public class ShopifyContactWrapperImpl extends ContactWrapper
     @Override
     public ContactField getAddress()
     {
-	JSONObject address = new JSONObject();
+    	org.json.JSONObject address = new org.json.JSONObject();
 	ContactField field = null;
 	if (defaultAddress != null)
 	{
@@ -213,11 +213,11 @@ public class ShopifyContactWrapperImpl extends ContactWrapper
 		address.put("address", strete);
 		field = new ContactField(Contact.ADDRESS, address.toString(), "home");
 	    }
-	    catch (JSONException e)
-	    {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	    }
+		catch (org.json.JSONException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	return field;
     }

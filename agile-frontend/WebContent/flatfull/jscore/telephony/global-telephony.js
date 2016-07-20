@@ -60,6 +60,10 @@ function getContactImage(number, type, callback)
 	}
 }
 
+function agile_is_iPhone(){
+   return (/iPhone/i.test(navigator.userAgent));
+ }
+
 function globalCallWidgetSet()
 {
 	$
@@ -69,8 +73,34 @@ function globalCallWidgetSet()
 					{
 						console.log("default call option selected is :" + call_widget);
 
+						$("body .contact-make-call").off("click");
+						$("body .contact-make-call").off("dblclick");
+						if(agile_is_mobile_browser()){
+							if(agile_is_iPhone()){
+								$("body").on("click", ".contact-make-call", function(e){
+									e.preventDefault();
+									var phone = $(this).attr("phone");
+									window.location.href="tel://"+phone;
+								});
+								return;
+							}else{
+								$("body").on("dblclick", ".contact-make-call", function(e){
+									e.preventDefault();
+									var phone = $(this).attr("phone");
+									window.location.href="tel://"+phone;
+								});
+							}
+						}
 						if (call_widget.length == 0)
 						{
+							if(agile_is_mobile_browser()){
+								
+								$("body").on("click", ".contact-make-call", function(e){
+									e.preventDefault();
+									var phone = $(this).attr("phone");
+									window.location.href="tel://"+phone;
+								});
+							}
 							return;
 						}
 

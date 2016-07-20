@@ -149,13 +149,14 @@ public abstract class ContactSyncService implements IContactSyncService
 	try
 	{
 	    Contact contact = wrapContactToAgileSchema(object);
-
+	    System.out.println("Contact while saving"+contact);
 	    if (contact == null)
 		return contact;
 
 	    ++total_synced_contact;
 
 	    contact = saveContact(contact);
+	    System.out.println("Contact After saving"+contact);
 	   contactWrapper.updateContact(contact);
 	    // Works as save callback to perform actions like creating
 	    // notes/tasks
@@ -205,7 +206,7 @@ public abstract class ContactSyncService implements IContactSyncService
 	    {
 		e.printStackTrace();
 	    }
-
+	System.out.println("contact wrapper is " + contactWrapper);
 	return contactWrapper.getWrapper(object).buildContact();
     }
 

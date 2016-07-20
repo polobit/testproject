@@ -91,12 +91,15 @@ public class AgileUser implements Serializable
     	System.out.println(SessionManager.get().getDomainId());
     	
     	AgileUser user = (AgileUser) SessionCache.getObject(SessionCache.CURRENT_AGILE_USER);
+    	System.out.println("user = " +user);
+    	
     	if( user == null )
     	{
     		user = getCurrentAgileUserFromDomainUser(SessionManager.get().getDomainId());
     		SessionCache.putObject(SessionCache.CURRENT_AGILE_USER, user);
     	}
     	
+    	System.out.println("user2 = " + user);
     	return user;
     }
 

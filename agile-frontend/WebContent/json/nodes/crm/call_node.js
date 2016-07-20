@@ -18,7 +18,7 @@
             "name": "from",
             "id":"from",
             "title": "Select Number",
-            "fieldType": "twilio_number",
+            "fieldType": "twilio_incoming_list",
             "type": "select",
             "style": {
                 "width": "66%"

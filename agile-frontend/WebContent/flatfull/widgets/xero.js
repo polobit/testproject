@@ -52,10 +52,9 @@ function showXeroClient(contact_id)
 		    		return;
 		    	var template = $('#Xero').html($(template_ui)); 
 				console.log("libpath is" + LIB_PATH);
-				console.log(template)
-				head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
-				{
-					$(".time-ago", template).timeago();
+				console.log(template);
+				head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
+					$(".time-ago", $('#Xero')).timeago();
 				});
 				loadInvoices(0);
 			}, "#Xero");
@@ -272,8 +271,8 @@ function startXeroWidget(contact_id){
 
 	showXeroClient(contact_id);
 
-    $("#widgets").off('click','#xero_add_contact');
-	$("#widgets").on('click','#xero_add_contact', function(e)
+    $("#"+WIDGET_PARENT_ID).off('click','#xero_add_contact');
+	$("#"+WIDGET_PARENT_ID).on('click','#xero_add_contact', function(e)
 	{
 		e.preventDefault();
 
@@ -281,8 +280,8 @@ function startXeroWidget(contact_id){
 	});
 
 	// attach event to invoices + icon to get lineitems
-    $("#widgets").off('click','.invoices');
-	$("#widgets").on('click','.invoices', function(e)
+    $("#"+WIDGET_PARENT_ID).off('click','.invoices');
+	$("#"+WIDGET_PARENT_ID).on('click','.invoices', function(e)
 	{
 		e.preventDefault();
 		var invoiceId = $(this).prop('value');
@@ -329,8 +328,8 @@ function startXeroWidget(contact_id){
 	 * On click of add client button in FreshBooks, calls method to add a client
 	 * in FreshBooks with contact's first name, last name and email
 	 */
-	$("#widgets").off("click", "#XERO_show_more");
-	$("#widgets").on("click", "#XERO_show_more", function(e)
+	$("#"+WIDGET_PARENT_ID).off("click", "#XERO_show_more");
+	$("#"+WIDGET_PARENT_ID).on("click", "#XERO_show_more", function(e)
 	{
 		e.preventDefault();
 		var offSet = XEROCount * 5;

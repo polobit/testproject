@@ -1414,7 +1414,10 @@ class="icon-plus"></i> <span >Add</span></a>
 				<li class=""><a data-toggle="tab" role="tab" href="#events">Events</a></li>
 				<li class=""><a data-toggle="tab" role="tab" href="#tasks">Tasks</a></li>
 				<li class=""><a data-toggle="tab" role="tab" href="#deals">Deals</a></li>
+				{{#isNewVersionDomainUser}} {{else}}
 				<li class=""><a data-toggle="tab" role="tab" href="#cases">Cases</a></li>
+				{{/isNewVersionDomainUser}}
+
 				<li class=""><a data-toggle="tab" role="tab" href="#campaigns">Campaigns</a></li>
 				<li class=""><a data-toggle="tab" role="tab" href="#stats">Web Stats</a></li>
 				<li class=""><a data-toggle="tab" role="tab" href="#mail">Mail</a></li>
@@ -1508,7 +1511,7 @@ class="icon-plus"></i> <span >Add</span></a>
  <div class="wrapper">
  						
  
- 				<div id="widgets" class="contact_{{id}}"></div>
+ 				<div id="widgets" class="contact_{{id}}" style="max-width:250px"></div>
  					</div>
  					</div>
  					</div>

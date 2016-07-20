@@ -826,16 +826,17 @@ function setUpGlobalTwilio()
 
 		Twilio.Device.connect(function(conn)
 		{
-			console.log("Twilio call is connected");
+			console.log("Twilio call is connected after sending the request to twilio to dial");
 			// Called for all new connections
 			console.log(conn);
 			console.log(conn._status);
 			globalconnection = conn;
 
 				// If call campaign then update call noty
+			
 				if(CALL_CAMPAIGN.start && CALL_CAMPAIGN.call_from_campaign)
 				  {
-					
+					console.log("call campaign is calling and we are changing the conatiner");
 						// Change status of call
 						CALL_CAMPAIGN.call_status = "CONNECTED";				
 						
@@ -896,6 +897,7 @@ function setUpGlobalTwilio()
 			
 			try{
 				// Get all call logs for widget only on cotact detail page
+				console.log("Get all call logs for widget only on cotact detail page in disconnected function");
 				if(window.location.hash.indexOf("contact/") != -1)
 				  {
 					if(typeof getTwilioIOLogs == 'undefined')
@@ -920,9 +922,9 @@ function setUpGlobalTwilio()
 			// notes related code			
 			console.log("calSid new  " + conn.parameters.CallSid);
 			
-			
+			console.log("getting twilio widget iin disconnect");
 			twilioGetWidgetDetails(function(data){
-
+				console.log("after getting twilio widget in disconnect");
 				var widgetDetails = data;
 				var widgetPrefs = $.parseJSON(data.prefs);
 				var acc_sid = widgetPrefs.twilio_acc_sid;
@@ -998,7 +1000,8 @@ function setUpGlobalTwilio()
 
 			});
 			}catch(err){
-				console.log("error --> " + err.message);
+				console.log("error in geting twilio widget --> " + err.message);
+				console.log("dialing next call for call campaign");
 				if(CALL_CAMPAIGN.start)
 				  {
 					CALL_CAMPAIGN.state = "START";
@@ -1152,6 +1155,8 @@ function setUpGlobalTwilio()
 function twiliocall(phoneNumber, toName,conferenceName, contact)
 {
 	// get the phone number to connect the call to
+	console.log("In twilio call finction after makingcall function and starting call");
+	
 	
 	params = { "from" : Verfied_Number, "PhoneNumber" : phoneNumber};
 
@@ -1178,7 +1183,7 @@ function twiliocall(phoneNumber, toName,conferenceName, contact)
 		  	  }
 		  }	
 	}catch(err) {
-		console.log("error --> " + err.message);
+		console.log("error happened while calling from campaign --> " + err.message);
 		Twilio.Device.disconnectAll();
 		$("#callStartText").html("");
 		$("#callStartTime").html("");
@@ -1187,6 +1192,8 @@ function twiliocall(phoneNumber, toName,conferenceName, contact)
 	
 	Twilio.Device.connect(params);
 
+	console.log("calling request sent to twilio to start call");
+	
 	To_Number = phoneNumber;
 	To_Name = toName;
 	TWILIO_CALLED_NO = To_Number;	

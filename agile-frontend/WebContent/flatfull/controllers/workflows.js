@@ -82,19 +82,20 @@ var WorkflowsRouter = Backbone.Router
 			loadworkflows : function(el){
 
 				var sortKey = _agile_get_prefs("workflow_sort_key");
-				if (this.workflow_list_view && this.workflow_list_view.options.global_sort_key == sortKey && this.workflow_list_view.collection && this.workflow_list_view.collection.length > 0)
+				if (App_Workflows.workflow_list_view && App_Workflows.workflow_list_view.options.global_sort_key == sortKey && App_Workflows.workflow_list_view.collection && App_Workflows.workflow_list_view.collection.length > 0)
 				{
-					$(el).find("#workflows-collection-container").html(this.workflow_list_view.render(true).el);
+					$(el).find("#workflows-collection-container").html(App_Workflows.workflow_list_view.render(true).el);
 					return;
 				}
 
-				this.workflow_list_view = new Base_Collection_View({ 
+				App_Workflows.workflow_list_view = new Base_Collection_View({ 
 					url : '/core/api/workflows', 
 					restKey : "workflow", 
 					sort_collection : false,
 					templateKey : "workflows", 
 					individual_tag_name : 'tr', 
-					customLoader : LOADING_HTML,
+					customLoader : true,
+					customLoaderTemplate : 'agile-app-collection-loader',
 					cursor : true, 
 					page_size : 20, 
 					global_sort_key : sortKey, 
@@ -554,8 +555,7 @@ var WorkflowsRouter = Backbone.Router
 
 				$('#content').html(this.triggersCollectionView.el);
 
-				$(".active").removeClass("active");
-				$("#workflowsmenu").addClass("active");
+				make_menu_item_active("triggersmenu");
 			},
 
 			/**

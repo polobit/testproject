@@ -19,6 +19,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.DeserializationConfig;
@@ -27,9 +28,11 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.json.XML;
 
 import com.agilecrm.account.APIKey;
 import com.agilecrm.account.util.APIKeyUtil;
+import com.agilecrm.account.util.SMSGatewayUtil;
 import com.agilecrm.activities.Task;
 import com.agilecrm.activities.util.TaskUtil;
 import com.agilecrm.cases.Case;
@@ -49,6 +52,7 @@ import com.agilecrm.forms.util.FormUtil;
 import com.agilecrm.gadget.GadgetTemplate;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
+import com.agilecrm.social.TwilioUtil;
 import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.util.DomainUserUtil;
@@ -71,7 +75,11 @@ import com.campaignio.cron.util.CronUtil;
 import com.campaignio.logger.util.LogUtil;
 import com.campaignio.wrapper.LogWrapper;
 import com.google.appengine.api.NamespaceManager;
+import com.googlecode.objectify.Objectify;
+import com.googlecode.objectify.ObjectifyService;
 import com.thirdparty.sendgrid.SendGrid;
+import com.thirdparty.twilio.sdk.TwilioRestClient;
+import com.thirdparty.twilio.sdk.TwilioRestResponse;
 import com.twilio.sdk.client.TwilioCapability;
 
 /**
@@ -1259,22 +1267,104 @@ public class JSAPI
 	String toNumber =null;
 	String token =null;
 	Map<String,String> params= new HashMap<String,String>();
+	String acc_id=null;
+	String auth_token=null;
+	String number_sid=null;
+	String applicationSid=null;
+	JSONObject jsonTwilioPrefs=new JSONObject();
 	try
 	{
-	    Widget twilioObj = WidgetUtil.getWidget("TwilioIO");
+	    Widget twilioObj = SMSGatewayUtil.getSMSGatewayWidget();
+	    if(twilioObj==null)
+		return new JSONObject(params).toString();
 	    JSONObject jsonPrefs= new JSONObject(twilioObj.prefs);
 	    
-	    if(jsonPrefs.has("twilio_from_number") && jsonPrefs.get("twilio_from_number")!=null && !jsonPrefs.get("twilio_from_number").toString().isEmpty())
-		fromNumber=jsonPrefs.get("twilio_from_number").toString();
-	    else if(jsonPrefs.has("twilio_number") && jsonPrefs.get("twilio_number")!=null && !jsonPrefs.get("twilio_number").toString().isEmpty())
-		fromNumber=jsonPrefs.get("twilio_number").toString();
+	   if(!jsonPrefs.getString("sms_api").equalsIgnoreCase("TWILIO"))
+		return new JSONObject(params).toString();
 	   
+	    if(jsonPrefs.has("account_sid") && jsonPrefs.get("account_sid")!=null && !jsonPrefs.get("account_sid").toString().isEmpty())
+		acc_id=jsonPrefs.get("account_sid").toString();
+	    
+	    if(jsonPrefs.has("auth_token") && jsonPrefs.get("auth_token")!=null && !jsonPrefs.get("auth_token").toString().isEmpty())
+		auth_token=jsonPrefs.get("auth_token").toString();
+	    if(jsonPrefs.has("twilio_from_number") && jsonPrefs.get("twilio_from_number")!=null && jsonPrefs.has("account_app_sid") && jsonPrefs.get("account_app_sid")!=null){
+		
+		applicationSid=jsonPrefs.get("account_app_sid").toString();
+		fromNumber=jsonPrefs.get("twilio_from_number").toString();
+	    }
+	    else
+	    {	    
+		    TwilioRestClient client = new TwilioRestClient(acc_id, auth_token, null);
+		    TwilioRestResponse response = client.request(
+				"/" + TwilioUtil.APIVERSION + "/Accounts/" + client.getAccountSid() + "/IncomingPhoneNumbers", "GET",
+				null);	    
+		    JSONObject result = XML.toJSONObject(response.getResponseText()).getJSONObject("TwilioResponse")
+				.getJSONObject("IncomingPhoneNumbers"); 	    
+		    if (result.get("IncomingPhoneNumber") instanceof JSONObject)
+		    {
+			fromNumber=result.getJSONObject("IncomingPhoneNumber").get("PhoneNumber").toString();
+		    }
+		    else
+		    {
+			JSONArray incomingNumberArray = result.getJSONArray("IncomingPhoneNumber");
+			fromNumber=incomingNumberArray.getJSONObject(1).get("PhoneNumber").toString();
+		    }
+		    //for checking twilio widget
+		    Objectify ofy = ObjectifyService.begin();
+		    List<Widget> widgetObjList = ofy.query(Widget.class).filter("name", "TwilioIO").list();
+		    if(!widgetObjList.isEmpty())
+		    {
+		       Iterator itr=widgetObjList.iterator();
+		      
+         		  while(itr.hasNext()){
+         		      
+         			Widget widgetObj=(Widget) itr.next();
+         			if(widgetObj.prefs!=null && !widgetObj.prefs.isEmpty()){
+         			     jsonTwilioPrefs= new JSONObject(widgetObj.prefs);
+         			
+         			if (jsonTwilioPrefs.length() != 0 && jsonTwilioPrefs.has("twilio_acc_sid"))
+         			 {	
+         			    if(jsonTwilioPrefs.get("twilio_acc_sid")!=null && jsonTwilioPrefs.get("twilio_acc_sid").toString().equalsIgnoreCase(acc_id))
+         			     {  
+         				if(jsonTwilioPrefs.has("twilio_from_number"))
+         				    if( jsonTwilioPrefs.get("twilio_from_number") != null && fromNumber.equalsIgnoreCase(jsonTwilioPrefs.get("twilio_from_number").toString()))
+             					applicationSid=jsonTwilioPrefs.get("twilio_app_sid").toString();
+                           		
+         				if(jsonTwilioPrefs.has("twilio_number"))
+         				     if(jsonTwilioPrefs.get("twilio_number") != null && fromNumber.equalsIgnoreCase(jsonTwilioPrefs.get("twilio_number").toString()))
+             					applicationSid=jsonTwilioPrefs.get("twilio_app_sid").toString();             					 
+             				
+         				break;
+         			     }
+         			 }
+         		       }   				
+         		    
+         		}
+		    }
+		  //creating app sid and save into smsgate_way only for twilio
+		    if(applicationSid==null || applicationSid.isEmpty())	
+		    {
+			if (result.get("IncomingPhoneNumber") instanceof JSONObject)
+			  {
+			    number_sid=result.getJSONObject("IncomingPhoneNumber").get("Sid").toString();        
+			  }
+		        else
+			  {
+				JSONArray incomingNumberArray = result.getJSONArray("IncomingPhoneNumber");
+				number_sid=incomingNumberArray.getJSONObject(1).get("Sid").toString();
+			  }
+			applicationSid= TwilioUtil.createAppSidTwilioIO(acc_id, auth_token,number_sid,"false", "None");
+		    }   	
+		    jsonPrefs.put("account_app_sid",applicationSid);
+    		    jsonPrefs.put("twilio_from_number",fromNumber);
+    		    twilioObj.prefs=jsonPrefs.toString();
+    		    twilioObj.save();	
+	    }
 	    toNumber =WebRuleUtil.getPhoneNumberByWebruleId(Long.parseLong(webruleId));
 		
 	    //getting call token here 
 	    Long agileUserID = AgileUser.getCurrentAgileUser().id;
-	    String applicationSid = twilioObj.getProperty("twilio_app_sid");
-	    TwilioCapability capability = new TwilioCapability(twilioObj.getProperty("twilio_acc_sid"),twilioObj.getProperty("twilio_auth_token"));
+	    TwilioCapability capability = new TwilioCapability(acc_id,auth_token);
 	    capability.allowClientOutgoing(applicationSid);
 	    capability.allowClientIncoming("agileclient" + agileUserID);
 	    token = capability.generateToken(86400);
@@ -1282,11 +1372,13 @@ public class JSAPI
 	    params.put("token", token);
 	    params.put("fromNumber", fromNumber);
 	    params.put("toNumber", toNumber);
+	  
 	    
 	}
 	catch (Exception e)
 	{
 	    e.printStackTrace();
+	    System.out.println(ExceptionUtils.getFullStackTrace(e));
 	    return null;
 	}
 	

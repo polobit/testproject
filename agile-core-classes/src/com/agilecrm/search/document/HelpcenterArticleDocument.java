@@ -49,7 +49,7 @@ public class HelpcenterArticleDocument implements BuilderInterface
 
 			Document.Builder document = Document.newBuilder();
 
-			// Set ticket id as doc id
+			// Set article id as doc id
 			document.setId(article.id + "");
 
 			// Setting search tokens

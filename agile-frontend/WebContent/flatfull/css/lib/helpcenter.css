@@ -25,8 +25,9 @@
 	padding: 80px;
 	text-align: center;
 	background: #EBEBEB;
-	background-size: cover;
+	
 	background-image: url("/flatfull/img/helpcenter.png");
+	background-size: cover;
 }
 
 .search-box .input-append {
@@ -81,6 +82,7 @@ body,input,button,select,textarea {
 	padding: 19px 50px;
 	margin-left: -5px;
 	vertical-align: top;
+	height: 69px;
 }
 
 /* /.Search box */

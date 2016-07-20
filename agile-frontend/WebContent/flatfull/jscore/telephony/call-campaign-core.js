@@ -53,21 +53,25 @@ function startCallCampaign(id_array)
 	try
 	{
 		console.log("In startCallCampaign");
-
+		console.log("Contact Ids for call campaign are " + id_array);
 		// If collection is there then proceed otherwise refresh the page
 		if (!App_Contacts.contactsListView || !App_Contacts.contactsListView.collection)
 			return;
 
-		console.log("collection found");
+		console.log("Collection found for starting call campaign");
 		// step1:
+		console.log("step1 - start call campaign is true");
 		CALL_CAMPAIGN.start = true;
 		// step2:
+		console.log("step2 - showing container for call camapign");
 		addCallContainer();
 		// step3:
+		console.log("step3 - updating contact in campaign");
 		updateContactInCampaignVariable();
 		// step4:
 
 		// step5:
+		console.log("step4 - starting call functionality");
 		startCall();
 	}
 	catch (err)
@@ -177,13 +181,16 @@ function hasMoreContactLeftToDial()
 function getNextContactIdSet()
 {
 	// fetch next 25 contacts id
+	
+	console.log("in getNextContactIdSet");
 	if ((CALL_CAMPAIGN.select_all == true) && (CALL_CAMPAIGN.current_count == (CALL_CAMPAIGN.contact_id_list.length - 1)))
 	{
 		if (CALL_CAMPAIGN.current_count == (CALL_CAMPAIGN.total_count-1))
 			return;
-
+		console.log("fetch next 25 contacts id in getNextContactIdSet");
 		getNextContactsId(function(id_array)
 		{
+			console.log("fetched next 25 contacts id in getNextContactIdSet");
 			CALL_CAMPAIGN.contact_id_list = CALL_CAMPAIGN.contact_id_list.concat(id_array);
 		});
 
@@ -196,16 +203,25 @@ function getNextContactIdSet()
 function dialNextCallAutomatically()
 {
 
+	console.log("in dialNextCallAutomatically fu");
+	
 	if (hasMoreContactLeftToDial())
 	{
+		console.log("in dialNextCallAutomatically fu - hasMoreContactLeftToDial is true ");
+		console.log("setting next contact");
 		pointToNextContact();
+		console.log("updateContactInCampaignVariable from dialNextCallAutomatically")
 		updateContactInCampaignVariable();
+		console.log("changeContactDeatilView from dialNextCallAutomatically ");
 		changeContactDeatilView();
+		console.log("startCall from dialNextCallAutomatically ");
 		startCall();
+		console.log("gettine next contact set");
 		getNextContactIdSet();
 	}
 	else
 	{
+		console.log("in dialNextCallAutomatically fu - no more contact to dail");
 		console.log("Last call done");
 		stopCallCampaign();
 		var alertMessage = '<center><div class="alert alert-success fade in" style="z-index:10000;margin-bottom:0px;margin-right:-4px;font-size: 14px;"><a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a><strong>Congrats!</strong> Your call campaign has been completed successfully.</div></center>';
@@ -220,6 +236,7 @@ function dialNextCallAutomatically()
  */
 function dialNextCallManually()
 {
+console.log("dialing manually next call");
 
 	restartCalling();
 	getNextContactIdSet();
@@ -231,22 +248,29 @@ function dialNextCallManually()
 
 function startCall()
 {
-	console.log("In startCall");
+	console.log("In startCall function");
 	console.log(CALL_CAMPAIGN.total_count);
 	console.log(CALL_CAMPAIGN.current_count);
 	console.log(CALL_CAMPAIGN.contact_id_list[CALL_CAMPAIGN.current_count]);
 
 	// step1 : check if campaign is already started
+	console.log("step1A : check if campaign is already started");
 	if (!CALL_CAMPAIGN.start)
 		return;
 
 	// step2: reset some variable to make next call without error
+	console.log("step2A: reset some variable to make next call without error");
 	resetSomeCampaignVariable();
+	
 	// step3:
+	console.log("step3A : Edit call container value");
 	editCallContainer();
+	
 	// step4: After 2 sec procedure will start.
+	console.log("step4A: After 2 sec procedure will start.");
 	setTimeout(function()
 	{
+		console.log("step4B: Procedure will start after 2 sec.");
 		if (CALL_CAMPAIGN.state == "START" && CALL_CAMPAIGN.autodial == true)
 			makeCampaignCall();
 	}, 2000);
@@ -259,7 +283,11 @@ function updateContactInCampaignVariable()
 {
 	try
 	{
+		console.log("inside updatecontactincampaign");
+		console.log("CALL_CAMPAIGN.current_count " + CALL_CAMPAIGN.current_count);
 		CALL_CAMPAIGN.current_contact = getContact(CALL_CAMPAIGN.contact_id_list[CALL_CAMPAIGN.current_count]);
+		console.log("CALL_CAMPAIGN.current_contact " +CALL_CAMPAIGN.current_contact);
+		console.log("getting contact detail in updatecontactincampaign");
 		getContactDetails();
 		console.log(CALL_CAMPAIGN.current_contact);
 	}
@@ -284,7 +312,7 @@ function pointToNextContact()
 			CALL_CAMPAIGN.current_count++;
 		}
 	}
-
+	console.log("pointToNextContact - current_count now becomes" + CALL_CAMPAIGN.current_count);
 }
 
 /**
@@ -318,6 +346,7 @@ function makeCampaignCall()
 	console.log("In makeCampaignCall");
 
 	// Step1: check whether to make a call or not
+	console.log("Step1B: check whether to make a call or not (state)- " + CALL_CAMPAIGN.state);
 	if (Twilio.Device.status() == "busy")
 	{
 		$('#alreadyOnCall').modal('show');
@@ -329,6 +358,7 @@ function makeCampaignCall()
 		return;
 	}
 	// Step2: get selected phone number to call otherwise select default phone
+	console.log("Step2B: get selected phone number to call otherwise select default phone");
 	if ($("#call_campaign_contact_number").length)
 	{
 		CALL_CAMPAIGN.selected_number = $("#call_campaign_contact_number option:selected").attr("value");
@@ -339,8 +369,9 @@ function makeCampaignCall()
 	{
 		CALL_CAMPAIGN.selected_number = getPropertyValue(CALL_CAMPAIGN.current_contact.properties, "phone");
 	}
-
+	console.log("Step2B: selected_number is " + CALL_CAMPAIGN.selected_number);
 	// Step3: If selected number is present then dial
+	console.log("Step3B: If selected number is present then dial");
 	if (CALL_CAMPAIGN.selected_number)
 	{
 
@@ -404,8 +435,10 @@ function makeCampaignCall()
 
 		// step3.9: twiliocall function is called after n sec, where n=0 for
 		// manual or n otherwise
+		console.log("Step3B.9: twiliocall function is called after n sec, where n= " + rampUP_Time);
 		CALL_CAMPAIGN.callObject = setTimeout(function()
 		{
+			console.log("Step3B.10: Now dialing the phone number after " + rampUP_Time);
 			CALL_CAMPAIGN.last_clicked = null; // this is to check the last
 			// click variable in disconnect
 			// call
@@ -431,6 +464,7 @@ function changeHtml(select, value)
  */
 function restartCalling()
 {
+	console.log("in restartcalling function");
 	resetSomeCampaignVariable();
 	editCallContainer();
 	if (CALL_CAMPAIGN.autodial == true)
@@ -445,6 +479,7 @@ function restartCalling()
  */
 function resetSomeCampaignVariable()
 {
+	console.log("In resetSomeCampaignVariable");
 	// Remove Dialpad
 	if ($(".call_campaign_dialpad_btns").length != 0)
 		$(".call_campaign_dialpad_btns").remove();
@@ -477,6 +512,7 @@ function resetSomeCampaignVariable()
 	// CALL_CAMPAIGN.call_status : IDEAL if the twiliocall function is not
 	// called
 	CALL_CAMPAIGN.call_status = "IDEAL";
+	
 }
 
 /** ***** Contacts function ****** */
@@ -523,11 +559,13 @@ function getContact(contactId)
 function getContactDetails()
 {
 	// Contact name in normal format like "fname lname"
+	console.log("Inside getcontactdetail");
 	To_Name = getContactName(CALL_CAMPAIGN.current_contact);
-
+	console.log("name is  " + To_Name);
 	// Contact id for twilio reference
 	TWILIO_CONTACT_ID = CALL_CAMPAIGN.current_contact.id;
-
+	console.log("id is  " + TWILIO_CONTACT_ID);
+	
 	CALL_CAMPAIGN.current_contact_name = To_Name;
 	CALL_CAMPAIGN.current_contact_email = getPropertyValue(CALL_CAMPAIGN.current_contact.properties, "email");
 	CALL_CAMPAIGN.current_contact_phonenumber = getPhoneNumbersInArray(CALL_CAMPAIGN.current_contact.properties);
@@ -683,14 +721,16 @@ function removeAlertAutomaticallyAfter(time)
  */
 function editCallContainer()
 {
+	console.log("In edit call container");
 	CALL_CAMPAIGN.temp_count = CALL_CAMPAIGN.current_count + 1;
 	$('#call-campaign-content').find('#callnoty-container').html(getTemplate("call-campaign-body", CALL_CAMPAIGN));
 
 	var dialpad = $(getTemplate("campaign-dialpad"), {});
 	$('.campaign_noty_buttons').append(dialpad);
-
+	
+	console.log("In edit call container appending voicemail");
 	accessUrlUsingAjax("core/api/voicemails", function(resp){
-
+		console.log("In edit call container after appended voicemail--");
 		var responseJson = resp;
 		getTemplate("campaign-voicemail",responseJson, undefined, function(template_ui){
 			if(!template_ui)
@@ -714,6 +754,7 @@ function editCallContainer()
  */
 function lookForSelectedNumber()
 {
+	console.log("in lookForSelectedNumber fu");
 	CALL_CAMPAIGN.selected_number = null;
 	CALL_CAMPAIGN.remember_phone = setSelectedPhone(CALL_CAMPAIGN.remember_phone, TWILIO_CONTACT_ID);
 

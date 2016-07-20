@@ -257,5 +257,8 @@ var MODAL_MESSAGES = {
 		"title": GLOBAL_MODAL_MESSAGES.global_error_title,
 		"message" : "URL provided for Twitter is not valid"
 	},
-
+	"stripe_customfield_selection_error" : {
+		"title": "Stripe Custom Field",
+		"message" : "Please select one custom field to save the Stripe ID."
+	}
 };
