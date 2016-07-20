@@ -21,31 +21,31 @@
 					<div style="font-weight:bold;padding-bottom:10px">Total {{HashMap.type}} in CSV file: {{HashMap.TOTAL}} </div> 
 					<div style="font-weight:bold;padding-bottom:10px">Successfully Saved: {{HashMap.SAVED_CONTACTS}}</div>
 					{{#HashMap.NEW_CONTACTS}}
-						<div style="padding-bottom:10px;padding-left:15px;font-size:14px">- New {{HashMap.type}}: {{HashMap.NEW_CONTACTS}}</div>
+						<div style="padding-bottom:10px;padding-left:15px;font-size:14px; font-family: sans-serif">- New {{HashMap.type}}: {{HashMap.NEW_CONTACTS}}</div>
 						{{/HashMap.NEW_CONTACTS}}
 						
 						{{#HashMap.MERGED_CONTACTS}}
-						<div style="padding-bottom:10px;padding-left:15px;font-size:14px">- Merged {{HashMap.type}}: {{HashMap.MERGED_CONTACTS}}</div>
+						<div style="padding-bottom:10px;padding-left:15px;font-size:14px; font-family: sans-serif">- Merged {{HashMap.type}}: {{HashMap.MERGED_CONTACTS}}</div>
 						{{/HashMap.MERGED_CONTACTS}}
 						
 					{{#HashMap.TOTAL_FAILED}} 
-					<div style="padding-bottom:10px;padding-left:15px;font-size:14px">- Failed {{HashMap.type}} : {{HashMap.TOTAL_FAILED}}*</div>
+					<div style="padding-bottom:10px;padding-left:15px;font-size:14px; font-family: sans-serif">- Failed {{HashMap.type}} : {{HashMap.TOTAL_FAILED}}*</div>
 					{{/HashMap.TOTAL_FAILED}}
 					 
 					{{#HashMap.NAME_MANDATORY}} 
-					<div style="padding-bottom:10px;padding-left:15px;font-size:14px">- Name missing : {{HashMap.NAME_MANDATORY}}</div>
+					<div style="padding-bottom:10px;padding-left:15px;font-size:14px; font-family: sans-serif">- Name missing : {{HashMap.NAME_MANDATORY}}</div>
 					{{/HashMap.NAME_MANDATORY}}
 					
 					{{#HashMap.EMAIL_REQUIRED}} 
-					<div style="padding-bottom:10px;padding-left:15px;font-size:14px">- Email missing/Invalid : {{HashMap.EMAIL_REQUIRED}} </div>
+					<div style="padding-bottom:10px;padding-left:15px;font-size:14px; font-family: sans-serif">- Email missing/Invalid : {{HashMap.EMAIL_REQUIRED}} </div>
 					{{/HashMap.EMAIL_REQUIRED}}
 					
 					{{#HashMap.LIMIT_REACHED}} 
-					<div style="padding-bottom:10px;padding-left:15px;font-size:14px">- Limit exceeded : {{HashMap.LIMIT_REACHED}} </div>
+					<div style="padding-bottom:10px;padding-left:15px;font-size:14px; font-family: sans-serif">- Limit exceeded : {{HashMap.LIMIT_REACHED}} </div>
 					{{/HashMap.LIMIT_REACHED}}
 					
 					{{#HashMap.ACCESS_DENIED}} 
-					<div style="padding-bottom:10px;padding-left:15px;font-size:14px">- Access denied to update : {{HashMap.ACCESS_DENIED}} </div>
+					<div style="padding-bottom:10px;padding-left:15px;font-size:14px; font-family: sans-serif">- Access denied to update : {{HashMap.ACCESS_DENIED}} </div>
 					{{/HashMap.ACCESS_DENIED}}
 					{{#HashMap.FAILEDCSV}}
 					{{#HashMap.TOTAL_FAILED}}
