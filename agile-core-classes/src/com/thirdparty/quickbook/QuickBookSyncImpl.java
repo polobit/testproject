@@ -71,9 +71,11 @@ public class QuickBookSyncImpl extends OneWaySyncService
 	    {
 		if (customers != null)
 		{
+			System.out.println("Customers of quickbook"+customers);
 		    for (int i = 0; i < customers.length(); i++)
 		    {
 			Contact contact = wrapContactToAgileSchemaAndSave(customers.get(i));
+			System.out.println("Contact returned"+contact);
 			addCustomerInvoiceNote(contact, customers.get(i));
 			printPaymentDetails(customers.get(i));
 		    }
@@ -399,7 +401,16 @@ public class QuickBookSyncImpl extends OneWaySyncService
 		if (queryResponse.has("Customer"))
 		{
 		    customers = queryResponse.getJSONArray("Customer");
+		    	System.out.println("Customers Size quickbook---"+customers.length());
 		}
+		else
+		{
+			System.out.println("Queryresponse--"+queryResponse);
+		}
+	    }
+	    else
+	    {
+	    	System.out.println("Queryresponse is nt found in getCustomers for query"+query);
 	    }
 
 	    // get updated customer
@@ -462,6 +473,11 @@ public class QuickBookSyncImpl extends OneWaySyncService
 		    if (queryResponse.has("totalCount"))
 		    {
 			count = (int) queryResponse.get("totalCount");
+		    }
+		    
+		    else
+		    {
+		    	System.out.println("No customers found for--"+countQuery);
 		    }
 	}
 	catch (Exception e)

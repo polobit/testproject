@@ -121,7 +121,7 @@ public class BasicAuthFilter implements Filter
 			    setUser(domainUser);
 			    
 			    // Validate with Agile API Limits
-			    APILimitCheck.checkAPILimit(domainUser.domain);
+			    //APILimitCheck.checkAPILimit(domainUser.domain);
 			    
 			    chain.doFilter(httpRequest, httpResponse);
 			    return;

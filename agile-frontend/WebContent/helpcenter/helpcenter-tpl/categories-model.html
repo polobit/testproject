@@ -1,18 +1,19 @@
 <script id="helpcenter-categories-model-template" type="text/html">
 <div class="m-b row m-l-none m-r-none">
-	<h4><i class="fa fa-cube" aria-hidden="true"></i> {{name}}</h4>
+	<br/>
+	<h4> {{name}}</h4>
 	<hr class="m-t-none" style="border-color: #DADDDE;"/>
 	{{#sections}}
 	{{#if_equals visible_to "CUSTOMER"}}
-		<div class="col-md-6 m-b-md">
-			<h4 class="m-b-none"><a href="#categorie/{{categorie_id}}/section/{{id}}">
-				{{name}} ({{articles_count}})</a>
-			</h4>
-			<small class="text-muted">
-				Created on {{epochToHumanDate "ddd mmm dd, yyyy" created_time}}
-			</small>
+		
+		<div class="col-md-6 m-b-md" data-id="{{id}}">
+			<a href="#section/{{name}}">
+				<h4 class="m-b-none" >{{name}} ({{articles_count}}) </h4></a>	
 		</div>
 	{{/if_equals}}
+	{{else}}
+	No sections found.
 	{{/sections}}
+
 </div>
 </script>

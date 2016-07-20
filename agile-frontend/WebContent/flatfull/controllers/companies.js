@@ -19,7 +19,11 @@ var CompaniesRouter = Backbone.Router
 		
 		"company-edit" : "editCompany",
 		
-		"company-view-prefs" : "companyViewPrefs"
+		"company-view-prefs" : "companyViewPrefs",
+
+		"duplicate-company/:id" : "duplicateCompany",
+
+		"merge-companies" : "mergeCompanies"
 	},
 	
 	/**
@@ -193,8 +197,11 @@ var CompaniesRouter = Backbone.Router
 		 * cursor and page_size options are taken to activate
 		 * infiniScroll
 		 */
-		this.companiesListView = new Contacts_Events_Collection_View({ url : url, restKey : "contact", modelData : view_data, global_sort_key : sort_key,
-			templateKey : template_key, individual_tag_name : 'tr', slateKey : slateKey, cursor : true, request_method : 'POST', post_data: {'filterJson': postData}, page_size : 25, sort_collection : false,
+		this.companiesListView = new Contacts_Events_Collection_View({ 
+			url : url, restKey : "contact", modelData : view_data, global_sort_key : sort_key,
+			templateKey : template_key, individual_tag_name : 'tr', slateKey : slateKey, 
+			cursor : true, request_method : 'POST', post_data: {'filterJson': postData}, page_size : 25, 
+			sort_collection : false,
 			postRenderCallback : function(el, collection)
 			{
 				// To set chats and view when contacts are fetch by
@@ -379,7 +386,7 @@ var CompaniesRouter = Backbone.Router
 		this.companyDetailView = new Contact_Details_Model_Events({ model : company, isNew : true, template : "company-detail",
 			postRenderCallback : function(el)
 			{
-				fill_company_related_contacts(id, 'company-contacts', el);
+				//fill_company_related_contacts(id, 'company-contacts', el);
 				// Clone contact model, to avoid render and
 				// post-render fell in to
 				// loop while changing attributes of contact
@@ -392,6 +399,8 @@ var CompaniesRouter = Backbone.Router
 
 				company_util.starify(el);
 				company_util.show_map(el);
+				load_company_tab(el, company.toJSON());
+
 				if(company)
 				addTypeCustomData(company.get('id') , el);
 				// fill_owners(eidl, contact.toJSON());
@@ -504,4 +513,99 @@ var CompaniesRouter = Backbone.Router
 				deserialize_contact(company, 'continue-company');
 		}, company.type);
 	},
+
+	duplicateCompany : function(company_id){
+
+		dup_companies_array.length = 0;
+		var max_companies_count = 20;
+		var individual_tag_name = "tr";
+
+		// Default url for contacts route
+		this.contact_id = company_id;
+		var url = '/core/api/search/duplicate-companies/' + company_id;
+		var collection_is_reverse = false;
+		template_key = "duplicate-companies";
+
+		if (App_Companies.companyDetailView === undefined){
+			Backbone.history.navigate("company/" + company_id, { trigger : true });
+			return;
+		}
+
+		/*
+		 * cursor and page_size options are taken to activate
+		 * infiniScroll
+		 */
+		this.duplicateCompanyListView = new Contacts_Events_Collection_View({
+			url : url, 
+			templateKey : template_key, 
+			individual_tag_name : 'tr', 
+			cursor : true,
+			page_size : 25, 
+			sort_collection : collection_is_reverse, 
+			slateKey : null, 
+			postRenderCallback : function(el){
+				// this.duplicateContactsListView.collection.forEach(function(model,
+				// index) {
+				// model.set('master_id',contact_id);
+				// });
+			} 
+		});
+
+		// Contacts are fetched when the app loads in the initialize
+		this.duplicateCompanyListView.collection.fetch();
+		$('#content').html(this.duplicateCompanyListView.render().el);
+		$(".active").removeClass("active");
+		$("#companiesmenu").addClass("active");
+
+	},
+
+	mergeCompanies : function(){
+
+		var id = dup_companies_array[0];
+		var max_companies_count = 20;
+		var individual_tag_name = "table";
+
+		var collection_is_reverse = false;
+		template_key = "merge-companies";
+
+		if (App_Companies.duplicateCompanyListView == undefined || dup_companies_array.length<1){
+			Backbone.history.navigate("companies", { trigger : true });
+			return;
+		}
+		var contacts = [];
+		for (var i = 0; i < dup_companies_array.length; i++){
+			var contact_id = Number(dup_companies_array[i]);
+			var data = App_Companies.duplicateCompanyListView.collection.where({ id : contact_id });
+			var temp = contacts.concat(data);
+			contacts = temp;
+		}
+		var bigObject = {};
+		var master_record = App_Companies.companyDetailView.model.toJSON();
+		console.log(master_record);
+		var objects = []
+		var length = 0;
+		objects[0] = master_record;
+		for (i = 0; i < contacts.length; i++){
+			objects[i + 1] = contacts[i].toJSON();
+			length++;
+		}
+		bigObject["contacts"] = objects;
+		bigObject["length"] = length;
+		
+		// Contact Edit - take him to continue-contact form
+		add_custom_fields_to_form(bigObject, function(contact){
+			this.mergeContactsView = new Contact_Details_Model_Events({ 
+				template : template_key, data : bigObject, 
+				postRenderCallback : function(el){
+				
+				} 
+			});
+
+			$('#content').html(this.mergeContactsView.render(true).el);
+			$( window ).scrollTop(0);
+			$(".active").removeClass("active");
+			$("#companiesmenu").addClass("active");
+
+		}, master_record.type);	
+	}
 });

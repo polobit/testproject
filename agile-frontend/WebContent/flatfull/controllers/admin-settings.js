@@ -59,7 +59,10 @@ var AdminSettingsRouter = Backbone.Router.extend({
 	"change-domain" : "changeDomain",
 
 	/* Java Script API Permission*/
-	"js-security" : "jsSecuritySettings"
+	"js-security" : "jsSecuritySettings",
+
+	/* SSO Login */
+	"sso-login" : "ssoLoginSettings"
 
 
 	},
@@ -126,6 +129,9 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			var view = new Base_Model_View({ url : '/core/api/account-prefs', template : "admin-settings-account-prefs", postRenderCallback : function()
 			{
 				ACCOUNT_DELETE_REASON_JSON = undefined;
+				
+			},saveCallback : function(){
+				location.reload(true);
 			} });
 
 			
@@ -253,6 +259,48 @@ var AdminSettingsRouter = Backbone.Router.extend({
 
 			$('#content').find('#js-security-accordian-template').html(view.render().el);
 	
+	},
+
+	ssoLoginSettings : function()
+	{
+			
+			if (!CURRENT_DOMAIN_USER.is_admin)
+		{
+			$('#content').html(getTemplate('others-not-allowed',{}));
+			return;
+		}
+		var that = this;
+		$('#content').html("<div id='account-pref'>&nbsp;</div>");
+		getTemplate("admin-settings", {}, undefined, function(template_ui){
+			if(!template_ui)
+				  return;
+				
+			$('#account-pref').html($(template_ui));
+			$('#account-pref').find('#admin-prefs-tabs-content').html(getTemplate("settings-account-tab"), {});
+			var view = new Base_Model_View({ url : '/core/api/sso/jwt', template : "admin-settings-sso-login",
+			postRenderCallback : function()
+			{
+				
+			},saveCallback : function(){
+				console.log("saveCallback");
+				App_Admin_Settings.ssoLoginSettings();
+				showNotyPopUp("information", "Preferences saved successfully", "top", 1000);
+			},
+			deleteCallback : function(){
+				console.log("deleteCallback");
+				App_Admin_Settings.ssoLoginSettings();
+			} });
+			
+			$('#content').find('#admin-prefs-tabs-content').find('#settings-account-tab-content').html(view.render().el);
+			$('#content').find('#AdminPrefsTab .select').removeClass('select');
+			$('#content').find('.account-prefs-tab').addClass('select');
+			$(".active").removeClass("active");
+			$('.settings-sso-login').addClass('active');
+			$('#account-pref').find('#admin-prefs-tabs-content').parent().removeClass('bg-white');
+			//$('.settings-sso-login').parent().removeClass('b-b-none');
+
+		}, "#account-pref");
+
 	},
 	
 	/**
@@ -891,6 +939,8 @@ var AdminSettingsRouter = Backbone.Router.extend({
 					value = 'MANDRILL';
 				else if (id == 'ses')
 	                value = 'SES';
+	            else if(id=='mailgun')
+	            	value='MAILGUN';
 
 				var emailGateway;
 				$.each(that.integrations.collection.where({name:"EmailGateway"}),function(key,value){
@@ -930,6 +980,9 @@ var AdminSettingsRouter = Backbone.Router.extend({
 
 						if(id=="ses"){
 							$("#integrations-image",el).attr("src","img/crm-plugins/ses_logo.png");
+					    }
+					    if(id=="mailgun"){
+							$("#integrations-image",el).attr("src","img/crm-plugins/mailgun.png");
 					    }
 						
 					}, saveCallback : function()
@@ -1379,3 +1432,5 @@ function getDomainFromURL(){
 		return "my";
 	return temp[0];
 }
+
+

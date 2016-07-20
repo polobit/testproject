@@ -77,7 +77,7 @@ function isValidForm(form) {
 		return isAlphaNumeric(value);
 	//	console.log(params);
 		
-	}, "Should start with an alphabet and special characters are not allowed.");
+	}, "Label should start with an alphabet and special characters except underscore are not allowed.");
 
 	// Internal regex of jQuery validator allows for special characters in e-mails.
 	// This regex solves that, overriding 'email'
@@ -87,7 +87,7 @@ function isValidForm(form) {
 			return true;
 		
 		return /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/.test(value);
-	}," Please enter a valid email.");
+	}," Please enter a valid email."); 
 
 	// Phone number validation
 	jQuery.validator.addMethod("phone", function(value, element){
@@ -158,6 +158,15 @@ function isValidForm(form) {
 			return false;
 		
 		return /^[0-9\-]+$/.test(value);
+	}," Please enter a valid number.");
+
+	//Positive Number validation which not accepts zero
+	jQuery.validator.addMethod("number_grater_than_zero", function(value, element){
+		
+		if(value=="" || (!isNaN(value) && parseFloat(value) == 0))
+			return false;
+		
+		return /^[0-9]+$/.test(value);
 	}," Please enter a valid number.");
 
 	//Positive Number validation
@@ -256,15 +265,15 @@ function isValidForm(form) {
 	// domain name validation
 	jQuery.validator.addMethod("domain_format", function(value, element){
 		
-		return /^[a-zA-Z][a-zA-Z0-9-_\.]{3,20}$/.test(value);
-	}," Name should be between 4-20 characters in length. Both letters and numbers are allowed but it should start with a letter.");
+		return /^[a-zA-Z][a-zA-Z0-9-_]{3,20}$/.test(value);
+	}," Name should be between 4-20 characters in length. Both letters and numbers are allowed but it should start with a letter. Cannot contain special characters other than '_' and '-'.");
     
 
     jQuery.validator.addMethod("customFieldSpecialCharacter", function(value, element){
 		
-		var custvals = /^\s*[a-zA-Z0-9\s]+\s*$/;
+		var custvals = /^\s*[_a-zA-Z0-9\s]+\s*$/;
 		return custvals.test(value);
-	}," Label should not contain special characters");
+	}," Label should start with an alphabet and special characters except underscore are not allowed.");
     jQuery.validator.addMethod("tickets_group_name", function(value, element){
 
 		return /^[a-zA-Z0-9._]*$/.test(value);

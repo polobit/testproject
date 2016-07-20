@@ -480,6 +480,30 @@ $(function()
 	 		highlight_event();
 	  		
 	  });
+	  $("body").on('click','#chrome-extension',function(e){
+		
+		$("#chrome-extension-modal").html(getTemplate("chrome-modal"));
+		$("#chrome-extension-modal").modal('show');
+	});
+
+	  $('body').on('click',".chromeExtension",function(e){
+	  	// e.stopImmediatePropagation();
+	  	e.stopPropagation();
+	  	//$("#chrome-extension-modal").addClass("hide")
+	  	console.log("before the chrome installation");
+	  	try{
+	  		chrome.webstore.install("https://chrome.google.com/webstore/detail/eofoblinhpjfhkjlfckmeidagfogclib", 
+		        function(d){
+		          console.log("installed")
+		        },function(e){
+		          console.log("not installed: "+ e)
+		        });
+	  	}catch(e){
+	  		console.log(e);
+	  	}
+      	
+      	console.log("after the chrome installation")
+	  })
 
 	/**
 	 * Sets the start time with current time and end time half an hour more than
@@ -489,7 +513,7 @@ $(function()
 	{
 		// Show related to contacts list
 		var el = $("#activityForm");
-		$('#task-date-1').datepicker({ format : CURRENT_USER_PREFS.dateFormat , weekStart : CALENDAR_WEEK_START_DAY});
+		$('#task-date-1').datepicker({ format : CURRENT_USER_PREFS.dateFormat , weekStart : CALENDAR_WEEK_START_DAY, autoclose: true});
 		$('#task-date-1').datepicker('update');
 
 		agile_type_ahead("event_related_to", el, contacts_typeahead);
@@ -601,7 +625,7 @@ $(function()
 		 * and activity-update modal
 		 */
 
-		var eventDate = $('#event-date-1').datepicker({ format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY }).on('changeDate', function(ev)
+		var eventDate = $('#event-date-1').datepicker({ format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY, autoclose: true }).on('changeDate', function(ev)
 		{
 			// If event start date is changed and end date is less than start date,
 			// change the value of the end date to start date.
@@ -618,8 +642,8 @@ $(function()
 		});
 
 
-		$('#event-date-2').datepicker({ format : CURRENT_USER_PREFS.dateFormat , weekStart : CALENDAR_WEEK_START_DAY});
-		$('#update-event-date-1').datepicker({ format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY }).on('changeDate', function(ev)
+		$('#event-date-2').datepicker({ format : CURRENT_USER_PREFS.dateFormat , weekStart : CALENDAR_WEEK_START_DAY, autoclose: true});
+		$('#update-event-date-1').datepicker({ format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY, autoclose: true }).on('changeDate', function(ev)
 
 		{
 			// If event start date is changed and end date is less than start date,
@@ -636,7 +660,7 @@ $(function()
 
 		});
 
-		$('#update-event-date-2').datepicker({ format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY });
+		$('#update-event-date-2').datepicker({ format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY, autoclose: true });
 
 
 		/**
@@ -1039,8 +1063,92 @@ function save_event(formId, modalName, isUpdate, saveBtn, el,callback)
 
 							});
 						}
-						
-						
+						else if (App_Companies.companyDetailView && Current_Route == "company/" + App_Companies.companyDetailView.model.get('id'))
+						{
+
+							/*
+							 * Verifies whether the added task is related to the
+							 * company in company detail view or not
+							 */
+							$.each(event.contacts, function(index, contact)
+							{
+								if (contact.id == App_Companies.companyDetailView.model.get('id'))
+								{
+
+									// Add model to collection. Disabled sort
+									// while adding and
+									// called
+									// sort explicitly, as sort is not working
+									// when it is called
+									// by add
+									// function
+									if (eventsView && eventsView.collection)
+									{
+										var owner = data.get("owner_id");
+
+									  	if(!owner){
+									  		owner = data.get("owner").id;
+									  	}
+
+										if (eventsView.collection.get(data.id))
+										{
+											if(hasScope("VIEW_CALENDAR") || CURRENT_DOMAIN_USER.id == owner){
+												eventsView.collection.get(data.id).set(new BaseModel(data));
+											}
+											
+										}
+										else
+										{
+											if(hasScope("VIEW_CALENDAR") || CURRENT_DOMAIN_USER.id == owner){
+												eventsView.collection.add(new BaseModel(data), { sort : false });
+												eventsView.collection.sort();
+											}
+										}
+										eventsView.render(true);
+									}
+
+									// Activates "Timeline" tab and its tab
+									// content in
+									// contact detail view
+									// activate_timeline_tab();
+									// add_entity_to_timeline(data);
+
+									return false;
+								}
+
+							});
+						}
+				
+
+
+
+						else if (App_Portlets.currentPosition && App_Portlets.todayEventsCollection && App_Portlets.todayEventsCollection[parseInt(App_Portlets.currentPosition)] && (Current_Route == undefined || Current_Route == 'dashboard'))
+						{
+							if (isUpdate)
+								App_Portlets.todayEventsCollection[parseInt(App_Portlets.currentPosition)].collection.remove(json);
+
+							// Updates events list view
+							App_Portlets.todayEventsCollection[parseInt(App_Portlets.currentPosition)].collection.add(data);
+
+							App_Portlets.todayEventsCollection[parseInt(App_Portlets.currentPosition)].render(true);
+
+						}
+						else if (App_Portlets.currentPortletName && App_Portlets.currentPortletName == 'Mini Calendar')
+					      {
+							if($('.minical-portlet-event').attr('data-date')!=undefined){
+								var a=new Date(parseInt($('.minical-portlet-event').attr('data-date')));	
+								a.setHours(0,0,0,0);
+								_agile_set_prefs("current_date_calendar",a);
+							}
+							else{
+								var a=new Date(parseInt($('.minical-portlet-event-add').attr('data-date')));	
+								a.setHours(0,0,0,0);
+								_agile_set_prefs("current_date_calendar",a);
+							}
+							$('#calendar_container').fullCalendar( 'refetchEvents' );
+						       App_Portlets.refetchEvents = true;
+						       //_agile_delete_prefs('current_date_calendar');
+					      }
 						else if (App_Deal_Details.dealDetailView && Current_Route == "deal/" + App_Deal_Details.dealDetailView.model.get('id'))
 						{
 

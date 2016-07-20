@@ -30,12 +30,12 @@ function createDealsNestedCollection(pipeline_id,milestones,currentTrack)
 	initDealListCollection(milestones);
 
 	// Url to call DB
-	var initialURL = '/core/api/opportunity/based?pipeline_id=' + pipeline_id + '&order_by=close_date';
+	var initialURL = '/core/api/deal/filters/query/grid/'+_agile_get_prefs('deal-filter-name')+'?pipeline_id=' + pipeline_id + '&order_by='+getDealSortFilter();
 
-	if (_agile_get_prefs('deal-filters'))
+	/*if (_agile_get_prefs('deal-filters'))
 	{
 		initialURL += '&filters=' + encodeURIComponent(getDealFilters());
-	}
+	}*/
 
 	// Creates main collection with deals lists
 	for ( var i in milestones)
@@ -178,12 +178,29 @@ function dealsFetch(base_model)
         
         $('a.deal-notes').tooltip();
         setup_deals_in_milestones('opportunities-by-paging-model-list');
-		dealsCountFetch(base_model, function(deals_count){
+        var deals_count = 0;
+        if(data && data.models && data.models[0])
+        {
+        	deals_count = data.models[0].get("count");
+        }
+        if(deals_count > 1000)
+		{
+			$('#' + base_model.get("heading").replace(/ +/g, '') + '_count').text("1000+");
+		}
+		else
+		{
+			$('#' + base_model.get("heading").replace(/ +/g, '') + '_count').text(deals_count);
+		}
+        if(deals_count <= 1000)
+		{
+			dealTotalCountForPopover(heading);
+		}
+		/*dealsCountFetch(base_model, function(deals_count){
 			if(deals_count <= 1000)
 			{
 				dealTotalCountForPopover(heading);
 			}
-		});
+		});*/
 	} });
 }
 
@@ -284,17 +301,9 @@ console.log('------popover pipeline id-----', pipeline_id);
 	var milestones = currentTrack.milestones.split(',');
 	console.log(milestones);
 
-	// Url to call DB
-	var initialURL = '/core/api/opportunity/totalDealValue?pipeline_id=' + pipeline_id + '&order_by=close_date';
-
-	if (_agile_get_prefs('deal-filters'))
-	{
-		initialURL += '&filters=' + encodeURIComponent(getDealFilters());
-	}
-
 	// Creates main collection with deals lists
 		var newDealList;
-			var url = initialURL + "&milestone=" + milestone;
+			var url = '/core/api/deal/filters/query/total/'+_agile_get_prefs('deal-filter-name')+'?pipeline_id=' + pipeline_id + '&order_by='+getDealSortFilter()+'&milestone='+milestone;
 			newDealList = { "heading" : milestone, "url" : url};
 			if(currentTrack.won_milestone == milestone)
 				newDealList.won_milestone = currentTrack.won_milestone;

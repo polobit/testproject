@@ -3,6 +3,8 @@ package com.agilecrm.landingpages;
 import javax.persistence.Id;
 import javax.persistence.PrePersist;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.condition.IfDefault;
@@ -15,6 +17,9 @@ public class LandingPage
 
     @NotSaved(IfDefault.class)
     public String name = null;
+    
+    @NotSaved(IfDefault.class)
+    public String dummy_name = null;
 
     @NotSaved(IfDefault.class)
     public String html = null;
@@ -74,6 +79,12 @@ public class LandingPage
 	@PrePersist
 	private void PrePersist()
 	{
+		
+		// Trim name and make dummy one to sore
+		if(StringUtils.isNotBlank(name)){
+			dummy_name = name.toLowerCase().trim();
+	    }
+		
 		// Initializes created Time
 		if (created_time == 0L)
 			created_time = System.currentTimeMillis() / 1000;

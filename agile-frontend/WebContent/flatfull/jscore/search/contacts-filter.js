@@ -40,6 +40,7 @@ var Report_Filters_Event_View = Base_Model_View.extend({
     	'click .default_filter' : 'defaultFilterResults',
 
     	'click #companies-filter' : 'companyFilterResults',
+
     	'change .lhs_chanined_parent' : 'onParentLHSChanged',
     	'change #condition > select' : 'onConditionChanged',
     	'change #contact_type' : 'onChangeContactType',
@@ -214,6 +215,15 @@ var Report_Filters_Event_View = Base_Model_View.extend({
 		e.preventDefault();
 		var targetEl = $(e.currentTarget);
 
+		if($(targetEl).closest('td').siblings('td.lhs-block').find("option:selected").parent().attr("label")== "Properties")
+		{
+
+		var $rhs_ele_new = $(targetEl).closest('td').siblings('td.rhs-new-block').find("#RHS-NEW");
+		var selected_val=targetEl.parents("tr").find("#LHS > select").find(':selected').text();
+		$rhs_ele_new.find('input').attr('placeholder','Enter '+selected_val);
+
+		}
+
 		if ($(targetEl).find("option:selected").hasClass('tags'))
 		{
 			var element = $(targetEl).parents().closest('tr').find('div#RHS');
@@ -252,6 +262,13 @@ var Report_Filters_Event_View = Base_Model_View.extend({
 			$('input', $(targetEl).closest('tr').find('td.rhs-block')).attr("placeholder", "Company Name");
 			$('input', $(targetEl).closest('tr').find('td.rhs-block')).addClass("company_custom_field");
 			agile_type_ahead($('input', $(targetEl).closest('tr').find('td.rhs-block')).attr("id"), $(targetEl).closest('tr').find('td.rhs-block'), contacts_typeahead, custom_company_display, 'type=COMPANY');
+		}
+
+		var value = $(targetEl).closest('td').siblings('td.lhs-block').find('div').find('select').find('option:selected').val();
+		if(value=="country"){
+			//var appenditem = $('#div_country_options').html();
+			var appenditem = getTemplate("country-list", {});
+			$(targetEl).closest('td').siblings('td.rhs-block').find('div').html(appenditem);
 		}
 		
 	},
@@ -478,6 +495,18 @@ function show_chained_fields(el, data, forceShow)
 	NESTED_LHS = $("#nested_lhs", el);
 	
 	RHS.chained(condition, function(chained_el, self){
+
+		LHS = $("#LHS", el);
+		RHS = $("#RHS", el);
+		RHS_NEW = $("#RHS-NEW", el);
+		var Filtre_label =$(':selected',LHS).closest('optgroup').prop('label');
+		if(Filtre_label == "Properties" || Filtre_label== "UTM Parameter")
+		{
+			var lh = LHS.find("> select").find(':selected').text();
+			$('input', $(LHS).closest('td').siblings('td.rhs-block')).attr("placeholder", "Enter "+ lh);
+			$($(LHS).closest('td').siblings('td.rhs-new-block').find("#RHS-NEW")).attr('placeholder','Enter ');
+		}
+
 		var selected_field = $(chained_el).find('option:selected');
 		var placeholder = $(selected_field).attr("placeholder");
 		var is_custom_field = $(selected_field).hasClass("custom_field");
@@ -495,6 +524,7 @@ function show_chained_fields(el, data, forceShow)
 		{
 			$("input", self).attr("placeholder", placeholder);
 		}
+
 		if(field_type && field_type == 'LIST')
 		{
 			var field_name = $(selected_field).attr("field_name");
@@ -503,7 +533,6 @@ function show_chained_fields(el, data, forceShow)
 			$($('select[name="'+field_name+'"]', self)[0]).show();
 			$('select:not([name="'+field_name+'"])', self).remove();
 		}
-		
 		
 	});
 	condition.chained(LHS);
@@ -532,6 +561,19 @@ function show_chained_fields(el, data, forceShow)
 	{
 		e.preventDefault();
 		var value = $(this).val();
+
+	var Filtre_label =$(':selected',LHS).closest('optgroup').prop('label');
+		if(Filtre_label == "Properties" || Filtre_label== "UTM Parameter")
+		{
+	var v=$(':selected',this).text();
+	$('input', $(this).closest('td').siblings('td.rhs-block')).attr("placeholder", "Enter "+ v);		
+		}
+		if(value=="country"){
+			//var appenditem = $('#div_country_options').html();
+			var appenditem = getTemplate("country-list", {});
+			$(this).closest('td').siblings('td.rhs-block').find('div').html(appenditem);
+		}
+		
 
 		if (value.indexOf('tags') != -1)
 		{

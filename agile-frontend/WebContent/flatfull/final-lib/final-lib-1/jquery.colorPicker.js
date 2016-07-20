@@ -323,7 +323,7 @@
     **/
     $.fn.colorPicker.defaults = {
         // colorPicker default selected color.
-        pickerDefault : "808080",
+        pickerDefault : "FFFFFF",
 
         // Default color set.
         colors : [

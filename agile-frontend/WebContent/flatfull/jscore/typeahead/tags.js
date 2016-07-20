@@ -247,10 +247,10 @@ function setup_tags_typeahead(callback) {
         				// Updates to both model and collection
         				App_Contacts.contactDetailView.model.set(data.toJSON(), {silent : true});
         				addTagToTimelineDynamically(tag, data.get("tagsWithTime"));
-                        var template = Handlebars.compile('<li class="inline-block tag btn btn-xs btn-default m-r-xs m-b-xs" data="{{name}}" ><span><a class="anchor m-r-xs" href="#tags/{{name}}">{{name}}</a><a class="close remove-tags" id="{{name}}" tag="{{name}}">&times</a></span></li>');
+                       // var template = Handlebars.compile('<li class="inline-block tag btn btn-xs btn-default m-r-xs m-b-xs" data="{{name}}" ><span><a class="anchor m-r-xs" href="#tags/{{name}}">{{name}}</a><a class="close remove-tags" id="{{name}}" tag="{{name}}">&times</a></span></li>');
 
                         // Adds contact name to tags ul as li element
-                        $('#added-tags-ul').append(template({name : tag}));
+                       // $('#added-tags-ul').append(template({name : tag}));
                         }
         				tagsCollection.add(new BaseModel( {"tag" : tag} ));
         			$("#addTagsForm").css("display", "none");

@@ -20,7 +20,9 @@ import com.agilecrm.session.SessionCache;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.DomainUser.ROLE;
 import com.agilecrm.user.access.UserAccessScopes;
+import com.agilecrm.util.VersioningUtil;
 import com.agilecrm.util.email.SendMail;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.datastore.QueryResultIterable;
@@ -224,7 +226,7 @@ public class DomainUserUtil
 
 	try
 	{
-	    List<DomainUser> domainUsers = dao.listByProperty("domain", domain);
+	    List<DomainUser> domainUsers = (VersioningUtil.isDevelopmentEnv()) ? dao.fetchAll() : dao.listByProperty("domain", domain);
 
 	    // Now sort by name.
 	    Collections.sort(domainUsers, new Comparator<DomainUser>()
@@ -818,6 +820,33 @@ public class DomainUserUtil
 	}
     }
     
+    public static List<Key<DomainUser>> getAllAdminUsersKeys(String domain)
+    {
+	String oldnamespace = NamespaceManager.get();
+
+	NamespaceManager.set("");
+
+	try
+	{
+	    Map<String, Object> searchMap = new HashMap<String, Object>();
+	    searchMap.put("is_admin", true);
+	    searchMap.put("domain", domain);
+
+	    return dao.listKeysByProperty(searchMap);
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    System.err.println("Exception occured while getting admin users..." + e.getMessage());
+	    return null;
+	}
+	finally
+	{
+
+	    NamespaceManager.set(oldnamespace);
+	}
+    }
+    
     /**
      * Updates the login domain user restricted scopes, if domain user contains DELETE_CONTACTS
      * 
@@ -879,5 +908,33 @@ public class DomainUserUtil
 		// Checks the condition is userfingerprint present in the list or not
 		return finger_prints.contains(user_finger_print);
 	}
+    
+    /**
+     * Returns selected role 
+     * @param selectedRole
+     * @return
+     */
+    public static ROLE getDomainUserRole(String selectedRole){
+    	Map<String, ROLE> map = new HashMap<String, ROLE>();
+    	map.put("CEO", ROLE.SALES);
+    	map.put("VP", ROLE.SALES);
+    	map.put("VP, Sales", ROLE.SALES);
+    	map.put("Sales Manager", ROLE.SALES);
+    	map.put("Reseller", ROLE.SALES);
+    	map.put("Recruiter", ROLE.SALES);
+    	map.put("Developer", ROLE.SALES);
+    	map.put("Other", ROLE.SALES);
+    	map.put("Consultant", ROLE.SALES);
+    	
+    	map.put("VP, Marketing", ROLE.MARKETING);
+    	map.put("Marketing Manager", ROLE.MARKETING);
+    	
+    	map.put("Customer Success Manager", ROLE.SERVICE);
+    	
+    	if(!map.containsKey(selectedRole))
+    		return ROLE.SALES;
+    	
+    	return map.get(selectedRole);
+    }
 	
 }

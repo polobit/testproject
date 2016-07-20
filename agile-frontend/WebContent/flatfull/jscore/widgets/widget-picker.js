@@ -55,7 +55,8 @@ function initializeWidgetSettingsListeners(){
 	 * add widget then navigates back to the contact-details page
 	 */
 	$('#prefs-tabs-content').off();
-	$('#prefs-tabs-content .install-custom-widget').off();
+	
+	$('#prefs-tabs-content .install-custom-widget').off('click');
 	$('#prefs-tabs-content, #custom-widget').on('click', '.install-custom-widget', function(e)
 	{
 
@@ -112,29 +113,105 @@ function initializeWidgetSettingsListeners(){
 
 	});
 
+	$('#prefs-tabs-content .acl_widget').off('click');
+	$('#prefs-tabs-content').on('click', '.acl_widget', function(e){
+		// Fetching widget ID.
+		var widgetData = $(this).attr('widget-data');		
+		var that = $(this);
+		$.getJSON( "core/api/users/agileusers", function(data){	
+			var result = {}; 
+			result.widget = JSON.parse(widgetData);							
+			var userList = JSON.stringify(result.widget.listOfUsers);					
+			for(var i=0; i < data.length ; i++){	
+				var obj = data[i];		
+				if(obj){
+					if(userList){
+						if(userList.indexOf(obj.id) > 0){
+							obj.isChecked = true;
+							data[i] = obj;
+					    } else {
+					    	data[i] = obj;
+					    }
+					}												
+				}		
+			}
+
+			result.data = data;
+
+			getTemplate('widget-acls-modal-content', result , undefined, function(template_ui){
+  				$("#widget-acls-modal").html(template_ui).modal('show');    					
+
+  				$('#widget-acls-modal').off('click', '.agileUserChk_all');
+				$('#widget-acls-modal').on('click', '.agileUserChk_all', function(e){
+					if($(this).is(":checked")){
+						$('#widget-acls-modal .agileUserChk').prop('checked',true);
+					}else{
+						$('#widget-acls-modal .agileUserChk').prop('checked',false);
+					}					
+				});
+
+  				$('#widget-acls-modal').off('click', '.widget_acl_save');
+				$('#widget-acls-modal').on('click', '.widget_acl_save', function(e){					
+					var widgetID = $(this).attr('widget-id');
+					var widget = result.widget;
+
+					var newUserList = [];
+					$('input:checkbox[name=agileUserChk]:checked').each(function(e){
+       					newUserList.push($(this).val());
+    				});
+
+					widget.listOfUsers = newUserList;
+
+					$.ajax({
+						type : 'POST',
+						url : '/core/api/widgets/saveWidgetPrivilages',
+						data : JSON.stringify(widget),						
+						success: function(resultData){
+							var widgetData = result.widget;
+							widgetData.listOfUsers = widget.listOfUsers;
+
+							that.attr('widget-data',JSON.stringify(widgetData));
+							console.log('Widget ACL updated');
+							Widgets_View = undefined;							
+							$("#widget-acls-modal").html(template_ui).modal('hide');
+							showNotyPopUp("success" , "Widgets updated successfully", "bottomRight");
+						},error: function(){
+							showNotyPopUp("error" , "Widgets update failed", "bottomRight");
+						}
+					});
+																							
+				});
+  											
+  			});					
+		});
+	});	
+
 	// Deleting widget
 	/**
 	 * When user chooses to delete a widget, on confirmation sends delete
 	 * request based on the name of the widget
 	 */
-	$('#prefs-tabs-content #delete-widget').off();
+	$('#prefs-tabs-content #delete-widget').off('click');
 	$('#prefs-tabs-content').on('click', '#delete-widget', function(e)
 	{
 		// Fetch widget name from the widget on which delete is clicked
 		var widget_name = $(this).attr('widget-name');
+		var widgetNameDisplay = $(this).attr('widget-displayname');
 
 		// If not confirmed to delete, return
 		var displayName;
 		
-		if(widget_name == "Rapleaf"){
-			displayName = "Towerdata";
-		}else if(widget_name == "TwilioIO"){
-			displayName = "Twilio";
+		if(widgetNameDisplay){
+			displayName = widgetNameDisplay;
 		}else{
-			displayName = widget_name;
+			displayName = widgetDisplayname[widget_name];
+			if(!displayName){
+				displayName = widget_name;
+			}	
 		}
+		
 
-		showAlertModal("Are you sure to delete " + displayName, "confirm", function(){
+		showAlertModal("Are you sure to delete " + displayName + "?", "confirm", function(){
 			delete_widget(widget_name);
 
 			if(widget_name == "Linkedin")
@@ -147,17 +224,17 @@ function initializeWidgetSettingsListeners(){
 	});	
 	
 	// Helps to know that widget is for all users.
-	$('#prefs-tabs-content .add_to_all').off();
+	$('#prefs-tabs-content .add_to_all').off('click');
 	$('#prefs-tabs-content').on('click', '.add_to_all', function(e){
 		isForAll = true;
 	});
 
-	$('#prefs-tabs-content .add-widget').off();
+	$('#prefs-tabs-content .add-widget').off('click');
 	$('#prefs-tabs-content').on('click', '.add-widget', function(e){
 		isForAll = false;
 	});
 	
-	$('#prefs-tabs-content #remove-widget').off();
+	$('#prefs-tabs-content #remove-widget').off('click');
 	$('#prefs-tabs-content').on('click', '#remove-widget', function(e)
 	{
 
@@ -190,7 +267,7 @@ function initializeWidgetSettingsListeners(){
 		
 
 	});
-	
+                
 }
 
 

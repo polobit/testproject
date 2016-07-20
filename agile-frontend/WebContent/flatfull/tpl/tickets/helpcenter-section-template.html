@@ -1,0 +1,32 @@
+<script id="helpcenter-section-template" type="text/html">
+  <div class="col-md-9">
+      <div class="wrapper">
+          <div class="panel panel-default">
+              <div class="panel-heading h4"> {{name}} 
+                      
+                        <a title= "Edit" style="padding-left:10px;padding-right:5px;" href="#categorie/{{categorie_id}}/section/{{id}}/edit-section"> <small class="text-muted m-b-sm"><i class="fa fa-pencil-square-o"></i></small></a>
+                        <a title= "Delete" class="delete" style="position:relative;vertical-align:top;top: -1px;"><small class="text-muted m-b-sm"><i class="fa fa-trash"></i></small></a>
+                      
+                       
+                <div class="pull-right">
+                  <div class="btn-group right pos-rlt pull-right">
+                    <a class="btn btn-default btn-sm" style="margin-top:-4px" href="#categorie/{{categorie_id}}/section/{{id}}/add-article"><span><i class="icon-plus-sign"></i></span> Add Article</a>
+                  </div>
+                </div>
+                    <!--<div>
+                      <small class="text-muted m-b-sm">
+                        created on {{epochToHumanDate "ddd mmm dd, yyyy" created_time}}
+                      </small>
+                      </div>
+                      <div>
+                      {{description}}
+                      </div>-->
+              </div>  
+            <div class="panel-body">                                
+              <div id="articles-collection">
+              </div>
+            </div>
+          </div>
+      </div>
+  </div> 
+</script>

@@ -1,7 +1,10 @@
 package com.agilecrm.knowledgebase.util;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import com.agilecrm.knowledgebase.entity.Article;
 import com.agilecrm.knowledgebase.entity.Categorie;
 import com.agilecrm.knowledgebase.entity.Section;
 import com.agilecrm.knowledgebase.entity.Section.Visible_To;
@@ -14,9 +17,21 @@ import com.googlecode.objectify.Key;
  */
 public class SectionUtil
 {
-	public static List<Section> getSectionByCategorie(Long categorieID)
+	public static List<Section> getSectionByCategorie(Long categorieID, boolean admin )
 	{
-		return Section.dao.listByProperty("categorie_key", new Key<>(Categorie.class, categorieID));
+		if(admin)
+			return Section.dao.listByProperty("categorie_key", new Key<>(Categorie.class, categorieID));
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+
+		if (categorieID != null){
+			
+			map.put("categorie_key", new Key<>(Categorie.class, categorieID));
+			map.put("visible_to",Visible_To.CUSTOMER);
+		}		
+		return Section.dao.listByProperty(map);
+
+		
 	}
 
 	public static void createDefaultSections(Key<Categorie> key)
@@ -41,4 +56,57 @@ public class SectionUtil
 		// Deleting section
 		Section.dao.deleteKey(new Key<Section>(Section.class, id));
 	}
+	
+	public static Section getSection(Long id)
+    {
+	try
+	{
+	    return Section.dao.get(id);
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
+	return null;
+    }
+	
+	/**
+     * Save the categories a precise order.
+     * 
+     * @param catIds
+     *            List of id of the categories in a sequence which are to be
+     *            save in the same order.
+     */
+    public static void saveSectionOrder(List<Long> catIds)
+    {
+	for (int i = 0; i < catIds.size(); i++)
+	{
+		Section section = getSection(catIds.get(i));
+		section.order=i;
+		updateSection(section);
+	}
+	
+    }
+
+    /**
+     * Update the category. If the category name is not valid or id is null then
+     * return null.
+     * 
+     * @param category
+     *            category to be updated.
+     * @return updated category.
+     */
+    public static Section updateSection(Section section)
+    {
+	
+    	Section oldsection = getSection(section.id);
+	if (oldsection == null)
+	    return null;
+		
+	Section.dao.put(section);
+	
+	return section;
+    }    
+
+
 }

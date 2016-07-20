@@ -3,7 +3,10 @@ package com.agilecrm.account.util;
 import com.agilecrm.AgileQueues;
 import com.agilecrm.account.AccountPrefs;
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.UserPrefs;
+import com.agilecrm.user.util.UserPrefsUtil;
 import com.campaignio.workflows.deferred.UpdateWorkflows;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
@@ -35,12 +38,10 @@ public class AccountPrefsUtil
 	{
 		Objectify ofy = ObjectifyService.begin();
 		AccountPrefs prefs = ofy.query(AccountPrefs.class).get();
-
 		if (prefs == null)
 		{
 			return getDefaultPrefs();
 		}
-
 		return prefs;
 	}
 
@@ -113,4 +114,6 @@ public class AccountPrefsUtil
 		Queue queue = QueueFactory.getQueue(AgileQueues.UPDATE_WORKFLOWS_QUEUE);
 		queue.add(TaskOptions.Builder.withPayload(task));
 	}
+	
+	
 }

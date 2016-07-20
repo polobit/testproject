@@ -1,5 +1,6 @@
 package com.agilecrm.core.api.deals;
 
+import java.util.Collection;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
@@ -8,15 +9,21 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import net.sf.json.JSONObject;
+
+import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-import com.agilecrm.contact.filter.ContactFilter;
+import com.agilecrm.deals.Opportunity;
 import com.agilecrm.deals.filter.DealFilter;
 import com.agilecrm.deals.filter.util.DealFilterUtil;
+import com.agilecrm.search.ui.serialize.SearchRule;
 
 @Path("/api/deal/filters")
 public class DealFilterAPI {
@@ -91,5 +98,101 @@ public class DealFilterAPI {
 
 	// Deletes all contact filters with ids specified in the list
 	DealFilter.dao.deleteBulkByIds(contactFiltersJSONArray);
+    }
+    
+    /**
+     * Returns {@link Opportunity} list based on the {@link SearchRule} in the
+     * {@link DealFilter} which is fetched by its id. It checks the type of
+     * request, whether filter is on custom built criteria or default filters,
+     * based on which results are returned returned
+     * 
+     * @param id
+     *            {@link DealFilter} id
+     * @return {@link Collection} list of contact
+     */
+    @Path("/query/list/{filter_id}")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public List<Opportunity> getQueryResultsList(@PathParam("filter_id") String id, @QueryParam("page_size") String count,
+    		@QueryParam("cursor") String cursor, @QueryParam("order_by") String sortKey) throws JSONException
+    {
+	System.out.println("cursor : " + cursor);
+	if (!StringUtils.isEmpty(count))
+	    return DealFilterUtil.getDeals(id, Integer.parseInt(count), cursor, sortKey, null, null);
+
+	return DealFilterUtil.getDeals(id, 25, null, sortKey, null, null);
+    }
+    
+    /**
+     * Returns {@link Opportunity} list based on the {@link SearchRule} in the
+     * {@link DealFilter} which is fetched by its id. It checks the type of
+     * request, whether filter is on custom built criteria or default filters,
+     * based on which results are returned returned
+     * 
+     * @param id
+     *            {@link DealFilter} id
+     * @return {@link Collection} list of contact
+     */
+    @Path("/query/grid/{filter_id}")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public List<Opportunity> getQueryResults(@PathParam("filter_id") String id, @QueryParam("page_size") String count, @QueryParam("cursor") String cursor, 
+    		@QueryParam("order_by") String sortKey, @QueryParam("pipeline_id") String pipeline, @QueryParam("milestone") String milestone) throws JSONException
+    {
+	System.out.println("cursor : " + cursor);
+	if (!StringUtils.isEmpty(count))
+	    return DealFilterUtil.getDeals(id, Integer.parseInt(count), cursor, sortKey, pipeline, milestone);
+
+	return DealFilterUtil.getDeals(id, 25, null, sortKey, pipeline, milestone);
+    }
+    
+    /**
+     * Returns {@link Opportunity} list based on tags in the
+     * {@link DealFilter} which is fetched by its id. It checks the type of
+     * request, whether filter is on custom built criteria or default filters,
+     * based on which results are returned returned
+     * 
+     * @param id
+     *            {@link DealFilter} id
+     * @return {@link Collection} list of contact
+     */
+    @Path("/query/list/tags/{tag_name}")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public List<Opportunity> getOpportubitiesListWithTags(@PathParam("tag_name") String tagName, @QueryParam("page_size") String count, @QueryParam("cursor") String cursor, 
+    		@QueryParam("order_by") String sortKey) throws JSONException
+    {
+	System.out.println("cursor : " + cursor);
+	if (!StringUtils.isEmpty(count))
+	    return DealFilterUtil.getDealsWithTag(tagName, Integer.parseInt(count), cursor, sortKey);
+
+	return DealFilterUtil.getDealsWithTag(tagName, 25, null, sortKey);
+    }
+    
+    /**
+     * Returns {@link Opportunity} count object based on the {@link SearchRule} in the
+     * {@link DealFilter} which is fetched by its id. It checks the type of
+     * request, whether filter is on custom built criteria or default filters,
+     * based on which results are returned returned
+     * 
+     * @param id
+     *            {@link DealFilter} id
+     * @return {@link Collection} list of contact
+     */
+    @Path("/query/total/{filter_id}")
+    @GET
+    @Produces({ MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON })
+    public JSONObject getQueryResultsCount(@PathParam("filter_id") String id, @QueryParam("page_size") String count, @QueryParam("cursor") String cursor, 
+    		@QueryParam("order_by") String sortKey, @QueryParam("pipeline_id") String pipeline, @QueryParam("milestone") String milestone) throws JSONException
+    {
+    List<Opportunity> oppList = null;
+	System.out.println("cursor : " + cursor);
+	if (!StringUtils.isEmpty(count))
+	    oppList = DealFilterUtil.getDeals(id, Integer.parseInt(count), cursor, sortKey, pipeline, milestone);
+
+	oppList = DealFilterUtil.getDeals(id, 1000, null, sortKey, pipeline, milestone);
+	
+	return DealFilterUtil.getDealsCountBasedOnList(oppList, milestone);
+	
     }
 }

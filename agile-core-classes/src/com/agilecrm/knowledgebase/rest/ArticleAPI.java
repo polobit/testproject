@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -16,17 +17,19 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.agilecrm.knowledgebase.entity.Article;
 import com.agilecrm.knowledgebase.entity.Categorie;
 import com.agilecrm.knowledgebase.entity.Section;
 import com.agilecrm.knowledgebase.util.ArticleUtil;
-import com.agilecrm.knowledgebase.util.SectionUtil;
 import com.agilecrm.search.document.HelpcenterArticleDocument;
-import com.agilecrm.user.DomainUser;
+import com.agilecrm.ticket.entitys.TicketStats;
+import com.agilecrm.ticket.utils.TicketStatsUtil;
 import com.googlecode.objectify.Key;
 
 /**
@@ -39,18 +42,21 @@ public class ArticleAPI
 {
 	/**
 	 * 
-	 * @param id
+	 * @param title
 	 * @return
 	 * @throws Exception
 	 */
 	@GET
-	@Path("/{id}")
+	@Path("/{title}")
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public Article getArticle(@PathParam("id") Long id) throws Exception
+	public Article getArticle(@PathParam("title") String title) throws Exception
 	{
 		try
 		{
-			Article article = Article.dao.get(id);
+			Article article = Article.dao.getByProperty("title", title);
+			if(article == null){
+				return null;
+			}
 			article.categorie = Categorie.dao.get(article.categorie_key);
 			article.section = Section.dao.get(article.section_key);
 
@@ -63,21 +69,31 @@ public class ArticleAPI
 					.build());
 		}
 	}
-	
+
 	/**
 	 * 
-	 * @param categorie_id
-	 * @param section_id
+	 * @param section_name
 	 * @return
 	 */
 	@GET
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public List<Article> getArticles(@QueryParam("categorie_id") Long categorie_id,
-			@QueryParam("section_id") Long section_id)
+	public List<Article> getArticles(@QueryParam("section_name") String section_name)
 	{
-		return ArticleUtil.getArticles(categorie_id, section_id);
+		return ArticleUtil.getArticles(section_name);
 	}
-	
+	/**
+	 * 
+	 * @param section_name
+	 * @return
+	 */
+	@Path("/admin-articles")
+	@GET
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	public List<Article> getAdminArticles(@QueryParam("section_name") String section_name)
+	{
+		return ArticleUtil.getAdminArticles(section_name);
+	}
+
 	/**
 	 * 
 	 * @param search_term
@@ -102,15 +118,70 @@ public class ArticleAPI
 			for (int i = 0; i < keysArray.length(); i++)
 				keys.add((Key<Article>) keysArray.get(i));
 
-			System.out.println("keys: " + keys);
+			List<Article> articleList = Article.dao.fetchAllByKeys(keys);
+			List<Article> articleListreturn = new ArrayList<Article>();
 
-			return Article.dao.fetchAllByKeys(keys);
+			for (Article ac : articleList)
+			{
+				if (ac.is_article_published == false)
+				{
+					articleListreturn.add(ac);
+				}
+			}
+			return articleListreturn;
+
 		}
 		catch (Exception e)
 		{
-			System.out.println(ExceptionUtils.getFullStackTrace(e));
-			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-					.build());
+			return null;
+		}
+	}
+
+	/**
+	 * Save the article order based on the order of the article id's sent.
+	 * 
+	 * @param ids
+	 *            article ids.
+	 * @return successes message after saving or else error message.
+	 */
+	@Path("position")
+	@POST
+	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	public String setArticleOrder(String ids)
+	{
+		System.out.println("-----------" + ids);
+		JSONObject result = new JSONObject();
+		try
+		{
+			JSONArray idsArray = null;
+			if (StringUtils.isNotEmpty(ids))
+			{
+				idsArray = new JSONArray(ids);
+				System.out.println("------------" + idsArray.length());
+				List<Long> catIds = new ArrayList<Long>();
+				for (int i = 0; i < idsArray.length(); i++)
+				{
+					catIds.add(Long.parseLong(idsArray.getString(i)));
+				}
+				ArticleUtil.saveArticleOrder(catIds);
+				result.put("message", "Order changes sucessfully.");
+			}
+			return result.toString();
+		}
+		catch (Exception je)
+		{
+			je.printStackTrace();
+			try
+			{
+				result.put("error", "Unable to update the order. Please check the input.");
+				throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(result).build());
+			}
+			catch (JSONException e)
+			{
+				e.printStackTrace();
+			}
+			return null;
 		}
 	}
 
@@ -127,6 +198,13 @@ public class ArticleAPI
 	{
 		try
 		{
+			Article existingArticle = Article.dao.getByProperty("title", article.title);
+
+			if (existingArticle != null && existingArticle.title.equalsIgnoreCase(article.title))
+			{
+				throw new Exception("Article with name " + article.title
+						+ " already exists. Please choose a different name.");
+			}
 			Key<Section> section_key = new Key<Section>(Section.class, article.section_id);
 			article.section_key = section_key;
 
@@ -134,6 +212,9 @@ public class ArticleAPI
 			article.categorie_key = categorie_key;
 
 			article.save();
+			
+			// Updating ticket count DB
+			TicketStatsUtil.updateEntity(TicketStats.Article_Count);
 		}
 		catch (Exception e)
 		{
@@ -145,9 +226,31 @@ public class ArticleAPI
 
 		return article;
 	}
+
+	@POST
+	@Path("/bulk")
+	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	@Produces(MediaType.APPLICATION_JSON)
+	public String deleteArticles(@FormParam("ids") String model_ids) throws JSONException
+	{
+		try
+		{
+			Article.dao.deleteBulkByIds(new JSONArray(model_ids));
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+					.build());
+		}
+
+		return new JSONObject().put("status", "success").toString();
+	}
+
 	/**
 	 * 
-	 * @param article,id
+	 * @param article
+	 *            ,id
 	 * @return
 	 * @throws WebApplicationException
 	 */
@@ -160,17 +263,25 @@ public class ArticleAPI
 		try
 		{
 			Article dbArticle = Article.dao.get(article.id);
-			
+
+			Article existingArticle = Article.dao.getByProperty("title", article.title);
+			if (existingArticle != null && !existingArticle.equals(article.title)
+					&& !(dbArticle.title.equalsIgnoreCase(article.title)))
+			{
+				throw new Exception("Article with name " + article.title
+						+ " already exists. Please choose a different name.");
+			}
+
 			Key<Section> section_key = new Key<Section>(Section.class, article.section_id);
 			article.section_key = section_key;
 
 			Key<Categorie> categorie_key = new Key<Categorie>(Categorie.class, article.categorie_id);
 			article.categorie_key = categorie_key;
 
-			article.created_by_key = dbArticle.created_by_key ;
-			
+			article.created_by_key = dbArticle.created_by_key;
+
 			article.created_time = dbArticle.created_time;
-		
+
 			article.save();
 		}
 		catch (Exception e)
@@ -183,10 +294,11 @@ public class ArticleAPI
 
 		return article;
 	}
-	
+
 	/**
 	 * 
-	 * @param article,id
+	 * @param article
+	 *            ,id
 	 * @return
 	 * @throws WebApplicationException
 	 */
@@ -198,13 +310,13 @@ public class ArticleAPI
 	{
 		try
 		{
-			if(article.id == null)
+			if (article.id == null)
 				throw new Exception("Required params missing.");
-			
+
 			Article dbArticle = Article.dao.get(article.id);
 
 			dbArticle.is_article_published = article.is_article_published;
-			
+
 			dbArticle.save();
 		}
 		catch (Exception e)
@@ -217,13 +329,13 @@ public class ArticleAPI
 
 		return article;
 	}
-	
+
 	/**
 	 * Deletes Articles by IDs
 	 * 
 	 */
 	@Path("/{id}")
-	@DELETE 
+	@DELETE
 	public String deleteArticle(@PathParam("id") Long id)
 	{
 		try

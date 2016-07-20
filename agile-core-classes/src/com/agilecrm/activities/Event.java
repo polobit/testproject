@@ -170,6 +170,15 @@ public class Event extends Cursor
     @NotSaved
     private List<String> deal_ids = new ArrayList<String>();
 
+
+    /**
+     * Define the status of the meeting
+     * happened, postponed, cancelled and no-show
+     */
+    @NotSaved(IfDefault.class)
+    public String status = null;
+        
+    
     /**
      * Related deal objects fetched using deal ids.
      */

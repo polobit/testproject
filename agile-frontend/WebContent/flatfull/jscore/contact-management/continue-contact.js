@@ -104,6 +104,9 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
 	var id = $('#' + form_id + ' input[name=id]').val();
 
     var man_delet  = $("#" + form_id + " #Manual_delete").val();
+	//Surce of the contact
+	var contact_source = $('#' + form_id + ' input[name=source]').attr('data');
+
 	// Makes created time constant
 	var created_time = $('#' + form_id + ' input[name=created_time]').val();
 
@@ -206,6 +209,9 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
         *saving first_name,last_name,picture and its TwitterId Pre-populate into the saving
         * person model and continue saving it will also appers with same field
         */
+		if(contact_source)
+			obj.source = contact_source ;
+
 		// Creates properties of contact (person)
 		if (isValidField(form_id + ' #fname'))
 			properties.push(property_JSON('first_name', form_id + ' #fname'));
@@ -475,13 +481,13 @@ function serialize_contact_properties_and_save(e, form_id, obj, properties, moda
 		{
 			var addressJSON = {};
 			var subtype;
-			var remote_addr=false;
+			/*var remote_addr=false; */ 
 			$.each($(element).find(":input,select"), function(index, subelement)
 			{
 
 				if ($(subelement).val() == undefined || $(subelement).val().length == 0)
-					{  remote_addr =true;
-						addressJSON['remote_add'] = remote_addr;
+					{  /*remote_addr =true;
+						addressJSON['remote_add'] = remote_addr;*/
 						return;}
 
 				if ($(subelement).attr('name') == 'address-type')
@@ -789,7 +795,7 @@ function deserialize_contact(contact, template)
 		// Add placeholder and date picker to date custom fields
 		$('.date_input').attr("placeholder", "Select Date");
 
-		$('.date_input').datepicker({ format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY});
+		$('.date_input').datepicker({ format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY, autoclose: true});
 
 		// To set typeahead for tags
 		setup_tags_typeahead();
@@ -915,6 +921,8 @@ function deserialize_contact(contact, template)
 				}
 			}
 		});
+
+		initializeEditContactListeners($('form', $('#content')).attr("id"));
 		
 
 	}, "#content");
@@ -950,7 +958,8 @@ function fill_multi_options(field_element, element)
 			var name = $(sub_field_element).attr('name');
 			if (name == 'address-type')
 				$(sub_field_element).val(element.subtype);
-			else if (name == 'country')
+			//Commented this block to maintain consistency with country in address
+			/*else if (name == 'country')
 			{
 				if (json[name] && json[name].length > 2)
 				{
@@ -960,9 +969,15 @@ function fill_multi_options(field_element, element)
 				}
 				else
 					$(sub_field_element).val(json[name]);
-			}
+			}*/
 			else
 				$(sub_field_element).val(json[name]);
+
+			if(name == 'country' && !$(sub_field_element).val())
+			{
+				var warning_msg_tpl = Handlebars.compile("<span class='country-mismatch-error' style='color:#B94A48; font-size:14px'><i>Country '{{country}}' doesn't match with our standard records. Please update the country using the dropdown.</i></span>");
+				$(sub_field_element).after(warning_msg_tpl(json));
+			}
 		});
 	}
 	else
@@ -1269,5 +1284,15 @@ function setReferenceContacts(name, ele, valJSON, referenceContactIds)
 			}
 			hideTransitionBar();
 		}
+	});
+}
+
+function initializeEditContactListeners(ele_id)
+{
+	$("#"+ele_id).on('change', '#country', function(e)
+	{
+		e.preventDefault();
+
+		$('.country-mismatch-error').hide();
 	});
 }

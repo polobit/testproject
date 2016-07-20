@@ -171,7 +171,7 @@ $(function()
 	 */
 	$('body').on('click', '#search-results', function(e)
 	{
-		e.preventDefault();
+		// e.preventDefault();
 		showSearchResults();
 	});
 });

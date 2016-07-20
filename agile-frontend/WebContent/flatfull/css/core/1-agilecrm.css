@@ -3722,7 +3722,7 @@ opacity: .3;
 
 	}
 
-.app-aside-dock #segmentationmenu a i{
+/*.app-aside-dock #segmentationmenu a i{
 
 	    margin-bottom: -4px;
 
@@ -3734,7 +3734,7 @@ opacity: .3;
 }
 .app-aside-folded #segmentationmenu a span{
 	line-height: 2.6em;
-}
+}*/
 #lhs_filters_segmentation .panel-body{
 	padding: 5px 15px;
 	min-height: 35px;
@@ -3934,7 +3934,6 @@ border-bottom:1px solid #eee;
  .draggable-noty:hover .move-icon{
  display:block!important;
  }
- 
 
 .user_img{
  display: inline-block !important;
@@ -4239,4 +4238,51 @@ background-color : #522E2E;
   float: left;
     padding-bottom: 10px;
     max-width: 180px;
+}
+
+#chrome-extension
+{
+        display:none;
+}
+@media all and (-webkit-min-device-pixel-ratio:0) and (min-resolution: .001dpcm) {
+    #chrome-extension{
+        display:inline-block;
+    }
+}
+
+#twilio_call_setup{  
+  color: rgba(0, 0, 0, 0.87); 
+  display:none;
+  margin-left: 31px;
+}
+
+.agile-feature-item-blink:before, .agile-feature-item-blink:after
+{
+    content: "";
+    width: 10px;
+    height: 10px;
+    position: absolute;
+    pointer-events: none;
+    background: orange;
+    border-radius: 1000px;
+    right: 5px;
+    top: 10px;
+}
+
+.agile-feature-item-blink:after
+{
+    animation:pulse-location 1s infinite;
+}
+@keyframes pulse-location{0%{transform:scale(1);opacity:1}100%{transform:scale(5);opacity:0}}
+@-webkit-keyframes pulse-location{0%{transform:scale(1);opacity:1}100%{transform:scale(5);opacity:0}}
+
+@media (max-width: 767px){
+.documentsheading{
+  text-align: center;
+    width: 100%;
+}
+#document-add{
+  text-align: center;
+    width: 100%;
+}
 }

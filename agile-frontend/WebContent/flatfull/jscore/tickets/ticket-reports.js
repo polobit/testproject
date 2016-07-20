@@ -17,6 +17,7 @@ var Ticket_Reports = {
 	    // Returns milliseconds from end date.
 	    //var end_time = Date.parse(end_value).valueOf();
 	    //Get the GMT end time
+	    var status = $('#status').find('option:selected').val();
 	    var end_time = getUTCMidNightEpochFromDate(new Date(end_value));
 
 	    end_time += (((23*60*60)+(59*60)+59)*1000);
@@ -30,11 +31,9 @@ var Ticket_Reports = {
 		{	
 			frequency = $(this).find('option:selected').val();
 			showBar('/core/api/tickets/reports/daily?start_time=' + start_time + '&end_time=' 
-					+ end_time + '&frequency=' + frequency, 'tickets-chart', '', 'Tickets count', false);
+					+ end_time + '&frequency=' + frequency+ '&status=' + status,'tickets-chart', '', 'Tickets count', false);
 		});
 
-		var status = $('#status').find('option:selected').val();
-		$('#status').off('change');
 		$('#status').change(function()
 		{	
 			status = $(this).find('option:selected').val();
@@ -190,6 +189,7 @@ var Ticket_Reports = {
 					total += v.count;
 					count ++;
 				});
+				AllData.push(total);
 
 				console.log(data,total);
 				// Iterates through data, gets each tag, count and
@@ -208,8 +208,6 @@ var Ticket_Reports = {
 					pieData.push(item);
 				});
 
-				console.log(pieData);
-
 				var animation = count > 20 ? false : true;
 
 				Ticket_Reports.createAPieChart(selector, name, animation, AllData, pieData);
@@ -218,11 +216,6 @@ var Ticket_Reports = {
 	},
 
 	createAPieChart: function(selector, name, animation, AllData, pieData){
-
-		console.log('All data');
-		console.log(AllData);
-		console.log('pieData');
-		console.log(pieData);
 
 		chart = new Highcharts.Chart({
 				chart : { renderTo : selector, type : 'pie', plotBackgroundColor : null, plotBorderWidth : null, plotShadow : false,
@@ -234,7 +227,7 @@ var Ticket_Reports = {
 						return  '<div>' + 
 	                        '<div class="p-n">'+this.series.name+': <b>'+ getNumberWithCommasForCharts(AllData[this.point.x][1]) + '</b></div>' +
 	                        '</div>'+
-	                        '<div class="p-n">Total: <b>' + pieData[this.point.x][2]+ '</b></div>';
+	                        '<div class="p-n">Total: <b>' + AllData[3]+ '</b></div>';
 					},
 					shared: true,
 					useHTML: true,

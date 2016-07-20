@@ -227,7 +227,7 @@ var ReportsRouter = Backbone.Router
 
 						}, '<option value="custom_{{field_label}}">{{field_label}}</option>', true, el);
 
-						head.js(LIB_PATH + 'lib/jquery-ui.min.js', LIB_PATH + 'lib/agile.jquery.chained.min.js', LIB_PATH + 'lib/jquery.multi-select.js',
+						head.js(LIB_PATH + 'lib/jquery-ui.min.js', LIB_PATH + 'lib/agile.jquery.chained.min.js?_='+_agile_get_file_hash("agile.jquery.chained.min.js"), LIB_PATH + 'lib/jquery.multi-select.js',
 								function()
 								{
 
@@ -416,7 +416,7 @@ var ReportsRouter = Backbone.Router
 
 						}, '<option value="custom_{{field_label}}">{{field_label}}</option>', true, el);
 
-						head.js(LIB_PATH + 'lib/jquery-ui.min.js', LIB_PATH + 'lib/agile.jquery.chained.min.js', LIB_PATH + 'lib/jquery.multi-select.js',
+						head.js(LIB_PATH + 'lib/jquery-ui.min.js', LIB_PATH + 'lib/agile.jquery.chained.min.js?_='+_agile_get_file_hash("agile.jquery.chained.min.js"), LIB_PATH + 'lib/jquery.multi-select.js',
 								function()
 								{
 

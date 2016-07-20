@@ -22,7 +22,7 @@ $(function()
 		$('.date_input').attr("placeholder","Select Date");
     
 		$('.date_input').datepicker({
-			format: CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY
+			format: CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY, autoclose: true
 		}).datepicker('update');
 
 		$("input.date").each(function(index, ele){$(ele).datepicker('update');});
@@ -47,6 +47,7 @@ $(function()
 		$(".deal-add-note", $("#opportunityModal")).show();
 		// Hide the Note label.
 		$(".deal-note-label").hide();
+		$("#color1", $("#opportunityModal")).attr('value','#FFFFFF');
 
 	});
 
@@ -54,7 +55,7 @@ $(function()
 	 * "Hide" event of note modal to remove contacts appended to related to
 	 * field and validation errors
 	 */
-	$('#opportunityUpdateModal').on('hide.bs.modal', function()
+	$('#opportunityUpdateModal').on('hidden.bs.modal', function()
 	{
 
 		// Removes appended contacts from related-to field
@@ -489,7 +490,7 @@ function updateDeal(ele, editFromMilestoneView)
 	// Enable the datepicker
 	$('#close_date', dealForm).datepicker("remove");
 	$('#close_date', dealForm).datepicker({
-		format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY
+		format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY, autoclose: true
 	});
 	
 	// Add notes in deal modal
@@ -638,7 +639,7 @@ function show_deal()
 	// Enable the datepicker
 	$('#close_date', el).datepicker("remove");
 	$('#close_date', el).datepicker({
-		format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY
+		format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY, autoclose: true
 	});
 }
 

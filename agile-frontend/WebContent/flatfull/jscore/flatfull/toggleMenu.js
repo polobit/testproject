@@ -17,12 +17,12 @@ $('#app-aside-folded').on('click', function(e) {
 		console.log("folded");
 		$("#app-aside-folded i").removeClass("fa-dedent");
 		$("#app-aside-folded i").addClass("fa-indent");
-		$(".app-aside-folded:not(.app-aside-dock) .navi > ul > li#documentsmenu > a span").text("Docs");
+		// $(".app-aside-folded:not(.app-aside-dock) .navi > ul > li#documentsmenu > a span").text("Docs");
 	}
 	else {
 		$("#app-aside-folded i").removeClass("fa-indent");
 		$("#app-aside-folded i").addClass("fa-dedent");
-		$(".navi > ul > li#documentsmenu > a span").text("Documents");
+		// $(".navi > ul > li#documentsmenu > a span").text("Documents");
 	}
 	
 	//contactInnerTabsInvoke();
@@ -40,15 +40,39 @@ $('#app-aside-folded').on('click', function(e) {
 
 
 
-
+function showTrailAlertMessage(){
+	if($("#trial_alert_info .trial_message").text().indexOf("today") != -1)
+		$("#trial_alert_info").css("width", "300px");
+	$("#trial_alert_info").show();
+	
+}
 
 
 	
 $(document).ready(function(){
 
+$(".trial_strip_close").click(function(e){
+	$(this).closest("#trial_alert_info").hide();
+	_agile_set_prefs("free_trial_time", parseInt(new Date().getTime()/1000));
+});
 
+if(!agile_is_mobile_browser() && USER_BILLING_PREFS.freeTrialStatus && USER_BILLING_PREFS.freeTrialStatus == "TRIALING" && USER_BILLING_PREFS.freeTrialEnd > parseInt(new Date().getTime()/1000))
+{
+	var oldTime =  _agile_get_prefs("free_trial_time");
+	var time = parseInt(new Date().getTime()/1000);
+
+	if(!oldTime)
+		showTrailAlertMessage();
+	else if(time-oldTime > 86400)
+		showTrailAlertMessage();
+
+}
 
 //addDescriptionInfo();
+
+$(".free_plan_strip_close").click(function(e){
+	$(this).closest(".free_plan_alert").hide().removeAttr("id");
+});
 	
  $("#addDescriptionLink").click(function(e){
  e.preventDefault();
@@ -86,16 +110,6 @@ $("#activityModal").on("click", "#eventDescriptionLink", function(e){
  	 $('.aside-wrap').off('ul li');
 	 if(agile_is_mobile_browser()){
 
-	 /*	$('body').on('click',function(e){
-		setTimeout(function(){
-		if(e.target.id != 'searchText' && !$(e.target).closest('button').hasClass('search-menu-mobile'))  {
-		$('.search-mobile').addClass('hide');
-		$('.add-modal-mobile , #search-menu-mobile').addClass('visible-xs');
-		$('.navbar-brand').removeClass('hide');
-		}
-		},500);
-	});*/
-
 	 	$('body').on('click','.add-modal-mobile',function(){
 	 		
 		if($('#aside').hasClass('off-screen')) {
@@ -113,25 +127,18 @@ $("#activityModal").on("click", "#eventDescriptionLink", function(e){
 		}); 	
 
 
-
-	 	$('.aside-wrap ul li').bind('touchstart',function(){
- 		$('.aside-wrap ul li').removeClass('active');
- 		$(this).addClass('active');
- 		}).bind('touchleave touchend',function(){
- 			setTimeout(function(){
- 		$('.aside-wrap ul li').removeClass('active');
- 		},500);
- 		});
-
+		$(".aside-wrap").on("touchstart", "ul li", function() {
+        	$('.aside-wrap ul li').removeClass('active');
+        	$(this).addClass('active');
+    	});
+    	$(".aside-wrap").on("touchleave touchend", "ul li", function() {
+        	setTimeout(function(){
+		 		$('.aside-wrap ul li').removeClass('active');
+		 	},500);
+    	});
  		
 		}
 
-	$('#menu1 a').click(function(e){
-		console.log(e.target);
-	});	
-
-	
-	
 
 	if(( $(window).width() ) < 768 ) {
 
@@ -211,10 +218,9 @@ $("#activityModal").on("click", "#eventDescriptionLink", function(e){
      $('body').css('overflow-y','auto');
 	});	
 	
-	$(".navi-wrap li a").click(function(){
-	  $("#mobile-menu").delay(2000).trigger("click");
-	});
-	
+	$(".navi-wrap").on("click", "li a", function() {
+        $("#mobile-menu").delay(2000).trigger("click");
+    });
 
    $("#mobile-menu-settings").on("click",function(){
    if( $("#aside").hasClass("off-screen") ) {
@@ -230,7 +236,16 @@ $("#activityModal").on("click", "#eventDescriptionLink", function(e){
    }
    });
 
+   $('#searchForm').hover(
+	function () {
+		  $("#advanced-search-filter").removeClass("hide");
+		}, 
+		function () {
+		  $("#advanced-search-filter").addClass("hide");
+		}
+   );
 
+  
    $("#mobile-menu").on("click",function(){
    if( $("#navbar").hasClass("show")) {
    	$("#navbar").removeClass("show");
@@ -336,16 +351,91 @@ $("#activityModal").on("click", "#eventDescriptionLink", function(e){
 
 	
 	// initializing need help popover for header page
-   $(".need_help").popover({ placement : 'left',
+   $(".need_help").popover({ 
+   					placement : $(this).attr("data-placement"),
 					html:true,
 					container: 'body'
 				}).on("click", function(){
-						var $this = $('.popover').find("#need_help_header");
-						$this.closest(".popover").addClass("custom_popover");
+						initRolehandlers();
+    			}).on("show.bs.popover", function(e){ 
+    				var $target = $(e.target);
+    				$(this).data("bs.popover").tip().addClass($target.data("custom-popover-class"));
+    			}); 
 
-    			   }); 
+    $('#searchText').on('focus', function () {
+	    $(this).parent().find("label").toggleClass('active');
+	});
 
+	$('#searchText').on('blur', function () {
+	    $(this).parent().find("label").toggleClass('active');
+	});
+
+	// Add blinker
+	/*if(!_agile_get_prefs("menu_blinker")){
+		_agile_set_prefs("menu_blinker", "shown");
+		$(".grid_icon_center a.grid-icon-header").addClass("agile-feature-item-blink");	
+	}*/
+
+	$(".grid_icon_center a.grid-icon-header").addClass("agile-feature-item-blink");	
    });
+
+
+// Click handlers to role menu items
+function initRolehandlers(){
+	// Remove blink icon from menu group icon
+	$(".grid_icon_center a.grid-icon-header").removeClass("agile-feature-item-blink");
+
+	// Reset active state from DomainUser.role
+	$(".menu-service-select[data-service-name='" + CURRENT_DOMAIN_USER.role + "']").addClass("active");
+
+	// Menu Items select
+	$(".menu-service-select").unbind("click").click(function(e){
+ 			e.preventDefault();
+
+ 			var serviceName = $(this).attr("data-service-name");
+ 			if(!serviceName)
+ 				  return;
+
+ 			var dashboardName = $(this).attr("data-dashboard");
+ 			if(!dashboardName)
+ 				 dashboardName = "dashboard";
+
+ 			// Update user with the current service
+ 			var json = {};
+ 			json.id = CURRENT_DOMAIN_USER.id;
+ 			json.role = serviceName;
+
+ 			var Role = Backbone.Model.extend({url : '/core/api/users/update-role'});
+ 			new Role().save( json, 
+ 						{success :function(model, response){
+ 							console.log("success");
+ 							console.log(model);
+ 							CURRENT_DOMAIN_USER = model.toJSON();
+ 						}, 
+ 						error: function(model, response){
+							console.log("error");
+ 						}});
+
+ 			// Close popup
+ 			// $("div.app-content-body div:first-child").click();
+ 			$(this).parents(".popover").popover('hide');
+
+ 			// Update dashboard name here
+ 			_agile_set_prefs("dashboard_" + CURRENT_DOMAIN_USER.id, dashboardName);
+
+ 			var due_tasks_count = $("#due_tasks_count").text();
+ 			due_tasks_count = due_tasks_count ? due_tasks_count : "";
+
+ 			// Update UI
+ 			$("#agile-menu-navigation-container").html(getTemplate(serviceName.toLowerCase() + "-menu-items", {due_tasks_count : due_tasks_count}));
+
+ 			// Call dashboard route
+ 			Backbone.history.navigate("#navigate-dashboard", {
+                trigger: true
+            });
+	});
+}
+
 
 //checks if there are any custom fields and if if present navigates to contact-add page otherwise opens person-modal
 function addContactBasedOnCustomfields(){

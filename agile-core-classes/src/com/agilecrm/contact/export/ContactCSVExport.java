@@ -7,11 +7,13 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.Tag;
+import com.agilecrm.contact.util.ContactUtil;
 
 /**
  * <code>ContactCSVExport</code> handles building CSV file for obtained
@@ -249,8 +251,31 @@ public class ContactCSVExport
 		try
 		{
 		    // add if not null
-		    if (field.value != null)
+		    if (field.value != null){
 		    	setFieldAtIndex(field.name, field.value, str, indexMap);
+		    	try{
+			    	Integer index = indexMap.get(field.name + " Name");
+			    	if(index != null){  // if the dynamic index is present then it denotes that the custom filed is contact or company type
+			    		List<Contact> contacts = ContactUtil.getContactsBulk(new JSONArray(field.value)) ;
+			    		if (contacts.size() > 0) {
+			    			StringBuilder contactName = new StringBuilder("[");
+				    		for(Contact cont : contacts){
+				    			if(cont.type.equals(Contact.Type.PERSON)){
+				    				contactName.append(cont.first_name);
+					    			contactName.append(cont.last_name);
+				    			}else{
+				    				contactName.append(cont.name);
+				    			}
+				    			
+				    			contactName.append(",");
+				    		}
+				    		contactName.replace(contactName.length()-1, contactName.length(),"");
+				    		contactName.append("]");
+				    		setFieldAtIndex(field.name+" Name", contactName.toString(), str, indexMap); // this is to show the name of the contact	
+			    		}
+			    	}		    			
+		    	}catch(Exception e){}
+		    }
 		}
 		catch (Exception e)
 		{

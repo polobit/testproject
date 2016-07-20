@@ -22,7 +22,7 @@ public class CreateTaskDeferredTask
     {
 
 	ExcecuteTaskDeferredTask task_reminder = new ExcecuteTaskDeferredTask(domain);
-	Queue queue = QueueFactory.getQueue("due-task-reminder");
+	Queue queue = QueueFactory.getQueue(TaskReminder.getTaskRemainderQueueName(domain));
 	TaskOptions options = TaskOptions.Builder.withPayload(task_reminder);
 	queue.add(options);
 

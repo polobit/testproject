@@ -42,7 +42,8 @@ var SettingsRouter = Backbone.Router
 			"gmail/:id" : "gmailShare",
 
 			/* Email templates */
-			"email-templates" : "emailTemplates", "email-template-add" : "emailTemplateAdd", "email-template/:id" : "emailTemplateEdit",
+			"email-templates" : "emailTemplates", "email-template-add" : "emailTemplateAdd", 
+			"email-template/:id" : "emailTemplateEdit",
 
 			/* Notifications */
 			"notification-prefs" : "notificationPrefs",
@@ -501,7 +502,7 @@ var SettingsRouter = Backbone.Router
 					$('#prefs-tabs-content').html(that.emailTemplatesListView.el);
 					$('#PrefsTab .select').removeClass('select');
 					$('.email-templates-tab').addClass('select');
-					$(".active").removeClass("active");
+					make_menu_item_active("email-templates-menu");
 
 				}, "#content");
 
@@ -798,8 +799,8 @@ var SettingsRouter = Backbone.Router
 				$('#prefs-tabs-content').html(view.render().el);
 				$('#PrefsTab .select').removeClass('select');
 				$('.scheduler-prefs-tab').addClass('select');
-				$(".active").removeClass("active");
-
+				make_menu_item_active("schedulingmenu");
+				
 				}, "#online-cal-listners");
 			},
 
