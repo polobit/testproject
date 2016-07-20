@@ -133,9 +133,7 @@ public class ArticleAPI
 		}
 		catch (Exception e)
 		{
-			System.out.println(ExceptionUtils.getFullStackTrace(e));
-			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-					.build());
+			return null;
 		}
 	}
 

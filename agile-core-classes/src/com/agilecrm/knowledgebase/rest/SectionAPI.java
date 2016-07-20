@@ -46,13 +46,13 @@ public class SectionAPI
 	{
 		try
 		{
-			Section section = Section.dao.getByProperty("name",name);
-			if(section == null)
+			Section section = Section.dao.getByProperty("name", name);
+			if (section == null)
 			{
 				return null;
 			}
 			section.categorie = Categorie.dao.get(section.categorie_key);
-			
+
 			return section;
 		}
 		catch (Exception e)
@@ -62,21 +62,23 @@ public class SectionAPI
 					.build());
 		}
 	}
-	
+
 	@GET
 	@Path("/categorie/{id}")
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public List<Section> getSectionsByCategorie(@PathParam("id") Long categorieID)
 	{
-			return SectionUtil.getSectionByCategorie(categorieID,false);
+		return SectionUtil.getSectionByCategorie(categorieID, false);
 	}
+
 	@GET
 	@Path("/{id}")
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public List<Section> getSections(@PathParam("id") Long categorieID)
 	{
-			return SectionUtil.getSectionByCategorie(categorieID,true);
+		return SectionUtil.getSectionByCategorie(categorieID, true);
 	}
+
 	@POST
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
@@ -88,9 +90,9 @@ public class SectionAPI
 				throw new Exception("Required params missing.");
 
 			Section existingsection = Section.dao.getByProperty("name", section.name);
-			if (existingsection != null && !existingsection.equals(section.name)){
-				throw new Exception("Section with name " + section.name
-						+ " already exists.");
+			if (existingsection != null && !existingsection.equals(section.name))
+			{
+				throw new Exception("Section with name " + section.name + " already exists.");
 			}
 			Key<Categorie> categorie_key = new Key<Categorie>(Categorie.class, section.categorie_id);
 
@@ -109,7 +111,7 @@ public class SectionAPI
 
 		return section;
 	}
-	
+
 	@POST
 	@Path("/bulk")
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
@@ -130,27 +132,25 @@ public class SectionAPI
 		return new JSONObject().put("status", "success").toString();
 	}
 
-	
 	@PUT
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public Section updateSection(Section section) throws WebApplicationException, EntityNotFoundException
 	{
-		Section dbsection = Section.dao.get(section.id) ;
+		Section dbsection = Section.dao.get(section.id);
 		try
 		{
 			if (StringUtils.isBlank(section.name) || section.categorie_id == null)
 				throw new Exception("Required params missing.");
 
-			
-
 			Section existingsection = Section.dao.getByProperty("name", section.name);
-			if (existingsection != null && (existingsection.name.equals(section.name)) && !(dbsection.name.equals(section.name))) {
+			if (existingsection != null && (existingsection.name.equals(section.name))
+					&& !(dbsection.name.equals(section.name)))
+			{
 				throw new Exception("Section with name " + section.name
-						+ " already exists. Please choose a different name." );
+						+ " already exists. Please choose a different name.");
 			}
-			
-			
+
 			Key<Categorie> categorie_key = new Key<Categorie>(Categorie.class, section.categorie_id);
 			section.categorie_key = categorie_key;
 			section.save();
@@ -170,7 +170,7 @@ public class SectionAPI
 	 * Deletes section by IDs
 	 * 
 	 */
-	@DELETE 
+	@DELETE
 	@Produces(MediaType.APPLICATION_JSON)
 	public String deleteSection(@QueryParam("id") Long id)
 	{
@@ -191,6 +191,7 @@ public class SectionAPI
 		}
 
 	}
+
 	/**
 	 * Save the section order based on the order of the section id's sent.
 	 * 
@@ -218,7 +219,7 @@ public class SectionAPI
 				{
 					catIds.add(Long.parseLong(idsArray.getString(i)));
 				}
-			SectionUtil.saveSectionOrder(catIds);
+				SectionUtil.saveSectionOrder(catIds);
 				result.put("message", "Order changes sucessfully.");
 			}
 			return result.toString();
@@ -238,7 +239,5 @@ public class SectionAPI
 			return null;
 		}
 	}
-
-
 
 }
