@@ -17,7 +17,9 @@ var ContactSearchRouter = Backbone.Router.extend({
 	searchResults : function(query)
 	{
 	
-		var search_list_filters = serializeForm("advanced-search-filter").fields_set;	
+		//var search_list_filters = serializeForm("advanced-search-filter").fields_set;
+		var search_filters = _agile_get_prefs('agile_search_filter_'+CURRENT_DOMAIN_USER.id);
+		var search_list_filters = JSON.parse(search_filters);	
 
 		if(search_list_filters){
 			$("#content").html("<div id='search-results-container'></div>")
@@ -121,24 +123,6 @@ var ContactSearchRouter = Backbone.Router.extend({
 						} });
 		  	   			ticketSearchResultsView.collection.fetch();
 						$('#search-results-container').find('#search_content_'+search_list_filters[i]).html(ticketSearchResultsView.render().el);
-
-
-		  	   	}
-
-		  	   	if(search_list_filters[i]=="cases"){
-
-		  	   		var caseSearchResultsView = new Base_Collection_View({ url : "core/api/search/seachlist?q=" + encodeURIComponent(query)+"&type="+ search_list_filters[i], templateKey : "case-search", individual_tag_name : 'tr', cursor : true,
-						data : QUERY_RESULTS, sort_collection : false, page_size : 5, postRenderCallback : function(el)
-						{
-							initializeCaseSearch();
-							// Shows the query string as heading of search results
-							if (caseSearchResultsView.collection.length == 0)
-								$("#search-query-heading", el).html('No matches found for "' + query + '" in cases');
-							else
-								$("#search-query-heading", el).html('Search results for "' + query + '" in cases');
-						} });
-		  	   			caseSearchResultsView.collection.fetch();
-						$('#search-results-container').find('#search_content_'+search_list_filters[i]).html(caseSearchResultsView.render().el);
 
 
 		  	   	}
