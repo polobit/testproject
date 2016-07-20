@@ -71,9 +71,11 @@ public class QuickBookSyncImpl extends OneWaySyncService
 	    {
 		if (customers != null)
 		{
+			System.out.println("Customers of quickbook"+customers);
 		    for (int i = 0; i < customers.length(); i++)
 		    {
 			Contact contact = wrapContactToAgileSchemaAndSave(customers.get(i));
+			System.out.println("Contact returned"+contact);
 			addCustomerInvoiceNote(contact, customers.get(i));
 			printPaymentDetails(customers.get(i));
 		    }
