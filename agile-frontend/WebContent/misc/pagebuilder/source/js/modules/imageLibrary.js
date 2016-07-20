@@ -81,7 +81,7 @@
             filename = filename + "_" + new Date().getTime() + "." + uploadedFileName.split('.').pop();
 
             var formData = new FormData();
-            formData.append('key',  "editor/betatesting/"+filename);
+            formData.append('key',  "editor/"+window.CURRENT_AGILE_DOMAIN+"/"+filename);
             formData.append('AWSAccessKeyId', 'AKIAIBK7MQYG5BPFHSRQ');
             formData.append('acl', 'public-read');
             formData.append('content-type', 'image/png');

@@ -297,7 +297,7 @@
         this.scripts = [];//tracks script URLs used on this page
         
         this.pageSettings = {
-            title: page.pages_title || 'My Landing Page',
+            title: page.pages_title || '',
             meta_description: page.meta_description || '',
             meta_keywords: page.meta_keywords || '',
             header_includes: page.header_includes || '',
@@ -1694,6 +1694,8 @@
             } else {
                 site.newPage();
 
+                site.setPendingChanges(false);
+
                 $("#publishPage").addClass("disabled");
                 $("#buttonPreview").addClass("disabled");
             }
@@ -1704,6 +1706,11 @@
                  $('#agileform_id').append("<option value= "+respData[i].id +">"+respData[i].formName+"</option>");
                }    
                 
+            }).fail(function(jqXHR) {
+                //login required
+                if (jqXHR.status === 401) {
+                    window.location = appUI.siteUrl + "login#landing-pages";
+                }
             });
             
             $(this.buttonNewPage).on('click', site.newPage);
@@ -1814,6 +1821,27 @@
 
             //store current responsive mode as well
             // serverData.siteData.responsiveMode = builderUI.currentResponsiveMode;
+
+            if(typeof serverData.pages["index"] === "undefined") {
+                return;
+            }
+
+            if(!serverData.pages["index"]["pageSettings"]["title"]) {
+                $("#lpPageNameForm").on('submit', function(formEL){
+                    formEL.preventDefault();
+                    var lpName = $("#lppagename").val();
+                    if(lpName) {
+                        site.inputPageSettingsTitle.value = lpName;
+                        site.updatePageSettings();
+                        $("#landingPageNameModal").modal('hide');
+                        site.save(true);
+                    } else {
+                        alert("Please provide a name for landing page.");
+                    }
+                });
+                $("#landingPageNameModal").modal('show');
+                return;
+            }
 
             var pageObject = {
                 "name": serverData.pages["index"]["pageSettings"]["title"],

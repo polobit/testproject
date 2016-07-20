@@ -52,6 +52,7 @@ if(idPath != null && !StringUtils.isEmpty(idPath) && !idPath.equals("/")) {
     var siteUrl = '<%=MAIN_URL%>';
     var agilePageId = <%=pageId%>;
     var s3BaseUrl = '<%=S3_STATIC_FILES_URL%>';
+    var CURRENT_AGILE_DOMAIN = '<%=NamespaceManager.get()%>';
     </script>
 </head>
 <body class="builderUI">
@@ -251,15 +252,15 @@ if(idPath != null && !StringUtils.isEmpty(idPath) && !idPath.equals("/")) {
                         <input type="text" class="form-control" id="linkText" name="linkText" placeholder="Link text" value="">
                     </div>
                     
-                    <!-- <div class="form-group">
+                    <div class="form-group hidden">
                         <select id="pageLinksDropdown" class="form-control select select-primary btn-block mbl">
                             <option value="#">Choose a page</option>                            
                         </select>
                     </div>
                     
-                    <p class="text-center or">
+                    <p class="text-center or hidden">
                         <span>or</span>
-                    </p> -->
+                    </p>
                     
                     <div class="form-group">
                         <!--<select id="pageLinksDropdown" class="form-control select select-primary btn-block mbl">-->
@@ -2027,7 +2028,7 @@ if(idPath != null && !StringUtils.isEmpty(idPath) && !idPath.equals("/")) {
                                     <div class="images masonry-3" id="adminImages">
                                     
                                                                             
-                                                                                <div class="image">
+                                        <!-- <div class="image">
                                                                     
                                             <div class="imageWrap">
                                                 <img src="<%=S3_STATIC_FILES_URL%>elements/images/autumn-507555.jpg">
@@ -2039,215 +2040,7 @@ if(idPath != null && !StringUtils.isEmpty(idPath) && !idPath.equals("/")) {
                                                 <button type="button" class="btn btn-info btn-embossed btn-block btn-sm useImage" data-url="images/autumn-507555.jpg"><span class="fui-export"></span> Insert Image</button>
                                             </div>
                                         
-                                        </div><!-- /.image -->
-                                                                                <div class="image">
-                                                                    
-                                            <div class="imageWrap">
-                                                <img src="<%=S3_STATIC_FILES_URL%>elements/images/exaple-image.jpg">
-                                                <div class="ribbon-wrapper-red"><div class="ribbon-red">Admin</div></div>
-                                            </div>
-                                            
-                                                                                        
-                                            <div class="buttons clearfix">
-                                                <button type="button" class="btn btn-info btn-embossed btn-block btn-sm useImage" data-url="images/exaple-image.jpg"><span class="fui-export"></span> Insert Image</button>
-                                            </div>
-                                        
-                                        </div><!-- /.image -->
-                                                                                <div class="image">
-                                                                    
-                                            <div class="imageWrap">
-                                                <img src="<%=S3_STATIC_FILES_URL%>elements/images/image1.png">
-                                                <div class="ribbon-wrapper-red"><div class="ribbon-red">Admin</div></div>
-                                            </div>
-                                            
-                                                                                        
-                                            <div class="buttons clearfix">
-                                                <button type="button" class="btn btn-info btn-embossed btn-block btn-sm useImage" data-url="images/image1.png"><span class="fui-export"></span> Insert Image</button>
-                                            </div>
-                                        
-                                        </div><!-- /.image -->
-                                                                                <div class="image">
-                                                                    
-                                            <div class="imageWrap">
-                                                <img src="<%=S3_STATIC_FILES_URL%>elements/images/iphone-518101_1920.jpg">
-                                                <div class="ribbon-wrapper-red"><div class="ribbon-red">Admin</div></div>
-                                            </div>
-                                            
-                                                                                        
-                                            <div class="buttons clearfix">
-                                                <button type="button" class="btn btn-info btn-embossed btn-block btn-sm useImage" data-url="images/iphone-518101_1920.jpg"><span class="fui-export"></span> Insert Image</button>
-                                            </div>
-                                        
-                                        </div><!-- /.image -->
-                                                                                <div class="image">
-                                                                    
-                                            <div class="imageWrap">
-                                                <img src="<%=S3_STATIC_FILES_URL%>elements/images/nikon-515883_1920.jpg">
-                                                <div class="ribbon-wrapper-red"><div class="ribbon-red">Admin</div></div>
-                                            </div>
-                                            
-                                                                                        
-                                            <div class="buttons clearfix">
-                                                <button type="button" class="btn btn-info btn-embossed btn-block btn-sm useImage" data-url="images/nikon-515883_1920.jpg"><span class="fui-export"></span> Insert Image</button>
-                                            </div>
-                                        
-                                        </div><!-- /.image -->
-                                                                                <div class="image">
-                                                                    
-                                            <div class="imageWrap">
-                                                <img src="<%=S3_STATIC_FILES_URL%>elements/images/picture1.jpg">
-                                                <div class="ribbon-wrapper-red"><div class="ribbon-red">Admin</div></div>
-                                            </div>
-                                            
-                                                                                        
-                                            <div class="buttons clearfix">
-                                                <button type="button" class="btn btn-info btn-embossed btn-block btn-sm useImage" data-url="images/picture1.jpg"><span class="fui-export"></span> Insert Image</button>
-                                            </div>
-                                        
-                                        </div><!-- /.image -->
-                                                                                <div class="image">
-                                                                    
-                                            <div class="imageWrap">
-                                                <img src="<%=S3_STATIC_FILES_URL%>elements/images/picture2.jpg">
-                                                <div class="ribbon-wrapper-red"><div class="ribbon-red">Admin</div></div>
-                                            </div>
-                                            
-                                                                                        
-                                            <div class="buttons clearfix">
-                                                <button type="button" class="btn btn-info btn-embossed btn-block btn-sm useImage" data-url="images/picture2.jpg"><span class="fui-export"></span> Insert Image</button>
-                                            </div>
-                                        
-                                        </div><!-- /.image -->
-                                                                                <div class="image">
-                                                                    
-                                            <div class="imageWrap">
-                                                <img src="<%=S3_STATIC_FILES_URL%>elements/images/portfolio1.jpg">
-                                                <div class="ribbon-wrapper-red"><div class="ribbon-red">Admin</div></div>
-                                            </div>
-                                            
-                                                                                        
-                                            <div class="buttons clearfix">
-                                                <button type="button" class="btn btn-info btn-embossed btn-block btn-sm useImage" data-url="images/portfolio1.jpg"><span class="fui-export"></span> Insert Image</button>
-                                            </div>
-                                        
-                                        </div><!-- /.image -->
-                                                                                <div class="image">
-                                                                    
-                                            <div class="imageWrap">
-                                                <img src="<%=S3_STATIC_FILES_URL%>elements/images/portfolio2.jpg">
-                                                <div class="ribbon-wrapper-red"><div class="ribbon-red">Admin</div></div>
-                                            </div>
-                                            
-                                                                                        
-                                            <div class="buttons clearfix">
-                                                <button type="button" class="btn btn-info btn-embossed btn-block btn-sm useImage" data-url="images/portfolio2.jpg"><span class="fui-export"></span> Insert Image</button>
-                                            </div>
-                                        
-                                        </div><!-- /.image -->
-                                                                                <div class="image">
-                                                                    
-                                            <div class="imageWrap">
-                                                <img src="<%=S3_STATIC_FILES_URL%>elements/images/portfolio3.jpg">
-                                                <div class="ribbon-wrapper-red"><div class="ribbon-red">Admin</div></div>
-                                            </div>
-                                            
-                                                                                        
-                                            <div class="buttons clearfix">
-                                                <button type="button" class="btn btn-info btn-embossed btn-block btn-sm useImage" data-url="images/portfolio3.jpg"><span class="fui-export"></span> Insert Image</button>
-                                            </div>
-                                        
-                                        </div><!-- /.image -->
-                                                                                <div class="image">
-                                                                    
-                                            <div class="imageWrap">
-                                                <img src="<%=S3_STATIC_FILES_URL%>elements/images/portfolio4.jpg">
-                                                <div class="ribbon-wrapper-red"><div class="ribbon-red">Admin</div></div>
-                                            </div>
-                                            
-                                                                                        
-                                            <div class="buttons clearfix">
-                                                <button type="button" class="btn btn-info btn-embossed btn-block btn-sm useImage" data-url="images/portfolio4.jpg"><span class="fui-export"></span> Insert Image</button>
-                                            </div>
-                                        
-                                        </div><!-- /.image -->
-                                                                                <div class="image">
-                                                                    
-                                            <div class="imageWrap">
-                                                <img src="<%=S3_STATIC_FILES_URL%>elements/images/portfolio5.jpg">
-                                                <div class="ribbon-wrapper-red"><div class="ribbon-red">Admin</div></div>
-                                            </div>
-                                            
-                                                                                        
-                                            <div class="buttons clearfix">
-                                                <button type="button" class="btn btn-info btn-embossed btn-block btn-sm useImage" data-url="images/portfolio5.jpg"><span class="fui-export"></span> Insert Image</button>
-                                            </div>
-                                        
-                                        </div><!-- /.image -->
-                                                                                <div class="image">
-                                                                    
-                                            <div class="imageWrap">
-                                                <img src="<%=S3_STATIC_FILES_URL%>elements/images/portfolio6.jpg">
-                                                <div class="ribbon-wrapper-red"><div class="ribbon-red">Admin</div></div>
-                                            </div>
-                                            
-                                                                                        
-                                            <div class="buttons clearfix">
-                                                <button type="button" class="btn btn-info btn-embossed btn-block btn-sm useImage" data-url="images/portfolio6.jpg"><span class="fui-export"></span> Insert Image</button>
-                                            </div>
-                                        
-                                        </div><!-- /.image -->
-                                                                                <div class="image">
-                                                                    
-                                            <div class="imageWrap">
-                                                <img src="<%=S3_STATIC_FILES_URL%>elements/images/portfolio7.jpg">
-                                                <div class="ribbon-wrapper-red"><div class="ribbon-red">Admin</div></div>
-                                            </div>
-                                            
-                                                                                        
-                                            <div class="buttons clearfix">
-                                                <button type="button" class="btn btn-info btn-embossed btn-block btn-sm useImage" data-url="images/portfolio7.jpg"><span class="fui-export"></span> Insert Image</button>
-                                            </div>
-                                        
-                                        </div><!-- /.image -->
-                                                                                <div class="image">
-                                                                    
-                                            <div class="imageWrap">
-                                                <img src="<%=S3_STATIC_FILES_URL%>elements/images/portfolio8.jpg">
-                                                <div class="ribbon-wrapper-red"><div class="ribbon-red">Admin</div></div>
-                                            </div>
-                                            
-                                                                                        
-                                            <div class="buttons clearfix">
-                                                <button type="button" class="btn btn-info btn-embossed btn-block btn-sm useImage" data-url="images/portfolio8.jpg"><span class="fui-export"></span> Insert Image</button>
-                                            </div>
-                                        
-                                        </div><!-- /.image -->
-                                                                                <div class="image">
-                                                                    
-                                            <div class="imageWrap">
-                                                <img src="<%=S3_STATIC_FILES_URL%>elements/images/powder-snow-496875_1920.jpg">
-                                                <div class="ribbon-wrapper-red"><div class="ribbon-red">Admin</div></div>
-                                            </div>
-                                            
-                                                                                        
-                                            <div class="buttons clearfix">
-                                                <button type="button" class="btn btn-info btn-embossed btn-block btn-sm useImage" data-url="images/powder-snow-496875_1920.jpg"><span class="fui-export"></span> Insert Image</button>
-                                            </div>
-                                        
-                                        </div><!-- /.image -->
-                                                                                <div class="image">
-                                                                    
-                                            <div class="imageWrap">
-                                                <img src="<%=S3_STATIC_FILES_URL%>elements/images/team1.jpg">
-                                                <div class="ribbon-wrapper-red"><div class="ribbon-red">Admin</div></div>
-                                            </div>
-                                            
-                                                                                        
-                                            <div class="buttons clearfix">
-                                                <button type="button" class="btn btn-info btn-embossed btn-block btn-sm useImage" data-url="images/team1.jpg"><span class="fui-export"></span> Insert Image</button>
-                                            </div>
-                                        
-                                        </div><!-- /.image -->
+                                        </div> -->
                                                                                 
                                                                                                     
                                     </div><!-- /.adminImages -->
@@ -2363,7 +2156,7 @@ if(idPath != null && !StringUtils.isEmpty(idPath) && !idPath.equals("/")) {
             
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                    <h4 class="modal-title" id="myModalLabel"><span class="fui-gear"></span> Page Settings for <span class="text-primary pName">index.html</span></h4>
+                    <h4 class="modal-title" id="myModalLabel"><span class="fui-gear"></span> Page Settings <span class="hidden text-primary pName">index.html</span></h4>
                 </div>
                 
                 <div class="modal-body">
@@ -2454,6 +2247,42 @@ if(idPath != null && !StringUtils.isEmpty(idPath) && !idPath.equals("/")) {
                 
     </div><!-- /.modal -->
     
+    <div class="modal fade landingPageNameModal" id="landingPageNameModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        
+        <div class="modal-dialog">
+            
+            <div class="modal-content">
+
+            <form id="lpPageNameForm">
+                                        
+                <div class="modal-body">
+  
+                  <div class="" style="padding: 30px 20px;">
+                            
+                    <div class="form-group">
+                      <label for="name" class="col-sm-3 control-label">Page Title:</label>
+                      <div class="col-sm-9">
+                        <input type="text" class="form-control" id="lppagename" name="lppagename" placeholder="Enter a name to the page" value="" required>
+                      </div>
+                    </div>
+                    
+                  </div>
+                                                                    
+                </div><!-- /.modal-body -->
+                                
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary btn-embossed" id="lpPageNameSaveButton"><span class="fui-check"></span> Save</button>
+                </div>
+
+            </form>
+                
+            </div><!-- /.modal-content -->
+            
+        </div><!-- /.modal-dialog -->
+                
+    </div><!-- /.modal -->
+
+
     <div class="modal fade successModal" id="successModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         
         <div class="modal-dialog">
