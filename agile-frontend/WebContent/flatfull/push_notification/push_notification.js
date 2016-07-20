@@ -125,7 +125,7 @@ function regiseterServiceWorkers()  {
 
   ///Get push notification browser id from browser
 
-  function agile_getPushNotificationBrowserId(callback){
+  function agile_setPushNotificationBrowserId(){
     try
     {
       var browser_id="";
@@ -142,16 +142,20 @@ function regiseterServiceWorkers()  {
              else
                browser_id = "chrome" + browser_id;
 
+             agile_store_data("agile-browser-id",browser_id);
+
             console.log(browser_id);
-             callback(browser_id);
           });
-        });
+        }).catch(function(error)
+         {
+            console.clear();
+             console.log("error");
+          });
 
      }
       catch(err)
       {
         console.log(err);
-        callback("");
       }
 
   }
