@@ -30,7 +30,8 @@ public class InvoiceCreatedWebhookHandler extends StripeWebhookHandler
 	 * if "request" parameter is null then only do the process 
 	 */
     	System.out.println("InvoiceCreatedWebhookHandler");
-	if (eventType.equals(StripeWebhookServlet.STRIPE_INVOICE_CREATED) && getEvent().getRequest() == null)
+    	AccountPrefs prefs = getAccountPrefs();
+	if (eventType.equals(StripeWebhookServlet.STRIPE_INVOICE_CREATED) && prefs != null && prefs.sendInvoiceBeforeCharge && getEvent().getRequest() == null)
 	{
 		System.out.println("InvoiceCreatedWebhookHandler success");
 
