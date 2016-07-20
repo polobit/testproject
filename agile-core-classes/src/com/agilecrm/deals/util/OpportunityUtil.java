@@ -1062,7 +1062,7 @@ public class OpportunityUtil
 		    searchMap.put("archived", Boolean.parseBoolean(filterJson.getString("archived")));
 	    }
 
-	    if (checkJsonString(filterJson, "value_filter")
+	    /*if (checkJsonString(filterJson, "value_filter")
 		    && filterJson.getString("value_filter").equalsIgnoreCase("equals"))
 	    {
 		if (checkJsonString(filterJson, "value"))
@@ -1084,9 +1084,9 @@ public class OpportunityUtil
 		    double value = Double.parseDouble(filterJson.getString("value_end").replace("%", ""));
 		    searchMap.put("expected_value <=", value);
 		}
-	    }
+	    }*/
 
-	    if (checkJsonString(filterJson, "probability_filter")
+	   /* if (checkJsonString(filterJson, "probability_filter")
 		    && filterJson.getString("probability_filter").equalsIgnoreCase("equals"))
 	    {
 		if (checkJsonString(filterJson, "probability"))
@@ -1108,7 +1108,7 @@ public class OpportunityUtil
 		    long probability = Long.parseLong(filterJson.getString("probability_end").replace("%", ""));
 		    searchMap.put("probability <=", probability);
 		}
-	    }
+	    }*/
 
 	    searchMap.putAll(getDateFilterCondition(filterJson, sortField));
 	    searchMap.putAll(getDateFilterCondition(filterJson, "created_time"));
