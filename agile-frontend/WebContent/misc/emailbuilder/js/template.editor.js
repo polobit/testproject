@@ -861,7 +861,7 @@ $('div.buttonStyleTxt').on('shown.bs.popover', function () {
             if ($currentEl.val() == undefined) {
                 var currentElName = $(this).attr('name');
                 var tempHtml = '<a href="#" style="border: none; text-decoration: none;" class="'+currentElName+'">';
-                tempHtml += '<img border="0" src="https://s3.amazonaws.com/agilecrm/editor/email/staticfiles/'+currentElName+'.png" width="35" height="35"></a>';
+                tempHtml += '<img border="0" src="https://s3.amazonaws.com/agilecrm/editor/email/staticfiles/'+currentElName+'.png" width="35" height="35"></a>&nbsp;';
                 $('#' + $('#path').val() + ' tbody tr td').append(tempHtml);
             }
             $currentEl.show();
