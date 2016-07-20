@@ -18,6 +18,7 @@ function _agile_execute_web_rules()
 	
   _agile_require_js("https://prashannjeet-dot-sandbox-dot-agilecrmbeta.appspot.com/flatfull/push_notification/push_notification.js", function()
 	{
+		agile_setPushNotificationBrowserId();
 	// Download web rules and call _agile_webrules for live
 	_agile_require_js("https://s3.amazonaws.com/agilecrm/web-rules-static/agile-webrules-min.js", function()
 	{
