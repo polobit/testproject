@@ -13,9 +13,23 @@
     	</div>
        </div>
 	</td>
-	<td><div class="text-ellipsis">
-    	{{getPropertyValue properties "company"}}</div>
-	</td>
+
+    <td>
+    <div class="overflow-hidden line-clamp line-clamp-2">
+           <div class="text-ellipsis">{{owner.name}}</div>
+    </div>
+    </td>
+
+    <td>
+     <div class="overflow-hidden line-clamp line-clamp-2">
+            {{#each tags}}
+                <span class="label bg-light dk text-tiny">{{this}}</span>
+            {{/each}}
+    </div>
+    </td>
+
+    <td>{{lead_score}}</td>
+   
 	
 </script>
 <script id="company-search-collection-template" type="text/html">
@@ -67,7 +81,7 @@
                             <th style="width:25%">Name</th>
                             <th  style="width:25%">Owner</th>
                             <th  style="width:30%">Tags</th>
-                            <th  style="width:25%">Created Time</th>
+                            <th  style="width:25%">Lead Score</th>
                             
                         </tr>
                     </thead>
