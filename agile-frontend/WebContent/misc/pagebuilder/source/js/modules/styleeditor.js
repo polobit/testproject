@@ -813,7 +813,7 @@
 
             $('a#video_Link').parent().show();
             $('a#video_Link').click();
-            $('a#tab1').css("display","none");
+            $('a#default-tab1').css("display","none");
 
             //inject current video ID,check if we're dealing with Youtube or Vimeo
 
@@ -1080,8 +1080,6 @@
                    var iframe_id=$("iframe")[i].getAttribute("id");
                    $('#'+iframe_id).contents().find('#agileform_div').empty();
                    $('#'+iframe_id).contents().find('#agileform_div').append(styleeditor._oldForm[current_agileform]);
-                   if(current_agileform==='agileform3')
-                        $('#'+iframe_id).contents().find('#agileform_div').css('text-align','center');
                    return;
                 }
             }); 
