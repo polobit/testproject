@@ -279,7 +279,7 @@ function isValidForm(form) {
 	jQuery.validator.addMethod("duplicateWithSystemName", function(value, element){
 		var labelJson = [];
 		labelJson.cases = 'title,owner_id,status,description' ;
-		labelJson.contact = 'first_name,last_name,email,company,title,name,url,website,address,phone,skypePhone,image,city,state,zip,country,tags' ;
+		labelJson.contact = 'fname,lname,email,company,title,name,url,website,address,phone,skypePhone,image,city,state,zip,country,tags' ;
 		labelJson.deal = 'name,probability,description,pipeline_milestone,close_date,deal_source_id,color1,relates_to,tags,expected_value' ;
 		var scope = $("#textModalForm").find("input[name='scope']").val();
 		var i;
