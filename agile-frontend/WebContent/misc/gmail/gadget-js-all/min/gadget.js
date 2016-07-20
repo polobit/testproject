@@ -74,7 +74,7 @@ function agile_get_emails()
 				{ name_from : "Devika Jakkannagari" },
 				{ email_to : "abhi@gashok.mygbiz.com;rahul@gashok.mygbiz.com;dheeraj@gashok.mygbiz.com;chandan@gashok.mygbiz.com;abhiranjan@gashok.mygbiz.com" },
 				{ name_to : "Abhi;;D j p;;" }, { email_cc : "devikatest1@gmail.com;devikatest@gmail.com;teju@gmail.com" }, { name_cc : "Dev T1;;Teju" },
-				{ email : "devikatest@gmail.com" }, { email : "vsrija17@gmail.com" }, { email : "test1@gmail.com" }, { email : "test1@gmail.com" }, { email : "pbx.kumar@gmail.com" },
+				{ email : "devikatest@gmail.com" }, { email : "vsrija17@gmail.com" },{ email : "ragaqt@gmail.com" }, { email : "test1@gmail.com" }, { email : "test1@gmail.com" }, { email : "pbx.kumar@gmail.com" },
 				{email_body : "Testing local emails body extractor."},{subject : "Testing local subject extractor."}
 		];
 
@@ -227,7 +227,9 @@ function agile_init_gadget() {
 		//_agile.set_account('osrgf4f2r27u8a7l8aap05317d', 'localhost');	
 		LIB_PATH = "https://srija1.agilecrm.com/";
 		
-		_agile.set_account('qs0ug1e05olqjps6k0839b0qk0', 'srija1');	
+		//LIB_PATH = "https://narmada.agilecrm.com/";
+		_agile.set_account('qs0ug1e05olqjps6k0839b0qk0', 'srija1');
+		//_agile.set_account('q8i1fa9n962hco1v88it4e9g58', 'narmada');		
 		
 		agile_user_associated();
 		
@@ -305,7 +307,7 @@ function agile_user_associated() {
 	head.js(LIB_PATH + 'lib/bootstrap.min.js', LIB_PATH + 'jscore/md5.js', function() {
 		
 		set_html($('#agile_content'), 'search', Contacts_Json);
-		$('#agile_content').prepend('<span style="float:right;cursor:pointer;margin-top:10px;" id="delete-button"><i class="icon-trash" data-toggle="tooltip" title="Uninstall" style="font-size:1em;"></i></span>');
+		$('#agile_content').prepend('<span style="float:right;cursor:pointer;margin-top:10px;margin-right:2px;" id="delete-button"><i class="icon-trash" data-toggle="tooltip" title="Uninstall" style="font-size:1em;"></i></span>');
 		$('#delete-button').live('click',agile_delete_all_prefs);
 	});
 	
@@ -1394,7 +1396,7 @@ function isValidTag(tag, showAlert) {
 
 			//  ------ Hide list view of contact. ------ 
 			$(".display-toggle", el).addClass("hide-contact-summery").removeClass("gadget-show-contact");
-			$(".display-toggle i", el).removeClass("fa fa-plus-square").addClass("fa fa-minus-square-o ");
+			$(".display-toggle i", el).removeClass("fa fa-caret-right").addClass("fa fa-caret-down");
 			$(".display-toggle i", el).attr("title", "Hide Details");
 			$(".display-toggle span", el).text("Hide Details");
 			$(".display-toggle", el).next().hide();
@@ -1432,7 +1434,7 @@ function isValidTag(tag, showAlert) {
 
 		//  ------ Show list view of contact. ------ 
 		$(".display-toggle", el).removeClass("hide-contact-summery").addClass("gadget-show-contact");
-		$(".display-toggle i", el).removeClass("fa fa-minus-square-o ").addClass("fa fa-plus-square");
+		$(".display-toggle i", el).removeClass("fa fa-caret-down ").addClass("fa fa-caret-right");
 		$(".display-toggle i", el).attr("title", "Show Details");
 		$(".display-toggle span", el).text("Show");
 		$(".display-toggle", el).next().show();

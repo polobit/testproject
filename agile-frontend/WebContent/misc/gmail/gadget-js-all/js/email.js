@@ -11,7 +11,7 @@ function agile_get_emails()
 				{ name_from : "Devika Jakkannagari" },
 				{ email_to : "abhi@gashok.mygbiz.com;rahul@gashok.mygbiz.com;dheeraj@gashok.mygbiz.com;chandan@gashok.mygbiz.com;abhiranjan@gashok.mygbiz.com" },
 				{ name_to : "Abhi;;D j p;;" }, { email_cc : "devikatest1@gmail.com;devikatest@gmail.com;teju@gmail.com" }, { name_cc : "Dev T1;;Teju" },
-				{ email : "devikatest@gmail.com" }, { email : "vsrija17@gmail.com" }, { email : "test1@gmail.com" }, { email : "test1@gmail.com" }, { email : "pbx.kumar@gmail.com" },
+				{ email : "devikatest@gmail.com" }, { email : "vsrija17@gmail.com" },{ email : "ragaqt@gmail.com" }, { email : "test1@gmail.com" }, { email : "test1@gmail.com" }, { email : "pbx.kumar@gmail.com" },
 				{email_body : "Testing local emails body extractor."},{subject : "Testing local subject extractor."}
 		];
 

@@ -219,7 +219,7 @@ function program2(depth0,data,depth1) {
 function program3(depth0,data,depth2) {
   
   var buffer = "", stack1, helper, options;
-  buffer += "\n<li style=\"margin:2px;border-bottom:1px solid #F5F5F5\">\n	<div style=\"display:block;\">\n		<div id=\"campaigns\" class=\"activity-text-block\">\n			<span class=\"activity-block-owner pull-left\" style=\" margin-right: 5px;min-height: 37px;\">\n				";
+  buffer += "\n<li style=\"margin:2px;border-bottom:1px solid #F5F5F5;padding-top: 5px;\">\n	<div style=\"display:block;\">\n		<div id=\"campaigns\" class=\"activity-text-block\">\n			<span class=\"activity-block-owner pull-left\" style=\" margin-right: 5px;min-height: 37px;\">\n				";
   stack1 = helpers['if'].call(depth0, (depth0 && depth0.log_type), {hash:{},inverse:self.program(6, program6, data),fn:self.programWithDepth(4, program4, data, depth2),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\n			</span>\n			\n			<!--<div class=\"edit-hover pull-right\" style=\"margin-right: 12px;\">Campaign - <a target=\"_blank\" href=\""
@@ -234,14 +234,7 @@ function program3(depth0,data,depth2) {
   buffer += escapeExpression(stack1)
     + "</a></div>-->\n			<div><a style=\"text-decoration: none;text-transform: capitalize;\"><b>"
     + escapeExpression((helper = helpers.titleFromEnums || (depth0 && depth0.titleFromEnums),options={hash:{},data:data},helper ? helper.call(depth0, (depth0 && depth0.log_type), options) : helperMissing.call(depth0, "titleFromEnums", (depth0 && depth0.log_type), options)))
-    + "</b></a></div>\n\n 			<p style=\"color:#b2b0b1;\">";
-  stack1 = (helper = helpers.if_email_sent || (depth0 && depth0.if_email_sent),options={hash:{},inverse:self.program(10, program10, data),fn:self.program(8, program8, data),data:data},helper ? helper.call(depth0, depth0, "log_type", options) : helperMissing.call(depth0, "if_email_sent", depth0, "log_type", options));
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "</p>\n\n			<div class=\"edit-hover pull-right\" style=\"margin-right: 10px; color:#b2b0b1;margin-top: -25px;\">\n					<span>\n					<i class=\"fa fa-clock-o m-r-xs text-muted\"></i>\n					<time class=\"log-created-time text-muted\" datetime=\""
-    + escapeExpression((helper = helpers.epochToHumanDate || (depth0 && depth0.epochToHumanDate),options={hash:{},data:data},helper ? helper.call(depth0, "", (depth0 && depth0.time), options) : helperMissing.call(depth0, "epochToHumanDate", "", (depth0 && depth0.time), options)))
-    + "\">"
-    + escapeExpression((helper = helpers.epochToHumanDate || (depth0 && depth0.epochToHumanDate),options={hash:{},data:data},helper ? helper.call(depth0, "ddd mmm dd yyyy HH:MM:ss", (depth0 && depth0.time), options) : helperMissing.call(depth0, "epochToHumanDate", "ddd mmm dd yyyy HH:MM:ss", (depth0 && depth0.time), options)))
-    + "</time>\n					</span>\n					<span class=\"label label-info pull-right\" style=\"margin-left:5px;\">Campaign -<a target=\"_blank\" href=\""
+    + "</b></a>\n			<span class=\"label label-info \" style=\"margin-left:5px;\">Campaign -<a target=\"_blank\" href=\""
     + escapeExpression(((stack1 = (depth2 && depth2.ac_path)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "#workflow/";
   if (helper = helpers.campaign_id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
@@ -251,7 +244,14 @@ function program3(depth0,data,depth2) {
   if (helper = helpers.campaign_name) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.campaign_name); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "</a>\n					</span>\n				\n			</div>	\n		</div>\n	</div>\n</li>\n			";
+    + "</a>\n					</span>\n			</div>\n\n\n 			<p style=\"color: #909090;\">";
+  stack1 = (helper = helpers.if_email_sent || (depth0 && depth0.if_email_sent),options={hash:{},inverse:self.program(10, program10, data),fn:self.program(8, program8, data),data:data},helper ? helper.call(depth0, depth0, "log_type", options) : helperMissing.call(depth0, "if_email_sent", depth0, "log_type", options));
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "</p>\n\n			<div class=\"edit-hover pull-right\" style=\"margin-right: 10px; color:#b2b0b1;margin-top: -25px;\">\n					<span>\n					<i class=\"fa fa-clock-o m-r-xs text-muted\"></i>\n					<time class=\"log-created-time text-muted\" datetime=\""
+    + escapeExpression((helper = helpers.epochToHumanDate || (depth0 && depth0.epochToHumanDate),options={hash:{},data:data},helper ? helper.call(depth0, "", (depth0 && depth0.time), options) : helperMissing.call(depth0, "epochToHumanDate", "", (depth0 && depth0.time), options)))
+    + "\">"
+    + escapeExpression((helper = helpers.epochToHumanDate || (depth0 && depth0.epochToHumanDate),options={hash:{},data:data},helper ? helper.call(depth0, "ddd mmm dd yyyy HH:MM:ss", (depth0 && depth0.time), options) : helperMissing.call(depth0, "epochToHumanDate", "ddd mmm dd yyyy HH:MM:ss", (depth0 && depth0.time), options)))
+    + "</time>\n					</span>\n					\n				\n			</div>	\n		</div>\n	</div>\n</li>\n			";
   return buffer;
   }
 function program4(depth0,data,depth3) {
@@ -315,7 +315,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
 function program1(depth0,data) {
   
   var buffer = "", stack1, helper, options;
-  buffer += "\n<!-- contact exist -->			\n		<div class=\"contact-minified row-fluid\">\n			<div style=\"max-width:95%; display:inline-block;\">\n				<div style=\"text-overflow: ellipsis; white-space: nowrap; overflow: hidden;margin-left: 11px;\">\n					<a class=\"gadget-show-contact display-toggle\" style=\"cursor:pointer; margin:0px 10px 0px 0px; text-decoration:underline; font-weight:bold;\"><i class=\"fa fa-plus-square toggle-tag\" style=\"text-decoration:none; margin-right:5px;margin-top: 2px;\" data-toggle=\"tooltip\"></i></a><span title=\""
+  buffer += "\n<!-- contact exist -->			\n		<div class=\"contact-minified row-fluid\">\n			<div style=\"max-width:95%; display:inline-block;\">\n				<div style=\"text-overflow: ellipsis; white-space: nowrap; overflow: hidden;margin-left: 11px;\">\n					<a class=\"gadget-show-contact display-toggle\" style=\"cursor:pointer; margin:0px 10px 0px 0px; text-decoration:underline; font-weight:bold;\"><i class=\"fa fa-caret-right toggle-tag\" style=\"text-decoration:none; margin-right:5px;margin-top: 2px;\" data-toggle=\"tooltip\"></i></a><span title=\""
     + escapeExpression((helper = helpers.getPropertyValue || (depth0 && depth0.getPropertyValue),options={hash:{},data:data},helper ? helper.call(depth0, (depth0 && depth0.properties), "first_name", options) : helperMissing.call(depth0, "getPropertyValue", (depth0 && depth0.properties), "first_name", options)))
     + " "
     + escapeExpression((helper = helpers.getPropertyValue || (depth0 && depth0.getPropertyValue),options={hash:{},data:data},helper ? helper.call(depth0, (depth0 && depth0.properties), "last_name", options) : helperMissing.call(depth0, "getPropertyValue", (depth0 && depth0.properties), "last_name", options)))
@@ -402,7 +402,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
 function program1(depth0,data) {
   
   var buffer = "", stack1, helper;
-  buffer += "\n													<div class=\"score-value inline-block font-bold\" style=\"display:inline-block; font-size: 11px; vertical-align:middle; cursor:default;overflow: hidden; white-space: nowrap;text-overflow: ellipsis;width:30px; text-align:center;\"data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"";
+  buffer += "\n													<div class=\"score-value inline-block font-bold\" style=\"display: inline-block;font-size: 11px;vertical-align: middle;cursor: default;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;width: 25px;text-align: center;\"data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"";
   if (helper = helpers.lead_score) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.lead_score); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
@@ -445,12 +445,12 @@ function program9(depth0,data) {
   return escapeExpression(stack1);
   }
 
-  buffer += "		\n<!-- 1st coloum (conatct image) -->\n				<div class=\"span1\" style=\"min-width:65px;\">\n					<div class=\"thumbnails\">\n	   					<div class=\"span12\">\n	   						<div style=\"position: relative;margin-right: 16px;\">\n	   						<div class=\"score-scope\" unselectable=\"on\" onselectstart=\"return false\">\n	   							<div style=\"position: absolute;right:7px;background-color: #27c24c;border-radius:10px;color: #fff;font-size: 12px;text-align: center;padding: 2px 5px;line-height: 1;display: inline-block;top:50px;\">\n													";
+  buffer += "		\n<!-- 1st coloum (conatct image) -->\n				<div class=\"span1\" style=\"min-width:65px;\">\n					<div class=\"thumbnails\">\n	   					<div class=\"span12\">\n	   						<div style=\"position: relative;margin-right: 16px;\">\n	   						<div class=\"score-scope\" unselectable=\"on\" onselectstart=\"return false\">\n	   							<div style=\"position: absolute;right:14px;background-color: #27c24c;border-radius: 10px;color: #fff;font-size: 12px;text-align: center;padding: 2px 5px;line-height: 1;display: inline-block;top: 39px;\">\n													";
   stack1 = helpers['if'].call(depth0, (depth0 && depth0.lead_score), {hash:{},inverse:self.program(3, program3, data),fn:self.program(1, program1, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n								</div>\n								<span id=\"cursor1\" style=\"position: absolute;border-radius:10px;font-size: 12px;min-width: 10px;text-align: center;padding: 2px 5px;line-height: 1;display: inline-block;top:50px;color:white;right:-11px;\" onmouseover=\"this.style.color='black';\" onmouseout=\"this.style.color='white';\">			\n												<ul style=\"margin:0; list-style-type:none; display:inline-block; vertical-align:middle;\">\n													<input type=\"hidden\" name=\"email\" value=\"ghanshyam.agile@gmail.com\">\n													<li style=\"line-height:7px;\"><i class=\"icon-sort-up add-score\" style=\"font-size:12px; cursor:pointer;\" title=\"Add Score\"></i></li>\n													<li style=\"line-height:4px;\"><i class=\"icon-sort-down subtract-score\" style=\"font-size:12px; cursor:pointer;\" title=\"Subtract Score\"></i></li>\n												</ul>\n								</span>			\n							</div>\n\n    							<img  class='upload_pic imgholder submit w-full img-circle w-full img-circle b-2x b' src=\""
+  buffer += "\n								</div>\n								<span id=\"cursor1\" style=\"position: absolute;border-radius: 10px;font-size: 12px;min-width: 10px;text-align: center;padding: 2px 10px;line-height: 1;display: inline-block;top: 45px;color: white;right: -8px;\" onmouseover=\"this.style.color='black';\" onmouseout=\"this.style.color='white';\">			\n												<ul style=\"    margin: 0;list-style-type: none;display: inline-block;vertical-align: middle;\">\n													<input type=\"hidden\" name=\"email\" value=\"ghanshyam.agile@gmail.com\">\n													<li style=\"line-height: 0px;\"><i class=\"icon-sort-up add-score\" style=\"font-size:12px; cursor:pointer;\" title=\"Add Score\"></i></li>\n													<li style=\"line-height:4px;\"><i class=\"icon-sort-down subtract-score\" style=\"font-size:12px; cursor:pointer;\" title=\"Subtract Score\"></i></li>\n												</ul>\n								</span>			\n							</div>\n\n    							<img  class='upload_pic imgholder submit w-full img-circle w-full img-circle b-2x b' src=\""
     + escapeExpression((helper = helpers.gravatarurl || (depth0 && depth0.gravatarurl),options={hash:{},data:data},helper ? helper.call(depth0, (depth0 && depth0.properties), 50, options) : helperMissing.call(depth0, "gravatarurl", (depth0 && depth0.properties), 50, options)))
-    + "\" style=\"width:52px;height:40px;border: 2px solid #9CC96B\" />\n		   					</div>\n		   				</div>\n					</div>\n    			</div>\n\n<!-- 2nd coloum (conatct details) -->\n				<div class=\"span8\" style=\"margin-left:-6px;\">\n<!-- First row (Name) - Starts -->\n					<div class=\"row-fluid\">\n						<div style=\"display:inline-block; max-width: 16em; vertical-align:middle;\">\n							<div>\n								\n									<font style=\"font-size: 14px;\" title=\""
+    + "\" style=\"width:35px;height:35px;border-radius:3px;\" />\n		   					</div>\n		   				</div>\n					</div>\n    			</div>\n\n<!-- 2nd coloum (conatct details) -->\n				<div class=\"span8\" style=\"margin-left:-20px;margin-top: -5px;\n\">\n<!-- First row (Name) - Starts -->\n					<div class=\"row-fluid\">\n						<div style=\"display:inline-block; max-width: 16em; vertical-align:middle;\">\n							<div>\n								\n									<font style=\"font-size: 14px;\" title=\""
     + escapeExpression((helper = helpers.getPropertyValue || (depth0 && depth0.getPropertyValue),options={hash:{},data:data},helper ? helper.call(depth0, (depth0 && depth0.properties), "first_name", options) : helperMissing.call(depth0, "getPropertyValue", (depth0 && depth0.properties), "first_name", options)))
     + " "
     + escapeExpression((helper = helpers.getPropertyValue || (depth0 && depth0.getPropertyValue),options={hash:{},data:data},helper ? helper.call(depth0, (depth0 && depth0.properties), "last_name", options) : helperMissing.call(depth0, "getPropertyValue", (depth0 && depth0.properties), "last_name", options)))
@@ -477,10 +477,10 @@ function program9(depth0,data) {
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\n					</div>\n<!-- Second row (Title, Company) - Ends -->\n					<div class=\"row-fluid\" style=\"margin-bottom: 1px;color: #98a6ad;\">\n					"
     + escapeExpression((helper = helpers.getPropertyValue || (depth0 && depth0.getPropertyValue),options={hash:{},data:data},helper ? helper.call(depth0, (depth0 && depth0.properties), "email", options) : helperMissing.call(depth0, "getPropertyValue", (depth0 && depth0.properties), "email", options)))
-    + "\n					</div>\n<!-- Third row (tags) - Starts -->					\n					<div class=\"row-fluid\">\n						<div class=\"span11\">	 		\n						<div class=\"add-tag\">\n							<div style=\"padding-top:4px;\">\n								<ul id=\"added_tags_ul\" class=\"tagsinput\">\n									<li class=\"tag\" style=\"display: none; padding:1px 4px;\">\n											<span>\n											<span class=\"anchor tag-name\" style=\"float:left; cursor:default;padding: 1px 1px 1px 1px;\">lead</span>\n											<a class=\"close remove-tag remove-tag-icon\" style=\"float:left; line-height:18px;color: white;font-weight: normal;opacity:1;font-size:15px;\" title=\"Remove Tag\">&times;</a>\n										</span>\n									</li> \n								</ul>\n								<div style=\"display: inline-block; vertical-align:top;\" >\n										<form id=\"add_tags_form\" name=\"add_tags_form\" method=\"post\" style=\"display: none; margin-bottom: 0px; margin-top:1px;\">\n										<div style=\"margin-bottom:0px;\">\n											<input type=\"hidden\" name=\"email\" value='";
+    + "\n					</div>\n<!-- Third row (tags) - Starts -->					\n					<div class=\"row-fluid\">\n						<div class=\"span11\">	 		\n						<div class=\"add-tag\">\n							<div>\n								<ul id=\"added_tags_ul\" class=\"tagsinput\">\n									<li class=\"tag\" style=\"display: none; padding:1px 4px;\">\n											<span>\n											<span class=\"anchor tag-name\" style=\"float:left; cursor:default;padding: 1px 1px 1px 1px;\">lead</span>\n											<a class=\"close remove-tag remove-tag-icon\" style=\"float: left;line-height: 18px;color: white;font-weight: normal;opacity: 1;font-size: 15px;\" title=\"Remove Tag\">&times;	</a>\n										</span>\n									</li> \n								</ul>\n								<div style=\"display: inline-block; vertical-align:top;\" >\n										<form id=\"add_tags_form\" name=\"add_tags_form\" method=\"post\" style=\"display: none; margin-bottom: 0px; margin-top:1px;\">\n										<div style=\"margin-bottom:0px;\">\n											<input type=\"hidden\" name=\"email\" value='";
   stack1 = (helper = helpers.if_propertyName || (depth0 && depth0.if_propertyName),options={hash:{},inverse:self.noop,fn:self.program(9, program9, data),data:data},helper ? helper.call(depth0, "email", options) : helperMissing.call(depth0, "if_propertyName", "email", options));
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "'/>\n											<input class=\"tags-typeahead ignore-comma-keydown input-small\" name=\"tags\" type=\"text\" id=\"tags\" style=\"margin: 0px;\" placeholder=\"Enter tag\" autocomplete=\"off\">\n											<a type=\"submit\" class=\"btn btn-default\" id=\"contact_add_tags\" style=\"margin-left: 10px; padding: 5px 12px;\">Add</a>\n										</div>\n									</form>\n									<img class=\"tag-waiting\" style=\"display:none; width:16px; margin-top:6px;\" src=\"https://googleapps.agilecrm.com/img/ajax-loader-cursor.gif\"></img>\n									<i id=\"add_tags\" class=\"icon-plus toggle-tag\" style=\"cursor:pointer; margin-top:4px; display:block;\" title=\"Add Tag\"></i>\n								</div>\n							</div>\n						</div>\n						</div>\n					</div>\n<!-- Third row (Tags) - End -->\n				</div>\n\n<!-- 3rd coloum -->				\n				<div class=\"span3 contact-col-3\" style=\"margin-left:0; position:absolute; right:28;\">\n					\n					<div class=\"row-fluid\" >\n								<div class=\"btn-group row-fluid\" style=\"display:inline-block; min-width:72px; margin-bottom:10px;\">\n									<div class=\"pull-right\" style=\"background-color: #F2F2F2;\" onmouseover=\"this.style.backgroundColor ='#DBDBDB';\" onmouseout=\"this.style.backgroundColor ='#F2F2F2';\">\n										<a id=\"dropdown_switching\" title=\"\" class=\"dropdown-toggle btn btn-default dropdown-toggle btn-sm \" data-toggle=\"dropdown\" aria-expanded=\"true\"> \n											<i class=\"fa fa-ellipsis-h filter-ellip-menu-st b b-light\" style=\"cursor:pointer;\" data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"Add\"></i> </a>\n										<ul class=\"dropdown-menu pull-right\">\n   											<!-- dropdown menu links -->\n											<li class=\"action-add-note\"><a style=\"cursor:default;\">Add Note</a></li>\n											<li class=\"action-add-email-note\"><a style=\"cursor:default;\">Add Email as Note</a></li>\n											<li class=\"action-add-task\"><a style=\"cursor:default;\">Add Task</a></li>\n											<li class=\"action-add-deal\"><a style=\"cursor:default;\">Add Deal</a></li>\n											<li class=\"action-add-campaign\"><a style=\"cursor:default;\">Add to Campaign</a></li>\n										</ul>\n									</div>\n								</div>\n							</div>\n					\n						\n<!-- end of contact info-->";
+  buffer += "'/>\n											<input class=\"tags-typeahead ignore-comma-keydown input-small\" name=\"tags\" type=\"text\" id=\"tags\" style=\"margin: 0px;\" placeholder=\"Enter tag\" autocomplete=\"off\">\n											<a type=\"submit\" class=\"btn btn-default\" id=\"contact_add_tags\" style=\"margin-left: 10px; padding: 5px 12px;\">Add</a>\n										</div>\n									</form>\n									<img class=\"tag-waiting\" style=\"display:none; width:16px; margin-top:6px;\" src=\"https://googleapps.agilecrm.com/img/ajax-loader-cursor.gif\"></img>\n									<i id=\"add_tags\" class=\"icon-plus-sign toggle-tag\" style=\"cursor:pointer; margin-top:4px; display:block;\" title=\"Add Tag\"></i>\n								</div>\n							</div>\n						</div>\n						</div>\n					</div>\n<!-- Third row (Tags) - End -->\n				</div>\n\n<!-- 3rd coloum -->				\n				<div class=\"span3 contact-col-3\" style=\"margin-left:0; position:absolute; right:28;\">\n					\n					<div class=\"row-fluid\" >\n								<div class=\"btn-group row-fluid\" style=\"display:inline-block; min-width:72px; margin-bottom:10px;\">\n									<div class=\"pull-right\" style=\"background-color: #F2F2F2;\" onmouseover=\"this.style.backgroundColor ='#DBDBDB';\" onmouseout=\"this.style.backgroundColor ='#F2F2F2';\">\n										<a id=\"dropdown_switching\" title=\"\" class=\"dropdown-toggle btn btn-default dropdown-toggle btn-sm \" data-toggle=\"dropdown\" aria-expanded=\"true\"> \n											<i class=\"fa fa-ellipsis-h filter-ellip-menu-st b b-light\" style=\"cursor:pointer;\" data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"Add\"></i> </a>\n										<ul class=\"dropdown-menu pull-right\">\n   											<!-- dropdown menu links -->\n											<li class=\"action-add-note\"><a style=\"cursor:default;\">Add Note</a></li>\n											<li class=\"action-add-email-note\"><a style=\"cursor:default;\">Add Email as Note</a></li>\n											<li class=\"action-add-task\"><a style=\"cursor:default;\">Add Task</a></li>\n											<li class=\"action-add-deal\"><a style=\"cursor:default;\">Add Deal</a></li>\n											<li class=\"action-add-campaign\"><a style=\"cursor:default;\">Add to Campaign</a></li>\n										</ul>\n									</div>\n								</div>\n							</div>\n					\n						\n<!-- end of contact info-->";
   return buffer;
   });
 templates['gadget-deal'] = template(function (Handlebars,depth0,helpers,partials,data) {
@@ -528,7 +528,7 @@ function program2(depth0,data) {
 function program3(depth0,data) {
   
   var buffer = "", stack1, helper, options;
-  buffer += "\n<li style=\"margin:5px;border-bottom:1px solid #F5F5F5;\">\n	<div style=\"display:block;\" class=\"activity\">\n		<div id=\"notes\" class=\"activity-text-block\">\n			<!--<h4 style=\"margin-bottom:2px;\"><a style=\"text-decoration: none\"><b>"
+  buffer += "\n<li style=\"margin:5px;border-bottom:1px solid #F5F5F5;padding-top: 5px;\">\n	<div style=\"display:block;\" class=\"activity\">\n		<div id=\"notes\" class=\"activity-text-block\">\n			<!--<h4 style=\"margin-bottom:2px;\"><a style=\"text-decoration: none\"><b>"
     + escapeExpression((helper = helpers.ucfirst || (depth0 && depth0.ucfirst),options={hash:{},data:data},helper ? helper.call(depth0, (depth0 && depth0.name), options) : helperMissing.call(depth0, "ucfirst", (depth0 && depth0.name), options)))
     + "</b></a><span style=\"margin-left:10px;\" data-toggle=\"tooltip\" title=\"Probability\">(";
   if (helper = helpers.probability) { stack1 = helper.call(depth0, {hash:{},data:data}); }
@@ -551,15 +551,19 @@ function program3(depth0,data) {
     + "</time>\n				</small>\n				\n			</div>-->\n			<span class=\"activity-block-owner pull-left\" style=\" margin-right: 5px;min-height: 37px;\">\n			";
   stack1 = helpers['if'].call(depth0, ((stack1 = (depth0 && depth0.owner)),stack1 == null || stack1 === false ? stack1 : stack1.pic), {hash:{},inverse:self.program(10, program10, data),fn:self.program(8, program8, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n			</span>\n			<a style=\"text-decoration: none\"><b>"
+  buffer += "\n			</span>\n\n			<a style=\"text-decoration: none\"><b>"
     + escapeExpression((helper = helpers.ucfirst || (depth0 && depth0.ucfirst),options={hash:{},data:data},helper ? helper.call(depth0, (depth0 && depth0.name), options) : helperMissing.call(depth0, "ucfirst", (depth0 && depth0.name), options)))
-    + "</b></a><span style=\"margin-left:5px;\" data-toggle=\"tooltip\" title=\"Probability\">(";
+    + "</b></a>\n			<span style=\"margin-left:2px;\" data-toggle=\"tooltip\" class=\"label label-info\" title=\"Milestone\">";
+  if (helper = helpers.milestone) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.milestone); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + " </span>\n			<span style=\"margin-left:5px;\" data-toggle=\"tooltip\" title=\"Probability\">(";
   if (helper = helpers.probability) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.probability); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
     + "%)</span>\n			<p >\n			<!--<span data-toggle=\"tooltip\" title=\"Owner\">"
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.owner)),stack1 == null || stack1 === false ? stack1 : stack1.name)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "</span>-->\n			<span style=\"color: #b2b0b1;\">Close Date: <time class=\"task-created-time\" datetime=\""
+    + "</span>-->\n			<span style=\"color: #909090;\">Close Date: <time class=\"task-created-time\" datetime=\""
     + escapeExpression((helper = helpers.epochToHumanDate || (depth0 && depth0.epochToHumanDate),options={hash:{},data:data},helper ? helper.call(depth0, "", (depth0 && depth0.close_date), options) : helperMissing.call(depth0, "epochToHumanDate", "", (depth0 && depth0.close_date), options)))
     + "\" style=\"border-bottom:dotted 1px #999\">"
     + escapeExpression((helper = helpers.epochToHumanDate || (depth0 && depth0.epochToHumanDate),options={hash:{},data:data},helper ? helper.call(depth0, "ddd mmm dd yyyy HH:MM:ss", (depth0 && depth0.close_date), options) : helperMissing.call(depth0, "epochToHumanDate", "ddd mmm dd yyyy HH:MM:ss", (depth0 && depth0.close_date), options)))
@@ -575,11 +579,11 @@ function program3(depth0,data) {
     + escapeExpression((helper = helpers.epochToHumanDate || (depth0 && depth0.epochToHumanDate),options={hash:{},data:data},helper ? helper.call(depth0, "", (depth0 && depth0.created_time), options) : helperMissing.call(depth0, "epochToHumanDate", "", (depth0 && depth0.created_time), options)))
     + "\" style=\"border-bottom:dotted 1px #999\">"
     + escapeExpression((helper = helpers.epochToHumanDate || (depth0 && depth0.epochToHumanDate),options={hash:{},data:data},helper ? helper.call(depth0, "ddd mmm dd yyyy HH:MM:ss", (depth0 && depth0.created_time), options) : helperMissing.call(depth0, "epochToHumanDate", "ddd mmm dd yyyy HH:MM:ss", (depth0 && depth0.created_time), options)))
-    + "</time>\n				</small>\n				<span style=\"margin-right:5px;\" data-toggle=\"tooltip\" class=\"pull-right label label-info\" title=\"Milestone\">";
+    + "</time>\n				</small>\n				<!--<span style=\"margin-right:5px;\" data-toggle=\"tooltip\" class=\"pull-right label label-info\" title=\"Milestone\">";
   if (helper = helpers.milestone) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.milestone); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + " </span>\n				\n			</div>\n			</div>\n\n		</div>\n	</div>\n</li>\n\n			";
+    + " </span>-->\n				\n			</div>\n			</div>\n\n		</div>\n	</div>\n</li>\n\n			";
   return buffer;
   }
 function program4(depth0,data) {
@@ -668,13 +672,13 @@ function program2(depth0,data) {
 function program3(depth0,data) {
   
   var buffer = "", stack1, helper, options;
-  buffer += "\n				<li style=\"margin:5px;border-bottom:1px solid #F5F5F5\">\n					<div style=\"display:block;\" class=\"activity\">\n						<div id=\"notes\" class=\"activity-text-block\">\n							<h4><a style=\"text-decoration: none\"><b>"
+  buffer += "\n				<li style=\"margin:5px;border-bottom:1px solid #F5F5F5;padding-top: 5px;\">\n					<div style=\"display:block;\" class=\"activity\">\n						<div id=\"notes\" class=\"activity-text-block\">\n							<h4><a style=\"text-decoration: none\"><b>"
     + escapeExpression((helper = helpers.ucfirst || (depth0 && depth0.ucfirst),options={hash:{},data:data},helper ? helper.call(depth0, (depth0 && depth0.subject), options) : helperMissing.call(depth0, "ucfirst", (depth0 && depth0.subject), options)))
-    + "</b></a></h4>\n							<p style=\"margin-right:40px;color: #b2b0b1;\">";
+    + "</b></a></h4>\n							<p style=\"margin-right:40px;color: #909090;\">";
   if (helper = helpers.description) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.description); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "</p>	\n					 		<div class=\"pull-right\" style=\"margin-top:-15px;\">\n							<small class=\"edit-hover\" style=\"color:#b2b0b1;\"> \n								<time class=\"note-created-time\" datetime=\""
+    + "</p>	\n					 		<div class=\"pull-right\" style=\"margin-top:-25px;\">\n							<small class=\"edit-hover\" style=\"color:#b2b0b1;\"> \n								<time class=\"note-created-time\" datetime=\""
     + escapeExpression((helper = helpers.epochToHumanDate || (depth0 && depth0.epochToHumanDate),options={hash:{},data:data},helper ? helper.call(depth0, "", (depth0 && depth0.created_time), options) : helperMissing.call(depth0, "epochToHumanDate", "", (depth0 && depth0.created_time), options)))
     + "\" style=\"border-bottom:dotted 1px #999\">"
     + escapeExpression((helper = helpers.epochToHumanDate || (depth0 && depth0.epochToHumanDate),options={hash:{},data:data},helper ? helper.call(depth0, "ddd mmm dd yyyy HH:MM:ss", (depth0 && depth0.created_time), options) : helperMissing.call(depth0, "epochToHumanDate", "ddd mmm dd yyyy HH:MM:ss", (depth0 && depth0.created_time), options)))
@@ -780,13 +784,13 @@ function program2(depth0,data) {
 function program3(depth0,data) {
   
   var buffer = "", stack1, helper, options;
-  buffer += "\n<li style=\"margin:5px;border-bottom:1px solid #F5F5F5\">\n	<div class=\"activity\" style=\"display:block;\">\n		";
-  stack1 = helpers['if'].call(depth0, (depth0 && depth0.is_complete), {hash:{},inverse:self.program(6, program6, data),fn:self.program(4, program4, data),data:data});
+  buffer += "\n<li style=\"margin:5px;border-bottom:1px solid #F5F5F5;padding-top: 5px;\">\n	<div class=\"activity\" style=\"display:block;\">\n		";
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.is_complete), {hash:{},inverse:self.program(4, program4, data),fn:self.program(4, program4, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "	\n			";
-  stack1 = helpers['if'].call(depth0, (depth0 && depth0.is_complete), {hash:{},inverse:self.program(10, program10, data),fn:self.program(8, program8, data),data:data});
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.is_complete), {hash:{},inverse:self.program(8, program8, data),fn:self.program(6, program6, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n			<div>\n				<p style=\"color:#b2b0b1;\">\n					<span >Due: <time class=\"task-created-time\" datetime=\""
+  buffer += "\n			<div>\n				<p style=\"color: #909090;\">\n					<span >Due: <time class=\"task-created-time\" datetime=\""
     + escapeExpression((helper = helpers.epochToHumanDate || (depth0 && depth0.epochToHumanDate),options={hash:{},data:data},helper ? helper.call(depth0, "", (depth0 && depth0.due), options) : helperMissing.call(depth0, "epochToHumanDate", "", (depth0 && depth0.due), options)))
     + "\" style=\"border-bottom:dotted 1px #999\">"
     + escapeExpression((helper = helpers.epochToHumanDate || (depth0 && depth0.epochToHumanDate),options={hash:{},data:data},helper ? helper.call(depth0, "ddd mmm dd yyyy HH:MM:ss", (depth0 && depth0.due), options) : helperMissing.call(depth0, "epochToHumanDate", "ddd mmm dd yyyy HH:MM:ss", (depth0 && depth0.due), options)))
@@ -798,69 +802,49 @@ function program3(depth0,data) {
     + escapeExpression((helper = helpers.epochToHumanDate || (depth0 && depth0.epochToHumanDate),options={hash:{},data:data},helper ? helper.call(depth0, "", (depth0 && depth0.created_time), options) : helperMissing.call(depth0, "epochToHumanDate", "", (depth0 && depth0.created_time), options)))
     + "\" style=\"border-bottom:dotted 1px #999\">"
     + escapeExpression((helper = helpers.epochToHumanDate || (depth0 && depth0.epochToHumanDate),options={hash:{},data:data},helper ? helper.call(depth0, "ddd mmm dd yyyy HH:MM:ss", (depth0 && depth0.created_time), options) : helperMissing.call(depth0, "epochToHumanDate", "ddd mmm dd yyyy HH:MM:ss", (depth0 && depth0.created_time), options)))
-    + "</time>\n				</small>\n				";
-  stack1 = helpers['if'].call(depth0, (depth0 && depth0.is_complete), {hash:{},inverse:self.program(12, program12, data),fn:self.program(12, program12, data),data:data});
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "				\n					\n				</div>\n			</div>\n		</div>\n	</div>\n</li>\n\n			";
+    + "</time>\n				</small>\n							\n					\n				</div>\n			</div>\n		</div>\n	</div>\n</li>\n\n			";
   return buffer;
   }
 function program4(depth0,data) {
   
   
-  return "\n			<div id=\"tasks\" class=\"activity-text-block\" style=\"background-color:#FFFAFA\">\n		";
+  return "\n			<div id=\"tasks\" class=\"activity-text-block\">\n		";
   }
 
 function program6(depth0,data) {
   
-  
-  return "\n			<div id=\"tasks\" class=\"activity-text-block\">\n		";
+  var buffer = "", helper, options;
+  buffer += "\n				<div style=\"margin-bottom: 1px;\">\n					<h4 class=\"task-subject\" style=\"text-decoration:line-through;display:inline;\">\n						<a style=\"text-decoration: none; margin:0px 5px 0px 0;\"><b>"
+    + escapeExpression((helper = helpers.ucfirst || (depth0 && depth0.ucfirst),options={hash:{},data:data},helper ? helper.call(depth0, (depth0 && depth0.subject), options) : helperMissing.call(depth0, "ucfirst", (depth0 && depth0.subject), options)))
+    + "</b></a>\n						<span class=\"label label-"
+    + escapeExpression((helper = helpers.task_label_color || (depth0 && depth0.task_label_color),options={hash:{},data:data},helper ? helper.call(depth0, (depth0 && depth0.priority_type), options) : helperMissing.call(depth0, "task_label_color", (depth0 && depth0.priority_type), options)))
+    + "\">"
+    + escapeExpression((helper = helpers.ucfirst || (depth0 && depth0.ucfirst),options={hash:{},data:data},helper ? helper.call(depth0, (depth0 && depth0.priority_type), options) : helperMissing.call(depth0, "ucfirst", (depth0 && depth0.priority_type), options)))
+    + "</span>\n					</h4>\n				</div>\n			";
+  return buffer;
   }
 
 function program8(depth0,data) {
   
   var buffer = "", helper, options;
-  buffer += "\n				<div style=\"margin-bottom: 1px;\">\n					<h4 class=\"task-subject\" style=\"text-decoration:line-through;display:inline;\">\n						<a style=\"text-decoration: none; margin:0px 20px 0px 0;\"><b>"
+  buffer += "\n				<div style=\"margin-bottom: 1px;\">\n					<h4 class=\"task-subject\" style=\"display:inline;\">\n						<a style=\"text-decoration: none; margin:0px 5px 0px 0;\"><b>"
     + escapeExpression((helper = helpers.ucfirst || (depth0 && depth0.ucfirst),options={hash:{},data:data},helper ? helper.call(depth0, (depth0 && depth0.subject), options) : helperMissing.call(depth0, "ucfirst", (depth0 && depth0.subject), options)))
-    + "</b></a>\n						<!--<span class=\"label label-"
+    + "</b></a>\n						<span class=\"label label-"
     + escapeExpression((helper = helpers.task_label_color || (depth0 && depth0.task_label_color),options={hash:{},data:data},helper ? helper.call(depth0, (depth0 && depth0.priority_type), options) : helperMissing.call(depth0, "task_label_color", (depth0 && depth0.priority_type), options)))
     + "\">"
     + escapeExpression((helper = helpers.ucfirst || (depth0 && depth0.ucfirst),options={hash:{},data:data},helper ? helper.call(depth0, (depth0 && depth0.priority_type), options) : helperMissing.call(depth0, "ucfirst", (depth0 && depth0.priority_type), options)))
-    + "</span>-->\n					</h4>\n				</div>\n			";
+    + "</span>	\n					</h4>\n				</div>\n			";
   return buffer;
   }
 
 function program10(depth0,data) {
-  
-  var buffer = "", helper, options;
-  buffer += "\n				<div style=\"margin-bottom: 1px;\">\n					<h4 class=\"task-subject\" style=\"display:inline;\">\n						<a style=\"text-decoration: none; margin:0px 20px 0px 0;\"><b>"
-    + escapeExpression((helper = helpers.ucfirst || (depth0 && depth0.ucfirst),options={hash:{},data:data},helper ? helper.call(depth0, (depth0 && depth0.subject), options) : helperMissing.call(depth0, "ucfirst", (depth0 && depth0.subject), options)))
-    + "</b></a>\n						<!--<span class=\"label label-"
-    + escapeExpression((helper = helpers.task_label_color || (depth0 && depth0.task_label_color),options={hash:{},data:data},helper ? helper.call(depth0, (depth0 && depth0.priority_type), options) : helperMissing.call(depth0, "task_label_color", (depth0 && depth0.priority_type), options)))
-    + "\">"
-    + escapeExpression((helper = helpers.ucfirst || (depth0 && depth0.ucfirst),options={hash:{},data:data},helper ? helper.call(depth0, (depth0 && depth0.priority_type), options) : helperMissing.call(depth0, "ucfirst", (depth0 && depth0.priority_type), options)))
-    + "</span>-->	\n					</h4>\n				</div>\n			";
-  return buffer;
-  }
-
-function program12(depth0,data) {
-  
-  var buffer = "", helper, options;
-  buffer += "\n					<span style=\"margin-right:5px;\" class=\"label label-"
-    + escapeExpression((helper = helpers.task_label_color || (depth0 && depth0.task_label_color),options={hash:{},data:data},helper ? helper.call(depth0, (depth0 && depth0.priority_type), options) : helperMissing.call(depth0, "task_label_color", (depth0 && depth0.priority_type), options)))
-    + "\">"
-    + escapeExpression((helper = helpers.ucfirst || (depth0 && depth0.ucfirst),options={hash:{},data:data},helper ? helper.call(depth0, (depth0 && depth0.priority_type), options) : helperMissing.call(depth0, "ucfirst", (depth0 && depth0.priority_type), options)))
-    + "</span>\n				";
-  return buffer;
-  }
-
-function program14(depth0,data) {
   
   
   return "\n		<li>\n			<div style=\"display:block;\" class=\"activity\">\n				<div id=\"notes\" class=\"activity-text-block\">\n					<p style=\"display:inline; margin-right:10px;\">You have no tasks for this contact.</p><br>\n					<a class=\"btn  btn-default btn-addon btn-sm action-add-task\" style=\"padding: 0;text-align: center;margin-top: 10px;margin-bottom: 10px;\"><i  class=\"fa fa-plus-circle\" style=\"border-right: 1px solid #ccc; padding: 6px;\"></i><span style=\"padding: 5px;\">Add Task</span></a>\n				</div>\n			</div>\n		</li>\n	";
   }
 
   buffer += "<!-- Tasks list tab -->\n<ul style=\"list-style-type:none; margin-right:25px;margin-left:10px;\">\n";
-  stack1 = helpers['if'].call(depth0, (depth0 && depth0.length), {hash:{},inverse:self.program(14, program14, data),fn:self.program(1, program1, data),data:data});
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.length), {hash:{},inverse:self.program(10, program10, data),fn:self.program(1, program1, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\n</ul>	";
   return buffer;
@@ -881,7 +865,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
 function program1(depth0,data) {
   
   var buffer = "", stack1;
-  buffer += "\n		<div class=\"well well-small gadget-contact-details-tab\" style='margin:0px;border-radius:0px;box-shadow:none;background-color:white;border:0px; border-left:0px; border-right:0px;'>\n			<div class=\"show-form\" data-content=\""
+  buffer += "\n		<div class=\"well well-small gadget-contact-details-tab\" style='margin:0px;border-radius:0px;box-shadow:none;background-color:white;border:0px; border-left:0px; border-right:0px;padding-bottom:12px;'>\n			<div class=\"show-form\" data-content=\""
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.value)),stack1 == null || stack1 === false ? stack1 : stack1.email)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\">\n<!--email list -->\n				<div class=\"contact-list\">\n					<div class=\"agile-no-contact row-fluid\">\n						<div class=\"contact-list-width\" style=\"max-width:95%; display:inline-block; vertical-align:middle;\">\n							<div style=\"text-overflow: ellipsis; white-space: nowrap; overflow: hidden;\">\n								";
   stack1 = helpers['if'].call(depth0, ((stack1 = (depth0 && depth0.value)),stack1 == null || stack1 === false ? stack1 : stack1.name), {hash:{},inverse:self.program(4, program4, data),fn:self.program(2, program2, data),data:data});
@@ -920,10 +904,10 @@ function program4(depth0,data) {
 function program6(depth0,data) {
   
   var buffer = "", stack1;
-  buffer += "\n<!--Search email panel -->			\n			<div class=\"well well-small gadget-contact-details-tab\" style=\"margin:0px 0px -1px 0px;box-shadow:none;border-radius:0px;background-color:#f2f2f2;border:0px;\">\n				<div class=\"show-form\">\n					<div>\n						<div class=\"row-fluid\">\n							\n	<!-- Search mail UI area start-->\n							<div style=\"line-height:22px;\">\n								<div class=\"search-pannel-inner\">\n									\n									<div style=\"display: inline-block;vertical-align: middle;\">\n										<a class=\"gadget-search-contact search-mail-button\" style=\"cursor:pointer; margin:0px 10px 0px 0px; text-decoration:underline; font-weight:bold;\"><i class=\"icon-search\" style=\"text-decoration:none; margin-right:5px;\"></i><span>Search</span></a>\n									</div>\n									<div class=\"btn-group\" style=\"display: inline-block;vertical-align: middle;margin: 0 10px 0 0;\">\n										<select id=\"search_drop_down\" class=\"agile-mail-dropdown\" style=\"width:auto; margin:0px;\">\n											<!-- dropdown menu links -->\n											";
+  buffer += "\n<!--Search email panel -->			\n			<div class=\"well well-small gadget-contact-details-tab\" style=\"margin:0px 0px 5px 0px;box-shadow:none;border-radius:0px;background-color:#f2f2f2;border:0px;padding-bottom:12px\">\n				<div class=\"show-form\">\n					<div>\n						<div class=\"row-fluid\">\n							\n	<!-- Search mail UI area start-->\n							<div style=\"line-height:22px;\">\n								<div class=\"search-pannel-inner\">\n									\n									<!--<div style=\"display: inline-block;vertical-align: middle;\">\n										<a class=\"gadget-search-contact search-mail-button\" style=\"cursor:pointer; margin:0px 10px 0px 0px; text-decoration:underline; font-weight:bold;\"><i class=\"icon-search\" style=\"text-decoration:none; margin-right:5px;\"></i><span>Search</span></a>\n									</div>-->\n									<div class=\"btn-group\" style=\"display: inline-block;vertical-align: middle;margin: 0 10px 0 0;\">\n										<select id=\"search_drop_down\" class=\"agile-mail-dropdown\" style=\"width:auto; margin:-8px;\">\n											<!-- dropdown menu links -->\n											";
   stack1 = helpers.each.call(depth0, depth0, {hash:{},inverse:self.noop,fn:self.program(7, program7, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "	\n										</select>\n									</div>\n									<div style=\"display: inline-block;vertical-align: middle;\">\n										<span style=\"display:inline-block;\">in Agile Contacts</span>\n										<img class=\"contact-search-waiting\" style=\"margin-left:20px; display:none; width:13px;\" src=\"https://googleapps.agilecrm.com/img/ajax-loader-cursor.gif\"></img>\n										<i class=\"contact-search-status\" style=\"display:none; color:indianred; margin-left:20px;\">Contact not found</i>\n									</div>\n								</div>\n							</div>\n	<!-- Search mail UI area end-->						\n						</div>\n					</div>\n				</div>\n			</div>\n	";
+  buffer += "	\n										</select>\n									</div>\n\n									<div style=\"display: inline-block;vertical-align: middle;\">\n										<span style=\"display:inline-block;\">in Agile Contacts</span>\n										<!--<img class=\"contact-search-waiting\" style=\"margin-left:50px; display:none; width:13px;\" src=\"https://googleapps.agilecrm.com/img/ajax-loader-cursor.gif\"></img>\n										<i class=\"contact-search-status\" style=\"display:none; color:indianred; margin-left:20px;\">Contact not found</i>-->\n									</div>\n									<div style=\"display: inline-block;vertical-align: middle;margin-left:12px\">\n										<a class=\"gadget-search-contact search-mail-button\" style=\"cursor:pointer; margin:0px 10px 0px 0px; text-decoration:underline; font-weight:bold;\"><i class=\"icon-search\" style=\"text-decoration:none; margin-right:5px;\"></i><span>Search</span></a>\n									</div>\n									<div style=\"display: inline-block;vertical-align: middle;\">\n									<img class=\"contact-search-waiting\" style=\"margin-left:50px; display:none; width:13px;\" src=\"https://googleapps.agilecrm.com/img/ajax-loader-cursor.gif\"></img>\n										<i class=\"contact-search-status\" style=\"display:none; color:indianred; margin-left:10px;\">Contact not found</i>\n									</div>\n								</div>\n							</div>\n	<!-- Search mail UI area end-->						\n						</div>\n					</div>\n				</div>\n			</div>\n	";
   return buffer;
   }
 function program7(depth0,data) {

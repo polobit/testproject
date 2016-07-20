@@ -137,7 +137,7 @@ $(function()
 
 			//  ------ Hide list view of contact. ------ 
 			$(".display-toggle", el).addClass("hide-contact-summery").removeClass("gadget-show-contact");
-			$(".display-toggle i", el).removeClass("fa fa-plus-square").addClass("fa fa-minus-square-o ");
+			$(".display-toggle i", el).removeClass("fa fa-caret-right").addClass("fa fa-caret-down");
 			$(".display-toggle i", el).attr("title", "Hide Details");
 			$(".display-toggle span", el).text("Hide Details");
 			$(".display-toggle", el).next().hide();
@@ -175,7 +175,7 @@ $(function()
 
 		//  ------ Show list view of contact. ------ 
 		$(".display-toggle", el).removeClass("hide-contact-summery").addClass("gadget-show-contact");
-		$(".display-toggle i", el).removeClass("fa fa-minus-square-o ").addClass("fa fa-plus-square");
+		$(".display-toggle i", el).removeClass("fa fa-caret-down ").addClass("fa fa-caret-right");
 		$(".display-toggle i", el).attr("title", "Show Details");
 		$(".display-toggle span", el).text("Show");
 		$(".display-toggle", el).next().show();
