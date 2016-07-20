@@ -28,6 +28,8 @@ import com.agilecrm.knowledgebase.entity.Categorie;
 import com.agilecrm.knowledgebase.entity.Section;
 import com.agilecrm.knowledgebase.util.ArticleUtil;
 import com.agilecrm.search.document.HelpcenterArticleDocument;
+import com.agilecrm.ticket.entitys.TicketStats;
+import com.agilecrm.ticket.utils.TicketStatsUtil;
 import com.googlecode.objectify.Key;
 
 /**
@@ -52,6 +54,9 @@ public class ArticleAPI
 		try
 		{
 			Article article = Article.dao.getByProperty("title", title);
+			if(article == null){
+				return null;
+			}
 			article.categorie = Categorie.dao.get(article.categorie_key);
 			article.section = Section.dao.get(article.section_key);
 
@@ -209,6 +214,9 @@ public class ArticleAPI
 			article.categorie_key = categorie_key;
 
 			article.save();
+			
+			// Updating ticket count DB
+			TicketStatsUtil.updateEntity(TicketStats.Article_Count);
 		}
 		catch (Exception e)
 		{

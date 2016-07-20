@@ -85,6 +85,13 @@ body,input,button,select,textarea {
 	height: 69px;
 }
 
+@-moz-document url-prefix() {
+    .search-box input[type="submit"]{
+        height: 64px !important;      
+
+    }
+}
+
 /* /.Search box */
 .section-end {
 	border-bottom: 1px solid #eee;

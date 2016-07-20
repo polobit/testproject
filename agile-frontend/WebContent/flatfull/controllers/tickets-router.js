@@ -1304,9 +1304,11 @@
  				template : "ticket-helpcenter-add-article",
  				window : "back",
                 prePersist : function(model){
+                	var title = model.toJSON().title;
+					title = $.trim(title);
 					var json = {};
 					var catogery_id = $("#catogery option:selected").data('catogery-id');
-					json = {"categorie_id" : catogery_id};
+					json = {"categorie_id" : catogery_id, "title":title};
 					model.set(json, { silent : true });
 			    },
 
@@ -1413,8 +1415,14 @@
 	 						fillSelect('catogery', '/core/api/knowledgebase/categorie', '', function(){
 	                                       $('select option[value="'+category_id+'"]').attr("selected",true);    
 				                     		},optionsTemplate, true);
-	 				}
-				   
+	 				},
+	 				prePersist : function(model){
+			        	var json = {};
+			        	var name = model.toJSON().name;
+			        	 name = $.trim(name);
+			        	 json = {'name':name};
+			        	 model.set(json, { silent : true });
+			        }
 			    });
 
 				$('#admin-prefs-tabs-content').html(editSectionView.render().el);			

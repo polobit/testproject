@@ -27,6 +27,8 @@ import com.agilecrm.knowledgebase.entity.Categorie;
 import com.agilecrm.knowledgebase.entity.Section;
 import com.agilecrm.knowledgebase.util.SectionUtil;
 import com.agilecrm.ticket.entitys.TicketGroups;
+import com.agilecrm.ticket.entitys.TicketStats;
+import com.agilecrm.ticket.utils.TicketStatsUtil;
 import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.googlecode.objectify.Key;
 
@@ -45,6 +47,10 @@ public class SectionAPI
 		try
 		{
 			Section section = Section.dao.getByProperty("name",name);
+			if(section == null)
+			{
+				return null;
+			}
 			section.categorie = Categorie.dao.get(section.categorie_key);
 			
 			return section;
@@ -90,6 +96,8 @@ public class SectionAPI
 
 			section.categorie_key = categorie_key;
 			section.save();
+			// Updating ticket count DB
+			TicketStatsUtil.updateEntity(TicketStats.Section_Count);
 		}
 		catch (Exception e)
 		{
