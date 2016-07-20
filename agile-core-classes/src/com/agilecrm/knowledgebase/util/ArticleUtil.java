@@ -33,9 +33,30 @@ public class ArticleUtil
 			Long sectionID = Section.dao.getByProperty("name",sectionName).id;
 			
 			map.put("section_key", new Key<>(Section.class, sectionID));
+			map.put("is_article_published",Boolean.FALSE);
 		}		
 		return Article.dao.listByProperty(map);
 	}
+	
+	/**
+	 * 
+	 * @param sectionname
+	 * @return
+	 */
+	public static List<Article> getAdminArticles( String sectionName){
+	
+		Map<String, Object> map = new HashMap<String, Object>();
+
+		if (sectionName != null){
+			
+			Long sectionID = Section.dao.getByProperty("name",sectionName).id;
+			
+			map.put("section_key", new Key<>(Section.class, sectionID));
+		}		
+		return Article.dao.listByProperty(map);
+	}
+
+	
 	
 	/**
 	 * Returns list of tickets to given list of ids

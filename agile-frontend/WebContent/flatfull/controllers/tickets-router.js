@@ -1063,7 +1063,7 @@
 				//Initializing base collection with groups URL
 			App_Ticket_Module.sectionsCollection = new Base_Collection_View({
 				
-				url : '/helpcenterapi/api/knowledgebase/section/categorie/' + categorie_id,		
+				url : '/core/api/knowledgebase/section/' + categorie_id,		
 				templateKey : "ticket-helpcenter-sections",
 				individual_tag_name : 'tr',
 				sort_collection : true, 
@@ -1145,7 +1145,7 @@
 				//Initializing base collection with groups URL
 			App_Ticket_Module.articlesCollection = new Base_Collection_View({
 
-				url : '/core/api/knowledgebase/article?section_name=' + name, 		
+				url : '/core/api/knowledgebase/article/admin-articles?section_name=' + name, 		
 				templateKey : "ticket-helpcenter-articles",
 				individual_tag_name : 'tr',
 				sort_collection : true, 
@@ -1236,12 +1236,10 @@
 					prePersist : function(model){
 						
 						var title = model.toJSON().title;
-						 title = title.replace(/\s+$/, '');
-						console.log(title.replace(/\s+$/, ''));
-						
+						 title = $.trim(title);
 						var json = {};
 						var catogery_id = $("#catogery option:selected").data('catogery-id');
-						json = {"categorie_id" : catogery_id,"title" : title };
+						json = {"categorie_id" : catogery_id,"title" : title};
 
 						var plain_content = '';
 
@@ -1257,18 +1255,21 @@
 
 			        postRenderCallback : function(el){
 					
-						setupTinyMCEEditor('textarea#description-article', true, undefined, function(){});
+						setupTinyMCEEditor('textarea#description-article', true, undefined, function(){
+							$("textarea#description-article").css("display", "none");
+						});
   
-						fillSelect('catogery', '/core/api/knowledgebase/categorie', '', function(collection){
+						 
+						fillSelect('catogery', '/core/api/knowledgebase/categorie/kb-admin', '', function(collection){
 			 	 			getTemplate("helpcenter-section-category", collection.toJSON(), undefined, function(template_ui){						
 
 								if(!template_ui)
 									return;
 
 				                $('#catogery', el).html($(template_ui));
-
+				       
 				                if(section_id){
-									var section_names = $('#catogery option:contains("'+section_id+'")').attr('selected','selected');
+									 $('#catogery option[data-value="'+section_id+'"]',el).attr('selected','selected');
 								}	
 								if(callback)
 					 				callback();
@@ -1302,11 +1303,12 @@
  				url : "/core/api/knowledgebase/article/" +name,
  				template : "ticket-helpcenter-add-article",
  				window : "back",
-		        
                 prePersist : function(model){
+                	var title = model.toJSON().title;
+					title = $.trim(title);
 					var json = {};
 					var catogery_id = $("#catogery option:selected").data('catogery-id');
-					json = {"categorie_id" : catogery_id };
+					json = {"categorie_id" : catogery_id, "title":title};
 					model.set(json, { silent : true });
 			    },
 
@@ -1315,7 +1317,7 @@
 					$("textarea#description-article").css("display", "none");
 				});
 
-				fillSelect('catogery', '/core/api/knowledgebase/categorie', '', function(collection){
+				fillSelect('catogery', '/core/api/knowledgebase/categorie/kb-admin', '', function(collection){
 
 		 	 		$('#catogery', el).html(getTemplate('helpcenter-section-category', collection.toJSON()));
    					$('#catogery option[value="'+section_id+'"]',el).attr("selected",true);                    
@@ -1372,7 +1374,7 @@
 			        prePersist : function(model){
 			        	var json = {};
 			        	var name = model.toJSON().name;
-			        	 name = name.replace(/\s+$/, '');
+			        	 name = $.trim(name);
 			        	 json = {'name':name};
 			        	 model.set(json, { silent : true });
 			        },
@@ -1413,8 +1415,14 @@
 	 						fillSelect('catogery', '/core/api/knowledgebase/categorie', '', function(){
 	                                       $('select option[value="'+category_id+'"]').attr("selected",true);    
 				                     		},optionsTemplate, true);
-	 				}
-				   
+	 				},
+	 				prePersist : function(model){
+			        	var json = {};
+			        	var name = model.toJSON().name;
+			        	 name = $.trim(name);
+			        	 json = {'name':name};
+			        	 model.set(json, { silent : true });
+			        }
 			    });
 
 				$('#admin-prefs-tabs-content').html(editSectionView.render().el);			
