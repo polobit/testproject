@@ -13,6 +13,7 @@
         activeElement: {}, //holds the element currenty being edited
         allStyleItemsOnCanvas: [],
         _oldIcon: [],
+        _oldForm:[],
         styleEditor: document.getElementById('styleEditor'),
         formStyle: document.getElementById('stylingForm'),
         buttonRemoveElement: document.getElementById('deleteElementConfirm'),
@@ -158,6 +159,8 @@
         */
         setupCanvasElementsOnElement: function (element, key) {
 
+            if(key==='img' && element.id !==null && element.id==='agileform')
+                return;
             //Element object extention
             canvasElement.prototype.clickHandler = function(el) {
                 styleeditor.styleClick(this);
@@ -543,6 +546,8 @@
                 if(form_id==='default')                 
                     return;
                 current_agileform=$(styleeditor.activeElement.element).closest("#page").children().attr("id");
+                var current_element=$(styleeditor.activeElement.element).children();
+                styleeditor._oldForm[current_agileform]=current_element;
                 styleeditor.loadAgileCRMFormInLandingPage($(styleeditor.activeElement.element),form_id);
             }
 
@@ -1069,12 +1074,14 @@
             }
 
             //agile form reset 
-           if($(styleeditor.activeElement.element).attr('id')==='agileform'){
+           if($(styleeditor.activeElement.element).attr('id')==='agileform_div'){
             $("iframe").each(function(i) { 
                 if($("iframe")[i].src.includes(current_agileform)){
                    var iframe_id=$("iframe")[i].getAttribute("id");
                    $('#'+iframe_id).contents().find('#agileform_div').empty();
-                   $('#'+iframe_id).contents().find('#agileform_div').append($(styleeditor.activeElement.element));
+                   $('#'+iframe_id).contents().find('#agileform_div').append(styleeditor._oldForm[current_agileform]);
+                   if(current_agileform==='agileform3')
+                        $('#'+iframe_id).contents().find('#agileform_div').css('text-align','center');
                    return;
                 }
             }); 
