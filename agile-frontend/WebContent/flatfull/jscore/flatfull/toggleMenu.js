@@ -379,6 +379,7 @@ $("#activityModal").on("click", "#eventDescriptionLink", function(e){
 	$(".grid_icon_center a.grid-icon-header").addClass("agile-feature-item-blink");	
    });
 
+
 // Click handlers to role menu items
 function initRolehandlers(){
 	// Remove blink icon from menu group icon

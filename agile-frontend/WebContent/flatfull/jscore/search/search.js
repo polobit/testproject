@@ -145,7 +145,25 @@ $(function()
 	 * Enables typeahead in search field in top nav-bar, custom callback to
 	 * redefine events on dropdown, which takes to contact details page
 	 */
-	agile_type_ahead("searchText", undefined, contacts_typeahead, navigateToDetailsPage, undefined, undefined, 'core/api/search/all/keyword', undefined, undefined, undefined, 5);
+	agile_type_ahead("searchText", undefined, contacts_typeahead, navigateToDetailsPage, undefined, undefined, 'core/api/search/all/keyword', undefined, undefined, undefined, 5, function(){
+		  
+		  //var filters = serializeForm("advanced-search-filter").fields_set;
+		  var search_filters = _agile_get_prefs('agile_search_filter_'+CURRENT_DOMAIN_USER.id);
+		  var filters = JSON.parse(search_filters);
+		  
+		  var filterCriteria = "type=";
+		  if(filters){
+		  	   for(var i =0; i<filters.length; i++){
+		  	   	if(filters[i] != undefined && filters[i] != ""){
+		  	   		filterCriteria += filters[i] + ",";
+		  	   	}
+		  	   }
+		  }
+
+	 	  console.log("checked elements  first are = "+ filters);
+
+	 	  return filterCriteria;	
+	});
 
 	/*
 	 * Click on search icon in search field top nav-bar, shows simple search

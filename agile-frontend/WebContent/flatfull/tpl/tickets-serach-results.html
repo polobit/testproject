@@ -1,41 +1,46 @@
-	<script id="search-model-template" type="text/html">
+<script id="tickets-search-model-template" type="text/html">
 	<td></td>
 	<td class="data" data="{{id}}">
-    <div class="table-resp">
-    	<div class="thumb-sm agile-img m-r-sm" style="margin-right:10px;">
-        	{{#if_contact_type "PERSON"}} <img class="img-inital r r-2x" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}" /> {{/if_contact_type}}
-        	{{#if_contact_type "COMPANY"}} <img class="img-inital r r-2x" {{getCompanyImage "40" "display:inline;"}} /> {{/if_contact_type}}
-    	</div>
-    	<div class="agile-thumb agile-thumb-view" style="width:calc(100% - 60px);">
-        	{{#if_contact_type "PERSON"}} <div class="text-cap custom-link"> {{getPropertyValue properties
-        	"first_name"}} {{getPropertyValue properties "last_name"}} </div> 
-        	<div> <small class="text-muted m-t-xs">{{getPropertyValue properties "email"}} </small></div> {{/if_contact_type}}
-        	{{#if_contact_type "COMPANY"}} <div class="text-cap custom-link"> {{getPropertyValue properties
-        	"name"}}</div> 
-           <div> <small class="text-muted m-t-xs"> {{getPropertyValue properties "url"}} </small> </div>
-{{/if_contact_type}}
-    	</div>
+     <div class="table-resp">
+        <div class="thumb-sm agile-img m-r-sm">
+        {{#if contact.properties}}
+            <img data-name="{{dataNameAvatar contact.properties 42}}" style="height:34px;width:34px;"  src="{{gravatarurl contact.properties 24}}" class="r-5x">
+        {{else}}
+            <img src="{{emailGravatarurl 42 requester_email}}">
+        {{/if}}
+        </div>
+        <div class="agile-thumb agile-thumb-view" style="width:calc(100% - 60px);">
+            <div class="text-cap custom-link">#{{id}}</div> 
+            <div> <small class="text-muted m-t-xs">{{subject}} </small></div>
+        </div>
        </div>
 	</td>
-	<td><div class="text-ellipsis">
-		{{getPropertyValue properties "title"}}<br />
-    	{{getPropertyValue properties "company"}}</div>
+
+	<td class="overflow-hidden no-wrap">
+        {{requester_name}}
 	</td>
+
+	<td class="text-muted">
+		 {{priority}}, {{status}}
+	</td>
+
 	<td>
-		<div class="overflow-hidden line-clamp line-clamp-2">
-			{{#each tags}}
-				<span class="label bg-light dk text-tiny">{{this}}</span>
-			{{/each}}
-		</div>
-	</td>
-	<td>{{lead_score}}</td>
+    <div class="table-resp">
+        <i class="fa fa-clock-o m-r-xs"></i>
+        <time class="document-created-time b-b-dotted" value="{{created_time}}" datetime="{{epochToHumanDate "" created_time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created_time}}</time>
+        </div>
+   
+    </td>
+    
 </script>
-<script id="search-collection-template" type="text/html">
+<script id="tickets-search-collection-template" type="text/html">
+<hr>
 <div class="wrapper-md lter bg-light b-b">
 <div class="row">
     <div class="col-md-12">
        
             
+          
             <div id="search-query-heading" style="font-size:19px;"class="m-n font-thin h3 pull-left">Search results for 
             <span style="font-weight:600;">"{{query}}"</span>
             </div>
@@ -69,18 +74,19 @@
                     </ul>
                 </div>
                 <div class="table-responsive">
-                <table id="contacts_search" class="table table-striped panel agile-table onlySorting  
+                <table  class="table table-striped  panel agile-table onlySorting  
                 table-layout-mob-view m-b-none" url="core/api/bulk/update?action_type=DELETE" style="table-layout:auto;">
                     <thead>
                         <tr>
 							<th style="width:2%"></th>
-                            <th style="width:25%">Name</th>
-                            <th style="width:25%">Work</th>
-                            <th style="width:30%">Tags</th>
-                            <th style="width:25%">Lead Score</th>
+
+                            <th style="width:25%">ID</th>
+                            <th style="width:25%">Assignee</th>
+                            <th style="width:30%">Priority & Status</th>
+                            <th style="width:25%">Created Date</th>
                         </tr>
                     </thead>
-                    <tbody id="search-model-list" class="model-list-cursor" route="contact/">
+                    <tbody id="tickets-search-model-list" class="model-list-cursor" route="ticket/">
                     </tbody>
                 </table>
                 </div>
