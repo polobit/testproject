@@ -247,8 +247,7 @@ public class APIKeyUtil
     {
 	String domain = NamespaceManager.get();
 	String data = "domain="+domain+"&blocked_ips="+blockedIps+"&psd="+AnalyticsUtil.STATS_SEREVR_HTTP_REQUEST_PWD;
-	//String postURL = AnalyticsUtil.STATS_SERVER_URL+"/api";
-	String postURL = "https://1-10-beta-dot-agilecrm-web-stats.appspot.com/api";
+	String postURL = AnalyticsUtil.STATS_SERVER_URL+"/api";
 	HTTPUtil.accessURLAsynchronouslyUsingPost(postURL, data);
     }
 }
