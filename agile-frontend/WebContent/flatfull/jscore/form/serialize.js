@@ -293,6 +293,10 @@ function serializeChainedElement(element)
 	    var newdate = (json_object.RHS_NEW + (24 * 60 * 60 * 1000) - 1);
        json_object.RHS_NEW = newdate;
 	}
+	else if(json_object.CONDITION == "AFTER"){
+	    var newdate = (json_object.RHS + (24 * 60 * 60 * 1000));
+       json_object.RHS = newdate;
+	}
 	if(json_object.nested_condition == "BETWEEN") {
 	    var newdate = (json_object.nested_rhs + (24 * 60 * 60 * 1000) - 1);
        json_object.nested_rhs = newdate;
@@ -407,6 +411,10 @@ function serializeLhsFilters(element)
 			json_object["CONDITION"] = CONDITION;
 			json_object["RHS"] = RHS_VALUE;
 			json_object["RHS_NEW"] = RHS_NEW_VALUE;
+			if(json_object.CONDITION == "AFTER"){
+	    		var newdate = (json_object.RHS + (24 * 60 * 60 * 1000));
+       			json_object.RHS = newdate;
+			}
 			json_array.push(json_object);
 			var fieldName = LHS.replace(/ +/g, '_');
 			fieldName = fieldName.replace(/#/g, '\\#').replace(/@/g, '\\@').replace(/[\/]/g,'\\/');
