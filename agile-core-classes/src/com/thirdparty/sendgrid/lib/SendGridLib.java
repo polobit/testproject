@@ -241,7 +241,7 @@ public class SendGridLib {
 						else
 							retry = false;
 					}
-	        		catch(ClosedStreamException ex) // To handle Blobstream on retry in Attachments
+	        		catch(IOException ex) // To handle Blobstream on retry in Attachments
 	        		{
 	        			throw ex;
 	        		}
