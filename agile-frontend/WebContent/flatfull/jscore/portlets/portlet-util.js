@@ -1239,16 +1239,19 @@ var portlet_utility = {
 		}
 		case "Mini Calendar": {
 
-								$('.portlet_body_calendar', $(model_list_element_fragment_portlets.querySelector('#ui-id-' + column_position + '-' + row_position)))
+						$('.gridster-portlets').load(".portlet_body_calendar",function() {
+                console.log("hi")
+           
+								$('.portlet_body_calendar', $("#ui-id-"+column_position+"-"+row_position))
 										.attr(
 												'id',
 												'p-body-calendar'
 														+ column_position + '-'
 														+ row_position)
-								$(model_list_element_fragment_portlets.querySelector(
+								$(
 										'#p-body-calendar' + column_position
-												+ '-' + row_position
-										))
+												+ '-' + row_position,
+										$('#portlet-res'))
 										.each(
 												function() {
 													$(this)
@@ -1268,6 +1271,8 @@ var portlet_utility = {
 													minicalendar(that);
 												});
 							});
+ }
+            );
 			break;
 		}
 		case "Onboarding" : {
