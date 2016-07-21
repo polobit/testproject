@@ -9,7 +9,7 @@ import com.agilecrm.knowledgebase.entity.Article;
 import com.agilecrm.knowledgebase.entity.Categorie;
 import com.agilecrm.knowledgebase.entity.Section;
 import com.agilecrm.search.document.HelpcenterArticleDocument;
-import com.agilecrm.search.document.TicketsDocument;
+import org.json.JSONArray;
 import com.googlecode.objectify.Key;
 
 /**
@@ -119,7 +119,15 @@ public class ArticleUtil
 		// Deleting document from text search
 				new HelpcenterArticleDocument().delete(id + "");
 	}
-	
+	public static void deletefromdocumentsearch(JSONArray ids)throws Exception
+	{
+		for(int i=0;i<ids.length();i++){
+			
+			Long id = (long) ids.get(i); 
+			// Deleting document from text search
+			new HelpcenterArticleDocument().delete(id + "");
+		}	
+	}
 	public static Article getArticle(Long id)
     {
 	try

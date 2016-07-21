@@ -23,14 +23,15 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.agilecrm.knowledgebase.entity.Article;
 import com.agilecrm.knowledgebase.entity.Categorie;
 import com.agilecrm.knowledgebase.entity.Section;
 import com.agilecrm.knowledgebase.util.SectionUtil;
-import com.agilecrm.ticket.entitys.TicketGroups;
 import com.agilecrm.ticket.entitys.TicketStats;
 import com.agilecrm.ticket.utils.TicketStatsUtil;
 import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.googlecode.objectify.Key;
+import com.googlecode.objectify.Query;
 
 /**
  * 
@@ -120,7 +121,20 @@ public class SectionAPI
 	{
 		try
 		{
+			JSONArray section_ids = new JSONArray(model_ids);
+			
+			for(int i=0;i<section_ids.length();i++){
+				Long id = (long)section_ids.get(i);
+				
+				Key<Section> section_key = new Key<Section>(Section.class, id);
+				
+				Query<Article> q = Article.dao.ofy().query(Article.class).filter("section_key =", section_key);
+				List <Article> sectionarticles = Article.dao.fetchAll(q);
+				Article.dao.deleteAll(sectionarticles);
+			}
+			
 			Section.dao.deleteBulkByIds(new JSONArray(model_ids));
+			
 		}
 		catch (Exception e)
 		{

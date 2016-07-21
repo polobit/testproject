@@ -236,6 +236,9 @@ public class ArticleAPI
 		try
 		{
 			Article.dao.deleteBulkByIds(new JSONArray(model_ids));
+			JSONArray article_ids = new JSONArray(model_ids);
+			ArticleUtil.deletefromdocumentsearch(article_ids);
+			
 		}
 		catch (Exception e)
 		{
