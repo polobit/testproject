@@ -26,6 +26,7 @@ import com.agilecrm.sendgrid.util.SendGridUtil;
 import com.agilecrm.util.Base64Encoder;
 import com.agilecrm.util.HttpClientUtil;
 import com.google.appengine.api.NamespaceManager;
+import com.google.appengine.api.blobstore.BlobstoreInputStream.ClosedStreamException;
 import com.thirdparty.mandrill.exception.RetryException;
 import com.thirdparty.sendgrid.SendGrid;
 import com.thirdparty.sendgrid.subusers.SendGridSubUser;
@@ -240,6 +241,10 @@ public class SendGridLib {
 						else
 							retry = false;
 					}
+	        		catch(ClosedStreamException ex) // To handle Blobstream on retry in Attachments
+	        		{
+	        			throw ex;
+	        		}
 					catch (SendGridException e) // To handle new sub user
 					{
 						System.err.println("SendGrid exception occured " + e.getMessage());
@@ -271,7 +276,9 @@ public class SendGridLib {
 				
 				try
 				{
-					Thread.sleep(3000); // Wait for 3 secs after creating subuser to fix emails drop
+					Thread.sleep(5000); // Wait for few secs after creating subuser to fix emails drop
+					
+					System.out.println("After wait time...");
 					
 					response = HttpClientUtil.accessURLUsingHttpClient(urlBuilder, this.buildBody(email));
 				}
