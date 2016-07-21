@@ -4353,7 +4353,7 @@ border: 1px solid #e5e5e5;
 }
 
 .search-results-scroll-container {
-    max-height: 300px;
+    max-height: 600px;
     overflow: hidden;
     overflow-y : auto!important;
     margin-bottom: 30px;

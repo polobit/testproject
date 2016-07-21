@@ -137,6 +137,9 @@ $(function(){
 
 function append_checkboxes(el)
 {
+	if(Current_Route && Current_Route == "contacts/search/test")
+		  return;
+		
 	var checkbox_element = $('tr:last > td.select_checkbox', el);
 	if(checkbox_element.length != 0)
 	{
