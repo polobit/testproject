@@ -295,11 +295,11 @@
                 <i class="icon-dashboard icon-3x"></i>
             </div>
             <b>{{agile_lng_translate 'report-view' 'campaign-stats'}}</b>
-        </div>report-view.campaign-stats
+        </div>
         <br />
         <!-- Description -->
         <div class="ellipsis-multiline m-b-md" rel="tooltip" title="{{description}}">
-           Find out how a campaign is performing over a time period.
+           {{agile_lng_translate 'report-view' 'campaign-reports-details'}}
         </div>
         <!-- Add button -->
        
@@ -320,12 +320,12 @@
             <div>
                 <i class="icon-bar-chart icon-3x"></i>
             </div>
-            <b>Compare Campaigns</b>
+            <b>{{agile_lng_translate 'report-view' 'compare-campaigns'}}</b>
         </div>
         <br />
         <!-- Description -->
         <div class="ellipsis-multiline m-b-md" rel="tooltip" title="{{description}}">
-            See how your campaigns fare against each other.
+            {{agile_lng_translate 'report-view' 'compare-reports-details'}}
         </div>
         <!-- Add button -->
         <div >
@@ -345,14 +345,14 @@
             <div>
                 <i class="icon-cogs icon-3x"></i>
             </div>
-            <b>User Activities</b>
+            <b>{agile_lng_translate 'portlets' 'user-activities'}}</b>
         </div>
         <br />
         
         {{#isAllowedInCurrentPlan "is_email_gateway_allowed"}}
         <!-- Description -->
         <div class="ellipsis-multiline m-b-md" rel="tooltip" title="{{description}}">
-          See a chronological activity report of your CRM users.
+          {{agile_lng_translate 'report-view' 'user-reports-details'}}
           <div style="display:none;" class="activities-upgrade" ><p class="text-danger">{{toSafeString message}}<p></div>
         </div>
         <!-- Add button -->
@@ -363,7 +363,7 @@
             {{else}}
             <!-- Description -->
             <div class="ellipsis-multiline m-b-md" rel="tooltip" title="{{description}}">
-             See a chronological activity report of your CRM users.
+             {{agile_lng_translate 'report-view' 'user-reports-details'}}
            <div style="display:none;" class="activities-upgrade" ><p class="text-danger">{{toSafeString message}}<p></div>
             </div>
         <!-- Add button -->
@@ -386,12 +386,12 @@
             <div>
                 <i class="icon-cogs icon-3x"></i>
             </div>
-            <b>Contact Activities</b>
+            <b>{{agile_lng_translate 'report-view' 'contact-activities'}}</b>
         </div>
         <br />
         <!-- Description -->
         <div class="ellipsis-multiline m-b-md" rel="tooltip" title="{{description}}">
-          See a chronological contact activity report of your CRM contacts.
+          {{agile_lng_translate 'report-view' 'contact-reports-details'}}
         </div>
         <!-- Add button -->
         <div >
@@ -410,12 +410,12 @@
             <div>
                 <i class="icon-call-end  icon-3x"></i>
             </div>
-            <b>Calls by User</b>
+            <b>{{agile_lng_translate 'report-view' 'calls-by-user'}}</b>
         </div>
         <br />
         <!-- Description -->
         <div class="ellipsis-multiline m-b-md" rel="tooltip" title="See a report of total calls made or total time spent on calls by each user.">
-          See a report of total calls made or total time spent on calls by each user.
+          {{agile_lng_translate 'report-view' 'calls-reports-details'}}
           <div style="display:none;" class="activities-upgrade" ><p class="text-danger"><p></div>
         </div>
         <!-- Add button -->
@@ -435,12 +435,12 @@
             <div>
                 <i class="icon-clock icon-3x"></i>
             </div>
-            <b>Average call duration</b>
+            <b>{{agile_lng_translate 'report-view' 'average-call-duration'}}</b>
         </div>
         <br />
         <!-- Description -->
-        <div class="ellipsis-multiline m-b-md" rel="tooltip" title="Know the average time spent on a call by each user.">
-          Know the average time spent on a call by each user.
+        <div class="ellipsis-multiline m-b-md" rel="tooltip" title="{{agile_lng_translate 'report-view' 'average-call-reports-details'}}">
+          {{agile_lng_translate 'report-view' 'average-call-reports-details'}}
         </div>
         <!-- Add button -->
         <div >
@@ -457,12 +457,12 @@
             <div>
                 <i class="icon-list  icon-3x"></i>
             </div>
-            <b>Call Logs</b>
+            <b>{{agile_lng_translate 'report-view' 'call-logs'}}</b>
         </div>
         <br />
         <!-- Description -->
         <div class="ellipsis-multiline m-b-md" rel="tooltip" title="See a full call log of all users.">
-          Generate timelines of calls by user.
+          {{agile_lng_translate 'report-view' 'generate-timelines-of-calls-by-user'}}
         </div>
         <!-- Add button -->
         <div >
@@ -478,12 +478,12 @@
             <div>
                 <i class="icon-pie-chart  icon-3x"></i>
             </div>
-            <b>Call Outcomes</b>
+            <b>{{agile_lng_translate 'report-view' 'call-outcomes'}}</b>
         </div>
         <br />
         <!-- Description -->
-        <div class="ellipsis-multiline m-b-md" rel="tooltip" title="Know the calls made  by each user on a pie graph.">
-          Generate a pie graph with call outcomes.
+        <div class="ellipsis-multiline m-b-md" rel="tooltip" title="{{agile_lng_translate 'report-view' 'know-calls-made-by-each-user-pie-graph'}}">
+          {{agile_lng_translate 'report-view' 'generate-pie-graph-with-call-outcomes'}}
         </div>
         <!-- Add button -->
         <div >
@@ -499,12 +499,12 @@
             <div>
                 <i class="icon-bar-chart  icon-3x"></i>
             </div>
-            <b>Call Report-Time Based</b>
+            <b>{{agile_lng_translate 'report-view' 'call-report-time-based'}}</b>
         </div>
         <br />
         <!-- Description -->
-        <div class="ellipsis-multiline m-b-md" rel="tooltip" title="Generate a bar graph with calls based on time.">
-          Generate a bar graph with calls based on time.
+        <div class="ellipsis-multiline m-b-md" rel="tooltip" title="{{agile_lng_translate 'report-view' 'generate-bar-graph-description'}}">
+          {{agile_lng_translate 'report-view' 'generate-bar-graph-description'}}
         </div>
         <!-- Add button -->
         <div >
@@ -527,12 +527,12 @@
             <div>
                 <i class="icon-graph icon-3x"></i>
             </div>
-            <b>Incoming Deals</b>
+            <b>{{agile_lng_translate 'report-view' 'incoming-deals'}}</b>
         </div>
         <br />
         <!-- Description -->
         <div class="ellipsis-multiline m-b-md" rel="tooltip" title="{{description}}">
-            See how your deal sources are performing over time.
+            {{agile_lng_translate 'report-view' 'incoming-deals-reports-details'}}
         </div>
         <!-- Add button -->
         <div>
@@ -548,12 +548,12 @@
             <div>
                 <i class="icon-pie-chart icon-3x"></i>
             </div>
-            <b>Lost Deal Analysis</b>
+            <b>{{agile_lng_translate 'portlets' 'lost-deal-analysis'}}</b>
             </div>
              <br />
         <!-- Description -->
         <div class="ellipsis-multiline m-b-md" rel="tooltip" title="{{description}}">
-           Get insights into why deals were lost. Filter by owner, track and source.
+           {{agile_lng_translate 'report-view' 'trackandsource'}}
 
         </div>
         <!-- Add button -->
@@ -570,12 +570,12 @@
             <div>
                 <i class="icon-pie-chart icon-3x"></i>
             </div>
-            <b>Revenue by Source</b>
+            <b>{{agile_lng_translate 'report-view' 'revenue-by-source'}}</b>
             </div>
              <br />
         <!-- Description -->
         <div class="ellipsis-multiline m-b-md" rel="tooltip" title="{{description}}">
-           See how each source contributes to revenue. Know which owner converts from which source better.
+           {{agile_lng_translate 'report-view' 'source-contributes-details'}}
         </div>
         <!-- Add button -->
         <div >
@@ -590,12 +590,12 @@
             <div>
                 <i class="icon-graph icon-3x"></i>
             </div>
-            <b>Sales Forecast</b>
+            <b>{{agile_lng_translate 'report-view' 'sales-forecast'}}</b>
         </div>
         <br />
         <!-- Description -->
         <div class="ellipsis-multiline m-b-md" rel="tooltip" title="{{description}}">
-         Know your revenue forecast based on your deals data.
+         {{agile_lng_translate 'report-view' 'know-your-revenue-forecast'}}
         </div>
         <!-- Add button -->
         <div>
@@ -611,12 +611,12 @@
             <div>
                 <i class="icon-graph icon-3x"></i>
             </div>
-            <b>User Reports</b>
+            <b>{{agile_lng_translate 'report-view' 'user-reports'}}/b>
         </div>
         <br />
         <!-- Description -->
         <div class="ellipsis-multiline m-b-md" rel="tooltip" title="{{description}}">
-        Analyze sales performance by user.
+       {{agile_lng_translate 'report-view' 'analyze-sales-performance-by-user'}}
         </div>
         <!-- Add button -->
         <div>
@@ -632,13 +632,13 @@
             <div>
                 <i class="icon-graph icon-3x"></i>
             </div>
-            <b>Rep Performance</b><span class="label label-sm bg-danger" style="margin: 5px;">Beta</span>
+            <b>{{agile_lng_translate 'report-view' 'rep-performance'}}/b><span class="label label-sm bg-danger" style="margin: 5px;">Beta</span>
         </div>
         <br />
         <!-- Description -->
         {{#isAllowedInCurrentPlan "is_activity_reports_enabled"}}
         <div class="ellipsis-multiline m-b-md" rel="tooltip" title="{{description}}">
-         Know the performance by each user.
+         {{agile_lng_translate 'report-view' 'know-the-performance-by-each-user'}}
          <div style="display:none;" class="activity-reports-upgrade" ><p class="text-danger">{{toSafeString message}}<p></div>
         </div>
         <!-- Add button -->
@@ -649,7 +649,7 @@
             {{else}}
             <!-- Description -->
             <div class="ellipsis-multiline m-b-md" rel="tooltip" title="{{description}}">
-             Know the performance by each user.
+             {{agile_lng_translate 'report-view' 'know-the-performance-by-each-user'}}
             <div style="display:none;" class="activity-reports-upgrade" ><p class="text-danger">{{toSafeString message}}<p></div>
              </div>
         <!-- Add button -->
@@ -668,12 +668,12 @@
             <div>
                 <i class="icon-graph icon-3x"></i>
             </div>
-            <b>Comparison Reports</b>
+            <b>{{agile_lng_translate 'report-view' 'comparison-reports'}}</b>
         </div>
         <br />
         <!-- Description -->
         <div class="ellipsis-multiline m-b-md" rel="tooltip" title="{{description}}">
-        Compare the pipeline stages for each user.
+        {{agile_lng_translate 'report-view' 'compare-the-pipeline-stages-for-each-user'}}
         </div>
         <!-- Add button -->
         <div>

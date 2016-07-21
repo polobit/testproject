@@ -115,9 +115,9 @@
 				<!-- <div class="filter-criteria"></div> -->
 				<!-- <thead>
 					<tr>
-						<th>Name</th>
-						<th>Star Value</th>
-						<th>Owner</th>
+						<th>{{agile_lng_translate 'deal-view' 'name'}}</th>
+						<th>{{agile_lng_translate 'contacts-view' 'Star value'}}</th>
+						<th>{{agile_lng_translate 'contact-details' 'owner'}}</th>
 					</tr>
 				</thead> -->
 				<tbody id="portlets-companies-model-list" class="portlets-companies-model-list overflow-scroll"
@@ -379,7 +379,7 @@
 		{{#if dealsWon}}
 		<li class="pull-left">
 		<div class="panel-heading visible-xs b-b b-light" style="background:white;">
-				<div class="text-ellipsis text-lg font-thin" style="color: #98a6ad;"><span class="inline-block">Deals</span>
+				<div class="text-ellipsis text-lg font-thin" style="color: #98a6ad;"><span class="inline-block">{{agile_lng_translate 'contact-details' 'deals'}}</span>
 				</div>
 				</div>
 			{{#each dealsWonJson}}
@@ -438,21 +438,21 @@
 					<div class="agile-thumb agile-thumb-view p-b-xs">
 						<div>You</div>
 						<div class="text-xlg calls_popover"  data-toggle="tooltip" title='<div><table style="background-color:transparent!important">
-						        					<tr><td style="color:#27c24c">Answered:&nbsp</td><td>{{answered}}</td></tr>
-					        		              	<tr><td style="color:#23b7e5">Busy:&nbsp</td><td>{{busy}}</td></tr>
-					        		              	<tr><td style="color:#f05050">Failed:&nbsp</td><td>{{failed}}</td></tr>
-					        		              	<tr><td style="color:#7266ba">Voicemail:&nbsp</td><td>{{voiceMail}}</td></tr>
-					        		              	<tr><td style="color:#fad733">Missed:&nbsp</td><td>{{missed}}</td></tr>
-					        		              	<tr><td style="color:#FF9900">Inquiry:&nbsp</td><td>{{inquiry}}</td></tr>
-					        		              	<tr><td style="color:#7AF168">Interest:&nbsp</td><td>{{interest}}</td></tr>
-					        		              	<tr><td style="color:#167F80">No Interest:&nbsp</td><td>{{noInterest}}</td></tr>
-					        		              	<tr><td style="color:#0560A2">Incorrect Referral:&nbsp</td><td>{{incorrectReferral}}</td></tr>
-					        		              	<tr><td style="color:#D3E6C7">Meeting Scheduled:&nbsp</td><td>{{meetingScheduled}}</td></tr>
-					        		              	<tr><td style="color:#7798BF">New Opportunity:&nbsp</td><td>{{newOpportunity}}</td></tr>
+						        					<tr><td style="color:#27c24c">{{agile_lng_translate 'campaigns' 'answered'}}:&nbsp</td><td>{{answered}}</td></tr>
+					        		              	<tr><td style="color:#23b7e5">{{agile_lng_translate 'campaigns' 'busy'}}:&nbsp</td><td>{{busy}}</td></tr>
+					        		              	<tr><td style="color:#f05050">{{agile_lng_translate 'call_activity' 'fail'}}:&nbsp</td><td>{{failed}}</td></tr>
+					        		              	<tr><td style="color:#7266ba">{{agile_lng_translate 'campaigns' 'voicemail'}}:&nbsp</td><td>{{voiceMail}}</td></tr>
+					        		              	<tr><td style="color:#fad733">{{agile_lng_translate 'campaigns' 'missed'}}:&nbsp</td><td>{{missed}}</td></tr>
+					        		              	<tr><td style="color:#FF9900">{{agile_lng_translate 'campaigns' 'inquiry'}}:&nbsp</td><td>{{inquiry}}</td></tr>
+					        		              	<tr><td style="color:#7AF168">{{agile_lng_translate 'campaigns' 'interest'}}:&nbsp</td><td>{{interest}}</td></tr>
+					        		              	<tr><td style="color:#167F80">{{agile_lng_translate 'campaigns' 'no-interest'}}:&nbsp</td><td>{{noInterest}}</td></tr>
+					        		              	<tr><td style="color:#0560A2">{{agile_lng_translate 'campaigns' 'incorrect-referral'}}:&nbsp</td><td>{{incorrectReferral}}</td></tr>
+					        		              	<tr><td style="color:#D3E6C7">{{agile_lng_translate 'campaigns' 'meeting-scheduled'}}:&nbsp</td><td>{{meetingScheduled}}</td></tr>
+					        		              	<tr><td style="color:#7798BF">{{agile_lng_translate 'campaigns' 'new-opportunity'}}:&nbsp</td><td>{{newOpportunity}}</td></tr>
 					        		              	
-					        		              	<tr><td style="color:#27c24c">Other:&nbsp</td><td>{{other}}</td></tr>
+					        		              	<tr><td style="color:#27c24c">{{agile_lng_translate 'admin-settings-tasks' 'Other'}}:&nbsp</td><td>{{other}}</td></tr>
 					        		              
-					        		              <tr><td class="b-b-none">Total:</td>
+					        		              <tr><td class="b-b-none">{{agile_lng_translate 'contacts-view' 'total'}}:</td>
 					        		        	  <td class="b-b-none">{{total}}</td></tr>
 					        		        	  </table></div>'>{{numberWithCommasForActivities answered}}/{{numberWithCommasForActivities total}}</div>
 					</div>
@@ -470,21 +470,21 @@
 					<div class="agile-thumb agile-thumb-view p-b-xs">
 						<div>{{userName}}</div>
 						<div class="text-xlg calls_popover" data-toggle="tooltip" title='<div><table style="background-color:transparent!important">
-						        					<tr><td style="color:#27c24c">Answered:&nbsp</td><td>{{answered}}</td></tr>
-					        		              	<tr><td style="color:#23b7e5">Busy:&nbsp</td><td>{{busy}}</td></tr>
-					        		              	<tr><td style="color:#f05050">Failed:&nbsp</td><td>{{failed}}</td></tr>
-					        		              	<tr><td style="color:#7266ba">Voicemail:&nbsp</td><td>{{voiceMail}}</td></tr>
-					        		              	<tr><td style="color:#fad733">Missed:&nbsp</td><td>{{missed}}</td></tr>
-					        		              	<tr><td style="color:#FF9900">Inquiry:&nbsp</td><td>{{inquiry}}</td></tr>
-					        		              	<tr><td style="color:#7AF168">Interest:&nbsp</td><td>{{interest}}</td></tr>
-					        		              	<tr><td style="color:#167F80">No Interest:&nbsp</td><td>{{noInterest}}</td></tr>
-					        		              	<tr><td style="color:#0560A2">Incorrect Referral:&nbsp</td><td>{{incorrectReferral}}</td></tr>
-					        		              	<tr><td style="color:#D3E6C7">Meeting Scheduled:&nbsp</td><td>{{meetingScheduled}}</td></tr>
-					        		              	<tr><td style="color:#7798BF">New Opportunity:&nbsp</td><td>{{newOpportunity}}</td></tr>
+						        					<tr><td style="color:#27c24c">{{agile_lng_translate 'campaigns' 'answered'}}:&nbsp</td><td>{{answered}}</td></tr>
+					        		              	<tr><td style="color:#23b7e5">{{agile_lng_translate 'campaigns' 'busy'}}:&nbsp</td><td>{{busy}}</td></tr>
+					        		              	<tr><td style="color:#f05050">{{agile_lng_translate 'call_activity' 'fail'}}:&nbsp</td><td>{{failed}}</td></tr>
+					        		              	<tr><td style="color:#7266ba">{{agile_lng_translate 'campaigns' 'voicemail'}}:&nbsp</td><td>{{voiceMail}}</td></tr>
+					        		              	<tr><td style="color:#fad733">{{agile_lng_translate 'campaigns' 'missed'}}:&nbsp</td><td>{{missed}}</td></tr>
+					        		              	<tr><td style="color:#FF9900">{{agile_lng_translate 'campaigns' 'inquiry'}}:&nbsp</td><td>{{inquiry}}</td></tr>
+					        		              	<tr><td style="color:#7AF168">{{agile_lng_translate 'campaigns' 'interest'}}:&nbsp</td><td>{{interest}}</td></tr>
+					        		              	<tr><td style="color:#167F80">{{agile_lng_translate 'campaigns' 'no-interest'}}:&nbsp</td><td>{{noInterest}}</td></tr>
+					        		              	<tr><td style="color:#0560A2">{{agile_lng_translate 'campaigns' 'incorrect-referral'}}:&nbsp</td><td>{{incorrectReferral}}</td></tr>
+					        		              	<tr><td style="color:#D3E6C7">{{agile_lng_translate 'campaigns' 'meeting-scheduled'}}:&nbsp</td><td>{{meetingScheduled}}</td></tr>
+					        		              	<tr><td style="color:#7798BF">{{agile_lng_translate 'campaigns' 'new-opportunity'}}:&nbsp</td><td>{{newOpportunity}}</td></tr>
 					        		              	
-					        		              	<tr><td style="color:#27c24c">Other:&nbsp</td><td>{{other}}</td></tr>
+					        		              	<tr><td style="color:#27c24c">">{{agile_lng_translate 'admin-settings-tasks' 'Other'}}:&nbsp</td><td>{{other}}</td></tr>
 
-					        		              <tr><td class="b-b-none">Total:</td>
+					        		              <tr><td class="b-b-none">{{agile_lng_translate 'contacts-view' 'total'}}:</td>
 					        		        	  <td class="b-b-none">{{total}}</td></tr>
 					        		        	  </table></div>'>{{numberWithCommasForActivities answered}}/{{numberWithCommasForActivities total}}</div>
 					</div>
