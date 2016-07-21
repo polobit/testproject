@@ -951,7 +951,8 @@ function setSelectedPhone(arrayObject, id)
 function changeContactDeatilView()
 {
 	var id = (CALL_CAMPAIGN.contact_id_list[CALL_CAMPAIGN.current_count]);
-	Backbone.history.navigate("contact/" + id, { trigger : true });
+	//Backbone.history.navigate("contact/" + id, { trigger : true });
+	routeToPage("contact/" + id);
 }
 
 /**
