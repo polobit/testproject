@@ -4352,3 +4352,8 @@ border: 1px solid #e5e5e5;
 }
 }
 
+.search-results-scroll-container {
+    max-height: 700px;
+    overflow: hidden;
+    overflow-y : auto!important;
+}
