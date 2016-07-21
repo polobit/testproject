@@ -192,13 +192,11 @@ public class UpdateContactsOfDomainDeferredTask implements DeferredTask
 
 	private void updateStats(String previousCursor,String failedIds, String status) {
 		NamespaceManager.set("");
-		System.out.println("status ="+status);
-		
+			
 		if(status.equalsIgnoreCase("COMPLETED"))
-		{
-			System.out.println("status1 ="+status);
+		{		
 	//SessionManager.get().getDomainId();
-	
+			System.out.println("Session ="+ SessionManager.get());
 		DomainUser domainUser = DomainUserUtil.getCurrentDomainUser();
 		System.out.println("Domain user "+domainUser);
 		System.out.println("Domain  "+domain);

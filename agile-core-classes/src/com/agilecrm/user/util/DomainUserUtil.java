@@ -8,10 +8,13 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
 import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
+
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.projectedpojos.DomainUserPartial;
 import com.agilecrm.projectedpojos.PartialDAO;
@@ -282,6 +285,7 @@ public class DomainUserUtil
     {
     	//Check in cache. If user is present, return result.
     	Object obj = SessionCache.getObject(SessionCache.CURRENT_DOMAIN_USER);
+    	System.out.println("obj ="+ obj);
     	if( obj != null && obj instanceof DomainUser )	return (DomainUser) obj;
     	
 		// Get Current Logged In user
@@ -298,6 +302,7 @@ public class DomainUserUtil
 		 * System.out.println("**************************" + user.menu_scopes);
 		 */
 		SessionCache.putObject(SessionCache.CURRENT_DOMAIN_USER, user);
+		System.out.println("cur dom usr ="+ user);
 		return user;
     }
 
