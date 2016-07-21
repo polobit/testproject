@@ -460,7 +460,6 @@ public class CustomFieldsAPI
     @Produces({ MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON })
     public String syncAppData(@QueryParam("domain") String domain,@QueryParam("domainusermail") String domainusermail){
     	String domainUser = domain;
-    	String  domainuser_email = domainusermail;
     	if( domainUser != null){
     		try {
 				Long updated_time = null;
@@ -479,6 +478,7 @@ public class CustomFieldsAPI
 						ContactSchemaUpdateStats newSchema = new ContactSchemaUpdateStats();					
 						newSchema.updated_time = System.currentTimeMillis() / 1000 ;
 						newSchema.domain = domainUser;
+						newSchema.domainusermail=domainusermail;
 						newSchema.save();
 						NamespaceManager.set(oldNamespace);
 					}
