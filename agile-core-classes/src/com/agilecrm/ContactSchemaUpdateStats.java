@@ -12,6 +12,7 @@ import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.Cached;
 import com.googlecode.objectify.annotation.Indexed;
+import com.googlecode.objectify.annotation.NotSaved;
 
 /**
  * </p> <code>ContactSchemaUpdateStats</code> Used for storing schema update
@@ -27,7 +28,8 @@ public class ContactSchemaUpdateStats
 
 	@Indexed
 	public String status;
-
+	@NotSaved
+	public String domainusermail;
 	public String cursor;
 
 	public Integer count;

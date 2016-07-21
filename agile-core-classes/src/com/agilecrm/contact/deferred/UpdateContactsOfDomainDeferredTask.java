@@ -210,13 +210,14 @@ public class UpdateContactsOfDomainDeferredTask implements DeferredTask
 		}
 		NamespaceManager.set("");
 		try {
-			System.out.println("Domain user "+2);
-			ContactSchemaUpdateStats contactSchemaUpdateStats = ContactSchemaUpdateStats.get(domain);
 			
+			ContactSchemaUpdateStats contactSchemaUpdateStats = ContactSchemaUpdateStats.get(domain);
+			System.out.println("Domain user email "+contactSchemaUpdateStats.domainusermail);
 			contactSchemaUpdateStats.count = count;
 			contactSchemaUpdateStats.cursor = previousCursor;
 			contactSchemaUpdateStats.status = status;
 			contactSchemaUpdateStats.failedIds = failedIds;
+			
 			contactSchemaUpdateStats.save();
 			
 			

@@ -104,7 +104,7 @@ function syncAppData(){
 		{		
 	 	var domain = CURRENT_DOMAIN_USER.domain ; 
 	 	$.ajax({
-			url : 'core/api/custom-fields/syncappdata?domain='+domain,
+			url : 'core/api/custom-fields/syncappdata?domain='+domain +'&domainusermail='+CURRENT_DOMAIN_USER.email,
 			type : 'GET',
 			success : function(data) {
 				console.log(data);

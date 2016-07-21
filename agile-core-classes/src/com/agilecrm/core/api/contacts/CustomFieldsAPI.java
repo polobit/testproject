@@ -458,8 +458,9 @@ public class CustomFieldsAPI
     @Path("/syncappdata")
     @GET
     @Produces({ MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON })
-    public String syncAppData(@QueryParam("domain") String domain){
+    public String syncAppData(@QueryParam("domain") String domain,@QueryParam("domainusermail") String domainusermail){
     	String domainUser = domain;
+    	String  domainuser_email = domainusermail;
     	if( domainUser != null){
     		try {
 				Long updated_time = null;
