@@ -782,11 +782,11 @@ var portlet_graph_data_utility = {
 										.each(
 												callsDurationList,
 												function(index, duration) {
-													callsDurationInMinsList[index] = duration;
+													callsDurationInMinsList[index] = duration/60;
 												});
 								tempData.data = callsDurationInMinsList;
 								series[0] = tempData;
-								text = "Calls Duration (Sec)";
+								text = "Calls Duration (Mins)";
 								colors = [ 'green' ];
 							}
 
