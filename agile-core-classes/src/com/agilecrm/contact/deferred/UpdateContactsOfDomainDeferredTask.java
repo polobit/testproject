@@ -51,6 +51,7 @@ public class UpdateContactsOfDomainDeferredTask implements DeferredTask
 	@Override
 	public void run()
 	{
+		
 		System.out.println("Task started for domain: "+ domain);
 		String oldNamespace = NamespaceManager.get();
 		int currentCount = 0;
@@ -138,6 +139,7 @@ public class UpdateContactsOfDomainDeferredTask implements DeferredTask
 						queue.addAsync(taskOptions);
 					} else {
 						//update stats to completion.
+						System.out.print("status is Completed test1");
 						updateStats(previousCursor,failedIds, "COMPLETED");
 					}
 					break;
@@ -154,6 +156,7 @@ public class UpdateContactsOfDomainDeferredTask implements DeferredTask
 				
 				//update stats to completion.
 				count+=currentCount;
+				System.out.print("status is Completed test");
 				updateStats(previousCursor,failedIds, "COMPLETED");
 				break;
 			} while (contacts_list.size() > 0 && !StringUtils.equals(previousCursor, currentCursor));
