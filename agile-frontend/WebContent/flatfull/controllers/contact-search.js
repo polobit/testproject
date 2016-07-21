@@ -17,174 +17,95 @@ var ContactSearchRouter = Backbone.Router.extend({
 	searchResults : function(query)
 	{
 	
-		//var search_list_filters = serializeForm("advanced-search-filter").fields_set;	
 		 var search_filters = _agile_get_prefs('agile_search_filter_'+CURRENT_DOMAIN_USER.id);
-		  var search_list_filters = JSON.parse(search_filters);
-		if(search_list_filters){
-			$("#content").html("<div id='search-results-container'></div>")
-			for(var j=0;j<search_list_filters.length;j++){
-			  	$("#search-results-container").append("<div class='search-results-scroll-container' id='search_content_"+search_list_filters[j]+"'></div>");
-				}
+		 var search_list_filters = JSON.parse(search_filters);
+		 if(!search_list_filters)
+		 	  return;
 
-		  	  	for(var i =0; i<search_list_filters.length; i++){
-		  	   	if(search_list_filters[i] != undefined && search_list_filters[i] != ""){
-		  	   		if(search_list_filters[i]=="person"){
-		  	   			var searchResultsView = new Base_Collection_View({ url : "core/api/search/seachlist?q=" + encodeURIComponent(query)+"&type="+ search_list_filters[i], templateKey : "search", individual_tag_name : 'tr', cursor : true,
-						data : QUERY_RESULTS, sort_collection : false,scroll_target : $("#search_content_" + search_list_filters[i]) ,page_size : 5, postRenderCallback : function(el)
-						{
-							// Shows the query string as heading of search results
-							if (searchResultsView.collection.length == 0)
-								$("#search-query-heading", el).html('No matches found for "' + query + '" in <span style="font-weight:600;">Contacts');
-							else
-								$("#search-query-heading", el).html('Search results for "' + query + '" in <span style="font-weight:600;">Contacts');
-						} });
+		 // Add containers
+		 this.addResultsContainers(search_list_filters);
 
-						// If QUERY_RESULTS is defined which are set by agile_typeahead
-						// istead of fetching again
-						/*
-						 * if(QUERY_RESULTS) { //Create collection with results
-						 * searchResultsView.collection = new BaseCollection(QUERY_RESULTS, {
-						 * restKey : searchResultsView.options.restKey, sortKey :
-						 * searchResultsView.options.sortKey });
-						 * 
-						 * $('#content').html(searchResultsView.render(true).el);
-						 * $('body').trigger('agile_collection_loaded'); return; }
-						 */
+		 for(var i =0; i<search_list_filters.length; i++){
+		 	   if(!this.isValid(search_list_filters[i]))
+		 	   	     continue;
 
-						// If in case results in different page is clicked before
-						// typeahead fetch results, then results are fetched here
-						searchResultsView.collection.fetch();
-						//$('#content').html(searchResultsView.render().el);
+		 	   var templateKey = this.getTemplateName(search_list_filters[i]);
+		 	   var searchResultsView = new Base_Collection_View({ 
+   							url : "core/api/search/seachlist?q=" + encodeURIComponent(query)+"&type="+ search_list_filters[i], 
+   							templateKey : templateKey, 
+   							individual_tag_name : 'tr', 
+   							cursor : true,
+							data : QUERY_RESULTS, 
+							sort_collection : false,
+							scroll_target : $("#search_content_" + search_list_filters[i]),
+							page_size : 8,
+							infiniscroll_fragment : search_list_filters[i],
+							postRenderCallback : function(el, collection)
+							{
+								var module_name = App_Contact_Search.getModuleName(collection.url);
+								
+								// el.find("table").removeClass("showCheckboxes");
 
-						$('#search-results-container').find('#search_content_'+search_list_filters[i]).html(searchResultsView.render().el);
-		  	   		}
+								// Shows the query string as heading of search results
+								if (collection.length == 0)
+									$("#search-query-heading", el).html('No matches found for "' + query + '" in <span style="font-weight:600;">' + module_name);
+								else
+									$("#search-query-heading", el).html('Search results for "' + query + '" in <span style="font-weight:600;">' + module_name);
+							} });
+						
+							// If in case results in different page is clicked before
+							// typeahead fetch results, then results are fetched here
+							searchResultsView.collection.fetch();
+						    $('#search-results-container').find('#search_content_'+search_list_filters[i]).html(searchResultsView.render().el);
 
-		  	   	}
+		 }
+	},
 
-	  	   		if(search_list_filters[i]=="company"){
-	  	   		var companySearchResultsView = new Base_Collection_View({ url : "core/api/search/seachlist?q=" + encodeURIComponent(query)+"&type="+ search_list_filters[i], templateKey : "company-search", individual_tag_name : 'tr', cursor : true,
-					data : QUERY_RESULTS, sort_collection : false, scroll_target : $("#search_content_" + search_list_filters[i]), page_size : 10, postRenderCallback : function(el)
-					{
-						el.find("#companies").removeClass("showCheckboxes");
-						// Shows the query string as heading of search results
-						if (companySearchResultsView.collection.length == 0)
-							$("#search-query-heading", el).html('No matches found for "' + query + '" in <span style="font-weight:600;">Companies');
-						else
-							$("#search-query-heading", el).html('Search results for "' + query + '" in <span style="font-weight:600;">Companies');
-					} });
-	  	   			companySearchResultsView.collection.fetch();
-					$('#search-results-container').find('#search_content_'+search_list_filters[i]).html(companySearchResultsView.render().el);
-
-		  	   	}
-
-		  	   	if(search_list_filters[i]=="opportunity"){
-		  	   		var dealSearchResultsView = new Base_Collection_View({ url : "core/api/search/seachlist?q=" + encodeURIComponent(query)+"&type="+ search_list_filters[i], templateKey : "deal-search", individual_tag_name : 'tr', cursor : true,
-						data : QUERY_RESULTS, sort_collection : false, scroll_target : $("#search_content_" + search_list_filters[i]), page_size : 10, postRenderCallback : function(el)
-						{
-							
-							el.find(".deals-table").removeClass("showCheckboxes");
-							el.find(".panel-heading").css("display","none");
-							initializeDealDetailSearch();
-							// Shows the query string as heading of search results
-							if (dealSearchResultsView.collection.length == 0)
-								$("#search-query-heading", el).html('No matches found for "' + query + '" in <span style="font-weight:600;">Deals');
-							else
-								$("#search-query-heading", el).html('Search results for "' + query + '" in <span style="font-weight:600;">Deals');
-						} });
-		  	   			
-		  	   			dealSearchResultsView.collection.fetch();
-						$('#search-results-container').find('#search_content_'+search_list_filters[i]).html(dealSearchResultsView.render().el);
-
-		  	   	}
-		  	   	if(search_list_filters[i]=="document"){
-
-		  	   		var documentSearchResultsView = new Base_Collection_View({ url : "core/api/search/seachlist?q=" + encodeURIComponent(query)+"&type="+ search_list_filters[i], templateKey : "documents-search", individual_tag_name : 'tr', cursor : true,
-						data : QUERY_RESULTS, sort_collection : false, scroll_target : $("#search_content_" + search_list_filters[i]), page_size : 10, postRenderCallback : function(el)
-						{
-							initializeDocumentSearch(el);
-							// Shows the query string as heading of search results
-							if (documentSearchResultsView.collection.length == 0)
-								$("#search-query-heading", el).html('No matches found for "' + query + '" in <span style="font-weight:600;">Documents</span>');
-							else
-								$("#search-query-heading", el).html('Search results for "' + query + '" in <span style="font-weight:600;">Documents');
-						} });
-		  	   			documentSearchResultsView.collection.fetch();
-						$('#search-results-container').find('#search_content_'+search_list_filters[i]).html(documentSearchResultsView.render().el);
-
-
-		  	   	}
-
-		  	   	if(search_list_filters[i]=="tickets"){
-
-		  	   		var ticketSearchResultsView = new Base_Collection_View({ url : "core/api/search/seachlist?q=" + encodeURIComponent(query)+"&type="+ search_list_filters[i], templateKey : "tickets-search", individual_tag_name : 'tr', cursor : true,
-						data : QUERY_RESULTS, sort_collection : false, scroll_target : $("#search_content_" + search_list_filters[i]), page_size : 10, postRenderCallback : function(el)
-						{
-							el.find(".deals-table").removeClass("showCheckboxes");
-							// Shows the query string as heading of search results
-							if (ticketSearchResultsView.collection.length == 0)
-								$("#search-query-heading", el).html('No matches found for "' + query + '" in <span style="font-weight:600;">Tickets');
-							else
-								$("#search-query-heading", el).html('Search results for "' + query + '" in <span style="font-weight:600;">Tickets');
-						} });
-		  	   			ticketSearchResultsView.collection.fetch();
-						$('#search-results-container').find('#search_content_'+search_list_filters[i]).html(ticketSearchResultsView.render().el);
-
-
-		  	   	}
-
-		  	   	/*if(search_list_filters[i]=="cases"){
-
-		  	   		var caseSearchResultsView = new Base_Collection_View({ url : "core/api/search/seachlist?q=" + encodeURIComponent(query)+"&type="+ search_list_filters[i], templateKey : "case-search", individual_tag_name : 'tr', cursor : true,
-						data : QUERY_RESULTS, sort_collection : false, page_size : 5, postRenderCallback : function(el)
-						{
-							initializeCaseSearch();
-							// Shows the query string as heading of search results
-							if (caseSearchResultsView.collection.length == 0)
-								$("#search-query-heading", el).html('No matches found for "' + query + '" in cases');
-							else
-								$("#search-query-heading", el).html('Search results for "' + query + '" in cases');
-						} });
-		  	   			caseSearchResultsView.collection.fetch();
-						$('#search-results-container').find('#search_content_'+search_list_filters[i]).html(caseSearchResultsView.render().el);
-
-
-		  	   	}*/
-		  	   
-		  	   		
-		  	   }
+	addResultsContainers :  function(options){
+		$("#content").html("<div id='search-results-container'></div>")
+		for(var j=0; j<options.length; j++)
+		{
+		  	$("#search-results-container").append("<div class='search-results-scroll-container' id='search_content_"+options[j]+"'></div>");
 		}
+	},
 
-		
-		/*
-		var searchResultsView = new Base_Collection_View({ url : "core/api/search?q=" + encodeURIComponent(query), templateKey : "search", individual_tag_name : 'tr', cursor : true,
-			data : QUERY_RESULTS, sort_collection : false, page_size : 15, postRenderCallback : function(el)
-			{
-				// Shows the query string as heading of search results
-				if (searchResultsView.collection.length == 0)
-					$("#search-query-heading", el).html('No matches found for "' + query + '"');
-				else
-					$("#search-query-heading", el).html('Search results for "' + query + '"');
-			} });
-		*/
-		// If QUERY_RESULTS is defined which are set by agile_typeahead
-		// istead of fetching again
-		/*
-		 * if(QUERY_RESULTS) { //Create collection with results
-		 * searchResultsView.collection = new BaseCollection(QUERY_RESULTS, {
-		 * restKey : searchResultsView.options.restKey, sortKey :
-		 * searchResultsView.options.sortKey });
-		 * 
-		 * $('#content').html(searchResultsView.render(true).el);
-		 * $('body').trigger('agile_collection_loaded'); return; }
-		 */
+	isValid : function(val){
+		if(val)
+			 return true;
+		return false;
+	},
 
-		// If in case results in different page is clicked before
-		// typeahead fetch results, then results are fetched here
-		/*searchResultsView.collection.fetch();
+	getTemplateName : function(module_name){
+		var json = {};
+		if(module_name == "person")
+			return "search";
+		else if(module_name == "company")
+			return "company-search";
+		else if(module_name == "opportunity")
+			return "deal-search";
+		else if(module_name == "document")
+			return "documents-search";
+		else if(module_name == "tickets")
+			return "tickets-search";
+	},
+	getModuleName : function(url){
+		if(url.indexOf("type=person") != -1){
+			return "Contacts";
+		}
+		else if(url.indexOf("type=company") != -1){
+			return "Companies";
+		}
+		else if(url.indexOf("type=opportunity") != -1){
+			return "Deals";
+		}
+		else if(url.indexOf("type=document") != -1){
+			return "Documents";
+		}
+		else if(url.indexOf("type=tickets") != -1){
+			return "Tickets";
+		}
+	},
 
-		$('#content').html(searchResultsView.render().el);*/
-
-	}
 
 });
 

@@ -3855,4 +3855,8 @@ div.list-tasks.panel-body:hover
     overflow: hidden;
     overflow-y : auto!important;
     margin-bottom: 30px;
+    position: relative;
 }
+/*.search-results-scroll-container table td:first-child{
+    display: none;
+} */
