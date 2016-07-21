@@ -24,14 +24,14 @@ var ContactSearchRouter = Backbone.Router.extend({
 		if(search_list_filters){
 			$("#content").html("<div id='search-results-container'></div>")
 			for(var j=0;j<search_list_filters.length;j++){
-			  	$("#search-results-container").append("<div id=search_content_"+search_list_filters[j]+"></div>");
+			  	$("#search-results-container").append("<div class='search-results-scroll-container' id='search_content_"+search_list_filters[j]+"'></div>");
 				}
 
 		  	  	for(var i =0; i<search_list_filters.length; i++){
 		  	   	if(search_list_filters[i] != undefined && search_list_filters[i] != ""){
 		  	   		if(search_list_filters[i]=="person"){
 		  	   			var searchResultsView = new Base_Collection_View({ url : "core/api/search/seachlist?q=" + encodeURIComponent(query)+"&type="+ search_list_filters[i], templateKey : "search", individual_tag_name : 'tr', cursor : true,
-						data : QUERY_RESULTS, sort_collection : false, page_size : 15, postRenderCallback : function(el)
+						data : QUERY_RESULTS, sort_collection : false,scroll_target : $("#search_content_" + search_list_filters[i]) ,page_size : 10, postRenderCallback : function(el)
 						{
 							// Shows the query string as heading of search results
 							if (searchResultsView.collection.length == 0)
@@ -64,7 +64,8 @@ var ContactSearchRouter = Backbone.Router.extend({
 
 	  	   		if(search_list_filters[i]=="company"){
 	  	   		var companySearchResultsView = new Base_Collection_View({ url : "core/api/search/seachlist?q=" + encodeURIComponent(query)+"&type="+ search_list_filters[i], templateKey : "company-search", individual_tag_name : 'tr', cursor : true,
-					data : QUERY_RESULTS, sort_collection : false, page_size : 5, postRenderCallback : function(el)
+
+					data : QUERY_RESULTS, sort_collection : false, scroll_target : $("#search_content_" + search_list_filters[i]), page_size : 10, postRenderCallback : function(el)
 					{
 						// Shows the query string as heading of search results
 						if (companySearchResultsView.collection.length == 0)
@@ -79,7 +80,9 @@ var ContactSearchRouter = Backbone.Router.extend({
 
 		  	   	if(search_list_filters[i]=="opportunity"){
 		  	   		var dealSearchResultsView = new Base_Collection_View({ url : "core/api/search/seachlist?q=" + encodeURIComponent(query)+"&type="+ search_list_filters[i], templateKey : "deal-search", individual_tag_name : 'tr', cursor : true,
-						data : QUERY_RESULTS, sort_collection : false, page_size : 5, postRenderCallback : function(el)
+
+						data : QUERY_RESULTS, sort_collection : false, scroll_target : $("#search_content_" + search_list_filters[i]), page_size : 10, postRenderCallback : function(el)
+
 						{
 							initializeDealDetailSearch();
 							// Shows the query string as heading of search results
@@ -95,7 +98,9 @@ var ContactSearchRouter = Backbone.Router.extend({
 		  	   	if(search_list_filters[i]=="document"){
 
 		  	   		var documentSearchResultsView = new Base_Collection_View({ url : "core/api/search/seachlist?q=" + encodeURIComponent(query)+"&type="+ search_list_filters[i], templateKey : "documents-search", individual_tag_name : 'tr', cursor : true,
-						data : QUERY_RESULTS, sort_collection : false, page_size : 5, postRenderCallback : function(el)
+
+						data : QUERY_RESULTS, sort_collection : false, scroll_target : $("#search_content_" + search_list_filters[i]), page_size : 10, postRenderCallback : function(el)
+
 						{
 							initializeDocumentSearch(el);
 							// Shows the query string as heading of search results
@@ -113,7 +118,8 @@ var ContactSearchRouter = Backbone.Router.extend({
 		  	   	if(search_list_filters[i]=="tickets"){
 
 		  	   		var ticketSearchResultsView = new Base_Collection_View({ url : "core/api/search/seachlist?q=" + encodeURIComponent(query)+"&type="+ search_list_filters[i], templateKey : "tickets-search", individual_tag_name : 'tr', cursor : true,
-						data : QUERY_RESULTS, sort_collection : false, page_size : 5, postRenderCallback : function(el)
+						data : QUERY_RESULTS, sort_collection : false, scroll_target : $("#search_content_" + search_list_filters[i]), page_size : 10, postRenderCallback : function(el)
+
 						{
 							// Shows the query string as heading of search results
 							if (ticketSearchResultsView.collection.length == 0)

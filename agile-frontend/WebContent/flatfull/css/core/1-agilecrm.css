@@ -4286,3 +4286,9 @@ background-color : #522E2E;
     width: 100%;
 }
 }
+
+.search-results-scroll-container {
+    max-height: 700px;
+    overflow: hidden;
+    overflow-y : auto!important;
+}
