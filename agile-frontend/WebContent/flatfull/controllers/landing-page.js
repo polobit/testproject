@@ -105,7 +105,7 @@ var LandingPageRouter = Backbone.Router.extend({
         }
 
         var lp = this.LandingPageCollectionView.collection.get(pageId).toJSON();
-        if(lp.version > 0) {
+        if(lp.version >= 2) {
             window.location = "pagebuilder/"+pageId;
             return;
         }
