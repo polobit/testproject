@@ -241,10 +241,6 @@ public class SendGridLib {
 						else
 							retry = false;
 					}
-	        		catch(IOException ex) // To handle Blobstream on retry in Attachments
-	        		{
-	        			throw ex;
-	        		}
 					catch (SendGridException e) // To handle new sub user
 					{
 						System.err.println("SendGrid exception occured " + e.getMessage());
@@ -282,13 +278,17 @@ public class SendGridLib {
 					
 					response = HttpClientUtil.accessURLUsingHttpClient(urlBuilder, this.buildBody(email));
 				}
-				catch (IOException e1)
+				catch (IOException e1) // To handle BlobStream closed exception
 				{
 					throw e1;
 				}
 				
 				System.out.println("Response after second attempt..." + response);
 			}
+        	catch(IOException ex) // To handle BlobStream closed exception
+        	{
+        		throw ex;
+        	}
         	catch(Exception ex)
         	{
         		System.err.println(ExceptionUtils.getFullStackTrace(ex));
@@ -703,5 +703,4 @@ public class SendGridLib {
             return this.message;
         }
     }
-    
 }
