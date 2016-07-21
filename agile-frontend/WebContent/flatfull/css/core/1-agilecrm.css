@@ -4276,7 +4276,6 @@ background-color : #522E2E;
 @keyframes pulse-location{0%{transform:scale(1);opacity:1}100%{transform:scale(5);opacity:0}}
 @-webkit-keyframes pulse-location{0%{transform:scale(1);opacity:1}100%{transform:scale(5);opacity:0}}
 
-
 @media (max-width: 767px){
 .documentsheading{
   text-align: center;
@@ -4358,4 +4357,13 @@ border: 1px solid #e5e5e5;
     overflow-y : auto!important;
     margin-bottom: 30px;
      position: relative;
+}
+
+.responsive-label{
+    -webkit-transform: rotate(-40deg);
+    display: block;
+    float: left;
+    margin-left: -32px;
+    margin-top: -8px;
+    font-weight: bold;
 }
