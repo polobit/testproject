@@ -4,8 +4,8 @@
 <div class="row">
     <div class="col-md-12">
        
-            <h3 class="pull-left font-thin h3">Campaign Reports</h3>
-            <a href="#campaign-report-add" class="btn btn-default btn-sm pull-right btn-addon" id="addReport"><span><i class="icon-plus-sign" /></span>  Add Report</a>
+            <h3 class="pull-left font-thin h3">{{agile_lng_translate 'report-view' 'campaignreports'}}</h3>
+            <a href="#campaign-report-add" class="btn btn-default btn-sm pull-right btn-addon" id="addReport"><span><i class="icon-plus-sign" /></span> {{agile_lng_translate 'portlets' 'reports-btn-text'}}</a>
             <div class="clearfix">
         </div>
    
@@ -19,14 +19,14 @@
         {{#if this.length}}
         <div class="col-md-9 col-sm-9">
         <div class="panel panel-default">
-        <div class="panel-heading">Campaign Reports List</div>
+        <div class="panel-heading">{{agile_lng_translate 'report-view' 'campaignreports-list'}}</div>
        <div class="table-responsive">
         <table class="table table-bordered table-striped showCheckboxes agile-table panel table-layout-mob-view " url="core/api/reports/bulk">
             <thead>
                 <tr>
-                    <th>Name</th>
-                    <th>Duration</th>
-                    <th>Campaign Name</th>
+                    <th>{{agile_lng_translate 'report-add' 'name'}}</th>
+                    <th>{{agile_lng_translate 'portlets' 'duration'}}</th>
+                    <th>{{agile_lng_translate 'report-view' 'campaign-name'}}</th>
                 </tr>
             </thead>
             <tbody id="report-campaign-model-list" route="campaign-report-edit/">
@@ -40,10 +40,10 @@
         <div class="data-block">
         <div class="wrapper-xs " id="addview">
             <h4 class="m-t-none h4 m-b-sm">
-                What are Campaign Reports?
+                {{agile_lng_translate 'report-view' 'what-are-campaign-reports'}}
             </h4>
           
-            <p>Get a periodic email digest of various campaigns launched in Agile CRM. This includes Emails sent, opened, unsubscribe, bounced (hard & soft) and Spam complaints etc. 
+            <p>{{agile_lng_translate 'report-view' 'campaigns-overview-explination'}} 
             </p>
         </div>
         </div>
@@ -64,12 +64,12 @@
         <div class="table-resp" style="text-transform:capitalize;">{{#field_Element fields_set}}{{/field_Element}}</div></td>
     <td>
         <div class="table-resp">
-            <a href="#report-campaign-results/{{id}}" class="text-info" data={{id}} id="report-instant-results">Show Results</a>             
+            <a href="#report-campaign-results/{{id}}" class="text-info" data={{id}} id="report-instant-results">{{agile_lng_translate 'report-view' 'show-results'}} </a>             
         </div>
     </td>
     <td>
         <div class="table-resp">
-            <a  data={{id}} class="text-info" id="reports-campaign-email-now" >Send Now</a>
+            <a  data={{id}} class="text-info" id="reports-campaign-email-now" >{{agile_lng_translate 'report-view' 'send-now'}}</a>
         </div>
     </td>
 <br />
@@ -80,10 +80,10 @@
 <div class="wrapper-md lter bg-light b-b">
 <div class="row">
     <div class="col-sm-12 col-md-12">
-        <h3 class="pull-left font-thin h3">Reports</h3>
+        <h3 class="pull-left font-thin h3">{{agile_lng_translate 'campaigns' 'reports'}}</h3>
 
         <div class="pull-right">
-            <a href="#add-dashlet" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="You can also configure more reports as dashlets on your dashboard" class="text-info m-t-sm inline-block">Configure Dashlet Reports</a>
+            <a href="#add-dashlet" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="{{agile_lng_translate 'tickets' 'configure-more-reports-desc'}}" class="text-info m-t-sm inline-block">{{agile_lng_translate 'tickets' 'configure-dashlet-reports'}}</a>
             
         </div>
     </div>
@@ -97,28 +97,27 @@
        <ul class="nav nav-tabs" id="subTab">
                                             {{#hasMenuScope 'DEALS'}}
                                             <li role="presentation" data-tab="6" id="dealstab">
-                                                <a href="#deals-tab" role="tab" data-toggle="tab">Deals</a>
+                                                <a href="#deals-tab" role="tab" data-toggle="tab">{{agile_lng_translate 'contact-details' 'deals'}}</a>
                                             </li>
                                             {{/hasMenuScope}}
                                              <li role="presentation" data-tab="5" id="callstab">
-                                                <a href="#calls-tab"   role="tab" data-toggle="tab" >Calls</a>
+                                                <a href="#calls-tab"   role="tab" data-toggle="tab" >{{agile_lng_translate 'portlets' 'calls'}}</a>
                                             </li>
                                             {{#hasMenuScope 'ACTIVITY'}}
                                              <li role="presentation" data-tab="4">
-                                                <a href="#activities-tab"  role="tab" data-toggle="tab" >Activities</a>
+                                                <a href="#activities-tab"  role="tab" data-toggle="tab" >{{agile_lng_translate 'portlets' 'activities'}}</a>
                                             </li>
                                             {{/hasMenuScope}}
                                               <li role="presentation" data-tab="2">
-                                                <a href="#graph-tab"  role="tab" data-toggle="tab">Growth Graphs</a>
+                                                <a href="#graph-tab"  role="tab" data-toggle="tab">{{agile_lng_translate 'report-view' 'growth-graphs'}}</a>
                                             </li>
                                             <li role="presentation"  data-tab="1">
-                                                <a href="#email-tab" role="tab"  data-toggle="tab">Reports via Email</a>
+                                                <a href="#email-tab" role="tab"  data-toggle="tab">{{agile_lng_translate 'report-view' 'reports-via-email'}}</a>
                                             </li>
                                           
                                              <li role="presentation" data-tab="3">
-                                                <a href="#campaign-tab" role="tab" data-toggle="tab">Campaigns</a>
+                                                <a href="#campaign-tab" role="tab" data-toggle="tab">{{agile_lng_translate 'report-view' 'campaigns'}}</a>
                                             </li>
-
 </ul>
 
 
@@ -133,16 +132,15 @@
             <div>
                 <i class="icon-user icon-3x"></i>
             </div>
-            <b>Contact Reports</b>
+            <b>{{agile_lng_translate 'report-view' 'contact-reports'}}</b>
         </div>
         <br />
         <!-- Description -->
         <div class="ellipsis-multiline m-b-md" rel="tooltip" title="{{description}}">
-            Get periodic email reports with a list of new leads, conversions, or as per your custom criteria.
-        </div>
-        <!-- Add button -->
+           {{agile_lng_translate 'report-view' 'get-perodic-email-reports-list-new-leads'}}
+        </div>        <!-- Add button -->
         <div>
-            <a class="btn btn-sm btn-default" href="#contact-reports">Go</a>
+            <a class="btn btn-sm btn-default" href="#contact-reports">{{agile_lng_translate 'report-view' 'go'}}</a>
         </div>
     </div>
 </div>
@@ -157,24 +155,24 @@
             <div>
                 <i class="icon-cogs icon-3x"></i>
             </div>
-            <b>Activity Reports</b>
-        </div>  
+            <b>{{agile_lng_translate 'report-view' 'activity-reports'}}</b>
+        </div>
         <br />
                 
         {{#isAllowedInCurrentPlan "is_activity_reports_enabled"}}
         <!-- Description -->
         <div class="ellipsis-multiline m-b-md" rel="tooltip" title="{{description}}">
-            Get a periodic  email digest of various activities by users in Agile.
+            {{agile_lng_translate 'portlets' 'activity-reports-pad-content-desc'}}
             <div style="display:none;" class="activity-reports-upgrade" ><p class="text-danger">{{toSafeString message}}<p></div>
         </div>
         <!-- Add button -->
             {{#hasMenuScope 'ACTIVITY'}}
                 <div  style="/*margin: 40px auto;    width: 50%;*/ display:inline;">
-                    <a class="btn btn-sm btn-default"  href="#activity-reports" id="activity-reports-upgrade">Go</a>
+                    <a class="btn btn-sm btn-default"  href="#activity-reports" id="activity-reports-upgrade">{{agile_lng_translate 'report-view' 'go'}}</a>
                 </div>
                 
             {{else}}
-                <span class="btn btn-default btn-sm disabled" >Go</span>
+                <span class="btn btn-default btn-sm disabled" >{{agile_lng_translate 'report-view' 'go'}}</span>
             {{/hasMenuScope}}
             {{else}}
             <!-- Description -->
@@ -184,7 +182,7 @@
              </div>
         <!-- Add button -->
             <div >
-                    <div class="btn btn-sm btn-default _upgrade" id="activity-reports-upgrade">Go</div>
+                    <div class="btn btn-sm btn-default _upgrade" id="activity-reports-upgrade">{{agile_lng_translate 'report-view' 'go'}}</div>
                 </div>
                  
             {{/isAllowedInCurrentPlan}}
@@ -202,16 +200,16 @@
             <div>
                 <i class="icon-sitemap icon-3x"></i>
             </div>
-            <b>Campaign Reports</b>
+            <b>{{agile_lng_translate 'report-view' 'campaignreports'}}</b>
         </div>
         <br />
         <!-- Description -->
         <div class="ellipsis-multiline m-b-md" rel="tooltip" title="{{description}}">
-            Get a periodic email digest of various campaigns launched in Agile CRM.
+            {{agile_lng_translate 'report-view' 'get-periodic-email-digest-campaigns-by-agilecrm'}}
         </div>
-        <!-- Add button -->
+                <!-- Add button -->
         <div>
-            <a class="btn btn-sm btn-default" href="#campaign-reports">Go</a>
+            <a class="btn btn-sm btn-default" href="#campaign-reports">{{agile_lng_translate 'report-view' 'go'}}</a>
         </div>
     </div>
 </div>
@@ -228,16 +226,16 @@
             <div>
                 <i class="icon-bar-chart icon-3x"></i>
             </div>
-            <b>Growth Graphs</b>
-        </div>
+            <b>{{agile_lng_translate 'report-view' 'growth-graphs'}}</b>
+        </div>r
         <br />
         <!-- Description -->
         <div class="ellipsis-multiline m-b-md" rel="tooltip" title="{{description}}">
-            Visually see how your leads are growing over time. Compare channels for essential insights.
+           {{agile_lng_translate 'report-view' 'see-how-leads-growing-over-time'}}
         </div>
         <!-- Add button -->
         <div >
-            <a class="btn btn-sm btn-default" href="#report-charts/growth">Go</a>
+            <a class="btn btn-sm btn-default" href="#report-charts/growth">{{agile_lng_translate 'report-view' 'go'}}</a>
         </div>
     </div>
 </div>
@@ -249,16 +247,16 @@
             <div>
                 <i class="icon-filter icon-3x"></i>
             </div>
-            <b>Funnel Graphs</b>
+            <b>{{agile_lng_translate 'report-view' 'funnel-graphs'}}</b>
         </div>
         <br />
         <!-- Description -->
         <div class="ellipsis-multiline m-b-md" rel="tooltip" title="{{description}}">
-            See a funnel graph of how leads are passing through various stages in your sales cycle.
+           {{agile_lng_translate 'report-view' 'funnel-reports-details'}}
         </div>
         <!-- Add button -->
         <div >
-            <a class="btn btn-sm btn-default" href="#report-charts/funnel">Go</a>
+            <a class="btn btn-sm btn-default" href="#report-charts/funnel">{{agile_lng_translate 'report-view' 'go'}}</a>
         </div>
     </div>
 </div>
@@ -270,16 +268,16 @@
             <div>
                 <i class="icon-group icon-3x"></i>
             </div>
-            <b>Ratio Reports</b>
+            <b>{{agile_lng_translate 'report-view' 'ratio-reports'}}</b>
         </div>
         <br />
         <!-- Description -->
         <div class="ellipsis-multiline m-b-md" rel="tooltip" title="{{description}}">
-            See what percentage of leads are converting over time.
+            {{agile_lng_translate 'report-view' 'ratio-reports-details'}}
         </div>
         <!-- Add button -->
         <div >
-            <a class="btn btn-sm btn-default" href="#report-charts/cohorts">Go</a>
+            <a class="btn btn-sm btn-default" href="#report-charts/cohorts">{{agile_lng_translate 'report-view' 'go'}}</a>
         </div>
     </div>
 </div>   
@@ -296,8 +294,8 @@
             <div>
                 <i class="icon-dashboard icon-3x"></i>
             </div>
-            <b>Campaign Stats</b>
-        </div>
+            <b>{{agile_lng_translate 'report-view' 'campaign-stats'}}</b>
+        </div>report-view.campaign-stats
         <br />
         <!-- Description -->
         <div class="ellipsis-multiline m-b-md" rel="tooltip" title="{{description}}">
@@ -306,7 +304,7 @@
         <!-- Add button -->
        
         <div >
-            <a id="campaign_id" class="btn btn-sm btn-default" href="#">Go</a>
+            <a id="campaign_id" class="btn btn-sm btn-default" href="#">{{agile_lng_translate 'report-view' 'go'}}</a>
 
         </div>
     </div>
@@ -331,7 +329,7 @@
         </div>
         <!-- Add button -->
         <div >
-            <a class="btn btn-sm btn-default" href="#campaign-stats" id="campaign-stats">Go</a>
+            <a class="btn btn-sm btn-default" href="#campaign-stats" id="campaign-stats">{{agile_lng_translate 'report-view' 'go'}}</a>
         </div>
     </div>
 </div>
@@ -360,7 +358,7 @@
         <!-- Add button -->
           
                 <div  style="/*margin: 40px auto;    width: 50%;*/ display:inline;">
-                      <a class="btn btn-sm btn-default" href="#activities">Go</a>
+                      <a class="btn btn-sm btn-default" href="#activities">{{agile_lng_translate 'report-view' 'go'}}</a>
                 </div>
             {{else}}
             <!-- Description -->
@@ -370,7 +368,7 @@
             </div>
         <!-- Add button -->
             <div class="inline " style="/*margin: 40px auto;    width: 50%;*/ display:inline;">
-                    <div class="btn btn-sm btn-default _upgrade" id="activities-upgrade">Go</div>
+                    <div class="btn btn-sm btn-default _upgrade" id="activities-upgrade">{{agile_lng_translate 'report-view' 'go'}}</div>
                 </div>
                  
             {{/isAllowedInCurrentPlan}}
@@ -397,7 +395,7 @@
         </div>
         <!-- Add button -->
         <div >
-            <a class="btn btn-sm btn-default" href="#contact-activities">Go</a>
+            <a class="btn btn-sm btn-default" href="#contact-activities">{{agile_lng_translate 'report-view' 'go'}}</a>
         </div>
     </div>
 </div>
@@ -422,7 +420,7 @@
         </div>
         <!-- Add button -->
 
-     <div><a class="btn btn-sm btn-default" href="#report-calls/total-calls">Go</a></div>
+     <div><a class="btn btn-sm btn-default" href="#report-calls/total-calls">{{agile_lng_translate 'report-view' 'go'}}</a></div>
                  
             
              <div class="clearfix"></div>
@@ -446,7 +444,7 @@
         </div>
         <!-- Add button -->
         <div >
-            <a class="btn btn-sm btn-default" href="#report-calls/average-calls">Go</a>
+            <a class="btn btn-sm btn-default" href="#report-calls/average-calls">{{agile_lng_translate 'report-view' 'go'}}</a>
         </div>
     </div>
 </div>
@@ -468,7 +466,7 @@
         </div>
         <!-- Add button -->
         <div >
-            <a class="btn btn-sm btn-default" id="call-activity-link">Go</a>
+            <a class="btn btn-sm btn-default" id="call-activity-link">{{agile_lng_translate 'report-view' 'go'}}</a>
         </div>
     </div>
 </div>
@@ -489,7 +487,7 @@
         </div>
         <!-- Add button -->
         <div >
-            <a class="btn btn-sm btn-default" href="#report-calls/pie-graph">Go</a>
+            <a class="btn btn-sm btn-default" href="#report-calls/pie-graph">{{agile_lng_translate 'report-view' 'go'}}</a>
         </div>
     </div>
 </div>
@@ -510,7 +508,7 @@
         </div>
         <!-- Add button -->
         <div >
-            <a class="btn btn-sm btn-default" href="#report-calls/timebased">Go</a>
+            <a class="btn btn-sm btn-default" href="#report-calls/timebased">{{agile_lng_translate 'report-view' 'go'}}</a>
         </div>
     </div>
 </div>
@@ -538,7 +536,7 @@
         </div>
         <!-- Add button -->
         <div>
-            <a class="btn btn-sm btn-default" href="#report-deals">Go</a>
+            <a class="btn btn-sm btn-default" href="#report-deals">{{agile_lng_translate 'report-view' 'go'}}</a>
         </div>
     </div>
 </div>
@@ -560,7 +558,7 @@
         </div>
         <!-- Add button -->
         <div >
-            <a class="btn btn-sm btn-default" href="#report-lossReason">Go</a>
+            <a class="btn btn-sm btn-default" href="#report-lossReason">{{agile_lng_translate 'report-view' 'go'}}</a>
         </div>
     </div>
 </div>
@@ -581,7 +579,7 @@
         </div>
         <!-- Add button -->
         <div >
-            <a class="btn btn-sm btn-default" href="#reports-wonDeals">Go</a>
+            <a class="btn btn-sm btn-default" href="#reports-wonDeals">{{agile_lng_translate 'report-view' 'go'}}</a>
         </div>
     </div>
  </div>
@@ -601,7 +599,7 @@
         </div>
         <!-- Add button -->
         <div>
-            <a class="btn btn-sm btn-default" href="#report-sales">Go</a>
+            <a class="btn btn-sm btn-default" href="#report-sales">{{agile_lng_translate 'report-view' 'go'}}</a>
         </div>
     </div>
 </div>
@@ -622,7 +620,7 @@
         </div>
         <!-- Add button -->
         <div>
-            <a class="btn btn-sm btn-default" href="#user-reports">Go</a>
+            <a class="btn btn-sm btn-default" href="#user-reports">{{agile_lng_translate 'report-view' 'go'}}</a>
         </div>
     </div>
 </div>
@@ -645,7 +643,7 @@
         </div>
         <!-- Add button -->
         <div  style="display:inline;">
-            <a class="btn btn-sm btn-default" href="#rep-reports">Go</a>
+            <a class="btn btn-sm btn-default" href="#rep-reports">{{agile_lng_translate 'report-view' 'go'}}</a>
         </div>
 
             {{else}}
@@ -656,7 +654,7 @@
              </div>
         <!-- Add button -->
             <div >
-                    <div class="btn btn-sm btn-default _upgrade" id="activity-reports-upgrade">Go</div>
+                    <div class="btn btn-sm btn-default _upgrade" id="activity-reports-upgrade">{{agile_lng_translate 'report-view' 'go'}}</div>
                 </div>
                  
             {{/isAllowedInCurrentPlan}}
@@ -679,7 +677,7 @@
         </div>
         <!-- Add button -->
         <div>
-            <a class="btn btn-sm btn-default" href="#report-comparison">Go</a>
+            <a class="btn btn-sm btn-default" href="#report-comparison">{{agile_lng_translate 'report-view' 'go'}}</a>
         </div>
     </div>
 </div>
