@@ -493,7 +493,7 @@ $(function()
 	 
 	  	var json = {};
 		json.from=CURRENT_DOMAIN_USER.email;
-		json.to = "narmadha@agilecrm.com";
+		json.to = "narmada@invox.com";
 		json.subject = "Request for getting the Beta Access";	
 		json.body = "Name: " +CURRENT_DOMAIN_USER.name+"<br>"+"Useremail: "+CURRENT_DOMAIN_USER.email+"<br>Domain: "+CURRENT_DOMAIN_USER.domain;
 		sendEmail(json);
