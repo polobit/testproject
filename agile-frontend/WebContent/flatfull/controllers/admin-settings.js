@@ -1096,7 +1096,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 					// gateway is the same as
 					// the clicked one
 					{
-						modalAlert("sms-integration-alert-modal", "You have a SMS Gateway already configured. Please disable that to configure a new one.",
+						modalAlert("sms-integration-alert-modal", _agile_get_translated_val('smsgateway', 'already-exists'),
 								"SMS Gateway Configured");
 						that.navigate("integrations", { trigger : true });
 						return;
