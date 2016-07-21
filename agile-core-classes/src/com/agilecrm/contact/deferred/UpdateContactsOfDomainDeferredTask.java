@@ -193,6 +193,18 @@ public class UpdateContactsOfDomainDeferredTask implements DeferredTask
 	private void updateStats(String previousCursor,String failedIds, String status) {
 		NamespaceManager.set("");
 		System.out.print("Domain user "+1);
+		
+		if(status.equalsIgnoreCase("COMPLETED"))
+		{
+	System.out.print("Domain user "+3);
+	//SessionManager.get().getDomainId();
+	
+		DomainUser domainUser = DomainUserUtil.getCurrentDomainUser();
+		System.out.print("Domain user "+domainUser);
+		
+		//SendMail.sendMail(domainUser.email, "CSV Companies Import Status", SendMail.CSV_IMPORT_NOTIFICATION,
+			//	new Object[] { domainUser, status });
+		}
 		try {
 			System.out.print("Domain user "+2);
 			ContactSchemaUpdateStats contactSchemaUpdateStats = ContactSchemaUpdateStats.get(domain);
@@ -202,17 +214,7 @@ public class UpdateContactsOfDomainDeferredTask implements DeferredTask
 			contactSchemaUpdateStats.failedIds = failedIds;
 			contactSchemaUpdateStats.save();
 			
-			if(status.equalsIgnoreCase("COMPLETED"))
-			{
-		System.out.print("Domain user "+3);
-		//SessionManager.get().getDomainId();
-		
-			DomainUser domainUser = DomainUserUtil.getCurrentDomainUser();
-			System.out.print("Domain user "+domainUser);
 			
-			SendMail.sendMail(domainUser.email, "CSV Companies Import Status", SendMail.CSV_IMPORT_NOTIFICATION,
-					new Object[] { domainUser, status });
-			}
 			
 		} catch(Exception e) {
 			System.err.println("Exception while updating stats for domain: "+ domain);
