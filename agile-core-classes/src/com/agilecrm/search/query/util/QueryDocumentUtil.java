@@ -6,10 +6,12 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.TimeZone;
 
 import org.apache.commons.lang.StringUtils;
 
 import com.agilecrm.SearchFilter;
+import com.agilecrm.account.util.AccountPrefsUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.core.api.search.SearchAPI;
@@ -584,6 +586,50 @@ public class QueryDocumentUtil {
 					* 3600;
 
 			String epochQuery = lhs + "_epoch >=" + currentTime;
+			epochQuery = buildNestedCondition("AND", epochQuery, lhs
+					+ "_epoch <=" + limitTime);
+			epochQuery = "(" + epochQuery + ")";
+			query = buildNestedCondition(joinCondition, query, epochQuery);
+		}
+		else if (condition.equals(SearchRule.RuleCondition.ON_AFTER) && StringUtils.isNumeric(rhs)) {
+			Calendar cal = Calendar.getInstance();
+			cal.setTimeZone(TimeZone.getTimeZone(AccountPrefsUtil.getTimeZone()));
+			cal.add(Calendar.DATE, Integer.parseInt(rhs)); // Add days
+			
+			cal.set(Calendar.HOUR_OF_DAY, 0);
+			cal.set(Calendar.MINUTE, 0);
+			cal.set(Calendar.SECOND, 0);
+			
+			long currentTime = cal.getTimeInMillis() / 1000;
+
+			cal.set(Calendar.HOUR_OF_DAY, 23);
+			cal.set(Calendar.MINUTE, 59);
+			cal.set(Calendar.SECOND, 59);
+			long limitTime = cal.getTimeInMillis()/1000;
+
+			String epochQuery = lhs + "_epoch >= " + currentTime;
+			epochQuery = buildNestedCondition("AND", epochQuery, lhs
+					+ "_epoch <=" + limitTime);
+			epochQuery = "(" + epochQuery + ")";
+			query = buildNestedCondition(joinCondition, query, epochQuery);
+		}
+		else if (condition.equals(SearchRule.RuleCondition.ON_BEFORE) && StringUtils.isNumeric(rhs)) {
+			Calendar cal = Calendar.getInstance();
+			cal.setTimeZone(TimeZone.getTimeZone(AccountPrefsUtil.getTimeZone()));
+			cal.add(Calendar.DATE, -(Integer.parseInt(rhs))); // Subtract days
+			
+			cal.set(Calendar.HOUR_OF_DAY, 0);
+			cal.set(Calendar.MINUTE, 0);
+			cal.set(Calendar.SECOND, 0);
+			
+			long currentTime = cal.getTimeInMillis() / 1000;
+
+			cal.set(Calendar.HOUR_OF_DAY, 23);
+			cal.set(Calendar.MINUTE, 59);
+			cal.set(Calendar.SECOND, 59);
+			long limitTime = cal.getTimeInMillis()/1000;
+
+			String epochQuery = lhs + "_epoch >= " + currentTime;
 			epochQuery = buildNestedCondition("AND", epochQuery, lhs
 					+ "_epoch <=" + limitTime);
 			epochQuery = "(" + epochQuery + ")";
