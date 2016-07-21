@@ -156,7 +156,7 @@ var SettingsRouter = Backbone.Router
 								success : function()
 								{
 									$('#changePasswordForm').find('span.save-status').html(
-											"<span style='color:green;margin-left:10px;'>Password changed successfully</span>").fadeOut(5000);
+											"<span style='color:green;margin-left:10px;'>" + _agile_get_translated_val('others', 'pwd-change-success') + "</span>").fadeOut(5000);
 									enable_save_button($(saveBtn));
 									$('#' + form_id).each(function()
 									{
@@ -168,7 +168,7 @@ var SettingsRouter = Backbone.Router
 								{
 									$('#changePasswordForm').find('span.save-status').html("");
 									$('#changePasswordForm').find('input[name="current_pswd"]').closest(".controls").append(
-											"<span style='color:red;margin-left:10px;'>Incorrect Password</span>");
+											"<span style='color:red;margin-left:10px;'>" + _agile_get_translated_val('others', 'pwd-in-correct') + "</span>");
 									$('#changePasswordForm').find('input[name="current_pswd"]').closest(".controls").find("span").fadeOut(5000);
 									$('#changePasswordForm').find('input[name="current_pswd"]').focus();
 									enable_save_button($(saveBtn));

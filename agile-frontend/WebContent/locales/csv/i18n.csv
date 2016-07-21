@@ -119,6 +119,7 @@ deal-view.what-are-milestone-p2,e.g. Use 'Won' in case of a successfully complet
 plan-and-upgrade.nicolas-woirhaye-desc,I've seen and used dozens of CRMs. This one may change the market upside down. Absolutely great&#44; easy-to-use and powerful.,
 admin-settings-deals.source-name-desc,Source name should start with an alphabet and can not contain special characters other than underscore&#44; space and hyphen.,El nombre de la fuente debe comenzar con una letra del alfabeto y no debe contener caracteres especiales a excepción del guión bajo&#44; el espacio y el guión
 validation-msgs.name-validation,Name should be between 4-20 characters in length. Both letters and numbers are allowed but it should start with a letter.,
+validation-msgs.select-atleast-one,Please select at least one option.,
 campaigns.triggers-desc-3,Please note that Triggers may not run immediately. It may take few minutes based on the pending campaigns to be executed.,Por favor tome en cuenta que los Triggers podrían  no ejecturarse de manera inmediata. Puede tomar unos minutos dependiendo de las campañas pendientes por ejecutarse
 campaigns.contact-unsubscribes-from-your-campaign-desc,When a contact unsubscribes from your campaign&#44; this name will be displayed as campaign name in the confirmation screen.,Cuando un contacto cancela su suscripción a tu campaña&#44; este nombre se mostrará como nombre de la campaña en la pantalla de confirmación.
 prefs-data-sync.widget-zendesk-desc,Zendesk streamlines communication within a ticket that has organized workflow towards resolution of the customer issue.,
@@ -928,6 +929,7 @@ contacts-view.removed-a-tag-from-contact,Removed a Tag from Contact,Eliminó una
 contacts-view.event-deleted-later-desc-1,Event deleted later. Event,
 validation-msgs.date,Please enter a valid date.,
 admin-settings-stats.no-sms-gateway-configured,No SMS gateway configured.,No se ha configurado la pasarela SMS.
+admin-settings-stats.sms-gateway-configured,SMS Gateway Configured,
 widgets.Sip-delete-message,Are you sure to delete Sip,¿Estás seguro de que deseas eliminar Sip?
 widgets.edit-custom-widget-details,Edit custom widget details,Editar detalles de widget personalizado.
 contacts-view.added-contacts-to-document,Added Contacts to Document,Contactos añadidos al documento
@@ -1022,7 +1024,7 @@ countries.TC,Turks and Caicos Islands,Islas Turcas y Caicos
 widgets.click-to-see-more-posts,Click to see more posts,Haz clic para ver más posts
 prefs-data-sync.needs-import-privilege,Needs import privilege.,Necesita el privilegio de importación.
 deal-view.hover-over-chart-slices,Hover over chart slices,Pase el cursor sobre las rebanadas del gráfico
-calendar.add-office-365-calendar,Add Office 365 Calendar,Añadi rCalendarioOffice 365 
+calendar.add-office-365-calendar,Add Office 365 Calendar,Añadi rCalendarioOffice 365
 countries.VG,Virgin Islands&#44; British,Islas Vírgenes Británicas
 campaigns.ticket-label-is-deleted,Ticket label is deleted,La etiqueta del ticket fue eliminada
 deal-view.do-you-want-to-proceed,Do you want to proceed?,Quieres proceder?
@@ -1373,7 +1375,7 @@ admin-settings-users.transfer-ownership,Transfer ownership,Transferir propiedad
 landing-pages.optional-directory,Optional Directory,Directorio opcional
 prefs-notifications.contact-is-created,Contact is created,El contacto se creó
 countries.DO,Dominican Republic,República Dominicana
-countries.KR,Korea&#44; Republic of,Corea&#44; República de 
+countries.KR,Korea&#44; Republic of,Corea&#44; República de
 widgets.enter-your-api-key,Enter your API key,Inserta tu llave de API
 widgets.to-enterprise-plan,to Enterprise plan,para un plan Enterprise
 campaigns.select-event-owner,Select Event Owner,Seleccionar dueño de evento
@@ -3105,7 +3107,7 @@ preferences.widgets,Widgets,Widgets
 prefs-data-sync.payment,Payment,Pago
 widgets.billing,Billing,Cobranza
 contact-details.sent-on,Sent on,Enviado
-contacts-view.deleted,Deleted,{"":"eliminado."}
+contacts-view.deleted,Deleted,"{"":""eliminado.""}"
 report-add.monthly,Monthly,Mensual
 plan-and-upgrade.pay-now,Pay Now,Paga ahora
 widgets.IM-type,IM type,Escribir mensaje instantáneo.
@@ -3714,3 +3716,28 @@ contact-details.by,by,por
 contact-details.in,in,en
 contact-details.on,on,en
 contact-details.to,To,A
+users.deleted-users,Users have been deleted successfully. Please adjust your billing plan to avoid being billed for the deleted users.,
+users.deleted-user,User has been deleted successfully. Please adjust your billing plan to avoid being billed for the deleted user.,
+users.delete-user-error,Sorry&#44; can not delete user having admin privilege.,
+contacts.delete-process-info,Your contacts deletion will be processed shortly,
+contacts.no-permission-to-delete,You do not have permission to delete contacts.,
+contacts.no-previlige-to-delete,You may not have permission to delete some of the contacts selected. Proceeding with this operation will delete only the contacts that you are permitted to delete.,
+companies.delete-process-info,Your companies deletion will be processed shortly,
+others.delete-warn,Are you sure you want to delete?,
+others.bulk-delete-no-select,You have not selected any records to delete. Please select at least one record to continue.,
+contacts.delete-contacts-from,Delete selected contacts from ,
+bulk-delete.bulk-delete,Bulk Delete,
+others.saving,Saving...,
+others.pwd-change-success,Password changed successfully,
+others.prefs-saved-success,Preferences saved successfully,
+others.pwd-in-correct,Incorrect Password,
+billing.upgrade-noty,You have been upgraded successfully. Please logout and login again for the new changes to apply.,
+security.ip-added,Your IP Address has been updated successfully.,
+datasync.gc-prefs-saved,Google calendar preferences saved successfully,
+domain-user.email-edited,You Email has been updated successfully. Logging out...,
+tag-manage.allow-users-to-add,Allow all users to add New Tags.,
+emailgateway.already-exists,You have a Email Gateway already configured. Please disable that to configure a new one.,
+emailgateway.configured,Email Gateway Configured,
+emailgateway.sign-mis-match,Signature Mismatch,
+emailgateway.invalid-acceess-key,Invalid Access Key,
+smsgateway.already-exists,You have a SMS Gateway already configured. Please disable that to configure a new one.,

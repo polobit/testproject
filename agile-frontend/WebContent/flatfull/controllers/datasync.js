@@ -229,7 +229,7 @@ dataSync : function()
                         saveCallback: function(data)
                         {
                             erase_google_calendar_prefs_cookie();
-                            showNotyPopUp("information", "Google calendar preferences saved successfully", "top", 1000);
+                            showNotyPopUp("information", _agile_get_translated_val('datasync', 'gc-prefs-saved'), "top", 1000);
                         },
                         postRenderCallback: function(el)
                         {

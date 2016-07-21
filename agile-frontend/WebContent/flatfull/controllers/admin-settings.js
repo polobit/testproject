@@ -175,7 +175,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 					
 				}, saveCallback : function(){
 				console.log("saveCallback");
-				showNotyPopUp("information", "Your IP Address has been updated successfully.", "top", 4000);
+				showNotyPopUp("information", _agile_get_translated_val('security','ip-added'), "top", 4000);
 				App_Admin_Settings.ipaccess();
 			},errorCallback : function(data){
 				showNotyPopUp("warning", data.responseText, "top");
@@ -210,14 +210,14 @@ var AdminSettingsRouter = Backbone.Router.extend({
                 if($(".checkedMultiCheckbox").find('input:checked').length > 0)
                       return true;
                 else{
-                    $(".checkedMultiCheckbox").append("<span generated='true' class='help-inline col-sm-offset-4 col-xs-offset-4 controls col-sm-8 col-xs-8' style='display: block;'>Please select at least one option.</span>"); 
+                    $(".checkedMultiCheckbox").append("<span generated='true' class='help-inline col-sm-offset-4 col-xs-offset-4 controls col-sm-8 col-xs-8' style='display: block;'>" +_agile_get_translated_val('validation-msgs', 'select-atleast-one')+ "</span>"); 
                 }
                 
                  return false;
 			}, saveCallback : function(){
 				console.log("saveCallback");
 				App_Admin_Settings.webhookSettings();
-				showNotyPopUp("information", "Preferences saved successfully", "top", 1000);
+				showNotyPopUp("information", _agile_get_translated_val('others', 'prefs-saved-success'), "top", 1000);
 			},
 			errorCallback : function(data){
 				showNotyPopUp("warning", data.responseText, "top",2000);
@@ -247,14 +247,14 @@ var AdminSettingsRouter = Backbone.Router.extend({
                 if($(".checkedMultiCheckbox").find('input:checked').length > 0)
                       return true;
                 else{
-                    $(".checkedMultiCheckbox").append("<span generated='true' class='help-inline col-sm-offset-4 col-xs-offset-4 controls col-sm-8 col-xs-8' style='display: block;'>Please select at least one option.</span>"); 
+                    $(".checkedMultiCheckbox").append("<span generated='true' class='help-inline col-sm-offset-4 col-xs-offset-4 controls col-sm-8 col-xs-8' style='display: block;'>" +_agile_get_translated_val('validation-msgs', 'select-atleast-one')+ "</span>"); 
                 }
                 
                  return false;
 			}, saveCallback : function(){
 				console.log("saveCallback");
 				App_Admin_Settings.jsSecuritySettings();
-				showNotyPopUp("information", "Preferences saved successfully", "top", 1000);
+				showNotyPopUp("information", _agile_get_translated_val('others', 'prefs-saved-success'), "top", 1000);
 			} });
 
 			$('#content').find('#js-security-accordian-template').html(view.render().el);
@@ -284,7 +284,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			},saveCallback : function(){
 				console.log("saveCallback");
 				App_Admin_Settings.ssoLoginSettings();
-				showNotyPopUp("information", "Preferences saved successfully", "top", 1000);
+				showNotyPopUp("information", _agile_get_translated_val('others', 'prefs-saved-success'), "top", 1000);
 			},
 			deleteCallback : function(){
 				console.log("deleteCallback");
@@ -476,7 +476,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 					if (needLogout && CURRENT_DOMAIN_USER.email != response.email)
 					{
 						console.log('Logging out...');
-						showNotyPopUp("information", "You Email has been updated successfully. Logging out...", "top");
+						showNotyPopUp("information", _agile_get_translated_val('domain-user', 'email-edited'), "top");
 						var hash = window.location.hash;
 
 						setTimeout(function()
@@ -890,7 +890,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 				acl_util.initTagACL(el);
 				initializeTagManagementListeners();
 				$(".allow_users_switch").tooltip({
-			        title: "<p>Allow all users to add New Tags.</p><p>Disable this option if you don't want users (non-admin) to add new tags on contacts or companies, apart from the tags listed here.</p>",  
+			        title: "<p>" +_agile_get_translated_val('tag-manage','allow-users-to-add')+ "</p><p>" +_agile_get_translated_val('tag-manage', 'allow-tooltip')+ "</p>",  
 			        html: true,
 			        placement : 'bottom'
 			    }); 
@@ -954,7 +954,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 				{
 					if(emailGateway["email_api"].toUpperCase() != value)//checks if the current email gateway is the same as the clicked one
 					{
-					modalAlert("sms-integration-alert-modal","You have a Email Gateway already configured. Please disable that to configure a new one.","Email Gateway Configured");
+					modalAlert("sms-integration-alert-modal", _agile_get_translated_val('emailgateway','already-exists'), _agile_get_translated_val('emailgateway', 'configured'));
 					that.navigate("integrations", { trigger : true });
 					return;	
 					}
@@ -1012,10 +1012,10 @@ var AdminSettingsRouter = Backbone.Router.extend({
 						var msg = response.responseText;
 
 						if(msg.indexOf('SignatureDoesNotMatch') != -1)
-	                        msg = msg.replace('SignatureDoesNotMatch', 'Signature Mismatch');
+	                        msg = msg.replace('SignatureDoesNotMatch', _agile_get_translated_val('emailgateway','sign-mis-match'));
 
 	                    if(msg.indexOf('InvalidClientTokenId') != -1)
-	                    	msg = msg.replace('InvalidClientTokenId', 'Invalid Access Key');
+	                    	msg = msg.replace('InvalidClientTokenId', _agile_get_translated_val('emailgateway','invalid-acceess-key'));
 
 						// Show cause of error in saving
 						var $save_info = $('<div style="display:inline-block"><small><p style="color:#B94A48; font-size:14px"><i>'

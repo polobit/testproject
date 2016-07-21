@@ -191,13 +191,13 @@ var AdminPanelRouter = Backbone.Router.extend({
 						{
 							add_password_change_info_as_note_to_owner(email);
 							Backbone.history.navigate("all-domain-users", { trigger : true });
-							showNotyPopUp("information", "password changed successfully", "top");
+							showNotyPopUp("information", _agile_get_translated_val('others', 'pwd-change-success'), "top");
 						},
 						error : function(response)
 						{
 							$('#changePasswordForm').find('span.save-status').html("");
 							$('#changePasswordForm').find('input[name="current_pswd"]').closest(".controls").append(
-									"<span style='color:red;margin-left:10px;'>Incorrect Password</span>");
+									"<span style='color:red;margin-left:10px;'>" + _agile_get_translated_val('others', 'pwd-in-correct') + "</span>");
 							$('#changePasswordForm').find('input[name="current_pswd"]').closest(".controls").find("span").fadeOut(5000);
 							$('#changePasswordForm').find('input[name="current_pswd"]').focus();
 							enable_save_button($(saveBtn));

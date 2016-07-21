@@ -40,7 +40,7 @@ var ActivitylogRouter = Backbone.Router.extend({
                         campaignHistory=false;
                     }
                     else{
-                        $('#selectedentity_type').html("Campaigns");
+                        $('#selectedentity_type').html(_agile_get_translated_val("menu", "menu-campaigns"));
                         $("#activities_date_range").hide();
                     }
 
@@ -54,7 +54,7 @@ var ActivitylogRouter = Backbone.Router.extend({
 
                     // fill workflows
                     fillSelect('user-select', 'core/api/users', 'domainuser', function fillActivities() {
-                        $('#activities-listners').find("#user-select").append("<li><a href=''>All Users</a></li>");
+                        $('#activities-listners').find("#user-select").append("<li><a href=''>" + _agile_get_translated_val('report-view', 'all-users') + "</a></li>");
                         if (activityFilters && (activityFilters.user || activityFilters.entity)) {
                             $('ul#user-select li a').closest("ul").data("selected_item", activityFilters.userId);
                             $('ul#entity_type li a').closest("ul").data("selected_item", activityFilters.entityId);
@@ -64,7 +64,7 @@ var ActivitylogRouter = Backbone.Router.extend({
                             if(id != undefined)
                             {
 
-                                   activityFilters.entity="Campaigns";
+                                   activityFilters.entity = _agile_get_translated_val("menu", "menu-campaigns");
                             }
                             
                                 $('#selectedentity_type').html(activityFilters.entity);
@@ -105,39 +105,39 @@ var ActivitylogRouter = Backbone.Router.extend({
                     switch (id) {
                         case "all":
                             keyword = "?log_type=All_Activities";
-                            uiKeyword = "All Activities";
+                            uiKeyword = _agile_get_translated_val("report-view", "all-activities");
                             break;
                         case "page-views":
                             keyword = "?log_type=Page_Views";
-                            uiKeyword = "Page Views";
+                            uiKeyword = _agile_get_translated_val("contact-details", "page-views");
                             break;
                         case "email-opens":
                             keyword = "?log_type=Email_Opened";
-                            uiKeyword = "Email Opens";
+                            uiKeyword = _agile_get_translated_val("portlets", "email-opens");
                             break;
                         case "email-clicks":
                             keyword = "?log_type=Email_Clicked";
-                            uiKeyword = "Email Clicks";
+                            uiKeyword = _agile_get_translated_val('contact-details', 'email-clicks');
                             break;
                         case "unsubscriptions":
                             keyword = "?log_type=Unsubscribed";
-                            uiKeyword = "Unsubscriptions";
+                            uiKeyword = _agile_get_translated_val('campaigns', 'unsubscriptions');
                             break;
                         case "spam-reports":
                             keyword = "?log_type=Email_Spam";
-                            uiKeyword = "Spam Reports";
+                            uiKeyword = _agile_get_translated_val("contact-details", "spam-reports");
                             break;
                         case "hard-bounces":
                             keyword = "?log_type=Email_Hard_Bounced";
-                            uiKeyword = "Hard Bounces";
+                            uiKeyword = _agile_get_translated_val("campaigns", "hard-bounces");
                             break;
                         case "soft-bounces":
                             keyword = "?log_type=Email_Soft_Bounced";
-                            uiKeyword = "Soft Bounces";
+                            uiKeyword = _agile_get_translated_val("campaigns", "soft-bounces");
                             break;
                         default:
                             keyword = "?log_type=All_Activities";
-                            uiKeyword = "All Activities";
+                            uiKeyword = _agile_get_translated_val("report-view", "all-activities");
                     }
 
                     urlPath = urlPath + keyword;
