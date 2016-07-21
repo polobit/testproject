@@ -30,7 +30,7 @@ var ContactSearchRouter = Backbone.Router.extend({
 		  	   	if(search_list_filters[i] != undefined && search_list_filters[i] != ""){
 		  	   		if(search_list_filters[i]=="person"){
 		  	   			var searchResultsView = new Base_Collection_View({ url : "core/api/search/seachlist?q=" + encodeURIComponent(query)+"&type="+ search_list_filters[i], templateKey : "search", individual_tag_name : 'tr', cursor : true,
-						data : QUERY_RESULTS, sort_collection : false,scroll_target : $("#search_content_" + search_list_filters[i]) ,page_size : 10, postRenderCallback : function(el)
+						data : QUERY_RESULTS, sort_collection : false,scroll_target : $("#search_content_" + search_list_filters[i]) ,page_size : 5, postRenderCallback : function(el)
 						{
 							// Shows the query string as heading of search results
 							if (searchResultsView.collection.length == 0)

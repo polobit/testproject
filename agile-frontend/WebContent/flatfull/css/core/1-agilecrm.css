@@ -3851,7 +3851,8 @@ div.list-tasks.panel-body:hover
 }
 
 .search-results-scroll-container {
-    max-height: 700px;
+    max-height: 300px;
     overflow: hidden;
     overflow-y : auto!important;
+    margin-bottom: 30px;
 }
