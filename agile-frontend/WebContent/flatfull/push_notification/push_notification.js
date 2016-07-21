@@ -1,6 +1,13 @@
 // Call this method through Web rules for enable push notification
 
 function enablePushNotification(){
+
+  var fileref=document.createElement("link")
+  fileref.setAttribute("rel", "manifest")
+  fileref.setAttribute("type", "text/json")
+  fileref.setAttribute("href", "notification/manifest.json");
+  document.getElementsByTagName("head")[0].appendChild(fileref);
+
   regiseterServiceWorkers();
 }
 

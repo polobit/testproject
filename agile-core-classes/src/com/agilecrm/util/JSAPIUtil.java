@@ -244,29 +244,37 @@ public class JSAPIUtil
 			    String key = (String) keys.next();
 				 if (key.equals("tags"))
 				  {
-				      String tagString = obj.getString(key);
-				      tagString = tagString.trim().replaceAll(" +", " ");
-				      tagString = tagString.replaceAll(", ", ",");
+				      JSONArray tagJSON = new JSONArray(obj.getString(key));
+				      String tagString = "";
+				      
+				      for(int i=0; i < tagJSON.length(); i++)
+				    	  {
+				    	    if(i!=0)
+				    	    	tagString = tagString + "," + tagJSON.getString(i);
+				    	    else
+				    	    	tagString = tagJSON.getString(i);
+				    	  }
 				      tags = tagString.split(",");
 				  }
+				 else if (key.equals("properties"))
+				    {
+						JSONArray propertiesJSONArray = new JSONArray(obj.getString(key));
+						for (int i = 0; i < propertiesJSONArray.length(); i++)
+						{
+						    // Create and add contact field to contact
+						    JSONObject json1 = new JSONObject();
+						    json1.put("name", propertiesJSONArray.getJSONObject(i).getString("name"));
+						    json1.put("value", propertiesJSONArray.getJSONObject(i).getString("value"));
+						    
+						    ContactField field = mapper.readValue(json1.toString(), ContactField.class);
+						    contact.addProperty(field);
+						}
+					    }
 				  else
 				  {
-				      JSONObject jobj = new JSONObject();
-				      jobj.put("name", key);
-				      jobj.put("value", obj.getString(key));
-				      ContactField field = mapper.readValue(jobj.toString(), ContactField.class);
-				      contact.addProperty(field);
+					  System.out.println("No prop");
 				  }
 		     }
-		     
-		     // Get Contact count by email
-			  String email = contact.getContactFieldValue(Contact.EMAIL);
-		     int count = ContactUtil.searchContactCountByEmail(email.toLowerCase());
-			 System.out.println("count = " + count);
-			 if (count != 0)
-			    {
-				 	return JSAPIUtil.generateJSONErrorResponse(Errors.DUPLICATE_CONTACT, email);
-			    }
 
 			 String address = contact.getContactFieldValue(Contact.ADDRESS);
 			 System.out.println("Address = " + address);
