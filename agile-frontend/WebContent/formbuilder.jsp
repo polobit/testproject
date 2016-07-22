@@ -14,8 +14,8 @@ String template = request.getParameter("template");
    <head>
       <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
       <title>Form Builder</title>
-      <!-- <link href="misc/formbuilder/bootstrap.min.css" rel="stylesheet"> -->
-      <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+      <link href="misc/formbuilder/bootstrap.min.css" rel="stylesheet">
+      <link href="flatfull/css/min/lib-all-new.css" rel="stylesheet">
       <link href="misc/formbuilder/custom.css?v=2" rel="stylesheet">
       <link href="misc/formbuilder/formthemes.css" rel="stylesheet">
       <script src="misc/formbuilder/formthemes/jscolor.js"></script>
@@ -47,13 +47,13 @@ String template = request.getParameter("template");
                <div class="clearfix">
                   <h2 id="form-label">Your Form</h2>
                   <div class="btn-group open" style="margin-top: -40px;margin-left: 210px;padding-right: 10px;">
-                    <a href="#" onclick="createCustTheme()" class="btn btn-default btn-sm" data-toggle="modal" data-target="#customThemeModal"><i class="glyphicon glyphicon-plus-sign"></i> Add Theme</a>
+                    <a href="#" onclick="createCustTheme()" class="btn btn-default btn-sm" data-toggle="modal" data-target="#customThemeModal"><i class="fa fa-plus-circle"></i> Add Theme</a>
                     <button class="btn btn-default btn-sm dropdown-toggle" onclick="chooseThemeFunc()" data-toggle="dropdown" aria-expanded="true" style="padding-bottom: 13px;padding-top: 11px;"><span class="caret"></span>
                     </button>
          
                     <div class="dropdown-content">
                       <div class="themeDiv">
-                        <i class="glyphicon glyphicon-ok"></i>
+                        <i class="fa fa-check"></i>
                         <a href="#" class="themeEle" onclick="selectedThemeFunc(this)">default</a>
                       </div>
                       <div class="themeDiv">
@@ -75,7 +75,7 @@ String template = request.getParameter("template");
                     </div>
                   </div>
             <div class="modal fade" id="customThemeModal" role="dialog">
-                      <div class="modal-dialog" style="width: 1032px;height: 365px;">
+                      <div class="modal-dialog" style="width: 1032px;height: 365px;left:0px;">
     
                          <!-- Modal content-->
                         <div class="modal-content">
@@ -356,7 +356,7 @@ String template = request.getParameter("template");
                   <hr style="margin-top: 30px;">
                   <!--Adding content for formPreview-->
                    <div class="modal fade" id="myModal" role="dialog">
-                      <div class="modal-dialog">
+                      <div class="modal-dialog" style="left:0px;">
     
                          <!-- Modal content-->
                         <div class="modal-content">
@@ -429,7 +429,7 @@ String template = request.getParameter("template");
                         themesListAsArr.push(custName);
                         var custCss=customthemes[i].themeCss;
                         var custIdName=custName+":"+custId;
-                        var inputTheme='<div class="themeDiv"><i class="ipadding"></i><a href="#" class="themeEle'+"\t"+custIdName+'"  onclick="selectedThemeFunc(this)">'+custName+'</a><a href="#" class="themeEleDelete glyphicon glyphicon-remove-circle" onclick="deleteTheme(this)"></a></div>';
+                        var inputTheme='<div class="themeDiv"><i class="ipadding"></i><a href="#" class="themeEle'+"\t"+custIdName+'"  onclick="selectedThemeFunc(this)">'+custName+'</a><a href="#" class="themeEleDelete fa fa-times-circle-o" onclick="deleteTheme(this)"></a></div>';
                               
                          $(inputTheme).insertAfter("#lable4");
                         }
@@ -444,12 +444,12 @@ String template = request.getParameter("template");
                                 $.each(themeElem,function(index,value){
                                   if($(this).text()==formtheme){
                                     var firstDiv=$(".themeDiv")[0];
-                                    $(firstDiv).find("i").removeClass("glyphicon");
-                                    $(firstDiv).find("i").removeClass("glyphicon-ok");
+                                    $(firstDiv).find("i").removeClass("fa");
+                                    $(firstDiv).find("i").removeClass("fa-check");
                                     $(firstDiv).find("i").addClass("ipadding");
                                     var parentDiv=$(this).parent();
-                                    $(parentDiv).find("i").addClass("glyphicon");
-                                    $(parentDiv).find("i").addClass("glyphicon-ok");
+                                    $(parentDiv).find("i").addClass("fa");
+                                    $(parentDiv).find("i").addClass("fa-check");
                                     $(parentDiv).find(i).removeClass("ipadding");
                                   }
                                 });
@@ -467,13 +467,13 @@ String template = request.getParameter("template");
                   function selectedThemeFunc(identifier){
                     var themeDivArr=$(".themeDiv");
                     $.each(themeDivArr,function(index,value){
-                      $(this).find("i").removeClass("glyphicon");
-                      $(this).find("i").removeClass("glyphicon-ok");
+                      $(this).find("i").removeClass("fa");
+                      $(this).find("i").removeClass("fa-check");
                       $(this).find("i").addClass("ipadding");
                      });
                     var themeVal= $(identifier).text();
-                    $(identifier).parent().find("i").addClass("glyphicon");
-                    $(identifier).parent().find("i").addClass("glyphicon-ok");
+                    $(identifier).parent().find("i").addClass("fa");
+                    $(identifier).parent().find("i").addClass("fa-check");
                     $(identifier).find("i").removeClass("ipadding");
 
                     console.log(themeVal);
@@ -547,7 +547,7 @@ String template = request.getParameter("template");
                             if(data!=undefined && data!=""){
                               customthemes.push(data);
                               $("#themeName").val("");
-                              var inputTheme='<div class="themeDiv"><i class="ipadding"></i><a href="#" class="themeEle'+"\t"+data.name+data.id+'"  onclick="selectedThemeFunc(this)">'+data.name+'</a><a href="#" class="themeEleDelete glyphicon glyphicon-remove-circle" onclick="deleteTheme(this)"></a></div>';
+                              var inputTheme='<div class="themeDiv"><i class="ipadding"></i><a href="#" class="themeEle'+"\t"+data.name+data.id+'"  onclick="selectedThemeFunc(this)">'+data.name+'</a><a href="#" class="themeEleDelete fa fa-times-circle-o" onclick="deleteTheme(this)"></a></div>';
                               
                               $(inputTheme).insertAfter("#lable4");
                             }
@@ -566,6 +566,10 @@ String template = request.getParameter("template");
                     var isThemeNameExist=false;
                     if(themeName==null || themeName.length<=0){
                       $("#errorSpan").text("Please provide valid theme name ");
+                      $("#themeName").val("");
+                    }
+                    if(themeName.split(" ").length>1){
+                      $("#errorSpan").text("Space not allowed");
                       $("#themeName").val("");
                     }
                     else {
@@ -592,11 +596,11 @@ String template = request.getParameter("template");
 
                   function deleteTheme(identifier){
                     var deleteThemeVal=$(identifier).prev().text();
-                    var isDeleteSelectTheme=$(identifier).prev().prev().hasClass("glyphicon-ok");
+                    var isDeleteSelectTheme=$(identifier).prev().prev().hasClass("fa-check");
                     if(isDeleteSelectTheme==true){
                       var themeElem=$(".themeDiv");
-                      $(themeElem[0]).find("i").addClass("glyphicon");
-                      $(themeElem[0]).find("i").addClass("glyphicon-ok");
+                      $(themeElem[0]).find("i").addClass("fa");
+                      $(themeElem[0]).find("i").addClass("fa-check");
                       $(themeElem[0]).find("i").removeClass("ipadding");
                     }
                   var parentDiv=$(identifier).parent();

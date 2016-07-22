@@ -15,8 +15,8 @@ define([
 		var themeVal=null;
 		var themeDivArr=$(".themeDiv");
                     $.each(themeDivArr,function(index,value){
-                      if($(this).find("i").hasClass("glyphicon") &&
-                      $(this).find("i").hasClass("glyphicon-ok")){
+                      if($(this).find("i").hasClass("fa") &&
+                      $(this).find("i").hasClass("fa-check")){
                       	themeVal=$(this).find(".themeEle").text();
                       }
                       
