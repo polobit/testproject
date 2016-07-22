@@ -81,6 +81,7 @@
               <fileset dir="WebContent">
                 <exclude name="flatfull/tpl/**/*"/>
               	<exclude name="misc/pagebuilder/source/**/*"/>
+                <exclude name="misc/landingpage/source/**/*"/>
             </fileset>
         </copy>
         <!--Copy application libraries to target -->
