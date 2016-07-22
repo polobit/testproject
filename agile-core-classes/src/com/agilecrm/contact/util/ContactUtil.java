@@ -2188,4 +2188,33 @@ public static Contact searchMultipleContactByEmail(String email,Contact contact)
     	}
     	return null;
     }
+    
+    
+    /**
+     * Gets a contact based on its push notification browser id
+     * 
+     * @param browserId
+     *            id value to get a contact
+     * @return {@Contact} related to an push notification browser id
+     */
+    public static Contact searchContactByBrowserId(String browserId)
+    {
+	if (StringUtils.isBlank(browserId))
+	    return null;
+
+	Query<Contact> q = dao.ofy().query(Contact.class);
+	q.filter("type", Type.PERSON);
+	q.filter("browserId", browserId);
+
+	try
+	{
+	    return dao.get(q.getKey());
+	}
+	catch (Exception e)
+	{
+	    return null;
+	}
+
+    }
+
 }

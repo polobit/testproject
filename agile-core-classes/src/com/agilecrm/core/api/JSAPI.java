@@ -38,7 +38,6 @@ import com.agilecrm.activities.util.TaskUtil;
 import com.agilecrm.cases.Case;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Contact.Type;
-import com.agilecrm.contact.js.JSContact;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.Note;
 import com.agilecrm.contact.util.ContactUtil;
@@ -55,14 +54,12 @@ import com.agilecrm.session.UserInfo;
 import com.agilecrm.social.TwilioUtil;
 import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
 import com.agilecrm.user.AgileUser;
-import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.GeoLocationUtil;
 import com.agilecrm.util.JSAPIUtil;
 import com.agilecrm.util.JSAPIUtil.Errors;
 import com.agilecrm.webrules.WebRule;
 import com.agilecrm.webrules.util.WebRuleUtil;
 import com.agilecrm.widgets.Widget;
-import com.agilecrm.widgets.util.WidgetUtil;
 import com.agilecrm.workflows.Workflow;
 import com.agilecrm.workflows.status.CampaignStatus;
 import com.agilecrm.workflows.status.CampaignStatus.Status;
@@ -74,10 +71,8 @@ import com.agilecrm.workflows.util.WorkflowUtil;
 import com.campaignio.cron.util.CronUtil;
 import com.campaignio.logger.util.LogUtil;
 import com.campaignio.wrapper.LogWrapper;
-import com.google.appengine.api.NamespaceManager;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
-import com.thirdparty.sendgrid.SendGrid;
 import com.thirdparty.twilio.sdk.TwilioRestClient;
 import com.thirdparty.twilio.sdk.TwilioRestResponse;
 import com.twilio.sdk.client.TwilioCapability;
@@ -178,7 +173,7 @@ public class JSAPI
     @GET
     @Produces("application/x-javascript;charset=UTF-8;")
     public String createContact(@QueryParam("contact") String json, @QueryParam("campaigns") String campaignIds,
-	    @QueryParam("id") String apiKey, @Context HttpServletRequest request)
+	    @QueryParam("id") String apiKey, @QueryParam("browserId") String browserId, @Context HttpServletRequest request)
     {
 	try
 	{
@@ -189,8 +184,18 @@ public class JSAPI
 	    if(!js_scopes.contains("create_contact"))
 		return JSAPIUtil.generateJSONErrorResponse(Errors.CONTACT_CREATE_RESTRICT);
 	    
+	    Contact contact=null;
+	    
+	    //If browser id exist
+	     if(!StringUtils.isBlank(browserId) || browserId !="null"){
+	    	 contact = ContactUtil.searchContactByBrowserId(browserId);
+	     }
+	     
+	     if(contact!=null)
+	    	return JSAPIUtil.updateContactPushNotification(contact, json, campaignIds, request, apiKey);
+	    
 	    ObjectMapper mapper = new ObjectMapper();
-	    Contact contact = mapper.readValue(json, Contact.class);
+	    contact = mapper.readValue(json, Contact.class);
 	    System.out.println(mapper.writeValueAsString(contact));
 
 	    // Get Contact count by email
@@ -255,7 +260,103 @@ public class JSAPI
 	    return null;
 	}
     }
+	/**
+	 *  Adds contact in the domain
+	 * If the click on allow push notification
+	 * popup for both types of visitor.
+	 * @param browserId
+	 * @param campaignIds
+	 * @param apiKey
+	 * @return
+	 */
+    @Path("contacts/push-notification/")
+    @GET
+    @Produces("application/x-javascript;charset=UTF-8;")
+    public String createPushNotificationContact(@QueryParam("contact") String json, @QueryParam("browserId") String browserId, @QueryParam("email") String email,
+	    @QueryParam("id") String apiKey, @Context HttpServletRequest request)
+    {
+	try
+	{
+	    UserInfo userInfo = SessionManager.get();
+		
+	    HashSet<String> js_scopes = userInfo.getJsrestricted_scopes();
+	    
+	    System.out.println("Contact details : "+ContactUtil.searchContactByBrowserId(browserId));
+	    
+	    if(!js_scopes.contains("create_contact"))
+	    	return JSAPIUtil.generateJSONErrorResponse(Errors.CONTACT_CREATE_RESTRICT);
+	    
+	    if(browserId == "null" || StringUtils.isBlank(browserId))
+	    	return JSAPIUtil.generateJSONErrorResponse(Errors.INVALID_BROWSER_ID);
+	    
+	    //check if contact already exist
+	    if (!StringUtils.isBlank(email))
+	    {
+	    	System.out.println(email.toLowerCase());
+	    	Contact contact =ContactUtil.searchContactByEmail(email);
+	    	
+	    	if(contact !=null ){
+	    		contact.addBrowserId(browserId);
+	    		contact.save();
+	    		contact.addTags("Push Notification");
+	    		return JSAPIUtil.generateJSONErrorResponse(Errors.DUPLICATE_CONTACT, email);	
+	    	}
+	    }
+	   
+	    ObjectMapper mapper = new ObjectMapper();
+	    Contact contact = mapper.readValue(json, Contact.class);
+	   
+	    String address = contact.getContactFieldValue(Contact.ADDRESS);
+	    
+	    System.out.println("Address = " + address);
+	    
+	    if (StringUtils.isBlank(address)) {
 
+			org.json.simple.JSONObject locJSON = GeoLocationUtil.getLocation(request);
+			contact.addProperty(new ContactField(Contact.ADDRESS, locJSON.toString(), null));
+	    }
+
+	    // Sets owner key to contact before saving
+	    contact.setContactOwner(JSAPIUtil.getDomainUserKeyFromInputKey(apiKey));
+
+	    //adding browser id
+	    contact.addBrowserId(browserId);
+	    
+	    //add Tag for push Notification
+	    contact.addTags("Push Notification");
+
+	    //Adding tag and save contact
+	    if (contact.tags.size() > 0){
+			String[] tags = new String[contact.tags.size()];
+			contact.tags.toArray(tags);
+			contact.addTags(tags);
+	    }
+	    else {
+		   // If zero, save it
+		   contact.save();
+	    }
+	    
+	    System.out.println(contact);
+	    // return mapper.writeValueAsString(contact);
+	    return JSAPIUtil.limitPropertiesInContactForJSAPI(contact);
+	}
+	catch (PlanRestrictedException e){
+	    return JSAPIUtil.generateJSONErrorResponse(Errors.CONTACT_LIMIT_REACHED);
+	}
+	catch (WebApplicationException e){
+	    return JSAPIUtil.generateJSONErrorResponse(Errors.INVALID_TAGS);
+	}
+	catch (IOException e){
+	    e.printStackTrace();
+	    return null;
+	}
+	catch (Exception e){
+	    e.printStackTrace();
+	    return null;
+	}
+    }
+
+    
     /**
      * Adds task. Takes email, task json and callback as query parameters, task
      * is created and related to contact based on the email. If contact doesn't

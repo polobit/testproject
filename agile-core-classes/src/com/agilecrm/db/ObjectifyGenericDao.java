@@ -57,6 +57,7 @@ import com.agilecrm.knowledgebase.entity.Section;
 import com.agilecrm.ipaccess.IpAccess;
 import com.agilecrm.landingpages.LandingPage;
 import com.agilecrm.landingpages.LandingPageCNames;
+import com.agilecrm.notification.push.PushNotificationMessage;
 import com.agilecrm.portlets.Portlet;
 import com.agilecrm.reports.ActivityReports;
 import com.agilecrm.reports.Reports;
@@ -296,6 +297,9 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	
 	//SSO feature
 	ObjectifyService.register(SingleSignOn.class);
+	
+	//Push Notification Message for Browser Notification
+	ObjectifyService.register(PushNotificationMessage.class);
 
     }
 
@@ -1199,4 +1203,24 @@ public class ObjectifyGenericDao<T> extends DAOBase
     }
     
 
+    /**
+     * Fetche only one record of the entities of type T
+     * 
+     * @return list of all T objects
+     */
+    public T fetchByOrder(String orderBy, Map<String, Object> map)
+    {
+	Query<T> query = ofy().query(clazz);
+	if (map != null)
+	    for (String propName : map.keySet())
+	    {
+		System.out.println(propName);
+		query.filter(propName, map.get(propName));
+	    }
+
+	if (!StringUtils.isEmpty(orderBy))
+	    query.order(orderBy);
+
+	return fetch(query);
+    }
 }

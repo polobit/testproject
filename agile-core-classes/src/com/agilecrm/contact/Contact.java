@@ -295,6 +295,13 @@ public class Contact extends Cursor
     @JsonIgnore
     @NotSaved
     public boolean forceSearch = false;
+    
+    /**
+     * Set of Browser id for push notification
+     *  
+     */
+    @Indexed
+    public Set<String> browserId = new HashSet<String>();
 
     /**
      * Default constructor
@@ -904,6 +911,21 @@ public class Contact extends Cursor
 	    this.save();
 
     }
+    
+    /**
+     * Add push notification browser id
+     * 
+     * @param browserId
+     *            value of the browser id
+     */
+    public void addBrowserId(String browserId)
+    {
+    	if (this.browserId == null)
+    		this.browserId = new HashSet<String>();
+
+    	this.browserId.add(browserId);
+    }
+
 
     /**
      * Deletes a contact from database and search document by executing a
@@ -1542,7 +1564,7 @@ public class Contact extends Cursor
     public String toString()
     {
 	return "id: " + id + " created_time: " + created_time + " updated_time" + updated_time + " type: " + type
-		+ " tags: " + tags + " properties: " + properties;
+		+ " tags: " + tags + " properties: " + properties+ " broser ID: " + browserId;
     }
 }
 
