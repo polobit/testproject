@@ -4276,6 +4276,7 @@ background-color : #522E2E;
 @keyframes pulse-location{0%{transform:scale(1);opacity:1}100%{transform:scale(5);opacity:0}}
 @-webkit-keyframes pulse-location{0%{transform:scale(1);opacity:1}100%{transform:scale(5);opacity:0}}
 
+
 @media (max-width: 767px){
 .documentsheading{
   text-align: center;
@@ -4285,4 +4286,76 @@ background-color : #522E2E;
   text-align: center;
     width: 100%;
 }
+}
+
+.search-results-scroll-container {
+    max-height: 700px;
+    overflow: hidden;
+    overflow-y : auto!important;
+}
+
+.downloadExtension {
+    background: white;
+   
+}
+.downloadExtension:hover {
+    background: #7266ba!important;
+}
+.downloadExtension:hover>a {
+    color: #ffffff !important;
+}
+
+.downloadExtension a{
+    color: #23b7e5 !important;
+   
+}
+.downloadExtension a:hover {
+    color: #ffffff !important;
+}
+#betasuccess .slate-content h4{
+  font-size: 12px;
+  opacity:0.8;
+}
+#betasuccess .slate-content p{
+  font-size: 14px;
+  opacity:0.7;
+}
+.chromeextensionborder
+{
+border-bottom-left-radius:3px;
+border-bottom-right-radius:3px;
+text-align:center;
+border: 1px solid #e5e5e5;
+}
+.extensionPopovers
+{
+
+  width:60px !important;
+}
+
+ @media screen and (-webkit-min-device-pixel-ratio:0) and (min-resolution:.001dpcm){
+    #chrome-extension a:link:after,a:visited:after {
+        content: "" !important;
+    }
+
+}
+.grid-sub-nav li#betasuccess {
+    width: 213px;
+}
+@-moz-document url-prefix(){
+    .grid-sub-nav li{
+      width:72px;
+      margin-right: 2px;
+    }
+    .grid-sub-nav li#betasuccess {
+    width: 150px;
+}
+}
+
+.search-results-scroll-container {
+    max-height: 600px;
+    overflow: hidden;
+    overflow-y : auto!important;
+    margin-bottom: 30px;
+     position: relative;
 }

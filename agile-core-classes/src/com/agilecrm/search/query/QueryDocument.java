@@ -787,7 +787,7 @@ public class QueryDocument<T> implements QueryInterface
 	// Gets last entity to set cursor on it
 	Object entity = entities.get(entities.size() - 1);
 
-	if ((entities instanceof com.agilecrm.cursor.Cursor))
+	if ((entity instanceof com.agilecrm.cursor.Cursor))
 	{
 
 	    com.agilecrm.cursor.Cursor agileCursor = null;
