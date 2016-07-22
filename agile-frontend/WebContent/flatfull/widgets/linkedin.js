@@ -263,7 +263,7 @@ function showLinkedinMatchingProfiles(data)
 		if (Search_details['keywords'] && Search_details['keywords'] != "")
 			linkedinMainError(
 					LINKEDIN_PLUGIN_NAME,
-					"<p class='a-dotted' style='margin-bottom:0px;'>No matches found for <a href='#search' class='linkedin_modify_search'>" + Search_details['keywords'] + "</a></p>",
+					"<p class='a-dotted' style='margin-bottom:0px;'>"+_agile_get_translated_val('contact-details', 'no-matches-found-for')+" <a href='#search' class='linkedin_modify_search'>" + Search_details['keywords'] + "</a></p>",
 					true);
 		else
 			linkedinMainError(LINKEDIN_PLUGIN_NAME,

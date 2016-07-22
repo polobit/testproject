@@ -118,7 +118,7 @@ function deleteTask(taskId, taskListId, taskListOwnerId)
 					count = count - 1 ;
 					$('#tasks-list-template').find('.tasks-count').removeAttr('data');
 					$('#tasks-list-template').find('.tasks-count').attr('data' , count);
-					$('#tasks-list-template').find('.tasks-count').text('('+count+' Total)');
+					$('#tasks-list-template').find('.tasks-count').text('('+count+' ' +_agile_get_translated_val('other','total')+ ')');
 				}
 			} 
 		});

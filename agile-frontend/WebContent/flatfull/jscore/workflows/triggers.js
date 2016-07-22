@@ -535,9 +535,8 @@ function resetAndFillFromSelect(selected_val) {
 	// Make send email node from email empty
 	$('#from_email').empty();
 
-	var options = {
-		"+ Add new" : "verify_email"
-	};
+	var options = {};
+	options[_agile_get_translated_val('others','add-new')] = "verify_email";
 
 	fetchAndFillSelect(
 			'core/api/account-prefs/verified-emails/all',

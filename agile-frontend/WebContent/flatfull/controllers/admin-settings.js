@@ -1097,7 +1097,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 					// the clicked one
 					{
 						modalAlert("sms-integration-alert-modal", _agile_get_translated_val('smsgateway', 'already-exists'),
-								"SMS Gateway Configured");
+								_agile_get_translated_val('smsgateway','configured'));
 						that.navigate("integrations", { trigger : true });
 						return;
 					}
@@ -1123,15 +1123,15 @@ var AdminSettingsRouter = Backbone.Router.extend({
 						{
 							$("#integrations-image", el).attr("src", "/img/plugins/plivo.png");
 							$("#accoundID", el).attr("name", "account_id");
-							$("#accoundID", el).attr("placeholder", "Auth ID");
-							$("#integrations-label", el).text("You need a Paid Plivo account to be able to send SMS");
+							$("#accoundID", el).attr("placeholder", _agile_get_translated_val("integrations", "auth-id"));
+							$("#integrations-label", el).text(_agile_get_translated_val('integrations', 'you-need-a-paid-plivo-account'));
 						}
 						if (id == "twilio")
 						{
 							$("#integrations-image", el).attr("src", "/img/plugins/twilio.png");
 							$("#accoundID", el).attr("name", "account_sid");
-							$("#accoundID", el).attr("placeholder", "Account SID");
-							$("#integrations-label", el).text("Please provide your account details");
+							$("#accoundID", el).attr("placeholder", _agile_get_translated_val("integrations", "account-sid"));
+							$("#integrations-label", el).text(_agile_get_translated_val('integrations', 'account-details'));
 						}
 					}, saveCallback : function(data)
 					{
@@ -1351,7 +1351,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 				if(domain == null)
 					window.location.href = "/login";
 				if(domain != response.alias[0]){
-					showNotyPopUp("information", "Your domain name has been updated successfully. Logging out...", "top");
+					showNotyPopUp("information", _agile_get_translated_val('domain-user','domain-edited'), "top");
 					setTimeout(function()
 					{
 						window.location.href = window.location.protocol + "//" + response.alias[0] + ".agilecrm.com/login" + window.location.hash;

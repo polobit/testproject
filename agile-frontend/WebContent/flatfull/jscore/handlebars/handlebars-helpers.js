@@ -852,7 +852,7 @@ $(function()
 	Handlebars.registerHelper('dateFormat', function()
 	{
 
-		return "Select Date";
+		return _agile_get_translated_val("contacts", "select-date");
 		
 	});
 
@@ -3554,13 +3554,13 @@ $(function()
 						{
 
 							if (this[0].count > 9999 && (_agile_get_prefs('contact_filter') || _agile_get_prefs('dynamic_contact_filter')))
-								count_message = "<small> (" + 10000 + "+ Total) </small>" + '<span style="vertical-align: text-top; margin-left: -5px">' + '<img border="0" src="'+updateImageS3Path("/img/help.png")+'"' + 'style="height: 10px; vertical-align: middle" rel="popover"' + 'data-placement="bottom" data-title="Lead Score"' + 'data-content="Looks like there are over 10,000 results. Sorry we can\'t give you a precise number in such cases."' + 'id="element" data-trigger="hover">' + '</span>';
+								count_message = "<small> (" + 10000 + "+" + _agile_get_translated_val('other','total') + " ) </small>" + '<span style="vertical-align: text-top; margin-left: -5px">' + '<img border="0" src="'+updateImageS3Path("/img/help.png")+'"' + 'style="height: 10px; vertical-align: middle" rel="popover"' + 'data-placement="bottom" data-title="Lead Score"' + 'data-content="'+_agile_get_translated_val('results','over-count')+'"' + 'id="element" data-trigger="hover">' + '</span>';
 
 							else
-								count_message = "<small> (" + this[0].count + " Total) </small>";
+								count_message = "<small> (" + this[0].count + _agile_get_translated_val('other','total') + " ) </small>";
 						}
 						else
-							count_message = "<small> (" + this.length + " Total) </small>";
+							count_message = "<small> (" + this.length + _agile_get_translated_val('other','total')+ " ) </small>";
 
 						return new Handlebars.SafeString(count_message);
 					});
@@ -3571,10 +3571,10 @@ $(function()
 		if (this[0] && this[0].count && (this[0].count != -1))
 		{
 			var count = this[0].count - 1;
-			count_message = "<small> (" + count + " Total) </small>";
+			count_message = "<small> (" + count + _agile_get_translated_val('other','total') +" ) </small>";
 		}
 		else
-			count_message = "<small> (" + this.length + " Total) </small>";
+			count_message = "<small> (" + this.length + _agile_get_translated_val('other','total') + " ) </small>";
 
 		return new Handlebars.SafeString(count_message);
 	});
@@ -3784,7 +3784,7 @@ $(function()
 		if (val <= 20)
 			return "Workflows";
 
-		return "(" + val + " Total)";
+		return "(" + val + _agile_get_translated_val('other','total')+ " )";
 	});
 
 	/**
@@ -6448,13 +6448,13 @@ $(function()
 				{
 
 					if (this[0].count > 9999 && (_agile_get_prefs('company_filter') || _agile_get_prefs('dynamic_company_filter')))
-						count_message = "<small> (" + 10000 + "+ Total) </small>" + '<span style="vertical-align: text-top; margin-left: -5px">' + '<img border="0" src="'+updateImageS3Path("/img/help.png")+'"' + 'style="height: 10px; vertical-align: middle" rel="popover"' + 'data-placement="bottom" data-title="Lead Score"' + 'data-content="Looks like there are over 10,000 results. Sorry we can\'t give you a precise number in such cases."' + 'id="element" data-trigger="hover">' + '</span>';
+						count_message = "<small> (" + 10000 + "+ " +_agile_get_translated_val('other','total')+ ") </small>" + '<span style="vertical-align: text-top; margin-left: -5px">' + '<img border="0" src="'+updateImageS3Path("/img/help.png")+'"' + 'style="height: 10px; vertical-align: middle" rel="popover"' + 'data-placement="bottom" data-title="Lead Score"' + 'data-content="'+_agile_get_translated_val('results','over-count')+'"' + 'id="element" data-trigger="hover">' + '</span>';
 
 					else
-						count_message = "<small> (" + this[0].count + " Total) </small>";
+						count_message = "<small> (" + this[0].count + " " +_agile_get_translated_val('other','total')+ ") </small>";
 				}
 				else
-					count_message = "<small> (" + this.length + " Total) </small>";
+					count_message = "<small> (" + this.length + " " +_agile_get_translated_val('other','total')+ ") </small>";
 
 				return new Handlebars.SafeString(count_message);
 			});

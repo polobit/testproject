@@ -229,9 +229,9 @@ var CompaniesRouter = Backbone.Router
 						}
 						var count_message;
 						if (count > 9999 && (_agile_get_prefs('company_filter') || _agile_get_prefs('dynamic_company_filter')))
-							count_message = "<small> (" + 10000 + "+ Total) </small>" + '<span style="vertical-align: text-top; margin-left: -5px">' + '<img border="0" src="' + updateImageS3Path("/img/help.png")+ '"' + 'style="height: 10px; vertical-align: middle" rel="popover"' + 'data-placement="bottom" data-title="Lead Score"' + 'data-content="Looks like there are over 10,000 results. Sorry we can\'t give you a precise number in such cases."' + 'id="element" data-trigger="hover">' + '</span>';
+							count_message = "<small> (" + 10000 + "+ " +_agile_get_translated_val('other','total')+ ") </small>" + '<span style="vertical-align: text-top; margin-left: -5px">' + '<img border="0" src="' + updateImageS3Path("/img/help.png")+ '"' + 'style="height: 10px; vertical-align: middle" rel="popover"' + 'data-placement="bottom" data-title="Lead Score"' + 'data-content="'+_agile_get_translated_val('results','over-count')+'"' + 'id="element" data-trigger="hover">' + '</span>';
 						else
-							count_message = "<small> (" + count + " Total) </small>";
+							count_message = "<small> (" + count + " "+_agile_get_translated_val('other','total')+") </small>";
 						$('#contacts-count').html(count_message);
 					}
 
@@ -358,7 +358,7 @@ var CompaniesRouter = Backbone.Router
 				{
 					if (response && response.status == '403')
 
-						$("#content").html("<div class='well'> <div class='alert bg-white text-center'><div class='slate-content p-md text'><h4 style='opacity:0.8'> Sorry, you do not have permission to view this Company.</h4><div class='text'style='opacity:0.6'>Please contact your admin or account owner to enable this option.</div></div></div></div>");
+						$("#content").html("<div class='well'> <div class='alert bg-white text-center'><div class='slate-content p-md text'><h4 style='opacity:0.8'> " +_agile_get_translated_val('companies', 'invalid-viewer')+ "</h4><div class='text'style='opacity:0.6'>" +_agile_get_translated_val('companies','enable-permission')+ "</div></div></div></div>");
 
 				} });
 

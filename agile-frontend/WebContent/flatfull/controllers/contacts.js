@@ -136,13 +136,13 @@ var ContactsRouter = Backbone.Router.extend({
 
 			dashboardJSON["id"] = "MarketingDashboard";
 			dashboardJSON["name"] = "Marketing";
-			dashboardJSON["description"] = "Welcome to Agile CRM Marketing Automation.";
+			dashboardJSON["description"] = _agile_get_translated_val("dashboards","marketing-help");
 
 		}else if(dashboard_name == "SalesDashboard"){
 
 			dashboardJSON["id"] = "SalesDashboard";
 			dashboardJSON["name"] = "Sales";
-			dashboardJSON["description"] = "Welcome to Agile CRM Sales Dashboard.";
+			dashboardJSON["description"] = _agile_get_translated_val("dashboards", "sales-help");
 
 		}else if(!dashboardJSON["id"])
 		{
@@ -377,9 +377,9 @@ var ContactsRouter = Backbone.Router.extend({
 						}
 						var count_message;
 						if (count > 9999 && (_agile_get_prefs('contact_filter') || _agile_get_prefs('dynamic_contact_filter')))
-							count_message = "<small> (" + 10000 + "+ Total) </small>" + '<span style="vertical-align: text-top; margin-left: 0px">' + '<img border="0" src="' + updateImageS3Path("/img/help.png") + '"' + 'style="height: 10px; vertical-align: middle" rel="popover"' + 'data-placement="bottom" data-title="Lead Score"' + 'data-content="Looks like there are over 10,000 results. Sorry we can\'t give you a precise number in such cases."' + 'id="element" data-trigger="hover">' + '</span>';
+							count_message = "<small> (" + 10000 + "+ " +_agile_get_translated_val('other','total')+") </small>" + '<span style="vertical-align: text-top; margin-left: 0px">' + '<img border="0" src="' + updateImageS3Path("/img/help.png") + '"' + 'style="height: 10px; vertical-align: middle" rel="popover"' + 'data-placement="bottom" data-title="Lead Score"' + 'data-content="'+_agile_get_translated_val('results','over-count')+'"' + 'id="element" data-trigger="hover">' + '</span>';
 						else
-							count_message = "<small> (" + count + " Total) </small>";
+							count_message = "<small> (" + count + " " +_agile_get_translated_val('other','total')+") </small>";
 						$('#contacts-count').html(count_message);
 
 					}
@@ -615,7 +615,7 @@ var ContactsRouter = Backbone.Router.extend({
 				{
 					if(response && response.status == '403')
 
-						$("#content").html ("<div class='well'><div class='alert bg-white text-center'><div class='slate-content p-md text'><h4 style='opacity:0.8;margin-bottom:5px!important;'> Sorry, you do not have permission to view this Contact.</h4><div class='text'style='opacity:0.6;'>Please contact your admin or account owner to enable this option.</div></div></div></div>");
+						$("#content").html ("<div class='well'><div class='alert bg-white text-center'><div class='slate-content p-md text'><h4 style='opacity:0.8;margin-bottom:5px!important;'> "+_agile_get_translated_val('contacts','invalid-viewer')+"</h4><div class='text'style='opacity:0.6;'>"+_agile_get_translated_val('companies','enable-permission')+"</div></div></div></div>");
 
 				}
 				});
@@ -733,9 +733,9 @@ var ContactsRouter = Backbone.Router.extend({
 		checkContactUpdated();
 
 		if(_agile_get_prefs('MAP_VIEW')=="disabled")
-				$("#map_view_action").html("<i class='icon-plus text-sm c-p' title='Show map' id='enable_map_view'></i>");
+				$("#map_view_action").html("<i class='icon-plus text-sm c-p' title='"+_agile_get_translated_val('contact-details','show-map')+"' id='enable_map_view'></i>");
 		else
-				$("#map_view_action").html("<i class='icon-minus text-sm c-p' title='Hide map' id='disable_map_view'></i>");
+				$("#map_view_action").html("<i class='icon-minus text-sm c-p' title='"+_agile_get_translated_val('contact-details','hide-map')+"' id='disable_map_view'></i>");
 
 
 		//contactInnerTabsInvoke(el);
@@ -981,9 +981,8 @@ $('#content').html('<div id="import-contacts-event-listener"></div>');
 		var that=this;
 		sendMail(id,subject,body,cc,bcc,that);
 
-		var options = {
-		"+ Add new" : "verify_email"
-		};
+		var options = {};
+		options[_agile_get_translated_val('others','add-new')] = "verify_email";
 		
 		fetchAndFillSelect(
 			'core/api/account-prefs/verified-emails/all',
@@ -1200,9 +1199,9 @@ $('#content').html('<div id="import-contacts-event-listener"></div>');
 						}
 						var count_message;
 						if (count > 9999 && (_agile_get_prefs('contact_filter') || _agile_get_prefs('dynamic_contact_filter')))
-							count_message = "<small> (" + 10000 + "+ Total) </small>" + '<span style="vertical-align: text-top; margin-left: 0px">' + '<img border="0" src="'+ updateImageS3Path("/img/help.png") +'"' + 'style="height: 10px; vertical-align: middle" rel="popover"' + 'data-placement="bottom" data-title="Lead Score"' + 'data-content="Looks like there are over 10,000 results. Sorry we can\'t give you a precise number in such cases."' + 'id="element" data-trigger="hover">' + '</span>';
+							count_message = "<small> (" + 10000 + "+ " +_agile_get_translated_val('other','total')+") </small>" + '<span style="vertical-align: text-top; margin-left: 0px">' + '<img border="0" src="'+ updateImageS3Path("/img/help.png") +'"' + 'style="height: 10px; vertical-align: middle" rel="popover"' + 'data-placement="bottom" data-title="Lead Score"' + 'data-content="'+_agile_get_translated_val('results','over-count')+'"' + 'id="element" data-trigger="hover">' + '</span>';
 						else
-							count_message = "<small> (" + count + " Total) </small>";
+							count_message = "<small> (" + count + " " +_agile_get_translated_val('other','total')+") </small>";
 						$('#contacts-count').html(count_message);
 					}
 
@@ -1319,7 +1318,7 @@ $('#content').html('<div id="import-contacts-event-listener"></div>');
 						  return;
 					$("#content").html($(template_ui));	
 					// Add placeholder and date picker to date custom fields
-					$('.date_input').attr("placeholder", "Select Date");
+					$('.date_input').attr("placeholder", _agile_get_translated_val("contacts", "select-date"));
 
 					$('.date_input').datepicker({ format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY, autoclose: true});
 
@@ -1368,7 +1367,7 @@ $('#content').html('<div id="import-contacts-event-listener"></div>');
 							});
 						}
 					}
-					agile_type_ahead("contact_company", $('#content'), contacts_typeahead, fxn_display_company, 'type=COMPANY', '<b>No Results</b> <br/> Will add a new one');
+					agile_type_ahead("contact_company", $('#content'), contacts_typeahead, fxn_display_company, 'type=COMPANY', '<b>'+_agile_get_translated_val("others","no-results")+'</b> <br/> ' + _agile_get_translated_val("others","add-new-one"));
 
 					$('.contact_input', $('#content')).each(function(){
 						agile_type_ahead($(this).attr("id"), $('#custom_contact_'+$(this).attr("id"), $('#content')), contacts_typeahead, undefined, 'type=PERSON');
@@ -1442,7 +1441,7 @@ function getAndUpdateCollectionCount(type, el, countFetchURL){
     	Count_XHR_Call = $.get(countURL, {}, function(data){
     		        data = parseInt(data);
     		        
-                    count_message = "<small> (" + data + " Total) </small>";
+                    count_message = "<small> (" + data + " "+_agile_get_translated_val('other','total')+") </small>";
 					$('#contacts-count').html(count_message);
 
 					if(type == "workflows")

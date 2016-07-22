@@ -19,7 +19,7 @@ $(function()
 	{
 
 		// Add placeholder and date picker to date custom fields
-		$('.date_input').attr("placeholder","Select Date");
+		$('.date_input').attr("placeholder",_agile_get_translated_val("contacts", "select-date"));
     
 		$('.date_input').datepicker({
 			format: CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY, autoclose: true

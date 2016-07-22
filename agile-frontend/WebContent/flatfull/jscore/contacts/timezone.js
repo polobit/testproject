@@ -28,7 +28,7 @@ function displayTimeZone(results)
 
 		$(".contacts-time").html(_agile_get_translated_val("misc-keys", "local-time") + " : " + data);
 		$("#contacts-local-time").show();
-		$("#map_view_action").html("<i class='icon-minus text-sm c-p' title='Hide map' id='disable_map_view'></i>");
+		$("#map_view_action").html("<i class='icon-minus text-sm c-p' title='"+_agile_get_translated_val('contact-details','hide-map')+"' id='disable_map_view'></i>");
 
 	   }, error : function(jqXHR, textStatus, errorThrown)
 	   {

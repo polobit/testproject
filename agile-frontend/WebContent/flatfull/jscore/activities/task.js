@@ -395,7 +395,7 @@ function save_task(formId, modalId, isUpdate, saveBtn)
 							if (isUpdate)
 								App_Calendar.allTasksListView.collection.remove(json);
 
-							if ((old_owner_id == "All Categories" || old_owner_id.toUpperCase() == json.type) && (old_type == "All Tasks" || json.owner_id == CURRENT_DOMAIN_USER.id))
+							if ((old_owner_id == "All Categories" || old_owner_id.toUpperCase() == json.type) && (old_type == _agile_get_translated_val('tasks', 'All Tasks') || json.owner_id == CURRENT_DOMAIN_USER.id))
 								App_Calendar.allTasksListView.collection.add(data);
 
 							App_Calendar.allTasksListView.render(true);

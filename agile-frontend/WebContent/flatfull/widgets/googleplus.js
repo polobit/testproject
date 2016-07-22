@@ -19,7 +19,7 @@ function showMatchedPeople(search)
 				if (searchDetails['keywords'] && searchDetails['keywords'] != "")
 					displayError(
 							WIDGET_NAME,
-							"<p class='text-base' style='margin-bottom:0px;'>No matches found for <a href='#' class='peoplesearch'>" + searchDetails['keywords'] + "</a>",
+							"<p class='text-base' style='margin-bottom:0px;'>"+ _agile_get_translated_val('contact-details', 'no-matches-found-for') +" <a href='#' class='peoplesearch'>" + searchDetails['keywords'] + "</a>",
 							true);
 				else
 					displayError(WIDGET_NAME,
@@ -30,7 +30,7 @@ function showMatchedPeople(search)
 			var el;
 
 			if (searchDetails['keywords'] && searchDetails['keywords'] != ""){
-				el = "<div class='panel-body text-base'><p>Search results for " + "<a href='#' class='peoplesearch'>" + searchDetails['keywords'] + "</a></p>";
+				el = "<div class='panel-body text-base'><p>"+_agile_get_translated_val('contact-details', 'search-results-for')+" " + "<a href='#' class='peoplesearch'>" + searchDetails['keywords'] + "</a></p>";
 			} else {
 				el = "<div class='panel-body text-base'><p>Search results. " + "<a href='#' class='peoplesearch'>Modify search</a></p>";
 			}

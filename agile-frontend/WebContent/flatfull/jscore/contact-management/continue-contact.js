@@ -793,7 +793,7 @@ function deserialize_contact(contact, template)
 			
 		var form = $('#content').html($(template_ui));	
 		// Add placeholder and date picker to date custom fields
-		$('.date_input').attr("placeholder", "Select Date");
+		$('.date_input').attr("placeholder", _agile_get_translated_val("contacts", "select-date"));
 
 		$('.date_input').datepicker({ format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY, autoclose: true});
 
@@ -855,7 +855,7 @@ function deserialize_contact(contact, template)
 				});
 			}
 		}
-		agile_type_ahead("contact_company", $('#content'), contacts_typeahead, fxn_display_company, 'type=COMPANY', '<b>No Results</b> <br/> Will add a new one');
+		agile_type_ahead("contact_company", $('#content'), contacts_typeahead, fxn_display_company, 'type=COMPANY', '<b>'+_agile_get_translated_val("others","no-results")+'</b> <br/> ' + _agile_get_translated_val("others","add-new-one"));
 
 		if (contact.contact_company_id && contact.contact_company_id.length > 0)
 		{

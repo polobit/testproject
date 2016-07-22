@@ -21,9 +21,9 @@ var ContactSearchRouter = Backbone.Router.extend({
 			{
 				// Shows the query string as heading of search results
 				if (searchResultsView.collection.length == 0)
-					$("#search-query-heading", el).html('No matches found for "' + query + '"');
+					$("#search-query-heading", el).html(_agile_get_translated_val('contact-details', 'no-matches-found-for') + ' "' + query + '"');
 				else
-					$("#search-query-heading", el).html('Search results for "' + query + '"');
+					$("#search-query-heading", el).html(_agile_get_translated_val('contact-details', 'search-results-for') + ' "' + query + '"');
 			} });
 
 		// If QUERY_RESULTS is defined which are set by agile_typeahead

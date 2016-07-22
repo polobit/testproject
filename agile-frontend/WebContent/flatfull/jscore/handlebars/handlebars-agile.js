@@ -1031,9 +1031,9 @@ function getCurrentContactProperty(value)
 function getCount(collection)
 {
 	if (collection[0] && collection[0].count && (collection[0].count != -1))
-		return "(" + collection[0].count + " Total)";
+		return "(" + collection[0].count + " " +_agile_get_translated_val('other','total')+ ")";
 	else
-		return "(" + collection.length + " Total)";
+		return "(" + collection.length + " " +_agile_get_translated_val('other','total')+ ")";
 }
 function getTaskCount(collection)
 {

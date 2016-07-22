@@ -517,7 +517,7 @@ function initializePortletsListeners() {
 												}
 
 												if (model.description) {
-													var description = '<label class="control-label"><b>Description </b></label><div class="controls"><textarea id="description" name="description" rows="3" class="input form-control" placeholder="Add Description"></textarea></div>'
+													var description = '<label class="control-label"><b>'+_agile_get_translated_val('misc-keys','description')+' </b></label><div class="controls"><textarea id="description" name="description" rows="3" class="input form-control" placeholder="' +_agile_get_translated_val('misc-keys','add-description')+'"></textarea></div>'
 													$("#event_desc").html(
 															description);
 													$("textarea#description")
@@ -526,9 +526,9 @@ function initializePortletsListeners() {
 												} else {
 													var desc = '<div class="row-fluid">'
 															+ '<div class="control-group form-group m-b-none">'
-															+ '<a href="#" id="add_event_desctiption"><i class="icon-plus"></i> Add Description </a>'
+															+ '<a href="#" id="add_event_desctiption"><i class="icon-plus"></i> '+_agile_get_translated_val('misc-keys','add-description')+' </a>'
 															+ '<div class="controls event_discription hide">'
-															+ '<textarea id="description" name="description" rows="3" class="input form-control w-full col-md-8" placeholder="Add Description"></textarea>'
+															+ '<textarea id="description" name="description" rows="3" class="input form-control w-full col-md-8" placeholder="' +_agile_get_translated_val('misc-keys','add-description')+ '"></textarea>'
 															+ '</div></div></div>'
 													$("#event_desc").html(desc);
 												}
@@ -839,16 +839,16 @@ $('.portlet_body')
 							// Fills owner select element
 							populateUsersInUpdateActivityModal(model.toJSON());
 							if (model.toJSON().description) {
-								var description = '<label class="control-label"><b>Description </b></label><div class="controls"><textarea id="description" name="description" rows="3" class="input form-control" placeholder="Add Description"></textarea></div>'
+								var description = '<label class="control-label"><b>'+_agile_get_translated_val('misc-keys','description')+' </b></label><div class="controls"><textarea id="description" name="description" rows="3" class="input form-control" placeholder="' +_agile_get_translated_val('misc-keys','add-description')+ '"></textarea></div>'
 								$("#event_desc").html(description);
 								$("textarea#description").val(
 										model.toJSON().description);
 							} else {
 								var desc = '<div class="row-fluid">'
 										+ '<div class="control-group form-group m-b-none">'
-										+ '<a href="#" id="add_event_desctiption"><i class="icon-plus"></i> Add Description </a>'
+										+ '<a href="#" id="add_event_desctiption"><i class="icon-plus"></i> ' +_agile_get_translated_val('misc-keys','add-description')+ ' </a>'
 										+ '<div class="controls event_discription hide">'
-										+ '<textarea id="description" name="description" rows="3" class="input form-control w-full col-md-8" placeholder="Add Description"></textarea>'
+										+ '<textarea id="description" name="description" rows="3" class="input form-control w-full col-md-8" placeholder="' +_agile_get_translated_val('misc-keys','add-description')+'"></textarea>'
 										+ '</div></div></div>'
 								$("#event_desc").html(desc);
 							}
@@ -986,12 +986,12 @@ $('.portlet_body')
 		    	}
 		    });
 		    if(id== "MarketingDashboard"){
-		    	$('#dashboard-desc').text("Welcome to Agile CRM Marketing Automation.");
-		    	$('#dashboard-desc').attr("title", "Welcome to Agile CRM Marketing Automation.");
+		    	$('#dashboard-desc').text(_agile_get_translated_val("dashboards","marketing-help"));
+		    	$('#dashboard-desc').attr("title", _agile_get_translated_val("dashboards","marketing-help"));
 		    }
 		    if(id == "SalesDashboard"){
-		    	$('#dashboard-desc').text("Welcome to Agile CRM Sales Dashboard.");
-		    	$('#dashboard-desc').attr("title", "Welcome to Agile CRM Sales Dashboard.");
+		    	$('#dashboard-desc').text(_agile_get_translated_val("dashboards", "sales-help"));
+		    	$('#dashboard-desc').attr("title", _agile_get_translated_val("dashboards", "sales-help"));
 		    }
 		    if(id == "Dashboard")
 		    {

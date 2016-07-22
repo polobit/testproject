@@ -58,7 +58,7 @@ function showTwitterMatchingProfiles(data)
 		if (Twitter_search_details['keywords'] && Twitter_search_details['keywords'] != "")
 			twitterMainError(
 					TWITTER_PLUGIN_NAME,
-					"<p class='m-b-none text-base'>No matches found for <a href='#' class='twitter_modify_search'>" + Twitter_search_details['keywords'] + "</a>",
+					"<p class='m-b-none text-base'>" +_agile_get_translated_val('contact-details', 'no-matches-found-for')+" <a href='#' class='twitter_modify_search'>" + Twitter_search_details['keywords'] + "</a>",
 					true);
 		else
 			twitterMainError(TWITTER_PLUGIN_NAME,
@@ -68,7 +68,7 @@ function showTwitterMatchingProfiles(data)
 
 	var el;
 	if (Twitter_search_details['keywords'] && Twitter_search_details['keywords'] != "")
-		el = "<div class='panel-body'><p class='text-base'>Search results for " + "<a href='#' class='twitter_modify_search'>" + Twitter_search_details['keywords'] + "</a></p>";
+		el = "<div class='panel-body'><p class='text-base'>"+_agile_get_translated_val('contact-details', 'search-results-for')+" " + "<a href='#' class='twitter_modify_search'>" + Twitter_search_details['keywords'] + "</a></p>";
 	else
 		el = "<div class='panel-body'><p class='text-base'>Search results. " + "<a href='#' class='twitter_modify_search'>Modify search</a></p>";
 
