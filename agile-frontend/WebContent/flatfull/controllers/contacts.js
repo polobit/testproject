@@ -1476,12 +1476,12 @@ function sendMail(id,subject,body,cc,bcc,that,custom_view)
 		{
 			var pendingEmails = getPendingEmails();
 			window.history.back();
-			var title = "Emails Limit";
+			var title = _agile_get_translated_val('campaigns', 'emails-limit');
 			var yes = "";
-			var no = "Ok"
-			var upgrade_link =  'Please <a  href="#subscribe" class="action text-info" data-dismiss="modal" subscribe="subscribe" action="deny"> upgrade </a> your email subscription.';
-			var emialErrormsg = '<div class="m-t-xs">To continue sending emails from your account, please<a href="#subscribe" class="action text-info" data-dismiss="modal" subscribe="subscribe" action="deny"> purchase </a>more.</div>';
-			var message = "<div>Sorry, your emails quota has been utilized.</div>" + emialErrormsg;
+			var no = _agile_get_translated_val("reputation", "Ok");
+			var upgrade_link =  _agile_get_translated_val('contact-details','please') + ' <a  href="#subscribe" class="action text-info" data-dismiss="modal" subscribe="subscribe" action="deny"> '+_agile_get_translated_val('portlets','upgrade')+' </a> ' + _agile_get_translated_val('billing','your-email-subscription');
+			var emialErrormsg = '<div class="m-t-xs">'+_agile_get_translated_val('billing','continue-send-emails')+', ' +_agile_get_translated_val('contact-details','please')+ '<a href="#subscribe" class="action text-info" data-dismiss="modal" subscribe="subscribe" action="deny"> '+_agile_get_translated_val('plan-and-upgrade','purchase')+' </a>'+_agile_get_translated_val('plan-and-upgrade','more')+'.</div>';
+			var message = "<div>" +_agile_get_translated_val('billing','email-quota-exceed')+ "</div>" + emialErrormsg;
 			
 			showModalConfirmation(title, 
 					message, 
@@ -1592,7 +1592,7 @@ function sendMail(id,subject,body,cc,bcc,that,custom_view)
 				head.js(LIB_PATH + 'lib/zoomifier.contentpicker.min.js', function()
 				{
 					$("#emailForm", el).find('textarea[name="body"]').closest(".controls")
-							.append('<div><a style="cursor:pointer;" onclick="Javascript:loadZoomifierDocSelector();"><i class="icon-plus-sign"></i> Attach Zoomifier Doc</a></div>');
+							.append('<div><a style="cursor:pointer;" onclick="Javascript:loadZoomifierDocSelector();"><i class="icon-plus-sign"></i> '+_agile_get_translated_val('tags','attach-zoomifier')+'</a></div>');
 				});
 			}
 

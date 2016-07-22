@@ -88,7 +88,7 @@
             var targetEl = $(e.currentTarget);
 
             var contact_id = App_Contacts.contactDetailView.model.id;
-            var optionsTemplate = "<option value='{{id}}'{{#if is_disabled}}disabled=disabled>{{name}} (Disabled){{else}}>{{name}}{{/if}}</option>";
+            var optionsTemplate = "<option value='{{id}}'{{#if is_disabled}}disabled=disabled>{{name}} ("+_agile_get_translated_val('campaigns','disabled')+"){{else}}>{{name}}{{/if}}</option>";
             
             // Navigate to Add Campaigns page
             if($(targetEl).hasClass('contact-add-campaign'))

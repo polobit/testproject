@@ -8,7 +8,7 @@ $(function()
 								.find('#subscribers-bulk-select')
 								.css('display', 'block')
 								.html(
-										'Selected All ' + getAvailableActiveContacts() + ' contacts. <a hrer="#" id="select-all-active-contacts-revert" class="text-info">Select chosen contacts only</a>');
+										_agile_get_translated_val('contacts','select-all') + ' ' + getAvailableActiveContacts() + ' contacts. <a hrer="#" id="select-all-active-contacts-revert" class="text-info">Select chosen contacts only</a>');
 
 						// On choosing select all option, all the visible
 						// checkboxes in the table should be checked

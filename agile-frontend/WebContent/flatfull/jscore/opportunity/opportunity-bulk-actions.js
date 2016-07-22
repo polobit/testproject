@@ -22,7 +22,7 @@ var deal_bulk_actions = {
 		$.ajax({ url : url, type : 'POST', data : input, contentType : "application/x-www-form-urlencoded", success : function(data)
 		{
 
-			$save_info = $('<div style="display:inline-block"><small><p class="text-success"><i>Task Scheduled.</i></p></small></div>');
+			$save_info = $('<div style="display:inline-block"><small><p class="text-success"><i>'+_agile_get_translated_val('bulk-actions','task-scheduled')+'.</i></p></small></div>');
 
 			if(form_id !== undefined)
 			{
@@ -48,7 +48,7 @@ var deal_bulk_actions = {
 			
 			if(!error_message)
 				{
-					showNotyPopUp('information', "Task scheduled", "top", 5000);
+					showNotyPopUp('information', _agile_get_translated_val('bulk-actions','task-scheduled'), "top", 5000);
 					return;
 				}
 				showNotyPopUp('information', error_message, "top", 5000);

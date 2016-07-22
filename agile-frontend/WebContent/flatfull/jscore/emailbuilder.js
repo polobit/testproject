@@ -37,7 +37,7 @@ function initializeEmailBuilderListeners() {
         var optionsTemplate = "<option value='{{id}}' network_type='{{titleFromEnums network_type}}' size='{{size}}'>{{name}}</option>";
         fillSelect('attachmentSelectBox','core/api/documents', 'documents',  function fillNew()
         {
-            el.find("#attachmentSelectBox option:first").after("<option value='new'>Upload new doc</option>");
+            el.find("#attachmentSelectBox option:first").after("<option value='new'>"+_agile_get_translated_val('others','upload-new-doc')+"</option>");
 
         }, optionsTemplate, false, el);
         $('#attachmentSelectBoxRequired').hide();

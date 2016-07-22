@@ -120,33 +120,33 @@ function deletePortlet(el) {
 	var deleteWarnHTML = "";
 
 	if (header_text && header_text.trim() != "Getting Started")
-		deleteWarnHTML = "Are you sure you want to delete Dashlet - "
+		deleteWarnHTML = _agile_get_translated_val('portlets','delete-dashlet-confirm')
 				+ header_text.trim() + " " + header_sub_text.trim() + "?";
 
 	else if (header_text && header_text.trim() == "Getting Started")
-		deleteWarnHTML = "Are you sure you want to delete Dashlet - "
+		deleteWarnHTML = _agile_get_translated_val('portlets','delete-dashlet-confirm')
 				+ header_text.trim()
-				+ "?<br/>This dashlet can't be added back again.";
+				+ "?<br/>" + _agile_get_translated_val('portlets','no-back-after-delete');
 
 	else if (model.get("name") == "Leaderboard")
-		deleteWarnHTML = "Are you sure you want to delete Dashlet - Leaderboard "
+		deleteWarnHTML = _agile_get_translated_val('portlets','delete-leaderboard-dashlet-confirm')
 				+ portlet_utility.getDurationForPortlets(
 						model.get("settings").duration, function(duration) {
 							return duration;
 						}) + "?";
 
 	else if (model.get("name") == "Mini Calendar")
-		deleteWarnHTML = "Are you sure you want to delete Dashlet - Mini Calendar?";
+		deleteWarnHTML = _agile_get_translated_val('portlets','delete-mini-calendar-dashlet-confirm');
 
 	else if (model.get("name") == "Deal Goals")
-		deleteWarnHTML = "Are you sure you want to delete Dashlet - Deal Goals "
+		deleteWarnHTML = _agile_get_translated_val('portlets','delete-deal-goals-dashlet-confirm') + " "
 				+ portlet_utility.getDurationForPortlets(
 						model.get("settings").duration, function(duration) {
 							return duration;
 						}) + "?";
 
 	else
-		deleteWarnHTML = "Are you sure you want to delete Dashlet - Activity Overview "
+		deleteWarnHTML = _agile_get_translated_val('portlets','delete-activity-overview-dashlet-confirm') + " "
 				+ portlet_utility.getDurationForPortlets(
 						model.get("settings").duration, function(duration) {
 							return duration;

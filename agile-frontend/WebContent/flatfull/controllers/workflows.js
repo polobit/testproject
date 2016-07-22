@@ -654,7 +654,7 @@ var WorkflowsRouter = Backbone.Router
 
 								});
 
-								var optionsTemplate = "<option value='{{id}}'{{#if is_disabled}}disabled=disabled>{{name}} (Disabled){{else}}>{{name}}{{/if}}</option>";
+								var optionsTemplate = "<option value='{{id}}'{{#if is_disabled}}disabled=disabled>{{name}} ("+_agile_get_translated_val('campaigns','disabled')+"){{else}}>{{name}}{{/if}}</option>";
 
 								/**
 								* Shows given values when trigger selected
@@ -904,7 +904,7 @@ var WorkflowsRouter = Backbone.Router
 							populate_call_trigger_options($('form#addTriggerForm', el), currentTrigger.toJSON());
 						}
 
-						var optionsTemplate = "<option value='{{id}}'{{#if is_disabled}}disabled=disabled>{{name}} (Disabled){{else}}>{{name}}{{/if}}</option>";
+						var optionsTemplate = "<option value='{{id}}'{{#if is_disabled}}disabled=disabled>{{name}} ("+_agile_get_translated_val('campaigns','disabled')+"){{else}}>{{name}}{{/if}}</option>";
 
 						/**
 						 * Fills campaign select drop down with existing

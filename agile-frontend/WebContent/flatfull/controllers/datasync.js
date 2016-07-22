@@ -85,7 +85,7 @@ salesforce : function(el){
                         var url= 'core/api/contactprefs/SALESFORCE',
                                   template= 'admin-settings-import-salesforce-prefs';
                                         renderInnerSyncView(url,template,model,function(model){
-                                        showNotyPopUp("information", "Salesforce import initiated", "top", 1000);
+                                        showNotyPopUp("information", _agile_get_translated_val('datasync','salesforce-initiated'), "top", 1000);
                                         // Navigate to back
                                         // Backbone.history.navigate("importcrm", { trigger : true });
                                         DATA_SYNC_FORCE_FETCH=true;
@@ -97,7 +97,7 @@ salesforce : function(el){
                                             if($(".checkedMultiCheckbox").find('input:checked').length > 0)
                                                   return true;
                                             else{
-                                                $(".checkedMultiCheckbox").append("<span generated='true' class='help-inline' style='display: block;'>Please select atleast one option.</span>"); 
+                                                $(".checkedMultiCheckbox").append("<span generated='true' class='help-inline' style='display: block;'>"+_agile_get_translated_val('validation-msgs', 'pls-select-atleast-one-option')+"</span>"); 
                                             }
                                             
                                              return false;
@@ -197,7 +197,7 @@ dataSync : function()
                        	var	url= 'core/api/contactprefs/GOOGLE',
     			                  template= 'admin-settings-import-google-contacts-setup';
                       					renderInnerSyncView(url,template,model,function(model){
-    									showNotyPopUp("information", "Contacts sync initiated", "top", 1000);
+    									showNotyPopUp("information", _agile_get_translated_val('misc-keys','sync-conatcts-init'), "top", 1000);
                       					});
     			               
     			         });
@@ -317,7 +317,7 @@ dataSync : function()
                        	var	url= 'core/api/contactprefs/STRIPE',
     			                  template= 'admin-settings-import-stripe-contact-sync-prefs';
                       					renderInnerSyncView(url,template,model,function(model){
-    									showNotyPopUp("information", "Contacts sync initiated", "top", 1000);
+    									showNotyPopUp("information", _agile_get_translated_val('misc-keys','sync-conatcts-init'), "top", 1000);
                       					});
     			               
     			    	     });
@@ -365,7 +365,7 @@ dataSync : function()
                             },
                             saveCallback: function() {                                
                                 App_Datasync.dataSync();
-                                showNotyPopUp("information", "Office365 calendar saved successfully", "top", 1000);
+                                showNotyPopUp("information", _agile_get_translated_val('datasync','office365-initiated'), "top", 1000);
                             }
                         });
                         $("#data-sync-settings-tab-content").html(calendar_settings_view.render().el);
@@ -404,7 +404,7 @@ dataSync : function()
                    	var	url= 'core/api/contactprefs/SHOPIFY',
 			                  template= 'admin-settings-import-shopify-prefs';
                   					renderInnerSyncView(url,template,model,function(model){
-									showNotyPopUp("information", "Contacts sync initiated", "top", 1000);
+									showNotyPopUp("information", _agile_get_translated_val('misc-keys','sync-conatcts-init'), "top", 1000);
                   					});
 			               
 			         });
@@ -433,7 +433,7 @@ dataSync : function()
                     var url= 'core/api/contactprefs/FRESHBOOKS',
                               template= 'admin-settings-import-freshbooks-contacts-form';
                                     renderInnerSyncView(url,template,model,function(model){
-                                    showNotyPopUp("information", "Contacts sync initiated", "top", 1000);
+                                    showNotyPopUp("information", _agile_get_translated_val('misc-keys','sync-conatcts-init'), "top", 1000);
                                     });
                            
                      });
@@ -463,7 +463,7 @@ dataSync : function()
                                     //initializes freshbooks listners which is present in 
                                     //import.js
                                     
-                                    showNotyPopUp("information", "Contacts sync initiated", "top", 1000);
+                                    showNotyPopUp("information", _agile_get_translated_val('misc-keys','sync-conatcts-init'), "top", 1000);
                                     });
                      });
 
@@ -494,7 +494,7 @@ dataSync : function()
 			                  template= 'admin-settings-import-quickbook-settings';
                   					renderInnerSyncView(url,template,model,function(model){
                                         
-									showNotyPopUp("information", "Contacts sync initiated", "top", 1000);
+									showNotyPopUp("information", _agile_get_translated_val('misc-keys','sync-conatcts-init'), "top", 1000);
                   					});
 			         });
                   }, null);
@@ -523,7 +523,7 @@ dataSync : function()
                    	var	url= 'core/api/contactprefs/XERO',
 			                  template= 'admin-settings-import-xero-settings';
                   					renderInnerSyncView(url,template,model,function(model){
-									showNotyPopUp("information", "Contacts sync initiated", "top", 1000);
+									showNotyPopUp("information", _agile_get_translated_val('misc-keys','sync-conatcts-init'), "top", 1000);
                   					});
 			               
 			         });
@@ -551,7 +551,7 @@ dataSync : function()
                    	var	url= 'core/api/contactprefs/ZOHO',
 			                  template= 'admin-settings-import-zoho-prefs';
                   					renderInnerSyncView(url,template,model,function(model){
-									showNotyPopUp("information", "Contacts sync initiated", "top", 1000);
+									showNotyPopUp("information", _agile_get_translated_val('misc-keys','sync-conatcts-init'), "top", 1000);
                   					});
 			               
 			         });

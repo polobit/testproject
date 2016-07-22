@@ -53,8 +53,8 @@ var ReferelRouter = Backbone.Router.extend({
 
 	referFriends : function()
 	{
-		var subject = "I am using Agile CRM and I really love it! Try it now.";
-		var body = "Hi,<br><br>I am using Agile CRM and I really love it!<br><br>It is a combination of important features like email marketing, call campaign, online scheduling, landing pages, Web rules and many others. This service is true value for money!<br><br>What to try it? Let's start by signing up with below link:<br>http://www.agilecrm.com/pricing?utm_source=affiliates&utm_medium=web&utm_campaign="+CURRENT_DOMAIN_USER.domain+"<br><br>Best Regards";
+		var subject = _agile_get_translated_val('referrals' 'iam-using-agile') + _agile_get_translated_val('referrals','try-agile');
+		var body = getTemplate("js-referal-program", {domain : CURRENT_DOMAIN_USER.domain});
 		sendMail(undefined,subject,body,undefined,undefined,this);
 	},
 

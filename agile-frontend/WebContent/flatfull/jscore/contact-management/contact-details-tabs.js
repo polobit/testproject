@@ -604,7 +604,7 @@ function initializeSendEmailListeners(){
 				var optionsTemplate = "<option value='{{id}}' network_type='{{titleFromEnums network_type}}' size='{{size}}' url='{{url}}'>{{name}}</option>";
         		fillSelect('attachment-select','core/api/documents', 'documents',  function fillNew()
 				{
-					el.find("#attachment-select option:first").after("<option value='new'>Upload new doc</option>");
+					el.find("#attachment-select option:first").after("<option value='new'>"+_agile_get_translated_val('others','upload-new-doc')+"</option>");
 					$('#attachment-select').find('option[value='+model.attachment_id+']').attr("selected","selected");
 					$('.add-attachment-confirm').trigger("click");
 
@@ -693,7 +693,7 @@ function initializeSendEmailListeners(){
 						}
 						else
 						{
-							showModalConfirmation("Send Email", 
+							showModalConfirmation(_agile_get_translated_val('contact-details','send-email'), 
 								"You may not have the permission to send emails to some of the contacts selected. Email will be sent to only contacts with send email permissions.<br/><br/> Do you want to proceed?",
 								function (){
 									emailSend(that,json);
