@@ -21,6 +21,8 @@ import org.apache.commons.lang.exception.ExceptionUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import com.agilecrm.knowledgebase.entity.Article;
 import com.agilecrm.knowledgebase.entity.Categorie;
 import com.agilecrm.knowledgebase.entity.Section;
 import com.agilecrm.knowledgebase.util.CategorieUtil;
@@ -30,6 +32,8 @@ import com.agilecrm.ticket.entitys.Tickets;
 import com.agilecrm.ticket.utils.TicketGroupUtil;
 import com.agilecrm.ticket.utils.TicketsUtil;
 import com.agilecrm.user.util.DomainUserUtil;
+import com.googlecode.objectify.Key;
+import com.googlecode.objectify.Query;
 
 /**
  * 
@@ -49,10 +53,28 @@ public class CategorieAPI
 			return null;
 
 		for (Categorie categorie : categories)
-			categorie.sections = SectionUtil.getSectionByCategorie(categorie.id);
+			categorie.sections = SectionUtil.getSectionByCategorie(categorie.id,false);
 
 		return categories;
 	}
+	
+    
+	@GET
+	@Path("/kb-admin")
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	public List<Categorie> getAdminCategories()
+	{
+		List<Categorie> categories = CategorieUtil.getCategories();
+
+		if (categories == null)
+			return null;
+
+		for (Categorie categorie : categories)
+			categorie.sections = SectionUtil.getSectionByCategorie(categorie.id,true);
+
+		return categories;
+	}
+
 
 	@GET
 	@Path("{id}")
@@ -100,6 +122,16 @@ public class CategorieAPI
 	{
 		try
 		{
+			JSONArray cat_ids = new JSONArray(model_ids);
+			for(int i=0;i<cat_ids.length();i++){
+				
+				Long id = (long)cat_ids.get(i);
+				Key<Categorie> categorie_key = new Key<Categorie>(Categorie.class, id);
+				Query<Section> q = Section.dao.ofy().query(Section.class).filter("categorie_key =", categorie_key);
+				List <Section> sections = Section.dao.fetchAll(q);
+				Section.dao.deleteAll(sections);
+			}
+			
 			Categorie.dao.deleteBulkByIds(new JSONArray(model_ids));
 		}
 		catch (Exception e)

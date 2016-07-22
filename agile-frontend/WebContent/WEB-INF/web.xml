@@ -394,6 +394,16 @@
 		<servlet-name>AgileDbUpdateServlet</servlet-name>
 		<url-pattern>/backend/agiledbupdate</url-pattern>
 	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>IpFiltersDataTransferServlet</servlet-name>
+		<servlet-class>com.agilecrm.subscription.limits.cron.IpFiltersDataTransferServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>IpFiltersDataTransferServlet</servlet-name>
+		<url-pattern>/backend/ipfilterstranfser</url-pattern>
+	</servlet-mapping>
 
 	<servlet>
 		<servlet-name>Stripe Webhook</servlet-name>
@@ -1382,5 +1392,13 @@
 	<servlet-mapping>
 		<servlet-name>SingleSignOn</servlet-name>
 		<url-pattern>/access/sso</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>ContactsDeleteServlet</servlet-name>
+		<servlet-class>com.agilecrm.DeleteContactsFromTextSearchServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ContactsDeleteServlet</servlet-name>
+		<url-pattern>/backend/cron/deleteContactsFromTextSearch</url-pattern>
 	</servlet-mapping>
 </web-app>

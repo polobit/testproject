@@ -34,9 +34,6 @@ cat ../WebContent/jscore/min/flatfull/social-suite-all-min.js >> ../WebContent/t
 cat ../WebContent/flatfull/jscore/tickets/base-model/*.js ../WebContent/flatfull/jscore/tickets/*.js > ../WebContent/jscore/min/flatfull/tickets-min.js
 java -jar yuicompressor-2.4.7.jar ../WebContent/jscore/min/flatfull/tickets-min.js --line-break 10000 --type js -o  ../WebContent/jscore/min/flatfull/tickets-min.js
 
-cat ../WebContent/flatfull/jscore/backbone/*.js ../WebContent/helpcenter/controllers/app.js ../WebContent/flatfull/jscore/helpcenter/base-model/*.js ../WebContent/flatfull/jscore/helpcenter/*.js  ../WebContent/flatfull/jscore/form/*.js ../WebContent/flatfull/jscore/handlebars/*.js > ../WebContent/jscore/min/flatfull/helpcenter-min.js
-cat $(find ../WebContent/helpcenter/controllers ! -path ../WebContent/helpcenter/controllers/app.js -name "helpcenter-router.js") >> ../WebContent/jscore/min/flatfull/helpcenter-min.js
-java -jar yuicompressor-2.4.7.jar ../WebContent/jscore/min/flatfull/helpcenter-min.js --line-break 10000 --type js -o  ../WebContent/jscore/min/flatfull/helpcenter-min.js
 
 ## Webrules into templates
 #cat ../WebContent/flatfull/jscore/web-rules/*.js > ../WebContent/jscore/min/flatfull/web-rules-min.js

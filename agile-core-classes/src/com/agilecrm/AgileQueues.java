@@ -89,4 +89,6 @@ public class AgileQueues
 		
 	//Email attachemnt queue for send an attachment
 	public static final String EMAIL_ATTACHEMNT_QUEUE = "email-attachment-queue";
+	
+	public static final String IP_FILTERS_TRANSFER_QUEUE = "ip-filters-transfer-queue";
 }

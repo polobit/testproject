@@ -187,6 +187,14 @@ public class UpdateContactsOfDomainDeferredTask implements DeferredTask
 		NamespaceManager.set("");
 		try {
 			ContactSchemaUpdateStats contactSchemaUpdateStats = ContactSchemaUpdateStats.get(domain);
+			if( contactSchemaUpdateStats==null || contactSchemaUpdateStats.equals(null) )
+			{
+				contactSchemaUpdateStats = new ContactSchemaUpdateStats();
+				
+				contactSchemaUpdateStats.updated_time = System.currentTimeMillis() / 1000 ;
+				contactSchemaUpdateStats.domain = domain;
+			}
+			System.out.println("count:" + count + ":schema:" +  contactSchemaUpdateStats);
 			contactSchemaUpdateStats.count = count;
 			contactSchemaUpdateStats.cursor = previousCursor;
 			contactSchemaUpdateStats.status = status;
@@ -194,7 +202,7 @@ public class UpdateContactsOfDomainDeferredTask implements DeferredTask
 			contactSchemaUpdateStats.save();
 		} catch(Exception e) {
 			System.err.println("Exception while updating stats for domain: "+ domain);
-			e.printStackTrace();
+			System.out.println(e.getMessage());
 		} finally {
 			NamespaceManager.set(domain);
 		}

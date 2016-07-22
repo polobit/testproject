@@ -213,6 +213,17 @@ content="<%=domainUser.getInfo(DomainUser.LAST_LOGGED_IN_TIME)%>" />
     outline:none;
     cursor:text;
 }
+.free_plan_alert{
+  padding-top: 5px;
+  padding-bottom: 7px;
+  z-index: 1;top: 65px;
+  position: absolute;
+  text-align: center;
+  left: 0;
+  right: 0;
+  margin: 0px auto;
+  width: 280px;
+}
 
 </style>
 <!--  responsive table js -->
@@ -241,6 +252,14 @@ function isIE() {
 
 </script>
 <div id="alert-message" style="display:none;"></div>
+
+<div id="free_plan_alert_info" class="free_plan_alert alert alert-info" role="alert" style="display:none;"> 
+  <span class="free_plan_message">
+   You are currently on FREE Plan.
+  </span>
+  <a href="#subscribe" class="text-info font-bold" onclick="Agile_GA_Event_Tracker.track_event('Upgrade from Nav Bar Message')">Upgrade</a>
+  <span class="free_plan_strip_close p-l-sm c-p">&times</span>
+</div>
 
 <div rel="popover" data-custom-popover-class='grid_custom_popover' data-trigger="click"  data-original-title="" title="" data-placement="bottom" class="need_help grid_icon_center hidden-xs <%
           switch (Integer.parseInt(currentUserPrefs.theme)) {
@@ -503,18 +522,6 @@ if(currentUserPrefs.menuPosition.equals("top")){
         }
     %>
     <%
-      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.SOCIAL)){
-   %>
-   <li id="socialsuitemenu">
-    <a  href="#social">
-      <i class="icon-bubbles"></i>
-      <span>Social</span>
-    </a>
-  </li>
-    <%
-          }
-    %>
-    <%
       if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.WEBRULE)){
     %>
    <li id="web-rules-menu">
@@ -557,6 +564,19 @@ if(currentUserPrefs.menuPosition.equals("top")){
     </a>
   </li>
 
+  <%
+      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.SOCIAL)){
+   %>
+   <li id="socialsuitemenu">
+    <a  href="#social">
+      <i class="icon-bubbles"></i>
+      <span>Social</span>
+    </a>
+  </li>
+    <%
+          }
+    %>
+    
     <%
       if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.ACTIVITY)){
     %>
@@ -961,8 +981,8 @@ if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Produ
 
 %>
 
-    <%@ include file="tpl/min/precompiled/flatfull/tpl.html"%>  
- 
+ <%@ include file="tpl/min/precompiled/flatfull/tpl.html"%>
+
   <!-- Include bootstrap modal divs-->
  <%@ include file="flatfull/modals.html"%>
 

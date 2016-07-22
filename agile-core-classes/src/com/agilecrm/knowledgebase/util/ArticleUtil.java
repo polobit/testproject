@@ -9,7 +9,7 @@ import com.agilecrm.knowledgebase.entity.Article;
 import com.agilecrm.knowledgebase.entity.Categorie;
 import com.agilecrm.knowledgebase.entity.Section;
 import com.agilecrm.search.document.HelpcenterArticleDocument;
-import com.agilecrm.search.document.TicketsDocument;
+import org.json.JSONArray;
 import com.googlecode.objectify.Key;
 
 /**
@@ -33,9 +33,30 @@ public class ArticleUtil
 			Long sectionID = Section.dao.getByProperty("name",sectionName).id;
 			
 			map.put("section_key", new Key<>(Section.class, sectionID));
+			map.put("is_article_published",Boolean.FALSE);
 		}		
 		return Article.dao.listByProperty(map);
 	}
+	
+	/**
+	 * 
+	 * @param sectionname
+	 * @return
+	 */
+	public static List<Article> getAdminArticles( String sectionName){
+	
+		Map<String, Object> map = new HashMap<String, Object>();
+
+		if (sectionName != null){
+			
+			Long sectionID = Section.dao.getByProperty("name",sectionName).id;
+			
+			map.put("section_key", new Key<>(Section.class, sectionID));
+		}		
+		return Article.dao.listByProperty(map);
+	}
+
+	
 	
 	/**
 	 * Returns list of tickets to given list of ids
@@ -98,7 +119,15 @@ public class ArticleUtil
 		// Deleting document from text search
 				new HelpcenterArticleDocument().delete(id + "");
 	}
-	
+	public static void deletefromdocumentsearch(JSONArray ids)throws Exception
+	{
+		for(int i=0;i<ids.length();i++){
+			
+			Long id = (long) ids.get(i); 
+			// Deleting document from text search
+			new HelpcenterArticleDocument().delete(id + "");
+		}	
+	}
 	public static Article getArticle(Long id)
     {
 	try

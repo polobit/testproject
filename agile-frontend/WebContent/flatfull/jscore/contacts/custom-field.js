@@ -192,7 +192,7 @@ function bindCustomFiledChangeEvent(el){
 			$("#custom-field-formula-data").hide();
 			$("textarea",  $("#custom-field-formula-data")).removeAttr("name");
 			$('.required-and-searchable').show();
-			$("#searchable").prop('checked', false);
+			//$("#searchable").prop('checked', true);
 			$("#searchable").prop('disabled', false);
 		}
 		else if(value == "TEXTAREA")
@@ -204,7 +204,7 @@ function bindCustomFiledChangeEvent(el){
 			$("#custom-field-formula-data").hide();
 			$("textarea",  $("#custom-field-formula-data")).removeAttr("name");
 			$('.required-and-searchable').show();
-			$("#searchable").prop('checked', false);
+			//$("#searchable").prop('checked', true);
 			$("#searchable").prop('disabled', false);
 		}
 		else if(value == "FORMULA")
@@ -216,8 +216,8 @@ function bindCustomFiledChangeEvent(el){
 			$("#custom-field-formula-data").show();
 			$("textarea",  $("#custom-field-formula-data")).attr("name", "field_data");
 			$('.required-and-searchable').hide();
-			$("#searchable").prop('checked', false);
-			$("#searchable").prop('disabled', false);
+			//$("#searchable").prop('checked', true);
+			//$("#searchable").prop('disabled', false);
 		}
 		else if(value == "CONTACT" || value == "COMPANY")
 		{ 	
@@ -225,13 +225,14 @@ function bindCustomFiledChangeEvent(el){
 			$("#searchable").prop('disabled', true);
 
 		}
+		
 		else
 		{
 			$("#custom-field-data").hide();
 			$("#custom-field-list-values").hide();
 			$("#custom-field-formula-data").hide();
 			$('.required-and-searchable').show();
-			$("#searchable").prop('checked', false);
+			//$("#searchable").prop('checked', true);
 			$("#searchable").prop('disabled', false);
 		}
 		

@@ -121,15 +121,6 @@
     </li>
    {{/isRestrictedMenuScope}}
 
-   {{#isRestrictedMenuScope "SOCIAL"}} {{else}}
-    <li id="socialsuitemenu">
-      <a  href="#social">
-        <i class="icon-bubbles"></i>
-        <span>Social</span>
-      </a>
-    </li>
-   {{/isRestrictedMenuScope}}
-
    {{#isRestrictedMenuScope "WEBRULE"}} {{else}}
     <li id="web-rules-menu">
       <a  href="#web-rules">
@@ -167,6 +158,15 @@
       <span>Email Templates</span>
     </a>
   </li>
+  
+  {{#isRestrictedMenuScope "SOCIAL"}} {{else}}
+    <li id="socialsuitemenu">
+      <a  href="#social">
+        <i class="icon-bubbles"></i>
+        <span>Social</span>
+      </a>
+    </li>
+   {{/isRestrictedMenuScope}}
 
   {{#isRestrictedMenuScope "ACTIVITY"}} {{else}}
     <li id="activitiesmenu">
