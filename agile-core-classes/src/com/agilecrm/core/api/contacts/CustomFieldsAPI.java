@@ -471,7 +471,6 @@ public class CustomFieldsAPI
 					update_date = new Date(updated_time);
 				}
 				Date current_date = new Date(); 
-				if(schema == null || (update_date.getSeconds() < current_date.getSeconds())){
 				
 				if(schema == null){
 						String oldNamespace = NamespaceManager.get();
@@ -488,8 +487,7 @@ public class CustomFieldsAPI
 					Queue queue = QueueFactory.getQueue(AgileQueues.CONTACTS_SCHEMA_CHANGE_QUEUE);
 					queue.add(TaskOptions.Builder.withPayload(updateContactDeferredTask));
 					return "success";
-				}
-				return "limitReached" ;
+				
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
