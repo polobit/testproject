@@ -971,11 +971,15 @@ public class DealsAPI
 		JSONArray idsArray = new JSONArray(ids);
 		System.out.println("------------" + idsArray.length());
 	    }
-        /*if(StringUtils.isNotEmpty(filters)){
+      try{
 	    org.json.JSONObject filterJSON = new org.json.JSONObject(filters);
 	    System.out.println("------------" + filterJSON.toString());
-        }
-*/
+      }
+      catch(Exception e){
+    	  e.printStackTrace();
+      }
+       
+
 	    String uri = "/core/api/opportunity/backend/archive/" + SessionManager.get().getDomainId();
 
 	    OpportunityUtil.postDataToDealBackend(uri, filters, ids);
@@ -1001,11 +1005,14 @@ public class DealsAPI
 		JSONArray idsArray = new JSONArray(ids);
 		System.out.println("------------" + idsArray.length());
 	    }
-      /* if(StringUtils.isNotEmpty(filters)){
+	   
+    try{
 	    org.json.JSONObject filterJSON = new org.json.JSONObject(filters);
 	    System.out.println("------------" + filterJSON.toString());
-       }*/
-
+    }
+    catch(Exception e){
+  	  e.printStackTrace();
+    }
 	    String uri = "/core/api/opportunity/backend/restore/" + SessionManager.get().getDomainId();
 
 	    OpportunityUtil.postDataToDealBackend(uri, filters, ids);
@@ -1032,12 +1039,14 @@ public class DealsAPI
 		JSONArray idsArray = new JSONArray(ids);
 		System.out.println("------------" + idsArray.length());
 	    }
-        /*if(StringUtils.isNotEmpty(filters)){
+	   
+    try{
 	    org.json.JSONObject filterJSON = new org.json.JSONObject(filters);
 	    System.out.println("------------" + filterJSON.toString());
-	    System.out.println("Owner_id" + ownerId);
-        }*/
-
+    }
+    catch(Exception e){
+  	  e.printStackTrace();
+    }
 	    String uri = "/core/api/opportunity/backend/change-owner/" + ownerId + "/"
 		    + SessionManager.get().getDomainId();
 
@@ -1065,10 +1074,13 @@ public class DealsAPI
 		JSONArray idsArray = new JSONArray(ids);
 		System.out.println("------------" + idsArray.length());
 	    }
-        /*if(StringUtils.isNotEmpty(filters)){
-	    org.json.JSONObject filterJSON = new org.json.JSONObject(filters);
-	    System.out.println("------------" + filterJSON.toString());
-        }*/
+	      try{
+		    org.json.JSONObject filterJSON = new org.json.JSONObject(filters);
+		    System.out.println("------------" + filterJSON.toString());
+	      }
+	      catch(Exception e){
+	    	  e.printStackTrace();
+	      }
 
 	    String uri = "/core/api/opportunity/backend/change-milestone/" + SessionManager.get().getDomainId();
 
@@ -1096,10 +1108,13 @@ public class DealsAPI
 		JSONArray idsArray = new JSONArray(ids);
 		System.out.println("------------" + idsArray.length());
 	    }
-       /* if(StringUtils.isNotEmpty(filters)){
-	    org.json.JSONObject filterJSON = new org.json.JSONObject(filters);
-	    System.out.println("------------" + filterJSON.toString());
-        }*/
+	      try{
+		    org.json.JSONObject filterJSON = new org.json.JSONObject(filters);
+		    System.out.println("------------" + filterJSON.toString());
+	      }
+	      catch(Exception e){
+	    	  e.printStackTrace();
+	      }
 
 	    String uri = "/core/api/opportunity/backend/contacts/add-tag/" + SessionManager.get().getDomainId();
 
@@ -1127,11 +1142,13 @@ public class DealsAPI
 		JSONArray idsArray = new JSONArray(ids);
 		System.out.println("------------" + idsArray.length());
 	    }
-        /*if(StringUtils.isNotEmpty(filters)){
-	    org.json.JSONObject filterJSON = new org.json.JSONObject(filters);
-	    System.out.println("------------" + filterJSON.toString());
-	    System.out.println("Workflow_id" + workflowId);
-        }*/
+	      try{
+		    org.json.JSONObject filterJSON = new org.json.JSONObject(filters);
+		    System.out.println("------------" + filterJSON.toString());
+	      }
+	      catch(Exception e){
+	    	  e.printStackTrace();
+	      }
 	    String uri = "/core/api/opportunity/backend/contacts/add-campaign/" + workflowId + "/"
 		    + SessionManager.get().getDomainId();
 
