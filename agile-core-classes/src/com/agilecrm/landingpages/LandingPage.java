@@ -24,6 +24,7 @@ public class LandingPage
     @NotSaved(IfDefault.class)
     public String html = null;
     
+//    For site builder (v2.x) page_css data will be stored here
     @NotSaved(IfDefault.class)
     public String css = null;
     
@@ -45,6 +46,17 @@ public class LandingPage
     public Long created_time = 0L;
     
     public Long updated_time = 0L;
+
+    @NotSaved(IfDefault.class)
+    public float version = 0.2f;
+    
+//    For site builder (v2.x)
+    @NotSaved(IfDefault.class)
+    public String header_includes = null;
+
+//    For site builder (v2.x) blocks data will be stored here
+    @NotSaved(IfDefault.class)
+    public String blocks = null;
 
     public static ObjectifyGenericDao<LandingPage> dao = new ObjectifyGenericDao<LandingPage>(LandingPage.class);
 

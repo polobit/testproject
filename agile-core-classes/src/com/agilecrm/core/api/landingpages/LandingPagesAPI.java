@@ -31,6 +31,32 @@ import com.google.appengine.api.utils.SystemProperty;
 public class LandingPagesAPI
 {
 	
+	@Path("/getframe/{landingPageId}/{frameId}")
+	@GET
+	@Produces({ MediaType.TEXT_HTML })
+	public String getLandingPageFrame(@PathParam("landingPageId") Long id,@PathParam("frameId") int requestedFrameId)
+	{
+		LandingPage landingPage = LandingPageUtil.getLandingPage(id);
+		if(!landingPage.blocks.isEmpty()) {
+			try {
+				JSONArray frames = new JSONArray(landingPage.blocks);
+				int noOfFrames = frames.length();
+				for (int i = 0; i < noOfFrames; ++i) {
+				    JSONObject frame = frames.getJSONObject(i);
+				    int frameId = frame.getInt("frames_id");
+				    if(frameId == requestedFrameId) {
+				    	return frame.getString("frameContent");
+				    }
+				}
+			} catch (JSONException e) {
+				e.printStackTrace();
+				return "";
+			}
+		}
+		
+		return "";
+	}
+	
 	@Path("/verifycname")
 	@GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -179,6 +205,9 @@ public class LandingPagesAPI
 	public LandingPage createLandingPage(LandingPage landingPage)
 	{
 		System.out.println(landingPage);
+		if(landingPage.version >= 2.0) {	    
+        	landingPage.html = LandingPageUtil.getFullHtmlCode(landingPage.blocks);
+        }
 		landingPage.save();
 		
 		//Increase count of Campaign for AllDomainstats report in database
@@ -194,6 +223,9 @@ public class LandingPagesAPI
     @Produces(MediaType.APPLICATION_JSON)
 	public LandingPage updateLandingPage(LandingPage landingPage)
 	{
+		if(landingPage.version >= 2.0) {	    
+        	landingPage.html = LandingPageUtil.getFullHtmlCode(landingPage.blocks);
+        }
 		landingPage.updated_time = System.currentTimeMillis() / 1000;
 		landingPage.save();
 		return landingPage;
