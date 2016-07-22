@@ -254,6 +254,7 @@
 			if( $(this.activeElement.element).attr('data-type') === 'video' ) {
 
                 this.editVideo(this.activeElement.element);
+                this.editImage(this.activeElement.element);
 
             }
 
@@ -509,11 +510,11 @@
 
                 if( $('input#youtubeID').val() !== '' ) {
 
-                    $(styleeditor.activeElement.element).prev().attr('src', "//www.youtube.com/embed/"+$('#video_Tab input#youtubeID').val());
+                    $(styleeditor.activeElement.element).prev().attr('data-video', "//www.youtube.com/embed/"+$('#video_Tab input#youtubeID').val());
 
                 } else if( $('input#vimeoID').val() !== '' ) {
 
-                    $(styleeditor.activeElement.element).prev().attr('src', "//player.vimeo.com/video/"+$('#video_Tab input#vimeoID').val()+"?title=0&amp;byline=0&amp;portrait=0");
+                    $(styleeditor.activeElement.element).prev().attr('data-video', "//player.vimeo.com/video/"+$('#video_Tab input#vimeoID').val()+"?title=0&amp;byline=0&amp;portrait=0");
 
                 }
 
@@ -817,9 +818,9 @@
 
             //inject current video ID,check if we're dealing with Youtube or Vimeo
 
-            if( $(el).prev().attr('src').indexOf("vimeo.com") > -1 ) {//vimeo
+            if( $(el).prev().attr('data-video').indexOf("vimeo.com") > -1 ) {//vimeo
 
-                matchResults = $(el).prev().attr('src').match(/player\.vimeo\.com\/video\/([0-9]*)/);
+                matchResults = $(el).prev().attr('data-video').match(/player\.vimeo\.com\/video\/([0-9]*)/);
 
                 $('#video_Tab input#vimeoID').val( matchResults[matchResults.length-1] );
                 $('#video_Tab input#youtubeID').val('');
@@ -828,7 +829,7 @@
 
                 //temp = $(el).prev().attr('src').split('/');
                 var regExp = /.*(?:youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=)([^#\&\?]*).*/;
-                matchResults = $(el).prev().attr('src').match(regExp);
+                matchResults = $(el).prev().attr('data-video').match(regExp);
 
                 $('#video_Tab input#youtubeID').val( matchResults[1] );
                 $('#video_Tab input#vimeoID').val('');

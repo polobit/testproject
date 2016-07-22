@@ -15,6 +15,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.util.FileStreamUtil;
@@ -372,25 +373,26 @@ public class LandingPageUtil
 		
 	}
 	
-	public static String  getFullHtmlCode(String fullXHtml) {
+	public static String  getFullHtmlCode(String fullXHtmlJson) {
 		
-	    String fullheadHtml="";
-	    String fullbodyHtml="<body> <div id='page' class='page'> ";
-	    String totalHtml="<!DOCTYPE html><html lang='en'>";
+	    String fullbodyHtml="";
 	   
 		try
 		{
-		    //String fileContent=FileStreamUtil.readResource("/home/agile21/eclipsestore/workplace(luna)/.metadata/.plugins/org.eclipse.wst.server.core/tmp0/agile-java-server/agile-frontend.war/misc/pagebuilder/elements/skeleton.html");
+//		    String fileContent=FileStreamUtil.readResource("D:/jpreddy/EclipseWorkSpace/final/.metadata/.plugins/org.eclipse.wst.server.core/tmp0/agile-java-server/agile-frontend.war/misc/pagebuilder/elements/skeleton.html");
 		    String fileContent=FileStreamUtil.readResource("misc/pagebuilder/elements/skeleton.html");
-		    fullheadHtml=Jsoup.parse(fileContent).getElementsByTag("head").toString();		    
-		    JSONArray jsonArray = new JSONArray(fullXHtml); 
+		    Document skeletonDoc = Jsoup.parse(fileContent);
+		    Element mainPageElement = skeletonDoc.getElementById("page");
+		    
+		    JSONArray jsonArray = new JSONArray(fullXHtmlJson); 
 		    for (int i = 0; i < jsonArray.length(); i++) {					
 		        JSONObject lpElements = jsonArray.getJSONObject(i);				        
 		        Document doc = Jsoup.parse(lpElements.getString("frameContent"));
 		        fullbodyHtml=fullbodyHtml+doc.body().getElementById("page").children();				        
 		    }
-		    totalHtml=totalHtml+fullheadHtml+fullbodyHtml+"</body></html>";
-		    return totalHtml;
+		    
+		    mainPageElement.html(fullbodyHtml);
+		    return skeletonDoc.toString();
 		}
 		catch (Exception e) {
 	    	    System.out.println(ExceptionUtils.getFullStackTrace(e));

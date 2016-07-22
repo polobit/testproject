@@ -39,7 +39,7 @@ if(idPath != null && !StringUtils.isEmpty(idPath) && !idPath.equals("/")) {
   <meta name="viewport" content="width=device-width, initial-scale=1.0">  
   <link href="<%=BUILD_PATH%>css/main.min.css" rel="stylesheet">    
   <link href="<%=BUILD_PATH%>css/builder.min.css" rel="stylesheet">      
-  <link rel="shortcut icon" href="<%=S3_STATIC_FILES_URL%>images/favicon.png">
+  <!-- <link rel="shortcut icon" href="<%=S3_STATIC_FILES_URL%>images/favicon.png"> -->
   
   <!-- HTML5 shim, for IE6-8 support of HTML5 elements. All other JS at the end of file. -->
   <!--[if lt IE 9]>
@@ -109,7 +109,7 @@ if(idPath != null && !StringUtils.isEmpty(idPath) && !idPath.equals("/")) {
                 
                 <div class="btn-group" style="float: right;">           
                     <button class="btn btn-inverse dropdown-toggle" data-toggle="dropdown">
-                        <i class="caret"></i>
+                        <i class="fui-gear"></i>
                     </button>
                     <button class="btn btn-inverse">
                         <a href="<%=MAIN_URL%>#landing-pages" id="backButton" style="color: #fff"><i class="fui-arrow-left"></i> Back</a>
@@ -191,7 +191,7 @@ if(idPath != null && !StringUtils.isEmpty(idPath) && !idPath.equals("/")) {
                     </div>
                     
                     <div class="title">
-                        <span id="pageTitle">index</span>
+                        <span id="pageTitle" class="hidden">index</span>
                     </div>
                     
                 </div>

@@ -72,6 +72,10 @@
         },
 
         uploadImageToS3: function() {
+
+            var $uploadImageButton = $('button#uploadImageButton');
+            var uploadImageButtonHtml = $uploadImageButton.html();
+            $uploadImageButton.html(uploadImageButtonHtml + " ...");
             
             var fileInput = document.getElementById('imageFile');
             var file = fileInput.files[0];
@@ -108,10 +112,17 @@
                 $(editor.activeElement.element).attr('src', data2);
                 //update image URL field
                 $('input#imageURL').val(data2);
+              } else if(editor.activeElement.element.getAttribute("data-type") === 'video') {
+                 //update live image
+                $(editor.activeElement.element).prev().attr('src', data2);
+                //update image URL field
+                $('input#imageURL').val(data2);
               } else {
                 $(editor.activeElement.element).css('background-image',  'url("'+data2+'")');
                 $("#stylingForm").find("input[name='background-image']").val( 'url("'+data2+'")' );
               }
+
+                $uploadImageButton.html(uploadImageButtonHtml);
 
                 //hide modal
                 $('#imageModal').modal('hide');
@@ -125,6 +136,7 @@
             },
             error: function (xhr, ajaxOptions, thrownError) {
               // alert("Error ! Try again.");
+              $uploadImageButton.html(uploadImageButtonHtml);
             }
             });
         },

@@ -1827,19 +1827,21 @@
             }
 
             if(!serverData.pages["index"]["pageSettings"]["title"]) {
-                $("#lpPageNameForm").on('submit', function(formEL){
-                    formEL.preventDefault();
-                    var lpName = $("#lppagename").val();
-                    if(lpName) {
-                        site.inputPageSettingsTitle.value = lpName;
-                        site.updatePageSettings();
-                        $("#landingPageNameModal").modal('hide');
-                        site.save(true);
-                    } else {
-                        alert("Please provide a name for landing page.");
-                    }
-                });
-                $("#landingPageNameModal").modal('show');
+                if(showConfirmModal) {
+                    $("#lpPageNameForm").on('submit', function(formEL){
+                        formEL.preventDefault();
+                        var lpName = $("#lppagename").val();
+                        if(lpName) {
+                            site.inputPageSettingsTitle.value = lpName;
+                            site.updatePageSettings();
+                            $("#landingPageNameModal").modal('hide');
+                            site.save(true);
+                        } else {
+                            alert("Please provide a name for landing page.");
+                        }
+                    });
+                    $("#landingPageNameModal").modal('show');
+                }
                 return;
             }
 
