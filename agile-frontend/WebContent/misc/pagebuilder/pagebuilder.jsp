@@ -2357,7 +2357,7 @@ if(idPath != null && !StringUtils.isEmpty(idPath) && !idPath.equals("/")) {
     <!-- preview popup -->
     <div class="modal fade" id="previewModal" tabindex="-1" role="dialog" aria-hidden="true">
         
-        <form action="<%=MAIN_URL%>landing/<%=pageId%>" target="_blank" id="markupPreviewForm" method="post" class="form-horizontal">
+        <form action="<%=MAIN_URL%>landing/<%=pageId%>" target="_blank" id="markupPreviewForm" method="get" class="form-horizontal">
         
         <input type="hidden" name="markup" value="" id="markupField">
         
