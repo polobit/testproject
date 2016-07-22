@@ -153,10 +153,9 @@ public class DealFilterUtil {
 				String milestoneName = rhsVal.substring(rhsVal.indexOf('_') + 1, rhsVal.length());
 				SearchRule newRule = new SearchRule();
 				newRule.LHS = "pipeline";
+				newRule.CONDITION = rule.CONDITION;
 				if(rule.CONDITION.equals(RuleCondition.NOTEQUALS) && milestoneName != null && !milestoneName.equalsIgnoreCase("ALL@MILESTONES"))
 					newRule.CONDITION =RuleCondition.EQUALS;
-				else
-				newRule.CONDITION = rule.CONDITION;
 				newRule.RHS = pipeline_id;
 				modifiedRules.add(newRule);
 				if(milestoneName != null && !milestoneName.equalsIgnoreCase("ALL@MILESTONES"))
