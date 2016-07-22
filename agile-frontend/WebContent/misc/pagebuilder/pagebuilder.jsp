@@ -2359,7 +2359,7 @@ if(idPath != null && !StringUtils.isEmpty(idPath) && !idPath.equals("/")) {
         
         <form action="<%=MAIN_URL%>landing/<%=pageId%>" target="_blank" id="markupPreviewForm" method="get" class="form-horizontal">
         
-        <input type="hidden" name="markup" value="" id="markupField">
+        <!-- <input type="hidden" name="markup" value="" id="markupField"> -->
         
         <div class="modal-dialog">
             

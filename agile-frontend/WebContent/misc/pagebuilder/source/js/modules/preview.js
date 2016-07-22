@@ -13,8 +13,8 @@
         init: function() {
 
             //events
-            $(this.modalPreview).on('shown.bs.modal', this.prepPreview);
-            $(this.modalPreview).on('show.bs.modal', this.prepPreviewLink);
+            /*$(this.modalPreview).on('shown.bs.modal', this.prepPreview);
+            $(this.modalPreview).on('show.bs.modal', this.prepPreviewLink);*/
 
             //reveal preview button
             $(this.buttonPreview).show();
