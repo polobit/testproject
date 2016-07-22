@@ -443,7 +443,8 @@ function makeCampaignCall()
 			// click variable in disconnect
 			// call
 			CALL_CAMPAIGN.state = "START";
-			twiliocall(CALL_CAMPAIGN.selected_number, getContactName(CALL_CAMPAIGN.current_contact));
+			//twiliocall(CALL_CAMPAIGN.selected_number, getContactName(CALL_CAMPAIGN.current_contact));
+			twiliocall(CALL_CAMPAIGN.selected_number, getContactName(CALL_CAMPAIGN.current_contact),null,CALL_CAMPAIGN.current_contact);
 			CALL_CAMPAIGN.callObject = null;
 		}, rampUP_Time);
 
