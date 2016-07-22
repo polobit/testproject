@@ -213,7 +213,8 @@ public class ContactDocument extends com.agilecrm.search.document.Document imple
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			System.out.println("error in contact doc"+e.getMessage());
+			System.out.println("error in contact doc:"+ e.getStackTrace());
+			
 			ExceptionUtil.catchException(e);
 		}
 		return doc;
