@@ -2567,7 +2567,7 @@ if(idPath != null && !StringUtils.isEmpty(idPath) && !idPath.equals("/")) {
     var iframe="";
     $("iframe").each(function(i) { 
       if($("iframe")[i].hasAttribute('data-originalurl') && 
-        $("iframe")[i].getAttribute('data-originalurl').includes("agileform")){
+        ($("iframe")[i].getAttribute('data-originalurl').includes("agileform") || $("iframe")[i].getAttribute('data-originalurl').includes("header10"))){
         var iframe=$("iframe")[i]; 
         var iframe_id=iframe.getAttribute("id");
         if($('#'+iframe_id).contents().find('#agileform').css("cursor")==="pointer"){
