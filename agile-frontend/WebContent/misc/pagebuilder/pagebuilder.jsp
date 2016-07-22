@@ -2415,6 +2415,6 @@ if(idPath != null && !StringUtils.isEmpty(idPath) && !idPath.equals("/")) {
   }
 
 </script>
-    <script src="<%=BUILD_PATH%>js/builder.min.js"></script>
+    <script src="<%=BUILD_PATH%>js/builder.min.js" charset="utf-8"></script>
   </body>
 </html>
