@@ -5,11 +5,12 @@
 String AGILE_VERSION = SystemProperty.applicationVersion.get();
 
 //local,beta,live
-String ENVIRONMENT = "local";
+String ENVIRONMENT = "live";
 String MAIN_URL = "http://localhost:8888/";
 
 if(ENVIRONMENT == "live")
-  MAIN_URL = "https://"+NamespaceManager.get()+".agilecrm.com/";
+  MAIN_URL = "https://"+NamespaceManager.get()+"-dot-27-7-dot-agile-crm-cloud.appspot.com/";
+  // MAIN_URL = "https://"+NamespaceManager.get()+".agilecrm.com/";
 else if(ENVIRONMENT == "beta")
   MAIN_URL = "https://"+NamespaceManager.get()+"-dot-sandbox-dot-agilecrmbeta.appspot.com/";
 
