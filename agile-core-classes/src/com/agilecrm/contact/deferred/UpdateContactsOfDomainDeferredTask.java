@@ -193,8 +193,9 @@ public class UpdateContactsOfDomainDeferredTask implements DeferredTask
 	private void updateStats(String previousCursor,String failedIds, String status) {
 		NamespaceManager.set("");
 			
-		/*if(status.equalsIgnoreCase("COMPLETED"))
-		{							
+		if(status.equalsIgnoreCase("COMPLETED"))
+		{		
+			
 			System.out.println("Namespace"+NamespaceManager.get());
 			System.out.println("Session ="+ SessionManager.get());
 			
@@ -202,12 +203,12 @@ public class UpdateContactsOfDomainDeferredTask implements DeferredTask
 		
 		System.out.println("Domain user "+domainUser);
 		
-		}*/
+		}
 		
 		try {
 			
 			ContactSchemaUpdateStats contactSchemaUpdateStats = ContactSchemaUpdateStats.get(domain);
-			//System.out.println("Domain user email "+ contactSchemaUpdateStats.domainusermail);
+			System.out.println("Domain user email "+ contactSchemaUpdateStats.domainusermail);
 			
 			contactSchemaUpdateStats.count = count;
 			contactSchemaUpdateStats.cursor = previousCursor;
