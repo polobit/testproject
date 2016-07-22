@@ -14,12 +14,15 @@ String template = request.getParameter("template");
    <head>
       <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
       <title>Form Builder</title>
-      <link href="misc/formbuilder/bootstrap.min.css" rel="stylesheet">
+      <!-- <link href="misc/formbuilder/bootstrap.min.css" rel="stylesheet"> -->
+      <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
       <link href="misc/formbuilder/custom.css?v=2" rel="stylesheet">
       <link href="misc/formbuilder/formthemes.css" rel="stylesheet">
       <script src="misc/formbuilder/formthemes/jscolor.js"></script>
       <script src="misc/formbuilder/formthemes/jquery-min.js"></script>
       <script src="misc/formbuilder/formthemes/dropDownNewSampleThemeJS.js"></script>
+      
+      <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script> -->
       <!--[if lt IE 9]>
       <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
       <![endif]-->
@@ -43,17 +46,34 @@ String template = request.getParameter("template");
             <div class="col-md-6">
                <div class="clearfix">
                   <h2 id="form-label">Your Form</h2>
-                  
-                     <input id="choose-Theme" type="button" class="btn btn-info" onclick="chooseThemeFunc()" style="margin-top: -40px;margin-left: 210px;padding-right: 10px;" value="Choose Theme">
-           <div class="dropdown-content" style="display:none;padding-left: 10px;margin-left: 205px;position: absolute;background-color: #f9f9f9;min-width: 160px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);">
-                              <div><input type="radio" id="createCustThemeRadio" name="theme" value="createCustThemeRadio" data-toggle="modal" data-target="#customThemeModal" onclick="selectedThemeFunc()">Create Custom Theme</div>
-                              <div><input type="radio" name="theme" id="default" value="default" onclick="selectedThemeFunc()" checked><label for="default">default</label></div>
-                              <div><input type="radio" name="theme" id= "theme1" value="theme1" onclick="selectedThemeFunc()"><label for="default">theme1</label></div>
-                              <div><input type="radio" name="theme" id= "theme2" value="theme2" onclick="selectedThemeFunc()"><label for="default">theme2</label></div>
-                              <div><input type="radio" name="theme" id= "theme3" value="theme3" onclick="selectedThemeFunc()"><label for="default">theme3</label></div>
-                              <div id="lable4"><input type="radio" name="theme" id= "theme4" value="theme4" onclick="selectedThemeFunc()"><label for="default">theme4</label></div>
-                              
-            </div>
+                  <div class="btn-group open" style="margin-top: -40px;margin-left: 210px;padding-right: 10px;">
+                    <a href="#" onclick="createCustTheme()" class="btn btn-default btn-sm" data-toggle="modal" data-target="#customThemeModal"><i class="glyphicon glyphicon-plus-sign"></i> Add Theme</a>
+                    <button class="btn btn-default btn-sm dropdown-toggle" onclick="chooseThemeFunc()" data-toggle="dropdown" aria-expanded="true" style="padding-bottom: 13px;padding-top: 11px;"><span class="caret"></span>
+                    </button>
+         
+                    <div class="dropdown-content">
+                      <div class="themeDiv">
+                        <i class="glyphicon glyphicon-ok"></i>
+                        <a href="#" class="themeEle" onclick="selectedThemeFunc(this)">default</a>
+                      </div>
+                      <div class="themeDiv">
+                        <i class="ipadding"></i>
+                        <a href="#" class="themeEle" onclick="selectedThemeFunc(this)">theme1</a>
+                      </div>
+                      <div class="themeDiv">
+                        <i class="ipadding"></i>
+                        <a href="#" class="themeEle" onclick="selectedThemeFunc(this)">theme2</a>
+                      </div>
+                      <div class="themeDiv">
+                        <i class="ipadding"></i>
+                        <a href="#" class="themeEle" onclick="selectedThemeFunc(this)">theme3</a>
+                      </div>
+                      <div id="lable4" class="themeDiv">
+                        <i class="ipadding"></i>
+                        <a href="#" class="themeEle" onclick="selectedThemeFunc(this)">theme4</a>
+                      </div>  
+                    </div>
+                  </div>
             <div class="modal fade" id="customThemeModal" role="dialog">
                       <div class="modal-dialog" style="width: 1032px;height: 365px;">
     
@@ -61,18 +81,19 @@ String template = request.getParameter("template");
                         <div class="modal-content">
                         <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <button type="button" class="" data-dismiss="modal" style="border: 1px solid #9E9E9E;;margin-right: 44px;float: right;padding-right: 9px;text-align: center;" onclick="saveCustTheme()">Save</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal" style="color: #fff;
+                        background-color: #7266ba;margin-right: 44px;float: right;text-align: center;" onclick="saveCustTheme()">Save</button>
                         
                         <div class="modal-title">
                         <label>Custom Theme:</label><!-- <input type="text" name="themeName"> -->
                       </div>
                         </div>
                         
-                        <div class="modal-body" style="overflow-y: scroll;">
-                 <div style="display: inline-table;"><label>Provide Theme Name:</label><input type="text" name="themeName" id="themeName" onblur="validThemeNameFunc()" maxlength="10"><span id="errorSpan" style="display: table-cell;color:red;"></span></div>
+                        <div class="modal-body" style="height: 400px;overflow-y: auto;">
+                 <div style="display:-webkit-box;border-bottom: 1px solid #9E9E9E;padding-bottom: 10px;"><label>Theme Name:</label><input type="text" name="themeName" id="themeName" onblur="validThemeNameFunc()" maxlength="15"><span id="errorSpan" style="display: table-cell;color:red;"></span></div>
     
         <!--ThemeBuilder Div-->
-    <div class ="outerSelectTheme" >
+    <div class ="col-sm-6 outerSelectTheme" >
       <!--Select Div Start-->
       <div class="selectDiv">
         <label>Select</label>
@@ -90,7 +111,6 @@ String template = request.getParameter("template");
       
       <!--Alignment Div Start-->
       <div class="outerAlignmentTheme">
-        <div class="arrow">-></div>
         <!--Align Form Elements Start-->
         <div class="innerAlignmentTheme innerAlignmentFormEle">
           <label>Form Elements</label>
@@ -102,10 +122,9 @@ String template = request.getParameter("template");
             </div>
         </div>
         <!--Align Form Elements Start-->
-        <div class="arrow">-></div>
         <!--Align Start-->
         <div class="innerAlignmentTheme innerAlignmentAlignStart">
-          <span>Align</span>
+          <span style="margin-left: 10px;font-weight: bold;">Align</span>
           <div class="">
             <select>
                   <option value="center">Center</option>
@@ -120,7 +139,6 @@ String template = request.getParameter("template");
       <!--Alignment Div End-->
       <!--Border Div Start -->
         <div class="outerBorderTheme">
-          <div class="arrow outerArrow">-></div>
           <!-- Border Form Elements Start-->
           <div class="innerBorderTheme innerBorderThemeFormEle ">
             <label>Form Elements</label>
@@ -131,7 +149,6 @@ String template = request.getParameter("template");
             </div>
           </div>
           <!-- Border Form Elements End-->
-          <div class="arrow">-></div>
           <!-- Border Width Start-->
           <div class="innerBorderTheme innerBorderWidthTheme">
             <label>Width</label>
@@ -145,8 +162,6 @@ String template = request.getParameter("template");
             </div>
           </div>
           <!-- Border Width End-->
-          
-          <div class="arrow outerArrow borderStyleArrow">-></div>
           <!-- Border Style Start-->
           <div class="innerBorderTheme innerBorderStyleTheme">
             <label>Border Style:</label>
@@ -160,11 +175,10 @@ String template = request.getParameter("template");
             </div>
           </div>
           <!-- Border Style End-->
-          <div class= "arrow borderColorArrow">-></div>
           <!-- Border Color Start-->
           <div class="innerBorderTheme colorTheme innerBorderColorTheme">
             <div><label>Choose Color</label></div>
-             <input class="jscolor innerColorTheme" value="281029">
+             <input class="jscolor innerColorTheme" style="color:#000000;" size="11" value="000000">
           </div>
           <!-- Border Color End-->
         </div>
@@ -172,7 +186,6 @@ String template = request.getParameter("template");
 
       <!--Font Div Start-->
       <div class="outerFontTheme">
-      <div class="arrow outerArrow fontThemeArrow">-></div>
          <!--Font Form Elements Start -->
         <div class="innerFontTheme innerFontEleTheme">
           <label>Form Elements</label>
@@ -185,7 +198,6 @@ String template = request.getParameter("template");
             </div>
         </div>
         <!--Font Form Elements End -->
-        <div class="arrow">-></div>
         <!--Font Type Start -->
         <div class="innerFontTheme innerFontFamilyTheme">
           <label>Font</label>
@@ -209,7 +221,6 @@ String template = request.getParameter("template");
             </div>
         </div>
         <!--Font Type End -->
-        <div class="arrow fontThemeArrow">-></div>
         <!--Font Style Start -->
         <div class="innerFontTheme innerFontStyleDiv">
           <label>Font Style</label>
@@ -222,7 +233,6 @@ String template = request.getParameter("template");
 
         </div>
         <!--Font Style End-->
-        <div class="arrow fontThemeArrow">-></div>
         <!--Font Weight Start -->
         <div class="innerFontTheme innerFontWeightDiv">
           <label>Font Weight</label>
@@ -236,7 +246,6 @@ String template = request.getParameter("template");
           </div>
         </div>
         <!--Font Weight End -->
-        <div class="arrow fontThemeArrow">-></div>
         <!--Font Size Start -->
         <div class="innerFontTheme ">
           <label>Font Size</label>
@@ -256,12 +265,11 @@ String template = request.getParameter("template");
           </div>
         </div>
         <!--Font Size End -->
-        <div class="arrow fontThemeArrow">-></div>
         <!--Font Color Start -->
         <div class="innerFontTheme colorTheme">
           <div class="colorTheme">
             <div><label>Choose Color</label></div>
-             <input class="jscolor innerColorTheme" value="281029">
+             <input class="jscolor innerColorTheme" style="color:#000000;" size="11" value="000000">
           </div>
         </div>
         <!--Font Color End -->
@@ -269,7 +277,6 @@ String template = request.getParameter("template");
       <!--Font Div End-->
       <!--Background ThemeComponent Start -->
       <div class="outerBackgroundTheme">
-      <div class="arrow outerArrow">-></div>
         <!--Form Elements for Background Change Start -->
         <div class="innerBackgroundTheme innerBackgroundFormEle">
           <label>Form Elements</label>
@@ -284,48 +291,46 @@ String template = request.getParameter("template");
           </div>
         </div>
         <!--Form Elements for Background Change End-->
-        <div class="arrow">-></div>
         <!--Background Theme Component Start -->
         <div class="innerBackgroundTheme innerBackgroundImageTheme">
           <div class="ulDiv bgImgLit">
             <ul>
               <li class="selected" name="img1">
-                <img src="/misc/formbuilder/formthemes/theme-images/formImg1.jpg" alt="Smiley face" height="42" width="42">
+                <img src="" alt="" height="42" width="42">
               </li>
               <li>
-                <img src="/misc/formbuilder/formthemes/theme-images/formImg2.jpg" alt="Smiley face" height="42" width="42">
+                <img src="/misc/landingpage/public/images/textures/0.png" alt="Smiley face" height="42" width="42">
               </li>
               <li>
-                <img src="/misc/formbuilder/formthemes/theme-images/formImg3.jpg" alt="Smiley face" height="42" width="42">
+                <img src="/misc/landingpage/public/images/textures/1.png" alt="Smiley face" height="42" width="42">
               </li>
               <li>
-                <img src="/misc/formbuilder/formthemes/theme-images/formImg4.jpg" alt="Smiley face" height="42" width="42">
+                <img src="/misc/landingpage/public/images/textures/4.png" alt="Smiley face" height="42" width="42">
               </li>
               <li>
-                <img src="/misc/formbuilder/formthemes/theme-images/formImg5.jpg" alt="Smiley face" height="42" width="42">
+                <img src="/misc/landingpage/public/images/textures/5.png" alt="Smiley face" height="42" width="42">
               </li>
               <li>
-                <img src="/misc/formbuilder/formthemes/theme-images/formImg6.jpg" alt="Smiley face" height="42" width="42">
+                <img src="/misc/landingpage/public/images/textures/28.png" alt="Smiley face" height="42" width="42">
               </li>
               <li>
-                <img src="/misc/formbuilder/formthemes/theme-images/formImg7.jpg" alt="Smiley face" height="42" width="42">
+                <img src="/misc/landingpage/public/images/textures/9.png" alt="Smiley face" height="42" width="42">
               </li>
               <li>
-                <img src="/misc/formbuilder/formthemes/theme-images/formImg1.jpg" alt="Smiley face" height="42" width="42">
+                <img src="/misc/landingpage/public/images/textures/15.png" alt="Smiley face" height="42" width="42">
               </li>
               <li>
-                <img src="/misc/formbuilder/formthemes/theme-images/formImg2.jpg" alt="Smiley face" height="42" width="42">
+                <img src="/misc/landingpage/public/images/textures/16.png" alt="Smiley face" height="42" width="42">
               </li>
             </ul>
           </div>
         </div>
         <!--Background Theme Component End -->
-        <div class="arrow">-></div>
         <!--Backdround Color Component Start -->
         <div class="innerBackgroundTheme colorTheme">
           <div class="colorTheme">
             <div><label>Choose Color</label></div>
-             <input class="jscolor innerColorTheme" value="281029
+             <input class="jscolor innerColorTheme" style="color: rgb(0, 0, 0);" size="11" value="FFFFFF
              ">
           </div>
         </div>
@@ -334,9 +339,8 @@ String template = request.getParameter("template");
       <!--Background ThemeComponent End -->
     </div>
     <!--ThemeBuilder Div-->                  
-    <div class="createCustomFormContent" style="margin:0 auto;width:450px">
+    <div class="col-sm-6 createCustomFormContent" style="margin:0 auto;width:450px;margin-top:20px;margin-left: 20px;">
     </div>
-    <!-- </p> -->
         </div>
               <div class="modal-footer">
               <button type="button" class="btn btn-default" data-dismiss="modal" style="color:#fff;background-color:#7266ba">Close</button>
@@ -347,8 +351,8 @@ String template = request.getParameter("template");
                   </div>
 
                  
-                  <input id="form-preview" type="button"  onclick="formView()" class="btn btn-info" data-toggle="modal" data-target="#myModal" style="margin-top: -40px;margin-left: 340px;padding-right: 10px;"value="Preview Form">
-                  <input id="form-save" type="button" class="btn btn-info" value="Save Form">
+                  <input id="form-preview" type="button"  onclick="formView()" class="btn btn-info" data-toggle="modal" data-target="#myModal" style="margin-top: -40px;margin-left: 340px;padding-right: 17px;background-color: #fff;color: #000;border-color: #ccc;height: 31px;font-size: 12px;"value="Preview Form">
+                  <input id="form-save" type="button" class="btn btn-info" style="background-color: #fff;color: #000;border-color: #ccc;height: 31px;font-size: 12px;padding-left: 22px;" value="Save Form">
                   <hr style="margin-top: 30px;">
                   <!--Adding content for formPreview-->
                    <div class="modal fade" id="myModal" role="dialog">
@@ -417,8 +421,6 @@ String template = request.getParameter("template");
                       customthemes=<%=net.sf.json.JSONSerializer.toJSON(custThmList) %>
 
                     /*Edit Form CustTheme Class Fetching*/
-
-                    /*Edit Form CustTheme Class Fetching*/
                     console.log("hi.........."+customthemes);
                     if(customthemes!=null){
                       for(i=0;i<customthemes.length;i++){
@@ -427,9 +429,9 @@ String template = request.getParameter("template");
                         themesListAsArr.push(custName);
                         var custCss=customthemes[i].themeCss;
                         var custIdName=custName+":"+custId;
-                        var inputRadio='<div><input type="radio" onclick="selectedThemeFunc()" name="theme" id="'+custId+'" value="'+custName+'"'+'><label for="'+custId+'">'+custName+'</label><a href="#" class="themespan" onclick="deleteTheme(this);" style="border-style: solid;border-radius: 8px;float: right;"><abbr title="delete">&times;</abbr></a></div>';
+                        var inputTheme='<div class="themeDiv"><i class="ipadding"></i><a href="#" class="themeEle'+"\t"+custIdName+'"  onclick="selectedThemeFunc(this)">'+custName+'</a><a href="#" class="themeEleDelete glyphicon glyphicon-remove-circle" onclick="deleteTheme(this)"></a></div>';
                               
-                         $(inputRadio).insertAfter("#lable4");
+                         $(inputTheme).insertAfter("#lable4");
                         }
                         if(formClasses!=null){
                           var formClassesList=formClasses.split(" ");
@@ -438,7 +440,19 @@ String template = request.getParameter("template");
                             $.each(formClassesList,function(index2,value2){
                               if(value1==value2){
                                 formtheme=value2;
-                                $(":radio[value="+value2+"]").attr('checked',true);
+                                var themeElem=$(".themeEle");
+                                $.each(themeElem,function(index,value){
+                                  if($(this).text()==formtheme){
+                                    var firstDiv=$(".themeDiv")[0];
+                                    $(firstDiv).find("i").removeClass("glyphicon");
+                                    $(firstDiv).find("i").removeClass("glyphicon-ok");
+                                    $(firstDiv).find("i").addClass("ipadding");
+                                    var parentDiv=$(this).parent();
+                                    $(parentDiv).find("i").addClass("glyphicon");
+                                    $(parentDiv).find("i").addClass("glyphicon-ok");
+                                    $(parentDiv).find(i).removeClass("ipadding");
+                                  }
+                                });
                               }
                             });
                          });
@@ -450,27 +464,25 @@ String template = request.getParameter("template");
                     $(".dropdown-content").css("display","block");
                   }
                   
-                  function selectedThemeFunc(){
-                    var themeVal= $( "input:checked" ).val();
+                  function selectedThemeFunc(identifier){
+                    var themeDivArr=$(".themeDiv");
+                    $.each(themeDivArr,function(index,value){
+                      $(this).find("i").removeClass("glyphicon");
+                      $(this).find("i").removeClass("glyphicon-ok");
+                      $(this).find("i").addClass("ipadding");
+                     });
+                    var themeVal= $(identifier).text();
+                    $(identifier).parent().find("i").addClass("glyphicon");
+                    $(identifier).parent().find("i").addClass("glyphicon-ok");
+                    $(identifier).find("i").removeClass("ipadding");
+
                     console.log(themeVal);
                     if(themeVal=="default"){
                       formtheme="default";
                     }
-                    else if(themeVal=="theme1"||themeVal=="theme2"||themeVal=="theme3"||themeVal=="theme4"){
+                    else{
                       formtheme=themeVal;
-                     }
-                     else if(themeVal=="createCustThemeRadio"){
-
-                      if($("#render")!=null){
-                        var pContent=document.getElementById("render").value;
-                           $(".createCustomFormContent").html(pContent);
                       }
-                   
-                     }
-                     else{
-                      formtheme=themeVal;
-
-                     }
                      $(".dropdown-content").css("display","none");
                   }
 
@@ -503,7 +515,6 @@ String template = request.getParameter("template");
                                       }});
                               }
                             
-                            //need to append css for custom Themes
                            }
                          }
                   function saveCustTheme(){
@@ -511,12 +522,6 @@ String template = request.getParameter("template");
                     var themeName=$("#themeName").val();
                     var isThemeNameExist=false;
                     if(themeName!=null && (themeName.length>0)){
-                      /*$.each( themesListAsArr, function( index, value ) {
-                        if(value==themeName){
-                          isThemeNameExist=true;
-                          //error message that 
-                        }
-                    });*/
                       if(!isThemeNameExist){
                        for(i=0;i<themeArray.length;i++){
                           for(j=0;j<themeArray[i].form_element.length;j++){
@@ -541,17 +546,16 @@ String template = request.getParameter("template");
                             console.log(data);
                             if(data!=undefined && data!=""){
                               customthemes.push(data);
-                              themesListAsArr.push(data.name);
-                            var inputRadio='<div><input type="radio" onclick="selectedThemeFunc()" name="theme" id="'+data.id+'" value="'+data.name+'"'+'><label for="'+data.id+'">'+data.name+'</label><a href="#" class="themespan" onclick="deleteTheme(this);" style="border-style: solid;border-radius: 8px;float: right;"><abbr title="delete">&times;</abbr></a></div>';
-                             $("#themeName").val("");
+                              $("#themeName").val("");
+                              var inputTheme='<div class="themeDiv"><i class="ipadding"></i><a href="#" class="themeEle'+"\t"+data.name+data.id+'"  onclick="selectedThemeFunc(this)">'+data.name+'</a><a href="#" class="themeEleDelete glyphicon glyphicon-remove-circle" onclick="deleteTheme(this)"></a></div>';
                               
-                         $(inputRadio).insertAfter("#lable4");
+                              $(inputTheme).insertAfter("#lable4");
                             }
                             
                           },
                           error: function(){
                             alert("Form with this name is already saved, or this is an invalid form name. Please change form name and try again.");
-                            // target.removeAttr("disabled");
+                            $("#themeName").val("");
                           }});
                       }
                     }
@@ -587,7 +591,14 @@ String template = request.getParameter("template");
                   }
 
                   function deleteTheme(identifier){
-                    var deleteThemeVal=$(identifier).prev().prev().val();
+                    var deleteThemeVal=$(identifier).prev().text();
+                    var isDeleteSelectTheme=$(identifier).prev().prev().hasClass("glyphicon-ok");
+                    if(isDeleteSelectTheme==true){
+                      var themeElem=$(".themeDiv");
+                      $(themeElem[0]).find("i").addClass("glyphicon");
+                      $(themeElem[0]).find("i").addClass("glyphicon-ok");
+                      $(themeElem[0]).find("i").removeClass("ipadding");
+                    }
                   var parentDiv=$(identifier).parent();
                      console.log("Requsted deleteThemeVal is:"+deleteThemeVal+"\t"+parentDiv);
                      $.ajax({
@@ -603,7 +614,7 @@ String template = request.getParameter("template");
                                     });
 
                                     $.each( customthemes, function( index, value ) {
-                                        if(value.name==deleteThemeVal){
+                                        if(this.name==deleteThemeVal){
                                          customthemes.splice(index,1); 
                                         }  
                                     });
@@ -613,6 +624,12 @@ String template = request.getParameter("template");
                                   alert("Theme is not getting deleted AJAX ERROR is::"+JSON.stringify(err, null, 2));
                                 }
                       });
+                  }
+                  function createCustTheme(){
+                    if($("#render")!=null){
+                        var pContent=document.getElementById("render").value;
+                           $(".createCustomFormContent").html(pContent);
+                      }
                   }
                   
                 </script>

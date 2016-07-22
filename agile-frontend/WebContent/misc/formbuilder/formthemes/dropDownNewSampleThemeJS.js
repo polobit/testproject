@@ -23,7 +23,7 @@ $(document).ready(function(){
 
 			var selectedSelectThemeEle=$(".selectDiv select option:selected").text();
 			if(selectedSelectThemeEle=="Alignment"){
-				$(".outerAlignmentTheme").css("display","-webkit-box");
+				$(".outerAlignmentTheme").css("display","inline");
 				/*$(".createCustomFormContent legend").css("margin-left","-14px");
 					$(".createCustomFormContent legend").css(" width","432px");
 					$(".createCustomFormContent legend").css("padding-top","15px");
@@ -38,13 +38,13 @@ $(document).ready(function(){
 					
 			}
 			else if(selectedSelectThemeEle=="Border"){
-				$(".outerBorderTheme").css("display","-webkit-box");
+				$(".outerBorderTheme").css("display","inline");
 			}
 			else if(selectedSelectThemeEle=="Font"){
-				$(".outerFontTheme").css("display","-webkit-box");
+				$(".outerFontTheme").css("display","inline");
 			}
 			else if(selectedSelectThemeEle=="Background"){
-				$(".outerBackgroundTheme").css("display","-webkit-box");
+				$(".outerBackgroundTheme").css("display","inline");
 			}
 
 			<!-- SELECT DIV  CLICK CHANGE LOGIC-->
@@ -55,14 +55,14 @@ $(document).ready(function(){
 				var selectedSelectThemeEle=$(".selectDiv select").val();
 			
 					if(selectedSelectThemeEle=="alignment"){
-						$(".outerAlignmentTheme").css("display","-webkit-box");
+						$(".outerAlignmentTheme").css("display","inline");
 						$(".outerBorderTheme").css("display","none");
 						$(".outerFontTheme").css("display","none");
 						$(".outerBackgroundTheme").css("display","none");
 					}
 					else if(selectedSelectThemeEle=="border"){
 						$(".outerAlignmentTheme").css("display","none");
-						$(".outerBorderTheme").css("display","-webkit-box");
+						$(".outerBorderTheme").css("display","inline");
 						$(".outerFontTheme").css("display","none");
 						$(".outerBackgroundTheme").css("display","none");
 							if($(".innerBorderWidthTheme select option:selected").text()=="None"){
@@ -75,14 +75,14 @@ $(document).ready(function(){
 					else if(selectedSelectThemeEle=="font"){
 						$(".outerAlignmentTheme").css("display","none");
 						$(".outerBorderTheme").css("display","none");
-						$(".outerFontTheme").css("display","-webkit-box");
+						$(".outerFontTheme").css("display","inline");
 							$(".outerBackgroundTheme").css("display","none");
 					}
 					else if(selectedSelectThemeEle=="background"){
 						$(".outerAlignmentTheme").css("display","none");
 						$(".outerBorderTheme").css("display","none");
 						$(".outerFontTheme").css("display","none");
-						$(".outerBackgroundTheme").css("display","-webkit-box");
+						$(".outerBackgroundTheme").css("display","inline");
 					}
 				
 			});
@@ -125,12 +125,15 @@ $(document).ready(function(){
 						$(".createCustomFormContent form button").parent().css("float",alignTypeEle);
 
 						var css="button{margin-left:0px;float"+alignTypeEle+"}";
+						if(alignTypeEle=="right"){
+							var css="button{margin-left:340px;}";
+						}
 					}
 					else{
 						$(".createCustomFormContent form button").parent().css("margin-left","140px");
 						$(".createCustomFormContent form button").parent().css("float","none");
 
-						var css="button{margin-left:0px;float:none;}";
+						var css="button{margin-left:165px;float:none;}";
 					}
 						var eleThemeCss=new EleThemeCss("Submit Button/button",css);
 						alignmentCss.form_element.push(eleThemeCss);
@@ -176,11 +179,14 @@ $(document).ready(function(){
 						$(".createCustomFormContent form button").parent().css("margin-left","0px");	
 						$(".createCustomFormContent form button").parent().css("float",alignTypeEle);	
 						var css="button{margin-left:0px;float:"+alignTypeEle+";}";
+						if(alignTypeEle=="right"){
+							var css="button{margin-left:340px;}";
+						}
 					}
 					else{
 						$(".createCustomFormContent form button").parent().css("margin-left","140px");
 						$(".createCustomFormContent form button").parent().css("float","none");
-						var css="button{margin-left:140px;float:none;}";
+						var css="button{margin-left:165px;float:none;}";
 					}
 						var eleThemeCss=new EleThemeCss("Submit Button/button",css);
 						alignmentCss.form_element.push(eleThemeCss);
@@ -250,7 +256,7 @@ $(document).ready(function(){
 					$(".createCustomFormContent form button").parent().parent().css("margin-bottom","0px");
 					$(".createCustomFormContent form button").parent().parent().css("background-color",backgroundColorVal);
 					$(".createCustomFormContent form button").parent().parent().css("background-image","url("+backgroundImgEle+")");
-					var css="button{height:63px;margin-bottom:0px;background-color:"+backgroundColorVal+"background-image:url("+backgroundImgEle+");}";
+					var css="button{height:63px;margin-bottom:0px;background-color:"+backgroundColorVal+";background-image:url("+backgroundImgEle+");}";
 					var eleThemeCss=new EleThemeCss("Footer/button",css);
 					for(i=0;i<bckgroundCss.form_element.length;i++){
 						if(bckgroundCss.form_element[i].ele=="Footer/button"){
@@ -261,7 +267,7 @@ $(document).ready(function(){
 
 				}
 				else if(backgroundFormEle=="Button"){
-					$(".createCustomFormContent form button").css("background-color","backgroundColorVal");
+					$(".createCustomFormContent form button").css("background-color",backgroundColorVal);
 					$(".createCustomFormContent form button").css("background","url("+backgroundImgEle+")");
 					var css="button{background-color:"+backgroundColorVal+";background-image:url("+backgroundImgEle+");}";
 					var eleThemeCss=new EleThemeCss("Button/button",css);
@@ -290,11 +296,16 @@ $(document).ready(function(){
 				$(".innerBackgroundImageTheme li").each(function(){
 						if($(this).hasClass("selected")){
 								backgroundImgEle=$(this).find("img").attr("src");
+								if(backgroundImgEle!=""||backgroundImgEle!=null){
+									$(".innerBackgroundTheme input").val("FFFFFF");
+									$(".innerBackgroundTheme input").css("background-color","#FFFFFF");
+									$(".innerBackgroundTheme input").css("color","rgb(0, 0, 0)");
+								}
 						}
 				});
 				backgroundColorVal="#"+$(".innerBackgroundTheme input").val();
 				if(backgroundFormEle=="Form"){
-					$(".createCustomFormContent form").css("background-color","backgroundColorVal");
+					$(".createCustomFormContent form").css("background-color",backgroundColorVal);
 					$(".createCustomFormContent form").css("background-image","url("+backgroundImgEle+")");
 					$(".createCustomFormContent form").css("background",backgroundColorVal+"\t"+"url("+backgroundImgEle+")");
 					var css="{background:"+backgroundColorVal+"\t"+"url("+backgroundImgEle+");}";
@@ -307,7 +318,7 @@ $(document).ready(function(){
 					}
 				}
 				else if(backgroundFormEle=="Header"){
-					$(".createCustomFormContent form legend").css("background-color","backgroundColorVal");
+					$(".createCustomFormContent form legend").css("background-color",backgroundColorVal);
 					$(".createCustomFormContent form legend").css("background-image","url("+backgroundImgEle+")");
 					var css="legend{background:"+backgroundColorVal+"\t"+"url("+backgroundImgEle+");}";
 					var eleThemeCss=new EleThemeCss("Header/form legend",css);
@@ -334,9 +345,9 @@ $(document).ready(function(){
 					$(".createCustomFormContent form button").parent().parent().css("height","63px");
 					/*$(".createCustomFormContent form button").parent().parent().css("margin","0px -14px -10px -14px");*/
 					$(".createCustomFormContent form button").parent().parent().css("margin-bottom","0px");
-					$(".createCustomFormContent form button").parent().parent().css("background-color","backgroundColorVal");
+					$(".createCustomFormContent form button").parent().parent().css("background-color",backgroundColorVal);
 					$(".createCustomFormContent form button").parent().parent().css("background-image","url("+backgroundImgEle+")");
-					var css="button{height:63px;margin-bottom:0px;background-color:"+backgroundColorVal+"background-image:url("+backgroundImgEle+");}";
+					var css="button{height:63px;margin-bottom:0px;background-color:"+backgroundColorVal+";background-image:url("+backgroundImgEle+");}";
 					var eleThemeCss=new EleThemeCss("Footer/button",css);
 					for(i=0;i<bckgroundCss.form_element.length;i++){
 						if(bckgroundCss.form_element[i].ele=="Footer/button"){
@@ -346,7 +357,7 @@ $(document).ready(function(){
 					}
 				}
 				else if(backgroundFormEle=="Button"){
-					$(".createCustomFormContent form button").css("background-color","backgroundColorVal");
+					$(".createCustomFormContent form button").css("background-color",backgroundColorVal);
 					$(".createCustomFormContent form button").css("background-image","url("+backgroundImgEle+")");
 					var css="button{background-color:"+backgroundColorVal+";background-image:url("+backgroundImgEle+");}";
 					var eleThemeCss=new EleThemeCss("Button/button",css);
@@ -366,13 +377,24 @@ $(document).ready(function(){
 				var backgroundFormEle=$(".innerBackgroundFormEle select option:selected").text();
 				var backgroundImgEle=null;
 				var backgroundColorVal="#"+$(".innerBackgroundTheme input").val();
+				var isImageFirst=false;
 				$(".innerBackgroundImageTheme li").each(function(){
 						if($(this).hasClass("selected")){
-								backgroundImgEle=$(this).find("img").attr("src");
+								if($(this)==$(".innerBackgroundImageTheme li").first()){
+									isImageFirst=true;
+									backgroundImgEle=$(this).find("img").attr("src");
+								}
+								else{
+								$(this).removeClass("selected");	
+								}
 						}
 				});
+				if(!isImageFirst){
+					backgroundImgEle=$(".innerBackgroundImageTheme li").first().addClass("selected").find("img").attr("src");
+				}
+
 				if(backgroundFormEle=="Form"){
-					$(".createCustomFormContent form").css("background-color","backgroundColorVal");
+					$(".createCustomFormContent form").css("background-color",backgroundColorVal);
 					$(".createCustomFormContent form").css("background-image","url("+backgroundImgEle+")");
 					var css="{background:"+backgroundColorVal+"\t"+"url("+backgroundImgEle+");}";
 					var eleThemeCss=new EleThemeCss("Form/form",css);
@@ -384,7 +406,7 @@ $(document).ready(function(){
 					}
 				}
 				else if(backgroundFormEle=="Header"){
-					$(".createCustomFormContent form legend").css("background-color","backgroundColorVal");
+					$(".createCustomFormContent form legend").css("background-color",backgroundColorVal);
 					$(".createCustomFormContent form legend").css("background-image","url("+backgroundImgEle+")");
 					var css="legend{background:"+backgroundColorVal+"\t"+"url("+backgroundImgEle+");}";
 					var eleThemeCss=new EleThemeCss("Header/form legend",css);
@@ -411,9 +433,9 @@ $(document).ready(function(){
 					$(".createCustomFormContent form button").parent().parent().css("height","63px");
 					/*$(".createCustomFormContent form button").parent().parent().css("margin","0px -14px -10px -14px");*/
 					$(".createCustomFormContent form button").parent().parent().css("margin-bottom","0px");
-					$(".createCustomFormContent form button").parent().parent().css("background-color","backgroundColorVal");
+					$(".createCustomFormContent form button").parent().parent().css("background-color",backgroundColorVal);
 					$(".createCustomFormContent form button").parent().parent().css("background-image","url("+backgroundImgEle+")");
-					var css="button{height:63px;margin-bottom:0px;background-color:"+backgroundColorVal+"background-image:url("+backgroundImgEle+");}";
+					var css="button{height:63px;margin-bottom:0px;background-color:"+backgroundColorVal+";background-image:url("+backgroundImgEle+");}";
 					var eleThemeCss=new EleThemeCss("Footer/button",css);
 					for(i=0;i<bckgroundCss.form_element.length;i++){
 						if(bckgroundCss.form_element[i].ele=="Footer/button"){
@@ -423,7 +445,7 @@ $(document).ready(function(){
 					}
 				}
 				else if(backgroundFormEle=="Button"){
-					$(".createCustomFormContent form button").css("background-color","backgroundColorVal");
+					$(".createCustomFormContent form button").css("background-color",backgroundColorVal);
 					$(".createCustomFormContent form button").css("background-image","url("+backgroundImgEle+")");
 					var css="button{background-color:"+backgroundColorVal+";background-image:url("+backgroundImgEle+");}";
 					var eleThemeCss=new EleThemeCss("Button/button",css);

@@ -11,7 +11,17 @@ define([
 		var form = {};
 		form.formName = saveform[0].fields.name.value;
 		form.formJson = saveform;
-		var themeVal= $( "input:checked" ).val();
+		/*var themeVal= $( "input:checked" ).val()*/;
+		var themeVal=null;
+		var themeDivArr=$(".themeDiv");
+                    $.each(themeDivArr,function(index,value){
+                      if($(this).find("i").hasClass("glyphicon") &&
+                      $(this).find("i").hasClass("glyphicon-ok")){
+                      	themeVal=$(this).find(".themeEle").text();
+                      }
+                      
+                     });
+		
 		 $("#formContent").html($("#render").val());
 		 $("#formContent .form-view").addClass(themeVal);
 		 console.log("Before::::"+$("#formContent .form-view"));
@@ -23,11 +33,13 @@ define([
 			data : themeVal,
 			success: function(data){
 				console.log("DATA COMING!!!"+data);
+				if(!(data==""||data==undefined)){
 				var style='<style id="'+data.name+data.id+'" type="text/css">'+data.themeCss+'</style>';
 				$("#formContent").append(style);
+				}
 			},
-			error: function(){
-				alert("Theme style not been appended!!");
+			error: function(e){
+				console.log("Theme not found!!"+e);
 			}
 		});
 
