@@ -97,6 +97,11 @@ public class ContactDocument extends com.agilecrm.search.document.Document imple
 			 * Company to text search.
 			 */
 			SearchUtil.addNameFirstLetter(contact, doc);
+			
+			
+			
+			doc.setId(contact.id.toString()).build();
+			
 			//schema version for ignoring stale data.
 			doc.addField(Field.newBuilder().setName("schema_version").setNumber(1.0));
 
@@ -204,16 +209,7 @@ public class ContactDocument extends com.agilecrm.search.document.Document imple
 			
 			if(contact.campaignStatus != null && !contact.campaignStatus.isEmpty())
 			    doc.addField(Field.newBuilder().setName("campaign_status").setText(SearchUtil.getCampaignStatus(contact)));
-			//Trace points
-			try{
-				System.out.println("contact.id:" + contact.id.toString());
-				doc.addField(Field.newBuilder().setName("id_dup").setText(contact.id.toString()));
-			}catch(Exception e)
-			{
-			  System.out.println("Debug errror:" + e.getMessage());	
-			}
 			
-			doc.setId(contact.id.toString()).build();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
