@@ -610,7 +610,7 @@ var SettingsRouter = Backbone.Router
 					var optionsTemplate = "<option value='{{id}}' network_type='{{titleFromEnums network_type}}' size='{{size}}' url='{{url}}'>{{name}}</option>";
         			fillSelect('attachment-select','core/api/documents', 'documents',  function fillNew()
 					{
-						el.find("#attachment-select option:first").after("<option value='new'>Upload new doc</option>");
+						el.find("#attachment-select option:first").after("<option value='new'>"+_agile_get_translated_val('others','upload-new-doc')+"</option>");
 						$('#attachment-select').find('option[value='+$('#attachment_id').val()+']').attr("selected","selected");
 						$('.add-tpl-attachment-confirm').trigger("click");
 						$('#tpl-attachment-select').hide();

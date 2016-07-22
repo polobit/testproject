@@ -457,7 +457,7 @@ var WorkflowsRouter = Backbone.Router
 					$('#content').html($(template_ui));	
 
 					// Show bar graph for campaign stats
-					showBar('/core/api/campaign-stats/stats/', 'campaign-stats-chart', 'Campaigns Comparison', 'Email Stats', null);
+					showBar('/core/api/campaign-stats/stats/', 'campaign-stats-chart', _agile_get_translated_val('campaigns','campaigns-comparison'), _agile_get_translated_val('campaigns','email-stats'), null);
 
 					$(".active").removeClass("active");
 					$("#workflowsmenu").addClass("active");

@@ -162,7 +162,7 @@ function initializeAdminpanelListner(el){
 				error : function(response)
 				{
 					$("#partialrefund").button('reset');
-					showNotyPopUp("information", "error occured please try again", "top");
+					showNotyPopUp("information", _agile_get_translated_val('billing','error-occured'), "top");
 				}
 			});
 		
@@ -228,7 +228,7 @@ function initializeAdminpanelListner(el){
 					},
 					error : function(response){
 						console.log(response);
-						showNotyPopUp("information", "Error occured please try again", "top");
+						showNotyPopUp("information", _agile_get_translated_val('billing','error-occured'), "top");
 					}
 				});
 			});

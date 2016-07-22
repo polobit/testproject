@@ -1446,7 +1446,7 @@
 									$('#template_id option[value=""]',el).attr("value",0);
 									$('#template_id option[value="'+kblpid+'"]',el).attr("selected",true);
 																							
-								}, optionTemplate, false, el,"Select Landing Page");
+								}, optionTemplate, false, el, _agile_get_translated_val('landingpages','select'));
 										
 							
 							var newKbmodel = new BaseModel();
