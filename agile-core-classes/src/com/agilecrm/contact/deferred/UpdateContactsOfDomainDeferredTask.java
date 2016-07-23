@@ -202,11 +202,12 @@ public class UpdateContactsOfDomainDeferredTask implements DeferredTask
 		DomainUser domainUser = DomainUserUtil.getCurrentDomainUser();
 		
 		System.out.println("Domain user "+domainUser);
+		System.out.println(" cur Domain "+ domain);
 		
 		}
 		
 		try {
-			
+			System.out.println(" cur Domain "+ domain);
 			ContactSchemaUpdateStats contactSchemaUpdateStats = ContactSchemaUpdateStats.get(domain);
 			System.out.println("Domain user email "+ contactSchemaUpdateStats.domainusermail);
 			
