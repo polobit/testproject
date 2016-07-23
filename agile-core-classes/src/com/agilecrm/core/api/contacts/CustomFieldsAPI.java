@@ -471,17 +471,20 @@ public class CustomFieldsAPI
 					update_date = new Date(updated_time);
 				}
 				Date current_date = new Date(); 
-				
-				if(schema == null){
-						String oldNamespace = NamespaceManager.get();
-						NamespaceManager.set("");
+				String oldNamespace = NamespaceManager.get();
+				NamespaceManager.set("");
+				if(schema == null){					
 						ContactSchemaUpdateStats newSchema = new ContactSchemaUpdateStats();					
 						newSchema.updated_time = System.currentTimeMillis() / 1000 ;
 						newSchema.domain = domainUser;
 						newSchema.domainusermail=domainusermail;   //set
 						newSchema.save();
-						NamespaceManager.set(oldNamespace);
 					}
+				else {
+					schema.domainusermail = domainusermail ; 
+					schema.save();				
+				}
+				NamespaceManager.set(oldNamespace);
 					UpdateContactsDeferredTask updateContactDeferredTask = new UpdateContactsDeferredTask(domainUser);					
 					// Add to queue
 					Queue queue = QueueFactory.getQueue(AgileQueues.CONTACTS_SCHEMA_CHANGE_QUEUE);
