@@ -177,7 +177,7 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
 			{
 				if ($(this).parent().find("ul").find("li").length == 0)
 				{
-					$(this).parent().append('<span for="fname" generated="true" class="help-inline">This field is required.</span>');
+					$(this).parent().append('<span for="fname" generated="true" class="help-inline">'+_agile_get_translated_val('validation-msgs','required')+'</span>');
 					var that = this;
 					setTimeout(function(){
 						$(that).parent().find('span').remove();
@@ -243,7 +243,7 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
 		{
 			if ($form.find('#contact_company').prop('value').length > 100)
 			{
-				show_error(modal_id, form_id, 'duplicate-email', 'Company name too long. Please restrict upto 100 characters.');
+				show_error(modal_id, form_id, 'duplicate-email', _agile_get_translated_val('companies','name-length-error'));
 				enable_save_button($(saveBtn));// Remove loading image
 				return;
 			}
@@ -363,7 +363,7 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
 			if (companyName.length > 100)
 			{
 				// Company name too long, show error and return;
-				show_error(modal_id, form_id, 'duplicate-email', 'Company name too long. Please restrict upto 100 characters.');
+				show_error(modal_id, form_id, 'duplicate-email', _agile_get_translated_val('companies','name-length-error'));
 
 				enable_save_button($(saveBtn));// Remove loading image
 				return;
@@ -374,7 +374,7 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
 
 					if (status)
 					{
-						show_error(modal_id, form_id, 'duplicate-email', 'Company name already exists.');
+						show_error(modal_id, form_id, 'duplicate-email', _agile_get_translated_val('companies','name-exists'));
 
 						enable_save_button($(saveBtn));// Remove loading image
 						return;
@@ -760,9 +760,9 @@ function serialize_contact_properties_and_save(e, form_id, obj, properties, moda
 		else if (response.status == 403)
 		{
 			if(form_id == 'companyForm')
-				show_error_in_formactions(modal_id, form_id, 'form-action-error', "You do not have permission to create Companies.");
+				show_error_in_formactions(modal_id, form_id, 'form-action-error', _agile_get_translated_val('companies','no-perm-to-add'));
 			else if(form_id == 'continueCompanyForm')
-				show_error_in_formactions(modal_id, form_id, 'form-action-error', "You do not have permission to update Companies.");
+				show_error_in_formactions(modal_id, form_id, 'form-action-error', _agile_get_translated_val('companies','no-perm-to-update'));
 			else
 				show_error_in_formactions(modal_id, form_id, 'form-action-error', response.responseText);
 		}

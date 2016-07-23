@@ -116,7 +116,7 @@ function saveEmailTemplateFromBuilder(fullSource,builderSource) {
         success: function (data) {
             $("#nameoftemplate-msg",parent.document).html('<br><span style="color: green;">'+message+'</span>').show().fadeOut(3000);
             $(".saveEmailBuilderButton",parent.document).prop("disabled",false);
-            $(".saveEmailBuilderButtonText",parent.document).html("Save");
+            $(".saveEmailBuilderButtonText",parent.document).html("{{agile_lng_translate 'modals' 'save'}}");
             if(requestType == "post") {
                 window.location.hash = "email-templates";
             }
@@ -208,8 +208,8 @@ function check_merge_fields_and_send(template)
   }
   
  function show_test_email_alert(template){
-     var title="Send Test Email";
-     var message="Please observe that the merge fields in test emails would not be replaced.";
+     var title=_agile_get_translated_val('emailbuilder','send-testemail');
+     var message=_agile_get_translated_val('emailbuilder','observe-merge-fields');
  
  
      window.parent.workflow_alerts(title, message , "workflow-alert-modal"
@@ -225,7 +225,7 @@ function check_merge_fields_and_send(template)
                      // Disable and change text
                      $(this).attr('disabled', 'disabled').text("Sending");
                      var requestType = "post";
-                    var message = "Test Email Sent.";
+                    var message = _agile_get_translated_val('emailbuilder','sent-testemail');
 
                     $.ajax({
                         type: requestType, 

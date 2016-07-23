@@ -501,7 +501,7 @@ $(function()
 				{
 					return last_name;
 				}
-				return "Contact";
+				return "{{agile_lng_translate 'menu' 'contact'}}";
 			}
 			else
 			{
@@ -510,7 +510,7 @@ $(function()
 					if (contact_properties[i].name == "name")
 						return contact_properties[i].value;
 				}
-				return "Company";
+				return "{{agile_lng_translate 'menu' 'company'}}";
 			}
 		} else if (App_Companies.companyDetailView && App_Companies.companyDetailView.model)
 		{
@@ -521,7 +521,7 @@ $(function()
 				if (contact_properties[i].name == "name")
 					return contact_properties[i].value;
 			}
-			return "Company";
+			return "{{agile_lng_translate 'menu' 'company'}}";
 		}
 	});
 	
@@ -558,7 +558,7 @@ $(function()
 	{
 
 		if (value == "FOLLOW_UP")
-			return "Follow Up";
+			return "{{agile_lng_translate 'tasks' 'Follow Up'}}";
 		else
 			return ucfirst(value);
 
@@ -711,7 +711,7 @@ $(function()
 										{
 											if (count == 1 && key == "")
 											{
-												html += '<div class="alert-info alert"><div class="slate-content"><div class="box-left pull-left m-r-md"><img alt="Clipboard" src="'+updateImageS3Path("/img/clipboard.png")+'"></div><div class="box-right pull-left"><h4 class="m-t-none">You have no milestones defined</h4><br><a href="#milestones" class="btn btn-default btn-sm m-t-xs"><i class="icon icon-plus-sign"></i> Add Milestones</a></div><div class="clearfix"></div></div></div>';
+												html += '<div class="alert-info alert"><div class="slate-content"><div class="box-left pull-left m-r-md"><img alt="Clipboard" src="'+updateImageS3Path("/img/clipboard.png")+'"></div><div class="box-right pull-left"><h4 class="m-t-none">{{agile_lng_translate "deals" "no-milestone"}}</h4><br><a href="#milestones" class="btn btn-default btn-sm m-t-xs"><i class="icon icon-plus-sign"></i> Add Milestones</a></div><div class="clearfix"></div></div></div>';
 											}
 											else
 											{
@@ -734,8 +734,8 @@ $(function()
 					function(data)
 					{
 						var html = "";
-						var wonMsg = 'Deals with this milestone are considered as Won.';
-						var lostMsg = 'Deals with this milestone are considered as Lost.';
+						var wonMsg = '{{agile_lng_translate "admin-settings-deals" "won-message"}}';
+						var lostMsg = '{{agile_lng_translate "admin-settings-deals" "lost-message"}}';
 						// var html = "<ul class='milestone-value-list
 						// tagsinput' style='padding:1px;list-style:none;'>";
 						if (data)
@@ -746,19 +746,19 @@ $(function()
 								html += "<tr data='" + milestones[i] + "' style='display: table-row;'><td><div class='milestone-name-block inline-block v-top text-ellipsis' style='width:80%'>";
 								if(milestones[i] == data.won_milestone){
 									html += milestones[i] + "<i data-toogle='tooltip' title='"+wonMsg+"' class='icon-like mark-won m-l-sm'></i></div></td><td class='b-r-none'><div class='m-b-n-xs'>";
-									html += "<a class='milestone-won text-l-none-hover c-p text-xs hover-show disabled' style='visibility:hidden;' data-toggle='tooltip' title='Set as Won Milestone'><i class='icon-like'></i></a>";
-									html += "<a class='milestone-lost text-l-none-hover c-p text-xs m-l-sm not-applicable hover-show' style='visibility:hidden;' data-toggle='tooltip' title='Set as Lost Milestone'><i class='icon-dislike'></i></a>";
+									html += "<a class='milestone-won text-l-none-hover c-p text-xs hover-show disabled' style='visibility:hidden;' data-toggle='tooltip' title='{{agile_lng_translate 'admin-settings-deals' 'set-as-won-milestone'}}'><i class='icon-like'></i></a>";
+									html += "<a class='milestone-lost text-l-none-hover c-p text-xs m-l-sm not-applicable hover-show' style='visibility:hidden;' data-toggle='tooltip' title='{{agile_lng_translate 'admin-settings-deals' 'set-as-lost-milestone'}}'><i class='icon-dislike'></i></a>";
 								} else if(milestones[i] == data.lost_milestone){
 									html += milestones[i] + "<i data-toogle='tooltip' title='"+lostMsg+"' class='icon-dislike mark-lost m-l-sm'></i></div></td><td class='b-r-none'><div class='m-b-n-xs'>";
-									html += "<a class='milestone-won text-l-none-hover c-p text-xs not-applicable hover-show' style='visibility:hidden;' data-toggle='tooltip' title='Set as Won Milestone'><i class='icon-like'></i></a>";
-									html += "<a class='milestone-lost text-l-none-hover c-p text-xs m-l-sm hover-show disabled' style='visibility:hidden;' data-toggle='tooltip' title='Set as Lost Milestone'><i class='icon-dislike'></i></a>";
+									html += "<a class='milestone-won text-l-none-hover c-p text-xs not-applicable hover-show' style='visibility:hidden;' data-toggle='tooltip' title='{{agile_lng_translate 'admin-settings-deals' 'set-as-won-milestone'}}'><i class='icon-like'></i></a>";
+									html += "<a class='milestone-lost text-l-none-hover c-p text-xs m-l-sm hover-show disabled' style='visibility:hidden;' data-toggle='tooltip' title='{{agile_lng_translate 'admin-settings-deals' 'set-as-lost-milestone'}}'><i class='icon-dislike'></i></a>";
 								} else{
 									html += milestones[i] + "</div></td><td class='b-r-none'><div class='m-b-n-xs'>";
-									html += "<a class='milestone-won text-l-none-hover c-p text-xs hover-show' style='visibility:hidden;' data-toggle='tooltip' title='Set as Won Milestone'><i class='icon-like'></i></a>";
-									html += "<a class='milestone-lost text-l-none-hover c-p text-xs m-l-sm hover-show' style='visibility:hidden;' data-toggle='tooltip' title='Set as Lost Milestone'><i class='icon-dislike'></i></a>";
+									html += "<a class='milestone-won text-l-none-hover c-p text-xs hover-show' style='visibility:hidden;' data-toggle='tooltip' title='{{agile_lng_translate 'admin-settings-deals' 'set-as-won-milestone'}}'><i class='icon-like'></i></a>";
+									html += "<a class='milestone-lost text-l-none-hover c-p text-xs m-l-sm hover-show' style='visibility:hidden;' data-toggle='tooltip' title='{{agile_lng_translate 'admin-settings-deals' 'set-as-lost-milestone'}}'><i class='icon-dislike'></i></a>";
 								}
-								html +=	"<a class='milestone-delete c-p m-l-sm text-l-none text-xs hover-show' style='visibility:hidden;' data-toggle='tooltip' title='Delete Milestone'><i class='icon icon-trash'></i>" +
-										"</a><a class='text-l-none-hover c-p text-xs m-l-sm hover-show' style='visibility:hidden;'><i title='Drag' class='icon-move'></i></a></div></td></tr>";
+								html +=	"<a class='milestone-delete c-p m-l-sm text-l-none text-xs hover-show' style='visibility:hidden;' data-toggle='tooltip' title='{{agile_lng_translate 'admin-settings-deals' 'delete-milestone'}}'><i class='icon icon-trash'></i>" +
+										"</a><a class='text-l-none-hover c-p text-xs m-l-sm hover-show' style='visibility:hidden;'><i title='{{agile_lng_translate 'admin-settings-custom-fields' 'drag'}}' class='icon-move'></i></a></div></td></tr>";
 								// html += "<li data='" + milestones[i] +
 								// "'><div><span>" + milestones[i] + "</span><a
 								// class='milestone-delete right'
@@ -981,9 +981,9 @@ $(function()
 	Handlebars.registerHelper('network', function(type)
 	{
 		if (type == 'GOOGLE')
-			return 'Google Drive';
+			return '{{agile_lng_translate "documents" "google-drive"}}';
 		if (type == 'S3')
-			return 'Uploaded Doc';
+			return '{{agile_lng_translate "documents" "uploaded-doc"}}';
 	});
 
 	/**
@@ -1235,7 +1235,7 @@ $(function()
 	Handlebars.registerHelper('triggerType', function(value)
 	{
 		if (value == 'ADD_SCORE')
-			return value.replace('ADD_SCORE', 'Score (>=)');
+			return value.replace('ADD_SCORE', '{{agile_lng_translate "deals" "score-g-o-e"}}');
 
 		return titleFromEnums(value);
 	});
@@ -2112,11 +2112,11 @@ $(function()
 		var min = Math.floor(sec / 60);
 
 		if (min < 1)
-			return Math.ceil(sec) + " secs";
+			return Math.ceil(sec) + " {{agile_lng_translate 'misc-keys' 'mins'}}";
 
 		var remainingSec = Math.ceil(sec % 60);
 
-		return min + " mins, " + remainingSec + " secs";
+		return min + " {{agile_lng_translate 'misc-keys' 'mins'}}, " + remainingSec + " {{agile_lng_translate 'misc-keys' 'secs'}}";
 	});
 
 	Handlebars.registerHelper('if_overflow', function(content, div_height, options)
@@ -2313,7 +2313,7 @@ $(function()
 						if (search[i].indexOf('q=') != -1)
 						{
 							search = search[i].split('=');
-							return new Handlebars.SafeString('( Keyword : ' + search[1].split('+').join(" ") + ' )');
+							return new Handlebars.SafeString('( {{agile_lng_translate "search" "keyword"}} : ' + search[1].split('+').join(" ") + ' )');
 						}
 					}
 				}
@@ -2344,7 +2344,7 @@ $(function()
 					return properties[i].value;
 			}
 
-			return "Contact";
+			return "{{agile_lng_translate 'menu' 'contact'}}";
 		}
 
 		// COMPANY type
@@ -2353,7 +2353,7 @@ $(function()
 			if (properties[i].name === "name")
 				return properties[i].value;
 		}
-		return "Company";
+		return "{{agile_lng_translate 'menu' 'company'}}";
 	});
 
 	/**
@@ -2673,17 +2673,32 @@ $(function()
 		if (!name)
 			return;
 
-		var name_json = { "HIGH" : "High", "LOW" : "Low", "NORMAL" : "Normal", "EMAIL" : "Email", "CALL" : "Call", "SEND" : "Send", "TWEET" : "Tweet",
-			"FOLLOW_UP" : "Follow Up", "MEETING" : "Meeting", "MILESTONE" : "Milestone", "OTHER" : "Other", "YET_TO_START" : "Yet To Start",
-			"IN_PROGRESS" : "In Progress", "COMPLETED" : "Completed", "TODAY" : "Today", "TOMORROW" : "Tomorrow", "OVERDUE" : "Overdue", "LATER" : "Later" };
+		var name_json = {
+			"HIGH": "{{agile_lng_translate 'tasks' 'High'}}",
+            "LOW": "{{agile_lng_translate 'tasks' 'Low'}}",
+            "NORMAL": "{{agile_lng_translate 'tasks' 'Normal'}}",
+            "EMAIL": "{{agile_lng_translate 'tasks' 'Email'}}",
+            "CALL": "{{agile_lng_translate 'tasks' 'Call'}}",
+            "SEND": "{{agile_lng_translate 'tasks' 'Send'}}",
+            "TWEET": "{{agile_lng_translate 'tasks' 'Tweet'}}",
+            "FOLLOW_UP": "{{agile_lng_translate 'tasks' 'Follow Up'}}",
+            "MEETING": "{{agile_lng_translate 'tasks' 'Meeting'}}",
+            "MILESTONE": "{{agile_lng_translate 'tasks' 'Milestone'}}",
+            "OTHER": "{{agile_lng_translate 'tasks' 'Other'}}",
+            "YET_TO_START": "{{agile_lng_translate 'tasks' 'Yet To Start'}}",
+            "IN_PROGRESS": "{{agile_lng_translate 'tasks' 'In Progress'}}",
+            "COMPLETED": "{{agile_lng_translate 'tasks' 'Completed'}}",
+            "TODAY": "{{agile_lng_translate 'tasks' 'Today'}}",
+            "TOMORROW": "{{agile_lng_translate 'tasks' 'Tomorrow'}}",
+            "OVERDUE": "{{agile_lng_translate 'tasks' 'Overdue'}}",
+            "LATER": "{{agile_lng_translate 'tasks' 'Later'}}",
+		};
 
 		name = name.trim();
-
-		var result = name;
 		if (name_json[name])
-			 result = name_json[name];
+			 return name_json[name];
 
-		return _agile_get_translated_val("tasks", result); 
+		return name; 
 
 	});
 	/** put the users according to the plan
@@ -2695,10 +2710,10 @@ $(function()
 		var temp = plantype[0].toLowerCase();
 		
 		if(plantype.length == 1)
-		var string = plan.quantity + " Users  " + temp.charAt(0).toUpperCase() + temp.slice(1);
+		var string = plan.quantity + " {{agile_lng_translate 'admin-settings' 'users'}}  " + temp.charAt(0).toUpperCase() + temp.slice(1);
 		else{
 			var temp1 = plantype[1].toLowerCase();
-			var string = plan.quantity + " Users  " + temp.charAt(0).toUpperCase() + temp.slice(1) + " (" + temp1.charAt(0).toUpperCase() +temp1.slice(1)+ ")";
+			var string = plan.quantity + " {{agile_lng_translate 'admin-settings' 'users'}}  " + temp.charAt(0).toUpperCase() + temp.slice(1) + " (" + temp1.charAt(0).toUpperCase() +temp1.slice(1)+ ")";
 		}
 		
 		return string;
@@ -2796,7 +2811,7 @@ $(function()
 
 	Handlebars.registerHelper('xeroType', function(type)
 	{
-		return (type == "ACCPAY") ? "Payable" : "Receivable";
+		return (type == "ACCPAY") ? "{{agile_lng_translate 'widgets' 'payable'}}" : "{{agile_lng_translate 'widgets' 'receivable'}}";
 	});
 
 	/**
@@ -2804,7 +2819,7 @@ $(function()
 	 */
 	Handlebars.registerHelper('xeroTypeToolTip', function(type)
 	{
-		return (type == "ACCPAY") ? "Payable" : "Receivable";
+		return (type == "ACCPAY") ? "{{agile_lng_translate 'widgets' 'payable'}}" : "{{agile_lng_translate 'widgets' 'receivable'}}";
 	});
 
 	/**
@@ -4144,22 +4159,6 @@ $(function()
 		return ret;
 	});
 
-	// Gets minutes from milli seconds
-	Handlebars.registerHelper('millSecondsToMinutes', function(timeInMill)
-	{
-		if (isNaN(timeInMill))
-			return;
-		var sec = timeInMill / 1000;
-		var min = Math.floor(sec / 60);
-
-		if (min < 1)
-			return Math.ceil(sec) + " secs";
-
-		var remainingSec = Math.ceil(sec % 60);
-
-		return min + " mins, " + remainingSec + " secs";
-	});
-
 	Handlebars.registerHelper('if_overflow', function(content, div_height, options)
 	{
 
@@ -4401,7 +4400,7 @@ $(function()
 					return properties[i].value;
 			}
 
-			return "Contact";
+			return "{{agile_lng_translate 'menu' 'contact'}}";
 		}
 
 		// COMPANY type
@@ -4410,7 +4409,7 @@ $(function()
 			if (properties[i].name === "name")
 				return properties[i].value;
 		}
-		return "Company";
+		return "{{agile_lng_translate 'menu' 'company'}}";
 	});
 
 	/**
@@ -6703,16 +6702,16 @@ Handlebars.registerHelper('get_portlet_description', function(p_name)
 	Handlebars.registerHelper('contact_filter_tooltip', function(options)
 			{	        
 		 	 if( _agile_get_prefs(CONTACTS_DYNAMIC_FILTER_COOKIE_STATUS)=="hide")
-		 	 	return "Show Filters" ;
+		 	 	return "{{agile_lng_translate 'tickets' 'show-filters'}}" ;
 		 	 else
-		 	 	return "Hide Filters" ;	
+		 	 	return "{{agile_lng_translate 'tickets' 'hide-filters'}}" ;	
 			});
 	Handlebars.registerHelper('company_filter_tooltip', function(options)
 			{	        
 		 	 if( _agile_get_prefs('companiesFilterStatus') == "display:none")
-		 	 	return "Show Filters" ;
+		 	 	return "{{agile_lng_translate 'tickets' 'show-filters'}}" ;
 		 	 else
-		 	 	return "Hide Filters" ;	
+		 	 	return "{{agile_lng_translate 'tickets' 'hide-filters'}}" ;	
 			});
 
 	
@@ -6736,7 +6735,7 @@ Handlebars.registerHelper('get_portlet_description', function(p_name)
 					{
 						allowed_domains[i] = allowed_domains[i].trim();
 						html += "<tr data='" + allowed_domains[i] + "' style='display: table-row;'><td><div class='inline-block v-top text-ellipsis' style='width:80%'>";
-						html += allowed_domains[i] + "</div></td><td class='b-r-none'><div class='m-b-n-xs' style='display:none;'><a class='allowed-domain-delete c-p m-l-sm text-l-none text-xs'  data-toggle='modal' role='button' href='#'><i title='Delete Allowed Domain' class='task-action icon icon-trash'></i></a></div></td></tr>";
+						html += allowed_domains[i] + "</div></td><td class='b-r-none'><div class='m-b-n-xs' style='display:none;'><a class='allowed-domain-delete c-p m-l-sm text-l-none text-xs'  data-toggle='modal' role='button' href='#'><i title='{{agile_lng_translate 'admin-settings-api-analytics' 'delete-allowed-domain'}}' class='task-action icon icon-trash'></i></a></div></td></tr>";
 					}
 				}
 				return html;
@@ -6753,7 +6752,7 @@ Handlebars.registerHelper('get_portlet_description', function(p_name)
 					{
 						blocked_ips[i] = blocked_ips[i].trim();
 						html += "<tr data='" + blocked_ips[i] + "' style='display: table-row;'><td><div class='inline-block v-top text-ellipsis' style='width:80%'>";
-						html += blocked_ips[i] + "</div></td><td class='b-r-none'><div class='m-b-n-xs' style='display:none;'><a class='blocked-ip-delete c-p m-l-sm text-l-none text-xs'  data-toggle='modal' role='button' href='#'><i title='Delete Blocked IP' class='task-action icon icon-trash'></i></a></div></td></tr>";
+						html += blocked_ips[i] + "</div></td><td class='b-r-none'><div class='m-b-n-xs' style='display:none;'><a class='blocked-ip-delete c-p m-l-sm text-l-none text-xs'  data-toggle='modal' role='button' href='#'><i title='{{agile_lng_translate 'admin-settings-api-analytics' 'delete-blocked-ip'}}' class='task-action icon icon-trash'></i></a></div></td></tr>";
 					}
 				}
 				return html;
@@ -7054,8 +7053,7 @@ Handlebars.registerHelper('convert_toISOString', function(dateInepoch, options) 
 	{
 		var options_el = "";
 		if(type == 'portlet'){
-			options_el +="<option value='MarketingDashboard' lass='user-dashboard' title='Marketing Dashboard'>Marketing</option>"
-						+ "<option value='SalesDashboard' class='user-dashboard' title='Sales Dashboard'>Sales</option>"; 
+			options_el += getTemplate('js-dashboards-options');
 		}
 		if(CURRENT_USER_DASHBOARDS)
 		{
@@ -7101,11 +7099,11 @@ Handlebars.registerHelper('convert_toISOString', function(dateInepoch, options) 
 					}
 					if(index == 0 && (!selected_li_id || !is_active_added))
 					{
-						options_el += "<li class='active'><a id='Dashboard' class='user-defined-dashboard predefined-dashboard' href='#'>Dashboard</a></li>";
+						options_el += "<li class='active'><a id='Dashboard' class='user-defined-dashboard predefined-dashboard' href='#'>{{agile_lng_translate 'portlets' 'dashboard'}}</a></li>";
 					}
 					else if(index == 0)
 					{
-						options_el += "<li><a id='Dashboard' class='user-defined-dashboard predefined-dashboard' href='#'>Dashboard</a></li>";
+						options_el += "<li><a id='Dashboard' class='user-defined-dashboard predefined-dashboard' href='#'>{{agile_lng_translate 'portlets' 'dashboard'}}</a></li>";
 					}
 
 					if(selected_li_id == this.id)
@@ -7118,10 +7116,7 @@ Handlebars.registerHelper('convert_toISOString', function(dateInepoch, options) 
 					}
 					if(index == CURRENT_USER_DASHBOARDS.length-1)
 					{
-						options_el += "<li><a id='MarketingDashboard' title='Marketing Dashboard' class='user-defined-dashboard' href='#'>Marketing</a></li>";
-						options_el += "<li><a id='SalesDashboard' title='Sales Dashboard' class='user-defined-dashboard' href='#'>Sales </a></li>";					
-						options_el += "<li class='divider'></li>";
-						options_el += "<li><a id='dashboards' href='#dashboards'>Manage Dashboards</a></li>";
+						options_el += getTemplate("js-dashboards-options-newui");
 					}
 					
 				}
@@ -7130,11 +7125,8 @@ Handlebars.registerHelper('convert_toISOString', function(dateInepoch, options) 
 
 			if(CURRENT_USER_DASHBOARDS.length == 0 && type == 'dashboard')
 			{
-				options_el += "<li><a id='Dashboard' class='user-defined-dashboard predefined-dashboard' href='#'>Dashboard</a></li>";
-				options_el += "<li><a id='MarketingDashboard' title='Marketing Dashboard' class='user-defined-dashboard' href='#'>Marketing</a></li>";
-				options_el += "<li><a id='SalesDashboard' title='Sales Dashboard' class='user-defined-dashboard' href='#'>Sales</a></li>";
-				options_el += "<li class='divider'></li>";	
-				options_el += "<li><a id='dashboards' href='#dashboards'>Manage Dashboards</a></li>";
+				options_el += "<li><a id='Dashboard' class='user-defined-dashboard predefined-dashboard' href='#'>{{agile_lng_translate 'portlets' 'dashboard'}}</a></li>";
+				options_el += getTemplate("js-dashboards-options-newui");
 			}			
 		}
 

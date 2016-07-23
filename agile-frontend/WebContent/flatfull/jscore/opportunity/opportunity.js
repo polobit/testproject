@@ -70,7 +70,7 @@ var tracks = new Base_Collection_View({url : '/core/api/milestone/pipelines'});
 	tracks.collection.fetch({
 		success: function(data){
 			var jsonModel = data.toJSON();
-			var html = '<option value="">Select...</option>';
+			var html = '<option value="">{{agile_lng_translate "contact-details" "select"}}</option>';
 			console.log(jsonModel);
 			
 			// If there is only one pipeline, select the option by default and hide the field.
@@ -88,7 +88,7 @@ var tracks = new Base_Collection_View({url : '/core/api/milestone/pipelines'});
 				}
 				if(!filter_el)
 				{
-					$('#' + id, el).closest('.control-group').find('label').html('Milestone<span class="field_req">*</span>');
+					$('#' + id, el).closest('.control-group').find('label').html('{{agile_lng_translate "admin-settings-tasks" "Milestone"}}<span class="field_req">*</span>');
 				}
 			}
 			else {
@@ -119,7 +119,7 @@ var tracks = new Base_Collection_View({url : '/core/api/milestone/pipelines'});
 				});
 				if(!filter_el)
 				{
-					$('#' + id, el).closest('.control-group').find('label').html('Track & Milestone<span class="field_req">*</span>');
+					$('#' + id, el).closest('.control-group').find('label').html('{{agile_lng_translate "deals" "track-and-milestone"}}<span class="field_req">*</span>');
 				}
 			}
 			
@@ -257,7 +257,7 @@ function populateMilestones(el, dealsDetails, pipeline, value, callback, default
 								
 							// If callback is present, it is called to deserialize the select field
 							if (callback && typeof (callback) === "function") {
-								var optionsHtml = '<option value="">Select...</option>';
+								var optionsHtml = '<option value="">{{agie "contact-details" "select"}}</option>';
 								$.each(array, function(index,element){
 									optionsHtml += Handlebars.compile('<option value="{{element}}">{{element}}</option>')({element : element});
 								});
@@ -591,7 +591,7 @@ function populateLostReasons(el, value){
 	tracks.collection.fetch({
 		success: function(data){
 			var jsonModel = data.toJSON();
-			var html = '<option value="">Select...</option>';
+			var html = '<option value="">{{agie "contact-details" "select"}}</option>';
 			console.log(jsonModel);
 			
 			$.each(jsonModel,function(index,lostReason){
@@ -645,7 +645,7 @@ function populateDealSources(el, value){
 	tracks.collection.fetch({
 		success: function(data){
 			var jsonModel = data.toJSON();
-			var html = '<option value="">Select...</option>';
+			var html = '<option value="">{{agie "contact-details" "select"}}</option>';
 			console.log(jsonModel);
 			
 			$.each(jsonModel,function(index,dealSource){
@@ -869,7 +869,7 @@ function setupTracksAndMilestones(el){
 				}
 				if(is_first_track)
 				{
-					$('#new-track-list-paging').find('#moving-tracks').html("<div style='font-size:18px;' class='m-t-xs'>Tracks & Milestones</div>");
+					$('#new-track-list-paging').find('#moving-tracks').html("<div style='font-size:18px;' class='m-t-xs'>{{agile_lng_translate 'deals' 'tracks-and-milestone'}}</div>");
 					style_class += " m-t-sm";
 					is_first_track = false;
 				}

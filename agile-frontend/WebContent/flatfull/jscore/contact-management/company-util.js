@@ -1055,7 +1055,7 @@ function fetch_mailserverurl_from_cookie(model)
 							final_url = 'core/api/social-prefs/google-emails?from_email='+email;
 							html = '<i class="icon-google-plus" style="margin-right:4px;font-size: 1.2em"></i>'+email;
 							if(shared)
-								html = html+ ' (Shared)';
+								html = html+ ' ('+_agile_get_translated_val('contact-details','shared')+')';
 						}
 					}
 					else if(email_server.toLowerCase()==='imap')
@@ -1089,7 +1089,7 @@ function fetch_mailserverurl_from_cookie(model)
 							final_url = 'core/api/imap/imap-emails?from_email='+email;
 							html = '<i class="icon-envelope-alt" style="margin-right:4px;font-size: 1.2em"></i>'+email;
 							if(shared)
-								html = html+ ' (Shared)';
+								html = html+ ' ('+_agile_get_translated_val('contact-details','shared')+')';
 						}
 					}
 					else if(email_server.toLowerCase()==='exchange')
@@ -1123,7 +1123,7 @@ function fetch_mailserverurl_from_cookie(model)
 							final_url = 'core/api/office/office365-emails?from_email='+email;
 							html = '<i class="icon-windows" style="margin-right:4px;font-size: 1.2em"></i>'+email;
 							if(shared)
-								html = html+ ' (Shared)';
+								html = html+ ' ('+_agile_get_translated_val('contact-details','shared')+')';
 						}
 					}
 					if(final_url)
@@ -1185,7 +1185,7 @@ function showMailsInfoMessages()
 	{
 		if(($('#all-emails-info',App_Companies.companyDetailView.el).length === 0))
 		{
-			$('#company-mails',App_Companies.companyDetailView.el).append('<div id="all-emails-info" class="alert alert-info">Showing relevant messages from all accounts. Maximum of 20 messages from each account </div>');
+			$('#company-mails',App_Companies.companyDetailView.el).append('<div id="all-emails-info" class="alert alert-info">'+_agile_get_translated_val('mails','show-mails-error')+' </div>');
 		}
 	}
 	$('#company-mail-account-types', App_Companies.companyDetailView.el).find('.all-mails-loading').remove();
@@ -1218,7 +1218,7 @@ function killAllPreviousRequests()
 }
 function show_no_email_alert()
 {
-	$('#company-mail', App_Companies.companyDetailView.el).html('<div class="alert alert-danger m-t-sm m-sm"><a class="close" data-dismiss="alert" href="#">&times;</a>Sorry! this company has no email to get the mails.</div>');
+	$('#company-mail', App_Companies.companyDetailView.el).html('<div class="alert alert-danger m-t-sm m-sm"><a class="close" data-dismiss="alert" href="#">&times;</a>'+_agile_get_translated_val('mails','mo-mails-error')+'</div>');
 }
 
 

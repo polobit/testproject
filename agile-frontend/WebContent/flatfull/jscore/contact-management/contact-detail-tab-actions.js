@@ -71,7 +71,7 @@ var contact_details_documentandtasks_actions = {
 			}
 			if (value.description)
 			{
-				var description = '<label class="control-label"><b>Description </b></label><div class="controls"><textarea id="description" name="description" rows="3" class="input form-control" placeholder="' + _agile_get_translated_val("misc-keys", "add-description") + '"></textarea></div>'
+				var description = '<label class="control-label"><b>'+_agile_get_translated_val("misc-keys", "description")+' </b></label><div class="controls"><textarea id="description" name="description" rows="3" class="input form-control" placeholder="' + _agile_get_translated_val("misc-keys", "add-description") + '"></textarea></div>'
 				$("#event_desc").html(description);
 				$("textarea#description").val(value.description);
 			}
@@ -341,7 +341,7 @@ var contact_details_documentandtasks_actions = {
 			{
 				if(response && response.status == 403)
 				{
-					showModalConfirmation("Detach Document", 
+					showModalConfirmation(_agile_get_translated_val('documents','detach-document'), 
 						DOC_ACL_DETACH_ERROR, 
 						function (){
 							return;
@@ -352,7 +352,7 @@ var contact_details_documentandtasks_actions = {
 						function(){
 							return;
 						},
-						"Cancel"
+						_agile_get_translated_val('contact-details','cancel')
 					);
 				}
 			} });
@@ -389,7 +389,7 @@ var contact_details_documentandtasks_actions = {
 			// To check whether the document is selected or not
 			if (document_id == "")
 			{
-				saveBtn.closest("span").find(".save-status").html("<span style='color:red;margin-left:10px;'>This field is required.</span>");
+				saveBtn.closest("span").find(".save-status").html("<span style='color:red;margin-left:10px;'>"+_agile_get_translated_val('validation-msgs','required')+"</span>");
 				saveBtn.closest("span").find('span.save-status').find("span").fadeOut(5000);
 				return;
 			}

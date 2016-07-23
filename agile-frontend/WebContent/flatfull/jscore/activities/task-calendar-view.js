@@ -126,7 +126,7 @@ function getCalendarView() {
 								var popover_min_width = 300;
 									
 									if (event.meeting_type && event.description){
-										meeting_type = '<i class="icon-comment-alt text-muted m-r-xs"></i><span>Meeting Type - ' + event.meeting_type + '</span><br/><span title=' + event.description + '>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + addDotsAtEnd(event.description) + '</span>';
+										meeting_type = '<i class="icon-comment-alt text-muted m-r-xs"></i><span>'+ _agile_get_translated_val('events','meeting-type') +' - ' + event.meeting_type + '</span><br/><span title=' + event.description + '>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + addDotsAtEnd(event.description) + '</span>';
 									}else if (event.description){
 										meeting_type = '<i class="icon-comment-alt text-muted m-r-xs"></i><span title=' + event.description + '>' + addDotsAtEnd(event.description) + '</span>';
 									}

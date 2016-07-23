@@ -153,7 +153,7 @@ call_reports : function(url,reportType,graphOn){
 
 	portlet_graph_data_utility.fetchPortletsGraphData(url,function(data){
 		if(data.status==403){
-			$('#'+selector).html("<div class='portlet-error-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;Sorry, you do not have the privileges to access this.</div>");
+			$('#'+selector).html("<div class='portlet-error-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;{{agile_lng_translate 'report-add' 'sorry-you-do-not-have-privileges-access'}}</div>");
 			return;
 		}
 
@@ -343,7 +343,7 @@ call_reports : function(url,reportType,graphOn){
 			    tempData.data=averageCallList;
 			    tempData.showInLegend=false;
 			    series[0]=tempData;
-			    text="Average Call Duration (Sec)";
+			    text="{{agile_lng_translate 'calls' 'avg-duration-secs'}}";
 			    colors=['green'];
 		}
 		else
@@ -362,7 +362,7 @@ call_reports : function(url,reportType,graphOn){
 			tempData.data=callsDurationInMinsList;
 			tempData.showInLegend=false;
 			series[0]=tempData;
-			text="Calls Duration (Sec)";
+			text="{{agile_lng_translate 'calls' 'duration-secs'}}";
 			colors=['green'];
 		}
 		
@@ -405,7 +405,7 @@ user_reports :function(callReportUrl){
 		
 		portlet_graph_data_utility.fetchPortletsGraphData(callReportUrl,function(data){
 			if(data.status==403){
-				$('#'+selector).html("<div class='portlet-error-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;Sorry, you do not have the privileges to access this.</div>");
+				$('#'+selector).html("<div class='portlet-error-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;{{agile_lng_translate 'report-add' 'sorry-you-do-not-have-privileges-access'}}</div>");
 				return;
 			}
 			answeredCallsCountList=data["answeredCallsCountList"];
@@ -528,7 +528,7 @@ user_reports :function(callReportUrl){
 					{
 						$('#' + selector1)
 									.html(
-										'<div class="portlet-error-message" style=" font-size: 14px;font-style: normal;padding-top: 174px;padding-bottom : 203px">No Deals Goals set </div>');
+										'<div class="portlet-error-message" style=" font-size: 14px;font-style: normal;padding-top: 174px;padding-bottom : 203px">{{agile_lng_translate "portlets" "no-deals-goals-set"}} </div>');
 								
 					}
 					else{
@@ -539,7 +539,7 @@ user_reports :function(callReportUrl){
 					{
 						$('#' + selector2)
 										.html(
-												'<div class="portlet-error-message" style="font-size: 14px;font-style: normal;padding-top: 174px;padding-bottom : 203px">No Amount Goals set </div>');
+												'<div class="portlet-error-message" style="font-size: 14px;font-style: normal;padding-top: 174px;padding-bottom : 203px">{{agile_lng_translate "report-view" "no-amount-goals-set"}} </div>');
 								
 					}
 					else{

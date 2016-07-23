@@ -77,7 +77,7 @@ var Contact_Details_Tab_Actions = {
 	  // to remove contact from active campaign.
 	  removeActiveCampaigns : function(e){
 	  	var targetEl = $(e.currentTarget);
-	  	showAlertModal("Are you sure to remove " + $(targetEl).attr("contact_name") + " from " + $(targetEl).attr("campaign_name") + " campaign?", "confirm", function(){
+	  	showAlertModal(_agile_get_translated_val('campaigns','sure-remove-active') + " " + $(targetEl).attr("contact_name") +  _agile_get_translated_val('calendar','from') + $(targetEl).attr("campaign_name") + -_agile_get_translated_val('contact-details','campaign') +" ?", "confirm", function(){
 			var $active_campaign = $(targetEl).closest('span#active-campaign');
 			var campaign_id = $active_campaign.attr('data');
 			var contact_id;
@@ -114,7 +114,7 @@ var Contact_Details_Tab_Actions = {
 				$active_campaign.remove();
 
 			} });
-		},undefined, "Remove Active Campaign");
+		},undefined, _agile_get_translated_val('campaigns','remove-active-campaign'));
 
 		
 	  },
@@ -237,7 +237,7 @@ var Contact_Details_Tab_Actions = {
 			var entity_id = $(targetEl).attr('id');
 			if (model && model.toJSON().type != "WEB_APPOINTMENT" || parseInt(model.toJSON().start) < parseInt(new Date().getTime() / 1000))
 			{
-				showAlertModal("delete", "confirm", function(){
+				showAlertModal(_agile_get_translated_val('contact-details','delete'), "confirm", function(){
 					modelDelete(model, targetEl, function(){
 						removeItemFromTimeline($("#" + entity_id, $("#timeline")));
 					});
@@ -299,7 +299,7 @@ function populate_send_email_details(el)
 
 	// Prefill the templates
 	var optionsTemplate = "<option value='{{id}}'> {{#if name}}{{name}}{{else}}{{subject}}{{/if}}</option>";
-	fillSelect('sendEmailSelect', '/core/api/email/templates', 'emailTemplates', undefined, optionsTemplate, false, el, '- Fill from Template -');
+	fillSelect('sendEmailSelect', '/core/api/email/templates', 'emailTemplates', undefined, optionsTemplate, false, el, _agile_get_translated_val('other','fill-from-template'));
 }
 
 /**
@@ -672,7 +672,7 @@ function initializeSendEmailListeners(){
 						if (json.to == "" || json.to == null || json.to == undefined)
 						{
 							// Appends error info to form actions block.
-							$save_info = $('<span style="display:inline-block;color:#df382c;">This field is required.</span>');
+							$save_info = $('<span style="display:inline-block;color:#df382c;">'+_agile_get_translated_val('validation-msgs','required')+'</span>');
 							$('#emailForm').find("#to").closest(".controls > div").append($save_info);
 							$('#emailForm').find("#to").focus();
 							// Hides the error message after 3 seconds
@@ -694,7 +694,7 @@ function initializeSendEmailListeners(){
 						else
 						{
 							showModalConfirmation(_agile_get_translated_val('contact-details','send-email'), 
-								"You may not have the permission to send emails to some of the contacts selected. Email will be sent to only contacts with send email permissions.<br/><br/> Do you want to proceed?",
+								_agile_get_translated_val('campaigns','no-perm-send-emails') + "<br/><br/> " + _agile_get_translated_val('deal-view','do-you-want-to-proceed'),
 								function (){
 									emailSend(that,json);
 								},
@@ -818,7 +818,7 @@ function modelDelete(model, targetEl, callback){
 			web_event_contact_name = firstname + " " + lastname;
 		}
 		$("#webEventCancelModel").modal('show');
-		$("#cancel_event_title").html("Delete event &#39" + web_event_title + "&#39");
+		$("#cancel_event_title").html(_agile_get_translated_val('events','delete-event') + " &#39" + web_event_title + "&#39");
 		$("#event_id_hidden").html("<input type='hidden' name='event_id' id='event_id' value='" + entity_id + "'/>");
 		return;
 	}
@@ -878,7 +878,7 @@ function modelDelete(model, targetEl, callback){
 			}
 			if(!can_edit)
 			{
-				showModalConfirmation("Delete <span class='text-cap'>"+model.get("entity_type")+"</span>", 
+				showModalConfirmation(_agile_get_translated_val('contact-details','delete') + " <span class='text-cap'>"+model.get("entity_type")+"</span>", 
 					'<span class="text-cap">'+model.get("entity_type")+'</span> '+CONTACTS_ACTIVITY_ACL_DELETE_ERROR, 
 					function (){
 						return;
@@ -889,7 +889,7 @@ function modelDelete(model, targetEl, callback){
 					function (){
 						return;
 					},
-					'Cancel'
+					_agile_get_translated_val('contact-details','cancel')
 				);
 				return;
 			}

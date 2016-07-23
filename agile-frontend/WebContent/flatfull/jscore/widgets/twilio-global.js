@@ -691,7 +691,7 @@ function createAppSid(twilioio_prefs, callback)
 		console.log(data);
 		var that = this;
 		showAlertModal("valid_details_try_again", undefined, function(){
-			$("#save_prefs").text("Save");
+			$("#save_prefs").text("{{agile_lng_translate 'modals' 'save'}}");
 			$("#save_prefs").attr("disabled", false);
 			$("#save_prefs").hide();
 			$("#validate_account").text("Validate");
@@ -756,7 +756,7 @@ function fill_twilioio_numbers()
 				$('#twilio_from_number').val(twilioio_widget.prefs.twilio_from_number);
 				$('#twilio_number').val(twilioio_widget.prefs.twilio_number);
 				$('#twilio_number_sid').val(twilioio_widget.prefs.twilio_number_sid);
-				$("#save_prefs").text("Save");
+				$("#save_prefs").text("{{agile_lng_translate 'modals' 'save'}}");
 				$("#save_prefs").attr("disabled", false);
 			});
 		}

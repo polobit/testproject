@@ -185,7 +185,7 @@ function initializeTasksListeners(){
 	$('#tasks-list-template').on('click', '.is-task-complete', function(event)
 	{
 		event.preventDefault();
-		if(!confirm("Are you sure to complete this task ?"))
+		if(!confirm(_agile_get_translated_val('tasks','confirm-delete')))
 			return;
 		if(!getTaskListId(this)  && $(this).parent().attr('data')){
 			completeTask(getTaskId(this), $(this).parent().attr('data'), parseInt(getTaskListOwnerId(this)));

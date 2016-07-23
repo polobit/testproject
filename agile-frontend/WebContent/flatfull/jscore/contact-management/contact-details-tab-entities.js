@@ -217,7 +217,7 @@ var contact_details_tab = {
 			
 			// Shows an error alert, when there is no email to the contact 
 			if(!email){
-				$('#stats', App_Contacts.contactDetailView.el).html('<div class="alert alert-danger m-sm"><a class="close" data-dismiss="alert" href="#">&times;</a>Sorry! this contact has no email to get the stats.</div>');
+				$('#stats', App_Contacts.contactDetailView.el).html('<div class="alert alert-danger m-sm"><a class="close" data-dismiss="alert" href="#">&times;</a>'+_agile_get_translated_val('contact-details','sorry-this-contact-has-no-email-to-get-the-stats')+'</div>');
 				return;	
 			}
 
@@ -226,7 +226,7 @@ var contact_details_tab = {
 				// To avoid unnecessary JSAPI count, first verify in cookie
 				if(!(_agile_get_prefs('_agile_jsapi') != null && _agile_get_prefs('_agile_jsapi') == "true") && (NO_WEB_STATS_SETUP && count == '0'))
 				{
-					$('#stats', App_Contacts.contactDetailView.el).html('<h4 class="webstats-msg space-normal  wrapper-sm font-normal m-none"><p>You have not yet setup the Javascript API on your website.</p><p>Please <a href="#analytics-code">set it up</a> to see the contact\'s site visits here.</p></h4>');
+					$('#stats', App_Contacts.contactDetailView.el).html('<h4 class="webstats-msg space-normal  wrapper-sm font-normal m-none"><p>'+_agile_get_translated_val('contact-details','you-have-not-yet-setup-the-javascript-api-on-your website')+'</p><p>'+_agile_get_translated_val('contact-details','please')+' <a href="#analytics-code">'+_agile_get_translated_val('contact-details','set-it-up')+'</a> '+_agile_get_translated_val('contact-details','to-see-the-contacts-site-visits-here')+'</p></h4>');
 					return;
 				}
 
@@ -607,7 +607,7 @@ function fetch_mailserverurl_from_cookie(model)
 							final_url = 'core/api/social-prefs/google-emails?from_email='+email;
 							html = '<i class="icon-google-plus" style="margin-right:4px;font-size: 1.2em"></i>'+email;
 							if(shared)
-								html = html+ ' (Shared)';
+								html = html+ ' ('+_agile_get_translated_val('contact-details','shared')+')';
 						}
 					}
 					else if(email_server.toLowerCase()==='imap')
@@ -641,7 +641,7 @@ function fetch_mailserverurl_from_cookie(model)
 							final_url = 'core/api/imap/imap-emails?from_email='+email;
 							html = '<i class="icon-envelope-alt" style="margin-right:4px;font-size: 1.2em"></i>'+email;
 							if(shared)
-								html = html+ ' (Shared)';
+								html = html+ ' ('+_agile_get_translated_val('contact-details','shared')+')';
 						}
 					}
 					else if(email_server.toLowerCase()==='exchange')
@@ -675,7 +675,7 @@ function fetch_mailserverurl_from_cookie(model)
 							final_url = 'core/api/office/office365-emails?from_email='+email;
 							html = '<i class="icon-windows" style="margin-right:4px;font-size: 1.2em"></i>'+email;
 							if(shared)
-								html = html+ ' (Shared)';
+								html = html+ ' ('+_agile_get_translated_val('contact-details','shared')+')';
 						}
 					}
 					if(final_url)
@@ -737,7 +737,7 @@ function showMailsInfoMessages()
 	{
 		if(($('#all-emails-info',App_Contacts.contactDetailView.el).length === 0))
 		{
-			$('#mails',App_Contacts.contactDetailView.el).append('<div id="all-emails-info" class="alert alert-info">Showing relevant messages from all accounts. Maximum of 20 messages from each account </div>');
+			$('#mails',App_Contacts.contactDetailView.el).append('<div id="all-emails-info" class="alert alert-info">'+_agile_get_translated_val('mails','show-mails-error')+' </div>');
 		}
 	}
 	$('#mail-account-types', App_Contacts.contactDetailView.el).find('.all-mails-loading').remove();

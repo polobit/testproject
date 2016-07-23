@@ -274,7 +274,7 @@ function initializeDealListners(el){
 					$('#milestone').html('');
 					if(milestonesList.length > 1)
 					{
-						$('#milestone', el).html('<option value="">Any</option>');
+						$('#milestone', el).html('<option value="">{{agile_lng_translate "portlets" "any"}}</option>');
 					}
 					$.each(milestonesList, function(index, milestone){
 						$('#milestone', el).append('<option value="'+milestone+'">'+milestone+'</option>');
@@ -286,7 +286,7 @@ function initializeDealListners(el){
 		}
 		else
 		{
-			$('#milestone', el).html('<option value="">Any</option>');
+			$('#milestone', el).html('<option value="">{{agile_lng_translate "portlets" "any"}}</option>');
 		}
 		
 	});

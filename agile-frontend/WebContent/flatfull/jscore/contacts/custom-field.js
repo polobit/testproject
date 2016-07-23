@@ -159,11 +159,11 @@ function showCustomFieldModel(data)
 
 				if($('#label', $('#textModalForm')).is(':disabled'))
 				{
-					$('#duplicate-custom-field-type-err').html("<i>"+errorJSON[response.responseText]+" type custom field exists with same label. Choose same type.</i>");
+					$('#duplicate-custom-field-type-err').html("<i>"+errorJSON[response.responseText]+" "+_agile_get_translated_val('customfields','label-exists')+"</i>");
 				}
 				else
 				{
-					$('#duplicate-custom-field-type-err').html("<i>"+errorJSON[response.responseText]+" type custom field exists with same label. Choose same type or different label.</i>");
+					$('#duplicate-custom-field-type-err').html("<i>"+errorJSON[response.responseText]+" "+_agile_get_translated_val('customfields','label-exists-1')+"</i>");
 				}
 				$('#duplicate-custom-field-type-err').removeClass("hide");
 			}

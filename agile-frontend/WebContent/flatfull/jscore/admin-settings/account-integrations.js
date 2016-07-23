@@ -98,8 +98,8 @@ $('#email-stats-listners a[href="#sync-stats-new"]').on('click', function(e) {
 }
 function syncAppData(){
 	 showModalConfirmation(
-		"Update Data",
-		"This will update your data. Do you want to continue?",
+		_agile_get_translated_val('datasync','update-data'),
+		_agile_get_translated_val('datasync','update-data-confirm'),
 		function()
 		{		
 	 	var domain = CURRENT_DOMAIN_USER.domain ; 
@@ -109,11 +109,11 @@ function syncAppData(){
 			success : function(data) {
 				console.log(data);
 				var yes = "";
-				var no = "Ok"
+				var no = _agile_get_translated_val('reputation','Ok');
 				if(data == "success"){
 					showModalConfirmation(
-						"Update Data",
-						"Update request is successfully scheduled.",
+						_agile_get_translated_val('datasync','update-data'),
+						_agile_get_translated_val('datasync','update-request-scheduled'),
 						function()
 						{
 							// No callback
@@ -125,8 +125,8 @@ function syncAppData(){
                   }
                   else if (data == "limitReached"){
                   	showModalConfirmation(
-						"Update Data",
-						"Update is allowed only once a month. Please try later.",
+						_agile_get_translated_val('datasync','update-data'),
+						_agile_get_translated_val('datasync','update-request-scheduled-error'),
 						function()
 						{
 							// No callback
@@ -138,8 +138,8 @@ function syncAppData(){
                   }
                   else{
                   	showModalConfirmation(
-						"Update Data",
-						"There seems to be an issue. Please try again later.",
+						_agile_get_translated_val('datasync','update-data'),
+						_agile_get_translated_val('datasync','sync-error'),
 						function()
 						{
 							// No callback
@@ -162,5 +162,5 @@ function syncAppData(){
 			}, function()
 			{
 				return;
-			}, "Ok", "Cancel");
+			}, _agile_get_translated_val('reputation','Ok'), _agile_get_translated_val('contact-details','cancel'));
 }

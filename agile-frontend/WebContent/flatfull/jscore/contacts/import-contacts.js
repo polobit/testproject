@@ -144,7 +144,7 @@ $('#' + id).on('click', '#import-contacts', function(e)
 						 * After validation checks are passed then loading is
 						 * shown
 						 */
-						$waiting = $('<div style="display:inline-block;padding-left:5px"><small><p class="text-success"><i><span id="status-message">Please wait</span></i></p></small></div>');
+						$waiting = $('<div style="display:inline-block;padding-left:5px"><small><p class="text-success"><i><span id="status-message">'+_agile_get_translated_val('campaigns','please-wait')+'</span></i></p></small></div>');
 						$waiting.insertAfter($('#import-cancel'));
 
 						$('td.import-contact-fields').each(function(index, element)
@@ -241,7 +241,7 @@ $('#' + id).on('click', '#import-contacts', function(e)
 								App_Contacts.importContacts.model.fetch({
 									success : function(data)
 									{
-										showNotyPopUp('information', "Contacts are now being imported. You will be notified on email when it is done", "top", 5000);
+										showNotyPopUp('information', _agile_get_translated_val('contacts','import-success'), "top", 5000);
 										addTagAgile(IMPORT_TAG);
 										console.log(data);
 									}
@@ -275,9 +275,9 @@ $('#' + id).on('click', '#import-comp', function(e)
 					if ($(this).attr('disabled'))
 						return;
 
-					var upload_valudation_errors = { "company_name_missing" : { "error_message" : "Company Name is mandatory. Please select Company name." },
-						"company_name_duplicated" : { "error_message" : "Company Name is Duplicated." },
-							"invalid_tag" : { "error_message" : "Tag name should start with an alphabet and can not contain special characters other than underscore and space." }
+					var upload_valudation_errors = { "company_name_missing" : { "error_message" : _agile_get_translated_val('companies','name-mandatory') },
+						"company_name_duplicated" : { "error_message" : _agile_get_translated_val('companies','name-duplicated') },
+							"invalid_tag" : { "error_message" : _agile_get_translated_val('tags','tag-name-error') }
 					}
 					var models = [];
 
@@ -368,7 +368,7 @@ $('#' + id).on('click', '#import-comp', function(e)
 					/*
 					 * After validation checks are passed then loading is shown
 					 */
-					$waiting = $('<div style="display:inline-block;padding-left:5px"><small><p class="text-success"><i><span id="status-message">Please wait</span></i></p></small></div>');
+					$waiting = $('<div style="display:inline-block;padding-left:5px"><small><p class="text-success"><i><span id="status-message">'+_agile_get_translated_val('campaigns','please-wait')+'</span></i></p></small></div>');
 					$waiting.insertAfter($('#import-cancel'));
 
 					var properties = [];
@@ -649,7 +649,7 @@ $('#' + id).on('click', '#import-deals', function(e)
 					/*
 					 * After validation checks are passed then loading is shown
 					 */
-					$waiting = $('<div style="display:inline-block;padding-left:5px"><small><p class="text-success"><i><span id="status-message">Please wait</span></i></p></small></div>');
+					$waiting = $('<div style="display:inline-block;padding-left:5px"><small><p class="text-success"><i><span id="status-message">'+_agile_get_translated_val('campaigns','please-wait')+'</span></i></p></small></div>');
 					$waiting.insertAfter($('#import-cancel'));
 
 					var properties = [];
@@ -728,7 +728,7 @@ $('#' + id).on('click', '#import-deals', function(e)
 							// Sends empty JSON to remove
 							// contact uploaded
 
-							showNotyPopUp('information', "Deals are now being imported. You will be notified on email when it is done", "top", 5000);
+							showNotyPopUp('information', _agile_get_translated_val('deals','import-success'), "top", 5000);
 							location.href = agileWindowOrigin() + "#deals";
 							// Calls vefiryUploadStatus with data returned
 							// from the url i.e., key of the memcache

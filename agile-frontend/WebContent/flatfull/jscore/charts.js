@@ -1435,7 +1435,7 @@ function showDealAreaSpline(url, selector, name, yaxis_name, show_loading,freque
 			    //and pipeline
 			    series: series,
 			    lang: {
-            				noData: "No Deals Found"
+            				noData: "{{agile_lng_translate 'portlets' 'no-deals-found'}}"
         				},
         					noData: {
            								style: {
@@ -1704,7 +1704,7 @@ function chartRenderforIncoming(selector,categories,name,yaxis_name,min_tick_int
                     useHTML: true
                 },
                   lang: {
-            				noData: "No Deals Found"
+            				noData: "{{agie 'portlets' 'no-deals-found'}}"
         				},
         					noData: {
            								style: {
@@ -1890,7 +1890,7 @@ if(selector == 'lossreasonpie-chart-users'){
 				], 
 
 				 lang: {
-					noData: "No Deals Found"
+					noData: "{{agie 'portlets' 'no-deals-found'}}"
 					},
 					 noData: {
 									 style: {

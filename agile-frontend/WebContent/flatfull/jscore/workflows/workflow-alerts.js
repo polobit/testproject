@@ -121,7 +121,7 @@ function send_verify_email(el)
 		if(!isValidForm('#verify-email-form'))
 			return;
 
-		$(this).attr('disabled', 'disabled').text("Sending...");
+		$(this).attr('disabled', 'disabled').text(_agile_get_translated_val('other','sending'));
 
 		var json = serializeForm("verify-email-form");
 		

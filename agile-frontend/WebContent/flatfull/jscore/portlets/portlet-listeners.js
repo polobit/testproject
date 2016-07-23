@@ -234,7 +234,7 @@ function initializePortletsListeners() {
 					var won= data.won_milestone;
 					if(milestonesList.length > 1)
 					{
-						$('#milestone', el).html('<option value="anyMilestone">Any</option>');
+						$('#milestone', el).html('<option value="anyMilestone">{{agile_lng_translate "portlets" "any"}}</option>');
 					}
 					$.each(milestonesList, function(index, milestone){
 						if(lost!=null && won!=null){
@@ -254,7 +254,7 @@ function initializePortletsListeners() {
 		}
 		else
 		{
-			$('#milestone', el).html('<option value="anyMilestone">Any</option>');
+			$('#milestone', el).html('<option value="anyMilestone">{{agile_lng_translate "portlets" "any"}}</option>');
 		}
 		
 	});
@@ -917,7 +917,7 @@ $('.portlet_body')
 										.parent()
 										.parent()
 										.html(
-												'<div class="portlet-error-message">No tasks found.</div>');
+												'<div class="portlet-error-message">{{agile_lng_translate "tasks" "no-tasks-found"}}</div>');
 							}
 						}
 					});
@@ -1381,7 +1381,7 @@ if (endDate - startDate >= 0)
 		$('#' + modalName)
 				.find(".invalid-range")
 				.html(
-					'<div class="alert alert-danger m-t-sm" style="margin-bottom:5px;"><a class="close" data-dismiss="alert" href="#">&times</a>Start date should not be greater than end date.</div>'
+					'<div class="alert alert-danger m-t-sm" style="margin-bottom:5px;"><a class="close" data-dismiss="alert" href="#">&times</a>{{agile_lng_translate "events" "start-date-error"}}</div>'
 						);
 				$('#' + modalName)
 				.find(".invalid-range").parents('.form-group').show();

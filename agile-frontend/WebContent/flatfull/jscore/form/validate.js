@@ -247,7 +247,7 @@ function isValidForm(form) {
 			return false;
 		return true;
 	}, function(params, element) {
-		  return 'Maximum length is ' + $(element).attr("max_len") + ' chars only.'
+		  return getTemplate("js-max-length-error", {length: $(element).attr("max_len")});		
 		}	
 	);
     
@@ -263,7 +263,7 @@ function isValidForm(form) {
 		
 		var custvals = /^\s*[_a-zA-Z0-9\s]+\s*$/;
 		return custvals.test(value);
-	}," Label should start with an alphabet and special characters except underscore are not allowed.");
+	},_agile_get_translated_val('validation-msgs','formlabel-validation'));
     jQuery.validator.addMethod("tickets_group_name", function(value, element){
 
 		return /^[a-zA-Z0-9._]*$/.test(value);

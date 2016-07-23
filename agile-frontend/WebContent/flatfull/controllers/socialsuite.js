@@ -39,7 +39,7 @@ var SocialSuiteRouter = Backbone.Router.extend({
 				next();
 			// For local env
 			else {
-				head.js("jscore/min/flatfull/social-suite-all-min.js", function(){
+				head.js("jscore/min/flatfull/locales/" +_LANGUAGE+ "/social-suite-all-min.js", function(){
                    next();
 				});
 			}

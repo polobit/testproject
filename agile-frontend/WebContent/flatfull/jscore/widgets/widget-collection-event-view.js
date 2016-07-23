@@ -101,7 +101,7 @@ var Widget_Model_Events = Base_Model_View.extend({
          // Saves the preferences into widget with name
          save_widget_prefs(widgetName, JSON.stringify(prefs), function(data){
             console.log(data);
-            $(ele).removeAttr("disabled").val("Save");
+            $(ele).removeAttr("disabled").val("{{agile_lng_translate 'modals' 'save'}}");
          });
       }else{
          createAppSid(prefs, function(data){
@@ -111,7 +111,7 @@ var Widget_Model_Events = Base_Model_View.extend({
                // Saves the preferences into widget with name
                save_widget_prefs(widgetName, JSON.stringify(prefs), function(data){
                   console.log(data);
-                  $(ele).removeAttr("disabled").val("Save");
+                  $(ele).removeAttr("disabled").val("{{agile_lng_translate 'modals' 'save'}}");
                });
          });
       }

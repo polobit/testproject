@@ -1,6 +1,6 @@
 var RELOAD_DEALS = false;
 var SELECT_ALL_DEALS = false;
-var DEALS_BULK_MESSAGE = 'Bulk operation is in progress. You will be notified when it is done.';
+var DEALS_BULK_MESSAGE = '{{agile_lng_translate "bulk-actions" "in-progress"}}';
 
 var deal_bulk_actions = {
 	
@@ -254,7 +254,7 @@ var deal_bulk_actions = {
 				$.each(campaigns, function(index,camp){
 					var option = '<option value="{{id}}">{{name}}</option></th>';
 					if(camp.is_disabled){
-						option = '<option value="{{id}}" disabled = disabled>{{name}} (Disabled)</option>';
+						option = '<option value="{{id}}" disabled = disabled>{{name}} ('+_agile_get_translated_val('campaigns','disabled')+')</option>';
  					} 
 					html += Handlebars.compile(option)({id : camp.id, name : camp.name});
 				});
@@ -291,7 +291,7 @@ var deal_bulk_actions = {
 							.find('#bulk-select')
 							.show()
 							.html(
-									"Selected " + deal_bulk_actions.numberWithCommas(App_Deals.opportunityCollectionView.collection.length) + " deals. <a id='select-all-available-deals' class='text-info' href='#'>Select all " + deals_count_with_commas + " deals</a>");
+									"Selected " + deal_bulk_actions.numberWithCommas(App_Deals.opportunityCollectionView.collection.length) + " deals. <a id='select-all-available-deals' class='text-info' href='#'>{{agile_lng_translate 'portlets' 'select-all'}} " + deals_count_with_commas + " deals</a>");
 			}
 			else
 			{

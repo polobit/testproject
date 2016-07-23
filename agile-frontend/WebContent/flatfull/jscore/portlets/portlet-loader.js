@@ -492,7 +492,7 @@ function initBlogPortletSync(el)
 							+ entry.contentSnippet.replace('<a', '<a target="_blank"') + '</p>';
 						 },
 							onComplete : function(e){
-							$('#portlet_blog_sync_container',el).append('<span class="pull-right"><a href="https://www.agilecrm.com/blog" target="_blank">Agile CRM Blog</a></span>');
+							$('#portlet_blog_sync_container',el).append('<span class="pull-right"><a href="https://www.agilecrm.com/blog" target="_blank">{{agile_lng_translate "portlets" "agile-crm-blog"}}</a></span>');
 							}
 						});
 		});
@@ -558,7 +558,7 @@ function loadGoogleEventsForPortlets(p_el,startTime,endTime){
 			setTimeout(function(){
 				if($(p_el).parent().parent().find('#normal-events').find('table').find('tr').length==0 && $(p_el).parent().parent().find('#google-events').find('table').find('tr').length==0)
 				{
-					$(p_el).parent().parent().find('#normal-events').html('<div class="portlet-error-message">No calendar events</div>');
+					$(p_el).parent().parent().find('#normal-events').html('<div class="portlet-error-message">{{agile_lng_translate "portlets" "no-calendar-events"}}</div>');
 				}
 			},1000);
 		}
@@ -608,7 +608,7 @@ function googledataforEvents(p_el,response,startTime,endTime)
 								setTimeout(function(){
 									if($(p_el).parent().parent().find('#normal-events').find('table').find('tr').length==0 && $(p_el).parent().parent().find('#google-events').find('table').find('tr').length==0)
 									{
-										$(p_el).parent().parent().find('#normal-events').html('<div class="portlet-error-message">No calendar events</div>');
+										$(p_el).parent().parent().find('#normal-events').html('<div class="portlet-error-message">{{agile_lng_translate "portlets" "no-calendar-events"}}</div>');
 									}
 								},1000);
 							} });

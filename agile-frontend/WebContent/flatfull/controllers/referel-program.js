@@ -53,7 +53,7 @@ var ReferelRouter = Backbone.Router.extend({
 
 	referFriends : function()
 	{
-		var subject = _agile_get_translated_val('referrals' 'iam-using-agile') + _agile_get_translated_val('referrals','try-agile');
+		var subject = _agile_get_translated_val('referrals','iam-using-agile') + _agile_get_translated_val('referrals','try-agile');
 		var body = getTemplate("js-referal-program", {domain : CURRENT_DOMAIN_USER.domain});
 		sendMail(undefined,subject,body,undefined,undefined,this);
 	},

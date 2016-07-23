@@ -852,7 +852,7 @@ var SettingsRouter = Backbone.Router
 							}, error : function()
 							{
 								hideTransitionBar();
-								showNotyPopUp("information", "error occured please try again", "top");
+								showNotyPopUp("information", _agile_get_translated_val('billing','error-occured'), "top");
 							} });
 
 				/*

@@ -172,7 +172,7 @@ $(function()
 												$('#' + id + ' .deal-options').find('.deal-edit').remove();
 												$('#' + id + ' .deal-options')
 														.prepend(
-																'<a title="Restore" class="deal-restore" style="cursor:pointer;text-decoration:none;"> <i style="width: 0.9em!important;" class="icon-mail-reply"></i> </a>');
+																'<a title="{{agile_lng_translate "deal-view" "restore"}}" class="deal-restore" style="cursor:pointer;text-decoration:none;"> <i style="width: 0.9em!important;" class="icon-mail-reply"></i> </a>');
 											}
 											console.log('archived deal----', model);
 											// Shows Milestones Pie
@@ -312,8 +312,8 @@ $(function()
 											else
 											{
 												$('#' + id + ' .deal-options').find('.deal-restore').remove();
-												var htmllinks = '<a title="Archive" class="deal-archive" style="cursor:pointer;text-decoration:none;"> <i style="width: 0.9em!important;" class="icon-archive"></i> </a>';
-												htmllinks += '<a title="Edit" class="deal-edit" style="cursor:pointer;text-decoration:none;"> <i style="width: 0.9em!important;" class="icon-pencil"></i> </a>';
+												var htmllinks = '<a title="{{agile_lng_translate "deal-view" "archive"}}" class="deal-archive" style="cursor:pointer;text-decoration:none;"> <i style="width: 0.9em!important;" class="icon-archive"></i> </a>';
+												htmllinks += '<a title="{{agile_lng_translate "contact-details" "edit"}}" class="deal-edit" style="cursor:pointer;text-decoration:none;"> <i style="width: 0.9em!important;" class="icon-pencil"></i> </a>';
 												$('#' + id + ' .deal-options').prepend(htmllinks);
 											}
 											console.log('archived deal----', model);
