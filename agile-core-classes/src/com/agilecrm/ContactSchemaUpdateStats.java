@@ -28,7 +28,7 @@ public class ContactSchemaUpdateStats
 
 	@Indexed
 	public String status;
-	@NotSaved
+	
 	public String domainusermail;
 	public String cursor;
 
