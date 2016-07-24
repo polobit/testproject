@@ -995,7 +995,7 @@ $('.portlet_body')
 		    }
 		    if(id == "Dashboard")
 		    {
-		    	$('#dashboard-desc').text("Welcome to Agile CRM");
+		    	$('#dashboard-desc').text("{{agile_lng_translate 'dashboards' 'default-help'}}");
 		    	$('#dashboard-desc').attr("title", "");
 		    	$('#dashboard-name').attr("title", "");
 		    }

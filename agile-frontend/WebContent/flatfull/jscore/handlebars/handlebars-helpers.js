@@ -1146,8 +1146,9 @@ $(function()
 			element = element.replace("_", " ");
 			cls = "";
 	 	}
-	 
-	 		el = el.concat('<th class="'+ cls +'">' + ucfirst(element) + '</th>');	
+	 	
+	 	element = getTableLanguageConvertHeader(element);
+	 	el = el.concat('<th class="'+ cls +'">' + ucfirst(element) + '</th>');	
 	  
 	 });
 		return new Handlebars.SafeString(el);
@@ -6430,7 +6431,9 @@ $(function()
 			element = element.replace("_", " ");
 			cls = "";
 	 	}
-	 		el = el.concat('<th class="'+ cls +'">' + ucfirst(element) + '</th>');	
+
+	 	element = getTableLanguageConvertHeader(element);
+	 	el = el.concat('<th class="'+ cls +'">' + ucfirst(element) + '</th>');	
 	  
   		});
 		return new Handlebars.SafeString(el);
@@ -7379,3 +7382,21 @@ Handlebars.registerHelper('if_asc_sork_key', function(value, options)
 	else
 		return options.fn(this); 
 });
+
+function getTableLanguageConvertHeader(element){
+	if(!element)
+		 return element;
+
+	if(_agile_get_translated_val("contacts-view", element))
+	   return _agile_get_translated_val("contacts-view", element);
+
+	element = ucfirst(element);
+	if(_agile_get_translated_val("contacts-view", element))
+	   return _agile_get_translated_val("contacts-view", element);
+
+	element = element.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+	if(_agile_get_translated_val("contacts-view", element))
+	   return _agile_get_translated_val("contacts-view", element);
+
+	return element;
+}

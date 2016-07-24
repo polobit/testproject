@@ -801,6 +801,7 @@ widgets.Googleplus-widget-saved-successfully,GooglePlus widget saved successfull
 datasync.office365-initiated,Office365 calendar saved successfully,Office365 calendario guardado correctamente
 campaigns.no-contact-removed,No contact removed from this campaign,Sin eliminado de esta campaña de contactos
 dashboards.sales-help,Welcome to Agile CRM Sales Dashboard.,Bienvenido a Agile CRM Sales del tablero de instrumentos.
+dashboards.default-help,Welcome to Agile CRM,Bienvenido al CRM de Agile
 validation-msgs.minlength,Please enter at least {0} characters.,Por favor&#44; introduzca al menos {0} caracteres.
 prefs-online-calendar.setup-a-webrule-to-show-the-calendar,Setup a webrule to show the calendar.,Configuración de una webrule para mostrar el calendario.
 validation-msgs.card-3months-valid,Card should be atleast 3 months valid,Tarjeta debe ser al menos 3 meses válidos
@@ -1202,6 +1203,7 @@ admin-settings-custom-fields.edit-company-custom-field,Edit Company Custom Field
 admin-settings-custom-fields.edit-contact-custom-field,Edit Contact Custom Field,Modificar campo personalizado de Contacto
 misc-keys.clip-email-copied,Email copied to clipboard,Correo electrónico copiado al portapapeles
 contacts-view.csv-companies-import-list,CSV Companies Import List,Importar Lista de Empresas CSV
+contacts-view.URL,URL,URL
 validation-msgs.url,Please enter a valid URL.,Por favor introduzca un URL válido.
 contacts-view.due-date-has-been-removed,due date has been removed,La fecha de vencimiento se ha eliminado
 prefs-settings.new-report-reports-page,New Report (Reports Page),Nuevo reporte (Página de reportes)
