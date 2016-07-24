@@ -398,7 +398,7 @@ $(function()
 	$('body').on('click', '#deal_lost_reason_save', function(e){
 		e.preventDefault();
 		$(this).attr('disabled',true);
-		$(this).text("{{agile_lng_translate 'others' 'saving'}}"");
+		$(this).text("{{agile_lng_translate 'others' 'saving'}}");
 		var dealPipelineModel = DEALS_LIST_COLLECTION.collection.where({ heading : App_Deals.newMilestone });
 		var dealModel = dealPipelineModel[0].get('dealCollection').get(App_Deals.lost_reason_milesone_id);
 		dealModel.collection.get(App_Deals.lost_reason_milesone_id).set({ "lost_reason_id" : $(this).closest('.modal').find('form').find('#lost_reason').val() });
