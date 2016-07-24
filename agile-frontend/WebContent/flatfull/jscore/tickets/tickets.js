@@ -1357,8 +1357,8 @@ var Tickets = {
 
 			$(".remove-date").css("display", "block");
 
-			var msg = (due_date_present) ? ("Due date has been changed to " + formatted_date) 
-						: ("Due date has been set to " + formatted_date);
+			var msg = (due_date_present) ? ("{{agile_lng_translate 'contacts-view' 'due-date-has-been-changed-to'}} " + formatted_date) 
+						: ("{{agile_lng_translate 'contacts-view' 'due-date-has-been-set-to'}} " + formatted_date);
 
 			Ticket_Utils.showNoty('information', msg, 'bottomRight', 5000);
 
@@ -1606,13 +1606,13 @@ var Tickets = {
 
 		if(type && type == "hide"){
 			targetEle.attr("rel", "activities");
-			targetEle.attr("data-original-title", "Hide Activities");
+			targetEle.attr("data-original-title", "{{agile_lng_translate 'tickets' 'hide-activities'}}");
 			targetEle.html("<i class='fa fa-ellipsis-v'></i>");
 		}
 		else{
 			//Rendering ticket notes
 			targetEle.attr("rel", "notes");
-			targetEle.attr("data-original-title", "Show Activities");
+			targetEle.attr("data-original-title", "{{agile_lng_translate 'tickets' 'show-activities'}}");
 			targetEle.html("<i class='fa fa-ellipsis-h'></i>");
 		}
 
@@ -1768,7 +1768,7 @@ var Tickets = {
 			if(!email || email == 'No email'){
 				var $span = $('.form-action-error');
 
-				$span.html('No email address found.');
+				$span.html('{{agile_lng_translate "tickets" "no-email-address"}}');
 
 				setTimeout(function(){
 					$span.html('');
