@@ -2,19 +2,19 @@ function initWebstatsDateRange() {
     $('#activities_date_range')
         .daterangepicker({
                 ranges: {
-                    'Today': ['today', 'today'],
-                    'Yesterday': ['yesterday', 'yesterday'],
-                    'Last 7 Days': [Date.today().add({
+                    '{{agile_lng_translate "calendar" "Today"}}': ['today', 'today'],
+                    '{{agile_lng_translate "calendar" "Yesterday"}}': ['yesterday', 'yesterday'],
+                    '{{agile_lng_translate "portlets" "last-7-days"}}': [Date.today().add({
                         days: -6
                     }), 'today'],
-                    'Last 30 Days': [Date.today().add({
+                    '{{agile_lng_translate "portlets" "last-30-days"}}': [Date.today().add({
                         days: -29
                     }), 'today'],
-                    'This Month': [
+                    '{{agile_lng_translate "portlets" "this-month"}}': [
                         Date.today().moveToFirstDayOfMonth(),
                         Date.today().moveToLastDayOfMonth()
                     ],
-                    'Last Month': [
+                    '{{agile_lng_translate "portlets" "last-month"}}': [
                         Date.today().moveToFirstDayOfMonth().add({
                             months: -1
                         }),
@@ -26,11 +26,11 @@ function initWebstatsDateRange() {
                     
                 },
                 locale: {
-                    applyLabel: 'Apply',
-                    cancelLabel: 'Cancel',
-                    fromLabel: 'From',
-                    toLabel: 'To',
-                    customRangeLabel: 'Custom',
+                    applyLabel: '{{agile_lng_translate "calendar" "Apply"}}',
+                    cancelLabel: '{{agile_lng_translate "other" "cancel"}}',
+                    fromLabel: '{{agile_lng_translate "calendar" "from"}}',
+                    toLabel: '{{agile_lng_translate "calendar" "to"}}',
+                    customRangeLabel: '{{agile_lng_translate "campaigns" "custom"}}',
                     daysOfWeek: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr',
                         'Sa'
                     ],

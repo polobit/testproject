@@ -570,13 +570,111 @@ var options='';
 }
 
 /** Initialising date range for various report* */
-function initDateRange(callback)
-{
-	initReportLibs(function()
-	{
+function initDateRange(callback) {
+    initReportLibs(function() {
 
+        $('.daterangepicker').remove();
+        // Bootstrap date range picker.
+        $('#reportrange').daterangepicker({
+            ranges: {
+                '{{agile_lng_translate "calendar" "Today"}}': [
+                    'today', 'today'
+                ],
+                '{{agile_lng_translate "calendar" "Yesterday"}}': [
+                    'yesterday', 'yesterday'
+                ],
+                '{{agile_lng_translate "portlets" "last-7-days"}}': [
+                    Date.today().add({
+                        days: -6
+                    }), 'today'
+                ],
+                '{{agile_lng_translate "portlets" "last-30-days"}}': [
+                    Date.today().add({
+                        days: -29
+                    }), 'today'
+                ],
+                '{{agile_lng_translate "portlets" "this-month"}}': [
+                    Date.today().moveToFirstDayOfMonth(), Date.today().moveToLastDayOfMonth()
+                ],
+                '{{agile_lng_translate "portlets" "last-month"}}': [
+                    Date.today().moveToFirstDayOfMonth().add({
+                        months: -1
+                    }), Date.today().moveToFirstDayOfMonth().add({
+                        days: -1
+                    })
+                ],
+                '{{agile_lng_translate "portlets" "this-quarter"}}': [
+                    Date.today().getMonth() < 3 ? new Date(Date.today().setMonth(0)).moveToFirstDayOfMonth() :
+                    (Date.today().getMonth() >= 3 && Date.today().getMonth() < 6) ? new Date(Date.today().setMonth(3)).moveToFirstDayOfMonth() :
+                    (Date.today().getMonth() >= 6 && Date.today().getMonth() < 9) ? new Date(Date.today().setMonth(6)).moveToFirstDayOfMonth() : new Date(Date.today().setMonth(9)).moveToFirstDayOfMonth(),
+                    Date.today().getMonth() < 3 ? new Date(Date.today().setMonth(2)).moveToLastDayOfMonth() :
+                    (Date.today().getMonth() >= 3 && Date.today().getMonth() < 6) ? new Date(Date.today().setMonth(5)).moveToLastDayOfMonth() :
+                    (Date.today().getMonth() >= 6 && Date.today().getMonth() < 9) ? new Date(Date.today().setMonth(8)).moveToLastDayOfMonth() : new Date(Date.today().setMonth(11)).moveToLastDayOfMonth()
+                ],
+                '{{agile_lng_translate "portlets" "last-quarter"}}': [
+                    Date.today().getMonth() < 3 ? new Date(Date.today().add({
+                        years: -1
+                    }).setMonth(9)).moveToFirstDayOfMonth() :
+                    (Date.today().getMonth() >= 3 && Date.today().getMonth() < 6) ? new Date(Date.today().setMonth(0)).moveToFirstDayOfMonth() :
+                    (Date.today().getMonth() >= 6 && Date.today().getMonth() < 9) ? new Date(Date.today().setMonth(3)).moveToFirstDayOfMonth() : new Date(Date.today().setMonth(6)).moveToFirstDayOfMonth(),
+                    Date.today().getMonth() < 3 ? new Date(Date.today().add({
+                        years: -1
+                    }).setMonth(11)).moveToLastDayOfMonth() :
+                    (Date.today().getMonth() >= 3 && Date.today().getMonth() < 6) ? new Date(Date.today().setMonth(2)).moveToLastDayOfMonth() :
+                    (Date.today().getMonth() >= 6 && Date.today().getMonth() < 9) ? new Date(Date.today().setMonth(5)).moveToLastDayOfMonth() : new Date(Date.today().setMonth(8)).moveToLastDayOfMonth()
+                ],
+                '{{agile_lng_translate "portlets" "this-year"}}': [
+                    new Date(Date.today().setMonth(0)).moveToFirstDayOfMonth(), new Date(Date.today().setMonth(11)).moveToLastDayOfMonth()
+                ],
+                '{{agile_lng_translate "portlets" "last-year"}}': [
+                    new Date(Date.today().setMonth(0)).add({
+                        years: -1
+                    }).moveToFirstDayOfMonth(), new Date(Date.today().setMonth(11)).add({
+                        years: -1
+                    }).moveToLastDayOfMonth()
+                ]
+            },
+            locale: {
+                applyLabel: '{{agile_lng_translate "calendar" "Apply"}}',
+	            cancelLabel: '{{agile_lng_translate "other" "cancel"}}',
+	            fromLabel: '{{agile_lng_translate "calendar" "from"}}',
+	            toLabel: '{{agile_lng_translate "calendar" "to"}}',
+	            customRangeLabel: '{{agile_lng_translate "campaigns" "custom"}}',
+                daysOfWeek: [
+                    'Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'
+                ],
+                monthNames: [
+                    'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'
+                ],
+                firstDay: parseInt(CALENDAR_WEEK_START_DAY)
+            }
+        }, function(start, end) {
+            if (start && end) {
+                var months_diff = Math.abs(start.getMonth() - end.getMonth() + (12 * (start.getFullYear() - end.getFullYear())));
+                $('#reportrange span').html(start.toString('MMMM d, yyyy') + ' - ' + end.toString('MMMM d, yyyy'));
+                $("#week-range").html(end.add({
+                    days: -6
+                }).toString('MMMM d, yyyy') + ' - ' + end.add({
+                    days: 6
+                }).toString('MMMM d, yyyy'));
+            } else {
+                $('#reportrange span').html(Date.today().add({
+                    days: -6
+                }).toString('MMMM d, yyyy') + '-' + Date.today().toString('MMMM d, yyyy'));
+                $('.daterangepicker > .ranges > ul > li').each(function() {
+                    $(this).removeClass("active");
+                });
+            }
+            callback();
+        });
+        $('.daterangepicker > .ranges > ul').on("click", "li", function(e) {
+            $('.daterangepicker > .ranges > ul > li').each(function() {
+                $(this).removeClass("active");
+            });
+            $(this).addClass("active");
+        });
 
-	});
+    });
 
 }
 
@@ -623,9 +721,111 @@ function showRepPerformanceReport()
 
 }
 
-function initRepReports(callback){
-	
-	}
+function initRepReports(callback) {
+    initReportLibs(function() {
+
+        $('.daterangepicker').remove();
+        // Bootstrap date range picker.
+        $('#reportrange').daterangepicker({
+            ranges: {
+                '{{agile_lng_translate "portlets" "this-month"}}': [
+                    Date.today().moveToFirstDayOfMonth(), Date.today().moveToLastDayOfMonth()
+                ],
+                '{{agile_lng_translate "portlets" "last-month"}}': [
+                    Date.today().moveToFirstDayOfMonth().add({
+                        months: -1
+                    }), Date.today().moveToFirstDayOfMonth().add({
+                        days: -1
+                    })
+                ],
+                '{{agile_lng_translate "portlets" "this-quarter"}}': [
+                    Date.today().getMonth() < 3 ? new Date(Date.today().setMonth(0)).moveToFirstDayOfMonth() :
+                    (Date.today().getMonth() >= 3 && Date.today().getMonth() < 6) ? new Date(Date.today().setMonth(3)).moveToFirstDayOfMonth() :
+                    (Date.today().getMonth() >= 6 && Date.today().getMonth() < 9) ? new Date(Date.today().setMonth(6)).moveToFirstDayOfMonth() : new Date(Date.today().setMonth(9)).moveToFirstDayOfMonth(),
+                    Date.today().getMonth() < 3 ? new Date(Date.today().setMonth(2)).moveToLastDayOfMonth() :
+                    (Date.today().getMonth() >= 3 && Date.today().getMonth() < 6) ? new Date(Date.today().setMonth(5)).moveToLastDayOfMonth() :
+                    (Date.today().getMonth() >= 6 && Date.today().getMonth() < 9) ? new Date(Date.today().setMonth(8)).moveToLastDayOfMonth() : new Date(Date.today().setMonth(11)).moveToLastDayOfMonth()
+                ],
+                '{{agile_lng_translate "portlets" "last-quarter"}}': [
+                    Date.today().getMonth() < 3 ? new Date(Date.today().add({
+                        years: -1
+                    }).setMonth(9)).moveToFirstDayOfMonth() :
+                    (Date.today().getMonth() >= 3 && Date.today().getMonth() < 6) ? new Date(Date.today().setMonth(0)).moveToFirstDayOfMonth() :
+                    (Date.today().getMonth() >= 6 && Date.today().getMonth() < 9) ? new Date(Date.today().setMonth(3)).moveToFirstDayOfMonth() : new Date(Date.today().setMonth(6)).moveToFirstDayOfMonth(),
+                    Date.today().getMonth() < 3 ? new Date(Date.today().add({
+                        years: -1
+                    }).setMonth(11)).moveToLastDayOfMonth() :
+                    (Date.today().getMonth() >= 3 && Date.today().getMonth() < 6) ? new Date(Date.today().setMonth(2)).moveToLastDayOfMonth() :
+                    (Date.today().getMonth() >= 6 && Date.today().getMonth() < 9) ? new Date(Date.today().setMonth(5)).moveToLastDayOfMonth() : new Date(Date.today().setMonth(8)).moveToLastDayOfMonth()
+                ],
+                '{{agile_lng_translate "portlets" "this-year"}}': [
+                    new Date(Date.today().setMonth(0)).moveToFirstDayOfMonth(), new Date(Date.today().setMonth(11)).moveToLastDayOfMonth()
+                ],
+                '{{agile_lng_translate "portlets" "last-year"}}': [
+                    new Date(Date.today().setMonth(0)).add({
+                        years: -1
+                    }).moveToFirstDayOfMonth(), new Date(Date.today().setMonth(11)).add({
+                        years: -1
+                    }).moveToLastDayOfMonth()
+                ]
+            },
+            locale: {
+                applyLabel: '{{agile_lng_translate "calendar" "Apply"}}',
+	            cancelLabel: '{{agile_lng_translate "other" "cancel"}}',
+	            fromLabel: '{{agile_lng_translate "calendar" "from"}}',
+	            toLabel: '{{agile_lng_translate "calendar" "to"}}',
+	            customRangeLabel: '{{agile_lng_translate "campaigns" "custom"}}',
+                minViewMode: 'month',
+                dateLimit: 'month',
+                startDate: Date.today().moveToFirstDayOfMonth(),
+                endDate: Date.today().moveToLastDayOfMonth(),
+                daysOfWeek: [
+                    'Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'
+                ],
+                monthNames: [
+                    'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'
+                ],
+                firstDay: parseInt(CALENDAR_WEEK_START_DAY)
+            }
+        }, function(start, end) {
+            if (start && end) {
+                var months_diff = Math.abs(start.getMonth() - end.getMonth() + (12 * (start.getFullYear() - end.getFullYear())));
+                $('#reportrange span').html(start.toString('MMMM d, yyyy') + ' - ' + end.toString('MMMM d, yyyy'));
+                $("#week-range").html(end.add({
+                    days: -6
+                }).toString('MMMM d, yyyy') + ' - ' + end.add({
+                    days: 6
+                }).toString('MMMM d, yyyy'));
+            } else {
+                $('#reportrange span').html(Date.today().moveToFirstDayOfMonth().toString('MMMM d, yyyy') + '-' + Date.today().moveToLastDayOfMonth().toString('MMMM d, yyyy'));
+                $('.daterangepicker > .ranges > ul > li').each(function() {
+                    $(this).removeClass("active");
+                });
+            }
+            callback();
+        });
+        $('.daterangepicker > .ranges > ul').on("click", "li", function(e) {
+            $('.daterangepicker > .ranges > ul > li').each(function() {
+                $(this).removeClass("active");
+            });
+            $(this).addClass("active");
+        });
+        $('.daterangepicker > .ranges > ul li:last-child').hide();
+        $('.daterangepicker  .range_inputs').hide();
+        $('.daterangepicker > .ranges > ul li:last-child').prev().removeClass('b-b');
+
+    });
+
+
+    fillSelect("owner", "core/api/users/partial", undefined, function() {
+        $('select[id="owner"]').find('option[value="' + CURRENT_DOMAIN_USER.id + '"]').attr("selected", true);
+        callback();
+        $('#owner').change(function() {
+            callback();
+        });
+
+    }, '<option class="default-select" value="{{id}}">{{name}}</option>', false, undefined);
+}
 
 function initComparisonReports(callback){
 	

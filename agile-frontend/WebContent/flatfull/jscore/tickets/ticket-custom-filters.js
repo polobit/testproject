@@ -39,7 +39,7 @@ var Ticket_Custom_Filters = {
 			$('.daterangepicker').remove();
 
 			// Bootstrap date range picker.
-			$('#created-date-input').daterangepicker({drops: 'up', locale : { applyLabel : 'Apply', cancelLabel : 'Cancel', firstDay : parseInt(CALENDAR_WEEK_START_DAY)}}, function(start, end)
+			$('#created-date-input').daterangepicker({drops: 'up', locale : { applyLabel : '{{agile_lng_translate "calendar" "Apply"}}', cancelLabel : '{{agile_lng_translate "other" "cancel"}}', firstDay : parseInt(CALENDAR_WEEK_START_DAY)}}, function(start, end)
 			{
 				var range = $('#created-date-input').val();
 
