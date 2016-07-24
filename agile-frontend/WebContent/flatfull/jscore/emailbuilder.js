@@ -6,7 +6,7 @@ function initializeEmailBuilderListeners() {
         e.preventDefault();
         if (isValidForm('#emailBuilderForm')) {
             $(".saveEmailBuilderButton").prop("disabled",true);
-            $(".saveEmailBuilderButtonText").html("Saving...");
+            $(".saveEmailBuilderButtonText").html("{{agile_lng_translate 'others' 'saving'}}");
             document.getElementById('emailBuilderFrame').contentWindow.$('#save').trigger("click");
         }
     });

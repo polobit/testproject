@@ -472,14 +472,14 @@ function addNumbersInUI(twilioNumbers, verifiedNumbers)
 		setToValidate("no number", false);
 
 		// Add error msg at bottom of form
-		$("#note-number-not-available").html("You have no twilio numbers and verified numbers.");
+		$("#note-number-not-available").html("{{agile_lng_translate 'twill' 'invalid-numbers'}}");
 		$("#note-number-not-available").show();
 	}
 	// twilio # is available but no verified #
 	else if (twilioNumbers.length != 0 && verifiedNumbers.length == 0)
 	{
 		// Add note at bottom you do not have verified #
-		$("#note-number-not-available").html("You have no verified numbers. Please verify number in your Twilio account.");
+		$("#note-number-not-available").html("{{agile_lng_translate 'twill' 'invalid-twilio-numbers'}}");
 		$("#note-number-not-available").show();
 
 		// If no numbers
@@ -512,7 +512,7 @@ function addNumbersInUI(twilioNumbers, verifiedNumbers)
 	else if (twilioNumbers.length == 0 && verifiedNumbers.length != 0)
 	{
 		// Add note at bottom you do not have twilio #
-		$("#note-number-not-available").html("You have no twilio numbers. Please buy or port a number in your Twilio account.");
+		$("#note-number-not-available").html("{{agile_lng_translate 'twillio' 'invalid-number'}}");
 		$("#note-number-not-available").show();
 
 		// If no numbers
@@ -631,7 +631,7 @@ function getVerifiedNumbers(acc_sid, auth_token, callback)
 
 function addTwilioNumbersInUI(result)
 {
-	var phoneNumberHtml = '<option value="" default selected style="display:none;">Select a Twilio number</option>';
+	var phoneNumberHtml = '<option value="" default selected style="display:none;">{{agile_lng_translate "twill" "select-twilio-number"}}</option>';
 	var optionHtml = "";
 
 	// Collect all twilio number for display
@@ -641,7 +641,7 @@ function addTwilioNumbersInUI(result)
 		phoneNumberHtml = phoneNumberHtml + optionHtml;
 	});
 
-	optionHtml = '<option data="" value="">None</option>';
+	optionHtml = '<option data="" value="">{{agile_lng_translate "widgets" "none"}}</option>';
 	phoneNumberHtml = phoneNumberHtml + optionHtml;
 	
 	// Add verified number in list
@@ -660,7 +660,7 @@ function addVerifiedCallerIdInUI(result)
 		phoneNumberHtml = phoneNumberHtml + optionHtml;
 	});
 
-	optionHtml = '<option data="" value="">None</option>';
+	optionHtml = '<option data="" value="">{{agile_lng_translate "widgets" "none"}}</option>';
 	phoneNumberHtml = phoneNumberHtml + optionHtml;
 	
 	// Add verified number in list
@@ -694,7 +694,7 @@ function createAppSid(twilioio_prefs, callback)
 			$("#save_prefs").text("{{agile_lng_translate 'modals' 'save'}}");
 			$("#save_prefs").attr("disabled", false);
 			$("#save_prefs").hide();
-			$("#validate_account").text("Validate");
+			$("#validate_account").text("{{agile_lng_translate 'widgets' 'validate'}}");
 			$("#validate_account").attr("disabled", false);
 			$("#validate_account").show();
 
@@ -729,7 +729,7 @@ function fill_twilioio_numbers()
 	// Show save button
 	$("#save_prefs").show();
 
-	$("#save_prefs").text("Loading...");
+	$("#save_prefs").text("{{agile_lng_translate 'tickets' 'loading'}}");
 	$("#save_prefs").attr("disabled", true);
 	
 	// Retrieves widget which is fetched using script API
@@ -1059,7 +1059,7 @@ function setUpGlobalTwilio()
 						searchForContact(To_Number, function(name){
 								To_Name = name;
 
-								var btns = [{"id":"", "class":"btn btn-primary noty_twilio_answer","title":"Answer"},{"id":"","class":"btn btn-danger noty_twilio_ignore","title":"Ignore"}];
+								var btns = [{"id":"", "class":"btn btn-primary noty_twilio_answer","title":"{{agile_lng_translate 'calls' 'answer'}}"},{"id":"","class":"btn btn-danger noty_twilio_ignore","title":"{{agile_lng_translate 'contacts-view' 'ignore'}}"}];
 								showDraggableNoty("Twilioio", TWILIO_CONTACT, "incoming", To_Number, btns);
 								
 								/*showCallNotyPopup("incoming", "Twilio",
@@ -1204,7 +1204,7 @@ function twiliocall(phoneNumber, toName,conferenceName, contact)
 			// this was added to remve the error of popup message	
 				console.log("calling call noty");
 				
-				var btns = [{"id":"", "class":"btn btn-default btn-sm noty_twilio_cancel","title":"Cancel"}];
+				var btns = [{"id":"", "class":"btn btn-default btn-sm noty_twilio_cancel","title":"{{agile_lng_translate 'other' 'cancel'}}"}];
 				showDraggableNoty("Twilioio", TWILIO_CONTACT, "outgoing", To_Number, btns);
 				
 				/*showCallNotyPopup("outgoing", "Twilio", Twilio_Call_Noty_IMG+'<span class="noty_contact_details"><i class="icon icon-phone"></i><b>Calling </b>'+ To_Number +'<br><a href="#contact/'+TWILIO_CONTACT_ID+'" style="color: inherit;">' + To_Name + '</a><br></span><div class="clearfix"></div>', false);*/

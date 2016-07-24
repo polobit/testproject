@@ -25,7 +25,7 @@ function saveLandingPageToDataStore(isAutoSaved,pageId) {
 	if (isValidForm('#landingPageBuilderForm')) {
 		$(".saveLandingPageButton").prop("disabled",true);
 		
-		$(".saveLandingPageButtonText").html("Saving...");
+		$(".saveLandingPageButtonText").html("{{agile_lng_translate 'others' 'saving'}}");
 		    		
 		document.getElementById('landingPageBuilder').contentWindow.$('.icon-floppy-1:last').trigger("click");
 		if(App_LandingPageRouter.LandingPageCollectionView) {

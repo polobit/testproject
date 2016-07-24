@@ -173,49 +173,49 @@ function fill_subscribers_slate(id, type)
 {
 	var SUBSCRIBERS_PAD_CONTENT = {
 		    "active-subscribers": {
-		        "title": "Campaign does not have any active subscriber",
-		        "description": "You can add subscribers from Contacts tab - using the Bulk Actions option",
-		        "button_text" : "Add subscribers",
+		        "title": "{{agile_lng_translate 'campaigns' 'no-active-subscriber'}}",
+		        "description": "{{agile_lng_translate 'campaigns' 'all-subscribers-pad-content-desc'}}",
+		        "button_text" : "{{agile_lng_translate 'campaigns' 'all-subscribers-pad-content-btn-text'}}",
 				"route" : "#contacts",
 		        "image": updateImageS3Path("/img/clipboard.png")
 		    },
 		    "completed-subscribers": {
-		        "title": "No contact assigned to this campaign",
-		        "description": "You can add subscribers from Contacts tab - using the Bulk Actions option",
-		        "button_text" : "Add subscribers",
+		        "title": "{{agile_lng_translate 'campaigns' 'no-contact-assinged'}}",
+		        "description": "{{agile_lng_translate 'bulk-actions' 'add-subscribers'}}",
+		        "button_text" : "{agile_lng_translate 'campaigns' 'all-subscribers-pad-content-btn-text'}}",
 				"route" : "#contacts",
 		        "image": updateImageS3Path("/img/clipboard.png")
 		    },
 		    "removed-subscribers": {
-		        "title": "No contact removed from this campaign",
-		        "description": "Removed subscribers are the contacts deleted from the active campaign",
+		        "title": "{{agile_lng_translate 'campaigns' 'no-contact-removed'}}",
+		        "description": "{{agile_lng_translate 'campaigns' 'removed-subscribers'}}",
 		        "image": updateImageS3Path("/img/clipboard.png")
 		    },
 		    "all-subscribers": {
-		        "title": "No current or past subscribers for this campaign",
-		        "description": "You can add subscribers from Contacts tab - using the Bulk Actions option",
-		        "button_text" : "Add subscribers",
+		        "title": "{{agile_lng_translate 'campaigns' 'all-subscribers-pad-content-title'}}",
+		        "description": "{{agile_lng_translate 'bulk-actions' 'add-subscribers'}}",
+		        "button_text" : "{agile_lng_translate 'campaigns' 'all-subscribers-pad-content-btn-text'}}",
 				"route" : "#contacts",
 				"image": updateImageS3Path("/img/clipboard.png")
 		    },
 		    "unsubscribe-subscribers": {
-		    	"title": "No unsubscriptions for this campaign",
-		        "description": "Great! No one unsubscribed from this campaign",
+		    	"title": "{{agile_lng_translate 'campaigns' 'no-campaign-unsubscriptions'}}",
+		        "description": "{{agile_lng_translate 'campaigns' 'no-campaign-unsubscribed'}}",
 				"image": updateImageS3Path("/img/clipboard.png")
 		    },
 		    "hardbounced-subscribers": {
-		    	"title": "No hard bounces for this campaign",
-		        "description": "Great! No email get hardbounced",
+		    	"title": "{{agile_lng_translate 'campaigns' 'no-hard-bounces'}}",
+		        "description": "{{agile_lng_translate 'campaigns' 'no-one-hard-bounces'}}",
 				"image": updateImageS3Path("/img/clipboard.png")
 		    },
 		    "softbounced-subscribers": {
-		    	"title": "No soft bounces for this campaign",
-		        "description": "Great! No email get softbounced",
+		    	"title": "{{agile_lng_translate 'campaigns' 'no-soft-bounces'}}",
+		        "description": "{{agile_lng_translate 'campaigns' 'no-email-soft-bounced'}}",
 				"image": updateImageS3Path("/img/clipboard.png")
 		    },
 		    "spam-reported-subscribers": {
-		    	"title": "No one reported spam for this campaign",
-		        "description": "Great! No one reported spam yet",
+		    	"title": "{{agile_lng_translate 'campaigns' 'no-reported-spam'}}",
+		        "description": "{{agile_lng_translate 'campaigns' 'no-email-reported-spam'}}",
 				"image": updateImageS3Path("/img/clipboard.png")
 		    }
 		}

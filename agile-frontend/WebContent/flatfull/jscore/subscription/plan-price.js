@@ -123,13 +123,13 @@ function update_price()
 	if(_billing_restriction.currentLimits.planName == "FREE")
 	{
 		if(plan_name == "starter")
-			$("#purchase-plan").text("Proceed to Pay");
+			$("#purchase-plan").text("{{agile_lng_translate 'plan-and-upgrade' 'proceed-to-pay'}}");
 		else if(IS_TRIAL && IS_ALLOWED_TRIAL)
-			$("#purchase-plan").text("Proceed to Trial");
+			$("#purchase-plan").text("{{agile_lng_translate 'plan-and-upgrade' 'proceed-to-trial'}}");
 		else
-			$("#purchase-plan").text("Proceed to Pay");
+			$("#purchase-plan").text("{{agile_lng_translate 'plan-and-upgrade' 'proceed-to-pay'}}");
 	}else
-		$("#purchase-plan").text("Proceed to Pay");
+		$("#purchase-plan").text("{{agile_lng_translate 'plan-and-upgrade' 'proceed-to-pay'}}");
 	return $("#" + plan_name + "_plan_price").text();
 }
 
@@ -344,7 +344,7 @@ function initializeSubscriptionListeners()
 			{
 				e.preventDefault();
 				if(!CURRENT_DOMAIN_USER.is_admin && USER_BILLING_PREFS.billingData){
-					showNotyPopUp("warning", "Sorry. Only users with admin privileges can change the plan. Please contact your administrator for further assistance.", "top");
+					showNotyPopUp("warning", "{{agile_lng_translate 'billing' 'cncel-voilation'}}", "top");
 					return;
 				}
 				plan_json = {};
@@ -654,7 +654,7 @@ function initializeSubscriptionListeners()
 				return true;
 
 			return parseInt(value) >= 5;
-		}, " Should purchase a minimum of 5000 emails.");
+		}, " {{agile_lng_translate 'billing' 'should-purchase-5000'}}");
 	});
 
 	$("#subscribe_plan_change").on("click","#cancel_free_trial",function(e){
@@ -714,7 +714,7 @@ function initializeSubscriptionListeners()
 		$.ajax({url:'core/api/subscription/cancel/email',
 			type:'GET',
 			success:function(data){
-				showNotyPopUp("information", "Email subscription has been cancelled successfully.", "top"); 
+				showNotyPopUp("information", "{{agile_lng_translate 'billing' 'email-subscription-canceled'}}", "top"); 
 				setTimeout(function(){ 
 					document.location.reload();
 				}, 1000);				
@@ -814,13 +814,13 @@ $(function(){
 		var $form = $("#purchaseCreditsForm");
 		if(!isValidForm($form))
 			return;
-		$(this).attr("disabled", "disabled").html("Processing...");
+		$(this).attr("disabled", "disabled").html("{{agile_lng_translate 'plan-and-upgrade' 'processing'}}");
 		var credits_count = $form.find("#email_credits_count").val();
 		$.ajax({url:'core/api/subscription/purchaseEmailCredits?quantity='+credits_count,
 			type:'POST',
 			success:function(data){
 				$form.closest(".modal").modal("hide");
-				showNotyPopUp("information", "Email credits have been added successfully.", "top"); 
+				showNotyPopUp("information", "{{agile_lng_translate 'billing' 'email-credits-added'}}", "top"); 
 				setTimeout(function(){ 
 					document.location.reload();
 				}, 1000);				

@@ -226,7 +226,7 @@ function populate_milestones_in_trigger(trigger_form, milestones_select_id, trig
 			
 			trigger_form.find('select#' + milestones_select_id).val(trigger_deal_milestone_value).attr('selected', 'selected').trigger('change');
 		}
-	}, "Select new milestone...", 'trigger-deal-milestone');
+	}, "{{agile_lng_translate 'milestones' 'select-new-one'}}", 'trigger-deal-milestone');
 
 	// Fills milestone select element
 /*	populateMilestones(trigger_form, undefined, 0, undefined, function(data)
@@ -266,7 +266,7 @@ function populate_contact_filters_in_trigger(trigger_form, filter_select_id, val
 		{
 			$('#contact-filter',trigger_form).find('option[value=' + value + ']').attr('selected', 'selected');
 		}
-	}, optionsTemplate, false,undefined,"Select Contact filter");
+	}, optionsTemplate, false,undefined,"{{agile_lng_translate 'campaigns' 'select-contact-filter'}}");
 }
 
 /**
@@ -323,14 +323,14 @@ function populate_owners_in_trigger(trigger_form, owner_select_id, trigger_owner
 	fillSelect(owner_select_id, '/core/api/users/partial', 'users', function()
 			{
 		
-			$("#" + owner_select_id +' option:first').after('<option value="ANY">Any Owner</option>');
+			$("#" + owner_select_id +' option:first').after('<option value="ANY">{{agile_lng_translate "triggers" "any-owner"}}</option>');
 			
 			if (trigger_owner_id)
 			{
 				$('#'+owner_select_id, trigger_form).find('option[value=' + trigger_owner_id + ']').attr('selected', 'selected');
 			}
 		
-	}, optionsTemplate, false, undefined, "Select Event Owner");
+	}, optionsTemplate, false, undefined, "{{agile_lng_translate 'campaigns' 'select-event-owner'}}");
 }
 
 function populate_call_trigger_options(trigger_form, triggerJSON)
@@ -355,7 +355,7 @@ function populate_forms_in_trigger(trigger_form, trigger_form_select_id, trigger
 		{
 			$('#' + trigger_form_select_id, trigger_form).find('option[value=' + trigger_form_id + ']').attr('selected', 'selected');
 		}
-	}, formOptionsTemplate, false, undefined, "Select Form");
+	}, formOptionsTemplate, false, undefined, "{{agile_lng_translate 'campaigns' 'select-form'}}");
 }
 
 
@@ -449,7 +449,7 @@ function show_email_tracking_campaigns()
 	fillSelect('email-tracking-campaign-id', '/core/api/workflows', 'workflow', function()
 			{
 				
-				$('#email-tracking-campaign-id option:first').after('<option value="0">All</option>');
+				$('#email-tracking-campaign-id option:first').after('<option value="0">{{agile_lng_translate "subscriber_type" "all"}}</option>');
 				
 			}, optionsTemplate, false);
 }
@@ -473,7 +473,7 @@ function openVerifyEmailModal(el) {
 	var selected = $(el).find(':selected').val();
 
 	if (selected == 'verify_email')
-		window.parent.workflow_alerts("Verify a new From address", undefined,
+		window.parent.workflow_alerts("{{agile_lng_translate 'emails' 'verify-new-email'}}", undefined,
 				"workflow-verify-email-modal"
 
 				, function(modal) {
@@ -524,7 +524,7 @@ function rearrange_from_email_options($select, data) {
 		
 		if (unverified.indexOf(email) != -1) {
 			$(this).attr('unverified', 'unverified');
-			$(this).text(email + ' (unverified)');
+			$(this).text(email + ' ({{agile_lng_translate "emails" "unverified"}})');
 		}
 		
 	});

@@ -1,6 +1,6 @@
 
 //Coupons array
-var AGILE_COUPONS_JSON = {}, AGILE_COUPON_INVALID_MESSAGE = "Coupon is either expired or invalid for the selected plan.";
+var AGILE_COUPONS_JSON = {}, AGILE_COUPON_INVALID_MESSAGE = "{{agile_lng_translate 'billing' 'coupon-expired'}}";
 function showCouponCodeContainer(id) {
 
 	/**

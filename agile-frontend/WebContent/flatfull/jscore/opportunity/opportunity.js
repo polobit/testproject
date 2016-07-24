@@ -98,11 +98,11 @@ var tracks = new Base_Collection_View({url : '/core/api/milestone/pipelines'});
 					html+='<optgroup label="'+mile.name+'">';
 					if(filter_el && value && mile.id == value.pipeline_id && value.milestone == "ALL@MILESTONES")
 					{
-						html += Handlebars.compile('<option selected="selected" value="{{id}}_ALL@MILESTONES">{{name}} - All</option>')({id : mile.id, name : mile.name});
+						html += Handlebars.compile('<option selected="selected" value="{{id}}_ALL@MILESTONES">{{name}} - {{agile_lng_translate "subscriber_type" "all"}}</option>')({id : mile.id, name : mile.name});
 					}
 					else if(filter_el)
 					{
-						html += Handlebars.compile('<option value="{{id}}_ALL@MILESTONES">{{name}} - All</option>')({id : mile.id, name : mile.name});
+						html += Handlebars.compile('<option value="{{id}}_ALL@MILESTONES">{{name}} - {{agile_lng_translate "subscriber_type" "all"}}</option>')({id : mile.id, name : mile.name});
 					}
 					$.each(mile.milestones.split(","), function(index,milestone){
 						array.push($.trim(this));

@@ -91,7 +91,7 @@ function deleteTask(taskId, taskListId, taskListOwnerId)
 		{
 			updateTask(false, model, model.toJSON());
 			TASKS_LIST_COLLECTION.render(true);
-			showModalConfirmation("Delete Task", 
+			showModalConfirmation("{{agile_lng_translate 'report-view' 'delete-task'}}", 
 				response.responseText, 
 				function (){
 					return;
@@ -102,7 +102,7 @@ function deleteTask(taskId, taskListId, taskListOwnerId)
 				function(){
 					return;
 				},
-				"Cancel"
+				"{{agile_lng_translate 'other' 'cancel'}}"
 			);
 		} });
 	}

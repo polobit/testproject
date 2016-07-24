@@ -61,7 +61,7 @@ function initializeOnlineCalendarListners(el){
 						$('#error_message').empty();
 					}, error : function(error)
 					{
-						$('#error_message').html("There was an error in saving your settings. Please try again in a minute.");
+						$('#error_message').html("{{agile_lng_translate 'calendar' 'saving-prefs-error'}}");
 						enable_save_button($(saveBtn));
 						
 					} });
@@ -135,7 +135,7 @@ $("#online-cal-listners").on("click","#save-scheduleurl", function(e){
 
 					console.log(error);
 					$('#schedule_error_message').html(
-							'Something went wrong as your schedule url was not updated. Please try again in few hours. Error: ' + error.statusText);
+							'{{agile_lng_translate "calendar" "saving-url-error"}}' + error.statusText);
 					$('#schedule_error_message').fadeIn('slow');
 					setTimeout(function()
 					{
@@ -159,14 +159,14 @@ $("#online-cal-listners").on("click","#save-scheduleurl", function(e){
 	$("#online-cal-listners #calendar_advanced_block").off("shown");
 	$("#online-cal-listners").on("shown","#calendar_advanced_block", function(e)
 	{
-		$('#calendar_advanced').html('<span><i class="icon-minus"></i></span> Advanced');
+		$('#calendar_advanced').html('<span><i class="icon-minus"></i></span> {{agile_lng_translate "report-add" "advanced"}}');
 
 	});
 
 	$("#online-cal-listners #calendar_advanced_block").off("hidden");
 	$("#online-cal-listners").on("hidden","#calendar_advanced_block", function(e)
 	{
-		$('#calendar_advanced').html('<span><i class="icon-plus"></i></span> Advanced');
+		$('#calendar_advanced').html('<span><i class="icon-plus"></i></span> {{agile_lng_translate "report-add" "advanced"}}');
 	});
 
 	$("#online-cal-listners #bufferTime").off("keypress");

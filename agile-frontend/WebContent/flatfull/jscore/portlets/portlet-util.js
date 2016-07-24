@@ -2612,7 +2612,7 @@ var portlet_utility = {
 	 * settings.
 	 */
 	setOwners : function(ele_id, base_model, elData) {
-		var options = '<option value="">All</option>';
+		var options = '<option value="">{{agile_lng_translate "subscriber_type" "all"}}</option>';
 		$.ajax({
 			type : 'GET',
 			url : '/core/api/users/partial',

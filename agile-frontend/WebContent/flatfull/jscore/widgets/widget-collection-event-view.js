@@ -16,10 +16,10 @@ var Widget_Model_Events = Base_Model_View.extend({
       var widgetType = $('#widget-settings').attr('widget-type');
       if(widgetType == "CUSTOM"){  
         if(e){      
-          showNotyPopUp("success" , "Custom widget saved successfully.", "bottomRight");
+          showNotyPopUp("success" , "{{agile_lng_translate 'widgets' 'saved-success'}}", "bottomRight");
           window.location.href = "#add-widget";
         }else{
-          showNotyPopUp("error" , "Widget name already in use.", "bottomRight");
+          showNotyPopUp("error" , "{{agile_lng_translate 'widgets' 'widgetname-exists'}}", "bottomRight");
         }
       }
     }
@@ -95,7 +95,7 @@ var Widget_Model_Events = Base_Model_View.extend({
 		if($(ele).attr("disabled"))
 			  return;
 
-		$(ele).attr("disabled", "disabled").val("Saving...");
+		$(ele).attr("disabled", "disabled").val("{{agile_lng_translate 'others' 'saving'}}");
 
       if(widgetName != "TwilioIO"){
          // Saves the preferences into widget with name

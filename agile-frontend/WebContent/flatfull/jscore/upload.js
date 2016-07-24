@@ -87,7 +87,7 @@ function setContactImageURL(url)
 	$('#' + id).find('.contact-image-view').html('');
 	$('#' + id).find('.contact-image-view').html('<img src="' + url + '" class="upload_pic imgholder submit w-full img-circle" style="width:75px;height:75px;" type="submit" />');
 	if($(".toggle-contact-image .contact-delete-option").length == 0) {
- 	$('#' + id).find('.toggle-contact-image').append('|<div style="float:right" class="contact-delete-option"><a name="Delete" value="Delete" onClick="deleteConfirmation();" class="tooltip_info" data-placement="bottom" data-toggle="tooltip" title="Delete"><i class="glyphicon glyphicon-trash" style="color:red"></i></a></div>');	
+ 	$('#' + id).find('.toggle-contact-image').append('|<div style="float:right" class="contact-delete-option"><a name="Delete" value="Delete" onClick="deleteConfirmation();" class="tooltip_info" data-placement="bottom" data-toggle="tooltip" title="{{agile_lng_translate "contact-details" "delete"}}"><i class="glyphicon glyphicon-trash" style="color:red"></i></a></div>');	
 	$('#' + id).find('.toggle-contact-image').find(".contact-edit-option").removeAttr('style');
 	$('#' + id).find('.toggle-contact-image').find(".contact-edit-option").css("float","left");
 	}

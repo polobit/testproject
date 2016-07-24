@@ -104,7 +104,7 @@ function initializeCallScriptListeners(){
 	$('#prefs-tabs-content').on('click', '#save_prefs', function(e)
 	{	e.preventDefault();
 
-		if ($(this).text() == "Saving..." || $(this).text() == "Loading...") {
+		if ($(this).text() == "{{agile_lng_translate 'others' 'saving'}}" || $(this).text() == "Loading...") {
 			console.log("Do not hit me again " + $(this).text());
 			return;
 		}
@@ -583,7 +583,7 @@ function makeWidgetTabActive()
  * in CallScript widget object
  */
 function saveCallScriptWidgetPrefs() {
-	$("#save_prefs").text("Saving...");
+	$("#save_prefs").text("{{agile_lng_translate 'others' 'saving'}}");
 	$("#save_prefs").attr("disabled", true);
 
 	// Retrieve and store the Sip preferences entered by the user as

@@ -16,7 +16,7 @@ function initializePortletsListeners() {
 						if (!isValidForm('#' + form_id))
 							return false;
 						$(this).attr('disabled', true);
-						$(this).text('Saving...');
+						$(this).text("{{agile_lng_translate 'others' 'saving'}}");
 
 						var el = this.id;
 						var flag = true;
