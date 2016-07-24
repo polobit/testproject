@@ -30,7 +30,7 @@ var Ticket_Reports = {
 		{	
 			frequency = $(this).find('option:selected').val();
 			showBar('/core/api/tickets/reports/daily?start_time=' + start_time + '&end_time=' 
-					+ end_time + '&frequency=' + frequency, 'tickets-chart', '', 'Tickets count', false);
+					+ end_time + '&frequency=' + frequency, 'tickets-chart', '', '{{agile_lng_translate "tickets" "count"}}', false);
 		});
 
 		var status = $('#status').find('option:selected').val();
@@ -39,11 +39,11 @@ var Ticket_Reports = {
 		{	
 			status = $(this).find('option:selected').val();
 			showBar('/core/api/tickets/reports/daily?start_time=' + start_time + '&end_time=' 
-					+ end_time + '&frequency=' + frequency + '&status=' + status, 'tickets-chart', '', 'Tickets count', false, ((status == 'NEW') ? ['#f0ad4e'] : ['#5cb85c']));
+					+ end_time + '&frequency=' + frequency + '&status=' + status, 'tickets-chart', '', '{{agile_lng_translate "tickets" "count"}}', false, ((status == 'NEW') ? ['#f0ad4e'] : ['#5cb85c']));
 		});
 
 		showBar('/core/api/tickets/reports/daily?start_time=' + start_time + '&end_time=' 
-				+ end_time + '&frequency=' + frequency + '&status=' + status, 'tickets-chart', '', 'Tickets count', false, ((status == 'NEW') ? ['#f0ad4e'] : ['#5cb85c']));
+				+ end_time + '&frequency=' + frequency + '&status=' + status, 'tickets-chart', '', '{{agile_lng_translate "tickets" "count"}}', false, ((status == 'NEW') ? ['#f0ad4e'] : ['#5cb85c']));
 	},
 
 	priorityReports: function(){
@@ -77,11 +77,11 @@ var Ticket_Reports = {
 			report_type = $(this).find('option:selected').val();
 
 			var url = '/core/api/tickets/reports/priority?start_time=' + start_time + '&end_time=' + end_time,
-			    report_title = 'Priority Report';
+			    report_title = '{{agile_lng_translate "tickets" "priority-report"}}';
 
 			if(report_type == 'status'){
 				url = '/core/api/tickets/reports/status?start_time=' + start_time + '&end_time=' + end_time;
-			    report_title = 'Status Report';
+			    report_title = '{{agile_lng_translate "tickets" "status-report"}}';
 			}
 
 			Ticket_Reports.pieforReports(url,'report-chart', '', true);
@@ -91,10 +91,10 @@ var Ticket_Reports = {
 		//report_type = $(this).find('option:selected').val();
 
 		var url = '/core/api/tickets/reports/priority?start_time=' + start_time + '&end_time=' + end_time,
-		    report_title = 'Priority Report';
+		    report_title = '{{agile_lng_translate "tickets" "priority-report"}}';
 		if(report_type == 'status'){
 			url = '/core/api/tickets/reports/status?start_time=' + start_time + '&end_time=' + end_time;
-		    report_title = 'Status Report';
+		    report_title = '{{agile_lng_translate "tickets" "status-report"}}';
 		}
 
 		Ticket_Reports.pieforReports(url,'report-chart', '', true);
@@ -234,7 +234,7 @@ var Ticket_Reports = {
 						return  '<div>' + 
 	                        '<div class="p-n">'+this.series.name+': <b>'+ getNumberWithCommasForCharts(AllData[this.point.x][1]) + '</b></div>' +
 	                        '</div>'+
-	                        '<div class="p-n">Total: <b>' + pieData[this.point.x][2]+ '</b></div>';
+	                        '<div class="p-n">{{agile_lng_translate "other" "total"}}: <b>' + pieData[this.point.x][2]+ '</b></div>';
 					},
 					shared: true,
 					useHTML: true,
@@ -280,9 +280,9 @@ var Ticket_Reports = {
 						borderWidth : 0
 					}
 				},
-				series : [{ type : 'pie', name : 'Tickets', data : pieData, startAngle : 90 }], 
+				series : [{ type : 'pie', name : '{{agile_lng_translate "report-view" "tickets"}}', data : pieData, startAngle : 90 }], 
 				exporting : { enabled : false },
-				lang: { noData: "No Data found"},
+				lang: { noData: "{{agile_lng_translate 'tickets' 'no-data-found'}}"},
 				noData: {
 					style: {
 						fontSize: '14px',

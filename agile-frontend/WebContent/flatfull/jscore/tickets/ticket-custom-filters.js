@@ -284,7 +284,7 @@ var Ticket_Custom_Filters = {
 					$select.html(optionList);
 
 					// Initliazing multi select drop down
-					$select.chosen({no_results_text: "No labels found"});
+					$select.chosen({no_results_text: "{{agile_lng_translate 'tickets' 'no-labels-found'}}"});
 
 					//Initializes click events
 		  			Ticket_Custom_Filters.initEvents();

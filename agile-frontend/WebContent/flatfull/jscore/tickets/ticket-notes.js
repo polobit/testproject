@@ -62,10 +62,10 @@ var Tickets_Notes = {
 				Tickets.remove_draft_message(Current_Ticket_ID, ((note_type == 'PUBLIC') ? 'reply' : 'comment'));
                 
                 if(notes_json.note_type == 'PRIVATE'){
-                	Ticket_Utils.showNoty('information', "Comment has been added" + ((is_ticket_closed) ? ' and status changed to Closed' : ''), 'bottomRight', 5000);
+                	Ticket_Utils.showNoty('information', "{{agile_lng_translate 'tickets' 'comment-added'}}" + ((is_ticket_closed) ? ' {{agile_lng_translate "tickets" "status-closed"}}' : ''), 'bottomRight', 5000);
                 }else{
 	                
-	                var msg = 'Comment has been added and ticket status changed to ' + ((is_ticket_closed) ? 'Closed' : 'Pending');
+	                var msg = '{{agile_lng_translate "tickets" "comment-and-status-update"}} ' + ((is_ticket_closed) ? '{{agile_lng_translate "cases" "closed"}}' : '{{agile_lng_translate "tickets" "pending"}}');
 
 	                Ticket_Utils.showNoty('information', msg, 'bottomRight', 5000);
 				}
@@ -161,7 +161,7 @@ var Tickets_Notes = {
 			accept: 'application/json',
 			success : function(data){
 				
-				Ticket_Utils.showNoty('information', "Ticket has been forwarded to " + emails.join(), 
+				Ticket_Utils.showNoty('information', "{{agile_lng_translate 'tickets' 'ticket-forwarded'}} " + emails.join(), 
 					'bottomRight', 5000);
 
 				// Remove draft message from local staorage
@@ -351,7 +351,7 @@ var Tickets_Notes = {
             notesText += note.plain_text;
               
 	        if(noteAttachment.length >0)
-	            notesText +="\n\nAttachments:";   
+	            notesText +="\n\n{{agile_lng_translate 'tickets' 'attachments'}}:";   
 
 	        $.each(noteAttachment,function(index,note_Attachment){
 	           notesText += '\n <a href="' + encodeURI(note_Attachment.url) + '">' 
@@ -404,7 +404,7 @@ var Tickets_Notes = {
 		newTicketModel.url = "core/api/tickets/execute-workflow";
 		newTicketModel.save(json, {	
 				success: function(model){
-					Ticket_Utils.showNoty('information', 'Workflow execution has been started successfully', 'bottomRight', 5000);
+					Ticket_Utils.showNoty('information', '{{agile_lng_translate "tickets" "workflow-exe-started"}}', 'bottomRight', 5000);
 			}}
 		);
 	},
