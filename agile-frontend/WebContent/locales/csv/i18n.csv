@@ -423,7 +423,7 @@ prefs-email.office365-content,See all emails related to a contact from your Offi
 campaigns.score-increased-desc,Add contact to a campaign when the score crosses a given limit.,Agregar un contacto a una campaña cuando el marcador cruza un límite determinado..
 campaigns.engage-your-customers,Engage your customers with the world's easiest visual designer.,Involucra a tus clientes con el diseñador visual más fácil del mundo.
 campaigns.name-exists,Please change the given name. Same kind of name already exists.,Por favor&#44; cambie el nombre dado. Mismo tipo de nombre ya existe.
-campaigns.connect-start-node,Please connect the 'Start' node to another node in the campaign,Por favor&#44; conecte el nodo &#39;Start&#39; para otro nodo en la campaña
+campaigns.connect-start-node,Please connect the \’Start\' node to another node in the campaign,Por favor&#44; conecte el nodo &#39;Start&#39; para otro nodo en la campaña
 calendar.solt-book-error,Looks like this slot is booked already. Please try another one.,Parece que esta ranura es reservado ya. Por favor&#44; intente otra.
 web-rules.create-your-own-template-desc,Create your own template by copy pasting your HTML into editor,Crea  tu propia plantilla al copiar y pegar el código HTML en el editor
 emails.verification-process,Please check your email and complete the verification process.,Por favor&#44; consultar su correo electrónico y completar el proceso de verificación.
@@ -1962,7 +1962,7 @@ contacts-view.reassigned-task,Reassigned Task,Tarea reasignado
 contact-details.opened-an-email,opened an email,abrió un correo electrónico
 admin-settings-stats.spam-complaints,Spam Complaints,Quejas de spam
 report-view.rep-performance,Rep Performance,Desempeño de rep
-contacts-view.does-not-contain,doesn't contain,no contiene
+contacts-view.does-not-contain,doesn\’t contain,no contiene
 tasks.add-description,Add Description,Agregar descripción
 admin-settings-tasks.delete-category,Delete Category,Eliminar categoría
 web-rules.substract-score,Substract Score,Restar puntuación
@@ -3876,7 +3876,7 @@ other.merge,Merge,Combinar
 landingpages.cname-exists,Found,Encontró
 contacts-view.Title,Title,Título
 other.email,Email,Email
-contacts-view.is-not,isn't,no es
+contacts-view.is-not,isn\’t,no es
 portlets.board,Board,Tablero
 theme.theme,Theme,Tema
 deal-view.value,Value,Valor
