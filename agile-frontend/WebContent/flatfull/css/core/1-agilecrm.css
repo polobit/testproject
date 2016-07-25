@@ -4225,7 +4225,7 @@ background-color : #522E2E;
     z-index: 999;
     left: 38%;
     float: right;
-    background: #f6f8f8;
+    background: lightyellow;
     margin-top: -10px;
     position: absolute;
     border-radius: 5px;
@@ -4358,4 +4358,49 @@ border: 1px solid #e5e5e5;
     overflow-y : auto!important;
     margin-bottom: 30px;
      position: relative;
+}
+
+.deal-actions-overlap {
+  background: #ebf5ff!important;
+}
+.archive-deal-action:after {
+  content: "Archive";
+  position: absolute;
+  top: 25px;
+  margin-left: -34px;
+  font-size: 14px;
+  font-family: "Source Sans Pro","Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+.restore-deal-action:after {
+  content: "Restore";
+  position: absolute;
+  top: 25px;
+  margin-left: -34px;
+  font-size: 14px;
+  font-family: "Source Sans Pro","Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+.delete-deal-action:after {
+  content: "Delete";
+  position: absolute;
+  top: 25px;
+  margin-left: -32px;
+  font-size: 14px;
+  font-family: "Source Sans Pro","Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+.move-deal-action:after {
+  content: "Other Track";
+  position: absolute;
+  top: 25px;
+  margin-left: -48px;
+  font-size: 14px;
+  font-family: "Source Sans Pro","Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+.update-drag-deal:hover {
+  background: #ebf5ff!important;
+}
+.update-drag-deal:hover span:after {
+  border-left: 6px solid #ebf5ff!important;
+}
+.update-drag-deal + .tooltip{
+  width: auto!important;
 }
