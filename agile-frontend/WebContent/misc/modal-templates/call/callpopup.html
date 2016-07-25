@@ -1,4 +1,4 @@
-<html lang="en">
+<html lang="en" data-modal-type="agile-modal-xs" data-modal-version="2">
 <head>
 <meta http-equiv="content-type" content="text/html;charset=utf-8" />
 <title>Popup</title>
@@ -8,25 +8,23 @@
 <style type="text/css">
 body {
 	background: #fff;
-	width: 310px;
-	height: 210px;
+	
 }
 
 #popup {
 	background: #FCFCFC;;
 	  border: 1px solid #f6f6f6;
-	border-radius: 5px 5px 0 0;
+	border-radius: 5px;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
 	color: #333 !important;
 	font: 13px/19px "Varela", Arial, Helvetica, sans-serif !important;
 	letter-spacing: 0;
-	width: 302px;
-	position: fixed;
-	bottom: 0;
+	
 }
 #popup-body {
 	border-radius: 8px;
-	margin: 17px;
-	padding: 20px 20px 20px;
+	padding: 20px;
 	position: relative;
 }
 
@@ -69,14 +67,15 @@ body {
 	font: bold 10px/10px "Montserat", Arial, Helvetica,
 		sans-serif !important;
 	letter-spacing: 1px;
-	padding: 8px;
-	text-align: center;
+	padding: 8px 0;
+	text-align: right;
 	text-transform: uppercase;
-	display: none;
+	/*display: none;*/
 }
 
 #popup-footer a {
 	color: #fff;
+	text-decoration: none;
 }
 
 #popup-content {
@@ -112,7 +111,7 @@ margin-bottom: 5px!important;
 </style>
 </head>
 <body>
-	<div id="opened">
+	
 		<div id="popup">
 			<div id="popup-body">
 				<div id="popup-title">Contact Us</div>
@@ -124,12 +123,13 @@ margin-bottom: 5px!important;
 				</div>
 				<div id="popup-close">x</div>
 			</div>
-			<div id="popup-footer">
-				Powered by <a href="https://www.agilecrm.com" target="_blank">AGILE
-					CRM</a>
-			</div>
+		
 		</div>
-	</div>
+	
+	<div id="popup-footer">
+				<div id="agile-copyright">Powered by <a href="https://www.agilecrm.com" target="_blank">AGILE
+					CRM</a></div>
+			</div>
 
 </body>
 
