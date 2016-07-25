@@ -913,6 +913,7 @@ String tplFile = _LANGUAGE + ".html";
 <jsp:include page="flatfull/footer.jsp" />
 
 <script src='//cdnjs.cloudflare.com/ajax/libs/headjs/1.0.3/head.min.js'></script>
+<script src='<%=FLAT_FULL_PATH%>jscore/handlebars/download-template.js'></script>
 <script>
 
 try{console.time("startbackbone");}catch(e){}
@@ -1003,7 +1004,7 @@ head.load(	"https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js",
 			LIB_PATH + 'final-lib/min/lib-all-new-1.js?_=' + _agile_get_file_hash('lib-all-new-1.js'),
 			"https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.3.0/handlebars.min.js",
 			LIB_PATH + 'final-lib/min/backbone-min.js',
-			LIB_PATH + 'final-lib/min/lib-all-new-2.js?_=' + _agile_get_file_hash('lib-all-new-2.js'), FLAT_FULL_PATH + "jscore/handlebars/download-template.js" + "?_=" + _agile_get_file_hash('download-template.js'),  
+			LIB_PATH + 'final-lib/min/lib-all-new-2.js?_=' + _agile_get_file_hash('lib-all-new-2.js'),  
 			function(){
             // Load tpl.html
             load_tpl_html();
