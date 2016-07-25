@@ -2538,6 +2538,7 @@ div.task-body:hover {
   text-overflow: ellipsis;
   display: block;
   overflow: hidden;
+  margin-left:20px;
 }
 /* .task-actions:hover,.task-actions:focus {display: block;} */
 /* ********************************************************* */
@@ -3848,4 +3849,12 @@ div.list-tasks.panel-body:hover
   font-weight:700;
   opacity:0.75;
   top:0px;
+}
+.taskchanges{
+  margin-left:3px;
+  margin-right:3px;
+}
+.taskfooter{
+  margin-top:12px;
+  margin-bottom:10px;
 }
