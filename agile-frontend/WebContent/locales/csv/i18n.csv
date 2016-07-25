@@ -3384,7 +3384,7 @@ misc-keys.local-time,Local time,Hora local
 contact-details.task-added,Task Added,tarea Agregada
 prefs-data-sync.salesforce,Salesforce,Fuerza de ventas
 contact-details.case-added,Case Added,caso Agregado
-months.September,.September,.Septiembre
+months.September,September,Septiembre
 form-builder.forms-list,Forms List,Lista de formularios
 widgets.started-at,Started At,Empezado a 
 widgets.GooglePlus,GooglePlus,GooglePlus
@@ -3607,7 +3607,7 @@ plan-and-upgrade.per-month,per month,por mes
 reputation.Excellent,Excellent,Excelente
 companies-view.companies,Companies,Compañías
 deal-view.documents,Documents,Documentos
-months.November,.November,.Noviembre
+months.November,November,Noviembre
 Refer-friend.referrals,Referrals,referidos
 dashboards.marketing,Marketing,Márketing
 web-rules.enter-url,Enter URL,Introducir URL
@@ -3622,7 +3622,7 @@ portlets.send-rate,Send Rate,Enviar Tasa
 plan-and-upgrade.plan-with,plan with,plan con
 contact-edit.add-email,Add Email,Añadir Correo
 others.add-new,+ Add new,+ Añadir nuevo
-months.December,.December,.Diciembre
+months.December,December,Diciembre
 widgets.ClickDesk,ClickDesk,ClickDesk
 contacts-view.condition,Condition,Condición
 modals.edit-note,Edit Note,Editar nota
@@ -3651,7 +3651,7 @@ help.importing,importing,importador
 tickets.requester,Requester,Solicitante
 landing-pages.save-page,Save Page,Guardar página
 portlets.activites,Activites,actividades
-months.february,.February,.Febrero
+months.february,February,Febrero
 tasks.All Tasks,All Tasks,Todas las tareas
 web-rules.templates,Templates,Plantillas
 menu.menu-marketing,Marketing,Marketing
@@ -3750,7 +3750,7 @@ contacts-view.to-track,to track,para realizar un seguimiento
 widgets.priority,Priority,Prioridad
 portlets.calendar,Calendar,Calendario
 portlets.webrule,web rule,regla web
-months.October,.October,.Octubre
+months.October,October,Octubre
 contacts-view.exported,Exported,Exportado
 contacts-view.won-deal,Won Deal,Trato de won
 report-add.duration,Duration,Duración
@@ -3819,7 +3819,7 @@ portlets.split-by,Split by,dividir por
 contact-details.referred,Referred,Referido
 web-rules.left-top,Left Top,Esquina superior izquierda
 portlets.dashlets,Dashlets,dashlets
-months.January,.January,.Enero
+months.January,January,Enero
 tasks.end-time,End Time,Hora de finalización
 deal-view.add-deals,Add Deal,Añadir acuerdo u oferta
 admin-settings.sso-help,SSO Help,Ayuda SSO
@@ -4048,7 +4048,7 @@ widgets.IM-type,IM type,Escribir mensaje instantáneo.
 other.proceed,Proceed,Proceder
 others.more,More...,Más...
 tickets.pending,Pending,Pendiente
-months.August,.August,.Agosto
+months.August,August,Agosto
 contact-details.contact,contact,contacto
 misc-keys.clip-copied,Copied!,Copiado!
 tasks.Meeting,Meeting,Reunión
@@ -4171,7 +4171,7 @@ other.cancel,Cancel,Cancelar
 widgets.script,Script,Script
 campaigns.safari,Safari,Safari
 contacts-view.merged,Merged,fusionado
-months-xs.April,.April,.Abril
+months-xs.April,April,Abril
 widgets.tweets,Tweets,Tweets
 contacts-view.remove,Remove,retirar
 portlets.2-days,2 Days,2 días
@@ -4183,7 +4183,7 @@ menu.search,Search,Búsqueda
 report-add.hourly,Hourly,Cada hora
 tickets.medium,Medium,Media
 call_activity.fail,Failed,Ha fallado
-months.April,.April,.Abril
+months.April,April,Abril
 contacts-view.called,Called,Llamado
 deal-view.select,Select,Seleccionar
 tickets.remove,remove,remover  
@@ -4241,7 +4241,7 @@ portlets.emails,Emails,Emails
 plan-and-upgrade.paypal,Paypal,PayPal
 report-add.fields,Fields,Campos
 campaigns.chrome,Chrome,Cromo
-months-xs.March,.March,.Marzo
+months-xs.March,March,Marzo
 prefs-data-sync.change,Change,Cambio
 prefs-data-sync.google,Google,google
 landingpages.sorry-this-browser-may-not-suppport,We&#39,Nosotros&#39;
@@ -4252,7 +4252,7 @@ deal-view.equals,Equals,Equivale a
 admin-settings-custom-fields.NUMBER,Number,Número
 campaigns.points,Points,Puntos
 contacts-view.oldest,Oldest,Más antiguo
-months.March,.March,.Marzo
+months.March,March,Marzo
 contacts-view.is-not,isn\’t,no es
 prefs-settings.domain,Domain,Dominio
 prefs-notifications.silent,Silent,Silencio
@@ -4374,8 +4374,8 @@ tickets.views,Views,Vistas
 contact-details.tasks,Tasks,Tareas
 portlets.owner,Owner,Propietario
 report-add.Phone,Phone,Teléfono
-months.July,.July,.Julio
-months.June,.June,.Junio
+months.July,July,Julio
+months.June,June,Junio
 contacts-view.total,Total,Total
 contacts-view.label,Label,Etiqueta
 admin-settings-integrations.note,Note:,Nota:
@@ -4401,8 +4401,8 @@ admin-settings-integrations.reset,Reset,Reiniciar
 deal-view.deals,Deals,ofertas
 widgets.tweet,Tweet,Tweet
 portlets.daily,Daily,Diariamente
-months-xs.July,.July,.Julio
-months-xs.June,.June,.Junio
+months-xs.July,July,Julio
+months-xs.June,June,Junio
 tasks.Tweet,Tweet,Tweet
 deal-view.owner,Owner,Propietario
 prefs-settings.brown,Brown,Café
@@ -4510,7 +4510,7 @@ report-add.tags,Tags,Etiquetas
 referrals.copy,Copy,Copiar
 contacts-view.skip,Skip,Omitir
 admin-settings-integrations.misc,Misc,Misc
-months.May,.May,.Mayo
+months.May,May,Mayo
 admin-settings-api-analytics.java,Java,Java
 contacts-view.type,Type,Tipo
 portlets.user,User,Usuario
@@ -4706,3 +4706,10 @@ contact-details.in,in,en
 contact-details.on,on,en
 contact-details.to,To,A
 dkim.type,TYPE,TIPO
+days.Su,Su,do
+days.Mo,Mo,lu
+days.Tu,Tu,ma
+days.We,We,mi
+days.Th,Th,ju
+days.Fr,Fr,vi
+days.Sa,Sa,sá

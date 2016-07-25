@@ -106,7 +106,7 @@ var Ticket_Utils = {
 
 	loadDateChartAndDatePicker: function(callback){
 
-		head.js(LIB_PATH + 'lib/date-charts.js', 
+		head.js(LIB_PATH + 'lib/date-charts-'+_LANGUAGE+'.js', 
 				  LIB_PATH + 'lib/date-range-picker.js'+'?_=' + _agile_get_file_hash('date-range-picker.js'), function(){
 
 			if(callback)

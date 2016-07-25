@@ -1828,15 +1828,6 @@ $(function()
 				return window.btoa(CURRENT_DOMAIN_USER.domain);
 	});
 
-	// Gets date in given range
-	Handlebars.registerHelper('date-range', function(from_date_string, no_of_days, options)
-	{
-		var from_date = Date.parse(from_date_string);
-		var to_date = Date.today().add({ days : parseInt(no_of_days) });
-		return to_date.toString('MMMM d, yyyy') + " - " + from_date.toString('MMMM d, yyyy');
-
-	});
-
 	Handlebars.registerHelper("extractEmail", function(content, options)
 	{
 

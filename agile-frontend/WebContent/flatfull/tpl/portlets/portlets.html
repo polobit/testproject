@@ -1897,7 +1897,7 @@ Created Task {{#if this.entityObject}}<a href="#task/{{this.entity_id}}">{{safe_
 {{#if_equals "removed_all_relatedcontacts" custom3}}
 {{agile_lng_translate 'contacts-view' 'removed-contacts-from-event'}} {{#if entityObject}}<a href="" data={{entity_id}} class='activity-event-edit'">{{label}}</a>{{else}}'{{label}}'{{/if}}<br/> 
 <div class="activities_second_line p-t-xs m-t-none text-sm text-ellipsis"><small>
-<i class="icon-calendar icon-white"></i> {{#unless this.entityObject}{{agile_lng_translate 'contacts-view' 'event-deleted-later'}}{{/unless}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}"  data="{{this.contactid}}" class="popover_contact">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}  {{agile_lng_translate 'contacts-view' 'removed-from-event'}}
+<i class="icon-calendar icon-white"></i> {{#unless this.entityObject}}{{agile_lng_translate 'contacts-view' 'event-deleted-later'}}{{/unless}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}"  data="{{this.contactid}}" class="popover_contact">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}  {{agile_lng_translate 'contacts-view' 'removed-from-event'}}
 </small></div>
 {{/if_equals}} 
 {{#if_equals "removed_relatedcontacts" custom3}}

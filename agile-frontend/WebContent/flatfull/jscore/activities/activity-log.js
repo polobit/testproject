@@ -281,10 +281,10 @@ function initActivitiesDateRange() {
             toLabel: '{{agile_lng_translate "calendar" "to"}}',
             customRangeLabel: '{{agile_lng_translate "campaigns" "custom"}}',
             daysOfWeek: [
-                'Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'
+                "{{agile_lng_translate 'days' 'Su'}}","{{agile_lng_translate 'days' 'Mo'}}","{{agile_lng_translate 'days' 'We'}}","{{agile_lng_translate 'days' 'Th'}}","{{agile_lng_translate 'days' 'Fr'}}","{{agile_lng_translate 'days' 'Sa'}}"
             ],
             monthNames: [
-                'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'
+            	"{{agile_lng_translate 'months' 'January'}}", "{{agile_lng_translate 'months' 'february'}}", "{{agile_lng_translate 'months' 'March'}}", "{{agile_lng_translate 'months' 'April'}}", "{{agile_lng_translate 'months' 'May'}}", "{{agile_lng_translate 'months' 'June'}}", "{{agile_lng_translate 'months' 'July'}}", "{{agile_lng_translate 'months' 'August'}}", "{{agile_lng_translate 'months' 'September'}}", "{{agile_lng_translate 'months' 'October'}}", "{{agile_lng_translate 'months' 'November'}}", "{{agile_lng_translate 'months' 'December'}}"
             ],
             firstDay: parseInt(CALENDAR_WEEK_START_DAY)
         }

@@ -17,7 +17,7 @@ var ActivitylogRouter = Backbone.Router.extend({
         if (!tight_acl.checkPermission('ACTIVITY'))
             return;
 
-        head.js(LIB_PATH + 'lib/date-charts.js', LIB_PATH + 'lib/date-range-picker.js' + '?_=' + _agile_get_file_hash('date-range-picker.js'), function() {
+        head.js(LIB_PATH + 'lib/date-charts-' +_LANGUAGE+'.js', LIB_PATH + 'lib/date-range-picker.js' + '?_=' + _agile_get_file_hash('date-range-picker.js'), function() {
 
             $('#content').html("<div id='activities-listners'>&nbsp;</div>");
             getTemplate('activity-list-header', {}, undefined, function(template_ui) {
@@ -89,7 +89,7 @@ var ActivitylogRouter = Backbone.Router.extend({
     },
     contactActivities: function(id) { // begin contact activities
 
-            head.js(LIB_PATH + 'lib/date-charts.js', LIB_PATH + 'lib/date-range-picker.js' + '?_=' + _agile_get_file_hash('date-range-picker.js'), function() {
+            head.js(LIB_PATH + 'lib/date-charts-'+_LANGUAGE+'.js', LIB_PATH + 'lib/date-range-picker.js' + '?_=' + _agile_get_file_hash('date-range-picker.js'), function() {
 
 
                 getTemplate('contact-activity-header', {}, undefined, function(template_ui) {
