@@ -232,7 +232,7 @@
             <div class="date">{{epochToTaskDate created_time}}</div>
             <div class="body wrapper-sm">
 				<div class="text-sm">
-					{{#if_equals callType "inbound"}}Incoming{{else}}Outgoing{{/if_equals}} call {{status}} 
+					{{#if_equals callType "inbound"}} {{agile_lng_translate 'widgets' 'incoming'}}{{else}}{{agile_lng_translate 'call' 'outgoing'}}{{/if_equals}} {{agile_lng_translate 'admin-settings-tasks' 'call'}} {{status}} 
 					{{#if_equals status "completed"}}  - {{toProperFormat duration}} 
 					{{else}}
 						{{#if_equals status "answered"}}   - {{toProperFormat duration}} 

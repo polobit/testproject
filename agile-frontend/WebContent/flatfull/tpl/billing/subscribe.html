@@ -40,10 +40,10 @@
                         <div style="position: relative;" class="show_limits price-panel wrapper m-t-none text-center b-b b-light bg-white p-b-none">
                         	<div  class="plan_features w-full h-full text-white p-t-xs pos-abs" style="display:none;top: 0px;left: 0px;background-color:black;opacity:0.75;">
                         		<ul class="p-l-none" style="list-style-type:none">
-                        			<li>10,000 Contacts</li>
-                        			<li>5 Campaigns</li>
-                        			<li>1,000 Pageviews</li>
-                        			<li>5 Web Rules</li>
+                        			<li>10,000 {{agile_lng_translate 'portlets' 'contacts'}}</li>
+                        			<li>5 {{agile_lng_translate 'contact-details' 'campaigns'}}</li>
+                        			<li>1,000 {{agile_lng_translate 'portlets' 'page-views'}}</li>
+                        			<li>5 {{agile_lng_translate 'menu' 'menu-web-rules'}}</li>
                         		</ul>
                         	</div>
                         	<div class="price_per_month" style="opacity:1;">
@@ -82,10 +82,10 @@
                         <div style="position: relative;" class="price-panel wrapper text-center m-t-none b-b b-light m-t p-b-none show_limits">
                         <div  class="plan_features w-full h-full text-white p-t-xs pos-abs" style="display:none;top: 0px;left: 0px;background-color:black;opacity:0.75;">
                         		<ul class="p-l-none" style="list-style-type:none">
-                        			<li>50,000 Contacts</li>
-                        			<li>10 Campaigns</li>
-                        			<li>10,000 Pageviews</li>
-                        			<li>10 Web Rules</li>
+                        			<li>50,000 {{agile_lng_translate 'portlets' 'contacts'}}</li>
+                        			<li>10 {{agile_lng_translate 'contact-details' 'campaigns'}}</li>
+                        			<li>10,000 {{agile_lng_translate 'portlets' 'page-views'}}</li>
+                        			<li>10 {{agile_lng_translate 'menu' 'menu-web-rules'}}</li>
                         		</ul>
                         	</div>
                         	<div class="price_per_month" style="opacity:1;">
@@ -129,10 +129,10 @@
                         <div style="position: relative;" class="price-panel wrapper m-t-none text-center b-b b-light p-b-none show_limits">
                         <div  class="plan_features w-full h-full text-white p-t-xs pos-abs" style="display:none;top: 0px;left: 0px;background-color:black;opacity:0.75;">
                         		<ul class="p-l-none" style="list-style-type:none">
-                        			<li>Unlimited Contacts</li>
-                        			<li>Unlimited Campaigns</li>
-                        			<li>20,000 Pageviews</li>
-                        			<li>Unlimited Web Rules</li>
+                        			<li>{{agile_lng_translate 'portlets' 'unlimited-contacts'}}</li>
+                        			<li>{{agile_lng_translate 'portlets' 'unlimited-campaigns'}}</li>
+                        			<li>20,000 {{agile_lng_translate 'portlets' 'page-views'}}</li>
+                        			<li>{{agile_lng_translate 'portlets' 'unlimited-workflows'}}</li>
                         		</ul>
                         	</div>
                         	<div class="price_per_month" style="opacity:1;">
@@ -538,7 +538,7 @@ Proceed to Trial
             </div>
             <div class="clearfix"></div>
             <div class="tweet-info">
-               {{agile_lng_translate 'plan-and-upgrade' 'gary-tramer-desc-1'}}   
+               {{agile_lng_translate 'Plan-and-upgrade' 'gary-tramer-desc4'}}   
             </div>
          </div>
          <div class="item">
@@ -583,7 +583,7 @@ Proceed to Trial
 </div>
 <!-- Detailed Info div end -->
 {{#getSubscriptionBasedOnPlan billingData emailPlan}}
-	<a href="#" class="text-info text-xs pull-right p-r" id="cancel_email_plan">Cancel Email Subscription</a> 
+	<a href="#" class="text-info text-xs pull-right p-r" id="cancel_email_plan">{{agile_lng_translate 'portlets' 'cancel-email-subscriptiion'}} </a> 
 {{/getSubscriptionBasedOnPlan}}
 </div>
 
@@ -739,7 +739,7 @@ Proceed to Trial
 </script>
 
 <script id="latest-invoice-template" type="text/html">
- Thank you for your last payment of ${{numeric_operation this.total 100 "/"}} on {{epochToHumanDate "mmm dd, yyyy" date}}.
+ {{agile_lng_translate 'Plan-and-upgrade' 'thank-for-paying'}} ${{numeric_operation this.total 100 "/"}} on {{epochToHumanDate "mmm dd, yyyy" date}}.
 </script>
 
 <script id="subscribe-error-modal-template" type="text/html">
@@ -748,36 +748,36 @@ Proceed to Trial
     <div class="modal-content">
 		<div class="modal-header">
             <button class="close" data-dismiss="modal">x</button>
-			<h3 class="modal-title">Plan Restrictions</h3>
+			<h3 class="modal-title">{{agile_lng_translate 'Plan-and-upgrade' 'plan-restrictions'}}</h3>
 		</div>
 		<div class="modal-body help-text">
-			<strong>Sorry, we are unable to subscribe you to {{plan}} plan because of the following reason{{#if_greater errorsCount 2}}s{{/if_greater}}:</strong><br/><br/>
+			<strong>{{agile_lng_translate 'Plan-and-upgrade' 'sorry-we-are-unable-to-sucscribe'}} {{plan}} {{agile_lng_translate 'Plan-and-upgrade' 'failure-reason'}}{{#if_greater errorsCount 2}}s{{/if_greater}}:</strong><br/><br/>
 			
 			{{#if is_more_users}}
-				<div class="p-t-xs"><i class="fa fa-angle-double-right pull-left" style="margin-top:3px;"></i><div class="p-l">We see that you already have {{../count}} users with your current plan and are trying to subscribe with {{../newCount}} user{{#if_greater ../newCount 1}}s{{/if_greater}} for the new plan.</div></div>
+				<div class="p-t-xs"><i class="fa fa-angle-double-right pull-left" style="margin-top:3px;"></i><div class="p-l">{{agile_lng_translate 'Plan-and-upgrade' 'we-see-that-you-have'}} {{../count}}  {{agile_lng_translate 'Plan-and-upgrade' 'users-with-your-current-plan-and-are-trying-to-subscribe'}}{{../newCount}} user{{#if_greater ../newCount 1}}s{{/if_greater}} {{agile_lng_translate 'Plan-and-upgrade' 'for-the-new-plan'}}</div></div>
 			{{else}}
 				{{#if_greater users.count users.limit}}
-					<div class="p-t-xs"><i class="fa fa-angle-double-right pull-left" style="margin-top:3px;"></i><div class="p-l">We see that you already have {{users.count}} users with your current plan and are trying to subscribe with {{users.limit}} user for the new plan.</div></div>
+					<div class="p-t-xs"><i class="fa fa-angle-double-right pull-left" style="margin-top:3px;"></i><div class="p-l">{{agile_lng_translate 'Plan-and-upgrade' 'we-see-that-you-have'}} {{users.count}} {{agile_lng_translate 'Plan-and-upgrade' 'users-with-your-current-plan-and-are-trying-to-subscribe'}} {{users.limit}} {{agile_lng_translate 'Plan-and-upgrade' 'for-the-new-plan'}}</div></div>
 				{{/if_greater}}
 				{{#if_greater contacts.count contacts.limit}}
-					<div class="p-t-xs"><i class="fa fa-angle-double-right pull-left" style="margin-top:3px;"></i><div class="p-l">We see that you already have {{contacts.count}} contacts with your current plan and are trying to subscribe with the plan ({{../plan}}) which does not support {{contacts.count}} contacts.</div></div>
+					<div class="p-t-xs"><i class="fa fa-angle-double-right pull-left" style="margin-top:3px;"></i><div class="p-l">{{agile_lng_translate 'Plan-and-upgrade' 'we-see-that-you-have'}} {{contacts.count}} {{agile_lng_translate 'Plan-and-upgrade' 'contacts-with-your-current-plan-and-are-trying-to-subscribe'}} ({{../plan}}) {{agile_lng_translate 'Plan-and-upgrade' 'which-does-not-support'}} {{contacts.count}} {{agile_lng_translate 'Plan-and-upgrade' 'campaigns-with-your-current-plan-and-are-trying-to-subscribe'}}{{agile_lng_translate 'portlets' 'contacts'}}</div></div>
 				{{/if_greater}}
 				{{#if_greater workflows.count workflows.limit}}
-					<div class="p-t-xs"><i class="fa fa-angle-double-right pull-left" style="margin-top:3px;"></i><div class="p-l">We see that you already have {{workflows.count}} campaigns with your current plan and are trying to subscribe with the plan ({{../plan}}) which does not support {{workflows.count}} campaigns.</div></div>
+					<div class="p-t-xs"><i class="fa fa-angle-double-right pull-left" style="margin-top:3px;"></i><div class="p-l">{{agile_lng_translate 'Plan-and-upgrade' 'we-see-that-you-have'}} {{workflows.count}}{{agile_lng_translate 'Plan-and-upgrade' 'campaigns-with-your-current-plan-and-are-trying-to-subscribe'}} ({{../plan}}) {{agile_lng_translate 'Plan-and-upgrade' 'which-does-not-support'}} {{workflows.count}} {{agile_lng_translate 'portlets' 'campaigns'}}</div></div>
 				{{/if_greater}}
 				{{#if_greater webrules.count webrules.limit}}
-					<div class="p-t-xs"><i class="fa fa-angle-double-right pull-left" style="margin-top:3px;"></i><div class="p-l">We see that you already have {{webrules.count}} web rules with your current plan and are trying to subscribe with the plan ({{../plan}}) which does not support {{webrules.count}} web rules.</div></div>
+					<div class="p-t-xs"><i class="fa fa-angle-double-right pull-left" style="margin-top:3px;"></i><div class="p-l">{{agile_lng_translate 'Plan-and-upgrade' 'we-see-that-you-have'}} {{webrules.count}} {{agile_lng_translate 'Plan-and-upgrade' 'webrules-with-your-current-plan-and-are-trying-to-subscribe'}} ({{../plan}}) {{agile_lng_translate 'Plan-and-upgrade' 'which-does-not-support'}} {{webrules.count}} {{agile_lng_translate 'portlets' 'webrules'}}</div></div>
 				{{/if_greater}}
 				{{#if_greater triggers.count triggers.limit}}
-					<div class="p-t-xs"><i class="fa fa-angle-double-right pull-left" style="margin-top:3px;"></i><div class="p-l">We see that you already have {{triggers.count}} triggers with your current plan and are trying to subscribe with the plan ({{../plan}}) which does not support {{triggers.count}} triggers.</div></div>
+					<div class="p-t-xs"><i class="fa fa-angle-double-right pull-left" style="margin-top:3px;"></i><div class="p-l">{{agile_lng_translate 'Plan-and-upgrade' 'we-see-that-you-have'}} {{triggers.count}} {{agile_lng_translate 'Plan-and-upgrade' 'triggers-with-your-current-plan-and-are-trying-to-subscribe'}}({{../plan}}) {{agile_lng_translate 'Plan-and-upgrade' 'which-does-not-support'}} {{triggers.count}} {{agile_lng_translate 'portlets' 'triggers'}}</div></div>
 				{{/if_greater}}
 			{{/if}}
 			<br/>
-			<div class="text-danger">Please adjust your current plan accordingly and proceed to process your new subscription.</div>
+			<div class="text-danger">{{agile_lng_translate 'portlets' 'please-adjust-your-current-plan-accordingly-and-proceed'}}</div>
 			
 		</div>
 		<div class="modal-footer">
-			<a href="#" data-dismiss="modal" class="btn btn-sm btn-danger">Close</a>
+			<a href="#" data-dismiss="modal" class="btn btn-sm btn-danger">{{agile_lng_translate 'contact-details' 'CLOSE'}}</a>
 		</div>
 	</div>
 </div>
@@ -790,33 +790,34 @@ Proceed to Trial
     <div class="modal-content">
 		<div class="modal-header">
             <button class="close" data-dismiss="modal">x</button>
-			<h3 class="modal-title">Plan Restrictions</h3>
+			<h3 class="modal-title">{{agile_lng_translate 'Plan-and-upgrade' 'plan-restrictions'}}</h3>
 		</div>
 		<div class="modal-body help-text">
-			<strong>Sorry, we are unable to cancel your trial subscription due to the following reasons:</strong><br/><br/>
+			<strong>:
+			{{agile_lng_translate 'Plan-and-upgrade' 'sorry-we-are-unable-to-trail-your-subscription'}}</strong><br/><br/>
 			
 				{{#is_greater userscount userslimit}}
-					<div class="p-t-xs"><i class="fa fa-angle-double-right pull-left" style="margin-top:3px;"></i><div class="p-l">Free plan does not allow more than {{userslimit}} users.</div></div>
+					<div class="p-t-xs"><i class="fa fa-angle-double-right pull-left" style="margin-top:3px;"></i><div class="p-l"> {{agile_lng_translate 'Plan-and-upgrade' 'free-plan-doesnt-allow-more-than'}}{{userslimit}}{{agile_lng_translate 'plan-and-upgrade' 'users'}} .</div></div>
 				{{/is_greater}}
 				{{#is_greater contactcount contactlimit}}
-					<div class="p-t-xs"><i class="fa fa-angle-double-right pull-left" style="margin-top:3px;"></i><div class="p-l">Free plan does not allow more than {{contactlimit}} contacts.</div></div>
+					<div class="p-t-xs"><i class="fa fa-angle-double-right pull-left" style="margin-top:3px;"></i><div class="p-l">{{agile_lng_translate 'Plan-and-upgrade' 'free-plan-doesnt-allow-more-than'}} {{contactlimit}} {{agile_lng_translate 'contact-details' 'contacts'}}.</div></div>
 				{{/is_greater}}
 				{{#is_greater compaigncount compaignlimit}}
-					<div class="p-t-xs"><i class="fa fa-angle-double-right pull-left" style="margin-top:3px;"></i><div class="p-l">Free plan does not allow more than {{compaignlimit}} campaign{{#is_greater compaignlimit 1}}s{{/is_greater}}.</div></div>
+					<div class="p-t-xs"><i class="fa fa-angle-double-right pull-left" style="margin-top:3px;"></i><div class="p-l">{{agile_lng_translate 'Plan-and-upgrade' 'free-plan-doesnt-allow-more-than'}} {{compaignlimit}} {{agile_lng_translate 'report-view' 'campaigns'}}{{#is_greater compaignlimit 1}}s{{/is_greater}}.</div></div>
 				{{/is_greater}}
 				{{#is_greater webrulecount webrulelimit}}
-					<div class="p-t-xs"><i class="fa fa-angle-double-right pull-left" style="margin-top:3px;"></i><div class="p-l">Free plan does not allow more than {{webrulelimit}} web rule{{#is_greater webrulelimit 1}}s{{/is_greater}}.</div></div>
+					<div class="p-t-xs"><i class="fa fa-angle-double-right pull-left" style="margin-top:3px;"></i><div class="p-l">{{agile_lng_translate 'Plan-and-upgrade' 'free-plan-doesnt-allow-more-than'}} {{webrulelimit}} {{agile_lng_translate 'portlets' 'webrule'}}{{#is_greater webrulelimit 1}}s{{/is_greater}}.</div></div>
 				{{/is_greater}}
 				{{#is_greater triggerscount triggerslimit}}
-					<div class="p-t-xs"><i class="fa fa-angle-double-right pull-left" style="margin-top:3px;"></i><div class="p-l">Free plan does not allow more than {{triggerslimit}} trigger{{#is_greater triggerslimit 1}}s{{/is_greater}}.</div></div>
+					<div class="p-t-xs"><i class="fa fa-angle-double-right pull-left" style="margin-top:3px;"></i><div class="p-l">{{agile_lng_translate 'Plan-and-upgrade' 'free-plan-doesnt-allow-more-than'}} {{triggerslimit}} {{agile_lng_translate 'portlets' 'triggers'}}{{#is_greater triggerslimit 1}}s{{/is_greater}}.</div></div>
 				{{/is_greater}}
 			
 			<br/>
-			<div class="text-danger">Please reset your account with the help of the above mentioned features and then proceed to cancel your trial subscription</div>
+			<div class="text-danger">{{agile_lng_translate 'portlets' 'please-reset-your-account-with-the-help-of-features'}}</div>
 			
 		</div>
 		<div class="modal-footer">
-			<a href="#" data-dismiss="modal" class="btn btn-sm btn-danger">Close</a>
+			<a href="#" data-dismiss="modal" class="btn btn-sm btn-danger">{{agile_lng_translate 'contact-details' 'CLOSE'}}</a>
 		</div>
 	</div>
 </div>
@@ -829,15 +830,16 @@ Proceed to Trial
 	    <div class="modal-content">
 			<div class="modal-header">
 	            <button class="close" data-dismiss="modal">x</button>
-				<h3 class="modal-title">Cancel Email Subscription</h3>
+				<h3 class="modal-title">{{agile_lng_translate 'portlets' 'cancel-email-subscriptiion'}}</h3>
 			</div>
 			<div class="modal-body help-text">
-				<p>Are you sure you want to cancel your Email subscription?</p>
-				<p>Please note that the free emails will be added to your account once the paid email quota has been completed.</p>
+				<p>{{agile_lng_translate 'portlets' 'email-subscription-cancellation-confirmation-message'}}</p>
+				<p>
+				{{agile_lng_translate 'portlets' 'please-note-thatfree-emails-will-be-added-once-email-quota-is-completed'}}</p>
 			</div>
 			<div class="modal-footer">
-				<a href="#" data-dismiss="modal" class="btn btn-sm btn-default">No</a>
-				<a href="#" data-dismiss="modal" id="cancel_email_plan_conform" class="btn btn-sm btn-primary">Yes</a>
+				<a href="#" data-dismiss="modal" class="btn btn-sm btn-default">{{agile_lng_translate 'portlets' 'no'}}</a>
+				<a href="#" data-dismiss="modal" id="cancel_email_plan_conform" class="btn btn-sm btn-primary">{{agile_lng_translate 'portlets' 'yes'}}</a>
 			</div>
 		</div>
 	</div>
@@ -849,25 +851,25 @@ Proceed to Trial
 	    <div class="modal-content">
 			<div class="modal-header">
 	            <button class="close" data-dismiss="modal">x</button>
-				<h3 class="modal-title">Email Credits</h3>
+				<h3 class="modal-title">{{agile_lng_translate 'plan-and-upgrade' 'email-credits'}}</h3>
 			</div>
 			<div class="modal-body help-text">
 				<form id="purchaseCreditsForm" class="form-horizontal" novalidate="novalidate"> 
 			     <fieldset> 
 			      <div class="control-group form-group m-b-none"> 
-			       <label class="control-label col-sm-3">Emails<span class="field_req">*</span></label> 
+			       <label class="control-label col-sm-3">{{agile_lng_translate 'portlets' 'emails'}}<span class="field_req">*</span></label> 
 			       <div class="controls col-sm-9"> 
 					<input type="text" id="email_credits_count" name="nextRechargeCount" value="" class="form-control required digits inline-block pull-left" min="5" style="width:25%;">
 			        <span class="input-group-addon form-control pull-left" style="width:25%;padding-top:9px;">× 1000</span>
 			        
 			       </div>
 			       <div class="col-sm-offset-3 p-l help-block m-b-none"> 
-				     You will be charged @ $4/1000 emails.
+				     You will be charged @ $4/1000 {{agile_lng_translate 'portlets' 'emails'}}.
 				   </div>
 			       <span for="email_credits_count" generated="true" class="help-inline col-sm-offset-3 p-l"></span> 
 			      </div>
 			      <div class="control-group form-group m-b-xs"> 
-			       <label class="control-label col-sm-3">Total Cost</label> 
+			       <label class="control-label col-sm-3">{{agile_lng_translate 'plan-and-upgrade' 'total-cost'}}</label> 
 			       <div class="controls col-sm-6" style="padding-top:7px;">
 			       	 $<span id="total_credits_cost">0</span>
 			       </div>
@@ -878,8 +880,8 @@ Proceed to Trial
 
 			</div>
 			<div class="modal-footer">
-				<a href="#" data-dismiss="modal" class="btn btn-sm btn-default">Cancel</a>
-				<a href="#" id="purchase_credits_conform" class="btn btn-sm btn-primary">Pay Now</a>
+				<a href="#" data-dismiss="modal" class="btn btn-sm btn-default">{{agile_lng_translate 'other' 'cancel'}}</a>
+				<a href="#" id="purchase_credits_conform" class="btn btn-sm btn-primary">{{agile_lng_translate 'plan-and-upgrade' 'pay-now'}}</a>
 			</div>
 		</div>
 	</div>

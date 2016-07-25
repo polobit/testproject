@@ -6,9 +6,10 @@
                     <img alt="Clipboard" src="{{getS3ImagePath '/img/clipboard.png'}}" />
                 </div>
                 <div class="box-right pull-left">
-                    <h4 class="m-t-none">{{contactShortName}} has no web activity.</h4>
+                    <h4 class="m-t-none">{{contactShortName}} {{agile_lng_translate 'contacts-view' 'has-no-web-activity'}}</h4>
                     <div class="text">
-						May be {{contactShortName}} did not visit the required page yet.
+						{{agile_lng_translate 'contacts-view' 'may-be'}} {{contactShortName}} 
+						{{agile_lng_translate 'Contacts-view' 'did-not-visit-the-recquired-page-yet'}}
                     </div>
                 </div>
 				<div class="clearfix">
@@ -22,10 +23,10 @@
 <div class="m-l">
 	<span>
 		<h5 class="m-t-none">
-	  	    <a class="text-l-none"><b>Initial Referrer URL</b></a><img border="0" src="{{getS3ImagePath '/img/help.png'}}"
+	  	    <a class="text-l-none"><b> {{agile_lng_translate 'Contacts-view' 'initial-referral-url'}}</b></a><img border="0" src="{{getS3ImagePath '/img/help.png'}}"
 		    style="height: 6px; vertical-align: text-top" rel="popover"
 			data-placement="bottom" data-title="Referrer URL"
-			data-content="This is the web page from where this contact has come to your website the very first time."
+			data-content="{{agile_lng_translate 'Contacts-view' 'this-is-the-website-your-contact-came-from'}}"
 			id="element" data-trigger="hover"> : {{checkOriginalRef "original_ref"}} {{#if this.length}}{{queryWords "original_ref"}}{{/if}}
 		</h5>
 	</span>	
@@ -134,7 +135,7 @@
 </div>
 	<div class="clearfix"></div>
 <!--<div class="pull-right">
-<a href="#" id="more-page-urls">More</a>
+<a href="#" id="more-page-urls">{{agile_lng_translate 'plan-and-upgrade' 'more'}}</a>
 </div>-->
 <div class="clearfix"></div>	
 </div>

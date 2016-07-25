@@ -1,5 +1,5 @@
 <script id="dashboard-template" type="text/html">
-<h1>Dashboard </h1>
+<h1>{{agile_lng_translate 'portlets' 'dashboard'}} </h1>
 <div class="btn-group right m-t-n-lg pos-rlt m-r-xs">
     <button class="btn btn-sm btn-default">
     	<i class="icon-list m-r-xs"></i>
@@ -20,19 +20,19 @@
 <div class="col-md-12 row m-l-none p-t">
 	<div class="col-md-6 m-t-sm">
 	    <ul class="nav nav-tabs" id="dashboardTabs" style="list-style: none;">
-			<li class="active"><a data-toggle="tab" href="#recentContacts">Recently Viewed</a></li>
-	        <li ><a data-toggle="tab" href="#deals">Deals</a></li>
-	        <li class=""><a data-toggle="tab" href="#notes">Notes</a></li>
-	        <li class=""><a data-toggle="tab" href="#tasks">Tasks</a></li>
-	        <li class=""><a data-toggle="tab" href="#campaigns">Campaigns</a></li>
-	    <!--<li class="active"><a data-toggle="tab" href="#activities">Activity <sup><span class="badge badge-success">3</span></sup> </a></li>-->
+			<li class="active"><a data-toggle="tab" href="#recentContacts">{{agile_lng_translate 'portlets' 'recently-viewed'}}</a></li>
+	        <li ><a data-toggle="tab" href="#deals">{{agile_lng_translate 'contact-details' 'deals'}}</a></li>
+	        <li class=""><a data-toggle="tab" href="#notes">{{agile_lng_translate 'deal-view' 'notes'}}</a></li>
+	        <li class=""><a data-toggle="tab" href="#tasks">{{agile_lng_translate 'menu' 'tasks'}}</a></li>
+	        <li class=""><a data-toggle="tab" href="#campaigns">{{agile_lng_translate 'report-view' 'campaigns'}}</a></li>
+	    <!--<li class="active"><a data-toggle="tab" href="#activities"> <sup><span class="badge badge-success">3</span></sup> </a></li>-->
 	    </ul>	
 		<div class="tab-content">
-			<div class="tab-pane" id="recentContacts">Recent Contacts</div>
-			<div class="tab-pane" id="notes">Notes</div>
-	              <div class="tab-pane" id="tasks">Tasks</div>
-	              <div class="tab-pane" id="deals">Deals</div>
-	              <div class="tab-pane" id="campaigns">camaigns</div>
+			<div class="tab-pane" id="recentContacts">{{agile_lng_translate 'portlets' 'recent-contacts'}}</div>
+			<div class="tab-pane" id="notes">{{agile_lng_translate 'deal-view' 'notes'}}</div>
+	              <div class="tab-pane" id="tasks">{{agile_lng_translate 'menu' 'tasks'}}</div>
+	              <div class="tab-pane" id="deals">{{agile_lng_translate 'contact-details' 'deals'}}</div>
+	              <div class="tab-pane" id="campaigns">{{agile_lng_translate 'report-view' 'campaigns'}}</div>
 		</div>
 	</div>	
 	<div class="col-md-6 m-t-sm" id="subscription-stats">	
@@ -43,45 +43,43 @@
 <script id="user-billing-template" type="text/html">
 <div class="m-b-sm p" style="background-color: #F8F8B9;">
 {{#if_equals users_count "2"}}
-	<h3 class="text-lg">Oops. You are out of users.</h3>
+	<h3 class="text-lg">{{agile_lng_translate 'portlets' 'you-are-out-of-users'}}</h3>
 	<p class="p-t-sm">
-		Plan: Free Plan <br/>
-		Users: {{users_count}} of 2 &nbsp;<a class="text-u-l" href="#subscribe">Add User</a><br/><br/>
+		{{agile_lng_translate 'portlets' 'plan-free-plan'}} <br/>
+		{{agile_lng_translate 'admin-settings' 'users'}}: {{users_count}} of 2 &nbsp;<a class="text-u-l" href="#subscribe">{{agile_lng_translate 'admin-settings-users' 'add-user'}}</a><br/><br/>
 	</p>
 {{else}}
-	<h3 class="text-lg text-u-l">Account Info</h3>
+	<h3 class="text-lg text-u-l">{{agile_lng_translate 'portlets' 'account-info'}}</h3>
 	<p class="p-t-sm">
-		Plan: Free Plan <br/>
-		Users: {{users_count}} of 2 &nbsp;<a class="text-u-l" href="#users-add">Add User</a><br/>
+		{{agile_lng_translate 'portlets' 'plan-free-plan'}}<br/>
+		{{agile_lng_translate 'admin-settings' 'users'}}: {{users_count}} of 2 &nbsp;<a class="text-u-l" href="#users-add">{{agile_lng_translate 'admin-settings-users' 'add-user'}}</a><br/>
 	</p>
 {{/if_equals}}
 <p>
-		<a class="text-u-l" href="#subscribe">Please
-			upgrade your account</a> to create more users. It takes only 10 seconds.
+		<a class="text-u-l" href="#subscribe">{{agile_lng_translate 'portlets' 'please-upgrade-your-account'}}</a> {{agile_lng_translate 'portlets' 'to-create-more-users-it-takes-only-10-seconds'}}
 	</p>
 </div>
 </script>
 
 <script id="dashboard-account-info-template" type="text/html">
 <div class="m-b-sm p" style="background-color: #F8F8B9;">
-	<h3 class="text-lg text-u-l">Account Info</h3>
+	<h3 class="text-lg text-u-l">{{agile_lng_translate 'portlets' 'account-info'}}</h3>
 	<p class="p-t-sm">
-		Plan: {{titleFromEnums plan.plan_type}}<br />
-		Users: {{userCount}} of {{plan.quantity}} 
+		{{agile_lng_translate 'portlets' 'plan'}}: {{titleFromEnums plan.plan_type}}<br />
+		{{agile_lng_translate 'admin-settings' 'users'}}: {{userCount}} of {{plan.quantity}} 
 		{{#if_equals userCount plan.quantity}}
-			 &nbsp;<a class="text-u-l" href="#subscribe">Add User</a> <br />
+			 &nbsp;<a class="text-u-l" href="#subscribe">{{agile_lng_translate 'admin-settings-users' 'add-user'}}</a> <br />
 		{{else}}
-		 	&nbsp;<a class="text-u-l" href="#users-add">Add User</a> <br />
+		 	&nbsp;<a class="text-u-l" href="#users-add">{{agile_lng_translate 'admin-settings-users' 'add-user'}}</a> <br />
 		{{/if_equals}}
 		<br />
-		<a class="text-u-l" href="#subscribe">Please
-			upgrade your account</a> to create more users. It takes only 10 seconds.
+		<a class="text-u-l" href="#subscribe">{{agile_lng_translate 'portlets' 'please-upgrade-your-account'}}</a> {{agile_lng_translate 'portlets' 'to-create-more-users-it-takes-only-10-seconds'}}
 	</p>
 </div>
 </script>
 <script id="profile-meter-template" type="text/html"> 
 <div class="m-b-sm p" style="background-color: #F8F8B9;">
-	<div><h3>Get started<h3></div>
+	<div><h3>{{agile_lng_translate 'web-rules' 'get-started'}}<h3></div>
 	<div class="row m-t-sm">
 		<div class="col-md-10">
 			<div class="progress progress-warning m-b-none">
@@ -92,10 +90,10 @@
 	</div>
 	<ul>
 			{{#unless Email}}
-		<li>Sync your email with Agile <a href="#email">here</a></li>
+		<li>{{agile_lng_translate 'portlets' 'sync-your-email-with-agile'}}<a href="#email">{{agile_lng_translate 'widgets' 'here'}}</a></li>
 			{{/unless}}
 			{{#unless User_invited}}
-		<li>Invite New colleagues to Agile <a href="#users">here</a></li>
+		<li>{{agile_lng_translate 'portlets' 'invite-new-collegue-to-agile'}} <a href="#users">{{agile_lng_translate 'widgets' 'here'}}</a></li>
 			{{/unless}}
 			{{#unless shared}}
 		<li>Spread the love</li>
@@ -107,14 +105,14 @@
 <div class="row">
 	<div class="col-lg-12 p-none">
 		<div class="row text-center m-t-n-xs">
-			<span class="inline-block pos-abs text-center p-t-xs p-b-xs p-l p-r r" style="background-color: rgb(249, 237, 190); border: 1px solid rgb(240, 195, 109);">Try the <a href="#portlets" style="color: #222222">new Dashboard</a> (beta).</span>
+			<span class="inline-block pos-abs text-center p-t-xs p-b-xs p-l p-r r" style="background-color: rgb(249, 237, 190); border: 1px solid rgb(240, 195, 109);">{{agile_lng_translate 'portlets' 'try-the'}} <a href="#portlets" style="color: #222222">{{agile_lng_translate 'portlets' 'new-dashboard'}}</a> (beta).</span>
 		</div>
 		<div class=" b-b m-b b-light">
 			<div id="reportrange" class="pull-right p-t-xs p-b-xs p-r-sm p-l-sm"
 				style="box-shadow: 0 0px 2px rgba(0, 0, 0, .25), inset 0 -1px 0 rgba(0, 0, 0, .1); display: none;">
 				<i class="icon-calendar icon-large"></i> <span id="range"></span>
 			</div>
-			<h1>Welcome to Agile CRM
+			<h1>{{agile_lng_translate 'portlets' 'welcome-msg'}}
 				<div class="pull-right">
             		<small style="font-size:0.5em; ">Last login :  <time id="last-login-time"  value="{{time_format}}" datetime="{{epochToHumanDate "" time_format}}">{{epochToHumanDate "ddd mmm dd yyyy" time_format}}</time></small>
         		</div>
@@ -126,7 +124,7 @@
 	<div class="col-md-9">
 			<div class="p-b-md" style="background-color:#f2f5ff;">
 				<div class="text-sm">
-					<p class="p-md">Agile has all you need - contact management, marketing automation, web analytics, telephony, newsletter management, 2 way emails, real time activity alerts, third-party integrations and lot more.</p>
+					<p class="p-md">{{agile_lng_translate 'portlets' 'agile-description'}}</p>
 				</div>
 				<div align="center">
 					<ul class="dashboard-list">
@@ -213,11 +211,12 @@
 			<div class="well">
 				<header>
 					<h3 class="m-l-xs">
-					 <span>Our expert talk </span>
+					 <span>{{agile_lng_translate 'portlets' 'our-expert-talk'}}</span>
 					</h3>
 				</header>
 				<div id="blog_sync_container"></div>
-				<span class="pull-right"><a href="https://www.agilecrm.com/blog" target="_blank">Read More...</a></span>
+				<span class="pull-right"><a href="https://www.agilecrm.com/blog" target="_blank">
+				{{agile_lng_translate 'portlets' 'read-more'}}</a></span>
 			</div>
 		</div>
 		</br>
@@ -242,6 +241,6 @@
 
 <script id="" type="text/html">
 	<div>
-		Alpha
+		{{agile_lng_translate 'prefs-data-sync' 'alpha'}}
 	</div>
 </script>

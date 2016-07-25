@@ -4,7 +4,7 @@
 <div class="row">
     <div class="col-sm-12 col-md-12">
        
-            <h3 class="pull-left font-thin h3">Campaign Reports</h3>
+            <h3 class="pull-left font-thin h3">{{agile_lng_translate 'report-view' 'campaignreports'}}</h3>
             
        
     </div>
@@ -17,14 +17,14 @@
 		<form id="reportsForm" class="form-horizontal">
 			<div name="rules" class="formsection chainedSelect">
  					{{#if id}} 
-                       <div class="panel-heading">Edit Campaign Report</div>
+                       <div class="panel-heading">{{agile_lng_translate 'Campaigns' 'edit-campaign-reports'}}</div>
                       {{else}}
-                        <div class="panel-heading"><i class="icon-plus-sign"></i> Add Campaign Report</div>
+                        <div class="panel-heading"><i class="icon-plus-sign"></i> {{agile_lng_translate 'Campaigns' 'add-campaign-report'}}</div>
                     {{/if}}
 				<div class="panel-body">
 				<fieldset>
 					<div class="control-group form-group">
-						<label class="control-label col-sm-2">Name<span class="field_req">*</span></label>
+						<label class="control-label col-sm-2">{{agile_lng_translate 'tickets' 'Requester-name'}}<span class="field_req">*</span></label>
 						<div class="controls col-sm-8">
 							<input type="text" name="name" class="required form-control" />
 						</div>
@@ -32,39 +32,39 @@
 
 				<div class="control-group form-group">         
                     
-                    <label class="control-label col-sm-2">Select campaign <span class="field_req">*</span></label>
+                    <label class="control-label col-sm-2">{{agile_lng_translate 'contact-details' 'select-campaign'}} <span class="field_req">*</span></label>
                     <div class="controls col-sm-8">
                         <select class="campaign-select required form-control" name="campaignId" id='campaign-select'>
-                            <option value="">Select..</option>
+                            <option value="">{{agile_lng_translate 'contacts-view' 'select'}}</option>
                         </select>
                     </div>
                 </div>	
 			<div class="control-group form-group">
-				<label class="control-label col-sm-2">Send Report To<span
+				<label class="control-label col-sm-2">{{agile_lng_translate 'report-add' 'send-report-to'}}<span
 					class="field_req">*</span></label>
 				<div class="controls col-sm-8">
-					<input type="text" name="sendTo" class="required multipleEmails form-control" placeholder="Email addresses separated by comma"/>
+					<input type="text" name="sendTo" class="required multipleEmails form-control" placeholder="{{agile_lng_translate 'report-add' 'email-address-sep-by-comma'}}"/>
 				</div>
 			</div>
 			<div class="control-group form-group">
-				<label class="control-label col-sm-2">Duration<span
+				<label class="control-label col-sm-2">{{agile_lng_translate 'portlets' 'duration'}}<span
 					class="field_req">*</span></label>
 				<div class="controls col-sm-8">
 					<select class="required form-control" name="duration" id="duration">
-					<option value="DAILY">Daily</option>
-						<option value="WEEKLY">Weekly</option>
-						<option value="MONTHLY">Monthly</option>
+					<option value="DAILY">{{agile_lng_translate 'report-add' 'daily'}}</option>
+						<option value="WEEKLY">{{agile_lng_translate 'report-add' 'weekly'}}</option>
+						<option value="MONTHLY">{{agile_lng_translate 'report-add' 'monthly'}}</option>
 					</select>
 				</div>
 			</div>			
 <div class="control-group form-group">
-				<label class="control-label col-sm-2" ><a href="" id="report_advanced" data-toggle="collapse" data-target="#report-advanced-block" class="text-info"><span><i class="fa fa-plus"></i></span>&nbsp;Advanced</a></label>
+				<label class="control-label col-sm-2" ><a href="" id="report_advanced" data-toggle="collapse" data-target="#report-advanced-block" class="text-info"><span><i class="fa fa-plus"></i></span>&nbsp;{{agile_lng_translate 'report-add' 'advanced'}}</a></label>
 			</div>
 			<div class="row">
 			<div class="collapse col-sm-12" id="report-advanced-block">
 
 <div class="control-group form-group">
-						<label class="control-label col-sm-2">Time Zone</label>
+						<label class="control-label col-sm-2">{{agile_lng_translate 'report-add' 'time-zone'}}</label>
 						<div class="controls col-sm-8">
 							<select name="report_timezone" id="report_timezone" class="form-control">
 					         <option value="Africa/Abidjan">
@@ -902,18 +902,18 @@
 				<label class="control-label col-sm-2">Day</label>
 				<div class="controls col-sm-8">
 					<select name="activity_weekday" class="form-control"> 
-						<option value="2">Monday</option>
-					    <option value="3">Tuesday</option>
-					    <option value="4">Wednesday</option>
-						<option value="5">Thursday</option>
-						<option value="6">Friday</option>
-						<option value="7">Saturday</option>
-                        <option value="1">Sunday</option>						
+						<option value="2">{{agile_lng_translate 'prefs-settings' 'monday'}}</option>
+					    <option value="3">{{agile_lng_translate 'calendar' 'tuesday'}}</option>
+					    <option value="4">{{agile_lng_translate 'calendar' 'wednesday'}}</option>
+						<option value="5">{{agile_lng_translate 'calendar' 'thursday'}}</option>
+						<option value="6">{{agile_lng_translate 'calendar' 'friday'}}</option>
+						<option value="7">{{agile_lng_translate 'calendar' 'saturday'}}</option>
+                        <option value="1">{{agile_lng_translate 'prefs-settings' 'sunday'}}</option>						
                    </select>
 				</div>
 			</div>	
 			<div class="control-group form-group" id="contact_report_time">
-				<label class="control-label col-sm-2">Time</label>
+				<label class="control-label col-sm-2">{{agile_lng_translate 'report-add' 'time'}}</label>
 				<div class="controls col-sm-8">
 					 <input type="text" name="activity_time" class="report_time_timepicker input-small form-control" id="activity_time"  placeholder="time" />
 				</div>
@@ -931,8 +931,8 @@
 <div class="row">
 <div class="col-sm-offset-2 col-sm-8">
 			<div class="form-actions">
-				<a href="#campaign-reports" class="btn btn-sm btn-default">Close</a>
-				<a href="#" type="submit" class="save btn btn-sm btn-primary" id="filtersAdd">Save</a>
+				<a href="#campaign-reports" class="btn btn-sm btn-default">{{agile_lng_translate 'contact-details' 'CLOSE'}}</a>
+				<a href="#" type="submit" class="save btn btn-sm btn-primary" id="filtersAdd">{{agile_lng_translate 'modals' 'save'}}</a>
 			</div>
 </div>
 </div>

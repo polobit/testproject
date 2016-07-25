@@ -4,7 +4,7 @@
 	<hr style="border-color: #DADDDE; margin-top: 10px; margin-bottom: 10px;"/>
 	<span class="text-black">{{{content}}}</span><br>
 	<small class="text-muted m-b-sm pull-right">
-		{{domainUser.name}}, Created On {{epochToHumanDate "ddd mmm dd, yyyy" created_time}}
+		{{domainUser.name}},{{agile_lng_translate 'admin-settings-users' 'created-on'}} {{epochToHumanDate "ddd mmm dd, yyyy" created_time}}
 	</small><br/>
 	<hr style="border-color: #DADDDE; margin-top: 10px; margin-bottom: 10px;"/>
 {{#if comments_disabled}}

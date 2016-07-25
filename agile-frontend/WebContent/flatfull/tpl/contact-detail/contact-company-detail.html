@@ -35,9 +35,9 @@
 <li class="divider"></li>
 
 									<li><a href='#' class="contact-add-note"><i
-											class="fa fa-file-text"></i> Add Note</a></li>
+											class="fa fa-file-text"></i> {{agile_lng_translate 'deal-view' 'add-note'}}</a></li>
 									<li><a href='#' class="contact-add-task"><i
-											class="icon-tasks"></i> Add Task</a></li>
+											class="icon-tasks"></i> {{agile_lng_translate 'contact-details' 'add-task'}}</a></li>
 									{{#isRestrictedMenuScope "CASES"}} {{else}}
 									{{#isNewVersionDomainUser}} {{else}}
 									<li><a href='#' class="contact-add-case"><i
@@ -162,7 +162,7 @@
 
 	<div class="content-tabs-show moreDetailsTab m-t-none p-t-none wrapper" id="contactDetailsTab" role="tablist" aria-multiselectable="true">
 	 <div class="panel panel-default m-b-none"> <div class="panel-heading" role="tab" id="headingOne"> 
-	 <h4 class="panel-title text-left"> <a role="button" data-toggle="collapse" data-parent="#contactDetailsTab" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne" class="collapsed"> More Details</a> </h4> 
+	 <h4 class="panel-title text-left"> <a role="button" data-toggle="collapse" data-parent="#contactDetailsTab" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne" class="collapsed"> {{agile_lng_translate 'contacts-view' 'more-details'}}</a> </h4> 
 	 </div> <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne" aria-expanded="false" style="height: 0px;"> 
 	 <div class="panel-body text-left">
 	
@@ -171,7 +171,7 @@
   <div class="panel panel-default m-b-none">
     <div class="panel-body">
 
-	<small class="text-muted text-base">Owner</small>				
+	<small class="text-muted text-base">{{agile_lng_translate 'contact-details' 'owner'}}</small>				
 					<div class="change-owner-succes"></div>
      <div title="Owner" class="contact-owner-view">
       	<div class="contact-owner text-xs" id="change-owner-element">
@@ -179,13 +179,14 @@
 			{{#if owner}}
         	<span class="contact-owner-pic" style="visibility:visible;"><img class="user-img"  alt="" src="{{getS3ImagePath 'img/company.png'}}" /></span>
 			{{else}}
-			<span class="contact-owner-pic" style="visibility:hidden;"><img class="user-img"  alt="" src="{{getS3ImagePath 'img/company.png'}}" /></span><span class="contact-owner-add" ><a class="c-p">Assign Owner</a></span>
+			<span class="contact-owner-pic" style="visibility:hidden;"><img class="user-img"  alt="" src="{{getS3ImagePath 'img/company.png'}}" /></span><span class="contact-owner-add" ><a class="c-p">{{agile_lng_translate 'contact-details' 'assign-owner'}}</a></span>
  			{{/if}}
         	<a href="#" id="contact-owner" data={{owner.id}}  class="contact-owner-name">{{owner.name}}</a>
         
         	{{#canEditContact owner.id}}
         	<div class="dropdown" id="change-owner-ul" style="display: none">
-        		 <a class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown">Change owner <span class="caret" ></span></a>
+        		 <a class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown">
+        		 {{agile_lng_translate 'deal-view' 'change-owner'}} <span class="caret" ></span></a>
         		 <ul id='contact-detail-owner' class="dropdown-menu"></ul>
         	</div> 
 			{{/canEditContact}}
@@ -226,13 +227,13 @@
 								<input name="" type="text" id="companyAddTags"
 									class="tags-typeahead ignore-comma-keydown form-control inline-block"
 									style="width: 60%" placeholder="Enter tag" />
-								<span><a href="#" class="btn btn-sm btn-default m-l-sm m-r-xs" id="company-add-tags">Add</a></span>
+								<span><a href="#" class="btn btn-sm btn-default m-l-sm m-r-xs" id="company-add-tags">{{agile_lng_translate 'other' 'add'}}</a></span>
 							</div>
 						</div>
 						{{#canEditContact owner.id}}
 			<a href="#" id="add-tags" rel="tooltip"
 							data-original-title="addtag" data-placement="top" class="text-xs text-muted"><i
-							class="icon-plus"></i> <span >Add</span></a>
+							class="icon-plus"></i> <span >{{agile_lng_translate 'other' 'add'}}</span></a>
 						{{/canEditContact}}
 					</div>
 				</div>	
@@ -276,7 +277,8 @@
 							<div class="m-b-sm">
   								<div class="panel panel-default m-b-none">
    							    <div class="panel-body">
-							<small class="text-base text-muted">Company Info</small>
+							<small class="text-base text-muted">
+							{{agile_lng_translate 'contact-details' 'company-info'}}</small>
 							
 								{{#multiple_Company_Property_Element "phone" properties}}
 								
@@ -309,7 +311,7 @@
 								<div class="m-b-sm">
   								<div class="panel panel-default m-b-none">
    							    <div class="panel-body">
-						<small class="text-base text-muted">Company Info</small>
+						<small class="text-base text-muted">{{agile_lng_translate 'contact-details' 'company-info'}}</small>
 									
 										{{/property_is_exists}} 
 									{{#each this}}
@@ -394,7 +396,8 @@
  									  <div class="m-b-sm">
   									<div class="panel panel-default m-b-none">
     								<div class="panel-body">
-									<small class="text-base text-muted">Location</small>
+									<small class="text-base text-muted">
+									{{agile_lng_translate 'contact-details' 'location'}}</small>
 										<div>
 											{{#address_Element properties}}{{/address_Element}}</div></div>
 
@@ -473,12 +476,14 @@
 									<li class="divider"></li>
 									<li>
 										<a href='#duplicate-company/{{id}}'>
-											<i class="icon-code-fork"></i>Merge Duplicates
+											<i class="icon-code-fork"></i>
+											{{agile_lng_translate 'contact-details' 'merge-duplicates'}}
 										</a>
 									</li>
 									<li class='divider'></li>
 									<li><a href='#' id='company-actions-delete'><i
-											class="icon-trash" style="margin-right:2px"></i> Delete</a></li>
+											class="icon-trash" style="margin-right:2px"></i> 
+											{{agile_lng_translate 'contact-details' 'delete'}}</a></li>
 								</ul>
 </div>
 </div>

@@ -4,12 +4,12 @@
     	<div class="col-md-9">
         	<div class="panel panel-default">
         		<div class="panel-heading">
-        			Select Landing Page
+        			{{agile_lng_translate 'tickets' 'select-landing-page'}}
     			</div>                                       
                 <div class="panel-body">
                    
                     <div class="control-group form-group">
-                        <label class="control-label col-md-3" style="padding-top:8px;">Select Landing Page<span class="field_req">*</span></label> 
+                        <label class="control-label col-md-3" style="padding-top:8px;">{{agile_lng_translate 'tickets' 'select-landing-page'}}<span class="field_req">*</span></label> 
                         <div class="col-md-6 m-t-xs">
                 
                             <div class="controls">
@@ -27,8 +27,8 @@
                 <div class="form-group">
                             <div class="form-actions col-sm-offset-3 col-md-9">
                                 <div class="form-actions">
-                                    <button type="reset" onclick='Backbone.history.loadUrl();' class="btn btn-default btn-sm">Cancel</button>
-                                    <a  href='/help' target="_blank" class="btn btn-primary btn-sm" style="    margin-left: 5px;">Access Your Knowledge Base</a>
+                                    <button type="reset" onclick='Backbone.history.loadUrl();' class="btn btn-default btn-sm">{{agile_lng_translate 'contact-details' 'cancel'}}</button>
+                                    <a  href='/help' target="_blank" class="btn btn-primary btn-sm" style="    margin-left: 5px;">{{agile_lng_translate 'tickets' 'access-your-knowledge-base'}}</a>
                                 </div>
                             </div>
                         </div>
@@ -42,10 +42,12 @@
         </div>
  <div class="col w-md  wrapper pos-rlt track-milestone-text p-t-none" >
             <h4 class="m-t-none row h4 m-b-sm">
-               How to add a landing page to your Knowledge Base?
+               
+               {{agile_lng_translate 'tickets' 'add-landing-pages-to-your-knowlwdge-base'}}
             </h4>
             <p>
-              Create a landing page, add knowledge base elements, choose your landing page here, then access your knowledge base.
+              
+              {{agile_lng_translate 'tickets' 'details-for-adding-a-landing-page-to-knowledge-base'}}
             </p> 
            </div>
 

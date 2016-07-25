@@ -74,7 +74,7 @@
 	{{#if_equals callType ""}}
 
 	{{else}}
-			{{#if_equals callType "inbound"}}Incoming call from{{else}}Outgoing call to{{/if_equals}}  {{phone}} </br>
+			{{#if_equals callType "inbound"}}{{agile_lng_translate 'Contacts-view' 'incoming-call-from'}}{{else}}{{agile_lng_translate 'Contacts-view' 'outgoing-call-to'}}{{/if_equals}}  {{phone}} </br>
 			{{#if status}} Status: {{status}} {{/if}}</br>
 			{{#if_equals status "busy"}}
 			{{else}}

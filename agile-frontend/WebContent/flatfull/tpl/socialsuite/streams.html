@@ -54,13 +54,13 @@
     </span>        
   <h4 class="column-title txt-ellipsis m-t-none"> 
       {{#if_equals stream_type "All_Updates"}}    
-          <span>All Updates</span>
+          <span>{{agile_lng_translate 'social' 'all-updates'}}</span>
       {{else}} 
         {{#if_equals stream_type "DM_Inbox"}}
-           <span>DM Inbox</span>
+           <span>{{agile_lng_translate 'social' 'DM Inbox'}}</span>
         {{else}} 
            {{#if_equals stream_type "DM_Outbox"}}
-               <span>DM Outbox</span>
+               <span>{{agile_lng_translate 'social' 'DM Outbox'}}</span>
            {{else}}
              <span>{{stream_type}}</span>
            {{/if_equals}}

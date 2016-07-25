@@ -541,9 +541,9 @@
 										<td class="controls v-top">
 												<div id="noty-message" name="popup_text" class="p-t-sm">
  													<a href='#' id="tiny_mce_webrules_link" class="pull-right text-info" style="display:none">{{agile_lng_translate 'web-rules' 'select-a-template-edit-editor'}}</a>
- 													<small id="twilio-info" style="display:none"><i class="icon-info-sign"></i> You need to setup <a href="#add-widget" class="text-info">Twilio account</a> .
+ 													<small id="twilio-info" style="display:none"><i class="icon-info-sign"></i> {{agile_lng_translate 'Web-rules' 'you-need-to-set-up'}} <a href="#add-widget" class="text-info"> {{agile_lng_translate 'Web-rules' 'twilio-account'}}</a> .
  													</small>
-													<textarea  cols="" name="webrule-information-field" class="information confirmation CORNER_NOTY span5 required w-full" rows="10" placeholder="Paste HTML context"></textarea>
+													<textarea  cols="" name="webrule-information-field" class="information confirmation CORNER_NOTY span5 required w-full" rows="10" placeholder="{{agile_lng_translate 'web-rules' 'paste-html-context'}}"></textarea>
 													<textarea  cols="" name="webrule-custom-html" id="tinyMCEhtml_email" class="custom_html required MODAL_POPUP w-full form-control" rows="10" placeholder="{{agile_lng_translate 'web-rules' 'paste-html-context'}}"></textarea>
 													<textarea  cols="" name="webrule-custom-html" id="callwebrule-code"  class="custom_html required CALL_POPUP w-full form-control" rows="10" ></textarea>
 <textarea  cols="" name="webrule-javascript" class="code  JAVA_SCRIPT form-control w-full required" rows="10" placeholder="">function agile_js_code_exec() {
@@ -567,7 +567,7 @@
 												<lable class="CALL_POPUP" style="color:#474444">Phone Number
 												<span class="field_req">*</span>
 												</lable>
-												<input type="text" name="number" class="CALL_POPUP required form-control" placeholder="Enter the Incoming number"></input>					
+												<input type="text" name="number" class="CALL_POPUP required form-control" placeholder="{{agile_lng_translate 'Web-rules' 'enter-the-incoming-number'}}"></input>					
 												</div>
 											
 										</td>
@@ -593,7 +593,7 @@
 												<select class="required form-control m-t-n-xxs">
 														<option value="IMMEDIATE" class="MODAL_POPUP FORM CORNER_NOTY CALL_POPUP SITE_BAR">{{agile_lng_translate 'web-rules' 'immediately'}}</option>
 														<option value="AFTER_SECS" class="MODAL_POPUP FORM CORNER_NOTY CALL_POPUP SITE_BAR">{{agile_lng_translate 'web-rules' 'after-certain-time'}}</option>
-														<option value="FIRST_SCROLL" class="MODAL_POPUP FORM CORNER_NOTY CALL_POPUP SITE_BAR">{{agile_lng_translate 'web-rules' 'on-starting-scroll'}}</option>
+														<option value="FIRST_SCROLL" class="MODAL_POPUP FORM CORNER_NOTY CALL_POPUP SITE_BAR">{{agile_lng_translate 'Web-rules' 'on-starting-scroll'}}</option>
 														<option value="END_OF_PAGE" class="MODAL_POPUP FORM CORNER_NOTY CALL_POPUP SITE_BAR">{{agile_lng_translate 'web-rules' 'on-reaching-end-of-page'}}</option>
 														<option value="EXIT" class="MODAL_POPUP FORM CORNER_NOTY CALL_POPUP SITE_BAR">{{agile_lng_translate 'web-rules' 'about-to-exit-page'}}</option> 
 												</select>
