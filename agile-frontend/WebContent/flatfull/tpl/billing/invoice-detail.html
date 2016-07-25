@@ -2,8 +2,8 @@
 <div class="row p-t-xs">
 <div class="col-md-9 p-r-xs">
   <div class="pull-right">
-    <a href="#invoice-details" class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Back"><i class="fa fa-arrow-left"></i></a>
-    <a href="/invoice?inv_id={{invoice.id}}&email={{get_current_domain_email}}" class="btn btn-default m-l-xs" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Download"><i class="fa fa-download"></i></a>
+    <a href="#invoice-details" class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="{{agile_lng_translate 'plan-and-upgrade' 'back'}}"><i class="fa fa-arrow-left"></i></a>
+    <a href="/invoice?inv_id={{invoice.id}}&email={{get_current_domain_email}}" class="btn btn-default m-l-xs" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="{{agile_lng_translate 'widgets' 'download'}}"><i class="fa fa-download"></i></a>
   </div>
 </div>
 </div>
@@ -102,7 +102,7 @@
 				{{#containString "Email" plan.name}}
 				{{numeric_operation this.quantity 1000 "*"}} Emails
 				<br>
-       			 <small>(charged @ ${{numeric_operation plan.amount 100 "/"}}/1000)</small>
+       			 <small>({{agile_lng_translate 'plan-and-upgrade' 'charged'}} @ ${{numeric_operation plan.amount 100 "/"}}/1000)</small>
         		{{else}} 
 				{{#if description}}
                	 {{invoice_description description}}
@@ -112,7 +112,7 @@
 				{{/containString}}
         {{else}}
           {{description}}
-          <br> <small>(charged @ $4/1000)</small>
+          <br> <small>({{agile_lng_translate 'plan-and-upgrade' 'charged'}} @ $4/1000)</small>
        {{/if}}
 			</td>
             

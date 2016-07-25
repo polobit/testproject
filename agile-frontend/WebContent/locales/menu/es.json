@@ -4,7 +4,7 @@
             "menu-cases": "Casos",
             "need-help": "¿Necesitas ayuda? Estamos a un clic de distancia",
             "menu-deals": "Ofertas",
-            "menu-marketing": "Marketing",
+            "menu-marketing": "Márketing",
             "menu-companies": "Compañías",
             "menu-docs": "Docs",
             "menu-social": "Social",
@@ -45,7 +45,7 @@
             "service": "Servicio",
             "menu-contacts": "Contactos",
             "agile-crm": "CRM de Agile",
-            "refer" : "Refer a Friend",
+            "refer" : "Recomendar un amigo",
             "call": "Call",
             "ticket": "Ticket",
         }

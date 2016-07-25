@@ -326,10 +326,10 @@ function setupContactFilterList(cel, tag_id)
 							filter_name = "Recent";
 
 						else if (filter_name.toLowerCase().indexOf('contacts') >= 0)
-							filter_name = "My Contacts";
+							filter_name = "{{agile_lng_translate 'contacts-view' 'my-contacts'}}";
 
 						else if (filter_name.toLowerCase().indexOf('leads') >= 0)
-							filter_name = "Leads";
+							filter_name = "{{agile_lng_translate 'portlets' 'leads'}}";
 
 						// If is not system type get the name of the filter from
 						// id(from cookie)

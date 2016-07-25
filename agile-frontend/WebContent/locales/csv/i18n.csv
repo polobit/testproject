@@ -4434,7 +4434,7 @@ deal-view.track,Track,Registro
 contact-details.CLOSE,Close,Cerca
 widgets.chats,Chats,Chats
 contacts-view.Score,Score,Puntuación
-months-xs.Sept,.Sept,.Sept
+months-xs.Sept,Sept,Sept
 help.about,About,Acerca de
 voice-mail.title,Title,Título
 contact-details.value,Value,Valor
@@ -4492,7 +4492,7 @@ menu.menu-docs,Docs,Docs
 menu.note,Note,Nota 
 contacts-view.won,Won.,Won.
 plan-and-upgrade.more,More,Más
-months-xs.Jan,.Jan,.Ene
+months-xs.Jan,January,Ene
 widgets.show,Show,Mostrar
 contact-edit.blog,Blog,Blog
 contacts-view.from,from,de
@@ -4501,7 +4501,7 @@ report-add.placeholder-time,time,hora
 prefs-data-sync.shop,Shop,Comprar
 other.data,Data,Datos
 visitors.site,site,sitio
-months-xs.Aug,.Aug,.Ago
+months-xs.Aug,August,Ago
 tickets.true,True,1
 modals.save,Save,Guardar
 admin-settings-tasks.call,Call,Llamar
@@ -4556,11 +4556,11 @@ contact-edit.city,City,Ciudad
 misc-keys.mins,mins,mins
 plan-and-upgrade.card,Card,Tarjeta
 prefs-email-templates.text,Text,Texto
-months-xs.Nov,.Nov,.Nov
+months-xs.Nov,November,November
 calendar.week,Week,Semana
 other.work,Work,Trabajo
 tasks.Send,Send,Enviar
-months-xs.Feb,.Feb,.Feb
+months-xs.Feb,February,February
 portlets.save,Save,Guardar
 widgets.none,None,Ninguno
 calendar.from,From,De
@@ -4576,7 +4576,7 @@ campaigns.form,Form,Formulario
 widgets.tax1,Tax1,Impuesto1
 widgets.tax2,Tax2,Impuesto2
 deal-view.done,Done,Hecho
-months-xs.Oct,.Oct,.Oct
+months-xs.Oct,October,October
 admin-settings-custom-fields.rows,Rows,filas
 contact-details.mail,Mail,Correo
 contacts-view.Tags,Tags,Etiquetas
@@ -4595,7 +4595,7 @@ campaigns.make,Make,Hacer
 calendar.team,Team,Equipo
 contacts-view.date,Date,Fecha
 campaigns.deal,Deal,Oferta
-months-xs.Dec,.Dec,.Dic
+months-xs.Dec,December,Dic
 campaigns.busy,Busy,Ocupado
 admin-settings-custom-fields.LIST,List,Lista
 report-view.name,Name,Nombre
@@ -4619,7 +4619,7 @@ countries.OM,Oman,Omán
 countries.PE,Peru,Peru
 portlets.from,from,de
 report-add.save,Save,Guardar
-months-xs.May,.May,.Mayo
+months-xs.May,May,Mayo
 other.from,From,De
 countries.TG,Togo,Togo
 widgets.from,From,De
@@ -4713,3 +4713,6 @@ days.We,We,mi
 days.Th,Th,ju
 days.Fr,Fr,vi
 days.Sa,Sa,sá
+portlets.range,Range,Distancia
+portlets.all-companies,All Companies,todas las Empresas
+portlets.leads,Leads,plomos

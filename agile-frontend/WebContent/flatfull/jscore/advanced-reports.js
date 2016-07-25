@@ -39,7 +39,7 @@ function initFunnelCharts(callback)
 			callback();
 		});
 
-	}, '<option class="default-select" value="{{id}}">{{name}}</option>', false, undefined, "All Contacts");
+	}, '<option class="default-select" value="{{id}}">{{name}}</option>', false, undefined, "{{agile_lng_translate 'portlets' 'all-contacts'}}");
 
 	if ($('#type').length > 0)
 	{

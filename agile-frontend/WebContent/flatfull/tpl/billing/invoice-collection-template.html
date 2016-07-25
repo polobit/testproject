@@ -54,7 +54,7 @@ Emails
 		{{#containString "Email" plan.name}}
         {{epochToHumanDate "mm/dd/yyyy" period.start}}
 <br>
-<small>(charged @ ${{numeric_operation plan.amount 100 "/"}}/1000)</small>
+<small>({{agile_lng_translate 'plan-and-upgrade' 'charged'}} @ ${{numeric_operation plan.amount 100 "/"}}/1000)</small>
         {{else}}
 {{epochToHumanDate "mm/dd/yyyy" period.start}}
 <br>
@@ -63,7 +63,7 @@ Emails
         {{else}}
            {{epochToHumanDate "mm/dd/yyyy" period.start}} 
            <br>
-            <small>(charged @ $4/1000)</small>
+            <small>({{agile_lng_translate 'plan-and-upgrade' 'charged'}} @ $4/1000)</small>
 		{{/if}}
     </td>
 	<td>

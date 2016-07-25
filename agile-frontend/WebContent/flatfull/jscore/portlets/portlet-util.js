@@ -45,15 +45,15 @@ var portlet_utility = {
 	get_filtered_contact_header : function(base_model, callback) {
 
 		if (base_model.get("settings").filter == 'contacts')
-			return callback("All Contacts");
+			return callback("{{agile_lng_translate 'portlets' 'all-contacts'}}");
 		else if (base_model.get("settings").filter == 'companies')
-			return callback("All Companies");
+			return callback("{{agile_lng_translate 'portlets' 'all-companies'}}");
 		else if (base_model.get("settings").filter == 'recent')
-			return callback = "Recent Contacts";
+			return callback = "{{agile_lng_translate 'portlets' 'recent-contacts'}}";
 		else if (base_model.get("settings").filter == 'myContacts')
-			return callback("My Contacts");
+			return callback("{{agile_lng_translate 'contacts-view' 'my-contacts'}}");
 		else if (base_model.get("settings").filter == 'leads')
-			return callback("Leads");
+			return callback("{{agile_lng_translate 'portlets' 'leads'}}");
 		else {
 
 			var contactFilter = $.ajax({
@@ -66,7 +66,7 @@ var portlet_utility = {
 						header_name = "" + data.name;
 
 					if (!header_name) {
-						header_name = "Contact List";
+						header_name = "{{agile_lng_translate 'portlets' 'contact-list'}}";
 					}
 
 					return callback(header_name);
@@ -1093,7 +1093,7 @@ var portlet_utility = {
 												portlet_utility
 														.getNumberWithCommasForPortlets(data["newContactsCount"]));
 								that.find('#new-contacts-label').text(
-										"New contacts");
+										"{{agile_lng_translate 'portlets' 'new-contacts'}}");
 							});
 
 			var wonDealsurl = '/core/api/portlets/activity-overview-report?reportType=wonDeals&duration='
@@ -1126,10 +1126,10 @@ var portlet_utility = {
 								that
 										.find('#won-deal-count')
 										.text(
-												"Won from "
+												"{{agile_lng_translate 'portlets' 'won-from'}} "
 														+ portlet_utility
 																.getNumberWithCommasForPortlets(data['wonDealsCount'])
-														+ " deals");
+														+ " {{agile_lng_translate 'deals' 'deals-sm'}}");
 							});
 
 			var newDealsurl = '/core/api/portlets/activity-overview-report?reportType=newDeals&duration='
@@ -1159,7 +1159,7 @@ var portlet_utility = {
 								that
 										.find('#new-deal-count')
 										.text(
-												"New deals worth "
+												"{{agile_lng_translate 'portlets' 'new-deals-worth'}} "
 														+ portlet_utility
 																.getPortletsCurrencySymbol()
 														+ ''
@@ -1188,7 +1188,7 @@ var portlet_utility = {
 				emailsSentCount = _agile_get_prefs('dashboard_campaign_count_'+CURRENT_DOMAIN_USER.id);
 			}
 			that.find('#emails-sent-count').text(portlet_utility.getNumberWithCommasForPortlets(emailsSentCount));
-			that.find('#emails-sent-label').text("Campaign emails sent");
+			that.find('#emails-sent-label').text("{{agile_lng_translate 'portlets' 'campaign-emails-sent'}}");
 			portlet_graph_data_utility
 					.fetchPortletsGraphData(
 							campaignEmailsSentsurl,
@@ -1211,7 +1211,7 @@ var portlet_utility = {
 									  );
 								}
 								that.find('#emails-sent-label').text(
-										"Campaign emails sent");
+										"{{agile_lng_translate 'portlets' 'campaign-emails-sent'}}");
 								_agile_set_prefs('dashboard_campaign_count_'+CURRENT_DOMAIN_USER.id, data["emailsSentCount"]);
 							});
 			setPortletContentHeight(base_model);
@@ -1276,14 +1276,14 @@ var portlet_utility = {
 							function(data) {
 								that.find('.deal_count').html(
 									portlet_utility.getNumberWithCommasForPortlets(data["dealcount"]));
-								that.find('.goal_count').html('Won Deals <br> from '+
-										portlet_utility.getNumberWithCommasForPortlets(data["goalCount"])+' Goals');
+								that.find('.goal_count').html('{{agile_lng_translate "portlets" "won-deals"}} <br> {{agile_lng_translate "contacts-view" "from"}} '+
+										portlet_utility.getNumberWithCommasForPortlets(data["goalCount"])+' {{agile_lng_translate "portlets" "goals"}}');
 								that.find('.deal_amount').html(portlet_utility.getPortletsCurrencySymbol()+
 									'' +
 									portlet_utility.getNumberWithCommasForPortlets(data["dealAmount"]));
-								that.find('.goal_amount').html('Revenue <br> from '+portlet_utility.getPortletsCurrencySymbol()+
+								that.find('.goal_amount').html('{{agile_lng_translate "portlets" "revenue"}} <br> {{agile_lng_translate "contacts-view" "from"}} '+portlet_utility.getPortletsCurrencySymbol()+
 									'' +
-									portlet_utility.getNumberWithCommasForPortlets(data["goalAmount"])+' Goals');
+									portlet_utility.getNumberWithCommasForPortlets(data["goalAmount"])+' {{agile_lng_translate "portlets" "goals"}}');
 									portlet_graph_data_utility.dealGoalsGraphData(selector,data,column_position,row_position);
 							});
 			setPortletContentHeight(base_model);
@@ -1454,16 +1454,16 @@ var portlet_utility = {
 			var existed_filter = base_model.get("settings").filter;
 			var options = '<option value="">{{agile_lng_translate "contact-details" "select"}}</option>';
 			if (existed_filter == "contacts") {
-				options += "<option selected='selected' value='contacts'>All Contacts</option>";
+				options += "<option selected='selected' value='contacts'>{{agile_lng_translate 'portlets' 'all-contacts'}}</option>";
 			}
 			else {
-				options += "<option value='contacts'>All Contacts</option>";
+				options += "<option value='contacts'>{{agile_lng_translate 'portlets' 'all-contacts'}}</option>";
 			}
 			if (existed_filter == "myContacts") {
-				options += "<option selected='selected' value='myContacts'>My Contacts</option>";
+				options += "<option selected='selected' value='myContacts'>{{agile_lng_translate 'contacts-view' 'my-contacts'}}</option>";
 			}
 			else {
-				options += "<option value='myContacts'>My Contacts</option>";
+				options += "<option value='myContacts'>{{agile_lng_translate 'contacts-view' 'my-contacts'}}</option>";
 			}
 			$.ajax({
 				type : 'GET',
