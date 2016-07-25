@@ -31,7 +31,8 @@ public class InvoiceCreatedWebhookHandler extends StripeWebhookHandler
 	 */
     	System.out.println("InvoiceCreatedWebhookHandler");
     	AccountPrefs prefs = getAccountPrefs();
-	if (eventType.equals(StripeWebhookServlet.STRIPE_INVOICE_CREATED) && prefs != null && prefs.sendInvoiceBeforeCharge && getEvent().getRequest() == null)
+    	//&& prefs.sendInvoiceBeforeCharge
+	if (eventType.equals(StripeWebhookServlet.STRIPE_INVOICE_CREATED) && prefs != null && getEvent().getRequest() == null)
 	{
 		System.out.println("InvoiceCreatedWebhookHandler success");
 
