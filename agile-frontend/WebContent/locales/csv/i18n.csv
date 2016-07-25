@@ -4153,3 +4153,19 @@ contact-details.by,by,por
 contact-details.in,in,en
 contact-details.on,on,en
 contact-details.to,To,A
+tags.renaming,Renaming tag,Cambiar el nombre de la etiqueta
+tags.rename-info,This may take a while. You may see the renamed tag on some contacts while this happens,Esto puede tardar un rato. Usted puede ver la etiqueta cambiado el nombre de algunos contactos mientras esto sucede
+tags.deleting,Deleting tag,La eliminación de la etiqueta
+tags.delete-info,You may see the deleted tag on some contacts while this happens,Es posible que vea la etiqueta eliminada en algunos contactos mientras esto sucede
+tags.merging,Merging tags,La fusión de las etiquetas
+tags.merging-info,This may take a while.  You may see the merged tag on some contacts cc,Esto puede tardar un rato. Usted puede ver la etiqueta fusionado en algunos contactos cc
+notifications.disabled,Desktop Notifications are now disabled.,Notificaciones de escritorio ahora están deshabilitados .
+notifications.enabled,Desktop Notifications are now enabled.,Notificaciones de escritorio ahora están habilitadas .
+dashboards.marketing-dashboard,Marketing Dashboard,Tablero de instrumentos de marketing
+dashboards.sales-dashboard,Sales Dashboard,Tablero de instrumentos de ventas
+dashboards.marketing,Marketing,Márketing
+deals.better-reports-info,For better deal reports and sales forecasting&#44; please set your 'Won' and 'Lost' milestones in the,Para obtener mejores informes tratan y la previsión de ventas & # 44; configure e hitos sus ' Won ' 'Lost ' en el
+validation-msgs.max-length-is,Maximum length is,La longitud máxima es
+validation-msgs.chars-only,chars only,Sólo caracteres
+forms.fill-out,Fill out my,Rellene mi
+forms.online-form,online form,formulario en línea

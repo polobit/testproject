@@ -3,7 +3,7 @@
 </script>
 
 <script type="text/html" id="js-email-error-mssg-template">
-	<div>To continue sending emails from your account, please<a href="#subscribe" class="action text-info" data-dismiss="modal" subscribe="subscribe" action="deny"> purchase</a>  more.</div>
+	<div>{{agile_lng_translate 'billing' 'continue-send-emails'}}, {{agile_lng_translate 'contact-details' 'please'}}<a href="#subscribe" class="action text-info" data-dismiss="modal" subscribe="subscribe" action="deny"> {{agile_lng_translate 'plan-and-upgrade' 'purchase'}}</a>  {{agile_lng_translate 'plan-and-upgrade' 'more'}}.</div>
 </script>
 
 <script type="text/html" id="js-referal-program-template">
@@ -31,47 +31,47 @@
 
 <script type="text/html" id="js-deal-filters-template">
 	<select name='{{field_name}}' class='form-control'>
-		<option value='true'>Archived</option>
-		<option value='false'>Active</option>
-		<option value='all'>Any</option>
+		<option value='true'>{{agile_lng_translate 'deal-view' 'archived'}}</option>
+		<option value='false'>{{agile_lng_translate 'subscriber_type' 'active'}}</option>
+		<option value='all'>{{agile_lng_translate 'portlets' 'any'}}</option>
 	</select>
 </script>
 
 <script type="text/html" id="js-form-embed-template">
 	<div id="{{host}}_{{formid}}" class="agile_crm_form_embed">
-		<span style="display:none">Fill out my <a href="{{link}}">online form</a></span>
+		<span style="display:none">{{agile_lng_translate 'forms' 'fill-out'}} <a href="{{link}}">{{agile_lng_translate 'forms' 'online-form'}}</a></span>
 	</div>
 </script>
 
 <script type="text/html" id="js-max-length-error-template">
-	Maximum length is {{length}} chars only.
+	{{agile_lng_translate 'validation-msgs' 'max-length-is'}} {{length}} {{agile_lng_translate 'validation-msgs' 'chars-only'}}.
 </script>
 
 <script type="text/html" id="js-deal-reports-template">
-	For better deal reports and sales forecasting, please set your 'Won' and 'Lost' milestones in the <i style='text-decoration:underline;'>Deal settings</i> page.
+	{{agile_lng_translate 'deals' 'better-reports-info'}} <i style='text-decoration:underline;'>{{agile_lng_translate 'deal-view' 'deal-settings'}}</i> {{agile_lng_translate 'admin-settings-integrations' 'page'}}.
 </script>
 
 <script type="text/html" id="js-dashboards-options-template">
-	<option value='MarketingDashboard' lass='user-dashboard' title='Marketing Dashboard'>Marketing</option>
-	<option value='SalesDashboard' class='user-dashboard' title='Sales Dashboard'>Sales</option>
+	<option value='MarketingDashboard' lass='user-dashboard' title='{{agile_lng_translate "dashboards" "marketing-dashboard"}}'>{{agile_lng_translate 'dashboards' 'marketing'}}</option>
+	<option value='SalesDashboard' class='user-dashboard' title='{{agile_lng_translate "dashboards" "sales-dashboard"}}'>{{agile_lng_translate 'menu' 'sales'}}</option>
 </script>
 
 <script type="text/html" id="js-dashboards-options-newui-template">
-	<li><a id='MarketingDashboard' title='Marketing Dashboard' class='user-defined-dashboard' href='#'>Marketing</a></li>
-	<li><a id='SalesDashboard' title='Sales Dashboard' class='user-defined-dashboard' href='#'>Sales </a></li>
+	<li><a id='MarketingDashboard' title='{{agile_lng_translate "dashboards" "marketing-dashboard"}}' class='user-defined-dashboard' href='#'>{{agile_lng_translate 'dashboards' 'marketing'}}</a></li>
+	<li><a id='SalesDashboard' title='{{agile_lng_translate "dashboards" "sales-dashboard"}}' class='user-defined-dashboard' href='#'>{{agile_lng_translate 'menu' 'sales'}} </a></li>
 	<li class='divider'></li>
-	<li><a id='dashboards' href='#dashboards'>Manage Dashboards</a></li>
+	<li><a id='dashboards' href='#dashboards'>{{agile_lng_translate 'portlets' 'manage-dashboards'}}</a></li>
 </script>
 
 <script type="text/html" id="js-desktop-notifications-disable-template">
-	<i>Desktop Notifications are now enabled. 
-	   <a href="#" id="disable-notification" class="text-info" style="text-decoration:underline;">Disable</a>
+	<i>{{agile_lng_translate 'notifications' 'enabled'}} 
+	   <a href="#" id="disable-notification" class="text-info" style="text-decoration:underline;">{{agile_lng_translate 'web-rules' 'disable'}}</a>
 	</i>
 </script>
 
 <script type="text/html" id="js-desktop-notifications-enable-template">
-	<i>Desktop Notifications are now disabled. 
-	   <a href="#" id="enable-notification" class="text-info" style="text-decoration:underline;">Enable</a>
+	<i>{{agile_lng_translate 'notifications' 'disabled'}} 
+	   <a href="#" id="enable-notification" class="text-info" style="text-decoration:underline;">{{agile_lng_translate 'prefs-email' 'enable'}}</a>
 	</i>
 </script>
 
@@ -96,15 +96,15 @@
 </script>
 
 <script type="text/html" id="js-merge-tags-template">
-	Merging tags {{oldTag}} and {{newTag}}. This may take a while.  You may see the merged tag on some contacts cc
+	{{agile_lng_translate 'tags' 'merging'}} {{oldTag}} {{agile_lng_translate 'contacts-view' 'and'}} {{newTag}}. {{agile_lng_translate 'tags' 'merging-info'}}
 </script>
 
 <script type="text/html" id="js-rename-tags-template">
-	Renaming tag {{oldTag}} to {{newTag}}. This may take a while. You may see the renamed tag on some contacts while this happens
+	{{agile_lng_translate 'tags' 'renaming'}} {{oldTag}} {{agile_lng_translate 'other' 'to'}} {{newTag}}. {{agile_lng_translate 'tags' 'rename-info'}}
 </script>
 
 <script type="text/html" id="js-deleting-tags-template">
-	Deleting tag {{tag}}.  You may see the deleted tag on some contacts while this happens
+	{{agile_lng_translate 'tags' 'deleting'}} {{tag}}.  {{agile_lng_translate 'tags' 'delete-info'}}
 </script>
 
 
