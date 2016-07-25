@@ -72,7 +72,7 @@ var _agile_synch_form_v4 = function()
            /*
            *for multiple checkboxes in the custome field selection
            */
-			else if(field_type == "checkbox" && !agile_tags|| agile_form[i].checked)
+			else if(agile_form[i].checked &&(field_type == "checkbox" && agile_tags))
 			   {
 				if (agile_multiple_checkbox){
 					agile_multiple_checkbox = agile_multiple_checkbox + ',' + field_value;
@@ -84,8 +84,10 @@ var _agile_synch_form_v4 = function()
 			   agile_contact[field_name] = agile_multiple_checkbox;  
 			}
           
-			else
+			else{
+				if(!agile_multiple_checkbox)
 				agile_contact[field_name] = field_value;
+			}
 		}
 		else if (field_value)
 		{
