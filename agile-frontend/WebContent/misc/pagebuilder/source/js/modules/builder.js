@@ -1235,7 +1235,7 @@
             errorDrawer.querySelector('button').addEventListener('click', this, false);
             this.parentLI.parentNode.insertBefore(newLI, this.parentLI.nextSibling);
             
-            ace.config.set("basePath", "/js/vendor/ace");
+            ace.config.set("basePath", "https://our.agilecrm.com/misc/landingpage/public/js/vendor/ace");
             
             var theId = theEditor.getAttribute('id');
             var editor = ace.edit( theId );
