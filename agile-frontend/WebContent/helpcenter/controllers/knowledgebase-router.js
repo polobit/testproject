@@ -23,6 +23,8 @@ var HelpcenterRouter = Backbone.Router.extend({
 				url :'/helpcenterapi/api/knowledgebase/categorie',
 				templateKey : "helpcenter-categories",
 				individual_tag_name : 'div',
+				sort_collection:true,
+				sortKey:"created_time",
 				postRenderCallback : function(el, collection) {
 
 					Helpcenter_Util.setBreadcrumbPath();
@@ -107,7 +109,6 @@ var HelpcenterRouter = Backbone.Router.extend({
 	},
 
 	viewArticle:function(name){
-		name	= encodeURIComponent(name);
 
 		App_Helpcenter.renderHomeTemplate(function(){
 
@@ -243,8 +244,10 @@ var HelpcenterRouter = Backbone.Router.extend({
 	},*/
 	renderHomeTemplate: function(callback){
 
+	
 		if($('#helpcenter-container').length)
 		{
+			
 			callback();
 			return;
 		}
@@ -254,7 +257,16 @@ var HelpcenterRouter = Backbone.Router.extend({
 	 		if(!template_ui)
 	 			return;
 
+	 		
 	 		$('#content').html($(template_ui));
+	 		
+	 		if(kbpagelpid == 1){
+				$(".search-box").addClass("search-box1");
+				$(".fa-search").css("top","215px");  
+
+				$(".search-box h1").css("color","#fff");
+			}    
+
 
 	 		if(callback)
 	 			callback();

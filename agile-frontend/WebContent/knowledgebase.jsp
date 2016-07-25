@@ -29,6 +29,7 @@
 <%@page import="com.agilecrm.user.UserPrefs"%>
 <%@page import="com.agilecrm.user.util.UserPrefsUtil"%>
 <%@page import="org.codehaus.jackson.map.ObjectMapper"%>
+<%@page	import="com.agilecrm.knowledgebase.util.KbLandingPageUtil"%>
 <%@page language="java" contentType="text/html; charset=UTF-8"
 pageEncoding="UTF-8"%>
 
@@ -60,7 +61,10 @@ pageEncoding="UTF-8"%>
   String _AGILE_VERSIONd = SystemProperty.applicationVersion.get();
 
   String _VERSION_IDd = VersioningUtil.getVersion();
-
+  if(kbpage != null){
+	 Long kbpagelp_id ;
+  	kbpagelp_id = kbpage.kb_landing_page_id;
+  }	
 %>
 
 <%
@@ -113,14 +117,12 @@ function isIE() {
  {window.location='/error/not-supported.jsp';}
 
 </script>
-<div id="alert-message" style="display:none;"></div>
-<div id="wrap" class="app app-aside-folded-inactive app-header-fixed app-aside-fixed" style="background-color: white;">
-
-<!-- Including header(Navigation Bar) page -->
 <%@ include file="/helpcenter/header.html"%>
+<div id="alert-message" style="display:none;"></div>
+<div id="wrap" class="app app-aside-folded-inactive" style="background-color: white;">
+
 
 <div class="app-content" id="agilecrm-container" style="margin-left: 0px;">
-	<!-- <div class="butterbar animation-active" style="z-index:99;"><span class="bar"></span></div>-->
 	<div id="content" class="app-content-body"></div>
 </div>
 <div id="push"></div>
@@ -184,6 +186,7 @@ var HANDLEBARS_PRECOMPILATIONd = false || <%=productiond%>;
 
 var CSS_PATHd = '<%=CSS_PATHd%>';
 // var CSS_PATH = "//dpm72z3r2fvl4.cloudfront.net/";
+var kbpagelpid = <%=kbpage.kb_landing_page_id%>;
 
 var IS_CONSOLE_ENABLEDd = <%=debugd%>;
 var LOCAL_SERVERd = <%=debugd%>;
@@ -192,9 +195,24 @@ var IS_FLUIDd = <%=is_fluidd %>
 
 var HANDLEBARS_LIBd = LOCAL_SERVERd ? "/lib/handlebars-v1.3.0.js" : "//cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.3.0/handlebars.min.js";
 
-head.load(LIB_PATHd + 'final-lib/min/lib-all-min-1.js?_=' + _AGILE_VERSIONd, function(){
-        load_globalize();
-});
+  var _AGILE_FILE_HASH;
+  
+  function _agile_get_file_hash(filename)
+  {
+    if( !filename || filename == '' ) return _AGILE_VERSION;
+    
+    if( _AGILE_FILE_HASH && _AGILE_FILE_HASH[filename] )  return _AGILE_FILE_HASH[filename];
+    
+    return _AGILE_VERSION;
+  }
+  head.load(  "https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js",
+      LIB_PATH + 'final-lib/min/lib-all-new-1.js?_=' + _agile_get_file_hash('lib-all-new-1.js'),
+      "https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.3.0/handlebars.min.js",
+      LIB_PATH + 'final-lib/min/backbone-min.js',
+      LIB_PATH + 'final-lib/min/lib-all-new-2.js?_=' + _agile_get_file_hash('lib-all-new-2.js')+'_', 
+      function(){
+        
+    });
 
 // head.js({ library  : LIB_PATH + 'final-lib/min/lib-all-min-1.js?_=' + _AGILE_VERSION });
 

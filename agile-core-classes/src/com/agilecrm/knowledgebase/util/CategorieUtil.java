@@ -24,7 +24,7 @@ public class CategorieUtil
 		List<Categorie> categories = Categorie.dao.fetchAll();
 
 		if (categories == null || categories.size() == 0)
-			return null;
+				CategorieUtil.createDefaultCategorie();
 		
 
 		return categories;
@@ -32,7 +32,7 @@ public class CategorieUtil
 
 	public static void createDefaultCategorie()
 	{
-		Categorie categorie = new Categorie("General", "General category contains FAQ'S and getting started guides.");
+		Categorie categorie = new Categorie("General", "General category contains FAQ's and getting started guides.");
 		Key<Categorie> key = categorie.save();
 
 		SectionUtil.createDefaultSections(key);

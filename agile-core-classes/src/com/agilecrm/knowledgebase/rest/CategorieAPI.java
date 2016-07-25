@@ -22,6 +22,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.agilecrm.activities.util.CategoriesUtil;
 import com.agilecrm.knowledgebase.entity.Article;
 import com.agilecrm.knowledgebase.entity.Categorie;
 import com.agilecrm.knowledgebase.entity.Section;
@@ -49,8 +50,7 @@ public class CategorieAPI
 	{
 		List<Categorie> categories = CategorieUtil.getCategories();
 
-		if (categories == null)
-			return null;
+		
 
 		for (Categorie categorie : categories)
 			categorie.sections = SectionUtil.getSectionByCategorie(categorie.id,false);
@@ -128,8 +128,11 @@ public class CategorieAPI
 				Long id = (long)cat_ids.get(i);
 				Key<Categorie> categorie_key = new Key<Categorie>(Categorie.class, id);
 				Query<Section> q = Section.dao.ofy().query(Section.class).filter("categorie_key =", categorie_key);
+				Query<Article> qa = Article.dao.ofy().query(Article.class).filter("categorie_key =", categorie_key);
 				List <Section> sections = Section.dao.fetchAll(q);
+				List <Article> articles = Article.dao.fetchAll(qa);
 				Section.dao.deleteAll(sections);
+				Article.dao.deleteAll(articles);
 			}
 			
 			Categorie.dao.deleteBulkByIds(new JSONArray(model_ids));

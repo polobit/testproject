@@ -14,6 +14,7 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 
 import com.agilecrm.cursor.Cursor;
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.knowledgebase.entity.Section.Visible_To;
 import com.agilecrm.projectedpojos.DomainUserPartial;
 import com.agilecrm.search.document.HelpcenterArticleDocument;
 import com.agilecrm.ticket.entitys.TicketDocuments;
@@ -58,6 +59,7 @@ public class Article extends Cursor implements Serializable
 
 	public Long updated_time = null;
 
+	public String encodedtitle = null;
 	/**
      * Order of the categorie in the list.
      */
@@ -146,6 +148,22 @@ public class Article extends Cursor implements Serializable
 	{
 
 	}
+	/**
+	 * constructor to create default articles
+	 */
+	public Article(String name, String description, String plain_text,Key<Categorie> categorie_key,Key<Section> section_key,Boolean is_article_published,String encodedtitle)
+	{
+		super();
+		this.title = name;
+		this.content = description;
+		this.plain_content = plain_text;
+		this.categorie_key = categorie_key;
+		this.section_key = section_key;
+		this.is_article_published = is_article_published ;
+		this.encodedtitle = encodedtitle;
+		this.save();
+	}
+
 
 	/**
 	 * Initialize DataAccessObject.

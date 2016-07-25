@@ -53,6 +53,7 @@
 		"knowledgebase/category/:categorie_id/section/:id/edit-section" : "editSection",	
 		"knowledgebase/add-category":"addCategory",
 		"knowledgebase/:id/edit-category":"editCategory",
+		"selectlandingpage":"addLandingpage"
 
 
 	},
@@ -1239,7 +1240,8 @@
 						 title = $.trim(title);
 						var json = {};
 						var catogery_id = $("#catogery option:selected").data('catogery-id');
-						json = {"categorie_id" : catogery_id,"title" : title};
+						var encodedtitle = encodeURIComponent(title);
+						json = {"categorie_id" : catogery_id,"title" : title,"encodedtitle":encodedtitle};
 
 						var plain_content = '';
 
@@ -1294,8 +1296,6 @@
 
 		loadServiceLibrary(function(){
 		 	//Rendering root template
-
-		 	name = encodeURIComponent(name);
 		 	App_Ticket_Module.loadAdminsettingsTemplate(function(callback){
 
 		 		var editarticleView = new Base_Model_View({
@@ -1306,9 +1306,11 @@
                 prePersist : function(model){
                 	var title = model.toJSON().title;
 					title = $.trim(title);
+					var encodedtitle = encodeURIComponent(title);
+
 					var json = {};
 					var catogery_id = $("#catogery option:selected").data('catogery-id');
-					json = {"categorie_id" : catogery_id, "title":title};
+					json = {"categorie_id" : catogery_id, "title":title ,"encodedtitle":encodedtitle};
 					model.set(json, { silent : true });
 			    },
 
@@ -1441,9 +1443,8 @@
 						isNew : false,
 						template : "ticket-helpcenter-select-landingpage",
 						url : "/core/api/knowledgebase/KBlandingpage",
-						window:'back',
 					    postRenderCallback : function(el,json){
-					        console.log(json);
+					       
 					        var kblpid = json.kb_landing_page_id;
 					        var kb_id = json.id;
 					        var optionTemplate = "<option value='{{id}}'>{{name}}</option>";
@@ -1451,26 +1452,13 @@
 
 								fillSelect('template_id', '/core/api/landingpages?page_size=20', '', 
 								function(){
+									$("#template_id",el).append('<option value=1>Default</option>');
 									$('#template_id option[value=""]',el).attr("value",0);
 									$('#template_id option[value="'+kblpid+'"]',el).attr("selected",true);
 																							
-								}, optionTemplate, false, el,"Select Landing Page");
+								}, optionTemplate, false, el,"Basic");
 										
 							
-							var newKbmodel = new BaseModel();
-							newKbmodel.url = "/core/api/knowledgebase/KBlandingpage";
-
-							$('#template_id',el).on('change', function (e) {
-    							var optionSelected = $("#template_id :selected").val();
-								
-								var kblp_json = {}; 
-								kblp_json.kb_landing_page_id = optionSelected;
-																
-								if(kb_id)	{
-									kblp_json.id = kb_id;
-								}	
-								newKbmodel.save(kblp_json);
-							});
 		 				}
 					   
 				    });

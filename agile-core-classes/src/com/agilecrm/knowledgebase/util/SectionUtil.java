@@ -36,15 +36,31 @@ public class SectionUtil
 
 	public static void createDefaultSections(Key<Categorie> key)
 	{
-		Section faqSection = new Section("FAQ", "This section contains fequently asked question by customers", key,
+	
+		Section faqSection = new Section("FAQ's", "This section contains fequently asked question by customers", key,
 				Visible_To.CUSTOMER);
 
-		faqSection.save();
+		Key<Section> faqkey = faqSection.save();
+		
+		String content = "<p>Create a landing page, add knowledge base elements, choose your landing page in settings, then access your knowledge base by clicking on Access.</p>";
+		
+		new Article("How to add a landing page to Knowledge Base?",content, "Create a landing page, add knowledge base elements, choose your landing page here, then access your knowledge base.",
+				key,faqkey,false,"How%20to%20add%20a%20landing%20page%20to%20Knowledge%20Base%3F");
 
-		Section gettingStarted = new Section("Getting started", "This section getting started guides for all modules",
+		
+		Section gettingStarted = new Section("Getting Started", "This section getting started guides for all modules",
 				key, Visible_To.CUSTOMER);
+	
+		Key<Section> gettingStartedkey= gettingStarted.save();
+	
 
-		gettingStarted.save();
+		 content = "<p>We created this category and a few common sections to help you get started with your Knowledge Base.<br/> You can add your own content and modify or completely delete our content.</p>";
+		new Article("Welcome",content, "We created this category and a few common sections to help you get started with your Knowledge Base. You can add your own content and modify or completely delete our content.",
+				key,gettingStartedkey,false,"Welcome");
+		content = "<p>Configure your knowledge base by adding categories, sections and articles, select a landing page in knowledge base settings and access your knowledge base.</p><ul><li>Click on category to see how many sections you have.</li><li>Click on section to see how many articles you have.</li></ul>";
+		 new Article("How to configure Knowledge Base?",content,"Configure your knowledge base by adding categories, sections and articles, select a landing page in knowledge base settings and access your knowledge base.Click on category to see how many sections you have.Click on section to see how many articles you have.",
+				 key,gettingStartedkey,false,"How%20to%20configure%20Knowledge%20Base%3F");
+		
 	}
 	/**
 	 * Deletes Section from DB, text search and its related notes. 
