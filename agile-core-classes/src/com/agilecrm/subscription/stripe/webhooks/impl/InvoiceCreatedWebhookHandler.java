@@ -1,7 +1,7 @@
 package com.agilecrm.subscription.stripe.webhooks.impl;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -97,9 +97,9 @@ public class InvoiceCreatedWebhookHandler extends StripeWebhookHandler
 	    if (data.has("period"))
 	    {
 		JSONObject period = data.getJSONObject("period");
-		
-		plan.put("start_date", new Date(Long.parseLong(period.getString("start")) * 1000).toString());
-		plan.put("end_date", new Date(Long.parseLong(period.getString("end")) * 1000).toString());
+		SimpleDateFormat formater = new SimpleDateFormat("MM/dd/yyyy");
+		plan.put("start_date", formater.format(new Date(Long.parseLong(period.getString("start")) * 1000).toString()));
+		plan.put("end_date", formater.format(new Date(Long.parseLong(period.getString("end")) * 1000).toString()));
 	    }
 	    Float amount = Float.valueOf(obj.getString("amountDue"));
 	    if(amount <= 0)
