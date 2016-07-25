@@ -165,6 +165,9 @@ public class AmazonSES
 
 		 //add subject of email         
          mimeMessage.setSubject(subject);
+         
+         if(fromName == null)
+        	 fromName = "";
        
          //Add from address of email
 	 	 mimeMessage.addFrom(new Address[]
@@ -205,8 +208,9 @@ public class AmazonSES
         //adding HTML or Text body part 
         mimeMessage.setContent(mimeBodyPart);
         
+        
         //Add metadata
-        if(! StringUtils.isBlank(campaignId))
+        if(StringUtils.isNotBlank(campaignId) && StringUtils.isNotBlank(domanName))
         {
 	        mimeMessage.addHeader(SUBACCOUNT_HEADER_NAME, domanName);
 	        
