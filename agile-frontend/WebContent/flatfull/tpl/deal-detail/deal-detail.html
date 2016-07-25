@@ -19,7 +19,7 @@
 <div class="m-b-sm text-base font-thin">{{currencySymbol}}{{numberWithCommas expected_value}}</div>
 {{/if}}
 <div class=" text-muted deal-track text-xs">
-{{#if this.archived}}&nbsp;&nbsp;<span  class="deal-task-type bg-light dk  btn btn-xs  m-l-xs" >Archived</span>{{else}}
+{{#if this.archived}}&nbsp;&nbsp;<span  class="deal-task-type bg-light dk  btn btn-xs  m-l-xs" >{{agile_lng_translate 'deal-view' 'archived'}}</span>{{else}}
   
 {{#getTracksCount}}<span>{{pipeline.name}} , </span>{{/getTracksCount}}         
             
@@ -39,7 +39,7 @@
 {{#if this.archived}}
 
 <div class="btn-group pos-abs " style="left:192px;top:29px;">
-<a href="#" class="deal-restore-detail-view btn btn-sm btn-default"><i class="icon-mail-reply"></i> Restore</a>
+<a href="#" class="deal-restore-detail-view btn btn-sm btn-default"><i class="icon-mail-reply"></i>{{agile_lng_translate 'deal-view' 'restore'}} </a>
 </div>
     
               
@@ -47,7 +47,7 @@
               <div class="change-owner-succes"></div>
               <div title="Owner">
                  <div class="contact-owner" id="change-owner-element">
-                 <div><small class="text-base text-muted"> Owner&nbsp;&nbsp;</small></div>
+                 <div><small class="text-base text-muted"> {{agile_lng_translate 'contact-details' 'owner'}}&nbsp;&nbsp;</small></div>
                  <a href="#"  data={{owner.id}} class="deal-owner-name custom-color contact-owner-name c-d text-xs">      {{owner.name}}</a>
               </div>
               </div>
@@ -65,11 +65,11 @@
        <li><a href="#" class="deal-detail-edit-deal" id="deal_details"><i class="fa fa-edit" style="margin-right:2px;"></i> Edit</a></li>
                                     <li class="divider"></li>
                   <li><a href='#'  id="dealshow-note" class="deal-note"><i
-                      class="icon-note" style="margin-right:2px;"></i> Add Note</a></li>
-                                    <li><a href='#'  id="dealdetail-archive" class="deal-detail-archive"><i class="fa fa-file-archive-o" style="margin-right:2px;"></i> Archive</a></li>
+                      class="icon-note" style="margin-right:2px;"></i> {{agile_lng_translate 'deal-view' 'add-note'}}</a></li>
+                                    <li><a href='#'  id="dealdetail-archive" class="deal-detail-archive"><i class="fa fa-file-archive-o" style="margin-right:2px;"></i> {{agile_lng_translate 'deal-view' 'archive'}}</a></li>
               
                   <li><a href='#'  data="{{id}}" class="deal_detail_delete" id='opportunity-actions-delete'><i
-                      class="icon-trash"></i> Delete</a></li>
+                      class="icon-trash"></i> {{agile_lng_translate 'contact-details' 'delete'}}</a></li>
                 </ul>
 </div>
 
@@ -79,7 +79,7 @@
             <div class="change-owner-succes"></div>
      <div title="Owner" class="contact-owner-view">
         <div class="contact-owner" id="change-owner-element">
-          <div><small class="text-base text-muted">Owner&nbsp;&nbsp;</small></div>
+          <div><small class="text-base text-muted">{{agile_lng_translate 'contact-details' 'owner'}}&nbsp;&nbsp;</small></div>
     
 
 
@@ -120,7 +120,7 @@
    
 
       <div>
-         <small class="text-base text-muted">Won Date</small>
+         <small class="text-base text-muted">{{agile_lng_translate 'deal-view' 'won-date'}}</small>
       </div>
       <div class="text-xs">{{epochToHumanDateInFormat won_date}}</div>
     </div>
@@ -133,7 +133,7 @@
     <div class="panel-body">
       <div class="m-t-sm">
         <div>
-          <small class="text-base text-muted">Won Date</small>
+          <small class="text-base text-muted">{{agile_lng_translate 'deal-view' 'won-date'}}</small>
         </div>
         <div class="text-xs">{{epochToHumanDateInFormat milestone_changed_time}}</div>
       </div>
@@ -149,7 +149,7 @@
 
   <div class="content-tabs-show moreDetailsTab m-t-none p-t-none" id="contactDetailsTab" role="tablist" aria-multiselectable="true">
    <div class="panel panel-default m-b-none"> <div class="panel-heading" role="tab" id="headingOne"> 
-   <h4 class="panel-title text-left"> <a role="button" data-toggle="collapse" data-parent="#contactDetailsTab" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne" class="collapsed"> More Details</a> </h4> 
+   <h4 class="panel-title text-left"> <a role="button" data-toggle="collapse" data-parent="#contactDetailsTab" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne" class="collapsed"> {{agile_lng_translate 'contacts-view' 'more-details'}}</a> </h4> 
    </div> <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne" aria-expanded="false" style="height: 0px;"> 
    <div class="panel-body text-left">
 
@@ -163,7 +163,7 @@
                   <div class="panel panel-default m-b-none ">
                     <div class="panel-body">
                                      
-                                      <small class="text-base text-muted">Custom Data</small>
+                                      <small class="text-base text-muted">{{agile_lng_translate 'Deal-detail' 'custom-view'}}</small>
                       <div>                
                   {{#getDealCustomProperties custom_data}}
                   {{#each_with_index this}}               
@@ -214,7 +214,7 @@
   <div class="panel panel-default m-b-none">
     <div class="panel-body">
 <div class="m-b-xs">
-          <small class="text-base text-muted">Related to</small>
+          <small class="text-base text-muted">{{agile_lng_translate 'deal-view' 'related-to'}}</small>
 </div>
 
     {{#each contacts}}
@@ -236,7 +236,7 @@
   <div class="panel panel-default m-b-none ">
     <div class="panel-body">
 <div>
-          <small class="text-base text-muted">Description</small>
+          <small class="text-base text-muted">{{agile_lng_translate 'misc-keys' 'description'}}</small>
 </div>
 <div class="text-xs custom-color">{{{show_link_in_statement description}}}</div>
 </div>
@@ -276,7 +276,7 @@
 <div class="m-b-sm text-base font-thin">{{currencySymbol}}{{numberWithCommas expected_value}}</div>
 {{/if}}
 <div class=" text-muted deal-track text-xs">
-{{#if this.archived}}&nbsp;&nbsp;<span  class="deal-task-type bg-light dk  btn btn-xs  m-l-xs" >Archived</span>{{else}}
+{{#if this.archived}}&nbsp;&nbsp;<span  class="deal-task-type bg-light dk  btn btn-xs  m-l-xs" >{{agile_lng_translate 'deal-view' 'archived'}}</span>{{else}}
   
 {{#getTracksCount}}<span>{{#if pipeline.name}}{{pipeline.name}} , {{/if}}</span>{{/getTracksCount}}         
             
@@ -300,7 +300,8 @@
 
 
 <div class="btn-group pos-abs " style="left:192px;top:29px;">
-<a href="#" class="deal-restore-detail-view btn btn-sm btn-default"><i class="icon-mail-reply"></i> Restore</a>
+<a href="#" class="deal-restore-detail-view btn btn-sm btn-default"><i class="icon-mail-reply"></i> 
+{{agile_lng_translate 'deal-view' 'restore'}}</a>
 </div>
     
               
@@ -308,7 +309,7 @@
               <div class="change-owner-succes"></div>
               <div title="Owner">
                  <div class="contact-owner" id="change-owner-element">
-                 <div><small class="text-base text-muted"> Owner&nbsp;&nbsp;</small></div>
+                 <div><small class="text-base text-muted"> {{agile_lng_translate 'deal-view' 'owner'}}&nbsp;&nbsp;</small></div>
                  <a href="#"  data={{owner.id}} class="deal-owner-name custom-color contact-owner-name c-d text-xs">      {{owner.name}}</a>
               </div>
               </div>
@@ -354,7 +355,7 @@
 
       
           <div class="btn-group v-middle dropdown deal-owner" id="change-deal-owner-ul" style="display: none">
-             <button href="javascript:void(0);" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown">Change Owner <span class="caret"></span></button>
+             <button href="javascript:void(0);" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown"> {{agile_lng_translate 'contacts-view' 'change-owner'}}<span class="caret"></span></button>
 
              <ul id='deal-detail-owner' class="dropdown-menu" role="menu"></ul>
           </div>
@@ -377,7 +378,7 @@
    
 
       <div>
-         <small class="text-base text-muted">Won Date</small>
+         <small class="text-base text-muted">{{agile_lng_translate 'deal-view' 'won-date'}}</small>
       </div>
       <div class="text-xs">{{epochToHumanDateInFormat won_date}}</div>
     </div>
@@ -390,7 +391,7 @@
     <div class="panel-body">
       <div class="m-t-sm">
         <div>
-          <small class="text-base text-muted">Won Date</small>
+          <small class="text-base text-muted">{{agile_lng_translate 'deal-view' 'won-date'}}</small>
         </div>
         <div class="text-xs">{{epochToHumanDateInFormat milestone_changed_time}}</div>
       </div>
@@ -414,7 +415,7 @@
                   <div class="panel panel-default m-b ">
                     <div class="panel-body">
                                      
-                                      <small class="text-base text-muted">Custom Data</small>
+                                      <small class="text-base text-muted">{{agile_lng_translate 'Deal-detail' 'custom-view'}}</small>
                       <div>                
                   {{#getDealCustomProperties custom_data}}
                   {{#each_with_index this}}               
@@ -467,7 +468,7 @@
   <div class="panel panel-default m-b">
     <div class="panel-body">
 <div class="m-b-xs">
-          <small class="text-base text-muted">Related to</small>
+          <small class="text-base text-muted">{{agile_lng_translate 'deal-view' 'related-to'}}</small>
 </div>
 
     {{#each contacts}}
@@ -511,11 +512,11 @@
               <div class="control-group save-tag m-b-none">
                 <input name="" type="text" id="addTags"
                   class="tags-typeahead ignore-comma-keydown form-control inline-block"
-                  style="width: 60%" placeholder="Enter tag" />
-                <span><a href="#" class="btn btn-sm btn-default m-l-sm m-r-xs" id="deal-add-tags">Add</a></span>
+                  style="width: 60%" placeholder="{{agile_lng_translate 'contacts-view' 'Enter Tag'}}" />
+                <span><a href="#" class="btn btn-sm btn-default m-l-sm m-r-xs" id="deal-add-tags">{{agile_lng_translate 'other' 'add'}}</a></span>
               </div>
             </div>
-            <a  id="add-tags" rel="tooltip" data-original-title="addtag" data-placement="top" class="text-xs text-muted"><i class="icon-plus"></i> <span>Add</span></a>
+            <a  id="add-tags" rel="tooltip" data-original-title="addtag" data-placement="top" class="text-xs text-muted"><i class="icon-plus"></i> <span>{{agile_lng_translate 'other' 'add'}}</span></a>
             </div>
         </div>
     </div>
@@ -529,7 +530,7 @@
   <div class="panel panel-default m-b-none ">
     <div class="panel-body">
 <div>
-          <small class="text-base text-muted">Description</small>
+          <small class="text-base text-muted">{{agile_lng_translate 'misc-keys' 'description'}}</small>
 </div>
 <div class="text-xs custom-color">{{{show_link_in_statement description}}}</div>
 </div>
@@ -586,20 +587,20 @@
     <div class="modal-content">
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-    <h3 class="modal-title">Archive Deal</h3>
+    <h3 class="modal-title">{{agile_lng_translate 'deal-view' 'archive-deal'}}</h3>
   </div>
   <div class="modal-body">
     <div id="deal-bulk-confirm">
 		<input id="archived-deal-id" name="id" type="hidden" value="{{id}}" />
 		<input id="archived-deal-milestone" name="milestone" type="hidden" value="{{milestone}}"/>
-		Deals can be archived and will not be shown. You can view them later by selecting 'All' in the filter.  
-		<br/> Are you sure to archive this deal?
+		  {{agile_lng_translate 'deal-view' 'deals-can-be-archived-desc'}}
+		<br/> {{agile_lng_translate 'deal-view' 'are-you-sure-to-archive-this-deal'}}
 	</div>
   </div>
   <div class="modal-footer">
   <span class="error-status text-danger"></span>
-	<button type="button" class="btn btn-sm btn-danger" data-dismiss="modal" aria-hidden="true">No</button>
-    <a href="#" id="deal-quick-archive" class="btn btn-sm btn-primary">Yes</a>
+	<button type="button" class="btn btn-sm btn-danger" data-dismiss="modal" aria-hidden="true">{{agile_lng_translate 'portlets' 'no'}}</button>
+    <a href="#" id="deal-quick-archive" class="btn btn-sm btn-primary">{{agile_lng_translate 'portlets' 'yes'}}</a>
   </div>
 </div>
 </div>
@@ -618,12 +619,13 @@
 	<input id="restored-deal-id" name="id" type="hidden"/>
 	<input id="restored-deal-milestone" name="milestone" type="hidden"/>
     <div id="deal-bulk-confirm">
-		Restoring the Deal will make it active again. <br/> Restore this Deal?
+		{{agile_lng_translate 'deal-view' 'restoring-the-deal-desc'}}<br/> 
+    {{agile_lng_translate 'Deal-detail' 'restore-this-deal'}}
 	</div>
   </div>
   <div class="modal-footer">
-	<button type="button" class="btn btn-sm btn-danger" data-dismiss="modal" aria-hidden="true">No</button>
-    <a href="#" id="deal-quick-restore" class="btn btn-sm btn-primary">Yes</a>
+	<button type="button" class="btn btn-sm btn-danger" data-dismiss="modal" aria-hidden="true">{{agile_lng_translate 'portlets' 'no'}}</button>
+    <a href="#" id="deal-quick-restore" class="btn btn-sm btn-primary">{{agile_lng_translate 'portlets' 'yes'}}</a>
   </div>
 </div>
 <!-- End of Restore confirmation-->

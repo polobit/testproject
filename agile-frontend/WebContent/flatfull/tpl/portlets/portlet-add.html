@@ -14,36 +14,36 @@
 				<!-- {{#if_equals "Mini Calendar" name}}
 					{{#isAdmin}}
 				<div class="btn-group  m-l-n-lg">
-  									<a type="button" class="btn btn-sm btn-default add-widget add-portlet-direct" portlet_type="{{portlet_type}}" portlet_name="{{name}}">Add</a>
+  									<a type="button" class="btn btn-sm btn-default add-widget add-portlet-direct" portlet_type="{{portlet_type}}" portlet_name="{{name}}">{{agile_lng_translate 'other' 'add'}}</a>
   									<a type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
     									<span class="caret"></span>
-    									<span class="sr-only">Toggle Dropdown</span>
+    									<span class="sr-only">{{agile_lng_translate 'widgets' 'toggle-dropdown'}}</span>
   									</a>
   									<ul class="dropdown-menu" role="menu">
-    									<li><a class="btn btn-sm add_to_all" portlet_type="{{portlet_type}}" portlet_name="{{name}}">Add for all users</a></li>    									
+    									<li><a class="btn btn-sm add_to_all" portlet_type="{{portlet_type}}" portlet_name="{{name}}">{{agile_lng_translate 'widgets' 'add-for-all-users'}}</a></li>    									
   									</ul>
 								</div>
 					{{else}}
-					  <div>	<a class="btn btn-sm btn-default add-widget add-portlet-direct"  portlet_type="{{portlet_type}}" portlet_name="{{name}}">Add</a></div>
+					  <div>	<a class="btn btn-sm btn-default add-widget add-portlet-direct"  portlet_type="{{portlet_type}}" portlet_name="{{name}}">{{agile_lng_translate 'other' 'add'}}</a></div>
 					  {{/isAdmin}}
 				{{else}}
 				 	 {{#if_equals "Agenda" name}} 
 				 	 {{#isAdmin}}
 				<div class="btn-group  m-l-n-lg">
-  									<a type="button" class="btn btn-sm btn-default add-widget add-portlet-direct" portlet_type="{{portlet_type}}" portlet_name="{{name}}">Add</a>
+  									<a type="button" class="btn btn-sm btn-default add-widget add-portlet-direct" portlet_type="{{portlet_type}}" portlet_name="{{name}}">{{agile_lng_translate 'other' 'add'}}</a>
   									<a type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
     									<span class="caret"></span>
-    									<span class="sr-only">Toggle Dropdown</span>
+    									<span class="sr-only">{{agile_lng_translate 'widgets' 'toggle-dropdown'}}</span>
   									</a>
   									<ul class="dropdown-menu" role="menu">
-    									<li><a class="btn btn-sm add_to_all" portlet_type="{{portlet_type}}" portlet_name="{{name}}">Add for all users</a></li>    									
+    									<li><a class="btn btn-sm add_to_all" portlet_type="{{portlet_type}}" portlet_name="{{name}}">{{agile_lng_translate 'widgets' 'add-for-all-users'}}</a></li>    									
   									</ul>
 								</div>
 					{{else}}
-					  <div>	<a class="btn btn-sm btn-default add-widget add-portlet-direct" portlet_type="{{portlet_type}}" portlet_name="{{name}}">Add</a></div>
+					  <div>	<a class="btn btn-sm btn-default add-widget add-portlet-direct" portlet_type="{{portlet_type}}" portlet_name="{{name}}">{{agile_lng_translate 'other' 'add'}}</a></div>
 					  {{/isAdmin}}
 					  {{else}}
-				<a type="button" class="btn btn-sm btn-default configure-portlets" route="{{is_routeadded}}" portlet_type="{{portlet_type}}" portlet_name="{{name}}">Add</a>
+				<a type="button" class="btn btn-sm btn-default configure-portlets" route="{{is_routeadded}}" portlet_type="{{portlet_type}}" portlet_name="{{name}}">{{agile_lng_translate 'other' 'add'}}</a>
 				{{/if_equals}}
 				{{/if_equals}} -->
 				<a type="button" class="btn btn-sm btn-default configure-portlets" route="{{is_routeadded}}" portlet_type="{{portlet_type}}" portlet_name="{{name}}">{{agile_lng_translate 'contacts-view' 'add'}}</a>

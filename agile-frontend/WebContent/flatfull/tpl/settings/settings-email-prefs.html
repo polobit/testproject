@@ -3,7 +3,8 @@
 <div class="row" style="display: none;">
 <div class="col-md-12">
 <div align="center" class="p-b-xl">
-You can integrate a maximum of 3 email accounts irrespective of the type of account (Gmail/IMAP/Office365).
+
+{{agile_lng_translate 'settings' 'type-of-integrations'}}
 </div>
 </div>
 </div>
@@ -33,8 +34,8 @@ You can integrate a maximum of 3 email accounts irrespective of the type of acco
 		<div  style="min-height: 85px;">
 		{{#if id}}
 		   <div>
-		   	  <div class="l-h word-break">Server: {{server_name}}</div>
-			  <div class="l-h word-break">Email: {{user_name}}</div>
+		   	  <div class="l-h word-break">{{agile_lng_translate 'settings' 'server'}}: {{server_name}}</div>
+			  <div class="l-h word-break">{{agile_lng_translate 'portlets' 'emails'}}: {{user_name}}</div>
 		   </div>
 		{{else}}
     	<div class="m-b-sm" rel="tooltip" title="{{agile_lng_translate 'prefs-email' 'imap-content'}}">
@@ -46,8 +47,8 @@ You can integrate a maximum of 3 email accounts irrespective of the type of acco
 		<center>
 			{{#if id}}
                 <div class="">
-				<a class="btn btn-sm btn-danger" href="#" id="imap-prefs-delete" name="imap" oid={{id}}>Disable</a>
-				<a class="btn btn-sm btn-default" href="#imap/{{id}}">Settings</a>
+				<a class="btn btn-sm btn-danger" href="#" id="imap-prefs-delete" name="imap" oid={{id}}>{{agile_lng_translate 'web-rules' 'disable'}}</a>
+				<a class="btn btn-sm btn-default" href="#imap/{{id}}">{{agile_lng_translate 'preferences' 'settings'}}</a>
                 </div>
 			{{else}}
 			<div>
@@ -84,8 +85,8 @@ You can integrate a maximum of 3 email accounts irrespective of the type of acco
 		<div  style="min-height: 85px;"> 
 			{{#if id}}
 			  <div class="m-b-md p-b-xs">
-		   	  <div class="l-h word-break">Server: {{server_url}}</div>
-		   	  <div class="l-h word-break">Email: {{user_name}}</div>
+		   	  <div class="l-h word-break">{{agile_lng_translate 'settings' 'server'}}: {{server_url}}</div>
+		   	  <div class="l-h word-break">{{agile_lng_translate 'portlets' 'emails'}}: {{user_name}}</div>
 		   </div>
 			{{else}}
 			<div class="m-b-sm" rel="tooltip" title="{{agile_lng_translate 'prefs-email' 'office365-content'}}">
@@ -95,8 +96,8 @@ You can integrate a maximum of 3 email accounts irrespective of the type of acco
 		</div>
         <center>
 			{{#if id}}
-				<a class="btn btn-sm btn-danger" href="#" id="office-prefs-delete" name="office" oid={{id}}>Disable</a>
-				<a class="btn btn-sm btn-default" href="#office/{{id}}">Settings</a>
+				<a class="btn btn-sm btn-danger" href="#" id="office-prefs-delete" name="office" oid={{id}}>{{agile_lng_translate 'web-rules' 'disable'}}</a>
+				<a class="btn btn-sm btn-default" href="#office/{{id}}">{{agile_lng_translate 'preferences' 'settings'}}</a>
 			{{else}}
 				<div>
 			    {{#has_email_account_limit_reached}}

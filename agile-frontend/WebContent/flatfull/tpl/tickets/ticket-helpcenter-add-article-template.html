@@ -4,7 +4,7 @@
     	<div class="col-md-10">
         	<div class="panel panel-default">
         		<div class="panel-heading">
-        			{{#if id}}Edit {{else}}Add {{/if}}Article
+        			{{#if id}}{{agile_lng_translate 'contact-details' 'edit'}} {{else}}{{agile_lng_translate 'portlets' 'add'}} {{/if}}{{agile_lng_translate 'Help-center' 'articles'}}
     			</div>
                 <form id="userForm" name="userForm" method="get" action="" class="form-horizontal">
                     {{#if id}}
@@ -12,7 +12,7 @@
                     {{/if}}
                     <fieldset class="wrapper"><br/>
                         <div class="control-group form-group">
-                            <label class="control-label col-md-2" for="Title">Article Title<span class="field_req">*</span></label> 
+                            <label class="control-label col-md-2" for="Title">{{agile_lng_translate 'Help-center' 'article-title'}}<span class="field_req">*</span></label> 
                             <div class="col-md-10">
                                 <div class="controls">
                                     <input type="text" name="title" id="title"  placeholder="Title" class="required form-control" maxlength="60" value="{{title}}">
@@ -20,7 +20,7 @@
                             </div>
                         </div>
                         <div class="control-group form-group">
-                            <label class="control-label col-md-2 col-sm-2">Description </label>
+                            <label class="control-label col-md-2 col-sm-2">{{agile_lng_translate 'misc-keys' 'description'}} </label>
                             <div class="controls col-sm-10  col-lg-10 email-editor-custom-scroll-bar">
                                 <div id="loading-editor"></div>
                                 <textarea class="form-control required" name="content" id="description-article" placeholder="Description" style="width: 75%; height: 45%; display: none;">{{description}}</textarea>
@@ -40,7 +40,7 @@
                         <label class="control-label col-md-2" for="description"><span></span></label> 
                             <div class="col-md-4 m-t-xs">
                                 <div class="controls">
-                                <input type="checkbox" name="is_article_published" style="vertical-align: top;"> Mark as private                                    
+                                <input type="checkbox" name="is_article_published" style="vertical-align: top;">     {{agile_lng_translate 'tickets' 'make-as-private'}}                                
                                 </div> 
                             </div>
                         </div>
@@ -54,7 +54,7 @@
                             <div class="form-actions col-sm-offset-3 col-md-9">
                                 <div class="form-actions">
                                     <a type="reset" href='javascript:history.back()' class="btn btn-default btn-sm">Cancel</a>
-                                    <button type="submit" class="save btn btn-sm btn-primary m-l-xs">Save Changes</button>
+                                    <button type="submit" class="save btn btn-sm btn-primary m-l-xs">{{agile_lng_translate 'prefs-settings' 'save-changes'}}</button>
                                 </div>
                             </div>
                         </div>

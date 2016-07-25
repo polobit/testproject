@@ -220,8 +220,8 @@
 					<select id="tags-filter" class="form-control" name="CONDITION" style="height:30px;font-size:12px;">
 						<option value="EQUALS" class="tags">{{agile_lng_translate 'contacts-view' 'is'}}</option>
 						<option value="NOTEQUALS" class="tags">{{agile_lng_translate 'contacts-view' 'is-not'}}</option>
-						<option value="DEFINED" class="tags">is defined</option>
-						<option value="NOT_DEFINED" class="tags">is not defined</option>
+						<option value="DEFINED" class="tags">{{agile_lng_translate 'contacts-view' 'is-defined'}}</option>
+						<option value="NOT_DEFINED" class="tags">{{agile_lng_translate 'contacts-view' 'is-not-defined'}}</option>
 					</select>
 					<div class="EQUALS NOTEQUALS condition_container m-t-xs">
 						<span id="RHS">
@@ -920,9 +920,9 @@
 					<select id="tags-filter" class="form-control" name="CONDITION" style="height:30px;font-size:12px;">
 						<option value="EQUALS" class="tags">{{agile_lng_translate 'contacts-view' 'is'}}</option>
 						<option value="NOTEQUALS" class="tags">{{agile_lng_translate 'contacts-view' 'is-not'}}</option>
-						<option value="DEFINED" class="tags">is defined</option>
-						<option value="NOT_DEFINED" class="tags">is not defined</option>
-					</select>
+						<option value="DEFINED" class="tags">{{agile_lng_translate 'contacts-view' 'is-defined'}}</option>
+						<option value="NOT_DEFINED" class="tags">{{agile_lng_translate 'contacts-view' 'is-not-defined'}}</option>
+						</select>
 					<div class="EQUALS NOTEQUALS condition_container m-t-xs">
 						<span id="RHS">
 							<input type="text" placeholder="{{agile_lng_translate 'contacts-view' 'Enter Tag'}}" prev-val="" class="required form-control filters-tags-typeahead companies_input" onchange="setTimeout(function(ele){bindChangeEvent(ele)}, 500, this);" name="temp-1" id="temp-1" style="height:30px;font-size:12px;">
@@ -1127,11 +1127,11 @@
 		<div class="lhs-contact-filter-row pos-rlt">
 		<input type="hidden" name="LHS" value="updated_time" class="form-control">
 		<select id="between_filter" name="CONDITION" class="form-control text-xs" style="height:30px;">
-			<option value="ON">on</option>
-			<option value="AFTER">is after</option>
-			<option value="BEFORE">is before</option>
-			<option value="BETWEEN">is between</option>
-			<option value="LAST">in last</option>
+			<option value="ON">{{agile_lng_translate 'contacts-view' 'on'}}</option>
+			<option value="AFTER">{{agile_lng_translate 'contacts-view' 'is-after'}}</option>
+			<option value="BEFORE">{{agile_lng_translate 'contacts-view' 'is-before'}}</option>
+			<option value="BETWEEN">{{agile_lng_translate 'contacts-view' 'is-between'}}</option>
+			<option value="LAST">{{agile_lng_translate 'contacts-view' 'in-last'}}</option>
 		</select>
 		<div class="AFTER BEFORE ON condition_container m-t-xs">
 			<span id="RHS">

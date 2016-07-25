@@ -224,7 +224,7 @@
     		{{#if_equals type "SALESFORCE"}}
 			{{#if id}}
     			<a class="btn btn-sm btn-danger " data_sync_type="{{type}}" data_sync_id="{{id}}" id="sync-import-prefs-delete" >{{agile_lng_translate 'prefs-email' 'disable'}}</a>
-    			<a href="#sync/salesforce" class="btn btn-sm btn-default" id="setting-widget">Settings</a>
+    			<a href="#sync/salesforce" class="btn btn-sm btn-default" id="setting-widget">{{agile_lng_translate 'portlets' 'settings'}}</a>
     		{{else}}
     			<a href="#sync/salesforce" class="btn btn-sm btn-default" id="setting-widget">{{agile_lng_translate 'prefs-email' 'enable'}}</a>
     		{{/if}}

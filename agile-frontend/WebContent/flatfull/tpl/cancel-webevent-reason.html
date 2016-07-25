@@ -10,7 +10,7 @@
 					method="post">
 					<fieldset class="m-b-n-md">
 						<div id="event_id_hidden"></div>
-						<p id="event_text">Please mention reason for cancellation.</p>
+						<p id="event_text">{{agile_lng_translate 'other' 'please-mention-the-reason-for-cancellation'}}</p>
 						<div class="form-group">
 							<textarea
 								style="margin: 0px 0px 9px; width: 573px; height: 126px;"
@@ -21,9 +21,9 @@
 			</div>
 			<div class="modal-footer">
 			<a href="#"  action_parameter="donotdelete"
-					class="btn btn-default" id="cancel_delete">Cancel </a> 
+					class="btn btn-default" id="cancel_delete"> {{agile_lng_translate 'other' 'cancel'}}</a> 
 			<a href="#" class="btn btn-primary"
-					action_parameter="updateattendee" id="cancel_delete">Ok</a>
+					action_parameter="updateattendee" id="cancel_delete">{{agile_lng_translate 'admin-settings-integrations' 'ok'}}</a>
 				
 			</div>
 		</div>

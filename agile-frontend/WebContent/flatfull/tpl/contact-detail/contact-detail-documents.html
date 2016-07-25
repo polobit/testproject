@@ -15,7 +15,7 @@
 					<div>{{#hasMenuScope 'DOCUMENT'}}<a href="#" class="btn btn-default btn-sm add-document-select m-t-xs"><i class='icon-plus-sign'/></i> {{agile_lng_translate 'contact-details' 'add-document'}}</a>{{/hasMenuScope}}
 						<span class="contact-document-select upload-doc-field" style="display:none;">
 							<select id="document-select" class="form-control inline-block w">
-								<option value="">Select...</option>
+								<option value="">{{agile_lng_translate 'contacts-view' 'select'}}</option>
 							</select>
  					<div class="m-t-sm">
 							<a href="#" class="btn btn-default btn-sm add-document-cancel m-r-sm">{{agile_lng_translate 'contact-details' 'cancel'}}</a>
@@ -25,10 +25,10 @@
 					</div>
 					</div>
          			<!--<div class="btn-group" style="margin-top:12px;">
-        				<a href="#" class="btn btn-default btn-sm right contact-add-document"><i class="icon-plus-sign"></i> Add Document</a>
+        				<a href="#" class="btn btn-default btn-sm right contact-add-document"><i class="icon-plus-sign"></i> {{agile_lng_translate 'deal-view' 'add-document'}}</a>
         				<a class="btn btn-sm dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
 						<ul class="dropdown-menu" style="text-shadow:0px 0px;">
-							<li><a href="#" class="document-exist">Existing Document</a></li>
+							<li><a href="#" class="document-exist">{{agile_lng_translate 'contacts-view' 'existing-document'}}</a></li>
 						</ul>
 					</div>-->
                 </div>
@@ -106,6 +106,8 @@
        	{{/each}}
 
        	{{#each deals}}
+
+       	
        	    {{#isCurrentDeal this.id}} {{else}}
                 <a href="#deal/{{this.id}}">{{this.name}}</a>{{#if @last}}{{else}},{{/if}}
        	    {{/isCurrentDeal}}

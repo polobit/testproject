@@ -4,24 +4,24 @@
     <div class="modal-content">
     <div class="modal-header">
         <button class="close" data-dismiss="modal">x</button>
-        <h3 class="modal-title"><i class="icon-info-sign"></i> iCalendar Feed URL</h3>
+        <h3 class="modal-title"><i class="icon-info-sign"></i> {{agile_lng_translate 'icalfeed' 'feed-url'}}</h3>
     </div>
 			<div class="modal-body agile-modal-body">
 				<form id="icalForm" name="icalForm" method="post">
 					<fieldset>
 							<table>
 				<tr>
-					<td><b>Subscribe to your
-									events</b></td>
+					<td><b>{{agile_lng_translate 'icalfeed' 'subscribe-to-your-events'}}
+									</b></td>
 				</tr>
 				
 				<tr>
 					<td><ol>
-							<li>Subscribe to your events on your mobile device <a
+							<li>{{agile_lng_translate 'icalfeed' 'subscribe-to-your-events-on-mobile-device'}} <a
 								href="https://support.apple.com/en-in/HT201747" target="_blank">&nbsp;<img
 									class="ical-apple-logo"
 									src="//doxhze3l6s7v9.cloudfront.net/beta/static/img/apple_logo.png" /></a></li>
-							<li><b>Copy</b> below iCal URL</li>
+							<li><b>Copy</b> {{agile_lng_translate 'icalfeed' 'below-ical-url'}}</li>
 							<li style="list-style-type:none;" id="ical-feed"></li>
 						</ol></td>
 				</tr>
@@ -29,40 +29,37 @@
 						<div class="col-md-9 line line-dashed b-b line-lg"></div>
 			<table>
 				<tr>
-					<td><b>Adding to Google Calendar</b></td>
+					<td><b>{{agile_lng_translate 'icalfeed' 'adding-to-google-calendar'}}</b></td>
 				</tr>
 				<tr>
 					<td><ol>
-							<li>Copy the above iCalendar webcal link.</li>
-							<li>Log into your Google Calendar and select <b>Add by
-									URL</b> from the menu within <b>Other calendars</b>.
+							<li>{{agile_lng_translate 'icalfeed' 'copy-the-above-icalander-webcal-link'}}</li>
+							<li>{{agile_lng_translate 'icalfeed' 'login-to-your-google-calendar-and-tell'}} <b>{{agile_lng_translate 'icalfeed' 'add-by-url'}}</b> {{agile_lng_translate 'icalfeed' 'from-the-menu-within'}} <b>
+								{{agile_lng_translate 'icalfeed' 'other-calendars'}}</b>.
 							</li>
-							<li>Paste the Calendar feed URL into the box provided and
-								click on <b>Add Calendar</b>
+							<li> {{agile_lng_translate 'icalfeed' 'paste-the-calendar-url-into-the-box-provided'}}<b>{{agile_lng_translate 'icalfeed' 'add-calendar'}}</b>
 							</li>
 							<li>
-							Once you have completed these steps it may take few
-							minutes for your events to appear in your Google Calendar.
+							
+								{{agile_lng_translate 'icalfeed' 'once-completed-it-takes-few-minutes-to-appear'}}
 							</li>
 						</ol></td>
 				</tr>
 				
 				<tr class="col-md-9 line line-dashed b-b line-lg"></tr>
 				<tr>
-					<td><b>Adding to Outlook 2007 or Later</b></td>
+					<td><b>{{agile_lng_translate 'icalfeed' 'adding-to-outlook'}}</b></td>
 				</tr>
 				<tr>
 					<td>
 						<ol>
-							<li>Click the link for the Internet Calendar Subscription.</li>
-							<li>At the prompt, click <b>Launch Application</b>.
+							<li>{{agile_lng_translate 'icalfeed' 'click-the-link-for-internet-calendar-subscription'}}</li>
+							<li>{{agile_lng_translate 'icalfeed' 'at-the-prompt-click'}} <b>{{agile_lng_translate 'icalfeed' 'launch-application'}}</b>.
 							</li>
-							<li>Outlook opens with a prompt, <b>Add this Internet
-									Calendar to Outlook and subscribe to updates</b>, click <b>Yes</b>.
+							<li>{{agile_lng_translate 'icalfeed' 'outlook-opens-with-a-prompt'}} <b>{{agile_lng_translate 'icalfeed' 'add-this-internte-calendar-to-outlook-and-subscribe-to-updates'}}</b>, click <b>Yes</b>.
 							</li>
 							<li>
-							The Calendar is added to Calendar view under <b>Other
-								Calendars</b>.
+							{{agile_lng_translate 'icalfeed' 'this-calendar-is-added-to-calendar-view-under'}} <b>{{agile_lng_translate 'icalfeed' 'other-calendars'}}</b>.
 							</li>
 						</ol>
 					</td>
@@ -72,7 +69,7 @@
 			</fieldset>
 			</form>
 
-			<div class="text-center p-sm"><div class="btn btn-default"><a class="text-info" href="#" id="send-ical-email"><i class="icon-envelope"></i> Send Calendar Feed URL via Email</a></div></div>
+			<div class="text-center p-sm"><div class="btn btn-default"><a class="text-info" href="#" id="send-ical-email"><i class="icon-envelope"></i> {{agile_lng_translate 'icalfeed' 'send-the-calendar-fee-url-via-email'}}</a></div></div>
      </div>
 </div>
 </div>
