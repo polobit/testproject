@@ -29,7 +29,10 @@
 <%@page import="com.agilecrm.user.UserPrefs"%>
 <%@page import="com.agilecrm.user.util.UserPrefsUtil"%>
 <%@page import="org.codehaus.jackson.map.ObjectMapper"%>
-<%@page	import="com.agilecrm.knowledgebase.util.KbLandingPageUtil"%>
+<%@page import="com.agilecrm.landingpages.LandingPageUtil"%>
+<%@page	import="com.agilecrm.knowledgebase.entity.LandingPageKnowledgebase"%>
+<%@page	import="com.agilecrm.landingpages.LandingPage"%>
+<%@page	import="com.agilecrm.landingpages.LandingPageServlet"%>
 <%@page	import="com.agilecrm.knowledgebase.util.KbLandingPageUtil"%>
 <%@page language="java" contentType="text/html; charset=UTF-8"
 pageEncoding="UTF-8"%>
