@@ -1,10 +1,8 @@
 // Twilio call noty when user change tab
 var Twilio_Call_Noty;
 var Twilio_Call_Noty_IMG = "";
-
 var To_Number;
 var To_Name = "";
-
 var Twilio_Token;
 var Verfied_Number;
 var globalconnection;
@@ -907,7 +905,7 @@ function setUpGlobalTwilio()
 					if(typeof getTwilioIOLogs == 'undefined')
 						return;
 					
-					getTwilioIOLogs(phoneNumber);
+					getTwilioIOLogs(phoneNumber,null, TWILIO_CONTACT);
 					
 					// Change selected number if its different than calling number.
 					var selectedNumber = $('#contact_number').val();
@@ -1045,7 +1043,8 @@ function setUpGlobalTwilio()
 							
 							//showCallNotyPopup("missedCall", "error", Twilio_Call_Noty_IMG+'<span class="noty_contact_details"><b>Missed call : </b><br>' + conn.parameters.From + '<br></span><div class="clearfix"></div>', 5000);
 							if(previousDialled){
-								To_Number = previousDialled ;  
+								To_Number = previousDialled ; 
+								previousDialled = "";
 							}
 							conn.reject();						
 							if (conn)
@@ -1161,25 +1160,12 @@ function twiliocall(phoneNumber, toName,conferenceName, contact)
 	// get the phone number to connect the call to
 	console.log("In twilio call finction after makingcall function and starting call");
 	
-	try{
-		var numberToDial = phoneNumber;
-		
+	
+		var num = phoneNumber;
+		var cont = contact;
+		var numberToDial = getFormattedPhone(num, cont);
 		// converting number to dial i 164 format...
-		var number = phoneNumber;
-		var code ;
-		var formattedNumber;
-		var countryCode;
-		var address = getPropertyValue(contact.properties,'address');
-		countryCode = JSON.parse(address).country;
-		code = countryCode;
-		
-			formattedNumber = phoneNumberParser(number,code);
-			var num164Format = formattedNumber.result.format164;
-			if(num164Format && num164Format!= "invalid"){
-				numberToDial = num164Format;
-			}
-			console.log("changes format phonenumber is " + formattedNumber);
-	}catch(e){}
+
 
 	
 
@@ -1222,7 +1208,7 @@ function twiliocall(phoneNumber, toName,conferenceName, contact)
 	
 	To_Number = phoneNumber;
 	To_Name = toName;
-	TWILIO_CALLED_NO = To_Number;	
+	TWILIO_CALLED_NO = numberToDial;	
 	
 	if(!CALL_CAMPAIGN.call_from_campaign){
 		addContactImg("Outgoing", function(img){
@@ -1746,4 +1732,30 @@ function getGravatar(items, width)
 	}
 
 	return ('https://secure.gravatar.com/avatar/' + Agile_MD5("") + '.jpg?s=' + width + '' + backup_image + data_name);	
+}
+
+function getFormattedPhone(number, cont){
+	try{
+		
+		if(!cont || !number){
+			return number;
+		}
+		var numToReturn = number;
+		var numberToFormat = number;
+		var contact = cont;
+		// converting number to dial i 164 format...
+		var code ;
+		var formattedNumber;
+		var countryCode;
+		var address = getPropertyValue(contact.properties,'address');
+		countryCode = JSON.parse(address).country;
+		code = countryCode;
+		formattedNumber = phoneNumberParser(numberToFormat,code);
+			var num164Format = formattedNumber.result.format164;
+			if(num164Format && num164Format!= "invalid"){
+				numToReturn = num164Format;
+			}
+			console.log("changes format phonenumber is " + formattedNumber);
+	}catch(e){}
+	return numToReturn;
 }
