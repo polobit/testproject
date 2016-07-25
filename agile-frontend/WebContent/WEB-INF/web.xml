@@ -1373,6 +1373,7 @@
 		<servlet-name>QuerySubmitServlet</servlet-name>
 		<url-pattern>/querysubmit</url-pattern>
 	</servlet-mapping>
+<<<<<<< HEAD
 	
 	<!-- SSO feature -->
 	<servlet>
@@ -1401,4 +1402,13 @@
 		<url-pattern>/pagebuilder/*</url-pattern>
 	</servlet-mapping>	
 
+	 <servlet>
+		<servlet-name>AmazonSESWebhook</servlet-name>
+		<servlet-class>com.thirdparty.amazon.httpendpoint.AmazonSESWebhook</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>AmazonSESWebhook</servlet-name>
+		<url-pattern>/backend/amazonseswebhook</url-pattern>
+	</servlet-mapping>
 </web-app>

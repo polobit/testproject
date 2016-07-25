@@ -1,10 +1,20 @@
 package com.thirdparty.ses;
 
-import java.net.URL;
+import java.io.ByteArrayOutputStream;
+import java.nio.ByteBuffer;
+import java.util.Properties;
+
+import javax.mail.Address;
+import javax.mail.Message.RecipientType;
+import javax.mail.BodyPart;
+import javax.mail.MessagingException;
+import javax.mail.Session;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
+import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.http.params.HttpConnectionParams;
-
 import com.agilecrm.util.EmailUtil;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.regions.Region;
@@ -14,7 +24,9 @@ import com.amazonaws.services.simpleemail.model.Body;
 import com.amazonaws.services.simpleemail.model.Content;
 import com.amazonaws.services.simpleemail.model.Destination;
 import com.amazonaws.services.simpleemail.model.Message;
+import com.amazonaws.services.simpleemail.model.RawMessage;
 import com.amazonaws.services.simpleemail.model.SendEmailRequest;
+import com.amazonaws.services.simpleemail.model.SendRawEmailRequest;
 
 /**
  * <code>AmazonSES</code> is the base class for AmazonSES gateway to send agile emails through Amazon SES.
@@ -29,6 +41,9 @@ import com.amazonaws.services.simpleemail.model.SendEmailRequest;
 public class AmazonSES 
 {
 	private AmazonSimpleEmailServiceClient client = null;
+	
+	public final static String SUBACCOUNT_HEADER_NAME = "Agile-Domain";
+	public final static String CAMPAIGN_ID_HEADER_NAME = "Agile-Campaign-Id";
 
 	private AmazonSES(String accessKey,String secretKey, String region) throws IllegalArgumentException {
 		
@@ -108,6 +123,113 @@ public class AmazonSES
 			client.sendEmail(request);
 
 			System.out.println("Time taken to send email..."
+					+ (System.currentTimeMillis() - startTime));
+			
+		} catch (Exception ex) {
+			System.out.println("The email was not sent.");
+			System.out.println("Error message: " + ex.getMessage());
+		}
+	}
+	
+	/**
+	 * This method is used to send email through AmazonSES with custom headers
+	 * or metadata
+	 * @param fromEmail
+	 * @param fromName
+	 * @param to
+	 * @param cc
+	 * @param bcc
+	 * @param subject
+	 * @param replyTo
+	 * @param html
+	 * @param text
+	 * @throws MessagingException 
+	 */
+	public void sendRawEmail(String fromEmail, String fromName, String to,
+			String cc, String bcc, String subject, String replyTo, String html,
+			String text, String campaignId, String domanName) throws MessagingException {
+		
+		 Session session = Session.getInstance(new Properties(), null);
+         MimeMessage mimeMessage = new MimeMessage(session);
+		// To
+		if (StringUtils.isNotBlank(to))
+			mimeMessage.setRecipients(RecipientType.TO, to);
+
+		// CC
+		if (StringUtils.isNotBlank(cc))
+			mimeMessage.setRecipients(RecipientType.CC, cc);
+
+		// BCC
+		if (StringUtils.isNotBlank(bcc))
+			mimeMessage.setRecipients(RecipientType.BCC, bcc);
+
+		 //add subject of email         
+         mimeMessage.setSubject(subject);
+       
+         //Add from address of email
+	 	 mimeMessage.addFrom(new Address[]
+    		 {
+    		    new InternetAddress(fromName + " <" + fromEmail + ">")
+    		});
+		
+	 	MimeMultipart mimeBodyPart = new MimeMultipart("alternative");
+	 	
+	  // add text part Text
+	 	if (StringUtils.isNotBlank(text)) 
+	 	{
+	        BodyPart textPart = new MimeBodyPart();
+	        
+	        textPart.setContent(text, "text/plain");
+	        
+	        mimeBodyPart.addBodyPart(textPart);
+	 	}
+   
+	 	if (StringUtils.isNotBlank(html))
+	 	{
+            BodyPart htmlPart = new MimeBodyPart();
+	     
+	        htmlPart.setContent(html,"text/html");
+	        
+	        mimeBodyPart.addBodyPart(htmlPart);
+	 	}
+        
+	 	// Reply To
+		if (StringUtils.isNotBlank(replyTo))
+		{
+		  mimeMessage.setReplyTo(new Address[]
+		    	{
+	    		    new InternetAddress(replyTo)
+	    		});
+		}
+		
+        //adding HTML or Text body part 
+        mimeMessage.setContent(mimeBodyPart);
+        
+        //Add metadata
+        if(! StringUtils.isBlank(campaignId))
+        {
+	        mimeMessage.addHeader(SUBACCOUNT_HEADER_NAME, domanName);
+	        
+	        mimeMessage.addHeader(CAMPAIGN_ID_HEADER_NAME, campaignId);
+        }
+	 
+        try
+        {
+	        // Create Raw message
+	        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+	        mimeMessage.writeTo(outputStream);
+	        
+	        RawMessage rawMessage = new RawMessage(ByteBuffer.wrap(outputStream.toByteArray()));
+	        
+			// Assemble the email.
+			SendRawEmailRequest request = new SendRawEmailRequest().withRawMessage(rawMessage);
+			
+			long startTime = System.currentTimeMillis();
+	
+			// Send the email.
+			client.sendRawEmail(request);
+	
+			System.out.println("Time taken to send Bulk email..."
 					+ (System.currentTimeMillis() - startTime));
 			
 		} catch (Exception ex) {
