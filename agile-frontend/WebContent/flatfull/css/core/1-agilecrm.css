@@ -4376,3 +4376,69 @@ border: 1px solid #e5e5e5;
     vertical-align: baseline;
     border-radius: .25em;
 }
+
+<!-- start of dialler -->
+	.keyPad:hover{
+		background-color: rgba(15, 179, 224, 0.32);
+		color: white !important;
+	}
+	.keyPad div:hover{
+		color: white !important;
+	}
+	.keyPad{
+		border-radius: 3px;
+	}
+	.active{
+  	border-bottom:3px solid #00c8ff;
+	}
+	.inactive{
+		color: rgba(15, 179, 224, 0.32);
+	}
+	#dialPad:after{
+	z-index: -1;
+    position: absolute;
+    content: "";
+    bottom: 10px;
+    right: 5px;
+    width: 90%;
+    top: 80%;
+    -webkit-box-shadow: 0 12px 5px rgba(0,0,0,.3);
+    -moz-box-shadow: 0 12px 5px rgba(0,0,0,.3);
+    box-shadow: 0 12px 5px rgba(0,0,0,.3);
+    -webkit-transform: rotate(3deg);
+    -moz-transform: rotate(3deg);
+    -o-transform: rotate(3deg);
+    -ms-transform: rotate(3deg);
+    transform: rotate(3deg);
+	}
+	#dialPad:before{
+	z-index: -1;
+    position: absolute;
+    content: "";
+    bottom: 10px;
+    right: 5px;
+    width: 97%;
+    top: 80%;
+    -webkit-box-shadow: 0 12px 5px rgba(0,0,0,.3);
+    -moz-box-shadow: 0 12px 5px rgba(0,0,0,.3);
+    box-shadow: 0 12px 5px rgba(0,0,0,.3);
+    -webkit-transform: rotate(-3deg);
+    -moz-transform: rotate(-3deg);
+    -o-transform: rotate(-3deg);
+    -ms-transform: rotate(-3deg);
+    transform: rotate(-3deg);
+	}
+	.dial-number:hover{
+		opacity: 0.8;
+	}
+	.list-padding{
+		float: left;
+		padding:15px 20px;
+	}
+	.link-top{
+		height: 40px; 
+		line-height: 40px; 
+		padding-bottom: 5px;
+	}
+	
+<!-- end of dialler -->	
