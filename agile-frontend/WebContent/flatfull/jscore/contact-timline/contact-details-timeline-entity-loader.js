@@ -33,7 +33,26 @@ var timeline_entity_loader = {
 		this.load_campaign_logs(contactId);
 		
 		this.get_stats(getPropertyValue(contact.properties, "email"), contact, App_Contacts.contactDetailView.el);
+		setTimeout(this.load_reload_emails, 9000);
 	},
+	
+	load_reload_emails : function(contactId)
+	{
+		divArr = $('.isotope-item');
+		$.each(divArr,function(index, data){
+			parentEMailDivId = divArr[index].id;
+			childEMailDivId = $('#'+parentEMailDivId).next('div').id;
+			try{
+				if(childEMailDivId.indexOf(parentEMailDivId)!=-1){
+					if($('#'+childEMailDivId).parentNode.id!=parentEMailDivId){
+						$('#'+parentEMailDivId).html($('#'+childEMailDivId).html());
+						$('#'+childEMailDivId).remove();
+					}
+				}
+			}catch(err){}
+		});
+	},
+
 	load_related_entites : function(contactId)
 	{
 		var entity_types = [
