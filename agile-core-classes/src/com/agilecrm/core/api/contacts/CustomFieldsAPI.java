@@ -486,6 +486,8 @@ public class CustomFieldsAPI
 					}
 				else {
 					schema.domainusermail = domainusermail ; 
+					
+					System.out.println("domainusermail ="+domainusermail); 
 					schema.save();				
 				}
 				NamespaceManager.set(oldNamespace);
