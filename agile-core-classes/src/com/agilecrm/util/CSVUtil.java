@@ -540,6 +540,7 @@ public class CSVUtil
 
 		    tempContact = ContactUtil.mergeContactFields(tempContact);
 		    accessControl.setObject(tempContact);
+		    failedContacts.add(new FailedContactBean(tempContact , "Contact is been merged"));
 		    if (!accessControl.canCreate())
 		    {
 			accessDeniedToUpdate++;
@@ -548,6 +549,9 @@ public class CSVUtil
 
 			continue;
 		    }
+		    /*else{
+		    	failedContacts.add(new FailedContactBean(tempContact , "Contact is been merged"));
+		    }*/
 		    isMerged = true;
 		}
 		else
