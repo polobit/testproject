@@ -59,7 +59,7 @@
                                    {{/if_equals}}			   	                
 							  {{/if_equals}}  
                             {{/if}}
-							<div class="right"><small style="font-style: italic;">Characters Left <em id="twitter-counter" style="margin-right:5px;">140</em></small></div>
+							<div class="right"><small style="font-style: italic;">{{agile_lng_translate 'widgets' 'characters-left'}} <em id="twitter-counter" style="margin-right:5px;">140</em></small></div>
                         </div>
 	                </div>	   
          
@@ -85,18 +85,19 @@
                         </div>
                       </div> 
             {{#if_equals headline "Retweet"}}
-               <span id="link-text" class="is-actionable right" style="font:menu;margin-right: 5px;display:none;"><a id="add_message" style="color:grey;">Spread the word about Agile CRM</a></span>
+               <span id="link-text" class="is-actionable right" style="font:menu;margin-right: 5px;display:none;"><a id="add_message" style="color:grey;">
+               {{agile_lng_translate 'other' 'spread-word-about-agilecrm'}}</a></span>
             {{else}}
-               <span id="link-text" class="is-actionable right" style="font:menu;margin-right: 5px;"><a id="add_message" style="color:grey;">Spread the word about Agile CRM</a></span>
+               <span id="link-text" class="is-actionable right" style="font:menu;margin-right: 5px;"><a id="add_message" style="color:grey;">{{agile_lng_translate 'other' 'spread-word-about-agilecrm'}}</a></span>
             {{/if_equals}} 
         </div>
 	    <div class="modal-footer form-actions" style="margin-top: 0px;">
             {{#if_equals headline "Retweet"}}
-                 <a href="#" class="btn btn-sm btn-primary" id="edit_retweet">Edit</a>
-                 <a href="#" class=" save btn btn-sm btn-primary" id="send_retweet">Retweet</a>
-                 <a href="#" class="save btn btn-sm btn-primary" id="send_tweet" style="display:none;">Send</a>
+                 <a href="#" class="btn btn-sm btn-primary" id="edit_retweet"> {{agile_lng_translate 'contact-details' 'edit'}}</a>
+                 <a href="#" class=" save btn btn-sm btn-primary" id="send_retweet">{{agile_lng_translate 'social' 'retweet'}}</a>
+                 <a href="#" class="save btn btn-sm btn-primary" id="send_tweet" style="display:none;">{{agile_lng_translate 'tasks' 'Send'}}</a>
             {{else}}       		 
-			     <a href="#" class="save btn btn-sm btn-primary" id="send_tweet">Send</a>
+			     <a href="#" class="save btn btn-sm btn-primary" id="send_tweet">{{agile_lng_translate 'tasks' 'Send'}}</a>
             {{/if_equals}}			
 			<span><img src="{{getS3ImagePath 'img/ajax-spinner.gif'}}" id="spinner-modal" style="display:none;"></img></span>
 	        <span class="save-status"></span>

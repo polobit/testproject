@@ -67,7 +67,7 @@
 			<div class="wrapper bg-light p-b-xs p-t-xs">
   <div class="panel panel-default m-b-sm">
 			<div class="p-t-sm p-b-sm text-center" style="padding-top: 8px; padding-bottom: 8px;">
-      <a href='#contact-filters' class="text-info">Add or Edit Filter</a></div>
+      <a href='#contact-filters' class="text-info">{{agile_lng_translate 'contacts-view' 'add-or-edit-filter'}}</a></div>
 </div>
 </div>
 
@@ -165,8 +165,8 @@
     	
     	<ul id="contact-view-model-list" class="pull-right dropdown-menu hidden-xs" role="menu">
         	<!--<li>
-            	<a href="#contacts" class="DefaultView">Default</a>
-				 a href="#contacts" class="GridView">Grid View</a 
+            	<a href="#contacts" class="DefaultView">{{agile_lng_translate 'report-chart-forms' 'default'}}</a>
+				 a href="#contacts" class="GridView">{{agile_lng_translate 'tasks' 'grid-view'}}</a 
         	</li>
 			<li class="divider"></li>-->
 			<li class="dropdown-submenu"><a data-toggle="dropdown" id="mobile-dropdown-click-sort">Sort By</a>
@@ -304,18 +304,20 @@
 
 <!-- <div id="bulk-action-btns" class="panel-heading no-shadow m-r-sm b-r" style="border-bottom: 0;background-color: rgba(246,248,248,1);">
 				      	
-					    <button id="bulk-tags" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled" style="font-size:10px">Add Tags</button>
-					    <button id="bulk-tags-remove" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled" style="font-size:10px">Remove Tags</button>
+					    <button id="bulk-tags" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled" style="font-size:10px">{{agile_lng_translate 'contacts-view' 'add-tags'}}</button>
+					    <button id="bulk-tags-remove" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled" style="font-size:10px">
+					    {{agile_lng_translate 'contacts-view' 'remove-tags'}}</button>
 					    {{#hasMenuScope 'CAMPAIGN'}}
-					    <button id="bulk-campaigns" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled" style="font-size:10px">Add to Campaign</button>
+					    <button id="bulk-campaigns" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled" style="font-size:10px">{{agile_lng_translate 'web-rules' 'add-to-campaign'}}</button>
 					    {{/hasMenuScope}}
-					    <button id="show-callcampaignModal" class="btn btn-default bulk-action-btn btn-sm disabled" style="font-size:10px">Start Call Campaign</button>
-					    <button id="bulk-email" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled" style="font-size:10px">Send Email</button>
-					    <button id="bulk-owner" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled" style="font-size:10px">Change Owner</button>
+					    <button id="show-callcampaignModal" class="btn btn-default bulk-action-btn btn-sm disabled" style="font-size:10px">{{agile_lng_translate 'contacts-view' 'start-call-campaign'}}</button>
+					    <button id="bulk-email" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled" style="font-size:10px">{{agile_lng_translate 'contacts-view' 'send-email'}}</button>
+					    <button id="bulk-owner" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled" style="font-size:10px">
+					    {{agile_lng_translate 'contacts-view' 'change-owner'}}</button>
 					    {{#hasScope "EXPORT_CONTACTS"}}
-					    <button id="bulk-contacts-export" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled" style="font-size:10px">Export Contacts as CSV</button>
+					    <button id="bulk-contacts-export" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled" style="font-size:10px">{{agile_lng_translate 'contacts-view' 'export-contacts-as-csv'}}</button>
 					    {{/hasScope}}
-					    <button class="btn btn-default bulk-action-btn delete-checked-contacts btn-sm disabled" style="font-size:10px">Delete</button>
+					    <button class="btn btn-default bulk-action-btn delete-checked-contacts btn-sm disabled" style="font-size:10px">{{agile_lng_translate 'contact-details' 'delete'}}</button>
 					    
 				    </div> -->
 
@@ -360,53 +362,53 @@
 	       		  
 	                  <li>
 	       		  		<a href="javascript:void(0);" class="p-b-none">
-							<label class="i-checks i-checks-sm contactcoloumn "><input name="first_name" value = "first_name"type="checkbox" class="choose-column-chbx"><i></i></label>First Name</a></li>
+							<label class="i-checks i-checks-sm contactcoloumn "><input name="first_name" value = "first_name"type="checkbox" class="choose-column-chbx"><i></i></label>{{agile_lng_translate 'modals' 'first-name'}}</a></li>
 	                   <li>
 	       		  			<a href="javascript:void(0);" class="p-b-none">
-								<label class="i-checks i-checks-sm contactcoloumn "><input name="last_name" value = "last_name"type="checkbox" class="choose-column-chbx"><i></i></label>Last Name</a></li>
+								<label class="i-checks i-checks-sm contactcoloumn "><input name="last_name" value = "last_name"type="checkbox" class="choose-column-chbx"><i></i></label>{{agile_lng_translate 'modals' 'last-name'}}</a></li>
 						<li>
 	       		  			<a href="javascript:void(0);" class="p-b-none">
-								<label class="i-checks i-checks-sm contactcoloumn "><input name="email" value="email"type="checkbox" class="choose-column-chbx"><i></i></label>Email</a></li>
+								<label class="i-checks i-checks-sm contactcoloumn "><input name="email" value="email"type="checkbox" class="choose-column-chbx"><i></i></label>{{agile_lng_translate 'modals' 'email'}}</a></li>
 	                   <li>
 	       		  			<a href="javascript:void(0);" class="p-b-none">
-								<label class="i-checks i-checks-sm contactcoloumn"><input name="company" value = "company"type="checkbox" class="choose-column-chbx"><i></i></label>Company</a></li>
+								<label class="i-checks i-checks-sm contactcoloumn"><input name="company" value = "company"type="checkbox" class="choose-column-chbx"><i></i></label>{{agile_lng_translate 'contacts-view' 'Company'}}</a></li>
 	                    
 	                    <li>
 	       		  			<a href="javascript:void(0);" class="p-b-none">
-								<label class="i-checks i-checks-sm contactcoloumn"><input name="title"value="title"type="checkbox" class="choose-column-chbx"><i></i></label>Title</a></li>
+								<label class="i-checks i-checks-sm contactcoloumn"><input name="title"value="title"type="checkbox" class="choose-column-chbx"><i></i></label>{{agile_lng_translate 'contacts-view' 'Title'}}</a></li>
 						<li>
 	       		  			<a href="javascript:void(0);" class="p-b-none">
-								<label class="i-checks i-checks-sm contactcoloumn"><input  name="tags" value = "tags"type="checkbox" class="choose-column-chbx"><i></i></label>Tags</a></li>
+								<label class="i-checks i-checks-sm contactcoloumn"><input  name="tags" value = "tags"type="checkbox" class="choose-column-chbx"><i></i></label>{{agile_lng_translate 'report-add' 'tags'}}</a></li>
 	                   <li>
 	       		  			<a href="javascript:void(0);" class="p-b-none">
-								<label class="i-checks i-checks-sm contactcoloumn"><input name="phone" value = "phone"type="checkbox" class="choose-column-chbx"><i></i></label>Phone</a></li>
+								<label class="i-checks i-checks-sm contactcoloumn"><input name="phone" value = "phone"type="checkbox" class="choose-column-chbx"><i></i></label>{{agile_lng_translate 'contacts-view' 'Phone'}}</a></li>
 	                    <li>
 	       		  			<a href="javascript:void(0);" class="p-b-none">
-								<label class="i-checks i-checks-sm contactcoloumn"><input name="address"value ="address"type="checkbox" class="choose-column-chbx"><i></i></label>Address</a></li>
+								<label class="i-checks i-checks-sm contactcoloumn"><input name="address"value ="address"type="checkbox" class="choose-column-chbx"><i></i></label>{{agile_lng_translate 'contacts-view' 'Address'}}</a></li>
 	                   <li>
 	       		  			<a href="javascript:void(0);" class="p-b-none">
-								<label class="i-checks i-checks-sm contactcoloumn"><input name="website"value = "website"type="checkbox" class="choose-column-chbx"><i></i></label>Website</a></li> 
+								<label class="i-checks i-checks-sm contactcoloumn"><input name="website"value = "website"type="checkbox" class="choose-column-chbx"><i></i></label>{{agile_lng_translate 'report-add' 'website'}}</a></li> 
 	                    <li>
 	       		  			<a href="javascript:void(0);" class="p-b-none">
-								<label class="i-checks i-checks-sm contactcoloumn"><input name="created_time"value = "created_time"type="checkbox" class="choose-column-chbx"><i></i></label>Created Date</a></li>
+								<label class="i-checks i-checks-sm contactcoloumn"><input name="created_time"value = "created_time"type="checkbox" class="choose-column-chbx"><i></i></label>{{agile_lng_translate 'misc-keys' 'created_date'}}</a></li>
 	                    <li>
 	       		  			<a href="javascript:void(0);" class="p-b-none">
-								<label class="i-checks i-checks-sm contactcoloumn"><input name="updated_time"value = "updated_time"type="checkbox" class="choose-column-chbx"><i></i></label>Updated Date</a></li>
+								<label class="i-checks i-checks-sm contactcoloumn"><input name="updated_time"value = "updated_time"type="checkbox" class="choose-column-chbx"><i></i></label>{{agile_lng_translate 'contacts-view' 'updated date'}}</a></li>
 	                  <!-- <li>
 	       		  			<a href="javascript:void(0);" class="p-b-none">
 								<label class="i-checks i-checks-sm contactcoloumn"><input name="image"value = "image"type="checkbox" class="choose-column-chbx"><i></i></label>Image</a></li> -->
 	                    <li>
 	       		  			<a href="javascript:void(0);" class="p-b-none">
-								<label class="i-checks i-checks-sm contactcoloumn"><input name="star_value"value = "star_value"type="checkbox" class="choose-column-chbx"><i></i></label>Star value</a></li> 
+								<label class="i-checks i-checks-sm contactcoloumn"><input name="star_value"value = "star_value"type="checkbox" class="choose-column-chbx"><i></i></label>{{agile_lng_translate 'contacts-view' 'Star value'}}</a></li> 
 	                     <li>
 	       		  			<a href="javascript:void(0);" class="p-b-none">
-								<label class="i-checks i-checks-sm contactcoloumn"><input  name="lead_score"value = "lead_score"type="checkbox" class="choose-column-chbx"><i></i></label>Lead Score</a></li>
+								<label class="i-checks i-checks-sm contactcoloumn"><input  name="lead_score"value = "lead_score"type="checkbox" class="choose-column-chbx"><i></i></label>{{agile_lng_translate 'contacts-view' 'Lead score'}}</a></li>
 	                      <li>
 	       		  			<a href="javascript:void(0);" class="p-b-none">
-								<label class="i-checks i-checks-sm contactcoloumn"><input name="lead_owner"value = "lead_owner"type="checkbox" class="choose-column-chbx"><i></i></label>Lead Owner</a></li>
+								<label class="i-checks i-checks-sm contactcoloumn"><input name="lead_owner"value = "lead_owner"type="checkbox" class="choose-column-chbx"><i></i></label>{{agile_lng_translate 'contacts-view' 'Lead owner'}}</a></li>
 	                     <li>
 	       		  			<a href="javascript:void(0);" class="p-b-none">
-								<label class="i-checks i-checks-sm contactcoloumn"><input name="last_contacted" value = "last_contacted"type="checkbox" class="choose-column-chbx"><i></i></label>Last Contacted</a></li>
+								<label class="i-checks i-checks-sm contactcoloumn"><input name="last_contacted" value = "last_contacted"type="checkbox" class="choose-column-chbx"><i></i></label>{{agile_lng_translate 'report-add' 'last-contacted'}}</a></li>
 	                     <div id="custom-fields-group"class="" ></div>
 	                     
 	      			</script>

@@ -173,12 +173,12 @@
    						</tbody>
    					</table>
    					<div class="show_field p-l p-t p-b">
-   			<input type="text" id="new_blocked_ip" name="new_blocked_ip" style="width:250px;display:inline-block;" class="form-control input-sm" placeholder="New IP Address">
-   						<a href="#blocked-ips" class="btn btn-sm btn-primary" id="update_blocked_ips">{{agile_lng_translate 'other 'add}}</a>
+   			<input type="text" id="new_blocked_ip" name="new_blocked_ip" style="width:250px;display:inline-block;" class="form-control input-sm" placeholder="{{agile_lng_translate 'admin-settings-api-analytics' 'new-ip-address'}}">
+   						<a href="#blocked-ips" class="btn btn-sm btn-primary" id="update_blocked_ips">{{agile_lng_translate 'other' 'add'}}</a>
                      <div>
-                     <span id="empty_ip_message" class="text-danger hide text-sm">Enter a valid IP Address</span>
-                     <span id="ip_error_message" class="text-danger hide text-sm"> This IP Address already exists</span></div>
-                    <div> <a id = "get_my_ip" class="inline-block text-sm text-info">Get my IP Address</a></div>
+                     <span id="empty_ip_message" class="text-danger hide text-sm">{{agile_lng_translate 'Admin-settings-api-analytics' 'enter-a-valid-ip'}}</span>
+                     <span id="ip_error_message" class="text-danger hide text-sm"> {{agile_lng_translate 'Admin-settings-api-analytics' 'this-ip-alreday-exist'}}</span></div>
+                    <div> <a id = "get_my_ip" class="inline-block text-sm text-info">{{agile_lng_translate 'Admin-settings-api-analytics' 'get-my-ip'}}</a></div>
    					</div>
                            </div>
                         </div>
@@ -189,7 +189,7 @@
                      <div id="">
                         <div class="panel-heading" role="tab" id="">
                            <div class="panel-title">
-                              <a class="accordion-toggle" data-toggle="collapse" aria-controls="collapseTwo" aria-expanded="true" data-parent="#accordion" href="#admin-settings-webhook"id="webhook_accordian">Webhooks</a>
+                              <a class="accordion-toggle" data-toggle="collapse" aria-controls="collapseTwo" aria-expanded="true" data-parent="#accordion" href="#admin-settings-webhook"id="webhook_accordian">{{agile_lng_translate 'admin-settings-integrations' 'webhooks'}}</a>
                            </div>
                         </div>
                         <div class="panel-collapse collapse " role="tabpanel" aria-labelledby="headingTwo" id="admin-settings-webhook" aria-expanded="true">
@@ -200,22 +200,22 @@
                      <div id="">
                         <div class="panel-heading" role="tab" id="">
                            <div class="panel-title">
-                              <a class="accordion-toggle" data-toggle="collapse" aria-controls="collapseTwo" aria-expanded="true" data-parent="#accordion" href="#admin-settings-sendgrid-dkim"id="sendgrid-dkim_accordian">Email (DKIM & SPF) Settings<span class="label label-sm bg-danger m-l-xs" style="position: relative;top: -2px;">Beta</span></a>
+                              <a class="accordion-toggle" data-toggle="collapse" aria-controls="collapseTwo" aria-expanded="true" data-parent="#accordion" href="#admin-settings-sendgrid-dkim"id="sendgrid-dkim_accordian">{{agile_lng_translate 'Admin-settings-api-analytics' 'email-dkim-settings'}}<span class="label label-sm bg-danger m-l-xs" style="position: relative;top: -2px;">{{agile_lng_translate 'deal-view' 'beta'}}</span></a>
                            </div>
                         </div>
                         <div class="panel-collapse collapse " role="tabpanel" aria-labelledby="headingTwo" id="admin-settings-sendgrid-dkim" aria-expanded="true"> <div class="row">
                      <div class="col-md-12 col-xs-12" id="sendgrid-dkim-restriction-template"></div>
                      <div class="col-md-12 col-xs-12" id="sendgrid-dkim-accordian-template"> <br> 
                        <div class="control-group form-group">
-                           <label class="control-label col-sm-3 col-xs-3" style="margin-top: 2px;">Email Sending Domain<span class="field_req">*</span>
+                           <label class="control-label col-sm-3 col-xs-3" style="margin-top: 2px;">{{agile_lng_translate 'Admin-settings-api-analytics' 'email-sending-domain'}}<span class="field_req">*</span>
                            </label> 
                            <div class="controls col-sm-5 col-xs-5">
-                               <input name="whitelabel-domain" id="whitelabel-domain" class="input-medium required form-control" type="domain" value="" placeholder="Enter your Email Sending Domain" style="height: 31px;" title=" ex: if you are sending email from sender@domain.com then enter domain.com here.">
-                                <span id="empty_domain_message" class="text-danger hide text-sm">Please enter a valid domain name.</span>
+                               <input name="whitelabel-domain" id="whitelabel-domain" class="input-medium required form-control" type="domain" value="" placeholder="{{agile_lng_translate 'Admin-settings-api-analytics' 'email-sending-domain'}}" style="height: 31px;" title="{{agile_lng_translate 'Admin-settings-api-analytics' 'example-for-email-sending-domain'}}">
+                                <span id="empty_domain_message" class="text-danger hide text-sm">{{agile_lng_translate 'Admin-settings-api-analytics' 'please-enter-valid-domain-name'}}</span>
                            </div>
                            <div>
-                               <a href="#analytics-code" class="btn btn-sm btn-primary" id="get_whitelabel_key">Get Settings</a>
-                               <a href="#analytics-code" class="btn btn-sm btn-success" style="margin-left: 3px;" id="validate_whitelabel">Verify</a>
+                               <a href="#analytics-code" class="btn btn-sm btn-primary" id="get_whitelabel_key">{{agile_lng_translate 'Admin-settings-api-analytics' 'get-settings'}}</a>
+                               <a href="#analytics-code" class="btn btn-sm btn-success" style="margin-left: 3px;" id="validate_whitelabel">{{agile_lng_translate 'landing-pages' 'verify'}}</a>
                            </div>
                        </div>
                        <div id="sendgrid-whitelabel-key-template"></div>
@@ -227,7 +227,7 @@
                      <div id="">
                         <div class="panel-heading" role="tab" id="">
                            <div class="panel-title">
-                              <a class="accordion-toggle" data-toggle="collapse" aria-controls="collapseTwo" aria-expanded="true" data-parent="#accordion" href="#admin-settings-js-security"id="js-security_accordian">JS API Security</a>
+                              <a class="accordion-toggle" data-toggle="collapse" aria-controls="collapseTwo" aria-expanded="true" data-parent="#accordion" href="#admin-settings-js-security"id="js-security_accordian">{{agile_lng_translate 'Admin-settings-api-analytics' 'js-api-security'}}</a>
                            </div>
                         </div>
                         <div class="panel-collapse collapse " role="tabpanel" aria-labelledby="headingTwo" id="admin-settings-js-security" aria-expanded="true">

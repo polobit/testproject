@@ -24,11 +24,11 @@
             </a>
         </div>
         <table class="table table-striped showCheckboxes m-b-none agile-table panel table-layout-mob-view show-delete-modal tableHeader tab-layout tickets-border" url="core/api/tickets/labels/bulk" data-bulk-delete-title="Delete"
-            data-bulk-delete-msg="Are you sure you want to delete?" data-resizable-columns-id="tickets-labels">
+            data-bulk-delete-msg="{{agile_lng_translate 'tickets' 'conformation-messge-for-deletion'}}" data-resizable-columns-id="tickets-labels">
                 <thead>
                     <tr>
-                        <th data-resizable-column-id="hide" class="hide">Id</th>
-                        <th data-resizable-column-id="label">Label</th>
+                        <th data-resizable-column-id="hide" class="hide">{{agile_lng_translate 'tickets' 'id'}}</th>
+                        <th data-resizable-column-id="label">{{agile_lng_translate 'contacts-view' 'label'}}</th>
                         <th data-resizable-column-id="">&nbsp;</th>
                     </tr>
                 </thead>

@@ -6,10 +6,10 @@
 <!-- IE conditional check-->
 {{#is_IE_browser}}
 <div class="col-md-6 col-md-offset-3">
-<div class="alert alert-warning" role="alert"> <strong>Warning!</strong> 
+<div class="alert alert-warning" role="alert"> <strong>{{agile_lng_translate 'landingpages' 'warining'}}</strong> 
 <div class="error-details">
-                    We&#39;re sorry. This browser may not support this feature.<br>
-To get the best experience, we recommend you to use <a href="https://support.google.com/chrome/answer/95346?hl=en">Chrome</a>, <a href="http://www.mozilla.org/en-US/firefox/features">Firefox</a> or <a href="http://support.apple.com/kb/dl1531">Safari</a> (Mac only).
+                  {{agile_lng_translate 'campaigns' 'we-are-sorry-this-browser-may-not-support'}}  <br>
+{{agile_lng_translate 'campaigns' 'to-get-best-experience'}} <a href="https://support.google.com/chrome/answer/95346?hl=en">{{agile_lng_translate 'campaigns' 'chrome'}}</a>, <a href="http://www.mozilla.org/en-US/firefox/features">{{agile_lng_translate 'campaigns' 'firefox'}}</a> or <a href="http://support.apple.com/kb/dl1531">{{agile_lng_translate 'campaigns' 'safari'}}</a> (Mac only).
                 </div>
 </div>
 </div> {{else}} 
@@ -39,7 +39,7 @@ To get the best experience, we recommend you to use <a href="https://support.goo
 										<button class="btn btn-primary btn-sm  right pos-rlt m-r-xs" id="save-workflow-top">{{agile_lng_translate 'campaigns' 'save-campaign'}}</button>
 										<div class="right m-r-sm">
 						                    <label class="btn btn-default btn-sm m-l-xs" id="campaign_access_level"> 
-						                    		<span> Make {{#if access_level}}{{#if_equals access_level "1"}}Private {{else}}Public{{/if_equals}}{{else}}Private{{/if}}</span>
+						                    		<span> {{agile_lng_translate 'campaigns' 'make'}} {{#if access_level}}{{#if_equals access_level "1"}}Private {{else}}Public{{/if_equals}}{{else}}Private{{/if}}</span>
 						                    </label>
 										</div>
 									 <!--
@@ -190,8 +190,8 @@ To get the best experience, we recommend you to use <a href="https://support.goo
 						</label>
 						<div class="controls col-sm-4">
 							<select name="access_level" id="access_level" class="form-control">
-								<option value="1">Public</option>
-								<option value="{{getAccountOwnerId}}">Private</option>
+								<option value="1">{{agile_lng_translate 'campaigns' 'public'}}</option>
+								<option value="{{getAccountOwnerId}}">{{agile_lng_translate 'campaigns' 'private'}}</option>
 							</select>
 						</div>
                 	</div>

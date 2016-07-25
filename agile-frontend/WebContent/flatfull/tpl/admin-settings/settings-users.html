@@ -15,8 +15,8 @@
                 <thead>
                     <tr>
                         <th style="width:5%"></th>
-                        <th style="width:20%" class="header">Name</th>
-						 <th style="width:20%" class="header">Email</th>
+                        <th style="width:20%" class="header">{{agile_lng_translate 'tickets' 'Requester-name'}}</th>
+						 <th style="width:20%" class="header">{{agile_lng_translate 'modals' 'email'}}</th>
                         <!-- <th style="width:20%" class="header">Created On</th>-->
                         <th style="width:20%" class="header">{{agile_lng_translate 'admin-settings-users' 'last-logged-in'}}</th>
 						 <th style="width:20%"></th> 
@@ -107,13 +107,18 @@
 	<td>
 		<span class="pull-left" style="width:101px;">
 		{{#if is_admin}}
-			<span class="label m-r-xs bg-light dk text-tiny">Admin</span>
+			<span class="label m-r-xs bg-light dk text-tiny">
+			{{agile_lng_translate 'admin-settings-users' 'admin'}}
+
+			</span>
 		{{/if}}
 		{{#if is_account_owner}}
-			<span class="label bg-light dk text-tiny">Owner</span>
+			<span class="label bg-light dk text-tiny">
+			{{agile_lng_translate 'contact-details' 'owner'}}</span>
 		{{/if}}
 		{{#if is_disabled}}
-			<span class="label label-danger">Disabled</span>
+			<span class="label label-danger">
+			{{agile_lng_translate 'campaigns' 'disabled'}}</span>
 		{{/if}}
 		</span>	
 	</td>
