@@ -57,7 +57,7 @@ $(".trial_strip_close").click(function(e){
 });
 
 $("#clickdesk_live_chat").click(function(e){
-	e.preventDefault();s
+	e.preventDefault();
 	CLICKDESK_LIVECHAT.show();
 });
 
