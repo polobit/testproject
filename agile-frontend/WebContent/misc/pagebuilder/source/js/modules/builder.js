@@ -1095,6 +1095,7 @@
             globalCheckbox.checked = this.global;
             globalLabel.appendChild(globalCheckbox);
             var globalText = document.createTextNode('Global');
+            globalLabel.style.display='none';
             globalLabel.appendChild(globalText);
 
             var trigger = document.createElement('span');
@@ -1703,7 +1704,7 @@
             $.getJSON(appUI.siteUrl+"core/api/forms", function(respData){
                
                for(var i=0;i<respData.length;i++){
-                 $('#agileform_id').append("<option value= "+respData[i].id +">"+respData[i].formName+"</option>");
+                 $('#agileform_id').append("<option value=" + window.CURRENT_AGILE_DOMAIN +"_"+respData[i].id +">"+respData[i].formName+"</option>");
                }    
                 
             }).fail(function(jqXHR) {
