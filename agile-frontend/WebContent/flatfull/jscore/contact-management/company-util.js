@@ -641,7 +641,11 @@
             	head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
             		 $(".note-created-time", el).timeago();
               	})
-            }
+              	contact_detail_page_infi_scroll($('#infinite-scroller-company-details', App_Companies.companyDetailView.el), notesView);
+            },
+             appendItemCallback : function(el) {
+					includeTimeAgo(el);
+				}
         });
         notesView.collection.fetch();
         $('#company-notes', App_Companies.companyDetailView.el).html(notesView.render().el);
