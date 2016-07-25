@@ -1261,7 +1261,7 @@
 							$("textarea#description-article").css("display", "none");
 						});
   
-						 
+						 section_id = decodeURIComponent(section_id);
 						fillSelect('catogery', '/core/api/knowledgebase/categorie/kb-admin', '', function(collection){
 			 	 			getTemplate("helpcenter-section-category", collection.toJSON(), undefined, function(template_ui){						
 
