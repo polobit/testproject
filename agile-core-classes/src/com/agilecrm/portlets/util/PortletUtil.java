@@ -848,7 +848,7 @@ public class PortletUtil {
 					else /*if(activity.custom3!=null && activity.custom3.equalsIgnoreCase("queued"))*/
 						queuedCallsCount++;
 					totalCallsCount++;
-					if(activity.custom4!=null && !activity.custom3.equalsIgnoreCase(Call.VOICEMAIL) && !activity.custom4.equalsIgnoreCase(null) 
+					if(activity.custom4!=null &&  !activity.custom4.equalsIgnoreCase(null) 
 							&& !activity.custom4.equalsIgnoreCase("null") && !activity.custom4.equalsIgnoreCase(""))
 						callsDuration+=Long.valueOf(activity.custom4);
 					
