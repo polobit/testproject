@@ -257,7 +257,7 @@ function populateMilestones(el, dealsDetails, pipeline, value, callback, default
 								
 							// If callback is present, it is called to deserialize the select field
 							if (callback && typeof (callback) === "function") {
-								var optionsHtml = '<option value="">{{agie "contact-details" "select"}}</option>';
+								var optionsHtml = '<option value="">{{agile_lng_translate "contact-details" "select"}}</option>';
 								$.each(array, function(index,element){
 									optionsHtml += Handlebars.compile('<option value="{{element}}">{{element}}</option>')({element : element});
 								});
@@ -591,7 +591,7 @@ function populateLostReasons(el, value){
 	tracks.collection.fetch({
 		success: function(data){
 			var jsonModel = data.toJSON();
-			var html = '<option value="">{{agie "contact-details" "select"}}</option>';
+			var html = '<option value="">{{agile_lng_translate "contact-details" "select"}}</option>';
 			console.log(jsonModel);
 			
 			$.each(jsonModel,function(index,lostReason){
@@ -645,7 +645,7 @@ function populateDealSources(el, value){
 	tracks.collection.fetch({
 		success: function(data){
 			var jsonModel = data.toJSON();
-			var html = '<option value="">{{agie "contact-details" "select"}}</option>';
+			var html = '<option value="">{{agile_lng_translate "contact-details" "select"}}</option>';
 			console.log(jsonModel);
 			
 			$.each(jsonModel,function(index,dealSource){
