@@ -23,6 +23,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.agilecrm.sendgrid.util.SendGridUtil;
+import com.agilecrm.user.DomainUser;
 import com.agilecrm.util.Base64Encoder;
 import com.agilecrm.util.HttpClientUtil;
 import com.google.appengine.api.NamespaceManager;
@@ -148,8 +149,7 @@ public class SendGridLib {
                 Map.Entry entry = (Map.Entry) it.next();
                 InputStream is = (InputStream) entry.getValue();
                 
-					if(is.read() != -1) // to know if inputstream got closed or not
-						builder.addBinaryBody(String.format(PARAM_FILES, entry.getKey()), is);
+				builder.addBinaryBody(String.format(PARAM_FILES, entry.getKey()), is);
             }
         }
 
@@ -236,6 +236,11 @@ public class SendGridLib {
 						if(StringUtils.contains(this.username, SendGridSubUser.AGILE_SUB_USER_NAME_TOKEN) && StringUtils.containsIgnoreCase(response, "Bad username"))
 						{
 							SendGridSubUser.updateSendGridSubUserPassword(NamespaceManager.get()); // Updates password
+							
+							// Sample email after password update
+		        			SendGrid.sendMail(this.username, this.password, "alert@agilecrm.com", "Agile CRM Alert", "naresh@agilecrm.com", 
+		        					null, null, "SubUser Password is updated", null, null, "Sample Email after password update.", null);
+		        			
 							retry = true;
 						}
 						else
@@ -287,6 +292,7 @@ public class SendGridLib {
 			}
         	catch(IOException ex) // To handle BlobStream closed exception
         	{
+        		System.out.println("IO Exception occured....");
         		throw ex;
         	}
         	catch(Exception ex)

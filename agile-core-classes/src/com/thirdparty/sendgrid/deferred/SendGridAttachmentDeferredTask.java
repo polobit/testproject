@@ -49,8 +49,9 @@ public class SendGridAttachmentDeferredTask implements DeferredTask
 			{
 				sendgrid.send(email);
 			}
-			catch(ClosedStreamException ex)
+			catch(IOException ex)
 			{
+				System.out.println(ex.getMessage());
 				// If stream got closed, get again
 				if(inputStream != null)
 				{

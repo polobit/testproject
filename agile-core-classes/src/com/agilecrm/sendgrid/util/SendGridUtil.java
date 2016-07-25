@@ -199,6 +199,11 @@ public class SendGridUtil
 						{
 		        			// Update password and retry again
 		        			SendGridSubUser.updateSendGridSubUserPassword(firstSendGridDefferedTask.domain);
+		        			
+		        			// Sample email after password update
+		        			SendGrid.sendMail(apiUser, apiKey, "alert@agilecrm.com", "Agile CRM Alert", "naresh@agilecrm.com", 
+		        					null, null, "SubUser Password is updated", null, null, "Sample Email after password update.", null);
+		        			
 		        			retry = true;
 						}
 		        		else

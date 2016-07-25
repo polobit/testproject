@@ -25,6 +25,8 @@ import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpParams;
 import org.apache.http.util.EntityUtils;
 
+import com.google.appengine.api.blobstore.BlobstoreInputStream.ClosedStreamException;
+
 
 /**
  * <code>HttpClientUtil</code> is the utility class that handles URL requests
@@ -120,7 +122,7 @@ public class HttpClientUtil
 	}
     }
     
-    public static String accessURLUsingHttpClient(URLBuilder urlBuilder, HttpEntity httpEntity) throws Exception
+    public static String accessURLUsingHttpClient(URLBuilder urlBuilder, HttpEntity httpEntity) throws ClosedStreamException, IOException, Exception
     {
     	HttpUriRequest request = null;
 

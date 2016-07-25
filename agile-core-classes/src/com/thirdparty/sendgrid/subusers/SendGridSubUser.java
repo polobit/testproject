@@ -575,6 +575,9 @@ public class SendGridSubUser extends SendGridLib
 	
 	public static void updateSendGridSubUserPassword(String domain) throws SendGridException, Exception
 	{
+		if(StringUtils.isBlank(domain))
+			return;
+		
 		String response = null, user = SendGridSubUser.getAgileSubUserName(domain), url = "https://api.sendgrid.com/apiv2/customer.password.json";
 		
 			String username = Globals.SENDGRID_API_USER_NAME, password = Globals.SENDGRID_API_KEY;
