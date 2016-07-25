@@ -475,7 +475,7 @@ function showCalendar(users)
 						eventDrop : function(event1, dayDelta, minuteDelta, allDay, revertFunc)
 						{
 							
-							if(!hasScope("MANAGE_CALENDAR") && (CURRENT_DOMAIN_USER.id != event1.owner.id)){
+							if(!hasScope("UPDATE_CALENDAR") && (CURRENT_DOMAIN_USER.id != event1.owner.id)){
 								revertFunc();
 								$("#moveEventErrorModal").html(getTemplate("move-event-error-modal")).modal('show');
 								return;

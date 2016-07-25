@@ -785,7 +785,7 @@ var Deal_Modal_Event_View = Base_Model_View.extend({
 	  		owner = model.get("owner").id;
 	  	}
 
-		if(!hasScope("MANAGE_CALENDAR") && (CURRENT_DOMAIN_USER.id != owner) && model.get("entity_type") && model.get("entity_type") == "event"){
+		if(!hasScope("DELETE_CALENDAR") && (CURRENT_DOMAIN_USER.id != owner) && model.get("entity_type") && model.get("entity_type") == "event"){
 			$("#deleteEventErrorModal").html(getTemplate("delete-event-error-modal")).modal('show');
 			return;
 		}

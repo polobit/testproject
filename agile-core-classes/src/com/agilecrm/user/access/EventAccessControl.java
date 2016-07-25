@@ -78,14 +78,14 @@ public class EventAccessControl extends UserAccessControl
 	// event and current owner is different
     if(!isNew())
     {
-    	if(hasMenuScope(NavbarConstants.CALENDAR) && (hasScope(UserAccessScopes.MANAGE_CALENDAR) || (isOldOwner() && checkOwner()) ))
+    	if(hasMenuScope(NavbarConstants.CALENDAR) && (hasScope(UserAccessScopes.UPDATE_CALENDAR) || (isOldOwner() && checkOwner()) ))
     	{
     		return true;
     	}
     }
     else
     {
-    	if(hasMenuScope(NavbarConstants.CALENDAR) && (hasScope(UserAccessScopes.MANAGE_CALENDAR) || checkOwner()))
+    	if(hasMenuScope(NavbarConstants.CALENDAR) && (hasScope(UserAccessScopes.CREATE_CALENDAR) || checkOwner()))
     	{
     		return true;
     	}
@@ -98,7 +98,7 @@ public class EventAccessControl extends UserAccessControl
     {
 	// Delete condition is checked only if current user is not owner of the
 	// event
-	if(!isNew() && hasMenuScope(NavbarConstants.CALENDAR) && (hasScope(UserAccessScopes.MANAGE_CALENDAR) || checkOwner()))
+	if(!isNew() && hasMenuScope(NavbarConstants.CALENDAR) && (hasScope(UserAccessScopes.DELETE_CALENDAR) || checkOwner()))
 	{
 		return true;
 	}
