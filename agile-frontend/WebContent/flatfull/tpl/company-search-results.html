@@ -1,42 +1,45 @@
-	<script id="search-model-template" type="text/html">
+	<script id="company-search-model-template" type="text/html">
 	<td></td>
 	<td class="data" data="{{id}}">
     <div class="table-resp">
     	<div class="thumb-sm agile-img m-r-sm" style="margin-right:10px;">
-        	{{#if_contact_type "PERSON"}} <img class="img-inital r r-2x" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}" /> {{/if_contact_type}}
         	{{#if_contact_type "COMPANY"}} <img class="img-inital r r-2x" {{getCompanyImage "40" "display:inline;"}} /> {{/if_contact_type}}
     	</div>
     	<div class="agile-thumb agile-thumb-view" style="width:calc(100% - 60px);">
-        	{{#if_contact_type "PERSON"}} <div class="text-cap custom-link"> {{getPropertyValue properties
-        	"first_name"}} {{getPropertyValue properties "last_name"}} </div> 
-        	<div> <small class="text-muted m-t-xs">{{getPropertyValue properties "email"}} </small></div> {{/if_contact_type}}
         	{{#if_contact_type "COMPANY"}} <div class="text-cap custom-link"> {{getPropertyValue properties
         	"name"}}</div> 
            <div> <small class="text-muted m-t-xs"> {{getPropertyValue properties "url"}} </small> </div>
-{{/if_contact_type}}
+            {{/if_contact_type}}
     	</div>
        </div>
 	</td>
-	<td><div class="text-ellipsis">
-		{{getPropertyValue properties "title"}}<br />
-    	{{getPropertyValue properties "company"}}</div>
-	</td>
-	<td>
-		<div class="overflow-hidden line-clamp line-clamp-2">
-			{{#each tags}}
-				<span class="label bg-light dk text-tiny">{{this}}</span>
-			{{/each}}
-		</div>
-	</td>
-	<td>{{lead_score}}</td>
+    <td>
+    <div class="overflow-hidden line-clamp line-clamp-2">
+           <div class="text-ellipsis">{{owner.name}}</div>
+    </div>
+    </td>
+
+    <td>
+     <div class="overflow-hidden line-clamp line-clamp-2">
+            {{#each tags}}
+                <span class="label bg-light dk text-tiny">{{this}}</span>
+            {{/each}}
+    </div>
+    </td>
+
+    <td>{{lead_score}}</td>
+   
+
+	
 </script>
-<script id="search-collection-template" type="text/html">
+<script id="company-search-collection-template" type="text/html">
 <div class="wrapper-md lter bg-light b-b">
 <div class="row">
     <div class="col-md-12">
        
             
-            <div id="search-query-heading" style="font-size:19px;"class="m-n font-thin h3 pull-left">Search results for 
+           
+            <div id="search-query-heading" style="font-size:19px;"class="m-n font-thin h3  pull-left">Search results for 
             <span style="font-weight:600;">"{{query}}"</span>
             </div>
             <div class="pull-right">
@@ -69,18 +72,19 @@
                     </ul>
                 </div>
                 <div class="table-responsive">
-                <table id="contacts_search" class="table table-striped panel agile-table onlySorting  
+                <table id="contacts_search" class="table table-striped  panel agile-table onlySorting  
                 table-layout-mob-view m-b-none" url="core/api/bulk/update?action_type=DELETE" style="table-layout:auto;">
                     <thead>
                         <tr>
 							<th style="width:2%"></th>
                             <th style="width:25%">Name</th>
-                            <th style="width:25%">Work</th>
-                            <th style="width:30%">Tags</th>
-                            <th style="width:25%">Lead Score</th>
+                            <th  style="width:25%">Owner</th>
+                            <th  style="width:30%">Tags</th>
+                            <th  style="width:25%">Lead Score</th>
+                            
                         </tr>
                     </thead>
-                    <tbody id="search-model-list" class="model-list-cursor" route="contact/">
+                    <tbody id="company-search-model-list" class="model-list-cursor" route="contact/">
                     </tbody>
                 </table>
                 </div>

@@ -226,7 +226,16 @@ $("#activityModal").on("click", "#eventDescriptionLink", function(e){
    }
    });
 
+   $('#searchForm').hover(
+	function () {
+		  $("#advanced-search-filter").removeClass("hide");
+		}, 
+		function () {
+		  $("#advanced-search-filter").addClass("hide");
+		}
+   );
 
+  
    $("#mobile-menu").on("click",function(){
    if( $("#navbar").hasClass("show")) {
    	$("#navbar").removeClass("show");
@@ -261,6 +270,50 @@ $("#activityModal").on("click", "#eventDescriptionLink", function(e){
 	        }
 	    });
 	});
+
+	$( '#advanced-search-fields-group a' ).on( 'click', function( event ) {
+
+   	   var $target = $( event.currentTarget ),
+       $inp = $target.find( 'input' );
+
+       if(!$inp.closest("li").hasClass("disabled"))
+       		$inp.prop( 'checked', !$inp.is(":checked") );
+
+       var $allitems = $("#advanced-search-fields-group a input"),
+       $inputs = $allitems.not($inp),
+       $items = $inputs.closest("li");
+
+       if(!$inp.prop("value")){	 
+       	 $inputs.prop("checked", $inp.is(":checked"));
+       }
+       else{
+      	var allChecked = ($allitems.not("[value='']").not(":checked").length  == 0);
+		$inputs.filter("[value='']").prop( 'checked', allChecked);
+       }
+
+	   $( event.target ).blur();
+	   var checkedlist = $allitems.not("[value='']");
+	   var list = $allitems.not("[value='']").filter(':checked').map(function(){return $(this).prop("value");}).get();	
+	   console.log(list);
+	   _agile_set_prefs('agile_search_filter_'+CURRENT_DOMAIN_USER.id,JSON.stringify(list));     	   
+	   return false;
+	});
+
+	var search_filters = _agile_get_prefs('agile_search_filter_'+CURRENT_DOMAIN_USER.id),
+	$inputs = $("#advanced-search-fields-group a input");
+	if(!search_filters)
+		search_filters = [];
+	if(typeof(search_filters)== "string")
+		search_filters = JSON.parse(search_filters);
+	$.each(search_filters, function(index, data){
+           $inputs.filter("[value='" + data + "']").prop("checked", true);
+	});
+
+	if(search_filters.length == 0 || $inputs.not(":checked").length == 1){
+		$inputs.filter("[value='']").closest("a").click();
+	}
+
+	
 	// initializing need help popover for header page
    $(".need_help").popover({ placement : 'left',
 					html:true,
@@ -272,7 +325,6 @@ $("#activityModal").on("click", "#eventDescriptionLink", function(e){
     			   }); 
 
    });
-
 
 //checks if there are any custom fields and if if present navigates to contact-add page otherwise opens person-modal
 function addContactBasedOnCustomfields(){

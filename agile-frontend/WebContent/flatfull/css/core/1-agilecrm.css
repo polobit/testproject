@@ -3850,6 +3850,7 @@ div.list-tasks.panel-body:hover
   opacity:0.75;
   top:0px;
 }
+
 .taskchanges{
   margin-left:3px;
   margin-right:3px;
@@ -3858,3 +3859,16 @@ div.list-tasks.panel-body:hover
   margin-top:12px;
   margin-bottom:10px;
 }
+
+
+.search-results-scroll-container {
+    max-height: 300px;
+    overflow: hidden;
+    overflow-y : auto!important;
+    margin-bottom: 30px;
+    position: relative;
+}
+/*.search-results-scroll-container table td:first-child{
+    display: none;
+} */
+
