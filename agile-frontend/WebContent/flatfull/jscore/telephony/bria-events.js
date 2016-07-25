@@ -440,10 +440,7 @@ function handleLogsForBria(message){
 		$('#bria-logs-panel').html(bria_logs_template);
 
 			// Load jquery time ago function to show time ago in logs
-			head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
-			{
-				$(".time-ago", bria_logs_template).timeago();
-			});
+			agileTimeAgoWithLngConversion($(".time-ago", bria_logs_template));
 
 	}, "#bria-logs-panel");
 }

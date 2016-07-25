@@ -101,12 +101,8 @@ var WorkflowsRouter = Backbone.Router
 					global_sort_key : sortKey, 
 					postRenderCallback : function(col_el)
 					{
-						head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
-						{
-							$("time.campaign-created-time", col_el).timeago();
-
-						});
-
+						agileTimeAgoWithLngConversion($("time.campaign-created-time", col_el));
+						
 						// updateSortKeyTemplate(sortKey, el);
 						start_tour(undefined, el);
 
@@ -415,11 +411,8 @@ var WorkflowsRouter = Backbone.Router
 								cursor : true,page_size :20, individual_tag_name : 'tr', sort_collection :false, postRenderCallback : function(el)
 								{
 									initializeTriggersListeners();
-									head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
-									{
-										$("time.log-created-time", el).timeago();
-									});
-
+									agileTimeAgoWithLngConversion($("time.log-created-time", el));
+									
 									$('#log-filter-title').html(log_filter_title);
 									
 								},appendItemCallback : function(el)

@@ -850,3 +850,16 @@ function make_menu_item_active(ele_id){
     $(".active").removeClass("active");
 	$("#" + ele_id).addClass("active");
 }
+
+function agileTimeAgoWithLngConversion(el, callback){
+	head.js(LIB_PATH + 'lib/jquery.timeago.js', LIB_PATH + 'lib/jquery.timeago.'+_LANGUAGE+'.js', function() {
+		if(el){
+			$(el).each(function(index, element) {
+       			$(element).timeago();
+       		});	
+		}
+
+        if(callback)
+        	 callback();
+    });
+}

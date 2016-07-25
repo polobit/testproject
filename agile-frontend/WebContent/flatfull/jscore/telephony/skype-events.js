@@ -402,10 +402,7 @@ function handleLogsForSkype(message){
 		$('#skype-logs-panel').html(skype_logs_template);
 
 			// Load jquery time ago function to show time ago in logs
-			head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
-			{
-				$(".time-ago", skype_logs_template).timeago();
-			});
+			agileTimeAgoWithLngConversion($(".time-ago", skype_logs_template));
 
 	}, "#skype-logs-panel");
 }

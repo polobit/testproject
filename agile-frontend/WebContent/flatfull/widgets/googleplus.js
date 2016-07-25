@@ -87,11 +87,7 @@ function showGooglePlusPosts(id, nextPageToken)
 			if(!GPostsData.items.length)
 				$('#recentPostsText').html('<div style="text-align: center;font-size: 13px;padding: 5px 0 6px 0;">No Posts.</div>');
 		}
-
-		head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
-		{
-			$(".time-ago").timeago();
-		});
+		agileTimeAgoWithLngConversion($(".time-ago"));
 	});
 
 }

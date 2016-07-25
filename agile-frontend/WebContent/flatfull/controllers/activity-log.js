@@ -164,12 +164,7 @@ var ActivitylogRouter = Backbone.Router.extend({
                         postRenderCallback: function(el) {
                             // initDateRangePicker("contact_activities_date_range",el);
                             contactListener();
-                            head.js(LIB_PATH + 'lib/jquery.timeago.js', function() {
-                                $("time", el).timeago();
-                                console.log(id);
-
-                            });
-
+                            agileTimeAgoWithLngConversion($("time", el));
                         },
                         appendItemCallback: function(el) {
                             includeTimeAgo(el);

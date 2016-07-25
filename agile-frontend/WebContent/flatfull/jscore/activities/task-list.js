@@ -3,10 +3,7 @@
  * @param element
  */
 function includeTimeAgo(element){
-	head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
-			{
-				$("time", element).timeago();
-			});
+	agileTimeAgoWithLngConversion($("time", element));
 }
 
 /**

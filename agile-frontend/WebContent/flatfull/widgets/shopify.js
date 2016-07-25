@@ -23,9 +23,7 @@ function loadSHOPIFYTickets(offSet){
 		});
 
 		// Load jquery time ago function to show time ago in tickets
-		head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
-			$(".time-ago", $('#shopify_orders_panel')).timeago();
-		});
+		agileTimeAgoWithLngConversion($(".time-ago", $('#shopify_orders_panel')));
 
 	}else if(offSet > 1  && (offSet + 5) < SHOPIFYTickets.length){
 		var result = {};
@@ -94,9 +92,7 @@ function showShopifyClient(shop, contact_id)
 				    	var template = $(template_ui);
 				    	console.log("libpath is" + LIB_PATH);
 						console.log(template)
-						head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
-							$(".time-ago", template).timeago();
-						});
+						agileTimeAgoWithLngConversion($(".time-ago", template));
 
 						$('#Shopify').html(template);
 						loadSHOPIFYTickets(1); 

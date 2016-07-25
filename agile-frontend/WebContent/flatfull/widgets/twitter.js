@@ -453,10 +453,8 @@ function showTwitterProfile(Twitter_id)
 
 					// Template is populated with update details and shown
 					$('#twitter_social_stream').append(element);
-					head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
-						$(".time-ago", $('#twitter_social_stream')).timeago();
-					});
-
+					agileTimeAgoWithLngConversion($(".time-ago", $('#twitter_social_stream')));
+					
 					return;
 					
 				}, null);

@@ -48,9 +48,8 @@ function loadTransaction(offSet){
 
 		getTemplate('braintree-transactions', result, undefined, function(template){					
 			$('#Braintree').html(template);
-			head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
-				$( ".time-ago", $('#Braintree')).timeago();
-			});
+			agileTimeAgoWithLngConversion($( ".time-ago", $('#Braintree')));
+			
 		},null);
 
 		if(BrainTreeObj.transaction.length > 5){

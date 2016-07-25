@@ -877,11 +877,7 @@
 	 		descending:true,
 	 		individual_tag_name : 'div',
 	 		postRenderCallback : function(el) {
-
-	 			head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
-				{
-					$("time", el).timeago();
-				});
+	 			agileTimeAgoWithLngConversion($("time", el));
 
 	 			if(callback)
 	 				callback();
@@ -907,12 +903,8 @@
 	 		descending:true,
 	 		individual_tag_name : 'div',
 	 		postRenderCallback : function(el) {
-
-	 			head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
-				{
-					$("time", el).timeago();
-				});
-
+	 			agileTimeAgoWithLngConversion($("time", el));
+	 			
 				if(callback)
 	 				callback();
 	 		}

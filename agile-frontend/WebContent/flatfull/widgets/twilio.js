@@ -346,10 +346,8 @@ function getTwilioLogs(to)
 		$('#twilio-logs-panel').html(twilio_logs_template);
 
 		// Load jquery time ago function to show time ago in logs
-		head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
-		{
-			$(".time-ago", twilio_logs_template).timeago();
-		});
+		agileTimeAgoWithLngConversion($(".time-ago", twilio_logs_template));
+		
 		// Add the call logs to the timeline.
 		addLogsToTimeLine($.parseJSON(logs));
 		

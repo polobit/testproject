@@ -526,10 +526,9 @@ var portlet_utility = {
 						sortKey : "openedTime",
 						individual_tag_name : 'tr',
 						postRenderCallback : function(p_el) {
-							head.js(LIB_PATH + 'lib/jquery.timeago.js', function() {
-								$(".time-ago", p_el).timeago();
-								initializePortletsListeners();
-							});
+							agileTimeAgoWithLngConversion($(".time-ago", p_el));
+							initializePortletsListeners();
+							
 							portlet_utility.addWidgetToGridster(base_model);
 						}
 					});
@@ -579,10 +578,9 @@ var portlet_utility = {
 						sort_collection : false,
 						individual_tag_name : 'tr',
 						postRenderCallback : function(p_el) {
-							head.js(LIB_PATH + 'lib/jquery.timeago.js', function() {
-								$(".time-ago", p_el).timeago();
-								initializePortletsListeners();
-							});
+							agileTimeAgoWithLngConversion($(".time-ago", p_el));
+							initializePortletsListeners();
+							
 							portlet_utility.addWidgetToGridster(base_model);
 						}
 					});
@@ -598,9 +596,8 @@ var portlet_utility = {
 				templateKey : 'portlets-opportunities',
 				individual_tag_name : 'tr',
 				postRenderCallback : function(p_el) {
-					head.js(LIB_PATH + 'lib/jquery.timeago.js', function() {
-						$(".time-ago", p_el).timeago();
-					});
+					agileTimeAgoWithLngConversion($(".time-ago", p_el));
+					
 					portlet_utility.addWidgetToGridster(base_model);
 				}
 			});
@@ -774,12 +771,8 @@ var portlet_utility = {
 				individual_tag_name : 'div',
 				postRenderCallback : function(p_el) {
 					portlet_utility.addWidgetToGridster(base_model);
-
-					head.js(LIB_PATH + 'lib/jquery.timeago.js', function() {
-						$("time", p_el).timeago();
-						
-
-					});
+					agileTimeAgoWithLngConversion($("time", p_el));
+					
 					contact_detail_page_infi_scroll($('.activity_body',
 							App_Portlets.activitiesView[parseInt(pos)].el),
 							App_Portlets.activity[parseInt(pos)])

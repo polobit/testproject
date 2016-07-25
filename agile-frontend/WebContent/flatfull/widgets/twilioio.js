@@ -191,10 +191,7 @@ function getTwilioIOLogs(to, direction)
 		$("#twilio-"+dir+"-logs-panel").html(twilio_logs_template);
 
 			// Load jquery time ago function to show time ago in logs
-			head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
-			{
-				$(".time-ago", twilio_logs_template).timeago();
-			});
+			agileTimeAgoWithLngConversion($(".time-ago", twilio_logs_template));
 
 			// Add more button if more than 10 call logs present
 			addMoreButton(pageInfo, dir);
@@ -320,10 +317,7 @@ function getNextLogs(to, page, pageToken, direction)
 	    	$("#twilio-"+dir+"-logs-panel").append(twilio_logs_template);
 
 			// Load jquery time ago function to show time ago in logs
-			head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
-			{
-				$(".time-ago", twilio_logs_template).timeago();
-			});
+			agileTimeAgoWithLngConversion($(".time-ago", twilio_logs_template));
 
 			// Add more button if more than 10 call logs present
 			addMoreButton(pageInfo, dir);

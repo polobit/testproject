@@ -491,11 +491,7 @@ var SettingsRouter = Backbone.Router
 					that.emailTemplatesListView = new Base_Collection_View({ url : '/core/api/email/templates', restKey : "emailTemplates",
 					templateKey : "settings-email-templates", individual_tag_name : 'tr', postRenderCallback : function(el)
 					{
-						head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
-						{
-							console.log("In email tmplt postrender");
-							$(".created_time", el).timeago();
-						});
+						agileTimeAgoWithLngConversion($(".created_time", el));
 					} });
 
 					that.emailTemplatesListView.collection.fetch();

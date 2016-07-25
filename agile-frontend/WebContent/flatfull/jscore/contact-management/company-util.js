@@ -592,13 +592,11 @@
             sortKey:"created_time",
             descending: true,
             postRenderCallback: function(el) {
-            	head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
-            		$(".deal-created-time", el).timeago();
-            		$(el).find('ul li').each(function(){
-				    $(this).addClass("deal-color");
-				    $(this).addClass($(this).find("input").attr("class"));
-			        });
-            	})
+            	agileTimeAgoWithLngConversion($(".deal-created-time", el));
+            	$(el).find('ul li').each(function(){
+			    	$(this).addClass("deal-color");
+			    	$(this).addClass($(this).find("input").attr("class"));
+		        });
             }
         });
         dealsView.collection.fetch();
@@ -617,9 +615,7 @@
             sortKey:"created_time",
             descending: true,
             postRenderCallback: function(el) {
-            	head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
-            		 $(".deal-created-time", el).timeago();
-            	})
+            	agileTimeAgoWithLngConversion($(".deal-created-time", el));
             }
         });
 		casesView.collection.fetch();
@@ -638,9 +634,7 @@
             sortKey:"created_time",
             descending: true,
             postRenderCallback: function(el) {
-            	head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
-            		 $(".note-created-time", el).timeago();
-              	})
+            	agileTimeAgoWithLngConversion($(".note-created-time", el));
             }
         });
         notesView.collection.fetch();
@@ -659,10 +653,7 @@
 	            sortKey:"uploaded_time",
 	            descending: true,
 	            postRenderCallback: function(el) {
-	            	head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
-	            		 $(".document-created-time", el).timeago();
-	              	});
-	            
+	            	agileTimeAgoWithLngConversion($(".document-created-time", el));       
 	            }
 	        });
 		    documentsView.collection.fetch();
@@ -681,9 +672,8 @@
 	            sortKey:"created_time",
 	            descending: true,
 	            postRenderCallback: function(el) {
-	            	head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
-	            		 $(".event-created-time", el).timeago();
-	              	});
+	            	agileTimeAgoWithLngConversion($(".event-created-time", el));
+	          
 	            	$('li',el).each(function(){
 	            	if($(this).find('.priority_type').text().trim() == "High") {
             			$(this).css("border-left","3px solid #f05050");
@@ -711,9 +701,7 @@
 		            sortKey:"created_time",
 		            descending: true,
 		            postRenderCallback: function(el) {
-		            	head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
-		            		 $(".task-created-time", el).timeago();
-		              	});
+		            	agileTimeAgoWithLngConversion($(".task-created-time", el));
 		            	$('li',el).each(function(){
 		            		if($(this).find('.priority_type').text().trim()== "HIGH") {
 		            			$(this).css("border-left","3px solid #f05050");
@@ -859,13 +847,7 @@ function company_fetchMails(company_detail_tab_scope,has_email_configured,mail_s
 	postRenderCallback : function(el)
 	{
 		$('#company-mail', App_Companies.companyDetailView.el).find("#no-email").css('display','block');
-		head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
-		{
-			$(".email-sent-time", el).each(function(index, element)
-			{
-				$(element).timeago();
-			});
-		});
+		agileTimeAgoWithLngConversion($(".email-sent-time", el));
 		
 		if(email_server_type!="agilecrm")
 			company_detail_tab_scope.configured_sync_email = email_server_type;
@@ -974,13 +956,7 @@ function loadAllMailsView(company_detail_tab_scope,has_email_configured,fetched_
 	templateKey : "email-social-company", sort_collection : true, sortKey : "date_secs", descending : true, individual_tag_name : "li",
 	postRenderCallback : function(el)
 	{
-		head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
-		{
-			$(".email-sent-time", el).each(function(index, element)
-			{
-				$(element).timeago();
-			});
-		});
+		agileTimeAgoWithLngConversion($(".email-sent-time", el));
 		
 		if(email_server_type!="agilecrm")
 			company_detail_tab_scope.configured_sync_email = email_server_type;

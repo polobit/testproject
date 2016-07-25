@@ -329,10 +329,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			individual_tag_name : "tr", sortKey : "name", postRenderCallback : function(el)
 			{
 				$('i').tooltip();
-				head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
-				{
-					$(".last-login-time", el).timeago();
-				});
+				agileTimeAgoWithLngConversion($(".last-login-time", el));
 				
 			} });
 			that.usersListView.collection.fetch();

@@ -26,11 +26,7 @@ var TicketMacroRouter = Backbone.Router.extend({
 			page_size : 20,
 			slateKey : "ticket-macros",
 			postRenderCallback : function(el) {
-				head.js(LIB_PATH + 'lib/jquery.timeago.js', function() {
-					$("time.macro-created-time", el).timeago();
-
-				});
-
+				agileTimeAgoWithLngConversion($("time.macro-created-time", el));
 			}
 		});
 

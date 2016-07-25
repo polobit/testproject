@@ -25,10 +25,7 @@ function showQuickbooksContacts(contact_id)
 	    var template = $('#' + QUICKBOOKS_PLUGIN_NAME).html(getTemplate('quickbooks-profile', data));
 	    console.log("libpath is" + LIB_PATH);
 	    console.log(template)
-	    head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
-	    {
-			$(".time-ago", $('#' + QUICKBOOKS_PLUGIN_NAME)).timeago();
-	    });
+	    agileTimeAgoWithLngConversion($(".time-ago", $('#' + QUICKBOOKS_PLUGIN_NAME)));
 
 	}
 	else

@@ -103,10 +103,7 @@ function showMailsInHelpScout(customerId, contact_id, offSet)
 			$('#all_conv_panel').html(getTemplate('helpscout-conversation', result));
 
 			// Load jquery time ago function to show time ago in tickets
-			head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
-			{
-				$(".time-ago", $('#all_conv_panel')).timeago();
-			});
+			agileTimeAgoWithLngConversion($(".time-ago", $('#all_conv_panel')));
 
 			if(helpscoutmails.length > 5){			
 				$('#all_conv_panel').append(showMoreHtml);

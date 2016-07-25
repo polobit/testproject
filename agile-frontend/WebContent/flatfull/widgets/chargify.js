@@ -36,13 +36,8 @@ function showChargifyClient()
 					  return;
 				
 				var template = $('#' + CHARGIFY_PLUGIN_NAME).html($(template_ui));
-				head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
-				{
-					$(".time-ago", template).timeago();
-				});
-
-
-
+				agileTimeAgoWithLngConversion($(".time-ago", template));
+				
 			}, "#" + CHARGIFY_PLUGIN_NAME);
 
 		}

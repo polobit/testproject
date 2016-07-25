@@ -169,10 +169,7 @@ function hidePortletErrors(ele) {
  */
 function displayTimeAgo(elmnt)
 {
-	head.js('lib/jquery.timeago.js', function()
-	{
-		$(".time-ago", elmnt).timeago();
-	});
+	agileTimeAgoWithLngConversion($(".time-ago", elmnt));
 	
 	console.log($("article.stream-item").parent());
 	

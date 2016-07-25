@@ -163,9 +163,7 @@ function showStripeProfile(stripe_custom_field_name, contact_id)
 			// Show the template in Stripe widget panel
 			$('#Stripe').html(stripe_template);
 			// Load jquery time ago function to show time ago in invoices
-			head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
-				$(".time-ago", $('#Stripe')).timeago();
-			});
+			agileTimeAgoWithLngConversion($(".time-ago", $('#Stripe')));
 
 			stripeOBJ = {};
 			stripeINVCount = 1;

@@ -694,10 +694,7 @@ function getFirstFiveLinkedInNetworkUpdates(Linkedin_id)
 			// Sets the update stream into a local variable for this method
 			Stream_Data = data;
 
-			head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
-			{
-				$(".time-ago", $('#linkedin_social_stream')).timeago();
-			});
+			agileTimeAgoWithLngConversion($(".time-ago", $('#linkedin_social_stream')));
 
 			return;
 		}
@@ -734,11 +731,7 @@ function getAllRecentNetworkUpdatesInLinkedIn(Linkedin_id, Stream_Data)
 
 		// Populates the template with the data
 		$("#linkedin_social_stream").html(getTemplate("linkedin-update-stream", data));
-
-		head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
-		{
-			$(".time-ago", $('#linkedin_social_stream')).timeago();
-		});
+		agileTimeAgoWithLngConversion($(".time-ago", $('#linkedin_social_stream')));
 
 		// If no updates are available for person return
 		if (data.length == 0)

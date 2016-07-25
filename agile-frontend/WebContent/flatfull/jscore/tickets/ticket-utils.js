@@ -137,8 +137,7 @@ var Ticket_Utils = {
 	},
 
 	loadTimeAgoPlugin: function(callback){
-		head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
-			
+		agileTimeAgoWithLngConversion(undefined, function(){
 			if(callback)
 				callback();
 		});

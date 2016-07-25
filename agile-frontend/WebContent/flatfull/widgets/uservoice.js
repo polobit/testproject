@@ -17,9 +17,8 @@ function loadUservoiceComments(offSet){
 
 		getTemplate('uservoice-transactions', result, undefined, function(template_inv){						
 			$('#uservoice-comments').html(template_inv);
-			head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
-				$( ".time-ago", $('#uservoice-comments')).timeago();
-			});			
+			agileTimeAgoWithLngConversion($( ".time-ago", $('#uservoice-comments')));
+						
 		},null);
 
 		if(uservoiceOBJ.comments && uservoiceOBJ.comments.length > 5){

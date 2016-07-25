@@ -153,9 +153,7 @@ function loadZENTickets(offSet){
 		});
 		
 		// Load jquery time ago function to show time ago in tickets
-		head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
-			$(".time-ago", $('#all_tickets_panel')).timeago();
-		});
+		agileTimeAgoWithLngConversion($(".time-ago", $('#all_tickets_panel')));
 	}else if(offSet > 0  && (offSet + 5) < ZENTickets.length){
 		var result = {};
 		result = ZENTickets.slice(offSet, (offSet+5));
@@ -241,10 +239,7 @@ function showZenMoreTickets(more_tickets)
 		$('#spinner-tickets').hide();
 
 		// Load jquery time ago function to show time ago in tickets
-		head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
-		{
-			$(".time-ago", template_ui).timeago();
-		});
+		agileTimeAgoWithLngConversion($(".time-ago", template_ui));
 	}, null);
 }
 

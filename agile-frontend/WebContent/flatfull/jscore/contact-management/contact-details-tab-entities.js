@@ -35,9 +35,8 @@ var contact_details_tab = {
 	            sortKey:"created_time",
 	            descending: true,
 	            postRenderCallback: function(el) {
-	            	head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
-	            		 $(".note-created-time", el).timeago();
-	              	})
+	            	agileTimeAgoWithLngConversion($(".note-created-time", el));
+	            	
 	              	contact_detail_page_infi_scroll($('#contact-dtl', App_Contacts.contactDetailView.el), notesView);
 	            }
 	        });
@@ -55,9 +54,8 @@ var contact_details_tab = {
 	            sortKey:"created_time",
 	            descending: true,
 	            postRenderCallback: function(el) {
-	            	head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
-	            		 $(".event-created-time", el).timeago();
-	              	});
+	            	agileTimeAgoWithLngConversion($(".event-created-time", el));
+	            	
 	            	$('li',el).each(function(){
 	            	if($(this).find('.priority_type').text().trim() == "High") {
             			$(this).css("border-left","3px solid #f05050");
@@ -83,9 +81,7 @@ var contact_details_tab = {
 		            sortKey:"uploaded_time",
 		            descending: true,
 		            postRenderCallback: function(el) {
-		            	head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
-		            		 $(".document-created-time", el).timeago();
-		              	});
+		            	agileTimeAgoWithLngConversion($(".document-created-time", el));
 		            
 		            }
 		        });
@@ -103,9 +99,8 @@ var contact_details_tab = {
 		            sortKey:"created_time",
 		            descending: true,
 		            postRenderCallback: function(el) {
-		            	head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
-		            		 $(".task-created-time", el).timeago();
-		              	});
+		            	agileTimeAgoWithLngConversion($(".task-created-time", el));
+		            	
 		            	$('li',el).each(function(){
 		            		if($(this).find('.priority_type').text().trim()== "HIGH") {
 		            			$(this).css("border-left","3px solid #f05050");
@@ -132,15 +127,11 @@ var contact_details_tab = {
 	            sortKey:"created_time",
 	            descending: true,
 	            postRenderCallback: function(el) {
-	            	head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
-	            		 $(".deal-created-time", el).timeago();
+	            	agileTimeAgoWithLngConversion($(".deal-created-time", el));
 	            	$(el).find('ul li').each(function(){
-				    $(this).addClass("deal-color");
-				    $(this).addClass($(this).find("input").attr("class"));
+				    	$(this).addClass("deal-color");
+				    	$(this).addClass($(this).find("input").attr("class"));
 			        });
-
-
-	            	})
 	            }
 	        });
 	        dealsView.collection.fetch();
@@ -157,9 +148,7 @@ var contact_details_tab = {
 	            sortKey:"created_time",
 	            descending: true,
 	            postRenderCallback: function(el) {
-	            	head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
-	            		 $(".deal-created-time", el).timeago();
-	            	})
+	            	agileTimeAgoWithLngConversion($(".deal-created-time", el));
 	            }
 	        });
 			casesView.collection.fetch();
@@ -240,11 +229,7 @@ var contact_details_tab = {
 	            individual_tag_name: 'li',
 	            postRenderCallback: function(el)
 	            {
-	            	head.js(LIB_PATH + 'lib/jquery.timeago.js', function() { 
-	        			$(".stats-created-time", el).each(function(index, element) {
-	        				$(element).timeago();
-	        			});
-	    			});
+	            	agileTimeAgoWithLngConversion($(".stats-created-time", el));
 	            	
 	            	var first_model_element = $('#stats-model-list').find('li')[0];
 	            	
@@ -293,10 +278,8 @@ var contact_details_tab = {
 							show_resubscribe_modal();
 
 		            	});
-
-		            	head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
-		              		 $("time.log-created-time", el).timeago();
-		              	});
+		            	agileTimeAgoWithLngConversion($("time.log-created-time", el));
+		            	
 		            	contact_detail_page_infi_scroll($('#contact-dtl', App_Contacts.contactDetailView.el), campaignsView);
 		            },
 		            appendItemCallback : function(el)
@@ -410,13 +393,7 @@ function fetchMails(contact_details_tab_scope,has_email_configured,mail_server_u
 	postRenderCallback : function(el)
 	{
 		$('#mail', App_Contacts.contactDetailView.el).find("#no-email").css('display','block');
-		head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
-		{
-			$(".email-sent-time", el).each(function(index, element)
-			{
-				$(element).timeago();
-			});
-		});
+		agileTimeAgoWithLngConversion($(".email-sent-time", el));
 		
 		if(email_server_type!="agilecrm")
 			contact_details_tab_scope.configured_sync_email = email_server_type;
@@ -526,13 +503,7 @@ function loadAllMailsView(contact_details_tab_scope,has_email_configured,fetched
 	templateKey : "email-social", sort_collection : true, sortKey : "date_secs", descending : true, individual_tag_name : "li",
 	postRenderCallback : function(el)
 	{
-		head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
-		{
-			$(".email-sent-time", el).each(function(index, element)
-			{
-				$(element).timeago();
-			});
-		});
+		agileTimeAgoWithLngConversion($(".email-sent-time", el));
 		
 		if(email_server_type!="agilecrm")
 			contact_details_tab_scope.configured_sync_email = email_server_type;

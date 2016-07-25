@@ -138,10 +138,8 @@ function get_campaign_subscribers_collection(workflow_id, fetch_url, template_ke
 		page_size : 20,
 		postRenderCallback : function(el)
 		{
-			head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
-			{
-				$("time.campaign-started-time", el).timeago();
-				$("time.campaign-completed-time", el).timeago();
+			agileTimeAgoWithLngConversion($("time.campaign-started-time", el));
+			agileTimeAgoWithLngConversion($("time.campaign-completed-time", el), function(){
 				contactListener();
 			});
 

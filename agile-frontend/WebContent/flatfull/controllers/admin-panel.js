@@ -133,11 +133,8 @@ var AdminPanelRouter = Backbone.Router.extend({
 		this.usersListViewCollection = new Base_Collection_View({ url : 'core/api/admin_panel/getParticularDomainUsers?d=' + id, templateKey : "all-domain",
 			individual_tag_name : 'tr', postRenderCallback : function(el)
 			{
-				head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
-				{
-					$(".last-login-time", el).timeago();
-				});
-
+				agileTimeAgoWithLngConversion($(".last-login-time", el));
+				
 				var mod_collection = self.usersListViewCollection.collection.models;
 
 				domainname = mod_collection[0].get('domain');

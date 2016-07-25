@@ -189,10 +189,8 @@ function showChats(data)
 	    		return;
 			$('#clickdesk_chats_panel').html($(template_ui1)); 
 			// Load jquery time ago function to show time ago in chats
-			head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
-			{
-				$(".time-ago", $('#clickdesk_chats_panel')).timeago();
-			});
+			agileTimeAgoWithLngConversion($(".time-ago", $('#clickdesk_chats_panel')));
+			
 		}, "#clickdesk_chats_panel");
 
 
@@ -421,10 +419,7 @@ function showClickDeskTickets(data)
 		$('#clickdesk_tickets_panel').html($(template_ui));
 
 		// Load jquery time ago function to show time ago in tickets
-		head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
-		{
-			$(".time-ago", $('#clickdesk_tickets_panel')).timeago();
-		});
+		agileTimeAgoWithLngConversion($(".time-ago", $('#clickdesk_tickets_panel')));
 
 	}, "#clickdesk_tickets_panel");
 

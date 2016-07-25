@@ -20,9 +20,8 @@ function loadPaypalInvoices(offSet){
 
 		getTemplate('paypal-invoices', result, undefined, function(template_inv){						
 			$('#PayPal').html(template_inv);
-			head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
-				$( ".time-ago", $('#PayPal')).timeago();
-			});
+			agileTimeAgoWithLngConversion($( ".time-ago", $('#PayPal')));
+			
 		},null);
 
 		if(paypalOBJ.invoices && paypalOBJ.invoices.length > 5){

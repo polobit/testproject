@@ -53,9 +53,8 @@ function showXeroClient(contact_id)
 		    	var template = $('#Xero').html($(template_ui)); 
 				console.log("libpath is" + LIB_PATH);
 				console.log(template);
-				head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
-					$(".time-ago", $('#Xero')).timeago();
-				});
+				agileTimeAgoWithLngConversion($(".time-ago", $('#Xero')));
+
 				loadInvoices(0);
 			}, "#Xero");
 		}

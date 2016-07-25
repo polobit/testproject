@@ -322,10 +322,8 @@ var Tickets_Rest={
 			descending : true, 
 			postRenderCallback : function(el)
 			{
-				head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
-				{
-					$(".note-created-time", el).timeago();
-				})
+				agileTimeAgoWithLngConversion($(".note-created-time", el));
+				
 			} 
 		});
 
