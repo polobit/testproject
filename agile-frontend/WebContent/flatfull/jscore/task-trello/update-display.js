@@ -4,7 +4,7 @@ function displaySettings()
 	// Creates normal time.
 	displayTimeAgo($(".task-trello-list"));
 
-	$(".listed-task").parent().addClass("task-striped m-sm ");
+	$(".listed-task").parent().addClass("task-striped m-xs");
 	$(".task-striped").css("padding","0px")
 
 	// Get selected criteria
