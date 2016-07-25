@@ -30,6 +30,7 @@
 <%@page import="com.agilecrm.user.util.UserPrefsUtil"%>
 <%@page import="org.codehaus.jackson.map.ObjectMapper"%>
 <%@page	import="com.agilecrm.knowledgebase.util.KbLandingPageUtil"%>
+<%@page	import="com.agilecrm.knowledgebase.util.KbLandingPageUtil"%>
 <%@page language="java" contentType="text/html; charset=UTF-8"
 pageEncoding="UTF-8"%>
 
@@ -61,10 +62,9 @@ pageEncoding="UTF-8"%>
   String _AGILE_VERSIONd = SystemProperty.applicationVersion.get();
 
   String _VERSION_IDd = VersioningUtil.getVersion();
-  if(kbpage != null){
-	 Long kbpagelp_id ;
-  	kbpagelp_id = kbpage.kb_landing_page_id;
-  }	
+  
+
+  LandingPageKnowledgebase  kblppage = KbLandingPageUtil.get(); 
 %>
 
 <%
@@ -186,7 +186,7 @@ var HANDLEBARS_PRECOMPILATIONd = false || <%=productiond%>;
 
 var CSS_PATHd = '<%=CSS_PATHd%>';
 // var CSS_PATH = "//dpm72z3r2fvl4.cloudfront.net/";
-var kbpagelpid = <%=kbpage.kb_landing_page_id%>;
+var kbpagelpid = <%=kblppage.kb_landing_page_id%>;
 
 var IS_CONSOLE_ENABLEDd = <%=debugd%>;
 var LOCAL_SERVERd = <%=debugd%>;
