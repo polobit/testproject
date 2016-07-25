@@ -58,6 +58,7 @@ $(".trial_strip_close").click(function(e){
 
 $("#clickdesk_live_chat").click(function(e){
 	e.preventDefault();
+	$(this).closest(".dropdown").removeClass("open");
 	CLICKDESK_LIVECHAT.show();
 });
 
