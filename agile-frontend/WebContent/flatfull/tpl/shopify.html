@@ -8,14 +8,14 @@
                 </div>
                 <div class="box-right pull-left">
 					{{#if installed}}
-						<h4 class="m-t-none">Your Agile CRM account is already linked to shop.</h4>
+						<h4 class="m-t-none">{{agile_lng_translate 'widjets' 'your-agile-crm-account-already-to-shop'}}</h4>
 						<div class="text">
-							Please uninstall Agile CRM app from {{shopurl}} and try again.
+							{{agile_lng_translate 'widjets' 'please-uninstall-agilecrm-app'}}{{shopurl}} {{agile_lng_translate 'widjets' 'tyr-again'}}
 						</div>
 					{{else}}
-	                    <h3>Agile CRM's code is successfully installed in your Shopify Store.</h3>
+	                    <h3>{{agile_lng_translate 'widjets' 'your-agilecrm-code-is-sucessfully-installed'}}</h3>
 	                    <div class="text">
-							You can now <a href="#web-rules"> define popups</a> to be shown on your store.
+							 {{agile_lng_translate 'widjets' 'you-can-now'}}<a href="#web-rules"> {{agile_lng_translate 'widjets' 'define-popups'}}</a> {{agile_lng_translate 'widjets' 'to-be-shown-on-your-store'}}
 	                    </div>
 					{{/if}}
                 </div>

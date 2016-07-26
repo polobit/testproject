@@ -32,7 +32,7 @@
     <option value="anyTrack" {{#if_equals track "anyTrack"}} selected="selected" {{/if_equals}}>{{agile_lng_translate 'portlets' 'any'}}</option>
 
     {{#each data}}	
-         <option value='{{id}}' {{#if_equals track "anyTrack"}} selected="selected" {{/if_equals}}>{{agile_lng_translate 'portlets' name}}
+         <option value='{{id}}' {{#if_equals track "anyTrack"}} selected="selected" {{/if_equals}}>{{agile_lng_translate 'portlets' 'name'}}
              </option>
     {{/each}}	
   
@@ -62,7 +62,7 @@
 </script>
 
 <script id="portlets-deals-track-options-template" type="text/html">
-   <option value="{{id}}">{{agile_lng_translate 'portlets' name}}</option>
+   <option value="{{id}}">{{agile_lng_translate 'portlets' 'name'}}</option>
 </script>
 
 <script id="portlets-deals-revenueGraph-options-template" type="text/html">
@@ -136,8 +136,9 @@
 			</div>
 
 				<div class="control-group form-group hide daterange">
-					<label class="control-label col-sm-3">
-						{{agile_lng_translate 'portlets' 'range'}}<span class="field_req">*</span></label>
+
+					<label class="control-label col-sm-3">{{agile_lng_translate 'campaigns' 'range'}}<span class="field_req">*</span></label>
+
 					<div class="controls col-sm-8">
 					<div class="col-sm-5" style="padding:0px"><input type="text" id="start_date" name="start-date"  class="start date required form-control" placeholder="{{agile_lng_translate 'tasks' 'start-date'}}"></input></div>  
 					<div class="col-sm-5" style="padding:0px;margin-left:12px"><input type="text" id="end_date" class="end date required form-control" name="end-date"  placeholder="{{agile_lng_translate 'tasks' 'end-date'}}"></input></div>
@@ -184,8 +185,8 @@
 			</div>
 
 				<div class="control-group form-group hide daterange">
-					<label class="control-label col-sm-3">
-						{{agile_lng_translate 'portlets' 'range'}}<span class="field_req">*</span></label>
+			<label class="control-label col-sm-3">{{agile_lng_translate 'campaigns' 'range'}}<span class="field_req">*</span></label>
+
 					<div class="controls col-sm-8">
 					<div class="col-sm-5" style="padding:0px"><input type="text" id="start_date" name="start-date"  class="start date required form-control" placeholder="{{agile_lng_translate 'tasks' 'start-date'}}"></input></div>  
 					<div class="col-sm-5" style="padding:0px;margin-left:12px"><input type="text" id="end_date" class="end date required form-control" name="end-date"  placeholder="{{agile_lng_translate 'tasks' 'end-date'}}"></input></div>
@@ -251,8 +252,9 @@
 			</div>
 
 				<div class="control-group form-group hide daterange">
-					<label class="control-label col-sm-3">
-						{{agile_lng_translate 'portlets' 'range'}}<span class="field_req">*</span></label>
+
+					<label class="control-label col-sm-3">{{agile_lng_translate 'campaigns' 'range'}}<span class="field_req">*</span></label>
+
 					<div class="controls col-sm-8">
 					<div class="col-sm-5" style="padding:0px"><input type="text" id="start_date" name="start-date"  class="start date required form-control" placeholder="{{agile_lng_translate 'tasks' 'start-date'}}"></input></div>  
 					<div class="col-sm-5" style="padding:0px;margin-left:12px"><input type="text" id="end_date" class="end date required form-control" name="end-date"  placeholder="{{agile_lng_translate 'tasks' 'end-date'}}"></input></div>
@@ -425,8 +427,9 @@
 			</div>
 
 				<div class="control-group form-group hide daterange">
-					<label class="control-label col-sm-3">
-						{{agile_lng_translate 'portlets' 'range'}}<span class="field_req">*</span></label>
+
+					<label class="control-label col-sm-3">{{agile_lng_translate 'campaigns' 'range'}}<span class="field_req">*</span></label>
+
 					<div class="controls col-sm-8">
 					<div class="col-sm-5" style="padding:0px"><input type="text" id="start_date" name="start-date"  class="start date required form-control" placeholder="{{agile_lng_translate 'tasks' 'start-date'}}"></input></div>  
 					<div class="col-sm-5" style="padding:0px;margin-left:12px"><input type="text" id="end_date" class="end date required form-control" name="end-date"  placeholder="{{agile_lng_translate 'tasks' 'end-date'}}"></input></div>
@@ -660,8 +663,9 @@
 			</div>
 
 				<div class="control-group form-group hide daterange">
-					<label class="control-label col-sm-3">
-						{{agile_lng_translate 'portlets' 'range'}}<span class="field_req">*</span></label>
+
+					<label class="control-label col-sm-3">{{agile_lng_translate 'campaigns' 'range'}}<span class="field_req">*</span></label>
+
 					<div class="controls col-sm-8">
 					<div class="col-sm-5" style="padding:0px"><input type="text" id="start_date" name="start-date"  class="start date required form-control" placeholder="{{agile_lng_translate 'tasks' 'start-date'}}"></input></div>  
 					<div class="col-sm-5" style="padding:0px;margin-left:12px"><input type="text" id="end_date" class="end date required form-control" name="end-date"  placeholder="{{agile_lng_translate 'tasks' 'end-date'}}"></input></div>
@@ -708,8 +712,9 @@
 			</div>
 
 				<div class="control-group form-group hide daterange">
-					<label class="control-label col-sm-3">
-						{{agile_lng_translate 'portlets' 'range'}}<span class="field_req">*</span></label>
+
+					<label class="control-label col-sm-3">{{agile_lng_translate 'campaigns' 'range'}}<span class="field_req">*</span></label>
+
 					<div class="controls col-sm-8">
 					<div class="col-sm-5" style="padding:0px"><input type="text" id="start_date" name="start-date"  class="start date required form-control" placeholder="{{agile_lng_translate 'tasks' 'start-date'}}"></input></div>  
 					<div class="col-sm-5" style="padding:0px;margin-left:12px"><input type="text" id="end_date" class="end date required form-control" name="end-date"  placeholder="{{agile_lng_translate 'tasks' 'end-date'}}"></input></div>
@@ -813,8 +818,9 @@
 			</div>
 
 				<div class="control-group form-group hide daterange">
-					<label class="control-label col-sm-3">
-						{{agile_lng_translate 'portlets' 'range'}}<span class="field_req">*</span></label>
+
+					<label class="control-label col-sm-3">{{agile_lng_translate 'campaigns' 'range'}}<span class="field_req">*</span></label>
+
 					<div class="controls col-sm-8">
 					<div class="col-sm-5" style="padding:0px"><input type="text" id="start_date" name="start-date"  class="start date required form-control" placeholder="{{agile_lng_translate 'tasks' 'start-date'}}"></input></div>  
 					<div class="col-sm-5" style="padding:0px;margin-left:12px"><input type="text" id="end_date" class="end date required form-control" name="end-date"  placeholder="{{agile_lng_translate 'tasks' 'end-date'}}"></input></div>
@@ -879,8 +885,9 @@
 
 				<div class="control-group form-group hide daterange">
 					<input type="hidden"></input>
-					<label class="control-label col-sm-3">
-						{{agile_lng_translate 'portlets' 'range'}}<span class="field_req">*</span></label>
+
+					<label class="control-label col-sm-3">{{agile_lng_translate 'campaigns' 'range'}}<span class="field_req">*</span></label>
+
 					<div class="controls col-sm-8">
 					<div class="col-sm-5" style="padding:0px"><input type="text" id="start_date" name="start-date"  class="start date required form-control" placeholder="{{agile_lng_translate 'tasks' 'start-date'}}"></input></div>  
 					<div class="col-sm-5" style="padding:0px;margin-left:12px"><input type="text" id="end_date" class="end date required form-control" name="end-date"  placeholder="{{agile_lng_translate 'tasks' 'end-date'}}"></input></div>
@@ -926,8 +933,9 @@
 			</div>
 
 				<div class="control-group form-group hide daterange">
-					<label class="control-label col-sm-3">
-						{{agile_lng_translate 'portlets' 'range'}}<span class="field_req">*</span></label>
+
+					<label class="control-label col-sm-3">{{agile_lng_translate 'campaigns' 'range'}}<span class="field_req">*</span></label>
+
 					<div class="controls col-sm-8">
 					<div class="col-sm-5" style="padding:0px"><input type="text" id="start_date" name="start-date"  class="start date required form-control" placeholder="{{agile_lng_translate 'tasks' 'start-date'}}"></input></div>  
 					<div class="col-sm-5" style="padding:0px;margin-left:12px"><input type="text" id="end_date" class="end date required form-control" name="end-date"  placeholder="{{agile_lng_translate 'tasks' 'end-date'}}"></input></div>
@@ -975,8 +983,9 @@
 			</div>
 
 				<div class="control-group form-group hide daterange">
-					<label class="control-label col-sm-3">
-						{{agile_lng_translate 'portlets' 'range'}}<span class="field_req">*</span></label>
+
+					<label class="control-label col-sm-3">{{agile_lng_translate 'campaigns' 'range'}}<span class="field_req">*</span></label>
+
 					<div class="controls col-sm-8">
 					<div class="col-sm-5" style="padding:0px"><input type="text" id="start_date" name="start-date"  class="start date required form-control" placeholder="{{agile_lng_translate 'tasks' 'start-date'}}"></input></div>  
 					<div class="col-sm-5" style="padding:0px;margin-left:12px"><input type="text" id="end_date" class="end date required form-control" name="end-date"  placeholder="{{agile_lng_translate 'tasks' 'end-date'}}"></input></div>
@@ -1062,8 +1071,9 @@
 			</div>
 
 				<div class="control-group form-group hide daterange">
-					<label class="control-label col-sm-3">
-						{{agile_lng_translate 'portlets' 'range'}}<span class="field_req">*</span></label>
+
+					<label class="control-label col-sm-3">{{agile_lng_translate 'campaigns' 'range'}}<span class="field_req">*</span></label>
+
 					<div class="controls col-sm-8">
 					<div class="col-sm-5" style="padding:0px"><input type="text" id="start_date" name="start-date"  class="start date required form-control" placeholder="{{agile_lng_translate 'tasks' 'start-date'}}"></input></div>  
 					<div class="col-sm-5" style="padding:0px;margin-left:12px"><input type="text" id="end_date" class="end date required form-control" name="end-date"  placeholder="{{agile_lng_translate 'tasks' 'end-date'}}"></input></div>
@@ -1115,8 +1125,9 @@
 			</div>
 
 				<div class="control-group form-group hide daterange">
-					<label class="control-label col-sm-3">
-						{{agile_lng_translate 'portlets' 'range'}}<span class="field_req">*</span></label>
+
+					<label class="control-label col-sm-3">{{agile_lng_translate 'campaigns' 'range'}}<span class="field_req">*</span></label>
+
 					<div class="controls col-sm-8">
 					<div class="col-sm-5" style="padding:0px"><input type="text" id="start_date" name="start-date"  class="start date required form-control" placeholder="{{agile_lng_translate 'tasks' 'start-date'}}"></input></div>  
 					<div class="col-sm-5" style="padding:0px;margin-left:12px"><input type="text" id="end_date" class="end date required form-control" name="end-date"  placeholder="{{agile_lng_translate 'tasks' 'end-date'}}"></input></div>
@@ -1181,21 +1192,26 @@
 					<select id="duration" name="duration" class="required form-control">
 						<option value="1-day" >{{agile_lng_translate 'portlets' 'today'}}</option>
 						<option value="yesterday" >{{agile_lng_translate 'portlets' 'yesterday'}}</option>
-						<option value="2-days">{{agile_lng_translate 'portlets' 'last-2-days'}}</option>
+
+						<option value="24-hours" >{{agile_lng_translate 'portlets' 'last-24-hours'}}</option>
+
 						<option value="this-week" >{{agile_lng_translate 'portlets' 'this-week'}}</option>
 						<option value="last-week" >{{agile_lng_translate 'portlets' 'last-week'}}</option>
 						<option value="1-week">{{agile_lng_translate 'portlets' 'last-7-days'}}</option>
 						<option value="this-month" >{{agile_lng_translate 'portlets' 'this-month'}}</option>
-						<option value="last-month" >{{agile_lng_translate 'calendar' 'Last Month'}}</option>
+
+						<option value="last-month" >{{agile_lng_translate 'portlets' 'last-month'}}</option>
 						<option value="1-month">{{agile_lng_translate 'portlets' 'last-30-days'}}</option>
-						<option value="Custom" class="Custom_range">{{agile_lng_translate 'campaigns' 'custom'}}</option>
+					<option value="Custom" class="Custom_range">{{agile_lng_translate 'campaigns' 'custom'}}</option>
+
 					</select>
 				</div>
 			</div>
 
 				<div class="control-group form-group hide daterange">
-					<label class="control-label col-sm-3">
-						{{agile_lng_translate 'portlets' 'range'}}<span class="field_req">*</span></label>
+
+					<label class="control-label col-sm-3">{{agile_lng_translate 'campaigns' 'range'}}<span class="field_req">*</span></label>
+
 					<div class="controls col-sm-8">
 					<div class="col-sm-5" style="padding:0px"><input type="text" id="start_date" name="start-date"  class="start date required form-control" placeholder="{{agile_lng_translate 'tasks' 'start-date'}}"></input></div>  
 					<div class="col-sm-5" style="padding:0px;margin-left:12px"><input type="text" id="end_date" class="end date required form-control" name="end-date"  placeholder="{{agile_lng_translate 'tasks' 'end-date'}}"></input></div>
@@ -1207,7 +1223,7 @@
 				<div class="invalid-range"></div></div>
 			</div>
 			<div class="control-group form-group">
-				<label class="control-label col-sm-3">Campaign Type</label>
+				<label class="control-label col-sm-3">{{agile_lng_translate 'portlets' 'campaign-type'}}</label>
 				<div class="controls col-sm-7">
 					<select id="campaign_type" name="campaign_type" class="required form-control">
 						
@@ -1300,8 +1316,9 @@
 			</div>
 
 				<div class="control-group form-group hide daterange">
-					<label class="control-label col-sm-3">
-						{{agile_lng_translate 'portlets' 'range'}}<span class="field_req">*</span></label>
+
+					<label class="control-label col-sm-3">{{agile_lng_translate 'campaigns' 'range'}}<span class="field_req">*</span></label>
+
 					<div class="controls col-sm-8">
 					<div class="col-sm-5" style="padding:0px"><input type="text" id="start_date" name="start-date"  class="start month_date required form-control" placeholder="{{agile_lng_translate 'tasks' 'start-date'}}"></input></div>  
 					<div class="col-sm-5" style="padding:0px;margin-left:12px"><input type="text" id="end_date" class="end month_date required form-control" name="end-date"  placeholder="{{agile_lng_translate 'tasks' 'end-date'}}"></input></div>
@@ -1383,8 +1400,9 @@
 			</div>
 
 				<div class="control-group form-group hide daterange">
-					<label class="control-label col-sm-3">
-						{{agile_lng_translate 'portlets' 'range'}}<span class="field_req">*</span></label>
+
+					<label class="control-label col-sm-3">{{agile_lng_translate 'campaigns' 'range'}}<span class="field_req">*</span></label>
+
 					<div class="controls col-sm-8">
 					<div class="col-sm-5" style="padding:0px"><input type="text" id="start_date" name="start-date"  class="start date required form-control" placeholder="{{agile_lng_translate 'tasks' 'start-date'}}"></input></div>  
 					<div class="col-sm-5" style="padding:0px;margin-left:12px"><input type="text" id="end_date" class="end date required form-control" name="end-date"  placeholder="{{agile_lng_translate 'tasks' 'end-date'}}"></input></div>
@@ -1458,14 +1476,17 @@
 						</option>
 						<option value="this-year">{{agile_lng_translate 'portlets' 'this-year'}}</option>
 						<option value="last-year">{{agile_lng_translate 'portlets' 'last-year'}}</option>
-						<option value="Custom" class="Custom_range">{{agile_lng_translate 'campaigns' 'custom'}}</option>
+
+					<option value="Custom" class="Custom_range">{{agile_lng_translate 'campaigns' 'custom'}}</option>
+
 					</select>
 				</div>
 			</div>
 
 				<div class="control-group form-group hide daterange">
-					<label class="control-label col-sm-3">
-						{{agile_lng_translate 'portlets' 'range'}}<span class="field_req">*</span></label>
+
+					<label class="control-label col-sm-3">{{agile_lng_translate 'campaigns' 'range'}}<span class="field_req">*</span></label>
+
 					<div class="controls col-sm-8">
 					<div class="col-sm-5" style="padding:0px"><input type="text" id="start_date" name="start-date"  class="start date required form-control" placeholder="{{agile_lng_translate 'tasks' 'start-date'}}"></input></div>  
 					<div class="col-sm-5" style="padding:0px;margin-left:12px"><input type="text" id="end_date" class="end date required form-control" name="end-date"  placeholder="{{agile_lng_translate 'tasks' 'end-date'}}"></input></div>
@@ -1514,8 +1535,9 @@
 			</div>
 
 				<div class="control-group form-group hide daterange">
-					<label class="control-label col-sm-3">
-						{{agile_lng_translate 'portlets' 'range'}}<span class="field_req">*</span></label>
+
+					<label class="control-label col-sm-3">{{agile_lng_translate 'campaigns' 'range'}}<span class="field_req">*</span></label>
+
 					<div class="controls col-sm-8">
 					<div class="col-sm-5" style="padding:0px"><input type="text" id="start_date" name="start-date"  class="start date required form-control" placeholder="{{agile_lng_translate 'tasks' 'start-date'}}"></input></div>  
 					<div class="col-sm-5" style="padding:0px;margin-left:12px"><input type="text" id="end_date" class="end date required form-control" name="end-date"  placeholder="{{agile_lng_translate 'tasks' 'end-date'}}"></input></div>
@@ -1611,8 +1633,9 @@
 			</div>
 
 				<div class="control-group form-group hide daterange">
-					<label class="control-label col-sm-3">
-						{{agile_lng_translate 'portlets' 'range'}}<span class="field_req">*</span></label>
+
+					<label class="control-label col-sm-3">{{agile_lng_translate 'campaigns' 'range'}}<span class="field_req">*</span></label>
+
 					<div class="controls col-sm-8">
 					<div class="col-sm-5" style="padding:0px"><input type="text" id="start_date" name="start-date"  class="start date required form-control" placeholder="{{agile_lng_translate 'tasks' 'start-date'}}"></input></div>  
 					<div class="col-sm-5" style="padding:0px;margin-left:12px"><input type="text" id="end_date" class="end date required form-control" name="end-date"  placeholder="{{agile_lng_translate 'tasks' 'end-date'}}"></input></div>
@@ -1660,8 +1683,9 @@
 			</div>
 
 				<div class="control-group form-group hide daterange">
-					<label class="control-label col-sm-3">
-						{{agile_lng_translate 'portlets' 'range'}}<span class="field_req">*</span></label>
+
+					<label class="control-label col-sm-3">{{agile_lng_translate 'campaigns' 'range'}}<span class="field_req">*</span></label>
+
 					<div class="controls col-sm-8">
 					<div class="col-sm-5" style="padding:0px"><input type="text" id="start_date" name="start-date"  class="start date required form-control" placeholder="{{agile_lng_translate 'tasks' 'start-date'}}"></input></div>  
 					<div class="col-sm-5" style="padding:0px;margin-left:12px"><input type="text" id="end_date" class="end date required form-control" name="end-date"  placeholder="{{agile_lng_translate 'tasks' 'end-date'}}"></input></div>
@@ -1748,20 +1772,21 @@
 					<select id="duration" name="duration" class="required form-control">
 						<option value="1-day" >{{agile_lng_translate 'portlets' 'today'}}</option>
 						<option value="yesterday" >{{agile_lng_translate 'portlets' 'yesterday'}}</option>
+
 						<option value="24-hours" >{{agile_lng_translate 'portlets' 'last-24-hours'}}</option>
 						<option value="this-week" >{{agile_lng_translate 'portlets' 'this-week'}}</option>
 						<option value="1-week">{{agile_lng_translate 'portlets' 'last-7-days'}}</option>
 						<option value="this-month" >{{agile_lng_translate 'portlets' 'this-month'}}</option>
 						<option value="last-month" >{{agile_lng_translate 'calendar' 'Last Month'}}</option>
 						<option value="1-month">{{agile_lng_translate 'portlets' 'last-30-days'}}</option>
-						<option value="Custom" class="Custom_range">{{agile_lng_translate 'campaigns' 'custom'}}</option>
-					</select>
+						<option value="Custom" class="Custom_range">{{agile_lng_translate 'campaigns' 'custom'}}</option>					</select>
 				</div>
 			</div>
 
 				<div class="control-group form-group hide daterange">
-					<label class="control-label col-sm-3">
-						{{agile_lng_translate 'portlets' 'range'}}<span class="field_req">*</span></label>
+
+					<label class="control-label col-sm-3">{{agile_lng_translate 'campaigns' 'range'}}<span class="field_req">*</span></label>
+
 					<div class="controls col-sm-8">
 					<div class="col-sm-5" style="padding:0px"><input type="text" id="start_date" name="start-date"  class="start date required form-control" placeholder="{{agile_lng_translate 'tasks' 'start-date'}}"></input></div>  
 					<div class="col-sm-5" style="padding:0px;margin-left:12px"><input type="text" id="end_date" class="end date required form-control" name="end-date"  placeholder="{{agile_lng_translate 'tasks' 'end-date'}}"></input></div>

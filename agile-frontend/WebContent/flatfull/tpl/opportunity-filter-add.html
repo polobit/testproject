@@ -5,7 +5,7 @@
 			<span style="vertical-align: text-top; margin-left: -3px"> <img border="0" src="/img/help.png" style="height: 6px;" rel="popover" data-placement="bottom" data-content="{{agile_lng_translate 'deal-view' 'edit-deal-filter-popover-content-1'}}" id="element" data-trigger="hover"></span>
 		</h3>
 	{{else}}
-        <h3 class="formheading h3 font-thin m-n"><i class="icon-plus-sign"></i> Add Deal Filter
+        <h3 class="formheading h3 font-thin m-n"><i class="icon-plus-sign"></i> {{agile_lng_translate 'deals' 'add-deal-filter'}}
         	<span style="vertical-align: text-top; margin-left: -3px"> <img border="0" src="/img/help.png" style="height: 6px;" rel="popover" data-placement="bottom" data-content="{{agile_lng_translate 'deal-view' 'edit-deal-filter-popover-content-1'}}" id="element" data-trigger="hover">
 			</span>
 		</h3>
@@ -20,7 +20,7 @@
 						<div class="control-group form-group">
 							<label class="control-label col-sm-2">{{agile_lng_translate 'other' 'name'}}<span class="field_req">*</span></label>
 							<div class="controls col-sm-8">
-								<input type="text" name="name" class="required form-control" maxlength="120" placeholder="Max Length: 120" />
+								<input type="text" name="name" class="required form-control" maxlength="120" placeholder="{{agile_lng_translate 'opportunity' 'place-holder-length'}}" />
 							</div>
 						</div>
 					</div> -->
@@ -67,36 +67,32 @@
 						</div>
 					</div>
 					<div class="control-group form-group" id="deal-close-date">
-						<label class="control-label col-sm-2">Close Date</label>
+						<label class="control-label col-sm-2">{{agile_lng_translate 'deal-view' 'close-date'}}</label>
 						<div class="controls col-sm-2" id="value_div">
 								<div id="deal-cd-condition" name="CONDITION">
 												<select name="close_date_filter" class="form-control deal-cd-value" id="cdCondtion">								
-													<option value="ON" class="updated_time created_time last_contacted last_emailed last_called last_campaign_emaild">on</option>
-													<option value="AFTER" class="created_time updated_time last_contacted last_emailed last_called last_campaign_emaild">is
-														after</option>
-													<option value="BEFORE" class="created_time updated_time last_contacted last_emailed last_called last_campaign_emaild">is
-														before</option>
-													<option value="BETWEEN" class="created_time updated_time last_contacted last_emailed last_called last_campaign_emaild">is
-														between</option>
-													<option value="LAST" class="created_time updated_time last_contacted last_emailed last_called last_campaign_emaild">in
-														last</option>
-													<option value="NEXT" class="created_time updated_time">in next
-														</option>												
+													<option value="ON" class="updated_time created_time last_contacted last_emailed last_called last_campaign_emaild">{{agile_lng_translate 'contacts-view' 'on'}}</option>
+													<option value="AFTER" class="created_time updated_time last_contacted last_emailed last_called last_campaign_emaild">{{agile_lng_translate 'contacts-view' 'is-after'}}</option>
+													<option value="BEFORE" class="created_time updated_time last_contacted last_emailed last_called last_campaign_emaild">{{agile_lng_translate 'contacts-view' 'is-before'}}</option>
+													<option value="BETWEEN" class="created_time updated_time last_contacted last_emailed last_called last_campaign_emaild">{{agile_lng_translate 'contacts-view' 'is-between'}}</option>
+													<option value="LAST" class="created_time updated_time last_contacted last_emailed last_called last_campaign_emaild">{{agile_lng_translate 'contacts-view' 'in-last'}}</option>
+													<option value="NEXT" class="created_time updated_time">
+														{{agile_lng_translate 'contacts-view' 'in-next'}}</option>												
 												</select>
 								</div>
 						</div>
 						<div class="controls col-sm-2  between">
 							<div id="deal-cd-rhs" class="rhs" name="RHS">										
-								<input id="deal-cd-first" type="text" name="close_date_start" class="ON AFTER BEFORE BETWEEN input date form-control" placeholder="Select Date" data-date-format="Select Date">
+								<input id="deal-cd-first" type="text" name="close_date_start" class="ON AFTER BEFORE BETWEEN input date form-control" placeholder="{{agile_lng_translate 'contacts-view' 'select-date'}}" data-date-format="Select Date">
 											</div>
 						</div>
 						<div class="controls col-sm-2 hide between"> 
 							<div id="deal-cd-rhs-new" name="RHS_NEW">
-								<input id="deal-cd-second" type="text" name="close_date_end" class="ON AFTER BEFORE BETWEEN input date form-control" placeholder="Select Date" data-date-format="Select Date">
+								<input id="deal-cd-second" type="text" name="close_date_end" class="ON AFTER BEFORE BETWEEN input date form-control" placeholder="{{agile_lng_translate 'contacts-view' 'select-date'}}" data-date-format="Select Date">
 							</div>
 						</div>
 						<div class="controls col-sm-2 equals hide">
-							<input type="number" id="cd-value" name="close_date_value" placeholder="Number of days" class="equals form-control positive_number">
+							<input type="number" id="cd-value" name="close_date_value" placeholder="{{agile_lng_translate 'contacts-view' 'number-of-days'}}" class="equals form-control positive_number">
 						</div>
 					</div>
 					<div class="control-group form-group">
