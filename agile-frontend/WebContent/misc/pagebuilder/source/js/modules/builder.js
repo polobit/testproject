@@ -1,5 +1,5 @@
 (function () {
-	"use strict";
+    "use strict";
 
     var siteBuilderUtils = require('./utils.js');
     var bConfig = require('./config.js');
@@ -7,7 +7,7 @@
     var publisher = require('../vendor/publisher');
 
 
-	 /*
+     /*
         Basic Builder UI initialisation
     */
     var builderUI = {
@@ -1095,7 +1095,6 @@
             globalCheckbox.checked = this.global;
             globalLabel.appendChild(globalCheckbox);
             var globalText = document.createTextNode('Global');
-            globalLabel.style.display='none';
             globalLabel.appendChild(globalText);
 
             var trigger = document.createElement('span');
@@ -1337,7 +1336,7 @@
 
             //enable draggable on the LI
             $(this.parentLI.parentNode).sortable('enable');
-		
+        
             //delete the errorDrawer
             $(this.parentLI.nextSibling).remove();
         
@@ -1653,8 +1652,8 @@
         divFrameWrapper: document.getElementById('frameWrapper'),
         
         skeleton: document.getElementById('skeleton'),
-		
-		autoSaveTimer: {},
+        
+        autoSaveTimer: {},
         
         init: function() {
 
@@ -1704,7 +1703,7 @@
             $.getJSON(appUI.siteUrl+"core/api/forms", function(respData){
                
                for(var i=0;i<respData.length;i++){
-                 $('#agileform_id').append("<option value=" + window.CURRENT_AGILE_DOMAIN +"_"+respData[i].id +">"+respData[i].formName+"</option>");
+                 $('#agileform_id').append("<option value= "+respData[i].id +">"+respData[i].formName+"</option>");
                }    
                 
             }).fail(function(jqXHR) {
@@ -1761,8 +1760,8 @@
             if(site.pendingChanges) {
                 site.save(false);
             }
-			
-			window.clearInterval(this.autoSaveTimer);
+            
+            window.clearInterval(this.autoSaveTimer);
             this.autoSaveTimer = setTimeout(site.autoSave, bConfig.autoSaveTimeout);
         
         },
@@ -1772,10 +1771,10 @@
             this.pendingChanges = value;
             
             if( value === true ) {
-				
-				//reset timer
-				window.clearInterval(this.autoSaveTimer);
-            	this.autoSaveTimer = setTimeout(site.autoSave, bConfig.autoSaveTimeout);
+                
+                //reset timer
+                window.clearInterval(this.autoSaveTimer);
+                this.autoSaveTimer = setTimeout(site.autoSave, bConfig.autoSaveTimeout);
                 
                 $('#savePage .bLabel').text("Save now (!)");
                 
@@ -1784,11 +1783,11 @@
                     site.activePage.status = 'changed';
                     
                 }
-			
+            
             } else {
-	
+    
                 $('#savePage .bLabel').text("Nothing to save");
-				
+                
                 site.updatePageStatus('');
 
             }
@@ -1804,12 +1803,12 @@
 
             //disable button
             $("a#savePage").addClass('disabled');
-	
+    
             //remove old alerts
             $('#errorModal .modal-body > *, #successModal .modal-body > *').each(function(){
                 $(this).remove();
             });
-	
+    
             site.prepForSave(false);
             
             var serverData = {};
@@ -1872,10 +1871,10 @@
                 contentType: "application/json",
                 data: JSON.stringify(pageObject),
             }).done(function(res){
-	
+    
                 //enable button
                 $("a#savePage").removeClass('disabled');
-	
+    
                 if(res.id) {
 
                     appUI.agilePageId = res.id;

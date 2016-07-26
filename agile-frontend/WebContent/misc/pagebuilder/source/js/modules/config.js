@@ -1,5 +1,5 @@
 (function () {
-	"use strict";
+    "use strict";
         
     module.exports.pageContainer = "#page";
     
@@ -16,9 +16,9 @@
         '.social a': ['color'],
         '.bg.bg1, .bg.bg2, .header10, .header11': ['background-image', 'background-color'],
         '.frameCover': [],
-        '.editContent': ['color', 'font-size', 'background-color', 'font-family'],
+        '.editContent': ['content', 'color', 'font-size', 'background-color', 'font-family'],
         'a.btn, button.btn': ['border-radius', 'font-size', 'background-color'],
-        '#pricing_table2 .pricing2 .bottom li': ['color', 'font-size', 'background-color', 'font-family']
+        '#pricing_table2 .pricing2 .bottom li': ['content']
     };
     
     module.exports.editableItemOptions = {
