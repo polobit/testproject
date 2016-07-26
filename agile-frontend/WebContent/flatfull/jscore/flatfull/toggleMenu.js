@@ -56,6 +56,12 @@ $(".trial_strip_close").click(function(e){
 	_agile_set_prefs("free_trial_time", parseInt(new Date().getTime()/1000));
 });
 
+$("#clickdesk_live_chat").click(function(e){
+	e.preventDefault();
+	$(this).closest(".dropdown").removeClass("open");
+	CLICKDESK_LIVECHAT.show();
+});
+
 if(!agile_is_mobile_browser() && USER_BILLING_PREFS.freeTrialStatus && USER_BILLING_PREFS.freeTrialStatus == "TRIALING" && USER_BILLING_PREFS.freeTrialEnd > parseInt(new Date().getTime()/1000))
 {
 	var oldTime =  _agile_get_prefs("free_trial_time");

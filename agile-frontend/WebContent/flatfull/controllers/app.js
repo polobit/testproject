@@ -171,7 +171,7 @@ function executeWebRulesOnRoute(){
 }
 
 $(document).ready(function(){
-
+  load_clickdesk_code();
   setTimeout(function(){$(".modal-header .close").html("&times;");}, 1000);
 });
 
