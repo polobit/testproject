@@ -72,8 +72,10 @@ var _agile_synch_form_v4 = function()
            /*
            *for multiple checkboxes in the custome field selection
            */
-			else if(agile_form[i].checked &&(field_type == "checkbox" && agile_tags))
-			   {
+			else if(agile_form[i].checked &&(field_type == "checkbox" && (agile_tags ==undefined || agile_tags )))
+			{
+			   
+
 				if (agile_multiple_checkbox){
 					agile_multiple_checkbox = agile_multiple_checkbox + ',' + field_value;
 				}
