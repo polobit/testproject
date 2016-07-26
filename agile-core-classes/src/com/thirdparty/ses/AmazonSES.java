@@ -182,7 +182,7 @@ public class AmazonSES
 	 	{
 	        BodyPart textPart = new MimeBodyPart();
 	        
-	        textPart.setContent(text, "text/plain");
+	        textPart.setContent(text, "text/plain; charset=utf-8");
 	        
 	        mimeBodyPart.addBodyPart(textPart);
 	 	}
@@ -191,7 +191,7 @@ public class AmazonSES
 	 	{
             BodyPart htmlPart = new MimeBodyPart();
 	     
-	        htmlPart.setContent(html,"text/html");
+	        htmlPart.setContent(html,"text/html; charset=utf-8");
 	        
 	        mimeBodyPart.addBodyPart(htmlPart);
 	 	}
