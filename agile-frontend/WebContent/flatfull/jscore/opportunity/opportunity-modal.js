@@ -696,6 +696,11 @@ function saveDeal(formId, modalId, saveBtn, json, isUpdate)
 		enable_save_button($(saveBtn));// $(saveBtn).removeAttr('disabled');
 		return false;
 	}
+	if(!ValidateDealDiscountAmt('#' + formId))
+	{
+		enable_save_button($(saveBtn));// $(saveBtn).removeAttr('disabled');
+		return false;
+	}	
 
 	// Shows loading symbol until model get saved
 	// $('#' + modalId).find('span.save-status').html(getRandomLoadingImg());

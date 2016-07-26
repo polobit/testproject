@@ -191,8 +191,8 @@ function saveDocument(form_id, modal_id, saveBtn, isUpdate, json, contact_id)
 		success : function(data) {
 			// reset document size 
 			CUSTOM_DOCUMENT_SIZE = 0;
-
-			if(data.doc_type=="SENDDOC")
+			var document = data.toJSON();
+			if(document.doc_type=="SENDDOC")
 			{
 				$(".email-send-doc",'#uploadDocumentForm,#uploadDocumentUpdateForm').removeClass("hide");				
 			}
@@ -217,7 +217,7 @@ function saveDocument(form_id, modal_id, saveBtn, isUpdate, json, contact_id)
 			//if(form_id)
 			//	$('#' + modal_id).modal('hide');
 			
-			var document = data.toJSON();
+			
 			add_recent_view(new BaseModel(document));
 			
 			// Updates data to timeline
@@ -254,14 +254,22 @@ function saveDocument(form_id, modal_id, saveBtn, isUpdate, json, contact_id)
 									return false;
 							}
 						});	
-						//var sURL="contact/" + App_Contacts.contactDetailView.model.get('id');
-						//Backbone.history.navigate(sURL, { trigger : true });
+						if(document.doc_type!="SENDDOC")
+						{
+							var sURL="contact/" + App_Contacts.contactDetailView.model.get('id');
+							Backbone.history.navigate(sURL, { trigger : true });	
+						}
+						
 						return;	
 					}
 					else if( Current_Route.indexOf( App_Contacts.contactDetailView.model.get('id'))>-1)
 					{
-						//var sURL="contact/" + App_Contacts.contactDetailView.model.get('id');
-						//Backbone.history.navigate(sURL, { trigger : true });
+						if(document.doc_type!="SENDDOC")
+						{
+							var sURL="contact/" + App_Contacts.contactDetailView.model.get('id');
+							Backbone.history.navigate(sURL, { trigger : true });
+						}
+						
 						return;
 					}		
 					
@@ -310,15 +318,23 @@ function saveDocument(form_id, modal_id, saveBtn, isUpdate, json, contact_id)
 									return false;
 							}
 						});	
-						//var sURL="company/" + App_Companies.companyDetailView.model.get('id');
-						//Backbone.history.navigate(sURL, { trigger : true });
+						if(document.doc_type!="SENDDOC")
+						{
+							var sURL="company/" + App_Companies.companyDetailView.model.get('id');
+							Backbone.history.navigate(sURL, { trigger : true });	
+						}	
+						
 						return;	
 					}
 					else if( Current_Route.indexOf( App_Companies.companyDetailView.model.get('id'))>-1)
 					{
 						company_util.updateDocumentsList(document,true);
-						//var sURL="company/" + App_Companies.companyDetailView.model.get('id');
-						//Backbone.history.navigate(sURL, { trigger : true });
+						if(document.doc_type!="SENDDOC")
+						{
+							var sURL="company/" + App_Companies.companyDetailView.model.get('id');
+							Backbone.history.navigate(sURL, { trigger : true });	
+						}
+						
 						return;
 					}				
 					
@@ -349,8 +365,12 @@ function saveDocument(form_id, modal_id, saveBtn, isUpdate, json, contact_id)
 								return false;			
 							}
 						});
-						//var sURL="deal/" + App_Deal_Details.dealDetailView.model.id ;
-						//Backbone.history.navigate(sURL, { trigger : true });
+						
+						if(document.doc_type!="SENDDOC")
+						{
+							var sURL="deal/" + App_Deal_Details.dealDetailView.model.id ;
+							Backbone.history.navigate(sURL, { trigger : true });	
+						}
 						return;			
 						
 					}
@@ -366,7 +386,11 @@ function saveDocument(form_id, modal_id, saveBtn, isUpdate, json, contact_id)
 				App_Documents.DocumentCollectionView.collection.add(data);
 
 				App_Documents.DocumentCollectionView.render(true);
-					//App_Documents.navigate("documents", {trigger : true});
+				if(document.doc_type!="SENDDOC")
+				{
+					App_Documents.navigate("documents", {trigger : true});
+				}
+					
 				return;	
 
 			}
@@ -374,12 +398,21 @@ function saveDocument(form_id, modal_id, saveBtn, isUpdate, json, contact_id)
 			{
 				$('#tpl-attachment-select').find('select').find('option:last').after("<option value="+document.id+" selected='selected'>"+document.name+"</option>");
 				$('.add-tpl-attachment-confirm').trigger("click");
-				//App_Settings.navigate(Current_Route, {trigger : true});
+				if(document.doc_type!="SENDDOC")
+				{
+					App_Settings.navigate(Current_Route, {trigger : true});	
+				}
+				
 			}
 			else 
 			{
-				//App_Documents.navigate("documents", {trigger : true});
+				if(document.doc_type!="SENDDOC")
+				{
+					App_Documents.navigate("documents", {trigger : true});		
+				}
+				
 			}
+
 		},
 		error : function(model, response)
 		{

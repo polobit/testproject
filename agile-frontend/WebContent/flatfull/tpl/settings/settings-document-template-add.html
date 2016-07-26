@@ -41,6 +41,7 @@
                            			<div id="loading-editor"></div>
                            			<textarea class="form-control col-md-6 required" style=" display: none;" name="text" id="document-template-html" placeholder="Document template html"></textarea>
             					</div>
+                                <span class="doc-template-error-status pull-left " style="color:#d9534f;margin-right:20px;"></span>
                             </div>
         				</div>
                         <div class="row">
@@ -52,7 +53,7 @@
                              <div class="form-actions col-sm-offset-3 col-md-12">
                        			
                        			<a type="reset" href='#document-templates' class="btn btn-default btn-sm">Cancel</a>
-                                <button type="submit" class="save btn btn-sm  btn-primary">{{#if id}}Save Changes {{else}}Save {{/if}}</button>
+                                <button type="button" class="save-doc-template save saveAuth btn btn-sm  btn-primary">{{#if id}}Save Changes {{else}}Save {{/if}}</button>
                              </div>   
                  		</div>
 

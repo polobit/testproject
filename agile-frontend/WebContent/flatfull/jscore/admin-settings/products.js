@@ -37,7 +37,9 @@ var admin_products = {
 					product_model_json.set(model);	
 				else	
 					App_Admin_Settings.productsGridView.collection.add(model);
-
+				
+				if($("#admin-settings-products-model-list > tr").length >0)
+						$('.product-header').removeClass("hide")
 			},
 			errorCallback : function(response)
 			{
@@ -59,6 +61,9 @@ var admin_products = {
 }	
 function initializeAdminProductsListners(el)
 {
+
+	if($("#admin-settings-products-model-list > tr").length >0)
+		$('.product-header').removeClass("hide")
 	$('#milestone-listner').off();	
 	$('#milestone-listner a[href="#product-add"]').on('click', function(e) {
 		e.preventDefault();

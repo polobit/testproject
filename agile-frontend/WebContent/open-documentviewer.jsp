@@ -59,9 +59,11 @@ Long dContactId= Long.parseLong(sContactId);
 Document document =DocumentUtil.getDocument(dDocumentId);
 List<DocumentNote> notes=null;
 String sContactName="";
+String bDocumentFound="0";
 if(document!=null)
 {
 
+	 bDocumentFound="1";
 	 notes= DocumentNoteUtil.getDocumentsNotes(sDocumentId,0,null);
 	 if(notes!=null)
 	 {
@@ -84,8 +86,6 @@ if(document!=null)
 	user_name = domainUser.name;
 	user_id = domainUser.id;
 	agile_user_id = agileUser.id;
-	
-
 }
 
 
@@ -125,7 +125,7 @@ var d_name=<%=mapper.writeValueAsString(d_name)%>;
 var contact_id=<%=mapper.writeValueAsString(sContactId)%>;
 var contact_name=<%=mapper.writeValueAsString(sContactName)%>;
 var document_id=<%=mapper.writeValueAsString(sDocumentId)%>;
-
+var sDocumentFound=<%=bDocumentFound%>;
 var subject=<%=mapper.writeValueAsString(sNoteSubject)%>
  </script>
 <style type="text/css">
@@ -170,81 +170,84 @@ var subject=<%=mapper.writeValueAsString(sNoteSubject)%>
 </head>
 
 <body onload="bodyLoad();" style="width:100%;height:100%;overflow:hidden;" >
-
-
-<div class="wrapper-md lter bg-light b-b">
-           <div class="row">
-               <div class="col-md-12 col-sm-12 col-xs-12" id="document-add">
-                       <h3 class="pull-left font-thin h3"><%=docTitle%></h3>
-                      
-               </div>
-           </div>
-</div>
-<div class="hbox hbox-auto-xs bg-light  ng-scope" >
-  <!-- column -->
-	 <div class="col" style="height:90%;">
-	   <div class="vbox">
-	     <div class="row-row">
-	       <div class="cell" style="height:90%;">
-	         <div class="cell-inner">
-	           <div class="wrapper-md">
-	            <div class="col-md-8 col-sm-12 col-xs-12 container panel panel-default col-md-offset-2">
-					<!-- Container Div -->
-					<div class="panel-body">
-					<!-- Left Div -->
-					<div class="col-md-12">
-					<%=htmlContent%>
-					</div>
-					<!-- Right Div -->
-					<div class="col-md-4"></div>
-					</div>
-					</div>
+	<div class="document-empty" style="display:none;">
+			<h1><center>Document Not Available</center></h1>
+	</div>		
+	<div class="wrapper-md lter bg-light b-b document-content">
+	           <div class="row">
+	               <div class="col-md-12 col-sm-12 col-xs-12" id="document-add">
+	                       <h3 class="pull-left font-thin h3"><%=docTitle%></h3>
+	                      
+	               </div>
 	           </div>
-	         </div>
-	       </div>
-	     </div>
-	   </div>
-	 </div>
-	 <!-- /column -->
-
-	  <!-- column -->
-	 <div class="col w-md lter b-l" style="height:90%;">
-		   <div class="vbox" style="height:85%;">
-			     <div class="wrapper b-b b-light">
-			       <div class="font-thin h4">Comments History</div>
-			     </div>
-			     <div class="row-row">
-				       <div class="cell">
-				         <div class="cell-inner">
-				           <div class="wrapper-md comments-history">
-								<% if(notes!=null ){ for(DocumentNote note:notes){ %>
-								             <ul class="list-group">
-								<li class="list-group-item document-notes"><p class="line-clamp line-clamp-3 activity-tag" style="word-wrap: break-word;overflow:hidden;" title="<%=note.description %>" ><%=note.description %></p>
-									<small class="block text-muted"> 
-					                    	<div class="m-b-none text-flow-ellipsis line-clamp">by <%=note.getcommenter_name()%></div>
-					                    	<small class="block text-muted"><i class="fa fa-fw fa-clock-o"></i> <time 	class="timeago" datetime="<%=note.created_time %>"><%=note.created_time%></time></small>
-				                    </small>
-								
-								</li>
-								</ul>
-								<%};} %>
-				           </div>
-				         </div>
-				       </div>
-			     </div>
-			     <div class="padder b-t  text-center">
-				       <div class="m-t-sm"><div class="row">
-				       		<textarea class="inputtext " rows="6" id="comments" name="notes" placeholder="Comments"></textarea>
-							<text id="contact_id" name="subject" type="hidden" value="<%=sContactId%>"></text>
-							<text id="subject" name="subject" type="hidden" value="<%=sNoteSubject%>"></text>
-						</div>
-						<div class="row">
-							<a  class="text-info" id="send-comments"><i class="icon-envelope-alt"></i> Send Comments</a>
-						</div>
-				</div>
-		    </div>
-	   </div>
 	</div>
+		<div class="hbox hbox-auto-xs bg-light  ng-scope document-content" >
+		  <!-- column -->
+			 <div class="col" style="height:90%;">
+			   <div class="vbox">
+			     <div class="row-row">
+			       <div class="cell" style="height:90%;">
+			         <div class="cell-inner">
+			           <div class="wrapper-md">
+			            <div class="col-md-8 col-sm-12 col-xs-12 container panel panel-default col-md-offset-2">
+							<!-- Container Div -->
+							<div class="panel-body">
+							<!-- Left Div -->
+							<div class="col-md-12">
+							<%=htmlContent%>
+							</div>
+							<!-- Right Div -->
+							<div class="col-md-4"></div>
+							</div>
+							</div>
+			           </div>
+			         </div>
+			       </div>
+			     </div>
+			   </div>
+			 </div>
+			 <!-- /column -->
+
+			  <!-- column -->
+			 <div class="col w-md lter b-l" style="height:90%;">
+				   <div class="vbox" style="height:85%;">
+					     <div class="wrapper b-b b-light">
+					       <div class="font-thin h4">Comments History</div>
+					     </div>
+					     <div class="row-row">
+						       <div class="cell">
+						         <div class="cell-inner">
+						           <div class="wrapper-md comments-history">
+										<% if(notes!=null ){ for(DocumentNote note:notes){ %>
+										             <ul class="list-group">
+										<li class="list-group-item document-notes"><p class="line-clamp line-clamp-3 activity-tag" style="word-wrap: break-word;overflow:hidden;" title="<%=note.description %>" ><%=note.description %></p>
+											<small class="block text-muted"> 
+							                    	<div class="m-b-none text-flow-ellipsis line-clamp">by <%=note.getcommenter_name()%></div>
+							                    	<small class="block text-muted"><i class="fa fa-fw fa-clock-o"></i> <time 	class="timeago" datetime="<%=note.created_time %>"><%=note.created_time%></time></small>
+						                    </small>
+										
+										</li>
+										</ul>
+										<%};} %>
+						           </div>
+						         </div>
+						       </div>
+					     </div>
+					     <div class="padder b-t  text-center">
+						       <div class="m-t-sm"><div class="row">
+						       		<textarea class="inputtext " rows="6" id="comments" name="notes" placeholder="Comments"></textarea>
+									<text id="contact_id" name="subject" type="hidden" value="<%=sContactId%>"></text>
+									<text id="subject" name="subject" type="hidden" value="<%=sNoteSubject%>"></text>
+								</div>
+								<div class="row">
+									<a  class="text-info" id="send-comments"><i class="icon-envelope-alt"></i> Send Comments</a>
+								</div>
+								<span class="doc-comment-error-status  " style="color:#d9534f;"></span>
+						</div>
+				    </div>
+			   </div>
+			</div>
+	
  <!-- /column -->
  <!-- /column -->
 <script type="text/javascript">
@@ -261,6 +264,10 @@ function bodyLoad()
 		$(document).ready(
 				function()
 				{
+					if(sDocumentFound=="0"){
+						$(".document-empty").css("display","block");
+						$(".document-content").css("display","none");
+					}
 					$(".document-notes").each(function(){
 								var sEpochTime =$("time", this).attr("datetime")
 								var format = "mmm dd yyyy HH:MM:ss"
@@ -281,9 +288,11 @@ function bodyLoad()
 						var sCommentsVal=$("#comments").val();
 						if(!sCommentsVal.trim())
 						{
-							alert("Enter comments");
+							$(".doc-comment-error-status").html("Comments is required.")
 							return;
 						}
+						else
+							$(".doc-comment-error-status").html("")
 						var doc_json={"description":$("#comments").val(),
 							"contact_id": contact_id,
 								"commenter_id": contact_id,

@@ -128,13 +128,15 @@
                 </div>
                 <div class="padder b-t  text-center">
                          <div class="m-t-sm"><div class="row">
-                              <textarea class="inputtext " rows="6" id="comments" name="notes" placeholder="Comments"></textarea>
+                              <textarea class="inputtext " cols="40" rows="6" id="comments" name="notes" placeholder="Comments"></textarea>
                               <text id="contact_id" name="subject" type="hidden" value="<%=sContactId%>"></text>
                               <text id="subject" name="subject" type="hidden" value="<%=sNoteSubject%>"></text>
                           </div>
                           <div class="row">
-                              <a  class="text-info" data="{{id}}" id="document-send-comments"><i class="icon-envelope-alt"></i> Send Comments</a>
+                              <a  class="text-info" data="{{id}}" id="document-send-comments"><i class1="icon-envelope-alt"></i> Send Comments</a>
+
                           </div>
+                          <span class="doc-comment-error-status  " style="color:#d9534f;"></span>
                   </div>
          </div>
        </form>

@@ -390,9 +390,11 @@ function initializeDocumentsListeners()
 						var sCommentsVal=$("#comments",'#uploadDocumentUpdateForm,#uploadDocumentForm').val();
 						if(!sCommentsVal.trim())
 						{
-							alert("Enter comments");
-							return;
+							$(".doc-comment-error-status",'#uploadDocumentUpdateForm,#uploadDocumentForm').html("Comments is required.")
+  							return;
 						}
+						else
+							$(".doc-comment-error-status",'#uploadDocumentUpdateForm,#uploadDocumentForm').html("")
 						var doc_json={"description":sCommentsVal,
 							"contact_id": "",
 							"commenter_id": CURRENT_DOMAIN_USER.id,
@@ -509,64 +511,8 @@ function initializeDocumentsListeners()
 	$('#uploadDocumentUpdateForm,#uploadDocumentForm').on('click', '.cancel-document', function(e)
 	{
  		e.preventDefault();
-
- 		if (App_Contacts.contactDetailView)
-		{
-				if(Current_Route.indexOf( "contact")>-1)	
-				{
-					var sURL="contact/" + App_Contacts.contactDetailView.model.get('id');
-					Backbone.history.navigate(sURL, { trigger : true });
-					return;			
-				}
-				else if( Current_Route.indexOf( App_Contacts.contactDetailView.model.get('id'))>-1)
-				{
-					var sURL="contact/" + App_Contacts.contactDetailView.model.get('id');
-					Backbone.history.navigate(sURL, { trigger : true });
-					return;
-				}
-		}
-		if (App_Companies.companyDetailView)
-		{
-			if(Current_Route.indexOf( "company")>-1)	
-			{
-				var sURL="company/" + App_Companies.companyDetailView.model.get('id');
-				Backbone.history.navigate(sURL, { trigger : true });
-				return;	
-			}
-			else if( Current_Route.indexOf( App_Companies.companyDetailView.model.get('id'))>-1)
-			{
-				company_util.updateDocumentsList(document,true);
-				var sURL="company/" + App_Companies.companyDetailView.model.get('id');
-				Backbone.history.navigate(sURL, { trigger : true });
-				return;
-			}		
-		}
-		if (App_Deal_Details.dealDetailView)
-		{
-				if((Current_Route.indexOf( "deal" + "/" +App_Deal_Details.dealDetailView.model.id)>-1) ||	( Current_Route.indexOf( App_Deal_Details.dealDetailView.model.get('id'))>-1))
-				{
-					var sURL="deal/" + App_Deal_Details.dealDetailView.model.id ;
-					Backbone.history.navigate(sURL, { trigger : true });
-					return;			
-				}
-		}		
-		if (Current_Route == 'documents') 
-		{
-			App_Documents.navigate("documents", {trigger : true});
-				return;
-		}	
-		if (Current_Route == "email-template-add" || Current_Route.indexOf("email-template") == 0) 
-		{
-			App_Settings.navigate(Current_Route, {
-					trigger : true
-				});
-		}
-		else 
-		{
-			App_Documents.navigate("documents", {
-				trigger : true
-			});
-		}
+ 		cancel_document();
+ 		
 	});
 	$('#uploadDocumentUpdateForm,#uploadDocumentForm').on('click', '.email-send-doc', function(e)
 	{
@@ -901,6 +847,66 @@ function initialize_add_document_template_listeners(elContainer) {
 		  $('.popover').css('top',parseInt($('.popover').css('top')) + 22 + 'px')
 		})
 		});
+}
+function cancel_document()
+{
+	if (App_Contacts.contactDetailView)
+		{
+				if(Current_Route.indexOf( "contact")>-1)	
+				{
+					var sURL="contact/" + App_Contacts.contactDetailView.model.get('id');
+					Backbone.history.navigate(sURL, { trigger : true });
+					return;			
+				}
+				else if( Current_Route.indexOf( App_Contacts.contactDetailView.model.get('id'))>-1)
+				{
+					var sURL="contact/" + App_Contacts.contactDetailView.model.get('id');
+					Backbone.history.navigate(sURL, { trigger : true });
+					return;
+				}
+		}
+		if (App_Companies.companyDetailView)
+		{
+			if(Current_Route.indexOf( "company")>-1)	
+			{
+				var sURL="company/" + App_Companies.companyDetailView.model.get('id');
+				Backbone.history.navigate(sURL, { trigger : true });
+				return;	
+			}
+			else if( Current_Route.indexOf( App_Companies.companyDetailView.model.get('id'))>-1)
+			{
+				company_util.updateDocumentsList(document,true);
+				var sURL="company/" + App_Companies.companyDetailView.model.get('id');
+				Backbone.history.navigate(sURL, { trigger : true });
+				return;
+			}		
+		}
+		if (App_Deal_Details.dealDetailView)
+		{
+				if((Current_Route.indexOf( "deal" + "/" +App_Deal_Details.dealDetailView.model.id)>-1) ||	( Current_Route.indexOf( App_Deal_Details.dealDetailView.model.get('id'))>-1))
+				{
+					var sURL="deal/" + App_Deal_Details.dealDetailView.model.id ;
+					Backbone.history.navigate(sURL, { trigger : true });
+					return;			
+				}
+		}		
+		if (Current_Route == 'documents') 
+		{
+			App_Documents.navigate("documents", {trigger : true});
+				return;
+		}	
+		if (Current_Route == "email-template-add" || Current_Route.indexOf("email-template") == 0) 
+		{
+			App_Settings.navigate(Current_Route, {
+					trigger : true
+				});
+		}
+		else 
+		{
+			App_Documents.navigate("documents", {
+				trigger : true
+			});
+		}
 }
 function load_document_from_edit_model(model)
 {

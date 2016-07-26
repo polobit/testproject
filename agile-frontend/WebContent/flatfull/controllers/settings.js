@@ -664,7 +664,25 @@ var SettingsRouter = Backbone.Router
 						  return;
 					$('#content').html($(template_ui));	
 
-					that.view = new Base_Model_View({url : '/core/api/document/templates', isNew : true, template : "settings-document-template-add",
+					that.view = new Base_Model_View({url : '/core/api/document/templates', isNew : true, template : "settings-document-template-add",change:false,
+					saveAuth:function (el)
+					{
+						trigger_tinymce_save('document-template-html')
+						var sVal1=$("#document-template-html").val()
+						if(sVal1.length<=61)
+						{
+							$(".doc-template-error-status","#userForm").html("This field is required.")
+							return false;
+						}	
+						else
+							$(".doc-template-error-status","#userForm").html("");
+					},
+					saveCallback:function(data){
+						if($("#id","#userForm").length==0){
+							$("#userForm").append('<input id="id" name="id" type="hidden" value="' + data.id + '" />')	
+						}
+						showNotyPopUp("information", "Document template saved successfully", "top", 1000);	
+					},
 					postRenderCallback : function(el)
 					{
 								// set up TinyMCE Editor
@@ -709,7 +727,28 @@ var SettingsRouter = Backbone.Router
 						  return;
 					$('#content').html($(template_ui));	
 
-					that.view = new Base_Model_View({url : '/core/api/document/templates', model : that.currentTemplate, template : "settings-document-template-add",
+					that.view = new Base_Model_View({url : '/core/api/document/templates', model : that.currentTemplate, template : "settings-document-template-add",reload : false,change:false,
+					saveAuth:function (el)
+					{
+						
+						var plain_content = '';
+
+						try{
+							plain_content = $(tinyMCE.activeEditor.getBody()).text();
+						}
+						catch(err){}
+
+						if(plain_content.trim().length==0)
+						{
+							$(".doc-template-error-status","#userForm").html("This field is required.")
+							return true;
+						}	
+						else
+							$(".doc-template-error-status","#userForm").html("");
+					},
+					saveCallback:function(data){
+						showNotyPopUp("information", "Document template saved successfully", "top", 1000);	
+					},
 					postRenderCallback : function(el)
 					{
 								// set up TinyMCE Editor
@@ -721,6 +760,12 @@ var SettingsRouter = Backbone.Router
 									// Register focus
 									register_focus_on_tinymce('document-template-html');
 									//$("#document-template-html_ifr").height("90vh");
+								});
+
+								$('.save-doc-template').on('click', function(e) {
+									e.preventDefault();
+									
+								
 								});
 						
 					} });
