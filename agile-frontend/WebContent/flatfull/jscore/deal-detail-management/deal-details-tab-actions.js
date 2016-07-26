@@ -83,7 +83,7 @@ var deal_details_tab = {
 			if(dealDetailMode && dealDetailMode == 'timeline'){
 				$('#deal-tab-content').find('.change-deal-activity').remove();
 				$('#dealactivities').empty();
-				$('#deal-tab-content').prepend('<button class="btn btn-default btn-sm change-deal-activity" data="activity" style="float:right;margin-right:20px;">Activity Mode</button>');
+				$('#deal-tab-content').prepend('<a class="btn btn-default btn-sm change-deal-activity" data="activity" style="float:right;margin-right:20px;">Activity Mode</a>');
 				$('#dealactivities').append('<div class="m-auto"><div id="timeline" style="float:left; z-index:1;"><div id="line-container"><div id="line"></div></div></div></div>');
 				$('#dealactivities').addClass('active');
 				var id = App_Deal_Details.dealDetailView.model.id;
@@ -104,7 +104,7 @@ var deal_details_tab = {
 			else{
 			    var id = App_Deal_Details.dealDetailView.model.id;
 			    $('#deal-tab-content').find('.change-deal-activity').remove();
-			    $('#deal-tab-content').prepend('<button class="btn btn-default btn-sm change-deal-activity" data="timeline" style="float:right;margin-right:20px;">Timeline Mode</button>');
+			    $('#deal-tab-content').prepend('<a class="btn btn-default btn-sm change-deal-activity" data="timeline" style="float:right;margin-right:20px;">Timeline Mode</a>');
 			    if(id){
 			    dealActivitiesView = new Base_Collection_View({
 		            url: '/core/api/opportunity/' + id + "/activities",
