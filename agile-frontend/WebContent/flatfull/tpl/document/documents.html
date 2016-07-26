@@ -7,9 +7,9 @@
 <div class="col-md-3">
         <div class="data-block">
                 <h4 class="m-t-none m-b-sm h4">
-                    How to use Documents?
+                    {{agile_lng_translate 'documents' 'how-to-use-documents'}}
                 </h4>                
-                <p>Documents add more context to Contacts or Deals. To add documents, upload them from your computer or append them from a cloud storage like Google Drive.</p>
+                <p>{{agile_lng_translate 'documents' 'documents-desc'}}</p>
             
         </div>
     </div>
@@ -22,14 +22,14 @@
 <div class="btn-toolbar m-l-none">
 <div class="btn-group dropdown m-l-none documentsheading" style="float:none;">
 <div>
-<h3 class="pull-left font-thin h3">Documents </h3></div>
+<h3 class="pull-left font-thin h3">{{agile_lng_translate 'deal-view' 'documents'}} </h3></div>
     <div class="btn-group   p-t-n-sm workflow-sortby">
                 <div class="btn-group dropdown">
                                 <button class="btn btn-sm no-shadow p-n b-n bg-transparent text-base" style="font-size: 11px;" data-toggle="dropdown" id="contact-sort">
-                                        <span class="text-muted">Sort by </span>
+                                        <span class="text-muted">{{agile_lng_translate 'contacts-view' 'sort-by'}} </span>
                                         <span class="sort-field-txt">
-                                        {{#if_equals_sork_key sortKey 'dummy_name' }}Name{{/if_equals_sork_key}}
-        {{#if_equals_sork_key sortKey 'uploaded_time' }}Uploaded Time{{/if_equals_sork_key}}</span>
+                                        {{#if_equals_sork_key sortKey 'dummy_name' }}{{agile_lng_translate 'deal-view' 'name'}}{{/if_equals_sork_key}}
+        {{#if_equals_sork_key sortKey 'uploaded_time' }}{{agile_lng_translate 'documents' 'uploaded-time'}}{{/if_equals_sork_key}}</span>
                                     </button>
                                     <button class="btn btn-sm no-shadow dropdown-toggle bg-transparent b-n p-t-none p-b-none p-l-xs" data-toggle="dropdown" aria-expanded="false">
                                         <span class="caret"></span>
@@ -37,25 +37,25 @@
                                     <ul class="dropdown-menu " id="sort_menu" role="menu">
                                         <li>
                                         <a class="sort-link sort-field pos-rlt text-ellipsis" style="width:185px;" href="javascript:void(0);" data="dummy_name" label_name="dummy_name">
-                                        Name
+                                        {{agile_lng_translate 'deal-view' 'name'}}
                                             <i class="fa fa-check pos-abs pos-r-sm txt-small m-t-xs sort-field-check  
                                 {{#if_equals_sork_key sortKey 'dummy_name'}}{{else}}display-none {{/if_equals_sork_key}}"></i> 
                                             </a>
                                     </li>
                                     <li>
                                         <a class="sort-link sort-field pos-rlt text-ellipsis" style="width:185px;" href="javascript:void(0);" data="uploaded_time" label_name="uploaded_time">
-                                        Uploaded Time
+                                        {{agile_lng_translate 'documents' 'uploaded-time'}}
                         <i class="fa fa-check pos-abs pos-r-sm txt-small m-t-xs sort-field-check 
                 {{#if_equals_sork_key sortKey 'uploaded_time'}}{{else}}display-none {{/if_equals_sork_key}}"></i> 
                                         </a>
                                     </li>
                                     <li class="divider" id="sort-divider"></li>
                                             <li>
-                                                <a class="order-by pos-rlt" data="" href="javascript:void(0);">Ascending 
+                                                <a class="order-by pos-rlt" data="" href="javascript:void(0);">{{agile_lng_translate 'contacts-view' 'ascending'}} 
                         <i class="fa fa-check pos-abs pos-r-sm txt-small m-t-xs sort-by-check  
                         {{#if_asc_sork_key sortKey}}{{else}}display-none {{/if_asc_sork_key}}"></i> </a>
                                             </li>
-                                            <li><a class="order-by pos-rlt" data="-" href="javascript:void(0);">Descending  
+                                            <li><a class="order-by pos-rlt" data="-" href="javascript:void(0);">{{agile_lng_translate 'contacts-view' 'descending'}}  
             <i class="fa fa-check pos-abs pos-r-sm txt-small m-t-xs sort-by-check 
             {{#if_asc_sork_key sortKey}}display-none{{else}} {{/if_asc_sork_key}}"></i> </a></li>
                                     </ul>
@@ -63,7 +63,7 @@
                                     </div>
                                     </div>
                                     <div class="pull-right m-t-xs" id="document-add">
-            <a href="#documents-add" class="documents-add btn btn-default btn-addon  btn-sm"><i class="fa fa-plus-circle" /> Add Document</a>
+            <a href="#documents-add" class="documents-add btn btn-default btn-addon  btn-sm"><i class="fa fa-plus-circle" /> {{agile_lng_translate 'deal-view' 'add-document'}}</a>
 
             <div class="clearfix"></div>
     </div>
@@ -79,11 +79,11 @@
                     <img alt="Clipboard" src="{{getS3ImagePath '/img/clipboard.png'}}" />
                 </div>
                 <div class="box-right pull-left">
-                    <h4 class="m-t-none">There are no documents </h3>
+                    <h4 class="m-t-none">{{agile_lng_translate 'documents' 'there-are-no-documents'}} </h3>
                     <div class="text">
-                        You can add document by clicking the button below or the one on the right side of the page.
+                        {{agile_lng_translate 'documents' 'you-can-add-document-by-clicking'}}
                     </div>
-                    <a href="#" class="documents-add btn btn-default btn-sm m-t-xs"><i class="fa fa-plus-circle"></i>  Add Document</a>
+                    <a href="#" class="documents-add btn btn-default btn-sm m-t-xs"><i class="fa fa-plus-circle"></i>  {{agile_lng_translate 'deal-view' 'add-document'}}</a>
                 </div>
                 <div class="clearfix">
                 </div>
@@ -94,15 +94,15 @@
         {{#if this.length}}
           
             <div class="panel panel-default">
-                <div class="panel-heading"> Documents List</div>
+                <div class="panel-heading"> {{agile_lng_translate 'documents' 'documents-list'}}</div>
                 <div class="table-responsive">
                 <table class="table table-striped showCheckboxes m-b-none panel agile-table table-layout-mob-view no-sorting" url="core/api/documents/bulk" id="document-list">
                     <thead>
                         <tr>
-                            <th style="width:30%">Title</th>
-                            <th style="width:30%">Related Contacts</th>
-                            <th style="width:20%">Uploaded Date</th>
-                            <th style="width:20%">Owner</th>
+                            <th style="width:30%">{{agile_lng_translate 'report-add' 'title'}}</th>
+                            <th style="width:30%">{{agile_lng_translate 'documents' 'related-contacts'}}</th>
+                            <th style="width:20%">{{agile_lng_translate 'documents' 'uploaded-date'}}</th>
+                            <th style="width:20%">{{agile_lng_translate 'contact-details' 'owner'}}</th>
                         </tr>
                     </thead>
                     <tbody id="documents-model-list" class="c-p">
@@ -119,7 +119,7 @@
 <td data="{{id}}" class="data">
 <div class="pull-left inline-block table-resp" style="max-width:90%;width:auto;"><a class="text-cap">{{name}}</a></div>
 <div class="pull-left m-l-xs">
-<b class="activate-link" style="display:none;"><a href="{{url}}" target="_blank"><i class="icon-external-link" title="Open Document"></i></a></b>
+<b class="activate-link" style="display:none;"><a href="{{url}}" target="_blank"><i class="icon-external-link" title="{{agile_lng_translate 'documents' 'open-document'}}"></i></a></b>
 </div>
 <div class="clearfix"></div>
 </div>
