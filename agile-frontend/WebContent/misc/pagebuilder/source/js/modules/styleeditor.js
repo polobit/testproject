@@ -402,6 +402,8 @@
 				if( $(this).attr('name') !== undefined ) {
 
                 	$(styleeditor.activeElement.element).css( $(this).attr('name'),  $(this).val());
+                     if($(this).attr("name") === 'font-size' && styleeditor.activeElement.element.nodeName === 'DIV')
+                        $(styleeditor.activeElement.element).children().css($(this).attr("name"),$(this).val());
 
 				}
 
@@ -1166,11 +1168,16 @@
             $('a#default-tab1').css('display','none');           
         },
 
-        loadAgileCRMFormInLandingPage: function(element,formId){
+        loadAgileCRMFormInLandingPage: function(element,id){
             element.parent().addClass('agile_crm_form_embed');
+            element.parent().attr("id",id);
+            id = id.split("_");
+            var agileDomain = id[0];
+            var formId = id[id.length-1];
+            console.log("domain is :"+agileDomain);
             var script = document.createElement('script');
-            script.src = window.siteUrl+'core/api/forms/form/js/'+formId;
-            document.body.appendChild(script);
+            script.src = window.location.protocol+'//'+agileDomain+'.-dot-sandbox-dot-agilecrmbeta.appspot.com/core/api/forms/form/js/'+formId;
+            document.body.appendChild(script);            
         }
 
     };

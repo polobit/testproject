@@ -16,9 +16,9 @@
         '.social a': ['color'],
         '.bg.bg1, .bg.bg2, .header10, .header11': ['background-image', 'background-color'],
         '.frameCover': [],
-        '.editContent': ['content', 'color', 'font-size', 'background-color', 'font-family'],
+        '.editContent': ['color', 'font-size', 'background-color', 'font-family'],
         'a.btn, button.btn': ['border-radius', 'font-size', 'background-color'],
-        '#pricing_table2 .pricing2 .bottom li': ['content']
+        '#pricing_table2 .pricing2 .bottom li': ['color', 'font-size', 'background-color', 'font-family']
     };
     
     module.exports.editableItemOptions = {
