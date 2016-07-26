@@ -394,7 +394,7 @@ public class Task extends Cursor
 	System.out.println("Owner_id : " + this.owner_id);
 
 	// If owner_id is null
-	if (owner_id == null)
+	if (owner_id == null && owner == null)
 	{
 	    UserInfo userInfo = SessionManager.get();
 	    if (userInfo == null)
