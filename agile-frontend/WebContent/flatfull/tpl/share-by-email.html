@@ -4,26 +4,26 @@
     <div class="modal-content">
 		<div class="modal-header">
             <button class="close" data-dismiss="modal">x</button>
-			<h3 class="modal-title">Thanks for sharing. We sure appreciate it!</h3>
+			<h3 class="modal-title">{{agile_lng_translate 'emails' 'thanks-for-sharing-we-appreciate-it'}}</h3>
 		</div>
 		<div class="modal-body">
 		<form id='sharemailForm' name="sharemailForm" class="form-horizontal">
 			<fieldset>
 				<input type="hidden" name="from" value="{{email}}"/>
 				<div class="control-group form-group">
-					<label class="control-label col-sm-3">To<span
+					<label class="control-label col-sm-3">{{agile_lng_translate 'contact-details' 'to'}}<span
 						class="field_req">*</span></label>
 					<div class="controls col-sm-7">
 						<input type="text" class="required input-xlarge form-control w-full" name="to"
-							id="to" placeholder="Enter Your Friend's Email Address" value=""/>
+							id="to" placeholder="{{agile_lng_translate 'email' 'enter-your-friends-email'}}" value=""/>
 					</div>
 				</div>
 				<div class="control-group form-group">
-					<label class="control-label col-sm-3">Subject <span
+					<label class="control-label col-sm-3">{{agile_lng_translate 'widgets' 'subject'}} <span
 						class="field_req">*</span></label>
 					<div class="controls col-sm-7">
 						<input type="text" class="required input-xlarge form-control w-full" name="subject"
-							id="subject" placeholder="About" value="I love AgileCRM - I want you to try it"/>
+							id="subject" placeholder="{{agile_lng_translate 'help' 'about'}}" value="I love AgileCRM - I want you to try it"/>
 					</div>
 				</div>
 				<div class="control-group form-group">

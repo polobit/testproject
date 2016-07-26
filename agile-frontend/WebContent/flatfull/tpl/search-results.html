@@ -36,7 +36,7 @@
     <div class="col-md-12">
        
             
-            <h3 id="search-query-heading" class="m-n font-thin h3 pull-left">Search results for "{{query}}"</h3>
+            <h3 id="search-query-heading" class="m-n font-thin h3 pull-left">{{agile_lng_translate 'contact-details' 'search-results-for'}} "{{query}}"</h3>
             <div class="pull-right">
             <div class="btn-group" id="view-list">
             </div>
@@ -53,17 +53,17 @@
         <div class="data">
             <div class="data-container">
                 <div class="btn-group right" id="bulk-actions" style="position: relative; display: none">
-                    <button class="btn btn-sm btn-default">Bulk Actions</button>
+                    <button class="btn btn-sm btn-default">{{agile_lng_translate 'contacts-view' 'bulk-actions'}}</button>
                     <button class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" id="view-actions">
                     <span class="caret"></span>
                     </button>
                     <ul class="dropdown-menu" id="view-actions" role="menu">
-                        <li><a href="#" id="bulk-owner">Change owner</a></li>
+                        <li><a href="#" id="bulk-owner">{{agile_lng_translate 'deal-view' 'change-owner'}}</a></li>
 						{{#hasMenuScope 'CAMPAIGN'}}
-                        <li><a href="#" id="bulk-campaigns">Add to campaign</a></li>
+                        <li><a href="#" id="bulk-campaigns">{{agile_lng_translate 'contacts-view' 'add-to-campaign'}}</a></li>
 						{{/hasMenuScope}}
-                        <li class="hide"><a href="#" id="bulk-email">Send email</a></li>
-                        <li><a href="#" id="bulk-tags">Add tags</a></li>
+                        <li class="hide"><a href="#" id="bulk-email">{{agile_lng_translate 'contact-details' 'send-email'}}</a></li>
+                        <li><a href="#" id="bulk-tags">{{agile_lng_translate 'contacts-view' 'add-tags'}}</a></li>
                     </ul>
                 </div>
                 <div class="table-responsive">
@@ -72,10 +72,10 @@
                     <thead>
                         <tr>
 							<th></th>
-                            <th style="width:35%">Name</th>
-                            <th style="width:20%">Work</th>
-                            <th style="width:35%">Tags</th>
-                            <th style="width:10%">Lead Score</th>
+                            <th style="width:35%">{{agile_lng_translate 'deal-view' 'name'}}</th>
+                            <th style="width:20%">{{agile_lng_translate 'other' 'work'}}</th>
+                            <th style="width:35%">{{agile_lng_translate 'modals' 'tags'}}</th>
+                            <th style="width:10%">{{agile_lng_translate 'contacts-view' 'Lead score'}}</th>
                         </tr>
                     </thead>
                     <tbody id="search-model-list" class="model-list-cursor" route="contact/">
