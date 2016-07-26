@@ -54,7 +54,7 @@
 								{{#canSyncContacts}}
 				{{#if ../type}}
 						<span class="btn btn-sm btn-default inline-block" disabled="">{{agile_lng_translate 'contacts-view' 'upload-csv-file'}}</span>
-						<a href="/flatfull/images/SampleContacts.csv" title="Sample CSV file" download><i class="fa fa-download btn btn-sm  btn-default inline-block" style="margin-left: -2px;border-left: 0px;border-radius: 0px 2px 2px 0px;"></i></a>
+						<a href="/flatfull/images/SampleContacts.csv" title=" {{agile_lng_translate 'other' 'sample-csv-file'}}" download><i class="fa fa-download btn btn-sm  btn-default inline-block" style="margin-left: -2px;border-left: 0px;border-radius: 0px 2px 2px 0px;"></i></a>
 						<span class="m-l-xs"><i>
 							{{#if total_count}}
 										{{agile_lng_translate 'contacts-view' 'import-in-process'}}
@@ -66,7 +66,7 @@
 						
 					{{else}}
            				<div class="btn btn-sm upload upload-contacts-ele btn-default inline-block">{{agile_lng_translate 'contacts-view' 'upload-csv-file'}}</div>
-           				<a href="/flatfull/images/SampleContacts.csv" title="Sample CSV file" download><i class="fa fa-download btn btn-sm  btn-default inline-block" style="margin-left: -2px;border-left: 0px;border-radius: 0px 2px 2px 0px;"></i></a>
+           				<a href="/flatfull/images/SampleContacts.csv" title="{{agile_lng_translate 'other' 'sample-csv-file'}}" download><i class="fa fa-download btn btn-sm  btn-default inline-block" style="margin-left: -2px;border-left: 0px;border-radius: 0px 2px 2px 0px;"></i></a>
            		{{/if}}
 					{{else}}
            				<span class="btn btn-sm btn-default inline-block" disabled="">{{agile_lng_translate 'contacts-view' 'upload-csv-file'}}</span>
@@ -94,11 +94,11 @@
         					<fieldset>
 							{{#canSyncContacts}}
            					<div class="btn btn-sm upload upload-contacts-ele btn-default inline-block">{{agile_lng_translate 'contacts-view' 'upload-csv-file'}}</div>
-           					<a href="/flatfull/images/SampleCompanies.csv" title="Sample CSV file" download><i class="fa fa-download btn btn-sm  btn-default inline-block" style="margin-left: -2px;border-left: 0px;    border-radius: 0px 2px 2px 0px;"></i></a>
+           					<a href="/flatfull/images/SampleCompanies.csv" title="{{agile_lng_translate 'other' 'sample-csv-file'}}" download><i class="fa fa-download btn btn-sm  btn-default inline-block" style="margin-left: -2px;border-left: 0px;    border-radius: 0px 2px 2px 0px;"></i></a>
 							{{else}}
            					<span class="btn btn-sm btn-default inline-block"  disabled="">{{agile_lng_translate 'contacts-view' 'upload-csv-file'}}</span>
 							<span style="margin-left:5px"><i>{{agile_lng_translate 'prefs-data-sync' 'needs-import-privilege'}}</i></span>
-							<a href="/flatfull/images/SampleCompanies.csv" title="Sample CSV file" download><i class="fa fa-download btn btn-sm  btn-default inline-block" style="margin-left: -2px;border-left: 0px;    border-radius: 0px 2px 2px 0px;"></i></a>
+							<a href="/flatfull/images/SampleCompanies.csv" title="{{agile_lng_translate 'other' 'sample-csv-file'}}" download><i class="fa fa-download btn btn-sm  btn-default inline-block" style="margin-left: -2px;border-left: 0px;    border-radius: 0px 2px 2px 0px;"></i></a>
 							{{/canSyncContacts}}
            					</fieldset>
     					</form>
@@ -438,14 +438,14 @@
 		  <div class="col-md-12 col-sm-12 col-xs-12">
 			<form id="import-contact-tags">
 			    <div class="form-group control-group">
-			        <label class="control-label">Tags (Optional)</label><br>
+			        <label class="control-label">{{agile_lng_translate 'contacts-view' 'tags-optional'}}</label><br>
 			        <div class="pull-left" style="margin-top:0px;">
 			            <ul name="tags" class="tagsinput tags p-l-none"></ul>
 			        </div>
 			        <div class="controls">
-			            <input id="tags-import" class="tags-typeahead form-control" name="tags" type="text" placeholder="Tags should be separated by comma.">
+			            <input id="tags-import" class="tags-typeahead form-control" name="tags" type="text" placeholder="{{agile_lng_translate 'contacts-view' 'tags-should-be-separated-by-comma'}}">
 			        </div>
-					<p class="help-block">You can optionally add tags to all new companies being created.</p>
+					<p class="help-block">{{agile_lng_translate 'companies' 'you-can-optionally-add-tags'}}</p>
 				
 			    </div>
 			</form>
@@ -654,8 +654,8 @@
 <select class="import-select form-control">
 <option value="properties__ignore_">-{{agile_lng_translate 'contacts-view' 'ignore'}}-</option>
 <option value="properties_name">{{agile_lng_translate 'companies-edit' 'organization'}}</option>
-<option value="tags">Tag</option>
-<option value="note">Note</option>
+<option value="tags">{{agile_lng_translate 'contact-edit' 'tag'}} </option>
+<option value="note">{{agile_lng_translate 'menu' 'note'}}</option>
 <optgroup label="Email">
     <option value="properties_primary-email">{{agile_lng_translate 'contacts-view' 'email-primary'}}</option>
     <option value="properties_alternate-email">{{agile_lng_translate 'contacts-view' 'email-alternate'}}
@@ -717,8 +717,8 @@
 <option value="properties_relatedTo">{{agile_lng_translate 'deal-view' 'related-to'}}</option>
 <option value="properties_note">{{agile_lng_translate 'menu' 'note'}}</option>
 <option value="properties_description">{{agile_lng_translate 'deal-view' 'descriptions'}}</option> 
-<option value="properties_dealSource">Deal Source</option> 
-<option value="properties_lossReason">Loss Reason</option> 
+<option value="properties_dealSource">{{agile_lng_translate 'deal-view' 'deal-source'}}</option> 
+<option value="properties_lossReason">{{agile_lng_translate 'deal-view' 'loss-reason'}}</option> 
 {{#if custom_fields}}
 <optgroup label="Custom field" id = "custom_fields">
    

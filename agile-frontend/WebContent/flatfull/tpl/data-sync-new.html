@@ -158,7 +158,7 @@
 				{{#canSyncContacts}}
     					<div class="btn btn-sm btn-default inline-block" sync_type="{{type}}" id="data-sync-type">{{agile_lng_translate 'prefs-email' 'enable'}}</div>
 					{{else}}
-						<span class="btn btn-sm btn-primary inline-block" disabled>Enable</span>
+						<span class="btn btn-sm btn-primary inline-block" disabled>{{agile_lng_translate 'prefs-email' 'enable'}}</span>
 						<span class="m-l-xs"><i>{{agile_lng_translate 'prefs-data-sync' 'needs-import-privilege'}}</i></span>
 				{{/canSyncContacts}}
     		{{/if}}
@@ -182,12 +182,12 @@
     		{{#if_equals type "OFFICE365"}}
 			{{#if id}}
     			<a class="btn btn-sm btn-danger " data_sync_type="{{type}}" data_sync_id="{{id}}" id="sync-import-prefs-delete" >{{agile_lng_translate 'prefs-email' 'disable'}}</a>
-				<a href="#sync/officeCalendar" class="btn btn-sm btn-default" id="setting-widget">Settings</a>
+				<a href="#sync/officeCalendar" class="btn btn-sm btn-default" id="setting-widget">{{agile_lng_translate 'settings' 'preferences'}}</a>
     		{{else}}
 				{{#canSyncContacts}}
     					<div class="btn btn-sm btn-default inline-block" sync_type="{{type}}" id="data-sync-type">{{agile_lng_translate 'prefs-email' 'enable'}}</div>
 					{{else}}
-						<span class="btn btn-sm btn-primary inline-block" disabled>Enable</span>
+						<span class="btn btn-sm btn-primary inline-block" disabled>{{agile_lng_translate 'prefs-email' 'enable'}}</span>
 						<span class="m-l-xs"><i>{{agile_lng_translate 'prefs-data-sync' 'needs-import-privilege'}}</i></span>
 				{{/canSyncContacts}}
     		{{/if}}
@@ -196,7 +196,7 @@
     		{{#if_equals type "FRESHBOOKS"}}
 			{{#if id}}
     			<a class="btn btn-sm btn-danger " data_sync_type="{{type}}" data_sync_id="{{id}}" id="sync-import-prefs-delete" >{{agile_lng_translate 'prefs-email' 'disable'}}</a>
-				<a href="#sync/freshbooks/setting" class="btn btn-sm btn-default" id="setting-widget">Settings</a>
+				<a href="#sync/freshbooks/setting" class="btn btn-sm btn-default" id="setting-widget">{{agile_lng_translate 'settings' 'preferences'}}</a>
     		{{else}}
 				{{#canSyncContacts}}
     					<div class="btn btn-sm btn-default inline-block" sync_type="{{type}}" id="data-sync-type">{{agile_lng_translate 'prefs-email' 'enable'}}</div>
@@ -210,7 +210,7 @@
     		{{#if_equals type "QUICKBOOK"}}
 			{{#if id}}
     			<a class="btn btn-sm btn-danger " data_sync_type="{{type}}" data_sync_id="{{id}}" id="sync-import-prefs-delete" >{{agile_lng_translate 'prefs-email' 'disable'}}</a>
-				<a href="#sync/quickbook" class="btn btn-sm btn-default" id="setting-widget">Settings</a>
+				<a href="#sync/quickbook" class="btn btn-sm btn-default" id="setting-widget">{{agile_lng_translate 'settings' 'preferences'}}</a>
     		{{else}}
 				{{#canSyncContacts}}
     					<div class="btn btn-sm btn-default inline-block" sync_type="{{type}}" id="data-sync-type">{{agile_lng_translate 'prefs-email' 'enable'}}</div>

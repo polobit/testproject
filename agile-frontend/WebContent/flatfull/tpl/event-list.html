@@ -81,14 +81,14 @@
 {{#unless this.length}}
 <div class="slate m-t" style="padding:5px 2px;">
     <div class="slate-content" style="text-align:center;">
-        <h4 class="h4">You have no Events</h4>
+        <h4 class="h4">{{agile_lng_translate 'events' 'you-have-no-events'}}</h4>
     </div>
 </div>
 {{/unless}}
 {{#if this.length}}
 <div class="table-responsive">
 		<div class="panel panel-default">
-			    <div class="panel-heading">Event List</div>		
+			    <div class="panel-heading">{{agile_lng_translate 'calendar' 'event-list'}}</div>		
         <table class="table table-striped" style="overflow:hidden!important;">
             <tbody id="eventAll" style="display: table;width:100%"></tbody>
         </table>
