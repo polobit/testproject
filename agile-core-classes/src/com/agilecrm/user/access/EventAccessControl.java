@@ -98,7 +98,7 @@ public class EventAccessControl extends UserAccessControl
     {
 	// Delete condition is checked only if current user is not owner of the
 	// event
-	if(!isNew() && hasMenuScope(NavbarConstants.CALENDAR) && (hasScope(UserAccessScopes.DELETE_CALENDAR) || checkOwner()))
+	if(!isNew() && hasMenuScope(NavbarConstants.CALENDAR) && hasScope(UserAccessScopes.DELETE_CALENDAR))
 	{
 		return true;
 	}

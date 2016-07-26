@@ -228,7 +228,7 @@ var Contact_Details_Tab_Actions = {
 		  		return;
 		  	}
 
-		  	if(!hasScope("DELETE_CALENDAR") && (CURRENT_DOMAIN_USER.id != owner) && model.get("entity_type") && model.get("entity_type") == "event"){
+		  	if(!hasScope("DELETE_CALENDAR") && model.get("entity_type") && model.get("entity_type") == "event"){
 				$("#deleteEventErrorModal").html(getTemplate("delete-event-error-modal")).modal('show');
 				return;
 			}
