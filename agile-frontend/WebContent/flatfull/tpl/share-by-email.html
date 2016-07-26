@@ -27,18 +27,18 @@
 					</div>
 				</div>
 				<div class="control-group form-group">
-					<label class="control-label col-sm-3">Message <span
+					<label class="control-label col-sm-3">{{agile_lng_translate 'portlets' 'message'}} <span
 						class="field_req">*</span></label>
 					<div class="controls col-sm-7">
-						<textarea class="required input-xlarge form-control w-full p-sm" rows="14" name="body" id="body" placeholder="Description">Hi,<br/><br/>I am using Agile CRM - it allows me to easily manage my contacts, track clicks, setup email and twitter campaigns, configure contact-level analytics, call and even receive notifications when a star contact is online.<br/><br/>I thought you would love as much as I do.<br/><br/>You can visit https://www.agilecrm.com/?utm_source=affiliates&utm_medium=web&utm_campaign={{get_current_domain}} to learn more.<br/><br/>- {{#getCurrentUserPrefs}}{{currentDomainUserName}}{{/getCurrentUserPrefs}}.</textarea>
+						<textarea class="required input-xlarge form-control w-full p-sm" rows="14" name="body" id="body" placeholder="{{agile_lng_translate 'misc-keys' 'description'}}">{{agile_lng_translate 'other' 'hi'}}<br/><br/>{{agile_lng_translate 'other' 'i-am-using-agile-crm-it-allows'}}<br/><br/>{{agile_lng_translate 'other' 'i-thought-you-would-love-as-much-as-i-do'}}<br/><br/> {{agile_lng_translate 'other' 'you-can-visit'}}https://www.agilecrm.com/?utm_source=affiliates&utm_medium=web&utm_campaign={{get_current_domain}} to learn more.<br/><br/>- {{#getCurrentUserPrefs}}{{currentDomainUserName}}{{/getCurrentUserPrefs}}.</textarea>
 					</div>
 				</div>
 			</fieldset>
 		</form>
         </div>
 		<div class="modal-footer">
-			<a href="#" data-dismiss="modal" class="btn btn-sm btn-danger">Close</a>
-            <a href="#" id="shareMail" class="save btn btn-sm btn-primary">Send</a>
+			<a href="#" data-dismiss="modal" class="btn btn-sm btn-danger">{{agile_lng_translate 'contact-details' 'CLOSE'}}</a>
+            <a href="#" id="shareMail" class="save btn btn-sm btn-primary">{{agile_lng_translate 'tasks' 'Send'}}</a>
 			&nbsp;&nbsp;<span id="msg"></span>
 		</div>
 </div>
