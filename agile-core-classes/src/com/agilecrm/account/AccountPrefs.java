@@ -71,7 +71,13 @@ public class AccountPrefs implements Serializable
 	 * property
 	 */
 	public boolean workflows_updated = false;
-
+	
+	/**
+	 * To check the invoice before charge the customer for recurring payments.
+	 */
+	@NotSaved(IfDefault.class)
+	public boolean sendInvoiceBeforeCharge = false;
+	
 	/**
 	 * Default AccountPrefs.
 	 */
