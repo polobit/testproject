@@ -1,78 +1,10 @@
-<script id="landingpages-collection-template" type="text/html">
+<script id="landingpages-static-container-template" type="text/html">
 <div class="custom-animated custom-fadeInUp">
-<div class="wrapper-md lter bg-light b-b">
-<div class="row">
-    <div class="col-sm-12 col-md-12">
-        
-            	<h3 class="pull-left font-thin h3">Landing Pages <small><span class="label label-sm bg-danger">Beta</span></small></h3>
-			
-			<div class="pull-right">
-				<div class="btn-group right pos-rlt pull-right">
-            		<a href="pagebuilder" class="btn btn-default btn-addon pull-right btn-sm" id="addLandingPage"><i class="icon-plus-sign"></i> Add Landing Page</a>
-				</div> 	
-			</div>
-            <div class="m-r-sm pull-right">
-                <a href="#forms" class="btn btn-default btn-sm btn-addon"><i class="icon-cog"></i>Manage Forms</a>
-            </div>
-			<div class="clearfix"></div>
-        
-    </div>
-</div>
-</div>
+<div id="Landingpages-top-view"></div>
 <div class="wrapper-md">
 <div class="row">
-<div class="col-md-9">
-{{#unless this.length}}
-        <div class="alert bg-white">
-            <div class="slate-content  p-md">
-                <div class="box-left pull-left m-r-md">
-                    <img alt="Clipboard" src="/img/clipboard.png" />
-                </div>
-                <div class="box-right pull-left">
-                    <h4 class="m-t-none">You do not have any Landing Pages currently.</h4>
-                    <div class="text">
-                        Landing page is a web page created to gather leads online.
-                    </div>
-                    <a href="pagebuilder" class="m-t-xs btn btn-default btn-sm"><i class="icon-plus-sign"></i>  Add Landing Page</a>
-                </div>
-                <div class="clearfix">
-                </div>
-            </div>
-        </div>
-        <div class="embed-responsive embed-responsive-16by9">
-        <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/iVTvUoEXTKY?rel=0&amp;" frameborder="0" style="
-                width: 58%;
-                position: absolute;
-                left: 37%;
-                top: 15%;
-                margin: -75px 0 0 -135px;
-                height: 304px;
-                " allowfullscreen=""></iframe>
-            </div>
-{{/unless}}
-{{#if this.length}}
-        <div class="panel panel-default">
-            <div class="panel-heading">Landing Pages List</div>
-            <div class="table-responsive">                
-                <table class="table table-striped showCheckboxes m-b-none agile-table panel" url="core/api/landingpages/bulk" id="landingpages-list" style="table-layout:auto;">
-                    <thead>
-                        <tr>
-                            <th style="width:45%">Name</th>
-                            <th style="width:10%"></th>
-                            <th style="width:10%"></th>
-                            <th style="width:30%"></th>
-                        </tr>
-                    </thead>
-                    <tbody id="landingpages-model-list" route="landing-page/">
-                    </tbody>
-                </table>                
-            </div>
-        </div>
-{{/if}}
-</div>
-
-    
-    <div class="col-md-3" id="learn-workflows">
+<div class="col-md-9" id="landing-pages-collection-container"></div>
+<div class="col-md-3" id="learn-workflows">
         
             <h4 class="m-t-none h4 m-b-sm">
                 How to use Landing Pages?
@@ -89,7 +21,6 @@
 <img src="{{getS3ImagePath '../../img/landingpage-info-1.png'}}" class="img-responsive w-full">
 </a>
 </p>
-
         <br>
         {{/if}}
         
@@ -98,43 +29,160 @@
 </div>
 </div>
 </script>
+        <script id="landing-pages-top-header-template" type="text/html">
+                    <div class="wrapper-md lter bg-light b-b">
+                        <div class="row">
+                            <div class="col-sm-12 col-md-12">
+                                 <div class="btn-group dropdown m-l-none workflow-heading" style="float: none;">
+                                    <div class="">
+                                        <h4 class="inline-block m-n">
+                                Landing Pages <small>
+                                <span class="label label-sm bg-danger">Beta</span>
+                                </small></h4>
+                                    </div>
+                                    <div class="btn-group m-r-xs p-t-n-sm workflow-sortby">
+                                        <div class="btn-group dropdown">
+                                                     <button class="btn btn-sm no-shadow p-n b-n bg-transparent text-base" style="font-size: 11px;" data-toggle="dropdown" id="contact-sort">
+                                                            <span class="text-muted">Sort by </span>
+                                                            <span class="sort-field-txt"> 
+                                                            {{#if_equals_sork_key sortKey "dummy_name" }}Name{{/if_equals_sork_key}}
+                                                            {{#if_equals_sork_key sortKey "created_time" }}
+                                                            Created Time
+                                                            {{/if_equals_sork_key}}
+                                                            {{#if_equals_sork_key sortKey "updated_time" }}
+                                                            Updated Time
+                                                            {{/if_equals_sork_key}}
+                                                        </span>
+                                                        </button>
+                                                        <button class="btn btn-sm no-shadow dropdown-toggle bg-transparent b-n p-t-none p-b-none p-l-xs" data-toggle="dropdown" aria-expanded="false">
+                                                            <span class="caret"></span>
+                                                        </button>
 
-<script id="landingpages-model-template" type="text/html">
-<td data="{{id}}" class="data">
-<div>{{name}}</div>
-</td>
-<td>
-<div class="table-resp">
-<a href="/landing/{{id}}" class="stop-propagation" target="_blank">View</a></div>
-</td>
-<td>
-<div class="table-resp">
-<a href="#landing-page-settings/{{id}}" class="stop-propagation">Publish</a></div>
-</td>
-<td class="text-muted">
-<i class="fa fa-clock-o m-r-xs"></i>
-{{#if updated_time}}
-&nbsp;<span><em>Modified</em>&nbsp;</span>
-<time class="document-created-time" value="{{updated_time}}" datetime="{{epochToHumanDate "" updated_time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" updated_time}}</time>
-{{else}}
-&nbsp;<span><em>Created</em>&nbsp;</span>
-<time class="document-created-time" value="{{created_time}}" datetime="{{epochToHumanDate "" created_time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created_time}}</time>
-{{/if}}
-</td>
-</script>
-<!-- creating an template for the adding an popup on save button!-->
+                                                        <ul class=" dropdown-menu " id="sort_menu" role="menu">
+                                                            <li>
+                                                            <a class="sort-link sort-field pos-rlt text-ellipsis" style="width:185px;" href="javascript:void(0);" data="dummy_name" label_name="dummy_name">
+                                                            Name
+                                                                <i class="fa fa-check pos-abs pos-r-sm txt-small m-t-xs sort-field-check {{#if_equals_sork_key sortKey 'dummy_name' }}{{else}}display-none {{/if_equals_sork_key}}"></i> 
+                                                                </a>
+                                                        </li>
+                                                        <li>
+                                                            <a class="sort-link sort-field pos-rlt text-ellipsis" style="width:185px;" href="javascript:void(0);" data="created_time" label_name="created_time">
+                                                            Created Time
+                                                            <i class="fa fa-check pos-abs pos-r-sm txt-small m-t-xs sort-field-check  {{#if_equals_sork_key sortKey 'created_time' }} {{else}} display-none {{/if_equals_sork_key}}"></i> 
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a class="sort-link sort-field pos-rlt text-ellipsis" style="width:185px;" href="javascript:void(0);" data="updated_time" label_name="updated_time">
+                                                            Updated Time
+                                                            <i class="fa fa-check pos-abs pos-r-sm txt-small m-t-xs sort-field-check  {{#if_equals_sork_key sortKey 'updated_time' }}{{else}}display-none {{/if_equals_sork_key}}"></i> 
+                                                            </a>
+                                                        </li>
+                                                        <li class="divider" id="sort-divider"></li>
+                                                                <li>
+                                                                    <a class="order-by pos-rlt" data="" href="javascript:void(0);">Ascending <i class="fa fa-check pos-abs pos-r-sm txt-small m-t-xs sort-by-check  {{#if_asc_sork_key sortKey}}{{else}}display-none {{/if_asc_sork_key}}"></i> </a>
+                                                                </li>
+                                                                <li><a class="order-by pos-rlt" data="-" href="javascript:void(0);">Descending  <i class="fa fa-check pos-abs pos-r-sm txt-small m-t-xs sort-by-check {{#if_asc_sork_key sortKey}} display-none {{else}}{{/if_asc_sork_key}}"></i> </a></li>
+                                                        </ul>
+                                         </div>
+                                    </div>
+                                </div>
+                                    <div class="pull-right">
+                                        <div class="btn-group right pos-rlt pull-right">
+                                        <a href="#landing-page-templates" class="btn btn-default btn-addon pull-right btn-sm" id="addLandingPage"><i class="icon-plus-sign"></i> Add Landing Page</a>
+                                        </div>  
+                                     </div> 
+                                     <div class="m-r-sm pull-right">
+                                        <a href="#forms" class="btn btn-default btn-sm btn-addon"><i class="icon-cog"></i>Manage Forms</a>
+                                    </div>
+                                     <div class="clearfix"></div>       
+                            </div>
+                        </div>
+                    </div>
+            </script>
+                <script id="landingpages-collection-template" type="text/html">
+                {{#unless this.length}}
+                        <div class="alert bg-white">
+                            <div class="slate-content  p-md">
+                                <div class="box-left pull-left m-r-md">
+                                    <img alt="Clipboard" src="/img/clipboard.png" />
+                                </div>
+                                <div class="box-right pull-left">
+                                    <h4 class="m-t-none">You do not have any Landing Pages currently.</h4>
+                                    <div class="text">
+                                        Landing page is a web page created to gather leads online.
+                                    </div>
+                                    <a href="#landing-page-templates" class="m-t-xs btn btn-default btn-sm"><i class="icon-plus-sign"></i>  Add Landing Page</a>
+                                </div>
+                                <div class="clearfix">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="embed-responsive embed-responsive-16by9">
+                        <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/iVTvUoEXTKY?rel=0&amp;" frameborder="0" style="
+                                width: 58%;
+                                position: absolute;
+                                left: 37%;
+                                top: 15%;
+                                margin: -75px 0 0 -135px;
+                                height: 304px;
+                                " allowfullscreen=""></iframe>
+                            </div>
+                {{/unless}}
+                {{#if this.length}}
+                <div class="panel panel-default">
+                <div class="panel-heading">Landing Pages List</div>
+                 <div class="table-responsive">                
+                                <table class="table table-striped showCheckboxes m-b-none agile-table panel" url="core/api/landingpages/bulk" id="landingpages-list" style="table-layout:auto;">
+                                    <thead>
+                                        <tr>
+                                            <th style="width:45%">Name</th>
+                                            <th style="width:10%"></th>
+                                            <th style="width:10%"></th>
+                                            <th style="width:30%"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="landingpages-model-list" route="landing-page/">
+                                    </tbody>
+                                </table>                
+                            </div>
+                     </div>
+                     {{/if}}
+                </script>
+        <script id="landingpages-model-template" type="text/html">
+            <td data="{{id}}" class="data">
+            <div>{{name}}</div>
+            </td>
+            <td>
+            <div class="table-resp">
+            <a href="/landing/{{id}}" class="stop-propagation" target="_blank">View</a></div>
+            </td>
+            <td>
+            <div class="table-resp">
+            <a href="#landing-page-settings/{{id}}" class="stop-propagation">Publish</a></div>
+            </td>
+            <td class="text-muted">
+            <i class="fa fa-clock-o m-r-xs"></i>
+            {{#if updated_time}}
+            &nbsp;<span><em>Modified</em>&nbsp;</span>
+            <time class="document-created-time" value="{{updated_time}}" datetime="{{epochToHumanDate "" updated_time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" updated_time}}</time>
+            {{else}}
+            &nbsp;<span><em>Created</em>&nbsp;</span>
+            <time class="document-created-time" value="{{created_time}}" datetime="{{epochToHumanDate "" created_time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created_time}}</time>
+            {{/if}}
+            </td>
+            </script>
 
 <script id="landingpages-save-popup-modal-template" type="text/html">
    
         <div class="modal-dialog" style="width:350px;">
-            <div class="modal-content">
+        <div class="modal-content">
                 <div class="modal-header">
-                    <button class="close" data-dismiss="modal">x</button>
+                 <button class="close" data-dismiss="modal">x</button>
                     <h3 class="modal-title">
                         <h6 id="popup-msg" style="margin:5px"><span style="color: green;">Landing page saved successfully</span></h6>
                         <i class="glyphicon glyphicon-arrow-right"></i> <strong>Next Action {{title}} </strong> Publish the Landing Page </h3>
                 </div> 
-                <div class="modal-body">
+            <div class="modal-body">
                 
                     <form id="landingpage-save-popup-form" style="margin-left:108px;/* margin-left:18px; */" style="margin-left: -11px;" >
                         <fieldset>            
@@ -150,7 +198,7 @@
                        <label class="pull-left" onclick="hideLandingpagePopup();" style="margin-left:-43px;margin-left:2px;"><input type="checkbox" id="landingpages-save-popup" value="false">Don't show me again</label>
                 
                         </div>
-                    <div class="col-sm-3" style="margin-left:27px;">  
+                         <div class="col-sm-3" style="margin-left:27px;">  
                         <button type="button" class="btn btn-sm btn-primary" data-dismiss="modal" id="ok">Close</button>
                     </div>
                 </div>  

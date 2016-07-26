@@ -1053,6 +1053,7 @@
 
 		 	});
 		});
+		make_menu_item_active("ticketknowledgebasemenu");
 	},
 
 
