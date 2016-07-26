@@ -75,6 +75,9 @@ public class SendMail
 
     public static final String EMAIL_PAYMENT_RECEIVED = "subscription/add-on/email/payment_received";
     public static final String EMAIL_PAYMENT_RECEIVED_SUBJECT = "Payment Received. Thank you.";
+    
+    public static final String INVOICE_CREATED = "subscription/payments/invoice_created";
+    public static final String INVOICE_CREATED_SUBJECT = "Your Agile CRM Invoice";
 
     public static final String PLAN_CHANGED = "subscription/plan_changed";
     public static final String PLAN_CHANGED_SUBJECT = "Your Agile CRM plan has changed";
