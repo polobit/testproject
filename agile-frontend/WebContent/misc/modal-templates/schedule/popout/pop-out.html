@@ -1,4 +1,4 @@
-<html lang="en">
+<html lang="en" data-modal-type="agile-modal-xs" data-modal-version="2">
 <head>
 <meta http-equiv="content-type" content="text/html;charset=utf-8" />
 <title>Popup</title>
@@ -7,24 +7,21 @@
 	rel="stylesheet" type="text/css">
 <style type="text/css">
 body {
-	background: #fff;
-	width: 310px;
-	height: 210px;
+	/*background: #fff;*/
 }
 
 #popup {
 	background: #FCFCFC;;
 	  border: 1px solid #f6f6f6;
-	-webkit-border-radius: 5px 5px 0 0;
-	-moz-border-radius: 5px 5px 0 0;
-	border-radius: 5px 5px 0 0;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
 	/*box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.25); */
 	color: #333 !important;
 	font: 13px/19px "Varela", Arial, Helvetica, sans-serif !important;
 	letter-spacing: 0;
-	width: 302px;
-	position: fixed;
-	bottom: 0;
+/*	width: 302px;
+	margin: 0px auto;*/
 }
 
 #popup-header {
@@ -50,8 +47,7 @@ body {
 	-webkit-border-radius: 8px;
 	-moz-border-radius: 8px;
 	border-radius: 8px;
-	margin: 5px;
-	padding: 20px 20px 20px;
+	padding: 20px;
 	position: relative;
 }
 
@@ -159,14 +155,15 @@ body {
 	font: bold 10px/10px "Montserat", Arial, Helvetica,
 		sans-serif !important;
 	letter-spacing: 1px;
-	padding: 8px;
-	text-align: center;
+	padding: 8px 0;
+	text-align: right;
 	text-transform: uppercase;
-	display: none;
+	/*display: none;*/
 }
 
 #popup-footer a {
 	color: #fff;
+	text-decoration: none;
 }
 
 #closed {
@@ -189,15 +186,8 @@ margin-bottom: 5px!important;
 </style>
 </head>
 <body>
-	<div id="closed">
-		<div id="popup">
-			<div id="popup-header">
-				Online Schedule Meeting
-				<div id="popup-header-arrow"></div>
-			</div>
-		</div>
-	</div>
-	<div id="opened">
+	
+	
 		<div id="popup">
 			<div id="popup-body">
 				<div id="popup-title">Contact Us</div>
@@ -209,12 +199,14 @@ margin-bottom: 5px!important;
 				</div>
 				<div id="popup-close">x</div>
 			</div>
-			<div id="popup-footer">
-				Powered by <a href="https://www.agilecrm.com" target="_blank">AGILE
-					CRM</a>
-			</div>
+			
 		</div>
-	</div>
+
+		<div id="popup-footer">
+				<div id="agile-copyright">Powered by <a href="https://www.agilecrm.com" target="_blank">AGILE
+					CRM</a></div>
+			</div>
+	
 	<script
 		src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
 	<script

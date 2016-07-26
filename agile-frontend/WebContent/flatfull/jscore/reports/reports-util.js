@@ -145,6 +145,7 @@ call_reports : function(url,reportType,graphOn){
 	var domainUsersList=[];
 	var domainUserImgList=[];
 	var averageCallList=[];
+	var averageCallList_temp=[];
 	var sizey = parseInt($('#'+selector).parent().attr("data-sizey"));
 	var topPos = 50*sizey;
 	if(sizey==2 || sizey==3)
@@ -333,9 +334,11 @@ call_reports : function(url,reportType,graphOn){
 			    if(duration > 0){
 			    	
 					var callsDurationAvg=duration/answeredCallsCountList[index];
-					averageCallList.push(callsDurationAvg);
+					averageCallList_temp.push(callsDurationAvg);
+					averageCallList.push(callsDurationAvg/60);
 			    	
 			    }else{
+			    	averageCallList_temp.push(0);
 			    	averageCallList.push(0);
 			    }
 				
@@ -353,7 +356,7 @@ call_reports : function(url,reportType,graphOn){
 			var callsDurationInMinsList = [];
 			$.each(callsDurationList,function(index,duration){
 				if(duration > 0){
-					callsDurationInMinsList[index] = duration;
+					callsDurationInMinsList[index] = duration/60;
 				}else{
 					callsDurationInMinsList[index] = 0;
 				}
@@ -366,7 +369,7 @@ call_reports : function(url,reportType,graphOn){
 			colors=['green'];
 		}
 		
-		portlet_graph_utility.callsPerPersonBarGraph(selector,domainUsersList,series,totalCallsCountList,callsDurationList,text,colors,domainUserImgList);
+		portlet_graph_utility.callsPerPersonBarGraph(selector,domainUsersList,series,totalCallsCountList,callsDurationList,text,colors,domainUserImgList,undefined,averageCallList_temp);
 	});
 
 	return;

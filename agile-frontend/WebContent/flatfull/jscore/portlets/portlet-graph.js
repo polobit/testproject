@@ -639,7 +639,7 @@ var portlet_graph_utility = {
 	 */
 	callsPerPersonBarGraph : function(selector, domainUsersList, series,
 			totalCallsCountList, callsDurationList, text, colors,
-			domainUserImgList,base_model) {
+			domainUserImgList,base_model,averageCallList_temp) {
 			var column_position = $('#'+selector).parent().attr('data-col'), row_position = $('#'+selector).parent().attr('data-row');
 		var pos = '' + column_position + '' + row_position;
 		var	height=domainUsersList.length*30+($('#'+selector).height()-30);
@@ -723,13 +723,14 @@ var portlet_graph_utility = {
 					        		              '<tr><td style="color:'+this.points[0].series.color+';padding:0">Calls:&nbsp; </td>' + 
 					        		        	  '<td style="padding:0"><b>'+totalCallsCountList[this.points[0].point.x]+'</b></td></tr>' +
 					        		        	  '</table>';
+					        		        	  
 						        		else if(text=="{{agile_lng_translate 'calls' 'avg-duration-secs'}}"){
 						        			
 						        			tt += '<table>';
 						        			if(this.points[0]!=undefined && this.points[0].series!=undefined){
 						        				tt += 	'<tr><td class="b-b-none"><u style="text-decoration:none;border-bottom:1px solid">'+domainUsersList[this.points[0].point.x]+'</u></td></tr>'+	
 						        							'<tr><td style="color:'+this.points[0].series.color+';padding:0">'+this.points[0].series.name+':&nbsp; </td>' +
-							                      		'<td style="padding:0"><b>'+portlet_utility.getPortletsTimeConversion(Math.round(this.points[0].point.y))+'</b></td></tr>';
+							                      		'<td style="padding:0"><b>'+portlet_utility.getPortletsTimeConversion(Math.round(averageCallList_temp[this.points[0].point.x]))+'</b></td></tr>';
 						        			}
 						        			tt += '</table>';
 						        			

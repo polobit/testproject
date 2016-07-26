@@ -7143,6 +7143,15 @@ Handlebars.registerHelper('convert_toISOString', function(dateInepoch, options) 
 		else
 			return options.fn(this);
 	});
+
+	Handlebars.registerHelper('is_yearly_plan', function(options)
+	{
+		var plan = USER_BILLING_PREFS.plan.plan_type;
+		var type = plan.split("_")
+		if(type[1] && (type[1] == "YEARLY" || type[1] == "BIENNIAL"))
+			return options.fn(this);
+		return options.inverse(this);
+	});
 	
 	Handlebars.registerHelper("check_admin_ip", function(options)
 	{
@@ -7357,7 +7366,9 @@ Handlebars.registerHelper('if_equals_lowerCase', function(value, target, options
 
 Handlebars.registerHelper('if_equals_sork_key', function(value, target, options)
 {
-	if(value && value.startsWith("-"))
+
+	if(value && value.lastIndexOf("-", 0) === 0)
+
 		value = value.substr(1);
 
 	if(value && target && target == value)
@@ -7368,7 +7379,9 @@ Handlebars.registerHelper('if_equals_sork_key', function(value, target, options)
 
 Handlebars.registerHelper('if_asc_sork_key', function(value, options)
 {
-	if(value && value.startsWith("-"))
+
+	if(value && value.lastIndexOf("-", 0) === 0)
+
 		return options.inverse(this);
 	else
 		return options.fn(this); 

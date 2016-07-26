@@ -38,7 +38,10 @@ var contact_details_tab = {
 	            	agileTimeAgoWithLngConversion($(".note-created-time", el));
 	            	
 	              	contact_detail_page_infi_scroll($('#contact-dtl', App_Contacts.contactDetailView.el), notesView);
-	            }
+	            },
+	            appendItemCallback : function(el) {
+					includeTimeAgo(el);
+				}
 	        });
 	        notesView.collection.fetch();
 	        $('#notes', App_Contacts.contactDetailView.el).html(notesView.el);

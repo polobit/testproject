@@ -316,12 +316,27 @@ function initializePortletsListeners() {
 				});
 
 			});
-
+	$("#chrome-extensions").popover({ 
+   					placement : $(this).attr("data-placement"),
+					html:true,
+					container: 'body',
+					content: function() {
+      return getTemplate("extensions-download-model");
+    }
+				});
 	$('.modal-body').off("click").on('click', '#category-select-all',
 			function(e) {
 				e.preventDefault();
 				$('#category-list').multiSelect('select_all');
 			});
+	$("#chrome-extension").popover({ 
+   					placement : $(this).attr("data-placement"),
+					html:true,
+					container: 'body',content: function() {
+      return $(getTemplate("extensions-download-model")).html();
+    }
+				});
+
 
 	$('.modal-content').off("click").on('click', '#category-select-none',
 			function(e) {

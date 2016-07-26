@@ -21,9 +21,9 @@
                         </div>
                         <div class="control-group form-group">
                             <label class="control-label col-md-2 col-sm-2">{{agile_lng_translate 'misc-keys' 'description'}} </label>
-                            <div class="controls col-sm-10  col-lg-10 email-editor-custom-scroll-bar">
+                            <div class="controls col-sm-10  col-lg-10 span6 email-editor-custom-scroll-bar"  rows="10"  >
                                 <div id="loading-editor"></div>
-                                <textarea class="form-control required" name="content" id="description-article" placeholder="Description" style="width: 75%; height: 45%; display: none;">{{description}}</textarea>
+                                <textarea class="form-control required" name="content" id="description-article" placeholder="Description" style="width: 75%; height: 400px; display: none;">{{description}}</textarea>
                             </div>
                         </div>   
                 
@@ -69,7 +69,7 @@
     {{#each this}}
       <optgroup  name='categorie_id' data-id="{{id}}"  label="{{name}}">
         {{#sections}}
-          <option name='section_id'  data-catogery-id="{{../id}}" value="{{id}}">
+          <option name='section_name'  data-catogery-id="{{../id}}" data-value="{{name}}" value="{{id}}">
             {{name}}
           </option>
         {{/sections}}
