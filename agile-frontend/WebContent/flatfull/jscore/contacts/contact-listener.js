@@ -706,14 +706,14 @@ function contact_list_starify(el,listView) {
     		 */
         	click: function(score, evt) {
         	         		  		
-           		if(listView!=undefined)   //pnt
+           		if(listView!=undefined)   
         		App_Contacts.contact_popover.set({'star_value': score});
       				 else{
       				 	App_Contacts.contact_popover.set({'star_value': score},{silent:true});
       				 App_Contacts.contact_popover.trigger('popoverChange');
-      				
-      				 }
-      				  contact_model =  App_Contacts.contact_popover.toJSON();
+      					 }
+
+      	contact_model =  App_Contacts.contact_popover.toJSON();
 			
 		if(contact_model && contact_model.star_value == 1)  //pnt1       
              {
@@ -728,10 +728,11 @@ function contact_list_starify(el,listView) {
               count_clicks=0;
               $(this.children[0]).attr('src','img/star-off.png');
               $(this).find('input').attr('value',0);
-              console.log("count_clicks="+count_clicks);
+              App_Contacts.contact_popover.trigger('popoverChange');              
                   }   
              }
              else count_clicks=0;
+      				  
         		
         		var new_model = new Backbone.Model();
         		new_model.url = 'core/api/contacts';
