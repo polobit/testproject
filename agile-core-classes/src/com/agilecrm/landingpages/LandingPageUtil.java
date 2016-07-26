@@ -113,12 +113,13 @@ public class LandingPageUtil
 		return map;
 	}
 
-	public static List<LandingPage> getLandingPages()
+	public static List<LandingPage> getLandingPages(String fieldName)
 	{
+		
 		try
 		{
 //			return dao.fetchAll();
-			return dao.ofy().query(LandingPage.class).list();
+			return dao.ofy().query(LandingPage.class).order(fieldName).list();
 		}
 		catch (Exception e)
 		{
@@ -127,11 +128,11 @@ public class LandingPageUtil
 		}
 	}
 
-	public static List<LandingPage> getLandingPages(int max, String cursor)
+	public static List<LandingPage> getLandingPages(int max, String cursor ,String fieldName)
 	{
 //		if (max != 0)
 //			return dao.fetchAll(max, cursor);
-		return getLandingPages();
+		return getLandingPages(fieldName);
 	}
 
 	public static int getCount()

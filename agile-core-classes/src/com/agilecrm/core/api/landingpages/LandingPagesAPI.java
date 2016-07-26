@@ -103,13 +103,15 @@ public class LandingPagesAPI
 	 */
 	@GET
 	@Produces({ MediaType.APPLICATION_JSON })
-	public List<LandingPage> getAllWebPages(@QueryParam("cursor") String cursor, @QueryParam("page_size") String count)
+	public List<LandingPage> getAllWebPages(@QueryParam("cursor") String cursor, @QueryParam("page_size") String count ,  @QueryParam("global_sort_key") String fieldName)
 	{
+		if(fieldName == null)
+			fieldName = "name";
 		if (count != null)
 		{
-			return LandingPageUtil.getLandingPages((Integer.parseInt(count)), cursor);
+			return LandingPageUtil.getLandingPages((Integer.parseInt(count)), cursor , fieldName);
 		}
-		return LandingPageUtil.getLandingPages();
+		return LandingPageUtil.getLandingPages(fieldName);
 	}
 
 	@Path("{landingPageId}")
