@@ -88,22 +88,22 @@
 </script>
 
 <script id="typeahead-contacts-collection-template" type="text/html">
-<div id="company-typeahead-heading" style="display:none;" class="text-md custom-color m-l-sm">Companies</div>
+<div id="company-typeahead-heading" style="display:none;" class="text-md custom-color m-l-sm">{{agile_lng_translate 'companies-view' 'companies'}}</div>
 	<div id="company-results">
 	</div>
-<div id="contact-typeahead-heading" style="display:none;" class="text-md custom-color m-l-sm">Contacts</div>
+<div id="contact-typeahead-heading" style="display:none;" class="text-md custom-color m-l-sm">{{agile_lng_translate 'contact-details' 'Contacts'}}</div>
 	<div id="contact-results">
 	</div>
-<div id="deal-typeahead-heading" style="display:none;" class="text-md custom-color m-l-sm">Deals</div>
+<div id="deal-typeahead-heading" style="display:none;" class="text-md custom-color m-l-sm">{{agile_lng_translate 'contact-details' 'deals'}}</div>
 	<div id="deals-results">
 	</div>
-<div id="document-typeahead-heading" style="display:none;" class="text-md custom-color m-l-sm">Documents</div>	
+<div id="document-typeahead-heading" style="display:none;" class="text-md custom-color m-l-sm">{{agile_lng_translate 'contact-details' 'documents'}}</div>	
 	<div id="document-results">
 	</div>
-<div id="case-typeahead-heading" style="display:none;" class="text-md custom-color m-l-sm">Cases</div>	
+<div id="case-typeahead-heading" style="display:none;" class="text-md custom-color m-l-sm">{{agile_lng_translate 'contact-details' 'cases'}}</div>	
 	<div id="case-results">
 	</div>
-<div id="tickets-typeahead-heading" style="display:none;" class="text-md custom-color m-l-sm">Tickets</div>	
+<div id="tickets-typeahead-heading" style="display:none;" class="text-md custom-color m-l-sm">{{agile_lng_translate 'report-view' 'tickets'}}</div>	
 	<div id="ticket-results">
 	</div>	
 	<div id="typeahead-contacts-model-list"></div>
@@ -123,7 +123,8 @@
   <div id="deal-bulk-confirm">
   <div class="alert bg-white text-center">
 <div class="slate-content p-md text text-center">
-		<i class="fa-exclamation-triangle icon-white"></i> Sorry, you do not have the privileges to access {{entity}}. Please contact your CRM administrator.</div></div>
+		<i class="fa-exclamation-triangle icon-white"></i>
+		{{agile_lng_translate 'opportunity' 'sorry-you-dont-have-previlages-to-access'}}{{entity}}. {{agile_lng_translate 'opportunity' 'please-contact-your-crm-adminstrator'}}</div></div>
 	</div>
 </div>
 <div class="modal-footer">

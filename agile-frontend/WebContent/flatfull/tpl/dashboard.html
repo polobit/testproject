@@ -9,10 +9,10 @@
     </button>
     <ul id="contact-view-model-list" class="pull-right dropdown-menu">
         <li>
-            <a href="#contacts" url="core/api/timeline/contact" class="dashboard-timeline-filter">Contacts</a>
+            <a href="#contacts" url="core/api/timeline/contact" class="dashboard-timeline-filter">{{agile_lng_translate 'contact-details' 'Contacts'}}</a>
 		</li>
 		<li>
-			<a href="#task" url="core/api/timeline/tasks" class="dashboard-timeline-filter">Task</a>
+			<a href="#task" url="core/api/timeline/tasks" class="dashboard-timeline-filter">{{agile_lng_translate 'menu' 'task'}}</a>
         </li>
     </ul>
 </div>
@@ -46,13 +46,13 @@
 	<h3 class="text-lg">{{agile_lng_translate 'portlets' 'you-are-out-of-users'}}</h3>
 	<p class="p-t-sm">
 		{{agile_lng_translate 'portlets' 'plan-free-plan'}} <br/>
-		{{agile_lng_translate 'admin-settings' 'users'}}: {{users_count}} of 2 &nbsp;<a class="text-u-l" href="#subscribe">{{agile_lng_translate 'admin-settings-users' 'add-user'}}</a><br/><br/>
+		{{agile_lng_translate 'admin-settings' 'users'}}: {{users_count}} {{agile_lng_translate 'tickets' 'of'}} 2 &nbsp;<a class="text-u-l" href="#subscribe">{{agile_lng_translate 'admin-settings-users' 'add-user'}}</a><br/><br/>
 	</p>
 {{else}}
 	<h3 class="text-lg text-u-l">{{agile_lng_translate 'portlets' 'account-info'}}</h3>
 	<p class="p-t-sm">
 		{{agile_lng_translate 'portlets' 'plan-free-plan'}}<br/>
-		{{agile_lng_translate 'admin-settings' 'users'}}: {{users_count}} of 2 &nbsp;<a class="text-u-l" href="#users-add">{{agile_lng_translate 'admin-settings-users' 'add-user'}}</a><br/>
+		{{agile_lng_translate 'admin-settings' 'users'}}: {{users_count}}  {{agile_lng_translate 'tickets' 'of'}} 2 &nbsp;<a class="text-u-l" href="#users-add">{{agile_lng_translate 'admin-settings-users' 'add-user'}}</a><br/>
 	</p>
 {{/if_equals}}
 <p>
@@ -66,7 +66,7 @@
 	<h3 class="text-lg text-u-l">{{agile_lng_translate 'portlets' 'account-info'}}</h3>
 	<p class="p-t-sm">
 		{{agile_lng_translate 'portlets' 'plan'}}: {{titleFromEnums plan.plan_type}}<br />
-		{{agile_lng_translate 'admin-settings' 'users'}}: {{userCount}} of {{plan.quantity}} 
+		{{agile_lng_translate 'admin-settings' 'users'}}: {{userCount}}  {{agile_lng_translate 'tickets' 'of'}} {{plan.quantity}} 
 		{{#if_equals userCount plan.quantity}}
 			 &nbsp;<a class="text-u-l" href="#subscribe">{{agile_lng_translate 'admin-settings-users' 'add-user'}}</a> <br />
 		{{else}}
@@ -114,7 +114,7 @@
 			</div>
 			<h1>{{agile_lng_translate 'portlets' 'welcome-msg'}}
 				<div class="pull-right">
-            		<small style="font-size:0.5em; ">Last login :  <time id="last-login-time"  value="{{time_format}}" datetime="{{epochToHumanDate "" time_format}}">{{epochToHumanDate "ddd mmm dd yyyy" time_format}}</time></small>
+            		<small style="font-size:0.5em; ">{{agile_lng_translate 'admin-settings-users' 'last-login'}} :  <time id="last-login-time"  value="{{time_format}}" datetime="{{epochToHumanDate "" time_format}}">{{epochToHumanDate "ddd mmm dd yyyy" time_format}}</time></small>
         		</div>
 			</h1>					
 		</div>
