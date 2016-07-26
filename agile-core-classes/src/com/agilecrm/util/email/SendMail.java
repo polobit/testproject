@@ -181,6 +181,8 @@ public class SendMail
      * Text(or Body) template extension.
      */
     public static final String TEMPLATE_BODY_EXT = "_body.html";
+    
+    public static final String Process_update_status = "Domainuser_updates_html";
 
     @SuppressWarnings("unused")
     private static Object String;

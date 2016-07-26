@@ -193,23 +193,15 @@ public class UpdateContactsOfDomainDeferredTask implements DeferredTask
 	private void updateStats(String previousCursor,String failedIds, String status) {
 		NamespaceManager.set("");
 			
-		if(status.equalsIgnoreCase("COMPLETED"))
-		{		
-			
-			System.out.println("Namespace"+NamespaceManager.get());
-			System.out.println("Session ="+ SessionManager.get());
-			
-		DomainUser domainUser = DomainUserUtil.getCurrentDomainUser();
 		
-		System.out.println("Domain user "+domainUser);
-		System.out.println(" cur Domain "+ domain);
-		
-		}
 		
 		try {
 			System.out.println(" cur Domain "+ domain);
 			ContactSchemaUpdateStats contactSchemaUpdateStats = ContactSchemaUpdateStats.get(domain);
-			System.out.println("Domain user email "+ contactSchemaUpdateStats.domainusermail);
+			String domainUserMail =contactSchemaUpdateStats.domainusermail;
+			System.out.println("Domain user email "+ domainUserMail);
+			
+			
 			
 			contactSchemaUpdateStats.count = count;
 			contactSchemaUpdateStats.cursor = previousCursor;
@@ -218,7 +210,21 @@ public class UpdateContactsOfDomainDeferredTask implements DeferredTask
 			
 			contactSchemaUpdateStats.save();
 			
+			if(status.equalsIgnoreCase("COMPLETED"))
+			{		
+				SendMail.sendMail(domainUserMail, "Process update Status", SendMail.Process_update_status,
+						new Object[] { domain, status });
+
+				
+				//System.out.println("Namespace"+NamespaceManager.get());
+				//System.out.println("Session ="+ SessionManager.get());
+				
+			//DomainUser domainUser = DomainUserUtil.getCurrentDomainUser();
 			
+			//System.out.println("Domain user "+domainUser);
+			//System.out.println(" cur Domain "+ domain);
+			
+			}
 			
 		} catch(Exception e) {
 			System.err.println("Exception while updating stats for domain: "+ domain);
