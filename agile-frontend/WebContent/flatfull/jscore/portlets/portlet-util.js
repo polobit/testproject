@@ -1351,7 +1351,7 @@ var portlet_utility = {
 			break;
 		}
 			case "Average Deviation": {
-			var url = '/core/api/portlets/averageDeviation?+start-date='
+			var url = '/core/api/portlets/averageDeviation?start-date='
 								+ portlet_utility
 										.getStartAndEndDatesOnDue(start_date_str,base_model.get('settings')["start-date"])
 								+ '&end-date='
