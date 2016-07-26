@@ -13,7 +13,7 @@
         {{epochToHumanDate "hh:MM tt" time}}
       </div>
       <div class="clearfix"></div>
-      <div class="date">{{epochToTaskDate time}}</div>
+      <div class="date" title='{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}'>{{epochToTaskDate time}}</div>
       <div class="body">
       <span class="text-xs"><div>Deal created for {{custom1}} ({{currencySymbol}}{{numberWithCommas entityObject.expected_value}}, {{entityObject.probability}}%). </div></span>
     </div>
@@ -31,7 +31,7 @@
       {{epochToHumanDate "hh:MM tt" time}}
     </div>
     <div class="clearfix"></div>
-    <div class="date">{{epochToTaskDate time}}</div>
+    <div class="date" title='{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}'>{{epochToTaskDate time}}</div>
     <div class="body">
       <span class="text-xs"><div>{{displayActivityFieldText custom3}} modified.</div></span>
     </div>
@@ -49,7 +49,7 @@
       {{epochToHumanDate "hh:MM tt" time}}
     </div>
     <div class="clearfix"></div>
-    <div class="date">{{epochToTaskDate time}}</div>
+    <div class="date" title='{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}'>{{epochToTaskDate time}}</div>
     <div class="body">
       <span class="text-xs"><div>Hurray. {{entityObject.owner.name}} has won deal worth {{currencySymbol}}{{numberWithCommas entityObject.expected_value}}.</div></span>
     </div>
@@ -67,7 +67,7 @@
       {{epochToHumanDate "hh:MM tt" time}}
     </div>
     <div class="clearfix"></div>
-    <div class="date">{{epochToTaskDate time}}</div>
+    <div class="date" title='{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}'>{{epochToTaskDate time}}</div>
     <div class="body">
       <span class="text-xs"><div>Alas. {{entityObject.owner.name}} has lost the deal worth {{currencySymbol}}{{numberWithCommas entityObject.expected_value}}.</div></span>
     </div>
@@ -85,10 +85,40 @@
       {{epochToHumanDate "hh:MM tt" time}}
     </div>
     <div class="clearfix"></div>
-    <div class="date">{{epochToTaskDate time}}</div>
+    <div class="date" title='{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}'>{{epochToTaskDate time}}</div>
     <div class="body">
       <span class="text-xs"><div>Milestone changed from {{custom2}} to {{custom1}}.</div></span>
     </div>
+  </div>
+{{/if_equals}}
+{{#if_equals "DEAL_ARCHIVE" activity_type}}
+  <div class="inner">
+    <div class="timestamp">{{time}}</div>
+    <div class="text-md text-cap pull-left">  
+      <div class="contact-job-title text-base custom-color">
+        <i class="icon-list-alt text-muted p-r-xs"></i>Deal Archived.
+      </div>
+    </div>
+    <div class="pull-right" style="font-size:11px;margin-top: 3px;"><i class="fa fa-clock-o m-r-xs"></i>
+      {{epochToHumanDate "hh:MM tt" time}}
+    </div>
+    <div class="clearfix"></div>
+    <div class="date" title='{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}'>{{epochToTaskDate time}}</div>
+  </div>
+{{/if_equals}}
+{{#if_equals "DEAL_RESTORE" activity_type}}
+  <div class="inner">
+    <div class="timestamp">{{time}}</div>
+    <div class="text-md text-cap pull-left">  
+      <div class="contact-job-title text-base custom-color">
+        <i class="icon-list-alt text-muted p-r-xs"></i>Deal Restored.
+      </div>
+    </div>
+    <div class="pull-right" style="font-size:11px;margin-top: 3px;"><i class="fa fa-clock-o m-r-xs"></i>
+      {{epochToHumanDate "hh:MM tt" time}}
+    </div>
+    <div class="clearfix"></div>
+    <div class="date" title='{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}'>{{epochToTaskDate time}}</div>
   </div>
 {{/if_equals}}
 {{#if_equals "DEAL_TAG_ADD" activity_type}}
@@ -103,7 +133,7 @@
       {{epochToHumanDate "hh:MM tt" time}}
     </div>
     <div class="clearfix"></div>
-    <div class="date">{{epochToTaskDate time}}</div>
+    <div class="date" title='{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}'>{{epochToTaskDate time}}</div>
   </div>
 {{/if_equals}}
 {{#if_equals "DEAL_TAG_DELETE" activity_type}}
@@ -118,7 +148,7 @@
       {{epochToHumanDate "hh:MM tt" time}}
     </div>
     <div class="clearfix"></div>
-    <div class="date">{{epochToTaskDate time}}</div>
+    <div class="date" title='{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}'>{{epochToTaskDate time}}</div>
   </div>
 {{/if_equals}}
 {{#if_equals "DEAL_TAG_CHANGE" activity_type}}
@@ -133,7 +163,7 @@
       {{epochToHumanDate "hh:MM tt" time}}
     </div>
     <div class="clearfix"></div>
-    <div class="date">{{epochToTaskDate time}}</div>
+    <div class="date" title='{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}'>{{epochToTaskDate time}}</div>
     <div class="body">
       <span class="text-xs"><div>Tags changed from {{custom2}} to {{custom1}}.</div></span>
     </div>
@@ -151,7 +181,7 @@
       {{epochToHumanDate "hh:MM tt" time}}
     </div>
     <div class="clearfix"></div>
-    <div class="date">{{epochToTaskDate time}}</div>
+    <div class="date" title='{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}'>{{epochToTaskDate time}}</div>
     <div class="body">
       <span class="text-xs"><div>Owner changed from {{custom2}} to {{custom1}}.</div></span>
     </div>
@@ -171,7 +201,7 @@
           {{epochToHumanDate "hh:MM tt" time}}
         </div>
         <div class="clearfix"></div>
-        <div class="date">{{epochToTaskDate time}}</div>
+        <div class="date" title='{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}'>{{epochToTaskDate time}}</div>
         <div class="body">
           <span class="text-xs"><div>{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}" data="{{this.contactid}}" class="popover_contact">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} removed from deal. </div></span>
         </div>
@@ -189,7 +219,7 @@
           {{epochToHumanDate "hh:MM tt" time}}
         </div>
         <div class="clearfix"></div>
-        <div class="date">{{epochToTaskDate time}}</div>
+        <div class="date" title='{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}'>{{epochToTaskDate time}}</div>
         <div class="body">
           <span class="text-xs"><div>{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}" data="{{this.contactid}}" class="popover_contact">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} removed from deal. </div></span>
         </div>
@@ -208,7 +238,7 @@
           {{epochToHumanDate "hh:MM tt" time}}
         </div>
         <div class="clearfix"></div>
-        <div class="date">{{epochToTaskDate time}}</div>
+        <div class="date" title='{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}'>{{epochToTaskDate time}}</div>
         <div class="body">
           <span class="text-xs"><div>{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}" data="{{this.contactid}}" class="popover_contact">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} added to deal. </div> </span>
         </div>
@@ -228,7 +258,7 @@
       {{epochToHumanDate "hh:MM tt" time}}
     </div>
     <div class="clearfix"></div>
-    <div class="date">{{epochToTaskDate time}}</div>
+    <div class="date" title='{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}'>{{epochToTaskDate time}}</div>
     <div class="body">
       <span class="text-xs"><div>{{custom1}}<br/>{{custom2}}.</div></span>
     </div>
