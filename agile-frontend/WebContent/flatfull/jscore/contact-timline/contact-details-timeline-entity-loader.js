@@ -33,7 +33,7 @@ var timeline_entity_loader = {
 		this.load_campaign_logs(contactId);
 		
 		this.get_stats(getPropertyValue(contact.properties, "email"), contact, App_Contacts.contactDetailView.el);
-		setTimeout(this.load_reload_emails, 9000);
+		//setTimeout(this.load_reload_emails, 30000);
 	},
 	
 	load_reload_emails : function(contactId)
@@ -42,9 +42,11 @@ var timeline_entity_loader = {
 		$.each(divArr,function(index, data){
 			parentEMailDivId = divArr[index].id;
 			childEMailDivId = $('#'+parentEMailDivId).next('div').id;
+			childParentId = $('#'+childEMailDivId).attr('parentid');
 			try{
 				if(childEMailDivId.indexOf(parentEMailDivId)!=-1){
-					if($('#'+childEMailDivId).parentNode.id!=parentEMailDivId){
+					//if($('#'+childEMailDivId).parentNode.id!=parentEMailDivId){
+					if(parentEMailDivId==childParentId){
 						$('#'+parentEMailDivId).html($('#'+childEMailDivId).html());
 						$('#'+childEMailDivId).remove();
 					}

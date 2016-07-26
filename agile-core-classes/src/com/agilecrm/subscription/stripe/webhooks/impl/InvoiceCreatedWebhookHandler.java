@@ -101,7 +101,7 @@ public class InvoiceCreatedWebhookHandler extends StripeWebhookHandler
 	    if (data.has("period"))
 	    {
 		JSONObject period = data.getJSONObject("period");
-		SimpleDateFormat formater = new SimpleDateFormat("MM/dd/yyyy");
+		SimpleDateFormat formater = new SimpleDateFormat("EEE MMM dd yyyy");
 		plan.put("start_date", formater.format(new Date(Long.parseLong(period.getString("start")) * 1000).toString()));
 		plan.put("end_date", formater.format(new Date(Long.parseLong(period.getString("end")) * 1000).toString()));
 	    }
