@@ -1734,7 +1734,9 @@ function getGravatar(items, width)
 	return ('https://secure.gravatar.com/avatar/' + Agile_MD5("") + '.jpg?s=' + width + '' + backup_image + data_name);	
 }
 
-function getFormattedPhone(number, cont){
+// this function will take number, contact and required format as parameter and gives the desired number..
+// country code is taken from contact if available..
+function getFormattedPhone(number, cont, format){
 	try{
 		
 		if(!cont || !number){
@@ -1743,19 +1745,37 @@ function getFormattedPhone(number, cont){
 		var numToReturn = number;
 		var numberToFormat = number;
 		var contact = cont;
-		// converting number to dial i 164 format...
 		var code ;
 		var formattedNumber;
 		var countryCode;
 		var address = getPropertyValue(contact.properties,'address');
 		countryCode = JSON.parse(address).country;
 		code = countryCode;
+		
+		// this will call the library method and gets output in json format
 		formattedNumber = phoneNumberParser(numberToFormat,code);
-			var num164Format = formattedNumber.result.format164;
-			if(num164Format && num164Format!= "invalid"){
-				numToReturn = num164Format;
+		
+		// check if the formatted number is valid
+		var formattedNumberResult;	
+		if(format){
+			if(format == "national"){
+				formattedNumberResult =formattedNumber.result.nationalFormat;
+			}else if(format == "international"){
+				formattedNumberResult = formattedNumber.result.internationalFormat;
+			}else if(format == "carrierFormat"){
+				formattedNumberResult = formattedNumber.result.carrierFormat;
+			}else{
+				formattedNumberResult = formattedNumber.result.format164;
 			}
-			console.log("changes format phonenumber is " + formattedNumber);
+		}else{
+			formattedNumberResult =  formattedNumber.result.format164;
+		}
+			
+		if(formattedNumberResult && formattedNumberResult!= "invalid"){
+			numToReturn = formattedNumberResult;
+		}
+		console.log("changes format phonenumber is " + formattedNumber);
+		
 	}catch(e){}
 	return numToReturn;
 }
