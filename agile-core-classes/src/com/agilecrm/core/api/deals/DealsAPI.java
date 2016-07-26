@@ -1524,7 +1524,7 @@ public class DealsAPI
     }
     @Path("/based/tags")
     @GET
-    @Produces({ MediaType.TEXT_HTML, MediaType.APPLICATION_JSON })
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     public List<Opportunity> getDealsByTags(@QueryParam("tag") String tag){
     	List<Opportunity> deals = null;
     	if(tag != null && tag != ""){
