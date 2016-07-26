@@ -65,6 +65,7 @@
 		loadServiceLibrary(function(){
 			App_Ticket_Module.ticketsByFilter(Ticket_Filter_ID);
 		});
+		make_menu_item_active("tickets");
 	},
 
 	/**
