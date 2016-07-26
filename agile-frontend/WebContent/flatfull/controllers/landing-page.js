@@ -54,6 +54,7 @@ var LandingPageRouter = Backbone.Router.extend({
             cursor : true,
             page_size : 20,  
             individual_tag_name : 'tr',
+            customLoaderTemplate : 'agile-app-collection-loader',
             global_sort_key : sortKey,
             postRenderCallback : function(el)
             {
