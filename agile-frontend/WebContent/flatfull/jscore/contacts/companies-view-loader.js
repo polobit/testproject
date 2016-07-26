@@ -56,6 +56,10 @@ var companies_view_loader = {
 						// Call to get Count 
 						getAndUpdateCollectionCount("companies", el);					
 					}
+					else
+					{
+						companies_view_loader.setUpCompaniesCount(el);
+					}
 					
 					contactListener();
 
@@ -175,7 +179,7 @@ var companies_view_loader = {
 				count_message = "<small> (" + 10000 + "+ Total) </small>" + '<span style="vertical-align: text-top; margin-left: 0px">' + '<img border="0" src="' + updateImageS3Path("/img/help.png") + '"' + 'style="height: 10px; vertical-align: middle" rel="popover"' + 'data-placement="bottom" data-title="Lead Score"' + 'data-content="Looks like there are over 10,000 results. Sorry we can\'t give you a precise number in such cases."' + 'id="element" data-trigger="hover">' + '</span>';
 			else
 				count_message = "<small> (" + count + " Total) </small>";
-			$('#contacts-count', el).append(count_message);
+			$('#contacts-count', el).html(count_message);
 		}
 	},
 

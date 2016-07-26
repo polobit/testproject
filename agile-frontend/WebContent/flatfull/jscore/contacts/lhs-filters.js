@@ -217,6 +217,7 @@ function contactFiltersListeners(container_id){
 if(!container_id)
 	  container_id = 'contacts-listener-container';
 
+$('#' + container_id).off('click', 'a.filter-multiple-add-lhs');
 $('#' + container_id).on('click', 'a.filter-multiple-add-lhs', function(e)
 {
 	e.preventDefault();
@@ -232,6 +233,7 @@ $('#' + container_id).on('click', 'a.filter-multiple-add-lhs', function(e)
 	$('#' + fieldName + '-lhs-filter-table').find("div.lhs-contact-filter-row:last").find('#RHS:visible').find(':not(input.date)').focus();
 });
 
+$('#' + container_id).off('click', 'i.filter-tags-multiple-remove-lhs');
 // Filter Contacts- Remove Multiple
 $('#' + container_id).on('click', 'i.filter-tags-multiple-remove-lhs', function(e)
 {
@@ -241,6 +243,7 @@ $('#' + container_id).on('click', 'i.filter-tags-multiple-remove-lhs', function(
 
 });
 
+$('#' + container_id).off('click', 'a.clear-filter-condition-lhs');
 // Filter Contacts- Remove Multiple
 $('#' + container_id).on('click', 'a.clear-filter-condition-lhs', function(e)
 {
@@ -265,6 +268,7 @@ $('#' + container_id).on('click', 'a.clear-filter-condition-lhs', function(e)
 	submitLhsFilter();
 });
 
+$('#' + container_id).off('click', '#clear-lhs-contact-filters');
 $('#' + container_id).on('click', '#clear-lhs-contact-filters', function(e)
 {
 	e.preventDefault();
@@ -278,6 +282,7 @@ $('#' + container_id).on('click', '#clear-lhs-contact-filters', function(e)
 	}
 });
 
+$('#' + container_id).off('click', '#clear-lhs-company-filters');
 $('#' + container_id).on('click', '#clear-lhs-company-filters', function(e)
 {
 	e.preventDefault();
@@ -289,6 +294,8 @@ $('#' + container_id).on('click', '#clear-lhs-company-filters', function(e)
 		companies_view_loader.getCompanies(App_Companies.companyViewModel, $('#companies-listener-container'));
 	}
 });
+
+$('#' + container_id).off('click', '#clear-lhs-segmentation-filters');
 $('#' + container_id).on('click', '#clear-lhs-segmentation-filters', function(e)
 {
 	e.preventDefault();
@@ -300,6 +307,7 @@ $('#' + container_id).on('click', '#clear-lhs-segmentation-filters', function(e)
 	 App_VisitorsSegmentation.visitorssegmentation();
 });
 
+$('#' + container_id).off('click', '#lhs-filters-header');
 $('#' + container_id).on('click', '#lhs-filters-header', function(e)
 {
 	e.preventDefault();
@@ -308,6 +316,7 @@ $('#' + container_id).on('click', '#lhs-filters-header', function(e)
 	$(this).next().find('.lhs-contact-filter-row:visible').find('#RHS').filter(visibleFilter).find(':not(input.date)').focus();
 });
 
+$('#' + container_id).off('change', '#lhs-contact-filter-form select[name="CONDITION"]');
 $('#' + container_id).on('change', '#lhs-contact-filter-form select[name="CONDITION"]', function(e)
 {
 	var selected = $(this).val();
@@ -351,7 +360,7 @@ $('#' + container_id).on('change', '#lhs-contact-filter-form select[name="CONDIT
 	}
 });
 
-
+$('#' + container_id).off('custom_blur keyup', '#lhs-contact-filter-form #RHS input.filters-tags-typeahead:not(.date)');
 $('#' + container_id).on('custom_blur keyup', '#lhs-contact-filter-form #RHS input.filters-tags-typeahead:not(.date)', function(e)
 {
 	console.log("I am in blur " + $(this).val());
@@ -388,6 +397,7 @@ $('#' + container_id).on('custom_blur keyup', '#lhs-contact-filter-form #RHS inp
 	}
 });
 
+$('#' + container_id).off('custom_blur', '#lhs-contact-filter-form #RHS input.typeahead_contacts:not(.date)');
 $('#' + container_id).on('custom_blur', '#lhs-contact-filter-form #RHS input.typeahead_contacts:not(.date)', function(e)
 {
 	console.log("I am in blur " + $(this).val());
@@ -398,6 +408,7 @@ $('#' + container_id).on('custom_blur', '#lhs-contact-filter-form #RHS input.typ
 	$(this).blur();
 });
 
+$('#' + container_id).off('click', '#remove_contact_in_lhs');
 // Filter Contacts- Remove Multiple
 $('#' + container_id).on('click', '#remove_contact_in_lhs', function(e)
 {
@@ -405,6 +416,7 @@ $('#' + container_id).on('click', '#remove_contact_in_lhs', function(e)
 	submitLhsFilter();
 });
 
+$('#' + container_id).off('blur keyup', '#lhs-contact-filter-form #RHS input:not(.date,.filters-tags-typeahead,.typeahead_contacts)');
 $('#' + container_id).on('blur keyup', '#lhs-contact-filter-form #RHS input:not(.date,.filters-tags-typeahead,.typeahead_contacts)', function(e)
 {   
 	if(!$('#lhs_filters_segmentation #error-message').hasClass("hide")){$('#lhs_filters_segmentation #error-message').addClass("hide");}
@@ -442,6 +454,7 @@ $('#' + container_id).on('blur keyup', '#lhs-contact-filter-form #RHS input:not(
 	}
 });
 
+$('#' + container_id).off('change keyup', '#lhs-contact-filter-form #RHS input.date');
 $('#' + container_id).on('change keyup', '#lhs-contact-filter-form #RHS input.date', function(e)
 {
 	if (e.type == 'change' || e.keyCode == '13')
@@ -477,6 +490,7 @@ $('#' + container_id).on('change keyup', '#lhs-contact-filter-form #RHS input.da
 	}
 });
 
+$('#' + container_id).off('change', '#lhs-contact-filter-form #RHS select');
 $('#' + container_id).on('change', '#lhs-contact-filter-form #RHS select', function(e)
 {
 	if ($(this).parent().next().attr("id") == "RHS_NEW")
@@ -514,6 +528,7 @@ $('#' + container_id).on('change', '#lhs-contact-filter-form #RHS select', funct
 	$(this).blur();
 });
 
+$('#' + container_id).off('change', '#lhs-contact-filter-form #RHS_NEW select');
 $('#' + container_id).on('change', '#lhs-contact-filter-form #RHS_NEW select', function(e)
 {
 	if ($(this).parent().prev().attr("id") == "RHS")
@@ -534,6 +549,7 @@ $('#' + container_id).on('change', '#lhs-contact-filter-form #RHS_NEW select', f
 	$(this).blur();
 });
 
+$('#' + container_id).off('blur keyup', '#lhs-contact-filter-form #RHS_NEW input:not(.date)');
 $('#' + container_id).on('blur keyup', '#lhs-contact-filter-form #RHS_NEW input:not(.date)', function(e)
 {
 	if (e.type == 'focusout' || e.keyCode == '13')
@@ -567,6 +583,7 @@ $('#' + container_id).on('blur keyup', '#lhs-contact-filter-form #RHS_NEW input:
 	}
 });
 
+$('#' + container_id).off('change keyup', '#lhs-contact-filter-form #RHS_NEW input.date');
 $('#' + container_id).on('change keyup', '#lhs-contact-filter-form #RHS_NEW input.date', function(e)
 {
 	if (e.type == 'change' || e.keyCode == '13')
@@ -600,7 +617,7 @@ $('#' + container_id).on('change keyup', '#lhs-contact-filter-form #RHS_NEW inpu
 	}
 });
 
-
+	 $('#' + container_id).off('click', '#contacts-left-filters-toggle');
      $('#' + container_id).on('click', '#contacts-left-filters-toggle', function(e)
 		{
 			e.preventDefault();
