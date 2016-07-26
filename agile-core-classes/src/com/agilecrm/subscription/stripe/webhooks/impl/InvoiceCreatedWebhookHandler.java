@@ -31,8 +31,7 @@ public class InvoiceCreatedWebhookHandler extends StripeWebhookHandler
 	 */
     	System.out.println("InvoiceCreatedWebhookHandler");
     	AccountPrefs prefs = getAccountPrefs();
-    	//&& prefs.sendInvoiceBeforeCharge
-	if (eventType.equals(StripeWebhookServlet.STRIPE_INVOICE_CREATED) && prefs != null && getEvent().getRequest() == null)
+	if (eventType.equals(StripeWebhookServlet.STRIPE_INVOICE_CREATED) && prefs != null && prefs.sendInvoiceBeforeCharge && getEvent().getRequest() == null)
 	{
 		System.out.println("InvoiceCreatedWebhookHandler success");
 
@@ -84,6 +83,10 @@ public class InvoiceCreatedWebhookHandler extends StripeWebhookHandler
 	    {
 		JSONObject planJSON = data.getJSONObject("plan");
 		String planName = planJSON.get("name").toString();
+		if(planJSON.get("name").toString().equals("month")){
+			System.out.println("This is monthly subscription. returning null");
+			return null;
+		}
 		if(planName.toLowerCase().contains("email"))
 			plan.put("plan", "1000 Emails");
 		else

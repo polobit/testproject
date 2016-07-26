@@ -7429,6 +7429,15 @@ Handlebars.registerHelper('convert_toISOString', function(dateInepoch, options) 
 		else
 			return options.fn(this);
 	});
+
+	Handlebars.registerHelper('is_yearly_plan', function(options)
+	{
+		var plan = USER_BILLING_PREFS.plan.plan_type;
+		var type = plan.split("_")
+		if(type[1] && (type[1] == "YEARLY" || type[1] == "BIENNIAL"))
+			return options.fn(this);
+		return options.inverse(this);
+	});
 	
 	Handlebars.registerHelper("check_admin_ip", function(options)
 	{
