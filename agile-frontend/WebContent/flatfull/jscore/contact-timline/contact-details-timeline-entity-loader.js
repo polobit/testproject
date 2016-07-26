@@ -33,7 +33,7 @@ var timeline_entity_loader = {
 		this.load_campaign_logs(contactId);
 		
 		this.get_stats(getPropertyValue(contact.properties, "email"), contact, App_Contacts.contactDetailView.el);
-		setTimeout(this.load_reload_emails, 30000);
+		//setTimeout(this.load_reload_emails, 30000);
 	},
 	
 	load_reload_emails : function(contactId)
