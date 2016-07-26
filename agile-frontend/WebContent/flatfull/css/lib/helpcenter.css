@@ -65,7 +65,7 @@ body,input,button,select,textarea {
 	padding: 20px 48px;
 	width: 500px;
 	line-height: 1em;
-
+	height: 58px;
 	width: 760px;
 }
 
@@ -514,17 +514,17 @@ body,input,button,select,textarea {
 	margin-top: 8px;
 }
 .sectionfont{
-	font-size: 16px;
+	font-size: 13px;
 	color:#0072EF;
 }
 .categoriefont{
-	font-size: 19px;
+	font-size: 14px;
 }
 .search-box .fa-search { 
   position: absolute;
-    top: 169px;
-    left: 279px;
-    font-size: 27px;
+    margin-top: 16px;
+    margin-left: 18px;
+    font-size: 23px;
 }
 .search-box1{
 	background:url(https://s3.amazonaws.com/agilecrm/landing/landing-page/images/intro-bg.jpg) no-repeat center center;

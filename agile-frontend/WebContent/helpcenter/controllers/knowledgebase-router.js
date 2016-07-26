@@ -262,8 +262,6 @@ var HelpcenterRouter = Backbone.Router.extend({
 	 		
 	 		if(kbpagelpid == 1){
 				$(".search-box").addClass("search-box1");
-				$(".fa-search").css("top","215px");  
-
 				$(".search-box h1").css("color","#fff");
 			}    
 
