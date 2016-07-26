@@ -1373,7 +1373,6 @@
 		<servlet-name>QuerySubmitServlet</servlet-name>
 		<url-pattern>/querysubmit</url-pattern>
 	</servlet-mapping>
-<<<<<<< HEAD
 	
 	<!-- SSO feature -->
 	<servlet>
