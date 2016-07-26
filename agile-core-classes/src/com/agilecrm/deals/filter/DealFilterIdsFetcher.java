@@ -34,7 +34,7 @@ public class DealFilterIdsFetcher {
     	try {
 			for (Opportunity opportunity : dealsList)
 			{
-				if(hasMenuScope(NavbarConstants.DEALS) && (hasScope(UserAccessScopes.MANAGE_DEALS) || isDealOwner(opportunity) ))
+				if(hasMenuScope(NavbarConstants.DEALS) && (hasScope(UserAccessScopes.UPDATE_DEALS) || isDealOwner(opportunity) ))
 		    	{
 					List<String> conIds = opportunity.getContact_ids();
 					List<String> modifiedConIds = UserAccessControlUtil.checkUpdateAndmodifyRelatedContacts(conIds);
@@ -123,5 +123,26 @@ public class DealFilterIdsFetcher {
 		e.printStackTrace();
 	}
     return false;
+    }
+    
+    public List<Opportunity> getDealsAfterResriction(boolean isDeleteOperation){
+    	List<Opportunity> opportunityList = new ArrayList<Opportunity>();
+    	try {
+			for (Opportunity opportunity : dealsList)
+			{
+				if(hasMenuScope(NavbarConstants.DEALS) && hasScope(UserAccessScopes.DELETE_DEALS))
+		    	{
+					List<String> conIds = opportunity.getContact_ids();
+					List<String> modifiedConIds = UserAccessControlUtil.checkUpdateAndmodifyRelatedContacts(conIds);
+					if(conIds == null || modifiedConIds == null || conIds.size() == modifiedConIds.size())
+					{
+						opportunityList.add(opportunity);
+					}
+		    	}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+    	return opportunityList;
     }
 }

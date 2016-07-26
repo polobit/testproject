@@ -253,7 +253,7 @@ $(function(){
 		if(checked){
 			var err_msg = "";
 			
-			if((!hasScope("MANAGE_DEALS") && hasScope("VIEW_DEALS")) || !hasScope("EDIT_CONTACT"))
+			if((!hasScope("DELETE_DEALS") && hasScope("VIEW_DEALS")) || !hasScope("EDIT_CONTACT"))
 			{
 				err_msg = "You may not have permission to delete some of the deals selected. Proceeding with this operation will delete only the deals that you are permitted to delete.<br/><br/> Do you want to proceed?";
 			}
@@ -262,7 +262,7 @@ $(function(){
 				err_msg = DEALS_CONTACTS_BULK_DELETE_ERROR;
 			}
 
-			if((!hasScope("MANAGE_DEALS") && hasScope("VIEW_DEALS")) || !hasScope("EDIT_CONTACT"))
+			if((!hasScope("DELETE_DEALS") && hasScope("VIEW_DEALS")) || !hasScope("EDIT_CONTACT"))
 			{
 				showModalConfirmation("Bulk Delete", 
 						err_msg, 

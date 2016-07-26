@@ -232,20 +232,36 @@
                                     </div>
                             </label>
                             <div>
-                                <div class="pull-left" style="width:40%;">
+                                <div class="pull-left" style="width:100%;">
                                     <label class="i-checks i-checks-sm checkbox">
                                         <input type="checkbox" name="temp" value="VIEW_DEALS" checked {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
                                         View All Deals
                                     
                                     </label>
                                 </div>
-                                <div class="pull-left" style="width:60%;">
+                                <div style="margin-left:26px;"><small>  View deals owned by other users</small>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="pull-left" style="width:35%;">
                                     <label class="i-checks i-checks-sm checkbox">
-                                        <input type="checkbox" name="temp" value="MANAGE_DEALS" checked {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
-                                    Manage Deals
+                                        <input type="checkbox" name="temp" value="CREATE_DEALS" checked {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
+                                    Create Deals
                                     </label>
                                 </div>
-                                <div style="margin-left:26px;"><small>  Add deals to others. View, edit and delete deals owned by others</small>
+                                <div class="pull-left" style="width:35%;">
+                                    <label class="i-checks i-checks-sm checkbox">
+                                        <input type="checkbox" name="temp" value="UPDATE_DEALS" checked {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
+                                    Update Deals
+                                    </label>
+                                </div>
+                                <div class="pull-left" style="width:30%;">
+                                    <label class="i-checks i-checks-sm checkbox">
+                                        <input type="checkbox" name="temp" value="DELETE_DEALS" checked {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
+                                    Delete Deals
+                                    </label>
+                                </div>
+                                <div style="margin-left:26px;"><small>  Add and edit deals owned by other users. Delete own and other user deals</small>
                                 </div>
                             </div>
                             <div>
@@ -304,19 +320,35 @@
                                             <div style="margin-left:6px;"><small>  Delete own contacts and other user contacts</small></div>
                                        </label>
                                      <div>
-                                      <div class="pull-left" style="width:40%;">
+                                      <div class="pull-left" style="width:100%;">
                                        <label class="i-checks i-checks-sm checkbox">
                                             <input type="checkbox" name="temp" value="VIEW_DEALS" {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
                                             View All Deals
                                        </label>
                                        </div>
-                                       <div class="pull-left" style="width:60%;">
+                                       <div style="margin-left:26px;"><small>  View deals owned by other users</small></div>
+                                      </div>
+                                     </div>
+                                     <div>
+                                       <div class="pull-left" style="width:35%;">
                                        <label class="i-checks i-checks-sm checkbox">
-                                            <input type="checkbox" name="temp" value="MANAGE_DEALS" {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
-                                            Manage Deals
+                                            <input type="checkbox" name="temp" value="CREATE_DEALS" {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
+                                            Create Deals
                                        </label>
                                        </div>
-                                       <div style="margin-left:26px;"><small>  Add deals to others. View, edit and delete deals owned by others</small></div>
+                                       <div class="pull-left" style="width:35%;">
+                                       <label class="i-checks i-checks-sm checkbox">
+                                            <input type="checkbox" name="temp" value="UPDATE_DEALS" {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
+                                            Update Deals
+                                       </label>
+                                       </div>
+                                       <div class="pull-left" style="width:30%;">
+                                       <label class="i-checks i-checks-sm checkbox">
+                                            <input type="checkbox" name="temp" value="DELETE_DEALS" {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
+                                            Delete Deals
+                                       </label>
+                                       </div>
+                                       <div style="margin-left:26px;"><small>  Add and edit deals owned by other users. Delete own and other user deals</small></div>
                                       </div>
                                       <div>
                                       <div class="pull-left" style="width:40%;">
@@ -371,19 +403,34 @@
                                         <div style="margin-left:6px;"><small>  Delete own contacts and other user contacts</small></div>
                                 </label>
                                 <div>
-                                    <div class="pull-left" style="width:40%;">
+                                    <div class="pull-left" style="width:100%;">
                                         <label class="i-checks i-checks-sm checkbox">
                                             <input type="checkbox" name="temp" value="VIEW_DEALS" disabled {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
                                                 View All Deals
                                         </label>
                                     </div>
-                                    <div class="pull-left" style="width:60%;">
+                                    <div style="margin-left:26px;"><small>  View deals owned by other users</small></div>
+                                </div>
+                                <div>
+                                    <div class="pull-left" style="width:35%;">
                                         <label class="i-checks i-checks-sm checkbox">
-                                            <input type="checkbox" name="temp" value="MANAGE_DEALS" disabled {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
-                                            Manage Deals
+                                            <input type="checkbox" name="temp" value="CREATE_DEALS" disabled {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
+                                            Create Deals
                                         </label>
                                     </div>
-                                    <div style="margin-left:26px;"><small>  Add deals to others. View, edit and delete deals owned by others</small></div>
+                                    <div class="pull-left" style="width:35%;">
+                                        <label class="i-checks i-checks-sm checkbox">
+                                            <input type="checkbox" name="temp" value="UPDATE_DEALS" disabled {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
+                                            Update Deals
+                                        </label>
+                                    </div>
+                                    <div class="pull-left" style="width:30%;">
+                                        <label class="i-checks i-checks-sm checkbox">
+                                            <input type="checkbox" name="temp" value="DELETE_DEALS" disabled {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
+                                            Delete Deals
+                                        </label>
+                                    </div>
+                                    <div style="margin-left:26px;"><small>  Add and edit deals owned by other users. Delete own and other user deals</small></div>
                                 </div>
                                 <div>
                                     <div class="pull-left" style="width:40%;">

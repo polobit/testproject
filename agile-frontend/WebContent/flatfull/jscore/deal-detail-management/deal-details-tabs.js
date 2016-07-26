@@ -302,7 +302,7 @@ var Deal_Modal_Event_View = Base_Model_View.extend({
 		e.preventDefault();
 		fill_deal_owners(undefined, undefined, function()
 		{
-			if(hasScope("MANAGE_DEALS") || $(this).attr("data") == CURRENT_DOMAIN_USER.id)
+			if(hasScope("UPDATE_DEALS") || $(this).attr("data") == CURRENT_DOMAIN_USER.id)
 			{
 				$('#deal-owner').css('display', 'none');
 			}

@@ -1052,6 +1052,14 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 			restricted_scopes.add(UserAccessScopes.EDIT_CONTACT);
 			restricted_scopes.add(UserAccessScopes.DELETE_CONTACT);
 		}
+		
+		if(restricted_scopes != null && restricted_scopes.contains(UserAccessScopes.MANAGE_DEALS))
+		{
+			restricted_scopes.remove(UserAccessScopes.MANAGE_DEALS);
+			restricted_scopes.add(UserAccessScopes.CREATE_DEALS);
+			restricted_scopes.add(UserAccessScopes.UPDATE_DEALS);
+			restricted_scopes.add(UserAccessScopes.DELETE_DEALS);
+		}
 
 		if (restricted_scopes != null)
 			defaultScopes.removeAll(restricted_scopes);

@@ -45,20 +45,10 @@ var Deals_Milestone_Events_Collection_View = Base_Collection_View.extend({
         var that = e.currentTarget;
         if(dealPipelineModel)
         {
-            if(!hasScope("MANAGE_DEALS"))
+            if(!hasScope("DELETE_DEALS"))
             {
-                if(dealPipelineModel[0].get('dealCollection').get(id).get('owner').id != CURRENT_DOMAIN_USER.id)
-                {
-                    $('#deal_delete_privileges_error_modal').html(getTemplate("deal-delete-privileges-error-modal")).modal('show');
-                    return;
-                }
-                else
-                {
-                    showAlertModal("delete", "confirm", function(){
-                        deleteDeal(id, milestone, dealPipelineModel, that);
-                    });
-                    return;
-                }
+                $('#deal_delete_privileges_error_modal').html(getTemplate("deal-delete-privileges-error-modal")).modal('show');
+                return;
             }
             else
             {
@@ -137,7 +127,7 @@ var Deals_Milestone_Events_Collection_View = Base_Collection_View.extend({
             if(!template_ui)
                   return;
 
-            if(!hasScope("MANAGE_DEALS") && hasScope("VIEW_DEALS"))
+            if(!hasScope("UPDATE_DEALS") && hasScope("VIEW_DEALS"))
             {
                 showModalConfirmation("Bulk Update", 
                         "You may not have permission to update some of the deals selected. Proceeding with this operation will update only the deals that you are permitted to update.<br/><br/> Do you want to proceed?", 
@@ -226,7 +216,7 @@ var Deals_Milestone_Events_Collection_View = Base_Collection_View.extend({
     bulkDealsArchive : function(e){
         e.preventDefault();
         var template_key = "deal-bulk-archive-modal";
-        if(!hasScope("MANAGE_DEALS") && hasScope("VIEW_DEALS"))
+        if(!hasScope("UPDATE_DEALS") && hasScope("VIEW_DEALS"))
         {
             template_key = "deal-bulk-archive-acl-modal";
         }
@@ -235,7 +225,7 @@ var Deals_Milestone_Events_Collection_View = Base_Collection_View.extend({
             if(!template_ui)
                   return;
 
-            if(!hasScope("MANAGE_DEALS") && hasScope("VIEW_DEALS"))
+            if(!hasScope("UPDATE_DEALS") && hasScope("VIEW_DEALS"))
             {
                 $('#deal_bulk_archive_acl_modal').html($(template_ui)).modal("show");
             }else
@@ -266,7 +256,7 @@ var Deals_Milestone_Events_Collection_View = Base_Collection_View.extend({
     bulkDealsRestore : function(e){
         e.preventDefault();
         var template_key = "deal-bulk-restore-modal";
-        if(!hasScope("MANAGE_DEALS") && hasScope("VIEW_DEALS"))
+        if(!hasScope("UPDATE_DEALS") && hasScope("VIEW_DEALS"))
         {
             template_key = "deal-bulk-restore-acl-modal";
         }
@@ -275,7 +265,7 @@ var Deals_Milestone_Events_Collection_View = Base_Collection_View.extend({
             if(!template_ui)
                   return;
 
-            if(!hasScope("MANAGE_DEALS") && hasScope("VIEW_DEALS"))
+            if(!hasScope("UPDATE_DEALS") && hasScope("VIEW_DEALS"))
             {
                 $('#deal_bulk_restore_acl_modal').html($(template_ui)).modal("show");
             }else
@@ -306,7 +296,7 @@ var Deals_Milestone_Events_Collection_View = Base_Collection_View.extend({
     bulkDealsDelete : function(e){
         e.preventDefault();
         var template_key = "deal-bulk-delete-modal";
-        if(!hasScope("MANAGE_DEALS") && hasScope("VIEW_DEALS"))
+        if(!hasScope("DELETE_DEALS"))
         {
             template_key = "deal-bulk-delete-acl-modal";
         }
@@ -315,9 +305,10 @@ var Deals_Milestone_Events_Collection_View = Base_Collection_View.extend({
             if(!template_ui)
                   return;
 
-            if(!hasScope("MANAGE_DEALS") && hasScope("VIEW_DEALS"))
+            if(!hasScope("DELETE_DEALS"))
             {
                 $('#deal_bulk_delete_acl_modal').html($(template_ui)).modal("show");
+                return;
             }else
             {
                 $('#deal_bulk_delete_modal').html($(template_ui));

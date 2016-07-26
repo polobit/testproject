@@ -124,7 +124,7 @@ var DealsRouter = Backbone.Router.extend({
 	 */
 	importDeals : function()
 	{
-		if (!hasScope("MANAGE_DEALS"))
+		if (!hasScope("CREATE_DEALS"))
 		{
 			$('#content').html('<h2 class="p-l-md"><strong><i class="fa-exclamation-triangle icon-white"></i>&nbsp;&nbsp; Sorry, you do not have privileges to import deals.</strong></h2>');
 			hideTransitionBar();
