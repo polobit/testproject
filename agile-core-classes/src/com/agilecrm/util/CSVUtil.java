@@ -1189,6 +1189,7 @@ public class CSVUtil
 		    	try 
 		    	{
 		    		opportunityId = Double.valueOf(dealPropValues[i]).longValue();
+		    		System.out.println("Inside try block id value------"+opportunityId);
 				}
 		    	catch (Exception e) 
 		    	{
@@ -1197,6 +1198,7 @@ public class CSVUtil
 		    	
 		    	if(opportunityId != null)
 		    	{
+		    		System.out.println("Before getting deal with id in import------"+opportunityId);
 		    		opportunity = OpportunityUtil.getOpportunity(opportunityId);
 		    	}
 	    		if(opportunity != null)
