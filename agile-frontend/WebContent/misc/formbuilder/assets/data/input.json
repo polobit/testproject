@@ -216,6 +216,43 @@
         }
     },
     {
+        "title": "Hidden Input",
+        "fields": {
+            "id": {
+                "label": "ID",
+                "type": "input",
+                "value": "agilefield"
+            },
+            "label": {
+                "label": "Label Text",
+                "type": "input",
+                "value": "Hidden Input"
+            },
+            "placeholder": null,
+            "required": null,
+            "inputtype":{
+                "label": "Input Type",
+                "type": "select",
+                "value": [
+                    {
+                        "value": "agile-hiddenEle-group",
+                        "label": "Hidden",
+                        "selected": true
+                    }
+                ]
+            },
+            "inputvalue":{
+                "label": "Input Value",
+                "type": "input",
+                "value":"",
+                "disabled":"disabled"
+
+            },
+            "inputheight": null,
+            "inputsize": null
+        }
+    },
+    {
         "title": "Prepended Text",
         "fields": {
             "id": {
