@@ -1288,6 +1288,7 @@ enterCompanyScore: function(e){
 	  listCompanyContacts :  function(e)
 	{
 		e.preventDefault();
+    save_company_tab_position_in_cookie("contacts");
 		fill_company_related_contacts(App_Companies.companyDetailView.model.id, 'company-contacts');
 	},
 

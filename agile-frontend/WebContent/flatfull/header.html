@@ -212,8 +212,8 @@
 </div> 
 
 						<ul class="nav navbar-nav agile-menu">
-							<li class="nav-bar-search">
-								<form id="searchForm" class=" navbar-search  navbar-search navbar-form navbar-form-sm navbar-left shift">
+							<li class="nav-bar-search m-r" >
+								<form id="searchForm" class=" navbar-search  navbar-search navbar-form navbar-form-sm navbar-left shift p-r-none">
 					<div class="input-group">
 						    <label for="searchText" class="fa fa-search global-search-label" id="search-results"></label>
 							<input id="searchText" type="text"
@@ -221,8 +221,57 @@
 										class="typeahead typeahead_contacts search-query form-control-custom input-sm no-border no-border-radius rounded bg-light"
 										placeholder='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "search")%>' onclick="Agile_GA_Event_Tracker.track_event('Search option in Nav Bar')">
               		</div>				
+				</form>
+
+				<form id="advanced-search-filter " class="pull-right m-t-sm hide">
+
+                <span class="input-group-btn inline-block">
+                <button type="submit" class="btn btn-sm bg-light rounded" id="search-results" style="height:30px;"><i class="fa fa-search"></i></button>
+
+                <!--<img onclick="startDictation()" src="https://i.imgur.com/cHidSVu.gif" class="btn btn-sm bg-light" style="width:30px;height:30px;padding:0px">-->
+                <button class="dropdown-toggle btn btn-sm bg-light rounded searchFilterDropdown" data-toggle="dropdown" style="height:30px;border-top-right-radius: 500px;border-bottom-right-radius: 500px;"><i style="opacity:0.7;" class="fa fa-filter"></i></button>
+							<ul class="dropdown-menu animated fadeInRight multiple-checkbox" name="fields_set" id="advanced-search-fields-group">           			
+                			
+                			<li>
+		       		  		<a href="javascript:void(0);" class="p-b-none">
+								<label class="i-checks i-checks-sm searchtypeall "><input name="all" value = "" type="checkbox" class="choose-column-chbx"><i></i></label>All</a>
+							</li>
+							
+	                   		<li>
+	       		  			<a href="javascript:void(0);" class="p-b-none">
+								<label class="i-checks i-checks-sm  searchtype"><input name="person" value = "person" type="checkbox" class="choose-column-chbx"><i></i></label>Contacts</a>
+							</li>
+
+							<li>
+	       		  			<a href="javascript:void(0);" class="p-b-none">
+								<label class="i-checks i-checks-sm  searchtype"><input name="company" value = "company" type="checkbox" class="choose-column-chbx"><i></i></label>Companies</a>
+							</li>
+
+							<li>
+	       		  			<a href="javascript:void(0);" class="p-b-none">
+								<label class="i-checks i-checks-sm  searchtype"><input name="opportunity" value = "opportunity" type="checkbox" class="choose-column-chbx"><i></i></label>Deals</a>
+							</li>
+							
+							<li>
+	       		  			<a href="javascript:void(0);" class="p-b-none">
+								<label class="i-checks i-checks-sm  searchtype"><input name="document" value = "document" type="checkbox" class="choose-column-chbx"><i></i></label>Documents</a>
+							</li>
+							<!-- <li>
+	       		  			<a href="javascript:void(0);" class="p-b-none">
+								<label class="i-checks i-checks-sm  searchtype"><input name="cases" value = "cases" type="checkbox" class="choose-column-chbx"><i></i></label>Cases</a>
+							</li> -->
+							<li>
+	       		  			<a href="javascript:void(0);" class="p-b-none">
+								<label class="i-checks i-checks-sm  searchtype"><input name="tickets" value = "tickets" type="checkbox" class="choose-column-chbx"><i></i></label>Tickets</a>
+							</li>
+                			
+                			</ul>
+              </span>
+ 
 								</form>
 							</li>
+							
+
 
 						 	<li id="homemenu" class="active"></li>
 							<%
@@ -442,18 +491,11 @@
 									 </a>
 								<ul class="dropdown-menu animated fadeInRight w" role="menu">
 									<li>
-										<div class="pull-left text-ellipsis w-auto hidden-sm hidden-md p-l p-r" style="max-width:210px;"><span class="hidden-sm hidden-md text-head-black"><%=SafeHtmlUtil.sanitize(domainUser.name)%></span></div>
 										<a href='#user-prefs' class="b-b p-r-none">
-											<%-- <%
-											    if (!StringUtils.isEmpty(currentUserPrefs.pic))
-																out.println("<img src='"
-																		+ currentUserPrefs.pic
-																		+ "'style='padding:2px !important' class='thumbnail m-b-none thumb-xxs m-r-xs inline'></img>");
-															else
-																out.println("<img src='img/gravatar.png' style='padding:2px !important' class='thumbnail m-b-none thumb-xxs m-r-xs inline'></img>");
-											%> --%> <span class="text-sm text-ellipsis block"> <b><%=user.getEmail()%></b></span>
-
-									</a></li>
+											<div class="pull-left text-ellipsis w-auto hidden-sm hidden-md" style="max-width:210px;clear: both;"><span class="hidden-sm hidden-md text-head-black"><%=SafeHtmlUtil.sanitize(domainUser.name)%></span></div>
+											<span class="text-sm text-ellipsis block" style="clear: both;"> <b><%=user.getEmail()%></b></span>
+										</a>
+									</li>
 
 									<li><a href="#user-prefs" onclick="Agile_GA_Event_Tracker.track_event('Preferences in Profile Dropdown')"><!-- <i class="icon-cog"></i> -->
 
@@ -479,7 +521,13 @@
 											<div class="pull-left"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "refer") %></div><div class='pull-right shortcuts'></div><div class="clearfix"></div></a></li>
 									
 									<li><a href="https://www.agilecrm.com/support" target= "_blank" onclick="Agile_GA_Event_Tracker.track_event('Help in Profile Dropdown')"><!-- <i class="icon-off"></i> -->
-											<div class="pull-left"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "help") %></div><div class='pull-right shortcuts'>Shift + H</div><div class="clearfix"></div></a></li>
+									<div class="pull-left"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "help") %></div><div class='pull-right shortcuts'>Shift + H</div><div class="clearfix"></div></a></li>
+
+									<li class="none"><a href="#" id="clickdesk_live_chat">
+											<div class="pull-left">Chat With Us 
+												<i class="fa fa-circle" aria-hidden="true" style="color: green;margin-left: 5px;"></i>
+											</div><div class='pull-right shortcuts'></div><div class="clearfix"></div></a>
+									</li>
 									<!-- <li><a href="https://www.agilecrm.com/support.html" target="_blank"><i class="icon-facetime-video"></i> Help
 											Videos</a></li>
 								 	<li><a href="#" onclick="$('li#fat-menu').removeClass('open');clickdesk_show_livechat_popup();"><i class="icon-comment"></i> Live Chat</a></li>  -->
@@ -497,6 +545,16 @@
 					</header>
 					<!--/.nav-collapse -->
 			
-		
-		
-		
+<script type="text/javascript">
+/*//Remove the search filter cookie if it exists
+function removeSearchFilter(){
+        	var savefilters = _agile_get_prefs("agile_search_filter");
+        	console.log("savefilters = "+savefilters);
+        	if(!savefilter){
+        		_agile_delete_prefs(savefilters);
+
+        	}
+
+        	//_agile_delete_prefs(savefilters);
+        }*/
+</script>

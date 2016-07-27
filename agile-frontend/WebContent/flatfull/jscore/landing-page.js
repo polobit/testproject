@@ -16,10 +16,40 @@ jQuery.validator.addMethod("lpdirectorypath", function(value, element) {
 	return /^(\/\w+)+[a-z0-9-.]+$/.test("/"+value);
 	},"{{agile_lng_translate 'landingpages' 'invalid-path'}}");
 
+
+var LandingPages_Top_Header_Modal_Events = Base_Model_View.extend
+({
+	events: {
+        'click #sort_menu > li': 'LandingpageSort',    
+    },
+    LandingpageSort : function(e){
+    	
+		e.preventDefault();
+        var targetEl = $(e.currentTarget);
+        var sortkey = "", 
+        $sort_menu = $("#sort_menu");
+        if($(targetEl).find("a").hasClass("sort-field"))
+        {
+            $sort_menu.find("li").not(targetEl).find("a.sort-field i").addClass("display-none");
+            $(targetEl).find("a.sort-field i").removeClass("display-none");
+        } else {
+            $sort_menu.find("li").not(targetEl).find("a.order-by i").addClass("display-none");
+            $(targetEl).find("a.order-by i").removeClass("display-none");
+        }
+         sortkey = $sort_menu.find(".order-by i:not(.display-none)").closest(".order-by").attr("data");
+        sortkey += $sort_menu.find(".sort-field i:not(.display-none)").closest(".sort-field").attr("data");
+        _agile_set_prefs("landingpage_sort_menu", sortkey);
+        this.model.set({"sortKey" : sortkey});
+        
+}
+});
+
+var landingpage_collection_events = Base_Collection_View.extend({
+	events : {},
+})
  /**making an function  for the reusable the code for the save 
  landing page and here one LandingPageId we are defining with empty  
  **/
-
 function saveLandingPageToDataStore(isAutoSaved,pageId) {
 
 	if (isValidForm('#landingPageBuilderForm')) {
@@ -118,6 +148,7 @@ function initializeLandingPageListeners(pageId) {
 		$("#builderPageOptions").slideToggle('fast');
 	});
 
+	
 	$('#landingpages-listeners').on('click', '#landingPageSettingBtn', function (e) {
 		e.preventDefault();
 
@@ -307,4 +338,32 @@ function formEmbedIFrameLoaded(iFrameEl) {
 		    formParentEl.innerHTML = formCode;
 		}
 	}
+}
+
+function landingpagesCollection(sortKey)
+{
+	this.LandingPageCollectionView = new landingpage_collection_events({ 
+            url : 'core/api/landingpages',
+            sort_collection : false,
+            templateKey : "landingpages",
+            cursor : true,
+            page_size : 20,  
+            individual_tag_name : 'tr',
+            global_sort_key : sortKey,
+            postRenderCallback : function(el)
+            {
+                includeTimeAgo(el);
+               // updateSortKeyTemplate(sortKey, el);
+                $("#landingpages-list").html(collectiondata);
+                $(".active").removeClass("active");
+                $("#landing-pages-menu").addClass("active");
+                
+            },
+            appendItemCallback : function(el)
+            { 
+                // To show time ago for models appended by infinite scroll
+                includeTimeAgo(el);
+            }});
+        this.LandingPageCollectionView.collection.fetch();
+        var collectiondata = this.LandingPageCollectionView.render().el;
 }

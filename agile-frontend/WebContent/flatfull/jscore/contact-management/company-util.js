@@ -634,8 +634,13 @@
             sortKey:"created_time",
             descending: true,
             postRenderCallback: function(el) {
-            	agileTimeAgoWithLngConversion($(".note-created-time", el));
-            }
+
+				agileTimeAgoWithLngConversion($(".note-created-time", el));
+              	contact_detail_page_infi_scroll($('#infinite-scroller-company-details', App_Companies.companyDetailView.el), notesView);
+            },
+             appendItemCallback : function(el) {
+					includeTimeAgo(el);
+			}
         });
         notesView.collection.fetch();
         $('#company-notes', App_Companies.companyDetailView.el).html(notesView.render().el);

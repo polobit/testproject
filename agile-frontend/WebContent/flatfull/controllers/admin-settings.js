@@ -126,7 +126,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 				  return;
 			$('#account-pref').html($(template_ui));
 			$('#account-pref').find('#admin-prefs-tabs-content').html(getTemplate("settings-account-tab"), {});	
-			var view = new Base_Model_View({ url : '/core/api/account-prefs', template : "admin-settings-account-prefs", postRenderCallback : function()
+			var view = new AccountPrefs_Events_Model_View({ url : '/core/api/account-prefs', template : "admin-settings-account-prefs", postRenderCallback : function()
 			{
 				ACCOUNT_DELETE_REASON_JSON = undefined;
 				
@@ -1430,4 +1430,24 @@ function getDomainFromURL(){
 	return temp[0];
 }
 
+var AccountPrefs_Events_Model_View = Base_Model_View.extend({
+    events: {
+    	
+    	'click .invoice_option' : 'toggleInvoiceOption',
+    	
 
+    },
+
+	toggleInvoiceOption :  function(e)
+	{
+		e.preventDefault();
+		var target_el = $(e.currentTarget);
+		$(target_el).toggleClass("fa-toggle-off fa-toggle-on");
+		var checkbox_el = $("#sendInvoiceBeforeCharge");
+		if(checkbox_el.is(':checked'))
+			checkbox_el.removeAttr("checked");
+		else
+			checkbox_el.attr("checked","checked");
+
+	},
+});

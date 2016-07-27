@@ -40,13 +40,39 @@ $('#app-aside-folded').on('click', function(e) {
 
 
 
-
+function showTrailAlertMessage(){
+	if($("#trial_alert_info .trial_message").text().indexOf("today") != -1)
+		$("#trial_alert_info").css("width", "300px");
+	$("#trial_alert_info").show();
+	
+}
 
 
 	
 $(document).ready(function(){
 
+$(".trial_strip_close").click(function(e){
+	$(this).closest("#trial_alert_info").hide();
+	_agile_set_prefs("free_trial_time", parseInt(new Date().getTime()/1000));
+});
 
+$("#clickdesk_live_chat").click(function(e){
+	e.preventDefault();
+	$(this).closest(".dropdown").removeClass("open");
+	CLICKDESK_LIVECHAT.show();
+});
+
+if(!agile_is_mobile_browser() && USER_BILLING_PREFS.freeTrialStatus && USER_BILLING_PREFS.freeTrialStatus == "TRIALING" && USER_BILLING_PREFS.freeTrialEnd > parseInt(new Date().getTime()/1000))
+{
+	var oldTime =  _agile_get_prefs("free_trial_time");
+	var time = parseInt(new Date().getTime()/1000);
+
+	if(!oldTime)
+		showTrailAlertMessage();
+	else if(time-oldTime > 86400)
+		showTrailAlertMessage();
+
+}
 
 //addDescriptionInfo();
 
@@ -90,16 +116,6 @@ $("#activityModal").on("click", "#eventDescriptionLink", function(e){
  	 $('.aside-wrap').off('ul li');
 	 if(agile_is_mobile_browser()){
 
-	 /*	$('body').on('click',function(e){
-		setTimeout(function(){
-		if(e.target.id != 'searchText' && !$(e.target).closest('button').hasClass('search-menu-mobile'))  {
-		$('.search-mobile').addClass('hide');
-		$('.add-modal-mobile , #search-menu-mobile').addClass('visible-xs');
-		$('.navbar-brand').removeClass('hide');
-		}
-		},500);
-	});*/
-
 	 	$('body').on('click','.add-modal-mobile',function(){
 	 		
 		if($('#aside').hasClass('off-screen')) {
@@ -117,25 +133,18 @@ $("#activityModal").on("click", "#eventDescriptionLink", function(e){
 		}); 	
 
 
-
-	 	$('.aside-wrap ul li').bind('touchstart',function(){
- 		$('.aside-wrap ul li').removeClass('active');
- 		$(this).addClass('active');
- 		}).bind('touchleave touchend',function(){
- 			setTimeout(function(){
- 		$('.aside-wrap ul li').removeClass('active');
- 		},500);
- 		});
-
+		$(".aside-wrap").on("touchstart", "ul li", function() {
+        	$('.aside-wrap ul li').removeClass('active');
+        	$(this).addClass('active');
+    	});
+    	$(".aside-wrap").on("touchleave touchend", "ul li", function() {
+        	setTimeout(function(){
+		 		$('.aside-wrap ul li').removeClass('active');
+		 	},500);
+    	});
  		
 		}
 
-	$('#menu1 a').click(function(e){
-		console.log(e.target);
-	});	
-
-	
-	
 
 	if(( $(window).width() ) < 768 ) {
 
@@ -215,10 +224,9 @@ $("#activityModal").on("click", "#eventDescriptionLink", function(e){
      $('body').css('overflow-y','auto');
 	});	
 	
-	$(".navi-wrap li a").click(function(){
-	  $("#mobile-menu").delay(2000).trigger("click");
-	});
-	
+	$(".navi-wrap").on("click", "li a", function() {
+        $("#mobile-menu").delay(2000).trigger("click");
+    });
 
    $("#mobile-menu-settings").on("click",function(){
    if( $("#aside").hasClass("off-screen") ) {
@@ -234,7 +242,16 @@ $("#activityModal").on("click", "#eventDescriptionLink", function(e){
    }
    });
 
+   $('#searchForm').hover(
+	function () {
+		  $("#advanced-search-filter").removeClass("hide");
+		}, 
+		function () {
+		  $("#advanced-search-filter").addClass("hide");
+		}
+   );
 
+  
    $("#mobile-menu").on("click",function(){
    if( $("#navbar").hasClass("show")) {
    	$("#navbar").removeClass("show");
@@ -286,6 +303,20 @@ $("#activityModal").on("click", "#eventDescriptionLink", function(e){
 		});
 		
 	});
+	$("body").on("click" , ".betaAccess", function(e){
+	  	//$(".BetaAccessForm").removeClass('hide');
+	  	$(".model-etensions").addClass("hide");
+	  		console.log("inside the sending request for the betarequest");
+	 
+	  	var json = {};
+		json.from=CURRENT_DOMAIN_USER.email;
+		json.to = "narmadha@agilecrm.com";
+		json.subject = "Request for getting the Beta Access";	
+		json.body = "Name: " +CURRENT_DOMAIN_USER.name+"<br>"+"Useremail: "+CURRENT_DOMAIN_USER.email+"<br>Domain: "+CURRENT_DOMAIN_USER.domain;
+		sendEmail(json);
+		$("#betasuccess").removeClass("hide");
+	  });
+
 
     $('body').on('click', function (e) {
 	    $('.popover').each(function () {
@@ -296,6 +327,49 @@ $("#activityModal").on("click", "#eventDescriptionLink", function(e){
 	        }
 	    });
 	});
+
+	$( '#advanced-search-fields-group a' ).on( 'click', function( event ) {
+
+   	   var $target = $( event.currentTarget ),
+       $inp = $target.find( 'input' );
+       if(!$inp.closest("li").hasClass("disabled"))
+       		$inp.prop( 'checked', !$inp.is(":checked") );
+
+       var $allitems = $("#advanced-search-fields-group a input"),
+       $inputs = $allitems.not($inp),
+       $items = $inputs.closest("li");
+
+       if(!$inp.prop("value")){	 
+       	 $inputs.prop("checked", $inp.is(":checked"));
+       }
+       else{
+      	var allChecked = ($allitems.not("[value='']").not(":checked").length  == 0);
+		$inputs.filter("[value='']").prop( 'checked', allChecked);
+       }
+
+	   $( event.target ).blur();
+	   var checkedlist = $allitems.not("[value='']");
+	   var list = $allitems.not("[value='']").filter(':checked').map(function(){return $(this).prop("value");}).get();	
+	   console.log(list);
+	   _agile_set_prefs('agile_search_filter_'+CURRENT_DOMAIN_USER.id,JSON.stringify(list));     	   
+	   return false;
+	});
+
+	var search_filters = _agile_get_prefs('agile_search_filter_'+CURRENT_DOMAIN_USER.id),
+	$inputs = $("#advanced-search-fields-group a input");
+	if(!search_filters)
+		search_filters = [];
+	if(typeof(search_filters)== "string")
+		search_filters = JSON.parse(search_filters);
+	$.each(search_filters, function(index, data){
+           $inputs.filter("[value='" + data + "']").prop("checked", true);
+	});
+
+	if(search_filters.length == 0 || $inputs.not(":checked").length == 1){
+		$inputs.filter("[value='']").closest("a").click();
+	}
+
+	
 	// initializing need help popover for header page
    $(".need_help").popover({ 
    					placement : $(this).attr("data-placement"),
@@ -317,13 +391,14 @@ $("#activityModal").on("click", "#eventDescriptionLink", function(e){
 	});
 
 	// Add blinker
-	/*if(!_agile_get_prefs("menu_blinker")){
+	if(!_agile_get_prefs("menu_blinker")){
 		_agile_set_prefs("menu_blinker", "shown");
 		$(".grid_icon_center a.grid-icon-header").addClass("agile-feature-item-blink");	
-	}*/
+	}
 
-	$(".grid_icon_center a.grid-icon-header").addClass("agile-feature-item-blink");	
+	//$(".grid_icon_center a.grid-icon-header").addClass("agile-feature-item-blink");	
    });
+
 
 // Click handlers to role menu items
 function initRolehandlers(){
@@ -380,6 +455,7 @@ function initRolehandlers(){
             });
 	});
 }
+
 
 //checks if there are any custom fields and if if present navigates to contact-add page otherwise opens person-modal
 function addContactBasedOnCustomfields(){

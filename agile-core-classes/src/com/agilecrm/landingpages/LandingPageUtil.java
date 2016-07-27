@@ -10,9 +10,15 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.json.JSONArray;
+import org.json.JSONObject;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.util.FileStreamUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.utils.SystemProperty;
 import com.googlecode.objectify.Query;
@@ -107,12 +113,13 @@ public class LandingPageUtil
 		return map;
 	}
 
-	public static List<LandingPage> getLandingPages()
+	public static List<LandingPage> getLandingPages(String fieldName)
 	{
+		
 		try
 		{
 //			return dao.fetchAll();
-			return dao.ofy().query(LandingPage.class).list();
+			return dao.ofy().query(LandingPage.class).order(fieldName).list();
 		}
 		catch (Exception e)
 		{
@@ -121,11 +128,11 @@ public class LandingPageUtil
 		}
 	}
 
-	public static List<LandingPage> getLandingPages(int max, String cursor)
+	public static List<LandingPage> getLandingPages(int max, String cursor ,String fieldName)
 	{
 //		if (max != 0)
 //			return dao.fetchAll(max, cursor);
-		return getLandingPages();
+		return getLandingPages(fieldName);
 	}
 
 	public static int getCount()
@@ -367,5 +374,32 @@ public class LandingPageUtil
 		
 	}
 	
+	public static String  getFullHtmlCode(String fullXHtmlJson) {
+		
+	    String fullbodyHtml="";
+	   
+		try
+		{
+//		    String fileContent=FileStreamUtil.readResource("D:/jpreddy/EclipseWorkSpace/final/.metadata/.plugins/org.eclipse.wst.server.core/tmp0/agile-java-server/agile-frontend.war/misc/pagebuilder/elements/skeleton.html");
+		    String fileContent=FileStreamUtil.readResource("misc/pagebuilder/elements/skeleton.html");
+		    Document skeletonDoc = Jsoup.parse(fileContent);
+		    Element mainPageElement = skeletonDoc.getElementById("page");
+		    
+		    JSONArray jsonArray = new JSONArray(fullXHtmlJson); 
+		    for (int i = 0; i < jsonArray.length(); i++) {					
+		        JSONObject lpElements = jsonArray.getJSONObject(i);				        
+		        Document doc = Jsoup.parse(lpElements.getString("frameContent"));
+		        fullbodyHtml=fullbodyHtml+doc.body().getElementById("page").children();				        
+		    }
+		    
+		    mainPageElement.html(fullbodyHtml);
+		    return skeletonDoc.toString();
+		}
+		catch (Exception e) {
+	    	    System.out.println(ExceptionUtils.getFullStackTrace(e));
+	    	    return null;
+		}
+		
+	}
 	
 }

@@ -317,6 +317,20 @@ AGILE_EB_OPTIONS['templateId'] = "";
                                     <span class="input-group-addon" ><input type="checkbox" checked="checked" name="youtube" class="social-check" /></span>
                                 </div>
                             </li>
+                            <li>
+                                <div class="input-group">
+                                    <span class="input-group-addon" ><i class="fa fa-2x fa-instagram"></i></span>
+                                    <input type="text" class=" form-control social-input" name="instagram" style="height:48px"/>
+                                    <span class="input-group-addon" ><input type="checkbox" checked="checked" name="instagram" class="social-check" /></span>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="input-group">
+                                    <span class="input-group-addon" ><i class="fa fa-2x fa-pinterest"></i></span>
+                                    <input type="text" class=" form-control social-input" name="pinterest" style="height:48px"/>
+                                    <span class="input-group-addon" ><input type="checkbox" checked="checked" name="pinterest" class="social-check" /></span>
+                                </div>
+                            </li>
                         </ul>
                     </div>
 

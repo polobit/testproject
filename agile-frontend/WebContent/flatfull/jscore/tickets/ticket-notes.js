@@ -161,7 +161,7 @@ var Tickets_Notes = {
 			accept: 'application/json',
 			success : function(data){
 				
-				Ticket_Utils.showNoty('information', "{{agile_lng_translate 'tickets' 'ticket-forwarded'}} " + emails.join(), 
+				Ticket_Utils.showNoty('information', "{{agile_lng_translate 'tickets' 'ticket-forwarded'}}",
 					'bottomRight', 5000);
 
 				// Remove draft message from local staorage

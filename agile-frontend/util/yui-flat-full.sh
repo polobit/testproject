@@ -30,6 +30,7 @@ cat ../WebContent/flatfull/jscore/social-suite/*.js > ../WebContent/jscore/min/f
 
 ## Tickets module min file
 cat ../WebContent/flatfull/jscore/tickets/base-model/*.js ../WebContent/flatfull/jscore/tickets/*.js > ../WebContent/jscore/min/flatfull/tickets-min.js
+
 cat ../WebContent/flatfull/jscore/backbone/*.js ../WebContent/helpcenter/controllers/app.js ../WebContent/flatfull/jscore/helpcenter/base-model/*.js ../WebContent/flatfull/jscore/helpcenter/*.js  ../WebContent/flatfull/jscore/form/*.js ../WebContent/flatfull/jscore/handlebars/*.js > ../WebContent/jscore/min/flatfull/helpcenter-min.js
 cat $(find ../WebContent/helpcenter/controllers ! -path ../WebContent/helpcenter/controllers/app.js -name "helpcenter-router.js") >> ../WebContent/jscore/min/flatfull/helpcenter-min.js
 

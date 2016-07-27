@@ -189,6 +189,17 @@
                     </div>
                     {{/if}}
                     
+                    <div class="control-group form-group {{#is_yearly_plan}}{{else}}hide{{/is_yearly_plan}}">
+                        <label class="control-label col-sm-4 col-xs-4">Send Invoice</label>
+                        <div class="controls col-sm-8 col-xs-8">
+                            <div class="checkbox">
+                                
+                                    <input id="sendInvoiceBeforeCharge" class="hidden" type="checkbox" value="off" name="sendInvoiceBeforeCharge">
+                                    <i class="fa fa-lg invoice_option {{#if sendInvoiceBeforeCharge}}fa-toggle-on {{else}} fa-toggle-off {{/if}}" aria-hidden="true" style="color: gray;"></i>
+                                
+                            </div>    
+                        </div>
+                    </div>
 					 <input name="timezone" class="form-control" type="hidden" value="{{timezone}}" />
 				</div>
 

@@ -1,17 +1,20 @@
-<script id="chrome-modal-template" type="text/html">
-    <div class="modal-dialog modal-xs">
-      <form id="extension-add-modal" class="form-horizontal">
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <h4 class="modal-title">{{agile_lng_translate 'widgets' 'download'}}</h4>
-        </div>
-        <div class="modal-body text-center">
-            <img src="//doxhze3l6s7v9.cloudfront.net/app/static/images/chromeExtensionImage.jpg" class="chromeExtension" alt="chrome image" width="150">
-           <div  class="m-b" > <a id="installExtension" class="btn btn-sm m-t-sm chromeExtension btn-primary">{{agile_lng_translate 'other' 'chroem-extension-model'}}</a></div>
-        </div>
-      </div>
-    </div>
-    </form>
-  </div>
+<script id="extensions-download-model-template" type="text/html">
+   <ul class='grid-sub-nav text-center' style="padding-right: 2px;padding-left:2px;margin-bottom: 0px;">    
+                <li id="chrome-extension" class='pull-left extensionPopovers  model-etensions' style="margin-right:12px;margin-bottom:10px;"><a href='#' class="chromeExtension" title="{{agile_lng_translate 'downloads' 'chrome-extension'}}" onclick="Agile_GA_Event_Tracker.track_event('Chrome Extension Download')"><i class='thumb'><img src='https://doxhze3l6s7v9.cloudfront.net/app/static/img/Chrome.svg'></i></a></li>
+
+                <li class='pull-left extensionPopovers model-etensions AndroidExtension' style="margin-right:12px;margin-bottom:10px;"><a href=" https://play.google.com/store/apps/details?id=agile.agile.crm" target="_blank"  title="{{agile_lng_translate 'downloads' 'andriod-app'}}" onclick="Agile_GA_Event_Tracker.track_event('Android App Download')" class='menu-service-select'><i class='thumb'><img src='https://doxhze3l6s7v9.cloudfront.net/app/static/img/Android.svg'></i> </a></li>
+
+                <li class='pull-left   extensionPopovers model-etensions' style="margin-right:12px;margin-bottom:10px;"><a href='#' class='menu-service-select betaAccess' onclick="Agile_GA_Event_Tracker.track_event('IOS App Request')" title ="{{agile_lng_translate 'downloads' 'ios-app'}}" data-service-name='SERVICE' data-dashboard='dashboard'><i class='thumb'><img src='https://doxhze3l6s7v9.cloudfront.net/app/static/img/Apple.svg'></i></a></li>
+                <li class="hide" id="betasuccess"><div class="bg-white">
+                <div class="slate-content">
+                <div class="box-right pull-left">
+                <h4 class="m-t-none" >Thanks for your request. We will send you an email with beta access.</h4>
+                    
+                </div>
+                 </div>
+                    
+                  </div>
+              </div>
+              </li>
+                </ul>
 </script>
