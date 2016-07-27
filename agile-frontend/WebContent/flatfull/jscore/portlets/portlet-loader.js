@@ -438,7 +438,7 @@ function set_up_portlets(el, portlets_el){
               					  });
 		            		   }
 		            		   else{
-					var weeksArray = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+		            var weeksArray = $.fn.datepicker.dates['en'].daysShort;
 					$(this).find('#calendar_container').find('.fc-widget-header').each(function(index)
 					{
 						$(this).text(weeksArray[index]);

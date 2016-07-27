@@ -1704,7 +1704,7 @@ function chartRenderforIncoming(selector,categories,name,yaxis_name,min_tick_int
                     useHTML: true
                 },
                   lang: {
-            				noData: "{{agie 'portlets' 'no-deals-found'}}"
+            				noData: "{{agile_lng_translate 'portlets' 'no-deals-found'}}"
         				},
         					noData: {
            								style: {
@@ -1890,7 +1890,7 @@ if(selector == 'lossreasonpie-chart-users'){
 				], 
 
 				 lang: {
-					noData: "{{agie 'portlets' 'no-deals-found'}}"
+					noData: "{{agile_lng_translate 'portlets' 'no-deals-found'}}"
 					},
 					 noData: {
 									 style: {
