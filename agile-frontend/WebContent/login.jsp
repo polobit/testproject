@@ -360,8 +360,6 @@ if(isSafari && isWin)
 	
 	<script src='//cdnjs.cloudflare.com/ajax/libs/headjs/1.0.3/head.min.js'></script>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/jstimezonedetect/1.0.4/jstz.min.js" type="text/javascript"></script>
-	<script type="text/javascript" src="https://cdn.jsdelivr.net/fingerprintjs2/1.1.2/fingerprint2.min.js"></script>
-
 	
 	<script type="text/javascript">
 		$(document).ready(function()
@@ -455,14 +453,49 @@ if(isSafari && isWin)
 
 			}
 		}
-		$(function(){
-			new Fingerprint2().get(function(result, components){
-					$("#finger_print").val(result);
-		  			console.log(result);
 
+		// localStorage setup
+		var _agile_storage = {
+			key : "_agile_user_fingerprint",
+			get : function(){
+				if(!this.is_strorage_supports())
+					 return;
+				return localStorage.getItem(this.key);
+			},
+			set :  function(val){
+				if(this.is_strorage_supports())
+					localStorage.setItem(this.key, val);
+			},
+			is_strorage_supports : function(){
+				return (typeof localStorage ? true : false);
+			}
+		};		
+		function _agile_get_fingerprint(callback){
+				
+				// Get stored value
+				var finger_print = _agile_storage.get();
+				if(finger_print)
+					return callback(finger_print);
+
+				// Load js and fetch print
+				head.load("https://cdn.jsdelivr.net/fingerprintjs2/1.1.2/fingerprint2.min.js", function(){
+					new Fingerprint2().get(function(result, components){
+							return callback(result);
+					});
 				});
-		});
+		}
+
 		$(function(){
+			// Get print value to notify user 
+			_agile_get_fingerprint(function(result){
+				if(!result)
+					 return;
+
+				$("#finger_print").val(result);
+				// Reset val
+				_agile_storage.set(result);
+			});
+			
 			var BrowserDetect = {
 					init : function() {
 						this.browser = this.searchString(this.dataBrowser)
