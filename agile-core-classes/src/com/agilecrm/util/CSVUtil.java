@@ -1185,8 +1185,17 @@ public class CSVUtil
 		    {
 		    if(value != null && value.equalsIgnoreCase("id") && StringUtils.isNotEmpty(dealPropValues[i]))
 		    {
-		    	Long opportunityId = Long.valueOf(dealPropValues[i]);
-	    		if(opportunityId != null)
+		    	Long opportunityId = null;
+		    	try 
+		    	{
+		    		opportunityId = Double.valueOf(dealPropValues[i]).longValue();
+				}
+		    	catch (Exception e) 
+		    	{
+					System.out.println("Exception while converting id in deals import.");
+				}
+		    	
+		    	if(opportunityId != null)
 		    	{
 		    		opportunity = OpportunityUtil.getOpportunity(opportunityId);
 		    	}
