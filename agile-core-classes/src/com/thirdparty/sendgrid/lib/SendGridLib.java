@@ -228,6 +228,10 @@ public class SendGridLib {
 				do{
 	        		try
 					{
+	        			// On retry get the stream again.
+	        			if(retry && !email.attachments.isEmpty())
+	        				throw new IOException("InputStream got closed.");
+	        			
 						response = HttpClientUtil.accessURLUsingHttpClient(urlBuilder, this.buildBody(email));
 						
 						System.out.println("Response of email sent: " + response);
@@ -277,10 +281,10 @@ public class SendGridLib {
 				
 				try
 				{
-					Thread.sleep(5000); // Wait for few secs after creating subuser to fix emails drop
-					
-					System.out.println("After wait time...");
-					
+					// On retry get the stream again for attachments.
+        			if(!email.attachments.isEmpty())
+        				throw new IOException("InputStream got closed.");
+        			
 					response = HttpClientUtil.accessURLUsingHttpClient(urlBuilder, this.buildBody(email));
 				}
 				catch (IOException e1) // To handle BlobStream closed exception
