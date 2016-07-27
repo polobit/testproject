@@ -27,8 +27,6 @@ var _agile_synch_form_v4 = function()
 	var agile_address = {};
 	var agile_multiple_checkbox = "";
 	var agile_tags = undefined;
-	var agiletags="";
-
 	var agile_notes = [];
 	var form_data = {};
 	var new_contact = true;
@@ -39,7 +37,6 @@ var _agile_synch_form_v4 = function()
 		var field_value = agile_form[i].value;
 		var field_id = agile_form[i].getAttribute("id");
 		var field_type = agile_form[i].getAttribute("type");
-
 
 		if (field_type == "hidden")
 			agile_form[i].setAttribute("disabled", "disabled");
@@ -52,18 +49,14 @@ var _agile_synch_form_v4 = function()
 			form_data[field_id] = field_value;
 			if ('address, city, state, country, zip'.indexOf(field_name) != -1)
 				agile_address[field_name] = field_value;
-			else if (agile_form[i].checked && (field_name == "tags" && (field_type=="checkbox" || 
-				field_type=="radio" || field_type=="hidden" )))
+			else if (field_name == "tags" && (field_id=="_agile_form_id_tags" || ((field_type=="checkbox" || 
+				field_type=="radio") && agile_form[i].checked)))
 			{
-				if (agile_tags){
-				  agile_tags = agile_tags + ',' + field_value;
-
-				}
-				else{ 
-					agile_tags = field_value;	
+				if (agile_tags)
+					agile_tags = agile_tags + ',' + field_value;
+				else
+					agile_tags = field_value;
 			}
-			agile_contact[field_name] = agile_tags;
-		}
 			else if (field_name == "note")
 			{
 				var agile_note = {};
@@ -71,27 +64,18 @@ var _agile_synch_form_v4 = function()
 				agile_note.description = field_value;
 				agile_notes.push(agile_note);
 			}
-           /*
-           *for multiple checkboxes in the custome field selection
-           */
-			else if(agile_form[i].checked &&(field_type == "checkbox" && agile_tags))
-			{
-			   
-
-				if (agile_multiple_checkbox){
+			else if(field_type == "checkbox" && !agile_tags)
+			   {
+				if (agile_multiple_checkbox)
 					agile_multiple_checkbox = agile_multiple_checkbox + ',' + field_value;
-				}
-				else{
+				else
 					agile_multiple_checkbox = field_value;
-				}
-			
-			   agile_contact[field_name] = agile_multiple_checkbox;  
+
+				  agile_contact[field_name] = agile_multiple_checkbox;  
 			}
-          
-			else{
-				//if(!agile_multiple_checkbox)
+
+			else
 				agile_contact[field_name] = field_value;
-			}
 		}
 		else if (field_value)
 		{
