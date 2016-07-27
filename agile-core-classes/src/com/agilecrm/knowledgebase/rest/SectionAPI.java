@@ -63,6 +63,25 @@ public class SectionAPI
 					.build());
 		}
 	}
+	
+	@GET
+	@Path("/kb-admin")
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	public Section getAdminSection(@QueryParam("id") long id)
+	{
+		try
+		{
+			Section section = Section.dao.get(id);
+			section.categorie = Categorie.dao.get(section.categorie_key);
+			return section;
+		}
+		catch (Exception e)
+		{
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+					.build());
+		}
+	}
 
 	@GET
 	@Path("/categorie/{id}")
@@ -147,9 +166,10 @@ public class SectionAPI
 	}
 
 	@PUT
+    @Path("/kb-admin")
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	public Section updateSection(Section section) throws WebApplicationException, EntityNotFoundException
+	public Section updateSection(Section section ) throws WebApplicationException, EntityNotFoundException
 	{
 		Section dbsection = Section.dao.get(section.id);
 		try

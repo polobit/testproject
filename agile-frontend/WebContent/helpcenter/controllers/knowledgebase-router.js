@@ -6,6 +6,7 @@ var HelpcenterRouter = Backbone.Router.extend({
 
 		/* Home routes */
 		"" : "categories",
+		"categories" : "categories",
 		"section/:id" : "sectionArticles",
 		"category/:categorie_id" : "categorieSections",
 		"section/:name" : "sectionArticles",
@@ -23,6 +24,8 @@ var HelpcenterRouter = Backbone.Router.extend({
 				url :'/helpcenterapi/api/knowledgebase/categorie',
 				templateKey : "helpcenter-categories",
 				individual_tag_name : 'div',
+				sort_collection:true,
+				sortKey:"created_time",
 				postRenderCallback : function(el, collection) {
 
 					Helpcenter_Util.setBreadcrumbPath();
@@ -70,6 +73,8 @@ var HelpcenterRouter = Backbone.Router.extend({
 
 	sectionArticles: function(name){
 
+		var name = decodeURI(name);
+		 name = encodeURIComponent(name);
 		App_Helpcenter.renderHomeTemplate(function(){
 
 			var sectionView = new Base_Model_View({
@@ -107,7 +112,6 @@ var HelpcenterRouter = Backbone.Router.extend({
 	},
 
 	viewArticle:function(name){
-		name	= encodeURIComponent(name);
 
 		App_Helpcenter.renderHomeTemplate(function(){
 
@@ -243,8 +247,10 @@ var HelpcenterRouter = Backbone.Router.extend({
 	},*/
 	renderHomeTemplate: function(callback){
 
+	
 		if($('#helpcenter-container').length)
 		{
+			
 			callback();
 			return;
 		}
@@ -254,7 +260,14 @@ var HelpcenterRouter = Backbone.Router.extend({
 	 		if(!template_ui)
 	 			return;
 
+	 		
 	 		$('#content').html($(template_ui));
+	 		
+	 		if(kbpagelpid == 1){
+				$(".search-box").addClass("search-box1");
+				$(".search-box h1").css("color","#fff");
+			}    
+
 
 	 		if(callback)
 	 			callback();
@@ -274,10 +287,17 @@ var HelpcenterRouter = Backbone.Router.extend({
 				individual_tag_name : 'div',
 				slateKey : 'articles',
 				postRenderCallback : function(el,data) {
+						
+					
+					
+					Helpcenter_Util.setBreadcrumbPath('categorie-sections-breadcrumb', data);
 					
 					$("#hc_query").val('');
+					var str = Backbone.history.getFragment();
 
-					Helpcenter_Util.setBreadcrumbPath('categorie-sections-breadcrumb', data);
+					if (str.indexOf("categories") >= 0){
+						$("li#default a").attr("href", "#")
+					}
 				},
 				errorCallback : function(){
 					$('#helpcenter-container').html(App_Helpcenter.articlesCollection.el);
