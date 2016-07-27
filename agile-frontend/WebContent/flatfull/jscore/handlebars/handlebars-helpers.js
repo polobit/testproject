@@ -3789,7 +3789,7 @@ $(function()
 			val = value[0].count;
 
 		if (val <= 20)
-			return "Workflows";
+			return "{{agile_lng_translate 'campaigns' 'workflows'}}";
 
 		return "(" + val + _agile_get_translated_val('other','total')+ " )";
 	});
