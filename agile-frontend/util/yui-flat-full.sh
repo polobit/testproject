@@ -30,8 +30,6 @@ cat ../WebContent/flatfull/jscore/social-suite/*.js > ../WebContent/jscore/min/f
 
 ## Tickets module min file
 cat ../WebContent/flatfull/jscore/tickets/base-model/*.js ../WebContent/flatfull/jscore/tickets/*.js > ../WebContent/jscore/min/flatfull/tickets-min.js
-cat ../WebContent/flatfull/jscore/backbone/*.js ../WebContent/helpcenter/controllers/app.js ../WebContent/flatfull/jscore/helpcenter/base-model/*.js ../WebContent/flatfull/jscore/helpcenter/*.js  ../WebContent/flatfull/jscore/form/*.js ../WebContent/flatfull/jscore/handlebars/*.js > ../WebContent/jscore/min/flatfull/helpcenter-min.js
-cat $(find ../WebContent/helpcenter/controllers ! -path ../WebContent/helpcenter/controllers/app.js -name "helpcenter-router.js") >> ../WebContent/jscore/min/flatfull/helpcenter-min.js
 
 ## Webrules into templates
 #cat ../WebContent/flatfull/jscore/web-rules/*.js > ../WebContent/jscore/min/flatfull/web-rules-min.js
@@ -46,13 +44,9 @@ java -jar yuicompressor-2.4.7.jar ../WebContent/stats/min/agile-min.js --type js
 
 echo 'Minifying helpcenter files...'
 cat ../WebContent/flatfull/jscore/backbone/*.js > ../WebContent/jscore/min/flatfull/helpcenter-all-min.js
-
 cat $(find ../WebContent/helpcenter/controllers ! -path ../WebContent/helpcenter/controllers/app.js -name "knowledgebase-router.js") >> ../WebContent/jscore/min/flatfull/helpcenter-all-min.js
-
 cat ../WebContent/flatfull/jscore/form/*.js ../WebContent/flatfull/jscore/handlebars/*.js >> ../WebContent/jscore/min/flatfull/helpcenter-all-min.js
-
 cat ../WebContent/helpcenter/jscore/*.js >> ../WebContent/jscore/min/flatfull/helpcenter-all-min.js
-
 cat ../WebContent/helpcenter/controllers/app.js >> ../WebContent/jscore/min/flatfull/helpcenter-all-min.js
 #End of Helpcenter
 
@@ -78,10 +72,6 @@ cat ../WebContent/jscore/min/flatfull/social-suite-all-min.js >> ../WebContent/t
 #Minify tickets
 java -jar yuicompressor-2.4.7.jar ../WebContent/jscore/min/flatfull/tickets-min.js --line-break 10000 --type js -o  ../WebContent/jscore/min/flatfull/tickets-min.js
 
-#Minify helpcenter
-java -jar yuicompressor-2.4.7.jar ../WebContent/jscore/min/flatfull/helpcenter-min.js --line-break 10000 --type js -o  ../WebContent/jscore/min/flatfull/helpcenter-min.js
-
-
 ########################################### En Changes #######
 java -jar yuicompressor-2.4.7.jar ../WebContent/jscore/min/locales/en/js-all-min-1.js --line-break 10000 --type js -o  ../WebContent/jscore/min/locales/en/js-all-min-1.js
 
@@ -98,10 +88,6 @@ java -jar yuicompressor-2.4.7.jar ../WebContent/jscore/min/locales/en/social-sui
 
 #Minify tickets
 java -jar yuicompressor-2.4.7.jar ../WebContent/jscore/min/locales/en/tickets-min.js --line-break 10000 --type js -o  ../WebContent/jscore/min/locales/en/tickets-min.js
-
-#Minify helpcenter
-java -jar yuicompressor-2.4.7.jar ../WebContent/jscore/min/locales/en/helpcenter-min.js --line-break 10000 --type js -o  ../WebContent/jscore/min/locales/en/helpcenter-min.js
-################################## End of En Changes #######
 
 ########################################### En Changes #######
 java -jar yuicompressor-2.4.7.jar ../WebContent/jscore/min/locales/es/js-all-min-1.js --line-break 10000 --type js -o  ../WebContent/jscore/min/locales/es/js-all-min-1.js
@@ -120,6 +106,4 @@ java -jar yuicompressor-2.4.7.jar ../WebContent/jscore/min/locales/es/social-sui
 #Minify tickets
 java -jar yuicompressor-2.4.7.jar ../WebContent/jscore/min/locales/es/tickets-min.js --line-break 10000 --type js -o  ../WebContent/jscore/min/locales/es/tickets-min.js
 
-#Minify helpcenter
-java -jar yuicompressor-2.4.7.jar ../WebContent/jscore/min/locales/es/helpcenter-min.js --line-break 10000 --type js -o  ../WebContent/jscore/min/locales/es/helpcenter-min.js
 ################################## End of En Changes #######
