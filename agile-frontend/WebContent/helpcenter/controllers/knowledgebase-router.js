@@ -74,7 +74,7 @@ var HelpcenterRouter = Backbone.Router.extend({
 	sectionArticles: function(name){
 
 		var name = decodeURI(name);
-		var name = encodeURIComponent(name);
+		 name = encodeURIComponent(name);
 		App_Helpcenter.renderHomeTemplate(function(){
 
 			var sectionView = new Base_Model_View({
