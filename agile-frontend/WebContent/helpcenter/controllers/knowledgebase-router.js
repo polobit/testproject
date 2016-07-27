@@ -287,10 +287,17 @@ var HelpcenterRouter = Backbone.Router.extend({
 				individual_tag_name : 'div',
 				slateKey : 'articles',
 				postRenderCallback : function(el,data) {
+						
+					
+					
+					Helpcenter_Util.setBreadcrumbPath('categorie-sections-breadcrumb', data);
 					
 					$("#hc_query").val('');
+					var str = Backbone.history.getFragment();
 
-					Helpcenter_Util.setBreadcrumbPath('categorie-sections-breadcrumb', data);
+					if (str.indexOf("categories") >= 0){
+						$("li#default a").attr("href", "#")
+					}
 				},
 				errorCallback : function(){
 					$('#helpcenter-container').html(App_Helpcenter.articlesCollection.el);
