@@ -683,7 +683,7 @@ public class ActivityReportsUtil
 		// Prepare the summary to show in the email, as it is not
 		// possible to format in the template.
 		activity.label = "<a href=\"https://" + user.domain + ".agilecrm.com/#contact/" + activity.entity_id
-			+ "\">" + activity.label + "</a>";
+			+ "\" style=\"text-decoration:none\">" + activity.label + "</a>";
 		emailActivity.add(activity);
 	    }
 	    else if (activity.activity_type == Activity.ActivityType.BULK_ACTION
@@ -1078,13 +1078,13 @@ public class ActivityReportsUtil
 	{
 	    if (activity.related_contact_ids != null && activity.related_contact_ids.length() != 0)
 	    {
-		String result = prefix;
+		String result = "";
 
 		JSONArray contacts = new JSONArray(activity.related_contact_ids);
 		for (int i = 0; i < contacts.length(); i++)
 		{
 		    result += "<a href=\"https://" + domain + ".agilecrm.com/#contact/"
-			    + contacts.getJSONObject(i).getString("contactid") + "\" target=\"_blank\">"
+			    + contacts.getJSONObject(i).getString("contactid") + "\" target=\"_blank\" style=\"text-decoration:none\">"
 			    + contacts.getJSONObject(i).getString("contactname") + "</a>";
 		    if (i + 1 != contacts.length())
 			result += ", ";
