@@ -462,10 +462,28 @@ public class SendGrid
 				System.out.println("FileName: " + fileName + " FileExtension: " + fileExt);
 				
 				email.addAttachment(fileName + "." + fileExt, fileContent);
+				
+				return sendGrid.send(email);
 			}
 			catch (IOException e)
 			{
 				e.printStackTrace();
+				
+				// If we get Inputstream closed exception then retry again
+				if(e.getMessage().equalsIgnoreCase("InputStream got closed."))
+				{
+					email.addAttachment(fileName + "." + fileExt, fileContent);
+					
+					try
+					{
+						return sendGrid.send(email);
+					}
+					catch (Exception ex)
+					{
+						System.out.println("Exception occured in ClosedStreamException handler...");
+						System.out.println(ExceptionUtils.getFullStackTrace(ex));
+					}
+				}
 			}
 	    }
     	
