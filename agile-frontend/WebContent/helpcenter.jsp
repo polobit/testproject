@@ -46,13 +46,14 @@
 
   
   <%
-  LandingPageKnowledgebase  kbpage = KbLandingPageUtil.get(); ;
+  LandingPageKnowledgebase  kbpage = KbLandingPageUtil.get(); 
 
-	if(kbpage == null ||kbpage.kb_landing_page_id == 0 
+	if(kbpage == null ||kbpage.kb_landing_page_id == 0 || kbpage.kb_landing_page_id == 1
 			|| LandingPageUtil.getLandingPage(kbpage.kb_landing_page_id) == null){
 	%>
 		<%@ include file="/knowledgebase.jsp"%>
-	<%}%> 
+	<%
+	}%> 
 	
 	<% 
   
@@ -96,7 +97,6 @@
 	out.write(fullXHtml);
 		}
 	} catch (Exception e) {
-	out.print("<h1>"+e.getMessage()+"</h1>");
 	} finally {
 	}
 
@@ -140,8 +140,7 @@ if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Produ
 
 %>
 <link rel="stylesheet" type="text/css" href="flatfull/css/min/css-all-min.css?_=<%=_AGILE_VERSION%>"></link>
-  <link rel="stylesheet" type="text/css" href="flatfull/css/min/helpcenter-custom.css?_=<%=_AGILE_VERSION%>"></link>
-<script src='//cdnjs.cloudflare.com/ajax/libs/headjs/1.0.3/head.min.js'></script>
+  <script src='//cdnjs.cloudflare.com/ajax/libs/headjs/1.0.3/head.min.js'></script>
 <script>
 
 <%-- var landingpageid = <%=landingpageid %> --%>
@@ -180,12 +179,29 @@ var IS_FLUID = <%=is_fluid %>
 
 var HANDLEBARS_LIB = LOCAL_SERVER ? "/lib/handlebars-v1.3.0.js" : "//cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.3.0/handlebars.min.js";
 
-head.load(LIB_PATH + 'final-lib/min/lib-all-min-1.js?_=' + _AGILE_VERSION, function(){
-        load_globalize();
-});
 
-// head.js({ library  : LIB_PATH + 'final-lib/min/lib-all-min-1.js?_=' + _AGILE_VERSION });
+	var _AGILE_FILE_HASH;
+	
+	function _agile_get_file_hash(filename)
+	{
+		if( !filename || filename == '' )	return _AGILE_VERSION;
+		
+		if( _AGILE_FILE_HASH && _AGILE_FILE_HASH[filename] )	return _AGILE_FILE_HASH[filename];
+		
+		return _AGILE_VERSION;
+	}
 
+
+head.load(	"https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js",
+			LIB_PATH + 'final-lib/min/lib-all-new-1.js?_=' + _agile_get_file_hash('lib-all-new-1.js'),
+			"https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.3.0/handlebars.min.js",
+			LIB_PATH + 'final-lib/min/backbone-min.js',
+			LIB_PATH + 'final-lib/min/lib-all-new-2.js?_=' + _agile_get_file_hash('lib-all-new-2.js')+'_', 
+			function(){
+		    
+		});
+/*<!--  head.js({ library  : LIB_PATH + 'final-lib/min/lib-all-min-1.js?_=' + _AGILE_VERSION }); -->
+*/
 if(HANDLEBARS_PRECOMPILATION)
 head.js(CLOUDFRONT_PATH + "tpl/min/precompiled/" + FLAT_FULL_PATH + "helpcenter-tpl.js" + "?_=" + _AGILE_VERSION);	
 

@@ -2,13 +2,11 @@
 	<!-- Search box -->
 	<div class="search-box">
         <h1>Have a question?</h1>
-        <h3>If you have any question you can enter what you are looking for!</h3>
 		<form id="article_search_form" name="article_search_form" method="get" 
 			onsubmit="Helpcenter_Util.searchArticles();return false;" >	
-			<div class="If you have any question you can enter what you are looking forinput-append">
-				<input id="hc_query" name="hc_query" type="text" placeholder="Search">
-				<input name="commit" type="submit" value="Search" class="btn btn-primary">
-			</div>
+			<i class="fa fa-search text-muted"></i>
+			<input id="hc_query" name="hc_query" type="text" placeholder="Search">
+						</div>
 		</form>	
 	</div>
 
@@ -16,5 +14,8 @@
 	<div class="container">
 		<div id="breadcrumb"></div>
 		<div id="helpcenter-container" class="helpcenter-container"></div>
+	</div>
+	<div class="pull-right text-muted" style="padding-top:40px;padding-right:40px ">
+	<i class="fa fa-cloud"></i> <a href="https://www.agilecrm.com/" target="_blank" class="text-muted">Powered by Agile</a>
 	</div>
 </script>
