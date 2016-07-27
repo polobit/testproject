@@ -4213,7 +4213,7 @@ background-color : #522E2E;
   margin-top: -10px;
   position: absolute;
   padding-left: 10px;
-  padding-top: 10px;
+  padding-top: 23px;
   background: none!important;
   border: none!important;
   font-weight: bold;
@@ -4228,16 +4228,17 @@ background-color : #522E2E;
     background: lightyellow;
     margin-top: -10px;
     position: absolute;
-    border-radius: 5px;
+    border-radius: 0px;
     padding-left: 10px;
     padding-top: 10px;
     border: 1px solid #edf1f2;
+    height: 70px;
 }
 
 #moved-deal li div {
   float: left;
-    padding-bottom: 10px;
-    max-width: 180px;
+  max-width: 180px;
+  margin-top: 13px;
 }
 
 #chrome-extension
@@ -4361,7 +4362,7 @@ border: 1px solid #e5e5e5;
 }
 
 .deal-actions-overlap {
-  background: #ebf5ff!important;
+  background: #cddeef!important;
 }
 .archive-deal-action:after {
   content: "Archive";
@@ -4396,10 +4397,10 @@ border: 1px solid #e5e5e5;
   font-family: "Source Sans Pro","Helvetica Neue",Helvetica,Arial,sans-serif;
 }
 .update-drag-deal:hover {
-  background: #ebf5ff!important;
+  background: #cddeef!important;
 }
 .update-drag-deal:hover span:after {
-  border-left: 6px solid #ebf5ff!important;
+  border-left: 6px solid #cddeef!important;
 }
 .update-drag-deal + .tooltip{
   width: auto!important;
