@@ -19,6 +19,7 @@ import com.agilecrm.deals.Opportunity;
 import com.agilecrm.deals.util.MilestoneUtil;
 import com.agilecrm.deals.util.OpportunityUtil;
 import com.agilecrm.user.util.UserPrefsUtil;
+import com.googlecode.objectify.Key;
 
 /**
  * <code>DealCSVExport</code> handles building CSV file for obtained Deals.
@@ -66,6 +67,8 @@ public class DealCSVExport
 
 	try
 	{
+		System.out.println("Deal id in export-----"+deal.id);
+		System.out.println("Deal key in export-----"+new Key<Opportunity>(Opportunity.class, deal.id));
 		str[indexMap.get(ID)] = String.valueOf(deal.id);
 	    str[indexMap.get(NAME)] = deal.name;
 	    str[indexMap.get(DESCRIPTION)] = deal.description;
