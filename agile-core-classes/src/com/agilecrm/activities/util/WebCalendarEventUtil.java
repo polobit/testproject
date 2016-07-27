@@ -866,14 +866,14 @@ public class WebCalendarEventUtil
 					usermail = "<p>" + wce.userName + " (" + wce.email
 							+ ") has scheduled an appointment </p><span>Type: '" + wce.name + "' (" + wce.slot_time
 							+ "mins)</span><br/><span>Meeting Type: " + wce.phoneNumber + "</span><br/><span>Note: "
-							+ wce.notes + "</span><br/><span><a href="+domain_url+"#contact/"+contact.id+">View this contact in Agile CRM</a></span><br/><p><a href=https://" + user.domain
+							+ wce.notes + "</span><br/><p><a href="+domain_url+"#contact/"+contact.id+">View this contact in Agile CRM</a></p><br/><p><a href=https://" + user.domain
 							+ ".agilecrm.com/#calendar>View this new event in Agile Calendar</a></p>";
 				}
 				else
 				{
 					usermail = "<p>" + wce.userName + " (" + wce.email
 							+ ") has scheduled an appointment </p><span>Type: '" + wce.name + "' (" + wce.slot_time
-							+ "mins)</span><br/><span>Note: " + wce.notes + "</span><br/><span><a href="+domain_url+"#contact/"+contact.id+">View this contact in Agile CRM</a></span><br/><p><a href=https://"
+							+ "mins)</span><br/><span>Note: " + wce.notes + "</span><br/><p><a href="+domain_url+"#contact/"+contact.id+">View this contact in Agile CRM</a></p><br/><p><a href=https://"
 							+ user.domain + ".agilecrm.com/#calendar>View this new event in Agile Calendar</a></p>";
 				}
 				if(attachments_to_agile_user!=null)
