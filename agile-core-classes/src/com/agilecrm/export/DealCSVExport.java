@@ -45,7 +45,7 @@ public class DealCSVExport
     public static final String LOSSREASON = "Loss Reason";
     public static final String CREATED_DATE = "Created Date";
     public static final String WON_DATE = "Won Date";
-    public static final String ID = "Id";
+    public static final String ID = "Deal ID";
 
     private static final DateFormat date = new SimpleDateFormat("MM/dd/yyyy");
 
@@ -67,9 +67,7 @@ public class DealCSVExport
 
 	try
 	{
-		System.out.println("Deal id in export-----"+deal.id);
-		System.out.println("Deal key in export-----"+new Key<Opportunity>(Opportunity.class, deal.id));
-		str[indexMap.get(ID)] = String.valueOf(deal.id);
+		str[indexMap.get(ID)] = "ID_"+String.valueOf(deal.id);
 	    str[indexMap.get(NAME)] = deal.name;
 	    str[indexMap.get(DESCRIPTION)] = deal.description;
 	    try
