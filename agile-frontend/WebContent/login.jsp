@@ -479,6 +479,13 @@ if(isSafari && isWin)
 
 				// Load js and fetch print
 				head.load("https://cdn.jsdelivr.net/fingerprintjs2/1.1.2/fingerprint2.min.js", function(){
+					if (typeof Fingerprint2 != "function") {
+						    setTimeout(function() {
+						      _agile_get_fingerprint(callback);
+						    }, 100);
+						    return;
+					}
+
 					new Fingerprint2().get(function(result, components){
 							return callback(result);
 					});
