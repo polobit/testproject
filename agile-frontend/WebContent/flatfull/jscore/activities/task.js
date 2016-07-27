@@ -54,19 +54,26 @@ $( document ).ready(function() {
 
 		agile_type_ahead("update_task_relates_to_deals", el, deals_typeahead, false,null,null,"core/api/search/deals",false, true);
 
-		$('.update-task-timepicker').timepicker({ defaultTime : get_hh_mm(true), showMeridian : false });
-		$('.update-task-timepicker').timepicker().on('show.timepicker', function(e)
-		{
-			if ($('.update-task-timepicker').prop('value') != "" && $('.update-task-timepicker').prop('value') != undefined)
-			{
-				if ($('.update-task-timepicker').prop('value').split(":")[0] != undefined)
-					e.time.hours = $('.update-task-timepicker').prop('value').split(":")[0];
-				if ($('.update-task-timepicker').prop('value').split(":")[0] != undefined)
-					e.time.minutes = $('.update-task-timepicker').prop('value').split(":")[1];
-			}
-			$('.bootstrap-timepicker-hour').val(e.time.hours);
-			$('.bootstrap-timepicker-minute').val(e.time.minutes);
-		});
+		head.js(CSS_PATH + 'css/businesshours/jquerytimepicker.css',
+				LIB_PATH + 'lib/businesshours/jquerytimepicker.js',
+				function(){
+		 			$('.update-task-timepicker').timepicker({ 'timeFormat' : 'H:i', 'step' : 15 });
+		 		}
+		);
+		
+		// $('.update-task-timepicker').timepicker({ defaultTime : get_hh_mm(true), showMeridian : false });
+		// $('.update-task-timepicker').timepicker().on('show.timepicker', function(e)
+		// {
+		// 	if ($('.update-task-timepicker').prop('value') != "" && $('.update-task-timepicker').prop('value') != undefined)
+		// 	{
+		// 		if ($('.update-task-timepicker').prop('value').split(":")[0] != undefined)
+		// 			e.time.hours = $('.update-task-timepicker').prop('value').split(":")[0];
+		// 		if ($('.update-task-timepicker').prop('value').split(":")[0] != undefined)
+		// 			e.time.minutes = $('.update-task-timepicker').prop('value').split(":")[1];
+		// 	}
+		// 	$('.bootstrap-timepicker-hour').val(e.time.hours);
+		// 	$('.bootstrap-timepicker-minute').val(e.time.minutes);
+		// });
 
 		// Fill details in form
 		setForm(el);
@@ -80,20 +87,27 @@ $( document ).ready(function() {
 function activateSliderAndTimerToTaskModal(el){
 
 	console.log("activateSliderAndTimerToTaskModal");
+
+	head.js(CSS_PATH + 'css/businesshours/jquerytimepicker.css',
+			LIB_PATH + 'lib/businesshours/jquerytimepicker.js',
+			function(){
+	 			$('.new-task-timepicker').timepicker({ 'timeFormat' : 'H:i', 'step' : 15 });
+	 		}
+	);
 	
-	$('.new-task-timepicker').timepicker({ defaultTime : '12:00', showMeridian : false });
-	$('.new-task-timepicker').timepicker().on('show.timepicker', function(e)
-	{
-		if ($('.new-task-timepicker').prop('value') != "" && $('.new-task-timepicker').prop('value') != undefined)
-		{
-			if ($('.new-task-timepicker').prop('value').split(":")[0] != undefined)
-				e.time.hours = $('.new-task-timepicker').prop('value').split(":")[0];
-			if ($('.new-task-timepicker').prop('value').split(":")[0] != undefined)
-				e.time.minutes = $('.new-task-timepicker').prop('value').split(":")[1];
-		}
-		$('.bootstrap-timepicker-hour').val(e.time.hours);
-		$('.bootstrap-timepicker-minute').val(e.time.minutes);
-	});
+	// $('.new-task-timepicker').timepicker({ defaultTime : '12:00', showMeridian : false });
+	// $('.new-task-timepicker').timepicker().on('show.timepicker', function(e)
+	// {
+	// 	if ($('.new-task-timepicker').prop('value') != "" && $('.new-task-timepicker').prop('value') != undefined)
+	// 	{
+	// 		if ($('.new-task-timepicker').prop('value').split(":")[0] != undefined)
+	// 			e.time.hours = $('.new-task-timepicker').prop('value').split(":")[0];
+	// 		if ($('.new-task-timepicker').prop('value').split(":")[0] != undefined)
+	// 			e.time.minutes = $('.new-task-timepicker').prop('value').split(":")[1];
+	// 	}
+	// 	$('.bootstrap-timepicker-hour').val(e.time.hours);
+	// 	$('.bootstrap-timepicker-minute').val(e.time.minutes);
+	// });
 
 	console.log("loadProgressSlider");
 

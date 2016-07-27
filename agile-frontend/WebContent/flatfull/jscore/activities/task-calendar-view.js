@@ -327,7 +327,12 @@ function getCalendarView() {
 							$('#task-date-1').val(getDateInFormatFromEpoc(start.getTime()));
 							if(calendarView == 'agendaDay')
 							{
-								$('.new-task-timepicker').timepicker({ defaultTime : start.getHours()+':'+start.getMinutes(), showMeridian : false });
+								head.js(CSS_PATH + 'css/businesshours/jquerytimepicker.css',
+										LIB_PATH + 'lib/businesshours/jquerytimepicker.js',
+										function(){
+								 			$('.new-task-timepicker').timepicker({ 'timeFormat' : 'H:i', 'step' : 15 });
+								 		}
+								);
 							}
 						},
 						/**

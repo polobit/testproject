@@ -498,32 +498,39 @@ $(function()
 		var d1 = new Date ();
 		var d2 = new Date ( d1 );
 		d2.setHours(d1.getHours()+3)
-		
-		$('.new-task-timepicker').timepicker({ defaultTime : d2.format("HH:MM") , showMeridian : false });
-		$('.new-task-timepicker').timepicker().on('show.timepicker', function(e)
-		{
-			if ($('.new-task-timepicker').prop('value') != "" && $('.new-task-timepicker').prop('value') != undefined)
-			{
-				if ($('.new-task-timepicker').prop('value').split(":")[0] != undefined)
-					e.time.hours = $('.new-task-timepicker').prop('value').split(":")[0];
-				if ($('.new-task-timepicker').prop('value').split(":")[0] != undefined)
-					e.time.minutes = $('.new-task-timepicker').prop('value').split(":")[1];
-			}
-			$('.bootstrap-timepicker-hour').val(e.time.hours);
-			$('.bootstrap-timepicker-minute').val(e.time.minutes);
-		});
-	
-		/**
-		 * Fills current time only when there is no time in the fields
-		 */
-		if ($('.start-timepicker', el).val() == '')
-			$('.start-timepicker', el).val(get_hh_mm());
 
-		if ($('.end-timepicker', el).val() == '')
-			$('.end-timepicker', el).val(get_hh_mm(true));
-		// sets the time in time picker if it is empty
-		if ($('.new-task-timepicker', el).val() == '')
-			$('.new-task-timepicker', el).val("12:00");
+		head.js(CSS_PATH + 'css/businesshours/jquerytimepicker.css',
+				LIB_PATH + 'lib/businesshours/jquerytimepicker.js',
+				function(){
+		 			$('.new-task-timepicker').timepicker({ 'timeFormat' : 'H:i', 'step' : 15 });
+		 		}
+		);
+		
+		// $('.new-task-timepicker').timepicker({ defaultTime : d2.format("HH:MM") , showMeridian : false });
+		// $('.new-task-timepicker').timepicker().on('show.timepicker', function(e)
+		// {
+		// 	if ($('.new-task-timepicker').prop('value') != "" && $('.new-task-timepicker').prop('value') != undefined)
+		// 	{
+		// 		if ($('.new-task-timepicker').prop('value').split(":")[0] != undefined)
+		// 			e.time.hours = $('.new-task-timepicker').prop('value').split(":")[0];
+		// 		if ($('.new-task-timepicker').prop('value').split(":")[0] != undefined)
+		// 			e.time.minutes = $('.new-task-timepicker').prop('value').split(":")[1];
+		// 	}
+		// 	$('.bootstrap-timepicker-hour').val(e.time.hours);
+		// 	$('.bootstrap-timepicker-minute').val(e.time.minutes);
+		// });
+	
+		// /**
+		//  * Fills current time only when there is no time in the fields
+		//  */
+		// if ($('.start-timepicker', el).val() == '')
+		// 	$('.start-timepicker', el).val(get_hh_mm());
+
+		// if ($('.end-timepicker', el).val() == '')
+		// 	$('.end-timepicker', el).val(get_hh_mm(true));
+		// // sets the time in time picker if it is empty
+		// if ($('.new-task-timepicker', el).val() == '')
+		// 	$('.new-task-timepicker', el).val("12:00");
 
 		activateSliderAndTimerToTaskModal(el);
 
