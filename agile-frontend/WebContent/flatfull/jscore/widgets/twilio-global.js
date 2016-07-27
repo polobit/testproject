@@ -767,10 +767,10 @@ function fill_twilioio_numbers()
 
 function setUpGlobalTwilio()
 {
-	head.js(LIB_PATH + "jscore/telephony/i18PhoneFormat.js", function()
+/*	head.js(LIB_PATH + "jscore/telephony/i18PhoneFormat.js", function()
 			{
 				console.log("i18PhoneFormat  loaded for validating numbers");
-			});
+			});*/
 	// Loads twilio min.js to intiliaze twilio call events
 	head.js("https://static.twilio.com/libs/twiliojs/1.2/twilio.min.js", function()
 	{
