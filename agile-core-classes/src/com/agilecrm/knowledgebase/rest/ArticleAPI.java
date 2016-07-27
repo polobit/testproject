@@ -89,9 +89,9 @@ public class ArticleAPI
 	@Path("/admin-articles")
 	@GET
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public List<Article> getAdminArticles(@QueryParam("section_name") String section_name)
+	public List<Article> getAdminArticles(@QueryParam("section_id") Long section_id)
 	{
-		return ArticleUtil.getAdminArticles(section_name);
+		return Article.dao.listByProperty("section_key", new Key<>(Section.class, section_id));
 	}
 
 	/**

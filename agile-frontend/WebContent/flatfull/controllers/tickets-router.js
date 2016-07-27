@@ -1146,7 +1146,7 @@
 				//Initializing base collection with groups URL
 			App_Ticket_Module.articlesCollection = new Base_Collection_View({
 
-				url : '/core/api/knowledgebase/article/admin-articles?section_name=' + name, 		
+				url : '/core/api/knowledgebase/article/admin-articles?section_id=' + name, 		
 				templateKey : "ticket-helpcenter-articles",
 				individual_tag_name : 'tr',
 				sort_collection : true, 
@@ -1271,7 +1271,7 @@
 				                $('#catogery', el).html($(template_ui));
 				       
 				                if(section_id){
-									 $('#catogery option[data-value="'+section_id+'"]',el).attr('selected','selected');
+									 $('#catogery option[value="'+section_id+'"]',el).attr('selected','selected');
 								}	
 								if(callback)
 					 				callback();
@@ -1410,7 +1410,7 @@
 				var editSectionView = new Base_Model_View({
 					isNew : false,
 					template : "ticket-helpcenter-add-section",
-					url : "/core/api/knowledgebase/section?name=" + name,
+					url : "/core/api/knowledgebase/section/kb-admin?id=" + section_id,
 					window:'back',
 				    postRenderCallback : function(el){
 				        var optionsTemplate = "<option value={{id}}>{{name}}</option>";

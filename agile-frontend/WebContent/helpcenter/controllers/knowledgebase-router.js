@@ -6,6 +6,7 @@ var HelpcenterRouter = Backbone.Router.extend({
 
 		/* Home routes */
 		"" : "categories",
+		"categories" : "categories",
 		"section/:id" : "sectionArticles",
 		"category/:categorie_id" : "categorieSections",
 		"section/:name" : "sectionArticles",
@@ -72,6 +73,8 @@ var HelpcenterRouter = Backbone.Router.extend({
 
 	sectionArticles: function(name){
 
+		var name = decodeURI(name);
+		var name = encodeURIComponent(name);
 		App_Helpcenter.renderHomeTemplate(function(){
 
 			var sectionView = new Base_Model_View({
