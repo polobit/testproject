@@ -488,6 +488,12 @@ function bulk_delete_operation(url, id_array, index_array, table, is_grid_view, 
 			$('.thead_check').attr("checked", false);
 			
 			switch(url){
+				case 'core/api/knowledgebase/categorie/bulk':{
+
+					if(id_array.length == App_Ticket_Module.categoriesCollection.collection.length)
+						App_Ticket_Module.categories();
+					break;
+				}
 				case 'core/api/tickets/groups/bulk':{
 
 					if(id_array.length == App_Ticket_Module.groupsCollection.collection.length)

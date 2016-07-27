@@ -26,7 +26,8 @@ public class CategorieUtil
 		if (categories == null || categories.size() == 0)
 				CategorieUtil.createDefaultCategorie();
 		
-
+		categories = Categorie.dao.fetchAll();
+		
 		return categories;
 	}
 

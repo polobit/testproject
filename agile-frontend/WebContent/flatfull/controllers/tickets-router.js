@@ -1047,7 +1047,11 @@
 				}
 			});	
 			//Fetching groups collections
-			App_Ticket_Module.categoriesCollection.collection.fetch();
+			if(!App_Ticket_Module.categoriesCollection.collection.fetch())
+			setTimeout(function(){
+            App_Ticket_Module.categoriesCollection.collection.fetch();
+
+            },2000);
 
 			//Rendering template
 			$('.ticket-settings', $('#admin-prefs-tabs-content')).html(App_Ticket_Module.categoriesCollection.el);

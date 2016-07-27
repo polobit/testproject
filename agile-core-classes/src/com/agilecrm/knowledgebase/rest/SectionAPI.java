@@ -166,9 +166,10 @@ public class SectionAPI
 	}
 
 	@PUT
+    @Path("/kb-admin")
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	public Section updateSection(Section section) throws WebApplicationException, EntityNotFoundException
+	public Section updateSection(Section section ) throws WebApplicationException, EntityNotFoundException
 	{
 		Section dbsection = Section.dao.get(section.id);
 		try

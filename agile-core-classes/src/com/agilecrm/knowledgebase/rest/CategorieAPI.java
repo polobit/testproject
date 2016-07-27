@@ -50,15 +50,12 @@ public class CategorieAPI
 	{
 		List<Categorie> categories = CategorieUtil.getCategories();
 
-		
-
 		for (Categorie categorie : categories)
-			categorie.sections = SectionUtil.getSectionByCategorie(categorie.id,false);
+			categorie.sections = SectionUtil.getSectionByCategorie(categorie.id, false);
 
 		return categories;
 	}
-	
-    
+
 	@GET
 	@Path("/kb-admin")
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
@@ -70,11 +67,10 @@ public class CategorieAPI
 			return null;
 
 		for (Categorie categorie : categories)
-			categorie.sections = SectionUtil.getSectionByCategorie(categorie.id,true);
+			categorie.sections = SectionUtil.getSectionByCategorie(categorie.id, true);
 
 		return categories;
 	}
-
 
 	@GET
 	@Path("{id}")
@@ -83,15 +79,18 @@ public class CategorieAPI
 	{
 		try
 		{
-			return Categorie.dao.get(id);
+			Categorie dbcategorie = Categorie.dao.get(id);
+			
+			
+			return dbcategorie;
 		}
 		catch (Exception e)
 		{
 			System.out.println("exception occured while creating workflow creation activity");
-
-			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-					.build());
+			return new Categorie();
+			
 		}
+
 	}
 
 	@POST
@@ -123,18 +122,19 @@ public class CategorieAPI
 		try
 		{
 			JSONArray cat_ids = new JSONArray(model_ids);
-			for(int i=0;i<cat_ids.length();i++){
-				
-				Long id = (long)cat_ids.get(i);
+			for (int i = 0; i < cat_ids.length(); i++)
+			{
+
+				Long id = (long) cat_ids.get(i);
 				Key<Categorie> categorie_key = new Key<Categorie>(Categorie.class, id);
 				Query<Section> q = Section.dao.ofy().query(Section.class).filter("categorie_key =", categorie_key);
 				Query<Article> qa = Article.dao.ofy().query(Article.class).filter("categorie_key =", categorie_key);
-				List <Section> sections = Section.dao.fetchAll(q);
-				List <Article> articles = Article.dao.fetchAll(qa);
+				List<Section> sections = Section.dao.fetchAll(q);
+				List<Article> articles = Article.dao.fetchAll(qa);
 				Section.dao.deleteAll(sections);
 				Article.dao.deleteAll(articles);
 			}
-			
+
 			Categorie.dao.deleteBulkByIds(new JSONArray(model_ids));
 		}
 		catch (Exception e)
