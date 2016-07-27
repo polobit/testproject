@@ -7,3 +7,8 @@ function _agile_get_translated_val(module_name, key){
 
 	return _Agile_Resources_Json[module_name][key];
 }
+
+(function(){
+	var jScript = Handlebars.templates["agile-localization-template"]({});
+      $('body').append('<script type="text/javascript">' + jScript + '<\/script>');
+})();
