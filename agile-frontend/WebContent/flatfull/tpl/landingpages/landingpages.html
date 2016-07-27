@@ -1,5 +1,6 @@
 <script id="landingpages-collection-template" type="text/html">
 <div class="custom-animated custom-fadeInUp">
+{{#hasMenuScope 'LANDINGPAGES'}}
 <div class="wrapper-md lter bg-light b-b">
 <div class="row">
     <div class="col-sm-12 col-md-12">
@@ -96,6 +97,19 @@
     </div>
 </div>
 </div>
+{{else}}
+<div class="well">
+
+<div class="alert bg-white text-center">
+<div class="slate-content p-md text text-center">
+
+<h4 style="opacity:0.8;margin-bottom:5px!important;">&nbsp;&nbsp; Sorry, you do not have the privileges to access Landing Pages.</h4>
+<div class="text" style="opacity:0.6;">Please contact your admin or account owner to enable this option.
+</div>
+
+</div>
+</div>
+</div>{{/hasMenuScope}}
 </div>
 </script>
 

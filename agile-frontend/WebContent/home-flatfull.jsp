@@ -533,18 +533,30 @@ if(currentUserPrefs.menuPosition.equals("top")){
     <%
           }
     %>
+     <%
+      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.VISITORS)){
+    %>
    <li id="segmentationmenu">
     <a  href="#visitors">
        <i class="icon-eye"></i>
       <span>Visitors</span>  
     </a>
   </li>
+   <%
+          }
+    %>
+     <%
+      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.LANDINGPAGES)){
+    %>
   <li id="landing-pages-menu">
     <a href="#landing-pages">
       <i class="fa fa-file-code-o"></i>
       <span>Landing Pages</span>
     </a>
   </li>
+  <%
+          }
+    %>
 
   <%
   if(domainUser.is_admin){
