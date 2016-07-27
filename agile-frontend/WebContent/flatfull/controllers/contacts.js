@@ -24,7 +24,7 @@ var ContactsRouter = Backbone.Router.extend({
 		// "dashboard-test": "dashboard",
 
 		/* Contacts */
-		"contacts" : "contacts",
+		"contacts" : "contactsNew",
 		
 		"contact/:id" : "contactDetails",
 		
@@ -43,7 +43,7 @@ var ContactsRouter = Backbone.Router.extend({
 
 		"merge-contacts" : "mergeContacts",
 		
-		"tags/:tag" : "contacts", 
+		"tags/:tag" : "contactsNew", 
 		
 		"send-email" : "sendEmail",
 		
@@ -1411,6 +1411,37 @@ $('#content').html('<div id="import-contacts-event-listener"></div>');
 
 
 
+	},
+
+	contactsNew : function(tag_id)
+	{
+		if(tag_id)
+		{
+			_agile_delete_prefs("contact_filter");
+			_agile_delete_prefs('dynamic_contact_filter');
+		}
+
+		if(_agile_get_prefs("contacts_tag") != tag_id)
+		{
+			CONTACTS_HARD_RELOAD = true;
+			_agile_set_prefs("contacts_tag", tag_id);
+		}
+		$('#content').html('<div id="contacts-listener-container"></div>');
+		var contactsHeader = new Contacts_And_Companies_Events_View({ data : {}, template : "contacts-header", isNew : true,
+			postRenderCallback : function(el)
+			{
+				contacts_view_loader.buildContactsView(el, tag_id);
+				
+				contacts_view_loader.setUpContactsCount(el);
+				
+				loadPortlets('Contacts',el);
+			} 
+		});
+		$('#contacts-listener-container').html(contactsHeader.render().el);
+
+		$(".active").removeClass("active");
+		$("#contactsmenu").addClass("active");
+		$('[data-toggle="tooltip"]').tooltip();
 	},
 
 	});
