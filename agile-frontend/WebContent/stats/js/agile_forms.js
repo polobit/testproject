@@ -40,6 +40,7 @@ var _agile_synch_form_v4 = function()
 		var field_id = agile_form[i].getAttribute("id");
 		var field_type = agile_form[i].getAttribute("type");
 
+
 		if (field_type == "hidden")
 			agile_form[i].setAttribute("disabled", "disabled");
 
@@ -51,7 +52,8 @@ var _agile_synch_form_v4 = function()
 			form_data[field_id] = field_value;
 			if ('address, city, state, country, zip'.indexOf(field_name) != -1)
 				agile_address[field_name] = field_value;
-			else if (agile_form[i].checked && (field_name == "tags" && field_type=="checkbox"))
+			else if (agile_form[i].checked && (field_name == "tags" && (field_type=="checkbox" || 
+				field_type=="radio" || field_type=="hidden" )))
 			{
 				if (agile_tags){
 				  agile_tags = agile_tags + ',' + field_value;
@@ -87,7 +89,7 @@ var _agile_synch_form_v4 = function()
 			}
           
 			else{
-				if(!agile_multiple_checkbox)
+				//if(!agile_multiple_checkbox)
 				agile_contact[field_name] = field_value;
 			}
 		}
