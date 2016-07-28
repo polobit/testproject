@@ -219,6 +219,7 @@ if(isSafari && isWin)
 </script>
 
 <script type='text/javascript' src='//cdnjs.cloudflare.com/ajax/libs/jquery/1.10.2/jquery.min.js'></script>
+<script type='text/javascript' src='//cdn.jsdelivr.net/fingerprintjs2/1.1.2/fingerprint2.min.js'></script>
 
 <!--[if lt IE 10]>
 <script src="flatfull/lib/ie/placeholders.jquery.min.js"></script>
