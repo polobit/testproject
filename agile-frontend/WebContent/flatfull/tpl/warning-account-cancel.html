@@ -3,29 +3,30 @@
     <div class="modal-content">
     <div class="modal-header warning-header bg-danger">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h3 class="modal-title">Make sure you want to do this</h3>
+        <h3 class="modal-title">{{agile_lng_translate 'other' 'make-sure-you-want-to-do-this'}}</h3>
     </div>
     <div class="modal-body">
         <div class="warning-dangerzone">
             <p>
-                This is extremely important. If you don't read this, unexpected bad things will most definitely occur.
+                
+                {{agile_lng_translate 'other' 'conformation-extermly-important'}}
             </p>
         </div>
         <ul class="p-sm">
-            <li>This action cannot be UNDONE.</li>
+            <li>{{agile_lng_translate 'other' 'this-action-cannot-be-undone'}}</li>
             <li>
-                Data you used 
+                {{agile_lng_translate 'other' 'data-you-used'}}
                 <ul>
-                    <li>Data : {{bytes}}</li>
-                    <li>Entities : {{entities}}</li>
+                    <li>{{agile_lng_translate 'other' 'data'}} : {{bytes}}</li>
+                    <li>{{agile_lng_translate 'other' 'entities'}} : {{entities}}</li>
                 </ul>
             </li>
-            <li>All data will be DELETED.</li>
+            <li>{{agile_lng_translate 'other' 'all-the-data-will-be-deleted'}}</li>
         </ul>
     </div>
     <div class="modal-footer">
-        <a href="#" class="btn btn-sm btn-danger" data-dismiss="modal">Close</a>
-        <a href="#" id="confirm-delete-account" class="btn btn-sm btn-danger ">Delete Account</a>
+        <a href="#" class="btn btn-sm btn-danger" data-dismiss="modal">{{agile_lng_translate 'contact-details' 'CLOSE'}}</a>
+        <a href="#" id="confirm-delete-account" class="btn btn-sm btn-danger ">{{agile_lng_translate 'users' 'delete-account'}}</a>
     </div>
 </div>
 </div>
@@ -36,53 +37,53 @@
     <div class="modal-content">
     <div class="modal-header warning-header bg-danger">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h3  class="modal-title">Make sure you want to do this</h3>
+        <h3  class="modal-title">{{agile_lng_translate 'other' 'make-sure-you-want-to-do-this'}}</h3>
     </div>
     <div class="modal-body">
             <p>
-			   <b>Sorry to see you go. Please tell us why?</b>
+			   <b>{{agile_lng_translate 'cancellation' 'sorry-to-see-you-go'}}</b>
             </p>
 		<form id="cancelation-feedback-form">
        		<ul  class="p-l-sm" style="list-style-type: none;">
             	<li class="p-b-xs">
 					<label class="i-checks i-checks-sm">
 						<input type="radio" name="cancellation_reason" value="No need"  class="inline"/><i></i></label>
-				        <label for="Did not like it" class="inline">Was just checking it out. Don't need it.</label>
+				        <label for="Did not like it" class="inline">{{agile_lng_translate 'cancellation' 'was-just-checkoin-it-out'}}</label>
            		</li>
 				<li class="p-b-xs">
 					<label class="i-checks i-checks-sm">
 						<input type="radio" name="cancellation_reason" value="Overkill" class="inline" /><i></i></label>
-				        <label for="Overwhelming" class="inline">Overwhelming for me</label>
+				        <label for="Overwhelming" class="inline">{{agile_lng_translate 'cancellation' 'overwhelming-for-me'}}</label>
             	</li>
 				<li class="p-b-xs">
 					<label class="i-checks i-checks-sm">
 						<input type="radio" name="cancellation_reason" value="Hard to use"  class="inline"/><i></i></label>
-				        <label for="Hard to use" class="inline">Hard to use</label>
+				        <label for="Hard to use" class="inline">{{agile_lng_translate 'cancellation' 'hard-to-use'}}</label>
             	</li>
 				<li class="p-b-xs">
 					<label class="i-checks i-checks-sm">
 						<input type="radio" name="cancellation_reason" value="Costly" class="inline"/><i></i></label>
-				        <label for="Expensive for me" class="inline">Expensive for me</label>
+				        <label for="Expensive for me" class="inline">{{agile_lng_translate 'cancellation' 'expensive-for-me'}}</label>
             	</li>
 				<li class="p-b-xs">
 					<label class="i-checks i-checks-sm">
 						<input type="radio" name="cancellation_reason" class="extra_info inline" value="No fit"/><i></i></label>
-				        <label for="No fit" class="inline">Doesn't meet my requirements</label>
+				        <label for="No fit" class="inline">{{agile_lng_translate 'cancellation' 'doesnt-meet-my-recquirements'}}</label>
             	</li>
 				<li class="p-b-xs">
 					<label class="i-checks i-checks-sm">
 						<input type="radio" name="cancellation_reason" value="Other"  checked="checked" class="extra_info inline" /><i></i></label>
-				        <label for="Other" class="inline">Other</label>
+				        <label for="Other" class="inline">{{agile_lng_translate 'admin-settings-tasks' 'Other'}}</label>
             	</li>
         	</ul>
 			<div  class="controls">
-				<textarea name="account_delete_reason" class="required form-control" id="account_delete_reason" rows="6" placeholder="Please give us more details. This will help us a lot."></textarea>
+				<textarea name="account_delete_reason" class="required form-control" id="account_delete_reason" rows="6" placeholder="{{agile_lng_translate 'cancellation' 'please-give-us-more-details'}}"></textarea>
     		</div>
 		</form>
 	</div>
     <div class="modal-footer">
-        <a href="#" class="btn btn-default btn-sm" data-dismiss="modal">Cancel</a>
-        <a href="#" id="warning-feedback-save" class="btn btn-sm btn-danger ">Delete Account</a>
+        <a href="#" class="btn btn-default btn-sm" data-dismiss="modal">{{agile_lng_translate 'other' 'cancel'}}</a>
+        <a href="#" id="warning-feedback-save" class="btn btn-sm btn-danger ">{{agile_lng_translate 'users' 'delete-account'}}</a>
     </div>
 </div>
 </div>
@@ -93,42 +94,42 @@
     <div class="modal-body">
      <button type="button" class="close pull-right m-r-xs" data-dismiss="modal" aria-hidden="true">&times;</button>
      <div class="display-center">
-        <h4>Request for Cancellation</h4>
+        <h4>{{agile_lng_translate 'cancellation' 'request-for-cancellation'}}</h4>
             <p class="p-t-xs">
-			   Please tell us why you want to leave. Your feedback will help us to serve you better.
+			   {{agile_lng_translate 'cancellation' 'please-tell-us-why-you-want-to-leave'}}
             </p>
 		<form id="cancelation-request-form">
       <div class="form-group">
-        <label>What's the main reason for the cancellation?<span class="field_req">*</span></label>
+        <label>{{agile_lng_translate 'cancellation' 'whats-the-main-reason-for-cancellation'}}<span class="field_req">*</span></label>
         <select id="account_cancel_reason" name="account_cancel_reason" class="form-control required">
           <option value="">-- Select --</option>
-          <option value="Over Priced">Over Priced</option>
-          <option value="Lack of Features">Lack of Features</option>
-          <option value="Moving to a different competitor">Moving to a Different Competitor</option>
-          <option value="Out of Business">Out of Business</option>
-          <option value="Lack of Good Support">Lack of Good Support</option>
-          <option value="Other">Other</option>
+          <option value="Over Priced">{{agile_lng_translate 'reasons' 'over-prised'}}</option>
+          <option value="Lack of Features">{{agile_lng_translate 'reasons' 'lack-of-features'}}</option>
+          <option value="Moving to a different competitor">{{agile_lng_translate 'reasons' 'moving-to-different-competition'}}</option>
+          <option value="Out of Business">{{agile_lng_translate 'reasons' 'out-of-business'}}</option>
+          <option value="Lack of Good Support">{{agile_lng_translate 'reasons' 'lack-of-good-support'}}</option>
+          <option value="Other">{{agile_lng_translate 'admin-settings-tasks' 'Other'}}</option>
         </select>
       </div>
       <div id="other_cancel_container" class="form-group" style="display: none;">
-        <label>Reason<span class="field_req">*</span></label>
+        <label>{{agile_lng_translate 'widgets' 'reason'}}<span class="field_req">*</span></label>
         <textarea name="other_cancel_reason" class="form-control w-full" id="other_cancel_reason" rows="3" ></textarea>
       </div>
       <div id="agile_pros_container" class="form-group">
-        <label>What did you like in Agile?</label>
+        <label>{{agile_lng_translate 'reasons' 'what-do-you-like-in-agile'}}</label>
         <textarea name="agile_pros" class="form-control w-full" id="agile_pros" rows="3" ></textarea>
       </div>
       <div id="advices_container">
-        <label>Explain in brief how we can serve you better in the future</label>
+        <label>{{agile_lng_translate 'reasons' 'Explain-how-we-can-serve-in-future'}}</label>
         <textarea name="advices" class="form-control w-full" id="advices" rows="3" ></textarea>
       </div>
-			<p class="p-t-xs"><span class="font-bold">Important: </span>Upon cancellation of your account, unused period will automatically lapse.</p>
+			<p class="p-t-xs"><span class="font-bold">{{agile_lng_translate 'other' 'important'}}: </span>{{agile_lng_translate 'reasons' 'upon-cancellation-of-your-account'}}</p>
 		</form>
 	 </div>
    </div>
     <div class="modal-footer">
-        <span id="cancel_info_msg" class="text-danger text-sm p-r-xs" style="display:none;">Once you click the 'Cancel Subscription' button, your subscription will be cancelled immediately.</span>
-        <a href="#" id="send-delete-request" class="btn btn-sm btn-primary ">Send Request</a>
+        <span id="cancel_info_msg" class="text-danger text-sm p-r-xs" style="display:none;">{{agile_lng_translate 'reasons' 'once-clicked-cancel-subriciption'}}</span>
+        <a href="#" id="send-delete-request" class="btn btn-sm btn-primary ">{{agile_lng_translate 'billing' 'canceled-request-sent'}}</a>
     </div>
 </div>
 </script>
@@ -138,11 +139,11 @@
     <div class="modal-content">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
-        <h3 class="modal-title">Cancellation Request Received</h3>
+        <h3 class="modal-title">{{agile_lng_translate 'reasons' 'cancellation-request-received'}}</h3>
     </div>
     <div class="modal-body">
-        We are sorry to see you leaving. Our Support team will contact you within 48 hours to know more about the reason for leaving us. Please note <i>your subscription is still active</i> and our Support team will help you with the further process.<br><br>
-		To know the status of the request, please <a href="#contact-us" class="text-info">write to us</a>.
+        {{agile_lng_translate 'reasons' 'we-are-sorry-to-see-you-leave'}}<i>{{agile_lng_translate 'reasons' 'your-subscription-is-still-active'}}</i> {{agile_lng_translate 'reasons' 'our-support-team-will-help-further-process'}}<br><br>
+		{{agile_lng_translate 'reasons' 'to-know-the-status-of-the-request'}}<a href="#contact-us" class="text-info">{{agile_lng_translate 'reasons' 'write-us'}}</a>.
 	</div>
     <div class="modal-footer">
        
@@ -156,8 +157,8 @@
      <div id="cancel_subscription_modal" class="modal-dialog p-t-md">
         <div class="modal-content">
             <div class="modal-body">
-                <div id="account_cancel_options" class="text-center"> <div style="font-size: 20px;line-height: 35px;">Please do not break up. Friends? <button type="button" class="close pull-right pos-abs" data-dismiss="modal" aria-hidden="true" style="right: 20px;">×</button></div>
-                    <div class="m-b" style="font-size: 16px;">Let us help you</div>
+                <div id="account_cancel_options" class="text-center"> <div style="font-size: 20px;line-height: 35px;">{{agile_lng_translate 'reasons' 'please-dont-break-up-my-friend'}} <button type="button" class="close pull-right pos-abs" data-dismiss="modal" aria-hidden="true" style="right: 20px;">×</button></div>
+                    <div class="m-b" style="font-size: 16px;">{{agile_lng_translate 'reasons' 'let-us-help-you'}}</div>
 
                     <div class="text-center row">
                      <div class="display-center p-b">
@@ -166,8 +167,8 @@
                               <div class="bg-box m-r m-l" style="background-color: #50c7a7;">
                                 <i class="fa fa-comment-o pos-rlt pos-t-xs"></i>
                               </div>
-                              <h4>Instant Help</h4>
-                              <div class="text-xs p-b-xs p-l-sm p-r-sm text-muted">We can help you to get more out of chat. Just ask us!</div>
+                              <h4>{{agile_lng_translate 'reasons' 'instant-help'}}</h4>
+                              <div class="text-xs p-b-xs p-l-sm p-r-sm text-muted">{agile_lng_translate 'reasons' 'we-can-help-you-to-get-more-out-of-chat'}}!</div>
                               <a id="account_cancel_chat_btn" class="btn btn-md btn-default p-t-sm w-xx-half">Chat</a>
                             </div></div>
                     <div class="col-md-4">
@@ -175,18 +176,18 @@
                               <div class="bg-box m-r m-l" style="background-color: #5fa2dd;">
                                 <i class="icon-support pos-rlt pos-t"></i>
                               </div>
-                              <h4>Schedule a Call</h4>
-                              <div class="text-xs p-b-xs p-l-sm p-r-sm text-muted">Schedule a slot & one of our product experts will call you for assistance.</div>
-                              <a href="http://supportcal.agilecrm.com" target="_blank" id="account_cancel_support_btn" class="btn btn-md btn-default p-t-sm w-xx-half">Schedule</a>
+                              <h4>{{agile_lng_translate 'help' 'schedule-a-call'}}</h4>
+                              <div class="text-xs p-b-xs p-l-sm p-r-sm text-muted">{{agile_lng_translate 'help' 'shedule-a-slot-our-product-support-will-call-you'}}</div>
+                              <a href="http://supportcal.agilecrm.com" target="_blank" id="account_cancel_support_btn" class="btn btn-md btn-default p-t-sm w-xx-half">{{agile_lng_translate 'other' 'schedule'}}</a>
                             </div></div>
                     <div class="col-md-4">
                       <div id="account_pause" class="wrapper">
                               <div class="bg-box m-r m-l" style="background-color: #f76c51;">
                                 <i class="icon-rocket pos-rlt pos-t"></i>
                               </div>
-                              <h4>Need a Break?</h4>
+                              <h4>{{agile_lng_translate 'help' 'need-a-break'}}</h4>
                               <div id="pause_settings" class="text-xs pos-rlt p-b-xs p-l-sm p-r-sm text-muted">
-                                  Postpone your billing for 
+                                   {{agile_lng_translate 'help' 'postpone-your-billing-for'}}
                                   <span class="pos-rlt">
                                   <span id="pause_count">1</span>
                                   <span class="pause-count-control m-l-sm">
@@ -196,7 +197,7 @@
                                         </ul>
                                   </span>
                                   </span>
-                                  <span id="month_id" class="m-l-xs">month</span>, so that you don't lose your data.
+                                  <span id="month_id" class="m-l-xs">month</span>, {{agile_lng_translate 'help' 'sothat-you-cant-lose-your-data'}}
                              </div>
                               <a id="account_pause_btn" class="btn btn-md btn-default p-t-sm w-xx-half">Pause</a>
                             </div></div>
@@ -204,16 +205,16 @@
                             </div>
                             <div class="display-center" style="width: 87%;"><hr></div>
                           </div>
-                    <div class="text-center text-lg">Still want to cancel?</div>
+                    <div class="text-center text-lg">{{agile_lng_translate 'other' 'still-want-to-cancel'}}</div>
                     <div class="m-b">
-                    <div class="text-base text-muted m-t-xs">By cancelling your subscription all your data and settings will be lost and never restore them back.</div>
+                    <div class="text-base text-muted m-t-xs">{{agile_lng_translate 'other' 'by-cancelling-all-of-your-data-will-be-lost'}}</div>
                     {{#ifCond date "greaterthan" "0"}}
-                    <div class="text-sm text-muted">Please note that your subscription is valid till <strong>{{epochToHumanDate "dd mmm yyyy" date}}</strong>. Cancelling your account now will result in lapse of remaining usage period.</div>
+                    <div class="text-sm text-muted">{{agile_lng_translate 'other' 'please-note-that-your-subscription-is-valid-till'}}<strong>{{epochToHumanDate "dd mmm yyyy" date}}</strong>. {{agile_lng_translate 'other' 'canceling-your-ccount-will-result-in-lapse-of-remaining-period'}}</div>
                     {{/ifCond}}
                     </div>
                     <div class="m-b-sm">
-                    	<a href="#" id="cancel-account-request-proceed" class="btn btn-sm btn-default">Cancel My Subscription</a>
-                        <a href="#" onClick="$('#send-cancellation').modal('hide');" class="btn btn-sm m-l-sm" style="background-color: #50c7a7;color:white;">Back to Dashboard</a>
+                    	<a href="#" id="cancel-account-request-proceed" class="btn btn-sm btn-default">{{agile_lng_translate 'other' 'cancel-my-subscription'}}</a>
+                        <a href="#" onClick="$('#send-cancellation').modal('hide');" class="btn btn-sm m-l-sm" style="background-color: #50c7a7;color:white;">{{agile_lng_translate 'other' 'back-to-dashboard'}}</a>
                     </div>
                 </div>
             </div>
@@ -222,16 +223,16 @@
 </script>
 
 <script id="cancellation-description-template" type="text/html">
-  Cancellation Reason : {{reason_type}}
+  {{agile_lng_translate 'cancellation' 'camcellation-reason'}} : {{reason_type}}
   {{#if_equals reason_type "Other"}}
-    <br/><br/>Description : {{reason}}
+    <br/><br/>{{agile_lng_translate 'misc-keys' 'description'}} : {{reason}}
   {{/if_equals}}
   {{#if likes_in_agile}}
     <br/><br/>
-    Likes in Agile : {{likes_in_agile}}
+    {{agile_lng_translate 'cancellation' 'likes-in-agile'}} : {{likes_in_agile}}
   {{/if}}
   {{#if advices}}
     <br/><br/>
-    Advices : {{advices}}
+    {{agile_lng_translate 'cancellation' 'advices'}} : {{advices}}
   {{/if}}
 </script>
