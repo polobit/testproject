@@ -238,8 +238,13 @@ function loadFullContactData(apikey, emailID){
 					}else{								
 						$('#FullContact').html("<div class='p-sm'>No new data available for update.</div>");										
 					}					
- 				}else{ 					
- 					$('#FullContact').html("<div class='p-sm'>"+contactObj.message+"</div>");
+ 				}else{ 
+ 					var errorMessage = contactObj.message;		
+ 					if(errorMessage == "Forbidden"){	
+ 						errorMessage = "API key is invalid. Please provide valid API key.";
+ 					}
+
+ 					$('#FullContact').html("<div class='p-sm'>"+errorMessage+"</div>");
  				}				
 			}            
         });
