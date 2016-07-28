@@ -129,21 +129,23 @@
       </a>
     </li>
    {{/isRestrictedMenuScope}}
-     {{#isRestrictedMenuScope "VISITORS"}} {{else}}
+
+   {{#isRestrictedMenuScope "VISITORS"}} {{else}}
     <li id="segmentationmenu">
-    <a  href="#visitors">
-       <i class="icon-eye"></i>
-      <span>Visitors</span>  
-    </a>
-  </li>
+      <a  href="#visitors">
+         <i class="icon-eye"></i>
+        <span>Visitors</span>  
+      </a>
+    </li>
    {{/isRestrictedMenuScope}}
+
    {{#isRestrictedMenuScope "LANDINGPAGES"}} {{else}}
     <li id="landing-pages-menu">
-    <a href="#landing-pages">
-      <i class="fa fa-file-code-o"></i>
-      <span>Landing Pages</span>
-    </a>
-  </li>
+      <a href="#landing-pages">
+          <i class="fa fa-file-code-o"></i>
+          <span>Landing Pages</span>
+      </a>
+    </li>
    {{/isRestrictedMenuScope}}
    
   
