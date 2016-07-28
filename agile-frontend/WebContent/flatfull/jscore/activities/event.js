@@ -520,17 +520,18 @@ $(function()
 		// 	$('.bootstrap-timepicker-minute').val(e.time.minutes);
 		// });
 	
-		// /**
-		//  * Fills current time only when there is no time in the fields
-		//  */
-		// if ($('.start-timepicker', el).val() == '')
-		// 	$('.start-timepicker', el).val(get_hh_mm());
+		/**
+		 * Fills current time only when there is no time in the fields
+		 */
+		if ($('.start-timepicker', el).val() == '')
+			$('.start-timepicker', el).val(get_hh_mm());
 
-		// if ($('.end-timepicker', el).val() == '')
-		// 	$('.end-timepicker', el).val(get_hh_mm(true));
-		// // sets the time in time picker if it is empty
-		// if ($('.new-task-timepicker', el).val() == '')
-		// 	$('.new-task-timepicker', el).val("12:00");
+		if ($('.end-timepicker', el).val() == '')
+			$('.end-timepicker', el).val(get_hh_mm(true));
+		
+		// sets the time in time picker if it is empty
+		if ($('.new-task-timepicker', el).val() == '')
+			$('.new-task-timepicker', el).val("12:00");
 
 		activateSliderAndTimerToTaskModal(el);
 
