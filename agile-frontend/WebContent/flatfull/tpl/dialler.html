@@ -1,7 +1,7 @@
 <script id="dialler-page-template" type="text/html">
 <div class="wrapper-md" style="position: relative;z-index: 100;">
 <div id="close-dialler" style="float: right">
-	<span class="clear-dialler c-p" style="font-size:19px">&times;</span>
+	<span class="c-p" style="font-size:19px;">&times;</span>
 </div>
 <div class="row" style="cursor:move">
 <div class="col-md-12">
@@ -12,10 +12,10 @@
 		<div class="col-md-12" style="padding:0px !important">
 			<nav style="position: relative; top: 0; left: 0;">
 			    <ul style="list-style: none; margin: 0; padding: 0;">
-			        <li class="list-padding dialler-widget-name-Twilio dialler-widget-li"><a href="#" class="active link-top"><img src='/widgets/twilio-small-logo.png' style='width: 20px; height: 20px; margin-right: 5px;' data-toggle='tooltip' data-placement='top' title='' data-original-title='Twilio' ></a></li>
-			        <li class="list-padding dialler-widget-name-Sip dialler-widget-li none"><a href="#" class="link-top"><img src='/widgets/sip-logo-small.png' style='width: 20px; height: 20px; margin-right: 5px;' data-toggle='tooltip' data-placement='top' title='' data-original-title='Sip' ></a></li>
-			        <li class="list-padding dialler-widget-name-Bria dialler-widget-li none"><a href="#" class="link-top"><img src='/img/plugins/bria-call.png' style='width: 20px; height: 20px; margin-right: 5px;' data-toggle='tooltip' data-placement='top' title='' data-original-title='Bria' ></a></li>
-			        <li class="list-padding dialler-widget-name-Skype dialler-widget-li none"><a href="#" class="link-top"><img src='/img/plugins/skype-call.png' style='width: 24px; height: 24px; margin-right: 5px;' data-toggle='tooltip' data-placement='top' title='' data-original-title='Skype' ></a></li>
+			        <li class="list-padding dialler-widget-name-Twilio dialler-widget-li"><a href="#" class="inactive link-top" value="Twilio"><img src='/widgets/twilio-small-logo.png' style='width: 20px; height: 20px; margin-left: 2px; margin-right: 2px;' data-toggle='tooltip' data-placement='top' title='' data-original-title='Twilio' ></a></li>
+			        <li class="list-padding dialler-widget-name-Sip dialler-widget-li"><a href="#" class="inactive link-top" value="Sip"><img src='/widgets/sip-logo-small.png' style='width: 20px; height: 20px; margin-left: 2px; margin-right: 2px;' data-toggle='tooltip' data-placement='top' title='' data-original-title='Sip' ></a></li>
+			        <li class="list-padding dialler-widget-name-Bria dialler-widget-li"><a href="#" class="inactive link-top" value="Bria"><img src='/img/plugins/bria-call.png' style='width: 20px; height: 20px; margin-left: 2px; margin-right: 2px;' data-toggle='tooltip' data-placement='top' title='' data-original-title='Bria' ></a></li>
+			        <li class="list-padding dialler-widget-name-Skype dialler-widget-li"><a href="#" class="inactive link-top" value="Skype"><img src='/img/plugins/skype-call.png' style='width: 24px; height: 24px; margin-left: 2px; margin-right: 2px;' data-toggle='tooltip' data-placement='top' title='' data-original-title='Skype' ></a></li>
 			    </ul>
 			</nav>
 		</div>
@@ -24,7 +24,7 @@
 			<div class="col-md-12">
 				<div class="form-group" style="position:relative;margin:0px 15px 15px 15px !important">
 				<div style="float: right;height: 0px;top: 7px;position: relative;left: -5px;">
-					<span class="clear-dialler c-p">&times;</span>
+					<span class="c-p" id="clear-dialler" style="display:none;">&times;</span>
 				</div>
 				<iframe id="remember-dialler" name="remember-dialler" class="hidden" src=""></iframe>
 				<form autocomplete="on" id="dialler-phone-number-form" action="/content/blank" method="post" target="remember-dialler">
