@@ -63,6 +63,8 @@ public class UserFingerPrintInfo implements Serializable{
 		// Get actual finger prints
     	Set<String> finger_prints = domainUser.finger_prints;
     	
+    	System.out.println("finger_prints = " + finger_prints);
+    	
     	// Check null and proceed check with existing ones 
 		if(StringUtils.isNotBlank(browserFingerPrint) && domainUser.is_secure && finger_prints != null && finger_prints.size() > 0 && !finger_prints.contains(browserFingerPrint))
 			 valid_finger_print = false;
