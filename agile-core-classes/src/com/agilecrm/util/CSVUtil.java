@@ -1335,7 +1335,9 @@ public class CSVUtil
 			    {
 				try
 				{
+					System.out.println("Inside try block---Imported deal value---"+val);
 				    Double dealValue = Double.parseDouble(parse(val));
+				    System.out.println("Inside try block---Imported deal value after conversion---"+dealValue);
 				    if (dealValue > Double.valueOf(1000000000000.0))
 				    {
 					opportunity.expected_value = 0.0;
@@ -1347,6 +1349,7 @@ public class CSVUtil
 				}
 				catch (NumberFormatException e)
 				{
+					System.out.println("Exception occured while setting deal value in import");
 				    e.printStackTrace();
 				}
 			    }
