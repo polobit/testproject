@@ -75,7 +75,7 @@ var AdminPanelRouter = Backbone.Router.extend({
 		console.log(domainname);
 		$.ajax({ url : 'core/api/admin_panel/get_subscription?d=' + domainname, type : 'GET', success : function(data)
 		{
-			if(data && data.plan && data.plan.status && $.inArray(data.plan.status, PAGEBLOCK_REASON) != -1){
+			if(data && data.status && $.inArray(data.status, PAGEBLOCK_REASON) != -1){
 				$(el).find(".unblock_user").show();
 				$(el).find(".unblock_user").attr("domain", domainname);
 			}
