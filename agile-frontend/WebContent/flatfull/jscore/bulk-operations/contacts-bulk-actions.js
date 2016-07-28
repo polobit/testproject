@@ -16,7 +16,9 @@ var _BULKACTION_FILTER = undefined;
 */
 var Contacts_Events_Collection_View = Base_Collection_View.extend({
     events: {
-    	'click .contact-type-image, .company-type-image' : 'navigateToProperContact'
+    	'click .contact-type-image, .company-type-image' : 'navigateToProperContact',
+    	'mouseenter #companies-list-view-model-list > tr > td:not(":first-child")' : 'companiesDataPopoverEnter',
+    	'mouseleave #companies-list-view-model-list > tr > td:not(":first-child")' : 'companiesDataPopoverLeave'
     },
     
     navigateToProperContact : function(e){
@@ -30,6 +32,25 @@ var Contacts_Events_Collection_View = Base_Collection_View.extend({
 		{
 			Backbone.history.navigate("company/" + currentObjId, { trigger : true });
 		}
+    },
+
+    companiesDataPopoverEnter : function(e)
+    {
+    	var left=e.pageX;
+		left=left-100;
+		var top=0;
+		var that=$(e.currentTarget).parent();
+        if($(e.currentTarget).hasClass("contact-type-custom-field-td") || $(e.currentTarget).hasClass("company-type-custom-field-td") || $(e.currentTarget).hasClass("contact-type-image") || $(e.currentTarget).hasClass("company-type-image"))
+        {
+        	return;
+        }
+        popoverEnter(that,left,top,true);
+    },
+
+    companiesDataPopoverLeave : function(e)
+    {
+    	var that=$(e.currentTarget).parent();
+		popout(that);
     }
 });
 
