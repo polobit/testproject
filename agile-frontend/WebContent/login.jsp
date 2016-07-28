@@ -324,7 +324,7 @@ if(isSafari && isWin)
 							<label class="checkbox" style="display:none;">
 							    <input type="checkbox" checked="checked" name="signin">Keep me signed in 
 							</label>
-							<input type='submit' value="Sign In" class='btn btn-lg btn-primary btn-block'>
+							<input type='submit' value="Sign In" disabled class='agile-submit btn btn-lg btn-primary btn-block'>
 							 
 						
 					
@@ -479,17 +479,8 @@ if(isSafari && isWin)
 					return callback(finger_print);
 
 				// Load js and fetch print
-				head.load("https://cdn.jsdelivr.net/fingerprintjs2/1.1.2/fingerprint2.min.js", function(){
-					if (typeof Fingerprint2 != "function") {
-						    setTimeout(function() {
-						      _agile_get_fingerprint(callback);
-						    }, 100);
-						    return;
-					}
-
-					new Fingerprint2().get(function(result, components){
-							return callback(result);
-					});
+				new Fingerprint2().get(function(result, components){
+						return callback(result);
 				});
 		}
 
@@ -500,6 +491,7 @@ if(isSafari && isWin)
 					 return;
 
 				$("#finger_print").val(result);
+				$(".agile-submit").removeAttr("disabled");
 				// Reset val
 				_agile_storage.set(result);
 			});
