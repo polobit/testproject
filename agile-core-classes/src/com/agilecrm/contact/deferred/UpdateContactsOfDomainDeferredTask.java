@@ -212,17 +212,10 @@ public class UpdateContactsOfDomainDeferredTask implements DeferredTask
 			
 			if(status.equalsIgnoreCase("COMPLETED"))
 			{		
-				SendMail.sendMail(domainUserMail, "Process update Status", SendMail.Process_update_status, contactSchemaUpdateStats);
-
+				DomainUser dUser=DomainUserUtil.getDomainUserByEmailFromParticularDomain(domainUserMail,domain);
+				SendMail.sendMail(domainUserMail, "Update Contacts Status", SendMail.Process_update_status, dUser);
 				
-				//System.out.println("Namespace"+NamespaceManager.get());
-				//System.out.println("Session ="+ SessionManager.get());
 				
-			//DomainUser domainUser = DomainUserUtil.getCurrentDomainUser();
-			
-			//System.out.println("Domain user "+domainUser);
-			//System.out.println(" cur Domain "+ domain);
-			
 			}
 			
 		} catch(Exception e) {
