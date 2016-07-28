@@ -503,6 +503,9 @@ $(function()
 				LIB_PATH + 'lib/businesshours/jquerytimepicker.js',
 				function(){
 		 			$('.new-task-timepicker').timepicker({ 'timeFormat' : 'H:i', 'step' : 15 });
+		 			// sets the time in time picker if it is empty
+					if ($('.new-task-timepicker', el).val() == '')
+						$('.new-task-timepicker', el).val(get_hh_mm());
 		 		}
 		);
 		
@@ -519,19 +522,6 @@ $(function()
 		// 	$('.bootstrap-timepicker-hour').val(e.time.hours);
 		// 	$('.bootstrap-timepicker-minute').val(e.time.minutes);
 		// });
-	
-		/**
-		 * Fills current time only when there is no time in the fields
-		 */
-		if ($('.start-timepicker', el).val() == '')
-			$('.start-timepicker', el).val(get_hh_mm());
-
-		if ($('.end-timepicker', el).val() == '')
-			$('.end-timepicker', el).val(get_hh_mm(true));
-		
-		// sets the time in time picker if it is empty
-		if ($('.new-task-timepicker', el).val() == '')
-			$('.new-task-timepicker', el).val("12:00");
 
 		activateSliderAndTimerToTaskModal(el);
 
@@ -655,6 +645,21 @@ $(function()
 					$('.update-end-timepicker').timepicker({ 'timeFormat' : 'H:i', 'step' : 15 });
 				}
 		);
+
+		/**
+		 * Fills current time only when there is no time in the fields
+		 */
+		if ($('.start-timepicker').val() == '')
+			$('.start-timepicker').val(get_hh_mm());
+
+		if ($('.end-timepicker').val() == '')
+			$('.end-timepicker').val(get_hh_mm(true));
+
+		if ($('.update-start-timepicker').val() == '')
+			$('.update-start-timepicker').val(get_hh_mm());
+
+		if ($('.update-end-timepicker').val() == '')
+			$('.update-end-timepicker').val(get_hh_mm(true));
 
 		/**
 		 * Activates time picker for start time to the fields with class

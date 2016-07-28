@@ -58,6 +58,11 @@ $( document ).ready(function() {
 				LIB_PATH + 'lib/businesshours/jquerytimepicker.js',
 				function(){
 		 			$('.update-task-timepicker').timepicker({ 'timeFormat' : 'H:i', 'step' : 15 });
+		 			/**
+					 * Fills current time only when there is no time in the fields
+					 */
+					if ($('.update-task-timepicker', el).val() == '')
+						$('.update-task-timepicker', el).val(get_hh_mm());
 		 		}
 		);
 		
@@ -92,7 +97,11 @@ function activateSliderAndTimerToTaskModal(el){
 			LIB_PATH + 'lib/businesshours/jquerytimepicker.js',
 			function(){
 	 			$('.new-task-timepicker').timepicker({ 'timeFormat' : 'H:i', 'step' : 15 });
-	 		}
+	 			
+				// sets the time in time picker if it is empty
+				if ($('.new-task-timepicker').val() == '')
+					$('.new-task-timepicker').val(get_hh_mm());
+		 		}
 	);
 	
 	// $('.new-task-timepicker').timepicker({ defaultTime : '12:00', showMeridian : false });

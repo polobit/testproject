@@ -30,6 +30,11 @@ $(function()
 							LIB_PATH + 'lib/businesshours/jquerytimepicker.js',
 							function(){
 					 			$('#scheduled_time').timepicker({ 'timeFormat' : 'H:i', 'step' : 15 });
+					 			/**
+								 * Fills current time only when there is no time in the fields
+								 */
+								if ($('#scheduled_time').val() == '')
+									$('#scheduled_time').val(get_hh_mm());
 					 		}
 					);
 					

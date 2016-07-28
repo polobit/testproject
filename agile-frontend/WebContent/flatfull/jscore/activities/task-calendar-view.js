@@ -331,6 +331,9 @@ function getCalendarView() {
 										LIB_PATH + 'lib/businesshours/jquerytimepicker.js',
 										function(){
 								 			$('.new-task-timepicker').timepicker({ 'timeFormat' : 'H:i', 'step' : 15 });
+											// sets the time in time picker if it is empty
+											if ($('.new-task-timepicker').val() == '')
+												$('.new-task-timepicker').val(get_hh_mm());
 								 		}
 								);
 							}
