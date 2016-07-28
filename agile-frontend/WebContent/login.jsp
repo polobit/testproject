@@ -370,21 +370,22 @@ if(isSafari && isWin)
 			if(window.location.href.indexOf("/normal") != -1)
 				$("form#agile").attr("action", "/login/normal");
 			
-			var login_hash = window.location.hash;
-
 			// Sets location hash in hidden fields
+			var login_hash = window.location.hash;
 			if(login_hash)
 				$("#location_hash").val(login_hash);
-        /*var newImg = new Image;
-        newImg.onload = function() {
-        
-        $("body").css("background-image","url('"+this.src+"')");
-       
-
-        }*/
-
-
       	
+      		// Get print value to notify user 
+			_agile_get_fingerprint(function(result){
+				if(!result)
+					 return;
+
+				$("#finger_print").val(result);
+				$(".agile-submit").removeAttr("disabled");
+				// Reset val
+				_agile_storage.set(result);
+			});
+			
         	// agile-login-page-high.png
         	preload_login_pages();
 			// Pre load dashlet files when don is active
@@ -484,157 +485,144 @@ if(isSafari && isWin)
 				});
 		}
 
-		$(function(){
-			// Get print value to notify user 
-			_agile_get_fingerprint(function(result){
-				if(!result)
-					 return;
+		var BrowserDetect = {
+			init : function() {
+				this.browser = this.searchString(this.dataBrowser)
+						|| "An unknown browser";
+				this.version = this.searchVersion(navigator.userAgent)
+						|| this.searchVersion(navigator.appVersion)
+						|| this.searchMobileVersion(navigator.userAgent)
+						|| "An unknown version";
+				this.OS = this.searchString(this.dataOS) || "unknown";
+			},
+			searchString : function(data) {
+				for ( var i = 0; i < data.length; i++) {
+					var dataString = data[i].string;
+					var dataProp = data[i].prop;
+					var match = data[i].match;
+					this.versionSearchString = data[i].versionSearch
+							|| data[i].identity;
 
-				$("#finger_print").val(result);
-				$(".agile-submit").removeAttr("disabled");
-				// Reset val
-				_agile_storage.set(result);
-			});
-			
-			var BrowserDetect = {
-					init : function() {
-						this.browser = this.searchString(this.dataBrowser)
-								|| "An unknown browser";
-						this.version = this.searchVersion(navigator.userAgent)
-								|| this.searchVersion(navigator.appVersion)
-								|| this.searchMobileVersion(navigator.userAgent)
-								|| "An unknown version";
-						this.OS = this.searchString(this.dataOS) || "unknown";
-					},
-					searchString : function(data) {
-						for ( var i = 0; i < data.length; i++) {
-							var dataString = data[i].string;
-							var dataProp = data[i].prop;
-							var match = data[i].match;
-							this.versionSearchString = data[i].versionSearch
-									|| data[i].identity;
+					if (match && dataString.match(match))
+						return data[i].identity;
 
-							if (match && dataString.match(match))
-								return data[i].identity;
+					if (dataString) {
+						if (dataString.indexOf(data[i].subString) != -1)
+							return data[i].identity;
+					} else if (dataProp)
+						return data[i].identity;
+				}
+			},
+			searchMobileVersion : function(dataString) {
 
-							if (dataString) {
-								if (dataString.indexOf(data[i].subString) != -1)
-									return data[i].identity;
-							} else if (dataProp)
-								return data[i].identity;
-						}
-					},
-					searchMobileVersion : function(dataString) {
+				try {
+					match = dataString.match(/Mobile Safari\/([\d.]+)/);
+					if (match)
+						return parseFloat(match[1]);
+				} catch (e) {
+				}
 
-						try {
-							match = dataString.match(/Mobile Safari\/([\d.]+)/);
-							if (match)
-								return parseFloat(match[1]);
-						} catch (e) {
-						}
+			},
+			searchVersion : function(dataString) {
 
-					},
-					searchVersion : function(dataString) {
+				var index = dataString.indexOf(this.versionSearchString);
+				if (index == -1)
+					return;
+				return parseFloat(dataString.substring(index
+						+ this.versionSearchString.length + 1));
+			},
+			dataBrowser : [ {
+				string : navigator.userAgent,
+				subString : "Chrome",
+				identity : "Chrome"
+			}, {
+				string : navigator.userAgent,
+				subString : "OmniWeb",
+				versionSearch : "OmniWeb/",
+				identity : "OmniWeb"
+			}, {
+				string : navigator.vendor,
+				subString : "Apple",
+				identity : "Safari",
+				versionSearch : "Version"
+			}, {
+				prop : window.opera,
+				identity : "Opera"
+			}, {
+				string : navigator.vendor,
+				subString : "iCab",
+				identity : "iCab"
+			}, {
+				string : navigator.vendor,
+				subString : "KDE",
+				identity : "Konqueror"
+			}, {
+				string : navigator.userAgent,
+				subString : "Firefox",
+				identity : "Firefox"
+			}, {
+				string : navigator.vendor,
+				subString : "Camino",
+				identity : "Camino"
+			}, { // for newer Netscapes (6+)
+				string : navigator.userAgent,
+				subString : "Netscape",
+				identity : "Netscape"
+			}, {
+				// For IE11
+				string : navigator.userAgent,
+				match : /Trident.*rv[ :]*11\./,
+				identity : "Explorer"
+			}, {
+				string : navigator.userAgent,
+				subString : "MSIE",
+				identity : "Explorer",
+			}, {
+				string : navigator.userAgent,
+				match : /Mobile Safari\/([\d.]+)/,
+				identity : "Mobile Safari",
+				versionSearch : "/AppleWebKit\/([\d.]+)/",
+			}, {
+				string : navigator.userAgent,
+				subString : "Gecko",
+				identity : "Mozilla",
+				versionSearch : "rv"
+			}, { // for older Netscapes (4-)
+				string : navigator.userAgent,
+				subString : "Mozilla",
+				identity : "Netscape",
+				versionSearch : "Mozilla"
+			} ],
+			dataOS : [ {
+				string : navigator.platform,
+				subString : "Win",
+				identity : "Windows"
+			}, {
+				string : navigator.platform,
+				subString : "Mac",
+				identity : "Mac"
+			}, {
+				string : navigator.userAgent,
+				match : /Android\s([0-9\.]*)/,
+				subString : "Android",
+				identity : "Android"
+			}, {
+				string : navigator.userAgent,
+				subString : "iPhone",
+				identity : "iPhone/iPod"
+			}, {
+				string : navigator.platform,
+				subString : "Linux",
+				identity : "Linux"
+			}
 
-						var index = dataString.indexOf(this.versionSearchString);
-						if (index == -1)
-							return;
-						return parseFloat(dataString.substring(index
-								+ this.versionSearchString.length + 1));
-					},
-					dataBrowser : [ {
-						string : navigator.userAgent,
-						subString : "Chrome",
-						identity : "Chrome"
-					}, {
-						string : navigator.userAgent,
-						subString : "OmniWeb",
-						versionSearch : "OmniWeb/",
-						identity : "OmniWeb"
-					}, {
-						string : navigator.vendor,
-						subString : "Apple",
-						identity : "Safari",
-						versionSearch : "Version"
-					}, {
-						prop : window.opera,
-						identity : "Opera"
-					}, {
-						string : navigator.vendor,
-						subString : "iCab",
-						identity : "iCab"
-					}, {
-						string : navigator.vendor,
-						subString : "KDE",
-						identity : "Konqueror"
-					}, {
-						string : navigator.userAgent,
-						subString : "Firefox",
-						identity : "Firefox"
-					}, {
-						string : navigator.vendor,
-						subString : "Camino",
-						identity : "Camino"
-					}, { // for newer Netscapes (6+)
-						string : navigator.userAgent,
-						subString : "Netscape",
-						identity : "Netscape"
-					}, {
-						// For IE11
-						string : navigator.userAgent,
-						match : /Trident.*rv[ :]*11\./,
-						identity : "Explorer"
-					}, {
-						string : navigator.userAgent,
-						subString : "MSIE",
-						identity : "Explorer",
-					}, {
-						string : navigator.userAgent,
-						match : /Mobile Safari\/([\d.]+)/,
-						identity : "Mobile Safari",
-						versionSearch : "/AppleWebKit\/([\d.]+)/",
-					}, {
-						string : navigator.userAgent,
-						subString : "Gecko",
-						identity : "Mozilla",
-						versionSearch : "rv"
-					}, { // for older Netscapes (4-)
-						string : navigator.userAgent,
-						subString : "Mozilla",
-						identity : "Netscape",
-						versionSearch : "Mozilla"
-					} ],
-					dataOS : [ {
-						string : navigator.platform,
-						subString : "Win",
-						identity : "Windows"
-					}, {
-						string : navigator.platform,
-						subString : "Mac",
-						identity : "Mac"
-					}, {
-						string : navigator.userAgent,
-						match : /Android\s([0-9\.]*)/,
-						subString : "Android",
-						identity : "Android"
-					}, {
-						string : navigator.userAgent,
-						subString : "iPhone",
-						identity : "iPhone/iPod"
-					}, {
-						string : navigator.platform,
-						subString : "Linux",
-						identity : "Linux"
-					}
+			]
 
-					]
-
-				};
-				BrowserDetect.init();
-				$('#browser_os').val(BrowserDetect.OS);
-				$('#browser_Name').val(BrowserDetect.browser);
-				$('#browser_version').val(BrowserDetect.version);
-		});
+		};
+		BrowserDetect.init();
+		$('#browser_os').val(BrowserDetect.OS);
+		$('#browser_Name').val(BrowserDetect.browser);
+		$('#browser_version').val(BrowserDetect.version);
 	</script>
 
 	<!-- Clicky code -->
