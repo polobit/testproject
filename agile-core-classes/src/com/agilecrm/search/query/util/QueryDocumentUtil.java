@@ -514,7 +514,7 @@ public class QueryDocumentUtil {
 
 		// Created after given date.
 		else if (condition.equals(SearchRule.RuleCondition.AFTER)) {
-			String epochQuery = lhs + "_epoch >= " + dayStartEpochTime;
+			String epochQuery = lhs + "_epoch > " + dayStartEpochTime;
 
 			query = buildNestedCondition(joinCondition, query, epochQuery);
 		}
