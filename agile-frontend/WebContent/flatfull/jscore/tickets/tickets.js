@@ -1210,7 +1210,7 @@ var Tickets = {
 
 			});
 			
-			App_Contacts.contactDetailView.render(true).el;
+			//App_Contacts.contactDetailView.render(true).el;
 		}
 	},
 
