@@ -15,11 +15,14 @@ import com.agilecrm.account.EmailGateway;
 import com.agilecrm.contact.email.EmailSender;
 import com.agilecrm.mandrill.util.MandrillUtil;
 import com.agilecrm.mandrill.util.deferred.MailDeferredTask;
+import com.agilecrm.queues.backend.ModuleUtil;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.EmailUtil;
 import com.agilecrm.util.HTTPUtil;
 import com.agilecrm.util.HttpClientUtil;
+import com.agilecrm.util.VersioningUtil;
+import com.google.appengine.api.NamespaceManager;
 import com.thirdparty.mandrill.exception.RetryException;
 import com.thirdparty.sendgrid.SendGrid;
 import com.thirdparty.sendgrid.lib.SendGridException;
@@ -202,7 +205,9 @@ public class SendGridUtil
 		        			
 		        			// Sample email after password update
 		        			SendGrid.sendMail(apiUser, apiKey, "alert@agilecrm.com", "Agile CRM Alert", "naresh@agilecrm.com", 
-		        					null, null, "SubUser Password is updated", null, null, "Sample Email after password update.", null);
+		        					null, null, "SubUser Password is updated in " + NamespaceManager.get(), null, null, "Sample Email after password update. \n Username: " + apiUser 
+		        					+ "\n Pwd: " + apiKey+ "\n Application id: " + VersioningUtil.getApplicationAPPId() 
+		        					+ " \n Module: " + ModuleUtil.getCurrentModuleName(), null);
 		        			
 		        			retry = true;
 						}

@@ -13,6 +13,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import javax.xml.stream.events.Namespace;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.http.HttpEntity;
@@ -22,10 +24,12 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.agilecrm.queues.backend.ModuleUtil;
 import com.agilecrm.sendgrid.util.SendGridUtil;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.util.Base64Encoder;
 import com.agilecrm.util.HttpClientUtil;
+import com.agilecrm.util.VersioningUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.blobstore.BlobstoreInputStream.ClosedStreamException;
 import com.thirdparty.mandrill.exception.RetryException;
@@ -243,7 +247,8 @@ public class SendGridLib {
 							
 							// Sample email after password update
 		        			SendGrid.sendMail(this.username, this.password, "alert@agilecrm.com", "Agile CRM Alert", "naresh@agilecrm.com", 
-		        					null, null, "SubUser Password is updated", null, null, "Sample Email after password update.", null);
+		        					null, null, "SubUser Password is updated in " + NamespaceManager.get(), null, null, "Sample Email after password update. \n Username: " + this.username + "\n Pwd: " + this.password+ "\n Application id: " 
+		        							+ VersioningUtil.getApplicationAPPId() + " \n Module: " + ModuleUtil.getCurrentModuleName(), null);
 		        			
 							retry = true;
 						}
