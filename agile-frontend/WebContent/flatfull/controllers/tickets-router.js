@@ -258,7 +258,9 @@
 		 					
 		 					$('#ticket-contact-details', el).html(
 		 						getTemplate('ticket-contact-fallback', data));
+		 				
 		 				}
+		 				loadWidgets(el, Ticket_Utils.Current_Ticket_Contact.toJSON(), "widgets");
 		 			});
 
 		 			// Append reply container
@@ -271,7 +273,7 @@
 					Ticket_Labels.showSelectedLabels(data.labels, $(el), true);
 
 					//Load RHS side bar widgets
-					Tickets.loadWidgets(App_Ticket_Module.ticketView.el);
+					Tickets.ticketsloadWidgets(App_Ticket_Module.ticketView.el);
 
 					//Initializing Assignee dropdown with groups and assignees
 					Tickets.fillAssigneeAndGroup(el);
