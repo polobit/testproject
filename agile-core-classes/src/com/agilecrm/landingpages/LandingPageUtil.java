@@ -374,14 +374,32 @@ public class LandingPageUtil
 		
 	}
 	
-	public static String  getFullHtmlCode(String fullXHtmlJson) {
+	public static String  getFullHtmlCode(LandingPage landingPage) {
 		
-	    String fullbodyHtml="";
+		String fullXHtmlJson = landingPage.blocks;		
+	    String fullbodyHtml = "";
 	   
 		try
 		{
-//		    String fileContent=FileStreamUtil.readResource("D:/jpreddy/EclipseWorkSpace/final/.metadata/.plugins/org.eclipse.wst.server.core/tmp0/agile-java-server/agile-frontend.war/misc/pagebuilder/elements/skeleton.html");
-		    String fileContent=FileStreamUtil.readResource("misc/pagebuilder/elements/skeleton.html");
+//		    String fileContent = FileStreamUtil.readResource("D:/jpreddy/EclipseWorkSpace/final/.metadata/.plugins/org.eclipse.wst.server.core/tmp0/agile-java-server/agile-frontend.war/misc/pagebuilder/elements/skeleton.html");
+		    String fileContent = FileStreamUtil.readResource("misc/pagebuilder/elements/skeleton.html");		    
+		    
+		    String meta = "";
+			if (landingPage.title != null && !landingPage.title.isEmpty()) {
+				meta += "<title>" + landingPage.title + "</title>";
+			}
+			if (landingPage.description != null && !landingPage.description.isEmpty()) {
+				meta += "<meta name=\"description\" content=\""+ landingPage.description + "\"/>";
+			}
+			if (landingPage.tags != null && !landingPage.tags.isEmpty()) {
+				meta += "<meta name=\"keywords\" content=\""+ landingPage.tags + "\"/>";
+			}
+			fileContent = fileContent.replace("<!--pageMeta-->", meta);
+			
+			if(landingPage.header_includes != null && !landingPage.header_includes.isEmpty()) {
+				fileContent = fileContent.replace("<!--headerIncludes-->", landingPage.header_includes);
+			}
+			
 		    Document skeletonDoc = Jsoup.parse(fileContent);
 		    Element mainPageElement = skeletonDoc.getElementById("page");
 		    
@@ -389,7 +407,7 @@ public class LandingPageUtil
 		    for (int i = 0; i < jsonArray.length(); i++) {					
 		        JSONObject lpElements = jsonArray.getJSONObject(i);				        
 		        Document doc = Jsoup.parse(lpElements.getString("frameContent"));
-		        fullbodyHtml=fullbodyHtml+doc.body().getElementById("page").children();				        
+		        fullbodyHtml = fullbodyHtml + doc.body().getElementById("page").children();				        
 		    }
 		    
 		    mainPageElement.html(fullbodyHtml);

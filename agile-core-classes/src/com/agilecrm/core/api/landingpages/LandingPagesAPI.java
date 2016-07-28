@@ -208,7 +208,7 @@ public class LandingPagesAPI
 	{
 		System.out.println(landingPage);
 		if(landingPage.version >= 2.0) {	    
-        	landingPage.html = LandingPageUtil.getFullHtmlCode(landingPage.blocks);
+        	landingPage.html = LandingPageUtil.getFullHtmlCode(landingPage);
         }
 		landingPage.save();
 		
@@ -226,7 +226,7 @@ public class LandingPagesAPI
 	public LandingPage updateLandingPage(LandingPage landingPage)
 	{
 		if(landingPage.version >= 2.0) {	    
-        	landingPage.html = LandingPageUtil.getFullHtmlCode(landingPage.blocks);
+        	landingPage.html = LandingPageUtil.getFullHtmlCode(landingPage);
         }
 		landingPage.updated_time = System.currentTimeMillis() / 1000;
 		landingPage.save();
