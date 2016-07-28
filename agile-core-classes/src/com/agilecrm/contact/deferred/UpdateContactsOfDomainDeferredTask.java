@@ -192,9 +192,7 @@ public class UpdateContactsOfDomainDeferredTask implements DeferredTask
 
 	private void updateStats(String previousCursor,String failedIds, String status) {
 		NamespaceManager.set("");
-			
-		
-		
+				
 		try {
 			System.out.println(" cur Domain "+ domain);
 			ContactSchemaUpdateStats contactSchemaUpdateStats = ContactSchemaUpdateStats.get(domain);
@@ -213,7 +211,7 @@ public class UpdateContactsOfDomainDeferredTask implements DeferredTask
 			if(status.equalsIgnoreCase("COMPLETED"))
 			{		
 				DomainUser dUser=DomainUserUtil.getDomainUserByEmailFromParticularDomain(domainUserMail,domain);
-				SendMail.sendMail(domainUserMail, "Update Contacts Status", SendMail.Process_update_status, dUser);
+				SendMail.sendMail(domainUserMail, "Update Contacts & Companies Status", SendMail.Contacts_update_status, dUser);
 				
 				
 			}

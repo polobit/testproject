@@ -115,7 +115,7 @@ function syncAppData(){
 				if(data == "success"){
 					showModalConfirmation(
 						"Update Data",
-						"Update request is successfully scheduled.",
+						"Update request is successfully scheduled. Status will be notified by email.",
 						function()
 						{
 							// No callback
