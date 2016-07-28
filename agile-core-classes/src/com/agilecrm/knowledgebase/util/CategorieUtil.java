@@ -33,7 +33,7 @@ public class CategorieUtil
 
 	public static void createDefaultCategorie()
 	{
-		Categorie categorie = new Categorie("General", "General category contains FAQ's and Getting Started guides.");
+		Categorie categorie = new Categorie("General", "General category contains Announcements, FAQ's and Getting Started guides.");
 		Key<Categorie> key = categorie.save();
 
 		SectionUtil.createDefaultSections(key);
