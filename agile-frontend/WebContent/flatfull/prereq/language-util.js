@@ -9,6 +9,9 @@ function _agile_get_translated_val(module_name, key){
 }
 
 (function(){
-	var jScript = Handlebars.templates["agile-localization-template"]({});
-      $('body').append('<script type="text/javascript">' + jScript + '<\/script>');
+	try{
+		var jScript = Handlebars.templates["agile-localization-template"]({});
+      	$('body').append('<script type="text/javascript">' + jScript + '<\/script>');
+	}catch(e){}
+	 
 })();

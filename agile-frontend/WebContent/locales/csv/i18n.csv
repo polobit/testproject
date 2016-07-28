@@ -107,6 +107,7 @@ campaigns.skip-call-campaign-desc,Please note that by clicking the 'Skip & call 
 campaigns.triggers-desc-1,Triggers are pre-defined conditions set up by you. If a condition is satisfied&#44; you can choose an action to follow using workflow automation.,Los triggers son condiciones pre-definidas configuradas por ti. Si una condición se cumple&#44; puedes elegir una acción a seguir utilizando un flujo de trabajo automatizado.
 campaigns.triggers-desc-2,e.g. If a user registers on your website&#44; you can automate the workflow to send a welcome email. The user registering on site is the trigger.,Ej: Si alguien se registra desde tu sitio web&#44; puedes automatizar el flujo de trabajo para enviar un correo de bienvenida. El trigger será el registro del usuario
 campaigns.help-wrapup-time-desc,'Wrapup Time' will be applicable for the 'Auto Dial' option which allows a time gap between each call so that the user may record call notes.,&#39;Wrapup Tiempo&#39; será aplicable para la opción &quot;Marcación automática&quot;&#44; que permite a un intervalo de tiempo entre cada llamada de manera que el usuario puede grabar notas de la llamada.
+reasons.we-are-sorry-to-see-you-leave,We are sorry to see you leaving. Our Support team will contact you within 48 hours to know more about the reason for leaving us. Please note,Lo sentimos verte salir. Nuestro equipo de soporte se pondrá en contacto con usted dentro de 48 horas para saber más acerca de la razón para salir de nosotros. tenga en cuenta
 widgets.chargify-simplifies-recurring-billing,Chargify simplifies recurring billing for Web 2.0 and SaaS companies. Build innovative web apps without worrying how to bill your customers.,Chargify simplifica la facturación recurrente de la Web 2.0 y las compañías de SaaS. Construir innovadoras aplicaciones web sin tener que preocuparse cómo facturar a sus clientes.
 prefs-email-templates.email-templates-desc-1,Personalize and customize email templates for every scenario in the sales cycle. Make sure you send a great looking email every single time.,Personalizar plantillas de email para cada escenario del ciclo de venta. Asegúrate de enviar un correo perfecto todo el tiempo.
 Refer-friend.enter-referal-url-once-after-validation-your-emails-will-be-vadated,Please enter the URL to your blog post about Agile CRM here. Once validated&#44; the email quota will be automatically updated in your account.,Por favor&#44; introduzca la dirección URL de su blog acerca de Agile CRM aquí. Una vez validado&#44; la cuota de correo electrónico se actualizará automáticamente en su cuenta.
@@ -165,6 +166,8 @@ main.by-clicking-on-resume-your-account-will-be-billed,Please note that by click
 widgets.we-are-forced-to-discontinue-linkedin-widget,We are forced to discontinue LinkedIn widget because of API restrictions from LinkedIn.You can read more on this from our,Nos vemos obligados a suspender el widget de LinkedIn debido a las restricciones de la API de LinkedIn.You puede leer más sobre esto desde nuestra
 validation-msgs.name-validation,Name should be between 4-20 characters in length. Both letters and numbers are allowed but it should start with a letter.,Nombre debe ser entre 4-20 caracteres de longitud. Letras y números están permitidos pero deben comenzar con una letra.
 campaigns.triggers-desc-3,Please note that Triggers may not run immediately. It may take few minutes based on the pending campaigns to be executed.,Por favor tome en cuenta que los Triggers podrían  no ejecturarse de manera inmediata. Puede tomar unos minutos dependiendo de las campañas pendientes por ejecutarse
+task.tasks-are-like-to-do,Tasks are like to-dos. Result oriented. You can assign a category such as call&#44; email etc and add them to your calendar.,Las tareas son como las tareas pendientes. Orientado a los resultados. Puede asignar una categoría&#44; como llamadas&#44; etc correo electrónico y agregarlos a su calendario.
+task.task-are-like-to-do,Tasks are like to-dos. Result oriented. You can assign a category such as call&#44; email etc and add them to your calendar.,Las tareas son como las tareas pendientes. Orientado a los resultados. Puede asignar una categoría&#44; como llamadas&#44; etc correo electrónico y agregarlos a su calendario.
 calls.reload-page,You are currently running a call campaign. If you reload the page the current call campaign will be exited automatically,En este momento está ejecutando una campaña llamada. Si vuelve a cargar la página de la campaña llamada actual se cierra automáticamente
 campaigns.contact-unsubscribes-from-your-campaign-desc,When a contact unsubscribes from your campaign&#44; this name will be displayed as campaign name in the confirmation screen.,Cuando un contacto cancela su suscripción a tu campaña&#44; este nombre se mostrará como nombre de la campaña en la pantalla de confirmación.
 prefs-data-sync.widget-zendesk-desc,Zendesk streamlines communication within a ticket that has organized workflow towards resolution of the customer issue.,Zendesk agiliza la comunicación dentro de un boleto que ha organizado el flujo de trabajo hacia la resolución del problema del cliente.
@@ -224,6 +227,7 @@ gateway.enable-twilio-integration,You need to enable Twilio Integration to use t
 widgets.shopify-id-desc,Shopify id for each contact is stored in a text custom field. You have no custom fields defined. Please,Se asigna un Shopify ID para cada contacto en un campo de texto personalizado. No has definido ningún campo personalizado todavía. 
 admin-settings-api-analytics.allowed-domains-desc,API & Analytics will be enabled on following domains. All domains are allowed by default using wildcard,API y Analytics se habilitarán en las siguientes dominios. Todos los dominios están habilitados de forma predeterminada usando un comodín
 landing-pages.below-are-links-to-CNAME-setup,Below are links to CNAME setup instructions provided by some of the  popular domain registrar services.,A continuación se presentan enlaces a instrucciones de configuración CNAME proporcionados por algunos de los servicios de registro de dominios populares.
+other.conformation-extermly-important,This is extremely important. If you don't read this&#44;  unexpected bad things will most definitely occur.,Esto es extremadamente importante. Si usted no lee esto&#44; lo más definitivamente ocurrir cosas malas inesperados.
 deal-view.deals-can-be-archived-desc,Deals can be archived and will not be shown. You can view them later by selecting 'All' in the filter.,"Las ofertas pueden ser archivadas y no se mostrarán. Puede verlos más tarde seleccionando ""Todos"" en el filtro."
 widgets.stripe-each-contact-desc,Stripe id for each contact is stored in a text custom field. You have no custom fields defined. Please,Se asigna un ID de Stripe para cada contacto en un campo de texto personalizado. Por favor selecciona el campo personalizado que deseas utilizar.
 other.you-wil-receive-a-verification-calll-asking-code,You will receive a verification call asking for a code. Enter the code you see after clicking verify.,Usted recibirá una llamada de verificación solicitando un código. Ingrese el código que ves después de hacer clic verificar.
@@ -232,6 +236,7 @@ admin-settings-integrations.shopify-content,Shopify is a powerful ecommerce solu
 widgets.shopify-desc,Shopify is a powerful ecommerce solution that includes everything you need to create an online store.,Shopify es una poderosa solución de ecommerce que incluye todo lo que necesitas para crear una tienda electrónica.
 portlets.dashlets-help-msg,Dashlets help you to view different modules data by grouping and manage your dashlets by adding them.,Los Dashlets te ayudan a visualizar diferentes datos de los módulos mediante la agrupación y gestión de tus dashlets añadiéndolos.
 widgets.no-script-rules-msg,Call Script Rules are used to show you the script for the call base on predefined rules you have set.,Las reglas de script de llamada se usan para mostrar el script de la base de la llamada de acuerdo a tus reglas predefinidas.
+other.by-cancelling-all-of-your-data-will-be-lost,By cancelling your subscription all your data and settings will be lost and never restore them back.,Al cancelar su suscripción todos sus datos y ajustes se perderán y nunca restaurar de nuevo.
 admin-settings-integrations.twilio-content,Twilio provides APIs for text messages and VoIP. Use your Twilio account to send SMS from Campaigns.,Twilio proporciona APIs para mensajes de texto y VoIP. Utilice su cuenta de Twilio para enviar SMS desde Campañas.
 campaigns.can-unsubscribe-your-contacts,can unsubscribe your contacts from either the current campaign or all campaigns (ongoing and future),Puedes dar de baja a cualquiera de tus contactos de la campaña actual o de todas las campañas (actuales y futuras)
 billing.plan-updated,Your plan has been updated successfully. Please logout and login again for the new changes to apply.,Su plan se ha actualizado correctamente. Por favor&#44; iniciar sesión otra vez para los nuevos cambios a aplicar.
@@ -240,6 +245,7 @@ widgets.documentation-for-js-api-placeholder,Paste your HTML source of widget. I
 report-chart-forms.growth-graphs-allow-desc,Growth graphs allow you to see how Contacts/leads with particular Tags are getting added over time.,Los gráficos de crecimiento permiten visualizar cómo los Contactos/leads con etiquetas particulares se van agregando a lo largo del tiempo.
 widgets.clickdesk-desc,Convert chat sessions with potential customers into contacts in Agile along with the conversation.,Convierte sesiones de chat con clientes potenciiales en clientes dentro de Agile a lo largo de la conversación.
 prefs-data-sync.widget-convert-chat-desc,Convert chat sessions with potential customers into contacts in Agile along with the conversation.,Convertir las sesiones de chat con los clientes potenciales en los contactos de ágil a lo largo de la conversación.
+reasons.once-clicked-cancel-subriciption,Once you click the 'Cancel Subscription' button&#44; your subscription will be cancelled immediately.,Una vez que se hace clic en el botón &#39;Cancelar suscripción&#39;&#44; su suscripción será cancelada inmediatamente.
 tickets.daily-tickets-reports-desc,Get periodic email reports with a list of new leads&#44; conversions&#44; or as per your custom criteria.,Obtener reportes de email periódicos con una lista de nuevos leads&#44; conversiones&#44; o criterios según tus costumbres.
 report-view.get-periodic-email-reports-desc,Get periodic email reports with a list of new leads&#44; conversions&#44; or as per your custom criteria.,Obtener reportes de email periódicos con una lista de nuevos leads&#44; conversiones&#44; o criterios según tus costumbres.
 admin-settings-integrations.magento-content,Magento is the open-source ecommerce software and platform trusted by the world's leading brands.,Magento es el software de comercio electrónico de código abierto y la plataforma de confianza de las marcas líderes en el mundo.
@@ -290,6 +296,7 @@ documents.you-can-add-document-by-clicking,You can add document by clicking the 
 portlets.filter-results-segments-pad-content-title,There are no contacts for the selected filter. Try refining the filters and the date range.,No hay contactos para el filtro seleccionado. Trate de refinar los filtros y el intervalo de fechas.
 bulk-actions.no-pem-to-archive-deal-contacts,Deal cannot be archived because you do not have permission to update associated contact(s).,Acuerdo no puede ser archivado&#44; ya que no tiene permiso para actualizar el contacto (s) asociada.
 campaigns.prompt-to-unsubscribe,Prompts the user with options to either unsubscribe from this campaign or all communication,Pide al usuario con opciones a cualquiera de salirse de esta campaña o todas las comunicaciones
+welcome.with-events-and-tasks-organize-and-keep-track-your-work,With Events and Tasks&#44;  organize and keep track of your work easily.Need to call a contact?,Con eventos y tareas&#44; organizar y realizar un seguimiento de su trabajo easily.Need para llamar a un contacto?
 contacts.merge-error,You have not selected any records to merge. Please select at least one record to continue.,No ha seleccionado ningún registro para fusionarse. Por favor&#44; seleccione al menos un registro para continuar.
 contacts-view.use-agile-crm-email-gateway-dns-records-to-your-domain,Using Agile CRM Email Gateway? Get your Email Settings and add DNS records to your domain.,El uso de Agile CRM Email Gateway? Obtenga su configuración de correo electrónico y añadir registros DNS para su dominio.
 prefs-data-sync.widget-sync-clients-from-quickbooks-desc,Sync customers in Quickbooks as Contacts in Agile CRM along with invoice and payment data.,Sincronizar los clientes en QuickBooks como contactos en Agile CRM&#44; junto con los datos de facturación y de pago.
@@ -310,6 +317,7 @@ report-view.funnel-reports-details,See a funnel graph of how leads are passing t
 cases.you-can-add-case-by-clicking,You can add case by clicking the button below or the one on the right side of the page.,Puede añadir un caso haciendo clic en el botón de abajo o el que está en el lado derecho de la página.
 campaigns.shopify-desc,Run a campaign on a contact when a specified Shopify event is performed by the contact.,Ejecutar una campaña en un contacto cuando un evento Shopify específico  se realiza por el contacto.
 prefs-email.imap-content,Just link your IMAP account and Agile will show emails below a contact from your Inbox.,Sólo tiene que unir su cuenta IMAP y Agile mostrará mensajes de correo electrónico por debajo de un contacto de la bandeja de entrada.
+cancellation.please-tell-us-why-you-want-to-leave,Please tell us why you want to leave. Your feedback will help us to serve you better.{{,Por favor&#44; díganos por qué desea hacerlo. Su opinión nos ayudará a servirle mejor. {{
 tags.rename-info,This may take a while. You may see the renamed tag on some contacts while this happens,Esto puede tardar un rato. Usted puede ver la etiqueta cambiado el nombre de algunos contactos mientras esto sucede
 Plan-and-upgrade.sorry-we-are-unable-to-trail-your-subscription,Sorry&#44 we are unable to cancel your trial subscription due to the following reasons,Lo sentimos&#44; no podemos cancelar su suscripción de prueba debido a las siguientes razones
 bulk-actions.no-pem-to-restore-deals,Deals  will not be restored for contacts for which you do not have update permissions.,Ofertas no se restaurarán los contactos para la que no tiene permisos de actualización.
@@ -396,6 +404,8 @@ admin-settings-deals.spl-chars-not-allowed-msg,Special characters are not allowe
 deals.import-success,Deals are now being imported. You will be notified on email when it is done,Ofertas ahora están siendo importados. Se le notificará de correo electrónico cuando se hace
 campaigns.form-submit-desc,Run a campaign on a contact when they submit an Agile form on your website.,Ejecutar una campaña en un contacto cuando llenan un formulario Agile desde tu sitio web.
 report-view.calls-reports-details,See a report of total calls made or total time spent on calls by each user.,Ver un reporte del total de llamadas realizadas o el tiempo total de llamadas por usuario
+reasons.upon-cancellation-of-your-account,Upon cancellation of your account&#44;  unused period will automatically lapse.,Tras la cancelación de su cuenta&#44; sin utilizar periodo caducará automáticamente.
+other.canceling-your-ccount-will-result-in-lapse-of-remaining-period,Cancelling your account now will result in lapse of remaining usage period.,Cancelación de su cuenta a continuación se traducirá en un lapso de tiempo de uso restante.
 admin-settings-custom-fields.custom-field-cond-desc,For the custom field to be sortable&#44; searchable checkbox must be selected.,Para que el campo personalizado se pueda ordenar&#44; la casilla de búsqueda debe ser seleccionada.
 campaigns.help-selected-contacts-desc,'Selected Contacts' displays the number of contacts added to the campaign.,&#39;Contactos seleccionada y muestra el número de contactos agregados a la campaña.
 twillio.no-verified-number,You have no verified numbers. Please verify number in your Twilio account.,No tiene cifras verificadas. Por favor&#44; compruebe el número de su cuenta Twilio.
@@ -404,6 +414,7 @@ twill.invalid-twilio-numbers,You have no verified numbers. Please verify number 
 track.all-exiisting-deals-in-this-track-can-be-accessed,All existing deals in this track can be accessed from the Deals list view.,Todas las ofertas existentes en esta pista se puede acceder desde la vista de lista de ofertas.
 custom-fields,1. Amazon SES services require verification of email addresses in the &#39,1. Los servicios de Amazon SES requieren la verificación de direcciones de correo electrónico en el &#39;
 contact-details.add-task-related-to-contact,You can add a task related to a contact for calling&#44; email&#44; follow-up etc.,Puede añadir una tarea relacionada con un contacto para llamar&#44; enviar email&#44; seguimiento&#44; etc.
+help.shedule-a-slot-our-product-support-will-call-you,Schedule a slot & one of our product experts will call you for assistance.,Programar una ranura y uno de nuestros expertos en el producto le llamará para obtener ayuda.
 admin-settings-stats.sms-msg,Agile CRM supports mobile messaging.You can configure the SMS feature here,El CRM  de Agile apoya la mensajería. Puedes configurar la función de SMS aquí
 emailbuilder.observe-merge-fields,Please observe that the merge fields in test emails would not be replaced.,Por favor&#44; observe que los campos de combinación en mensajes de correo electrónico de prueba no serían reemplazados.
 prefs-data-sync.shopify-sync-desc,Sync customer data and Agile CRM as contacts along with purchase history.,Sincronice los datos del cliente y Agile CRM como contactos junto con el historial de compras.
@@ -488,14 +499,15 @@ admin-settings-integrations.woocommerce-content,WooCommerce is a popular and fre
 portlets.contact-list-desc,See a list of 50 recently added contacts customizable by filters.,Ver una lista de 50 contactos añadidos recientemente personalizable por filtros.
 campaigns.connect-start-node,Please connect the \’Start\' node to another node in the campaign,Por favor&#44; conecte el nodo &#39;Start&#39; para otro nodo en la campaña
 contacts-view.easy -drag-and-drop-builders-help-to-build-landing-pages,Easy Drag and Drop builder helps you build your own Landing pages,Fácil de arrastrar y constructor gota ayuda a construir sus propias páginas de destino
-companies.enable-permission,Please contact your admin or account owner to enable this option.,Por favor&#44; póngase en contacto con el administrador o propietario de la cuenta para habilitar esta opción.
 note.exit-froom-the-campaign-and-will-be-redirected-to-contacts,Exit from the campaign and will be redirect to contacts list page,Salida de la campaña y será redirigir a página de la lista de contactos
+companies.enable-permission,Please contact your admin or account owner to enable this option.,Por favor&#44; póngase en contacto con el administrador o propietario de la cuenta para habilitar esta opción.
 Plan-and-upgrade.contacts-with-your-current-plan-and-are-trying-to-subscribe,contacts with your current plan and are trying to subscribe with,contactos con su plan actual y están tratando de suscribirse con
 admin-settings-users.add-deals-to-others,Add deals to others. View&#44; edit and delete deals owned by others,Añadir ofertas a los demás. Ver&#44; editar y eliminar ofertas que sean propiedad de otros
 admin-settings-users.start-your-list-from-csv,Start your list from CSV&#44; Google Contacts&#44; Stripe or other CRMs.,Comience su lista desde un  CSV&#44; contactos de Google&#44; Stripe o de otros CRMs
 Plan-and-upgrade.triggers-with-your-current-plan-and-are-trying-to-subscribe,triggers with your current plan and are trying to subscribe with,desencadena con su plan actual y están tratando de suscribirse con
 campaigns.ticket-note-cust,Runs a Campaign on a contact When new note is added by customer.,Ejecuta una campaña en un contacto cuando se añade nueva nota por parte del cliente.
 contacts.merge-max,you can merge maximum of 2 records at a time with master record.,puede combinar máximo de 2 registros a la vez con el registro maestro.
+welcome.you-can-the-API-javascript,you can use the API JavaScript to your web pages and use the API,puede utilizar la API de JavaScript a sus páginas web y el uso de la API
 deal-view.restoring-the-deal-desc,Restoring the Deal will make it active again. Restore this Deal?,La restauración de la Oferta la hará activa de nuevo. Restaurar este oferta?
 widgets.sip-desc,Make and receive calls from your contacts using any SIP account.,Haz y recibe llamadas de tus contactos utilizando cualquier cuenta SIP.
 prefs-data-sync.widget-sip-desc,Make and receive calls from your contacts using any SIP account.,Hacer y recibir llamadas de sus contactos utilizando cualquier cuenta SIP.
@@ -535,17 +547,20 @@ other.send-email-if-unusual-activity-detected,Sends verification code if unusual
 contacts-view.configure-agile-with-your-email,Configure Agile with your Email&#44 SMS & Telephony gateways.,Configurar ágil con su correo electrónico&#44; SMS y Telefonía pasarelas.
 Plan-and-upgrade.users-with-your-current-plan-and-are-trying-to-subscribe,users with your current plan and are trying to subscribe with,los usuarios con su plan actual y están tratando de suscribirse con
 campaigns.exit-call-campaign-desc,Are you sure you want to exit from the current call campaign?,¿Está seguro de que desea salir de la campaña de llamadas actual?
+Welcome.to-start-collecting-your-contacts-from-website-and-track-them,To start collecting your contacts from website and track them,Para comenzar a recoger sus contactos desde el sitio web y hacer un seguimiento
 campaigns.social-campaign-desc,Reach out to prospects on social media. Send automated Tweets,Llegar a los clientes potenciales en las redes sociales. Enviar Tweets automatizados
 widgets.skype-desc-4,You should be able to now make and receive calls using Skype.,Ya puedes hacer y recibir llamadas utilizando Skype-
 campaigns.event-added-desc,Run a campaign on a contact when they are added to an event.,Realiza una campaña a un cliente al agregarlo a un evento
 portlets.mini-calendar-desc,A mini calendar with an overview of your agenda for the day.,Una agenda de tamaño reducido con una descripción de su agenda para el día.
 prefs-email.gmail-content,See all emails related to a contact from your Gmail account.,Ver todos los mensajes de correo electrónico relacionados con un contacto de su cuenta de Gmail.
+reasons.our-support-team-will-help-further-process,and our Support team will help you with the further process.,y nuestro equipo de soporte le ayudará con el proceso.
 tickets.mark-selected-tickets-as-favorite,Are you sure&#44; you want to mark selected tickets as favorite?,¿Estás seguro de que deseas marcar los tickets seleccionados como favoritos?
 campaigns.ticket-note-desc,Runs a Campaign on a contact When new note is added by user.,Se ejecuta una campaña en un contacto cuando se añade una nueva nota por parte del usuario.
 widgets.bria-desc-4,You should be able to now make and receive calls using Bria.,Ya puedes hacer y recibir llamadas utilizando Bria.
 Plan-and-upgrade.are-you-suryou-want-to-cancel-your-trail,Are you sure you want to cancel your trial and move to free?,¿Seguro que deseas cancelar la prueba y pasar a liberar?
 Admin-settings-integrations.the-email-address-of-your-agile-crm-user,the email addresses of all your Agile CRM users and the &#39,las direcciones de correo electrónico de todos sus usuarios de Agile CRM y en la &#39;
 campaigns.contact-added-desc,Add contact to a campaign as soon as the contact is created.,Agregar contacto a una campaña cuando un contacto es creado.
+welcome.define-milestone-for-details-and-manage-sales,Define milestores for details and manage your sales funnel.,Definir milestores para obtener más información y gestionar su embudo de ventas.
 companies-view.companies-are-prospects-that-you-interact-with-using-agile,companies are prospects that you interact with using Agile.,las compañías son los prospectos con los que interactúas usando Agile
 campaigns.hard-bounce-occurs-desc,A hard bounce occurs when the recipient's email is invalid.,Un rebote duro ocurre cuando el email del recipiente es inválido
 prefs-settings.either-of-the-selected-days,Your calender week starts with either of the selected days.,Tu semana de calendario empieza con cualquier de los días seleccionados
@@ -563,6 +578,7 @@ campaigns.we-are-sorry-this-browser-may-not-support,We&#39;re sorry. This browse
 widgets.twitter-profile-desc,Engage with contacts in real time based on what they tweet.,Interactúa con clientes en tiempo real con base en sus tweets
 companies.name-length-error,Company name too long. Please restrict upto 100 characters.,Nombre de empresa demasiado tiempo. Por favor limite hasta 100 caracteres.
 portlets.companies-pad-content-desc,companies are prospects that you interact with using Agile.,las compañías son los prospectos con los que interactúas usando Agile
+tasks.all-contacts-which-are-related-to-the-task,All Contacts which are related to this task are shown here.,Todos los contactos que están relacionados con esta tarea se muestran aquí.
 landing-pages.publish-your-landing-page,Publish your landing page by using the custom domain setup.,Publica tu landing usando el setup personalizado de dominio.
 portlets.delete-activity-overview-dashlet-confirm,Are you sure you want to delete Dashlet - Activity Overview,¿Seguro que quiere eliminar Dashlet - Descripción general
 report-chart-forms.companies-are-prospects-that-you-interact-with-using-agile,companies are prospects that you interact with using Agile.,Las compañías son prospectos con los que interactúas a través de Agile.
@@ -575,10 +591,12 @@ campaigns.tickets-label-deleted-desc,Runs a Campaign on a contact When ticket la
 campaigns.email-link-clicked-desc,Run a campaign on a contact when an email link is clicked.,Realizar una campaña a un contacto cuando hace clic en un vínculo de correo electrónico.
 billing.coupon-expired,Coupon is either expired or invalid for the selected plan.,El cupón es caducado o no válido para el plan seleccionado.
 Admin-settings-users.copy-the-below-setting-and-update-in-web-domain,Copy the below settings and update in your Web domain DNS.,Copie la siguiente configuración y actualización de DNS en su dominio web.
+reasons.Explain-how-we-can-serve-in-future,Explain in brief how we can serve you better in the future,Explicaremos brevemente cómo podemos servirle mejor en el futuro
 campaigns.tag-will-be-added-desc,Tag will be added once the call is completed successfully.,se añadirá la etiqueta una vez que la llamada se ha realizado correctamente.
 calendar.saving-url-error,Something went wrong as your schedule url was not updated.,Algo salió mal ya que su url horario no se actualiza.
 contact-details.you-have-not-yet-setup-the-javascript-api-on-your website,You have not yet setup the Javascript API on your website.,Usted no ha configurado aún la API de Javascript en su página web.
 campaigns.tag-removed-desc,Add contact to a campaign when a specified tag is removed.,Agregar contacto a campaña cuando una etiqueta específica sea eliminada.
+landing-pages.about,Landing page is a web page created to gather leads online.,La página de destino es una página web creada para reunir clientes potenciales en línea .
 social.pl-change-name,Please change the name and click on 'Create a Copy' again.,Por favor&#44; cambiar el nombre y haga clic en &quot;Crear una copia &#39;de nuevo.
 Contacts-view.upload-and-attach-documents-to-contacts-deals-cases,upload and attach documents to contacts&#44 deals or cases,cargar y adjuntar documentos a los contactos&#44; ofertas o casos
 prefs-data-sync.setup-contact-sync-with-your-gmail-account,Setup contact sync with your Gmail or Google Apps account.,Configure la sincronización de contactos con su cuenta de Gmail o Google Apps.
@@ -590,6 +608,7 @@ portlets.contact-activities-pad-content-desc,Web and Campaign activity of your c
 twilio.to-satrt-making-calls-you-need-to-verify-your-number,To start making calls&#44 you need to verify your number.,Para empezar a hacer llamadas&#44; es necesario verificar su número.
 contact-details.web-and-campaign-activity-desc,Web and Campaign activity of your contacts is shown here.,La actividad web y de campaña de sus contactos se muestra aquí.
 portlets.contact-activities-all-activities-pad-content-desc,Web and Campaign activity of your contacts is shown here.,La Actividad web y de la campaña de sus contactos se muestra aquí.
+welcome.you-can-also-add-contacts-manually,You can also add contacts manually from the Contacts tab.,También puede agregar contactos manualmente desde la ficha Contactos.
 web-rules.to-start-using-web-rules,To start using Web Rules&#44; please setup our tracking code.,Para empezar a utilizar Reglas web&#44; por favor&#44; instala nuestro código de seguimiento.
 campaigns.weekly-desc,Run a campaign on a filtered list of contacts every week.,Realizar una campaña en una lista filtrada de contactos cada semana.
 campaigns.new-email-desc,Run a campaign on a contact when a new email is received.,Realiza una campaña en un contacto cuando se recibe un nuevo correo electrónico.
@@ -613,6 +632,7 @@ deal-view.save-specific-note-information,You can save specific information about
 tickets.mark-selected-tickets-as-spam,Are you sure&#44; you want to mark selected tickets as spam?,¿Estás seguro de que deseas marcar los siguientes tickets como spam?
 portlets.webstat-visits-desc,A pie chart of Known and Unknown Visits on your website.,Un gráfico de pastel de Visitas conocidas y desconocidas en su sitio web.
 web-rules.web-rules-help-text,Need more help? Please check the detailed documentation.,Necesitas más ayuda? Por favor&#44; revisa la documentación detallada.
+task.all-deals-which-are-related-to-this,All deals which are related to this task are shown here.,Todas las ofertas que están relacionados con esta tarea se muestran aquí.
 portlets.delete-mini-calendar-dashlet-confirm,Are you sure you want to delete Dashlet - Mini Calendar?,¿Seguro que quiere eliminar Dashlet - Mini Calendario?
 campaigns.are-you-sure-previous-call,Are you sure you want to be taken to the previous call?,¿Estás seguro de que deseas ser llevado a la llamada anterior?
 portlets.deals-funnel-desc,A funnel report of total Deals value in each Milestone.,Un informe embudo del valor total de las ofertas en cada hito.
@@ -623,12 +643,15 @@ admin-settings-users.upload-and-attach-documents-to-contacts,Upload and attach d
 domain-user.email-edited,You Email has been updated successfully. Logging out...,Usted correo electrónico se ha actualizado correctamente. Saliendo de tu cuenta...
 campaigns.to-get-best-experience,To get the best experience&#44  we recommend you to use,Para obtener la mejor experiencia&#44; recomendamos que utilice
 contacts-view.acceptable-date-format-are,Acceptable date format are 'MM/dd/yyyy' or 'MM-dd-yyyy',"Los formatos de fecha aceptables son ""MM / dd / aaaa"" o ""MM-dd-aaaa '"
+task.you-can-save-specific-information,You can save specific information about task as a Note.,Puede guardar información específica acerca de la tarea como una nota.
 pages.unlink-fb-confirm,Are you sure you want to unlink your Facebook account ?,¿Está seguro de que desea desvincular su cuenta de Facebook?
 companies.invalid-viewer,Sorry&#44; you do not have permission to view this Company.,Lo sentimos&#44; usted no tiene permiso para ver este Company.
 landing-pages.enter-the-domain-setup,Enter the domain you want to point to the landing page.,Introduzca el dominio que desea que apunte a la página de destino.
+welcome.create-deals-for-sales-opportunities,Create Deals for sales opportunities you want to track.,Crear ofertas para las oportunidades de venta que desea rastrear.
 social.social-suite-not-associated,You have not associated any social accounts currently.,No has asociado ninguna cuenta social actualmente.
 campaigns.tickets-desc,Runs a Campaign on a contact When new ticket is added.,Se ejecuta una campaña en un contacto al añadirse un nuevo ticket.
 portlets.stats-report-desc,Detailed list of activities done by your team members.,Lista detallada de las actividades realizadas por los miembros de su equipo.
+welcome.calls-were-needed-check-in-the-admin-settings-option,calls where needed. Check it in Admin Settings option.,llamadas en las que sea necesario. Compruebe que la opción de configuración del administrador de.
 report-view.ratio-reports-details,See what percentage of leads are converting over time.,Ver qué porcentaje de leads se convierten a lo largo del tiempo.
 social.all-updates-hover-content,Updates and shares from user's connections and groups.,Actualizaciones de las conexiones y grupos del usuario
 companies.name-mandatory,Company Name is mandatory. Please select Company name.,Nombre de la empresa es obligatoria. Por favor&#44; seleccione el nombre de la empresa.
@@ -656,19 +679,23 @@ stripe.select-custom-field,Please select one custom field to save the Stripe ID.
 portlets.delete-leaderboard-dashlet-confirm,Are you sure you want to delete Dashlet - Leaderboard,¿Seguro que quiere eliminar el Dashlet -  tabla de posiciones?
 billing.canceled-requested,Your cancellation request has been sent successfully.,Su solicitud de cancelación ha sido enviado con éxito.
 campaigns.displays-live-timeline,Displays a live timeline of all user activities here.,Muestra una línea de tiempo en vivo de todas las actividades del usuario aquí.
+cancellation.please-give-us-more-details,Please give us more details. This will help us a lot.,Por favor&#44; danos más detalles. Esto nos va a ayudar mucho.
 contacts-view.notes-can-be-imported-desc,Notes can be imported by selecting the 'Note' option.,Las notas pueden ser importadas al seleccionar la opción 'Nota'.
 report-add.sorry-you-do-not-have-privileges-access,Sorry&#44; you do not have the privileges to access this.,Lo sentimos&#44; usted no tiene los privilegios para acceder a esto.
 campaigns.newsletter-desc,Send a newsletter and see reports on opens and clicks,Enviar newsletter
 deal-view.what-are-milestone-p1,Milestones are used to define the status of the deal.,Los hitos se utilizan para definir el estado de la operación.
 contact-details.you-have-not-yet-configured-your-email,You have not yet configured your email. Please click,Usted todavía no ha configurado su correo electrónico. Por favor haga clic
+welcome.create-and-run-campaigns-on-your-contacts,Create and run automated campaigns on your contacts.,Crear y ejecutar campañas automatizadas en sus contactos.
 social.search-hover-content,Relevant Tweets matching a specified Search Keyword.,Tweets relevantes que coinciden con una búsqueda por palabra clave específica
 admin-settings-integrations.you-need-a-paid-plivo-account,You need a Paid Plivo account to be able to send SMS,Usted necesita una cuenta de pago Plivo para poder enviar un SMS
 report-view.know-your-revenue-forecast,Know your revenue forecast based on your deals data.,Conocer el pronóstico de tus ingresos de acuerdo a los datos de tus ventas.
 datasync.update-data-confirm,This will update your data. Do you want to continue?,Esto actualizará sus datos. ¿Quieres continuar?
+welcome.add-reports-to-improve-customr-reention-statergies,Add reports to improve customer retention strategies,Añadir informes para mejorar las estrategias de retención de clientes
 portlets.delete-deal-goals-dashlet-confirm,Are you sure you want to delete Dashlet - Deal Goals,¿Seguro que quiere eliminar Dashlet - Objetivos de la oferta?
 acls.access-denied,Access denied to sync contacts. Please contact Admin,Acceso denegado para sincronizar los contactos. Por favor&#44; póngase en contacto con administrador
 validation-msgs.between-error,Sorry. You can't have multiple 'Between' conditions.,Lo siento. No se puede tener múltiples &quot;entre&quot; condiciones.
 portlets.average-deviation-desc,A quick view of deviation in tasks completion times.,Una vista rápida de la desviación en los tiempos de finalización de tareas.
+reasons.we-can-help-you-to-get-more-out-of-chat,We can help you to get more out of chat. Just ask us,Podemos ayudarle a obtener más provecho de la charla. Sólo nos pide
 tickets.click-on-category-and-see-sections,Click on category to see how many sections you have.,Haga clic en la categoría para ver cuántas secciones que tiene.
 campaigns.email-opened-desc,Run a campaign on a contact when they open an email.,Realizar una campaña de un contacto cuando se abre un correo electrónico.
 tickets.click-on-section-see-how-many-articles-you-have,Click on section to see how many articles you have.,Haga clic en la sección para ver la cantidad de artículos que tiene.
@@ -691,6 +718,7 @@ campaigns.unsubscribed-desc,Run a campaign on a contact when they unsubscribe.,R
 contact-details.sorry-this-contact-has-no-email-to-get-the-stats,Sorry! this contact has no email to get the stats.,¡Lo siento! este contacto no tiene correo electrónico para obtener las estadísticas.
 campaigns.spam-report-desc,Run a campaign on a contact when they report spam.,Realiza una campaña en un contacto cuando reportan spam.
 tweets.undo-retweet-confirm,Are you sure you want to undo retweet this status?,¿Seguro que desea deshacer Retweet este estatus?
+welcome.add-tracks-to-schedule-a-meeting,Add a task. To schedule a meeting&#44; create an event,Agregar una tarea. Para programar una reunión&#44; crear un evento
 tickets.delete-selected-tickets,Are you sure&#44; you want to delete selected tickets?,¿Estás seguro de que deaeas eliminar los tickets seleccionados?
 admin-settings-integrations.add-a-for-to-fb-page,Add a form to your Facebook page and gather leads.,Añadir un formulario a su página de Facebook y recopilar leads
 users.delete-user-error,Sorry&#44; can not delete user having admin privilege.,En este momento&#44; no se puede eliminar el usuario que tiene privilegios de administrador.
@@ -709,6 +737,7 @@ companies.delete-process-info,Your companies deletion will be processed shortly,
 prefs-data-sync.setup-contacts-sync-with-freshbooks,Setup contacts sync with your Freshbooks account.,Configurar sincronzación de contactos con su cuenta de Freshbooks
 widjets.your-agile-crm-account-already-to-shop,Your Agile CRM account is already linked to shop.,Su cuenta ágil CRM ya está vinculada a la tienda.
 validation-msgs.pls-enter-valid-email-sep-by-comma,Please enter valid email each separated by comma.,Por favor&#44; introduzca válida de correo electrónico separados por comas.
+other.please-note-that-your-subscription-is-valid-till,Please note that your subscription is valid till ,Tenga en cuenta que su suscripción es válida hasta
 admin-settings-deals.lost-message,Deals with this milestone are considered as Lost.,Ofertas con este hito se consideran como perdidas
 Admin-settings-integrations.amazon-se-service-recquires-verification-of-email,Amazon se service recquires verification of email,Amazon SE de recquires servicio de verificación de correo electrónico
 report-view.know-calls-made-by-each-user-pie-graph,Know the calls made  by each user on a pie graph.,Conocer las llamadas realizadas por cada usuario en un gráfico circular.
@@ -759,6 +788,7 @@ social.give-access,You have to give access to your social account.,Usted tiene q
 companies.merge-max,Maximum of 2 companies can be merged at a time.,Máximo de 2 empresas se pueden combinar a la vez.
 tags.no-perm-to-add,You don't have permissions to create a new tag.,Usted no tiene permisos para crear una nueva etiqueta.
 portlets.to-create-more-users-it-takes-only-10-seconds,to create more users. It takes only 10 seconds.,para crear más usuarios. Se tarda sólo 10 segundos.
+tasks.task-is-not-associated,Task is not associated with any person/contact.,Tarea no está asociada a ninguna persona / contacto.
 plan-and-upgrade.ron-kaplan-desc,Sales and Business Development - Espresso Logic,Ventas y Desarrollo de Negocios - Espresso Logic
 admin-settings-integrations.capture-leads-desc,Capture leads directly from your Facebook page.,Captura tus leads directamente desde tu pagina de Facebook
 portlets.pending-deals-desc,Gives you a heads up on all your pending Deals.,Te avisa sobre tus ofertas pendientes
@@ -809,6 +839,8 @@ widgets.make-and-receive-calls-using-your-skype-client,Make & receive calls usin
 prefs-data-sync.setup-contact-sync-with-stripe,Setup contact sync with your Stripe account.,Configurar la sincronización de contactos con su cuenta de Stripe
 tasks.you-do-not-have-permission-to-update-events,You do not have permission to update Events.,Usted no tiene permiso para actualizar Eventos.
 others.pwds-in-correct,Current and New Password can not be the same,Actual y la nueva contraseña no puede ser la misma
+landing-pages.no-pages,You do not have any Landing Pages currently.,No es necesario que las páginas de destino actualmente .
+cancellation.whats-the-main-reason-for-cancellation,What's the main reason for the cancellation?,¿Cuál es la principal razón de la cancelación?
 admin-settings-integrations.please-upgrade-to-regular-or-enterprise-plan,Please upgrade to Regular or Enterprise plan,Por favor&#44; actualice al plan regular o Enterprise
 countries.GS,South Georgia and the South Sandwich Islands,Georgia del Sur y las Islas Sandwich del Sur
 help.with-your-google-apps-other-emailservices,with your Google apps or other mail servers.,con sus aplicaciones de Google u otros servidores de correo.
@@ -820,6 +852,7 @@ admin-settings-users.delete-own-contacts-and-other-user-contacts,Delete own cont
 billing.email-quota-exceed,Sorry&#44; your emails quota has been utilized.,Lo sentimos&#44; la cuota de mensajes de correo electrónico se ha utilizado.
 contacts-view.import-upto-10&#44;000-contacts-from-a-CSV-file,Import upto 10&#44;000 contacts from a CSV file,Importar hasta 10.000 contactos desde un archivo CSV
 widgets.create-new-text-custom-field,Or&#44; you can create a new text custom field.,O&#44; puedes crear un nuevo campo de texto personalizado.
+reasons.to-know-the-status-of-the-request,To know the status of the request&#44;  please ,Para conocer el estado de la solicitud&#44; por favor
 calendar.saving-prefs-error,There was an error in saving your settings.,Se ha producido un error en la configuración de ahorro.
 Plan-and-upgrade.sorry-we-are-unable-to-sucscribe,Sorry&#44 we are unable to subscribe you to,Lo sentimos&#44; no podemos realizar la suscripción a
 tweets.delete-confirm,Are you sure you want to delete this tweet?,¿Está seguro de que quiere eliminar este tweet?
@@ -870,6 +903,8 @@ other.i-thought-you-would-love-as-much-as-i-do,I thought you would love as much 
 deal-view.save-specific-document-information,You can add a document related to a Deal.,Puedes añadir un documento relacionado con un acuerdo u oferta.
 admin-settings-tasks.confirm-delete-category,Are you sure you want to delete Category,¿Estás seguro de que deseas eliminar la categoría?
 socialsuite.posted-twitter,Your tweet has been posted successfully.,Su tweet se ha publicado con éxito.
+cancellation.was-just-checkoin-it-out,Was just checking it out. Don't need it.,Se acaba de echarle un vistazo. No lo necesita.
+cancellation.sorry-to-see-you-go,Sorry to see you go. Please tell us why?,Siento verte ir. Haznos saber por qué?
 portlets.workflows-pad-content-title,You do not have any Campaigns currently.,Usted no tiene ninguna Campaña actualmente.
 icalfeed.login-to-your-google-calendar-and-tell,Log into your Google Calendar and select,Ingrese a su calendario de Google y seleccione
 tickets.create-lables-to-streamline-your-tickets,Create lables to streamline your tickets,Crear etiquetas para agilizar tus tickets
@@ -968,6 +1003,7 @@ widgets.QuickBooks Widget saved successfully,QuickBooks widget saved successfull
 twitter.url-invalid,URL provided for Twitter is not valid,URL que aparece en Twitter no es válida
 help.chat-with-our-support-representative,Chat with our support representative.,Chatear con nuestro representante de soporte técnico
 admin-settings-integrations.your-settings-saved,Your settings are successfully saved.,La configuración se ha guardado correctamente.
+task.task-is-not-associated-with-any-deal,Task is not associated with any deal.,Tarea no está asociado a ningún acuerdo.
 widgets.Googleplus-widget-saved-successfully,GooglePlus widget saved successfully.,WIdget de GooglePlus guardado exitosamente.
 datasync.office365-initiated,Office365 calendar saved successfully,Office365 calendario guardado correctamente
 track.delete-conformation,Are you sure you want to delete Track,¿Está seguro de que quiere borrar la pista
@@ -1097,10 +1133,13 @@ gateway.no-twilio-gateway,Twilio Integration not Configured,Twilio La integraci�
 campaigns.no-hard-bounces,No hard bounces for this campaign,No hay devoluciones fuertes para esta campaña
 widgets.QuickBooks-delete-message,Are you sure to delete QuickBooks,¿Estás seguro de que quieres eliminar Quickbooks?
 widgets.no-clients-matching-this-contact,No clients matching this contact.,Ningún cliente coincide con este contacto.
+other.task-status-changed-to-completed,Task status changed to completed.,Estado de la tarea cambió a completado.
+welcome.take-your-tour,Take the tour - Your new AgileCRM,Toma el tour - Su nuevo AgileCRM
 Campaigns.assign-contacts-to-campaign,Assign contact(s) to the Campaign,Asignar contacto (s) a la Campaña
 campaigns.you-do-not-have-any-activity-yet,You do not have any activity yet.,Usted no tiene ninguna actividad todavía.
 portlets.contact-activities-all-activities-pad-content-title,No Contact activity recorded yet.,No hay actividad de contacto registrada todavía.
 plan-and-upgrade.you-do-not-have-any-invoices-yet,You do not have any invoices yet.,No es necesario que todas las facturas todavía.
+reasons.your-subscription-is-still-active,your subscription is still active,su suscripción todavía está activo
 report-view.call-logs-reports-details,See a full call log of all users.,Mosrtrar un registro completo de llamadas de todos los usuarios.
 plan-and-upgrade.contact-us-if-you-need-more-users,Contact us if you need more users,Contáctanos si necesitas más usuarios
 social.connection-active,A connection is currently active.,Una conexión está activa actualmente.
@@ -1112,6 +1151,7 @@ menu.need-help,Need Help? We are one click away.,¿Necesitas ayuda? Estamos a un
 portlets.contact-activities-pad-content-title,No Contact activity recorded yet.,No hay actividad de contacto registrada.
 prefs-data-sync.google-contact-group-to-sync-to,Google contact  group to sync to.,grupo de contacto de Google para sincronizar a.
 email.enter-your-friends-email,Enter Your Friend's Email Address,Introduzca de su amigo Dirección de correo electrónico
+help.sothat-you-cant-lose-your-data,so that you don't lose your data.,para que no pierda sus datos.
 admin-settings-integrations.please-upgrade-to-enterprise-plan,Please upgrade to Enterprise plan,Por favor actualiza al plan Empresarial
 contact-details.there-was-a-hard-bounce-for-email,There was a hard bounce for email,Hubo un rebote duro para el correo electrónico
 widgets.GooglePlus-delete-message,Are you sure to delete GooglePlus,¿Estás seguro de que deseas eliminar GooglePlus?
@@ -1130,6 +1170,7 @@ deal-view.no-tasks-for-deal,You have no tasks for this Deal.,No tiene tareas par
 theme.your-settings-are-not-saved-yet,Your settings are not saved yet.,Tu configuración no ha sido guardada todavía
 deal-view.add-related-contacts-of-selected,Add related Contacts of selected,Agregar contactos relacionados de los seleccionados
 contacts-view.import-contacts-from-freshbooks,Import contacts from Freshbooks.,Importar contactos de Freshbooks
+task.you-have-no-notes-for-this-task,You have no notes for this task.,No tiene notas para esta tarea.
 contacts-view.import-contacts-from-quickbooks,Import contacts from Quickbooks.,Importar contactos de QuickBooks.
 tickets.how-to-configure-knowledge-base,How to configure Knowledge Base?,Cómo configurar Knowledge Base?
 widgets.saved-success,Custom widget saved successfully,widget personalizado guardado correctamente
@@ -1149,14 +1190,18 @@ landing-pages.start-with-an-empty-landing-page,Start with an empty landing page,
 icalfeed.send-the-calendar-fee-url-via-email,Send Calendar Feed URL via Email,Enviar URL Calendario RSS a través de correo electrónico
 admin-settings-custom-fields.text-field-desc,Text field - A simple text field,Campo de texto - Un campo de texto simple
 campaigns.send-acknowledgement-to-customer,Send Acknowledgement to Customer,Enviar reconocimiento al cliente
+welcome.with-easy-drag-and-drop-interface,with easy drag & drop interface.,con fácil arrastrar y soltar interfaz.
 widgets.ClickDesk-delete-message,Are you sure to delete ClickDesk,¿Estás seguro de que deseas eliminar ClickDesk?
 prefs-online-calendar.please-enter-at-least-4-letters,Please enter at least 4 letters.,Introduzca por lo menos 4 letras.
 tag-manage.allow-users-to-add,Allow all users to add New Tags.,Permitir que todos los usuarios Añadir nuevas etiquetas.
 report-view.ticket-priority-and-status-reports,Ticket Priority & Status Reports,Prioridad de Ticket y Reportes de estatus
 widgets.Twilio-widget-saved-successfully,Twilio widget saved successfully,Widget de Twilio guardado exitosamente
 contacts-view.tickets-have-been-marked-as-spam,tickets have been marked as spam,entradas que se han marcado como spam
+reasons.moving-to-different-competition,Moving to a Different Competitor,Mover a un competidor diferente
 prefs-notifications.contact-assigned-to-me-starred,Contact assigned to me & starred,Contacto asignado a mí y con estrella
 countries.BQ,Bonaire&#44; Sint Eustatius and Saba,Bonaire&#44; Sint Eustatius and Saba
+reasons.please-dont-break-up-my-friend,Please do not break up. Friends?,Por favor&#44; no romper. ¿Amigos?
+welcome.you-can-also-try-importing-them,You can also try importing them.,También puede tratar de importarlos.
 campaigns.please-start-the-campaign-again,Please start the campaign again.,Por favor comience la campaña nuevamente.
 portlets.get-start-by-add-dashlet,Get started by adding a dashlet.,Comience por añadir un dashlet
 countries.LA,Lao People's Democratic Republic,República Popular Democrática de Lao
@@ -1249,6 +1294,7 @@ widgets.enter-your-widget-details,Enter your __widget__ details,Ingresa tus deta
 currency.Netherlands Antillean Guilder,Netherlands Antillean Guilder,Florín antillano
 widgets.Twilio-delete-message,Are you sure to delete Twilio,¿Estás seguro de que deseas eliminar Twilio?
 admin-settings-users.include-password-in-email,Include password in the email,Incluir contraseña en el correo electrónico
+other.make-sure-you-want-to-do-this,Make sure you want to do this,Asegúrese de que quiere hacer esto
 Widgets.add-linked-image-to-contact,Add LinkedIn image to contact,Añadir imagen LinkedIn para contactar
 widjets.mail-your-online-schedule-url,Mail your online schedule URL,Enviar por correo su URL programa en línea
 social.my-updates-hover-content,Updates authored by the user.,Actualizacioones autorizadas por el usuario.
@@ -1257,6 +1303,7 @@ other.deals-tag-added-to-deal-are,Deal Tags Added to deal are :,Trato Etiquetas 
 contacts-view.add-tags-to-selected-contacts,Add tags to selected contacts,Añadir etiquetas a los contactos seleccionados
 validation-msgs.deal_description_duplicated,'Description' already exists!,&#39;Descripción&#39; ya existe!
 tickets.columns-not-included-in-table,Columns not included in table,Columnas no incluidas en la tabla
+reasons.cancellation-request-received,Cancellation Request Received,Solicitud de cancelación recibida
 help.change-plan-or-cancel-account,Change plan or cancel account,Cambiar plan o cancelar cuenta
 campaigns.contact-active-in-campaign,is already active in Campaign,ya está activo en la campaña
 portlets.contact-activities-spam-reports-pad-content-title,No spam reports recorded yet.,No hay informes de spam registradox.
@@ -1277,6 +1324,7 @@ widgets.Sip-widget-saved-successfully,Sip widget saved successfully,Widget de Si
 admin-settings-stats.sendgrid-msg,SendGrid stats are shown here,Estadísticas SendGrid se muestran aquí
 contacts-view.enabled-the-owner-permissions-for,enabled owner permissions for,habilitadas para permisos de propietario
 validation-msgs.deal_probability_duplicated,'Probability' already exists!,&#39;Probabilidad&#39; ya existe!
+other.this-action-cannot-be-undone,This action cannot be UNDONE.,Esta acción no se puede deshacer.
 campaigns.you-have-reached-limit-of,You have reached the limit of,Has alcanzado el límite de
 widgets.sip-number-title,e.g. 555123456 (or John.Doe),ej: 555123456 (o John.Doe)
 widgets.requires-regular-or-pro-plan,Requires Regular or Pro plan,Requiere plan Pro o Regular
@@ -1294,6 +1342,7 @@ deal-view.changing-track-milestone-for,Changing track/milestone for,Cambio de re
 validation-msgs.deal_close_date_duplicated,'Close date' already exists!,&quot;Cerrar la fecha &#39;ya existe!
 contacts-view.import-contacts-from-stripe,Import contacts from Stripe.,Importar contactos de Stripe
 Plan-and-upgrade.we-see-that-you-have,We see that you already have,Vemos que ya tiene
+cancellation.doesnt-meet-my-recquirements,Doesn't meet my requirements,No cumple con mis requisitos
 integrations.in-app-messages-and-web-popups,In-app Messages & Web popups,Dentro de la aplicación de mensajes y ventanas emergentes de Web
 tickets.assignee-changed-to,Assignee has been changed to,Cesionario se ha cambiado a
 calendar.scheduled-another-appointment,Schedule Another Appointment,Programar otra cita
@@ -1304,6 +1353,7 @@ settings.you-dont-have-domain-users,You don't have Domain Users.,No es necesario
 contacts-view.import-contacts-from-google,Import contacts from Google.,Importar contactos de Google.
 contact-details.pending-email-configuration,PENDING EMAIL CONFIGURATION.,PENDIENTE Configuración de correo electrónico.
 plan-and-upgrade.by-upgrading-to-2-year-plan,by upgrading to 2 year plan.,al cambiar a un plan de 2 años.
+workflows.enter-from-email-address,Enter the From email address,De entrar en la dirección de correo electrónico
 contacts-view.removed-contacts-from-task,Removed Contact(s) from Task,Contacto (s) retirado (s)  de Tarea
 tickets.status-closed,and status changed to Closed,y el estado cambia a Cerrado
 admin-settings-users.manage-your-tasks-and-events,Manage your tasks and events,Administrar tareas y eventos
@@ -1345,6 +1395,7 @@ tickets.you-do-not-have-any-tickets,You do not have any tickets,No tienes ningú
 contacts-view.edit-contact-company-filter,Edit Contact/Company Filter,Editar contacto / Filtro de compañía
 contacts-view.event-start-time-changed-to,Event Start time changed to,Hora de inicio de evento cambiada a 
 tickets.hours-since-assignee-update,Hours Since Assignee Update,Horas transcurridas desde la actualización del cesionario
+reasons.what-do-you-like-in-agile,What did you like in Agile?,¿Qué le gustó de ágil?
 landing-pages.there-are-no-landing-pages,There are no landing pages.,No hay páginas de landing.
 widgets.what-are-call-script-rules,What are Call Script Rules?,¿Qué son las reglas de script de llamada?
 campaigns.personal-or-campaign-emails,Personal or Campaign emails,Emails personales o de campaña
@@ -1438,6 +1489,8 @@ other.chroem-extension-model,Download Chrome Extension,Descargar Chrome Extensio
 other.plan-to-use-this-feature,plan to use this feature.,planificar el uso de esta característica.
 contact-details.you-have-no-documents-for,You have no documents for,No tiene documentos para
 widget.widget-saved,widget saved successfully,Reproductor guardado correctamente
+other.all-the-data-will-be-deleted,All data will be DELETED.,Se eliminarán todos los datos.
+help.postpone-your-billing-for,Postpone your billing for,Posponer su facturación para
 contacts-view.added-contacts-to-event,Added Contact(s) to Event,Añadió Contacto (s) para eventos
 portlets.cancel-email-subscriptiion,Cancel Email Subscription,Cancelar suscripción por correo electrónico
 icalfeed.adding-to-google-calendar,Adding to Google Calendar,Añadiendo a Google Calendar
@@ -1511,6 +1564,7 @@ widgets.support-for-windows-only,Support for Windows only,Soporte para Windows �
 validation-msgs.deal_name_missing,Deal Name' is mandatory!,Nombre acuerdo &quot;es obligatorio!
 campaigns.separate-tags-with-comma,Separate tags with comma,Separar etiquetas con comas
 contacts-view.changed-progress-of-task,Changed Progress of Task,Se cambió el Progreso de la tarea
+cancellation.request-for-cancellation,Request for Cancellation,Solicitud de cancelación
 emailgateway.configured,Email Gateway Configured,Email Gateway Configurado
 widgets.update-ticket-in-zendesk,Update ticket in zendesk,Actualizar ticket en Zendesk
 contacts-view.task-deleted-later-task,Task deleted later. Task,Tarea elimina más tarde. Tarea
@@ -1627,6 +1681,7 @@ admin-settings-custom-fields.edit-case-custom-field,Edit Case Custom Field,Edita
 widgets.linked-shopify-account,Linked Shopify account,Cuenta Shopify vinculada
 contacts-view.changed-status-of-task,Changed Status of Task,Modificó el estatus de la tarea
 other.upgrading-to-save-yearly,by upgrading to yearly,mediante la actualización a anual
+welcome.add-or-import-contacts,Add or Import contacts,Agregar o Importar contactos
 contacts-view.create-email-templates,Create Email Templates,Crear plantillas de correo electrónico
 widgets.select-a-twilio-number,Select a Twilio number,Seleccionar número de Twilio
 contacts-view.import-from-freshbooks,Import from Freshbooks,Importar de Freshbooks
@@ -1634,12 +1689,14 @@ prefs-data-sync.freshbooks-domain-name,Freshbooks domain name,nombre de dominio 
 others.if-not-added,if they are not added.,si no se agregan.
 campaigns.note-added-by-customer,Note Added by Customer,Nota añadida por el Cliente
 contacts-view.contact-deleted-later,Contact deleted later.,El contacto se eliminará más tarde.
+task.task-created-for-the-user,Task created for user ,Tarea creado para el usuario
 campaigns.remove-active-campaign,Remove Active Campaign,Retire Campaña Activo
 activity_type.DEAL_MILESTONE_CHANGE,Deal Milestone Changed,Milestone Trato cambió
 campaign.mute-you-current-call,Mute your current call,Silenciar la llamada actual
 contacts-view.company-deleted-later,Company deleted later.,Compañía eliminada más tarde
 campaigns.manage-email-templates,Manage Email Templates,Administrar Plantillas de correo electrónico
 campaigns.deal-milestone-changed,Deal Milestone Changed,Hito de oferta fue modificado
+other.cancel-my-subscription,Cancel My Subscription,Cancelar mi suscripción
 Deal-detail.tags-added-to-deal-are,Tags Added to deal are,Etiquetas Añadido a tratar son
 documents.there-are-no-documents,There are no documents,No hay documentos
 currency.Papua New Guinean Kina,Papua New Guinean Kina,Kina de Papua Nueva Guinea
@@ -1647,6 +1704,8 @@ prefs-notifications.contact-assigned-to-me,Contact assigned to me,Contactos asig
 tickets.comment-added,Comment has been added,El comentario ha sido añadido
 validation-msgs.deal_duplicated,'Name' already exists!,&#39;¡Nombre ya existe!
 portlets.all-deals-by-milestone,All Deals by Milestone,Todas las ofertas por hito
+welcome.manage-your-activities,Manage your activities,Administrar sus actividades
+task.task-owner-changed-to,Task  owner changed to,propietario de la tarea cambió a
 Plan-and-upgrade.claim-your-savings,and claim your savings,y reclamar sus ahorros
 tickets.email-removed-from-cc,removed from CC emails,retirado de correos electrónicos CC
 campaigns.sure-remove-active,Are you sure to remove,¿Seguro para eliminar
@@ -1686,8 +1745,8 @@ contact-details.you-have-no-notes-for,You have no notes for,No tiene notas para
 prefs-settings.new-task-tasks-page,New Task (Tasks Page),Nueva tarea (Página de tareas)
 campaigns.select-contact-filter,Select Contact filter,Seleccionar filtro de contacto
 campaigns.note-is-added-by-user,Note is added by user,La nota fue agregada por el usuario
-contacts.delete-tag-scheduled,Tags delete scheduled,Etiquetas borrar El programados
 prefs-notifications.desktop-notifications,Desktop Notifications,Notificaciones de Escritorio
+contacts.delete-tag-scheduled,Tags delete scheduled,Etiquetas borrar El programados
 campaigns.ticket-label-is-added,Ticket label is added,Se agregó una etiqueta de ticket
 admin-settings-api-analytics.delete-allowed-domain,Delete Allowed Domain,Eliminar dominio autorizado
 tickets.tickets-are-selected,tickets are selected.,tickets están seleccionados
@@ -1697,6 +1756,7 @@ contacts-view.last-campaign-emailed,Last Campaign Emailed,Última campaña envia
 widgets.edit-call-script-rule,Edit Call Script Rule,Editar Regla de script de llamada
 portlets.talk-to-agile-support,Talk to Agile Support,Hablar con soporte de Agile
 deal-view.for-more-information,for more information.,para más información.
+other.still-want-to-cancel,Still want to cancel?,Aún desea cancelar?
 tags.tag-management-action,Tag Management Action,Acción de Manejo de etiquetas
 contacts-view.import-deals-from-csv,Import Deals From CSV,Importar ofertas desde CSV
 report-view.average-call-duration,Average call duration,Duración promedio de llamadas
@@ -1727,8 +1787,8 @@ contacts-view.changed-milestone-for,Changed milestone for,Hito cambiado para
 report-add.average-call-duration,Average Call Duration,Promedio de duración de llamada
 widgets.edit-widget-users,Edit users for widget,Editar usuarios para Reproductor
 web-rules.maximum-times-to-show,Maximum times to show,Los tiempos máximos para mostrar
-help.email-synchronisation,email synchronization,sincronización de correo electrónico
 currency.Cayman Islands Dollar,Cayman Islands Dollar,Dólar de las Islas Caimán
+help.email-synchronisation,email synchronization,sincronización de correo electrónico
 portlets.my-deals-by-milestone,My Deals by Milestone,Mis Ofertas por hito
 Campaigns.add-contacts-manually,Add Contacts Manually,Agregar contactos manualmente
 other.thinngs-you-need-to-do,Things you need to do,Cosas que hay que hacer
@@ -1744,8 +1804,8 @@ contacts-view.csv-deals-import-list,CSV Deals Import List,Importar lista de ofer
 prefs-email.email-account-sharing,Email Account Sharing,Compartir cuenta de email
 documents.how-to-use-documents,How to use Documents?,Cómo utilizar los documentos?
 plan-and-upgrade.last-purchased-emails,Last Purchased Emails,Últimos emails comprados
-tickets.marked-spam,Ticket marked as spam,Venta de entradas marcadas como spam
 admin-settings-integrations.link-facebook-account,Link Facebook Account,Vincular cuenta de Facebook
+tickets.marked-spam,Ticket marked as spam,Venta de entradas marcadas como spam
 admin-settings-integrations.deleted-success,Deleted successfully.,Borrado exitosamente.
 admin-settings-integrations.to-this-facebook-page,To this Facebook page,A esta página en Facebook
 countries.CS,Serbia and Montenegro,Serbia y Montenegro
@@ -1766,6 +1826,7 @@ tweets.undo-retweet,Undow Retweet status,Retweet estado Undow
 widgets.subscription-details,Subscription Details,Detalles de suscripción
 tickets.hours-since-due-date,Hours Since Due Date,Horas transcurridas desde la fecha límite
 currency.Sierra Leonean Leone,Sierra Leonean Leone,Sierra Leona
+reasons.lack-of-good-support,Lack of Good Support,La falta de buen soporte
 tags.attach-zoomifier,Attach Zoomifier Doc,Adjuntar Zoomifier Doc
 web-rules.remove-from-campaign,Remove From Campaign,Quitar de la Campaña
 campaigns.campaign-emails-only,Campaign emails only,Emails de campaña únicamente
@@ -1841,6 +1902,7 @@ contact-details.visited-your-website,visited your website,visitó su sitio web
 tickets.hours-since-assigned,Hours Since Assigned,Horas tranacurridas desde que se asignó
 countries.SY,Syrian Arab Republic,República Árabe de Siria
 contacts-view.contact-to-campaign,Contact to Campaign,Contacto a campaña
+cancellation.camcellation-reason,Cancellation Reason,Motivo de cancelación
 widgets.initiated-chat-type,Initiated Chat Type,Tipo de Chat iniciado
 contacts-view.import-is-scheduled,Import is scheduled,La importación está programada
 menu.still-on-free-plan,Still on FREE Plan?,¿Sigues con un plan GRATUITO?
@@ -1879,8 +1941,8 @@ landingpages.cname-error,CNAME is incorrect.,CNAME es incorrecta.
 widgets.compose-a-new-tweet,Compose a new Tweet,Redactar nuevo Tweet
 contacts-view.priority-changed-to,priority changed to,prioridad cambió a
 widjets.enter-email-address,Enter Email Address,Introducir la dirección de correo electrónico
-widgets.verified-caller-ids,Verified Caller IDs,Caller ID's verificados
 tickets.configure-help-desk,Configure Help Desk,Configurar Help Desk
+widgets.verified-caller-ids,Verified Caller IDs,Caller ID's verificados
 other.next-billing-date,Next Billing Date :,Siguiente Fecha de facturación:
 campaign.unmute-you-current-call,Unmute current call,No silenciar la llamada actual
 tickets.changed-due-date-to,Changed due date to,Cambiar fecha límite 
@@ -1913,6 +1975,7 @@ contacts-view.export-deals-in-CSV,Export Deals in CSV,Exportar ofertas en CSV
 contacts-view.csv-contacts-import,CSV Contacts Import, Importar contactos CSV
 dashboards.marketing-dashboard,Marketing Dashboard,Tablero de instrumentos de marketing
 deals.tracks-and-milestone,Tracks & Milestones,Pistas e hitos
+cancellation.overwhelming-for-me,Overwhelming for me,Abrumadora para mí
 web-rules.setup-tracking-code,Setup Tracking Code,Configuración del código de seguimiento
 contacts-view.customize-your-view,Customize your view,Personalizar la vista
 tickets.select-landing-page,Select Landing Page,Seleccione la página de destino
@@ -2038,6 +2101,7 @@ landing-pages.optional-directory,Optional Directory,Directorio opcional
 prefs-notifications.contact-is-created,Contact is created,El contacto se creó
 tickets.email-added-to-cc,added to CC emails,añadido a los correos electrónicos CC
 contacts.add-tag-scheduled,Tags add scheduled,Etiquetas Añadir programadas
+task.no-activity-found,No Activity Found.,No hemos encontrado actividad.
 Plan-and-upgrade.per-user-per-month,per user per month,por usuario al mes
 campaigns.pause-current-call,Pause current call,Pausa llamada actual
 countries.DO,Dominican Republic,República Dominicana
@@ -2105,6 +2169,7 @@ email.subject-recquired,Subject required.,Sujeto (requerido.
 opportunity.name-of-voice-mail,Name of Voicemail,Nombre de correo de voz
 currency.Seychellois Rupee,Seychellois Rupee,Rupia de Seychelles
 web-rules.select-a-template,Select a Template,Selecciona una plantilla
+other.back-to-dashboard,Back to Dashboard,Volver al tablero de instrumentos
 portlets.cancel-my-account,Cancel My Account,Cancelar mi cuenta
 portlets.emails-in-account,Emails in account,Mensajes de correo electrónico en la cuenta
 plan-and-upgrade.next-billing-date,Next Billing Date,Próxima fecha de cobro
@@ -2187,6 +2252,7 @@ plan-and-upgrade.emails-remaining,Emails Remaining,Correos restantes
 misc-keys.sync-in-progress,Sync in progress,Sincronización en curso
 tickets.cc-email-removed,CC email removed,Email de copia oculta eliminado
 contacts-view.deal-assigned-to,Deal assigned to,Oferta asignada a 
+cancellation.expensive-for-me,Expensive for me,Caro para mí
 currency.Sri Lankan Rupee,Sri Lankan Rupee,Rupia de Sri Lanka
 campaigns.customer-created,Customer created,Cliente creado
 campaigns.checkout-created,Checkout created,Pedido creado
@@ -2218,12 +2284,14 @@ tickets.replace-existing,Replace existing,Reemplazar existente
 currency.Lithuanian Litas,Lithuanian Litas,Litas lituana
 report-view.user-performance,User Performance,Rendimiento de usuario
 campaigns.task-assigned-to,Task assigned to,Tarea asignada a
+downloads.chrome-extension,Chrome Extension,Chrome Extension
 prefs-settings.global-shortcuts,Global Shortcuts,Atajos globales
 plan-and-upgrade.purchased-emails,Purchased Emails,Emails comprados
 widgets.add-subscription,Add Subscription,Añadir suscripción
 campaigns.checkout-deleted,Checkout deleted,Pedido eliminado
 contacts-view.csv-deals-import,CSV Deals Import,Importar ofertas desde CSV
 contacts-view.reassigned-deal,Reassigned Deal ,Trato reasignado
+reasons.lack-of-features,Lack of Features,La falta de Características
 landing-pages.dns-instructions,DNS Instructions,Instrucciones de DNS
 plan-and-upgrade.proceed-to-trial,Proceed to Trial,Proceder a juicio
 web-rules.cart-is-not-empty,Cart isn't empty,El carrito no se encuentra vacío
@@ -2283,6 +2351,7 @@ admin-settings-stats.your-plan-limits,Your Plan Limits,Su plan limita
 web-rules.existing-contact,Existing Contact,Contacto existente
 tickets.marked-as-unspam,marked as Unspam,marcado como Unspam
 contacts-view.phone-home-fax,Phone (Home fax),Teléfono (fax Inicio)
+welcome.customize-reports,Customize Report,personalizar Informe
 plan-and-upgrade.plan-and-upgrade,Plan and Upgrade,Plan y mejora
 tickets.mark-as-favorite,Mark as Favorite,Marcar como favorito
 twill.no-twilio-number,No Twilio Number,No Número Twilio
@@ -2346,6 +2415,7 @@ social.compose-message,Compose Message,Redactar mensaje
 documents.detach-document,Detach Document,Separar documento
 tickets.ticket-priority,Ticket priority,Prioridad de Ticket
 opportunity.place-holder-length,Max Length: 120,Longitud máxima: 120
+downloads.ios-app,iOS Beta Access,El acceso iOS Beta
 contacts-view.deal-related-to,Deal related to,Oferta relacionada con
 prefs-data-sync.agile-to-google,Agile to Google,Agile hacia Google
 campaigns.unsubscriptions,Unsubscriptions,Suscripciones cancelades
@@ -2392,6 +2462,7 @@ menu.recent-activity,Recent Activity,Actividad reciente
 other.recent-payments,Recent Payments,Los pagos recientes
 web-rules.create-your-own,Create your own,Crea tu propio
 currency.CFA Franc BCEAO,CFA Franc BCEAO,Franco CFA BCEAO
+task.task-is-deleted,Task is deleted,Tarea se elimina
 currency.Moroccan Dirham,Moroccan Dirham,Dirham marroquí
 prefs-notifications.deal-is-created,Deal is created,Se crea oferta
 contacts-view.added-to-event.,added to Event.,añadido a Evento.
@@ -2432,8 +2503,8 @@ tickets.Requester&nbsp;Email,Requester Email,Email del solicitante
 contacts-view.event-starts-at,Event starts at,Evento comienza a las
 bulk-delete.bulk-activity,Delete Activity,suprimir la Actividad
 currency.Pakistani Rupee,Pakistani Rupee,Rupia paquistaní
-visitors.no-visits-found,No Visits Found,No se encontró ninguna visita
 tickets.add-new-contact,Add new contact,Agregar nuevo contacto
+visitors.no-visits-found,No Visits Found,No se encontró ninguna visita
 contacts-view.upload-csv-file,Upload CSV file,Subir archivo CSV
 campaigns.delete-all-logs,Delete All Logs,Eliminar todos los registros
 widgets.user-not-found,User not found.,Usuario no encontrado
@@ -2469,6 +2540,7 @@ preferences.online-calendar,Online Calendar,Calendario en línea
 deal-view.what-are-deals,What are Deals?,¿Cuáles son ofertas?
 landingpages.invalid-domain,Invalid domain.,dominio no válido.
 widgets.characters-left,Characters Left,Caracteres restantes
+reasons.out-of-business,Out of Business,Fuera del negocio
 widgets.department-name,Department Name,Nombre de Departamento
 tickets.select-assignee,Select Assignee,Seleccionar Cesionario
 widgets.enter-shop,Enter Shop name,Introduce el nombre de la tienda
@@ -2497,6 +2569,7 @@ timezone.available-on,Availability on,disponibilidad bajo
 portlets.recent-contacts,Recent Contacts,Contactos recientes
 portlets.Account Details,Account Details,detalles de la cuenta
 tickets.search-contacts,Search contacts,Buscar contactos
+reasons.let-us-help-you,Let us help you,Dejanos ayudarte
 contacts-view.import-from-csv,Import from CSV,Importar desde CSV
 admin-settings-deals.new-loss-reason,New Loss Reason,Nueva razón de pérdida
 contact-edit.import-from-crm,Import From CRM,Importar de CRM
@@ -2507,8 +2580,8 @@ visitors.is-not-equal-to,Is not equal to,No es igual a
 tickets.last-updated-by,Last Updated By,Última actualización por
 countries.SB,Solomon Islands,Islas Solomón
 visitors.choose-country,Choose country,Elegir país
-contact-details.ticket-created,Ticket created,ticket creado
 tickets.weekly-tickets,Weekly tickets,Tickets semanales
+contact-details.ticket-created,Ticket created,ticket creado
 admin-settings-integrations.try-zapier-app,Try Zapier App,Pruebe la app Zapier 
 help.video-tutorial,Video Tutorial,Tutorial de video
 contacts-view.added-to-task,added to Task.,añadido a la Tarea.
@@ -2530,6 +2603,7 @@ workflows.add-automation,Add Automation,Añadir Automatización
 report-view.campaign-stats,Campaign Stats,Estadísticas de campaña
 widgets.please-wait,Please wait...,Por favor espera…
 bulk-actions.task-scheduled,Task Scheduled,La tarea programada
+cancellation.likes-in-agile,Likes in Agile,Le gusta en Agile
 contacts.merge,Merge Contacts,combinar Contactos
 currency.Zambian Kwacha,Zambian Kwacha,Kwacha zambiano
 tickets.multiline-view,Multiline view,Vista múltiple
@@ -2540,8 +2614,8 @@ campaigns.signup-welcome,Signup Welcome,Bienvenida a suscripción
 tickets.email-template,Email Template,Plantilla de email
 report-view.all-activities,All Activities,Todas las actividades
 activity_type.TASK_COMPLETED,Task Completed,Tarea terminada
-contacts-view.was-completed,was completed.,fue completado.
 currency.Uzbekistan Som,Uzbekistan Som,Som de Uzbekistán
+contacts-view.was-completed,was completed.,fue completado.
 tickets.delete-tickets,Delete Tickets,Eliminar tickets
 menu.upgrade,Plan & Upgrade,Plan y mejora
 web-rules.is-within-next,is within next,está dentro de la próxima
@@ -2554,8 +2628,8 @@ Campaigns.growth-reports,Growth Reports,Informes de crecimiento
 tickets.toggle-widgets,Toggle Widgets,Alternar widgets
 tickets.choose-columns,Choose Columns,Seleccionar columnas
 other.trigers-count,Triggers Count,Los disparadores Conde
-prefs-online-calendar.scheduling-url,Scheduling URL,Programación de URL
 portlets.branded-emails,Branded emails,Emails con marca
+prefs-online-calendar.scheduling-url,Scheduling URL,Programación de URL
 contacts-view.completed-task,Completed Task,Tarea completada
 campaigns.emails-clicked,Emails Clicked,Hicieron Click correos electrónicos
 misc-keys.sync-init,Sync initiated,sincronización iniciada
@@ -2634,6 +2708,7 @@ contacts-view.has-been-added,has been added,ha sido añadido
 Web-rules.twilio-account,Twilio account,cuenta Twilio
 currency.Nepalese Rupee,Nepalese Rupee,Rupia de Nepal
 currency.Uruguayan Peso,Uruguayan Peso,Peso uruguayo
+other.data-you-used,Data you used ,Los datos que utilizó
 report-add.funnel-reports,Funnel Reports,Reportes de embudo
 contacts-view.ticket-deleted,Ticket deleted,Ticket eliminado
 tickets.Requester&nbsp;Name,Requester Name,Nombre del solicitante
@@ -2647,6 +2722,7 @@ widjets.tyr-again,and try again.,e intenta de nuevo.
 section.delete-text,Delete Section,eliminar la Sección
 contacts-view.first-name-asc,First Name Asc,Primer Nombre Asc
 Campaigns.report-results,Report Results,resultados del informe
+task.all-categories,All Categories,todas las categorias
 other.knowledge-base,Knowledge Base,Base de conocimiento
 campaigns.event-is-added,Event is added,Se añadió evento
 contacts-view.lowest-starred,Lowest Starred,Calificado como más bajo
@@ -2665,8 +2741,8 @@ contacts.contact-update,Contact Update,Contacto de actualización
 social.name-not-valid,Name not valid,El nombre no válido
 contacts-view.last-contacted,Last Contacted,Contactado por última vez
 Web-rules.Disable-Access,Disable Access,Deshabilitar el acceso
-tickets.recomedations,Recommendation,Recomendación
 currency.Lebanese Pound,Lebanese Pound,Libra libanesa
+tickets.recomedations,Recommendation,Recomendación
 countries.AS,American Samoa,Samoa Americana
 countries.CZ,Czech Republic,República Checa
 contacts-view.modified-event,Modified Event,Evento modificado
@@ -2715,8 +2791,8 @@ prefs-email.server-host,Server (Host),Servidor (host)
 report-view.calendar-view,Calendar View,Ver Calendario
 other.master-record,Master Record,Registro maestro
 admin-settings-deals.delete-source,Delete Source,Eliminar fuente
-other.share-a-link,shared a link,Compartió un vínculo
 portlets.add-dashboard,Add Dashboard,agregar dashboard
+other.share-a-link,shared a link,Compartió un vínculo
 admin-settings-deals.add-milestone,Add Milestone,Añadir hito
 contacts-view.sent-email-to,Sent email to,Enviar email a 
 tickets.remove-labels,Remove labels,Remover etiquetas    
@@ -2790,6 +2866,7 @@ tickets.label-removed,Label removed,Etiqueta removida
 tasks.related-deals,Related Deals,Ofertas relacionadas
 contacts-view.archived-deal,Archived Deal,Trato archivado
 contacts-view.email-subject,Email subject,Asunto del email
+workflows.select-period,Select period,Elija un periodo
 Plan-and-upgrade.compare-plans,Compare Plans,compare los planes
 contacts-view.field-mapping,Field mapping,Asignación de campos
 admin-settings-users.administrator,Administrator,Administrador
@@ -2901,8 +2978,10 @@ web-rules.cart-is-empty,Cart is empty,El carrito esta vacío
 tickets.name-of-macro,Name of Macro,Nombre del macro
 countries.CI,Cote D'Ivoire,Costa de Marfil
 report-view.growth-graphs,Growth Graphs,Gráficas de crecimiento
+documents.uploaded-time,Uploaded Time,Tiempo de subida
 countries.BV,Bouvet Island,Isla Bouvet
 widgets.order-details,Order Details,Detalles de orden
+help.need-a-break,Need a Break?,¿Necesitar un descanso?
 countries.GF,French Guiana,Guyana Francesa
 contacts-view.added-tag-to,Added  tag to,Se añadió la etiqueta a 
 countries.FO,Faroe Islands,Islas Feore
@@ -2941,8 +3020,8 @@ tags.renaming,Renaming tag,Cambiar el nombre de la etiqueta
 tags.deleting,Deleting tag,La eliminación de la etiqueta
 admin-settings-deals.delete-track,Delete Track,Eliminar registro
 prefs-settings.domain-alias,Domain Alias,Alias de dominio
-Help-content.crate-deals,Create deals,crear ofertas
 portlets.invite-users,Invite Users,invitar usuarios
+Help-content.crate-deals,Create deals,crear ofertas
 tickets.Created&nbsp;Date,Created Date,Fecha de creación
 contacts-view.hard-bounced,Hard Bounced,Rebote duro
 campaigns.add-campaign,Add Campaign,Agregar campaña
@@ -2976,8 +3055,8 @@ report-view.user-reports,User Reports,Reporte de usuarios
 other.cancel-trail,Cancel Trial,Cancelar la prueba
 currency.Moldovan Leu,Moldovan Leu,Leu moldavo
 bulk-actions.add-tag,Bulk Add Tag,Agregar grupo Tag
-contacts-view.updated date,Updated Date,Fecha actualizada
 currency.Mexican Peso,Mexican Peso,peso mexicano
+contacts-view.updated date,Updated Date,Fecha actualizada
 plan-and-upgrade.expiry-month,Expiry Month,Mes de expiración
 contacts-view.created-deal,Created Deal,Oferta creada
 timezone.current-time,Current Time,Hora actual
@@ -2998,10 +3077,12 @@ contacts-view.phone-work,Phone (Work),Teléfono (Trabajo)
 tickets.ticket-group,Ticket Group,Grupo de tickets
 calendar.agile-events,Agile Events,Eventos de AGILE
 contacts-view.last-emailed,Last Emailed,último correo electrónico enviado el
+task.removed-from,removed from,retirado de
 admin-settings.integrations,Integrations,integraciones
 currency.Indian Rupee,Indian Rupee,Rupia india
 portlets.read-more,Read More...,Lee mas...
 events.update-event,Update Event,actualización de eventos
+reasons.instant-help,Instant Help,Ayuda instantánea
 contact-details.assign-owner,Assign Owner,asignar propietario
 campaigns.please-wait,Please wait.,Por favor espera.
 contacts-view.soft-bounced,Soft Bounced,Rebotes suaves
@@ -3025,12 +3106,12 @@ deal-view.bulk-actions,Bulk Actions,Acciones masivas
 activity_type.TASK_DELETE,Task Deleted,tarea Suprimido
 subscriber_type.hardbounced,Hard Bounced,duro rebotados
 widgets.show-profile,Show Profile,Mostrar perfil
-contact-details.company-info,Company Info,Información de la compañía
 widgets.phone-number,Phone Number,Número telefónico
+contact-details.company-info,Company Info,Información de la compañía
 campaigns.lead-scoring,Lead Scoring,Puntuación de lead
 report-chart-forms.growth-graph,Growth graph,Gráfico de crecimiento
-portlets.all-contacts,All Contacts,Todos los contactos
 portlets.contact-list,Contact List,Lista de contactos
+portlets.all-contacts,All Contacts,Todos los contactos
 contacts-view.unsubscribed,Unsubscribed,Dado de baja
 contact-edit.company-name,Company Name,Nombre de empresa
 admin-settings-integrations.manage-pages,Manage Pages,Gestionar páginas
@@ -3184,6 +3265,7 @@ report-view.subscribers,Subscribers,Suscriptores
 activity_type.DEAL_CLOSE,Deal Closed,trato se cerró
 Help-Center.help-center,Help Center,Centro de ayuda
 plan-and-upgrade.expiry-year,Expiry Year,Año de expiración
+downloads.andriod-app,Android App,Android App
 prefs-settings.date-format,Date Format,Formato de fecha
 portlets.last-7-days,Last 7 Days,Los últimos 7 días
 currency.Yemeni Rial,Yemeni Rial,Rial yemení
@@ -3191,6 +3273,7 @@ widgets.twimlet-url,Twimlet Url,URL de Twimlet
 portlets.email-opens,Email Opens,Abrir correo electrónico
 widjets.you-can-now,You can now,Tu puedes ahora
 widgets.no-invoices,No invoices,No hay facturas
+task.attached-to,attached to,adjunto a
 portlets.add-dashlet,Add Dashlet,Añadir Dashlet
 campaigns.email-stats,Email Stats,Estadísticas de email
 campaigns.select-form,Select Form,Seleccionar formulario
@@ -3286,6 +3369,7 @@ plan-and-upgrade.free-emails,Free Emails,Los correos electrónicos gratuitos
 contacts-view.never-added,Never Added,Nunca Agregado
 social.all-updates,All Updates,Todas las actualizaciones
 Contacts-view.skype-phone,Skype Phone,Teléfono Skype
+reasons.write-us,write to us,Escríbenos
 users.deleted-user-text,Delete User,Borrar usuario
 forms.fill-out,Fill out my,Rellene mi
 landing-pages.create-form,Create Form,crear formulario
@@ -3306,6 +3390,7 @@ tickets.hide-fields,Hide fields,Ocultar campos
 campaigns.add-trigger,Add Trigger,Añadir trigger
 currency.Saudi Riyal,Saudi Riyal,Riyal saudí
 portlets.last-2-days,Last 2 Days,Últimos 2 Días
+reasons.over-prised,Over Priced,Es caro
 Plan-and-upgrade.update-plan,Update Plan,actualización del plan
 widgets.add-profile,Add Profile,Agregar perfil
 report-add.total-calls,Total Calls,Total de llamadas
@@ -3333,6 +3418,7 @@ menu.preferences,Preferences,Preferencias
 documents.my-computer,My Computer,mi PC
 other.expiry-date,Expiry Date,Fecha de caducidad
 contacts-view.assigned-to,assigned to,asignado a
+cancellation.hard-to-use,Hard to use,Difícil de usar
 visitors.page-viewed,Page Viewed,Página visualizada 
 report-add.all-sources,All Sources,todas las fuentes
 campaigns.enter-score,Enter Score,Ingresar puntuación
@@ -3519,6 +3605,7 @@ prefs-email.server-url,Server URL,URL del servidor
 prefs-email.yes-and-push,Yes & Push,Sí y empuje 
 plan-and-upgrade.expiration,Expiration,Fecha de expiración
 widgets.occupation,Occupation,Ocupación
+task.task-list,Tasks List,Lista de tareas
 activity_type.User_Email_Changed,User email,correo electrónico del usuario
 contact-details.lead-score,Lead Score,Puntuación de lead
 tickets.create-new,Create new,Crear nuevo
@@ -3534,6 +3621,7 @@ admin-settings-deals.add-reason,Add Reason,Añadir motivo
 widgets.QuickBooks,QuickBooks,Quickbooks
 contacts-view.contact-to,contact to,Contactar con
 campaigns.share-with,Share with,Compartir con
+other.reputation,Reputation,Reputación
 admin-settings-users.privileges,Privileges,privilegios
 widgets.view-video,view video,Ver video
 contacts-view.enter-tags,Enter Tags,Introduce las etiquetas
@@ -3699,6 +3787,7 @@ months.September,September,Septiembre
 companies-view.companies,Companies,Compañías
 deal-view.documents,Documents,Documentos
 Refer-friend.referrals,Referrals,referidos
+task.follow-up,Follow-up,Seguir
 dashboards.marketing,Marketing,Márketing
 web-rules.enter-url,Enter URL,Introducir URL
 admin-settings-custom-fields.TEXTAREA,Text Area,Área de texto
@@ -4151,6 +4240,7 @@ widgets.IM-type,IM type,Escribir mensaje instantáneo.
 other.proceed,Proceed,Proceder
 others.more,More...,Más...
 tickets.pending,Pending,Pendiente
+cancellation.advices,Advices,consejos
 contact-details.contact,contact,contacto
 misc-keys.clip-copied,Copied!,Copiado!
 tasks.Meeting,Meeting,Reunión
@@ -4826,9 +4916,3 @@ contact-details.by,by,por
 contact-details.in,in,en
 contact-details.on,on,en
 contact-details.to,To,A
-downloads.chrome-extension,Chrome Extension,Chrome Extension
-downloads.andriod-app,Android App,Android App
-downloads.ios-app,iOS Beta Access,El acceso iOS Beta
-landing-pages.no-pages,You do not have any Landing Pages currently.,No es necesario que las páginas de destino actualmente .
-landing-pages.about,Landing page is a web page created to gather leads online.,La página de destino es una página web creada para reunir clientes potenciales en línea .
-documents.uploaded-time,Uploaded Time,Tiempo de subida
