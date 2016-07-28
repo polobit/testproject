@@ -1236,7 +1236,7 @@
             errorDrawer.querySelector('button').addEventListener('click', this, false);
             this.parentLI.parentNode.insertBefore(newLI, this.parentLI.nextSibling);
             
-            ace.config.set("basePath", "https://our.agilecrm.com/misc/landingpage/public/js/vendor/ace");
+            ace.config.set("basePath", "https://s3.amazonaws.com/agilecrm/pagebuilder/static/js/ace");
             
             var theId = theEditor.getAttribute('id');
             var editor = ace.edit( theId );
@@ -1248,7 +1248,7 @@
             
 
             editor.setValue( theHTML );
-            editor.setTheme("ace/theme/twilight");
+            editor.setTheme("ace/theme/chrome");
             editor.getSession().setMode("ace/mode/html");
             
             var block = this;
