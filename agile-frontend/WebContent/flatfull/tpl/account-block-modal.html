@@ -32,6 +32,23 @@
 </div>
 </script>
 
+<script id="addon-blocked-modal-template" type="text/html">
+	<div class="modal fade" id="user-blocked-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false" data-backdrop="static" data-keyboard="false">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-body">
+				<div class="panel text-center text-md m-b-none bg-light">
+					<div class="panel-body">
+						Your addon subscription was cancelled and your account has been locked. Please contact our Billing Team at billing@agilecrm.com or update your credit card. 
+					<div class="p-t"><a class="btn btn-success btn-lg" href="#updateCreditCard">Update Credit Card</a></div><span class="text-info text-xs"><a href="/login">Log out</a></span> 
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+</script>
+
 <script id="user-alert-template" type="text/html">
 	<div class="user-alert center-div">
  <div class="user-alert-message"><span class="pull-right" onclick="$('#alert-message').hide();">&times</span><a href="#subscribe">Action Required! Your account has pending dues. Please update your credit card information immediately to pay the outstanding amount. Non payment of dues will lead to the suspension of your account.</a></div> 

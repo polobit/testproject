@@ -9,6 +9,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 
+import com.agilecrm.addon.AddOn;
+import com.agilecrm.addon.AddOnInfo.AddOnStatus;
+import com.agilecrm.addon.AddOnUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.util.ContactUtil;
@@ -401,6 +404,27 @@ public abstract class StripeWebhookHandler
 
 	return false;
     }
+    
+    protected boolean isAddonPlan()
+    {
+
+	String plan_id = String.valueOf(getPlanDetails().get("plan_id"));
+	System.out.println("plan :" + plan_id);
+	if (StringUtils.containsIgnoreCase(plan_id, "addon"))
+	    return true;
+
+	return false;
+    }
+    
+    protected String getAddonPlan()
+    {
+	String planId = String.valueOf(getPlanDetails().get("plan_id"));
+	String[] planType = planId.split("-");
+	if(planType != null && planType.length >1)
+		return  planType[1];
+	System.out.println("Null returned. Addon Plan is not there. Plan Id is::"+planId);
+	return null;
+    }
 
     protected Subscription getSubscription()
     {
@@ -416,6 +440,38 @@ public abstract class StripeWebhookHandler
 	subscription = SubscriptionUtil.getSubscription();
 
 	return subscription;
+    }
+    
+    protected void updateAddOnStatus(String addOnType, AddOnStatus status){
+    	if(addOnType == null)
+    		return;
+    	System.out.println("updating addOnStatus... AddOn:"+addOnType+", status:"+status);
+    	String oldNameSpace = NamespaceManager.get();
+    	NamespaceManager.set(getDomain());
+    	try{
+    		AddOn addOn = AddOnUtil.getAddOn();
+	    	switch (addOnType) {
+			case "acl":
+				addOn.aclInfo.status = status;
+				addOn.save();
+				break;
+				
+			case "campaign":
+				addOn.campaignInfo.status = status;
+				addOn.save();
+				break;
+				
+			case "trigger":
+				addOn.triggerInfo.status = status;
+				addOn.save();
+				break;
+				
+			default:
+				break;
+	    	}
+		}finally{
+			NamespaceManager.set(oldNameSpace);
+		}
     }
 
 }

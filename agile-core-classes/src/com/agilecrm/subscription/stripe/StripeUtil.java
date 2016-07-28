@@ -365,5 +365,136 @@ public class StripeUtil {
 		}
 		return null;
 	}
+	
+	/**
+	 * Creates any addOn subscription in stripe
+	 * @param planId
+	 * @param quantity
+	 * @return
+	 * @throws Exception
+	 */
+	public static com.stripe.model.Subscription createAddOnSubscription(String planId, int quantity) throws Exception{
+		if(planId == null || quantity == 0)
+			throw new Exception("Please provide valid details");
+		Customer cust = getStripeCustomer();
+		if(cust == null)
+			throw new Exception("Please upgrade your plan to do this action");
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("plan", planId);
+		params.put("prorate", true);
+		params.put("quantity", quantity);
+		System.out.println("Creating new subscription with plan:"+planId+" quantity:"+quantity);
+		com.stripe.model.Subscription subscription = cust.createSubscription(params);
+		System.out.println("Subscription created");
+		return subscription;
+	}
+	
+	/**
+	 * updates any addOn subscription in stripe
+	 * if subscription is not available with provided planId creates new subscription
+	 * @param planId
+	 * @param quantity
+	 * @return
+	 * @throws Exception
+	 */
+	public static com.stripe.model.Subscription updateAddOnSubscription(String planId, int quantity, String subscriptionId) throws Exception{
+		if(planId == null || quantity == 0)
+			throw new Exception("Please provide valid details");
+		Customer cust = getStripeCustomer();
+		if(cust == null)
+			throw new Exception("Please upgrade your plan to do this action");
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("plan", planId);
+		params.put("prorate", true);
+		params.put("quantity", quantity);
+		com.stripe.model.Subscription subscription = null;;
+		if(subscriptionId != null)
+			subscription= getStripeSubscriptionById(subscriptionId);
+		if(subscription == null){
+			System.out.println("creating subscription with plan:"+planId+" quantity:"+quantity);
+			com.stripe.model.Subscription newSub = cust.createSubscription(params);
+			Map<String, Object> invoiceParams = new HashMap<String, Object>();
+			invoiceParams.put("customer", cust.getId());
+			invoiceParams.put("subscription", newSub.getId());
+
+			try {
+				// Creates invoice for plan upgrade and charges customer
+				// immediately
+				Invoice invoice = Invoice.create(invoiceParams);
+				if (invoice != null && invoice.getSubscription().equals(newSub.getId()))
+					invoice.pay();
+			} catch (Exception e) {
+			}
+			System.out.println("Subscription created");
+			return newSub;
+		}else{
+			System.out.println("updating subscription with plan:"+planId+" quantity:"+quantity);
+			System.out.println("Old plandetails::: plan:"+subscription.getId()+" quantity:"+quantity);
+			com.stripe.model.Subscription updatedSub = subscription.update(params);
+			System.out.println("Subscription updated");
+			Map<String, Object> invoiceParams = new HashMap<String, Object>();
+			invoiceParams.put("customer", cust.getId());
+			invoiceParams.put("subscription", updatedSub.getId());
+
+			try {
+				// Creates invoice for plan upgrade and charges customer
+				// immediately
+				Invoice invoice = Invoice.create(invoiceParams);
+				if (invoice != null && invoice.getSubscription().equals(updatedSub.getId()))
+					invoice.pay();
+			} catch (Exception e) {
+			}
+			return updatedSub;
+		}
+		
+	}
+	
+	/**
+	 * Gives stripe customer object
+	 * @return
+	 * @throws Exception
+	 */
+	public static Customer getStripeCustomer() throws Exception{
+		Subscription agileSub = SubscriptionUtil.getSubscription();
+		if(agileSub.billing_data == null)
+			return null;
+		return getCustomerFromJson(agileSub.billing_data);
+	}
+	
+	
+	/**
+	 * Gives the subscription from stripe by plan id
+	 * @param id
+	 * @return
+	 * @throws Exception
+	 */
+	public static com.stripe.model.Subscription getStripeSubscriptionById(String id) throws Exception{
+		if(id == null || StringUtils.isEmpty(id))
+			return null;
+		Customer cust = getStripeCustomer();
+		List<com.stripe.model.Subscription> subscriptions = cust.getSubscriptions().getData();
+		com.stripe.model.Subscription subscription = null;
+		for(com.stripe.model.Subscription sub : subscriptions){
+			if(sub.getId().equals(id)){
+				subscription = sub;
+				break;
+			}
+		}
+		return subscription;
+	}
+	
+	/**
+	 * Cancel AddOn subscriptions
+	 * @param subscriptionId
+	 * @throws Exception 
+	 */
+	public static void cancelAddOnSubscription(String subscriptionId) throws Exception{
+		Customer cust = getStripeCustomer();
+		System.out.println("Deleting subscription::"+subscriptionId);
+		cust.getSubscriptions().retrieve(subscriptionId).cancel(null);
+		System.out.println("Subscription Deleted");
+	}
+	
+	
 
 }

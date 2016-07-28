@@ -1,4 +1,6 @@
 <!DOCTYPE html>
+<%@page import="com.agilecrm.addon.AddOn"%>
+<%@page import="com.agilecrm.addon.AddOnUtil"%>
 <%@page import="com.agilecrm.user.DomainUser.ROLE"%>
 <%@page import="com.campaignio.servlets.deferred.WorkflowAddAccessLevelDeferredTask"%>
 <%@page import="com.google.appengine.api.taskqueue.Queue"%>
@@ -83,6 +85,8 @@ return;
 
 
 DomainUser domainUser = DomainUserUtil.getCurrentDomainUser();
+
+AddOn addOn = AddOnUtil.getAddOn();
 
 System.out.println("Domain user " + domainUser);
 
@@ -980,8 +984,7 @@ if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Produ
 }
 
 %>
-
- <%@ include file="tpl/min/precompiled/flatfull/tpl.html"%>
+<%@ include file="tpl/min/precompiled/flatfull/tpl.html"%>
 
   <!-- Include bootstrap modal divs-->
  <%@ include file="flatfull/modals.html"%>
@@ -1043,6 +1046,9 @@ var ACCOUNT_PREFS = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(accountPr
 
 // Get current domain user json
 var CURRENT_DOMAIN_USER = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(domainUser))%>;
+
+//Get current domain addon json
+var ADDON_INFO = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(addOn))%>;
 
 // Get current user dashboards
 var CURRENT_USER_DASHBOARDS = <%=mapper.writeValueAsString(dashboardsList)%>;
