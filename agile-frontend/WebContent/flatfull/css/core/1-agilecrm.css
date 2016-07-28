@@ -3769,7 +3769,7 @@ div.addField div.controls div:first-child{
 .task-trello-list.expand .task-list-minimized{
  display: :block;
 }
-.task-trello-list.expand .panel.panel-default
+.task-trello-list.expand  .panel-default.w-full.m-r-none.m-b-none
 {
   display: none;
 }
@@ -3777,7 +3777,7 @@ div.addField div.controls div:first-child{
 {
   display:none;
 }
-.task-trello-list.compress .panel.panel-default{
+.task-trello-list.compress .panel-default.w-full.m-r-none.m-b-none{
   display:block;
 }
 
@@ -3804,11 +3804,11 @@ div.addField div.controls div:first-child{
    padding: 10px 15px;
   border: 1px solid #dee5e7;
 }
-.expand-button .transform-rotate{
+/*.expand-button .transform-rotate{
   position:absolute;
   padding-left:10px;
   margin-top:20px;
-}
+}*/
 
 .task-list-minimized .taskheading
 {

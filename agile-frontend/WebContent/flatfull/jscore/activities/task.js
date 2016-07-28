@@ -297,14 +297,14 @@ function taskAutoWidth(el)
 	if(expanded)
 	{
 		arr.push($(el).closest(".task-trello-list").attr("id"))
-		$(el).children().removeClass("fa")
-		$(el).children().addClass("fa fa-expand")
-		$(el).children().removeClass("fa-compress")
+		
+		$(el).children().removeClass("fa fa-expand")
+		$(el).children().addClass("fa fa-compress")
 	}
 
 	else
 	{
-		$(el).children().removeClass("fa")
+		
 		$(el).children().removeClass("fa fa-compress")
 		$(el).children().addClass("fa fa-expand")
 		
@@ -425,6 +425,7 @@ function save_task(formId, modalId, isUpdate, saveBtn)
 									$(".navbar_due_tasks").css("display", "inline-block");
 								if(due_task_count !=0)
 									$('#due_tasks_count').html(due_task_count);
+									
 								else
 									$('#due_tasks_count').html("");
 
