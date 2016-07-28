@@ -60,8 +60,6 @@ var companies_view_loader = {
 					{
 						companies_view_loader.setUpCompaniesCount(el);
 					}
-					
-					contactListener();
 
 				} });
 			App_Companies.companiesListView.collection.fetch();
