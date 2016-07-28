@@ -212,8 +212,7 @@ public class UpdateContactsOfDomainDeferredTask implements DeferredTask
 			
 			if(status.equalsIgnoreCase("COMPLETED"))
 			{		
-				SendMail.sendMail(domainUserMail, "Process update Status", SendMail.Process_update_status,
-						new Object[] { domain, status });
+				SendMail.sendMail(domainUserMail, "Process update Status", SendMail.Process_update_status, contactSchemaUpdateStats);
 
 				
 				//System.out.println("Namespace"+NamespaceManager.get());
