@@ -33,7 +33,7 @@ public class LandingPagesAPI
 	
 	@Path("/getframe/{landingPageId}/{frameId}")
 	@GET
-	@Produces({ MediaType.TEXT_HTML })
+	@Produces(MediaType.TEXT_HTML + ";charset=utf-8")
 	public String getLandingPageFrame(@PathParam("landingPageId") Long id,@PathParam("frameId") int requestedFrameId)
 	{
 		LandingPage landingPage = LandingPageUtil.getLandingPage(id);
