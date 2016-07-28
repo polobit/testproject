@@ -657,6 +657,10 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 	    if(role == null && this.id != null && domainUser != null)
 	    	role = domainUser.role;
 	    
+	    // Reset finger_prints
+	    if(finger_prints == null && this.id != null && domainUser != null)
+	    	finger_prints = domainUser.finger_prints;
+	    
 	    // Set user version
 	    if(this.id == null)
 	    	version = "v1";

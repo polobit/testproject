@@ -6,6 +6,9 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.lang.StringUtils;
+
 import com.agilecrm.ipaccess.IpAccessUtil;
 import com.agilecrm.user.DomainUser;
 
@@ -53,6 +56,8 @@ public class UserFingerPrintInfo implements Serializable{
 		
 		// Get Fingerprint
 		String browserFingerPrint = request.getParameter("finger_print");
+		if(StringUtils.isNotBlank(browserFingerPrint))
+			browserFingerPrint = browserFingerPrint.trim();
 		System.out.println("Browser FP = " + browserFingerPrint);
 		
 		// Get actual finger prints
