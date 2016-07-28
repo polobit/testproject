@@ -16,6 +16,10 @@ $(function()
 	{
 		return getPropertyValue(items, name);
 	});
+	Handlebars.registerHelper('getSystemPropertyValue', function(items, name)
+	{
+		return getSystemPropertyValue(items, name);
+	});
 
 	Handlebars.registerHelper('stripeCreditConvertion', function(amount)
 	{
@@ -2762,31 +2766,29 @@ $(function()
 		{
 			type = "label-danger text-tiny";
 			reputation = "Poor";
-			badge="red;";
+			badge="progress-bar-danger";
 		}
 		else if (value >= 40 && value < 75)
 		{
 			type = "label-warning text-tiny";
 			reputation = "Ok";
-			badge="yellow";
+			badge="progress-bar-warning";
 		}
 		else if (value >= 75 && value < 90)
 		{
 			type = "label-primary text-tiny";
 			reputation = "Good";
-			badge="blue";
+			badge="progress-bar-info";
 		}
 		else if (value >= 90)
 		{
 			type = "label-success text-tiny";
 			reputation = "Excellent";
-			badge="green"
+			badge="progress-bar-success"
 		}
-
-		return "<span style='font-weight: bold;font-size: 12px;position: relative;' class='label " + type
-
-		+ "'>" + reputation + " <span style='margin: 0px -2px 0px 5px; padding:1px 5px 1px 5px ; background-color:white; color:"+ badge +"' class='badge " 
-		+ type + "'>" + value + " %</span> </span>";
+		var data = {'type':type, 'reputation':reputation, 'value':value,'badge':badge};
+		var html = getTemplate("reputation-progress", data);
+		return html;
 
 	});
 
