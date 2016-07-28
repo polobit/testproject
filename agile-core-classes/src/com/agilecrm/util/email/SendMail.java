@@ -194,7 +194,7 @@ public class SendMail
      */
     public static final String TEMPLATE_BODY_EXT = "_body.html";
     
-    public static final String Contacts_update_status = "Domainuser_updates_html";
+    public static final String Contacts_update_status = "Domainuser_updates";
 
     @SuppressWarnings("unused")
     private static Object String;
