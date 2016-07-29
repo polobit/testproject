@@ -262,8 +262,14 @@ public class Widget {
 			}
 			
 			DomainUser domainUser = agileUser.getDomainUser();
-			boolean isAdmin = domainUser.is_admin;
-			if(isAdmin){
+			boolean isAdmin = domainUser.is_admin;			
+			
+			if(isAdmin && this.id != null){
+				
+				if(!this.add_by_admin){
+					dao.put(this);
+				}
+				
 				List<Widget> widgetList = WidgetUtil.getWigetUserListByAdmin(name);
 				if (widgetList != null && widgetList.size() > 0) {
 					for (Widget widget : widgetList) {						
