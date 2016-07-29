@@ -648,8 +648,6 @@ public class AdminPanelAPI
     
     @Path("/release_user")
     @POST
-    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     public void releaseUser(@QueryParam("d") String domainname){
     	String oldNamespace = NamespaceManager.get();
     	try{
