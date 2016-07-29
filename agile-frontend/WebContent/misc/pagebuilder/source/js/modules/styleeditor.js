@@ -405,6 +405,8 @@
                 if( $(this).attr('name') !== undefined ) {
 
                     $(styleeditor.activeElement.element).css( $(this).attr('name'),  $(this).val());
+                    if($(this).attr("name") === 'font-size' && styleeditor.activeElement.element.nodeName === 'DIV')
+                        $(styleeditor.activeElement.element).children().css($(this).attr("name"),$(this).val());
 
                 }
 
