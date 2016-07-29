@@ -163,7 +163,8 @@
                 return;
             //Element object extention
             canvasElement.prototype.clickHandler = function(el) {
-                styleeditor.styleClick(this);
+                if(el.style.cursor === "pointer")                   
+                   styleeditor.styleClick(this);
             };
 
             var newElement = new canvasElement(element);
@@ -1128,6 +1129,9 @@
 
             if ( e !== undefined ) e.preventDefault();
 
+            if(styleeditor.activeElement.element)
+                 styleeditor.activeElement.editableAttributes=bConfig.editableItems[styleeditor.activeElement.element.getAttribute('data-selector')];
+            
             if ( styleeditor.activeElement.editableAttributes && styleeditor.activeElement.editableAttributes.indexOf('content') === -1 ) {
                 styleeditor.activeElement.removeOutline();
                 styleeditor.activeElement.activate();
