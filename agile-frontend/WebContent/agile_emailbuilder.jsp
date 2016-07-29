@@ -1,8 +1,8 @@
 <html>
 <head>
-<title>Thanks for rating us | AgileCRM</title>
+<title>Thanks for rating us</title>
 </head>
 <body>
-	<h2>Thanks <%= request.getParameter("name") %> for filling out my form!</h2>
+	<h2>Thanks for sharing your Feedback !</h2>
 </body>
 </html>
