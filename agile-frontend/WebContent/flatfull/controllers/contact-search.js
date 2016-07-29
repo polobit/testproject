@@ -47,9 +47,9 @@ var ContactSearchRouter = Backbone.Router.extend({
 
 								// Shows the query string as heading of search results
 								if (collection.length == 0)
-									$("#search-query-heading", el).html('No matches found for "' + query + '" in <span style="font-weight:600;">' + module_name);
+									$("#search-query-heading", el).html('{{agile_lng_translate 'contact-details' 'no-matches-found-for'}} "' + query + '" {{agile_lng_translate "contacts-view" "in"}} <span style="font-weight:600;">' + module_name);
 								else
-									$("#search-query-heading", el).html('Search results for "' + query + '" in <span style="font-weight:600;">' + module_name);
+									$("#search-query-heading", el).html('{{agile_lng_translate 'contact-details' 'search-results-for'}} "' + query + '" {{agile_lng_translate "contacts-view" "in"}} <span style="font-weight:600;">' + module_name);
 							} });
 						
 							// If in case results in different page is clicked before
@@ -89,19 +89,19 @@ var ContactSearchRouter = Backbone.Router.extend({
 	},
 	getModuleName : function(url){
 		if(url.indexOf("type=person") != -1){
-			return "Contacts";
+			return "{{agile_lng_translate 'contact-details' 'Contacts'}}";
 		}
 		else if(url.indexOf("type=company") != -1){
-			return "Companies";
+			return "{{agile_lng_translate 'companies-view' 'companies'}}";
 		}
 		else if(url.indexOf("type=opportunity") != -1){
-			return "Deals";
+			return "{{agile_lng_translate 'deal-view' 'deals'}}";
 		}
 		else if(url.indexOf("type=document") != -1){
-			return "Documents";
+			return "{{agile_lng_translate 'deal-view' 'documents'}}";
 		}
 		else if(url.indexOf("type=tickets") != -1){
-			return "Tickets";
+			return "{{agile_lng_translate 'report-view' 'tickets'}}";
 		}
 	},
 });

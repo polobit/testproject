@@ -121,7 +121,7 @@ var portlet_utility = {
 		var campaign_id = base_model.get("settings").campaign_type;
 
 		if (campaign_id == 'All')
-			return callback('All Campaigns');
+			return callback('{{agile_lng_translate "campaigns" "all-campaigns"}}');
 		else {
 			var campaign = $.ajax({
 				type : 'GET',
@@ -1639,7 +1639,7 @@ var portlet_utility = {
 							'option[value='
 									+ base_model.get("settings").duration + ']')
 					.attr("selected", "selected");
-			var options = "<option value='All'>All Campaigns</option>";
+			var options = "<option value='All'>{{agile_lng_translate 'campaigns' 'all-campaigns'}}</option>";
 			$.ajax({
 				type : 'GET',
 				url : '/core/api/workflows',
@@ -1943,7 +1943,7 @@ var portlet_utility = {
 							'option[value='
 									+ base_model.get("settings").duration + ']')
 					.attr("selected", "selected");
-			var options = "<option value='All'>All Campaigns</option>";
+			var options = "<option value='All'>{{agile_lng_translate 'campaigns' 'all-campaigns'}}</option>";
 			$.ajax({
 				type : 'GET',
 				url : '/core/api/workflows',
