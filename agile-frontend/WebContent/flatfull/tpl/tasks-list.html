@@ -30,7 +30,7 @@
 
             <thead>
                 <tr>
-                    <th style="width:10%;" class="header">{agile_lng_translate 'contact-details' 'owner'}}</th>
+                    <th style="width:10%;" class="header">{{agile_lng_translate 'contact-details' 'owner'}}</th>
                     <th style="width:30%;" class="header">{{agile_lng_translate 'tasks' 'task-name'}}</th>
                     <th style="width:10%;" class="header">{{agile_lng_translate 'portlets' 'category'}}</th>
                     <th style="width:10%;" class="header">{{agile_lng_translate 'widgets' 'priority'}}</th>
@@ -100,9 +100,9 @@
     </td>
     <td> 
         <div id="task-list-actions" data ="{{type}}" class="hidden">
-            <i class="task-action icon icon-check is-task-complete m-r-xs" data="{{id}}" title="Mark as Complete"></i>
-            <i class="task-action icon icon-edit edit-task" data="{{id}}" title="Edit Task"></i>          
-            <i class="task-action icon icon-trash delete-task" data="{{id}}" title="Delete Task"></i>
+            <i class="task-action icon icon-check is-task-complete m-r-xs" data="{{id}}" title="{{agile_lng_translate 'report-view' 'mark-as-complete'}}"></i>
+            <i class="task-action icon icon-edit edit-task" data="{{id}}" title="{{agile_lng_translate 'modals' 'edit-task'}}"></i>          
+            <i class="task-action icon icon-trash delete-task" data="{{id}}" title="{{agile_lng_translate 'report-view' 'delete-task'}}"></i>
            
         </div>
     </td>

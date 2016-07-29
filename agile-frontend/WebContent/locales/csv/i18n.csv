@@ -4918,9 +4918,12 @@ contact-details.in,in,en
 contact-details.on,on,en
 contact-details.to,To,A
 country.not-found-error,doesn’t match with our standard records. Please update the country using the dropdown.,no coincide con nuestros registros estándar . Por favor&#44; actualice el país usando el menú desplegable.
-contact-details.pages-visited,Pages Visited,
-contact-details.page-view-analytics,Page View Analytics,
-timeline.email-sent-from,Email sent From:,
-deal-filters.not-applicable,This condition is not applicable for Milestone View.,
-deal-filters.add-new,Add Opportunity Filter,
+contact-details.pages-visited,Pages Visited,páginas visitadas
+contact-details.page-view-analytics,Page View Analytics,Ver página Analytics
+timeline.email-sent-from,Email sent From:,El correo electrónico enviado desde :
+deal-filters.not-applicable,This condition is not applicable for Milestone View.,Esta condición no es aplicable para Milestone Vista .
+deal-filters.add-new,Add Opportunity Filter,Añadir Oportunidad Filtrar
 portlets.deals-pad-content-desc-2,Deals are sales opportunities you track continuously throughout its lifecycle., Las ofertas son las oportunidades de ventasa las que puedes realiazr un seguimiento de forma continua a lo largo de su ciclo de vida.
+deal-goals.total,Total Goals,Total de goles
+deal-goals.total-value,Total Goals Value,Valor Total de goles
+deal-goals.goal-value,Goal Value,Valor del objetivo

@@ -349,7 +349,7 @@ function initializeSubscriptionListeners()
 				}
 				plan_json = {};
 				var buttonText = $(this).html();
-				$(this).text("Loading...");
+				$(this).text("{{agile_lng_translate 'tickets' 'loading'}}");
 				$(this).attr("disabled","disabled");
 				/*
 				 * var quantity = $("#users_quantity").text(); var cost =

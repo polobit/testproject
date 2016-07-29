@@ -63,7 +63,7 @@ function getCalendarView() {
 								$("#loading_calendar_events").remove();
 								$('.fc-header-left','#task-calendar-based-condition')
 										.append(
-												'<span id="loading_calendar_events" style="margin-left:5px;vertical-align:middle;padding-top: 5px;position: absolute;">loading...</span>')
+												'<span id="loading_calendar_events" style="margin-left:5px;vertical-align:middle;padding-top: 5px;position: absolute;">{{agile_lng_translate "tickets" "loading"}}</span>')
 										.show();
 								$('.fc-header-left','#task-calendar-based-condition').show();
 
