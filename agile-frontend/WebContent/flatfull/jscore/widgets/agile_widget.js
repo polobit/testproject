@@ -158,7 +158,6 @@ function agile_crm_update_contact(propertyName, value, callback)
 }
 
 
-
 function agile_crm_get_contact_model(){
 	
 	if(company_util.isCompany()){
@@ -190,7 +189,6 @@ function agile_crm_is_model_property_changed(propertyName, value){
 	return changed;
 
 }
-
 
 /**
  * Updates a contact with the list of property name and its value specified in
@@ -337,7 +335,6 @@ function agile_crm_get_widget(pluginName)
 	 */
 	console.log($('#' + pluginName));
 	var model_data = $('#' + pluginName, get_current_view_el()).data('model');
-
 	console.log(model_data);
 
 	return model_data.toJSON();
@@ -355,7 +352,9 @@ function agile_crm_get_widget_prefs(pluginName)
 	pluginName = pluginName.replace(/ +/g, '');
 	console.log("in get widget prefs " + pluginName);
 	// Gets data attribute of from the plugin, and return prefs from that object
-	return $('#' + pluginName, get_current_view_el()).data('model').toJSON().prefs;
+	//var prefs = $('#' + pluginName, App_Contacts.contactDetailView.el).data('model').toJSON().prefs;
+	var prefs = $('#' + pluginName).data('model').toJSON().prefs;
+	return prefs;
 }
 
 /**
@@ -375,7 +374,8 @@ function agile_crm_save_widget_prefs(pluginName, prefs, callback)
 	console.log($('#' + pluginName, get_current_view_el()));
 
 	// Get the model from the the element
-	var widget = $('#' + pluginName, get_current_view_el()).data('model');
+	//var widget = $('#' + pluginName, App_Contacts.contactDetailView.el).data('model');
+	var widget = $('#' + pluginName).data('model');
 
 	console.log(widget);
 	// Set changed preferences to widget backbone model
@@ -394,7 +394,8 @@ function agile_crm_save_widget_prefs(pluginName, prefs, callback)
 		console.log("Saved widget: " + data.toJSON());
 		
 		// Set the changed model data to respective plugin div as data
-		$('#' + pluginName, get_current_view_el()).data('model', widget);
+		//$('#' + pluginName, App_Contacts.contactDetailView.el).data('model', widget);
+		$('#' + pluginName).data('model', widget);
 		
 		if (callback && typeof (callback) === "function")
 		{
