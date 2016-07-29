@@ -176,12 +176,12 @@ function initializeAdminpanelListner(el){
 			var that = this;
 			if(domain){
 				$.ajax({
-					url: '/core/api/admin_panel/release_user?chargeid='+chargeid+'&amount='+amount, 
+					url: '/core/api/admin_panel/release_user?d='+domain, 
 					type : 'POST',
 					success : function(data)
 					{	
 						showNotyPopUp("information", "Domain released successfully.", "top");
-						$(that).hide();
+						$(that).closest("div").hide();
 						var json = {};
 						json.from="care@agilecrm.com";
 						json.cc = "mogulla@agilecrm.com";
