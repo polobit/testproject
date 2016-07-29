@@ -190,9 +190,9 @@ function initializeAdminpanelListner(el){
 						json.body = "Domain: "+domain;
 						sendEmail(json);
 					},
-					error : function(response)
+					error : function(data)
 					{
-						showNotyPopUp("warning", "error occured please try again", "top");
+						showNotyPopUp("warning", data.responseText, "top");
 					}
 				});
 			}
