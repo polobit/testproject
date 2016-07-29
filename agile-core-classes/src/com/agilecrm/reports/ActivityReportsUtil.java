@@ -133,7 +133,7 @@ public class ActivityReportsUtil
 	     */
 
 	    // Format for dates in the report.
-	    String format = "EEE, MMM d, yyyy HH:mm z";
+	    String format = "EEE, MMM d, yyyy";
 
 	    // Fill the map object with the required data.
 	    activityReports.put("start_time", MustacheUtil.convertDate(format, timeBounds.get("startTime")));
@@ -754,7 +754,7 @@ public class ActivityReportsUtil
 
 	    if (!StringUtils.isEmpty(name))
 		result = "to <a href=\"https://" + user.domain + ".agilecrm.com/#contact/" + contact.id
-			+ "\" target=\"_blank\">" + name + "</a>";
+			+ "\" target=\"_blank\" style=\"text-decoration:none\">" + name + "</a>";
 
 	    activity.custom4 = result;
 	    noteActivities.add(activity);
@@ -854,7 +854,7 @@ public class ActivityReportsUtil
 
 	    if (activity.entity_id != null)
 		link = "<a href=\"https://" + user.domain + ".agilecrm.com/#contact/" + activity.entity_id
-			+ "\" target=\"_blank\">" + activity.label + "</a>";
+			+ "\" target=\"_blank\" style=\"text-decoration:none\">" + activity.label + "</a>";
 	    else
 		link = activity.label;
 
