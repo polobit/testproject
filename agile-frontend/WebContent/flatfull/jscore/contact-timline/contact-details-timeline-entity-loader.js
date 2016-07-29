@@ -33,7 +33,7 @@ var timeline_entity_loader = {
 		this.load_campaign_logs(contactId);
 		
 		this.get_stats(getPropertyValue(contact.properties, "email"), contact, App_Contacts.contactDetailView.el);
-		//setTimeout(this.load_reload_emails, 30000);
+		//setTimeout(this.load_reload_emails, 5000);
 	},
 	
 	load_reload_emails : function(contactId)
@@ -48,6 +48,7 @@ var timeline_entity_loader = {
 				$('#'+parentEMailDivId).html($('#'+childEMailDivId).wrapAll('<div>').parent().html());
 				$('#'+childEMailDivId).remove();
 			}
+			//$('#message-'+parentEMailDivId).show();
 		});
 	},
 
