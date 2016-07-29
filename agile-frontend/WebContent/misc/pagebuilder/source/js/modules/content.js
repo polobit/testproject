@@ -111,7 +111,7 @@
 
                 contenteditor.mediumEditors.push(editor);
 
-                console.log(contenteditor.mediumEditors);
+               // console.log(contenteditor.mediumEditors);
 
             }
             
