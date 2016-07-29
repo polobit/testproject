@@ -64,17 +64,19 @@ var _agile_synch_form_v4 = function()
 				agile_note.description = field_value;
 				agile_notes.push(agile_note);
 			}
-			else if(field_type == "checkbox" && !agile_tags)
+			else if(agile_form[i].checked &&(field_type == "checkbox" &&  (typeof agile_tags == undefined || agile_tags)))
 			   {
 				if (agile_multiple_checkbox)
 					agile_multiple_checkbox = agile_multiple_checkbox + ',' + field_value;
-				else
+				else{
 					agile_multiple_checkbox = field_value;
 
 				  agile_contact[field_name] = agile_multiple_checkbox;  
+				}
 			}
 
 			else
+				if(!agile_multiple_checkbox)
 				agile_contact[field_name] = field_value;
 		}
 		else if (field_value)
