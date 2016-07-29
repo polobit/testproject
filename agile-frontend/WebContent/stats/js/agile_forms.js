@@ -70,9 +70,9 @@ var _agile_synch_form_v4 = function()
 					agile_multiple_checkbox = agile_multiple_checkbox + ',' + field_value;
 				else{
 					agile_multiple_checkbox = field_value;
-
+                    }
 				  agile_contact[field_name] = agile_multiple_checkbox;  
-				}
+				
 			}
 
 			else
