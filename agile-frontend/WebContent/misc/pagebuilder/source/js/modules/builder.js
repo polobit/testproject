@@ -1408,7 +1408,8 @@
             //block has changed
             this.status = 'changed';
 
-            publisher.publish('onBlockChange', this, 'change');
+            // publisher.publish('onBlockChange', this, 'change');
+            publisher.publish('onBlockLoaded', this);
 
         };
             
