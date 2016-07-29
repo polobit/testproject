@@ -212,7 +212,74 @@
 </div> 
 
 						<ul class="nav navbar-nav agile-menu">
-							<li class="nav-bar-search m-r" >
+
+					<li>
+					<div class="dropdown m-l-sm navbar-searchicon">
+					<button class="fa fa-search text-base p-n btn btn-sm dropdown-toggle no-shadow bg-transparent b-n" type="button" data-toggle="dropdown"></button>
+					<ul class="dropdown-menu search-view animated fadeInRight">
+					<li>
+
+					<div class="col-sm-12">
+
+					<form class=" m-t-sm m-b-sm" id="searchbar-input" role="search">
+					<div class="input-group add-on">
+					<input type="text" class="form-control r-5x">
+					<div class="input-group-btn">
+					<button class="btn btn-default no-shadow" type="submit"><i class="icon-microphone"></i></button>
+					<button class="btn btn-default no-shadow r-5x" type="submit"><i class="fa fa-search"></i></button>
+					</div>
+					</div>
+					</form>
+
+
+					</div>
+
+					</li>
+
+
+					<li>
+					<ul class="col-sm-12 list-none search-filters" id="advanced-search-fields-group">           			
+					<li>
+					<a href="javascript:void(0);">
+					<label class="i-checks i-checks-sm ">
+					<input name="person" value="person" type="checkbox">
+					<i></i></label>Contacts</a>
+					</li>
+
+					<li>
+					<a href="javascript:void(0);">
+					<label class="i-checks i-checks-sm  searchtype"><input name="company" value="company" type="checkbox" class="choose-column-chbx"><i></i></label>Companies</a>
+					</li>
+
+					<li>
+					<a href="javascript:void(0);">
+					<label class="i-checks i-checks-sm">
+					<input name="opportunity" value="opportunity" type="checkbox"><i></i></label>Deals</a>
+					</li>
+
+					<li>
+					<a href="javascript:void(0);">
+					<label class="i-checks i-checks-sm "><input name="document" value="document" type="checkbox"><i></i></label>Documents</a>
+					</li>
+
+					<li>
+					<a href="javascript:void(0);">
+					<label class="i-checks i-checks-sm"><input name="tickets" value="tickets" type="checkbox"><i></i></label>Tickets</a>
+					</li>
+
+					<li>
+					<button style="margin-left:2px; margin-top:3px;" class="btn m-b-sm w-xs btn-xs btn-info text-base">Go</button>
+					</li>
+
+					</ul>
+
+					</li>
+
+					</ul>
+					</div>
+
+					</li>
+							<li class="nav-bar-search m-r hide" >
 								<form id="searchForm" class=" navbar-search  navbar-search navbar-form navbar-form-sm navbar-left shift p-r-none">
 					<div class="input-group">
 						    <label for="searchText" class="fa fa-search global-search-label" id="search-results"></label>
