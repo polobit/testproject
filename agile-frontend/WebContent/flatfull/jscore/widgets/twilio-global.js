@@ -1423,6 +1423,7 @@ function showNoteAfterCall(callRespJson,messageObj,paramJson)
 			CallLogVariables.dynamicData = data;
 		}
 		
+		CallLogVariables.subject = noteSub;
 		CallLogVariables.callWidget = "Twilio";
 		CallLogVariables.callType = TWILIO_DIRECTION;
 		CallLogVariables.phone = phoneNumber;

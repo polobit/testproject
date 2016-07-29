@@ -198,16 +198,18 @@ $(function()
 	$('body').on("click","#call_newNumber_btn_continue",function(e)
 	{
 		e.preventDefault();
+		
+		CallLogVariables.processed = true;
 		var opt = $("#call_newNumber_check:checked").val();
-		//var phoneNumber = $("#diallerInfoModal","#call_newNumber_btn_continue").data("phoneNumber");
+		//var phoneNumber = $("#mergeContactModal","#call_newNumber_btn_continue").data("phoneNumber");
 		var phoneNumber = $(this).data("phoneNumber");
 		if(!phoneNumber){
-			$("#diallerInfoModal").modal('hide');
+			$("#mergeContactModal").modal('hide');
 			return;
 		}
 		
 		if(opt == "new"){
-			$("#diallerInfoModal").modal('hide');
+			$("#mergeContactModal").modal('hide');
 			  setTimeout(function(){
 				  showNewContactModal(phoneNumber);
 			 },2);
@@ -237,13 +239,49 @@ $(function()
 				}
 				var json = {};
 				json['phoneNumber'] = phoneNumber;
-				$("#diallerInfoModal").modal('hide');
+				$("#mergeContactModal").modal('hide');
 				 setTimeout(function(){
 					 proessEditPage(data,json);
 				 },2);
 			});
 		}
 	});
+	
+	$('#mergeContactModal').on('hidden.bs.modal', function (e) {
+		if(CallLogVariables.callWidget){
+
+			if(CallLogVariables.processed){
+				CallLogVariables.processed = false;
+					return;
+			}
+			try{
+				//if the data is not there - it means call status is not completed - so we log the activities of the call
+				var widgetType = CallLogVariables.callWidget.toLowerCase();
+				var direction = CallLogVariables.callType;
+				var phoneNumber = CallLogVariables.phone;
+				var status = CallLogVariables.status;
+				var duration = CallLogVariables.duration;
+				var url = "/core/api/widgets/" + widgetType + "/savecallactivity";
+				
+				
+				//url is : 
+				//1)twilio : /core/api/widgets/twilio/savecallactivity
+				//2)bria : /core/api/widgets/bria/savecallactivity
+				//3)skype: /core/api/widgets/skype/savecallactivity
+				
+				$.post( url,{
+				direction: direction, 
+				phone: phoneNumber, 
+				status : status,
+				duration : duration 
+				});
+				resetCallLogVariables();
+			}catch(e){
+			}
+		}	
+		
+	});
+	
 });
 
 function makeCallAction(json){
@@ -283,6 +321,9 @@ function sendActionToClient(action){
 	if(command == "startCall"){
 		var btns = [];
 		showDraggableNoty(client, globalCall.contactedContact , "dialing", globalCall.callNumber, btns);
+		globalCall.callDirection = "Outgoing";
+		globalCall.callStatus = "Dialing";
+		globalCall.callNumber = number;
 	}
 	var image = new Image();
 	image.onload = function(png) {

@@ -4,7 +4,7 @@ var globalCall = { "callDirection" : null, "callStatus" : "Ideal", "callId" : nu
 var globalCallForActivity = { "callDirection" : null, "callId" : null, "callNumber" : null, "callStatus" : null, "duration" : 0, "requestedLogs" : false, "justCalledId" : null, "justSavedCalledIDForNote" : null, "justSavedCalledIDForActivity" : null,"contactedId":null, "answeredByTab" : false}; 
 var widgetCallName = { "Sip" : "Sip", "TwilioIO" : "Twilio", "Bria" : "Bria", "Skype" : "Skype", "CallScript" : "CallScript" };
 var dialled = {"using" : "default"};
-var CallLogVariables = {"callActivitySaved" : false, "id" : null, "callType" : null, "status" : null, "callWidget" : null, "duration" : null, "phone" : null, "url" : null,"description":null , "dynamicData" : null, "processed" : false};
+var CallLogVariables = {"callActivitySaved" : false, "id" : null, "callType" : null, "subject":null, "status" : null, "callWidget" : null, "duration" : null, "phone" : null, "url" : null,"description":null , "dynamicData" : null, "processed" : false};
 
 $(function()
 {
@@ -421,6 +421,7 @@ function resetCallLogVariables(){
 	CallLogVariables.url = null;
 	CallLogVariables.description = null;
 	CallLogVariables.dynamicData = null;
+	CallLogVariables.subject = null;
 	CallLogVariables.processed = false;
 }
 
@@ -707,9 +708,9 @@ function newCallLogVariables (json){
 function showContactMergeOption(jsonObj){
 	
 	var phoneNumber = jsonObj.phoneNumber;
-	showModal($("#diallerInfoModal"),"newContactAddPhone");
-	$("#call_newNumber_btn_continue", "#diallerInfoModal").data("phoneNumber",phoneNumber);
-	var el = $("#diallerInfoModal");
+	showModal($("#mergeContactModal"),"newContactAddPhone");
+	$("#call_newNumber_btn_continue", "#mergeContactModal").data("phoneNumber",phoneNumber);
+	var el = $("#mergeContactModal");
 	var contact_display = function(data, item)
 	  {
 	   setTimeout(function(){

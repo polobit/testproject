@@ -179,6 +179,7 @@ function saveCallNoteBria(call){
 	    			data.widget = "Bria";
 	    			CallLogVariables.dynamicData = data;
 	    		}
+	    			CallLogVariables.subject = noteSub;
 		    		CallLogVariables.callWidget = "Bria";
 		    		CallLogVariables.callType = "inbound";
 		    		CallLogVariables.phone = number;
@@ -275,6 +276,7 @@ function saveCallNoteBria(call){
     			data.widget = "Bria";
     			CallLogVariables.dynamicData = data;
     		}
+    			CallLogVariables.subject = noteSub;
 	    		CallLogVariables.callWidget = "Bria";
 	    		CallLogVariables.callType = "outbound-dial";
 	    		CallLogVariables.phone = number;

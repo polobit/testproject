@@ -235,6 +235,7 @@ function saveCallNoteSkype(call){
 	    			data.widget = "Skype";
 	    			CallLogVariables.dynamicData = data;
 	    		}
+	    			CallLogVariables.subject = noteSub;
 		    		CallLogVariables.callWidget = "Skype";
 		    		CallLogVariables.callType = "inbound";
 		    		CallLogVariables.phone = number;
@@ -324,6 +325,7 @@ function saveCallNoteSkype(call){
     			data.widget = "Skype";
     			CallLogVariables.dynamicData = data;
     		}
+				CallLogVariables.subject = noteSub;
 	    		CallLogVariables.callWidget = "Skype";
 	    		CallLogVariables.callType = "outbound-dial";
 	    		CallLogVariables.phone = number;

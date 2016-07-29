@@ -693,7 +693,7 @@ function serialize_contact_properties_and_save(e, form_id, obj, properties, moda
 		}
 
 		// Hides the modal
-		if(CallLogVariables.dynamicData != null){
+		if(CallLogVariables.callWidget){
 			CallLogVariables.processed = true;
 		}
 		$('#' + modal_id).modal('hide');
@@ -716,6 +716,27 @@ function serialize_contact_properties_and_save(e, form_id, obj, properties, moda
 					dynamicData.contact_name = getContactName(jsonData1);
 					dynamicData.contId = jsonData1.id;
 					showDynamicCallLogs(dynamicData);
+				}else if(CallLogVariables.callWidget && CallLogVariables.subject){
+					var jsonData1 = data.toJSON();
+					$.post( "/core/api/widgets/twilio/autosavenote", {
+						subject: CallLogVariables.subject,
+						message: "",
+						contactid: jsonData1.id,
+						phone: CallLogVariables.phone,
+						callType: CallLogVariables.callType,
+						status: CallLogVariables.status,
+						duration: 0},
+						function(noteData){
+						
+						$.post( "/core/api/widgets/" + CallLogVariables.callWidget.toLowerCase() + "/savecallactivityById?note_id="+noteData.id,{
+							id:jsonData1.id,
+							direction: CallLogVariables.callType, 
+							phone: CallLogVariables.phone, 
+							status : CallLogVariables.status,
+							duration : 0 
+							});
+						resetCallLogVariables();
+						});
 				}
 			}
 		}catch(e){}
@@ -1134,6 +1155,43 @@ $(function()
 	{
 		e.preventDefault();
 		var id = $('#continueform input[name=id]').val();
+		var fName = $('#continueform input[name=fname]').val();
+		var lName = $('#continueform input[name=lname]').val();
+		try{
+			if(CallLogVariables.callWidget){
+				if(CallLogVariables.dynamicData != null){
+					var name = fName + lName;
+					var dynamicData = CallLogVariables.dynamicData;
+					dynamicData.contact_name = name;
+					dynamicData.contId = id;
+					showDynamicCallLogs(dynamicData);
+				}else if(CallLogVariables.callWidget && CallLogVariables.subject){
+					var jsonData1 = data.toJSON();
+					$.post( "/core/api/widgets/twilio/autosavenote", {
+						subject: CallLogVariables.subject,
+						message: "",
+						contactid: jsonData1.id,
+						phone: CallLogVariables.phone,
+						callType: CallLogVariables.callType,
+						status: CallLogVariables.status,
+						duration: 0},
+						function(noteData){
+						
+						$.post( "/core/api/widgets/" + CallLogVariables.callWidget.toLowerCase() + "/savecallactivityById?note_id="+noteData.id,{
+							id:jsonData1.id,
+							direction: CallLogVariables.callType, 
+							phone: CallLogVariables.phone, 
+							status : CallLogVariables.status,
+							duration : 0 
+							});
+						resetCallLogVariables();
+						});
+				}
+			}
+		}catch(e){}
+
+
+	
 		// added for call campaign - functionality after updating fom call
 		// campaign
 		if(CALL_CAMPAIGN.start && CALL_CAMPAIGN.contact_update){
