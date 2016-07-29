@@ -1312,7 +1312,10 @@ function showNoteAfterCall(callRespJson,messageObj,paramJson)
 			console.log(callRespJson);
 			var json = resp;
 			if(json == null) {
-				return showNewContactModal(phoneNumber);
+				var jsonObj = {};
+				jsonObj['phoneNumber'] = phoneNumber;
+				return showContactMergeOption(jsonObj);
+			//	return showNewContactModal(phoneNumber);
 			}
 			var contact_name = getContactName(json);
 
@@ -1432,8 +1435,10 @@ function showNoteAfterCall(callRespJson,messageObj,paramJson)
 				status : callRespJson.status,
 				duration : callRespJson.duration 
 				});*/
-
-		return showNewContactModal(phoneNumber);
+		var jsonObj = {};
+		jsonObj['phoneNumber'] = phoneNumber;
+		return showContactMergeOption(jsonObj);
+		//return showNewContactModal(phoneNumber);
 	}
 	
 }

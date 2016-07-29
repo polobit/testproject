@@ -104,7 +104,7 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
 	var id = $('#' + form_id + ' input[name=id]').val();
 
     var man_delet  = $("#" + form_id + " #Manual_delete").val();
-	//Surce of the contact
+	// Surce of the contact
 	var contact_source = $('#' + form_id + ' input[name=source]').attr('data');
 
 	// Makes created time constant
@@ -118,7 +118,7 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
 
 	// Object to save
 	var obj = {};
-	//to check if it manually added
+	// to check if it manually added
 
 	// Stores all the property objects
 	var properties = [];
@@ -205,10 +205,11 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
 		// Stores person's continue editing form template key
 		template = 'continue-contact';
 		obj.type = 'PERSON';
-        /*@priyanka
-        *saving first_name,last_name,picture and its TwitterId Pre-populate into the saving
-        * person model and continue saving it will also appers with same field
-        */
+        /*
+		 * @priyanka saving first_name,last_name,picture and its TwitterId
+		 * Pre-populate into the saving person model and continue saving it will
+		 * also appers with same field
+		 */
 		if(contact_source)
 			obj.source = contact_source ;
 
@@ -223,7 +224,8 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
 		// if(form_id == "personForm")
 		if (isValidField(form_id + ' #image'))
 			properties.push(property_JSON('image', form_id + ' #image'));
-        //checking the condition for the when tweeterId is saving into the datastore
+        // checking the condition for the when tweeterId is saving into the
+		// datastore
         if(isValidField(form_id +' #handle'))
         	properties.push({ "name" : "website", "value" :$('#handle').val(), "subtype" : "TWITTER" })
 
@@ -259,8 +261,10 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
 		if (isValidField(form_id + ' #phone'))
 			properties.push(property_JSON('phone', form_id + ' #phone'));
 		
-/*		if (isValidField(form_id + ' #skypePhone'))
-			properties.push(property_JSON('skypePhone', form_id + ' #skypePhone'));*/
+/*
+ * if (isValidField(form_id + ' #skypePhone'))
+ * properties.push(property_JSON('skypePhone', form_id + ' #skypePhone'));
+ */
 
 		if (isValidField(form_id + ' #job_title'))
 			properties.push(property_JSON('title', form_id + ' #job_title'));
@@ -449,7 +453,8 @@ function serialize_contact_properties_and_save(e, form_id, obj, properties, moda
 
 					if (is_new) {
 						tag_objects_temp.push({ "tag" : value });
-						//check if tags are valid if they are newly adding to the contact.
+						// check if tags are valid if they are newly adding to
+						// the contact.
 						if(!isValidTag(value, false)) {
 							tags_valid = false;
 							return false;
@@ -481,13 +486,15 @@ function serialize_contact_properties_and_save(e, form_id, obj, properties, moda
 		{
 			var addressJSON = {};
 			var subtype;
-			/*var remote_addr=false; */ 
+			/* var remote_addr=false; */ 
 			$.each($(element).find(":input,select"), function(index, subelement)
 			{
 
 				if ($(subelement).val() == undefined || $(subelement).val().length == 0)
-					{  /*remote_addr =true;
-						addressJSON['remote_add'] = remote_addr;*/
+					{  /*
+						 * remote_addr =true; addressJSON['remote_add'] =
+						 * remote_addr;
+						 */
 						return;}
 
 				if ($(subelement).attr('name') == 'address-type')
@@ -523,8 +530,8 @@ function serialize_contact_properties_and_save(e, form_id, obj, properties, moda
 	/*
 	 * Check whether there are any properties in existing contact, which can get
 	 * lost in contact update form. There are chances user adds a property(may
-	 * be stripe id..) using developers API and contact image saved as CUSTOM type,
-	 * in order not to loose them following verification is done
+	 * be stripe id..) using developers API and contact image saved as CUSTOM
+	 * type, in order not to loose them following verification is done
 	 */
 	if (obj.properties)
 	{
@@ -657,7 +664,7 @@ function serialize_contact_properties_and_save(e, form_id, obj, properties, moda
 				if(!CALL_CAMPAIGN.start && Current_Route != "contact/" + data.id)
 				App_Contacts.navigate("contact/" + data.id, { trigger : true });
 			} else {
-				//Update all the existed contacts with mapped this company
+				// Update all the existed contacts with mapped this company
 				var companyJSON = data.toJSON();
 				if(App_Contacts.contactsListView)
 				{
@@ -714,7 +721,8 @@ function serialize_contact_properties_and_save(e, form_id, obj, properties, moda
 		}catch(e){}
 		
 		
-		//added for call campaign - functionality after updating fom call campaign
+		// added for call campaign - functionality after updating fom call
+		// campaign
 			if(CALL_CAMPAIGN.start ){
 				var id = $('#continueform input[name=id]').val();
 				if(CALL_CAMPAIGN.contact_update){
@@ -783,7 +791,7 @@ function serialize_contact_properties_and_save(e, form_id, obj, properties, moda
  * @param {String}
  *            template template key to load the form
  */
-function deserialize_contact(contact, template)
+function deserialize_contact(contact, template, callback)
 {
 
 	// Loads the form based on template value
@@ -924,7 +932,9 @@ function deserialize_contact(contact, template)
 
 		initializeEditContactListeners($('form', $('#content')).attr("id"));
 		
-
+		if (callback && typeof (callback) === "function"){
+			callback();
+		}
 	}, "#content");
 
 	
@@ -958,18 +968,15 @@ function fill_multi_options(field_element, element)
 			var name = $(sub_field_element).attr('name');
 			if (name == 'address-type')
 				$(sub_field_element).val(element.subtype);
-			//Commented this block to maintain consistency with country in address
-			/*else if (name == 'country')
-			{
-				if (json[name] && json[name].length > 2)
-				{
-					$("#country").remove();
-					$(field_element).append('<input type="text" name="country" id="country" class="form-control m-b-sm" placeholder="country">');
-					$("#country").val(json[name]);
-				}
-				else
-					$(sub_field_element).val(json[name]);
-			}*/
+			// Commented this block to maintain consistency with country in
+			// address
+			/*
+			 * else if (name == 'country') { if (json[name] && json[name].length >
+			 * 2) { $("#country").remove(); $(field_element).append('<input
+			 * type="text" name="country" id="country" class="form-control
+			 * m-b-sm" placeholder="country">'); $("#country").val(json[name]); }
+			 * else $(sub_field_element).val(json[name]); }
+			 */
 			else
 				$(sub_field_element).val(json[name]);
 
@@ -1080,11 +1087,12 @@ $(function()
 						flag = true ;
 					if(!flag){
 						$("#content .address-type,#address,#city,#state,#zip,#country").val('');
-						/*$("#content #address").val('');
-						$("#content #city").val('');
-						$("#content #state").val('');
-						$("#content #zip").val('');
-						$("#content #country").val('');*/
+						/*
+						 * $("#content #address").val(''); $("#content
+						 * #city").val(''); $("#content #state").val('');
+						 * $("#content #zip").val(''); $("#content
+						 * #country").val('');
+						 */
 					}
 				}
 			}
@@ -1126,7 +1134,8 @@ $(function()
 	{
 		e.preventDefault();
 		var id = $('#continueform input[name=id]').val();
-		//added for call campaign - functionality after updating fom call campaign
+		// added for call campaign - functionality after updating fom call
+		// campaign
 		if(CALL_CAMPAIGN.start && CALL_CAMPAIGN.contact_update){
 			CALL_CAMPAIGN.contact_update = false;
 			Backbone.history.loadUrl("#contact/" + id);
@@ -1170,7 +1179,7 @@ function add_contact_to_view(appView, model, isUpdate)
 
 	if (model.get('type') == 'COMPANY')
 	{
-		//Change the entity type to company
+		// Change the entity type to company
 		model.set({ "entity_type" : "company_entity" }, { silent : true });
 		if (appView.collection.get(model.id) != null) // update existing model
 			appView.collection.get(model.id).set(model);
@@ -1186,7 +1195,8 @@ function add_contact_to_view(appView, model, isUpdate)
 	{
 		if (!_agile_get_prefs('company_filter')) // check if in contacts view
 		{
-			if (!_agile_get_prefs('contact_filter')) // add model only if its in
+			if (!_agile_get_prefs('contact_filter')) // add model only if its
+														// in
 			// plain contact view, otherwise
 			// always hard reload
 			{
