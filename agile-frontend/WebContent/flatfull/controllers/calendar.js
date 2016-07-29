@@ -68,8 +68,7 @@ calendar : function()
 					}, $('#calendar-listers').find("#calendar-filters"));
 		});
 		
-		head.js(LIB_PATH + 'lib/jquery-ui.min.js', LIB_PATH + 'lib/fullcalendar.min.js', function()
-		{
+		_agile_library_loader.load_fullcalendar_libs(function(){
 			$('#calendar_event').html('');
 			showCalendar([]);
 			hideTransitionBar();

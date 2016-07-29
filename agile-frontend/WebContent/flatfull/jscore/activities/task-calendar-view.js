@@ -21,7 +21,10 @@ function getCalendarView() {
 						 *            fullCalendar
 						 * 
 						 */
-
+						monthNames: $.fn.datepicker.dates['en'].months,
+					    monthNamesShort: $.fn.datepicker.dates['en'].monthsShort,
+					    dayNames: $.fn.datepicker.dates['en'].days,
+					    dayNamesShort: $.fn.datepicker.dates['en'].daysShort,
 						events : function(start, end, callback)
 						{
 							var tasksURL = "core/api/tasks/calendar/"

@@ -1,5 +1,6 @@
 cd ../WebContent
 cat flatfull/tpl/*.html > tpl/min/flatfull/tpl.js
+cat flatfull/tpl/dashboards/*.html >  tpl/min/flatfull/dashboards.js
 cat flatfull/tpl/settings/*.html >  tpl/min/flatfull/settings.js
 cat flatfull/tpl/continue/*.html > tpl/min/flatfull/continue.js
 cat flatfull/tpl/deal-detail/*.html > tpl/min/flatfull/deal-detail.js

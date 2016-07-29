@@ -1240,13 +1240,11 @@ var portlet_utility = {
 													App_Portlets.refetchEvents = false;
 													App_Portlets.eventCalendar=$(this);
 													var that=$(this);
-																head
-					.js(
-							LIB_PATH + 'lib/jquery-ui.min.js', LIB_PATH + 
-							'lib/fullcalendar.min.js',
-							function() {
-													minicalendar(that);
-												});
+
+					_agile_library_loader.load_fullcalendar_libs(function(){
+								minicalendar(that);
+					});
+
 							});
 			break;
 		}

@@ -53,22 +53,6 @@ cat ../WebContent/helpcenter/controllers/app.js >> ../WebContent/jscore/min/flat
 #Localize
 java -jar agilelocalize.jar ../WebContent/jscore/min/flatfull ../WebContent/jscore/min en,es
 
-
-java -jar yuicompressor-2.4.7.jar ../WebContent/jscore/min/flatfull/js-all-min-1.js --line-break 10000 --type js -o  ../WebContent/jscore/min/flatfull/js-all-min-1.js
-
-java -jar yuicompressor-2.4.7.jar ../WebContent/jscore/min/flatfull/js-all-min-2.js --line-break 10000 --type js -o  ../WebContent/jscore/min/flatfull/js-all-min-2.js
-
-java -jar yuicompressor-2.4.7.jar ../WebContent/jscore/min/flatfull/js-all-min-3.js --line-break 10000 --type js -o  ../WebContent/jscore/min/flatfull/js-all-min-3.js
-
-java -jar yuicompressor-2.4.7.jar ../WebContent/jscore/min/flatfull/js-all-min-4.js --line-break 10000 --type js -o  ../WebContent/jscore/min/flatfull/js-all-min-4.js
-
-java -jar yuicompressor-2.4.7.jar ../WebContent/jscore/min/flatfull/helpcenter-all-min.js --line-break 10000 --type js -o  ../WebContent/jscore/min/flatfull/helpcenter-all-min.js
-
-#Minify socialsuite
-java -jar yuicompressor-2.4.7.jar ../WebContent/jscore/min/flatfull/social-suite-all-min.js --line-break 10000 --type js -o  ../WebContent/jscore/min/flatfull/social-suite-all-min.js
-cat ../WebContent/tpl/min/precompiled/flatfull/socialsuite.js >  ../WebContent/tpl/min/precompiled/flatfull/socialsuite-all.js
-cat ../WebContent/jscore/min/flatfull/social-suite-all-min.js >> ../WebContent/tpl/min/precompiled/flatfull/socialsuite-all.js
-
 #Minify tickets
 java -jar yuicompressor-2.4.7.jar ../WebContent/jscore/min/flatfull/tickets-min.js --line-break 10000 --type js -o  ../WebContent/jscore/min/flatfull/tickets-min.js
 

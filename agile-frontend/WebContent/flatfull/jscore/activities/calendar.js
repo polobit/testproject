@@ -210,7 +210,10 @@ function showCalendar(users)
 						 *            fullCalendar
 						 * 
 						 */
-
+						monthNames: $.fn.datepicker.dates['en'].months,
+					    monthNamesShort: $.fn.datepicker.dates['en'].monthsShort,
+					    dayNames: $.fn.datepicker.dates['en'].days,
+					    dayNamesShort: $.fn.datepicker.dates['en'].daysShort,
 						eventSources : [
 								{ 	
 									events : function(start, end, callback)

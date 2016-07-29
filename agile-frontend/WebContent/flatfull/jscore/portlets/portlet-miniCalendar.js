@@ -33,7 +33,10 @@ function minicalendar(el)
 		{
 			month : 'MMM yyyy',
 		},
-
+		monthNames: $.fn.datepicker.dates['en'].months,
+	    monthNamesShort: $.fn.datepicker.dates['en'].monthsShort,
+	    dayNames: $.fn.datepicker.dates['en'].days,
+	    dayNamesShort: $.fn.datepicker.dates['en'].daysShort,
 		eventSources :[
 		               {
 		            	   events : function(start, end, callback)
@@ -56,7 +59,7 @@ function minicalendar(el)
 		            		   var date=new Date();
 		            		   var todayDate=new Date(date.getFullYear(), date.getMonth(), date.getDate(),00,00,00);
 		            		   var endDate=new Date(date.getFullYear(), date.getMonth(), date.getDate(),23,59,59);
-		            		   var todayDiv='<div class="show p-t-xs text-md text-center">Today </div><ul class="list"></ul>';
+		            		   var todayDiv='<div class="show p-t-xs text-md text-center">{{agile_lng_translate "calendar" "Today"}} </div><ul class="list"></ul>';
 		            		   if(_agile_get_prefs('current_date_calendar')!=null)
 		            		   {
 		            			   var days = $.fn.datepicker.dates['en'].daysShort;
@@ -411,7 +414,7 @@ function minicalendar(el)
 		            		   var days = $.fn.datepicker.dates['en'].daysShort;
 		            		   var current_date = new Date();
 		            		   if(date.getFullYear()==current_date.getFullYear() && date.getMonth()==current_date.getMonth() && date.getDate()==current_date.getDate()){
-		            			   $(el).find('.events_show').empty().append('<div class="show p-t-xs text-md text-center">Today</div><ul class="list"></ul>');
+		            			   $(el).find('.events_show').empty().append('<div class="show p-t-xs text-md text-center">{{agile_lng_translate "calendar" "Today"}}</div><ul class="list"></ul>');
 		            		   }
 		            		   else{
 		            			   $(el).find('.events_show').empty().append('<div class="show p-t-xs text-md text-center">'+days[date.getDay()]+', ' +date.format('dd mmm')+' </div><ul class="list"></ul>');
