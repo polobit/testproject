@@ -165,15 +165,7 @@ function getTemplateUrls(templateName)
 	}
 	if (templateName.indexOf("socialsuite") == 0)
 	{
-		if(HANDLEBARS_PRECOMPILATION)
-			template_relative_urls.push("socialsuite-all.js");
-		else
-		{
-			template_relative_urls.push("socialsuite.js");
-		}
-
-		if (HANDLEBARS_PRECOMPILATION)
-			template_relative_urls.push("socialsuite.html");
+		template_relative_urls.push("socialsuite.js");
 	}
 
 

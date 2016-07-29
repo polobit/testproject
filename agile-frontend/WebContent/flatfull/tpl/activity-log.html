@@ -1068,7 +1068,7 @@ Added {{custom3}} {{agile_lng_translate 'contacts-view' 'contact-to-campaign'}}<
 <!-- Start of ticketing activities-->
 	{{#if_equals "TICKET" entity_type}}
 		{{#if_equals "TICKET_CREATED" activity_type}}
-			{{agile_lng_translate 'menu' 'new'}} <a href="#ticket/{{entity_id}}" >ticket#{{entity_id}}</a> {{agile_lng_translate 'contacts-view' 'created'}}<br/>
+			{{agile_lng_translate 'menu' 'new'}} <a href="#ticket/{{entity_id}}" >{{agile_lng_translate 'activities' 'ticket'}}#{{entity_id}}</a> {{agile_lng_translate 'contacts-view' 'created'}}<br/>
 			<small class="activities_second_line m-t-none text-sm">
 				{{#if this.entityObject}}  
 			   <a href="" class="ticket-activity-notes" data-id="{{id}}">{{this.entityObject.subject}}</a>	  			
@@ -1076,14 +1076,14 @@ Added {{custom3}} {{agile_lng_translate 'contacts-view' 'contact-to-campaign'}}<
 			</small>
 		{{/if_equals}}
 		{{#if_equals "TICKET_DELETED" activity_type}}
-			<a href="#ticket/{{entity_id}}">Ticket#{{entity_id}}</a> {{agile_lng_translate 'contacts-view' 'has-been-deleted'}} <span class="inline-block first-letter-cap">{{custom2}}</span><br/>
+			<a href="#ticket/{{entity_id}}">{{agile_lng_translate 'contact-details' 'ticket'}}#{{entity_id}}</a> {{agile_lng_translate 'contacts-view' 'has-been-deleted'}} <span class="inline-block first-letter-cap">{{custom2}}</span><br/>
 			<small class="activities_second_line m-t-none text-sm">
 			 	<i class="icon-trash"></i>{{agile_lng_translate 'contacts-view' 'ticket-deleted'}}
 			</small> 
 		{{/if_equals}}
 		{{#if_equals "TICKET_ASSIGNED" activity_type}}
 			{{#if user_name}}
-				{{user_name}} {{agile_lng_translate 'contacts-view' 'assigned'}} <a href="#ticket/{{entity_id}}">ticket#{{entity_id}}</a> {{agile_lng_translate 'contacts-view' 'to'}} 
+				{{user_name}} {{agile_lng_translate 'contacts-view' 'assigned'}} <a href="#ticket/{{entity_id}}">{{agile_lng_translate 'activities' 'ticket'}}#{{entity_id}}</a> {{agile_lng_translate 'contacts-view' 'to'}} 
 				<span>{{custom2}}</span>
 				</small>  
 			{{else}}
@@ -1095,7 +1095,7 @@ Added {{custom3}} {{agile_lng_translate 'contacts-view' 'contact-to-campaign'}}<
 		{{/if_equals}}
 		{{#if_equals "TICKET_ASSIGNEE_CHANGED" activity_type}}
 			{{#if user_name}}
-				{{user_name}} {{agile_lng_translate 'contacts-view' 'changed'}} <a href="#ticket/{{entity_id}}">ticket#{{entity_id}}</a> {{agile_lng_translate 'contacts-view' 'assignee-to'}} 
+				{{user_name}} {{agile_lng_translate 'contacts-view' 'changed'}} <a href="#ticket/{{entity_id}}">{{agile_lng_translate 'activities' 'ticket'}}#{{entity_id}}</a> {{agile_lng_translate 'contacts-view' 'assignee-to'}} 
 					<span>{{custom2}}</span>
 			{{else}}
 				<a href="#ticket/{{entity_id}}">{{agile_lng_translate 'contact-details' 'ticket'}}#{{entity_id}}</a> {{agile_lng_translate 'contacts-view' 'assignee-changed-to'}} <span>{{custom2}}</span>
@@ -1121,7 +1121,7 @@ Added {{custom3}} {{agile_lng_translate 'contacts-view' 'contact-to-campaign'}}<
 			{{#if user_name}}
 				{{user_name}} {{agile_lng_translate 'contacts-view' 'changed'}} <a href="#ticket/{{entity_id}}">{{agile_lng_translate 'contact-details' 'ticket'}}#{{entity_id}}</a> {{agile_lng_translate 'contacts-view' 'status-to'}} <span class="inline-block first-letter-cap">{{custom2}}</span>
 			{{else}}
-				<a href="#ticket/{{entity_id}}">Ticket#{{entity_id}}</a> {{agile_lng_translate 'contacts-view' 'status-changed-to'}} <span class="inline-block first-letter-cap">{{custom2}}</span>
+				<a href="#ticket/{{entity_id}}">{{agile_lng_translate 'contact-details' 'ticket'}}#{{entity_id}}</a> {{agile_lng_translate 'contacts-view' 'status-changed-to'}} <span class="inline-block first-letter-cap">{{custom2}}</span>
 			{{/if}}
 			<br/><small class="activities_second_line m-t-none text-sm">
 				{{#if this.entityObject}}{{this.entityObject.subject}}{{else}}{{agile_lng_translate 'contacts-view' 'ticket-deleted'}}{{/if}}
@@ -1139,7 +1139,7 @@ Added {{custom3}} {{agile_lng_translate 'contacts-view' 'contact-to-campaign'}}<
 		{{/if_equals}}
 		{{#if_equals "TICKET_TYPE_CHANGE" activity_type}}
 			{{#if user_name}}
-				{{user_name}} {{agile_lng_translate 'contacts-view' 'changed'}} <a href="#ticket/{{entity_id}}">ticket#{{entity_id}}</a> {{agile_lng_translate 'contacts-view' 'type-to'}} <span class="inline-block first-letter-cap">{{custom2}}</span>
+				{{user_name}} {{agile_lng_translate 'contacts-view' 'changed'}} <a href="#ticket/{{entity_id}}">{{agile_lng_translate 'activities' 'ticket'}}#{{entity_id}}</a> {{agile_lng_translate 'contacts-view' 'type-to'}} <span class="inline-block first-letter-cap">{{custom2}}</span>
 			{{else}}
 				<a href="#ticket/{{entity_id}}">{{agile_lng_translate 'contact-details' 'ticket'}}#{{entity_id}}</a> {{agile_lng_translate 'contacts-view' 'type-changed-to'}} <span class="inline-block first-letter-cap">{{custom2}}</span>
 			{{/if}}
@@ -1151,7 +1151,7 @@ Added {{custom3}} {{agile_lng_translate 'contacts-view' 'contact-to-campaign'}}<
 			{{#if user_name}}
 				{{user_name}} {{agile_lng_translate 'contacts-view' 'added'}} <span class="inline-block first-letter-cap">{{custom2}}</span> {{agile_lng_translate 'contacts-view' 'label-to'}} <a href="#ticket/{{entity_id}}">{{agile_lng_translate 'contact-details' 'ticket'}}#{{entity_id}}</a>
 			{{else}}
-				{{agile_lng_translate 'contacts-view' 'label'}} <span class="inline-block first-letter-cap">{{custom2}}</span> {{agile_lng_translate 'contacts-view' 'has-been-added-to'}} <a href="#ticket/{{entity_id}}">ticket#{{entity_id}}</a>
+				{{agile_lng_translate 'contacts-view' 'label'}} <span class="inline-block first-letter-cap">{{custom2}}</span> {{agile_lng_translate 'contacts-view' 'has-been-added-to'}} <a href="#ticket/{{entity_id}}">{{agile_lng_translate 'activities' 'ticket'}}#{{entity_id}}</a>
 			{{/if}}
 			<br/><small class="activities_second_line m-t-none text-sm">
 				{{#if this.entityObject}}{{this.entityObject.subject}}{{else}}{{agile_lng_translate 'contacts-view' 'ticket-deleted'}}{{/if}}
@@ -1185,7 +1185,7 @@ Added {{custom3}} {{agile_lng_translate 'contacts-view' 'contact-to-campaign'}}<
 						</a>   
 					{{/toLinkTrigger}}
 				{{/stringToJSON}}
-			{{/if}} {{agile_lng_translate 'contacts-view' 'replied-to'}} <a href="#ticket/{{entity_id}}">ticket#{{entity_id}}</a><br/>
+			{{/if}} {{agile_lng_translate 'contacts-view' 'replied-to'}} <a href="#ticket/{{entity_id}}">{{agile_lng_translate 'activities' 'ticket'}}#{{entity_id}}</a><br/>
 			{{#if this.entityObject}}
 			<small class="activities_second_line m-t-none text-sm">  
 			    <a href="" class="ticket-activity-notes" data-id="{{id}}">{{this.entityObject.subject}}</a></small>
@@ -1215,7 +1215,7 @@ Added {{custom3}} {{agile_lng_translate 'contacts-view' 'contact-to-campaign'}}<
 			{{#if user_name}}
 				{{user_name}} {{agile_lng_translate 'contacts-view' 'marked'}} <a href="#ticket/{{entity_id}}">{{agile_lng_translate 'contact-details' 'ticket'}}#{{entity_id}}</a> {{agile_lng_translate 'contacts-view' 'as-unfavorite'}}
 			{{else}}
-				<a href="#ticket/{{entity_id}}">Ticket#{{entity_id}}</a> {{agile_lng_translate 'contacts-view' 'marked-as-unfavorite'}}
+				<a href="#ticket/{{entity_id}}">{{agile_lng_translate 'contact-details' 'ticket'}}#{{entity_id}}</a> {{agile_lng_translate 'contacts-view' 'marked-as-unfavorite'}}
 			{{/if}}
 			<br/><small class="activities_second_line m-t-none text-sm">
 				{{#if this.entityObject}}{{this.entityObject.subject}}{{else}}{{agile_lng_translate 'contacts-view' 'ticket-deleted'}}{{/if}}
@@ -1225,7 +1225,7 @@ Added {{custom3}} {{agile_lng_translate 'contacts-view' 'contact-to-campaign'}}<
 			{{#if user_name}}
 				{{user_name}} marked <a href="#ticket/{{entity_id}}">{{agile_lng_translate 'contact-details' 'ticket'}}#{{entity_id}}</a> {{agile_lng_translate 'contacts-view' 'as-spam'}}
 			{{else}}
-				<a href="#ticket/{{entity_id}}">Ticket#{{entity_id}}</a> {{agile_lng_translate 'contacts-view' 'marked-as-spam'}}
+				<a href="#ticket/{{entity_id}}">{{agile_lng_translate 'contact-details' 'ticket'}}#{{entity_id}}</a> {{agile_lng_translate 'contacts-view' 'marked-as-spam'}}
 			{{/if}}
 			<br/><small class="activities_second_line m-t-none text-sm">
 				{{#if this.entityObject}}{{this.entityObject.subject}}{{else}}{{agile_lng_translate 'contacts-view' 'ticket-deleted'}}{{/if}}

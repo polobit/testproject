@@ -291,7 +291,7 @@ var deal_bulk_actions = {
 							.find('#bulk-select')
 							.show()
 							.html(
-									"Selected " + deal_bulk_actions.numberWithCommas(App_Deals.opportunityCollectionView.collection.length) + " deals. <a id='select-all-available-deals' class='text-info' href='#'>{{agile_lng_translate 'portlets' 'select-all'}} " + deals_count_with_commas + " deals</a>");
+									"{{agile_lng_translate 'companies-view' 'selected'}} " + deal_bulk_actions.numberWithCommas(App_Deals.opportunityCollectionView.collection.length) + " {{agile_lng_translate 'deals' 'deals-sm'}}. <a id='select-all-available-deals' class='text-info' href='#'>{{agile_lng_translate 'portlets' 'select-all'}} " + deals_count_with_commas + " deals</a>");
 			}
 			else
 			{

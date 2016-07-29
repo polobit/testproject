@@ -744,7 +744,7 @@ function killAllPreviousRequests()
 }
 function show_no_email_alert()
 {
-	$('#mail', App_Contacts.contactDetailView.el).html('<div class="alert alert-danger m-t-sm m-sm"><a class="close" data-dismiss="alert" href="#">&times;</a>Sorry! this contact has no email to get the mails.</div>');
+	$('#mail', App_Contacts.contactDetailView.el).html('<div class="alert alert-danger m-t-sm m-sm"><a class="close" data-dismiss="alert" href="#">&times;</a>{{agile_lng_translate "contact-details" "sorry-this-contact-has-no-email-to-get-the-mails"}}</div>');
 }
 
 function show_resubscribe_modal(){

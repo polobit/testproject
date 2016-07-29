@@ -435,7 +435,7 @@
                                         </small></div>
                                </label>
                                {{#if_equals this.version "v1"}} {{else}} {{/if_equals}}
-                                <label class="i-checks i-checks-sm checkbox done">
+                                <label class="i-checks i-checks-sm checkbox none">
                                     <input type="checkbox" name="scopes-temp" class="required" value="CASES" {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
                                     {{agile_lng_translate 'contact-details' 'cases'}}<br/>
                                     <div style="margin-left:6px;"><small>{{agile_lng_translate 'admin-settings-users' 'log-and-address-customer-issues'}}

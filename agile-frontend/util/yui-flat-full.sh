@@ -54,24 +54,24 @@ cat ../WebContent/helpcenter/controllers/app.js >> ../WebContent/jscore/min/flat
 java -jar agilelocalize.jar ../WebContent/jscore/min/flatfull ../WebContent/jscore/min en,es
 
 #Minify tickets
-java -jar yuicompressor-2.4.7.jar ../WebContent/jscore/min/flatfull/tickets-min.js --line-break 10000 --type js -o  ../WebContent/jscore/min/flatfull/tickets-min.js
+#java -jar yuicompressor-2.4.7.jar ../WebContent/jscore/min/flatfull/tickets-min.js --line-break 10000 --type js -o  ../WebContent/jscore/min/flatfull/tickets-min.js
 
 ########################################### En Changes #######
-java -jar yuicompressor-2.4.7.jar ../WebContent/jscore/min/locales/en/js-all-min-1.js --line-break 10000 --type js -o  ../WebContent/jscore/min/locales/en/js-all-min-1.js
+#java -jar yuicompressor-2.4.7.jar ../WebContent/jscore/min/locales/en/js-all-min-1.js --line-break 10000 --type js -o  ../WebContent/jscore/min/locales/en/js-all-min-1.js
 
-java -jar yuicompressor-2.4.7.jar ../WebContent/jscore/min/locales/en/js-all-min-2.js --line-break 10000 --type js -o  ../WebContent/jscore/min/locales/en/js-all-min-2.js
+#java -jar yuicompressor-2.4.7.jar ../WebContent/jscore/min/locales/en/js-all-min-2.js --line-break 10000 --type js -o  ../WebContent/jscore/min/locales/en/js-all-min-2.js
 
-java -jar yuicompressor-2.4.7.jar ../WebContent/jscore/min/locales/en/js-all-min-3.js --line-break 10000 --type js -o  ../WebContent/jscore/min/locales/en/js-all-min-3.js
+#java -jar yuicompressor-2.4.7.jar ../WebContent/jscore/min/locales/en/js-all-min-3.js --line-break 10000 --type js -o  ../WebContent/jscore/min/locales/en/js-all-min-3.js
 
-java -jar yuicompressor-2.4.7.jar ../WebContent/jscore/min/locales/en/js-all-min-4.js --line-break 10000 --type js -o  ../WebContent/jscore/min/locales/en/js-all-min-4.js
+#java -jar yuicompressor-2.4.7.jar ../WebContent/jscore/min/locales/en/js-all-min-4.js --line-break 10000 --type js -o  ../WebContent/jscore/min/locales/en/js-all-min-4.js
 
-java -jar yuicompressor-2.4.7.jar ../WebContent/jscore/min/locales/en/helpcenter-all-min.js --line-break 10000 --type js -o  ../WebContent/jscore/min/locales/en/helpcenter-all-min.js
+#java -jar yuicompressor-2.4.7.jar ../WebContent/jscore/min/locales/en/helpcenter-all-min.js --line-break 10000 --type js -o  ../WebContent/jscore/min/locales/en/helpcenter-all-min.js
 
 #Minify socialsuite
-java -jar yuicompressor-2.4.7.jar ../WebContent/jscore/min/locales/en/social-suite-all-min.js --line-break 10000 --type js -o  ../WebContent/jscore/min/locales/en/social-suite-all-min.js
+#java -jar yuicompressor-2.4.7.jar ../WebContent/jscore/min/locales/en/social-suite-all-min.js --line-break 10000 --type js -o  ../WebContent/jscore/min/locales/en/social-suite-all-min.js
 
 #Minify tickets
-java -jar yuicompressor-2.4.7.jar ../WebContent/jscore/min/locales/en/tickets-min.js --line-break 10000 --type js -o  ../WebContent/jscore/min/locales/en/tickets-min.js
+#java -jar yuicompressor-2.4.7.jar ../WebContent/jscore/min/locales/en/tickets-min.js --line-break 10000 --type js -o  ../WebContent/jscore/min/locales/en/tickets-min.js
 
 ########################################### En Changes #######
 java -jar yuicompressor-2.4.7.jar ../WebContent/jscore/min/locales/es/js-all-min-1.js --line-break 10000 --type js -o  ../WebContent/jscore/min/locales/es/js-all-min-1.js

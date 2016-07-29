@@ -975,7 +975,7 @@ function fill_multi_options(field_element, element)
 
 			if(name == 'country' && !$(sub_field_element).val())
 			{
-				var warning_msg_tpl = Handlebars.compile("<span class='country-mismatch-error' style='color:#B94A48; font-size:14px'><i>Country '{{country}}' doesn't match with our standard records. Please update the country using the dropdown.</i></span>");
+				var warning_msg_tpl = Handlebars.compile("<span class='country-mismatch-error' style='color:#B94A48; font-size:14px'><i>{{agile_lng_translate 'contacts-view' 'country'}} {{country}} {{agile_lng_translate 'country' 'not-found-error'}}</i></span>");
 				$(sub_field_element).after(warning_msg_tpl(json));
 			}
 		});

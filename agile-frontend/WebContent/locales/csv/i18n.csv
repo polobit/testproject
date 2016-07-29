@@ -49,7 +49,7 @@ referrals.about-agile,It is a combination of important features like email marke
 admin-settings-stats.this-can-happen-for-various-reasons,This can happen for various reasons including incorrect number&#44; improper number format&#44; queue overflows or  account suspensions. Twilio does not charge you for failed messages.,Esto puede ocurrir por varias razones incluyendo el número incorrecto&#44; formato de número incorrecto&#44; desborde de colas o suspensiones de cuentas. Twilio no cobra por mensajes fallidos.
 tickets.ticket-groups-desc-1,Every group will generate a unique Forwarding Email address which is used to configure your Help Desk system. See how to forward from existing email address to your help desk.,Cada grupo generará una dirección única de reenvío de correos que será utilizada para configurar tu sistema de Help Desk. Ver cómo reenviar correos de tu cuenta de email existente a tu help desk.´
 cases.cases-desc,Track and resolve customer issues effectively with cases. Log a case when customers ask questions&#44; report bugs&#44; or have complaints. Keep track of the progress till resolution.,Realice un seguimiento y resuelva los problemas de los clientes con eficacia a través de casos. Registre un caso cuando los clientes hagan preguntas&#44; informen de errores&#44; o si tienen quejas. Realicr un seguimiento de los progresos hasta la resolución.
-portlets.deals-pad-content-desc,You either do not have any deals currently&#44; or there are none matching the filter conditions. Deals are sales opportunities you track continuously throughout its lifecycle.,Ya sea que no cuentas con ninguna oferta actualmente&#44; o bien&#44; ninguna  corresponde a las condiciones de filtro. Las ofertas son las oportunidades de ventasa las que puedes realiazr un seguimiento de forma continua a lo largo de su ciclo de vida.
+portlets.deals-pad-content-desc,You either do not have any deals currently&#44; or there are none matching the filter conditions.,Ya sea que no cuentas con ninguna oferta actualmente&#44; o bien&#44; ninguna  corresponde a las condiciones de filtro.
 widjets.sync-your-agilecrm-calendar-with-apple,Sync your AgileCRM Calendar with Apple iCal&#44; Google Calendar&#44; Microsoft Outlook 2007 (or later) or another application that supports iCalendar format using the url below.,Sincronizar su calendario AgileCRM con Apple iCal&#44; Google Calendar Microsoft Outlook 2007 (o posterior) u otra aplicación que soporta el formato iCalendar con la siguiente URL.
 bulk-actions.no-pem-to-change-owners,You may not have permission to update some of the contacts selected. Proceeding with this operation will change the owner for only the contacts you are allowed to update.,Puede que no tenga permiso para actualizar algunos de los contactos seleccionados. De proceder a esta operación cambiará el propietario para que sólo los contactos que usted está autorizado a modificar.
 report-view.campaigns-overview-explination,Get a periodic email digest of various campaigns launched in Agile CRM. This includes Emails sent&#44; opened&#44; unsubscribe&#44 bounced (hard & soft) and Spam complaints etc.,Obtener un correo electrónico a digerir periódica de diversas campañas lanzadas en Agile CRM. Esto incluye los correos electrónicos enviados&#44; abierto&#44; para darse de baja&#44; rebotaban (duros y blandos) y las quejas de spam&#44; etc.
@@ -569,7 +569,7 @@ customfields.label-exists,type custom field exists with same label. Choose same 
 admin-settings-integrations.unbounce-content,Push Unbounce landing page form data as a contact in Agile.,Haga Push Unbounce a los datos del formulario de la  página de landing como un contacto en Agile
 plan-and-upgrade.credit-balance-desc,Your credit balance will be utilized in next billing cycle.,El saldo de su crédito se utilizará en el próximo ciclo de facturación.
 prefs-data-sync.widget-script-desc,Shows you the script for a call based on your preset rules.,Le muestra la secuencia de comandos para una llamada sobre la base de sus reglas preestablecidas.
-contacts.invalid-viewer,Sorry$#44; you do not have permission to view this Contact.,Lo sentimos $ # 44; usted no tiene permiso para ver este contacto.
+contacts.invalid-viewer,Sorry&#44; you do not have permission to view this Contact.,Lo sentimos $ # 44; usted no tiene permiso para ver este contacto.
 other.and-here-some-amazing-content,And here's some amazing content. It's very engaging. Right?,Y aquí hay algo de contenido increíble. Es muy atractivo. ¿Derecha?
 admin-settings-integrations.js-api-content,Use our JS API to push data into Agile from your web forms.,Utilizar nuestra API JS para empujar datos en ágil de sus formularios web.
 other.click-on-get-settings-to-register-domain,Please click on Get Settings first to register your domain.,Por favor&#44; haga clic en Mostrar configuración primero en registrar su dominio.
@@ -716,6 +716,7 @@ campaigns.ticket-closed-desc,Runs a Campaign on a contact When ticket is closed.
 report-view.average-call-reports-details,Know the average time spent on a call by each user.,Conocer el tiempo promedio de llamadas por cada usuario
 campaigns.unsubscribed-desc,Run a campaign on a contact when they unsubscribe.,Realizar una campaña en un contacto al darse de baja.
 contact-details.sorry-this-contact-has-no-email-to-get-the-stats,Sorry! this contact has no email to get the stats.,¡Lo siento! este contacto no tiene correo electrónico para obtener las estadísticas.
+contact-details.sorry-this-contact-has-no-email-to-get-the-mails,Sorry! this contact has no email to get the mails,¡Lo siento! este contacto no tiene correo electrónico para recibir los correos
 campaigns.spam-report-desc,Run a campaign on a contact when they report spam.,Realiza una campaña en un contacto cuando reportan spam.
 tweets.undo-retweet-confirm,Are you sure you want to undo retweet this status?,¿Seguro que desea deshacer Retweet este estatus?
 welcome.add-tracks-to-schedule-a-meeting,Add a task. To schedule a meeting&#44; create an event,Agregar una tarea. Para programar una reunión&#44; crear un evento
@@ -852,7 +853,7 @@ admin-settings-users.delete-own-contacts-and-other-user-contacts,Delete own cont
 billing.email-quota-exceed,Sorry&#44; your emails quota has been utilized.,Lo sentimos&#44; la cuota de mensajes de correo electrónico se ha utilizado.
 contacts-view.import-upto-10&#44;000-contacts-from-a-CSV-file,Import upto 10&#44;000 contacts from a CSV file,Importar hasta 10.000 contactos desde un archivo CSV
 widgets.create-new-text-custom-field,Or&#44; you can create a new text custom field.,O&#44; puedes crear un nuevo campo de texto personalizado.
-reasons.to-know-the-status-of-the-request,To know the status of the request&#44;  please ,Para conocer el estado de la solicitud&#44; por favor
+reasons.to-know-the-status-of-the-request,To know the status of the request&#44;  please,Para conocer el estado de la solicitud&#44; por favor
 calendar.saving-prefs-error,There was an error in saving your settings.,Se ha producido un error en la configuración de ahorro.
 Plan-and-upgrade.sorry-we-are-unable-to-sucscribe,Sorry&#44 we are unable to subscribe you to,Lo sentimos&#44; no podemos realizar la suscripción a
 tweets.delete-confirm,Are you sure you want to delete this tweet?,¿Está seguro de que quiere eliminar este tweet?
@@ -4448,7 +4449,7 @@ admin-settings-custom-fields.NUMBER,Number,Número
 months.August,August,Agosto
 campaigns.points,Points,Puntos
 contacts-view.oldest,Oldest,Más antiguo
-contacts-view.is-not,isn\’t,no es
+contacts-view.is-not,isn’t,no es
 prefs-settings.domain,Domain,Dominio
 prefs-notifications.silent,Silent,Silencio
 contact-details.events,Events,Eventos
@@ -4916,3 +4917,10 @@ contact-details.by,by,por
 contact-details.in,in,en
 contact-details.on,on,en
 contact-details.to,To,A
+country.not-found-error,doesn’t match with our standard records. Please update the country using the dropdown.,no coincide con nuestros registros estándar . Por favor&#44; actualice el país usando el menú desplegable.
+contact-details.pages-visited,Pages Visited,
+contact-details.page-view-analytics,Page View Analytics,
+timeline.email-sent-from,Email sent From:,
+deal-filters.not-applicable,This condition is not applicable for Milestone View.,
+deal-filters.add-new,Add Opportunity Filter,
+portlets.deals-pad-content-desc-2,Deals are sales opportunities you track continuously throughout its lifecycle., Las ofertas son las oportunidades de ventasa las que puedes realiazr un seguimiento de forma continua a lo largo de su ciclo de vida.
