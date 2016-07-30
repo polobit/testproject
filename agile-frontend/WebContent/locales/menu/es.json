@@ -48,5 +48,6 @@
             "refer" : "Recomendar un amigo",
             "call": "Call",
             "ticket": "Ticket",
+            "tasks-due" : "tareas debido",
         }
 }

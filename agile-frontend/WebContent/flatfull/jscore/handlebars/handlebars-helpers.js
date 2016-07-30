@@ -7403,6 +7403,31 @@ Handlebars.registerHelper('get_default_label', function(label, module_name, opti
 
 });
 
+Handlebars.registerHelper('get_widget_translation', function(widget_name, type, options)
+{
+	if(!type)
+		  type = "content";
+
+	if(_Agile_Resources_Json["widgets"] && _Agile_Resources_Json["widgets"][widget_name + "-" + type])
+		return _Agile_Resources_Json["widgets"][widget_name + "-" + type];
+	else
+		return widget_name + "-" + type;
+
+});
+
+Handlebars.registerHelper('get_datasync_translation', function(sync_name, type, options)
+{
+	if(!type)
+		  type = "content";
+
+	console.log("sync_name = " + sync_name + " : " + type);
+	if(_Agile_Resources_Json["prefs-data-sync"] && _Agile_Resources_Json["prefs-data-sync"][sync_name + "-" + type])
+		return _Agile_Resources_Json["prefs-data-sync"][sync_name + "-" + type];
+	else
+		return sync_name + "-" + type;
+
+});
+
 function getTableLanguageConvertHeader(element){
 	if(!element)
 		 return element;

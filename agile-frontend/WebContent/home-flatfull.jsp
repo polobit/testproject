@@ -469,7 +469,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
     <a href="#tasks" onclick="Agile_GA_Event_Tracker.track_event('Tasks Option in Nav Bar')">
       <i class="icon-list" data-original-title="" title=""></i>
       <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "tasks") %></span>
-      <span title="Tasks due" class="navbar_due_tasks pull-right tasks-span-top">
+      <span title="<%=LanguageUtil.getLocaleJSONValue(localeJSON, "tasks-due") %>" class="navbar_due_tasks pull-right tasks-span-top">
           <span  id="due_tasks_count" class="badge badge-sm bg-danger"></span>
       </span>
     </a>
@@ -618,7 +618,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
     <a href="#tasks" onclick="Agile_GA_Event_Tracker.track_event('Tasks Option in Nav Bar')">
       <i class="icon-list" data-original-title="" title=""></i>
       <span>Tasks</span>
-      <span title="Tasks due" class="navbar_due_tasks pull-right tasks-span-top">
+      <span title="<%=LanguageUtil.getLocaleJSONValue(localeJSON, "tasks-due") %>" class="navbar_due_tasks pull-right tasks-span-top">
           <span  id="due_tasks_count" class="badge badge-sm bg-danger"></span>
       </span>
     </a>
@@ -649,7 +649,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
     <a href="#tasks" onclick="Agile_GA_Event_Tracker.track_event('Tasks Option in Nav Bar')">
       <i class="icon-list" data-original-title="" title=""></i>
       <span>Tasks</span>
-      <span title="Tasks due" class="navbar_due_tasks pull-right tasks-span-top">
+      <span title="<%=LanguageUtil.getLocaleJSONValue(localeJSON, "tasks-due") %>" class="navbar_due_tasks pull-right tasks-span-top">
           <span  id="due_tasks_count" class="badge badge-sm bg-danger"></span>
       </span>
     </a>

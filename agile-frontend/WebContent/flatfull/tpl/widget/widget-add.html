@@ -5,7 +5,7 @@
 		   <center>  
 			    <span style="font-size: 24px; height: 47px; text-align:center;vertical-align: middle; display:inline-block;">
 				    <span style="margin-top:6px; display:inline-block;">
-				    	<img src="{{logo_url}}"  class="img-responsive inline-block" style="margin-right: 4px; margin-top:-5px; width:25px; height:25px;">{{agile_lng_translate 'widgets' 'SIP'}}
+				    	<img src="{{logo_url}}"  class="img-responsive inline-block" style="margin-right: 4px; margin-top:-5px; width:25px; height:25px;">{{get_widget_translation name 'name'}}
 				    </span>
 					<span class="label label-sm bg-danger" style="margin: 5px;font-size: 11px;top: -6px;position: relative;">{{agile_lng_translate 'deal-view' 'beta'}}</span>
 			    </span>
@@ -15,7 +15,7 @@
 		    <center>    
 		       <span style="font-size: 24px; height: 47px; text-align:center;vertical-align: middle;">
 			       <span style="margin-top:6px; display:inline-block; padding-bottom: 7px;">
-			       		<img src="{{logo_url}}" class="img-responsive inline-block" style="margin-right: 4px; margin-top:-3px; width:25px; height:25px;">{{agile_lng_translate 'widgets' 'call-script'}}
+			       		<img src="{{logo_url}}" class="img-responsive inline-block" style="margin-right: 4px; margin-top:-3px; width:25px; height:25px;">{{get_widget_translation name 'name'}}
 			       </span>
 		       </span>
 		     </center>
@@ -24,7 +24,7 @@
 						<center>  
 		  					<span style="font-size: 24px;width: 113px;height: 50px; text-align:center;vertical-align: middle;">
 		  						<span>
-		  							<img src="{{logo_url}}" style="width: 40px; height: 40px;margin-right: 4px;margin-top: 1px;">{{agile_lng_translate 'widgets' 'bria'}}
+		  							<img src="{{logo_url}}" style="width: 40px; height: 40px;margin-right: 4px;margin-top: 1px;">{{get_widget_translation name 'name'}}
 		  						</span>
 		  					</span>
 						</center>  
@@ -33,7 +33,7 @@
 							<center>  
 				  				<span style="font-size: 24px;width: 135px;height: 50px; text-align:center;vertical-align: middle;">
 				  					<span>
-				  						<img src="{{logo_url}}" style="width: 40px; height: 40px;margin-right: 4px;margin-top: 1px;">{{agile_lng_translate 'contact-edit' 'skype'}}
+				  						<img src="{{logo_url}}" style="width: 40px; height: 40px;margin-right: 4px;margin-top: 1px;">{{get_widget_translation name 'name'}}
 				  					</span>
 				  				</span>
 								<!-- <span class="label label-sm bg-danger" style="margin: 5px;">Beta</span> -->
@@ -57,10 +57,10 @@
   </div>
   <div class="panel-body">
 	{{#if_equals name "Bria"}}
-  		 <div class="text-flow-ellipsis line-clamp line-clamp-4 widget-text" style="height:75px"  rel="tooltip" title="{{description}}">
+  		 <div class="text-flow-ellipsis line-clamp line-clamp-4 widget-text" style="height:75px"  rel="tooltip" title="{{get_widget_translation name 'content'}}">
     {{else}}
 		{{#if_equals name "Skype"}}
-			<div class="text-flow-ellipsis line-clamp line-clamp-4 widget-text" style="height:75px"  rel="tooltip" title="{{description}}">
+			<div class="text-flow-ellipsis line-clamp line-clamp-4 widget-text" style="height:75px"  rel="tooltip" title="{{get_widget_translation name 'content'}}">
 	 	{{else}}
 			<div class="text-flow-ellipsis line-clamp line-clamp-4 widget-text" style="height:85px"  rel="tooltip">
 		{{/if_equals}}
@@ -68,11 +68,11 @@
 		{{#if_equals widget_type "CUSTOM"}}
 			{{#if_equals name "Custom"}}
 			{{else}}
-				<center title="Widget display name"><h4 class="m-t-xxs m-b-xxs">{{#if display_name}}{{display_name}}{{else}}{{name}}{{/if}}</h4></center>
-				<center title="Widget name"><span class="text-xs m-b-xs">{{name}}</span></center>
+				<center title="{{agile_lng_translate 'widgets' 'display-name'}}"><h4 class="m-t-xxs m-b-xxs">{{#if display_name}}{{get_widget_translation name 'display_name'}}{{else}}{{get_widget_translation name 'name'}}{{/if}}</h4></center>
+				<center title="{{agile_lng_translate 'widgets' 'widget-name'}}"><span class="text-xs m-b-xs">{{get_widget_translation name 'name'}}</span></center>
 			{{/if_equals}}
 		{{/if_equals}}
-		{{description}}
+		{{get_widget_translation name 'content'}}
 
 	{{#if_equals name "Bria"}}
 		<br/>
@@ -87,7 +87,7 @@
 		{{#if_equals name "Sip"}}
 			<br/>
 			<span style="font-size: 12px;position: relative;top: 2px;">*</span>
-			<span style="font-size: 10px;">We recommend Bria</span>
+			<span style="font-size: 10px;">{{agile_lng_translate 'widgets' 'bria-recommend'}}</span>
 		{{/if_equals}}
 	{{/if_equals}}
 	{{/if_equals}}
@@ -597,7 +597,7 @@
 						<textarea rows="4" class="required" name="script" id="script" value={{script}} placeholder="{{agile_lng_translate 'widgets' 'documentation-for-js-api-placeholder'}}"></textarea>
 					</span>
 					<span id="url_div" style="display:none;">
-						<span class="help-block"><b>Documentation for <a class="text-info" href="https://github.com/agilecrm/widget-api-backend" target="_blank">widget backend API</a></b></span>
+						<span class="help-block"><b>Documentation for <a class="text-info" href="https://github.com/agilecrm/widget-api-backend" target="_blank">{{agile_lng_translate 'widgets' 'widget-backend-api'}}</a></b></span>
 						<input type="url" id="url" class="input-medium required widget_input_box form-control" style="width:90%;" placeholder="{{agile_lng_translate 'widgets' 'webhook-url'}}" value={{url}} name="url"></input>
 					</span>
 				</div></div>
@@ -616,14 +616,14 @@
 <script id="custom-widget-edit-template" type="text/html">
 <form id="customwidget_login_form" name="customwidget_login_form" method="post">
 	<fieldset>		
-		<label><b>Enter your custom widget details</b></label>						
+		<label><b>{{agile_lng_translate 'widgets' 'custom-widget-details'}}</b></label>						
 		<input type="hidden" id="widget_type" class="input-medium required widget_input_box form-control" value="CUSTOM" name="widget_type"/>
 		<input type="hidden" id="name" class="input-medium required widget_input_box form-control" value="{{name}}" name="name"/>
 		{{#if id}}
 			<input type="hidden" id="id" class="input-medium required widget_input_box form-control"value="{{id}}" name="id"/>		
 			<div class="control-group form-group">
 				<div class="controls">
-					<input type="text" id="display_name" value="{{#if display_name}}{{display_name}}{{else}}{{name}}{{/if}}" class="input-medium required widget_input_box form-control" tabindex="1" maxlength="14" placeholder="Widget Name (Max length 14)" name="display_name">
+					<input type="text" id="display_name" value="{{#if display_name}}{{display_name}}{{else}}{{name}}{{/if}}" class="input-medium required widget_input_box form-control" tabindex="1" maxlength="14" placeholder="{{agile_lng_translate 'Widgets' 'Widget-Name-Max-length'}}" name="display_name">
 					</input>				
 				</div>
 			</div>
