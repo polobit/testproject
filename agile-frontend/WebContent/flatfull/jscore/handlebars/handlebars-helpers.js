@@ -7389,6 +7389,20 @@ Handlebars.registerHelper('if_asc_sork_key', function(value, options)
 		return options.fn(this); 
 });
 
+Handlebars.registerHelper('get_default_label', function(label, module_name, options)
+{
+	var i18nKeyPrefix = "admin-settings-tasks";
+	if(module_name == "category"){
+		i18nKeyPrefix = "admin-settings-tasks";
+	}
+
+	if(_Agile_Resources_Json[i18nKeyPrefix] && _Agile_Resources_Json[i18nKeyPrefix][label])
+		return _Agile_Resources_Json[i18nKeyPrefix][label];
+	else
+		return label;
+
+});
+
 function getTableLanguageConvertHeader(element){
 	if(!element)
 		 return element;

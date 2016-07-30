@@ -1083,7 +1083,7 @@ head.load([{'js-core-1': CLOUDFRONT_PATH + 'jscore/min/locales/' + _LANGUAGE  +'
 }); //End of head.ready() function. Check above.
 
 function load_tpl_html(){
-    downloadTemplate('<%=tplFile%>');
+    downloadTemplate('<%=tplFile%>', function(){});
 }
 
 function load_globalize()

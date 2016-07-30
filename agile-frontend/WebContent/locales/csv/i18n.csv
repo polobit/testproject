@@ -3710,6 +3710,7 @@ tickets.view-name,View name,Ver nombre
 others.saving,Saving...,Ahorro...
 tickets.mark-spam,Mark Spam,Marcar como spam
 admin-settings-tasks.Follow_up,Follow_up,Seguimiento
+admin-settings-tasks.follow_up,Follow_up,Seguimiento
 prefs-settings.reminders,Reminders,Recordatorios
 report-add.time-zone,Time Zone,Zona horaria
 menu.help-desk,Help Desk,Help Desk
@@ -4221,6 +4222,7 @@ contact-details.subject,Subject,Tema
 companies-view.default,Default,Defecto
 widgets.mailbox,Mailbox,Buzón de correo
 admin-settings-tasks.Meeting,Meeting,Reunión
+admin-settings-tasks.meeting,Meeting,Reunión
 months.January,January,Enero
 report-view.tickets,Tickets,Tickets
 admin-settings-deals.Default,Default,Predeterminado
@@ -4564,6 +4566,7 @@ portlets.pages,Pages,páginas
 widgets.here,here.,aquí.
 tickets.cc-me,CC Me,Incluirme con copia oculta
 admin-settings-tasks.Tweet,Tweet,Tweettear
+admin-settings-tasks.tweet,Tweet,Tweettear
 menu.email,Email,Email     
 admin-settings-tasks.Other,Other,Otro
 tasks.Today,Today,Hoy
@@ -4643,6 +4646,7 @@ contact-details.value,Value,Valor
 other.phone,Phone,Teléfono
 menu.event,Event,Evento
 admin-settings-tasks.email,Email,Email
+admin-settings-tasks.Email,Email,Email
 tasks.Other,Other,Otro
 report-view.deals,Deals,Ofertas
 menu.sales,Sales,Ventas
@@ -4705,6 +4709,7 @@ visitors.site,site,sitio
 tickets.true,True,1
 modals.save,Save,Guardar
 admin-settings-tasks.call,Call,Llamar
+admin-settings-tasks.Call,Call,Llamar
 plan-and-upgrade.back,Back,Detrás
 report-add.tags,Tags,Etiquetas
 referrals.copy,Copy,Copiar
@@ -4769,6 +4774,7 @@ prefs-email.IMAP,IMAP,IMAP
 months-xs.July,July,Julio
 months-xs.June,June,Junio
 admin-settings-tasks.Send,Send,Enviar
+admin-settings-tasks.send,Send,Enviar
 prefs-online-calendar.slot,Slot,Espacio
 modals.tags,Tags,Etiquetas
 social.Sent,Sent,Enviado
@@ -4927,3 +4933,5 @@ portlets.deals-pad-content-desc-2,Deals are sales opportunities you track contin
 deal-goals.total,Total Goals,Total de goles
 deal-goals.total-value,Total Goals Value,Valor Total de goles
 deal-goals.goal-value,Goal Value,Valor del objetivo
+plan-and-upgrade.send-invoice,Send Invoice,Enviará la factura
+others.upload,Upload,Subir

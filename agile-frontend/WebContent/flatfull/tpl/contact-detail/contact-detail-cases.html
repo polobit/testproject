@@ -64,8 +64,8 @@
 		<div class="pull-right pos-abs pos-r-0 pos-b-0 icons-text-sm">
 		<span class="actions">
              {{#hasMenuScope 'CASES'}}
-			 <a title="Edit"  data="{{id}}" href="#" class="cases-edit-contact-tab c-p text-l-none p-r-sm" > <i class="fa fa-edit"></i> </a>
-             <a title="Delete" class="c-p"><span class="activity-delete icon-trash" id="{{id}}" url="core/api/cases/bulk"></span></a>
+			 <a title="{{agile_lng_translate 'contact-details' 'edit'}}"  data="{{id}}" href="#" class="cases-edit-contact-tab c-p text-l-none p-r-sm" > <i class="fa fa-edit"></i> </a>
+             <a title="{{agile_lng_translate 'contact-details' 'delete'}}" class="c-p"><span class="activity-delete icon-trash" id="{{id}}" url="core/api/cases/bulk"></span></a>
              {{/hasMenuScope}}
         </span>
         </div>
