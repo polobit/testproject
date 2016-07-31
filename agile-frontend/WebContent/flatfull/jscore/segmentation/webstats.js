@@ -27,7 +27,7 @@ function initWebstatsDateRange() {
                 },
                 locale: {
                     applyLabel: '{{agile_lng_translate "calendar" "Apply"}}',
-                    cancelLabel: '{{agile_lng_translate "other" "cancel"}}',
+                    clearLabel: '{{agile_lng_translate "deal-view" "clear"}}',
                     fromLabel: '{{agile_lng_translate "calendar" "from"}}',
                     toLabel: '{{agile_lng_translate "calendar" "to"}}',
                     customRangeLabel: '{{agile_lng_translate "campaigns" "custom"}}',

@@ -284,14 +284,14 @@ var Tickets = {
 					url += "/" + ticket_id + "/activity/change-status";
 					json = {status: action_value, id: ticket_id};
 
-			        message = '{{agile_lng_translate "tickets" "status-updated-to"}} ' + action_value.toLowerCase();
+			        message = '{{agile_lng_translate "tickets" "status-updated-to"}} ' + get_ticket_translated_text("status", action_value);
 					break;
 				case 'priority':
 
 					url += "/" + ticket_id + "/activity/change-priority";
 					json = {priority: action_value, id: ticket_id};
 
-					message = '{{agile_lng_translate "tickets" "priority-updated-to"}} ' + action_value.toLowerCase();
+					message = '{{agile_lng_translate "tickets" "priority-updated-to"}} ' + get_ticket_translated_text("priority", action_value);
 					break;
 				case 'assignee':
 				{	
@@ -319,7 +319,7 @@ var Tickets = {
 
 				Ticket_Utils.showNoty('information', message, 'bottomRight', 5000);
 
-				$that.closest('tr').find('a.' + action_type).html(action_value);
+				$that.closest('tr').find('a.' + action_type).html(get_ticket_translated_text(action_type, action_value));
 				$that.closest('div').find('.dropdown-menu').dropdown('toggle');
 
 				if(action_type == 'priority'){

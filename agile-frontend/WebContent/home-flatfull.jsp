@@ -531,7 +531,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
   <li id="triggersmenu">
     <a  href="#triggers">
       <i class="icon icon-magic-wand"></i>
-      <span>Triggers</span>
+      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "triggers") %></span>
     </a>
   </li>
     <%
@@ -568,7 +568,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
   <li id="formsmenu">
     <a  href="#forms">
        <i class="icon-large1 icon-docs"></i>
-      <span>Forms</span>  
+      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "forms") %></span>  
     </a>
   </li>
   <%}%>
@@ -576,7 +576,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
   <li id="email-templates-menu">
     <a href="#email-templates">
       <i class="icon-envelope-letter"></i>
-      <span>Email Templates</span>
+      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "email-templates") %></span>
     </a>
   </li>
 
@@ -657,35 +657,35 @@ if(currentUserPrefs.menuPosition.equals("top")){
 
   <%
   if(domainUser.is_admin && !domainUser.restricted_menu_scopes.contains(NavbarConstants.HELPDESK)){
-  %>
+  %>          
   <li id="ticketgroupsmenu">
     <a href="#ticket-groups">
       <i class="icon icon-users"></i>
-      <span>Groups</span>
+      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "groups") %></span>
     </a>
   </li>
   <li id="ticketlabelsmenu">
     <a href="#ticket-labels">
       <i class="icon icon-flag"></i>
-      <span>Labels</span>
+      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "labels") %></span>
     </a>
   </li>
   <li id="ticketcannedmessagesmenu">
     <a href="#canned-responses">
       <i class="icon icon-cursor"></i>
-      <span>Canned Responses</span>
+      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "canned-responses") %></span>
     </a>
   </li>
   <li id="ticketviewsmenu">
     <a href="#ticket-views">
       <i class="icon icon-directions"></i>
-      <span>Views</span>
+      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "views") %></span>
     </a>
   </li>
   <li id="ticketknowledgebasemenu">
     <a href="#knowledgebase">
       <i class="fa fa-search"></i>
-      <span>Knowledge Base</span>
+      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "knowledge-base") %></span>
     </a>
   </li>
    <%

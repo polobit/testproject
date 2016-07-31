@@ -237,7 +237,7 @@ var Contact_Details_Tab_Actions = {
 			var entity_id = $(targetEl).attr('id');
 			if (model && model.toJSON().type != "WEB_APPOINTMENT" || parseInt(model.toJSON().start) < parseInt(new Date().getTime() / 1000))
 			{
-				showAlertModal(_agile_get_translated_val('contact-details','delete'), "confirm", function(){
+				showAlertModal("delete", "confirm", function(){
 					modelDelete(model, targetEl, function(){
 						removeItemFromTimeline($("#" + entity_id, $("#timeline")));
 					});

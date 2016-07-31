@@ -467,7 +467,7 @@ function set_up_portlets(el, portlets_el){
 function hidePortletSettingsAfterSave(modal_id){
 
 	var modal=$('#'+modal_id+ '> .modal-dialog > .modal-content > .modal-footer > a');
-	modal.text('Save');
+	modal.text('{{agile_lng_translate "modals" "save"}}');
 	modal.attr('disabled',false);
 	$('#'+modal_id).modal('hide');
 	$('.modal-backdrop').hide();

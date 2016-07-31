@@ -58,7 +58,7 @@ function initFunnelCharts(callback)
 					callback();
 				});
 
-	}, '<option class="default-select" value="{{id}}">{{name}}</option>', false, undefined, "All Owners");
+	}, '<option class="default-select" value="{{id}}">{{name}}</option>', false, undefined, "{{agile_lng_translate 'report-add' 'all-owners'}}");
 
 	callback();
 }
@@ -98,7 +98,7 @@ function initReportsForCalls(callback){
 					callback();
 				});
 
-			}, '<option class="default-select" value="{{id}}">{{name}}</option>', false, undefined, "All Users");
+			}, '<option class="default-select" value="{{id}}">{{name}}</option>', false, undefined, "{{agile_lng_translate 'report-view' 'all-users'}}");
 	
 }
 
@@ -145,7 +145,7 @@ function initSalesCharts(callback){
 			{
 				callback();
 			});
-		}, '<option class="default-select" value="{{id}}">{{name}}</option>', false, undefined, "All Tracks");
+		}, '<option class="default-select" value="{{id}}">{{name}}</option>', false, undefined, "{{agile_lng_translate 'report-add' 'all-tracks'}}");
 
 		fillSelect("owner", "core/api/users/partial", undefined, function()
 		{
@@ -154,7 +154,7 @@ function initSalesCharts(callback){
 				callback();
 			});
 
-		}, '<option class="default-select" value="{{id}}">{{name}}</option>', false, undefined, "All Owners");
+		}, '<option class="default-select" value="{{id}}">{{name}}</option>', false, undefined, "{{agile_lng_translate 'report-add' 'all-owners'}}");
 
 		/*fillSelect("source", "/core/api/categories?entity_type=DEAL_SOURCE", undefined, function()
 		{
@@ -363,7 +363,7 @@ function initUserReports(callback){
 				callback();
 			});
 
-		}, '<option class="default-select" value="{{id}}">{{name}}</option>', false, undefined, "All Owners");
+		}, '<option class="default-select" value="{{id}}">{{name}}</option>', false, undefined, "{{agile_lng_translate 'report-add' 'all-owners'}}");
 		
 	}
 
@@ -636,7 +636,7 @@ function initDateRange(callback) {
             },
             locale: {
                 applyLabel: '{{agile_lng_translate "calendar" "Apply"}}',
-	            cancelLabel: '{{agile_lng_translate "other" "cancel"}}',
+	            clearLabel: '{{agile_lng_translate "deal-view" "clear"}}',
 	            fromLabel: '{{agile_lng_translate "calendar" "from"}}',
 	            toLabel: '{{agile_lng_translate "calendar" "to"}}',
 	            customRangeLabel: '{{agile_lng_translate "campaigns" "custom"}}',
@@ -766,8 +766,8 @@ function initRepReports(callback) {
                 ]
             },
             locale: {
-                applyLabel: '{{agile_lng_translate "calendar" "Apply"}}',
-	            cancelLabel: '{{agile_lng_translate "other" "cancel"}}',
+                applyLabel: '{{agile_lng_translate "calendar" "Apply"}}',     
+	            clearLabel: '{{agile_lng_translate "deal-view" "clear"}}',
 	            fromLabel: '{{agile_lng_translate "calendar" "from"}}',
 	            toLabel: '{{agile_lng_translate "calendar" "to"}}',
 	            customRangeLabel: '{{agile_lng_translate "campaigns" "custom"}}',

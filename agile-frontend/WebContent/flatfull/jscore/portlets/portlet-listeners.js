@@ -38,7 +38,7 @@ function initializePortletsListeners() {
 							if(!is_valid_custom_range(json["start-date"]*1000,json["end-date"]*1000,modal_id))
 								{
 									$(this).attr('disabled', false);
-        							$(this).text('Save');
+        							$(this).text('{{agile_lng_translate "modals" "save"}}');
 								return;
 							}
 						}

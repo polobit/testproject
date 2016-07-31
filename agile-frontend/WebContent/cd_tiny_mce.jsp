@@ -308,7 +308,7 @@ function initialize_tinymce_editor(){
 	// Hide message and show textarea
 	$('#loading-msg').hide();
 	$('textarea#content').show();
-	
+
 	// Initialize tinymce
 	tinymce.init({
         mode: "textareas",
@@ -328,12 +328,13 @@ function initialize_tinymce_editor(){
 		convert_urls : false,
 		forced_root_block : false,
         extended_valid_elements : "*[*]",
+        language : window.opener.get_tinymce_supported_language(),
         setup: function(editor) {
             
         	// Agile Merge Fields
             editor.addButton('merge_fields', {
                 type: 'menubutton',
-                text: 'Agile Contact Fields',
+                text: window.opener._agile_get_translated_val('widgets', 'agile-contact-fields'),
                 icon: false,
                 menu: set_up_merge_fields(editor)
             });

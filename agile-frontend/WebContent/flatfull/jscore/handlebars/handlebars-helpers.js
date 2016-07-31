@@ -1216,6 +1216,21 @@ $(function()
 		if (!actions)
 			return;
 
+		var action_types = {
+			"MODAL_POPUP" : "{{agile_lng_translate 'web-rules' 'modal-popup'}}",
+			"CORNER_NOTY" : "{{agile_lng_translate 'web-rules' 'noty-message'}}",
+			"CALL_POPUP" : "{{agile_lng_translate 'webrules' 'call-popup'}}",
+			"SITE_BAR" : "{{agile_lng_translate 'webrules' 'site-bar'}}",
+			"ASSIGN_CAMPAIGN" : "{{agile_lng_translate 'contact-details' 'add-to-campaign'}}",
+			"UNSUBSCRIBE_CAMPAIGN" : "{{agile_lng_translate 'contact-details' 'remove-from-campaign'}}",
+			"ADD_TAG" : "{{agile_lng_translate 'web-rules' 'add-tag'}}",
+			"REMOVE_TAG" : "{{agile_lng_translate 'web-rules' 'remove-tag'}}",
+			"ADD_SCORE" : "{{agile_lng_translate 'web-rules' 'add-score'}}",
+			"SUBTRACT_SCORE" : "{{agile_lng_translate 'web-rules' 'substract-score'}}",
+			"JAVA_SCRIPT" : "{{agile_lng_translate 'web-rules' 'java-script'}}",	
+		};
+		
+
 		var actions_count = actions.length;
 
 		var el = '<div class="table-resp">';
@@ -1224,10 +1239,10 @@ $(function()
 		{
 			if (--actions_count == 0)
 			{
-				el = el.concat(titleFromEnums(val.action));
+				el = el.concat(titleFromEnums(action_types[val.action] ? action_types[val.action] : val.action));
 				return;
 			}
-			el = el.concat(titleFromEnums(val.action) + ", ");
+			el = el.concat(titleFromEnums(action_types[val.action] ? action_types[val.action] : val.action) + ", ");
 		});
 
 		el = el.concat('</div>');
@@ -1237,8 +1252,43 @@ $(function()
 
 	Handlebars.registerHelper('triggerType', function(value)
 	{
+		var trigger_types = {
+			"TAG_IS_ADDED" : "{{agile_lng_translate 'campaigns' 'tag-is-added'}}",
+	        "TAG_IS_DELETED" : "{{agile_lng_translate 'campaigns' 'tag-is-deleted'}}",
+			"CONTACT_IS_ADDED" : "{{agile_lng_translate 'campaigns' 'contact-is-added'}}",
+	        "DEAL_IS_ADDED" : "{{agile_lng_translate 'campaigns' 'deal-is-added'}}",
+	        "DEAL_IS_DELETED" : "{{agile_lng_translate 'campaigns' 'deal-is-deleted'}}",
+	        "DEAL_MILESTONE_IS_CHANGED" : "{{agile_lng_translate 'campaigns' 'deal-milestone-is-changed'}}",
+			"RUNS_DAILY" : "{{agile_lng_translate 'portlets' 'daily'}}",
+	        "RUNS_WEEKLY" : "{{agile_lng_translate 'portlets' 'weekly'}}",
+	        "RUNS_MONTHLY" : "{{agile_lng_translate 'portlets' 'monthly'}}",
+			"STRIPE_CHARGE_EVENT" : "{{agile_lng_translate 'campaigns' 'stripe-event'}}",
+			"INBOUND_MAIL_EVENT"  : "{{agile_lng_translate 'campaigns' 'new-email'}}",
+			"EMAIL_OPENED" : "{{agile_lng_translate 'contact-details' 'email-opened'}}",
+			"EMAIL_LINK_CLICKED" : "{{agile_lng_translate 'campaigns' 'email-link-clicked'}}",
+			"UNSUBSCRIBED" : "{{agile_lng_translate 'contacts-view' 'unsubscribed'}}",
+			"SOFT_BOUNCE" : "{{agile_lng_translate 'campaigns' 'soft-bounce'}}",
+			"HARD_BOUNCE" : "{{agile_lng_translate 'campaigns' 'hard-bounce'}}",
+			"SPAM_REPORT" : "{{agile_lng_translate 'campaigns' 'spam-report'}}",
+			"EVENT_IS_ADDED" : "{{agile_lng_translate 'campaigns' 'event-is-added'}}",
+			"INBOUND_CALL" : "{{agile_lng_translate 'campaigns' 'inbound-call'}}",
+			"OUTBOUND_CALL" : "{{agile_lng_translate 'campaigns' 'outbound-call'}}",
+			"SHOPIFY_EVENT" : "{{agile_lng_translate 'campaigns' 'shopify-event'}}",
+			"FORM_SUBMIT" : "{{agile_lng_translate 'campaigns' 'form-submit'}}",
+			"NEW_TICKET_IS_ADDED" : "{{agile_lng_translate 'campaigns' 'new-ticket-is-added'}}",
+			"TICKET_NOTE_ADDED_BY_USER" : "{{agile_lng_translate 'campaigns' 'note-is-added-by-user'}}",
+			"TICKET_NOTE_ADDED_BY_CUSTOMER" : "{{agile_lng_translate 'campaigns' 'note-is-added-by-customer'}}",
+			"TICKET_IS_CLOSED" : "{{agile_lng_translate 'campaigns' 'ticket-is-closed'}}",
+			"TICKET_SLA_REACHED" : "{{agile_lng_translate 'campaigns' 'sla-reached'}}",
+			"TICKET_ASSIGNEE_CHANGED" : "{{agile_lng_translate 'campaigns' 'ticket-assignee-changed'}}",
+			"TICKET_LABEL_IS_ADDED" : "{{agile_lng_translate 'campaigns' 'ticket-label-is-added'}}",
+			"TICKET_LABEL_IS_DELETED" : "{{agile_lng_translate 'campaigns' 'ticket-label-is-deleted'}}",
+		};
 		if (value == 'ADD_SCORE')
 			return value.replace('ADD_SCORE', '{{agile_lng_translate "deals" "score-g-o-e"}}');
+
+		if(trigger_types[value])
+			return titleFromEnums(trigger_types[value]);
 
 		return titleFromEnums(value);
 	});
@@ -5669,19 +5719,19 @@ $(function()
 	{
 		var field_type_name = '';
 		if (field_type == "TEXT")
-			field_type_name = "Text Field";
+			field_type_name = "{{agile_lng_translate 'admin-settings-custom-fields' 'TEXT'}}";
 		else if (field_type == "TEXTAREA")
-			field_type_name = "Text Area";
+			field_type_name = "{{agile_lng_translate 'admin-settings-custom-fields' 'TEXTAREA'}}";
 		else if (field_type == "DATE")
-			field_type_name = "Date";
+			field_type_name = "{{agile_lng_translate 'admin-settings-custom-fields' 'DATE'}}";
 		else if (field_type == "CHECKBOX")
-			field_type_name = "Checkbox";
+			field_type_name = "{{agile_lng_translate 'admin-settings-custom-fields' 'CHECKBOX'}}";
 		else if (field_type == "LIST")
-			field_type_name = "List";
+			field_type_name = "{{agile_lng_translate 'admin-settings-custom-fields' 'LIST'}}";
 		else if (field_type == "NUMBER")
-			field_type_name = "Number";
+			field_type_name = "{{agile_lng_translate 'admin-settings-custom-fields' 'NUMBER'}}";
 		else if (field_type == "FORMULA")
-			field_type_name = "Formula";
+			field_type_name = "{{agile_lng_translate 'admin-settings-custom-fields' 'FORMULA'}}";
 		return field_type_name;
 	});
 
@@ -6298,11 +6348,11 @@ $(function()
 	 */
 	Handlebars.registerHelper('get_portlet_duration', function(duration)
 	{
-		var time_period = _agile_get_translated_val("portlets", duration);
-		if(!time_period)
-			  time_period = _agile_get_translated_val("portlets", "1-day");
-		
-		return time_period;
+		console.log("duration = " + duration);
+		if(!duration)
+			duration = "today";
+
+		return _agile_get_translated_val("portlets", duration);
 	});
 	
 	/**
@@ -7408,11 +7458,7 @@ Handlebars.registerHelper('get_widget_translation', function(widget_name, type, 
 	if(!type)
 		  type = "content";
 
-	if(_Agile_Resources_Json["widgets"] && _Agile_Resources_Json["widgets"][widget_name + "-" + type])
-		return _Agile_Resources_Json["widgets"][widget_name + "-" + type];
-	else
-		return widget_name + "-" + type;
-
+	_agile_get_translated_val("widgets", widget_name + "-" + type);
 });
 
 Handlebars.registerHelper('get_datasync_translation', function(sync_name, type, options)
@@ -7420,12 +7466,7 @@ Handlebars.registerHelper('get_datasync_translation', function(sync_name, type, 
 	if(!type)
 		  type = "content";
 
-	console.log("sync_name = " + sync_name + " : " + type);
-	if(_Agile_Resources_Json["prefs-data-sync"] && _Agile_Resources_Json["prefs-data-sync"][sync_name + "-" + type])
-		return _Agile_Resources_Json["prefs-data-sync"][sync_name + "-" + type];
-	else
-		return sync_name + "-" + type;
-
+	_agile_get_translated_val("prefs-data-sync", sync_name + "-" + type);
 });
 
 function getTableLanguageConvertHeader(element){

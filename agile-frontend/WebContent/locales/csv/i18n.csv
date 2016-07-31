@@ -2196,7 +2196,7 @@ emailbuilder.name-of-template,Name of template:,Nombre de la plantilla:
 tickets.last-updated-date,Last Updated Date,Fecha de última actualización
 contacts-view.import-in-process,Import in process,Importación en proceso
 campaigns.select-a-template,Select a template,Selecciona una plantilla
-campaigns.pending-triggers,PENDING TRIGGERS.,Triggers pendientes
+campaigns.pending-triggers,PENDING TRIGGERS.,PENDIENTE Desencadenantes.
 currency.Costa Rican Colon,Costa Rican Colon,Colón de Costa Rica
 social.select-the-stream,Select the Stream,Selecciona el stream
 campaigns.name-of-campaign,Name of campaign:,Nombre de la campaña
@@ -4043,7 +4043,7 @@ menu.activity,Activity,Actividad
 contact-edit.facebook,Facebook,Facebook
 widgets.Facebook-displayName,Facebook,Facebook
 contacts-view.assigned,assigned,asignado
-contact-details.Contacts,Contacts,contactos
+contact-details.Contacts,Contacts,Contactos
 landingpages.warining,Warning!,¡Advertencia!
 landing-pages.elements,Elements,Elementos
 contact-details.add-case,Add Case,Añadir Caso
@@ -4123,7 +4123,7 @@ months-xs.Dec,December,Dic
 campaigns.interest,Interest,Interés
 other.schedule,Schedule,Programar
 prefs-settings.language,Language,Idioma
-campaigns.triggers,Triggers,Triggers   
+campaigns.triggers,Triggers,Disparadores
 prefs-settings.new-deal,New Deal,Nueva oferta
 report-view.send-now,Send Now,Enviar ahora
 visitors.referral,Referral,Referencia
@@ -4315,7 +4315,7 @@ prefs-data-sync.payment,Payment,Pago
 widgets.billing,Billing,Cobranza
 widjets.inbound,Inbound,Entrante
 contact-details.sent-on,Sent on,Enviado
-contacts-view.deleted,Deleted,"{"":""eliminado.""}"
+contacts-view.deleted,Deleted,Eliminado.
 report-add.monthly,Monthly,Mensual
 others.confirm,Confirm,Confirmar
 plan-and-upgrade.pay-now,Pay Now,Paga ahora
@@ -4591,7 +4591,7 @@ countries.LV,Latvia,Latvia
 deal-view.delete,Delete,Borrar
 countries.MC,Monaco,Monaco
 countries.MW,Malawi,Malawi
-countries.MX,Mexico,Mexico
+countries.MX,Mexico,Méjico
 countries.NO,Norway,Noruega
 web-rules.device,Device,Dispositivo
 other.report,Report,Informe
@@ -4921,7 +4921,7 @@ countries.IQ,Iraq,Iraq
 countries.ML,Mali,Mali
 countries.NU,Niue,Niue
 countries.OM,Oman,Omán
-countries.PE,Peru,Peru
+countries.PE,Peru,Perú
 portlets.from,from,de
 report-add.save,Save,Guardar
 other.from,From,De
@@ -5030,3 +5030,14 @@ widgets.enter-freshBooks-widget-details,Enter your Freshbooks details,Introduzca
 widgets.enter-clickDesk-widget-details,Enter your ClickDesk details,Introduzca sus datos ClickDesk
 widgets.please-try-again,Please Try agian,Por favor Pruebe alquilásemos
 prefs-data-sync.SALESFORCE-content,By configuring access to your Salesforce&#44; we'll automatically import your Contacts and Tasks to AgileCRM.,Mediante la configuración de acceso a su Salesforce &#44; vamos a importar automáticamente sus contactos y tareas a AgileCRM .
+visitors.no-ref-found,No Referral URL Found,No se han encontrado URL de referencia
+webrules.call-popup,Call Popup,Emergente llamada
+webrules.site-bar,Site Bar,Bar sitio
+contact-view.owner-name,Owner Name,Nombre del propietario
+contact-view.owner-email,Owner Email,Propietario Enviar
+contact-view.calendar-url,Calendar URL,URL del calendario
+tickets.comments,Ticket Comments,Comentarios de entradas
+tickets.footer,Footer,Pie de página
+contact-view.merge-fields,Merge Fields,Los campos de fusión
+contact-view.select-merge-fields,Select Merge Field,Seleccione Campo de combinación
+contact-view.modified-time,Modified Time,Tiempo modificado

@@ -11,7 +11,7 @@ var portlet_utility = {
 				function(index, trackObj) {
 					if (deal_track == 0 && trackObj.name == "Default")
 						options += "<option value=" + trackObj.id
-								+ " selected='selected'>" + trackObj.name
+								+ " selected='selected'>{{agile_lng_translate 'companies-view' 'default'}}"
 								+ "</option>";
 					else if (deal_track == trackObj.id)
 						options += "<option value=" + trackObj.id
@@ -95,7 +95,7 @@ var portlet_utility = {
 
 				if (App_Portlets.track_length > 1) {
 					if (track_id == 0)
-						return callback("Default");
+						return callback("{{agile_lng_translate 'companies-view' 'default'}}");
 					else {
 						var milestone = $.ajax({
 							type : 'GET',
@@ -1384,7 +1384,7 @@ var portlet_utility = {
 					+ '&time_zone=' + (new Date().getTimezoneOffset());
 			portlet_graph_data_utility.fetchPortletsGraphData(url,function(data) {
 				if(data.length==0){
-						$('.'+selector).html('<div class="portlet-error-message">No Referral URL Found</div>');
+						$('.'+selector).html('<div class="portlet-error-message">{{agile_lng_translate "visitors" "no-ref-found"}}</div>');
 								return;
 					}
 				var span;
@@ -2644,7 +2644,7 @@ var portlet_utility = {
 		fillSelect(ele_id, "/core/api/milestone/pipelines", undefined, function()
 		{
 			$('#'+ele_id, elData).find('option[value='+base_model.get("settings")["track"]+']').attr("selected", "selected");
-		}, '<option class="default-select" value="{{id}}">{{name}}</option>', false, undefined, "All Tracks");
+		}, '<option class="default-select" value="{{id}}">{{name}}</option>', false, undefined, "{{agile_lng_translate 'report-add' 'all-tracks'}}");
 	}
 };
 
