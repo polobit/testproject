@@ -5041,3 +5041,15 @@ tickets.footer,Footer,Pie de página
 contact-view.merge-fields,Merge Fields,Los campos de fusión
 contact-view.select-merge-fields,Select Merge Field,Seleccione Campo de combinación
 contact-view.modified-time,Modified Time,Tiempo modificado
+category.name,Category Name,Nombre de la categoría
+highcharts.context-menu,Chart context menu,Menú contextual Gráfico
+highcharts.print-chart,Print chart,Tabla de impresión
+highcharts.download-jpeg,Download JPEG image,Descarga de imagen JPEG
+highcharts.download-pdf,Download PDF document,Descargas de documentos PDF
+highcharts.download-png,Download PNG image,Descargar imagen PNG
+highcharts.download-svg,Download SVG vector image,Descargar imagen vectorial SVG
+highcharts.download-csv,Download CSV,Descargar CSV
+highcharts.download-xls,Download XLS,Descargar XLS
+integration-stats.sync-contacts,to update all fields of contacts and companies,para actualizar todos los campos de contactos y empresas
+others.click,Click,Hacer clic
+integration-stats.sync-in-month,Update can be used only once in a month,Actualización se puede utilizar solamente una vez en un mes

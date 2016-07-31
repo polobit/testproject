@@ -24,12 +24,12 @@
                     <span><i class="icon-plus-sign"></i></span> {{agile_lng_translate 'tickets' 'add-canned-response'}}
                 </a>
             </div>
-            <table class="table table-striped showCheckboxes m-b-none agile-table panel table-layout-mob-view show-delete-modal" url="core/api/tickets/canned-messages/bulk" data-bulk-delete-title="{{agile_lng_translate 'contacts-view' 'delete'}}" data-bulk-delete-msg="Are you sure you want to delete?">
+            <table class="table table-striped showCheckboxes m-b-none agile-table panel table-layout-mob-view show-delete-modal" url="core/api/tickets/canned-messages/bulk" data-bulk-delete-title="{{agile_lng_translate 'contacts-view' 'delete'}}" data-bulk-delete-msg="{{agile_lng_translate 'others' 'delete-warn'}}">
                     <thead>
                         <tr>
                             <th class="hide">{{agile_lng_translate 'tickets' 'id'}}</th>
                             <th style="width:33%">{{agile_lng_translate 'other' 'title'}}</th>
-                            <th style="width:30%">{{agile_lng_translate 'other' 'message'}}</th>
+                            <th style="width:30%">{{agile_lng_translate 'portlets' 'message'}}</th>
                              <!--<th style="width:30%">Labels</th> -->
                             <th style="width:36%">&nbsp;</th>
                         </tr>

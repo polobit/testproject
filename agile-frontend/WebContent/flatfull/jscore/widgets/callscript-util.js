@@ -156,7 +156,7 @@ function adjust_form()
 		$(".no-rule-added").show();
 
 	// Enable add rule btn
-	$("#add_csrule").text('Add Rule');
+	$("#add_csrule").text('{{agile_lng_translate "widgets" "add-rule"}}');
 	$("#add_csrule").attr("disabled", false);
 }
 

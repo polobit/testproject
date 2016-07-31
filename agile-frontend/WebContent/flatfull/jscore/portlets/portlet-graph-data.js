@@ -377,6 +377,7 @@ var portlet_graph_data_utility = {
 											LIB_PATH
 													+ 'lib/flot/highcharts-3.js',
 											function() {
+												_agile_library_loader.localize_highcharts();
 												$
 														.each(
 																sortedData,

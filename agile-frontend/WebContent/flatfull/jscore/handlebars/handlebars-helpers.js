@@ -4793,27 +4793,27 @@ $(function()
 					function(value)
 					{
 						var type = "bg-light dk text-tiny";
-						var reputation = "Unknown";
+						var reputation = "{{agile_lng_translate 'report-add' 'unknown'}}";
 
 						if (value > 1 && value < 40)
 						{
 							type = "label-danger text-tiny";
-							reputation = "Poor";
+							reputation = "{{agile_lng_translate 'reputation' 'Poor'}}";
 						}
 						else if (value >= 40 && value < 75)
 						{
 							type = "bg-light text-tiny";
-							reputation = "Ok";
+							reputation = "{{agile_lng_translate 'reputation' 'Ok'}}";
 						}
 						else if (value >= 75 && value < 90)
 						{
 							type = "label-success";
-							reputation = "Good";
+							reputation = "{{agile_lng_translate 'reputation' 'Good'}}";
 						}
 						else if (value >= 90)
 						{
 							type = "label-success";
-							reputation = "Excellent";
+							reputation = "{{agile_lng_translate 'reputation' 'Excellent'}}";
 						}
 
 						reputation = _agile_get_translated_val("reputation", reputation);
@@ -7458,7 +7458,7 @@ Handlebars.registerHelper('get_widget_translation', function(widget_name, type, 
 	if(!type)
 		  type = "content";
 
-	_agile_get_translated_val("widgets", widget_name + "-" + type);
+	return _agile_get_translated_val("widgets", widget_name + "-" + type);
 });
 
 Handlebars.registerHelper('get_datasync_translation', function(sync_name, type, options)
@@ -7466,7 +7466,7 @@ Handlebars.registerHelper('get_datasync_translation', function(sync_name, type, 
 	if(!type)
 		  type = "content";
 
-	_agile_get_translated_val("prefs-data-sync", sync_name + "-" + type);
+	return _agile_get_translated_val("prefs-data-sync", sync_name + "-" + type);
 });
 
 function getTableLanguageConvertHeader(element){
