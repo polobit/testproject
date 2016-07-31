@@ -58,6 +58,15 @@ $( document ).ready(function() {
 				LIB_PATH + 'lib/businesshours/jquerytimepicker.js',
 				function(){
 		 			$('.update-task-timepicker').timepicker({ 'timeFormat' : 'H:i', 'step' : 15 });
+		 			
+		 			$('.update-task-timepicker').focus(function(){
+		 				$('#activityModal').css("overflow", "hidden");
+		 			});
+		 			
+		 			$('.update-task-timepicker').blur(function(){
+		 				$('#activityModal').css("overflow", "auto");
+		 			});
+
 		 			/**
 					 * Fills current time only when there is no time in the fields
 					 */

@@ -503,6 +503,15 @@ $(function()
 				LIB_PATH + 'lib/businesshours/jquerytimepicker.js',
 				function(){
 		 			$('.new-task-timepicker').timepicker({ 'timeFormat' : 'H:i', 'step' : 15 });
+		 			
+		 			$('.new-task-timepicker').focus(function(){
+		 				$('#activityTaskModal').css("overflow", "hidden");
+		 			});
+		 			
+		 			$('.new-task-timepicker').blur(function(){
+		 				$('#activityTaskModal').css("overflow", "auto");
+		 			});
+
 		 			// sets the time in time picker if it is empty
 					if ($('.new-task-timepicker', el).val() == '')
 						$('.new-task-timepicker', el).val(get_hh_mm());
@@ -642,7 +651,39 @@ $(function()
 					$('.start-timepicker').timepicker({ 'timeFormat' : 'H:i', 'step' : 15 });
 					$('.end-timepicker').timepicker({ 'timeFormat' : 'H:i', 'step' : 15 });
 					$('.update-start-timepicker').timepicker({ 'timeFormat' : 'H:i', 'step' : 15 });
-					$('.update-end-timepicker').timepicker({ 'timeFormat' : 'H:i', 'step' : 15 });
+					$('.update-end-timepicker').timepicker({ 'timeFormat' : 'H:i', 'step' : 15 });					
+		 			
+		 			$('.start-timepicker').blur(function(){
+		 				$('#activityModal').css("overflow", "auto");
+		 			});
+
+		 			$('.start-timepicker').focus(function(){
+		 				$('#activityModal').css("overflow", "hidden");
+		 			});
+		 			
+		 			$('.end-timepicker').blur(function(){
+		 				$('#activityModal').css("overflow", "auto");
+		 			});
+
+		 			$('.end-timepicker').focus(function(){
+		 				$('#activityModal').css("overflow", "hidden");
+		 			});
+		 			
+		 			$('.update-start-timepicker').blur(function(){
+		 				$('#activityModal').css("overflow", "auto");
+		 			});
+
+		 			$('.update-start-timepicker').focus(function(){
+		 				$('#activityModal').css("overflow", "hidden");
+		 			});
+		 			
+		 			$('.update-end-timepicker').blur(function(){
+		 				$('#activityModal').css("overflow", "auto");
+		 			});
+
+		 			$('.update-end-timepicker').focus(function(){
+		 				$('#activityModal').css("overflow", "hidden");
+		 			});
 				}
 		);
 
