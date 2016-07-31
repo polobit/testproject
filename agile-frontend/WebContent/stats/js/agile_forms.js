@@ -1,10 +1,10 @@
 /*
  * Function to sync form data to agile v4
  */
-var _agile_synch_form_v4 = function()
+var _agile_synch_form_v4 = function(identifier)
 {
 	
-	if(!agile_validations()){
+	if(!agile_validations(identifier)){
 		return;
 	}
 
@@ -20,7 +20,7 @@ var _agile_synch_form_v4 = function()
 		agile_error_msg.appendChild(spin);
 	}
 
-	var agile_form = document.forms["agile-form"];
+	var agile_form = identifier;
 	var agile_redirect_url = agile_form["_agile_redirect_url"].value;
 
 	var agile_contact = {};

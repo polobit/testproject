@@ -39,5 +39,6 @@ color:#fff;background-color:#74cfae;
 }
 </style>
 <script type="text/javascript">
-(function(a){var b=a.onload,p=<%=preload%>;if(p){a.onload="function"!=typeof b?function(){try{_agile_load_form_fields()}catch(a){}}:function(){b();try{_agile_load_form_fields()}catch(a){}}};a.document.forms["agile-form"].onsubmit=function(a){a.preventDefault();try{_agile_synch_form_v4()}catch(b){this.submit()}}})(window);
+(function(a){var b=a.onload,p=<%=preload%>;if(p){a.onload="function"!=typeof b?function(){try{_agile_load_form_fields()}catch(a){}}:function(){b();
+try{_agile_load_form_fields()}catch(a){}}};var formLen=document.forms.length;for(i=0;i<formLen;i++){if(document.forms.item(i).getAttribute("id")=='agile-form'){a.document.forms.item(i).onsubmit=function(a){a.preventDefault();try{_agile_synch_form_v4(this)}catch(b){this.submit()}}}}})(window);
 </script>

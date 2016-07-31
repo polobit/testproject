@@ -1,14 +1,14 @@
-function agile_validations(){
+function agile_validations(identifier){
 	
 	var isValid =  true;
 	var count = null;    //to count the spans in the form
-	var agile_form = document.forms["agile-form"];
+	var agile_form = identifier;
 
 	for(var i=0; i<agile_form.length; i++){
 
 			var inputId = agile_form[i].getAttribute("id");
         	var inputType = agile_form[i].getAttribute("type");
-        	var inputNode = document.getElementById(inputId);
+        	var inputNode = agile_form[i];
 			var spans = document.getElementById("agile_span"+i);
 			var required = agile_form[i].getAttribute("required");
 		
