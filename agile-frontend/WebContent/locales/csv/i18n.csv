@@ -16,7 +16,7 @@ form-builder.forms-desc,Forms created using the Form Builder can be placed on yo
 voice-mail.voicemail-desc-1,When you call customers from Agile's telephony widgets&#44; you have the option to leave a pre-recorded voicemail. You can manage your pre-recorded voicemail messages (WAV files) here and choose one of them when leaving a voicemails.,Cuando se llama a los clientes desde los widgets de telefonía de Agile&#44; usted tiene la opción de dejar un mensaje de voz pregrabado. Puede gestionar sus mensajes de voz pregrabados (archivos WAV) aquí y elegir uno de ellos al salir de un mensaje de voz.
 widgets.tag-note-desc,Important: We have made some changes to Tag management. Tag name should start with an alphabet and cannot contain special characters other than underscore and space. Please go through your tags below and rename them accordingly.,Importante: Hemos realizadi algunos cambios a la gestión de Tags. El nombre de Tag debe comenzar con una letra del abecedario y no debe contener caracteres especiales salvo el guión bajo y el espacio&#44; Por favor revisa tus tags a continuación y renómbralas con los ajustes pertinentes.
 admin-settings-integrations.amazon-note-1,1. Amazon SES services require verification of email addresses in the From field of sent emails. Please ensure that you verify the email addresses of all your Agile CRM users and the From addresses of all your campaign emails.,1. Los servicios de Amazon SES requieren la verificación de direcciones de correo electrónico en el campo De de los correos electrónicos enviados. Por favor asegúrese de verificar las direcciones de email de todos sus usuarios de Agile CRM y en las direcciones De de todos sus emails de campaña.
-admin-settings-api-analytics.analytics-code-desc,You can use javascript API to track page views on your site&#44; add / delete contacts from your website or blog directly. Copy and paste the below code in your webpage's HTML just before the,Puede utilizar la API de JavaScript para realizar un seguimiento de páginas vistas en su sitio & # 44; añadir / eliminar contactos de su sitio web o blog directamente . Copia y pega el código de abajo en el HTML de su página web justo antes de la
+admin-settings-api-analytics.analytics-code-desc,You can use javascript API to track page views on your site&#44; add / delete contacts from your website or blog directly. Copy and paste the below code in your webpage's HTML just before the,Puede utilizar la API de JavaScript para realizar un seguimiento de páginas vistas en su sitio &#44; añadir / eliminar contactos de su sitio web o blog directamente . Copia y pega el código de abajo en el HTML de su página web justo antes de la
 admin-settings-api-analytics.analytics-code-desc-1,tag to enable tracking / API methods.,la etiqueta para permitir métodos de seguimiento / API.
 widgets.bria-tooltip,Download executable and run it in your system to establish a connection between your Bria client and Agile CRM. Please note that you should already be logged in with selected Bria client before running this executable file.,Descarga el archivo ejecutable y córrelo desde tu sistema para establecer una conexión entre tu cliente Bria y tu CRM de Agile. Por favor toma en cuenta que deberás estar previamente loggeado con el cliente Bria seleccionado antes de correr este archivo ejecutable
 Plan-and-upgrade.gary-tramer-desc4,Agile CRM is the coolest&#44 easiest and by far the most productive CRM I've ever used. Within 20 minutes we had customized the CRM and sent out a complex outbound email campaign. We're already converting our leads. Insane,Ágil CRM es el más fresco&#44; más fácil y con mucho&#44; el CRM más productivo que he usado. Dentro de los 20 minutos que habíamos personalizado el CRM y enviado a cabo una campaña de correo electrónico saliente compleja. Ya estamos convirtiendo nuestros clientes potenciales. Insano
@@ -263,7 +263,7 @@ reasons.once-clicked-cancel-subriciption,Once you click the 'Cancel Subscription
 tickets.daily-tickets-reports-desc,Get periodic email reports with a list of new leads&#44; conversions&#44; or as per your custom criteria.,Obtener reportes de email periódicos con una lista de nuevos leads&#44; conversiones&#44; o criterios según tus costumbres.
 report-view.get-periodic-email-reports-desc,Get periodic email reports with a list of new leads&#44; conversions&#44; or as per your custom criteria.,Obtener reportes de email periódicos con una lista de nuevos leads&#44; conversiones&#44; o criterios según tus costumbres.
 admin-settings-integrations.magento-content,Magento is the open-source ecommerce software and platform trusted by the world's leading brands.,Magento es el software de comercio electrónico de código abierto y la plataforma de confianza de las marcas líderes en el mundo.
-deals.better-reports-info,For better deal reports and sales forecasting&#44; please set your 'Won' and 'Lost' milestones in the,Para obtener mejores informes tratan y la previsión de ventas & # 44; configure e hitos sus ' Won ' 'Lost ' en el
+deals.better-reports-info,For better deal reports and sales forecasting&#44; please set your 'Won' and 'Lost' milestones in the,Para obtener mejores informes tratan y la previsión de ventas &#44; configure e hitos sus ' Won ' 'Lost ' en el
 report-view.get-perodic-email-reports-list-new-leads,Get periodic email reports with a list of new leads&#44; conversions&#44; or as per your custom criteria.,Obtener informes periódicos por correo electrónico con una lista de nuevos clientes potenciales&#44; conversiones&#44; o según sus criterios personalizados.
 tickets.sla-report-desc,Get periodic email reports with a list of new leads&#44; conversions&#44; or as per your custom criteria.,Obtener reportes de email periódicos con una lista de nuevos leads&#44; conversiones&#44; o criterios según tus costumbres.
 admin-settings-integrations.for-java-php-desc,For Java&#44; PHP&#44; .Net wrappers and integrations like Zapier&#44; Wufoo&#44; Unbounce&#44; Chrome extension etc.,Para Java&#44; PHP&#44; .NET wrappers e integraciones como Zapier&#44; Wufoo&#44; Unbounce&#44; extensión de Chrome&#44; etc.
@@ -339,7 +339,7 @@ cases.you-can-add-case-by-clicking,You can add case by clicking the button below
 campaigns.shopify-desc,Run a campaign on a contact when a specified Shopify event is performed by the contact.,Ejecutar una campaña en un contacto cuando un evento Shopify específico  se realiza por el contacto.
 prefs-email.imap-content,Just link your IMAP account and Agile will show emails below a contact from your Inbox.,Sólo tiene que unir su cuenta IMAP y Agile mostrará mensajes de correo electrónico por debajo de un contacto de la bandeja de entrada.
 widgets.QuickBooks-content,Create invoices&#44; track and receive payments&#44; and see invoice history of your customers.,Crear facturas&#44; seguimiento y recibir pagos&#44; y ver la historia de la factura de sus clientes.
-cancellation.please-tell-us-why-you-want-to-leave,Please tell us why you want to leave. Your feedback will help us to serve you better.{{,Por favor&#44; díganos por qué desea hacerlo. Su opinión nos ayudará a servirle mejor. {{
+cancellation.please-tell-us-why-you-want-to-leave,Please tell us why you want to leave. Your feedback will help us to serve you better.,Por favor&#44; díganos por qué desea hacerlo. Su opinión nos ayudará a servirle mejor.
 tags.rename-info,This may take a while. You may see the renamed tag on some contacts while this happens,Esto puede tardar un rato. Usted puede ver la etiqueta cambiado el nombre de algunos contactos mientras esto sucede
 Plan-and-upgrade.sorry-we-are-unable-to-trail-your-subscription,Sorry&#44 we are unable to cancel your trial subscription due to the following reasons,Lo sentimos&#44; no podemos cancelar su suscripción de prueba debido a las siguientes razones
 widgets.Rapleaf-content,Leverage towerdata to personalize content for your customers based on their interests.,towerdata apalancamiento para personalizar el contenido para sus clientes en función de sus intereses.
@@ -2309,7 +2309,7 @@ tickets.favorite-tickets,Favorite Tickets,Tickets favoritos
 plan-and-upgrade.enter-promo-code,Enter Promo Code,Ingresa código promocional
 portlets.my-pending-deals,My Pending Deals,Mis acuerdos pendientes
 campaigns.unsubscribe-name,Unsubscribe Name,Dar de baja nombre
-plan-and-upgrade.yearly-20-percent-off,Yearly (20% off),Anual (20% de descuento)
+plan-and-upgrade.yearly-20-percent-off,(20% off),(20% de descuento)
 portlets.all-deals-funnel,All Deals Funnel,Embudo de todas las ofertas
 contacts-view.does-not-contain,doesn\’t contain,no contiene
 portlets.our-expert-talk,Our expert talk ,Nuestra charla experto
@@ -2391,6 +2391,7 @@ prefs-settings.current-password,Current Password,contraseña actual
 settings.confirm-password,Confirm Password,Confirmar contraseña
 timeline.email-sent-from,Email sent From:,El correo electrónico enviado desde :
 plan-and-upgrade.yearly-40-percent-off,Yearly (40% off),Anual (40% de descuento)
+plan-and-upgrade.2yearly-40-percent-off,(40% off),( 40 % de descuento)
 tickets.execute-workflow,Execute workflow,Ejecutar flujo de trabajo
 deal-view.edit-deal-filter,Edit Deal Filter,Editar filtro de Oferta
 other.plan,Selected Plan : ,Plan seleccionado:
@@ -5053,3 +5054,7 @@ highcharts.download-xls,Download XLS,Descargar XLS
 integration-stats.sync-contacts,to update all fields of contacts and companies,para actualizar todos los campos de contactos y empresas
 others.click,Click,Hacer clic
 integration-stats.sync-in-month,Update can be used only once in a month,Actualización se puede utilizar solamente una vez en un mes
+billing.invoice-bal-from,Balance from previous transaction,Saldo de transacción anterior
+billing.invoice-changed-on,Changed on,Cambio bajo
+billing.email-credits-tooltip,You will be charged,se te cobrará
+billing.for-the-period,for the period,para el periodo

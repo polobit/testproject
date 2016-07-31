@@ -297,7 +297,7 @@ function initializeSubscriptionListeners()
 
 		var quantity = $("#user_quantity").val();
 
-		(quantity && quantity > 1) ? $("#users_quantity_text").text("Users") : $("#users_quantity_text").text("User");
+		(quantity && quantity > 1) ? $("#users_quantity_text").text("{{agile_lng_translate 'plan-and-upgrade' 'users'}}") : $("#users_quantity_text").text("{{agile_lng_translate 'plan-and-upgrade' 'user'}}");
 
 	});
 

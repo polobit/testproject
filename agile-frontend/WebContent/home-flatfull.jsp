@@ -267,9 +267,9 @@ function isIE() {
 
 <div id="free_plan_alert_info" class="free_plan_alert alert alert-info" role="alert" style="display:none;"> 
   <span class="free_plan_message">
-   You are currently on FREE Plan.
+   <%=LanguageUtil.getLocaleJSONValue(localeJSON, "you-are-currently-on-free-plan") %>.
   </span>
-  <a href="#subscribe" class="text-info font-bold" onclick="Agile_GA_Event_Tracker.track_event('Upgrade from Nav Bar Message')">Upgrade</a>
+  <a href="#subscribe" class="text-info font-bold" onclick="Agile_GA_Event_Tracker.track_event('Upgrade from Nav Bar Message')"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "noty-upgrade") %></a>
   <span class="free_plan_strip_close p-l-sm c-p">&times</span>
 </div>
 

@@ -6832,13 +6832,14 @@ Handlebars.registerHelper('get_portlet_description', function(p_name)
 		    });
 	Handlebars.registerHelper('invoice_description', function(description) {
 
+		console.log(description);
 		if (!description)
 			return description;
 
 		if (description.indexOf("Unused time on") != -1) {
-			description = "Balance from previous transaction";
+			description = _agile_get_translated_val('billing','invoice-bal-from');
 		} else if (description.indexOf("Remaining") != -1) {
-			description = "Changed on " + description.substring(description.indexOf("after") + 5);
+			description = _agile_get_translated_val('billing','invoice-changed-on') + description.substring(description.indexOf("after") + 5);
 		}
 
 		return description + " ";

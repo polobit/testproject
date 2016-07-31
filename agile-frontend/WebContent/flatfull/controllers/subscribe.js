@@ -309,7 +309,7 @@ var SubscribeRouter = Backbone.Router
 					price = update_price();
 					$("#user_quantity").val(quantity);
 					$("#users_quantity").text(quantity);
-					(quantity && quantity > 1) ? $("#users_quantity_text").text("Users") : $("#users_quantity_text").text("User");
+					(quantity && quantity > 1) ? $("#users_quantity_text").text("{{agile_lng_translate 'plan-and-upgrade' 'users'}}") : $("#users_quantity_text").text("{{agile_lng_translate 'plan-and-upgrade' 'user'}}");
 					$("#users_total_cost").text((quantity * price).toFixed(2));
 					if ($.isEmptyObject(data))
 						setPlan("free");
