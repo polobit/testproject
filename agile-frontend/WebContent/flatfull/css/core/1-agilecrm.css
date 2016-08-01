@@ -4447,8 +4447,8 @@ border: 1px solid #e5e5e5;
 		opacity: 0.8;
 	}
 	.list-padding{
-		float: left;
-		padding:15px 20px;
+		display: inline-block;
+		padding:4px 18px;
 	}
 	.link-top{
 		height: 40px; 

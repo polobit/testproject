@@ -163,6 +163,7 @@ function globalCallWidgetSet()
 							
 							// this will show the option of widget to select in direct dial from new tab
 							var name = widgetCallName[obj.name];
+							$(".dialler-widget-name-" + name).removeClass("none");
 							$(".dialler-widget-name-" + name +"> a").removeClass("inactive");
 							$(".dialler-widget-name-" + name +"> a").addClass("active");
 						});
