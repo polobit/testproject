@@ -784,7 +784,6 @@ $(function()
 		console.log(format + " : " + date);
 		if ((date / 100000000000) > 1)
 		{
-			console.log(new Date(parseInt(date)).format(format));
 			return new Date(parseInt(date)).format(format, 0);
 		}
 		// date form milliseconds

@@ -18,6 +18,12 @@ $.fn.datepicker.dates['en'] = {
     daysExactMin: ["{{agile_lng_translate 'days' 'Su'}}","{{agile_lng_translate 'days' 'Mo'}}","{{agile_lng_translate 'days' 'Tu'}}","{{agile_lng_translate 'days' 'We'}}","{{agile_lng_translate 'days' 'Th'}}","{{agile_lng_translate 'days' 'Fr'}}","{{agile_lng_translate 'days' 'Sa'}}"],
 };
 
+// Date format 
+dateFormat.i18n = {
+    dayNames: $.fn.datepicker.dates['en'].daysShort.concat($.fn.datepicker.dates['en'].days),
+    monthNames: $.fn.datepicker.dates['en'].monthsShort.concat($.fn.datepicker.dates['en'].months)
+};
+
 var _agile_date_utility = {
     get_date_from_string : function(string){
         if(!string)

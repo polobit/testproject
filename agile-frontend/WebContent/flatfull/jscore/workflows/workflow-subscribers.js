@@ -180,7 +180,7 @@ function fill_subscribers_slate(id, type)
 		    "completed-subscribers": {
 		        "title": "{{agile_lng_translate 'campaigns' 'no-contact-assinged'}}",
 		        "description": "{{agile_lng_translate 'bulk-actions' 'add-subscribers'}}",
-		        "button_text" : "{agile_lng_translate 'campaigns' 'all-subscribers-pad-content-btn-text'}}",
+		        "button_text" : "{{agile_lng_translate 'campaigns' 'all-subscribers-pad-content-btn-text'}}",
 				"route" : "#contacts",
 		        "image": updateImageS3Path("/img/clipboard.png")
 		    },
@@ -192,7 +192,7 @@ function fill_subscribers_slate(id, type)
 		    "all-subscribers": {
 		        "title": "{{agile_lng_translate 'campaigns' 'all-subscribers-pad-content-title'}}",
 		        "description": "{{agile_lng_translate 'bulk-actions' 'add-subscribers'}}",
-		        "button_text" : "{agile_lng_translate 'campaigns' 'all-subscribers-pad-content-btn-text'}}",
+		        "button_text" : "{{agile_lng_translate 'campaigns' 'all-subscribers-pad-content-btn-text'}}",
 				"route" : "#contacts",
 				"image": updateImageS3Path("/img/clipboard.png")
 		    },

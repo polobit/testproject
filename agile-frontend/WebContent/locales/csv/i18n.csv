@@ -4643,6 +4643,7 @@ report-add.title,Title,Título
 widgets.order,Order,Orden
 contacts-view.value,Value,Valor
 contact-details.cases,Cases,Casos
+menu.case,Case,Caso
 contact-details.owner,Owner,Propietario
 admin-settings-tasks.Email,Email,Email
 tasks.Email,Email,Email
@@ -4817,7 +4818,7 @@ currency.Euro,Euro,Euro
 deal-view.name,Name,Nombre
 tasks.High,High,Alta
 menu.help,Help,Ayuda
-portlets.+add,+Add,Agregar
+portlets.+add,+Add,+Agregar
 portlets.tags,Tags,Etiquetas
 report-add.name,Name,Nombre
 contact-edit.main,Main,Principal
@@ -5060,3 +5061,4 @@ billing.invoice-changed-on,Changed on,Cambio bajo
 billing.email-credits-tooltip,You will be charged,se te cobrará
 billing.for-the-period,for the period,para el periodo
 calendar.all-day,all-day,todo el dia
+tickets.priority-and-status,Priority & Status,Prioridad y Estado
