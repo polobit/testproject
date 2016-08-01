@@ -654,7 +654,7 @@ var portlet_graph_utility = {
 						            marginRight: 100,
 						            plotBorderWidth: 1,
 						            plotBorderColor: '#F4F4F5',
-						            height:height,
+						           // height:height,
 						            events: {
 								   		load: function(){
 								   			console.log("load");
@@ -827,7 +827,14 @@ var portlet_graph_utility = {
 									verticalAlign : 'top',
 									y:30
 								}
-						    });
+						    },function(chart){
+                                                        var max = chart.xAxis[0].max,
+                                                                            min = chart.xAxis[0].min,
+                                                                            height = chart.xAxis[0].height;
+                                                                          if (height - (max - min) * 27 <= 0) {
+                                                                            chart.setSize(chart.chartWidth, chart.chartHeight + (max - min) * 20)
+                                                                          }
+                                                    });
 							
 						});
 	},

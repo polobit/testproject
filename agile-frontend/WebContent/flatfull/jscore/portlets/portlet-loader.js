@@ -337,11 +337,20 @@ function set_up_portlets(el, portlets_el){
         			}
         			else if(tempModel.get("name")=="Calls Per Person")
         			{
+{
 
         				var pos = '' + this.$resized_widget.attr('data-col')+''+this.$resized_widget.attr('data-row');
         				var height = this.$resized_widget.find('.portlet_body').height();
-        				var width=this.$resized_widget.find('.portlet_body').width()
-        				callschart[parseInt(pos)].setSize(width,callschart[parseInt(pos)].xAxis[0].categories.length*30+(height-30),false);
+        				var width=this.$resized_widget.find('.portlet_body').width();
+        				var max = callschart[parseInt(pos)].xAxis[0].max,
+									    min = callschart[parseInt(pos)].xAxis[0].min,
+									    height_chart = callschart[parseInt(pos)].xAxis[0].height;
+									 if (height_chart-(max-min)*28<=0) {
+									    callschart[parseInt(pos)].setSize(width, height+(max-min)*20)
+									  }
+									  else
+									  	 callschart[parseInt(pos)].setSize(width, height);
+        				//callschart[parseInt(pos)].setSize(width,callschart[parseInt(pos)].xAxis[0].categories.length*30+(height-30),false);
         			}
         			else if(tempModel.get("name")=="Task Report")
         			{
