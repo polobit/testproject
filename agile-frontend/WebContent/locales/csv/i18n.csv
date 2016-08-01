@@ -874,6 +874,7 @@ contacts-view.import-upto-10&#44;000-companies-from-a-CSV-file,Import upto 10&#4
 campaigns.sends-an-email-to-all-assignees-in-the-group,Sends an email to all assignees in the group,Envía un correo electrónico a todos los cesionarios en el grupo
 billing.continue-send-emails,To continue sending emails from your account,Para continuar con el envío de mensajes de correo electrónico desde su cuenta
 portlets.deal-goals-desc,See how much sales target you have achieved.,Visualiza qué tanto de tu objetivo de ventas has alcanzado
+portlets.deal-goals,Deal Goals,Objetivos de reparto
 validation-msgs.accept,Please enter a value with a valid extension.,Por favor&#44; introduzca un valor con una extensión válida.
 portlets.user-activities-desc,See a timeline of user actions in Agile CRM.,Vea una cronología de las acciones del usuario en el  CRM de Agilw.
 icalfeed.this-calendar-is-added-to-calendar-view-under,The Calendar is added to Calendar view under,Se añade el Calendario para la vista Calendario bajo

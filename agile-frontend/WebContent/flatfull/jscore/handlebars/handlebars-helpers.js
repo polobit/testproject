@@ -781,6 +781,7 @@ $(function()
 		if (!date)
 			return;
 
+		console.log(format + " : " + date);
 		if ((date / 100000000000) > 1)
 		{
 			console.log(new Date(parseInt(date)).format(format));
@@ -5862,6 +5863,20 @@ $(function()
  			portlet_name = "ref-url-stats";
  		else if (p_name == 'Lost Deal Analysis')
 			portlet_name = "deals-lost-reason";
+		else if (p_name== 'Revenue Graph')
+			portlet_name = 'revenue-graph';
+		else if (p_name== 'Mini Calendar')
+			portlet_name = 'mini-calendar'
+		else if(p_name == 'Deal Goals')
+			portlet_name = 'deal-goals'
+		else if(p_name == 'Incoming Deals')
+			portlet_name = 'incoming-deals'
+		else if(p_name == 'Leaderboard')
+			portlet_name = 'leaderboard'
+		else if(p_name == 'Account Details')
+			portlet_name = 'account-details'
+		else if(p_name == 'User Activities')
+			portlet_name = 'user-activities'
 		else
 			portlet_name = p_name;
 

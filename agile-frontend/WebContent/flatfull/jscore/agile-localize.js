@@ -18,4 +18,14 @@ $.fn.datepicker.dates['en'] = {
     daysExactMin: ["{{agile_lng_translate 'days' 'Su'}}","{{agile_lng_translate 'days' 'Mo'}}","{{agile_lng_translate 'days' 'Tu'}}","{{agile_lng_translate 'days' 'We'}}","{{agile_lng_translate 'days' 'Th'}}","{{agile_lng_translate 'days' 'Fr'}}","{{agile_lng_translate 'days' 'Sa'}}"],
 };
 
+var _agile_date_utility = {
+    get_date_from_string : function(string){
+        if(!string)
+             return null;
 
+        return new Date(this.parseDate(string));
+    },
+    parseDate : function(string){
+        return Date.parse(string);
+    },
+};
