@@ -107,7 +107,7 @@
 				{{#if description}}
                	 {{invoice_description description}}
 				{{else}}
-				 Changed on {{epochToHumanDate "dd mmm yyyy" period.start}}
+				 {{agile_lng_translate 'billing' 'invoice-changed-on'}} {{epochToHumanDate "dd mmm yyyy" period.start}}
 				{{/if}}
 				{{/containString}}
         {{else}}
