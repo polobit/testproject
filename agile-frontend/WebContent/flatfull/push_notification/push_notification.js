@@ -155,7 +155,6 @@ function regiseterServiceWorkers()  {
           });
         }).catch(function(error)
          {
-            console.clear();
              console.log("error");
           });
 
