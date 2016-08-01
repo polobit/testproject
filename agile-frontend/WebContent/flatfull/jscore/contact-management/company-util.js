@@ -305,7 +305,7 @@
               
                 if(count_clicks==2)
                   {
-              App_Companies.companyDetailView.model.set({'star_value': score}, {silent : true});
+              App_Companies.companyDetailView.model.set({'star_value': 0}, {silent : true});
 	 		company_model =  App_Companies.companyDetailView.model.toJSON();
               
               count_clicks=0;
