@@ -545,7 +545,7 @@ public class CSVUtil
 		    {
 			accessDeniedToUpdate++;
 			failedContacts.add(new FailedContactBean(getDummyContact(properties, csvValues),
-				"Error.Access denied to update contact"));
+				"Error! Access denied to update contact"));
 
 			continue;
 		    }
@@ -569,7 +569,7 @@ public class CSVUtil
 		    {
 			++limitExceeded;
 			failedContacts.add(new FailedContactBean(getDummyContact(properties, csvValues),
-				"Error.limit is exceeded"));
+				"Error! limit is exceeded"));
 			continue;
 		    }
 
@@ -589,7 +589,7 @@ public class CSVUtil
 
 		System.out.println("Invalid tag exception raised while saving contact ");
 		e.printStackTrace();
-		failedContacts.add(new FailedContactBean(getDummyContact(properties, csvValues),"Error."+e.getMessage()));
+		failedContacts.add(new FailedContactBean(getDummyContact(properties, csvValues),"Error! "+e.getMessage()));
 		continue;
 	    }
 	    catch (AccessDeniedException e)
@@ -598,7 +598,7 @@ public class CSVUtil
 		accessDeniedToUpdate++;
 		System.out.println("ACL exception raised while saving contact ");
 		e.printStackTrace();
-		failedContacts.add(new FailedContactBean(getDummyContact(properties, csvValues), "Error."+e.getMessage()));
+		failedContacts.add(new FailedContactBean(getDummyContact(properties, csvValues), "Error! "+e.getMessage()));
 
 	    }
 	    catch (Exception e)
@@ -609,7 +609,7 @@ public class CSVUtil
 		if (tempContact.id != null)
 		{
 		    failedContacts.add(new FailedContactBean(getDummyContact(properties, csvValues),
-			    "Error.Exception raise while saving contact"));
+			    "Error! Exception raise while saving contact"));
 		}
 
 	    }
@@ -660,7 +660,7 @@ public class CSVUtil
 	}
 
 	if (failedContacts.size() > 0)
-	    buildCSVImportStatus(status, ImportStatus.TOTAL_FAILED, failedContacts.size());
+	    buildCSVImportStatus(status, ImportStatus.TOTAL_FAILED, failedContacts.size() - mergedContacts);
 
 	buildCSVImportStatus(status, ImportStatus.TOTAL, csvData.size());
 
@@ -1103,13 +1103,13 @@ public class CSVUtil
 		&& StringUtils.isBlank(contact.getContactFieldValue(Contact.LAST_NAME)))
 	{
 	    buildCSVImportStatus(statusMap, ImportStatus.NAME_MANDATORY, 1);
-	    failed.add(new FailedContactBean(getDummyContact(properties, csvValues), "Error.Name field can't be blank"));
+	    failed.add(new FailedContactBean(getDummyContact(properties, csvValues), "Error! Name field can't be blank"));
 	    return false;
 	}
 	if (StringUtils.isBlank(contact.getContactFieldValue(Contact.EMAIL)))
 	{
 	    buildCSVImportStatus(statusMap, ImportStatus.EMAIL_REQUIRED, 1);
-	    failed.add(new FailedContactBean(getDummyContact(properties, csvValues), "Error.Email field can't be blank"));
+	    failed.add(new FailedContactBean(getDummyContact(properties, csvValues), "Error! Email field can't be blank"));
 	    return false;
 	}
 
