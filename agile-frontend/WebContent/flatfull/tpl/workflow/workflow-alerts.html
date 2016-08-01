@@ -120,9 +120,9 @@
                 		<div class="control-group form-group">
 	                		<div class="row">
 	                			<div class="col-md-5">
-		                    		<label class="control-label"><b>Email</b> <span class="field_req">*</span></label>
+		                    		<label class="control-label"><b>{{agile_lng_translate 'modals' 'email'}}</b> <span class="field_req">*</span></label>
 		                    		<div class="controls">
-		                        		<span><input name="email" id="emailId" onkeypress="return event.keyCode != 13;" class="email form-control required" type="text" placeholder="Enter the email address" autofocus></span>
+		                        		<span><input name="email" id="emailId" onkeypress="return event.keyCode != 13;" class="email form-control required" type="text" placeholder="{{agile_lng_translate 'widjets' 'enter-email-address'}}" autofocus></span>
 		                    		</div>
 								</div>
 								<span id="alert-msg"></span>
@@ -134,7 +134,7 @@
 		<div class="modal-footer">
 			<span class="m-r-xs"></span>
  			<button type="button" class="btn btn-danger" data-dismiss="modal" id="verify-ignore" style="display:none;">{{agile_lng_translate 'contacts-view' 'ignore'}}</button>
-			<a href="javascript:void(0)" class="btn btn-sm btn-primary" id="verify-email" onclick="createJSON()">Done</a>
+			<a href="javascript:void(0)" class="btn btn-sm btn-primary" id="verify-email" onclick="createJSON()">{{agile_lng_translate 'deal-view' 'done'}}</a>
 		</div>
 	</div>
 </div>

@@ -482,14 +482,14 @@ function create_new_workflow(e,name, designerJSON, unsubscribe_json, $clicked_bu
                   // Show different message for Copy
                   if($clicked_button.attr('id') === 'duplicate-workflow-bottom' || $clicked_button.attr('id') === 'duplicate-workflow-top')
                   {
-                      if(status.responseText === "{{agile_lng_translate 'campaigns' 'name-exists'}}")
+                      if(status.responseText === "Please change the given name. Same kind of name already exists.")
                       {
                           showAlertModal("duplicate_workflow");
                           return;
                       }
                   }
                   
-                  showAlertModal(response.responseText, undefined, undefined, undefined, "Error");
+                  showAlertModal(status.responseText, undefined, undefined, undefined, "Error");
               }
               else
                   {

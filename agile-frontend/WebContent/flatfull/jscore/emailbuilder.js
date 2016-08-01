@@ -98,13 +98,13 @@ function saveEmailTemplateFromBuilder(fullSource,builderSource) {
     };
 
     var requestType = "post";
-    var message = "Template saved.";
+    var message = "{{agile_lng_translate 'emailbuilder' 'saved'}}";
     //to check already template id exists or not
     var templateId = $("#templateid").val();
     if(templateId) {
         var requestType = "put";
         template["id"] = templateId;
-        message = "Template updated.";
+        message = "{{agile_lng_translate 'emailbuilder' 'updated'}}";
     }
 
     $.ajax({
@@ -223,7 +223,7 @@ function check_merge_fields_and_send(template)
                      e.preventDefault();
                     
                      // Disable and change text
-                     $(this).attr('disabled', 'disabled').text("Sending");
+                     $(this).attr('disabled', 'disabled').text("{{agile_lng_translate 'other' 'sending'}}");
                      var requestType = "post";
                     var message = _agile_get_translated_val('emailbuilder','sent-testemail');
 
