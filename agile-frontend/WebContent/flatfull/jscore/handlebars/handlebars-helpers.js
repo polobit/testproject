@@ -2789,6 +2789,45 @@ $(function()
 		return value.trim();
 	});
 
+/**
+	 * Returns reputation name based on value
+	 * 
+	 */
+	Handlebars.registerHelper('get_subaccount_reputation', function(value)
+	{
+		var type = "bg-light dk text-tiny";
+		var reputation = "Unknown";
+		var badge="";
+
+		if (value > 1 && value < 40)
+		{
+			type = "label-danger text-tiny";
+			reputation = "{{agile_lng_translate 'reputation' 'Poor'}}";
+			badge="progress-bar-danger";
+		}
+		else if (value >= 40 && value < 75)
+		{
+			type = "label-warning text-tiny";
+			reputation = "{{agile_lng_translate 'reputation' 'Ok'}}";
+			badge="progress-bar-warning";
+		}
+		else if (value >= 75 && value < 90)
+		{
+			type = "label-primary text-tiny";
+			reputation = "{{agile_lng_translate 'reputation' 'Good'}}";
+			badge="progress-bar-info";
+		}
+		else if (value >= 90)
+		{
+			type = "label-success text-tiny";
+			reputation = "{{agile_lng_translate 'reputation' 'Excellent'}}";
+			badge="progress-bar-success"
+		}
+		var data = {'type':type, 'reputation':reputation, 'value':value,'badge':badge};
+		var html = getTemplate("reputation-progress", data);
+		return html;
+
+	});
 
 	/**
 	 * Returns id from hash. It returns id from hash iff id exists at last.
