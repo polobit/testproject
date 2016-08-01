@@ -5,8 +5,7 @@
     var bConfig = require('./config.js');
     var siteBuilder = require('./builder.js');
     var publisher = require('../vendor/publisher');
-    var current_agileform;
-
+    
     var styleeditor = {
 
         buttonSaveChanges: document.getElementById('saveStyling'),
@@ -137,8 +136,14 @@
 
             if ( block === undefined ) return false;
 
-            var i;
+            //render agileform latest code
+            if(!window.current_agileform && block.frame.hasAttribute('data-originalurl') && (block.frame.getAttribute('data-originalurl').includes("agileform") || block.frame.getAttribute('data-originalurl').includes("header10")))
+            {    var agileform_class=$(block.frame.contentWindow.document).find('.agile_crm_form_embed');
+                if(agileform_class!==0)
+                    styleeditor.loadAgileCRMFormInLandingPage(agileform_class.attr("id")); 
+            } 
 
+            var i;           
             //create an object for every editable element on the canvas and setup it's events
 
             for( var key in bConfig.editableItems ) {
@@ -161,6 +166,7 @@
 
             if(key==='img' && element.id !==null && element.id==='agileform')
                 return;
+                         
             //Element object extention
             canvasElement.prototype.clickHandler = function(el) {
                 styleeditor.styleClick(this);
@@ -546,10 +552,15 @@
                 var form_id=$('select[id=agileform_id]').val();
                 if(form_id==='default')                 
                     return;
-                current_agileform=$(styleeditor.activeElement.element).closest("#page").children().attr("id");
+
+                window.current_agileform=$(styleeditor.activeElement.element).closest("#page").children().attr("id");
                 var current_element=$(styleeditor.activeElement.element).children();
-                styleeditor._oldForm[current_agileform]=current_element;
-                styleeditor.loadAgileCRMFormInLandingPage($(styleeditor.activeElement.element),form_id);
+
+                if(current_element.attr("class")==="agile_crm_form_embed")
+                    current_element=$(styleeditor.activeElement.element).children().children();                    
+
+                styleeditor._oldForm[window.current_agileform]=current_element;
+                styleeditor.loadAgileCRMFormInLandingPage(form_id);
             }
 
             $('#detailsAppliedMessage').fadeIn(600, function(){
@@ -1077,10 +1088,14 @@
             //agile form reset 
            if($(styleeditor.activeElement.element).attr('id')==='agileform_div'){
             $("iframe").each(function(i) { 
-                if($("iframe")[i].src.includes(current_agileform)){
-                   var iframe_id=$("iframe")[i].getAttribute("id");
-                   $('#'+iframe_id).contents().find('#agileform_div').empty();
-                   $('#'+iframe_id).contents().find('#agileform_div').append(styleeditor._oldForm[current_agileform]);
+                if($("iframe")[i].hasAttribute('data-originalurl') && ($("iframe")[i].getAttribute('data-originalurl').includes(window.current_agileform))){
+                   var iframe_id=$("iframe")[i].getAttribute("id");                   
+                   if(styleeditor._oldForm[window.current_agileform].size()===1)
+                        $('#'+iframe_id).contents().find('#agileform_div').html(styleeditor._oldForm[window.current_agileform]);
+                   else {
+                        $('#'+iframe_id).contents().find('.agile_crm_form_embed').attr("id",styleeditor.preForm_id);
+                        $('#'+iframe_id).contents().find('.agile_crm_form_embed').html(styleeditor._oldForm[window.current_agileform]);
+                    }
                    return;
                 }
             }); 
@@ -1166,11 +1181,14 @@
             $('a#default-tab1').css('display','none');           
         },
 
-        loadAgileCRMFormInLandingPage: function(element,formId){
-            element.parent().addClass('agile_crm_form_embed');
-            var script = document.createElement('script');
+        loadAgileCRMFormInLandingPage: function(id){
+            id = id.split("_");
+             var agileDomain = id[0];
+             var formId = id[id.length-1];
+             console.log("domain is :"+agileDomain);
+             var script = document.createElement('script');
             script.src = window.siteUrl+'core/api/forms/form/js/'+formId;
-            document.body.appendChild(script);
+            document.body.appendChild(script);  
         }
 
     };
