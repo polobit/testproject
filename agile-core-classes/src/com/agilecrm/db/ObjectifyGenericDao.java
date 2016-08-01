@@ -57,6 +57,7 @@ import com.agilecrm.knowledgebase.entity.Section;
 import com.agilecrm.ipaccess.IpAccess;
 import com.agilecrm.landingpages.LandingPage;
 import com.agilecrm.landingpages.LandingPageCNames;
+import com.agilecrm.notification.NotificationTemplate;
 import com.agilecrm.notification.push.PushNotificationMessage;
 import com.agilecrm.portlets.Portlet;
 import com.agilecrm.reports.ActivityReports;
@@ -300,6 +301,7 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	
 	//Push Notification Message for Browser Notification
 	ObjectifyService.register(PushNotificationMessage.class);
+	ObjectifyService.register(NotificationTemplate.class);
 
     }
 

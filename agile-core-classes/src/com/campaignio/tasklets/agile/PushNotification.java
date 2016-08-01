@@ -8,14 +8,19 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.sync.wrapper.ContactWrapper;
 import com.agilecrm.contact.util.ContactUtil;
+import com.agilecrm.email.wrappers.ContactEmailWrapper;
+import com.agilecrm.notification.NotificationTemplate;
 import com.agilecrm.notification.push.PushNotificationMessage;
+import com.agilecrm.util.EmailLinksConversion;
 import com.agilecrm.util.HTTPUtil;
 import com.campaignio.logger.Log.LogType;
 import com.campaignio.logger.util.LogUtil;
 import com.campaignio.tasklets.TaskletAdapter;
 import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
 import com.campaignio.tasklets.util.TaskletUtil;
+import com.thirdparty.push.notification.NotificationTemplateUtil;
 
 /**
  * <code>PushNotification</code> represents PushNotification node in the workflow. It push notification.
@@ -60,22 +65,27 @@ public class PushNotification extends TaskletAdapter
     public static String GCM_API_KEY = "key=AIzaSyCk-w152hepg2pmVWT7MEbEq64GNhnbfik";
 
 	/**
-	 * Given Push Notification Title
+	 * Given Push Notification Template id
 	 */
-	public static String NOTIFICATION_TITLE_VALUE = "notification_title";
+	public static String PUSH_NOTIFICATION_TEMPLATE_NAME = "push_notification_template_name";
 
 	/**
-	 * Given URL type
+	 * Given  Push Notification Title
+	 */
+	public static String NOTIFICATION_TITLE_VALUE = "notification_title";
+	
+	/**
+	 * Given URL Push Notification message
 	 */
 	public static String NOTIFICATION_MESSAGE_VALUE = "notification_message";
 
 	/**
-	 * Exact URL type
+	 * Exact URL Push Notification icon url
 	 */
 	public static String NOTIFICATION_ICON_URL_VALUE = "notification_icon";
 
 	/**
-	 * Like URL type
+	 * Exact url Push Notification link
 	 */
 	public static String NOTIFICATION_LINK_URL_VALUE = "notification_url";
 
@@ -92,10 +102,30 @@ public class PushNotification extends TaskletAdapter
 	 public void run(JSONObject campaignJSON, JSONObject subscriberJSON, JSONObject data, JSONObject nodeJSON) throws Exception
 	    {
 		// Get Score and Type
-		String title = getStringValue(nodeJSON, subscriberJSON, data, NOTIFICATION_TITLE_VALUE);
-		String message = getStringValue(nodeJSON, subscriberJSON, data, NOTIFICATION_MESSAGE_VALUE);
-		String linkURL = getStringValue(nodeJSON, subscriberJSON, data, NOTIFICATION_LINK_URL_VALUE);
-		String iconURL = getStringValue(nodeJSON, subscriberJSON, data, NOTIFICATION_ICON_URL_VALUE);
+		 Long notificationTemplateId = Long.parseLong(getStringValue(nodeJSON, subscriberJSON, data, PUSH_NOTIFICATION_TEMPLATE_NAME));
+		 
+		 NotificationTemplate notificationTemplate = NotificationTemplateUtil.getNotificationTemplateById(notificationTemplateId);
+		 
+		 if(notificationTemplate == null){
+			 TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, null);
+	    		return;
+		 }
+		 System.out.println("nnnnnnnnnnnnnnn"+notificationTemplateId);
+		 		 
+		String title = notificationTemplate.notificationTitle;
+		String message = notificationTemplate.notificationMessage;
+		String linkURL = notificationTemplate.notificationLink;
+		String iconURL = notificationTemplate.notificationIcon;
+		
+		String pushParam = notificationTemplate.push_param;
+		 
+		 if(notificationTemplate.push_param.equals("YES_AND_PUSH")){
+			 linkURL = EmailLinksConversion.convertLinksUsingRegex(linkURL, AgileTaskletUtil.getId(subscriberJSON), AgileTaskletUtil.getId(campaignJSON), pushParam);
+		 }
+		 else if(notificationTemplate.push_param.equals("YES_AND_PUSH_EMAIL_ONLY")){
+			 linkURL = EmailLinksConversion.convertLinksUsingRegex(linkURL, AgileTaskletUtil.getId(subscriberJSON), AgileTaskletUtil.getId(campaignJSON), pushParam);
+		 }
+		
 
 		try
 		{
@@ -268,11 +298,14 @@ public class PushNotification extends TaskletAdapter
 	 }
 	 
 	 public static void main(String asd[]) throws Exception{
-		 int i=0;
-		 //String str="https://android.googleapis.com/gcm/send/zW1vgKGlds/:APA91bHrg6ULcPskmV58IkYsveZwjH97UYXGSNfoNb_k-q5N9rg4ELS_NR";
-		 //System.out.println(StringUtils.substringAfterLast(str, "/"));
-		 while(i<1){
-		 sendPushNotificationToChrome("erqk5SmfYjw:APA91bGRRVfKrx3dn2I41J5qZ85pSZzl7FsZvNqVZ6CNLrkfrejVsn3pFx5QZjFSXbCJKmYsuS_r_g41C2G0BFSd4hzfFZ4kP28i-UFT8bMnFLYK-X1eAFTt37hAixRJhYrDPcyQuZW_");
-		 i++;}
+		String url=" https://api.sendgrid.com/v3/subusers";
+		 
+		 String response = HTTPUtil.accessURLUsingAuthentication(url, "agilecrm1", "send@agile1",
+					"GET", null, false, "application/json", "application/json");
+		 
+		 JSONArray json=new JSONArray(response);
+		 System.out.println("subuser: "+json.length());
+		 
+		 
 	 }
 }
