@@ -35,7 +35,7 @@
 					<div class="control-group form-group">
 						<label class="control-label col-sm-2">Name<span class="field_req">*</span></label>
 						<div class="controls col-sm-8">
-							<input type="text" name="name" class="required form-control" />
+							<input type="text" name="name" class="required form-control" maxlength="120" placeholder="Max Length: 120"/>
 						</div>
 					</div>
 					<div class="control-group form-group">
@@ -138,7 +138,7 @@
 														between</option>
 													<option value="LAST" class="created_time updated_time last_contacted last_emailed last_called last_campaign_emaild">in
 														last</option>
-													<option value="NOT_DEFINED" class="last_contacted">never</option>
+													<option value="NOT_DEFINED" class="last_contacted last_emailed last_called">never</option>
 													<option value="NEXT" class="created_time updated_time">in next
 														</option>
 													<option value="EQUALS" class="tag org_tag">is</option>
@@ -325,7 +325,7 @@
 														between</option>
 													<option value="LAST" class="created_time updated_time last_contacted last_emailed last_called last_campaign_emaild">in
 														last</option>
-													<option value="NOT_DEFINED" class="last_contacted">never</option>
+													<option value="NOT_DEFINED" class="last_contacted last_emailed last_called">never</option>
 													<option value="NEXT" class="created_time updated_time">in next
 														</option>
 													<option value="EQUALS" class="tag org_tag">is</option>

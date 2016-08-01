@@ -16,6 +16,10 @@ $(function()
 	{
 		return getPropertyValue(items, name);
 	});
+	Handlebars.registerHelper('getSystemPropertyValue', function(items, name)
+	{
+		return getSystemPropertyValue(items, name);
+	});
 
 	Handlebars.registerHelper('stripeCreditConvertion', function(amount)
 	{
@@ -1131,6 +1135,8 @@ $(function()
 							element = "";
 							cls = "compactcontact";
 						}
+						if(element == "basic_info")
+							element = "Basic Info";
 					}
 			}
 
@@ -1397,6 +1403,25 @@ $(function()
 		
 		return options.inverse(this);
 	});
+
+
+	/*Handlebars.registerHelper('property_json_is_remote_addr', function(name, properties, options)
+	{
+
+        var value = getPropertyValue(properties, name);
+        if(!value)
+        {
+        	return options.inverse(this);
+        }
+        try{
+        	value = JSON.parse(value);
+        }catch(e){}
+
+		if (value && Object.keys(value) && Object.keys(value).length == 1 && value.remote_add!=undefined)
+			return options.fn(this);
+		
+		return options.inverse(this);
+	});*/
 
 	/**
 	 * returns online scheduling url of current user
@@ -1749,6 +1774,16 @@ $(function()
 		}
 	});
 
+	Handlebars.registerHelper('getCurrentCompanyProperty', function(value)
+	{
+		if (App_Companies.companyDetailView && App_Companies.companyDetailView.model)
+		{
+			var contact_properties = App_Companies.companyDetailView.model.get('properties')
+			console.log(App_Companies.companyDetailView.model.toJSON());
+			return getPropertyValue(contact_properties, value);
+		}
+	});
+
 	Handlebars.registerHelper('safe_string', function(data)
 	{
 		if (data && data.indexOf("Tweet about Agile") == -1 && data.indexOf("Like Agile on Facebook") == -1)
@@ -1844,7 +1879,7 @@ $(function()
 
 	Handlebars.registerHelper('isDuplicateContactProperty', function(properties, key, options)
 	{
-		if (App_Contacts.contactDetailView && App_Contacts.contactDetailView.model)
+		if (App_Contacts.contactDetailView && App_Contacts.contactDetailView.model && Current_Route.indexOf("contact/") == 0)
 		{
 			var contact_properties = App_Contacts.contactDetailView.model.get('properties');
 			var currentContactEntity = getPropertyValue(contact_properties, key);
@@ -1863,6 +1898,29 @@ $(function()
 			}
 
 			if (currentContactEntity == contactEntity)
+				return options.fn(this);
+
+			return options.inverse(this)
+		}
+		if (App_Companies.companyDetailView && App_Companies.companyDetailView.model && Current_Route.indexOf("company/") == 0)
+		{
+			var contact_properties = App_Companies.companyDetailView.model.get('properties');
+			var currentContactEntity = getPropertyValue(contact_properties, key);
+			var contactEntity = getPropertyValue(properties, key);
+
+			if (!currentContactEntity || !contactEntity)
+			{
+				currentContactEntity = getPropertyValue(contact_properties, "first_name") + " " + getPropertyValue(contact_properties, "last_name");
+				contactEntity = getPropertyValue(properties, "first_name") + " " + getPropertyValue(properties, "last_name");
+			}
+			
+			if(App_Companies.companyDetailView.model.get('type') == 'COMPANY')
+			{
+				currentContactEntity = getPropertyValue(contact_properties, "name") ;
+				contactEntity = getPropertyValue(properties, "name");
+			}
+
+			if (currentContactEntity && contactEntity && currentContactEntity.toLowerCase() == contactEntity.toLowerCase())
 				return options.fn(this);
 
 			return options.inverse(this)
@@ -2708,31 +2766,29 @@ $(function()
 		{
 			type = "label-danger text-tiny";
 			reputation = "Poor";
-			badge="red;";
+			badge="progress-bar-danger";
 		}
 		else if (value >= 40 && value < 75)
 		{
 			type = "label-warning text-tiny";
 			reputation = "Ok";
-			badge="yellow";
+			badge="progress-bar-warning";
 		}
 		else if (value >= 75 && value < 90)
 		{
 			type = "label-primary text-tiny";
 			reputation = "Good";
-			badge="blue";
+			badge="progress-bar-info";
 		}
 		else if (value >= 90)
 		{
 			type = "label-success text-tiny";
 			reputation = "Excellent";
-			badge="green"
+			badge="progress-bar-success"
 		}
-
-		return "<span style='font-weight: bold;font-size: 12px;position: relative;' class='label " + type
-
-		+ "'>" + reputation + " <span style='margin: 0px -2px 0px 5px; padding:1px 5px 1px 5px ; background-color:white; color:"+ badge +"' class='badge " 
-		+ type + "'>" + value + " %</span> </span>";
+		var data = {'type':type, 'reputation':reputation, 'value':value,'badge':badge};
+		var html = getTemplate("reputation-progress", data);
+		return html;
 
 	});
 
@@ -2751,6 +2807,16 @@ $(function()
 	Handlebars.registerHelper('isAdmin',function(options)
 	{
 		if(CURRENT_DOMAIN_USER.is_admin){
+			return options.fn(this);
+		}else{
+			return options.inverse(this);
+		}
+		 
+	});
+
+	Handlebars.registerHelper('isNewVersionDomainUser',function(options)
+	{
+		if(CURRENT_DOMAIN_USER.version){
 			return options.fn(this);
 		}else{
 			return options.inverse(this);
@@ -2879,6 +2945,17 @@ $(function()
 	Handlebars.registerHelper("hasRestrictedMenuScope", function(scope_constant, options)
 	{
 		if (CURRENT_DOMAIN_USER.restricted_scopes && $.inArray(scope_constant, CURRENT_DOMAIN_USER.restricted_scopes) != -1){
+			return options.fn(this);
+		}
+		return options.inverse(this);
+	});
+
+	/**
+	 * Helps to check the restricted permissions of the user based on the ACL.
+	 */
+	Handlebars.registerHelper("isRestrictedMenuScope", function(scope_constant, options)
+	{
+		if (CURRENT_DOMAIN_USER.restricted_menu_scopes && $.inArray(scope_constant, CURRENT_DOMAIN_USER.restricted_menu_scopes) != -1){
 			return options.fn(this);
 		}
 		return options.inverse(this);
@@ -4007,33 +4084,6 @@ $(function()
 			var contact_properties = App_Contacts.contactDetailView.model.get('properties')
 			console.log(App_Contacts.contactDetailView.model.toJSON());
 			return options.fn(getPropertyValue(contact_properties, value));
-		}
-	});
-
-	Handlebars.registerHelper('isDuplicateContactProperty', function(properties, key, options)
-	{
-		if (App_Contacts.contactDetailView && App_Contacts.contactDetailView.model)
-		{
-			var contact_properties = App_Contacts.contactDetailView.model.get('properties')
-			var currentContactEntity = getPropertyValue(contact_properties, key);
-			var contactEntity = getPropertyValue(properties, key);
-
-			if (!currentContactEntity || !contactEntity)
-			{
-				currentContactEntity = getPropertyValue(contact_properties, "first_name") + " " + getPropertyValue(contact_properties, "last_name");
-				contactEntity = getPropertyValue(properties, "first_name") + " " + getPropertyValue(properties, "last_name");
-			}
-			
-			if(App_Contacts.contactDetailView.model.get('type') == 'COMPANY')
-			{
-				currentContactEntity = getPropertyValue(contact_properties, "name") ;
-				contactEntity = getPropertyValue(properties, "name");
-			}
-
-			if (currentContactEntity == contactEntity)
-				return options.fn(this);
-
-			return options.inverse(this)
 		}
 	});
 
@@ -5856,7 +5906,7 @@ $(function()
 		case "no interest":
 		case "incorrect referral":
 		case "meeting scheduled":
-		case "new oppurtunity":
+		case "new opportunity":
 			return "Call duration";
 			break;
 		case "busy":
@@ -5947,6 +5997,8 @@ $(function()
 			portlet_name = "Visits";
 		else if(p_name=='Referralurl stats')
  			portlet_name = "Referral URL Stats";
+ 		else if (p_name == 'Lost Deal Analysis')
+			portlet_name = "Deals Lost by Reason";
 		else
 			portlet_name = p_name;
 		return portlet_name;
@@ -6636,6 +6688,8 @@ $(function()
 							element = "";
 							cls = "compactcontact";
 						}
+						if(element == "basic_info")
+							element = "Basic Info";
 					}
 			}
 		else if(element == "url")
@@ -7274,7 +7328,8 @@ Handlebars.registerHelper('convert_toISOString', function(dateInepoch, options) 
 	{
 		var options_el = "";
 		if(type == 'portlet'){
-			options_el +="<option value='MarketingDashboard' lass='user-dashboard' title='Marketing Dashboard'>Marketing Dashboard</option>"; 
+			options_el +="<option value='MarketingDashboard' lass='user-dashboard' title='Marketing Dashboard'>Marketing</option>"
+						+ "<option value='SalesDashboard' class='user-dashboard' title='Sales Dashboard'>Sales</option>"; 
 		}
 		if(CURRENT_USER_DASHBOARDS)
 		{
@@ -7337,7 +7392,8 @@ Handlebars.registerHelper('convert_toISOString', function(dateInepoch, options) 
 					}
 					if(index == CURRENT_USER_DASHBOARDS.length-1)
 					{
-						options_el += "<li><a id='MarketingDashboard' title='Marketing Dashboard' class='user-defined-dashboard' href='#'>Marketing Dashboard</a></li>";
+						options_el += "<li><a id='MarketingDashboard' title='Marketing Dashboard' class='user-defined-dashboard' href='#'>Marketing</a></li>";
+						options_el += "<li><a id='SalesDashboard' title='Sales Dashboard' class='user-defined-dashboard' href='#'>Sales </a></li>";					
 						options_el += "<li class='divider'></li>";
 						options_el += "<li><a id='dashboards' href='#dashboards'>Manage Dashboards</a></li>";
 					}
@@ -7349,7 +7405,8 @@ Handlebars.registerHelper('convert_toISOString', function(dateInepoch, options) 
 			if(CURRENT_USER_DASHBOARDS.length == 0 && type == 'dashboard')
 			{
 				options_el += "<li><a id='Dashboard' class='user-defined-dashboard predefined-dashboard' href='#'>Dashboard</a></li>";
-				options_el += "<li><a id='MarketingDashboard' title='Marketing Dashboard' class='user-defined-dashboard' href='#'>Marketing Dashboard</a></li>";
+				options_el += "<li><a id='MarketingDashboard' title='Marketing Dashboard' class='user-defined-dashboard' href='#'>Marketing</a></li>";
+				options_el += "<li><a id='SalesDashboard' title='Sales Dashboard' class='user-defined-dashboard' href='#'>Sales</a></li>";
 				options_el += "<li class='divider'></li>";	
 				options_el += "<li><a id='dashboards' href='#dashboards'>Manage Dashboards</a></li>";
 			}			
@@ -7373,6 +7430,15 @@ Handlebars.registerHelper('convert_toISOString', function(dateInepoch, options) 
 			return options.inverse(this);
 		else
 			return options.fn(this);
+	});
+
+	Handlebars.registerHelper('is_yearly_plan', function(options)
+	{
+		var plan = USER_BILLING_PREFS.plan.plan_type;
+		var type = plan.split("_")
+		if(type[1] && (type[1] == "YEARLY" || type[1] == "BIENNIAL"))
+			return options.fn(this);
+		return options.inverse(this);
 	});
 	
 	Handlebars.registerHelper("check_admin_ip", function(options)
@@ -7478,6 +7544,19 @@ Handlebars.registerHelper('getSuggestionName', function(suggestionId){
 		}		
 });
 
+Handlebars.registerHelper('stringifyObject', function(data){
+	var obj ={};
+	obj.id = data.id;
+	obj.name = data.name;
+	if(data.display_name){
+		obj.display_name = data.display_name;
+	}else{
+		obj.display_name = data.name;
+	}
+	obj.listOfUsers = data.listOfUsers;
+	return JSON.stringify(obj);
+});
+
 Handlebars.registerHelper('removeSpecialCharacter',function(value){
           var value = value.replace(/[^\w\s]/gi, '-');
           return value;
@@ -7571,4 +7650,27 @@ Handlebars.registerHelper('if_equals_lowerCase', function(value, target, options
 		return options.fn(this);
 	else
 		return options.inverse(this);
+});
+
+Handlebars.registerHelper('if_equals_sork_key', function(value, target, options)
+{
+
+	if(value && value.lastIndexOf("-", 0) === 0)
+
+		value = value.substr(1);
+
+	if(value && target && target == value)
+		return options.fn(this);
+	else
+		return options.inverse(this); 
+});
+
+Handlebars.registerHelper('if_asc_sork_key', function(value, options)
+{
+
+	if(value && value.lastIndexOf("-", 0) === 0)
+
+		return options.inverse(this);
+	else
+		return options.fn(this); 
 });

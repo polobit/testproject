@@ -52,9 +52,12 @@ $(function(){
 
 		
 		// Remove, if rendere of a collection is called multiple times 
-		if(table_headers.length == 0)
+		if(table_headers.length == 0 && !$(table).hasClass("no-header-checkbox"))
 			$(table_header_row).prepend('<th style="width:5%;"><label class="i-checks i-checks-sm m-b-none"><input type="checkbox" class="thead_check" value=""><i></i></label></th>');
 		
+		if(table_headers.length == 0 && $(table).hasClass("no-header-checkbox"))
+			$(table_header_row).prepend('<th style="width:5%;"></th>');
+
 		if(table_cell.length == 0)
 			$(table_body_row).prepend('<td class="v-middle checkbox" style="cursor:default;"><label class="i-checks i-checks-sm"><input type="checkbox" class="tbody_check" value=""><i></i></label></td>');	  
 		
@@ -137,6 +140,9 @@ $(function(){
 
 function append_checkboxes(el)
 {
+	if(Current_Route && (Current_Route.indexOf("contacts/search")!=-1))
+		  return;
+		
 	var checkbox_element = $('tr:last > td.select_checkbox', el);
 	if(checkbox_element.length != 0)
 	{
@@ -149,7 +155,7 @@ function append_checkboxes(el)
 	// If select all is chosen then all the upcomming models with in table should have checked checkboxes
 	if(SELECT_ALL == true || (Current_Route == 'deals' && SELECT_ALL_DEALS==true) || SUBSCRIBERS_SELECT_ALL == true)
 	{
-		$.each($('tr td:nth-child(1)').not(".checkbox"), function(key, value){
+		$.each($('tr td:nth-child(1)', el).not(".checkbox"), function(key, value){
 			$(this).closest('tr').prepend('<td class="checkbox"><label class="i-checks i-checks-sm"><input class="tbody_check" type="checkbox" checked="checked"/><i></i></label></td>');
 		});
 		var grid_view_element = $(".grid-view-checkbox", el);
@@ -158,7 +164,7 @@ function append_checkboxes(el)
 	}	
 
 	else{
-		$.each($('tr td:nth-child(1)').not(".checkbox"), function(key, value){
+		$.each($('tr td:nth-child(1)', el).not(".checkbox"), function(key, value){
 			$(this).closest('tr').prepend('<td class="checkbox"><label class="i-checks i-checks-sm"><input class="tbody_check" type="checkbox"/><i></i></label></td>');
 		});
 	}

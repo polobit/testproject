@@ -7,6 +7,7 @@ import javax.persistence.Id;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.Cached;
@@ -36,6 +37,8 @@ public class OpportunitySchemaUpdateStats
 	public Integer total;
 	
 	public String failedIds;
+	
+	public Long updated_time = 0L;
 
 	
 	private static ObjectifyGenericDao<OpportunitySchemaUpdateStats> dao = new ObjectifyGenericDao<OpportunitySchemaUpdateStats>(
@@ -46,14 +49,28 @@ public class OpportunitySchemaUpdateStats
 	 */
 	public void save()
 	{
+		this.updated_time = System.currentTimeMillis() / 1000 ; 
 		dao.put(this);
 	}
 
 	public static OpportunitySchemaUpdateStats get(String domain) throws EntityNotFoundException
 	{
-		Key<OpportunitySchemaUpdateStats> domainKey = new Key<OpportunitySchemaUpdateStats>(OpportunitySchemaUpdateStats.class,
-				domain);
-		return dao.get(domainKey);
+		String oldNamespace = NamespaceManager.get();
+		NamespaceManager.set("");
+		try
+		{
+			Key<OpportunitySchemaUpdateStats> domainKey = new Key<OpportunitySchemaUpdateStats>(OpportunitySchemaUpdateStats.class,domain);
+			return dao.get(domainKey);
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			return null;
+		}
+		finally
+		{
+			NamespaceManager.set(oldNamespace);
+		}
 	}
 	
 	public static OpportunitySchemaUpdateStats getByDomain(String domain)

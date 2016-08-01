@@ -100,8 +100,7 @@ tasks : function()
 			initOwnerslist();
 		}, "<li><a href='{{id}}'>My Tasks</a></li>", true);
 
-		$(".active").removeClass("active");
-		$("#calendarmenu").addClass("active");
+		make_menu_item_active("tasksmenu");
 
 	}, "#content");
 },
@@ -135,7 +134,7 @@ tasks_new : function()
 		$('.loading').remove();
 
 		$(".active").removeClass("active");
-		$("#calendarmenu").addClass("active");
+		$("#tasksmenu").addClass("active");
 
 		// Hide owner's and status task selection options from dropdown
 		$(".hide-on-pending").hide();

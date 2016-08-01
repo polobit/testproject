@@ -1,5 +1,6 @@
 package com.campaignio.tasklets.util.deferred;
 
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.json.JSONObject;
 
 import com.agilecrm.session.SessionManager;
@@ -81,7 +82,7 @@ public class TaskletWorkflowDeferredTask implements DeferredTask
 		catch (Exception e)
 		{
 			System.err.println("Exception occured in TaskletUtilDeferredTask " + e.getMessage());
-			e.printStackTrace();
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
 		}
 		finally
 		{

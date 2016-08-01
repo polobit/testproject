@@ -152,7 +152,7 @@ public class Globals
     public static final String FACEBOOK_APP_SECRET = "4b2d379cbb6c33a0bdab9a89dc2bb2c5";
 
     // Max Plan Users
-    public static final int TRIAL_USERS_COUNT = 2;
+    public static final int TRIAL_USERS_COUNT = 10;
 
     // Cheat Code
     public static final String MASTER_CODE_INTO_SYSTEM = "AgileRocks#@!";

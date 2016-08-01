@@ -42,8 +42,16 @@ request.setAttribute("agile_email", email);
 String error = request.getParameter("error");
 if(error != null)
   System.out.println(error);
-else
-  error = "";
+else {
+	String sessionError = (String)request.getSession().getAttribute("sso_error");
+	if(sessionError != null)
+	{
+	    error = sessionError; 
+		request.getSession().removeAttribute("sso_error");
+	} 
+	else
+		error = "";	 
+}
 
 if("multi-login".equalsIgnoreCase(error)){
 Cookie[] cookies = request.getCookies();
@@ -359,7 +367,10 @@ if(isSafari && isWin)
 		$(document).ready(function()
 		{
 
-
+			// Reset form action param
+			if(window.location.href.indexOf("/normal") != -1)
+				$("form#agile").attr("action", "/login/normal");
+			
 			var login_hash = window.location.hash;
 
 			// Sets location hash in hidden fields
@@ -418,7 +429,14 @@ if(isSafari && isWin)
 				return;
 			}
 
-			head.load('<%=CLOUDFRONT_STATIC_FILES_PATH %>final-lib/min/lib-all-min-1.js?_=<%=_AGILE_VERSION%>', '<%=CLOUDFRONT_TEMPLATE_LIB_PATH %>jscore/min/flatfull/js-all-min.js?_=<%=_AGILE_VERSION%>', '<%=CLOUDFRONT_TEMPLATE_LIB_PATH%>tpl/min/precompiled/<%=FLAT_FULL_PATH%>tpl.js?_=<%=_AGILE_VERSION%>', '<%=CLOUDFRONT_TEMPLATE_LIB_PATH%>tpl/min/precompiled/<%=FLAT_FULL_PATH%>portlets.js?_=<%=_AGILE_VERSION%>');
+			head.load('<%=CLOUDFRONT_STATIC_FILES_PATH %>final-lib/min/lib-all-min-1.js?_=<%=_AGILE_VERSION%>', 
+					'<%=CLOUDFRONT_TEMPLATE_LIB_PATH %>jscore/min/flatfull/js-all-min-1.js?_=<%=_AGILE_VERSION%>', 
+					'<%=CLOUDFRONT_TEMPLATE_LIB_PATH %>jscore/min/flatfull/js-all-min-2.js?_=<%=_AGILE_VERSION%>', 
+					'<%=CLOUDFRONT_TEMPLATE_LIB_PATH %>jscore/min/flatfull/js-all-min-3.js?_=<%=_AGILE_VERSION%>', 
+					'<%=CLOUDFRONT_TEMPLATE_LIB_PATH %>jscore/min/flatfull/js-all-min-4.js?_=<%=_AGILE_VERSION%>', 
+					'<%=CLOUDFRONT_TEMPLATE_LIB_PATH%>tpl/min/precompiled/<%=FLAT_FULL_PATH%>tpl.js?_=<%=_AGILE_VERSION%>', 
+					'<%=CLOUDFRONT_TEMPLATE_LIB_PATH%>tpl/min/precompiled/<%=FLAT_FULL_PATH%>portlets.js?_=<%=_AGILE_VERSION%>'
+							);
 		}
 
 		function preload_login_pages(){

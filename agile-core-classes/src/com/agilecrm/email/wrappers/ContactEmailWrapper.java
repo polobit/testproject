@@ -3,7 +3,6 @@ package com.agilecrm.email.wrappers;
 import java.util.List;
 
 import com.agilecrm.cursor.Cursor;
-import com.googlecode.objectify.annotation.NotSaved;
 
 public class ContactEmailWrapper extends Cursor
 {
@@ -176,6 +175,7 @@ public class ContactEmailWrapper extends Cursor
     private long email_link_clicked_at;
     private String user_id_from_email;
     private List<String> attachment_ids;
+    private String contact_type;
     
     private String document_key;
     private String blob_key;
@@ -290,6 +290,14 @@ public class ContactEmailWrapper extends Cursor
 	public void setEmail_link_clicked_at(long email_link_clicked_at)
 	{
 		this.email_link_clicked_at = email_link_clicked_at;
+	}
+
+	public String getContact_type() {
+		return contact_type;
+	}
+
+	public void setContact_type(String contact_type) {
+		this.contact_type = contact_type;
 	}
 
 }

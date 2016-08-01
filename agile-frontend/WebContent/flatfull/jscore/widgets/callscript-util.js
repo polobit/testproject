@@ -399,7 +399,7 @@ function editCallScriptRule(ruleCount)
 		$("#prefs-tabs-content").html(LOADING_HTML);
 		initializeCallScriptListeners();
 		
-		head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js', function()
+		head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js?_='+_agile_get_file_hash("agile.jquery.chained.min.js"), function()
 		{
 					
 			getTemplate('callscript-rule', contact_fields, undefined, function(template_ui){
@@ -613,8 +613,6 @@ function saveCallScriptWidgetPrefs() {
 function callscript_save_widget_prefs() {
 	
 }
-
-
 
 function build_custom_widget_form(el)
 {

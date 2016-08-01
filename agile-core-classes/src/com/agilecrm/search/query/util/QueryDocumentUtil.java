@@ -13,6 +13,7 @@ import com.agilecrm.SearchFilter;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.core.api.search.SearchAPI;
+import com.agilecrm.deals.filter.DealFilter;
 import com.agilecrm.search.AppengineSearch;
 import com.agilecrm.search.BuilderInterface;
 import com.agilecrm.search.QueryInterface.Type;
@@ -35,8 +36,7 @@ import com.googlecode.objectify.Key;
  * @author bobby
  * 
  */
-public class QueryDocumentUtil
-{
+public class QueryDocumentUtil {
 
 	/**
 	 * Builds Query based on Conditions AND, NOT
@@ -49,12 +49,11 @@ public class QueryDocumentUtil
 	 *            {@link String}
 	 * @return Returns query string built based on conditions {@link String}
 	 */
-	public static String buildNestedCondition(String condition, String query, String newQuery)
-	{
+	public static String buildNestedCondition(String condition, String query,
+			String newQuery) {
 
 		// If query is not empty should add AND condition
-		if (!query.isEmpty())
-		{
+		if (!query.isEmpty()) {
 			query = query + " " + condition + " " + newQuery;
 			return query;
 		}
@@ -63,17 +62,14 @@ public class QueryDocumentUtil
 		return newQuery;
 	}
 
-	public static String buildNotNestedCondition(String joinCondition, String query, String newQuery)
-	{
+	public static String buildNotNestedCondition(String joinCondition,
+			String query, String newQuery) {
 
 		// If query string is empty return simple not query
-		if (query.isEmpty())
-		{
+		if (query.isEmpty()) {
 			query = "NOT " + newQuery;
-		}
-		else
-		{
-			query = query +" "+ joinCondition + " (NOT " + newQuery + ")";
+		} else {
+			query = query + " " + joinCondition + " (NOT " + newQuery + ")";
 		}
 		return query;
 	}
@@ -88,17 +84,21 @@ public class QueryDocumentUtil
 	 *            TODO
 	 * @return
 	 */
-	public static String constructQuery(List<SearchRule> rules, String joinCondition)
-	{
+	public static String constructQuery(List<SearchRule> rules,
+			String joinCondition) {
 		String query = "";
 
 		// Iterates though each rule object, and constructs query based on type
 		// (Date, Number, Text fields) and conditions (Equals, OR, AND, ON)
-		for (SearchRule rule : rules)
-		{
+		for (SearchRule rule : rules) {
 			// Checks Rules is built properly, as validations are not preset at
 			// client side. Improper query raises exceptions.
-			if (rule.LHS == null || (rule.RHS == null && !rule.CONDITION.equals(SearchRule.RuleCondition.DEFINED) && !rule.CONDITION.equals(SearchRule.RuleCondition.NOT_DEFINED)) || rule.CONDITION == null)
+			if (rule.LHS == null
+					|| (rule.RHS == null
+							&& !rule.CONDITION
+									.equals(SearchRule.RuleCondition.DEFINED) && !rule.CONDITION
+								.equals(SearchRule.RuleCondition.NOT_DEFINED))
+					|| rule.CONDITION == null)
 				continue;
 
 			// If nested condition is not null and nested value is not
@@ -123,58 +123,59 @@ public class QueryDocumentUtil
 			 * Build equals and not equals queries conditions except time based
 			 * conditions
 			 */
-			if (!(lhs.contains("time") || lhs.contains("last_contacted") || lhs.contains("last_emailed") || lhs.contains("last_called") || lhs.contains("last_campaign_emaild")) || condition.equals(SearchRule.RuleCondition.DEFINED) || condition.equals(SearchRule.RuleCondition.NOT_DEFINED) )
-			{
+			if (!(lhs.contains("time") || lhs.contains("last_contacted")
+					|| lhs.contains("last_emailed")
+					|| lhs.contains("last_called") || lhs
+						.contains("last_campaign_emaild"))
+					|| condition.equals(SearchRule.RuleCondition.DEFINED)
+					|| condition.equals(SearchRule.RuleCondition.NOT_DEFINED)) {
 				/*
 				 * Create new query with LHS and RHS conditions to be processed
 				 * further for necessary queries
 				 */
 				lhs = SearchUtil.normalizeTextSearchString(lhs);
 				lhs = lhs.replaceAll("[^a-zA-Z0-9_]", "_");
-				String value = SearchUtil.normalizeString(rhs).replace(":", "\\:");
+				String value = SearchUtil.normalizeString(rhs).replace(":",
+						"\\:");
 				String newQuery = lhs + ":" + SearchUtil.normalizeString(value);
 
 				// For equals condition
-				if (condition.equals(SearchRule.RuleCondition.EQUALS))
-				{
+				if (condition.equals(SearchRule.RuleCondition.EQUALS)) {
 					/*
 					 * Build query by passing condition old query and new query
 					 */
 					// double quotes for exact match of value.
-					if ("tags".equals(lhs)) {
+					if ("tags".equals(lhs) || "milestone".equals(lhs)) {
 						value = SearchUtil.normalizeTag(value);
 					} else {
 						value = SearchUtil.normalizeString(value);
 					}
 					query = buildNestedCondition(joinCondition, query, lhs
 							+ ":\"" + value + "\"");
-				}
-				else if (condition.equals(SearchRule.RuleCondition.ON)
-						|| condition.equals(SearchRule.RuleCondition.CONTAINS))
-				{
+				} else if (condition.equals(SearchRule.RuleCondition.ON)
+						|| condition.equals(SearchRule.RuleCondition.CONTAINS)) {
 					query = buildNestedCondition(joinCondition, query, newQuery);
-				}
-				else if (condition.equals(SearchRule.RuleCondition.NOTEQUALS))
-				{
-					if ("tags".equals(lhs)) {
+				} else if (condition.equals(SearchRule.RuleCondition.NOTEQUALS)) {
+					if ("tags".equals(lhs) || "milestone".equals(lhs)) {
 						value = SearchUtil.normalizeTag(value);
 					} else {
 						value = SearchUtil.normalizeString(value);
 					}
 					// double quotes for exact match of value.
-					query = buildNotNestedCondition(joinCondition, query,
-							lhs + ":\"" + value + "\"");
+					query = buildNotNestedCondition(joinCondition, query, lhs
+							+ ":\"" + value + "\"");
 				}
 
-				else if (condition.equals(SearchRule.RuleCondition.NOT_CONTAINS))
-				{
+				else if (condition
+						.equals(SearchRule.RuleCondition.NOT_CONTAINS)) {
 					// For not queries
-					query = buildNotNestedCondition(joinCondition, query, newQuery);
+					query = buildNotNestedCondition(joinCondition, query,
+							newQuery);
 				}
 
 				// For equals condition
-				else if (condition.equals(SearchRule.RuleCondition.IS_GREATER_THAN))
-				{
+				else if (condition
+						.equals(SearchRule.RuleCondition.IS_GREATER_THAN)) {
 					newQuery = lhs + ">" + SearchUtil.normalizeString(rhs);
 
 					/*
@@ -183,8 +184,8 @@ public class QueryDocumentUtil
 					query = buildNestedCondition(joinCondition, query, newQuery);
 				}
 
-				else if (condition.equals(SearchRule.RuleCondition.IS_LESS_THAN))
-				{
+				else if (condition
+						.equals(SearchRule.RuleCondition.IS_LESS_THAN)) {
 					newQuery = lhs + "<" + SearchUtil.normalizeString(rhs);
 
 					/*
@@ -195,37 +196,36 @@ public class QueryDocumentUtil
 
 				// Between given values
 				else if (condition.equals(SearchRule.RuleCondition.BETWEEN)
-						|| condition.equals(SearchRule.RuleCondition.BETWEEN_NUMBER))
-				{
-					if (rhs_new != null)
-					{
+						|| condition
+								.equals(SearchRule.RuleCondition.BETWEEN_NUMBER)) {
+					if (rhs_new != null) {
 						newQuery = lhs + " >= " + rhs;
-						newQuery = buildNestedCondition("AND", newQuery, lhs + " <= " + rhs_new);
-						newQuery = "("+newQuery+")";
-						query = buildNestedCondition(joinCondition, query, newQuery);
+						newQuery = buildNestedCondition("AND", newQuery, lhs
+								+ " <= " + rhs_new);
+						newQuery = "(" + newQuery + ")";
+						query = buildNestedCondition(joinCondition, query,
+								newQuery);
 					}
 				}
-				
+
 				// For campaigns
-				else if (SearchRule.RuleCondition.campaignConditions.contains(condition))
-				{
-					if (condition.equals(SearchRule.RuleCondition.NOT_ADDED))
-					{
+				else if (SearchRule.RuleCondition.campaignConditions
+						.contains(condition)) {
+					if (condition.equals(SearchRule.RuleCondition.NOT_ADDED)) {
 						newQuery = lhs + "=\"" + rhs + "\"";
-						query = buildNotNestedCondition(joinCondition, query, newQuery);
+						query = buildNotNestedCondition(joinCondition, query,
+								newQuery);
 					} else {
 						newQuery = lhs + "=\"" + rhs + "_" + condition + "\"";
-						query = buildNestedCondition(joinCondition, query, newQuery);
+						query = buildNestedCondition(joinCondition, query,
+								newQuery);
 					}
-				}
-				else if (condition.equals(SearchRule.RuleCondition.DEFINED))
-				{
+				} else if (condition.equals(SearchRule.RuleCondition.DEFINED)) {
 					// double quotes for exact match of value.
 					query = buildNestedCondition(joinCondition, query,
 							"field_labels" + ":\"" + lhs + "\"");
-				}
-				else if (condition.equals(SearchRule.RuleCondition.NOT_DEFINED))
-				{
+				} else if (condition
+						.equals(SearchRule.RuleCondition.NOT_DEFINED)) {
 					// double quotes for exact match of value.
 					query = buildNotNestedCondition(joinCondition, query,
 							"field_labels" + ":\"" + lhs + "\"");
@@ -241,9 +241,9 @@ public class QueryDocumentUtil
 					query = createTimeQueryEpoch(query, lhs, condition, rhs, rhs_new, joinCondition);
 			}
 
-			else if (lhs.contains("time") && lhs.contains("tags"))
-			{
-				query = createTimeQueryEpoch(query, SearchUtil.normalizeTextSearchString(rhs) + "_time",
+			else if (lhs.contains("time") && lhs.contains("tags")) {
+				query = createTimeQueryEpoch(query,
+						SearchUtil.normalizeTextSearchString(rhs) + "_time",
 						nestedCondition, nestedLhs, nestedRhs, joinCondition);
 			}
 		}
@@ -476,9 +476,9 @@ public class QueryDocumentUtil
 	 * 
 	 * }
 	 */
-	public static String createTimeQueryEpoch(String query, String lhs, SearchRule.RuleCondition condition, String rhs,
-			String rhs_new, String joinCondition)
-	{
+	public static String createTimeQueryEpoch(String query, String lhs,
+			SearchRule.RuleCondition condition, String rhs, String rhs_new,
+			String joinCondition) {
 
 		// Gets date from rhs (selected value)
 
@@ -497,8 +497,8 @@ public class QueryDocumentUtil
 		String dayEndEpochTime = String.valueOf(endTimeEpoch / 1000);
 
 		// Created on date condition
-		if (condition.equals(SearchRule.RuleCondition.ON) || condition.equals(SearchRule.RuleCondition.EQUALS))
-		{
+		if (condition.equals(SearchRule.RuleCondition.ON)
+				|| condition.equals(SearchRule.RuleCondition.EQUALS)) {
 			String epochQuery = "";
 
 			// First create query based on epoch time, take it in to temp string
@@ -506,49 +506,48 @@ public class QueryDocumentUtil
 			// support old data
 			epochQuery = lhs + "_epoch" + ">=" + dayStartEpochTime;
 
-			epochQuery = buildNestedCondition("AND", epochQuery, lhs + "_epoch" + "<=" + dayEndEpochTime);
+			epochQuery = buildNestedCondition("AND", epochQuery, lhs + "_epoch"
+					+ "<=" + dayEndEpochTime);
 			epochQuery = "(" + epochQuery + ")";
 			query = buildNestedCondition(joinCondition, query, epochQuery);
 
 		}
 
 		// Created after given date.
-		else if (condition.equals(SearchRule.RuleCondition.AFTER))
-		{
+		else if (condition.equals(SearchRule.RuleCondition.AFTER)) {
 			String epochQuery = lhs + "_epoch >= " + dayStartEpochTime;
 
 			query = buildNestedCondition(joinCondition, query, epochQuery);
 		}
 
 		// Created before particular date
-		else if (condition.equals(SearchRule.RuleCondition.BEFORE))
-		{
+		else if (condition.equals(SearchRule.RuleCondition.BEFORE)) {
 			String epochQuery = lhs + "_epoch < " + dayStartEpochTime;
 
 			query = buildNestedCondition(joinCondition, query, epochQuery);
 		}
 
 		// Created Between given dates
-		else if (condition.equals(SearchRule.RuleCondition.BETWEEN))
-		{
-			if (rhs_new != null)
-			{
+		else if (condition.equals(SearchRule.RuleCondition.BETWEEN)) {
+			if (rhs_new != null) {
 
-				Date toDate = new DateUtil(new Date(Long.parseLong(rhs_new))).getTime();
+				Date toDate = new DateUtil(new Date(Long.parseLong(rhs_new)))
+						.getTime();
 
-				String toDateEpoch = String.valueOf(Long.parseLong(rhs_new) / 1000);
+				String toDateEpoch = String
+						.valueOf(Long.parseLong(rhs_new) / 1000);
 
 				String epochQuery = lhs + "_epoch >= " + dayStartEpochTime;
 
-				epochQuery = buildNestedCondition("AND", epochQuery, lhs + "_epoch <= " + toDateEpoch);
+				epochQuery = buildNestedCondition("AND", epochQuery, lhs
+						+ "_epoch <= " + toDateEpoch);
 				epochQuery = "(" + epochQuery + ")";
 				query = buildNestedCondition(joinCondition, query, epochQuery);
 			}
 		}
 
 		// Created in last number of days
-		else if (condition.equals(SearchRule.RuleCondition.LAST))
-		{
+		else if (condition.equals(SearchRule.RuleCondition.LAST)) {
 			// Get epoch time of starting date i.e., before x days, current date
 			// - x days
 
@@ -568,24 +567,26 @@ public class QueryDocumentUtil
 
 			long fromDateInSecs = currentEpochTime - days * 24 * 3600;
 
-			String epochQuery = lhs + "_epoch >= " + String.valueOf(fromDateInSecs);
+			String epochQuery = lhs + "_epoch >= "
+					+ String.valueOf(fromDateInSecs);
 
-			epochQuery = buildNestedCondition("AND", epochQuery, lhs + "_epoch <= " + String.valueOf(currentEpochTime));
+			epochQuery = buildNestedCondition("AND", epochQuery, lhs
+					+ "_epoch <= " + String.valueOf(currentEpochTime));
 			epochQuery = "(" + epochQuery + ")";
 			// Constructs OR query on both epoch query and date query, as ON
 			// date condition is not working we have an extra fields which save
 			// epoch time
 			query = buildNestedCondition(joinCondition, query, epochQuery);
 
-		}
-		else if (condition.equals(SearchRule.RuleCondition.NEXT))
-		{
+		} else if (condition.equals(SearchRule.RuleCondition.NEXT)) {
 			long currentTime = new Date().getTime() / 1000;
 
-			long limitTime = currentTime + (Integer.parseInt(rhs) - 1) * 24 * 3600;
+			long limitTime = currentTime + (Integer.parseInt(rhs) - 1) * 24
+					* 3600;
 
 			String epochQuery = lhs + "_epoch >=" + currentTime;
-			epochQuery = buildNestedCondition("AND", epochQuery, lhs + "_epoch <=" + limitTime);
+			epochQuery = buildNestedCondition("AND", epochQuery, lhs
+					+ "_epoch <=" + limitTime);
 			epochQuery = "(" + epochQuery + ")";
 			query = buildNestedCondition(joinCondition, query, epochQuery);
 		}
@@ -601,21 +602,19 @@ public class QueryDocumentUtil
 	 * @param entity_ids
 	 * @return
 	 */
-	public static List getEntities(Type type, List<Long> entity_ids)
-	{
+	public static List getEntities(Type type, List<Long> entity_ids) {
 
 		// Gets class name, which is used to get respective document class
 		System.out.println(type.getClazz().getSimpleName());
-		try
-		{
+		try {
 			// Gets Document object and gets entities
 			BuilderInterface builder = (BuilderInterface) Class.forName(
-					"com.agilecrm.search.document." + type.getClazz().getSimpleName() + "Document").newInstance();
+					"com.agilecrm.search.document."
+							+ type.getClazz().getSimpleName() + "Document")
+					.newInstance();
 			return builder.getResults(entity_ids);
 
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			e.printStackTrace();
 			// TODO: handle exception
 		}
@@ -631,8 +630,8 @@ public class QueryDocumentUtil
 	 * @return query for finding duplicate records for a given contact
 	 * @throws Exception
 	 */
-	public static String constructDuplicateContactsQuery(Contact contact) throws Exception
-	{
+	public static String constructDuplicateContactsQuery(Contact contact)
+			throws Exception {
 		String firstName = contact.getContactFieldValue(Contact.FIRST_NAME);
 		String lastName = contact.getContactFieldValue(Contact.LAST_NAME);
 		StringBuffer emailBuffer = new StringBuffer();
@@ -643,44 +642,41 @@ public class QueryDocumentUtil
 		// Building search query for finding duplicate records for a given
 		// contact
 		// filtering on first name and last name
-		if (StringUtils.isNotBlank(firstName) && StringUtils.isNotBlank(lastName))
-		{
-			String fName = firstName.trim().replaceAll(" ", "").replaceAll("\"", "\\\\\"");
-			String lName = lastName.trim().replaceAll(" ", "").replaceAll("\"", "\\\\\"");
-			stringBuffer.append("(first_name=\"" + fName + "\" AND " + "last_name=\"" + lName + "\")");
-		}
-		else if (StringUtils.isNotBlank(firstName) && StringUtils.isBlank(lastName))
-		{
-			String fName = firstName.trim().replaceAll(" ", "").replaceAll("\"", "\\\\\"");
+		if (StringUtils.isNotBlank(firstName)
+				&& StringUtils.isNotBlank(lastName)) {
+			String fName = firstName.trim().replaceAll(" ", "")
+					.replaceAll("\"", "\\\\\"");
+			String lName = lastName.trim().replaceAll(" ", "")
+					.replaceAll("\"", "\\\\\"");
+			stringBuffer.append("(first_name=\"" + fName + "\" AND "
+					+ "last_name=\"" + lName + "\")");
+		} else if (StringUtils.isNotBlank(firstName)
+				&& StringUtils.isBlank(lastName)) {
+			String fName = firstName.trim().replaceAll(" ", "")
+					.replaceAll("\"", "\\\\\"");
 			stringBuffer.append("(first_name=\"" + fName + "\")");
-		}
-		else if (StringUtils.isBlank(firstName) && StringUtils.isNotBlank(lastName))
-		{
-			String lName = lastName.trim().replaceAll(" ", "").replaceAll("\"", "\\\\\"");
+		} else if (StringUtils.isBlank(firstName)
+				&& StringUtils.isNotBlank(lastName)) {
+			String lName = lastName.trim().replaceAll(" ", "")
+					.replaceAll("\"", "\\\\\"");
 			stringBuffer.append("(last_name=\"" + lName + "\")");
 		}
 		List<ContactField> properties = contact.getProperties();
-		for (int i = 0; i < properties.size(); i++)
-		{
+		for (int i = 0; i < properties.size(); i++) {
 			ContactField contactField = properties.get(i);
-			if (contactField.name.equalsIgnoreCase(Contact.PHONE))
-			{
+			if (contactField.name.equalsIgnoreCase(Contact.PHONE)) {
 				if (StringUtils.isNotBlank(contactField.value))
 					phones.add((contactField.value).trim().replaceAll(" ", ""));
 			}
-			if (contactField.name.equalsIgnoreCase(Contact.EMAIL))
-			{
+			if (contactField.name.equalsIgnoreCase(Contact.EMAIL)) {
 				if (StringUtils.isNotBlank(contactField.value))
 					emails.add((contactField.value).trim().replaceAll(" ", ""));
 			}
 		}
-		if (emails.size() > 0)
-		{
+		if (emails.size() > 0) {
 			Object[] emailsArray = emails.toArray();
-			for (int i = 0; i < emailsArray.length; i++)
-			{
-				if (i == 0)
-				{
+			for (int i = 0; i < emailsArray.length; i++) {
+				if (i == 0) {
 					emailBuffer.append("email=(");
 				}
 				emailBuffer.append("\"");
@@ -692,19 +688,15 @@ public class QueryDocumentUtil
 					emailBuffer.append(")");
 			}
 		}
-		if (StringUtils.isNotBlank(emailBuffer.toString()))
-		{
+		if (StringUtils.isNotBlank(emailBuffer.toString())) {
 			if (StringUtils.isNotBlank(stringBuffer.toString()))
 				stringBuffer.append(" OR ");
 			stringBuffer.append(emailBuffer.toString());
 		}
-		if (phones.size() > 0)
-		{
+		if (phones.size() > 0) {
 			Object[] phonesArray = phones.toArray();
-			for (int i = 0; i < phonesArray.length; i++)
-			{
-				if (i == 0)
-				{
+			for (int i = 0; i < phonesArray.length; i++) {
+				if (i == 0) {
 					phoneBuffer.append("phone=(");
 				}
 				phoneBuffer.append("\"");
@@ -716,8 +708,7 @@ public class QueryDocumentUtil
 					phoneBuffer.append(")");
 			}
 		}
-		if (StringUtils.isNotBlank(phoneBuffer.toString()))
-		{
+		if (StringUtils.isNotBlank(phoneBuffer.toString())) {
 			if (StringUtils.isNotBlank(stringBuffer.toString()))
 				stringBuffer.append(" OR ");
 			stringBuffer.append(phoneBuffer.toString());
@@ -725,51 +716,202 @@ public class QueryDocumentUtil
 		if (stringBuffer.length() > 0)
 			stringBuffer.append(" AND type=PERSON");
 		// filtering user access level
-		if (!UserAccessControlUtil.hasScope(UserAccessScopes.EDIT_CONTACT))
-		{
+		if (!UserAccessControlUtil.hasScope(UserAccessScopes.EDIT_CONTACT)) {
 			Key<DomainUser> domainUserKey = DomainUserUtil.getCurentUserKey();
-			if (domainUserKey != null)
-			{
+			if (domainUserKey != null) {
 				if (stringBuffer.length() > 0)
-					stringBuffer.append(" AND owner_id=" + domainUserKey.getId());
+					stringBuffer.append(" AND owner_id="
+							+ domainUserKey.getId());
 			}
 		}
 		String query = stringBuffer.toString();
 		return query;
 	}
 
-	public static String constructFilterQuery(SearchFilter filter)
-	{
+	public static String constructDuplicateCompaniesQuery(Contact contact)
+			throws Exception {
+		String companyName = contact.getContactFieldValue(Contact.NAME);
+		StringBuffer emailBuffer = new StringBuffer();
+		StringBuffer phoneBuffer = new StringBuffer();
+		StringBuffer urlBuffer = new StringBuffer();
+		StringBuffer stringBuffer = new StringBuffer();		
+		Set<String> emails = new HashSet<String>();
+		Set<String> phones = new HashSet<String>();
+		Set<String> urls = new HashSet<String>();
+
+		if (StringUtils.isNotBlank(companyName)) {
+			String company_name = companyName.trim().replaceAll(" ", "")
+					.replaceAll("\"", "\\\\\"");
+			stringBuffer.append("(name=\"" + company_name + "\")");
+		}
+
+		List<ContactField> properties = contact.getProperties();
+		for (int i = 0; i < properties.size(); i++) {
+			ContactField contactField = properties.get(i);
+			if (contactField.name.equalsIgnoreCase(Contact.PHONE)) {
+				if (StringUtils.isNotBlank(contactField.value))
+					phones.add((contactField.value).trim().replaceAll(" ", ""));
+			}
+			if (contactField.name.equalsIgnoreCase(Contact.EMAIL)) {
+				if (StringUtils.isNotBlank(contactField.value))
+					emails.add((contactField.value).trim().replaceAll(" ", ""));
+			}
+			if (contactField.name.equalsIgnoreCase(Contact.URL)) {
+				if (StringUtils.isNotBlank(contactField.value))
+					urls.add((contactField.value).trim().replaceAll(" ", ""));
+			}
+			
+		}
+		
+		if(urls.size() > 0){
+			Object[] urlsArray = urls.toArray();
+			for (int i = 0; i < urlsArray.length; i++) {
+				if (i == 0) {
+					urlBuffer.append("url=(");
+				}
+				urlBuffer.append("\"");
+				urlBuffer.append(urlsArray[i]);
+				urlBuffer.append("\"");
+				if (!(i == urlsArray.length - 1)) {
+					urlBuffer.append(" OR ");
+				} else {
+					urlBuffer.append(")");
+				}
+			}
+		}
+		
+		if (StringUtils.isNotBlank(urlBuffer.toString())) {
+			if (StringUtils.isNotBlank(stringBuffer.toString())) {
+				stringBuffer.append(" OR ");
+			}
+			stringBuffer.append(urlBuffer.toString());
+		}
+		
+		if (emails.size() > 0) {
+			Object[] emailsArray = emails.toArray();
+			for (int i = 0; i < emailsArray.length; i++) {
+				if (i == 0) {
+					emailBuffer.append("email=(");
+				}
+				emailBuffer.append("\"");
+				emailBuffer.append(emailsArray[i]);
+				emailBuffer.append("\"");
+				if (!(i == emailsArray.length - 1)) {
+					emailBuffer.append(" OR ");
+				} else {
+					emailBuffer.append(")");
+				}
+			}
+		}
+		if (StringUtils.isNotBlank(emailBuffer.toString())) {
+			if (StringUtils.isNotBlank(stringBuffer.toString())) {
+				stringBuffer.append(" OR ");
+			}
+			stringBuffer.append(emailBuffer.toString());
+		}
+		if (phones.size() > 0) {
+			Object[] phonesArray = phones.toArray();
+			for (int i = 0; i < phonesArray.length; i++) {
+				if (i == 0) {
+					phoneBuffer.append("phone=(");
+				}
+				phoneBuffer.append("\"");
+				phoneBuffer.append(phonesArray[i]);
+				phoneBuffer.append("\"");
+				if (!(i == phonesArray.length - 1)) {
+					phoneBuffer.append(" OR ");
+				} else {
+					phoneBuffer.append(")");
+				}
+			}
+		}
+		if (StringUtils.isNotBlank(phoneBuffer.toString())) {
+			if (StringUtils.isNotBlank(stringBuffer.toString())) {
+				stringBuffer.append(" OR ");
+			}
+			stringBuffer.append(phoneBuffer.toString());
+		}
+		if (stringBuffer.length() > 0) {
+			stringBuffer.append(" AND type=COMPANY");
+		}
+		// filtering user access level
+		if (!UserAccessControlUtil.hasScope(UserAccessScopes.EDIT_CONTACT)) {
+			Key<DomainUser> domainUserKey = DomainUserUtil.getCurentUserKey();
+			if (domainUserKey != null) {
+				if (stringBuffer.length() > 0) {
+					stringBuffer.append(" AND owner_id="
+							+ domainUserKey.getId());
+				}
+			}
+		}
+		String query = stringBuffer.toString();
+		return query;
+	}
+
+	public static String constructFilterQuery(SearchFilter filter) {
 		// Construct query based on rules
 		String query = "";
 		String andQuery = constructQuery(filter.rules, "AND");
 		String orQuery = null;
+		
+		List<String> dealsrules = new ArrayList<String>();
+		
 		if (filter.or_rules != null && !filter.or_rules.isEmpty())
-			orQuery = constructQuery(filter.or_rules, "OR");
-		if (StringUtils.isNotEmpty(orQuery))
 		{
-			query = "(" + andQuery + ") AND (" + orQuery + ")";
+			for(int i=0;i<filter.or_rules.size();i++)
+			{
+				if(filter.or_rules.get(i).LHS.equalsIgnoreCase("pipeline"))
+				{
+					SearchFilter newfilter = new DealFilter();
+					newfilter.rules.add(filter.or_rules.get(i));
+					filter.or_rules.remove(i);
+					if(filter.or_rules.size()>0)
+					{
+					if(filter.or_rules.get(i).LHS.equalsIgnoreCase("milestone")){
+					newfilter.rules.add(filter.or_rules.get(i));
+					filter.or_rules.remove(i);
+					}
+					}
+					dealsrules.add(constructQuery(newfilter.rules, "AND"));
+					i--;
+				}
+			}
+			if(dealsrules!=null && dealsrules.size()>0)
+			{
+				orQuery="("+dealsrules.get(0)+")";
+				for(int i=1;i<dealsrules.size();i++)
+				{
+					orQuery=orQuery+" OR ("+dealsrules.get(i) + ")";
+				}
+			}
+			if(orQuery!=null){
+				if(StringUtils.isNotEmpty(constructQuery(filter.or_rules, "OR")))
+			orQuery = orQuery+" OR (" +constructQuery(filter.or_rules, "OR")+ ")";
+			}
+			else
+				orQuery=constructQuery(filter.or_rules, "OR");
 		}
-		else
-		{
+		if (StringUtils.isNotEmpty(orQuery)) {
+			query = "(" + andQuery + ") AND (" + orQuery + ")";
+		} else {
 			query = andQuery;
 		}
 		return query;
 	}
 
-	public static Contact getContactsByPhoneNumber(String phoneNumber)
-	{
+	public static Contact getContactsByPhoneNumber(String phoneNumber) {
 		StringBuilder query = new StringBuilder();
 		phoneNumber = StringUtils2.extractNumber(phoneNumber);
 		query.append("phone=").append(phoneNumber);
-		if (phoneNumber.length() >= 8)
-		{
-			query.append(" OR phone=").append(phoneNumber.substring(phoneNumber.length() - 8));
+		if (phoneNumber.length() >= 8) {
+			query.append(" OR phone=").append(
+					phoneNumber.substring(phoneNumber.length() - 8));
 		}
-		AppengineSearch<Contact> appEngineSearch = new AppengineSearch<Contact>(Contact.class);
-		List<Contact> contacts = new ArrayList<Contact>(appEngineSearch.getSearchResults(query.toString(), null, null));
-		if (contacts != null && !contacts.isEmpty())
-		{
+		AppengineSearch<Contact> appEngineSearch = new AppengineSearch<Contact>(
+				Contact.class);
+		List<Contact> contacts = new ArrayList<Contact>(
+				appEngineSearch.getSearchResults(query.toString(), null, null));
+		if (contacts != null && !contacts.isEmpty()) {
 			return contacts.get(0);
 		}
 		return null;

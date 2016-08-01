@@ -1,13 +1,12 @@
-<html lang="en">
+<html lang="en"  data-modal-type="agile-modal-sm agile-modal-choicetwo" 
+data-modal-version="2">
    <head>
       <meta http-equiv="content-type" content="text/html;charset=utf-8" />
       <title>Popup</title>
       <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700,800" rel="stylesheet" type="text/css" />
-      <style>
+      <style type="text/css">
          body {
-         background: #333;
-         width:620px;
-         height:454px;
+         
          }
          #popup {
          background-color: #fffdd9;
@@ -15,16 +14,14 @@
          background-repeat: repeat-x;
          background-position: 0% 30%;
          box-shadow: 0 0 0 1px rgba(0,0,0,0.2);
-         border-radius: 20px;
+         border-radius: 5px;
          border: 10px solid white;
-         -webkit-border-radius: 20px;
-         -moz-border-radius: 20px;
-         border-radius: 20px;
+         -webkit-border-radius: 5px;
+         -moz-border-radius: 5px;
          color: #163747!important;
          font: 14px/20px 'Open Sans', Arial, sans-serif!important;
          letter-spacing: 0;
-         position: fixed;
-         width: 600px;
+        
          }
          #popup-body {
          padding: 25px 20px;
@@ -40,6 +37,7 @@
          }
          #popup-content p  {
          margin: 0 0 20px;
+         padding: 0 5px;
          }
          .popup-column {
          background: #fff none no-repeat center 30px;
@@ -47,9 +45,9 @@
          -moz-border-radius: 10px;
          border-radius: 10px;
          box-shadow: 0 0 0 2px rgba(0,0,0,0.1);
-         padding: 140px 10px 5px;
+         padding: 140px 0px 5px;
          text-align: center;
-         width: 250px;
+         width: 260px;
          }
          .popup-column-left {
          background-image: url('https://s3.amazonaws.com/PopupTemplates/survey/choice-two/images/image-1.png');
@@ -88,7 +86,30 @@
          clear: both;
          height: 0;
          }
+
+         #popup-footer {
+  color: #fff !important;
+  font: bold 10px/10px "Montserat", Arial, Helvetica,
+    sans-serif !important;
+  letter-spacing: 1px;
+  padding: 8px 0;
+  text-align: right;
+  text-transform: uppercase;
+  /*display: none;*/
+}
+#popup-footer a {
+  color: #fff;
+  text-decoration: none;
+}
+
+         @media (max-width:599px) {
+            .popup-column { width: 100%; margin-bottom: 20px;}
+            .popup-button{ width: 90%;}
+         }
+
       </style>
+
+   
    </head>
    <body>
       <div id="popup">
@@ -109,5 +130,11 @@
             </div>
          </div>
       </div>
+
+      <div id="popup-footer">
+        <div id="agile-copyright">Powered by <a href="https://www.agilecrm.com" target="_blank">AGILE
+          CRM</a></div>
+      </div>
+
    </body>
 </html>

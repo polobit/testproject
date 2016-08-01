@@ -5,12 +5,22 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javassist.expr.Instanceof;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.user.AgileUser;
+import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.widgets.CustomWidget;
 import com.agilecrm.widgets.Widget;
 import com.agilecrm.widgets.Widget.IntegrationType;
 import com.agilecrm.widgets.Widget.WidgetType;
+import com.amazonaws.services.autoscaling.model.Instance;
+import com.google.appengine.api.NamespaceManager;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
@@ -54,18 +64,100 @@ public class WidgetUtil {
 	 * @return {@link List} of {@link Widget}
 	 */
 	public static List<Widget> setIsAddedStatus(List<Widget> widgets) {
+
 		// Getting the list widget saved by the current user.
 		List<Widget> currentWidgets = getAddedWidgetsForCurrentUser();
-
-		for (Widget widget : widgets)
-			for (Widget currentWidget : currentWidgets)
+		AgileUser agileUser = AgileUser.getCurrentAgileUser();
+		DomainUser dmu = agileUser.getDomainUser();
+		
+		for (Widget widget : widgets) {
+			for (Widget currentWidget : currentWidgets) {
 				if (currentWidget.name.equals(widget.name)) {
+					
+					if(currentWidget instanceof CustomWidget){
+						Widget tempWidget = WidgetUtil.getWidget(widget.name, agileUser.id);
+						if(tempWidget != null){
+							widgets.remove(widget);
+							continue;
+						}
+					}
+					
+					String userID = agileUser.id.toString();	
+					
+					// Logic to find the admin user are active for widget or not.
+					if (dmu.is_admin) {						
+						JSONArray currentUsers = new JSONArray();
+												
+						List<JSONObject> widgetsList = WidgetUtil.getWigdetsObjectList(widget.name);
+						if(widgetsList != null){									
+							for (int i = 0; i < widgetsList.size(); i++) {
+								JSONObject widgetObj = widgetsList.get(i);																				
+								try {
+									String widgetUserID = widgetObj.getString("userID");
+									boolean isAdmin = widgetObj.getBoolean("isAdminUser");
+									boolean isActive = widgetObj.getBoolean("isActive");
+									
+									if(isAdmin){
+										if(isActive){
+											currentUsers.put(widgetUserID);
+										}
+									}else{
+										currentUsers.put(widgetUserID);
+									}																		
+								} catch (JSONException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}																
+							}
+							currentWidget.listOfUsers = currentUsers.toString();
+						}	
+					}
+					
 					// Setting true to know that widget is configured.
 					widget.is_added = true;
 					widget.id = currentWidget.id;
 					widget.prefs = currentWidget.prefs;
+					widget.script_type = currentWidget.script_type;
+					widget.url = currentWidget.url;
+					widget.script = currentWidget.script;
+					widget.listOfUsers = currentWidget.listOfUsers;
+					
+					//To support the old custom widget to get the logo URLs, script and webhook URLs. 
+					if(widget.widget_type.equals(WidgetType.CUSTOM)){
+						Widget customWidget = null;
+						
+						if(widget.script_type == null){							
+							if(widget.script != null && widget.script.length() != 0){
+								widget.script_type = "script";
+							}else {
+								widget.script_type = "url";
+								// Adding webhook URL by fetching from custom widget if missing.								
+								if(widget.url == null || widget.url.length() == 0){									
+										customWidget = WidgetUtil.getCustomWidget(currentWidget.name, Long.parseLong(userID));
+										if(customWidget != null){
+											widget.url = customWidget.url;
+										}
+								}
+							}					
+							widget.save();
+						}	
+						
+						// Fix for mini logo url is missing.
+						if(widget.mini_logo_url == null || widget.mini_logo_url.length() == 0){
+							if(customWidget == null){
+								customWidget = WidgetUtil.getCustomWidget(currentWidget.name, Long.parseLong(userID));									
+							}							
+							
+							if(customWidget != null){
+								widget.mini_logo_url = customWidget.mini_logo_url;
+								widget.save();
+							}
+						}
+					}
+					
 				}
-
+			}
+		}
 		return widgets;
 	}
 
@@ -89,25 +181,67 @@ public class WidgetUtil {
 		 * Fetches list of widgets related to AgileUser key and adds is_added
 		 * field as true to default widgets if not present
 		 */
-		List<Widget> widgets = ofy.query(Widget.class).ancestor(userKey)
-				.filter("widget_type !=", WidgetType.INTEGRATIONS).list();
+		List<Widget> widgets = ofy.query(Widget.class).ancestor(userKey).filter("widget_type !=", WidgetType.INTEGRATIONS).list();
 
-		for (Widget widget : widgets) {
+		//Converting widget type email to integrations.
+		for (int i = 0; i < widgets.size(); i++) {
+			Widget widget = widgets.get(i);
 			if (WidgetType.EMAIL.equals(widget.widget_type)) {
-				System.out
-						.println("Converting widget type email to integrations...");
-
+				System.out.println("Converting widget type email to integrations...");
 				widget.widget_type = WidgetType.INTEGRATIONS;
 				widget.save();
-
+				
 				// Remove from list
 				widgets.remove(widget);
-
 				break;
 			}
 		}
 
 		return widgets;
+	}
+
+	/**
+	 * Gets all the widget of the current user.
+	 * 
+	 * <p>
+	 * Default widgets - which are added and Custom widgets - which are added
+	 * </p>
+	 * 
+	 * @return {@link List} of {@link Widget}s
+	 */
+	public static List<Widget> getActiveWidgetsForCurrentUser() {
+		
+		List<Widget> finalWidgets = new ArrayList<Widget>();
+		AgileUser agileuser = AgileUser.getCurrentAgileUser();
+
+		if (agileuser != null) {
+			DomainUser domainUser = agileuser.getDomainUser();
+
+			// Creates Current AgileUser key
+			Key<AgileUser> userKey = new Key<AgileUser>(AgileUser.class, agileuser.id);
+
+			/*
+			 * Fetches list of widgets related to AgileUser key and adds
+			 * is_added field as true to default widgets if not present
+			 */
+			Objectify ofy = ObjectifyService.begin();
+			List<Widget> widgets = ofy.query(Widget.class).ancestor(userKey).filter("widget_type !=", WidgetType.INTEGRATIONS).list();
+			
+			if (domainUser != null && domainUser.is_admin) {				
+				if (widgets != null) {					
+					for (int i = 0; i < widgets.size(); i++) {						
+						Widget widget = widgets.get(i);								
+						if(widget.isActive){
+							finalWidgets.add(widget);
+						}						
+					}
+				}
+			}else{
+				finalWidgets = widgets;
+			}
+		}
+
+		return finalWidgets;
 	}
 
 	/**
@@ -172,9 +306,8 @@ public class WidgetUtil {
 		}
 	}
 
-		/**
-	 * @author prakash 
-	 * To get added  widget with itegation type
+	/**
+	 * @author prakash To get added widget with itegation type
 	 * 
 	 * 
 	 * @param name
@@ -192,10 +325,9 @@ public class WidgetUtil {
 			return null;
 		}
 	}
-	
+
 	/**
-	 * @author - prakash
-	 * Gets the widget based on the widget type and user id.
+	 * @author - prakash Gets the widget based on the widget type and user id.
 	 * 
 	 * @param name
 	 *            {@link Integration type}. Type of the widget
@@ -219,7 +351,6 @@ public class WidgetUtil {
 			return null;
 		}
 	}
-	
 
 	/**
 	 * Gets the widget based on the widget name and user id.
@@ -246,7 +377,74 @@ public class WidgetUtil {
 			return null;
 		}
 	}
+
+	public static JSONArray getWigdetsActiveUsersList(String name) {
+		JSONArray userIDs = new JSONArray();
+		String domain = NamespaceManager.get();
+		System.out.println("*** domain " + domain);
+
+		// if(domain != null){
+		List<DomainUser> users = DomainUserUtil.getUsers(domain);
+		for (DomainUser dUser : users) {
+			AgileUser aUser = AgileUser
+					.getCurrentAgileUserFromDomainUser(dUser.id);
+			if (aUser != null) {
+				Widget userWidget = WidgetUtil.getWidget(name, aUser.id);
+				if (userWidget != null && userWidget.isActive) {
+					userIDs.put(aUser.id);
+				}
+			}
+		}
+		// }
+
+		return userIDs;
+	}
+
+	public static List<JSONObject> getWigdetsObjectList(String name) {
+		List<JSONObject> userList = new ArrayList<JSONObject>();
+		String domain = NamespaceManager.get();
+		System.out.println("*** domain " + domain);
+
+		// if(domain != null){
+		List<DomainUser> users = DomainUserUtil.getUsers(domain);
+		
+		for (DomainUser dUser : users) {
+			AgileUser aUser = AgileUser.getCurrentAgileUserFromDomainUser(dUser.id);
+			if (aUser != null) {
+				Widget userWidget = WidgetUtil.getWidget(name, aUser.id);
+				if (userWidget != null) {
+					JSONObject obj = new JSONObject();
+					try {
+						obj.put("userID", aUser.id);
+						obj.put("isActive", userWidget.isActive);
+						obj.put("addByAdmin", userWidget.add_by_admin);
+						obj.put("isAdminUser", dUser.is_admin);
+						userList.add(obj);
+					} catch (JSONException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}				
+				}
+			}
+		}
+		// }
+
+		return userList;
+	}
 	
+	public static List<Widget> getWigetUserListByAdmin(String name) {
+		try {
+			Objectify ofy = ObjectifyService.begin();
+
+			// Queries on widget name, with current AgileUser Key
+			return ofy.query(Widget.class).filter("name", name)
+					.filter("add_by_admin", true).list();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
 	/**
 	 * Gets the widget based on the widget name and user id.
 	 * 
@@ -282,7 +480,65 @@ public class WidgetUtil {
 	public static void removeWidgetForAllUsers(String name) {
 		dao.deleteKeys(dao.listKeysByProperty("name", name));
 	}
+
+	public static void deleteWidget(String id, String name) {
+		Objectify ofy = ObjectifyService.begin();
+
+		// Creates Current AgileUser key
+		Key<AgileUser> userKey = new Key<AgileUser>(AgileUser.class, id);
+
+		/*
+		 * Fetches list of widgets related to AgileUser key and adds is_added
+		 * field as true to default widgets if not present
+		 */
+		List<Widget> widgets = ofy.query(Widget.class).ancestor(userKey)
+				.filter("name", name).list();
+		for (Widget widget : widgets) {
+			widget.delete();
+		}
+	}
+
+	public static void deleteWidgetByUserID(String id, String name) {
+		Objectify ofy = ObjectifyService.begin();
+
+		// Creates Current AgileUser key
+		AgileUser agileUser = AgileUser.getCurrentAgileUser(Long.parseLong(id));
+		if (agileUser != null) {
+			Key<AgileUser> userKey = AgileUser
+					.getCurrentAgileUserKeyFromDomainUser(agileUser.domain_user_id);
+
+			/*
+			 * Fetches list of widgets related to AgileUser key and adds
+			 * is_added field as true to default widgets if not present
+			 */
+			List<Widget> widgets = ofy.query(Widget.class).ancestor(userKey)
+					.filter("name", name).list();
+			for (Widget widget : widgets) {
+				widget.delete();
+			}
+		}
+	}
 	
+	public static void updateWidgetStatus(String id, String name, boolean status) {
+		Objectify ofy = ObjectifyService.begin();
+
+		// Creates Current AgileUser key
+		AgileUser agileUser = AgileUser.getCurrentAgileUser(Long.parseLong(id));
+		if (agileUser != null) {
+			Key<AgileUser> userKey = AgileUser.getCurrentAgileUserKeyFromDomainUser(agileUser.domain_user_id);
+
+			/*
+			 * Fetches list of widgets related to AgileUser key and adds
+			 * is_added field as true to default widgets if not present
+			 */
+			Widget widget = ofy.query(Widget.class).ancestor(userKey).filter("name", name).get();
+			if(widget != null){
+				widget.isActive = status;
+				widget.save();
+			}
+		}
+	}
+
 	/**
 	 * 
 	 * 
@@ -290,17 +546,18 @@ public class WidgetUtil {
 	 */
 	public static void removeCurrentUserCustomWidget(String name) {
 		Objectify ofy = ObjectifyService.begin();
-		
+
 		// Creates Current AgileUser key
 		Key<AgileUser> userKey = new Key<AgileUser>(AgileUser.class,
-					AgileUser.getCurrentAgileUser().id);
+				AgileUser.getCurrentAgileUser().id);
 
 		/*
 		 * Fetches list of widgets related to AgileUser key and adds is_added
 		 * field as true to default widgets if not present
 		 */
-		List<CustomWidget> widgets = ofy.query(CustomWidget.class).ancestor(userKey).filter("name", name).list();
-		
+		List<CustomWidget> widgets = ofy.query(CustomWidget.class)
+				.ancestor(userKey).filter("name", name).list();
+
 		for (CustomWidget customWidget : widgets) {
 			// check if widget is custom widget and delete it.
 			if (WidgetType.CUSTOM == customWidget.widget_type) {
@@ -318,14 +575,18 @@ public class WidgetUtil {
 	public static boolean checkIfWidgetNameExists(String name) {
 		if (name == null)
 			return false;
-
+		
 		for (Widget defaultWidget : DefaultWidgets.getAvailableDefaultWidgets())
 			if (defaultWidget.name.equals(name))
 				return true;
 
 		if (CustomWidgets.getCount("name", name) != 0)
 			return true;
-
+		
+		
+		if (WidgetUtil.getWidgetCount("name", name) != 0)
+			return true;
+		
 		return false;
 	}
 
@@ -348,5 +609,10 @@ public class WidgetUtil {
 				.filter("widget_type", WidgetType.EMAIL).list());
 
 		return listOfIntegrations;
+	}
+	
+	public static int getWidgetCount(String propertyName, Object propertyValue) {
+		ObjectifyGenericDao<Widget> widgetDao = new ObjectifyGenericDao<Widget>(Widget.class);
+		return widgetDao.getCountByProperty(propertyName, propertyValue);
 	}
 }

@@ -109,6 +109,12 @@ public class Task extends Cursor
      * Sets the priority as specified.
      */
     public PriorityType priority_type;
+    
+    /**
+     * only used for due task reminder email sending
+     */
+    @NotSaved
+    public String priority_type_string;
 
     /**
      * List of contact keys related to a task
@@ -220,6 +226,8 @@ public class Task extends Cursor
      */
     private List<Key<Opportunity>> related_deals = new ArrayList<Key<Opportunity>>();
     /**************************************************************/
+
+    public String timeFormatForEmail = null;
 
     // Dao
     public static ObjectifyGenericDao<Task> dao = new ObjectifyGenericDao<Task>(Task.class);
@@ -357,16 +365,21 @@ public class Task extends Cursor
 	if (created_time == 0L)
 	    created_time = System.currentTimeMillis() / 1000;
 
+	
 	if (this.id != null)
 	{
 	    Task oldtask = TaskUtil.getTask(this.id);
+	    if (oldtask != null)
 	    task_start_time = oldtask.task_start_time;
+	   
+	    if(oldtask != null)
 	    if (oldtask.progress == 0)
 	    {
 		if (this.progress > 0)
 		    task_start_time = System.currentTimeMillis() / 1000;
 	    }
 	}
+	
 
 	if (this.contacts != null)
 	{

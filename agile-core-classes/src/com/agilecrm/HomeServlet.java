@@ -2,7 +2,6 @@ package com.agilecrm;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -16,8 +15,6 @@ import org.apache.commons.lang.exception.ExceptionUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.agilecrm.account.AccountPrefs;
-import com.agilecrm.account.util.AccountPrefsUtil;
 import com.agilecrm.contact.CustomFieldDef;
 import com.agilecrm.contact.CustomFieldDef.SCOPE;
 import com.agilecrm.contact.util.CustomFieldDefUtil;
@@ -27,11 +24,7 @@ import com.agilecrm.session.SessionCache;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
-import com.agilecrm.user.OnlineCalendarPrefs;
-import com.agilecrm.user.UserPrefs;
 import com.agilecrm.user.util.DomainUserUtil;
-import com.agilecrm.user.util.OnlineCalendarUtil;
-import com.agilecrm.user.util.UserPrefsUtil;
 import com.agilecrm.util.Defaults;
 import com.google.appengine.api.NamespaceManager;
 
@@ -76,10 +69,19 @@ public class HomeServlet extends HttpServlet
 	    return;
 	}
 
-	// Create New User - AgileUser (for this namespace)
-	new AgileUser(SessionManager.get().getDomainId()).save();
+	System.out.println("setUpAgileUser inside");
+	// Create new user only if this user is not newly registered user
+	if( (req.getSession().getAttribute(RegisterServlet.IS_NEWLY_REGISTERED_USER_ATTR)) == null )
+	{
+		// Create New User - AgileUser (for this namespace)
+		new AgileUser(SessionManager.get().getDomainId()).save();
+	}
 
 	req.setAttribute(FIRST_TIME_USER_ATTRIBUTE, true);
+	
+	// Delete first time user session attribute
+	req.getSession().removeAttribute(RegisterServlet.IS_NEWLY_REGISTERED_USER_ATTR);
+	
 
 	// It load defaults. If request is for the first user in the domain then
 	// default are created or else only tour cookie is set
@@ -156,8 +158,17 @@ public class HomeServlet extends HttpServlet
      * 
      * @return
      */
-    public boolean isNewUser()
+    public boolean isNewUser(HttpServletRequest request)
     {
+    System.out.println("isNewUser = ");
+    
+    Boolean isNewUserSessionAttr = (Boolean) request.getSession().getAttribute(RegisterServlet.IS_NEWLY_REGISTERED_USER_ATTR);
+    System.out.println("isNewUserSessionAttr = " + isNewUserSessionAttr);
+    if( isNewUserSessionAttr != null && isNewUserSessionAttr.booleanValue() == true )
+    {
+    	return true;
+    }
+    
 	// Gets current AgileUser
 	return AgileUser.getCurrentAgileUser() == null;
     }
@@ -175,31 +186,6 @@ public class HomeServlet extends HttpServlet
 	    setLastLoggedInTime(domainUser);
 
 	    domainUser.setInfo(DomainUser.LOGGED_IN_TIME, new Long(System.currentTimeMillis() / 1000));
-	    setUserInfoTimezone(req, domainUser.id);
-	    domainUser = createOnlineCalendarPrefs(domainUser);
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	}
-    }
-    
-    /**
-     * Saves finger print in domain user before request is forwarded to
-     * dashboard (home.jsp)
-     */
-    private void saveFingerPrint(HttpServletRequest req, DomainUser domainUser)
-    {
-	try
-	{
-		UserFingerPrintInfo info = UserFingerPrintInfo.getUserAuthCodeInfo(req);
-	    if(StringUtils.isBlank(info.finger_print))
-	    	return;
-		    
-	    if(domainUser.finger_prints == null)
-	    	domainUser.finger_prints = new HashSet();
-	    
-	    domainUser.finger_prints.add(info.finger_print);
 	}
 	catch (Exception e)
 	{
@@ -229,7 +215,7 @@ public class HomeServlet extends HttpServlet
 
     	// If user is not new, it calls method to set logged in time in current
     	// domain user and forwards request to home.jsp
-    	if (!isNewUser())
+    	if (!isNewUser(req))
     	{
     		UserFingerPrintInfo browser_auth = UserFingerPrintInfo.getUserAuthCodeInfo(req);
     		if(!browser_auth.valid_finger_print || !browser_auth.valid_ip){
@@ -245,10 +231,6 @@ public class HomeServlet extends HttpServlet
     		
     	    // Saves logged in time in domain user.
     	    setLoggedInTime(req, domainUser);
-    	    setAccountTimezone(req);
-    	    
-    	    // Save user finger print
-    	    saveFingerPrint(req, domainUser);
     	    
     	    try {
     	    	domainUser.save();
@@ -264,6 +246,7 @@ public class HomeServlet extends HttpServlet
     	    return;
     	}
 
+    	System.out.println("setUpAgileUser");
     	// If user is new user it will create new AgileUser and set cookie for
     	// initial page tour. It also calls to initialize defaults, if user is
     	// first user in the domain.
@@ -323,81 +306,6 @@ public class HomeServlet extends HttpServlet
 
     }
 
-    private void setAccountTimezone(HttpServletRequest req)
-    {
-	try
-	{
-	    // Set timezone in account prefs.
-	    AccountPrefs accPrefs = AccountPrefsUtil.getAccountPrefs();
-	    if (StringUtils.isEmpty(accPrefs.timezone) || "UTC".equals(accPrefs.timezone)
-		    || "GMT".equals(accPrefs.timezone))
-	    {
-		accPrefs.timezone = (String) req.getSession().getAttribute("account_timezone");
-		accPrefs.save();
-	    }
-	}
-	catch (Exception e)
-	{
-	    System.out.println("Exception in setting timezone in account prefs.");
-	}
-    }
-
-    private void setUserInfoTimezone(HttpServletRequest req, Long domainid)
-    {
-	try
-	{
-	    UserPrefs user_prefs = UserPrefsUtil.getUserPrefs(AgileUser.getCurrentAgileUser());
-	    System.out.println("user_prefs in setUserInfoTimezone --------------- " + user_prefs);
-	    if (StringUtils.isEmpty(user_prefs.timezone) || "UTC".equals(user_prefs.timezone))
-	    {
-
-		user_prefs.timezone = (String) req.getSession().getAttribute("account_timezone");
-		user_prefs.save();
-	    }
-	}
-	catch (Exception e)
-	{
-	    System.out.println("Exception in setting timezone in user prefs.");
-	}
-    }
-
-    private DomainUser createOnlineCalendarPrefs(DomainUser user)
-    {
-	OnlineCalendarPrefs onlinePrefs = OnlineCalendarUtil.getCalendarPrefs(user.id);
-	if (onlinePrefs == null)
-	{
-	    if (StringUtils.isNotEmpty(user.schedule_id))
-	    {
-		onlinePrefs = new OnlineCalendarPrefs(user.schedule_id, user.meeting_types, user.business_hours,
-			user.meeting_durations, user.id);
-	    }
-	    else
-	    {
-		onlinePrefs = new OnlineCalendarPrefs(OnlineCalendarUtil.getScheduleid(user.name), user.id);
-	    }
-	    user.schedule_id = onlinePrefs.schedule_id;
-	    onlinePrefs.save();
-	}
-	else
-	{
-	    if (StringUtils.isBlank(user.schedule_id) || !(onlinePrefs.schedule_id.equalsIgnoreCase(user.schedule_id)))
-	    {
-		try
-		{
-		    user.schedule_id = onlinePrefs.schedule_id;
-		    return user;
-		}
-		catch (Exception e)
-		{
-		    // TODO Auto-generated catch block
-		    e.printStackTrace();
-		}
-	    }
-	}
-	return user;
-    }
-    
-    
     /**
      * Set the values for Custom Fields as request attributes to be used by home-flatfull.jsp file.
      * @param request

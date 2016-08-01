@@ -453,7 +453,7 @@ public class SearchUtil
 	// Holds first name and last name for different combinations to search
 	String firstName = "";
 	String lastName = "";
-
+	String name = "";
 	/*
 	 * Iterates through contact properties and gets fist name last name (for
 	 * combinations first_name + last_name , last_name + first_name),
@@ -469,6 +469,11 @@ public class SearchUtil
 	    else if ("last_name".equals(contactField.name))
 	    {
 		lastName = contactField.value;
+	    }
+
+	    else if ("name".equals(contactField.name))
+	    {
+	    	name = contactField.value;
 	    }
 
 	    else if ("address".equals(contactField.name))
@@ -499,6 +504,24 @@ public class SearchUtil
 
 	String contactName = "";
 
+	String[] firstNameArr = firstName.split(" ");
+	for(int i=0; i<firstNameArr.length; i++){
+		contactName = normalizeString(firstNameArr[i]);
+		tokens.add(contactName);
+	}
+	
+	String[] lastNameArr = lastName.split(" ");
+	for(int i=0; i<lastNameArr.length; i++){
+		contactName = normalizeString(lastNameArr[i]);
+		tokens.add(contactName);
+	}
+	
+	String[] nameArr = name.split(" ");
+	for(int i=0; i<nameArr.length; i++){
+		contactName = normalizeString(nameArr[i]);
+		tokens.add(contactName);
+	}
+	
 	// contact contact name first name then last name add to tokens
 	contactName = normalizeString(firstName + lastName);
 	tokens.add(contactName);
@@ -506,7 +529,6 @@ public class SearchUtil
 	// contact contact name last name then first name add to tokens
 	contactName = normalizeString(lastName + firstName);
 	tokens.add(contactName);
-
 	// Splits each token in to fragments to search based on keyword
 	if (tokens.size() != 0)
 	    tokens = StringUtils2.getSearchTokens(tokens);

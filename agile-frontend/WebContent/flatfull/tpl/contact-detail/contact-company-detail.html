@@ -34,8 +34,17 @@
 								<ul class="dropdown-menu pull-right text-sm">
 <li> <a href="#company-edit"><i class="fa fa-edit" style="margin-right:2px"></i> Edit</a></li>
 <li class="divider"></li>
+									<li><a href='#' class="contact-add-note"><i
+											class="fa fa-file-text"></i> Add Note</a></li>
+									<li><a href='#' class="contact-add-task"><i
+											class="icon-tasks"></i> Add Task</a></li>
+									{{#isRestrictedMenuScope "CASES"}} {{else}}
+									{{#isNewVersionDomainUser}} {{else}}
 									<li><a href='#' class="contact-add-case"><i
 											class="icon-folder" style="margin-right:2px"></i> Add Case</a></li>
+									{{/isNewVersionDomainUser}}
+									{{/isRestrictedMenuScope}}
+
 									{{#hasMenuScope 'DEALS'}}
 									<li><a href='#' class="contact-add-deal"><i class="icon-money" style="margin-right:2px"></i>
 											Add Opportunity</a></li>
@@ -448,15 +457,26 @@
 								<ul class="dropdown-menu pull-right text-sm"  role="menu">
 <li> <a href="#company-edit"><i class="fa fa-edit" style="margin-right:2px"></i> Edit</a></li>
 <li class="divider"></li>
+									{{#isRestrictedMenuScope "CASES"}} {{else}}
+										{{#isNewVersionDomainUser}} {{else}}
 									<li><a href='#' class="contact-add-case"><i
 											class="icon-folder" style="margin-right:2px"></i> Add Case</a></li>
+										{{/isNewVersionDomainUser}}
+									{{/isRestrictedMenuScope}}
+
 									{{#hasMenuScope 'DEALS'}}
 									<li><a href='#' class="contact-add-deal"><i class="icon-money" style="margin-right:2px"></i>
-											Add Opportunity</a></li>
+											Add Deal</a></li>
 									{{/hasMenuScope}}
 									<li class='divider'></li>
 									<li><a href='#send-email{{#if_propertyName "email"}}/{{value}}{{/if_propertyName}}' id="contact-send-email"><i
 											class="icon-envelope" style="margin-right:2px"></i> Send Email</a></li>
+									<li class="divider"></li>
+									<li>
+										<a href='#duplicate-company/{{id}}'>
+											<i class="icon-code-fork"></i>Merge Duplicates
+										</a>
+									</li>
 									<li class='divider'></li>
 									<li><a href='#' id='company-actions-delete'><i
 											class="icon-trash" style="margin-right:2px"></i> Delete</a></li>
@@ -632,7 +652,7 @@
 </div>
 </div>
 
-<div class="wrapper p-b-s " id="contacts-type-custom-fields" style="padding-top:10px;"></div>
+<div class="wrapper p-b-s hidden" id="contacts-type-custom-fields" style="padding-top:10px;  padding-bottom: 5px;"></div>
 <!-- funda for contact details edit -->
 
 {{#property_is_exists "phone" properties}}
@@ -819,17 +839,29 @@
 			<ul class="nav nav-tabs  bg-light" id="contactDetailsTab">
 				<li class="active"><a data-toggle="tab" href="#company-contacts">Contacts</a></li>
 				<li class=""><a data-toggle="tab" href="#company-deals">Deals</a></li>
+				{{#isNewVersionDomainUser}} {{else}}
 				<li class=""><a data-toggle="tab" href="#company-cases">Cases</a></li>
+				{{/isNewVersionDomainUser}}
+
                 <li class=""><a data-toggle="tab" href="#company-notes">Notes</a></li>
-                <li class=""><a data-toggle="tab" href="#company-documents">Documents</a></li>				
+                <li class=""><a data-toggle="tab" role="tab" href="#company-events">Events</a></li>
+				<li class=""><a data-toggle="tab" role="tab" href="#company-tasks">Tasks</a></li>
+                <li class=""><a data-toggle="tab" href="#company-documents">Documents</a></li>
+                <li class=""><a data-toggle="tab" role="tab" href="#company-mail">Mail</a></li>				
 			</ul>
 			</div>
 			<div class="tab-content" id="contact-tab-content">
-				<div class="tab-pane active" id="company-contacts">...</div>
-				<div class="tab-pane" id="deals">...</div>
-				<div class="tab-pane" id="cases">...</div>
-                <div class="tab-pane" id="notes"><img src="{{getS3ImagePath 'img/21-0-new.gif'}}"></img></div>
-               <div class="tab-pane" id="documents"><img src="{{getS3ImagePath 'img/21-0-new.gif'}}"></img></div>
+				<div class="tab-pane" id="company-contacts">...</div>
+				<div class="tab-pane" id="company-deals">...</div>
+				<div class="tab-pane" id="company-cases">...</div>
+                <div class="tab-pane" id="company-notes"><img src="{{getS3ImagePath 'img/21-0-new.gif'}}"></img></div>
+               <div class="tab-pane" id="company-documents"><img src="{{getS3ImagePath 'img/21-0-new.gif'}}"></img></div>
+           <div class="tab-pane" id="company-events"><img src="{{getS3ImagePath 'img/21-0-new.gif'}}"></img></div>
+			<div class="tab-pane" id="company-tasks"><img src="{{getS3ImagePath 'img/21-0-new.gif'}}"></img></div>
+			<div class="tab-pane" id="company-mail" style="min-height: 20em">
+					<div id="company-mail-account-types"  style="display:none"></div>
+					<div id="company-mails"></div>
+			    </div>
 			</div>
 		
 	</div>
@@ -839,7 +871,7 @@
 	<!-- Contact Details -->
 	<div class="col bg-white hide">
 
-<div id="widgets"></div>
+<div id="widgets" style="max-width:250px"></div>
 						</div>
 					</div>
 </div>

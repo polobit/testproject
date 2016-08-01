@@ -187,6 +187,9 @@ var ActivitylogRouter = Backbone.Router.extend({
 
             });
 
+            $(".active").removeClass("active");
+            $("#activitiesmenu").addClass("active");
+
         } // end contact activities
 
 });

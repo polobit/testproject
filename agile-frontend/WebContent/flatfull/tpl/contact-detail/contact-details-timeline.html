@@ -213,11 +213,11 @@
 
 {{#each this}}
 {{#if id}}
-<div class="item post" id={{id}}>
+<div class="item post" id="{{id}}">
 {{else}}
 <div class="item post" id="id-{{@index}}">
 {{/if}}
-    <div class="inner">
+    <div class="inner" parentid="{{id}}" id="{{id}}-inner">
 
 	{{#if_entity "logPhone"}}
 

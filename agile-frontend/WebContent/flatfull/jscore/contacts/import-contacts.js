@@ -524,8 +524,9 @@ $('#' + id).on('click', '#import-deals', function(e)
 										close_date_count +=1;
 						if(value == "properties_relatedTo")
 										related_count +=1;
-						if(value == "properties_note")
-										note_count +=1;
+						/* commented the code by prakash - for saving multiple notes in deal
+ 						if(value == "properties_note")
+										note_count +=1;*/
 						if(value == "properties_description")
 										description_count +=1;
 										
@@ -620,6 +621,7 @@ $('#' + id).on('click', '#import-deals', function(e)
 						return false;
 					}
 					
+					/* commented the code as we are now saving multiple notes for a deal while importing
 					else if (note_count > 1)
 					{
 						getTemplate("import-deal-validation-message", upload_valudation_errors.deal_note_duplicated, undefined, function(template_ui){
@@ -629,7 +631,7 @@ $('#' + id).on('click', '#import-deals', function(e)
 						}, "#import-validation-error");
 
 						return false;
-					}
+					}*/
 					
 					else if (description_count > 1)
 					{

@@ -149,8 +149,9 @@ public class ContactEmailUtil
 			body = EmailUtil.appendTrackingImage(body, null, contactEmailWrapper.getTrackerId());
 			System.out.println("Start -- in saveContactEmailAndSend if toEmailSet size is 1-----");
 			// Get contactId for link tracking
-			for(String email: toEmailSet)
-				contact = ContactUtil.searchContactByEmail(EmailUtil.getEmail(email));
+			for(String email: toEmailSet){
+				contact = ContactUtil.searchContactByTypeAndEmail(EmailUtil.getEmail(email), contactEmailWrapper.getContact_type());
+			}				
 			
 			if (contact != null)
 				body = EmailLinksConversion.convertLinksUsingJSOUP(body, contact.id.toString(), null, contactEmailWrapper.getTrackerId(), contactEmailWrapper.getPush_param().toString());
@@ -187,7 +188,7 @@ public class ContactEmailUtil
 				String email = EmailUtil.getEmail(toEmail);
 
 				// Get contact based on email.
-				contact = ContactUtil.searchContactByEmail(email);
+				contact = ContactUtil.searchContactByTypeAndEmail(EmailUtil.getEmail(email), contactEmailWrapper.getContact_type());
 				
 				System.out.println("To Email is " + toEmail + " Email - *" + email + "* Contact is " + contact);
 

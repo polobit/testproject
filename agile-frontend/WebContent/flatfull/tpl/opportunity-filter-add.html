@@ -1,134 +1,326 @@
 <script id="filter-deals-template" type="text/html">
 <div class="bg-light lter b-b wrapper-md">
-	{{#if id}} 
-		<h3  class="formheading h3 font-thin m-n">Edit Deal Filter
-			<span style="vertical-align: text-top; margin-left: -3px"> <img border="0" src="/img/help.png" style="height: 6px;" rel="popover" data-placement="bottom" data-content="Use filters to sort deals with a specific criteria to find patterns. You can save your preferred filters and fetch the deals based on saved preferences." id="element" data-trigger="hover"></span>
-		</h3>
-	{{else}}
-        <h3 class="formheading h3 font-thin m-n"><i class="icon-plus-sign"></i> Add Deal Filter
-        	<span style="vertical-align: text-top; margin-left: -3px"> <img border="0" src="/img/help.png" style="height: 6px;" rel="popover" data-placement="bottom" data-content="Use filters to sort deals with a specific criteria to find patterns. You can save your preferred filters and fetch the deals based on saved preferences." id="element" data-trigger="hover">
+	{{#if id}}
+		<h3  class="formheading h3 font-thin m-n">
+			Edit Deal Filter
+			<span style="vertical-align: text-top; margin-left: -3px">
+				<img border="0" src="{{getS3ImagePath '/img/help.png'}}" style="height: 6px;" rel="popover" data-placement="bottom" 
+				data-content="Use filters to sort deals with a specific criteria to find patterns. You can save your preferred filters and fetch the deals based on saved preferences." id="element" data-trigger="hover">
 			</span>
 		</h3>
-     {{/if}}
+	{{else}}
+		<h3 class="formheading h3 font-thin m-n">
+			<i class="icon-plus-sign"></i>
+			Add Opportunity Filter
+			<span style="vertical-align: text-top; margin-left: -3px">
+				<img border="0" src="{{getS3ImagePath '/img/help.png'}}" style="height: 6px;" rel="popover" data-placement="bottom" 
+				data-content="Use filters to sort deals with a specific criteria to find patterns. You can save your preferred filters and fetch the deals based on saved preferences." id="element" data-trigger="hover">
+			</span>
+		</h3>
+	{{/if}}
 </div>
 <div class="wrapper-md">
 	<div class="row">
 		<div class="col-md-12">
-			<form id="dealsFilterForm" name="dealsFilterForm" class="form-horizontal">
-				<fieldset>
-					<div class="control-group form-group">
-						<label class="control-label col-sm-2">Name<span class="field_req">*</span></label>
-						<div class="controls col-sm-6">
-							<input type="text" name="name" class="required form-control" autofocus/>
-						</div>
-					</div>
-					<!-- <div class="control-group form-group">
-						<label class="control-label col-sm-2">View Type<span class="field_req">*</span></label>
-						<div class="controls col-sm-6">
-							<div id="contact_type_filter" name="contact_type_filter">
-								<select name="view_type" id="view_type" class="form-control">
-									<option value="list">List View</option>
-									<option value="milestone">Milestone View</option>
-								</select>
+			<form id="filterOpportunityForm" class="form-horizontal">
+				<div name="rules" class="formsection chainedSelect">	
+					<fieldset>
+						<div class="control-group form-group">
+							<label class="control-label col-sm-2">Name<span class="field_req">*</span></label>
+							<div class="controls col-sm-8">
+								<input type="text" name="name" class="required form-control" maxlength="120" placeholder="Max Length: 120" />
 							</div>
 						</div>
-					</div> -->
-					<div class="control-group form-group">
-						<label class="control-label col-sm-2">Owner</label>
-						<div class="controls col-sm-6" >
-							<select id="owners-list-filters" name="owner_id" class="form-control"></select>
-							<img class="loading-img" src="img/21-0.gif"></img>
-						</div>
-					</div>
-					<div class="control-group form-group" id="filter-track">
-						<label class="control-label col-sm-2">Track</label>
-						<div class="controls col-sm-6" id="track_div">
-							<select id="filter_pipeline" name="pipeline_id" class="form-control"></select>
-							<img class="loading-img" src="img/21-0.gif"></img>
-						</div>
-					</div>
-					<div class="control-group form-group" id="filter-milestone">
-						<label class="control-label col-sm-2">Milestone</label>
-						<div class="controls col-sm-6" id="milestone_div">
-							<select id="milestone" name="milestone" class="form-control"></select>
-							<img class="loading-img" src="img/21-0.gif" style="display:none;"></img>
-						</div>
-					</div>
-						
-					<div class="control-group form-group" id="deal-value-filter">
-						<label class="control-label col-sm-2">Value</label>
-						<div class="controls col-sm-2" id="value_div">
-								<select id="value_filter" name="value_filter" class="filter_type form-control m-b-sm" data="expected_value">
-									<option value="equals">Equals</option>
-									<option value="between">Between</option>
-								</select>
-						</div>
-						<div class="controls col-sm-4 equals">
-							<input type="number" id="value" name="value" placeholder="Value" class="equals form-control positive_number"/>
-						</div>
-						<div class="controls col-sm-2 hide between">
-							<input type="number" id="value_start" name="value_start" class="between form-control positive_number" placeholder="Min Value"/>
-						</div>
-						<div class="controls col-sm-2 hide between"> 
-								<input type="number" id="value_end" name="value_end" placeholder="Max Value" class="between form-control positive_number" />
-						</div>
-					</div>
-					<div class="control-group form-group" id="deal-close-date">
-						<label class="control-label col-sm-2">Close Date</label>
-						<div class="controls col-sm-2" id="value_div">
-								<div id="deal-cd-condition" name="CONDITION">
-												<select name="close_date_filter" class="form-control deal-cd-value" id="cdCondtion">								
-													<option value="ON" class="updated_time created_time last_contacted last_emailed last_called last_campaign_emaild">on</option>
-													<option value="AFTER" class="created_time updated_time last_contacted last_emailed last_called last_campaign_emaild">is
-														after</option>
-													<option value="BEFORE" class="created_time updated_time last_contacted last_emailed last_called last_campaign_emaild">is
-														before</option>
-													<option value="BETWEEN" class="created_time updated_time last_contacted last_emailed last_called last_campaign_emaild">is
-														between</option>
-													<option value="LAST" class="created_time updated_time last_contacted last_emailed last_called last_campaign_emaild">in
-														last</option>
-													<option value="NEXT" class="created_time updated_time">in next
-														</option>												
-												</select>
+						<div class="control-group form-group" id="filter-settings">
+							<label class="control-label col-sm-2">Condition</label>
+							<div class="controls col-sm-8">
+								<div id="opportunities-filter-wrapper">
+									<div>Meet <i>All </i> of the following conditions</div>
+									<table class="bg-transparent m-b-xs chained-table opportunity and_rules">
+										<tbody>
+											<tr valign="top" class="chained controls hide" name="rules">
+												<td class="lhs-block">
+													<div id="LHS" name="LHS">
+														<select name="temp" class="lhs form-control" id="LHS">
+															<optgroup label="Tag">
+																<option value="tags" selected="selected">Tag</option>
+																<option value="tags_time">Tag And Created Date</option>
+															</optgroup>
+															<optgroup label="Date">
+																<option value="created_time">Created</option>
+																<option value="updated_time">Updated</option>
+																<option value="closed_time">Closed</option>
+																<option value="won_time">Won</option>
+															</optgroup>
+		 													<optgroup label="Properties">
+																<!-- <option value="name">Name</option> -->
+																<option value="owner_id">Owner</option>
+																<option value="track_milestone">Track & Milestone</option>
+																<option value="expected_value">Value</option>
+																<option value="probability">Probability</option>
+																<option value="archived">State</option>
+																<option value="deal_source">Source</option>
+																<option value="lost_reason">Loss reason</option>
+																<!-- <option value="type">Type</option> -->
+															</optgroup>
+															<optgroup label="Custom Fields" id="custom-fields" class="hide">
+															</optgroup>
+														</select>
+													</div>
+												</td>
+												<td class="codition-block">
+													<div id="condition" name="CONDITION">
+														<select name="temp" class="form-control">
+															<option value="EQUALS" class="tags tags_time name type track_milestone">is</option>
+															<option value="NOTEQUALS" class="tags name type track_milestone">isn't</option>
+															<option value="DEFINED" class="tags">is defined</option>
+															<option value="NOT_DEFINED" class="tags">is not defined</option>
+															<option value="EQUALS" class="expected_value probability">equals</option>
+															<option value="BETWEEN_NUMBER" class="expected_value probability">between</option>
+															<option value="IS_GREATER_THAN" class="expected_value probability">greater than</option>
+															<option value="IS_LESS_THAN" class="expected_value probability">less than</option>
+															<option value="ON" class="created_time updated_time closed_time won_time">on</option>
+															<option value="AFTER" class="created_time updated_time closed_time won_time">is
+																after</option>
+															<option value="BEFORE" class="created_time updated_time closed_time won_time">is
+																before</option>
+															<option value="BETWEEN" class="created_time updated_time closed_time won_time">is
+																between</option>
+															<option value="LAST" class="created_time updated_time closed_time won_time">in
+																last</option>
+															<option value="NEXT" class="closed_time">in next
+																</option>
+															<option value="EQUALS" class="owner_id" related="RHS" url="core/api/users" parse_key="id" parse_value="name">is</option>
+															<option value="NOTEQUALS" class="owner_id" related="RHS" url="core/api/users" parse_key="id" parse_value="name">isn't</option>
+															<option value="EQUALS" class="deal_source" related="RHS" url="core/api/categories?entity_type=DEAL_SOURCE" parse_key="id" parse_value="label">is</option>
+															<option value="NOTEQUALS" class="deal_source" related="RHS" url="core/api/categories?entity_type=DEAL_SOURCE" parse_key="id" parse_value="label">isn't</option>
+															<option value="EQUALS" class="lost_reason" related="RHS" url="core/api/categories?entity_type=DEAL_LOST_REASON" parse_key="id" parse_value="label">is</option>
+															<option value="NOTEQUALS" class="lost_reason" related="RHS" url="core/api/categories?entity_type=DEAL_LOST_REASON" parse_key="id" parse_value="label">isn't</option>
+															<option value="EQUALS" class="archived" related="RHS" >is</option>
+														</select>
+													</div>
+												</td>
+												<td class="rhs-block  controls v-top">
+													<div id="RHS" class="rhs" name="RHS">
+														<input type="text" name="temp"
+															class="LAST NEXT required form-control number" min="1" max="1000" placeholder="Number of days"/>
+														<input type="text" name="temp" 
+															class="EQUALS NOTEQUALS required form-control"/>
+														<input type="text" name="temp"
+															class="IS_GREATER_THAN IS_LESS_THAN number form-control required"/>
+														<input type="text" name="tag" 
+															class="tags tags_time required form-control m-n" /> 
+		                                                <input type="text" name="temp" 
+															class="BETWEEN_NUMBER number required form-control"/>
+														<input type="text" name="temp"
+															class="ON AFTER BEFORE BETWEEN input required date form-control"
+															placeholder="{{dateFormat}}" data-date-format="{{dateFormat}}"/>
+														
+													</div>
+												</td>
+												<td class="rhs-new-block controls v-top">
+													<div id="RHS-NEW" name="RHS_NEW">
+														<input type="text" name="temp"
+															class="BETWEEN_NUMBER number required form-control"/>
+														<input id="date_between" type="text" name="temp" data-date-format="{{dateFormat}}"
+															class="BETWEEN input date required form-control" placeholder="{{dateFormat}}" />
+													</div>
+												</td>
+												<td class="nested-condition-block v-top" >
+													<div id="nested_condition" name="nested_condition">
+														<select name="temp" class="form-control">
+															<option value="EQUALS" class="tags_time">on</option>
+															<option value="AFTER" class="tags_time">is after</option>
+															<option value="BEFORE" class="tags_time">is before</option>
+															<option value="BETWEEN" class="tags_time">is
+																between</option>
+															<option value="LAST" class="tags_time">in last</option>
+														</select>
+													</div>
+												</td>
+												<td class="controls v-top" >
+													<div id="nested_lhs" name="nested_lhs">
+														<input type="text" name="temp" class="LAST required number form-control" placeholder="Number of days" /> 
+														<input
+															id="date_between" type="text" 
+															name="temp"
+															class="BETWEEN EQUALS AFTER BEFORE input date required form-control"
+															placeholder="{{dateFormat}}" data-date-format="{{dateFormat}}"/>
+													</div>
+												</td>
+												<td class="controls v-top" >
+													<div id="nested_rhs" name="nested_rhs">
+														<input id="date_between" type="text" name="temp"
+															 class="BETWEEN input date required form-control"
+															placeholder="{{dateFormat}}" data-date-format="{{dateFormat}}" />
+													</div>
+												</td>
+												<td>
+													<div class="m-l-sm">
+														<i class="filter-opportunities-multiple-remove icon-remove-circle c-p"></i>
+													</div>
+												</td>
+												<td class="track-milestone-error hide">
+													<div class="m-l-sm">
+														<span class="text-danger">This condition is not applicable for Milestone View.</span>
+													</div>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+									<a href="#" class="filter-opportunities-multiple-add text-l-none m-t-xs text-info"><i class="icon-plus"></i> Add condition</a>
+									<br/><br/><small>and</small><br/>
+									<div>Meet  <i> Any </i> of the following conditions</div>
+									<table class="bg-transparent m-b-xs chained-table opportunity or_rules">
+										<tbody>
+											<tr valign="top" class="chained controls hide" name="or_rules">
+												<td class="lhs-block">
+													<div id="LHS" name="LHS">
+														<select name="temp" class="lhs form-control" id="LHS">
+															<optgroup label="Tag">
+																<option value="tags" selected="selected">Tag</option>
+																<option value="tags_time">Tag And Created Date</option>
+															</optgroup>
+															<optgroup label="Date">
+																<option value="created_time">Created</option>
+																<option value="updated_time">Updated</option>
+																<option value="closed_time">Closed</option>
+																<option value="won_time">Won</option>
+															</optgroup>
+		 													<optgroup label="Properties">
+																<!-- <option value="name">Name</option> -->
+																<option value="owner_id">Owner</option>
+																<option value="track_milestone">Track & Milestone</option>
+																<option value="expected_value">Value</option>
+																<option value="probability">Probability</option>
+																<option value="archived">State</option>
+																<option value="deal_source">Source</option>
+																<option value="lost_reason">Loss reason</option>
+																<!-- <option value="type">Type</option> -->
+															</optgroup>
+															<optgroup label="Custom Fields" id="custom-fields" class="hide">
+															</optgroup>
+														</select>
+													</div>
+												</td>
+												<td class="codition-block">
+													<div id="condition" name="CONDITION">
+														<select name="temp" class="form-control">
+															<option value="EQUALS" class="tags tags_time name type track_milestone">is</option>
+															<option value="NOTEQUALS" class="tags name type track_milestone">isn't</option>
+															<option value="DEFINED" class="tags">is defined</option>
+															<option value="NOT_DEFINED" class="tags">is not defined</option>
+															<option value="EQUALS" class="expected_value probability">equals</option>
+															<option value="BETWEEN_NUMBER" class="expected_value probability">between</option>
+															<option value="IS_GREATER_THAN" class="expected_value probability">greater than</option>
+															<option value="IS_LESS_THAN" class="expected_value probability">less than</option>
+															<option value="ON" class="created_time updated_time closed_time won_time">on</option>
+															<option value="AFTER" class="created_time updated_time closed_time won_time">is
+																after</option>
+															<option value="BEFORE" class="created_time updated_time closed_time won_time">is
+																before</option>
+															<option value="BETWEEN" class="created_time updated_time closed_time won_time">is
+																between</option>
+															<option value="LAST" class="created_time updated_time closed_time won_time">in
+																last</option>
+															<option value="NEXT" class="closed_time">in next
+																</option>
+															<option value="EQUALS" class="owner_id" related="RHS" url="core/api/users" parse_key="id" parse_value="name">is</option>
+															<option value="NOTEQUALS" class="owner_id" related="RHS" url="core/api/users" parse_key="id" parse_value="name">isn't</option>
+															<option value="EQUALS" class="deal_source" related="RHS" url="core/api/categories?entity_type=DEAL_SOURCE" parse_key="id" parse_value="label">is</option>
+															<option value="NOTEQUALS" class="deal_source" related="RHS" url="core/api/categories?entity_type=DEAL_SOURCE" parse_key="id" parse_value="label">isn't</option>
+															<option value="EQUALS" class="lost_reason" related="RHS" url="core/api/categories?entity_type=DEAL_LOST_REASON" parse_key="id" parse_value="label">is</option>
+															<option value="NOTEQUALS" class="lost_reason" related="RHS" url="core/api/categories?entity_type=DEAL_LOST_REASON" parse_key="id" parse_value="label">isn't</option>
+															<option value="EQUALS" class="archived" related="RHS" >is</option>
+														</select>
+													</div>
+												</td>
+												<td class="rhs-block  controls v-top">
+													<div id="RHS" class="rhs" name="RHS">
+														<input type="text" name="temp"
+															class="LAST NEXT required form-control number" min="1" max="1000" placeholder="Number of days"/>
+														<input type="text" name="temp" 
+															class="EQUALS NOTEQUALS required form-control"/>
+														<input type="text" name="temp"
+															class="IS_GREATER_THAN IS_LESS_THAN number form-control required"/>
+														<input type="text" name="tag" 
+															class="tags tags_time required form-control m-n" /> 
+		                                                <input type="text" name="temp" 
+															class="BETWEEN_NUMBER number required form-control"/>
+														<input type="text" name="temp"
+															class="ON AFTER BEFORE BETWEEN input required date form-control"
+															placeholder="{{dateFormat}}" data-date-format="{{dateFormat}}"/>
+															
+													</div>
+												</td>
+												<td class="rhs-new-block controls v-top">
+													<div id="RHS-NEW" name="RHS_NEW">
+														<input type="text" name="temp"
+															class="BETWEEN_NUMBER number required form-control"/>
+														<input id="date_between" type="text" name="temp" data-date-format="{{dateFormat}}"
+															class="BETWEEN input date required form-control" placeholder="{{dateFormat}}" />
+													</div>
+												</td>
+												<td class="nested-condition-block v-top" >
+													<div id="nested_condition" name="nested_condition">
+														<select name="temp" class="form-control">
+															<option value="EQUALS" class="tags_time">on</option>
+															<option value="AFTER" class="tags_time">is after</option>
+															<option value="BEFORE" class="tags_time">is before</option>
+															<option value="BETWEEN" class="tags_time">is
+																between</option>
+															<option value="LAST" class="tags_time">in last</option>
+														</select>
+													</div>
+												</td>
+												<td class="controls v-top" >
+													<div id="nested_lhs" name="nested_lhs">
+														<input type="text" name="temp" class="LAST required number form-control" placeholder="Number of days" /> 
+														<input
+															id="date_between" type="text" 
+															name="temp"
+															class="BETWEEN EQUALS AFTER BEFORE input date required form-control"
+															placeholder="{{dateFormat}}" data-date-format="{{dateFormat}}"/>
+													</div>
+												</td>
+												<td class="controls v-top" >
+													<div id="nested_rhs" name="nested_rhs">
+														<input id="date_between" type="text" name="temp"
+															 class="BETWEEN input date required form-control"
+															placeholder="{{dateFormat}}" data-date-format="{{dateFormat}}" />
+													</div>
+												</td>
+												<td>
+													<div class="m-l-sm">
+														<i class="filter-opportunities-multiple-remove icon-remove-circle c-p"></i>
+													</div>
+												</td>
+												<td class="track-milestone-error hide">
+													<div class="m-l-sm">
+														<span class="text-danger">This condition is not applicable for Milestone View.</span>
+													</div>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+									<a href="#" class="filter-opportunities-multiple-add-or-rules text-l-none m-t-xs text-info"><i class="icon-plus"></i> Add condition</a>
 								</div>
-						</div>
-						<div class="controls col-sm-2  between">
-							<div id="deal-cd-rhs" class="rhs" name="RHS">										
-								<input id="deal-cd-first" type="text" name="close_date_start" class="ON AFTER BEFORE BETWEEN input date form-control" placeholder="Select Date" data-date-format="Select Date">
-											</div>
-						</div>
-						<div class="controls col-sm-2 hide between"> 
-							<div id="deal-cd-rhs-new" name="RHS_NEW">
-								<input id="deal-cd-second" type="text" name="close_date_end" class="ON AFTER BEFORE BETWEEN input date form-control" placeholder="Select Date" data-date-format="Select Date">
 							</div>
 						</div>
-						<div class="controls col-sm-2 equals hide">
-							<input type="number" id="cd-value" name="close_date_value" placeholder="Number of days" class="equals form-control positive_number">
+						{{#if id}}
+							<input type="hidden" name="id" value="{{id}}" />
+							<input type="hidden" name="created_time" value="{{created_time}}" />
+							<input type="hidden" name="filter_owner_id" value="{{filterOwner.id}}" />
+						{{/if}}
+						<div class="line line-lg b-b"></div>
+						<div class="row">
+							<div class="form-actions col-sm-offset-2 col-sm-10">
+								<a href="#deal-filters" class="btn btn-sm btn-default">Cancel</a>
+								<a href="#" type="submit" class="save btn btn-sm btn-primary" id="filtersAdd">Save</a> 
+							</div>
 						</div>
-					</div>
-					<div class="control-group form-group">
-						<label class="control-label col-sm-2">State</label>
-						<div class="controls col-sm-6" id="archived_div">
-							<span><select id="archived" name="archived" class="form-control">
-									<option value="true">Archived</option>
-									<option value="false" selected>Active</option>
-									<option value="all">All</option>
-							</select></span>
-						</div>
-					</div>
-					<div class="line line-lg b-b"></div>
-					<div class="row">
-						<div class="form-actions col-sm-offset-2 col-sm-10">
-							<a href="#deal-filters" class="btn btn-sm btn-default">Cancel</a>
-							<a href="#" type="submit" class="save btn btn-sm btn-primary" id="filtersAdd">Save</a> 
-						</div>
-					</div>
-					{{#if id}}
-						<input type="hidden" name="id" value="{{id}}" />
-						<input type="hidden" name="created_time" value="{{created_time}}" />
-						<input type="hidden" name="filter_owner_id" value="{{filterOwner.id}}" />
-					{{/if}}
-				</fieldset>
+					</fieldset>
+				</div>
 			</form>
 		</div>
 	</div>

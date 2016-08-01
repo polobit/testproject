@@ -215,10 +215,11 @@ AGILE_EB_OPTIONS['templateId'] = "";
                                 <li class="list-group-item" style="font-family:comic sans ms,marker felt-thin,arial,sans-serif;">Comic Sans MS</li>
                                 <li class="list-group-item" style="font-family:courier new,courier,monospace;">Courier New</li>
                                 <li class="list-group-item" style="font-family:lucida sans unicode,lucida grande,sans-serif;">Lucida</li>
-                                <li class="list-group-item" style="font-family: Trebuchet MS,Helvetica, sans-serif">Trebuchet MS</li>
+                                <li class="list-group-item" style="font-family: Trebuchet MS,sans-serif">Trebuchet MS</li>
                                 <li class="list-group-item" style="font-family: Tahoma, Geneva, sans-serif;">Tahoma</li>
                                 <li class="list-group-item" style="font-family: Impact,Charcoal, sans-serif">Impact</li>
                                 <li class="list-group-item" style="font-family: Arial Black,Gadget, sans-serif">Arial Black</li>
+                                <li class="list-group-item" style="font-family: Helvetica, sans-serif">Helvetica</li>
                             </ul>
                         </div>
                     </div>
@@ -314,6 +315,20 @@ AGILE_EB_OPTIONS['templateId'] = "";
                                     <span class="input-group-addon" ><i class="fa fa-2x fa-youtube"></i></span>
                                     <input type="text" class=" form-control social-input" name="youtube" style="height:48px"/>
                                     <span class="input-group-addon" ><input type="checkbox" checked="checked" name="youtube" class="social-check" /></span>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="input-group">
+                                    <span class="input-group-addon" ><i class="fa fa-2x fa-instagram"></i></span>
+                                    <input type="text" class=" form-control social-input" name="instagram" style="height:48px"/>
+                                    <span class="input-group-addon" ><input type="checkbox" checked="checked" name="instagram" class="social-check" /></span>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="input-group">
+                                    <span class="input-group-addon" ><i class="fa fa-2x fa-pinterest"></i></span>
+                                    <input type="text" class=" form-control social-input" name="pinterest" style="height:48px"/>
+                                    <span class="input-group-addon" ><input type="checkbox" checked="checked" name="pinterest" class="social-check" /></span>
                                 </div>
                             </li>
                         </ul>

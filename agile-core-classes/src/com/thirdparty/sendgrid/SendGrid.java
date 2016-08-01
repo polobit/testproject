@@ -262,8 +262,9 @@ public class SendGrid
 	
 	// Add SMTP Header
 	if (SMTPHeaderJSON != null)
-	    queryString += "&" + SENDGRID_API_PARAM_X_SMTPAPI + "=" + URLEncoder.encode(SMTPHeaderJSON, "UTF-8");
-	
+	{
+		queryString += "&" + SENDGRID_API_PARAM_X_SMTPAPI + "=" + URLEncoder.encode(SMTPHeaderJSON, "UTF-8");
+	}
 	else
 	 {
 		JSONObject subjectJSON=new JSONObject();
@@ -386,7 +387,7 @@ public class SendGrid
     
     public static String sendMail(String apiUser, String apiKey, String fromEmail, String fromName, String to,
     	    String cc, String bcc, String subject, String replyTo, String html, String text, String SMTPHeaderJSON, List<Long> documentIds, List<BlobKey> blobKeys,
-    	    String... attachmentData)
+    	    String... attachmentData) throws Exception
     {
     	if(apiUser == null && apiKey == null)
     	{
@@ -461,10 +462,28 @@ public class SendGrid
 				System.out.println("FileName: " + fileName + " FileExtension: " + fileExt);
 				
 				email.addAttachment(fileName + "." + fileExt, fileContent);
+				
+				return sendGrid.send(email);
 			}
 			catch (IOException e)
 			{
 				e.printStackTrace();
+				
+				// If we get Inputstream closed exception then retry again
+				if(e.getMessage().equalsIgnoreCase("InputStream got closed."))
+				{
+					email.addAttachment(fileName + "." + fileExt, fileContent);
+					
+					try
+					{
+						return sendGrid.send(email);
+					}
+					catch (Exception ex)
+					{
+						System.out.println("Exception occured in ClosedStreamException handler...");
+						System.out.println(ExceptionUtils.getFullStackTrace(ex));
+					}
+				}
 			}
 	    }
     	

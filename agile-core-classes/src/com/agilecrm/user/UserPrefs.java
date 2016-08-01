@@ -39,6 +39,8 @@ import com.googlecode.objectify.condition.IfDefault;
 @Cached
 public class UserPrefs
 {
+	public static final String DEFAULT_CURRENCY = "USD-$";
+	
 	/**
 	 * UserPrefs Id.
 	 */
@@ -98,7 +100,7 @@ public class UserPrefs
 	 * Type of Currency.
 	 */
 	@NotSaved(IfDefault.class)
-	public String currency = null;
+	public String currency = DEFAULT_CURRENCY;
 
 	/**
 	 * Signature.

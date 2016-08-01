@@ -17,6 +17,9 @@ import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
+import com.agilecrm.util.HTTPUtil;
+import com.analytics.util.AnalyticsUtil;
+import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.Query;
@@ -238,5 +241,13 @@ public class APIKeyUtil
 	// Fetches domain user based on domainUser id
 	return DomainUserUtil.getDomainUser(userKey.getId());
 
+    }
+    
+    public static void updateBlockedIpsInStatsServer(String blockedIps)
+    {
+	String domain = NamespaceManager.get();
+	String data = "domain="+domain+"&blocked_ips="+blockedIps+"&psd="+AnalyticsUtil.STATS_SEREVR_HTTP_REQUEST_PWD;
+	String postURL = AnalyticsUtil.STATS_SERVER_URL+"/api";
+	HTTPUtil.accessURLAsynchronouslyUsingPost(postURL, data);
     }
 }

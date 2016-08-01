@@ -40,6 +40,7 @@ var Report_Filters_Event_View = Base_Model_View.extend({
     	'click .default_filter' : 'defaultFilterResults',
 
     	'click #companies-filter' : 'companyFilterResults',
+
     	'change .lhs_chanined_parent' : 'onParentLHSChanged',
     	'change #condition > select' : 'onConditionChanged',
     	'change #contact_type' : 'onChangeContactType',
@@ -214,6 +215,15 @@ var Report_Filters_Event_View = Base_Model_View.extend({
 		e.preventDefault();
 		var targetEl = $(e.currentTarget);
 
+		if($(targetEl).closest('td').siblings('td.lhs-block').find("option:selected").parent().attr("label")== "Properties")
+		{
+
+		var $rhs_ele_new = $(targetEl).closest('td').siblings('td.rhs-new-block').find("#RHS-NEW");
+		var selected_val=targetEl.parents("tr").find("#LHS > select").find(':selected').text();
+		$rhs_ele_new.find('input').attr('placeholder','Enter '+selected_val);
+
+		}
+
 		if ($(targetEl).find("option:selected").hasClass('tags'))
 		{
 			var element = $(targetEl).parents().closest('tr').find('div#RHS');
@@ -252,6 +262,13 @@ var Report_Filters_Event_View = Base_Model_View.extend({
 			$('input', $(targetEl).closest('tr').find('td.rhs-block')).attr("placeholder", "Company Name");
 			$('input', $(targetEl).closest('tr').find('td.rhs-block')).addClass("company_custom_field");
 			agile_type_ahead($('input', $(targetEl).closest('tr').find('td.rhs-block')).attr("id"), $(targetEl).closest('tr').find('td.rhs-block'), contacts_typeahead, custom_company_display, 'type=COMPANY');
+		}
+
+		var value = $(targetEl).closest('td').siblings('td.lhs-block').find('div').find('select').find('option:selected').val();
+		if(value=="country"){
+			//var appenditem = $('#div_country_options').html();
+			var appenditem = getTemplate("country-list", {});
+			$(targetEl).closest('td').siblings('td.rhs-block').find('div').html(appenditem);
 		}
 		
 	},
@@ -305,6 +322,7 @@ function setupContactFilterList(cel, tag_id)
 				no_transition_bar : true,
 				postRenderCallback : function(el)
 				{
+					contactFiltersListeners("lhs_filters_conatiner");
 					var filter_name;
 					// Set saved filter name on dropdown button
 					if (filter_name = _agile_get_prefs('contact_filter'))
@@ -380,7 +398,7 @@ function revertToDefaultContacts()
 		App_Contacts.contact_custom_view = undefined;
 
 	// Loads contacts
-	App_Contacts.contacts();
+	contacts_view_loader.getContacts(App_Contacts.contactViewModel, $("#contacts-listener-container"));
 }
 
 function chainFiltersForContactAndCompany(el, data, callback) {
@@ -478,6 +496,18 @@ function show_chained_fields(el, data, forceShow)
 	NESTED_LHS = $("#nested_lhs", el);
 	
 	RHS.chained(condition, function(chained_el, self){
+
+		LHS = $("#LHS", el);
+		RHS = $("#RHS", el);
+		RHS_NEW = $("#RHS-NEW", el);
+		var Filtre_label =$(':selected',LHS).closest('optgroup').prop('label');
+		if(Filtre_label == "Properties" || Filtre_label== "UTM Parameter")
+		{
+			var lh = LHS.find("> select").find(':selected').text();
+			$('input', $(LHS).closest('td').siblings('td.rhs-block')).attr("placeholder", "Enter "+ lh);
+			$($(LHS).closest('td').siblings('td.rhs-new-block').find("#RHS-NEW")).attr('placeholder','Enter ');
+		}
+
 		var selected_field = $(chained_el).find('option:selected');
 		var placeholder = $(selected_field).attr("placeholder");
 		var is_custom_field = $(selected_field).hasClass("custom_field");
@@ -495,6 +525,7 @@ function show_chained_fields(el, data, forceShow)
 		{
 			$("input", self).attr("placeholder", placeholder);
 		}
+
 		if(field_type && field_type == 'LIST')
 		{
 			var field_name = $(selected_field).attr("field_name");
@@ -503,7 +534,6 @@ function show_chained_fields(el, data, forceShow)
 			$($('select[name="'+field_name+'"]', self)[0]).show();
 			$('select:not([name="'+field_name+'"])', self).remove();
 		}
-		
 		
 	});
 	condition.chained(LHS, function(chained_el, self) {
@@ -542,6 +572,19 @@ function show_chained_fields(el, data, forceShow)
 	{
 		e.preventDefault();
 		var value = $(this).val();
+
+	var Filtre_label =$(':selected',LHS).closest('optgroup').prop('label');
+		if(Filtre_label == "Properties" || Filtre_label== "UTM Parameter")
+		{
+	var v=$(':selected',this).text();
+	$('input', $(this).closest('td').siblings('td.rhs-block')).attr("placeholder", "Enter "+ v);		
+		}
+		if(value=="country"){
+			//var appenditem = $('#div_country_options').html();
+			var appenditem = getTemplate("country-list", {});
+			$(this).closest('td').siblings('td.rhs-block').find('div').html(appenditem);
+		}
+		
 
 		if (value.indexOf('tags') != -1)
 		{
@@ -846,21 +889,6 @@ function showDynamicFilters(el){
 	}
 }
 
-
-function setUpContactView(cel,tagExists){
-
-	
-	if (_agile_get_prefs("agile_contact_view"))
-	{
-		$('#contacts-view-options', cel).html("<a data-toggle='tooltip' data-placement='bottom' data-original-title='List View' class='btn btn-default btn-sm contacts-view' data='list'><i class='fa fa-list'  style='margin-right:3px'></i></a>");
-	}
-	else{
-		$('#contacts-view-options', cel).html("<a data-toggle='tooltip' data-placement='bottom' data-original-title='Grid View' class='btn btn-default btn-sm contacts-view' data='grid'><i class='fa fa-th-large' style='margin-right:3px'></i></a>");
-	}
-	
-}
-
-
 var contact_filters_util = {
 
 	// Fetch filter result without changing route on click
@@ -884,7 +912,7 @@ var contact_filters_util = {
 		filter_name = $(targetEl).attr('data');
 
 		CONTACTS_HARD_RELOAD=true;
-		App_Contacts.contacts();
+		contacts_view_loader.getContacts(App_Contacts.contactViewModel, $("#contacts-listener-container"));
 		return;
 		// /removed old code from below,
 		// now filters will work only on contact, not company

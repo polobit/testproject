@@ -848,7 +848,7 @@ public class Opportunity extends Cursor implements Serializable
     {
 
 	if (colorName == null)
-	    colorName = Color.GREY;
+	    colorName = Color.WHITE;
 
 	// Initializes created Time
 	if (created_time == 0L)
@@ -1125,6 +1125,15 @@ public class Opportunity extends Cursor implements Serializable
 		.append(lost_reason_id).append(", deal_source_id=").append(deal_source_id).append("]");
 	;
 	return builder.toString();
+    }
+    
+    @JsonIgnore
+    public void setRelatedNotes(Set<Long> noteId)
+    {
+    	for(Long eachNoteId : noteId){
+    		this.related_notes.add(new Key<>(Note.class,eachNoteId));
+    	}
+    
     }
 
 }

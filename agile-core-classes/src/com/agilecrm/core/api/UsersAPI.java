@@ -255,6 +255,44 @@ public class UsersAPI
 	}
 
 	/**
+	 * Updates the existing user service
+	 * 
+	 * @param domainUser
+	 *            user to be updated
+	 * @return updated user
+	 */
+	@Path("/update-role")
+	@PUT
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	public DomainUser updateDomainUserRole(DomainUser domainUser,@Context HttpServletRequest request)
+	{
+		try
+		{
+			DomainUser currentDomainUser = DomainUserUtil.getCurrentDomainUser();
+			if (domainUser.id == null)
+			{
+				throw new Exception("Invalid User");
+			}
+			if (domainUser.role == null)
+			{
+				throw new Exception("Invalid Role");
+			}
+			
+			currentDomainUser.role = domainUser.role;
+			currentDomainUser.save();
+			
+			return currentDomainUser;
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			System.out.println(e.getMessage());
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+					.build());
+		}
+	}
+	
+	/**
 	 * Deletes a user from database, by validating users count and ownership of
 	 * the user to be deleted. If the user is fit to delete, deletes its related
 	 * entities also.

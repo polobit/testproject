@@ -640,12 +640,6 @@ public class DealsAPI
 		System.out.println("------------" + idsArray.length());
 	    }
 
-	    if (StringUtils.isEmpty(filters))
-		filters = "{}";
-
-	    org.json.JSONObject filterJSON = new org.json.JSONObject(filters);
-	    System.out.println("------------" + filterJSON.toString());
-
 	    String uri = "/core/api/opportunity/backend/delete/" + SessionManager.get().getDomainId();
 
 	    OpportunityUtil.postDataToDealBackend(uri, filters, ids);
@@ -1530,7 +1524,7 @@ public class DealsAPI
     }
     @Path("/based/tags")
     @GET
-    @Produces({ MediaType.TEXT_HTML, MediaType.APPLICATION_JSON })
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     public List<Opportunity> getDealsByTags(@QueryParam("tag") String tag){
     	List<Opportunity> deals = null;
     	if(tag != null && tag != ""){
