@@ -305,7 +305,7 @@ prefs-data-sync.widget-twitter-desc-1,Twitter offers a great way of engaging wit
 widgets.twitter-desc,Twitter offers a great way of engaging with contacts in real time based on what they tweet.,Twitter ofrece una gran forma de relacionarte con tus contactos en tiempo real con base en lo que ellos twittean.
 bulk-actions.no-pem-to-delete-documents,Documents will not be deleted for contacts for which you do not have update permissions(s).,Los documentos no se eliminarán los contactos para la que no tiene permisos de actualización (s).
 report-view.see-how-leads-growing-over-time,Visually see how your leads are growing over time. Compare channels for essential insights.,ver visualmente cómo sus clientes potenciales están creciendo con el tiempo. Comparación de los canales de información esencial.
-Plan-and-upgrade.ideal-for-startups-with-lean-sales-teams,Ideal for startups with lean sales teams for sales tracking and basic marketing automation.,Ideal para empresas de productos con equipos de ventas magras para el seguimiento de las ventas y la automatización de marketing básico.
+plan-and-upgrade.ideal-for-startups-with-lean-sales-teams,Ideal for startups with lean sales teams for sales tracking and basic marketing automation.,Ideal para empresas de productos con equipos de ventas magras para el seguimiento de las ventas y la automatización de marketing básico.
 others.bulk-delete-no-select,You have not selected any records to delete. Please select at least one record to continue.,No ha seleccionado ningún registro que desea eliminar. Por favor&#44; seleccione al menos un registro para continuar.
 report-view.growth-reports-details,Visually see how your leads are growing over time. Compare various channel to gain insight.,Visualizar cómo tus oportunidades crecen a lo largo del tiempo. Compara diversos canales para mayor conocimiento.
 bulk-actions.no-pem-to-restore-deal-contacts,Deal cannot be restored because you do not have permission to update associated contact(s).,Acuerdo no puede ser restaurado porque no tiene permiso para actualizar el contacto (s) asociada.
@@ -1264,7 +1264,7 @@ icalfeed.adding-to-outlook,Adding to Outlook 2007 or Later,Agregando a Outlook 2
 campaigns.no-email-soft-bounced,Great! No email get softbounced,¡Estupendo! Sin correo electrónico Cómo softbounced
 campaigns.in-your-stripe-account-for-this,in your stripe account for this,en tu cuenta de Stripe para esto
 other.spread-word-about-agilecrm,Spread the word about Agile CRM,Correr la voz acerca de Agile CRM
-Plan-and-upgrade.user-is-currently-in-free-plan,User is currently in FREE plan.,El usuario está actualmente en planta libre.
+plan-and-upgrade.user-is-currently-in-free-plan,User is currently in FREE plan.,El usuario está actualmente en planta libre.
 widgets.Xero-widget-saved-successfully,Xero widget saved successfully.,Widget de Xero guardado exitosamente
 admin-settings.agile-takes-security-seriously,Agile takes security seriously.,Ágil toma en serio la seguridad.
 users.confirm-change,Are you sure about this change?,¿Estás seguro de que este cambio?
@@ -2146,7 +2146,7 @@ prefs-notifications.contact-is-created,Contact is created,El contacto se creó
 tickets.email-added-to-cc,added to CC emails,añadido a los correos electrónicos CC
 contacts.add-tag-scheduled,Tags add scheduled,Etiquetas Añadir programadas
 task.no-activity-found,No Activity Found.,No hemos encontrado actividad.
-Plan-and-upgrade.per-user-per-month,per user per month,por usuario al mes
+plan-and-upgrade.per-user-per-month,per user per month,por usuario al mes
 campaigns.pause-current-call,Pause current call,Pausa llamada actual
 countries.DO,Dominican Republic,República Dominicana
 others.add-new-one,Will add a new one,Agregará una nueva
@@ -2743,7 +2743,7 @@ portlets.Incoming Deals,Incoming Deals,Ofertas entrantes
 contacts-view.delete-contact,Delete Contact,Borrar contacto
 campaigns.setup-webhooks,setup webhooks,configurar webhooks
 menu.refer,Refer a Friend,Recomendar un amigo
-Plan-and-upgrade.add-more-users,Add more users,Añadir más usuarios
+plan-and-upgrade.add-more-users,Add more users,Añadir más usuarios
 call_activity.voicemail,Left voicemail,correo de voz izquierda
 tags.tag-management,Tag Management,Manejo de etiquetas
 settings.reset-password,Reset Password,Restablecer la contraseña
@@ -2918,7 +2918,7 @@ tasks.related-deals,Related Deals,Ofertas relacionadas
 contacts-view.archived-deal,Archived Deal,Trato archivado
 contacts-view.email-subject,Email subject,Asunto del email
 workflows.select-period,Select period,Elija un periodo
-Plan-and-upgrade.compare-plans,Compare Plans,compare los planes
+plan-and-upgrade.compare-plans,Compare Plans,compare los planes
 contacts-view.field-mapping,Field mapping,Asignación de campos
 admin-settings-users.administrator,Administrator,Administrador
 campaigns.order-deleted,Order deleted,Orden eliminada
@@ -3837,7 +3837,7 @@ menu.tasks-due,Tasks due,tareas debido
 contact-details.opened-on,Opened on,Abierto el
 tasks.grid-view,Grid View,Vista de cuadrícula
 widjets.call-type,Call Type,Tipo de llamada
-Plan-and-upgrade.from-date,From Date,Partir de la fecha
+plan-and-upgrade.from-date,From Date,Partir de la fecha
 widgets.unit-cost,Unit cost,Costo unitario
 contacts-view.is-before,is before,es antes
 tickets.eg-twain,E.g Twain,Ej: Twain
@@ -4245,7 +4245,7 @@ tasks.Overdue,Overdue,Atrasado
 contact-edit.google-plus,Google+,Google+
 contacts-view.sort-by,Sort By,Ordenar por
 Deal-detail.hurry,Hurray.,Viva.
-Plan-and-upgrade.to-date,To Date,Hasta la fecha
+plan-and-upgrade.to-date,To Date,Hasta la fecha
 main.log-out,Log out,Cerrar sesión
 widgets.Twitter-name,Twitter,Gorjeo
 contacts-view.type-to,type to,Tipo a
