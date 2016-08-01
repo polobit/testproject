@@ -576,7 +576,12 @@ if(currentUserPrefs.menuPosition.equals("top")){
     <%
           }
     %>
-    
+    <li id="push-notification-menu">
+    <a href="#push-notification">
+      <i class="fa fa-bell-o"></i>
+      <span>Push Notification</span>
+    </a>
+  </li>
     <%
       if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.ACTIVITY)){
     %>
