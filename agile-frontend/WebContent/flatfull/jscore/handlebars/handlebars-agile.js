@@ -44,7 +44,7 @@ function getTemplate(templateName, context, download, callback, loading_place_ho
 	if (HANDLEBARS_PRECOMPILATION)
 	{
 		var template = Handlebars.templates[templateName + "-template"];
-
+preLoadTemplates
 		// If teplate is found
 		if (template)
 		{
@@ -349,7 +349,10 @@ function getTemplateUrls(templateName)
 	{
 		template_relative_urls.push("helpcenter.js");
 	}
-	
+	if (templateName.indexOf("push-notification") == 0)
+	{
+		template_relative_urls.push("notification.js");
+	}
 	return template_relative_urls;
 }
 
