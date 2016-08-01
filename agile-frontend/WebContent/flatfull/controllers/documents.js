@@ -5,7 +5,7 @@ var eDocTemplate_Select_View
 var DocumentsRouter = Backbone.Router.extend({
 
 	routes : {
-	"documents" : "load_documents", 
+	"documents" : "documents", 
 	"documents/:idtype" : "editdocument",
 	"documents/:idtype/:templateid" : "editdocument",
 	"documents/:contactcompanydealtype/:contactcompanydealtid/:edocattachtype" : "addcontactcompanydealtypedocument",
@@ -199,9 +199,7 @@ var DocumentsRouter = Backbone.Router.extend({
 	 * document to the list.
 	 */
 	load_documents : function()
-	{
-		
-		
+	{	
 		var that = this;
 		getTemplate("documents-load", {}, undefined, function(template_ui){
 		if(!template_ui)
@@ -211,12 +209,7 @@ var DocumentsRouter = Backbone.Router.extend({
 		individual_tag_name : 'tr', postRenderCallback : function(el)
 		{
 			includeTimeAgo(el);
-			$(".documents-collection").on('click', '.document-url', function(e)
-				{
-						var source = e.target || e.srcElement;
-						var id =$(source).attr("data");
-						Backbone.history.navigate('documents/' + id, { trigger : true });
-				});		 
+				 
 		}, appendItemCallback : function(el)
 		{
 		// To show timeago for models appended by infini scroll
@@ -236,7 +229,91 @@ var DocumentsRouter = Backbone.Router.extend({
 				
 		});
 		}, "#content");
-	} 
+	}, 
+	documents : function()
+	{
+		getTemplate('documents-static-container', {}, undefined, function(template_ui) {
+					$("#content").html(getTemplate("documents-static-container"));
+
+					// Add top view
+					var sortKey = _agile_get_prefs("Documentssort_Key");
+					if(sortKey == undefined || sortKey == null){
+						sortKey = "dummy_name";
+						_agile_set_prefs("Documentssort_Key", sortKey);
+					}
+
+					var that = this;
+					var documentsStaticModelview = new Document_Model_Events({
+						template : 'documents-top-header',
+						isNew : true,
+						model : new Backbone.Model({"sortKey" : sortKey}),
+						postRenderCallback : function(el){
+							// Add collection view
+							console.log("Load collection");
+							App_Documents.loadDocuments($("#content"));
+						}
+					});
+
+					$("#content").find("#documents-top-view").html(documentsStaticModelview.render().el);
+
+				}, $("#content"));
+		head.js(LIB_PATH + 'lib/date-charts.js', function() {
+		renderDocumentsActivityView();
+				
+		});
+
+	},
+
+	loadDocuments : function(el)
+	{
+		var that  = this ;
+		var sortKey = _agile_get_prefs("Documentssort_Key");
+				if (App_Documents.DocumentCollectionView && App_Documents.DocumentCollectionView.options.global_sort_key == sortKey && App_Documents.DocumentCollectionView.collection && App_Documents.DocumentCollectionView.collection.length > 0)
+				{
+					$(el).find("#documents_collection_container").html(App_Documents.DocumentCollectionView.render(true).el);
+					return;
+				}
+
+				// Loading icon
+				$("#content").find("#documents_collection_container").html(LOADING_HTML);
+
+				
+
+				App_Documents.DocumentCollectionView = new Document_Collection_Events({ 
+					url : 'core/api/documents', 
+					sort_collection : false,
+					templateKey : "documents", 
+					individual_tag_name : 'tr', 
+					cursor : true, 
+					customLoader : true,
+					customLoaderTemplate : 'agile-app-collection-loader',
+					page_size : 20, 
+					global_sort_key : sortKey, 
+					postRenderCallback : function(col_el)
+					{
+						//includeTimeAgo(el);
+						//updateSortKeyTemplate(sortField, el);
+						includeTimeAgo(el);
+						$(".active").removeClass("active");
+						$("#documentsmenu").addClass("active");
+						$(".documents-collection").on('click', '.document-url', function(e)
+						{
+						var source = e.target || e.srcElement;
+						var id =$(source).attr("data");
+						Backbone.history.navigate('documents/' + id, { trigger : true });
+						});	 
+					}, appendItemCallback : function(el)
+					{
+					// To show timeago for models appended by infini scroll
+					includeTimeAgo(el);
+					}
+					});
+					App_Documents.DocumentCollectionView.collection.fetch();
+					// Shows deals as list view
+					$("#content").find("#documents_collection_container").html(App_Documents.DocumentCollectionView.el);
+
+	
+	}
 });
 
 function renderEachDocumentActivityView(id)

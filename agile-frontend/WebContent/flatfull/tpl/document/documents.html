@@ -1,3 +1,78 @@
+<script id="documents-static-container-template" type="text/html">
+<div class="custom-animated custom-fadeInUp">
+<div id="documents-top-view"></div>
+<div class="wrapper-md">
+<div class="row">
+<div id="documents_collection_container" class="col-md-9 col-sm-9" ></div>
+<div class="col-md-3">
+        <div class="data-block documents-activities">
+                    
+                      
+        </div>
+    </div>
+    </div>
+    </div>
+    </div>
+</script>
+<script id="documents-top-header-template" type="text/html">
+<div class="wrapper-md lter bg-light b-b">
+<div class="btn-toolbar m-l-none">
+<div class="btn-group dropdown m-l-none documentsheading" style="float:none;">
+<div>
+<h3 class="pull-left font-thin h3">Documents </h3></div>
+    <div class="btn-group   p-t-n-sm workflow-sortby">
+                <div class="btn-group dropdown">
+                                <button class="btn btn-sm no-shadow p-n b-n bg-transparent text-base" style="font-size: 11px;" data-toggle="dropdown" id="contact-sort">
+                                        <span class="text-muted">Sort by </span>
+                                        <span class="sort-field-txt">
+                                        {{#if_equals_sork_key sortKey 'dummy_name' }}Name{{/if_equals_sork_key}}
+        {{#if_equals_sork_key sortKey 'uploaded_time' }}Uploaded Time{{/if_equals_sork_key}}</span>
+                                    </button>
+                                    <button class="btn btn-sm no-shadow dropdown-toggle bg-transparent b-n p-t-none p-b-none p-l-xs" data-toggle="dropdown" aria-expanded="false">
+                                        <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu " id="sort_menu" role="menu">
+                                        <li>
+                                        <a class="sort-link sort-field pos-rlt text-ellipsis" style="width:185px;" href="javascript:void(0);" data="dummy_name" label_name="dummy_name">
+                                        Name
+                                            <i class="fa fa-check pos-abs pos-r-sm txt-small m-t-xs sort-field-check  
+                                {{#if_equals_sork_key sortKey 'dummy_name'}}{{else}}display-none {{/if_equals_sork_key}}"></i> 
+                                            </a>
+                                    </li>
+                                    <li>
+                                        <a class="sort-link sort-field pos-rlt text-ellipsis" style="width:185px;" href="javascript:void(0);" data="uploaded_time" label_name="uploaded_time">
+                                        Uploaded Time
+                        <i class="fa fa-check pos-abs pos-r-sm txt-small m-t-xs sort-field-check 
+                {{#if_equals_sork_key sortKey 'uploaded_time'}}{{else}}display-none {{/if_equals_sork_key}}"></i> 
+                                        </a>
+                                    </li>
+                                    <li class="divider" id="sort-divider"></li>
+                                            <li>
+                                                <a class="order-by pos-rlt" data="" href="javascript:void(0);">Ascending 
+                        <i class="fa fa-check pos-abs pos-r-sm txt-small m-t-xs sort-by-check  
+                        {{#if_asc_sork_key sortKey}}{{else}}display-none {{/if_asc_sork_key}}"></i> </a>
+                                            </li>
+                                            <li><a class="order-by pos-rlt" data="-" href="javascript:void(0);">Descending  
+            <i class="fa fa-check pos-abs pos-r-sm txt-small m-t-xs sort-by-check 
+            {{#if_asc_sork_key sortKey}}display-none{{else}} {{/if_asc_sork_key}}"></i> </a></li>
+                                    </ul>
+                                    </div>
+                                    </div>
+                                    </div>
+                                    <div class="btn-group  pull-right ">
+                                        <a href="#documents/attachment" class="btn btn-default btn-sm documents-add m-t-xs" class1="btn btn-default btn-sm"><i class="icon-plus-sign"></i> Add Document</a>
+                                        <a class="btn btn-default btn-sm dropdown-toggle m-t-xs" data-toggle="dropdown"><span class="caret"></span></a>
+
+                                        <ul class="dropdown-menu pull-right" style="margin-top:3px;">
+                                            <li style="padding:0px 0px;border:0px;"><a href="#documents/edoc" class="edocuments-add">Add eDocument</a></li>
+                                            <li class="divider"></li>
+                                            <li style="padding:0px 0px;border:0px;"><a href="#document-templates" class="edocuments-add">Add Templates</a></li>
+                                        </ul>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                    
+</div>
+</script>
 <script id="documents-send-mail-template" type="text/html">
 <table width="480" cellpadding="0" cellspacing="0" border="0"><tbody><tr><td width="480" height="30"></td></tr><tr>
 <td width="480"><table width="480" cellpadding="0" cellspacing="0" border="0"><tbody><tr><td width="40"></td>    

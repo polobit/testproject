@@ -4,10 +4,15 @@
 var Document_Collection_Events = Base_Collection_View.extend({
 	
 	events: {
-		'click #documents-model-list > tr > td:not(":first-child")': 'onDocumentListSelect',		
+		'click #documents-model-list > tr > td:not(":first-child")': 'onDocumentListSelect',	
+		'click .document-url': 'onDocumentSelect',		
 	},
 
-	
+	onDocumentSelect : function(e){
+			var source = e.target || e.srcElement;
+						var id =$(source).attr("data");
+						Backbone.history.navigate('documents/' + id, { trigger : true });
+	},
 
 	 /** 
      * Document list view edit
@@ -22,6 +27,52 @@ var Document_Collection_Events = Base_Collection_View.extend({
 
 });
   
+var Document_Model_Events = Base_Model_View.extend({
+ 			events: {
+ 						'click #sort_menu > li': 'documentsSort',
+ 						//'click .documents-add': 'onAddDocument',		
+					},
+			documentsSort : function(e)
+				{
+					 e.preventDefault();
+
+		        var targetEl = $(e.currentTarget);
+		        var sortkey = "", $sort_menu = $("#sort_menu");
+		        if($(targetEl).find("a").hasClass("sort-field"))
+		        {
+		            $sort_menu.find("li").not(targetEl).find("a.sort-field i").addClass("display-none");
+		            $(targetEl).find("a.sort-field i").removeClass("display-none");
+		        } 
+		        else 
+		        {
+		            $sort_menu.find("li").not(targetEl).find("a.order-by i").addClass("display-none");
+		            $(targetEl).find("a.order-by i").removeClass("display-none");
+		        }
+
+		        sortkey = $sort_menu.find(".order-by i:not(.display-none)").closest(".order-by").attr("data");
+		        sortkey += $sort_menu.find(".sort-field i:not(.display-none)").closest(".sort-field").attr("data");
+		        
+		        _agile_set_prefs("Documentssort_Key", sortkey);
+		        this.model.set({"sortKey" : sortkey});
+				},
+				/**
+				 * For adding new document
+				 */
+				onAddDocument: function(e){
+					e.preventDefault();
+
+					// Show modal
+					$('#uploadDocumentModal').html(getTemplate("upload-document-modal", {})).modal('show');
+				
+					// Add type a head actions
+					var el = $("#uploadDocumentForm");
+					// Contacts type-ahead
+					agile_type_ahead("document_relates_to_contacts", el, contacts_typeahead);
+					
+					// Deals type-ahead
+					agile_type_ahead("document_relates_to_deals", el, deals_typeahead, false,null,null,"core/api/search/deals",false, true);
+				},
+			});  
 /** Modal event initializer **/
 $(function(){
 
