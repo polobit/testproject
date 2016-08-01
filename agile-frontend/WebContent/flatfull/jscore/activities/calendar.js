@@ -214,6 +214,7 @@ function showCalendar(users)
 					    monthNamesShort: $.fn.datepicker.dates['en'].monthsShort,
 					    dayNames: $.fn.datepicker.dates['en'].days,
 					    dayNamesShort: $.fn.datepicker.dates['en'].daysShort,
+					    allDayText: '{{agile_lng_translate "calendar" "all-day"}}',
 						eventSources : [
 								{ 	
 									events : function(start, end, callback)
