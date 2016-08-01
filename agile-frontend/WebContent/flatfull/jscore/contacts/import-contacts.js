@@ -482,16 +482,16 @@ $('#' + id).on('click', '#import-deals', function(e)
 						return;
 
 					var upload_valudation_errors = {
-							"deal_name_missing" : { "error_message" : _agile_get_translated_val("misc-keys", "deal_name_missing") },
-							"deal_duplicated" : { "error_message" : _agile_get_translated_val("misc-keys", "deal_duplicated") },
-							"deal_value_duplicated" : { "error_message" : _agile_get_translated_val("misc-keys", "deal_value_duplicated") },
-							"deal_track_duplicated" : { "error_message" : _agile_get_translated_val("misc-keys", "deal_track_duplicated") },
-							"deal_milestone_duplicated" : {"error_message" : _agile_get_translated_val("misc-keys", "deal_milestone_duplicated")},
-							"deal_related_contact_duplicated" : {"error_message" : _agile_get_translated_val("misc-keys", "deal_related_contact_duplicated") },
-							"deal_probability_duplicated" : {"error_message" : _agile_get_translated_val("misc-keys", "deal_probability_duplicated")},
-							"deal_close_date_duplicated" : {"error_message" : _agile_get_translated_val("misc-keys", "deal_close_date_duplicated")},
-							"deal_note_duplicated" : {"error_message" : _agile_get_translated_val("misc-keys", "deal_note_duplicated")},
-							"deal_description_duplicated" : {"error_message": _agile_get_translated_val("misc-keys", "deal_description_duplicated")},
+							"deal_name_missing" : { "error_message" : _agile_get_translated_val("validation-msgs", "deal_name_missing") },
+							"deal_duplicated" : { "error_message" : _agile_get_translated_val("validation-msgs", "deal_duplicated") },
+							"deal_value_duplicated" : { "error_message" : _agile_get_translated_val("validation-msgs", "deal_value_duplicated") },
+							"deal_track_duplicated" : { "error_message" : _agile_get_translated_val("validation-msgs", "deal_track_duplicated") },
+							"deal_milestone_duplicated" : {"error_message" : _agile_get_translated_val("validation-msgs", "deal_milestone_duplicated")},
+							"deal_related_contact_duplicated" : {"error_message" : _agile_get_translated_val("validation-msgs", "deal_related_contact_duplicated") },
+							"deal_probability_duplicated" : {"error_message" : _agile_get_translated_val("validation-msgs", "deal_probability_duplicated")},
+							"deal_close_date_duplicated" : {"error_message" : _agile_get_translated_val("validation-msgs", "deal_close_date_duplicated")},
+							"deal_note_duplicated" : {"error_message" : _agile_get_translated_val("validation-msgs", "deal_note_duplicated")},
+							"deal_description_duplicated" : {"error_message": _agile_get_translated_val("validation-msgs", "deal_description_duplicated")},
 					}
 					var models = [];
 
@@ -743,14 +743,14 @@ function importContactsValidate()
                     {
 
 						var upload_valudation_errors = {
-							"first_name_missing" : { "error_message" : _agile_get_translated_val("misc-keys", "first_name_missing") },
-							"last_name_missing" : { "error_message" : _agile_get_translated_val("misc-keys", "last_name_missing") },
-							"email_missing" : { "error_message" : _agile_get_translated_val("misc-keys", "email_missing") },
-							"first_name_duplicate" : { "error_message" : _agile_get_translated_val("misc-keys", "first_name_duplicate") },
-							"last_name_duplicate" : { "error_message" : _agile_get_translated_val("misc-keys", "last_name_duplicate") },
-							"company_duplicate" : { "error_message" : _agile_get_translated_val("misc-keys", "company_duplicate") },
-							"job_title_duplicate" : { "error_message" : _agile_get_translated_val("misc-keys", "job_title_duplicate") },
-							"invalid_tag" : { "error_message" : _agile_get_translated_val("misc-keys", "invalid_tag") },
+							"first_name_missing" : { "error_message" : _agile_get_translated_val("validation-msgs", "first_name_missing") },
+							"last_name_missing" : { "error_message" : _agile_get_translated_val("validation-msgs", "last_name_missing") },
+							"email_missing" : { "error_message" : _agile_get_translated_val("validation-msgs", "email_missing") },
+							"first_name_duplicate" : { "error_message" : _agile_get_translated_val("validation-msgs", "first_name_duplicate") },
+							"last_name_duplicate" : { "error_message" : _agile_get_translated_val("validation-msgs", "last_name_duplicate") },
+							"company_duplicate" : { "error_message" : _agile_get_translated_val("validation-msgs", "company_duplicate") },
+							"job_title_duplicate" : { "error_message" : _agile_get_translated_val("validation-msgs", "job_title_duplicate") },
+							"invalid_tag" : { "error_message" : _agile_get_translated_val("validation-msgs", "invalid_tag") },
 							}
 
 						var models = [];

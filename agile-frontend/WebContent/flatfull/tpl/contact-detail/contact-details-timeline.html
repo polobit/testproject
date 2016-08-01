@@ -21,7 +21,7 @@
         {{/if_entity}}
         {{#if_entity "task"}}
             <div class="timestamp">{{created_time}}</div>
-            <div class="title"><div class="text-base"><span><a class="no-line"><i class="icon-tasks text-muted"></i></a></span> Task</div></div>
+            <div class="title"><div class="text-base"><span><a class="no-line"><i class="icon-tasks text-muted"></i></a></span> {{agile_lng_translate 'menu' 'task'}}</div></div>
             <div class="date">{{epochToTaskDate created_time}}</div>
             <div class="body">
                 <div class="text-xs text-ellipsis" style="margin-top:-8px"><i class="{{icons type}}"></i> ({{type}})</div>         
@@ -31,7 +31,7 @@
 
         {{#if_entity "contact_entity"}}
             <div class="timestamp">{{created_time}}</div>
-            <div class="title"><div class="text-base"><span><a class="no-line"><i class="icon-tasks text-muted"></i></a></span> Created</div></div>
+            <div class="title"><div class="text-base"><span><a class="no-line"><i class="icon-tasks text-muted"></i></a></span> {{agile_lng_translate 'campaigns' 'created'}}</div></div>
             <div class="date">{{epochToTaskDate created_time}}</div>
             <div class="body" style="padding:5px">
                 <div class="text-base ">{{epochToHumanDate "mmmm dd, yyyy 'at' hh:MM tt" created_time}}</div>
@@ -41,7 +41,7 @@
 	  {{#if_entity "tag"}}
 			<div id="{{remove_spaces tag}}-tag-timeline-element"></div>
             <div class="timestamp">{{createdTime}}</div>
-            <div class="title"><div class="text-base"><span><a class="no-line"><i class="icon-tag text-muted"></i></a></span> Tag Added - {{tag}}</div></div>
+            <div class="title"><div class="text-base"><span><a class="no-line"><i class="icon-tag text-muted"></i></a></span> {{agile_lng_translate 'contact-details' 'tag-added'}} - {{tag}}</div></div>
             <div class="date">{{epochToTaskDate createdTime}}</div>
             <div class="body" style="padding:5px">
                 <div class="text-base ">{{epochToHumanDate "mmmm dd, yyyy 'at' hh:MM tt" createdTime}}</div>
@@ -64,7 +64,7 @@
 
         {{#if_entity "deal"}}
             <div class="timestamp">{{created_time}}</div>
-            <div class="title"><div class="text-base"><span><a class="no-line"><i class="icon-money text-muted"></i></a></span> Deal</div></div>
+            <div class="title"><div class="text-base"><span><a class="no-line"><i class="icon-money text-muted"></i></a></span> {{agile_lng_translate 'campaigns' 'deal'}}</div></div>
             <div class="date">{{epochToTaskDate created_time}}</div>
             <div class="body">
                 <div class="text-xs ">{{name}}</div>
@@ -75,7 +75,7 @@
 		{{#if_entity "case"}}
 			
             <div class="timestamp">{{created_time}}</div>
-            <div class="title"><div class="text-base"><span><a class="no-line"><i class="icon-folder-close text-muted"></i></a></span> Case</div></div>
+            <div class="title"><div class="text-base"><span><a class="no-line"><i class="icon-folder-close text-muted"></i></a></span> {{agile_lng_translate 'menu' 'case'}}</div></div>
             <div class="date">{{epochToTaskDate created_time}}</div>
             <div class="body">
                 <div class="text-xs ">{{title}}</div>
@@ -131,7 +131,7 @@
                 <div>
                     <div class="ellipsis-multi-line" id="autoellipsis" style="height:70px;">
                         <div>
-							Pages Visited {{#stringToJSON this "urls_with_time_spent"}} ({{this.length}}){{/stringToJSON}}
+							{{agile_lng_translate 'contact-details' 'pages-visited'}} {{#stringToJSON this "urls_with_time_spent"}} ({{this.length}}){{/stringToJSON}}
 								<span style="float: right;">
 									{{#if user_agent}}
 										{{#stringToJSON this "parsedUserAgent"}}
@@ -513,8 +513,8 @@
              <div class="pull-right" style="font-size:11px;margin-top: 3px;"><i class="fa fa-clock-o m-r-xs"></i>{{epochToHumanDate "hh:MM tt" date_secs}}</div><div class="clearfix"></div>
             <div class="date">{{epochToTaskDate date_secs}}</div>
             <div class="body">
-                <div class="text-xs text-ellipsis" ><b>From:</b> {{from}}</div>
-                <div class="text-xs text-ellipsis" id="tl-mail-to-popover" rel="popover" data-placement="right" data-content="message:" data-trigger="hover"><b>To:</b> {{to}}
+                <div class="text-xs text-ellipsis" ><b>{{agile_lng_translate 'contact-details' 'from'}}:</b> {{from}}</div>
+                <div class="text-xs text-ellipsis" id="tl-mail-to-popover" rel="popover" data-placement="right" data-content="message:" data-trigger="hover"><b>{{agile_lng_translate 'contact-details' 'to'}}:</b> {{to}}
                 </div>
             
             {{#if message}}
@@ -546,7 +546,7 @@
                 <div>
                     <div class="ellipsis-multi-line" id="autoellipsis" style="height:70px;">
                         <div>
-							Pages Visited {{#stringToJSON this "urls_with_time_spent"}} ({{this.length}}){{/stringToJSON}}
+							{{agile_lng_translate 'contact-details' 'pages-visited'}} {{#stringToJSON this "urls_with_time_spent"}} ({{this.length}}){{/stringToJSON}}
 								<span style="float: right;">
 									{{#if user_agent}}
 										{{#stringToJSON this "parsedUserAgent"}}

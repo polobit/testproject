@@ -1097,7 +1097,7 @@ function load_globalize()
   } */
 
   Globalize.load(Globalize_Main_Data);
-  en = Globalize("es");
+  en = Globalize("en");
 
 }
 
