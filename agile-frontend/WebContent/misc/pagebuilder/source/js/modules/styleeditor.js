@@ -139,7 +139,7 @@
             //render agileform latest code
             if(!window.current_agileform && block.frame.hasAttribute('data-originalurl') && (block.frame.getAttribute('data-originalurl').includes("agileform") || block.frame.getAttribute('data-originalurl').includes("header10")))
             {    var agileform_class=$(block.frame.contentWindow.document).find('.agile_crm_form_embed');
-                if(agileform_class!==0)
+                if(agileform_class.size()!==0)
                     styleeditor.loadAgileCRMFormInLandingPage(agileform_class.attr("id")); 
             } 
 
