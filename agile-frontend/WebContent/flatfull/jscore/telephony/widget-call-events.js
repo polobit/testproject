@@ -183,8 +183,7 @@ $(function()
 // this is to call onclick of checkbox in add/update contact	
 	$('body').on('click', '#call_newNumber_check', function(e)
 			{
-							e.preventDefault();
-							e.stopPropagation();
+							$(this).attr("checked");
 							var opt = $(this).val();
 							if(opt == "update"){
 								$("#call_newNumber_relatedTo_div").show();
