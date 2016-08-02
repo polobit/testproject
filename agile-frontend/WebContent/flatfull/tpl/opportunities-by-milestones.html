@@ -42,7 +42,7 @@
 					<ul class="dropdown-menu pull-right" role="menu">
 						{{#hasScope "CREATE_DEALS"}}
 						<li><a href="#import-deals" onclick="Agile_GA_Event_Tracker.track_event('Deals Import from CSV')">Import</a></li>
-						{{/hasScope}
+						{{/hasScope}}
 						{{#hasScope "UPDATE_DEALS"}}
 						<li><a href="#" class="deals-export-csv" onclick="Agile_GA_Event_Tracker.track_event('Deals Export as CSV')">Export</a></li>
 						{{/hasScope}}
