@@ -263,7 +263,7 @@ if(isSafari && isWin)
                    <%
                    }
                    %>
-                  
+                   
                    
 				<form id='oauth' name='oauth' method='post'>
               <%--      <div><h3>Sign In
@@ -359,6 +359,50 @@ if(isSafari && isWin)
 	
 	<!-- JQUery Core and UI CDN -->
 	
+                  
+		<script type="text/javascript">
+			// localStorage setup
+			var _agile_storage = {
+				key : "_agile_user_fingerprint",
+				get : function(){
+					if(!this.is_strorage_supports())
+						 return;
+					return localStorage.getItem(this.key);
+				},
+				set :  function(val){
+					if(this.is_strorage_supports())
+						localStorage.setItem(this.key, val);
+				},
+				is_strorage_supports : function(){
+					return (typeof localStorage ? true : false);
+				}
+			};		
+			
+			function _agile_get_fingerprint(callback){
+					
+					// Get stored value
+					var finger_print = _agile_storage.get();
+					if(finger_print)
+						return callback(finger_print);
+	
+					// Load js and fetch print
+					new Fingerprint2().get(function(result, components){
+							return callback(result);
+					});
+			}
+	      	
+      		// Get print value to notify user 
+			_agile_get_fingerprint(function(result){
+				if(!result)
+					 return;
+
+				$("#finger_print").val(result);
+				$(".agile-submit").removeAttr("disabled");
+				// Reset val
+				_agile_storage.set(result);
+			});
+		</script>
+		
 	<script src='//cdnjs.cloudflare.com/ajax/libs/headjs/1.0.3/head.min.js'></script>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/jstimezonedetect/1.0.4/jstz.min.js" type="text/javascript"></script>
 	
@@ -374,17 +418,6 @@ if(isSafari && isWin)
 			var login_hash = window.location.hash;
 			if(login_hash)
 				$("#location_hash").val(login_hash);
-      	
-      		// Get print value to notify user 
-			_agile_get_fingerprint(function(result){
-				if(!result)
-					 return;
-
-				$("#finger_print").val(result);
-				$(".agile-submit").removeAttr("disabled");
-				// Reset val
-				_agile_storage.set(result);
-			});
 			
         	// agile-login-page-high.png
         	preload_login_pages();
