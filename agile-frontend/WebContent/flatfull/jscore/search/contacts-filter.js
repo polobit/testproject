@@ -335,8 +335,8 @@ function setupContactFilterList(cel, tag_id)
 						if (filter_name.toLowerCase().indexOf('recent') >= 0)
 							filter_name = "Recent";
 
-						else if (filter_name.toLowerCase().indexOf('contacts') >= 0)
-							filter_name = "My Contacts";
+						/*else if (filter_name.toLowerCase().indexOf('contacts') >= 0)
+							filter_name = "My Contacts";*/
 
 						else if (filter_name.toLowerCase().indexOf('leads') >= 0)
 							filter_name = "Leads";

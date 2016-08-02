@@ -135,7 +135,7 @@ var contacts_view_loader = {
 		var template = Handlebars.compile('<ul id="added-tags-ul" class="tagsinput p-n m-b-sm m-t-sm m-l-sm"><li class="inline-block tag btn btn-xs btn-primary" data="developer"><span class="inline-block m-r-xs v-middle">{{name}}</span><a class="close default_filter">&times</a></li></ul>');
 
 	 	// Adds contact name to tags ul as li element
-		$('.filter-criteria', el).html(template({name : filter_name}));
+		$('.filter-criteria', el).html(template({name : filter_name})).attr("_filter", contact_filter_id);
 	},
 
 	getContactsSortKey : function()
