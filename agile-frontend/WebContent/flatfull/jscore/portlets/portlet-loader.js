@@ -337,7 +337,6 @@ function set_up_portlets(el, portlets_el){
         			}
         			else if(tempModel.get("name")=="Calls Per Person")
         			{
-{
 
         				var pos = '' + this.$resized_widget.attr('data-col')+''+this.$resized_widget.attr('data-row');
         				var height = this.$resized_widget.find('.portlet_body').height();

@@ -642,9 +642,9 @@ var portlet_graph_utility = {
 			domainUserImgList,base_model,averageCallList_temp) {
 			var column_position = $('#'+selector).parent().attr('data-col'), row_position = $('#'+selector).parent().attr('data-row');
 		var pos = '' + column_position + '' + row_position;
-		var	height=domainUsersList.length*30+($('#'+selector).height()-30);
+		/*var	height=domainUsersList.length*30+($('#'+selector).height()-30);
 		if(selector=='calls-chart')
-			height=domainUsersList.length*30+120;
+			height=domainUsersList.length*30+120;*/
 		setupCharts(function(){
 							
 							callschart[parseInt(pos)]=new Highcharts.Chart({
@@ -828,12 +828,16 @@ var portlet_graph_utility = {
 									y:30
 								}
 						    },function(chart){
-                                                        var max = chart.xAxis[0].max,
-                                                                            min = chart.xAxis[0].min,
-                                                                            height = chart.xAxis[0].height;
-                                                                          if (height - (max - min) * 27 <= 0) {
-                                                                            chart.setSize(chart.chartWidth, chart.chartHeight + (max - min) * 20)
-                                                                          }
+						    	if(selector=='calls-chart')
+								chart.setSize(chart.chartWidth, domainUsersList.length*30+120);
+								else{
+                                    var max = chart.xAxis[0].max,
+                                        min = chart.xAxis[0].min,
+                                        height = chart.xAxis[0].height;
+                                      if (height - (max - min) * 27 <= 0) {
+                                        chart.setSize(chart.chartWidth, chart.chartHeight + (max - min) * 20)
+                                      }
+                                     }
                                                     });
 							
 						});
