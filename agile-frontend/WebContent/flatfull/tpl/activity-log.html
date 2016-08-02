@@ -588,7 +588,7 @@
 {{/if_equals}}
 
 {{#if_equals "User_Deleted" activity_type}}
-{{user_name}}   {{agile_lng_translate 'menu' 'deleted-the-user'}}{{custom1}}{{#if this.entityObject}}<a  href="#User/{{entity_id}}" >{{label}}</a>{{else}}{{/if}} 
+{{user_name}}   {{agile_lng_translate 'menu' 'deleted-the-user'}} {{custom1}}{{#if this.entityObject}}<a  href="#User/{{entity_id}}" >{{label}}</a>{{else}}{{/if}} 
 <div class="activities_second_line m-t-none"><small>
 <i class=""></i> {{#unless entityObject}} {{/unless}}  {{#if this.entityObject}}{{/if}}  {{custom3}}
 </small></div>
@@ -638,7 +638,7 @@
 </small>
 </div>
 {{else}}
-{{user_name}}   {{agile_lng_translate 'contacts-view' 'enabled-the-user'}}{{custom1}}
+{{user_name}}   {{agile_lng_translate 'contacts-view' 'enabled-the-user'}} {{custom1}}
 <div class="activities_second_line m-t-none">
 <small class="activities_second_line m-t-none text-sm">   
 <i class="icon-white"></i> {{custom3}}. 
@@ -652,7 +652,7 @@
 <!-- user owner change -->
 {{#if_equals "User_Owner_Change" activity_type}}
 {{#if_equals "true" custom4}}
-{{user_name}}  {{agile_lng_translate 'contacts-view' 'enabled-the-owner-permissions-for'}}{{custom1}}  
+{{user_name}}  {{agile_lng_translate 'contacts-view' 'enabled-the-owner-permissions-for'}} {{custom1}}  
 <div class="activities_second_line m-t-none">
 <small class="activities_second_line m-t-none text-sm">   
 <i class=""></i> {{custom3}}. 
