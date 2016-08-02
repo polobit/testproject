@@ -11,28 +11,7 @@
    		{{#if display_name}}
    			{{display_name}}
    		{{else}}
-	   		{{#if_equals name "Linkedin"}}LinkedIn
-			{{else}}
-				{{#if_equals name "GooglePlus"}}Google+
-				{{else}}
-					{{#if_equals name "HelpScout"}}Help Scout
-		    		{{else}}
-		    			{{#if_equals name "Twilio"}}Twilio Call Log
-		            	{{else}}
-		            		{{#if_equals name "TwilioIO"}}Twilio
-							{{else}}
-								{{#if_equals name "CallScript"}}Call Script
-								{{else}}
-									{{#if_equals name "Rapleaf"}}TowerData
-		                            {{else}}
-		                            	{{name}}
-		                            {{/if_equals}}
-								{{/if_equals}}
-		                    {{/if_equals}}
-		           		{{/if_equals}}
-		    		{{/if_equals}}
-				{{/if_equals}}
-			{{/if_equals}}
+   			{{get_widget_translation name 'displayName'}}
 		{{/if}}
 		<div class="widget_header_icons pull-right text-base" style="display:none;">
 			<div class="customWidgets text-base">
@@ -44,20 +23,20 @@
 				{{/if}}
 				<span class="m-t-xs m-r-xs">
 					{{#if_equals name "Linkedin"}}
-						<a id="{{remove_spaces name}}_plugin_delete" rel="tooltip" title="Reset settings">
+						<a id="{{remove_spaces name}}_plugin_delete" rel="tooltip" title="{{agile_lng_translate 'widgets' 'reset-settings'}}">
 							<i class="text-muted fa fa-wrench c-p"></i>
 						</a>
 					{{else}}
 						{{#if_equals name "Twitter"}}
-							<a id="{{remove_spaces name}}_plugin_delete" rel="tooltip" title="Reset settings"><i class="text-muted fa fa-wrench c-p"></i></a>
+							<a id="{{remove_spaces name}}_plugin_delete" rel="tooltip" title="{{agile_lng_translate 'widgets' 'reset-settings'}}"><i class="text-muted fa fa-wrench c-p"></i></a>
 						{{else}}
 							{{#if_equals name "Facebook"}}
-								<a id="{{remove_spaces name}}_plugin_delete" rel="tooltip" title="Reset settings"><i class="text-muted fa-wrench fa c-p"></i></a>
+								<a id="{{remove_spaces name}}_plugin_delete" rel="tooltip" title="{{agile_lng_translate 'widgets' 'reset-settings'}}"><i class="text-muted fa-wrench fa c-p"></i></a>
 							{{else}}
 								{{#if_equals name "GooglePlus"}}
-									<a id="{{remove_spaces name}}_plugin_delete" rel="tooltip" title="Reset settings"><i class="text-muted fa-wrench fa c-p"></i></a>
+									<a id="{{remove_spaces name}}_plugin_delete" rel="tooltip" title="{{agile_lng_translate 'widgets' 'reset-settings'}}"><i class="text-muted fa-wrench fa c-p"></i></a>
 								{{else}}
-									<a href="#add-widget" rel="tooltip" title="Reset settings"><i class="text-muted fa fa-wrench c-p"></i></a>
+									<a href="#add-widget" rel="tooltip" title="{{agile_lng_translate 'widgets' 'reset-settings'}}"><i class="text-muted fa fa-wrench c-p"></i></a>
 								{{/if_equals}}
 							{{/if_equals}}
 						{{/if_equals}}

@@ -766,7 +766,7 @@ getRepPerformanceLog : function(url) {
 function initReportLibs(callback)
 {
 
-	head.load(LIB_PATH + 'lib/date-charts-'+_LANGUAGE+'.js', LIB_PATH + 'lib/date-range-picker.js'+'?_=' + _agile_get_file_hash('date-range-picker.js'), function()
+	head.load(LIB_PATH + 'lib/date-charts-en.js', LIB_PATH + 'lib/date-range-picker.js'+'?_=' + _agile_get_file_hash('date-range-picker.js'), function()
 	{
 		callback();
 

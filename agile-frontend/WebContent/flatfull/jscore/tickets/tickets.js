@@ -1390,7 +1390,7 @@ var Tickets = {
 		
 		var ticket = App_Ticket_Module.ticketView.model.toJSON();
 
-		head.load(LIB_PATH + 'lib/date-charts-'+_LANGUAGE+'.js', function()
+		head.load(LIB_PATH + 'lib/date-charts-en.js', function()
 		{
 			$('#ticket_change_sla', el).datepicker({ 
 				drops: "down", 
