@@ -475,7 +475,7 @@ public class CustomFieldsAPI
 				Date current_date = new Date(); 
 				String oldNamespace = NamespaceManager.get();
 				NamespaceManager.set("");
-			//	if(schema == null || (update_date.getMonth() < current_date.getMonth() && update_date.getYear() <= current_date.getYear())){
+				if(schema == null || (update_date.getMonth() < current_date.getMonth() && update_date.getYear() <= current_date.getYear())){
 				if(schema == null){					
 						ContactSchemaUpdateStats newSchema = new ContactSchemaUpdateStats();					
 						newSchema.updated_time = System.currentTimeMillis() / 1000 ;
@@ -498,8 +498,8 @@ public class CustomFieldsAPI
 					queue.add(TaskOptions.Builder.withPayload(updateContactDeferredTask));
 					return "success";
 				
-    	//	}
-			//return "limitReached" ;
+    	}
+			return "limitReached" ;
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
