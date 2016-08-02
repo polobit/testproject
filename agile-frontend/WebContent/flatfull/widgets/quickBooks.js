@@ -2,7 +2,7 @@ function showQuickbooksContacts(contact_id)
 {
     if (!Email)
     {
-	quickBooksError("<div class='wrapper-sm'>Please provide email for this contact</div>");
+	quickBooksError("<div class='wrapper-sm'>"+_agile_get_translated_val('widgets','pl-give-contact-email')+"</div>");
 	return;
     }
 
@@ -43,7 +43,7 @@ function showQuickbooksContacts(contact_id)
 	}
 	else if(data.responseText.indexOf('Exception Timeout while fetching') != -1)
 	{
-		quickBooksError("<div class='wrapper-sm'>Timeout while fetching Please refresh</div>");
+		quickBooksError("<div class='wrapper-sm'>" + _agile_get_translated_val('widgets', 'quickbooks-error')+"</div>");
 	}
 	else
 	{

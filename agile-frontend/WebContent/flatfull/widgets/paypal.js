@@ -1,7 +1,7 @@
 
 var paypalOBJ = {};
 var paymentINVCount = 1;
-var showMorePaypalINV = '<div class="widget_tab_footer paypal_inv_show_more" align="center"><a class="c-p text-info" id="paypal_inv_show_more" rel="tooltip" title="Click to see more tickets">Show More</a></div>';
+var showMorePaypalINV = '<div class="widget_tab_footer paypal_inv_show_more" align="center"><a class="c-p text-info" id="paypal_inv_show_more" rel="tooltip" title="'+_agile_get_translated_val('widgets', 'click-to-see-more-tickets')+'">'+_agile_get_translated_val('widgets', 'show-more')+'</a></div>';
 
 
 function loadPaypalInvoices(offSet){
@@ -12,10 +12,10 @@ function loadPaypalInvoices(offSet){
 			if(paypalOBJ.invoices && paypalOBJ.invoices.length > 0){				
 				result.invoices = paypalOBJ.invoices.slice(0, 5);
 			}else{
-				result.content = "No invoices found.";
+				result.content = _agile_get_translated_val('plan-and-upgrade','no-invoices-found') + ".";
 			}
 		}else{
-			result.content = "Please provide email for this contact.";
+			result.content = _agile_get_translated_val('widgets','pl-give-contact-email') + ".";
 		}
 
 		getTemplate('paypal-invoices', result, undefined, function(template_inv){						
@@ -58,7 +58,7 @@ function loadProfile(contact_id, callback){
 			callback(data);
 	}, 
 	function error(data){
-		$('#PayPal').html('<div class="wrapper-sm">Error Occured while fetching invoices</div>');
+		$('#PayPal').html('<div class="wrapper-sm">'+_agile_get_translated_val('widgets', 'paypal-error')+'</div>');
 	});
 }
 

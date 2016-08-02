@@ -41,22 +41,7 @@
 		<img class="w-full" src="{{defaultGravatarurl 50}}" title="{{name}}" style="width:20px; height:20px; border-radius:2px;" />
        {{/if}}
     </div>
-	<div class="agile-thumb agile-thumb-view">
-		<a class="m-r-sm custom-link pull-left text-ellipsis w-auto" style="max-width:calc(100% - 101px);">{{name}}</a>
-<span class="pull-left" style="width:91px">
-		{{#if is_admin}}
-			<span class="label m-r-xs bg-light dk text-tiny">{{agile_lng_translate 'admin-settings-users' 'admin'}}</span>
-		{{/if}}
-		{{#if is_account_owner}}
-			<span class="label bg-light dk text-tiny">{{agile_lng_translate 'deal-view' 'owner'}}</span>
-		{{/if}}
-		{{#if is_disabled}}
-			<span class="label label-danger">{{agile_lng_translate 'campaigns' 'disabled'}}</span>
-		{{/if}}
-		</span>	
-<div class="clearfix"></div>
-		<div class="text-xs">{{email}}</div>
-	</div>
+    </div>
 	</td>
 
 	<td><div class="agile-thumb agile-thumb-view" style="width: calc(100% - 0px)">

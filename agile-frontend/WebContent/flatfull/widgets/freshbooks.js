@@ -6,7 +6,7 @@
  */
 var FBSmails = {};
 var FBSCount = 1;
-var showMoreHtmlFBS = '<div class="widget_tab_footer freshbooks_show_more" align="center"><a class="c-p text-info" id="FBS_show_more" rel="tooltip" title="Click to see more tickets">Show More</a></div>';
+var showMoreHtmlFBS = '<div class="widget_tab_footer freshbooks_show_more" align="center"><a class="c-p text-info" id="FBS_show_more" rel="tooltip" title="'+_agile_get_translated_val('widgets', 'click-to-see-more-tickets')+'">'+_agile_get_translated_val('widgets', 'show-more')+'</a></div>';
 var FBSclientID = "";
 
 /**
@@ -78,7 +78,7 @@ function showFreshBooksClient(contact_id)
 	 */
 	if (!Email)
 	{
-		freshBooksError(FRESHBOOKS_PLUGIN_NAME, "Please provide email for this contact");
+		freshBooksError(FRESHBOOKS_PLUGIN_NAME, _agile_get_translated_val('widgets', 'pl-give-contact-email'));
 		return;
 	}
 

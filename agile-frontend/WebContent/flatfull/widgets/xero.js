@@ -8,14 +8,14 @@
 
 var XEROObj = {};
 var XEROCount = 1;
-var showMoreHtmlXERO = '<div class="widget_tab_footer xero_show_more" align="center"><a class="c-p text-info" id="XERO_show_more" rel="tooltip" title="Click to see more tickets">Show More</a></div>';
+var showMoreHtmlXERO = '<div class="widget_tab_footer xero_show_more" align="center"><a class="c-p text-info" id="XERO_show_more" rel="tooltip" title="'+_agile_get_translated_val('widgets', 'click-to-see-more-tickets')+'">'+_agile_get_translated_val('widgets', 'show-more')+'</a></div>';
  
 
 function showXeroClient(contact_id)
 {
 	if (EmailList.length == 0)
 	{
-		xeroError(Xero_PLUGIN_NAME, "No email for this contact");
+		xeroError(Xero_PLUGIN_NAME, _agile_get_translated_val("widgets","email-not-found-for-contact"));
 		return;
 	}
 	var emailArray = [];
@@ -242,7 +242,7 @@ function startXeroWidget(contact_id){
 
 	if (xero_widget.prefs == undefined)
 	{
-		xeroError(Xero_PLUGIN_NAME, 'Authentication Error.Please reconfigure your Xero widget.');
+		xeroError(Xero_PLUGIN_NAME, _agile_get_translated_val('widgets','reconfigure-xero'));
 		return;
 	}
 
@@ -252,7 +252,7 @@ function startXeroWidget(contact_id){
 
 	if (typeof SHORT_CODE == "undefined")
 	{
-		xeroError(Xero_PLUGIN_NAME, "Authentication Error.Please reconfigure your Xero widget.");
+		xeroError(Xero_PLUGIN_NAME, _agile_get_translated_val('widgets','reconfigure-xero'));
 		return;
 	}
 

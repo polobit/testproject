@@ -1,7 +1,7 @@
 
 var SHOPIFYTickets = {};
 var SHOPIFYCount = 1;
-var showMoreSHOPIFY = '<div class="widget_tab_footer shopify_show_more" align="center"><a class="c-p text-info" id="SHOPIFY_show_more" rel="tooltip" title="Click to see more tickets">Show More</a></div>';
+var showMoreSHOPIFY = '<div class="widget_tab_footer shopify_show_more" align="center"><a class="c-p text-info" id="SHOPIFY_show_more" rel="tooltip" title="' + _agile_get_translated_val('widgets','click-to-see-more-tickets') + '">' +_agile_get_translated_val('widgets', 'show-more')+ '</a></div>';
 
 function loadSHOPIFYTickets(offSet){
 	if(offSet == 1){
@@ -47,7 +47,7 @@ function showShopifyClient(shop, contact_id)
 
 		if (EmailList.length == 0)
 		{
-			shopifyError(Shopify_PLUGIN_NAME, "Please provide email for this contact");
+			shopifyError(Shopify_PLUGIN_NAME, _agile_get_translated_val('widgets', 'pl-give-contact-email'));
 			return;
 		}
 		var emailArray = [];

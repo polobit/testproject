@@ -23,7 +23,7 @@ function showMatchedPeople(search)
 							true);
 				else
 					displayError(WIDGET_NAME,
-							"<p class='text-base' style='margin-bottom:0px;'>No matches found. <a href='#' class='peoplesearch'>Modify search</a>", true);
+							"<p class='text-base' style='margin-bottom:0px;'>"+_agile_get_translated_val('contact-details', 'no-matches-found')+" <a href='#' class='peoplesearch'>"+_agile_get_translated_val('widgets', 'modify-search')+"</a>", true);
 				return;
 			}
 
@@ -32,7 +32,7 @@ function showMatchedPeople(search)
 			if (searchDetails['keywords'] && searchDetails['keywords'] != ""){
 				el = "<div class='panel-body text-base'><p>"+_agile_get_translated_val('contact-details', 'search-results-for')+" " + "<a href='#' class='peoplesearch'>" + searchDetails['keywords'] + "</a></p>";
 			} else {
-				el = "<div class='panel-body text-base'><p>Search results. " + "<a href='#' class='peoplesearch'>Modify search</a></p>";
+				el = "<div class='panel-body text-base'><p>"+_agile_get_translated_val('contact-details', 'search-results')+" " + "<a href='#' class='peoplesearch'>"+_agile_get_translated_val('widgets', 'modify-search')+"</a></p>";
 			}
 
 			el = el.concat(getTemplate("googleplus-search-result", data));
@@ -85,7 +85,7 @@ function showGooglePlusPosts(id, nextPageToken)
 		{
 			$('#gpostscontainer').html(getTemplate("googleplus-profile-tabs", GPostsData));
 			if(!GPostsData.items.length)
-				$('#recentPostsText').html('<div style="text-align: center;font-size: 13px;padding: 5px 0 6px 0;">No Posts.</div>');
+				$('#recentPostsText').html('<div style="text-align: center;font-size: 13px;padding: 5px 0 6px 0;">'+_agile_get_translated_val('widgets', 'no-posts')+'</div>');
 		}
 		agileTimeAgoWithLngConversion($(".time-ago"));
 	});

@@ -208,6 +208,12 @@ $(function()
 
 });
 
+// Static messages
+var _Agile_LinkedIn_Static_Messages = {
+	"linkedin-info" : _agile_get_translated_val('widgets', 'linkedin-info'),
+	"linkedin-link-profile" : _agile_get_translated_val('widgets', 'linkedin-link-profile'),
+	'no-matches-found-for' : _agile_get_translated_val('contact-details', 'no-matches-found-for'),
+};
 /**
  * Shows setup if user adds LinkedIn widget for the first time. Uses
  * ScribeServlet to create a client and get preferences and save it to the
@@ -230,7 +236,7 @@ function setupLinkedinOAuth()
 	// Shows a link button in the UI which connects to the above URL
 	$('#Linkedin')
 			.html(
-					"<div class='widget_content' style='border-bottom:none;line-height: 160%;' >Build professional relationships with contacts and keep a tab on their business interests.<p style='margin: 10px 0px 5px 0px;' ><a class='btn' href=\"" + url + "\" style='text-decoration: none;'>Link your LinkedIn</a></p></div>");
+					"<div class='widget_content' style='border-bottom:none;line-height: 160%;' >"+_Agile_LinkedIn_Static_Messages['linkedin-info']+"<p style='margin: 10px 0px 5px 0px;' ><a class='btn' href=\"" + url + "\" style='text-decoration: none;'>"+_Agile_LinkedIn_Static_Messages['linkedin-link-profile']+"</a></p></div>");
 }
 
 /**
@@ -267,7 +273,7 @@ function showLinkedinMatchingProfiles(data)
 					true);
 		else
 			linkedinMainError(LINKEDIN_PLUGIN_NAME,
-					"<p class='a-dotted' style='margin-bottom:0px;'>No matches found. <a href='#search' class='linkedin_modify_search'>Modify search</a></p>",
+					"<p class='a-dotted' style='margin-bottom:0px;'>"+_agile_get_translated_val('contact-details', 'no-matches-found')+" <a href='#search' class='linkedin_modify_search'>"+_agile_get_translated_val('widgets', 'modify-search')+"</a></p>",
 					true);
 		return;
 	}
@@ -513,7 +519,7 @@ function showLinkedinProfile(Linkedin_id)
 		 */
 		if (data.responseText == "Invalid member id {private}")
 		{
-			linkedinMainError(LINKEDIN_PLUGIN_NAME, "Member doesn't share his information for third party applications");
+			linkedinMainError(LINKEDIN_PLUGIN_NAME, _agile_get_translated_val('widgets','linkedin-link-profile-error'));
 			return;
 		}
 
@@ -541,7 +547,7 @@ function showExperienceInLinkedIn(data)
 	 */
 	if ((!data.three_current_positions || data.three_current_positions.length == 0) && (!data.three_past_positions || data.three_past_positions.length == 0))
 	{
-		$('#linkedin_experience_panel').html('<div class="widget_content">Work status unavailable</div>');
+		$('#linkedin_experience_panel').html('<div class="widget_content">'+_agile_get_translated_val('widgets', 'linkedin-work-status-error')+'</div>');
 		return;
 	}
 	Experience_data = data;
@@ -589,12 +595,12 @@ function registerEventsInLinkedIn(Linkedin_id, linkedin_connected, Stream_Data)
 			// Checks if person is already connected in LinkedIn to agile user
 			if (linkedin_connected)
 			{
-				linkedinError("status-error-panel", "This person does not share his/her updates");
+				linkedinError("status-error-panel", _agile_get_translated_val('widgets', 'this-person-doesnt-share-his-her'));
 				return;
 			}
 
 			// If not connected, advice user to connect to see updates
-			linkedinError("status-error-panel", "Member does not share his/her updates. Get connected");
+			linkedinError("status-error-panel", _agile_get_translated_val('widgets', 'linkedin-share-connect'));
 			return;
 		}
 
@@ -795,7 +801,7 @@ function getAnyFiveNetworkUpdatesInLinkedIn(Linkedin_id, end_time, Stream_Data, 
 		// If no more updates available, less and refresh buttons are shown
 		if (data.length == 0)
 		{
-			linkedinError("status-error-panel", "No more updates available");
+			linkedinError("status-error-panel", _agile_get_translated_val('widgets', 'linkedin-no-updates'));
 			$('#linkedin_refresh_stream').show();
 
 			/*
@@ -849,13 +855,13 @@ function sendLinkedInAddRequest(Linkedin_id)
 	var json = {};
 
 	// Set headline of modal window as Connect
-	json["headline"] = "Connect";
+	json["headline"] = _agile_get_translated_val('prefs-data-sync', 'connect');
 
 	// Information to be shown in the modal to the user
-	json["info"] = "Connect to " + Linkedin_current_profile_user_name + " on Linkedin";
+	json["info"] = _agile_get_translated_val('widgets', 'linkedin-connect-to') + " " + Linkedin_current_profile_user_name + " " + _agile_get_translated_val('widgets','on-linkedin');
 
 	// Default message to be sent while sending connect request to LinkedIn
-	json["description"] = "I'd like to add you to my professional network on LinkedIn.";
+	json["description"] = _agile_get_translated_val('widgets', 'add-linkedin');
 
 	// If modal already exists remove to show a new one
 	$('#linkedin_messageModal').remove();
@@ -869,7 +875,6 @@ function sendLinkedInAddRequest(Linkedin_id)
     $('#linkedin_messageModal').off('shown');
 	$('#linkedin_messageModal').on('shown', function()
 	{
-
 		head.js(LIB_PATH + 'lib/bootstrap-limit.js', function()
 		{
 			$('.linkedin_connect_limit').limit({ maxChars : 275, counter : "#linkedin_counter" });
@@ -914,10 +919,10 @@ function sendLinkedInMessage(Linkedin_id)
 	var json = {};
 
 	// Set headline of modal window as Send Message
-	json["headline"] = "Send Message";
+	json["headline"] = _agile_get_translated_val("widgets", "linkedin-send-mssg");
 
 	// Information to be shown in the modal to the user while sending message
-	json["info"] = "Send message to " + Linkedin_current_profile_user_name + " on LinkedIn";
+	json["info"] = _agile_get_translated_val('widgets', 'linkedin-send-mssg-to') + " " + Linkedin_current_profile_user_name + " "+ _agile_get_translated_val('widgets', 'on-linkedin');
 
 	// If modal already exists remove to show a new one
 	$('#linkedin_messageModal').remove();
@@ -1081,7 +1086,7 @@ function getLinkedinIdByUrl(linkedin_web_url, callback)
 		if (data.responseText.indexOf("Public profile URL is not correct") != -1)
 		{
 			// Shows error message to the user returned by LinkedIn
-			showAlertModal("URL provided for linkedin is not valid " + data.responseText, undefined, function(){
+			showAlertModal(_agile_get_translated_val('widgets', 'linkedin-url-invalid') + " " + data.responseText, undefined, function(){
 				/*
 				 * Delete the LinkedIn URL associated with contact as it is
 				 * incorrect
@@ -1141,7 +1146,7 @@ function getLinkedInSharedConnections(Linkedin_id)
 		// If no matches found display message
 		if (data.length == 0)
 		{
-			$('#linkedin_shared_panel').html("<div style='padding: 10px;line-height:160%;'>" + "No shared connections</div>");
+			$('#linkedin_shared_panel').html("<div style='padding: 10px;line-height:160%;'>" + _agile_get_translated_val('widgets','linked-no-connections')+"</div>");
 			return;
 		}
 
@@ -1220,7 +1225,7 @@ function grantAccessToLinkedIn(message)
 	// Shows a link button in the UI which connects to the above URL
 	$('#Linkedin')
 			.html(
-					"<div class='widget_content' style='border-bottom:none;line-height: 160%;' >" + message + "<p style='margin: 10px 0px 5px 0px;' ><a class='btn' href=\"" + url + "\" style='text-decoration: none;'>Regrant Access</a></p></div>");
+					"<div class='widget_content' style='border-bottom:none;line-height: 160%;' >" + message + "<p style='margin: 10px 0px 5px 0px;' ><a class='btn' href=\"" + url + "\" style='text-decoration: none;'>"+_agile_get_translated_val('widgets','linkedin-regeant')+"</a></p></div>");
 }
 
 /**
@@ -1267,7 +1272,7 @@ function linkedinMainError(id, error, disable_check)
 
 	// build JSON with error message
 	var error_json = {};
-	error_json['message'] = error;
+	error_json['message'] = _agile_get_translated_val('widgets','linkedin-account-expired');
 	error_json['disable_check'] = disable_check;
 
 	/*

@@ -5100,3 +5100,58 @@ socialsuite.tweet-status-of,Status of,Estado de
 socialsuite.tweet-posted,Your Tweet was posted!,Su Tweet fue publicada !
 socialsuite.your-tweet-to,Your Tweet to,Tu Tweet
 socialsuite.tweet-has-sent,has been sent!,¡ha sido enviado!
+widgets.pl-give-contact-email,Please provide email for this contact,Sírvanse proporcionar correo electrónico para este contacto
+widgets.configure-properly,Please configure widget properly,Por favor&#44; configure Reproductor adecuadamente
+widgets.pl-provide,Please provide,Por favor&#44; proporcione
+widgets.for-this-contact,for this contact,para este contacto
+widgets.no-phone-number-to-contact,There is no phone number associated with this contact.,No hay un número de teléfono asociado a este contacto .
+widgets.welcome-to-callscript,Welcome to CallScript,Bienvenido a CallScript
+widgets.no-chats,No chats,No hay chats
+widgets.no-more-chats,No more chats,No más charlas
+widgets.no-more-tickets,No more tickets,No hay más entradas
+widgets.no-fb-account,Facebook profile do not exist.,Facebook perfil no existe.
+widgets.modify-search,Modify search,modificar la búsqueda
+widgets.no-posts,No Posts.,No hay Mensajes .
+widgets.add-conversion-to-hsc,Add Conversation to HelpScout,Añadir a la Conversación HelpScout
+widgets.add-conversion-in-hsc,Add Conversation in HelpScout,Añadir Conversación en HelpScout
+widgets.linkedin-info,Build professional relationships with contacts and keep a tab on their business interests.,Construir relaciones profesionales con los contactos y mantener una ficha sobre sus intereses comerciales.
+widgets.linkedin-link-profile,Link your LinkedIn,Enlace su LinkedIn
+widgets.linkedin-link-profile-error,Member doesn't share his information for third party applications,Miembro no comparte su información para aplicaciones de terceros
+widgets.linkedin-work-status-error,Work status unavailable,situación laboral no disponible
+widgets.linkedin-share-connect,Member does not share his/her updates. Get connected,Miembro no comparte su / sus actualizaciones. Conectarse
+widgets.linkedin-no-updates,No more updates available,No hay más actualizaciones disponibles
+widgets.linkedin-connect-to,Connect to,Conectar a
+widgets.add-linkedin,I'd like to add you to my professional network on LinkedIn.,Me gustaría añadirte a mi red profesional en LinkedIn.
+widgets.on-linkedin,on Linkedin,en Linkedin
+widgets.linkedin-send-mssg,Send Message,Enviar mensaje
+widgets.linkedin-send-mssg-to,Send message to,Enviar un mensaje a
+widgets.linked-no-connections,No shared connections,No hay conexiones compartidas
+widgets.linkedin-regeant,Regrant Access,El acceso Regrant
+widgets.linkedin-account-expired,Access granted to your linkedin account has expired.,Concesión de acceso a su cuenta de LinkedIn ha expirado .
+widgets.paypal-error,Error Occured while fetching invoices,Error al obtener las facturas
+widgets.quickbooks-error,Timeout while fetching Please refresh,Tiempo de espera al recuperar Actualiza
+widgets.skype-contact-info,There is no phone number or skype id associated with this contact.,No hay un número de teléfono o skype ID asociado a este contacto .
+widgets.skype-invalid-number,Add phone number or skype id,Añadir número de teléfono o skype ID
+widgets.stripe-subscriptions,See the contact's subscriptions history and payments from your Stripe account.,Ver la historia y los pagos de las suscripciones del contacto de su cuenta de la raya .
+widgets.stripe-cust-id,Please provide the Stripe customer id for this contact,Por favor proporcione el identificador de banda del cliente para este contacto
+widgets.stripe-iden-id,customer id,Identificación del cliente
+widgets.twitter-req-sent,Follow Request Sent,Siga Solicitud Enviado
+widgets.twitter-no-share,This member doesn't share his/her tweets,Este miembro no comparte su / sus tuits
+widgets.tweets-not-share,Member does not share his/her tweets. Follow him/her and try,Miembro no comparte su / sus tweets. Siga él / ella y tratar
+widgets.on-twitter,on Twitter,en Twitter
+widgets.tweets-followers,"Tweets&#44; Followers&#44; Following and complete profile. Click the ""Follow"" button to send a follow request.","Tweets&#44; Seguidores&#44; Siguiendo y al perfil completo . Haga clic en el botón "" Seguir "" para enviar una solicitud de seguimiento ."
+widgets.reconfigure-widget,Please reconfigure widget,Por favor&#44; vuelva a configurar Reproductor
+widgets.no-followers,doesn't have any followers yet,no tiene ningún seguidores
+widgets.no-following-yet,isn't following anyone yet,no está siguiendo a nadie
+widgets.see-more-comments,Click to see more Comments,Haga clic para ver más Comentarios
+widgets.no-comments-found,No comments found.,No se encontraron comentarios .
+widgets.email-not-found-for-contact,Email not found for this contact.,Email no encontrado para este contacto .
+widgets.error-while-fetch-comments,Error occured while fetching comments,Se produjo un error al recuperar los comentarios
+widgets.reconfigure-xero,Authentication Error.Please reconfigure your Xero widget.,Autenticación Error.Please volver a configurar el widget de Xero .
+widgets.update-ticket,Update Ticket,actualización de entradas
+widgets.updates-ticket-no,Updates Ticket No,Sin actualizaciones de entradas
+widgets.in-zendesk,in Zendesk,en Zendesk
+widgets.twilio-verifing,Verifying,verificando
+widgets.remove-twilio-widget,Please delete this widget and add the new improved Twilio widget from the,Por favor&#44; elimine este widget y añadir el nuevo widget de mejora de la Twilio
+widgets.widget-settings-page,widget settings page,La página de configuración del widget
+widgets.click-to-see-more-logs,Click to see more call logs,Haga clic para ver más registros de llamadas

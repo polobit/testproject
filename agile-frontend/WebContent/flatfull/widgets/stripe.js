@@ -9,8 +9,8 @@ var customer_id = 0;
 var stripeINVCount = 1;
 var stripePAYCount = 1;
 
-var showMoreStripeINV = '<div class="widget_tab_footer stripe_inv_show_more" align="center"><a class="c-p text-info" id="stripe_inv_show_more" rel="tooltip" title="Click to see more tickets">Show More</a></div>';
-var showMoreStripePAY = '<div class="widget_tab_footer stripe_pay_show_more" align="center"><a class="c-p text-info" id="stripe_pay_show_more" rel="tooltip" title="Click to see more tickets">Show More</a></div>';
+var showMoreStripeINV = '<div class="widget_tab_footer stripe_inv_show_more" align="center"><a class="c-p text-info" id="stripe_inv_show_more" rel="tooltip" title="'+_agile_get_translated_val('widgets', 'click-to-see-more-tickets')+'">' +_agile_get_translated_val('widgets', 'show-more')+'</a></div>';
+var showMoreStripePAY = '<div class="widget_tab_footer stripe_pay_show_more" align="center"><a class="c-p text-info" id="stripe_pay_show_more" rel="tooltip" title="'+_agile_get_translated_val('widgets', 'click-to-see-more-tickets')+'">'+_agile_get_translated_val('widgets', 'show-more')+'</a></div>';
 
 /**
  * Shows setup if user adds Stripe widget for the first time. Uses ScribeServlet
@@ -35,7 +35,7 @@ function setupStripeOAuth()
 
 	$('#Stripe')
 			.html(
-					'<div class="widget_content" style="border-bottom:none;line-height: 160%;">See the contact\'s subscriptions history and payments from your Stripe account.<p style="margin: 10px 0px 5px 0px;"></p><div class="text-center"><a class="btn" href=' + url + '>Link your Stripe</a></div></div>');
+					'<div class="widget_content" style="border-bottom:none;line-height: 160%;">'+_agile_get_translated_val('widgets', 'stripe-subscriptions')+'<p style="margin: 10px 0px 5px 0px;"></p><div class="text-center"><a class="btn" href=' + url + '>'+_agile_get_translated_val('widgets','link-your Stripe')+'</a></div></div>');
 
 }
 
@@ -140,10 +140,10 @@ function showStripeProfile(stripe_custom_field_name, contact_id)
 	
 	
 		 $('#Stripe').html("<div class='wrapper-sm'><form style='border-bottom:none;margin-bottom:5px;' id='stripe_contact_id_form' name='stripe_contact_id_form' method='post'>" +
-		    "<fieldset><p>Please provide the Stripe customer id for this contact</p>" +
+		    "<fieldset><p>"+_agile_get_translated_val('widgets','stripe-cust-id')+"</p>" +
 		    "<div class='control-group' style='margin-bottom:0px'><div class='controls'>" +
-		    "<input type='text' class='required form-control' name='stripe_contact_id' style='width:90%' id='stripe_contact_id' placeholder='Stripe customer id' onkeydown='if (event.keyCode == 13) { event.preventDefault(); }'></input>" +
-		    "</div></div><a href='#' class='btn btn-ms btn-default m-t-xs' id='stripe_contact_id_save'>Save</a>" +
+		    "<input type='text' class='required form-control' name='stripe_contact_id' style='width:90%' id='stripe_contact_id' placeholder='Stripe '"+_agile_get_translated_val('widgets','stripe-iden-id')+" onkeydown='if (event.keyCode == 13) { event.preventDefault(); }'></input>" +
+		    "</div></div><a href='#' class='btn btn-ms btn-default m-t-xs' id='stripe_contact_id_save'>"+_agile_get_translated_val('modals', 'save')+"</a>" +
 		    "</fieldset></form></div>");
 		  
 		 return;

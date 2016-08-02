@@ -345,7 +345,7 @@ function getLogsForSkype(num){
 	var logNumber;
 	var parameter = {};
 	
-	parameter['error_message'] = "There is no phone number or skype id associated with this contact. <a href='#contact-edit' class='text-info' style='color:#23b7e5'>Add phone number or skype id</a>";
+	parameter['error_message'] = _agile_get_translated_val('widgets', 'skype-contact-info')+  " <a href='#contact-edit' class='text-info' style='color:#23b7e5'>"+_agile_get_translated_val('widgets', 'skype-invalid-number')+"</a>";
 	//var contact = agile_crm_get_contact();
 	//parameter['num'] = getPhoneWithSkypeInArray(contact.properties);
 	parameter['num'] = agile_crm_get_contact_properties_list("phone");

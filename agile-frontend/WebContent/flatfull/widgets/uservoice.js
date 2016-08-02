@@ -1,6 +1,6 @@
 var uservoiceOBJ = {};
 var commentsCount = 1;
-var showMoreUservoiceCommments = '<div class="widget_tab_footer uservoice_show_more" align="center"><a class="c-p text-info" id="uservoice_inv_show_more" rel="tooltip" title="Click to see more Comments">Show More</a></div>';
+var showMoreUservoiceCommments = '<div class="widget_tab_footer uservoice_show_more" align="center"><a class="c-p text-info" id="uservoice_inv_show_more" rel="tooltip" title="'+_agile_get_translated_val('widgets','see-more-comments')+'">'+_agile_get_translated_val('widgets', 'show-more')+'</a></div>';
 
 function loadUservoiceComments(offSet){
 	if(offSet == 0){
@@ -9,10 +9,10 @@ function loadUservoiceComments(offSet){
 			if(uservoiceOBJ.comments && uservoiceOBJ.comments.length > 0){				
 				result.comments = uservoiceOBJ.comments.slice(0, 5);
 			}else{
-				result.content = "No comments found.";
+				result.content = _agile_get_translated_val("widgets","no-comments-found");
 			}
 		}else{
-			result.content = "Email not found for this contact.";
+			result.content = _agile_get_translated_val("widgets","email-not-found-for-contact");
 		}
 
 		getTemplate('uservoice-transactions', result, undefined, function(template_inv){						
@@ -78,11 +78,11 @@ function loadData(contact_id){
 				    },
 				    error: function (xhr, textStatus, errorThrown) {
 				        console.log("Has error in uservoice");
-						$('#Uservoice').html('<div class="wrapper-sm">Error occured while fetching comments</div>');
+						$('#Uservoice').html('<div class="wrapper-sm">'+_agile_get_translated_val('widgets','error-while-fetch-comments')+'</div>');
 				    }
 				});								
 	}else{		
-		$('#Uservoice').html('<div class="wrapper-sm">Email not found.</div>');
+		$('#Uservoice').html('<div class="wrapper-sm">'+_agile_get_translated_val('widgets','email-not-found-for-contact')+'</div>');
 	}	
 }
 
