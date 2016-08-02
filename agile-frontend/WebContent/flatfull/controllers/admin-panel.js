@@ -69,6 +69,26 @@ var AdminPanelRouter = Backbone.Router.extend({
 
 	},
 
+	get_subscription_from_db : function(el, domainname)
+	{
+		console.log("in accountstats object");
+		console.log(domainname);
+		$.ajax({ url : 'core/api/admin_panel/get_subscription?d=' + domainname, type : 'GET', success : function(data)
+		{
+			if(data && data.status && $.inArray(data.status, PAGEBLOCK_REASON) != -1){
+				$(el).find(".unblock_user").closest("div").show();
+				$(el).find(".unblock_user").attr("domain", domainname);
+			}
+
+
+		}, error : function(response)
+		{
+
+			console.log(response);
+		} });
+
+	},
+
 	// function will be called from getDomainDetails Navigation
 	// todisplay get subscription object for particular domain
 	get_customerobject_for_domain_from_adminpanel : function(el, domainname)
@@ -145,6 +165,7 @@ var AdminPanelRouter = Backbone.Router.extend({
 				self.get_customerobject_for_domain_from_adminpanel(el, domainname);
 				$('#account').html("<img src='" + updateImageS3Path("img/21-0.gif")+ "'>");
 				self.get_account_stats_for_domain_from_adminpanel(el, domainname);
+				self.get_subscription_from_db(el, domainname);
 
 				initializeAdminpanelListner(el);
 
