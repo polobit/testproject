@@ -332,11 +332,13 @@ function setupContactFilterList(cel, tag_id)
 						 * system filter names, to load results based on those
 						 * filters
 						 */
+						filter_id = filter_name;
+
 						if (filter_name.toLowerCase().indexOf('recent') >= 0)
 							filter_name = "Recent";
 
-						/*else if (filter_name.toLowerCase().indexOf('contacts') >= 0)
-							filter_name = "My Contacts";*/
+						else if (filter_name.toLowerCase().indexOf('contacts') >= 0)
+							filter_name = "My Contacts";
 
 						else if (filter_name.toLowerCase().indexOf('leads') >= 0)
 							filter_name = "Leads";
@@ -345,7 +347,6 @@ function setupContactFilterList(cel, tag_id)
 						// id(from cookie)
 						else if (filter_name.indexOf("system") < 0)
 						{
-							filter_id = filter_name;
 							if(contactFiltersListView.collection.get(filter_name))
 									filter_name = contactFiltersListView.collection.get(filter_name).toJSON().name;
 							
