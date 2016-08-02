@@ -390,6 +390,7 @@ public class WidgetsAPI {
 		if (obj != null) {			
 			//Gets current agile user.
 			AgileUser agileUser = AgileUser.getCurrentAgileUser();
+			Long agileUserID = agileUser.id;
 			//Gets the current domain user.
 			DomainUser domainUser = agileUser.getDomainUser();	
 			if(domainUser.is_admin){
@@ -426,7 +427,7 @@ public class WidgetsAPI {
 							if(widget != null){							
 								if(oldDomainUser.is_admin){
 									//If the user is admin, we are making him inactive.
-									widget.updateStatus(false);
+									widget.updateStatus(false, agileUserID);
 								}else{
 									WidgetUtil.deleteWidgetByUserID(oldUserID, widgetName);
 									 //If it was custom widget we will delete custom widget.
@@ -467,9 +468,8 @@ public class WidgetsAPI {
 									widget.integration_type = customwidget.integration_type;									
 									widget.script = customwidget.script;
 									widget.script_type = customwidget.script_type;
-									widget.url = customwidget.url;
-									
-									widget.add_by_admin = true;	
+									widget.url = customwidget.url;									
+									widget.add_by = agileUserID;	
 									widget.isActive = false;
 									widget.id = null;			
 									Key<AgileUser> adminUserKey = AgileUser.getCurrentAgileUserKeyFromDomainUser(agileUser.domain_user_id);
@@ -479,11 +479,11 @@ public class WidgetsAPI {
 								if(localDomainUser != null && localDomainUser.is_admin){
 									Widget adminWidget = WidgetUtil.getWidget(widgetName, agileLocalUser.id);
 									if(adminWidget != null){
-										adminWidget.updateStatus(true);
+										adminWidget.updateStatus(true, agileUserID);
 										continue;
 									}
 								}								
-								widget.add_by_admin = true;	
+								widget.add_by = agileUserID;	
 								widget.isActive = true;
 								widget.id = null;
 								widget.saveByUserKey(userKey, widget);
