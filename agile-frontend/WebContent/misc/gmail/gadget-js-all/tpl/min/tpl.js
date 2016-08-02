@@ -422,6 +422,14 @@ function program3(depth0,data) {
 
 function program5(depth0,data) {
   
+  var stack1, helper;
+  if (helper = helpers.value) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.value); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  return escapeExpression(stack1);
+  }
+
+function program7(depth0,data) {
+  
   var buffer = "", stack1, helper;
   buffer += "\n						";
   if (helper = helpers.value) { stack1 = helper.call(depth0, {hash:{},data:data}); }
@@ -431,24 +439,19 @@ function program5(depth0,data) {
   return buffer;
   }
 
-function program7(depth0,data) {
+function program9(depth0,data) {
   
   var buffer = "";
   return buffer;
   }
 
-function program9(depth0,data) {
-  
-  var stack1, helper;
-  if (helper = helpers.value) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.value); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  return escapeExpression(stack1);
-  }
-
   buffer += "		\n<!-- 1st coloum (conatct image) -->\n				<div class=\"span1\" style=\"min-width:65px;\">\n					<div class=\"thumbnails\">\n	   					<div class=\"span12\">\n	   						<div style=\"position: relative;margin-right: 16px;\">\n	   						<div class=\"score-scope\" unselectable=\"on\" onselectstart=\"return false\">\n	   							<div style=\"position: absolute;right:14px;background-color: #27c24c;border-radius: 10px;color: #fff;font-size: 12px;text-align: center;padding: 2px 5px;line-height: 1;display: inline-block;top: 39px;\">\n													";
   stack1 = helpers['if'].call(depth0, (depth0 && depth0.lead_score), {hash:{},inverse:self.program(3, program3, data),fn:self.program(1, program1, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n								</div>\n								<span id=\"cursor1\" style=\"position: absolute;border-radius: 10px;font-size: 12px;min-width: 10px;text-align: center;padding: 2px 10px;line-height: 1;display: inline-block;top: 45px;color: white;right: -8px;\" onmouseover=\"this.style.color='black';\" onmouseout=\"this.style.color='white';\">			\n												<ul style=\"    margin: 0;list-style-type: none;display: inline-block;vertical-align: middle;\">\n													<input type=\"hidden\" name=\"email\" value=\"ghanshyam.agile@gmail.com\">\n													<li style=\"line-height: 0px;\"><i class=\"icon-sort-up add-score\" style=\"font-size:12px; cursor:pointer;\" title=\"Add Score\"></i></li>\n													<li style=\"line-height:4px;\"><i class=\"icon-sort-down subtract-score\" style=\"font-size:12px; cursor:pointer;\" title=\"Subtract Score\"></i></li>\n												</ul>\n								</span>			\n							</div>\n\n    							<img  class='upload_pic imgholder submit w-full img-circle w-full img-circle b-2x b' src=\""
+  buffer += "\n								</div>\n								<span id=\"cursor1\" style=\"position: absolute;border-radius: 10px;font-size: 12px;min-width: 10px;text-align: center;padding: 2px 10px;line-height: 1;display: inline-block;top: 45px;color: white;right: -8px;\" onmouseover=\"this.style.color='black';\" onmouseout=\"this.style.color='white';\">			\n												<ul style=\"    margin: 0;list-style-type: none;display: inline-block;vertical-align: middle;margin-top:-5px\">\n													<input type=\"hidden\" name=\"email\" value='";
+  stack1 = (helper = helpers.if_propertyName || (depth0 && depth0.if_propertyName),options={hash:{},inverse:self.noop,fn:self.program(5, program5, data),data:data},helper ? helper.call(depth0, "email", options) : helperMissing.call(depth0, "if_propertyName", "email", options));
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "'>\n													<li style=\"line-height: 7px;\"><i class=\"icon-sort-up add-score\" style=\"font-size:12px; cursor:pointer;\" title=\"Add Score\"></i></li>\n													<li style=\"line-height:4px;\"><i class=\"icon-sort-down subtract-score\" style=\"font-size:12px; cursor:pointer;\" title=\"Subtract Score\"></i></li>\n												</ul>\n								</span>			\n							</div>\n\n    							<img  class='upload_pic imgholder submit w-full img-circle w-full img-circle b-2x b' src=\""
     + escapeExpression((helper = helpers.gravatarurl || (depth0 && depth0.gravatarurl),options={hash:{},data:data},helper ? helper.call(depth0, (depth0 && depth0.properties), 50, options) : helperMissing.call(depth0, "gravatarurl", (depth0 && depth0.properties), 50, options)))
     + "\" style=\"width:35px;height:35px;border-radius:3px;\" />\n		   					</div>\n		   				</div>\n					</div>\n    			</div>\n\n<!-- 2nd coloum (conatct details) -->\n				<div class=\"span8\" style=\"margin-left:-20px;margin-top: -5px;\n\">\n<!-- First row (Name) - Starts -->\n					<div class=\"row-fluid\">\n						<div style=\"display:inline-block; max-width: 16em; vertical-align:middle;\">\n							<div>\n								\n									<font style=\"font-size: 14px;\" title=\""
     + escapeExpression((helper = helpers.getPropertyValue || (depth0 && depth0.getPropertyValue),options={hash:{},data:data},helper ? helper.call(depth0, (depth0 && depth0.properties), "first_name", options) : helperMissing.call(depth0, "getPropertyValue", (depth0 && depth0.properties), "first_name", options)))
@@ -467,18 +470,18 @@ function program9(depth0,data) {
   else { helper = (depth0 && depth0.id); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
     + "\" style=\"margin-left:6px; text-decoration:none; vertical-align:middle;\"><i class=\"fa fa-external-link-square\" title=\"Show contact in Agile\"></i></a><br/>\n					</div>\n<!-- First row (Name) - Ends -->\n\n<!-- Second row (Title, Company) - Starts -->					\n					<div class=\"row-fluid\">\n					";
-  stack1 = (helper = helpers.if_propertyName || (depth0 && depth0.if_propertyName),options={hash:{},inverse:self.noop,fn:self.program(5, program5, data),data:data},helper ? helper.call(depth0, "title", options) : helperMissing.call(depth0, "if_propertyName", "title", options));
+  stack1 = (helper = helpers.if_propertyName || (depth0 && depth0.if_propertyName),options={hash:{},inverse:self.noop,fn:self.program(7, program7, data),data:data},helper ? helper.call(depth0, "title", options) : helperMissing.call(depth0, "if_propertyName", "title", options));
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\n					";
-  stack1 = (helper = helpers.comma_in_between_property || (depth0 && depth0.comma_in_between_property),options={hash:{},inverse:self.noop,fn:self.program(7, program7, data),data:data},helper ? helper.call(depth0, "title", "company", (depth0 && depth0.properties), options) : helperMissing.call(depth0, "comma_in_between_property", "title", "company", (depth0 && depth0.properties), options));
+  stack1 = (helper = helpers.comma_in_between_property || (depth0 && depth0.comma_in_between_property),options={hash:{},inverse:self.noop,fn:self.program(9, program9, data),data:data},helper ? helper.call(depth0, "title", "company", (depth0 && depth0.properties), options) : helperMissing.call(depth0, "comma_in_between_property", "title", "company", (depth0 && depth0.properties), options));
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\n					";
-  stack1 = (helper = helpers.if_propertyName || (depth0 && depth0.if_propertyName),options={hash:{},inverse:self.noop,fn:self.program(5, program5, data),data:data},helper ? helper.call(depth0, "company", options) : helperMissing.call(depth0, "if_propertyName", "company", options));
+  stack1 = (helper = helpers.if_propertyName || (depth0 && depth0.if_propertyName),options={hash:{},inverse:self.noop,fn:self.program(7, program7, data),data:data},helper ? helper.call(depth0, "company", options) : helperMissing.call(depth0, "if_propertyName", "company", options));
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\n					</div>\n<!-- Second row (Title, Company) - Ends -->\n					<div class=\"row-fluid\" style=\"margin-bottom: 1px;color: #98a6ad;\">\n					"
     + escapeExpression((helper = helpers.getPropertyValue || (depth0 && depth0.getPropertyValue),options={hash:{},data:data},helper ? helper.call(depth0, (depth0 && depth0.properties), "email", options) : helperMissing.call(depth0, "getPropertyValue", (depth0 && depth0.properties), "email", options)))
     + "\n					</div>\n<!-- Third row (tags) - Starts -->					\n					<div class=\"row-fluid\">\n						<div class=\"span11\">	 		\n						<div class=\"add-tag\">\n							<div>\n								<ul id=\"added_tags_ul\" class=\"tagsinput\">\n									<li class=\"tag\" style=\"display: none; padding:1px 4px;\">\n											<span>\n											<span class=\"anchor tag-name\" style=\"float:left; cursor:default;padding: 1px 1px 1px 1px;\">lead</span>\n											<a class=\"close remove-tag remove-tag-icon\" style=\"float: left;line-height: 18px;color: white;font-weight: normal;opacity: 1;font-size: 15px;\" title=\"Remove Tag\">&times;	</a>\n										</span>\n									</li> \n								</ul>\n								<div style=\"display: inline-block; vertical-align:top;\" >\n										<form id=\"add_tags_form\" name=\"add_tags_form\" method=\"post\" style=\"display: none; margin-bottom: 0px; margin-top:1px;\">\n										<div style=\"margin-bottom:0px;\">\n											<input type=\"hidden\" name=\"email\" value='";
-  stack1 = (helper = helpers.if_propertyName || (depth0 && depth0.if_propertyName),options={hash:{},inverse:self.noop,fn:self.program(9, program9, data),data:data},helper ? helper.call(depth0, "email", options) : helperMissing.call(depth0, "if_propertyName", "email", options));
+  stack1 = (helper = helpers.if_propertyName || (depth0 && depth0.if_propertyName),options={hash:{},inverse:self.noop,fn:self.program(5, program5, data),data:data},helper ? helper.call(depth0, "email", options) : helperMissing.call(depth0, "if_propertyName", "email", options));
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "'/>\n											<input class=\"tags-typeahead ignore-comma-keydown input-small\" name=\"tags\" type=\"text\" id=\"tags\" style=\"margin: 0px;\" placeholder=\"Enter tag\" autocomplete=\"off\">\n											<a type=\"submit\" class=\"btn btn-default\" id=\"contact_add_tags\" style=\"margin-left: 10px; padding: 5px 12px;\">Add</a>\n										</div>\n									</form>\n									<img class=\"tag-waiting\" style=\"display:none; width:16px; margin-top:6px;\" src=\"https://googleapps.agilecrm.com/img/ajax-loader-cursor.gif\"></img>\n									<i id=\"add_tags\" class=\"icon-plus-sign toggle-tag\" style=\"cursor:pointer; margin-top:4px; display:block;\" title=\"Add Tag\"></i>\n								</div>\n							</div>\n						</div>\n						</div>\n					</div>\n<!-- Third row (Tags) - End -->\n				</div>\n\n<!-- 3rd coloum -->				\n				<div class=\"span3 contact-col-3\" style=\"margin-left:0; position:absolute; right:28;\">\n					\n					<div class=\"row-fluid\" >\n								<div class=\"btn-group row-fluid\" style=\"display:inline-block; min-width:72px; margin-bottom:10px;\">\n									<div class=\"pull-right\" style=\"background-color: #F2F2F2;\" onmouseover=\"this.style.backgroundColor ='#DBDBDB';\" onmouseout=\"this.style.backgroundColor ='#F2F2F2';\">\n										<a id=\"dropdown_switching\" title=\"\" class=\"dropdown-toggle btn btn-default dropdown-toggle btn-sm \" data-toggle=\"dropdown\" aria-expanded=\"true\"> \n											<i class=\"fa fa-ellipsis-h filter-ellip-menu-st b b-light\" style=\"cursor:pointer;\" data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"Add\"></i> </a>\n										<ul class=\"dropdown-menu pull-right\">\n   											<!-- dropdown menu links -->\n											<li class=\"action-add-note\"><a style=\"cursor:default;\">Add Note</a></li>\n											<li class=\"action-add-email-note\"><a style=\"cursor:default;\">Add Email as Note</a></li>\n											<li class=\"action-add-task\"><a style=\"cursor:default;\">Add Task</a></li>\n											<li class=\"action-add-deal\"><a style=\"cursor:default;\">Add Deal</a></li>\n											<li class=\"action-add-campaign\"><a style=\"cursor:default;\">Add to Campaign</a></li>\n										</ul>\n									</div>\n								</div>\n							</div>\n					\n						\n<!-- end of contact info-->";
   return buffer;
@@ -855,7 +858,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   
 
 
-  return "<div class=\"well well-small agile-one-time-setup\" style=\"margin:0px; border-radius:0px; background-color:white; box-shadow:none; border-bottom:0px; border-left:0px; border-right:0px;\">\n<p>We need to associate your Google account with AgileCRM - this is a one time setup</p>\n<P style=\"margin:0px;\"><input type=\"button\" value=\"Associate\" onclick=\"agile_gadget_open_popup(); return false;\" class=\"btn\" style=\"padding:2px 6px 2px;\">\n<span id=\"notify_user\" style=\"display:none; margin-left:20px; color:indianred;\"><i>Please enter your domain.</i></span>\nDon't have an account? <a href=\"https://www.agilecrm.com/stripe?utm_source=google-apps&utm_medium=website&utm_campaign=integration\" target=\"_blank\">Sign up</a>.\n</P>\n</div> ";
+  return "<div class=\"well well-small agile-one-time-setup\" style=\"margin:0px; border-radius:0px; background-color:white; box-shadow:none; border-bottom:0px; border-left:0px; border-right:0px;\">\n<p>We need to associate your Google account with Agile CRM</p>\n<P style=\"margin:0px;\"><input type=\"btn btn-primary\" value=\"Associate Account\" onclick=\"agile_gadget_open_popup(); return false;\" class=\"btn\" style=\"padding:2px 6px 2px;\">\n<span id=\"notify_user\" style=\"display:none; margin-left:20px; color:indianred;\"><i>Please enter your domain.</i></span>\n<span style=\"color:#98a6ad;\">Don't have an account? <a href=\"https://www.agilecrm.com/stripe?utm_source=google-apps&utm_medium=website&utm_campaign=integration\" target=\"_blank\">Sign up</a>.</span>\n</P>\n</div> ";
   });
 templates['search'] = template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [4,'>= 1.0.0'];

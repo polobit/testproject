@@ -222,14 +222,9 @@ function agile_init_gadget() {
 		Is_Localhost = true;
 		
 		// Lib Path 
-		//LIB_PATH = "http://localhost:8888/";
+		LIB_PATH = "http://localhost:8888/";
 		
-		//_agile.set_account('osrgf4f2r27u8a7l8aap05317d', 'localhost');	
-		LIB_PATH = "https://srija1.agilecrm.com/";
-		
-		//LIB_PATH = "https://narmada.agilecrm.com/";
-		_agile.set_account('qs0ug1e05olqjps6k0839b0qk0', 'srija1');
-		//_agile.set_account('q8i1fa9n962hco1v88it4e9g58', 'narmada');		
+		_agile.set_account('3en1iuvi164jimp4n78u5o1nkp', 'localhost');	
 		
 		agile_user_associated();
 		
@@ -299,15 +294,15 @@ function agile_user_associated() {
 	//Contacts_Json[emails[0].email] = emails[0];
 	$.each(emails, function(index, value)
 	{
-		//if(value.email != agile_get_prefs(PREFS_EMAIL))
+		if(value.email != agile_get_prefs(PREFS_EMAIL))
 			Contacts_Json[value.email] = value;
 	});
 	
-	//delete Contacts_Json[agile_get_prefs(PREFS_EMAIL)];
+	delete Contacts_Json[agile_get_prefs(PREFS_EMAIL)];
 	head.js(LIB_PATH + 'lib/bootstrap.min.js', LIB_PATH + 'jscore/md5.js', function() {
 		
 		set_html($('#agile_content'), 'search', Contacts_Json);
-		$('#agile_content').prepend('<span style="float:right;cursor:pointer;margin-top:10px;margin-right:2px;" id="delete-button"><i class="icon-trash" data-toggle="tooltip" title="Uninstall" style="font-size:1em;"></i></span>');
+		$('#agile_content').prepend('<span style="float:right;cursor:pointer;margin-top:14px;margin-right:2px;" id="delete-button"><i class="icon-trash" data-toggle="tooltip" title="Uninstall" style="font-size:1em;"></i></span>');
 		$('#delete-button').live('click',agile_delete_all_prefs);
 	});
 	

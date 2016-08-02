@@ -23,14 +23,9 @@ function agile_init_gadget() {
 		Is_Localhost = true;
 		
 		// Lib Path 
-		//LIB_PATH = "http://localhost:8888/";
+		LIB_PATH = "http://localhost:8888/";
 		
-		//_agile.set_account('osrgf4f2r27u8a7l8aap05317d', 'localhost');	
-		LIB_PATH = "https://srija1.agilecrm.com/";
-		
-		//LIB_PATH = "https://narmada.agilecrm.com/";
-		_agile.set_account('qs0ug1e05olqjps6k0839b0qk0', 'srija1');
-		//_agile.set_account('q8i1fa9n962hco1v88it4e9g58', 'narmada');		
+		_agile.set_account('3en1iuvi164jimp4n78u5o1nkp', 'localhost');	
 		
 		agile_user_associated();
 		
