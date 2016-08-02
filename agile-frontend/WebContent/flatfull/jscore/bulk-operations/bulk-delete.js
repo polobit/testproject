@@ -251,21 +251,28 @@ $(function(){
 			}
 		});
 		if(checked){
-			var err_msg = "";
 			
-			if((!hasScope("DELETE_DEALS") && hasScope("VIEW_DEALS")) || !hasScope("EDIT_CONTACT"))
-			{
-				err_msg = "You may not have permission to delete some of the deals selected. Proceeding with this operation will delete only the deals that you are permitted to delete.<br/><br/> Do you want to proceed?";
-			}
-			else if(!hasScope("EDIT_CONTACT"))
-			{
-				err_msg = DEALS_CONTACTS_BULK_DELETE_ERROR;
-			}
-
-			if((!hasScope("DELETE_DEALS") && hasScope("VIEW_DEALS")) || !hasScope("EDIT_CONTACT"))
+			if(!hasScope("DELETE_DEALS"))
 			{
 				showModalConfirmation("Bulk Delete", 
-						err_msg, 
+						"You do not have permission to delete deals.", 
+						function (){
+							return;
+						}, 
+						function(){
+							return;
+						},
+						function() {
+							
+						},
+						"Cancel", "");
+				return;
+			}
+
+			if(!hasScope("EDIT_CONTACT"))
+			{
+				showModalConfirmation("Bulk Delete", 
+						DEALS_CONTACTS_BULK_DELETE_ERROR, 
 						function (){
 					
 					// Customize the bulk delete operations
