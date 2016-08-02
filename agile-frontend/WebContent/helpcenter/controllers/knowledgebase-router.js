@@ -50,6 +50,10 @@ var HelpcenterRouter = Backbone.Router.extend({
 				url : "/helpcenterapi/api/knowledgebase/categorie/" + categorie_id,
 		        postRenderCallback: function(el, data){
 
+		        	if(!data.id){
+
+		        		window.history.back();
+		        	}
 		        	Helpcenter_Util.setBreadcrumbPath('categorie-sections-breadcrumb', data);
 
 		        	//Initializing base collection with groups URL
