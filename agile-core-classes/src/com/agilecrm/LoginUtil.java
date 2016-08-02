@@ -148,6 +148,7 @@ public class LoginUtil
 		try
 		{
 			UserFingerPrintInfo info = UserFingerPrintInfo.getUserAuthCodeInfo(req);
+			System.out.println("info.finger_print =  " + info.finger_print);
 		    if(StringUtils.isBlank(info.finger_print))
 		    	return;
 			    
