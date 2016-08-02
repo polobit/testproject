@@ -311,7 +311,7 @@
 <script id = "contacts-custom-view-last_emailed-template" type="text/html">
 	<td class='data' data='{{id}}'>
        <div class="text-ellipsis " style="width:12em;" >
-	   	  <span>{{epochToHumanDate "dd mmm yyyy" last_emailed}}</span>
+	   	  <span>{{epochToHumanDateInFormat last_emailed}}</span>
        </div>
 	</td>
 </script>
@@ -319,7 +319,7 @@
 <script id = "contacts-custom-view-last_called-template" type="text/html">
 	<td class='data' data='{{id}}'>
        <div class="text-ellipsis " style="width:12em;">
-	   	  <span>{{epochToHumanDate "dd mmm yyyy" last_called}}</span>
+	   	  <span>{{epochToHumanDateInFormat last_called}}</span>
        </div>
 	</td>
 </script>
