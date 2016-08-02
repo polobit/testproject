@@ -1753,7 +1753,7 @@ public class PortletUtil {
 	 * @returns JSONObject
 	 * 
 	 */
-	public static JSONObject getGoalsAttainedData(Long owner_id,Long minTime,Long maxTime)
+	public static JSONObject getGoalsAttainedData(Long owner_id,Long minTime,Long maxTime,Long timeZone)
 	{
 		int count=0;
 		Long count_goal=0L;
@@ -1772,7 +1772,7 @@ public class PortletUtil {
 		}
 		json.put("dealcount", count);
 		json.put("dealAmount", value);
-		List<Goals> goals=GoalsUtil.getAllGoalsForUser(owner_id, minTime, maxTime);
+		List<Goals> goals=GoalsUtil.getAllGoalsForUser(owner_id, minTime, maxTime,timeZone);
 		if(goals!=null)
 		{
 			for(Goals goal:goals){
