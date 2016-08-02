@@ -11,7 +11,6 @@ var Push_Notification_Event_View = Base_Model_View.extend({
 		    events: {
 		 		'keyup #notification-title' : 'notificationTitleAdd',
 		 		'keyup #notification-message' : 'notificationMessageAdd',
-		 		'keyup #notification-link' : 'notificationLinkAdd',
 		 		'change #uploadIconToS3Btn' : 'uploadNotificationIcon',
 		 		'click #prev-notification-icon' : 'changeNotificationIcon',
 		 		'change #notification-icon' : 'changeNotificationIcon',
@@ -31,16 +30,7 @@ var Push_Notification_Event_View = Base_Model_View.extend({
 				$("#prev-notification-message").text($("#notification-message").val());
 
 				if($("#prev-notification-message").text()=="")
-					 $("#prev-notification-message").text("Notification message body should maximum 160 character.");
-			},
-			
-			notificationLinkAdd: function(e)
-			{
-				$("#prev-notification-link").text($("#notification-link").val());
-
-				if($("#prev-notification-link").text()=="")
-					 $("#prev-notification-link").text("https://prashannjeet-dot-sandbox-dot-agilecrmbeta.appspot.com");
-				
+					 $("#prev-notification-message").text("Notification Message ");
 			},
 
 			uploadNotificationIcon: function(e)

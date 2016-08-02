@@ -3,7 +3,7 @@
 		<div class="row">
     		<div class="col-md-12">
         		<h3 class="font-thin h3 pull-left">Push Notifications</h3>
-					<a href="#push-notification-add" class="btn btn-sm btn-default pull-right btn-addon" style="position:relative"><span><i class="icon-plus-sign" /></span> Add Notification</a>
+					<a href="#push-notification-add" class="btn btn-sm btn-default pull-right btn-addon" style="position:relative"><span><i class="icon-plus-sign" /></span> Add Push Notification</a>
 				<div class="clearfix"></div> 
     		</div>
 		</div>
@@ -19,13 +19,19 @@
 							<img alt="Clipboard" src="{{getS3ImagePath '/img/clipboard.png'}}" />
 						</div>
 						<div class="box-right pull-left">
-							<h4 class="m-t-none">You do not have any Push Notification Templates currently.</h4>
-								<div class="text">
-					     							Create the push notification and send on a website. Whenever a you run the campaign. 
+							<h4 class="m-t-none">Engage with your audience easily through Browser Push Notification.</h4>
+								<div class="text">Define the Push Notifications and engage with your audience both on the web page and off the web page.
 								</div>
-								<a href="#push-notification-add" class="m-t-xs btn blue btn-slate-action btn-info btn-addon btn-sm"><i class="icon-plus-sign"></i> Add Notification</a>
+								<a href="#push-notification-add" class="m-t-xs btn blue btn-slate-action btn-info btn-addon btn-sm"><i class="icon-plus-sign"></i> Add Push Notification</a>
 						</div>
 						<div class="clearfix"></div>
+						<br>
+						<p class="text" style="text-align:center;">For Push Notifications to work, Just complete the below 3 steps and you are ready to Go. </p>
+						<div id="whitelist-disabled">
+							<pre class="prettyprint">1.Create a directory with name notification in your web hosting directory and place the below files 
+   under it.<br>  <a href="/downloadpush?q=json" style="color: blue">Click here to dowhload manifest.json</a><br>  <a href="/downloadpush?q=js" style="color: blue">Click here to download agile-servise-workers.js</a><br>2.Create a Web rule of Type Enable Push Notification<br>3.Your website should be certified (Valid HTTPS)
+							</pre>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -54,9 +60,9 @@
 	<div class="col-md-3">
         <div class="data-block">
             	<h4 class="h4 m-t-none m-b-sm"> What is Push Notification?	</h4>
-				<p>
-					Push Notification created using the <a target="_blank" href="formbuilder">Form Builder</a> can be placed on your website or app. These Forms are readily linked to your Agile account. When a visitor fills the form, a Contact is created and subsequent web activity is logged automatically.
+				<p>Engage with your audience easily through Browser notification. Schedule and send messages to engage the right users at the most relevant time through our Marketing Campaigns.
 				</p>
+				<img src="//doxhze3l6s7v9.cloudfront.net/beta/static//img/push-noty-template.png" class="img-responsive w-full">
     	</div>
 	</div>
  </div>
@@ -97,7 +103,7 @@
 
 <div class="wrapper-sm">
 <div class="row">
-<div class="col-md-7">
+<div class="col-md-8">
     <div class="panel panel-default">
     <div class="panel-body">
         <form id='notificationForm' name="notificationForm" class="form-horizontal" accept-charset="UTF-8">
@@ -112,33 +118,33 @@
 				<div class="control-group form-group">
                       <label class="control-label col-sm-2 col-xs-12">Title<span class="field_req">*</span></label>
                 	 <div class="controls col-sm-10 col-xs-12">
-                    	 <input type="text" maxlength=25 placeholder="Title of the Push Notification maximum 25 Characters." class="required form-control" id="notification-title" name="notificationTitle"/>
+                    	 <input type="text" maxlength=45 placeholder="Maximum 45 Characters." class="required form-control" id="notification-title" name="notificationTitle"/>
                     </div>
                 </div>
 
                 <div class="control-group form-group">
                     <label class="control-label col-sm-2 col-xs-12">Message<span class="field_req">*</span></label>
                 	 <div class="controls col-sm-10 col-xs-12">
-                    	 <textarea type="text" maxlength=160 placeholder="Message size maximum 160 Characters." class="required form-control " id="notification-message" name="notificationMessage"/>
+                    	 <textarea type="text" maxlength=160 placeholder="Maximum 160 Characters." class="required form-control " id="notification-message" name="notificationMessage"/>
                     </div>
                 </div>
                
                <div class="control-group form-group">
-                      <label class="control-label col-sm-2 col-xs-12">Link URL</label>
+                      <label class="control-label col-sm-2 col-xs-12">Destination URL</label>
                 	 <div class="controls col-sm-10 col-xs-12">
-                    	 <input type="url" placeholder="Enter URL with http:// or https://" class="form-control" id="notification-link" name="notificationLink"/>
+                    	 <input type="url" placeholder="URL to open when user clicks the push notification." class="form-control" id="notification-link" name="notificationLink"/>
                     </div>
                 </div>
 
                 <div class="control-group form-group">
-                      <label class="control-label col-sm-2 col-xs-12">Icon URL</label>
+                      <label class="control-label col-sm-2 col-xs-12">Image URL</label>
                 	 <div class="controls col-sm-10 col-xs-12">
-                    	 <input type="url" placeholder="Enter URL with http:// or https://" class="form-control" id="notification-icon" name="notificationIcon"/>
+                    	 <input type="url" placeholder="Image address url (Recommended 200*200 px)" class="form-control" id="notification-icon" name="notificationIcon"/>
                 	</div>
                 </div>
 
                <div class="control-group form-group col-sm-8">
-			   <div class="control-label col-sm-3 col-xs-5"></div>
+			   <div class="control-label col-sm-3 col-xs-5">Tracking</div>
 			        <div class="controls col-sm-5 col-xs-5">
 			              <select name="push_param" class="form-control">
 			                   <option value="YES">Yes</option>
@@ -168,7 +174,7 @@
 </div>
 </div>
 
-<div class="col-md-5" >
+<div class="col-md-4" style="padding:1px 7px 0px 0px" >
     <div class="panel panel-default" >
       <div class="panel-heading h4">
            <p>Preview</p>
@@ -176,25 +182,18 @@
       <div class="overflow-hidden" style="margin: 10px; box-shadow: 1px 1px 20px 0px #afaaaa;">
                 <div class="notification-demo">
                     <div class="row" style="padding: 10px;">
-                       <div class="col-md-3 col-xs-3" style="width: 20%">
-                            <img id="prev-notification-icon" class="js-custom-notifications-image" src="https://media.licdn.com/mpr/mpr/shrink_200_200/AAEAAQAAAAAAAAWJAAAAJDQwNmRhNGNmLTlmNWMtNGZkMC1hZDJhLWI0ODE1NDQxMmNhNA.png" alt="" style="width: 136%;">
+                       <div class="col-md-3 col-xs-3" style="width: 25%">
+                            <img id="prev-notification-icon" class="js-custom-notifications-image" src="https://media.licdn.com/mpr/mpr/shrink_200_200/AAEAAQAAAAAAAAWJAAAAJDQwNmRhNGNmLTlmNWMtNGZkMC1hZDJhLWI0ODE1NDQxMmNhNA.png" alt="" style="width: 140%;">
                         </div>
-                            <div class="col-md-9 col-xs-9">
+                            <div class="col-md-9 col-xs-9" style="padding-left: 20px;">
                                 <p style="color: black;" id = "prev-notification-title" class="h4 p-b-sm">Notification Title </p>
-                                <p style="color: black;" id="prev-notification-message" class="h5 p-b-sm">Notification bodymessage should be within 160 characers. Agile CRM</p>
-                                <p  style="color: #989898;" class="h6 p-b-xs"><b>www.prashannjeet.agilcrm.com</b> </p>
+                                <p style="color: black;" id="prev-notification-message" class="h5 p-b-sm">Notification Message </p>
+                                <p  style="color: #989898;" class="h6 p-b-xs"><b>yourwebsite.com</b> </p>
                             </div>
                         </div>
                     </div>
-                </div><div class="panel-body">
-            
-            
-        <div class="widget">
-           <p class="h5" style="color: black;">URL to open when user clicks the notification:</p>
-            <p id="prev-notification-link" class=" text-primary" data-bind="offerPageURL">https://prashannjeet-dot-sandbox-dot-agilecrmbeta.appspot.com</p>
-     </div>
-</div>
-</div>
+                </div>
+			</div>
 </div>
 </div>
 </div>

@@ -2,7 +2,7 @@
     "name": "Push Notification",
     "thumbnail": "json/nodes/images/common/push.png",
     "icon": "json/nodes/icons/common/push.png",
-    "info": "Send a browser push notification to your contacts.",
-    "help": "Send a browser push notification to your contacts.",
+    "info": "Engage with your audience through Browser Push notification.",
+    "help": "Engage with your audience through Browser Push notification.",
     "path": "json/nodes/common/push_notification.js"
 }
