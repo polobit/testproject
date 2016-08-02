@@ -44,9 +44,9 @@
     {{/if_equals}}     
 
     {{#if_equals stream_type "Mentions"}}
-         <p class="stream-type-icon icon mentions-small-title text-muted" title="Mentions Stream">@</p>
+         <p class="stream-type-icon icon mentions-small-title text-muted" title="{{agile_lng_translate 'social' 'mentions-stream'}}">@</p>
     {{else}}
-         <i class="stream-type-icon icon {{get_stream_icon stream_type}} text-muted" title="{{stream_type}} Stream"></i>
+         <i class="stream-type-icon icon {{get_stream_icon stream_type}} text-muted" title="{{stream_type}} {{agile_lng_translate 'social' 'stream'}}"></i>
     {{/if_equals}}
    </span>
 <span id="stream-spinner-modal-{{id}}" class="waiting-symbol">
@@ -73,11 +73,11 @@
     <span class="attribution txt-mute txt-sub-antialiased">@{{screen_name}}</span>
    </h4> 
    <span class="column-header-link is-actionable">
-      <i class="pull-right icon icon-trash stream-delete header-action" id={{id}} title="Delete Stream"></i>                     
+      <i class="pull-right icon icon-trash stream-delete header-action" id={{id}} title="{{agile_lng_translate 'social' 'delete-stream'}}"></i>                     
       {{#if_equals network_type "TWITTER"}}         
-          <i class="compose-status icon icon-edit compose-message header-action" stream-id={{id}} title="Compose Message"></i>
+          <i class="compose-status icon icon-edit compose-message header-action" stream-id={{id}} title="{{agile_lng_translate 'social' 'compose-message'}}"></i>
     {{else}}
-        <i class="compose-status icon icon-edit share-update header-action" stream-id={{id}} title="Share an update"></i>
+        <i class="compose-status icon icon-edit share-update header-action" stream-id={{id}} title="{{agile_lng_translate 'social' 'share-an-update'}}"></i>
     {{/if_equals}} 
    </span>   
 </header>
@@ -108,7 +108,7 @@
            <header class="tweet-header">        
             <a class="account-link link-complex block" href="https://twitter.com/{{user.screen_name}}" rel="user" target="_blank"> 
              <div class="thumb thumb-wrapper tweet-img">  
-             <img class="r-2x" src={{user.profile_image_url}}  alt="{{user.screen_name}}'s avatar" title="Klout Score {{klout_score}}">   
+             <img class="r-2x" src={{user.profile_image_url}}  alt="{{user.screen_name}}'s avatar" title="{{agile_lng_translate 'social' 'klout-score'}} {{klout_score}}">   
              </div> 
              
           </a>  
@@ -135,44 +135,44 @@
           <ul class="tweet-actions">
                  {{#if direct_message}}
                     <li> <a class="tweet-action add-twitter-contact" href="#personModal" class="btn btn-sm btn-default right" data-toggle="modal"> 
-                            <i class="icon icon-plus-sign" title="Add Contact"></i>                            
+                            <i class="icon icon-plus-sign" title="{{agile_lng_translate 'contact-details' 'add-contact'}}"></i>                            
                          </a> </li>
                  {{else}}
                     <li> <a class="tweet-action" href="https://twitter.com/{{user.screen_name}}/status/{{id_str}}" rel="url" target="_blank"> 
-                            <i class="icon icon-external-link" title="Detail Status"></i>                            
+                            <i class="icon icon-external-link" title="{{agile_lng_translate 'social' 'detail-status'}}"></i>                            
                          </a> </li>         
                     <li> <a class="tweet-action add-twitter-contact" href="#personModal" class="btn btn-sm btn-default right" data-toggle="modal"> 
-                            <i class="icon icon-plus-sign" title="Add Contact"></i>                            
+                            <i class="icon icon-plus-sign" title="{{agile_lng_translate 'contact-details' 'add-contact'}}"></i>                            
                          </a> </li>                  
             <li> <a class="tweet-action" href="#social" rel="reply"> 
-                            <i class="icon icon-reply reply-message" title="Reply"></i>                             
+                            <i class="icon icon-reply reply-message" title="{{agile_lng_translate 'contact-details' 'reply'}}"></i>                             
                          </a> </li>                    
             <li> <a class="tweet-action" href="#social" rel="retweet">
                          {{#if retweeted_by_user}}
-                           <i class="icon icon-retweet undo-retweet-status" title="Retweet" style="color:#00FF40;"></i>
+                           <i class="icon icon-retweet undo-retweet-status" title="{{agile_lng_translate 'social' 'retweet'}}" style="color:#00FF40;"></i>
                          {{else}}
                              {{#if tweetowner_not_streamuser}}
-                                 <i class="icon icon-retweet retweet-status" title="Retweet"></i>
+                                 <i class="icon icon-retweet retweet-status" title="{{agile_lng_translate 'social' 'retweet'}}"></i>
                              {{/if}}
                          {{/if}}
                          </a> </li>
             <li> <a class="tweet-action" href="#social" rel="favorite"> 
                          {{#if favorited_by_user}}
-                            <i class="icon icon-star undo-favorite-status" style="color:orange;" title="Unfavorite from {{user.screen_name}}"></i>                             
+                            <i class="icon icon-star undo-favorite-status" style="color:orange;" title="{{agile_lng_translate 'social' 'unfavorite-from'}} {{user.screen_name}}"></i>                             
                          {{else}}
-                            <i class="icon icon-star favorite-status" title="Favorite from {{user.screen_name}}"></i>                             
+                            <i class="icon icon-star favorite-status" title="{{agile_lng_translate 'social' 'favorite-from'}} {{user.screen_name}}"></i>                             
                          {{/if}}
                          </a> </li>
                  {{/if}}
             <li> 
                          <a id="{{id_str}}_more_options" class="tweet-action more-options" href="#social"> 
-                            <i class="icon icon-ellipsis-horizontal" title="More Options"></i> 
+                            <i class="icon icon-ellipsis-horizontal" title="{{agile_lng_translate 'social' 'more-options'}}"></i> 
                          </a>
                <ul id="{{id_str}}_more_options_list" class="pull-right more-options-list dropdown-menu" role="menu">
-                                <li role="presentation"><a href="#social" class="reply-message" role="menuitem">Tweet to @{{user.screen_name}}</a></li>               
+                                <li role="presentation"><a href="#social" class="reply-message" role="menuitem">{{agile_lng_translate 'social' 'tweet-to'}} @{{user.screen_name}}</a></li>               
                             {{#if deletable_tweet}}
                                 <li class="divider"></li>
-                                <li role="presentation"><a href="#social" class="delete-tweet" role="menuitem">Delete</a></li>                                
+                                <li role="presentation"><a href="#social" class="delete-tweet" role="menuitem">{{agile_lng_translate 'contact-details' 'delete'}}</a></li>                                
                             {{/if}}
                </ul>
                     </li>  

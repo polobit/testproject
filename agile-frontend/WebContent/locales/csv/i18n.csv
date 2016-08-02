@@ -681,7 +681,7 @@ landing-pages.create-a-cname-record,Create a CNAME record in your DNS settings w
 admin-settings-users.upload-and-attach-documents-to-contacts,Upload and attach documents to contacts&#44; deals or cases,Subir y adjuntar documentos a los contactos&#44; ofertas o casos
 domain-user.email-edited,You Email has been updated successfully. Logging out...,Usted correo electrónico se ha actualizado correctamente. Saliendo de tu cuenta...
 campaigns.to-get-best-experience,To get the best experience&#44  we recommend you to use,Para obtener la mejor experiencia&#44; recomendamos que utilice
-contacts.invalid-viewer,Sorry&#44; you do not have permission to view this Contact.,Lo sentimos $ # 44; usted no tiene permiso para ver este contacto.
+contacts.invalid-viewer,Sorry&#44; you do not have permission to view this Contact.,Lo sentimos $#44; usted no tiene permiso para ver este contacto.
 contacts-view.acceptable-date-format-are,Acceptable date format are 'MM/dd/yyyy' or 'MM-dd-yyyy',"Los formatos de fecha aceptables son ""MM / dd / aaaa"" o ""MM-dd-aaaa '"
 task.you-can-save-specific-information,You can save specific information about task as a Note.,Puede guardar información específica acerca de la tarea como una nota.
 pages.unlink-fb-confirm,Are you sure you want to unlink your Facebook account ?,¿Está seguro de que desea desvincular su cuenta de Facebook?
@@ -5065,3 +5065,38 @@ tickets.priority-and-status,Priority & Status,Prioridad y Estado
 emailbuilder.updated,Template updated.,Plantilla actualizada.
 emailbuilder.saved,Template saved.,Guardada de la plantilla .
 widgets.reset-settings,Reset settings,Reiniciar ajustes
+socialsuite.direct-message,Direct Message,Mensaje directo
+socialsuite.reply-tweet,Reply Tweet,Responder Tweet
+socialsuite.reply-message-to,Reply Message to,Responder Mensaje para
+socialsuite.scheduling,Scheduling,programación
+socialsuite.no-tweet,NoTweet,NoTweet
+socialsuite.no-tweet-show,No Tweets to show here.,No hay tweets para mostrar aquí .
+socialsuite.new-tweet,new Tweet,nuevo tweet
+socialsuite.new-tweets,new Tweets,nuevos Tweets
+socialsuite.request-rate-exceed,Request rate limit exceeded&#44; Retry after some time.,el límite de solicitudes superó &#44; Pruebe después de algún tiempo .
+socialsuite.retry,Retry again.,Vuelva a intentar de nuevo.
+socialsuite.no-more-updates,No more updates available for stream,No hay más actualizaciones disponibles para la corriente
+socialsuite.limit-reached,Request rate limit exceeded&#44; Retry after some time.,el límite de solicitudes superado &#44; vuelva a intentar después de algún tiempo .
+socialsuite.check-internet,Please&#44; check your internet connection.,Por favor revise su conexion a internet.
+socialsuite.search-keyword,Search Keyword,buscar la palabra clave
+socialsuite.no-fav-stream,You have to select your favorite stream type.,Usted tiene que seleccionar el tipo de flujo preferido.
+socialsuite.retry-after,Retry after sometime.,Volver a intentar después de algún tiempo .
+socialsuite.now-follow,Now you are following,Ahora usted está siguiendo
+socialsuite.now-not-follow,Now you are not following,Ahora usted no está siguiendo
+socialsuite.now-blocked,You just blocked,Usted acaba bloqueado
+socialsuite.now-unblocked,You just unblock,Usted acaba de desbloquear
+socialsuite.tweeted-already,Whoops! You already tweeted that...,¡Lo sentimos! Ya Twitter que ...
+socialsuite.tweeted-no-exists,Sorry&#44; that tweet does not exist.,En este momento &#44;no existe ese tweet .
+socialsuite.unfollow,Unfollow,Dejar de seguir
+socialsuite.unblock,Unblock,Desatascar
+socialsuite.block,Block,Bloquear
+socialsuite.tweet-deleted,Your tweet has been deleted.,Su tweet ha sido eliminado.
+socialsuite.page-not-foumd,Sorry&#44; that page does not exist,lo siento&#44; esa pagina no existe
+socialsuite.tweet-what-happening,What's happening?,¿Que está pasando?
+socialsuite.tweet-status-from,Status from,el estado de
+socialsuite.tweet-message-from,Direct message from,mensaje directo de
+socialsuite.tweet-tip,Tip: you can send a message to anyone who follows you.,Sugerencia : puedes enviar un mensaje a cualquiera que te siga .
+socialsuite.tweet-status-of,Status of,Estado de
+socialsuite.tweet-posted,Your Tweet was posted!,Su Tweet fue publicada !
+socialsuite.your-tweet-to,Your Tweet to,Tu Tweet
+socialsuite.tweet-has-sent,has been sent!,¡ha sido enviado!

@@ -7,16 +7,16 @@
          <div class="modal-header">
 	        <button class="close" data-dismiss="modal">x</button>
 			{{#if_equals headline "Direct Message"}}
-	        	<h3><i class="icon-envelope"></i> {{headline}}</h3>
+	        	<h3><i class="icon-envelope"></i> {{agile_lng_translate 'socialsuite' 'direct-message'}}</h3>
 			{{/if_equals}}
 			{{#if_equals headline "Tweet"}}
-				<h3><i class="icon-twitter"></i> {{headline}}</h3>
+				<h3><i class="icon-twitter"></i> {{agile_lng_translate 'widgets' 'tweet'}}</h3>
 			{{/if_equals}}
             {{#if_equals headline "Reply Tweet"}}
-				<h3><i class="icon-share"></i> {{headline}}</h3>
+				<h3><i class="icon-share"></i> {{agile_lng_translate 'socialsuite' 'reply-tweet'}}</h3>
 			{{/if_equals}}
             {{#if_equals headline "Retweet"}}
-				<h3><i class="icon-retweet"></i> {{headline}}</h3>
+				<h3><i class="icon-retweet"></i> {{agile_lng_translate 'social' 'retweet'}}</h3>
 			{{/if_equals}}
         </div>
         <div class="modal-body agile-modal-body">	      
@@ -38,18 +38,18 @@
 						{{info}}
 					</div>	                
 	                <div class="control-group form-group">
-	                    <label class="control-label"><b>Message: </b><span class="field_req">*</span></label>
+	                    <label class="control-label"><b>{{agile_lng_translate 'portlets' 'message'}}: </b><span class="field_req">*</span></label>
 	                    <div class="controls" style="margin-left:0px;">
                             {{#if message}} <!-- Edit Scheduled Update -->
                               <input name="id" type="hidden" value={{id}} />
 							  {{#if_equals headline "Reply Tweet"}}
-	                        	<textarea rows="4" class="required form-control w-full twit-tweet-limit" placeholder="Reply Message to {{description}}" name="message" id="twit-tweet" data-provide="limit" data-counter="#counter" >{{message}}</textarea>
+	                        	<textarea rows="4" class="required form-control w-full twit-tweet-limit" placeholder="{{agile_lng_translate 'socialsuite' 'reply-message-to'}} {{description}}" name="message" id="twit-tweet" data-provide="limit" data-counter="#counter" >{{message}}</textarea>
 							  {{else}} <!-- tweet and direct msg -->
 								<textarea rows="4" class="required form-control w-full twit-tweet-limit" placeholder="{{description}}" name="message" id="twit-tweet" data-provide="limit" data-counter="#counter" >{{message}}</textarea>
 							  {{/if_equals}}
                             {{else}}
                               {{#if_equals headline "Reply Tweet"}}
-	                        	<textarea rows="4" class="required form-control w-full twit-tweet-limit" placeholder="Reply Message to {{description}}" name="message" id="twit-tweet" data-provide="limit" data-counter="#counter" >{{description}}&nbsp</textarea>
+	                        	<textarea rows="4" class="required form-control w-full twit-tweet-limit" placeholder="{{agile_lng_translate 'socialsuite' 'reply-message-to'}} {{description}}" name="message" id="twit-tweet" data-provide="limit" data-counter="#counter" >{{description}}&nbsp</textarea>
 							  {{else}} 
                                    {{#if_equals headline "Retweet"}}
                                          <textarea rows="4" class="required form-control-F-width"  id="twit-retweet" disabled>{{description}}</textarea>                            
@@ -64,23 +64,23 @@
 	                </div>	   
          
                     {{#if_equals headline "Retweet"}}
-                      <div id="tweet_scheduling" class="tweet-scheduling" title="Scheduling" style="display:none;">
+                      <div id="tweet_scheduling" class="tweet-scheduling" title="{{agile_lng_translate 'socialsuite' 'scheduling'}}" style="display:none;">
                     {{else}}
-                      <div id="tweet_scheduling" class="tweet-scheduling" title="Scheduling">
+                      <div id="tweet_scheduling" class="tweet-scheduling" title="{{agile_lng_translate 'socialsuite' 'scheduling'}}">
                     {{/if_equals}}	
                         <i class="icon-time icon-2x" style="color: gray;"></i>
                       </div>
                       <div id="schedule_controls" class="row" style="display:none;">
                         <div id="schedule_date" class="control-group form-group col-md-6">
-                          <label class="control-label"><b>Date </b></label>
+                          <label class="control-label"><b>{{agile_lng_translate 'contacts-view' 'date'}} </b></label>
                           <div class="controls">
                             <input id="scheduled_date" class="required form-control date" type="text" name="scheduled_date" placeholder="{{dateFormat}}">							
                           </div>
                         </div>
                         <div id="schedule_time" class="control-group form-group col-md-6">
-                          <label class="control-label"><b>Time </b></label>
+                          <label class="control-label"><b>{{agile_lng_translate 'report-add' 'time'}} </b></label>
                           <div class="controls">
-                             <input id="scheduled_time" class="required form-control" type="text" name="scheduled_time" placeholder="time">		
+                             <input id="scheduled_time" class="required form-control" type="text" name="scheduled_time" placeholder="{{agile_lng_translate 'report-add' 'time'}}">		
                           </div>
                         </div>
                       </div> 
