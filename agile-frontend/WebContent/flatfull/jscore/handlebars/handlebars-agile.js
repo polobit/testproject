@@ -1037,9 +1037,11 @@ function getCount(collection)
 }
 function getSimpleCount(collection)
 {
-	if (collection[0] && collection[0].count && (collection[0].count != -1))
-		return collection[0].count ;
-	else
+	for(var i=0;i<collection.length;i++){
+		if (collection[i] && collection[i].count && (collection[i].count != -1))
+			return collection[i].count ;
+			
+			}
 		return collection.length ;
 }
 function getTaskCount(collection)
