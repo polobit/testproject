@@ -636,7 +636,7 @@ calendar.saving-url-error,Something went wrong as your schedule url was not upda
 contact-details.you-have-not-yet-setup-the-javascript-api-on-your website,You have not yet setup the Javascript API on your website.,Usted no ha configurado aún la API de Javascript en su página web.
 campaigns.tag-removed-desc,Add contact to a campaign when a specified tag is removed.,Agregar contacto a campaña cuando una etiqueta específica sea eliminada.
 landing-pages.about,Landing page is a web page created to gather leads online.,La página de destino es una página web creada para reunir clientes potenciales en línea .
-social.pl-change-name,Please change the name and click on 'Create a Copy' again.,Por favor&#44; cambiar el nombre y haga clic en &quot;Crear una copia \'de nuevo.
+social.pl-change-name,Please change the name and click on 'Create a Copy' again.,Por favor&#44; cambiar el nombre y haga clic en ‘Crear una copia’ de nuevo.
 Contacts-view.upload-and-attach-documents-to-contacts-deals-cases,upload and attach documents to contacts&#44 deals or cases,cargar y adjuntar documentos a los contactos&#44; ofertas o casos
 prefs-data-sync.setup-contact-sync-with-your-gmail-account,Setup contact sync with your Gmail or Google Apps account.,Configure la sincronización de contactos con su cuenta de Gmail o Google Apps.
 tickets.configure-email-forwarding-desc,Configure email forwarding to receive tickets to Help Desk,Configurar el reenvío de correos para recibir tickets al Help Desk 
@@ -4337,7 +4337,7 @@ landing-pages.publish,Publish,Publicar
 plan-and-upgrade.regular,Regular,Regular
 help.support,Support,Soporte
 prefs-online-calendar.60-mins,60 Mins,60 minutos
-prefs-settings.spanish,Spanish,Español
+prefs-settings.spanish,Español,Español
 portlets.message,Message,Mensaje
 other.add-bcc,Add BCC,Añadir BCC
 web-rules.minutes,Minutes,Minutos
@@ -5156,3 +5156,26 @@ widgets.remove-twilio-widget,Please delete this widget and add the new improved 
 widgets.widget-settings-page,widget settings page,La página de configuración del widget
 widgets.click-to-see-more-logs,Click to see more call logs,Haga clic para ver más registros de llamadas
 email-templates.attachment,Attachment,Adjunto archivo
+widjets.send-message,Send Message,Enviar mensaje
+widjets.connetions,Connections,Conexiones
+widjets.no-updates-avaliable,No updates available,No hay actualizaciones disponibles
+widjets.click-to-see-more-updates,Click to see more updates,Haga clic para ver más actualizaciones
+widjets.refresh-to-get-updates,Refresh to get current updates,Actualizar para obtener actualizaciones actuales
+widjets.share-activity-in-linkedin,Share activity in LinkedIn,Compartir la actividad en LinkedIn
+widjets.build-professional-relationship-with-contacts,Build professional relationships with contacts and keep a tab on their business interests.,Construir relaciones profesionales con los contactos y mantener una ficha sobre sus intereses comerciales.
+widjets.link-your-linkedin,Link your LinkedIn,Enlace su LinkedIn
+widjets.chargify-sub-domain,chargify SubDomain,SubDomain Chargify
+widjets.linkedin-profile,LinkedIn Profile,Perfil de Linkedin
+widjets.modify-search,Modify search,Modificar la búsqueda
+widjets.paid,Paid,Pagado
+widjets.hang-up,Hang up,Colgar
+widjets.enter-number,Enter number,Ingresar número
+widjets.make-a-call-to,Make a call to,Hacer una llamada a
+widjets.record-the-call,Record the call,Grabar la llamada
+widjets.current-out-going-number,Current outgoing Number,Número de saludo actual
+widjets.we-recommend-bria,We recommend Bria,Recomendamos Bria
+widjets.enter-your-custom-widjet-details,Enter your custom widget details,Introduzca sus detalles personalizados para widgets
+widjets.help-scout,Help Scout,Help Scout
+widjets.twilio-call-log,Twilio Call Log,Twilio registro de llamadas
+widjets.tour-data,TowerData,TowerData
+widjets.reset-settings,Reset settings,Reiniciar ajustes
