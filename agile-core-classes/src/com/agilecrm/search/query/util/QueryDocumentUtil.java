@@ -6,10 +6,12 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.TimeZone;
 
 import org.apache.commons.lang.StringUtils;
 
 import com.agilecrm.SearchFilter;
+import com.agilecrm.account.util.AccountPrefsUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.core.api.search.SearchAPI;
@@ -939,9 +941,33 @@ public class QueryDocumentUtil {
 		
 		lhs = SearchUtil.normalizeTextSearchString(lhs);
 		
+		String lhsMonth = lhs + "__mm__", lhsDate = lhs + "__dd__";
+		
 		if(condition.equals(RuleCondition.BY_MONTH_ONLY))
 		{
-			String partialDateQuery = lhs + "__mm__" + " = " + value;
+			Calendar cal = Calendar.getInstance();
+			cal.set(Calendar.MONTH, value);
+			
+			String partialDateQuery = lhsMonth + " = " + value;
+			
+			String timezoneOffset = AccountPrefsUtil.getTimeZoneInOffset();
+			
+			if(StringUtils.equalsIgnoreCase(timezoneOffset, "+00:00") 
+					&& StringUtils.contains(timezoneOffset, "+"))
+			{
+				int firstDayOfCurrentMonth = cal.getMinimum(Calendar.DAY_OF_MONTH);
+				int lastDayOfCurrentMonth = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
+				
+				cal.add(Calendar.MONTH, -1); // Goto previous month
+				int previousMonth = cal.get(Calendar.MONTH) + 1;
+				int lastDayOfPreviousMonth = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
+	
+				partialDateQuery =  "(" + lhsMonth + "=" + value + " AND " + "(" + lhsDate + "<" + lastDayOfCurrentMonth 
+						+ " AND "
+						+ lhsDate + ">=" + firstDayOfCurrentMonth
+						+"))";
+				partialDateQuery += " AND " + "(" + lhsMonth + "=" + previousMonth + " AND " + lhsDate + "=" + lastDayOfPreviousMonth + ")";
+			}
 			
 			query = buildNestedCondition(joinCondition, query, partialDateQuery);
 		}
@@ -956,9 +982,9 @@ public class QueryDocumentUtil {
 			
 			cal.add(Calendar.DATE, value);
 			
-			String partialDateQuery = lhs + "__mm__" + " = " + (cal.get(Calendar.MONTH) + 1);
+			String partialDateQuery = lhsMonth + " = " + (cal.get(Calendar.MONTH) + 1);
 			
-			partialDateQuery += " AND " +  lhs + "__dd__" + " = " + (cal.get(Calendar.DATE));
+			partialDateQuery += " AND " +  lhsDate+ " = " + (cal.get(Calendar.DATE));
 			
 			query = buildNestedCondition(joinCondition, query, partialDateQuery);
 		}
