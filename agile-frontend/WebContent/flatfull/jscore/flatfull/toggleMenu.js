@@ -394,6 +394,11 @@ $("#activityModal").on("click", "#eventDescriptionLink", function(e){
 	});
 
 	if(search_filters.length == 0 || $inputs.not(":checked").length == 1){
+		var $allitems = $("#advanced-search-fields-group a input");
+		/*$.each($allitems, function(index, data){
+           $inputs.filter("[value='" + data + "']").prop("checked", true);
+		});*/
+
 		$inputs.filter("[value='']").closest("a").click();
 	}
 
