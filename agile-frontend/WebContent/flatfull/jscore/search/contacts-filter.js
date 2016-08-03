@@ -538,14 +538,14 @@ function show_chained_fields(el, data, forceShow)
 	});
 	condition.chained(LHS, function(chained_el, self) {
 
-		var $month_children = $('optgroup[label="Month"]', self).children();
-		var $days_children = $('optgroup[label="Days"]', self).children();
+		var $month_children = $('optgroup[label="Relative"]', self).children();
+		// var $days_children = $('optgroup[label="Days"]', self).children();
 
-		if($month_children.length == 0)
-			$('optgroup[label="Month"]', self).remove();
+		if($month_children.length == 0) // To remove optgroup
+			$('optgroup[label="Relative"]', self).remove();
 
-		if($days_children.length == 0)
-			$('optgroup[label="Days"]', self).remove();
+		// if($days_children.length == 0)
+			// $('optgroup[label="Days"]', self).remove();
 	});
 	
 	RHS_NEW.chained(condition);
@@ -628,8 +628,8 @@ function show_chained_fields(el, data, forceShow)
 		if($(this).find('option:selected').attr("field_type") !== "DATE")
 		{
 			var $condition_block = $(this).closest('td').siblings('td.codition-block');
-			$condition_block.find('optgroup[label="Month"]').remove();
-			$condition_block.find('optgroup[label="Days"]').remove();
+			$condition_block.find('optgroup[label="Relative"]').remove(); // Removes optgroup
+			// $condition_block.find('optgroup[label="Days"]').remove();
 
 		}
 
@@ -741,6 +741,7 @@ var _AGILE_CUSTOM_DIVIDER_ = ' _AGILE_CUSTOM_DIVIDER_';
 var custom_chained_filter = "custom_chained_class";
 function fillCustomFields(fields, el, callback, is_webrules)
 {
+	// To fix duplicate options in Select
 	if($(el).hasClass('hide'))
 		return;
 
@@ -772,7 +773,7 @@ function fillCustomFields(fields, el, callback, is_webrules)
 			
 			if(!is_webrules)
 			{
-				var $month_optgroup = condition.find('optgroup[label="Month"]');
+				var $month_optgroup = condition.find('optgroup[label="Relative"]');
 
 				var $defined_options = '<option value="DEFINED" custom_chained_class= "'+field.field_label+'_time'+ " " + _AGILE_CUSTOM_DIVIDER_ +'  custom_field" class="'+field.field_label +'_time '+ _AGILE_CUSTOM_DIVIDER_ + ' custom_field" field_type="'+field.field_type+'" field_name="'+field.field_label+'">is defined</option>' 
 									+
@@ -787,15 +788,15 @@ function fillCustomFields(fields, el, callback, is_webrules)
 				if(field.scope == "CONTACT")
 				{
 
-					if(condition.find('optgroup[label="Month"]').length == 0)
+					if(condition.find('optgroup[label="Relative"]').length == 0)
 					{
-						condition.append('<optgroup label="Month"></optgroup>');
-						condition.append('<optgroup label="Days"></optgroup>')
+						condition.append('<optgroup label="Relative"></optgroup>');
+						// condition.append('<optgroup label="Days"></optgroup>');
 					}
 					
-					condition.find('optgroup[label="Month"]').append('<option value="BY_MONTH_ONLY" custom_chained_class= "'+field.field_label+'_time'+ " " + _AGILE_CUSTOM_DIVIDER_ +'  custom_field" class="'+field.field_label +'_time '+ _AGILE_CUSTOM_DIVIDER_ + ' custom_field" field_type="'+field.field_type+'" field_name="'+field.field_label+'">on</option>');
+					condition.find('optgroup[label="Relative"]').append('<option value="BY_MONTH_ONLY" custom_chained_class= "'+field.field_label+'_time'+ " " + _AGILE_CUSTOM_DIVIDER_ +'  custom_field" class="'+field.field_label +'_time '+ _AGILE_CUSTOM_DIVIDER_ + ' custom_field" field_type="'+field.field_type+'" field_name="'+field.field_label+'">on</option>');
 
-					condition.find('optgroup[label="Days"]').append(
+					condition.find('optgroup[label="Relative"]').append(
 						'<option value="IS_AFTER_IN_DAYS" custom_chained_class= "'+field.field_label+'_time'+ " " + _AGILE_CUSTOM_DIVIDER_ +'  custom_field" class="'+field.field_label +'_time '+ _AGILE_CUSTOM_DIVIDER_ + ' custom_field" field_type="'+field.field_type+'" field_name="'+field.field_label+'">is after</option>'
 						+
 						'<option value="IS_BEFORE_IN_DAYS" custom_chained_class= "'+field.field_label+'_time'+ " " + _AGILE_CUSTOM_DIVIDER_ +'  custom_field" class="'+field.field_label +'_time '+ _AGILE_CUSTOM_DIVIDER_ + ' custom_field" field_type="'+field.field_type+'" field_name="'+field.field_label+'">is before</option>'
