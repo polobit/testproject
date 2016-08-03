@@ -136,8 +136,7 @@ function activateSliderAndTimerToTaskModal(el){
 	/**
 	 * Date Picker Activates datepicker for task due element
 	 */
-
-	// $('#task-date-1').datepicker({ format : CURRENT_USER_PREFS.dateFormat , weekStart : CALENDAR_WEEK_START_DAY});
+	 
 	$('#update-task-date-1').datepicker({ format : CURRENT_USER_PREFS.dateFormat , weekStart : CALENDAR_WEEK_START_DAY, autoclose: true});
 
 
