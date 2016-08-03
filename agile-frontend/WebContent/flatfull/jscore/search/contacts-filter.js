@@ -741,6 +741,9 @@ var _AGILE_CUSTOM_DIVIDER_ = ' _AGILE_CUSTOM_DIVIDER_';
 var custom_chained_filter = "custom_chained_class";
 function fillCustomFields(fields, el, callback, is_webrules)
 {
+	if($(el).hasClass('hide'))
+		return;
+
 	var lhs_element = $("#LHS > select > #custom-fields", el);
 	var rhs_element = $("#RHS", el);
 	var condition = $("#condition > select", el);
@@ -781,7 +784,7 @@ function fillCustomFields(fields, el, callback, is_webrules)
 				else
 					condition.append($defined_options);
 
-				if(($('#contact_type').val() == "PERSON") && (USER_BILLING_PREFS.planLimits.planName == "ENTERPRISE" || USER_BILLING_PREFS.planLimits.planName == "PRO"))
+				if(field.scope == "CONTACT")
 				{
 
 					if(condition.find('optgroup[label="Month"]').length == 0)
