@@ -1410,4 +1410,17 @@
 		<servlet-name>AmazonSESWebhook</servlet-name>
 		<url-pattern>/backend/amazonseswebhook</url-pattern>
 	</servlet-mapping>
+	
+	  <!-- message url for sendmessage node-->
+       <servlet>
+         <servlet-name>ReplySMSTwilioServlet</servlet-name>
+         <servlet-class>com.thirdparty.twilio.ReplySMSTwilioServlet</servlet-class>
+      </servlet>
+     
+      <servlet-mapping>
+         <servlet-name>ReplySMSTwilioServlet</servlet-name>
+         <url-pattern>/msgReplyActionUrl</url-pattern>
+      </servlet-mapping> 
+      
+    
 </web-app>
