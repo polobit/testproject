@@ -597,6 +597,7 @@ function getMergeFieldsWithOptGroups(uiFieldDefinition, selectEventHandler) {
 		"Owner" : {
 			"Owner Name" : "{{owner.name}}",
 			"Owner Email" : "{{owner.email}}",
+			"Owner Phone" : "{{owner.phone}}",
 			"Owner calendar URL" : "{{owner.calendar_url}}",
 			"Owner Signature" : "{{{owner.signature}}}"
 		},
