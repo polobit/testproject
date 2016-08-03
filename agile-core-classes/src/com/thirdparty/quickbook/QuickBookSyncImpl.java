@@ -383,6 +383,7 @@ public class QuickBookSyncImpl extends OneWaySyncService
 	}
 	catch (Exception e)
 	{
+		System.out.println("Inside updatelastsync"+e.getMessage());
 	    e.printStackTrace();
 	}
 
