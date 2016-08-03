@@ -334,6 +334,7 @@ function get_merge_fields(callback)
 			"Country":"{{location.country}}",
 			"Owner Name":"{{owner.name}}",
 			"Owner Email":"{{owner.email}}", 
+			"Owner Phone":"{{owner.phone}}",
 			"Calendar URL":"{{owner.calendar_url}}"
 			
 			}
@@ -383,6 +384,7 @@ function get_merge_field_objs()
 		"Country":"{{location.country}}",
 		"Owner Name":"{{owner.name}}",
 		"Owner Email":"{{owner.email}}", 
+		"Owner Phone":"{{owner.phone}}",
 		"Calendar URL":"{{owner.calendar_url}}"
 	}
 	
