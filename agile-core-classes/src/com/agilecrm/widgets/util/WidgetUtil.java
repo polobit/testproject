@@ -5,8 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javassist.expr.Instanceof;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -19,7 +17,6 @@ import com.agilecrm.widgets.CustomWidget;
 import com.agilecrm.widgets.Widget;
 import com.agilecrm.widgets.Widget.IntegrationType;
 import com.agilecrm.widgets.Widget.WidgetType;
-import com.amazonaws.services.autoscaling.model.Instance;
 import com.google.appengine.api.NamespaceManager;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Objectify;
@@ -417,7 +414,7 @@ public class WidgetUtil {
 					try {
 						obj.put("userID", aUser.id);
 						obj.put("isActive", userWidget.isActive);
-						obj.put("addByAdmin", userWidget.add_by_admin);
+						obj.put("addBy", userWidget.add_by);
 						obj.put("isAdminUser", dUser.is_admin);
 						userList.add(obj);
 					} catch (JSONException e) {
@@ -432,13 +429,13 @@ public class WidgetUtil {
 		return userList;
 	}
 	
-	public static List<Widget> getWigetUserListByAdmin(String name) {
+	public static List<Widget> getWigetUserListByAdmin(String name, Long agileUserID) {
 		try {
 			Objectify ofy = ObjectifyService.begin();
 
 			// Queries on widget name, with current AgileUser Key
 			return ofy.query(Widget.class).filter("name", name)
-					.filter("add_by_admin", true).list();
+					.filter("add_by", agileUserID).list();
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;

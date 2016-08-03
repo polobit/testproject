@@ -89,6 +89,11 @@ public class DealFilterUtil {
 	    rule.CONDITION = RuleCondition.EQUALS;
 	    rule.RHS = "Opportunity";
 	    filter.rules.add(rule);
+	    rule = new SearchRule();
+	    rule.LHS = "schema_version";
+	    rule.CONDITION = RuleCondition.EQUALS;
+	    rule.RHS = "1.0";	    
+	    filter.rules.add(rule);
 
 	    // Sets ACL condition
 	    UserAccessControlUtil.checkReadAccessAndModifyTextSearchQuery(UserAccessControl.AccessControlClasses.Opportunity.toString(), filter.rules, null);
@@ -149,6 +154,8 @@ public class DealFilterUtil {
 				SearchRule newRule = new SearchRule();
 				newRule.LHS = "pipeline";
 				newRule.CONDITION = rule.CONDITION;
+				if(rule.CONDITION.equals(RuleCondition.NOTEQUALS) && milestoneName != null && !milestoneName.equalsIgnoreCase("ALL@MILESTONES"))
+					newRule.CONDITION =RuleCondition.EQUALS;
 				newRule.RHS = pipeline_id;
 				modifiedRules.add(newRule);
 				if(milestoneName != null && !milestoneName.equalsIgnoreCase("ALL@MILESTONES"))

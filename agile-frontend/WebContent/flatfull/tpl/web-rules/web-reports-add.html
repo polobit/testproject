@@ -481,6 +481,7 @@
 												<option value="MODAL_POPUP" class="POPUP">Modal Popup</option>
 												<option value="CORNER_NOTY" class="POPUP">Noty Message</option>
 												<option value="CALL_POPUP" class="POPUP">Call Popup</option>
+												<option value="SITE_BAR" class="POPUP">Site Bar</option>
 											</optgroup>
 											<optgroup label="Campaign">
 												<option value="ASSIGN_CAMPAIGN" class="campaign" 
@@ -543,8 +544,7 @@
 										<td class="controls v-top">
 												<div id="noty-message" name="popup_text" class="p-t-sm">
  													<a href='#' id="tiny_mce_webrules_link" class="pull-right text-info" style="display:none">(Select a template / Edit in HTML editor)</a>
- 													<small id="twilio-info" style="display:none"><i class="icon-info-sign"></i> You need to setup <a href="#add-widget" class="text-info">Twilio account</a> .
- 													</small>
+ 													
 													<textarea  cols="" name="webrule-information-field" class="information confirmation CORNER_NOTY span5 required w-full" rows="10" placeholder="Paste HTML context"></textarea>
 													<textarea  cols="" name="webrule-custom-html" id="tinyMCEhtml_email" class="custom_html required MODAL_POPUP w-full form-control" rows="10" placeholder="Paste HTML context"></textarea>
 													<textarea  cols="" name="webrule-custom-html" id="callwebrule-code"  class="custom_html required CALL_POPUP w-full form-control" rows="10" ></textarea>
@@ -554,6 +554,9 @@
 
 
 }()</textarea>
+
+<textarea  cols="" name="webrule-custom-html" id="agile-bar-code"  class="custom_html required SITE_BAR w-full form-control" rows="10" placeholder="Paste HTML context"></textarea>
+
 									<input type="text" name="temp-title class="FORM input form-control required w-xs" placeholder="Form id">
 													<div style="float:right;display:none" class="web-rule-preview"><a href="#" class="text-info">Preview</a></div> 
 												</div>
@@ -566,7 +569,7 @@
 												<lable class="CALL_POPUP" style="color:#474444">Phone Number
 												<span class="field_req">*</span>
 												</lable>
-												<input type="text" name="number" class="CALL_POPUP required number form-control" placeholder="Enter the Incoming number"></input>					
+												<input type="text" name="number" class="CALL_POPUP required form-control" placeholder="Enter the Incoming number"></input>					
 												</div>
 											
 										</td>
@@ -579,6 +582,8 @@
 													<option value="CENTER" class="MODAL_POPUP CALL_POPUP">Center</option>
 													<option value="RIGHT_BOTTOM" class="MODAL_POPUP CALL_POPUP">Right Bottom</option>
 													<option value="LEFT_BOTTOM" class="MODAL_POPUP CALL_POPUP">Left Bottom</option>
+													<option value="TOP" class="SITE_BAR">Top</option>
+													<option value="BOTTOM" class="SITE_BAR">Bottom</option>
 												</select>
 											</div>
 										</td>
@@ -588,11 +593,11 @@
 											<div name="delay" id="delay">
 												<div class="pull-left p-t-sm"><span style="color:#474444">When to show</span></div></br></br>
 												<select class="required form-control m-t-n-xxs">
-														<option value="IMMEDIATE" class="MODAL_POPUP FORM CORNER_NOTY CALL_POPUP">Immediately</option>
-														<option value="AFTER_SECS" class="MODAL_POPUP FORM CORNER_NOTY CALL_POPUP">After certain time</option>
-														<option value="FIRST_SCROLL" class="MODAL_POPUP FORM CORNER_NOTY CALL_POPUP">On starting scroll</option>
-														<option value="END_OF_PAGE" class="MODAL_POPUP FORM CORNER_NOTY CALL_POPUP">On reaching end of page</option>
-														<option value="EXIT" class="MODAL_POPUP FORM CORNER_NOTY CALL_POPUP">About to exit page</option> 
+														<option value="IMMEDIATE" class="MODAL_POPUP FORM CORNER_NOTY CALL_POPUP SITE_BAR">Immediately</option>
+														<option value="AFTER_SECS" class="MODAL_POPUP FORM CORNER_NOTY CALL_POPUP SITE_BAR">After certain time</option>
+														<option value="FIRST_SCROLL" class="MODAL_POPUP FORM CORNER_NOTY CALL_POPUP SITE_BAR">On starting scroll</option>
+														<option value="END_OF_PAGE" class="MODAL_POPUP FORM CORNER_NOTY CALL_POPUP SITE_BAR">On reaching end of page</option>
+														<option value="EXIT" class="MODAL_POPUP FORM CORNER_NOTY CALL_POPUP SITE_BAR">About to exit page</option> 
 												</select>
 											</div>
 										
@@ -629,6 +634,7 @@
 			<div class="form-actions">
 				<a href="#web-rules" class="btn btn-sm btn-default">Close</a>
 				<a href="#" type="submit" class="save btn btn-sm btn-primary">Save</a> 
+				<small id="twilio_call_setup">Please enable your Twilio integration <a href="#integrations" class="text-info">here.</a></small>
 			</div>
 </div>
 </div>

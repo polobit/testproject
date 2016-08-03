@@ -95,6 +95,7 @@ function updateTask(isUpdate, data, json)
 
 		// Set new details in Task
 		modelTaskList[0].get('taskCollection').get(json.id).set(data);
+		modelTaskList[0].get('taskCollection').sort();
 
 		// Update task in UI : set() won't work on task which is dragged, so need to do manually. 
 		if (criteria == "OWNER")

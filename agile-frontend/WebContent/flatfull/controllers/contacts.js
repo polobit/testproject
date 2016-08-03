@@ -18,11 +18,13 @@ var ContactsRouter = Backbone.Router.extend({
 		"" : "dashboard", 
 		
 		"dashboard" : "dashboard",
+
+		"navigate-dashboard" : "navigateDashboard", 
 		
 		// "dashboard-test": "dashboard",
 
 		/* Contacts */
-		"contacts" : "contacts",
+		"contacts" : "contactsNew",
 		
 		"contact/:id" : "contactDetails",
 		
@@ -41,7 +43,7 @@ var ContactsRouter = Backbone.Router.extend({
 
 		"merge-contacts" : "mergeContacts",
 		
-		"tags/:tag" : "contacts", 
+		"tags/:tag" : "contactsNew", 
 		
 		"send-email" : "sendEmail",
 		
@@ -82,10 +84,17 @@ var ContactsRouter = Backbone.Router.extend({
          App_Datasync.salesforce();
 	},
 
+	navigateDashboard : function(){
+		// Call dashboard route
+		Backbone.history.navigate("#", {
+            trigger: true
+        });
+	},
+
 	dashboard : function()
 	{
 		insidePopover=false;
-		$(".active").removeClass("active");
+		$("#agile-menu-navigation-container .active").removeClass("active");
 		if(CURRENT_DOMAIN_USER.domain == "admin")
 		{
 			Backbone.history.navigate("domainSearch" , {
@@ -95,6 +104,20 @@ var ContactsRouter = Backbone.Router.extend({
 		}
 
 		var dashboard_name = _agile_get_prefs("dashboard_"+CURRENT_DOMAIN_USER.id);
+		if(!dashboard_name){
+			var selected_id = _agile_get_prefs("selected_dashboard_"+CURRENT_DOMAIN_USER.id);
+			if(selected_id == "Dashboard")
+				 dashboard_name = "Dashboard";
+		}
+		
+		// Reset dashboard with role selected
+		if(!dashboard_name){
+			_agile_set_prefs("selected_dashboard_"+CURRENT_DOMAIN_USER.id, id);
+			if(CURRENT_DOMAIN_USER.role == "SALES")
+				  dashboard_name = "SalesDashboard";
+			else if(CURRENT_DOMAIN_USER.role == "MARKETING")
+				dashboard_name = "MarketingDashboard";
+		}
 
 		dashboard_name = dashboard_name ? dashboard_name : "DashBoard";
 
@@ -112,8 +135,14 @@ var ContactsRouter = Backbone.Router.extend({
 		if(dashboard_name==="MarketingDashboard"){
 
 			dashboardJSON["id"] = "MarketingDashboard";
-			dashboardJSON["name"] = "Marketing Dashboard";
+			dashboardJSON["name"] = "Marketing";
 			dashboardJSON["description"] = "Welcome to Agile CRM Marketing Automation.";
+
+		}else if(dashboard_name == "SalesDashboard"){
+
+			dashboardJSON["id"] = "SalesDashboard";
+			dashboardJSON["name"] = "Sales";
+			dashboardJSON["description"] = "Welcome to Agile CRM Sales Dashboard.";
 
 		}else if(!dashboardJSON["id"])
 		{
@@ -130,7 +159,11 @@ var ContactsRouter = Backbone.Router.extend({
 				$('[data-toggle="tooltip"]').tooltip();
 				if ((navigator.userAgent.toLowerCase().indexOf('chrome') > -1&&navigator.userAgent.toLowerCase().indexOf('opr/') == -1) && !document.getElementById('agilecrm_extension'))
 				{
-					$("#chrome-extension-button").removeClass('hide');
+					try{
+						if (typeof chrome && typeof chrome.app && !chrome.app.isInstalled) 
+							$("#chrome-extension-button").removeClass('hide');	
+					}catch(e){}
+					
 				}
 
 				loadPortlets(dashboard_name,el);
@@ -1378,6 +1411,37 @@ $('#content').html('<div id="import-contacts-event-listener"></div>');
 
 
 
+	},
+
+	contactsNew : function(tag_id)
+	{
+		if(tag_id)
+		{
+			_agile_delete_prefs("contact_filter");
+			_agile_delete_prefs('dynamic_contact_filter');
+		}
+
+		if(_agile_get_prefs("contacts_tag") != tag_id)
+		{
+			CONTACTS_HARD_RELOAD = true;
+			_agile_set_prefs("contacts_tag", tag_id);
+		}
+		$('#content').html('<div id="contacts-listener-container"></div>');
+		var contactsHeader = new Contacts_And_Companies_Events_View({ data : {}, template : "contacts-header", isNew : true,
+			postRenderCallback : function(el)
+			{
+				contacts_view_loader.buildContactsView(el, tag_id);
+				
+				contacts_view_loader.setUpContactsCount(el);
+				
+				loadPortlets('Contacts',el);
+			} 
+		});
+		$('#contacts-listener-container').html(contactsHeader.render().el);
+
+		$(".active").removeClass("active");
+		$("#contactsmenu").addClass("active");
+		$('[data-toggle="tooltip"]').tooltip();
 	},
 
 	});

@@ -14,6 +14,7 @@
             <fieldset>
                 <input type="hidden"  id="agile_attachment_name" name="attachment_name"/>
                 <input type="hidden"  id="agile_attachment_url" name="attachment_url"/>
+                 <input type="hidden"  id="contact_type"  name="contact_type" value="{{type}}"/>
                 <div id="bulk-count" style="margin-left: 17%; padding-bottom: 5px; display: none;"><p></p></div>
 				<div class="control-group form-group">
                     <label class="control-label col-sm-2 col-xs-12">From <span class="field_req">*</span></label>
@@ -110,7 +111,7 @@
                     <label class="control-label col-sm-2">Message </label>
                     <div class="controls col-sm-8 email-editor-custom-scroll-bar">
                         <div id="loading-editor"></div>
-                        <textarea class="form-control required" name="message" id="email-body" placeholder="Description" style="width: 75%; height: 45%; display: none;"></textarea>
+                        <textarea class="form-control required" name="message" id="email-body" placeholder="Description" style="width: 75%; height: 300px; display: none;"></textarea>
                     </div>
                 </div>   
                 
@@ -288,7 +289,7 @@
                     <label class="control-label col-sm-2">Message </label>
                     <div class="controls col-sm-8">
                         <div id="loading-editor"></div>
-                        <textarea class="form-control required" name="message" id="email-body" placeholder="Description" style="width: 75%; height: 45%; display: none;"></textarea>
+                        <textarea class="form-control required" name="message" id="email-body" placeholder="Description" style="width: 75%; height: 300px; display: none;"></textarea>
                     </div>
                 </div>   
                 

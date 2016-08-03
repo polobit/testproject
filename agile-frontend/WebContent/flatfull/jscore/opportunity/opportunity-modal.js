@@ -47,6 +47,7 @@ $(function()
 		$(".deal-add-note", $("#opportunityModal")).show();
 		// Hide the Note label.
 		$(".deal-note-label").hide();
+		$("#color1", $("#opportunityModal")).attr('value','#FFFFFF');
 
 	});
 

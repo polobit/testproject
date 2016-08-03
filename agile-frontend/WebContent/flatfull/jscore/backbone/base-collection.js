@@ -256,7 +256,8 @@ var Base_Collection_View = Backbone.View
 			 * elements in current view
 			 */
 			events : {
-				"click .temp_collection_event" : "tempEvent"
+				"click .temp_collection_event" : "tempEvent",
+				"click .searchFetchNext" : "fetchNextCollectionModels",
 			},
 
 			/**
@@ -384,6 +385,10 @@ var Base_Collection_View = Backbone.View
 						if (that.options.infini_scroll_cbk)
 							that.options.infini_scroll_cbk();
 
+						// Remove More option when there is no cursor
+						if(!that.collection.last().get("cursor") || that.collection.first().get("count") == that.collection.models.length){
+						    $(".searchFetchNext", that.el).remove();
+						}
 					}, untilAttr : 'cursor', param : 'cursor', strict : true, pageSize : this.page_size, target : this.options.scroll_target ? this.options.scroll_target: $(window),
 
 					/*
@@ -406,7 +411,7 @@ var Base_Collection_View = Backbone.View
 					 * to disable infiniscroll on different view if not
 					 * necessary.
 					 */
-					addInfiniScrollToRoute(this.infiniScroll);
+					addInfiniScrollToRoute(this.infiniScroll, this.options.infiniscroll_fragment);
 
 					// disposePreviousView(this.options.templateKey +
 					// '-collection', this);
@@ -446,6 +451,10 @@ var Base_Collection_View = Backbone.View
 
 			tempEvent: function(){
 				console.log("tempEvent");
+			},
+			fetchNextCollectionModels : function(e){
+				e.preventDefault();
+				this.infiniScroll.fetchNext();
 			},
 
 			/**
@@ -509,11 +518,11 @@ var Base_Collection_View = Backbone.View
 				if (appendItemCallback && typeof (appendItemCallback) === "function")
 					appendItemCallback($(this.el));
 
-				if ($('table', this.el).hasClass('onlySorting'))
-					return;
-
+				if ($('table', this.el).length != 0){
+			
 				append_checkboxes(this.model_list_element);
 				//endFunctionTimer("appendItemOnAddEvent");
+				}
 			},
 
 			appendItemsOnAddEvent : function(modalsArray)
@@ -536,15 +545,22 @@ var Base_Collection_View = Backbone.View
 				});
 
 				$(this.model_list_element).append(this.model_list_element_fragment);
-				
+
+				// Remove More option when there is no cursor
+				if(!that.collection.last().get("cursor") || that.collection.first().get("count") == that.collection.models.length){
+				    $(".searchFetchNext", that.el).remove();
+				}
+
 				var appendItemCallback = this.options.appendItemCallback;
 
 				if (appendItemCallback && typeof (appendItemCallback) === "function")
 					appendItemCallback($(this.el));
-				
-				if ($('table', this.el).hasClass('onlySorting'))
+
+				if ($('table').hasClass('onlySorting'))
 					return;
+
 				append_checkboxes(this.model_list_element);
+				
 				//endFunctionTimer("appendItemsOnAddEvent");
 			},
 			/**

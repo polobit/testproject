@@ -13,6 +13,7 @@ import com.agilecrm.SearchFilter;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.core.api.search.SearchAPI;
+import com.agilecrm.deals.filter.DealFilter;
 import com.agilecrm.search.AppengineSearch;
 import com.agilecrm.search.BuilderInterface;
 import com.agilecrm.search.QueryInterface.Type;
@@ -143,10 +144,8 @@ public class QueryDocumentUtil {
 					 * Build query by passing condition old query and new query
 					 */
 					// double quotes for exact match of value.
-					if ("tags".equals(lhs)) {
+					if ("tags".equals(lhs) || "milestone".equals(lhs)) {
 						value = SearchUtil.normalizeTag(value);
-					} else if("milestone".equals(lhs)) {
-						value = rhs;
 					} else {
 						value = SearchUtil.normalizeString(value);
 					}
@@ -156,10 +155,8 @@ public class QueryDocumentUtil {
 						|| condition.equals(SearchRule.RuleCondition.CONTAINS)) {
 					query = buildNestedCondition(joinCondition, query, newQuery);
 				} else if (condition.equals(SearchRule.RuleCondition.NOTEQUALS)) {
-					if ("tags".equals(lhs)) {
+					if ("tags".equals(lhs) || "milestone".equals(lhs)) {
 						value = SearchUtil.normalizeTag(value);
-					} else if("milestone".equals(lhs)) {
-						value = rhs;
 					} else {
 						value = SearchUtil.normalizeString(value);
 					}
@@ -856,8 +853,44 @@ public class QueryDocumentUtil {
 		String query = "";
 		String andQuery = constructQuery(filter.rules, "AND");
 		String orQuery = null;
+		
+		List<String> dealsrules = new ArrayList<String>();
+		
 		if (filter.or_rules != null && !filter.or_rules.isEmpty())
-			orQuery = constructQuery(filter.or_rules, "OR");
+		{
+			for(int i=0;i<filter.or_rules.size();i++)
+			{
+				if(filter.or_rules.get(i).LHS.equalsIgnoreCase("pipeline"))
+				{
+					SearchFilter newfilter = new DealFilter();
+					newfilter.rules.add(filter.or_rules.get(i));
+					filter.or_rules.remove(i);
+					if(filter.or_rules.size()>0)
+					{
+					if(filter.or_rules.get(i).LHS.equalsIgnoreCase("milestone")){
+					newfilter.rules.add(filter.or_rules.get(i));
+					filter.or_rules.remove(i);
+					}
+					}
+					dealsrules.add(constructQuery(newfilter.rules, "AND"));
+					i--;
+				}
+			}
+			if(dealsrules!=null && dealsrules.size()>0)
+			{
+				orQuery="("+dealsrules.get(0)+")";
+				for(int i=1;i<dealsrules.size();i++)
+				{
+					orQuery=orQuery+" OR ("+dealsrules.get(i) + ")";
+				}
+			}
+			if(orQuery!=null){
+				if(StringUtils.isNotEmpty(constructQuery(filter.or_rules, "OR")))
+			orQuery = orQuery+" OR (" +constructQuery(filter.or_rules, "OR")+ ")";
+			}
+			else
+				orQuery=constructQuery(filter.or_rules, "OR");
+		}
 		if (StringUtils.isNotEmpty(orQuery)) {
 			query = "(" + andQuery + ") AND (" + orQuery + ")";
 		} else {

@@ -1,51 +1,61 @@
 <script id="widgets-add-new-model-template" type="text/html"> 
 <div class="panel panel-default widget-add pos-rlt" style="height: 220px;">
-	  <div class="panel-heading">
-		   {{#if_equals name "Sip"}}  
-			   <center>  
-				    <span style="font-size: 24px; height: 47px; text-align:center;vertical-align: middle; display:inline-block;">
-				    <span style="margin-top:6px; display:inline-block;"><img src="{{logo_url}}"  class="img-responsive inline-block" 
-				    style="margin-right: 4px; margin-top:-5px; width:25px; height:25px;">SIP</span>
+  <div class="panel-heading">
+	   {{#if_equals name "Sip"}}  
+		   <center>  
+			    <span style="font-size: 24px; height: 47px; text-align:center;vertical-align: middle; display:inline-block;">
+				    <span style="margin-top:6px; display:inline-block;">
+				    	<img src="{{logo_url}}"  class="img-responsive inline-block" style="margin-right: 4px; margin-top:-5px; width:25px; height:25px;">SIP
 				    </span>
-			   </center>
-		   {{else}} 
-		      {{#if_equals name "CallScript"}}
-			     <center>    
-			       <span style="font-size: 24px; height: 47px; text-align:center;vertical-align: middle;">
-			    <span style="margin-top:6px; display:inline-block; padding-bottom: 7px;">
-			    <img src="{{logo_url}}" class="img-responsive inline-block" style="margin-right: 4px; margin-top:-3px; width:25px; height:25px;">Call Script</span>
+					<span class="label label-sm bg-danger" style="margin: 5px;font-size: 11px;top: -6px;position: relative;">Beta</span>
 			    </span>
-			     </center>  
-			    {{else}}
-						{{#if_equals name "Bria"}}
+		   </center>
+	   {{else}} 
+	      {{#if_equals name "CallScript"}}
+		    <center>    
+		       <span style="font-size: 24px; height: 47px; text-align:center;vertical-align: middle;">
+			       <span style="margin-top:6px; display:inline-block; padding-bottom: 7px;">
+			       		<img src="{{logo_url}}" class="img-responsive inline-block" style="margin-right: 4px; margin-top:-3px; width:25px; height:25px;">Call Script
+			       </span>
+		       </span>
+		     </center>
+		    {{else}}
+					{{#if_equals name "Bria"}}
+						<center>  
+		  					<span style="font-size: 24px;width: 113px;height: 50px; text-align:center;vertical-align: middle;">
+		  						<span>
+		  							<img src="{{logo_url}}" style="width: 40px; height: 40px;margin-right: 4px;margin-top: 1px;">Bria
+		  						</span>
+		  					</span>
+						</center>  
+		        	{{else}}
+						{{#if_equals name "Skype"}}
 							<center>  
-			  				<span style="font-size: 24px;width: 113px;height: 50px; text-align:center;vertical-align: middle;"><span><img src="{{logo_url}}" style="width: 40px; height: 40px;margin-right: 4px;margin-top: 1px;">Bria</span></span>
-							<span class="label label-sm bg-danger" style="margin: 5px;">Beta</span>
-							</center>  
+				  				<span style="font-size: 24px;width: 135px;height: 50px; text-align:center;vertical-align: middle;">
+				  					<span>
+				  						<img src="{{logo_url}}" style="width: 40px; height: 40px;margin-right: 4px;margin-top: 1px;">Skype
+				  					</span>
+				  				</span>
+								<!-- <span class="label label-sm bg-danger" style="margin: 5px;">Beta</span> -->
+							</center>   
 			        	{{else}}
-							{{#if_equals name "Skype"}}
+				        	{{#if_equals name "Braintree"}}
 								<center>  
-				  				<span style="font-size: 24px;width: 135px;height: 50px; text-align:center;vertical-align: middle;"><span><img src="{{logo_url}}" style="width: 40px; height: 40px;margin-right: 4px;margin-top: 1px;">Skype</span></span>
-								<span class="label label-sm bg-danger" style="margin: 5px;">Beta</span>
-								</center>  
-				        	{{else}}
-					        	{{#if_equals name "Braintree"}}
-									<center>  
 					  				<span style="font-size: 24px;width: 135px;height: 50px; text-align:center;vertical-align: middle;">
 					  					<img src="{{logo_url}}" style="height: 47px;">
 					  				</span>
-									<span class="label label-sm bg-danger" style="margin: 5px;">Beta</span>
-									</center>  
-					        	{{else}}
-							      <center> 
-							        <img class="m-b-none img-responsive thumb-xl bg-transparent" style="height:47px;" src="{{logo_url}}" />
-							      </center>   
-					 			{{/if_equals}}
-							{{/if_equals}}
+									<!-- <span class="label label-sm bg-danger" style="margin: 5px;">Beta</span> -->
+								</center>  
+				        	{{else}}
+						      <center> 
+						        <img class="m-b-none img-responsive thumb-xl bg-transparent" style="height:47px;" src="{{logo_url}}" />
+						      </center>   
+				 			{{/if_equals}}
 						{{/if_equals}}
-		   		{{/if_equals}}
-		   {{/if_equals}}
-	  </div>
+					{{/if_equals}}
+	   		{{/if_equals}}
+	   {{/if_equals}}
+  </div>
   <div class="panel-body">
 	{{#if_equals name "Bria"}}
   		 <div class="text-flow-ellipsis line-clamp line-clamp-4 widget-text" style="height:75px"  rel="tooltip" title="{{description}}">
@@ -73,6 +83,12 @@
 		<br/>
 		<span style="font-size: 12px;position: relative;top: 2px;">*</span>
 		<span style="font-size: 10px;">Support for Windows only</span>
+	{{else}}
+		{{#if_equals name "Sip"}}
+			<br/>
+			<span style="font-size: 12px;position: relative;top: 2px;">*</span>
+			<span style="font-size: 10px;">We recommend Bria</span>
+		{{/if_equals}}
 	{{/if_equals}}
 	{{/if_equals}}
 		</div>
@@ -520,7 +536,9 @@
 			<div class="panel panel-default" style="min-height: 220px;">
 			<div class="panel-heading">
 			{{#if_equals name "Sip"}}
-			    <center><img class="m-b-none img-responsive thumb-xl bg-transparent" style="height:47px;" src="{{getS3ImagePath '/img/plugins/sip.png'}}" /></center>
+			    <center><img class="m-b-none img-responsive thumb-xl bg-transparent" style="height:47px;" src="{{getS3ImagePath '/img/plugins/sip.png'}}" />
+					<span class="label label-sm bg-danger" style="margin: 5px;margin-left: -30px;">Beta</span>
+				</center>
 			{{else}}
 			    {{#if_equals name "CallScript"}}
 			        <center><img class="m-b-none img-responsive thumb-xl bg-transparent" style="height:47px;" src="{{getS3ImagePath '/img/plugins/call_script.png'}}" /></center>
@@ -528,13 +546,13 @@
 					{{#if_equals name "Bria"}}
 						<center>
 							<span style="font-size: 24px;width: 113px;height: 50px; text-align:center;vertical-align: middle;"><span><img src="{{logo_url}}" style="width: 40px; height: 40px;margin-right: 4px;margin-top: 1px;">Bria</span></span>
-								<span class="label label-sm bg-danger" style="margin: 5px;">Beta</span>
+								<!-- <span class="label label-sm bg-danger" style="margin: 5px;">Beta</span> -->
 						</center>
 			     {{else}}
 					{{#if_equals name "Skype"}}
 							<center>
 								<span style="font-size: 24px;width: 135px;height: 50px; text-align:center;vertical-align: middle;"><span><img src="{{logo_url}}" style="width: 40px; height: 40px;margin-right: 4px;margin-top: 1px;">Skype</span></span>
-								<span class="label label-sm bg-danger" style="margin: 5px;">Beta</span>
+								<!-- <span class="label label-sm bg-danger" style="margin: 5px;">Beta</span> -->
 							</center>
 			        	{{else}}
 			        <center><img class="m-b-none img-responsive thumb-xl bg-transparent" style="height:47px;" src="{{logo_url}}" /></center>

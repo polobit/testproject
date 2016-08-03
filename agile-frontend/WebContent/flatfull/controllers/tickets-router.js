@@ -11,6 +11,7 @@
 		"tickets/filter/:id" : "ticketsByFilter",
 		"tickets/filter/:id/ticket/:id" : "ticketDetailsByFilter",
 
+		/*Ticket details*/
 		"ticket/:id" : "ticketDetails",
 
 		/* Ticket bulk actions*/
@@ -37,7 +38,24 @@
 
 		/*Ticket reports*/
 		"ticket-reports" : "ticketReports",
-		"ticket-report/:report_type" : "ticketReport"
+		"ticket-report/:report_type" : "ticketReport",
+	     
+         /*Help center Routes*/
+		"knowledgebase" : "categories",
+        "knowledgebase/:id/sections":"sections",  
+       	"knowledgebase/:name/articles":"articles",
+		"knowledgebase/add-article" : "addArticle",
+		"knowledgebase/add-article/:id" : "addArticle",
+		"knowledgebase/section/:section_id/edit-article/:name" : "editArticle",	
+		"knowledgebase/section/:section_id/article/:id" : "showArticle",
+		"knowledgebase/add-section" : "addSection",
+		"knowledgebase/add-section/:id" : "addSection",
+		"knowledgebase/category/:categorie_id/section/:id/edit-section" : "editSection",	
+		"knowledgebase/add-category":"addCategory",
+		"knowledgebase/:id/edit-category":"editCategory",
+		"selectlandingpage":"addLandingpage"
+
+
 	},
 
 	/**
@@ -48,6 +66,7 @@
 		loadServiceLibrary(function(){
 			App_Ticket_Module.ticketsByFilter(Ticket_Filter_ID);
 		});
+		make_menu_item_active("tickets");
 	},
 
 	/**
@@ -240,7 +259,9 @@
 		 					
 		 					$('#ticket-contact-details', el).html(
 		 						getTemplate('ticket-contact-fallback', data));
+		 				
 		 				}
+		 				loadWidgets(el, Ticket_Utils.Current_Ticket_Contact.toJSON(), "widgets");
 		 			});
 
 		 			// Append reply container
@@ -253,7 +274,7 @@
 					Ticket_Labels.showSelectedLabels(data.labels, $(el), true);
 
 					//Load RHS side bar widgets
-					Tickets.loadWidgets(App_Ticket_Module.ticketView.el);
+					Tickets.ticketsloadWidgets(App_Ticket_Module.ticketView.el);
 
 					//Initializing Assignee dropdown with groups and assignees
 					Tickets.fillAssigneeAndGroup(el);
@@ -355,6 +376,7 @@
 		 			callback();
 		 	});
 		});
+		make_menu_item_active("ticketgroupsmenu");
 	},
 
 	/**
@@ -490,6 +512,8 @@
 		 			callback();
 		 	});
 		});
+
+		make_menu_item_active("ticketlabelsmenu");
 	 },
 
 	/**
@@ -585,6 +609,8 @@
 		 			callback();
 		 	});
 		});
+
+		make_menu_item_active("ticketviewsmenu");
 	 },
 
 	/**
@@ -689,6 +715,7 @@
 				});
 		 	});
 		});
+		make_menu_item_active("ticketcannedmessagesmenu");
 	},
 
 	/**
@@ -951,6 +978,548 @@
 
  			if(callback)
  				callback(tab_highlight_callback);
+		});
+	},
+
+	categories: function(){
+				loadServiceLibrary(function(){
+		 	//Rendering root template
+			App_Ticket_Module.loadAdminsettingsHelpdeskTemplate({knowledgebase: true},function(callback){
+				//Initializing base collection with groups URL
+			App_Ticket_Module.categoriesCollection = new Base_Collection_View({
+				url : '/core/api/knowledgebase/categorie',
+				templateKey : "ticket-helpcenter-categories",
+				individual_tag_name : 'tr',
+				sortKey:"updated_time",
+				sort_collection:"true",
+				postRenderCallback : function(el, collection) {
+
+					head.js(LIB_PATH + 'lib/jquery-ui.min.js', function() {
+						$(el).find('tbody').each(function(index){
+							$(this).sortable({
+							      items:'tr',
+							      helper: function(e, tr){
+							          var $originals = tr.children();
+							          var $helper = tr.clone();
+							          $helper.children().each(function(index)
+							          {
+							            // Set helper cell sizes to match the original sizes
+							            $(this).width($originals.eq(index).width());
+							            console.log('-----------'+$originals.eq(index).width());
+							          });
+							          return $helper;
+							      },
+							      start: function(event, ui){
+							    	  $.each(ui.item.children(),function(index,ele){
+							    		  ui.helper.children().eq(index).width(ui.helper.children().eq(index).width()-$(this).width());
+							    	  });
+							    	  ui.helper.width(ui.helper.width());
+							      },
+							      sort: function(event, ui){
+							    	  ui.helper.css("top",(ui.helper.offset().top+ui.item.offset().top)+"px");
+							      },
+							      forceHelperSize:true,
+							      placeholder:'<tr><td></td></tr>',
+							      forcePlaceholderSize:true,
+							      handle: ".icon-move",
+							      cursor: "move",
+							      tolerance: "intersect",
+							      
+						    });
+						
+							$('#ticket-helpcenter-categories-model-list',$('#ticket-categorie-table')).on("sortstop",function(event, ui){
+								
+								var sourceIds = [];
+								$('#ticket-helpcenter-categories-model-list > tr').each(function(column){
+									sourceIds[column] = $(this).data().id;
+								});
+								// Saves new positions in server
+									$.ajax({ type : 'POST', url : '/core/api/knowledgebase/categorie/position', data : JSON.stringify(sourceIds),
+										contentType : "application/json; charset=utf-8", dataType : 'json', success : function(data){
+											$.each(sourceIds, function(index, val){
+												$('#dealSourcesForm_'+val).find('input[name="order"]').val(index);
+									
+											});
+									}});	
+								});
+							});	
+							
+
+						});	
+								
+				}
+			});	
+			//Fetching groups collections
+			if(!App_Ticket_Module.categoriesCollection.collection.fetch())
+			setTimeout(function(){
+            App_Ticket_Module.categoriesCollection.collection.fetch();
+
+            },2000);
+
+			//Rendering template
+			$('.ticket-settings', $('#admin-prefs-tabs-content')).html(App_Ticket_Module.categoriesCollection.el);
+
+		 	});
+		});
+		make_menu_item_active("ticketknowledgebasemenu");
+	},
+
+
+	sections: function(categorie_id){
+		loadServiceLibrary(function(){
+		 	//Rendering root template
+			App_Ticket_Module.loadAdminsettingsHelpdeskTemplate({knowledgebase: true},function(callback){
+				//Initializing base collection with groups URL
+			App_Ticket_Module.sectionsCollection = new Base_Collection_View({
+				
+				url : '/core/api/knowledgebase/section/' + categorie_id,		
+				templateKey : "ticket-helpcenter-sections",
+				individual_tag_name : 'tr',
+				sort_collection : true, 
+	 			sortKey : 'order',
+				postRenderCallback : function(el, collection) {
+
+                  //Helcenter_Events.sectionDelete(el);
+
+                  head.js(LIB_PATH + 'lib/jquery-ui.min.js', function() {
+						$(el).find('tbody').each(function(index){
+							$(this).sortable({
+							      items:'tr',
+							      helper: function(e, tr){
+							          var $originals = tr.children();
+							          var $helper = tr.clone();
+							          $helper.children().each(function(index)
+							          {
+							            // Set helper cell sizes to match the original sizes
+							            $(this).width($originals.eq(index).width());
+							            console.log('-----------'+$originals.eq(index).width());
+							          });
+							          return $helper;
+							      },
+							      start: function(event, ui){
+							    	  $.each(ui.item.children(),function(index,ele){
+							    		  ui.helper.children().eq(index).width(ui.helper.children().eq(index).width()-$(this).width());
+							    	  });
+							    	  ui.helper.width(ui.helper.width());
+							      },
+							      sort: function(event, ui){
+							    	  ui.helper.css("top",(ui.helper.offset().top+ui.item.offset().top)+"px");
+							      },
+							      forceHelperSize:true,
+							      placeholder:'<tr><td></td></tr>',
+							      forcePlaceholderSize:true,
+							      handle: ".icon-move",
+							      cursor: "move",
+							      tolerance: "intersect",
+							      
+						    });
+						
+							$('#ticket-helpcenter-sections-model-list',$('#ticket-section-table')).on("sortstop",function(event, ui){
+								
+								var sourceIds = [];
+								$('#ticket-helpcenter-sections-model-list > tr').each(function(column){
+									sourceIds[column] = $(this).data().id;
+								});
+								// Saves new positions in server
+									$.ajax({ type : 'POST', url : '/core/api/knowledgebase/section/position', data : JSON.stringify(sourceIds),
+										contentType : "application/json; charset=utf-8", dataType : 'json', success : function(data){
+											$.each(sourceIds, function(index, val){
+												$('#dealSourcesForm_'+val).find('input[name="order"]').val(index);
+									
+											});
+									}});	
+								});
+							});	
+							
+
+						});
+				}
+			});
+
+			//Fetching groups collections
+			App_Ticket_Module.sectionsCollection.collection.fetch();
+
+			//Rendering template
+			$('.ticket-settings', $('#admin-prefs-tabs-content')).html(App_Ticket_Module.sectionsCollection.el);
+
+		 	});
+		});
+	},
+    
+    articles: function(name){
+
+		loadServiceLibrary(function(){
+		 	//Rendering root template
+			App_Ticket_Module.loadAdminsettingsHelpdeskTemplate({knowledgebase: true},function(callback){
+				//Initializing base collection with groups URL
+			App_Ticket_Module.articlesCollection = new Base_Collection_View({
+
+				url : '/core/api/knowledgebase/article/admin-articles?section_id=' + name, 		
+				templateKey : "ticket-helpcenter-articles",
+				individual_tag_name : 'tr',
+				sort_collection : true, 
+	 			sortKey : 'order',
+				postRenderCallback : function(el, collection) {
+
+                  //Helcenter_Events.articleDelete(el);
+				
+                  head.js(LIB_PATH + 'lib/jquery-ui.min.js', function() {
+						$(el).find('tbody').each(function(index){
+							$(this).sortable({
+							      items:'tr',
+							      helper: function(e, tr){
+							          var $originals = tr.children();
+							          var $helper = tr.clone();
+							          $helper.children().each(function(index)
+							          {
+							            // Set helper cell sizes to match the original sizes
+							            $(this).width($originals.eq(index).width());
+							            console.log('-----------'+$originals.eq(index).width());
+							          });
+							          return $helper;
+							      },
+							      start: function(event, ui){
+							    	  $.each(ui.item.children(),function(index,ele){
+							    		  ui.helper.children().eq(index).width(ui.helper.children().eq(index).width()-$(this).width());
+							    	  });
+							    	  ui.helper.width(ui.helper.width());
+							      },
+							      sort: function(event, ui){
+							    	  ui.helper.css("top",(ui.helper.offset().top+ui.item.offset().top)+"px");
+							      },
+							      forceHelperSize:true,
+							      placeholder:'<tr><td></td></tr>',
+							      forcePlaceholderSize:true,
+							      handle: ".icon-move",
+							      cursor: "move",
+							      tolerance: "intersect",
+							      
+						    });
+						
+							$('#ticket-helpcenter-articles-model-list',$('#ticket-article-table')).on("sortstop",function(event, ui){
+								
+								var sourceIds = [];
+								$('#ticket-helpcenter-articles-model-list > tr').each(function(column){
+									sourceIds[column] = $(this).data().id;
+								});
+								// Saves new positions in server
+									$.ajax({ type : 'POST', url : '/core/api/knowledgebase/article/position', data : JSON.stringify(sourceIds),
+										contentType : "application/json; charset=utf-8", dataType : 'json', success : function(data){
+											$.each(sourceIds, function(index, val){
+												$('#dealSourcesForm_'+val).find('input[name="order"]').val(index);
+									
+											});
+									}});	
+								});
+							});	
+							
+
+						});	
+
+
+				}
+			});
+
+			//Fetching article collections
+			App_Ticket_Module.articlesCollection.collection.fetch();
+
+			//Rendering template
+			$('.ticket-settings', $('#admin-prefs-tabs-content')).html(App_Ticket_Module.articlesCollection.el);
+
+		 	});
+		});
+	},
+
+	addArticle : function(section_id){
+
+		loadServiceLibrary(function(){
+		 	//Rendering root template
+		 	App_Ticket_Module.loadAdminsettingsTemplate(function(callback){
+
+		 		var addArticleView = new Base_Model_View({
+	 				isNew : true, 
+	 				url : '/core/api/knowledgebase/article',
+	 				template : "ticket-helpcenter-add-article",
+	 				window : "back",
+			        
+					prePersist : function(model){
+						
+						var title = model.toJSON().title;
+						 title = $.trim(title);
+						var json = {};
+						var catogery_id = $("#catogery option:selected").data('catogery-id');
+						var encodedtitle = encodeURIComponent(title);
+						json = {"categorie_id" : catogery_id,"title" : title,"encodedtitle":encodedtitle};
+
+						var plain_content = '';
+
+						try{
+							plain_content = $(tinyMCE.activeEditor.getBody()).text();
+
+							json.plain_content = plain_content;
+						}
+						catch(err){}
+						
+						model.set(json, { silent : true });
+				    },
+
+			        postRenderCallback : function(el){
+					
+						setupTinyMCEEditor('textarea#description-article', true, undefined, function(){
+							$("textarea#description-article").css("display", "none");
+						});
+  
+						 section_id = decodeURIComponent(section_id);
+						fillSelect('catogery', '/core/api/knowledgebase/categorie/kb-admin', '', function(collection){
+			 	 			getTemplate("helpcenter-section-category", collection.toJSON(), undefined, function(template_ui){						
+
+								if(!template_ui)
+									return;
+
+				                $('#catogery', el).html($(template_ui));
+				       
+				                if(section_id){
+									 $('#catogery option[value="'+section_id+'"]',el).attr('selected','selected');
+								}	
+								if(callback)
+					 				callback();
+			               	} );		
+					
+					},'', true);
+
+			        },
+			        
+			    });
+
+	 			$('#admin-prefs-tabs-content').html(addArticleView.render().el);
+
+		 		if(callback)
+		 			callback();
+		 	});
+		});
+
+	},
+
+	editArticle : function(section_id,name){
+
+		loadServiceLibrary(function(){
+		 	//Rendering root template
+		 	App_Ticket_Module.loadAdminsettingsTemplate(function(callback){
+
+		 		var editarticleView = new Base_Model_View({
+ 				isNew : false, 
+ 				url : "/core/api/knowledgebase/article/" +name,
+ 				template : "ticket-helpcenter-add-article",
+ 				window : "back",
+                prePersist : function(model){
+                	var title = model.toJSON().title;
+					title = $.trim(title);
+					var encodedtitle = encodeURIComponent(title);
+
+					var json = {};
+					var catogery_id = $("#catogery option:selected").data('catogery-id');
+					json = {"categorie_id" : catogery_id, "title":title ,"encodedtitle":encodedtitle};
+					model.set(json, { silent : true });
+			    },
+
+		        postRenderCallback : function(el){
+				setupTinyMCEEditor('textarea#description-article', true, undefined, function(){
+					$("textarea#description-article").css("display", "none");
+				});
+
+				fillSelect('catogery', '/core/api/knowledgebase/categorie/kb-admin', '', function(collection){
+
+		 	 		$('#catogery', el).html(getTemplate('helpcenter-section-category', collection.toJSON()));
+   					$('#catogery option[value="'+section_id+'"]',el).attr("selected",true);                    
+				
+				},'', true);
+
+		        }
+		    });    
+	 			$('#admin-prefs-tabs-content').html(editarticleView.render().el);
+
+		 		if(callback)
+		 			callback();
+		 	});
+		});
+
+	},
+
+	showArticle : function(section_id,article_id){
+
+		loadServiceLibrary(function(){
+		 	//Rendering root template
+		 	App_Ticket_Module.loadAdminsettingsTemplate(function(callback){
+  
+				var articleView = new Base_Model_View({
+					
+					isNew : false,
+					template : "ticket-helpcenter-article",
+					url : "/core/api/knowledgebase/article/" + article_id,
+			        postRenderCallback: function(el, data){
+
+			     
+					}
+				});
+
+				$('#admin-prefs-tabs-content').html(articleView.render().el);
+
+							
+			});	
+		});	
+	},
+
+	addSection : function(category_id){
+
+		loadServiceLibrary(function(){
+		 	//Rendering root template
+		 	App_Ticket_Module.loadAdminsettingsTemplate(function(callback){
+  
+				var addsectionView = new Base_Model_View({
+
+	 				isNew : true, 
+	 				url : '/core/api/knowledgebase/section',
+	 				template : "ticket-helpcenter-add-section",
+			        window:'back',
+			        prePersist : function(model){
+			        	var json = {};
+			        	var name = model.toJSON().name;
+			        	 name = $.trim(name);
+			        	 json = {'name':name};
+			        	 model.set(json, { silent : true });
+			        },
+			        postRenderCallback : function(el){
+			        	 var optionsTemplate = "<option value={{id}}>{{name}}</option>";
+							 fillSelect('catogery', '/core/api/knowledgebase/categorie', '',function(){
+	                                           
+	                                       if(!category_id)
+	                                       	  return;
+
+	                                       $('select option[value="'+category_id+'"]').attr("selected",true);
+	                                        
+							 },optionsTemplate, true);
+
+			        }
+				});
+
+				$('#admin-prefs-tabs-content').html(addsectionView.render().el);			
+			});	
+		});	
+	},
+
+
+    editSection : function(category_id,section_id){
+
+    	var name = $("#"+section_id).data("id");
+		loadServiceLibrary(function(){
+		 	//Rendering root template
+		 	App_Ticket_Module.loadAdminsettingsTemplate(function(callback){
+  
+				var editSectionView = new Base_Model_View({
+					isNew : false,
+					template : "ticket-helpcenter-add-section",
+					url : "/core/api/knowledgebase/section/kb-admin?id=" + section_id,
+					window:'back',
+				    postRenderCallback : function(el){
+				        var optionsTemplate = "<option value={{id}}>{{name}}</option>";
+	 						fillSelect('catogery', '/core/api/knowledgebase/categorie', '', function(){
+	                                       $('select option[value="'+category_id+'"]').attr("selected",true);    
+				                     		},optionsTemplate, true);
+	 				},
+	 				prePersist : function(model){
+			        	var json = {};
+			        	var name = model.toJSON().name;
+			        	 name = $.trim(name);
+			        	 json = {'name':name};
+			        	 model.set(json, { silent : true });
+			        }
+			    });
+
+				$('#admin-prefs-tabs-content').html(editSectionView.render().el);			
+			});	
+		});	
+	}, 
+
+	addLandingpage : function(){
+		
+
+			loadServiceLibrary(function(){	
+			 	//Rendering root template
+			 	App_Ticket_Module.loadAdminsettingsTemplate(function(callback){
+	  
+					var addLandingpageView = new Base_Model_View({
+						isNew : false,
+						template : "ticket-helpcenter-select-landingpage",
+						url : "/core/api/knowledgebase/KBlandingpage",
+					    postRenderCallback : function(el,json){
+					       
+					        var kblpid = json.kb_landing_page_id;
+					        var kb_id = json.id;
+					        var optionTemplate = "<option value='{{id}}'>{{name}}</option>";
+								
+
+								fillSelect('template_id', '/core/api/landingpages?page_size=20', '', 
+								function(){
+									$("#template_id",el).append('<option value=1>Default</option>');
+									$('#template_id option[value=""]',el).attr("value",0);
+									$('#template_id option[value="'+kblpid+'"]',el).attr("selected",true);
+																							
+								}, optionTemplate, false, el,"Basic");
+										
+							
+		 				}
+					   
+				    });
+
+					$('#admin-prefs-tabs-content').html(addLandingpageView.render().el);			
+				});	
+			});	
+		}, 
+
+
+	addCategory : function(){
+
+		loadServiceLibrary(function(){
+		 	//Rendering root template
+		 	App_Ticket_Module.loadAdminsettingsTemplate(function(callback){
+  
+				var addCatogeryView = new Base_Model_View({
+							isNew : true, 
+						 	url : '/core/api/knowledgebase/categorie',
+							template : "helpcenter-add-catogery",
+							window : "back",
+				    });
+
+				$('#admin-prefs-tabs-content').html(addCatogeryView.render().el);    
+			});
+		});
+	},
+
+
+	editCategory : function(category_id){
+
+		if(!App_Ticket_Module.categoriesCollection || !App_Ticket_Module.categoriesCollection.collection){
+	 		return;
+	} 			
+
+		loadServiceLibrary(function(){
+		 	//Rendering root template
+		 	App_Ticket_Module.loadAdminsettingsTemplate(function(callback){
+  
+			var categorieModel = App_Ticket_Module.categoriesCollection.collection.get(category_id);
+
+        	console.log(categorieModel);
+		
+		    var editCatogeryView = new Base_Model_View({
+ 				model : categorieModel,
+ 				isNew : true, 
+ 				url : '/core/api/knowledgebase/categorie',
+ 				template : "helpcenter-add-catogery",
+ 				window : "back",
+		    });
+
+				$('#admin-prefs-tabs-content').html(editCatogeryView.render().el);    
+			});
 		});
 	},
 

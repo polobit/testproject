@@ -135,7 +135,8 @@ $(function(){
 					clearTimeout(CALL_CAMPAIGN.callObject);
 					CALL_CAMPAIGN.callObject = null;
 				}
-				routeToPage("contacts");
+				Backbone.history.navigate("contacts", { trigger : true });
+				//routeToPage("contacts");
 
 	});	
 	

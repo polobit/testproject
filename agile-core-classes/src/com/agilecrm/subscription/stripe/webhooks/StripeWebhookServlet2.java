@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.agilecrm.Globals;
 import com.agilecrm.subscription.stripe.StripeUtil;
+import com.agilecrm.subscription.stripe.webhooks.impl.InvoiceCreatedWebhookHandler;
 import com.agilecrm.subscription.stripe.webhooks.impl.InvoiceWebhookHandler;
 import com.agilecrm.subscription.stripe.webhooks.impl.SubscriptionWebhookHandlerImpl;
 import com.stripe.Stripe;
@@ -154,8 +155,12 @@ class StripeWebhookHandlerUtil
 
 	if (event_name.contains("subscription"))
 	    handler = new SubscriptionWebhookHandlerImpl();
-	else if (event_name.contains("invoice"))
-	    handler = new InvoiceWebhookHandler();
+	else if (event_name.contains("invoice")){
+		if(event_name.contains("created"))
+			handler = new InvoiceCreatedWebhookHandler();
+		else
+			handler = new InvoiceWebhookHandler();
+	}
 
 	System.out.println(event_name + ", " + handler);
 

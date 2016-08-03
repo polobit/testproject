@@ -1276,7 +1276,8 @@ var portlet_utility = {
 										.getStartAndEndDatesOnDue(start_date_str,base_model.get('settings')["start-date"])
 								+ '&end-date='
 								+ portlet_utility
-										.getStartAndEndDatesOnDue(end_date_str,base_model.get('settings')["end-date"]);
+										.getStartAndEndDatesOnDue(end_date_str,base_model.get('settings')["end-date"])
+										+ '&time_zone=' + (new Date().getTimezoneOffset());
 			portlet_graph_data_utility
 					.fetchPortletsGraphData(
 							url,
@@ -1351,7 +1352,7 @@ var portlet_utility = {
 			break;
 		}
 			case "Average Deviation": {
-			var url = '/core/api/portlets/averageDeviation?+start-date='
+			var url = '/core/api/portlets/averageDeviation?start-date='
 								+ portlet_utility
 										.getStartAndEndDatesOnDue(start_date_str,base_model.get('settings')["start-date"])
 								+ '&end-date='

@@ -13,6 +13,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.sync.ImportStatus;
 import com.agilecrm.contact.sync.service.TwoWaySyncService;
 import com.agilecrm.contact.sync.wrapper.IContactWrapper;
@@ -162,6 +163,7 @@ public class GoogleSyncImpl extends TwoWaySyncService
 	    // Builds query without access key
 	    Query nextQuery = buildBasicQueryWithoutAccessKey();
 	    DateTime dateTime = new DateTime(last_synced_from_client);
+	    System.out.println("Last_synced from client time"+dateTime);
 	    nextQuery.setUpdatedMin(dateTime);
 
 	    // Sets start index
@@ -201,6 +203,8 @@ public class GoogleSyncImpl extends TwoWaySyncService
 	System.out.println("existing next link " + nextLink);
 
 	resultFeed = getFeed();
+	
+	System.out.println("ResultFeed" + resultFeed);
 
 	List<ContactEntry> entries = resultFeed.getEntries();
 
@@ -321,6 +325,7 @@ public class GoogleSyncImpl extends TwoWaySyncService
 
 	for (ContactEntry entry : entries)
 	{
+		System.out.println("Google entry to agile"+entry);
 	    etag = entry.getEtag();
 
 	    if (currentEtagInSync == null)
@@ -431,6 +436,7 @@ public class GoogleSyncImpl extends TwoWaySyncService
 	 */
     private void saveNewContactsToGoogle(List<Contact> contacts) throws Exception
     {
+    	System.out.println("New contacts from Agile" + contacts);
 	String token = prefs.token;
 
 	// Feed that hold s all the batch request entries.
@@ -457,9 +463,29 @@ public class GoogleSyncImpl extends TwoWaySyncService
 
 	    Contact contact = contacts.get(i);
 	    
+	    List<ContactField> emails = contact.getContactPropertiesList(Contact.EMAIL);
+
+	    // Added condition to mandate emails. It is added here as other sync
+	    // allows contacts without email
+	    if (emails == null || emails.size() == 0)
+	    	continue;
+	    boolean no_email=false;
+	    for(ContactField emailField:emails){
+	    if (!StringUtils.isBlank(emailField.value) || ContactUtil.isValidEmail(emailField.value))
+	    {
+	    	no_email=true;
+	    	break;
+	    }
+	    }
+	    
+	    if(!no_email)
+	    	continue;
+	    
 	    // Create google supported contact entry based on current contact
 	    // data
 	    ContactEntry createContact = ContactSyncUtil.createContactEntry(contact, group, prefs);
+	    
+	    System.out.println("Google contact entry" + createContact);
 
 	    // Check if contact saving should be skipped. It is required if last
 	    // contact is null then to avoid rest of contacts to being saved
@@ -536,6 +562,8 @@ public class GoogleSyncImpl extends TwoWaySyncService
      */
     private void saveUpdatedContactsToGoogle(List<Contact> contacts) throws Exception
     {
+    
+    System.out.println("Updated contacts from Agile" + contacts);
 	String token = prefs.token;
 
 	// Feed that hold s all the batch request entries.
@@ -557,11 +585,28 @@ public class GoogleSyncImpl extends TwoWaySyncService
 	
 	for (int i = 0; i < contacts_list_size; i++)
 	{
-	    Contact contact = contacts.get(i);	    
+	    Contact contact = contacts.get(i);
+	    
+	    List<ContactField> emails = contact.getContactPropertiesList(Contact.EMAIL);
+	    // Added condition to mandate emails. It is added here as other sync
+	    // allows contacts without email
+	    if (emails == null || emails.size() == 0)
+	    	continue;
+	    boolean no_email=false;
+	    for(ContactField emailField:emails){
+	    if (!StringUtils.isBlank(emailField.value) || ContactUtil.isValidEmail(emailField.value))
+	    {
+	    	no_email=true;
+	    	break;
+	    }
+	    }
+	    
+	    if(!no_email)
+	    	continue;   
 	    // Create google supported contact entry based on current contact
 	    // data
 	    ContactEntry createContact = ContactSyncUtil.createContactEntry(contact, group, prefs);
-
+	    System.out.println("Contact entity for google"+createContact);
 	    // Check if contact saving should be skipped. It is required if last
 	    // contact is null then to avoid rest of contacts to being saved
 
@@ -578,13 +623,21 @@ public class GoogleSyncImpl extends TwoWaySyncService
 		}
 		if (!skip)
 		{
-			if(createContact.getId()!=null)
-			{
-				BatchUtils.setBatchId(createContact, contact.id.toString());
-				BatchUtils.setBatchOperationType(createContact, BatchOperationType.UPDATE);
-				updateFeed.getEntries().add(createContact);
+			 if(createContact.getId() == null)
+			    {
+					BatchUtils.setBatchOperationType(createContact, BatchOperationType.INSERT);
+					BatchUtils.setBatchId(createContact,"create");
+					updateFeed.getEntries().add(createContact);
+			    }
+			    else
+			    {
+			    	//If contact already present in google with this email, we just update this
+			    	//instead of creating new contact
+					BatchUtils.setBatchOperationType(createContact, BatchOperationType.UPDATE);
+					BatchUtils.setBatchId(createContact,"update");
+					updateFeed.getEntries().add(createContact);
+			    }
 				updateRequestCount++;
-			}
 		}
 		    
 		if (updateRequestCount >= 95 || ((i >= (contacts.size() - 1) && updateRequestCount != 0)))
@@ -730,6 +783,7 @@ public class GoogleSyncImpl extends TwoWaySyncService
 	    
 	    // Saves contacts in agile matching accordingly based on entity
 	    // names
+	    System.out.println("Entries size " + entries.size());
 	    saveContactsInAgile(entries);
 
 	    // If fetched contacts size is less than 200, next request is not

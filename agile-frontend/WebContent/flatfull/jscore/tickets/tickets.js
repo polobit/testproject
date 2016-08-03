@@ -1174,7 +1174,7 @@ var Tickets = {
 	// 	});
 	// },
 
-	loadWidgets: function(){
+	ticketsloadWidgets: function(){
 
 		var widgetState = _agile_get_prefs("hide_ticket_details_widgets");
 		if(widgetState && widgetState == "true")
@@ -1202,12 +1202,14 @@ var Tickets = {
 						return;
 
 					clearContactWidetQueues(ticketModel.contactID);
+					loadWidgets(App_Contacts.contactDetailView.el, contact, "widgets");
 
-					//loadWidgets(App_Contacts.contactDetailView.el, contact, "widgets");
-					loadWidgets(App_Ticket_Module.ticketView.el, contact);
+										
 				}
-			});
 
+
+			});
+			
 			//App_Contacts.contactDetailView.render(true).el;
 		}
 	},
@@ -1291,7 +1293,7 @@ var Tickets = {
 			$(e.target).addClass('fa-dedent').removeClass('fa-indent');
 
 			if(widgetStatus == false && $("#widgets-model-list").length == 0)
-				Tickets.loadWidgets();
+				Tickets.ticketsloadWidgets();
 
 		});
 	},

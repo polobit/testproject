@@ -20,8 +20,8 @@ function addInfiniScrollToRoute(infini_scroll) {
 	var current_route = window.location.hash.split("#")[1];
 
 	// Destroys infini scroll
-	if (INFINI_SCROLL_JSON[current_route])
-		INFINI_SCROLL_JSON[current_route].destroy();
+	//if (INFINI_SCROLL_JSON[current_route])
+		//INFINI_SCROLL_JSON[current_route].destroy();
 
 	// Sets new infini scroll object w.r.t current route
 	INFINI_SCROLL_JSON[current_route] = infini_scroll;

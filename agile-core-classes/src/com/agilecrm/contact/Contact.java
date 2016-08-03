@@ -364,6 +364,42 @@ public class Contact extends Cursor
 	}
 	return field;
     }
+    
+    /**
+     * Get Contact field of a based on name and subtype. Partial Update.
+     * 
+     * @return properties as list
+     */
+    public ContactField addpropertyWithoutSavingPartialUpdate(ContactField contactField)
+    {
+	// Ties to get contact field from existing properties based on new field
+	// name.
+	System.out.println("The contact field is " + contactField);
+	ContactField field = this.getContactFieldByNameAndSubType(contactField.name,contactField.subtype);
+	System.out.println("The contact field is " + field);
+	String fieldName = field == null ? contactField.name : field.name;
+	System.out.println("The fieldName is " + fieldName);
+	FieldType type = FieldType.CUSTOM;
+	System.out.println("The FieldType is " + type);
+	if (fieldName.equals(FIRST_NAME) || fieldName.equals(LAST_NAME) || fieldName.equals(EMAIL)
+		|| fieldName.equals(TITLE) || fieldName.equals(WEBSITE) || fieldName.equals(COMPANY)
+		|| fieldName.equals(ADDRESS) || fieldName.equals(URL) || fieldName.equals(PHONE)
+		|| fieldName.equals(NAME) || fieldName.equals(SKYPEPHONE))
+	    type = FieldType.SYSTEM;
+
+	// If field is null then new contact field is added to properties.
+	if (field == null)
+	{
+	    contactField.type = type;
+	    this.properties.add(contactField);
+	}
+	else
+	{
+	    contactField.type = type;
+	    field.updateField(contactField);
+	}
+	return field;
+    }
 
     /**
      * Adds {@link ContactField} to properties list.
@@ -376,6 +412,23 @@ public class Contact extends Cursor
 	save();
     }
 
+    /**
+     * Adds {@link ContactField} to properties list. Partial update.
+     * 
+     * @param input_properties
+     * @return 
+     */
+    public void addPropertiesData(List<ContactField> input_properties)
+    {
+	for(int i = 0; i < input_properties.size() ; i++){
+	    addpropertyWithoutSavingPartialUpdate(input_properties.get(i));
+	}
+	System.out.println(properties);
+	save();
+	
+	
+    }
+    
     public void removeProperty(String propertyName)
     {
 	if (getContactField(propertyName) == null)
@@ -605,6 +658,30 @@ public class Contact extends Cursor
 	{
 	    if (fieldName.equals(field.name))
 		return field;
+	}
+	return null;
+    }
+    
+    /**
+     * Returns {@link ContactField} object based on the field name and subtype.
+     * 
+     * @param fieldName
+     * @return
+     */
+    public ContactField getContactFieldByNameAndSubType(String fieldName, String fielSubType)
+    {
+	System.out.println("inside get contactfield " + fieldName);
+	// Iterates through all the properties and returns matching property
+	for (ContactField field : properties)
+	{
+	    if(fielSubType != null){
+		if (fieldName.equals(field.name) && fielSubType.equals(field.subtype))
+			return field;
+	    }else{
+		if (fieldName.equals(field.name))
+			return field;
+	    }
+	    
 	}
 	return null;
     }

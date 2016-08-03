@@ -60,6 +60,10 @@ function getContactImage(number, type, callback)
 	}
 }
 
+function agile_is_iPhone(){
+   return (/iPhone/i.test(navigator.userAgent));
+ }
+
 function globalCallWidgetSet()
 {
 	$
@@ -69,8 +73,34 @@ function globalCallWidgetSet()
 					{
 						console.log("default call option selected is :" + call_widget);
 
+						$("body .contact-make-call").off("click");
+						$("body .contact-make-call").off("dblclick");
+						if(agile_is_mobile_browser()){
+							if(agile_is_iPhone()){
+								$("body").on("click", ".contact-make-call", function(e){
+									e.preventDefault();
+									var phone = $(this).attr("phone");
+									window.location.href="tel://"+phone;
+								});
+								return;
+							}else{
+								$("body").on("dblclick", ".contact-make-call", function(e){
+									e.preventDefault();
+									var phone = $(this).attr("phone");
+									window.location.href="tel://"+phone;
+								});
+							}
+						}
 						if (call_widget.length == 0)
 						{
+							if(agile_is_mobile_browser()){
+								
+								$("body").on("click", ".contact-make-call", function(e){
+									e.preventDefault();
+									var phone = $(this).attr("phone");
+									window.location.href="tel://"+phone;
+								});
+							}
 							return;
 						}
 
@@ -95,19 +125,50 @@ function globalCallWidgetSet()
 
 						callOptionDiv = callOptionDiv.concat("</span>");
 
+						// this is to get the name of widget stored in cache
+						var nameToStore = "";
+						var selectedWidget = _agile_get_prefs("dial-default-widget");
+						var alreadySetPrefs = false;
+						if(selectedWidget){
+							if(selectedWidget == "Twilio"){
+								selectedWidget = "TwilioIO";
+							}
+							var index = containsOption(default_call_option.callOption, "name", selectedWidget);
+							if( index == -1){
+								nameToStore = "";
+							}else{
+								alreadySetPrefs = true;
+								nameToStore = widgetCallName[selectedWidget];
+							}
+						}
+						
+						var flag = false;
 						$.each(default_call_option.callOption, function(i, obj)
 						{
-							if (obj.name == "Bria" || obj.name == "Skype")
-							{
-								sendTestCommand();
-								return false;
+							// this is to store twilio as default in localstorrage otherwise any
+							if(!alreadySetPrefs){
+								if(widgetCallName[obj.name] == "Twilio"){
+									nameToStore = "Twilio";
+								}else if(nameToStore != "Twilio" && obj.name != "CallScript"){
+									nameToStore = widgetCallName[obj.name];
+								}
 							}
-						});
 
-						$.each(default_call_option.callOption, function(i, obj){
+							//check whether executables are running or not
+							if ((obj.name == "Bria" || obj.name == "Skype" ) && !flag)
+							{
+								flag = true;
+								sendTestCommand();
+							}
+							
+							// this will show the option of widget to select in direct dial from new tab
 							var name = widgetCallName[obj.name];
 							$(".dialler-widget-name-" + name).show();
 						});
+						
+						// saving the name in local storage to show in direct dial 
+							_agile_set_prefs("dial-default-widget", nameToStore);
+
 						
 						$('body').on({ mouseenter : function(e)
 						{
@@ -384,8 +445,8 @@ function handleCallRequest(message)
 			var call = { "direction" : message.direction, "phone" : globalCallForActivity.callNumber, "status" : globalCallForActivity.callStatus,
 				"duration" : message.duration, "contactId" : globalCallForActivity.contactedId };
 			var num = globalCallForActivity.callNumber;
-			saveCallNoteBria();
-			saveCallActivityBria(call);
+			saveCallNoteBria(call);
+			//saveCallActivityBria(call);
 			try
 			{
 				var phone = $("#bria_contact_number").val();
@@ -453,8 +514,8 @@ function handleCallRequest(message)
 				"status" : globalCallForActivity.callStatus, "duration" : message.duration, "contactId" : globalCallForActivity.contactedId };
 			var num = globalCallForActivity.callNumber;
 			console.log("last called : " + call);
-			saveCallNoteSkype();
-			saveCallActivitySkype(call);
+			saveCallNoteSkype(call);
+			//saveCallActivitySkype(call);
 			try
 			{
 				

@@ -289,11 +289,6 @@ function generateSelectUI(uiFieldDefinition, selectEventHandler) {
     	options = getTwilioIncomingList("twilio_incoming_list");
     }
     
-    if(uiFieldDefinition.fieldType == "twilio_number")
-    {
-    	options = getTwilioNumber("twilio_number");
-    }
-    
     if(uiFieldDefinition.fieldType == "campaign_list")
     {
     	options = getCampaignList("campaign_list");
@@ -612,7 +607,7 @@ function addLabel(text, container, inputType)
 	if(text.indexOf(".") == -1)
 	
 	// Add colon if does not exist.(yasin(13-09-10))	
-			if(text.indexOf(":") == -1)
+			if(inputType!="plaintext" && text.indexOf(":") == -1)
 				text += ": "; 
 	
 	// Original text is stored for later translation		

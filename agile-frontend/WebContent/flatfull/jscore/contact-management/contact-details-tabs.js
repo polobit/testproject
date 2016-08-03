@@ -10,6 +10,8 @@
 
 var contact_tab_position_cookie_name = "contact_tab_position_" + CURRENT_DOMAIN_USER.id;
 
+var company_tab_position_cookie_name = "company_tab_position_" + CURRENT_DOMAIN_USER.id;
+
 var CONTACT_ASSIGNED_TO_CAMPAIGN = false;
 
 var NO_WEB_STATS_SETUP = true;
@@ -35,7 +37,7 @@ function fill_company_related_contacts(companyId, htmlId, context_el)
 	if(context_el)
 		$('#' + htmlId, $(context_el)).html(companyContactsView.render().el);
 	else
-		$('#' + htmlId).html(companyContactsView.render().el);
+		$('#' + htmlId,App_Companies.companyDetailView.el).html(companyContactsView.render().el);
 }
 
 var Contact_Details_Tab_Actions = {
@@ -327,6 +329,22 @@ function activate_timeline_tab()
 	}
 }
 
+function activate_company_contact_tab()
+{
+	$('#contactDetailsTab').find('li.active').removeClass('active');
+	$('#contactDetailsTab li:first-child').addClass('active');
+
+	$('div.tab-content').find('div.active').removeClass('active');
+	$('div.tab-content > div:first-child',App_Companies.companyDetailView.el).addClass('active');
+
+	// $('#time-line').addClass('active'); //old original code for flicking
+	// timeline
+
+	if (App_Companies.companyDetailView.model.get('type') == 'COMPANY')
+	{
+		fill_company_related_contacts(App_Companies.companyDetailView.model.id, 'company-contacts');
+	}
+}
 /**
  * Disables Send button of SendEmail and change text from Send to Sending...
  * 
@@ -375,6 +393,17 @@ function save_contact_tab_position_in_cookie(tab_href)
 	_agile_set_prefs(contact_tab_position_cookie_name, tab_href);
 }
 
+function save_company_tab_position_in_cookie(tab_href)
+{
+
+	var position = _agile_get_prefs(company_tab_position_cookie_name);
+
+	if (position == tab_href)
+		return;
+
+	_agile_set_prefs(company_tab_position_cookie_name, tab_href);
+}
+
 function load_contact_tab(el, contactJSON)
 {
 	timeline_collection_view = null;
@@ -405,6 +434,36 @@ function load_contact_tab(el, contactJSON)
 
 }
 
+function load_company_tab(el, contactJSON)
+{
+	//timeline_collection_view = null;
+	var position = _agile_get_prefs(company_tab_position_cookie_name);
+	if (position == null || position == undefined || position == "")
+		position = "contacts";
+
+	if(position == "contacts" && agile_is_mobile_browser())
+			return;
+
+	$('#contactDetailsTab a[href="#company-' + position + '"]', el).tab('show');
+
+	if (!position || position == "contacts")
+	{
+		activate_company_contact_tab()
+		company_detail_tab.load_fill_company_related_contacts
+		return;
+	}
+
+	if (company_detail_tab["load_company_" + position])
+	{
+
+		// Should add active class, tab is not enough as content might not be
+		// shown in view.
+		$(".tab-content", el).find("#company-" + position).addClass("active");
+		company_detail_tab["load_company_" + position]();
+	}
+
+}
+
 function get_emails_to_reply(emails, configured_email)
 {
 	var emails_array = emails.split(',');
@@ -414,10 +473,10 @@ function get_emails_to_reply(emails, configured_email)
 	for (var i = 0, len = emails_array.length; i < len; i++)
 	{
 
-		var email = emails_array[i].match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+)/gi)[0];
+		var email = emails_array[i].match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+)/gi);
 
 		// Skip configured email
-		if (configured_email && email == configured_email)
+		if (configured_email && email == configured_email || !email)
 			continue;
 
 		// Skip current user email
@@ -800,12 +859,20 @@ function modelDelete(model, targetEl, callback){
 		{
 			var can_edit = false;
 			$.each(response_data, function(index, contactId){
-				if(App_Contacts.contactDetailView.model.get("id") && contactId == App_Contacts.contactDetailView.model.get("id"))
+				if(Current_Route.indexOf("contact/") == 0 && App_Contacts.contactDetailView.model.get("id") && contactId == App_Contacts.contactDetailView.model.get("id"))
+				{
+					can_edit = true;
+				}
+				else if(Current_Route.indexOf("company/") == 0 && App_Companies.companyDetailView.model.get("id") && contactId == App_Companies.companyDetailView.model.get("id"))
 				{
 					can_edit = true;
 				}
 			});
-			if(!App_Contacts.contactDetailView.model.get("id"))
+			if(Current_Route.indexOf("contact/") == 0 && !App_Contacts.contactDetailView.model.get("id"))
+			{
+				can_edit = true;
+			}
+			else if(Current_Route.indexOf("company/") == 0 && !App_Companies.companyDetailView.model.get("id"))
 			{
 				can_edit = true;
 			}
@@ -828,7 +895,7 @@ function modelDelete(model, targetEl, callback){
 			}
 		}
 		// Removes activity from list
-		$(that).parents(".activity").fadeOut(400, function()
+		$(that).parents(".activity").parent().fadeOut(400, function()
 		{
 			$(targetEl).remove();
 		});
