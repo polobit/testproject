@@ -133,7 +133,7 @@
 		<li class="list-group-item r-none b-l-none b-r-none">
 			<div class="clear">					
 				<a class="pull-left" data-toggle="collapse" href="#collapse-{{id}}" >
-					{{#if_equals paid true}}Paid{{else}}Pending{{/if_equals}}
+					{{#if_equals paid true}}{{agile_lng_translate 'widjets' 'paid'}}{{else}}{{agile_lng_translate 'tickets' 'pending'}}{{/if_equals}}
 				</a>
 				<div class="pull-right font-bold">$ {{numeric_operation total 100 "/"}}</div>	
 				<div class="clearfix"></div>	
@@ -176,7 +176,7 @@
 		<li class="list-group-item r-none b-l-none b-r-none">
 			<div class="clear">					
 				<a class="pull-left" data-toggle="collapse" href="#collapse-{{id}}" >
-					{{#if_equals paid true}}Paid{{else}}Pending{{/if_equals}}
+					{{#if_equals paid true}}{{agile_lng_translate 'widjets' 'paid'}}{{else}}{{agile_lng_translate 'tickets' 'pending'}}{{/if_equals}}
 				</a>
 				<div class="pull-right font-bold">$ {{numeric_operation amount 100 "/"}}</div>				
 				<div class="clearfix"></div>
