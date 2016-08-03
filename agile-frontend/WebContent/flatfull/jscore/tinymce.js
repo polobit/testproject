@@ -334,7 +334,7 @@ function get_merge_fields(callback)
 			"{{agile_lng_translate 'contacts-view' 'country'}}":"{{location.country}}",
 			"{{agile_lng_translate 'contact-view' 'owner-name'}}":"{{owner.name}}",
 			"{{agile_lng_translate 'contact-view' 'owner-email'}}":"{{owner.email}}", 
-			"{{agile_lng_translate 'contact-view' 'calendar-url'}}":"{{owner.calendar_url}}"
+			"{{agile_lng_translate 'contact-view' 'calendar-url'}}":"{{owner.calendar_url}}"	
 			}
 	
 	if(!callback){
