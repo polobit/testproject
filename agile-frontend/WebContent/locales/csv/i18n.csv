@@ -4067,12 +4067,12 @@ admin-settings-integrations.accounts,Accounts,cuentas
 social.tweet-to,Tweet to,Twittear a
 tasks.group-by,Group By,Agrupar por
 tickets.incident,Incident,Incidente
-months-xs.Nov,November,November
+months-xs.Nov,Nov,Nov
 widgets.Facebook,Facebook,Facebook 
 months.November,November,Noviembre
 campaigns.payments,Payments,Pagos
 portlets.category,Category,Categoría
-months-xs.Feb,February,February
+months-xs.Feb,Feb,Feb
 tasks.complete,Complete,Completar
 portlets.split-by,Split by,dividir por
 contact-details.referred,Referred,Referido
@@ -4121,7 +4121,7 @@ admin-settings-custom-fields.required,Required,Requerido
 months.february,February,Febrero
 tickets.assignee,Assignee,Cesionarios
 deal-view.Deals?,Deal(s)?,Oferta(s)?
-months-xs.Dec,December,Dic
+months-xs.Dec,Dec,Dic
 campaigns.interest,Interest,Interés
 other.schedule,Schedule,Programar
 prefs-settings.language,Language,Idioma
@@ -4189,7 +4189,7 @@ contacts-view.Company,Company,Empresa
 countries.YT,Mayotte,Mayotte
 widgets.blocked,Blocked,Bloqueado
 deal-view.compact,Compact,Compactar
-months-xs.Jan,January,Ene
+months-xs.Jan,Jan,Ene
 other.details,Details,detalles
 countries.UA,Ukraine,Ucrania
 countries.UY,Uruguay,Uruguay
@@ -4331,7 +4331,7 @@ misc-keys.clip-copied,Copied!,Copiado!
 tasks.Meeting,Meeting,Reunión
 contact-details.created,Created,Creado
 admin-settings-integrations.api-key,API Key,Llave API
-months-xs.Oct,October,October
+months-xs.Oct,Oct,Oct
 bulk-actions.you-may,You may,Puedes
 landing-pages.publish,Publish,Publicar
 plan-and-upgrade.regular,Regular,Regular
@@ -4445,7 +4445,7 @@ activities.ticket,ticket,boleto
 deal-view.events,Events,Eventos
 tickets.is-not,is not,no es
 campaigns.public,Public,Público
-months-xs.Aug,August,Ago
+months-xs.Aug,Aug,Ago
 widgets.signup,SignUp,Registrarse
 subscriber_type.active,Active,Activo
 contact-edit.update,Update,Actualizar
