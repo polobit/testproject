@@ -76,7 +76,7 @@
     <td class="text-muted" style="color: #b2b0b1;">
        {{#if created_time}}
           <div class="text-muted table-resp text-xs"> <i class="fa fa-clock-o m-r-xs"></i>
-    	       Created <time class="created_time time-ago" value="{{created_time}}" datetime="{{epochToHumanDate "" created_time}}">{{epochToHumanDate "ddd mmm dd yyyy" created_time}}</time> by {{emailTemplateOwner.name}}
+    	       {{agile_lng_translate 'campaigns' 'created'}} <time class="created_time time-ago" value="{{created_time}}" datetime="{{epochToHumanDate "" created_time}}">{{epochToHumanDate "ddd mmm dd yyyy" created_time}}</time> by {{emailTemplateOwner.name}}
           </div>
        {{/if}}
     </td>

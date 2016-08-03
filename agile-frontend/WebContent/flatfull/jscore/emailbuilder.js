@@ -140,7 +140,7 @@ function sendTestEmailTemplate(fullSource,builderSource) {
     // Verifies merge fields and gives alert
     if ( check_merge_fields_and_send(template) ){
         var requestType = "post";
-        var message = "Test Email Sent.";
+        var message = "{{agile_lng_translate 'emailbuilder' 'sent-testemail'}}";
 
         $.ajax({
             type: requestType, 

@@ -78,7 +78,7 @@
 			<input type="hidden" name="isDefault" value="{{isDefault}}">
 			<input type="hidden" name="won_milestone" value="{{won_milestone}}" />
 			<input type="hidden" name="lost_milestone" value="{{lost_milestone}}" />
-			<div class="panel-title"><a class="accordion-toggle pull-left text-l-none-hover" data-toggle="collapse" aria-controls="collapseOne" aria-expanded="true" data-parent="#deal-tracks-accordion" href="#dealtracks-{{id}}-accordion" style="width:90%;">{{agile_lng_translate 'deal-view' name}}</a></div>
+			<div class="panel-title"><a class="accordion-toggle pull-left text-l-none-hover" data-toggle="collapse" aria-controls="collapseOne" aria-expanded="true" data-parent="#deal-tracks-accordion" href="#dealtracks-{{id}}-accordion" style="width:90%;">{{name}}</a></div>
 			<div id="icons" class="pull-right pos-abs pos-r-0 pos-t-0 p-r m-t-xs" style="display:none;">
 			{{#isTracksEligible}}
 			{{#hasSingleTrack}}
@@ -247,11 +247,11 @@
    <div class="text-right">
       <ul class="list-inline text-sm m-b-xs">
          <li>
-            Total Goals: 
+            {{agile_lng_translate 'deal-goals' 'total'}}: 
             <div class="Count_goal  text-right pull-right p-l-xs" value=0>0</div>
          </li>
          <li>
-            Total Goals Value: 
+            {{agile_lng_translate 'deal-goals' 'total-value'}}: 
             <div class="text-right pull-right p-l-xs">{{currencySymbol}}<label class="Amount_goal" value=0>0</label></div>
          </li>
       </ul>
@@ -275,9 +275,9 @@
                   <thead>
                      <tr>
                         <th style="width:5%"></th>
-                        <th style="width:35%">User</th>
-                        <th style="width:30%">Goals</th>
-                        <th style="width:30%">Goal Value</th>
+                        <th style="width:35%">{{agile_lng_translate 'portlets' 'user'}}</th>
+                        <th style="width:30%">{{agile_lng_translate 'portlets' 'goals'}}</th>
+                        <th style="width:30%">{{agile_lng_translate 'deal-goals' 'goal-value'}}</th>
                      </tr>
                   </thead>
                   <tbody id="admin-settings-deal-goals-model-list" class="admin-settings-deal-goals-model-list">

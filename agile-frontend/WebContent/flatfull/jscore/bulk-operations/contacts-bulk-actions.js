@@ -805,14 +805,14 @@ select_contacts :  function(e)
 							resultCount = limitValue + "+";
 						}
 					}
-					html = ' '+_agile_get_translated_val('contacts','select-all')+' ' + resultCount + ' '+_agile_get_translated_val('contact-details','companies')+'. <a hrer="#" id="select-all-revert" class="c-p text-info">'+_agile_get_translated_val('companies', 'select-choosen-only')+'</a>';
+					html = ' '+_agile_get_translated_val('contacts','select-all')+' ' + resultCount + ' '+_agile_get_translated_val('contact-details','companies')+'. <a hrer="#" id="select-all-revert" class="c-p text-info">{{agile_lng_translate "companies" "select-choosen-only"}}</a>';
 				}else{
 					if(localStorage.getItem("dynamic_contact_filter") != null || localStorage.getItem("contact_filter") != null){				
 						if(resultCount > limitValue){
 							resultCount = limitValue + "+";
 						}
 					}
-					html = ' '+_agile_get_translated_val('contacts','select-all')+' ' + resultCount + ' '+_agile_get_translated_val('contact-details','contacts')+'. <a hrer="#" id="select-all-revert" class="c-p text-info">'+_agile_get_translated_val('contacts', 'select-choosen-only')+'</a>';
+					html = ' '+_agile_get_translated_val('contacts','select-all')+' ' + resultCount + ' '+_agile_get_translated_val('contact-details','contacts')+'. <a hrer="#" id="select-all-revert" class="c-p text-info">{{agile_lng_translate "contacts" "select-choosen-only"}}</a>';
 				}
 				
 				$('body')

@@ -135,13 +135,13 @@ var ContactsRouter = Backbone.Router.extend({
 		if(dashboard_name==="MarketingDashboard"){
 
 			dashboardJSON["id"] = "MarketingDashboard";
-			dashboardJSON["name"] = "Marketing";
+			dashboardJSON["name"] = "{{agile_lng_translate 'dashboards' 'marketing'}}";
 			dashboardJSON["description"] = _agile_get_translated_val("dashboards","marketing-help");
 
 		}else if(dashboard_name == "SalesDashboard"){
 
 			dashboardJSON["id"] = "SalesDashboard";
-			dashboardJSON["name"] = "Sales";
+			dashboardJSON["name"] = "{{agile_lng_translate 'menu' 'sales'}}";
 			dashboardJSON["description"] = _agile_get_translated_val("dashboards", "sales-help");
 
 		}else if(!dashboardJSON["id"])

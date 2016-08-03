@@ -169,7 +169,7 @@ var tracks = new Base_Collection_View({url : '/core/api/milestone/pipelines'});
 		success: function(data){
 			hideTransitionBar();
 			var jsonModel = data.toJSON();
-			var html = '<option value="">Select..</option>';
+			var html = '<option value="">{{agile_lng_translate "contacts-view" "select"}}</option>';
 			console.log(jsonModel);
 			
 			// If there is only one pipeline, select the option by default and hide the field.

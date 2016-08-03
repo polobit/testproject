@@ -69,7 +69,7 @@ var CONTENT_JSON = {
 	},
 	"deals" : {
 		"title" : "{{agile_lng_translate 'portlets' 'no-deals-found'}}.",
-		"description" : "{{agile_lng_translate 'portlets' 'deals-pad-content-desc'}}",
+		"description" : "{{agile_lng_translate 'portlets' 'deals-pad-content-desc'}}<br/> {{agile_lng_translate 'portlets' 'deals-pad-content-desc-2'}}",
 		//"learn_more" : "click here to learn more",
 		"button_text" : "{{agile_lng_translate 'portlets' 'deals-btn-text'}}",
 		"route" : "#",

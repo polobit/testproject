@@ -61,7 +61,7 @@
                            </div>
                         </div>
 
-                        <div class="plan-collection-content show_limits text-base text-center p" style="height:104px;" id="basic_plan_statement">
+                        <div class="plan-collection-content show_limits text-base text-center p" style="min-height:104px;" id="basic_plan_statement">
                            {{agile_lng_translate 'plan-and-upgrade' 'starter-content'}} 
                         </div>
 
@@ -149,7 +149,7 @@
                            </div>
                            </div>
                         </div>
-                        <div class="plan-collection-content text-base p text-center show_limits" style="height: 104px;">
+                        <div class="plan-collection-content text-base p text-center show_limits" style="min-height: 104px;">
                            {{agile_lng_translate 'plan-and-upgrade' 'enterprise-content'}}
                         </div>
 
@@ -303,10 +303,10 @@
 	<label class="control-label col-sm-3">{{agile_lng_translate 'plan-and-upgrade' 'billing-cycle'}}</label> 
 		<div class="controls col-sm-3">
 			<select name="cycle" id="billing_cycle" class="form-control">
-				<option value="monthly" selected>{{agile_lng_translate 'plan-and-upgrade' 'monthly'}}</option>
-				<option value="yearly">{{agile_lng_translate 'plan-and-upgrade' 'yearly-20-percent-off'}}
+				<option value="monthly" selected>Monthly</option>
+				<option value="yearly">Yearly {{agile_lng_translate 'plan-and-upgrade' 'yearly-20-percent-off'}}
 				</option>
-				<option value="biennial">{{agile_lng_translate 'plan-and-upgrade' 'yearly-40-percent-off'}}
+				<option value="biennial">2 Years {{agile_lng_translate 'plan-and-upgrade' '2yearly-40-percent-off'}}
 				</option>
 			</select>
 		</div> <!-- End of controls col-sm-6 -->
@@ -864,7 +864,7 @@ Proceed to Trial
 			        
 			       </div>
 			       <div class="col-sm-offset-3 p-l help-block m-b-none"> 
-				     You will be charged @ $4/1000 {{agile_lng_translate 'portlets' 'emails'}}.
+				     {{agile_lng_translate 'billing' 'email-credits-tooltip'}} @ $4/1000 {{agile_lng_translate 'portlets' 'emails'}}.
 				   </div>
 			       <span for="email_credits_count" generated="true" class="help-inline col-sm-offset-3 p-l"></span> 
 			      </div>

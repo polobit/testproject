@@ -94,11 +94,11 @@ var VisitorsSegmentationRouter = Backbone.Router
 
                                                                                              
                                if(collection.models.length==0)
-                                     $("#visitors-count").html("<small> (" + 0 + _agile_get_translated_val('other','total') + " ) </small>");
+                                     $("#visitors-count").html("<small> (" + 0 + " " + _agile_get_translated_val('other','total') + " ) </small>");
                                 else if(collection.models[collection.models.length-1].attributes.count){
                                     
                                     total_count = collection.models[collection.models.length-1].attributes.count;
-                                    count_message = "<small> (" + total_count + _agile_get_translated_val('other','total') + " ) </small>";
+                                    count_message = "<small> (" + total_count + " " + _agile_get_translated_val('other','total') + " ) </small>";
                                     $("#visitors-count").html(count_message);
                                 }                                             
                                                              

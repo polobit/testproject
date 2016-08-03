@@ -25,7 +25,7 @@
 		<h5 class="m-t-none">
 	  	    <a class="text-l-none"><b> {{agile_lng_translate 'Contacts-view' 'initial-referral-url'}}</b></a><img border="0" src="{{getS3ImagePath '/img/help.png'}}"
 		    style="height: 6px; vertical-align: text-top" rel="popover"
-			data-placement="bottom" data-title="Referrer URL"
+			data-placement="bottom" data-title="{{agile_lng_translate 'web-rules' 'referrer-url'}}"
 			data-content="{{agile_lng_translate 'Contacts-view' 'this-is-the-website-your-contact-came-from'}}"
 			id="element" data-trigger="hover"> : {{checkOriginalRef "original_ref"}} {{#if this.length}}{{queryWords "original_ref"}}{{/if}}
 		</h5>
@@ -41,7 +41,7 @@
 <div  class="activity block">
 	<div class="activity-text-block">
 		
-		<h4 class="inline hide"><b>Page View Analytics</b></h4>
+		<h4 class="inline hide"><b>{{agile_lng_translate 'contact-details' 'page-view-analytics'}}</b></h4>
 
 <div class="pull-right">
 		<small class="edit-hover text-muted">
@@ -54,7 +54,7 @@
 		    <div class="list-none p-n">
 			    <div>	
 					{{#stringToJSON this "urls_with_time_spent"}}
-                    <div class="text-md text-cap custom-color"><a id="show-page-views" href="#">Pages Visited ({{this.length}}) </a></div>
+                    <div class="text-md text-cap custom-color"><a id="show-page-views" href="#">{{agile_lng_translate 'contact-details' 'pages-visited'}} ({{this.length}}) </a></div>
 							
 					{{!-- {{#if_more_urls this this.length}}		
 						<div class="limited-page-urls word-break-all">
@@ -75,7 +75,7 @@
 			<div>	
 					{{#stringToJSON this "urls_with_time_spent"}}
                     <!--<div  class="text-md text-cap custom-color">
-						Pages Visited ({{this.length}}){{/stringToJSON}}
+						{{agile_lng_translate 'contact-details' 'pages-visited'}} ({{this.length}}){{/stringToJSON}}
 					
 					</div>-->
 
@@ -89,7 +89,7 @@
  
                 {{#if ref_url}}
                 <div class="m-t-xs">	
-					<span>Referred -- </span>
+					<span>{{agile_lng_translate 'contact-details' 'referred'}} -- </span>
 							
 					<span>
 						{{ref_url}}
@@ -99,7 +99,7 @@
                
                {{#if ip}}
 				<div class="m-t-xs">	
-					<span>IP Address -- </span>		
+					<span>{{agile_lng_translate 'admin-settings' 'ip-address'}} -- </span>		
 					<span>
 						{{ip}}
 					</span>
@@ -108,7 +108,7 @@
 
 			   {{#if city}}
                 <div class="m-t-xs">	
-					<span>Location -- </span>		
+					<span>{{agile_lng_translate 'contact-details' 'location'}} -- </span>		
 					<span>
 						{{ucfirst city}}, {{ucfirst region}}, {{getCountryName country}}
 					</span>

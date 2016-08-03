@@ -297,7 +297,7 @@ function initializeSubscriptionListeners()
 
 		var quantity = $("#user_quantity").val();
 
-		(quantity && quantity > 1) ? $("#users_quantity_text").text("Users") : $("#users_quantity_text").text("User");
+		(quantity && quantity > 1) ? $("#users_quantity_text").text("{{agile_lng_translate 'plan-and-upgrade' 'users'}}") : $("#users_quantity_text").text("{{agile_lng_translate 'plan-and-upgrade' 'user'}}");
 
 	});
 
@@ -349,7 +349,7 @@ function initializeSubscriptionListeners()
 				}
 				plan_json = {};
 				var buttonText = $(this).html();
-				$(this).text("Loading...");
+				$(this).text("{{agile_lng_translate 'tickets' 'loading'}}");
 				$(this).attr("disabled","disabled");
 				/*
 				 * var quantity = $("#users_quantity").text(); var cost =

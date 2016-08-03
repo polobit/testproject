@@ -123,12 +123,12 @@
     </div>
     <div class="panel-body">
     {{#if_equals type "GOOGLE"}}
-	    <div class="text-flow-ellipsis line-clamp line-clamp-4" style="height:80px" rel="tooltip" title="{{content}}">
-			{{content}}
+	    <div class="text-flow-ellipsis line-clamp line-clamp-4" style="height:80px" rel="tooltip" title="{{get_datasync_translation type 'content'}}">
+			{{get_datasync_translation type 'content'}}
 		</div>
 	{{else}}
-		<div class="text-flow-ellipsis line-clamp line-clamp-4" style="height:85px" rel="tooltip" title="{{content}}">
-			{{content}}
+		<div class="text-flow-ellipsis line-clamp line-clamp-4" style="height:85px" rel="tooltip" title="{{get_datasync_translation type 'content'}}">
+			{{get_datasync_translation type 'content'}}
 		</div>
 	{{/if_equals}}
     <div class="text-center">

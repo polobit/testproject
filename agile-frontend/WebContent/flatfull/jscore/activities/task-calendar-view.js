@@ -21,7 +21,10 @@ function getCalendarView() {
 						 *            fullCalendar
 						 * 
 						 */
-
+						monthNames: $.fn.datepicker.dates['en'].months,
+					    monthNamesShort: $.fn.datepicker.dates['en'].monthsShort,
+					    dayNames: $.fn.datepicker.dates['en'].days,
+					    dayNamesShort: $.fn.datepicker.dates['en'].daysShort,
 						events : function(start, end, callback)
 						{
 							var tasksURL = "core/api/tasks/calendar/"
@@ -60,7 +63,7 @@ function getCalendarView() {
 								$("#loading_calendar_events").remove();
 								$('.fc-header-left','#task-calendar-based-condition')
 										.append(
-												'<span id="loading_calendar_events" style="margin-left:5px;vertical-align:middle;padding-top: 5px;position: absolute;">loading...</span>')
+												'<span id="loading_calendar_events" style="margin-left:5px;vertical-align:middle;padding-top: 5px;position: absolute;">{{agile_lng_translate "tickets" "loading"}}</span>')
 										.show();
 								$('.fc-header-left','#task-calendar-based-condition').show();
 

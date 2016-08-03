@@ -367,3 +367,8 @@ function landingpagesCollection(sortKey)
         this.LandingPageCollectionView.collection.fetch();
         var collectiondata = this.LandingPageCollectionView.render().el;
 }
+
+function resetLandingPageButton(){
+	$(".saveLandingPageButton").prop("disabled",false);
+    $(".saveLandingPageButtonText").html("{{agile_lng_translate 'landing-pages' 'save-page'}}");
+}

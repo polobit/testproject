@@ -692,7 +692,7 @@ $('body').on('mouseleave','#workflows-model-list tr', function(e){
             while($("#workflow-save-popup").length)
                   $("#workflow-save-popup").remove();
 
-            workflow_alerts("Next Action ", "null" , "workflow-save-popup-modal", function(el){
+            workflow_alerts("{{agile_lng_translate 'landingpages' 'next-action'}} ", "null" , "workflow-save-popup-modal", function(el){
                
                 window.setTimeout(function () {   $(el).find("#popup-msg").fadeOut(8000); }, 500); 
             });

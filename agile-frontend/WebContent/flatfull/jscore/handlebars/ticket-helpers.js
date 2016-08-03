@@ -610,4 +610,30 @@ Handlebars.registerHelper('helpcenter_url_section', function(options)
     var id = idarr[idarr.length-1];
 	return "/"+id;
 });
+
+Handlebars.registerHelper('get_ticket_translated_text', function(module, key, options)
+{
+	return get_ticket_translated_text(module, key);
+	
+});
 /** End of ticketing handlebars* */
+
+function get_ticket_translated_text(module, key){
+	var items = {
+		"priority" : {
+			"LOW" : "{{agile_lng_translate 'tasks' 'Low'}}",
+			"MEDIUM" : "{{agile_lng_translate 'tickets' 'medium'}}",
+			"HIGH" : "{{agile_lng_translate 'tasks' 'High'}}",
+		},
+		"status" : {
+			"OPEN" : "{{agile_lng_translate 'contact-details' 'OPEN'}}",
+			"PENDING" : "{{agile_lng_translate 'tickets' 'pending'}}",
+			"CLOSED" :"{{agile_lng_translate 'cases' 'closed'}}",
+		},
+	};
+	if(items[module] && items[module][key]){
+		return items[module][key];
+	}
+	
+	return key;
+}

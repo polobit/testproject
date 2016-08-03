@@ -48,5 +48,15 @@
             "recent-activity" :     "Recent Activity",
             "still-on-free-plan"   :     "Still on FREE Plan?",
             "refer" : "Refer a Friend",
+            "tasks-due" : "Tasks due",
+            "triggers" : "Triggers",
+            "forms" : "Forms",
+            "email-templates" : "Email Templates",
+            "groups" : "Groups",
+            "labels" : "Labels",
+            "canned-responses" : "Canned Responses",
+            "views" : "Views",
+            "knowledge-base" : "Knowledge Base",
+            "chat-with-us" : "Chat With Us",
       }
 }

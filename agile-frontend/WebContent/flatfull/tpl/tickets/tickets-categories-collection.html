@@ -32,12 +32,12 @@
                     
                 </button>
             </div>
-            <table class="table table-striped showCheckboxes m-b-none agile-table panel table-layout-mob-view show-delete-modal" url="core/api/knowledgebase/categorie/bulk" data-bulk-delete-title="Delete"
-                data-bulk-delete-msg="Are you sure you want to delete?" id="ticket-categorie-table">
+            <table class="table table-striped showCheckboxes m-b-none agile-table panel table-layout-mob-view show-delete-modal" url="core/api/knowledgebase/categorie/bulk" data-bulk-delete-title="{{agile_lng_translate 'contact-details' 'delete'}}"
+                data-bulk-delete-msg="{{agile_lng_translate 'tickets' 'conformation-messge-for-deletion'}}" id="ticket-categorie-table">
                     <thead>
                         <tr>
                             <th class="hide">Id</th>
-                            <th style="width:40%">Category Name</th>
+                            <th style="width:40%">{{agile_lng_translate 'category' 'name'}}</th>
                             <th style="width:40%">&nbsp;</th>
                         </tr>
                     </thead>

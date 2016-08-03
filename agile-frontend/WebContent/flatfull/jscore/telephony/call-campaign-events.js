@@ -153,7 +153,7 @@ $(function(){
 					
 					// Disabled the buttons and fields......
 					$("#bulk-start-call-campaign").attr("disabled","disabled");
-					$("#bulk-start-call-campaign").html("Loading...");
+					$("#bulk-start-call-campaign").html("{{agile_lng_translate 'tickets' 'loading'}}");
 					$("#call_campaign_autodial").attr("disabled","disabled");
 					$("#addTag").attr("disabled","disabled");
 					$("#rampTimeButton").attr("disabled","disabled");

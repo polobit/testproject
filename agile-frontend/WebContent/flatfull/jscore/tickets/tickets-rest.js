@@ -96,7 +96,7 @@ var Tickets_Rest={
 
 		var $this = $(e.target);
 
-		$this.siblings("#workflows_list").html('<li><a href="javascript:void(0);">Loading...</a></li>');
+		$this.siblings("#workflows_list").html('<li><a href="javascript:void(0);">{{agile_lng_translate "tickets" "loading"}}</a></li>');
 
 		var workflows = Backbone.Collection.extend({
 			url : 'core/api/workflows'

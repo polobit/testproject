@@ -267,9 +267,9 @@ function isIE() {
 
 <div id="free_plan_alert_info" class="free_plan_alert alert alert-info" role="alert" style="display:none;"> 
   <span class="free_plan_message">
-   You are currently on FREE Plan.
+   <%=LanguageUtil.getLocaleJSONValue(localeJSON, "you-are-currently-on-free-plan") %>.
   </span>
-  <a href="#subscribe" class="text-info font-bold" onclick="Agile_GA_Event_Tracker.track_event('Upgrade from Nav Bar Message')">Upgrade</a>
+  <a href="#subscribe" class="text-info font-bold" onclick="Agile_GA_Event_Tracker.track_event('Upgrade from Nav Bar Message')"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "noty-upgrade") %></a>
   <span class="free_plan_strip_close p-l-sm c-p">&times</span>
 </div>
 
@@ -469,7 +469,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
     <a href="#tasks" onclick="Agile_GA_Event_Tracker.track_event('Tasks Option in Nav Bar')">
       <i class="icon-list" data-original-title="" title=""></i>
       <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "tasks") %></span>
-      <span title="Tasks due" class="navbar_due_tasks pull-right tasks-span-top">
+      <span title="<%=LanguageUtil.getLocaleJSONValue(localeJSON, "tasks-due") %>" class="navbar_due_tasks pull-right tasks-span-top">
           <span  id="due_tasks_count" class="badge badge-sm bg-danger"></span>
       </span>
     </a>
@@ -531,7 +531,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
   <li id="triggersmenu">
     <a  href="#triggers">
       <i class="icon icon-magic-wand"></i>
-      <span>Triggers</span>
+      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "triggers") %></span>
     </a>
   </li>
     <%
@@ -568,7 +568,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
   <li id="formsmenu">
     <a  href="#forms">
        <i class="icon-large1 icon-docs"></i>
-      <span>Forms</span>  
+      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "forms") %></span>  
     </a>
   </li>
   <%}%>
@@ -576,7 +576,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
   <li id="email-templates-menu">
     <a href="#email-templates">
       <i class="icon-envelope-letter"></i>
-      <span>Email Templates</span>
+      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "email-templates") %></span>
     </a>
   </li>
 
@@ -618,7 +618,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
     <a href="#tasks" onclick="Agile_GA_Event_Tracker.track_event('Tasks Option in Nav Bar')">
       <i class="icon-list" data-original-title="" title=""></i>
       <span>Tasks</span>
-      <span title="Tasks due" class="navbar_due_tasks pull-right tasks-span-top">
+      <span title="<%=LanguageUtil.getLocaleJSONValue(localeJSON, "tasks-due") %>" class="navbar_due_tasks pull-right tasks-span-top">
           <span  id="due_tasks_count" class="badge badge-sm bg-danger"></span>
       </span>
     </a>
@@ -649,7 +649,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
     <a href="#tasks" onclick="Agile_GA_Event_Tracker.track_event('Tasks Option in Nav Bar')">
       <i class="icon-list" data-original-title="" title=""></i>
       <span>Tasks</span>
-      <span title="Tasks due" class="navbar_due_tasks pull-right tasks-span-top">
+      <span title="<%=LanguageUtil.getLocaleJSONValue(localeJSON, "tasks-due") %>" class="navbar_due_tasks pull-right tasks-span-top">
           <span  id="due_tasks_count" class="badge badge-sm bg-danger"></span>
       </span>
     </a>
@@ -657,35 +657,35 @@ if(currentUserPrefs.menuPosition.equals("top")){
 
   <%
   if(domainUser.is_admin && !domainUser.restricted_menu_scopes.contains(NavbarConstants.HELPDESK)){
-  %>
+  %>          
   <li id="ticketgroupsmenu">
     <a href="#ticket-groups">
       <i class="icon icon-users"></i>
-      <span>Groups</span>
+      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "groups") %></span>
     </a>
   </li>
   <li id="ticketlabelsmenu">
     <a href="#ticket-labels">
       <i class="icon icon-flag"></i>
-      <span>Labels</span>
+      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "labels") %></span>
     </a>
   </li>
   <li id="ticketcannedmessagesmenu">
     <a href="#canned-responses">
       <i class="icon icon-cursor"></i>
-      <span>Canned Responses</span>
+      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "canned-responses") %></span>
     </a>
   </li>
   <li id="ticketviewsmenu">
     <a href="#ticket-views">
       <i class="icon icon-directions"></i>
-      <span>Views</span>
+      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "views") %></span>
     </a>
   </li>
   <li id="ticketknowledgebasemenu">
     <a href="#knowledgebase">
       <i class="fa fa-search"></i>
-      <span>Knowledge Base</span>
+      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "knowledge-base") %></span>
     </a>
   </li>
    <%
@@ -1017,10 +1017,7 @@ head.load(	"https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js",
 // head.js({ library  : LIB_PATH + 'final-lib/min/lib-all-min-1.js?_=' + _AGILE_VERSION });
 
 if(HANDLEBARS_PRECOMPILATION)
-head.js(CLOUDFRONT_PATH + "tpl/min/precompiled/locales/" + _LANGUAGE + "/" + _LANGUAGE + ".js" + "?_=" + _agile_get_file_hash(_LANGUAGE + '.js'), function(){
-      var jScript = Handlebars.templates["agile-localization-template"]({});
-      $('body').append('<script type="text/javascript">' + jScript + '<\/script>');
-});	
+head.js(CLOUDFRONT_PATH + "tpl/min/precompiled/locales/" + _LANGUAGE + "/" + _LANGUAGE + ".js" + "?_=" + _agile_get_file_hash(_LANGUAGE + '.js'));	
 
 var en;
 
@@ -1086,7 +1083,7 @@ head.load([{'js-core-1': CLOUDFRONT_PATH + 'jscore/min/locales/' + _LANGUAGE  +'
 }); //End of head.ready() function. Check above.
 
 function load_tpl_html(){
-    downloadTemplate('<%=tplFile%>');
+    downloadTemplate('<%=tplFile%>', function(){});
 }
 
 function load_globalize()

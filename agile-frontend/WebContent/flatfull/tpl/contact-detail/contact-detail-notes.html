@@ -119,16 +119,16 @@
 	{{else}}
 
 		<span class="actions  text-sm">
-		<a title="Edit"  data="{{id}}" class="edit-logPhone c-p text-l-none p-r-sm">  <i class="fa fa-edit"></i> </a>
+		<a title="{{agile_lng_translate 'contact-details' 'edit'}}"  data="{{id}}" class="edit-logPhone c-p text-l-none p-r-sm">  <i class="fa fa-edit"></i> </a>
 		
 	{{/if_equals}}
 
 {{else}}
 		<span class="actions  text-sm">
-		<a title="Edit"  data="{{id}}" data-toggle="modal" class="edit-note c-p text-l-none p-r-sm"> <i class="fa fa-edit"></i> </a>
+		<a title="{{agile_lng_translate 'contact-details' 'edit'}}"  data="{{id}}" data-toggle="modal" class="edit-note c-p text-l-none p-r-sm"> <i class="fa fa-edit"></i> </a>
 
 {{/if}}
-            <a title="Delete" class="c-p text-l-none"><span class="activity-delete icon-trash" id="{{id}}" url="core/api/notes/bulk"></span></a>
+            <a title="{{agile_lng_translate 'contact-details' 'delete'}}" class="c-p text-l-none"><span class="activity-delete icon-trash" id="{{id}}" url="core/api/notes/bulk"></span></a>
         </span>
 </div>
 </div>

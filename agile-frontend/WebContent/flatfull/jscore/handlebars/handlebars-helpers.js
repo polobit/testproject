@@ -1204,6 +1204,8 @@ $(function()
 		if (!value)
 			return;
 
+		// CALL_DONE,CALL_FAILED,UPDATE_DEAL,EMAIL_QUEUED, EMAIL_SENT, EMAIL_OPENED, EMAIL_CLICKED, EMAIL_REPLIED,EMAIL_HARD_BOUNCED, EMAIL_SPAM, EMAIL_SOFT_BOUNCED, WAIT, CLICKED, OPENED, AB, URL_VISITED, TWEET, ADD_NOTE, TAGS, CHECK_TAGS, CONDITION, JSONIO, SCORE, SET_OWNER, ADD_TASK, ADD_DEAL, ADD_CASE, TRANSFER, GENDER, EMAIL_NOT_REPLIED, CHANGED_DEAL_MILESTONE, EMAIL_SLEEP, EMAIL_SENDING_FAILED, EMAIL_SENDING_SKIPPED, UNSUBSCRIBED, SET_PROPERTY, CAMPAIGN_STOPPED, WAIT_TILL, SMS_SENT, SMS_FAILED, SMS_LINK_CLICKED, TWEET_LINK_CLICKED, UNSUBSCRIBE, CLOSED_TASK, ADD_EVENT, SET_PROPERTY_FAILED,  TICKET_STATUS, TICKET_ASSIGNEE_CHANGED, TICKET_EMAIL_GROUP, TICKET_EMAIL_USER, TICKET_GROUP_CHANGED, TICKET_LABELS, TICKET_PRIORITY, TICKET_TYPE, TICKET_SET_SLA
+
 		var str = value.replace(/_/g, ' ');
 		return ucfirst(str.toLowerCase());
 
@@ -1214,6 +1216,21 @@ $(function()
 		if (!actions)
 			return;
 
+		var action_types = {
+			"MODAL_POPUP" : "{{agile_lng_translate 'web-rules' 'modal-popup'}}",
+			"CORNER_NOTY" : "{{agile_lng_translate 'web-rules' 'noty-message'}}",
+			"CALL_POPUP" : "{{agile_lng_translate 'webrules' 'call-popup'}}",
+			"SITE_BAR" : "{{agile_lng_translate 'webrules' 'site-bar'}}",
+			"ASSIGN_CAMPAIGN" : "{{agile_lng_translate 'contact-details' 'add-to-campaign'}}",
+			"UNSUBSCRIBE_CAMPAIGN" : "{{agile_lng_translate 'contact-details' 'remove-from-campaign'}}",
+			"ADD_TAG" : "{{agile_lng_translate 'web-rules' 'add-tag'}}",
+			"REMOVE_TAG" : "{{agile_lng_translate 'web-rules' 'remove-tag'}}",
+			"ADD_SCORE" : "{{agile_lng_translate 'web-rules' 'add-score'}}",
+			"SUBTRACT_SCORE" : "{{agile_lng_translate 'web-rules' 'substract-score'}}",
+			"JAVA_SCRIPT" : "{{agile_lng_translate 'web-rules' 'java-script'}}",	
+		};
+		
+
 		var actions_count = actions.length;
 
 		var el = '<div class="table-resp">';
@@ -1222,10 +1239,10 @@ $(function()
 		{
 			if (--actions_count == 0)
 			{
-				el = el.concat(titleFromEnums(val.action));
+				el = el.concat(titleFromEnums(action_types[val.action] ? action_types[val.action] : val.action));
 				return;
 			}
-			el = el.concat(titleFromEnums(val.action) + ", ");
+			el = el.concat(titleFromEnums(action_types[val.action] ? action_types[val.action] : val.action) + ", ");
 		});
 
 		el = el.concat('</div>');
@@ -1235,8 +1252,43 @@ $(function()
 
 	Handlebars.registerHelper('triggerType', function(value)
 	{
+		var trigger_types = {
+			"TAG_IS_ADDED" : "{{agile_lng_translate 'campaigns' 'tag-is-added'}}",
+	        "TAG_IS_DELETED" : "{{agile_lng_translate 'campaigns' 'tag-is-deleted'}}",
+			"CONTACT_IS_ADDED" : "{{agile_lng_translate 'campaigns' 'contact-is-added'}}",
+	        "DEAL_IS_ADDED" : "{{agile_lng_translate 'campaigns' 'deal-is-added'}}",
+	        "DEAL_IS_DELETED" : "{{agile_lng_translate 'campaigns' 'deal-is-deleted'}}",
+	        "DEAL_MILESTONE_IS_CHANGED" : "{{agile_lng_translate 'campaigns' 'deal-milestone-is-changed'}}",
+			"RUNS_DAILY" : "{{agile_lng_translate 'portlets' 'daily'}}",
+	        "RUNS_WEEKLY" : "{{agile_lng_translate 'portlets' 'weekly'}}",
+	        "RUNS_MONTHLY" : "{{agile_lng_translate 'portlets' 'monthly'}}",
+			"STRIPE_CHARGE_EVENT" : "{{agile_lng_translate 'campaigns' 'stripe-event'}}",
+			"INBOUND_MAIL_EVENT"  : "{{agile_lng_translate 'campaigns' 'new-email'}}",
+			"EMAIL_OPENED" : "{{agile_lng_translate 'contact-details' 'email-opened'}}",
+			"EMAIL_LINK_CLICKED" : "{{agile_lng_translate 'campaigns' 'email-link-clicked'}}",
+			"UNSUBSCRIBED" : "{{agile_lng_translate 'contacts-view' 'unsubscribed'}}",
+			"SOFT_BOUNCE" : "{{agile_lng_translate 'campaigns' 'soft-bounce'}}",
+			"HARD_BOUNCE" : "{{agile_lng_translate 'campaigns' 'hard-bounce'}}",
+			"SPAM_REPORT" : "{{agile_lng_translate 'campaigns' 'spam-report'}}",
+			"EVENT_IS_ADDED" : "{{agile_lng_translate 'campaigns' 'event-is-added'}}",
+			"INBOUND_CALL" : "{{agile_lng_translate 'campaigns' 'inbound-call'}}",
+			"OUTBOUND_CALL" : "{{agile_lng_translate 'campaigns' 'outbound-call'}}",
+			"SHOPIFY_EVENT" : "{{agile_lng_translate 'campaigns' 'shopify-event'}}",
+			"FORM_SUBMIT" : "{{agile_lng_translate 'campaigns' 'form-submit'}}",
+			"NEW_TICKET_IS_ADDED" : "{{agile_lng_translate 'campaigns' 'new-ticket-is-added'}}",
+			"TICKET_NOTE_ADDED_BY_USER" : "{{agile_lng_translate 'campaigns' 'note-is-added-by-user'}}",
+			"TICKET_NOTE_ADDED_BY_CUSTOMER" : "{{agile_lng_translate 'campaigns' 'note-is-added-by-customer'}}",
+			"TICKET_IS_CLOSED" : "{{agile_lng_translate 'campaigns' 'ticket-is-closed'}}",
+			"TICKET_SLA_REACHED" : "{{agile_lng_translate 'campaigns' 'sla-reached'}}",
+			"TICKET_ASSIGNEE_CHANGED" : "{{agile_lng_translate 'campaigns' 'ticket-assignee-changed'}}",
+			"TICKET_LABEL_IS_ADDED" : "{{agile_lng_translate 'campaigns' 'ticket-label-is-added'}}",
+			"TICKET_LABEL_IS_DELETED" : "{{agile_lng_translate 'campaigns' 'ticket-label-is-deleted'}}",
+		};
 		if (value == 'ADD_SCORE')
 			return value.replace('ADD_SCORE', '{{agile_lng_translate "deals" "score-g-o-e"}}');
+
+		if(trigger_types[value])
+			return titleFromEnums(trigger_types[value]);
 
 		return titleFromEnums(value);
 	});
@@ -3656,7 +3708,7 @@ $(function()
 	Handlebars.registerHelper('tl_log_string', function(string)
 	{
 
-		return string.replace("Sending email From:", "Email sent From:");
+		return string.replace("Sending email From:", "{{agile_lng_translate 'timeline' 'email-sent-from'}}:");
 	});
 
 	/**
@@ -3789,7 +3841,7 @@ $(function()
 			val = value[0].count;
 
 		if (val <= 20)
-			return "Workflows";
+			return "{{agile_lng_translate 'campaigns' 'workflows'}}";
 
 		return "(" + val + _agile_get_translated_val('other','total')+ " )";
 	});
@@ -4741,27 +4793,27 @@ $(function()
 					function(value)
 					{
 						var type = "bg-light dk text-tiny";
-						var reputation = "Unknown";
+						var reputation = "{{agile_lng_translate 'report-add' 'unknown'}}";
 
 						if (value > 1 && value < 40)
 						{
 							type = "label-danger text-tiny";
-							reputation = "Poor";
+							reputation = "{{agile_lng_translate 'reputation' 'Poor'}}";
 						}
 						else if (value >= 40 && value < 75)
 						{
 							type = "bg-light text-tiny";
-							reputation = "Ok";
+							reputation = "{{agile_lng_translate 'reputation' 'Ok'}}";
 						}
 						else if (value >= 75 && value < 90)
 						{
 							type = "label-success";
-							reputation = "Good";
+							reputation = "{{agile_lng_translate 'reputation' 'Good'}}";
 						}
 						else if (value >= 90)
 						{
 							type = "label-success";
-							reputation = "Excellent";
+							reputation = "{{agile_lng_translate 'reputation' 'Excellent'}}";
 						}
 
 						reputation = _agile_get_translated_val("reputation", reputation);
@@ -5667,19 +5719,19 @@ $(function()
 	{
 		var field_type_name = '';
 		if (field_type == "TEXT")
-			field_type_name = "Text Field";
+			field_type_name = "{{agile_lng_translate 'admin-settings-custom-fields' 'TEXT'}}";
 		else if (field_type == "TEXTAREA")
-			field_type_name = "Text Area";
+			field_type_name = "{{agile_lng_translate 'admin-settings-custom-fields' 'TEXTAREA'}}";
 		else if (field_type == "DATE")
-			field_type_name = "Date";
+			field_type_name = "{{agile_lng_translate 'admin-settings-custom-fields' 'DATE'}}";
 		else if (field_type == "CHECKBOX")
-			field_type_name = "Checkbox";
+			field_type_name = "{{agile_lng_translate 'admin-settings-custom-fields' 'CHECKBOX'}}";
 		else if (field_type == "LIST")
-			field_type_name = "List";
+			field_type_name = "{{agile_lng_translate 'admin-settings-custom-fields' 'LIST'}}";
 		else if (field_type == "NUMBER")
-			field_type_name = "Number";
+			field_type_name = "{{agile_lng_translate 'admin-settings-custom-fields' 'NUMBER'}}";
 		else if (field_type == "FORMULA")
-			field_type_name = "Formula";
+			field_type_name = "{{agile_lng_translate 'admin-settings-custom-fields' 'FORMULA'}}";
 		return field_type_name;
 	});
 
@@ -6296,11 +6348,11 @@ $(function()
 	 */
 	Handlebars.registerHelper('get_portlet_duration', function(duration)
 	{
-		var time_period = _agile_get_translated_val("portlets", duration);
-		if(!time_period)
-			  time_period = _agile_get_translated_val("portlets", "1-day");
-		
-		return time_period;
+		console.log("duration = " + duration);
+		if(!duration)
+			duration = "today";
+
+		return _agile_get_translated_val("portlets", duration);
 	});
 	
 	/**
@@ -6780,13 +6832,14 @@ Handlebars.registerHelper('get_portlet_description', function(p_name)
 		    });
 	Handlebars.registerHelper('invoice_description', function(description) {
 
+		console.log(description);
 		if (!description)
 			return description;
 
 		if (description.indexOf("Unused time on") != -1) {
-			description = "Balance from previous transaction";
+			description = _agile_get_translated_val('billing','invoice-bal-from');
 		} else if (description.indexOf("Remaining") != -1) {
-			description = "Changed on " + description.substring(description.indexOf("after") + 5);
+			description = _agile_get_translated_val('billing','invoice-changed-on') + description.substring(description.indexOf("after") + 5);
 		}
 
 		return description + " ";
@@ -7385,6 +7438,36 @@ Handlebars.registerHelper('if_asc_sork_key', function(value, options)
 		return options.inverse(this);
 	else
 		return options.fn(this); 
+});
+
+Handlebars.registerHelper('get_default_label', function(label, module_name, options)
+{
+	var i18nKeyPrefix = "admin-settings-tasks";
+	if(module_name == "category"){
+		i18nKeyPrefix = "admin-settings-tasks";
+	}
+
+	if(_Agile_Resources_Json[i18nKeyPrefix] && _Agile_Resources_Json[i18nKeyPrefix][label])
+		return _Agile_Resources_Json[i18nKeyPrefix][label];
+	else
+		return label;
+
+});
+
+Handlebars.registerHelper('get_widget_translation', function(widget_name, type, options)
+{
+	if(!type)
+		  type = "content";
+
+	return _agile_get_translated_val("widgets", widget_name + "-" + type);
+});
+
+Handlebars.registerHelper('get_datasync_translation', function(sync_name, type, options)
+{
+	if(!type)
+		  type = "content";
+
+	return _agile_get_translated_val("prefs-data-sync", sync_name + "-" + type);
 });
 
 function getTableLanguageConvertHeader(element){

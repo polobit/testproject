@@ -86,8 +86,8 @@
               <span class="txt-small note-count" title="Notes">{{notes.length}}</span>
 			{{/if}}
 			{{#hasMenuScope 'DEALS'}}
-			 <a title="Edit"  data="{{id}}" href="#" class="deal-edit-contact-tab c-p text-l-none p-r-sm"> <i class="fa fa-edit"></i> </a>
-             <a title="Delete" class="c-p text-l-none"><span class="activity-delete icon-trash" id="{{id}}" url="core/api/opportunity/delete"></span></a>
+			 <a title="{{agile_lng_translate 'contact-details' 'edit'}}"  data="{{id}}" href="#" class="deal-edit-contact-tab c-p text-l-none p-r-sm"> <i class="fa fa-edit"></i> </a>
+             <a title="{{agile_lng_translate 'contact-details' 'delete'}}" class="c-p text-l-none"><span class="activity-delete icon-trash" id="{{id}}" url="core/api/opportunity/delete"></span></a>
       		{{/hasMenuScope}}
 	</div>
 	<div class="clearfix"></div>

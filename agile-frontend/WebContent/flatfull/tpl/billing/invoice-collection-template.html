@@ -58,7 +58,7 @@ Emails
         {{else}}
 {{epochToHumanDate "mm/dd/yyyy" period.start}}
 <br>
-			<small>(for the period {{epochToHumanDate "mm/dd/yyyy" period.start}} to {{epochToHumanDate "mm/dd/yyyy" period.end}})</small>
+			<small>({{agile_lng_translate 'billing' 'for-the-period'}} {{epochToHumanDate "mm/dd/yyyy" period.start}} to {{epochToHumanDate "mm/dd/yyyy" period.end}})</small>
 		{{/containString}}
         {{else}}
            {{epochToHumanDate "mm/dd/yyyy" period.start}} 

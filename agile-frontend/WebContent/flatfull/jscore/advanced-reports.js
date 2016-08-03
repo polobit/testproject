@@ -58,7 +58,7 @@ function initFunnelCharts(callback)
 					callback();
 				});
 
-	}, '<option class="default-select" value="{{id}}">{{name}}</option>', false, undefined, "All Owners");
+	}, '<option class="default-select" value="{{id}}">{{name}}</option>', false, undefined, "{{agile_lng_translate 'report-add' 'all-owners'}}");
 
 	callback();
 }
@@ -98,7 +98,7 @@ function initReportsForCalls(callback){
 					callback();
 				});
 
-			}, '<option class="default-select" value="{{id}}">{{name}}</option>', false, undefined, "All Users");
+			}, '<option class="default-select" value="{{id}}">{{name}}</option>', false, undefined, "{{agile_lng_translate 'report-view' 'all-users'}}");
 	
 }
 
@@ -145,7 +145,7 @@ function initSalesCharts(callback){
 			{
 				callback();
 			});
-		}, '<option class="default-select" value="{{id}}">{{name}}</option>', false, undefined, "All Tracks");
+		}, '<option class="default-select" value="{{id}}">{{name}}</option>', false, undefined, "{{agile_lng_translate 'report-add' 'all-tracks'}}");
 
 		fillSelect("owner", "core/api/users/partial", undefined, function()
 		{
@@ -154,7 +154,7 @@ function initSalesCharts(callback){
 				callback();
 			});
 
-		}, '<option class="default-select" value="{{id}}">{{name}}</option>', false, undefined, "All Owners");
+		}, '<option class="default-select" value="{{id}}">{{name}}</option>', false, undefined, "{{agile_lng_translate 'report-add' 'all-owners'}}");
 
 		/*fillSelect("source", "/core/api/categories?entity_type=DEAL_SOURCE", undefined, function()
 		{
@@ -363,7 +363,7 @@ function initUserReports(callback){
 				callback();
 			});
 
-		}, '<option class="default-select" value="{{id}}">{{name}}</option>', false, undefined, "All Owners");
+		}, '<option class="default-select" value="{{id}}">{{name}}</option>', false, undefined, "{{agile_lng_translate 'report-add' 'all-owners'}}");
 		
 	}
 
@@ -636,16 +636,12 @@ function initDateRange(callback) {
             },
             locale: {
                 applyLabel: '{{agile_lng_translate "calendar" "Apply"}}',
-	            cancelLabel: '{{agile_lng_translate "other" "cancel"}}',
+	            clearLabel: '{{agile_lng_translate "deal-view" "clear"}}',
 	            fromLabel: '{{agile_lng_translate "calendar" "from"}}',
 	            toLabel: '{{agile_lng_translate "calendar" "to"}}',
 	            customRangeLabel: '{{agile_lng_translate "campaigns" "custom"}}',
-                daysOfWeek: [
-                    "{{agile_lng_translate 'days' 'Su'}}","{{agile_lng_translate 'days' 'Mo'}}","{{agile_lng_translate 'days' 'We'}}","{{agile_lng_translate 'days' 'Th'}}","{{agile_lng_translate 'days' 'Fr'}}","{{agile_lng_translate 'days' 'Sa'}}"
-                ],
-                monthNames: [
-                    "{{agile_lng_translate 'months' 'January'}}", "{{agile_lng_translate 'months' 'february'}}", "{{agile_lng_translate 'months' 'March'}}", "{{agile_lng_translate 'months' 'April'}}", "{{agile_lng_translate 'months' 'May'}}", "{{agile_lng_translate 'months' 'June'}}", "{{agile_lng_translate 'months' 'July'}}", "{{agile_lng_translate 'months' 'August'}}", "{{agile_lng_translate 'months' 'September'}}", "{{agile_lng_translate 'months' 'October'}}", "{{agile_lng_translate 'months' 'November'}}", "{{agile_lng_translate 'months' 'December'}}"
-                ],
+                daysOfWeek: $.fn.datepicker.dates['en'].daysExactMin,
+                monthNames: $.fn.datepicker.dates['en'].months,
                 firstDay: parseInt(CALENDAR_WEEK_START_DAY)
             }
         }, function(start, end) {
@@ -770,8 +766,8 @@ function initRepReports(callback) {
                 ]
             },
             locale: {
-                applyLabel: '{{agile_lng_translate "calendar" "Apply"}}',
-	            cancelLabel: '{{agile_lng_translate "other" "cancel"}}',
+                applyLabel: '{{agile_lng_translate "calendar" "Apply"}}',     
+	            clearLabel: '{{agile_lng_translate "deal-view" "clear"}}',
 	            fromLabel: '{{agile_lng_translate "calendar" "from"}}',
 	            toLabel: '{{agile_lng_translate "calendar" "to"}}',
 	            customRangeLabel: '{{agile_lng_translate "campaigns" "custom"}}',
@@ -779,12 +775,8 @@ function initRepReports(callback) {
                 dateLimit: 'month',
                 startDate: Date.today().moveToFirstDayOfMonth(),
                 endDate: Date.today().moveToLastDayOfMonth(),
-                daysOfWeek: [
-                    "{{agile_lng_translate 'days' 'Su'}}","{{agile_lng_translate 'days' 'Mo'}}","{{agile_lng_translate 'days' 'We'}}","{{agile_lng_translate 'days' 'Th'}}","{{agile_lng_translate 'days' 'Fr'}}","{{agile_lng_translate 'days' 'Sa'}}"
-                ],
-                monthNames: [
-                    'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'
-                ],
+                daysOfWeek: $.fn.datepicker.dates['en'].daysExactMin,
+                monthNames: $.fn.datepicker.dates['en'].months,
                 firstDay: parseInt(CALENDAR_WEEK_START_DAY)
             }
         }, function(start, end) {

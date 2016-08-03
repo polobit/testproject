@@ -15,7 +15,7 @@
                 <thead>
                     <tr>
                         <th style="width:5%"></th>
-                        <th style="width:20%" class="header">{{agile_lng_translate 'tickets' 'Requester-Name'}}</th>
+                        <th style="width:20%" class="header">{{agile_lng_translate 'deal-view' 'name'}}</th>
 						 <th style="width:20%" class="header">{{agile_lng_translate 'modals' 'email'}}</th>
                         <!-- <th style="width:20%" class="header">Created On</th>-->
                         <th style="width:20%" class="header">{{agile_lng_translate 'admin-settings-users' 'last-logged-in'}}</th>
@@ -95,10 +95,10 @@
 		<div class="table-resp text-muted text-xs" style="margin-top:3px;">
 		<i class="fa fa-clock-o"></i>
 		{{#hasKey  info_json_string "updated_time"}}
-		<span><em>Modified</em>&nbsp;</span>
+		<span><em>{{agile_lng_translate 'campaigns' 'modified'}}</em>&nbsp;</span>
 		<time class="last-login-time" datetime="{{epochToDate info_json_string "updated_time"}}" >{{epochToDate info_json_string "updated_time"}}</time>
 		{{else}}
-		<span><em>Created</em>&nbsp;</span>
+		<span><em>{{agile_lng_translate 'campaigns' 'created'}}</em>&nbsp;</span>
 		<time class="last-login-time" datetime="{{epochToDate info_json_string "created_time"}}" >{{epochToDate info_json_string "created_time"}}</time>
 		{{/hasKey}} 
 		</div>

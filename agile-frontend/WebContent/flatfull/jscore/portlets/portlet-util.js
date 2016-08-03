@@ -11,7 +11,7 @@ var portlet_utility = {
 				function(index, trackObj) {
 					if (deal_track == 0 && trackObj.name == "Default")
 						options += "<option value=" + trackObj.id
-								+ " selected='selected'>" + trackObj.name
+								+ " selected='selected'>{{agile_lng_translate 'companies-view' 'default'}}"
 								+ "</option>";
 					else if (deal_track == trackObj.id)
 						options += "<option value=" + trackObj.id
@@ -95,7 +95,7 @@ var portlet_utility = {
 
 				if (App_Portlets.track_length > 1) {
 					if (track_id == 0)
-						return callback("Default");
+						return callback("{{agile_lng_translate 'companies-view' 'default'}}");
 					else {
 						var milestone = $.ajax({
 							type : 'GET',
@@ -121,7 +121,7 @@ var portlet_utility = {
 		var campaign_id = base_model.get("settings").campaign_type;
 
 		if (campaign_id == 'All')
-			return callback('All Campaigns');
+			return callback('{{agile_lng_translate "campaigns" "all-campaigns"}}');
 		else {
 			var campaign = $.ajax({
 				type : 'GET',
@@ -1240,13 +1240,11 @@ var portlet_utility = {
 													App_Portlets.refetchEvents = false;
 													App_Portlets.eventCalendar=$(this);
 													var that=$(this);
-																head
-					.js(
-							LIB_PATH + 'lib/jquery-ui.min.js', LIB_PATH + 
-							'lib/fullcalendar.min.js',
-							function() {
-													minicalendar(that);
-												});
+
+					_agile_library_loader.load_fullcalendar_libs(function(){
+								minicalendar(that);
+					});
+
 							});
 			break;
 		}
@@ -1386,7 +1384,7 @@ var portlet_utility = {
 					+ '&time_zone=' + (new Date().getTimezoneOffset());
 			portlet_graph_data_utility.fetchPortletsGraphData(url,function(data) {
 				if(data.length==0){
-						$('.'+selector).html('<div class="portlet-error-message">No Referral URL Found</div>');
+						$('.'+selector).html('<div class="portlet-error-message">{{agile_lng_translate "visitors" "no-ref-found"}}</div>');
 								return;
 					}
 				var span;
@@ -1641,7 +1639,7 @@ var portlet_utility = {
 							'option[value='
 									+ base_model.get("settings").duration + ']')
 					.attr("selected", "selected");
-			var options = "<option value='All'>All Campaigns</option>";
+			var options = "<option value='All'>{{agile_lng_translate 'campaigns' 'all-campaigns'}}</option>";
 			$.ajax({
 				type : 'GET',
 				url : '/core/api/workflows',
@@ -1945,7 +1943,7 @@ var portlet_utility = {
 							'option[value='
 									+ base_model.get("settings").duration + ']')
 					.attr("selected", "selected");
-			var options = "<option value='All'>All Campaigns</option>";
+			var options = "<option value='All'>{{agile_lng_translate 'campaigns' 'all-campaigns'}}</option>";
 			$.ajax({
 				type : 'GET',
 				url : '/core/api/workflows',
@@ -2646,7 +2644,7 @@ var portlet_utility = {
 		fillSelect(ele_id, "/core/api/milestone/pipelines", undefined, function()
 		{
 			$('#'+ele_id, elData).find('option[value='+base_model.get("settings")["track"]+']').attr("selected", "selected");
-		}, '<option class="default-select" value="{{id}}">{{name}}</option>', false, undefined, "All Tracks");
+		}, '<option class="default-select" value="{{id}}">{{name}}</option>', false, undefined, "{{agile_lng_translate 'report-add' 'all-tracks'}}");
 	}
 };
 

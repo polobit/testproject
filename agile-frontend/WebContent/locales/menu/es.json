@@ -48,5 +48,15 @@
             "refer" : "Recomendar un amigo",
             "call": "Call",
             "ticket": "Ticket",
+            "tasks-due" : "tareas debido",
+            "triggers" : "Disparadores",
+            "forms" : "Formularios",
+            "email-templates" : "Plantillas de email",
+            "groups" : "Grupos",
+            "labels" : "Etiquetas",
+            "canned-responses" : "Respuestas almacenadas",
+            "views" : "Vistas",
+            "knowledge-base" : "Base de conocimiento",
+            "chat-with-us" : "Habla con nosotros",
         }
 }
