@@ -56,6 +56,12 @@ cat flatfull/tpl/widget/zendesk/*.html > tpl/min/flatfull/zendesk.js
 cd ../util
 
 #Local Dev
-java -jar agilelocalize.jar ../WebContent/tpl/min/flatfull ../WebContent/tpl/min en,es
-#cat ../WebContent/tpl/min/flatfull/js-localize.js > ../WebContent/local
+#Localize and Minify
+if [ -n "$1" ]; then
+    echo "template not empty"
+    java -jar agilelocalize.jar ../WebContent/tpl/min/flatfull ../WebContent/tpl/min $1
+else
+    echo "template empty"
+    java -jar agilelocalize.jar ../WebContent/tpl/min/flatfull ../WebContent/tpl/min en
+fi
 #End of Local Dev

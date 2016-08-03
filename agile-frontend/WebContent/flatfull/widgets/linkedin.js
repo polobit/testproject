@@ -194,7 +194,7 @@ $(function()
 		e.preventDefault();
 		var href = $(this).attr("href");
 		var id = $(this).attr('id');
-		$('#' + id).text("Less");
+		$('#' + id).text(_agile_get_translated_val('widgets','less-text'));
 		$(".summary-expand-" + id).hide();
 		$(href).collapse('toggle');
 
@@ -202,7 +202,7 @@ $(function()
 		$(href).on("hidden", function()
 		{
 			$(".summary-expand-" + id).show();
-			$('#' + id).text("More");
+			$('#' + id).text(_agile_get_translated_val('plan-and-upgrade','more'));
 		});
 	});
 
@@ -635,7 +635,7 @@ function registerEventsInLinkedIn(Linkedin_id, linkedin_connected, Stream_Data)
 			 * link is changed as see less and shows all the updates by toggling
 			 */
 			$(this).attr("less", "false");
-			$(this).text("See Less..");
+			$(this).text(_agile_get_translated_val('widgets','see-less'));
 			$('#linkedin_current_activity').hide();
 			$('#linkedin_refresh_stream').show();
 			return;
@@ -646,7 +646,7 @@ function registerEventsInLinkedIn(Linkedin_id, linkedin_connected, Stream_Data)
 		 * be changed as see more button
 		 */
 		$(this).attr("less", "true");
-		$(this).text("See More..");
+		$(this).text(_agile_get_translated_val('widgets','see-more'));
 		$('#linkedin_current_activity').show();
 		$('#linkedin_refresh_stream').hide();
 	});
@@ -897,7 +897,7 @@ function sendLinkedInAddRequest(Linkedin_id)
 			return;
 		}
 
-		$(this).text("Saving..");
+		$(this).text(_agile_get_translated_val('others','saving'));
 
 		sendRequestToLinkedIn("/core/api/widgets/social/connect/" + LinkedIn_Plugin_Id + "/" + Linkedin_id, 'linkedin_messageForm', 'linkedin_messageModal');
 	});
@@ -947,7 +947,7 @@ function sendLinkedInMessage(Linkedin_id)
 			return;
 		}
 
-		$(this).text("Saving..");
+		$(this).text(_agile_get_translated_val('others','saving'));
 
 		sendRequestToLinkedIn("/core/api/widgets/social/message/" + LinkedIn_Plugin_Id + "/" + Linkedin_id, 'linkedin_messageForm', 'linkedin_messageModal');
 	});
@@ -1026,7 +1026,7 @@ function reSharePost(share_id, message, element)
 		 * Text is changed as shared, will be changed to reshare on refresh of
 		 * profile
 		 */
-		$(element).text('Shared');
+		$(element).text(_agile_get_translated_val('contact-details','shared'));
 
 	}).error(function(data)
 	{

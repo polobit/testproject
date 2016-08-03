@@ -23,6 +23,7 @@ do
    mkdir ../WebContent/tpl/min/precompiled/locales
    mkdir ../WebContent/tpl/min/precompiled/locales/"$i"
    java -jar precompile.jar ../WebContent/tpl/localestmp/locales/"$i" ../../../tmp/handlebars ../WebContent/tpl/min/precompiled/locales/"$i"
+   sh yui-flat-full.sh "$i"
 done
 #Delete locales
 rm -r ../WebContent/tpl/localestmp
@@ -33,8 +34,6 @@ rm -r ../WebContent/tpl/localestmp
 
 
 sh yui.sh
-
-sh yui-flat-full.sh
 
 sh tpl.sh
 

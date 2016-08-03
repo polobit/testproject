@@ -323,10 +323,10 @@ function addTicketToZendesk()
 	var json = {};
 
 	// Set headline of modal window as Add Ticket
-	json["headline"] = "Add Ticket";
+	json["headline"] = _agile_get_translated_val('widgets', 'add-ticket');
 
 	// Information to be shown in the modal to the user
-	json["info"] = "Add ticket in Zendesk";
+	json["info"] = _agile_get_translated_val('widgets','add-ticket-in-zendesk');
 
 	// Name of the contact to be added to ticket
 	var name = "";

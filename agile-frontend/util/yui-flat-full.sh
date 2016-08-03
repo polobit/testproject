@@ -31,11 +31,6 @@ cat ../WebContent/flatfull/jscore/social-suite/*.js > ../WebContent/jscore/min/f
 ## Tickets module min file
 cat ../WebContent/flatfull/jscore/tickets/base-model/*.js ../WebContent/flatfull/jscore/tickets/*.js > ../WebContent/jscore/min/flatfull/tickets-min.js
 
-## Webrules into templates
-#cat ../WebContent/flatfull/jscore/web-rules/*.js > ../WebContent/jscore/min/flatfull/web-rules-min.js
-#java -jar yuicompressor-2.4.7.jar ../WebContent/jscore/min/flatfull/web-rules-min.js --line-break 10000 --type js -o  ../WebContent/jscore/min/flatfull/web-rules-min.js
-#cat ../WebContent/jscore/min/flatfull/web-rules-min.js >> ../WebContent/tpl/min/precompiled/flatfull/web-rules.js
-
 cat ../WebContent/flatfull/controllers/app.js >> ../WebContent/jscore/min/flatfull/js-all-min-4.js
 
 cat ../WebContent/stats/js/*.js > ../WebContent/stats/min/agile-min.js
@@ -50,44 +45,13 @@ cat ../WebContent/helpcenter/jscore/*.js >> ../WebContent/jscore/min/flatfull/he
 cat ../WebContent/helpcenter/controllers/app.js >> ../WebContent/jscore/min/flatfull/helpcenter-all-min.js
 #End of Helpcenter
 
-#Localize
-java -jar agilelocalize.jar ../WebContent/jscore/min/flatfull ../WebContent/jscore/min en,es
-
-#Minify tickets
-#java -jar yuicompressor-2.4.7.jar ../WebContent/jscore/min/flatfull/tickets-min.js --line-break 10000 --type js -o  ../WebContent/jscore/min/flatfull/tickets-min.js
-
-########################################### En Changes #######
-#java -jar yuicompressor-2.4.7.jar ../WebContent/jscore/min/locales/en/js-all-min-1.js --line-break 10000 --type js -o  ../WebContent/jscore/min/locales/en/js-all-min-1.js
-
-#java -jar yuicompressor-2.4.7.jar ../WebContent/jscore/min/locales/en/js-all-min-2.js --line-break 10000 --type js -o  ../WebContent/jscore/min/locales/en/js-all-min-2.js
-
-#java -jar yuicompressor-2.4.7.jar ../WebContent/jscore/min/locales/en/js-all-min-3.js --line-break 10000 --type js -o  ../WebContent/jscore/min/locales/en/js-all-min-3.js
-
-#java -jar yuicompressor-2.4.7.jar ../WebContent/jscore/min/locales/en/js-all-min-4.js --line-break 10000 --type js -o  ../WebContent/jscore/min/locales/en/js-all-min-4.js
-
-#java -jar yuicompressor-2.4.7.jar ../WebContent/jscore/min/locales/en/helpcenter-all-min.js --line-break 10000 --type js -o  ../WebContent/jscore/min/locales/en/helpcenter-all-min.js
-
-#Minify socialsuite
-#java -jar yuicompressor-2.4.7.jar ../WebContent/jscore/min/locales/en/social-suite-all-min.js --line-break 10000 --type js -o  ../WebContent/jscore/min/locales/en/social-suite-all-min.js
-
-#Minify tickets
-#java -jar yuicompressor-2.4.7.jar ../WebContent/jscore/min/locales/en/tickets-min.js --line-break 10000 --type js -o  ../WebContent/jscore/min/locales/en/tickets-min.js
-
-########################################### En Changes #######
-java -jar yuicompressor-2.4.7.jar ../WebContent/jscore/min/locales/es/js-all-min-1.js --line-break 10000 --type js -o  ../WebContent/jscore/min/locales/es/js-all-min-1.js
-
-java -jar yuicompressor-2.4.7.jar ../WebContent/jscore/min/locales/es/js-all-min-2.js --line-break 10000 --type js -o  ../WebContent/jscore/min/locales/es/js-all-min-2.js
-
-java -jar yuicompressor-2.4.7.jar ../WebContent/jscore/min/locales/es/js-all-min-3.js --line-break 10000 --type js -o  ../WebContent/jscore/min/locales/es/js-all-min-3.js
-
-java -jar yuicompressor-2.4.7.jar ../WebContent/jscore/min/locales/es/js-all-min-4.js --line-break 10000 --type js -o  ../WebContent/jscore/min/locales/es/js-all-min-4.js
-
-java -jar yuicompressor-2.4.7.jar ../WebContent/jscore/min/locales/es/helpcenter-all-min.js --line-break 10000 --type js -o  ../WebContent/jscore/min/locales/es/helpcenter-all-min.js
-
-#Minify socialsuite
-java -jar yuicompressor-2.4.7.jar ../WebContent/jscore/min/locales/es/social-suite-all-min.js --line-break 10000 --type js -o  ../WebContent/jscore/min/locales/es/social-suite-all-min.js
-
-#Minify tickets
-java -jar yuicompressor-2.4.7.jar ../WebContent/jscore/min/locales/es/tickets-min.js --line-break 10000 --type js -o  ../WebContent/jscore/min/locales/es/tickets-min.js
-
-################################## End of En Changes #######
+#Localize and Minify
+if [ -n "$1" ]; then
+    echo "not empty"
+    java -jar agilelocalize.jar ../WebContent/jscore/min/flatfull ../WebContent/jscore/min $1
+    sh yui-minifier.sh $1
+else
+    echo "empty"
+    java -jar agilelocalize.jar ../WebContent/jscore/min/flatfull ../WebContent/jscore/min en
+    sh yui-minifier.sh en
+fi
