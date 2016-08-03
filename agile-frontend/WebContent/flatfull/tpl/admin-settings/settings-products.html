@@ -11,14 +11,14 @@
     <div class="row">
         <div class="col-md-12 col-sm-12">
                     <div class=" table-responsive" style="overflow:hidden;"> 
-                    <table class="table table-striped no-sorting agile-table panel table-layout-mob-view table table-hover   custom-fields-table products-table table-hover m-b-none agile-table " url1="core/api/products/bulk?action_type=DELETE">
+                    <table class="table table-striped noDelete no-sorting agile-table panel table-layout-mob-view table table-hover noCheckboxes  custom-fields-table products-table table-hover m-b-none agile-table " url1="core/api/products/bulk?action_type=DELETE">
                         <thead>
                             <tr class="hide product-header">
                                 <th style="width:23%" class="header">Name</th>
         						<th style="width:23%" class1="header">Description</th>
         						<th style="width:23%" class="header">Price</th>
                                 <th style="width:23%" class="header">Image</th>
-                                <th style="width:8%" class="">&nbsp;</th>
+                                <th style="width:4%" class="">&nbsp;</th>
                             </tr>
                          </thead>
                          <tbody id='admin-settings-products-model-list' route1='product-edit/'>
@@ -30,13 +30,13 @@
     </div>
 </script>
 <script id="admin-settings-products-model-template" type="text/html">
-    <td class='data' data='{{id}}'>
+    <td class='data' data='{{id}}' title="{{name}}">
         <div class="table-resp">
             {{name}}
         </div>
 	</td>
 	<td class='data'>
-        <div class="table-resp">
+        <div class="table-resp" title="{{description}}">
             {{description}}
         </div>
 	</td>
@@ -45,7 +45,9 @@
 	</td>
     <td class='data'>
         {{#if image}}
-            <img class="w-full" src="{{image}}" style="width:85px;" align="center" />
+            <div class="imgholder  thumb-wrapper thumb">
+                <img class="w-full" src="{{image}}"  align="center" />
+            </div>
         {{else}}
             &nbsp;
         {{/if}}    

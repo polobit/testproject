@@ -75,16 +75,17 @@ function initializeAdminProductsListners(el)
 		admin_products.showProductNew(product_field.toJSON());
 	});
 	$('#milestone-listner').on('click', '#delete-product-field', function(e){
-		if(confirm("Are you sure you want to delete?")){
-			e.preventDefault();
-			var product_field = $(this).closest('tr').data();
+		e.preventDefault();
+		var that=this;
+		showAlertModal("delete", "confirm", function(){
+				var product_field = $(that).closest('tr').data();
 			console.log(product_field);
-			var currentElement=$(this);
+			var currentElement=$(that);
 			$.ajax({ type : 'DELETE', url : '/core/api/products/' + product_field.id, contentType : "application/json; charset=utf-8",
 				success : function(data){
 					App_Admin_Settings.productsGridView.collection.remove(product_field.id);
 					currentElement.closest('tr').remove();
-				}, dataType : 'json' });
-		}
+				}, dataType : 'json' });	
+	    });
 	});
 }
