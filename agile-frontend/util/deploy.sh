@@ -30,7 +30,7 @@ rm -r ../WebContent/tpl/localestmp
 ##End of localization support
 
 #java -jar precompile.jar ../WebContent/flatfull/tpl ../../../tmp/handlebars ../WebContent/tpl/min/precompiled/flatfull
-#java -jar precompile.jar ../WebContent/helpcenter/helpcenter-tpl ../../../tmp/handlebars ../WebContent/tpl/min/precompiled/flatfull
+java -jar precompile.jar ../WebContent/helpcenter/helpcenter-tpl ../../../tmp/handlebars ../WebContent/tpl/min/precompiled/flatfull
 
 
 sh yui.sh
