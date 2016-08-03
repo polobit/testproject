@@ -26,6 +26,9 @@ var AdminSettingsRouter = Backbone.Router.extend({
 	/* Milestones */
 	"milestones" : "milestones",
 	
+	/* telepnony */
+	"telephony" : "telephony",
+	
 	/* Categories */
 	"categories" : "categories",
 
@@ -1370,6 +1373,43 @@ var AdminSettingsRouter = Backbone.Router.extend({
 
 		
 		
+	},
+	
+	telephony : function(){
+		if (!CURRENT_DOMAIN_USER.is_admin)
+		{
+			getTemplate('others-not-allowed', {}, undefined, function(template_ui){
+				if(!template_ui)
+					  return;
+				$('#content').html($(template_ui));	
+			}, "#content");
+
+			return;
+		}
+		
+		var that = this;
+		$('#content').html("<div id='telephony-listner'>&nbsp;</div>");
+		getTemplate("admin-settings", {}, undefined, function(template_ui){
+			if(!template_ui)
+				  return;
+			$('#telephony-listner').html($(template_ui));
+			
+			this.telephonyGridView = new Base_Collection_View({ url : '/core/api/categories?entity_type=TELEPHONY', templateKey : "admin-settings-telephony",
+				individual_tag_name : 'tr', sortKey : "order", postRenderCallback : function(el)
+				{
+					console.log("loaded categories : ", el);
+					initializeTelephonyListners();
+					//categories.setup_categories(el);
+					//categories.init();
+				} });
+			this.telephonyGridView.collection.fetch();
+			$('#content').find('#admin-prefs-tabs-content').html(this.telephonyGridView.render().el);
+			$('#content').find('#AdminPrefsTab .select').removeClass('select');
+			$('#content').find('.telephony-tab').addClass('select');
+			$(".active").removeClass("active");
+			
+		}, "#telephony-listner");
+
 	}
 
 });

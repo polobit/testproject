@@ -1,0 +1,80 @@
+<script id="admin-settings-telephony-collection-template" type="text/html">
+	
+
+ <div class="col">
+    <div class="hbox h-auto m-b-lg">
+	<div  id="custom-fields-accordion">
+	<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+	
+<!-- telephony pannel starts-->
+
+	<div class="panel panel-default">
+			<div id="telephony-callstatus-fields">
+				<div class="panel-heading" role="tab" id="headingTwo">
+					<div class="panel-title">
+						<a class="collapsed accordion-toggle" aria-controls="collapseOne" aria-expanded="false"  data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">Call Status</a>
+					</div>
+				</div>
+
+
+				<div class="panel-collapse" role="tabpanel" aria-labelledby="headingTwo" id="collapseTwo" >
+				<div class="panel-body p-n" id="telephony-callstatus-accordion">
+					<fieldset>
+    				<div class="control-group m-b-none">  	 
+                    <div>
+					<table class="table table-hover  custom-fields-table bg-white table-hover m-b-none" >
+					<colgroup><col width="50%"><col width="4%"></colgroup>
+					<tbody id="admin-settings-telephony-model-list" class="">
+					</tbody>
+					</table>
+					</div>
+					<div class="p-l p-t p-b"><a href="#" class="show_task_category_field text-info"><i class="icon-plus-sign"></i> Add status </a></div>
+					<div class="show_field p-l p-t p-b" style="display:none;">
+						<input id="add_new_task_category" class="add_new_category form-control input-sm" style="width:145px;display:inline-block" type="text" placeholder="New Category ">
+						<a class="btn btn-info btn-addon btn-sm add_task_category" data-toggle="modal" id="add_task_category" href="#">Add</a>
+						<span class="save-status"></span>
+					</div>
+    			</div> 
+    			</fieldset>
+				</div>
+			</div>
+			</div>
+			</div>
+
+<!-- telephony pannel ends -->
+
+	</div>
+    </div>
+    </div>
+    </div>
+    <div class="col w-md">
+        <div class="data-block">
+            <div class="p-l p-r">
+				<h4 class="m-t-none">
+                    Help
+                </h4>
+                
+				<p>You can define the status here for call. This will appear on call log after each call.<br/>
+				
+            </div>
+        </div>
+    </div>
+
+</script>
+
+<script id="admin-settings-telephony-model-template" type="text/html">
+    	
+	<td>
+		<div class="inline-block v-top text-ellipsis" style="width:80%">{{label}}</div>
+		<input type="hidden" name="id" value="{{id}}">
+	</td>	
+	<td class="b-r-none">
+		<div class="m-b-n-xs">
+			<a class="text-l-none-hover c-p text-xs"><i title="Drag" class="icon-move"></i></a>
+			<a id="{{id}}" class="category-delete c-p text-l-none text-xs" data-toggle="modal" role="button" href="#" data="{{label}}">
+				<i title="Delete status" class="task-action icon icon-trash"></i>
+			</a>
+		</div>
+	</td>
+		
+</script>
