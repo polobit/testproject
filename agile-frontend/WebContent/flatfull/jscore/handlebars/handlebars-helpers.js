@@ -7432,11 +7432,13 @@ Handlebars.registerHelper('convert_toISOString', function(dateInepoch, options) 
 			return options.fn(this);
 	});
 
-	Handlebars.registerHelper('is_yearly_plan', function(options)
+	Handlebars.registerHelper('check_plan_interval', function(interval, options)
 	{
 		var plan = USER_BILLING_PREFS.plan.plan_type;
-		var type = plan.split("_")
-		if(type[1] && (type[1] == "YEARLY" || type[1] == "BIENNIAL"))
+		var type = plan.split("_");
+		if(!type[1] || !interval)
+			return options.inverse(this);
+		if(type[1] == interval.toUpperCase())
 			return options.fn(this);
 		return options.inverse(this);
 	});

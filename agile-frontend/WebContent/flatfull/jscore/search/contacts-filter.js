@@ -332,6 +332,8 @@ function setupContactFilterList(cel, tag_id)
 						 * system filter names, to load results based on those
 						 * filters
 						 */
+						filter_id = filter_name;
+
 						if (filter_name.toLowerCase().indexOf('recent') >= 0)
 							filter_name = "Recent";
 
@@ -345,7 +347,6 @@ function setupContactFilterList(cel, tag_id)
 						// id(from cookie)
 						else if (filter_name.indexOf("system") < 0)
 						{
-							filter_id = filter_name;
 							if(contactFiltersListView.collection.get(filter_name))
 									filter_name = contactFiltersListView.collection.get(filter_name).toJSON().name;
 							
