@@ -321,22 +321,20 @@ function set_up_merge_fields(editor)
  */
 function get_merge_fields(callback)
 {
-	
 	var options = {
-			"First Name": "{{first_name}}",
-			"Last Name": "{{last_name}}",
-			"Score": "{{score}}",
-			"Email": "{{email}}",
-			"Company": "{{company}}",
-			"Title": "{{title}}",
-			"Address": "{{location.address}}",
-			"City": "{{location.city}}",
-			"State":"{{location.state}}",
-			"Country":"{{location.country}}",
-			"Owner Name":"{{owner.name}}",
-			"Owner Email":"{{owner.email}}", 
-			"Calendar URL":"{{owner.calendar_url}}"
-			
+			"{{agile_lng_translate 'contacts-view' 'First Name'}}": "{{first_name}}",
+			"{{agile_lng_translate 'contacts-view' 'Last name'}}": "{{last_name}}",
+			"{{agile_lng_translate 'report-add' 'score'}}": "{{score}}",
+			"{{agile_lng_translate 'modals' 'email'}}": "{{email}}",
+			"{{agile_lng_translate 'contacts-view' 'Company'}}": "{{company}}",
+			"{{agile_lng_translate 'other' 'title'}}": "{{title}}",
+			"{{agile_lng_translate 'other' 'address'}}": "{{location.address}}",
+			"{{agile_lng_translate 'contact-edit' 'city'}}": "{{location.city}}",
+			"{{agile_lng_translate 'contact-edit' 'state'}}":"{{location.state}}",
+			"{{agile_lng_translate 'contacts-view' 'country'}}":"{{location.country}}",
+			"{{agile_lng_translate 'contact-view' 'owner-name'}}":"{{owner.name}}",
+			"{{agile_lng_translate 'contact-view' 'owner-email'}}":"{{owner.email}}", 
+			"{{agile_lng_translate 'contact-view' 'calendar-url'}}":"{{owner.calendar_url}}"
 			}
 	
 	if(!callback){

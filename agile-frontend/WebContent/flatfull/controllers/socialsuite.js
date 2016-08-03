@@ -37,7 +37,7 @@ var SocialSuiteRouter = Backbone.Router.extend({
 			// For production versions
 			// if(HANDLEBARS_PRECOMPILATION)
 				// next();
-			head.js("jscore/min/locales/" +_LANGUAGE+ "/social-suite-all-min.js?_="_agile_get_file_hash("social-suite-all-min.js") + , function(){
+			head.js("jscore/min/locales/" +_LANGUAGE+ "/social-suite-all-min.js?_=" + _agile_get_file_hash("social-suite-all-min.js") , function(){
                next();
 			});
 			// For local env
