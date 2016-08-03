@@ -46,29 +46,19 @@
     {{#if_equals stream_type "Mentions"}}
          <p class="stream-type-icon icon mentions-small-title text-muted" title="{{agile_lng_translate 'social' 'mentions-stream'}}">@</p>
     {{else}}
-         <i class="stream-type-icon icon {{get_stream_icon stream_type}} text-muted" title="{{stream_type}} {{agile_lng_translate 'social' 'stream'}}"></i>
+         <i class="stream-type-icon icon {{get_stream_icon stream_type}} text-muted" title="{{get_stream_name stream_type}} {{agile_lng_translate 'social' 'stream'}}"></i>
     {{/if_equals}}
    </span>
 <span id="stream-spinner-modal-{{id}}" class="waiting-symbol">
          <img src="{{getS3ImagePath 'img/ajax-loader-cursor.gif'}}"></img>
     </span>        
   <h4 class="column-title txt-ellipsis m-t-none"> 
-      {{#if_equals stream_type "All_Updates"}}    
-          <span>{{agile_lng_translate 'social' 'all-updates'}}</span>
-      {{else}} 
-        {{#if_equals stream_type "DM_Inbox"}}
-           <span>{{agile_lng_translate 'social' 'DM Inbox'}}</span>
-        {{else}} 
-           {{#if_equals stream_type "DM_Outbox"}}
-               <span>{{agile_lng_translate 'social' 'DM Outbox'}}</span>
-           {{else}}
-             <span>{{stream_type}}</span>
-           {{/if_equals}}
-        {{/if_equals}}
+
+      <span>{{get_stream_name stream_type}}</span>
+      {{#if_equals stream_type "Search"}}    
+      <small>{{keyword}}</small>
       {{/if_equals}}
-      {{#if_equals stream_type "Search"}}                 
-     <small>{{keyword}}</small>
-      {{/if_equals}}
+
       <br>
     <span class="attribution txt-mute txt-sub-antialiased">@{{screen_name}}</span>
    </h4> 
