@@ -11,19 +11,19 @@
    		{{#if display_name}}
    			{{display_name}}
    		{{else}}
-	   		{{#if_equals name "Linkedin"}}LinkedIn
+	   		{{#if_equals name "Linkedin"}}{{agile_lng_translate 'contact-edit' 'linkedin'}}
 			{{else}}
-				{{#if_equals name "GooglePlus"}}Google+
+				{{#if_equals name "GooglePlus"}}{{agile_lng_translate 'contact-edit' 'google-plus'}}
 				{{else}}
-					{{#if_equals name "HelpScout"}}Help Scout
+					{{#if_equals name "HelpScout"}}{{agile_lng_translate 'widjets' 'help-scout'}}
 		    		{{else}}
-		    			{{#if_equals name "Twilio"}}Twilio Call Log
+		    			{{#if_equals name "Twilio"}}{{agile_lng_translate 'widjets' 'twilio-call-log'}}
 		            	{{else}}
-		            		{{#if_equals name "TwilioIO"}}Twilio
+		            		{{#if_equals name "TwilioIO"}}{{agile_lng_translate 'widgets' 'Twilio'}}
 							{{else}}
-								{{#if_equals name "CallScript"}}Call Script
+								{{#if_equals name "CallScript"}}{{agile_lng_translate 'widgets' 'call-script'}}
 								{{else}}
-									{{#if_equals name "Rapleaf"}}TowerData
+									{{#if_equals name "Rapleaf"}}{{agile_lng_translate 'widjets' 'tour-data'}}
 		                            {{else}}
 		                            	{{name}}
 		                            {{/if_equals}}
@@ -44,20 +44,20 @@
 				{{/if}}
 				<span class="m-t-xs m-r-xs">
 					{{#if_equals name "Linkedin"}}
-						<a id="{{remove_spaces name}}_plugin_delete" rel="tooltip" title="Reset settings">
+						<a id="{{remove_spaces name}}_plugin_delete" rel="tooltip" title="{{agile_lng_translate 'widjets' 'reset-settings'}}">
 							<i class="text-muted fa fa-wrench c-p"></i>
 						</a>
 					{{else}}
 						{{#if_equals name "Twitter"}}
-							<a id="{{remove_spaces name}}_plugin_delete" rel="tooltip" title="Reset settings"><i class="text-muted fa fa-wrench c-p"></i></a>
+							<a id="{{remove_spaces name}}_plugin_delete" rel="tooltip" title="{{agile_lng_translate 'widjets' 'reset-settings'}}"><i class="text-muted fa fa-wrench c-p"></i></a>
 						{{else}}
 							{{#if_equals name "Facebook"}}
-								<a id="{{remove_spaces name}}_plugin_delete" rel="tooltip" title="Reset settings"><i class="text-muted fa-wrench fa c-p"></i></a>
+								<a id="{{remove_spaces name}}_plugin_delete" rel="tooltip" title="{{agile_lng_translate 'widjets' 'reset-settings'}}"><i class="text-muted fa-wrench fa c-p"></i></a>
 							{{else}}
 								{{#if_equals name "GooglePlus"}}
-									<a id="{{remove_spaces name}}_plugin_delete" rel="tooltip" title="Reset settings"><i class="text-muted fa-wrench fa c-p"></i></a>
+									<a id="{{remove_spaces name}}_plugin_delete" rel="tooltip" title="{{agile_lng_translate 'widjets' 'reset-settings'}}"><i class="text-muted fa-wrench fa c-p"></i></a>
 								{{else}}
-									<a href="#add-widget" rel="tooltip" title="Reset settings"><i class="text-muted fa fa-wrench c-p"></i></a>
+									<a href="#add-widget" rel="tooltip" title="{{agile_lng_translate 'widjets' 'reset-settings'}}"><i class="text-muted fa fa-wrench c-p"></i></a>
 								{{/if_equals}}
 							{{/if_equals}}
 						{{/if_equals}}

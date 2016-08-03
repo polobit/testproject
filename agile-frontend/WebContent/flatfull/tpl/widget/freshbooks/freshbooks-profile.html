@@ -104,8 +104,8 @@
 					{{client.p_country}}
 				{{/if}}
 			</p>	
-			{{#if client.home_phone}}<i class="icon icon-phone text-muted text-sm"></i><a class="text-muted" href="tel:{{client.home_phone}}" > {{client.home_phone}} (home)<br> </a>{{/if}}
-			{{#if client.work_phone}}<i class="icon icon-phone text-muted text-sm"></i><a class="text-muted" href="tel:{{client.work_phone}}" > {{client.work_phone}} (work)<br> </a>{{/if}}
+			{{#if client.home_phone}}<i class="icon icon-phone text-muted text-sm"></i><a class="text-muted" href="tel:{{client.home_phone}}" > {{client.home_phone}} ({{agile_lng_translate 'social' 'Home'}})<br> </a>{{/if}}
+			{{#if client.work_phone}}<i class="icon icon-phone text-muted text-sm"></i><a class="text-muted" href="tel:{{client.work_phone}}" > {{client.work_phone}} ({{agile_lng_translate 'other' 'work'}})<br> </a>{{/if}}
 			{{#if client.mobile}}<i class="icon icon-phone text-muted"></i><a class="text-muted" href="tel:{{client.mobile}}"> {{client.mobile}} (mobile)</a>{{/if}}
 		{{/isArray}}
 	</div>

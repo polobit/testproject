@@ -87,7 +87,7 @@
 		{{#if_equals name "Sip"}}
 			<br/>
 			<span style="font-size: 12px;position: relative;top: 2px;">*</span>
-			<span style="font-size: 10px;">We recommend Bria</span>
+			<span style="font-size: 10px;">{{agile_lng_translate 'widjets' 'we-recommend-bria'}}</span>
 		{{/if_equals}}
 	{{/if_equals}}
 	{{/if_equals}}
@@ -542,7 +542,7 @@
 			<div class="panel-heading">
 			{{#if_equals name "Sip"}}
 			    <center><img class="m-b-none img-responsive thumb-xl bg-transparent" style="height:47px;" src="{{getS3ImagePath '/img/plugins/sip.png'}}" />
-					<span class="label label-sm bg-danger" style="margin: 5px;margin-left: -30px;">Beta</span>
+					<span class="label label-sm bg-danger" style="margin: 5px;margin-left: -30px;">{{agile_lng_translate 'deal-view' 'beta'}}</span>
 				</center>
 			{{else}}
 			    {{#if_equals name "CallScript"}}
@@ -597,7 +597,7 @@
 						<textarea rows="4" class="required" name="script" id="script" value={{script}} placeholder="{{agile_lng_translate 'widgets' 'documentation-for-js-api-placeholder'}}"></textarea>
 					</span>
 					<span id="url_div" style="display:none;">
-						<span class="help-block"><b>Documentation for <a class="text-info" href="https://github.com/agilecrm/widget-api-backend" target="_blank">widget backend API</a></b></span>
+						<span class="help-block"><b>{{agile_lng_translate 'widgets' 'documentation-for'}} <a class="text-info" href="https://github.com/agilecrm/widget-api-backend" target="_blank">widget backend API</a></b></span>
 						<input type="url" id="url" class="input-medium required widget_input_box form-control" style="width:90%;" placeholder="{{agile_lng_translate 'widgets' 'webhook-url'}}" value={{url}} name="url"></input>
 					</span>
 				</div></div>
@@ -616,28 +616,28 @@
 <script id="custom-widget-edit-template" type="text/html">
 <form id="customwidget_login_form" name="customwidget_login_form" method="post">
 	<fieldset>		
-		<label><b>Enter your custom widget details</b></label>						
+		<label><b>{{agile_lng_translate 'widjets' 'enter-your-custom-widjet-details'}}</b></label>						
 		<input type="hidden" id="widget_type" class="input-medium required widget_input_box form-control" value="CUSTOM" name="widget_type"/>
 		<input type="hidden" id="name" class="input-medium required widget_input_box form-control" value="{{name}}" name="name"/>
 		{{#if id}}
 			<input type="hidden" id="id" class="input-medium required widget_input_box form-control"value="{{id}}" name="id"/>		
 			<div class="control-group form-group">
 				<div class="controls">
-					<input type="text" id="display_name" value="{{#if display_name}}{{display_name}}{{else}}{{name}}{{/if}}" class="input-medium required widget_input_box form-control" tabindex="1" maxlength="14" placeholder="Widget Name (Max length 14)" name="display_name">
+					<input type="text" id="display_name" value="{{#if display_name}}{{display_name}}{{else}}{{name}}{{/if}}" class="input-medium required widget_input_box form-control" tabindex="1" maxlength="14" placeholder="{{agile_lng_translate 'Widgets' 'Widget-Name-Max-length'}}" name="display_name">
 					</input>				
 				</div>
 			</div>
 			<div class="control-group form-group">
 				<div class="controls">								
-					<input type="text" id="description" value="{{description}}" class="input-medium required widget_input_box form-control" tabindex="2" maxlength="110" placeholder="Description (Max length 110)" name="description">
+					<input type="text" id="description" value="{{description}}" class="input-medium required widget_input_box form-control" tabindex="2" maxlength="110" placeholder="{{agile_lng_translate 'Widgets' 'Widget-description-Max-length'}}" name="description">
 					</input>
 				</div>
 			</div>
 			<div class="control-group form-group">
 				<div class="controls">								
 					<select name="script_type" id="script_type" tabindex="3" class="required form-control">
-						<option value="script" {{#if_equals script_type "script"}}selected{{/if_equals}}>HTML</option> 
-						<option value="url" {{#if_equals script_type "url"}}selected{{/if_equals}}>URL</option> 
+						<option value="script" {{#if_equals script_type "script"}}{{agile_lng_translate 'companies-view' 'selected'}}{{/if_equals}}>HTML</option> 
+						<option value="url" {{#if_equals script_type "url"}}{{agile_lng_translate 'companies-view' 'selected'}}{{/if_equals}}>URL</option> 
 					</select>
 				</div>
 			</div>
