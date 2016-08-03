@@ -148,7 +148,7 @@ public class QuickBookSyncImpl extends OneWaySyncService
 	{
 
 	  //  updateLastSyncedInPrefs();
-		System.out.println("Quickbook issue"+e.getMessage());
+		System.out.println("Quickbook issue" + e.getMessage());
 	    e.printStackTrace();
 	}
 
@@ -410,6 +410,7 @@ public class QuickBookSyncImpl extends OneWaySyncService
 	    String response = SignpostUtil.accessURLWithOauth(Globals.QUICKBOOKS_CONSUMER_KEY,
 		    Globals.QUICKBOOKS_CONSUMER_SECRET, prefs.token, prefs.secret, customerAccessURl, "GET", "",
 		    "quickbooks");
+	    System.out.println("Response returned:"+response);
 	    JSONObject object=null;
 	    JSONObject queryResponse=null;
 	    if(response!=null)
@@ -463,6 +464,7 @@ public class QuickBookSyncImpl extends OneWaySyncService
 	}
 	catch (Exception e)
 	{
+		 System.out.println("Inside GetCustomers:"+e.getMessage());
 	    e.printStackTrace();
 	}
 	return customers;
