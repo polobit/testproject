@@ -227,7 +227,7 @@
 										class="typeahead form-control r-5x typeahead_contacts form-control-custom"
 										placeholder="Search" onclick="Agile_GA_Event_Tracker.track_event('Search option in Nav Bar')">
 					<div class="input-group-btn">
-					<button class="btn btn-default no-shadow" type="submit" ><i class="icon-microphone"></i></button>
+					<button class="btn btn-default no-shadow" onclick="startDictation()" src="https://i.imgur.com/cHidSVu.gif" class="btn btn-sm bg-light"  ><i class="icon-microphone"></i></button>
 					<button class="btn btn-default no-shadow r-5x" id="search-results" type="submit"><i class="fa fa-search"></i></button>
 					</div>
 					</div>
@@ -561,17 +561,29 @@
 					</header>
 					<!--/.nav-collapse -->
 			
+
 <script type="text/javascript">
-/*//Remove the search filter cookie if it exists
-function removeSearchFilter(){
-        	var savefilters = _agile_get_prefs("agile_search_filter");
-        	console.log("savefilters = "+savefilters);
-        	if(!savefilter){
-        		_agile_delete_prefs(savefilters);
-
-        	}
-
-        	//_agile_delete_prefs(savefilters);
-        }*/
+  function startDictation() {
+      var recognition = new webkitSpeechRecognition();
+ 
+      recognition.continuous = false;
+      recognition.interimResults = false;
+ 
+      recognition.lang = "en-US";
+      recognition.start();
+ 
+      recognition.onresult = function(e) {
+        document.getElementById('searchText').value
+                                 = e.results[0][0].transcript;
+        $("#search-results").trigger('click')
+        recognition.stop();
+       
+      };
+ 
+      recognition.onerror = function(e) {
+      	console.log(e)
+        recognition.stop();
+      }
+    }
+  
 </script>
-		

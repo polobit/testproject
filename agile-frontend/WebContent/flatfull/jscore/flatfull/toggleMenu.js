@@ -334,11 +334,20 @@ $("#activityModal").on("click", "#eventDescriptionLink", function(e){
 	});
 
 	$('#searchText').on('keydown', function(e){
+
+		if(e.keyCode == 13){
+			$('.searchicon-dropdown').removeClass('open');
+			//$("#search-results").trigger("click");
+			showSearchResults();
+			e.preventDefault();
+			//return;
+		}
+
 		e.stopPropagation()
 	});
 
 	$('body').on('click', function (e) {
-	    if (e.target.closest(".agile-search")
+	    if (!e.target.closest(".agile-search") 
 	        && $('.searchicon-dropdown').has(e.target).length === 0 
 	        && $('.open').has(e.target).length === 0 || e.which == 13
 	    ) {

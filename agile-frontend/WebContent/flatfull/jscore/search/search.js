@@ -172,6 +172,7 @@ $(function()
 	$('body').on('click', '#search-results', function(e)
 	{
 		// e.preventDefault();
+		$('.searchicon-dropdown').removeClass('open');
 		showSearchResults();
 	});
 });
