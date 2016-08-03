@@ -6407,6 +6407,21 @@ $(function()
 
 		return _agile_get_translated_val("portlets", duration);
 	});
+
+	/**
+	 * getting duration for campaign reports
+	 */
+	Handlebars.registerHelper('get_campaign_reports_duration', function(duration)
+	{
+		console.log("duration = " + duration);
+		var report_duration = {
+				"DAILY" : "{{agile_lng_translate 'report-add' 'daily'}}",
+				"WEEKLY" : "{{agile_lng_translate 'report-add' 'weekly'}}",
+				"MONTHLY" : "{{agile_lng_translate 'report-add' 'monthly'}}",
+		};
+
+		return report_duration[duration];
+	});
 	
 	/**
 	 * Returns a given date string to a time ago format ,used for gmaps listview implementation
