@@ -685,6 +685,31 @@ function initializeSendEmailListeners(){
 						// Is valid
 						if (!isValidForm($('#emailForm')))
 							return;
+
+						try
+						{
+							var emails_length = json.to.split(',').length;
+							var MAX_EMAILS_LIMIT = 10;
+
+							if(json.cc)
+								emails_length = json.cc.split(',').length + emails_length;
+
+							if(json.bcc)
+								emails_length = json.bcc.split(',').length + emails_length;
+
+							if(emails_length > MAX_EMAILS_LIMIT)
+							{
+								showAlertModal("Maximum limit of sending emails at once exceeded.", undefined, function(){},
+									function(){},
+									"Alert");
+								return;
+							}
+						}
+						catch(err)
+						{
+							
+						}
+						
 						var that =$(this);
 
 						if(hasScope("EDIT_CONTACT"))
