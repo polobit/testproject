@@ -55,8 +55,6 @@ function agile_trackPageview(callback)
 
 	agile_json(agile_url_new);
 
-	//Set push notification browser id
-	agile_setPushNotificationBrowserId();
 
 }
 

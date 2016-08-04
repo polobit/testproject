@@ -44,7 +44,6 @@ function getTemplate(templateName, context, download, callback, loading_place_ho
 	if (HANDLEBARS_PRECOMPILATION)
 	{
 		var template = Handlebars.templates[templateName + "-template"];
-preLoadTemplates
 		// If teplate is found
 		if (template)
 		{
