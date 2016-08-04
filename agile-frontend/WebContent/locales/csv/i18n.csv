@@ -940,7 +940,7 @@ validation-msgs.range,Please enter a value between {0} and {1}.,Por favor&#44; i
 widgets.person-does-not-share-his-her-tweets,This person does not share his/her tweets,Esta persona no comparte sus tweets.
 portlets.delete-dashlet-confirm,Are you sure you want to delete Dashlet -,¿Seguro que quiere eliminar Dashlet -
 Deal-detail.you-can-upgrade-account-at-anytime,You can upgrade your account at any time.,Puede actualizar su cuenta en cualquier momento.
-other.social-know-your-customer-social-activity,Social Know your customer social activity,Conoce la actividad social de tu cliente
+other.social-know-your-customer-social-activity,Know your customer social activity,Conoce tu actividad social del cliente
 web-rules.select-a-template-edit-editor,(Select a template / Edit in HTML editor),(Seleccionar plantilla / Usar el editor HTML)
 other.i-thought-you-would-love-as-much-as-i-do,I thought you would love as much as I do.,Pensé que a usted le gusta tanto como yo.
 deal-view.save-specific-document-information,You can add a document related to a Deal.,Puedes añadir un documento relacionado con un acuerdo u oferta.
@@ -5033,7 +5033,7 @@ widgets.custom-widget-details,Enter your custom widget details,Introduzca sus de
 widgets.enter-zendesk-widget-details,Enter your Zendesk details,Introduzca sus datos de Zendesk
 widgets.enter-sip-widget-details,Enter your Sip details,Introduzca sus datos de Sip
 widgets.enter-twilio-widget-details,Enter your Twilio details,Introduzca sus datos de Twilio
-widgets.enter-freshBooks-widget-details,Enter your Freshbooks details,Introduzca sus datos Freshbooks
+widgets.enter-freshBooks-widget-details,Enter your FreshBooks details,Introduzca sus datos FreshBooks
 widgets.enter-clickDesk-widget-details,Enter your ClickDesk details,Introduzca sus datos ClickDesk
 widgets.please-try-again,Please Try agian,Por favor Pruebe alquilásemos
 prefs-data-sync.SALESFORCE-content,By configuring access to your Salesforce&#44; we'll automatically import your Contacts and Tasks to AgileCRM.,Mediante la configuración de acceso a su Salesforce &#44; vamos a importar automáticamente sus contactos y tareas a AgileCRM .
@@ -5194,3 +5194,13 @@ contacts-view.added-call-log-to,Added call log to,Se añadió registro de llamad
 contacts-view.added-note-to,Added note to ,Se agregó una nota a
 datasync.resync-info,Update will 'resync' your entire data to make it searchable. This may be needed in extreme scenarios. Eg: you made an existing custom field searchable.,Update 'sincronizar' sus datos completos para facilitar las búsquedas . Esto puede ser necesario en situaciones extremas . Por ejemplo : se hizo un campo personalizado existente búsquedas.
 validation-msgs.system-fields,Given name is a system field name. Please choose another name.,Nombre dado es un nombre de campo del sistema. Por favor&#44; elija otro nombre .
+widgets.view-tickets-and-chats,View tickets and chats,Ver las entradas y chats
+widgets.customer-support,Customer Support,Atención al cliente
+widgets.send-and-rcv-email,Send and Receive Email,Enviar y recibir correo electrónico
+widgets.make-and-rcv-calls,Make & Receive calls from Agile,Hacer y recibir llamadas desde ágil
+widgets.calling,Calling,Vocación
+widgets.view-and-invoices,View and send invoices,Ver y enviar facturas
+widgets.view-cus-order-details,View Customer Orders Details,Ordenes de los Clientes Detalles
+widgets.add-your-widgets,Add your widgets,Añadir sus widgets
+widgets.custom-widgets,Custom Widgets,Reproductores personalizados
+widgets.stripe-custom-field-select,Stripe uses Stripe ID stored in text custom field to fetch data. Select the custom field to be used.,Raya utiliza identificador de banda almacenado en el campo de texto personalizado para obtener los datos . Seleccionar el campo personalizado que se utilizará .
