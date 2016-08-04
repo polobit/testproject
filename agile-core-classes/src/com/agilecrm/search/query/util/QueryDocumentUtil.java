@@ -952,8 +952,8 @@ public class QueryDocumentUtil {
 			
 			String timezoneOffset = AccountPrefsUtil.getTimeZoneInOffset();
 			
-			if(StringUtils.equalsIgnoreCase(timezoneOffset, "+00:00") 
-					&& StringUtils.contains(timezoneOffset, "+"))
+			if(!StringUtils.equalsIgnoreCase(timezoneOffset, "+00:00") 
+					&& StringUtils.startsWith(timezoneOffset, "+"))
 			{
 				int firstDayOfCurrentMonth = cal.getMinimum(Calendar.DAY_OF_MONTH);
 				int lastDayOfCurrentMonth = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
