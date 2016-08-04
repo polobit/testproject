@@ -5188,3 +5188,8 @@ widjets.reset-settings,Reset settings,Reiniciar ajustes
 social.Scheduled,Scheduled,Programado
 social.my-updates,My Updates,Mis actualizaciones
 widgets.callscript-not-found,No matching call script found.,No se encontró la escritura llamada coincidente .
+landingpages.basic,Basic,Basic
+domain-user.phone,Owner Phone,Propietario del teléfono
+contacts-view.added-call-log-to,Added call log to,Se añadió registro de llamadas a 
+contacts-view.added-note-to,Added note to ,Se agregó una nota a
+datasync.resync-info,Update will 'resync' your entire data to make it searchable. This may be needed in extreme scenarios. Eg: you made an existing custom field searchable.,Update 'sincronizar' sus datos completos para facilitar las búsquedas . Esto puede ser necesario en situaciones extremas . Por ejemplo : se hizo un campo personalizado existente búsquedas.
