@@ -1200,7 +1200,7 @@ function loadSavedTemplate() {
 function initializeEditor() {
     
     tinymce.init({
-        language : parent.get_tinymce_supported_language(),
+        // language : parent.get_tinymce_supported_language(),
         menubar: false,
         force_br_newlines: false,
         force_p_newlines: true,
