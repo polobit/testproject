@@ -749,7 +749,8 @@
 
   {{#if_equals "NOTE_ADD" activity_type}}
 {{#if custom4}}
-{{agile_lng_translate 'contacts-view' 'added-call-log-to-contact'}} {{#if this.entityObject}}<a href="#contact/{{entity_id}}" data="{{entity_id}}" class="popover_contact">{{label}}</a>{{else}}'{{label}}'{{/if}} <br/>
+{{agile_lng_translate 'contacts-view' 'added-call-log-to'}} {{#if_equals "company_entity" this.entityObject.entity_type}} {{agile_lng_translate 'contacts-view' 'Company'}} {{else}} {{agile_lng_translate 'contact-details' 'Contact'}}{{/if_equals}}  {{#if this.entityObject}}<a href="{{#if_equals "company_entity" this.entityObject.entity_type}} #company/{{entity_id}} 
+{{else}} #contact/{{entity_id}} {{/if_equals}}" data="{{entity_id}}" class="popover_contact">{{label}}</a>{{else}}'{{label}}'{{/if}} <br/>
 <small class="activities_second_line m-t-none text-sm">
  <i class="icon-pencil"></i>{{#unless this.entityObject}} {{agile_lng_translate 'contacts-view' 'contact-deleted-later'}} {{/unless}} {{custom1}} {{#if custom2}}- {{custom2}}{{/if}}
 </small> <br/>
@@ -757,7 +758,9 @@
  <i class="icon-pencil"></i>{{custom4}}
 </small>
 {{else}}
-{{agile_lng_translate 'contacts-view' 'added-note-to-contact'}} {{#if this.entityObject}}<a href="#contact/{{entity_id}}" data="{{entity_id}}" class="popover_contact">{{label}}</a>{{else}}'{{label}}'{{/if}} <br/>
+{{agile_lng_translate 'contacts-view' 'added-note-to'}} {{#if_equals "company_entity" this.entityObject.entity_type}} {{agile_lng_translate 'contacts-view' 'Company'}} {{else}} {{agile_lng_translate 'contact-details' 'Contact'}}{{/if_equals}} {{#if this.entityObject}}
+<a href="{{#if_equals "company_entity" this.entityObject.entity_type}} #company/{{entity_id}} 
+{{else}} #contact/{{entity_id}} {{/if_equals}}" data="{{entity_id}}" class="popover_contact">{{label}}</a>{{else}}'{{label}}'{{/if}} <br/>
 <small class="activities_second_line m-t-none text-sm">
  <i class="icon-pencil"></i>{{#unless this.entityObject}} {{agile_lng_translate 'contacts-view' 'contact-deleted-later'}} {{/unless}} {{custom1}} {{#if custom2}}- {{custom2}}{{/if}}
 </small>  

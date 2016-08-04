@@ -27,10 +27,9 @@
                 </a>
              </div>
              <div class="pull-right">
-                <button onclick="App_Ticket_Module.addLandingpage()"  class="btn btn-sm btn-default btn-addon access_kb">
-                    {{agile_lng_translate 'tickets' 'knowledge-base-settings'}}
-                    
-                </button>
+                <a href="#selectlandingpage"  class="btn btn-sm btn-default btn-addon access_kb">
+                    {{agile_lng_translate 'preferences' 'settings'}}
+                </a>
             </div>
             <table class="table table-striped showCheckboxes m-b-none agile-table panel table-layout-mob-view show-delete-modal" url="core/api/knowledgebase/categorie/bulk" data-bulk-delete-title="{{agile_lng_translate 'contact-details' 'delete'}}"
                 data-bulk-delete-msg="{{agile_lng_translate 'tickets' 'conformation-messge-for-deletion'}}" id="ticket-categorie-table">

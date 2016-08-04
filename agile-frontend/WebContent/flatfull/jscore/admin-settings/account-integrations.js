@@ -164,3 +164,72 @@ function syncAppData(){
 				return;
 			}, _agile_get_translated_val('reputation','Ok'), _agile_get_translated_val('contact-details','cancel'));
 }
+function syncAppDatatoDeals(){
+	 showModalConfirmation(
+		"Update Data",
+		"This will update your data. Do you want to continue?",
+		function()
+		{		
+	 	var domain = CURRENT_DOMAIN_USER.domain ; 
+	 	$.ajax({
+			url : 'core/api/custom-fields/syncappdataforDeals?domain='+domain,
+			type : 'GET',
+			success : function(data) {
+				console.log(data);
+				var yes = "";
+				var no = "Ok"
+				if(data == "success"){
+					showModalConfirmation(
+						"Update Data",
+						"Update request is successfully scheduled.",
+						function()
+						{
+							// No callback
+							return;
+						},function()
+						{
+							return;
+						}, yes, no);
+                  }
+                  else if (data == "limitReached"){
+                  	showModalConfirmation(
+						"Update Data",
+						"Update is allowed only once a month. Please try later.",
+						function()
+						{
+							// No callback
+							return;
+						},function()
+						{
+							return;
+						}, yes, no);
+                  }
+                  else{
+                  	showModalConfirmation(
+						"Update Data",
+						"There seems to be an issue. Please try again later.",
+						function()
+						{
+							// No callback
+							return;
+						},function()
+						{
+							return;
+						}, yes, no);
+                  }
+			},
+			error : function(response) {
+				console.log("error");
+				console.log(response);
+			}
+			});
+	    }, function()
+			{
+				// No callback
+				return;
+			}, function()
+			{
+				return;
+			}, "Ok", "Cancel");
+>>>>>>> 261090ac99c4e07888b06da10449b9b30367d056
+}

@@ -49,7 +49,7 @@
                    <span {{#is_mobile}} class="block" {{/is_mobile}}><label class="label bg-light text-tiny"><!-- <i class="fa {{icons type}} hide"></i>&nbsp; -->{{ucfirst type}}</label></span>
 				</div>
 		{{else}}
-			<div> {{#is_mobile}} {{else}}<label class="i-checks i-checks-sm"><input data="{{id}}" class="complete-task form-control" type="checkbox"/><i></i></label>{{/is_mobile}}<div class="task-subject {{#is_mobile}} block text-ellipsis w-full {{else}} inline {{/is_mobile}}"><a class="space-normal" href="#task/{{id}}">{{subject}}</a></div>{{#if_equals priority_type "NORMAL"}}{{else}}
+			<div> {{#is_mobile}} {{else}}<label class="i-checks i-checks-sm"><input data="{{id}}" class="complete-task form-control" type="checkbox"/><i></i></label>{{/is_mobile}}<div class="task-subject {{#is_mobile}} block text-ellipsis w-full {{else}} text-ellipsis pos-rlt pos-t-xs inline-block {{/is_mobile}}"><a class="space-normal" href="#task/{{id}}">{{subject}}</a></div>{{#if_equals priority_type "NORMAL"}}{{else}}
 					<span class="label hidden label-{{task_label_color priority_type}}">{{ucfirst priority_type}}</span>{{/if_equals}}
                     <span {{#is_mobile}} class="block" {{/is_mobile}}><label class="label bg-light text-tiny"><!-- <i class="fa {{icons type}}"></i>&nbsp; -->{{ucfirst type}}</label></span>
 				</div>

@@ -1,249 +1,68 @@
-<script id="contacts-grid-model-template" type="text/html">
-<div class="custom-animated custom-fadeInUp">
-<div class="contacts-grid-view-temp p-b col-md-4 {{id}}">
+<script id="contacts-grid-view-model-template" type="text/html">
 	{{#if_contact_type "PERSON"}}
-	<div class="b r-5x p-sm bg-white" id="{{id}}" style="height: 110px;">
-		<div class="left pos-abs">
-			<label class="i-checks i-checks-sm"> <input type="checkbox"
-				class="tbody_check grid-view-checkbox" value=""> <i></i>
-			</label>
-		</div>
-		<div style="margin-left: 25px; margin-bottom: 55px;">
-			<div class="pull-left m-r-xs thumb-sm">
-				<a href="#contact/{{id}}"> <img class="img-inital inline r r-2x"
-					data-name="{{dataNameAvatar properties}}"
-					src="{{gravatarurl properties 50}}" width="40px !important;"
-					height="40px !important" /></a>
-			</div>
-			<div class="pull-left text-ellipsis"
-				style="width: calc(100% - 45px);line-height: 18px;color:#7C7C7C;">
-				<a href="#contact/{{id}}" style="width: calc(100% - 30px);"
-					class="text-cap agile-contact-grid-view text-ellipsis block">
-					{{getPropertyValue properties "first_name"}} {{getPropertyValue
-					properties "last_name"}} </a>
-
-				<div style="color:#7C7C7C; display:{{checkPropertyValueExistance properties "company" "title"}}">
-					<span class="text-cap grid-view-elipsis" style="vertical-align: bottom;" title="{{getPropertyValue properties "company"}}">{{getPropertyValue
-						properties "company"}}</span><span style="margin-right: {{getMarginLength properties "company"}};">{{getPropertyValueExists properties
-					"company" "title"}}</span><span class="text-cap grid-view-elipsis" style="vertical-align: bottom;"
-						title="{{getPropertyValue properties "title"}}">
-						{{getPropertyValue properties "title"}}</span>
+		<div class="custom-animated custom-fadeInUp">
+			<div class="contacts-grid-view-temp p-b col-md-4 {{id}}">
+				<div class="b r-5x p-sm bg-white" id="{{id}}" style="height: 110px;">
+					<div class="left pos-abs">
+						<label class="i-checks i-checks-sm">
+							<input type="checkbox" class="tbody_check grid-view-checkbox" value=""> <i></i>
+						</label>
+					</div>
+					<div style="margin-left: 25px; margin-bottom: 55px;">
+						<div class="pull-left m-r-xs thumb-sm">
+							<a href="#contact/{{id}}"> <img class="img-inital inline r r-2x" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 50}}" width="40px !important;" height="40px !important" /></a>
+						</div>
+						<div class="pull-left text-ellipsis" style="width: calc(100% - 45px);line-height: 18px;color:#7C7C7C;">
+							<a href="#contact/{{id}}" style="width: calc(100% - 30px);" class="text-cap agile-contact-grid-view text-ellipsis block">
+								{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}
+							</a>
+							<div style="color:#7C7C7C; display:{{checkPropertyValueExistance properties "company" "title"}}">
+								<span class="text-cap grid-view-elipsis" style="vertical-align: bottom;" title="{{getPropertyValue properties "company"}}">
+									{{getPropertyValue properties "company"}}
+								</span>
+								<span style="margin-right: {{getMarginLength properties "company"}};">
+									{{getPropertyValueExists properties "company" "title"}}
+								</span>
+								<span class="text-cap grid-view-elipsis" style="vertical-align: bottom;" title="{{getPropertyValue properties "title"}}">
+									{{getPropertyValue properties "title"}}
+								</span>
+							</div>
+							<div>{{getPropertyValue properties "email"}}</div>
+						</div>
+						<div class="pull-right grid-view-actions grid-view-action-button">
+							<span class="m-r-xs c-p">
+								<a href="#contact/{{id}}">
+									<i data-toggle="tooltip" data-placement="left" title="" data-original-title="Edit" class="fa fa-pencil-square grid-edit-color"></i>
+								</a>
+							</span>
+							<span class='c-p' con_id="{{id}}" id="contact-actions-grid-delete">
+								<i data-toggle="tooltip" data-placement="left" title="" data-original-title="Delete" class="fa fa-trash grid-delete-color"></i>
+							</span>
+						</div>
+					</div>
+					<div class="clearfix"></div>
+					<div class="w-full contact-grid-ellipsis line-clamp line-clamp-1 m-t-xs no-wrap" style="padding-left: 24px;">
+						{{#each tags}}
+							<span class="label bg-light dk text-tiny overflow-visible font-normal grid-tag-color">{{this}}</span>
+						{{/each}}
+					</div>
 				</div>
-
-				<div>{{getPropertyValue properties "email"}}</div>
-
-
-
 			</div>
-			<div class="pull-right grid-view-actions grid-view-action-button">
-				<span class="m-r-xs c-p"><a href="#contact/{{id}}"><i
-						data-toggle="tooltip" data-placement="left" title=""
-						data-original-title="{{agile_lng_translate 'contact-details' 'edit'}}"
-						class="fa fa-pencil-square grid-edit-color"></i></a></span><span class='c-p'
-					con_id="{{id}}" id="contact-actions-grid-delete"><i
-					data-toggle="tooltip" data-placement="left" title=""
-					data-original-title="{{agile_lng_translate 'deal-view' 'delete'}}" class="fa fa-trash grid-delete-color"></i></span>
-			</div>
-
 		</div>
-		<div class="clearfix"></div>
-		<div class="w-full contact-grid-ellipsis line-clamp line-clamp-1 m-t-xs no-wrap" style="padding-left: 24px;">
-			{{#each tags}} <span
-				class="label bg-light dk text-tiny overflow-visible font-normal grid-tag-color">{{this}}</span>
-			{{/each}}
-		</div>
-	</div>
 	{{/if_contact_type}}
-
-
-</div>
-</div>
 </script>
 
-<script id="contacts-grid-table-model-template" type="text/html">
-<div class="contacts-grid-view-temp p-b col-md-4 {{id}}">
-	{{#if_contact_type "PERSON"}}
-	<div class="b r-5x p-sm" style="background-color: #fff; height: 120px;"
-		id={{id}}>
-		<div class="left pos-abs">
-			<label class="i-checks i-checks-sm"> <input type="checkbox"
-				class="tbody_check grid-view-checkbox" value=""> <i></i>
-			</label>
-		</div>
-		<div style="margin-left: 25px; height: 71px;">
-			<div class="pull-left m-r-xs">
-				<a href="#contact/{{id}}"><img
-					title="{{getPropertyValue properties 'first_name'}} {{getPropertyValue properties 'last_name'}}"
-					class="img-inital inline r r-2x"
-					data-name="{{dataNameAvatar properties}}"
-					src="{{gravatarurl properties 50}}" width="40px !important"
-					height="40px !important" /></a>
-			</div>
-			<div class="pull-left text-ellipsis"
-				style="width: calc(100% - 45px);line-height: 18px;">
-				<a href="#contact/{{id}}" style="width: calc(100% - 30px);"
-					class="text-cap agile-contact-grid-view text-ellipsis block">
-					{{getPropertyValue properties "first_name"}} {{getPropertyValue
-					properties "last_name"}} </a>
-
-				<div style="color:#7C7C7C;display:{{checkPropertyValueExistance properties "company" "title"}}">
-					<span class="grid-view-elipsis text-cap" style="vertical-align: bottom;"  title="{{getPropertyValue properties "company"}}">{{getPropertyValue
-						properties "company"}}</span><span style="margin-right: {{getMarginLength properties "company"}};">{{getPropertyValueExists properties
-					"company" "title"}}</span><span class="text-cap grid-view-elipsis" style="vertical-align: bottom;" title="{{getPropertyValue properties "title"}}">
-						{{getPropertyValue properties "title"}}</span>
-				</div>
-				<div>{{getPropertyValue properties "email"}}</div>
-
-			</div>
-			<div class="pull-right grid-view-actions grid-view-action-button">
-				<span class="m-r-xs c-p"><a href="#contact/{{id}}"><i
-						data-toggle="tooltip" data-placement="left" title=""
-						data-original-title="{{agile_lng_translate 'contact-details' 'edit'}}"
-						class="fa fa-pencil-square grid-edit-color"></i></a></span><span class='c-p'
-					con_id="{{id}}" id="contact-actions-grid-delete"><i
-					data-toggle="tooltip" data-placement="left" title=""
-					data-original-title="{{agile_lng_translate 'deal-view' 'delete'}}" class="fa fa-trash grid-delete-color"></i></span>
-			</div>
-			<div class="clearfix"></div>
-		</div>
-	<div class="w-full contact-grid-ellipsis line-clamp line-clamp-1 m-t-xs no-wrap" style="padding-left: 27px;">
-				{{#each tags}} <span
-					class="label bg-light dk text-tiny overflow-visible font-normal grid-tag-color">{{this}}</span>
-				{{/each}}
-	</div>
-		{{/if_contact_type}}
-
-	</div>
-
-	</script>
-
-
-<script id="contacts-grid-collection-template" type="text/html">
-<div class="hbox hbox-auto-xs hbox-auto-sm">
-    <div class="col w-lg dk b-r bg-auto" id="contacts-lhs-filters-toggle" style="display:{{toggle_contacts_filter}}">
-        <div class="data-block">
-            <div  id="lhs_filters_conatiner">
-				
-			</div>
-        </div>
-    </div>
-    <div class="col">
-	  <div id="right-pane">
-		
-	<div class="wrapper bg-light padder-md padder-v {{#is_mobile}} {{else}} m-r-sm p-r-none{{/is_mobile}}" style="border-bottom: 1px solid rgba(140, 139, 139, 0.2);>
-	    <div class="btn-toolbar m-l-none pos-rlt">
-		
-    	<div class="btn-toolbar m-l-none pos-rlt">
-	    	<div class="filters-drp-down btn-group dropdown m-l-none" style="float: none;"><div class="">
-	    		<div class="inline-block" style="font-size: 18px;color: rgb(88, 102, 110);"><div>{{agile_lng_translate 'contacts-view' 'contacts'}} <div class="inline-block" id="filter-list"></div><span id="contacts-count" class="">{{contacts_count}}</span>
-	    			<a id="contacts-left-filters-toggle" class="" data-toggle="tooltip" data-placement="right" title="" data-original-title="{{agile_lng_translate 'contacts-view' 'filters'}}" onclick="Agile_GA_Event_Tracker.track_event('Hide/Expand Filters')">
-            			<i id="icon-filter" class="fa fa-filter icon-white text-base" style="color: rgb(88, 102, 110);"></i>
-          			</a>
-          			</div>
-          			<div class="btn-group  pull-left m-r-xs pos-rlt m-t-n-xs" id="contact-sorter" style="vertical-align:top;"></div>
-	    		</div><br>
-				
-    
-    
-
-
-</div></div>
-      <div class="pull-right">
-			
-            <div class="btn-group pull-left m-r-xs" id="contacts-view-options"></div>
-           
-			<div class="btn-group pull-left" id="view-list"></div>
-			
-</div>
-<div class="clearfix"></div>
-   
-    </div>
-    </div>
-    </div>
-    <div class="route_Portlet b-b" style="display:none">
-	<div class="row">
-		<div class="col-md-12">
-			<div>
-				<div id="portlets">&nbsp;</div>
-			</div>
-		</div>
-	</div>
-	</div>
-    <div class="contacts-div">
-    <div id="bulk-action-btns" class="panel-heading no-shadow grid-checkboxes b-r {{#is_mobile}} {{else}} m-r-sm {{/is_mobile}}" style="border-bottom: 1px solid rgba(140, 139, 139, 0.2);background-color: rgba(246,248,248,1);">
-    					{{#if this.length}}
-				          <span style="margin: 5px 0px 5px 5px;"> <label class="i-checks i-checks-sm p-l-lg">
-				                <input type="checkbox" id="select_grid_contacts1" class="thead_check" value="">
-				                <i></i>                
-				          </label></span>
-				  		{{/if}}
-				      	
-					    <button id="bulk-tags" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled" style="font-size:10px">{{agile_lng_translate 'contacts-view' 'add-tags'}}</button>
-					    <button id="bulk-tags-remove" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled" style="font-size:10px">{{agile_lng_translate 'contacts-view' 'remove-tags'}}</button>
-					    {{#hasMenuScope 'CAMPAIGN'}}
-					    <button id="bulk-campaigns" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled" style="font-size:10px">{{agile_lng_translate 'contacts-view' 'add-to-campaign'}}</button>
-					    {{/hasMenuScope}}
-					    <button id="show-callcampaignModal" class="btn btn-default bulk-action-btn btn-sm disabled" style="font-size:10px">{{agile_lng_translate 'contacts-view' 'start-call-campaign'}}</button>
-					    <button id="bulk-email" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled" style="font-size:10px">{{agile_lng_translate 'contacts-view' 'send-email'}}</button>
-					    <button id="bulk-owner" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled" style="font-size:10px">{{agile_lng_translate 'contacts-view' 'change-owner'}}</button>
-					    {{#hasScope "EXPORT_CONTACTS"}}
-					    <button id="bulk-contacts-export" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled" style="font-size:10px">{{agile_lng_translate 'deal-view' 'export-as-csv'}}</button>
-					    {{/hasScope}}
-					    <button id="delete-checked-grid" class="btn btn-default bulk-action-btn btn-sm disabled" style="font-size:10px">{{agile_lng_translate 'contacts-view' 'delete'}}</button>
-				    </div>
-
-      <div class="m-l-sm filter-criteria"></div>
-      {{#unless this.length}}
-        <div class="m-l-sm" id="slate">
-        </div>
-        {{/unless}}
-        {{#if this.length}}
-        <div class="data">
-            <div class="data-container contacts-inner-div">
-             <div  class="btn-group inline-block text-center" style="display: none; border:1px solid #dee5e7;width:99%;margin-top:-1px; padding:5px;" id="bulk-select"></div>
-                <div id="contacts-grid-model-list" class="contacts-model-list grid-view showCheckboxes row wrapper-md" route="contact/"  url="core/api/contacts/delete?action=DELETE"></div>
+<script id="contacts-grid-view-collection-template" type="text/html">
+	<div class="m-l-sm filter-criteria"></div>
+	{{#unless this.length}}
+		<div class="m-l-sm" id="slate"></div>
+	{{/unless}}
+	{{#if this.length}}
+		<div class="data">
+			<div class="data-container contacts-inner-div">
+				<div  class="btn-group inline-block text-center" style="display: none; border:1px solid #dee5e7;width:99%;margin-top:-1px; padding:5px;" id="bulk-select"></div>
+                <div id="contacts-grid-view-model-list" class="contacts-model-list grid-view showCheckboxes row wrapper-md" route="contact/"  url="core/api/contacts/delete?action=DELETE"></div>
             </div>
         </div>
-        {{/if}}
-       </div>
-    </div>
-</div>
-
-</script>
-	<script id="contacts-grid-table-collection-template" type="text/html">
-
-	<!-- <div id="bulk-action-btns" class="panel-heading no-shadow m-r-sm b-r" style="border-bottom: 1px solid rgba(140, 139, 139, 0.2);background-color: rgba(246,248,248,1);">
-				      	{{#if this.length}}
-				          <span style="margin: 5px 0px 5px 5px;"> <label class="i-checks i-checks-sm p-l-lg">
-				                <input type="checkbox" id="select_grid_contacts1" class="thead_check" value="">
-				                <i></i>                
-				          </label></span>
-				  		{{/if}}
-					    <button id="bulk-tags" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled" style="font-size:10px">Add Tags</button>
-					    <button id="bulk-tags-remove" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled" style="font-size:10px">Remove Tags</button>
-					    {{#hasMenuScope 'CAMPAIGN'}}
-					    <button id="bulk-campaigns" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled" style="font-size:10px">Add to Campaign</button>
-					    {{/hasMenuScope}}
-					    <button id="show-callcampaignModal" class="btn btn-default bulk-action-btn btn-sm disabled" style="font-size:10px">Start Call Campaign</button>
-					    <button id="bulk-email" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled" style="font-size:10px">Send Email</button>
-					    <button id="bulk-owner" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled" style="font-size:10px">Change Owner</button>
-					    {{#hasScope "EXPORT_CONTACTS"}}
-					    <button id="bulk-contacts-export" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled" style="font-size:10px">Export Contacts as CSV</button>
-					    {{/hasScope}}
-					    <button id="delete-checked-grid" class="btn btn-default bulk-action-btn btn-sm disabled" style="font-size:10px">Delete</button>
-				    </div> -->
-      <div class="m-l-sm filter-criteria"></div>
-      {{#unless this.length}}
-        <div class="m-l-sm" id="slate">
-        </div>
-        {{/unless}}
-        {{#if this.length}}
-
-        <!-- <div class="data">
-            <div class="data-container"> -->
-                <div id="contacts-grid-table-model-list" class="contacts-model-list grid-view showCheckboxes row wrapper-md" route="contact/"  url="core/api/contacts/delete?action=DELETE"></div>
-            <!-- </div>
-        </div> -->
-        {{/if}}
-		
+	{{/if}}
 </script>

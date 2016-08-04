@@ -522,13 +522,18 @@ function initializeDealListners(el){
 
     $('#opportunity-listners').off('click', '.update-drag-deal');
 	$('#opportunity-listners').on('click', '.update-drag-deal', function(e) {
-
+		var posCss = $(this).position();
+		posCss["left"] = parseInt(posCss["left"]) + (($(this).find("div:first").width() - 50) / 2) + "px";
+		posCss["overflow"] = "hidden";
+		posCss["width"] = "50px";
+		$("#moved-deal", $("#new-track-list-paging")).find("li").eq(1).animate(posCss, 700, function(){
+			$("#moved-deal", $("#new-track-list-paging")).find("li").eq(1).css("overflow", "hidden");
+		});
 		var deal_id = $("#moving-deal").find("div:first").attr("id");
 		var heading = $("#moving-deal").attr("data-heading");
 		var track = $(this).find("div:first").attr("data-track");
 		var newMilestone = $(this).find("div:first").text().trim();
 		var dealsCollection = DEALS_LIST_COLLECTION.collection.where({ heading : heading });
-
 		if(dealsCollection) {
 			var dealModel = dealsCollection[0].get("dealCollection").get(deal_id);
 			if(dealModel) {
@@ -538,9 +543,11 @@ function initializeDealListners(el){
 				$('#'+old_milestone.replace(/ +/g, '')+'_count').text(parseInt($('#'+old_milestone.replace(/ +/g, '')+'_count').text())-1);
 			}
 		}
-		$("#new-track-list-paging").hide();
-		$("#new-opportunity-list-paging").show();
-		$("#opportunities-header", $("#opportunity-listners")).show();
+		setTimeout(function(){
+			$("#new-track-list-paging").hide();
+			$("#new-opportunity-list-paging").show();
+			$("#opportunities-header", $("#opportunity-listners")).show();
+		},800);
     });
 
 }

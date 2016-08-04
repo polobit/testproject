@@ -1007,11 +1007,9 @@ head.load(	"https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js",
 			LIB_PATH + 'final-lib/min/backbone-min.js',
 			LIB_PATH + 'final-lib/min/lib-all-new-2.js?_=' + _agile_get_file_hash('lib-all-new-2.js'),  
 			function(){
-            // Load tpl.html
-            load_tpl_html();
-            // load_lng_json();
-		        load_globalize();
-		        showVideoForRegisteredUser();
+         // Load tpl.html
+        load_tpl_html();
+		    showVideoForRegisteredUser();
 		});
 
 // head.js({ library  : LIB_PATH + 'final-lib/min/lib-all-min-1.js?_=' + _AGILE_VERSION });
@@ -1048,6 +1046,7 @@ head.load([{'js-core-1': CLOUDFRONT_PATH + 'jscore/min/locales/' + _LANGUAGE  +'
 		{'js-core-4': CLOUDFRONT_PATH + 'jscore/min/locales/' + _LANGUAGE +'/js-all-min-4.js' + "?_=" + _agile_get_file_hash('js-all-min-4.js')}, 
 		CLOUDFRONT_PATH + "tpl/min/precompiled/locales/" + _LANGUAGE + "/contact-view.js" + "?_=" + _agile_get_file_hash('contact-view.js')], function(){
 			console.log("All files loaded. Now continuing with script");
+      load_globalize();
 			try{
 				$('[data-toggle="tooltip"]').tooltip();  
 				//Code to display alerts of widgets.

@@ -408,6 +408,8 @@ function save_task(formId, modalId, isUpdate, saveBtn)
 							{
 								if (isUpdate)
 									App_Calendar.allTasksListView.collection.get(json).set(new BaseModel(data));
+								else
+									App_Calendar.allTasksListView.collection.add(new BaseModel(data));
 								App_Calendar.allTasksListView.render(true);
 								return;
 							}

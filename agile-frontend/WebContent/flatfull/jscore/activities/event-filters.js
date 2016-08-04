@@ -589,7 +589,7 @@ function renderEventBasedOnOwner(data)
 				else if (data.color == '#36C' || data.color == '#23b7e5' || data.color == 'blue')
 					data.className = 'fc-b-l fc-b-2x fc-b-warning fc-border-height fc-event-month';
 				data.color = '';
-				data.backgroundColor = '#fff';
+				//data.backgroundColor = '#fff';
 			}
 
 			else
@@ -601,7 +601,7 @@ function renderEventBasedOnOwner(data)
 				else if (data.color == '#36C' || data.color == '#23b7e5' || data.color == 'blue')
 					data.className = 'normal fc-b-l fc-b-2x fc-b-light fc-border-height fc-event-month';
 				data.color = '';
-				data.backgroundColor = '#fff';
+				//data.backgroundColor = '#fff';
 			}
 		}
 

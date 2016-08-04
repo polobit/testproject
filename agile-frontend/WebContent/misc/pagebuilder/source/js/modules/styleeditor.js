@@ -378,7 +378,10 @@
 
                 }
 
-                newStyleEl.css('display', 'block');
+                if(newStyleEl.find('input').attr("name")==="content")
+                    newStyleEl.css('display', 'none');
+                else 
+                    newStyleEl.css('display', 'block'); 
 
                 $('#styleElements').append( newStyleEl );
 

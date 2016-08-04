@@ -132,6 +132,7 @@ function setup_deals_in_milestones(id){
 		
 		$('li.delete-deal-action').droppable({
 			accept: ".deal-color",
+			hoverClass: "deal-actions-overlap",
 			drop: function( event, ui ) {
 				$("li.ui-sortable-placeholder").hide();
 				$(ui.draggable).hide();
@@ -205,6 +206,7 @@ function setup_deals_in_milestones(id){
 		});
 		$('li.archive-deal-action').droppable({
 			accept: ".deal-color",
+			hoverClass: "deal-actions-overlap",
 			drop: function( event, ui ) {
 				$("li.ui-sortable-placeholder", $("#opportunity-listners")).hide();
 				$(ui.draggable).hide();
@@ -232,6 +234,7 @@ function setup_deals_in_milestones(id){
 
 		$('li.restore-deal-action').droppable({
 			accept: ".deal-color",
+			hoverClass: "deal-actions-overlap",
 			drop: function( event, ui ) {
 				$("li.ui-sortable-placeholder", $("#opportunity-listners")).hide();
 				$(ui.draggable).hide();
@@ -259,6 +262,7 @@ function setup_deals_in_milestones(id){
 
 		$('li.move-deal-action').droppable({
 			accept: ".deal-color",
+			hoverClass: "deal-actions-overlap",
 			drop: function( event, ui ) {
 				is_deal_drop_to_track = true;
 				DEAL_DRAG_EVENT = event;

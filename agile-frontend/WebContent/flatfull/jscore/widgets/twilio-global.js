@@ -952,11 +952,14 @@ function setUpGlobalTwilio()
 							var callRespJson = callDetailsJson.calls[0];
 						else
 							var callRespJson = callDetailsJson;
-						
+					
+						var waitForNextDial = false;
 						if(typeof callRespJson != "undefined") {
+							waitForNextDial = true;
 							if(typeof callRespJson.status != "undefined") {
 								if(callRespJson.status != "completed" && CALL_CAMPAIGN.start){
 									CALL_CAMPAIGN.state = "DISCONNECTED";
+									waitForNextDial = false;
 								}
 								console.log(callRespJson.status);
 								showNoteAfterCall(callRespJson,messageObj);
@@ -968,8 +971,8 @@ function setUpGlobalTwilio()
 
 						}
 						
+						if(!waitForNextDial){
 							//if the call campaign is started then we try to make a next call from campaign
-								if(($("#noteModal").data('bs.modal') || {}).isShown != true && ($("#logCallModal").data('bs.modal') || {}).isShown != true){
 								if(CALL_CAMPAIGN.start)
 								  {
 									if(CALL_CAMPAIGN.call_from_campaign ){
@@ -995,7 +998,7 @@ function setUpGlobalTwilio()
 										  }
 								  	}	
 								
-								}
+						}	
 				});			
 
 			});

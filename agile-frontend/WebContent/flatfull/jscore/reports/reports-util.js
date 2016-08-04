@@ -690,7 +690,7 @@ getRepPerformanceLog : function(url) {
 								goal_url=goal_url+user;
 							}
 							}
-							goal_url=goal_url+ getSelectedDates();
+							goal_url=goal_url+ getSelectedDates()+'&time_zone=' + (new Date().getTimezoneOffset());;
 							report_utility.Goal_report(goal_url);
 
 							var conversion_url='/core/api/opportunity/conversionRate/'+user+getSelectedDates();

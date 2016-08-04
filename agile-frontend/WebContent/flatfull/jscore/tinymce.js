@@ -333,8 +333,9 @@ function get_merge_fields(callback)
 			"{{agile_lng_translate 'contact-edit' 'state'}}":"{{location.state}}",
 			"{{agile_lng_translate 'contacts-view' 'country'}}":"{{location.country}}",
 			"{{agile_lng_translate 'contact-view' 'owner-name'}}":"{{owner.name}}",
-			"{{agile_lng_translate 'contact-view' 'owner-email'}}":"{{owner.email}}", 
-			"{{agile_lng_translate 'contact-view' 'calendar-url'}}":"{{owner.calendar_url}}"	
+			"{{agile_lng_translate 'contact-view' 'owner-email'}}":"{{owner.email}}",
+			"{{agile_lng_translate 'domain-user' 'phone'}}":"{{owner.phone}}", 
+			"{{agile_lng_translate 'contact-view' 'calendar-url'}}":"{{owner.calendar_url}}"
 			}
 	
 	if(!callback){
@@ -382,6 +383,7 @@ function get_merge_field_objs()
 		"{{agile_lng_translate 'contacts-view' 'country'}}":"{{location.country}}",
 		"{{agile_lng_translate 'contact-view' 'owner-name'}}":"{{owner.name}}",
 		"{{agile_lng_translate 'contact-view' 'owner-email'}}":"{{owner.email}}", 
+		"{{agile_lng_translate 'domain-user' 'phone'}}":"{{owner.phone}}", 
 		"{{agile_lng_translate 'contact-view' 'calendar-url'}}":"{{owner.calendar_url}}"
 	}
 	

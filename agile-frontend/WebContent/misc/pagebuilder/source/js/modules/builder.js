@@ -1095,6 +1095,7 @@
             globalCheckbox.checked = this.global;
             globalLabel.appendChild(globalCheckbox);
             var globalText = document.createTextNode('Global');
+            globalLabel.style.display='none';
             globalLabel.appendChild(globalText);
 
             var trigger = document.createElement('span');

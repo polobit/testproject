@@ -322,6 +322,7 @@ function setupContactFilterList(cel, tag_id)
 				no_transition_bar : true,
 				postRenderCallback : function(el)
 				{
+					contactFiltersListeners("lhs_filters_conatiner");
 					var filter_name;
 					// Set saved filter name on dropdown button
 					if (filter_name = _agile_get_prefs('contact_filter'))
@@ -331,6 +332,8 @@ function setupContactFilterList(cel, tag_id)
 						 * system filter names, to load results based on those
 						 * filters
 						 */
+						filter_id = filter_name;
+
 						if (filter_name.toLowerCase().indexOf('recent') >= 0)
 							filter_name = "Recent";
 
@@ -344,7 +347,6 @@ function setupContactFilterList(cel, tag_id)
 						// id(from cookie)
 						else if (filter_name.indexOf("system") < 0)
 						{
-							filter_id = filter_name;
 							if(contactFiltersListView.collection.get(filter_name))
 									filter_name = contactFiltersListView.collection.get(filter_name).toJSON().name;
 							
@@ -397,7 +399,7 @@ function revertToDefaultContacts()
 		App_Contacts.contact_custom_view = undefined;
 
 	// Loads contacts
-	App_Contacts.contacts();
+	contacts_view_loader.getContacts(App_Contacts.contactViewModel, $("#contacts-listener-container"));
 }
 
 function chainFiltersForContactAndCompany(el, data, callback) {
@@ -838,21 +840,6 @@ function showDynamicFilters(el){
 	}
 }
 
-
-function setUpContactView(cel,tagExists){
-
-	
-	if (_agile_get_prefs("agile_contact_view"))
-	{
-		$('#contacts-view-options', cel).html("<a data-toggle='tooltip' data-placement='bottom' data-original-title='{{agile_lng_translate 'deal-view' 'list-view'}}' class='btn btn-default btn-sm contacts-view' data='list'><i class='fa fa-list'  style='margin-right:3px'></i></a>");
-	}
-	else{
-		$('#contacts-view-options', cel).html("<a data-toggle='tooltip' data-placement='bottom' data-original-title='{{agile_lng_translate 'tasks' 'grid-view'}}' class='btn btn-default btn-sm contacts-view' data='grid'><i class='fa fa-th-large' style='margin-right:3px'></i></a>");
-	}
-	
-}
-
-
 var contact_filters_util = {
 
 	// Fetch filter result without changing route on click
@@ -876,7 +863,7 @@ var contact_filters_util = {
 		filter_name = $(targetEl).attr('data');
 
 		CONTACTS_HARD_RELOAD=true;
-		App_Contacts.contacts();
+		contacts_view_loader.getContacts(App_Contacts.contactViewModel, $("#contacts-listener-container"));
 		return;
 		// /removed old code from below,
 		// now filters will work only on contact, not company

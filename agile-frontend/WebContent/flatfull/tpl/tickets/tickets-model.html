@@ -157,7 +157,7 @@
         <td style="width: 20%;"><span class="text-muted cursor-default">{{agile_lng_translate 'tickets' 'assignee'}}: </span></td>
         <td class="p-l-sm cursor-pointer" style="width: 80%;">
           <div class="assignee-change pos-rlt show-caret" data-action="assignee">
-            <a class="btn btn-sm p-n b-n first-letter-cap inline-block m-r-xs txt-small assignee txt-color-light" data-toggle="dropdown">
+            <a class="btn btn-sm p-n b-n first-letter-cap inline-block m-r-xs txt-small assignee txt-color-light text-ellipsis width-9em" data-toggle="dropdown">
               {{#if assigneeID}}
                 {{assignee.name}}
               {{else}}
@@ -316,7 +316,7 @@
     </li>
     {{#group_users}}
       <li>
-        <a href="javascript:void(0);" data-field="assignee" data-name="{{name}}" data-group-name="{{../group_name}}" data-group-id="{{../id}}" value="{{id}}">
+        <a href="javascript:void(0);" data-field="assignee" data-name="{{name}}" data-group-name="{{../group_name}}" data-group-id="{{../id}}" value="{{id}}" class="text-ellipsis width-9em">
           {{name}}
         </a>
       </li>

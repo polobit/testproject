@@ -156,9 +156,10 @@ var Deals_Milestone_Events_Collection_View = Base_Collection_View.extend({
             
             // Fills tracks
             populateTracks($(template_ui), undefined, undefined, function(data, optionsHTML){
-                console.log(optionsHTML);
+                console.log(optionsHTML);  
                 $("#deal_mile_change_modal").find("#pipeline-list-bulk").html(optionsHTML);
                 $("#pipeline-list-bulk", $("#deal_mile_change_modal")).closest('div').find('.loading').hide(); 
+                $("#pipeline-list-bulk, #deal_mile_change_modal").trigger('change');
             });
 
             $("#deal_mile_change_modal").off("change", "#pipeline-list-bulk");

@@ -379,7 +379,7 @@
 		setTimeout(function(){
 					
 			var filter_id = null;
-			companyFiltersListView = new Base_Collection_View(
+			App_Companies.companyFiltersListView = new Base_Collection_View(
 				{
 					url : '/core/api/filters?type=COMPANY',
 					sort_collection : false,
@@ -390,6 +390,7 @@
 					no_transition_bar : true,
 					postRenderCallback : function(el)
 					{
+						contactFiltersListeners("lhs_filters_conatiner");
 						var filter_name;
 						// Set saved filter name on dropdown button
 						if (filter_name = _agile_get_prefs('company_filter'))
@@ -397,8 +398,8 @@
 							// If is not system type get the name of the filter from
 							// id(from cookie)
 								filter_id = filter_name;
-								if(companyFiltersListView.collection.get(filter_name))
-										filter_name = companyFiltersListView.collection.get(filter_name).toJSON().name;
+								if(App_Companies.companyFiltersListView.collection.get(filter_name))
+										filter_name = App_Companies.companyFiltersListView.collection.get(filter_name).toJSON().name;
 								
 
 							el.find('.filter-dropdown').append(Handlebars.compile('{{name}}')({name : filter_name}));
@@ -420,12 +421,12 @@
 					} });
 
 				// Fetchs filters
-				companyFiltersListView.collection.fetch();
+				App_Companies.companyFiltersListView.collection.fetch();
 			
-				var filter_dropdown_element = companyFiltersListView.render().el;
+				var filter_dropdown_element = App_Companies.companyFiltersListView.render().el;
 			
 				// Shows in contacts list
-				$('#filter-list', cel).html(companyFiltersListView.render().el);
+				$('#filter-list', cel).html(App_Companies.companyFiltersListView.render().el);
 		}, 500);
 				
 	};
@@ -433,15 +434,10 @@
 	company_list_view.revertToDefaultCompanies = function(){
 		// Erase filter cookie. Erases both contact and company filter
 		_agile_delete_prefs('company_filter');
-		_agile_delete_prefs('dynamic_filter');
+		_agile_delete_prefs('dynamic_company_filter');
 	
-		if (App_Companies.companiesListView)
-			App_Companies.companiesListView = undefined;
-		//if (App_Contacts.contact_custom_view)
-			//App_Contacts.contact_custom_view = undefined;
-	
-		// Loads contacts
-		App_Companies.companies();
+		COMPANIES_HARD_RELOAD = true;
+		companies_view_loader.getCompanies(App_Companies.companyViewModel, $('#companies-listener-container'));
 	};
 	
 	company_list_view.init = function(cel){

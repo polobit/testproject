@@ -34,6 +34,7 @@ public class SetOwner extends TaskletAdapter
 {
     // Owner Id
     public static String OWNER_ID = "owner_id";
+    public static String MERGEFIELD_OWNER_ID ="mergefield_owner_id";
 
     /**
      * Sets contact owner and add log.
@@ -52,9 +53,20 @@ public class SetOwner extends TaskletAdapter
     {
 	// Get OwnerId
 	String ownerId = getStringValue(nodeJSON, subscriberJSON, data, OWNER_ID);
+	String mergefield_owner_id =null;
+	try{
+	mergefield_owner_id = getStringValue(nodeJSON, subscriberJSON, data, MERGEFIELD_OWNER_ID);
+	System.out.println("mergefield_owner_id:"+mergefield_owner_id);
+	}catch(Exception e){
+		System.err.println("Error occured in fetching merge field owner id"+e.getMessage());
+	}
 
 	try
 	{
+		if ((ownerId == null || ownerId.equals("")) && mergefield_owner_id!=null ){
+			System.out.println("Updating owner from owner merge field:"+mergefield_owner_id);
+			ownerId = mergefield_owner_id;
+		}
 
 		 List<String> ownerIds = AgileTaskletUtil.getListOfCampaignIDs(nodeJSON, subscriberJSON, campaignJSON, OWNER_ID); 
 		  

@@ -11,7 +11,7 @@
                 <div class="control-group form-group">
                     <label class="control-label col-sm-3">{{agile_lng_translate 'other' 'name'}}<span class="field_req">*</span></label>
                     <div class="controls col-sm-9 company_input">                     
-                        <input name="name" type="text" class="required form-control  field_length" max_len="100" id="company_name" value="{{getPropertyValue properties "name"}}"/>
+                        <input name="name" type="text" class="required form-control  field_length" max_len="100" id="company_name" value="{{getPropertyValue properties "name"}}" placeholder="Name"/>
                     </div>
                 </div>
 				<div class="control-group form-group" id="tags_source_continue_company">
@@ -82,7 +82,6 @@
 
 						    <div class="pull-left w-half">
                             	<input class="form-control inline-block field_length" max_len="500" type="text" id="phone" name="phone" placeholder="{{agile_lng_translate 'contact-edit' 'phone-number'}}" />
-
 						    </div>
                             <div class="pull-left w-half">
                  <select class="phone-select form-control inline-block m-l-sm" name="phone-select" style="width:calc(100% - 32px);">
@@ -101,6 +100,7 @@
                         <div class="phone multiple-template" data="phone">
 
 							<div class="pull-left w-half">
+
             <input class="form-control inline-block field_length" max_len="500" type="text" id="phone" name="phone" placeholder="{{agile_lng_translate 'contact-edit' 'phone-number'}}" />
 
 							</div>

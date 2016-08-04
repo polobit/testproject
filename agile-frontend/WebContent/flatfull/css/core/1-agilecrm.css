@@ -4039,8 +4039,16 @@ padding-left:0px;
     display: block;
     margin-top: 0; 
  }
+ #companies-custom-coloumns .dropdown-menu{
+    display: none;
+    margin-top: 0; 
+ }
  div#contact-custom-coloumns:hover.compact .dropdown-menu{
     display: block;
+    margin-top: 0; 
+ }
+ div#contact-custom-coloumns .dropdown-menu{
+    display: none;
     margin-top: 0; 
  }
 
@@ -4213,7 +4221,7 @@ background-color : #522E2E;
   margin-top: -10px;
   position: absolute;
   padding-left: 10px;
-  padding-top: 10px;
+  padding-top: 23px;
   background: none!important;
   border: none!important;
   font-weight: bold;
@@ -4225,19 +4233,20 @@ background-color : #522E2E;
     z-index: 999;
     left: 38%;
     float: right;
-    background: #f6f8f8;
+    background: lightyellow;
     margin-top: -10px;
     position: absolute;
-    border-radius: 5px;
+    border-radius: 0px;
     padding-left: 10px;
     padding-top: 10px;
     border: 1px solid #edf1f2;
+    height: 70px;
 }
 
 #moved-deal li div {
   float: left;
-    padding-bottom: 10px;
-    max-width: 180px;
+  max-width: 180px;
+  margin-top: 13px;
 }
 
 #chrome-extension
@@ -4375,4 +4384,49 @@ border: 1px solid #e5e5e5;
     white-space: nowrap;
     vertical-align: baseline;
     border-radius: .25em;
+}
+
+.deal-actions-overlap {
+  background: #cddeef!important;
+}
+.archive-deal-action:after {
+  content: "Archive";
+  position: absolute;
+  top: 25px;
+  margin-left: -34px;
+  font-size: 14px;
+  font-family: "Source Sans Pro","Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+.restore-deal-action:after {
+  content: "Restore";
+  position: absolute;
+  top: 25px;
+  margin-left: -34px;
+  font-size: 14px;
+  font-family: "Source Sans Pro","Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+.delete-deal-action:after {
+  content: "Delete";
+  position: absolute;
+  top: 25px;
+  margin-left: -32px;
+  font-size: 14px;
+  font-family: "Source Sans Pro","Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+.move-deal-action:after {
+  content: "Other Track";
+  position: absolute;
+  top: 25px;
+  margin-left: -48px;
+  font-size: 14px;
+  font-family: "Source Sans Pro","Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+.update-drag-deal:hover {
+  background: #cddeef!important;
+}
+.update-drag-deal:hover span:after {
+  border-left: 6px solid #cddeef!important;
+}
+.update-drag-deal + .tooltip{
+  width: auto!important;
 }
