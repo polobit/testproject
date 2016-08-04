@@ -1,12 +1,18 @@
 package com.agilecrm.workflows.util;
 
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.json.JSONObject;
 
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.workflows.Workflow;
 import com.campaignio.tasklets.util.TaskletUtil;
 import com.googlecode.objectify.Key;
@@ -48,9 +54,44 @@ public class WorkflowUtil
 		}
 		catch (Exception e)
 		{
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
 			e.printStackTrace();
 			return null;
 		}
+	}
+	
+	/**
+	 * Locates workflow based on id.
+	 * 
+	 * @param id
+	 *            Workflow id.
+	 * @return workflow object with that id if exists, otherwise null.
+	 */
+	public static Workflow getWorkflow(Long id, boolean user_campaign_only)
+	{
+		try
+		{
+			Workflow worflow = getWorkflow(id);
+			if(!user_campaign_only)
+				return worflow;
+			
+			if(worflow.access_level == 1L || worflow.access_level.equals(DomainUserUtil.getCurentUserId()))
+				return worflow;
+		
+			throw new Exception("This Workflow is not related to yours.");
+		
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	// returns all workflows count
+	public static int getCount()
+	{
+		return Workflow.dao.count();
 	}
 
 	/**
@@ -58,18 +99,56 @@ public class WorkflowUtil
 	 * 
 	 * @return list of all workflows.
 	 */
+	public static List<Workflow> getAccountWorkflows(Long allowCampaign, String orderBy)
+	{
+		Map map = new HashMap();
+		Long userId = DomainUserUtil.getCurentUserId();
+		if(userId != null)
+		{
+			Set set = new HashSet();
+			set.add(1L);
+			set.add(userId);
+			
+			map.put("access_level in", set);
+		}
+		if(orderBy == null)
+			orderBy = "name_dummy";
+		List<Workflow> list = dao.fetchAllByOrder(orderBy, map);
+		if(allowCampaign == null)
+			  return list;
+		
+		boolean idPresent = false;
+		for(Workflow workflow : list){
+			  if(workflow.id.equals(allowCampaign))
+				  idPresent = true;
+		}
+		
+		if(!idPresent)
+			list.add(WorkflowUtil.getWorkflow(allowCampaign));
+		
+		return list;
+	}
+	
+	/**
+	 * Returns all workflows as a collection list.
+	 * 
+	 * @return list of all workflows.
+	 */
 	public static List<Workflow> getAllWorkflows()
 	{
-		return dao.ofy().query(Workflow.class).order("name").list();
+		return getAccountWorkflows(null, null);
 	}
-
-	// returns all workflows count
-	public static int getCount()
+	
+	/**
+	 * Returns all workflows as a collection list.
+	 * 
+	 * @return list of all workflows.
+	 */
+	public static List<Workflow> getAllWorkflows(Long allowCampaign, String orderBy)
 	{
-
-		return Workflow.dao.count();
+		return getAccountWorkflows(allowCampaign, orderBy);
 	}
-
+	
 	/**
 	 * Returns list of workflows based on page size.
 	 * 
@@ -81,9 +160,25 @@ public class WorkflowUtil
 	 * @return Returns list of workflows with respective to page size and
 	 *         cursor.
 	 */
-	public static List<Workflow> getAllWorkflows(int max, String cursor)
+	public static List<Workflow> getAllWorkflows(int max, String cursor, String orderBy)
 	{
-		return dao.fetchAllByOrder(max, cursor, null, true, false, "name");
+		if(orderBy == null)
+			orderBy = "name_dummy";
+		Long userId = DomainUserUtil.getCurentUserId();
+		Map map = new HashMap();
+		
+		if(userId != null)
+		{
+			Set set = new HashSet();
+			set.add(1L);
+			set.add(userId);
+			
+			// Conditional check for account level private access 
+			if(dao.getCountByProperty("access_level !=", 1L) > 0)
+				map.put("access_level in", set);
+		}
+		
+		return dao.fetchAllByOrder(max, cursor, map, true, false, orderBy);
 	}
 
 	/**

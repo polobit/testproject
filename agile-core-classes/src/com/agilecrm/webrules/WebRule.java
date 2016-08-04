@@ -1,5 +1,6 @@
 package com.agilecrm.webrules;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,6 +11,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.search.ui.serialize.SearchRule;
 import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
+import com.agilecrm.webrules.util.WebRuleUtil;
 import com.google.appengine.api.datastore.Text;
 import com.googlecode.objectify.annotation.Cached;
 import com.googlecode.objectify.annotation.NotSaved;
@@ -18,9 +20,14 @@ import com.googlecode.objectify.condition.IfDefault;
 
 @XmlRootElement
 @Cached
-public class WebRule
+public class WebRule implements Serializable
 {
-    @Id
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	@Id
     public Long id;
 
     @NotSaved(IfDefault.class)
@@ -70,6 +77,17 @@ public class WebRule
     public void save() throws PlanRestrictedException
     {
 	dao.put(this);
+	WebRuleUtil.deleteRulesFromCache();
+    }
+    public static String getPhoneNumber(WebRule webrule) 
+    {
+	String number=null;
+	for(int i=0;i<webrule.actions.size();i++){
+	    if(webrule.actions.get(i).action.toString().equals("CALL_POPUP"))
+		number= webrule.actions.get(i).RHS;
+	}
+	
+	return number;
     }
 }
 
@@ -85,7 +103,7 @@ class WebRuleAction
 
     public enum Action
     {
-	POPUP, ASSIGN_CAMPAIGN, UNSUBSCRIBE_CAMPAIGN, ADD_TAG, REMOVE_TAG, ADD_SCORE, SUBTRACT_SCORE, MODAL_POPUP, CORNER_NOTY, NOTY, JAVA_SCRIPT, RUN_JAVASCRIPT, FORM;
+	POPUP, ASSIGN_CAMPAIGN, UNSUBSCRIBE_CAMPAIGN, ADD_TAG, REMOVE_TAG, ADD_SCORE, SUBTRACT_SCORE, MODAL_POPUP, CORNER_NOTY, NOTY, JAVA_SCRIPT, RUN_JAVASCRIPT, FORM,CALL_POPUP, SITE_BAR;
     }
 
     public Action action = null;

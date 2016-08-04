@@ -73,20 +73,23 @@ function setUpStripeCustomField(stripe_widget_prefs, contact_id)
 	 * preferences are saved including stripe_field_name and Stripe profile of
 	 * customer is shown
 	 */
-    $("#widgets").off("click", '#save_stripe_name');
-	$("#widgets").on("click", '#save_stripe_name', function(e)
+    $("#"+WIDGET_PARENT_ID).off("click", '#save_stripe_name');
+	$("#"+WIDGET_PARENT_ID).on("click", '#save_stripe_name', function(e)
 	{
 		e.preventDefault();
 
 		// Get the selected value from list of custom fields
 		var stripe_custom_field_name = $('#stripe_custom_field_name').val();
 		
-		if(!stripe_custom_field_name)
+		if(!stripe_custom_field_name){
+			showAlertModal("stripe_customfield_selection_error", undefined, function(){					
+			});	
 			return;
+		}
 
 		// Include 'stripe_field_name' to stripe_widget_prefs and save
 		stripe_widget_prefs['stripe_field_name'] = stripe_custom_field_name;
-
+		
 		// preferences are saved and Stripe profile of customer is shown
 		agile_crm_save_widget_prefs(Stripe_PLUGIN_NAME, JSON.stringify(stripe_widget_prefs), function(data)
 		{
@@ -119,17 +122,16 @@ function showStripeProfile(stripe_custom_field_name, contact_id)
 	if (!customer_id)
 	{
 		
-         $("#widgets").off("click", '#stripe_contact_id_save');
-		 $("#widgets").on("click", '#stripe_contact_id_save', function(e){
+         $("#"+WIDGET_PARENT_ID).off("click", '#stripe_contact_id_save');
+		 $("#"+WIDGET_PARENT_ID).on("click", '#stripe_contact_id_save', function(e){
 			   
 			   e.preventDefault();
 
 			   if(!isValidForm($('#stripe_contact_id_form')))
 			    return;
 			   
-			   customer_id = $('#stripe_contact_id').val();
-			   
-			   agile_crm_save_contact_property(stripe_custom_field_name, "", customer_id, "CUSTOM");
+			   customer_id = $('#stripe_contact_id').val();			  
+			   agile_crm_save_contact_property(stripe_custom_field_name, "", customer_id, "CUSTOM");			   
 			   
 			   showStripeProfile(stripe_custom_field_name, contact_id);
 			   return;
@@ -157,14 +159,13 @@ function showStripeProfile(stripe_custom_field_name, contact_id)
 	    		return;
 	    	
 	    	var stripe_template = $(template_ui);
-	    	// Load jquery time ago function to show time ago in invoices
-			head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
-			{
-				$(".time-ago", stripe_template).timeago();
-			});
 
 			// Show the template in Stripe widget panel
 			$('#Stripe').html(stripe_template);
+			// Load jquery time ago function to show time ago in invoices
+			head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
+				$(".time-ago", $('#Stripe')).timeago();
+			});
 
 			stripeOBJ = {};
 			stripeINVCount = 1;
@@ -181,8 +182,8 @@ function showStripeProfile(stripe_custom_field_name, contact_id)
 	}, contact_id);
 
 
-	$("#widgets").off("click", "#stripe_pay_show_more");
-	$("#widgets").on("click", "#stripe_pay_show_more", function(e)
+	$("#"+WIDGET_PARENT_ID).off("click", "#stripe_pay_show_more");
+	$("#"+WIDGET_PARENT_ID).on("click", "#stripe_pay_show_more", function(e)
 	{
 		e.preventDefault();
 		var offSet = stripePAYCount * 5;
@@ -190,28 +191,28 @@ function showStripeProfile(stripe_custom_field_name, contact_id)
 		++stripePAYCount;
 	});
 
-	$("#widgets").off("click", "#stripe_inv_show_more");
-	$("#widgets").on("click", "#stripe_inv_show_more", function(e){
+	$("#"+WIDGET_PARENT_ID).off("click", "#stripe_inv_show_more");
+	$("#"+WIDGET_PARENT_ID).on("click", "#stripe_inv_show_more", function(e){
 		e.preventDefault();
 		var offSet = stripeINVCount * 5;
 		loadStripeInvoices(offSet);
 		++stripeINVCount;
 	});
 
-	$("#widgets").off("click", "#add_credits");
-	$("#widgets").on("click", "#add_credits", function(e){
+	$("#"+WIDGET_PARENT_ID).off("click", "#add_credits");
+	$("#"+WIDGET_PARENT_ID).on("click", "#add_credits", function(e){
 		$('#stripe_credits_panel').removeClass('hide');
 		$('#add_credits').addClass('hide');
 	});
 
-	$("#widgets").off("click", "#stripe_credits_cancel");
-	$("#widgets").on("click", "#stripe_credits_cancel", function(e){
+	$("#"+WIDGET_PARENT_ID).off("click", "#stripe_credits_cancel");
+	$("#"+WIDGET_PARENT_ID).on("click", "#stripe_credits_cancel", function(e){
 		$('#add_credits').removeClass('hide');
 		$('#stripe_credits_panel').addClass('hide');
 	});	 
 
-	$("#widgets").off("click", "#stripe_credits_add");
-	$("#widgets").on("click", "#stripe_credits_add", function(e){
+	$("#"+WIDGET_PARENT_ID).off("click", "#stripe_credits_add");
+	$("#"+WIDGET_PARENT_ID).on("click", "#stripe_credits_add", function(e){
 		var creditAmt = (parseFloat($('#credit_amount').val())*100);
 		if(creditAmt != 0){
 			$("#stripe_credits_panel *").attr("disabled", "disabled");
@@ -230,7 +231,7 @@ function showStripeProfile(stripe_custom_field_name, contact_id)
 				$("#stripe_credits_panel *").removeAttr("disabled");
 			});
 		}else{
-			alert('Please enter proper amount');
+			showAlertModal("proper_amount");
 		}
 	});	
 

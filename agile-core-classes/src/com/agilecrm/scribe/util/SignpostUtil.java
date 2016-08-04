@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
+import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +42,8 @@ public class SignpostUtil
 	 * @return
 	 * @throws IOException
 	 */
+	
+	
 	public static String accessURLWithOauth(String consumerKey, String consumerSecret, String accessToken,
 			String tokenSecret, String endPointURL, String requestMethod, String postData, String pluginName)
 			throws IOException
@@ -50,7 +53,8 @@ public class SignpostUtil
 		HttpURLConnection request = null;
 		BufferedReader rd = null;
 		StringBuilder response = null;
-
+		boolean flag = false;
+		int repeat = 0;
 		String errorMsg = "error: ";
 		try
 		{
@@ -71,7 +75,9 @@ public class SignpostUtil
 
 			request.setRequestProperty("Content-Type", "application/json");
 			request.setRequestProperty("Accept", "application/json");
+			request.setConnectTimeout(10000);
 			request.setDoOutput(true);
+			
 
 			try
 			{
@@ -96,21 +102,28 @@ public class SignpostUtil
 				wr.write(postData);
 				wr.flush();
 			}
-
-			request.connect();
-			System.out.println(request.getResponseCode());
-			// removed some response code conditions for desk.com
-			if (request.getResponseCode() == 400 || request.getResponseCode() == 401
-					|| request.getResponseCode() == 500 || request.getResponseCode() == 404)
-				rd = new BufferedReader(new InputStreamReader(request.getErrorStream(),"UTF-8"));
-			else
-				rd = new BufferedReader(new InputStreamReader(request.getInputStream(),"UTF-8"));
-
-			response = new StringBuilder();
-			String line = null;
-			while ((line = rd.readLine()) != null)
-			{
-				response.append(line + '\n');
+			while(!flag && repeat < 5){
+				try{
+					request.connect();
+					System.out.println(request.getResponseCode());
+					// removed some response code conditions for desk.com
+					if (request.getResponseCode() == 400 || request.getResponseCode() == 401
+							|| request.getResponseCode() == 500 || request.getResponseCode() == 404)
+						rd = new BufferedReader(new InputStreamReader(request.getErrorStream(),"UTF-8"));
+					else
+						rd = new BufferedReader(new InputStreamReader(request.getInputStream(),"UTF-8"));
+					
+					response = new StringBuilder();
+					String line = null;
+					while ((line = rd.readLine()) != null)
+					{
+						response.append(line + '\n');
+					}
+					flag = true;
+				}catch(SocketTimeoutException e){
+					repeat ++;	
+					errorMsg += "Exception " + e.getMessage();
+				}
 			}
 		}
 		catch (Exception e)
@@ -124,6 +137,7 @@ public class SignpostUtil
 			try
 			{
 				request.disconnect();
+				
 			}
 			catch (Exception e)
 			{
@@ -183,7 +197,7 @@ public class SignpostUtil
 			// send the request
 			HttpClient httpClient = new DefaultHttpClient();
 			HttpResponse httpResponse = httpClient.execute(httpost);
-			System.out.println(httpResponse.getStatusLine().getStatusCode());
+			System.out.println("Oath Status"+httpResponse.getStatusLine().getStatusCode());
 
 			response = IOUtils.toString(httpResponse.getEntity().getContent());
 		}

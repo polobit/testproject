@@ -639,7 +639,7 @@ var portlet_graph_utility = {
 	 */
 	callsPerPersonBarGraph : function(selector, domainUsersList, series,
 			totalCallsCountList, callsDurationList, text, colors,
-			domainUserImgList,base_model) {
+			domainUserImgList,base_model,averageCallList_temp) {
 			var column_position = $('#'+selector).parent().attr('data-col'), row_position = $('#'+selector).parent().attr('data-row');
 		var pos = '' + column_position + '' + row_position;
 		var	height=domainUsersList.length*30+($('#'+selector).height()-30);
@@ -658,9 +658,11 @@ var portlet_graph_utility = {
 						            events: {
 								   		load: function(){
 								   			console.log("load");
+								   			if(base_model!=undefined)
 								   			portlet_utility.toggle_chart_legends(this, base_model);
 								   		}, redraw : function(){
 								   			console.log("redraw");
+								   			if(base_model!=undefined)
 								   			portlet_utility.toggle_chart_legends(this, base_model);
 								   		}
 								   },
@@ -727,7 +729,7 @@ var portlet_graph_utility = {
 						        			if(this.points[0]!=undefined && this.points[0].series!=undefined){
 						        				tt += 	'<tr><td class="b-b-none"><u style="text-decoration:none;border-bottom:1px solid">'+domainUsersList[this.points[0].point.x]+'</u></td></tr>'+	
 						        							'<tr><td style="color:'+this.points[0].series.color+';padding:0">'+this.points[0].series.name+':&nbsp; </td>' +
-							                      		'<td style="padding:0"><b>'+portlet_utility.getPortletsTimeConversion(Math.round(this.points[0].point.y))+'</b></td></tr>';
+							                      		'<td style="padding:0"><b>'+portlet_utility.getPortletsTimeConversion(Math.round(averageCallList_temp[this.points[0].point.x]))+'</b></td></tr>';
 						        			}
 						        			tt += '</table>';
 						        			
@@ -776,6 +778,10 @@ var portlet_graph_utility = {
 						        			if(this.points[10]!=undefined && this.points[10].series!=undefined){
 						        				tt += 	'<tr><td style="color:'+this.points[10].series.color+';padding:0">'+this.points[10].series.name+':&nbsp; </td>' +
 							                      		'<td style="padding:0"><b>'+this.points[10].point.y+'</b></td></tr>';
+						        			}
+						        			if(this.points[11]!=undefined && this.points[11].series!=undefined){
+						        				tt += 	'<tr><td style="color:'+this.points[11].series.color+';padding:0">'+this.points[11].series.name+':&nbsp; </td>' +
+							                      		'<td style="padding:0"><b>'+this.points[11].point.y+'</b></td></tr>';
 						        			}
 						        			tt += '<tr><td>Total:&nbsp; </td><td class="b-b-none">'+totalCallsCountList[this.points[0].point.x]+'</td></tr></table>';
 						        		}
@@ -1707,5 +1713,118 @@ setupCharts(function(){
 											});
 						});
 	},
+
+	/**
+	 * To display contacts count by Visitors portlet as pie graph
+	 */
+	webstatVisitsPieGraph : function(selector, known,
+			anonymous) {
+		var series = [];
+							series.push([ "Known",
+									known]);
+							series.push([ "Unknown", anonymous ]);
+        var totalVisits = known+anonymous;
+
+		setupCharts(function(){
+			if (known == 0 && anonymous == 0) {
+								$('#' + selector)
+										.html(
+												'<div class="portlet-error-message">No Visits Found</div>');
+								return;
+							}
+								$('#' + selector)
+										.highcharts(
+												{
+													chart : {
+														type : 'pie',
+														marginRight : 20
+													},
+													colors : [ '#55BF3B',
+															'#23b7e5',
+															'#ff0000',
+															'#27c24c',
+															'#f05050',
+															"#aaeeee",
+															"#ff0066",
+															"#eeaaee",
+															"#7266ba",
+															"#DF5353",
+															"#7798BF",
+															"#aaeeee" ],
+													title : {
+														text : ''
+													},
+													tooltip : {
+														formatter : function() {
+															return '<table>'
+																	+ '<tr> <td class="p-n">'
+																	+ (this.point.name)
+																	+ ' Visits:<b> '+(this.point.y)
+																	+ '</b></td></tr>'
+																	+ '<tr><td class="p-n">Total Visits: '
+																	+ '<b> '
+																	+ totalVisits
+																	+ '</b></td></tr>'
+																	+ '</table>';
+														},
+														shared : true,
+														useHTML : true,
+														borderWidth : 1,
+														backgroundColor : '#313030',
+														shadow : false,
+														borderColor : '#000',
+														borderRadius : 3,
+														style : {
+															color : '#EFEFEF'
+														}
+													},
+													plotOptions : {
+														series : {
+															borderWidth : 0
+														},
+														pie : {
+															borderWidth : 0,
+															innerSize : '35%',
+															size:'45%',
+															dataLabels : {
+																enabled : true,
+																useHTML : true,
+																/*
+																 * connectorWidth:
+																 * 0,
+																 */
+																softConnector : true,
+																formatter : function() {
+																	return '<div class="text-center"><span style="color:'
+																			+ this.point.color
+																			+ '"><b>'
+																			+ this.point.name
+																			+ '</b></span><br/>'
+																			+ '<span style="color:'
+																			+ this.point.color
+																			+ '"><b>'
+																			+ Math
+																					.round(this.point.percentage)
+																			+ '%</b></span></div>';
+																},
+																/*
+																 * format: '<b>{point.name}</b>:
+																 * {point.percentage:.1f}',
+																 */
+																distance : 30,
+																x : 2,
+																y : -10
+															},
+															showInLegend : false
+														}
+													},
+													series : [ {
+														name : 'Visits',
+														data : series
+													} ],
+																									});
+						});
+	},
+
 
 };

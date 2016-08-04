@@ -53,6 +53,7 @@
 								{{#canSyncContacts}}
 				{{#if ../type}}
 						<span class="btn btn-sm btn-default inline-block" disabled="">Upload CSV file</span>
+						<a href="/flatfull/images/SampleContacts.csv" title="Sample CSV file" download><i class="fa fa-download btn btn-sm  btn-default inline-block" style="margin-left: -2px;border-left: 0px;border-radius: 0px 2px 2px 0px;"></i></a>
 						<span class="m-l-xs"><i>
 							{{#if total_count}}
 										Import in process
@@ -64,9 +65,11 @@
 						
 					{{else}}
            				<div class="btn btn-sm upload upload-contacts-ele btn-default inline-block">Upload CSV file</div>
+           				<a href="/flatfull/images/SampleContacts.csv" title="Sample CSV file" download><i class="fa fa-download btn btn-sm  btn-default inline-block" style="margin-left: -2px;border-left: 0px;border-radius: 0px 2px 2px 0px;"></i></a>
            		{{/if}}
 					{{else}}
            				<span class="btn btn-sm btn-default inline-block" disabled="">Upload CSV file</span>
+           				<a href="/flatfull/images/SampleContacts.csv" title="Sample CSV file" download><i class="fa fa-download btn btn-sm  btn-default inline-block" style="margin-left: -2px;border-left: 0px;border-radius: 0px 2px 2px 0px;"></i></a>
 						<span class="m-l-xs"><i>Needs import privilege.</i></span>
 			{{/canSyncContacts}}
 	        					</fieldset>
@@ -90,9 +93,11 @@
         					<fieldset>
 							{{#canSyncContacts}}
            					<div class="btn btn-sm upload upload-contacts-ele btn-default inline-block">Upload CSV file</div>
+           					<a href="/flatfull/images/SampleCompanies.csv" title="Sample CSV file" download><i class="fa fa-download btn btn-sm  btn-default inline-block" style="margin-left: -2px;border-left: 0px;    border-radius: 0px 2px 2px 0px;"></i></a>
 							{{else}}
            					<span class="btn btn-sm btn-default inline-block"  disabled="">Upload CSV file</span>
 							<span style="margin-left:5px"><i>Needs import privilege.</i></span>
+							<a href="/flatfull/images/SampleCompanies.csv" title="Sample CSV file" download><i class="fa fa-download btn btn-sm  btn-default inline-block" style="margin-left: -2px;border-left: 0px;    border-radius: 0px 2px 2px 0px;"></i></a>
 							{{/canSyncContacts}}
            					</fieldset>
     					</form>
@@ -110,7 +115,7 @@
 		<div>
 			<div class="panel panel-default">
 				<div class="panel-heading">
-					Import from Salesforce <span class="label label-sm bg-danger">Beta</span>
+					Import from Salesforce <!-- <span class="label label-sm bg-danger">Beta</span> -->
 				</div>
 				<div class="panel-body">
 					 <form id="imap-prefs-form">
@@ -268,7 +273,7 @@
 <div class="row">
 <div class="col-sm-6 col-md-4 col-xs-12">
 <div class="panel panel-default">
-	<div class="panel-heading">CSV Deals Import <span class="label label-sm bg-danger">Beta</span></div>
+	<div class="panel-heading">CSV Deals Import <!-- <span class="label label-sm bg-danger">Beta</span> --></div>
 	<div class="panel-body">
     <form id="deal-import-form">
 		<div class="p-b-sm">
@@ -644,6 +649,8 @@
 <select class="import-select form-control">
 <option value="properties__ignore_">-Ignore-</option>
 <option value="properties_name">Organization</option>
+<option value="tags">Tag</option>
+<option value="note">Note</option>
 <optgroup label="Email">
     <option value="properties_primary-email">Email (Primary)</option>
     <option value="properties_alternate-email">Email (Alternate)</option>
@@ -703,6 +710,9 @@
 <option value="properties_relatedTo">Related To</option>
 <option value="properties_note">Note</option>
 <option value="properties_description">Descriptions</option> 
+<option value="properties_dealSource">Deal Source</option> 
+<option value="properties_lossReason">Loss Reason</option> 
+
 {{#if custom_fields}}
 <optgroup label="Custom field" id = "custom_fields">
    

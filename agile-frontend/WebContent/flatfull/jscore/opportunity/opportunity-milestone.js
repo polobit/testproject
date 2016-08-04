@@ -1,5 +1,5 @@
 // Before selecting proper type array from map, need to fill map with user's detail.
-function startGettingDeals(criteria, pending)
+function startGettingDeals()
 {
 	console.log('------started-----', pipeline_id);
 	var milestoneString = trackListView.collection.get(pipeline_id).toJSON().milestones;
@@ -21,17 +21,6 @@ function startGettingDeals(criteria, pending)
 	
 }
 
-// Decide which array to pass for creation of collection.
-function dealFiltersForCollection(criteria)
-{
-	if (criteria == "CATEGORY")
-		// Sort task list on count of task and then create collection
-		getArraySortOnCount(criteria, GROUPING_MAP[criteria].type, pending);
-	else
-		// Creates nested collection
-		createNestedCollection(criteria, GROUPING_MAP[criteria].type, pending);
-}
-
 // Creates nested collection
 function createDealsNestedCollection(pipeline_id,milestones,currentTrack)
 {
@@ -41,12 +30,12 @@ function createDealsNestedCollection(pipeline_id,milestones,currentTrack)
 	initDealListCollection(milestones);
 
 	// Url to call DB
-	var initialURL = '/core/api/opportunity/based?pipeline_id=' + pipeline_id + '&order_by=close_date';
+	var initialURL = '/core/api/deal/filters/query/grid/'+_agile_get_prefs('deal-filter-name')+'?pipeline_id=' + pipeline_id + '&order_by='+getDealSortFilter();
 
-	if (_agile_get_prefs('deal-filters'))
+	/*if (_agile_get_prefs('deal-filters'))
 	{
 		initialURL += '&filters=' + encodeURIComponent(getDealFilters());
-	}
+	}*/
 
 	// Creates main collection with deals lists
 	for ( var i in milestones)
@@ -81,7 +70,7 @@ function createDealsNestedCollection(pipeline_id,milestones,currentTrack)
 function initDealListCollection(milestones)
 {
 	// Define main collection
-	DEALS_LIST_COLLECTION = new Base_Collection_View({ restKey : "deal", templateKey : "opportunities-by-paging", individual_tag_name : 'div',
+	DEALS_LIST_COLLECTION = new Deals_Milestone_Events_Collection_View({ restKey : "deal", templateKey : "opportunities-by-paging", individual_tag_name : 'div',
 		sort_collection : false, postRenderCallback : function(el)
 		{
 			// Remove loding imgs
@@ -99,6 +88,10 @@ function initDealListCollection(milestones)
 			{
 				if (_agile_get_prefs('deal-milestone-view') == "compact" && count > 8)
 					width = 100 / 8;
+				if (_agile_get_prefs('deal-milestone-view') == "fit")
+				{
+					$('#opportunities-by-paging-model-list', el).find('.milestone-column').css("min-width",0);
+				}
 			}
 			else if (count > 5)
 			{
@@ -156,9 +149,10 @@ function dealsFetch(base_model)
 	var dealCollection = new Base_Collection_View({ url : base_model.get("url"), templateKey : dealsTemplate, individual_tag_name : 'li', 
 		sort_collection : false, cursor : true, page_size : 20, postRenderCallback : function(el)
 		{   
-			$(el).find('ul li').each(function(){
+			$(el).find('ul li').each(function(index){
 				$(this).addClass("deal-color");
 				$(this).addClass($(this).find("input").attr("class"));
+				$(this).attr("data-pos", index);
 			});
 			
 
@@ -180,28 +174,33 @@ function dealsFetch(base_model)
 		$('#' + base_model.get("heading").replace(/ +/g, '') + '-list-container').html(dealCollection.render(true).el)
 		console.log($('#' + base_model.get("heading").replace(/ +/g, '')).find('img.loading_img').length);
 		$('#' + base_model.get("heading").replace(/ +/g, '')).find('img.loading_img').hide();
-		var heading =  base_model.get("heading");
-		/*try
-		{
-			var count = data.at(0) ? data.at(0).toJSON().count : 0;
-			$('#' + base_model.get("heading").replace(/ +/g, '') + '_count').text(data.at(0) ? data.at(0).toJSON().count : 0);
-	     
-        }
-        catch (err)
-		{
-			console.log(err);
-		}*/  
+		var heading =  base_model.get("heading"); 
         
         $('a.deal-notes').tooltip();
-        	// Counter to fetch next sub collection
-		pipeline_count++;
-		setup_deals_in_milestones('opportunities-by-paging-model-list');
-		dealsCountFetch(base_model, function(deals_count){
+        setup_deals_in_milestones('opportunities-by-paging-model-list');
+        var deals_count = 0;
+        if(data && data.models && data.models[0])
+        {
+        	deals_count = data.models[0].get("count");
+        }
+        if(deals_count > 1000)
+		{
+			$('#' + base_model.get("heading").replace(/ +/g, '') + '_count').text("1000+");
+		}
+		else
+		{
+			$('#' + base_model.get("heading").replace(/ +/g, '') + '_count').text(deals_count);
+		}
+        if(deals_count <= 1000)
+		{
+			dealTotalCountForPopover(heading);
+		}
+		/*dealsCountFetch(base_model, function(deals_count){
 			if(deals_count <= 1000)
 			{
 				dealTotalCountForPopover(heading);
 			}
-		});
+		});*/
 	} });
 }
 
@@ -302,17 +301,9 @@ console.log('------popover pipeline id-----', pipeline_id);
 	var milestones = currentTrack.milestones.split(',');
 	console.log(milestones);
 
-	// Url to call DB
-	var initialURL = '/core/api/opportunity/totalDealValue?pipeline_id=' + pipeline_id + '&order_by=close_date';
-
-	if (_agile_get_prefs('deal-filters'))
-	{
-		initialURL += '&filters=' + encodeURIComponent(getDealFilters());
-	}
-
 	// Creates main collection with deals lists
 		var newDealList;
-			var url = initialURL + "&milestone=" + milestone;
+			var url = '/core/api/deal/filters/query/total/'+_agile_get_prefs('deal-filter-name')+'?pipeline_id=' + pipeline_id + '&order_by='+getDealSortFilter()+'&milestone='+milestone;
 			newDealList = { "heading" : milestone, "url" : url};
 			if(currentTrack.won_milestone == milestone)
 				newDealList.won_milestone = currentTrack.won_milestone;

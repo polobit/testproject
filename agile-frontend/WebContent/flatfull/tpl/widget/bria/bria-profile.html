@@ -79,7 +79,7 @@
 	<form class="p-xs" id="bria_login_form" name="bria_login_form" method="post">
     	<fieldset>
 				<p class="m-t-sm" style=" margin: 0px;margin-bottom: 20px;">
-                    Make & receive calls using your Bria client
+                    Make and receive calls with your customers using Bria account.
 			  </p>	
 
 			  
@@ -115,27 +115,29 @@
 
 
 
-<script id="briaDialpad-template" type="text/html">
-<div id="briaDialpad_btns" class="dialpad_btns" style="border: none;position: relative;top: 55px;left: 180px;z-index:1"> 
+<script id="bria-widgetdialpad-template" type="text/html">
+<div>
+<div id="dialpad_btns" class="dialpad_btns" style="border: none;position: relative;left:calc(60%);z-index:1;padding-bottom: 10px;"> 
   <div  class"campaign_dialpad_bg" style="border-left: 1px solid #EEEEEE;" >
      <div class="campaign_dialpad_row">
-       <div class="campaign_dialpad_cell" style="border-top: 1px solid #EEE;"><input type="button" value="1" class="button1" id="button1" onclick="briaSendDTMF('1');"></div>
-       <div class="campaign_dialpad_cell" style="border-top: 1px solid #EEE;"><input type="button" value="2" class="button2" id="button2" onclick="briaSendDTMF('2');"></div>
-       <div class="campaign_dialpad_cell" style="border-top: 1px solid #EEE;"><input type="button" value="3" class="button3" id="button3" onclick="briaSendDTMF('3');"></div>
- 	   <div class="campaign_dialpad_cell" style="border-top: 1px solid #EEE;"><input type="button" value="4" class="button4" id="button4" onclick="briaSendDTMF('4');"></div>   
+       <div class="campaign_dialpad_cell" style="border-top: 1px solid #EEE;"><input type="button" value="1" class="button1" id="button1" onclick="sendDTMF('1');"></div>
+       <div class="campaign_dialpad_cell" style="border-top: 1px solid #EEE;"><input type="button" value="2" class="button2" id="button2" onclick="sendDTMF('2');"></div>
+       <div class="campaign_dialpad_cell" style="border-top: 1px solid #EEE;"><input type="button" value="3" class="button3" id="button3" onclick="sendDTMF('3');"></div>
+ 	   <div class="campaign_dialpad_cell" style="border-top: 1px solid #EEE;"><input type="button" value="4" class="button4" id="button4" onclick="sendDTMF('4');"></div>   
  	 </div>
      <div class="campaign_dialpad_row">
-       <div class="campaign_dialpad_cell"><input type="button" value="5" class="button5" id="button5" onclick="briaSendDTMF('5');"></div>
-       <div class="campaign_dialpad_cell"><input type="button" value="6" class="button6" id="button6" onclick="briaSendDTMF('6');"></div>
-       <div class="campaign_dialpad_cell"><input type="button" value="7" class="button7" id="button7" onclick="briaSendDTMF('7');"></div>
-       <div class="campaign_dialpad_cell"><input type="button" value="8" class="button8" id="button8" onclick="briaSendDTMF('8');"></div>
+       <div class="campaign_dialpad_cell"><input type="button" value="5" class="button5" id="button5" onclick="sendDTMF('5');"></div>
+       <div class="campaign_dialpad_cell"><input type="button" value="6" class="button6" id="button6" onclick="sendDTMF('6');"></div>
+       <div class="campaign_dialpad_cell"><input type="button" value="7" class="button7" id="button7" onclick="sendDTMF('7');"></div>
+       <div class="campaign_dialpad_cell"><input type="button" value="8" class="button8" id="button8" onclick="sendDTMF('8');"></div>
 	 </div>
      <div class="campaign_dialpad_row">
-       <div class="campaign_dialpad_cell" ><input type="button" value="9" class="button9" id="button9" onclick="briaSendDTMF('9');"></div>
-	   <div class="campaign_dialpad_cell"><input type="button" value="0" class="button0" id="button0" onclick="briaSendDTMF('0');"></div>    
-	   <div class="campaign_dialpad_cell"><input type="button" value="*" class="buttonstar" id="buttonstar" style="width:94%;" onclick="briaSendDTMF('star');"></div>
-       <div class="campaign_dialpad_cell"><input type="button" value="#" class="buttonpound" id="buttonpound" onclick="briaSendDTMF('hash');"></div> 	
+       <div class="campaign_dialpad_cell" ><input type="button" value="9" class="button9" id="button9" onclick="sendDTMF('9');"></div>
+	   <div class="campaign_dialpad_cell"><input type="button" value="0" class="button0" id="button0" onclick="sendDTMF('0');"></div>    
+	   <div class="campaign_dialpad_cell"><input type="button" value="*" class="buttonstar" id="buttonstar" style="width:94%;" onclick="sendDTMF('star');"></div>
+       <div class="campaign_dialpad_cell"><input type="button" value="#" class="buttonpound" id="buttonpound" onclick="sendDTMF('hash');"></div> 	
 	 </div>
   </div>
+</div>
 </div>
 </script>

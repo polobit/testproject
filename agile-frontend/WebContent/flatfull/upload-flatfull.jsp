@@ -20,15 +20,34 @@
 <script type="text/javascript" src="/lib/jquery.validate.min.js"></script>
 <!-- <script type="text/javascript" src="/lib/bootstrap.min.js"></script> -->
 
+<!-- Load angular file -->
+<%if(request.getParameter("enable_crop") != null) {%>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
+<script type="text/javascript" src="/flatfull/lib/ng-img-crop/ng-img-crop.js"></script>
+<script type="text/javascript" src="/flatfull/lib/ng-img-crop/ng-img-crop-util.js?_=12"></script>
+<%}%>
+<link rel="stylesheet" type="text/css" href="/flatfull/lib/ng-img-crop/ng-img-crop.css" />
+<style>
+    .cropArea {
+      background: #E4E4E4;
+      overflow: hidden;
+      /*width:500px;*/
+      height:300px;
+    }
+</style>
+
 <script type="text/javascript">
 jQuery.validator.setDefaults({
 	debug: true,
 	success: "valid"
 });;
+
 </script>
 <script type="text/javascript">
 //Get URL
 var url = "https://s3.amazonaws.com/agilecrm/" + unescape(getUrlVars()["key"]) + "?id=" + unescape(getUrlVars()["id"]);
+var enabledToCropImage = <%=request.getParameter("enable_crop")%>;
+
 // Get Id
 //Read a page's GET URL variables and return them as an associative array.
 function getUrlVars() {
@@ -105,11 +124,8 @@ function isValid(){
     // to remove error message while change
     isValid();
   });
-		});
 
-function agile_is_mobile_browser(){
-   return (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
-   }
+		});
 
 (function()
  	{
@@ -117,7 +133,6 @@ function agile_is_mobile_browser(){
    $( "<style>@media all and (max-width: 767px) {	.mobile-popup {min-height: 50vh; } .mobile-popup * {text-align: center;font-"+"size: 20px;}.mobile-popup input {display: inline-block;}}</style>" ).appendTo( "head" );
     }
  	})();
-
 </script>
 <style>
 	label.error {
@@ -129,7 +144,7 @@ function agile_is_mobile_browser(){
 </head>
 
 
-<body class="wrapper-md">
+<body class="wrapper-md" ng-app="app" ng-controller="Ctrl">
 
 <br/>
 <div class="row">
@@ -141,10 +156,14 @@ function agile_is_mobile_browser(){
 
 <br/>
 <form id="form" action="https://agilecrm.s3.amazonaws.com/" method="post" enctype="multipart/form-data" onsubmit="return isValid();"> 
-
-    
-	 <input type="hidden" name="key" value="panel/uploaded-logo/<%=new Date().getTime()%>" /> 
-
+ 
+ <%if(request.getParameter("enable_crop") != null){
+ %>
+ 	<input type="hidden" name="key" value="cd-uploaded-files/<%=new Date().getTime()%>" />  
+ <%} else {
+ %>
+ 	<input type="hidden" name="key" value="panel/uploaded-logo/<%=new Date().getTime()%>" />      
+ <%}%>
 
 <input type="hidden" name="acl" value="public-read" /> 
 <input type="hidden" name="content-type" value="image/*" />
@@ -157,6 +176,25 @@ function agile_is_mobile_browser(){
 
 
 <p><input name="file" id='fileextension' type="file" /></p>
+
+<div class="row m-n cropAreaContainer" style="display: none;">
+	<div class="cropArea col-xs-8 col-sm-8 col-md-8">
+	    <img-crop image="myImage" result-image="myCroppedImage" area-type="{{cropType}}"></img-crop>
+	</div>
+	<div class="col-xs-4 col-sm-4 col-md-4" id="preview">
+		<div>Cropped Image:</div>
+		<div><img ng-src="{{myCroppedImage}}" style="width: 100%;"/></div>
+	</div>
+</div>
+
+<!--
+<div class="btn-group m-t">
+      <label class="btn btn-default" ng-model="cropType" btn-radio="'circle'">Circle</label>
+      <label class="btn btn-default" ng-model="cropType" btn-radio="'square'">Square</label>
+</div>
+-->
+
+
 <br/>
 <input name="upload" value="Upload" class='submit btn btn-primary' type="submit"/> 
 </form> 

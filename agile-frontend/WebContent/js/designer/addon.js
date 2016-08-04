@@ -125,7 +125,18 @@ function addAddonTabTemplate(data, url, callback, container)
     	    		 return;
                 	 }
                  } 
-                 
+                 //show modal for integrating twilio call widget
+                 if(json.name == "Call"){
+                     var list = getTwilioIncomingList();
+                     if(list == null){
+                        window.parent.campaignAlert("Unauthorised_Call_Widget");
+                        return; 
+                     }
+                     if($.isEmptyObject(list)){
+                        window.parent.campaignAlert("Empty_Widget");
+                     return;
+                     }
+                 } 
                  var jsonsrc = $(this).data('jsonsrc');
 
                  // Close the dialog

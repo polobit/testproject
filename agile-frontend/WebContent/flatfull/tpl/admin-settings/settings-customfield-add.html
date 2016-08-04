@@ -17,7 +17,7 @@
                         <input type="text" id="label" placeholder="Label" class="required form-control noSpecialChars" value="{{../field_label}}" disabled / >
 						<input name="field_label" type="text" id="label" placeholder="Label" class="required form-control noSpecialChars hide" value="{{../field_label}}" / >
 						{{else}}
-							<input name="field_label" type="text" id="label" placeholder="Label" class="required form-control noSpecialChars field_length custom_field_keyword" max_len="500" value="{{field_label}}"/>
+							<input name="field_label" type="text" id="label" placeholder="Label" class="required form-control noSpecialChars field_length custom_field_keyword    customFieldSpecialCharacter duplicateWithSystemName" max_len="500" value="{{field_label}}"/>
 					{{/if}}
                     </div>
                 </div>
@@ -137,9 +137,9 @@
         <form id="textModalForm" name="textModalForm" method="post" class="form-horizontal">
             <fieldset>
                 <div class="control-group form-group">
-                    <label class="control-label col-sm-3">Label <span class="field_req">*</span></label> 
+                    <label class="control-label col-sm-3  ">Label <span class="field_req">*</span></label> 
                     <div class="controls">
-                        <input name="field_label" type="text" id="label" placeholder="Label" class="required noSpecialChars form-control field_length" max_len="500" />
+                        <input name="field_label" type="text" id="label" placeholder="Label" class="required noSpecialChars form-control field_length  localFieldLabel" max_len="500" />
                     </div>
                 </div>
                 <input class="hide form-control" name="field_type" type="text" placeholder="Label" value="TEXT" />
@@ -287,7 +287,7 @@
                 <input class="hide" name="field_type" type="text" placeholder="Label" value="LIST" />
                 <div class="control-group form-group">
                     <label class="control-label col-sm-3">Description <span class="field_req">*</span></label>
-                    <div class="controls"> 
+          <div class="controls"> 
                         <input name="field_description" type="text" id="description" placeholder="Description" class="required form-control" />
                     </div>
                 </div>

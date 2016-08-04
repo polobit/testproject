@@ -1,12 +1,18 @@
 package com.agilecrm.util;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.conn.ClientConnectionManager;
 import org.apache.http.conn.scheme.PlainSocketFactory;
 import org.apache.http.conn.scheme.Scheme;
@@ -17,6 +23,9 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpParams;
+import org.apache.http.util.EntityUtils;
+
+import com.google.appengine.api.blobstore.BlobstoreInputStream.ClosedStreamException;
 
 
 /**
@@ -51,13 +60,14 @@ public class HttpClientUtil
      * @param postData
      *            - post data
      */
-    public static void accessPostURLUsingHttpClient(String url, String contentType, String postData)
+    public static String accessPostURLUsingHttpClient(String url, String contentType, String postData)
     {
 	try
 	{
 	    HttpPost postRequest = new HttpPost(url);
 
 	    StringEntity input = new StringEntity(postData, "UTF-8");
+	    
 	    
 	    if(StringUtils.isNotBlank(contentType))
 	    	input.setContentType(contentType);
@@ -79,8 +89,12 @@ public class HttpClientUtil
 	    }
 
 	    br.close();
-
-	    System.out.println("Response:  " + sb.toString());
+	    
+	    String res = sb.toString();
+	    
+	    System.out.println("Response:  " + res);
+	    
+	    return res;
 	}
 	catch (Exception e)
 	{
@@ -90,9 +104,11 @@ public class HttpClientUtil
 
 	    System.err.println("Sending again normally...");
 
+	    String response = null;
+	    
 	    try
 	    {
-		String response = HTTPUtil.accessURLUsingPost(url, postData);
+		 response = HTTPUtil.accessURLUsingPost(url, postData);
 
 		System.out.println("Response in HttpClientUtil..." + response);
 	    }
@@ -101,6 +117,100 @@ public class HttpClientUtil
 		e1.printStackTrace();
 		System.err.println("Exception occured in HttpClientUtil while sending again..." + e1.getMessage());
 	    }
+	    
+	    return response;
 	}
+    }
+    
+    public static String accessURLUsingHttpClient(URLBuilder urlBuilder, HttpEntity httpEntity) throws ClosedStreamException, IOException, Exception
+    {
+    	HttpUriRequest request = null;
+
+		if(urlBuilder.getMethod().equalsIgnoreCase("GET"))
+			request = new HttpGet(urlBuilder.getURL());
+		
+		if(urlBuilder.getMethod().equalsIgnoreCase("POST"))
+		{
+			request = new HttpPost(urlBuilder.getURL());
+			((HttpPost)request).setEntity(httpEntity);
+		}
+		
+		// Iterates each header and add to request
+		if(!urlBuilder.getHeaders().isEmpty())
+		{
+			for(Map.Entry<String, String> entry: urlBuilder.getHeaders().entrySet())
+			{
+				request.setHeader(entry.getKey(), entry.getValue());
+			}
+		}
+		
+		HttpResponse response = httpClient.execute(request);
+
+		System.out.println(response.getStatusLine().getStatusCode());
+		System.out.println(response.getStatusLine().getReasonPhrase());
+		String res =  EntityUtils.toString(response.getEntity());
+		
+		System.out.println("Response is " + res);
+		
+		return res;
+    }
+    
+  public static class URLBuilder
+    {
+    	private String url;
+    	private String contentType;
+    	private String method = "GET";
+    	
+    	private Map<String, String> headers = new LinkedHashMap<String, String>();
+    	
+    	public final String USER_AGENT = "User-Agent";
+    	public final String AUTHORIZATION = "Authorization";
+    	
+    	public URLBuilder(String url)
+    	{
+    		this.url = url;
+    	}
+    	
+    	public String getContentType()
+		{
+			return contentType;
+		}
+
+		public void setContentType(String contentType)
+		{
+			this.contentType = contentType;
+		}
+
+		public String getMethod()
+		{
+			return method;
+		}
+
+		public void setMethod(String method)
+		{
+			this.method = method;
+		}
+
+    	public void setURL(String url)
+    	{
+    		this.url = url;
+    	}
+    	
+    	public String getURL()
+    	{
+    		return url;
+    	}
+    	
+    	public void setHeaders(Map<String, String> headers)
+    	{
+    		this.headers = headers;
+    	}
+    	
+    	public Map<String, String> getHeaders()
+    	{
+    		return headers;
+    	}
+    	
+    	
     }
 }

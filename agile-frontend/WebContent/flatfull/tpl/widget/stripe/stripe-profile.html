@@ -199,11 +199,11 @@
 <script id="stripe-custom-field-template" type="text/html">
 <div class="wrapper-sm">
 {{#if_equals this.custom_fields.length "0"}}
-	<p>Stripe id for each contact is stored in a text custom field. You have no custom fields defined. Please <a class="text-info" href="#custom-fields">create one</a>.</p>
+	<p>Stripe uses Stripe ID stored in text custom field to fetch data. You have no custom fields. Please <a class="text-info" href="#custom-fields">create one</a>.</p>
 {{else}}
-	<p>Stripe id for each contact is stored in a text custom field. Select the custom field to be used.</p>
+	<p>Stripe uses Stripe ID stored in text custom field to fetch data. Select the custom field to be used.</p>
 	<select name="stripe_field" id="stripe_custom_field_name" class="required form-control col-md-10 w-full">
-     		<option class="default-select" value="">-Select-</option>
+     		<option class="default-select" value=""> Select </option>
 		{{#each this.custom_fields}}
 			<option value="{{field_label}}">{{field_label}} 
 			</option>
@@ -231,7 +231,7 @@
 
 <script id="stripe-login-template" type="text/html">
 <div class="m-t">
-	See the contact's subscriptions history and payments from your Stripe account.
+	View subscription details, check payment history, get stripe events and create campaigns for your customers.
 <br>
 	<div class="col-sm-12 text-center m-t-sm">
 		<p><b>Access <i class="icon-question c-p" data-toggle="tooltip" data-placement="top" title="Select the access mode to enable features. Ex- Give write access to enable add credit feature." ></i></b></p>
@@ -257,7 +257,7 @@
 				<p>Stripe id for each contact is stored in a text custom field. You have no custom fields defined. Please <a class="text-info" href="#custom-fields">create one</a>.</p>
 {{else}}
 
-<p>Stripe id for each contact is stored in a text custom field. Select the custom field to be used.</p>
+<p>Stripe uses Stripe ID stored in text custom field to fetch data. Select the custom field to be used.</p>
 <form id="reportsForm">
 
 <input name="scope"  id="scope" value="{{prefs.scope}}" hidden/>
@@ -274,7 +274,7 @@
 				<div class="controls" id="contactTypeAhead">
 			
 			<select name="stripe_field_name" id="stripe_custom_field" class="required col-md-10 form-control w-full">
-     				<option class="default-select" value="">-Select-</option>
+     				<option class="default-select" value=""> Select </option>
 				{{#each custom_data}}
 					{{#if_equals ../prefs.stripe_field_name field_label}}
 						<option selected="selected" value="{{field_label}}">{{field_label}}</option>

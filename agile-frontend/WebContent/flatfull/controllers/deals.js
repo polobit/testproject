@@ -5,14 +5,19 @@
 var DealsRouter = Backbone.Router.extend({
 
 	routes : {
-
-	/* Deals/Opportunity */
-	"deals" : "deals", "import-deals" : "importDeals",
-	"deal-rc-0" : "dealsRightClick","deal-rc-1" : "dealsRightClick","deal-rc-2" : "dealsRightClick","deal-rc-3" : "dealsRightClick",
-	"deal-filters" : "dealFilters", 
-	"deal-filter-add" : "dealFilterAdd",
-	"deal-filter-edit/:id" : "dealFilterEdit",
-	"deal-filter/:id" : "dealFilter"},
+		/* Deals/Opportunity */
+		"deals" : "deals", 
+		"import-deals" : "importDeals",
+		"deal-rc-0" : "dealsRightClick",
+		"deal-rc-1" : "dealsRightClick",
+		"deal-rc-2" : "dealsRightClick",
+		"deal-rc-3" : "dealsRightClick",
+		"deal-filters" : "dealFilters", 
+		"deal-filter-add" : "dealFilterAdd",
+		"deal-filter-edit/:id" : "dealFilterEdit",
+		"deal-filter/:id" : "dealFilter",
+		"filter/:tag" : "deals"
+	},
 
 	/**
 	 * Fetches all the opportunities as list and also as milestone lists.
@@ -21,19 +26,16 @@ var DealsRouter = Backbone.Router.extend({
 	 * fetches Milestones pie-chart and Details graph if deals exist.
 	 */
 	deals : function()
-	{
+	{	
+		var dealTag = null ;
+		if(window.location.hash.indexOf("filter")==1){
+       		dealTag = window.location.hash.substr(window.location.hash.lastIndexOf("/")+1);
+       		_agile_set_prefs("agile_deal_view", "list_view");
+  		}	
 		pipeline_id = 0;
 		if (_agile_get_prefs("agile_deal_track"))
 			pipeline_id = _agile_get_prefs("agile_deal_track");
-		/*var deal_filters = _agile_get_prefs('deal-filters');
-		if(deal_filters)
-		{
-			var filtersJSON = $.parseJSON(deal_filters);
-			if(filtersJSON && filtersJSON.pipeline_id)
-			{
-				pipeline_id = filtersJSON.pipeline_id;
-			}
-		}*/
+		
 		$('#content').html("<div id='opportunity-listners'>&nbsp;</div>");
 		
 		//fix for mobile view showing only list view 
@@ -48,22 +50,15 @@ var DealsRouter = Backbone.Router.extend({
 			if (pipeline_id == 1)
 				pipeline_id = 0;
 
-			getTemplate("new-opportunity-header", {}, undefined, function(template_ui){
+			getTemplate("opportunities-header", {}, undefined, function(template_ui){
 				if(!template_ui)
 					  return;
 				$('#opportunity-listners').html($(template_ui));
 
-				// Add row-fluid if user prefs are set to fluid
-				if (IS_FLUID)
-				{
-					$('#opportunity-listners').find('div.row').removeClass('row').addClass('row');
-				}
-				pipeline_count = 0;
-				deal_fetching = false;
 				DEALS_LIST_COLLECTION = null;
 				setupDealsTracksList();
 				setupDealFilters();
-				//setupNewDealFilters();
+				setUpDealSortFilters($('#opportunity-listners'));
 				initializeDealListners();
 				loadPortlets('Deals');
 				contactListener();
@@ -73,75 +68,22 @@ var DealsRouter = Backbone.Router.extend({
 		else
 		{
 			var that = this;
-			setupNewDealFilters(function(){
-				DEALS_LIST_COLLECTION = null;
-				getTemplate("opportunities-header-list", {}, undefined, function(template_ui){
-				if(!template_ui)
-					  return;
-				$('#opportunity-listners').html($(template_ui));
-				
-				var query = ''
-				if (_agile_get_prefs('deal-filters'))
-				{
-					query = '&filters=' + encodeURIComponent(getDealFilters());
+			DEALS_LIST_COLLECTION = null;
+			setupDealFilters(function(data){
+				if(dealTag){
+					data["dealToFilter"] = dealTag ;
 				}
-				// Fetches deals as list
-				that.opportunityCollectionView = new Base_Collection_View({ url : 'core/api/opportunity/based?pipeline_id=' + pipeline_id + query,
-					templateKey : "opportunities", individual_tag_name : 'tr', sort_collection : false, cursor : true, page_size : 25,
-					postRenderCallback : function(el)
-					{
-						if (pipeline_id == 1)
-							pipeline_id = 0;
-						var cel = App_Deals.opportunityCollectionView.el;
-						appendCustomfieldsHeaders(el);
-						appendCustomfields(el);
-						// Showing time ago plugin for close date
-						includeTimeAgo(el);
-						// Shows Milestones Pie
-						pieMilestonesByPipeline(pipeline_id);
+				getTemplate("opportunities-header", {}, undefined, function(template_ui){
+					if(!template_ui)
+						  return;
+					$('#opportunity-listners').html($(template_ui));
 
-						var dealCount = new Base_Model_View({ url : 'core/api/opportunity/based/count?pipeline_id=' + pipeline_id + query, template : "" });
-
-						dealCount.model.fetch({ success : function(data)
-						{
-							var count = data.get("count") ? data.get("count") : 0;
-							if(count != undefined && count <= 1000)
-							{
-								// Shows deals chart
-								$("#total-pipeline-chart").show();
-								dealsLineChartByPipeline(pipeline_id);
-							}
-							else if(count != undefined && count > 1000){
-								$("#total-pipeline-chart").hide();
-							}
-							if(App_Deals.opportunityCollectionView.collection && App_Deals.opportunityCollectionView.collection.models[0])
-							{
-								App_Deals.opportunityCollectionView.collection.models[0].set({ "count" : count }, { silent : true })
-							}
-						} });
-						deal_bulk_actions.init_dom(el);
-						setupDealsTracksList(cel);
-						setupDealFilters(cel);
-						setNewDealFilters(App_Deals.deal_filters.collection);
-						initializeDealListners(el);
-						contactListener();
-						setTimeout(function(){
-							$('#delete-checked',el).attr("id","deal-delete-checked");
-						},500);
-					}, appendItemCallback : function(el)
-					{
-						appendCustomfields(el);
-
-						// To show timeago for models appended by infini scroll
-						includeTimeAgo(el);
-
-					} });
-				that.opportunityCollectionView.collection.fetch();
-
-				$('.new-collection-deal-list').html(that.opportunityCollectionView.render().el);
-				loadPortlets('Deals');
+					setUpDealSortFilters($('#opportunity-listners'));
+					
+					loadPortlets('Deals');
+				});
+				fetchDealsList(data);
 			});
-});
 		}
 
 		$(".active").removeClass("active");
@@ -224,47 +166,22 @@ var DealsRouter = Backbone.Router.extend({
 	dealFilterAdd : function()
 	{
 		$('#content').html("<div id='opportunity-listners'></div>");
-		var deals_filter = new Base_Model_View({ url : '/core/api/deal/filters', template : "filter-deals", isNew : "true", window : "deal-filters",
+		var deals_filter = new Opportunity_Filters_Event_View({ url : '/core/api/deal/filters', template : "filter-deals", isNew : "true", window : "deal-filters",
 			postRenderCallback : function(el)
 			{
+				head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js', function()
+				{
+					chainFiltersForOpportunity(el, undefined, function()
+					{
+						$("#opportunity-listners", $("#content")).html(el);
+						scramble_input_names($(el).find('#filter-settings'));
+					});
+				});
 				initializeDealListners();
 				contactListener();
-				var usersCollection = new Base_Collection_View({ url : '/core/api/users', sort_collection : false });
-				usersCollection.collection.fetch({
-					success : function(data){
-						var json = data.toJSON();
-						$('#owners-list-filters').html('');
-						if(json && json.length > 1){
-							$('#owners-list-filters').html('<option value="">Any</option>');
-						}
-						var template = Handlebars.compile('<option value="{{id}}">{{name}}</option>'); 
-						$.each(json, function(index, user){
-							$('#owners-list-filters').append(template({name : user.name, id : user.id}));
-						});
-						$('#owners-list-filters').parent().find('img').hide();
-						hideTransitionBar();
-					}
-				});
-				var tracksCollection = new Base_Collection_View({ url : '/core/api/milestone/pipelines', sort_collection : false });
-				tracksCollection.collection.fetch({
-					success : function(data){
-						var json = data.toJSON();
-						$('#filter_pipeline').html('');
-						if(json && json.length > 1){
-							$('#filter_pipeline').html('<option value="">Any</option>');
-						}
-						var template = Handlebars.compile('<option value="{{id}}">{{name}}</option>'); 
-						$.each(json, function(index, track){
-							$('#filter_pipeline').append(template({name : track.name, id : track.id}));
-						});
-						$('#filter_pipeline', $('#opportunity-listners')).trigger('change');
-						$('#filter_pipeline').parent().find('img').hide();
-						hideTransitionBar();
-					}
-				});
 				$('input[name=name]').trigger('focus');
 			} });
-		$("#opportunity-listners").html(deals_filter.render().el);
+		deals_filter.render();
 	},
 
 	/**
@@ -282,108 +199,25 @@ var DealsRouter = Backbone.Router.extend({
 		$("#opportunity-listners").html(LOADING_HTML);
 		var deal_filter = this.dealFiltersList.collection.get(id);
 		var deal_filter_json = deal_filter.toJSON();
-		var dealFilter = new Base_Model_View({ url : 'core/api/deal/filters', model : deal_filter, template : "filter-deals",
-			window : 'deal-filters', prePersist : function(model){
-				model.set({ 
-							'pipeline_id' : $('#filter_pipeline', $("#dealsFilterForm")).val(), 
-							'milestone' : $('#milestone', $("#dealsFilterForm")).val(),
-							'owner_id' : $('#owners-list-filters', $("#dealsFilterForm")).val() 
-						}, 
-						{ 
-							silent : true 
-						});
-			}, 
+		var dealFilter = new Opportunity_Filters_Event_View({ url : 'core/api/deal/filters', model : deal_filter, template : "filter-deals",
+			window : 'deal-filters', 
 			postRenderCallback : function(el)
 			{
+				head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js', function()
+				{
+					chainFiltersForOpportunity(el, deal_filter_json, function()
+					{
+						$("#opportunity-listners", $("#content")).html(el);
+						setOportunityChainFilterValidations($(el).find('#filter-settings'));
+					});
+					scramble_input_names($(el).find('#filter-settings'));
+				});
 				initializeDealListners();
 				contactListener();
-				deserializeForm(deal_filter_json, $("#dealsFilterForm"));
 				$('input[name=name]').trigger('focus');
-				var usersCollection = new Base_Collection_View({ url : '/core/api/users', sort_collection : false });
-				usersCollection.collection.fetch({
-					success : function(data){
-						var json = data.toJSON();
-						$('#owners-list-filters').html('');
-						if(json && json.length > 1){
-							$('#owners-list-filters').html('<option value="">Any</option>');
-						}
-						var template = Handlebars.compile('<option value="{{id}}">{{name}}</option>');
-						$.each(json, function(index, user){
-							$('#owners-list-filters').append(template({id : user.id, name : user.name}));
-						});
-						if(deal_filter_json && deal_filter_json.owner_id)
-						{
-							$('#owners-list-filters').find('option[value="'+deal_filter_json.owner_id+'"]').attr("selected", "selected");
-						}
-						$('#owners-list-filters').parent().find('img').hide();
-						hideTransitionBar();
-						$('#value_filter').find('option').each(function(){
-				    		if($(this).val()==$('#value_filter').val()){
-				    			$('.'+$(this).val()).removeClass('hide');
-				    		}else{
-				    			$('.'+$(this).val()).addClass('hide');
-				    		} 
-				    	});
-					}
-				});
-				var tracksCollection = new Base_Collection_View({ url : '/core/api/milestone/pipelines', sort_collection : false });
-				tracksCollection.collection.fetch({
-					success : function(data){
-						var json = data.toJSON();
-						$('#filter_pipeline').html('');
-						if(json && json.length > 1){
-							$('#filter_pipeline').html('<option value="">Any</option>');
-						}
-						var template = Handlebars.compile('<option value="{{id}}">{{name}}</option>');
-						$.each(json, function(index, track){
-							$('#filter_pipeline').append(template({id : track.id, name : track.name}));
-						});
-						if(deal_filter_json && deal_filter_json.pipeline_id)
-						{
-							$('#filter_pipeline').find('option[value="'+deal_filter_json.pipeline_id+'"]').attr("selected", "selected");
-						}
-						$('#filter_pipeline').parent().find('img').hide();
-						hideTransitionBar();
-
-						var track = $('#filter_pipeline').val();
-						if (track)
-						{
-							var milestoneModel = Backbone.Model.extend({ url : '/core/api/milestone/'+track });
-							var model = new milestoneModel();
-							model.fetch({ 
-								success : function(data){
-									var json = data.toJSON();
-									var milestones = json.milestones;
-									milestonesList = milestones.split(",");
-									$('#milestone').html('');
-									if(milestonesList.length > 1)
-									{
-										$('#milestone', el).html('<option value="">Any</option>');
-									}
-									var template = Handlebars.compile('<option value="{{milestone}}">{{milestone}}</option>');
-									$.each(milestonesList, function(index, milestone){
-										$('#milestone', el).append(template({milestone : milestone}));
-									});
-									if(deal_filter_json && deal_filter_json.milestone && track == deal_filter_json.pipeline_id)
-									{
-										$('#milestone').find('option[value="'+deal_filter_json.milestone+'"]').attr("selected", "selected");
-									}
-									
-									$('#milestone', el).parent().find('img').hide();
-									hideTransitionBar();
-								} 
-							});
-						}
-						else
-						{
-							$('#milestone', el).html('<option value="">Any</option>');
-						}
-					}
-				});
 			} });
 
-		$("#opportunity-listners").html(dealFilter.render().el);
-
+		dealFilter.render();
 	},
 
 	/**

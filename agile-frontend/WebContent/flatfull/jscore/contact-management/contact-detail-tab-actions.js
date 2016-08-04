@@ -1,4 +1,4 @@
-var existingDocumentsView;
+var existingDocumentsView;var comp_addr_prop ; 
 
 // Documents actions
 var contact_details_documentandtasks_actions = {
@@ -114,7 +114,7 @@ var contact_details_documentandtasks_actions = {
 			    	$('#color1', el).colorPicker();
 				}
 
-				var colorcode = "#808080";
+				var colorcode = "#FFFFFF";
 			    $('#color1' , el).attr('value', colorcode);
 			    $('.colorPicker-picker', el).css("background-color", colorcode); 
 			    // Disable color input field
@@ -179,7 +179,7 @@ var contact_details_documentandtasks_actions = {
 
 				// Enable the datepicker
 
-				$('#close_date', el).datepicker({ format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY});
+				$('#close_date', el).datepicker({ format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY, autoclose: true});
 
 
 				var json = null;
@@ -193,7 +193,7 @@ var contact_details_documentandtasks_actions = {
 				var template = Handlebars.compile('<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="{{id}}">{{name}}</li>');
   
 			 	// Adds contact name to tags ul as li element
-			 	$('.tags',el).html(template({name : contact_name, id : json.id}));
+			 	$('#contactTypeAhead .tags',el).html(template({name : contact_name, id : json.id}));
         },
 
        add_case : function(e){
@@ -236,16 +236,22 @@ var contact_details_documentandtasks_actions = {
 			// shown.
 			// Disables typeahead, as it won't be needed as there will be no Company
 			// input text box.
-			var json = {};
+			var json = {}; 
 
 			if(Current_Route.indexOf("company") > -1)
 				 json = App_Companies.companyDetailView.model.toJSON();
 			else 
 				 json = App_Contacts.contactDetailView.model.toJSON();
-
+			contact_company = json ;	
 			forceCompany.name = getContactName(json); // name of Company
 			forceCompany.id = json.id; // id of Company
-			forceCompany.doit = true; // yes force it. If this is false the
+			forceCompany.doit = true;
+			comp_addr_prop = null ; 
+			$.each(contact_company.properties , function(){
+				if(this.name == "address" && this.subtype == "office")
+					comp_addr_prop = JSON.parse(this.value);				
+			}); 
+			// yes force it. If this is false the
 			// Company won't be forced.
 			// Also after showing modal, it is set to false internally, so
 			// Company is not forced otherwise.
@@ -259,7 +265,23 @@ var contact_details_documentandtasks_actions = {
 					{
 						Backbone.history.navigate("contact-add" , {trigger: true});
 						setTimeout(function(){ 
-						$("#continueform").find("ul[name=contact_company_id]").html('<li class="inline-block tag btn btn-xs btn-primary m-r-xs m-b-xs" data="'+forceCompany.id+'"><span><a class="text-white m-r-xs" href="#contact/'+forceCompany.id+'">'+forceCompany.name+'</a><a class="close text-white" id="remove_tag">×</a></span></li>')
+						$("#continueform").find("ul[name=contact_company_id]").html('<li class="inline-block tag btn btn-xs btn-primary m-r-xs m-b-xs" data="'+forceCompany.id+'"><span><a class="text-white m-r-xs" href="#contact/'+forceCompany.id+'">'+forceCompany.name+'</a><a class="close text-white" id="remove_tag">×</a></span></li>');
+						console.log(comp_addr_prop);
+						if(comp_addr_prop){
+							$("#content .address-type").val("office");
+							if(comp_addr_prop.address)
+								$("#content #address").val(comp_addr_prop.address);
+							if(comp_addr_prop.city)
+								$("#content #city").val(comp_addr_prop.city);
+							if(comp_addr_prop.state)
+								$("#content #state").val(comp_addr_prop.state);
+							if(comp_addr_prop.zip)
+								$("#content #zip").val(comp_addr_prop.zip);
+							if(comp_addr_prop.country)
+								$("#content #country").val(comp_addr_prop.country);
+							$("#content #remove_tag").addClass("companyAddress");
+						}
+						
 						}, 800);
 					}
 					else
@@ -316,6 +338,25 @@ var contact_details_documentandtasks_actions = {
 			{
 				documentsView.collection.remove(json);
 				documentsView.render(true);
+			},
+			error : function(model, response)
+			{
+				if(response && response.status == 403)
+				{
+					showModalConfirmation("Detach Document", 
+						DOC_ACL_DETACH_ERROR, 
+						function (){
+							return;
+						}, 
+						function(){
+							return;
+						},
+						function(){
+							return;
+						},
+						"Cancel"
+					);
+				}
 			} });
        },
 
@@ -417,7 +458,7 @@ function existing_document_attach(document_id, saveBtn)
 	if ((json.contact_ids).indexOf(contact_id) < 0)
 	{
 		json.contact_ids.push(contact_id);
-		saveDocument(null, null, saveBtn, false, json);
+		saveDocument(null, null, saveBtn, false, json, contact_id);
 	}
 	else
 	{

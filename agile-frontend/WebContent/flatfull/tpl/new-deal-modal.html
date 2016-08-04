@@ -16,7 +16,7 @@
               class="field_req">*</span></label>
             <div class="controls col-sm-7">
               <span><input id="name" name="name" type="text"
-                class=" required form-control" placeholder="Name of Deal" /></span>
+                class=" required form-control" placeholder="Deal Name" /></span>
             </div>
           </div>
           <div class="control-group form-group">
@@ -58,8 +58,6 @@
             </div>  
           </div>
           
-
-        
           <div class="control-group form-group">
             <label class="control-label col-sm-3">Milestone<span
               class="field_req">*</span></label>
@@ -93,7 +91,7 @@
           <div class="control-group form-group">
             <label class="control-label col-sm-3">Type</label>
             <div class="controls col-sm-7" style="height:32px;overflow:hidden;">
-              <span><input type="text" id="color1" name="color1" value="#808080" class=" required form-control" />
+              <span><input type="text" id="color1" name="color1" value="#FFFFFF" class=" required form-control" />
               </span>
             </div>
           </div>
@@ -120,6 +118,22 @@
             </div>
           </div>
         </div>
+        <div class="control-group form-group" id='tags_source_deal_modal'>
+                      <label class="control-label col-sm-3">Tags</label>
+     
+                      <div class="controls col-sm-7">
+                          <input name="tags" type="text" id="tags-new-person" class="tags-typeahead form-control" maxlength="500" placeholder="Separate tags with commas"/>
+                          <div class="pull-left" style="margin-top: 1px;">
+                            <ul name="tags" class="tagsinput tags p-n" style="margin-bottom: 1px;">
+                            </ul>
+                        </div>
+              </div>
+         </div>
+         <div class="row invalid-tags-person" style="display:none;">
+                    <div class="col-sm-offset-3 col-sm-7">
+                        <div style="color:red;" class="text-sm">Tag name should start with an alphabet and cannot contain special characters other than underscore and space.</div>
+                    </div>
+                </div>
         <div class="control-group hidden">  
           <label class="i-checks i-checks-sm control-label">
           <input type="checkbox" id="archived" class="input" name="archived" style="margin: 0px 5px;"><i></i> Archive </label>

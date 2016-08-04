@@ -43,6 +43,7 @@
                 "Status": "{{ticket.status}}",
                 "Priority": "{{ticket.priority}}",
                 "Ticket Type": "{{ticket.type}}",
+                "Ticket Group": "{{ticket.group.group_name}}",
                 "Subject": "{{ticket.subject}}",
                 "Last Updated By": "{{ticket.last_updated_by}}"
             },
@@ -75,7 +76,7 @@
             "required": "required",
             "category": "Settings",
             "name": "variable_2",
-            "title": "Enter a value.<br><br> Status possible values 'OPEN,PENDING,CLOSED' <br> Priority possible values 'LOW, MEDIUM, HIGH' <br> Ticket Type possible values 'INCIDENT, QUESTION, TASK, PROBLEM' <br> Last Updated By possible values 'AGENT, REQUESTER'",
+            "title": "Enter a value.<br><br> Status possible values 'OPEN, PENDING, CLOSED' <br> Priority possible values 'LOW, MEDIUM, HIGH' <br> Ticket Type possible values 'INCIDENT, QUESTION, TASK, PROBLEM' <br> Last Updated By possible values 'AGENT, REQUESTER'",
             "fieldType": "input",
             "type": "text" 
         },

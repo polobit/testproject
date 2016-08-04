@@ -6,6 +6,8 @@ function chainWebRules(el, data, isNew, actions)
 	});
 	$("#action-details", el).chained($("#action", el),  function(){
 	});
+	$("#RHS_CALL_POPUOP", el).chained($("#action", el),  function(){
+	});
 	$("#WEB_RULE_RHS", el).chained($("#action", el), function(el, self){
 
 		var select = $('select', $(self));
@@ -36,19 +38,40 @@ function chainWebRules(el, data, isNew, actions)
 	$("#delay", el).chained($("#action", el));
 	
 	$("#noty-message", el).chained($("#action", el), function(select, self){
-		var value = $("select", select).val();
+		var value = $("select", select).val();					
 		$(self).show();
+		$('#twilio_call_setup').hide();
 		console.log(value);
 	
-		if(value == "MODAL_POPUP" || value == "CORNER_NOTY")
+		if(value == "MODAL_POPUP" || value == "CORNER_NOTY" || value== "CALL_POPUP")
 			{
-				if(value == "MODAL_POPUP")
+				if(value == "MODAL_POPUP"  || value=="CALL_POPUP")
 				$("#tiny_mce_webrules_link", self).show();
+
+				if(value=="CALL_POPUP"){
+					loadSavedTemplate("call/callpopup.html");
+					$.ajax({
+						url: '/core/api/sms-gateway/twilio',
+						type : 'GET',
+						success : function(data) {
+							App_WebReports.isTwilioSMS=data;
+						},
+						error : function(data) {
+							App_WebReports.isTwilioSMS=false;
+						}
+					});
+				}
 				self.find(".web-rule-preview").show();
 			return;
+			} else if(value == "SITE_BAR") {
+				loadSavedTemplate("bar/sitebar.html");
+				$("#tiny_mce_webrules_link", self).show();
+				self.find(".web-rule-preview").show();
+				return;
 			}
 		self.find(".web-rule-preview").hide();
 	});
+	
 	
 	if(data && data.actions)
 		deserializeChainedSelect1($(el).find('form'), data.actions, element_clone, data.actions[0]);
@@ -80,6 +103,17 @@ var Web_Rules_Event_View = Base_Model_View.extend({
 						  return;
 
 					var htmlContent = $(template_ui).find('.webrule-actions > div').clone();
+					var action_count=$('#action select').length;
+					for(var i=0;i<action_count;i++){
+						var actionSelected = $($('#action select')[i]).val();
+
+						if(actionSelected === 'CALL_POPUP' || actionSelected === 'MODAL_POPUP' || actionSelected === 'SITE_BAR'){
+							var listOfOptions = $(htmlContent).find('#action select optgroup option');
+							listOfOptions[0].remove();//MODAL_POPUP
+							listOfOptions[2].remove();//CALL_POPUP
+							listOfOptions[3].remove();//SITE_BAR
+						}
+					}
 					chainWebRules($(htmlContent)[0], undefined, true);
 					// var htmlContent = $(this).closest("tr").clone();
 					$(htmlContent).find("i.webrule-multiple-remove").css("display", "inline-block");
@@ -126,7 +160,7 @@ var Web_Rules_Event_View = Base_Model_View.extend({
 			webrulePreview: function(e){
 				e.preventDefault();
 				var that = $(e.currentTarget);
-				_agile_require_js("https://s3.amazonaws.com/agilewebgrabbers/scripts/agile-webrules-min.js", function(){
+				_agile_require_js("https://s3.amazonaws.com/agilecrm/web-rules-static/agile-webrules-min-26-4.js", function(){
 
 					// Serializes webrule action to show preview
 					var action = serializeChainedElement($(that).closest('table'));
@@ -144,14 +178,29 @@ var Web_Rules_Event_View = Base_Model_View.extend({
 				e.preventDefault();
 
 				// If not empty, redirect to tinymce
-				if($('#tinyMCEhtml_email').val() !== "")
+				if(typeof $('#tinyMCEhtml_email').val() != "undefined" && $('#tinyMCEhtml_email').val() != "")
 				{
 					if($('.custom_html').length > 1){
-						alert("Only one popup is allowed per webrule. You have already set a popup action for this webrule.");
-						$($(e.currentTarget)).closest(".alert").remove();
+						showAlertModal("webrule_popup_limit", undefined, function(){
+							$($(e.currentTarget)).closest(".alert").remove();
+						});
 						return;
 					}
 					loadTinyMCE("tinyMCEhtml_email");
+					return;
+
+				}else if($('#callwebrule-code').val() !== "" && $('#action select').val() == 'CALL_POPUP'){
+
+					if($('.custom_html').length > 1){
+						showAlertModal("webrule_popup_limit", undefined, function() {
+                   			 $($(e.currentTarget)).closest(".alert").remove()
+                		});
+						return;
+					}
+					loadTinyMCE("callwebrule-code");
+					return;
+				} else if($('#agile-bar-code').val() !== "" && $('#action select').val()=='SITE_BAR') {
+					loadTinyMCE("agile-bar-code");
 					return;
 				}
 				var strWindowFeatures = "height=650, width=800,menubar=no,location=yes,resizable=yes,scrollbars=yes,status=yes";
@@ -289,8 +338,9 @@ function merge_webrules_jsons(target, object1, object2)
 				if($('#tinyMCEhtml_email').val() !== "")
 				{
 					if($('.custom_html').length > 1){
-						alert("Only one popup is allowed per webrule. You have already set a popup action for this webrule.");
-						$($(e.currentTarget)).closest(".alert").remove();
+						showAlertModal("webrule_popup_limit", undefined, function(){
+							$($(e.currentTarget)).closest(".alert").remove();
+						});
 						return;
 					}
 				}

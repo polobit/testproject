@@ -49,7 +49,7 @@
 	</div>
 	<div class="clearfix"></div>
 	
-		<pre style="white-space:pre-wrap;">{{show_link_in_statement description}}</pre>
+		<pre style="white-space:pre-wrap; word-break:normal">{{show_link_in_statement description}}</pre>
 		
 	 	<div>
 		<div class="m-b-sm">	
@@ -61,16 +61,16 @@
 						<a class="text-info" href="#contact/{{id}}" data="{{id}}" class="popover_contact">{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</a>,
 					{{/if_contact_type}}
 					{{#if_contact_type "COMPANY"}}
-        				<a class="text-info" href="#company/{{id}}">{{getPropertyValue properties "name"}}</a>,
+        				<a class="text-info popover_contact" href="#company/{{id}}" data="{{id}}">{{getPropertyValue properties "name"}}</a>,
         			{{/if_contact_type}}
 				{{/isDuplicateContactProperty}}
            		
            	{{/if}}
        	{{/each}}
 		</div>
-		<div class="pos-abs pos-r-0 pos-b-n-sm" id="deal-hover-actions" style="right:19px;">
+		<div class="pos-abs pos-r-0 pos-b-n-sm icons-text-sm" id="deal-hover-actions" style="right:19px;">
 		<span class="actions">
-<a title="Edit"  data="{{id}}" data-toggle="modal" class="deal-edit-note c-p text-l-none-hover p-r-sm"> <i class="icon-pencil"></i> </a>
+<a title="Edit"  data="{{id}}" data-toggle="modal" class="deal-edit-note c-p text-l-none-hover p-r-sm"> <i class="fa fa-edit"></i> </a>
             <a title="Delete" class="c-p text-l-none-hover"><span class="activity-delete icon-trash inline"  id="{{id}}" url="core/api/contacts/notes/bulk"></span></a>
         </span>
         </div>

@@ -1,4 +1,14 @@
 //Helps to know that widget is for all users.
+var widgetDisplayname = {
+	Rapleaf : "TowerData",
+	Twilio : "Twilio Call Log",
+	HelpScout : "Help Scout",
+	TwilioIO : "Twilio",
+	GooglePlus : "Google+",
+	CallScript : "Call Script",	
+	Uservoice : "UserVoice"
+};
+
 var isForAll = false;
 
 function initializeTabListeners(localStorageItem, navigateURL){
@@ -51,8 +61,8 @@ function save_widget_prefs(pluginName, prefs, callback) {
 	console.log("In save_widget_prefs.");
 	
 	var msgType = "success";
-	var displayName = pluginName;
-	var msg = displayName+" widget saved successfully";	
+	var displayName;
+	var msg;	
 
 	/*
 	 * Get widget model from collection based on the name attribute of the
@@ -86,15 +96,12 @@ function save_widget_prefs(pluginName, prefs, callback) {
 			models[0].set(data);
 			var widgetID = data.id;
 			
-			if(pluginName  == "Rapleaf"){
-				displayName = "Towerdata"
-			}else if(pluginName == "HelpScout"){
-				displayName = "Help Scout"
-			}else if(pluginName == "TwilioIO"){
-				displayName = "Twilio";
-			}else{
+			displayName = widgetDisplayname[pluginName];
+			if(!displayName){
 				displayName = pluginName;
 			}			
+
+			msg = displayName+" widget saved successfully";
 
 			if(widgetID){
 
@@ -374,13 +381,26 @@ function addConfigurableWidget(widgetId, widgetName, templateName) {
 			var widget_el = getTemplate("widget-settings", model);
 			$('#prefs-tabs-content').html(widget_el);
 
-			// Create a view modal for widgets
-			renderWidgetView(templateName, 'core/api/widgets',model, '#widget-settings');
-			
+			if(widgetName == "Braintree"){
+				// Retrieve all custom from Agile account
+				$.get("/core/api/custom-fields/type/scope?scope=CONTACT&type=TEXT", function(data){
+					// Include 'stripe_field_name' to stripe_widget_prefs and save
+					model['custom_fields'] = data;
+					
+					renderWidgetView(templateName, 'core/api/widgets',model, '#widget-settings');
+
+				}, "json").error(function(data){
+					
+				});
+				
+			}else{
+				// Create a view modal for widgets
+				renderWidgetView(templateName, 'core/api/widgets',model, '#widget-settings');
+			}
+
 			if (model.name == "TwilioIO" && model.is_added) {
 				fill_twilioio_numbers();
 			}
-
 		});
 
 	});

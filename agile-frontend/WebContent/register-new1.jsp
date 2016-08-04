@@ -1,3 +1,4 @@
+<%@page import="com.agilecrm.ipaccess.IpAccessUtil"%>
 <%@page import="com.agilecrm.util.RegisterUtil"%>
 <%@page import="com.agilecrm.user.RegisterVerificationServlet"%>
 <%@page import="org.apache.commons.lang.StringUtils"%>
@@ -5,7 +6,9 @@
 <%@page import="com.google.appengine.api.utils.SystemProperty"%>
 <%@page import="com.agilecrm.util.MathUtil"%>
 <%@page contentType="text/html; charset=UTF-8" %>
+
 <%
+	
 
 	if (request.getAttribute("javax.servlet.forward.request_uri") == null) {
 		response.sendRedirect("/register");
@@ -175,7 +178,7 @@ if(isSafari && isWin)
 <input class="input-xlarge field required email form-control no-border"
 			id="login_email" name='email' type="email" required maxlength="50"
 			minlength="6" value="<%=email%>"  placeholder="Email Address (User ID)"
-			autocapitalize="off" autocomplete="off">
+			autocapitalize="off">
 </div>
 
 

@@ -33,7 +33,7 @@ var addAgileApi = function(json, api, callback)
 	var agileapi = {};
 	agileapi.label = "Agile API";
 	agileapi.type = "input";
-	agileapi.value = api.api_key;
+	agileapi.value = api.js_api_key;
 
 	var agiledomain = {};
 	agiledomain.label = "Agile Domain";
@@ -45,29 +45,35 @@ var addAgileApi = function(json, api, callback)
 	agileredirecturl.type = "input";
 	agileredirecturl.value = "#";
 
-	var agileformmethod = {};
-	agileformmethod.label = "Form Method";
-	agileformmethod.type = "select";
-	agileformmethod.value = [{ value : "GET", selected : true, label : "GET"}, { value : "POST", selected : false, label : "POST" }];
-
 	var agilepreloadfields = {};
 	agilepreloadfields.label = "Preload Fields";
 	agilepreloadfields.type = "select";
 	agilepreloadfields.value = [{value : false, selected : true, label : "no"}, {value : true, selected : false, label: "yes"}];
+   // adding the tag for the TO SEND EMAIL Notification 
+	var formemailnotification = {};
+	formemailnotification.label = "Email Notification";
+	formemailnotification.type = "select";
+	formemailnotification.value = [{value : false, selected : true, label : "false"}, {value : true, selected : false, label: "true"}];
 
 	var agileformidtag = {};
 	agileformidtag.label = "Form Tags";
 	agileformidtag.type = "input";
 	agileformidtag.value = "";
 
+	var agiletransparentbackground = {};
+	agiletransparentbackground.label = "Transparent Background";
+	agiletransparentbackground.type = "select";
+	agiletransparentbackground.value = [{value : "", selected : true, label : "no"}, {value : " agile-form-transparent", selected : false, label: "yes"}];
+
 	for ( var b = 0; b < json.length; b++)
 	{
 		json[b].fields["agileapi"] = agileapi;
 		json[b].fields["agiledomain"] = agiledomain;
 		json[b].fields["agileredirecturl"] = agileredirecturl;
-		json[b].fields["agileformmethod"] = agileformmethod;
 		json[b].fields["agilepreloadfields"] = agilepreloadfields;
 		json[b].fields["agileformidtag"] = agileformidtag;
+		json[b].fields["formemailnotification"] = formemailnotification;
+		json[b].fields["agiletransparentbackground"] = agiletransparentbackground;
 	}
 	callback(json);
 };

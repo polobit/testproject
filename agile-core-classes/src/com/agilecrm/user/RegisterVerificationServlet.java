@@ -4,15 +4,13 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URLDecoder;
 import java.util.ArrayList;
-
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import org.apache.commons.lang.StringUtils;
-
 import com.agilecrm.user.util.AliasDomainUtil;
+import com.agilecrm.ipaccess.IpAccessUtil;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.CacheUtil;
 import com.analytics.servlets.AnalyticsServlet;
@@ -22,7 +20,7 @@ import com.google.appengine.labs.repackaged.org.json.JSONObject;
 
 public class RegisterVerificationServlet extends HttpServlet
 {
-    private static final ArrayList<String> invalid_domains = new ArrayList<String>();
+    /*private static final ArrayList<String> invalid_domains = new ArrayList<String>();
 
     static
     {
@@ -36,7 +34,7 @@ public class RegisterVerificationServlet extends HttpServlet
 	invalid_domains.add("rossbergercom");
 	invalid_domains.add("fastmail");
 	invalid_domains.add("usa.gov");
-    }
+    }*/
 
     private static final ArrayList<String> IPlIST = new ArrayList<String>();
 
@@ -55,6 +53,7 @@ public class RegisterVerificationServlet extends HttpServlet
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
     {
+    	
 	String domain = request.getParameter("domain");
 	String oauth = request.getParameter("oauth");
 	String email = request.getParameter("email");
@@ -74,6 +73,7 @@ public class RegisterVerificationServlet extends HttpServlet
 
 	try
 	{
+		
 	    if (isTrottleLimitReached(userIp) && !IPlIST.contains(userIp))
 	    {
 		System.out.println("Throttle reached" + userIp);
@@ -82,8 +82,10 @@ public class RegisterVerificationServlet extends HttpServlet
 			"You seem to have registered an account very recently. Please wait for 1 day if you wish to create another or write to care@agilecrm.com.");
 		return;
 	    }
-
-	    if (StringUtils.equalsIgnoreCase(request.getHeader("X-AppEngine-Country"), "BD")
+	    
+	    String countryName = request.getHeader("X-AppEngine-Country");
+	    
+	    if (StringUtils.equalsIgnoreCase(countryName, "BD") || StringUtils.equalsIgnoreCase(countryName, "NG")
 		    || "180.211.195.60".equals(userIp))
 	    {
 		writeErrorMessage(response, "Access denied");
@@ -207,9 +209,9 @@ public class RegisterVerificationServlet extends HttpServlet
 	    if (StringUtils.isEmpty(emailDomain))
 				throw new Exception("Agile CRM needs your business email to signup");
 	    
-		if (invalid_domains.contains(emailDomain.toLowerCase())
+		/*if (invalid_domains.contains(emailDomain.toLowerCase())
 			|| invalid_domains.contains(emailDomainSubstring))
-			throw new Exception("Agile CRM needs your business email to signup");
+			throw new Exception("Agile CRM needs your business email to signup");*/
 		
 		
 		DomainUser domainUser = DomainUserUtil.getDomainUserFromEmail(email);

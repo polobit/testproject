@@ -10,6 +10,8 @@
 
 var contact_tab_position_cookie_name = "contact_tab_position_" + CURRENT_DOMAIN_USER.id;
 
+var company_tab_position_cookie_name = "company_tab_position_" + CURRENT_DOMAIN_USER.id;
+
 var CONTACT_ASSIGNED_TO_CAMPAIGN = false;
 
 var NO_WEB_STATS_SETUP = true;
@@ -35,7 +37,7 @@ function fill_company_related_contacts(companyId, htmlId, context_el)
 	if(context_el)
 		$('#' + htmlId, $(context_el)).html(companyContactsView.render().el);
 	else
-		$('#' + htmlId).html(companyContactsView.render().el);
+		$('#' + htmlId,App_Companies.companyDetailView.el).html(companyContactsView.render().el);
 }
 
 var Contact_Details_Tab_Actions = {
@@ -75,46 +77,46 @@ var Contact_Details_Tab_Actions = {
 	  // to remove contact from active campaign.
 	  removeActiveCampaigns : function(e){
 	  	var targetEl = $(e.currentTarget);
+	  	showAlertModal("Are you sure to remove " + $(targetEl).attr("contact_name") + " from " + $(targetEl).attr("campaign_name") + " campaign?", "confirm", function(){
+			var $active_campaign = $(targetEl).closest('span#active-campaign');
+			var campaign_id = $active_campaign.attr('data');
+			var contact_id;
 
-  		if (!confirm("Are you sure to remove " + $(targetEl).attr("contact_name") + " from " + $(targetEl).attr("campaign_name") + " campaign?"))
-		return;
+			// Fetch contact id from model
+			if (App_Contacts.contactDetailView && App_Contacts.contactDetailView.model)
+				contact_id = App_Contacts.contactDetailView.model.get('id');
 
-		var $active_campaign = $(targetEl).closest('span#active-campaign');
-		var campaign_id = $active_campaign.attr('data');
-		var contact_id;
+			// Url to delete
+			var deleteUrl = 'core/api/workflows/remove-active-subscriber/' + campaign_id + '/' + contact_id;
 
-		// Fetch contact id from model
-		if (App_Contacts.contactDetailView && App_Contacts.contactDetailView.model)
-			contact_id = App_Contacts.contactDetailView.model.get('id');
-
-		// Url to delete
-		var deleteUrl = 'core/api/workflows/remove-active-subscriber/' + campaign_id + '/' + contact_id;
-
-		$.ajax({ url : deleteUrl, type : 'DELETE', success : function(data)
-		{
-
-			var contact_json = App_Contacts.contactDetailView.model.toJSON();
-			var campaign_status = contact_json.campaignStatus;
-
-			// On success callback, remove from both UI and backbone contact
-			// model.
-			if (campaign_status !== undefined)
+			$.ajax({ url : deleteUrl, type : 'DELETE', success : function(data)
 			{
-				for (var i = 0, len = campaign_status.length; i < len; i++)
+
+				var contact_json = App_Contacts.contactDetailView.model.toJSON();
+				var campaign_status = contact_json.campaignStatus;
+
+				// On success callback, remove from both UI and backbone contact
+				// model.
+				if (campaign_status !== undefined)
 				{
-					if (campaign_id === campaign_status[i].campaign_id)
+					for (var i = 0, len = campaign_status.length; i < len; i++)
 					{
-						// Remove from campaignStatus array of contact model
-						campaign_status.splice(i, 1);
-						break;
+						if (campaign_id === campaign_status[i].campaign_id)
+						{
+							// Remove from campaignStatus array of contact model
+							campaign_status.splice(i, 1);
+							break;
+						}
 					}
 				}
-			}
 
-			// Remove li
-			$active_campaign.remove();
+				// Remove li
+				$active_campaign.remove();
 
-		} });
+			} });
+		},undefined, "Remove Active Campaign");
+
+		
 	  },
 
 	  /**
@@ -217,12 +219,12 @@ var Contact_Details_Tab_Actions = {
 		  	}
 
 		  	if(!hasScope("MANAGE_DEALS") && (CURRENT_DOMAIN_USER.id != owner) && model.get("entity_type") && model.get("entity_type") == "deal"){
-		  		$('#deal_delete_privileges_error_modal').modal('show');
+		  		$('#deal_delete_privileges_error_modal').html(getTemplate("deal-delete-privileges-error-modal")).modal('show');
 		  		return;
 		  	}
 
 		  	if(model.get("entity_type") && model.get("entity_type") == "note" && Current_Route.indexOf("deal/") == 0 && model.get("domainOwner") && !hasScope("MANAGE_DEALS") && (CURRENT_DOMAIN_USER.id != owner)){
-		  		$('#deal_update_privileges_error_modal').modal('show');
+		  		$('#deal_update_privileges_error_modal').html(getTemplate("deal-update-privileges-error-modal")).modal('show');
 		  		return;
 		  	}
 
@@ -231,76 +233,20 @@ var Contact_Details_Tab_Actions = {
 				return;
 			}
 
-			if (model && model.toJSON().type != "WEB_APPOINTMENT")
-			{
-				if (!confirm("Are you sure you want to delete?"))
-					return;
-			}
-			else if (model && model.toJSON().type == "WEB_APPOINTMENT" && parseInt(model.toJSON().start) < parseInt(new Date().getTime() / 1000))
-			{
-				if (!confirm("Are you sure you want to delete?"))
-					return;
-			}
-
-			if (model && model.collection)
-			{
-				model.collection.remove(model);
-			}
-
 			// Gets the id of the entity
 			var entity_id = $(targetEl).attr('id');
-
-			if (model && model.toJSON().type == "WEB_APPOINTMENT" && parseInt(model.toJSON().start) > parseInt(new Date().getTime() / 1000))
+			if (model && model.toJSON().type != "WEB_APPOINTMENT" || parseInt(model.toJSON().start) < parseInt(new Date().getTime() / 1000))
 			{
-				web_event_title = model.toJSON().title;
-				if (model.toJSON().contacts.length > 0)
-				{
-					var firstname = getPropertyValue(model.toJSON().contacts[0].properties, "first_name");
-					if (firstname == undefined)
-						firstname = "";
-					var lastname = getPropertyValue(model.toJSON().contacts[0].properties, "last_name");
-					if (lastname == undefined)
-						lastname = "";
-					web_event_contact_name = firstname + " " + lastname;
-				}
-				$("#webEventCancelModel").modal('show');
-				$("#cancel_event_title").html("Delete event &#39" + web_event_title + "&#39");
-				$("#event_id_hidden").html("<input type='hidden' name='event_id' id='event_id' value='" + entity_id + "'/>");
+				showAlertModal("delete", "confirm", function(){
+					modelDelete(model, targetEl, function(){
+						removeItemFromTimeline($("#" + entity_id, $("#timeline")));
+					});
+				});
 				return;
 			}
+			modelDelete(model, targetEl);
 
-			// Gets the url to which delete request is to be sent
-			var entity_url = $(targetEl).attr('url');
-
-			if (!entity_url)
-				return;
-
-			var id_array = [];
-			var id_json = {};
-
-			// Create array with entity id.
-			id_array.push(entity_id);
-
-			// Set entity id array in to json object with key ids,
-			// where ids are read using form param
-			id_json.ids = JSON.stringify(id_array);
-			var that = targetEl;
-
-			// Add loading. Adds loading only if there is no loaded image added
-			// already i.e.,
-			// to avoid multiple loading images on hitting delete multiple times
-			if ($(targetEl).find('.loading').length == 0)
-				$(targetEl).prepend($(LOADING_HTML).addClass('pull-left').css('width', "20px"));
-
-			$.ajax({ url : entity_url, type : 'POST', data : id_json, success : function()
-			{
-				// Removes activity from list
-				$(that).parents(".activity").fadeOut(400, function()
-				{
-					$(targetEl).remove();
-				});
-				removeItemFromTimeline($("#" + entity_id, $("#timeline")));
-			} });
+			
 	  },
 
 	 
@@ -383,6 +329,22 @@ function activate_timeline_tab()
 	}
 }
 
+function activate_company_contact_tab()
+{
+	$('#contactDetailsTab').find('li.active').removeClass('active');
+	$('#contactDetailsTab li:first-child').addClass('active');
+
+	$('div.tab-content').find('div.active').removeClass('active');
+	$('div.tab-content > div:first-child',App_Companies.companyDetailView.el).addClass('active');
+
+	// $('#time-line').addClass('active'); //old original code for flicking
+	// timeline
+
+	if (App_Companies.companyDetailView.model.get('type') == 'COMPANY')
+	{
+		fill_company_related_contacts(App_Companies.companyDetailView.model.id, 'company-contacts');
+	}
+}
 /**
  * Disables Send button of SendEmail and change text from Send to Sending...
  * 
@@ -431,6 +393,17 @@ function save_contact_tab_position_in_cookie(tab_href)
 	_agile_set_prefs(contact_tab_position_cookie_name, tab_href);
 }
 
+function save_company_tab_position_in_cookie(tab_href)
+{
+
+	var position = _agile_get_prefs(company_tab_position_cookie_name);
+
+	if (position == tab_href)
+		return;
+
+	_agile_set_prefs(company_tab_position_cookie_name, tab_href);
+}
+
 function load_contact_tab(el, contactJSON)
 {
 	timeline_collection_view = null;
@@ -461,6 +434,36 @@ function load_contact_tab(el, contactJSON)
 
 }
 
+function load_company_tab(el, contactJSON)
+{
+	//timeline_collection_view = null;
+	var position = _agile_get_prefs(company_tab_position_cookie_name);
+	if (position == null || position == undefined || position == "")
+		position = "contacts";
+
+	if(position == "contacts" && agile_is_mobile_browser())
+			return;
+
+	$('#contactDetailsTab a[href="#company-' + position + '"]', el).tab('show');
+
+	if (!position || position == "contacts")
+	{
+		activate_company_contact_tab()
+		company_detail_tab.load_fill_company_related_contacts
+		return;
+	}
+
+	if (company_detail_tab["load_company_" + position])
+	{
+
+		// Should add active class, tab is not enough as content might not be
+		// shown in view.
+		$(".tab-content", el).find("#company-" + position).addClass("active");
+		company_detail_tab["load_company_" + position]();
+	}
+
+}
+
 function get_emails_to_reply(emails, configured_email)
 {
 	var emails_array = emails.split(',');
@@ -470,10 +473,10 @@ function get_emails_to_reply(emails, configured_email)
 	for (var i = 0, len = emails_array.length; i < len; i++)
 	{
 
-		var email = emails_array[i].match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+)/gi)[0];
+		var email = emails_array[i].match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+)/gi);
 
 		// Skip configured email
-		if (configured_email && email == configured_email)
+		if (configured_email && email == configured_email || !email)
 			continue;
 
 		// Skip current user email
@@ -640,6 +643,7 @@ function initializeSendEmailListeners(){
 						// Is valid
 						if (!isValidForm($form))
 							return;
+
 						var network_type = $('#attachment-select').find(":selected").attr('network_type');
 						// checking email attachment type , email doesn't allow
 						// google drive documents as attachments
@@ -654,6 +658,8 @@ function initializeSendEmailListeners(){
 
 						// serialize form.
 						var json = serializeForm("emailForm");
+						
+						json.from = $(".email").find(":selected").val();
 						if ((json.contact_to_ids).join())
 							json.to += ((json.to != "") ? "," : "") + (json.contact_to_ids).join();
 
@@ -679,43 +685,26 @@ function initializeSendEmailListeners(){
 						// Is valid
 						if (!isValidForm($('#emailForm')))
 							return;
+						var that =$(this);
 
-						// Disables send button and change text to Sending...
-						disable_send_button($(this));
-
-						// Navigates to previous page on sending email
-						$
-								.ajax({
-									type : 'POST',
-									data : JSON.stringify(json),
-									dataType: 'json',
-									contentType: "application/json",
-									url : 'core/api/emails/contact/send-email',
-									success : function()
-									{
-
-										// Enables Send Email button.
-										enable_send_button($('#sendEmail'));
-
-										window.history.back();
-
-									},
-									error : function(response)
-									{
-										enable_send_button($('#sendEmail'));
-
-										// Show cause of error in saving
-										$save_info = $('<div style="display:inline-block"><small><p style="color:#B94A48; font-size:14px"><i>' + response.responseText + '</i></p></small></div>');
-
-										// Appends error info to form actions
-										// block.
-										$($('#sendEmail')).closest(".form-actions", this.el).append($save_info);
-
-										// Hides the error message after 3
-										// seconds
-										if (response.status != 406)
-											$save_info.show().delay(10000).hide(1);
-									} });
+						if(hasScope("EDIT_CONTACT"))
+						{
+							emailSend(that,json);
+						}
+						else
+						{
+							showModalConfirmation("Send Email", 
+								"You may not have the permission to send emails to some of the contacts selected. Email will be sent to only contacts with send email permissions.<br/><br/> Do you want to proceed?",
+								function (){
+									emailSend(that,json);
+								},
+								function(){
+									return;
+								},
+								function(){
+					
+								});
+						}
 
 					});
 
@@ -764,4 +753,154 @@ $('#send-email-listener-container').on('click', '#cc-link, #bcc-link', function(
 		return;
 	});
 
+}
+
+/*
+ * Ajax call to send email
+ */
+function emailSend(ele,json)
+{
+	// Disables send button and change text to Sending...
+	disable_send_button(ele);
+
+	// Navigates to previous page on sending email
+	$.ajax({
+		type : 'POST',
+		data : JSON.stringify(json),
+		dataType: 'json',
+		contentType: "application/json",
+		url : 'core/api/emails/contact/send-email',
+		success : function()
+		{
+
+			// Enables Send Email button.
+			enable_send_button($('#sendEmail'));
+
+			window.history.back();
+
+		},
+		error : function(response)
+		{
+			enable_send_button($('#sendEmail'));
+
+			// Show cause of error in saving
+			$save_info = $('<div style="display:inline-block"><small><p style="color:#B94A48; font-size:14px"><i>' + response.responseText + '</i></p></small></div>');
+
+			// Appends error info to form actions
+			// block.
+			$($('#sendEmail')).closest(".form-actions", this.el).append($save_info);
+
+			// Hides the error message after 3
+			// seconds
+			if (response.status != 406)
+				$save_info.show().delay(10000).hide(1);
+		} 
+	});
+}
+
+function modelDelete(model, targetEl, callback){
+	if (model && model.collection)
+	{
+		model.collection.remove(model);
+	}
+
+	if (model && model.toJSON().type == "WEB_APPOINTMENT" && parseInt(model.toJSON().start) > parseInt(new Date().getTime() / 1000))
+	{
+		web_event_title = model.toJSON().title;
+		if (model.toJSON().contacts.length > 0)
+		{
+			var firstname = getPropertyValue(model.toJSON().contacts[0].properties, "first_name");
+			if (firstname == undefined)
+				firstname = "";
+			var lastname = getPropertyValue(model.toJSON().contacts[0].properties, "last_name");
+			if (lastname == undefined)
+				lastname = "";
+			web_event_contact_name = firstname + " " + lastname;
+		}
+		$("#webEventCancelModel").modal('show');
+		$("#cancel_event_title").html("Delete event &#39" + web_event_title + "&#39");
+		$("#event_id_hidden").html("<input type='hidden' name='event_id' id='event_id' value='" + entity_id + "'/>");
+		return;
+	}
+
+	// Gets the id of the entity
+	var entity_id = $(targetEl).attr('id');
+
+	// Gets the url to which delete request is to be sent
+	var entity_url = $(targetEl).attr('url');
+
+	if (!entity_url)
+		return;
+
+	var id_array = [];
+	var id_json = {};
+
+	// Create array with entity id.
+	id_array.push(entity_id);
+
+	// Set entity id array in to json object with key ids,
+	// where ids are read using form param
+	id_json.ids = JSON.stringify(id_array);
+	var that = targetEl;
+
+	// Add loading. Adds loading only if there is no loaded image added
+	// already i.e.,
+	// to avoid multiple loading images on hitting delete multiple times
+	/*if ($(targetEl).find('.loading').length == 0)
+		$(targetEl).prepend($(LOADING_HTML).addClass('pull-left').css('width', "20px"));*/
+
+	$.ajax({ url : entity_url, type : 'POST', data : id_json, success : function(response_data)
+	{	
+		if((Current_Route.indexOf("contact/") == 0 || Current_Route.indexOf("company/") == 0) && !response_data)
+		{
+			return;
+		}
+		if((Current_Route.indexOf("contact/") == 0 || Current_Route.indexOf("company/") == 0) && response_data)
+		{
+			var can_edit = false;
+			$.each(response_data, function(index, contactId){
+				if(Current_Route.indexOf("contact/") == 0 && App_Contacts.contactDetailView.model.get("id") && contactId == App_Contacts.contactDetailView.model.get("id"))
+				{
+					can_edit = true;
+				}
+				else if(Current_Route.indexOf("company/") == 0 && App_Companies.companyDetailView.model.get("id") && contactId == App_Companies.companyDetailView.model.get("id"))
+				{
+					can_edit = true;
+				}
+			});
+			if(Current_Route.indexOf("contact/") == 0 && !App_Contacts.contactDetailView.model.get("id"))
+			{
+				can_edit = true;
+			}
+			else if(Current_Route.indexOf("company/") == 0 && !App_Companies.companyDetailView.model.get("id"))
+			{
+				can_edit = true;
+			}
+			if(!can_edit)
+			{
+				showModalConfirmation("Delete <span class='text-cap'>"+model.get("entity_type")+"</span>", 
+					'<span class="text-cap">'+model.get("entity_type")+'</span> '+CONTACTS_ACTIVITY_ACL_DELETE_ERROR, 
+					function (){
+						return;
+					}, 
+					function(){
+						return;
+					},
+					function (){
+						return;
+					},
+					'Cancel'
+				);
+				return;
+			}
+		}
+		// Removes activity from list
+		$(that).parents(".activity").parent().fadeOut(400, function()
+		{
+			$(targetEl).remove();
+		});
+		if(callback && typeof(callback) === "function"){
+			callback();
+		}
+	} });
 }

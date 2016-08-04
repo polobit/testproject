@@ -474,7 +474,7 @@ function loadGoogleEventsandRender()
 		{
 			_agile_set_prefs('google_event_token', response.access_token);
 
-			head.js('https://apis.google.com/js/client.js', '/lib/calendar/gapi-helper.js?t=25',
+			head.js('https://apis.google.com/js/client.js', '/lib/calendar/gapi-helper.js?t=27',
 					function()
 					{
 						setupGC(function()
@@ -589,7 +589,7 @@ function renderEventBasedOnOwner(data)
 				else if (data.color == '#36C' || data.color == '#23b7e5' || data.color == 'blue')
 					data.className = 'fc-b-l fc-b-2x fc-b-warning fc-border-height fc-event-month';
 				data.color = '';
-				data.backgroundColor = '#fff';
+				//data.backgroundColor = '#fff';
 			}
 
 			else
@@ -601,7 +601,7 @@ function renderEventBasedOnOwner(data)
 				else if (data.color == '#36C' || data.color == '#23b7e5' || data.color == 'blue')
 					data.className = 'normal fc-b-l fc-b-2x fc-b-light fc-border-height fc-event-month';
 				data.color = '';
-				data.backgroundColor = '#fff';
+				//data.backgroundColor = '#fff';
 			}
 		}
 

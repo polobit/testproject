@@ -12,14 +12,17 @@ import javax.persistence.Embedded;
 import javax.persistence.Transient;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.json.JSONArray;
 
+import com.agilecrm.AgileGlobalProperties;
 import com.agilecrm.AllDomainStats;
 import com.agilecrm.ContactSchemaUpdateStats;
 import com.agilecrm.OpportunitySchemaUpdateStats;
 import com.agilecrm.account.APIKey;
 import com.agilecrm.account.AccountEmailStats;
 import com.agilecrm.account.AccountPrefs;
+import com.agilecrm.account.DomainLimits;
 import com.agilecrm.account.EmailTemplates;
 import com.agilecrm.account.MenuSetting;
 import com.agilecrm.account.VerifiedEmails;
@@ -37,6 +40,7 @@ import com.agilecrm.contact.Tag;
 import com.agilecrm.contact.customview.CustomView;
 import com.agilecrm.contact.email.ContactEmail;
 import com.agilecrm.contact.filter.ContactFilter;
+import com.agilecrm.dashboards.Dashboard;
 import com.agilecrm.contact.upload.blob.status.ImportStatus;
 import com.agilecrm.deals.CurrencyConversionRates;
 import com.agilecrm.deals.Goals;
@@ -46,12 +50,20 @@ import com.agilecrm.deals.filter.DealFilter;
 import com.agilecrm.document.Document;
 import com.agilecrm.facebookpage.FacebookPage;
 import com.agilecrm.forms.Form;
+import com.agilecrm.knowledgebase.entity.Article;
+import com.agilecrm.knowledgebase.entity.Categorie;
+import com.agilecrm.knowledgebase.entity.Comment;
+import com.agilecrm.knowledgebase.entity.HelpcenterUser;
+import com.agilecrm.knowledgebase.entity.LandingPageKnowledgebase;
+import com.agilecrm.knowledgebase.entity.Section;
+import com.agilecrm.ipaccess.IpAccess;
 import com.agilecrm.landingpages.LandingPage;
 import com.agilecrm.landingpages.LandingPageCNames;
 import com.agilecrm.portlets.Portlet;
 import com.agilecrm.reports.ActivityReports;
 import com.agilecrm.reports.Reports;
 import com.agilecrm.shopify.ShopifyApp;
+import com.agilecrm.ssologin.SingleSignOn;
 import com.agilecrm.subscription.Subscription;
 import com.agilecrm.subscription.restrictions.db.BillingRestriction;
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
@@ -64,6 +76,7 @@ import com.agilecrm.ticket.entitys.TicketLabels;
 import com.agilecrm.ticket.entitys.TicketNotes;
 import com.agilecrm.ticket.entitys.TicketStats;
 import com.agilecrm.ticket.entitys.Tickets;
+import com.agilecrm.ticket.entitys.TicketsBackup;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.AliasDomain;
 import com.agilecrm.user.ContactViewPrefs;
@@ -71,6 +84,7 @@ import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.IMAPEmailPrefs;
 import com.agilecrm.user.OfficeEmailPrefs;
 import com.agilecrm.user.OnlineCalendarPrefs;
+import com.agilecrm.user.Referer;
 import com.agilecrm.user.SocialPrefs;
 import com.agilecrm.user.UserPrefs;
 import com.agilecrm.user.access.util.UserAccessControlUtil;
@@ -86,6 +100,7 @@ import com.agilecrm.widgets.Widget;
 import com.agilecrm.workflows.Workflow;
 import com.agilecrm.workflows.templates.WorkflowTemplate;
 import com.agilecrm.workflows.triggers.Trigger;
+import com.analytics.VisitorFilter;
 import com.campaignio.cron.Cron;
 import com.campaignio.logger.Log;
 import com.campaignio.twitter.TwitterJobQueue;
@@ -240,7 +255,7 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	ObjectifyService.register(TicketCannedMessages.class);
 	ObjectifyService.register(TicketFilters.class);
 	ObjectifyService.register(TicketDocuments.class);
-	//ObjectifyService.register(TicketActivity.class);
+	ObjectifyService.register(TicketsBackup.class);
 	ObjectifyService.register(TicketLabels.class);
 	ObjectifyService.register(TicketStats.class);
 	
@@ -250,11 +265,13 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	ObjectifyService.register(LandingPage.class);
 	ObjectifyService.register(LandingPageCNames.class);
 	ObjectifyService.register(Goals.class);
+	ObjectifyService.register(Dashboard.class);
 
 	ObjectifyService.register(Webhook.class);
 	
 	//All Domain Stats report for Agile Management
 	ObjectifyService.register(AllDomainStats.class);
+	ObjectifyService.register(Referer.class);
 
 	// CSV Import status
 	ObjectifyService.register(ImportStatus.class);
@@ -264,6 +281,29 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	
 	//For currency conversion rates
 	ObjectifyService.register(CurrencyConversionRates.class);
+	ObjectifyService.register(VisitorFilter.class);
+	
+	//Knowledgebase entities
+	ObjectifyService.register(Categorie.class);
+	ObjectifyService.register(Section.class);
+	ObjectifyService.register(Article.class);
+	ObjectifyService.register(Comment.class);
+	ObjectifyService.register(HelpcenterUser.class);
+	ObjectifyService.register(LandingPageKnowledgebase.class);
+
+	ObjectifyService.register(IpAccess.class);
+    /**
+     * Registering the DomainLimits class into dataStore
+     * for tweet node in campaing an domain user can send
+     *  the maximum 25 tweet message in a day 
+     * */
+	ObjectifyService.register(DomainLimits.class);
+	
+	//SSO feature
+	ObjectifyService.register(SingleSignOn.class);
+	
+	// AgileGlobalProperties
+	ObjectifyService.register(AgileGlobalProperties.class);
 
     }
 
@@ -332,6 +372,18 @@ public class ObjectifyGenericDao<T> extends DAOBase
 
 	return key;
     }
+    
+    /**
+     * Stores an entity in database
+     * 
+     * @param entity
+     * @return Key of the saved entity
+     */
+    public Key<T> put(T entity, boolean force)
+    {
+    	return ofy().put(entity);
+    }
+
 
     /**
      * Stores multiple entities of same type
@@ -437,6 +489,11 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	Key<T> key = new Key<T>(this.clazz, id);
 	return get(key);
     }
+    
+    public T get() throws EntityNotFoundException
+    {
+    	return ofy().query(this.clazz).get();
+    }
 
     /**
      * Fetches an entity based on its Key
@@ -474,9 +531,11 @@ public class ObjectifyGenericDao<T> extends DAOBase
     public T getByProperty(Map<String, Object> map)
     {
 	Query<T> q = ofy().query(clazz);
-	for (String propName : map.keySet())
-	{
-	    q.filter(propName, map.get(propName));
+	if(map != null){
+		for (String propName : map.keySet())
+		{
+		    q.filter(propName, map.get(propName));
+		}
 	}
 
 	return fetch(q);
@@ -694,7 +753,7 @@ public class ObjectifyGenericDao<T> extends DAOBase
 
 	if (!StringUtils.isEmpty(orderBy))
 	    query.order(orderBy);
-
+	
 	return fetchAllWithCursor(max, cursor, query, forceLoad, cache);
     }
 
@@ -705,14 +764,25 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	// entities he had created
 	System.out.println("check read query");
 	UserAccessControlUtil.checkReadAccessAndModifyQuery(clazz.getSimpleName(), query);
+	int page_index_for_cursor = 0;
 
-	if (cursor != null)
-	    query.startCursor(Cursor.fromWebSafeString(cursor));
+	if (cursor != null){
+		
+		if(!cursor.startsWith("agile_cursor_"))
+			query.startCursor(Cursor.fromWebSafeString(cursor));
+		else {
+			page_index_for_cursor = Integer.parseInt(cursor.replace("agile_cursor_", "").split("-")[0]);
+			// query.limit(max);
+			query.offset(page_index_for_cursor * max);
+		}
+		
+	}
+	    
 
 	int index = 0;
+	
 	String newCursor = null;
 	List<T> results = new ArrayList<T>();
-
 	QueryResultIterator<T> iterator = query.iterator();
 	while (iterator.hasNext())
 	{
@@ -721,8 +791,44 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	    // Add to list
 	    results.add(result);
 
-	    // Send totalCount if first time
-	    if (cursor == null && index == 0)
+	    // Check if we have reached the limit
+	    if (++index == max)
+	    {
+		// Sets cursor for client
+		if (iterator.hasNext())
+		{
+		    Cursor cursorDb = iterator.getCursor();
+		    try {
+		    	 newCursor = cursorDb.toWebSafeString();
+			} catch (NullPointerException e) {
+				/**
+				 * GAE Query not support cursor with inequality filters in the query.
+				 */
+				System.out.println(ExceptionUtils.getFullStackTrace(e));
+				page_index_for_cursor++;
+				
+				newCursor = "agile_cursor_" + page_index_for_cursor + "-" + max;
+				
+			}
+		   
+
+		    // Store the cursor in the last element
+		    if (result instanceof com.agilecrm.cursor.Cursor)
+		    {
+			com.agilecrm.cursor.Cursor agileCursor = (com.agilecrm.cursor.Cursor) result;
+			agileCursor.cursor = newCursor;
+		    }
+		}
+		break;
+	    }
+	}
+	// Add count for the first time if next cursor is null
+	if(results != null && results.size() > 0 && cursor == null)
+	{
+		
+		T result = results.get(0);
+		// Send totalCount if first time
+	    if (result != null)
 	    {
 		// First time query - let's get the count
 		if (result instanceof com.agilecrm.cursor.Cursor)
@@ -744,36 +850,18 @@ public class ObjectifyGenericDao<T> extends DAOBase
 		    {
 			long startTime = System.currentTimeMillis();
 			if (!Arrays.asList(countRestrictedClassNames).contains(className))
-			    agileCursor.count = query.count();
+			    agileCursor.count = (newCursor == null ? results.size() : query.count());
 
 			long endTime = System.currentTimeMillis();
 			if ((endTime - startTime) > 15 * 1000 && cache)
 			    CacheUtil.setCache(this.clazz.getSimpleName() + "_" + NamespaceManager.get() + "_count",
 				    agileCursor.count, 1 * 60 * 60 * 1000);
 		    }
-
+		    
 		}
-	    }
-
-	    // Check if we have reached the limit
-	    if (++index == max)
-	    {
-		// Sets cursor for client
-		if (iterator.hasNext())
-		{
-		    Cursor cursorDb = iterator.getCursor();
-		    newCursor = cursorDb.toWebSafeString();
-
-		    // Store the cursor in the last element
-		    if (result instanceof com.agilecrm.cursor.Cursor)
-		    {
-			com.agilecrm.cursor.Cursor agileCursor = (com.agilecrm.cursor.Cursor) result;
-			agileCursor.cursor = newCursor;
-		    }
-		}
-		break;
 	    }
 	}
+	
 	return results;
     }
     

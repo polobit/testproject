@@ -1,4 +1,9 @@
+
+
+ 
+
 var timeline_entity_loader = {
+
 
 	init : function(contact)
 	{
@@ -28,7 +33,25 @@ var timeline_entity_loader = {
 		this.load_campaign_logs(contactId);
 		
 		this.get_stats(getPropertyValue(contact.properties, "email"), contact, App_Contacts.contactDetailView.el);
+		//setTimeout(this.load_reload_emails, 5000);
 	},
+	
+	load_reload_emails : function(contactId)
+	{
+		divArr = $('.isotope-item');
+		$.each(divArr,function(index, data){
+			parentEMailDivId = divArr[index].id;
+			childEMailDivId = parentEMailDivId+'-inner';
+			if($('#'+childEMailDivId).length==0){
+				childEMailDivId = parentEMailDivId+'\\/-inner';
+				//$('#'+parentEMailDivId).html($('#'+childEMailDivId).html());
+				$('#'+parentEMailDivId).html($('#'+childEMailDivId).wrapAll('<div>').parent().html());
+				$('#'+childEMailDivId).remove();
+			}
+			//$('#message-'+parentEMailDivId).show();
+		});
+	},
+
 	load_related_entites : function(contactId)
 	{
 		var entity_types = [
@@ -265,9 +288,12 @@ var timeline_entity_loader = {
 				if (data.toJSON() && data.toJSON().length > 0)
 				{
 
-					// Gets address of the contact from its browsing history
+					// Gets address of the contact from its browsing history  
 					var address = getPropertyValue(contact.properties, "address");
-
+					//var remote_addr= getPropertyValue(contact.properties, "remote_addr");
+					/*if(address){
+						var remote_addr=JSON.parse(address).remote_addr;
+					}*/
 					if (!address)
 					{
 						var addressJSON = {};

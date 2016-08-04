@@ -1,6 +1,5 @@
 package com.agilecrm.user.util;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -9,32 +8,30 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
+import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
-
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.projectedpojos.DomainUserPartial;
-import com.agilecrm.projectedpojos.OpportunityPartial;
 import com.agilecrm.projectedpojos.PartialDAO;
+import com.agilecrm.ipaccess.IpAccess;
+import com.agilecrm.session.SessionCache;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.DomainUser.ROLE;
+import com.agilecrm.user.access.UserAccessScopes;
 import com.agilecrm.util.VersioningUtil;
 import com.agilecrm.util.email.SendMail;
 import com.google.appengine.api.NamespaceManager;
-import com.google.appengine.api.datastore.DatastoreService;
-import com.google.appengine.api.datastore.DatastoreServiceFactory;
-import com.google.appengine.api.datastore.Entity;
-import com.google.appengine.api.datastore.KeyFactory;
-import com.google.appengine.api.datastore.PropertyProjection;
 import com.google.appengine.api.datastore.QueryResultIterable;
 import com.google.appengine.api.datastore.QueryResultIterator;
-import com.google.appengine.api.datastore.Query.FilterOperator;
+import com.google.i18n.phonenumbers.NumberParseException;
+import com.google.i18n.phonenumbers.PhoneNumberUtil;
+import com.google.i18n.phonenumbers.Phonenumber.PhoneNumber;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Query;
-import com.googlecode.objectify.cache.CachingDatastoreServiceFactory;
 
 /**
  * <code>DomainUserUtil</code> is utility class used to process data of
@@ -229,7 +226,7 @@ public class DomainUserUtil
 
 	try
 	{
-	    List<DomainUser> domainUsers = dao.listByProperty("domain", domain);
+	    List<DomainUser> domainUsers = (VersioningUtil.isDevelopmentEnv()) ? dao.fetchAll() : dao.listByProperty("domain", domain);
 
 	    // Now sort by name.
 	    Collections.sort(domainUsers, new Comparator<DomainUser>()
@@ -262,6 +259,19 @@ public class DomainUserUtil
 
 	return getDomainUserKey(info.getDomainId());
     }
+    
+    /**
+     * Get Current User key
+     */
+    public static Long getCurentUserId()
+    {
+	UserInfo info = SessionManager.get();
+	if (info == null)
+	    return null;
+
+	return info.getDomainId();
+    }
+    
 
     /**
      * Gets current domain user using SessionManager
@@ -270,20 +280,25 @@ public class DomainUserUtil
      */
     public static DomainUser getCurrentDomainUser()
     {
-	// Get Current Logged In user
-	UserInfo userInfo = SessionManager.get();
-	if (userInfo == null)
-	    return null;
-	DomainUser user = getDomainUserFromEmail(userInfo.getEmail());
-
-	/*
-	 * try { user.postLoad(); } catch (DecoderException e) {
-	 * System.out.println("exception exception **************************");
-	 * // TODO Auto-generated catch block e.printStackTrace(); }
-	 * 
-	 * System.out.println("**************************" + user.menu_scopes);
-	 */
-	return user;
+    	//Check in cache. If user is present, return result.
+    	Object obj = SessionCache.getObject(SessionCache.CURRENT_DOMAIN_USER);
+    	if( obj != null && obj instanceof DomainUser )	return (DomainUser) obj;
+    	
+		// Get Current Logged In user
+		UserInfo userInfo = SessionManager.get();
+		if (userInfo == null)
+		    return null;
+		DomainUser user = getDomainUserFromEmail(userInfo.getEmail());
+	
+		/*
+		 * try { user.postLoad(); } catch (DecoderException e) {
+		 * System.out.println("exception exception **************************");
+		 * // TODO Auto-generated catch block e.printStackTrace(); }
+		 * 
+		 * System.out.println("**************************" + user.menu_scopes);
+		 */
+		SessionCache.putObject(SessionCache.CURRENT_DOMAIN_USER, user);
+		return user;
     }
 
     /**
@@ -804,5 +819,122 @@ public class DomainUserUtil
 	    NamespaceManager.set(oldnamespace);
 	}
     }
+    
+    public static List<Key<DomainUser>> getAllAdminUsersKeys(String domain)
+    {
+	String oldnamespace = NamespaceManager.get();
 
+	NamespaceManager.set("");
+
+	try
+	{
+	    Map<String, Object> searchMap = new HashMap<String, Object>();
+	    searchMap.put("is_admin", true);
+	    searchMap.put("domain", domain);
+
+	    return dao.listKeysByProperty(searchMap);
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    System.err.println("Exception occured while getting admin users..." + e.getMessage());
+	    return null;
+	}
+	finally
+	{
+
+	    NamespaceManager.set(oldnamespace);
+	}
+    }
+    
+    /**
+     * Updates the login domain user restricted scopes, if domain user contains DELETE_CONTACTS
+     * 
+     * @return
+     */
+    public static void setNewUpdateContactACLs(DomainUser currenrDomainUser)
+    {
+    	try 
+    	{
+			if(currenrDomainUser != null && currenrDomainUser.restricted_scopes != null && currenrDomainUser.restricted_scopes.contains(UserAccessScopes.DELETE_CONTACTS))
+			{
+				HashSet<UserAccessScopes> userAccessScopes = currenrDomainUser.restricted_scopes;
+				//Update contacts is splitting into edit and delete contacts, so removing the existed and adding new scopes
+				userAccessScopes.remove(UserAccessScopes.DELETE_CONTACTS);
+				userAccessScopes.add(UserAccessScopes.EDIT_CONTACT);
+				userAccessScopes.add(UserAccessScopes.DELETE_CONTACT);
+				currenrDomainUser.restricted_scopes = userAccessScopes;
+				currenrDomainUser.save();
+			}
+		} 
+    	catch (Exception e) 
+    	{
+			System.err.println("Exception occured while updating new acls to contacts..." + e.getMessage());
+			e.printStackTrace();
+		}
+    }
+
+	public static boolean checkValidNumber(String to)
+	{
+
+		PhoneNumberUtil phoneUtil = PhoneNumberUtil.getInstance();
+		try
+		{
+			PhoneNumber toPhoneNumber = phoneUtil.parse(to, null);
+			if (phoneUtil.isValidNumber(toPhoneNumber))
+				return true;
+		}
+		catch (NumberParseException e)
+		{
+			System.out.println("Inside domain user phone validation");
+			System.err.println("NumberParseException was thrown: " + e.toString());
+		}
+		return false;
+	}
+	
+	  /** Check whether fingerprint present or not in list*/
+    public static  boolean isValidFingerPrint(DomainUser domainUser, HttpServletRequest request){
+    	
+    	// Get actual finger prints
+    	Set<String> finger_prints = domainUser.finger_prints;
+    	
+		// Checks the wheather fingerprintlist is null or not  
+		if(finger_prints == null || finger_prints.size() == 0)
+			 return true;
+		
+		// Gets the userfingerprint from request
+		String user_finger_print = request.getParameter("finger_print");
+		
+		// Checks the condition is userfingerprint present in the list or not
+		return finger_prints.contains(user_finger_print);
+	}
+    
+    /**
+     * Returns selected role 
+     * @param selectedRole
+     * @return
+     */
+    public static ROLE getDomainUserRole(String selectedRole){
+    	Map<String, ROLE> map = new HashMap<String, ROLE>();
+    	map.put("CEO", ROLE.SALES);
+    	map.put("VP", ROLE.SALES);
+    	map.put("VP, Sales", ROLE.SALES);
+    	map.put("Sales Manager", ROLE.SALES);
+    	map.put("Reseller", ROLE.SALES);
+    	map.put("Recruiter", ROLE.SALES);
+    	map.put("Developer", ROLE.SALES);
+    	map.put("Other", ROLE.SALES);
+    	map.put("Consultant", ROLE.SALES);
+    	
+    	map.put("VP, Marketing", ROLE.MARKETING);
+    	map.put("Marketing Manager", ROLE.MARKETING);
+    	
+    	map.put("Customer Success Manager", ROLE.SERVICE);
+    	
+    	if(!map.containsKey(selectedRole))
+    		return ROLE.SALES;
+    	
+    	return map.get(selectedRole);
+    }
+	
 }

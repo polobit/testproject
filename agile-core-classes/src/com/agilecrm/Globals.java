@@ -26,7 +26,7 @@ public class Globals
     // API user name
     // public static final String SENDGRID_API_USER_NAME = "shelley";
     // public static final String SENDGRID_API_USER_NAME = "naveen123";
-    public static final String SENDGRID_API_USER_NAME = "agilecrm";
+    public static final String SENDGRID_API_USER_NAME = "agilecrm1";
 
     // API key
     // public static final String SENDGRID_API_KEY = "mantra800pbx";
@@ -152,7 +152,7 @@ public class Globals
     public static final String FACEBOOK_APP_SECRET = "4b2d379cbb6c33a0bdab9a89dc2bb2c5";
 
     // Max Plan Users
-    public static final int TRIAL_USERS_COUNT = 2;
+    public static final int TRIAL_USERS_COUNT = 10;
 
     // Cheat Code
     public static final String MASTER_CODE_INTO_SYSTEM = "AgileRocks#@!";
@@ -167,8 +167,7 @@ public class Globals
     public static final String PUBNUB_SUBSCRIBE_KEY = "sub-c-118f8482-92c3-11e2-9b69-12313f022c90";
 
     // MANDRILL MAIL API
-    //public static final String MANDRIL_API_KEY_VALUE = "iQ_811cc9NxpLG11Ue4ftA";
-    public static final String MANDRIL_API_KEY_VALUE = "RSn1Y3FmVLr59WKZqlKDGQ";
+    public static final String MANDRIL_API_KEY_VALUE = "iQ_811cc9NxpLG11Ue4ftA";
     public static final String MANDRILL_TEST_API_KEY_VALUE = "MRiwkducZGEbXrLW1LC5oQ";
 
     // Mandrill API Key for FREE

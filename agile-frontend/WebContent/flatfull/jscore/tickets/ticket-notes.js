@@ -161,7 +161,7 @@ var Tickets_Notes = {
 			accept: 'application/json',
 			success : function(data){
 				
-				Ticket_Utils.showNoty('information', "Ticket has been forwarded to " + emails.join(), 
+				Ticket_Utils.showNoty('information', "Ticket has been forwarded",
 					'bottomRight', 5000);
 
 				// Remove draft message from local staorage
@@ -413,7 +413,7 @@ var Tickets_Notes = {
 
 		var params  = 'width=550';
 		params += ', height=' + (screen.height-200);
-		params += ', top=0, left=0';
+		params += ', scrollbars=yes, top=0, left=0';
 
 		type = (!type) ? "html" : type;
 

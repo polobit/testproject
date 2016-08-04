@@ -33,6 +33,7 @@ import com.agilecrm.ticket.entitys.Tickets.Status;
 import com.agilecrm.ticket.entitys.Tickets.Type;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
+import com.agilecrm.util.email.MustacheUtil;
 import com.agilecrm.util.email.SendMail;
 import com.agilecrm.workflows.triggers.util.TicketTriggerUtil;
 import com.google.appengine.api.NamespaceManager;
@@ -386,8 +387,10 @@ public class TicketsUtil
 		{
 			try
 			{
-				TicketNotesUtil.sendEmail(email, ticket.subject, agentName, fromAddress, ticket.cc_emails,
-						SendMail.TICKET_FORWARD, new JSONObject().put("content", content));
+				String emailHTML = MustacheUtil.templatize(SendMail.TICKET_FORWARD + SendMail.TEMPLATE_HTML_EXT,
+						new JSONObject().put("content", content));
+
+				TicketNotesUtil.sendEmail(email, ticket.subject, agentName, fromAddress, ticket.cc_emails, emailHTML);
 
 			}
 			catch (Exception e)
@@ -729,9 +732,9 @@ public class TicketsUtil
 				// Logging ticket assignee changed activity
 				ActivityUtil.createTicketActivity(ActivityType.TICKET_ASSIGNEE_CHANGED, ticket.contactID, ticket.id,
 						oldAssigneeID + "", ((domainUser != null) ? domainUser.name : ""), "assigneeID", set_user_key);
-
-				TicketTriggerUtil.executeTriggerForAssigneeChanged(ticket);
 			}
+			
+			TicketTriggerUtil.executeTriggerForAssigneeChanged(ticket);
 		}
 
 		System.out.println("completed changeGroupAndAssignee execution");
@@ -816,7 +819,7 @@ public class TicketsUtil
 	 * @throws EntityNotFoundException
 	 * @throws JSONException
 	 */
-	public static void sendEmailToGroup(Long group_id, String subject, String body) throws Exception
+	public static void sendEmailToGroup(Long group_id, String subject, String body, String from_name, String from_address) throws Exception
 	{
 		System.out.println("Send email to ticket group....");
 
@@ -864,7 +867,7 @@ public class TicketsUtil
 		System.out.println("users found...." + users.size());
 
 		for (DomainUser user : users)
-			sendEmailToUser(user.email, subject, body);
+			sendEmailToUser(user.email, subject, body, from_name, from_address);
 	}
 
 	/**
@@ -875,7 +878,7 @@ public class TicketsUtil
 	 * @param body
 	 * @throws JSONException
 	 */
-	public static void sendEmailToUser(String email, String subject, String body) throws Exception
+	public static void sendEmailToUser(String email, String subject, String body, String from_name, String from_address) throws Exception
 	{
 		if (StringUtils.isBlank(email) || StringUtils.isBlank(subject) || StringUtils.isBlank(body))
 			throw new Exception("Required parameters missing");
@@ -884,9 +887,15 @@ public class TicketsUtil
 
 		Map<String, String> data = new HashMap<String, String>();
 		data.put("body", body);
-
-		SendMail.sendMail(email, subject, SendMail.TICKET_SEND_EMAIL_TO_USER, data);
-
+		
+		if(StringUtils.isBlank(from_name))
+			from_name = SendMail.AGILE_FROM_NAME;
+		
+		if(StringUtils.isBlank(from_address))
+			from_address = SendMail.AGILE_FROM_EMAIL;
+		
+		SendMail.sendMail(email, subject, SendMail.TICKET_SEND_EMAIL_TO_USER, data, from_address, from_name);
+		
 		System.out.println("Sent email to: " + email);
 	}
 

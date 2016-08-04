@@ -20,8 +20,8 @@ function showFacebookMatchingProfile(contact_id, first_name)
 			console.log(data);
 			var template = $('#' + FACEBOOK_PLUGIN_NAME).html(getTemplate('facebook-matching-profiles', data));
             
-            $("#widgets").off("mouseover", ".facebookImage");
-			$("#widgets").on("mouseover", ".facebookImage", function(e)
+            $("#"+WIDGET_PARENT_ID).off("mouseover", ".facebookImage");
+			$("#"+WIDGET_PARENT_ID).on("mouseover", ".facebookImage", function(e)
 			{
 				// Unique Twitter Id from widget
 				Facebook_id = $(this).attr('id');
@@ -51,7 +51,7 @@ function showFacebookMatchingProfile(contact_id, first_name)
 					// Web url of twitter for this profile
 					var url = "@" + Facebook_id;
 
-					web_url = url;
+					facebook_web_url = url;
 					console.log(url);
 
 					var propertiesArray = [
@@ -78,7 +78,12 @@ function showFacebookMatchingProfile(contact_id, first_name)
 
 					console.log(propertiesArray);
 
-					agile_crm_update_contact_properties(propertiesArray);
+					verifyUpdateImgPermission(function(can_update){
+						if(can_update)
+						{
+							agile_crm_update_contact_properties(propertiesArray);
+						}
+					});
 
 					// show twitter profile by id
 					showFacebookProfile(Facebook_id, contact_id);
@@ -164,8 +169,8 @@ function showFacebookProfile(facebookid, contact_id)
 			$('#Twitter_plugin_delete').show();
 			var template = $('#' + FACEBOOK_PLUGIN_NAME).html(getTemplate('facebook-profile', data));
             
-            $("#widgets").off("click", "#facebook_post_btn");
-			$("#widgets").on("click", "#facebook_post_btn", function(e)
+            $("#"+WIDGET_PARENT_ID).off("click", "#facebook_post_btn");
+			$("#"+WIDGET_PARENT_ID).on("click", "#facebook_post_btn", function(e)
 			{
 				console.log("post on a wall")
 				queueGetRequest("widget_queue_"+contact_id, "/core/api/widgets/facebook/postonwall/" + FACEBOOK_PLUGIN_ID + "/" + facebookid + "/" + "hai", 'json',
@@ -236,17 +241,17 @@ function startFacebookWidget(contact_id)
 	SEARCH_STRING = first_name + ' ' + last_name;
 	console.log("    SEARCH_STRING" + SEARCH_STRING)
 
-	web_url = agile_crm_get_contact_property_by_subtype('website', 'FACEBOOK');
-	console.log(web_url);
+	facebook_web_url = agile_crm_get_contact_property_by_subtype('website', 'FACEBOOK');
+	console.log(facebook_web_url);
 
 	$('#Facebook').html(FACEBOOK_PROFILE_LOAD_IMAGE);
 
-	if (web_url)
+	if (facebook_web_url)
 	{
 
 		// Get Twitter id from URL and show profile
-		console.log("profile attched" + web_url)
-		var fbProfileLink = buildFacebookProfileURL(web_url);
+		console.log("profile attched" + facebook_web_url)
+		var fbProfileLink = buildFacebookProfileURL(facebook_web_url);
 		var userNameOrId = getUserNameOrUserID(fbProfileLink);
 		var fbUserId = userNameOrId;
 		console.log(fbUserId);
@@ -286,16 +291,16 @@ function startFacebookWidget(contact_id)
 		showFacebookMatchingProfile(contact_id, SEARCH_STRING);
 	}
 
-    $("#widgets").off("click", "#facebook_search_btn");
-	$("#widgets").on("click", "#facebook_search_btn", function(e)
+    $("#"+WIDGET_PARENT_ID).off("click", "#facebook_search_btn");
+	$("#"+WIDGET_PARENT_ID).on("click", "#facebook_search_btn", function(e)
 	{
 		e.preventDefault();
 
 		getModifiedFacebookMatchingProfiles(contact_id);
 	});
 
-    $("#widgets").off("click", ".facebook_modify_search");
-	$("#widgets").on("click", ".facebook_modify_search", function(e)
+    $("#"+WIDGET_PARENT_ID).off("click", ".facebook_modify_search");
+	$("#"+WIDGET_PARENT_ID).on("click", ".facebook_modify_search", function(e)
 	{
 		e.preventDefault();
 
@@ -304,8 +309,8 @@ function startFacebookWidget(contact_id)
 		$('#' + FACEBOOK_PLUGIN_NAME).html(getTemplate('facebook-modified-search', { "searchString" : SEARCH_STRING }));
 	});
     
-    $("#widgets").off("click", "#facebook_search_close");
-	$("#widgets").on("click", "#facebook_search_close", function(e)
+    $("#"+WIDGET_PARENT_ID).off("click", "#facebook_search_close");
+	$("#"+WIDGET_PARENT_ID).on("click", "#facebook_search_close", function(e)
 	{
 		e.preventDefault();
 
@@ -316,17 +321,18 @@ function startFacebookWidget(contact_id)
 	});
 	
 	// Deletes Twitter profile on click of delete button in template
-    $("#widgets").off("click", "#Facebook_plugin_delete");
-	$("#widgets").on("click", "#Facebook_plugin_delete", function(e)
+    $("#"+WIDGET_PARENT_ID).off("click", "#Facebook_plugin_delete");
+	$("#"+WIDGET_PARENT_ID).on("click", "#Facebook_plugin_delete", function(e)
 	{
 		e.preventDefault();
-		web_url = agile_crm_get_contact_property_by_subtype('website', 'FACEBOOK');
-		console.log('deleting facebook acct.',web_url);
-		agile_crm_delete_contact_property_by_subtype('website', 'FACEBOOK', web_url, function(data)
-		{
+		facebook_web_url = agile_crm_get_contact_property_by_subtype('website', 'FACEBOOK');
+		if(facebook_web_url){
+			$('#Facebook').html(FACEBOOK_PROFILE_LOAD_IMAGE);	
+		}
+		console.log('deleting facebook acct.',facebook_web_url);		
+		agile_crm_delete_contact_property_by_subtype('website', 'FACEBOOK', facebook_web_url, function(data){
 			console.log("In facebook delete callback");
 			showFacebookMatchingProfile(contact_id);
 		});
-
 	});
 }

@@ -35,7 +35,7 @@
                     <th style="width:10%;" class="header">Category</th>
                     <th style="width:10%;" class="header">Priority</th>
                     <th style="width:10%;" class="header">Due Date</th>
-                    <th style="width:30%;" class="header">Related To</th>
+                    <th style="width:15%;" class="header">Related To</th>
                 </tr>
             </thead>
 
@@ -67,36 +67,44 @@
   </div>
 </td>
 {{#if is_complete}}
-	<td><div class="text-l-t table-resp">{{#is_link subject}}<span class="activate-link">{{else}}<span>{{/is_link}}{{safe_string subject}}</span></div></td>
-    <td><div class="text-l-t"><!--<i class="{{icons type}}"></i>&nbsp;--><span class="label bg-light dk text-tiny">{{task_property type}}</span></div></td>
-    <td><div class="text-l-t"><span class="label label-{{task_label_color priority_type}}">{{ucfirst priority_type}}</span></div></td>
-    <td><div class="text-l-t text-muted"><i class="fa fa-clock-o m-r-xs"></i><time class="task-due-time" value="{{due}}" datetime="{{epochToHumanDate "" due}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy" due}}</time></div></td>
+	<td class='view-task-details'><div class="text-l-t table-resp">{{#is_link subject}}<span class="activate-link">{{else}}<span>{{/is_link}}{{safe_string subject}}</span></div></td>
+    <td class='view-task-details'><div class="text-l-t"><!--<i class="{{icons type}}"></i>&nbsp;--><span class="label bg-light dk text-tiny">{{task_property type}}</span></div></td>
+    <td class='view-task-details'><div class="text-l-t"><span class="label label-{{task_label_color priority_type}}">{{ucfirst priority_type}}</span></div></td>
+    <td class='view-task-details'><div class="text-l-t text-muted"><i class="fa fa-clock-o m-r-xs"></i><time class="task-due-time" value="{{due}}" datetime="{{epochToHumanDate "" due}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy" due}}</time></div></td>
 {{else}}
-	<td><div class="table-resp">{{#is_link subject}}<span class="activate-link">{{else}}<span>{{/is_link}}{{safe_string subject}}</span></div></td>
-    <td><div class="table-resp"><!--<i class="{{icons type}}"></i>&nbsp;-->
+	<td class='view-task-details'><div class="table-resp">{{#is_link subject}}<span class="activate-link">{{else}}<span>{{/is_link}}{{safe_string subject}}</span></div></td>
+    <td class="view-task-details"><div class="table-resp"><!--<i class="{{icons type}}"></i>&nbsp;-->
 
           <span class="label bg-light dk text-tiny m-r-xs">{{task_property type}}</span></div></td>
-    <td>	{{#if_equals priority_type "NORMAL"}}{{else}}
+    <td>	
 					<span class="m-l-xs" class="label label-{{task_label_color priority_type}}">{{ucfirst priority_type}}</span>
-				{{/if_equals}}</td>
+				</td>
 	<td><div class="text-muted"><i class="fa fa-clock-o m-r-xs"></i><time class="task-due-time" value="{{due}}" datetime="{{epochToHumanDate "" due}}">{{epochToHumanDate "ddd mmm dd yyyy" due}}</time></div></td>
 {{/if}}
 	<td>
 		<div class="image-ellipsis-3">
         	{{#each contacts}}
         		{{#if_contact_type "PERSON"}}
-        				<a href="#contact/{{id}}" class="activate-link thumb">
-							<img class="r r-2x" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 50}}"  title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" />
+        				<a href="#contact/{{id}}"  class="activate-link thumb tasks-list-image popover_contact" data="{{id}}">
+							<img class="r r-2x" url="contact/{{id}}" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 50}}"  title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" />
 						</a>
         		{{/if_contact_type}}
 				{{#if_contact_type "COMPANY"}}
-        				<a href="#company/{{id}}" class="activate-link thumb">
-							<img class="r r-2x" {{getCompanyImage "50" "display:inline;"}} title="{{getPropertyValue properties "name"}}"/>
+        				<a href="#company/{{id}}" class="activate-link thumb tasks-list-image popover_contact" data="{{id}}">
+							<img class="r r-2x" {{getCompanyImage "50" "display:inline;"}} title="{{getPropertyValue properties "name"}}" url="company/{{id}}" />
 						</a>
         		{{/if_contact_type}}
         	{{/each}}
 		</div>
        {{#if_greater this.contacts.length "3"}}<span>...</span>{{/if_greater}}
+    </td>
+    <td> 
+        <div id="task-list-actions" data ="{{type}}" class="hidden">
+            <i class="task-action icon icon-check is-task-complete m-r-xs" data="{{id}}" title="Mark as Complete"></i>
+            <i class="task-action icon icon-edit edit-task" data="{{id}}" title="Edit Task"></i>          
+            <i class="task-action icon icon-trash delete-task" data="{{id}}" title="Delete Task"></i>
+           
+        </div>
     </td>
 </script>
 <script id="tasks-list-header-template" type="text/html">

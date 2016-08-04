@@ -29,6 +29,7 @@ var Tickets_Rest={
 				{
 				    $(".ticket-addnote-close").removeAttr("disabled");
 				    $(".ticket-send-reply .btn").removeAttr("disabled");
+				    $('.ticket_change_slatime').removeAttr("disabled");
                 	$('#ticket_change_sla').removeAttr("disabled");                    	
                 	$(".close-current-ticket").removeAttr("disabled");
                 	if($('#ticket_change_sla').val() != "")
@@ -40,6 +41,7 @@ var Tickets_Rest={
 				    $(".ticket-addnote_close").attr("disabled","disabled"); 
 					$(".ticket-send-reply .btn").attr("disabled","disabled");
 					$('#ticket_change_sla').attr("disabled","disabled");
+					$('.ticket_change_slatime').attr("disabled","disabled");
 					$(".close-current-ticket").attr("disabled","disabled");
 					$(".ticket_status").val("CLOSED");
 
@@ -149,12 +151,12 @@ var Tickets_Rest={
 			if(model.toJSON().is_spam)
 			{
 				$(e.target).addClass("btn-danger").removeClass("btn-default");
-			    message="Ticket marked as Spam"; 
+			    message="Ticket marked as spam"; 
 			}
 			else
 			{
 				$(e.target).removeClass("btn-danger").addClass("btn-default");
-                message="Ticket un marked as Spam";
+                message="Ticket marked as unspam";
                 spam_value=false;
             }
 
@@ -281,11 +283,13 @@ var Tickets_Rest={
 
 	 	Tickets.updateModel(url, json, function(model){
 
-    		$('#ticket_change_sla').val(''); 
+    		$('#ticket_change_sla').val('');
+    		$('.ticket_change_slatime').timepicker('setTime', '');
 
     		$(".remove-date").css("display", "none");
 
-	 		Tickets_Rest.updateDataInModelAndCollection(Current_Ticket_ID,{due_time:''});
+	 		App_Ticket_Module.ticketView.model.set({due_time:''}, {silent:true});
+	 		Tickets_Rest.updateDataInModelAndCollection(Current_Ticket_ID, {due_time:''});
 
 	 		Ticket_Utils.showNoty('information', "Due date has been removed",'bottomRight', 5000);
 
@@ -303,5 +307,30 @@ var Tickets_Rest={
 
 		//Update data in model
 		model.set(data, {silent: true});
+	},
+
+	loadTicketsByContactId : function(id){
+
+		$('div.tab-content', App_Contacts.contactDetailView.el).find('div.active').removeClass('active');
+		$('#tickets', App_Contacts.contactDetailView.el).addClass('active');
+
+		var ticketsCollection = new Base_Collection_View({ 
+			url : '/core/api/tickets/contact/' + id, 
+			templateKey : "tickets-by-contacts",
+			individual_tag_name : 'li', 
+			sortKey : "created_time", 
+			descending : true, 
+			postRenderCallback : function(el)
+			{
+				head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
+				{
+					$(".note-created-time", el).timeago();
+				})
+			} 
+		});
+
+		ticketsCollection.collection.fetch();
+
+		$('#tickets', App_Contacts.contactDetailView.el).html(ticketsCollection.el);
 	}
 };

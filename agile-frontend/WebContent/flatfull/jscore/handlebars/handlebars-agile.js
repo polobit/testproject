@@ -337,6 +337,19 @@ function getTemplateUrls(templateName)
 	{
 		template_relative_urls.push("uservoice.js");
 	}
+    if (templateName.indexOf("dashboard") == 0)
+	{
+		template_relative_urls.push("dashboards.js");
+	}
+	if (templateName.indexOf("refer") == 0)
+	{
+		template_relative_urls.push("referals.js");
+	}
+	if (templateName.indexOf("helpcenter") == 0)
+	{
+		template_relative_urls.push("helpcenter.js");
+	}
+	
 	return template_relative_urls;
 }
 
@@ -410,9 +423,26 @@ function getPropertyValue(items, name)
 
 	for (var i = 0, l = items.length; i < l; i++)
 	{
-		if (items[i].name == name)
+		if (items[i].name == name){
+			if(items[i].value!=null)
+			 items[i].value=items[i].value.trim();
 			return items[i].value;
-	}
+		}
+		}
+}
+function getSystemPropertyValue(items, name)
+{
+	if (items == undefined)
+		return;
+
+	for (var i = 0, l = items.length; i < l; i++)
+	{
+		if (items[i].name == name && items[i].type == "SYSTEM"){
+			if(items[i].value!=null)
+			 items[i].value=items[i].value.trim();
+			return items[i].value;
+		}
+		}
 }
 
 
@@ -547,6 +577,18 @@ function getProperty(items, name)
 	for (var i = 0, l = items.length; i < l; i++)
 	{
 		if (items[i].name == name)
+			return items[i];
+	}
+}
+
+function getCustomProperty(items, name)
+{
+	if (items == undefined)
+		return;
+
+	for (var i = 0, l = items.length; i < l; i++)
+	{
+		if (items[i].name == name && items[i].type == "CUSTOM" )
 			return items[i];
 	}
 }
@@ -1018,6 +1060,13 @@ function getCount(collection)
 		return "(" + collection[0].count + " Total)";
 	else
 		return "(" + collection.length + " Total)";
+}
+function getTaskCount(collection)
+{
+	if (collection[0] && collection[0].count && (collection[0].count != -1))
+		return collection[0].count ;
+	else
+		return collection.length ;
 }
 
 /**

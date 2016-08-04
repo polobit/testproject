@@ -2,6 +2,7 @@ package com.agilecrm.contact.email;
 
 import java.util.List;
 
+import com.agilecrm.AgileGlobalProperties;
 import com.agilecrm.Globals;
 import com.agilecrm.account.AccountEmailStats;
 import com.agilecrm.account.EmailGateway;
@@ -14,6 +15,7 @@ import com.agilecrm.subscription.restrictions.db.BillingRestriction;
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
 import com.agilecrm.subscription.restrictions.entity.DaoBillingRestriction;
 import com.agilecrm.subscription.restrictions.entity.impl.EmailBillingRestriction;
+import com.agilecrm.util.AgileGlobalPropertiesUtil;
 import com.agilecrm.util.EmailUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.blobstore.BlobKey;
@@ -47,7 +49,7 @@ public class EmailSender
 	emailSender.emailGateway = EmailGatewayUtil.getEmailGateway();
 
 	emailSender.accountEmailStats = AccountEmailStatsUtil.getAccountEmailStats();
-
+	
 	return emailSender;
     }
 
@@ -229,6 +231,14 @@ public class EmailSender
     {
 	MailDeferredTask mailDeferredTask = new MailDeferredTask(emailGatewayType, apiUser, apiKey, domain, fromEmail,
 	        fromName, to, cc, bcc, subject, replyTo, html, text, mandrillMetadata, subscriberId, campaignId);
+	
+	System.out.println("Emailgatewaytype is:"+emailGatewayType);
+	
+	// Add to pull queue with from email as Tag
+	if(emailGatewayType!=null && emailGatewayType.equalsIgnoreCase("SES")){
+		queueName = "amazon-ses-pull-queue";
+		System.out.println("Sending mails through amazon pull queue");
+	}
 
 	// Add to pull queue with from email as Tag
 	PullQueueUtil.addToPullQueue(queueName, mailDeferredTask, fromEmail);

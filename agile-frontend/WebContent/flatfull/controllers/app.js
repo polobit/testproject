@@ -41,9 +41,9 @@ $(function()
 	App_Datasync = new DataSyncRouter();
 	App_Ticket_Module = new TicketsUtilRouter();
 	App_LandingPageRouter = new LandingPageRouter();
+	App_Dashboards = new DashboardsRouter();
 	App_EmailBuilderRouter = new EmailBuilderRouter();
 	App_VisitorsSegmentation=new VisitorsSegmentationRouter();
-
 	// Binds an event to activate infinite page scrolling
 	Backbone.history.bind("all", currentRoute)
 
@@ -144,6 +144,7 @@ function removing_fullscreen()
 /**
  * Clickdesk Widget
  */
+var CLICKDESK_Live_Chat = CLICKDESK_Live_Chat || {};
 function load_clickdesk_code()
 {
 
@@ -160,8 +161,28 @@ function load_clickdesk_code()
 	glcspt.src = glcpath + 'livechat-new.js';
 	var s = document.getElementsByTagName('script')[0];
 	s.parentNode.insertBefore(glcspt, s);
+
+	CLICKDESK_Live_Chat.on_after_load = function(){
+		agile_toggle_chat_option_on_status();
+	};
 }
-_
+
+function clickdesk_livechat_get_current_status(callback){
+	CLICKDESK_Live_Chat.onStatus(function(status){callback(status)});
+}
+
+function agile_toggle_chat_option_on_status(){
+	clickdesk_livechat_get_current_status(function(status){
+		var $li = $("#clickdesk_live_chat").closest("li");
+		$li.removeClass("none block");
+		
+    	if(status == "online")
+	    	$li.addClass("block");
+	    else 
+	    	$li.addClass("none");
+    });
+}
+
 function executeWebRulesOnRoute(){
  	  if(typeof _agile_execute_action == "function")
 	  {
@@ -171,6 +192,8 @@ function executeWebRulesOnRoute(){
 }
 
 $(document).ready(function(){
-
+  load_clickdesk_code();
   setTimeout(function(){$(".modal-header .close").html("&times;");}, 1000);
 });
+
+SUBSCRIBERS_SELECT_ALL = false;

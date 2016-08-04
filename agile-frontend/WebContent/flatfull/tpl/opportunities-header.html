@@ -1,0 +1,95 @@
+<script id="opportunities-header-template" type="text/html">
+<div class="custom-animated custom-fadeInUp">
+	{{#is_mobile}}
+	{{else}}
+	<div class="wrapper-md lter bg-light b-b" id="opportunities-header">
+		<div class="row">
+	    	<div class="col-md-12">
+	    		<h3 class="pull-left font-thin h3" id="opp-header">Deals <small>Opportunities</small>
+					<div id="milestone-set-msg" class="alert alert-warning p-sm" role="alert" style="margin-left:100px;display:none;">
+	  					For better deal reports and sales forecasting, please set your 'Won' and 'Lost' milestones in the <a href="#milestones" style="font-style:italic;text-decoration: initial;color: #337ab7;">Deal settings</a> page.
+					</div>
+				</h3>
+				<div class="pull-right">
+					<div class="btn-group pull-left m-r-xs" id="deal-sorter"></div>
+	            	<div class="btn-group inline-block m-l-xs" id="deals-tracks"></div>
+					<div id="deal-list-filters" class="btn-group inline-block m-l-xs"></div>
+					<div class="btn-group inline-block m-l-xs" id="deals-view">
+						<div class="btn btn-sm btn-default"><i class="icon-list m-l-xs"></i></div>
+						<a class="btn btn-sm btn-default  dropdown-toggle" data-toggle="dropdown" href="#">
+							<span class="caret deals-view-caret"></span>
+						</a>
+						<ul class="dropdown-menu pull-right" role="menu">
+							<li><a href="#deal-rc-0" class="deals-list-view">List View</a></li>
+							<li class="dropdown-submenu do-onclick-nothing"><a href="#deal-rc-1" data-toggle="dropdown" class="deals-pipelined-view">Milestone View</a>
+								<ul class="dropdown-menu" style="min-width:130px" role="menu">
+									<li><a href="#deal-rc-1" id="deal-milestone-regular">Relaxed</a></li>
+									<li><a href="#deal-rc-2" id="deal-milestone-compact">Compact</a></li>
+									<li><a href="#deal-rc-3" id="deal-milestone-fit">Fit</a></li>
+								</ul>
+							</li>
+						</ul>
+					</div>
+					<div class="btn-group inline-block m-l-xs" id="deals-action">
+						<a href="#deals-add" class="deals-add btn btn-sm  btn-default" onclick="Agile_GA_Event_Tracker.track_event('Add Deal')">
+							<i class="icon-plus-sign" /> Add Deal
+						</a>
+						<a class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" href="#">
+							<span class="caret"></span>
+						</a>
+						{{#hasScope "MANAGE_DEALS"}}
+							<ul class="dropdown-menu pull-right" role="menu">
+								<li><a href="#import-deals" onclick="Agile_GA_Event_Tracker.track_event('Deals Import from CSV')">Import</a></li>
+								<li><a href="#" class="deals-export-csv" onclick="Agile_GA_Event_Tracker.track_event('Deals Export as CSV')">Export</a></li>
+								<li><a href="#add-dashlet" onclick="Agile_GA_Event_Tracker.track_event('Deals Add Dashlet')">Add Dashlet</a></li>
+							</ul>
+						{{else}}
+							<ul class="dropdown-menu pull-right" role="menu">
+								<li><a href="#add-dashlet">Add Dashlet</a></li>
+							</ul>
+						{{/hasScope}}
+					</div>
+				</div>
+	        	<div class="clearfix"></div>
+	    	</div>
+		</div>
+	</div>
+	{{/is_mobile}}
+	<div class="route_Portlet b-b" style="display:none">
+		<div class="row">
+			<div class="col-md-12">
+				<div>
+					<div id="portlets">&nbsp;</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="wrapper-md" id="deals-new-milestone-view">
+		<div class="row">
+			<div class="col-md-12">
+				<span class="error-status text-danger"></span>
+				<div id="new-opportunity-list-paging">
+					<img class="loading_img p-r-xs"  height="32px" width="32px" src= "{{getS3ImagePath 'img/21-0-new.gif'}}"></img>
+					<div id="opportunities-by-milestones-model-list"></div>
+				</div>
+				<div id="new-track-list-paging" class="bg-white wrapper-md custom-animated custom-fadeInUp" style="display:none;min-height:calc(100vh - 90px);">
+					<div id="moving-deal" class="text-right hide"></div>
+					<div id="moved-deal"></div>
+					<i class="icon-close pull-right c-p m-r-n-sm text-md deal-track-close"></i>
+					<div class="m-l-n-md m-r-n-md b-b" style="margin-top:70px;"></div>
+					<div id="moving-tracks" class="m-r-n-md" style="max-height:calc(100vh - 175px);;overflow-y:auto;"></div>
+		        </div>
+			</div>
+		</div>
+	</div>
+	<div class="new-collection-deal-list" id="deals-new-list-view"></div>
+	<div id="dealActions" class="open" style="display:none;">
+	  <ul class="closeDeal">
+	    <li class="fa fa-file-archive-o customDrop archive-deal-action"></li>
+	    <li class="icon-mail-reply customDrop restore-deal-action"></li>
+	    <li class="icon-trash customDrop delete-deal-action"></li>
+	    <li class="icon-road customDrop move-deal-action"></li>
+	  </ul>
+	</div>
+</div>
+</script>

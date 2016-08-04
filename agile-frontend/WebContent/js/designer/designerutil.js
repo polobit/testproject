@@ -942,7 +942,3 @@ function insertSelectedOption1(ele ,target_id)
 
         return false;
 	}
-
-
-	
-

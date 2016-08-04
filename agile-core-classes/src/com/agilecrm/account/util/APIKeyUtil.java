@@ -17,6 +17,9 @@ import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
+import com.agilecrm.util.HTTPUtil;
+import com.analytics.util.AnalyticsUtil;
+import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.Query;
@@ -55,6 +58,21 @@ public class APIKeyUtil
     {
 	// Queries APIKey entities with the apikey parameter
 	return dao.ofy().query(APIKey.class).filter("api_key", key).count() > 0;	
+    }
+    
+    /**
+     * Checks whether JS api is related to this domain, used while verifying JsAPI
+     * request in JsAPiFilter
+     * 
+     * @param key
+     *            APIKey to be verified
+     * @return {@link Boolean} Returns true if APIKey exists in current domain
+     *         and vice-versa
+     */
+    public static Boolean isJSAPIKeyPresent(String key)
+    {
+	// Queries APIKey entities with the apikey parameter
+	return dao.ofy().query(APIKey.class).filter("js_api_key", key).count() > 0;	
     }
     
     /**
@@ -146,7 +164,11 @@ public class APIKeyUtil
     	if(StringUtils.isBlank(apiKey))
     		  return false;
     	
-    	return (getDataStore().prepare(validJSOrRestAPIKeyQuery(apiKey)).countEntities() > 0);
+    	if(isPresent(apiKey) || isJSAPIKeyPresent(apiKey))
+    		  return true;
+    	
+    	return false;
+    	// return (getDataStore().prepare(validJSOrRestAPIKeyQuery(apiKey)).countEntities() > 0);
     }
     
     /**
@@ -197,5 +219,35 @@ public class APIKeyUtil
      */
     private static DatastoreService getDataStore(){
     	return CachingDatastoreServiceFactory.getDatastoreService();
+    }
+    
+    /**
+     * Returns domain user related ot API key. Domain user key is stored in
+     * APIKey entity. Queries with APIKey and fetches domain user based on key
+     * saved in owner field
+     * 
+     * @param apiKey
+     * @return
+     */
+    public static DomainUser getDomainUserRelatedToAPIKeyJS(String apiKey)
+    {
+	// Fetches APIKey object and returns domain user key.
+	
+	Key<DomainUser> userKey = getAPIKeyDomainOwnerKey(apiKey);
+
+	if (userKey == null)
+	    return null;
+
+	// Fetches domain user based on domainUser id
+	return DomainUserUtil.getDomainUser(userKey.getId());
+
+    }
+    
+    public static void updateBlockedIpsInStatsServer(String blockedIps)
+    {
+	String domain = NamespaceManager.get();
+	String data = "domain="+domain+"&blocked_ips="+blockedIps+"&psd="+AnalyticsUtil.STATS_SEREVR_HTTP_REQUEST_PWD;
+	String postURL = AnalyticsUtil.STATS_SERVER_URL+"/api";
+	HTTPUtil.accessURLAsynchronouslyUsingPost(postURL, data);
     }
 }

@@ -579,4 +579,35 @@ Handlebars.registerHelper('gravatarurl', function(items, width)
 		return new Handlebars.SafeString('https://secure.gravatar.com/avatar/' + Agile_MD5("") + '.jpg?s=' + width + '' + backup_image + data_name);
 
 	});
+
+Handlebars.registerHelper('uc_first', function(text, options)
+{
+	return ucfirst(text);
+});
+
+Handlebars.registerHelper('helpcenter_url', function(options)
+{
+	if(!App_Ticket_Module.sectionsCollection)
+		return "";
+	var collection = App_Ticket_Module.sectionsCollection.collection;
+	console.log(collection);	
+	var url = collection.url; 
+	var arr = url.split("/");
+	var url_id = arr[arr.length-1];
+
+	return "/"+url_id;
+});
+Handlebars.registerHelper('helpcenter_url_section', function(options)
+{
+	if(!App_Ticket_Module.articlesCollection)
+		return "";
+	var collection = App_Ticket_Module.articlesCollection.collection;
+	console.log(collection);	
+	var url = collection.url; 
+	var arr = url.split("/");
+	var url_id = arr[arr.length-1];
+    var idarr = url_id.split("=");
+    var id = idarr[idarr.length-1];
+	return "/"+id;
+});
 /** End of ticketing handlebars* */

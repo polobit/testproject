@@ -24,6 +24,7 @@ import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.CustomFieldDef;
 import com.agilecrm.contact.email.bounce.EmailBounceStatus;
 import com.agilecrm.contact.email.bounce.EmailBounceStatus.EmailBounceType;
+import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.CustomFieldDefUtil;
 import com.agilecrm.util.StringUtils2;
 import com.agilecrm.workflows.status.CampaignStatus;
@@ -434,12 +435,13 @@ public class SearchUtil
 	// Holds first name and last name for different combinations to search
 	String firstName = "";
 	String lastName = "";
-
+	String name = "";
 	/*
 	 * Iterates through contact properties and gets fist name last name (for
 	 * combinations first_name + last_name , last_name + first_name),
 	 * converts address string to map and saves address keywords to search
 	 */
+	System.out.println("Before properties for loop");
 	for (ContactField contactField : properties)
 	{
 	    if ("first_name".equals(contactField.name))
@@ -452,6 +454,11 @@ public class SearchUtil
 		lastName = contactField.value;
 	    }
 
+	    else if ("name".equals(contactField.name))
+	    {
+	    	name = contactField.value;
+	    }
+
 	    else if ("address".equals(contactField.name))
 	    {
 		// Creates HashMap from Address JSON string
@@ -459,6 +466,7 @@ public class SearchUtil
 		{
 		    // Converts address JSON string(sent so from client) to a
 		    // map
+			System.out.println("Inside try bolck and before geting address map");
 		    HashMap<String, String> addressMap = new ObjectMapper().readValue(contactField.value,
 			    new TypeReference<HashMap<String, String>>()
 			    {
@@ -466,10 +474,14 @@ public class SearchUtil
 
 		    // save the address values
 		    tokens.addAll(addressMap.values());
+			System.out.println("Inside try bolck and after geting address map");
+
 		}
 		catch (Exception e)
 		{
 		    e.printStackTrace();
+		    System.out.println("Inside catch bolck");
+		    System.out.println(e.getMessage());
 		}
 	    }
 
@@ -480,6 +492,29 @@ public class SearchUtil
 
 	String contactName = "";
 
+	String[] firstNameArr = firstName.split(" ");
+	System.out.println("Before first name for loop");
+	for(int i=0; i<firstNameArr.length; i++){
+		contactName = normalizeString(firstNameArr[i]);
+		tokens.add(contactName);
+	}
+	System.out.println("After first name for loop");
+
+	String[] lastNameArr = lastName.split(" ");
+	System.out.println("Before last name for loop");
+
+	for(int i=0; i<lastNameArr.length; i++){
+		contactName = normalizeString(lastNameArr[i]);
+		tokens.add(contactName);
+	}
+	System.out.println("After last name for loop");
+
+	String[] nameArr = name.split(" ");
+	for(int i=0; i<nameArr.length; i++){
+		contactName = normalizeString(nameArr[i]);
+		tokens.add(contactName);
+	}
+	
 	// contact contact name first name then last name add to tokens
 	contactName = normalizeString(firstName + lastName);
 	tokens.add(contactName);
@@ -487,12 +522,13 @@ public class SearchUtil
 	// contact contact name last name then first name add to tokens
 	contactName = normalizeString(lastName + firstName);
 	tokens.add(contactName);
-
 	// Splits each token in to fragments to search based on keyword
+	System.out.println("Token size is:"+tokens.size());
 	if (tokens.size() != 0)
 	    tokens = StringUtils2.getSearchTokens(tokens);
 
 	// Returns normalized set
+	System.out.println("Before returning the tokens");
 	return normalizeSet(tokens);
     }
     
@@ -667,6 +703,42 @@ public class SearchUtil
 			normalizedString += " " + normalizeTag(tag);
 		}
 		return normalizedString.trim();
+	}
+	public static List<Object> searchForCompanyResult(List<Object> searchResult){
+		try {
+			Set<String> set = new HashSet<String>(); 
+			int searchCount = 0;
+			for(Object m : searchResult){
+				if(m instanceof Contact){
+					Contact contact = (Contact) m;
+					set.add(contact.contact_company_id);
+					searchCount = searchCount+1;
+				}
+			}
+			if(searchCount == searchResult.size() && set.size()==1){
+				Iterator iterator = set.iterator();
+				if(iterator != null && iterator.hasNext()){
+					String id = iterator.next().toString();
+					Contact contact = ContactUtil.getContact(Long.parseLong(id));
+					if(contact != null){
+						searchResult.remove(9);
+						searchResult.add(contact);
+					}
+				}
+			}
+		} catch (NumberFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (NullPointerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		return searchResult;
 	}
 
 }

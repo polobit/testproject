@@ -23,9 +23,9 @@ import org.json.JSONException;
 import com.agilecrm.AgileQueues;
 import com.agilecrm.activities.util.ActivitySave;
 import com.agilecrm.contact.Contact;
-import com.agilecrm.contact.Tag;
 import com.agilecrm.contact.Contact.Type;
 import com.agilecrm.contact.ContactField;
+import com.agilecrm.contact.Tag;
 import com.agilecrm.contact.deferred.CompanyDeleteDeferredTask;
 import com.agilecrm.contact.deferred.ContactPostDeleteTask;
 import com.agilecrm.contact.email.ContactEmail;
@@ -33,15 +33,17 @@ import com.agilecrm.contact.email.bounce.EmailBounceStatus.EmailBounceType;
 import com.agilecrm.contact.email.deferred.LastContactedDeferredTask;
 import com.agilecrm.contact.email.util.ContactEmailUtil;
 import com.agilecrm.contact.exception.DuplicateContactException;
+import com.agilecrm.contact.filter.ContactFilter;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.projectedpojos.ContactPartial;
 import com.agilecrm.projectedpojos.PartialDAO;
+import com.agilecrm.queues.backend.ModuleUtil;
+import com.agilecrm.queues.backend.ModuleUtil.AgileModules;
 import com.agilecrm.search.AppengineSearch;
 import com.agilecrm.search.document.ContactDocument;
 import com.agilecrm.search.ui.serialize.SearchRule;
 import com.agilecrm.search.ui.serialize.SearchRule.RuleCondition;
 import com.agilecrm.session.SessionManager;
-import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.access.UserAccessControl;
 import com.agilecrm.user.access.UserAccessScopes;
@@ -56,12 +58,15 @@ import com.campaignio.tasklets.agile.CheckCampaign;
 import com.campaignio.twitter.util.TwitterJobQueueUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.datastore.EntityNotFoundException;
+import com.google.appengine.api.modules.ModulesService;
+import com.google.appengine.api.modules.ModulesServiceFactory;
 import com.google.appengine.api.search.Document.Builder;
 import com.google.appengine.api.search.Index;
 import com.google.appengine.api.search.SearchException;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
+import com.google.gson.Gson;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Query;
 
@@ -148,7 +153,7 @@ public class ContactUtil
 	}
 	catch (Exception e)
 	{
-	    e.printStackTrace();
+		e.printStackTrace();
 	    return null;
 	}
     }
@@ -360,18 +365,90 @@ public class ContactUtil
 	}
 
     }
+    
+    public static Contact searchContactByEmailID(String email)
+    {
+		if (StringUtils.isBlank(email))
+		    return null;
+	
+		Map<String, Object> searchMap = new HashMap<String, Object>();
+		searchMap.put("properties.name", Contact.EMAIL);
+		searchMap.put("type", Type.PERSON);
+		searchMap.put("properties.value", email.toLowerCase());
+		return dao.getByProperty(searchMap);
 
+    }
+
+    public static Contact searchCompanyByEmail(String email)
+    {
+	if (StringUtils.isBlank(email))
+	    return null;
+
+	Query<Contact> q = dao.ofy().query(Contact.class);
+	q.filter("properties.name", Contact.EMAIL);
+	q.filter("type", Type.COMPANY);
+	q.filter("properties.value", email.toLowerCase());
+
+	try
+	{
+	    return dao.get(q.getKey());
+	}
+	catch (Exception e)
+	{
+	    return null;
+	}
+
+    }
+
+    /**
+     * Gets a contact based on its email
+     * 
+     * @param email
+     *            email value to get a contact
+     * @return {@Contact} related to an email
+     */
+    public static Contact searchContactByTypeAndEmail(String email,String type){
+    
+		if (StringUtils.isBlank(email)){
+		    return null;
+		}
+
+		Query<Contact> q = dao.ofy().query(Contact.class);
+		q.filter("properties.name", Contact.EMAIL);
+		q.filter("type", type);
+		q.filter("properties.value", email.toLowerCase());
+
+		try{
+		    return dao.get(q.getKey());
+		}catch (Exception e){
+		    return null;
+		}
+
+    }
+
+    
+    
     public static Contact searchContactByCompanyName(String companyName)
     {
 	if (StringUtils.isBlank(companyName))
 	    return null;
 
 	Map<String, Object> searchMap = new HashMap<String, Object>();
-	searchMap.put("properties.name", "name");
-	searchMap.put("properties.value", companyName);
+	searchMap.put("name", companyName);
 	searchMap.put("type", Type.COMPANY);
 	return dao.getByProperty(searchMap);
 
+    }
+    
+    public static Contact searchContactByPesonName(String personName)
+    {
+    	if (StringUtils.isBlank(personName))
+		    return null;
+	
+		Map<String, Object> searchMap = new HashMap<String, Object>();
+		searchMap.put("first_name", personName);		
+		searchMap.put("type", Type.PERSON);
+		return dao.getByProperty(searchMap);
     }
 
     public static Contact searchContactByPhoneNumber(String phoneNumber)
@@ -617,7 +694,7 @@ public class ContactUtil
 
 	try
 	{
-	    int count = dao.ofy().query(Contact.class).filter("properties.name", "name").filter("type", Type.COMPANY)
+	    int count = dao.ofy().query(Contact.class).filter("properties.name", "name_lower").filter("type", Type.COMPANY)
 		    .filter("properties.value", companyName.trim().toLowerCase()).count();
 	    if (count == 0)
 	    {
@@ -1190,8 +1267,19 @@ public class ContactUtil
 	}
 
 	oldContact.tags.addAll(newContact.tags);
-
-	return oldContact;
+	try {
+		//source of the contact
+		oldContact.source = "import" ;
+		if(newContact.source != null){
+			oldContact.source = newContact.source ;
+		}
+	} catch (Exception e) {
+		// TODO Auto-generated catch block
+		System.out.println(e.getMessage());
+	}
+	
+	newContact=oldContact;
+	return 	newContact;
     }
 
     public static Contact mergeCompanyFields(Contact newContact, Contact oldContact)
@@ -1454,7 +1542,7 @@ public class ContactUtil
 	UserAccessControl control = UserAccessControl.getAccessControl(
 		UserAccessControl.AccessControlClasses.Contact.toString(), null, null);
 
-	if (control.hasScope(UserAccessScopes.DELETE_CONTACTS) || control.hasScope(UserAccessScopes.UPDATE_CONTACT))
+	if (control.hasScope(UserAccessScopes.UPDATE_CONTACT) || control.hasScope(UserAccessScopes.EDIT_CONTACT))
 	    return;
 
 	Iterator<Contact> i = contacts.iterator();
@@ -1462,7 +1550,7 @@ public class ContactUtil
 	{
 	    Contact c = i.next();
 	    control.setObject(c);
-	    if (control.canDelete())
+	    if (control.canCreate())
 		continue;
 
 	    i.remove();
@@ -1857,8 +1945,11 @@ public class ContactUtil
     {
 	LastContactedDeferredTask lastContactDeferredtask = new LastContactedDeferredTask(contactId,
 		lastCampaignEmailed, toEmail);
+
 	Queue queue = QueueFactory.getQueue(AgileQueues.LAST_CONTACTED_UPDATE_QUEUE);
-	queue.add(TaskOptions.Builder.withPayload(lastContactDeferredtask).etaMillis(System.currentTimeMillis() + 5000));
+	
+	// Add these tasks to run in Agile Tasks Handler backend
+	queue.add(TaskOptions.Builder.withPayload(lastContactDeferredtask).header("Host", ModuleUtil.getModuleDefaultVersionHost(AgileModules.AGILE_TASKS_HANDLER.getModuleName())).etaMillis(System.currentTimeMillis() + 5000));
     }
 
     public static String getMD5EncodedImage(Contact contact)
@@ -1902,7 +1993,8 @@ public class ContactUtil
 	{
 	    contact.addpropertyWithoutSaving(new ContactField(Contact.FIRST_NAME, names[0], null));
 
-	    contact.addpropertyWithoutSaving(new ContactField(Contact.LAST_NAME, name.replace(names[0], "").trim(), null));
+	    contact.addpropertyWithoutSaving(new ContactField(Contact.LAST_NAME, name.replace(names[0], "").trim(),
+		    null));
 	}
 	else
 	{
@@ -1914,11 +2006,11 @@ public class ContactUtil
 
 	try
 	{
-		Tag tagObject = new Tag("helpdesk");
+	    Tag tagObject = new Tag("helpdesk");
 
 	    contact.tagsWithTime.add(tagObject);
 	    contact.save();
-	    
+
 	    ActivitySave.createTagAddActivity(contact);
 	}
 	catch (Exception e)
@@ -1978,5 +2070,122 @@ public class ContactUtil
 	    e.printStackTrace();
 	    return null;
 	}
+    }
+
+    /**
+     * Gets a contact based on its email
+     * 
+     * @param email
+     *            email value to get a contact
+     * @return {@Contact} related to an email
+     */
+    public static Contact searchContactByEmailZapier(String email)
+    {
+	if (StringUtils.isBlank(email))
+	    return null;
+	List<Contact> contacts = null;
+	try
+	{
+
+	    contacts = new ArrayList<>(new AppengineSearch<Contact>(Contact.class).getSimpleSearchResultsWithQuery(
+		    "email : " + email, Integer.parseInt("5"), null, Contact.Type.PERSON.toString()));
+
+	    return contacts.get(0);
+
+	}
+	catch (Exception e)
+	{
+	    return null;
+	}
+
+    }
+    
+public static Contact searchMultipleContactByEmail(String email,Contact contact){
+    	
+    	if (StringUtils.isBlank(email))
+    	    return null;
+    	
+    	Map<String, Object> searchMap = new HashMap<String, Object>();
+    	searchMap.put("type", Type.PERSON);
+    	searchMap.put("properties.name", Contact.EMAIL);
+    	searchMap.put("properties.value", email.toLowerCase());
+
+    	try
+    	{
+    	   List<Contact> contacts=dao.listByProperty(searchMap);
+    	   if(contacts.size()>0){
+    	  for(Contact newcontact:contacts){
+    		  if(newcontact.id.equals(contact.id))
+    			  continue;
+    		  return newcontact;
+    	  }
+    	   }
+    	   return null;
+    	}
+    	catch (Exception e)
+    	{
+    	    return null;
+    	}
+	}
+
+    /**
+     * Gets contacts and companies based on its email collection
+     * 
+     * @param emails
+     *            emails collection to get contacts and companies
+     * @return {@List} related to all emails
+     */
+    public static List<Contact> searchContactsAndCompaniesByEmailList(List<String> emails)
+    {
+    System.out.println("Emails in searchContactsAndCompaniesByEmailList---"+emails);
+	if (emails == null || (emails != null && emails.size() == 0))
+	    return null;
+	List<Key<Contact>> contactsKeyList = new ArrayList<Key<Contact>>();
+	if(emails != null)
+	{
+		System.out.println("Emails size in searchContactsAndCompaniesByEmailList---"+emails.size());
+		for(String email : emails)
+		{
+			Query<Contact> q = dao.ofy().query(Contact.class).filter("properties.name", Contact.EMAIL).filter("properties.value", email);
+			contactsKeyList.add(q.getKey());
+		}
+	}
+	if(contactsKeyList ==null || (contactsKeyList != null && contactsKeyList.size() == 0))
+		return null;
+	try
+	{
+	    return ContactUtil.dao.fetchAllByKeys(contactsKeyList);
+	}
+	catch (Exception e)
+	{
+	    return null;
+	}
+    }
+    public static Set<Contact> searchContactsByCustomFields(String id)
+    {
+    	Set<Contact> contacts = (HashSet<Contact>) dao.ofy().query(Contact.class).filter("Companytype = ", id);
+    	return contacts;
+    }
+    public static List<Contact> getContactsWithCustomFields(String id ,List<String> customField){
+    	
+    	if(id != null && customField != null){
+    		ContactFilter contact_filter = new ContactFilter();
+    		SearchRule andRule = new SearchRule();
+    		SearchRule orRule =  null;
+    		andRule.LHS = "field_labels";
+    		andRule.CONDITION = RuleCondition.NOTEQUALS;
+    		andRule.RHS = " " ;
+    		contact_filter.rules.add(andRule);
+    		for(String eachfield : customField){
+    			orRule = new SearchRule();
+    			orRule.LHS = eachfield;
+    			orRule.CONDITION = RuleCondition.EQUALS;
+    			orRule.RHS = id ;
+	    		contact_filter.or_rules.add(orRule);
+    		}
+    		List<Contact> contacts = new ArrayList<Contact>(contact_filter.queryContacts(50, null, null));
+    		return contacts;
+    	}
+    	return null;
     }
 }

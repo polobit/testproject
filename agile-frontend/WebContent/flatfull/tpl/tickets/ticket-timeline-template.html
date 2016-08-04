@@ -127,7 +127,7 @@
 						    {{/if_equals}}
 
 						    {{#if_equals activity_type 'TICKET_STATUS_CHANGE'}}
-			                    Status changed from <span class="first-letter-cap inline-block">{{custom1}}</span> to <span class="first-letter-cap inline-block">{{custom2}}</span>
+			                    Status changed from {{uc_first custom1}} to {{uc_first custom2}}
 			                {{/if_equals}}
 
 			                {{#if_equals activity_type 'TICKET_PRIORITY_CHANGE'}}
@@ -161,30 +161,30 @@
 
 		                    {{#if_equals activity_type 'TICKET_MARKED_FAVORITE'}}
 		                    	<!-- <span class="first-letter-cap inline-block">{{domainUser.name}}</span>--> 
-		                        Marked as favorite
+		                        Marked as Favorite
 		                    {{/if_equals}}
 
 		                    {{#if_equals activity_type 'TICKET_MARKED_UNFAVORITE'}}
 		                        <!-- <span class="first-letter-cap inline-block">{{domainUser.name}}</span>-->
-		                        Marked as unfavorite
+		                        Marked as Unfavorite
 		                    {{/if_equals}}
 
 		                    {{#if_equals activity_type 'TICKET_MARKED_SPAM'}}
 		                        <!--<span class="first-letter-cap inline-block">{{domainUser.name}}</span>-->
-		                        Marked as spam
+		                        Marked as Spam
 		                    {{/if_equals}}
 
 		                    {{#if_equals activity_type 'TICKET_MARKED_UNSPAM'}}
 		                        <!--<span class="first-letter-cap inline-block">{{domainUser.name}}</span>-->
-		                        Marked as not spam
+		                        Marked as Unspam
 		                    {{/if_equals}}
 		                    {{#if_equals activity_type 'SET_DUE_DATE'}}
 		                        <!--<span class="first-letter-cap inline-block">{{domainUser.name}}</span>-->
-		                        Due date set to {{epochToHumanDate "mmm dd, yyyy" custom2}}
+		                        Due date set to {{epochToHumanDate "mmm dd, yyyy HH:MM" custom2}}
 		                    {{/if_equals}}
 		                    {{#if_equals activity_type 'DUE_DATE_CHANGED'}}
 		                        <!--<span class="first-letter-cap inline-block">{{domainUser.name}}</span>-->
-		                        Changed due date to {{epochToHumanDate "mmm dd, yyyy" custom2}}
+		                        Changed due date to {{epochToHumanDate "mmm dd, yyyy HH:MM" custom2}}
 		                    {{/if_equals}}
 		                    {{#if_equals activity_type 'DUE_DATE_REMOVED'}}
 		                        <!--<span class="first-letter-cap inline-block">{{domainUser.name}}</span>-->

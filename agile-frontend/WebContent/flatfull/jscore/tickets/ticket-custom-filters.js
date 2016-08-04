@@ -22,7 +22,8 @@ var Ticket_Custom_Filters = {
 
 			$input.datepicker({ 
 				drops: "down", 
-				dateFormat : CURRENT_USER_PREFS.dateFormat
+				dateFormat : CURRENT_USER_PREFS.dateFormat,
+				autoclose: true
 			}).on('changeDate', function(ev)
 			{
 				//Show clear button
@@ -437,10 +438,16 @@ var Ticket_Custom_Filters = {
 
 		if(epoch_time){
 
+			//Add 23 hrs 59 mins & 59 secs to make due time to End of day
+			var date = new Date(epoch_time);
+			date.setHours(23);
+			date.setMinutes(59);
+			date.setSeconds(59);
+
 			var condition = {};
 			condition.LHS = 'due_date';
 			condition.CONDITION = 'IS_LESS_THAN';
-			condition.RHS = Math.floor(epoch_time/1000);
+			condition.RHS = Math.floor(date.getTime()/1000);
 
 			Ticket_Custom_Filters.customFilters.push(condition);
 		}
@@ -472,6 +479,7 @@ var Ticket_Custom_Filters = {
 			condition.RHS = Math.floor(new Date(start).getTime()/1000);
 			condition.RHS_NEW =  Math.floor(new Date(end).getTime()/1000);
 			
+			//Adding seconds to end date to change end time to End of day
 			condition.RHS_NEW += 86400;
 
 			Ticket_Custom_Filters.customFilters.push(condition);

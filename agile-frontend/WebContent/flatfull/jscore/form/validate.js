@@ -6,6 +6,7 @@
  * @param form
  * @returns
  */
+ 
 function isValidForm(form) {
 
     jQuery.validator.addMethod("choosen-select-input", function(value, element){
@@ -21,6 +22,17 @@ function isValidForm(form) {
 			
 			return false;
 		}," This field is required.");
+	
+	// Internal regex of jQuery validator allows for special characters in e-mails for ticketing.
+	// This regex solves that, overriding 'email'
+	jQuery.validator.addMethod("tickets_email", function(value, element){
+		
+		if(this.optional(element))
+			return true;
+		
+		return /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/.test(value);
+	}," Please enter a valid email.");
+
 
 	// Credit card validation to check card is valid for next 3 months
 	jQuery.validator.addMethod("atleastThreeMonths", function(value, element) {
@@ -66,7 +78,7 @@ function isValidForm(form) {
 		return isAlphaNumeric(value);
 	//	console.log(params);
 		
-	}, "Should start with an alphabet and special characters are not allowed.");
+	}, "Label should start with an alphabet and special characters except underscore are not allowed.");
 
 	// Internal regex of jQuery validator allows for special characters in e-mails.
 	// This regex solves that, overriding 'email'
@@ -76,7 +88,7 @@ function isValidForm(form) {
 			return true;
 		
 		return /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/.test(value);
-	}," Please enter a valid email.");
+	}," Please enter a valid email."); 
 
 	// Phone number validation
 	jQuery.validator.addMethod("phone", function(value, element){
@@ -87,6 +99,16 @@ function isValidForm(form) {
 		//return /^(\()?(\d{3})([\)-\. ])?(\d{3})([-\. ])?(\d{4})$/.test(value);
 		return /^[^a-zA-Z]+$/.test(value);
 	}," Please enter a valid phone number.");
+	
+	// Phone number validation
+	jQuery.validator.addMethod("allow-char-phone", function(value, element){
+		
+		if(this.optional(element))
+			return true;
+		
+		//return /^(\()?(\d{3})([\)-\. ])?(\d{3})([-\. ])?(\d{4})$/.test(value);
+		return /^((\+)(\d)+)$/.test(value);
+	},"Please enter valid phone number (+xxxxxxxxxx)");
 	
 	jQuery.validator.addMethod("multi-tags", function(value, element){
 		
@@ -102,6 +124,20 @@ function isValidForm(form) {
 		
 		return $(element).closest(".control-group").find('ul.tags > li').length > 0 ? true : false;
 	}," This field is required.");
+
+	//IP validation
+	jQuery.validator.addMethod("ipValidation", function(value, element){
+		
+		if(this.optional(element))
+			return true;
+
+		if(!value)
+			 return false;
+			
+		return is_valid_ip(value.trim());
+	
+	}," Please enter a valid IP Address.");
+
 	
 	jQuery.validator.addMethod("formulaData", function(value, element){
 		var source = $(element).val();
@@ -123,6 +159,15 @@ function isValidForm(form) {
 			return false;
 		
 		return /^[0-9\-]+$/.test(value);
+	}," Please enter a valid number.");
+
+	//Positive Number validation which not accepts zero
+	jQuery.validator.addMethod("number_grater_than_zero", function(value, element){
+		
+		if(value=="" || (!isNaN(value) && parseFloat(value) == 0))
+			return false;
+		
+		return /^[0-9]+$/.test(value);
 	}," Please enter a valid number.");
 
 	//Positive Number validation
@@ -216,14 +261,53 @@ function isValidForm(form) {
 		  return 'Maximum length is ' + $(element).attr("max_len") + ' chars only.'
 		}	
 	);
-
+    
 
 	// domain name validation
 	jQuery.validator.addMethod("domain_format", function(value, element){
 		
-		return /^[a-zA-Z][a-zA-Z0-9-_\.]{3,20}$/.test(value);
-	}," Name should be between 4-20 characters in length. Both letters and numbers are allowed but it should start with a letter.");
+		return /^[a-zA-Z][a-zA-Z0-9-_]{3,20}$/.test(value);
+	}," Name should be between 4-20 characters in length. Both letters and numbers are allowed but it should start with a letter. Cannot contain special characters other than '_' and '-'.");
     
+
+    jQuery.validator.addMethod("customFieldSpecialCharacter", function(value, element){
+		
+		var custvals = /^\s*[_a-zA-Z0-9\s]+\s*$/;
+		return custvals.test(value);
+	}," Label should start with an alphabet and special characters except underscore are not allowed.");
+
+	jQuery.validator.addMethod("duplicateWithSystemName", function(value, element){
+		var labelJson = [];
+		labelJson.cases = 'title,owner_id,status,description' ;
+		labelJson.contact = 'fname,lname,email,company,title,name,url,website,address,phone,skypephone,image,city,state,zip,country,tags' ;
+		labelJson.deal = 'name,probability,description,pipeline_milestone,close_date,deal_source_id,color1,relates_to,tags,expected_value' ;
+		var scope = $("#textModalForm").find("input[name='scope']").val();
+		var i;
+		if(scope && (scope == "CONTACT" || scope == "COMPANY")){
+			var array = labelJson.contact.split(',');
+			for(i=0 ; i < array.length ; i++){
+				if(value.toLowerCase() == array[i])
+					return false;
+			}
+		}
+		else if(scope && scope == "DEAL"){
+			var array = labelJson.deal.split(',');
+			for(i=0 ; i < array.length ; i++){
+				if(value.toLowerCase() == array[i])
+					return false;
+			}	
+		}
+		else if(scope && scope == "CASE"){
+			var array = labelJson.cases.split(',');
+			for(i=0 ; i < array.length ; i++){
+				if(value.toLowerCase() == array[i])
+					return false;
+			}
+
+		}
+		return true;
+	},"Given name is a system field name. Please choose another name.");
+
     jQuery.validator.addMethod("tickets_group_name", function(value, element){
 
 		return /^[a-zA-Z0-9._]*$/.test(value);
@@ -243,6 +327,24 @@ function isValidForm(form) {
 		}
 
 	},"<b>image</b> is a keyword in the system and it can't be added as a custom field.");
+
+	jQuery.validator.addMethod("verified-email", function(value, element){
+		if($(element).find("option").length !=0){
+ 				if(typeof($(element).find("option[value=\""+value+"\"]").attr("unverified")) == "undefined")
+ 					return true;
+ 				
+ 					return false;
+ 		}
+ 	}," From email is not verified. Please verify it.");
+
+	jQuery.validator.addMethod("month_date", function(value, element){
+		if(value=="")
+			return true;
+
+		return !/Invalid|NaN/.test(getFormattedDateObjectForMonthWithString(value));
+
+			
+	}," Please enter a valid date.");
 
 	$(form).validate({
 		ignoreTitle: true,

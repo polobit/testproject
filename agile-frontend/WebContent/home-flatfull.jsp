@@ -1,5 +1,8 @@
 <!DOCTYPE html>
+<%@page import="com.agilecrm.user.DomainUser.ROLE"%>
+<%@page import="com.campaignio.servlets.deferred.WorkflowAddAccessLevelDeferredTask"%>
 <%@page import="com.google.appengine.api.taskqueue.Queue"%>
+<%@page import="com.agilecrm.ipaccess.IpAccessUtil"%>
 <%@page import="com.agilecrm.subscription.Subscription"%>
 <%@page import="com.google.appengine.api.NamespaceManager"%>
 <%@page import="com.campaignio.servlets.deferred.DomainUserAddPicDeferredTask"%>
@@ -26,6 +29,9 @@
 <%@page import="com.agilecrm.user.UserPrefs"%>
 <%@page import="com.agilecrm.user.util.UserPrefsUtil"%>
 <%@page import="org.codehaus.jackson.map.ObjectMapper"%>
+<%@page import="com.agilecrm.dashboards.Dashboard"%>
+<%@page import="com.agilecrm.dashboards.util.DashboardUtil"%>
+<%@page import="java.util.List"%>
 <%@page language="java" contentType="text/html; charset=UTF-8"
 pageEncoding="UTF-8"%>
 
@@ -41,6 +47,27 @@ pageEncoding="UTF-8"%>
 <meta name="globalsign-domain-verification" content="-r3RJ0a7Q59atalBdQQIvI2DYIhVYtVrtYuRdNXENx" />
 <link rel="chrome-webstore-item" href="https://chrome.google.com/webstore/detail/eofoblinhpjfhkjlfckmeidagfogclib">
 
+<%
+	if( !(SystemProperty.environment.value() == SystemProperty.Environment.Value.Development) )
+	{
+%>
+<%@ include file="file-hash.json"%>
+<%
+	}
+%>
+<script type="text/javascript">
+	var _AGILE_FILE_HASH;
+	
+	function _agile_get_file_hash(filename)
+	{
+		if( !filename || filename == '' )	return _AGILE_VERSION;
+		
+		if( _AGILE_FILE_HASH && _AGILE_FILE_HASH[filename] )	return _AGILE_FILE_HASH[filename];
+		
+		return _AGILE_VERSION;
+	}
+</script>
+
 <!-- Include ios meta tags -->
 <%@ include file="ios-native-app-meta-tags.jsp"%>
 
@@ -52,15 +79,12 @@ response.sendRedirect("/login");
 return;
 }
 
+
+
+
 DomainUser domainUser = DomainUserUtil.getCurrentDomainUser();
 
 System.out.println("Domain user " + domainUser);
-
-DomainUserAddPicDeferredTask task = new DomainUserAddPicDeferredTask(domainUser.domain);
-// Add to queue
-Queue queue = QueueFactory.getDefaultQueue();
-queue.add(TaskOptions.Builder.withPayload(task));
-
 
 ObjectMapper mapper = new ObjectMapper();
 
@@ -124,6 +148,7 @@ String _AGILE_VERSION = SystemProperty.applicationVersion.get();
 
 String _VERSION_ID = VersioningUtil.getVersion();
 
+List<Dashboard> dashboardsList = DashboardUtil.getAddedDashboardsForCurrentUser();
 %>
 
 
@@ -169,6 +194,37 @@ content="<%=domainUser.getInfo(DomainUser.LAST_LOGGED_IN_TIME)%>" />
   display: none !important;
 }
 
+.search label { position:absolute; margin:5px 0 0 5px; }
+.search input[type="text"]{
+    text-indent:1px;
+    padding:0 0 0 22px;
+    width:0;
+    height:22px;
+    
+    border:1px solid #ccc;
+    color:#000;
+   
+    -webkit-transition:width 0.5s ease-in-out;
+    -moz-transition:width 0.5s ease-in-out;
+    cursor:pointer;
+}
+.search input[type="text"]:focus{
+    width:200px;
+    outline:none;
+    cursor:text;
+}
+.free_plan_alert{
+  padding-top: 5px;
+  padding-bottom: 7px;
+  z-index: 1;top: 65px;
+  position: absolute;
+  text-align: center;
+  left: 0;
+  right: 0;
+  margin: 0px auto;
+  width: 280px;
+}
+
 </style>
 <!--  responsive table js -->
 <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
@@ -196,6 +252,66 @@ function isIE() {
 
 </script>
 <div id="alert-message" style="display:none;"></div>
+
+<div id="free_plan_alert_info" class="free_plan_alert alert alert-info" role="alert" style="display:none;"> 
+  <span class="free_plan_message">
+   You are currently on FREE Plan.
+  </span>
+  <a href="#subscribe" class="text-info font-bold" onclick="Agile_GA_Event_Tracker.track_event('Upgrade from Nav Bar Message')">Upgrade</a>
+  <span class="free_plan_strip_close p-l-sm c-p">&times</span>
+</div>
+
+<div rel="popover" data-custom-popover-class='grid_custom_popover' data-trigger="click"  data-original-title="" title="" data-placement="bottom" class="need_help grid_icon_center hidden-xs <%
+          switch (Integer.parseInt(currentUserPrefs.theme)) {
+            case 1:  out.print("bg-white-only ");
+                   break;
+            case 2:  out.print("bg-white-only ");
+                 break;
+            case 3:  out.print("bg-white-only ");
+                 break;
+            case 4:  out.print("bg-white-only ");
+                 break;
+            case 5:  out.print("bg-white-only ");
+                 break;
+            case 6:  out.print("bg-white-only ");
+                 break;
+            case 7:  out.print("bg-black ");
+                 break;
+            case 8:  out.print("bg-info dker ");
+                 break;
+            case 9:  out.print("bg-primary ");
+                 break;
+            case 10:  out.print("bg-info dk ");
+                 break;
+            case 11:  out.print("bg-success ");
+                 break;
+            case 12:  out.print("bg-danger dker ");
+                 break;
+            case 13:  out.print("bg-white-only ");
+                 break;
+            case 14:  out.print("bg-dark ");
+                 break;
+            default:
+                    break;
+         
+          }
+              
+         %>" screen_name="Need Help? We are one click away." data-content="<div class='row' id='need_help_header'>
+                  <ul class='col-xs-12 col-sm-12 grid-sub-nav text-center m-t-md p-l-md p-r-md'>
+                    
+                <li class='pull-left m-b-sm'><a href='#' class='menu-service-select' data-service-name='SALES' data-dashboard='SalesDashboard'><i class='thumb'><img src='img/sales.svg'></i><span class='block'>Sales</span></a></li>
+
+                <li class='pull-left m-b-sm'><a href='#' class='menu-service-select' data-service-name='MARKETING' data-dashboard='MarketingDashboard'><i class='thumb'><img src='img/marketing.svg'></i> <span class='block'>Marketing</span></a></li>
+
+                <li class='pull-left m-b-sm'><a href='#' class='menu-service-select' data-service-name='SERVICE' data-dashboard='dashboard'><i class='thumb'><img src='img/service.svg'></i> <span class='block'>Service</span></a></li>
+
+                </ul>
+                </div>
+                
+                  </div>">
+                   <a href="#" class='grid-icon-header block wrapper' onclick="return false;"><i class="glyphicon glyphicon-th"></i></a>    
+               </div>
+
 <div id="wrap" class="app app-aside-folded-inactive app-header-fixed app-aside-fixed 
 <% 
 if(currentUserPrefs.menuPosition.equals("top")){
@@ -252,68 +368,175 @@ if(currentUserPrefs.menuPosition.equals("top")){
           <div class="aside-wrap">
         <div class="navi-wrap">
   
-  <nav  class="navi clearfix">
-            <ul class="nav">
-              <li class="hidden-folded padder m-t m-b-sm text-muted text-xs">
-                <span>Sales</span>
-              </li>
-              
+  <nav  class="navi clearfix" id="agile-menu-navigation-container">
+  	<ul class="nav">
+  	
+	<!-- Sales menu -->  	
+  <%if(domainUser.role == ROLE.SALES){ %>
+   <li class="hidden-folded padder m-t-xs m-b-xs text-muted text-xs">
+     <span>Sales</span>
+   </li>
+        
+  <%
+      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.CONTACT)){
+  %>      
   <li id="contactsmenu">
     <a  href="#contacts">
       <i class="icon icon-user"></i>
       <span>Contacts</span>
     </a>
   </li>
+  <%
+      }
+  %>
+
   <li id="companiesmenu">
     <a  href="#companies">
       <i class="icon icon-building"></i>
       <span>Companies</span>
     </a>
   </li>
+
+  <%
+      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.DEALS)){
+  %>
    <li  id="dealsmenu">
     <a  href="#deals">
       <i class="fa fa-money"></i>
       <span>Deals</span>
     </a>
   </li>
-   <li id="casesmenu">
+  <%
+      }
+  %>
+  <%
+      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.CASES) && domainUser.version == null){
+  %>
+  <li id="casesmenu">
     <a  href="#cases">
       <i class="icon icon-folder"></i>
       <span>Cases</span>
     </a>
-  </li>
+  </li> 
+  <%
+      }
+  %>
+  <%
+      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.DOCUMENT)){
+  %>
+  
    <li id="documentsmenu">
     <a  href="#documents">
       <i class="icon icon-doc"></i>
       <span><%if(currentUserPrefs.menuPosition.equals("leftcol")){%>Docs<%}else{ %>Documents<%} %></span>
     </a>
   </li>
-  <li class="line dk  m-t-none m-b-none" style="height: 1px;"></li>
-    <li class="hidden-folded padder m-t m-b-sm text-muted text-xs">
+  <%
+        }
+  %>  
+  
+  <%
+      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.CALENDAR)){
+  %>
+  
+  <li id="calendarmenu">
+    <a href="#calendar" onclick="Agile_GA_Event_Tracker.track_event('Calendar Option in Nav Bar')">
+    	<i class="icon icon-calendar"></i> 
+    	<span>Calendar</span> 
+    </a>
+  </li>
+  <%
+        }
+  %>  
+  
+  <li id="tasksmenu">
+    <a href="#tasks" onclick="Agile_GA_Event_Tracker.track_event('Tasks Option in Nav Bar')">
+      <i class="icon-list" data-original-title="" title=""></i>
+      <span>Tasks</span>
+      <span title="Tasks due" class="navbar_due_tasks pull-right tasks-span-top">
+          <span  id="due_tasks_count" class="badge badge-sm bg-danger"></span>
+      </span>
+    </a>
+  </li>
+
+  <li id="schedulingmenu">
+    <a href="#scheduler-prefs" onclick="Agile_GA_Event_Tracker.track_event('Appointment scheduling Option in Nav Bar')">
+      <i class="icon-tag" data-original-title="" title=""></i>
+      <span>Online Calendar</span>
+    </a>
+  </li>
+
+  <%
+      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.ACTIVITY)){
+    %>
+    <li id="activitiesmenu">
+    <a  href="#activities">
+      <i class="icon-speedometer icon-white"></i>
+      <span>Activities</span>
+    </a>
+  </li>
+    <%
+          }
+    %>
+    <%
+      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.REPORT)){
+    %>
+  <li id="reportsmenu">
+    <a  href="#reports">
+      <i class="icon-bar-chart icon-white"></i>
+      <span>Reports</span>
+    </a>
+  </li> 
+    <%
+          }
+    %> 
+  
+  <!-- End of Sales menu -->
+  <%} %>
+
+  
+  <!--  <li class="line dk  m-t-none m-b-none" style="height: 1px;"></li> -->
+  
+  <!-- Marketing menu -->  	
+  <%if(domainUser.role == ROLE.MARKETING){ %>
+  <li class="hidden-folded padder m-t-xs m-b-xs text-muted text-xs">
                 <span>Marketing</span>
               </li>
+   <%
+      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.CAMPAIGN)){
+   %>
    <li id="workflowsmenu">
     <a  href="#workflows">
       <i class="icon icon-sitemap"></i>
       <span>Campaigns</span>
     </a>
   </li>
-   <li id="socialsuitemenu">
-    <a  href="#social">
-      <i class="icon icon-comments"></i>
-      <span>Social</span>
+
+  <li id="triggersmenu">
+    <a  href="#triggers">
+      <i class="icon icon-magic-wand"></i>
+      <span>Triggers</span>
     </a>
   </li>
+    <%
+        }
+    %>
+    <%
+      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.WEBRULE)){
+    %>
    <li id="web-rules-menu">
     <a  href="#web-rules">
       <i class="icon icon-globe"></i>
       <span>Web Rules</span>
     </a>
   </li>
+    <%
+          }
+    %>
    <li id="segmentationmenu">
-    <a  href="#segments">
-       <i class="icon-large icon-screenshot"></i>
-      <span>Segments</span>  
+    <a  href="#visitors">
+       <i class="icon-eye"></i>
+      <span>Visitors</span>  
     </a>
   </li>
   <li id="landing-pages-menu">
@@ -322,32 +545,165 @@ if(currentUserPrefs.menuPosition.equals("top")){
       <span>Landing Pages</span>
     </a>
   </li>
+
+  <%
+  if(domainUser.is_admin){
+  %>
+  <li id="formsmenu">
+    <a  href="#forms">
+       <i class="icon-large1 icon-docs"></i>
+      <span>Forms</span>  
+    </a>
+  </li>
+  <%}%>
+  
+  <li id="email-templates-menu">
+    <a href="#email-templates">
+      <i class="icon-envelope-letter"></i>
+      <span>Email Templates</span>
+    </a>
+  </li>
+
+  <%
+      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.SOCIAL)){
+   %>
+   <li id="socialsuitemenu">
+    <a  href="#social">
+      <i class="icon-bubbles"></i>
+      <span>Social</span>
+    </a>
+  </li>
+    <%
+          }
+    %>
+    
+    <%
+      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.ACTIVITY)){
+    %>
     <li id="activitiesmenu">
     <a  href="#activities">
-      <i class="icon-cogs icon-white"></i>
+      <i class="icon-speedometer icon-white"></i>
       <span>Activities</span>
     </a>
   </li>
+    <%
+          }
+    %>
+    <%
+      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.REPORT)){
+    %>
   <li id="reportsmenu">
     <a  href="#reports">
       <i class="icon-bar-chart icon-white"></i>
       <span>Reports</span>
     </a>
-  </li>  
-  
-  <!-- <li class='<%if(currentUserPrefs.menuPosition.equals("top")){out.print("dockedicons ");} else{out.print("fixedicons ");} %>' id="planView"> <a href="#subscribe"><i class="icon-shopping-cart"></i> <span> Plan &amp; Upgrade </span></a></li>
-  <li class='pos-b-0 <%if(currentUserPrefs.menuPosition.equals("top")){out.print("dockedicons ");} else{out.print("fixedicons ");} %>' id ="helpView"><a href="#help"><i class="icon-question"></i>
-                      <span> Help </span></a></li> -->
-  <li class="line dk m-t-none m-b-none" style="height: 1px; display: none;"></li>
-  <li class="hidden-folded padder m-t m-b-sm text-muted text-xs" style="display: none;">
-    <span>Support</span>
+  </li> 
+  <li id="tasksmenu" class="hide">
+    <a href="#tasks" onclick="Agile_GA_Event_Tracker.track_event('Tasks Option in Nav Bar')">
+      <i class="icon-list" data-original-title="" title=""></i>
+      <span>Tasks</span>
+      <span title="Tasks due" class="navbar_due_tasks pull-right tasks-span-top">
+          <span  id="due_tasks_count" class="badge badge-sm bg-danger"></span>
+      </span>
+    </a>
   </li>
-  <li id="tickets" style="display: none;">
-    <a  href="#tickets">
+    <%
+          }
+    %> 
+    
+  <!-- End of Marketing menu -->
+  <%} %>
+  
+  <!-- <li class="line dk m-t-none m-b-none" style="height: 1px;"></li> -->
+  <!-- Service menu -->  	
+  <%if(domainUser.role == ROLE.SERVICE){ %>
+  
+  <li class="hidden-folded padder m-t-xs m-b-xs text-muted text-xs">
+    <span>Service</span>
+  </li>
+  
+  <li id="tickets">
+    <a href="#tickets">
       <i class="icon icon-ticket"></i>
       <span>Help Desk</span>
     </a>
-  </li>            
+  </li>
+
+  <li id="tasksmenu" class="hide">
+    <a href="#tasks" onclick="Agile_GA_Event_Tracker.track_event('Tasks Option in Nav Bar')">
+      <i class="icon-list" data-original-title="" title=""></i>
+      <span>Tasks</span>
+      <span title="Tasks due" class="navbar_due_tasks pull-right tasks-span-top">
+          <span  id="due_tasks_count" class="badge badge-sm bg-danger"></span>
+      </span>
+    </a>
+  </li>
+
+  <%
+  if(domainUser.is_admin && !domainUser.restricted_menu_scopes.contains(NavbarConstants.HELPDESK)){
+  %>
+  <li id="ticketgroupsmenu">
+    <a href="#ticket-groups">
+      <i class="icon icon-users"></i>
+      <span>Groups</span>
+    </a>
+  </li>
+  <li id="ticketlabelsmenu">
+    <a href="#ticket-labels">
+      <i class="icon icon-flag"></i>
+      <span>Labels</span>
+    </a>
+  </li>
+  <li id="ticketcannedmessagesmenu">
+    <a href="#canned-responses">
+      <i class="icon icon-cursor"></i>
+      <span>Canned Responses</span>
+    </a>
+  </li>
+  <li id="ticketviewsmenu">
+    <a href="#ticket-views">
+      <i class="icon icon-directions"></i>
+      <span>Views</span>
+    </a>
+  </li>
+  <li id="ticketknowledgebasemenu">
+    <a href="#knowledgebase">
+      <i class="fa fa-search"></i>
+      <span>Knowledge Base</span>
+    </a>
+  </li>
+   <%
+      }
+  %> 
+
+  <%
+      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.ACTIVITY)){
+    %>
+    <li id="activitiesmenu">
+    <a  href="#activities">
+      <i class="icon-speedometer icon-white"></i>
+      <span>Activities</span>
+    </a>
+  </li>
+    <%
+          }
+    %>
+    <%
+      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.REPORT)){
+    %>
+  <li id="reportsmenu">
+    <a  href="#reports">
+      <i class="icon-bar-chart icon-white"></i>
+      <span>Reports</span>
+    </a>
+  </li> 
+    <%
+          }
+    %> 
+ 
+  <!-- End of Service menu -->
+  <%} %>
+             
   </ul>
 
 
@@ -449,7 +805,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
               </li> 
               --%>
               
-              <li class="line dk"></li>
+             <!--  <li class="line dk"></li>
             <li class="hidden-folded padder m-t m-b-sm text-muted text-xs">
                 <span>More</span>
               </li>
@@ -457,12 +813,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
                 <li id="due_tasks"  data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Tasks"><a class="pos-rlt" href="#tasks"><i class="icon-list"></i>
                   <span class="visible-xs">Tasks</span>
 
-                      <span title="Tasks due" class="navbar_due_tasks pull-right-xs"><span  id="due_tasks_count" class="badge badge-sm up bg-danger"></span></span></a></li>
-               <!-- <li id="recent-menu" class="dropdown" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Activity"><a
-                class="dropdown-toggle" data-toggle="dropdown" href=""> <i class='fa fa-history' style="opacity:0.8"></i>
-                <span class="visible-xs">Recent Activity</span>
-              </a><ul class="dropdown-menu animated fadeInRight recent-view" style="width:23em; right:-11px;"></ul>
-              </li>  -->
+                      <span title="Tasks due" class="navbar_due_tasks pull-right-xs"><span  id="due_tasks_count" class="badge badge-sm up bg-danger"></span></span></a></li> -->
               
               
             </ul>
@@ -583,8 +934,18 @@ if(currentUserPrefs.menuPosition.equals("top")){
   </div>
   </aside>
 <div class="app-content" id="agilecrm-container">
+<div id="direct-dialler-div" style = "height:0px;position: absolute!important;"></div>
+<div id="draggable_noty" style = "height:0px;position: absolute!important;"><div style="z-index: 10000;position: relative;"><div class="draggable_noty_info"></div><div class="draggable_noty_notes"></div><div class="draggable_noty_callScript" style="display:none;"></div></div></div>
 <div id="call-campaign-content" class="box-shadow width-min-100p height-min-100p z-lg" style = "background-color: #edf1f2;"></div> 
-<div class="butterbar animation-active" style="z-index:99;"><span class="bar"></span></div>
+<script type="text/javascript">
+// In mobile browsers, don't show animation bar
+if( (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) )
+{
+	document.write('<div class="butterbar" style="z-index:99;"><span class="bar"></span></div>');
+} else {
+	document.write('<div class="butterbar animation-active" style="z-index:99;"><span class="bar"></span></div>');
+}
+</script>
 <div id="content" class="app-content-body">
 <!-- <img class="init-loading" style="padding-right: 5px"
 src="img/21-0.gif"></img> -->
@@ -619,12 +980,14 @@ if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Produ
 }
 
 %>
-    <%@ include file="tpl/min/precompiled/flatfull/tpl.html"%>  
- 
+
+ <%@ include file="tpl/min/precompiled/flatfull/tpl.html"%>
+
   <!-- Include bootstrap modal divs-->
  <%@ include file="flatfull/modals.html"%>
 
 </div>
+
 <!-- Including Footer page -->
 <jsp:include page="flatfull/footer.jsp" />
 
@@ -681,10 +1044,25 @@ var ACCOUNT_PREFS = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(accountPr
 // Get current domain user json
 var CURRENT_DOMAIN_USER = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(domainUser))%>;
 
+// Get current user dashboards
+var CURRENT_USER_DASHBOARDS = <%=mapper.writeValueAsString(dashboardsList)%>;
+// Get Current Agile User
+var CURRENT_AGILE_USER = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(AgileUser.getCurrentAgileUser()))%>;
+
 // Get Contact Date Fields
-var CONTACTS_DATE_FIELDS = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(CustomFieldDefUtil.getCustomFieldsByScopeAndType(SCOPE.CONTACT, "DATE")))%>;
+var CONTACTS_DATE_FIELDS = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(request.getAttribute("customFieldsScopeContactTypeDate")))%>;
 // Get Contact Date Fields
-var COMPANY_DATE_FIELDS = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(CustomFieldDefUtil.getCustomFieldsByScopeAndType(SCOPE.COMPANY, "DATE")))%>;
+var COMPANY_DATE_FIELDS = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(request.getAttribute("customFieldsScopeCompanyTypeDate")))%>;
+
+// Get Contact contact type custom fields
+var CONTACTS_CONTACT_TYPE_FIELDS = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(request.getAttribute("customFieldsScopeContactTypeContact")))%>;
+// Get Contact company type custom fields
+var CONTACTS_COMPANY_TYPE_FIELDS = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(request.getAttribute("customFieldsScopeContactTypeCompany")))%>;
+
+// Get Company contact type custom fields
+var COMPANIES_CONTACT_TYPE_FIELDS = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(request.getAttribute("customFieldsScopeCompanyTypeContact")))%>;
+// Get Company company type custom fields
+var COMPANIES_COMPANY_TYPE_FIELDS = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(request.getAttribute("customFieldsScopeCompanyTypeCompany")))%>;
 
 //online scheduling url will be filled  only when user goes to calendar route 
 var ONLINE_SCHEDULING_URL ="" ;
@@ -695,15 +1073,20 @@ var HANDLEBARS_LIB = LOCAL_SERVER ? "/lib/handlebars-v1.3.0.js" : "//cdnjs.cloud
 var _billing_restriction = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(restriction))%>;
 var USER_BILLING_PREFS = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(subscription))%>;
 
-head.load(LIB_PATH + 'final-lib/min/lib-all-min-1.js?_=' + _AGILE_VERSION, function(){
-        load_globalize();
-        showVideoForRegisteredUser();
-});
+head.load(	"https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js",
+			LIB_PATH + 'final-lib/min/lib-all-new-1.js?_=' + _agile_get_file_hash('lib-all-new-1.js'),
+			"https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.3.0/handlebars.min.js",
+			LIB_PATH + 'final-lib/min/backbone-min.js',
+			LIB_PATH + 'final-lib/min/lib-all-new-2.js?_=' + _agile_get_file_hash('lib-all-new-2.js')+'_', 
+			function(){
+		        // load_globalize();
+		        showVideoForRegisteredUser();
+		});
 
 // head.js({ library  : LIB_PATH + 'final-lib/min/lib-all-min-1.js?_=' + _AGILE_VERSION });
 
 if(HANDLEBARS_PRECOMPILATION)
-head.js(CLOUDFRONT_PATH + "tpl/min/precompiled/" + FLAT_FULL_PATH + "tpl.js" + "?_=" + _AGILE_VERSION);	
+head.js(CLOUDFRONT_PATH + "tpl/min/precompiled/" + FLAT_FULL_PATH + "tpl.js" + "?_=" + _agile_get_file_hash('tpl.js'));	
 
 var en;
 
@@ -716,7 +1099,7 @@ var Agile_Contact = {};
 head.ready(function() {
 
 if(!HANDLEBARS_PRECOMPILATION){
-    head.js(HANDLEBARS_LIB, FLAT_FULL_PATH + "jscore/handlebars/download-template.js" + "?_=" + _AGILE_VERSION, function()
+    head.js(HANDLEBARS_LIB, FLAT_FULL_PATH + "jscore/handlebars/download-template.js" + "?_=" + _agile_get_file_hash('download-template.js'), function()
     {
         downloadTemplate("tpl.js");
         downloadTemplate("contact-view.js");
@@ -727,31 +1110,48 @@ if(!HANDLEBARS_PRECOMPILATION){
 $('body').css('background-image', 'none');
 //$('#content').html('ready');
 $("img.init-loading", $('#content')).attr("src", "<%=CLOUDFRONT_TEMPLATE_LIB_PATH%>/img/ajax-loader-cursor.gif");
-head.js({"core" :   CLOUDFRONT_PATH + 'jscore/min/' + FLAT_FULL_PATH +'js-all-min.js' + "?_=" + _AGILE_VERSION}, CLOUDFRONT_PATH + "tpl/min/precompiled/" + FLAT_FULL_PATH + "contact-view.js" + "?_=" + _AGILE_VERSION);
+
+head.load([{'js-core-1': CLOUDFRONT_PATH + 'jscore/min/' + FLAT_FULL_PATH +'js-all-min-1.js' + "?_=" + _agile_get_file_hash('js-all-min-1.js')+"_"}, 
+		{'js-core-2': CLOUDFRONT_PATH + 'jscore/min/' + FLAT_FULL_PATH +'js-all-min-2.js' + "?_=" + _agile_get_file_hash('js-all-min-2.js')+"_"}, 
+		{'js-core-3': CLOUDFRONT_PATH + 'jscore/min/' + FLAT_FULL_PATH +'js-all-min-3.js' + "?_=" + _agile_get_file_hash('js-all-min-3.js')+"_"}, 
+		{'js-core-4': CLOUDFRONT_PATH + 'jscore/min/' + FLAT_FULL_PATH +'js-all-min-4.js' + "?_=" + _agile_get_file_hash('js-all-min-4.js')+"_"}, 
+		CLOUDFRONT_PATH + "tpl/min/precompiled/" + FLAT_FULL_PATH + "contact-view.js" + "?_=" + _agile_get_file_hash('contact-view.js')+"_"], function(){
+			console.log("All files loaded. Now continuing with script");
+      load_globalize();
+			try{
+				$('[data-toggle="tooltip"]').tooltip();  
+				//Code to display alerts of widgets.
+				showNotyPopUp('<%=session.getAttribute("widgetMsgType") %>', '<%=session.getAttribute("widgetMsg") %>' , "bottomRight");
+			} catch(e) {
+				//Do nothing
+			}
+			 
+			//Resting the variables.
+			<% session.removeAttribute("widgetMsgType");
+			session.removeAttribute("widgetMsg"); 
+			%>
+			
+			try{
+				var sig = CURRENT_USER_PREFS.signature;
+				sig = sig.replace(/&lt;/g, "<").replace(/&gt;/g, ">");
+				CURRENT_USER_PREFS.signature = sig;
+
+        //Turn off all animations if this is mobile
+        if( agile_is_mobile_browser() )
+        {
+          $("body")[0].addClass('disable-anim');
+        }
+
+			} catch(e) {
+				
+			}
+
+	});
 
 // head.js({"stats" : '<%=CLOUDFRONT_TEMPLATE_LIB_PATH%>stats/min/agile-min.js' + "?_=" + _AGILE_VERSION});
-head.ready(["core"], function(){
-
-   try{
-      $('[data-toggle="tooltip"]').tooltip();  
-      //Code to display alerts of widgets.
-      showNotyPopUp('<%=session.getAttribute("widgetMsgType") %>', '<%=session.getAttribute("widgetMsg") %>' , "bottomRight");
-   }catch(e){}
-	 
-	//Resting the variables.
-	<% session.removeAttribute("widgetMsgType");
-	   session.removeAttribute("widgetMsg"); 
-  %>
 	
-	try{
-      var sig = CURRENT_USER_PREFS.signature;
-      sig = sig.replace(/&lt;/g, "<").replace(/&gt;/g, ">");
-      CURRENT_USER_PREFS.signature = sig;
-	}catch(e){}
+}); //End of head.ready() function. Check above.
 
-});
-
-});    
 function load_globalize()
 {
 
@@ -827,7 +1227,7 @@ var glcp = (('https:' == document.location.protocol) ? 'https://' : 'http://');
           
         
         </div>
-</div>
-
+  </div>
+<div id="fb-root"></div>
 </body>
 </html>

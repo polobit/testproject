@@ -1,0 +1,13 @@
+<script id="helpcenter-articles-model-template" type="text/html">
+{{#if is_article_published}}
+{{else}}
+<div style="padding-top:10px">
+	<i class="fa fa-chevron-right" aria-hidden="true"></i>
+	<a class="h5" href="#article/{{encodedtitle}}" 
+		style="font-size: 15px; vertical-align: top;">
+		{{title}}
+	</a>
+</div>
+
+{{/if}}
+</script>

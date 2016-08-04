@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -47,7 +48,7 @@ public class CampaignLogsSQLUtil
      *            - Log Type.
      */
     public static void addToCampaignLogs(String domain, String campaignId, String campaignName, String subscriberId,
-	    String message, String type)
+	    String message, String type, String timestamp)
     {
 	String insertToLogs = "INSERT INTO campaign_logs (domain, campaign_id, campaign_name, subscriber_id, log_time, message, log_type) VALUES("
 		+ GoogleSQLUtil.encodeSQLColumnValue(domain)
@@ -57,7 +58,7 @@ public class CampaignLogsSQLUtil
 		+ GoogleSQLUtil.encodeSQLColumnValue(campaignName)
 		+ ","
 		+ GoogleSQLUtil.encodeSQLColumnValue(subscriberId)
-		+ ",NOW()"
+		+ ","+getCampaignLogTimestamp(timestamp)
 		+ ","
 		+ GoogleSQLUtil.encodeSQLColumnValue(message) + "," + GoogleSQLUtil.encodeSQLColumnValue(type) + ")";
 	
@@ -66,9 +67,11 @@ public class CampaignLogsSQLUtil
 	try
 	{
 	    GoogleSQL.executeNonQuery(insertToLogs);
+	    //GoogleSQL.executeNonQueryInNewInstance(insertToLogs);
 	}
 	catch (Exception e)
 	{
+	    System.err.println("Exception occured while adding campaign log " + e.getMessage());
 	    e.printStackTrace();
 	}
     }
@@ -306,7 +309,7 @@ public class CampaignLogsSQLUtil
 	else
 	{
 	    logs = "SELECT campaign_id, subscriber_id, campaign_name, log_time, log_type,message, UNIX_TIMESTAMP(log_time) AS time FROM campaign_logs "
-			+ " USE INDEX(domain_logtype_logtime_index) WHERE domain = '"
+			+ " WHERE domain = '"
 			+ domain
 			+ "' AND log_type = '"
 			+ log_type.toUpperCase() + "' ORDER BY time DESC LIMIT " + page_size + " OFFSET " + cursor;
@@ -444,6 +447,70 @@ public class CampaignLogsSQLUtil
 	
     }
     
+//    /**
+//     * Takes list of string arrays and create a batch request and persists in
+//     * DB. It returns number of succefull insertions
+//     * 
+//     * @param listOfLogs
+//     * @return
+//     */
+//    public static int[] addCampaignLogsToNewInstance(List<Object[]> listOfLogs)
+//    {
+//	String insertToLogs = "INSERT INTO campaign_logs (domain, campaign_id, campaign_name, subscriber_id, log_time, message, log_type) VALUES(?, ?, ?, ?, ?, ?, ?)";
+//	Connection conn = null;
+//	PreparedStatement statement = null;
+//	int[] resultFlags = new int[listOfLogs.size()];
+//	try
+//	{
+//	    statement = GoogleSQL.getPreparedStatementFromNewInstance(insertToLogs);
+//	    conn = statement.getConnection();
+//	    conn.setAutoCommit(false);
+//	    
+//	    Long start_time = System.currentTimeMillis();
+//	    for (Object[] log : listOfLogs)
+//	    {
+//		for (int i = 1; i <= log.length; i++)
+//		{
+//		    statement.setObject(i, log[i - 1]);
+//		}
+//		
+//		statement.addBatch();
+//		
+//	    }
+//	    
+//	    System.out.println("time taken to add batch requests : " + (System.currentTimeMillis() - start_time));
+//	    
+//	    start_time = System.currentTimeMillis();
+//	    resultFlags = statement.executeBatch();
+//	    System.out.println("time taken to add batch  completed: " + (System.currentTimeMillis() - start_time));
+//	    
+//	}
+//	catch (Exception e)
+//	{
+//	    // TODO Auto-generated catch block
+//	    e.printStackTrace();
+//	}
+//	finally
+//	{
+//	    
+//	    try
+//	    {
+//		conn.commit();
+//		statement.close();
+//		if (conn != null)
+//		    conn.close();
+//	    }
+//	    catch (SQLException e)
+//	    {
+//		// TODO Auto-generated catch block
+//		e.printStackTrace();
+//	    }
+//	}
+//	
+//	return resultFlags;
+//	
+//    }
+    
     /**
      * Fetches Contact Activities (Both Page Views and Campaign Logs) Fetches
      * page by page. Uses Offset and Limit.
@@ -542,4 +609,50 @@ public class CampaignLogsSQLUtil
 	return contactActivities;
     }
     
+    public static void insertCampaignAssignedStatus(String domain, String campaignId, String status, String message, String token)
+    {
+    	String insertToLogs = "INSERT INTO campaign_assigned (domain, campaign_id, status, log_time, message, token) VALUES("
+    			+ GoogleSQLUtil.encodeSQLColumnValue(domain)
+    			+ ","
+    			+ GoogleSQLUtil.encodeSQLColumnValue(campaignId)
+    			+ ","
+    			+ GoogleSQLUtil.encodeSQLColumnValue(status)
+    			+ ",NOW(3)"
+    			+ ","
+    			+ GoogleSQLUtil.encodeSQLColumnValue(message) 
+    			+ ","
+    			+ GoogleSQLUtil.encodeSQLColumnValue(token) 
+    			+ ")";
+    		
+    		System.out.println("Insert Query to Campaigns Assigned: " + insertToLogs);
+    		
+    		try
+    		{
+    		   GoogleSQL.executeNonQuery(insertToLogs);
+    		}
+    		catch (Exception e)
+    		{
+    		    System.out.println("Exception occured while adding campaign log " + e.getMessage());
+    		    e.printStackTrace();
+    		}
+    }
+    
+    /**
+     * If campaign log already having timestamp it simply returns
+     * that timestamp else we mysql now() function.
+     * @param timestamp
+     * @return
+     */
+    public static String getCampaignLogTimestamp(String timestamp)
+    {
+	if(StringUtils.isBlank(timestamp))
+	{
+	    timestamp = "NOW(3)";
+	}
+	else
+	{
+	    timestamp = GoogleSQLUtil.encodeSQLColumnValue(timestamp);
+	}
+	return timestamp;
+    }
 }

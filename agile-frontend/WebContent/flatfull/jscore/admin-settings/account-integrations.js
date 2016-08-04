@@ -59,8 +59,18 @@ var account_stats_integrations = {
 				console.log("error");
 				console.log(response);
 			}
-		});
+			});
 
+	},
+
+	loadSyncTab : function(el) {
+	
+				getTemplate("sync-stats-new", {} , undefined, function(template_ui){
+					if(!template_ui)
+						  return;
+					$(el).find('#sync-stats-new').html($(template_ui));	
+				}, $(el).find('#sync-stats-new'));				
+		
 	}
 };
 
@@ -80,4 +90,145 @@ $('#email-stats-listners a[href="#sms-stats-new"]').on('click', function(e) {
 	$(el).find('#sms-stats-new').html(LOADING_ON_CURSOR);
 	account_stats_integrations.loadSMSStats(el);
 });
+$('#email-stats-listners a[href="#sync-stats-new"]').on('click', function(e) {
+	e.preventDefault();
+	$(el).find('#sync-stats-new').html(LOADING_ON_CURSOR);
+	account_stats_integrations.loadSyncTab(el);
+});
+}
+function syncAppData(){
+	 showModalConfirmation(
+		"Update Data",
+		"This will update your data. Do you want to continue?",
+		function()
+		{		
+	 	var domain = CURRENT_DOMAIN_USER.domain ; 
+	 	$.ajax({
+			url : 'core/api/custom-fields/syncappdata?domain='+domain,
+			type : 'GET',
+			success : function(data) {
+				console.log(data);
+				var yes = "";
+				var no = "Ok"
+				if(data == "success"){
+					showModalConfirmation(
+						"Update Data",
+						"Update request is successfully scheduled.",
+						function()
+						{
+							// No callback
+							return;
+						},function()
+						{
+							return;
+						}, yes, no);
+                  }
+                  else if (data == "limitReached"){
+                  	showModalConfirmation(
+						"Update Data",
+						"Update is allowed only once a month. Please try later.",
+						function()
+						{
+							// No callback
+							return;
+						},function()
+						{
+							return;
+						}, yes, no);
+                  }
+                  else{
+                  	showModalConfirmation(
+						"Update Data",
+						"There seems to be an issue. Please try again later.",
+						function()
+						{
+							// No callback
+							return;
+						},function()
+						{
+							return;
+						}, yes, no);
+                  }
+			},
+			error : function(response) {
+				console.log("error");
+				console.log(response);
+			}
+			});
+	    }, function()
+			{
+				// No callback
+				return;
+			}, function()
+			{
+				return;
+			}, "Ok", "Cancel");
+}
+function syncAppDatatoDeals(){
+	 showModalConfirmation(
+		"Update Data",
+		"This will update your data. Do you want to continue?",
+		function()
+		{		
+	 	var domain = CURRENT_DOMAIN_USER.domain ; 
+	 	$.ajax({
+			url : 'core/api/custom-fields/syncappdataforDeals?domain='+domain,
+			type : 'GET',
+			success : function(data) {
+				console.log(data);
+				var yes = "";
+				var no = "Ok"
+				if(data == "success"){
+					showModalConfirmation(
+						"Update Data",
+						"Update request is successfully scheduled.",
+						function()
+						{
+							// No callback
+							return;
+						},function()
+						{
+							return;
+						}, yes, no);
+                  }
+                  else if (data == "limitReached"){
+                  	showModalConfirmation(
+						"Update Data",
+						"Update is allowed only once a month. Please try later.",
+						function()
+						{
+							// No callback
+							return;
+						},function()
+						{
+							return;
+						}, yes, no);
+                  }
+                  else{
+                  	showModalConfirmation(
+						"Update Data",
+						"There seems to be an issue. Please try again later.",
+						function()
+						{
+							// No callback
+							return;
+						},function()
+						{
+							return;
+						}, yes, no);
+                  }
+			},
+			error : function(response) {
+				console.log("error");
+				console.log(response);
+			}
+			});
+	    }, function()
+			{
+				// No callback
+				return;
+			}, function()
+			{
+				return;
+			}, "Ok", "Cancel");
 }

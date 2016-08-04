@@ -69,6 +69,9 @@
             <arg value="deploy.sh"/>
         </exec> 
         <exec dir="util" executable="/bin/bash">
+            <arg value="generate-hash.sh"/>
+        </exec> 
+        <exec dir="util" executable="/bin/bash">
             <arg value="./ec2-lib-sync.sh"/>
             <arg line="${RELEASE_VERSION}"/>
             <arg line="${PRODUCTION}"/>
@@ -77,6 +80,8 @@
         <copy todir="${TARGET_DIR}/${ant.project.name}.war">
               <fileset dir="WebContent">
                 <exclude name="flatfull/tpl/**/*"/>
+              	<exclude name="misc/pagebuilder/source/**/*"/>
+                <exclude name="misc/landingpage/source/**/*"/>
             </fileset>
         </copy>
         <!--Copy application libraries to target -->

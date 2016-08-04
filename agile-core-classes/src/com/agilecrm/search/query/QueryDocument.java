@@ -16,7 +16,6 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.filter.util.ContactFilterUtil;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.db.ObjectifyGenericDao;
-import com.agilecrm.deals.Opportunity;
 import com.agilecrm.reports.Reports;
 import com.agilecrm.search.QueryInterface;
 import com.agilecrm.search.query.util.QueryDocumentUtil;
@@ -107,7 +106,18 @@ public class QueryDocument<T> implements QueryInterface
     public Collection<T> simpleSearchWithType(String keyword, Integer count, String cursor, String type)
     {
 	keyword = SearchUtil.normalizeString(keyword);
-	return processQuery("search_tokens:" + keyword + " AND type:" + type, count, cursor);
+	String typeFields = "";
+	if(type != null){
+		String[] typeStrings = type.split(",");
+		for (int i = 0; i < typeStrings.length; i++) {
+			if(StringUtils.isBlank(typeStrings[i]))
+				continue;
+			
+			typeFields += (i == 0 ? "" : " OR ") + "type : " + typeStrings[i].toUpperCase();
+		}
+	}
+	return processQuery("search_tokens:" + keyword + " AND " + typeFields, count, cursor);
+	//return processQuery("search_tokens:" + keyword + " AND type:" + type, count, cursor);
     }
 
     /**
@@ -520,7 +530,7 @@ public class QueryDocument<T> implements QueryInterface
      * @param orderBy
      * @return
      */
-    private List<ScoredDocument> getDocuments(String query, String orderBy)
+    public List<ScoredDocument> getDocuments(String query, String orderBy)
     {
 	SortOptions sortOptions = null;
 	if (StringUtils.isNotBlank(orderBy))
@@ -718,27 +728,8 @@ public class QueryDocument<T> implements QueryInterface
 	    com.agilecrm.cursor.Cursor agileCursor = (com.agilecrm.cursor.Cursor) entity;
 	    agileCursor.count = availableResults.intValue();
 	}
-	if(entities.size() == 10 ){
-		Set<String> set = new HashSet<String>(); 
-		int count = 0;
-		for(Object m : entities){
-			if(m instanceof Contact);
-				Contact contact = (Contact) m;
-				set.add(contact.contact_company_id);
-				count = count+1;
-		}
-		if(count == 10 && set.size()==1){
-			String id = set.iterator().next().toString();
-			Contact contact = ContactUtil.getContact(Long.parseLong(id));
-			if(contact != null){
-				entities.remove(9);
-				entities.add(contact);
-			}
-		}
-	}
 	return entities;
     }
-    
 
     /**
      * Iterates though contact documents in and fetch respective entities from
@@ -796,7 +787,7 @@ public class QueryDocument<T> implements QueryInterface
 	// Gets last entity to set cursor on it
 	Object entity = entities.get(entities.size() - 1);
 
-	if ((entities instanceof com.agilecrm.cursor.Cursor))
+	if ((entity instanceof com.agilecrm.cursor.Cursor))
 	{
 
 	    com.agilecrm.cursor.Cursor agileCursor = null;
@@ -892,5 +883,22 @@ public class QueryDocument<T> implements QueryInterface
 	String query = QueryDocumentUtil.constructQuery(rules, "AND");
 	System.out.println("Query is : " + query);
 	return getCount(query);
+    }
+
+    /**
+     * Simple search based on key words with type as extra parameter, which is
+     * used to fetch a particular set of either Contact or list of companies.
+     * 
+     * @param keyword
+     * @param count
+     * @param cursor
+     * @param type
+     * @return
+     */
+    @Override
+    public Collection<T> simpleSearchWithTypeAndQuery(String query, Integer count, String cursor, String type)
+    {
+	query = SearchUtil.normalizeString(query);
+	return processQuery(query + " AND type:" + type, count, cursor);
     }
 }

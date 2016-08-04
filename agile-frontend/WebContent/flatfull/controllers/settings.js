@@ -42,7 +42,8 @@ var SettingsRouter = Backbone.Router
 			"gmail/:id" : "gmailShare",
 
 			/* Email templates */
-			"email-templates" : "emailTemplates", "email-template-add" : "emailTemplateAdd", "email-template/:id" : "emailTemplateEdit",
+			"email-templates" : "emailTemplates", "email-template-add" : "emailTemplateAdd", 
+			"email-template/:id" : "emailTemplateEdit",
 
 			/* Notifications */
 			"notification-prefs" : "notificationPrefs",
@@ -501,7 +502,7 @@ var SettingsRouter = Backbone.Router
 					$('#prefs-tabs-content').html(that.emailTemplatesListView.el);
 					$('#PrefsTab .select').removeClass('select');
 					$('.email-templates-tab').addClass('select');
-					$(".active").removeClass("active");
+					make_menu_item_active("email-templates-menu");
 
 				}, "#content");
 
@@ -751,7 +752,9 @@ var SettingsRouter = Backbone.Router
 						$('#online-calendar a[href="#calendar-tab"]', el).tab('show');
 						//online_calendar_tabs.loadScheduleUrlTab("#online-cal-listners");
 
-						var onlineschedulingURL = "https://" + CURRENT_DOMAIN_USER.domain + ".agilecrm.com/calendar/" + view.model.get('schedule_id');
+						var currentDomain = getCurrentDomain();
+
+						var onlineschedulingURL = "https://" + currentDomain + ".agilecrm.com/calendar/" + view.model.get('schedule_id');
 
 						$("#scheduleurl").attr("href", onlineschedulingURL);
 						$("#scheduleurl").text(onlineschedulingURL);
@@ -796,8 +799,8 @@ var SettingsRouter = Backbone.Router
 				$('#prefs-tabs-content').html(view.render().el);
 				$('#PrefsTab .select').removeClass('select');
 				$('.scheduler-prefs-tab').addClass('select');
-				$(".active").removeClass("active");
-
+				make_menu_item_active("schedulingmenu");
+				
 				}, "#online-cal-listners");
 			},
 
@@ -914,3 +917,13 @@ var SettingsRouter = Backbone.Router
 			}
 
 		});
+
+
+function getCurrentDomain(options){
+	var url = window.location.host;
+	var exp = /(\.)/;
+	if (url.search(exp) >= 0){
+		return url.split(exp)[0];
+	}
+	return " ";
+}

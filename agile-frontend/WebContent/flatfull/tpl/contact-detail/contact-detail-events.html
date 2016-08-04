@@ -8,7 +8,7 @@
                 <div class="box-right pull-left">
                     <h4 class="m-t-none">You have no events for {{contactShortName}}.</h4>
                     <div class="text">
-                        You can add an event related to a contact.
+                        You can add an event related to a {{#isCompany}}companies{{else}}contacts{{/isCompany}}
                     </div>
                     <a href="#" class="btn blue btn-slate-action btn-default btn-sm m-t-xs contact-add-event"><i class="icon-plus-sign"></i>  Add Event</a>
                 </div>
@@ -56,7 +56,7 @@
 							<a class="text-info popover_contact text-capitalize" href="#contact/{{id}}" data="{{id}}">{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</a>{{#if @last}}{{else}},{{/if}}
         				{{/if_contact_type}}
 						{{#if_contact_type "COMPANY"}}
-        					<a href="#company/{{id}}" class="text-capitalize">{{getPropertyValue properties "name"}}</a>{{#if @last}}{{else}},{{/if}}
+        					<a href="#company/{{id}}" class="text-info text-capitalize popover_contact" data="{{id}}">{{getPropertyValue properties "name"}}</a>{{#if @last}}{{else}},{{/if}}
         				{{/if_contact_type}}
 				{{/isDuplicateContactProperty}}
            		
@@ -71,9 +71,9 @@
 			<i class="fa fa-clock-o m-r-xs"></i> <time class="event-created-time text-base" datetime="{{epochToHumanDate "" created_time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created_time}}</time>
 		</small>
 		</div>
-		<div class="pull-right pos-abs pos-r-0 pos-b-0 m-r-xs">
+		<div class="pull-right pos-abs pos-r-0 pos-b-0 m-r-xs icons-text-sm">
 		<span class="actions">
-			<a title="Edit"  data="{{id}}" class="c-p text-l-none event-edit-contact-tab p-r-sm"> <i class="icon-pencil"></i> </a>
+			<a title="Edit"  data="{{id}}" class="c-p text-l-none event-edit-contact-tab p-r-sm"> <i class="fa fa-edit"></i> </a>
             <a title="Delete" class="c-p text-l-none"><span class="activity-delete icon-trash" id="{{id}}" url="core/api/events/bulk"><i></i></span></a>
         </span>
         </div>        

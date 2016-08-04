@@ -91,6 +91,7 @@ var Tickets = {
 				sort_collection: false,
 				templateKey : Tickets.isSingleRowView() ? 'ticket-single-row' : 'ticket',
 				customLoader: true,
+				preserveAcrossRoutes: true,
 				custom_scrollable_element: '.ticket-collection-container',
 				customLoaderTemplate: 'ticket-collection-loader',
 				individual_tag_name : 'tr',
@@ -631,6 +632,9 @@ var Tickets = {
 	  	});
 	},
 
+     
+
+
 	fillAssigneeAndGroup : function(el){
 
 		//Fetching all groups, assignees and appending them to select dropdown
@@ -1170,7 +1174,7 @@ var Tickets = {
 	// 	});
 	// },
 
-	loadWidgets: function(){
+	ticketsloadWidgets: function(){
 
 		var widgetState = _agile_get_prefs("hide_ticket_details_widgets");
 		if(widgetState && widgetState == "true")
@@ -1198,12 +1202,14 @@ var Tickets = {
 						return;
 
 					clearContactWidetQueues(ticketModel.contactID);
+					loadWidgets(App_Contacts.contactDetailView.el, contact, "widgets");
 
-					//loadWidgets(App_Contacts.contactDetailView.el, contact, "widgets");
-					loadWidgets(App_Ticket_Module.ticketView.el, contact);
+										
 				}
-			});
 
+
+			});
+			
 			//App_Contacts.contactDetailView.render(true).el;
 		}
 	},
@@ -1287,7 +1293,7 @@ var Tickets = {
 			$(e.target).addClass('fa-dedent').removeClass('fa-indent');
 
 			if(widgetStatus == false && $("#widgets-model-list").length == 0)
-				Tickets.loadWidgets();
+				Tickets.ticketsloadWidgets();
 
 		});
 	},
@@ -1300,13 +1306,44 @@ var Tickets = {
 			$row.css('min-height', window.innerHeight - $row.offset().top + 'px');
 	},
 
-	updateDueDate : function(timeInMilli, callback){
-          
-		var currentTicketJSON = App_Ticket_Module.ticketView.model.toJSON();
-          
-        if(currentTicketJSON.due_time == timeInMilli)   
-				return;
-			
+	updateDueDate : function(timeInMilli, el, callback ){
+        
+        var currentTicketJSON = App_Ticket_Module.ticketView.model.toJSON();
+		var date = new Date();
+		
+		if(Math.floor(currentTicketJSON.due_time/1000) == Math.floor(timeInMilli/1000))   
+			return;
+		
+		if(timeInMilli < date.getTime()){
+
+			var dueDate = null;
+
+			if(currentTicketJSON.due_time)
+			   dueDate = new Date(currentTicketJSON.due_time);
+
+			getTemplate("ticket-sla-error", {}, undefined, function(template_ui){
+
+				if(!template_ui)
+			  		return;
+
+			  	$('#ticket_change_sla', el).datepicker( "hide" );
+
+
+			  	if(dueDate){
+			  		$('#ticket_change_sla').val(new Date(dueDate).format('mm/dd/yyyy'));
+			        $('.ticket_change_slatime').val(new Date(dueDate).format('HH:MM'));
+                }
+			  	else{
+			  		$('#ticket_change_sla').val('');
+                    $('.ticket_change_slatime').val('');
+			  	}
+
+			  	$('#ticketsModal').html($(template_ui)).modal('show');
+			});
+
+        	return;
+		}
+	
 		var due_date_present = currentTicketJSON.due_time ? true : false;
 
 		var url = "/core/api/tickets/" + Current_Ticket_ID + "/activity/change-due-date";
@@ -1314,7 +1351,9 @@ var Tickets = {
 
 	  	Tickets.updateModel(url, json, function(model){
 
-			var formatted_date = new Date(timeInMilli).format('mmm dd, yyyy');
+			var formatted_date = new Date(timeInMilli).format('mmm dd, yyyy HH:MM');
+
+			App_Ticket_Module.ticketView.model.set(json,{silent:true});
 
 			Tickets_Rest.updateDataInModelAndCollection(Current_Ticket_ID, json);
 
@@ -1357,43 +1396,47 @@ var Tickets = {
 		{
 			$('#ticket_change_sla', el).datepicker({ 
 				drops: "down", 
-				dateFormat : CURRENT_USER_PREFS.dateFormat
+				dateFormat : CURRENT_USER_PREFS.dateFormat,
+				autoclose: true
 			}).on('changeDate', function(ev)
 			{
-				
+				//to get the time value 
 				var selected_date = $('#ticket_change_sla', el).val();
-				var selected_date_epoch_time = Date.parse(selected_date).getTime();
-                 
-                  
-				//Show alert if selected date is less than today start time
-				if(selected_date_epoch_time < Date.today().getTime()){
-
-					getTemplate("ticket-sla-error", {}, undefined, function(template_ui){
-
-						if(!template_ui)
-					  		return;
-
-					  	$('#ticket_change_sla', el).datepicker( "hide" );
-
-
-					  	var due_time = ticket.due_time;
-
-					  	if(due_time)
-					  		$('#ticket_change_sla').val(new Date(due_time).format('mm/dd/yyyy'));
-					 
-					  	else
-					  		$('#ticket_change_sla').val('');
-
-					  	$('#ticketsModal').html($(template_ui)).modal('show');
-					});
-
-					return;
-				}
-
+                var selected_date_epoch_time = Date.parse(selected_date).getTime();
 				
-				Tickets.updateDueDate(selected_date_epoch_time, function(){
+				var selected_hours = $('.ticket_change_slatime', el).val(); 
+
+				if(selected_hours){
+					var selected_time = selected_hours.split(':');
+
+					if(!selected_time[0] && !selected_time[1])
+					{
+						//Add 86399000 milli secs to convert due date to end of day
+						selected_date_epoch_time += 86399000
+					}
+					else{
+
+						var hours = parseInt(selected_time[0]);
+	                	var minutes = parseInt(selected_time[1]);
+
+						selected_date_epoch_time = Date.parse(selected_date).getTime() + 
+													(hours * 3600 * 1000) + (minutes * 60 * 1000);                  
+					}
+                }else{
+                	
+                	//Add 86399000 milli secs to convert due date to end of day
+					selected_date_epoch_time += 86399000
+                }
+				
+				//Show alert if selected date is less than today start time
+				Tickets.updateDueDate(selected_date_epoch_time,el, function(){
 					$('#ticket_change_sla', el).datepicker("hide");
 					$('#ticket_change_sla', el).blur();
+
+					var date = new Date(selected_date_epoch_time);
+
+					//Set time in time picker
+					$('.ticket_change_slatime', el).timepicker('setTime', date.format('HH:MM'));
 				});
 			});
 		});
@@ -1401,7 +1444,7 @@ var Tickets = {
 		//Initializing click event on due date button
 	  	$(el).on('click','.choose-due-date', function(event){
          
-         var currentTicketJSON = App_Ticket_Module.ticketView.model.toJSON();
+         	var currentTicketJSON = App_Ticket_Module.ticketView.model.toJSON();
 
 	  		if(currentTicketJSON.status == "CLOSED")
 	  			return;
@@ -1409,6 +1452,10 @@ var Tickets = {
 	  		console.log('Ticket status: ' + currentTicketJSON.status);
 
 	  		var value = $(this).data('value'), current_date = new Date();
+            
+            current_date.setHours(0);
+            current_date.setMinutes(0);
+            current_date.setSeconds(0);
 
 	  		switch(value){
 	  			case 'tomorrow':
@@ -1425,14 +1472,41 @@ var Tickets = {
 	  				break;
 	  		}
 
-	  		//Set selected date in input field
-	  		$('#ticket_change_sla', el).val(new Date(current_date.getTime()).format('mm/dd/yyyy'));
+            //Get the epoch time
+	  		var new_due_date = current_date.getTime();
 
-	  		Tickets.updateDueDate(current_date.getTime(), function(){
-				$('#ticket_change_sla', el).datepicker("hide");
-				$('#ticket_change_sla', el).blur();
-			});
-	  	});
+            var selected_hours = $('.ticket_change_slatime', el).val(); 
+
+            if(selected_hours){
+				var selected_time = selected_hours.split(':');
+
+				if(!selected_time[0] && !selected_time[1])
+				{
+					//Add 86399000 milli secs to convert due date to end of day
+					new_due_date += 86399000
+				}
+				else{
+
+					var hours = parseInt(selected_time[0]);
+                	var minutes = parseInt(selected_time[1]);
+
+					new_due_date = Date.parse(current_date).getTime() + 
+												(hours * 3600 * 1000) + (minutes * 60 * 1000);                  
+				}
+            }else{
+            	
+            	//Add 86399000 milli secs to convert due date to end of day
+				new_due_date += 86399000
+            }
+
+            //Set date
+	  		$('#ticket_change_sla', el).val(new Date(new_due_date).format(CURRENT_USER_PREFS.dateFormat));
+            
+            //Set hours and minutes
+	        $('.ticket_change_slatime', el).timepicker('setTime', new Date(new_due_date).format('HH:MM'));
+
+	  		Tickets.updateDueDate(new_due_date);
+		});
 	},
 
 	// removeTicketsFromCollection: function(ticketIDCSV){
@@ -1715,10 +1789,68 @@ var Tickets = {
 		$('div#ticketsModal').on('click', 'a.close', function(e){
 			$(e.target).closest('li').remove();
 		});
-	}
+	},
+
+	initializeTicketSLAinHours : function(el){
+
+		var TicketJSON = App_Ticket_Module.ticketView.model.toJSON();
+		var dueDate = TicketJSON.due_time; 
+        var hours, minutes;
+		
+		//Initializing timepicker with default date
+        $('.ticket_change_slatime', el).timepicker({showMeridian: false, defaultTime: false});
+
+        if(dueDate){
+
+        	var date = new Date(dueDate);
+
+	        //set time
+	        $('.ticket_change_slatime', el).timepicker('setTime', date.format('HH:MM'));
+	    }
+
+        //Binding change event on time picker
+        $('.ticket_change_slatime',el).timepicker().on('hide.timepicker', function(e) {
+			
+			console.log(e.time)
+
+			var TicketJSON = App_Ticket_Module.ticketView.model.toJSON();
+
+	 		var dueDate = TicketJSON.due_time;
+	 		console.log(dueDate);
+
+			if(e.time.hours == 0 && e.time.minutes == 0 && !dueDate){
+
+				$('.ticket_change_slatime',el).val('');
+				return;
+			}
+
+			var currentDate = new Date();
+
+		   	if(dueDate){
+		    	currentDate = new Date(dueDate);	
+		        //$('#ticket_change_sla',el).val(dueDateModifi.format('mm/dd/yyyy'));
+		    }
+			
+			currentDate.setHours(0);
+			currentDate.setMinutes(0);
+			currentDate.setSeconds(0);
+
+			var due_date = currentDate.getTime() + (e.time.hours * 3600 * 1000) 
+							+ (e.time.minutes * 60 * 1000);
+
+	        Tickets.updateDueDate(due_date, el, function(){
+
+	        	//Set date in date picker field
+	        	$('#ticket_change_sla', el).val(new Date(due_date).format(CURRENT_USER_PREFS.dateFormat));
+	        	
+	        	//Set hours and minutes
+	        	$('.ticket_change_slatime', el).timepicker('setTime', new Date(due_date).format('HH:MM'));
+	        });
+    	});	
+    }
 };
 
-// function tickets_typeahead(data){
+// fdue_dateu;nction tickets_typeahead(data){
 
 // 	if (data == null)
 // 		return;
@@ -1771,4 +1903,3 @@ var Tickets = {
 // 	// Returns list of contact/company names
 // 	return contact_names_list;
 // }
-

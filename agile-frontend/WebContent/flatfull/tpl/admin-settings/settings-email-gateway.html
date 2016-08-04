@@ -24,6 +24,9 @@
 							{{#if_equals email_api "SES"}}
 								<input type="text" autocomplete="off" class="input-medium required form-control" placeholder="Access Key" value="{{api_user}}" name="api_user">
 							{{/if_equals}}
+							{{#if_equals email_api "MAILGUN"}}
+								<input type="text" autocomplete="off" class="input-medium required form-control" placeholder="Domain Name" value="{{api_user}}" name="api_user">
+							{{/if_equals}}
 						</div>
 				</div>
 				<div class="control-group form-group">
@@ -35,6 +38,9 @@
 								<input type="password" autocomplete="off" class="input-medium form-control required" placeholder="Secret Key" value="{{api_key}}"  name="api_key"/>
 							{{/if_equals}}
                         	{{#if_equals email_api "MANDRILL"}}
+								<input type="text" autocomplete="off" class="input-medium required form-control"  placeholder="API Key" value="{{api_key}}" name="api_key"/>
+							{{/if_equals}}
+							{{#if_equals email_api "MAILGUN"}}
 								<input type="text" autocomplete="off" class="input-medium required form-control"  placeholder="API Key" value="{{api_key}}" name="api_key"/>
 							{{/if_equals}}
 						</div>
@@ -51,8 +57,9 @@
 					</div>
 				</div>	
 				{{#if_equals email_api "SEND_GRID"}}
-					<p>Note: Emails with attachments are currently not supported by the SendGrid integration. They are sent via Agile&#39;s default email gateway.</p>
+					
 				{{/if_equals}}	
+
 				{{#if_equals email_api "SES"}}
 					<!-- SES Content -->
 					<div class="m-t-n-sm">

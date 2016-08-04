@@ -20,6 +20,7 @@ public class FileStreamUtil
 	{
 	    // System.out.println(path);
 	    File f = new File(path);
+	    System.out.println(f.getAbsolutePath());
 	    if (!f.exists())
 	    {
 		System.out.println("File does not exist");

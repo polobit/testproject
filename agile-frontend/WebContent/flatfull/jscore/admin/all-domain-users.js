@@ -38,23 +38,25 @@ function initializeAdminpanelListner(el){
 	$("#admin-panel-listners").on("click", '.delete_user', function(e) {
 		
 		e.preventDefault();
-		if (!confirm("Are you sure you want to delete ?" ))
-			return;
-		var id = $(this).closest('a').attr("data");
-		$.ajax({
-			url: '/core/api/admin_panel/deleteuser?id='+id, 
-			type : 'DELETE',
-			success : function(data)
-			{
-				add_delete_user_info_as_note_to_owner(email);
-				alert("user deleted" );
-				location.reload(true);
-					           
-			},
-			error : function(response)
-			{
-				alert("error in deletion ");
-			} });
+		var $that = $(this);
+		showAlertModal("delete_user", "confirm", function(){
+			var id = $that.closest('a').attr("data");
+			$.ajax({
+				url: '/core/api/admin_panel/deleteuser?id='+id, 
+				type : 'DELETE',
+				success : function(data)
+				{
+					add_delete_user_info_as_note_to_owner(email);
+					showAlertModal("user_deleted", undefined, function(){
+						location.reload(true);
+					});					
+						           
+				},
+				error : function(response)
+				{
+					alert("error in deletion ");
+				} });
+		});
 		
 	});
 	
@@ -84,22 +86,21 @@ function initializeAdminpanelListner(el){
 					
 					if(namespace != "")
 					{
-							if (!confirm("Are you sure you want to delete ?" ))
-								return;
-							
-							// Show loading in content
-							$("#content").html(getRandomLoadingImg());
-							/**
-							 * Sends delete request to delete namespace
-							 */
-							$.ajax({
-								type : "DELETE",
-								url : "core/api/admin_panel/deletedomain/" + namespace,
-								success : function(data)
-								{
-									alert("account deleted");
-									Backbone.history.navigate("all-domain-users", { trigger : true });
-								}
+							showAlertModal("delete_account", "confirm", function(){
+								// Show loading in content
+								$("#content").html(getRandomLoadingImg());
+								/**
+								 * Sends delete request to delete namespace
+								 */
+								$.ajax({
+									type : "DELETE",
+									url : "core/api/admin_panel/deletedomain/" + namespace,
+									success : function(data)
+									{
+										alert("account deleted");
+										Backbone.history.navigate("all-domain-users", { trigger : true });
+									}
+								});
 							});
 						
 					
@@ -166,68 +167,101 @@ function initializeAdminpanelListner(el){
 			});
 		
 		});
+
+		$("#admin-panel-listners .unblock_user").off("click");
+		$("#admin-panel-listners").on("click", '.unblock_user', function(e) { 
+			
+			e.preventDefault();	
+			var domain = $(this).attr("domain");
+			var that = this;
+			if(domain){
+				$.ajax({
+					url: '/core/api/admin_panel/release_user?d='+domain, 
+					type : 'POST',
+					success : function(data)
+					{	
+						showNotyPopUp("information", "Domain released successfully.", "top");
+						$(that).closest("div").hide();
+						var json = {};
+						json.from="care@agilecrm.com";
+						json.cc = "mogulla@agilecrm.com";
+						json.to = "venkat@agilecrm.com";
+						json.subject = "Domain released from Admin Panel";	
+						json.body = "Domain: "+domain;
+						sendEmail(json);
+					},
+					error : function(data)
+					{
+						showNotyPopUp("warning", data.responseText, "top");
+					}
+				});
+			}
+		
+		});
 		
 		
 		$("#admin-panel-listners").on("click", '#delete_userplan', function(e) { 
 			e.preventDefault();
-			if (!confirm("Are you sure you want to cancel this subscription ?" ))
-				return;
-			var sub_id = $("#delete_userplan").attr("sub_id");
-			var cus_id = $("#delete_userplan").attr("cus_id");
-			$.ajax({url : 'core/api/admin_panel/deletesubscription?subscription_id='+sub_id+'&cus_id='+cus_id,
-				type : 'DELETE',
-				
-				success: function()
-			{
-				add_cancel_subscription_info_as_note_to_owner(email);
-				location.reload(true);
-			},error : function(response)
-			{
+			showAlertModal("delete_subscription", "confirm", function(){
+				var sub_id = $("#delete_userplan").attr("sub_id");
+				var cus_id = $("#delete_userplan").attr("cus_id");
+				$.ajax({url : 'core/api/admin_panel/deletesubscription?subscription_id='+sub_id+'&cus_id='+cus_id,
+					type : 'DELETE',
+					
+					success: function()
+					{
+						add_cancel_subscription_info_as_note_to_owner(email);
+						location.reload(true);
+					},error : function(response)
+					{
 
-				console.log(response);
-			}
+						console.log(response);
+					}
+				
+				});
+			});
 			
-		});
 		});
 		$("#admin-panel-listners").on("click", '#delete_emailplan', function(e) { 
 			e.preventDefault();
-			if (!confirm("Are you sure you want to cancel this subscription ?" ))
-				return;
-			var sub_id = $("#delete_emailplan").attr("sub_id");
-			var cus_id = $("#delete_emailplan").attr("cus_id");
-			$.ajax({url : 'core/api/admin_panel/deletesubscription?subscription_id='+sub_id+'&cus_id='+cus_id,
-				type : 'DELETE',
-				
-				success: function()
-			{
-					add_cancel_subscription_info_as_note_to_owner(email);
-					location.reload(true);
-			},error : function(response)
-			{
+			showAlertModal("delete_subscription", "confirm", function(){
+				var sub_id = $("#delete_emailplan").attr("sub_id");
+				var cus_id = $("#delete_emailplan").attr("cus_id");
+				$.ajax({url : 'core/api/admin_panel/deletesubscription?subscription_id='+sub_id+'&cus_id='+cus_id,
+					type : 'DELETE',
+					
+					success: function()
+					{
+							add_cancel_subscription_info_as_note_to_owner(email);
+							location.reload(true);
+					},error : function(response)
+					{
 
-				console.log(response);
-			}
-			
-		});
+						console.log(response);
+					}
+					
+				});
+			});
 			
 		});
 		
 		$("#admin-panel-listners").on("click", '#unpause_mandrill', function(e)
 		{
 			e.preventDefault();
-			if (!confirm("Are you sure you want to UnPause Mandrill?" ))
-				return;
-			var domain = $(this).attr('domain');
-			$.ajax({
-				url : 'core/api/admin_panel/resumeMandrill?domain='+domain,
-				type : 'PUT',
-				success : function(){
-					location.reload(true);
-				},
-				error : function(response){
-					console.log(response);
-					showNotyPopUp("information", "Error occured please try again", "top");
-				}
+			var $that = $(this);
+			showAlertModal("resume_mandrill", "confirm", function(){
+				var domain = $that.attr('domain');
+				$.ajax({
+					url : 'core/api/admin_panel/resumeMandrill?domain='+domain,
+					type : 'PUT',
+					success : function(){
+						location.reload(true);
+					},
+					error : function(response){
+						console.log(response);
+						showNotyPopUp("information", "Error occured please try again", "top");
+					}
+				});
 			});
 		});
 }

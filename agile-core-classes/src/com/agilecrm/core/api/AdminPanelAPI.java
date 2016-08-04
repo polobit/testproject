@@ -25,6 +25,7 @@ import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.deals.util.OpportunityUtil;
 import com.agilecrm.document.util.DocumentUtil;
 import com.agilecrm.subscription.Subscription;
+import com.agilecrm.subscription.Subscription.BillingStatus;
 import com.agilecrm.subscription.SubscriptionUtil;
 import com.agilecrm.subscription.limits.cron.deferred.AccountLimitsRemainderDeferredTask;
 import com.agilecrm.subscription.restrictions.db.BillingRestriction;
@@ -32,7 +33,9 @@ import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
 import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
 import com.agilecrm.subscription.stripe.StripeUtil;
 import com.agilecrm.subscription.ui.serialize.Plan;
+import com.agilecrm.user.AliasDomain;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.util.AliasDomainUtil;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.AccountDeleteUtil;
 import com.agilecrm.webrules.util.WebRuleUtil;
@@ -49,6 +52,7 @@ import com.stripe.model.Charge;
 import com.stripe.model.Customer;
 import com.stripe.model.Refund;
 import com.thirdparty.mandrill.subaccounts.MandrillSubAccounts;
+import com.thirdparty.sendgrid.subusers.SendGridSubUser;
 
 @Path("/api/admin_panel")
 public class AdminPanelAPI
@@ -82,6 +86,11 @@ public class AdminPanelAPI
 	    }
 	    // Gets the users and update the password to the masked one
 	    List<DomainUser> users = DomainUserUtil.getUsers(domain);
+	    if(users == null || users.isEmpty()){
+	    	String actualDomain = AliasDomainUtil.getDomainByAlias(domain);
+	        users = DomainUserUtil.getUsers(actualDomain);
+	    	
+	    }
 	    return users;
 	}
 	catch (Exception e)
@@ -224,7 +233,7 @@ public class AdminPanelAPI
 	int triggerscount = TriggerUtil.getCount();
 	int webstats = AnalyticsSQLUtil.getPageViewsCountForGivenDomain(domainname);
 
-	String emailinfo = MandrillSubAccounts.getSubAccountInfo(domainname, null);
+	String emailinfo = SendGridSubUser.getSendgridStats(domainname, null);
 
 	try
 	{
@@ -621,4 +630,37 @@ public class AdminPanelAPI
 	}
     }
 
+    @Path("/get_subscription")
+    @GET
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public Subscription getSubscription(@QueryParam("d") String domainname){
+    	String oldNamespace = NamespaceManager.get();
+    	try{
+    	NamespaceManager.set(domainname);
+    	return SubscriptionUtil.getSubscription();
+    	}catch(Exception e){
+    		e.printStackTrace();
+    	}finally{
+    		NamespaceManager.set(oldNamespace);
+    	}
+    	return null;
+    }
+    
+    @Path("/release_user")
+    @POST
+    public void releaseUser(@QueryParam("d") String domainname){
+    	String oldNamespace = NamespaceManager.get();
+    	try{
+    	NamespaceManager.set(domainname);
+    	Subscription subscription = SubscriptionUtil.getSubscription();
+    	subscription.status = BillingStatus.BILLING_SUCCESS;
+    	subscription.save();
+    	}catch(Exception e){
+    		throw new WebApplicationException(Response
+					.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+					.build());
+    	}finally{
+    		NamespaceManager.set(oldNamespace);
+    	}
+    }
 }

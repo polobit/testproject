@@ -19,7 +19,7 @@
                         <div id="addTask" class="control-group form-group" style="margin-bottom:0px;">
                             <label class="control-label col-sm-3">Task<span class="field_req">*</span></label>
                             <div class="controls col-sm-7">
-                                <input id="subject" placeholder="Name of Task" type="text" name="subject" size="40" class="required form-control" />
+                                <input id="subject" placeholder="Task Name" type="text" name="subject" size="40" class="required form-control" />
                             </div>
                         </div>
                         <div class="text-muted">
@@ -33,7 +33,7 @@
                             <label for="type" class="control-label col-sm-3">Category<span class="field_req">*</span></label>
                             <div class="controls col-sm-7">
                                 <span class="input ">
-                                    <select name="type" id="type" size="1" class="input-medium required form-control">
+                                    <select name="type" id="type" class="input-medium required form-control">
                                         <option value="CALL">Call</option>
                                         <option value="EMAIL">Email</option>
                                         <option value="FOLLOW_UP">Follow-up</option>
@@ -80,7 +80,7 @@
                     <div class="control-group form-group">
                             <label for="priority_type" class="control-label col-sm-3">Priority</label>
                             <div class="controls col-sm-7" >
-                                <select name="priority_type" id="priority_type" size="1" class="input-medium form-control">
+                                <select name="priority_type" id="priority_type" class="input-medium form-control">
                                         <option value="HIGH">High</option>
                                         <option value="NORMAL" selected="selected">Normal</option>
                                         <option value="LOW">Low</option>
@@ -91,7 +91,7 @@
                     <div class="control-group form-group">
                             <label for="status" class="control-label col-sm-3">Status</label>
                             <div class="controls col-sm-7" >
-                                <select name="status" id="status" size="1" class="status input-medium form-control">
+                                <select name="status" id="status" class="status input-medium form-control">
                                         <option value="YET_TO_START" selected="selected">Yet to Start</option>
                                         <option value="IN_PROGRESS">In Progress</option>
                                         <option value="COMPLETED">Completed</option>                                        
@@ -173,7 +173,7 @@
         </div>
     </div>
     <div class="modal-footer">
-        <a href="#" class="btn btn-primary" id="task_event_validate">Save </a>
+        <a href="#" class="btn btn-primary pull-right" id="task_event_validate">Save </a>
         <span class="save-status"></span>
     </div>
 </div>

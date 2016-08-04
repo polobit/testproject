@@ -10256,7 +10256,7 @@ left:0;
 .app-aside-folded:not(.app-aside-dock) .navi > ul > li > a
 {
 	width:60px;
-	height:50px;
+	height:45px;
 	overflow:hidden;
 }
 .app-aside-folded:not(.app-aside-dock) .navi > ul > li > a  i
@@ -10624,7 +10624,7 @@ top:117px;
 }
 
 /*hack for contact list second column spacing*/
-#contacts-table thead tr th:nth-child(2),#contacts-table tbody tr td:nth-child(2)
+#contacts-table thead tr th:nth-child(2),#contacts-table tbody tr td:nth-child(2),#companies thead tr th:nth-child(2),#companies tbody tr td:nth-child(2) 
 {
 	padding-left:0px;
 }

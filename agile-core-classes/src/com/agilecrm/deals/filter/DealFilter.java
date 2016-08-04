@@ -1,12 +1,24 @@
 package com.agilecrm.deals.filter;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 import javax.persistence.Id;
+import javax.persistence.PostLoad;
 import javax.persistence.PrePersist;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import com.agilecrm.contact.filter.ContactFilter;
+import org.apache.commons.lang.exception.ExceptionUtils;
+
+import com.agilecrm.SearchFilter;
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.deals.Opportunity;
+import com.agilecrm.deals.filter.util.DealFilterUtil;
+import com.agilecrm.search.AppengineSearch;
+import com.agilecrm.search.ui.serialize.SearchRule;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.googlecode.objectify.Key;
@@ -16,7 +28,7 @@ import com.googlecode.objectify.condition.IfDefault;
 
 @XmlRootElement
 @Cached
-public class DealFilter {
+public class DealFilter extends SearchFilter implements Serializable, Comparable<DealFilter>{
 	// Key
     @Id
     public Long id;
@@ -55,6 +67,18 @@ public class DealFilter {
     public String value_end = null;
     
     @NotSaved(IfDefault.class)
+    public String close_date_filter = null;
+    
+    @NotSaved(IfDefault.class)
+    public Long close_date_start = 0L;
+    
+    @NotSaved(IfDefault.class)
+    public Long close_date_end = 0L;
+    
+    @NotSaved(IfDefault.class)
+    public Long close_date_value = 0L;
+     
+    @NotSaved(IfDefault.class)
     public String archived = null;
     
     /**
@@ -73,6 +97,13 @@ public class DealFilter {
      * Created time of filter
      */
     public Long created_time = 0L;
+    
+    //deal tag filter added 
+    @NotSaved(IfDefault.class)
+    public String dealTagCondition = null;
+    
+    @NotSaved(IfDefault.class)
+    public String dealTagName = null;
     
     // Dao
     public static ObjectifyGenericDao<DealFilter> dao = new ObjectifyGenericDao<DealFilter>(DealFilter.class);
@@ -110,6 +141,22 @@ public class DealFilter {
     	this.value_start=value_start;
     	this.value_end=value_end;
     	this.archived=archived;
+    }
+    public DealFilter(String name, String view_type, Long owner_id, Long pipeline_id, String milestone, String value_filter, String value, String value_start, String value_end, String archived,String close_date_filter,Long close_date_start,Long close_date_end,Long close_date_value){
+    	this.name=name;
+    	this.view_type=view_type;
+    	this.owner_id=owner_id;
+    	this.pipeline_id=pipeline_id;
+    	this.milestone=milestone;
+    	this.value_filter=value_filter;
+    	this.value=value;
+    	this.value_start=value_start;
+    	this.value_end=value_end;
+    	this.archived=archived;
+    	this.close_date_filter = close_date_filter;
+    	this.close_date_start = close_date_start;
+    	this.close_date_end = close_date_end;
+    	this.close_date_value = close_date_value;
     }
     
     /**
@@ -151,6 +198,24 @@ public class DealFilter {
 	return null;
     }
     
+    @Override
+    public int compareTo(DealFilter dealFilter)
+    {
+	if (this.name == null && dealFilter.name != null)
+	{
+	    return -1;
+	}
+	else if (this.name != null && dealFilter.name == null)
+	{
+	    return 1;
+	}
+	else if (this.name == null && dealFilter.name == null)
+	{
+	    return 0;
+	}
+	return this.name.compareToIgnoreCase(dealFilter.name);
+    }
+    
     /**
      * Assigns created time for the new one, creates filter with owner key.
      */
@@ -172,5 +237,27 @@ public class DealFilter {
 	    	owner = new Key<DomainUser>(DomainUser.class, Long.parseLong(filter_owner_id));
     }
     
+    @PostLoad
+    private void postLoad()
+    {
+    	try {
+    		DealFilterUtil.setOldFiltersData(this);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+    }
+    
+    /**
+     * Queries deals based on {@link List} of {@link SearchRule} specified,
+     * applying 'AND' condition on after each {@link SearchRule}. Builds a query
+     * and returns search results using {@link AppengineSearch}.
+     * 
+     * @return {@link Collection}
+     */
+    @SuppressWarnings("rawtypes")
+    public Collection queryDeals(Integer count, String cursor, String orderBy)
+    {
 
+	return new AppengineSearch<Opportunity>(Opportunity.class).getAdvacnedSearchResultsForFilter(this, count, cursor, orderBy);
+    }
 }

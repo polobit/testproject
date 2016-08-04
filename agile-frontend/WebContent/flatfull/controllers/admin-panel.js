@@ -44,15 +44,15 @@ var AdminPanelRouter = Backbone.Router.extend({
 		{
 			console.log(data);
 
-			var emails = data.emailcount;
-			data.emailcount = JSON.parse(data.emailcount);
+			
 			getTemplate("domain-info", data, undefined, function(template_ui){
 				if(!template_ui)
 					  return;
 				$(el).find('#account').html($(template_ui));
 
 			}, $(el).find('#account'));
-
+			var emails = data.emailcount;
+			data.emailcount = JSON.parse(data.emailcount);
 			getTemplate("email-stats", JSON.parse(emails), undefined, function(template_ui){
 				if(!template_ui)
 					  return;
@@ -60,6 +60,26 @@ var AdminPanelRouter = Backbone.Router.extend({
 				$(".delete-namespace").attr("data", domainname);
 
 			}, $(el).find('#emailcount'));
+
+		}, error : function(response)
+		{
+
+			console.log(response);
+		} });
+
+	},
+
+	get_subscription_from_db : function(el, domainname)
+	{
+		console.log("in accountstats object");
+		console.log(domainname);
+		$.ajax({ url : 'core/api/admin_panel/get_subscription?d=' + domainname, type : 'GET', success : function(data)
+		{
+			if(data && data.status && $.inArray(data.status, PAGEBLOCK_REASON) != -1){
+				$(el).find(".unblock_user").closest("div").show();
+				$(el).find(".unblock_user").attr("domain", domainname);
+			}
+
 
 		}, error : function(response)
 		{
@@ -145,6 +165,7 @@ var AdminPanelRouter = Backbone.Router.extend({
 				self.get_customerobject_for_domain_from_adminpanel(el, domainname);
 				$('#account').html("<img src='" + updateImageS3Path("img/21-0.gif")+ "'>");
 				self.get_account_stats_for_domain_from_adminpanel(el, domainname);
+				self.get_subscription_from_db(el, domainname);
 
 				initializeAdminpanelListner(el);
 

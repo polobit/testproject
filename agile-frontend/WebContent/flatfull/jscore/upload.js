@@ -2,19 +2,24 @@ $(function(){
 
 	$("body").on('click', ".upload_s3", function(e){
 		e.preventDefault();
-		uploadImage("upload-container");
+		uploadImage("upload-container", $(this).closest("div"));
 	});
 
 	//Upload contact image
-	$("body").on('click', ".edit-pic", function(e){
+	/*$("body").on('click', ".edit-pic", function(e){
 		e.preventDefault();
 		uploadImage("contact-container");
-	});
+	});*/
 
 	//Upload company image
-	$("body").on('click', ".upload_pic", function(e){
+	$("body").on('click', ".upload_pic, .edit-pic", function(e){
 		e.preventDefault();
-		uploadImage("contact-container");
+		verifyUpdateImgPermission(function(can_update_image){
+			if(can_update_image)
+			{
+				uploadImage("contact-container");
+			}
+		});
 	});
 	
 	//Upload personal prefs
@@ -25,9 +30,20 @@ $(function(){
 	
 });	
 
-function uploadImage(id)
+function uploadImage(id, parent_div)
 {
-	var newwindow = window.open("flatfull/upload-flatfull.jsp?id=" + id,'name','height=310,width=500');
+	var allow_croper = ["contact/", "company/", "user-prefs"];
+	var allow_image_crop = false;
+	for (var i = 0; i < allow_croper.length; i++) {
+		if(window.location.href.indexOf(allow_croper[i]) > 0)
+				allow_image_crop = true;
+	}
+	
+	var windowURL = "flatfull/upload-flatfull.jsp?id=" + id;
+	if(allow_image_crop)
+		   windowURL += "&enable_crop=true";
+
+	var newwindow = window.open(windowURL,'name','height=310,width=500');
 	if (window.focus)
 	{
 		newwindow.focus();
@@ -148,7 +164,66 @@ function deleteContactImage(){
 }
 function deleteConfirmation() {
     var x;
-    if (confirm("Are you sure to Delete?") == true) {
-        deleteContactImage();
-    } 
+    verifyUpdateImgPermission(function(can_delete_image){
+		if(can_delete_image)
+		{
+			showAlertModal("delete", "confirm", function(){
+		    	deleteContactImage();
+			});
+		}
+	});
+
+}
+
+function verifyUpdateImgPermission(callback) {
+	if(Current_Route && Current_Route.indexOf("contact/") == 0 && App_Contacts.contactDetailView && App_Contacts.contactDetailView.model)
+	{
+		var contact_owner = App_Contacts.contactDetailView.model.get("owner");
+		if(contact_owner && contact_owner.id != CURRENT_DOMAIN_USER.id && !hasScope("EDIT_CONTACT"))
+		{
+			showModalConfirmation("Contact Update", 
+					"You do not have permission to update contacts.", 
+					function (){
+						return;
+					}, 
+					function(){
+						return;
+					},
+					function() {
+						
+					},
+					"Cancel", "");
+			if(callback && typeof callback === "function")
+			{
+				return callback(false);
+			}
+		}
+	}
+	if(Current_Route && Current_Route.indexOf("company/") == 0 && App_Companies.companyDetailView && App_Companies.companyDetailView.model)
+	{
+		var company_owner = App_Companies.companyDetailView.model.get("owner");
+		if(company_owner && company_owner.id != CURRENT_DOMAIN_USER.id && !hasScope("EDIT_CONTACT"))
+		{
+			showModalConfirmation("Company Update", 
+					"You do not have permission to update companies.", 
+					function (){
+						return;
+					}, 
+					function(){
+						return;
+					},
+					function() {
+						
+					},
+					"Cancel", "");
+			if(callback && typeof callback === "function")
+			{
+				return callback(false);
+			}
+		}
+	}
+	if(callback && typeof callback === "function")
+	{
+		return callback(true);
+	}
 }

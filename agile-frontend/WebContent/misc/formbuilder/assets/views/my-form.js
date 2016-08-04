@@ -34,7 +34,8 @@ define([
         that.$el.append(snippet);
       });
       $("#render").val(that.renderForm({preload : FormSettings.getSetting("agilepreloadfields"),
-	  method : FormSettings.getSetting("agileformmethod"), action : window.location.protocol + '//' + window.location.host + '/formsubmit',
+    agileformtransbg : FormSettings.getSetting("agiletransparentbackground"),
+	  action : window.location.protocol + '//' + window.location.host + '/formsubmit',
 	  text: _.map(this.collection.renderAllClean(), function(e){return e.html();}).join("\n")
       }));
       this.$el.appendTo("#build form");

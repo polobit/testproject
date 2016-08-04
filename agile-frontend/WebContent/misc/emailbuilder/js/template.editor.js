@@ -159,6 +159,7 @@ function handleObjects() {
 
                         $('#image-w').val(img.css('width'));
                         $('#image-h').val(img.css('height'));
+                        $('#image-alt-text').val(img.attr('alt'));
 
                         $('#image-link').val("");
                         if(img.parent('a').length) {
@@ -187,6 +188,7 @@ function handleObjects() {
 
                         $('#image-w').val(img.css('width'));
                         $('#image-h').val(img.css('height'));
+                        $('#image-alt-text').val(img.attr('alt'));
 
                         $('#image-link').val("");
                         if(img.parent('a').length) {
@@ -235,6 +237,7 @@ function handleObjects() {
 
                         $('#image-w').val(img.css('width'));
                         $('#image-h').val(img.css('height'));
+                        $('#image-alt-text').val(img.attr('alt'));
 
                         $('#image-link').val("");
                         if(img.parent('a').length) {
@@ -290,6 +293,18 @@ function handleObjects() {
                             $('input.social-check[name=youtube]').prop('checked', false);
                         }
 
+                        if (self.find('a.instagram').is(":visible")) {
+                            $('input.social-check[name=instagram]').prop('checked', true);
+                        } else {
+                            $('input.social-check[name=instagram]').prop('checked', false);
+                        }
+
+                        if (self.find('a.pinterest').is(":visible")) {
+                            $('input.social-check[name=pinterest]').prop('checked', true);
+                        } else {
+                            $('input.social-check[name=pinterest]').prop('checked', false);
+                        }
+
 
                         $('input.social-input[name="facebook"]').val(self.find('a.facebook').attr('href'));
 
@@ -298,6 +313,10 @@ function handleObjects() {
                         $('input.social-input[name="linkedin"]').val(self.find('a.linkedin').attr('href'));
 
                         $('input.social-input[name="youtube"]').val(self.find('a.youtube').attr('href'));
+
+                        $('input.social-input[name="instagram"]').val(self.find('a.instagram').attr('href'));
+
+                        $('input.social-input[name="pinterest"]').val(self.find('a.pinterest').attr('href'));
 
                         hideAllSettings();
                         $('#social-links').show();
@@ -599,9 +618,10 @@ $(document).ready(function () {
     $('#change-image').on('click', function(e){
         e.preventDefault();
          var id= $('#image-url').data('id');
-         $('#'+id).attr('src', $('#image-url').val()) ;
-         $('#'+id).attr('width', $('#image-w').val()) ;
-         $('#'+id).attr('height', $('#image-h').val()) ;
+         $('#'+id).attr('src', $('#image-url').val());
+         $('#'+id).attr('width', $('#image-w').val());
+         $('#'+id).attr('height', $('#image-h').val());
+         $('#'+id).attr('alt', $('#image-alt-text').val());
          if($('#image-link').val()) {
             if($('#'+id).parent("a").length) {
                 var anchorTag = $('#'+id).parent("a");
@@ -838,6 +858,12 @@ $('div.buttonStyleTxt').on('shown.bs.popover', function () {
         var $currentEl = $('#' + $('#path').val()).find($('#selector').val() + ' a.' + $(this).attr('name'));
         var $imgEl = $currentEl.find("img");
         if ($(this).is(':checked')) {
+            if ($currentEl.val() == undefined) {
+                var currentElName = $(this).attr('name');
+                var tempHtml = '<a href="#" style="border: none; text-decoration: none;" class="'+currentElName+'">';
+                tempHtml += '<img border="0" src="https://s3.amazonaws.com/agilecrm/editor/email/staticfiles/'+currentElName+'.png" width="35" height="35"></a>&nbsp;';
+                $('#' + $('#path').val() + ' tbody tr td').append(tempHtml);
+            }
             $currentEl.show();
             $imgEl.attr("width","35");
             $imgEl.attr("height","35");
@@ -1096,6 +1122,7 @@ $('div.buttonStyleTxt').on('shown.bs.popover', function () {
 
         $('#image-w').val($(this).css('width'));
         $('#image-h').val($(this).css('height'));
+        $('#image-alt-text').val($(this).attr('alt'));
         $('#image-link').val("");
         if(img.parent('a').length) {
             $('#image-link').val(img.parent('a').attr('href'));
@@ -1181,9 +1208,11 @@ function initializeEditor() {
         plugins: "autolink lists link charmap code paste textcolor colorpicker paste",
         paste_as_text: true,
        // paste_word_valid_elements: "h1,h2,h3,b,strong,i,em",
+        relative_urls : false,
+		convert_urls : false,
         toolbar: "bold italic underline | alignleft aligncenter alignright | forecolor backcolor | bullist numlist | link | styleselect | merge_fields",
         setup: function (editor) {
-            editor.addButton('merge_fields', { type : 'menubutton', text : 'Agile Contact Fields', icon : false, menu : parent.set_up_merge_fields(editor) });
+            editor.addButton('merge_fields', { type : 'menubutton', text : 'Merge Fields', icon : false, menu : parent.set_up_merge_fields(editor) });
 
             // editor.addButton('calltoaction', {
             //     text : 'Add Button',

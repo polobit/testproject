@@ -178,6 +178,13 @@ function initValidator(selector, callback) {
 				return;
 	    	}   
 
+	    	//validate for call node
+	    	var isValidCallNode =  isCheckFlagCallNode();
+	    
+	    	if(!isValidCallNode){
+        	    errorMessageCallNode(selector_ele);
+				return;
+	    	} 
   	        //if errors show single message
 	   		if(!saveflag){
 				  
@@ -240,4 +247,22 @@ function errorMessageUpdateDeal(selector)
 				}			
 			
 		
+}
+
+function isCheckFlagCallNode()
+{
+	var errorflag = true;
+
+		if($('#phonenumber2') && $('#message') ){
+	        
+	        	if($('#message').val()=="" && $('#phonenumber2').val()=="")
+		        	errorflag = false;			
+		}	
+		return errorflag;
+}
+function errorMessageCallNode(selector)
+{
+	if($('#phonenumber2').val() == "" && $('#message').val() == "")
+	   	selector.find("#errorsdiv").html("<p><strong>Message</strong> or <strong>Redirect Number</strong>-Please complete atleast one of this fields. </p>").addClass('ui-state-highlight');		       
+	        	
 }

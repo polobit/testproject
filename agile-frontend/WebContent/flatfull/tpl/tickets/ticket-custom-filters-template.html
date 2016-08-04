@@ -3,7 +3,7 @@
   <div class="panel panel-default m-b-none">
     <div class="panel-body">
         <div class="col-md-12 p-n m-b-xs">Assignees</div>
-        <div class="col-md-12 p-n assignee-select txt-small"><small>Loading...</small></div>
+        <div class="col-md-12 p-n assignee-select txt-small" style="max-height: 230px; overflow-y: auto;"><small>Loading...</small></div>
         <div class="col-md-12 p-n m-t-xs m-b-xs">Groups</div>
         <div class="col-md-12 p-n group-select txt-small"><small>Loading...</small></div>
     </div>
@@ -238,9 +238,11 @@
   <div id="ticket-lhs-assignees-model-list"></div>
 </script>
 <script id="ticket-lhs-assignees-model-template" type="text/html">
+  <div class="text-ellipsis width-9em">
   <label class="i-checks i-checks-sm">
     <input name="assignee_id" value="{{id}}" type="checkbox"><i></i>
   </label> {{name}}
+  </div>
 </script>
 <script id="ticket-lhs-groups-collection-template" type="text/html">
   <div id="ticket-lhs-groups-model-list"></div>

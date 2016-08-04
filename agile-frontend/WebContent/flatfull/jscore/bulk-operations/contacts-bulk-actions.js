@@ -16,274 +16,42 @@ var _BULKACTION_FILTER = undefined;
 */
 var Contacts_Events_Collection_View = Base_Collection_View.extend({
     events: {
-    	/** Contacts bulk actions */
-    	'click #bulk-owner' : 'bulkActionAddOwner',
-    	'click #bulk-campaigns' : 'bulkActionAssignToCampaign',
-    	'click #bulk-tags' : 'bulkActionAddTags',
-    	'click #bulk-tags-remove' : 'bulkActionRemoveTags',
-    	'click #bulk-email' : 'bulkActionSendEmail',
-    	'click #bulk-contacts-export' : 'bulkActionExportContacts',
-    	'click #bulk-companies-export' : 'bulkActionExportCompanies',
-    	'click #select-all-available-contacts' : 'bulkActionSelectAvailContacts',
-    	'click #select-all-revert' : 'bulkActionRevertAvailContacts',
-
-    	/** Company bulk actions */
-    	'click .default_company_filter' : 'bulkActionCompanyDefaultFilter',
-    	'click #companies-filter' : 'bulkActionCompaniesFilter',
-    	'click .company_static_filter' : 'bulkActionCompaniesStaticFilter',
-    	'click #comp-sort-by-created_time-desc' : 'bulkActionCompaniesSortonTimeDesc',
-    	'click #comp-sort-by-created_time-asc' : 'bulkActionCompaniesSortonTimeAsec',
-    	'click .comp-sort-by-name' : 'bulkActionCompaniesSortByName',
-    	'click #contact-actions-grid-delete' : 'contactActionsGridDelete',
-    	
-    	'click .filter' : 'filterResults',
-    	'click .default_filter' : 'defaultFilterResults',
-    	// 'click #companies-filter' : 'companyFilterResults',
-    	'click .default_contact_remove_tag' : 'defaultContactRemoveTag'
-
-    	//'click .contact-actions-delete-mobile' : 'onContactDelete'
-    	
+    	'click .contact-type-image, .company-type-image' : 'navigateToProperContact',
+    	'mouseenter #companies-list-view-model-list > tr > td:not(":first-child")' : 'companiesDataPopoverEnter',
+    	'mouseleave #companies-list-view-model-list > tr > td:not(":first-child")' : 'companiesDataPopoverLeave'
     },
-
-    /*onContactDeleteAction : function(e){
-    	e.preventDefault();
-    	event.stopPropagation();
-    	contact_delete_action.onContactDelete(e);
-	},*/
-
-    bulkActionCompaniesSortByName : function(e){
-
-    	e.preventDefault();
-			_agile_set_prefs('company_sort_field',$(e.currentTarget).attr('data'));
-			COMPANIES_HARD_RELOAD=true;
-			App_Companies.companies();
-    },
-
-	defaultContactRemoveTag: function(e)
-	{
-		e.preventDefault();
-		// Navigate to show form
-		Backbone.history.navigate("contacts", { trigger : true });
-	},
-
-    // Fetch filter result without changing route on click
-	filterResults:  function(e)
-	{
-
-		contact_filters_util.filterResults(e);
-	},
-
-	/*
-	 * If default filter is selected, removes filter cookies an load contacts
-	 * with out any query condition
-	 */
-	defaultFilterResults:  function(e)
-	{
-		e.preventDefault();
-		revertToDefaultContacts();
-	},
-
-	companyFilterResults: function(e)
-	{
-		contact_filters_util.companyFilterResults(e);
-		
-	},
     
-	contactActionsGridDelete: function(e){
-		
-		e.preventDefault();
-		var contact_id=$(e.currentTarget).attr('con_id');
-    	var model=App_Contacts.contactsListView.collection.get(contact_id);
-		$('#deleteGridContactModal').modal('show');
-
-		$('#deleteGridContactModal').on("shown.bs.modal", function(){
-
-				// If Yes clicked
-		   $('#deleteGridContactModal').on('click', '#delete_grid_contact_yes', function(e) {
-				e.preventDefault();
-				// Delete Contact.
-				$.ajax({
-    					url: 'core/api/contacts/' + contact_id,
-       					type: 'DELETE',
-       					success: function()
-       					{
-       						$('#deleteGridContactModal').modal('hide');
-       						App_Contacts.contactsListView.collection.remove(model);
-       						if(App_Contacts.contact_custom_view)
-       						App_Contacts.contact_custom_view.collection.remove(model);
-       						CONTACTS_HARD_RELOAD=true;
-       						App_Contacts.contacts();
-       					}
-       				});
-			});
-
-
-		   $('#deleteGridContactModal').on('click', '#delete_grid_contact_no', function(e) {
-				e.preventDefault();
-				if($(this).attr('disabled'))
-			   	     return;
-				$('#deleteGridContactModal').modal('hide');
-			});
-
-		});
-
-    		
-	},
-	/*
-	 * If default filter is selected, removes filter cookies an load contacts
-	 * with out any query condition
-	 */
-	bulkActionCompanyDefaultFilter :  function(e)
-	{
-		e.preventDefault();
-		company_list_view.revertToDefaultCompanies();
-	},
-	
-	bulkActionCompaniesFilter : function(e)
-	{
-
-		e.preventDefault();
-		_agile_delete_prefs('company_filter');
-		//_agile_delete_prefs('contact_filter_type');
-
-		//_agile_set_prefs('company_filter', "Companies");
-		COMPANIES_HARD_RELOAD = true;
-		App_Companies.companies(); // /Show Companies list, explicitly hard
-		// reload
-		return;
-	},
-
-	bulkActionCompaniesStaticFilter :  function(e)
-	{
-
-		e.preventDefault();
-		_agile_delete_prefs('company_filter');
-		//_agile_delete_prefs('dynamic_contact_filter');
-		_agile_delete_prefs('dynamic_company_filter');
-
-		var filter_id = $(e.currentTarget).attr('id');
-		var filter_type = $(e.currentTarget).attr('filter_type');
-
-		// Saves Filter in cookie
-		_agile_set_prefs('company_filter', filter_id)
-		//_agile_set_prefs('company_filter_type', filter_type)
-
-		// Gets name of the filter, which is set as data
-		// attribute in filter
-		filter_name = $(e.currentTarget).attr('data');
-
-		COMPANIES_HARD_RELOAD=true;
-		App_Companies.companies();
-		return;
-		// /removed old code from below,
-		// now filters will work only on contact, not company
-	},
-	
-	bulkActionCompaniesSortonTimeDesc : function(e)
-	{
-		e.preventDefault();
-		_agile_set_prefs('company_sort_field',$(e.currentTarget).attr('data'));
-		COMPANIES_HARD_RELOAD=true;
-		App_Companies.companies();
-	},
-	
-	bulkActionCompaniesSortonTimeAsec : function(e){
-		e.preventDefault();
-		_agile_set_prefs('company_sort_field',$(e.currentTarget).attr('data'));
-		COMPANIES_HARD_RELOAD=true;
-		App_Companies.companies();
-	},
-
-    bulkActionAddOwner : function(e){
-    	e.preventDefault();
-    	contacts_bulk_actions.change_owner(e);
-    },
-
-    bulkActionAssignToCampaign : function(e){
-    	e.preventDefault();
-    	contacts_bulk_actions.assign_to_campaigns(e);
-    },
-
-    bulkActionAddTags :  function(e){
-    	e.preventDefault();
-    	contacts_bulk_actions.add_tags(e);
-    },
-
-    bulkActionRemoveTags :  function(e){
-    	e.preventDefault();
-    	contacts_bulk_actions.remove_tags(e);
-    },
-    bulkActionSendEmail : function(e){
-    	e.preventDefault();
-    	contacts_bulk_actions.send_email(e);
-    },
-
-    bulkActionExportContacts : function(e){
-    	e.preventDefault();
-    	contacts_bulk_actions.export_contacts(e);
-    },
-
-    bulkActionExportCompanies : function(e){
-    	e.preventDefault();
-    	contacts_bulk_actions.export_companies(e);
-    },
-
-    bulkActionSelectAvailContacts : function(e){
-    	e.preventDefault();
-    	contacts_bulk_actions.select_contacts(e);
-    },
-
-    bulkActionRevertAvailContacts : function(e){
-    	e.preventDefault();
-
-    	SELECT_ALL = false;
-		_BULK_CONTACTS = undefined;
-		
-		var html = '';
-
-		var resultCount = 0;
-		var appCount = 0;
-		var limitValue = 10000;		
-
-		if(company_util.isCompany()){
-
-			resultCount = App_Companies.companiesListView.collection.length;
-			appCount = getAvailableContacts();
-
-			if(localStorage.getItem("dynamic_company_filter") != null || localStorage.getItem("company_filter") != null) {				
-				
-				if(resultCount > limitValue){
-					resultCount = limitValue + "+";
-				}
-
-				if(appCount > limitValue){
-					appCount = limitValue + "+";
-				}
-
-			}
-
-			html = "Selected " + resultCount + " companies. <a href='#'  id='select-all-available-contacts' class='c-p text-info'>Select all " + appCount + " companies</a>";
-		}else{
-
-			resultCount = App_Contacts.contactsListView.collection.length;
-			appCount = getAvailableContacts();
-
-			if(localStorage.getItem("dynamic_contact_filter") != null || localStorage.getItem("contact_filter") != null){	
-				if(resultCount > limitValue){
-					resultCount = limitValue + "+";
-				}
-
-				if(appCount > limitValue){
-					appCount = limitValue + "+";
-				}
-			}
-
-			html = "Selected " + resultCount + " contacts. <a href='#'  id='select-all-available-contacts' class='c-p text-info'>Select all " + appCount + " contacts</a>";
+    navigateToProperContact : function(e){
+    	e.stopPropagation();
+		var currentObjId = $(e.currentTarget).attr("id");
+		if($(e.currentTarget).hasClass("contact-type-image"))
+		{
+			Backbone.history.navigate("contact/" + currentObjId, { trigger : true });
 		}
-		$('body').find('#bulk-select').html(html);
-    } 
+		else
+		{
+			Backbone.history.navigate("company/" + currentObjId, { trigger : true });
+		}
+    },
 
-   
+    companiesDataPopoverEnter : function(e)
+    {
+    	var left=e.pageX;
+		left=left-100;
+		var top=0;
+		var that=$(e.currentTarget).parent();
+        if($(e.currentTarget).hasClass("contact-type-custom-field-td") || $(e.currentTarget).hasClass("company-type-custom-field-td") || $(e.currentTarget).hasClass("contact-type-image") || $(e.currentTarget).hasClass("company-type-image"))
+        {
+        	return;
+        }
+        popoverEnter(that,left,top,true);
+    },
+
+    companiesDataPopoverLeave : function(e)
+    {
+    	var that=$(e.currentTarget).parent();
+		popout(that);
+    }
 });
 
 $(function(){
@@ -546,22 +314,22 @@ var contacts_bulk_actions = {
 										return;
 									});
 						}
-						if (is_free_plan() && has_more_than_limit())
+						if (has_more_than_limit())
 						{
 							showModalConfirmation(
 									"Send Email",
-									"You can apply this bulk action only on 25 contacts in the FREE Plan. Please choose lesser number of contacts or upgrade your account.",
-									function()
+									"You can apply this bulk action only on 25 contacts. Please create a campaign.",
+									 function()
 									{
-										Backbone.history.navigate("subscribe", { trigger : true });
-									}, function()
+										Backbone.history.navigate("workflows", { trigger : true })
+									},  function()
 									{
 										// No callback
 										return;
 									}, function()
 									{
 										return;
-									}, "Upgrade", "Close");
+									},"Go to Campaign","Close");
 						}
 						else
 						{
@@ -1218,10 +986,7 @@ function show_bulk_owner_change_page()
 
 			// serialize form.
 			var form_json = serializeForm("emailForm");
-			if (form_json.from != CURRENT_DOMAIN_USER.email && form_json.from_name == CURRENT_DOMAIN_USER.name)
-			{
-				form_json.from_name = "";
-			}
+
 			var url = '/core/api/bulk/update?action_type=SEND_EMAIL';
 
 			var json = {};
@@ -1360,9 +1125,16 @@ function toggle_contacts_bulk_actions_dropdown(clicked_ele, isBulk, isCampaign)
 		if (isBulk)
 		{
 			if(company_util.isCompany())
+			{
 				$("#bulk-action-btns button").addClass("disabled");
+				$("#companiesTabelView").removeClass("disabled");
+			}
 			else
+			{
 				$("#bulk-action-btns button").addClass("disabled");
+				$("#contactTabelView").removeClass("disabled");
+			}
+				
 			return;
 		}
 

@@ -70,20 +70,20 @@ function initializeFbPageTabListners(el){
 	
 	$("#fbPageTab-listners").on('click', '.deleteFacebookLinkedpage', function(e){
 		e.preventDefault();
-		var agree = confirm("Are you sure you want to delete this Form from your Facebook page?");
-		if(agree) {
-			var pageId = $(this).attr("data-pageid");
+		var $that = $(this);
+		showAlertModal("delete_facebook_linked_page", "confirm", function(){
+			var pageId = $that.attr("data-pageid");
 			var pageToken = $("#facebookTabPage option[value='"+pageId+"']").attr("data-token");
 			if(typeof pageToken == "undefined") {
-				var isAgreed = confirm("To delete the Form from Page, Link your Facebook account which is associated to the Page.");
-				if(isAgreed) {
-					var fbLoginLink = $("#AddFormLinkFacebookAccount").attr("href");
-					if(typeof fbLoginLink != "undefined") {
-						window.location.href = fbLoginLink;
-					}
-				}
-			} else {
-				
+				setTimeout(function(){
+					showAlertModal("delete_facebook_linked_page_error", undefined, function(){
+						var fbLoginLink = $("#AddFormLinkFacebookAccount").attr("href");
+						if(typeof fbLoginLink != "undefined") {
+							window.location.href = fbLoginLink;
+						}
+					});
+				},1000);
+			}else{
 				var formData = "facebookPageID=" + pageId;
 				formData += "&facebookPageToken=" + pageToken;
 				
@@ -103,7 +103,7 @@ function initializeFbPageTabListners(el){
 				    }
 				    });
 			}
-		}		
+		});	
 	});
 	
 	$("#fbPageTab-listners").on('change', '#formToUse', function(e){
@@ -121,11 +121,10 @@ function initializeFbPageTabListners(el){
 
 	$("#fbPageTab-listners").on('click', '#unlinkFacebookAccount', function(e) {
 		e.preventDefault();
-		if(!confirm("Are you sure you want to unlink your Facebook account ?")) {
-			return;
-		}
-		$.post( "fbpage?action=UNLINK_ACCOUNT", function(data) {
-			window.location.reload();
+		showAlertModal("unlink_facebook", "confirm", function(){
+			$.post( "fbpage?action=UNLINK_ACCOUNT", function(data) {
+				window.location.reload();
+			});
 		});
 	});
 }

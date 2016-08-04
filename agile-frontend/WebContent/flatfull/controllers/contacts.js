@@ -8,6 +8,8 @@
 CONTACTS_HARD_RELOAD = true;
 
 var import_tab_Id;
+var REFER_DATA;
+var contact_company ;
 
 var ContactsRouter = Backbone.Router.extend({
 
@@ -16,11 +18,13 @@ var ContactsRouter = Backbone.Router.extend({
 		"" : "dashboard", 
 		
 		"dashboard" : "dashboard",
+
+		"navigate-dashboard" : "navigateDashboard", 
 		
 		// "dashboard-test": "dashboard",
 
 		/* Contacts */
-		"contacts" : "contacts",
+		"contacts" : "contactsNew",
 		
 		"contact/:id" : "contactDetails",
 		
@@ -39,7 +43,7 @@ var ContactsRouter = Backbone.Router.extend({
 
 		"merge-contacts" : "mergeContacts",
 		
-		"tags/:tag" : "contacts", 
+		"tags/:tag" : "contactsNew", 
 		
 		"send-email" : "sendEmail",
 		
@@ -61,7 +65,9 @@ var ContactsRouter = Backbone.Router.extend({
 			/* CALL-with only mobile number */
 			"contacts/call-lead/:mob" : "addMobLead",
 			
+
 			"call-contacts" : "callcontacts"
+
 	},
 	
 	initialize : function()
@@ -78,10 +84,17 @@ var ContactsRouter = Backbone.Router.extend({
          App_Datasync.salesforce();
 	},
 
+	navigateDashboard : function(){
+		// Call dashboard route
+		Backbone.history.navigate("#", {
+            trigger: true
+        });
+	},
+
 	dashboard : function()
 	{
 		insidePopover=false;
-		$(".active").removeClass("active");
+		$("#agile-menu-navigation-container .active").removeClass("active");
 		if(CURRENT_DOMAIN_USER.domain == "admin")
 		{
 			Backbone.history.navigate("domainSearch" , {
@@ -90,7 +103,53 @@ var ContactsRouter = Backbone.Router.extend({
             return;
 		}
 
-		getTemplate('portlets', {}, undefined, function(template_ui){
+		var dashboard_name = _agile_get_prefs("dashboard_"+CURRENT_DOMAIN_USER.id);
+		if(!dashboard_name){
+			var selected_id = _agile_get_prefs("selected_dashboard_"+CURRENT_DOMAIN_USER.id);
+			if(selected_id == "Dashboard")
+				 dashboard_name = "Dashboard";
+		}
+		
+		// Reset dashboard with role selected
+		if(!dashboard_name){
+			_agile_set_prefs("selected_dashboard_"+CURRENT_DOMAIN_USER.id, id);
+			if(CURRENT_DOMAIN_USER.role == "SALES")
+				  dashboard_name = "SalesDashboard";
+			else if(CURRENT_DOMAIN_USER.role == "MARKETING")
+				dashboard_name = "MarketingDashboard";
+		}
+
+		dashboard_name = dashboard_name ? dashboard_name : "DashBoard";
+
+		var dashboardJSON = {};
+		if(CURRENT_USER_DASHBOARDS && dashboard_name != "DashBoard") {
+			$.each(CURRENT_USER_DASHBOARDS, function(index, value){
+				if(dashboard_name != "DashBoard" && value.id == dashboard_name) {
+					dashboardJSON["id"] = value.id;
+					dashboardJSON["name"] = value.name;
+					dashboardJSON["description"] = value.description;
+				}
+			});
+		}
+
+		if(dashboard_name==="MarketingDashboard"){
+
+			dashboardJSON["id"] = "MarketingDashboard";
+			dashboardJSON["name"] = "Marketing";
+			dashboardJSON["description"] = "Welcome to Agile CRM Marketing Automation.";
+
+		}else if(dashboard_name == "SalesDashboard"){
+
+			dashboardJSON["id"] = "SalesDashboard";
+			dashboardJSON["name"] = "Sales";
+			dashboardJSON["description"] = "Welcome to Agile CRM Sales Dashboard.";
+
+		}else if(!dashboardJSON["id"])
+		{
+			dashboard_name = "DashBoard";
+		}
+
+		getTemplate('portlets', dashboardJSON, undefined, function(template_ui){
 				if(!template_ui)
 					  return;
 
@@ -100,10 +159,14 @@ var ContactsRouter = Backbone.Router.extend({
 				$('[data-toggle="tooltip"]').tooltip();
 				if ((navigator.userAgent.toLowerCase().indexOf('chrome') > -1&&navigator.userAgent.toLowerCase().indexOf('opr/') == -1) && !document.getElementById('agilecrm_extension'))
 				{
-					$("#chrome-extension-button").removeClass('hide');
+					try{
+						if (typeof chrome && typeof chrome.app && !chrome.app.isInstalled) 
+							$("#chrome-extension-button").removeClass('hide');	
+					}catch(e){}
+					
 				}
 
-				loadPortlets('DashBoard',el);
+				loadPortlets(dashboard_name,el);
 
 		}, "#content");
 
@@ -328,6 +391,7 @@ var ContactsRouter = Backbone.Router.extend({
 					setupContactFilterList(cel, tag_id);
 					setUpContactView(cel);
 					loadPortlets('Contacts',cel);
+				
 
 					if(collection.models.length > 0 && !collection.models[0].get("count")){
 						// Call to get Count 
@@ -585,7 +649,19 @@ var ContactsRouter = Backbone.Router.extend({
 		this.contactDetailView = new Contact_Details_Model_Events({ model : contact, isNew : true, template : "contact-detail", postRenderCallback : function(el)
 		{
 			
-
+			$(el).on('click',function(el){
+				var newId = el.target.id;
+				if(newId == "contact_name")
+					return ;
+				if(newId == "contactName")
+					return ;
+				if(newId == 'Contact-input-firstname' || newId == 'Contact-input-lastname')
+					return;
+				
+					inlineNameChange(el,newId);
+				
+			});
+		
 			//mobile tabs
 			 $('.content-tabs').tabCollapse(); 
 
@@ -605,9 +681,7 @@ var ContactsRouter = Backbone.Router.extend({
 
 			load_contact_tab(el, contact.toJSON());
 
-			loadWidgets(el, contact.toJSON());
-			
-			
+			loadWidgets(el, contact.toJSON(), "widgets");
 			
 			/*
 			 * // To get QR code and download Vcard
@@ -641,7 +715,12 @@ var ContactsRouter = Backbone.Router.extend({
 				$(".contact-make-call",el).removeClass("c-progress");
 				$(".contact-make-skype-call",el).removeClass("c-progress");
 			}
-			} });
+			if(contact)
+				addTypeCustomData(contact.get('id') , el);
+
+			} 
+			
+		});
 
 		var el = this.contactDetailView.render(true).el;
 		$(el).find('.content-tabs').tabCollapse(); 
@@ -652,7 +731,6 @@ var ContactsRouter = Backbone.Router.extend({
 			}*/
 		// Check updates in the contact.
 		checkContactUpdated();
-
 
 		if(_agile_get_prefs('MAP_VIEW')=="disabled")
 				$("#map_view_action").html("<i class='icon-plus text-sm c-p' title='Show map' id='enable_map_view'></i>");
@@ -726,6 +804,19 @@ var ContactsRouter = Backbone.Router.extend({
 			} });
 
 			return;
+		}
+		if(contact.contact_company_id){							
+			$.ajax({
+				url : "/core/api/contacts/"+contact.contact_company_id ,
+				type: 'GET',
+				dataType: 'json',
+				success: function(company){
+					if(company){
+						console.log(company);
+						contact_company = company ;
+					}
+				}
+			});
 		}
 
 		// Contact Edit - take him to continue-contact form
@@ -889,7 +980,36 @@ $('#content').html('<div id="import-contacts-event-listener"></div>');
 		}
 		var that=this;
 		sendMail(id,subject,body,cc,bcc,that);
-	
+
+		var options = {
+		"+ Add new" : "verify_email"
+		};
+		
+		fetchAndFillSelect(
+			'core/api/account-prefs/verified-emails/all',
+			"email",
+			"email",
+			undefined,
+			options,
+			$('#from_email'),
+			"prepend",
+			function($select, data) {
+			
+			var ownerEmail = $select.find('option[value = \"'+CURRENT_DOMAIN_USER.email+'\"]').val();
+				
+				if(typeof(ownerEmail) == "undefined")
+				{
+				$select
+						.find("option:first")
+						.before(
+								"<option value="+CURRENT_DOMAIN_USER.email+">"+CURRENT_DOMAIN_USER.email+"</option>");
+
+					$select.val(CURRENT_DOMAIN_USER.email).attr("selected", "selected");
+				}
+				else
+					$select.val(CURRENT_DOMAIN_USER.email).attr("selected", "selected");
+				rearrange_from_email_options($select, data);
+			});
 	},
 
 	sendEmailCustom : function(id, subject, body, cc, bcc,custom_view)
@@ -927,7 +1047,7 @@ $('#content').html('<div id="import-contacts-event-listener"></div>');
 			this.contact_custom_view = undefined;
 			CONTACTS_HARD_RELOAD = false;
 			view_data = undefined;
-			// App_Contacts.contactViewModel = undefined;
+			// ts.contactViewModel = undefined;
 		}
 
 		// If id is defined get the respective custom view object
@@ -976,7 +1096,7 @@ $('#content').html('<div id="import-contacts-event-listener"></div>');
 			$("#contacts-view-options").css( 'pointer-events', 'auto' );
 			//loadPortlets('Contacts',el);
 			if(agile_is_mobile_browser()) {
-			$('#contacts-table tbody tr .icon-append-mobile',el).after('<td><div class="text-md text-muted m-t contact-list-mobile"><i class="fa fa-angle-right"></i></div></td>');
+			// $('#contacts-table tbody tr .icon-append-mobile',el).after('<td><div class="text-md text-muted m-t contact-list-mobile"><i class="fa fa-angle-right"></i></div></td>');
 			}
 			
 
@@ -998,6 +1118,7 @@ $('#content').html('<div id="import-contacts-event-listener"></div>');
 			$(".active").removeClass("active"); // Activate Contacts
 												// Navbar tab
 			$("#contactsmenu").addClass("active");
+			 App_Contacts.contactsListView.delegateEvents();
 			return;
 		}
 
@@ -1035,7 +1156,7 @@ $('#content').html('<div id="import-contacts-event-listener"></div>');
 			custom_scrollable_element="#contacts-grid-table-model-list";
 		    }
 		}	
-		
+		that = this ;
 		this.contact_custom_view = new Contacts_Events_Collection_View({ url : url, restKey : "contact", modelData : view_data, global_sort_key : sort_key,
 			templateKey : template_key,custom_scrollable_element:custom_scrollable_element, individual_tag_name : individual_tag_name, slateKey : slateKey, cursor : true, request_method : 'POST', post_data: {'filterJson': postData}, page_size : 25, sort_collection : false,
 			postRenderCallback : function(el, collection)
@@ -1044,7 +1165,7 @@ $('#content').html('<div id="import-contacts-event-listener"></div>');
 				App_Contacts.contactsListView = App_Contacts.contact_custom_view;
 				contactListener();
 
-
+				
 				// To set chats and view when contacts are fetch by
 				// infiniscroll
 				//setup_tags(el);
@@ -1060,6 +1181,9 @@ $('#content').html('<div id="import-contacts-event-listener"></div>');
 				setUpContactView(el,true);
 			    else
 				setUpContactView(el);
+
+				// Render Contact fields
+				setupContactFields(el);
 
 				abortCountQueryCall();
 				
@@ -1097,20 +1221,21 @@ $('#content').html('<div id="import-contacts-event-listener"></div>');
 				if(agile_is_mobile_browser()) {
 				
 					var $nextEle = $('<td><div class="text-md text-muted m-t contact-list-mobile"><i class="fa fa-angle-right"></i></div></td>');
-					$('#contacts-table tbody tr .icon-append-mobile',el).after($nextEle);
+					// $('#contacts-table tbody tr .icon-append-mobile',el).after($nextEle);
 				}
-				
-
 				
 
 			}, appendItemCallback: function(el){
 				if(agile_is_mobile_browser()) {
-					$('#contacts-table tbody tr .icon-append-mobile',el).after('<td><div class="text-md text-muted m-t contact-list-mobile"><i class="fa fa-angle-right"></i></div></td>');
+					// $('#contacts-table tbody tr .icon-append-mobile',el).after('<td><div class="text-md text-muted m-t contact-list-mobile"><i class="fa fa-angle-right"></i></div></td>');
 				}
 			}, });
 
 		var _that = this;
 		App_Contacts.contactDateFields = CONTACTS_DATE_FIELDS;
+
+		App_Contacts.contactContactTypeFields = CONTACTS_CONTACT_TYPE_FIELDS;
+		App_Contacts.contactCompanyTypeFields = CONTACTS_COMPANY_TYPE_FIELDS;
 
 		if(!App_Contacts.contactDateFields){
 				$.getJSON("core/api/custom-fields/type/scope?type=DATE&scope=CONTACT", function(customDatefields)
@@ -1119,7 +1244,7 @@ $('#content').html('<div id="import-contacts-event-listener"></div>');
 					
 					// Defines appendItem for custom view
 					_that.contact_custom_view.appendItem = function(base_model){
-						contactTableView(base_model,App_Contacts.contactDateFields,this);
+						contactTableView(base_model,App_Contacts.contactDateFields,this,App_Contacts.contactContactTypeFields,App_Contacts.contactCompanyTypeFields);
 					};
 					// Fetch collection
 					_that.contact_custom_view.collection.fetch();
@@ -1131,7 +1256,7 @@ $('#content').html('<div id="import-contacts-event-listener"></div>');
 
 				// Defines appendItem for custom view
 				_that.contact_custom_view.appendItem = function(base_model){
-					contactTableView(base_model,App_Contacts.contactDateFields,this);
+					contactTableView(base_model,App_Contacts.contactDateFields,this,App_Contacts.contactContactTypeFields,App_Contacts.contactCompanyTypeFields);
 				};
 				// Fetch collection
 				_that.contact_custom_view.collection.fetch();
@@ -1161,7 +1286,7 @@ $('#content').html('<div id="import-contacts-event-listener"></div>');
 	},
 	
 	addLead : function(first, last){
-		$("#personModal").on("shown", function(){
+		$("#personModal").on("show.bs.modal", function(){
 			$(this).find("#fname").val(first);
 			$(this).find("#lname").val(last);
 		});
@@ -1169,7 +1294,7 @@ $('#content').html('<div id="import-contacts-event-listener"></div>');
 	},
 	
 	addLeadDirectly : function(first, last,mob){
-		$("#personModal").on("shown", function(){
+		$("#personModal").on("show.bs.modal", function(){
 			$(this).find("#fname").val(first);
 			$(this).find("#lname").val(last);
 			$(this).find("#phone").val(mob);
@@ -1178,7 +1303,7 @@ $('#content').html('<div id="import-contacts-event-listener"></div>');
 	},
 
 	addMobLead : function(mob){
-		$("#personModal").on("shown", function(){
+		$("#personModal").on("show.bs.modal", function(){
 			$(this).find("#phone").val(mob);
 		});
 		$("#personModal").modal();
@@ -1196,7 +1321,7 @@ $('#content').html('<div id="import-contacts-event-listener"></div>');
 					// Add placeholder and date picker to date custom fields
 					$('.date_input').attr("placeholder", "Select Date");
 
-					$('.date_input').datepicker({ format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY});
+					$('.date_input').datepicker({ format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY, autoclose: true});
 
 					// To set typeahead for tags
 					setup_tags_typeahead();
@@ -1209,6 +1334,39 @@ $('#content').html('<div id="import-contacts-event-listener"></div>');
 								.html(
 										'<li class="inline-block tag btn btn-xs btn-primary m-r-xs m-b-xs" data="' + data + '"><span><a class="text-white m-r-xs" href="#contact/' + data + '">' + item + '</a><a class="close" id="remove_tag">&times</a></span></li>');
 						$("#content #contact_company").hide();
+						if(data){							
+							$.ajax({
+								url : "/core/api/contacts/"+data,
+								type: 'GET',
+								dataType: 'json',
+								success: function(company){
+									if(company){
+										console.log(company);
+										contact_company = company ;
+										var prop = null;
+										$.each(contact_company.properties , function(){
+											if(this.name == "address" && this.subtype == "office")
+												prop = JSON.parse(this.value);
+										});
+										if(prop){
+											$("#content .address-type").val("office");
+											if(prop.address)
+												$("#content #address").val(prop.address);
+											if(prop.city)
+												$("#content #city").val(prop.city);
+											if(prop.state)
+												$("#content #state").val(prop.state);
+											if(prop.zip)
+												$("#content #zip").val(prop.zip);
+											if(prop.country)
+												$("#content #country").val(prop.country);
+										}
+
+									}
+
+								}
+							});
+						}
 					}
 					agile_type_ahead("contact_company", $('#content'), contacts_typeahead, fxn_display_company, 'type=COMPANY', '<b>No Results</b> <br/> Will add a new one');
 
@@ -1253,9 +1411,41 @@ $('#content').html('<div id="import-contacts-event-listener"></div>');
 
 
 
-	}
-		
+	},
+
+	contactsNew : function(tag_id)
+	{
+		if(tag_id)
+		{
+			_agile_delete_prefs("contact_filter");
+			_agile_delete_prefs('dynamic_contact_filter');
+		}
+
+		if(_agile_get_prefs("contacts_tag") != tag_id)
+		{
+			CONTACTS_HARD_RELOAD = true;
+			_agile_set_prefs("contacts_tag", tag_id);
+		}
+		$('#content').html('<div id="contacts-listener-container"></div>');
+		var contactsHeader = new Contacts_And_Companies_Events_View({ data : {}, template : "contacts-header", isNew : true,
+			postRenderCallback : function(el)
+			{
+				contacts_view_loader.buildContactsView(el, tag_id);
+				
+				contacts_view_loader.setUpContactsCount(el);
+				
+				loadPortlets('Contacts',el);
+			} 
+		});
+		$('#contacts-listener-container').html(contactsHeader.render().el);
+
+		$(".active").removeClass("active");
+		$("#contactsmenu").addClass("active");
+		$('[data-toggle="tooltip"]').tooltip();
+	},
+
 	});
+
 
 function getAndUpdateCollectionCount(type, el, countFetchURL){
 
@@ -1492,4 +1682,27 @@ function sendMail(id,subject,body,cc,bcc,that,custom_view)
 			
 			
 		}, "#send-email-listener-container"); 
+}
+function addTypeCustomData(contactId, el){
+	var customFieldsView = new Base_Collection_View({
+							url : 'core/api/contacts/getCustomfieldBasedContacts?id='+contactId+'&type=CONTACT',
+							sortKey : 'time',
+							descending : true,
+							templateKey : "contact-type-custom-fields",
+							cursor : true,
+							page_size : 20,
+							postRenderCallback : function(el){
+								
+							}
+						});
+	customFieldsView.collection.fetch({
+
+		success : function(data){
+			if(data.length){
+				$('#contacts-type-custom-fields' , el).removeClass('hidden');
+			}
+		}
+	});
+	$('#contacts-type-custom-fields' , el).html(customFieldsView.render().el);
+	
 }

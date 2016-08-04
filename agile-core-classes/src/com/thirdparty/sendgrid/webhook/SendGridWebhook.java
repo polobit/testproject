@@ -9,10 +9,16 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.agilecrm.AgileQueues;
 import com.agilecrm.contact.email.bounce.EmailBounceStatus.EmailBounceType;
 import com.google.appengine.api.NamespaceManager;
+import com.google.appengine.api.taskqueue.DeferredTask;
+import com.google.appengine.api.taskqueue.Queue;
+import com.google.appengine.api.taskqueue.QueueFactory;
+import com.google.appengine.api.taskqueue.TaskOptions;
 import com.thirdparty.email.webhook.util.EmailWebhookUtil;
 
 @SuppressWarnings("serial")
@@ -21,14 +27,20 @@ public class SendGridWebhook extends HttpServlet
 
 	public static final String EVENT = "event";
 	public static final String HARD_BOUNCE = "bounce";
-	public static final String SOFT_BOUNCE = "deferred";
+	public static final String SOFT_BOUNCE = "bounce";
 	public static final String SPAM_REPORT = "spam report";
+	public static final String DROPPED = "dropped";
+	public static final String TYPE = "type";
+	public static final String BLOCKED = "blocked";
+	public static final String INVALID = "invalid";
 
 	public static final String EMAIL = "email";
 
 	public static final String SUBJECT = "subject";
 	public static final String DOMAIN = "domain";
 	public static final String CAMPAIGN_ID = "campaign_id";
+	
+	private static final String REASON = "reason";
 
 	public void service(HttpServletRequest req, HttpServletResponse res)
 	{
@@ -83,8 +95,18 @@ public class SendGridWebhook extends HttpServlet
 				// Set to contact if event is HardBounce or SoftBounce
 				if (StringUtils.equalsIgnoreCase(event, HARD_BOUNCE)
 						|| StringUtils.equalsIgnoreCase(event, SOFT_BOUNCE)
-						|| StringUtils.equalsIgnoreCase(event, SPAM_REPORT))
-					setBounceStatusToContact(eventJSON);
+						|| StringUtils.equalsIgnoreCase(event, SPAM_REPORT)
+						|| StringUtils.equalsIgnoreCase(event, DROPPED)
+						|| StringUtils.equalsIgnoreCase(event, INVALID))
+				{
+					//setBounceStatusToContact(eventJSON);
+					
+					//System.out.println(eventJSON.toString());
+					SendGridDeferredTask sendGridDeferredTask = new SendGridDeferredTask(eventJSON.toString());
+					
+					Queue queue = QueueFactory.getQueue(AgileQueues.MANDRILL_QUEUE);
+					queue.add(TaskOptions.Builder.withPayload(sendGridDeferredTask));
+				}
 			}
 
 		}
@@ -101,7 +123,7 @@ public class SendGridWebhook extends HttpServlet
 	 * @param eventJSON
 	 *            webhook event
 	 */
-	private void setBounceStatusToContact(JSONObject eventJSON)
+	public void setBounceStatusToContact(JSONObject eventJSON)
 	{
 		String oldNamespace = NamespaceManager.get();
 		String subject = null;
@@ -124,12 +146,24 @@ public class SendGridWebhook extends HttpServlet
 			// Get email subject
 			if (eventJSON.has(SUBJECT))
 				subject = eventJSON.getString(SUBJECT);
+			
+			// For Dropped event, check whether it is Bounced Address, then save it against contact
+			if(StringUtils.equalsIgnoreCase(eventJSON.getString(EVENT), DROPPED) && eventJSON.has(REASON))
+			{
+				String reason = eventJSON.getString(REASON);
+				
+				System.out.println("Reason is " + reason);
+				
+				if(StringUtils.containsIgnoreCase(reason, "Bounced Address"))
+					eventJSON.put(EVENT, HARD_BOUNCE);
+			}
+				
 
-			// By default SOFT_BOUNCE
-			EmailBounceType type = EmailBounceType.SOFT_BOUNCE;
-
-			if (HARD_BOUNCE.equals(eventJSON.getString(EVENT)))
-			type = EmailBounceType.HARD_BOUNCE;
+			// By default HARD_BOUNCE
+			EmailBounceType type = EmailBounceType.HARD_BOUNCE;
+			
+			if (SOFT_BOUNCE.equals(eventJSON.getString(EVENT)) && ( eventJSON.has(TYPE) && eventJSON.getString(TYPE).equalsIgnoreCase(BLOCKED) ) )
+			type = EmailBounceType.SOFT_BOUNCE;
 
 			if (SPAM_REPORT.equals(eventJSON.getString(EVENT)))
 			type = EmailBounceType.SPAM;
@@ -156,4 +190,41 @@ public class SendGridWebhook extends HttpServlet
 
 	}
 
+}
+
+/**
+ * <code>SendGridDeferredTask</code> is the deferred task for executing email events like bounce, spam etc
+ * 
+ * @author naresh
+ *
+ */
+class SendGridDeferredTask implements DeferredTask
+{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -9175934454595478511L;
+	
+	String eventJSON = null;
+	
+	public SendGridDeferredTask(String eventJSON)
+	{
+		this.eventJSON = eventJSON;
+	}
+	
+	public void run()
+	{
+		try
+		{
+			JSONObject json = new JSONObject(eventJSON);
+			SendGridWebhook sw = new SendGridWebhook();
+			sw.setBounceStatusToContact(json);
+		}
+		catch(JSONException e)
+		{
+			e.printStackTrace();
+			System.err.println("JSONException occured in SendGridDeferredTask..." + e.getMessage());
+		}
+	}
 }

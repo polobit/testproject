@@ -88,9 +88,9 @@
 	<div class="pos-rlt">
 		{{network network_type}}&nbsp;&nbsp;<a href="{{url}}" target="_blank" class="pull-left"><i class="icon-external-link" title="Open Document"></i></a>
 		<span class="pull-right">{{#is_mobile}}{{#hasMenuScope 'DOCUMENT'}}
-	  <div class="pos-abs pos-r-0 " >
+	  <div class="pos-abs pos-r-0 icons-text-sm" >
 		<span class="actions">
-			<a title="Edit"  data="{{id}}" class="document-edit-deal-tab  m-r-sm"> <i class="icon-pencil"></i> </a>
+			<a title="Edit"  data="{{id}}" class="document-edit-deal-tab  m-r-sm"> <i class="fa fa-edit"></i> </a>
 			<a title="Detach"  data="{{id}}" class="document-unlink-deal-tab"> <i class="icon-unlink"></i> </a>
             <!--<a title="Delete" style="cursor:pointer;text-decoration: none"><span class="activity-delete icon-trash" style="display:inline" id="{{id}}" url="core/api/documents/bulk"><i></i></span></a>-->
         </span>
@@ -108,7 +108,7 @@
 							<a href="#contact/{{id}}" data="{{id}}" class="popover_contact">{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</a>,
         				{{/if_contact_type}}
 						{{#if_contact_type "COMPANY"}}
-        					<a href="#company/{{id}}">{{getPropertyValue properties "name"}}</a>,
+        					<a href="#company/{{id}}" data="{{id}}" class="popover_contact">{{getPropertyValue properties "name"}}</a>,
         				{{/if_contact_type}}
            		
            	{{/if}}
@@ -123,9 +123,9 @@
 		{{#is_mobile}}
 		{{else}}
 		{{#hasMenuScope 'DOCUMENT'}}
-	  <div class="pos-abs pos-r-0 pos-b-0" style="bottom:-7px">
+	  <div class="pos-abs pos-r-0 pos-b-0 icons-text-sm" style="bottom:-7px">
 		<span class="actions">
-			<a title="Edit"  data="{{id}}" class="document-edit-deal-tab  m-r-sm"> <i class="icon-pencil"></i> </a>
+			<a title="Edit"  data="{{id}}" class="document-edit-deal-tab  m-r-sm"> <i class="fa fa-edit"></i> </a>
 			<a title="Detach"  data="{{id}}" class="document-unlink-deal-tab"> <i class="icon-unlink"></i> </a>
             <!--<a title="Delete" style="cursor:pointer;text-decoration: none"><span class="activity-delete icon-trash" style="display:inline" id="{{id}}" url="core/api/documents/bulk"><i></i></span></a>-->
         </span>

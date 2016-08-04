@@ -1,7 +1,10 @@
 package com.campaignio.tasklets.util.deferred;
 
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.json.JSONObject;
 
+import com.agilecrm.session.SessionManager;
+import com.agilecrm.session.UserInfo;
 import com.agilecrm.workflows.status.CampaignStatus.Status;
 import com.agilecrm.workflows.status.util.CampaignStatusUtil;
 import com.agilecrm.workflows.util.WorkflowUtil;
@@ -51,6 +54,9 @@ public class TaskletWorkflowDeferredTask implements DeferredTask
 
 		try
 		{
+			//To fix session issue in campaigns - Setting the userinfo to null so that plan and ACL's comes from database.
+			SessionManager.set((UserInfo) null);
+			
 			NamespaceManager.set(namespace);
 
 			System.out.println("Executing tasklet in namespace " + NamespaceManager.get());
@@ -76,7 +82,7 @@ public class TaskletWorkflowDeferredTask implements DeferredTask
 		catch (Exception e)
 		{
 			System.err.println("Exception occured in TaskletUtilDeferredTask " + e.getMessage());
-			e.printStackTrace();
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
 		}
 		finally
 		{

@@ -13,21 +13,28 @@
 		</div>
 		<div class="pull-left"><a href="#" id="add-new-tag" class="btn btn-default btn-addon btn-sm"><i class="icon-plus-sign" ></i> Add Tag</a>
 		<label class="btn btn-default btn-sm m-l-xs allow_users_switch" id="disable_new_tags" >
-		 	<span  id="disable_new_tags" > Disable Access </span><input type="checkbox" id="new_tag_acl" class="left hidden" name="new_tag_acl" value="true" checked="checked">
+			{{#hasTagPermission}}
+		 	<span  id="disable_new_tags" > Disable Access </span><input type="checkbox" id="new_tag_acl" class="left hidden" name="new_tag_acl" value="true" checked="checked"> 
+		 	{{else}}
+		 	
+<span  id="disable_new_tags" > Enable Access </span><input type="checkbox" id="new_tag_acl" class="left hidden" name="new_tag_acl" value="true" checked="checked"> 
+		 	{{/hasTagPermission}}
 			</label></div>
 		<div id="new_tag_field_block" style="display:none;" class="inline pull-right"><input id="new_tag" type="text" class="form-control pull-left m-r-sm w" placeholder="New Tag"/><a class="btn btn-info pull-left v-top  btn-sm" id="add_new_tag" href="#">Add</a></div>
 		<div class="clearfix"></div>
 	</div>
 	<div class="clearfix"></div>
-		<div class="alert alert-warning" role="alert">
-	  		Important: We have made some changes to Tag management. Tag name should start with an alphabet and cannot contain special characters other than underscore and space. Please go through your tags below and rename them accordingly.
-	 	</div>
+		
 	</div>
-<div class="control-group form-group">  
+	<div class="col-md-3 data-block pull-right m-t-md m-r-n-md">
+	  		<h4>Important</h4> <p>We have made some changes to Tag management. Tag name should start with an alphabet and cannot contain special characters except underscore and space. Please review your tags and rename them accordingly.</p>
+	 	</div>
+<div class="control-group form-group col-md-9">  
 {{tagManagementCollectionSetup this}}	 
                     <div id="milestone-values" class="milestone-ul-list1">
-						<ul class="tags-management tag-cloud" id="tag-management-model-list" style="list-style:none;"></ul>
+						<ul class="tags-management tag-cloud" id="tag-management-model-list" style="list-style:none;width:50%"></ul>
                     </div>
+
 <div class="clearfix"></div>
 					</div>
 
@@ -65,9 +72,9 @@
 <a class="anchor v-middle text-sm p-l-xs text-sm pull-left inline-block p-r-xs" href="#tags/{{this.tag}}" >{{this.tag}}</a>  
 <span id="actions" class="agile-custom-hide text-xs">
 <div class="pull-right tag-management-actions" data-trigger="click">
-	<a class="edit" href="#" ><i class="fa fa-pencil-square"></i></a>
-	<a class="delete" href="#" ><i class="fa fa-trash"></i></a>
-	<a class="details" href="#"><i class="fa fa-user"></i></a>
+	<a class="edit" href="#" ><i class="fa fa-edit"></i></a>
+	<a class="delete" href="#" ><i class="icon-trash"></i></a>
+	<a class="details" href="#"><i class="icon icon-user"></i></a>
 </div>
 <div class="clearfix"></div>
 </div>

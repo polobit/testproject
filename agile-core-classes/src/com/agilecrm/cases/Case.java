@@ -9,6 +9,8 @@ import javax.persistence.PrePersist;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.apache.commons.lang.exception.ExceptionUtils;
+import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.annotate.JsonIgnore;
 
 import com.agilecrm.contact.Contact;
@@ -57,6 +59,9 @@ public class Case extends Cursor
      */
     @NotSaved(IfDefault.class)
     public String title = null;
+    
+    @NotSaved(IfDefault.class)
+    public String dummy_title = null;
 
     /**
      * Description of the case
@@ -109,6 +114,10 @@ public class Case extends Cursor
      * Status of case , OPEN or CLOSE. Can be extended later
      * 
      */
+    public List<Contact> relatedContacts()
+    {
+	 return Contact.dao.fetchAllByKeys(this.related_contacts_key);
+    }
     public static enum Status
     {
 	OPEN, CLOSE
@@ -243,6 +252,10 @@ public class Case extends Cursor
 
 	if (owner_key == null)
 	    owner_key = new Key<DomainUser>(DomainUser.class, Long.parseLong(this.owner_id));
+	
+	// Trim name and make dummy one to sore
+	if(StringUtils.isNotBlank(title))
+		dummy_title = title.toLowerCase().trim();
     }
 
     /**

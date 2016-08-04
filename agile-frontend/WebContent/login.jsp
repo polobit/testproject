@@ -1,3 +1,4 @@
+<%@page import="com.agilecrm.ipaccess.IpAccessUtil"%>
 <%@page import="com.agilecrm.util.MathUtil"%>
 <%@page import="com.google.appengine.api.utils.SystemProperty"%>
 <%@page import="com.agilecrm.util.VersioningUtil"%>
@@ -14,7 +15,7 @@ we use setAttribute() to store the username and to autofill if he want to resubm
 */
 //flatfull path
 String flatfull_path="/flatfull";
-
+	
 
 
 // Gets User Name
@@ -27,6 +28,9 @@ email = email.toLowerCase();
 request.setAttribute("agile_email", email);
 
 }
+//Gets the Ip 
+
+
 	
 // Checks if it is being access directly and not through servlet
 /* if(request.getAttribute("javax.servlet.forward.request_uri") == null)
@@ -38,8 +42,16 @@ request.setAttribute("agile_email", email);
 String error = request.getParameter("error");
 if(error != null)
   System.out.println(error);
-else
-  error = "";
+else {
+	String sessionError = (String)request.getSession().getAttribute("sso_error");
+	if(sessionError != null)
+	{
+	    error = sessionError; 
+		request.getSession().removeAttribute("sso_error");
+	} 
+	else
+		error = "";	 
+}
 
 if("multi-login".equalsIgnoreCase(error)){
 Cookie[] cookies = request.getCookies();
@@ -97,12 +109,13 @@ if(SystemProperty.environment.value() == SystemProperty.Environment.Value.Develo
 	  S3_STATIC_IMAGE_PATH = VersioningUtil.getStaticFilesBaseURL();
 }
 
-// Users can show their logo on login page. 
+// Users can show their company logo on login page. 
 AccountPrefs accountPrefs = AccountPrefsUtil.getAccountPrefs();
 String logo_url = accountPrefs.logo;
 
 // Bg Image
 int randomBGImageInteger = MathUtil.randomWithInRange(1, 9);
+
 
 %>
 <!DOCTYPE html>
@@ -206,6 +219,7 @@ if(isSafari && isWin)
 </script>
 
 <script type='text/javascript' src='//cdnjs.cloudflare.com/ajax/libs/jquery/1.10.2/jquery.min.js'></script>
+<script type='text/javascript' src='//cdn.jsdelivr.net/fingerprintjs2/1.1.2/fingerprint2.min.js'></script>
 
 <!--[if lt IE 10]>
 <script src="flatfull/lib/ie/placeholders.jquery.min.js"></script>
@@ -239,7 +253,18 @@ if(isSafari && isWin)
 					</a>
 				<%}%>
 				<div>
-				
+					<% if(!StringUtils.isEmpty(logo_url) && !StringUtils.equalsIgnoreCase("yourlogourl", logo_url))
+                       {
+                       %>
+
+                     <div style="display:table; margin:0px auto; border:none; padding: 5px;" class="imgholder thumb-wrapper thumb-lg">
+                   		<img class="company_logo w-full" style="background-color: white;border-radius: 3px;"src="<%=logo_url%>" ></img>
+                   	 </div>
+                   <%
+                   }
+                   %>
+                   
+                   
 				<form id='oauth' name='oauth' method='post'>
               <%--      <div><h3>Sign In
                    
@@ -290,12 +315,16 @@ if(isSafari && isWin)
 						<div class="block">
 							<input class="hide" id="location_hash" name="location_hash"></input>
 						</div>
-						
+						<input class="hide" id="finger_print" name="finger_print"></input>
+						<input class="hide" id="ip_validation" name="ip_validation"></input>
+						<input class="hide" id="browser_Name" name="browser_Name"></input>
+						<input class="hide" id="browser_version" name="browser_version"></input>
+						<input class="hide" id="browser_os" name="browser_os"></input>
 						</div>
 							<label class="checkbox" style="display:none;">
 							    <input type="checkbox" checked="checked" name="signin">Keep me signed in 
 							</label>
-							<input type='submit' value="Sign In" class='btn btn-lg btn-primary btn-block'>
+							<input type='submit' value="Sign In" disabled class='agile-submit btn btn-lg btn-primary btn-block'>
 							 
 						
 					
@@ -330,6 +359,50 @@ if(isSafari && isWin)
 	
 	<!-- JQUery Core and UI CDN -->
 	
+                  
+		<script type="text/javascript">
+			// localStorage setup
+			var _agile_storage = {
+				key : "_agile_user_fingerprint",
+				get : function(){
+					if(!this.is_strorage_supports())
+						 return;
+					return localStorage.getItem(this.key);
+				},
+				set :  function(val){
+					if(this.is_strorage_supports())
+						localStorage.setItem(this.key, val);
+				},
+				is_strorage_supports : function(){
+					return (typeof localStorage ? true : false);
+				}
+			};		
+			
+			function _agile_get_fingerprint(callback){
+					
+					// Get stored value
+					var finger_print = _agile_storage.get();
+					if(finger_print)
+						return callback(finger_print);
+	
+					// Load js and fetch print
+					new Fingerprint2().get(function(result, components){
+							return callback(result);
+					});
+			}
+	      	
+      		// Get print value to notify user 
+			_agile_get_fingerprint(function(result){
+				if(!result)
+					 return;
+
+				$("#finger_print").val(result);
+				$(".agile-submit").removeAttr("disabled");
+				// Reset val
+				_agile_storage.set(result);
+			});
+		</script>
+		
 	<script src='//cdnjs.cloudflare.com/ajax/libs/headjs/1.0.3/head.min.js'></script>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/jstimezonedetect/1.0.4/jstz.min.js" type="text/javascript"></script>
 	
@@ -337,22 +410,16 @@ if(isSafari && isWin)
 		$(document).ready(function()
 		{
 
-
-			var login_hash = window.location.hash;
-
+			// Reset form action param
+			if(window.location.href.indexOf("/normal") != -1)
+				$("form#agile").attr("action", "/login/normal");
+			
 			// Sets location hash in hidden fields
+			var login_hash = window.location.hash;
 			if(login_hash)
 				$("#location_hash").val(login_hash);
-        /*var newImg = new Image;
-        newImg.onload = function() {
-        
-        $("body").css("background-image","url('"+this.src+"')");
-       
-        }*/
-
-      //  newImg.src = '<%=S3_STATIC_IMAGE_PATH%>images/login-<%=randomBGImageInteger%>-high.jpg';
-
-        // agile-login-page-high.png
+			
+        	// agile-login-page-high.png
         	preload_login_pages();
 			// Pre load dashlet files when don is active
 			preload_dashlet_libs();
@@ -395,7 +462,14 @@ if(isSafari && isWin)
 				return;
 			}
 
-			head.load('<%=CLOUDFRONT_STATIC_FILES_PATH %>final-lib/min/lib-all-min-1.js?_=<%=_AGILE_VERSION%>', '<%=CLOUDFRONT_TEMPLATE_LIB_PATH %>jscore/min/flatfull/js-all-min.js?_=<%=_AGILE_VERSION%>', '<%=CLOUDFRONT_TEMPLATE_LIB_PATH%>tpl/min/precompiled/<%=FLAT_FULL_PATH%>tpl.js?_=<%=_AGILE_VERSION%>', '<%=CLOUDFRONT_TEMPLATE_LIB_PATH%>tpl/min/precompiled/<%=FLAT_FULL_PATH%>portlets.js?_=<%=_AGILE_VERSION%>');
+			head.load('<%=CLOUDFRONT_STATIC_FILES_PATH %>final-lib/min/lib-all-min-1.js?_=<%=_AGILE_VERSION%>', 
+					'<%=CLOUDFRONT_TEMPLATE_LIB_PATH %>jscore/min/flatfull/js-all-min-1.js?_=<%=_AGILE_VERSION%>', 
+					'<%=CLOUDFRONT_TEMPLATE_LIB_PATH %>jscore/min/flatfull/js-all-min-2.js?_=<%=_AGILE_VERSION%>', 
+					'<%=CLOUDFRONT_TEMPLATE_LIB_PATH %>jscore/min/flatfull/js-all-min-3.js?_=<%=_AGILE_VERSION%>', 
+					'<%=CLOUDFRONT_TEMPLATE_LIB_PATH %>jscore/min/flatfull/js-all-min-4.js?_=<%=_AGILE_VERSION%>', 
+					'<%=CLOUDFRONT_TEMPLATE_LIB_PATH%>tpl/min/precompiled/<%=FLAT_FULL_PATH%>tpl.js?_=<%=_AGILE_VERSION%>', 
+					'<%=CLOUDFRONT_TEMPLATE_LIB_PATH%>tpl/min/precompiled/<%=FLAT_FULL_PATH%>portlets.js?_=<%=_AGILE_VERSION%>'
+							);
 		}
 
 		function preload_login_pages(){
@@ -414,7 +488,176 @@ if(isSafari && isWin)
 
 			}
 		}
+
+		// localStorage setup
+		var _agile_storage = {
+			key : "_agile_user_fingerprint",
+			get : function(){
+				if(!this.is_strorage_supports())
+					 return;
+				return localStorage.getItem(this.key);
+			},
+			set :  function(val){
+				if(this.is_strorage_supports())
+					localStorage.setItem(this.key, val);
+			},
+			is_strorage_supports : function(){
+				return (typeof localStorage ? true : false);
+			}
+		};		
+		function _agile_get_fingerprint(callback){
+				
+				// Get stored value
+				var finger_print = _agile_storage.get();
+				if(finger_print)
+					return callback(finger_print);
+
+				// Load js and fetch print
+				new Fingerprint2().get(function(result, components){
+						return callback(result);
+				});
+		}
+
+		var BrowserDetect = {
+			init : function() {
+				this.browser = this.searchString(this.dataBrowser)
+						|| "An unknown browser";
+				this.version = this.searchVersion(navigator.userAgent)
+						|| this.searchVersion(navigator.appVersion)
+						|| this.searchMobileVersion(navigator.userAgent)
+						|| "An unknown version";
+				this.OS = this.searchString(this.dataOS) || "unknown";
+			},
+			searchString : function(data) {
+				for ( var i = 0; i < data.length; i++) {
+					var dataString = data[i].string;
+					var dataProp = data[i].prop;
+					var match = data[i].match;
+					this.versionSearchString = data[i].versionSearch
+							|| data[i].identity;
+
+					if (match && dataString.match(match))
+						return data[i].identity;
+
+					if (dataString) {
+						if (dataString.indexOf(data[i].subString) != -1)
+							return data[i].identity;
+					} else if (dataProp)
+						return data[i].identity;
+				}
+			},
+			searchMobileVersion : function(dataString) {
+
+				try {
+					match = dataString.match(/Mobile Safari\/([\d.]+)/);
+					if (match)
+						return parseFloat(match[1]);
+				} catch (e) {
+				}
+
+			},
+			searchVersion : function(dataString) {
+
+				var index = dataString.indexOf(this.versionSearchString);
+				if (index == -1)
+					return;
+				return parseFloat(dataString.substring(index
+						+ this.versionSearchString.length + 1));
+			},
+			dataBrowser : [ {
+				string : navigator.userAgent,
+				subString : "Chrome",
+				identity : "Chrome"
+			}, {
+				string : navigator.userAgent,
+				subString : "OmniWeb",
+				versionSearch : "OmniWeb/",
+				identity : "OmniWeb"
+			}, {
+				string : navigator.vendor,
+				subString : "Apple",
+				identity : "Safari",
+				versionSearch : "Version"
+			}, {
+				prop : window.opera,
+				identity : "Opera"
+			}, {
+				string : navigator.vendor,
+				subString : "iCab",
+				identity : "iCab"
+			}, {
+				string : navigator.vendor,
+				subString : "KDE",
+				identity : "Konqueror"
+			}, {
+				string : navigator.userAgent,
+				subString : "Firefox",
+				identity : "Firefox"
+			}, {
+				string : navigator.vendor,
+				subString : "Camino",
+				identity : "Camino"
+			}, { // for newer Netscapes (6+)
+				string : navigator.userAgent,
+				subString : "Netscape",
+				identity : "Netscape"
+			}, {
+				// For IE11
+				string : navigator.userAgent,
+				match : /Trident.*rv[ :]*11\./,
+				identity : "Explorer"
+			}, {
+				string : navigator.userAgent,
+				subString : "MSIE",
+				identity : "Explorer",
+			}, {
+				string : navigator.userAgent,
+				match : /Mobile Safari\/([\d.]+)/,
+				identity : "Mobile Safari",
+				versionSearch : "/AppleWebKit\/([\d.]+)/",
+			}, {
+				string : navigator.userAgent,
+				subString : "Gecko",
+				identity : "Mozilla",
+				versionSearch : "rv"
+			}, { // for older Netscapes (4-)
+				string : navigator.userAgent,
+				subString : "Mozilla",
+				identity : "Netscape",
+				versionSearch : "Mozilla"
+			} ],
+			dataOS : [ {
+				string : navigator.platform,
+				subString : "Win",
+				identity : "Windows"
+			}, {
+				string : navigator.platform,
+				subString : "Mac",
+				identity : "Mac"
+			}, {
+				string : navigator.userAgent,
+				match : /Android\s([0-9\.]*)/,
+				subString : "Android",
+				identity : "Android"
+			}, {
+				string : navigator.userAgent,
+				subString : "iPhone",
+				identity : "iPhone/iPod"
+			}, {
+				string : navigator.platform,
+				subString : "Linux",
+				identity : "Linux"
+			}
+
+			]
+
+		};
+		BrowserDetect.init();
+		$('#browser_os').val(BrowserDetect.OS);
+		$('#browser_Name').val(BrowserDetect.browser);
+		$('#browser_version').val(BrowserDetect.version);
 	</script>
+
 	<!-- Clicky code -->
  	<script src="//static.getclicky.com/js" type="text/javascript"></script>
 	<script type="text/javascript">try{ clicky.init(100729733); }catch(e){}</script> 

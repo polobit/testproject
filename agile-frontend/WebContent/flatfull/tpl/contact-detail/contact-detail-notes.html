@@ -12,9 +12,9 @@
                     </div>
 					<div class="btn-group">
             			<a href="#noteModal" data-toggle="modal" class="btn m-t-xs btn-default btn-sm btn-slate-action contact-add-note"><i class="icon-plus-sign"></i>&nbsp;Add Note</a>
-            			<a class="btn dropdown-toggle m-t-xs btn-sm btn-default" data-toggle="dropdown" aria-expanded="false"><span class="caret"></span></a>
-						<ul class="dropdown-menu pull-right" style="padding:2px">
-							<li style="padding:0px; text-align: center;"><a class="show-logPhone ">&nbsp;Add Call-log</a> </li>
+            			<button class="btn dropdown-toggle m-t-xs btn-sm btn-default" data-toggle="dropdown" aria-expanded="false"><span class="caret"></span></button>
+						<ul class="dropdown-menu pull-right" style="padding:2px" role="menu">
+							<li style="padding:0px; text-align: center;"><a href="javascript:void(0)" class="show-logPhone ">&nbsp;Add Call-log</a> </li>
 						</ul>
 					</div>
                 </div>
@@ -27,9 +27,9 @@
 <div class="m-b-md m-t-md m-r-sm" align="right">
 <div class="btn-group" align="right">
    <a href="#noteModal" data-toggle="modal" class="btn btn-default btn-sm btn-slate-action contact-add-note"><i class="icon-plus-sign"></i>&nbsp;Add Note</a>
-               			<a class="btn dropdown-toggle btn-sm btn-default" data-toggle="dropdown" aria-expanded="false"><span class="caret"></span></a>
-						<ul class="dropdown-menu pull-right" style="padding:2px">
-							<li style="padding:0px; text-align: center;"><a class="show-logPhone ">&nbsp;Add Call-log</a> </li>
+               			<button class="btn dropdown-toggle btn-sm btn-default" data-toggle="dropdown" aria-expanded="false"><span class="caret"></span></button>
+						<ul class="dropdown-menu pull-right" style="padding:2px" role="menu">
+							<li style="padding:0px; text-align: center;"><a href="javascript:void(0)" class="show-logPhone ">&nbsp;Add Call-log</a> </li>
 						</ul>
 						</div>
 						</div>
@@ -64,7 +64,7 @@
 		<div class="clearfix"></div>
 		<div class="contact-desc-dynamic">
 	<div>
-<pre style="white-space:pre-wrap">
+<pre style="white-space:pre-wrap; word-break: normal;">  <!--word-break:break-word; added -->
 {{show_link_in_statement description}}
 </pre>
 {{#if callType}}
@@ -91,28 +91,25 @@
 
 {{/if}}
 	</div>	
-	 	
-			
 		{{#each contacts}}
-
            	{{#if id}}
-				{{#isDuplicateContactProperty properties "email"}}
+				{{#isInCurrentView properties "email"}}
 					{{else}}	
 <div class="inline-block word-break-all">
 					{{#if_contact_type "PERSON"}}
 						<a class="text-info popover_contact text-capitalize" href="#contact/{{id}}" data="{{id}}">{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</a>{{#if @last}}{{else}},{{/if}}
 					{{/if_contact_type}}
 					{{#if_contact_type "COMPANY"}}
-        		<a class="text-info text-capitalize" href="#company/{{id}}">{{getPropertyValue properties "name"}}</a>{{#if @last}}{{else}},{{/if}}
+        		<a class="text-info text-capitalize popover_contact" href="#company/{{id}}" data="{{id}}">{{getPropertyValue properties "name"}}</a>{{#if @last}}{{else}},{{/if}}
         			{{/if_contact_type}}
 </div>
-				{{/isDuplicateContactProperty}}
+				{{/isInCurrentView}}
            		
            	{{/if}}
        	{{/each}}
 	
 </div>
-<div align="right" class="pos-abs pos-r-0 pos-b-0" style="right:19px;">
+<div align="right" class="pos-abs pos-r-0 pos-b-0 icons-text-sm" style="right:19px;">
 {{#if callType}}
 
 	{{#if_equals callType ""}}
@@ -120,16 +117,16 @@
 	{{else}}
 
 		<span class="actions  text-sm">
-		<a title="Edit"  data="{{id}}" class="edit-logPhone c-p text-l-none p-r-sm">  <i class="icon-pencil"></i> </a>
+		<a title="Edit"  data="{{id}}" class="edit-logPhone c-p text-l-none p-r-sm">  <i class="fa fa-edit"></i> </a>
 		
 	{{/if_equals}}
 
 {{else}}
 		<span class="actions  text-sm">
-		<a title="Edit"  data="{{id}}" data-toggle="modal" class="edit-note c-p text-l-none p-r-sm"> <i class="icon-pencil"></i> </a>
+		<a title="Edit"  data="{{id}}" data-toggle="modal" class="edit-note c-p text-l-none p-r-sm"> <i class="fa fa-edit"></i> </a>
 
 {{/if}}
-            <a title="Delete" class="c-p text-l-none"><span class="activity-delete icon-trash" id="{{id}}" url="core/api/contacts/notes/bulk"></span></a>
+            <a title="Delete" class="c-p text-l-none"><span class="activity-delete icon-trash" id="{{id}}" url="core/api/notes/bulk"></span></a>
         </span>
 </div>
 </div>

@@ -104,6 +104,13 @@ public class EmailUtil
 
 	return tokenSet;
     }
+    
+    public static String[] getStringTokenArray(String str, String delimiter)
+    {
+    	Set<String> tokenSet = getStringTokenSet(str, delimiter);
+    	
+    	return tokenSet.toArray(new String[tokenSet.size()]);
+    }
 
     /**
      * Sends an email using to remote object <code>SendGridEmail</code>
@@ -351,6 +358,9 @@ public class EmailUtil
 		return "";
 
 	    String name = emailString.substring(0, emailString.indexOf("<") - 1);
+	    
+	    //Removing Double Quotes and single quotes
+	     name=name.replaceAll("[\"']", "");
 
 	    // If name and email equals, return empty
 	    if (StringUtils.equals(name, getEmail(emailString)))
@@ -419,5 +429,4 @@ public class EmailUtil
 
 	return to;
     }
-
-}
+   }

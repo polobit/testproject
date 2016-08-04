@@ -1,6 +1,8 @@
 package com.agilecrm;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
@@ -9,20 +11,22 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.agilecrm.account.AccountPrefs;
-import com.agilecrm.account.util.AccountPrefsUtil;
+import com.agilecrm.contact.CustomFieldDef;
+import com.agilecrm.contact.CustomFieldDef.SCOPE;
+import com.agilecrm.contact.util.CustomFieldDefUtil;
+import com.agilecrm.ipaccess.IpAccess;
+import com.agilecrm.ipaccess.IpAccessUtil;
+import com.agilecrm.session.SessionCache;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
-import com.agilecrm.user.OnlineCalendarPrefs;
-import com.agilecrm.user.UserPrefs;
 import com.agilecrm.user.util.DomainUserUtil;
-import com.agilecrm.user.util.OnlineCalendarUtil;
-import com.agilecrm.user.util.UserPrefsUtil;
 import com.agilecrm.util.Defaults;
+import com.google.appengine.api.NamespaceManager;
 
 /**
  * <code>HomeServlet</code> handles request after login/new registration and
@@ -65,10 +69,19 @@ public class HomeServlet extends HttpServlet
 	    return;
 	}
 
-	// Create New User - AgileUser (for this namespace)
-	new AgileUser(SessionManager.get().getDomainId()).save();
+	System.out.println("setUpAgileUser inside");
+	// Create new user only if this user is not newly registered user
+	if( (req.getSession().getAttribute(RegisterServlet.IS_NEWLY_REGISTERED_USER_ATTR)) == null )
+	{
+		// Create New User - AgileUser (for this namespace)
+		new AgileUser(SessionManager.get().getDomainId()).save();
+	}
 
 	req.setAttribute(FIRST_TIME_USER_ATTRIBUTE, true);
+	
+	// Delete first time user session attribute
+	req.getSession().removeAttribute(RegisterServlet.IS_NEWLY_REGISTERED_USER_ATTR);
+	
 
 	// It load defaults. If request is for the first user in the domain then
 	// default are created or else only tour cookie is set
@@ -145,8 +158,17 @@ public class HomeServlet extends HttpServlet
      * 
      * @return
      */
-    public boolean isNewUser()
+    public boolean isNewUser(HttpServletRequest request)
     {
+    System.out.println("isNewUser = ");
+    
+    Boolean isNewUserSessionAttr = (Boolean) request.getSession().getAttribute(RegisterServlet.IS_NEWLY_REGISTERED_USER_ATTR);
+    System.out.println("isNewUserSessionAttr = " + isNewUserSessionAttr);
+    if( isNewUserSessionAttr != null && isNewUserSessionAttr.booleanValue() == true )
+    {
+    	return true;
+    }
+    
 	// Gets current AgileUser
 	return AgileUser.getCurrentAgileUser() == null;
     }
@@ -155,20 +177,15 @@ public class HomeServlet extends HttpServlet
      * Saves logged in time in domain user before request is forwarded to
      * dashboard (home.jsp)
      */
-    private void setLoggedInTime(HttpServletRequest req)
+    private void setLoggedInTime(HttpServletRequest req, DomainUser domainUser)
     {
 	try
 	{
-	    // Gets current domain user and saves current time as logged in
-	    // time.
-	    DomainUser domainUser = DomainUserUtil.getCurrentDomainUser();
-
+	    // saves current time as logged in
+	    // time for Domain user
 	    setLastLoggedInTime(domainUser);
 
 	    domainUser.setInfo(DomainUser.LOGGED_IN_TIME, new Long(System.currentTimeMillis() / 1000));
-	    setUserInfoTimezone(req, domainUser.id);
-	    domainUser = createOnlineCalendarPrefs(domainUser);
-	    domainUser.save();
 	}
 	catch (Exception e)
 	{
@@ -196,29 +213,94 @@ public class HomeServlet extends HttpServlet
     public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException
     {
 
-	// If user is not new, it calls method to set logged in time in current
-	// domain user and forwards request to home.jsp
-	if (!isNewUser())
-	{
-	    // Saves logged in time in domain user.
-	    setLoggedInTime(req);
-	    setAccountTimezone(req);
+    	// If user is not new, it calls method to set logged in time in current
+    	// domain user and forwards request to home.jsp
+    	if (!isNewUser(req))
+    	{
+    		UserFingerPrintInfo browser_auth = UserFingerPrintInfo.getUserAuthCodeInfo(req);
+    		if(!browser_auth.valid_finger_print || !browser_auth.valid_ip){
+    			req.getRequestDispatcher("fingerprintAuthentication.jsp").forward(req, resp);
+    			return;
+    		}
+    		
+    		SessionCache.removeObject(SessionCache.CURRENT_AGILE_USER);
+    		SessionCache.removeObject(SessionCache.CURRENT_DOMAIN_USER);
 
-	    String old_ui = req.getParameter("old");
-	    if (old_ui != null)
-		req.getRequestDispatcher("home.jsp").forward(req, resp);
-	    else
-		req.getRequestDispatcher("home-flatfull.jsp").forward(req, resp);
+    		// Avoid saving the DomainUser twice.
+    		DomainUser domainUser = DomainUserUtil.getCurrentDomainUser();
+    		
+    	    // Saves logged in time in domain user.
+    	    setLoggedInTime(req, domainUser);
+    	    
+    	    try {
+    	    	domainUser.save();
+    	    } catch(Exception e) {
+    	    	e.printStackTrace();
+    	    }
 
-	    return;
-	}
+    	    String old_ui = req.getParameter("old");
+    	    
+    	    if( old_ui == null )	setCustomFields(req);
+    	    
+    		req.getRequestDispatcher(old_ui != null ? "home.jsp" : "home-flatfull.jsp").forward(req, resp);
+    	    return;
+    	}
 
-	// If user is new user it will create new AgileUser and set cookie for
-	// initial page tour. It also calls to initialize defaults, if user is
-	// first user in the domain.
-	setUpAgileUser(req, resp);
+    	System.out.println("setUpAgileUser");
+    	// If user is new user it will create new AgileUser and set cookie for
+    	// initial page tour. It also calls to initialize defaults, if user is
+    	// first user in the domain.
+    	setUpAgileUser(req, resp);
     }
+   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
+    {
+    	try 
+    	{
+    		// Get code from user
+	    	String otp = request.getParameter("finger_print_otp");
+	    	System.out.println("user otp "+otp);
+	    	// Validate exiting one
+	    	UserFingerPrintInfo info = UserFingerPrintInfo.getUserAuthCodeInfo(request);
+	    	System.out.println("genearated otp = "+info.verification_code);
+	    	if(StringUtils.isBlank(otp) || !info.verification_code.equalsIgnoreCase(otp)){
+	    		throw new Exception(" Please enter valid verification code.");
+	    	} 
+	    	
+	    	if(!info.valid_ip)
+	    	{
+	    		IpAccess ipList =  IpAccessUtil.getIPListByDomainName(NamespaceManager.get());
+	    		if(ipList != null && ipList.ipList != null){
+	    			ipList.ipList.add(request.getRemoteAddr());
+	    			ipList.save();
+	    			System.out.println(ipList);
+	    		}
+	    		
+	    		
+	    	}
+	    	// Add to info
+    		info.valid_ip = true;
+    		info.valid_finger_print = true;
+    		info.set(request);
+	    	
+    		/*
+    		 * If Browser fingerprint verification succeeds, set Account Timezone, User Timezone
+    		 * OnlineCalendarPrefs and Browser Fingerprint.
+    		 */
+			LoginUtil.setMiscValuesAtLogin(request, DomainUserUtil.getCurrentDomainUser());
 
+			doGet(request, response);
+    	}
+    	catch(NumberFormatException e){
+    		request.getRequestDispatcher("fingerprintAuthentication.jsp?error=" + "Please enter valid verification code").forward(request, response);
+    	}
+    	catch(Exception e){
+    		e.printStackTrace();
+    		System.out.println(ExceptionUtils.getFullStackTrace(e));
+    		request.getRequestDispatcher("fingerprintAuthentication.jsp?error=" + e.getMessage()).forward(request, response);
+    	}
+    	
+    }
+  
     public static boolean isFirstTimeUser(HttpServletRequest req)
     {
 	Object object = req.getAttribute(FIRST_TIME_USER_ATTRIBUTE);
@@ -230,77 +312,47 @@ public class HomeServlet extends HttpServlet
 
     }
 
-    private void setAccountTimezone(HttpServletRequest req)
+    /**
+     * Set the values for Custom Fields as request attributes to be used by home-flatfull.jsp file.
+     * @param request
+     */
+    private void setCustomFields(HttpServletRequest request)
     {
-	try
-	{
-	    // Set timezone in account prefs.
-	    AccountPrefs accPrefs = AccountPrefsUtil.getAccountPrefs();
-	    if (StringUtils.isEmpty(accPrefs.timezone) || "UTC".equals(accPrefs.timezone)
-		    || "GMT".equals(accPrefs.timezone))
-	    {
-		accPrefs.timezone = (String) req.getSession().getAttribute("account_timezone");
-		accPrefs.save();
-	    }
-	}
-	catch (Exception e)
-	{
-	    System.out.println("Exception in setting timezone in account prefs.");
-	}
-    }
+    	List<CustomFieldDef> contactFields = CustomFieldDefUtil.getCustomFieldsByScope(SCOPE.CONTACT);
+    	List<CustomFieldDef> companyFields = CustomFieldDefUtil.getCustomFieldsByScope(SCOPE.COMPANY);
+    	
+    	List<CustomFieldDef> customFieldsScopeContactTypeDate = new ArrayList<>();
+    	List<CustomFieldDef> customFieldsScopeContactTypeContact = new ArrayList<>();
+    	List<CustomFieldDef> customFieldsScopeContactTypeCompany = new ArrayList<>();
 
-    private void setUserInfoTimezone(HttpServletRequest req, Long domainid)
-    {
-	try
-	{
-	    UserPrefs user_prefs = UserPrefsUtil.getUserPrefs(AgileUser.getCurrentAgileUserFromDomainUser(domainid));
-	    System.out.println("user_prefs in setUserInfoTimezone --------------- " + user_prefs);
-	    if (StringUtils.isEmpty(user_prefs.timezone) || "UTC".equals(user_prefs.timezone))
-	    {
+    	List<CustomFieldDef> customFieldsScopeCompanyTypeDate = new ArrayList<>();
+    	List<CustomFieldDef> customFieldsScopeCompanyTypeContact = new ArrayList<>();
+    	List<CustomFieldDef> customFieldsScopeCompanyTypeCompany = new ArrayList<>();
+    	
+    	for(CustomFieldDef field : contactFields)
+    	{
+    		if( field.field_type.equals(CustomFieldDef.Type.DATE) )	customFieldsScopeContactTypeDate.add(field);
 
-		user_prefs.timezone = (String) req.getSession().getAttribute("account_timezone");
-		user_prefs.save();
-	    }
-	}
-	catch (Exception e)
-	{
-	    System.out.println("Exception in setting timezone in user prefs.");
-	}
-    }
+    		if( field.field_type.equals(CustomFieldDef.Type.CONTACT) )	customFieldsScopeContactTypeContact.add(field);
+    		
+    		if( field.field_type.equals(CustomFieldDef.Type.COMPANY) )	customFieldsScopeContactTypeCompany.add(field);
+    	}
+    	
+    	for(CustomFieldDef field : companyFields)
+    	{
+    		if( field.field_type.equals(CustomFieldDef.Type.DATE) )	customFieldsScopeCompanyTypeDate.add(field);
 
-    private DomainUser createOnlineCalendarPrefs(DomainUser user)
-    {
-	OnlineCalendarPrefs onlinePrefs = OnlineCalendarUtil.getCalendarPrefs(user.id);
-	if (onlinePrefs == null)
-	{
-	    if (StringUtils.isNotEmpty(user.schedule_id))
-	    {
-		onlinePrefs = new OnlineCalendarPrefs(user.schedule_id, user.meeting_types, user.business_hours,
-			user.meeting_durations, user.id);
-	    }
-	    else
-	    {
-		onlinePrefs = new OnlineCalendarPrefs(OnlineCalendarUtil.getScheduleid(user.name), user.id);
-	    }
-	    user.schedule_id = onlinePrefs.schedule_id;
-	    onlinePrefs.save();
-	}
-	else
-	{
-	    if (StringUtils.isBlank(user.schedule_id) || !(onlinePrefs.schedule_id.equalsIgnoreCase(user.schedule_id)))
-	    {
-		try
-		{
-		    user.schedule_id = onlinePrefs.schedule_id;
-		    return user;
-		}
-		catch (Exception e)
-		{
-		    // TODO Auto-generated catch block
-		    e.printStackTrace();
-		}
-	    }
-	}
-	return user;
+    		if( field.field_type.equals(CustomFieldDef.Type.CONTACT) )	customFieldsScopeCompanyTypeContact.add(field);
+    		
+    		if( field.field_type.equals(CustomFieldDef.Type.COMPANY) )	customFieldsScopeCompanyTypeCompany.add(field);
+    	}
+    	
+    	request.setAttribute("customFieldsScopeContactTypeDate", customFieldsScopeContactTypeDate);
+    	request.setAttribute("customFieldsScopeContactTypeContact", customFieldsScopeContactTypeContact);
+    	request.setAttribute("customFieldsScopeContactTypeCompany", customFieldsScopeContactTypeCompany);
+    	
+    	request.setAttribute("customFieldsScopeCompanyTypeDate", customFieldsScopeCompanyTypeDate);
+    	request.setAttribute("customFieldsScopeCompanyTypeContact", customFieldsScopeCompanyTypeContact);
+    	request.setAttribute("customFieldsScopeCompanyTypeCompany", customFieldsScopeCompanyTypeCompany);
     }
 }

@@ -1,15 +1,27 @@
+<script id="settings-account-tab-template" type="text/html">
+    <div class="tab-container m-b-none">
+           <ul class="nav nav-tabs b-b-none">
+            <li class="settings-account-prefs"><a href="#account-prefs" class="b-l-none">Preferences</a></li>
+            <li class="settings-account-ips"><a href="#account-ipaccess" class="b-l-none">Security</a></li>
+            <li class="settings-sso-login"><a href="#sso-login" class="b-l-none">Single Sign-On (SSO)</a></li>
+           </ul>
+    </div>
+    <div class="tab-pane active" id="settings-account-tab-content">
+</script>
+
+
 
 <!--  Contact View Detail in Detailed mode - when only one contact is shown -->
 <script id="admin-settings-account-prefs-template" type="text/html">
-<div class="panel panel-default">
-	<div class="panel-heading">Preferences</div>
-	<div class="panel-body">
+<div class="col-sm-9 panel ">
+    <!--<div class="panel-heading">Preferences</div>-->
+    <div class="panel-body">
     <form id="accountPrefs" class="form-horizontal">
         <fieldset>
             <input name="id" class="form-control" type="hidden" value="{{id}}" />
             
             <div class="row">
-				<div class="col-md-7 col-xs-12">
+                <div class="col-md-8 col-xs-12">
                     <div class="control-group form-group">
                         <label class="control-label col-sm-4 col-xs-4">Plan</label> 
                         <div class="controls col-sm-8 col-xs-8" style="margin-top:7px;">
@@ -31,16 +43,143 @@
                             {{/if}}
                         </div>
                     </div>
+
+                     <div class="control-group form-group">
+                        <label class="control-label col-sm-4 col-xs-4">Currency</label> 
+                        <div class="controls col-sm-8 col-xs-8">
+                        <select id="target_list" name="currency" class="form-control">
+                        <option value="USD-$" selected="1">United States Dollar</option>
+                        <option value="EUR-&euro;">Euro</option>
+                        <option value="DZD-DA">Algerian Dinar</option>
+                        <option value="ARS-$">Argentina Peso</option>
+                        <option value="AUD-$">Australian Dollar</option>
+                        <option value="BHD-BD">Bahraini Dinar</option>
+                        <option value="BOB-$b">Bolivian Boliviano</option>
+                        <option value="BWP-P">Botswanan Pula</option>
+                        <option value="BRL-R$">Brazilian Real</option>
+                        <option value="GBP-&pound;">British Pound Sterling</option>
+                        <option value="BND-$">Brunei Dollar</option>
+                        <option value="BGN-&#1083;&#1074;">Bulgarian Lev</option>
+                        <option value="CAD-$">Canadian Dollar</option>
+                        <option value="KYD-$">Cayman Islands Dollar</option>
+                        <option value="XOF-CFAF">CFA Franc BCEAO</option>
+                        <option value="CLP-$">Chilean Peso</option>
+                        <option value="CNY-&yen;">Chinese Yuan</option>
+                        <option value="COP-$">Colombian Peso</option>
+                        <option value="CRC-&#8353;">Costa Rican Colon</option>
+                        <option value="HRK-kn">Croatian Kuna</option>
+                        <option value="CZK-K&#269;">Czech Republic Koruna</option>
+                        <option value="DKK-kr">Danish Krone</option>
+                        <option value="DOP-RD$">Dominican Peso</option>
+                        <option value="EGP-&pound;">Egyptian Pound</option>
+                        <option value="EEK-kr">Estonian Kroon</option>
+                        <option value="FJD-$">Fijian Dollar</option>
+                        <option value="HNL-L">Honduran Lempira</option>
+                        <option value="HKD-$">Hong Kong Dollar</option>
+                        <option value="HUF-Ft">Hungarian Forint</option>
+                        <option value="ISK-ISK">Icelandic Krona</option>
+                        <option value="INR-Rs">Indian Rupee</option>
+                        <option value="IDR-Rp">Indonesian Rupiah</option>
+                        <option value="ILS-&#8362;">Israeli New Sheqel</option>
+                        <option value="JMD-J$">Jamaican Dollar</option>
+                        <option value="JPY-&yen;">Japanese Yen</option>
+                        <option value="JOD-JOD">Jordanian Dinar</option>
+                        <option value="KZT-&#1083;&#1074;">Kazakhstani Tenge</option>
+                        <option value="KES-KSh">Kenyan Shilling</option>
+                        <option value="KWD-KD">Kuwaiti Dinar</option>
+                        <option value="LVL-Ls">Latvian Lats</option>
+                        <option value="LBP-&pound;">Lebanese Pound</option>
+                        <option value="LYD-LD">Libyan Dinar</option>
+                        <option value="LTL-Lt">Lithuanian Litas</option>
+                        <option value="MKD-&#1076;&#1077;&#1085;">Macedonian Denar</option>
+                        <option value="MYR-RM">Malaysian Ringgit</option>
+                        <option value="MUR-&#8360;">Mauritian Rupee</option>
+                        <option value="MXN-$">Mexican Peso</option>
+                        <option value="MDL-MDL">Moldovan Leu</option>
+                        <option value="MAD-DH">Moroccan Dirham</option>
+                        <option value="NAD-$">Namibian Dollar</option>
+                        <option value="NPR-&#8360;">Nepalese Rupee</option>
+                        <option value="ANG-&fnof;">Netherlands Antillean Guilder</option>
+                        <option value="TWD-NT$">New Taiwan Dollar</option>
+                        <option value="NZD-$">New Zealand Dollar</option>
+                        <option value="NIO-C$">Nicaraguan Cordoba</option>
+                        <option value="NGN-&#8358;">Nigerian Naira</option>
+                        <option value="NOK-kr">Norwegian Krone</option>
+                        <option value="OMR-RO">Omani Rial</option>
+                        <option value="PKR-&#8360;">Pakistani Rupee</option>
+                        <option value="PGK-K">Papua New Guinean Kina</option>
+                        <option value="PYG-Gs">Paraguayan Guarani</option>
+                        <option value="PEN-S/.">Peruvian Nuevo Sol</option>
+                        <option value="PHP-&#8369;">Philippine Peso</option>
+                        <option value="PLN-z&#322;">Polish Zloty</option>
+                        <option value="QAR-QR">Qatari Rial</option>
+                        <option value="RON-lei">Romanian Leu</option>
+                        <option value="RUB-&#1088;&#1091;&#1073;">Russian Ruble</option>
+                        <option value="SVC-&#8353;">Salvadoran Colon</option>
+                        <option value="SAR-SR">Saudi Riyal</option>
+                        <option value="RSD-&#1044;&#1080;&#1085;.">Serbian Dinar</option>
+                        <option value="SCR-&#8360;">Seychellois Rupee</option>
+                        <option value="SLL-Le">Sierra Leonean Leone</option>
+                        <option value="SGD-$">Singapore Dollar</option>
+                        <option value="SKK-Sk">Slovak Koruna</option>
+                        <option value="ZAR-R">South African Rand</option>
+                        <option value="KRW-&#8361;">South Korean Won</option>
+                        <option value="LKR-&#8360;">Sri Lankan Rupee</option>
+                        <option value="SEK-kr">Swedish Krona</option>
+                        <option value="CHF-CHF">Swiss Franc</option>
+                        <option value="TZS-TSh">Tanzanian Shilling</option>
+                        <option value="THB-&#3647;">Thai Baht</option>
+                        <option value="TTD-TT$">Trinidad and Tobago Dollar</option>
+                        <option value="TND-TD">Tunisian Dinar</option>
+                        <option value="TRY-YTL">Turkish Lira</option>
+                        <option value="UGX-USh">Ugandan Shilling</option>
+                        <option value="UAH-UAH">Ukrainian Hryvnia</option>
+                        <option value="AED-Dh">United Arab Emirates Dirham</option>
+                        <option value="UYU-$U">Uruguayan Peso</option>
+                        <option value="UZS-&#1083;&#1074;">Uzbekistan Som</option>
+                        <option value="VEF-VEF">Venezuelan Bolivar</option>
+                        <option value="VND-&#8363;">Vietnamese Dong</option>
+                        <option value="YER-YER">Yemeni Rial</option>
+                        <option value="ZMK-ZK">Zambian Kwacha</option>
+                    </select>
+                        </div>
+                    </div>
+                    
                     <div class="control-group form-group">
-                        <label class="control-label col-sm-4 col-xs-4">Company <span class="field_req">*</span></label> 
+                        <label class="control-label col-sm-4 col-xs-4">Company Name <span class="field_req">*</span></label> 
                         <div class="controls col-sm-8 col-xs-8">
                             <input name="company_name" class="input-medium required form-control" type="text" value="{{company_name}}" />
                         </div>
+
                     </div>
+
+                   
+
+
+                    <div class="control-group form-group">
+                    <label class="control-label col-sm-4 col-xs-4">Company Logo</label> 
+                    <div id="upload-container" class="controls col-sm-8 col-xs-8" messg="User image has been uploaded">     
+                                   <div class="imgholder company_logo form-whitelabel-image thumb-wrapper thumb-lg">
+                                            {{#if logo}}
+                                            <img class="w-full" src="{{logo}}" height="60" width="120" />
+                                            {{else}}
+                                            <img class="w-full" src="https://s3.amazonaws.com/agilecrm/panel/uploaded-logo/1383722651000?id=upload-container"  height="60" width="120" />
+                                            {{/if}}                                            
+                                  </div>
+                                  <div class="company_logo_upload m-l-sm">
+                                     <input type="hidden" id="upload_url" name="logo" class="logo"  />  
+                                     <input  class="upload_s3 btn btn-xs btn-default" type="button" id="account_prefs_image" value="Upload" />
+                                  </div>
+                       
+                    </div>                        
+                    </div>
+
+
+
                     <div class="control-group form-group">
                         <label class="control-label col-sm-4 col-xs-4">Domain</label>
                         <div class="controls col-sm-8 col-xs-8" style="margin-top:7px;">
-                            {{get_current_domain}} {{#unless aliasNames}}<a href="#change-domain" class="text-info p-l-xs">Add Alias</a>{{/unless}}                           
+                            {{get_current_domain}} {{#unless aliasNames}}<a href="#change-domain" class="text-info p-l-xs text-xs"><i class="icon-plus alias-icon"></i> Add Alias</a>{{/unless}}                           
                         </div>
                     </div>
                     {{#if aliasNames}}
@@ -52,32 +191,31 @@
                     </div>
                     {{/if}}
                     
-					 <input name="timezone" class="form-control" type="hidden" value="{{timezone}}" />
-				</div>
-                <div class="col-md-offset-2 col-md-3 col-xs-offset-4 col-xs-8 hide">
-                    <div >
-                        <div id="upload-container" messg="User image has been uploaded">
-                            <div class="clearfix">
-                                <div class="imgholder thumb-wrapper thumb-lg">
-                                    {{#if logo}}
-                                    <img class="w-full" src="{{logo}}"  width="85" />
-                                    {{else}}
-                                    <img class="w-full" src="https://contactuswidget.appspot.com/images/pic.png"  width="85" />
-                                    {{/if}}													
-                                </div>
-                                <p>
-                                    <input type="hidden" class="form-control" id="upload_url" name="logo" />  
-                                    <input class="upload_s3 btn btn-default btn-sm m-t-sm m-l-xs" type="button" id="account_prefs_image" value="Upload Logo" />
-                                </p>
-                            </div>
+                    <div class="control-group form-group {{#check_plan_interval 'YEARLY'}}{{else}}
+                        {{#check_plan_interval 'BIENNIAL'}}{{else}}
+                        hide
+                        {{/check_plan_interval}}
+                    {{/check_plan_interval}}">
+                        <label class="control-label col-sm-4 col-xs-4">Send Invoice</label>
+                        <div class="controls col-sm-8 col-xs-8">
+                            <div class="checkbox">
+                                
+                                    <input id="sendInvoiceBeforeCharge" class="hidden" type="checkbox" value="off" name="sendInvoiceBeforeCharge">
+                                    <i class="fa fa-lg invoice_option {{#if sendInvoiceBeforeCharge}}fa-toggle-on {{else}} fa-toggle-off {{/if}}" aria-hidden="true" style="color: gray;"></i>
+                                
+                            </div>    
                         </div>
                     </div>
-                </div>
+					 <input name="timezone" class="form-control" type="hidden" value="{{timezone}}" />
+				</div>
+
+                 
+                    
             </div>
             <div class="clearfix"></div>
 <div class="line ling-lg b-b"></div>
 <div class="row">
-<div class="col-md-7 col-xs-8">
+<div class="col-md-8 col-xs-8">
 <div class="col-sm-offset-4 col-sm-8 col-xs-offset-4 col-xs-8">
             
                 <a href="#" type="submit" class="save btn btn-sm btn-primary">Save Changes</a>
@@ -92,6 +230,7 @@
 </div>
 
 </script>
+
 
 <script id="admin-settings-domain-alias-template" type="text/html">
 <div id="alias_domain" class="panel panel-default">
@@ -156,4 +295,160 @@
             </div>
         </div>
     </div>
+
+</script>
+<script id="admin-settings-ip-prefs-template" type="text/html">
+<div id="ip_access" class="col-sm-9 panel ">
+    {{#unless ipList.length}} {{else}}
+    <div class="panel-heading allow_access_panelheading">
+    <div class="pull-left  m-t-xs">IP Address List</div>
+    <div class="pull-right">
+       <a class="upsert-ip btn btn-sm btn-default btn-addon" ><span><i class='icon-plus-sign'/></span> Add IP Address</a>
+    </div>
+    <div class="clearfix"></div>
+    </div>
+
+    {{/unless}}
+   
+    <form id="access-ip" class="form-horizontal">
+
+        <fieldset>
+            {{#if id}}
+                <input name="id"  class="form-control" type="hidden" value="{{id}}" />
+            {{/if}}
+            <input name="domain" class="form-control" type="hidden" value="{{get_current_domain}}" />
+            
+            <table class="table table-hover table-striped custom-fields-table bg-white m-b-none iptable" style="border:1px solid #eee">
+                <colgroup><col width="50%"><col width="4%"></colgroup>
+                <thead>
+                {{#unless ipList.length}} {{else}}
+                <tr>
+                <th>IP Address</th> 
+                <th></th>                
+                    </tr>
+                    {{/unless}}
+                </thead>
+                <tbody id="blocked_panel_ips_list" class="multiple-input" name="ipList">
+                   {{#each ipList}}
+                    <tr data="{{this}}" >
+                        <td>
+                            <div class="inline-block v-top text-ellipsis" style="width:80%">{{this}}</div>
+                            <input class="form-control ip_edit" type="hidden" value="{{this}}" />
+                        </td>
+                        <td class="b-r-none" style="width:8%;">
+                            <div class="m-b-n-xs pull-left" style="visibility: hidden;">
+                                <a class="upsert-ip c-p m-l-sm text-l-none text-sm hover-show" data-toggle="modal" role="button" style="margin-left:27px;" data-position="{{@index}}">
+                                        <i title="Edit" class="icon icon-edit"></i>
+                                </a>
+                                <a class="blocked-panel-ip-delete c-p m-l-sm text-l-none text-sm" data-toggle="modal" role="button" href="#"><i title="Delete  IP" class="task-action icon icon-trash"></i></a>
+                            </div>
+                        </td>
+                    </tr>
+                    {{/each}}
+                    <tr data="{{this}}" style="display:none;" >
+                        <td>
+                        <div class="show_field" style="visibility:hidden;">
+                        <input type="text" id="ipList"  style="width:250px;display:inline-block;" class="form-control input-sm ipValidation newip required" placeholder="New IP Address">
+                        <a href="#" type="submit"  class="save  btn btn-sm btn-primary " >Add</a>
+                        </div>
+                        </td>
+                        
+                    </tr>
+                </tbody>
+            </table>  
+             {{#unless ipList.length}}
+                     <div class="m-l-sm" id="slate">
+                     <div class="alert bg-white ">
+                     <div class="slate-content p-md">
+                        <div class="box-left pull-left m-r-md">
+                            <img alt="Clipboard" src="//doxhze3l6s7v9.cloudfront.net/beta/static//img/clipboard.png">
+                        </div>
+                        <div class="box-right pull-left" style="position:relative;top:10px;">
+
+                        <h4 class="m-t-none">Agile takes security seriously.</h4>
+                        <div class="text">Add extra protection by restricting Agile to certain IP addresses.</div>
+                        
+                        <a href="#"  class="upsert-ip modal-form btn btn-sm btn-default blue btn-slate-action m-t-xs" role="button" id="newip-add" ><i class="icon-plus-sign"></i> Add IP Address</a>
+                        </div>
+                        </div>
+                    <div class="clearfix"></div>
+                    </div></div>
+            {{/unless}}
+            {{#unless ipList.length}} {{else}}
+            <footer class="panel-footer">
+             <!--<a href="#" class="blocked-panel-ip-delete btn btn-danger btn-sm " data-toggle="modal" role="button" > Delete</a>-->
+            <!--<a href="#" class="btn btn-sm btn-primary " data-toggle="modal" role="button" id="newip-add" > Add</a>-->
+            </footer>  
+            {{/unless}}
+        </fieldset>
+    </form>
+
+</div>
+</script>
+
+<!--  SSO Login Test -->
+<script id="admin-settings-sso-login-template" type="text/html">
+<div class="col-sm-9 panel ">
+    <!--<div class="panel-heading">Webhook URL </div>-->
+    <div class="panel-body">
+    <form id="ssoPrefs" class="form-horizontal" style="margin-top: 16px;">
+        <fieldset>
+            {{#if id}}
+            <input name="id" class="form-control" type="hidden" value="">
+            {{/if}}
+            <div class="row">
+                <div class="col-md-8 col-xs-12">
+                    
+                    <div class="control-group form-group">
+                        <label class="control-label col-sm-4 col-xs-4" style="padding-left: 5px;">Remote Login URL<span class="field_req">*</span></label> 
+                        <div class="controls col-sm-8 col-xs-8">
+                            <input name="url" id="url" class="input-medium required form-control" type="url" value="" placeholder="https://">
+                        </div>
+                    </div>
+                    
+                    <div class="control-group form-group">
+                        <label class="control-label col-sm-4 col-xs-4">Shared Secret</label> 
+                        <div class="controls col-sm-8 col-xs-8">
+                            <div>
+                                <input type="hidden" name="secretKey" value="{{secretKey}}">
+                                <pre class="prettyprint pln" id="secret_key_sso_code">{{secretKey}}</pre>
+                                </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+                <div class="clearfix"></div>
+            <div class="line ling-lg b-b"></div>
+            <div class="row">
+            <div class="col-md-8 col-xs-8">
+            <div class="col-sm-offset-4 col-sm-8 col-xs-offset-4 col-xs-8">
+                {{#if id}}
+                    {{#if url}}
+                    <a href="#" type="submit" class="delete btn btn-sm btn-danger">Delete</a>
+                    {{/if}}
+                {{/if}}
+
+                <a href="#" type="submit" class="save btn btn-sm btn-primary">Submit</a>
+           
+
+            </div>
+            </div>
+            </div>
+                
+            </fieldset></form>
+</div>
+</div>
+<div class="col w-md  wrapper pos-rlt track-milestone-text" style="padding-top: 0px;">
+ <div class="data-block">
+  <div class="p-l p-r">
+   <h4 class="m-t-none">SSO Help</h4>   
+   <p>Admins and other users can use the SSO option to login into your Agile CRM. Agile CRM SSO is implemented using JWT, a widely adopted service that provides a flexible framework for creating a custom SSO solution. <br/>
+        <a href="https://github.com/agilecrm/sso" target="_blank" style="color: #337ab7;">Learn More</a>
+    </p>
+   <br>
+   
+  </div>
+ </div>
+</div>
 </script>

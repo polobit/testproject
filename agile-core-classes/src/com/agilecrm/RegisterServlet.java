@@ -16,7 +16,6 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.json.JSONObject;
 
-import com.agilecrm.account.APIKey;
 import com.agilecrm.account.AccountPrefs;
 import com.agilecrm.account.util.APIKeyUtil;
 import com.agilecrm.account.util.AccountPrefsUtil;
@@ -29,17 +28,22 @@ import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.subscription.SubscriptionUtil;
+import com.agilecrm.subscription.restrictions.db.BillingRestriction;
+import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
 import com.agilecrm.subscription.ui.serialize.Plan;
+import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.Referer;
 import com.agilecrm.user.RegisterVerificationServlet;
 import com.agilecrm.user.util.DomainUserUtil;
+import com.agilecrm.user.util.ReferUtil;
 import com.agilecrm.util.ReferenceUtil;
 import com.agilecrm.util.RegisterUtil;
 import com.agilecrm.util.VersioningUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.utils.SystemProperty;
 import com.googlecode.objectify.Key;
-import com.thirdparty.mandrill.subaccounts.MandrillSubAccounts;
+import com.thirdparty.sendgrid.subusers.SendGridSubUser;
 
 /**
  * <code>RegisterServlet</code> class registers the user account in agile crm.
@@ -62,6 +66,12 @@ import com.thirdparty.mandrill.subaccounts.MandrillSubAccounts;
 @SuppressWarnings("serial")
 public class RegisterServlet extends HttpServlet
 {
+	
+	/**
+	 * Request Attribute to flat newly registered user 
+	 */
+	public static final String IS_NEWLY_REGISTERED_USER_ATTR = "__agile_newly_registered_user";
+	
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
     {
 	doGet(request, response);
@@ -89,6 +99,7 @@ public class RegisterServlet extends HttpServlet
 	// Type the type of registration for the user - oauth or agile
 	try
 	{
+		
 	    if (type != null)
 	    {
 		if (type.equalsIgnoreCase("oauth"))
@@ -228,7 +239,10 @@ public class RegisterServlet extends HttpServlet
 	EventReminder.getEventReminder(domainUser.domain, null);
 	
 	// Create subaccount in Mandrill after registration
-	MandrillSubAccounts.createSubAccountInAgileMandrill(domainUser.domain);
+	//MandrillSubAccounts.createSubAccountInAgileMandrill(domainUser.domain);
+	
+	// Creates subUser in SendGrid after registration
+	SendGridSubUser.createSubAccountInSendGrid(domainUser.domain);
 	
 	request.getSession().setAttribute("account_timezone", timezone);
 	try
@@ -249,6 +263,22 @@ public class RegisterServlet extends HttpServlet
 	String planValue = request.getParameter(RegistrationGlobals.PLAN_TYPE);
 	if(!planValue.equals("Free"))
 		redirectionURL+= "#subscribe";
+	
+	// Create new Agile User
+	new AgileUser(domainUser.id).save();
+	
+	// New user param to save defaults
+	request.getSession().setAttribute(IS_NEWLY_REGISTERED_USER_ATTR, new Boolean(true));
+	
+	// New user param to save defaults
+	request.getSession().setAttribute(IS_NEWLY_REGISTERED_USER_ATTR, new Boolean(true));
+	
+	// New user param to save defaults
+	request.getSession().setAttribute(IS_NEWLY_REGISTERED_USER_ATTR, new Boolean(true));
+	
+	// Set misc values at Register before sending user to home page.
+	LoginUtil.setMiscValuesAtLogin(request, domainUser);
+	
 	// Redirect to home page
 	response.sendRedirect(redirectionURL);
     }
@@ -526,12 +556,18 @@ public class RegisterServlet extends HttpServlet
 	domainUser.setInfo(DomainUser.COUNTRY, request.getHeader("X-AppEngine-Country"));
 	domainUser.setInfo(DomainUser.CITY, request.getHeader("X-AppEngine-City"));
 	domainUser.setInfo(DomainUser.LAT_LONG, request.getHeader("X-AppEngine-CityLatLong"));
+	
+	
+	// Set Role
+	domainUser.role = DomainUserUtil.getDomainUserRole(((String) request.getParameter(RegistrationGlobals.USER_ROLE)));
 	domainUser.save();
 
 	if (domainUser != null && reference_domain != null)
 	{
 	    ReferenceUtil.updateReferralCount(reference_domain);
+	    setReferenceInfo(reference_domain, domainUser.domain);
 	}
+	
 
 	try
 	{
@@ -543,6 +579,30 @@ public class RegisterServlet extends HttpServlet
 	}
 	userInfo.setDomainId(domainUser.id);
 	return domainUser;
+    }
+    
+    public void setReferenceInfo(String reference_domain, String registered_domain){
+    	System.out.println("Referer process started");
+    	String oldNamespace = NamespaceManager.get();
+    	NamespaceManager.set(reference_domain);
+    	try{
+    		System.out.println("refer_domain: "+reference_domain+" Namespace :"+NamespaceManager.get());
+    		Referer referer = ReferUtil.getReferrer();
+    		++referer.referral_count;
+    		System.out.println("referral_count"+referer.referral_count);
+    		referer.referedDomains.add(registered_domain);
+    		referer.save();
+    		BillingRestriction restriction = BillingRestrictionUtil.getBillingRestrictionFromDB();
+    		System.out.println("adding email credits");
+    		restriction.incrementEmailCreditsCount(500);
+    		restriction.save();
+    		System.out.println("Referer process ended");
+    	}catch(Exception e){
+    		System.out.println(ExceptionUtils.getMessage(e));
+    		e.printStackTrace();
+    	}finally{
+    		NamespaceManager.set(oldNamespace);
+    	}
     }
 
     /**

@@ -1,0 +1,21 @@
+<script id="categorie-sections-breadcrumb-template" type="text/html">
+  <ul class="breadcrumb bg-white ">
+      <li id="default"><a href="#categories">Home</a></li>
+      <li class="active">{{name}}</li>
+    </ul>
+</script>
+<script id="section-articles-breadcrumb-template" type="text/html">
+	<ul class="breadcrumb bg-white ">
+      <li><a href="#"> Home</a></li>
+      <li><a href="#category/{{categorie.id}}">{{categorie.name}}</a></li>
+      <li class="active">{{name}}</li>
+    </ul>
+</script>
+<script id="article-breadcrumb-template" type="text/html">
+	<ul class="breadcrumb bg-white">
+      <li><a href="#">Home</a></li>
+      <li><a href="#category/{{categorie.id}}">{{categorie.name}}</a></li>
+      <li><a href="#section/{{section.name}}">{{section.name}}</a></li>
+      <li class="active">{{title}}</li>
+    </ul>
+</script>

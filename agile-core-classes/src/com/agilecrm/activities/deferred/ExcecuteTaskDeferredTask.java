@@ -103,7 +103,7 @@ public class ExcecuteTaskDeferredTask implements DeferredTask
 		    "jagadeesh@invox.com", null, null, "transient exception " + domain, null, "execute task reminder",
 		    null, null, null, null);
 	    ExcecuteTaskDeferredTask task_deferred = new ExcecuteTaskDeferredTask(domain);
-	    Queue queue = QueueFactory.getQueue("due-task-reminder");
+	    Queue queue = QueueFactory.getQueue(TaskReminder.getTaskRemainderQueueName(domain));
 	    TaskOptions options = TaskOptions.Builder.withPayload(task_deferred);
 	    options.countdownMillis(40000);
 	    queue.add(options);
@@ -118,6 +118,7 @@ public class ExcecuteTaskDeferredTask implements DeferredTask
 		StringWriter errors = new StringWriter();
 		e.printStackTrace(new PrintWriter(errors));
 		String errorString = errors.toString();
+		e.printStackTrace();
 
 		Mandrill.sendMail("vVC_RtuNFH_5A99TEWXPmA", true, "noreplay@agilecrm.com", "task-reminder-failure",
 		        "jagadeesh@invox.com", null, null, "exception at taskreminder deferred task " + domain, null,

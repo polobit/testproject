@@ -49,8 +49,8 @@
     	<fieldset>
               <input type="hidden" id="twilio_number_sid" value="" name="twilio_number_sid"></input>
 		      <p class="m-t-sm">
-                   Make and receive calls from your contacts using your Twilio account.
-              </p>
+              Make and receive calls, and send and receive text messages with your customers using Twilio account.
+          </p>
 			  
 				<label><b>Enter your Twilio details </b>
                        <span>         
@@ -64,7 +64,7 @@
                 </div>
                 <div class="control-group form-group">
                      <div class="controls">
-                          <input type="text" id="twilio_auth_token" class="input-medium required widget_input_box form-control"  title="Auth Token length should be 32." value="" name="twilio_auth_token" placeholder="Auth Token"  minlength= "32" maxlength= "32" required></input>
+                          <input type="password" id="twilio_auth_token" class="input-medium required widget_input_box form-control"  title="Auth Token length should be 32." value="" name="twilio_auth_token" placeholder="Auth Token"  minlength= "32" maxlength= "32" required></input>
                      </div>
                 </div>            
 
@@ -127,32 +127,31 @@
 
 
 
-<script id="twilioio-dialpad-template" type="text/html">
-<div id="dialpad_in_twilio" class="m-t-sm m-b-sm pull-right" style="display:none;"> 
 
-  <div class="w-full bg-transparent" style="border-collapse: collapse;border-spacing: 0;display: table;">
-   <div style="display: table-row-group;vertical-align: middle;border-color: inherit;"> 
-    <div style="display: table-row;vertical-align: inherit;border-color: inherit;">
-    <div style="display: table-cell;vertical-align: inherit;padding-bottom: 2px;padding-right: 1px;"><input type="button" value="1" class="button1" id="button1" onclick="twilioSendDTMF('1');"></div>
-    <div style="display: table-cell;vertical-align: inherit;padding-bottom: 2px;padding-right: 1px;"><input type="button" value="2" class="button2" id="button2" onclick="twilioSendDTMF('2');"></div>
-    <div style="display: table-cell;vertical-align: inherit;padding-bottom: 2px;padding-right: 1px;"><input type="button" value="3" class="button3" id="button3" onclick="twilioSendDTMF('3');"></div>
-    </div>
-    <div style="display: table-row;vertical-align: inherit;border-color: inherit;">
-    <div style="display: table-cell;vertical-align: inherit;padding-bottom: 2px;padding-right: 1px;"><input type="button" value="4" class="button4" id="button4" onclick="twilioSendDTMF('4');"></div>
-    <div style="display: table-cell;vertical-align: inherit;padding-bottom: 2px;padding-right: 1px;"><input type="button" value="5" class="button5" id="button5" onclick="twilioSendDTMF('5');"></div>
-    <div style="display: table-cell;vertical-align: inherit;padding-bottom: 2px;padding-right: 1px;"><input type="button" value="6" class="button6" id="button6" onclick="twilioSendDTMF('6');"></div>
-    </div>
-    <div style="display: table-row;vertical-align: inherit;border-color: inherit;">
-    <div style="display: table-cell;vertical-align: inherit;padding-bottom: 2px;padding-right: 1px;"><input type="button" value="7" class="button7" id="button7" onclick="twilioSendDTMF('7');"></div>
-    <div style="display: table-cell;vertical-align: inherit;padding-bottom: 2px;padding-right: 1px;"><input type="button" value="8" class="button8" id="button8" onclick="twilioSendDTMF('8');"></div>
-    <div style="display: table-cell;vertical-align: inherit;padding-bottom: 2px;padding-right: 1px;"><input type="button" value="9" class="button9" id="button9" onclick="twilioSendDTMF('9');"></div>
-    </div>
-    <div style="display: table-row;vertical-align: inherit;border-color: inherit;">
-    <div style="display: table-cell;vertical-align: inherit;padding-bottom: 2px;padding-right: 1px;"><input type="button" value="*" class="buttonstar" id="buttonstar" style="width:94%;" onclick="twilioSendDTMF('*');"></div>
-    <div style="display: table-cell;vertical-align: inherit;padding-bottom: 2px;padding-right: 1px;"><input type="button" value="0" class="button0" id="button0" onclick="twilioSendDTMF('0');"></div>
-    <div style="display: table-cell;vertical-align: inherit;padding-bottom: 2px;padding-right: 1px;"><input type="button" value="#" class="buttonpound" id="buttonpound" onclick="twilioSendDTMF('#');"></div>
-    </div>
-    </div>
+<script id="twilioio-dialpad-template" type="text/html">
+
+<div>
+<div id="dialpad_in_twilio" class="dialpad_btns" style="border: none;position: relative;left:calc(60%);z-index:1;padding-bottom: 10px;"> 
+  <div  class"campaign_dialpad_bg" style="border-left: 1px solid #EEEEEE;" >
+     <div class="campaign_dialpad_row">
+       <div class="campaign_dialpad_cell" style="border-top: 1px solid #EEE;"><input type="button" value="1" class="button1" id="button1" onclick="twilioSendDTMF('1');"></div>
+       <div class="campaign_dialpad_cell" style="border-top: 1px solid #EEE;"><input type="button" value="2" class="button2" id="button2" onclick="twilioSendDTMF('2');"></div>
+       <div class="campaign_dialpad_cell" style="border-top: 1px solid #EEE;"><input type="button" value="3" class="button3" id="button3" onclick="twilioSendDTMF('3');"></div>
+ 	   <div class="campaign_dialpad_cell" style="border-top: 1px solid #EEE;"><input type="button" value="4" class="button4" id="button4" onclick="twilioSendDTMF('4');"></div>   
+ 	 </div>
+     <div class="campaign_dialpad_row">
+       <div class="campaign_dialpad_cell"><input type="button" value="5" class="button5" id="button5" onclick="twilioSendDTMF('5');"></div>
+       <div class="campaign_dialpad_cell"><input type="button" value="6" class="button6" id="button6" onclick="twilioSendDTMF('6');"></div>
+       <div class="campaign_dialpad_cell"><input type="button" value="7" class="button7" id="button7" onclick="twilioSendDTMF('7');"></div>
+       <div class="campaign_dialpad_cell"><input type="button" value="8" class="button8" id="button8" onclick="twilioSendDTMF('8');"></div>
+	 </div>
+     <div class="campaign_dialpad_row">
+       <div class="campaign_dialpad_cell" ><input type="button" value="9" class="button9" id="button9" onclick="twilioSendDTMF('9');"></div>
+	   <div class="campaign_dialpad_cell"><input type="button" value="0" class="button0" id="button0" onclick="twilioSendDTMF('0');"></div>    
+	   <div class="campaign_dialpad_cell"><input type="button" value="*" class="buttonstar" id="buttonstar" style="width:94%;" onclick="twilioSendDTMF('*');"></div>
+       <div class="campaign_dialpad_cell"><input type="button" value="#" class="buttonpound" id="buttonpound" onclick="twilioSendDTMF('#');"></div> 	
+	 </div>
+  </div>
 </div>
 </div>
 <div style="clear:both"></div>
@@ -161,9 +160,9 @@
 <script id="twilioio-voicemail-template" type="text/html">
 {{#if this}}
 <div class="btn-group dropup pull-left">
-<button class="btn btn-sm btn-default" id="noty_twilio_voicemail" data-length="{{length}}" data-src="{{this.0.extension}}">Leave Voicemail</button>
+<button class="btn btn-xs btn-default" id="noty_twilio_voicemail" data-length="{{length}}" data-src="{{this.0.extension}}">Leave Voicemail</button>
 {{#ifCond length "greaterthan" 1}}
-<button class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" onclick="voiceMailDropAction()" id="splitButtonVoicemail" ><span class="caret"></span></button>
+<button class="btn btn-xs btn-default dropdown-toggle" data-toggle="dropdown" onclick="voiceMailDropAction()" id="splitButtonVoicemail" ><span class="caret"></span></button>
 <ul class="dropdown-menu text-left text-base">
 {{#each this}}
 <li><a href="#" data-src="{{extension}}" class="voiceMailItem">{{name}}</a></li>

@@ -1,9 +1,10 @@
 var default_call_option = { "callOption" : [] };
 var callOptionDiv = "" ;
-var globalCall = { "callDirection" : null, "callStatus" : "Ideal", "callId" : null, "callNumber" : null, "timeObject" : null, "lastReceived":null, "calledFrom":null, "contactedId":null};
-var globalCallForActivity = { "callDirection" : null, "callId" : null, "callNumber" : null, "callStatus" : null, "duration" : 0, "requestedLogs" : false, "justCalledId" : null, "justSavedCalledIDForNote" : null, "justSavedCalledIDForActivity" : null}; 
+var globalCall = { "callDirection" : null, "callStatus" : "Ideal", "callId" : null, "callNumber" : null, "timeObject" : null, "lastReceived":null, "lastSent":null , "calledFrom":null, "contactedId":null, "contactedContact" : null};
+var globalCallForActivity = { "callDirection" : null, "callId" : null, "callNumber" : null, "callStatus" : null, "duration" : 0, "requestedLogs" : false, "justCalledId" : null, "justSavedCalledIDForNote" : null, "justSavedCalledIDForActivity" : null,"contactedId":null, "answeredByTab" : false}; 
 var widgetCallName = { "Sip" : "Sip", "TwilioIO" : "Twilio", "Bria" : "Bria", "Skype" : "Skype", "CallScript" : "CallScript" };
-var CallLogVariables = {"callActivitySaved" : false, "id" : null, "callType" : null, "status" : null, "callWidget" : null, "duration" : null, "phone" : null, "url" : null };
+var dialled = {"using" : "default"};
+var CallLogVariables = {"callActivitySaved" : false, "id" : null, "callType" : null, "status" : null, "callWidget" : null, "duration" : null, "phone" : null, "url" : null,"description":null , "dynamicData" : null, "processed" : false};
 
 $(function()
 {
@@ -13,42 +14,55 @@ $(function()
 
 function getContactImage(number, type, callback)
 {
-	if (type)
-	{
-		if (type == "Outgoing")
+	try{
+		if (type)
 		{
-			var currentContact = agile_crm_get_contact();
-			getTemplate('contact-image', currentContact, undefined, function(image)
+			if (type == "Outgoing")
 			{
-				if (!image)
-					callback("");
-				callback(image);
-			});
-
-		}
-		else
-		{
-
-			searchForContactImg(number, function(currentContact)
-			{
-				if (!currentContact)
-				{
-					 callback("");
-					 return;
-				}
+				var currentContact = agile_crm_get_contact();
 				getTemplate('contact-image', currentContact, undefined, function(image)
 				{
-					if (!image){
+					if (!image)
 						callback("");
-						return;
-					}
 					callback(image);
 				});
-			});
-		}
-	}
 
+			}
+			else
+			{
+
+				searchForContactImg(number, function(currentContact)
+				{
+					if (!currentContact)
+					{
+						 callback("");
+						 return;
+					}
+					getTemplate('contact-image', currentContact, undefined, function(image)
+					{
+						if (!image){
+							callback("");
+							return;
+						}
+						callback(image);
+					});
+				});
+			}
+		}
+	}catch(e){
+		if (callback && typeof callback === "function"){
+			callback("");
+			return;
+		}else{
+			return "";
+		}
+			
+	}
 }
+
+function agile_is_iPhone(){
+   return (/iPhone/i.test(navigator.userAgent));
+ }
 
 function globalCallWidgetSet()
 {
@@ -59,8 +73,34 @@ function globalCallWidgetSet()
 					{
 						console.log("default call option selected is :" + call_widget);
 
+						$("body .contact-make-call").off("click");
+						$("body .contact-make-call").off("dblclick");
+						if(agile_is_mobile_browser()){
+							if(agile_is_iPhone()){
+								$("body").on("click", ".contact-make-call", function(e){
+									e.preventDefault();
+									var phone = $(this).attr("phone");
+									window.location.href="tel://"+phone;
+								});
+								return;
+							}else{
+								$("body").on("dblclick", ".contact-make-call", function(e){
+									e.preventDefault();
+									var phone = $(this).attr("phone");
+									window.location.href="tel://"+phone;
+								});
+							}
+						}
 						if (call_widget.length == 0)
 						{
+							if(agile_is_mobile_browser()){
+								
+								$("body").on("click", ".contact-make-call", function(e){
+									e.preventDefault();
+									var phone = $(this).attr("phone");
+									window.location.href="tel://"+phone;
+								});
+							}
 							return;
 						}
 
@@ -85,15 +125,51 @@ function globalCallWidgetSet()
 
 						callOptionDiv = callOptionDiv.concat("</span>");
 
+						// this is to get the name of widget stored in cache
+						var nameToStore = "";
+						var selectedWidget = _agile_get_prefs("dial-default-widget");
+						var alreadySetPrefs = false;
+						if(selectedWidget){
+							if(selectedWidget == "Twilio"){
+								selectedWidget = "TwilioIO";
+							}
+							var index = containsOption(default_call_option.callOption, "name", selectedWidget);
+							if( index == -1){
+								nameToStore = "";
+							}else{
+								alreadySetPrefs = true;
+								nameToStore = widgetCallName[selectedWidget];
+							}
+						}
+						
+						var flag = false;
 						$.each(default_call_option.callOption, function(i, obj)
 						{
-							if (obj.name == "Bria" || obj.name == "Skype")
-							{
-								sendTestCommand();
-								return false;
+							// this is to store twilio as default in localstorrage otherwise any
+							if(!alreadySetPrefs){
+								if(widgetCallName[obj.name] == "Twilio"){
+									nameToStore = "Twilio";
+								}else if(nameToStore != "Twilio" && obj.name != "CallScript"){
+									nameToStore = widgetCallName[obj.name];
+								}
 							}
-						});
 
+							//check whether executables are running or not
+							if ((obj.name == "Bria" || obj.name == "Skype" ) && !flag)
+							{
+								flag = true;
+								sendTestCommand();
+							}
+							
+							// this will show the option of widget to select in direct dial from new tab
+							var name = widgetCallName[obj.name];
+							$(".dialler-widget-name-" + name).show();
+						});
+						
+						// saving the name in local storage to show in direct dial 
+							_agile_set_prefs("dial-default-widget", nameToStore);
+
+						
 						$('body').on({ mouseenter : function(e)
 						{
 							if (!Pubnub)
@@ -295,6 +371,7 @@ function replicateglobalCallVariable()
 	globalCallForActivity.callDirection = globalCall.callDirection;
 	globalCallForActivity.callNumber = globalCall.callNumber;
 	globalCallForActivity.callId = globalCall.callId;
+	globalCallForActivity.contactedId = globalCall.contactedId;
 	globalCallForActivity.requestedLogs = false;
 }
 
@@ -308,7 +385,10 @@ function resetglobalCallVariables()
 	globalCall.callId = null;
 	globalCall.callNumber = null;
 	globalCall.lastReceived = null;
-	globalCall.calledFrom = null;
+	globalCall.lastSent = null;
+	globalCall.contactedId = "";
+	globalCall.contactedContact = null;
+	//globalCall.calledFrom = null;
 	if (globalCall.timeObject != null)
 	{
 		clearTimeout(globalCall.timeObject);
@@ -324,6 +404,10 @@ function resetglobalCallForActivityVariables()
 	globalCallForActivity.callId = null;
 	globalCallForActivity.callNumber = null;
 	globalCallForActivity.duration = 0;
+	globalCallForActivity.contactedId = "";
+	globalCallForActivity.answeredByTab = false;
+
+	
 }
 
 function resetCallLogVariables(){
@@ -335,6 +419,9 @@ function resetCallLogVariables(){
 	CallLogVariables.duration = null;
 	CallLogVariables.phone = null;
 	CallLogVariables.url = null;
+	CallLogVariables.description = null;
+	CallLogVariables.dynamicData = null;
+	CallLogVariables.processed = false;
 }
 
 function handleCallRequest(message)
@@ -349,12 +436,17 @@ function handleCallRequest(message)
 		}
 		if (message.state == "lastCallDetail")
 		{
+			if(message.direction == "Incoming" || message.direction == "inbound"){
+				if(!globalCallForActivity.answeredByTab){
+					return;
+				}
+			}
 			globalCallForActivity.duration = message.duration;
 			var call = { "direction" : message.direction, "phone" : globalCallForActivity.callNumber, "status" : globalCallForActivity.callStatus,
-				"duration" : message.duration };
+				"duration" : message.duration, "contactId" : globalCallForActivity.contactedId };
 			var num = globalCallForActivity.callNumber;
-			saveCallNoteBria();
-			saveCallActivityBria(call);
+			saveCallNoteBria(call);
+			//saveCallActivityBria(call);
 			try
 			{
 				var phone = $("#bria_contact_number").val();
@@ -370,29 +462,15 @@ function handleCallRequest(message)
 			catch (e)
 			{
 			}
+			
 			return;
 		}
 		else if (message.state == "error")
 		{
-			head.js(LIB_PATH + 'lib/noty/jquery.noty.js', LIB_PATH + 'lib/noty/layouts/bottom.js', LIB_PATH + 'lib/noty/layouts/bottomRight.js',
-					LIB_PATH + 'lib/noty/themes/default.js', LIB_PATH + 'lib/noty/packaged/jquery.noty.packaged.min.js', function()
-					{
-						if (Bria_Call_Noty != undefined)
-							Bria_Call_Noty.close();
-						try
-						{
-							$('#briaCallId').parents("ul").last().remove();
-							if(globalCall.calledFrom == "bria"){
-								resetglobalCallVariables();
-								resetglobalCallForActivityVariables();
-							}
-						}
-						catch (e)
-						{
-						}
-					});
+			closeCallNoty(true);
 			resetglobalCallVariables();
 			resetglobalCallForActivityVariables();
+			
 			return;
 		}
 		else if (message.state == "logs")
@@ -402,12 +480,13 @@ function handleCallRequest(message)
 		}
 		else if (message.state == "closed")
 		{
-			if(globalCall.calledFrom == "bria"){
+			if(globalCall.calledFrom == "Bria"){
 				showCallNotyMessage("Bria is not running");
-				$('#briaCallId').parents("ul").last().remove();
+				closeCallNoty(true);
 				resetglobalCallVariables();
 				resetglobalCallForActivityVariables();
 			}
+			
 			return;
 		}
 		showBriaCallNoty(message);
@@ -423,14 +502,20 @@ function handleCallRequest(message)
 		// start from here
 		if (message.state == "lastCallDetail")
 		{
+			if(message.direction == "Incoming" || message.direction == "inbound"){
+				if(!globalCallForActivity.answeredByTab){
+					return;
+				}
+			}
+			
 			globalCallForActivity.duration = message.duration;
 			console.log("message.direction : " + message.direction + "-----" + globalCallForActivity.callDirection);
 			var call = { "direction" : globalCallForActivity.callDirection, "phone" : globalCallForActivity.callNumber,
-				"status" : globalCallForActivity.callStatus, "duration" : message.duration };
+				"status" : globalCallForActivity.callStatus, "duration" : message.duration, "contactId" : globalCallForActivity.contactedId };
 			var num = globalCallForActivity.callNumber;
 			console.log("last called : " + call);
-			saveCallNoteSkype();
-			saveCallActivitySkype(call);
+			saveCallNoteSkype(call);
+			//saveCallActivitySkype(call);
 			try
 			{
 				
@@ -451,31 +536,17 @@ function handleCallRequest(message)
 			{
 			}
 			globalCallForActivity.requestedLogs = false;
+			
 			return;
 		}
 		else if (message.state == "error")
 		{
-			head.js(LIB_PATH + 'lib/noty/jquery.noty.js', LIB_PATH + 'lib/noty/layouts/bottom.js', LIB_PATH + 'lib/noty/layouts/bottomRight.js',
-					LIB_PATH + 'lib/noty/themes/default.js', LIB_PATH + 'lib/noty/packaged/jquery.noty.packaged.min.js', function()
-					{
-						if (Skype_Call_Noty != undefined)
-							Skype_Call_Noty.close();
-						try
-						{
-							$('#skypeCallId').parents("ul").last().remove();
-							if(globalCall.calledFrom == "skype"){
-								resetglobalCallVariables();
-								resetglobalCallForActivityVariables();
-							}
-						}
-						catch (e)
-						{
-						}
-					});
+			closeCallNoty(true);
 			resetglobalCallVariables();
 			resetglobalCallForActivityVariables();
 
-			console.log("error message received...");
+			
+			return;
 		}
 		else if (message.state == "logs")
 		{
@@ -484,12 +555,14 @@ function handleCallRequest(message)
 		}
 		else if (message.state == "closed")
 		{
-			if(globalCall.calledFrom == "skype"){
-				$('#skypeCallId').parents("ul").last().remove();
+			
+			if(globalCall.calledFrom == "Skype"){
+				closeCallNoty(true);
 				showCallNotyMessage("Skype is not running");
 				resetglobalCallVariables();
 				resetglobalCallForActivityVariables();
 			}
+			
 			return;
 		}
 		showSkypeCallNoty(message);
@@ -533,18 +606,45 @@ function checkForActiveCall()
 	return flag;
 }
 
+function closeCallNoty(option){
+	
+	if(!option){
+		if(checkForActiveCall()){
+			return;
+		}
+	}
+	$("#draggable_noty").hide();
+	$(".draggable_noty_callScript","#draggable_noty").html("");
+	$("#draggable_noty").removeClass("draggable-popup");
+	
+	 if(dialled.using == "dialler"){
+		  $("#direct-dialler-div").show();
+		  dialled.using = "default";
+	  }
+	
+}
+
+
+
 function setTimerToCheckDialing(name)
 {
 	globalCall.timeObject = setTimeout(function()
 	{
 		if (globalCall.callStatus == "dialing")
 		{
-			$('#' + name + 'CallId').parents("ul").last().remove();
+			closeCallNoty(true);
+			var number = globalCall.contactedId ;
+			var cont = globalCall.contactedContact;
+			var previousCalledClient  = globalCall.calledFrom; 
 			resetglobalCallVariables();
 			resetglobalCallForActivityVariables();
+			globalCall.calledFrom = previousCalledClient;
+			globalCall.contactedId = number;
+			globalCall.contactedContact = cont;
 		}
 	}, 20000);
 }
+
 
 /**
  * It will return the phone and skype phone in array having more than one
@@ -565,4 +665,41 @@ function getPhoneWithSkypeInArray(items)
 		}
 	}
 	return va;
+}
+
+/**
+ * @ author - prakash - 15/6/15
+ * This method updates two fields of contact object - lastcalled and last contacted
+ * This method retrieves the current contact object and make the json call to server to save json time in server.
+ */
+function twilioIOSaveContactedTime(contactId)
+{
+	console.log ('in IOSaveContactedTime');
+	var id;
+	if(contactId){
+		id = contactId;
+	}else{
+		id = agile_crm_get_contact().id;
+	}
+	console.log('contact id = ' + id);
+	$.get("/core/api/widgets/twilio/save/time/?id=" + id , function(result)
+			{
+				console.log('processed In twilioIOSaveContactedTime');
+				console.log('Results : ' + result);
+				console.log('result = ' + result);
+			}).error(function(data)
+			{
+				console.log('Error - Results :' + data);
+			});
+}
+
+function newCallLogVariables (json){
+	if(!json.length > 0){
+		return;
+	}
+	$.each(json,function(i,obj){
+		if(CallLogVariables.contains(obj)){
+			CallLogVariables[obj.key] = obj.value;
+		}
+	});
 }

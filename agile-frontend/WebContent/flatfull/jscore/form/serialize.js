@@ -51,6 +51,7 @@ function serializeForm(form_id) {
 		};
 	}).get());
 	console.log(arr);
+
 	
 	//Included to set content editable data
 	arr = arr.concat($('#' + form_id + ' div[contenteditable="true"]').map(function() {
@@ -87,6 +88,15 @@ function serializeForm(form_id) {
 	//Serialize attachments list
 	//arr = arr.concat(Ticket_Attachments.serializeList(form_id));
 
+	arr = arr.concat($('#' + form_id + ' .array-input-fields').map(function() {
+		console.log($(this).val());
+		return {
+			"name" : this.name,
+			"value" : $(this).val()
+		};
+	}).get());
+
+
 	// Serialize tags
 	arr = arr.concat(get_tags(form_id));
 
@@ -120,7 +130,6 @@ function serializeForm(form_id) {
 		};
 	}).get());
 
-
 	arr = arr.concat($('#' + form_id + ' .chosen-select').map(function() {
 		var fields_set = [];
 
@@ -131,6 +140,27 @@ function serializeForm(form_id) {
 			"value" : $(this).val()
 		};
 	}).get());
+
+	arr = arr.concat($('#' + form_id + ' .multiple-input').map(function() {
+		var fields_set = [];
+
+		// Gets list of options, selected and pushes the field values in to an
+		// array fields_set
+		$.each($(this).find('input'), function(index, data) {
+			if($(data).val())
+				fields_set.push($(data).val());
+		});
+
+
+		// The array of selected values are mapped with the field name and
+		// returned as a key value pair
+		return {
+			"name" : $(this).attr('name'),
+			"value" : fields_set
+		};
+	}).get());
+
+	
 	
 	arr = arr.concat($('#' + form_id + ' .multiple-checkbox').map(function() {
 		var fields_set = [];
@@ -170,7 +200,13 @@ function serializeForm(form_id) {
 		};
 	}).get());
 
-
+	arr = arr.concat($('#' + form_id + ' input.month_date').map(function() {
+		
+			return {
+				"name" : this.name,
+				"value" : getFormattedDateObjectForMonthWithString(this.value).getTime() / 1000
+			};
+	}).get());
 
 	/*
 	 * Chained select, Chained select is used for filters, which uses logical
@@ -221,9 +257,21 @@ function serializeChainedElement(element)
 
 		// If type of the field is "date" then return epoch time
 		if ($(data).hasClass("date")) {
-			var date = getFormattedDateObjectWithString($(data).val());
+			if($(data).closest('td').siblings('td.lhs-block').find("select#LHS").val() == "closed_time" && $(data).closest('tr').parent().parent().hasClass('opportunity'))
+			{
+				var date = getFormattedDateObjectWithString($(data).val());
 
-			value = getGMTEpochFromDateForCustomFilters(date);
+				if(date)
+				{
+					value = date.getTime();
+				}
+			}
+			else
+			{
+				var date = getFormattedDateObjectWithString($(data).val());
+
+				value = getGMTEpochFromDateForDynamicFilters(date);
+			}
 		}
 		else if ($(data).hasClass("contact_custom_field") || $(data).hasClass("company_custom_field")) {
 			value = $(data).attr("data");

@@ -1,5 +1,8 @@
 package com.agilecrm.account;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.persistence.Id;
 import javax.persistence.PostLoad;
 import javax.persistence.PrePersist;
@@ -93,6 +96,8 @@ public class EmailTemplates
 	 * Created time of email template
 	 */
 	public Long created_time = 0L;
+	
+	public Set access_level = new HashSet();
 	
 	/**
 	 * Attached document id

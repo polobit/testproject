@@ -10,13 +10,14 @@
              <li><a href="#account-stats-new" data-toggle="tab" ><i class="icon-user-following"></i></a></li>
              <li><a href="#email-stats-new" data-toggle="tab" ><i class="icon-envelope"></i></a></li>
 			 <li><a href="#sms-stats-new" data-toggle="tab"><i class="icon-screen-smartphone"></i></a></li>
-
+			  <li><a href="#sync-stats-new" data-toggle="tab"><i class="icon-refresh"></i></a></li>
 			 {{else}}
 
 
              <li><a href="#account-stats-new" data-toggle="tab" >Account</a></li>
              <li><a href="#email-stats-new" data-toggle="tab" >Email</a></li>
 			 <li><a href="#sms-stats-new" data-toggle="tab">SMS</a></li>
+			 <li><a href="#sync-stats-new" data-toggle="tab">Sync</a></li>
 
 			 {{/is_mobile}}
            </ul>
@@ -25,6 +26,7 @@
  		<div class="tab-pane" id="account-stats-new"></div>
  		<div class="tab-pane" id="email-stats-new"></div>
  		<div class="tab-pane" id="sms-stats-new"></div>
+ 		<div class="tab-pane" id="sync-stats-new"></div>
  	</div>
 </div>
 
@@ -82,12 +84,12 @@
 
 </script>
 
-<script id="email-stats-new-template" type="text/html" >
+<script id="email-stats-new-template" type="text/html">
 
 <div class="m-b-sm">
 <!--<h4 class="h4 pull-left"> Email Stats </h4>-->
 				<div  class="pull-right">
-					{{#if this.id}}Reputation {{{get_subaccount_reputation reputation}}}
+					{{#if this.id}}<span>Reputation</span>{{{get_subaccount_reputation reputation}}}
 					{{/if}}
 				</div>
 <div class="clearfix"></div>
@@ -102,8 +104,42 @@
 		<div>
 		
 		{{#if_equals "SEND_GRID" _agile_email_gateway}}
-			<div class="text-md">SendGrid stats are shown <a class="text-info" style="color: #23b7e5 !important;" href="https://sendgrid.com/statistics" target="_blank">here</a></div><br/>
+			<div class="row">
+	        		<div class="col-md-6 b-light">
+	        		<div class="panel panel-default">
+	            		<div class="panel-heading">Emails Sent</div>
+	            	
+						<table class="table table-bordered table-hover">
+							<tbody>
+								<tr><td>Today</td><td>{{numberWithCommas dailyEmailSent}}</td></tr>
+								<tr><td>This Week</td><td>{{numberWithCommas weeklyEmailSent}}</td></tr>
+								<tr><td>This Month</td><td>{{numberWithCommas monthlyEmailSent}}</td></tr>
+								<tr><td>Overall</td><td>{{numberWithCommas allEmailSent}}</td></tr>
+							</tbody>
+						</table>
+					
+		        	</div>
+		        	</div>
+		        	<div class="col-md-6">
+		        	<div class="panel panel-default">
+		            	<div class="panel-heading">Bounces (Last 30 Days)</div>
+		            	
+						<table class="table table-bordered table-hover">
+							<tbody>
+								<tr><td>Hard Bounce</td><td>{{numberWithCommas hardBounce}}</td></tr>
+								<tr><td>Soft Bounce</td><td>{{numberWithCommas softBounce}}</td></tr>
+								<tr><td>Rejects</td><td>{{numberWithCommas rejected}}</td></tr>
+								<tr><td>Spam Complaints</td><td>{{numberWithCommas spamReported}}</td></tr>
+							</tbody>
+						</table>
+						
+		        	</div>
+		    	</div>
+		    	</div>
 		{{else}}
+			{{#if_equals "MAILGUN" _agile_email_gateway}}
+				<div class="text-md">Mailgun stats are shown <a class="text-info" href="https://mailgun.com" target="_blank">here</a></div><br/>
+			{{else}}
 			{{!--SES Stats--}}
 			{{#if_equals "SES" _agile_email_gateway}}
 				<div class="text-md">Amazon SES stats are shown <a class="text-info" href="https://aws.amazon.com/" target="_blank">here</a></div><br/>
@@ -140,6 +176,7 @@
 		        	</div>
 		    	</div>
 		    	</div>
+		    	{{/if_equals}}	
 			{{/if_equals}}	
 		{{/if_equals}}
     	</div>
@@ -208,4 +245,42 @@
 		{{/if_equals}}
 		</div>
 
+</script>
+
+
+<script id="sync-stats-new-template" type="text/html">
+<div class="m-b-sm" id="sync-app-data">
+<!--<h4 class="h4 m-b-sm">Sync Data</h4>-->
+<div class="row">
+<table calss="table" style="width: 24%;font-size: 16px;text-align: right;padding: 1px;">
+  	<tbody>
+  		<tr class="spacer">
+    		<td>Contacts &amp; Companies:</td>
+    		<td><a onclick="syncAppData();" class="btn btn-sm btn-default sync-app-con" style="margin-left: 10px;">Update</a></td>
+  		</tr>
+  		<tr>
+  			<td style="padding-top: 8px;">Deals:</td>
+    		<td style="margin-top: 10px;display: inline-block;">
+    			<a onclick="syncAppDatatoDeals();" class="btn btn-sm btn-default sync-app-con" style="margin-left:9px;">Update</a>
+    		</td>
+
+  		</tr>
+  	</tbody>
+</table>
+<div style="position:relative;margin: 15px 0px 10px 15px;">
+    <p>Update will 'resync' your entire data to make it searchable. This may be needed in extreme scenarios. Eg: you made an existing custom field searchable.</p>
+   	<p>* Update can be used only once in a month</p>
+</div>
+</div>
+</div>
+</script>
+
+<script id="reputation-progress-template" type="text/html" >
+	<span style="padding-bottom:3px !important" class="text-muted pull-right">{{reputation}}({{value}}%)</span>
+	<div class="progress" style="width:300px;height:5px !important;margin-bottom:10px !important" title="{{value}}%">
+        <div class="progress-bar {{badge}}" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: {{value}}%;">
+            <!-- <div class="sr-only">{{value}}% {{reputation}}</div> -->
+        </div>
+        <!-- <span class="progress-completed">{{value}}% ({{reputation}})</span> -->
+    </div>
 </script>

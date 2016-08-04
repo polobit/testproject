@@ -1,3 +1,4 @@
+
 <script id="segmentation-custom-view-collection-template" type="text/html">
 {{#is_mobile}}
 <!-- Newly Added -->
@@ -48,12 +49,13 @@
                      <i id="icon-filter" class="fa fa-bars icon-white"></i>
                </a>
             </h3>            
-            <small><span class="label label-sm bg-danger m-l-xs" style="position: relative;
+            <!-- <small><span class="label label-sm bg-danger m-l-xs" style="position: relative;
                   top: -3px;">Beta</span>
-            </small>   
+            </small>  -->  
          </div>
          </div>
          <div class="pull-right">
+            <div class="btn-group pull-left m-r-xs" id="filter-list"></div>
             <div id="activities_date_range" class="btn-group pull-right activity-date-filter c-p m-r m-t-none">
                <span class="inline-block" style="padding: 3px 10px;">
                <i class="icon-calendar icon-large m-r-xs"></i>
@@ -227,7 +229,25 @@
       {{setupRating star_value}}
    </ul>
    {{/if}}
-</td>
+</td>  
   
-  
+</script>
+
+<script id="segment-filter-list-collection-template" type="text/html">
+<div class="btn-group"  id="filters-tour-step">
+   <button class="btn btn-default btn-sm "><i class="icon-filter" id="segment-filter" style="margin-right:3px"></i></button>
+   <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+   <span class="caret"></span>
+   </button>
+   <ul id = "segment-filter-list-model-list" class="pull-right dropdown-menu">
+   </ul>
+</div>
+</script>
+<script id="segment-filter-list-model-template" type="text/html">
+<span class="segment-lilist" id={{id}}>
+<a id='{{id}}' class="visitor-filter pull-left text-ellipsis" data={{name}}  href="#segment-filter/{{id}}">{{name}}
+</a>
+<button data-name={{name}} class="remove-segment-filter pull-right hide"  id= "remove-segment-filter" data={{id}}>x</button>
+<div class="clearfix"></div>
+</span>
 </script>

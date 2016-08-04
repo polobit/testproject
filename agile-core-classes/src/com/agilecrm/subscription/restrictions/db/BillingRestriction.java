@@ -13,7 +13,6 @@ import javax.persistence.PrePersist;
 import javax.xml.bind.annotation.XmlElement;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang.exception.ExceptionUtils;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.map.JsonMappingException;
@@ -121,7 +120,7 @@ public class BillingRestriction
     public boolean isNewEmailPlanUpgrade = false;
 
     public Integer max_emails_count;
-
+    
     public Long email_pack_start_time = 0L;
 
     @NotSaved(IfDefault.class)

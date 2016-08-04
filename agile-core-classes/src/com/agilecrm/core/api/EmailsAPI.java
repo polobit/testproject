@@ -1,12 +1,8 @@
 package com.agilecrm.core.api;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
@@ -15,7 +11,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -31,7 +26,6 @@ import com.agilecrm.account.VerifiedEmails;
 import com.agilecrm.account.VerifiedEmails.Verified;
 import com.agilecrm.account.util.EmailGatewayUtil;
 import com.agilecrm.account.util.VerifiedEmailsUtil;
-import com.agilecrm.activities.util.ActivitySave;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.email.ContactEmail;
 import com.agilecrm.contact.email.EmailSender;
@@ -39,21 +33,21 @@ import com.agilecrm.contact.email.util.ContactEmailUtil;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.email.wrappers.ContactEmailWrapper;
 import com.agilecrm.mandrill.util.MandrillUtil;
+import com.agilecrm.sendgrid.util.SendGridUtil;
 import com.agilecrm.session.SessionManager;
-import com.agilecrm.user.AgileUser;
-import com.agilecrm.user.DomainUser;
+import com.agilecrm.subscription.SubscriptionUtil;
+import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
+import com.agilecrm.subscription.ui.serialize.Plan;
 import com.agilecrm.user.EmailPrefs;
-import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.DateUtil;
 import com.agilecrm.util.EmailUtil;
 import com.agilecrm.util.HTTPUtil;
-import com.agilecrm.util.NamespaceUtil;
 import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.blobstore.BlobKey;
 import com.thirdparty.mandrill.EmailContentLengthLimitExceededException;
-import com.thirdparty.mandrill.Mandrill;
 import com.thirdparty.mandrill.subaccounts.MandrillSubAccounts;
+import com.thirdparty.sendgrid.subusers.SendGridSubUser;
 
 /**
  * <code>EmailsAPI</code> is the API class for Emails. It handles sending email
@@ -106,7 +100,8 @@ public class EmailsAPI
 	try
 	{
 	    
-	    if (MandrillUtil.isEmailContentSizeValid(contactEmail.getMessage(), contactEmail.getDocument_key()))
+	    // Compares documents size
+		if (MandrillUtil.isEmailContentSizeValid(contactEmail.getMessage(), contactEmail.getDocument_key()))
 	    {
 		// Saves Contact Email.
 //		ContactEmailUtil.saveContactEmailAndSend(fromEmail, fromName, to, cc, bcc, subject, body, signature,
@@ -149,8 +144,9 @@ public class EmailsAPI
 	try
 	{
 	    // To avoid sending through subaccount
-	    NamespaceManager.set("");
-	    Mandrill.sendMail(false, fromEmail, fromEmail, to, cc, bcc, subject, fromEmail, body, null, null, null,null);
+		//Mandrill.sendMail(false, fromEmail, fromEmail, to, cc, bcc, subject, fromEmail, body, null, null, null,null);
+	   
+	    EmailGatewayUtil.sendEmail(null, null, fromEmail, null, to, cc, bcc, subject, null, body, null, null, null, null, new String[]{});
 	}
 	catch (Exception e)
 	{
@@ -266,6 +262,11 @@ public class EmailsAPI
     {
 	EmailGateway emailGateway = EmailGatewayUtil.getEmailGateway();
 	
+	String domain = NamespaceManager.get();
+	
+	//if Emil Gateway is SendGrid or Null
+	if(emailGateway==null || emailGateway.email_api.equals(EmailGateway.EMAIL_API.SEND_GRID))
+	              return  SendGridSubUser.getSendgridStats(domain, emailGateway);
 	// If not Mandrill, return 
 	if(emailGateway != null && !(emailGateway.email_api.equals(EMAIL_API.MANDRILL)))
 		return new JSONObject().put("_agile_email_gateway", emailGateway.email_api.toString()).toString();
@@ -275,8 +276,6 @@ public class EmailsAPI
 	// Get emailGateway api-key
 	if (emailGateway != null)
 	    apiKey = emailGateway.api_key;
-	
-	String domain = NamespaceManager.get();
 
 	// Returns mandrill subaccount info if created, otherwise error json.
 	String info = MandrillSubAccounts.getSubAccountInfo(domain, apiKey);
@@ -412,6 +411,7 @@ public class EmailsAPI
      *            - offset.
      * @return String
      */
+       
     @Path("agile-emails")
     @GET
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
@@ -476,6 +476,72 @@ public class EmailsAPI
 	    return null;
 	}
     }
+
+    @Path("agile-cemails")
+    @GET
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public List<ContactEmailWrapper> getCompanyAgileEmails(@QueryParam("search_email") String searchEmail,@QueryParam("count") String countString)
+    {
+	List<ContactEmailWrapper> emailsList = null;
+	try
+	{
+	    // Removes unwanted spaces in between commas
+	    String normalisedEmail = AgileTaskletUtil.normalizeStringSeparatedByDelimiter(',', searchEmail);
+
+	    searchEmail = StringUtils.split(normalisedEmail, ",")[0];
+
+	    Contact contact = ContactUtil.searchCompanyByEmail(searchEmail);
+	    
+	    List<ContactEmail> contactEmails = null;
+	    
+	    if(StringUtils.isNotBlank(countString))
+	    {
+	    	try
+	    	{
+	    		Integer count = Integer.parseInt(countString);
+	    		// Fetches latest contact emails
+	    		contactEmails = ContactEmailUtil.getContactEmails(contact.id,count);
+	    	}
+	    	catch(NumberFormatException e)
+	    	{
+	    		e.printStackTrace();
+	    		contactEmails = ContactEmailUtil.getContactEmails(contact.id,20);
+	    	}
+	    }
+	    else
+	    {
+	    	contactEmails = ContactEmailUtil.getContactEmails(contact.id);
+	    }
+	    
+        if(contactEmails!= null)
+        {
+		    JSONArray agileEmails = new JSONArray();
+		    // Merge Contact Emails with obtained imap emails
+		    for (ContactEmail contactEmail : contactEmails)
+		    {
+			// parse email body
+			contactEmail.message = EmailUtil.parseEmailData(contactEmail.message);
+	
+			ObjectMapper mapper = new ObjectMapper();
+			String emailString = mapper.writeValueAsString(contactEmail);
+			agileEmails.put(new JSONObject(emailString));
+		    }
+	
+		    emailsList = new ObjectMapper().readValue(agileEmails.toString(),
+			    new TypeReference<List<ContactEmailWrapper>>()
+			    {
+			    });
+        }
+	    return emailsList;
+	}
+	catch (Exception e)
+	{
+	    System.out.println("Got an exception in EmailsAPI: " + e.getMessage());
+	    e.printStackTrace();
+	    return null;
+	}
+    }
+    
     
     @Path("verify-from-email")
     @POST
@@ -585,4 +651,64 @@ public class EmailsAPI
 	
 	return scoreJson;
     }
+    
+    /**
+     * Returns sendgrid whitelabel host and key
+     * 
+     * @return String
+     * @throws Exception
+     */
+    @Path("/sendgrid/whitelabel")
+    @GET
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public String getSendgridWhitelabelDomain(@QueryParam("emailDomain") String emailDomain) throws Exception
+    {
+	EmailGateway emailGateway = EmailGatewayUtil.getEmailGateway();
+	
+	String domain = NamespaceManager.get();
+	
+	return SendGridUtil.addSendgridWhiteLabelDomain(emailDomain, emailGateway, domain);
+    }
+
+/**
+ * This method will validate  sendgrid whitelabel host and key
+ * 
+ * @return String
+ * @throws Exception
+ */
+@Path("/sendgrid/whitelabel/validate")
+@GET
+@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+public String validateSendgridWhitelabelDomain(@QueryParam("emailDomain") String emailDomain) throws Exception
+{
+	EmailGateway emailGateway = EmailGatewayUtil.getEmailGateway();
+	
+	String domain = NamespaceManager.get();
+	
+	return SendGridUtil.validateSendgridWhiteLabelDomain(emailDomain, emailGateway, domain);
+}
+
+/**
+ * This method will validate  sendgrid whitelabel host and key
+ * 
+ * @return String
+ * @throws Exception
+ */
+@Path("/sendgrid/permission")
+@GET
+@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+public String getSendgridWhitelabelPermission() throws Exception
+{
+	EmailGateway emailGateway = EmailGatewayUtil.getEmailGateway();
+	JSONObject restriction=new JSONObject();
+	
+	if(emailGateway!=null)
+	   restriction.put("emailGateway", "gateway exist");
+	
+	if(SubscriptionUtil.isFreePlan())
+		restriction.put("plan", "Paid");
+	
+	return restriction.toString();
+	
+}
 }

@@ -184,8 +184,10 @@ public class MandrillWebhookTriggerInbound extends HttpServlet
 
 		Contact contact = null;
 
-		if (isNewContact)
+		if (isNewContact){
 			contact = new Contact();
+			contact.source = "Inbound Email" ;
+		}
 		else
 			contact = ContactUtil.searchContactByEmail(fromEmail);
 
@@ -342,7 +344,7 @@ public class MandrillWebhookTriggerInbound extends HttpServlet
 	 * 
 	 * @param emailMessage
 	 */
-	private void parseEmailMessageAndRunCampaign(JSONObject emailMessage, String agileDomain)
+	public void parseEmailMessageAndRunCampaign(JSONObject emailMessage, String agileDomain)
 	{
 		if (emailMessage.has("html"))
 		{

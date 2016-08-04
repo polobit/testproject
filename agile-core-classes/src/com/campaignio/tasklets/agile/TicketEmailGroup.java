@@ -18,6 +18,15 @@ import com.campaignio.tasklets.util.TaskletUtil;
  */
 public class TicketEmailGroup extends TaskletAdapter
 {
+	/**
+	 * Ticket
+	 */
+	public static String FROM_NAME = "from_name";
+
+	/**
+	 * Ticket Group id
+	 */
+	public static String FROM_ADDRESS = "from_address";
 
 	/**
 	 * Ticket
@@ -57,6 +66,12 @@ public class TicketEmailGroup extends TaskletAdapter
 
 			if (ticketJSON != null)
 			{
+				// Get from name
+				String from_name = getStringValue(nodeJSON, subscriberJSON, data, FROM_NAME);
+
+				// Get from address
+				String from_address = getStringValue(nodeJSON, subscriberJSON, data, FROM_ADDRESS);
+				
 				// Get group id
 				String groupId = getStringValue(nodeJSON, subscriberJSON, data, TICKET_GROUP_ID);
 
@@ -69,7 +84,7 @@ public class TicketEmailGroup extends TaskletAdapter
 				System.out.println("TicketEmailGroup groupId: " + groupId);
 				
 				// Change Group and Assignee
-				TicketsUtil.sendEmailToGroup(Long.parseLong(groupId), subject, emailBody);
+				TicketsUtil.sendEmailToGroup(Long.parseLong(groupId), subject, emailBody, from_name, from_address);
 
 				String message = "Ticket(#" + ticketJSON.getString("id") + ") email sent to group";
 				try

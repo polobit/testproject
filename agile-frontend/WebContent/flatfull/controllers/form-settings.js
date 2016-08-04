@@ -9,7 +9,7 @@ var FormsRouter = Backbone.Router.extend({
 	{
 		console.log("forms collection template");
 		
-		this.formsListView = new Base_Collection_View({ url : '/core/api/forms', restKey : "forms", templateKey : "forms",
+		this.formsListView = new Form_Collection_Events({ url : '/core/api/forms', restKey : "forms", templateKey : "forms",
 			individual_tag_name : 'tr', postRenderCallback : function(el){
 				head.js(LIB_PATH + 'lib/jquery.timeago.js', function(el)
 						{
@@ -18,6 +18,8 @@ var FormsRouter = Backbone.Router.extend({
 			} })
 		this.formsListView.collection.fetch();
 		$("#content").html(this.formsListView.el);
+
+		make_menu_item_active("formsmenu");
 	},
 
 	getListOfTemplates : function()

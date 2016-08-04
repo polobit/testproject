@@ -18,11 +18,17 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
 import com.agilecrm.Globals;
+import com.agilecrm.account.EmailTemplates;
 import com.agilecrm.account.util.AccountPrefsUtil;
+import com.agilecrm.account.util.EmailGatewayUtil;
+import com.agilecrm.account.util.EmailTemplatesUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.projectedpojos.DomainUserPartial;
 import com.agilecrm.projectedpojos.TicketNotesPartial;
+import com.agilecrm.subscription.Subscription;
+import com.agilecrm.subscription.SubscriptionUtil;
+import com.agilecrm.subscription.ui.serialize.Plan;
 import com.agilecrm.ticket.entitys.TicketDocuments;
 import com.agilecrm.ticket.entitys.TicketGroups;
 import com.agilecrm.ticket.entitys.TicketNotes;
@@ -32,14 +38,13 @@ import com.agilecrm.ticket.entitys.Tickets;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.DateUtil;
-import com.agilecrm.util.HTTPUtil;
 import com.agilecrm.util.VersioningUtil;
 import com.agilecrm.util.email.MustacheUtil;
 import com.agilecrm.util.email.SendMail;
+import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.googlecode.objectify.Key;
-import com.thirdparty.mandrill.Mandrill;
 
 /**
  * 
@@ -138,7 +143,15 @@ public class TicketNotesUtil
 	 */
 	public static void sendReplyToRequester(Tickets ticket) throws Exception
 	{
-		JSONObject json = new JSONObject();
+		Contact contact = ContactUtil.getContact(ticket.contact_key.getId());
+
+		// Converting contact object to json object
+		JSONObject json = AgileTaskletUtil.getSubscriberJSON(contact);
+		json = json.getJSONObject("data");
+
+		System.out.println("json: " + json);
+
+		// JSONObject json = new JSONObject();
 
 		List<TicketNotes> notesList = getTicketNotes(ticket.id, "-created_time");
 
@@ -173,6 +186,23 @@ public class TicketNotesUtil
 
 		System.out.println("notesList.get(0).id): " + notesList.get(0).id);
 
+		String domain = DomainUserUtil.getDomainUser(ticket.assigneeID).domain;
+		 		
+		 		Subscription subscription = new Subscription().getSubscriptionOfParticularDomain(domain);
+		 
+		 		Plan emailPlan = subscription.emailPlan;
+		 		System.out.println(emailPlan);
+		 		String email_pan = SubscriptionUtil.getEmailPlan(subscription.plan.quantity);
+		 		json.put("subscription_email", "");
+		 	
+		 		if(emailPlan == null)
+		 		{
+		 			json.put("subscription_email", "email_plan");
+		 		}
+		 		
+		 		System.out.println(email_pan);		
+		 	
+
 		JSONArray notesArray = new JSONArray();
 
 		// Add all notes
@@ -181,8 +211,7 @@ public class TicketNotesUtil
 			if (notes.note_type == NOTE_TYPE.PRIVATE)
 				continue;
 
-			JSONObject eachNoteJSON = getFormattedEmailNoteJSON(notes,
-					ContactUtil.getContact(ticket.contact_key.getId()));
+			JSONObject eachNoteJSON = getFormattedEmailNoteJSON(notes, contact);
 
 			if (eachNoteJSON != null)
 				notesArray.put(eachNoteJSON);
@@ -190,14 +219,104 @@ public class TicketNotesUtil
 
 		json.put("note_json_array", notesArray);
 
+		// Set merge fields data
+		json.put("subject", ticket.subject);
+		json.put("requester_name", ticket.requester_name);
+		json.put("requester_email", ticket.requester_email);
+		json.put("priority", StringUtils.capitalize(ticket.priority.toString()));
+		json.put("status", StringUtils.capitalize(ticket.status.toString()));
+
 		System.out.println("notesArray: " + notesArray);
+
+		String html = prepareHTML(group, json);
+
+		System.out.println("HTML:");
+		// System.out.println(html);
 
 		String fromAddress = group.group_email;
 
 		fromAddress = StringUtils.isNotBlank(group.send_as) ? group.send_as : fromAddress;
 
-		sendEmail(ticket.requester_email, ticket.subject, agentName, fromAddress, ticket.cc_emails,
-				SendMail.TICKET_REPLY, json);
+		sendEmail(ticket.requester_email, ticket.subject, agentName, fromAddress, ticket.cc_emails, html);
+	}
+
+	public static String prepareHTML(TicketGroups group, JSONObject dataJSON)
+	{
+		try
+		{
+			// No template is chosen so returning default template html content
+			if (group.template_id == null)
+				return MustacheUtil.templatize(SendMail.TICKET_REPLY + SendMail.TEMPLATE_HTML_EXT, dataJSON);
+
+			dataJSON.put("ticket_comments",
+					MustacheUtil.templatize(SendMail.TICKET_COMMENTS + SendMail.TEMPLATE_HTML_EXT, dataJSON));
+			dataJSON.put("ticket_footer",
+					MustacheUtil.templatize(SendMail.TICKET_FOOTER + SendMail.TEMPLATE_HTML_EXT, dataJSON));
+
+			EmailTemplates emailTemplates = EmailTemplatesUtil.getEmailTemplate(group.template_id);
+
+			return MustacheUtil.compile(emailTemplates.text, dataJSON);
+		}
+		catch (Exception e)
+		{
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+		}
+
+		return "";
+	}
+
+	public static void sendEmail(String toAddress, String subject, String fromName, String fromEmail,
+			List<String> ccEmails, String emailHTML) throws Exception
+	{
+		String oldNamespace = NamespaceManager.get();
+
+		try
+		{
+			// Read template - HTML
+			// String emailHTML = MustacheUtil.templatize(template +
+			// SendMail.TEMPLATE_HTML_EXT, dataJSON);
+
+			// JSONObject mailJSON = Mandrill.setMandrillAPIKey(null,
+			// NamespaceManager.get(), null);
+
+			String ccEmailString = "";
+			for (String ccEmail : ccEmails)
+				ccEmailString += ccEmail + ",";
+
+			// All email params are inserted into Message json
+			// JSONObject messageJSON = Mandrill.getMessageJSON("", fromEmail,
+			// fromName, toAddress, ccEmailString, "", "",
+			// subject, emailHTML, emailBody, "", "");
+			//
+			// mailJSON.put(Mandrill.MANDRILL_MESSAGE, messageJSON);
+			//
+			// System.out.println("mailJSON: " + mailJSON);
+			long start_time = System.currentTimeMillis();
+
+			NamespaceManager.set("");
+
+			EmailGatewayUtil.sendEmail(null, NamespaceManager.get(), fromEmail, fromName, toAddress, ccEmailString, "",
+					subject, "", emailHTML, "", "", null, null);
+
+			// response =
+			// HTTPUtil.accessURLUsingPost(Mandrill.MANDRILL_API_POST_URL
+			// + Mandrill.MANDRILL_API_MESSAGE_CALL,
+			// mailJSON.toString());
+
+			long process_time = System.currentTimeMillis() - start_time;
+
+			System.out.println("Process time for sending mandrill " + process_time + "ms");
+
+			NamespaceManager.set(oldNamespace);
+		}
+		catch (Exception e)
+		{
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+		}
+		finally
+		{
+			NamespaceManager.set(oldNamespace);
+		}
 	}
 
 	/**
@@ -265,54 +384,6 @@ public class TicketNotesUtil
 		}
 
 		return json;
-	}
-
-	public static void sendEmail(String toAddress, String subject, String fromName, String fromEmail,
-			List<String> ccEmails, String template, JSONObject dataJSON) throws Exception
-	{
-		// Read template - HTML
-		String emailHTML = MustacheUtil.templatize(template + SendMail.TEMPLATE_HTML_EXT, dataJSON);
-
-		// Read template - Body
-		String emailBody = MustacheUtil.templatize(template + SendMail.TEMPLATE_BODY_EXT, dataJSON);
-
-		// If both are null, nothing to be sent
-		if (emailHTML == null && emailBody == null)
-		{
-			System.err.println("Email could not be sent as no matching templates were found " + template);
-			return;
-		}
-
-		String oldNamespace = NamespaceManager.get();
-		NamespaceManager.set("");
-
-		JSONObject mailJSON = Mandrill.setMandrillAPIKey(null, NamespaceManager.get(), null);
-
-		String ccEmailString = "";
-		for (String ccEmail : ccEmails)
-			ccEmailString += ccEmail + ",";
-
-		// All email params are inserted into Message json
-		JSONObject messageJSON = Mandrill.getMessageJSON("", fromEmail, fromName, toAddress, ccEmailString, "", "",
-				subject, emailHTML, emailBody, "", "");
-
-		String response = null;
-
-		mailJSON.put(Mandrill.MANDRILL_MESSAGE, messageJSON);
-
-		System.out.println("mailJSON: " + mailJSON);
-		long start_time = System.currentTimeMillis();
-
-		response = HTTPUtil.accessURLUsingPost(Mandrill.MANDRILL_API_POST_URL + Mandrill.MANDRILL_API_MESSAGE_CALL,
-				mailJSON.toString());
-
-		long process_time = System.currentTimeMillis() - start_time;
-
-		System.out.println("Process time for sending mandrill " + process_time + "ms");
-
-		System.out.println("Response for first attempt " + response);
-
-		NamespaceManager.set(oldNamespace);
 	}
 
 	/**
@@ -533,20 +604,5 @@ public class TicketNotesUtil
 		List<Key<TicketNotes>> notes = TicketNotes.ticketNotesDao.listKeysByProperty(searchMap);
 
 		TicketNotes.ticketNotesDao.deleteKeys(notes);
-	}
-
-	public static void main(String[] args)
-	{
-		String s = "hiiiiiiii\r\n\r\n2016-03-11 17:25 GMT+05:30 Sudha <sudha+QFp5CyjS4+199@helptor.com>:\r\n\r\n> Your request (#199) has been reviewed by support team.\r\n> [image: clickdesk-profile-pic]\r\n>\r\n> *Sudha*\r\n>\r\n> Mar 11, 11:55 AM (GMT)\r\n> hiiii\r\n>\r\n> Sent using Agile\r\n> <https://www.agilecrm.com?utm_source=powered-by&utm_medium=email-signature&utm_campaign=sudha>\r\n> [image: clickdesk-profile-pic]\r\n>\r\n> *sudha P*\r\n>\r\n> Mar 11, 5:57 AM (GMT)\r\n> మరియు మాత్రమే\r\n> వారు మీ వెబ్సైట్ లేదా కాల్ సందర్శించడానికి క్లిక్ చెల్లిస్తారు\r\n> [image: clickdesk-profile-pic]\r\n>\r\n> *Sudha*\r\n>\r\n> Mar 11, 5:57 AM (GMT)\r\n> వారు మీ వెబ్సైట్ లేదా కాల్ సందర్శించడానికి క్లిక్ చెల్లిస్తారు\r\n>\r\n> Sent using Agile\r\n> <https://www.agilecrm.com?utm_source=powered-by&utm_medium=email-signature&utm_campaign=sudha>\r\n> [image: clickdesk-profile-pic]\r\n>\r\n> *sudha P*\r\n>\r\n> Mar 11, 5:56 AM (GMT)\r\n> వారు మీరు శోధిస్తున్న సమయంలో ప్రకటనతో ప్రజలు చేరుకోవడానికి. మరియు మాత్రమే\r\n> వారు మీ వెబ్సైట్ లేదా కాల్ సందర్శించడానికి క్లిక్ చెల్లిస్తారు\r\n> This email is a service from My company. Delivered by Agile CRM\r\n> <https://www.agilecrm.com?utm_source=www.agilecrm.com?utm_source=powered-by&utm_medium=email-signature&utm_campaign=null>\r\n>\r\n";
-		System.out.println(s);
-		System.out.println("Quoted text........");
-		System.out.println(removedQuotedRepliesFromPlainText(s));
-
-		System.out.println("Next text..........");
-
-		s = "Hi,\n\ndhaynadadsaf dsafndskanf sda\n\n\nThank you\n\n2016-03-19 22:49 GMT+05:30 sasi <sasi+OJ0FQV9Ae+5783832003346694@helptor.com\n>:\n\n> Your request (#5783832003346694) has been reviewed by support team.\n> [image: clickdesk-profile-pic]\n>\n> *sasi*\n>\n> Mar 19, 5:19 PM (GMT)\n> thnk you\n>\n> fadsf dsafdas fdsa\n>\n> f\n> sad fdsf safdsa fsa\n>\n> Sent using Agile\n> <https://www.agilecrm.com?utm_source=powered-by&utm_medium=email-signature&utm_campaign=sasi>\n> [image: clickdesk-profile-pic]\n>\n> *Sasi Jolla*\n>\n> Mar 19, 5:18 PM (GMT)\n> హల్లో\n>\n> డియర్ వెబ్ యజమాని,\n>\n> మరింత ఖాతాదారులకు మరియు వినియోగదారులు వాంట్?\n>\n> మేము వాటిని Google (Yahoo & బింగ్) లో * మొదటి పేజీ న మీరు పెట్టటం ద్వారా\n> మీరు కనుగొనడంలో సహాయంగా.\n>\n>\n> మేము ఈ సీజన్లో కొన్ని ప్రత్యేక ఆఫర్లు ఉన్నాయి.\n> This email is a service from My company. Delivered by Agile CRM\n> <https://www.agilecrm.com?utm_source=www.agilecrm.com?utm_source=powered-by&utm_medium=email-signature&utm_campaign=null>\n>\n\n\n";
-		System.out.println(s);
-		System.out.println("Quoted text........");
-		System.out.println(removedQuotedRepliesFromPlainText(s));
 	}
 }

@@ -8,6 +8,9 @@ import javax.persistence.PrePersist;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.apache.commons.lang.exception.ExceptionUtils;
+import org.apache.commons.lang.StringUtils;
+
 import com.agilecrm.cases.Case;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.ContactUtil;
@@ -58,6 +61,9 @@ public class Document extends Cursor
      */
     @NotSaved(IfDefault.class)
     public String name = null;
+    
+    @NotSaved(IfDefault.class)
+    public String dummy_name = null;
 
     /**
      * Uploaded time of a Document.
@@ -147,7 +153,7 @@ public class Document extends Cursor
     @NotSaved(IfDefault.class)
     private Key<DomainUser> ownerKey = null;
 
-    /**
+	/**
      * ObjectifyDao of Document.
      */
     public static ObjectifyGenericDao<Document> dao = new ObjectifyGenericDao<Document>(Document.class);
@@ -162,6 +168,10 @@ public class Document extends Cursor
     public List<ContactPartial> getContacts()
     {
     	return ContactUtil.getPartialContacts(this.related_contacts);
+    }
+    public List<Contact> getrelatedContacts()
+    {
+    	return Contact.dao.fetchAllByKeys(this.related_contacts);
     }
 
     /**
@@ -226,10 +236,13 @@ public class Document extends Cursor
     @XmlElement(name = "contact_ids")
     public List<String> getContact_ids()
     {
-	contact_ids = new ArrayList<String>();
+    if((contact_ids != null && contact_ids.size() == 0) || contact_ids == null)
+    {
+    	contact_ids = new ArrayList<String>();
 
-	for (Key<Contact> contactKey : related_contacts)
-	    contact_ids.add(String.valueOf(contactKey.getId()));
+    	for (Key<Contact> contactKey : related_contacts)
+    	    contact_ids.add(String.valueOf(contactKey.getId()));
+    }
 
 	return contact_ids;
     }
@@ -335,6 +348,12 @@ public class Document extends Cursor
     @PrePersist
     private void PrePersist()
     {
+    	
+	// Trim name and make dummy one to sore
+	if(StringUtils.isNotBlank(name)){
+		dummy_name = name.toLowerCase().trim();
+    }
+    
 	// Initializes created Time
 	if (uploaded_time == 0L)
 	    uploaded_time = System.currentTimeMillis() / 1000;

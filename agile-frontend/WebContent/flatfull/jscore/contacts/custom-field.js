@@ -34,11 +34,12 @@ function initializeCustomFieldsListeners(){
 		showCustomFieldModel(custom_field.toJSON());
 	});
 	$('#custom-fields-accordion').on('click', '#delete-custom-field', function(e){
-		if(confirm("Are you sure you want to delete?")){
-			e.preventDefault();
-			var custom_field = $(this).closest('tr').data();
+		e.preventDefault();
+		var $that = $(this);
+		showAlertModal("delete_custom_field", "confirm", function(){
+			var custom_field = $that.closest('tr').data();
 			console.log(custom_field);
-			var currentElement=$(this);
+			var currentElement=$that;
 			$.ajax({ type : 'DELETE', url : '/core/api/custom-fields/' + custom_field.id, contentType : "application/json; charset=utf-8",
 				success : function(data){
 					if(custom_field.get("scope")=="CONTACT")
@@ -51,7 +52,7 @@ function initializeCustomFieldsListeners(){
 						App_Admin_Settings.caseCustomFieldsListView.collection.remove(custom_field.id);
 					currentElement.closest('tr').remove();
 				}, dataType : 'json' });
-		}
+		});
 	});
 }
 
@@ -191,6 +192,8 @@ function bindCustomFiledChangeEvent(el){
 			$("#custom-field-formula-data").hide();
 			$("textarea",  $("#custom-field-formula-data")).removeAttr("name");
 			$('.required-and-searchable').show();
+			//$("#searchable").prop('checked', true);
+			$("#searchable").prop('disabled', false);
 		}
 		else if(value == "TEXTAREA")
 		{
@@ -201,6 +204,8 @@ function bindCustomFiledChangeEvent(el){
 			$("#custom-field-formula-data").hide();
 			$("textarea",  $("#custom-field-formula-data")).removeAttr("name");
 			$('.required-and-searchable').show();
+			//$("#searchable").prop('checked', true);
+			$("#searchable").prop('disabled', false);
 		}
 		else if(value == "FORMULA")
 		{
@@ -211,16 +216,28 @@ function bindCustomFiledChangeEvent(el){
 			$("#custom-field-formula-data").show();
 			$("textarea",  $("#custom-field-formula-data")).attr("name", "field_data");
 			$('.required-and-searchable').hide();
+			//$("#searchable").prop('checked', true);
+			//$("#searchable").prop('disabled', false);
 		}
+		else if(value == "CONTACT" || value == "COMPANY")
+		{ 	
+			$("#searchable").prop('checked', true);
+			$("#searchable").prop('disabled', true);
+
+		}
+		
 		else
 		{
 			$("#custom-field-data").hide();
 			$("#custom-field-list-values").hide();
 			$("#custom-field-formula-data").hide();
 			$('.required-and-searchable').show();
+			//$("#searchable").prop('checked', true);
+			$("#searchable").prop('disabled', false);
 		}
 		
 	});
+	
 }
 
 /**
@@ -311,13 +328,14 @@ function show_custom_fields_helper(custom_fields, properties){
 		if(field.scope == "CONTACT"){
 			label_style = "col-sm-3 word-break-all";
 			field_style = "col-sm-10";
-			div_col9_style = "col-sm-9";
+			div_col9_style = "col-sm-9 company_input";
 			div_col3_style = "col-sm-3";
 			modal_checkbox = "col-sm-offset-3 modal-cbx-m-t";
 		}else if(field.scope == "COMPANY"){
 			label_style = "control-label col-sm-3 word-break-all";
 			modal_label_style = "control-label col-sm-3 word-break-all"; 
 			modal_control_style = "col-sm-7";
+			div_col9_style = "company_input";
 			checkbox_style = "col-sm-3";
 			modal_checkbox = "col-sm-offset-3 modal-cbx-m-t";
 		}else if(field.scope == "DEAL"){

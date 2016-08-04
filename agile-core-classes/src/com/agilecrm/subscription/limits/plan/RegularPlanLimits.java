@@ -60,5 +60,7 @@ public class RegularPlanLimits extends PlanLimits
 		 * Milestones
 		 */
 		addTracks = true;
+		
+		checkTicketSLA = false;
 	}
 }

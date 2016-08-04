@@ -406,7 +406,12 @@ angular.module('builder')
 		 */
 		delete: function(node) {
 
-			if (node && node.nodeName != 'BODY') {
+			if (node && node.nodeName != 'BODY' && node.className.indexOf("col-") == -1) {
+				var agileEmbedForm = $(node).closest('.form-embed-container form#agile-form');
+				if(agileEmbedForm.length > 0) {
+					alert("Please make your changes in form builder only.");
+					return;
+				}
 
 				if (node.parentNode) {
 					$rootScope.$apply(function() {$rootScope.selectNode(node.parentNode);});

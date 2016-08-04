@@ -51,7 +51,7 @@
 		</small>	
 	</div>
 	<div class="clearfix"></div>	
-	<pre style="white-space:pre-wrap;">{{show_link_in_statement description}}</pre>	
+	<pre style="white-space:pre-wrap; word-break:normal">{{show_link_in_statement description}}</pre>	
 	 
      <div>	
 		{{#each contacts}}
@@ -70,8 +70,8 @@
        	{{/each}}
 		</div>
 		
-		<div class="actions pos-abs pos-r-0" style="bottom:-7px;right:30px;">
-<a title="Edit"  data="{{id}}" data-toggle="modal" class="task-note-edit p-r-sm c-p text-l-none"> <i class="icon-pencil"></i> </a>
+		<div class="actions pos-abs pos-r-0 icons-text-sm" style="bottom:-7px;right:30px;">
+<a title="Edit"  data="{{id}}" data-toggle="modal" class="task-note-edit p-r-sm c-p text-l-none"> <i class="fa fa-edit"></i> </a>
             <a title="Delete" class="c-p text-l-none"><span class="activity-delete icon-trash inline"  id="{{id}}" url="core/api/contacts/notes/bulk"></span></a>
         </div>
 	</div>

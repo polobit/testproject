@@ -541,3 +541,17 @@ form#new-ticket ul.chosen-choices {
 .word-break-all{
   word-break: break-all;
 }
+
+.font-weight-bold{
+  font-weight: bold;
+}
+
+.notes-max-lines{
+  max-height: 65px;
+  line-height: 1.5;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+}

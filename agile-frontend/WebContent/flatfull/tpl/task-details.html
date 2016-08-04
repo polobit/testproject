@@ -1,33 +1,37 @@
 
 <script id="task-detail-template" type="text/html">
 <div class="app-content-full  h-full dock-view-fixing">
-<div class="hbox hbox-auto-xs  bg-light">
-<div class="col w-xl bg-light lter b-r text-center-mobile-view" >
+<div class="hbox hbox-auto-xs  bg-light taskListDetails">
+<div class="col w-xl bg-light lter b-r text-center-mobile-view taskDetailsCol" >
 <div class="vbox">
 <div class="row-row">
 <div id="task-detail-lhs" class="wrapper pos-rlt details-mobile-view">
 
                   <div> 
-                    <div class="text-cap h3 font-thin custom-color w-full">{{#is_link subject}}<span class="activate-link">{{else}}<span class="block" style="margin-right:7px;">{{/is_link}}{{safe_string subject}}</span><span class="label bg-light dk inline-block m-r-sm text-xs pos-rlt pos-t-n-xs text-ellipsis"
-                     style="max-width:200px;min-width:auto;vertical-align:bottom;">{{task_property type}}</span>                  
-                    {{#if_not_equals priority_type "NORMAL" }}
+                    <div class="text-cap h3 font-thin custom-color w-full">{{#is_link subject}}<span class="activate-link">{{else}}<span class="block text-ellipsis" style="margin-right:7px;">{{/is_link}}{{safe_string subject}}</span>
+                    <span class="label bg-light dk inline-block m-r-sm text-xs pos-rlt pos-t-n-xs text-ellipsis"
+                     style="max-width:200px;min-width:auto;vertical-align:bottom; font-size:12px;">{{task_property type}}</span>                
+
+                    
                    <span class="label label-{{task_label_color priority_type}} inline-block  text-xs pos-rlt pos-t-n-xs">{{ucfirst priority_type}}</span>
-                         {{/if_not_equals}}</div>
+                         </div>
                   </div>
 					
                  	<!--  starting rating,edit,owner -->
                    
 					<div class="pos-abs pos-r-xs pos-t">
 					   
-                        <a class="dropdown-toggle" data-toggle="dropdown"><span class="fa fa-angle-down text-lg"></span></a>
+                        <button class="dropdown-toggle bg-transparent editicon m-t-sm" data-toggle="dropdown">
+								<span class="caret m-l-none" style="margin-top:-11px;"></span>
+								</button>
                     	
-								<ul class="dropdown-menu pull-right" role="menu">
+								<ul class="dropdown-menu pull-right text-sm" role="menu">
 
-                                   <li><a  href="javascript:void(0)" data="{{id}}" id="task_edit" ><i class="fa fa-pencil-square" style="margin-right:2px"></i> Edit</a></li>
+                                   <li><a  href="javascript:void(0)" data="{{id}}" id="task_edit" ><i class="fa fa-edit" style="margin-right:2px"></i> Edit</a></li>
                                    <li class="divider"></li>
-									<li><a href="#new-task-modal"  data-toggle="modal"><i class="fa fa-file-text" style="margin-right:2px"></i> Add Note</a></li>
+									<li><a href="#new-task-modal"  data-toggle="modal"><i class="icon-note" style="margin-right:2px"></i> Add Note</a></li>
                                     
-									<li><a href='javascript:void(0)'  data="{{id}}" class ="delete_task"><i	class="fa fa-trash" style="margin-right:2px"></i> Delete</a></li>
+									<li><a href='javascript:void(0)'  data="{{id}}" class ="delete_task"><i	class="icon-trash" style="margin-right:2px"></i> Delete</a></li>
 								</ul>
 					 </div>
 					
@@ -83,8 +87,8 @@
         
         	{{#canEditContact taskOwner.id}}
         	<div class="btn-group v-middle" id="change-task-owner-ul" style="display: none">
-        		 <a class="btn btn-xs dropdown-toggle btn-default" data-toggle="dropdown">Change Owner <span class="caret"></span></a>
-        		 <ul id='task-detail-owner' class="dropdown-menu"></ul>
+        		 <button class="btn btn-xs dropdown-toggle btn-default" data-toggle="dropdown">Change Owner <span class="caret"></span></button>
+        		 <ul id='task-detail-owner' class="dropdown-menu" role="menu"></ul>
         	</div> 
 			{{/canEditContact}}
        </div>
@@ -105,10 +109,10 @@
 
 {{#each contacts}}
         		{{#if_contact_type "PERSON"}}
-        			<a href="#contact/{{id}}" class="activate-link thumb m-b-xs"><img class="r r-2x" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"   title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" /></a>
+        		 <a href="#contact/{{id}}" class="activate-link thumb m-b-xs popover_contact" data="{{id}}"><img class="r r-2x" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"   title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" /></a>
         		{{/if_contact_type}}
 				{{#if_contact_type "COMPANY"}}
-        			<a href="#company/{{id}}" class="activate-link thumb m-b-xs"><img class="r r-2x" {{getCompanyImage "40" "display:inline;"}} title="{{getPropertyValue properties "name"}}"/></a>
+        		 <a href="#company/{{id}}" class="activate-link thumb m-b-xs popover_contact" data="{{id}}"><img class="r r-2x" {{getCompanyImage "40" "display:inline;"}} title="{{getPropertyValue properties "name"}}"/></a>
         		{{/if_contact_type}}
         	{{/each}}
 </div>
@@ -152,7 +156,7 @@
 </div>
 </div>
 
-<div class="col bg-white">
+<div class="col bg-white taskTabListCenter">
 <div class="vbox" style="display:block">
 <div class="row-row" style="display:block">
 		<div id="task-tab-container-header" class="tab-container">
@@ -438,10 +442,10 @@
 	<div class="inline-block text-ellipsis" style="width:9em">
 	{{#each contacts}}
        {{#if_contact_type "PERSON"}}
-        	<a href="#contact/{{id}}" class="activate-link hide-popover thumb-sm"><img class="r r-2x img-inital" data-name="{{dataNameAvatar properties 40}}" src="{{gravatarurl properties 40}}"   title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" /></a>
+        <a href="#contact/{{id}}" class="activate-link hide-popover thumb-sm popover_contact" data="{{id}}"><img class="r r-2x img-inital" data-name="{{dataNameAvatar properties 40}}" src="{{gravatarurl properties 40}}"   title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" /></a>
        {{/if_contact_type}}
 	   {{#if_contact_type "COMPANY"}}
-        	<a href="#company/{{id}}" class="activate-link hide-popover thumb-sm"><img class="r r-2x" {{getCompanyImage "40" "display:inline;"}} title="{{getPropertyValue properties "name"}}"/></a>
+        <a href="#company/{{id}}" class="activate-link hide-popover thumb-sm popover_contact" data="{{id}}"><img class="r r-2x" {{getCompanyImage "40" "display:inline;"}} title="{{getPropertyValue properties "name"}}"/></a>
        {{/if_contact_type}}
    {{/each}}
    </div>
