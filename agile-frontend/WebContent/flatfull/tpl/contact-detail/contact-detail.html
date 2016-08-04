@@ -808,8 +808,8 @@ class="icon-plus"></i> <span >Add</span></a>
 					</div>
 					<div class="w-full  m-t-xs  text-lg font-thin custom-color text-ellipsis" style="padding-bottom:1px;padding-right:20px; height:28px;" id ="contactName">
 
-								<span class="text-capitalize " id="contact_name">{{getPropertyValue properties
-										"first_name"}}</span> <span class="text-capitalize "> {{getPropertyValue properties "last_name"}}</span>
+								<span class="text-capitalize " id="contact_name">{{getSystemPropertyValue properties
+										"first_name"}}</span> <span class="text-capitalize "> {{getSystemPropertyValue properties "last_name"}}</span>
 
 
 								 <!-- {{#if_propertyName "email"}}</br> <a href='#send-email/{{value}}'>{{value}}</a>{{/if_propertyName}} -->
@@ -820,9 +820,9 @@ class="icon-plus"></i> <span >Add</span></a>
 						<div class="contact-job-title text-base text-center font-thin custom-color text-ellipsis" style="max-width:100%;">{{#if_propertyName "title"}} {{value}}{{/if_propertyName}}   {{#if contact_company_id}}
 
 
-									<a class = "block text-xs"  href="#company/{{contact_company_id}}">{{getPropertyValue properties "company"}}</a>
+									<a class = "block text-xs"  href="#company/{{contact_company_id}}">{{getSystemPropertyValue properties "company"}}</a>
 								{{else}}
-									{{getPropertyValue properties "company"}}
+									{{getSystemPropertyValue properties "company"}}
 								{{/if}}</div>
 								
 								
@@ -832,9 +832,9 @@ class="icon-plus"></i> <span >Add</span></a>
 						<!-- <div class="contact-company-name text-ellipsis pull-left w-half font-thin">
 														
                          {{#if contact_company_id}} 
-									<a href="#contact/{{contact_company_id}}">{{getPropertyValue properties "company"}}</a>
+									<a href="#contact/{{contact_company_id}}">{{getSystemPropertyValue properties "company"}}</a>
 								{{else}}
-									{{getPropertyValue properties "company"}}
+									{{getSystemPropertyValue properties "company"}}
 								{{/if}}
                          </div> -->
                          <div class="clearfix"></div>
@@ -1414,7 +1414,10 @@ class="icon-plus"></i> <span >Add</span></a>
 				<li class=""><a data-toggle="tab" role="tab" href="#events">Events</a></li>
 				<li class=""><a data-toggle="tab" role="tab" href="#tasks">Tasks</a></li>
 				<li class=""><a data-toggle="tab" role="tab" href="#deals">Deals</a></li>
+				{{#isNewVersionDomainUser}} {{else}}
 				<li class=""><a data-toggle="tab" role="tab" href="#cases">Cases</a></li>
+				{{/isNewVersionDomainUser}}
+
 				<li class=""><a data-toggle="tab" role="tab" href="#campaigns">Campaigns</a></li>
 				<li class=""><a data-toggle="tab" role="tab" href="#stats">Web Stats</a></li>
 				<li class=""><a data-toggle="tab" role="tab" href="#mail">Mail</a></li>
@@ -1508,7 +1511,7 @@ class="icon-plus"></i> <span >Add</span></a>
  <div class="wrapper">
  						
  
- 				<div id="widgets" class="contact_{{id}}"></div>
+ 				<div id="widgets" class="contact_{{id}}" style="max-width:250px"></div>
  					</div>
  					</div>
  					</div>

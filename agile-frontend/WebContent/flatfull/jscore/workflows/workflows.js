@@ -29,16 +29,16 @@ var Workflow_Model_Events = Base_Model_View.extend({
         unsubscribe_fill_select.id = "";
         var model_id = $('.emailSelect option:selected').prop('value');
         if (!model_id)
-        	return;
-		var emailTemplatesModel = Backbone.Model.extend({ url : '/core/api/email/templates/' + model_id, restKey : "emailTemplates" });
-		var templateModel = new emailTemplatesModel();
-		
-		templateModel.fetch({ success : (function(data)
-		{
+            return;
+        var emailTemplatesModel = Backbone.Model.extend({ url : '/core/api/email/templates/' + model_id, restKey : "emailTemplates" });
+        var templateModel = new emailTemplatesModel();
+        
+        templateModel.fetch({ success : (function(data)
+        {
             var model = data.toJSON();
-			unsubscribe_fill_select.id = model_id;
+            unsubscribe_fill_select.id = model_id;
             unsubscribe_fill_select.text = model.text;
-		})
+        })
     });
             
 
@@ -338,35 +338,6 @@ var Workflow_Model_Events = Base_Model_View.extend({
 
 });
 
-var Workflow_Collection_Events = Base_Collection_View.extend({
-    events: {
-        'click #sort_menu > li': 'workflowsSort',
-        
-    },
-
-    workflowsSort : function(e)
-    {
-        e.preventDefault();
-        var targetEl = $(e.currentTarget);
-        var ele = $(targetEl).find("a").attr("data");
-        if($(targetEl).find("a").hasClass("sort-field")){
-            $("#sort_menu").find(".sort-field i").addClass("display-none");
-        }else{
-            $("#sort_menu").find(".order-by i").addClass("display-none");
-        }
-        $(targetEl).find("i").removeClass("display-none");
-        var sort_key = $("#sort_menu").find(".order-by i:not(.display-none)").closest(".order-by").attr("data");
-        sort_key = sort_key + $("#sort_menu").find(".sort-field i:not(.display-none)").closest(".sort-field").attr("data");
-        var previous_sortKey = _agile_get_prefs("workflow_sort_key");
-        if(sort_key == previous_sortKey)
-            return;
-        _agile_set_prefs("workflow_sort_key", sort_key);
-        printSortByName($(".sort-field[data='"+sort_key+"']").attr("label_name"), $(targetEl).closest("#workflows-listener-container"));
-        App_Workflows.workflow_list_view.collection.reset();
-        Backbone.history.loadUrl(Backbone.history.fragment);
-    },  
-});
-
 function initializeLogReportHandlers(){
 
     // Show stats of selected campaign
@@ -446,11 +417,11 @@ var Workflow_Reports_Events = Base_Collection_View.extend({
 
 $(function(){
 
-	// To stop propagation to edit page
-	$('body').on('click', '.stop-propagation', function (e) {
+    // To stop propagation to edit page
+    $('body').on('click', '.stop-propagation', function (e) {
         e.stopPropagation();
     });
-	
+    
 });
 
 /**
@@ -463,9 +434,9 @@ $(function(){
  **/
 function create_new_workflow(e,name, designerJSON, unsubscribe_json, $clicked_button, trigger_data, is_disabled, was_disabled, access_level)
 {
-	var workflowJSON = {};
-	
-	workflowJSON.name = name;
+    var workflowJSON = {};
+    
+    workflowJSON.name = name;
     workflowJSON.rules = designerJSON;
     workflowJSON.unsubscribe = unsubscribe_json;
     workflowJSON.is_disabled = is_disabled;
@@ -474,34 +445,34 @@ function create_new_workflow(e,name, designerJSON, unsubscribe_json, $clicked_bu
     
     var workflow = new Backbone.Model(workflowJSON);
     App_Workflows.workflow_list_view.collection.create(workflow,{
-    	    success:function(){  
+            success:function(){  
 
-    	    	// Removes disabled attribute of save button
-    	    	enable_save_button($clicked_button);
-    	    	
-    	    	// Shows Campaign save message
-    	    	show_campaign_save(e);
+                // Removes disabled attribute of save button
+                enable_save_button($clicked_button);
+                
+                // Shows Campaign save message
+                show_campaign_save(e);
 
-    	    	// $('#workflowform').find('#save-workflow').removeAttr('disabled');
-    	    	
-    	    	// Hide edit message
-    	    	$('#workflow-edit-msg').hide();
-    	    	
-    	    	// $(".save-workflow-img").remove();
-    	    	        
-    	    	// Boolean data used on clicking on Done
-    	    	if(trigger_data && trigger_data["navigate"])
-    	    	{
-    	    		Backbone.history.navigate("workflows", {
+                // $('#workflowform').find('#save-workflow').removeAttr('disabled');
+                
+                // Hide edit message
+                $('#workflow-edit-msg').hide();
+                
+                // $(".save-workflow-img").remove();
+                        
+                // Boolean data used on clicking on Done
+                if(trigger_data && trigger_data["navigate"])
+                {
+                    Backbone.history.navigate("workflows", {
                       trigger: true
                   });
-    	    	}
-    	    	
-    	    	// Updates workflow model
-    	    	App_Workflows.workflow_model = workflow;
+                }
+                
+                // Updates workflow model
+                App_Workflows.workflow_model = workflow;
                 if(Current_Route.indexOf("share-campaign")!=-1)
                     App_Workflows.workflow_list_view = undefined;
-    	    },
+            },
             
             error: function(jqXHR, status, errorThrown){ 
               enable_save_button($clicked_button); 
@@ -509,31 +480,31 @@ function create_new_workflow(e,name, designerJSON, unsubscribe_json, $clicked_bu
               // shows Exception message
               if(status.status != 406)
               {
-            	  // Show different message for Copy
-            	  if($clicked_button.attr('id') === 'duplicate-workflow-bottom' || $clicked_button.attr('id') === 'duplicate-workflow-top')
-            	  {
-            		  if(status.responseText === "Please change the given name. Same kind of name already exists.")
-            		  {
-            			  showAlertModal("duplicate_workflow");
-            			  return;
-            		  }
-            	  }
-            	  
-            	  showAlertModal(response.responseText, undefined, undefined, undefined, "Error");
+                  // Show different message for Copy
+                  if($clicked_button.attr('id') === 'duplicate-workflow-bottom' || $clicked_button.attr('id') === 'duplicate-workflow-top')
+                  {
+                      if(status.responseText === "Please change the given name. Same kind of name already exists.")
+                      {
+                          showAlertModal("duplicate_workflow");
+                          return;
+                      }
+                  }
+                  
+                  showAlertModal(response.responseText, undefined, undefined, undefined, "Error");
               }
               else
-            	  {
-            	  console.log(status);
-            		// Show cause of error in saving
-					$save_info = $('<div style="display:inline-block"><small><p style="color:#B94A48; font-size:14px"><i>'
-							+ status.responseText
-							+ '</i></p></small></div>');
+                  {
+                  console.log(status);
+                    // Show cause of error in saving
+                    $save_info = $('<div style="display:inline-block"><small><p style="color:#B94A48; font-size:14px"><i>'
+                            + status.responseText
+                            + '</i></p></small></div>');
 
-					// Appends error info to form actions
-					// block.
-					$("#workflow-msg").html(
-							$save_info).show();
-            	  }
+                    // Appends error info to form actions
+                    // block.
+                    $("#workflow-msg").html(
+                            $save_info).show();
+                  }
                 }
     });
 }
@@ -548,49 +519,49 @@ function create_new_workflow(e,name, designerJSON, unsubscribe_json, $clicked_bu
  **/
 function fill_logs_slate(id, type)
 {
-	if(type == undefined)
-		type="ALL";
-	
-	var LOGS_PAD_CONTENT = {
-		    "ALL": {
-		        "title": "No logs for this campaign yet",
-				"image": updateImageS3Path("/img/clipboard.png")
-		    },
-		    "EMAIL_SENT": {
-		    	"title": "No emails sent yet",
-				"image": updateImageS3Path("/img/clipboard.png")
-		    },
+    if(type == undefined)
+        type="ALL";
+    
+    var LOGS_PAD_CONTENT = {
+            "ALL": {
+                "title": "No logs for this campaign yet",
+                "image": updateImageS3Path("/img/clipboard.png")
+            },
+            "EMAIL_SENT": {
+                "title": "No emails sent yet",
+                "image": updateImageS3Path("/img/clipboard.png")
+            },
             "EMAIL_SENDING_SKIPPED": {
                 "title": "No emails skipped yet",
                 "image": updateImageS3Path("/img/clipboard.png")
             },
-		    "EMAIL_OPENED": {
-		    	"title": "No emails opened in this campaign",
-				"image": updateImageS3Path("/img/clipboard.png")
-		    },
-		    "EMAIL_CLICKED": {
-		    	"title": "No emails clicked in this campaign",
-				"image": updateImageS3Path("/img/clipboard.png")
-		    },
-		    "UNSUBSCRIBED": {
-		    	"title": "No one unsubscribed from this campaign",
-				"image": updateImageS3Path("/img/clipboard.png")
-		    },
-		    "EMAIL_HARD_BOUNCED": {
-		    	"title": "No hard bounces seen for  this campaign",
-				"image": updateImageS3Path("/img/clipboard.png")
-		    },
-		    "EMAIL_SOFT_BOUNCED": {
-		    	"title": "No soft bounces seen for this campaign",
-				"image": updateImageS3Path("/img/clipboard.png")
-		    },
-		    "EMAIL_SPAM": {
-		    	"title": "No spam reports seen for this campaign",
-				"image": updateImageS3Path("/img/clipboard.png")
-		    }
-		}
+            "EMAIL_OPENED": {
+                "title": "No emails opened in this campaign",
+                "image": updateImageS3Path("/img/clipboard.png")
+            },
+            "EMAIL_CLICKED": {
+                "title": "No emails clicked in this campaign",
+                "image": updateImageS3Path("/img/clipboard.png")
+            },
+            "UNSUBSCRIBED": {
+                "title": "No one unsubscribed from this campaign",
+                "image": updateImageS3Path("/img/clipboard.png")
+            },
+            "EMAIL_HARD_BOUNCED": {
+                "title": "No hard bounces seen for  this campaign",
+                "image": updateImageS3Path("/img/clipboard.png")
+            },
+            "EMAIL_SOFT_BOUNCED": {
+                "title": "No soft bounces seen for this campaign",
+                "image": updateImageS3Path("/img/clipboard.png")
+            },
+            "EMAIL_SPAM": {
+                "title": "No spam reports seen for this campaign",
+                "image": updateImageS3Path("/img/clipboard.png")
+            }
+        }
 
-	getTemplate("empty-collection-model", LOGS_PAD_CONTENT[type], undefined, function(template_ui){
+    getTemplate("empty-collection-model", LOGS_PAD_CONTENT[type], undefined, function(template_ui){
         if(!template_ui)
               return;
             
@@ -602,13 +573,13 @@ function fill_logs_slate(id, type)
 
 function show_campaign_save(e,message,color)
 {
-	// Campaign save message
+    // Campaign save message
     var save_info;
     if(message)
         save_info = '<span style="color: green;">'+message+'</span>';
     else
     {
-	   save_info = '<span style="color: green;">Campaign saved.</span>';
+       save_info = '<span style="color: green;">Campaign saved.</span>';
        //Show popup modal for adding campaign in trigger or contac
         showCampaignPopup(e);
        
@@ -617,7 +588,7 @@ function show_campaign_save(e,message,color)
     if(color)
         save_info = $(save_info).css("color", color);
 
-   	$("#workflow-msg").html(save_info).show().fadeOut(3000);
+    $("#workflow-msg").html(save_info).show().fadeOut(3000);
 }
 
 function is_start_active(designerJSON){
@@ -775,3 +746,30 @@ function change_access_level(level, el){
     }
 }
 
+var Workflow_Top_Header_Model_Events = Base_Model_View.extend({
+    events: {
+        'click #sort_menu > li': 'sortCollectionView'
+    },
+
+    sortCollectionView : function(e)
+    {
+        e.preventDefault();
+
+        var targetEl = $(e.currentTarget);
+        var sortkey = "", $sort_menu = $("#sort_menu");
+        if($(targetEl).find("a").hasClass("sort-field"))
+        {
+            $sort_menu.find("li").not(targetEl).find("a.sort-field i").addClass("display-none");
+            $(targetEl).find("a.sort-field i").removeClass("display-none");
+        } else {
+            $sort_menu.find("li").not(targetEl).find("a.order-by i").addClass("display-none");
+            $(targetEl).find("a.order-by i").removeClass("display-none");
+        }
+
+        sortkey = $sort_menu.find(".order-by i:not(.display-none)").closest(".order-by").attr("data");
+        sortkey += $sort_menu.find(".sort-field i:not(.display-none)").closest(".sort-field").attr("data");
+        
+        _agile_set_prefs("workflow_sort_key", sortkey);
+        this.model.set({"sortKey" : sortkey});
+    },  
+});

@@ -56,8 +56,9 @@ function updateData(params) {
 		this.App_Calendar.allTasksListView = new Base_Collection_View({
 		url : '/core/api/tasks/based' + params,
 		restKey : "task",
-		sort_collection : false,
-		//sortKey :'due',
+		sort_collection : true,
+		descending:false,
+		sortKey:'due',
 		templateKey : "tasks-list",
 		cursor : true, page_size : 25,
 		individual_tag_name : 'tr',
@@ -180,7 +181,7 @@ function bulk_complete_operation(url, index_array, table, data_array){
 	
 	var tasks = [];
 	$.each(data_array, function(index, task){
-		var contacts = task.contacts;
+		var contacts = task.taskContacts;
 		task.contacts = [];
 		$.each(contacts, function(i, contact){
 			task.contacts.push(contact.id);

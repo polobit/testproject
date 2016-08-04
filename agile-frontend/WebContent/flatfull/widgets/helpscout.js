@@ -102,25 +102,27 @@ function showMailsInHelpScout(customerId, contact_id, offSet)
 			// Get and fill the template with tickets
 			$('#all_conv_panel').html(getTemplate('helpscout-conversation', result));
 
-			if(helpscoutmails.length > 5){			
-				$('#all_conv_panel').append(showMoreHtml);
-			}
-
 			// Load jquery time ago function to show time ago in tickets
 			head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
 			{
-				$(".time-ago").timeago();
+				$(".time-ago", $('#all_conv_panel')).timeago();
 			});
+
+			if(helpscoutmails.length > 5){			
+				$('#all_conv_panel').append(showMoreHtml);
+			}
 		});
 	}else if(offSet > 0  && (offSet+5) < helpscoutmails.length){
 		var result = helpscoutmails.slice(offSet, (offSet+5));
 		$('.helpscout_show_more').remove();
 		$('#all_conv_panel').append(getTemplate('helpscout-conversation', result));
+		$(".time-ago", $('#all_conv_panel')).timeago();
 		$('#all_conv_panel').append(showMoreHtml);
 	}else {
 		var result = helpscoutmails.slice(offSet, helpscoutmails.length);
 		$('.helpscout_show_more').remove();
 		$('#all_conv_panel').append(getTemplate('helpscout-conversation', result));
+		$(".time-ago", $('#all_conv_panel')).timeago();
 	}
 }
 
@@ -344,14 +346,14 @@ function startHelpScoutWidget(contact_id){
 	showHelpScoutMails(contact_id);
 
 	// On click of add ticket, add ticket method is called
-    $("#widgets").off("click", "#add_conv");
-	$("#widgets").on("click", "#add_conv", function(e){
+    $("#"+WIDGET_PARENT_ID).off("click", "#add_conv");
+	$("#"+WIDGET_PARENT_ID).on("click", "#add_conv", function(e){
 		e.preventDefault();
 		addTicketToHelpScout(contact_id);
 	});
 
-    $("#widgets").off("click", "#help_show_more");
-	$("#widgets").on("click", "#help_show_more", function(e){
+    $("#"+WIDGET_PARENT_ID).off("click", "#help_show_more");
+	$("#"+WIDGET_PARENT_ID).on("click", "#help_show_more", function(e){
 		e.preventDefault();
 		var offSet = showMoreCount * 5;
 		showMailsInHelpScout(customerId, contact_id, offSet);

@@ -155,7 +155,8 @@
   </queue>
   <queue>
     <name>event-notifier</name>
-    <rate>20/s</rate>
+    <rate>80/s</rate>
+    <bucket-size>100</bucket-size>
     <max-concurrent-requests>20</max-concurrent-requests>
     <retry-parameters>
     <task-retry-limit>1</task-retry-limit>
@@ -634,6 +635,17 @@
   <retry-parameters>
       <task-retry-limit>1</task-retry-limit>
   </retry-parameters>
+  </queue>
+  
+  <queue>
+    <name>ip-filters-transfer-queue</name>
+    <rate>20/s</rate>
+    <bucket-size>40</bucket-size>
+    <max-concurrent-requests>20</max-concurrent-requests>
+    <retry-parameters>
+    <task-retry-limit>1</task-retry-limit>
+  </retry-parameters>
+  <target>agile-temp-bulk</target>
   </queue>
 
 </queue-entries>

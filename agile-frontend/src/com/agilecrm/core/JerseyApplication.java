@@ -140,6 +140,7 @@ public class JerseyApplication extends Application
 	s.add(com.agilecrm.knowledgebase.rest.SectionAPI.class);
 	s.add(com.agilecrm.knowledgebase.rest.ArticleAPI.class);
 	s.add(com.agilecrm.knowledgebase.rest.CommentAPI.class);
+	s.add(com.agilecrm.knowledgebase.rest.LandingPageKnowledgebaseAPI.class);
 	
 	s.add(com.agilecrm.core.api.widgets.UservoiceWidgetAPI.class);
 	s.add(com.agilecrm.core.api.analytics.VisitorFilterAPI.class);
@@ -149,6 +150,8 @@ public class JerseyApplication extends Application
 	
 	// JS Permission
 	s.add(com.agilecrm.core.api.JavaScriptPermissionAPI.class);
+	// SSO feature
+	s.add(com.agilecrm.ssologin.SingleSignOnAPI.class);
 	return s;
     }
 }

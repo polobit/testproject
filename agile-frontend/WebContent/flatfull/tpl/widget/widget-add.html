@@ -1,65 +1,78 @@
 <script id="widgets-add-new-model-template" type="text/html"> 
 <div class="panel panel-default widget-add pos-rlt" style="height: 220px;">
   <div class="panel-heading">
-   {{#if_equals name "Sip"}}  
-   <center>  
-    <span style="font-size: 24px; height: 47px; text-align:center;vertical-align: middle; display:inline-block;">
-    <span style="margin-top:6px; display:inline-block;"><img src="{{logo_url}}"  class="img-responsive inline-block" 
-    style="margin-right: 4px; margin-top:-5px; width:25px; height:25px;">SIP</span>
-	<span class="label label-sm bg-danger" style="margin: 5px;font-size: 11px;top: -6px;position: relative;">Beta</span>
-    </span>
-
-   </center>
-   {{else}} 
-      {{#if_equals name "CallScript"}}
-     <center>    
-       <span style="font-size: 24px; height: 47px; text-align:center;vertical-align: middle;">
-    <span style="margin-top:6px; display:inline-block; padding-bottom: 7px;">
-    <img src="{{logo_url}}" class="img-responsive inline-block" style="margin-right: 4px; margin-top:-3px; width:25px; height:25px;">Call Script</span>
-    </span>
-     </center>  
-    {{else}}
-			{{#if_equals name "Bria"}}
-				<center>  
-  				<span style="font-size: 24px;width: 113px;height: 50px; text-align:center;vertical-align: middle;"><span><img src="{{logo_url}}" style="width: 40px; height: 40px;margin-right: 4px;margin-top: 1px;">Bria</span></span>
-				<span class="label label-sm bg-danger"  style="margin: 5px;">Beta</span>
-				</center>  
-        	{{else}}
-			{{#if_equals name "Skype"}}
-				<center>  
-  				<span style="font-size: 24px;width: 135px;height: 50px; text-align:center;vertical-align: middle;"><span><img src="{{logo_url}}" style="width: 40px; height: 40px;margin-right: 4px;margin-top: 1px;">Skype</span></span>
-				<span class="label label-sm bg-danger" style="margin: 5px;">Beta</span>
-				</center>  
-        	{{else}}
-        	{{#if_equals name "Braintree"}}
-				<center>  
-  				<span style="font-size: 24px;width: 135px;height: 50px; text-align:center;vertical-align: middle;">
-  					<img src="{{logo_url}}" style="height: 47px;">
-  				</span>
-				<span class="label label-sm bg-danger" style="margin: 5px;">Beta</span>
-				</center>  
-        	{{else}}
-      <center> 
-        <img class="m-b-none img-responsive thumb-xl bg-transparent" style="height:47px;" src="{{logo_url}}" />
-      </center>   
-			 {{/if_equals}}
-		{{/if_equals}}
-		{{/if_equals}}
-   {{/if_equals}}
-   {{/if_equals}}
+	   {{#if_equals name "Sip"}}  
+		   <center>  
+			    <span style="font-size: 24px; height: 47px; text-align:center;vertical-align: middle; display:inline-block;">
+				    <span style="margin-top:6px; display:inline-block;">
+				    	<img src="{{logo_url}}"  class="img-responsive inline-block" style="margin-right: 4px; margin-top:-5px; width:25px; height:25px;">SIP
+				    </span>
+					<span class="label label-sm bg-danger" style="margin: 5px;font-size: 11px;top: -6px;position: relative;">Beta</span>
+			    </span>
+		   </center>
+	   {{else}} 
+	      {{#if_equals name "CallScript"}}
+		    <center>    
+		       <span style="font-size: 24px; height: 47px; text-align:center;vertical-align: middle;">
+			       <span style="margin-top:6px; display:inline-block; padding-bottom: 7px;">
+			       		<img src="{{logo_url}}" class="img-responsive inline-block" style="margin-right: 4px; margin-top:-3px; width:25px; height:25px;">Call Script
+			       </span>
+		       </span>
+		     </center>
+		    {{else}}
+					{{#if_equals name "Bria"}}
+						<center>  
+		  					<span style="font-size: 24px;width: 113px;height: 50px; text-align:center;vertical-align: middle;">
+		  						<span>
+		  							<img src="{{logo_url}}" style="width: 40px; height: 40px;margin-right: 4px;margin-top: 1px;">Bria
+		  						</span>
+		  					</span>
+						</center>  
+		        	{{else}}
+						{{#if_equals name "Skype"}}
+							<center>  
+				  				<span style="font-size: 24px;width: 135px;height: 50px; text-align:center;vertical-align: middle;">
+				  					<span>
+				  						<img src="{{logo_url}}" style="width: 40px; height: 40px;margin-right: 4px;margin-top: 1px;">Skype
+				  					</span>
+				  				</span>
+								<!-- <span class="label label-sm bg-danger" style="margin: 5px;">Beta</span> -->
+							</center>   
+			        	{{else}}
+				        	{{#if_equals name "Braintree"}}
+								<center>  
+					  				<span style="font-size: 24px;width: 135px;height: 50px; text-align:center;vertical-align: middle;">
+					  					<img src="{{logo_url}}" style="height: 47px;">
+					  				</span>
+									<!-- <span class="label label-sm bg-danger" style="margin: 5px;">Beta</span> -->
+								</center>  
+				        	{{else}}
+						      <center> 
+						        <img class="m-b-none img-responsive thumb-xl bg-transparent" style="height:47px;" src="{{logo_url}}" />
+						      </center>   
+				 			{{/if_equals}}
+						{{/if_equals}}
+					{{/if_equals}}
+	   		{{/if_equals}}
+	   {{/if_equals}}
   </div>
   <div class="panel-body">
-	
 	{{#if_equals name "Bria"}}
   		 <div class="text-flow-ellipsis line-clamp line-clamp-4 widget-text" style="height:75px"  rel="tooltip" title="{{description}}">
     {{else}}
-	{{#if_equals name "Skype"}}
-		<div class="text-flow-ellipsis line-clamp line-clamp-4 widget-text" style="height:75px"  rel="tooltip" title="{{description}}">
- 	{{else}}
-		<div class="text-flow-ellipsis line-clamp line-clamp-4 widget-text" style="height:85px"  rel="tooltip" title="{{description}}">
+		{{#if_equals name "Skype"}}
+			<div class="text-flow-ellipsis line-clamp line-clamp-4 widget-text" style="height:75px"  rel="tooltip" title="{{description}}">
+	 	{{else}}
+			<div class="text-flow-ellipsis line-clamp line-clamp-4 widget-text" style="height:85px"  rel="tooltip">
+		{{/if_equals}}
 	{{/if_equals}}
-	{{/if_equals}}
-   
+		{{#if_equals widget_type "CUSTOM"}}
+			{{#if_equals name "Custom"}}
+			{{else}}
+				<center title="Widget display name"><h4 class="m-t-xxs m-b-xxs">{{#if display_name}}{{display_name}}{{else}}{{name}}{{/if}}</h4></center>
+				<center title="Widget name"><span class="text-xs m-b-xs">{{name}}</span></center>
+			{{/if_equals}}
+		{{/if_equals}}
 		{{description}}
 	{{#if_equals name "Bria"}}
 		<br/>
@@ -78,37 +91,66 @@
 		{{/if_equals}}
 	{{/if_equals}}
 	{{/if_equals}}
-
-	</div>
-    <div class="text-center">
-
+		</div>
+    <div class="text-center m-t-sm">
 		{{#if_equals widget_type "CUSTOM"}}
-			{{#if is_added}}
+			{{#if id}}
 				{{add_tag "Widgets"}}
 					<div class="btn-group inline-block">
-        				<a class="btn btn-sm btn-danger" id="delete-widget" widget-name="{{name}}">Delete</a>
-        				<a class="btn btn-sm btn-danger dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
-						<ul class="dropdown-menu text-base">
-							<li><a id="remove-widget" widget-name="{{name}}">Uninstall</a></li>
-						</ul>
-					</div>
+					{{#isAdmin}}
+						<a class="btn btn-sm btn-default m-r-sm acl_widget" title="Edit users for widget" widget-data="{{stringifyObject this}}">
+  							<i class="fa fa-users"></i>
+  						</a>
+  					{{/isAdmin}}
+  						<a class="btn btn-sm btn-default m-r-sm" href="#Custom-widget/{{id}}" widget-name="{{name}}" widget-type="{{widget_type}}">Edit</a>
+        				<a class="btn btn-sm btn-danger" id="delete-widget" widget-name="{{name}}" widget-displayname="{{display_name}}">Delete</a>  
+        			</div>
 					<!--<a href="#Custom-widget/{{id}}" class="btn btn-sm btn-default inline-block m-t-n-md" id="setting-widget" set-widget-name="{{name}}">Settings</a>-->
     		{{else}}
-    			<a class="btn btn-sm btn-default install-custom-widget" href="#Custom-widget" widget-name="{{name}}">Add</a>
-				<a class="btn btn-sm btn-danger" id="remove-widget" widget-name="{{name}}">Uninstall</a>    		
+    			<div class="text-center">																		
+					<div class="btn-group">
+						<a class="btn btn-sm btn-default" href="#Custom-widget" widget-name="{{name}}">
+        					Add custom widget
+						</a>
+					</div>					
+				</div>				   		
 			{{/if}}
 		{{else}}
 			{{#if is_added}}
 				{{add_tag "Widgets"}}
-				{{#if_equals name "CallScript"}}  
-                   <a href="#callscript/{{id}}" class="btn btn-sm btn-default" id="setting-widget" set-widget-name="{{name}}">Settings</a>
-                {{else}}{{#if_equals name "Twilio"}}
-                           <a></a>
-                        {{else}}
-				           <a href="#{{name}}/{{id}}" class="btn btn-sm btn-default" id="setting-widget" set-widget-name="{{name}}">Settings</a>
-                        {{/if_equals}}
+				{{#if_equals name "CallScript"}}	
+							{{#isAdmin}}
+                           		<a class="btn btn-sm btn-default acl_widget" widget-data="{{stringifyObject this}}">
+  									<i class="fa fa-users"></i>
+  				   		   		</a>
+  				   		    {{/isAdmin}}			 
+                   <a href="#callscript/{{id}}" class="btn btn-sm btn-default" id="setting-widget" set-widget-name="{{name}}">Settings</a>                   
+                {{else}}
+		                {{#if_equals name "TwilioIO"}}
+		                    <a></a>
+		                {{else}}
+		               	 {{#if_equals name "Bria"}}
+		               	  <a></a>
+		               	  {{else}}
+		               	 {{#if_equals name "Skype"}}
+		               	  <a></a>
+		               	  {{else}}
+		               	 {{#if_equals name "Sip"}}
+		               	  <a></a>
+		                {{else}}
+		                	{{#isAdmin}}
+                           		<a class="btn btn-sm btn-default acl_widget" widget-data="{{stringifyObject this}}">
+  									<i class="fa fa-users"></i>
+  				   		   		</a>
+  				   		    {{/isAdmin}}
+  				   		   {{/if_equals}}
+  				   		     {{/if_equals}}
                 {{/if_equals}}
-    			<a class="btn btn-sm btn-danger m-r-xs" id="delete-widget" widget-name="{{name}}">Delete</a>
+                  {{/if_equals}}
+               
+				           <a href="#{{name}}/{{id}}" class="btn btn-sm btn-default" id="setting-widget" set-widget-name="{{name}}">Settings</a>	
+				            {{/if_equals}}			                       
+				<a class="btn btn-sm btn-danger m-r-xs" id="delete-widget" widget-name="{{name}}">Delete</a>				
 				{{#if_equals name "Bria"}}
 					<div class="text-center m-t-sm ">
 							Download
@@ -144,14 +186,7 @@
 												<a class="btn btn-sm btn-default add-widget" href="#{{name}}" widget-name="{{name}}">Add</a>
 											{{else}}
 								<div class="btn-group">
-  									<a type="button" class="btn btn-sm btn-default add-widget" href="#{{name}}" widget-name="{{name}}">Add</a>
-  									<a type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-    									<span class="caret"></span>
-    									<span class="sr-only">Toggle Dropdown</span>
-  									</a>
-  									<ul class="dropdown-menu" role="menu">
-    									<li><a class="btn btn-sm add_to_all" href="#{{name}}" widget-name="{{name}}">Add for all users</a></li>    									
-  									</ul>
+  									<a type="button" class="btn btn-sm btn-default add-widget" href="#{{name}}" widget-name="{{name}}">Add</a>  									
 								</div>
 										{{/if_equals}}
 									{{/if_equals}}
@@ -178,14 +213,7 @@
 												<a class="btn btn-sm btn-default add-widget" href="#callscript" widget-name="{{name}}">Add</a>
 											{{else}}																			
 											<div class="btn-group">
-  												<a class="btn btn-sm btn-default add-widget" href="#callscript" widget-name="{{name}}">Add</a>
-  												<a type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-    												<span class="caret"></span>
-    												<span class="sr-only">Toggle Dropdown</span>
-  												</a>
-  												<ul class="dropdown-menu" role="menu">
-    												<li><a class="btn btn-sm add_to_all" href="#callscript" widget-name="{{name}}">Add for all users</a></li>    									
-  												</ul>
+  												<a class="btn btn-sm btn-default add-widget" href="#callscript" widget-name="{{name}}">Add</a>											
 											</div>
 												{{/if_equals}}
 											{{/if_equals}}
@@ -213,14 +241,7 @@
 											{{else}}											
 												<div class="btn-group">
   													<a class="btn btn-sm btn-default add-widget" href="#{{name}}" widget-name="{{name}}">Add</a>
-  													<a type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-    													<span class="caret"></span>
-    													<span class="sr-only">Toggle Dropdown</span>
-  													</a>
-  													<ul class="dropdown-menu" role="menu">
-    													<li><a class="btn btn-sm add_to_all" href="#{{name}}" widget-name="{{name}}">Add for all users</a></li>    									
-  													</ul>
-												</div>
+  												</div>
 												{{/if_equals}}
 												{{/if_equals}}
 											{{/if_equals}}
@@ -247,13 +268,6 @@
 									{{else}}	
 											<div class="btn-group">										
   												<a class="btn btn-sm btn-default add-widget" href="#{{name}}" widget-name="{{name}}">Add</a>
-  												<a type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-    												<span class="caret"></span>
-    												<span class="sr-only">Toggle Dropdown</span>
-  												</a>
-  												<ul class="dropdown-menu" role="menu">
-    												<li><a class="btn btn-sm add_to_all" href="#{{name}}" widget-name="{{name}}">Add for all users</a></li>    									
-  												</ul>
 											</div>
 												{{/if_equals}}
 											{{/if_equals}}
@@ -298,13 +312,6 @@
 									
 								<div class="btn-group">										
   									<a class="btn btn-sm btn-default _upgrade" id="{{#is_blank name}}{{getRandomNumber}}{{else}}{{this}}{{/is_blank}}-upgrade">Add</a>
-  									<a type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-    									<span class="caret"></span>
-    									<span class="sr-only">Toggle Dropdown</span>
-  									</a>
-  									<ul class="dropdown-menu" role="menu">    							
-										<li><a class="btn btn-sm _upgrade" id="{{#is_blank name}}{{getRandomNumber}}{{else}}{{this}}{{/is_blank}}-upgrade">Add for all users</a></li>    									
-  									</ul>
 								</div>
 								{{/if_equals}}
 							{{/if_equals}}
@@ -361,40 +368,9 @@
 			<div id="ecommerce" class="row"></div>
 		</div>
 		<div class="tab-pane" id="custom-widget-tab">
-
-			<div id="custom" class="row">
-				<div class="col-md-4" id="custom-widget" >
-					<div class="panel panel-default widget-add" style="min-height:220px;">
-					<div class="panel-heading">
-    					<center>
-    					<span style="font-size: 24px;width: 135px;height: 47px; text-align:center;vertical-align: middle;"><span style="margin-top:6px; display:inline-block; padding-bottom:7px;"><img class="img-responsive inline-block" style="margin-top:-4px; width:25px; height:25px; margin-right:2px;" src="{{getS3ImagePath '/widgets/custom-widget-logo-small.png'}}" />Custom Widget</span></span></center>
-    				</div>
-    				<div class="panel-body">
-    					<div class="text-flow-ellipsis line-clamp line-clamp-4 widget-text" style="height:85px"  rel="tooltip" title="You can now develop your own custom widget in javascript or any backend server language.">
-							You can now develop your own custom widget in javascript or any backend server language.
-						</div>
-    					 <div class="text-center">
-							{{#isAdmin}}											
-								<div class="btn-group" id="custom-widget-btn">
-  									<a type="button" class="btn btn-sm btn-default" id="add-custom-widget">Add custom widget</a>
-  									<a type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-    									<span class="caret"></span>
-    									<span class="sr-only">Toggle Dropdown</span>
-  									</a>
-  									<ul class="dropdown-menu" role="menu">
-    									<li><a class="btn btn-sm add_to_all" id="add-custom-widget">Add for all users</a></li>    									
-  									</ul>
-								</div>
-							{{else}}
-								<a class="btn btn-sm btn-default m-t-md" id="add-custom-widget">Add custom widget</a>
-							{{/isAdmin}}
-						</div>
-					</div>
-				</div>
-			</div>
+			<div id="custom" class="row"></div>
 		</div>
 	</div>
-</div>
 </script>
 
 
@@ -474,17 +450,14 @@
     					 <div class="text-center">
 							{{#isAdmin}}											
 								<div class="btn-group m-t-md" id="custom-widget-btn">
-  									<a type="button" class="btn btn-sm btn-default" id="add-custom-widget">Add custom widget</a>
-  									<a type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-    									<span class="caret"></span>
-    									<span class="sr-only">Toggle Dropdown</span>
-  									</a>
-  									<ul class="dropdown-menu" role="menu">
-    									<li><a class="btn btn-sm add_to_all" id="add-custom-widget">Add for all users</a></li>    									
-  									</ul>
+  									<a type="button" class="btn btn-sm btn-default" href="#Custom-widget">
+  										Add custom widget
+  									</a>  									
 								</div>
 							{{else}}
-								<a class="btn btn-sm btn-default m-t-md" id="add-custom-widget">Add custom widget</a>
+								<a class="btn btn-sm btn-default m-t-md" href="#Custom-widget">
+									Add custom widget
+								</a>
 							{{/isAdmin}}
 						</div>
 					</div>
@@ -514,11 +487,11 @@
 				</select></div></div>
 				<div class="control-group form-group"><div class="controls">
 					<span id="script_div">
-						<span class="help-block">Documentation for <a href="https://github.com/agilecrm/widget-api-html" target="_blank">widget JS API</a></span>
+						<span class="help-block"><b>Documentation for <a class="text-info" href="https://github.com/agilecrm/widget-api-html" target="_blank">widget JS API</a></b></span>
 						<textarea rows="4" class="required form-control" name="script" id="script" value="" placeholder="Paste your HTML source of widget. It may contain embedded script that make use of Agile widgets API"></textarea>
 					</span>
 					<span id="url_div" style="display:none;">
-						<span class="help-block">Documentation for <a href="https://github.com/agilecrm/widget-api-backend" target="_blank">widget backend API</a></span>
+						<span class="help-block"><b>Documentation for <a class="text-info" href="https://github.com/agilecrm/widget-api-backend" target="_blank">widget backend API</a></b></span>
 						<input type="url" id="url" class="input-medium required widget_input_box form-control"  placeholder="Webhook URL" value="" name="url"></input>
 					</span>
 				</div></div>
@@ -573,13 +546,13 @@
 					{{#if_equals name "Bria"}}
 						<center>
 							<span style="font-size: 24px;width: 113px;height: 50px; text-align:center;vertical-align: middle;"><span><img src="{{logo_url}}" style="width: 40px; height: 40px;margin-right: 4px;margin-top: 1px;">Bria</span></span>
-								<span class="label label-sm bg-danger" style="margin: 5px;">Beta</span>
+								<!-- <span class="label label-sm bg-danger" style="margin: 5px;">Beta</span> -->
 						</center>
 			     {{else}}
 					{{#if_equals name "Skype"}}
 							<center>
 								<span style="font-size: 24px;width: 135px;height: 50px; text-align:center;vertical-align: middle;"><span><img src="{{logo_url}}" style="width: 40px; height: 40px;margin-right: 4px;margin-top: 1px;">Skype</span></span>
-								<span class="label label-sm bg-danger" style="margin: 5px;">Beta</span>
+								<!-- <span class="label label-sm bg-danger" style="margin: 5px;">Beta</span> -->
 							</center>
 			        	{{else}}
 			        <center><img class="m-b-none img-responsive thumb-xl bg-transparent" style="height:47px;" src="{{logo_url}}" /></center>
@@ -589,7 +562,7 @@
 			{{/if_equals}}
 			</div> 
 			<div class="panel-body">
-				<div  id="widget-settings" widget-name="{{name}}">
+				<div  id="widget-settings" widget-name="{{name}}" widget-type="{{widget_type}}">
 				</div>
 			</div>
 			</div>
@@ -601,12 +574,10 @@
 <div>{{show_link_in_statement error_message}}</div>
 <a href="{{error_url}}" class"text-l-none" widget-name="{{name}}">Try again</a>
 </script>
+
 <script id="custom-widget-settings-template" type="text/html">
-<div class="panel panel-heading widget-edit">
-	<div class="panel-heading">
-		<h4 class="h4">Edit custom widget details</h4>
-	</div>
-<div class="panel-body">
+<div class="widget-edit">
+	<div class="panel-body">
 		<form class="b-b-none m-t-n-sm m-b-none" id="custom_widget_form" name="custom_widget_login_form" method="post">
 	    	<fieldset>
 				<input type="hidden" id="widget_type" class="input-medium required" style="width:90%" value="CUSTOM" name="widget_type"></input>
@@ -619,22 +590,188 @@
 				</select></div></div>
 				<div class="control-group m-b-none"><div class="controls">
 					<span id="script_div">
-						<span class="help-block">Documentation for <a href="https://github.com/agilecrm/widget-api-html" target="_blank">widget JS API</a></span>
+						<span class="help-block"><b>Documentation for <a class="text-info" href="https://github.com/agilecrm/widget-api-html" target="_blank">widget JS API</a></b></span>
 						<textarea rows="4" class="required" name="script" id="script" value={{script}} placeholder="Paste your HTML source of widget. It may contain embedded script that make use of Agile widgets API"></textarea>
 					</span>
 					<span id="url_div" style="display:none;">
-						<span class="help-block">Documentation for <a href="https://github.com/agilecrm/widget-api-backend" target="_blank">widget backend API</a></span>
+						<span class="help-block"><b>Documentation for <a class="text-info" href="https://github.com/agilecrm/widget-api-backend" target="_blank">widget backend API</a></b></span>
 						<input type="url" id="url" class="input-medium required widget_input_box form-control" style="width:90%;" placeholder="Webhook URL" value={{url}} name="url"></input>
 					</span>
 				</div></div>
 				<div class="control-group m-b-none"><div class="controls"><input type="url" id="logo_url" class="input-medium required widget_input_box" style="width:90%" placeholder="Logo URL" value={{logo_url}} name="logo_url"></input></div></div>
 				<div class="control-group m-b-none"><div class="controls"><input type="url" id="mini_logo_url" class="input-medium required widget_input_box" style="width:90%" placeholder="Mini logo URL" value={{mini_logo_url}} name="mini_logo_url"></input></div></div>
-				<div class="form-actions p-t p-r-md p-b-none p-l-md m-t m-b-none">
-               		<a id="save_custom_widget" type="submit" class="save btn btn-sm btn-primary">Save</a>
+				<div class="form-actions p-t p-r-md p-b-none p-l-md m-t m-b-none">               		
                		<a type="reset" id="cancel_custom_widget" class="btn btn-default btn-sm">Cancel</a>
+               		<a id="save_custom_widget" type="submit" class="save btn btn-sm btn-primary">Save</a>
              	</div>
 			 </fieldset>
 	    </form>
 	</div>
-	</div>
+</div>
+</script>
+
+<script id="custom-widget-edit-template" type="text/html">
+<form id="customwidget_login_form" name="customwidget_login_form" method="post">
+	<fieldset>		
+		<label><b>Enter your custom widget details</b></label>						
+		<input type="hidden" id="widget_type" class="input-medium required widget_input_box form-control" value="CUSTOM" name="widget_type"/>
+		<input type="hidden" id="name" class="input-medium required widget_input_box form-control" value="{{name}}" name="name"/>
+		{{#if id}}
+			<input type="hidden" id="id" class="input-medium required widget_input_box form-control"value="{{id}}" name="id"/>		
+			<div class="control-group form-group">
+				<div class="controls">
+					<input type="text" id="display_name" value="{{#if display_name}}{{display_name}}{{else}}{{name}}{{/if}}" class="input-medium required widget_input_box form-control" tabindex="1" maxlength="14" placeholder="Widget Name (Max length 14)" name="display_name">
+					</input>				
+				</div>
+			</div>
+			<div class="control-group form-group">
+				<div class="controls">								
+					<input type="text" id="description" value="{{description}}" class="input-medium required widget_input_box form-control" tabindex="2" maxlength="110" placeholder="Description (Max length 110)" name="description">
+					</input>
+				</div>
+			</div>
+			<div class="control-group form-group">
+				<div class="controls">								
+					<select name="script_type" id="script_type" tabindex="3" class="required form-control">
+						<option value="script" {{#if_equals script_type "script"}}selected{{/if_equals}}>HTML</option> 
+						<option value="url" {{#if_equals script_type "url"}}selected{{/if_equals}}>URL</option> 
+					</select>
+				</div>
+			</div>
+			<div class="control-group form-group">
+				<div class="controls">
+					<span id="script_div" {{#if_equals script_type "script"}}{{else}}style="display:none;"{{/if_equals}}>
+						<span class="help-block"><b>Documentation for <a class="text-info" href="https://github.com/agilecrm/widget-api-html" tabindex="4" target="_blank">widget JS API</b></a>
+						</span>
+						<textarea rows="4" class="required widget_input_box form-control" name="script" tabindex="5" id="script" placeholder="Paste your HTML source of widget. It may contain embedded script that make use of Agile widgets API">{{script}}</textarea>											
+					</span>					
+					<span id="url_div" {{#if_equals script_type "url"}}{{else}}style="display:none;"{{/if_equals}}>
+						<span class="help-block"><b>Documentation for <a class="text-info" tabindex="4" href="https://github.com/agilecrm/widget-api-backend" target="_blank">widget backend API</a></b>
+						</span>
+						<input type="url" id="url" value="{{url}}" tabindex="5" class="input-medium required widget_input_box form-control" placeholder="Webhook URL" name="url"/>					
+					</span>
+				</div>
+			</div>	
+			<div class="control-group form-group">
+				<div class="controls">
+					<input type="url" id="logo_url" value="{{logo_url}}" tabindex="6" class="input-medium required widget_input_box form-control" placeholder="Logo URL" name="logo_url">
+					</input>
+				</div>
+			</div>
+			<div class="control-group form-group">
+				<div class="controls">
+					<input type="url" id="mini_logo_url" value="{{mini_logo_url}}"  tabindex="7" class="input-medium required widget_input_box form-control" placeholder="Mini logo URL" name="mini_logo_url">
+					</input>
+				</div>
+			</div>
+		  {{else}}
+				<div class="control-group form-group">
+					<div class="controls">
+						<input type="text" id="name" tabindex="1" class="input-medium required widget_input_box form-control" maxlength="14"placeholder="Widget Name (Max length 14)" name="name">
+						</input>				
+					</div>
+				</div>
+				<div class="control-group form-group">
+					<div class="controls">								
+						<input type="text" id="description" tabindex="2" class="input-medium required widget_input_box form-control" maxlength="110" placeholder="Description (Max length 110)" name="description">
+						</input>
+					</div>
+				</div>
+				<div class="control-group form-group">
+					<div class="controls">								
+						<select name="script_type" id="script_type" tabindex="3" class="required form-control">
+							<option value="script">HTML</option> 
+							<option value="url">URL</option> 
+						</select>
+					</div>
+				</div>
+				<div class="control-group form-group">
+					<div class="controls">
+						<span id="script_div">
+							<span class="help-block"><b>Documentation for <a class="text-info" href="https://github.com/agilecrm/widget-api-html" tabindex="4" target="_blank">widget JS API</a></b>
+							</span>
+							<textarea rows="4" tabindex="5" class="required widget_input_box form-control" name="script" id="script" placeholder="Paste your HTML source of widget. It may contain embedded script that make use of Agile widgets API"/>					
+						</span>
+						<span id="url_div" style="display:none;">
+							<span class="help-block"><b>Documentation for <a class="text-info" href="https://github.com/agilecrm/widget-api-backend" tabindex="4" target="_blank">widget backend API</a></b>
+							</span>
+							<input type="url" id="url" tabindex="5" class="input-medium required widget_input_box form-control" placeholder="Webhook URL" name="url">
+							</input>
+						</span>
+					</div>
+				</div>	
+				<div class="control-group form-group">
+					<div class="controls">
+						<input type="url" id="logo_url" tabindex="6" class="input-medium required widget_input_box form-control" placeholder="Logo URL" name="logo_url">
+						</input>
+					</div>
+				</div>
+				<div class="control-group form-group">
+					<div class="controls">
+						<input type="url" id="mini_logo_url" tabindex="7" class="input-medium required widget_input_box form-control" placeholder="Mini logo URL" name="mini_logo_url">
+						</input>
+					</div>
+				</div>
+		{{/if}}
+		<div class="text-center">						
+            <a type="reset" id="cancel_custom_widget" tabindex="8" class="btn btn-default btn-sm">Cancel</a>
+            <a id="save_custom_widget" type="submit" tabindex="9" class="save btn btn-sm btn-primary">Save</a>
+		</div>
+	</fieldset>
+</form>
+</script>
+
+<script  id="widget-acls-modal-content-template" type="text/html">
+ <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">{{this.widget.display_name}}</h4>
+      </div>
+      <div class="modal-body p-l p-t-xs p-b-xs">
+		  <span style="width:5%;">
+		  	<label class="i-checks i-checks-sm m-b-none">
+		    	<input type="checkbox" class="agileUserChk_all" value=""><i></i>
+		    </label>
+		  </span>
+		  <span>All Users</span>
+	  </div>
+      <div class="modal-body overflow-auto p-xs" style="max-height: 500px;">
+        	{{#if this.data.length}}
+        	<div class="row p-none m-none">
+        		{{#each this.data}}
+    				<div class="col-md-6 p-none">	    	
+    					<div class="b p-sm m-sm">			
+	    					<div class="checkbox pull-left">
+				              <label class="i-checks">
+				               {{#if isChecked}}
+				                <input type="checkbox" class="agileUserChk" name="agileUserChk" value="{{id}}" checked>
+				               {{else}}
+				               	<input type="checkbox" class="agileUserChk" name="agileUserChk" value="{{id}}">
+				               {{/if}}
+				                <i></i>				           
+				              </label>
+		            		</div>
+		    				<div class="m-r-xs agile-img">					
+								<img class="img-inital r r-2x" height="42" width="42" src="{{domainUser.ownerPic}}" title="{{domainUser.name}}">					   
+							</div>
+							<div class="text-ellipsis">
+								<a class="m-r-sm custom-link text-ellipsis">{{domainUser.name}}</a><br>
+								<div class="text-xs">{{domainUser.email}}</div>
+								 <div class="text-xs">{{epochToHumanDateInFormat domainUser.createdTime}}</div>		
+							</div>
+							<div class="clear-fix"></div>
+						</div>
+					</div>            		
+        		{{/each}}
+        	</div>
+        	{{/if}}
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+        <button type="button" class="widget_acl_save btn btn-primary" widget-id="{{this.widget.id}}">Save</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
 </script>

@@ -15,6 +15,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.json.JSONArray;
 
+import com.agilecrm.AgileGlobalProperties;
 import com.agilecrm.AllDomainStats;
 import com.agilecrm.ContactSchemaUpdateStats;
 import com.agilecrm.OpportunitySchemaUpdateStats;
@@ -52,6 +53,7 @@ import com.agilecrm.knowledgebase.entity.Article;
 import com.agilecrm.knowledgebase.entity.Categorie;
 import com.agilecrm.knowledgebase.entity.Comment;
 import com.agilecrm.knowledgebase.entity.HelpcenterUser;
+import com.agilecrm.knowledgebase.entity.LandingPageKnowledgebase;
 import com.agilecrm.knowledgebase.entity.Section;
 import com.agilecrm.ipaccess.IpAccess;
 import com.agilecrm.landingpages.LandingPage;
@@ -60,6 +62,7 @@ import com.agilecrm.portlets.Portlet;
 import com.agilecrm.reports.ActivityReports;
 import com.agilecrm.reports.Reports;
 import com.agilecrm.shopify.ShopifyApp;
+import com.agilecrm.ssologin.SingleSignOn;
 import com.agilecrm.subscription.Subscription;
 import com.agilecrm.subscription.restrictions.db.BillingRestriction;
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
@@ -282,6 +285,7 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	ObjectifyService.register(Article.class);
 	ObjectifyService.register(Comment.class);
 	ObjectifyService.register(HelpcenterUser.class);
+	ObjectifyService.register(LandingPageKnowledgebase.class);
 
 	ObjectifyService.register(IpAccess.class);
     /**
@@ -290,6 +294,12 @@ public class ObjectifyGenericDao<T> extends DAOBase
      *  the maximum 25 tweet message in a day 
      * */
 	ObjectifyService.register(DomainLimits.class);
+	
+	//SSO feature
+	ObjectifyService.register(SingleSignOn.class);
+	
+	// AgileGlobalProperties
+	ObjectifyService.register(AgileGlobalProperties.class);
 
     }
 
@@ -475,6 +485,11 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	Key<T> key = new Key<T>(this.clazz, id);
 	return get(key);
     }
+    
+    public T get() throws EntityNotFoundException
+    {
+    	return ofy().query(this.clazz).get();
+    }
 
     /**
      * Fetches an entity based on its Key
@@ -512,9 +527,11 @@ public class ObjectifyGenericDao<T> extends DAOBase
     public T getByProperty(Map<String, Object> map)
     {
 	Query<T> q = ofy().query(clazz);
-	for (String propName : map.keySet())
-	{
-	    q.filter(propName, map.get(propName));
+	if(map != null){
+		for (String propName : map.keySet())
+		{
+		    q.filter(propName, map.get(propName));
+		}
 	}
 
 	return fetch(q);
@@ -770,40 +787,6 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	    // Add to list
 	    results.add(result);
 
-	    // Send totalCount if first time
-	    if (cursor == null && index == 0)
-	    {
-		// First time query - let's get the count
-		if (result instanceof com.agilecrm.cursor.Cursor)
-		{
-
-		    String className = this.clazz.getSimpleName().toLowerCase();
-
-		    com.agilecrm.cursor.Cursor agileCursor = (com.agilecrm.cursor.Cursor) result;
-		    Object object = forceLoad ? null : CacheUtil.getCache(this.clazz.getSimpleName() + "_"
-			    + NamespaceManager.get() + "_count");
-
-		    if (object != null)
-		    {
-			if (!Arrays.asList(countRestrictedClassNames).contains(className))
-			    agileCursor.count = (Integer) object;
-		    }
-
-		    else
-		    {
-			long startTime = System.currentTimeMillis();
-			if (!Arrays.asList(countRestrictedClassNames).contains(className))
-			    agileCursor.count = query.count();
-
-			long endTime = System.currentTimeMillis();
-			if ((endTime - startTime) > 15 * 1000 && cache)
-			    CacheUtil.setCache(this.clazz.getSimpleName() + "_" + NamespaceManager.get() + "_count",
-				    agileCursor.count, 1 * 60 * 60 * 1000);
-		    }
-		    
-		}
-	    }
-
 	    // Check if we have reached the limit
 	    if (++index == max)
 	    {
@@ -835,6 +818,46 @@ public class ObjectifyGenericDao<T> extends DAOBase
 		break;
 	    }
 	}
+	// Add count for the first time if next cursor is null
+	if(results != null && results.size() > 0 && cursor == null)
+	{
+		
+		T result = results.get(0);
+		// Send totalCount if first time
+	    if (result != null)
+	    {
+		// First time query - let's get the count
+		if (result instanceof com.agilecrm.cursor.Cursor)
+		{
+
+		    String className = this.clazz.getSimpleName().toLowerCase();
+
+		    com.agilecrm.cursor.Cursor agileCursor = (com.agilecrm.cursor.Cursor) result;
+		    Object object = forceLoad ? null : CacheUtil.getCache(this.clazz.getSimpleName() + "_"
+			    + NamespaceManager.get() + "_count");
+
+		    if (object != null)
+		    {
+			if (!Arrays.asList(countRestrictedClassNames).contains(className))
+			    agileCursor.count = (Integer) object;
+		    }
+
+		    else
+		    {
+			long startTime = System.currentTimeMillis();
+			if (!Arrays.asList(countRestrictedClassNames).contains(className))
+			    agileCursor.count = (newCursor == null ? results.size() : query.count());
+
+			long endTime = System.currentTimeMillis();
+			if ((endTime - startTime) > 15 * 1000 && cache)
+			    CacheUtil.setCache(this.clazz.getSimpleName() + "_" + NamespaceManager.get() + "_count",
+				    agileCursor.count, 1 * 60 * 60 * 1000);
+		    }
+		    
+		}
+	    }
+	}
+	
 	return results;
     }
     

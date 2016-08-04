@@ -36,7 +36,9 @@
     <div class="col-md-12">
        
             
-            <h3 id="search-query-heading" class="m-n font-thin h3 pull-left">Search results for "{{query}}"</h3>
+            <div id="search-query-heading" style="font-size:19px;"class="m-n font-thin h3 pull-left">Search results for 
+            <span style="font-weight:600;">"{{query}}"</span>
+            </div>
             <div class="pull-right">
             <div class="btn-group" id="view-list">
             </div>
@@ -67,15 +69,15 @@
                     </ul>
                 </div>
                 <div class="table-responsive">
-                <table id="contacts_search" class="table table-striped showCheckboxes panel agile-table onlySorting  
+                <table id="contacts_search" class="table table-striped panel agile-table onlySorting  
                 table-layout-mob-view m-b-none" url="core/api/bulk/update?action_type=DELETE" style="table-layout:auto;">
                     <thead>
                         <tr>
-							<th></th>
-                            <th style="width:35%">Name</th>
-                            <th style="width:20%">Work</th>
-                            <th style="width:35%">Tags</th>
-                            <th style="width:10%">Lead Score</th>
+							<th style="width:2%"></th>
+                            <th style="width:25%">Name</th>
+                            <th style="width:25%">Work</th>
+                            <th style="width:30%">Tags</th>
+                            <th style="width:25%">Lead Score</th>
                         </tr>
                     </thead>
                     <tbody id="search-model-list" class="model-list-cursor" route="contact/">
@@ -84,6 +86,7 @@
                 </div>
             </div>
         </div>
+        <div><a href="#" class="searchFetchNext pull-right text-info p-r-sm">More..</a></div>
         {{/if}}
     </div>
    

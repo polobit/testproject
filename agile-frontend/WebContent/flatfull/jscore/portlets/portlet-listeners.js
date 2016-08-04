@@ -316,12 +316,27 @@ function initializePortletsListeners() {
 				});
 
 			});
-
+	$("#chrome-extensions").popover({ 
+   					placement : $(this).attr("data-placement"),
+					html:true,
+					container: 'body',
+					content: function() {
+      return getTemplate("extensions-download-model");
+    }
+				});
 	$('.modal-body').off("click").on('click', '#category-select-all',
 			function(e) {
 				e.preventDefault();
 				$('#category-list').multiSelect('select_all');
 			});
+	$("#chrome-extension").popover({ 
+   					placement : $(this).attr("data-placement"),
+					html:true,
+					container: 'body',content: function() {
+      return $(getTemplate("extensions-download-model")).html();
+    }
+				});
+
 
 	$('.modal-content').off("click").on('click', '#category-select-none',
 			function(e) {
@@ -945,6 +960,10 @@ $('.portlet_body')
 
 		var dashboard_name = _agile_get_prefs("dashboard_"+CURRENT_DOMAIN_USER.id);
 	    var id = $(this).attr("id");
+	    
+	    // Add this in a seperate storage value
+	    _agile_set_prefs("selected_dashboard_"+CURRENT_DOMAIN_USER.id, id);
+
 	    $('.user-defined-dashboard').parent().removeClass("active");
 	    $(this).parent().addClass("active");
 	    if(id != $('#dashboard-name').attr("data-value")){

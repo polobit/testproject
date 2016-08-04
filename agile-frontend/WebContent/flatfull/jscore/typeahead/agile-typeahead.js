@@ -43,7 +43,7 @@ var TYPEHEAD_DEAL_RELATED_CONTACTS = {};
  * @author Yaswanth
  * 
  */
-function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, url, isEmailSearch, isDealSearch, appendNameToEmail, page_size)
+function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, url, isEmailSearch, isDealSearch, appendNameToEmail, page_size, urlParamsCallback)
 {
 	// Turn off browser default auto complete
 	$('#' + id, el).attr("autocomplete", "off");
@@ -80,6 +80,10 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
 							// Get data on query
 
 							var type_url = "";
+
+							if(urlParamsCallback){
+								urlParams = urlParamsCallback();
+							}
 
 							if (urlParams && urlParams.length)
 								type_url = '&' + urlParams;

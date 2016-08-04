@@ -16,6 +16,10 @@ $(function()
 	{
 		return getPropertyValue(items, name);
 	});
+	Handlebars.registerHelper('getSystemPropertyValue', function(items, name)
+	{
+		return getSystemPropertyValue(items, name);
+	});
 
 	Handlebars.registerHelper('stripeCreditConvertion', function(amount)
 	{
@@ -2762,31 +2766,29 @@ $(function()
 		{
 			type = "label-danger text-tiny";
 			reputation = "Poor";
-			badge="red;";
+			badge="progress-bar-danger";
 		}
 		else if (value >= 40 && value < 75)
 		{
 			type = "label-warning text-tiny";
 			reputation = "Ok";
-			badge="yellow";
+			badge="progress-bar-warning";
 		}
 		else if (value >= 75 && value < 90)
 		{
 			type = "label-primary text-tiny";
 			reputation = "Good";
-			badge="blue";
+			badge="progress-bar-info";
 		}
 		else if (value >= 90)
 		{
 			type = "label-success text-tiny";
 			reputation = "Excellent";
-			badge="green"
+			badge="progress-bar-success"
 		}
-
-		return "<span style='font-weight: bold;font-size: 12px;position: relative;' class='label " + type
-
-		+ "'>" + reputation + " <span style='margin: 0px -2px 0px 5px; padding:1px 5px 1px 5px ; background-color:white; color:"+ badge +"' class='badge " 
-		+ type + "'>" + value + " %</span> </span>";
+		var data = {'type':type, 'reputation':reputation, 'value':value,'badge':badge};
+		var html = getTemplate("reputation-progress", data);
+		return html;
 
 	});
 
@@ -2805,6 +2807,16 @@ $(function()
 	Handlebars.registerHelper('isAdmin',function(options)
 	{
 		if(CURRENT_DOMAIN_USER.is_admin){
+			return options.fn(this);
+		}else{
+			return options.inverse(this);
+		}
+		 
+	});
+
+	Handlebars.registerHelper('isNewVersionDomainUser',function(options)
+	{
+		if(CURRENT_DOMAIN_USER.version){
 			return options.fn(this);
 		}else{
 			return options.inverse(this);
@@ -2933,6 +2945,17 @@ $(function()
 	Handlebars.registerHelper("hasRestrictedMenuScope", function(scope_constant, options)
 	{
 		if (CURRENT_DOMAIN_USER.restricted_scopes && $.inArray(scope_constant, CURRENT_DOMAIN_USER.restricted_scopes) != -1){
+			return options.fn(this);
+		}
+		return options.inverse(this);
+	});
+
+	/**
+	 * Helps to check the restricted permissions of the user based on the ACL.
+	 */
+	Handlebars.registerHelper("isRestrictedMenuScope", function(scope_constant, options)
+	{
+		if (CURRENT_DOMAIN_USER.restricted_menu_scopes && $.inArray(scope_constant, CURRENT_DOMAIN_USER.restricted_menu_scopes) != -1){
 			return options.fn(this);
 		}
 		return options.inverse(this);
@@ -5883,7 +5906,7 @@ $(function()
 		case "no interest":
 		case "incorrect referral":
 		case "meeting scheduled":
-		case "new oppurtunity":
+		case "new opportunity":
 			return "Call duration";
 			break;
 		case "busy":
@@ -7408,6 +7431,17 @@ Handlebars.registerHelper('convert_toISOString', function(dateInepoch, options) 
 		else
 			return options.fn(this);
 	});
+
+	Handlebars.registerHelper('check_plan_interval', function(interval, options)
+	{
+		var plan = USER_BILLING_PREFS.plan.plan_type;
+		var type = plan.split("_");
+		if(!type[1] || !interval)
+			return options.inverse(this);
+		if(type[1] == interval.toUpperCase())
+			return options.fn(this);
+		return options.inverse(this);
+	});
 	
 	Handlebars.registerHelper("check_admin_ip", function(options)
 	{
@@ -7512,6 +7546,19 @@ Handlebars.registerHelper('getSuggestionName', function(suggestionId){
 		}		
 });
 
+Handlebars.registerHelper('stringifyObject', function(data){
+	var obj ={};
+	obj.id = data.id;
+	obj.name = data.name;
+	if(data.display_name){
+		obj.display_name = data.display_name;
+	}else{
+		obj.display_name = data.name;
+	}
+	obj.listOfUsers = data.listOfUsers;
+	return JSON.stringify(obj);
+});
+
 Handlebars.registerHelper('removeSpecialCharacter',function(value){
           var value = value.replace(/[^\w\s]/gi, '-');
           return value;
@@ -7605,4 +7652,27 @@ Handlebars.registerHelper('if_equals_lowerCase', function(value, target, options
 		return options.fn(this);
 	else
 		return options.inverse(this);
+});
+
+Handlebars.registerHelper('if_equals_sork_key', function(value, target, options)
+{
+
+	if(value && value.lastIndexOf("-", 0) === 0)
+
+		value = value.substr(1);
+
+	if(value && target && target == value)
+		return options.fn(this);
+	else
+		return options.inverse(this); 
+});
+
+Handlebars.registerHelper('if_asc_sork_key', function(value, options)
+{
+
+	if(value && value.lastIndexOf("-", 0) === 0)
+
+		return options.inverse(this);
+	else
+		return options.fn(this); 
 });

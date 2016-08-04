@@ -430,6 +430,20 @@ function getPropertyValue(items, name)
 		}
 		}
 }
+function getSystemPropertyValue(items, name)
+{
+	if (items == undefined)
+		return;
+
+	for (var i = 0, l = items.length; i < l; i++)
+	{
+		if (items[i].name == name && items[i].type == "SYSTEM"){
+			if(items[i].value!=null)
+			 items[i].value=items[i].value.trim();
+			return items[i].value;
+		}
+		}
+}
 
 
 /**
@@ -563,6 +577,18 @@ function getProperty(items, name)
 	for (var i = 0, l = items.length; i < l; i++)
 	{
 		if (items[i].name == name)
+			return items[i];
+	}
+}
+
+function getCustomProperty(items, name)
+{
+	if (items == undefined)
+		return;
+
+	for (var i = 0, l = items.length; i < l; i++)
+	{
+		if (items[i].name == name && items[i].type == "CUSTOM" )
 			return items[i];
 	}
 }

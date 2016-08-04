@@ -37,7 +37,7 @@ function fill_company_related_contacts(companyId, htmlId, context_el)
 	if(context_el)
 		$('#' + htmlId, $(context_el)).html(companyContactsView.render().el);
 	else
-		$('#' + htmlId).html(companyContactsView.render().el);
+		$('#' + htmlId,App_Companies.companyDetailView.el).html(companyContactsView.render().el);
 }
 
 var Contact_Details_Tab_Actions = {
@@ -335,7 +335,7 @@ function activate_company_contact_tab()
 	$('#contactDetailsTab li:first-child').addClass('active');
 
 	$('div.tab-content').find('div.active').removeClass('active');
-	$('div.tab-content > div:first-child').addClass('active');
+	$('div.tab-content > div:first-child',App_Companies.companyDetailView.el).addClass('active');
 
 	// $('#time-line').addClass('active'); //old original code for flicking
 	// timeline

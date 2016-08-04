@@ -161,7 +161,7 @@
 
                     <div class="text-center row">
                      <div class="display-center p-b">
-                            <div class="col-md-4">
+                      <div class="col-md-4 {{#check_plan_interval 'MONTHLY'}}{{else}}col-md-offset-2{{/check_plan_interval}}">
                       <div id="account_cancel_chat" class="wrapper">
                               <div class="bg-box m-r m-l" style="background-color: #50c7a7;">
                                 <i class="fa fa-comment-o pos-rlt pos-t-xs"></i>
@@ -179,7 +179,7 @@
                               <div class="text-xs p-b-xs p-l-sm p-r-sm text-muted">Schedule a slot & one of our product experts will call you for assistance.</div>
                               <a href="http://supportcal.agilecrm.com" target="_blank" id="account_cancel_support_btn" class="btn btn-md btn-default p-t-sm w-xx-half">Schedule</a>
                             </div></div>
-                    <div class="col-md-4">
+                    <div class="col-md-4 {{#check_plan_interval 'MONTHLY'}}{{else}}hide{{/check_plan_interval}}">
                       <div id="account_pause" class="wrapper">
                               <div class="bg-box m-r m-l" style="background-color: #f76c51;">
                                 <i class="icon-rocket pos-rlt pos-t"></i>

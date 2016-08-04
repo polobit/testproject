@@ -38,8 +38,13 @@
 											class="fa fa-file-text"></i> Add Note</a></li>
 									<li><a href='#' class="contact-add-task"><i
 											class="icon-tasks"></i> Add Task</a></li>
+									{{#isRestrictedMenuScope "CASES"}} {{else}}
+									{{#isNewVersionDomainUser}} {{else}}
 									<li><a href='#' class="contact-add-case"><i
 											class="icon-folder" style="margin-right:2px"></i> Add Case</a></li>
+									{{/isNewVersionDomainUser}}
+									{{/isRestrictedMenuScope}}
+
 									{{#hasMenuScope 'DEALS'}}
 									<li><a href='#' class="contact-add-deal"><i class="icon-money" style="margin-right:2px"></i>
 											Add Opportunity</a></li>
@@ -452,11 +457,16 @@
 								<ul class="dropdown-menu pull-right text-sm"  role="menu">
 <li> <a href="#company-edit"><i class="fa fa-edit" style="margin-right:2px"></i> Edit</a></li>
 <li class="divider"></li>
+									{{#isRestrictedMenuScope "CASES"}} {{else}}
+										{{#isNewVersionDomainUser}} {{else}}
 									<li><a href='#' class="contact-add-case"><i
 											class="icon-folder" style="margin-right:2px"></i> Add Case</a></li>
+										{{/isNewVersionDomainUser}}
+									{{/isRestrictedMenuScope}}
+
 									{{#hasMenuScope 'DEALS'}}
 									<li><a href='#' class="contact-add-deal"><i class="icon-money" style="margin-right:2px"></i>
-											Add Opportunity</a></li>
+											Add Deal</a></li>
 									{{/hasMenuScope}}
 									<li class='divider'></li>
 									<li><a href='#send-email{{#if_propertyName "email"}}/{{value}}{{/if_propertyName}}' id="contact-send-email"><i
@@ -829,7 +839,10 @@
 			<ul class="nav nav-tabs  bg-light" id="contactDetailsTab">
 				<li class="active"><a data-toggle="tab" href="#company-contacts">Contacts</a></li>
 				<li class=""><a data-toggle="tab" href="#company-deals">Deals</a></li>
+				{{#isNewVersionDomainUser}} {{else}}
 				<li class=""><a data-toggle="tab" href="#company-cases">Cases</a></li>
+				{{/isNewVersionDomainUser}}
+
                 <li class=""><a data-toggle="tab" href="#company-notes">Notes</a></li>
                 <li class=""><a data-toggle="tab" role="tab" href="#company-events">Events</a></li>
 				<li class=""><a data-toggle="tab" role="tab" href="#company-tasks">Tasks</a></li>
@@ -858,7 +871,7 @@
 	<!-- Contact Details -->
 	<div class="col bg-white hide">
 
-<div id="widgets"></div>
+<div id="widgets" style="max-width:250px"></div>
 						</div>
 					</div>
 </div>
