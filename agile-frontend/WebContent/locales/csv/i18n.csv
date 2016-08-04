@@ -5193,3 +5193,4 @@ domain-user.phone,Owner Phone,Propietario del teléfono
 contacts-view.added-call-log-to,Added call log to,Se añadió registro de llamadas a 
 contacts-view.added-note-to,Added note to ,Se agregó una nota a
 datasync.resync-info,Update will 'resync' your entire data to make it searchable. This may be needed in extreme scenarios. Eg: you made an existing custom field searchable.,Update 'sincronizar' sus datos completos para facilitar las búsquedas . Esto puede ser necesario en situaciones extremas . Por ejemplo : se hizo un campo personalizado existente búsquedas.
+validation-msgs.system-fields,Given name is a system field name. Please choose another name.,Nombre dado es un nombre de campo del sistema. Por favor&#44; elija otro nombre .

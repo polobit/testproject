@@ -296,9 +296,8 @@ function isValidForm(form) {
 
 		}
 		return true;
-	},"Given name is a system field name. Please choose another name.");
+	},"{{agile_lng_translate 'validation-msgs' 'system-fields'}}");
 
->>>>>>> 261090ac99c4e07888b06da10449b9b30367d056
     jQuery.validator.addMethod("tickets_group_name", function(value, element){
 
 		return /^[a-zA-Z0-9._]*$/.test(value);

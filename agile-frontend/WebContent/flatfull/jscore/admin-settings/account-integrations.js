@@ -230,6 +230,5 @@ function syncAppDatatoDeals(){
 			}, function()
 			{
 				return;
-			}, "Ok", "Cancel");
->>>>>>> 261090ac99c4e07888b06da10449b9b30367d056
+			}, _agile_get_translated_val('reputation','Ok'), _agile_get_translated_val('contact-details','cancel'));
 }

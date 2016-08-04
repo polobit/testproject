@@ -226,7 +226,7 @@ function set_up_widgets(el, widgets_el)
 					
 				}, undefined, 'true');
 			}else{
-				downloadTemplate(model.get('name').toLowerCase() + ".js", function()
+				downloadTemplate(model.get('name').toLowerCase() + ".js?_=" + _agile_get_file_hash(model.get('name').toLowerCase() + ".js"), function()
 				{
 					widget_template_loaded_map[model.get('name').toLowerCase()] = true;
 					queueGetRequest("_widgets_" + contact_id, url, "script", function(data, queueName){
