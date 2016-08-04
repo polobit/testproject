@@ -245,6 +245,20 @@
 		<url-pattern>/helpcenterapi/*</url-pattern>
 	</servlet-mapping>
 
+<servlet>
+		<servlet-name>Jersey Feedback REST Service</servlet-name>
+		<servlet-class>org.jboss.resteasy.plugins.server.servlet.HttpServletDispatcher</servlet-class>
+		<init-param>
+			<param-name>resteasy.servlet.mapping.prefix</param-name>
+			<param-value>/feedbackapi</param-value>
+		</init-param>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>Jersey Feedback REST Service</servlet-name>
+		<url-pattern>/feedbackapi/*</url-pattern>
+	</servlet-mapping>
+
 
 
 
@@ -1364,6 +1378,15 @@
 		<url-pattern>/knowledgebase/*</url-pattern>
 	</servlet-mapping>
 	<!-- End of HelpCenter -->
+	<servlet>
+		<servlet-name>FeedBack</servlet-name>
+		<jsp-file>/feedback.jsp</jsp-file>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>FeedBack</servlet-name>
+		<url-pattern>/feedback</url-pattern>
+	</servlet-mapping>
 	<servlet>
         <servlet-name>VoiceCallTwilioServlet</servlet-name>
         <servlet-class>com.thirdparty.twilio.VoiceCallTwilioServlet</servlet-class>

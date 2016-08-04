@@ -29,6 +29,7 @@ import com.itextpdf.text.Document;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.tool.xml.XMLWorkerHelper;
 import com.itextpdf.text.PageSize;
+
 /**
  * Servlet implementation class InvoicePdfServlet
  */
@@ -63,32 +64,32 @@ public class TicketsPdfServlet extends HttpServlet
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException,
 			IOException
 	{
-		
+
 		// TODO Auto-generated method stub
 		try
-		{			
+		{
 			JSONArray notesArray = new JSONArray();
-			
+
 			String ticket_id = request.getParameter("ticket_id");
-			
+
 			long ticketId = Long.parseLong(ticket_id);
-			
+
 			Tickets ticket = TicketsUtil.getTicketByID(ticketId);
 			System.out.println(ticket);
-			
+
 			JSONObject json = new JSONObject();
-			
+
 			TicketGroups group = TicketGroupUtil.getTicketGroupById(ticket.groupID);
-			
+
 			List<TicketNotes> notesList = TicketNotesUtil.getTicketNotes(ticketId, "-created_time");
-			
+
 			String groupName = group.group_name;
-			
+
 			String agentName = DomainUserUtil.getDomainUser(ticket.assigneeID).name;
 
 			if (StringUtils.isBlank(agentName))
 				agentName = "";
-			
+
 			json.put("subject", ticket.subject);
 			json.put("status", ticket.status.toString().toLowerCase());
 			json.put("type", ticket.type.toString().toLowerCase());
@@ -105,56 +106,57 @@ public class TicketsPdfServlet extends HttpServlet
 
 			if (companyName != null)
 				json.put("company_name", companyName);
-			
+
 			for (TicketNotes notes : notesList)
-				
+
 			{
 				if (notes.note_type == NOTE_TYPE.PRIVATE)
 					continue;
 
-				JSONObject eachNoteJSON = TicketNotesUtil.getFormattedEmailNoteJSON(notes, ContactUtil.getContact(ticket.contact_key.getId()));
+				int i = 1;
+				JSONObject eachNoteJSON = TicketNotesUtil.getFormattedEmailNoteJSON(notes,
+						ContactUtil.getContact(ticket.contact_key.getId()),i);
 
 				if (eachNoteJSON != null)
 					notesArray.put(eachNoteJSON);
 			}
-			
+
 			json.put("note_json_array", notesArray);
-			
-			
+
 			String htmlText = "";
-             // Add all notes
-		   
-//		    for (TicketNotes notes : notesList)
-//			{  
-//			htmlText = htmlText.concat(notes.html_text);
-//			}
-//			System.out.println("htmlText "+htmlText);
-//			
-			
-			String ticketTemplate = MustacheUtil.templatize("ticket_pdf_download_html.html",json);
-			System.out.println("json "+json);			
+			// Add all notes
+
+			// for (TicketNotes notes : notesList)
+			// {
+			// htmlText = htmlText.concat(notes.html_text);
+			// }
+			// System.out.println("htmlText "+htmlText);
+			//
+
+			String ticketTemplate = MustacheUtil.templatize("ticket_pdf_download_html.html", json);
+			System.out.println("json " + json);
 			response.setContentType("application/pdf");
-			response.setHeader("Content-Disposition","attachment; filename=TicketDetails.pdf");
-			
+			response.setHeader("Content-Disposition", "attachment; filename=TicketDetails.pdf");
+
 			Document document = new Document();
 			PdfWriter writer = PdfWriter.getInstance(document, response.getOutputStream());
-			
+
 			document.open();
 			document.setPageSize(PageSize.A4);
-			
+
 			InputStream is = new ByteArrayInputStream(ticketTemplate.getBytes());
 			XMLWorkerHelper.getInstance().parseXHtml(writer, document, is);
 
 			document.close();
 		}
-		
+
 		catch (Exception e)
 		{
 			// TODO Auto-generated catch block
 			System.out.println(ExceptionUtils.getMessage(e));
 			e.printStackTrace();
 		}
-	
+
 	}
-	
+
 }

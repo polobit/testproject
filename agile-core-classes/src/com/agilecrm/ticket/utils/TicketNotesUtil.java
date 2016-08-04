@@ -99,6 +99,20 @@ public class TicketNotesUtil
 		// return inclDomainUsers(notes);
 		return notes;
 	}
+	/**
+	 * 
+	 * @param noteID,feedback
+	 * @return
+	 * @throws EntityNotFoundException 
+	 */
+	public static void savefeedback(Long noteId,String feedback) throws EntityNotFoundException
+	{
+		TicketNotes dbnote = TicketNotes.ticketNotesDao.get(noteId);
+		 
+		dbnote.feed_back = feedback;
+		TicketNotes.ticketNotesDao.put(dbnote);
+		
+ 	}
 
 	// /**
 	// *
@@ -202,7 +216,7 @@ public class TicketNotesUtil
 		 		
 		 		System.out.println(email_pan);		
 		 	
-
+	    int count =0; 		
 		JSONArray notesArray = new JSONArray();
 
 		// Add all notes
@@ -211,10 +225,11 @@ public class TicketNotesUtil
 			if (notes.note_type == NOTE_TYPE.PRIVATE)
 				continue;
 
-			JSONObject eachNoteJSON = getFormattedEmailNoteJSON(notes, contact);
+			JSONObject eachNoteJSON = getFormattedEmailNoteJSON(notes, contact,count );
 
 			if (eachNoteJSON != null)
 				notesArray.put(eachNoteJSON);
+				count++;
 		}
 
 		json.put("note_json_array", notesArray);
@@ -325,12 +340,20 @@ public class TicketNotesUtil
 	 * @return
 	 * @throws Exception
 	 */
-	public static JSONObject getFormattedEmailNoteJSON(TicketNotes notes, Contact contact) throws Exception
+	public static JSONObject getFormattedEmailNoteJSON(TicketNotes notes, Contact contact , int count) throws Exception
 	{
 		Map<Long, DomainUser> domainUsersMap = new HashMap<Long, DomainUser>();
 
+		String oldNamespace = NamespaceManager.get();
+		
 		JSONObject json = new JSONObject();
 
+		if(count == 0){
+		json.put("count", true);
+		json.put("namespace", oldNamespace);
+		json.put("note_id", notes.id);
+		json.put("contactid", contact.id);
+		}
 		json.put("created_time", DateUtil.getCalendarString(notes.created_time, "MMM d, h:mm a (z)", ""));
 
 		json.put("plain_text", notes.plain_text);

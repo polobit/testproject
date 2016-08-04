@@ -7,6 +7,7 @@ import java.util.List;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -18,6 +19,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 
 import com.agilecrm.contact.Contact;
+import com.agilecrm.knowledgebase.entity.Article;
 import com.agilecrm.ticket.entitys.TicketDocuments;
 import com.agilecrm.ticket.entitys.TicketGroups;
 import com.agilecrm.ticket.entitys.TicketNotes;
@@ -30,6 +32,7 @@ import com.agilecrm.ticket.utils.TicketNotesUtil;
 import com.agilecrm.ticket.utils.TicketsUtil;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
+import com.google.appengine.repackaged.com.google.gson.JsonObject;
 import com.googlecode.objectify.Key;
 
 /**
@@ -167,4 +170,42 @@ public class TicketNotesRest
 					.build());
 		}
 	}
+	/**
+	 * 
+	 * @param comment,noteid
+	 * @throws WebApplicationException
+	 */
+	@PUT
+	@Path("/feedback-comment/{id}")
+	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	public void addFeedbackComment(@PathParam("id") Long id ,String comment) throws WebApplicationException
+	{
+		try
+		{
+			System.out.println(comment);
+			String[] fbarray = comment.split("\\&", -1);
+			System.out.println(fbarray);
+		    String feed_back = fbarray[1].split("\\=",-1)[1];
+		    String feedback_comment = fbarray[2].split("\\=",-1)[1];
+			
+			if (id == null)
+				throw new Exception("Required params missing.");
+			
+			TicketNotes dbNotes = TicketNotes.ticketNotesDao.get(id);
+			dbNotes.feed_back = feed_back;
+			dbNotes.feedback_comment = feedback_comment;
+
+					TicketNotes.ticketNotesDao.put(dbNotes);
+					}
+		catch (Exception e)
+		{
+			System.out.println("exception occured while saving feedback comment");
+
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+					.build());
+		}
+
+	}
+
+	
 }

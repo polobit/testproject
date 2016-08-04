@@ -59,6 +59,8 @@ public class TicketNotes
 	@NotSaved
 	public Long group_id = null;
 
+	
+	public String feedback_comment = "";
 	/**
 	 * Stores user ID to whom ticket is assigned
 	 */
@@ -74,12 +76,19 @@ public class TicketNotes
 	{
 		AGENT, REQUESTER
 	};
+	
+	
 
 	/**
 	 * Stores last updated by text either agent or customer
 	 */
 	public CREATED_BY created_by = CREATED_BY.REQUESTER;
 
+	/**
+	 * Stores feed back for a note
+	 */
+	public String feed_back = "";
+	
 	/**
 	 * Stores name of customer who created ticket
 	 */
