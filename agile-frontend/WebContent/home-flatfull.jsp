@@ -552,7 +552,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
    <li id="segmentationmenu">
     <a  href="#visitors">
        <i class="icon-eye"></i>
-      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-visitors") %><</span> 
+      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-visitors") %></span> 
     </a>
   </li>
   <li id="landing-pages-menu">
