@@ -573,13 +573,13 @@ function registerClickEventsInTwitter(Twitter_id, twitter_connected, stream_data
 			 * On first click of see less, less attribute is made true and text
 			 * will be changed as see more button
 			 */
-			$(this).text(_agile_get_translated_val('socialsuite' 'show-less'));
+			$(this).text(_agile_get_translated_val('socialsuite','show-less'));
 			$('#twitter_refresh_stream').show();
 		}
 		else
 		{
 			$(this).attr("less", "true");
-			$(this).text(_agile_get_translated_val('socialsuite' 'show-more-dot'));
+			$(this).text(_agile_get_translated_val('socialsuite','show-more-dot'));
 			$('#twitter_current_activity').show();
 			$('#twitter_refresh_stream').hide();
 		}
@@ -1412,7 +1412,7 @@ function startTwitterWidget(contact_id){
     $("#"+WIDGET_PARENT_ID).off('mouseenter','#twitter_unfollow');
 	$("#"+WIDGET_PARENT_ID).on('mouseenter','#twitter_unfollow', function(e)
 	{
-		$('#twitter_unfollow').text(_agile_get_translated_val('socialsuite' 'unfollow'));
+		$('#twitter_unfollow').text(_agile_get_translated_val('socialsuite','unfollow'));
 		$('#twitter_unfollow').addClass("btn-danger");
 		$('#twitter_unfollow').removeClass("btn-primary");
 	});
@@ -1421,7 +1421,7 @@ function startTwitterWidget(contact_id){
     $("#"+WIDGET_PARENT_ID).off('mouseleave','#twitter_unfollow');
 	$("#"+WIDGET_PARENT_ID).on('mouseleave','#twitter_unfollow', function(e)
 	{
-		$('#twitter_unfollow').text(_agile_get_translated_val('socialsuite' 'following'));
+		$('#twitter_unfollow').text(_agile_get_translated_val('socialsuite','following'));
 		$('#twitter_unfollow').addClass("btn-primary");
 		$('#twitter_unfollow').removeClass("btn-danger");
 	});
