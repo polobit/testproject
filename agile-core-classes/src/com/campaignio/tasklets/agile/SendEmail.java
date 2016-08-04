@@ -531,7 +531,7 @@ public class SendEmail extends TaskletAdapter
 	// Check if day matches - otherwise return false
 	if (weekday == Calendar.FRIDAY)
 	{
-	    if (on.equalsIgnoreCase(ON_MON_FRI) || on.equalsIgnoreCase(ON_MON_SAT) || on.equalsIgnoreCase(ON_FRI))
+	    if (on.equalsIgnoreCase(ON_ANY_DAY) || on.equalsIgnoreCase(ON_MON_FRI) || on.equalsIgnoreCase(ON_MON_SAT) || on.equalsIgnoreCase(ON_FRI))
 		return true;
 	}
 
