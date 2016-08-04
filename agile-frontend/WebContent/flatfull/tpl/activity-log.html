@@ -95,6 +95,73 @@
 <div class="activity-tag p-l-xxl">
 <div class="custom-link">
 {{#if_equals "TASK" entity_type}}
+	{{#if_equals "BULK_ACTION" activity_type}}
+		{{#if_equals "BULK_TASK_CHANGE_OWNER" custom1}}
+			{{#if_equals "1" custom3}}
+				Changed owner for {{custom3}} Task 
+				<div class="activities_second_line m-t-none"><small>
+				<i class="icon-money icon-white"></i> Task assigned to {{custom2}}.
+				</small></div>
+			{{else}}
+				Changed owner for {{custom3}} Tasks 
+				<div class="activities_second_line m-t-none"><small>
+				<i class="icon-money icon-white"></i> Tasks assigned to {{custom2}}.
+				</small></div>
+			{{/if_equals}}
+		{{/if_equals}}
+		{{#if_equals "BULK_TASK_CHANGE_STATUS" custom1}}
+			{{#if_equals "1" custom3}}
+				Status changed for {{custom3}} Task 
+				<div class="activities_second_line m-t-none"><small>
+				<i class="icon-money icon-white"></i> Task status changed to '{{taskBulkStatus custom2}}'.
+				</small></div>
+			{{else}}
+				Status changed for {{custom3}} Tasks 
+				<div class="activities_second_line m-t-none"><small>
+				<i class="icon-money icon-white"></i> Tasks status changed to '{{taskBulkStatus custom2}}'.
+				</small></div>
+			{{/if_equals}}
+		{{/if_equals}}
+		{{#if_equals "BULK_TASK_CHANGE_PRIORITY" custom1}}
+			{{#if_equals "1" custom3}}
+				Priority changed for {{custom3}} Task 
+				<div class="activities_second_line m-t-none"><small>
+				<i class="icon-money icon-white"></i> Task priority changed to '{{taskBulkPriority custom2}}'.
+				</small></div>
+			{{else}}
+				Priority changed for {{custom3}} Tasks 
+				<div class="activities_second_line m-t-none"><small>
+				<i class="icon-money icon-white"></i> Tasks priority changed to '{{taskBulkPriority custom2}}'.
+				</small></div>
+			{{/if_equals}}
+		{{/if_equals}}
+		{{#if_equals "BULK_TASK_DELETE" custom1}}
+			{{#if_equals "1" custom3}}
+				Task Deleted
+				<div class="activities_second_line m-t-none"><small>
+				<i class="icon-money icon-white"></i>{{custom3}} Task deleted.
+				</small></div>
+			{{else}}
+				Tasks Deleted
+				<div class="activities_second_line m-t-none"><small>
+				<i class="icon-money icon-white"></i>{{custom3}} Tasks deleted.
+				</small></div>
+			{{/if_equals}}
+		{{/if_equals}}
+		{{#if_equals "BULK_TASK_CHANGE_DUEDATE" custom1}}
+			{{#if_equals "1" custom3}}
+				Due date changed for {{custom3}} Task
+				<div class="activities_second_line m-t-none"><small>
+				<i class="icon-money icon-white"></i> Task due date changed to {{epochToHumanDate "ddd mmm dd yyyy" custom2}}.
+				</small></div>
+			{{else}}
+				Due date changed for {{custom3}} Tasks
+				<div class="activities_second_line m-t-none"><small>
+				<i class="icon-money icon-white"></i>Tasks due date changed to {{epochToHumanDate "ddd mmm dd yyyy" custom2}}.
+				</small></div>
+			{{/if_equals}}
+		{{/if_equals}}
+	{{/if_equals}}
 {{#if_equals "TASK_ADD" activity_type}} 
 Created Task {{#if this.entityObject}}<a href="#task/{{entity_id}}">{{safe_string label}}</a>{{else}} '{{safe_string label}}'{{/if}} <br/>
 <div class="activities_second_line m-t-none"><small>
@@ -742,8 +809,7 @@ Changed owner for Contact {{#if this.entityObject}}<a href="#contact/{{entity_id
 
   {{#if_equals "NOTE_ADD" activity_type}}
 {{#if custom4}}
-Added call log to {{#if_equals "company_entity" this.entityObject.entity_type}} Company {{else}} Contact{{/if_equals}}  {{#if this.entityObject}}<a href="{{#if_equals "company_entity" this.entityObject.entity_type}} #company/{{entity_id}} 
-{{else}} #contact/{{entity_id}} {{/if_equals}}" data="{{entity_id}}" class="popover_contact">{{label}}</a>{{else}}'{{label}}'{{/if}} <br/>
+Added call log to Contact {{#if this.entityObject}}<a href="#contact/{{entity_id}}" data="{{entity_id}}" class="popover_contact">{{label}}</a>{{else}}'{{label}}'{{/if}} <br/>
 <small class="activities_second_line m-t-none text-sm">
  <i class="icon-pencil"></i>{{#unless this.entityObject}} Contact deleted later. {{/unless}} {{custom1}} {{#if custom2}}- {{custom2}}{{/if}}
 </small> <br/>
@@ -751,9 +817,7 @@ Added call log to {{#if_equals "company_entity" this.entityObject.entity_type}} 
  <i class="icon-pencil"></i>{{custom4}}
 </small>
 {{else}}
-Added note to {{#if_equals "company_entity" this.entityObject.entity_type}} Company {{else}} Contact{{/if_equals}} {{#if this.entityObject}}
-<a href="{{#if_equals "company_entity" this.entityObject.entity_type}} #company/{{entity_id}} 
-{{else}} #contact/{{entity_id}} {{/if_equals}}" data="{{entity_id}}" class="popover_contact">{{label}}</a>{{else}}'{{label}}'{{/if}} <br/>
+Added note to Contact {{#if this.entityObject}}<a href="#contact/{{entity_id}}" data="{{entity_id}}" class="popover_contact">{{label}}</a>{{else}}'{{label}}'{{/if}} <br/>
 <small class="activities_second_line m-t-none text-sm">
  <i class="icon-pencil"></i>{{#unless this.entityObject}} Contact deleted later. {{/unless}} {{custom1}} {{#if custom2}}- {{custom2}}{{/if}}
 </small>  

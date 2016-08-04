@@ -256,6 +256,7 @@ public class TaskBulkActionsAPI {
 			JSONObject json = new JSONObject(data);
 			JSONObject priority = json.getJSONObject("priority");
 			Long newDue = priority.getLong("due");
+			String activityData = priority.getString("due");
 			ArrayList<String> taskIdList = new ArrayList<String>();
 			List<Task> subList = new ArrayList<Task>();
 			com.google.appengine.labs.repackaged.org.json.JSONArray taskIdArray = null;
@@ -281,7 +282,7 @@ public class TaskBulkActionsAPI {
 				if (!subList.isEmpty()) {
 					Task.dao.putAll(subList);
 				}
-				ActivitySave.createBulkActionActivityForTasks(taskIdArray.length(), "BULK_TASK_CHANGE_DUEDATE", "", "tasks", "");
+				ActivitySave.createBulkActionActivityForTasks(taskIdArray.length(), "BULK_TASK_CHANGE_DUEDATE", activityData, "tasks", "");
 
 			} else {
 				boolean pending = json.getBoolean("pending");String criteria = null ;String type = null;
@@ -305,7 +306,7 @@ public class TaskBulkActionsAPI {
 				if (!subList.isEmpty()) {
 					Task.dao.putAll(subList);
 				}
-				ActivitySave.createBulkActionActivityForTasks(tasks.size(), "BULK_TASK_CHANGE_DUEDATE", "", "tasks", "");
+				ActivitySave.createBulkActionActivityForTasks(tasks.size(), "BULK_TASK_CHANGE_DUEDATE", activityData, "tasks", "");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -320,7 +321,7 @@ public class TaskBulkActionsAPI {
 	public List<Task> bulkTaskDelete(
 			@FormParam("data") String data) {
 		try {
-			String ownerId = null;
+			String ownerId = null;int taskLength = 0;
 			JSONObject json = new JSONObject(data);
 			ArrayList<String> taskIdList = new ArrayList<String>();
 			List<Task> subList = new ArrayList<Task>();
@@ -328,7 +329,8 @@ public class TaskBulkActionsAPI {
 			if(json.has("IdJson")&& !json.get("IdJson").equals(null) && !json.get("IdJson").equals("null") && json.get("IdJson") != "")		
 				taskIdArray = json.getJSONArray("IdJson");
 			if (taskIdArray != null) {
-				for (int i = 0; i < taskIdArray.length(); i++) {
+				taskLength = taskIdArray.length();
+				for (int i = 0; i < taskLength; i++) {
 					try {
 						Task task = null;
 						Long id = taskIdArray.getLong(i);
@@ -346,7 +348,7 @@ public class TaskBulkActionsAPI {
 				if (!subList.isEmpty()) {
 					Task.dao.deleteAll(subList);
 				}
-				ActivitySave.createBulkActionActivityForTasks(taskIdArray.length(), "BULK_TASK_DELETE", "", "tasks", "");
+				ActivitySave.createBulkActionActivityForTasks(taskLength, "BULK_TASK_DELETE", "", "tasks", "");
 			} else {
 				boolean pending = json.getBoolean("pending");String criteria = null ;String type = null;
 				if (json.has("ownerId") && !json.get("ownerId").equals(null) && !json.get("ownerId").equals("null") && json.get("ownerId") != "")
@@ -357,6 +359,7 @@ public class TaskBulkActionsAPI {
 					type = json.getString("type");
 				List<Task> tasks = TaskUtil.getTasksRelatedToOwnerOfType(
 						criteria, type, ownerId, pending, null, null);
+				taskLength = tasks.size();
 				for (Task task : tasks) {
 					subList.add(task);
 					if (subList.size() >= 100) {
@@ -367,7 +370,7 @@ public class TaskBulkActionsAPI {
 				if (!subList.isEmpty()) {
 					Task.dao.deleteAll(subList);
 				}
-				ActivitySave.createBulkActionActivityForTasks(tasks.size(), "BULK_TASK_DELETE", "", "tasks", "");
+				ActivitySave.createBulkActionActivityForTasks(taskLength, "BULK_TASK_DELETE", "", "tasks", "");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

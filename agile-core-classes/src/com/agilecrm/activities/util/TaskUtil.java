@@ -1018,12 +1018,13 @@ public class TaskUtil
 						taskList.add(task);
 					}
 				}
-				ActivitySave.createBulkActionActivityForTasks(taskList.size(), "BULK_TASK_CHANGE_DUEDATE", "", "tasks", "");
+				ActivitySave.createBulkActionActivityForTasks(taskList.size(), "BULK_TASK_CHANGE_DUEDATE", newProperty, "tasks", "");
 			}
 			else {
+				int taskcount  = taskIdList.size();
 				org.json.JSONArray taskId = new org.json.JSONArray(taskIdList);
 				Task.dao.deleteBulkByIds(taskId);
-				ActivitySave.createBulkActionActivityForTasks(taskList.size(), "BULK_TASK_DELETE", "", "tasks", "");
+				ActivitySave.createBulkActionActivityForTasks(taskcount, "BULK_TASK_DELETE", "", "tasks", "");
 			}
 			return taskList ;
 		} catch (Exception e) {
