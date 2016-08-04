@@ -302,7 +302,7 @@ function agile_user_associated() {
 	head.js(LIB_PATH + 'lib/bootstrap.min.js', LIB_PATH + 'jscore/md5.js', function() {
 		
 		set_html($('#agile_content'), 'search', Contacts_Json);
-		$('#agile_content').prepend('<span style="float:right;cursor:pointer;margin-top:14px;margin-right:2px;" id="delete-button"><i class="icon-trash" data-toggle="tooltip" title="Uninstall" style="font-size:1em;"></i></span>');
+		$('#agile_content').prepend('<span style="float:right;cursor:pointer;margin-top:11px;margin-right:2px;" id="delete-button"><i class="icon-trash" data-toggle="tooltip" title="Uninstall" style="font-size:1em;"></i></span>');
 		$('#delete-button').live('click',agile_delete_all_prefs);
 	});
 	
