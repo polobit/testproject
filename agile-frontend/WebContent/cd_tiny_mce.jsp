@@ -309,6 +309,19 @@ function initialize_tinymce_editor(){
 	$('#loading-msg').hide();
 	$('textarea#content').show();
 
+	var supported_lang = "en_US", menu_context_text = "Agile Contact Fields";
+	try{
+		supported_lang = window.opener.get_tinymce_supported_language();
+	}catch(e){}
+	if(!supported_lang)
+		supported_lang = "en_US";
+
+	try{
+		menu_context_text = window.opener._agile_get_translated_val('widgets', 'agile-contact-fields');
+	}catch(e){}
+	if(!menu_context_text)
+		menu_context_text = "Agile Contact Fields";
+
 	// Initialize tinymce
 	tinymce.init({
         mode: "textareas",
@@ -328,13 +341,13 @@ function initialize_tinymce_editor(){
 		convert_urls : false,
 		forced_root_block : false,
         extended_valid_elements : "*[*]",
-        language : window.opener.get_tinymce_supported_language(),
+        language : supported_lang,
         setup: function(editor) {
             
         	// Agile Merge Fields
             editor.addButton('merge_fields', {
                 type: 'menubutton',
-                text: window.opener._agile_get_translated_val('widgets', 'agile-contact-fields'),
+                text: menu_context_text,
                 icon: false,
                 menu: set_up_merge_fields(editor)
             });
