@@ -2,8 +2,8 @@
 * CSV auto converts the text to month
 */
 var _agile_month_short_names_localize = {
-	"es" : ["ene","feb","mar","abr","may","jun","jul","ago","sep","oct","nov","dic"],
-	"en" : ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],
+    "es" : ["ene","feb","mar","abr","may","jun","jul","ago","sep","oct","nov","dic"],
+    "en" : ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],
     "months-xs" : ["{{agile_lng_translate 'months-xs' 'Jan'}}", "{{agile_lng_translate 'months-xs' 'Feb'}}", "{{agile_lng_translate 'months-xs' 'March'}}", "{{agile_lng_translate 'months-xs' 'April'}}", "{{agile_lng_translate 'months-xs' 'May'}}", "{{agile_lng_translate 'months-xs' 'June'}}", "{{agile_lng_translate 'months-xs' 'July'}}", "{{agile_lng_translate 'months-xs' 'Aug'}}", "{{agile_lng_translate 'months-xs' 'Sept'}}", "{{agile_lng_translate 'months-xs' 'Oct'}}", "{{agile_lng_translate 'months-xs' 'Nov'}}", "{{agile_lng_translate 'months-xs' 'Dec'}}"],
 };
 
