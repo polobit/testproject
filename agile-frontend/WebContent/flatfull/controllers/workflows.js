@@ -899,7 +899,7 @@ var WorkflowsRouter = Backbone.Router
 						}
 
 						// Inbound of Outbound call
-						if (type == 'INBOUND_CALL' || type == 'OUTBOUND_CALL')
+						if (type == 'INBOUND_CALL' || type == 'OUTBOUND_CALL' || type == 'REPLY_SMS' )
 						{
 							populate_call_trigger_options($('form#addTriggerForm', el), currentTrigger.toJSON());
 						}

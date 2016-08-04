@@ -63,6 +63,7 @@
 										<optgroup label="Call">
 										<option value="INBOUND_CALL">Inbound Call</option>
 										<option value="OUTBOUND_CALL">Outbound Call</option>
+										<option value="REPLY_SMS">Reply sms</option>
 										<optgroup label="Ecommerce">
 										<option value="SHOPIFY_EVENT" id="shopify-event">Shopify Event</option>
 										<optgroup label="Form">
@@ -105,7 +106,7 @@
 						<!--Call Inbound and Outbound -->
 						<div class="control-group form-group" style="display: none;">
 							<div id="CALL">
-								<label class="control-label INBOUND_CALL OUTBOUND_CALL"></label>
+								<label class="control-label REPLY_SMS INBOUND_CALL OUTBOUND_CALL"></label>
 								<div class="controls col-sm-offset-4 col-sm-8">	
 									<select name="call_disposition" class="required form-control w-md">
 										<option value="" class="INBOUND_CALL OUTBOUND_CALL">Select call status</option>
@@ -122,6 +123,8 @@
 										<option value="meeting scheduled" class="INBOUND_CALL OUTBOUND_CALL">Meeting Scheduled</option>
 										<option value="new opportunity" class="INBOUND_CALL OUTBOUND_CALL">New Opportunity</option>
 										<option value="voicemail" class="OUTBOUND_CALL">Voicemail</option>
+										<option value="yes" class="REPLY_SMS">YES</option>
+										<option value="no" class="REPLY_SMS">NO</option>
 									</select>
 								</div>
 							</div>
@@ -815,6 +818,25 @@
                     <!-- Add button -->
                     <div>
                         <a class="btn btn-sm btn-default add-trigger" data = "OUTBOUND_CALL"  >Go</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6 col-xs-12">
+                <div class="panel wrapper text-center b-a">
+                    <!-- Icon and Title -->
+                    <div>
+                        <div>
+                            <i class="icon-call-in icon-3x"></i>
+                        </div>
+                        <b>Reply sms</b>
+                    </div>
+                    <br/>
+                    <div class="ellipsis-multiline m-b-md" rel="tooltip">
+                        Run a campaign on a contact when they reply to your Twilio number.
+                    </div>
+                    <!-- Add button -->
+                    <div>
+                        <a class="btn btn-sm btn-default add-trigger" data = "REPLY_SMS"  >Go</a>
                     </div>
                 </div>
             </div>

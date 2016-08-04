@@ -730,7 +730,7 @@ function initializeTriggerListEventListners(id,trigger_type)
 		}
 		
 		// Hide trigger milestones div for other trigger conditions.
-		if (type !== 'INBOUND_CALL' || type !== 'OUTBOUND_CALL'){
+		if (type !== 'INBOUND_CALL' || type !== 'OUTBOUND_CALL' || type !== 'REPLY_SMS'){
 			$('form#addTriggerForm').find('div#CALL').closest('div.control-group').css('display', 'none');
 		}
 			
@@ -796,7 +796,7 @@ function initializeTriggerListEventListners(id,trigger_type)
 			populate_owners_in_trigger($('form#addTriggerForm'), 'event-owner-id');
 		}
 		
-		if(type == 'INBOUND_CALL' || type == 'OUTBOUND_CALL')
+		if(type == 'INBOUND_CALL' || type == 'OUTBOUND_CALL' || type == 'REPLY_SMS')
 		{
 			populate_call_trigger_options($('form#addTriggerForm'));	
 		}
