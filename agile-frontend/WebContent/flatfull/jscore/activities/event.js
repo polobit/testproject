@@ -540,7 +540,40 @@ $(function()
 	  	}
       	
       	console.log("after the chrome installation")
-	  })
+	  });
+
+
+	 function loadModalsDateandTimepickers(el){
+	 	agile_type_ahead("event_related_to", el, contacts_typeahead);
+
+		agile_type_ahead("event_relates_to_deals", el, deals_typeahead, false,null,null,"core/api/search/deals",false, true);
+		var d1 = new Date ();
+		var d2 = new Date ( d1 );
+		d2.setHours(d1.getHours()+3);
+
+		head.js(CSS_PATH + 'css/businesshours/jquerytimepicker.css',
+				LIB_PATH + 'lib/businesshours/jquerytimepicker.js',
+				function(){
+		 			$('.new-task-timepicker').timepicker({ 'timeFormat' : 'H:i', 'step' : 15 });
+		 		}
+		);
+
+		$('.new-task-timepicker').focus(function(){
+			$('#activityTaskModal').css("overflow", "hidden");
+		});
+		
+		$('.new-task-timepicker').blur(function(){
+			$('#activityTaskModal').css("overflow", "auto");
+		});
+
+			// sets the time in time picker if it is empty
+		if ($('.new-task-timepicker', el).val() == '')
+			$('.new-task-timepicker', el).val(get_hh_mm());
+
+		$('#task-date-1', el).datepicker({ format : CURRENT_USER_PREFS.dateFormat , weekStart : CALENDAR_WEEK_START_DAY, autoclose: true});
+		$('#task-date-1', el).datepicker('update');		
+	 }
+
 
 	/**
 	 * Sets the start time with current time and end time half an hour more than
@@ -551,37 +584,10 @@ $(function()
 		console.log("prem **** ");
 		// Show related to contacts list
 		var el = $("#activityForm");
-		$('#task-date-1').datepicker({ format : CURRENT_USER_PREFS.dateFormat , weekStart : CALENDAR_WEEK_START_DAY, autoclose: true})
-			.on('changeDate', function (ev) {
-    			$(this).datepicker('hide');
-			});
-		$('#task-date-1').datepicker('update');
+		loadModalsDateandTimepickers(el);
+		el = $('#taskForm');
+		loadModalsDateandTimepickers(el);	
 
-		agile_type_ahead("event_related_to", el, contacts_typeahead);
-
-		agile_type_ahead("event_relates_to_deals", el, deals_typeahead, false,null,null,"core/api/search/deals",false, true);
-		var d1 = new Date ();
-		var d2 = new Date ( d1 );
-		d2.setHours(d1.getHours()+3)
-
-		head.js(CSS_PATH + 'css/businesshours/jquerytimepicker.css',
-				LIB_PATH + 'lib/businesshours/jquerytimepicker.js',
-				function(){
-		 			$('.new-task-timepicker').timepicker({ 'timeFormat' : 'H:i', 'step' : 15 });
-		 			
-		 			$('.new-task-timepicker').focus(function(){
-		 				$('#activityTaskModal').css("overflow", "hidden");
-		 			});
-		 			
-		 			$('.new-task-timepicker').blur(function(){
-		 				$('#activityTaskModal').css("overflow", "auto");
-		 			});
-
-		 			// sets the time in time picker if it is empty
-					if ($('.new-task-timepicker', el).val() == '')
-						$('.new-task-timepicker', el).val(get_hh_mm());
-		 		}
-		);
 		
 		// $('.new-task-timepicker').timepicker({ defaultTime : d2.format("HH:MM") , showMeridian : false });
 		// $('.new-task-timepicker').timepicker().on('show.timepicker', function(e)
