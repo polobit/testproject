@@ -1297,4 +1297,12 @@ public class ActivitySave
     		
     	}
     }
+    public static void createBulkActionActivityForTasks(int taskIdsCount, String actiontype, String data, String label,
+    	    String bulk_action_subject) throws JSONException
+        {
+
+    	ActivityUtil.createBulkActionActivity(actiontype, data, String.valueOf(taskIdsCount), label,
+    	        bulk_action_subject, EntityType.TASK);
+
+        }
 }

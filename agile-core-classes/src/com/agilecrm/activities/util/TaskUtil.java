@@ -981,6 +981,7 @@ public class TaskUtil
 						taskList.add(task);
 					}
 				}
+				ActivitySave.createBulkActionActivityForTasks(taskList.size(), "BULK_TASK_CHANGE_STATUS", newProperty, "tasks", "");
 			}			
 			else if (formId.equalsIgnoreCase("bulkTaskPriorityForm")){
 				newProperty = priority.getString("priority_type");
@@ -992,9 +993,11 @@ public class TaskUtil
 						taskList.add(task);
 					}
 				}
+				ActivitySave.createBulkActionActivityForTasks(taskList.size(), "BULK_TASK_CHANGE_PRIORITY", newProperty, "tasks", "");
 			}
 			else if (formId.equalsIgnoreCase("bulkTaskOwnerForm")) {
 				newProperty = priority.getString("owner_id");
+				String owner_name = DomainUserUtil.getDomainUser(Long.parseLong(newProperty)).name;
 				for(String taskId : taskIdList){
 					Task task = getTask(Long.parseLong(taskId));
 					if(task != null && newProperty!= null ){
@@ -1003,6 +1006,7 @@ public class TaskUtil
 						taskList.add(task);
 					}
 				}
+				ActivitySave.createBulkActionActivityForTasks(taskList.size(), "BULK_TASK_CHANGE_OWNER", owner_name, "tasks", "");
 			}
 			else if (formId.equalsIgnoreCase("bulkTaskDuedateForm")) {
 				newProperty = priority.getString("due");
@@ -1014,10 +1018,12 @@ public class TaskUtil
 						taskList.add(task);
 					}
 				}
+				ActivitySave.createBulkActionActivityForTasks(taskList.size(), "BULK_TASK_CHANGE_DUEDATE", "", "tasks", "");
 			}
 			else {
 				org.json.JSONArray taskId = new org.json.JSONArray(taskIdList);
 				Task.dao.deleteBulkByIds(taskId);
+				ActivitySave.createBulkActionActivityForTasks(taskList.size(), "BULK_TASK_DELETE", "", "tasks", "");
 			}
 			return taskList ;
 		} catch (Exception e) {

@@ -15,6 +15,7 @@ import javax.ws.rs.core.MediaType;
 
 import com.agilecrm.activities.Activity.EntityType;
 import com.agilecrm.activities.Task;
+import com.agilecrm.activities.util.ActivitySave;
 import com.agilecrm.activities.util.ActivityUtil;
 import com.agilecrm.activities.util.TaskUtil;
 import com.agilecrm.deals.Opportunity;
@@ -68,6 +69,7 @@ public class TaskBulkActionsAPI {
 				if (!subList.isEmpty()) {
 					Task.dao.putAll(subList);
 				}
+				ActivitySave.createBulkActionActivityForTasks(taskIdArray.length(), "BULK_TASK_CHANGE_STATUS", newProperty, "tasks", "");
 
 			} else {
 				boolean pending = json.getBoolean("pending");String criteria = null ;String type = null;
@@ -97,7 +99,7 @@ public class TaskBulkActionsAPI {
 				if (!subList.isEmpty()) {
 					Task.dao.putAll(subList);
 				}
-
+				ActivitySave.createBulkActionActivityForTasks(tasks.size(), "BULK_TASK_CHANGE_STATUS", newProperty, "tasks", "");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -143,7 +145,7 @@ public class TaskBulkActionsAPI {
 				if (!subList.isEmpty()) {
 					Task.dao.putAll(subList);
 				}
-
+				ActivitySave.createBulkActionActivityForTasks(taskIdArray.length(), "BULK_TASK_CHANGE_PRIORITY", newProperty, "tasks", "");
 			} else {
 				boolean pending = json.getBoolean("pending");String criteria = null ;String type = null;
 				if (json.has("ownerId") && !json.get("ownerId").equals(null) && !json.get("ownerId").equals("null") && json.get("ownerId") != "")
@@ -165,7 +167,7 @@ public class TaskBulkActionsAPI {
 				if (!subList.isEmpty()) {
 					Task.dao.putAll(subList);
 				}
-			//	ActivityUtil.createBulkActionActivity(null, null, "Task_Priority_Type", newProperty, null, EntityType.TASK);
+				ActivitySave.createBulkActionActivityForTasks(tasks.size(), "BULK_TASK_CHANGE_PRIORITY", newProperty, "tasks", "");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -184,6 +186,7 @@ public class TaskBulkActionsAPI {
 			JSONObject json = new JSONObject(data);
 			JSONObject priority = json.getJSONObject("priority");
 			String newOwnerId = priority.getString("owner_id");
+			String owner_name = DomainUserUtil.getDomainUser(Long.parseLong(newOwnerId)).name;
 			ArrayList<String> taskIdList = new ArrayList<String>();
 			List<Task> subList = new ArrayList<Task>();
 			com.google.appengine.labs.repackaged.org.json.JSONArray taskIdArray = null;
@@ -210,7 +213,7 @@ public class TaskBulkActionsAPI {
 				if (!subList.isEmpty()) {
 					Task.dao.putAll(subList);
 				}
-
+				ActivitySave.createBulkActionActivityForTasks(taskIdArray.length(), "BULK_TASK_CHANGE_OWNER", owner_name, "tasks", "");
 			} else {
 				boolean pending = json.getBoolean("pending");String criteria = null ;String type = null;
 				if (json.has("ownerId") && !json.get("ownerId").equals(null) && !json.get("ownerId").equals("null") && json.get("ownerId") != "")
@@ -233,7 +236,7 @@ public class TaskBulkActionsAPI {
 				if (!subList.isEmpty()) {
 					Task.dao.putAll(subList);
 				}
-
+				ActivitySave.createBulkActionActivityForTasks(tasks.size(), "BULK_TASK_CHANGE_OWNER", owner_name, "tasks", "");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -278,6 +281,7 @@ public class TaskBulkActionsAPI {
 				if (!subList.isEmpty()) {
 					Task.dao.putAll(subList);
 				}
+				ActivitySave.createBulkActionActivityForTasks(taskIdArray.length(), "BULK_TASK_CHANGE_DUEDATE", "", "tasks", "");
 
 			} else {
 				boolean pending = json.getBoolean("pending");String criteria = null ;String type = null;
@@ -301,7 +305,7 @@ public class TaskBulkActionsAPI {
 				if (!subList.isEmpty()) {
 					Task.dao.putAll(subList);
 				}
-
+				ActivitySave.createBulkActionActivityForTasks(tasks.size(), "BULK_TASK_CHANGE_DUEDATE", "", "tasks", "");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -342,7 +346,7 @@ public class TaskBulkActionsAPI {
 				if (!subList.isEmpty()) {
 					Task.dao.deleteAll(subList);
 				}
-
+				ActivitySave.createBulkActionActivityForTasks(taskIdArray.length(), "BULK_TASK_DELETE", "", "tasks", "");
 			} else {
 				boolean pending = json.getBoolean("pending");String criteria = null ;String type = null;
 				if (json.has("ownerId") && !json.get("ownerId").equals(null) && !json.get("ownerId").equals("null") && json.get("ownerId") != "")
@@ -363,7 +367,7 @@ public class TaskBulkActionsAPI {
 				if (!subList.isEmpty()) {
 					Task.dao.deleteAll(subList);
 				}
-
+				ActivitySave.createBulkActionActivityForTasks(tasks.size(), "BULK_TASK_DELETE", "", "tasks", "");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
