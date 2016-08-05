@@ -87,8 +87,8 @@
                   <%
                     }
                   %>
-                  <li><a href="#"  id="show-activity"> <div class="pull-left">Event</div><div class='pull-right shortcuts'>Shift + V</div><div class="clearfix"></div></a></li>
-                  <li><a href="#" class=" add-task"> <div class="pull-left">Task</div><div class='pull-right shortcuts'>Shift + T</div><div class="clearfix"></div></a></li>
+                  <li><a href="#"  id="show-activity"> <div class="pull-left"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "event") %></div><div class='pull-right shortcuts'>Shift + V</div><div class="clearfix"></div></a></li>
+                  <li><a href="#" class=" add-task"> <div class="pull-left"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "task") %></div><div class='pull-right shortcuts'>Shift + T</div><div class="clearfix"></div></a></li>
 
                  
                   <li><a href="#" id="show-note"> <div class="pull-left">Note</div><div class='pull-right shortcuts'>Shift + O</div><div class="clearfix"></div></a></li>
@@ -457,7 +457,7 @@
 										}
 									%>
 									<li><a href="#"  id="show-activity"> <div class="pull-left"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "event") %></div><div class='pull-right shortcuts'>Shift + V</div><div class="clearfix"></div></a></li>
-									<li><a href="#" class=" add-task"> <div class="pull-left">Task</div><div class='pull-right shortcuts'>Shift + T</div><div class="clearfix"></div></a></li>
+									<li><a href="#" class=" add-task"> <div class="pull-left"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "task") %></div><div class='pull-right shortcuts'>Shift + T</div><div class="clearfix"></div></a></li>
 
 									
 									<li><a href="#" id="show-note"> <div class="pull-left"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "note") %></div><div class='pull-right shortcuts'>Shift + O</div><div class="clearfix"></div></a></li>
@@ -465,7 +465,7 @@
 									<%if(domainUser.menu_scopes.contains(NavbarConstants.HELPDESK)){%>
 									  <li><a href="javascript:void(0);" onclick="App_Ticket_Module.renderNewTicketModalView();"> <div class="pull-left"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "ticket") %></div><div class="clearfix"></div></a></li>
 								    <%}%>
-									<li><a href="#" class="show-dialler"> <div class="pull-left">Call</div><div class="clearfix"></div></a></li>
+									<li><a href="#" class="show-dialler"> <div class="pull-left"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "call") %></div><div class="clearfix"></div></a></li>
 								</ul> <!-- 
 							<img style='display:hidden' id='ajax'
 								src='img/ajax-loader.gif' />

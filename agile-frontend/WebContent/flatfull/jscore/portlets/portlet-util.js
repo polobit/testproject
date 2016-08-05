@@ -2237,31 +2237,7 @@ var portlet_utility = {
 		if (!name)
 			return;
 
-		var name_json = {
-			"HIGH": "{{agile_lng_translate 'tasks' 'High'}}",
-            "LOW": "{{agile_lng_translate 'tasks' 'Low'}}",
-            "NORMAL": "{{agile_lng_translate 'tasks' 'Normal'}}",
-            "EMAIL": "{{agile_lng_translate 'tasks' 'Email'}}",
-            "CALL": "{{agile_lng_translate 'tasks' 'Call'}}",
-            "SEND": "{{agile_lng_translate 'tasks' 'Send'}}",
-            "TWEET": "{{agile_lng_translate 'tasks' 'Tweet'}}",
-            "FOLLOW_UP": "{{agile_lng_translate 'tasks' 'Follow Up'}}",
-            "MEETING": "{{agile_lng_translate 'tasks' 'Meeting'}}",
-            "MILESTONE": "{{agile_lng_translate 'tasks' 'Milestone'}}",
-            "OTHER": "{{agile_lng_translate 'tasks' 'Other'}}",
-            "YET_TO_START": "{{agile_lng_translate 'tasks' 'Yet To Start'}}",
-            "IN_PROGRESS": "{{agile_lng_translate 'tasks' 'In Progress'}}",
-            "COMPLETED": "{{agile_lng_translate 'tasks' 'Completed'}}",
-            "TODAY": "{{agile_lng_translate 'tasks' 'Today'}}",
-            "TOMORROW": "{{agile_lng_translate 'tasks' 'Tomorrow'}}",
-            "OVERDUE": "{{agile_lng_translate 'tasks' 'Overdue'}}",
-            "LATER": "{{agile_lng_translate 'tasks' 'Later'}}",
-		};
-
-		name = name.trim();
-
-		return (name_json[name] ? name_json[name] : name);
-
+		return getTranslatedPortletName(name);
 	},
 
 	/**
@@ -2712,4 +2688,31 @@ var eventDate = $('#start_date',elData).datepicker({ format : CURRENT_USER_PREFS
 function stringToDate(date,format)
 {
 	return new Date(date).format(format);
+}
+
+
+function getTranslatedPortletName(name){
+	var name_json = {
+		"HIGH": "{{agile_lng_translate 'tasks' 'High'}}",
+        "LOW": "{{agile_lng_translate 'tasks' 'Low'}}",
+        "NORMAL": "{{agile_lng_translate 'tasks' 'Normal'}}",
+        "EMAIL": "{{agile_lng_translate 'tasks' 'Email'}}",
+        "CALL": "{{agile_lng_translate 'tasks' 'Call'}}",
+        "SEND": "{{agile_lng_translate 'tasks' 'Send'}}",
+        "TWEET": "{{agile_lng_translate 'tasks' 'Tweet'}}",
+        "FOLLOW_UP": "{{agile_lng_translate 'tasks' 'Follow Up'}}",
+        "MEETING": "{{agile_lng_translate 'tasks' 'Meeting'}}",
+        "MILESTONE": "{{agile_lng_translate 'tasks' 'Milestone'}}",
+        "OTHER": "{{agile_lng_translate 'tasks' 'Other'}}",
+        "YET_TO_START": "{{agile_lng_translate 'tasks' 'Yet To Start'}}",
+        "IN_PROGRESS": "{{agile_lng_translate 'tasks' 'In Progress'}}",
+        "COMPLETED": "{{agile_lng_translate 'tasks' 'Completed'}}",
+        "TODAY": "{{agile_lng_translate 'tasks' 'Today'}}",
+        "TOMORROW": "{{agile_lng_translate 'tasks' 'Tomorrow'}}",
+        "OVERDUE": "{{agile_lng_translate 'tasks' 'Overdue'}}",
+        "LATER": "{{agile_lng_translate 'tasks' 'Later'}}",
+	};
+
+	name = name.trim();
+	return (name_json[name] ? name_json[name] : name);
 }
