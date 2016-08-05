@@ -946,7 +946,7 @@ public class QueryDocumentUtil {
 		if(condition.equals(RuleCondition.BY_MONTH_ONLY))
 		{
 			Calendar cal = Calendar.getInstance();
-			cal.set(Calendar.MONTH, value);
+			cal.set(Calendar.MONTH, value - 1); // In Calendar Jan starts with 0
 			
 			String partialDateQuery = lhsMonth + " = " + value;
 			
@@ -959,14 +959,14 @@ public class QueryDocumentUtil {
 				int lastDayOfCurrentMonth = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
 				
 				cal.add(Calendar.MONTH, -1); // Goto previous month
-				int previousMonth = cal.get(Calendar.MONTH) + 1;
+				int previousMonth = cal.get(Calendar.MONTH) + 1; 
 				int lastDayOfPreviousMonth = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
 	
-				partialDateQuery =  "(" + lhsMonth + "=" + value + " AND " + "(" + lhsDate + "<" + lastDayOfCurrentMonth 
+				partialDateQuery =  "(" + lhsMonth + " = " + value + " AND " + "(" + lhsDate + " < " + lastDayOfCurrentMonth 
 						+ " AND "
-						+ lhsDate + ">=" + firstDayOfCurrentMonth
+						+ lhsDate + " >= " + firstDayOfCurrentMonth
 						+"))";
-				partialDateQuery += " AND " + "(" + lhsMonth + "=" + previousMonth + " AND " + lhsDate + "=" + lastDayOfPreviousMonth + ")";
+				partialDateQuery += " OR " + "(" + lhsMonth + " = " + previousMonth + " AND " + lhsDate + " = " + lastDayOfPreviousMonth + ")";
 			}
 			
 			query = buildNestedCondition(joinCondition, query, partialDateQuery);
