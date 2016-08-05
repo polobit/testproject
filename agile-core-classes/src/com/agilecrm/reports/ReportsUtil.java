@@ -361,7 +361,7 @@ public class ReportsUtil {
 			if (report.campaignId.equals("All"))
 				statsJSON.put("campaign_name", "All Campaigns");
 			else
-				statsJSON.put("campaign_name", "<b>Campaign Name : </b>"
+				statsJSON.put("campaign_name", "<b style=\"color: #58666e\">Campaign Name : </b>"
 						+ WorkflowUtil.getCampaignName(report.campaignId));
 			statsJSON.put("report_name", report.name);
 			statsJSON.put("domain", NamespaceManager.get());
@@ -1204,7 +1204,7 @@ public class ReportsUtil {
 			if (report.campaignId.equals("All"))
 				statsJSON.put("campaign_name", "All Campaigns");
 			else
-				statsJSON.put("campaign_name", "<b>Campaign Name : </b>"
+				statsJSON.put("campaign_name", "<b style=\"color: #58666e\">Campaign Name : </b>"
 						+ WorkflowUtil.getCampaignName(report.campaignId));
 
 			statsJSON.put("report_name", report.name);
