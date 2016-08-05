@@ -904,51 +904,19 @@
 
 <script id="company-contacts-collection-template" type="text/html">
 
-{{#if this.length}}
 	<div align="right" class="m-b-md m-t-md m-r-sm">
 		<a href="#" class="contact-add-contact btn btn-default btn-sm btn-addon">
 			<span><i class="icon-plus-sign"></i></span> Add Contact
 		</a>
 	</div>
-	
-		<div class="table-responsive">
-<table id="contacts" class="table table-striped onlySorting b-t  showCheckboxes m-b-none agile-table panel table-layout-mob-view">
-			
-				<thead>
-					<tr>
-<th></th>
-						<th style="width:40%">Name</th>
-						<th style="width:20%">Work</th>
-						<th style="width:20%">Tags</th>
-						<th style="width:20%">Lead Score</th>
-					</tr>
-				</thead>
-				<tbody id="company-contacts-model-list" class="contacts-model-list"
-					route="contact/" style="overflow: scroll;">
-				</tbody>
-			</table>
-			</div>
+	<div>
+	<button class="btn btn-default dropdown-toggle  btn-sm" data-toggle="dropdown" aria-expanded="true" id="contactTabelView"><i class="{{#iscompactTabel 'PERSON'}} fa fa-ellipsis-h {{else}} fa fa-navicon {{/iscompactTabel}}"></"></i></button> 
+                				<ul class="pull-right dropdown-menu  p-l"  role="menu">
+                					<form id="contact-static-fields" class="">
+                						<div class="multiple-checkbox" name="fields_set" id="contact-static-fields-group"></div>
+                					</form>
+                				</ul>
+                				</div>
+				<div id="contacts-list-view"></div>
 
-		{{else}}
-            <div class="p-sm">
-			<div>
-            	<div class="slate-content mobile-pad-content">
-                	<div class="box-left pull-left m-r-md">
-                    	<img alt="Clipboard" src="{{getS3ImagePath '/img/clipboard.png'}}">
-                	</div>
-                	<div class="box-right pull-left">
-                    	<h4 class="m-t-none">{{contactShortName}} is not associated with any person/contact. </h4>
-                    	<div class="text">
-							All Contacts that have this company in the 'Organization' or 'Company' field are shown here.
-						</div>
-                    	<a href="#" class="contact-add-contact btn btn-default btn-sm left m-t-xs">
-								<i class="icon-plus-sign"></i> Add Contact
-							</a>
-                	</div>
-					<div class="clearfix">
-					</div>
-            	</div>
-        	</div>
-           </div>
-		{{/if}}
 </script>

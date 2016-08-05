@@ -574,7 +574,7 @@ var ContactsRouter = Backbone.Router
 					this.contactDetailView = new Base_Model_View({ model : contact, isNew : true, template : "company-detail",
 						postRenderCallback : function(el)
 						{
-							fill_company_related_contacts(id, 'company-contacts');
+							fill_company_related_contacts(id, 'contacts-list-view');
 							// Clone contact model, to avoid render and
 							// post-render fell in to
 							// loop while changing attributes of contact
@@ -609,7 +609,7 @@ var ContactsRouter = Backbone.Router
 
 					var el = this.contactDetailView.render(true).el;
 					$('#content').html(el);
-					fill_company_related_contacts(id, 'company-contacts');
+					fill_company_related_contacts(id, 'contacts-list-view');
 					return;
 				}
 

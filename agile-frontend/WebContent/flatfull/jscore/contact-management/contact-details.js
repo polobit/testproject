@@ -401,7 +401,8 @@ var Contact_Details_Model_Events = Base_Model_View.extend({
 		/** inliner edits input fields**/
 		'click #company-name-text '  : 'toggleinline_company',
 		'blur #company-Input input ' : 'companyInlineEdit',
-    'keydown #company-inline-input' : 'companyNameChange'  
+    'keydown #company-inline-input' : 'companyNameChange' ,
+    'click #company-contacts .contactcoloumn' : 'addOrRemoveContactCompanyColumns',
     },
     
     
@@ -1536,7 +1537,36 @@ updateScoreValue :function(){
 			}
 		}
 		setleadScoreStyles(scoreboxval)
-	}
+	},
+
+  addOrRemoveContactCompanyColumns :function(e){
+      e.preventDefault();
+      var $checkboxInput = $(e.currentTarget).find("input");
+      if($checkboxInput.is(":checked"))
+      {
+        $checkboxInput.prop("checked", false);
+      }
+      else
+      {
+        $checkboxInput.prop("checked", true);
+      }
+      var json = serializeForm("contact-static-fields");
+    $.ajax({
+      url : 'core/api/contact-view-prefs/contact-company',
+      type : 'PUT',
+      contentType : 'application/json',
+      dataType : 'json',
+      data :JSON.stringify(json),
+      success : function(data)
+      {
+        console.log("Hi");
+        //App_Contacts.contactViewModel = data;
+        //contacts_view_loader.fetchHeadings(function(modelData){
+        //contacts_view_loader.getContacts(modelData, $("#contacts-listener-container"));
+       // });
+      } 
+    });
+    },
 });
 
 $(function(){

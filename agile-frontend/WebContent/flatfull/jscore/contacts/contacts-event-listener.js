@@ -26,7 +26,7 @@ var Contacts_And_Companies_Events_View = Base_Model_View.extend({
 
     	'click .contacts-view' : 'toggleContactsView',
     	'click #contactTabelView' : 'toggleContactsListView',
-    	'click .contactcoloumn' : 'addOrRemoveContactColumns',
+    	'click .contacts-div .contactcoloumn' : 'addOrRemoveContactColumns',
     	'click .toggle-contact-filters' : 'toggleContactFilters',
     	'click #companiesTabelView' : 'toggleCompaniesListView',
     	'click .companycoloumn' : 'addOrRemoveCompanyColumns',
