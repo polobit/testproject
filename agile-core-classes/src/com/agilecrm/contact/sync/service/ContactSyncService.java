@@ -175,6 +175,8 @@ public abstract class ContactSyncService implements IContactSyncService
 	catch (Exception e)
 	{
 	    e.printStackTrace();
+	    System.out.println("ContactSyncService wrapContactToAgileSchemaAndSave :"+e.getMessage());
+	    System.out.println("ContactSyncService wrapContactToAgileSchemaAndSave :"+e);
 	    return null;
 	}
     }
