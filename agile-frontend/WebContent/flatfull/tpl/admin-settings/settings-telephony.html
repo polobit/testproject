@@ -19,23 +19,21 @@
 
 				<div class="panel-collapse" role="tabpanel" aria-labelledby="headingTwo" id="collapseTwo" >
 				<div class="panel-body p-n" id="telephony-callstatus-accordion">
-					<fieldset>
     				<div class="control-group m-b-none">  	 
                     <div>
-					<table class="table table-hover  custom-fields-table bg-white table-hover m-b-none" >
-					<colgroup><col width="50%"><col width="4%"></colgroup>
-					<tbody id="admin-settings-telephony-model-list" class="">
+					<table class="table table-hover agile-table custom-fields-table bg-white table-hover m-b-none" >
+					<colgroup><col width="40%"><col width="20%"></colgroup>
+					<tbody id="admin-settings-telephony-model-list" class="telephony-tbody ui-sortable">
 					</tbody>
 					</table>
 					</div>
-					<div class="p-l p-t p-b"><a href="#" class="show_task_category_field text-info"><i class="icon-plus-sign"></i> Add status </a></div>
+					<div class="p-l p-t p-b show_telephony_status_field "><a href="#" class="text-info"><i class="icon-plus-sign"></i> Add status </a></div>
 					<div class="show_field p-l p-t p-b" style="display:none;">
-						<input id="add_new_task_category" class="add_new_category form-control input-sm" style="width:145px;display:inline-block" type="text" placeholder="New Category ">
-						<a class="btn btn-info btn-addon btn-sm add_task_category" data-toggle="modal" id="add_task_category" href="#">Add</a>
+						<input id="add_new_telephony_status" class="form-control input-sm" style="width:145px;display:inline-block" type="text" placeholder="New Status">
+						<a class="btn btn-info btn-addon btn-sm" data-toggle="modal" id="add_telephony_status" href="#">Add</a>
 						<span class="save-status"></span>
 					</div>
     			</div> 
-    			</fieldset>
 				</div>
 			</div>
 			</div>
@@ -60,21 +58,56 @@
         </div>
     </div>
 
+<!-- Delete modal script start here -->
+
+
+<div class="modal fade" id="telephony-status-delete-modal">
+<div class="modal-dialog">
+    <div class="modal-content">
+	<div class="modal-header">
+        <button class="close" data-dismiss="modal">x</button>
+        <h3>Delete Status</h3>
+    </div>
+	<div class="modal-body">
+        <div id="delete-telephony-confirm-dialog">
+			<input type="hidden" name="id"></input>
+             <p>Are you sure you want to delete the Status - <span id="telephony-status-name"></span> ? </p>
+        </div>
+    </div>
+    <div class="modal-footer">
+    <span class="category-delete-message" style="margin-right:5px;color:red;"></span>
+	<a href="#" id="telephony-status-delete-confirm" class="btn btn-primary">Yes</a>
+	<a  href="#" class="btn btn-default" data-dismiss="modal">No</a>
+    </div>
+</div>
+</div>
+</div>
+
+<!-- Delete modal script ends here -->
 </script>
 
 <script id="admin-settings-telephony-model-template" type="text/html">
     	
 	<td>
 		<div class="inline-block v-top text-ellipsis" style="width:80%">{{label}}</div>
-		<input type="hidden" name="id" value="{{id}}">
+		<input type="hidden" name="id" value="{{id}}" order="{{order}}">
 	</td>	
-	<td class="b-r-none">
-		<div class="m-b-n-xs">
+	<td class="b-r-none" style="text-align: right;">
+{{#if_anyone_equals label "Answered,Busy,Failed,Missed,Voicemail"}}
+		<div class="m-b-n-xs" style="display:none;">
 			<a class="text-l-none-hover c-p text-xs"><i title="Drag" class="icon-move"></i></a>
-			<a id="{{id}}" class="category-delete c-p text-l-none text-xs" data-toggle="modal" role="button" href="#" data="{{label}}">
-				<i title="Delete status" class="task-action icon icon-trash"></i>
+		</div>
+{{else}}
+		<div class="m-b-n-xs" style="display:none;">
+			<a class="text-l-none-hover c-p text-xs"><i title="Drag" class="icon-move"></i></a>
+			<a id="{{id}}" class="telephony-status-delete c-p text-l-none text-xs" data-toggle="modal" role="button" href="#" data="{{label}}">
+				<i title="Delete status" class="telephony-action icon icon-trash"></i>
 			</a>
 		</div>
+{{/if_anyone_equals}}
+
+
+
 	</td>
 		
 </script>

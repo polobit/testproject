@@ -326,6 +326,31 @@ public class CategoriesUtil
     	{
     		categories = careateDefaultCategories();
     		return categories;
+    	}else if(type.equals(Category.EntityType.TELEPHONY_STATUS.toString())){
+/*    		Category cat1 = new Category("Default_"+type.toLowerCase()+"_", 0, Category.EntityType.TELEPHONY_STATUS);
+    		createCategory(cat1);*/
+    		Category cat2 = new Category("Answered", 0, Category.EntityType.TELEPHONY_STATUS);
+    		categories.add(cat2);
+    		Category cat3 = new Category("Busy", 1, Category.EntityType.TELEPHONY_STATUS);
+    		categories.add(cat3);
+    		Category cat4 = new Category("Failed", 2, Category.EntityType.TELEPHONY_STATUS);
+    		categories.add(cat4);
+    		Category cat5 = new Category("Missed", 3, Category.EntityType.TELEPHONY_STATUS);
+    		categories.add(cat5);
+    		Category cat12 = new Category("Voicemail", 4, Category.EntityType.TELEPHONY_STATUS);
+    		categories.add(cat12);
+    		Category cat6 = new Category("Inquiry", 5, Category.EntityType.TELEPHONY_STATUS);
+    		categories.add(cat6);
+    		Category cat7 = new Category("Interest", 6, Category.EntityType.TELEPHONY_STATUS);
+    		categories.add(cat7);
+    		Category cat8 = new Category("No Interest", 7, Category.EntityType.TELEPHONY_STATUS);
+    		categories.add(cat8);
+    		Category cat9 = new Category("Incorrect Referral", 8, Category.EntityType.TELEPHONY_STATUS);
+    		categories.add(cat9);
+    		Category cat10 = new Category("Meeting Scheduled", 9, Category.EntityType.TELEPHONY_STATUS);
+    		categories.add(cat10);
+    		Category cat11 = new Category("New Opportunity", 10, Category.EntityType.TELEPHONY_STATUS);
+    		categories.add(cat11);
     	}
     	dao.putAll(categories);
     	return categories;

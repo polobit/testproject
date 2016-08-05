@@ -1394,16 +1394,19 @@ var AdminSettingsRouter = Backbone.Router.extend({
 				  return;
 			$('#telephony-listner').html($(template_ui));
 			
-			this.telephonyGridView = new Base_Collection_View({ url : '/core/api/categories?entity_type=TELEPHONY', templateKey : "admin-settings-telephony",
+			that.telephonyGridView = new Base_Collection_View({ url : '/core/api/categories?entity_type=TELEPHONY_STATUS', templateKey : "admin-settings-telephony",
 				individual_tag_name : 'tr', sortKey : "order", postRenderCallback : function(el)
 				{
-					console.log("loaded categories : ", el);
-					initializeTelephonyListners();
+					
+					console.log("loaded telephony : ", el);
+					
+					initializeTelephonyListners(el);
 					//categories.setup_categories(el);
 					//categories.init();
+				
 				} });
-			this.telephonyGridView.collection.fetch();
-			$('#content').find('#admin-prefs-tabs-content').html(this.telephonyGridView.render().el);
+			that.telephonyGridView.collection.fetch();
+			$('#content').find('#admin-prefs-tabs-content').html(that.telephonyGridView.render().el);
 			$('#content').find('#AdminPrefsTab .select').removeClass('select');
 			$('#content').find('.telephony-tab').addClass('select');
 			$(".active").removeClass("active");
