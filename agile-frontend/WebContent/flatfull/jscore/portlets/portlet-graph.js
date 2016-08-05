@@ -695,7 +695,8 @@ var portlet_graph_utility = {
 						            gridLineWidth : 0,
 						    		gridLineColor : '#F4F4F5',
 						    		lineWidth : 0,
-						    		tickWidth : 0
+						    		tickWidth : 0,
+						    		tickPixelInterval: 50
 						        },
 						        yAxis: {
 						            min: 0,
