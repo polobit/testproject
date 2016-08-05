@@ -117,9 +117,12 @@ public class AccountPrefsUtil
 		queue.add(TaskOptions.Builder.withPayload(task));
 	}
 	
-	public static String getTimeZoneInOffset()
+	public static String getTimeZoneInOffset(String timezone)
 	{
-		TimeZone tz = TimeZone.getTimeZone(getTimeZone());
+		if(timezone == null)
+			timezone = getTimeZone();
+		
+		TimeZone tz = TimeZone.getTimeZone(timezone);
 		long offsetInMillis = tz.getOffset(System.currentTimeMillis());
 		
 		String offset = String.format("%02d:%02d", Math.abs(offsetInMillis / 3600000), Math.abs((offsetInMillis / 60000) % 60));

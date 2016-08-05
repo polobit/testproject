@@ -28,6 +28,7 @@ import com.agilecrm.user.access.util.UserAccessControlUtil;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.DateUtil;
 import com.agilecrm.util.StringUtils2;
+import com.amazonaws.services.s3.model.BucketLifecycleConfiguration.Rule;
 import com.googlecode.objectify.Key;
 
 /**
@@ -950,7 +951,7 @@ public class QueryDocumentUtil {
 			
 			String partialDateQuery = lhsMonth + " = " + value;
 			
-			String timezoneOffset = AccountPrefsUtil.getTimeZoneInOffset();
+			String timezoneOffset = AccountPrefsUtil.getTimeZoneInOffset(null);
 			
 			if(!StringUtils.equalsIgnoreCase(timezoneOffset, "+00:00") 
 					&& StringUtils.startsWith(timezoneOffset, "+"))
@@ -974,7 +975,24 @@ public class QueryDocumentUtil {
 		
 		if(condition.equals(RuleCondition.IS_AFTER_IN_DAYS) || condition.equals(RuleCondition.IS_BEFORE_IN_DAYS))
 		{
+			String timeZone = AccountPrefsUtil.getTimeZone();
+			
 			Calendar cal = Calendar.getInstance();
+			cal.setTimeZone(TimeZone.getTimeZone(timeZone));
+			cal.set(Calendar.HOUR_OF_DAY, 0);
+			cal.set(Calendar.MINUTE, 0);
+			
+			String timezoneOffset = AccountPrefsUtil.getTimeZoneInOffset(timeZone);
+			
+			if(!StringUtils.equalsIgnoreCase(timezoneOffset, "+00:00") 
+					&& StringUtils.startsWith(timezoneOffset, "+"))
+			{
+				if(condition.equals(RuleCondition.IS_AFTER_IN_DAYS))
+					value = value - 1; // If timezone is ahead of GMT, decrease by one day
+				
+				if(condition.equals(RuleCondition.IS_BEFORE_IN_DAYS))
+					value = value + 1; // If timezone is ahead of GMT, increase by one day
+			}
 			
 			// Add '-' to decrease days
 			if(condition.equals(RuleCondition.IS_BEFORE_IN_DAYS))
