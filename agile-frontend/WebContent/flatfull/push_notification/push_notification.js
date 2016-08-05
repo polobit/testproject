@@ -95,8 +95,14 @@ function regiseterServiceWorkers()  {
 
      property.value = email;
 
-     properties.push(property);
+     if(email!=null || email != undefined)
+     {
+        property.name = "first_name";
 
+        property.value = "Anonymous";
+     }
+
+      properties.push(property);
      var model = {};
 
      // Get utm params from cookie
