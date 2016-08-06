@@ -319,7 +319,19 @@
 <script id = "contacts-custom-view-last_emailed-template" type="text/html">
 	<td class='data' data='{{id}}'>
        <div class="text-ellipsis " style="width:12em;" >
-	   	  <span>{{epochToHumanDateInFormat last_emailed}}</span>
+       {{#is_greater_time last_emailed last_campaign_emaild}}	
+	       		{{#if_equals last_emailed 0}}
+	       		{{else}}
+		   	  <span>{{epochToHumanDateInFormat last_emailed}}</span>
+		   	  <i class="fa fa-envelope-o text-muted m-l-xs"></i>
+		   	  {{/if_equals}}
+	   	 {{else}}
+		   	 {{#if_equals last_campaign_emaild 0}}
+	       		{{else}}
+		   	  <span>{{epochToHumanDateInFormat last_campaign_emaild}}</span>
+		   	  <i class="fa fa-sitemap text-muted m-l-xs"></i>
+		   	  {{/if_equals}}
+	   	 {{/is_greater_time}}
        </div>
 	</td>
 </script>

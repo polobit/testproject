@@ -7682,3 +7682,14 @@ Handlebars.registerHelper('is_Particular_Domain', function(options)
 		else
 			return options.inverse(this);
 });
+
+
+/** To find out greater of 2 epoch duration **/
+
+Handlebars.registerHelper('is_greater_time', function(value, target, options)
+	{
+		if (target > value)
+			return options.inverse(this);
+		else
+			return options.fn(this);
+	});
