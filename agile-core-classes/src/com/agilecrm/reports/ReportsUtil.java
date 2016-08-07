@@ -545,7 +545,7 @@ public class ReportsUtil {
 									|| field.equalsIgnoreCase("last_contacted")
 									|| field.equalsIgnoreCase("last_emailed") || field
 										.equalsIgnoreCase("last_called"))
-									&& !fieldValue.equals(" "))
+									&& (!fieldValue.equals(" ")||!fieldValue.equals("0")))
 								fieldValue = SearchUtil
 										.getDateWithoutTimeComponent(Long
 												.parseLong(fieldValue) * 1000);
