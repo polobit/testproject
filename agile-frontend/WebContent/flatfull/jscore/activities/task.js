@@ -263,7 +263,18 @@ function initializeTasksListeners(){
 			$("#task-bulk-change-duedate").modal('show');
 			$('#task-date-1').datepicker({ format : CURRENT_USER_PREFS.dateFormat , weekStart : CALENDAR_WEEK_START_DAY , autoclose : true});
 			$('#task-date-1').datepicker('update');
-			var d1 = new Date ();
+			head.js(CSS_PATH + 'css/businesshours/jquerytimepicker.css',
+					LIB_PATH + 'lib/businesshours/jquerytimepicker.js',
+					function(){
+			 			$('.new-task-timepicker').timepicker({ 'timeFormat' : 'H:i', 'step' : 15 });
+			 		}
+			);
+			
+			// sets the time in time picker if it is empty
+			if ($('.new-task-timepicker').val() == ''){
+				$('.new-task-timepicker').val(get_hh_mm());
+			}
+/*			var d1 = new Date ();
 			var d2 = new Date ( d1 );
 			d2.setHours(d1.getHours()+3)
 			$('.new-task-timepicker').timepicker({ defaultTime : d2.format("HH:MM") , showMeridian : false , autoclose : true });
@@ -278,7 +289,7 @@ function initializeTasksListeners(){
 			}
 			$('.bootstrap-timepicker-hour').val(e.time.hours);
 			$('.bootstrap-timepicker-minute').val(e.time.minutes);
-			});
+			});*/
 		}
 
 	});
