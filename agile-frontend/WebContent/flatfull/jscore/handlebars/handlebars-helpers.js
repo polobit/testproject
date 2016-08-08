@@ -7487,7 +7487,6 @@ Handlebars.registerHelper('if_asc_sork_key', function(value, options)
 	else
 		return options.fn(this); 
 });
-
 Handlebars.registerHelper('get_default_label', function(label, module_name, options)
 {
 	var i18nKeyPrefix = "admin-settings-tasks";
@@ -7535,3 +7534,11 @@ function getTableLanguageConvertHeader(element){
 
 	return element;
 }
+Handlebars.registerHelper('is_Particular_Domain', function(options)
+{
+	if(CURRENT_DOMAIN_USER.domain=='fieldglobal')
+	return options.fn(this);
+		else
+			return options.inverse(this);
+});
+
