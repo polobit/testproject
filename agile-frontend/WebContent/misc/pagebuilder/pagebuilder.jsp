@@ -2410,9 +2410,8 @@ function showAgileCRMForm(formJson,formHolderId) {
 
                     $('#'+iframe_id).contents().find('#agileform_div').empty();
                     var div = $("<div class='agile_crm_form_embed' id='"+window.CURRENT_AGILE_DOMAIN+"_"+formJson.id+"' ></div>");
-                    $('#'+iframe_id).contents().find('#agileform_div').append(div);
-                    replace_form_class.html(formJson.formHtml);           
-                    return;
+                    div.html(formJson.formHtml); 
+                    $('#'+iframe_id).contents().find('#agileform_div').append(div);            return;
                 } 
                 else {            
                     if(window.current_agileform!=null){
