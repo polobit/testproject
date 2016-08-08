@@ -231,7 +231,9 @@ function changeFeedback(e,objButton){
 	var d = document.getElementById("myTextarea");
 	d.required = true;
 }
-
+else
+{
+	d.required = false;
 }
 </script>
 	<script type="text/javascript">		
