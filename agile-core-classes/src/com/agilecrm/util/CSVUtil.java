@@ -450,15 +450,11 @@ public class CSVUtil
 			    {
 				addressJSON = new JSONObject(addressField.value);
 				
-				CountryUtil.setCountryCode(addressJSON, field, csvValues[j]);
-				
 				addressField.value = addressJSON.toString();
 			    }
 			    else
 			    {
-			    CountryUtil.setCountryCode(addressJSON, field, csvValues[j]);
-			    
-				tempContact.properties.add(new ContactField(Contact.ADDRESS, addressJSON.toString(),
+			    tempContact.properties.add(new ContactField(Contact.ADDRESS, addressJSON.toString(),
 					field.type.toString()));
 			    }
 
@@ -842,13 +838,11 @@ public class CSVUtil
 			if (addressField != null && addressField.value != null)
 			{
 			    addressJSON = new JSONObject(addressField.value);
-			    CountryUtil.setCountryCode(addressJSON, field, csvValues[j]);
 			    addressField.value = addressJSON.toString();
 			}
 			else
 			{
-				CountryUtil.setCountryCode(addressJSON, field, csvValues[j]);
-			    tempContact.properties.add(new ContactField(Contact.ADDRESS, addressJSON.toString(),
+				tempContact.properties.add(new ContactField(Contact.ADDRESS, addressJSON.toString(),
 				    field.subtype.toString()));
 			}
 
