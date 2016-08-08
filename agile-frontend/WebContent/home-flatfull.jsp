@@ -62,8 +62,8 @@ pageEncoding="UTF-8"%>
 	
 	function _agile_get_file_hash(filename)
 	{
-    //if(true)
-      //  return _AGILE_VERSION;
+    if(true)
+      return _AGILE_VERSION;
       
 		if( !filename || filename == '' )	return _AGILE_VERSION;
 		
@@ -552,7 +552,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
    <li id="segmentationmenu">
     <a  href="#visitors">
        <i class="icon-eye"></i>
-      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-visitors") %><</span> 
+      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-visitors") %></span> 
     </a>
   </li>
   <li id="landing-pages-menu">

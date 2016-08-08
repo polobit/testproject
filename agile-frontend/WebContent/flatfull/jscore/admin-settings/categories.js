@@ -25,11 +25,15 @@
 		categories.getCategories(function(cats){
 			var html = '';
 			$.each(cats, function(index,cat){
-				//console.log(customfield);
+				var catLabel = cat.label;
+				if(catLabel){
+					catLabel = getTranslatedPortletName(catLabel.toUpperCase());
+				}
+				
 				if(type == cat.name)
-					html += '<option value="'+cat.name+'" selected="selected">'+cat.label+'</option>';
+					html += '<option value="'+cat.name+'" selected="selected">'+catLabel+'</option>';
 				else
-					html += '<option value="'+cat.name+'">'+cat.label+'</option>';
+					html += '<option value="'+cat.name+'">'+catLabel+'</option>';
 			});
 			if (callback && typeof (callback) === "function")
 				callback(html);

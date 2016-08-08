@@ -18,13 +18,13 @@ widgets.tag-note-desc,Important: We have made some changes to Tag management. Ta
 admin-settings-integrations.amazon-note-1,1. Amazon SES services require verification of email addresses in the From field of sent emails. Please ensure that you verify the email addresses of all your Agile CRM users and the From addresses of all your campaign emails.,1. Los servicios de Amazon SES requieren la verificación de direcciones de correo electrónico en el campo De de los correos electrónicos enviados. Por favor asegúrese de verificar las direcciones de email de todos sus usuarios de Agile CRM y en las direcciones De de todos sus emails de campaña.
 admin-settings-api-analytics.analytics-code-desc,You can use javascript API to track page views on your site&#44; add / delete contacts from your website or blog directly. Copy and paste the below code in your webpage's HTML just before the,Puede utilizar la API de JavaScript para realizar un seguimiento de páginas vistas en su sitio &#44; añadir / eliminar contactos de su sitio web o blog directamente . Copia y pega el código de abajo en el HTML de su página web justo antes de la
 admin-settings-api-analytics.analytics-code-desc-1,tag to enable tracking / API methods.,la etiqueta para permitir métodos de seguimiento / API.
-widgets.bria-tooltip,Download executable and run it in your system to establish a connection between your Bria client and Agile CRM. Please note that you should already be logged in with selected Bria client before running this executable file.,Descarga el archivo ejecutable y córrelo desde tu sistema para establecer una conexión entre tu cliente Bria y tu CRM de Agile. Por favor toma en cuenta que deberás estar previamente loggeado con el cliente Bria seleccionado antes de correr este archivo ejecutable
-Plan-and-upgrade.gary-tramer-desc4,Agile CRM is the coolest&#44 easiest and by far the most productive CRM I've ever used. Within 20 minutes we had customized the CRM and sent out a complex outbound email campaign. We're already converting our leads. Insane,Ágil CRM es el más fresco&#44; más fácil y con mucho&#44; el CRM más productivo que he usado. Dentro de los 20 minutos que habíamos personalizado el CRM y enviado a cabo una campaña de correo electrónico saliente compleja. Ya estamos convirtiendo nuestros clientes potenciales. Insano
-plan-and-upgrade.gary-tramer-desc-1,Agile CRM is the coolest&#44; easiest and by far the most productive CRM I've ever used. Within 20 minutes we had customized the CRM and sent out a complex outbound email campaign. We're already converting our leads. Insane!,Ágil CRM es el más fresco&#44; más fácil y con mucho&#44; el CRM más productivo que he usado. Dentro de los 20 minutos que habíamos personalizado el CRM y enviado a cabo una campaña de correo electrónico saliente compleja. Ya estamos convirtiendo nuestros clientes potenciales. ¡Insano!
+widgets.bria-tooltip,Download executable and run it in your system to establish a connection between your Bria client and Agile CRM. Please note that you should already be logged in with selected Bria client before running this executable file.,Descarga el archivo ejecutable y córrelo desde tu sistema para establecer una conexión entre tu cliente Bria y tu Agile CRM. Por favor toma en cuenta que deberás estar previamente loggeado con el cliente Bria seleccionado antes de correr este archivo ejecutable
+Plan-and-upgrade.gary-tramer-desc4,Agile CRM is the coolest&#44 easiest and by far the most productive CRM I've ever used. Within 20 minutes we had customized the CRM and sent out a complex outbound email campaign. We're already converting our leads. Insane,Agile CRM es el más fresco&#44; más fácil y con mucho&#44; el CRM más productivo que he usado. Dentro de los 20 minutos que habíamos personalizado el CRM y enviado a cabo una campaña de correo electrónico saliente compleja. Ya estamos convirtiendo nuestros clientes potenciales. Insano
+plan-and-upgrade.gary-tramer-desc-1,Agile CRM is the coolest&#44; easiest and by far the most productive CRM I've ever used. Within 20 minutes we had customized the CRM and sent out a complex outbound email campaign. We're already converting our leads. Insane!,Agile CRM es el más fresco&#44; más fácil y con mucho&#44; el CRM más productivo que he usado. Dentro de los 20 minutos que habíamos personalizado el CRM y enviado a cabo una campaña de correo electrónico saliente compleja. Ya estamos convirtiendo nuestros clientes potenciales. ¡Insano!
 portlets.agile-description,Agile has all you need - contact management&$44 marketing automation&#44 web analytics&#44 telephony&#44 newsletter management&#44 2 way emails&#44 real time activity alerts&#44  third-party integrations and lot more.,Agile tiene todo lo que necesita - la gestión de contactos y $ 44 la automatización de marketing&#44; análisis web&#44; telefonía&#44; gestión de noticias&#44; mensajes de correo electrónico de 2 vías&#44; alertas de actividad en tiempo real&#44; las integraciones de terceros y mucho más.
-other.i-am-using-agile-crm-it-allows,I am using Agile CRM - it allows me to easily manage my contacts&#44; track clicks&#44; setup email and twitter campaigns&#44; configure contact-level analytics&#44; call and even receive notifications when a star contact is online.,Estoy utilizando ágil CRM - me permite administrar fácilmente mis contactos&#44; clics de pista&#44; configuración de correo electrónico y campañas de Twitter&#44; se configura de análisis a nivel de contacto&#44; llamar e incluso recibir notificaciones cuando un contacto de estrella no está en línea.
+other.i-am-using-agile-crm-it-allows,I am using Agile CRM - it allows me to easily manage my contacts&#44; track clicks&#44; setup email and twitter campaigns&#44; configure contact-level analytics&#44; call and even receive notifications when a star contact is online.,Estoy utilizando agile CRM - me permite administrar fácilmente mis contactos&#44; clics de pista&#44; configuración de correo electrónico y campañas de Twitter&#44; se configura de análisis a nivel de contacto&#44; llamar e incluso recibir notificaciones cuando un contacto de estrella no está en línea.
 main.your-subscription-has-canceled-and-your-account-has-blocked,Your subscription was cancelled and your account has been locked. Please contact our Billing Team at billing@agilecrm.com or upgrade your subscription to any paid plan by clicking the 'Upgrade Subscription' button.,Su suscripción fue cancelada y su cuenta ha sido bloqueada. Por favor&#44; póngase en contacto con nuestro equipo de facturación en billing@agilecrm.com o actualizar su suscripción a cualquier plan de pago haciendo clic en el botón de \'suscripción de actualización\'.
-admin-settings.admin-and-others-can-use-sso-option-to-login-to-agile-crm,Admins and other users can use the SSO option to login into your Agile CRM. Agile CRM SSO is implemented using JWT&#44; a widely adopted service that provides a flexible framework for creating a custom SSO solution.,Administradores y otros usuarios pueden utilizar la opción de SSO para acceder a su ágil CRM. Ágil CRM SSO se implementa utilizando JWT&#44; un servicio ampliamente adoptado que proporciona un marco flexible para crear una solución SSO personalizado.
+admin-settings.admin-and-others-can-use-sso-option-to-login-to-agile-crm,Admins and other users can use the SSO option to login into your Agile CRM. Agile CRM SSO is implemented using JWT&#44; a widely adopted service that provides a flexible framework for creating a custom SSO solution.,Administradores y otros usuarios pueden utilizar la opción de SSO para acceder a su agile CRM. Agile CRM SSO se implementa utilizando JWT&#44; un servicio ampliamente adoptado que proporciona un marco flexible para crear una solución SSO personalizado.
 admin-settings-stats.twilio-has-received-a-delivery-desc,Twilio has received a delivery receipt indicating that the message was not delivered. This can happen for a number of reasons including carrier content filtering&#44; availability of the destination handset&#44; etc.,Twilio ha recibido un acuse de recibo que indica que el mensaje no se entregó. Esto puede ocurrir por un número de razones&#44; incluyendo el filtrado de contenido del carrier&#44; la disponibilidad del teléfono de destino&#44; etc.
 prefs-email.gmail-settings-tooltip,You can share this email integration with other users. This allows them to see emails you have exchanged with a Contact. The shared users will see your email account in the Mail tab when they open a Contact.,Puede compartir esta integración de correo electrónico con otros usuarios. Esto les permite ver los mensajes de correo electrónico que ha intercambiado con un contacto. Los usuarios compartidos verán su cuenta de correo electrónico en la ficha Correo cuando abren un contacto.
 widgets.verified-caller-ids-tooltip,A verified phone number is one that you can use as your Caller ID when making outbound calls with Twilio. Agile will use this number as the Caller ID. Incoming calls on this number will NOT come to Agile.,Un número telefónico verificado es aquel que puedes utilizar como Caller ID al realizar llamadas salientes en Twilio. Agile utilizará este número como Caller ID. Las llamadas entrantes a este número NO ingresarán a Agile
@@ -63,11 +63,11 @@ contacts.no-previlige-to-delete,You may not have permission to delete some of th
 bulk-actions.bulk-update-ur-contacts,You may not have permission to update some of the contacts selected. Proceeding with this operation will delete tag to only the contacts you are allowed to update.,Puede que no tenga permiso para actualizar algunos de los contactos seleccionados. De continuar con esta operación eliminará la etiqueta sólo a los contactos que está autorizado a modificar.
 admin-settings-stats.message-could-not-be-sent-desc,The message could not be sent. This can happen for various reasons including queue overflows&#44; account suspensions. Twilio does not charge you for failed messages.,El mensaje no se pudo enviar. Esto puede ocurrir por varias razones incluyendo el desborde de la cola (queue)&#44;  suspensión de cuentas. Twilio no cobra por mensajes fallidos.
 landing-pages.tell-your-domain-desc,Tell your domain to show the pages hosted by Agile CRM.(Create a CNAME record in your DNS settings with HOST as 'page' and DESTINATION as 'landing.agilecrm.com.'),Informe a su dominio para mostrar las páginas alojadas por Agile CRM. (Crear un registro CNAME en la configuración de DNS con el HOST como 'page' y el destino como 'landing.agilecrm.com.')
-Plan-and-upgrade.paul-singh-desc4,For a startup that relies a lot on on-line business&#44 Agile CRM has been an invaluable team to our sales team as it integrates many capabilities out-of-the-box.,Para un inicio que se basa mucho en los negocios en línea&#44; ágil CRM ha sido un equipo muy valiosa para nuestro equipo de ventas ya que integra muchas capacidades fuera de la caja.
+Plan-and-upgrade.paul-singh-desc4,For a startup that relies a lot on on-line business&#44 Agile CRM has been an invaluable team to our sales team as it integrates many capabilities out-of-the-box.,Para un inicio que se basa mucho en los negocios en línea&#44; agile CRM ha sido un equipo muy valiosa para nuestro equipo de ventas ya que integra muchas capacidades fuera de la caja.
 integrations.agile-send-messages-to-your-users-based-on-activity,Agile can send relevant messages to your users based on what they do (or don’t do) on your site or application. Start engaging your users on email by creating a,Ágil puede enviar mensajes relevantes a sus usuarios en función de lo que hacen (o no hacen) en su sitio o aplicación. Iniciar la participación de sus usuarios de correo electrónico en la creación de un
 bulk-actions.delete-contacts-to-update,You may not have permission to update some of the contacts selected. Proceeding with this operation will add tag to only the contacts you are allowed to update.,Puede que no tenga permiso para actualizar algunos de los contactos seleccionados. De proceder con esta operación se sumará a la etiqueta sólo los contactos que está autorizado a modificar.
 deal-view.permission-to-restore-deals,You may not have permission to restore some of the deals selected. Proceeding with this operation will restore only the deals that you are permitted to update.,Puede que no tengas permiso para restaurar algunas de las ofertas seleccionadas. Proceder con esta operación restaurará sólo las ofertas que estés autorizado para actualizar.
-plan-and-upgrade.paul-singh-desc-1,For a startup that relies a lot on on-line business&#44; Agile CRM has been an invaluable team to our sales team as it integrates many capabilities out-of-the-box.,Para un inicio que se basa mucho en los negocios en línea&#44; ágil CRM ha sido un equipo muy valiosa para nuestro equipo de ventas ya que integra muchas capacidades fuera de la caja.
+plan-and-upgrade.paul-singh-desc-1,For a startup that relies a lot on on-line business&#44; Agile CRM has been an invaluable team to our sales team as it integrates many capabilities out-of-the-box.,Para un inicio que se basa mucho en los negocios en línea&#44; agile CRM ha sido un equipo muy valiosa para nuestro equipo de ventas ya que integra muchas capacidades fuera de la caja.
 deal-view.permission-to-archive-deals,You may not have permission to archive some of the deals selected. Proceeding with this operation will archive only the deals that you are permitted to update.,Puede que no tenga permiso para achivar algunas de las ofertas seleccionadas. De continuar con esta operación se archivarán solamente las ofertas que se te permite actualizar.
 tickets.configure-your-knowledge-base-by-adding-categories,Configure your knowledge base by adding categories&#44 sections and articles&#44; select a landing page in knowledge base settings and access your knowledge base.,Configurar su base de conocimientos mediante la adición de categorías&#44; secciones y artículos&#44; seleccione una página de destino en la configuración de la base de conocimientos y acceder a su base de conocimientos.
 admin-settings-integrations.your-facebook-title,To link a new Facebook account&#44; first you need to unlink your already linked account. Unlinking old account will not delete added forms in your Facebook page.,Para enlazar una nueva cuenta de Facebook&#44; primero que hay que desvincular su cuenta ya vinculada. La desvinculación dela cuenta anterior no eliminará los formularios añadidos en su página de Facebook.
@@ -79,7 +79,7 @@ admin-settings-custom-fields.formula-desc,Formula - An arithmetic formula in fol
 prefs-data-sync.widget-paypal-desc,PayPal is the faster&#44; safer way for online invoicing web and mobile payments. Configure your PayPal business account to view your PayPal invoices in Agile.,PayPal es la forma más rápida&#44; más segura para la web de facturación en línea y pagos móviles. Configurar su cuenta PayPal Business para ver sus facturas de PayPal en ágil.
 campaigns.when-a-contact-unsubscribes-from-your-campaign,When a contact unsubscribes from your campaign&#44; a confirmation email is sent. The above given email address will be used as ‘From’ address for that email.,Cuando un contacto se da de baja de tu campaña&#44; se envía un email de confirmación. La dirección de correo en cuestión será utilizada como la dirección del Remitente para ese email
 widgets.towerdata-helps-desc,Towerdata helps you learn more about your customers&#44; provides data (age&#44; gender&#44; marital status&#44; income&#44; etc.&#44;) on US consumer email addresses.To access&#44;,Towerdata ayuda a aprender más sobre tus clientes&#44; proporciona información (edad&#44; sexo&#44; estatus marital&#44; ingreso&#44; etc.&#44;) en cuentas de e-mail de consumidores en E.E.U.U. Para acceder&#44;
-plan-and-upgrade.ron-kaplan-desc-1,Agile CRM is an exciting and powerful system. The capability to create complex workflows is immensely useful and easy - simply a matter of drag and drop.,Ágil CRM es un sistema potente y emocionante. La capacidad para crear flujos de trabajo complejos es inmensamente útil y fácil - simplemente una cuestión de arrastrar y soltar.
+plan-and-upgrade.ron-kaplan-desc-1,Agile CRM is an exciting and powerful system. The capability to create complex workflows is immensely useful and easy - simply a matter of drag and drop.,Agile CRM es un sistema potente y emocionante. La capacidad para crear flujos de trabajo complejos es inmensamente útil y fácil - simplemente una cuestión de arrastrar y soltar.
 widgets.towerdata-profile-desc,Towerdata helps you learn more about your customers&#44; provides data (age&#44; gender&#44; marital status&#44; income&#44; etc.&#44;) on US consumer email addresses.To access&#44;,Towerdata ayuda a aprender más sobre tus clientes&#44; proporciona información (edad&#44; sexo&#44; estatus marital&#44; ingreso&#44; etc.&#44;) en cuentas de e-mail de consumidores en E.E.U.U. Para acceder&#44;
 deal-view.edit-deal-filter-popover-content-1,Use filters to sort deals with a specific criteria to find patterns. You can save your preferred filters and fetch the deals based on saved preferences.,Utilice filtros para ordenar ofertas con un criterio específico para encontrar patrones. Puede guardar sus filtros preferidosy buscar ofertas de acuerdo a las preferencias guardadas.
 documents.documents-desc,Documents add more context to Contacts or Deals. To add documents&#44; upload them from your computer or append them from a cloud storage like Google Drive.,Los Documentos añaden más contexto a contactos o ofertas. Para agregar documentos&#44; súbalos desde el ordenador o anéxelos desde la nube como Google Drive.
@@ -184,7 +184,7 @@ web-rules.web-rules-desc-1,Web rules allow you to perform certain actions when p
 admin-settings-integrations.zapier-content,Zapier is the easiest way to connect hundreds of SaaS apps you use to easily move your data and automate tedious tasks.,Zapier es la forma más fácil de conectar cientos de aplicaciones SaaS que se utiliza para mover datos facilmente  y automatizar tareas tediosas.
 admin-settings-custom-fields.date-field-desc,Date field - A calendar date input field. (If you are providing this field value through API&#44; provide an epoch number),campo de fecha - Un campo de entrada de fecha del calendario. (Si vas a proporcionar este valor  a través de la API&#44; proporciona un número epoch)
 billing.cncel-voilation,Sorry. Only users with admin privileges can change the plan. Please contact your administrator for further assistance.,Lo siento. Sólo los usuarios con privilegios de administrador puede cambiar el plan. Por favor&#44; póngase en contacto con el administrador para obtener más ayuda.
-Refer-friend.referral-detail,Try @agilecrm. I am using Agile CRM and really love it. An all-in-one CRM which enables you sell like the Fortune 500!,Trate @agilecrm. Estoy utilizando ágil CRM y realmente lo amo. Un todo-en-uno de CRM que permite vendes como las empresas de Fortune 500!
+Refer-friend.referral-detail,Try @agilecrm. I am using Agile CRM and really love it. An all-in-one CRM which enables you sell like the Fortune 500!,Trate @agilecrm. Estoy utilizando agile CRM y realmente lo amo. Un todo-en-uno de CRM que permite vendes como las empresas de Fortune 500!
 admin-settings-api-analytics.desc-4,To allow only on a particular subdomain eg: https://test.example.com please add as test.example.com or *.example.com.,Para permitir sólo en un subdominio particular&#44; por ejemplo: https://test.example.com&#44; favor de añadir como test.example.com o * .example.com.
 admin-settings-api-analytics.desc-subdomain,To allow only on a particular subdomain eg,Para permitir sólo en un subdominio particular&#44; por ejemplo&#44;
 admin-settings-api-analytics.desc-pl-add,please add as,Por favor&#44; añadir
@@ -204,7 +204,7 @@ users.deleted-users,Users have been deleted successfully. Please adjust your bil
 widgets.freshBooks-desc,FreshBooks enables the ability to create and manage invoices&#44; estimates&#44; expenses&#44; and projects all in one place.,Freshbooks otorga la habilidad de crear y administrar facturas&#44; estimados&#44; gastos y proyectos en un solo lugar.
 admin-settings-integrations.plivo-content,Plivo provides Voice and SMS API for businesses of all sizes.  Use your Plivo account to send SMS from Campaigns.,Plivo ofrece servicios de voz y API SMS para negocios de todos los tamaños. Utilice su cuenta de Plivo para enviar SMS desde Campañas.
 gateway.enable-gateway,You need to enable SMS Gateway integration to use this option. Please enable it in Admin Settings -> Integrations,Es necesario para permitir la integración SMS Gateway para utilizar esta opción. Por favor habilite esta configuración del administrador -&gt; Integraciones
-referrals.place-this-link-on-your-website,Place this link on your website&#44; in your email newsletter&#44; or give it to someone when you refer them to AgileCRM.,Coloca este enlace en tu sitio web&#44; en tu newsletter&#44; o dáselo a alguien al referirlos con el CRM de Agile
+referrals.place-this-link-on-your-website,Place this link on your website&#44; in your email newsletter&#44; or give it to someone when you refer them to AgileCRM.,Coloca este enlace en tu sitio web&#44; en tu newsletter&#44; o dáselo a alguien al referirlos con el Agile CRM
 prefs-data-sync.widget-freshbooks-desc,FreshBooks enables the ability to create and manage invoices&#44; estimates&#44; expenses&#44; and projects all in one place.,FreshBooks permite la posibilidad de crear y gestionar las facturas&#44; presupuestos&#44; gastos&#44; y proyectos en un solo lugar.
 other.contact-delete-conformation,Are you sure you want to delete this contact? Please note that once confirmed&#44  the action can not be undone.,¿Está seguro de que quiere eliminar este contacto? Tenga en cuenta que una vez confirmada&#44; la acción no se puede deshacer.
 validation-msgs.company_duplicate,You have assigned Company to more than one element. Please ensure that company is assigned to only one element.,Se ha asignado a la empresa más de un elemento. Por favor asegúrese de que la empresa se le asigna a un solo elemento.
@@ -375,7 +375,7 @@ documents.gd-error,Can not attach Google Drive doc to email. You can add a link 
 prefs-data-sync.freshbooks-sync-desc,Sync Clients from Freshbooks as Contacts in Agile CRM along with purchase history.,Sincronice sus clientes desde Freshbooks como contactos en CRM Agile junto con el historial de compras.
 prefs-data-sync.FRESHBOOKS-content,Sync Clients from Freshbooks as Contacts in Agile CRM along with purchase history.,Sincronice sus clientes desde Freshbooks como contactos en CRM Agile junto con el historial de compras.
 prefs-data-sync.widget-braintree-desc,Braintree enables individuals and businesses to accept payments over the internet.,Braintree permite a los individuos y las empresas para aceptar pagos a través de Internet.
-datasync.FRESH,Sync Clients from Freshbooks as Contacts in Agile CRM along with purchase history.,Sincronizar clientes desde Freshbooks como contactos en el CRM de Agile junto con el historial de compras.
+datasync.FRESH,Sync Clients from Freshbooks as Contacts in Agile CRM along with purchase history.,Sincronizar clientes desde Freshbooks como contactos en el Agile CRM junto con el historial de compras.
 bulk-actions.wanna-continue,Continuing with this operation will stop sending emails once it crosses the quota.,Continuando con esta operación se detendrá el envío de mensajes de correo electrónico una vez que se cruza la cuota.
 campaigns.show-personalized-popup-messages,Show those personalized popup messages to your visitors to keep them coming back.,Mostrar los popups personalizados a sus visitantes para assegurar que regresen.
 contacts-view.has-no-entities-desc,has no entities (Notes&#44; Tasks&#44; Deals and etc..) related&#44; to show in the Timeline.,no tiene entidades (notas&#44; tareas&#44; ofertas y etc ..) relacionadas&#44; para mostrar en la línea de tiempo.
@@ -457,7 +457,7 @@ prefs-data-sync.SHOPIFY-content,Sync customer data and Agile CRM as contacts alo
 validation-msgs.image-is-a-keyword-desc,image is a keyword in the system and it can't be added as a custom field.,imagen es una palabra clave en el sistema y que no se puede añadir como un campo personalizado.
 admin-settings-users.prevents-the-user-access,Prevents the user access but billing cycle is still enabled for this user,Previene el acceso de los usuarios&#44; pero el ciclo de cobranza permancece habilitado para este usuario
 contact-details.setup-telephony-social-helpdesk,Setup telephony&#44; social&#44; helpdesk&#44; billing and enhance your contact view.,Configurar telefonía&#44; social&#44; help desk&#44; cobranza y mejora tu vista de contactos
-prefs-data-sync.widget-sync-customer-data-desc,Sync customer data and Agile CRM as contacts along with purchase history.,Sincronizar los datos del cliente y ágil CRM como contactos junto con el historial de compras.
+prefs-data-sync.widget-sync-customer-data-desc,Sync customer data and Agile CRM as contacts along with purchase history.,Sincronizar los datos del cliente y agile CRM como contactos junto con el historial de compras.
 bulk-actions.add-subscribers,You can add subscribers from Contacts tab - using the Bulk Actions option,Puede añadir los suscriptores desde la pestaña Contactos - utilizando la opción de acciones a granel
 report-view.lost-deals-description,Get insights into why deals were lost. Filter by owner&#44; track and source.,Conocer por qué se pierde una oferta. Filtrar por dueño&#44; registro y fuente
 report-view.trackandsource,Get insights into why deals were lost. Filter by owner&#44; track and source.,Obtener una visión de por qué se perdieron ofertas. Filtrar por el propietario&#44; la pista y la fuente.
@@ -529,7 +529,7 @@ contacts-view.import-some-of-the-columns-desc,to import some of the columns in y
 acl.please-contact-your-admin-to-enable-this-option,Please contact your admin or account owner to enable this option.,Por favor&#44; póngase en contacto con el administrador o propietario de la cuenta para habilitar esta opción.
 admin-settings-users.configure-agile-cms,Configure Agile with your CMS&#44; eCommerce&#44; SMS and email gateways.,Configurar Agile con tu CMS&#44; eCommerce&#44; SMS y gateways de correo electrónico.
 contacts-view.engage-with-your-customers-on-twitter-by-setting-up-streams,Engage your customers on Twitter by setting up different streams.,Involucrar a sus clientes en Twitter mediante la creación de diferentes corrientes.
-widjets.your-agilecrm-code-is-sucessfully-installed,Agile CRM's code is successfully installed in your Shopify Store.,código de ágil CRM se ha instalado correctamente en su Shopify tienda.
+widjets.your-agilecrm-code-is-sucessfully-installed,Agile CRM's code is successfully installed in your Shopify Store.,código de agile CRM se ha instalado correctamente en su Shopify tienda.
 plan-and-upgrade.you-can-save-bi-yearly,You can save $__bi_yearly_discount__ by upgrading to 2 year plan.,Puedes ahorrar $__descuento__bi_anual__ al cambiar al plan de 2 años
 campaigns.create-custom-campaign-template-desc,You can create custom campaign template for every sales scenario.,Puedes crear plantillas de campaña personalizadas para cada escenario de ventas.
 admin-settings-integrations.woocommerce-content,WooCommerce is a popular and free ecommerce plugin for Wordpress.,WooCommerce es un plugin de comercio electrónico popular y gratuito para Wordpress.
@@ -655,7 +655,7 @@ workflows.run-campaign-on-filtered-list-every-hour,Run a campaign on a filtered 
 widgets.please-select-twilio-number,Please select either Twilio number or Verified Caller ID.,Favor de seleciconar un número Twilio o un Caller ID verificado
 report-view.campaign-reports-details,Find out how a campaign is performing over a time period.,Descubre el progreso de una campaña sobre un periodo de tiempo
 portlets.more-fun-with-colleagues,Agile is more fun with your colleagues. Invite them now.,Agile es más divertido con tus colegas. Invítalos ahora
-socialsuite.follow-twitter,You are following Agile CRM on Twitter. Congratulations!,Estas siguiendo ágil CRM en Twitter. ¡Felicitaciones!
+socialsuite.follow-twitter,You are following Agile CRM on Twitter. Congratulations!,Estas siguiendo agile CRM en Twitter. ¡Felicitaciones!
 social.mentions-hover-content,Mentions (all tweets containing a users's @screen_name).,Menciones (todos los tweets que contienen el @nombre_de_usuario_ del usuario
 campaigns.tickets-label-added-desc,Runs a Campaign on a contact When ticket label is added.,Ejecuta una campaña en un contacto cuando se añade una etiqueta de ticket
 other.verify-your-number-after-you-receive-a-call-from-twilio,verify your number after you receive a call from Twilio.,verificar su número después de recibir una llamada de Twilio.
@@ -776,7 +776,7 @@ prefs-notifications.get-notified-when-a-contact-opens-email,Get notified when a 
 plan-and-upgrade.current-plan-description,Your current plan provides 5000 emails (branded).,Tu plan actual proporciona 5000 correos (con tu marca)
 companies.delete-process-info,Your companies deletion will be processed shortly,Su compañías de eliminación será procesada en breve
 prefs-data-sync.setup-contacts-sync-with-freshbooks,Setup contacts sync with your Freshbooks account.,Configurar sincronzación de contactos con su cuenta de Freshbooks
-widjets.your-agile-crm-account-already-to-shop,Your Agile CRM account is already linked to shop.,Su cuenta ágil CRM ya está vinculada a la tienda.
+widjets.your-agile-crm-account-already-to-shop,Your Agile CRM account is already linked to shop.,Su cuenta agile CRM ya está vinculada a la tienda.
 validation-msgs.pls-enter-valid-email-sep-by-comma,Please enter valid email each separated by comma.,Por favor&#44; introduzca válida de correo electrónico separados por comas.
 other.please-note-that-your-subscription-is-valid-till,Please note that your subscription is valid till ,Tenga en cuenta que su suscripción es válida hasta
 contact-details.sorry-this-contact-has-no-email-to-get-the-mails,Sorry! this contact has no email to get the mails,¡Lo siento! este contacto no tiene correo electrónico para recibir los correos
@@ -839,7 +839,7 @@ security.ip-added,Your IP Address has been updated successfully.,Su dirección I
 workflows.total-email-skipped-recorded,Total email skipped recorded & unique skipped.,total de correo electrónico registrada saltado y único saltado.
 portlets.email-templates-pad-content-title,You do not have any Email templates currently.,No cuentas con plantillas de correo todavía
 prefs-email-templates.you-do-not-have-any-email-templates-currently,You do not have any Email templates currently.,Aún no has ingresado ninguna plantilla de Email
-referrals.you-have-not-referred-agile-crm-yet-to-any-one,You have not referred Agile CRM yet to any one,No has referido el CRM de Agile a nadie todavía
+referrals.you-have-not-referred-agile-crm-yet-to-any-one,You have not referred Agile CRM yet to any one,No has referido el Agile CRM a nadie todavía
 contacts-view.company-name-is-mandatory-for-import-companies,Company name is mandatory for import companies,El nombre de la empresa es obligatorio para importar compañías
 report-view.first-response-time-over-the-date-ranges,View first response time over the date ranges.,Ver el tiempo de la primera respuesta a lo largo del tiempo con rangos diversos de tiempo
 portlets.no-ticket-filters-pad-content-title,You do not have any Tickets Filters currently.,Usted no tiene ningun filtro de tickets actualmente.
@@ -888,7 +888,7 @@ admin-settings-integrations.please-upgrade-to-regular-or-enterprise-plan,Please 
 countries.GS,South Georgia and the South Sandwich Islands,Georgia del Sur y las Islas Sandwich del Sur
 help.with-your-google-apps-other-emailservices,with your Google apps or other mail servers.,con sus aplicaciones de Google u otros servidores de correo.
 contact-details.no-perm-to-update,You do not have permission to change owner.,Usted no tiene permiso para cambiar el propietario.
-Refer-friend.mention-agilecrm-on-your-timeline,Mention Agile CRM on your Twitter timeline!,Mención ágil CRM en su línea de tiempo de Twitter!
+Refer-friend.mention-agilecrm-on-your-timeline,Mention Agile CRM on your Twitter timeline!,Mención agile CRM en su línea de tiempo de Twitter!
 Admin-settings-integrations.capasity-agile-doesnt-queue-your-emails,capacity. Agile does NOT queue your emails.,capacidad. Ágil no poner en cola mensajes de correo electrónico.
 widgets.make-and-receive-calls-using-your-bria-client,Make & receive calls using your Bria client,Haz y recibe llamadas utilizando tu cliente Bria.
 admin-settings-users.delete-own-contacts-and-other-user-contacts,Delete own contacts and other user contacts,Eliminar contactos propios y otros contactos de usuario
@@ -940,7 +940,7 @@ validation-msgs.range,Please enter a value between {0} and {1}.,Por favor&#44; i
 widgets.person-does-not-share-his-her-tweets,This person does not share his/her tweets,Esta persona no comparte sus tweets.
 portlets.delete-dashlet-confirm,Are you sure you want to delete Dashlet -,¿Seguro que quiere eliminar Dashlet -
 Deal-detail.you-can-upgrade-account-at-anytime,You can upgrade your account at any time.,Puede actualizar su cuenta en cualquier momento.
-other.social-know-your-customer-social-activity,Social Know your customer social activity,Conoce la actividad social de tu cliente
+other.social-know-your-customer-social-activity,Know your customer social activity,Conoce tu actividad social del cliente
 web-rules.select-a-template-edit-editor,(Select a template / Edit in HTML editor),(Seleccionar plantilla / Usar el editor HTML)
 other.i-thought-you-would-love-as-much-as-i-do,I thought you would love as much as I do.,Pensé que a usted le gusta tanto como yo.
 deal-view.save-specific-document-information,You can add a document related to a Deal.,Puedes añadir un documento relacionado con un acuerdo u oferta.
@@ -1000,7 +1000,7 @@ campaigns.enabled-campaign,Campaign has been enabled successfully.,Campaña se h
 other.emails-sending-in-this-domain-is-paused,Email sending on this domain is paused.,el envío de correo electrónico en este dominio está en pausa.
 widgets.server-sip-proxy-title,e.g. computer.network&#44; proxy.domain.com,Ej: computer.network&#44; proxy.domain.com
 portlets.do-not-have-dashlets,You do not have any dashlets currently.,Usted no tiene ningún dashlet actualmente.
-main.your-agile-crm-account-has-been-paused,Your Agile CRM account has been paused.,Su cuenta ágil CRM está en pausa.
+main.your-agile-crm-account-has-been-paused,Your Agile CRM account has been paused.,Su cuenta agile CRM está en pausa.
 deal-view.move-deal-from-archive-to-active-state,Move Deal from Archive to Active state,Mover Oferta del estado Archivada a Activa
 portlets.reports-pad-content-title,You do not have any reports currently.,Aún no tienes ningún reporte
 contacts-view.disabled-the-admin-permissions-for,disabled Administrator Permissions for,Permisos de administrador para discapacitados
@@ -1071,7 +1071,7 @@ portlets.filter-results-companies-pad-content-title,No companies matching this c
 form-builder.you-do-not-have-any-forms-currently,You do not have any Forms currently.,No cuentas con ningún formulario todavía
 countries.UM,United States Minor Outlying Islands,Islas menores de los Estados Unidos
 tickets.conversitions-and-tickets-related-to,Conversations and tickets related to,Conversaciones y entradas relacionadas con
-widjets.please-uninstall-agilecrm-app,Please uninstall Agile CRM app from ,Por favor&#44; desinstale ágil CRM aplicación desde
+widjets.please-uninstall-agilecrm-app,Please uninstall Agile CRM app from ,Por favor&#44; desinstale agile CRM aplicación desde
 campaigns.no-contact-assinged,No contact assigned to this campaign,No hay contacto asignado a esta campaña
 admin-settings-users.update-contacts-owned-by-other-users,Update contacts owned by other users,Actualizar los contactos de otros usuarios
 portlets.please-relate-the-call-to-a-contact,Please relate the call to a contact.,Por favor referirse a la llamada a un contacto.
@@ -1218,8 +1218,8 @@ contacts-view.import-contacts-from-quickbooks,Import contacts from Quickbooks.,I
 tickets.how-to-configure-knowledge-base,How to configure Knowledge Base?,Cómo configurar Knowledge Base?
 widgets.saved-success,Custom widget saved successfully,widget personalizado guardado correctamente
 campaigns.run-this-campaign-on-the-contact,Run this Campaign on the Contact,Ejecuta esta campaña en el contacto
-Refer-friend.invite-frinds-to-try-agilecrm,Invite friends to try Agile CRM!,Invitar a amigos a probar ágil CRM!
-prefs-settings.keyboard-shortcuts-for,Keyboard Shortcuts for Agile CRM,Atajos de teclado para CRM de Agile
+Refer-friend.invite-frinds-to-try-agilecrm,Invite friends to try Agile CRM!,Invitar a amigos a probar agile CRM!
+prefs-settings.keyboard-shortcuts-for,Keyboard Shortcuts for Agile CRM,Atajos de teclado para Agile CRM
 widgets.Towerdata-delete-message,Are you sure to delete Towerdata,¿Estás seguro de que deseas eliminar Towerdata?
 deal-view.add-related-contacts-to-campaign,Add related Contacts to Campaign,Agregar contactos relacionados a la campaña
 form-builder.you-do-not-have-any-forms-saved,You do not have any Forms saved.,No tienes ningún formulario guardado.
@@ -1403,7 +1403,7 @@ admin-settings-users.manage-your-tasks-and-events,Manage your tasks and events,A
 campaigns.what-is-workflow-automation,What is Workflow Automation?,¿Qué es la automatización del flujo de trabajo?
 tickets.ticket-forwarded,Ticket has been forwarded to,Venta de entradas ha sido remitida a
 other.email-send-and-receive-email,Email Send and Receive Email,Email enviar y recibir email
-description.agile-crm-for-saas-companies,Agile CRM for SaaS Companies,Ágil CRM SaaS para empresas
+description.agile-crm-for-saas-companies,Agile CRM for SaaS Companies,Agile CRM SaaS para empresas
 tickets.label-deleted,has been deleted from ticket,ha sido borrado de entradas
 tickets.priority-updated-to,Priority has been updated to,Prioridad ha sido actualizado a la
 portlets.contact-activities-page-views-pad-content-desc,No email opens recorded yet.,No se han registrado correos abiertos todavía
@@ -1685,7 +1685,7 @@ widgets.click-to-see-more-chats,Click to see more chats,Haz clic para ver más c
 contacts-view.export-companies-in-CSV,Export Companies in CSV,Ecportar compañías a CSV
 web-rules.cart-value-greater-than,Cart value greater than,Valor del carrito de compras mayor a 
 validation-msgs.deal_track_duplicated,'Track' already exists!,\'Track\' ya existe!
-admin-settings-integrations.add-this-agile-crm-form,Add this Agile CRM form,Añadir esta plantilla del CRM de Agile
+admin-settings-integrations.add-this-agile-crm-form,Add this Agile CRM form,Añadir esta plantilla del Agile CRM
 widgets.dont-have-api-key,Don't have an API key? ,¿No tiene una clave de API?
 contacts-view.campaign-deleted-later,Campaign deleted later.,La campaña se elimina más tarde.
 misc-keys.clip-key-copied,Key copied to clipboard,Clave copiar al portapapeles
@@ -1884,7 +1884,7 @@ campaigns.delete-logs,Delete Campaign logs,Eliminar registros de la campaña
 widgets.current-custom-field,Current custom field,Campo personalizado actual
 notofication.in-loction-bar,in the location bar.,en la barra de direcciones.
 deal-view.what-are-milestone,What are Milestones?,¿Cuáles son hitos?
-portlets.welcome-msg,Welcome to Agile CRM,Bienvenido al CRM de Agile
+portlets.welcome-msg,Welcome to Agile CRM,Bienvenido al Agile CRM
 prefs-settings.contextual-shortcuts,Contextual Shortcuts,Atajos contextuales
 widgets.redirect-twimlet-url,Redirect Twimlet Url,Redireccionar URL de Twimlet
 widgets.agile-contact-fields,Agile Contact Fields,Campos de contacto Agile
@@ -1940,7 +1940,7 @@ countries.AE,United Arab Emirates,Emiratos Árabes Unidos
 report-view.pipeline-conversions,Pipeline Conversions,Conversiones de tuberías
 web-rules.cart-value-less-than,Cart value less than,Valor del carrito de compras menor a 
 countries.MD,Moldova&#44; Republic of,República de Moldovia
-dashboards.default-help,Welcome to Agile CRM,Bienvenido al CRM de Agile
+dashboards.default-help,Welcome to Agile CRM,Bienvenido al Agile CRM
 tickets.no-filters-available,No filters available,No hay filtros disponibles
 contact-details.visited-your-website,visited your website,visitó su sitio web
 tickets.hours-since-assigned,Hours Since Assigned,Horas tranacurridas desde que se asignó
@@ -2713,7 +2713,7 @@ admin-settings-users.last-logged-in,Last Logged In,última fecha de inicio de se
 campaigns.tag-is-deleted,Tag is deleted,se elimina Tag
 report-add.last-contacted,Last Contacted,Contactado por última vez
 widgets.marital-status,Marital status,Estatus marital
-portlets.agile-crm-blog,Agile CRM Blog,Blog de CRM de Agile
+portlets.agile-crm-blog,Agile CRM Blog,Blog de Agile CRM
 report-add.send-report-to,Send Report To,Enviar reporte a 
 landing-pages.landing-pages,Landing Pages ,Páginas de landing
 menu.theme-and-layout,Theme & Layout,Tema y layout
@@ -2968,7 +2968,7 @@ currency.Serbian Dinar,Serbian Dinar,Dinar serbio
 tasks.completed,Complete Task,Tarea completa
 widgets.revoke-access,Revoke Access,Revocar acceso
 portlets.all-companies,All Companies,todas las Empresas
-other.agile-crm,Agile CRM&#44,Ágil CRM&#44;
+other.agile-crm,Agile CRM&#44,Agile CRM&#44;
 reports.daily,Daily Reports,Reportes diarios
 contacts-view.add-condition,Add condition,Añadir condición
 campaigns.deal-is-added,Deal is added,Se agregó oferta
@@ -3771,7 +3771,7 @@ campaigns.new-email,New Email,Nuevo email
 contact-details.duplicate,Duplicate,Duplicar
 widgets.sorry-we-coud-not-establish-a-connection,Sorry&#44,Lo siento&#44;
 contacts-view.Enter Tag,Enter Tag,Introduzca Tag
-menu.agile-crm,Agile CRM,CRM de Agile
+menu.agile-crm,Agile CRM,Agile CRM
 tickets.view-name,View name,Ver nombre
 others.saving,Saving...,Ahorro...
 tickets.mark-spam,Mark Spam,Marcar como spam
@@ -5033,7 +5033,7 @@ widgets.custom-widget-details,Enter your custom widget details,Introduzca sus de
 widgets.enter-zendesk-widget-details,Enter your Zendesk details,Introduzca sus datos de Zendesk
 widgets.enter-sip-widget-details,Enter your Sip details,Introduzca sus datos de Sip
 widgets.enter-twilio-widget-details,Enter your Twilio details,Introduzca sus datos de Twilio
-widgets.enter-freshBooks-widget-details,Enter your Freshbooks details,Introduzca sus datos Freshbooks
+widgets.enter-freshBooks-widget-details,Enter your FreshBooks details,Introduzca sus datos FreshBooks
 widgets.enter-clickDesk-widget-details,Enter your ClickDesk details,Introduzca sus datos ClickDesk
 widgets.please-try-again,Please Try agian,Por favor Pruebe alquilásemos
 prefs-data-sync.SALESFORCE-content,By configuring access to your Salesforce&#44; we'll automatically import your Contacts and Tasks to AgileCRM.,Mediante la configuración de acceso a su Salesforce &#44; vamos a importar automáticamente sus contactos y tareas a AgileCRM .
@@ -5194,3 +5194,13 @@ contacts-view.added-call-log-to,Added call log to,Se añadió registro de llamad
 contacts-view.added-note-to,Added note to ,Se agregó una nota a
 datasync.resync-info,Update will 'resync' your entire data to make it searchable. This may be needed in extreme scenarios. Eg: you made an existing custom field searchable.,Update 'sincronizar' sus datos completos para facilitar las búsquedas . Esto puede ser necesario en situaciones extremas . Por ejemplo : se hizo un campo personalizado existente búsquedas.
 validation-msgs.system-fields,Given name is a system field name. Please choose another name.,Nombre dado es un nombre de campo del sistema. Por favor&#44; elija otro nombre .
+widgets.view-tickets-and-chats,View tickets and chats,Ver las entradas y chats
+widgets.customer-support,Customer Support,Atención al cliente
+widgets.send-and-rcv-email,Send and Receive Email,Enviar y recibir correo electrónico
+widgets.make-and-rcv-calls,Make & Receive calls from Agile,Hacer y recibir llamadas desde ágil
+widgets.calling,Calling,Vocación
+widgets.view-and-invoices,View and send invoices,Ver y enviar facturas
+widgets.view-cus-order-details,View Customer Orders Details,Ordenes de los Clientes Detalles
+widgets.add-your-widgets,Add your widgets,Añadir sus widgets
+widgets.custom-widgets,Custom Widgets,Reproductores personalizados
+widgets.stripe-custom-field-select,Stripe uses Stripe ID stored in text custom field to fetch data. Select the custom field to be used.,Raya utiliza identificador de banda almacenado en el campo de texto personalizado para obtener los datos . Seleccionar el campo personalizado que se utilizará .

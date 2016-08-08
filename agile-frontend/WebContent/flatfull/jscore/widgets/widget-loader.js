@@ -226,7 +226,7 @@ function set_up_widgets(el, widgets_el)
 					
 				}, undefined, 'true');
 			}else{
-				var download_tpl_js_path = model.get('name').toLowerCase() + ".js?_=" + _agile_get_file_hash(model.get('name') + ".js");
+				var download_tpl_js_path = model.get('name').toLowerCase() + ".js";
 				downloadTemplate(download_tpl_js_path, function()
 				{
 					widget_template_loaded_map[model.get('name').toLowerCase()] = true;

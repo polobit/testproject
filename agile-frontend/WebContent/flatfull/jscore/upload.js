@@ -167,7 +167,7 @@ function deleteConfirmation() {
     verifyUpdateImgPermission(function(can_delete_image){
 		if(can_delete_image)
 		{
-			showAlertModal(_agile_get_translated_val('contact-details', 'delete'), "confirm", function(){
+			showAlertModal('delete', "confirm", function(){
 		    	deleteContactImage();
 			});
 		}

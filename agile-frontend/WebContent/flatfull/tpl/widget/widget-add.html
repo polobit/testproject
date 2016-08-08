@@ -68,11 +68,16 @@
 		{{#if_equals widget_type "CUSTOM"}}
 			{{#if_equals name "Custom"}}
 			{{else}}
-				<center title="{{agile_lng_translate 'widgets' 'display-name'}}"><h4 class="m-t-xxs m-b-xxs">{{#if display_name}}{{get_widget_translation name 'display_name'}}{{else}}{{get_widget_translation name 'name'}}{{/if}}</h4></center>
-				<center title="{{agile_lng_translate 'widgets' 'widget-name'}}"><span class="text-xs m-b-xs">{{get_widget_translation name 'name'}}</span></center>
-			{{/if_equals}}
+				<center title="{{agile_lng_translate 'widgets' 'display-name'}}"><h4 class="m-t-xxs m-b-xxs">{{#if display_name}}{{display_name}}{{else}}{{name}}{{/if}}</h4></center>
+				<center title="{{agile_lng_translate 'widgets' 'widget-name'}}"><span class="text-xs m-b-xs">{{name}}</span></center>
+			{{/if_equals}} 
 		{{/if_equals}}
-		{{get_widget_translation name 'content'}}
+		{{#if_equals widget_type "CUSTOM"}}
+			{{description}}
+		{{else}}
+		    {{get_widget_translation name 'content'}}
+		{{/if_equals}}
+		
 
 	{{#if_equals name "Bria"}}
 		<br/>
@@ -386,7 +391,8 @@
 <div class="col-md-12">
     <div class="row">
 	<div class="col-md-12">
-     		<h4 class="m-b">{{agile_lng_translate 'other' 'social-know-your-customer-social-activity'}}</h4>
+     		<h4 class="m-b">{{agile_lng_translate 'widgets' 'social'}} <small>{{agile_lng_translate 'other' 'social-know-your-customer-social-activity'}}
+     		</small></h4>
            
        
                 <div id="social" class="row">
@@ -396,7 +402,7 @@
 	<div class="row">
 	<div class="col-md-12">
     
-            <h4 class="m-b">{{agile_lng_translate 'other' 'customer-support-View-tickets-and-chats'}}</h4>
+            <h4 class="m-b">{{agile_lng_translate 'widgets' 'customer-support'}} <small>{{agile_lng_translate 'widgets' 'view-tickets-and-chats'}}</small></h4>
       
                 <div id="support" class="row">
                 </div>
@@ -405,7 +411,7 @@
 	<div class="row">
 	<div class="col-md-12" style="display:none;">
       
-            <h4 class="m-b">{{agile_lng_translate 'other' 'email-send-and-receive-email'}}</h4>
+            <h4 class="m-b">{{agile_lng_translate 'modals' 'email'}} <small>{{agile_lng_translate 'widgets' 'send-and-rcv-email'}}</small></h4>
        
                 <div id="email" class="row">
                 </div>
@@ -414,7 +420,7 @@
 	<div class="row">
     <div class="col-md-12">
 
-            <h4 class="m-b">{{agile_lng_translate 'other' 'calling-Make-and-receive-calls-from-agile'}}</h4>
+            <h4 class="m-b">{{agile_lng_translate 'widgets' 'calling'}} <small>{{agile_lng_translate 'widgets' 'make-and-rcv-calls'}}</small></h4>
         
                 <div id="call" class="row">
                 </div>
@@ -423,7 +429,7 @@
 	<div class="row">
     <div class="col-md-12">
         
-            <h4 class="m-b">{{agile_lng_translate 'other' 'billing-view-and-send-invoices'}}</h4>
+            <h4 class="m-b">{{agile_lng_translate 'widgets' 'billing'}} <small>{{agile_lng_translate 'widgets' 'view-and-invoices'}}</small></h4>
       
                 <div id="billing" class="row">
                 </div>
@@ -432,7 +438,7 @@
 	<div class="row">
   <div class="col-md-12">
         
-            <h4 class="m-b">{{agile_lng_translate 'other' 'ecommerce-view-customer-orders-details'}}</h4>
+            <h4 class="m-b">{{agile_lng_translate 'prefs-data-sync' 'ecommerce'}} <small>{{agile_lng_translate 'widgets' 'view-cus-order-details'}}</small></h4>
       
                 <div id="ecommerce" class="row">
                 </div>
@@ -442,7 +448,7 @@
 	<div class="row">
 	<div class="col-md-12">
 	
-            <h4 class="m-b">{{agile_lng_translate 'other' 'custom-widgets-add-your-widgets'}}</h4>
+            <h4 class="m-b">{{agile_lng_translate 'widgets' 'custom-widgets'}} <small>{{agile_lng_translate 'widgets' 'add-your-widgets'}}</small></h4>
        
 			<div id="custom" class="row">
 				<div class="col-md-4" id="custom-widget" >
@@ -500,7 +506,7 @@
 					</span>
 				</div></div>
 				<div class="control-group form-group"><div class="controls"><input type="url" id="logo_url" class="input-medium required widget_input_box form-control"  placeholder="{{agile_lng_translate 'widgets' 'logo-url'}}" value="" name="logo_url"></input></div></div>
-				<div class="control-group form-group"><div class="controls"><input type="url" id="mini_logo_url" class="input-medium required widget_input_box form-control"  placeholder="{{agile_lng_translate 'widgets' 'mini-logo-url'}}" value="" name="mini_logo_url">.
+				<div class="control-group form-group"><div class="controls"><input type="url" id="mini_logo_url" class="input-medium required widget_input_box form-control"  placeholder="{{agile_lng_translate 'widgets' 'mini-logo-url'}}" value="" name="mini_logo_url">
 				</input></div></div>
 				<div class="form-actions m-t text-center">
 					<a type="reset" id="cancel_custom_widget" class="btn btn-default btn-sm">{{agile_lng_translate 'other' 'cancel'}}</a>
@@ -641,15 +647,15 @@
 			<div class="control-group form-group">
 				<div class="controls">								
 					<select name="script_type" id="script_type" tabindex="3" class="required form-control">
-						<option value="script" {{#if_equals script_type "script"}}{{agile_lng_translate 'companies-view' 'selected'}}{{/if_equals}}>HTML</option> 
-						<option value="url" {{#if_equals script_type "url"}}{{agile_lng_translate 'companies-view' 'selected'}}{{/if_equals}}>URL</option> 
+						<option value="script" {{#if_equals script_type "script"}}selected{{/if_equals}}>{{agile_lng_translate 'widgets' 'html'}}</option> 
+						<option value="url" {{#if_equals script_type "url"}}selected{{/if_equals}}>{{agile_lng_translate 'widgets' 'url'}}</option> 
 					</select>
 				</div>
 			</div>
 			<div class="control-group form-group">
 				<div class="controls">
 					<span id="script_div" {{#if_equals script_type "script"}}{{else}}style="display:none;"{{/if_equals}}>
-						<span class="help-block"><b>{{agile_lng_translate 'widgets' 'documentation-for'}} <a class="text-info" href="https://github.com/agilecrm/widget-api-html" tabindex="4" target="_blank">{{agile_lng_translate 'widgets' 'widget-js-api'}}</b></a>
+						<span class="help-block"><b>{{agile_lng_translate 'widgets' 'documentation-for'}}  <a class="text-info" href="https://github.com/agilecrm/widget-api-html" tabindex="4" target="_blank">{{agile_lng_translate 'widgets' 'widget-js-api'}}</b></a>
 						</span>
 						<textarea rows="4" class="required widget_input_box form-control" name="script" tabindex="5" id="script" placeholder="{{agile_lng_translate 'widgets' 'documentation-for-js-api-placeholder'}}">{{script}}</textarea>											
 					</span>					
@@ -696,7 +702,7 @@
 				<div class="control-group form-group">
 					<div class="controls">
 						<span id="script_div">
-							<span class="help-block"><b>{{agile_lng_translate 'widgets' 'documentation-for'}}<a class="text-info" href="https://github.com/agilecrm/widget-api-html" tabindex="4" target="_blank">{{agile_lng_translate 'widgets' 'widget-js-api'}}</a></b>
+							<span class="help-block"><b>{{agile_lng_translate 'widgets' 'documentation-for'}} <a class="text-info" href="https://github.com/agilecrm/widget-api-html" tabindex="4" target="_blank">{{agile_lng_translate 'widgets' 'widget-js-api'}}</a></b>
 							</span>
 							<textarea rows="4" tabindex="5" class="required widget_input_box form-control" name="script" id="script" placeholder="{{agile_lng_translate 'widgets' 'documentation-for-js-api-placeholder'}}"/>					
 						</span>

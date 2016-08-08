@@ -205,9 +205,9 @@
 {{#if_equals this.custom_fields.length "0"}}
 	<p>{{agile_lng_translate 'widgets' 'stripe-each-contact-desc'}} <a class="text-info" href="#custom-fields">{{agile_lng_translate 'widgets' 'create-one'}}</a>.</p>
 {{else}}
-	<p>{{agile_lng_translate 'widgets' 'select-the-custom-field'}}</p>
+	<p>{{agile_lng_translate 'widgets' 'stripe-custom-field-select'}}</p>
 	<select name="stripe_field" id="stripe_custom_field_name" class="required form-control col-md-10 w-full">
-     		<option class="default-select" value="">{{agile_lng_translate 'widgets' 'select'}}</option>
+     		<option class="default-select" value="">{{agile_lng_translate 'deal-view' 'select'}}</option>
 		{{#each this.custom_fields}}
 			<option value="{{field_label}}">{{field_label}} 
 			</option>
@@ -235,7 +235,7 @@
 
 <script id="stripe-login-template" type="text/html">
 <div class="m-t">
-	{{agile_lng_translate 'widgets' 'stripe-profile-desc'}}
+	{{agile_lng_translate 'widgets' 'Stripe-content'}}
 <br>
 	<div class="col-sm-12 text-center m-t-sm">
 		<p><b>{{agile_lng_translate 'widgets' 'access'}} <i class="icon-question c-p" data-toggle="tooltip" data-placement="top" title="{{agile_lng_translate 'widgets' 'select-the-access-mode-desc'}}" ></i></b></p>
@@ -261,7 +261,7 @@
 				<p>{{agile_lng_translate 'widgets' 'stripe-each-contact-desc'}} <a class="text-info" href="#custom-fields">{{agile_lng_translate 'widgets' 'create-one'}}</a>.</p>
 {{else}}
 
-<p>{{agile_lng_translate 'widgets' 'select-the-custom-field'}}</p>
+<p>{{agile_lng_translate 'widgets' 'stripe-custom-field-select'}}</p>
 <form id="reportsForm">
 
 <input name="scope"  id="scope" value="{{prefs.scope}}" hidden/>
@@ -279,7 +279,7 @@
 				<div class="controls" id="contactTypeAhead">
 			
 			<select name="stripe_field_name" id="stripe_custom_field" class="required col-md-10 form-control w-full">
-     				<option class="default-select" value="">{{agile_lng_translate 'widgets' 'select'}}
+     				<option class="default-select" value="">{{agile_lng_translate 'deal-view' 'select'}}
      				</option>
 				{{#each custom_data}}
 					{{#if_equals ../prefs.stripe_field_name field_label}}

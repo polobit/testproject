@@ -11,7 +11,11 @@
    		{{#if display_name}}
    			{{display_name}}
    		{{else}}
-   			{{get_widget_translation name 'displayName'}}
+   			{{#if_equals widget_type "CUSTOM"}}
+   			    {{name}}
+   			{{else}}
+   				{{get_widget_translation name 'displayName'}} 
+   			{{/if_equals}}
 		{{/if}}
 		<div class="widget_header_icons pull-right text-base" style="display:none;">
 			<div class="customWidgets text-base">
