@@ -278,10 +278,6 @@ var HelpcenterRouter = Backbone.Router.extend({
 	 	});
 	},
 	searchArticle: function(search_term){
-		try{
-			search_term	= encodeURIComponent(search_term);
-		}
-		catch(err){};
 		App_Helpcenter.renderHomeTemplate(function(){
 
 			//Initializing base collection with groups URL
