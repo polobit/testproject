@@ -964,7 +964,7 @@ public class TwilioUtil
         	// parameters required to create application
         	Map<String, String> params = new HashMap<String, String>();
         	params.put("FriendlyName", "Agile CRM Twilio SMS");        
-        	params.put("SmsUrl", "https://sonali-dot-sandbox-dot-agilecrmbeta.appspot.com/msgReplyActionUrl");     
+        	params.put("SmsUrl", "https://"+  NamespaceManager.get()  +"-dot-sandbox-dot-agilecrmbeta.appspot.com/msgReplyActionUrl");     
         	params.put("SmsMethod", "POST");
         
         	// Make a POST request to create application
