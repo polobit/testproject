@@ -7507,7 +7507,11 @@ Handlebars.registerHelper('get_widget_translation', function(widget_name, type, 
 	if(!type)
 		  type = "content";
 
-	return _agile_get_translated_val("widgets", widget_name + "-" + type);
+	var val = _agile_get_translated_val("widgets", widget_name + "-" + type);
+	if(!val)
+		 return widget_name;
+
+	return val;
 });
 
 Handlebars.registerHelper('get_datasync_translation', function(sync_name, type, options)

@@ -72,11 +72,18 @@
 				<center title="{{agile_lng_translate 'widgets' 'widget-name'}}"><span class="text-xs m-b-xs">{{name}}</span></center>
 			{{/if_equals}} 
 		{{/if_equals}}
-		{{#if_equals widget_type "CUSTOM"}}
-			{{description}}
+
+		// Check widget_type exists
+		{{#if widget_type}}
+			{{#if_equals widget_type "CUSTOM"}}
+				{{description}}
+			{{else}}
+			    {{get_widget_translation name 'content'}}
+			{{/if_equals}}
 		{{else}}
-		    {{get_widget_translation name 'content'}}
-		{{/if_equals}}
+			{{description}}
+		{{/if}}
+		
 		
 
 	{{#if_equals name "Bria"}}
