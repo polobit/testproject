@@ -540,7 +540,40 @@ $(function()
 	  	}
       	
       	console.log("after the chrome installation")
-	  })
+	  });
+
+
+	 function loadModalsDateandTimepickers(el){
+	 	agile_type_ahead("event_related_to", el, contacts_typeahead);
+
+		agile_type_ahead("event_relates_to_deals", el, deals_typeahead, false,null,null,"core/api/search/deals",false, true);
+		var d1 = new Date ();
+		var d2 = new Date ( d1 );
+		d2.setHours(d1.getHours()+3);
+
+		head.js(CSS_PATH + 'css/businesshours/jquerytimepicker.css',
+				LIB_PATH + 'lib/businesshours/jquerytimepicker.js',
+				function(){
+		 			$('.new-task-timepicker').timepicker({ 'timeFormat' : 'H:i', 'step' : 15 });
+		 		}
+		);
+
+		$('.new-task-timepicker').focus(function(){
+			$('#activityTaskModal').css("overflow", "hidden");
+		});
+		
+		$('.new-task-timepicker').blur(function(){
+			$('#activityTaskModal').css("overflow", "auto");
+		});
+
+			// sets the time in time picker if it is empty
+		if ($('.new-task-timepicker', el).val() == '')
+			$('.new-task-timepicker', el).val(get_hh_mm());
+
+		$('#task-date-1', el).datepicker({ format : CURRENT_USER_PREFS.dateFormat , weekStart : CALENDAR_WEEK_START_DAY, autoclose: true});
+		$('#task-date-1', el).datepicker('update');		
+	 }
+
 
 	/**
 	 * Sets the start time with current time and end time half an hour more than
@@ -548,43 +581,27 @@ $(function()
 	 */
 	$('#activityModal, #activityTaskModal').on('shown.bs.modal', function()
 	{
+		console.log("prem **** ");
 		// Show related to contacts list
 		var el = $("#activityForm");
-		$('#task-date-1').datepicker({ format : CURRENT_USER_PREFS.dateFormat , weekStart : CALENDAR_WEEK_START_DAY, autoclose: true});
-		$('#task-date-1').datepicker('update');
+		loadModalsDateandTimepickers(el);
+		el = $('#taskForm');
+		loadModalsDateandTimepickers(el);	
 
-		agile_type_ahead("event_related_to", el, contacts_typeahead);
-
-		agile_type_ahead("event_relates_to_deals", el, deals_typeahead, false,null,null,"core/api/search/deals",false, true);
-		var d1 = new Date ();
-		var d2 = new Date ( d1 );
-		d2.setHours(d1.getHours()+3)
 		
-		$('.new-task-timepicker').timepicker({ defaultTime : d2.format("HH:MM") , showMeridian : false });
-		$('.new-task-timepicker').timepicker().on('show.timepicker', function(e)
-		{
-			if ($('.new-task-timepicker').prop('value') != "" && $('.new-task-timepicker').prop('value') != undefined)
-			{
-				if ($('.new-task-timepicker').prop('value').split(":")[0] != undefined)
-					e.time.hours = $('.new-task-timepicker').prop('value').split(":")[0];
-				if ($('.new-task-timepicker').prop('value').split(":")[0] != undefined)
-					e.time.minutes = $('.new-task-timepicker').prop('value').split(":")[1];
-			}
-			$('.bootstrap-timepicker-hour').val(e.time.hours);
-			$('.bootstrap-timepicker-minute').val(e.time.minutes);
-		});
-	
-		/**
-		 * Fills current time only when there is no time in the fields
-		 */
-		if ($('.start-timepicker', el).val() == '')
-			$('.start-timepicker', el).val(get_hh_mm());
-
-		if ($('.end-timepicker', el).val() == '')
-			$('.end-timepicker', el).val(get_hh_mm(true));
-		// sets the time in time picker if it is empty
-		if ($('.new-task-timepicker', el).val() == '')
-			$('.new-task-timepicker', el).val("12:00");
+		// $('.new-task-timepicker').timepicker({ defaultTime : d2.format("HH:MM") , showMeridian : false });
+		// $('.new-task-timepicker').timepicker().on('show.timepicker', function(e)
+		// {
+		// 	if ($('.new-task-timepicker').prop('value') != "" && $('.new-task-timepicker').prop('value') != undefined)
+		// 	{
+		// 		if ($('.new-task-timepicker').prop('value').split(":")[0] != undefined)
+		// 			e.time.hours = $('.new-task-timepicker').prop('value').split(":")[0];
+		// 		if ($('.new-task-timepicker').prop('value').split(":")[0] != undefined)
+		// 			e.time.minutes = $('.new-task-timepicker').prop('value').split(":")[1];
+		// 	}
+		// 	$('.bootstrap-timepicker-hour').val(e.time.hours);
+		// 	$('.bootstrap-timepicker-minute').val(e.time.minutes);
+		// });
 
 		activateSliderAndTimerToTaskModal(el);
 
@@ -699,98 +716,157 @@ $(function()
 
 		$('#update-event-date-2').datepicker({ format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY, autoclose: true });
 
+		head.js(CSS_PATH + 'css/businesshours/jquerytimepicker.css',
+				LIB_PATH + 'lib/businesshours/jquerytimepicker.js',
+				function(){
+					$('.start-timepicker').timepicker({ 'timeFormat' : 'H:i', 'step' : 15 });
+					$('.end-timepicker').timepicker({ 'timeFormat' : 'H:i', 'step' : 15 });
+					$('.update-start-timepicker').timepicker({ 'timeFormat' : 'H:i', 'step' : 15 });
+					$('.update-end-timepicker').timepicker({ 'timeFormat' : 'H:i', 'step' : 15 });					
+		 			
+		 			$('.start-timepicker').blur(function(){
+		 				$('#activityModal').css("overflow", "auto");
+		 			});
+
+		 			$('.start-timepicker').focus(function(){
+		 				$('#activityModal').css("overflow", "hidden");
+		 			});
+		 			
+		 			$('.end-timepicker').blur(function(){
+		 				$('#activityModal').css("overflow", "auto");
+		 			});
+
+		 			$('.end-timepicker').focus(function(){
+		 				$('#activityModal').css("overflow", "hidden");
+		 			});
+		 			
+		 			$('.update-start-timepicker').blur(function(){
+		 				$('#activityModal').css("overflow", "auto");
+		 			});
+
+		 			$('.update-start-timepicker').focus(function(){
+		 				$('#activityModal').css("overflow", "hidden");
+		 			});
+		 			
+		 			$('.update-end-timepicker').blur(function(){
+		 				$('#activityModal').css("overflow", "auto");
+		 			});
+
+		 			$('.update-end-timepicker').focus(function(){
+		 				$('#activityModal').css("overflow", "hidden");
+		 			});
+				}
+		);
+
+		/**
+		 * Fills current time only when there is no time in the fields
+		 */
+		if ($('.start-timepicker').val() == '')
+			$('.start-timepicker').val(get_hh_mm());
+
+		if ($('.end-timepicker').val() == '')
+			$('.end-timepicker').val(get_hh_mm(true));
+
+		if ($('.update-start-timepicker').val() == '')
+			$('.update-start-timepicker').val(get_hh_mm());
+
+		if ($('.update-end-timepicker').val() == '')
+			$('.update-end-timepicker').val(get_hh_mm(true));
 
 		/**
 		 * Activates time picker for start time to the fields with class
 		 * start-timepicker
 		 */
-		$('.start-timepicker').timepicker({ defaultTime : 'current', showMeridian : false }).on('hide.timepicker', function(e)
-		{
-			if ($('#activityModal #allDay').is(':checked'))
-			{
-				$('#event-time-1').closest('.control-group').hide();
-				$('#event-date-2').closest('.row').hide();
-			}
 
-			// ChangeTime event is not working, so need to invoke user method.
-			var endTime = changeEndTime($('.start-timepicker').val().split(":"), $('.end-timepicker').val().split(":"));
-			$('.end-timepicker').val(endTime);
+		// $('.start-timepicker').timepicker({ defaultTime : 'current', showMeridian : false }).on('hide.timepicker', function(e)
+		// {
+		// 	if ($('#activityModal #allDay').is(':checked'))
+		// 	{
+		// 		$('#event-time-1').closest('.control-group').hide();
+		// 		$('#event-date-2').closest('.row').hide();
+		// 	}
 
-			e.stopImmediatePropagation();
-			return false;
-		});
-		$('.start-timepicker').timepicker().on('show.timepicker', function(e)
-		{
-			if ($('.start-timepicker').prop('value') != "" && $('.start-timepicker').prop('value') != undefined)
-			{
-				if ($('.start-timepicker').prop('value').split(":")[0] != undefined)
-					e.time.hours = $('.start-timepicker').prop('value').split(":")[0];
-				if ($('.start-timepicker').prop('value').split(":")[0] != undefined)
-					e.time.minutes = $('.start-timepicker').prop('value').split(":")[1];
-			}
-			$('.bootstrap-timepicker-hour').val(e.time.hours);
-			$('.bootstrap-timepicker-minute').val(e.time.minutes);
-		});
+		// 	// ChangeTime event is not working, so need to invoke user method.
+		// 	var endTime = changeEndTime($('.start-timepicker').val().split(":"), $('.end-timepicker').val().split(":"));
+		// 	$('.end-timepicker').val(endTime);
+
+		// 	e.stopImmediatePropagation();
+		// 	return false;
+		// });
+
+		// $('.start-timepicker').timepicker().on('show.timepicker', function(e)
+		// {
+		// 	if ($('.start-timepicker').prop('value') != "" && $('.start-timepicker').prop('value') != undefined)
+		// 	{
+		// 		if ($('.start-timepicker').prop('value').split(":")[0] != undefined)
+		// 			e.time.hours = $('.start-timepicker').prop('value').split(":")[0];
+		// 		if ($('.start-timepicker').prop('value').split(":")[0] != undefined)
+		// 			e.time.minutes = $('.start-timepicker').prop('value').split(":")[1];
+		// 	}
+		// 	$('.bootstrap-timepicker-hour').val(e.time.hours);
+		// 	$('.bootstrap-timepicker-minute').val(e.time.minutes);
+		// });
 
 		/**
 		 * Activates time picker for end time to the fields with class
 		 * end-timepicker
 		 */
-		$('.end-timepicker').timepicker({ defaultTime : get_hh_mm(true), showMeridian : false });
-		console.log(get_hh_mm(true));
-		$('.end-timepicker').timepicker().on('show.timepicker', function(e)
-		{
-			if ($('.end-timepicker').prop('value') != "" && $('.end-timepicker').prop('value') != undefined)
-			{
-				if ($('.end-timepicker').prop('value').split(":")[0] != undefined)
-					e.time.hours = $('.end-timepicker').prop('value').split(":")[0];
-				if ($('.end-timepicker').prop('value').split(":")[0] != undefined)
-					e.time.minutes = $('.end-timepicker').prop('value').split(":")[1];
-			}
-			$('.bootstrap-timepicker-hour').val(e.time.hours);
-			$('.bootstrap-timepicker-minute').val(e.time.minutes);
-		});
+		// $('.end-timepicker').timepicker({ defaultTime : get_hh_mm(true), showMeridian : false });
+		// console.log(get_hh_mm(true));
+		// $('.end-timepicker').timepicker().on('show.timepicker', function(e)
+		// {
+		// 	if ($('.end-timepicker').prop('value') != "" && $('.end-timepicker').prop('value') != undefined)
+		// 	{
+		// 		if ($('.end-timepicker').prop('value').split(":")[0] != undefined)
+		// 			e.time.hours = $('.end-timepicker').prop('value').split(":")[0];
+		// 		if ($('.end-timepicker').prop('value').split(":")[0] != undefined)
+		// 			e.time.minutes = $('.end-timepicker').prop('value').split(":")[1];
+		// 	}
+		// 	$('.bootstrap-timepicker-hour').val(e.time.hours);
+		// 	$('.bootstrap-timepicker-minute').val(e.time.minutes);
+		// });
 
-		/**
-		 * Activates time picker for start time to the fields with class
-		 * update-start-timepicker
-		 */
-		$('.update-start-timepicker').timepicker({ defaultTime : 'current', showMeridian : false }).on('hide.timepicker', function(e)
-		{
-			// ChangeTime event is not working, so need to invoke user method.
-			var endTime = changeEndTime($('.update-start-timepicker').val().split(":"), $('.update-end-timepicker').val().split(":"));
-			$('.update-end-timepicker').val(endTime); 
-		});
-		$('.update-start-timepicker').timepicker().on('show.timepicker', function(e)
-		{
-			if ($('.update-start-timepicker').prop('value') != "" && $('.update-start-timepicker').prop('value') != undefined)
-			{
-				if ($('.update-start-timepicker').prop('value').split(":")[0] != undefined)
-					e.time.hours = $('.update-start-timepicker').prop('value').split(":")[0];
-				if ($('.update-start-timepicker').prop('value').split(":")[0] != undefined)
-					e.time.minutes = $('.update-start-timepicker').prop('value').split(":")[1];
-			}
-			$('.bootstrap-timepicker-hour').val(e.time.hours);
-			$('.bootstrap-timepicker-minute').val(e.time.minutes);
-		});
+		// /**
+		//  * Activates time picker for start time to the fields with class
+		//  * update-start-timepicker
+		//  */
+		// $('.update-start-timepicker').timepicker({ defaultTime : 'current', showMeridian : false }).on('hide.timepicker', function(e)
+		// {
+		// 	// ChangeTime event is not working, so need to invoke user method.
+		// 	var endTime = changeEndTime($('.update-start-timepicker').val().split(":"), $('.update-end-timepicker').val().split(":"));
+		// 	$('.update-end-timepicker').val(endTime); 
+		// });
 
-		/**
-		 * Activates time picker for end time to the fields with class
-		 * update-end-timepicker
-		 */
-		$('.update-end-timepicker').timepicker({ defaultTime : get_hh_mm(true), showMeridian : false });
-		$('.update-end-timepicker').timepicker().on('show.timepicker', function(e)
-		{
-			if ($('.update-end-timepicker').prop('value') != "" && $('.update-end-timepicker').prop('value') != undefined)
-			{
-				if ($('.update-end-timepicker').prop('value').split(":")[0] != undefined)
-					e.time.hours = $('.update-end-timepicker').prop('value').split(":")[0];
-				if ($('.update-end-timepicker').prop('value').split(":")[0] != undefined)
-					e.time.minutes = $('.update-end-timepicker').prop('value').split(":")[1];
-			}
-			$('.bootstrap-timepicker-hour').val(e.time.hours);
-			$('.bootstrap-timepicker-minute').val(e.time.minutes);
-		});
+		// $('.update-start-timepicker').timepicker().on('show.timepicker', function(e)
+		// {
+		// 	if ($('.update-start-timepicker').prop('value') != "" && $('.update-start-timepicker').prop('value') != undefined)
+		// 	{
+		// 		if ($('.update-start-timepicker').prop('value').split(":")[0] != undefined)
+		// 			e.time.hours = $('.update-start-timepicker').prop('value').split(":")[0];
+		// 		if ($('.update-start-timepicker').prop('value').split(":")[0] != undefined)
+		// 			e.time.minutes = $('.update-start-timepicker').prop('value').split(":")[1];
+		// 	}
+		// 	$('.bootstrap-timepicker-hour').val(e.time.hours);
+		// 	$('.bootstrap-timepicker-minute').val(e.time.minutes);
+		// });
+
+		// /**
+		//  * Activates time picker for end time to the fields with class
+		//  * update-end-timepicker
+		//  */
+		// $('.update-end-timepicker').timepicker({ defaultTime : get_hh_mm(true), showMeridian : false });
+		// $('.update-end-timepicker').timepicker().on('show.timepicker', function(e)
+		// {
+		// 	if ($('.update-end-timepicker').prop('value') != "" && $('.update-end-timepicker').prop('value') != undefined)
+		// 	{
+		// 		if ($('.update-end-timepicker').prop('value').split(":")[0] != undefined)
+		// 			e.time.hours = $('.update-end-timepicker').prop('value').split(":")[0];
+		// 		if ($('.update-end-timepicker').prop('value').split(":")[0] != undefined)
+		// 			e.time.minutes = $('.update-end-timepicker').prop('value').split(":")[1];
+		// 	}
+		// 	$('.bootstrap-timepicker-hour').val(e.time.hours);
+		// 	$('.bootstrap-timepicker-minute').val(e.time.minutes);
+		// });
 
 	});
 
