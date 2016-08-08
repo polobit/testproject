@@ -5,11 +5,13 @@ import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.deals.Opportunity;
+import com.agilecrm.deals.util.OpportunityUtil;
 import com.agilecrm.search.ui.serialize.SearchRule;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
@@ -201,6 +203,37 @@ public class UserAccessControlUtil
 			e.printStackTrace();
 		}
     	return modifiedContactIds;
+    }
+    
+    public static List<String> checkUpdateAndmodifyRelatedDeals(List<String> deal_ids)
+    {
+    	List<String> modifiedDealIds = new ArrayList<String>();
+    	List<Long> dealIds = new ArrayList<Long>();
+    	try 
+    	{
+    		if(deal_ids != null && deal_ids.size() > 0)
+        	{
+    			modifiedDealIds.addAll(deal_ids);
+    			for(String str : deal_ids)
+    			{
+    				dealIds.add(Long.valueOf(str));
+    			}
+    			List<Opportunity> dealsList = OpportunityUtil.getDealsBulkbyIds(dealIds);
+            	for(Opportunity opportunity : dealsList)
+            	{
+            		boolean can_update = UserAccessControlUtil.check(Opportunity.class.getSimpleName(), opportunity, CRUDOperation.CREATE, false);
+            		if(!can_update)
+            		{
+            			modifiedDealIds.remove(String.valueOf(opportunity.id));
+            		}
+            	}
+        	}
+		} 
+    	catch (Exception e) 
+		{
+			e.printStackTrace();
+		}
+    	return modifiedDealIds;
     }
 
 }

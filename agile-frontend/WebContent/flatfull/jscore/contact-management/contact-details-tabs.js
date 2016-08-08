@@ -902,5 +902,20 @@ function modelDelete(model, targetEl, callback){
 		if(callback && typeof(callback) === "function"){
 			callback();
 		}
+	}, error : function(response){
+		showModalConfirmation("Delete <span class='text-cap'>"+model.get("entity_type")+"</span>", 
+			'<span>'+response.responseText+'</span>', 
+			function (){
+				return;
+			}, 
+			function(){
+				return;
+			},
+			function (){
+				return;
+			},
+			'Cancel'
+		);
+		return;
 	} });
 }

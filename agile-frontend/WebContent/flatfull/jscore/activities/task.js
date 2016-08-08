@@ -831,6 +831,22 @@ function complete_task(taskId, collection, ui, callback)
 			// execute the callback, passing parameters as necessary
 			callback(model);
 		}
+	},
+	error : function(model, response){
+		showModalConfirmation("Complete Task", 
+			'<span>'+response.responseText+'</span>', 
+			function (){
+				return;
+			}, 
+			function(){
+				return;
+			},
+			function (){
+				return;
+			},
+			'Cancel'
+		);
+		return;
 	} });
 
 	// Set is complete flag to be true

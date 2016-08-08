@@ -497,6 +497,22 @@ var Deal_Modal_Event_View = Base_Model_View.extend({
 			success : function(data) {
 				dealDocsView.collection.remove(json);
 				dealDocsView.render(true);
+			},
+			error : function(model, response){
+				showModalConfirmation("Delete <span class='text-cap'>"+model.get("entity_type")+"</span>", 
+					'<span>'+response.responseText.replace("attached", "detached")+'</span>', 
+					function (){
+						return;
+					}, 
+					function(){
+						return;
+					},
+					function (){
+						return;
+					},
+					'Cancel'
+				);
+				return;
 			}
 		});
 	},
