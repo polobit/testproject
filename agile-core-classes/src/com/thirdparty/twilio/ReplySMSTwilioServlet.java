@@ -27,26 +27,26 @@ public class ReplySMSTwilioServlet extends HttpServlet
 	    Contact contact = null;
 	    String phoneNumber = request.getParameter("To");
 	    String replyMsg = request.getParameter("Body");
-	    if (!StringUtils.isBlank(phoneNumber))
+	    if (!StringUtils.isBlank(replyMsg))
 	    {
-		contact = ContactUtil.searchContactByPhoneNumber(phoneNumber);
-	    }
-	    List<Trigger> triggers = TriggerUtil.getAllTriggers();
-	    for (Trigger trigger : triggers)
-	    {
-		if (StringUtils.equals(trigger.type.toString(), "REPLY_SMS"))
-		{
-		    if (!StringUtils.isBlank(replyMsg))
-		    {
-			if (trigger.call_disposition.equalsIgnoreCase(replyMsg))
-			{
-			    System.out.println("Assigning campaign to contact ...");
-			    WorkflowSubscribeUtil.subscribeDeferred(contact, trigger.campaign_id,
-				    new JSONObject().put("replysms", trigger));
-			}
-		    }
-		}
-	    }
+        	    if (!StringUtils.isBlank(phoneNumber))
+        	    {
+        		contact = ContactUtil.searchContactByPhoneNumber(phoneNumber);
+        	    }
+        	    List<Trigger> triggers = TriggerUtil.getAllTriggers();
+        	    for (Trigger trigger : triggers)
+        	    {
+        		if (StringUtils.equals(trigger.type.toString(), "REPLY_SMS"))
+        		{		   
+        			if (trigger.call_disposition.equalsIgnoreCase(replyMsg))
+        			{
+        			    System.out.println("Assigning campaign to contact ...");
+        			    WorkflowSubscribeUtil.subscribeDeferred(contact, trigger.campaign_id,
+        				    new JSONObject().put("replysms", trigger));
+        			}
+        		}
+        	    }
+    	    }
 	    
 	}
 	catch (Exception e)
