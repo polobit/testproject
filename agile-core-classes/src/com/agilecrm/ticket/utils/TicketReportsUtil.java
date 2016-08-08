@@ -2,8 +2,10 @@ package com.agilecrm.ticket.utils;
 
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.TimeZone;
 
 import javax.ws.rs.QueryParam;
@@ -18,6 +20,7 @@ import org.apache.commons.lang.exception.ExceptionUtils;
 
 import com.agilecrm.reports.ReportsUtil;
 import com.agilecrm.search.document.TicketsDocument;
+import com.agilecrm.ticket.entitys.TicketNotes;
 import com.agilecrm.ticket.entitys.Tickets;
 import com.agilecrm.ticket.entitys.Tickets.Priority;
 import com.agilecrm.ticket.entitys.Tickets.Status;
@@ -25,6 +28,7 @@ import com.agilecrm.user.UserPrefs;
 import com.agilecrm.user.util.UserPrefsUtil;
 import com.google.appengine.api.search.Field;
 import com.google.appengine.api.search.ScoredDocument;
+import com.google.appengine.labs.repackaged.org.json.JSONArray;
 
 /**
  * 
@@ -257,6 +261,38 @@ public class TicketReportsUtil
 
 		return JSONSerializer.toJSON(map).toString();
 	}
+	
+	
+	/**
+	 * 
+	 * @param startTime
+	 * @param endTime
+	 * @return
+	 */
+	public static String getFeedbackReport(Long startTime, Long endTime)
+	{	
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("created_time >", startTime);
+		map.put("created_time <", endTime);
+		map.put("feedback_flag", true);
+		map.put("feed_back", "YAY");
+		JSONObject feedbackcount_yay =new JSONObject();
+		feedbackcount_yay.put("count" , TicketNotes.ticketNotesDao.getCountByProperty(map));
+		map.remove("feed_back");
+		map.put("feed_back", "OK");
+		JSONObject feedbackcount_ok =new JSONObject();
+		 feedbackcount_ok.put("count", TicketNotes.ticketNotesDao.getCountByProperty(map));
+		map.remove("feed_back");
+		map.put("feed_back", "BOO");
+		JSONObject feedbackcount_boo =new JSONObject();
+		feedbackcount_boo.put("count", TicketNotes.ticketNotesDao.getCountByProperty(map));
+		JSONObject feedback_array = new JSONObject() ;
+		feedback_array.put("YAY",feedbackcount_yay );
+		feedback_array.put("OK",feedbackcount_ok );
+		feedback_array.put("BOO",feedbackcount_boo );
+		return feedback_array.toString();
+	}
+
 
 	/**
 	 * 

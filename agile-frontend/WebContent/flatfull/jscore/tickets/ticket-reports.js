@@ -100,6 +100,32 @@ var Ticket_Reports = {
 		$('.report_name').text(report_title);
 	},
 
+
+	feedbackReports: function(){
+		var range = $('#range').html().split("-");
+    
+	    var start_time = getUTCMidNightEpochFromDate(new Date(range[0]));
+	    var d = new Date();
+	    start_time=start_time+(d.getTimezoneOffset()*60*1000);
+	    var end_value = $.trim(range[1]);
+
+	    // To make end value as end time of day
+	    if (end_value)
+	        end_value = end_value + " 23:59:59";
+
+	    // Returns milliseconds from end date.
+	    //var end_time = Date.parse(end_value).valueOf();
+	    //Get the GMT end time
+	    var end_time = getUTCMidNightEpochFromDate(new Date(end_value));
+
+	    end_time += (((23*60*60)+(59*60)+59)*1000);
+	    end_time=end_time+(d.getTimezoneOffset()*60*1000);
+		
+		Ticket_Reports.pieforReports('/core/api/tickets/reports/feedback?start_time=' + start_time + '&end_time=' + end_time,
+			'feedback', '', true);
+		
+	},
+
 	avgFirstRespTime: function(){
 
 		var range = $('#range').html().split("-");
@@ -217,6 +243,11 @@ var Ticket_Reports = {
 
 	createAPieChart: function(selector, name, animation, AllData, pieData){
 
+		var newname = "Tickets";
+		if(selector == "feedback")
+		{
+			newname = "Feedback";
+		}
 		chart = new Highcharts.Chart({
 				chart : { renderTo : selector, type : 'pie', plotBackgroundColor : null, plotBorderWidth : null, plotShadow : false,
 					marginBottom:30, marginTop:20, marginLeft: 70, marginRight: 70},
@@ -273,7 +304,7 @@ var Ticket_Reports = {
 						borderWidth : 0
 					}
 				},
-				series : [{ type : 'pie', name : 'Tickets', data : pieData, startAngle : 90 }], 
+				series : [{ type : 'pie', name :newname , data : pieData, startAngle : 90 }], 
 				exporting : { enabled : false },
 				lang: { noData: "No Data found"},
 				noData: {

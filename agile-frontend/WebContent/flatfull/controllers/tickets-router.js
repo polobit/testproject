@@ -841,6 +841,10 @@
 						template = 'ticket-avg-first-resp-time';
 						callback = Ticket_Reports.avgFirstRespTime;
 						break;
+					case 'feedback':
+						template = 'ticket-feedback-report';
+						callback = Ticket_Reports.feedbackReports;
+						break;
 				}
 
 				//Renders the required template based on report type

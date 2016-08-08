@@ -48,6 +48,8 @@ public class TicketReportsRest
 					return TicketReportsUtil.getFirstReponseReport(startTime, endTime);
 				case "sla":
 					return TicketReportsUtil.getSLAReport(startTime, endTime);
+				case "feedback":
+					return TicketReportsUtil.getFeedbackReport(startTime, endTime);
 				default:
 					return "";
 			}

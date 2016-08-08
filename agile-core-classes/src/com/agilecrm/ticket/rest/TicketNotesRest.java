@@ -182,6 +182,7 @@ public class TicketNotesRest
 	{
 		try
 		{
+			
 			System.out.println(comment);
 			String[] fbarray = comment.split("\\&", -1);
 			System.out.println(fbarray);
@@ -192,6 +193,7 @@ public class TicketNotesRest
 				throw new Exception("Required params missing.");
 			
 			TicketNotes dbNotes = TicketNotes.ticketNotesDao.get(id);
+			dbNotes.feedback_flag = true;
 			dbNotes.feed_back = feed_back;
 			dbNotes.feedback_comment = feedback_comment;
 

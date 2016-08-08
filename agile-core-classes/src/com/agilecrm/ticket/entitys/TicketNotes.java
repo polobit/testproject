@@ -60,6 +60,7 @@ public class TicketNotes
 	public Long group_id = null;
 
 	
+	
 	public String feedback_comment = "";
 	/**
 	 * Stores user ID to whom ticket is assigned
@@ -77,8 +78,8 @@ public class TicketNotes
 		AGENT, REQUESTER
 	};
 	
+	public boolean feedback_flag = false;
 	
-
 	/**
 	 * Stores last updated by text either agent or customer
 	 */
