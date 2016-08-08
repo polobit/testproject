@@ -1166,12 +1166,19 @@ function toggle_contacts_bulk_actions_dropdown(clicked_ele, isBulk, isCampaign)
  */
 function getAvailableContacts()
 {
-		if (company_util.isCompany() && App_Companies.companiesListView.collection.toJSON()[0] && App_Companies.companiesListView.collection.toJSON()[0].count)
+		if (company_util.isCompany() && App_Companies.companiesListView && App_Companies.companiesListView.collection.toJSON()[0] && App_Companies.companiesListView.collection.toJSON()[0].count)
 		{
 			//
 			current_view_contacts_count = App_Companies.companiesListView.collection.toJSON()[0].count;
 			return current_view_contacts_count;
-		} else if (App_Contacts.contactsListView.collection.toJSON()[0] && App_Contacts.contactsListView.collection.toJSON()[0].count)
+		}
+		else if(company_util.isCompany() && App_Companies.contacts_Company_List && App_Companies.contacts_Company_List.collection.toJSON()[0] && App_Companies.contacts_Company_List.collection.toJSON()[0].count)
+		{
+			//
+			current_view_contacts_count = App_Companies.contacts_Company_List.collection.toJSON()[0].count;
+			return current_view_contacts_count;
+		}
+		 else if (App_Contacts.contactsListView.collection.toJSON()[0] && App_Contacts.contactsListView.collection.toJSON()[0].count)
 		{
 			//
 			current_view_contacts_count = App_Contacts.contactsListView.collection.toJSON()[0].count;

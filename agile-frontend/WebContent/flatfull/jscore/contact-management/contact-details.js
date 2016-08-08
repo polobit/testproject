@@ -1560,10 +1560,10 @@ updateScoreValue :function(){
       success : function(data)
       {
         console.log("Hi");
-        //App_Contacts.contactViewModel = data;
-        //contacts_view_loader.fetchHeadings(function(modelData){
-        //contacts_view_loader.getContacts(modelData, $("#contacts-listener-container"));
-       // });
+        App_Contacts.contactCompanyViewModel = data;
+        fetchContactCompanyHeadings(function(modelData){
+        getContactofCompanies(modelData, $("#contacts-listener-container"));
+        });
       } 
     });
     },

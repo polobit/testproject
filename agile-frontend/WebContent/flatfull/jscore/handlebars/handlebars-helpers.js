@@ -7674,3 +7674,57 @@ Handlebars.registerHelper('if_asc_sork_key', function(value, options)
 	else
 		return options.fn(this); 
 });
+
+/**
+	 * Returns table headings for custom contacts list view
+	 */
+	Handlebars.registerHelper('companyContactsTableHeadings', function(item)
+  	{
+		var el = "", cls = ""; 
+		$.each(App_Companies.contactCompanyViewModel[item], function(index, element)
+  		{
+  			if (element == "basic_info" || element == "image")
+  			{
+					
+					if(_agile_get_prefs("contactTabelView"))
+					{
+						// if the compact view is present the remove th basic info heading and add the empty heading for the image
+
+						if(element == "basic_info")
+							return ;
+	
+						if(element == "image")
+						{
+							element = "";
+							cls = "";
+						}
+							  
+					}
+					else
+					{
+						if(element == "image")
+						{
+							element = "";
+							cls = "compactcontact";
+						}
+						if(element == "basic_info")
+							element = "Basic Info";
+					}
+			}
+
+		else if (element.indexOf("CUSTOM_") == 0) 
+		{
+  			element = element.split("_")[1];
+  			cls = "text-muted";
+  		}
+  		else 
+  		{
+			element = element.replace("_", " ");
+			cls = "";
+	 	}
+	 
+	 		el = el.concat('<th class="'+ cls +'">' + ucfirst(element) + '</th>');	
+	  
+	 });
+		return new Handlebars.SafeString(el);
+	});

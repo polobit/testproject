@@ -909,14 +909,96 @@
 			<span><i class="icon-plus-sign"></i></span> Add Contact
 		</a>
 	</div>
-	<div>
-	<button class="btn btn-default dropdown-toggle  btn-sm" data-toggle="dropdown" aria-expanded="true" id="contactTabelView"><i class="{{#iscompactTabel 'PERSON'}} fa fa-ellipsis-h {{else}} fa fa-navicon {{/iscompactTabel}}"></"></i></button> 
-                				<ul class="pull-right dropdown-menu  p-l"  role="menu">
-                					<form id="contact-static-fields" class="">
-                						<div class="multiple-checkbox" name="fields_set" id="contact-static-fields-group"></div>
-                					</form>
-                				</ul>
-                				</div>
-				<div id="contacts-list-view"></div>
+	<div class="contacts-companies-div">
+<div id="bulk-action-btns" class="panel-heading no-shadow p-r-none b-r m-r-sm" style="border-bottom: 0;background-color: rgba(246,248,248,1);position:relative;">
+				      	<span id="contacts-list-view-checkbox">
+								<label class="i-checks i-checks-sm">
+				                	<input type="checkbox" class="thead_check">
+				                	<i></i>                
+				          		</label>
+							</span>
+				      	
+					    <button id="bulk-tags" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled txt-small">Add Tags</button>
+					    <button id="bulk-tags-remove" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled txt-small">Remove Tags</button>
+					    {{#hasMenuScope 'CAMPAIGN'}}
+					    <button id="bulk-campaigns" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled txt-small" onclick="Agile_GA_Event_Tracker.track_event('Add to Campaign');">Add to Campaign</button>
+					    {{/hasMenuScope}}
+					    <button id="show-callcampaignModal" class="btn btn-default bulk-action-btn btn-sm disabled txt-small">Start Call Campaign</button>
+					    <button id="bulk-email" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled txt-small" onclick="Agile_GA_Event_Tracker.track_event('Send Email');">Send Email</button>
+					    <button id="bulk-owner" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled txt-small">Change Owner</button>
+					    {{#hasScope "EXPORT_CONTACTS"}}
+					    <button id="bulk-contacts-export" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled txt-small" onclick="Agile_GA_Event_Tracker.track_event('Export as CSV');">Export as CSV</button>
+					    {{/hasScope}}
+					    {{#hasRestrictedMenuScope 'DELETE_CONTACT'}} {{else}}
+					    <button class="btn btn-default bulk-action-btn delete-checked-contacts btn-sm disabled txt-small">Delete</button>
 
+					     {{/hasRestrictedMenuScope}}
+
+					    <div class="btn-group dropdown pull-right {{#iscompactTabel 'PERSON'}}compact {{/iscompactTabel}} multiple-checkbox" style="padding-right: 10px;" id="contact-custom-coloumns">
+							<div class="btn-group dropdown  multiple-checkbox" style="padding-right: 10px;position:absolute;right:0px;" id="contact-custom-coloumns">
+							 <button class="btn btn-default dropdown-toggle  btn-sm" data-toggle="dropdown" aria-expanded="true" id="contactTabelView"><i class="{{#iscompactTabel 'PERSON'}} fa fa-ellipsis-h {{else}} fa fa-navicon {{/iscompactTabel}}"></"></i></button> 
+							<!-- <button class="dropdown-toggle btn btn-default  btn-sm " data-toggle="dropdown" aria-expanded="true" id="contact_columns" >
+                    		<i class="caret"></i>
+                			</button> -->
+                			<ul class="pull-right dropdown-menu  p-l"  role="menu">
+                			
+                			
+                			<form id="contact-static-fields" class="">
+                			<div class="multiple-checkbox" name="fields_set" id="contact-static-fields-group">
+                			</div>
+                			</form>
+                			
+                			</ul>
+
+				        </div>
+					    
+
+				    </div>
+</div>
+
+					<div id="company-contacts-list-view"></div>
+	 </div>
+			    
+	    	</div>
+
+</script>
+
+<script id="company-contacts-list-view-collection-template" type="text/html">
+	{{#is_mobile}}
+		<div class="contacts-div">
+			<div class="dta-contatiner table-responsive b-n contacts-inner-div">
+				<div class="panel panel-default m-b-none b-n no-radius" style="overflow-x:hidden;">
+					{{#unless this.length}}
+		        		<div class="m-l-sm" id="slate"></div>
+		        	{{/unless}}
+		        	{{#if this.length}}
+	                	<table id="contacts-table" class="table b-n no-radius no-sorting onlySorting panel agile-table noDelete"  url="core/api/contacts/delete?action=DELETE">                
+							<div class="filter-criteria"></div>
+							<tbody id="company-contacts-list-view-model-list" route="contact/"></tbody>
+	                	</table>
+                	{{/if}}
+				</div>
+            </div>
+        </div>
+	{{else}}
+		<div class="dta-contatiner table-responsive m-r-sm contacts-inner-div">
+			<div class="btn-group inline-block  text-center" style="display: none;border:1px solid #dee5e7;width:100%;padding:5px; background-color:#edf1f2;" id="bulk-select"></div>
+			<div class="panel panel-default" style="overflow-x:auto; border-left:none;">
+	    		{{#unless this.length}}
+        			<div class="m-l-sm" id="slate"></div>
+        		{{/unless}}
+        		{{#if this.length}}
+              			<table id="contacts-table" class="table contacts-custom noDelete table-striped showCheckboxes no-sorting panel agile-table no-header-checkbox"  url="core/api/contacts/delete?action=DELETE" style="table-layout:auto">                
+							<div class="filter-criteria"></div>
+			 				<thead>
+                      			<tr style="text-transform: capitalize;">
+                          			{{companyContactsTableHeadings "fields_set"}}
+                      			</tr>
+                 			</thead>
+                   			<tbody id="company-contacts-list-view-model-list" route="contact/"></tbody>
+              			</table>
+              		{{/if}}
+			</div>
+		</div>
+	{{/is_mobile}}
 </script>
