@@ -46,8 +46,8 @@ function addTaskToTaskList(headingToSearch, tasksToAdd, conditionToCheck)
 		// change task count in header of task list
 		changeTaskCount(modelTaskList[0].toJSON(), true);
 	}
-	modelTaskList[0].get('taskCollection').sort();
-	 setup_sortable_tasks();
+	//modelTaskList[0].get('taskCollection').sort();
+	// setup_sortable_tasks();
 	// Maintain changes in UI
 	displaySettings();
 }
