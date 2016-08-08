@@ -67,7 +67,8 @@ $(function(){
 							return;
 
 						$('#ticketsModal').html($(template_ui)).modal('show').on('shown.bs.modal', function(){
-
+							
+							$('#ticketsModal a.bulk-delete').off('click');
 							$('#ticketsModal a.bulk-delete').click(function(e){
 								console.log("tickets clicked");
 								
