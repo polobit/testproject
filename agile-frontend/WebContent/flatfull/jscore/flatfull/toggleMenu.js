@@ -31,6 +31,7 @@ $('#app-aside-folded').on('click', function(e) {
 		$(this).parent().highcharts().reflow();
 	});
 	
+
     
 	});
 
@@ -50,6 +51,25 @@ function showTrailAlertMessage(){
 
 	
 $(document).ready(function(){
+
+
+$('body').on('click','#speechDectation',function(){
+      var recognition = new webkitSpeechRecognition();
+ 
+      recognition.continuous = false;
+      recognition.interimResults = false;
+ 
+      recognition.lang = "en-US";
+      recognition.start();
+ 
+      recognition.onresult = function(e) {
+        document.getElementById('serachtext').value
+                                 = e.results[0][0].transcript;
+        //$("#search-results").trigger('click')
+        recognition.stop();
+       
+      };
+  });
 
 $(".trial_strip_close").click(function(e){
 	$(this).closest("#trial_alert_info").hide();

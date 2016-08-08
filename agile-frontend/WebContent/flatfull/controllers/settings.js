@@ -17,6 +17,8 @@ var SettingsRouter = Backbone.Router
 			/* User preferences */
 			"user-prefs" : "userPrefs",
 
+			"speech-test" : 'speechtest',
+
 			/* Change Password */
 			"change-password" : "changePassword",
 
@@ -74,6 +76,15 @@ var SettingsRouter = Backbone.Router
 			 * Creates a Model to show and edit Personal Preferences, and sets
 			 * HTML Editor. Reloads the page on save success.
 			 */
+			 speechtest : function(e){
+
+			 	getTemplate("speech-test", {}, undefined, function(template_ui){
+					if(!template_ui)
+						  return;
+					$('#content').html($(template_ui));
+				});
+
+			 },
 			userPrefs : function()
 			{
 				//var data;
