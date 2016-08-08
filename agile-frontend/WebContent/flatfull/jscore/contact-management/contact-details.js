@@ -31,8 +31,6 @@ function starify(el) {
     		 */
          
         	click: function(score, evt) {
-        	         		
-           		
 
         		App_Contacts.contactDetailView.model.set({'star_value': score}, {silent : true});
         		contact_model =  App_Contacts.contactDetailView.model.toJSON();
@@ -41,18 +39,16 @@ function starify(el) {
              {
               count_clicks++;
               $(this.children[0]).attr('src','img/star-on.png');
-              console.log("count_clicks="+count_clicks);
+              
                 if(count_clicks==2)
                   {
-              App_Contacts.contactDetailView.model.set({'star_value': 0}, {silent : true});
-              contact_model =  App_Contacts.contactDetailView.model.toJSON();
-              
-              count_clicks=0;
-              $(this.children[0]).attr('src','img/star-off.png');
-              $(this).find('input').attr('value',0);
-              console.log("count_clicks="+count_clicks);
+                  App_Contacts.contactDetailView.model.set({'star_value': 0}, {silent : true});
+                  contact_model =  App_Contacts.contactDetailView.model.toJSON();
+                  count_clicks=0;
+                  $(this.children[0]).attr('src','img/star-off.png');
+                  $(this).find('input').attr('value',0);
                   }   
-             }
+            }
              else count_clicks=0;
            
             var new_model = new Backbone.Model();
