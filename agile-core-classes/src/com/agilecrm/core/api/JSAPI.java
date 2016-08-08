@@ -173,7 +173,7 @@ public class JSAPI
     @GET
     @Produces("application/x-javascript;charset=UTF-8;")
     public String createContact(@QueryParam("contact") String json, @QueryParam("campaigns") String campaignIds,
-	    @QueryParam("id") String apiKey, @QueryParam("browserId") String browserId, @Context HttpServletRequest request)
+	    @QueryParam("id") String apiKey, @QueryParam("browserId") String browserId, @QueryParam("guId") String guId, @Context HttpServletRequest request)
     {
 	try
 	{
@@ -190,6 +190,9 @@ public class JSAPI
 	     if(!StringUtils.isBlank(browserId) || browserId !="null"){
 	    	 contact = ContactUtil.searchContactByBrowserId(browserId);
 	     }
+	     
+	     if(contact==null && !StringUtils.isBlank(guId))
+	    		contact =ContactUtil.searchContactByGUId(guId);
 	     
 	     if(contact!=null)
 	    	return JSAPIUtil.updateContactPushNotification(contact, json, campaignIds, request, apiKey);
@@ -273,15 +276,13 @@ public class JSAPI
     @GET
     @Produces("application/x-javascript;charset=UTF-8;")
     public String createPushNotificationContact(@QueryParam("contact") String json, @QueryParam("browserId") String browserId, @QueryParam("email") String email,
-	    @QueryParam("id") String apiKey, @Context HttpServletRequest request)
+	    @QueryParam("id") String apiKey, @QueryParam("guId") String guId, @Context HttpServletRequest request)
     {
 	try
 	{
 	    UserInfo userInfo = SessionManager.get();
 		
 	    HashSet<String> js_scopes = userInfo.getJsrestricted_scopes();
-	    
-	    System.out.println("Contact details : "+ContactUtil.searchContactByBrowserId(browserId));
 	    
 	    if(!js_scopes.contains("create_contact"))
 	    	return JSAPIUtil.generateJSONErrorResponse(Errors.CONTACT_CREATE_RESTRICT);
@@ -294,6 +295,9 @@ public class JSAPI
 	    {
 	    	System.out.println(email.toLowerCase());
 	    	Contact contact =ContactUtil.searchContactByEmail(email);
+	    	
+	    	if(contact==null)
+	    		contact =ContactUtil.searchContactByGUId(guId);
 	    	
 	    	if(contact !=null ){
 	    		contact.addBrowserId(browserId);
@@ -357,6 +361,106 @@ public class JSAPI
     }
 
     
+    /**
+	 *  Adds contact in the domain
+	 * If the click on allow push notification
+	 * popup for both types of visitor.
+	 * @param browserId
+	 * @param campaignIds
+	 * @param apiKey
+	 * @return
+	 */
+    @Path("contacts/push-notification/subscriber")
+    @GET
+    @Produces("application/x-javascript;charset=UTF-8;")
+    public String createPushNotificationSubscriber( @QueryParam("browserId") String browserId, @QueryParam("email") String email,
+	    @QueryParam("id") String apiKey,@QueryParam("guid") String guid, @Context HttpServletRequest request)
+    {
+	try
+	{
+	    UserInfo userInfo = SessionManager.get();
+		
+	    HashSet<String> js_scopes = userInfo.getJsrestricted_scopes();
+	    
+	    if(!js_scopes.contains("create_contact"))
+	    	return JSAPIUtil.generateJSONErrorResponse(Errors.CONTACT_CREATE_RESTRICT);
+
+		Contact contact = null;
+		
+		if(StringUtils.isBlank(guid) || StringUtils.isBlank(apiKey) ||StringUtils.isBlank(browserId))
+			return JSAPIUtil.generateJSONErrorResponse(Errors.INVALID_BROWSER_ID);
+		
+	     if(contact == null && !StringUtils.isBlank(guid) && guid !="null"){
+	    		contact =ContactUtil.searchContactByGUId(guid);
+	     }
+	    
+	     if(contact == null && !StringUtils.isBlank(email) && email !="null"){
+	    		contact =ContactUtil.searchContactByEmail(email);
+	     }
+	     
+	     JSONObject jsonObject = new JSONObject();
+	     
+	     JSONArray jsonArray = new JSONArray();
+	     
+	     if(StringUtils.isNotBlank(email) &&  email != "null")
+	     {
+	    	 jsonObject.put("name",Contact.EMAIL);
+	    	 jsonObject.put("value", email);
+	     }
+	     
+	     else
+	     {
+	    	 jsonObject.put("name", Contact.FIRST_NAME);
+	    	 jsonObject.put("value", "Anonymous"); 
+	     }
+	    	     
+	     jsonArray.put(jsonObject);
+	     
+	     jsonObject =  new JSONObject();
+	     
+	     jsonObject.put("properties", jsonArray);
+	     
+	     if(contact==null){
+	    	 ObjectMapper mapper = new ObjectMapper();
+	 	    contact = mapper.readValue(jsonObject.toString(), Contact.class);
+	     }
+	     contact.addBrowserId(browserId);
+	     contact.guid = guid;
+	         
+	     String address = contact.getContactFieldValue(Contact.ADDRESS);
+		 System.out.println("Address = " + address);
+		 
+		 if (StringUtils.isBlank(address))
+		    {
+			 	System.out.println("Adding location");
+
+			 	org.json.simple.JSONObject locJSON = GeoLocationUtil.getLocation(request);
+			 	contact.addProperty(new ContactField(Contact.ADDRESS, locJSON.toString(), null));
+		    }
+
+		    // Sets owner key to contact before saving
+		    contact.setContactOwner(JSAPIUtil.getDomainUserKeyFromInputKey(apiKey));
+		    
+		  //Adding tag for push notification  
+		  contact.addTags("Push Notification");
+	    // return mapper.writeValueAsString(contact);
+	    return JSAPIUtil.limitPropertiesInContactForJSAPI(contact);
+	}
+	catch (PlanRestrictedException e){
+	    return JSAPIUtil.generateJSONErrorResponse(Errors.CONTACT_LIMIT_REACHED);
+	}
+	catch (WebApplicationException e){
+	    return JSAPIUtil.generateJSONErrorResponse(Errors.INVALID_TAGS);
+	}
+	catch (IOException e){
+	    e.printStackTrace();
+	    return null;
+	}
+	catch (Exception e){
+	    e.printStackTrace();
+	    return null;
+	}
+    }
     /**
      * Adds task. Takes email, task json and callback as query parameters, task
      * is created and related to contact based on the email. If contact doesn't

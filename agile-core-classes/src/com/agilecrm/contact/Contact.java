@@ -302,6 +302,13 @@ public class Contact extends Cursor
      */
     @Indexed
     public Set<String> browserId = new HashSet<String>();
+    
+    /**
+     * Set of Guid of contact
+     *  
+     */
+    @Indexed
+    public String guid = null;
 
     /**
      * Default constructor
@@ -1564,7 +1571,7 @@ public class Contact extends Cursor
     public String toString()
     {
 	return "id: " + id + " created_time: " + created_time + " updated_time" + updated_time + " type: " + type
-		+ " tags: " + tags + " properties: " + properties+ " broser ID: " + browserId;
+		+ " tags: " + tags + " properties: " + properties+ " browser ID: " + browserId + "guid:" + guid;
     }
 }
 

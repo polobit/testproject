@@ -41,7 +41,7 @@ public class NotificationTemplateAPI
 {
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public List<NotificationTemplate> getAllForms()
+    public List<NotificationTemplate> getAllNotificationTemplates()
     {
 	return NotificationTemplateUtil.getAllNotificationTemplates();
     }
@@ -51,6 +51,10 @@ public class NotificationTemplateAPI
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public NotificationTemplate getNotificationTemplateById(@QueryParam("notificationTemplateId") Long notificationTemplateId)
     {
+    	if(NotificationTemplateUtil.getNotificationTemplateCount()==0)
+    	{
+    		//Create webrues for showing push model
+    	}
 	return NotificationTemplateUtil.getNotificationTemplateById(notificationTemplateId);
     }
 
@@ -61,8 +65,6 @@ public class NotificationTemplateAPI
     {
 	try
 	{
-	  //  ObjectMapper mapper = new ObjectMapper();
-	   // NotificationTemplate notificationTemplate = mapper.readValue(notificationString, NotificationTemplate.class);
 	    notificationTemplate.save();
 	   return notificationTemplate;
 	}

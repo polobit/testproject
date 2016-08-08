@@ -2216,5 +2216,32 @@ public static Contact searchMultipleContactByEmail(String email,Contact contact)
 	}
 
     }
+    
+    /**
+     * Gets a contact based on its guid
+     * 
+     * @param duid
+     *            id value to get a contact
+     * @return {@Contact} related to an push notification guid
+     */
+    public static Contact searchContactByGUId(String guId)
+    {
+	if (StringUtils.isBlank(guId))
+	    return null;
+
+	Query<Contact> q = dao.ofy().query(Contact.class);
+	q.filter("type", Type.PERSON);
+	q.filter("guid", guId);
+
+	try
+	{
+	    return dao.get(q.getKey());
+	}
+	catch (Exception e)
+	{
+	    return null;
+	}
+
+    }
 
 }

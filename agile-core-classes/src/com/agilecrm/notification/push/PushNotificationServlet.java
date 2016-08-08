@@ -10,11 +10,9 @@ import org.apache.commons.lang.exception.ExceptionUtils;
 import org.datanucleus.util.StringUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import com.campaignio.logger.Log.LogType;
 import com.campaignio.logger.util.LogUtil;
 import com.campaignio.tasklets.agile.PushNotification;
-import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
 import com.google.appengine.api.NamespaceManager;
 
 public class PushNotificationServlet extends HttpServlet {

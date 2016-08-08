@@ -2,13 +2,14 @@ package com.thirdparty.push.notification;
 
 import java.util.List;
 
+import com.agilecrm.contact.Contact;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.notification.NotificationTemplate;
 import com.googlecode.objectify.Query;
 
 /**
- * This <code>
- * @author agil16
+ * This <NotificationTemplateUtil> class is used 
+ * @author Prashannjet
  *
  */
 
@@ -39,6 +40,14 @@ public class NotificationTemplateUtil
 			    return null;
 			else
 			    return notificationTemplate;
+	    }
+	 /**
+	  * Get count of notification template
+	  * @returnnotificationTemplate
+	  */
+	 public static int getNotificationTemplateCount()
+	    {
+		 return NotificationTemplate.dao.count();
 	    }
 
 }
