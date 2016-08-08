@@ -126,7 +126,28 @@ var AdminSettingsRouter = Backbone.Router.extend({
 				  return;
 			$('#account-pref').html($(template_ui));
 			$('#account-pref').find('#admin-prefs-tabs-content').html(getTemplate("settings-account-tab"), {});	
-			var view = new AccountPrefs_Events_Model_View({ url : '/core/api/account-prefs', template : "admin-settings-account-prefs", postRenderCallback : function()
+			var view = new AccountPrefs_Events_Model_View({ url : '/core/api/account-prefs', template : "admin-settings-account-prefs",
+			prePersist : function(model){
+				console.log(model);
+				var accountCurrency = ACCOUNT_PREFS.currency.substring(0, 3);
+				var changedCurrency = model.get('currency').substring(0, 3);
+				if(accountCurrency && changedCurrency && accountCurrency != changedCurrency){
+					showModalConfirmation(
+						"Admin Settings",
+						"Changing currency will affect deal reporting. Do you want to change the currency?",
+						function()
+						{
+							model.get('currency') = ACCOUNT_PREFS.currency ; 
+						},function()
+						{
+							return;
+						}, function()
+						{
+							return;
+						}, "Yes", "No");
+				}
+			},
+			postRenderCallback : function()
 			{
 				ACCOUNT_DELETE_REASON_JSON = undefined;
 				
