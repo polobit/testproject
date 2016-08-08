@@ -16,6 +16,7 @@ import org.json.XML;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.widgets.Widget;
+import com.campaignio.tasklets.sms.SendMessage;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.utils.SystemProperty;
 import com.thirdparty.twilio.sdk.TwilioRestClient;
@@ -704,8 +705,8 @@ public class TwilioUtil
 	public static String createAppSidTwilioIO(String accountSID, String authToken, String numberSid, String record,
 			String twimletUrl) throws Exception
 	{
-		// Get current logged in agile user
-		Long agileUserID = AgileUser.getCurrentAgileUser().id;
+	    	    	
+	    	Long agileUserID = AgileUser.getCurrentAgileUser().id;
 		// Encode twimlet url
 		String twimletUrlToSend = URLEncoder.encode(twimletUrl, "UTF-8");
 		// Get Twilio client configured with account SID and authToken
@@ -725,6 +726,7 @@ public class TwilioUtil
 		// For Main
 		params.put("VoiceUrl", "https://" + NamespaceManager.get() + ".agilecrm.com/twilioiovoice?record=" + record
 				+ "&agileuserid=" + agileUserID + "&twimleturl=" + twimletUrlToSend);
+		params.put("SmsUrl", "https://sonali-dot-sandbox-dot-agilecrmbeta.appspot.com/msgReplyActionUrl");
 
 		// For Beta
 		/*
@@ -951,5 +953,48 @@ public class TwilioUtil
 		{
 			return logs;
 		}
+	}
+	
+	public static String createSMSAppSidTwilioIO(String accountSID, String authToken, String numberSid) throws Exception
+	{
+            	
+        	// Get Twilio client configured with account SID and authToken
+        	TwilioRestClient client = new TwilioRestClient(accountSID, authToken, null);
+        
+        	// parameters required to create application
+        	Map<String, String> params = new HashMap<String, String>();
+        	params.put("FriendlyName", "Agile CRM Twilio SMS");        
+        	params.put("SmsUrl", "https://sonali-dot-sandbox-dot-agilecrmbeta.appspot.com/msgReplyActionUrl");     
+        	params.put("SmsMethod", "POST");
+        
+        	// Make a POST request to create application
+        	TwilioRestResponse response = client.request("/2010-04-01/Accounts/" + client.getAccountSid()
+        			+ "/Applications.json", "POST", params);
+        
+        	/*
+        	 * If error occurs, throw exception based on its status else return
+        	 * application SID
+        	 */
+        	if (response.isError()){
+        		throwProperException(response);
+        	}
+        
+        	String appSid = new JSONObject(response.getResponseText()).getString("sid");
+        
+        	/* ****** Add application to twilio number ***** */
+        	if (!numberSid.equalsIgnoreCase("None"))
+        	{
+        		// parameters required to create application
+        		params = new HashMap<String, String>();
+        		params.put("SmsApplicationSid", appSid);        
+        		// Make a POST request to add application to twilio number
+        		// /IncomingPhoneNumbers/PNa96612e977cc4a8c8b6cb0c14dd43e88
+        		response = client.request("/2010-04-01/Accounts/" + client.getAccountSid() + "/IncomingPhoneNumbers/"
+        				+ numberSid, "POST", params);
+        		if (response.isError()){
+        			throwProperException(response);
+        		}
+        	}
+        	return appSid;
 	}
 }
