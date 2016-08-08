@@ -46,8 +46,7 @@ function addTaskToTaskList(headingToSearch, tasksToAdd, conditionToCheck)
 		// change task count in header of task list
 		changeTaskCount(modelTaskList[0].toJSON(), true);
 	}
-	modelTaskList[0].get('taskCollection').sort();
-	 setup_sortable_tasks();
+	//modelTaskList[0].get('taskCollection').sort();
 	// Maintain changes in UI
 	displaySettings();
 }
@@ -92,7 +91,7 @@ function deleteTask(taskId, taskListId, taskListOwnerId)
 		{
 			updateTask(false, model, model.toJSON());
 			TASKS_LIST_COLLECTION.render(true);
-			showModalConfirmation("Delete Task", 
+			showModalConfirmation("{{agile_lng_translate 'report-view' 'delete-task'}}", 
 				response.responseText, 
 				function (){
 					return;
@@ -103,7 +102,7 @@ function deleteTask(taskId, taskListId, taskListOwnerId)
 				function(){
 					return;
 				},
-				"Cancel"
+				"{{agile_lng_translate 'other' 'cancel'}}"
 			);
 		} });
 	}
@@ -119,7 +118,7 @@ function deleteTask(taskId, taskListId, taskListOwnerId)
 					count = count - 1 ;
 					$('#tasks-list-template').find('.tasks-count').removeAttr('data');
 					$('#tasks-list-template').find('.tasks-count').attr('data' , count);
-					$('#tasks-list-template').find('.tasks-count').text('('+count+' Total)');
+					$('#tasks-list-template').find('.tasks-count').text('('+count+' ' +_agile_get_translated_val('other','total')+ ')');
 				}
 			} 
 		});

@@ -6,7 +6,7 @@
 
 var ZENTickets = {};
 var ZENCount = 1;
-var showMoreHtmlZEN = '<div class="widget_tab_footer zen_show_more" align="center"><a class="c-p text-info" id="ZEN_show_more" rel="tooltip" title="Click to see more tickets">Show More</a></div>';
+var showMoreHtmlZEN = '<div class="widget_tab_footer zen_show_more" align="center"><a class="c-p text-info" id="ZEN_show_more" rel="tooltip" title="'+_agile_get_translated_val('widgets', 'click-to-see-more-tickets')+'">'+_agile_get_translated_val('widgets', 'show-more')+'</a></div>';
 
 /**
  * Shows setup if user adds Zendesk widget for the first time or clicks on reset
@@ -79,7 +79,7 @@ function showZendeskProfile(contact_id)
 	 */
 	if (!Email)
 	{
-		zendeskError(ZENDESK_PLUGIN_NAME, "Please provide email for this contact");
+		zendeskError(ZENDESK_PLUGIN_NAME, _agile_get_translated_val('widgets','pl-give-contact-email'));
 		return;
 	}
 	
@@ -153,9 +153,7 @@ function loadZENTickets(offSet){
 		});
 		
 		// Load jquery time ago function to show time ago in tickets
-		head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
-			$(".time-ago", $('#all_tickets_panel')).timeago();
-		});
+		agileTimeAgoWithLngConversion($(".time-ago", $('#all_tickets_panel')));
 	}else if(offSet > 0  && (offSet + 5) < ZENTickets.length){
 		var result = {};
 		result = ZENTickets.slice(offSet, (offSet+5));
@@ -225,7 +223,7 @@ function showZenMoreTickets(more_tickets)
 	if (more_tickets.length == 0)
 	{
 		$('#spinner-tickets').hide();
-		zendeskStreamError("tickets-error-panel", 'No more tickets');
+		zendeskStreamError("tickets-error-panel", _agile_get_translated_val('widgets','no-more-tickets'));
 		return;
 	}
 
@@ -241,10 +239,7 @@ function showZenMoreTickets(more_tickets)
 		$('#spinner-tickets').hide();
 
 		// Load jquery time ago function to show time ago in tickets
-		head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
-		{
-			$(".time-ago", template_ui).timeago();
-		});
+		agileTimeAgoWithLngConversion($(".time-ago", template_ui));
 	}, null);
 }
 
@@ -328,10 +323,10 @@ function addTicketToZendesk()
 	var json = {};
 
 	// Set headline of modal window as Add Ticket
-	json["headline"] = "Add Ticket";
+	json["headline"] = _agile_get_translated_val('widgets', 'add-ticket');
 
 	// Information to be shown in the modal to the user
-	json["info"] = "Add ticket in Zendesk";
+	json["info"] = _agile_get_translated_val('widgets','add-ticket-in-zendesk');
 
 	// Name of the contact to be added to ticket
 	var name = "";
@@ -407,10 +402,10 @@ function updateTicketInZendesk(ticket_id)
 	var json = {};
 
 	// Set headline of modal window as Update Ticket
-	json["headline"] = "Update Ticket";
+	json["headline"] = _agile_get_translated_val('widgets','update-ticket');
 
 	// Information to be shown in the modal to the user
-	json["info"] = "Updates Ticket No " + ticket_id + " in Zendesk";
+	json["info"] = _agile_get_translated_val('widgets','updates-ticket-no') + " " + ticket_id + " " +_agile_get_translated_val('widgets','in-zendesk');
 
 	// Id of the ticket to update it
 	json["id"] = ticket_id;
@@ -479,7 +474,7 @@ function sendRequestToZendesk(url, formId, modalId, errorPanelId)
 	$.post(url, $('#' + formId).serialize(), function(data)
 	{
 		// On success, shows the status as sent
-		$('#' + modalId).find('span.save-status').html("sent");
+		$('#' + modalId).find('span.save-status').html(_agile_get_translated_val('social','Sent'));
 
 		// Hides the modal after 2 seconds after the sent is shown
 		setTimeout(function()

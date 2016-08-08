@@ -1,9 +1,13 @@
 package com.agilecrm.activities;
 
+import java.io.File;
+import java.io.FileReader;
+import java.io.PrintWriter;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -15,7 +19,10 @@ import javax.persistence.PrePersist;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.annotate.JsonIgnore;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 
 import com.agilecrm.activities.util.TaskUtil;
 import com.agilecrm.contact.Contact;

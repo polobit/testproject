@@ -86,7 +86,7 @@ function incomingCallNoty(message, type)
 
 		// Set properties
 		Twilio_Call_Noty = noty({ text : message, type : "confirm", layout : "bottomLeft", buttons : [
-				{ addClass : 'btn btn-primary noty_twilio_answer', text : 'Answer' }, { addClass : 'btn btn-danger noty_twilio_ignore', text : 'Ignore' }
+				{ addClass : 'btn btn-primary noty_twilio_answer', text : '{{agile_lng_translate "calls" "answer"}}' }, { addClass : 'btn btn-danger noty_twilio_ignore', text : '{{agile_lng_translate "contacts-view" "ignore"}}' }
 		] });
 
 		return;
@@ -98,7 +98,7 @@ function incomingCallNoty(message, type)
 
 	// Set properties
 	CALL = noty({ text : message, type : "confirm", layout : "bottomLeft", buttons : [
-			{ addClass : 'btn btn-sm btn-primary answer', text : 'Answer' }, { addClass : 'btn btn-danger ignore', text : 'Ignore' }
+			{ addClass : 'btn btn-sm btn-primary answer', text : 'Answer' }, { addClass : 'btn btn-danger ignore', text : '{{agile_lng_translate "contacts-view" "ignore"}}' }
 	] });
 }
 
@@ -121,7 +121,7 @@ function connectedCallNoty(message, type)
 				{ addClass : 'btn btn-sm btn-default noty_twilio_mute', text : '<i class="icon-microphone"></i>' },
 				{ addClass : 'btn btn-sm btn-default noty_twilio_unmute', text : '<i class="icon-microphone-off"></i>' },
 				{ addClass : 'btn btn-sm btn-default noty_twilio_dialpad', text : '<i class="icon-th"></i>' }, 
-				{ addClass : 'btn btn-sm btn-danger noty_twilio_hangup', text : 'Hangup' }
+				{ addClass : 'btn btn-sm btn-danger noty_twilio_hangup', text : '{{agile_lng_translate "calls" "hangup"}}' }
 		] });
 		
 		if(TWILIO_DIRECTION == "outbound-dial") {
@@ -160,7 +160,7 @@ function connectedCallNoty(message, type)
 
 	// Set properties
 	CALL = noty({ text : message, type : "success", layout : "bottomLeft", buttons : [
-			{ addClass : 'btn dialpad noty_sip_dialpad', text : '<i class="icon-th"></i>' }, { addClass : 'btn btn-danger hangup', text : 'Hangup' }
+			{ addClass : 'btn dialpad noty_sip_dialpad', text : '<i class="icon-th"></i>' }, { addClass : 'btn btn-danger hangup', text : '{{agile_lng_translate "calls" "hangup"}}' }
 	] });
 }
 
@@ -179,7 +179,7 @@ function outgoingCallNoty(message, type)
 
 		// Set properties
 		Twilio_Call_Noty = noty({ text : message, type : "confirm", layout : "bottomLeft", buttons : [
-			{ addClass : 'btn btn-default btn-sm noty_twilio_cancel', text : 'Cancel' }
+			{ addClass : 'btn btn-default btn-sm noty_twilio_cancel', text : '{{agile_lng_translate "contacts-view" "cancel"}}' }
 		] });
 
 		return;
@@ -191,7 +191,7 @@ function outgoingCallNoty(message, type)
 
 	// Set properties
 	CALL = noty({ text : message, type : "confirm", layout : "bottomLeft", buttons : [
-		{ addClass : 'btn btn-default btn-sm hangup', text : 'Cancel' }
+		{ addClass : 'btn btn-default btn-sm hangup', text : '{{agile_lng_translate "contacts-view" "cancel"}}' }
 	] });
 }
 
@@ -247,7 +247,7 @@ if(message.state == "connected"){
 		btns.push({"id":"", "class":"btn btn-sm btn-default p-8 noty_"+widgetype+"_unmute icon-microphone-off none","title":""});
 	}
 	btns.push({"id":"", "class":"btn btn-sm btn-default noty_"+widgetype+"_dialpad icon-th","title":""});
-	btns.push({"id":"", "class":"btn btn-sm btn-danger noty_"+widgetype+"_hangup","title":"Hangup"});
+	btns.push({"id":"", "class":"btn btn-sm btn-danger noty_"+widgetype+"_hangup","title":'{{agile_lng_translate "calls" "hangup"}}'});
 	var json = {"callId": callId};
 	showDraggableNoty(widgetype, globalCall.contactedContact, "connected", globalCall.callNumber, btns,json);
 	
@@ -260,7 +260,7 @@ if(message.state == "connected"){
 			globalCall.contactedContact = currentContact;
 			globalCall.contactedId = currentContact.id;
 		}
-		var btns = [{"id":"", "class":"btn btn-primary noty_"+widgetype+"_answer","title":"Answer"},{"id":"","class":"btn btn-danger noty_"+widgetype+"_ignore","title":"Ignore"}];
+		var btns = [{"id":"", "class":"btn btn-primary noty_"+widgetype+"_answer","title":"Answer"},{"id":"","class":"btn btn-danger noty_"+widgetype+"_ignore","title":'{{agile_lng_translate "contacts-view" "ignore"}}'}];
 		var json = {"callId": callId};
 		showDraggableNoty(widgetype, globalCall.contactedContact, "incoming", number, btns,json);
 	});
@@ -270,7 +270,7 @@ if(message.state == "connected"){
 	
 }else if(message.state == "connecting"){
 	
-	var btns = [{"id":"", "class":"btn btn-default btn-sm noty_"+widgetype+"_cancel","title":"Cancel"}];
+	var btns = [{"id":"", "class":"btn btn-default btn-sm noty_"+widgetype+"_cancel","title":'{{agile_lng_translate "contacts-view" "cancel"}}'}];
 	var json = {"callId": callId};
 	showDraggableNoty(widgetype, globalCall.contactedContact , "outgoing", number, btns, json);
 	

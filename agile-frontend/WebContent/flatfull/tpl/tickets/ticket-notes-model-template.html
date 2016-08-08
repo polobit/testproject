@@ -26,8 +26,8 @@
 			  	<span class="caret"></span>
 			  </button>
 		      <ul class="dropdown-menu  pull-right">
-		        <li><a onClick="Tickets_Notes.showOriginal({{id}}, 'html')" href="javascript:void(0);">Show HTML</a></li>
-		        {{#if mime_object}}<li><a onClick="Tickets_Notes.showOriginal({{id}}, 'original')" href="javascript:void(0);">Show Original</a></li>{{/if}}
+		        <li><a onClick="Tickets_Notes.showOriginal({{id}}, 'html')" href="javascript:void(0);">{{agile_lng_translate 'tickets' 'show-html'}}</a></li>
+		        {{#if mime_object}}<li><a onClick="Tickets_Notes.showOriginal({{id}}, 'original')" href="javascript:void(0);">{{agile_lng_translate 'tickets' 'show-original'}}</a></li>{{/if}}
 		      </ul>
 		    </div>
 	    {{/if_equals}}
@@ -67,7 +67,7 @@
 
 	   {{#if attachments_list}}
 	  		<div class="wrapper p-n">
-	  			<h5>Attachments</h5>
+	  			<h5>{{agile_lng_translate 'tickets' 'attachments'}}</h5>
 	  			 <ul class="inline v-top m-b-sm p-n attachments-list">
 	  			 	{{#each attachments_list}}
 		  				<li class="tag btn btn-xs btn-default m-r-xs m-b-xs inline-block" file-name="{{name}}" url="{{url}}" size="{{size}}">

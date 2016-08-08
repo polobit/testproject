@@ -40,7 +40,7 @@ function setup_tags_typeahead(callback) {
     });
 
     if(!$('.tags-typeahead').attr('placeholder'))
-    	$('.tags-typeahead').attr("placeholder", "Separate tags with commas");
+    	$('.tags-typeahead').attr("placeholder", "{{agile_lng_translate 'tags' 'seperate-tags-comma'}}");
     
     // Turn off browser default auto complete
     $('.tags-typeahead').attr("autocomplete","off");

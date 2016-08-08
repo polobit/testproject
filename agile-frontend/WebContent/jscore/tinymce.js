@@ -314,6 +314,7 @@ function get_merge_fields()
 	"Country":"{{location.country}}",
 	"Owner Name":"{{owner.name}}",
 	"Owner Email":"{{owner.email}}", 
+	"Owner Phone":"{{owner.phone}}",
 	"Calendar URL":"{{owner.calendar_url}}"
 	
 	}

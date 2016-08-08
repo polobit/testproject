@@ -174,9 +174,9 @@ function initializeWidgetSettingsListeners(){
 							console.log('Widget ACL updated');
 							Widgets_View = undefined;							
 							$("#widget-acls-modal").html(template_ui).modal('hide');
-							showNotyPopUp("success" , "Widgets updated successfully", "bottomRight");
+							showNotyPopUp("success" , "{{agile_lng_translate 'widgets' 'widget-updated'}}", "bottomRight");
 						},error: function(){
-							showNotyPopUp("error" , "Widgets update failed", "bottomRight");
+							showNotyPopUp("error" , "{{agile_lng_translate 'widgets' 'widget-updated-failed'}}", "bottomRight");
 						}
 					});
 																							
@@ -211,7 +211,7 @@ function initializeWidgetSettingsListeners(){
 		}
 		
 
-		showAlertModal("Are you sure to delete " + displayName + "?", "confirm", function(){
+		showAlertModal("{{agile_lng_translate 'widgets' 'confirm-delete'}} " + displayName + "?", "confirm", function(){
 			delete_widget(widget_name);
 
 			if(widget_name == "Linkedin")
@@ -219,7 +219,7 @@ function initializeWidgetSettingsListeners(){
 			
 			if(widget_name == "Twilio")
 				$('#Twilio-container').hide();
-		},undefined, "Delete Widget");
+		},undefined, "{{agile_lng_translate 'widgets' 'widget-delete'}}");
 
 	});	
 	
@@ -262,7 +262,7 @@ function initializeWidgetSettingsListeners(){
 				App_Widgets.Catalog_Widgets_View.collection.fetch();
 
 			}, dataType : 'json' });
-		},undefined, "Delete Widget");
+		},undefined, "{{agile_lng_translate 'widgets' 'widget-delete'}}");
 
 		
 

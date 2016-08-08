@@ -27,13 +27,13 @@ function showEmailGraphs(campaign_id)
 {
 
 	// Daily
-	showBar('core/api/campaign-stats/email/reports/' + campaign_id + getOptions() + "&type=date", 'line-daily-chart', 'Daily Reports', 'Count', null);
+	showBar('core/api/campaign-stats/email/reports/' + campaign_id + getOptions() + "&type=date", 'line-daily-chart', _agile_get_translated_val('reports','daily') , 'Count', null);
 
 	// Hourly
-	showBar('core/api/campaign-stats/email/reports/' + campaign_id + getOptions() + "&type=hour", 'line-hourly-chart', 'Hourly Reports', 'Count', null);
+	showBar('core/api/campaign-stats/email/reports/' + campaign_id + getOptions() + "&type=hour", 'line-hourly-chart', _agile_get_translated_val('reports','hourly'), 'Count', null);
 
 	// Weekly
-	showBar('core/api/campaign-stats/email/reports/' + campaign_id + getOptions() + "&type=day", 'line-weekly-chart', 'Weekly Reports', 'Count', null);
+	showBar('core/api/campaign-stats/email/reports/' + campaign_id + getOptions() + "&type=day", 'line-weekly-chart', _agile_get_translated_val('reports','weekly'), 'Count', null);
 }
 
 /**
