@@ -2685,14 +2685,14 @@ contacts-view.completed-task,Completed Task,Tarea completada
 campaigns.emails-clicked,Emails Clicked,Hicieron Click correos electrónicos
 misc-keys.sync-init,Sync initiated,sincronización iniciada
 companies-view.select-columns,Select Columns,Seleccionar columnas
-Tickets.Requester-Email,Requester&nbsp,solicitante
+Tickets.Requester-Email,Requester Email,Email Solicitante
 plan-and-upgrade.credit-balance,Credit Balance,Balance de crédito
 report-view.sales-forecast,Sales Forecast,Pronóstico de ventas
 other.webrules-count,Webrules Count,Webrules Conde
 admin-settings-api-analytics.analytics-code,Analytics Code,Código Analytics
 report-add.no-calls-found,No Calls Found,Sin llamadas encontradas
 contacts-view.phone-mobile,Phone (Mobile),Teléfono móvil
-tickets.Requester-Name,Requester&nbsp,solicitante
+tickets.Requester-Name,Requester Name,Nombre Solicitante
 tickets.search-contact,Search contact,Buscar contacto
 Admin-settings-users.Update Contact,Update Contact,Actualizar contacto
 contacts-view.get-dkim-spf,Get DKIM & SPF,Obtener DKIM y SPF
@@ -2951,7 +2951,7 @@ other.domain-details,DomainDetails,DomainDetails
 contact-details.email-bounced,Email bounced,rebotó correo electrónico
 social.favorite-from,Favorite from,Favorito de
 Refer-friend.refer-friedns,Refer friends,consulte los amigos
-tickets.Assigned-Date,Assigned&nbsp,asignado
+tickets.Assigned-Date,Assigned Date,Fecha de asignación
 web-rules.enter-seconds,Enter Seconds,Introduce los segundos
 widgets.validating,Validating...,Validando…
 companies-view.add-companies,Add Companies,Añadir Empresas
@@ -3057,7 +3057,7 @@ plan-and-upgrade.proceeding,Proceeding...,Procediendo…
 contacts-view.deleted-event,Deleted Event,Evento borrado
 admin-settings.shared-secret,Shared Secret,Secreto compartido
 prefs-settings.save-changes,Save Changes,Guardar cambios
-Tickets.Created-Date,Created&nbsp,Creado
+Tickets.Created-Date,Created Date,Fecha de creación
 landing-pages.page-options,Page Options,Opciones de página
 opportunities.mail-details,Mail Details,Detalles electrónico
 web-rules.visitor-type,Visitor Type,Tipo de visitante
@@ -3114,7 +3114,7 @@ currency.Mexican Peso,Mexican Peso,peso mexicano
 plan-and-upgrade.expiry-month,Expiry Month,Mes de expiración
 contacts-view.created-deal,Created Deal,Oferta creada
 timezone.current-time,Current Time,Hora actual
-Tickets.Due-Date,Created&nbsp,Creado
+Tickets.Due-Date,Due Date,Fecha de vencimiento
 campaigns.go-to-editor,Go To Editor,Ir al editor
 campaigns.coming-up-at,coming up at,&#44; presentándose en
 portlets.new-contacts,New Contacts,nuevos Contactos
@@ -3317,7 +3317,7 @@ tickets.add-section,Add Section,Añadir Sección
 datasync.update-data,Update Data,Actualizar datos
 campaigns.hard-bounce,Hard Bounce,Rebote fuerte
 landingpages.next-action,Next Action,Proxima accion
-Tickets.Closed-Date,Closed&nbsp,Cerrado
+Tickets.Closed-Date,Closed Date,Fecha de cierre
 report-view.subscribers,Subscribers,Suscriptores
 activity_type.DEAL_CLOSE,Deal Closed,trato se cerró
 Help-Center.help-center,Help Center,Centro de ayuda
@@ -3415,7 +3415,7 @@ other.delete-user,Delete User,Borrar usuario
 campaigns.you-need-to,You need to,Necesitas
 prefs-notifications.any-contact,Any Contact,Cualquier contacto
 calendar.Last 7 Days,Last 7 Days,Los últimos 7 días
-Tickets.Ticket-Type,Ticket&nbsp,Boleto
+Tickets.Ticket-Type,Ticket Type,Tipo de ticket
 tickets.you-dont-have-any-categories,You don&#39,Usted don \'
 companies-view.add-company,Add Company,Añadir empresa
 widgets.total-spent,Total spent,Total gastado
@@ -3875,7 +3875,7 @@ contact-details.campaigns,Campaigns,campañas
 portlets.send-rate,Send Rate,Enviar Tasa
 plan-and-upgrade.plan-with,plan with,plan con
 contact-edit.add-email,Add Email,Añadir Correo
-others.add-new,+ Add new,+ Añadir nuevo
+others.add-new,#NAME?,#NAME?
 widgets.ClickDesk,ClickDesk,ClickDesk
 contacts-view.condition,Condition,Condición
 modals.edit-note,Edit Note,Editar nota
@@ -3957,7 +3957,7 @@ widgets.show-more,Show More,Ver más
 countries.LK,Sri Lanka,Sri Lanka
 cases.edit-case,Edit Case,Editar Caso
 countries.LT,Lithuania,Lituania
-Tickets.Last-Updated-Date,Last&nbsp,Último
+Tickets.Last-Updated-Date,Last Updated Date,Fecha de última actualización
 countries.MU,Mauritius,Mauricio
 countries.NI,Nicaragua,Nicaragua
 other.to-select,to select,para seleccionar
@@ -4695,7 +4695,7 @@ deal-view.clear,Clear,Limpiar
 admin-settings-stats.count,Count,Contar
 prefs-settings.alias,Alias,Alias
 calendar.Apply,Apply,Aplicar
-tickets.false,False,0
+tickets.false,FALSE,0
 prefs-online-calendar.hours,Hours,horas
 calendar.Clear,Clear,Limpiar
 plan-and-upgrade.users,users,usuarios
@@ -4807,7 +4807,7 @@ report-add.placeholder-time,time,hora
 prefs-data-sync.shop,Shop,Comprar
 other.data,Data,Datos
 visitors.site,site,sitio
-tickets.true,True,1
+tickets.true,TRUE,1
 modals.save,Save,Guardar
 admin-settings-tasks.call,Call,Llamar
 plan-and-upgrade.back,Back,Detrás
@@ -4823,7 +4823,7 @@ currency.Euro,Euro,Euro
 deal-view.name,Name,Nombre
 tasks.High,High,Alta
 menu.help,Help,Ayuda
-portlets.+add,+Add,+Agregar
+portlets.+add,#NAME?,#NAME?
 portlets.tags,Tags,Etiquetas
 report-add.name,Name,Nombre
 contact-edit.main,Main,Principal
@@ -5205,3 +5205,7 @@ widgets.view-cus-order-details,View Customer Orders Details,Ordenes de los Clien
 widgets.add-your-widgets,Add your widgets,Añadir sus widgets
 widgets.custom-widgets,Custom Widgets,Reproductores personalizados
 widgets.stripe-custom-field-select,Stripe uses Stripe ID stored in text custom field to fetch data. Select the custom field to be used.,Raya utiliza identificador de banda almacenado en el campo de texto personalizado para obtener los datos . Seleccionar el campo personalizado que se utilizará .
+events.rescheduled,Rescheduled,Reprogramada
+events.cancelled,Cancelled,Cancelado
+events.no-show,No Show,No Show
+widgets.create-your-own-custom,Create your own custom web forms easily and place them on your website to update web visitor details.,
