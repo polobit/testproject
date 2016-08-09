@@ -180,7 +180,106 @@ $(function()
 	$('body #wrap #agilecrm-container').on('click', '#dialpad_btns', function(e)	{
 		e.stopPropagation();
 	});
+// this is to call onclick of checkbox in add/update contact	
+	$('body').on('click', '#call_newNumber_check', function(e)
+			{
+							$(this).attr("checked");
+							var opt = $(this).val();
+							if(opt == "update"){
+								$("#call_newNumber_relatedTo_div").show();
+								//$("#rampTimeButton").removeAttr('disabled');
+							}else{
+								$("#call_newNumber_relatedTo_div").hide();
+							}
+			});
 	
+//this function is called when the continue button is clicked on add new contact in call	
+	$('body').on("click","#call_newNumber_btn_continue",function(e)
+	{
+		e.preventDefault();
+		
+		CallLogVariables.processed = true;
+		var opt = $("#call_newNumber_check:checked").val();
+		//var phoneNumber = $("#mergeContactModal","#call_newNumber_btn_continue").data("phoneNumber");
+		var phoneNumber = $(this).data("phoneNumber");
+		if(!phoneNumber){
+			$("#mergeContactModal").modal('hide');
+			return;
+		}
+		
+		if(opt == "new"){
+			$("#mergeContactModal").modal('hide');
+			  setTimeout(function(){
+				  showNewContactModal(phoneNumber);
+			 },2);
+			
+		}else{
+			//take the contact and move to edit contact page
+			/*if update show new contact and log call
+			if selected contact is type contact then 
+			1)if continue - show log call
+			2)if cance - save activities
+			if selected is type companies then
+			1) if continue - show log call 
+			2)if cancel - save activities;*/
+			
+			//var contactId = $("#call_newNumber_relatedTo_div").find(".tagsinput:first li:nth-child(1)").attr("data");
+			var contactId = $("#relates_to_call_contact_ul li").attr("data");
+			if(!contactId){
+				$("#relates_to_call_error").show().delay(3000).hide(1);
+				console.log("error no contact found");
+				return;
+			}
+			
+			accessUrlUsingAjax("core/api/contacts/"+contactId, function(data){
+				if(!data){
+					console.log("no contact found");
+					return;
+				}
+				var json = {};
+				json['phoneNumber'] = phoneNumber;
+				$("#mergeContactModal").modal('hide');
+				 setTimeout(function(){
+					 proessEditPage(data,json);
+				 },2);
+			});
+		}
+	});
+	
+	$('#mergeContactModal').on('hidden.bs.modal', function (e) {
+		if(CallLogVariables.callWidget){
+
+			if(CallLogVariables.processed){
+				CallLogVariables.processed = false;
+					return;
+			}
+			try{
+				//if the data is not there - it means call status is not completed - so we log the activities of the call
+				var widgetType = CallLogVariables.callWidget.toLowerCase();
+				var direction = CallLogVariables.callType;
+				var phoneNumber = CallLogVariables.phone;
+				var status = CallLogVariables.status;
+				var duration = CallLogVariables.duration;
+				var url = "/core/api/widgets/" + widgetType + "/savecallactivity";
+				
+				
+				//url is : 
+				//1)twilio : /core/api/widgets/twilio/savecallactivity
+				//2)bria : /core/api/widgets/bria/savecallactivity
+				//3)skype: /core/api/widgets/skype/savecallactivity
+				
+				$.post( url,{
+				direction: direction, 
+				phone: phoneNumber, 
+				status : status,
+				duration : duration 
+				});
+				resetCallLogVariables();
+			}catch(e){
+			}
+		}	
+		
+	});
 	
 });
 
@@ -221,6 +320,9 @@ function sendActionToClient(action){
 	if(command == "startCall"){
 		var btns = [];
 		showDraggableNoty(client, globalCall.contactedContact , "dialing", globalCall.callNumber, btns);
+		globalCall.callDirection = "Outgoing";
+		globalCall.callStatus = "Dialing";
+		globalCall.callNumber = number;
 	}
 	var image = new Image();
 	image.onload = function(png) {
