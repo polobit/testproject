@@ -3,7 +3,7 @@
 	<td>
 		<div class="table-resp">
 			<div class="pull-left text-ellipsis">
-				<a href="#knowledgebase/{{name}}/articles" class="text-cap pull-left text-ellipsis w-full">{{name}}</a>
+				<a href="#knowledgebase/{{id}}/articles" class="pull-left text-ellipsis w-full">{{name}}</a>
 			</div>
 		</div>
 	</td>
@@ -11,7 +11,7 @@
         <div class="table-resp">
             <small class="edit-hover text-muted"> 
 				<i class="fa fa-clock-o m-r-xs"></i>
-		        <span>Last updated on&nbsp;</span>
+		        <span>{{agile_lng_translate 'tickets' 'last-updated-on'}}&nbsp;</span>
                 <time class="b-b-dotted" datetime="{{epochToHumanDate "" updated_time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM" updated_time}}</time>
             </small>
         </div>

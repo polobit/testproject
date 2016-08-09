@@ -85,8 +85,7 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 	/**
 	 * Phone number of user
 	 */
-	@NotSaved(IfDefault.class)
-	public String phone = null;
+	public String phone = "";
 	
 	/** The Reference tracking object represents referercount and referece key */
 
@@ -291,8 +290,8 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 	public ROLE role = ROLE.SALES;
 	public enum ROLE {SALES, MARKETING, SERVICE};
 	
-	// Added Role version
-	public String version = null;
+	// Added Role version (Make it default version v2)
+	public String version = "v1";
 	
 	// Dao
 	private static ObjectifyGenericDao<DomainUser> dao = new ObjectifyGenericDao<DomainUser>(DomainUser.class);
@@ -400,7 +399,7 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 			if (is_disabled)
 				sendEmail(SendMail.USER_DISABLED_SUBJECT, SendMail.USER_DISABLED_NOTIFICATION);
 			else
-				sendEmail(SendMail.USER_ENABLED_NOTIFICATION, SendMail.USER_ENABLED_NOTIFICATION);
+				sendEmail(SendMail.USER_ENABLED_SUBJECT, SendMail.USER_ENABLED_NOTIFICATION);
 		}
 		catch (Exception e)
 		{
@@ -656,6 +655,10 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 	    // Reset Role
 	    if(role == null && this.id != null && domainUser != null)
 	    	role = domainUser.role;
+	    
+	    // Reset finger_prints
+	    if(finger_prints == null && this.id != null && domainUser != null)
+	    	finger_prints = domainUser.finger_prints;
 	    
 	    // Set user version
 	    if(this.id == null)
@@ -945,6 +948,10 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 			
 			//if no javascrupt permission set, load default
 			loadJavaScriptScope();
+			
+			// Add version
+			if(this.version == null)
+				version = "v1";
 		}
 		catch (Exception e)
 		{

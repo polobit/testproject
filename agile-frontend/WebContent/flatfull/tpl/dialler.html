@@ -10,14 +10,14 @@
 			<span class="clear-dialler c-p">X</span>
 		</div>
 
-	<span style="font-size:15px;color:whitesmoke;margin-left:15px">Dial</span>
+	<span style="font-size:15px;color:whitesmoke;margin-left:15px">{{agile_lng_translate 'portlets' 'dail'}}</span>
 	
 		<span style="text-align:center;margin-left: 26px;">
 						<a href="" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false"> 
     				      <button id="dialler-widget" type="button" class="btn btn-default" style="width: 147px;border-radius: 17px;">
     						  				  
 								<span  id="dialler-widget-name-span" style="float: left;" value = "" >
-								 Select
+								{{agile_lng_translate 'plan-and-upgrade' 'select'}}
 								</span>
          				   		<span class="caret" style="color: #23B7E5;position: relative;top: 5px;float: right;zoom: 1.5"></span>
 							
@@ -26,26 +26,26 @@
 								<ul class="dropdown-menu" style="top: 40px;left: 84px;min-width: 135px;padding: 0px;margin: 0px;border-radius: 5px;">
 									<li class = "dialler-widget-name-Twilio dialler-widget-li none">
 										<a href="" value = "Twilio" style="float: left;width: 100%;">
-											<img src='/widgets/twilio-small-logo.png' style='width: 20px; height: 20px; margin-right: 5px;' data-toggle='tooltip' data-placement='top' title='' data-original-title='Twilio' >
-											Twilio
+											<img src='/widgets/twilio-small-logo.png' style='width: 20px; height: 20px; margin-right: 5px;' data-toggle='tooltip' data-placement='top' title='' data-original-title='{{agile_lng_translate 'widgets' 'Twilio'}}' >
+											{{agile_lng_translate 'widgets' 'Twilio'}}
 										</a> 
 									</li>
 									<li class = "dialler-widget-name-Sip dialler-widget-li none">
 										<a class = "dialler-widget-name-span-value" href="" value = "Sip" style="float: left;width: 100%;">
-											<img src='/widgets/sip-logo-small.png' style='width: 20px; height: 20px;' data-toggle='tooltip' data-placement='top' title='' data-original-title='Sip' >
-											SIP
+											<img src='/widgets/sip-logo-small.png' style='width: 20px; height: 20px;' data-toggle='tooltip' data-placement='top' title='' data-original-title="{{agile_lng_translate 'widgets' 'SIP'}}" >
+											{{agile_lng_translate 'widgets' 'SIP'}}
 										</a> 
 									</li>
 									<li class = "dialler-widget-name-Bria dialler-widget-li none">
 										<a class = "dialler-widget-name-span-value" href="" value = "Bria" style="float: left;width: 100%;">
-											<img src='/img/plugins/bria-call.png' style='width: 20px; height: 20px;' data-toggle='tooltip' data-placement='top' title='' data-original-title='Bria' >
-											Bria
+											<img src='/img/plugins/bria-call.png' style='width: 20px; height: 20px;' data-toggle='tooltip' data-placement='top' title='' data-original-title="{{agile_lng_translate 'widgets' 'bria'}}" >
+											{{agile_lng_translate 'widgets' 'bria'}}
 										</a> 
 									</li>
 									<li class = "dialler-widget-name-Skype dialler-widget-li none">
 										<a class = "dialler-widget-name-span-value" href="" value = "Skype" style="float: left;width: 100%;">
-											<img src='/img/plugins/skype-call.png' style='width: 24px; height: 24px;' data-toggle='tooltip' data-placement='top' title='' data-original-title='Skype' >
-											Skype
+											<img src='/img/plugins/skype-call.png' style='width: 24px; height: 24px;' data-toggle='tooltip' data-placement='top' title='' data-original-title="{{agile_lng_translate 'contact-edit' 'skype'}}" >
+											{{agile_lng_translate 'contact-edit' 'skype'}}
 										</a> 
 									</li>
 								</ul>
@@ -64,7 +64,7 @@
 
 <iframe id="remember-dialler" name="remember-dialler" class="hidden" src=""></iframe>
 <form autocomplete="on" id="dialler-phone-number-form" action="/content/blank" method="post" target="remember-dialler">
-		<input type = "text" placeholder="Enter phone number" autocomplete="on" name="dail_phone_number" id="dail_phone_number" style="width: 100%;padding: 5px; border:none; border-bottom: 1px solid rgb(191, 200, 203);" />
+		<input type = "text" placeholder="{{agile_lng_translate 'widgets' 'enter-your-phone-number'}}" autocomplete="on" name="dail_phone_number" id="dail_phone_number" style="width: 100%;padding: 5px; border:none; border-bottom: 1px solid rgb(191, 200, 203);" />
 </form>
 		</div>	
 

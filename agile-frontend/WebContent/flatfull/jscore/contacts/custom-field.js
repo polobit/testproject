@@ -159,11 +159,11 @@ function showCustomFieldModel(data)
 
 				if($('#label', $('#textModalForm')).is(':disabled'))
 				{
-					$('#duplicate-custom-field-type-err').html("<i>"+errorJSON[response.responseText]+" type custom field exists with same label. Choose same type.</i>");
+					$('#duplicate-custom-field-type-err').html("<i>"+errorJSON[response.responseText]+" "+_agile_get_translated_val('customfields','label-exists')+"</i>");
 				}
 				else
 				{
-					$('#duplicate-custom-field-type-err').html("<i>"+errorJSON[response.responseText]+" type custom field exists with same label. Choose same type or different label.</i>");
+					$('#duplicate-custom-field-type-err').html("<i>"+errorJSON[response.responseText]+" "+_agile_get_translated_val('customfields','label-exists-1')+"</i>");
 				}
 				$('#duplicate-custom-field-type-err').removeClass("hide");
 			}
@@ -192,7 +192,7 @@ function bindCustomFiledChangeEvent(el){
 			$("#custom-field-formula-data").hide();
 			$("textarea",  $("#custom-field-formula-data")).removeAttr("name");
 			$('.required-and-searchable').show();
-			$("#searchable").prop('checked', false);
+			//$("#searchable").prop('checked', true);
 			$("#searchable").prop('disabled', false);
 		}
 		else if(value == "TEXTAREA")
@@ -204,7 +204,7 @@ function bindCustomFiledChangeEvent(el){
 			$("#custom-field-formula-data").hide();
 			$("textarea",  $("#custom-field-formula-data")).removeAttr("name");
 			$('.required-and-searchable').show();
-			$("#searchable").prop('checked', false);
+			//$("#searchable").prop('checked', true);
 			$("#searchable").prop('disabled', false);
 		}
 		else if(value == "FORMULA")
@@ -216,8 +216,8 @@ function bindCustomFiledChangeEvent(el){
 			$("#custom-field-formula-data").show();
 			$("textarea",  $("#custom-field-formula-data")).attr("name", "field_data");
 			$('.required-and-searchable').hide();
-			$("#searchable").prop('checked', false);
-			$("#searchable").prop('disabled', false);
+			//$("#searchable").prop('checked', true);
+			//$("#searchable").prop('disabled', false);
 		}
 		else if(value == "CONTACT" || value == "COMPANY")
 		{ 	
@@ -225,13 +225,14 @@ function bindCustomFiledChangeEvent(el){
 			$("#searchable").prop('disabled', true);
 
 		}
+		
 		else
 		{
 			$("#custom-field-data").hide();
 			$("#custom-field-list-values").hide();
 			$("#custom-field-formula-data").hide();
 			$('.required-and-searchable').show();
-			$("#searchable").prop('checked', false);
+			//$("#searchable").prop('checked', true);
 			$("#searchable").prop('disabled', false);
 		}
 		
@@ -652,7 +653,7 @@ function show_custom_fields_helper(custom_fields, properties){
 								+field.field_type.toLowerCase()
 								+'_input custom_field required_field form-control field_length typeahead typeahead_contacts" id='
 								+field.id+' name="'+field.field_label
-								+'" max_len="'+max_len+'" placeholder="Contact Name"></div></div>');
+								+'" max_len="'+max_len+'" placeholder="{{agile_lng_translate "cases" "contact-name"}}"></div></div>');
 				}else{
 					el = el.concat('<div class="control-group form-group " id="custom_contact_'+field.id+'"><label class="control-label '+label_style+'">'
 							+field.field_label
@@ -662,7 +663,7 @@ function show_custom_fields_helper(custom_fields, properties){
 							+field.field_type.toLowerCase()
 							+'_input custom_field required_field form-control field_length typeahead typeahead_contacts" id='
 							+field.id+' name="'+field.field_label
-							+'" max_len="'+max_len+'" placeholder="Contact Name"></div></div>');
+							+'" max_len="'+max_len+'" placeholder="{{agile_lng_translate "cases" "contact-name"}}"></div></div>');
 				}
 			}else{
 				if(isModal){
@@ -675,7 +676,7 @@ function show_custom_fields_helper(custom_fields, properties){
 								+'_input custom_field form-control field_length typeahead typeahead_contacts" id='
 								+field.id+' name="'
 								+field.field_label
-								+'" max_len="'+max_len+'" placeholder="Contact Name"></div></div>');
+								+'" max_len="'+max_len+'" placeholder="{{agile_lng_translate "cases" "contact-name"}}"></div></div>');
 				}else{
 					el = el.concat('<div class="control-group form-group " id="custom_contact_'+field.id+'"><label class="control-label '+label_style+'">'
 							+field.field_label
@@ -686,7 +687,7 @@ function show_custom_fields_helper(custom_fields, properties){
 							+'_input custom_field form-control field_length typeahead typeahead_contacts" id='
 							+field.id+' name="'
 							+field.field_label
-							+'" max_len="'+max_len+'" placeholder="Contact Name"></div></div>');
+							+'" max_len="'+max_len+'" placeholder="{{agile_lng_translate "cases" "contact-name"}}"></div></div>');
 				}
 			}
 				
@@ -705,7 +706,7 @@ function show_custom_fields_helper(custom_fields, properties){
 								+field.field_type.toLowerCase()
 								+'_input custom_field required_field form-control field_length typeahead typeahead_contacts" id='
 								+field.id+' name="'+field.field_label
-								+'" max_len="'+max_len+'" placeholder="Company Name"></div></div>');
+								+'" max_len="'+max_len+'" placeholder="{{agile_lng_translate "contact-edit" "company-name"}}"></div></div>');
 				}else{
 					el = el.concat('<div class="control-group form-group " id="custom_company_'+field.id+'">	<label class="control-label '+label_style+'">'
 							+field.field_label
@@ -715,7 +716,7 @@ function show_custom_fields_helper(custom_fields, properties){
 							+field.field_type.toLowerCase()
 							+'_input custom_field required_field form-control field_length typeahead typeahead_contacts" id='
 							+field.id+' name="'+field.field_label
-							+'" max_len="'+max_len+'" placeholder="Company Name"></div></div>');
+							+'" max_len="'+max_len+'" placeholder="{{agile_lng_translate "contact-edit" "company-name"}}"></div></div>');
 				}
 			}else{
 				if(isModal){
@@ -728,7 +729,7 @@ function show_custom_fields_helper(custom_fields, properties){
 								+'_input custom_field form-control field_length typeahead typeahead_contacts" id='
 								+field.id+' name="'
 								+field.field_label
-								+'" max_len="'+max_len+'" placeholder="Company Name"></div></div>');
+								+'" max_len="'+max_len+'" placeholder="{{agile_lng_translate "contact-edit" "company-name"}}"></div></div>');
 				}else{
 					el = el.concat('<div class="control-group form-group " id="custom_company_'+field.id+'"><label class="control-label '+label_style+'">'
 							+field.field_label
@@ -739,7 +740,7 @@ function show_custom_fields_helper(custom_fields, properties){
 							+'_input custom_field form-control field_length typeahead typeahead_contacts" id='
 							+field.id+' name="'
 							+field.field_label
-							+'" max_len="'+max_len+'" placeholder="Company Name"></div></div>');
+							+'" max_len="'+max_len+'" placeholder="{{agile_lng_translate "contact-edit" "company-name"}}"></div></div>');
 				}
 			}
 				

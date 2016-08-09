@@ -599,11 +599,10 @@ function displayCalendarView()
 
 	$('#'+calendarView,$('#calendarTasksButtons')).addClass('bg-light');
 
-	head.js(LIB_PATH + 'lib/jquery-ui.min.js', LIB_PATH + 'lib/fullcalendar.min.js', function()
-	{
+	_agile_library_loader.load_fullcalendar_libs(function(){
 		$('#task-calendar-based-condition').html("");
 		getCalendarView();
 		initilizeTasksCalendarViewListeners();
-	});
 
+	});
 }

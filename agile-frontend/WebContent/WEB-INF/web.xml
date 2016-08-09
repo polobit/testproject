@@ -1238,6 +1238,16 @@
     </servlet-mapping>
     
     <servlet>
+		<servlet-name>AgileGlobalPropertyServlet</servlet-name>
+		<servlet-class>com.agilecrm.AgileGlobalPropertyServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+
+		<servlet-name>AgileGlobalPropertyServlet</servlet-name>
+		<url-pattern>/ag-global-props/*</url-pattern>
+	</servlet-mapping>
+    
+    <servlet>
 		<servlet-name>OpportunitySchemaChange</servlet-name>
 		<servlet-class>com.agilecrm.OpportunitySchemaChangeServlet</servlet-class>
 	</servlet>
@@ -1390,5 +1400,24 @@
 	<servlet-mapping>
 		<servlet-name>ContactsDeleteServlet</servlet-name>
 		<url-pattern>/backend/cron/deleteContactsFromTextSearch</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>PageBuilder</servlet-name>
+		<jsp-file>/misc/pagebuilder/pagebuilder.jsp</jsp-file>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>PageBuilder</servlet-name>
+		<url-pattern>/pagebuilder/*</url-pattern>
+	</servlet-mapping>	
+
+	 <servlet>
+		<servlet-name>AmazonSESWebhook</servlet-name>
+		<servlet-class>com.thirdparty.amazon.httpendpoint.AmazonSESWebhook</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>AmazonSESWebhook</servlet-name>
+		<url-pattern>/backend/amazonseswebhook</url-pattern>
 	</servlet-mapping>
 </web-app>

@@ -705,8 +705,8 @@ public class PortletsAPI {
 	public JSONObject getDealsGoalsAttainmentForPortlets(
 			@PathParam("owner-id") Long owner_id,
 			@QueryParam("start-date") Long start_time,
-			@QueryParam("end-date") Long end_time) {
-		return PortletUtil.getGoalsAttainedData(owner_id, start_time, end_time);
+			@QueryParam("end-date") Long end_time,@QueryParam("time_zone") Long time_zone) {
+		return PortletUtil.getGoalsAttainedData(owner_id, start_time, end_time,time_zone);
 	}
 
 	/**

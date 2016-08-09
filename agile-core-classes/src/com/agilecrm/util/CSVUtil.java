@@ -1785,7 +1785,10 @@ public class CSVUtil
     {
 	try
 	{
-	    properties.add(index - 1, errorMsg);
+		for(int i=properties.size();i<index-1;i++){
+			properties.add("");
+		}
+	    properties.add(errorMsg);
 	}
 	catch (ArrayIndexOutOfBoundsException e)
 	{

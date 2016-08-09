@@ -154,6 +154,8 @@ public class DealFilterUtil {
 				SearchRule newRule = new SearchRule();
 				newRule.LHS = "pipeline";
 				newRule.CONDITION = rule.CONDITION;
+				if(rule.CONDITION.equals(RuleCondition.NOTEQUALS) && milestoneName != null && !milestoneName.equalsIgnoreCase("ALL@MILESTONES"))
+					newRule.CONDITION =RuleCondition.EQUALS;
 				newRule.RHS = pipeline_id;
 				modifiedRules.add(newRule);
 				if(milestoneName != null && !milestoneName.equalsIgnoreCase("ALL@MILESTONES"))

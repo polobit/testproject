@@ -3,27 +3,27 @@
         <ul class="nav nav-tabs b-b-none">
         	<li {{#if groups}}class="active"{{/if}}>
          		<a href="#ticket-groups" class="b-l-none">
-         			Groups
+         			{{agile_lng_translate 'tickets' 'groups'}}
          		</a>
          	</li>
             <li {{#if labels}}class="active"{{/if}}>
                 <a href="#ticket-labels" class="b-l-none">
-                    Labels
+                    {{agile_lng_translate 'tickets' 'labels'}}
                 </a>
             </li>
          	<li {{#if canned_responses}}class="active"{{/if}}>
-         		<a href="#canned-responses">
-         			Canned Responses
+         		<a href="#canned-responses" class="b-l-none">
+         			{{agile_lng_translate 'tickets' 'canned-responses'}}
          		</a>
          	</li>
 		 	<li {{#if filters}}class="active"{{/if}}>
-		 		<a href="#ticket-views">
-		 			Views
+		 		<a href="#ticket-views" class="b-l-none">
+		 			{{agile_lng_translate 'tickets' 'views'}}
 		 		</a>
 		 	</li>
             <li {{#if knowledgebase}}class="active"{{/if}}>
                 <a href="#knowledgebase" class="b-l-none">
-                    Knowledge Base
+                    {{agile_lng_translate 'other' 'knowledge-base'}}
                 </a>
             </li>
        </ul>

@@ -194,7 +194,8 @@ function getMergeFields(type)
 		"Created Time": "{{created_time}}",
 		"Modified Time": "{{modified_time}}",
 		"Owner Name": "{{owner_name}}",
-		"Owner Email": "{{owner_email}}"
+		"Owner Email": "{{owner_email}}",
+		"Owner Phone": "{{owner_phone}}"
 	};
 	
 	// Get Custom Fields in template format
