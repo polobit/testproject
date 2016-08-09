@@ -7536,7 +7536,7 @@ Handlebars.registerHelper('leadTableHeadings', function(item)
  		el = el.concat('<th class="'+ cls +'">' + ucfirst(element) + '</th>');	
  	});
 	return new Handlebars.SafeString(el);
-}
+});
 Handlebars.registerHelper('get_default_label', function(label, module_name, options)
 {
 	var i18nKeyPrefix = "admin-settings-tasks";
