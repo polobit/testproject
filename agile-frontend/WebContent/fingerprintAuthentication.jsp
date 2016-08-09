@@ -255,7 +255,6 @@ position: fixed;width: 100%;top: 0px;
 	<!-- JQUery Core and UI CDN -->
 	
 	<script src='//cdnjs.cloudflare.com/ajax/libs/headjs/1.0.3/head.min.js'></script>
-	<script type="text/javascript" src="https://cdn.jsdelivr.net/fingerprintjs2/1.1.2/fingerprint2.min.js"></script>
 	
 	<script type="text/javascript">
 

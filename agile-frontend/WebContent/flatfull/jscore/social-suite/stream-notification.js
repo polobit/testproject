@@ -51,12 +51,12 @@ function updateNotification(stream)
 	else if (newAddedTweets.length == 1)
 	{
 		// Add notification of new tweet on stream.
-		document.getElementById('stream_notifications_' + stream.id).innerHTML = '<p class="bg-info">' + newAddedTweets.length + ' new Tweet </p>';
+		document.getElementById('stream_notifications_' + stream.id).innerHTML = '<p class="bg-info">' + newAddedTweets.length + ' {{agile_lng_translate "socialsuite" "new-tweet"}} </p>';
 	}
 	else if (newAddedTweets.length > 1)
 	{
 		// Add notification of new tweets on stream.
-		document.getElementById('stream_notifications_' + stream.id).innerHTML = '<p class="bg-info">' + newAddedTweets.length + ' new Tweets </p>';
+		document.getElementById('stream_notifications_' + stream.id).innerHTML = '<p class="bg-info">' + newAddedTweets.length + ' {{agile_lng_translate "socialsuite" "new-tweets"}} </p>';
 	}
 
 	/*
@@ -110,7 +110,7 @@ function displayErrorInStream(errorMsg)
 	if (modelStream.get('tweetListView').length == 0)
 	{
 		// Add notification of error on stream.
-		document.getElementById('stream_notifications_' + streamId).innerHTML = '<p>Request rate limit exceeded, Retry after some time. <i class="icon icon-refresh" title="Retry again."></i></p>';
+		document.getElementById('stream_notifications_' + streamId).innerHTML = '<p>{{agile_lng_translate "socialsuite" "request-rate-exceed"}} <i class="icon icon-refresh" title="{{agile_lng_translate "socialsuite" "retry"}}"></i></p>';
 
 		// Add relation from <div> for notification.
 		$('#stream_notifications_' + streamId).attr("rel", 'retry');

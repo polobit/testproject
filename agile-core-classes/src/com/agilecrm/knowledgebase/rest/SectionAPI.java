@@ -23,12 +23,15 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.agilecrm.knowledgebase.entity.Article;
 import com.agilecrm.knowledgebase.entity.Categorie;
 import com.agilecrm.knowledgebase.entity.Section;
 import com.agilecrm.knowledgebase.util.SectionUtil;
-import com.agilecrm.ticket.entitys.TicketGroups;
+import com.agilecrm.ticket.entitys.TicketStats;
+import com.agilecrm.ticket.utils.TicketStatsUtil;
 import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.googlecode.objectify.Key;
+import com.googlecode.objectify.Query;
 
 /**
  * 
@@ -44,9 +47,13 @@ public class SectionAPI
 	{
 		try
 		{
-			Section section = Section.dao.getByProperty("name",name);
+			Section section = Section.dao.getByProperty("name", name);
+			if (section == null)
+			{
+				return null;
+			}
 			section.categorie = Categorie.dao.get(section.categorie_key);
-			
+
 			return section;
 		}
 		catch (Exception e)
@@ -58,13 +65,15 @@ public class SectionAPI
 	}
 	
 	@GET
-	@Path("/categorie/{id}")
+	@Path("/kb-admin")
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public List<Section> getSectionsByCategorie(@PathParam("id") Long categorieID)
+	public Section getAdminSection(@QueryParam("id") long id)
 	{
 		try
 		{
-			return SectionUtil.getSectionByCategorie(categorieID);
+			Section section = Section.dao.get(id);
+			section.categorie = Categorie.dao.get(section.categorie_key);
+			return section;
 		}
 		catch (Exception e)
 		{
@@ -73,7 +82,23 @@ public class SectionAPI
 					.build());
 		}
 	}
-	
+
+	@GET
+	@Path("/categorie/{id}")
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	public List<Section> getSectionsByCategorie(@PathParam("id") Long categorieID)
+	{
+		return SectionUtil.getSectionByCategorie(categorieID, false);
+	}
+
+	@GET
+	@Path("/{id}")
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	public List<Section> getSections(@PathParam("id") Long categorieID)
+	{
+		return SectionUtil.getSectionByCategorie(categorieID, true);
+	}
+
 	@POST
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
@@ -85,14 +110,16 @@ public class SectionAPI
 				throw new Exception("Required params missing.");
 
 			Section existingsection = Section.dao.getByProperty("name", section.name);
-			if (existingsection != null && !existingsection.equals(section.name)){
-				throw new Exception("Section with name " + section.name
-						+ " already exists.");
+			if (existingsection != null && !existingsection.equals(section.name))
+			{
+				throw new Exception("Section with name " + section.name + " already exists.");
 			}
 			Key<Categorie> categorie_key = new Key<Categorie>(Categorie.class, section.categorie_id);
 
 			section.categorie_key = categorie_key;
 			section.save();
+			// Updating ticket count DB
+			TicketStatsUtil.updateEntity(TicketStats.Section_Count);
 		}
 		catch (Exception e)
 		{
@@ -104,7 +131,7 @@ public class SectionAPI
 
 		return section;
 	}
-	
+
 	@POST
 	@Path("/bulk")
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
@@ -113,7 +140,20 @@ public class SectionAPI
 	{
 		try
 		{
+			JSONArray section_ids = new JSONArray(model_ids);
+			
+			for(int i=0;i<section_ids.length();i++){
+				Long id = (long)section_ids.get(i);
+				
+				Key<Section> section_key = new Key<Section>(Section.class, id);
+				
+				Query<Article> q = Article.dao.ofy().query(Article.class).filter("section_key =", section_key);
+				List <Article> sectionarticles = Article.dao.fetchAll(q);
+				Article.dao.deleteAll(sectionarticles);
+			}
+			
 			Section.dao.deleteBulkByIds(new JSONArray(model_ids));
+			
 		}
 		catch (Exception e)
 		{
@@ -125,27 +165,26 @@ public class SectionAPI
 		return new JSONObject().put("status", "success").toString();
 	}
 
-	
 	@PUT
+    @Path("/kb-admin")
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	public Section updateSection(Section section) throws WebApplicationException, EntityNotFoundException
+	public Section updateSection(Section section ) throws WebApplicationException, EntityNotFoundException
 	{
-		Section dbsection = Section.dao.get(section.id) ;
+		Section dbsection = Section.dao.get(section.id);
 		try
 		{
 			if (StringUtils.isBlank(section.name) || section.categorie_id == null)
 				throw new Exception("Required params missing.");
 
-			
-
 			Section existingsection = Section.dao.getByProperty("name", section.name);
-			if (existingsection != null && (existingsection.name.equals(section.name)) && !(dbsection.name.equals(section.name))) {
+			if (existingsection != null && (existingsection.name.equals(section.name))
+					&& !(dbsection.name.equals(section.name)))
+			{
 				throw new Exception("Section with name " + section.name
-						+ " already exists. Please choose a different name." );
+						+ " already exists. Please choose a different name.");
 			}
-			
-			
+
 			Key<Categorie> categorie_key = new Key<Categorie>(Categorie.class, section.categorie_id);
 			section.categorie_key = categorie_key;
 			section.save();
@@ -165,7 +204,7 @@ public class SectionAPI
 	 * Deletes section by IDs
 	 * 
 	 */
-	@DELETE 
+	@DELETE
 	@Produces(MediaType.APPLICATION_JSON)
 	public String deleteSection(@QueryParam("id") Long id)
 	{
@@ -186,6 +225,7 @@ public class SectionAPI
 		}
 
 	}
+
 	/**
 	 * Save the section order based on the order of the section id's sent.
 	 * 
@@ -213,7 +253,7 @@ public class SectionAPI
 				{
 					catIds.add(Long.parseLong(idsArray.getString(i)));
 				}
-			SectionUtil.saveSectionOrder(catIds);
+				SectionUtil.saveSectionOrder(catIds);
 				result.put("message", "Order changes sucessfully.");
 			}
 			return result.toString();
@@ -233,7 +273,5 @@ public class SectionAPI
 			return null;
 		}
 	}
-
-
 
 }

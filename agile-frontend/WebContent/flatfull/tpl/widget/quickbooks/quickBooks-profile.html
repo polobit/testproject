@@ -1,7 +1,7 @@
 <script id="quickbooks-login-template" type="text/html">
 <div class="m-t">
-	Create invoices, track and receive payments, and see invoice history of your customers.
-	<div class="m-t-md text-center"><a class="btn btn-primary btn-sm" href="{{url}}">Link your QuickBooks</a>
+	{{agile_lng_translate 'widgets' 'QuickBooks-content'}}
+	<div class="m-t-md text-center"><a class="btn btn-primary btn-sm" href="{{url}}">{{agile_lng_translate 'widgets' 'link-your-quickbooks'}}</a>
 </div>
 </div>
 </script>
@@ -69,13 +69,13 @@
 		
 		{{/if}}
 	</div>	
-	<a id="quickbooks_add_invoice" class="m-t-xs c-p pull-left btn btn-xs btn-default" href="https://sg.qbo.intuit.com/app/invoice?nameId={{Customer.Id}}" target="_blank">Add Invoice</a>
+	<a id="quickbooks_add_invoice" class="m-t-xs c-p pull-left btn btn-xs btn-default" href="https://sg.qbo.intuit.com/app/invoice?nameId={{Customer.Id}}" target="_blank">{{agile_lng_translate 'admin-settings-integrations' 'add-invoice'}}</a>
 	<div class="clearfix"></div>	
 </div>
 {{#if Invoices}}
 	{{#isArray Invoices}}
 	<div class="wrapper-sm b-t b-light">
-		<a href="https://sg.qbo.intuit.com/app/customerdetail?nameId={{Customer.Id}}" target="_blank"><h4 class="m-n text-md">Invoices</h4></a>
+		<a href="https://sg.qbo.intuit.com/app/customerdetail?nameId={{Customer.Id}}" target="_blank"><h4 class="m-n text-md">{{agile_lng_translate 'plan-and-upgrade' 'invoices'}}</h4></a>
 	</div>
 	<ul class="list-group m-n text-base">
 		{{#each Invoices}}
@@ -108,26 +108,26 @@
 	{{/isArray}}
 	{{else}}
 		<li class="wrapper-sm b-t b-light">
-	    	No invoices	found		
+	    	{{agile_lng_translate 'plan-and-upgrade' 'no-invoices-found'}}		
 		</li>
 	{{/if}}
 </script>
 
 <script id="quickbooks-profile-addcontact-template" type="text/html">
 <div class="wrapper-sm">
-	<div>No customer found.</div>
-	<a id="quickbooks_add_contact" class="btn btn-default btn-xs m-t-xs">Add Contact</a>
+	<div>{{agile_lng_translate 'widgets' 'no-customer-found'}}</div>
+	<a id="quickbooks_add_contact" class="btn btn-default btn-xs m-t-xs">{{agile_lng_translate 'deal-view' 'add-contact'}}</a>
 </div>
 </script>
 <script id="quickbook-items-template" type="text/html">
 	{{#if_equals Line "0"}}
 		<li class="list-group-item r-none b-l-none b-r-none text-light">
-	    	No Items available. Add an item in your account to generate invoice.
+	    	{{agile_lng_translate 'widgets' 'no-items-available'}}
 		</li>		
 	{{else}}
 		<li class="list-group-item r-none b-l-none b-r-none p-b-none">
-			<div class="col-md-6">Item name</div>
-			<div class="col-md-6 text-right">Unit cost</div>
+			<div class="col-md-6">{{agile_lng_translate 'web-rules' 'item-name'}}</div>
+			<div class="col-md-6 text-right">{{agile_lng_translate 'widgets' 'unit-cost'}}</div>
 		</li>
 		{{#isArray Line}}
 			{{#each Line}}
@@ -135,7 +135,7 @@
 					<div class="pull-left" rel="tooltip" title="{{DetailType.ItemRef.name}}">{{DetailType.ItemRef.name}}</div>
 					<div class="pull-right">{{Amount}}</div><br>
 					<ul class="widget_tab_link m-n etxt-base" style="float:left;">
-						<li><a href="#add" id="freshbooks_add_invoice" item_name={{name}} rel="tooltip" title="Generate invoice and send an email for this item">Add Invoice</a></li>
+						<li><a href="#add" id="freshbooks_add_invoice" item_name={{name}} rel="tooltip" title="{{agile_lng_translate 'widgets' 'generate-invoice-desc'}}">{{agile_lng_translate 'admin-settings-integrations' 'add-invoice'}}</a></li>
 						<li><small class="text-muted"><i class="fa fa-clock-o m-r-xs"></i><time class="time-ago pull-left l_border" datetime="{{updated}}">{{updated}}</time></small></li>
 					</ul>
 				</li>
@@ -146,7 +146,7 @@
 				<div class="pull-right">{{item.unit_cost}}</div><br>
 				<small class="text-muted"><i class="fa fa-clock-o m-r-xs"></i><time class="time-ago pull-left" datetime="{{item.updated}}">{{item.updated}}</time></small>
 				<ul class="widget_tab_link m-n text-base" style="float:left;">
-					<li><a href="#add" id="freshbooks_add_invoice" item_name={{item.name}} rel="tooltip" title="Generate invoice and send an email for this item">Add Invoice</a></li>
+					<li><a href="#add" id="freshbooks_add_invoice" item_name={{item.name}} rel="tooltip" title="{{agile_lng_translate 'widgets' 'generate-invoice-desc'}}">{{agile_lng_translate 'admin-settings-integrations' 'add-invoice'}}</a></li>
 					<li><small class="text-muted"><i class="fa fa-clock-o m-r-xs"></i><time class="time-ago pull-left l_border" datetime="{{item.updated}}">{{item.updated}}</time></small></li>
 				</ul>
 			</li>
@@ -159,8 +159,8 @@
 <p class="title_txt"><a href="https://go.xero.com/Dashboard/" target="_blank" >{{fetchXeroUser prefs}}</a></p>
 	</div>
 	<div class="m-t-sm m-r-none m-b-xs m-l-none text-center">
-			<a class='btn revoke-widget ml_5 btn-sm btn-danger revoke-widget' widget-name="Xero">Revoke Access</a>
-			<a href="#add-widget" class='btn btn-default btn-sm ml_5' widget-name="Xero">Cancel</a>
+			<a class='btn revoke-widget ml_5 btn-sm btn-danger revoke-widget' widget-name="Xero">{{agile_lng_translate 'widgets' 'revoke-access'}}</a>
+			<a href="#add-widget" class='btn btn-default btn-sm ml_5' widget-name="Xero">{{agile_lng_translate 'other' 'cancel'}}</a>
 		
 	</div>
 

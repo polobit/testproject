@@ -6,6 +6,7 @@ var HelpcenterRouter = Backbone.Router.extend({
 
 		/* Home routes */
 		"" : "categories",
+		"categories" : "categories",
 		"section/:id" : "sectionArticles",
 		"category/:categorie_id" : "categorieSections",
 		"section/:name" : "sectionArticles",
@@ -15,7 +16,6 @@ var HelpcenterRouter = Backbone.Router.extend({
 		"search-article/:search_term" : "searchArticle"  
 	},
 	categories: function(){
-		console.log("sreedevi");
 
 		App_Helpcenter.renderHomeTemplate(function(){
 
@@ -24,6 +24,8 @@ var HelpcenterRouter = Backbone.Router.extend({
 				url :'/helpcenterapi/api/knowledgebase/categorie',
 				templateKey : "helpcenter-categories",
 				individual_tag_name : 'div',
+				sort_collection:true,
+				sortKey:"created_time",
 				postRenderCallback : function(el, collection) {
 
 					Helpcenter_Util.setBreadcrumbPath();
@@ -48,6 +50,10 @@ var HelpcenterRouter = Backbone.Router.extend({
 				url : "/helpcenterapi/api/knowledgebase/categorie/" + categorie_id,
 		        postRenderCallback: function(el, data){
 
+		        	if(!data.id){
+
+		        		window.history.back();
+		        	}
 		        	Helpcenter_Util.setBreadcrumbPath('categorie-sections-breadcrumb', data);
 
 		        	//Initializing base collection with groups URL
@@ -71,6 +77,8 @@ var HelpcenterRouter = Backbone.Router.extend({
 
 	sectionArticles: function(name){
 
+		var name = decodeURI(name);
+		 name = encodeURIComponent(name);
 		App_Helpcenter.renderHomeTemplate(function(){
 
 			var sectionView = new Base_Model_View({
@@ -78,6 +86,9 @@ var HelpcenterRouter = Backbone.Router.extend({
 				template : "section",
 				url : "/helpcenterapi/api/knowledgebase/section?name=" + name,
 		        postRenderCallback: function(el, data){
+
+		        	if(data.name == null)
+						window.history.back();
 
 		        	Helpcenter_Util.setBreadcrumbPath('section-articles-breadcrumb', data);
 
@@ -87,7 +98,9 @@ var HelpcenterRouter = Backbone.Router.extend({
 						templateKey : "helpcenter-articles",
 						individual_tag_name : 'div',
 						postRenderCallback : function(el){
-						}
+						
+
+						},
 					});
 
 					//Fetching groups collections
@@ -103,7 +116,6 @@ var HelpcenterRouter = Backbone.Router.extend({
 	},
 
 	viewArticle:function(name){
-		name	= encodeURIComponent(name);
 
 		App_Helpcenter.renderHomeTemplate(function(){
 
@@ -113,17 +125,22 @@ var HelpcenterRouter = Backbone.Router.extend({
 				url : "/helpcenterapi/api/knowledgebase/article/" + name,
 		        postRenderCallback: function(el, data){
 
+		        	if( data.title == null)
+		        	{
+		        		window.history.back();
+
+		        				        	}
 		        	Helpcenter_Util.setBreadcrumbPath('article-breadcrumb', data);
 		            //App_Helpcenter.renderComment(el,article_id); 		    
 				    
-				}
+				},
 			});
 
 	 		$('#helpcenter-container').html(articleView.render().el);
 	 	});
 	},
 
-	renderComment : function(el,article_id){
+	/*renderComment : function(el,article_id){
     	
     	App_Helpcenter.commentsCollection = new Base_Collection_View({
 			url : '/helpcenterapi/api/knowledgebase/comment?article_id=' + article_id ,
@@ -145,9 +162,9 @@ var HelpcenterRouter = Backbone.Router.extend({
 		//Rendering template
 		$('#comments-collection').html(App_Helpcenter.commentsCollection.el);  
 
-	},
+	},*/
     
-    saveComment:function(el,article_id){
+    /*saveComment:function(el,article_id){
 	
 		var commentsView = new Base_Model_View({
 		isNew : true,
@@ -231,11 +248,13 @@ var HelpcenterRouter = Backbone.Router.extend({
 		App_Helpcenter.editCommentandDelete(el,article_id);
 		App_Helpcenter.saveComment(el,article_id); 
                         	
-	},
+	},*/
 	renderHomeTemplate: function(callback){
 
+	
 		if($('#helpcenter-container').length)
 		{
+			
 			callback();
 			return;
 		}
@@ -245,15 +264,24 @@ var HelpcenterRouter = Backbone.Router.extend({
 	 		if(!template_ui)
 	 			return;
 
+	 		
 	 		$('#content').html($(template_ui));
+	 		
+	 		if(kbpagelpid == 1){
+				$(".search-box").addClass("search-box1");
+				$(".search-box h1").css("color","#fff");
+			}    
+
 
 	 		if(callback)
 	 			callback();
 	 	});
 	},
-	 
 	searchArticle: function(search_term){
-		search_term	= encodeURIComponent(search_term);
+		try{
+			search_term	= encodeURIComponent(search_term);
+		}
+		catch(err){};
 		App_Helpcenter.renderHomeTemplate(function(){
 
 			//Initializing base collection with groups URL
@@ -263,10 +291,21 @@ var HelpcenterRouter = Backbone.Router.extend({
 				individual_tag_name : 'div',
 				slateKey : 'articles',
 				postRenderCallback : function(el,data) {
+						
+					
+					
+					Helpcenter_Util.setBreadcrumbPath('categorie-sections-breadcrumb', data);
 					
 					$("#hc_query").val('');
+					var str = Backbone.history.getFragment();
 
-					Helpcenter_Util.setBreadcrumbPath('categorie-sections-breadcrumb', data);
+					if (str.indexOf("categories") >= 0){
+						$("li#default a").attr("href", "#")
+					}
+				},
+				errorCallback : function(){
+					$('#helpcenter-container').html(App_Helpcenter.articlesCollection.el);
+
 				}
 			});
 

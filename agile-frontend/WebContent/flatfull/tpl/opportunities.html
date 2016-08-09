@@ -75,25 +75,25 @@
         {{else}}
       <div>
         <div class="btn-group pull-left" id="bulk-actions" style="display:none;">
-          <div class="btn btn-sm btn-default">Bulk Actions</div>
+          <div class="btn btn-sm btn-default">{{agile_lng_translate 'deal-view' 'bulk-actions'}}</div>
           <a class="btn btn-sm dropdown-toggle btn-default" data-toggle="dropdown" href="#">
             <span class="caret"></span>
           </a>
           <ul class="dropdown-menu" id="view-actions" role="menu">
           {{#hasScope 'MANAGE_DEALS'}}
-            <li><a href="#" id="bulk_deals_owner_change" data-toggle="modal">Change Owner</a></li>
+            <li><a href="#" id="bulk_deals_owner_change" data-toggle="modal">{{agile_lng_translate 'deal-view' 'change-owner'}}</a></li>
           {{/hasScope}}
-            <li><a href="#" id="bulk_deals_milestone_change" data-toggle="modal">Change Milestone/Track</a></li>
+            <li><a href="#" id="bulk_deals_milestone_change" data-toggle="modal">{{agile_lng_translate 'deal-view' 'change-milestone-track'}}</a></li>
             <li class="divider"></li>
-            <li><a href="#" id="bulk_deals_add_tag_to_contacts" data-toggle="modal">Add Tag to related Contacts</a></li>
+            <li><a href="#" id="bulk_deals_add_tag_to_contacts" data-toggle="modal">{{agile_lng_translate 'deal-view' 'add-tag-to-related-contacts'}}</a></li>
             {{#hasMenuScope 'CAMPAIGN'}}
-              <li><a href="#" id="bulk_deals_add_campaign_to_contacts" data-toggle="modal">Add related Contacts to Campaign</a></li>
+              <li><a href="#" id="bulk_deals_add_campaign_to_contacts" data-toggle="modal">{{agile_lng_translate 'deal-view' 'add-related-contacts-to-campaign'}}</a></li>
             {{/hasMenuScope}}
             <li class="divider"></li>
-            <li><a href="#" id="bulk_deals_archive" data-toggle="modal">Archive</a></li>
-            <li><a href="#" id="bulk_deals_restore" data-toggle="modal">Restore</a></li>
+            <li><a href="#" id="bulk_deals_archive" data-toggle="modal">{{agile_lng_translate 'deal-view' 'archive'}}</a></li>
+            <li><a href="#" id="bulk_deals_restore" data-toggle="modal">{{agile_lng_translate 'deal-view' 'restore'}}</a></li>
             <li class="divider"></li>
-            <li><a href="#" id="bulk_deals_delete" data-toggle="modal">Delete</a></li>
+            <li><a href="#" id="bulk_deals_delete" data-toggle="modal">{{agile_lng_translate 'deal-view' 'delete'}}</a></li>
             
           </ul>
         </div>
@@ -103,21 +103,22 @@
       </div>
       {{/is_mobile}}
       <div class="panel panel-default" {{#is_mobile}} style="border:0px; border-radius:0px;" {{/is_mobile}}>
-      {{#is_mobile}} {{else}} <div class="panel-heading"> Deals</div>{{/is_mobile}}
+      {{#is_mobile}} {{else}} <div class="panel-heading"> {{agile_lng_translate 'deal-view' 'deals'}}
+      </div>{{/is_mobile}}
       <div class="table-responsive">
 
-                <table class="table {{#is_mobile}} {{else}} table-striped {{/is_mobile}} showCheckboxes m-b-none no-sorting agile-table panel table-layout-mob-view deals-table deals-nowrap {{#is_mobile}} noDelete {{/is_mobile}}" url="core/api/opportunity/bulk" id="deal-list" style="{{#is_mobile}} border-radius:0px; {{/is_mobile}} table-layout:auto;">
+                <table class="table {{#is_mobile}} {{else}} table-striped {{/is_mobile}} showCheckboxes m-b-none no-sorting agile-table panel table-layout-mob-view deals-table deals-nowrap noDelete" url="core/api/opportunity/bulk" id="deal-list" style="{{#is_mobile}} border-radius:0px; {{/is_mobile}} table-layout:auto;">
 
           {{#is_mobile}}
            {{else}}
           <thead>
                         <tr>
-                            <th>Opportunity</th>
-                            <th>Related To</th>
-                            <th>Value</th>
-                            <th>Milestone</th>
-                            <th>Close Date</th>
-                            <th>Owner</th>
+                            <th>{{agile_lng_translate 'deal-view' 'opportunity'}}</th>
+                            <th>{{agile_lng_translate 'deal-view' 'related-to'}}</th>
+                            <th>{{agile_lng_translate 'deal-view' 'value'}}</th>
+                            <th>{{agile_lng_translate 'deal-view' 'milestone'}}</th>
+                            <th>{{agile_lng_translate 'deal-view' 'close-date'}}</th>
+                            <th>{{agile_lng_translate 'deal-view' 'owner'}}</th>
                         </tr>
                     </thead>
                     {{/is_mobile}}
@@ -135,3 +136,4 @@
 </div>
 </div>
 </script>
+

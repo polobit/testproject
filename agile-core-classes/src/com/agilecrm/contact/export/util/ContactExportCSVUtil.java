@@ -65,7 +65,7 @@ public class ContactExportCSVUtil
 		ContactCSVExport.ZIP, ContactCSVExport.WEBSITE_DEFAULT, ContactCSVExport.WEBSITE,
 		ContactCSVExport.SKYPE, ContactCSVExport.TWITTER, ContactCSVExport.LINKEDIN, ContactCSVExport.FACEBOOK,
 		ContactCSVExport.XING, ContactCSVExport.BLOG, ContactCSVExport.GOOGLE_PLUS, ContactCSVExport.FLICKR,
-		ContactCSVExport.GITHUB, ContactCSVExport.YOUTUBE, ContactCSVExport.TAGS, ContactCSVExport.TAGS_TIME,
+		ContactCSVExport.GITHUB, ContactCSVExport.YOUTUBE, ContactCSVExport.TAGS, ContactCSVExport.TAGS_TIME, ContactCSVExport.TAGS_TIME_NEW,
 		ContactCSVExport.CREATED_TIME};
 
 	return getHeaders(ContactExportCSVUtil.appendCustomFieldsToHeaders(headers, SCOPE.PERSON));
@@ -116,6 +116,9 @@ public class ContactExportCSVUtil
 	    	if (!customField.field_type.equals(CustomFieldDef.Type.FORMULA))
 	    	{
 	    		headersList.add(customField.field_label);
+	    	}
+	    	if(customField.field_type.equals(CustomFieldDef.Type.CONTACT) || customField.field_type.equals(CustomFieldDef.Type.COMPANY)){
+	    		headersList.add(customField.field_label+" Name");
 	    	}
 	    }
 

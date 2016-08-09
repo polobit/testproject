@@ -3,13 +3,14 @@
     <div class="col panel wrapper">
     <div class="hbox h-auto m-b-sm">
         <div class="text-center padder-v">
-            <h4 class="m-t-none m-b-xs">You don&#39;t have any categories</h4>
+            <h4 class="m-t-none m-b-xs">{{agile_lng_translate 'tickets' 'you-dont-have-any-categories'}}</h4>
             <div class="m-b-xs text-muted">
-                You can add category by clicking the button below.
+               
+                {{agile_lng_translate 'tickets' 'you-can-add-categories-by-clicking-below'}}
             </div>
             <div>
                 <a href="#knowledgebase/add-category" class="btn btn-sm btn-default blue btn-slate-action m-t-xs ">
-                    <span><i class="icon-plus-sign"></i></span> Add Category
+                    <span><i class="icon-plus-sign"></i></span> {{agile_lng_translate 'admin-settings-tasks' 'add-category'}}
                     
                 </a>
             </div>
@@ -22,20 +23,20 @@
         <div class="hbox h-auto m-b-sm">
             <div class="pull-right" style="margin-left:10px">
                 <a href="#knowledgebase/add-category" class="btn btn-sm btn-default btn-addon">
-                    <span><i class="icon-plus-sign"></i></span> Add Category
+                    <span><i class="icon-plus-sign"></i></span> {{agile_lng_translate 'admin-settings-tasks' 'add-category'}}
                 </a>
              </div>
              <div class="pull-right">
-                <button onclick="App_Ticket_Module.addLandingpage()"  class="btn btn-sm btn-default btn-addon access_kb">
-                    Knowledge Base Settings
-                </button>
+                <a href="#selectlandingpage"  class="btn btn-sm btn-default btn-addon access_kb">
+                    {{agile_lng_translate 'preferences' 'settings'}}
+                </a>
             </div>
-            <table class="table table-striped showCheckboxes m-b-none agile-table panel table-layout-mob-view show-delete-modal" url="core/api/knowledgebase/categorie/bulk" data-bulk-delete-title="Delete"
-                data-bulk-delete-msg="Are you sure you want to delete?" id="ticket-categorie-table">
+            <table class="table table-striped showCheckboxes m-b-none agile-table panel table-layout-mob-view show-delete-modal" url="core/api/knowledgebase/categorie/bulk" data-bulk-delete-title="{{agile_lng_translate 'contact-details' 'delete'}}"
+                data-bulk-delete-msg="{{agile_lng_translate 'tickets' 'conformation-messge-for-deletion'}}" id="ticket-categorie-table">
                     <thead>
                         <tr>
                             <th class="hide">Id</th>
-                            <th style="width:42%">Category Name</th>
+                            <th style="width:40%">{{agile_lng_translate 'category' 'name'}}</th>
                             <th style="width:40%">&nbsp;</th>
                         </tr>
                     </thead>
@@ -46,17 +47,20 @@
 {{/if}}
 <div class="col w-md  wrapper pos-rlt track-milestone-text p-t-none" >
             <h4 class="m-t-none h4 m-b-sm">
-               How to configure Knowledge Base?
+             
+               {{agile_lng_translate 'tickets' 'how-to-configure-knowledge-base'}}
             </h4>
             <p>
-              Configure your knowledge base by adding categories, sections and articles, select a landing page in knowledge base settings and access your knowledge base.
+              {{agile_lng_translate 'tickets' 'configure-your-knowledge-base-by-adding-categories'}}
             </p> 
             <ul>
               <li>
-                 Click on category to see how many sections you have.
+                 
+                 {{agile_lng_translate 'tickets' 'click-on-category-and-see-sections'}}
               </li>
               <li>
-                 Click on section to see how many articles you have.
+                 
+                  {{agile_lng_translate 'tickets' 'click-on-section-see-how-many-articles-you-have'}}
               </li>
             </ul>
             <br>

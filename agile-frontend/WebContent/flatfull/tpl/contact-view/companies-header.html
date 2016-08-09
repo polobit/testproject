@@ -1,0 +1,79 @@
+<script id="companies-header-template" type="text/html">
+	{{#is_mobile}}
+		<div class="hbox hbox-auto-xs hbox-auto-sm">
+			<div class="">
+				<div id="right-pane">
+					<div class="contacts-div">
+						<div id="companies-list-view"></div>
+        			</div>
+	 			</div>
+			</div>
+		</div>
+	{{else}}
+		<div class="hbox hbox-auto-xs hbox-auto-sm">
+ 			{{#is_mobile}}
+    		{{else}}
+				<div class="col w-lg  dk b-r bg-auto" id="companies-lhs-filters-toggle" style="{{ toggle_companies_filter }}">
+					<div class="data-block">
+						<div id="lhs_filters_conatiner"></div>
+					</div>
+				</div>
+			{{/is_mobile}}
+			<div class="{{#is_mobile}}{{else}}col{{/is_mobile}} ">
+				<div id="right-pane">
+					<div class="wrapper bg-light padder-md padder-v m-r-sm {{#is_mobile}} {{else}}  p-r-none {{/is_mobile}}" style="border-bottom: 1px solid rgba(140, 139, 139, 0.2);">
+	    				<div class="btn-toolbar m-l-none pos-rlt">
+	    					<div class="filters-drp-down btn-group dropdown m-l-none" style="float: none;">
+	    						<div class="">
+									<h4 class="inline-block m-n">
+		    							{{agile_lng_translate 'companies-view' 'companies'}}
+		    							<div class="inline-block" id="filter-list"></div>
+		    							<span id="contacts-count" class=""></span>
+		    							{{#is_mobile}}
+										{{else}}
+											<a id="companies-left-filters-toggle" class="m-l-xs text-lg toggle-company-filters" data-toggle="tooltip" data-placement="bottom" title="{{company_filter_tooltip}}" data-container="body" data-original-title="Filters">
+												<i id="icon-filter" class="fa fa-filter text-base" style="color: rgb(88, 102, 110);"></i>
+	          								</a>
+	          							{{/is_mobile}}
+		    						</h4>
+	    							<br>
+				 				</div>
+		  					</div>
+	    					<div class="pull-right pos-abs" style="right: 0; top: 5px;">
+	    						<div id="view-list" class="pull-left btn-group"></div>
+            				</div>
+	    				</div>
+						<div  class="btn-group m-r-xs m-t-n-sm" id="contact-sorter"></div>
+					</div>
+					<div class="contacts-div">
+	 					<div id="bulk-action-btns" class="panel-heading no-shadow p-r-none b-r m-r-sm {{#is_mobile}} {{else}}  {{/is_mobile}}" style="border-bottom: 0;background-color: rgba(246,248,248,1);">
+							<span id="companies-list-view-checkbox">
+								<label class="i-checks i-checks-sm">
+				                	<input type="checkbox" class="thead_check">
+				                	<i></i>                
+				          		</label>
+							</span>							
+							<button id="bulk-tags" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm m-r-xs txt-small disabled" >{{agile_lng_translate 'contacts-view' 'add-tags'}}</button>
+							<button id="bulk-tags-remove" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm m-r-xs txt-small disabled" >{{agile_lng_translate 'contacts-view' 'remove-tags'}}</button>	
+							<button id="bulk-email" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm m-r-xs txt-small disabled" >{{agile_lng_translate 'contacts-view' 'send-email'}}</button>	
+							<button id="bulk-owner" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm m-r-xs txt-small disabled" >{{agile_lng_translate 'contacts-view' 'change-owner'}}</button>
+							{{#hasScope "EXPORT_CONTACTS"}}
+								<button id="bulk-companies-export" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm m-r-xs txt-small disabled" >{{agile_lng_translate 'contacts-view' 'export-as-csv'}}</button>
+							{{/hasScope}}				    
+							<button class="btn btn-default bulk-action-btn delete-checked-contacts btn-sm m-r-xs txt-small disabled" >{{agile_lng_translate 'contacts-view' 'delete'}}</button>
+							<div class="btn-group dropdown pull-right {{#iscompactTabel 'company'}} compact {{/iscompactTabel}} multiple-checkbox" style="padding-right: 10px;" id="companies-custom-coloumns">
+					    		<button class="btn btn-default dropdown-toggle btn-sm " data-toggle="dropdown" aria-expanded="true" id="companiesTabelView"><i class="{{#iscompactTabel 'company'}} fa fa-ellipsis-h {{else}}fa fa-navicon {{/iscompactTabel}}"></i></button>
+                				<ul class="pull-right dropdown-menu  p-l"  role="menu">
+                					<form id="companies-static-fields" class="">
+                						<div class="multiple-checkbox" name="fields_set" id="companies-static-fields-group"></div>
+                					</form>
+                				</ul>
+							</div>
+            			</div>
+						<div id="companies-list-view"></div>
+            		</div>
+            	</div>
+            </div>
+		</div>
+	{{/is_mobile}}
+</script>

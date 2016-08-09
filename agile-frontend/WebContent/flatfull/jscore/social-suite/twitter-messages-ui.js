@@ -175,7 +175,7 @@ $(function()
 				// Undo-Retweet is Unsuccessful.
 				if (data == "Unsuccessful")
 				{
-					showNotyPopUp('information', "Retry after sometime.", "top", 5000);
+					showNotyPopUp('information', "{{agile_lng_translate 'socialsuite' 'retry-after'}}", "top", 5000);
 					return;
 				}
 
@@ -217,7 +217,7 @@ $(function()
 
 		document.getElementById("twit-tweet").value += quote;
 
-		$("#link-text").html("<b>Thank you.</b>");
+		$("#link-text").html("<b>{{agile_lng_translate 'other' 'thank-you'}}.</b>");
 
 		setTimeout(function()
 		{

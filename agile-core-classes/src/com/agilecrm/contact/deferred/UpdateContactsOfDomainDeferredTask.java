@@ -196,11 +196,13 @@ public class UpdateContactsOfDomainDeferredTask implements DeferredTask
 		try {
 			System.out.println(" cur Domain "+ domain);
 			ContactSchemaUpdateStats contactSchemaUpdateStats = ContactSchemaUpdateStats.get(domain);
+
 			String domainUserMail =contactSchemaUpdateStats.domainusermail;
 			System.out.println("Domain user email "+ domainUserMail);
 			
 			
 			
+
 			contactSchemaUpdateStats.count = count;
 			contactSchemaUpdateStats.cursor = previousCursor;
 			contactSchemaUpdateStats.status = status;
@@ -218,7 +220,7 @@ public class UpdateContactsOfDomainDeferredTask implements DeferredTask
 			
 		} catch(Exception e) {
 			System.err.println("Exception while updating stats for domain: "+ domain);
-			e.printStackTrace();
+			System.out.println(e.getMessage());
 		} finally {
 			NamespaceManager.set(domain);
 		}

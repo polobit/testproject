@@ -2,14 +2,14 @@
 <td class="hide data" data="{{id}}">{{id}}</td>
 	<td>
      <div class="text-ellipsis" style="max-width: 20em;">
-      <a href="#knowledgebase/section/{{section_id}}/edit-article/{{title}}">{{title}}
+      <a href="#knowledgebase/section/{{section_id}}/edit-article/{{encodedtitle}}">{{title}}
       </a>
                             
      </div>
   </td>
   <td>
     <div class="text-ellipsis">
-      <a href="#knowledgebase/section/{{section_id}}/edit-article/{{title}}">
+      <a href="#knowledgebase/section/{{section_id}}/edit-article/{{encodedtitle}}">
       {{domainUser.name}}
       </a>
     </div>   
@@ -18,7 +18,8 @@
     <div class="table-resp">
       <small class="edit-hover text-muted"> 
         <i class="fa fa-clock-o m-r-xs"></i>
-      <span>Last updated on&nbsp;</span>
+      <span>
+      {{agile_lng_translate 'tickets' 'last-updated-on'}}&nbsp;</span>
         <time class="b-b-dotted" datetime="{{epochToHumanDate "" updated_time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM" updated_time}}</time>
       </small>
     </div>

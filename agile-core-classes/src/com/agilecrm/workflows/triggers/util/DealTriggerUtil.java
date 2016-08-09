@@ -223,7 +223,8 @@ public class DealTriggerUtil
 				updatedOwner.put("id", owner.getString("id"));
 				updatedOwner.put("name", owner.getString("name"));
 				updatedOwner.put("email", owner.getString("email"));
-
+				updatedOwner.put("phone", owner.getString("phone"));
+				
 				opportunityJSON.put("owner", updatedOwner);
 			}
 
