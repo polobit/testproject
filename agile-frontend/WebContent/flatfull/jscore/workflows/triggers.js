@@ -547,19 +547,11 @@ function resetAndFillFromSelect(selected_val) {
 			$('#from_email'),
 			"prepend",
 			function($select, data) {
-				var ownerEmail = $select.find('option[value = \"'+CURRENT_DOMAIN_USER.email+'\"]').val();
-				if(typeof(ownerEmail) == "undefined")
-				{
-				$select
-						.find("option:first")
-						.before(
-								"<option value="+CURRENT_DOMAIN_USER.email+">"+CURRENT_DOMAIN_USER.email+"</option>");
+				if($select.find('option').size()===1){
+					$select.find("option:first").before(
+						"<option value='NOEMAIL'>-No Verified Email-</option>");
+					$select.val('NOEMAIL').attr("selected", "selected");
 				}
-	
-				if (selected_val)
-					$select.val(selected_val).attr("selected", "selected");
-				else
-					$select.val(CURRENT_DOMAIN_USER.email).attr("selected", "selected");
 
 				rearrange_from_email_options($select, data);
 			});
