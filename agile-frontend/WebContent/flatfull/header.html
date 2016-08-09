@@ -225,7 +225,7 @@
 					<div class="input-group add-on">
 					<input type="text" class="form-control r-5x">
 					<div class="input-group-btn">
-					<button class="btn btn-default no-shadow" type="submit"><i class="icon-microphone"></i></button>
+					<button class="btn btn-default no-shadow" type="submit" id="speechicon"onclick="startDictation()"><i class="icon-microphone"></i></button>
 					<button class="btn btn-default no-shadow r-5x" type="submit"><i class="fa fa-search"></i></button>
 					</div>
 					</div>
@@ -627,5 +627,30 @@ function removeSearchFilter(){
 
         	//_agile_delete_prefs(savefilters);
         }*/
+      function startDictation(e) {
+      var recognition = new webkitSpeechRecognition();
+ 
+      recognition.continuous = false;
+      recognition.interimResults = false;
+ 
+      recognition.lang = "en-US";
+      recognition.start();
+      $(document.getElementById('speechicon')).addClass("agile-feature-item-blink");
+ 
+      recognition.onresult = function(e) {
+        document.getElementById('searchText').value
+                                 = e.results[0][0].transcript;
+        $("#search-results").trigger('click')
+        recognition.stop();
+        $(document.getElementById('speechicon')).removeClass("agile-feature-item-blink");
+       
+      };
+ 
+      recognition.onerror = function(e) {
+      	console.log(e)
+        recognition.stop();
+        $(document.getElementById('speechicon')).removeClass("agile-feature-item-blink");
+      }
+    }
 </script>
 		
