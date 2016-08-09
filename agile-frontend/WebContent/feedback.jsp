@@ -226,14 +226,10 @@ function changeFeedback(e,objButton){
 	document.getElementById(feedback).style.display="none";
 	document.getElementById(objButton.value).style.display="block";
 	feedback = ""+objButton.value;
-	if(feedback == "BOO" || feedback == "OK")
-{
 	var d = document.getElementById("myTextarea");
-	d.required = true;
-}
-else
-{
 	d.required = false;
+	if(feedback == "BOO" || feedback == "OK")
+	d.required = true;
 }
 </script>
 	<script type="text/javascript">		
