@@ -1237,7 +1237,7 @@ welcome.with-easy-drag-and-drop-interface,with easy drag & drop interface.,con f
 widgets.ClickDesk-delete-message,Are you sure to delete ClickDesk,¿Estás seguro de que deseas eliminar ClickDesk?
 prefs-online-calendar.please-enter-at-least-4-letters,Please enter at least 4 letters.,Introduzca por lo menos 4 letras.
 tag-manage.allow-users-to-add,Allow all users to add New Tags.,Permitir que todos los usuarios Añadir nuevas etiquetas.
-report-view.ticket-priority-and-status-reports,Ticket Priority & Status Reports,Prioridad de Ticket y Reportes de estatus
+report-view.ticket-priority-and-status-reports,Ticket Priority & Status Report,Prioridad de Ticket y Reportes de estatus
 widgets.Twilio-widget-saved-successfully,Twilio widget saved successfully,Widget de Twilio guardado exitosamente
 contacts-view.tickets-have-been-marked-as-spam,tickets have been marked as spam,entradas que se han marcado como spam
 reasons.moving-to-different-competition,Moving to a Different Competitor,Mover a un competidor diferente
@@ -2225,7 +2225,7 @@ tickets.last-updated-time,Last Updated Time,Hora de la última actualización
 campaigns.link-url-contains,Link URL contains,La liga del URL contiene
 widgets.call-script-rules,Call Script Rules,Reglas de script de llamada
 widgets.manage-voicemails,Manage voicemails,Administrar correos de voz
-tickets.add-a-merge-field,Add a merge field,Agregar un campo combinado
+tickets.add-a-merge-field,Add a Merge Field,Agregar un Campo Combinado
 contacts-view.removed-tags-from,Removed tag from ,Fuera del tag
 portlets.no-email-activity,No email activity,No hay actividad de correo electrónico
 activity_type.DEAL_TAG_DELETE,Deal Tags Deleted,Etiquetas tratar Suprimido
@@ -2327,7 +2327,7 @@ contacts-view.has-been-deleted,has been deleted,ha sido eliminado
 currency.Macedonian Denar,Macedonian Denar,Denar macedonio
 documents.name-of-document,Name of Document,Nombre del Documento
 tickets.what-are-macros,What are Macros?,¿Qué son los macros?
-tickets.replace-existing,Replace existing,Reemplazar existente
+tickets.replace-existing,Replace Existing,Reemplazar existente
 currency.Lithuanian Litas,Lithuanian Litas,Litas lituana
 report-view.user-performance,User Performance,Rendimiento de usuario
 campaigns.task-assigned-to,Task assigned to,Tarea asignada a
@@ -2393,7 +2393,7 @@ settings.confirm-password,Confirm Password,Confirmar contraseña
 timeline.email-sent-from,Email sent From:,El correo electrónico enviado desde :
 plan-and-upgrade.yearly-40-percent-off,Yearly (40% off),Anual (40% de descuento)
 plan-and-upgrade.2yearly-40-percent-off,(40% off),( 40 % de descuento)
-tickets.execute-workflow,Execute workflow,Ejecutar flujo de trabajo
+tickets.execute-workflow,Execute Workflow,Ejecutar flujo de trabajo
 deal-view.edit-deal-filter,Edit Deal Filter,Editar filtro de Oferta
 other.plan,Selected Plan : ,Plan seleccionado:
 admin-settings-stats.your-plan-limits,Your Plan Limits,Su plan limita
@@ -2434,7 +2434,7 @@ activity_type.TASK_PROGRESS_CHANGE,Progress Changed,El progreso ha cambiado
 countries.PG,Papua New Guinea,Papúa Nueva Guinea
 countries.PF,French Polynesia,Polinesia Francesa
 widgets.how-to-get-this,How to get this?,¿Cómo puedo obtenerlo?
-tickets.priority-report,Priority report,Reporte de prioridades
+tickets.priority-report,Priority Report,Reporte de prioridades
 preferences.email-templates,Email Templates,Plantillas de email
 social.unfavorite-from,Unfavorite from,Quitar de favoritos
 contacts-view.add-edit-filter,Add/Edit Filter,Añadir / Modificar filtro
@@ -2530,7 +2530,7 @@ widgets.Twilio-displayName,Twilio Call Log,Twilio registro de llamadas
 contacts-view.refresh-contact,Refresh Contact,Actualizar contacto
 admin-settings.api-and-analytics,API & Analytics,API y análisis
 tickets.no-labels-found,No labels found,No se encontraron etiquetas
-tickets.select-workflow,Select workflow,Seleccionar flujo de trabajo
+tickets.select-workflow,Select Workflow,Seleccionar flujo de trabajo
 contacts-view.highest-starred,Highest Starred,Calificado como más alto
 tickets.spammed-tickets,Spammed Tickets,Tickets marcados como spam
 contacts-view.first-name-desc,First Name Desc,Descripción del nombre de pila
@@ -2555,7 +2555,7 @@ contacts-view.event-starts-at,Event starts at,Evento comienza a las
 bulk-delete.bulk-activity,Delete Activity,suprimir la Actividad
 currency.Pakistani Rupee,Pakistani Rupee,Rupia paquistaní
 visitors.no-visits-found,No Visits Found,No se encontró ninguna visita
-tickets.add-new-contact,Add new contact,Agregar nuevo contacto
+tickets.add-new-contact,Add New Contact,Agregar Nuevo Contacto
 contacts-view.upload-csv-file,Upload CSV file,Subir archivo CSV
 campaigns.delete-all-logs,Delete All Logs,Eliminar todos los registros
 widgets.user-not-found,User not found.,Usuario no encontrado
@@ -2693,7 +2693,7 @@ admin-settings-api-analytics.analytics-code,Analytics Code,Código Analytics
 report-add.no-calls-found,No Calls Found,Sin llamadas encontradas
 contacts-view.phone-mobile,Phone (Mobile),Teléfono móvil
 tickets.Requester-Name,Requester Name,Nombre Solicitante
-tickets.search-contact,Search contact,Buscar contacto
+tickets.search-contact,Search Contact,Buscar contacto
 Admin-settings-users.Update Contact,Update Contact,Actualizar contacto
 contacts-view.get-dkim-spf,Get DKIM & SPF,Obtener DKIM y SPF
 reports.ratio-analysis,Ratio Analysis,Analisis de proporción
@@ -2886,7 +2886,7 @@ contacts-view.spam-reported,Spam Reported,Spam reportado
 admin-settings-integrations.account-stats,Account Stats,Estadísticas de la cuenta
 portlets.last-6-months,Last 6 Months,Últimos 6 meses
 report-view.email-reports,Email Reports,Reportes de email
-tickets.choose-action,Choose action,Seleccionar acción
+tickets.choose-action,Choose Action,Seleccionar acción
 tasks.all-day-event,All day event,Evento de todo el día
 documents.open-document,Open Document,Abrir documento
 contact-details.done-campaign,Done Campaign,Campaña hecha
@@ -2975,7 +2975,7 @@ campaigns.deal-is-added,Deal is added,Se agregó oferta
 contact-details.pages-visited,Pages Visited,páginas visitadas
 form-builder.last-modified,Last Modified,Modificado por última vez
 widgets.widget-delete,Delete Widget,eliminar Widget
-tickets.manage-labels,Manage labels,Administrar etiquetas
+tickets.manage-labels,Manage Labels,Administrar etiquetas
 portlets.revenue-graph,Revenue Graph,Gráfico de ingresos   
 admin-settings-integrations.your-facebook,Your Facebook,Tu Facebook
 web-rules.times-to-show,Times to show,Veces para mostrar
@@ -3773,7 +3773,7 @@ contact-details.duplicate,Duplicate,Duplicar
 widgets.sorry-we-coud-not-establish-a-connection,Sorry&#44,Lo siento&#44;
 contacts-view.Enter Tag,Enter Tag,Introduzca Tag
 menu.agile-crm,Agile CRM,Agile CRM
-tickets.view-name,View name,Ver nombre
+tickets.view-name,View Name,Ver Nombre
 others.saving,Saving...,Ahorro...
 tickets.mark-spam,Mark Spam,Marcar como spam
 admin-settings-tasks.Follow_up,Follow_up,Seguimiento
