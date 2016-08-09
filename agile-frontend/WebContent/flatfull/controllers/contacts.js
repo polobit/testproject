@@ -994,12 +994,9 @@ $('#content').html('<div id="import-contacts-event-listener"></div>');
 			"prepend",
 			function($select, data) {
 				
-				if($select.find('option').size()===1){
-					$select.find("option:first").before(
-						"<option value='NOEMAIL'>-No Verified Email-</option>");
-					$select.val('NOEMAIL').attr("selected", "selected");
-				}
-				
+				if($select.find('option').size()===1)
+					$select.find("option:first").before("<option value='NOEMAIL'>-No Verified Email-</option>");
+							
 				rearrange_from_email_options($select, data);
 			});
 	},

@@ -473,6 +473,7 @@ function openVerifyEmailModal(el) {
 	var selected = $(el).find(':selected').val();
 
 	if (selected == 'verify_email')
+	{	
 		window.parent.workflow_alerts("{{agile_lng_translate 'emails' 'verify-new-email'}}", undefined,
 				"workflow-verify-email-modal"
 
@@ -480,7 +481,7 @@ function openVerifyEmailModal(el) {
 
 					// Focus on input
 					modal.on('shown.bs.modal', function() {
-						$(this).find('input').focus();
+						 $(this).find('input').focus();
 
 						parent.send_verify_email();
 					});
@@ -493,7 +494,8 @@ function openVerifyEmailModal(el) {
 						resetAndFillFromSelect(given_email);
 					});
 				});
-	
+		return;
+	}	
 		resetAndFillFromSelect(selected);
 }
 
@@ -547,12 +549,9 @@ function resetAndFillFromSelect(selected_val) {
 			$('#from_email'),
 			"prepend",
 			function($select, data) {
-				if($select.find('option').size()===1){
-					$select.find("option:first").before(
-						"<option value='NOEMAIL'>-No Verified Email-</option>");
-					$select.val('NOEMAIL').attr("selected", "selected");
-				}
-
+				if($select.find('option').size()===1)
+					$select.find("option:first").before("<option value='NOEMAIL'>-No Verified Email-</option>");
+				
 				rearrange_from_email_options($select, data);
 			});
 }
