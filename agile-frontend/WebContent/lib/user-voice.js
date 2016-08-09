@@ -10,7 +10,10 @@
 	UserVoice.push(['set', {
 	  accent_color: '#448dd6',
 	  trigger_color: 'white',
-	  trigger_background_color: 'rgba(46, 49, 51, 0.6)'
+	  trigger_background_color: 'rgba(46, 49, 51, 0.6)',
+	  
+	  // Available with UserVoice Helpdesk
+	  contact_enabled: false
 	}]);
 
 	// Identify the user and pass traits

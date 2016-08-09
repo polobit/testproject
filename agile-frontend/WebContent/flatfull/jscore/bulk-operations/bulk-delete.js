@@ -67,9 +67,11 @@ $(function(){
 							return;
 
 						$('#ticketsModal').html($(template_ui)).modal('show').on('shown.bs.modal', function(){
-
-							$('#ticketsModal').on('click', 'a.bulk-delete', function(e){
-
+							
+							$('#ticketsModal a.bulk-delete').off('click');
+							$('#ticketsModal a.bulk-delete').click(function(e){
+								console.log("tickets clicked");
+								
 								$('#ticketsModal').modal('hide');
 								$(this).after('<img class="bulk-delete-loading" style="padding-right:5px;margin-bottom:15px" src= "img/21-0.gif"></img>');
 								bulk_delete_operation($(table).attr('url'), id_array, index_array, table, undefined, data_array);
@@ -113,7 +115,7 @@ $(function(){
 				var confirm_msg = _agile_get_translated_val("others", "delete-warn");
 				var $that = $(this);
 				// Shows confirm alert, if Cancel clicked, return false
- -				showAlertModal(confirm_msg, "confirm", function(){
+ 				showAlertModal(confirm_msg, "confirm", function(){
 				// Appends campaign-name for active subscribers
 				if($(table).attr('id') === "active-campaign")
 					confirm_msg = _agile_get_translated_val("contacts", "delete-contacts-from") + " " +$('#subscribers-campaign-name').text()+" " +_agile_get_translated_val("contact-details", "campaign")+ "?";
