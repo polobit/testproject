@@ -300,3 +300,114 @@ fieldset {
 	color: red;
 	font-size: 12px;
 }
+
+.form-view .agile-hiddenEle-group{
+	display: none;
+}
+.theme5 .agile-input-group input[type=text]:last-child {
+    border-top-right-radius: 20px!important;
+    border-bottom-right-radius: 20px!important;
+    height: 43px;
+}
+.theme5 .agile-input-group input[type=text]:first-child {
+    border-top-left-radius: 20px!important;
+    border-bottom-left-radius: 20px!important;
+    height: 43px;
+}
+.theme5 .agile-field>input[type=text],.theme5 .agile-field>input[type=email],#target .agile-group select:not([multiple]) {
+  border: 1px solid #cfdadd;
+	  -webkit-border-radius: 50px;
+	  -moz-border-radius: 50px;
+	  border-radius: 50px;
+	  color: #333!important;
+	  font-weight: 100;
+	  font-size: 14px!important;
+	  line-height: 20px!important;
+	  outline: 0;
+	  background-color: #fff;
+	  padding: 10px 20px !important;
+	  display: block;
+	  font-family: 'Open Sans', sans-serif;
+	  box-sizing: border-box;
+}
+.theme5 .agile-field{
+      width:100%;
+}
+.theme5 .agile-group button{
+     background-color: #23b7e5;
+     border: 1px solid #23b7e5;
+     -webkit-border-radius: 50px;
+     -moz-border-radius: 50px;
+     border-radius: 50px;
+     color: #fff;
+     cursor: pointer;
+     font-size: 18px;
+     padding: 6px 20px;
+     width: 100% !important;
+     margin-top: 20px;
+     outline: none;
+     height: 48px;
+     font-family: 'Open Sans', sans-serif;
+ }
+.theme5 .agile-group button:hover{
+	  background-color: #19a9d5;
+	  border-color: #189ec8;
+	}
+
+.theme5 .agile-label{ 
+		display: block; 
+		font-size:14px; 
+		font-weight: 100; 
+	  	margin-bottom: 5px;
+}
+
+.theme5 .agile-group-addon:first-child{
+border-top-left-radius: 50px;
+border-bottom-left-radius: 50px;
+}
+.theme5 .agile-group-addon:last-child{
+border-top-right-radius: 50px;
+border-bottom-right-radius: 50px;  
+}
+.theme5 .agile-group textarea{
+height:119px;
+}
+.theme5 legend{
+text-align: center;
+font-size: 18px;
+font-weight: 600;
+margin-bottom: 10px;
+border-bottom: none;
+}
+.theme5 .agile-input-group{
+width: 100%;
+}
+.theme5 .agile-group{
+padding: 0px 35px;
+}
+.theme5 .agile-group input::-webkit-input-placeholder,.theme5 .agile-group button{
+/*font-family:'Open Sans', serif;*/
+}
+.theme5 fieldset{
+	margin: 0;
+padding: 0;
+}
+.theme5 .agile-group select{
+	background-color: white;
+}
+.theme5{
+/* font-family:'Open Sans', serif;*/
+color: #333;
+font-size: 14px;
+font-weight: 400;
+}
+
+#target .popover form{
+	font-family:sans-serif;
+}
+#agiletheme{
+	display: none;
+}
+
+
+

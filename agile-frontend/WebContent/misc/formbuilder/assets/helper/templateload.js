@@ -14,6 +14,19 @@ define([
 				
 				saveform = JSON.parse(data.formJson);
 				console.log(saveform);
+				var agilethemeObj=saveform[0].fields.agiletheme;
+				var themeClassName="";
+				if(agilethemeObj!=undefined || agilethemeObj!=null){
+					var agilethemeObjValArr=agilethemeObj.value;
+					for(i=0;i<agilethemeObjValArr.length;i++){
+						if(agilethemeObjValArr[i].selected){
+						     themeClassName=agilethemeObjValArr[i].value;
+						     $("#target").addClass(themeClassName);
+						     break;
+						}
+					}
+			    }
+				
 				saveform[0].fields.agiledomain.value = window.location.hostname.split('.')[0];
 				saveform[0].fields.agileapi.value = api.js_api_key;
 				console.log(saveform);

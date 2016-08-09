@@ -13,7 +13,17 @@
                     "id": "contactus",
                     "displayname": "Contact Us",
                     "description": "this is sample text"
-                }                	
+                },
+                {
+                   "id": "subscribenow",
+                    "displayname": "Subscribe Now",
+                    "description": "this is sample text"  
+                },
+                {
+                   "id": "getintouchwithus",
+                    "displayname": "Get I Touch With Us",
+                    "description": "this is sample text"  
+                }                   	
             ]
         }
     ]
