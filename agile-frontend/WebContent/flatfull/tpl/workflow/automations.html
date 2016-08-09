@@ -10,9 +10,9 @@
 <div class="row">
     <div class="col-md-12">
         
-            <h3 class="font-thin h3">List of Automations</h3>
+            <h3 class="font-thin h3">{{agile_lng_translate 'workflows' 'list-of-automations'}}</h3>
             <a href="#automation-add" class="btn btn-sm btn-default right m-t-n-lg pos-rlt" id="addAutomation">
-				<i class="icon-plus-sign"></i> Add Automation
+				<i class="icon-plus-sign"></i> {{agile_lng_translate 'workflows' 'add-automation'}}
 			</a>
         
     </div>
@@ -27,12 +27,12 @@
                     <img alt="Clipboard" src="{{getS3ImagePath '/img/clipboard.png'}}" />
                 </div>
                 <div class="box-right pull-left">
-                    <h4 class="m-t-none">You do not have any Automations currently.</h4>
+                    <h4 class="m-t-none">{{agile_lng_translate 'workflows' 'you-dont-have-automations-currently'}}</h4>
                     <div class="text">
-                        You can define a automations to start execution of a campaign. But please make sure to create atleast one campaign before creating automation.
+                        {{agile_lng_translate 'workflows' 'you-can-define-a-automation-to-start-executing-of-campaign'}}
                     </div>
                     <a href="#automation-add" class="btn btn-default btn-sm blue btn-slate-action m-t-xs">
-						<i class="icon-plus-sign"></i>  Add Automation 
+						<i class="icon-plus-sign"></i> {{agile_lng_translate 'workflows' 'add-automation'}}
 					</a>
                 </div>
 				<div class="clearfix">
@@ -46,10 +46,10 @@
                 <table class="table table-striped showCheckboxes" url="core/api/automations/bulk">
                     <thead>
                         <tr>
-                            <th>Name</th>
-                            <th>Period</th>
-                            <th>Contact Filter</th>
-                            <th>Campaign</th>
+                            <th>{{agile_lng_translate 'deal-view' 'name'}}</th>
+                            <th>{{agile_lng_translate 'workflows' 'period'}}</th>
+                            <th>{{agile_lng_translate 'workflows' 'contact-filter'}}</th>
+                            <th>{{agile_lng_translate 'contact-details' 'campaign'}}</th>
                         </tr>
                     </thead>
                     <tbody id="automations-model-list" route="automation/"> </tbody>
@@ -61,14 +61,16 @@
     <div class="col-md-3">
         <div class="well">
             <h3>
-                What are Automations?
+              {{agile_lng_translate 'workflows' 'what-are-automations'}}
             </h3>
             <br />
             <p>
-                Automations are pre-defined conditions set up by you. If the condition is satisfied, you can choose an action to follow using workflow automation.
+               
+                {{agile_lng_translate 'workflows' 'workflow-description'}}
             </p>
             <p>
-                e.g. If a user registers on your website, you can automate the workflow to send a welcome email. The user registering on site is the trigger.
+                
+                {{agile_lng_translate 'workflows' 'workflow-example'}}
             </p>
         </div>
     </div>

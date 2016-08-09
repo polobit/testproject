@@ -9,78 +9,78 @@
                             {{/if}}
                             <div class="row">
                                 <div class="col-md-12 col-xs-12 js-prev-lge">
-                                    <div style="margin-bottom: 3px;">Using Javascript may be insecure if you are using it in public sites. Select the permissions.</div>
+                                    <div style="margin-bottom: 3px;">{{agile_lng_translate 'Admin-settings-integrations' 'using-javascript-may-be-if-you-are-using-in-public-sites'}}</div>
                                     <div class="form-group multiple-checkbox checkedMultiCheckbox" name="jsrestricted_scopes">
                                         <label class="i-checks i-checks-sm checkbox col-sm-4">
                                             <input type="checkbox" name="js-temp" class="required pos-rlt m-t-sm" style="margin-right:-115px;"value="create_contact" ><i></i> 
-                                            Create Contact
+                                            {{agile_lng_translate 'admin-settings-users' 'create-contacts'}}
                                         </label>
                                         <label class="i-checks i-checks-sm checkbox col-sm-4">
                                             <input type="checkbox" name="js-temp"  class="required" value="update_contact" ><i></i> 
-                                            Update Contact
+                                            {{agile_lng_translate 'Admin-settings-users' 'Update Contact'}}
                                         </label>
                                         <label class="i-checks i-checks-sm checkbox col-sm-4 hide">
                                             <input type="checkbox" name="js-temp"  class="required" value="view_contact" ><i></i> 
-                                            View Contact
+                                            {{agile_lng_translate 'Admin-settings-users' 'view-contact'}}
                                         </label>                        
                                     </div>
-                                    <div style="margin-bottom: 3px;margin-top: 21px;">Select properties to send using JS API.</div>
+                                    <div style="margin-bottom: 3px;margin-top: 21px;">{{agile_lng_translate 'Admin-settings-users' 'select-properties-to-send-using-js-api'}}</div>
                                     <div class="form-group multiple-checkbox checkedMultiCheckbox" name="jsrestricted_propertiess">
                                         <label class="i-checks i-checks-sm checkbox col-sm-4">
                                             <input type="checkbox" name="js-temp" class="required" value="first_name" ><i></i> 
-                                            First Name
+                                            {{agile_lng_translate 'modals' 'first-name'}}
                                         </label>
                                         <label class="i-checks i-checks-sm checkbox col-sm-4">
                                             <input type="checkbox" name="js-temp"  class="required" value="last_name" ><i></i> 
-                                            Last Name
+                                            {{agile_lng_translate 'modals' 'last-name'}}
                                         </label>
                                         <label class="i-checks i-checks-sm checkbox col-sm-4">
                                             <input type="checkbox" name="js-temp" class="required" value="email" ><i></i> 
-                                            Email
+                                           {{agile_lng_translate 'modals' 'email'}}
                                         </label>
                                         <label class="i-checks i-checks-sm checkbox col-sm-4">
                                             <input type="checkbox" name="js-temp"  class="required" value="company" ><i></i> 
-                                            Company
+                                            {{agile_lng_translate 'report-add' 'company'}}
                                         </label>
                                         <label class="i-checks i-checks-sm checkbox col-sm-4">
                                             <input type="checkbox" name="js-temp"  class="required" value="title" ><i></i> 
-                                            Title
+                                            {{agile_lng_translate 'report-add' 'title'}}
                                         </label>
                                         <label class="i-checks i-checks-sm checkbox col-sm-4">
                                             <input type="checkbox" name="js-temp"  class="required" value="name" ><i></i> 
-                                            Name
+                                            {{agile_lng_translate 'deal-view' 'name'}}
                                         </label>
                                         <label class="i-checks i-checks-sm checkbox col-sm-4">
                                             <input type="checkbox" name="js-temp"  class="required" value="url" ><i></i> 
-                                            URL
+                                            {{agile_lng_translate 'widgets' 'url'}}
                                         </label>
                                         <label class="i-checks i-checks-sm checkbox col-sm-4">
                                             <input type="checkbox" name="js-temp"  class="required" value="website" ><i></i> 
-                                            Website
+                                            {{agile_lng_translate 'admin-settings-deals' 'Website'}}
                                         </label>
                                         <label class="i-checks i-checks-sm checkbox col-sm-4">
                                             <input type="checkbox" name="js-temp"  class="required" value="address" ><i></i> 
-                                            Address
+                                            {{agile_lng_translate 'contact-details' 'address'}}
                                         </label>
                                         <label class="i-checks i-checks-sm checkbox col-sm-4">
                                             <input type="checkbox" name="js-temp"  class="required" value="phone" ><i></i> 
-                                            Phone
+                                            {{agile_lng_translate 'contacts-view' 'Phone'}}
                                         </label>
                                         <label class="i-checks i-checks-sm checkbox col-sm-4">
                                             <input type="checkbox" name="js-temp"  class="required" value="skypePhone" ><i></i> 
-                                            Skype Phone
+                                            {{agile_lng_translate 'Contacts-view' 'skype-phone'}}
                                         </label>
                                         <label class="i-checks i-checks-sm checkbox col-sm-4">
                                             <input type="checkbox" name="js-temp"  class="required" value="custom_field" ><i></i> 
-                                            Custom Fields
+                                            {{agile_lng_translate 'contacts-view' 'custom-fields'}}
                                         </label>
                                         <label class="i-checks i-checks-sm checkbox col-sm-4">
                                             <input type="checkbox" name="js-temp"  class="required" value="tags" ><i></i> 
-                                            Tags
+                                            {{agile_lng_translate 'report-add' 'tags'}}
                                         </label>
                                         <label class="i-checks i-checks-sm checkbox col-sm-4">
                                             <input type="checkbox" name="js-temp"  class="required" value="owner" ><i></i> 
-                                            Owner
+                                            {{agile_lng_translate 'contact-details' 'owner'}}
                                         </label>
                                         <label class="i-checks i-checks-sm checkbox hide col-sm-4">
                                             <input type="checkbox" name="js-temp"  class="required" value="image" ><i></i> 
@@ -95,7 +95,7 @@
                             <div class="row">
                                 <div class="col-md-7 col-xs-8">
                                     <div>
-                                        <a href="#" type="submit" class="save btn btn-sm btn-primary">Submit</a>
+                                        <a href="#" type="submit" class="save btn btn-sm btn-primary">{{agile_lng_translate 'admin-settings' 'submit'}}</a>
                                     </div>
                                 </div>
                             </div>

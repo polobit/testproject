@@ -322,27 +322,35 @@ public class AnalyticsUtil
 		Objectify ofy = ObjectifyService.begin();
 		for (int i = 0; i < contactEmails.size(); i++)
 		{
-		    com.googlecode.objectify.Query<Contact> query = ofy.query(Contact.class);
-		    Map<String, Object> searchMap = new HashMap<String, Object>();
-		    searchMap.put("type", Contact.Type.PERSON);
-		    searchMap.put("properties.name", "email");
-		    searchMap.put("properties.value", contactEmails.get(i));
-		    for (String propName : searchMap.keySet())
-			query.filter(propName, searchMap.get(propName));
-		    System.out.println(query.toString());
-		    Contact contact = dao.fetch(query);
-		    if (contact != null)
-		    {
-			ObjectMapper mapper = new ObjectMapper();
-			String contactString = mapper.writeValueAsString(contact);
-			JSONObject contactJSON = new JSONObject(contactString);
-			contactsArray.put(contactJSON);
-		    }
-		    else
-		    {
-			JSONObject contactJSON = buildDummyContact(contactEmails.get(i));
-			contactsArray.put(contactJSON);
-		    }
+			/**
+		     * converting searching email-id into the lowercase and 
+		     * then it should not be blank
+		     * */
+		    	
+			if(StringUtils.isNotBlank(contactEmails.get(i)))
+			{
+			    com.googlecode.objectify.Query<Contact> query = ofy.query(Contact.class);
+			    Map<String, Object> searchMap = new HashMap<String, Object>();
+			    searchMap.put("type", Contact.Type.PERSON);
+			    searchMap.put("properties.name", "email");
+			    searchMap.put("properties.value", contactEmails.get(i).toLowerCase());
+			    for (String propName : searchMap.keySet())
+				query.filter(propName, searchMap.get(propName));
+			    System.out.println(query.toString());
+			    Contact contact = dao.fetch(query);
+			    if (contact != null)
+			    {
+				ObjectMapper mapper = new ObjectMapper();
+				String contactString = mapper.writeValueAsString(contact);
+				JSONObject contactJSON = new JSONObject(contactString);
+				contactsArray.put(contactJSON);
+			    }
+			    else
+			    {
+				JSONObject contactJSON = buildDummyContact(contactEmails.get(i));
+				contactsArray.put(contactJSON);
+			    }
+			}
 		}
 		JSONObject contactJSON = contactsArray.getJSONObject(contactsArray.length() - 1);
 		contactJSON.put("count", totalEmailCount);

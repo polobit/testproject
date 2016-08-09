@@ -53,9 +53,13 @@ public class GoalsUtil
 	/*
 	 * Get Goals for a User based on duration
 	 */
-	public static List<Goals> getAllGoalsForUser(Long onwner_id,Long start_time,Long end_time){
+	public static List<Goals> getAllGoalsForUser(Long onwner_id,Long start_time,Long end_time,Long timeZone){
 		
 		Map<String, Object> conditionsMap = new HashMap<String, Object>();
+		if(timeZone!=null){
+		start_time=(start_time*1000-(timeZone*60*1000))/1000;
+		end_time=(end_time*1000-(timeZone*60*1000))/1000;
+		}
 		List<Goals> user_goals = new ArrayList<Goals>();
 		conditionsMap.put("ownerKey", new Key<DomainUser>(DomainUser.class, onwner_id));
 		List<Goals> goals= Goals.dao.listByProperty(conditionsMap);

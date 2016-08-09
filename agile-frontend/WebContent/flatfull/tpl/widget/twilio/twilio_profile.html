@@ -18,10 +18,11 @@
 			{{/if_equals}}
 		</div>
 		<div class="row-fluid">
-			<a href="#call" class="btn btn-sm btn-default pull-right" id="twilio_call" style="display:none;"><i class="icon-phone"></i>Call</a>
-			<a href="#hangup" class="btn btn-sm btn-danger pull-right" id="twilio_hangup" style="display:none;">Hang up</a>
-            <a href="#dialpad" class="btn btn-sm btn-default pull-right m-r-xs" id="twilio_dialpad" style="display:none;">Dialpad</a>
-			<a href="#note" class="right contact-add-note m-xs" id="twilio_note" style="display:none;">Add Note</a>
+			<a href="#call" class="btn btn-sm btn-default pull-right" id="twilio_call" style="display:none;"><i class="icon-phone"></i>{{agile_lng_translate 'admin-settings-tasks' 'call'}}</a>
+			<a href="#hangup" class="btn btn-sm btn-danger pull-right" id="twilio_hangup" style="display:none;">{{agile_lng_translate 'widjets' 'hang-up'}}</a>
+            <a href="#dialpad" class="btn btn-sm btn-default pull-right m-r-xs" id="twilio_dialpad" style="display:none;">{{agile_lng_translate 'other' 'dail-pad'}}</a>
+			<a href="#note" class="right contact-add-note m-xs" id="twilio_note" style="display:none;">
+			{{agile_lng_translate 'deal-view' 'add-note'}}</a>
 		</div>
 
 
@@ -44,7 +45,7 @@
 			{{#if recording.Recording}}
 				{{#if_equals recording.Recording.total "0"}}
 				<i class="icon pull-left icon-phone text-muted text-md m-r-xs m-t-xxs v-middle"></i>
-				<div class="pull-left">{{#if_equals call.Status "no-answer"}}Call unanswered{{else}}Call connected{{/if_equals}}</div>
+				<div class="pull-left">{{#if_equals call.Status "no-answer"}}{{agile_lng_translate 'widgets' 'call-unanswered'}}{{else}}{{agile_lng_translate 'widgets' 'call-connected'}}{{/if_equals}}</div>
 				<div class="pull-right">{{#is_string call.Duration}}{{toProperFormat call.Duration}}{{else}}0 s{{/is_string}}</div>
 				<div class="clearfix"></div>
 				<small class="text-muted"><i class="fa fa-clock-o m-r-xs pull-left m-t-xxs"></i><time class="time-ago pull-left" datetime="{{call.StartTime}}">{{toLocalTimezone call.StartTime}}</time></small>	
@@ -53,7 +54,7 @@
 					<!-- <i class="icon pull-left icon-play m-r-xs m-t-xxs r" id="record_sound_play" sound_url="{{recording.Recording.Uri}}" style="color: white;background: rgba(130, 130, 130, 1);padding:1px;"></i> -->
 					<div class = "text-inside-sound">
 					<i class="icon pull-left icon-play m-r-xs m-t-xxs r" style="color: white;background: rgba(130, 130, 130, 1);padding:1px;"></i>
-					<div class="pull-left">{{#if_equals call.Status "no-answer"}}Call unanswered{{else}}Call connected{{/if_equals}}</div>
+					<div class="pull-left">{{#if_equals call.Status "no-answer"}}{{agile_lng_translate 'widgets' 'call-unanswered'}}{{else}}{{agile_lng_translate 'widgets' 'call-connected'}}{{/if_equals}}</div>
 					<div class="pull-right">{{#is_string call.Duration}}{{toProperFormat call.Duration}}{{else}}0 s{{/is_string}}</div>
 					<div class="clearfix"></div>
 					<small class="text-muted"><i class="fa fa-clock-o m-r-xs pull-left m-t-xs"></i><time class="time-ago pull-left" datetime="{{call.StartTime}}">{{toLocalTimezone call.StartTime}}</time></small>	
@@ -70,13 +71,14 @@
 						<source src="https://api.twilio.com{{recording.Recording.Uri}}" type="audio/wav">  						
 						<source src="https://api.twilio.com{{recording.Recording.Uri}}" type="audio/mpeg">
 						<source src="https://api.twilio.com{{recording.Recording.Uri}}" type="audio/ogg">
-  						Your browser does not support the audio element.Please download the file to play.
+  						
+  						{{agile_lng_translate 'other' 'your-browser-doesnt-support-the-audio-element'}}
 					</audio>
 					</div>
 					{{/if_equals}}			
 				{{else}}
 						<i class="icon pull-left icon-phone text-muted text-md m-r-xs m-t-xxs v-middle"></i>
-						<div class="pull-left">{{#if_equals call.Status "no-answer"}}Call unanswered{{else}}Call connected{{/if_equals}}</div>
+						<div class="pull-left">{{#if_equals call.Status "no-answer"}}{{agile_lng_translate 'widgets' 'call-unanswered'}}{{else}}{{agile_lng_translate 'widgets' 'call-connected'}}{{/if_equals}}</div>
 						<div class="pull-right">{{#is_string call.Duration}}{{toProperFormat call.Duration}}{{else}}0 s{{/is_string}}</div>
 						<div class="clearfix"></div>
 						<small class="text-muted"><i class="fa fa-clock-o m-r-xs pull-left m-t-xxs"></i><time class="time-ago pull-left" datetime="{{call.StartTime}}">{{toLocalTimezone call.StartTime}}</time></small>
@@ -99,9 +101,11 @@
 		<form class="b-b-none" id="twilio_call_form" name="twilio_call_form" method="post">
 	    	<fieldset>
 				
-				<div class="control-group" ><div class="controls"><input type="text" placeholder="Enter number" name="twilio_from" id="twilio_from" onkeydown="if (event.keyCode == 13) { event.preventDefault(); }" class="required form-control" style="width:90%" maxlength="15"/></div</div>	
-				<p>You will receive a verification call asking for a code. Enter the code you see after clicking verify.</p>
-				<a href="#verify" id="twilio_verify" class="btn btn-sm btn-default text-l-none">Verify</a>	
+				<div class="control-group" ><div class="controls"><input type="text" placeholder="{{agile_lng_translate 'widjets' 'enter-number'}}" name="twilio_from" id="twilio_from" onkeydown="if (event.keyCode == 13) { event.preventDefault(); }" class="required form-control" style="width:90%" maxlength="15"/></div</div>	
+				<p>
+				{{agile_lng_translate 'other' 'you-will-receive-a-verification-call-asking-code'}}</p>
+				<a href="#verify" id="twilio_verify" class="btn btn-sm btn-default text-l-none">
+				{{agile_lng_translate 'landing-pages' 'verify'}}</a>	
 			</fieldset>
 	    </form>				
 	</div>
@@ -110,11 +114,11 @@
 <script id="twilio-verify-template" type="text/html" >
 	<div class="widget_content b-b-none" style='line-height: 160%;' >
 		
-		<p>Please enter this code <b>{{ValidationRequest.ValidationCode}}</b> to verify your number after you receive a call from Twilio.</p>
+		<p>{{agile_lng_translate 'other' 'please-enter-this-code'}} <b>{{ValidationRequest.ValidationCode}}</b> to {{agile_lng_translate 'other' 'verify-your-number-after-you-receive-a-call-from-twilio'}}</p>
 		{{#if settings}}
-			<a href="#Twilio/twilio{{id}}" class="btn btn-sm btn-default text-sm" id="twilio_proceed_settings">Proceed</a>			
+			<a href="#Twilio/twilio{{id}}" class="btn btn-sm btn-default text-sm" id="twilio_proceed_settings">{{agile_lng_translate 'other' 'proceed'}}</a>			
 		{{else}}
-			<a href="#proceed" class="btn btn-sm btn-default text-sm" id="twilio_proceed">Proceed</a>	
+			<a href="#proceed" class="btn btn-sm btn-default text-sm" id="twilio_proceed">{{agile_lng_translate 'other' 'proceed'}}</a>	
 		{{/if}}	
 	</div>
 </script>
@@ -126,18 +130,18 @@
   <div class="modal-content"> 
 	<div class="modal-header" >
     	<a href="#" data-dismiss="modal" class="close">&times;</a>
-		<h3>Call {{name}}?</h3></div>
+		<h3>{{agile_lng_translate 'campaigns' 'call'}} {{name}}?</h3></div>
     <div class="modal-body" >
-		<p>Make a call to {{to}}?</p>
+		<p>{{agile_lng_translate 'widjets' 'make-a-call-to'}} {{to}}?</p>
         <p>
 		<label class="i-checks i-checks-sm">
 			<input type="checkbox" name="add-image" id="enable-record" checked="checked"/><i></i></label>
-			Record the call
+			{{agile_lng_translate 'widjets' 'record-the-call'}}
 		</p>
 	</div>
 	<div class="modal-footer" >
-		<a href="#" class="btn btn-sm btn-default close enable-call" make_call="no">No</a>
-		<a href="#" class="btn btn-sm btn-primary enable-call" make_call="yes">Yes</a>
+		<a href="#" class="btn btn-sm btn-default close enable-call" make_call="no">{{agile_lng_translate 'portlets' 'no'}}</a>
+		<a href="#" class="btn btn-sm btn-primary enable-call" make_call="yes">{{agile_lng_translate 'portlets' 'yes'}}</a>
 	</div>
 </div>
 </div>
@@ -164,8 +168,8 @@
 
 <script id="twilio-login-template" type="text/html">
 <div class="m-t">
-	<p>Call your contacts directly using your Twilio account.</p>
-	<a id="twilio-connect-button" class="btn btn-sm btn-default m-b-sm m-t-sm" href="https://www.twilio.com/authorize/CNf63bca035414be121d517a116066a5f8?state={{url}}" >Link your Twilio</a>
+	<p>{{agile_lng_translate 'twilio' 'call-your-contacts-directly-using-twilio-account'}}</p>
+	<a id="twilio-connect-button" class="btn btn-sm btn-default m-b-sm m-t-sm" href="https://www.twilio.com/authorize/CNf63bca035414be121d517a116066a5f8?state={{url}}" >{{agile_lng_translate 'twilio' 'link-your-twilio'}}</a>
 </div>
 </script>
 
@@ -176,16 +180,16 @@
 
 <div class='widget_content b-b-none' style='line-height: 160%;' >
 	{{#if_equals outgoing_numbers.length "0"}}
-				<p>To start making calls, you need to verify your number.</p>
+				<p>{{agile_lng_translate 'twilio' 'to-satrt-making-calls-you-need-to-verify-your-number'}}</p>
 				<p class="m-t-sm m-r-none m-b-xs m-l-none">
-					<a href="#" id="twilio_verify_settings">Verify an outgoing number</a>
+					<a href="#" id="twilio_verify_settings">{{agile_lng_translate 'twilio' 'verify-an-outgoing-number'}}</a>
 				</p>
 	{{else}}
 				{{#stringToJSON this "prefs"}}{{/stringToJSON}}
 <form id="reportsForm">
 <fieldset class="m-l-md">
 		<div class="control-group m-l-n-md">
-				<label class="control-label">Current outgoing Number</label>
+				<label class="control-label">{{agile_lng_translate 'widjets' 'current-out-going-number'}}</label>
 				<div class="controls" id="contactTypeAhead">
 			<select name="verified_number" id="twilio_from_number" class="required form-control col-md-12 w-full">
 				{{#each outgoing_numbers}}
@@ -205,13 +209,16 @@
 <input value="success" name="verification_status" class="hidden"/> 
 		</fieldset>
 				<p class="m-t-sm m-r-none m-b-sm m-l-none">
-					<a href="#" id="twilio_verify_settings">Verify a new outgoing number</a>
+					<a href="#" id="twilio_verify_settings">{{agile_lng_translate 'twilio' 'verify-an-outgoing-number'}}</a>
 				</p>
 	{{/if_equals}}
 				<p class="m-t-sm m-r-none m-b-xs m-l-none text-center">
-					<a class='btn btn-sm btn-primary p-xs' widget-name="Twilio" id="widget-prefs-save">Save</a>
-					<a class='btn btn-sm btn-danger revoke-widget ml_5' widget-name="Twilio">Revoke Access</a>
-					<a href="#add-widget" class='btn btn-default btn-sm ml_5' widget-name="Twilio">Cancel</a>
+					<a class='btn btn-sm btn-primary p-xs' widget-name="Twilio" id="widget-prefs-save">
+					{{agile_lng_translate 'modals' 'save'}}</a>
+					<a class='btn btn-sm btn-danger revoke-widget ml_5' widget-name="Twilio">
+					{{agile_lng_translate 'widgets' 'revoke-access'}}</a>
+					<a href="#add-widget" class='btn btn-default btn-sm ml_5' widget-name="Twilio">
+					{{agile_lng_translate 'other' 'cancel'}}</a>
 				</p> 
 	</div>
 </form>

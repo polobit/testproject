@@ -16,7 +16,7 @@ function initializePortletsListeners() {
 						if (!isValidForm('#' + form_id))
 							return false;
 						$(this).attr('disabled', true);
-						$(this).text('Saving...');
+						$(this).text("{{agile_lng_translate 'others' 'saving'}}");
 
 						var el = this.id;
 						var flag = true;
@@ -38,7 +38,7 @@ function initializePortletsListeners() {
 							if(!is_valid_custom_range(json["start-date"]*1000,json["end-date"]*1000,modal_id))
 								{
 									$(this).attr('disabled', false);
-        							$(this).text('Save');
+        							$(this).text('{{agile_lng_translate "modals" "save"}}');
 								return;
 							}
 						}
@@ -234,7 +234,7 @@ function initializePortletsListeners() {
 					var won= data.won_milestone;
 					if(milestonesList.length > 1)
 					{
-						$('#milestone', el).html('<option value="anyMilestone">Any</option>');
+						$('#milestone', el).html('<option value="anyMilestone">{{agile_lng_translate "portlets" "any"}}</option>');
 					}
 					$.each(milestonesList, function(index, milestone){
 						if(lost!=null && won!=null){
@@ -254,7 +254,7 @@ function initializePortletsListeners() {
 		}
 		else
 		{
-			$('#milestone', el).html('<option value="anyMilestone">Any</option>');
+			$('#milestone', el).html('<option value="anyMilestone">{{agile_lng_translate "portlets" "any"}}</option>');
 		}
 		
 	});
@@ -532,7 +532,7 @@ function initializePortletsListeners() {
 												}
 
 												if (model.description) {
-													var description = '<label class="control-label"><b>Description </b></label><div class="controls"><textarea id="description" name="description" rows="3" class="input form-control" placeholder="Add Description"></textarea></div>'
+													var description = '<label class="control-label"><b>'+_agile_get_translated_val('misc-keys','description')+' </b></label><div class="controls"><textarea id="description" name="description" rows="3" class="input form-control" placeholder="' +_agile_get_translated_val('misc-keys','add-description')+'"></textarea></div>'
 													$("#event_desc").html(
 															description);
 													$("textarea#description")
@@ -541,9 +541,9 @@ function initializePortletsListeners() {
 												} else {
 													var desc = '<div class="row-fluid">'
 															+ '<div class="control-group form-group m-b-none">'
-															+ '<a href="#" id="add_event_desctiption"><i class="icon-plus"></i> Add Description </a>'
+															+ '<a href="#" id="add_event_desctiption"><i class="icon-plus"></i> '+_agile_get_translated_val('misc-keys','add-description')+' </a>'
 															+ '<div class="controls event_discription hide">'
-															+ '<textarea id="description" name="description" rows="3" class="input form-control w-full col-md-8" placeholder="Add Description"></textarea>'
+															+ '<textarea id="description" name="description" rows="3" class="input form-control w-full col-md-8" placeholder="' +_agile_get_translated_val('misc-keys','add-description')+ '"></textarea>'
 															+ '</div></div></div>'
 													$("#event_desc").html(desc);
 												}
@@ -854,16 +854,16 @@ $('.portlet_body')
 							// Fills owner select element
 							populateUsersInUpdateActivityModal(model.toJSON());
 							if (model.toJSON().description) {
-								var description = '<label class="control-label"><b>Description </b></label><div class="controls"><textarea id="description" name="description" rows="3" class="input form-control" placeholder="Add Description"></textarea></div>'
+								var description = '<label class="control-label"><b>'+_agile_get_translated_val('misc-keys','description')+' </b></label><div class="controls"><textarea id="description" name="description" rows="3" class="input form-control" placeholder="' +_agile_get_translated_val('misc-keys','add-description')+ '"></textarea></div>'
 								$("#event_desc").html(description);
 								$("textarea#description").val(
 										model.toJSON().description);
 							} else {
 								var desc = '<div class="row-fluid">'
 										+ '<div class="control-group form-group m-b-none">'
-										+ '<a href="#" id="add_event_desctiption"><i class="icon-plus"></i> Add Description </a>'
+										+ '<a href="#" id="add_event_desctiption"><i class="icon-plus"></i> ' +_agile_get_translated_val('misc-keys','add-description')+ ' </a>'
 										+ '<div class="controls event_discription hide">'
-										+ '<textarea id="description" name="description" rows="3" class="input form-control w-full col-md-8" placeholder="Add Description"></textarea>'
+										+ '<textarea id="description" name="description" rows="3" class="input form-control w-full col-md-8" placeholder="' +_agile_get_translated_val('misc-keys','add-description')+'"></textarea>'
 										+ '</div></div></div>'
 								$("#event_desc").html(desc);
 							}
@@ -932,7 +932,7 @@ $('.portlet_body')
 										.parent()
 										.parent()
 										.html(
-												'<div class="portlet-error-message">No tasks found.</div>');
+												'<div class="portlet-error-message">{{agile_lng_translate "tasks" "no-tasks-found"}}</div>');
 							}
 						}
 					});
@@ -1001,16 +1001,16 @@ $('.portlet_body')
 		    	}
 		    });
 		    if(id== "MarketingDashboard"){
-		    	$('#dashboard-desc').text("Welcome to Agile CRM Marketing Automation.");
-		    	$('#dashboard-desc').attr("title", "Welcome to Agile CRM Marketing Automation.");
+		    	$('#dashboard-desc').text(_agile_get_translated_val("dashboards","marketing-help"));
+		    	$('#dashboard-desc').attr("title", _agile_get_translated_val("dashboards","marketing-help"));
 		    }
 		    if(id == "SalesDashboard"){
-		    	$('#dashboard-desc').text("Welcome to Agile CRM Sales Dashboard.");
-		    	$('#dashboard-desc').attr("title", "Welcome to Agile CRM Sales Dashboard.");
+		    	$('#dashboard-desc').text(_agile_get_translated_val("dashboards", "sales-help"));
+		    	$('#dashboard-desc').attr("title", _agile_get_translated_val("dashboards", "sales-help"));
 		    }
 		    if(id == "Dashboard")
 		    {
-		    	$('#dashboard-desc').text("Welcome to Agile CRM");
+		    	$('#dashboard-desc').text("{{agile_lng_translate 'dashboards' 'default-help'}}");
 		    	$('#dashboard-desc').attr("title", "");
 		    	$('#dashboard-name').attr("title", "");
 		    }
@@ -1396,7 +1396,7 @@ if (endDate - startDate >= 0)
 		$('#' + modalName)
 				.find(".invalid-range")
 				.html(
-					'<div class="alert alert-danger m-t-sm" style="margin-bottom:5px;"><a class="close" data-dismiss="alert" href="#">&times</a>Start date should not be greater than end date.</div>'
+					'<div class="alert alert-danger m-t-sm" style="margin-bottom:5px;"><a class="close" data-dismiss="alert" href="#">&times</a>{{agile_lng_translate "events" "start-date-error"}}</div>'
 						);
 				$('#' + modalName)
 				.find(".invalid-range").parents('.form-group').show();

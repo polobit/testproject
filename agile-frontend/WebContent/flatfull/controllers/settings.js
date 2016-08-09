@@ -177,7 +177,7 @@ var SettingsRouter = Backbone.Router
 									if ($("#current_pswd").val() == $("#new_pswd").val())
 									{
 										$('#changePasswordForm').find('span.save-status').html(
-												"<span style='color:red;margin-left:10px;'>Current and New Password can not be the same</span>");
+												"<span style='color:red;margin-left:10px;'>"+_agile_get_translated_val('others','pwds-in-correct')+"</span>");
 										$('#changePasswordForm').find('span.save-status').find("span").fadeOut(5000);
 										enable_save_button($(saveBtn));
 										return false;
@@ -195,7 +195,7 @@ var SettingsRouter = Backbone.Router
 										success : function()
 										{
 											$('#changePasswordForm').find('span.save-status').html(
-													"<span style='color:green;margin-left:10px;'>Password changed successfully</span>").fadeOut(5000);
+													"<span style='color:green;margin-left:10px;'>" + _agile_get_translated_val('others', 'pwd-change-success') + "</span>").fadeOut(5000);
 											enable_save_button($(saveBtn));
 											$('#' + form_id).each(function()
 											{
@@ -207,7 +207,7 @@ var SettingsRouter = Backbone.Router
 										{
 											$('#changePasswordForm').find('span.save-status').html("");
 											$('#changePasswordForm').find('input[name="current_pswd"]').closest(".controls").append(
-													"<span style='color:red;margin-left:10px;'>Incorrect Password</span>");
+													"<span style='color:red;margin-left:10px;'>" + _agile_get_translated_val("others", "pwd-in-correct") + "</span>");
 											$('#changePasswordForm').find('input[name="current_pswd"]').closest(".controls").find("span").fadeOut(5000);
 											$('#changePasswordForm').find('input[name="current_pswd"]').focus();
 											enable_save_button($(saveBtn));
@@ -491,11 +491,7 @@ var SettingsRouter = Backbone.Router
 					that.emailTemplatesListView = new Base_Collection_View({ url : '/core/api/email/templates', restKey : "emailTemplates",
 					templateKey : "settings-email-templates", individual_tag_name : 'tr', postRenderCallback : function(el)
 					{
-						head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
-						{
-							console.log("In email tmplt postrender");
-							$(".created_time", el).timeago();
-						});
+						agileTimeAgoWithLngConversion($(".created_time", el));
 					} });
 
 					that.emailTemplatesListView.collection.fetch();
@@ -610,7 +606,7 @@ var SettingsRouter = Backbone.Router
 					var optionsTemplate = "<option value='{{id}}' network_type='{{titleFromEnums network_type}}' size='{{size}}' url='{{url}}'>{{name}}</option>";
         			fillSelect('attachment-select','core/api/documents', 'documents',  function fillNew()
 					{
-						el.find("#attachment-select option:first").after("<option value='new'>Upload new doc</option>");
+						el.find("#attachment-select option:first").after("<option value='new'>"+_agile_get_translated_val('others','upload-new-doc')+"</option>");
 						$('#attachment-select').find('option[value='+$('#attachment_id').val()+']').attr("selected","selected");
 						$('.add-tpl-attachment-confirm').trigger("click");
 						$('#tpl-attachment-select').hide();
@@ -852,7 +848,7 @@ var SettingsRouter = Backbone.Router
 							}, error : function()
 							{
 								hideTransitionBar();
-								showNotyPopUp("information", "error occured please try again", "top");
+								showNotyPopUp("information", _agile_get_translated_val('billing','error-occured'), "top");
 							} });
 
 				/*
