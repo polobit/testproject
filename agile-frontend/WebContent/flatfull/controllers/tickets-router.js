@@ -881,11 +881,7 @@
 	 		descending:true,
 	 		individual_tag_name : 'div',
 	 		postRenderCallback : function(el) {
-
-	 			head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
-				{
-					$("time", el).timeago();
-				});
+	 			agileTimeAgoWithLngConversion($("time", el));
 
 	 			if(callback)
 	 				callback();
@@ -911,12 +907,8 @@
 	 		descending:true,
 	 		individual_tag_name : 'div',
 	 		postRenderCallback : function(el) {
-
-	 			head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
-				{
-					$("time", el).timeago();
-				});
-
+	 			agileTimeAgoWithLngConversion($("time", el));
+	 			
 				if(callback)
 	 				callback();
 	 		}
@@ -1460,13 +1452,11 @@
 
 								fillSelect('template_id', '/core/api/landingpages?page_size=20', '', 
 								function(){
-									$("#template_id",el).append('<option value=1>Default</option>');
+									$("#template_id",el).append('<option value=1>{{agile_lng_translate "report-chart-forms" "default"}}</option>');
 									$('#template_id option[value=""]',el).attr("value",0);
 									$('#template_id option[value="'+kblpid+'"]',el).attr("selected",true);
-																							
-								}, optionTemplate, false, el,"Basic");
-										
-							
+								}, optionTemplate, false, el,"{{agile_lng_translate 'landingpages' 'basic'}}");
+								
 		 				}
 					   
 				    });

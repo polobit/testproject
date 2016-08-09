@@ -75,14 +75,12 @@ function request_notification_permission() {
 			{	
 				$('#set-desktop-notification').css('display', 'none');
 			    $('#desktop-notification-content')
-					.html(
-							"<i>Desktop Notifications are now enabled. <a href=\"#\" id=\"disable-notification\" class=\"text-info\" style=\"text-decoration:underline;\">Disable</a></i>");
+					.html(getTemplate("js-desktop-notifications-disable"));
 			}
 			else
 			{
 				$('#set-desktop-notification').css('display', 'none');
-	            $('#desktop-notification-content').html(
-					"<i>Desktop Notifications are now disabled. <a href=\"#\" id=\"enable-notification\" class=\"text-info\" style=\"text-decoration:underline;\">Enable</a></i>")
+	            $('#desktop-notification-content').html(getTemplate("js-desktop-notifications-enable"));
              }	
 		});
 	});	

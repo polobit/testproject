@@ -243,7 +243,11 @@
        {{#if_equals last_contacted 0}}
        
 	   	{{else}}
-	   	 <span>{{epochToHumanDateInFormat  last_contacted}}</span>	
+	    	{{#is_Particular_Domain}}
+	   	<time datetime="{{epochToHumanDate "" last_contacted}}"> {{epochToHumanDate "ddd mmm dd yyyy h:MM TT" last_contacted}}</time>
+	   	{{else}}
+	   		<span>{{epochToHumanDateInFormat last_contacted}}</span>
+	   	{{/is_Particular_Domain}}
 	   	 		{{#if_equals last_contacted last_emailed}}<i class="fa fa-envelope-o text-muted m-l-xs"></i>
 	   	 		{{else}}
 	   	 			{{#if_equals last_contacted last_campaign_emaild}}<i class="fa fa-sitemap text-muted m-l-xs"></i>
@@ -303,7 +307,11 @@
        {{#if_equals last_contacted 0}}
        
 	   	{{else}}
-	   	 <span>{{epochToHumanDateInFormat  last_contacted}}</span>	
+	   	{{#is_Particular_Domain}}
+	   	<time datetime="{{epochToHumanDate "" last_contacted}}"> {{epochToHumanDate "ddd mmm dd yyyy h:MM TT" last_contacted}}</time>
+	   	{{else}}
+	   		<span>{{epochToHumanDateInFormat last_contacted}}</span>
+	   	{{/is_Particular_Domain}}
 	   	 		{{#if_equals last_contacted last_emailed}}<i class="fa fa-envelope-o text-muted m-l-xs"></i>
 	   	 		{{else}}
 	   	 			{{#if_equals last_contacted last_campaign_emaild}}<i class="fa fa-sitemap text-muted m-l-xs"></i>
@@ -319,7 +327,7 @@
 <script id = "contacts-custom-view-last_emailed-template" type="text/html">
 	<td class='data' data='{{id}}'>
        <div class="text-ellipsis " style="width:12em;" >
-	   	  <span>{{epochToHumanDate "dd mmm yyyy" last_emailed}}</span>
+		   	  <span>{{epochToHumanDateInFormat last_emailed}}</span>
        </div>
 	</td>
 </script>
@@ -327,7 +335,7 @@
 <script id = "contacts-custom-view-last_called-template" type="text/html">
 	<td class='data' data='{{id}}'>
        <div class="text-ellipsis " style="width:12em;">
-	   	  <span>{{epochToHumanDate "dd mmm yyyy" last_called}}</span>
+	   	  <span>{{epochToHumanDateInFormat last_called}}</span>
        </div>
 	</td>
 </script>
@@ -386,19 +394,19 @@
 		{{#if owner}}
         	<a id="contact-owner-popover" class="custom-color" data={{owner.id}} title="{{owner.name}}">{{owner.name}}</a>
         	{{else}}
-        		<a id="contact-owner-popover" class="custom-color" >Assign Owner</a>
+        		<a id="contact-owner-popover" class="custom-color" >{{agile_lng_translate 'contact-details' 'assign-owner'}}</a>
         		{{/if}}
         	
         	{{else}}
         		{{#if owner}}
         		<span id="contact-owner-static" class="custom-color" data={{owner.id}} title="{{owner.name}}">{{owner.name}}</span>
         		{{else}}
-        			<span id="contact-owner-static" class="custom-color" >Assign Owner</span>
+        			<span id="contact-owner-static" class="custom-color" >{{agile_lng_translate 'contact-details' 'assign-owner'}}</span>
         		{{/if}}
         {{/canEditContact}}
         	{{#canEditContact owner.id}}
         	<div class="dropdown" id="change-owner-ul-popover"  style="display: none">
-        		 <a class="btn btn-sm dropdown-toggle btn-default" data-toggle="dropdown">Change Owner <span class="caret"></span></a>
+        		 <a class="btn btn-sm dropdown-toggle btn-default" data-toggle="dropdown">{{agile_lng_translate 'deal-view' 'change-owner'}} <span class="caret"></span></a>
         		 <ul id='contact-detail-owner-popover' class="dropdown-menu"></ul>
         	</div> 
 			{{/canEditContact}}
@@ -479,13 +487,13 @@
 							<div class="control-group save-tag m-b-none">
 								<input name="" type="text" id="addTagsOnPopover"
 									class="tags-typeahead ignore-comma-keydown form-control inline-block"
-									style="width: 60%" placeholder="Enter tag" />
-								<span><a href="#" class="btn btn-sm btn-default m-l-sm m-r-xs" id="contact-add-tags-popover">Add</a></span>
+									style="width: 60%" placeholder="{{agile_lng_translate 'contact-details' 'enter-tag'}}" />
+								<span><a href="#" class="btn btn-sm btn-default m-l-sm m-r-xs" id="contact-add-tags-popover">{{agile_lng_translate 'other' 'add'}}</a></span>
 							</div>
 						</div>
 						{{#canEditContact owner.id}}
 			<div class="pull-left"><a href="#" id="add-tags-popover" rel="tooltip"
-							data-original-title="addtag" data-placement="top" class="text-xs  pull-left" style="padding:.2em"> <i class="fa fa-plus" style="font-size:8px; padding-right:2px"></i><span>Tag</span></a></div>
+							data-original-title="addtag" data-placement="top" class="text-xs  pull-left" style="padding:.2em"> <i class="fa fa-plus" style="font-size:8px; padding-right:2px"></i><span>{{agile_lng_translate 'contact-edit' 'tag'}}</span></a></div>
 						{{/canEditContact}}
 
 						
@@ -689,3 +697,4 @@
 
  {{/each}}
 </script>
+

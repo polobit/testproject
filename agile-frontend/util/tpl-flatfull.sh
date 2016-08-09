@@ -1,5 +1,6 @@
 cd ../WebContent
 cat flatfull/tpl/*.html > tpl/min/flatfull/tpl.js
+cat flatfull/tpl/dashboards/*.html >  tpl/min/flatfull/dashboards.js
 cat flatfull/tpl/settings/*.html >  tpl/min/flatfull/settings.js
 cat flatfull/tpl/continue/*.html > tpl/min/flatfull/continue.js
 cat flatfull/tpl/deal-detail/*.html > tpl/min/flatfull/deal-detail.js
@@ -24,8 +25,71 @@ cat flatfull/tpl/emailbuilder/*.html > tpl/min/flatfull/emailbuilder.js
 cat flatfull/tpl/segmentation/*.html > tpl/min/flatfull/segmentation.js
 cat flatfull/tpl/referals/*.html > tpl/min/flatfull/referals.js
 cat flatfull/tpl/helpcenter/*.html  > tpl/min/flatfull/helpcenter.js
+
+cat flatfull/tpl/widget/zendesk/*.html > tpl/min/flatfull/zendesk.js
+cat flatfull/tpl/widget/helpscout/*.html > tpl/min/flatfull/helpscout.js
+cat flatfull/tpl/widget/clickdesk/*.html > tpl/min/flatfull/clickdesk.js
+cat flatfull/tpl/widget/fullcontact/*.html > tpl/min/flatfull/fullcontact.js
+cat flatfull/tpl/widget/facebook/*.html > tpl/min/flatfull/facebook.js
+cat flatfull/tpl/widget/linkedin/*.html > tpl/min/flatfull/linkedin.js
+cat flatfull/tpl/widget/quickbooks/*.html > tpl/min/flatfull/quickbooks.js
+cat flatfull/tpl/widget/shopify/*.html > tpl/min/flatfull/shopify.js
+cat flatfull/tpl/widget/freshbooks/*.html > tpl/min/flatfull/freshbooks.js
+cat flatfull/tpl/widget/klout/*.html > tpl/min/flatfull/klout.js
+cat flatfull/tpl/widget/rapleaf/*.html > tpl/min/flatfull/rapleaf.js
+cat flatfull/tpl/widget/sip/*.html > tpl/min/flatfull/sip.js
+cat flatfull/tpl/widget/stripe/*.html > tpl/min/flatfull/stripe.js
+cat flatfull/tpl/widget/twilio/*.html > tpl/min/flatfull/twilio.js
+cat flatfull/tpl/widget/twilioio/*.html > tpl/min/flatfull/twilioio.js
+cat flatfull/tpl/widget/xero/*.html > tpl/min/flatfull/xero.js
+cat flatfull/tpl/widget/twitter/*.html > tpl/min/flatfull/twitter.js
+cat flatfull/tpl/widget/uservoice/*.html > tpl/min/flatfull/uservoice.js
+cat flatfull/tpl/widget/callscript/*.html > tpl/min/flatfull/callscript.js
+cat flatfull/tpl/widget/googleplus/*.html > tpl/min/flatfull/googleplus.js
+cat flatfull/tpl/widget/paypal/*.html > tpl/min/flatfull/paypal.js
+cat flatfull/tpl/widget/braintree/*.html > tpl/min/flatfull/braintree.js
+cat flatfull/tpl/widget/facebook/*.html > tpl/min/flatfull/facebook.js
+
 cat ../WebContent/helpcenter/helpcenter-tpl/*.html  > ../WebContent/tpl/min/flatfull/helpcenter-tpl.js
 cat flatfull/tpl/leads-filters/*.html  > tpl/min/flatfull/leads-filters.js
 cat flatfull/tpl/leads-view/*.html  > tpl/min/flatfull/leads-view.js
 cat flatfull/tpl/leads-form/*.html  > tpl/min/flatfull/leads-form.js
+
+## Widgets
+cat flatfull/tpl/widget/braintree/*.html > tpl/min/flatfull/braintree.js
+cat flatfull/tpl/widget/bria/*.html > tpl/min/flatfull/bria.js
+cat flatfull/tpl/widget/callscript/*.html > tpl/min/flatfull/callscript.js
+cat flatfull/tpl/widget/chargify/*.html > tpl/min/flatfull/chargify.js
+cat flatfull/tpl/widget/clickdesk/*.html > tpl/min/flatfull/clickdesk.js
+cat flatfull/tpl/widget/facebook/*.html > tpl/min/flatfull/facebook.js
+cat flatfull/tpl/widget/freshbooks/*.html > tpl/min/flatfull/freshbooks.js
+cat flatfull/tpl/widget/googleplus/*.html > tpl/min/flatfull/googleplus.js
+cat flatfull/tpl/widget/helpscout/*.html > tpl/min/flatfull/helpscout.js
+cat flatfull/tpl/widget/linkedin/*.html > tpl/min/flatfull/linkedin.js
+cat flatfull/tpl/widget/paypal/*.html > tpl/min/flatfull/paypal.js
+cat flatfull/tpl/widget/quickbooks/*.html > tpl/min/flatfull/quickbooks.js
+cat flatfull/tpl/widget/rapleaf/*.html > tpl/min/flatfull/rapleaf.js
+cat flatfull/tpl/widget/shopify/*.html > tpl/min/flatfull/shopify.js
+cat flatfull/tpl/widget/sip/*.html > tpl/min/flatfull/sip.js
+cat flatfull/tpl/widget/skype/*.html > tpl/min/flatfull/skype.js
+cat flatfull/tpl/widget/stripe/*.html > tpl/min/flatfull/stripe.js
+cat flatfull/tpl/widget/twilio/*.html > tpl/min/flatfull/twilio.js
+cat flatfull/tpl/widget/twilioio/*.html > tpl/min/flatfull/twilioio.js
+cat flatfull/tpl/widget/twitter/*.html > tpl/min/flatfull/twitter.js
+cat flatfull/tpl/widget/uservoice/*.html > tpl/min/flatfull/uservoice.js
+cat flatfull/tpl/widget/xero/*.html > tpl/min/flatfull/xero.js
+cat flatfull/tpl/widget/zendesk/*.html > tpl/min/flatfull/zendesk.js
+## End of widgets
+
 cd ../util
+
+#Local Dev
+#Localize and Minify
+if [ -n "$1" ]; then
+    echo "template not empty"
+    java -jar agilelocalize.jar ../WebContent/tpl/min/flatfull ../WebContent/tpl/min $1
+else
+    echo "template empty"
+    java -jar agilelocalize.jar ../WebContent/tpl/min/flatfull ../WebContent/tpl/min en
+fi
+#End of Local Dev

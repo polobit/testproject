@@ -273,7 +273,7 @@ function startFacebookWidget(contact_id)
 								agile_crm_update_contact_properties(propertiesArray);
 							} else {
 								if(typeof fbProfileDetails.error != 'undefined') {
-									facebookError("Facebook profile do not exist.("+fbProfileLink+")");
+									facebookError(_agile_get_translated_val('widgets', 'no-fb-account') + "("+fbProfileLink+")");
 									return;
 								}
 							}

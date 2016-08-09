@@ -65,7 +65,7 @@ $(function(){
 		
 		if(!$(table_element).hasClass('noDelete')){
 			
-			$(table).after('<div><div class="select-none"></div></div><footer class="panel-footer"><a href="#" class="btn btn-danger btn-sm" id="delete-checked"> Delete</a></footer>');
+			$(table).after('<div><div class="select-none"></div></div><footer class="panel-footer"><a href="#" class="btn btn-danger btn-sm" id="delete-checked"> '+_agile_get_translated_val('contact-details','delete')+'</a></footer>');
 			
 		}
 			
