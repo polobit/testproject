@@ -726,8 +726,7 @@ public class TwilioUtil
 		// For Main
 		params.put("VoiceUrl", "https://" + NamespaceManager.get() + ".agilecrm.com/twilioiovoice?record=" + record
 				+ "&agileuserid=" + agileUserID + "&twimleturl=" + twimletUrlToSend);
-		params.put("SmsUrl", "https://sonali-dot-sandbox-dot-agilecrmbeta.appspot.com/msgReplyActionUrl");
-
+		
 		// For Beta
 		/*
 		 * params.put("VoiceUrl", "https://" + NamespaceManager.get() +
