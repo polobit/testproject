@@ -245,8 +245,8 @@ angular.module('builder.projects', [])
                         		  	alertify.log("Page name already exists.", "error");
                               		$rootScope.savingChanges = false;
                               		$timeout(function() {
-                                      	$(".saveLandingPageButton",parent.document).prop("disabled",false);
-                      					$(".saveLandingPageButtonText",parent.document).html("Save Page");
+                              			parent.resetLandingPageButton();
+                                      	
                                   	}, 3000);
                         	  }else{
                                   
@@ -287,8 +287,7 @@ angular.module('builder.projects', [])
                       					$("#landingpagename-msg",parent.document).html('<span style="color: green; margin-left: 85px;">Page saved.</span>').show().fadeOut(3000);
 
                       				$timeout(function() {
-                                      	$(".saveLandingPageButton",parent.document).prop("disabled",false);
-                      					$(".saveLandingPageButtonText",parent.document).html("Save Page");
+                      					parent.resetLandingPageButton();
                       					//window.parent.location.hash = ("landing-page/"+returnDataFormat.pages[0].id);
                     					if(typeof projectPageData.id == "undefined") {
                     						window.parent.location.hash = ("landing-pages");
@@ -301,8 +300,7 @@ angular.module('builder.projects', [])
 
                       			}).error(function(data) {
                       				$timeout(function() {
-                                      	$(".saveLandingPageButton",parent.document).prop("disabled",false);
-                      					$(".saveLandingPageButtonText",parent.document).html("Save Page");
+                                      	parent.resetLandingPageButton();
                                   	}, 3000);
                       				//alertify.log(data.substring(0, 500), 'error', 2500);
                       			}).finally(function(data) {
@@ -319,8 +317,7 @@ angular.module('builder.projects', [])
                           	
               			}).error(function(data) {
               				$timeout(function() {
-                              	$(".saveLandingPageButton",parent.document).prop("disabled",false);
-              					$(".saveLandingPageButtonText",parent.document).html("Save Page");
+                              	parent.resetLandingPageButton();
                           	}, 3000);
               				//alertify.log(data.substring(0, 500), 'error', 2500);
               			});

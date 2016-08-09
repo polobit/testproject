@@ -87,6 +87,8 @@ public class GoogleSyncImpl extends TwoWaySyncService
 	catch (Exception e)
 	{
 	    e.printStackTrace();
+	    System.out.println("GoogleSyncImpl syncContactFromClient : "+e.getMessage());
+	    System.out.println("GoogleSyncImpl syncContactFromClient : "+e);
 	}
 	finally
 	{
@@ -109,6 +111,8 @@ public class GoogleSyncImpl extends TwoWaySyncService
 	    {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
+		System.out.println("GoogleSyncImpl getFeed if : "+e.getMessage());
+		System.out.println("GoogleSyncImpl getFeed if : "+e);
 	    }
 	}
 	else
@@ -123,6 +127,8 @@ public class GoogleSyncImpl extends TwoWaySyncService
 	    {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
+		System.out.println("GoogleSyncImpl getFeed else : "+e.getMessage());
+		System.out.println("GoogleSyncImpl getFeed else : "+e);
 	    }
 	}
 
@@ -224,6 +230,8 @@ public class GoogleSyncImpl extends TwoWaySyncService
 	catch (MalformedURLException e)
 	{
 	    e.printStackTrace();
+	    System.out.println("GoogleSyncImpl buildBasicQueryWithoutAccessKey : "+e.getMessage());
+	    System.out.println("GoogleSyncImpl buildBasicQueryWithoutAccessKey : "+e);
 	}
 
 	if (feedUrl == null)
@@ -410,6 +418,7 @@ public class GoogleSyncImpl extends TwoWaySyncService
 	catch (Exception e)
 	{
 	    System.out.println("Error occured while creating contacts in Google" + e.getMessage());
+	    System.out.println("Error occured while creating contacts in Google" + e);
 	}
 	
     }
@@ -424,6 +433,7 @@ public class GoogleSyncImpl extends TwoWaySyncService
 	catch (Exception e)
 	{
 		System.out.println("Error occured while updating contacts in Google" + e.getMessage());
+		System.out.println("Error occured while updating contacts in Google" + e);
 	}
 
     }
@@ -814,6 +824,8 @@ public class GoogleSyncImpl extends TwoWaySyncService
 	{
 	    // TODO Auto-generated catch block
 	    e.printStackTrace();
+	    System.out.println("GoogleSyncImpl updateOtherParameters : "+e.getMessage());
+	    System.out.println("GoogleSyncImpl updateOtherParameters : "+e);
 	}
     }
 

@@ -282,7 +282,13 @@ public class HomeServlet extends HttpServlet
     		info.valid_finger_print = true;
     		info.set(request);
 	    	
-	    	doGet(request, response);
+    		/*
+    		 * If Browser fingerprint verification succeeds, set Account Timezone, User Timezone
+    		 * OnlineCalendarPrefs and Browser Fingerprint.
+    		 */
+			LoginUtil.setMiscValuesAtLogin(request, DomainUserUtil.getCurrentDomainUser());
+
+			doGet(request, response);
     	}
     	catch(NumberFormatException e){
     		request.getRequestDispatcher("fingerprintAuthentication.jsp?error=" + "Please enter valid verification code").forward(request, response);

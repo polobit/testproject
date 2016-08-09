@@ -11,28 +11,11 @@
    		{{#if display_name}}
    			{{display_name}}
    		{{else}}
-	   		{{#if_equals name "Linkedin"}}LinkedIn
-			{{else}}
-				{{#if_equals name "GooglePlus"}}Google+
-				{{else}}
-					{{#if_equals name "HelpScout"}}Help Scout
-		    		{{else}}
-		    			{{#if_equals name "Twilio"}}Twilio Call Log
-		            	{{else}}
-		            		{{#if_equals name "TwilioIO"}}Twilio
-							{{else}}
-								{{#if_equals name "CallScript"}}Call Script
-								{{else}}
-									{{#if_equals name "Rapleaf"}}TowerData
-		                            {{else}}
-		                            	{{name}}
-		                            {{/if_equals}}
-								{{/if_equals}}
-		                    {{/if_equals}}
-		           		{{/if_equals}}
-		    		{{/if_equals}}
-				{{/if_equals}}
-			{{/if_equals}}
+   			{{#if_equals widget_type "CUSTOM"}}
+   			    {{name}}
+   			{{else}}
+   				{{get_widget_translation name 'displayName'}} 
+   			{{/if_equals}}
 		{{/if}}
 		<div class="widget_header_icons pull-right text-base" style="display:none;">
 			<div class="customWidgets text-base">
@@ -44,20 +27,20 @@
 				{{/if}}
 				<span class="m-t-xs m-r-xs">
 					{{#if_equals name "Linkedin"}}
-						<a id="{{remove_spaces name}}_plugin_delete" rel="tooltip" title="Reset settings">
+						<a id="{{remove_spaces name}}_plugin_delete" rel="tooltip" title="{{agile_lng_translate 'widgets' 'reset-settings'}}">
 							<i class="text-muted fa fa-wrench c-p"></i>
 						</a>
 					{{else}}
 						{{#if_equals name "Twitter"}}
-							<a id="{{remove_spaces name}}_plugin_delete" rel="tooltip" title="Reset settings"><i class="text-muted fa fa-wrench c-p"></i></a>
+							<a id="{{remove_spaces name}}_plugin_delete" rel="tooltip" title="{{agile_lng_translate 'widgets' 'reset-settings'}}"><i class="text-muted fa fa-wrench c-p"></i></a>
 						{{else}}
 							{{#if_equals name "Facebook"}}
-								<a id="{{remove_spaces name}}_plugin_delete" rel="tooltip" title="Reset settings"><i class="text-muted fa-wrench fa c-p"></i></a>
+								<a id="{{remove_spaces name}}_plugin_delete" rel="tooltip" title="{{agile_lng_translate 'widgets' 'reset-settings'}}"><i class="text-muted fa-wrench fa c-p"></i></a>
 							{{else}}
 								{{#if_equals name "GooglePlus"}}
-									<a id="{{remove_spaces name}}_plugin_delete" rel="tooltip" title="Reset settings"><i class="text-muted fa-wrench fa c-p"></i></a>
+									<a id="{{remove_spaces name}}_plugin_delete" rel="tooltip" title="{{agile_lng_translate 'widgets' 'reset-settings'}}"><i class="text-muted fa-wrench fa c-p"></i></a>
 								{{else}}
-									<a href="#add-widget" rel="tooltip" title="Reset settings"><i class="text-muted fa fa-wrench c-p"></i></a>
+									<a href="#add-widget" rel="tooltip" title="{{agile_lng_translate 'widgets' 'reset-settings'}}"><i class="text-muted fa fa-wrench c-p"></i></a>
 								{{/if_equals}}
 							{{/if_equals}}
 						{{/if_equals}}
@@ -103,13 +86,13 @@
 {{#unless this.length}}
 	<div class="panel">
 		<h4 class="widget_header_name font-thin padder m-b-none b-b p-b-sm p-r-none b-light">
-			<i class="icon-puzzle-piece"></i>&nbsp;&nbsp;Try some widgets
+			<i class="icon-puzzle-piece"></i>&nbsp;&nbsp;{{agile_lng_translate 'contact-details' 'try-some-widgets'}}
 		</h4>
 		<div class="wrapper-sm text-base">			
-			<p>See more information about your contacts with widgets. Choose from a range of widgets - social, communications, customer billing, support and more.</p>
+			<p>{{agile_lng_translate 'contact-details' 'widgets-default-message'}}</p>
 			<div class="clearfix"></div>			
 			<div class="text-center">
-			<a class="btn btn-sm btn-primary m-t-none" href='#add-widget'>Add widgets</a>
+			<a class="btn btn-sm btn-primary m-t-none" href='#add-widget'>{{agile_lng_translate 'contact-details' 'add-widgets'}}</a>
 			</div>
 			<div class="clearfix"></div>
 		</div>
@@ -117,7 +100,7 @@
 {{else}}
  <ul class="widget-sortable p-l-none m-n text-base" id="widgets-model-list"></ul>
  <div class="text-center">
- <a class="btn btn-sm btn-primary" href='#add-widget'><i class="icon-plus-sign"></i>&nbsp;&nbsp;Manage widgets</a>
+ <a class="btn btn-sm btn-primary" href='#add-widget'><i class="icon-plus-sign"></i>&nbsp;&nbsp;{{agile_lng_translate 'contact-details' 'manage-widgets'}}</a>
  </div>
 {{/unless}}
 </script>

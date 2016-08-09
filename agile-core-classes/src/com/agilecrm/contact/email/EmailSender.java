@@ -2,6 +2,7 @@ package com.agilecrm.contact.email;
 
 import java.util.List;
 
+import com.agilecrm.AgileGlobalProperties;
 import com.agilecrm.Globals;
 import com.agilecrm.account.AccountEmailStats;
 import com.agilecrm.account.EmailGateway;
@@ -14,6 +15,7 @@ import com.agilecrm.subscription.restrictions.db.BillingRestriction;
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
 import com.agilecrm.subscription.restrictions.entity.DaoBillingRestriction;
 import com.agilecrm.subscription.restrictions.entity.impl.EmailBillingRestriction;
+import com.agilecrm.util.AgileGlobalPropertiesUtil;
 import com.agilecrm.util.EmailUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.blobstore.BlobKey;
@@ -47,7 +49,7 @@ public class EmailSender
 	emailSender.emailGateway = EmailGatewayUtil.getEmailGateway();
 
 	emailSender.accountEmailStats = AccountEmailStatsUtil.getAccountEmailStats();
-
+	
 	return emailSender;
     }
 

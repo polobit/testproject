@@ -6,7 +6,7 @@
      <div class="col-sm-12 col-md-12">
 
      		<div class="col-md-4 col-sm-6" style="padding-left:0px;padding-bottom:8px">
-            <h3 class="font-thin h3">Call Reports</h3>
+            <h3 class="font-thin h3">{{agile_lng_translate 'report-add' 'call-reports'}}</h3>
 			<div style="width:46%;display:none" class="pull-right" id="plan-limit-error"></div>
 			</div>
                   <div class="clearfix"></div>   
@@ -17,13 +17,11 @@
               </div>
 			<div style="padding:0px 8px 10px" class="pull-right">
 				<select class="required form-control" name="group-by" id="typeCall">
-					<option value="number-of-calls" selected="selected">Total Calls</option>
-						<option value="call-duration">Total Call Duration</option>
-                         <option value="average-calls">Average Call Duration</option>
+					<option value="number-of-calls" selected="selected">{{agile_lng_translate 'report-add' 'total-calls'}}</option>
+						<option value="call-duration">{{agile_lng_translate 'report-add' 'total-call-duration'}}</option>
+                         <option value="average-calls">{{agile_lng_translate 'report-add' 'average-call-duration'}}</option>
                 </select>
-			</div>
-			
-   
+			</div>   
         </div>
  </div>
 </div>
@@ -49,7 +47,7 @@
  
      <div class="col-sm-12 col-md-12">
               <div class="col-md-4 col-sm-6" style="padding-left:0px;padding-bottom:8px">
-            <h3 class="font-thin h3">Call Reports</h3>
+            <h3 class="font-thin h3">{{agile_lng_translate 'report-add' 'call-reports'}}</h3>
 			<div style="width:46%;display:none" class="pull-right" id="plan-limit-error"></div>
 			</div>
                <div class="clearfix"></div>        
@@ -62,13 +60,11 @@
                 
 			<div style="padding:0px 8px 10px" class="pull-right">
 				<select class="required form-control" name="group-by" id="users">
-					<option value="All" selected="selected">All Users</option>
+					<option value="All" selected="selected">{{agile_lng_translate 'report-view' 'all-users'}}
+					</option>
 						
                 </select>
 			</div>
-			
-			
-   
         </div>
  </div>
 </div>
@@ -95,7 +91,7 @@
      <div class="col-sm-12 col-md-12">
                 
                 <div class="col-md-4 col-sm-6" style="padding-left:0px;padding-bottom:8px">
-            <h3 class="font-thin h3">Call Reports</h3>
+            <h3 class="font-thin h3">{{agile_lng_translate 'report-add' 'call-reports'}}</h3>
 
 			</div>
 			<div class="clearfix"></div>     
@@ -107,19 +103,18 @@
 
 			<div class="pull-right" style="padding:0px 8px 10px">
 				<select name="frequency" id="frequency" class="required form-control" style="width:105px">
-					<option value="daily">Daily</option>
-					<option value="weekly">Weekly</option>
-                    <option value="monthly">Monthly</option>
+					<option value="daily">{{agile_lng_translate 'report-add' 'daily'}}</option>
+					<option value="weekly">{{agile_lng_translate 'report-add' 'weekly'}}</option>
+                    <option value="monthly">{{agile_lng_translate 'report-add' 'monthly'}}</option>
                 </select>
 			</div> 
 			<div style="padding:0px 8px 10px" class="pull-right">
 				<select class="required form-control" name="group-by" id="users">
-					<option value="All" selected="selected">All Users</option>
+					<option value="All" selected="selected">{{agile_lng_translate 'report-view' 'all-users'}}
+					</option>
 						
                 </select>
 			</div>
-			
-   
         </div>
  </div>
 </div>

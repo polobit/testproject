@@ -68,6 +68,10 @@ pageEncoding="UTF-8"%>
   
 
   LandingPageKnowledgebase  kblppage = KbLandingPageUtil.get(); 
+  Long Kblpid = 0L;
+  if(kblppage != null){
+	  Kblpid =  kblppage.kb_landing_page_id;
+  }
 %>
 
 <%
@@ -189,7 +193,7 @@ var HANDLEBARS_PRECOMPILATIONd = false || <%=productiond%>;
 
 var CSS_PATHd = '<%=CSS_PATHd%>';
 // var CSS_PATH = "//dpm72z3r2fvl4.cloudfront.net/";
-var kbpagelpid = <%=kblppage.kb_landing_page_id%>;
+var kbpagelpid = <%=Kblpid%>;
 
 var IS_CONSOLE_ENABLEDd = <%=debugd%>;
 var LOCAL_SERVERd = <%=debugd%>;
