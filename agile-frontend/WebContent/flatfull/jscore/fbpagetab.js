@@ -41,26 +41,26 @@ function initializeFbPageTabListners(el){
 		    	   $('#facebookTabPage').prop('selectedIndex',0);
 
 		    	   if($('#fbFormsTable').length == 0) {
-		    	   	$('#fbFormsHolder').html('<p class="font-bold">Current Facebook Pages</p><table class="table" id="fbFormsTable"><tbody></tbody></table><div id="delStatusMessageHolder"></div>');
+		    	   	$('#fbFormsHolder').html('<p class="font-bold">'+_agile_get_translated_val('admin-settings-integrations','current-facebook-pages')+'</p><table class="table" id="fbFormsTable"><tbody></tbody></table><div id="delStatusMessageHolder"></div>');
 		    	   }
 
-		    	   var tableRowHtml = '<tr id="connectedFormHolder_'+facebookPageId+'"><td colspan="3" style="padding-left:0px;"><a target="_blank" href="/form.jsp?id='+selectedFormId+'" class="text-info">'+selectedFormName+'</a> form has been added to<br><a target="_blank" href="https://www.facebook.com/pages/null/'+facebookPageId+'?sk=app_'+AgileFacebookAppId+'" class="text-info">'+facebookPageName+'</a> page</td><td style="padding-top:18px;"><a href="#" data-pageid="'+facebookPageId+'" id="connectedForm_'+selectedFormId+'" class="deleteFacebookLinkedpage"><i class="icon-trash"></i></a></td></tr>';
+		    	   var tableRowHtml = '<tr id="connectedFormHolder_'+facebookPageId+'"><td colspan="3" style="padding-left:0px;"><a target="_blank" href="/form.jsp?id='+selectedFormId+'" class="text-info">'+selectedFormName+'</a> '+_agile_get_translated_val('admin-settings-integrations','form-has-been-added-to')+'<br><a target="_blank" href="https://www.facebook.com/pages/null/'+facebookPageId+'?sk=app_'+AgileFacebookAppId+'" class="text-info">'+facebookPageName+'</a> '+_agile_get_translated_val('admin-settings-integrations','page')+'</td><td style="padding-top:18px;"><a href="#" data-pageid="'+facebookPageId+'" id="connectedForm_'+selectedFormId+'" class="deleteFacebookLinkedpage"><i class="icon-trash"></i></a></td></tr>';
 		    	   
-		    	   var statusMessageNote = "has been added to";
+		    	   var statusMessageNote = _agile_get_translated_val('contacts-view','has-been-added-to');
 		    	   if($('#connectedFormHolder_'+facebookPageId).length != 0) {
 		    	   	$('#connectedFormHolder_'+facebookPageId).remove();
-		    	   	statusMessageNote = "updated in";
+		    	   	statusMessageNote = _agile_get_translated_val('admin-settings-integrations','updated_in');
 		    	   }
 
 		    	   $('#fbFormsTable > tbody:last-child').append(tableRowHtml);
 
-		    	   var sucMessage = "Form "+statusMessageNote+" <a target=\"_blank\" class=\"text-info\" href=\"https://www.facebook.com/pages/null/"+facebookPageId+"?sk=app_"+AgileFacebookAppId+"\">your Facebook page.</a><br>";
+		    	   var sucMessage = _agile_get_translated_val('campaigns','form') + " "+statusMessageNote+" <a target=\"_blank\" class=\"text-info\" href=\"https://www.facebook.com/pages/null/"+facebookPageId+"?sk=app_"+AgileFacebookAppId+"\">"+_agile_get_translated_val('admin-settings-integrations','you-fb-page')+"</a><br>";
 		    	   $("#statusMessageHolder").html(sucMessage).show().fadeOut(10000);
 		    	   $("#facebookFormAddHolder").hide();
 		    	   $("#addFacebookFormLink").show();
 
 		       } else {
-		    	   $("#statusMessageHolder").html("Something went wrong, please try again.");
+		    	   $("#statusMessageHolder").html(_agile_get_translated_val('admin-settings-integrations','try-again'));
 		       }
 		    },
 		    error: function (jqXHR, textStatus, errorThrown){
@@ -94,9 +94,9 @@ function initializeFbPageTabListners(el){
 				    success: function(data, textStatus, jqXHR){
 				       if(data == "true") {
 				    	   $("#connectedFormHolder_"+pageId).remove();
-				    	   $("#delStatusMessageHolder").html("Deleted successfully.<br>").show().fadeOut(8000);
+				    	   $("#delStatusMessageHolder").html(_agile_get_translated_val('admin-settings-integrations','deleted-success') + "<br>").show().fadeOut(8000);
 				       } else {
-				    	   $("#delStatusMessageHolder").html("Something went wrong, please try again.");
+				    	   $("#delStatusMessageHolder").html(_agile_get_translated_val('admin-settings-integrations','try-again'));
 				       }
 				    },
 				    error: function (jqXHR, textStatus, errorThrown){

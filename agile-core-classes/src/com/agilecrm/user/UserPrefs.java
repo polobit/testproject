@@ -40,12 +40,15 @@ import com.googlecode.objectify.condition.IfDefault;
 public class UserPrefs
 {
 	public static final String DEFAULT_CURRENCY = "USD-$";
+	public static final String DEFAULT_LANGUAGE = "en";
 	
 	/**
 	 * UserPrefs Id.
 	 */
 	@Id
 	public Long id;
+	
+	public String language = DEFAULT_LANGUAGE;
 
 	/**
 	 * Name of User which is same as DomainUser name.

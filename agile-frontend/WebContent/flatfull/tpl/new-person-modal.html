@@ -4,17 +4,17 @@
     <div class="modal-content">
     <div class="modal-header">
         <button class="close" data-dismiss="modal">&times;</button>
-        <h3 class="modal-title">&nbsp;New Contact</h3>
+        <h3 class="modal-title">&nbsp;{{agile_lng_translate 'prefs-settings' 'new-contact'}}</h3>
     </div>
     <div class="modal-body">
         <form id="personForm" name="personForm" method="post" class="form-horizontal">
             <fieldset>            
                 <div class="control-group form-group">
-	                <label class="control-label col-sm-3">Name<span class="field_req">*</span></label>
+	                <label class="control-label col-sm-3">{{agile_lng_translate 'modals' 'name'}}<span class="field_req">*</span></label>
 	                <div class="col-sm-7">
 		                 <div class="control-group">
 		                     <span class="controls">
-		                     <input name="first_name" type="text" class="required form-control field_length" max_len="500" id="fname" placeholder="First Name" />
+		                     <input name="first_name" type="text" class="required form-control field_length" max_len="500" id="fname" placeholder="{{agile_lng_translate 'modals' 'first-name'}}" />
 		                     </span>
 		                 </div>
 		             </div>
@@ -22,45 +22,45 @@
 		                 <div class="control-group form-group">
 		                 	<div class="col-sm-offset-3 col-sm-7">
 		                     <span class="controls">
-		                     <input name="last_name" class="form-control field_length" max_len="500" type="text" id="lname" placeholder="Last Name" />
+		                     <input name="last_name" class="form-control field_length" max_len="500" type="text" id="lname" placeholder="{{agile_lng_translate 'modals' 'last-name'}}" />
 		                     </span>
 		                 </div>
 		                 </div>
 	                	<div class="form-group control-group">
-	                    <label class="control-label col-sm-3">Title</label>
+	                    <label class="control-label col-sm-3">{{agile_lng_translate 'modals' 'title'}}</label>
 	                    <div class="controls col-sm-7">
-	                        <input name="title" type="text" id="job_title" placeholder="Job Title" class="form-control field_length" max_len="500" />
+	                        <input name="title" type="text" id="job_title" placeholder="{{agile_lng_translate 'other' 'title'}}" class="form-control field_length" max_len="500" />
 	                    </div>
 	                </div>
 	                <div class="control-group form-group" id='company_source_person_modal'>
-	                    <label class="control-label col-sm-3">Company</label>
+	                    <label class="control-label col-sm-3">{{agile_lng_translate 'modals' 'company'}}</label>
 	                    <div class="controls col-sm-7">
 							<div class="pull-left" style="display:block;">
 								<ul name="contact_company_id" class="contacts tagsinput tags p-n" style="margin-top: 7px;"></ul>
 							</div>
-	                        <input type="text" id="contact_company" placeholder="Company Name" class="form-control field_length" max_len="100" />
+	                        <input type="text" id="contact_company" placeholder="{{agile_lng_translate 'modals' 'company-name'}}" class="form-control field_length" max_len="100" />
 	                    </div>
 	                </div>
                 <div class="control-group form-group">
-		                    <label class="control-label col-sm-3">Email</label>
+		                    <label class="control-label col-sm-3">{{agile_lng_translate 'modals' 'email'}}</label>
 		                    <div class="controls col-sm-7">
-		                        <span><input name="email" class="email form-control field_length" max_len="500" type="text" id="email" placeholder="Email" /></span>
+		                        <span><input name="email" class="email form-control field_length" max_len="500" type="text" id="email" placeholder="{{agile_lng_translate 'modals' 'email'}}" /></span>
 		                    </div>
 		                </div>
 		                <div class="row">
                     <div class="col-sm-offset-3 col-sm-7 p-l  duplicate-email"></div>
                 </div>
 	                <div class="control-group form-group">
-	                    <label class="control-label col-sm-3">Phone</label>
+	                    <label class="control-label col-sm-3">{{agile_lng_translate 'modals' 'phone'}}</label>
 	                    <div class="controls col-sm-7">
-	                        <input name="phone" class="phone form-control field_length" max_len="500" type="text" id="phone" placeholder="Phone Number" />
+	                        <input name="phone" class="phone form-control field_length" max_len="500" type="text" id="phone" placeholder="{{agile_lng_translate 'modals' 'phone-number'}}" />
 	                    </div>
 	                </div>
 	                <div class="control-group form-group" id='tags_source_person_modal' style="margin-bottom:1px">
-	                    <label class="control-label col-sm-3">Tags</label>
+	                    <label class="control-label col-sm-3">{{agile_lng_translate 'modals' 'tags'}}</label>
 	   
 	                    <div class="controls col-sm-7">
-	                        <input name="tags" type="text" id="tags-new-person" class="tags-typeahead form-control" maxlength="500" placeholder="Separate tags with commas"/>
+	                        <input name="tags" type="text" id="tags-new-person" class="tags-typeahead form-control" maxlength="500" placeholder="{{agile_lng_translate 'modals' 'separate-tags-with-commas'}}"/>
 	                        <div class="pull-left" style="margin-top: 1px;">
 		                        <ul name="tags" class="tagsinput tags p-n" style="margin-bottom: 1px;">
 		                        </ul>
@@ -70,12 +70,12 @@
 	                    </div>
 	            <div class="row invalid-tags-person" style="display:none;">
                     <div class="col-sm-offset-3 col-sm-7">
-                        <div style="color:red;" class="text-sm">Tag name should start with an alphabet and cannot contain special characters other than underscore and space.</div>
+                        <div style="color:red;" class="text-sm">{{agile_lng_translate 'modals' 'tag-name-description'}}</div>
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="col-sm-offset-3 col-sm-7 text-right">
-      	<a href="#import" data-dismiss="modal" id="import-link" class="text-info">Import Contacts</a>
+      	<a href="#import" data-dismiss="modal" id="import-link" class="text-info">{{agile_lng_translate 'modals' 'import-contacts'}}</a>
                     </div>
                     <div class="clearfix"></div>
                 </div> 
@@ -88,7 +88,7 @@
                                                                       margin-left: 77px;
                                                                       margin-top: 6px;
                                                                       margin-top: 19px;
-                                                               ">TwitterId</b> </label>
+                                                               ">{{agile_lng_translate 'portlets' 'twitter-id'}}</b> </label>
 		                    	<div class="controls">
 		                        <span><input name="handle" type="hidden" id="handle" style="
                                    /* margin-left: -1px; */
@@ -104,8 +104,7 @@
     </div>
     <div class="modal-footer">
     	<span class="form-action-error"></span>
-        <a href="#continue-contact" class="btn btn-sm btn-default" id="continue-contact">Continue
-        Editing</a> <a href="#" class="save btn btn-sm btn-primary" id="person_validate">Save
+        <a href="#continue-contact" class="btn btn-sm btn-default" id="continue-contact">{{agile_lng_translate 'modals' 'continue-editing'}}</a> <a href="#" class="save btn btn-sm btn-primary" id="person_validate">{{agile_lng_translate 'modals' 'save'}}
         </a>
         <span class="save-status"></span>
     </div>

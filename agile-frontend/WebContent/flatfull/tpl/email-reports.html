@@ -2,7 +2,8 @@
 <div class="row">
     <div class="col-md-12">
        
-            <h3 class="m-b m-t-sm p-b-xs b-b  b-light">Email Reports</h3>
+            <h3 class="m-b m-t-sm p-b-xs b-b  b-light">{{agile_lng_translate 'report-view' 'email-reports'}}
+            </h3>
        
 	</div>
 </div>
@@ -17,16 +18,16 @@
             <div>
                 <i class="icon-user icon-4x"></i>
             </div>
-            <b>Contact Reports</b>
+            <b>{{agile_lng_translate 'report-view' 'contact-reports'}}</b>
         </div>
         <br />
         <!-- Description -->
         <div class="ellipsis-multiline m-b-md" rel="tooltip" title="{{description}}">
-            Get periodic email reports with a list of new leads, conversions, or as per your custom criteria.
+            {{agile_lng_translate 'report-view' 'get-periodic-email-reports-desc'}}
         </div>
         <!-- Add button -->
         <div>
-            <a class="btn btn-sm btn-primary" href="#contact-reports">Go</a>
+            <a class="btn btn-sm btn-primary" href="#contact-reports">{{agile_lng_translate 'campaigns' 'go'}}</a>
         </div>
     </div>
 </div>
@@ -41,17 +42,16 @@
             <div>
                 <i class="icon-cogs icon-4x"></i>
             </div>
-            <b>Activity Reports</b>
+            <b>{{agile_lng_translate 'report-view' 'activity-reports'}}</b>
         </div>
         <br />
         <!-- Description -->
         <div class="ellipsis-multiline m-b-md" rel="tooltip" title="{{description}}">
-          	Get a periodic  email digest of various activities by users in Agile.
+          	{{agile_lng_translate 'report-view' 'get-a-periodic-email-digest-desc'}}
         </div>
         <!-- Add button -->
         <div>
-            <a cl
-ass="btn btn-sm btn-primary" href="#activity-reports">Go</a>
+            <a class="btn btn-sm btn-primary" href="#activity-reports">{{agile_lng_translate 'campaigns' 'go'}}</a>
         </div>
     </div>
 </div>
@@ -64,8 +64,8 @@ ass="btn btn-sm btn-primary" href="#activity-reports">Go</a>
 <div class="row">
     <div class="col-md-12">
        
-            <h3 class="pull-left font-thin h3">Activity Reports</h3>
-            <a href="#activity-report-add" id="addActivityReport" class="btn btn-sm btn-default right btn-addon"><span><i class="icon-plus-sign" /></span>  Add Report</a>
+            <h3 class="pull-left font-thin h3">{{agile_lng_translate 'report-view' 'activity-reports'}}</h3>
+            <a href="#activity-report-add" id="addActivityReport" class="btn btn-sm btn-default right btn-addon"><span><i class="icon-plus-sign" /></span>  {{agile_lng_translate 'report-view' 'add-report'}}</a>
       		<div class="clearfix">
     </div>
 </div>
@@ -78,15 +78,15 @@ ass="btn btn-sm btn-primary" href="#activity-reports">Go</a>
         {{#if this.length}}
         <div class="col-md-9 col-sm-9">
 		<div class="panel panel-default">
-		<div class="panel-heading">Activity Reports List</div>
+		<div class="panel-heading">{{agile_lng_translate 'report-view' 'activity-reports-list'}}</div>
         <div class="table-responsive">
         <table class="table table-bordered table-striped showCheckboxes m-b-none agile-table panel table-layout-mob-view" url="core/api/activity-reports/bulk">
             <thead>
                 <tr>
-                    <th>Name</th>
-                    <th>Frequency</th>
-					<th>Activity</th>
-					<th>Users</th>
+                    <th>{{agile_lng_translate 'other' 'name'}}</th>
+                    <th>{{agile_lng_translate 'portlets' 'frequency'}}</th>
+					<th>{{agile_lng_translate 'portlets' 'activity'}}</th>
+					<th>{{agile_lng_translate 'admin-settings' 'users'}}</th>
                 </tr>
             </thead>
             <tbody id="activity-report-model-list" route="activity-report-edit/">
@@ -100,10 +100,10 @@ ass="btn btn-sm btn-primary" href="#activity-reports">Go</a>
 		<div class="data-block">
         <div class="wrapper-xs" id="addview">
             <h4 class="m-t-nne h4 m-b-sm">
-                What are Activity Reports?
+                {{agile_lng_translate 'report-view' 'what-are-activity-reports'}}
             </h4>
            
-            <p> Get a periodic email digest of various activities by users in Agile. This includes activities on Deals, Tasks, Calendar Events and Emails sent.</p>
+            <p> {{agile_lng_translate 'report-view' 'get-a-periodic-email-digest-of-various-activities-by-users-in-Agile'}}</p>
         </div>
 		</div>
     </div>
@@ -122,7 +122,7 @@ ass="btn btn-sm btn-primary" href="#activity-reports">Go</a>
 		{{namesFromObject usersList 'name'}}
 	</td>
 	<td>
-	 	<a  data={{id}} class="text-info" id="activity-reports-email-now" >Send Now</a>
+	 	<a  data={{id}} class="text-info" id="activity-reports-email-now" >{{agile_lng_translate 'report-view' 'send-now'}}</a>
 	</td>
 <br />
 </script>
@@ -133,7 +133,7 @@ ass="btn btn-sm btn-primary" href="#activity-reports">Go</a>
 <div class="row">
     <div class="col-sm-12 col-md-12">
        
-            <h3 class="pull-left font-thin h3">Activity Reports</h3>
+            <h3 class="pull-left font-thin h3">{{agile_lng_translate 'report-view' 'activity-reports'}}</h3>
             
        
     </div>
@@ -145,48 +145,51 @@ ass="btn btn-sm btn-primary" href="#activity-reports">Go</a>
 		<form id="activityReportsForm" class="form-horizontal">
 				<div name="rules" class="formsection chainedSelect">
  					{{#if id}} 
-                        <div class="panel-heading">Edit Activity Report</div>
+                        <div class="panel-heading">{{agile_lng_translate 'report-view' 'edit-activity-report'}}</div>
                       {{else}}
-                        <div class="panel-heading"><i class="icon-plus-sign"></i> Add Activity Report</div>
+                        <div class="panel-heading"><i class="icon-plus-sign"></i> {{agile_lng_translate 'report-view' 'add-activity-report'}}</div>
                     {{/if}}
                 <div class="panel-body">
 				<fieldset>
 					<div class="control-group form-group">
-						<label class="control-label col-sm-2">Name<span class="field_req">*</span></label>
+						<label class="control-label col-sm-2">{{agile_lng_translate 'report-add' 'name'}}<span class="field_req">*</span></label>
 						<div class="controls col-sm-8">
 							<input type="text" name="name" class="required form-control" />
 						</div>
 					</div>
 
 			<div class="control-group form-group">
-				<label class="control-label col-sm-2">Activity Type <span class="field_req">*</span></label>
+				<label class="control-label col-sm-2">{{agile_lng_translate 'report-view' 'activity-type'}} 
+				<span class="field_req">*</span></label>
 				<div class="controls col-sm-8">
 					<span class="m-xs block">
-						<a href="#" id="activity-type-list-select-all" class="text-info">Select all</a> |
-						<a href="#" id="activity-type-list-select-none" class="text-info">Select none</a>
+						<a href="#" id="activity-type-list-select-all" class="text-info">{{agile_lng_translate 'portlets' 'select-all'}}</a> |
+						<a href="#" id="activity-type-list-select-none" class="text-info">{{agile_lng_translate 'portlets' 'select-none'}}</a>
 					</span>
 					<select id="activity-type-list" name="activity" class="required form-control" multiple="multiple">
 						{{#hasMenuScope 'DEALS'}}
-						<option value="DEAL">Deals</option>
+						<option value="DEAL">{{agile_lng_translate 'contact-details' 'deals'}}</option>
 						{{/hasMenuScope}}
-						<option value="TASK">Task</option>
-						<option value="EVENT">Event</option>
-						<option value="EMAIL">Email</option>
-						<option value="NOTES">Notes</option>
+						<option value="TASK">{{agile_lng_translate 'menu' 'task'}}</option>
+						<option value="EVENT">{{agile_lng_translate 'menu' 'event'}}</option>
+						<option value="EMAIL">{{agile_lng_translate 'menu' 'email'}}</option>
+						<option value="NOTES">{{agile_lng_translate 'contact-details' 'notes'}}</option>
 						{{#hasMenuScope 'DOCUMENT'}}
-						<option value="DOCUMENTS">Documents</option>
+						<option value="DOCUMENTS">{{agile_lng_translate 'contact-details' 'documents'}}
+						</option>
 						{{/hasMenuScope}}
-						<option value="CALL">Calls</option>
+						<option value="CALL">{{agile_lng_translate 'report-view' 'calls'}}</option>
 					</select>
 				</div>
 			</div>
 
 			<div class="control-group form-group">
-				<label class="control-label col-sm-2">Users <span class="field_req">*</span></label>
+				<label class="control-label col-sm-2">{{agile_lng_translate 'admin-settings' 'users'}} 
+				<span class="field_req">*</span></label>
 				<div class="controls col-sm-8" >
 					<span class="m-xs block">
-						<a href="#" id="users-list-select-all" class="text-info">Select all</a> | 
-						<a href="#" id="users-list-select-none" class="text-info">Select none</a>
+						<a href="#" id="users-list-select-all" class="text-info">{{agile_lng_translate 'portlets' 'select-all'}}</a> | 
+						<a href="#" id="users-list-select-none" class="text-info">{{agile_lng_translate 'portlets' 'select-none'}}</a>
 					</span>
 					<select id="users-list" name="user_ids" class="required form-control" multiple="multiple">
 					</select>
@@ -194,25 +197,26 @@ ass="btn btn-sm btn-primary" href="#activity-reports">Go</a>
 			</div>
 
 			<div class="control-group form-group">
-				<label class="control-label col-sm-2">Send Report To<span
+				<label class="control-label col-sm-2">{{agile_lng_translate 'report-add' 'send-report-to'}}
+				<span
 					class="field_req">*</span></label>
 				<div class="controls col-sm-8">
-					<input type="text" name="sendTo" class="required multipleEmails form-control" placeholder="Email addresses separated by comma"/>
+					<input type="text" name="sendTo" class="required multipleEmails form-control" placeholder="{{agile_lng_translate 'report-add' 'email-address-sep-by-comma'}}"/>
 				</div>
 			</div>
 			<div class="control-group form-group">
-				<label class="control-label col-sm-2">Frequency<span
+				<label class="control-label col-sm-2">{{agile_lng_translate 'portlets' 'frequency'}}<span
 					class="field_req">*</span></label>
 				<div class="controls col-sm-8">
 					<select class="required form-control" name="frequency" id="frequency">
-					<option value="DAILY">Daily</option>
-						<option value="WEEKLY">Weekly</option>
-						<option value="MONTHLY">Monthly</option>
+					<option value="DAILY">{{agile_lng_translate 'portlets' 'daily'}}</option>
+						<option value="WEEKLY">{{agile_lng_translate 'portlets' 'weekly'}}</option>
+						<option value="MONTHLY">{{agile_lng_translate 'portlets' 'monthly'}}</option>
 					</select>
 				</div>
 			</div>	
 			<div class="control-group form-group">
-				<label class="control-label col-sm-2" ><a href="" id="activity_advanced" data-toggle="collapse" data-target="#activity-advanced-block" class="text-info"><span><i class="fa fa-plus"></i></span>&nbsp;Advanced</a></label>
+				<label class="control-label col-sm-2" ><a href="" id="activity_advanced" data-toggle="collapse" data-target="#activity-advanced-block" class="text-info"><span><i class="fa fa-plus"></i></span>&nbsp;{{agile_lng_translate 'prefs-settings' 'advanced'}}</a></label>
 						
 			</div>
 			<div class="row">
@@ -1016,7 +1020,7 @@ ass="btn btn-sm btn-primary" href="#activity-reports">Go</a>
 						</div>
 					</div>
             <div class="control-group form-group" id="activity_report_day" style="display:none;">
-				<label class="control-label col-sm-2">Day of Month</label>
+				<label class="control-label col-sm-2">{{agile_lng_translate 'report-add' 'day-of-month'}}</label>
 				<div class="controls col-sm-8">
 					<select name="activity_day" class="form-group"> 
                     <option value="1">1</option>
@@ -1053,25 +1057,25 @@ ass="btn btn-sm btn-primary" href="#activity-reports">Go</a>
 				</select>
 				</div>
 			</div>
-            <div class="control-group form-group" id="activity_report_weekday" style="display:none;">
-				<label class="control-label col-sm-2">Day</label>
+           <div class="control-group form-group" id="activity_report_weekday" style="display:none;">
+				<label class="control-label col-sm-2">{{agile_lng_translate 'calendar' 'day'}}</label>
 				<div class="controls col-sm-8">
 					<select name="activity_weekday" class="form-control"> 
-						<option value="2">Monday</option>
-					    <option value="3">Tuesday</option>
-					    <option value="4">Wednesday</option>
-						<option value="5">Thursday</option>
-						<option value="6">Friday</option>
-						<option value="7">Saturday</option>
-                       <option value="1">Sunday</option>
+						<option value="2">{{agile_lng_translate 'prefs-settings' 'monday'}}</option>
+					    <option value="3">{{agile_lng_translate 'calendar' 'tuesday'}}</option>
+					    <option value="4">{{agile_lng_translate 'calendar' 'wednesday'}}</option>
+						<option value="5">{{agile_lng_translate 'calendar' 'thursday'}}</option>
+						<option value="6">{{agile_lng_translate 'calendar' 'friday'}}</option>
+						<option value="7">{{agile_lng_translate 'calendar' 'saturday'}}</option>
+                       <option value="1">{{agile_lng_translate 'prefs-settings' 'sunday'}}</option>
 						
                    </select>
 				</div>
 			</div>	
 			<div class="control-group form-group" id="activity_report_time">
-				<label class="control-label col-sm-2">Time</label>
+				<label class="control-label col-sm-2">{{agile_lng_translate 'report-add' 'time'}}</label>
 				<div class="controls col-sm-8">
-					 <input type="text" name="activity_time" class="activity_time_timepicker form-control input-small " id="activity_time"  placeholder="time" />
+					 <input type="text" name="activity_time" class="activity_time_timepicker form-control input-small " id="activity_time"  placeholder="{{agile_lng_translate 'report-add' 'placeholder-time'}}" />
 				</div>
 			</div>	
 			
@@ -1084,9 +1088,9 @@ ass="btn btn-sm btn-primary" href="#activity-reports">Go</a>
 			<div class="row">
 			<div class="col-sm-offset-2 col-sm-8">
 			<div class="form-actions">
-				<a href="#activity-reports" class="btn btn-sm btn-danger">Close</a>
+				<a href="#activity-reports" class="btn btn-sm btn-danger">{{agile_lng_translate 'report-add' 'close'}}</a>
 				<a href="#" type="submit" class="save btn btn-sm btn-primary"
-					id="filtersAdd">Save</a>
+					id="filtersAdd">{{agile_lng_translate 'report-add' 'save'}}</a>
 			</div>
 			</div>
 			</div>
@@ -1105,7 +1109,7 @@ ass="btn btn-sm btn-primary" href="#activity-reports">Go</a>
 <div class="wrapper-md lter bg-light b-b">
     <div class="row">
         <div class="col-md-12">
-            <h1 class="m-n font-thin h3 pull-left">Campaign Report </small> </h1>
+            <h1 class="m-n font-thin h3 pull-left">{{agile_lng_translate 'email' 'campaign-report'}} </small> </h1>
              <div class="clearfix"></div> 
         </div>
     </div>
@@ -1119,7 +1123,7 @@ ass="btn btn-sm btn-primary" href="#activity-reports">Go</a>
                  <tbody>
                    <tr style="font-weight: bold;color: #23B7E5;">
                     <td valign="middle" height="32px" >{{report_name}}</td>
-                    <td valign="right" height="32px" style="text-align: right" >{{duration}} Report </td>
+                    <td valign="right" height="32px" style="text-align: right" >{{duration}} {{agile_lng_translate 'other' 'report'}} </td>
                     </tr>
                 </tbody>
               </table>
@@ -1130,38 +1134,38 @@ ass="btn btn-sm btn-primary" href="#activity-reports">Go</a>
             <tbody>
                          <tr style="text-align:center;">
                <td style="border-right: 2px solid #edf1f2;">
-                    <div style="margin:15px">Emails Sent</div> 
+                    <div style="margin:15px">{{agile_lng_translate 'portlets' 'emails-sent'}}</div> 
                 <div   style="margin:15px; color:#23B7E5; font-size: 20px;"><strong>{{emailSent}}</strong></div>
                </td>
                <td style="border-right: 2px solid #edf1f2;">                   
-                    <div style="margin:15px">Emails Skipped</div> 
+                    <div style="margin:15px">{{agile_lng_translate 'workflows' 'emails-skipped'}}</div> 
                 <div   style="margin:15px; color:#FAD733; font-size: 20px;"><strong>{{emailSkipped}}</strong></div>
                </td>
                <td style="border-right: 2px solid #edf1f2;">                   
-                    <div style="margin:15px">Emails Open</div> 
+                    <div style="margin:15px">{{agile_lng_translate 'emails' 'emails-open'}}</div> 
                 <div style="margin:15px; color:#08C; font-size: 20px;"><strong>{{emailOpened}}</strong></div>
                </td>
                 <td>
-                    <div style="margin:15px">Emails Clicked</div> 
+                    <div style="margin:15px">{{agile_lng_translate 'campaigns' 'emails-clicked'}}</div> 
                 <div   style="margin:15px; color:rgb(18, 209, 18); font-size: 20px;"><strong>{{emailClicked}}</strong></div>
                </td>
              </tr>
 
              <tr style="text-align:center;">
                <td style="border-right: 2px solid #edf1f2; border-top: 2px solid #edf1f2;">
-                    <div style="margin:15px">Hard Bounce</div> 
+                    <div style="margin:15px">{{agile_lng_translate 'campaigns' 'hard-bounce'}}</div> 
                 <div   style="margin:15px; color:#009688; font-size: 20px;"><strong>{{hardBounce}}</strong></div>
                </td>
                <td style="border-right: 2px solid #edf1f2; border-top: 2px solid #edf1f2;">                
-                    <div style="margin:15px">Soft Bounce</div> 
+                    <div style="margin:15px">{{agile_lng_translate 'campaigns' 'soft-bounce'}}</div> 
                 <div   style="margin:15px; color:#9C27B0; font-size: 20px;"><strong>{{softBounce}}</strong></div>
                </td>
                <td style="border-right: 2px solid #edf1f2; border-top: 2px solid #edf1f2;">                
-                    <div style="margin:15px">Unsubscribe</div> 
+                    <div style="margin:15px">{{agile_lng_translate 'contacts-view' 'unsubscribe'}}</div> 
                 <div   style="margin:15px; color:rgb(205,15,0); font-size: 20px;"><strong>{{emailUnsubscribed}}</strong></div>
                </td>
                 <td style=" border-top: 2px solid #edf1f2;">
-                    <div style="margin:15px">Spam</div> 
+                    <div style="margin:15px">{{agile_lng_translate 'tickets' 'spam'}}</div> 
                 <div   style="margin:15px; color:#FF4343; font-size: 20px;"><strong>{{emailSpam}}</strong></div>
                </td>
              </tr>
@@ -1171,6 +1175,6 @@ ass="btn btn-sm btn-primary" href="#activity-reports">Go</a>
         </div>
     </div>{{else}}
 
-    <h1>No campaign report found...</h1>
+    <h1>{{agile_lng_translate 'campaigns' 'no-camaign-report-found'}}</h1>
     {{/if}}
 </script>

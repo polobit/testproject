@@ -4,7 +4,7 @@
     	<div class="col-md-11">
         	<div class="panel panel-default">
         		<div class="panel-heading">
-        			{{#if id}}Edit{{else}}Add{{/if}} Ticket View</h4>
+        			{{#if id}}{{agile_lng_translate 'contact-details' 'edit'}}{{else}}{{agile_lng_translate 'other' 'add'}}{{/if}} {{agile_lng_translate 'tickets' 'ticket-view'}}</h4>
     			</div>
                 <form id="userForm" name="userForm" method="get" action="" class="form-horizontal">
                     {{#if id}}
@@ -14,15 +14,15 @@
                     {{/if}}
                     <fieldset class="wrapper"><br/>
                         <div class="control-group form-group">
-                            <label class="control-label col-md-3" for="name">Name <span class="field_req">*</span></label> 
+                            <label class="control-label col-md-3" for="name">{{agile_lng_translate 'tickets' 'name'}} <span class="field_req">*</span></label> 
                             <div class="col-md-6">
                                 <div class="controls">
-                                    <input type="text" id="name" name="name" value="{{name}}" class="required form-control" placeholder="View" maxlength="60"/>
+                                    <input type="text" id="name" name="name" value="{{name}}" class="required form-control" placeholder="{{agile_lng_translate 'landing-pages' 'view'}}" maxlength="60"/>
                                 </div>
                             </div>
                         </div>
                         <div class="control-group form-group">
-                            <label class="control-label col-md-3" for="name">Conditions <span class="field_req">*</span></label> 
+                            <label class="control-label col-md-3" for="name">{{agile_lng_translate 'tickets' 'conditions'}} <span class="field_req">*</span></label> 
                             <div class="col-md-9">
                                 <div class="controls">
                                     <table class="bg-transparent ticket-filter-conditions-table chained-table">
@@ -37,29 +37,33 @@
                                                 <td class="lhs-block v-top p-b-xs">
                                                     <div id="LHS" name="LHS" class="m-r-xs">
                                                         <select name="temp" class="lhs form-control" id="LHS">
-                                                            <option value="status" selected="selected">Status</option>
-                                                            <option value="ticket_type">Type</option>
-                                                            <option value="priority">Priority</option>
+                                                            <option value="status" selected="selected">{{agile_lng_translate 'portlets' 'status'}}
+                                                            </option>
+                                                            <option value="ticket_type">{{agile_lng_translate 'contacts-view' 'type'}}</option>
+                                                            <option value="priority">{{agile_lng_translate 'tasks' 'priority'}}</option>
                                                         <!--<option value="requester">Requester</option>-->
                                                         <!--<option value="company">Company</option>-->
-                                                            <option value="labels">Label</option>
-                                                            <option value="assignee_id">Assignee</option>
-                                                            <option value="group_id">Group</option>
-                                                            <option value="source">Source</option>
+                                                            <option value="labels">{{agile_lng_translate 'contacts-view' 'label'}}</option>
+                                                            <option value="assignee_id">{{agile_lng_translate 'tickets' 'assignee'}}</option>
+                                                            <option value="group_id">{{agile_lng_translate 'tickets' 'group'}}</option>
+                                                            <option value="source">{{agile_lng_translate 'portlets' 'source'}}</option>
                                                             <option value="ticket_last_updated_by">
-                                                                Last Updated By
+                                                                {{agile_lng_translate 'tickets' 'last-updated-by'}}
                                                             </option>
-                                                            <option value="subject" placeholder="Enter Text">Subject</option>
+                                                            <option value="subject" placeholder="{{agile_lng_translate 'tickets' 'enter-text'}}">{{agile_lng_translate 'contact-details' 'subject'}}</option>
                                                             <!-- <option value="notes" placeholder="Enter Text">Notes</option> -->
-                                                            <option value="ticket_favorite">Favorite Tickets</option>
-                                                            <option value="ticket_spam">Spammed Tickets</option>
-                                                            <option value="hrs_since_created" placeholder="Enter Hours">Hours Since Created</option>
-                                                            <option value="hrs_since_opened" placeholder="Enter Hours">Hours Since Open</option>
-                                                            <option value="hrs_since_closed" placeholder="Enter Hours">Hours Since Closed</option>
-                                                            <option value="hrs_since_assigned" placeholder="Enter Hours">Hours Since Assigned</option>
-                                                            <option value="hrs_since_requester_update" placeholder="Enter Hours">Hours Since Requester Update</option>
-                                                            <option value="hrs_since_assignee_update" placeholder="Enter Hours">Hours Since Assignee Update</option>
-                                                            <option value="hrs_since_due_date" placeholder="Enter Hours">Hours Since Due Date</option>
+                                                            <option value="ticket_favorite">{{agile_lng_translate 'tickets' 'favorite-tickets'}}</option>
+                                                            <option value="ticket_spam">{{agile_lng_translate 'tickets' 'spammed-tickets'}}</option>
+                                                            <option value="hrs_since_created" placeholder="{{agile_lng_translate 'tickets' 'enter-hours'}}">{{agile_lng_translate 'tickets' 'hours-since-created'}}
+                                                            </option>
+                                                            <option value="hrs_since_opened" placeholder="{{agile_lng_translate 'tickets' 'enter-hours'}}">{{agile_lng_translate 'tickets' 'hours-since-open'}}</option>
+                                                            <option value="hrs_since_closed" placeholder="{{agile_lng_translate 'tickets' 'enter-hours'}}">{{agile_lng_translate 'tickets' 'hours-since-closed'}}</option>
+                                                            <option value="hrs_since_assigned" placeholder="{{agile_lng_translate 'tickets' 'enter-hours'}}">{{agile_lng_translate 'tickets' 'hours-since-assigned'}}
+                                                            </option>
+                                                            <option value="hrs_since_requester_update" placeholder="{{agile_lng_translate 'tickets' 'enter-hours'}}">{{agile_lng_translate 'tickets' 'hours-since-requester-update'}}</option>
+                                                            <option value="hrs_since_assignee_update" placeholder="{{agile_lng_translate 'tickets' 'enter-hours'}}">{{agile_lng_translate 'tickets' 'hours-since-assignee-update'}}</option>
+                                                            <option value="hrs_since_due_date" placeholder="{{agile_lng_translate 'tickets' 'enter-hours'}}">{{agile_lng_translate 'tickets' 'hours-since-due-date'}}
+                                                            </option>
                                                             <!-- <option value="hrs_untill_due_date" placeholder="Enter Hours">Hours Since Untill Due Date</option> -->
                                                         </select>
                                                     </div>
@@ -67,69 +71,75 @@
                                                 <td class="codition-block v-top">
                                                     <div id="condition" name="CONDITION" class="m-r-xs">
                                                         <select name="temp" class="form-control">
-                                                            <option value="TICKET_STATUS_IS" class="status">is</option>
-                                                            <option value="TICKET_STATUS_IS_NOT" class="status">isn&#39;t</option>
+                                                            <option value="TICKET_STATUS_IS" class="status">{{agile_lng_translate 'contacts-view' 'is'}}</option>
+                                                            <option value="TICKET_STATUS_IS_NOT" class="status">{{agile_lng_translate 'tickets' 'is-not'}}</option>
 
-                                                            <option value="TICKET_TYPE_IS" class="ticket_type">is</option>
-                                                            <option value="TICKET_TYPE_IS_NOT" class="ticket_type">isn&#39;t</option>
+                                                            <option value="TICKET_TYPE_IS" class="ticket_type">{{agile_lng_translate 'contacts-view' 'is'}}</option>
+                                                            <option value="TICKET_TYPE_IS_NOT" class="ticket_type">{{agile_lng_translate 'tickets' 'is-not'}}</option>
 
-                                                            <option value="TICKET_PRIORITY_IS" class="priority">is</option>
-                                                            <option value="TICKET_PRIORITY_IS_NOT" class="priority">isn&#39;t</option>
+                                                            <option value="TICKET_PRIORITY_IS" class="priority">{{agile_lng_translate 'contacts-view' 'is'}}</option>
+                                                            <option value="TICKET_PRIORITY_IS_NOT" class="priority">{{agile_lng_translate 'tickets' 'is-not'}}</option>
 
-                                                            <option value="TICKET_LABEL_IS" class="labels" related="RHS" url="/core/api/tickets/labels" parse_key="id" parse_value="label">is</option>
-                                                            <option value="TICKET_LABEL_IS_NOT" class="labels" related="RHS" url="/core/api/tickets/labels" parse_key="id" parse_value="label">isn&#39;t</option>
+                                                            <option value="TICKET_LABEL_IS" class="labels" related="RHS" url="/core/api/tickets/labels" parse_key="id" parse_value="label">{{agile_lng_translate 'contacts-view' 'is'}}</option>
+                                                            <option value="TICKET_LABEL_IS_NOT" class="labels" related="RHS" url="/core/api/tickets/labels" parse_key="id" parse_value="label">{{agile_lng_translate 'tickets' 'is-not'}}</option>
 
-                                                            <option value="IS" class="requester company tags">is</option>
-                                                            <option value="IS_NOT" class="requester company tags">isn&#39;t</option>
+                                                            <option value="IS" class="requester company tags">{{agile_lng_translate 'contacts-view' 'is'}}</option>
+                                                            <option value="IS_NOT" class="requester company tags">{{agile_lng_translate 'tickets' 'is-not'}}</option>
 
-                                                            <option value="EQUALS" class="assignee_id" related="RHS" url="/core/api/tickets/users" parse_key="id" parse_value="name">is</option>
-                                                            <option value="NOTEQUALS" class="assignee_id" related="RHS" url="/core/api/tickets/users" parse_key="id" parse_value="name">isn&#39;t</option>
+                                                            <option value="EQUALS" class="assignee_id" related="RHS" url="/core/api/tickets/users" parse_key="id" parse_value="name">{{agile_lng_translate 'contacts-view' 'is'}}</option>
+                                                            <option value="NOTEQUALS" class="assignee_id" related="RHS" url="/core/api/tickets/users" parse_key="id" parse_value="name">{{agile_lng_translate 'tickets' 'is-not'}}</option>
 
-                                                            <option value="EQUALS" class="group_id" related="RHS" url="core/api/tickets/groups" parse_key="id" parse_value="group_name">is</option>
-                                                            <option value="NOTEQUALS" class="group_id" related="RHS" url="core/api/tickets/groups" parse_key="id" parse_value="group_name">isn&#39;t</option>
+                                                            <option value="EQUALS" class="group_id" related="RHS" url="core/api/tickets/groups" parse_key="id" parse_value="group_name">{{agile_lng_translate 'contacts-view' 'is'}}</option>
+                                                            <option value="NOTEQUALS" class="group_id" related="RHS" url="core/api/tickets/groups" parse_key="id" parse_value="group_name">{{agile_lng_translate 'tickets' 'is-not'}}</option>
 
-                                                            <option value="CONTAINS" class="subject notes">Contains</option>
-                                                            <option value="NOT_CONTAINS" class="subject notes">Not Contains</option>
+                                                            <option value="CONTAINS" class="subject notes">{{agile_lng_translate 'tickets' 'contains'}}</option>
+                                                            <option value="NOT_CONTAINS" class="subject notes">{{agile_lng_translate 'tickets' 'not-contains'}}</option>
 
-                                                            <option value="TICKET_SOURCE_IS" class="source">is</option>
-                                                            <option value="TICKET_SOURCE_IS_NOT" class="source">isn&#39;t</option>
+                                                            <option value="TICKET_SOURCE_IS" class="source">{{agile_lng_translate 'contacts-view' 'is'}}</option>
+                                                            <option value="TICKET_SOURCE_IS_NOT" class="source">{{agile_lng_translate 'tickets' 'is-not'}}</option>
 
                                                             <!--<option value="STARTS_WITH" class="subject notes">Start With</option>
                                                             <option value="ENDS_WITH" class="subject notes">Ends With</option>-->
 
                                                             <option value="IS_GREATER_THAN" class="hrs_since_created hrs_since_opened 
                                                                 hrs_since_closed hrs_since_assigned hrs_since_requester_update hrs_since_assignee_update
-                                                                hrs_since_due_date hrs_untill_due_date">Greater Than</option>
+                                                                hrs_since_due_date hrs_untill_due_date">{{agile_lng_translate 'tickets' 'greater-than'}}</option>
                                                             <option value="IS_LESS_THAN" class="hrs_since_created hrs_since_opened 
                                                                 hrs_since_closed hrs_since_assigned hrs_since_requester_update hrs_since_assignee_update
-                                                                hrs_since_due_date hrs_untill_due_date">Less Than</option>
+                                                                hrs_since_due_date hrs_untill_due_date">{{agile_lng_translate 'tickets' 'less-than'}}</option>
 
-                                                            <option value="LAST_UPDATED_BY_AGENT" class="ticket_last_updated_by">Agent</option>
-                                                            <option value="LAST_UPDATED_BY_REQUESTER" class="ticket_last_updated_by">Requester</option>
-                                                            <option value="TICKET_IS" class="ticket_favorite ticket_spam">True</option>
-                                                            <option value="TICKET_IS_NOT" class="ticket_favorite ticket_spam">False</option>
+                                                            <option value="LAST_UPDATED_BY_AGENT" class="ticket_last_updated_by">{{agile_lng_translate 'tickets' 'agent'}}</option>
+                                                            <option value="LAST_UPDATED_BY_REQUESTER" class="ticket_last_updated_by">{{agile_lng_translate 'tickets' 'requester'}}
+                                                            </option>
+                                                            <option value="TICKET_IS" class="ticket_favorite ticket_spam">{{agile_lng_translate 'tickets' 'true'}}</option>
+                                                            <option value="TICKET_IS_NOT" class="ticket_favorite ticket_spam">{{agile_lng_translate 'tickets' 'false'}}</option>
                                                         </select>
                                                     </div>
                                                 </td>
                                                 <td class="rhs-block controls v-top">
                                                     <div id="RHS" class="rhs" name="RHS">
                                                         <select class="form-control">
-                                                            <option value="NEW" class="TICKET_STATUS_IS TICKET_STATUS_IS_NOT">New</option>
-                                                            <option value="OPEN" class="TICKET_STATUS_IS TICKET_STATUS_IS_NOT">Open</option>
-                                                            <option value="PENDING" class="TICKET_STATUS_IS TICKET_STATUS_IS_NOT">Pending</option>
-                                                            <option value="CLOSED" class="TICKET_STATUS_IS TICKET_STATUS_IS_NOT">Closed</option>
+                                                            <option value="NEW" class="TICKET_STATUS_IS TICKET_STATUS_IS_NOT">{{agile_lng_translate 'menu' 'new'}}</option>
+                                                            <option value="OPEN" class="TICKET_STATUS_IS TICKET_STATUS_IS_NOT">{{agile_lng_translate 'contact-details' 'OPEN'}}
+                                                            </option>
+                                                            <option value="PENDING" class="TICKET_STATUS_IS TICKET_STATUS_IS_NOT">{{agile_lng_translate 'tickets' 'pending'}}</option>
+                                                            <option value="CLOSED" class="TICKET_STATUS_IS TICKET_STATUS_IS_NOT">{{agile_lng_translate 'cases' 'closed'}}</option>
 
-                                                            <option value="PROBLEM" class="TICKET_TYPE_IS TICKET_TYPE_IS_NOT">Problem</option>
-                                                            <option value="INCIDENT" class="TICKET_TYPE_IS TICKET_TYPE_IS_NOT">Incident</option>
-                                                            <option value="QUESTION" class="TICKET_TYPE_IS TICKET_TYPE_IS_NOT">Question</option>
-                                                            <option value="TASK" class="TICKET_TYPE_IS TICKET_TYPE_IS_NOT">Task</option>
+                                                            <option value="PROBLEM" class="TICKET_TYPE_IS TICKET_TYPE_IS_NOT">{{agile_lng_translate 'tickets' 'problem'}}
+                                                            </option>
+                                                            <option value="INCIDENT" class="TICKET_TYPE_IS TICKET_TYPE_IS_NOT">{{agile_lng_translate 'tickets' 'incident'}}
+                                                            </option>
+                                                            <option value="QUESTION" class="TICKET_TYPE_IS TICKET_TYPE_IS_NOT">{{agile_lng_translate 'tickets' 'question'}}
+                                                            </option>
+                                                            <option value="TASK" class="TICKET_TYPE_IS TICKET_TYPE_IS_NOT">{{agile_lng_translate 'menu' 'task'}}</option>
 
-                                                            <option value="LOW" class="TICKET_PRIORITY_IS TICKET_PRIORITY_IS_NOT">Low</option>
-                                                            <option value="MEDIUM" class="TICKET_PRIORITY_IS TICKET_PRIORITY_IS_NOT">Medium</option>
-                                                            <option value="HIGH" class="TICKET_PRIORITY_IS TICKET_PRIORITY_IS_NOT">High</option>
+                                                            <option value="LOW" class="TICKET_PRIORITY_IS TICKET_PRIORITY_IS_NOT">{{agile_lng_translate 'tasks' 'Low'}}</option>
+                                                            <option value="MEDIUM" class="TICKET_PRIORITY_IS TICKET_PRIORITY_IS_NOT">{{agile_lng_translate 'tickets' 'medium'}}
+                                                            </option>
+                                                            <option value="HIGH" class="TICKET_PRIORITY_IS TICKET_PRIORITY_IS_NOT">{{agile_lng_translate 'tasks' 'High'}}</option>
 
-                                                            <option value="EMAIL" class="TICKET_SOURCE_IS TICKET_SOURCE_IS_NOT">Email</option>
-                                                            <option value="WEBFORM" class="TICKET_SOURCE_IS TICKET_SOURCE_IS_NOT">Web Form</option>
+                                                            <option value="EMAIL" class="TICKET_SOURCE_IS TICKET_SOURCE_IS_NOT">{{agile_lng_translate 'tasks' 'Email'}}</option>
+                                                            <option value="WEBFORM" class="TICKET_SOURCE_IS TICKET_SOURCE_IS_NOT">{{agile_lng_translate 'tickets' 'web-form'}}</option>
                                                         </select>
                                                         <input type="text" name="temp" class="IS IS_NOT CONTAINS NOT_CONTAINS STARTS_WITH ENDS_WITH form-control required"/>
                                                         <input type="text" name="temp" class="IS_GREATER_THAN IS_LESS_THAN form-control number required"/>
@@ -152,8 +162,8 @@
                         <div class="form-group">
                             <div class="form-actions col-sm-offset-3 col-md-9">
                                 <div class="form-actions">
-                                    <a type="reset" href='#ticket-views' class="btn btn-default btn-sm">Cancel</a>
-                                    <button type="submit" class="save btn btn-sm btn-primary m-l-xs">Save Changes</button>
+                                    <a type="reset" href='#ticket-views' class="btn btn-default btn-sm">{{agile_lng_translate 'contact-details' 'cancel'}}</a>
+                                    <button type="submit" class="save btn btn-sm btn-primary m-l-xs">{{agile_lng_translate 'prefs-settings' 'save-changes'}}</button>
                                 </div>
                             </div>
                         </div>

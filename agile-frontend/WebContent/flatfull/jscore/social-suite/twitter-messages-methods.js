@@ -35,8 +35,8 @@ function displayFilledModal(streamId, tweetId, tweetOwner, messageType)
 
 		// Information to be shown in the modal to the user while sending
 		// message
-		json["info"] = "Status from " + stream.screen_name;
-		json["description"] = "What's happening?";
+		json["info"] = "{{agile_lng_translate 'socialsuite' 'tweet-status-from'}} " + stream.screen_name;
+		json["description"] = "{{agile_lng_translate 'socialsuite' 'tweet-what-happening'}}";
 	}
 		break;
 	case "Reply Tweet":
@@ -48,7 +48,7 @@ function displayFilledModal(streamId, tweetId, tweetOwner, messageType)
 
 			// Information to be shown in the modal to the user while sending
 			// message
-			json["info"] = "Reply " + "@" + tweet.user.screen_name + " from " + stream.screen_name;
+			json["info"] = "{{agile_lng_translate 'contact-details' 'reply'}} " + "@" + tweet.user.screen_name + " from " + stream.screen_name;
 			json["description"] = "@" + tweet.user.screen_name;
 			json["tweetId"] = tweet.id_str;
 			json["tweetOwner"] = tweet.user.screen_name;
@@ -60,7 +60,7 @@ function displayFilledModal(streamId, tweetId, tweetOwner, messageType)
 
 			// Information to be shown in the modal to the user while sending
 			// message
-			json["info"] = "Reply " + "@" + tweetOwner + " from " + stream.screen_name;
+			json["info"] = "{{agile_lng_translate 'contact-details' 'reply'}} " + "@" + tweetOwner + " from " + stream.screen_name;
 
 			json["description"] = "@" + tweetOwner;
 			json["tweetOwner"] = tweetOwner;
@@ -74,9 +74,9 @@ function displayFilledModal(streamId, tweetId, tweetOwner, messageType)
 
 		// Information to be shown in the modal to the user while sending
 		// message
-		json["info"] = "Direct message from " + stream.screen_name + " to " + tweet.user.screen_name;
+		json["info"] = "{{agile_lng_translate 'socialsuite' 'tweet-message-from'}} " + stream.screen_name + " to " + tweet.user.screen_name;
 
-		json["description"] = "Tip: you can send a message to anyone who follows you."
+		json["description"] = "{{agile_lng_translate 'socialsuite' 'tweet-tip'}}"
 		json["tweetId"] = tweet.id_str;
 		json["tweetOwner"] = tweet.user.screen_name;
 	}
@@ -88,7 +88,7 @@ function displayFilledModal(streamId, tweetId, tweetOwner, messageType)
 
 		// Information to be shown in the modal to the user while sending
 		// message
-		json["info"] = "Status of " + "@" + tweet.user.screen_name;
+		json["info"] = "{{agile_lng_translate 'socialsuite' 'tweet-status-of'}} " + "@" + tweet.user.screen_name;
 
 		json["description"] = tweet.original_text;
 		json["tweetId"] = tweet.id;
@@ -176,15 +176,15 @@ function displayNoty(data)
 	if (data.response == "Successful")
 	{
 		if (Message_Model.model.get("headline") == "Tweet")
-			showNotyPopUp('information', "Your Tweet was posted!", "top", 5000);
+			showNotyPopUp('information', "{{agile_lng_translate 'socialsuite' 'tweet-posted'}}", "top", 5000);
 		else
-			showNotyPopUp('information', "Your Tweet to @" + Message_Model.model.get("tweetOwner") + " has been sent!", "top", 5000);
+			showNotyPopUp('information', "{{agile_lng_translate 'socialsuite' 'your-tweet-to'}} @" + Message_Model.model.get("tweetOwner") + " {{agile_lng_translate 'socialsuite' 'tweet-has-sent'}}", "top", 5000);
 	}
 	else if (data.response == "Unsuccessful")
 	{
 		// On failure, shows the status as retry
 		$('#socialsuite_twitter_messageModal').find('span.save-status').html("Retry");
-		showNotyPopUp('information', "Retry after sometime.", "top", 5000);
+		showNotyPopUp('information', "{{agile_lng_translate 'socialsuite' 'retry-after'}}", "top", 5000);
 	}
 	else if (Message_Model.model.get("headline") == "Retweet" && data.response != undefined)
 		showEffectOfRT(data);

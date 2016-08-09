@@ -62,6 +62,8 @@ public class RegisterVerificationServlet extends HttpServlet
 		email = URLDecoder.decode(email, "UTF-8");
 	} catch (Exception e) {
 	}
+	if(domain != null)
+		domain = domain.toLowerCase();
 
 	String userAgent = request.getHeader("User-Agent");
 
@@ -82,8 +84,10 @@ public class RegisterVerificationServlet extends HttpServlet
 			"You seem to have registered an account very recently. Please wait for 1 day if you wish to create another or write to care@agilecrm.com.");
 		return;
 	    }
-
-	    if (StringUtils.equalsIgnoreCase(request.getHeader("X-AppEngine-Country"), "BD")
+	    
+	    String countryName = request.getHeader("X-AppEngine-Country");
+	    
+	    if (StringUtils.equalsIgnoreCase(countryName, "BD") || StringUtils.equalsIgnoreCase(countryName, "NG")
 		    || "180.211.195.60".equals(userIp))
 	    {
 		writeErrorMessage(response, "Access denied");

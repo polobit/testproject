@@ -481,7 +481,17 @@ public class ContactsAPI
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public List<Opportunity> getCurrentContactOpportunity(@PathParam("contact-id") Long id)
     {
-	return OpportunityUtil.getDeals(id, null, null);
+    
+    	try{
+    		if(id!=null){
+	         return OpportunityUtil.getDeals(id, null, null);
+    		}
+    	}
+    	catch(Exception e){
+    		e.printStackTrace();
+    	}
+    	return null;
+    
     }
 
     /**

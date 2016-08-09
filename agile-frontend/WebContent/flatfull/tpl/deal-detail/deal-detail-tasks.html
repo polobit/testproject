@@ -6,11 +6,11 @@
                     <img alt="Clipboard" src="{{getS3ImagePath '/img/clipboard.png'}}" />
                 </div>
                 <div class="box-right pull-left">
-                    <h4 class="m-t-none">You have no tasks for this Deal.</h4>
+                    <h4 class="m-t-none">{{agile_lng_translate 'deal-view' 'no-tasks-for-deal'}}</h4>
                     <div class="text">
-                        You can add a task related to a deal for calling, email, follow-up etc.
+                        {{agile_lng_translate 'deal-view' 'save-specific-task-information'}}
                     </div>
-                    <a href="#" class="btn blue btn-slate-action btn-default btn-sm deal-add-task m-t-xs"><i class="icon-plus-sign"></i>  Add Task</a>
+                    <a href="#" class="btn blue btn-slate-action btn-default btn-sm deal-add-task m-t-xs"><i class="icon-plus-sign"></i>  {{agile_lng_translate 'deal-view' 'add-task'}}</a>
                 </div>
 				<div class="clearfix">
 				</div>
@@ -19,7 +19,7 @@
         {{/unless}}
         {{#if this.length}}
 	<div class="m-b-md m-t-md m-r-sm" align="right">
-		<a href="#" class="btn btn-default btn-sm deal-add-task pos-rlt m-t-xs btn-addon"><span><i class='icon-plus-sign'/></span> Add Task</a>
+		<a href="#" class="btn btn-default btn-sm deal-add-task pos-rlt m-t-xs btn-addon"><span><i class='icon-plus-sign'/></span> {{agile_lng_translate 'deal-view' 'add-task'}}</a>
 	</div>
 			<ul id="deal-tasks-model-list" class="ativity-block-ul list-group list-group-lg no-radius m-b-none m-t-n-xxs" url="core/api/notes/bulk"></ul>
 		{{/if}} 
@@ -86,8 +86,8 @@
      </div>
 <div class="pull-right icons-text-sm">
 		<span class="actions">
-			<a title="Edit"  data="{{id}}" class="task-edit-deal-tab c-p text-l-none p-r-sm"> <i class="fa fa-edit"></i> </a>
-            <a title="Delete" class="c-p text-l-none"><span class="deal-task-delete icon-trash" id="{{id}}" url="core/api/tasks/bulk"><i></i></span></a>
+			<a title="{{agile_lng_translate 'contact-details' 'edit'}}"  data="{{id}}" class="task-edit-deal-tab c-p text-l-none p-r-sm"> <i class="fa fa-edit"></i> </a>
+            <a title="{{agile_lng_translate 'contact-details' 'delete'}}" class="c-p text-l-none"><span class="deal-task-delete icon-trash" id="{{id}}" url="core/api/tasks/bulk"><i></i></span></a>
         </span>
         </div>
 <div class="clearfix"></div>

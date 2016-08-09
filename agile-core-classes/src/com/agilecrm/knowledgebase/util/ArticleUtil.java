@@ -8,6 +8,7 @@ import java.util.Map;
 import com.agilecrm.knowledgebase.entity.Article;
 import com.agilecrm.knowledgebase.entity.Categorie;
 import com.agilecrm.knowledgebase.entity.Section;
+import com.agilecrm.knowledgebase.entity.Section.Visible_To;
 import com.agilecrm.search.document.HelpcenterArticleDocument;
 import org.json.JSONArray;
 import com.googlecode.objectify.Key;
@@ -55,8 +56,6 @@ public class ArticleUtil
 		}		
 		return Article.dao.listByProperty(map);
 	}
-
-	
 	
 	/**
 	 * Returns list of tickets to given list of ids

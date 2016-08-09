@@ -848,7 +848,7 @@ public class PortletUtil {
 					else /*if(activity.custom3!=null && activity.custom3.equalsIgnoreCase("queued"))*/
 						queuedCallsCount++;
 					totalCallsCount++;
-					if(activity.custom4!=null && !activity.custom3.equalsIgnoreCase(Call.VOICEMAIL) && !activity.custom4.equalsIgnoreCase(null) 
+					if(activity.custom4!=null &&  !activity.custom4.equalsIgnoreCase(null) 
 							&& !activity.custom4.equalsIgnoreCase("null") && !activity.custom4.equalsIgnoreCase(""))
 						callsDuration+=Long.valueOf(activity.custom4);
 					
@@ -1753,7 +1753,7 @@ public class PortletUtil {
 	 * @returns JSONObject
 	 * 
 	 */
-	public static JSONObject getGoalsAttainedData(Long owner_id,Long minTime,Long maxTime)
+	public static JSONObject getGoalsAttainedData(Long owner_id,Long minTime,Long maxTime,Long timeZone)
 	{
 		int count=0;
 		Long count_goal=0L;
@@ -1772,7 +1772,7 @@ public class PortletUtil {
 		}
 		json.put("dealcount", count);
 		json.put("dealAmount", value);
-		List<Goals> goals=GoalsUtil.getAllGoalsForUser(owner_id, minTime, maxTime);
+		List<Goals> goals=GoalsUtil.getAllGoalsForUser(owner_id, minTime, maxTime,timeZone);
 		if(goals!=null)
 		{
 			for(Goals goal:goals){
@@ -2159,10 +2159,17 @@ public class PortletUtil {
 		try 
 		{
 			Portlet dummySalesPortlet = new Portlet("Dummy Sales Blog",PortletType.RSS,1,1,1,1,Portlet.PortletRoute.SalesDashboard.toString());
-			Portlet filterBasedContactsPortlet = new Portlet("Filter Based",PortletType.CONTACTS,1,1,1,1,Portlet.PortletRoute.SalesDashboard.toString());
-			Portlet dealsFunnelPortlet = new Portlet("Deals Funnel",PortletType.DEALS,2,1,1,1,Portlet.PortletRoute.SalesDashboard.toString());
+			Portlet filterBasedContactsPortlet = new Portlet("Filter Based",PortletType.CONTACTS,1,2,1,1,Portlet.PortletRoute.SalesDashboard.toString());
+			Portlet dealsFunnelPortlet = new Portlet("Deals Funnel",PortletType.DEALS,1,3,1,1,Portlet.PortletRoute.SalesDashboard.toString());
 			Portlet incomingDealsPortlet = new Portlet("Incoming Deals",PortletType.DEALS,3,1,1,1,Portlet.PortletRoute.SalesDashboard.toString());
-			Portlet miniCalendarPortlet = new Portlet("Mini Calendar",PortletType.TASKSANDEVENTS,1,2,1,1,Portlet.PortletRoute.SalesDashboard.toString());
+			Portlet miniCalendarPortlet = new Portlet("Mini Calendar",PortletType.TASKSANDEVENTS,1,4,1,1,Portlet.PortletRoute.SalesDashboard.toString());
+			Portlet activityOverViewPortlet = new Portlet("User Activities",PortletType.USERACTIVITY,1,1,1,1,Portlet.PortletRoute.SalesDashboard.toString());
+			Portlet revenueDealsGraphPortlet = new Portlet("Revenue Graph",PortletType.DEALS,2,3,1,1,Portlet.PortletRoute.SalesDashboard.toString());
+			Portlet leaderBoardPortlet = new Portlet("Leaderboard",PortletType.USERACTIVITY,2,2,2,1,Portlet.PortletRoute.SalesDashboard.toString());
+			Portlet tasksPortlet = new Portlet("Today Tasks",PortletType.TASKSANDEVENTS,2,4,1,1,Portlet.PortletRoute.SalesDashboard.toString());
+			Portlet callsPortlet = new Portlet("Calls Per Person",PortletType.USERACTIVITY,3,3,1,1,Portlet.PortletRoute.SalesDashboard.toString());
+			Portlet dealGoalsPortlet = new Portlet("Deal Goals",PortletType.DEALS,2,1,1,1,Portlet.PortletRoute.SalesDashboard.toString());
+			
 			
 			JSONObject filterBasedContactsPortletJSON = new JSONObject();
 			filterBasedContactsPortletJSON.put("filter","myContacts");
@@ -2180,11 +2187,53 @@ public class PortletUtil {
 			incomingDealsPortletJSON.put("duration","1-week");
 			incomingDealsPortlet.prefs = incomingDealsPortletJSON.toString();
 			
+			JSONObject activityOverViewPortletJSON = new JSONObject();			
+			activityOverViewPortletJSON.put("duration","yesterday");
+			activityOverViewPortlet.prefs = activityOverViewPortletJSON.toString();
+			
+			JSONObject revenueDealsGraphPortletJSON = new JSONObject();			
+			revenueDealsGraphPortletJSON.put("duration","this-quarter");
+			revenueDealsGraphPortletJSON.put("track","anyTrack");
+			revenueDealsGraphPortlet.prefs = revenueDealsGraphPortletJSON.toString();
+			
+			JSONObject leaderBoardPortletJSON = new JSONObject();
+			leaderBoardPortletJSON.put("type","deals");
+			leaderBoardPortletJSON.put("frequency","daily");
+			leaderBoardPortletJSON.put("duration","1-week");
+			JSONObject category = new JSONObject();
+			category.put("revenue", true);
+			category.put("dealsWon", true);
+			category.put("calls", true);
+			category.put("tasks", true);
+			leaderBoardPortletJSON.put("category",category);
+			leaderBoardPortlet.prefs = leaderBoardPortletJSON.toString();
+			
+			JSONObject tasksPortletJSON = new JSONObject();			
+			tasksPortletJSON.put("duration","today-and-tomorrow");
+			tasksPortlet.prefs = tasksPortletJSON.toString();
+			
+			JSONObject callsPortletJSON = new JSONObject();			
+			callsPortletJSON.put("group-by","number-of-calls");
+			callsPortletJSON.put("duration","1-day");
+			callsPortlet.prefs = callsPortletJSON.toString(); 
+			
+			JSONObject dealGoalsPortletJSON = new JSONObject();			
+			dealGoalsPortletJSON.put("group-by","number-of-calls");
+			dealGoalsPortletJSON.put("duration","1-day");
+			dealGoalsPortlet.prefs = dealGoalsPortletJSON.toString();
+				
 			dummySalesPortlet.save();
 			filterBasedContactsPortlet.save();
 			dealsFunnelPortlet.save();
 			incomingDealsPortlet.save();
 			miniCalendarPortlet.save();
+			
+			activityOverViewPortlet.save();
+			revenueDealsGraphPortlet.save();
+			leaderBoardPortlet.save();
+			tasksPortlet.save();
+			callsPortlet.save();
+			dealGoalsPortlet.save();
 		}
 		catch (Exception e) 
 		{
