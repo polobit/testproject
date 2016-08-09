@@ -274,7 +274,7 @@ function initializeDealListners(el){
 					$('#milestone').html('');
 					if(milestonesList.length > 1)
 					{
-						$('#milestone', el).html('<option value="">Any</option>');
+						$('#milestone', el).html('<option value="">{{agile_lng_translate "portlets" "any"}}</option>');
 					}
 					$.each(milestonesList, function(index, milestone){
 						$('#milestone', el).append('<option value="'+milestone+'">'+milestone+'</option>');
@@ -286,7 +286,7 @@ function initializeDealListners(el){
 		}
 		else
 		{
-			$('#milestone', el).html('<option value="">Any</option>');
+			$('#milestone', el).html('<option value="">{{agile_lng_translate "portlets" "any"}}</option>');
 		}
 		
 	});
@@ -338,7 +338,7 @@ function initializeDealListners(el){
 							var input = {};
 							input.filter = getDealFilters();
 							 // Shows message
-						    $save_info = $('<img src="'+updateImageS3Path("img/1-0.gif")+'" height="18px" width="18px" style="opacity:0.5;"></img>&nbsp;&nbsp;<span><small class="text-success" style="font-size:15px; display:inline-block"><i>Email will be sent shortly.</i></small></span>');
+						    $save_info = $('<img src="'+updateImageS3Path("img/1-0.gif")+'" height="18px" width="18px" style="opacity:0.5;"></img>&nbsp;&nbsp;<span><small class="text-success" style="font-size:15px; display:inline-block"><i>'+_agile_get_translated_val('campaigns','email-will-be-sent-shortly')+'</i></small></span>');
 						    $(this).parent('.modal-footer').find('.deals-export-csv-message').append($save_info);
 							$save_info.show();
 							// Export Deals.

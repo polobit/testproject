@@ -76,6 +76,10 @@ public class UserPrefsAPI
 		    userPrefs.currency = prefs.currency;
 		    userPrefs.keyboard_shotcuts = prefs.keyboard_shotcuts;
 		    userPrefs.calendar_wk_start_day = prefs.calendar_wk_start_day;
+		    
+		    // Add language 
+		    if(StringUtils.isNotBlank(prefs.language))
+		    	userPrefs.language = prefs.language;
 	
 				userPrefs.save();
 				return userPrefs;

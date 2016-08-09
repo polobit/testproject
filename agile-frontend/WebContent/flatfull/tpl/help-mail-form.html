@@ -2,7 +2,7 @@
 <div class="wrapper-md lter bg-light b-b">
 <div class="row">
     <div class="col-md-12">
-    <h3 class="h3 font-thin">Email Us</h3>
+    <h3 class="h3 font-thin">{{agile_lng_translate 'help' 'email-us'}}</h3>
     </div>
 </div>
 </div>
@@ -13,31 +13,31 @@
         	<form id="helpmailForm" name="helpmailForm" class="form-horizontal" style="margin-top: 20px;">
             	<fieldset>
                 	<div class="control-group form-group">
-                    	<label class="control-label col-sm-2">To</label>
+                    	<label class="control-label col-sm-2">{{agile_lng_translate 'other' 'to'}}</label>
                     	<div class="controls col-sm-10">
                         	<select class="select-xlarge form-control" name="to">
-                            	<option value="care@agilecrm.com">Support</option>
-                            	<option value="sales@agilecrm.com">Sales</option>
+                            	<option value="care@agilecrm.com">{{agile_lng_translate 'help' 'support'}}</option>
+                            	<option value="sales@agilecrm.com">{{agile_lng_translate 'menu' 'sales'}}</option>
                         	</select>
                     	</div>
                 	</div>
                 	<div class="control-group form-group">
-                    	<label class="control-label col-sm-2">Subject <span class="field_req">*</span></label>
+                    	<label class="control-label col-sm-2">{{agile_lng_translate 'widgets' 'subject'}} <span class="field_req">*</span></label>
                     	<div class="controls col-sm-10">
-                        	<input type="text" class="input-xlarge required form-control" name="subject" id="subject" placeholder="About" />
+                        	<input type="text" class="input-xlarge required form-control" name="subject" id="subject" placeholder="{{agile_lng_translate 'help' 'about'}}" />
                     	</div>
                 	</div>
                 	<div class="control-group form-group">
-                    	<label class="control-label col-sm-2">Message <span class="field_req">*</span></label>
+                    	<label class="control-label col-sm-2">{{agile_lng_translate 'other' 'message'}} <span class="field_req">*</span></label>
                     	<div class="controls col-sm-10">
-                        	<textarea class="input-xlarge required form-control" rows="8" name="body" id="body" placeholder="Description"></textarea>
+                        	<textarea class="input-xlarge required form-control" rows="8" name="body" id="body" placeholder="{{agile_lng_translate 'misc-keys' 'description'}}"></textarea>
                     	</div>
                 	</div>
 <div class="line  b-b line-lg"></div>
 <div class="row">
                 	<div class="form-actions col-sm-offset-2 col-sm-10">  
-						<a onclick="history.back();"  class="btn btn-default btn-sm">Cancel</a>
-                    	<a href="#" id="helpMail" class="btn btn-sm btn-primary">Send</a>        
+						<a onclick="history.back();"  class="btn btn-default btn-sm">{{agile_lng_translate 'other' 'cancel'}}</a>
+                    	<a href="#" id="helpMail" class="btn btn-sm btn-primary">{{agile_lng_translate 'tasks' 'Send'}}</a>        
                     	&nbsp;&nbsp;<span id="msg"></span> 
                 	</div>
 </div>

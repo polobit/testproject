@@ -408,6 +408,7 @@ public class JSAPI
 		return JSAPIUtil.generateJSONErrorResponse(Errors.INVALID_TAGS);
 	    }
 
+	    System.out.println("Contact with tags = " +contact);
 	    return JSAPIUtil.limitPropertiesInContactForJSAPI(contact);
 	    // return new ObjectMapper().writeValueAsString(contact);
 
@@ -509,6 +510,7 @@ public class JSAPI
 
 	    contact.addScore(score);
 	    // return new ObjectMapper().writeValueAsString(contact);
+	    System.out.println("Contact with score = " +contact);
 	    return JSAPIUtil.limitPropertiesInContactForJSAPI(contact);
 	}
 	catch (Exception e)
@@ -550,6 +552,7 @@ public class JSAPI
 
 	    contact.subtractScore(score);
 	    // return new ObjectMapper().writeValueAsString(contact);
+	    System.out.println("Contact with score = " +contact);
 	    return JSAPIUtil.limitPropertiesInContactForJSAPI(contact);
 	}
 	catch (Exception e)
@@ -689,6 +692,7 @@ public class JSAPI
 	    Note note = mapper.readValue(json, Note.class);
 	    note.addRelatedContacts(contact.id.toString());
 	    note.save();
+	    System.out.println("Contact  = " +contact);
 	    return mapper.writeValueAsString(note);
 	}
 	catch (Exception e)
@@ -1047,6 +1051,7 @@ public class JSAPI
 		contact.save();
 
 	    // return mapper.writeValueAsString(contact);
+	    System.out.println("Contact  = " +contact);
 	    return JSAPIUtil.limitPropertiesInContactForJSAPI(contact);
 	}
 	catch (JsonGenerationException e)
@@ -1188,7 +1193,9 @@ public class JSAPI
 		return JSAPIUtil.generateJSONErrorResponse(Errors.PROPERTY_MISSING);
 	    
 	    contact.removeProperty(name);
-	    contact.setContactOwner(JSAPIUtil.getDomainUserKeyFromInputKey(apiKey));
+	    
+	    // Owner should not be change
+	    //contact.setContactOwner(JSAPIUtil.getDomainUserKeyFromInputKey(apiKey));
 	    contact.save();
 	    ObjectMapper mapper = new ObjectMapper();
 	    return mapper.writeValueAsString(contact);

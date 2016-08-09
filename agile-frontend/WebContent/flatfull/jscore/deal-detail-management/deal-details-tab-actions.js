@@ -41,9 +41,8 @@ var deal_details_tab = {
 	            sortKey:"created_time",
 	            descending: true,
 	            postRenderCallback: function(el) {
-	            	head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
-	            		 $(".note-created-time", el).timeago();
-	              	})
+	            	agileTimeAgoWithLngConversion($(".note-created-time", el));
+	            	
 	            }
 	        });
 		    dealNotesView.collection.fetch();
@@ -63,9 +62,8 @@ var deal_details_tab = {
 		            sortKey:"uploaded_time",
 		            descending: true,
 		            postRenderCallback: function(el) {
-		            	head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
-		            		 $(".document-created-time", el).timeago();
-		              	})
+		            	agileTimeAgoWithLngConversion($(".document-created-time", el));
+		            	
 		            }
 		        });
 			 dealDocsView.collection.fetch();
@@ -87,9 +85,8 @@ var deal_details_tab = {
 	            cursor : true,
 	            page_size : 20,
 	            postRenderCallback: function(el) {
-	            	head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
-	            		 $(".note-created-time", el).timeago();
-	              	})
+	            	agileTimeAgoWithLngConversion($(".note-created-time", el));
+	            	
 	            }
 	        });
 		    dealActivitiesView.collection.fetch();
@@ -109,9 +106,8 @@ var deal_details_tab = {
 		            sortKey:"id",
 		            descending: true,
 		            postRenderCallback: function(el) {
-		            	head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
-		            		 $(".task-created-time", el).timeago();
-		              	})
+		            	agileTimeAgoWithLngConversion($(".task-created-time", el));
+		            	
 		              	$('li',el).each(function(){
 		            		if($(this).find('.priority_type').text().trim()== "HIGH") {
 		            			$(this).css("border-left","3px solid #f05050");
@@ -140,9 +136,8 @@ var deal_details_tab = {
 	            sortKey:"created_time",
 	            descending: true,
 	            postRenderCallback: function(el) {
-	            	head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
-	            		 $(".event-created-time", el).timeago();
-	              	});
+	            	agileTimeAgoWithLngConversion($(".event-created-time", el));
+	            	
 	            	$('li',el).each(function(){
 	            	if($(this).find('.priority_type').text().trim() == "High") {
             			$(this).css("border-left","3px solid #f05050");
@@ -183,7 +178,8 @@ function existing_deal_document_attach(document_id, saveBtn)
     }
     else
     {
-    	saveBtn.closest("span").find(".save-status").html("<span style='color:red;margin-left:10px;'>Linked Already</span>");
+    	var linkedtext = _agile_get_translated_val("misc-keys", "link-already");
+    	saveBtn.closest("span").find(".save-status").html("<span style='color:red;margin-left:10px;'>" + linkedtext + "</span>");
     	saveBtn.closest("span").find('span.save-status').find("span").fadeOut(5000);
     	return;
     }
