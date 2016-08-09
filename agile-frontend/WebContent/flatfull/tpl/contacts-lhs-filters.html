@@ -72,10 +72,13 @@
 		<option value="BETWEEN">is between</option>
 		<option value="LAST">in last</option>
 		<option value="NEXT">in next</option>
+		{{!--Options only for Contact Fields--}}
+		{{#if_equals "CONTACT" this.scope}}
+			<option value="ON_AFTER">on after</option>
+			<option value="ON_BEFORE">on before</option>
+		{{/if_equals}}
 		<option value="DEFINED">is defined</option>
 		<option value="NOT_DEFINED">is not defined</option>
-		<option value="ON_AFTER">on after</option>
-		<option value="ON_BEFORE">on before</option>
 	</select>
 	<div class="AFTER BEFORE ON condition_container m-t-xs">
 		<span id="RHS">
