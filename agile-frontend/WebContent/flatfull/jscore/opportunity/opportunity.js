@@ -978,7 +978,7 @@ function populate_deal_products(el, value,form_id){
 						var inputCheckbox=objTD.parent().children().eq(0).children().eq(0).children().eq(0);
 						if(!$(inputCheckbox).is(':checked'))
 						{	
-							objModel.set("isChecked",true)
+						//	objModel.set("isChecked",true)
 						}	
 						objModel.set("qty",value)
 					}
@@ -1014,7 +1014,7 @@ function populate_deal_products(el, value,form_id){
 					for(var key in App_Deal_Details.deal_products_collection_view.collection.models)
 					{
 						var iQtyPriceTotal= parseFloat( App_Deal_Details.deal_products_collection_view.collection.models[key].get("qty")) *parseFloat( App_Deal_Details.deal_products_collection_view.collection.models[key].get("price"))
-						if(iQtyPriceTotal.toFixed)
+						if(Math.round(iQtyPriceTotal) != iQtyPriceTotal && iQtyPriceTotal.toFixed)
 							iQtyPriceTotal=iQtyPriceTotal.toFixed(2)
 						App_Deal_Details.deal_products_collection_view.collection.models[key].set("total",iQtyPriceTotal)
 						var sId=App_Deal_Details.deal_products_collection_view.collection.models[key].get("id")
@@ -1065,6 +1065,12 @@ function ValidateDealDiscountAmt(_form_id)
 		if($("#apply_discount",_form_id).is(':checked'))
 		{
 			
+			var RE = /^-{0,1}\d*\.{0,1}\d+$/;
+			if( !(RE.test(iDiscountValue)) )
+			{
+				$(".calculation-error-status",_form_id).html("Discount should be numeric");
+				return false;
+			}
 			if(!$.isNumeric(iDiscountValue))
 			{
 				$(".calculation-error-status",_form_id).html("Discount should be numeric")
@@ -1086,8 +1092,7 @@ function ValidateDealDiscountAmt(_form_id)
 						return false;
 					}	
 				}
-				else
-				{
+				
 					var iTotal=0;
 					for(var key in App_Deal_Details.deal_products_collection_view.collection.models)
 					{
@@ -1114,7 +1119,7 @@ function ValidateDealDiscountAmt(_form_id)
 						$(".calculation-error-status",_form_id).html("Discount value cannot be less than 0")
 						return false;	
 					}	
-				}
+				
 			}
 
 		}	

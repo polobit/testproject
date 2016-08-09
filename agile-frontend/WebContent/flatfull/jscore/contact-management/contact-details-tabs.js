@@ -675,8 +675,12 @@ function initializeSendEmailListeners(){
 	$('#send-email-listener-container').on('click', '#send-email-close', function(e)
 	{
 		e.preventDefault();
+		if(Current_Route.indexOf("/documents/")>0){
 
-		window.history.back();
+				Backbone.history.navigate("#documents/" + Current_Route.split("/")[2], { trigger : true });
+			}
+			else
+				window.history.back();
 	});
 
 
@@ -735,7 +739,11 @@ function emailSend(ele,json)
 
 			// Enables Send Email button.
 			enable_send_button($('#sendEmail'));
+			if(Current_Route.indexOf("/documents/")>0){
 
+				Backbone.history.navigate("#documents/" + Current_Route.split("/")[2], { trigger : true });
+			}
+			else
 			window.history.back();
 
 		},

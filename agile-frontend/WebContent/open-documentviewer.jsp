@@ -75,7 +75,8 @@ if(document!=null)
 	 docTitle=document.name;
 	 sNoteSubject=docTitle; 
 	 Contact contact = ContactUtil.getContact(dContactId);
-	 sContactName=contact.first_name + " " + contact.last_name;
+	 if(contact!=null)
+	 	sContactName=contact.first_name + " " + contact.last_name;
 	
 
 	DomainUserPartial domainUser =document.getOwner();
