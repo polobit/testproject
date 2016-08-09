@@ -257,7 +257,7 @@ $(function(){
 			if(!hasScope("DELETE_DEALS"))
 			{
 				showModalConfirmation(_agile_get_translated_val("bulk-delete", "bulk-delete"), 
-						"You do not have permission to delete deals.", 
+						_agile_get_translated_val("deal-view", "persmission-to-delete-deals"), 
 						function (){
 							return;
 						}, 
