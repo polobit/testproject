@@ -5,10 +5,12 @@
        {{#is_mobile}}
         <li class="prefs-profile"><a href="#settings-user-prefs" data-toggle="tab"  class="b-l-none"><i class="icon icon-user"></i></a></li>
          <li class="prefs-reminders"><a href="#settings-reminders" data-toggle="tab" ><i class="icon icon-note"></i></a></li>
+      
 		 <li class="prefs-advanced"><a href="#settings-advanced" data-toggle="tab" ><i class="icon-magnifier"></i></a></li>
 		 {{else}}
 		  <li class="prefs-profile"><a href="#settings-user-prefs" data-toggle="tab"  class="b-l-none">Profile</a></li>
          <li class="prefs-reminders"><a href="#settings-reminders" data-toggle="tab" >Reminders</a></li>
+         
 		 <li class="prefs-advanced"><a href="#settings-advanced" data-toggle="tab" >Advanced</a></li>
 		 {{/is_mobile}}
        </ul>
@@ -17,6 +19,10 @@
 		
 	</div>
 	
+</script>
+<script type="text/html" id="speech-test-template">
+<input name="name" type="text" class="required form-control" value="" autocapitalize="off" id="serachtext" style="width: 30%;float: left;">
+<button class="btn btn-default no-shadow" type="submit" id="speechDectation"><i class="icon-microphone"></i></button>
 </script>
 
 <script id="settings-user-prefs-template" type="text/html">
