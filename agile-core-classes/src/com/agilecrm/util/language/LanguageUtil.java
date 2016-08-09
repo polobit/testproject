@@ -9,9 +9,13 @@ import com.agilecrm.user.UserPrefs;
 import com.agilecrm.util.FileStreamUtil;
 
 public class LanguageUtil {
-
+	
+	// Root folder path
+	public static final String NON_APPLICATION_ROOT_PATH = "non-home-page-locales";
+	
 	public static JSONObject getLocaleJSON(UserPrefs prefs,
 			ServletContext application) {
+		
 		String language = prefs.language;
 		if(StringUtils.isBlank(language))
 			language = UserPrefs.DEFAULT_LANGUAGE;
@@ -23,7 +27,7 @@ public class LanguageUtil {
 			String str = FileStreamUtil.readResource(application
 					.getRealPath("/")
 					+ "/"
-					+ "locales/menu/"
+					+ NON_APPLICATION_ROOT_PATH + "locales/menu/"
 					+ language
 					+ ".json");
 			str = str.replace("var _Agile_Resources_Json =", "").trim();

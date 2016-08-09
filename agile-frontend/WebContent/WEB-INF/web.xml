@@ -999,15 +999,6 @@
 		<url-pattern>/OAuthServlet</url-pattern>
 	</servlet-mapping>
 
-	<!-- <servlet>
-		<servlet-name>WebEventCalendar</servlet-name>
-		<jsp-file>/web-event-calendar.jsp</jsp-file>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>WebEventCalendar</servlet-name>
-		<url-pattern>/calendar/*</url-pattern>
-	</servlet-mapping> -->
-	
 	<servlet>
 		<servlet-name>NormalInstantiator</servlet-name>
 		<servlet-class>com.agilecrm.test.NormalIntantiator</servlet-class>
@@ -1017,7 +1008,16 @@
 		<url-pattern>/normal-instantiator</url-pattern>
 	</servlet-mapping>
 	
-	<!-- <servlet>
+	<!-- Online Calendar in localhost -->
+	<servlet>
+		<servlet-name>WebEventCalendar</servlet-name>
+		<jsp-file>/web-event-calendar.jsp</jsp-file>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>WebEventCalendar</servlet-name>
+		<url-pattern>/calendar/*</url-pattern>
+	</servlet-mapping> 
+	<servlet>
 		<servlet-name>CancelWebAppointment</servlet-name>
 		<jsp-file>/cancel-web-appointment.jsp</jsp-file>
 	</servlet>
@@ -1033,7 +1033,9 @@
 		<servlet-name>WebAppointmentCancelled</servlet-name>
 		<url-pattern>/appointment/confirmation</url-pattern>
 	</servlet-mapping>
-	 --><servlet>
+	<!-- End of Online Calendar in localhost -->
+
+	<servlet>
 		<servlet-name>EcommerceWebhook</servlet-name>
 		<servlet-class>com.thirdparty.ecommerce.EcommerceWebhook</servlet-class>
 	</servlet>
