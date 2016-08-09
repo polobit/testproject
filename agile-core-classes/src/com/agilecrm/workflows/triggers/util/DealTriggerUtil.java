@@ -1,6 +1,7 @@
 package com.agilecrm.workflows.triggers.util;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -9,14 +10,19 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.util.bulk.BulkActionNotifications;
 import com.agilecrm.deals.CustomFieldData;
 import com.agilecrm.deals.Milestone;
 import com.agilecrm.deals.Opportunity;
 import com.agilecrm.deals.util.OpportunityUtil;
+import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.util.DomainUserUtil;
+import com.agilecrm.util.email.SendMail;
 import com.agilecrm.workflows.triggers.Trigger;
 import com.agilecrm.workflows.triggers.Trigger.Type;
 import com.agilecrm.workflows.util.WorkflowSubscribeUtil;
 import com.campaignio.reports.DateUtil;
+import com.google.appengine.api.NamespaceManager;
 
 /**
  * <code>DealTriggerUtil</code> executes trigger for deals with conditions deal
@@ -89,6 +95,35 @@ public class DealTriggerUtil
 			System.out.println("Milestone changed from " + oldOpportunity.milestone + " to " + updatedOpportunity.milestone
 				+ " of deal " + updatedOpportunity.name);
 
+			DomainUser users=DomainUserUtil.getCurrentDomainUser();
+			System.out.println("Cur domain ="+users);
+			
+			List<DomainUser> user_list=	DomainUserUtil.getUsers(users.domain);
+			
+			for (DomainUser user  : user_list) {
+				 System.out.println( " user s "+user.email);
+				 System.out.println( " user s "+user.id);
+				 
+			}
+			
+			
+			if(updatedOpportunity.milestone.equals("Won"))
+			{
+				String domain = NamespaceManager.get();	
+				String msg = "Deal won alert"; 
+				 BulkActionNotifications.publishNotification(msg);
+				
+				System.out.println("Currrent domain ="+domain);
+				 HashMap<String, Object> map = new HashMap<String, Object>();
+				    map.put("deal", updatedOpportunity);
+			for (DomainUser user  : user_list)
+			{
+				 map.put("user", user);
+				SendMail.sendMail(user.email," Deal Won Alert", SendMail.Deal_Won_status,map);
+			
+			//PubNub.pubNubPush(user.id + "_Channel", messageJson);
+				}
+			}
 			// execute trigger for deal milestone change.
 			executeTriggerForDealsBasedOnCondition(updatedOpportunity.relatedContacts(), oldOpportunity, updatedOpportunity,
 				Trigger.Type.DEAL_MILESTONE_IS_CHANGED);
