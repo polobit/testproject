@@ -20,7 +20,7 @@ var Tickets_Rest={
         var current_time = new Date().getTime();
 		Tickets.updateModel(url, json, function(model){
 
-				Ticket_Utils.showNoty('information', 'Ticket status has been changed to '+ status.toLowerCase() , 'bottomRight', 5000);
+				Ticket_Utils.showNoty('information', '{{agile_lng_translate "tickets" "status-changed-to"}} '+ status.toLowerCase() , 'bottomRight', 5000);
 
 				 if(status != "NEW")
                      $('.ticket_status option[value="NEW"]').hide()
@@ -79,7 +79,7 @@ var Tickets_Rest={
 					App_Ticket_Module.ticketView.model.destroy({
 						success : function(model, response) {
 							
-							Ticket_Utils.showNoty('information', "Ticket has been deleted",'bottomRight', 5000);
+							Ticket_Utils.showNoty('information', "{{agile_lng_translate 'tickets' 'deleted'}}",'bottomRight', 5000);
 	                          
 							var url = '#tickets/filter/' + Ticket_Filter_ID;
 							Backbone.history.navigate(url, {trigger : true});
@@ -96,7 +96,7 @@ var Tickets_Rest={
 
 		var $this = $(e.target);
 
-		$this.siblings("#workflows_list").html('<li><a href="javascript:void(0);">Loading...</a></li>');
+		$this.siblings("#workflows_list").html('<li><a href="javascript:void(0);">{{agile_lng_translate "tickets" "loading"}}</a></li>');
 
 		var workflows = Backbone.Collection.extend({
 			url : 'core/api/workflows'
@@ -127,10 +127,10 @@ var Tickets_Rest={
 
 		Tickets.updateModel(url, json, function(model){
 
-			var succesmessage = "Ticket marked favourite";
+			var succesmessage = "{{agile_lng_translate 'tickets' 'marked-favourite'}}";
 
 			if(!favourite)
-				succesmessage = "Ticket marked as unfavourite";
+				succesmessage = "{{agile_lng_translate 'tickets' 'marked-unfavourite'}}";
 
              Tickets_Rest.updateDataInModelAndCollection(Current_Ticket_ID, {is_favorite:favourite});
 
@@ -151,12 +151,12 @@ var Tickets_Rest={
 			if(model.toJSON().is_spam)
 			{
 				$(e.target).addClass("btn-danger").removeClass("btn-default");
-			    message="Ticket marked as spam"; 
+			    message="{{agile_lng_translate 'tickets' 'marked-spam'}}"; 
 			}
 			else
 			{
 				$(e.target).removeClass("btn-danger").addClass("btn-default");
-                message="Ticket marked as unspam";
+                message="{{agile_lng_translate 'tickets' 'marked-unspam'}}";
                 spam_value=false;
             }
 
@@ -182,7 +182,7 @@ var Tickets_Rest={
 			Tickets_Rest.updateDataInModelAndCollection(Current_Ticket_ID, {type : new_ticket_type});
 			 
 				//update collection 
-	   			Ticket_Utils.showNoty('information', 'Ticket Type has been changed to '+ new_ticket_type.toLowerCase(), 'bottomRight', 5000);
+	   			Ticket_Utils.showNoty('information', '{{agile_lng_translate "tickets" "type-changed-to"}} '+ new_ticket_type.toLowerCase(), 'bottomRight', 5000);
 			}
 		);
 	},
@@ -199,7 +199,7 @@ var Tickets_Rest={
 
 			Tickets_Rest.updateDataInModelAndCollection(Current_Ticket_ID, json);
 
-			Ticket_Utils.showNoty('information', 'Ticket priority has been changed to '+ new_priority.toLowerCase() , 'bottomRight', 5000);
+			Ticket_Utils.showNoty('information', '{{agile_lng_translate "tickets" "priority-changed-to"}} '+ new_priority.toLowerCase() , 'bottomRight', 5000);
 		});
 	},
 
@@ -246,10 +246,10 @@ var Tickets_Rest={
 			var assigneeName = (modelData.assigneeID) ? (modelData.assignee.name) : modelData.group.group_name;
 
 			var assigned_to_group = true;
-			var message = 'Ticket group has been changed to ' + assigneeName;
+			var message = '{{agile_lng_translate "tickets" "group-changed-to"}} ' + assigneeName;
 
 			if(modelData.assigneeID){
-				message = 'Assignee has been changed to ' + assigneeName;
+				message = '{{agile_lng_translate "tickets" "assignee-changed-to"}} ' + assigneeName;
 				assigned_to_group = false;
 			}
 			
@@ -291,7 +291,7 @@ var Tickets_Rest={
 	 		App_Ticket_Module.ticketView.model.set({due_time:''}, {silent:true});
 	 		Tickets_Rest.updateDataInModelAndCollection(Current_Ticket_ID, {due_time:''});
 
-	 		Ticket_Utils.showNoty('information', "Due date has been removed",'bottomRight', 5000);
+	 		Ticket_Utils.showNoty('information', "{{agile_lng_translate 'tickets' 'due-date-changed'}}",'bottomRight', 5000);
 
 	 	}, null);
 	 },
@@ -322,10 +322,8 @@ var Tickets_Rest={
 			descending : true, 
 			postRenderCallback : function(el)
 			{
-				head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
-				{
-					$(".note-created-time", el).timeago();
-				})
+				agileTimeAgoWithLngConversion($(".note-created-time", el));
+				
 			} 
 		});
 

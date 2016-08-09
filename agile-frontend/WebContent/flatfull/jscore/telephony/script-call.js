@@ -13,7 +13,7 @@ function _agile_execute_callscriptrules(_agile_web_rules)
 	}
 	
 	// show default text as no rule defined 
-	$('#CallScript').html("<div class='wrapper-sm'>No matching call script found.</div>");	
+	$('#CallScript').html("<div class='wrapper-sm'>{{agile_lng_translate 'widgets' 'callscript-not-found'}}</div>");	
 }
 
 // Run a single web rule

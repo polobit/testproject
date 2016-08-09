@@ -13,7 +13,7 @@ function setupCharts(callback)
 	head.js(LIB_PATH + 'lib/flot/highcharts-3.js',LIB_PATH + 'lib/flot/highcharts-more.js',LIB_PATH + 'lib/flot/solid-gauge.js', LIB_PATH + 'lib/flot/highcharts-exporting.js?_=v1', LIB_PATH + 'lib/flot/funnel.js',LIB_PATH + 'lib/flot/highcharts-grid.js',
 	LIB_PATH + 'lib/flot/no-data-to-display.js', LIB_PATH + 'lib/flot/export-csv.js', function()
 	{
-
+		_agile_library_loader.localize_highcharts();
 		// Checks if callback is available, if available calls the callback
 		if (callback && typeof (callback) === "function")
 		{
@@ -1435,7 +1435,7 @@ function showDealAreaSpline(url, selector, name, yaxis_name, show_loading,freque
 			    //and pipeline
 			    series: series,
 			    lang: {
-            				noData: "No Deals Found"
+            				noData: "{{agile_lng_translate 'portlets' 'no-deals-found'}}"
         				},
         					noData: {
            								style: {
@@ -1704,7 +1704,7 @@ function chartRenderforIncoming(selector,categories,name,yaxis_name,min_tick_int
                     useHTML: true
                 },
                   lang: {
-            				noData: "No Deals Found"
+            				noData: "{{agile_lng_translate 'portlets' 'no-deals-found'}}"
         				},
         					noData: {
            								style: {
@@ -1890,7 +1890,7 @@ if(selector == 'lossreasonpie-chart-users'){
 				], 
 
 				 lang: {
-					noData: "No Deals Found"
+					noData: "{{agile_lng_translate 'portlets' 'no-deals-found'}}"
 					},
 					 noData: {
 									 style: {

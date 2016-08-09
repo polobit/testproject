@@ -37,7 +37,7 @@
 
                   </div>
                   <div>
-                        <a class="link-color"href="{{get_ticket_uri}}">Tickets</a> / 
+                        <a class="link-color"href="{{get_ticket_uri}}">{{agile_lng_translate 'report-view' 'tickets'}}</a> / 
 
                         <span> #{{id}}</span>
                   </div>
@@ -53,7 +53,8 @@
 
             <!-- Previous Tickets -->
             <div class="panel b-a previous-tickets-panel" style="display: none;">
-              <div class="padder m-t-sm m-b-sm">Previous Tickets <span id="count"></span>
+              <div class="padder m-t-sm m-b-sm">{{agile_lng_translate 'tickets' 'previous-tickets'}} 
+              <span id="count"></span>
                   <i id="toggle_previous_tickets" class="fa fa-plus text-muted pull-right m-t-xs text-sm cursor-pointer"></i>
               </div>
               <div id="previous_tickets_container" class="m-l-sm m-r-sm m-b-sm m-t-xs p-t-xs b-t b-light" style="display:none;">
@@ -70,8 +71,8 @@
 
                    <div class="row m-l-n m-r-n">
                     <div class="col-md-12 p-l-n">
-                      <div class="p-n m-b-xxs">Assignee
-                      <a class="assign-to-me link-color pull-right text-xs" href="javascript:void(0);" style="display: none;">Take It</a>
+                      <div class="p-n m-b-xxs">{{agile_lng_translate 'tickets' 'assignee'}}
+                      <a class="assign-to-me link-color pull-right text-xs" href="javascript:void(0);" style="display: none;">{{agile_lng_translate 'tickets' 'take-it'}}</a>
                       </div>
                       <select id="ticket-assignee" class="form-control text-xs" name="assigneeID" style="height: 28px;padding: 3px 6px;"></select>
                     </div>
@@ -80,8 +81,8 @@
                 </div>
 
                 <div class="row m-n p-t-sm">
-                  <div class="col-md-12 p-n m-b-xxs">CCs
-                    <a class="add-me-to-cc link-color pull-right text-xs" href="javascript:void(0);" style="{{#containsScope requester_email cc_emails}} display:none {{/containsScope}}">CC Me</a>
+                  <div class="col-md-12 p-n m-b-xxs">{{agile_lng_translate 'tickets' 'CCs'}}
+                    <a class="add-me-to-cc link-color pull-right text-xs" href="javascript:void(0);" style="{{#containsScope requester_email cc_emails}} display:none {{/containsScope}}">{{agile_lng_translate 'tickets' 'cc-me'}}</a>
                   </div>
                   <div class="col-md-12  ticket-email b-a p-xs p-b-none r text-xs">
                     <div class="v-top">
@@ -95,7 +96,7 @@
                             </li>
                           {{/each}}
                           <li class="tag m-r-xs m-b-xs inline-block">
-                            <input type="text" placeholder="Add CC Email" id="cc_email_field" class="cc_emails_st" autocomplete="off">
+                            <input type="text" placeholder="{{agile_lng_translate 'tickets' 'add-cc-email'}}" id="cc_email_field" class="cc_emails_st" autocomplete="off">
                           </li>
                       </ul>
                     </div>  
@@ -104,23 +105,21 @@
 
                 <div class="row m-n p-t-sm">
                   <div class="col-md-12 p-n m-b-xs sla-due-date">
-
                     <div class="col-md-12 p-n m-b-xxs"> 
-                      <span class="sla-text">Due Date</span> 
+                      <span class="sla-text">{{agile_lng_translate 'portlets' 'due-date'}}</span> 
                       <a class="link-color pull-right text-xs remove-date {{#if due_time}}{{#if_equals status "CLOSED"}}display-none{{/if_equals}}{{else}}display-none 
                       {{/if}}" href="javascript:void(0);">
-                        Remove
+                        {{agile_lng_translate 'tickets' 'remove'}}
                       </a>
                     </div>
                       
-                    <input type="text" style="width:70%;float:left"class="form-control text-xs" id="ticket_change_sla" placeholder="Select Date" value="{{#if due_time}}{{epochToHumanDate "mm/dd/yyyy" due_time}}{{/if}}" {{#if_equals status "CLOSED"}}disabled="disabled"{{/if_equals}}/>
+                    <input type="text" style="width:70%;float:left"class="form-control text-xs" id="ticket_change_sla" placeholder="{{agile_lng_translate 'contacts-view' 'select-date'}}" value="{{#if due_time}}{{epochToHumanDate "mm/dd/yyyy" due_time}}{{/if}}" {{#if_equals status "CLOSED"}}disabled="disabled"{{/if_equals}}/>
                     
                     <input type="text" style="width:30%;float:right" class="form-control text-xs ticket_change_slatime" placeholder="Time" {{#if_equals status "CLOSED"}}disabled="disabled"{{/if_equals}}/>
-
                    
                     <div class="col-md-12 p-n">
                       <div class="col-md-3 p-n">
-                        <a href="javascript:void(0);" class="c-p text-info link-color choose-due-date txt-small" data-value="tomorrow">Tomorrow</a>
+                        <a href="javascript:void(0);" class="c-p text-info link-color choose-due-date txt-small" data-value="tomorrow">{{agile_lng_translate 'tasks' 'Tomorrow'}}</a>
                       </div>
                       <div class="col-md-1 p-n text-center"> | </div>
                       <div class="col-md-1 p-n text-center">
@@ -147,12 +146,12 @@
 
                 <div class="row m-n">
                    <div class="col-md-12 p-n">
-                      <div class="p-n m-b-xxs">Status</div>
+                      <div class="p-n m-b-xxs">{{agile_lng_translate 'widgets' 'status'}}</div>
                       <select name="status" class="form-control text-xs ticket_status" style="height: 28px;padding: 3px 6px;">
-                        {{#if_equals status "NEW"}}<option value="NEW" selected>New</option>{{/if_equals}}
-                        <option value="OPEN" {{#if_equals status "OPEN"}}selected{{/if_equals}}>Open</option>
-                        <option value="PENDING" {{#if_equals status "PENDING"}}selected{{/if_equals}}>Pending</option>
-                        <option value="CLOSED" {{#if_equals status "CLOSED"}}selected{{/if_equals}}>Closed</option>
+                        {{#if_equals status "NEW"}}<option value="NEW" selected>{{agile_lng_translate 'menu' 'new'}}</option>{{/if_equals}}
+                        <option value="OPEN" {{#if_equals status "OPEN"}}selected{{/if_equals}}>{{agile_lng_translate 'contact-details' 'OPEN'}}</option>
+                        <option value="PENDING" {{#if_equals status "PENDING"}}selected{{/if_equals}}>{{agile_lng_translate 'tickets' 'pending'}}</option>
+                        <option value="CLOSED" {{#if_equals status "CLOSED"}}selected{{/if_equals}}>{{agile_lng_translate 'cases' 'closed'}}</option>
                       </select>
                     </div>
                  </div>
@@ -160,32 +159,32 @@
               <div class="row p-t-sm">
 
                   <div class="col-md-6 p-l-n">
-                    <div class="p-n m-b-xxs">Type</div>
+                    <div class="p-n m-b-xxs">{{agile_lng_translate 'contacts-view' 'type'}}</div>
                     <select id="type" name="type" class="form-control text-xs ticket_type" style="height: 28px;padding: 3px 6px;">
                       <option value="QUESTION" {{#if_equals type "QUESTION"}}selected{{/if_equals}}>
-                        Question
+                        {{agile_lng_translate 'tickets' 'question'}}
                       </option>
-                      <option value="TASK" {{#if_equals type "TASK"}}selected{{/if_equals}}>Task</option>
+                      <option value="TASK" {{#if_equals type "TASK"}}selected{{/if_equals}}>{{agile_lng_translate 'menu' 'task'}}</option>
                       <option value="INCIDENT" {{#if_equals type "INCIDENT"}}selected{{/if_equals}}>
-                        Incident
+                        {{agile_lng_translate 'tickets' 'incident'}}
                       </option>
-                      <option value="PROBLEM" {{#if_equals type "PROBLEM"}}selected{{/if_equals}}>Problem</option>
+                      <option value="PROBLEM" {{#if_equals type "PROBLEM"}}selected{{/if_equals}}>{{agile_lng_translate 'tickets' 'problem'}}</option>
                     </select>
                   </div>
 
                   <div class="col-md-6 p-r-n">
-                      <div class="p-n m-b-xxs">Priority</div>
+                      <div class="p-n m-b-xxs">{{agile_lng_translate 'tasks' 'priority'}}</div>
                       <select name="priority" class="form-control text-xs ticket_priority" style="height: 28px;padding: 3px 6px;">
-                        <option value="LOW" {{#if_equals priority "LOW"}}selected{{/if_equals}}>Low</option>
-                        <option value="MEDIUM" {{#if_equals priority "MEDIUM"}}selected{{/if_equals}}>Medium</option>
-                        <option value="HIGH" {{#if_equals priority "HIGH"}}selected{{/if_equals}}>High</option>
+                        <option value="LOW" {{#if_equals priority "LOW"}}selected{{/if_equals}}>{{agile_lng_translate 'tasks' 'Low'}}</option>
+                        <option value="MEDIUM" {{#if_equals priority "MEDIUM"}}selected{{/if_equals}}>{{agile_lng_translate 'tickets' 'medium'}}</option>
+                        <option value="HIGH" {{#if_equals priority "HIGH"}}selected{{/if_equals}}>{{agile_lng_translate 'tasks' 'High'}}</option>
                       </select>
                   </div>
               
               </div>
 
               <div class="row m-n p-t-sm">
-                  <div class="col-md-12 p-n m-b-xxs">Labels</div>
+                  <div class="col-md-12 p-n m-b-xxs">{{agile_lng_translate 'tickets' 'labels'}}</div>
                   <div class="col-md-12 p-n text-xs">
                     <select data-placeholder="Add Labels" class="chosen-select form-control" multiple class="w-md">
                     </select>
@@ -220,25 +219,26 @@
              
             <div class="pos-abs" style="right: 15px; top: 9px;">
 
-            <div class="btn-group dropdown m-l-xs" data-toggle="tooltip" data-container="body" data-placement="bottom" data-original-title="Workflows">
+            <div class="btn-group dropdown m-l-xs" data-toggle="tooltip" data-container="body" data-placement="bottom" data-original-title="{{agile_lng_translate 'campaigns' 'workflows'}}">
               <button class="fa fa-sitemap btn btn-sm btn-default show-workflows p-ver-2" data-toggle="dropdown"></button>
 
               <ul id="workflows_list" class="dropdown-menu">
-                <li><a href="javascript:void(0);">Loading...</a></li>
+                <li><a href="javascript:void(0);">{{agile_lng_translate 'tickets' 'loading'}}</a></li>
               </ul>
             </div>
 
             <div class="btn-group m-l-xs">
 
-              <button class="fa fa-ban btn btn-sm p-ver-2 {{#if_equals is_spam "true"}}btn-danger{{else}}btn-default{{/if_equals}} w-xxs w-auto-xs toggle-spam" data-toggle="tooltip" data-container="body" data-placement="bottom" data-original-title="{{#if_equals is_spam "true"}}Not Spam{{else}}Mark as Spam{{/if_equals}}"></button>
+              <button class="fa fa-ban btn btn-sm p-ver-2 {{#if_equals is_spam "true"}}btn-danger{{else}}btn-default{{/if_equals}} w-xxs w-auto-xs toggle-spam" data-toggle="tooltip" data-container="body" data-placement="bottom" data-original-title="{{#if_equals is_spam "true"}}{{agile_lng_translate 'tickets' 'not-spam'}}{{else}}{{agile_lng_translate 'tickets' 'mark-as-spam'}}{{/if_equals}}"></button>
               
-              <button class="fa fa-trash-o btn btn-sm p-ver-2 btn-default w-xxs w-auto-xs delete-ticket" data-toggle="tooltip" data-container="body" data-placement="bottom" data-original-title="Delete Ticket"></button>
+              <button class="fa fa-trash-o btn btn-sm p-ver-2 btn-default w-xxs w-auto-xs delete-ticket" data-toggle="tooltip" data-container="body" data-placement="bottom" data-original-title="{{agile_lng_translate 'tickets' 'delete-ticket'}}">
+              </button>
 
-                <button class="fa fa-check btn btn-sm p-ver-2 btn-default w-xxs w-auto-xs close-current-ticket" {{#if_equals status 'CLOSED'}}disabled="disabled"{{/if_equals}}" data-toggle="tooltip" data-container="body" data-placement="bottom" data-original-title="Close Ticket"></button>
+                <button class="fa fa-check btn btn-sm p-ver-2 btn-default w-xxs w-auto-xs close-current-ticket" {{#if_equals status 'CLOSED'}}disabled="disabled"{{/if_equals}} data-toggle="tooltip" data-container="body" data-placement="bottom" data-original-title="{{agile_lng_translate 'tickets' 'close-ticket'}}"></button>
                 
             </div> 
 
-            <button class="fa fa-dedent btn btn-sm p-ver-2 btn-default m-l-xs toggle-widgets" data-toggle="tooltip" data-container="body" data-placement="bottom" data-original-title="Toggle Widgets"></button>
+            <button class="fa fa-dedent btn btn-sm p-ver-2 btn-default m-l-xs toggle-widgets" data-toggle="tooltip" data-container="body" data-placement="bottom" data-original-title="{{agile_lng_translate 'tickets' 'toggle-widgets'}}"></button>
              
             </div>
           </div>
@@ -251,9 +251,9 @@
             </div>
 
             <div class="b-b b-light m-b-sm position-relative">
-              <span class="label label-default toggle-timeline cursor-pointer pull-right position-relative" style="bottom: 8px;">Show Timeline</span>
+              <span class="label label-default toggle-timeline cursor-pointer pull-right position-relative" style="bottom: 8px;">{{agile_lng_translate 'tickets' 'show-timeline-cap'}}</span>
 
-              <span class="label label-default cursor-pointer pull-right position-relative toggle-activities-notes" style="bottom: 8px;right: 1px;" data-toggle="tooltip" data-container="body" data-placement="bottom" data-original-title="Show Activities" rel="notes">
+              <span class="label label-default cursor-pointer pull-right position-relative toggle-activities-notes" style="bottom: 8px;right: 1px;" data-toggle="tooltip" data-container="body" data-placement="bottom" data-original-title="{{agile_lng_translate 'tickets' 'show-activities'}}" rel="notes">
                 <i class="fa fa-ellipsis-h"></i>
               </span>
 
@@ -283,7 +283,7 @@
 
           <div id="widgets" class="contact_{{contactID}}">
               <div class="text-center">
-                <img id="widget_load_img " src="//doxhze3l6s7v9.cloudfront.net/beta/static/img/ajax-loader-cursor.gif" class="m-t-sm m-b">
+                <img id="widget_load_img" src="//doxhze3l6s7v9.cloudfront.net/beta/static/img/ajax-loader-cursor.gif" class="m-t-sm m-b">
               </div>
             </div>  
           </div>  
@@ -302,14 +302,14 @@
       <div>
 
         <div class="btn-group">
-          <button type="button" class="btn btn-default btn-sm reply-btn {{#if_equals reply_type "reply"}}active box-shadow-none border-dee5e7{{/if_equals}}" rel="reply">Reply
+          <button type="button" class="btn btn-default btn-sm reply-btn {{#if_equals reply_type "reply"}}active box-shadow-none border-dee5e7{{/if_equals}}" rel="reply">{{agile_lng_translate 'contact-details' 'reply'}}
             {{#if_equals reply_type "reply"}}<span class="arrow bottom arrow-light" style="top:100%;"></span>{{/if_equals}}
           </button>
-          <button type="button" class="btn btn-default btn-sm reply-btn {{#if_equals reply_type "comment"}}active box-shadow-none border-dee5e7{{/if_equals}}" rel="comment">Notes
+          <button type="button" class="btn btn-default btn-sm reply-btn {{#if_equals reply_type "comment"}}active box-shadow-none border-dee5e7{{/if_equals}}" rel="comment">{{agile_lng_translate 'contact-details' 'notes'}}
             {{#if_equals reply_type "comment"}}<span class="arrow bottom arrow-light" style="top:100%;"></span>{{/if_equals}}
           </button>
 
-          <button type="button" class="btn btn-default btn-sm reply-btn {{#if_equals reply_type "forward"}}active box-shadow-none border-dee5e7{{/if_equals}}" rel="forward">Forward
+          <button type="button" class="btn btn-default btn-sm reply-btn {{#if_equals reply_type "forward"}}active box-shadow-none border-dee5e7{{/if_equals}}" rel="forward">{{agile_lng_translate 'tickets' 'forward'}}
             {{#if_equals reply_type "forward"}}<span class="arrow bottom arrow-light" style="top:100%;"></span>{{/if_equals}}
           </button>
           
@@ -317,7 +317,7 @@
       
         {{#if canned_responses}}
         <div class="btn-group dropdown m-l-xs pull-right">
-          <a class="link-color text-sm"  id="macro_list" data-toggle="dropdown" aria-expanded="false">Canned Responses <span class="caret"></span></a>
+          <a class="link-color text-sm"  id="macro_list" data-toggle="dropdown" aria-expanded="false">{{agile_lng_translate 'tickets' 'canned-responses'}} <span class="caret"></span></a>
           <ul class="dropdown-menu">
             {{#each canned_responses}}
             <li class="text-cap" id="ticket_canned_response" rel="{{id}}"><a href="javascript:void(0);" id={{id}}>{{title}}</a></li>
@@ -333,7 +333,7 @@
                     {{#if_equals reply_type "forward"}}
                      <ul class="forward-emails m-n p-a-sm b-a p-xs p-b-none r" name="forward_emails">
                           <li class="tag m-r-xs m-b-xs inline-block w-full">
-                             <input type="text" id="forward_email_input" name="email" class="b-n w-full" placeholder="To Email" autocomplete="off"/>
+                             <input type="text" id="forward_email_input" name="email" class="b-n w-full" placeholder="{{agile_lng_translate 'tickets' 'to-email'}}" autocomplete="off"/>
                           </li>
                       </ul> 
                     {{/if_equals}}
@@ -348,14 +348,14 @@
                   
                   <div class="m-t-xs clearfix m-b-sm">
 
-                    {{#if label_matched_canned_responses}}<a href="javascript:void(0);" onclick="$('.matched-canned-responses-list').toggle();" class="link-color text-sm cursor-pointer border-highlight-light pull-right">{{label_matched_canned_responses.length}} Recommendation{{#if_equals label_matched_canned_responses.length "1"}}{{else}}s{{/if_equals}}</a>{{/if}}
+                    {{#if label_matched_canned_responses}}<a href="javascript:void(0);" onclick="$('.matched-canned-responses-list').toggle();" class="link-color text-sm cursor-pointer border-highlight-light pull-right">{{label_matched_canned_responses.length}} {{agile_lng_translate 'tickets' 'recomedations'}}{{#if_equals label_matched_canned_responses.length "1"}}{{else}}s{{/if_equals}}</a>{{/if}}
 
                     {{#if_equals reply_type "reply"}}
                     <div class="btn-group dropdown p-none ticket-send-reply">
-                        <button class="btn btn-gray btn-sm send-reply"{{#if_equals status 'CLOSED'}}disabled="disabled"{{/if_equals}} data-loading-text="Sending...">Send Reply</button>
+                        <button class="btn btn-gray btn-sm send-reply"{{#if_equals status 'CLOSED'}}disabled="disabled"{{/if_equals}} data-loading-text="Sending...">{{agile_lng_translate 'tickets' 'send-reply'}}</button>
                         <button class="btn btn-gray btn-sm" data-toggle="dropdown"  {{#if_equals status 'CLOSED'}}disabled="disabled"{{/if_equals}} aria-expanded="false"><span class="caret"></span></button>
                         <ul class="dropdown-menu">
-                          <li><a href="javascript:void(0);" class="send-reply close-ticket">Send Reply &amp; Close Ticket</a></li>
+                          <li><a href="javascript:void(0);" class="send-reply close-ticket">{{agile_lng_translate 'tickets' 'send-reply'}} &amp; {{agile_lng_translate 'tickets' 'close-ticket'}}</a></li>
                         </ul>
                       </div>
                       {{/if_equals}}
@@ -363,16 +363,16 @@
                       {{#if_equals reply_type "comment"}} 
 
                       <div class="btn-group dropdown p-none">
-                        <button class="btn btn-gray btn-sm send-reply private" data-loading-text="Add Notes">Add Notes</button>
+                        <button class="btn btn-gray btn-sm send-reply private" data-loading-text="Add Notes">{{agile_lng_translate 'tickets' 'add-notes'}}</button>
                         <button class="ticket-addnote-close btn btn-gray btn-sm" {{#if_equals status 'CLOSED'}}disabled="disabled"{{/if_equals}} data-toggle="dropdown" aria-expanded="false"><span class="caret"></span></button>
                         <ul class="dropdown-menu">
-                          <li><a href="javascript:void(0);" class="send-reply private close-ticket" data-loading-text="Add Notes & Close Ticket">Add Notes & Close Ticket</a></li>
+                          <li><a href="javascript:void(0);" class="send-reply private close-ticket" data-loading-text="Add Notes & Close Ticket">{{agile_lng_translate 'tickets' 'add-notes'}} & {{agile_lng_translate 'tickets' 'close-ticket'}}</a></li>
                         </ul>
                       </div> 
                       {{/if_equals}} 
 
                       {{#if_equals reply_type "forward"}} 
-                        <button class="btn btn-sm btn-gray send-reply forward" data-loading-text="Sending...">Forward</button>
+                        <button class="btn btn-sm btn-gray send-reply forward" data-loading-text="Sending...">{{agile_lng_translate 'tickets' 'forward'}}</button>
                       {{/if_equals}}
 
                       <span class="error-msg text-sm" style="color: #d9534f;"></span>
@@ -381,7 +381,7 @@
 
                   {{#if label_matched_canned_responses}}
                   <div class="panel panel-default m-t-md matched-canned-responses-list" style="display: none;">
-                    <div class="panel-heading">Matched Canned Responses</div>
+                    <div class="panel-heading">{{agile_lng_translate 'tickets' 'matched-canned-responses'}}</div>
                     <table class="table table-striped table-responsive m-b-none">
                       <tbody>
                         {{#each label_matched_canned_responses}}
@@ -408,12 +408,12 @@
 <script  id="ticket-status-template" type="text/html">
   {{#if_equals status 'OPEN'}}
     <li>
-      <a class="change-ticket-status-li" data-value="CLOSED">Close</a>
+      <a class="change-ticket-status-li" data-value="CLOSED">{{agile_lng_translate 'contact-details' 'close'}}</a>
     </li>
   {{/if_equals}}
   {{#if_equals status 'CLOSED'}}
     <li>
-      <a class="change-ticket-status-li" data-value="OPEN">Open</a>
+      <a class="change-ticket-status-li" data-value="OPEN">{{agile_lng_translate 'contact-details' 'OPEN'}}</a>
     </li>
   {{/if_equals}}
 </script>
@@ -423,7 +423,7 @@
 </div>
 </script>
 <script  id="ticket-change-assignee-template" type="text/html">
-  <option value="">Select</option>
+  <option value="">{{agile_lng_translate 'deal-view' 'select'}}</option>
   {{#each this}}
     <optgroup data-group-id="{{id}}" data-group-email="{{group_email}}" label="{{group_name}}">
       {{#group_users}}
@@ -434,7 +434,7 @@
 </script>
 <script  id="ticket-deals-list-template" type="text/html">
   {{#unless this.length}}
-    No Deals
+    {{agile_lng_translate 'tickets' 'no-deals'}}
   {{/unless}}  
   {{#each this}}
     <div class="col-md-12 p-n m-t-xs">
@@ -472,7 +472,8 @@
         <div class="row m-n mar-btm-md">
           <div class="col-md-12 p-b-sm">
             <span class="label bg-{{toLowerCase status}} first-letter-cap inline-block">{{toLowerCase status}}</span>&nbsp;&nbsp;&nbsp;
-            <span class="v-middle txt-small">Ticket #{{id}}</span>
+            <span class="v-middle txt-small">{{agile_lng_translate 'contact-details' 'ticket'}} #{{id}}
+            </span>
             <span class="text-light pull-right" style="margin-top: 2px;">
               <time class="time-ago txt-small" datetime="{{epochToHumanDate "" created_time}}">
                   {{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created_time}}
@@ -490,7 +491,7 @@
           {{#if_equals status 'NEW'}}
           {{else}}
             <div class="col-md-12 pad-all-sm">
-              <span class="text-muted">Last comment</span>
+              <span class="text-muted">{{agile_lng_translate 'tickets' 'last-comment'}}</span>
               <hr class="m-t-xs m-b-xs">
             </div>
             <div class="col-md-12 pad-all-sm">
@@ -520,15 +521,15 @@
     <div class="modal-content">
         <div class="modal-header">
             <button class="close" data-dismiss="modal">x</button>
-            <h3 class="modal-title"><i class="icon icon-warning"></i> Error</h3>
+            <h3 class="modal-title"><i class="icon icon-warning"></i> {{agile_lng_translate 'contact-details' 'error'}}</h3>
         </div>
         <div class="modal-body">
             <form id='executeWorkFlowForm' name="executeWorkFlowForm" class="form-horizontal">
-                Due date must be greater than current time<br/><br/>
+                {{agile_lng_translate 'tickets' 'due-date-condition'}}<br/><br/>
             </form>
         </div>
         <div class="modal-footer">
-            <a href="javascript:void(0);" data-dismiss="modal" class="btn btn-sm btn-default">Close</a>
+            <a href="javascript:void(0);" data-dismiss="modal" class="btn btn-sm btn-default">{{agile_lng_translate 'contact-details' 'close'}}</a>
         </div>
     </div>
 </div>

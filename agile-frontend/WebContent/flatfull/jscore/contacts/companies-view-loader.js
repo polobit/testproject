@@ -128,7 +128,7 @@ var companies_view_loader = {
 				filter_name = conFilterObj.get("name");
 				var template = Handlebars.compile('<ul id="added-tags-ul" class="tagsinput p-n m-b-sm m-t-sm m-l-sm"><li class="inline-block tag btn btn-xs btn-primary" data="developer"><span class="inline-block m-r-xs v-middle">{{name}}</span><a class="close default_company_filter">&times</a></li></ul>');
 
-			 	$('.filter-criteria', el).html(template({name : filter_name}));
+			 	$('.filter-criteria', el).html(template({name : filter_name})).attr("_filter", company_filter_id);
 			}
 		}
 	},
