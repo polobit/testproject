@@ -792,7 +792,7 @@ function fillCustomFields(fields, el, callback, is_webrules)
 
 					if(condition.find('optgroup.relative-grp').length == 0)
 					{
-						condition.append('<optgroup class="relative-grp" label='{{agile_lng_translate "commons-lang" "relative"}}'></optgroup>');
+						condition.append('<optgroup class="relative-grp" label='{{agile_lng_translate "common-words" "relative-cap"}}'></optgroup>');
 						// condition.append('<optgroup label="Days"></optgroup>');
 					}
 					
