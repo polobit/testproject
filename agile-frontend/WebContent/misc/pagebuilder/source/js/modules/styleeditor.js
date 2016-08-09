@@ -566,17 +566,15 @@
         /*
             on focus, we'll make the input fields wider
         */
-        animateStyleInputIn: function() {            
-            $(this).css('position', 'absolute');
-            $(this).css('right', '0px');
-            $(this).animate({'width': '100%'}, 500);
-            if($(this).attr("name")!=="background-image"){
+        animateStyleInputIn: function() {
+            if($(this).attr("name") !== "background-image") {
+                $(this).css('position', 'absolute');
+                $(this).css('right', '0px');
+                $(this).animate({'width': '100%'}, 500);
                 $(this).focus(function(){
                     this.select();
                 });
-            }    
-            
-
+            }
         },
 
 
