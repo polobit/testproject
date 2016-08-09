@@ -1082,7 +1082,7 @@ $(function()
 
 	Handlebars.registerHelper('iscompactTabel', function(type , options)
 	{
-		var setCompactView = (type != "PERSON") ? _agile_get_prefs("companyTabelView") : _agile_get_prefs("contactTabelView");
+		var setCompactView = (type == "COMPANY") ? _agile_get_prefs("companyTabelView") : (type == "LEAD") ? _agile_get_prefs("leadTabelView") : _agile_get_prefs("contactTabelView");
 
 		if(setCompactView)
 				return options.fn(this);
@@ -7675,4 +7675,54 @@ Handlebars.registerHelper('if_asc_sork_key', function(value, options)
 		return options.inverse(this);
 	else
 		return options.fn(this); 
+});
+
+/**
+ * Returns table headings for custom contacts list view
+ */
+Handlebars.registerHelper('leadTableHeadings', function(item)
+{
+	var el = "", cls = ""; 
+	$.each(App_Leads.leadViewModel[item], function(index, element)
+	{
+		if (element == "basic_info" || element == "image")
+		{
+			
+			if(_agile_get_prefs("leadTabelView"))
+			{
+				// if the compact view is present the remove th basic info heading and add the empty heading for the image
+
+				if(element == "basic_info")
+					return ;
+
+				if(element == "image")
+				{
+					element = "";
+					cls = "";
+				}
+					  
+			}
+			else
+			{
+				if(element == "image")
+				{
+					return;
+				}
+				if(element == "basic_info")
+					element = "Basic Info";
+			}
+		}
+		else if (element.indexOf("CUSTOM_") == 0) 
+		{
+				element = element.split("_")[1];
+				cls = "text-muted";
+			}
+			else 
+			{
+			element = element.replace("_", " ");
+			cls = "";
+	 	}
+ 		el = el.concat('<th class="'+ cls +'">' + ucfirst(element) + '</th>');	
+ 	});
+	return new Handlebars.SafeString(el);
 });

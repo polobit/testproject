@@ -320,6 +320,7 @@ public class HomeServlet extends HttpServlet
     {
     	List<CustomFieldDef> contactFields = CustomFieldDefUtil.getCustomFieldsByScope(SCOPE.CONTACT);
     	List<CustomFieldDef> companyFields = CustomFieldDefUtil.getCustomFieldsByScope(SCOPE.COMPANY);
+    	List<CustomFieldDef> leadFields = CustomFieldDefUtil.getCustomFieldsByScope(SCOPE.LEAD);
     	
     	List<CustomFieldDef> customFieldsScopeContactTypeDate = new ArrayList<>();
     	List<CustomFieldDef> customFieldsScopeContactTypeContact = new ArrayList<>();
@@ -328,6 +329,10 @@ public class HomeServlet extends HttpServlet
     	List<CustomFieldDef> customFieldsScopeCompanyTypeDate = new ArrayList<>();
     	List<CustomFieldDef> customFieldsScopeCompanyTypeContact = new ArrayList<>();
     	List<CustomFieldDef> customFieldsScopeCompanyTypeCompany = new ArrayList<>();
+    	
+    	List<CustomFieldDef> customFieldsScopeLeadTypeDate = new ArrayList<>();
+    	List<CustomFieldDef> customFieldsScopeLeadTypeContact = new ArrayList<>();
+    	List<CustomFieldDef> customFieldsScopeLeadTypeCompany = new ArrayList<>();
     	
     	for(CustomFieldDef field : contactFields)
     	{
@@ -347,6 +352,15 @@ public class HomeServlet extends HttpServlet
     		if( field.field_type.equals(CustomFieldDef.Type.COMPANY) )	customFieldsScopeCompanyTypeCompany.add(field);
     	}
     	
+    	for(CustomFieldDef field : leadFields)
+    	{
+    		if( field.field_type.equals(CustomFieldDef.Type.DATE) )	customFieldsScopeLeadTypeDate.add(field);
+
+    		if( field.field_type.equals(CustomFieldDef.Type.CONTACT) )	customFieldsScopeLeadTypeContact.add(field);
+    		
+    		if( field.field_type.equals(CustomFieldDef.Type.COMPANY) )	customFieldsScopeLeadTypeCompany.add(field);
+    	}
+    	
     	request.setAttribute("customFieldsScopeContactTypeDate", customFieldsScopeContactTypeDate);
     	request.setAttribute("customFieldsScopeContactTypeContact", customFieldsScopeContactTypeContact);
     	request.setAttribute("customFieldsScopeContactTypeCompany", customFieldsScopeContactTypeCompany);
@@ -354,5 +368,9 @@ public class HomeServlet extends HttpServlet
     	request.setAttribute("customFieldsScopeCompanyTypeDate", customFieldsScopeCompanyTypeDate);
     	request.setAttribute("customFieldsScopeCompanyTypeContact", customFieldsScopeCompanyTypeContact);
     	request.setAttribute("customFieldsScopeCompanyTypeCompany", customFieldsScopeCompanyTypeCompany);
+    	
+    	request.setAttribute("customFieldsScopeLeadTypeDate", customFieldsScopeLeadTypeDate);
+    	request.setAttribute("customFieldsScopeLeadTypeContact", customFieldsScopeLeadTypeContact);
+    	request.setAttribute("customFieldsScopeLeadTypeCompany", customFieldsScopeLeadTypeCompany);
     }
 }

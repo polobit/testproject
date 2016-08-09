@@ -94,6 +94,10 @@ $(function(){
 				deal_bulk_actions.toggle_deals_bulk_actions_dropdown(undefined, true,$(this).parents('table').attr('id'));
 			else if(Current_Route == 'users')			
 				toggle_admin_user_bulk_actions_delete(this, true,$(this).parents('table').attr('id'));
+			else if(Current_Route == 'leads')
+			{
+				App_Leads.leadsBulkActions.toggleLeadsBulkActions(this, true, $(this).parents('table').attr('id'));
+			}
 			else
 				toggle_contacts_bulk_actions_dropdown(undefined, true,$(this).parents('table').attr('id'));
 			
@@ -109,7 +113,10 @@ $(function(){
 			deal_bulk_actions.toggle_deals_bulk_actions_dropdown(this, true,$(this).parents('table').attr('id'));
 		else if(Current_Route == 'users')			
 				toggle_admin_user_bulk_actions_delete(this, true,$(this).parents('table').attr('id'));		
-
+		else if(Current_Route == 'leads')
+		{
+			App_Leads.leadsBulkActions.toggleLeadsBulkActions(this, true, $(this).parents('table').attr('id'));
+		}	
 		else
 			toggle_contacts_bulk_actions_dropdown(this, true,$(this).parents('table').attr('id'));
 		

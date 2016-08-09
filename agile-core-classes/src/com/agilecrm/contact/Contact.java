@@ -90,7 +90,7 @@ public class Contact extends Cursor
      */
     public static enum Type
     {
-	PERSON, COMPANY
+	PERSON, COMPANY, LEAD
     };
 
     /**

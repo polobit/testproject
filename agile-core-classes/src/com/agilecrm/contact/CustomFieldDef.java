@@ -91,7 +91,7 @@ public class CustomFieldDef
      */
     public static enum SCOPE
     {
-	PERSON_COMPANY, PERSON, COMPANY, CONTACT, DEAL, CASE
+	PERSON_COMPANY, PERSON, COMPANY, CONTACT, DEAL, CASE, LEAD
     };
 
     public SCOPE scope = SCOPE.CONTACT;

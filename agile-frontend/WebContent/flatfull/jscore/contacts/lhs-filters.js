@@ -863,3 +863,16 @@ function clearLhsFilters()
 	});
 }
 
+function submitLeadLhsFilters()
+{
+	var formData = serializeLhsFilters($('#lhs-lead-filter-form'))
+	var contact_type = formData.contact_type;
+	_agile_delete_prefs('lead_filter');
+	if (formData != null && (formData.rules.length > 0 || formData.or_rules.length > 0))
+	{
+		_agile_set_prefs('dynamic_lead_filter', JSON.stringify(formData));
+	}
+	LEADS_HARD_RELOAD=true;
+	App_Leads.leadsViewLoader.getLeads(App_Leads.leadViewModel, $('#content'));
+}
+

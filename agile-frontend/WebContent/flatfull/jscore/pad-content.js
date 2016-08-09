@@ -324,3 +324,18 @@ $(function() {
 			$("#" + id).modal('show');
 	});
 });
+
+function getLeadPadcontentKey(url)
+{
+	if(!url)
+		return;
+	
+	if(url.indexOf('tag') > 0)
+		return "tag_results";
+	
+	if(url.indexOf('filter') > 0)
+		return "filter_results";
+	
+	return "leads";
+		
+}

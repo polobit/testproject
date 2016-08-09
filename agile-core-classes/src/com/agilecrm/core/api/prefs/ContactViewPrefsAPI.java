@@ -122,4 +122,55 @@ public class ContactViewPrefsAPI
 	    return null;
 	}
     }
+    
+    /**
+     * Gets ContactViewPrefs of current agile user.
+     * 
+     * @return ContactViewPrefs of current agile user.
+     */
+    @Path("lead")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public ContactViewPrefs getLeadViewPrefs()
+    {
+	try
+	{
+	    return ContactViewPrefsUtil.getCurrentUserContactViewPrefs(ContactViewPrefs.Type.LEAD.toString());
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
+    }
+
+    /**
+     * Updates ContactViewPrefs.
+     * 
+     * @param prefs
+     *            - ContactViewPrefs object to be updated.
+     * @return updated ContactViewPrefs.
+     */
+    @Path("lead")
+    @PUT
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public ContactViewPrefs saveLeadViewPrefs(ContactViewPrefs prefs)
+    {
+	try
+	{
+	    // Get UserPrefs of user who is logged in
+	    ContactViewPrefs viewPrefs = ContactViewPrefsUtil
+		    .getCurrentUserContactViewPrefs(ContactViewPrefs.Type.LEAD.toString());
+
+	    viewPrefs.fields_set = prefs.fields_set;
+	    viewPrefs.type = ContactViewPrefs.Type.LEAD;
+	    viewPrefs.save();
+	    return viewPrefs;
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
+    }
 }

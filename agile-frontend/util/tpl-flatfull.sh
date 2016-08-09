@@ -25,4 +25,7 @@ cat flatfull/tpl/segmentation/*.html > tpl/min/flatfull/segmentation.js
 cat flatfull/tpl/referals/*.html > tpl/min/flatfull/referals.js
 cat flatfull/tpl/helpcenter/*.html  > tpl/min/flatfull/helpcenter.js
 cat ../WebContent/helpcenter/helpcenter-tpl/*.html  > ../WebContent/tpl/min/flatfull/helpcenter-tpl.js
+cat flatfull/tpl/leads-filters/*.html  > tpl/min/flatfull/leads-filters.js
+cat flatfull/tpl/leads-view/*.html  > tpl/min/flatfull/leads-view.js
+cat flatfull/tpl/leads-form/*.html  > tpl/min/flatfull/leads-form.js
 cd ../util

@@ -180,6 +180,8 @@ public class ContactFilter extends SearchFilter implements Serializable, Compara
 		result.add(filter);
 	    else if (("COMPANY").equalsIgnoreCase(type) && filter.contact_type == Type.COMPANY)
 		result.add(filter);
+	    else if (("LEAD").equalsIgnoreCase(type) && filter.contact_type == Type.LEAD)
+		result.add(filter);
 	}
 
 	Collections.sort(result);

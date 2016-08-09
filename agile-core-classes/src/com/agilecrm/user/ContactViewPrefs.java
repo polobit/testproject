@@ -53,7 +53,7 @@ public class ContactViewPrefs
      */
     public static enum Type
     {
-	PERSON, COMPANY
+	PERSON, COMPANY, LEAD
     };
 
     @NotSaved(IfDefault.class)

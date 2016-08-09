@@ -1,0 +1,84 @@
+<script id="leads-static-filters-collection-template" type="text/html">
+	{{#is_mobile}}
+		<ul id = "contact-filter-list-model-list" class="pull-left dropdown-menu block w-full pos-rlt p-n m-t-sm m-b-sm b-n box-shadow-none text-ellipsis"></ul>
+	{{else}}
+		<div class="" id="filters-tour-step">
+			<button class="btn btn-sm dropdown-toggle no-shadow bg-transparent b-n p-l-xs p-r-xs p-t-none" data-toggle="dropdown">
+    			<span class="caret" data-toggle="tooltip" data-placement="right" title="" data-original-title="Filters"></span>
+  			</button>
+			<ul id = "leads-static-filters-model-list" class="dropdown-menu" role="menu">
+				<li>
+					<a href="#" class="default_filter">Leads</a>
+				</li>
+				<li class="divider"></li>
+				<li>
+					<a href='#lead-filters'>Manage Filters</a>
+				</li>
+				<li class="divider"></li>
+				<li><a class="lead_static_filter" id="system-LEADS"  data="My Leads" href="#">My Leads</a></li>
+			</ul>
+		</div>
+	{{/is_mobile}}
+</script>
+
+<script id="leads-static-filters-model-template" type="text/html">
+	<a id='{{id}}' class="lead_static_filter" data={{name}} filter_type="{{contact_type}}" href="#">{{name}}</a>
+</script>
+
+<script id="leads-filter-collection-template" type="text/html">
+<div class="wrapper-md lter bg-light b-b">
+	<div class="row">
+    	<div class="col-md-12">
+        	<h3 class="pull-left font-thin h3">Lead Filters</h3>
+            <a href="#lead-filter-add" class="btn btn-sm btn-default right" id="leadFilter"><span><i class='icon-plus-sign'/></span>  Add Filter</a>
+            <div class="clearfix"></div>
+           
+        </div>
+	</div>
+</div>
+<div class="wrapper-md">
+	<div class="row">
+    	<div class="col-md-9"> 
+	        {{#if this.length}}
+	        	<div class="panel panel-default">
+					<div class="table-responsive">
+	        			<table class="table table-bordered showCheckboxes agile-table panel table-layout-mob-view" url="core/api/filters/bulk" id="leads-filter-list">  
+	            			<thead>
+	                			<tr>   
+	                    			<th style="width:50%">Name</th>
+	                    			<th style="width:50%"></th>
+	                			</tr>
+	            			</thead>
+	            			<tbody id='leads-filter-model-list' route='lead-filter-edit/'></tbody>
+	        			</table>
+					</div>
+				</div>
+			{{/if}}
+			<div id="slate"></div>
+    	</div>
+    	<div class='col-md-3'>
+        	<div class="wrapper" id='addview'>
+             	<h4 class="m-t-none m-b-sm">
+              		What are Filters?
+             	</h4>
+            	<p>Filters are used to sort leads with a specific criteria to find patterns. You can save your preferred filters and fetch the leads based on saved preferences.</p>
+        	</div>
+    	</div>
+	</div>
+</div>
+</script>
+
+<script id="leads-filter-model-template" type="text/html">
+<td data='{{id}}' class='data c-p'>
+  <div>
+    {{name}} 
+  </div>
+</td>
+<td> 
+  {{#if created_time}}
+      <div>
+         Created <i class="fa fa-clock-o m-r-xs text-muted"></i><time class="created_time time-ago border-highlight text-muted" value="{{created_time}}" datetime="{{epochToHumanDate "" created_time}}">{{epochToHumanDate "ddd mmm dd yyyy" created_time}}</time> by {{filterOwner.name}}
+      </div>
+  {{/if}}
+</td>
+</script>

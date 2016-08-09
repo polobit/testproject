@@ -349,6 +349,18 @@ function getTemplateUrls(templateName)
 	{
 		template_relative_urls.push("helpcenter.js");
 	}
+	if (templateName.indexOf("leads-filter") == 0 || templateName.indexOf("leads-lhs-filters") == 0 || templateName.indexOf("leads-static-filters") == 0)
+	{
+		template_relative_urls.push("leads-filters.js");
+	}
+	if (templateName.indexOf("new-lead") == 0 || templateName.indexOf("update-lead") == 0)
+	{
+		template_relative_urls.push("leads-form.js");
+	}
+	if (templateName.indexOf("leads-header") == 0 || templateName.indexOf("leads-list-view") == 0)
+	{
+		template_relative_urls.push("leads-view.js");
+	}
 	
 	return template_relative_urls;
 }

@@ -187,7 +187,20 @@ public class ContactFilterUtil
 	}
 	else if (type == ContactFilter.DefaultFilter.LEADS)
 	{
-	    queryMap.put("tagsWithTime.tag", "lead");
+	    //queryMap.put("tagsWithTime.tag", "lead");
+		System.out.println(SessionManager.get());
+
+	    // Creates a DomainUser key based on current domain user id
+	    Key<DomainUser> userKey = null;
+
+	    // Creates a DomainUser key based on current domain user id
+
+	    userKey = new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId());
+
+	    // Queries contacts whose owner_key is equal to current domain user
+	    // key
+	    queryMap.put("owner_key", userKey);
+	    queryMap.put("type", Contact.Type.LEAD);
 	}
 
 	return queryMap;
