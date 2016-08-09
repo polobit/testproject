@@ -29,7 +29,17 @@ var PushNotificationRouter = Backbone.Router.extend({
 			
 			postRenderCallback : function(el)
 			{
-				$("#content").html(el);
+			  $("#content").html(el);
+			   head.js('stats/js/cookie.js', function(e)
+                 {
+                    var browserId = agile_read_data("agile-browser-id");
+                    if(browserId !=null || browserId != undefined){
+                    	$("#previewBtn").text("Send Preview"); 
+                    	$("#previewBtn").attr("btn-value","send");  
+
+                    }
+                });
+				
 			} });
 
 		$("#content").html(getRandomLoadingImg());
@@ -54,6 +64,15 @@ var PushNotificationRouter = Backbone.Router.extend({
 			postRenderCallback : function(el)
 			{
 				$("#content").html(el);
+				  head.js('stats/js/cookie.js', function(e)
+                 {
+                    var browserId = agile_read_data("agile-browser-id");
+                    if(browserId !=null || browserId != undefined){
+                    	$("#previewBtn").text("Send Preview"); 
+                    	$("#previewBtn").attr("btn-value","send");  
+
+                    }
+                });
 
 			} });
 
@@ -64,7 +83,6 @@ var PushNotificationRouter = Backbone.Router.extend({
 		$("#notification-message").keyup();
 		$("#notification-link").keyup();
 		$("#notification-icon").change();
-        
         $(".active").removeClass("active");
 	
 	} 

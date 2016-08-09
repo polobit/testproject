@@ -1,7 +1,8 @@
- var registration_id=null;
- var url="https://prashannjeet-dot-sandbox-dot-agilecrmbeta.appspot.com/push?id=";  
+ var registration_id=null; 
  self.addEventListener('push', function(event) 
  {
+    var url="/push?id="; 
+    url = event.srcElement.registration.scope.split("/n")[0]+url;
     event.waitUntil(  
         self.registration.pushManager.getSubscription().then(function(subscription) {
               console.log("got subscription id: ", subscription.endpoint)

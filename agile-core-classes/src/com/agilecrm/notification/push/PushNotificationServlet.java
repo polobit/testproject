@@ -38,7 +38,7 @@ public class PushNotificationServlet extends HttpServlet {
 		    try
 		    {
 		    	pushNotificationMessage = PushNotificationMessageUtil.getPushNotificationMessage(browser_id);
-		    	System.out.println("Message Created Time :"+pushNotificationMessage.toString());
+		    	System.out.println("Message Created Time :" + pushNotificationMessage.toString());
 		    } catch (Exception e) 
 			{
 		    	System.out.println(ExceptionUtils.getFullStackTrace(e));
@@ -59,7 +59,7 @@ public class PushNotificationServlet extends HttpServlet {
 		    try
 		    {
 				JSONObject data= new JSONObject(message);
-				if(data.has(PushNotification.NOTIFICATION_TITLE_VALUE))
+				if(data.has(PushNotification.NOTIFICATION_TITLE_VALUE) && org.apache.commons.lang.StringUtils.isNotBlank(campaign_id))
 				     LogUtil.addLogToSQL(campaign_id, subscriber_id, "Title : "+data.getString(PushNotification.NOTIFICATION_TITLE_VALUE),LogType.PUSH_NOTIFICATION_SHOWN.toString());
 			} catch (JSONException e) 
 			{

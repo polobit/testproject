@@ -118,13 +118,13 @@ function regiseterServiceWorkers()  {
 
      var params = "browserId=" +encodeURIComponent(browser_id); 
 
-     if(email != null || email != undefined)
+     if(email != 'null' || email != undefined)
         params = params + "&email=" + encodeURIComponent(email);
 
-     if(guid != null || guid != undefined)
+     if(guid != 'null' || guid != undefined)
         params = params + "&guid=" + encodeURIComponent(guid);
 
-      if(apiKey != null || apiKey != undefined)
+      if(apiKey != 'null' || apiKey != undefined)
         params = params + "&id=" + encodeURIComponent(apiKey);
 
      var agile_url = window.location.origin + "/core/js/api/contacts/push-notification/subscriber?"+ params;

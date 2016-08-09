@@ -402,7 +402,7 @@ public class JSAPI
 	     
 	     JSONArray jsonArray = new JSONArray();
 	     
-	     if(StringUtils.isNotBlank(email) &&  email != "null")
+	     if(StringUtils.isNotBlank(email))
 	     {
 	    	 jsonObject.put("name",Contact.EMAIL);
 	    	 jsonObject.put("value", email);

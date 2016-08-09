@@ -14,6 +14,7 @@ var Push_Notification_Event_View = Base_Model_View.extend({
 		 		'change #uploadIconToS3Btn' : 'uploadNotificationIcon',
 		 		'click #prev-notification-icon' : 'changeNotificationIcon',
 		 		'change #notification-icon' : 'changeNotificationIcon',
+        'click #previewBtn' : 'sendPushNotificationPreview',
 		    },
 
 			// Add notification title in preview
@@ -49,9 +50,47 @@ var Push_Notification_Event_View = Base_Model_View.extend({
          	  	 $('#prev-notification-icon').attr('src', 'https://media.licdn.com/mpr/mpr/shrink_200_200/AAEAAQAAAAAAAAWJAAAAJDQwNmRhNGNmLTlmNWMtNGZkMC1hZDJhLWI0ODE1NDQxMmNhNA.png');
 				
 			},
+      sendPushNotificationPreview: function(e)
+      {
+         e.preventDefault();
+         var btnValue = $("#previewBtn").attr("btn-value");
+         if($("#previewBtn").attr("btn-value")== 'send')         
+                sendPushNotification();
+          else
+          {
+            head.js('flatfull/push_notification/push_notification.js', function(e)
+            {
+               enablePushNotification();
+               $("#previewBtn").text("Send Preview"); 
+               $("#previewBtn").attr("btn-value","send");
+             });
+           }
+      },
 
 
 		});
+
+
+//Preview
+function sendPushNotification(){
+  var jsonData = serializeForm("notificationForm");
+  jsonData.browserId = agile_read_data("agile-browser-id");
+  
+  $("#PreviewBtn").text("Sending");
+   $.ajax({
+            data: JSON.stringify(jsonData),
+            dataType: 'json',
+            contentType: 'application/json',
+            type: "POST",
+            url: "/core/api/push/notifications/preview",
+            success: function(data) {
+              $("#PreviewBtn").text("Send Preview");
+            },
+        });
+
+
+}
+
 
 function uploadIconToS3ThroughBtn(file) {
     if(typeof file != "undefined") {

@@ -138,9 +138,11 @@
 
                 <div class="control-group form-group">
                       <label class="control-label col-sm-2 col-xs-12">Image URL</label>
-                	 <div class="controls col-sm-10 col-xs-12">
+                	 <div class="controls col-sm-8 col-xs-12">
                     	 <input type="url" placeholder="Image address url (Recommended 200*200 px)" class="form-control" id="notification-icon" name="notificationIcon"/>
                 	</div>
+                	 <a class="btn btn-xm btn-primary" id="browseBtn" onclick="$('#uploadIconToS3Btn').click() ">Upload Image</a>
+			        <input type="file" id="uploadIconToS3Btn" class="hidden">
                 </div>
 
                <div class="control-group form-group col-sm-8">
@@ -153,11 +155,7 @@
 			               </select>
 			         </div>
 			 </div>
-			  <div class="pull-right">
-			          <a class="btn btn-sm btn-primary" id="browseBtn" onclick="$('#uploadIconToS3Btn').click() ">Upload Image</a>
-			        <input type="file" id="uploadIconToS3Btn" class="hidden">
-			    </div>
-
+			 
 				<div class="clearfix"></div>           
 				<div class="line ling-lg b-b"></div>
                 <div class="form-actions col-sm-offset-2 col-sm-8">          
@@ -188,12 +186,13 @@
                             <div class="col-md-9 col-xs-9" style="padding-left: 20px;">
                                 <p style="color: black;" id = "prev-notification-title" class="h4 p-b-sm">Notification Title </p>
                                 <p style="color: black;" id="prev-notification-message" class="h5 p-b-sm">Notification Message </p>
-                                <p  style="color: #989898;" class="h6 p-b-xs"><b>yourwebsite.com</b> </p>
+                                <p  style="color: #989898;" class="h6 p-b-xs"><b>domain.agilecrm.com</b> </p>
                             </div>
                         </div>
                     </div>
                 </div>
 			</div>
+			 <a class="btn btn-xm btn-primary" id="previewBtn" btn-value="allow" onclick="">Enable Preview</a>
 </div>
 </div>
 </div>

@@ -43,13 +43,22 @@ function regiseterServiceWorkers()  {
            }
 
         registration.pushManager.getSubscription().then(
-        function(pushSubscription) 
+        function(subscription) 
         {
           // Check if we have an existing pushSubscription
-          if (pushSubscription)
+          if (subscription)
            {
-                 
-                 console.log("You already having subscription"+pushSubscription.endpoint);
+                  if(subscription !=null || subscription !=undefined){
+                       browser_id = subscription.endpoint.substring(subscription.endpoint.lastIndexOf("/")+1)
+
+                   if(subscription.endpoint.indexOf("mozilla")>0)
+                       browser_id = "mozilla" + browser_id;
+                   else
+                     browser_id = "chrome" + browser_id;
+
+                       agile_store_data("agile-browser-id",browser_id);
+                       console.log("You already having subscription"+subscription.endpoint);
+                }
            } 
           else
            {
@@ -86,6 +95,8 @@ function regiseterServiceWorkers()  {
         browser_id = "mozilla" + browser_id;
       else
         browser_id = "chrome" + browser_id;
+
+       agile_store_data("agile-browser-id",browser_id);
 
      var params = "browserId=" +encodeURIComponent(browser_id);
 
