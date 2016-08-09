@@ -1384,6 +1384,15 @@
 		<url-pattern>/querysubmit</url-pattern>
 	</servlet-mapping>
 	
+	<servlet>
+		<servlet-name>WebruleServlet</servlet-name>
+		<servlet-class>com.agilecrm.webrules.WebruleServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>WebruleServlet</servlet-name>
+		<url-pattern>/push_notification</url-pattern>
+	</servlet-mapping>
+	
 	<!-- SSO feature -->
 	<servlet>
 		<servlet-name>SingleSignOn</servlet-name>
