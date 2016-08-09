@@ -231,7 +231,9 @@ function sendActionToClient(action){
 	image.onerror= function(png) {
 		console.log("client failure");
 		window.focus();
-		resetglobalCallVariables();
+		if(command != "getLogs"){
+			resetglobalCallVariables();	
+		}
 		if(command == "getLogs"){
 			var message ={};
 			message["data"] = "";

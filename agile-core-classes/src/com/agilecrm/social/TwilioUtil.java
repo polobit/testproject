@@ -2,7 +2,9 @@ package com.agilecrm.social;
 
 import java.net.URI;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -18,7 +20,9 @@ import com.agilecrm.user.AgileUser;
 import com.agilecrm.widgets.Widget;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.utils.SystemProperty;
+import com.google.gson.JsonObject;
 import com.thirdparty.twilio.sdk.TwilioRestClient;
+import com.thirdparty.twilio.sdk.TwilioRestException;
 import com.thirdparty.twilio.sdk.TwilioRestResponse;
 import com.twilio.sdk.client.TwilioCapability;
 import com.twilio.sdk.client.TwilioCapability.DomainException;
@@ -952,4 +956,218 @@ public class TwilioUtil
 			return logs;
 		}
 	}
+	
+	/**
+	 * join client to conference call.
+	 * 
+	 * @author Prakash
+	 * @created 05-April-2016
+	 * 
+	 */
+	public static String addToConference(Widget widget, String from, String to, String conferenceName)
+			throws JSONException, Exception
+	{
+		String status = "400";
+		try
+		{
+			System.out.println("IN add to conference methods");
+			String account_sid = widget.getProperty("twilio_acc_sid");
+			String auth_token = widget.getProperty("twilio_auth_token");
+			System.out.println("account_sid" + account_sid);
+			System.out.println("token is " + auth_token);
+			TwilioRestClient client = new TwilioRestClient(account_sid, auth_token, "");
+			String record = widget.getProperty("twilio_record");
+			Map<String, String> params = new HashMap<String, String>();
+				params.put("From",from);
+				params.put("To", to);
+				params.put("Url","https://test55-dot-sandbox-dot-agilecrmbeta.appspot.com/conftwiml?conference=" + conferenceName +  "&endConferenceOnExit=no&recordConference=" + record + "&maxParticipants=3");
+				TwilioRestResponse response = client.request("/" + APIVERSION + "/Accounts/" + account_sid + "/Calls/", "POST", params);
+				JSONObject responseTextJson = XML.toJSONObject(response.getResponseText()).getJSONObject("TwilioResponse");
+				JSONObject callResponse = responseTextJson.getJSONObject("Call");
+				if(callResponse == null){
+					callResponse = responseTextJson.getJSONObject("RestException");
+				}
+				if(callResponse != null){
+					status = callResponse.getString("Status");
+				}
+				System.out.println("status for adding in conference is " + status);
+				return status;
+		}
+		catch (Exception e)
+		{
+			System.out.println( "Error occured in adding call to conference" + e.getMessage());
+		}
+		return status;
+	}
+	
+	
+	/**
+	 * join client to conference call.
+	 * 
+	 * @author Prakash
+	 * @created 05-April-2016
+	 * 
+	 */
+	public static String modifyCall(Widget widget, String callSid, String conferenceName, String direction)
+			throws JSONException, Exception
+	{
+		String status = "400";
+		try{
+			
+			System.out.println("IN add to conference methods");
+			String account_sid = widget.getProperty("twilio_acc_sid");
+			String auth_token = widget.getProperty("twilio_auth_token");
+			System.out.println("account_sid" + account_sid);
+			System.out.println("token is " + auth_token);
+			TwilioRestClient client = new TwilioRestClient(account_sid, auth_token, "");
+			String record = widget.getProperty("twilio_record");
+			
+			Map<String, String> params = new HashMap<String, String>();
+			String childCallSid = "";
+
+			// we only need the to number to forward so we find the call sid which have to number
+			if(direction.equalsIgnoreCase("Outgoing")){
+				params.put("ParentCallSid", callSid);
+				TwilioRestResponse response = client.request("/" + APIVERSION + "/Accounts/" + account_sid + "/Calls.json",
+						"GET", params);
+				JSONObject responseJSON = new JSONObject(response);
+				String responseText = response.getResponseText();
+				JSONObject responseTextJson = new JSONObject(responseText);
+				JSONArray calls = responseTextJson.getJSONArray("calls");
+				JSONObject call = (JSONObject) calls.get(0);
+				childCallSid = call.getString("sid");
+				System.out.println("child call sid is " +  childCallSid);
+			}else{
+				childCallSid = callSid;
+				TwilioRestResponse response = client.request("/" + APIVERSION + "/Accounts/" + account_sid + "/Calls/"
+						+ callSid + ".json", "GET", null);
+				JSONObject responseJSON = new JSONObject(response);
+				String responseText = response.getResponseText();
+				JSONObject responseTextJson = new JSONObject(responseText);
+				childCallSid = responseTextJson.getString("parent_call_sid");
+			}
+			
+				params.put("Url","https://test55-dot-sandbox-dot-agilecrmbeta.appspot.com/conftwiml?conference=" + conferenceName + "&endConferenceOnExit=yes&recordConference=" + record+ "&maxParticipants=3");
+				params.put("Method", "POST");
+				TwilioRestResponse response = client.request("/" + APIVERSION + "/Accounts/" + account_sid + "/Calls/" +childCallSid, "POST", params);
+				System.out.println("respomse for modify call is -" + XML.toJSONObject(response.getResponseText()).getJSONObject("TwilioResponse"));
+				JSONObject responseTextJson = XML.toJSONObject(response.getResponseText()).getJSONObject("TwilioResponse");
+				JSONObject callResponse = responseTextJson.getJSONObject("Call");
+				if(callResponse == null){
+					callResponse = responseTextJson.getJSONObject("RestException");
+				}
+				if(callResponse != null){
+					status = callResponse.getString("Status");
+				}
+				
+				System.out.println("status for modify call is " + status);
+			return status;
+
+		}catch(Exception e){
+			System.out.println( "Error occured in modifying call using rest api" + e.getMessage());
+		}
+		
+		return status;
+	}
+	
+	
+	
+	/**
+	 * Gets conference last call log status.
+	 * 
+	 * @author Prakash
+	 * @created 06/04/2016
+	 * 
+	 */
+	public static JSONObject getLastConfCallDetails(String account_sid, String auth_token, String confName)
+			throws JSONException, Exception
+	{
+		TwilioRestClient client = new TwilioRestClient(account_sid, auth_token, "");
+		Map<String, String> params = new HashMap<String, String>();
+		params.put("FriendlyName", confName);
+		TwilioRestResponse response = client.request("/" + APIVERSION + "/Accounts/" + account_sid + "/Conferences.json",
+				"GET", params);
+		System.out.println("output for conf response is " + response.getResponseText());
+		JSONObject responseJSON = new JSONObject(response.getResponseText());
+		String confSid = "";
+		try{
+			JSONArray conferences = responseJSON.getJSONArray("conferences");
+			
+			confSid = conferences.getJSONObject(0).getString("sid");
+			System.out.println("confSid is" + conferences);
+		}catch(Exception e){
+			System.out.println(e.getMessage());
+		}
+		getParticipantsForConfCall(account_sid, auth_token, confSid);
+		return responseJSON;
+	}
+	
+	/**
+	 * Gets conference last call log status.
+	 * 
+	 * @author Prakash
+	 * @created 06/04/2016
+	 * 
+	 */
+	public static JSONObject getParticipantsForConfCall(String account_sid, String auth_token, String confId)
+			throws JSONException, Exception
+	{
+		try{
+			TwilioRestClient client = new TwilioRestClient(account_sid, auth_token, "");
+			
+			
+			TwilioRestResponse response = client.request("/" + APIVERSION + "/Accounts/" + account_sid + "/Conferences/" + confId + "/Participants.json",
+					"GET", null);
+			
+			System.out.println("output for conf response is " + response.getResponseText());
+			JSONObject responseJSON = new JSONObject(response.getResponseText());
+			try{
+				JSONArray participants = responseJSON.getJSONArray("participants");
+				System.out.println("participants" + participants);
+			}catch(Exception e){
+				System.out.println(e.getMessage());
+			}
+			
+			return responseJSON;
+		}catch(Exception e){
+			System.out.println(e.getMessage());
+		}
+		return new JSONObject();
+		
+	
+	}
+
+	public static String checkAndEndLastParticipant(Widget widget, String callSid)
+	{
+		String number = null;
+		String account_sid = widget.getProperty("twilio_acc_sid");
+		String auth_token = widget.getProperty("twilio_auth_token");
+		TwilioRestClient client = new TwilioRestClient(account_sid, auth_token, "");
+		
+		TwilioRestResponse response;
+		try
+		{
+			response = client.request("/" + APIVERSION + "/Accounts/" + account_sid + "/Calls/"
+					+ callSid + ".json", "GET", null);
+			JSONObject responseJSON = new JSONObject(response);
+			String responseText = response.getResponseText();
+			JSONObject responseTextJson = new JSONObject(responseText);
+			
+			System.out.println("response is " + responseTextJson);
+		}
+		catch (TwilioRestException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		catch (JSONException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		return number;
+	}
+	
 }
