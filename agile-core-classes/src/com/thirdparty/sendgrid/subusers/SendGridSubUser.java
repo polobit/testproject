@@ -15,19 +15,26 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.agilecrm.AgileGlobalProperties;
 import com.agilecrm.AgileQueues;
 import com.agilecrm.Globals;
 import com.agilecrm.account.EmailGateway;
 import com.agilecrm.account.util.AccountPrefsUtil;
+import com.agilecrm.sendgrid.util.SendGridUtil;
 import com.agilecrm.user.util.DomainUserUtil;
+import com.agilecrm.util.AgileGlobalPropertiesUtil;
 import com.agilecrm.util.Base64Encoder;
+import com.agilecrm.util.EncryptDecryptUtil;
 import com.agilecrm.util.HTTPUtil;
 import com.agilecrm.util.HttpClientUtil;
 import com.campaignio.reports.DateUtil;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
+import com.google.appengine.api.utils.SystemProperty;
+import com.thirdparty.sendgrid.SendGrid;
 import com.thirdparty.sendgrid.deferred.SendGridSubAccountDeferred;
+import com.thirdparty.sendgrid.lib.SendGridException;
 import com.thirdparty.sendgrid.lib.SendGridLib;
 import com.thirdparty.sendgrid.webhook.util.SendGridWebhookUtil;
 
@@ -64,9 +71,9 @@ public class SendGridSubUser extends SendGridLib
 	/**
 	 * @param subUser
 	 * @return
-	 * @throws UnsupportedEncodingException
+	 * @throws Exception 
 	 */
-	public String createSubUser(SubUser subUser) throws UnsupportedEncodingException
+	public String createSubUser(SubUser subUser) throws Exception
 	{
     	HttpClientUtil.URLBuilder urlBuilder = new HttpClientUtil.URLBuilder(super.url + super.endpoint);
     	urlBuilder.setMethod("POST");
@@ -96,7 +103,7 @@ public class SendGridSubUser extends SendGridLib
 		return webhookResponse;
 	}
 	
-	public String associateAgileWhiteLabel(SubUser subUser)
+	public String associateAgileWhiteLabel(SubUser subUser) throws Exception
 	{
 		String DEFAULT_WHITELABEL_ID = "455116";
 		String url = "https://api.sendgrid.com/v3/whitelabel/domains/"+DEFAULT_WHITELABEL_ID+"/subuser";
@@ -167,7 +174,7 @@ public class SendGridSubUser extends SendGridLib
 		public SubUser()
 		{
 			this.ips = new ArrayList<String>();
-			ips.add("167.89.89.43");
+			ips.add("167.89.30.183");
 		}
 		
 		public String getName()
@@ -238,8 +245,16 @@ public class SendGridSubUser extends SendGridLib
 	 */
 	public static String getAgileSubUserPwd(String domain) throws IllegalArgumentException
 	{
+		String pwd = null;
+		
 		if(StringUtils.isNotBlank(domain))
 		{
+			// Gets password from Datastore
+			pwd = AgileGlobalPropertiesUtil.getGlobalSendGridSubUserPwd();
+
+			if(StringUtils.isNotBlank(pwd))
+				return EncryptDecryptUtil.encrypt(pwd + domain);
+			
 			if(domain.length() <= 3)
 				return domain +  AGILE_SUB_USER_PWD_PREPEND + AGILE_SUB_USER_PWD_TOKEN;
 			
@@ -531,7 +546,16 @@ public class SendGridSubUser extends SendGridLib
 	}
 	
 	public static void main(String adf[]){
-		deleteSubAccountFromSendGrid("prashannjeet");
+		try
+		{
+			updateSendGridSubUserPassword("xyz");
+		}
+		catch (SendGridException e)
+		{
+			System.out.println("Exception occured in main...."  + e.getMessage());
+			e.printStackTrace();
+		}
+		catch(Exception e){e.printStackTrace();}
 	}
 	/**
 	 * Add SendGrid sub account creation task in Deferred queue
@@ -549,9 +573,42 @@ public class SendGridSubUser extends SendGridLib
 		
 	}
 	
+	public static void updateSendGridSubUserPassword(String domain) throws SendGridException, Exception
+	{
+		if(StringUtils.isBlank(domain))
+			return;
+		
+		String response = null, user = SendGridSubUser.getAgileSubUserName(domain), url = "https://api.sendgrid.com/apiv2/customer.password.json";
+		
+			String username = Globals.SENDGRID_API_USER_NAME, password = Globals.SENDGRID_API_KEY;
+			
+			String newPassword = getAgileSubUserPwd(domain);
+			
+			String queryString = null;
+			
+			try
+			{
+				queryString = SendGrid.SENDGRID_API_PARAM_API_USER + "=" + URLEncoder.encode(username, "UTF-8") + "&"  
+									+ SendGrid.SENDGRID_API_PARAM_API_KEY + "=" + URLEncoder.encode(password, "UTF-8") + "&"
+									+ "user" + "=" + URLEncoder.encode(user, "UTF-8") + "&"
+									+ "password" + "=" + URLEncoder.encode(newPassword, "UTF-8") + "&"
+									+ "confirm_password" + "=" + URLEncoder.encode(newPassword, "UTF-8");
+			}
+			catch (UnsupportedEncodingException e)
+			{
+				e.printStackTrace();
+			}
+			
+			response = HTTPUtil.accessURLUsingPost(url, queryString);
+			
+			System.out.println("Response after updating password " + response);
+			
+			if(response.contains("User does not exist") && response.contains("400"))
+				throw new SendGridException(new Exception("User does not exist"));
+			
+			System.out.println("After throwing exception");
+	}
 	
-	
-
 }
 	
 

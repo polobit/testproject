@@ -19,29 +19,29 @@ function campaignAlert(alertType)
 	 
 	if(alertType == "Empty")
 		{
-		alertJSON["title"]="No Twilio Number";
-		alertJSON["message"]="The Twilio SMS gateway you configured does not have a purchased number. Please purchase a number from Twilio to start sending SMS.";
+		alertJSON["title"]="{{agile_lng_translate 'twill' 'no-twilio-number'}}";
+		alertJSON["message"]="{{agile_lng_translate 'gateway' 'number-error'}}";
 		templateName = "SMSGateway-integration-alert-modal";
 		}
 	
 	if(alertType == "Empty_Widget")
 		{
-		alertJSON["title"]="No Twilio Number";
-		alertJSON["message"]="The Twilio call widget you configured does not have a purchased number. Please purchase a number from Twilio to start calling.";
+		alertJSON["title"]="{{agile_lng_translate 'twill' 'no-twilio-number'}}";
+		alertJSON["message"]="{{agile_lng_translate 'gateway' 'number-integration-error'}}";
 		templateName = "CallWidget-integration-alert-modal";
 		}
 
 	if(alertType == "Unauthorised")
 		{
-		alertJSON["title"]="SMS Gateway not Configured";
-		alertJSON["message"]="You need to enable SMS Gateway integration to use this option. Please enable it in Admin Settings -> Integrations";
+		alertJSON["title"]="{{agile_lng_translate 'gateway' 'no-gateway'}}";
+		alertJSON["message"]="{{agile_lng_translate 'gateway' 'enable-gateway'}}";
 		templateName = "SMSGateway-integration-alert-modal";
 		}
 
 	if(alertType == "Unauthorised_Call_Widget")
 		{
-		alertJSON["title"]="Call Widget  not Configured";
-		alertJSON["message"]="You need to enable Twilio Call widget to use this option. Please enable it in Preferences -> Widgets";
+		alertJSON["title"]="{{agile_lng_translate 'gateway' 'no-twilio-gateway'}}";
+		alertJSON["message"]="{{agile_lng_translate 'gateway' 'enable-twilio-integration'}}";
 		templateName = "CallWidget-integration-alert-modal";
 		}
 
@@ -121,7 +121,7 @@ function send_verify_email(el)
 		if(!isValidForm('#verify-email-form'))
 			return;
 
-		$(this).attr('disabled', 'disabled').text("Sending...");
+		$(this).attr('disabled', 'disabled').text(_agile_get_translated_val('other','sending'));
 
 		var json = serializeForm("verify-email-form");
 		
@@ -140,8 +140,8 @@ function send_verify_email(el)
 			     $('#verify-email-form').find('div.row div').hide();
 			     $('#verify-email-form').find('div.row input').val(json.email);
 
-			     $('#verify-email-form').find('div.row span#alert-msg').html("<p class='m-l'>Verification email sent to &#39;"+json.email+"&#39;. Please check your email and complete the verification process.</p>");
-			     $('#verify-email-send').removeAttr('href').removeAttr('id').off('click').attr('data-dismiss', 'modal').text('Done');
+			     $('#verify-email-form').find('div.row span#alert-msg').html("<p class='m-l'>{{agile_lng_translate 'emails' 'verification-sent'}} &#39;"+json.email+"&#39;. {{agile_lng_translate 'emails' 'verification-process'}}</p>");
+			     $('#verify-email-send').removeAttr('href').removeAttr('id').off('click').attr('data-dismiss', 'modal').text('{{agile_lng_translate "deal-view" "done"}}');
 
 			},
 			error: function(response)
@@ -154,8 +154,8 @@ function send_verify_email(el)
 					$('#verify-email-form').find('div.row div').hide();
 					$('#verify-email-form').find('div.row input').val(json.email);
 			     
-					$('#verify-email-form').find('div.row span#alert-msg').html("<p class='m-l'> &#39;"+json.email+"&#39; is not verified yet. Please check your email and complete the verification process.</p>");
-					$('#verify-email-send').removeAttr('href').removeAttr('id').off('click').attr('data-dismiss', 'modal').text('Done');
+					$('#verify-email-form').find('div.row span#alert-msg').html("<p class='m-l'> &#39;"+json.email+"&#39; {{agile_lng_translate 'emails' 'email-not-verified-error'}}</p>");
+					$('#verify-email-send').removeAttr('href').removeAttr('id').off('click').attr('data-dismiss', 'modal').text('{{agile_lng_translate "deal-view" "done"}}');
 					
 //					$("#verify-ignore").show();
 					return;
@@ -183,7 +183,7 @@ function unsubscribe_contact()
 		if(!isValidForm('#unsubscribe-form'))
 			return;
 
-		$(this).attr('disabled', 'disabled').text("Unsubscribing...");
+		$(this).attr('disabled', 'disabled').text("{{agile_lng_translate 'emails' 'unsubscribing'}}");
 
 		var json = {}, campaigns_list = [];
 
@@ -235,7 +235,7 @@ function unsubscribe_contact()
 
 				$('div#contact-detail-resubscribe-modal').modal('hide');
 
-				showNotyPopUp("information", "Unsubscribed successfully.", "top");
+				showNotyPopUp("information", "{{agile_lng_translate 'emails' 'unsubscribe-done'}}", "top");
 			},
 			error: function(response)
 			{
@@ -254,7 +254,7 @@ function resubscribe()
 		e.preventDefault();
 
 		var $element = $(event.target);
-		if(!confirm("Are you sure to resubscribe " + $(this).attr("contact_name") + " to " + $(this).attr("campaign_name") + " campaign?"))
+		if(!confirm("{{agile_lng_translate 'emails' 'confirm-resubscribe'}} " + $(this).attr("contact_name") + " {{agile_lng_translate 'contacts-view' 'to'}} " + $(this).attr("campaign_name") + " {{agile_lng_translate 'campaigns' 'campaign-sm'}}?"))
 			return;
 		var campaign_id = $(this).attr('data');
 

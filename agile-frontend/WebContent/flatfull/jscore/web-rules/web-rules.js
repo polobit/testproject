@@ -40,6 +40,7 @@ function chainWebRules(el, data, isNew, actions)
 	$("#noty-message", el).chained($("#action", el), function(select, self){
 		var value = $("select", select).val();					
 		$(self).show();
+		$('#twilio_call_setup').hide();
 		console.log(value);
 	
 		if(value == "MODAL_POPUP" || value == "CORNER_NOTY" || value== "CALL_POPUP")
@@ -49,7 +50,16 @@ function chainWebRules(el, data, isNew, actions)
 
 				if(value=="CALL_POPUP"){
 					loadSavedTemplate("call/callpopup.html");
-					$('#twilio-info',self).show();
+					$.ajax({
+						url: '/core/api/sms-gateway/twilio',
+						type : 'GET',
+						success : function(data) {
+							App_WebReports.isTwilioSMS=data;
+						},
+						error : function(data) {
+							App_WebReports.isTwilioSMS=false;
+						}
+					});
 				}
 				self.find(".web-rule-preview").show();
 			return;
@@ -240,25 +250,26 @@ function getMergeFields(type, callback)
 {
 	var options=
 	{
-		"Select Merge Field": "",
-		"First Name": "{{first_name}}",
-		"Last Name": "{{last_name}}",
-		"Email": "{{email}}",
-		"Company":"{{company}}",
-		"Title": "{{title}}",
-		"Website": "{{website}}",
-		"Phone": "{{phone}}",
-		"City": "{{city}}",
-		"State": "{{state}}",
-		"Country": "{{country}}",
-		"Zip": "{{zip}}",
-		"Domain": "{{domain}}",
-		"Address": "{{address}}",
-		"Score": "{{score}}",
-		"Created Time": "{{created_time}}",
-		"Modified Time": "{{modified_time}}",
-		"Owner Name": "{{owner_name}}",
-		"Owner Email": "{{owner_email}}"
+		"{{agile_lng_translate 'contact-view' 'select-merge-fields'}}": "",
+		"{{agile_lng_translate 'contacts-view' 'First Name'}}": "{{first_name}}",
+		"{{agile_lng_translate 'contacts-view' 'Last name'}}": "{{last_name}}",
+		"{{agile_lng_translate 'modals' 'email'}}": "{{email}}",
+		"{{agile_lng_translate 'contacts-view' 'Company'}}": "{{company}}",
+		"{{agile_lng_translate 'other' 'title'}}": "{{title}}",
+		"{{agile_lng_translate 'other' 'website'}}": "{{website}}",
+		"{{agile_lng_translate 'contacts-view' 'Phone'}}": "{{phone}}",
+		"{{agile_lng_translate 'contact-edit' 'city'}}": "{{location.city}}",
+		"{{agile_lng_translate 'contact-edit' 'state'}}":"{{location.state}}",
+		"{{agile_lng_translate 'contacts-view' 'country'}}":"{{location.country}}",
+		"{{agile_lng_translate 'contact-edit' 'zip'}}": "{{zip}}",
+		"{{agile_lng_translate 'prefs-settings' 'domain'}}": "{{domain}}",
+		"{{agile_lng_translate 'other' 'address'}}": "{{location.address}}",
+		"{{agile_lng_translate 'report-add' 'score'}}": "{{score}}",
+		"{{agile_lng_translate 'contacts-view' 'Created time'}}": "{{created_time}}",
+		"{{agile_lng_translate 'contact-view' 'modified-time'}}": "{{modified_time}}",
+		"{{agile_lng_translate 'contact-view' 'owner-name'}}":"{{owner.name}}",
+		"{{agile_lng_translate 'contact-view' 'owner-email'}}":"{{owner.email}}", 
+		"{{agile_lng_translate 'domain-user' 'phone'}}":"{{owner.phone}}"
 	};
 	
 	// Get Custom Fields in template format

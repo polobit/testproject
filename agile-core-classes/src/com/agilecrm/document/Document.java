@@ -8,6 +8,9 @@ import javax.persistence.PrePersist;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.apache.commons.lang.exception.ExceptionUtils;
+import org.apache.commons.lang.StringUtils;
+
 import com.agilecrm.cases.Case;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.ContactUtil;
@@ -58,6 +61,9 @@ public class Document extends Cursor
      */
     @NotSaved(IfDefault.class)
     public String name = null;
+    
+    @NotSaved(IfDefault.class)
+    public String dummy_name = null;
 
     /**
      * Uploaded time of a Document.
@@ -342,6 +348,12 @@ public class Document extends Cursor
     @PrePersist
     private void PrePersist()
     {
+    	
+	// Trim name and make dummy one to sore
+	if(StringUtils.isNotBlank(name)){
+		dummy_name = name.toLowerCase().trim();
+    }
+    
 	// Initializes created Time
 	if (uploaded_time == 0L)
 	    uploaded_time = System.currentTimeMillis() / 1000;

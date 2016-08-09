@@ -9,8 +9,8 @@ var customer_id = 0;
 var stripeINVCount = 1;
 var stripePAYCount = 1;
 
-var showMoreStripeINV = '<div class="widget_tab_footer stripe_inv_show_more" align="center"><a class="c-p text-info" id="stripe_inv_show_more" rel="tooltip" title="Click to see more tickets">Show More</a></div>';
-var showMoreStripePAY = '<div class="widget_tab_footer stripe_pay_show_more" align="center"><a class="c-p text-info" id="stripe_pay_show_more" rel="tooltip" title="Click to see more tickets">Show More</a></div>';
+var showMoreStripeINV = '<div class="widget_tab_footer stripe_inv_show_more" align="center"><a class="c-p text-info" id="stripe_inv_show_more" rel="tooltip" title="'+_agile_get_translated_val('widgets', 'click-to-see-more-tickets')+'">' +_agile_get_translated_val('widgets', 'show-more')+'</a></div>';
+var showMoreStripePAY = '<div class="widget_tab_footer stripe_pay_show_more" align="center"><a class="c-p text-info" id="stripe_pay_show_more" rel="tooltip" title="'+_agile_get_translated_val('widgets', 'click-to-see-more-tickets')+'">'+_agile_get_translated_val('widgets', 'show-more')+'</a></div>';
 
 /**
  * Shows setup if user adds Stripe widget for the first time. Uses ScribeServlet
@@ -35,7 +35,7 @@ function setupStripeOAuth()
 
 	$('#Stripe')
 			.html(
-					'<div class="widget_content" style="border-bottom:none;line-height: 160%;">See the contact\'s subscriptions history and payments from your Stripe account.<p style="margin: 10px 0px 5px 0px;"></p><div class="text-center"><a class="btn" href=' + url + '>Link your Stripe</a></div></div>');
+					'<div class="widget_content" style="border-bottom:none;line-height: 160%;">'+_agile_get_translated_val('widgets', 'stripe-subscriptions')+'<p style="margin: 10px 0px 5px 0px;"></p><div class="text-center"><a class="btn" href=' + url + '>'+_agile_get_translated_val('widgets','link-your Stripe')+'</a></div></div>');
 
 }
 
@@ -73,20 +73,23 @@ function setUpStripeCustomField(stripe_widget_prefs, contact_id)
 	 * preferences are saved including stripe_field_name and Stripe profile of
 	 * customer is shown
 	 */
-    $("#widgets").off("click", '#save_stripe_name');
-	$("#widgets").on("click", '#save_stripe_name', function(e)
+    $("#"+WIDGET_PARENT_ID).off("click", '#save_stripe_name');
+	$("#"+WIDGET_PARENT_ID).on("click", '#save_stripe_name', function(e)
 	{
 		e.preventDefault();
 
 		// Get the selected value from list of custom fields
 		var stripe_custom_field_name = $('#stripe_custom_field_name').val();
 		
-		if(!stripe_custom_field_name)
+		if(!stripe_custom_field_name){
+			showAlertModal("stripe_customfield_selection_error", undefined, function(){					
+			});	
 			return;
+		}
 
 		// Include 'stripe_field_name' to stripe_widget_prefs and save
 		stripe_widget_prefs['stripe_field_name'] = stripe_custom_field_name;
-
+		
 		// preferences are saved and Stripe profile of customer is shown
 		agile_crm_save_widget_prefs(Stripe_PLUGIN_NAME, JSON.stringify(stripe_widget_prefs), function(data)
 		{
@@ -119,17 +122,16 @@ function showStripeProfile(stripe_custom_field_name, contact_id)
 	if (!customer_id)
 	{
 		
-         $("#widgets").off("click", '#stripe_contact_id_save');
-		 $("#widgets").on("click", '#stripe_contact_id_save', function(e){
+         $("#"+WIDGET_PARENT_ID).off("click", '#stripe_contact_id_save');
+		 $("#"+WIDGET_PARENT_ID).on("click", '#stripe_contact_id_save', function(e){
 			   
 			   e.preventDefault();
 
 			   if(!isValidForm($('#stripe_contact_id_form')))
 			    return;
 			   
-			   customer_id = $('#stripe_contact_id').val();
-			   
-			   agile_crm_save_contact_property(stripe_custom_field_name, "", customer_id, "CUSTOM");
+			   customer_id = $('#stripe_contact_id').val();			  
+			   agile_crm_save_contact_property(stripe_custom_field_name, "", customer_id, "CUSTOM");			   
 			   
 			   showStripeProfile(stripe_custom_field_name, contact_id);
 			   return;
@@ -138,10 +140,10 @@ function showStripeProfile(stripe_custom_field_name, contact_id)
 	
 	
 		 $('#Stripe').html("<div class='wrapper-sm'><form style='border-bottom:none;margin-bottom:5px;' id='stripe_contact_id_form' name='stripe_contact_id_form' method='post'>" +
-		    "<fieldset><p>Please provide the Stripe customer id for this contact</p>" +
+		    "<fieldset><p>"+_agile_get_translated_val('widgets','stripe-cust-id')+"</p>" +
 		    "<div class='control-group' style='margin-bottom:0px'><div class='controls'>" +
-		    "<input type='text' class='required form-control' name='stripe_contact_id' style='width:90%' id='stripe_contact_id' placeholder='Stripe customer id' onkeydown='if (event.keyCode == 13) { event.preventDefault(); }'></input>" +
-		    "</div></div><a href='#' class='btn btn-ms btn-default m-t-xs' id='stripe_contact_id_save'>Save</a>" +
+		    "<input type='text' class='required form-control' name='stripe_contact_id' style='width:90%' id='stripe_contact_id' placeholder='Stripe '"+_agile_get_translated_val('widgets','stripe-iden-id')+" onkeydown='if (event.keyCode == 13) { event.preventDefault(); }'></input>" +
+		    "</div></div><a href='#' class='btn btn-ms btn-default m-t-xs' id='stripe_contact_id_save'>"+_agile_get_translated_val('modals', 'save')+"</a>" +
 		    "</fieldset></form></div>");
 		  
 		 return;
@@ -157,14 +159,11 @@ function showStripeProfile(stripe_custom_field_name, contact_id)
 	    		return;
 	    	
 	    	var stripe_template = $(template_ui);
-	    	// Load jquery time ago function to show time ago in invoices
-			head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
-			{
-				$(".time-ago", stripe_template).timeago();
-			});
 
 			// Show the template in Stripe widget panel
 			$('#Stripe').html(stripe_template);
+			// Load jquery time ago function to show time ago in invoices
+			agileTimeAgoWithLngConversion($(".time-ago", $('#Stripe')));
 
 			stripeOBJ = {};
 			stripeINVCount = 1;
@@ -181,8 +180,8 @@ function showStripeProfile(stripe_custom_field_name, contact_id)
 	}, contact_id);
 
 
-	$("#widgets").off("click", "#stripe_pay_show_more");
-	$("#widgets").on("click", "#stripe_pay_show_more", function(e)
+	$("#"+WIDGET_PARENT_ID).off("click", "#stripe_pay_show_more");
+	$("#"+WIDGET_PARENT_ID).on("click", "#stripe_pay_show_more", function(e)
 	{
 		e.preventDefault();
 		var offSet = stripePAYCount * 5;
@@ -190,28 +189,28 @@ function showStripeProfile(stripe_custom_field_name, contact_id)
 		++stripePAYCount;
 	});
 
-	$("#widgets").off("click", "#stripe_inv_show_more");
-	$("#widgets").on("click", "#stripe_inv_show_more", function(e){
+	$("#"+WIDGET_PARENT_ID).off("click", "#stripe_inv_show_more");
+	$("#"+WIDGET_PARENT_ID).on("click", "#stripe_inv_show_more", function(e){
 		e.preventDefault();
 		var offSet = stripeINVCount * 5;
 		loadStripeInvoices(offSet);
 		++stripeINVCount;
 	});
 
-	$("#widgets").off("click", "#add_credits");
-	$("#widgets").on("click", "#add_credits", function(e){
+	$("#"+WIDGET_PARENT_ID).off("click", "#add_credits");
+	$("#"+WIDGET_PARENT_ID).on("click", "#add_credits", function(e){
 		$('#stripe_credits_panel').removeClass('hide');
 		$('#add_credits').addClass('hide');
 	});
 
-	$("#widgets").off("click", "#stripe_credits_cancel");
-	$("#widgets").on("click", "#stripe_credits_cancel", function(e){
+	$("#"+WIDGET_PARENT_ID).off("click", "#stripe_credits_cancel");
+	$("#"+WIDGET_PARENT_ID).on("click", "#stripe_credits_cancel", function(e){
 		$('#add_credits').removeClass('hide');
 		$('#stripe_credits_panel').addClass('hide');
 	});	 
 
-	$("#widgets").off("click", "#stripe_credits_add");
-	$("#widgets").on("click", "#stripe_credits_add", function(e){
+	$("#"+WIDGET_PARENT_ID).off("click", "#stripe_credits_add");
+	$("#"+WIDGET_PARENT_ID).on("click", "#stripe_credits_add", function(e){
 		var creditAmt = (parseFloat($('#credit_amount').val())*100);
 		if(creditAmt != 0){
 			$("#stripe_credits_panel *").attr("disabled", "disabled");

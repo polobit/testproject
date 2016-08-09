@@ -27,7 +27,7 @@ function setupTwitterOAuth()
 	// Shows a link button in the UI which connects to the above URL
 	$('#Twitter', agile_crm_get_current_view())
 			.html(
-					"<div class='widget_content' style='border-bottom:none;line-height: 160%;' >" + "Engage with contacts in real time based on what they tweet." + "<p style='margin: 10px 0px 5px 0px;'>" + "<a class='btn' href=\"" + url + "\" style='text-decoration:none;'>" + "Link your Twitter</a></p></div>");
+					"<div class='widget_content' style='border-bottom:none;line-height: 160%;' >" + _agile_get_translated_val('widgets','Twitter-content') + "<p style='margin: 10px 0px 5px 0px;'>" + "<a class='btn' href=\"" + url + "\" style='text-decoration:none;'>" + _agile_get_translated_val('widgets','link-your-twitter')+"</a></p></div>");
 }
 
 /**
@@ -58,30 +58,31 @@ function showTwitterMatchingProfiles(data)
 		if (Twitter_search_details['keywords'] && Twitter_search_details['keywords'] != "")
 			twitterMainError(
 					TWITTER_PLUGIN_NAME,
-					"<p class='m-b-none text-base'>No matches found for <a href='#' class='twitter_modify_search'>" + Twitter_search_details['keywords'] + "</a>",
+					"<p class='m-b-none text-base'>" +_agile_get_translated_val('contact-details', 'no-matches-found-for')+" <a href='#' class='twitter_modify_search'>" + Twitter_search_details['keywords'] + "</a>",
 					true);
 		else
 			twitterMainError(TWITTER_PLUGIN_NAME,
-					"<p class='m-b-none text-base'>No matches found. <a href='#' class='twitter_modify_search'>Modify search</a>", true);
+					"<p class='m-b-none text-base'>"+_agile_get_translated_val('contact-details','no-matches-found')+" <a href='#' class='twitter_modify_search'>"+_agile_get_translated_val('widgets','modify-search')+"</a>", true);
 		return;
 	}
 
 	var el;
 	if (Twitter_search_details['keywords'] && Twitter_search_details['keywords'] != "")
-		el = "<div class='panel-body'><p class='text-base'>Search results for " + "<a href='#' class='twitter_modify_search'>" + Twitter_search_details['keywords'] + "</a></p>";
+		el = "<div class='panel-body'><p class='text-base'>"+_agile_get_translated_val('contact-details', 'search-results-for')+" " + "<a href='#' class='twitter_modify_search'>" + Twitter_search_details['keywords'] + "</a></p>";
 	else
-		el = "<div class='panel-body'><p class='text-base'>Search results. " + "<a href='#' class='twitter_modify_search'>Modify search</a></p>";
+		el = "<div class='panel-body'><p class='text-base'>"+_agile_get_translated_val('contact-details', 'search-results')+" " + "<a href='#' class='twitter_modify_search'>"+_agile_get_translated_val('widgets','modify-search')+"</a></p>";
 
 	//el = el.concat(getTemplate("twitter-search-result", data));
 
 	getTemplate('twitter-search-result', data, undefined, function(template_ui){
+
  		if(!template_ui)
     		return;
 		el += template_ui; 
 		el += "</div><div class='clearfix'></div>";
 
 		// Show matching profiles in Twitter panel
-		$('#Twitter', agile_crm_get_current_view()).html(el);
+		$('#Twitter', "#"+WIDGET_PARENT_ID).html(el);
 
 		/*
 		 * Displays Twitter profile details on mouse hover and saves profile on
@@ -122,7 +123,7 @@ function showTwitterMatchingProfiles(data)
 				// Web url of twitter for this profile
 				var url = "@" + $(this).attr('screen_name');
 
-				web_url = url;
+				twitter_web_url = url;
 				console.log(url);
 
 				var propertiesArray = [
@@ -168,12 +169,12 @@ function showTwitterMatchingProfiles(data)
  * Fetches Twitter matching profiles based on plugin id
  */
 function getTwitterMatchingProfiles(contact_id)
-{
+{	
 	// Shows loading image, until matches profiles are fetched
-	$('#Twitter', agile_crm_get_current_view()).html(TWITTER_UPDATE_LOAD_IMAGE);
+	$('#Twitter', "#"+WIDGET_PARENT_ID).html(TWITTER_UPDATE_LOAD_IMAGE);
 
 	// Gets contact id, to save social results of a particular id
-	var contact_id = agile_crm_get_contact()['id'];
+	var contact_id = WIDGET_LOADED_CONTACT.id;
 
 	// Reads from cookie (local storage HTML5), since widgets are saved using
 	// local
@@ -190,7 +191,7 @@ function getTwitterMatchingProfiles(contact_id)
 		queueGetRequest("widget_queue_"+contact_id, "core/api/widgets/social/match/" + Twitter_Plugin_Id + "/" + contact_id, 'json', function success(data)
 		{
 			// Save social results in cookie of particular contact
-			_agile_set_prefs('Agile_twitter_matches_' + contact_id, JSON.stringify(data));
+			_agile_set_prefs('Agile_twitter_matches_' + contact_id, JSON.stringify(data));			
 
 			showTwitterMatchingProfiles(data);
 
@@ -277,11 +278,10 @@ function getTwitterIdByUrl(web_url, callback, contact_id)
 		if (!data)
 		{
 			// Shows message that URL is invalid to the user
-			alert("URL provided for Twitter is not valid ");
+			alert(_agile_get_translated_val("widgets","twitter-url-invalid"));
 			showAlertModal("twitter_invalid_url", undefined, function(){
 				// Shows Twitter matching profiles based on contact name
 				getTwitterMatchingProfiles(contact_id);
-
 				// Delete the Twitter URL associated with contact as it is incorrect
 				agile_crm_delete_contact_property_by_subtype('website', 'TWITTER', web_url);
 			});
@@ -432,7 +432,7 @@ function showTwitterProfile(Twitter_id)
 					 * If follow request sent, then button is disabled showing the
 					 * text as follow request sent
 					 */
-					$('#twitter_follow').text("Follow Request Sent").attr("disabled", "disabled").show();
+					$('#twitter_follow').text(_agile_get_translated_val('widgets','twitter-req-sent')).attr("disabled", "disabled").show();
 			}
 
 			// If updates are available, show recent updates in Twitter profile
@@ -450,14 +450,11 @@ function showTwitterProfile(Twitter_id)
 			 		if(!template_ui)
 			    		return;
 			    	var element = $(template_ui);
-			    	head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
-					{
-						$(".time-ago", element).timeago();
-					});
 
 					// Template is populated with update details and shown
 					$('#twitter_social_stream').append(element);
-
+					agileTimeAgoWithLngConversion($(".time-ago", $('#twitter_social_stream')));
+					
 					return;
 					
 				}, null);
@@ -497,8 +494,8 @@ function showTwitterProfile(Twitter_id)
 function registerClickEventsInTwitter(Twitter_id, twitter_connected, stream_data)
 {
 	// On click of see more link, more updates are retrieved
-    $("#widgets").off('click','.twitter_stream');
-	$("#widgets").on('click','.twitter_stream', function(e)
+    $("#"+WIDGET_PARENT_ID).off('click','.twitter_stream');
+	$("#"+WIDGET_PARENT_ID).on('click','.twitter_stream', function(e)
 	{
 
 		e.preventDefault();
@@ -520,7 +517,7 @@ function registerClickEventsInTwitter(Twitter_id, twitter_connected, stream_data
 			// Checks if person is already following in Twitter to agile user
 			if (twitter_connected)
 			{
-				tweetError("tweet-error-panel", "This member doesn't share his/her tweets");
+				tweetError("tweet-error-panel", _agile_get_translated_val('widgets', 'twitter-no-share'));
 				return;
 			}
 
@@ -528,7 +525,7 @@ function registerClickEventsInTwitter(Twitter_id, twitter_connected, stream_data
 			 * If not following, advice user to follow him/her to see updates
 			 * Error message is shown to the user
 			 */
-			tweetError("tweet-error-panel", "Member does not share his/her tweets. Follow him/her and try");
+			tweetError("tweet-error-panel", _agile_get_translated_val('widgets','tweets-not-share'));
 			return;
 		}
 
@@ -552,8 +549,8 @@ function registerClickEventsInTwitter(Twitter_id, twitter_connected, stream_data
 	 * On click of less button, hides update stream and shows current update by
 	 * toggling
 	 */
-    $("#widgets").off('click','#twitter_less');
-	$("#widgets").on('click','#twitter_less', function(e)
+    $("#"+WIDGET_PARENT_ID).off('click','#twitter_less');
+	$("#"+WIDGET_PARENT_ID).on('click','#twitter_less', function(e)
 	{
 		e.preventDefault();
 
@@ -576,13 +573,13 @@ function registerClickEventsInTwitter(Twitter_id, twitter_connected, stream_data
 			 * On first click of see less, less attribute is made true and text
 			 * will be changed as see more button
 			 */
-			$(this).text("Show Less..");
+			$(this).text(_agile_get_translated_val('socialsuite','show-less'));
 			$('#twitter_refresh_stream').show();
 		}
 		else
 		{
 			$(this).attr("less", "true");
-			$(this).text("Show More..");
+			$(this).text(_agile_get_translated_val('socialsuite','show-more-dot'));
 			$('#twitter_current_activity').show();
 			$('#twitter_refresh_stream').hide();
 		}
@@ -592,8 +589,8 @@ function registerClickEventsInTwitter(Twitter_id, twitter_connected, stream_data
 	 * On click of refresh icon in the Twitter panel, all the new updates are
 	 * shown
 	 */
-    $("#widgets").off('click','#twitter_refresh_stream');
-	$("#widgets").on('click','#twitter_refresh_stream', function(e)
+    $("#"+WIDGET_PARENT_ID).off('click','#twitter_refresh_stream');
+	$("#"+WIDGET_PARENT_ID).on('click','#twitter_refresh_stream', function(e)
 	{
 		e.preventDefault();
 
@@ -638,7 +635,7 @@ function anyFiveNetworkUpdates(Twitter_id, tweet_id, stream_data, element)
 		// If no more updates available, less and refresh buttons are shown
 		if (data.length == 0)
 		{
-			tweetError("tweet-error-panel", "No more updates available");
+			tweetError("tweet-error-panel", _agile_get_translated_val('widgets','linkedin-no-updates'));
 
 			/*
 			 * On click of more if no updates available and if user have initial
@@ -832,7 +829,7 @@ function sendFollowRequest(Twitter_id)
 				}
 				else
 				{
-					$('#twitter_follow').text("Follow Request Sent").attr("disabled", "disabled").show();
+					$('#twitter_follow').text(_agile_get_translated_val('widgets','twitter-req-sent')).attr("disabled", "disabled").show();
 					return;
 				}
 
@@ -849,7 +846,7 @@ function sendFollowRequest(Twitter_id)
 					function(data)
 					{
 						if (data.responseText.indexOf("401:Authentication credentials") != 0)
-							data.responseText = "Only confirmed followers have access to " + Twitter_current_profile_user_name + " Tweets and complete profile. Click the \"Follow\" button to send a follow request.";
+							data.responseText = _agile_get_translated_val('widgets','only-confirmed-followers-desc') + " " + Twitter_current_profile_user_name + _agile_get_translated_val('widgets', 'tweets-and-complete-profile-desc');
 
 						// Error message is shown if error occurs
 						tweetError("twitter-error-panel", data.responseText);
@@ -902,10 +899,10 @@ function sendTwitterMessage(Twitter_id, message)
 	var json = {};
 
 	// Set headline of modal window as Send Message
-	json["headline"] = "Direct Message";
+	json["headline"] = _agile_get_translated_val('widgets','socialsuite-direct-message');
 
 	// Information to be shown in the modal to the user while sending message
-	json["info"] = "Send message to " + Twitter_current_profile_user_name.toUpperCase() + " on Twitter";
+	json["info"] = _agile_get_translated_val('widgets','linkedin-send-mssg-to') + " " + Twitter_current_profile_user_name.toUpperCase() + " " + _agile_get_translated_val("widgets","on-twitter");
 
 	// If modal already exists remove to show a new one
 	$('#twitter_messageModal').remove();
@@ -946,7 +943,7 @@ function sendTwitterMessage(Twitter_id, message)
 				return;
 			}
 
-			$(this).text("Saving..");
+			$(this).text(_agile_get_translated_val("others","saving"));
 			sendRequest("/core/api/widgets/social/message/" + Twitter_Plugin_Id + "/" + Twitter_id, "twitter_messageForm", "twitter_messageModal");
 
 		});
@@ -973,7 +970,7 @@ function tweetInTwitter(Twitter_id)
 	json["headline"] = "Tweet";
 
 	// Information to be shown in the modal to the user while sending message
-	json["info"] = "Tweet to " + Twitter_current_profile_user_name.toUpperCase() + " on Twitter";
+	json["info"] = _agile_get_translated_val('social','tweet-to') + " " + Twitter_current_profile_user_name.toUpperCase() + " " + _agile_get_translated_val('widgets','on-twitter');
 
 	json["description"] = "@" + Twitter_current_profile_screen_name;
 
@@ -1013,7 +1010,7 @@ function tweetInTwitter(Twitter_id)
 				return;
 			}
 
-			$(this).text("Saving..");
+			$(this).text(_agile_get_translated_val("others","saving"));
 			sendRequest("/core/api/widgets/social/tweet/" + Twitter_Plugin_Id, "twitter_messageForm", "twitter_messageModal");
 
 		});
@@ -1137,7 +1134,7 @@ function getFollowerIdsInTwitter(Twitter_id, callback)
 
 						if (data.responseText.indexOf("401:Authentication credentials") != -1)
 						{
-							var message = "Only confirmed followers have access to " + Twitter_current_profile_user_name + " Tweets, Followers, Following and complete profile. Click the \"Follow\" button to send a follow request.";
+							var message = _agile_get_translated_val('widgets','only-confirmed-followers-desc') + " " + Twitter_current_profile_user_name + " " + _agile_get_translated_val("widgets","tweets-followers");
 							twitterMainError("twitter_follower_panel", message, true);
 							$("#twitter_follower_panel").css("padding", "0px");
 							return;
@@ -1184,7 +1181,7 @@ function getFollowingIdsInTwitter(Twitter_id, callback)
 
 						if (data.responseText.indexOf("401:Authentication credentials") != -1)
 						{
-							var message = "Only confirmed followers have access to " + Twitter_current_profile_user_name + " Tweets, Followers, Following and complete profile. Click the \"Follow\" button to send a follow request.";
+							var message = _agile_get_translated_val('widgets','only-confirmed-followers-desc') + " " + Twitter_current_profile_user_name + " " + _agile_get_translated_val("widgets","tweets-followers");
 							twitterMainError("twitter_following_panel", message, true);
 							$("#twitter_following_panel").css("padding", "0px");
 							return;
@@ -1295,12 +1292,13 @@ function twitterMainError(id, error, disable_check)
 
 function startTwitterWidget(contact_id){
 	// Twitter widget name as a global variable
+	
 	TWITTER_PLUGIN_NAME = "Twitter";
 
 	// Twitter update loading image declared as global
 	TWITTER_UPDATE_LOAD_IMAGE = "<div id='tweet_load'><center><img  src=\'img/ajax-loader-cursor.gif\'" + "style'=margin-top: 10px;margin-bottom: 14px;'></img></center></div>";
 
-	// Current contact user name in Twitter profile
+	// Current contact username in Twitter profile
 	Twitter_current_profile_user_name = "";
 	Twitter_current_update_id = "";
 	Twitter_current_profile_screen_name = "";
@@ -1311,7 +1309,7 @@ function startTwitterWidget(contact_id){
 	search_string = undefined;
 	search_data = undefined;
 	Twitter_search_details = {};
-	web_url = "";
+	twitter_web_url = "";
 
 	// Global twitter id
 	Twitter_id = "";
@@ -1342,19 +1340,19 @@ function startTwitterWidget(contact_id){
 	var version = JSON.parse(twitter_widget.prefs).version;	
 	if(version == undefined || version != "v2"){
 	 	$('#widget_load_img').remove();
-	 	$('#Twitter', agile_crm_get_current_view()).html('<div class="wrapper-sm"><a class="link" href="#add-widget">Please reconfigure widget</a></div>');
+	 	$('#Twitter', agile_crm_get_current_view()).html('<div class="wrapper-sm"><a class="link" href="#add-widget">'+_agile_get_translated_val('widgets','reconfigure-widget')+'</a></div>');
 	 	return;
 	}
 
 	// Get website URL for Twitter from contact to get profile based on it
-	web_url = agile_crm_get_contact_property_by_subtype('website', 'TWITTER');
-	console.log(web_url);
+	twitter_web_url = agile_crm_get_contact_property_by_subtype('website', 'TWITTER');
+	console.log(twitter_web_url);
 
 	// If Twitter URL exists for contact,
-	if (web_url)
+	if (twitter_web_url)
 	{
 		// Get Twitter id from URL and show profile
-		getTwitterIdByUrl(web_url, function(data)
+		getTwitterIdByUrl(twitter_web_url, function(data)
 		{
 			Twitter_id = data;
 			showTwitterProfile(Twitter_id);
@@ -1364,33 +1362,33 @@ function startTwitterWidget(contact_id){
 	{
 		// Shows all the matches in Twitter for the contact
 		getTwitterMatchingProfiles(contact_id);
-	}
+	}	
 
 	// Deletes Twitter profile on click of delete button in template
-    $("#widgets").off('click','#Twitter_plugin_delete');
-	$("#widgets").on('click','#Twitter_plugin_delete', function(e)
+    $("#"+WIDGET_PARENT_ID).off('click','#Twitter_plugin_delete');
+	$("#"+WIDGET_PARENT_ID).on('click','#Twitter_plugin_delete', function(e)
 	{
-		e.preventDefault();
-
-		agile_crm_delete_contact_property_by_subtype('website', 'TWITTER', web_url, function(data)
-		{
-			console.log("In twitter delete callback");
-			getTwitterMatchingProfiles(contact_id);
+		e.preventDefault();	
+		if(twitter_web_url){
+			$('#Twitter').html(TWITTER_UPDATE_LOAD_IMAGE);		
+		}
+		agile_crm_delete_contact_property_by_subtype('website', 'TWITTER', twitter_web_url, function(data){
+				console.log("In twitter delete callback");
+				getTwitterMatchingProfiles(contact_id);
 		});
-
 	});
 
 	// Sends a message to Twitter when clicked on send message button
-    $("#widgets").off('click','#twitter_message');
-	$("#widgets").on('click','#twitter_message', function(e)
+    $("#"+WIDGET_PARENT_ID).off('click','#twitter_message');
+	$("#"+WIDGET_PARENT_ID).on('click','#twitter_message', function(e)
 	{
 		e.preventDefault();
 		sendTwitterMessage(Twitter_id);
 	});
 
 	// Sends an follow request to Twitter when clicked on follow button
-    $("#widgets").off('click','#twitter_follow');
-	$("#widgets").on('click','#twitter_follow', function(e)
+    $("#"+WIDGET_PARENT_ID).off('click','#twitter_follow');
+	$("#"+WIDGET_PARENT_ID).on('click','#twitter_follow', function(e)
 	{
 		e.preventDefault();
 
@@ -1403,34 +1401,34 @@ function startTwitterWidget(contact_id){
 	});
 
 	// Sends an UnFollow request to Twitter when clicked on UnFollow button
-    $("#widgets").off('click','#twitter_unfollow');
-	$("#widgets").on('click','#twitter_unfollow', function(e)
+    $("#"+WIDGET_PARENT_ID).off('click','#twitter_unfollow');
+	$("#"+WIDGET_PARENT_ID).on('click','#twitter_unfollow', function(e)
 	{
 		e.preventDefault();
 		sendUnfollowRequest(Twitter_id);
 	});
 
 	// On mouse enter unfollow
-    $("#widgets").off('mouseenter','#twitter_unfollow');
-	$("#widgets").on('mouseenter','#twitter_unfollow', function(e)
+    $("#"+WIDGET_PARENT_ID).off('mouseenter','#twitter_unfollow');
+	$("#"+WIDGET_PARENT_ID).on('mouseenter','#twitter_unfollow', function(e)
 	{
-		$('#twitter_unfollow').text("Unfollow");
+		$('#twitter_unfollow').text(_agile_get_translated_val('socialsuite','unfollow'));
 		$('#twitter_unfollow').addClass("btn-danger");
 		$('#twitter_unfollow').removeClass("btn-primary");
 	});
 
 	// On mouse leave following
-    $("#widgets").off('mouseleave','#twitter_unfollow');
-	$("#widgets").on('mouseleave','#twitter_unfollow', function(e)
+    $("#"+WIDGET_PARENT_ID).off('mouseleave','#twitter_unfollow');
+	$("#"+WIDGET_PARENT_ID).on('mouseleave','#twitter_unfollow', function(e)
 	{
-		$('#twitter_unfollow').text("Following");
+		$('#twitter_unfollow').text(_agile_get_translated_val('socialsuite','following'));
 		$('#twitter_unfollow').addClass("btn-primary");
 		$('#twitter_unfollow').removeClass("btn-danger");
 	});
 
 	// ReTweets a tweet in Twitter on click of ReTweet link
-    $("#widgets").off('click','.twitter_retweet');
-	$("#widgets").on('click','.twitter_retweet', function(e)
+    $("#"+WIDGET_PARENT_ID).off('click','.twitter_retweet');
+	$("#"+WIDGET_PARENT_ID).on('click','.twitter_retweet', function(e)
 	{
 		e.preventDefault();
 
@@ -1443,8 +1441,8 @@ function startTwitterWidget(contact_id){
 	});
 
 	// Sends a tweet to the contact Twitter profile
-    $("#widgets").off('click','#twitter_tweet');
-	$("#widgets").on('click','#twitter_tweet', function(e)
+    $("#"+WIDGET_PARENT_ID).off('click','#twitter_tweet');
+	$("#"+WIDGET_PARENT_ID).on('click','#twitter_tweet', function(e)
 	{
 		e.preventDefault();
 		tweetInTwitter(Twitter_id);
@@ -1452,8 +1450,8 @@ function startTwitterWidget(contact_id){
 	});
 
 	// on click of name link to modify search, search template is shown
-    $("#widgets").off('click','.twitter_modify_search');
-	$("#widgets").on('click','.twitter_modify_search', function(e)
+    $("#"+WIDGET_PARENT_ID).off('click','.twitter_modify_search');
+	$("#"+WIDGET_PARENT_ID).on('click','.twitter_modify_search', function(e)
 	{
 		e.preventDefault();
 
@@ -1471,8 +1469,8 @@ function startTwitterWidget(contact_id){
 	 * On click of search button in modify template, matching profiles are
 	 * fetched
 	 */
-    $("#widgets").off('click','#twitter_search_btn');
-	$("#widgets").on('click','#twitter_search_btn', function(e)
+    $("#"+WIDGET_PARENT_ID).off('click','#twitter_search_btn');
+	$("#"+WIDGET_PARENT_ID).on('click','#twitter_search_btn', function(e)
 	{
 		e.preventDefault();
 
@@ -1482,8 +1480,8 @@ function startTwitterWidget(contact_id){
 	/*
 	 * On click of close, show past results with past searched data
 	 */
-    $("#widgets").off('click','#twitter_search_close');
-	$("#widgets").on('click','#twitter_search_close', function(e)
+    $("#"+WIDGET_PARENT_ID).off('click','#twitter_search_close');
+	$("#"+WIDGET_PARENT_ID).on('click','#twitter_search_close', function(e)
 	{
 		e.preventDefault();
 
@@ -1494,8 +1492,8 @@ function startTwitterWidget(contact_id){
 	});
 
 	// On click of followers in twitter panel
-    $("#widgets").off('click','#twitter_followers');
-	$("#widgets").on('click','#twitter_followers', function(e1)
+    $("#"+WIDGET_PARENT_ID).off('click','#twitter_followers');
+	$("#"+WIDGET_PARENT_ID).on('click','#twitter_followers', function(e1)
 	{
 		e1.preventDefault();
 
@@ -1521,7 +1519,7 @@ function startTwitterWidget(contact_id){
 			// If no followers, show info
 			if (data.length == 0)
 			{
-				$('#twitter_follower_panel', agile_crm_get_current_view()).html(Twitter_current_profile_user_name + " doesn't have any followers yet");
+				$('#twitter_follower_panel', agile_crm_get_current_view()).html(Twitter_current_profile_user_name + " " + _agile_get_translated_val('widgets','no-followers'));
 				return;
 			}
 
@@ -1538,7 +1536,8 @@ function startTwitterWidget(contact_id){
 			 		if(!template_ui)
 			    		return;
 					$('#twitter_follower_panel', agile_crm_get_current_view()).html($(template_ui)); 
-					$("#widgets").on('mouseover','.twitterImage', function(e1)
+					$("#"+WIDGET_PARENT_ID).off('mouseover','.twitterImage');
+					$("#"+WIDGET_PARENT_ID).on('mouseover','.twitterImage', function(e1)
 					{
 						// Unique Twitter Id from widget
 						var id = $(this).attr('id');
@@ -1566,8 +1565,8 @@ function startTwitterWidget(contact_id){
 		});
 	});
 
-    $("#widgets").off('click','#more_followers');
-	$("#widgets").on('click','#more_followers', function(e2)
+    $("#"+WIDGET_PARENT_ID).off('click','#more_followers');
+	$("#"+WIDGET_PARENT_ID).on('click','#more_followers', function(e2)
 	{
 		e2.preventDefault();
 
@@ -1603,8 +1602,8 @@ function startTwitterWidget(contact_id){
 	});
 
 	// On click of following in twitter panel
-    $("#widgets").off('click','#twitter_following');
-	$("#widgets").on('click','#twitter_following', function(e1)
+    $("#"+WIDGET_PARENT_ID).off('click','#twitter_following');
+	$("#"+WIDGET_PARENT_ID).on('click','#twitter_following', function(e1)
 	{
 		e1.preventDefault();
 
@@ -1624,7 +1623,7 @@ function startTwitterWidget(contact_id){
 			console.log(data.length);
 			if (data.length == 0)
 			{
-				$('#twitter_following_panel', agile_crm_get_current_view()).html(Twitter_current_profile_user_name + " isn't following anyone yet");
+				$('#twitter_following_panel', agile_crm_get_current_view()).html(Twitter_current_profile_user_name + " " + _agile_get_translated_val('widgets','no-following-yet'));
 				return;
 			}
 
@@ -1642,12 +1641,12 @@ function startTwitterWidget(contact_id){
 			 		if(!template_ui)
 			    		return;
 					$('#twitter_following_panel', agile_crm_get_current_view()).html($(template_ui));
-					$("#widgets").on('mouseover','.twitterImage', function(e1)
+					$("#"+WIDGET_PARENT_ID).off('mouseover','.twitterImage');
+					$("#"+WIDGET_PARENT_ID).on('mouseover','.twitterImage', function(e1)
 					{
 						// Unique Twitter Id from widget
 						var id = $(this).attr('id');
-                
-                $("#widgets").off('mouseover','.twitterImage');
+                               
 						// Aligns details to left in the pop over
 						$('#' + id).popover({ placement : 'left',
 							html : true
@@ -1671,8 +1670,8 @@ function startTwitterWidget(contact_id){
 		});
 	});
 
-    $("#widgets").off('click','#more_following');
-	$("#widgets").on('click','#more_following', function(e2)
+    $("#"+WIDGET_PARENT_ID).off('click','#more_following');
+	$("#"+WIDGET_PARENT_ID).on('click','#more_following', function(e2)
 	{
 		e2.preventDefault();
 

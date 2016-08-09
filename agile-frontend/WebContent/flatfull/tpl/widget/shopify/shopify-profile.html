@@ -1,25 +1,25 @@
 <script id="shopify-login-template" type="text/html">
 <div class="m-t">
-<p>Link your shopify account</p>
+<p><b>{{agile_lng_translate 'widgets' 'link-your-shopify-account'}}</b></p>
 <div class='input-group'>
 	<span class="input-group-addon">https://</span>
-	  <input id="shop" required="required" name="shopname" class="form-control"  type="text" placeholder="Enter shop domain">
+	  <input id="shop" required="required" name="shopname" class="form-control"  type="text" placeholder="{{agile_lng_translate 'prefs-data-sync' 'enter-shop-domain'}}">
     <span class="input-group-addon">.myshopify.com</span>
     
     </div>
-<center><a href ="#" id ="widget_shopify" class="connect_shopify btn btn-sm btn-primary m-t-sm">Connect</a></center>
+<center><a href ="#" id ="widget_shopify" class="connect_shopify btn btn-sm btn-primary m-t-sm">{{agile_lng_translate 'prefs-data-sync' 'connect'}}</a></center>
 </div>
 </script>
 
 
 <script id="shopify-revoke-access-template" type="text/html">
 <div>
-<div> Linked Shopify account</div>
+<div> {{agile_lng_translate 'widgets' 'linked-shopify-account'}}</div>
  <div>{{profile.shop}}</div>
 <br> 
 <p class="text-center">
-					<a class='btn btn-sm btn-danger revoke-widget'id="revoke-shopify" widget-name="Shopify">Delete</a>
-					<a href="#add-widget" class='btn btn-default btn-sm ml_5' widget-name="Shopify">Cancel</a>
+					<a class='btn btn-sm btn-danger revoke-widget'id="revoke-shopify" widget-name="Shopify">{{agile_lng_translate 'contacts-view' 'delete'}}</a>
+					<a href="#add-widget" class='btn btn-default btn-sm ml_5' widget-name="Shopify">{{agile_lng_translate 'other' 'cancel'}}</a>
 	</p> 
 				
 
@@ -29,18 +29,18 @@
 <script id="shopify-custom-field-template" type="text/html">
 <div class="wrapper-sm">
 {{#if_equals this.custom_fields.length "0"}}
-	<p>Shopify id for each contact is stored in a text custom field. You have no custom fields defined. Please <a href="#custom-fields">create one</a>.</p>
+	<p>{{agile_lng_translate 'widgets' 'shopify-id-desc'}} <a href="#custom-fields">{{agile_lng_translate 'widgets' 'create-one'}}</a>.</p>
 {{else}}
-	<p>Shopify id for each contact is stored in a text custom field. Select the custom field to be used.</p>
+	<p>{{agile_lng_translate 'widgets' 'shopify-id-desc-1'}}</p>
 	<select name="shopify_field" id="shopify_custom_field_name" class="required form-control span10 w-full">
-     		<option class="default-select" value="">-Select-</option>
+     		<option class="default-select" value="">{{agile_lng_translate 'widgets' 'select'}}</option>
 		{{#each this.custom_fields}}
 			<option value="{{field_label}}">{{field_label}} 
 			</option>
 		{{/each}}
 	</select>
-	<p>Or, you can <a href="#custom-fields">create </a> a new text custom field.</p>
-	<a href="#" class="btn btn-sm btn-default" id="save_shopify_name text-l-none">Save</a>
+	<p>{{agile_lng_translate 'widgets' 'or-you-can'}} <a href="#custom-fields">{{agile_lng_translate 'tickets' 'create'}} </a> {{agile_lng_translate 'widgets' 'new-text-custom-field'}}</p>
+	<a href="#" class="btn btn-sm btn-default" id="save_shopify_name text-l-none">{{agile_lng_translate 'portlets' 'save'}}</a>
 {{/if_equals}}
 </div>
 </script>
@@ -63,40 +63,43 @@
 <script id="shopify-profile-template" type="text/html">
 <div class="wrapper-sm">
 <div><a href="https://{{this.0.shop}}/admin/customers/{{this.0.id}}" target="_blank" class="text-cap">{{this.0.name}}</a></div>
-<div class="text-muted text-sm">Total spent &nbsp;&nbsp;{{this.0.currency}}&nbsp; {{this.0.total_spent}}</div>
+<div class="text-muted text-sm">{{agile_lng_translate 'widgets' 'total-spent'}} &nbsp;&nbsp;{{this.0.currency}}&nbsp; {{this.0.total_spent}}</div>
 </div>
 <div class="wrapper-sm b b-light b-r-none b-l-none">
-	<h4 class="h4 text-sm">Order Details</h4>
+	<h4 class="h4 text-sm">{{agile_lng_translate 'widgets' 'order-details'}}</h4>
 </div>
+<ul class="m-b-none list-group text-base" id="shopify_orders_panel"></ul>
+</script>
+
+<script id="shopify-order-list-template" type="text/html">
 {{#each_index_slice this 1}}
-<ul class="m-b-none list-group text-base">
-<li class="list-group-item r-none b-l-none b-r-none">
-<div class="pull-left">
-	<a class="order c-p" data-target="collapse-{{this.id}}" data-toggle="collapse" data-placement="top" title= "Order" href="#" value="{{this.id}}">
-		<i class="icon icon-plus text-muted text-sm"></i> No #{{this.id}}
-	</a>
-</div> 
-<div class="pull-right">{{currency}}&nbsp;{{this.subtotal_price}}</div>
-<div class="clearfix"></div>
-<div id="collapse-{{this.id}}" class="collapse" style="color: rgba(0, 0, 0, 0.5);"></div>
-<div class="pull-left">
-	<small class="text-muted pull-left">
-		<i class="fa fa-clock-o m-r-xs"></i><time class="time-ago" datetime="{{updated_at}}">{{iso_date_to_normalizeDate updated_at}}</time>
-	</small>
-</div>					
-<div class="pull-right">
-	<span class="label bg-light dk text-black">{{financial_status}}</span>
-</div>
-<div class="clearfix"></div>
-</li>
-</ul>
+	<li class="list-group-item r-none b-l-none b-r-none">
+		<div class="pull-left">
+			<a class="order c-p" data-target="collapse-{{this.id}}" data-toggle="collapse" data-placement="top" title= "{{agile_lng_translate 'widgets' 'order'}}" href="#" value="{{this.id}}">
+				<i class="icon icon-plus text-muted text-sm"></i>#{{this.id}}
+			</a>
+		</div> 
+		<div class="pull-right">{{currency}}&nbsp;{{this.subtotal_price}}</div>
+		<div class="clearfix"></div>
+		<div id="collapse-{{this.id}}" class="collapse" style="color: rgba(0, 0, 0, 0.5);"></div>
+		<div class="pull-left">
+			<small class="text-muted pull-left">
+				<i class="fa fa-clock-o m-r-xs"></i>
+				<time class="time-ago" datetime="{{updated_at}}">{{iso_date_to_normalizeDate updated_at}}</time>
+			</small>
+		</div>					
+		<div class="pull-right">
+			<span class="label bg-light dk text-black">{{financial_status}}</span>
+		</div>
+		<div class="clearfix"></div>
+	</li>
 {{/each_index_slice}}
 </script>
 
 <script id="shopify-profile-addcontact-template" type="text/html">
 <div class="wrapper-sm">
-	<div>No customer found</div>
-	<a class="btn btn-xs btn-default c-p m-t-sm" id="shopify_add_contact" href="#">Add Customer</a> 
+	<div>{{agile_lng_translate 'widgets' 'no-customer-found'}}</div>
+	<a class="btn btn-xs btn-default c-p m-t-sm" id="shopify_add_contact" href="#">{{agile_lng_translate 'widgets' 'add-customer'}}</a> 
 </div>
 </script>
 
@@ -105,13 +108,12 @@
 	<li class="list-group-item r-none b-l-none b-r-none text-base"><a href="https://{{shop}}/admin/customers/{{this.0.name}}" target="_blank">{{this.0.name}}</a></li>
 </div>
 <div class="sub_header">
-	<h4>Order Details</h4>
+	<h4>{{agile_lng_translate 'widgets' 'order-details'}}</h4>
 </div>
-<div> No Order found</div>
+<div> {{agile_lng_translate 'widgets' 'no-order-found'}}</div>
 </script>
 
 <script id="shopify-line-item-template" type="text/html">
-
 {{#each this}}
 <div class="wrapper-xs p-t-none text-sm b-b b-light">
 	<div class="row-fluid">
@@ -119,7 +121,7 @@
 		<div class="text-right col-md-6 p-n">{{this.currency}}&nbsp;{{this.price}}</div>
 	</div>
 	<div class="clearfix"></div>
-	<div class="pull-left">Quantity</div>
+	<div class="pull-left">{{agile_lng_translate 'plan-and-upgrade' 'quantity'}}</div>
 	<div class="pull-right">{{this.quantity}}</div>
 	<div class="clearfix"></div>
 </div>

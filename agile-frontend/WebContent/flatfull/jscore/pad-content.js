@@ -13,16 +13,16 @@
  */
 var CONTENT_JSON = {
 	"contacts" : {
-		"title" : "You do not have any contacts currently.",
-		"description" : "Contacts are your customers or prospects that you interact with using Agile.",
+		"title" : "{{agile_lng_translate 'portlets' 'no-contacts-pad-content'}}",
+		"description" : "{{agile_lng_translate 'portlets' 'no-contacts-pad-content-title'}}",
 		//"learn_more" : "click here to learn more",
-		"button_text" : "Add Contacts",
+		"button_text" : "{{agile_lng_translate 'portlets' 'contacts-btn-text'}}",
 		"route" : "#",
 		"modal_id" : "personModal",
 		"image" : updateImageS3Path("/img/clipboard.png")
 	},
 	"filter_results" : {
-		"title" : "No contacts matching this criteria.",
+		"title" : "{{agile_lng_translate 'portlets' 'contacts-filter-results-title'}}",
 		//"learn_more" : "click here to learn more",
 		//"button_text" : "Add Contacts",
 		"route" : "#",
@@ -30,12 +30,12 @@ var CONTENT_JSON = {
 		"image" : updateImageS3Path("/img/clipboard.png")
 	},
 	"filter_results_segments" : {
-		"title" : "There are no contacts for the selected filter. Try refining the filters and the date range.",
+		"title" : "{{agile_lng_translate 'portlets' 'filter-results-segments-pad-content-title'}}",
 		"route" : "#",
 		"image" : updateImageS3Path("/img/clipboard.png")
 	},
 	"filter_results_companies" : {
-		"title" : "No companies matching this criteria.",
+		"title" : "{{agile_lng_translate 'portlets' 'filter-results-companies-pad-content-title'}}",
 		//"learn_more" : "click here to learn more",
 		//"button_text" : "Add Contacts",
 		"route" : "#",
@@ -43,7 +43,7 @@ var CONTENT_JSON = {
 		"image" : updateImageS3Path("/img/clipboard.png")
 	},
 	"tag_results" : {
-		"title" : "No contacts available with this tag.",
+		"title" : "{{agile_lng_translate 'admin-settings-tags' 'no-contacts-available-with-this-tag'}}",
 		//"learn_more" : "click here to learn more",
 		//"button_text" : "Add Contacts",
 		"route" : "#",
@@ -51,168 +51,168 @@ var CONTENT_JSON = {
 		"image" : updateImageS3Path("/img/clipboard.png")
 	},
 	"companies" : {
-		"title" : "You do not have any companies currently.",
-		"description" : "companies are prospects that you interact with using Agile.",
+		"title" : "{{agile_lng_translate 'portlets' 'companies-pad-content-title'}}",
+		"description" : "{{agile_lng_translate 'report-chart-forms' 'companies-are-prospects-that-you-interact-with-using-agile'}}",
 		//"learn_more" : "click here to learn more",
-		"button_text" : "Add Companies",
+		"button_text" : "{{agile_lng_translate 'companies-view' 'add-companies'}}",
 		"route" : "#",
 		"modal_id" : "companyModal",
 		"image" : updateImageS3Path("/img/clipboard.png")
 	},
 	"workflows" : {
-		"title" : "You do not have any Campaigns currently.",
-		"description" : "Campaign or workflow is an intelligent sales and marketing automation process for sending your contacts relevant information at the right time.",
+		"title" : "{{agile_lng_translate 'portlets' 'workflows-pad-content-title'}}",
+		"description" : "{{agile_lng_translate 'campaigns' 'no-campaigns-desc'}}",
 		//"learn_more" : "click here to learn more",
-		"button_text" : "Add Campaign",
+		"button_text" : "{{agile_lng_translate 'campaigns' 'add-campaign'}}",
 		"route" : "#workflow-templates",
 		"image" : updateImageS3Path("/img/clipboard.png")
 	},
 	"deals" : {
-		"title" : "No deals found.",
-		"description" : "You either do not have any deals currently, or there are none matching the filter conditions. <br/>Deals are sales opportunities you track continuously throughout its lifecycle.",
+		"title" : "{{agile_lng_translate 'portlets' 'no-deals-found'}}.",
+		"description" : "{{agile_lng_translate 'portlets' 'deals-pad-content-desc'}}<br/> {{agile_lng_translate 'portlets' 'deals-pad-content-desc-2'}}",
 		//"learn_more" : "click here to learn more",
-		"button_text" : "Add Deal",
+		"button_text" : "{{agile_lng_translate 'portlets' 'deals-btn-text'}}",
 		"route" : "#",
 		"modal_id" : "opportunityModal",
 		"image" : updateImageS3Path("/img/clipboard.png")
 	},
 	"reports" : {
-		"title" : "You do not have any reports currently.",
-		"description" : "Reports are based on a variety of tags and filters and receive them periodically to constantly be in touch with your sales cycle and pipeline.",
+		"title" : "{{agile_lng_translate 'portlets' 'reports-pad-content-title'}}",
+		"description" : "{{agile_lng_translate 'portlets' 'reports-pad-content-desc'}}",
 		//"learn_more" : "click here to learn more",
-		"button_text" : "Add Report",
+		"button_text" : "{{agile_lng_translate 'report-view' 'add-report'}}",
 		"route" : "#report-add",
 		"image" : updateImageS3Path("/img/clipboard.png")
 	},
 	"activity-reports" : {
-		"title" : "You do not have any activity reports currently.",
-		"description" : "Get a periodic  email digest of various activities by users in Agile.",
+		"title" : "{{agile_lng_translate 'portlets' 'activity-reports-pad-content-title'}}",
+		"description" : "{{agile_lng_translate 'portlets' 'activity-reports-pad-content-desc'}}",
 		//"learn_more" : "click here to learn more",
-		"button_text" : "Add Report",
+		"button_text" : "{{agile_lng_translate 'report-view' 'add-report'}}",
 		"route" : "#activity-report-add",
 		"image" : updateImageS3Path("/img/clipboard.png")
 	},
 	"campaign-reports" : {
-		"title" : "You do not have any campaign reports currently.",
-		"description" : "Get a periodic  email digest of various campaign reports stats by users in Agile.",
+		"title" : "{{agile_lng_translate 'campaigns' 'not-having-reports'}}",
+		"description" : "{{agile_lng_translate 'campaigns' 'periodic-reports'}}",
 		//"learn_more" : "click here to learn more",
-		"button_text" : "Add Report",
+		"button_text" : "{{agile_lng_translate 'report-view' 'add-report'}}",
 		"route" : "#campaign-report-add",
 		"image" : updateImageS3Path("/img/clipboard.png")
 	},
 	"contact-filters" : {
-		"title" : "You do not have any filters currently.",
-		"description" : "Filters are used to sort contacts with a specific criteria to find patterns.",
+		"title" : "{{agile_lng_translate 'portlets' 'deal-filters-pad-content-title'}}",
+		"description" : "{{agile_lng_translate 'portlets' 'contact-filters-pad-content-desc'}}",
 		//"learn_more" : "click here to learn more",
-		"button_text" : "Add Filter",
+		"button_text" : "{{agile_lng_translate 'portlets' 'deal-filters-btn-text'}}",
 		"route" : "#contact-filter-add",
 		"image" : updateImageS3Path("/img/clipboard.png")
 	},
 	"contact-views": {
-		"title" : "You do not have any custom views currently.",
-		"description" : "View is collection of different fields and the order in which you would like them to appear.",
+		"title" : "{{agile_lng_translate 'portlets' 'contact-views-pad-content-title'}}",
+		"description" : "{{agile_lng_translate 'portlets' 'contact-views-pad-content-desc'}}",
 		//"learn_more" : "click here to learn more",
-		"button_text" : "Add View",
+		"button_text" : "{{agile_lng_translate 'contacts-view' 'add-view'}}",
 		"route" : "#contact-view-add",
 		"image" : updateImageS3Path("/img/clipboard.png")
 	},
 	"no-tickets" : {
-		"title" : "You do not have any Tickets currently.",
-		"description" : "Tickets can be problem, incident, question or task escalated by your customers. Set up email forwarding to receive tickets.",
-		"button_text" : "Set up forwarding",
+		"title" : "{{agile_lng_translate 'portlets' 'no-tickets-pad-content-title'}}",
+		"description" : "{{agile_lng_translate 'portlets' 'no-tickets-pad-content-desc'}}",
+		"button_text" : "{{agile_lng_translate 'portlets' 'no-tickets-btn-text'}}",
 		"route" : "#ticket-groups",
 		"image" : "/img/clipboard.png"
 	},
 	"no-ticket-filters" : {
-		"title" : "You do not have any Tickets Filters currently.",
-		"description" : "Tickets Filters are set of conditions to view Tickets which satisfies conditions.",
+		"title" : "{{agile_lng_translate 'portlets' 'no-ticket-filters-pad-content-title'}}",
+		"description" : "{{agile_lng_translate 'portlets' 'no-ticket-filters-pad-content-desc'}}",
 		"image" : "/img/clipboard.png"
 	},
 	"dashboard" : {
 		"contacts" : {
-			"title" : "There is no recent activity",
+			"title" : "{{agile_lng_translate 'portlets' 'dashboard-contacts-title'}}",
 			"description" : "Perhaps, you may want to create a <a href='#' modal_id='personModal' class='modal-form'>new contact</a>.",
 			"icon" : "icon-group icon-3x"
 		},
 		"tasks" : {
-			"title" : "You have no tasks due",
+			"title" : "{{agile_lng_translate 'portlets' 'dashboard-tasks-title'}}",
 			"icon" : "icon-edit icon-3x"
 		},
 		"deals" : {
-			"title" : "No ongoing deals for you",
+			"title" : "{{agile_lng_translate 'portlets' 'dashboard-deals-title'}}",
 			"icon" : "icon-money icon-3x"
 		},
 		"workflows" : {
-			"title" : "No campaign activity yet",
+			"title" : "{{agile_lng_translate 'portlets' 'dashboard-workflows-title'}}",
 			"description" : "Campaigns help you automate your communication with your customers.<br/>You can create a <a href='#workflow-add'>new campaign</a>.",
 			"icon" : "icon-sitemap icon-3x"
 		}
 	},
 	"email-templates" : {
-		"title" : "You do not have any Email templates currently.",
-		"description" : "Personalize and customize email templates for every scenario in the sales cycle.",
-		"button_text" : "Add Email Template",
+		"title" : "{{agile_lng_translate 'portlets' 'email-templates-pad-content-title'}}",
+		"description" : "{{agile_lng_translate 'prefs-email-templates' 'no-email-tpl-desc'}}",
+		"button_text" : "{{agile_lng_translate 'portlets' 'email-templates-btn-text'}}",
 		"route" : "#emailbuilder-templates",
 		"image" : updateImageS3Path("/img/clipboard.png")
 	},
 	"contact-activities" : {
-		"title" : "No Contact activity recorded yet.",
-		"description" : "Web and Campaign activity of your contacts is shown here.",
+		"title" : "{{agile_lng_translate 'portlets' 'contact-activities-pad-content-title'}}",
+		"description" : "{{agile_lng_translate 'portlets' 'contact-activities-all-activities-pad-content-desc'}}",
 		"image" : updateImageS3Path("/img/clipboard.png")
 	},
 	"contact-activities/All_Activities" : {
-		"title" : "No Contact activity recorded yet.",
-		"description" : "Web and Campaign activity of your contacts is shown here.",
+		"title" : "{{agile_lng_translate 'portlets' 'contact-activities-pad-content-title'}}",
+		"description" : "{{agile_lng_translate 'portlets' 'contact-activities-all-activities-pad-content-desc'}}",
 		"image" : updateImageS3Path("/img/clipboard.png")
 	},
 	"contact-activities/Page_Views" : {
-		"title" : "No web activity recorded yet.",
+		"title" : "{{agile_lng_translate 'portlets' 'contact-activities-page-views-pad-content-title'}}",
 		"image" : updateImageS3Path("/img/clipboard.png")
 	},
 	"contact-activities/Email_Opened" : {
-		"title" : "No email opens recorded yet.",
+		"title" : "{{agile_lng_translate 'portlets' 'contact-activities-page-views-pad-content-desc'}}",
 		"image" : updateImageS3Path("/img/clipboard.png")
 	},
 	"contact-activities/Email_Clicked" : {
-		"title" : "No email clicks recorded yet.",
+		"title" : "{{agile_lng_translate 'portlets' 'contact-activities-email-clicked-pad-content-title'}}",
 		"image" : updateImageS3Path("/img/clipboard.png")
 	},
 	"contact-activities/Unsubscribed" : {
-		"title" : "No unsubscriptions recorded yet.",
+		"title" : "{{agile_lng_translate 'portlets' 'contact-activities-unsubscribed-pad-content-title'}}",
 		"image" : updateImageS3Path("/img/clipboard.png")
 	},
 	"contact-activities/Spam_Reports" : {
-		"title" : "No spam reports recorded yet.",
+		"title" : "{{agile_lng_translate 'portlets' 'contact-activities-spam-reports-pad-content-title'}}",
 		"image" : updateImageS3Path("/img/clipboard.png")
 	},
 	"contact-activities/Email_Hard_Bounced" : {
-		"title" : "No hard bouces recorded yet.",
+		"title" : "{{agile_lng_translate 'campaigns' 'email-no-hard-bounces'}}",
 		"image" : updateImageS3Path("/img/clipboard.png")
 	},
 	"contact-activities/Email_Soft_Bounced" : {
-		"title" : "No soft bounces recorded yet.",
+		"title" : "{{agile_lng_translate 'portlets' 'contact-activities-email-soft-bounced-pad-content-title'}}",
 		"image" : updateImageS3Path("/img/clipboard.png")
 	},
 	"webpages" : {
-		"title" : "You do not have any Webpages currently.",
-		"description" : "You can create a page easily by using our smart builder.",
-		"button_text" : "Add Webpage",
+		"title" : "{{agile_lng_translate 'portlets' 'webpages-pad-content-title'}}",
+		"description" : "{{agile_lng_translate 'portlets' 'webpages-pad-content-desc'}}",
+		"button_text" : "{{agile_lng_translate 'portlets' 'webpages-btn-text'}}",
 		"route" : "#webpage-add",
 		"image" : updateImageS3Path("/img/clipboard.png")
 	},
 	"deal-filters" : {
-		"title" : "You do not have any filters currently.",
-		"description" : "Filters are used to sort deals with a specific criteria to find patterns.",
+		"title" : "{{agile_lng_translate 'portlets' 'deal-filters-pad-content-title'}}",
+		"description" : "{{agile_lng_translate 'portlets' 'deal-filters-pad-content-desc'}}",
 		//"learn_more" : "click here to learn more",
-		"button_text" : "Add Filter",
+		"button_text" : "{{agile_lng_translate 'portlets' 'deal-filters-btn-text'}}",
 		"route" : "#deal-filter-add",
 		"image" : updateImageS3Path("/img/clipboard.png")
 	},
 	"dashboards" : {
-		"title" : "There are no user-defined dashboards.",
-		"description" : "User-defined dashboards allow users to configure multiple dashboards with different dashlets for various purposes.",
+		"title" : "{{agile_lng_translate 'portlets' 'user-defined-dashboards'}}",
+		"description" : "{{agile_lng_translate 'portlets' 'no-user-defined-dashboards-desc'}}",
 		//"learn_more" : "click here to learn more",
-		"button_text" : "Add Dashboard",
+		"button_text" : "{{agile_lng_translate 'portlets' 'add-dashboard'}}",
 		"route" : "#add-dashboard",
 		"image" : updateImageS3Path("/img/clipboard.png")
 	},

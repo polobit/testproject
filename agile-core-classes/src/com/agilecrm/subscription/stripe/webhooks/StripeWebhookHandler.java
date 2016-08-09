@@ -8,7 +8,8 @@ import org.apache.commons.lang.StringUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-
+import com.agilecrm.account.AccountPrefs;
+import com.agilecrm.account.util.AccountPrefsUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.util.ContactUtil;
@@ -43,6 +44,7 @@ public abstract class StripeWebhookHandler
 
     Contact contact;
     DomainUser user;
+    AccountPrefs prefs;
 
     public abstract void process();
 
@@ -76,6 +78,25 @@ public abstract class StripeWebhookHandler
 	}
 
 	return user;
+    }
+    
+    protected AccountPrefs getAccountPrefs()
+    {
+	if (prefs != null)
+	    return prefs;
+
+
+	String domain = getDomain();
+	if (StringUtils.isEmpty(domain))
+	    return null;
+	String oldNamespace = NamespaceManager.get();
+	NamespaceManager.set(domain);
+	try{
+		prefs = AccountPrefsUtil.getAccountPrefs();
+	}finally{
+		NamespaceManager.set(oldNamespace);
+	}
+	return prefs;
     }
 
     public Contact getContactFromOurDomain()
@@ -214,7 +235,9 @@ public abstract class StripeWebhookHandler
     protected void sendMail1(String emailSubject, String template)
     {
 	// Send mail to domain user
-	SendMail.sendMail(user.email, emailSubject, template, getMailDetails());
+    Map<String, Object> data = getMailDetails();
+    if(data != null)
+    	SendMail.sendMail(user.email, emailSubject, template, data);
     }
 
     protected abstract Map<String, Object> getMailDetails();

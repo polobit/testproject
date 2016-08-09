@@ -1062,7 +1062,7 @@ public class OpportunityUtil
 		    searchMap.put("archived", Boolean.parseBoolean(filterJson.getString("archived")));
 	    }
 
-	    if (checkJsonString(filterJson, "value_filter")
+	    /*if (checkJsonString(filterJson, "value_filter")
 		    && filterJson.getString("value_filter").equalsIgnoreCase("equals"))
 	    {
 		if (checkJsonString(filterJson, "value"))
@@ -1084,9 +1084,9 @@ public class OpportunityUtil
 		    double value = Double.parseDouble(filterJson.getString("value_end").replace("%", ""));
 		    searchMap.put("expected_value <=", value);
 		}
-	    }
+	    }*/
 
-	    if (checkJsonString(filterJson, "probability_filter")
+	   /* if (checkJsonString(filterJson, "probability_filter")
 		    && filterJson.getString("probability_filter").equalsIgnoreCase("equals"))
 	    {
 		if (checkJsonString(filterJson, "probability"))
@@ -1108,7 +1108,7 @@ public class OpportunityUtil
 		    long probability = Long.parseLong(filterJson.getString("probability_end").replace("%", ""));
 		    searchMap.put("probability <=", probability);
 		}
-	    }
+	    }*/
 
 	    searchMap.putAll(getDateFilterCondition(filterJson, sortField));
 	    searchMap.putAll(getDateFilterCondition(filterJson, "created_time"));
@@ -2228,7 +2228,6 @@ public class OpportunityUtil
 	{
 	    sourcecount.put(source.getId().toString(), type.equalsIgnoreCase("deals") ? 0 : 0.0);
 	}
-	System.out.println(sources.get(0).getId());
 	newDealsObject = ReportsUtil.initializeFrequencyForReports(minTime, maxTime, frequency, timeZone, sourcecount);
 
 	System.out.println("Total opportunitite....." + opportunitiesList.size());
@@ -2244,7 +2243,6 @@ public class OpportunityUtil
 		 * Date(opportunity.close_date * 1000));
 		 */
 		Long source_id = opportunity.getDeal_source_id();
-		System.out.println(categoriesUtil.getCategory(source_id));
 		List<Category> sources_id = categoriesUtil.getCategoriesByType("DEAL_SOURCE");
 		for (Category source_temp : sources_id)
 		{

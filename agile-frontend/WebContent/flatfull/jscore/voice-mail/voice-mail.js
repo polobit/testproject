@@ -124,7 +124,7 @@ function saveVoiceMail(form_id, modal_id, saveBtn, json)
 		var url = $('#' + form_id).find('#upload_url').val();
 		if(url == "")
 		{
-			$('#' + form_id).find('#error').html('<div class="alert alert-danger">Sorry! Voice file not uploaded properly.</div>');
+			$('#' + form_id).find('#error').html('<div class="alert alert-danger">{{agile_lng_translate "calls" "voicemail-uploaded"}}</div>');
 			enable_save_button($(saveBtn));
 			return;
 		}
@@ -145,7 +145,7 @@ function saveVoiceMail(form_id, modal_id, saveBtn, json)
 			$('#' + form_id).find("#extension").val("");
 			$('#' + form_id).find(".addFileLink").empty();
 			$('#' + form_id).find('#error').empty();
-			$('#' + form_id).find(".addFileLink").html('<a href="#" id="S3"><i class="icon-plus-sign"></i> <span>Add File</span></a>');
+			$('#' + form_id).find(".addFileLink").html('<a href="#" id="S3"><i class="icon-plus-sign"></i> <span>{{agile_lng_translate "documents" "add-file"}}</span></a>');
 			$('#' + form_id).each(function() {
 				this.reset();
 			});

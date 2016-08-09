@@ -2,19 +2,19 @@ function initWebstatsDateRange() {
     $('#activities_date_range')
         .daterangepicker({
                 ranges: {
-                    'Today': ['today', 'today'],
-                    'Yesterday': ['yesterday', 'yesterday'],
-                    'Last 7 Days': [Date.today().add({
+                    '{{agile_lng_translate "calendar" "Today"}}': ['today', 'today'],
+                    '{{agile_lng_translate "calendar" "Yesterday"}}': ['yesterday', 'yesterday'],
+                    '{{agile_lng_translate "portlets" "last-7-days"}}': [Date.today().add({
                         days: -6
                     }), 'today'],
-                    'Last 30 Days': [Date.today().add({
+                    '{{agile_lng_translate "portlets" "last-30-days"}}': [Date.today().add({
                         days: -29
                     }), 'today'],
-                    'This Month': [
+                    '{{agile_lng_translate "portlets" "this-month"}}': [
                         Date.today().moveToFirstDayOfMonth(),
                         Date.today().moveToLastDayOfMonth()
                     ],
-                    'Last Month': [
+                    '{{agile_lng_translate "portlets" "last-month"}}': [
                         Date.today().moveToFirstDayOfMonth().add({
                             months: -1
                         }),
@@ -26,19 +26,13 @@ function initWebstatsDateRange() {
                     
                 },
                 locale: {
-                    applyLabel: 'Apply',
-                    cancelLabel: 'Cancel',
-                    fromLabel: 'From',
-                    toLabel: 'To',
-                    customRangeLabel: 'Custom',
-                    daysOfWeek: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr',
-                        'Sa'
-                    ],
-                    monthNames: ['January', 'February', 'March',
-                        'April', 'May', 'June', 'July', 'August',
-                        'September', 'October', 'November',
-                        'December'
-                    ],
+                    applyLabel: '{{agile_lng_translate "calendar" "Apply"}}',
+                    clearLabel: '{{agile_lng_translate "deal-view" "clear"}}',
+                    fromLabel: '{{agile_lng_translate "calendar" "from"}}',
+                    toLabel: '{{agile_lng_translate "calendar" "to"}}',
+                    customRangeLabel: '{{agile_lng_translate "campaigns" "custom"}}',
+                    daysOfWeek: $.fn.datepicker.dates['en'].daysExactMin,
+                    monthNames: $.fn.datepicker.dates['en'].months,
                     firstDay: parseInt(CALENDAR_WEEK_START_DAY)
                 }
             },

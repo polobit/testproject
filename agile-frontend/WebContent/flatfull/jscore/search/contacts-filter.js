@@ -215,6 +215,15 @@ var Report_Filters_Event_View = Base_Model_View.extend({
 		e.preventDefault();
 		var targetEl = $(e.currentTarget);
 
+		if($(targetEl).closest('td').siblings('td.lhs-block').find("option:selected").parent().attr("label")== "Properties")
+		{
+
+		var $rhs_ele_new = $(targetEl).closest('td').siblings('td.rhs-new-block').find("#RHS-NEW");
+		var selected_val=targetEl.parents("tr").find("#LHS > select").find(':selected').text();
+		$rhs_ele_new.find('input').attr('placeholder','Enter '+selected_val);
+
+		}
+
 		if ($(targetEl).find("option:selected").hasClass('tags'))
 		{
 			var element = $(targetEl).parents().closest('tr').find('div#RHS');
@@ -250,7 +259,7 @@ var Report_Filters_Event_View = Base_Model_View.extend({
 				
 			}
 			$('input', $(targetEl).closest('tr').find('td.rhs-block')).attr("id", $(targetEl).closest('tr').find('td.lhs-block').find('option:selected').attr("id"));
-			$('input', $(targetEl).closest('tr').find('td.rhs-block')).attr("placeholder", "Company Name");
+			$('input', $(targetEl).closest('tr').find('td.rhs-block')).attr("placeholder", "{{agile_lng_translate 'contact-edit' 'company-name'}}");
 			$('input', $(targetEl).closest('tr').find('td.rhs-block')).addClass("company_custom_field");
 			agile_type_ahead($('input', $(targetEl).closest('tr').find('td.rhs-block')).attr("id"), $(targetEl).closest('tr').find('td.rhs-block'), contacts_typeahead, custom_company_display, 'type=COMPANY');
 		}
@@ -313,6 +322,7 @@ function setupContactFilterList(cel, tag_id)
 				no_transition_bar : true,
 				postRenderCallback : function(el)
 				{
+					contactFiltersListeners("lhs_filters_conatiner");
 					var filter_name;
 					// Set saved filter name on dropdown button
 					if (filter_name = _agile_get_prefs('contact_filter'))
@@ -322,20 +332,21 @@ function setupContactFilterList(cel, tag_id)
 						 * system filter names, to load results based on those
 						 * filters
 						 */
+						filter_id = filter_name;
+
 						if (filter_name.toLowerCase().indexOf('recent') >= 0)
 							filter_name = "Recent";
 
 						else if (filter_name.toLowerCase().indexOf('contacts') >= 0)
-							filter_name = "My Contacts";
+							filter_name = "{{agile_lng_translate 'contacts-view' 'my-contacts'}}";
 
 						else if (filter_name.toLowerCase().indexOf('leads') >= 0)
-							filter_name = "Leads";
+							filter_name = "{{agile_lng_translate 'portlets' 'leads'}}";
 
 						// If is not system type get the name of the filter from
 						// id(from cookie)
 						else if (filter_name.indexOf("system") < 0)
 						{
-							filter_id = filter_name;
 							if(contactFiltersListView.collection.get(filter_name))
 									filter_name = contactFiltersListView.collection.get(filter_name).toJSON().name;
 							
@@ -388,7 +399,7 @@ function revertToDefaultContacts()
 		App_Contacts.contact_custom_view = undefined;
 
 	// Loads contacts
-	App_Contacts.contacts();
+	contacts_view_loader.getContacts(App_Contacts.contactViewModel, $("#contacts-listener-container"));
 }
 
 function chainFiltersForContactAndCompany(el, data, callback) {
@@ -486,6 +497,18 @@ function show_chained_fields(el, data, forceShow)
 	NESTED_LHS = $("#nested_lhs", el);
 	
 	RHS.chained(condition, function(chained_el, self){
+
+		LHS = $("#LHS", el);
+		RHS = $("#RHS", el);
+		RHS_NEW = $("#RHS-NEW", el);
+		var Filtre_label =$(':selected',LHS).closest('optgroup').prop('label');
+		if(Filtre_label == "Properties" || Filtre_label== "UTM Parameter")
+		{
+			var lh = LHS.find("> select").find(':selected').text();
+			$('input', $(LHS).closest('td').siblings('td.rhs-block')).attr("placeholder", "Enter "+ lh);
+			$($(LHS).closest('td').siblings('td.rhs-new-block').find("#RHS-NEW")).attr('placeholder','Enter ');
+		}
+
 		var selected_field = $(chained_el).find('option:selected');
 		var placeholder = $(selected_field).attr("placeholder");
 		var is_custom_field = $(selected_field).hasClass("custom_field");
@@ -514,7 +537,17 @@ function show_chained_fields(el, data, forceShow)
 		}
 		
 	});
-	condition.chained(LHS);
+	condition.chained(LHS, function(chained_el, self) {
+
+		var $month_children = $('optgroup[label="Relative"]', self).children();
+		// var $days_children = $('optgroup[label="Days"]', self).children();
+
+		if($month_children.length == 0) // To remove optgroup
+			$('optgroup[label="Relative"]', self).remove();
+
+		// if($days_children.length == 0)
+			// $('optgroup[label="Days"]', self).remove();
+	});
 	
 	RHS_NEW.chained(condition);
 	NESTED_CONDITION.chained(LHS);
@@ -541,7 +574,12 @@ function show_chained_fields(el, data, forceShow)
 		e.preventDefault();
 		var value = $(this).val();
 
-		
+	var Filtre_label =$(':selected',LHS).closest('optgroup').prop('label');
+		if(Filtre_label == "Properties" || Filtre_label== "UTM Parameter")
+		{
+	var v=$(':selected',this).text();
+	$('input', $(this).closest('td').siblings('td.rhs-block')).attr("placeholder", "Enter "+ v);		
+		}
 		if(value=="country"){
 			//var appenditem = $('#div_country_options').html();
 			var appenditem = getTemplate("country-list", {});
@@ -583,9 +621,17 @@ function show_chained_fields(el, data, forceShow)
 				
 			}
 			$('input', $(this).closest('td').siblings('td.rhs-block')).attr("id", $(this).find("option:selected").attr("id"));
-			$('input', $(this).closest('td').siblings('td.rhs-block')).attr("placeholder", "Company Name");
+			$('input', $(this).closest('td').siblings('td.rhs-block')).attr("placeholder", "{{agile_lng_translate 'contact-edit' 'company-name'}}");
 			$('input', $(this).closest('td').siblings('td.rhs-block')).addClass("company_custom_field");
 			agile_type_ahead($('input', $(this).closest('td').siblings('td.rhs-block')).attr("id"), $(this).closest('td').siblings('td.rhs-block'), contacts_typeahead, custom_company_display, 'type=COMPANY');
+		}
+
+		if($(this).find('option:selected').attr("field_type") !== "DATE")
+		{
+			var $condition_block = $(this).closest('td').siblings('td.codition-block');
+			$condition_block.find('optgroup[label="Relative"]').remove(); // Removes optgroup
+			// $condition_block.find('optgroup[label="Days"]').remove();
+
 		}
 
 	});
@@ -616,7 +662,7 @@ function show_chained_fields(el, data, forceShow)
 			},10);
 		}
 		$('input', RHS).attr("id", LHS.find("option:selected").attr("id"));
-		$('input', RHS).attr("placeholder", "Company Name");
+		$('input', RHS).attr("placeholder", "{{agile_lng_translate 'contact-edit' 'company-name'}}");
 		$('input', RHS).addClass("company_custom_field");
 		agile_type_ahead($('input', RHS).attr("id"), RHS, contacts_typeahead, custom_company_display, 'type=COMPANY');
 	}
@@ -664,7 +710,7 @@ function addTagsArrayasTypeaheadSource(tagsJSON, element)
 	});
 
 	// $("input", element).attr("data-provide","typeahead");
-	$("input", element).typeahead({ "source" : tags_array }).attr('placeholder', "Enter Tag").width("92%");
+	$("input", element).typeahead({ "source" : tags_array }).attr('placeholder', "{{agile_lng_translate 'contacts-view' 'Enter Tag'}}").width("92%");
 }
 
 
@@ -696,31 +742,68 @@ var _AGILE_CUSTOM_DIVIDER_ = ' _AGILE_CUSTOM_DIVIDER_';
 var custom_chained_filter = "custom_chained_class";
 function fillCustomFields(fields, el, callback, is_webrules)
 {
+	// To fix duplicate options in Select
+	if($(el).hasClass('hide'))
+		return;
+
 	var lhs_element = $("#LHS > select > #custom-fields", el);
 	var rhs_element = $("#RHS", el);
 	var condition = $("#condition > select", el);
 
 	var _AGILE_CUSTOM_DIVIDER_ = ' _AGILE_CUSTOM_DIVIDER_';
+
 	for(var i = 0; i < fields.length ; i++)
 	{
 		if(i == 0)
 			lhs_element.removeClass('hide');
+
 		var field = fields[i];
 
-		condition.append('<option value="EQUALS" custom_chained_class= "'+field.field_label+ " " + _AGILE_CUSTOM_DIVIDER_ +'  custom_field" class="'+field.field_label + _AGILE_CUSTOM_DIVIDER_ + ' custom_field" field_type="'+field.field_type+'" field_name="'+field.field_label+'">is</option>');
-		condition.append('<option value="NOTEQUALS" custom_chained_class= "'+field.field_label+ " " +_AGILE_CUSTOM_DIVIDER_+'  custom_field" class="'+field.field_label + _AGILE_CUSTOM_DIVIDER_ + ' custom_field" field_type="'+field.field_type+'" field_name="'+field.field_label+'">isn\'t</option>');
+		condition.append('<option value="EQUALS" custom_chained_class= "'+field.field_label+ " " + _AGILE_CUSTOM_DIVIDER_ +'  custom_field" class="'+field.field_label + _AGILE_CUSTOM_DIVIDER_ + ' custom_field" field_type="'+field.field_type+'" field_name="'+field.field_label+'">{{agile_lng_translate "contacts-view" "is"}}</option>');
+		condition.append('<option value="NOTEQUALS" custom_chained_class= "'+field.field_label+ " " +_AGILE_CUSTOM_DIVIDER_+'  custom_field" class="'+field.field_label + _AGILE_CUSTOM_DIVIDER_ + ' custom_field" field_type="'+field.field_type+'" field_name="'+field.field_label+'">{{agile_lng_translate "contacts-view" "is-not"}}</option>');
 
 		if(field.field_type == "DATE")
 		{
+
 			lhs_element.append('<option value="'+field.field_label+'_time" field_type="'+field.field_type+'">'+field.field_label+'</option>');
+
 			//condition.find("option.created_time").addClass(field.field_label+'_time');
 			var element = condition.find("option.created_time"); 
 			add_custom_class_to_filter_elements(element, field.field_label+'_time');
 			$(element).addClass(field.field_label+'_time' + _AGILE_CUSTOM_DIVIDER_);
+			
 			if(!is_webrules)
 			{
-				condition.append('<option value="DEFINED" custom_chained_class= "'+field.field_label+'_time'+ " " + _AGILE_CUSTOM_DIVIDER_ +'  custom_field" class="'+field.field_label +'_time '+ _AGILE_CUSTOM_DIVIDER_ + ' custom_field" field_type="'+field.field_type+'" field_name="'+field.field_label+'">is defined</option>');
-				condition.append('<option value="NOT_DEFINED" custom_chained_class= "'+field.field_label+'_time'+ " " +_AGILE_CUSTOM_DIVIDER_+'  custom_field" class="'+field.field_label +'_time																																				 '+ _AGILE_CUSTOM_DIVIDER_ + ' custom_field" field_type="'+field.field_type+'" field_name="'+field.field_label+'">is not defined</option>');
+				var $month_optgroup = condition.find('optgroup.relative-grp');
+
+				var $defined_options = 
+				'<option value="DEFINED" custom_chained_class= "'+field.field_label+'_time'+ " " + _AGILE_CUSTOM_DIVIDER_ +'  custom_field" class="'+field.field_label +'_time '+ _AGILE_CUSTOM_DIVIDER_ + ' custom_field" field_type="'+field.field_type+'" field_name="'+field.field_label+'">{{agile_lng_translate "contacts-view" "is-defined"}}</option>' 
+									+
+				'<option value="NOT_DEFINED" custom_chained_class= "'+field.field_label+'_time'+ " " +_AGILE_CUSTOM_DIVIDER_+'  custom_field" class="'+field.field_label +'_time '+ _AGILE_CUSTOM_DIVIDER_ + ' custom_field" field_type="'+field.field_type+'" field_name="'+field.field_label+'">{{agile_lng_translate "contacts-view" "is-not-defined"}}</option>';
+
+				// To prepend optgroup
+				if($month_optgroup.length != 0)
+					$month_optgroup.before($defined_options);
+				else
+					condition.append($defined_options);
+
+				if(field.scope == "CONTACT")
+				{
+
+					if(condition.find('optgroup.relative-grp').length == 0)
+					{
+						condition.append('<optgroup class="relative-grp" label='{{agile_lng_translate "commons-lang" "relative"}}'></optgroup>');
+						// condition.append('<optgroup label="Days"></optgroup>');
+					}
+					
+					condition.find('optgroup.relative-grp').append('<option value="BY_MONTH_ONLY" custom_chained_class= "'+field.field_label+'_time'+ " " + _AGILE_CUSTOM_DIVIDER_ +'  custom_field" class="'+field.field_label +'_time '+ _AGILE_CUSTOM_DIVIDER_ + ' custom_field" field_type="'+field.field_type+'" field_name="'+field.field_label+'">{{agile_lng_translate "contacts-view" "on"}}</option>');
+
+					condition.find('optgroup.relative-grp').append(
+						'<option value="IS_AFTER_IN_DAYS" custom_chained_class= "'+field.field_label+'_time'+ " " + _AGILE_CUSTOM_DIVIDER_ +'  custom_field" class="'+field.field_label +'_time '+ _AGILE_CUSTOM_DIVIDER_ + ' custom_field" field_type="'+field.field_type+'" field_name="'+field.field_label+'">{{agile_lng_translate "contacts-view" "on-after"}}</option>'
+						+
+						'<option value="IS_BEFORE_IN_DAYS" custom_chained_class= "'+field.field_label+'_time'+ " " + _AGILE_CUSTOM_DIVIDER_ +'  custom_field" class="'+field.field_label +'_time '+ _AGILE_CUSTOM_DIVIDER_ + ' custom_field" field_type="'+field.field_type+'" field_name="'+field.field_label+'">{{agile_lng_translate "contacts-view" "on-before"}}</option>'
+						);
+			    }
 			}
 		} else if(field.field_type == "NUMBER")
 		{
@@ -731,8 +814,8 @@ function fillCustomFields(fields, el, callback, is_webrules)
 			$(element).addClass(field.field_label+'_number' + _AGILE_CUSTOM_DIVIDER_);
 			if(!is_webrules)
 			{
-				condition.append('<option value="DEFINED" custom_chained_class= "'+field.field_label+'_number'+ " " + _AGILE_CUSTOM_DIVIDER_ +'  custom_field" class="'+field.field_label +'_number '+ _AGILE_CUSTOM_DIVIDER_ + ' custom_field" field_type="'+field.field_type+'" field_name="'+field.field_label+'">is defined</option>');
-				condition.append('<option value="NOT_DEFINED" custom_chained_class= "'+field.field_label+'_number'+ " " +_AGILE_CUSTOM_DIVIDER_+'  custom_field" class="'+field.field_label +'_number '+ _AGILE_CUSTOM_DIVIDER_ + ' custom_field" field_type="'+field.field_type+'" field_name="'+field.field_label+'">is not defined</option>');
+				condition.append('<option value="DEFINED" custom_chained_class= "'+field.field_label+'_number'+ " " + _AGILE_CUSTOM_DIVIDER_ +'  custom_field" class="'+field.field_label +'_number '+ _AGILE_CUSTOM_DIVIDER_ + ' custom_field" field_type="'+field.field_type+'" field_name="'+field.field_label+'">{{agile_lng_translate "contacts-view" "is-defined"}}</option>');
+				condition.append('<option value="NOT_DEFINED" custom_chained_class= "'+field.field_label+'_number'+ " " +_AGILE_CUSTOM_DIVIDER_+'  custom_field" class="'+field.field_label +'_number '+ _AGILE_CUSTOM_DIVIDER_ + ' custom_field" field_type="'+field.field_type+'" field_name="'+field.field_label+'">{{agile_lng_translate "contacts-view" "is-not-defined"}}</option>');
 			}
 		
 		} else if(field.field_type == "CONTACT" || field.field_type == "COMPANY")
@@ -744,8 +827,8 @@ function fillCustomFields(fields, el, callback, is_webrules)
 			lhs_element.append('<option value="'+field.field_label+'" field_type="'+field.field_type+'" >'+field.field_label+'</option>');
 			if(!is_webrules)
 			{
-				condition.append('<option value="DEFINED" custom_chained_class= "'+field.field_label+ " " + _AGILE_CUSTOM_DIVIDER_ +'  custom_field" class="'+field.field_label + _AGILE_CUSTOM_DIVIDER_ + ' custom_field" field_type="'+field.field_type+'" field_name="'+field.field_label+'">is defined</option>');
-				condition.append('<option value="NOT_DEFINED" custom_chained_class= "'+field.field_label+ " " +_AGILE_CUSTOM_DIVIDER_+'  custom_field" class="'+field.field_label + _AGILE_CUSTOM_DIVIDER_ + ' custom_field" field_type="'+field.field_type+'" field_name="'+field.field_label+'">is not defined</option>');
+				condition.append('<option value="DEFINED" custom_chained_class= "'+field.field_label+ " " + _AGILE_CUSTOM_DIVIDER_ +'  custom_field" class="'+field.field_label + _AGILE_CUSTOM_DIVIDER_ + ' custom_field" field_type="'+field.field_type+'" field_name="'+field.field_label+'">{{agile_lng_translate "contacts-view" "is-defined"}}</option>');
+				condition.append('<option value="NOT_DEFINED" custom_chained_class= "'+field.field_label+ " " +_AGILE_CUSTOM_DIVIDER_+'  custom_field" class="'+field.field_label + _AGILE_CUSTOM_DIVIDER_ + ' custom_field" field_type="'+field.field_type+'" field_name="'+field.field_label+'">{{agile_lng_translate "contacts-view" "is-not-defined"}}</option>');
 			}
 		
 		}
@@ -753,8 +836,8 @@ function fillCustomFields(fields, el, callback, is_webrules)
 		// Contacts and not contains should only be in webrules form
 		if(is_webrules)
 		{
-			condition.append('<option value="MATCHES" custom_chained_class= "'+field.field_label+ " " + _AGILE_CUSTOM_DIVIDER_+'  custom_field" class="'+field.field_label +' custom_field" field_name="'+field.field_label+'">contains</option>');
-			condition.append('<option value="NOT_CONTAINS"  custom_chained_class= "'+field.field_label+ " " +_AGILE_CUSTOM_DIVIDER_+'  custom_field" class="'+field.field_label+' custom_field" field_name="'+field.field_label+'">doesn\'t contain</option>');
+			condition.append('<option value="MATCHES" custom_chained_class= "'+field.field_label+ " " + _AGILE_CUSTOM_DIVIDER_+'  custom_field" class="'+field.field_label +' custom_field" field_name="'+field.field_label+'">{{agile_lng_translate "contacts-view" "contains"}}</option>');
+			condition.append('<option value="NOT_CONTAINS"  custom_chained_class= "'+field.field_label+ " " +_AGILE_CUSTOM_DIVIDER_+'  custom_field" class="'+field.field_label+' custom_field" field_name="'+field.field_label+'">{{agile_lng_translate "contacts-view" "does-not-contain"}}</option>');
 		}
 		
 		if(field.field_type == "LIST")
@@ -812,21 +895,6 @@ function showDynamicFilters(el){
 	}
 }
 
-
-function setUpContactView(cel,tagExists){
-
-	
-	if (_agile_get_prefs("agile_contact_view"))
-	{
-		$('#contacts-view-options', cel).html("<a data-toggle='tooltip' data-placement='bottom' data-original-title='List View' class='btn btn-default btn-sm contacts-view' data='list'><i class='fa fa-list'  style='margin-right:3px'></i></a>");
-	}
-	else{
-		$('#contacts-view-options', cel).html("<a data-toggle='tooltip' data-placement='bottom' data-original-title='Grid View' class='btn btn-default btn-sm contacts-view' data='grid'><i class='fa fa-th-large' style='margin-right:3px'></i></a>");
-	}
-	
-}
-
-
 var contact_filters_util = {
 
 	// Fetch filter result without changing route on click
@@ -850,7 +918,7 @@ var contact_filters_util = {
 		filter_name = $(targetEl).attr('data');
 
 		CONTACTS_HARD_RELOAD=true;
-		App_Contacts.contacts();
+		contacts_view_loader.getContacts(App_Contacts.contactViewModel, $("#contacts-listener-container"));
 		return;
 		// /removed old code from below,
 		// now filters will work only on contact, not company

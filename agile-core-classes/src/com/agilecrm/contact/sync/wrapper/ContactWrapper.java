@@ -72,23 +72,41 @@ public abstract class ContactWrapper implements IContactWrapper
     public Contact buildContact()
     {
 
-	wrapContact();
+        System.out.println("wrapping contact");	
+    	wrapContact();
 
-	/**
-	 * Setting properties and other fields to new contact object
-	 */
-
-	setFirstName();
-	setLastName();
-	setEmail();
-	//setSyncId();
-	setOrganization();
-	setPhoneNumber();
-	setDescription();
-	setAddress();
-	setTag();
-	setJobTitle();
-	addMoreCustomInfo();
+    	/**
+    	 * Setting properties and other fields to new contact object
+    	 */
+    	System.out.println("setting firstname");
+    	setFirstName();
+    	
+    	System.out.println("setting lastname");
+    	setLastName();
+    	
+    	System.out.println("setting email");
+    	setEmail();
+    	//setSyncId();
+    	System.out.println("setting organisation");
+    	setOrganization();
+    	
+    	System.out.println("setting phone number");
+    	setPhoneNumber();
+    	
+    	System.out.println("setting description");
+    	setDescription();
+    	
+    	System.out.println("setting address");
+    	setAddress();
+    	
+    	System.out.println("setting tag");
+    	setTag();
+    	
+    	System.out.println("setting jobtitle");
+    	setJobTitle();
+    	
+    	System.out.println("adding more customer info");
+    	addMoreCustomInfo();	
 
 	return contact;
     }
@@ -256,5 +274,10 @@ public abstract class ContactWrapper implements IContactWrapper
 		tagName = tagName.replaceFirst("[0-9]", "").trim();
 	}
 	return tagName;
+    }
+    
+    public void updateContact(Contact contact)
+    {
+    	this.contact=contact;
     }
 }

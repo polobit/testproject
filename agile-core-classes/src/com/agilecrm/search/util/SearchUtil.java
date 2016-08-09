@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.commons.lang.time.DateUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
@@ -54,6 +55,8 @@ public class SearchUtil
 	// Map to store all the fields
 	Map<String, String> fields = new HashMap<String, String>();
 
+	Calendar cal = Calendar.getInstance();
+	
 	// Sets contactField objects in to map
 	for (ContactField contactField : contact.properties)
 	{
@@ -111,6 +114,21 @@ public class SearchUtil
 		{
 		    doc.addField(Field.newBuilder().setName(normalizeTextSearchString(field_name) + "_time_epoch")
 			    .setNumber(Double.valueOf(contactField.value)));
+		    
+		    try
+			{
+				cal.setTimeInMillis(Long.valueOf(contactField.value) * 1000);
+				
+				doc.addField(Field.newBuilder().setName(normalizeTextSearchString(field_name) + "_time__dd__").setNumber(cal.get(Calendar.DATE)));
+				doc.addField(Field.newBuilder().setName(normalizeTextSearchString(field_name) + "_time__mm__").setNumber(cal.get(Calendar.MONTH)+ 1));
+				doc.addField(Field.newBuilder().setName(normalizeTextSearchString(field_name) + "_time__yy__").setNumber(cal.get(Calendar.YEAR)));
+			}
+			catch (Exception e)
+			{
+				System.err.println("Exception occured while splitting date values..." + e.getMessage());
+				System.out.println(ExceptionUtils.getFullStackTrace(e));
+			}
+		    
 		    fields.put(normalizeTextSearchString(field_name) + "_time", contactField.value);
 		}
 		catch (NumberFormatException e)
@@ -441,6 +459,7 @@ public class SearchUtil
 	 * combinations first_name + last_name , last_name + first_name),
 	 * converts address string to map and saves address keywords to search
 	 */
+	System.out.println("Before properties for loop");
 	for (ContactField contactField : properties)
 	{
 	    if ("first_name".equals(contactField.name))
@@ -465,6 +484,7 @@ public class SearchUtil
 		{
 		    // Converts address JSON string(sent so from client) to a
 		    // map
+			System.out.println("Inside try bolck and before geting address map");
 		    HashMap<String, String> addressMap = new ObjectMapper().readValue(contactField.value,
 			    new TypeReference<HashMap<String, String>>()
 			    {
@@ -472,10 +492,14 @@ public class SearchUtil
 
 		    // save the address values
 		    tokens.addAll(addressMap.values());
+			System.out.println("Inside try bolck and after geting address map");
+
 		}
 		catch (Exception e)
 		{
 		    e.printStackTrace();
+		    System.out.println("Inside catch bolck");
+		    System.out.println(e.getMessage());
 		}
 	    }
 
@@ -487,17 +511,22 @@ public class SearchUtil
 	String contactName = "";
 
 	String[] firstNameArr = firstName.split(" ");
+	System.out.println("Before first name for loop");
 	for(int i=0; i<firstNameArr.length; i++){
 		contactName = normalizeString(firstNameArr[i]);
 		tokens.add(contactName);
 	}
-	
+	System.out.println("After first name for loop");
+
 	String[] lastNameArr = lastName.split(" ");
+	System.out.println("Before last name for loop");
+
 	for(int i=0; i<lastNameArr.length; i++){
 		contactName = normalizeString(lastNameArr[i]);
 		tokens.add(contactName);
 	}
-	
+	System.out.println("After last name for loop");
+
 	String[] nameArr = name.split(" ");
 	for(int i=0; i<nameArr.length; i++){
 		contactName = normalizeString(nameArr[i]);
@@ -512,10 +541,12 @@ public class SearchUtil
 	contactName = normalizeString(lastName + firstName);
 	tokens.add(contactName);
 	// Splits each token in to fragments to search based on keyword
+	System.out.println("Token size is:"+tokens.size());
 	if (tokens.size() != 0)
 	    tokens = StringUtils2.getSearchTokens(tokens);
 
 	// Returns normalized set
+	System.out.println("Before returning the tokens");
 	return normalizeSet(tokens);
     }
     

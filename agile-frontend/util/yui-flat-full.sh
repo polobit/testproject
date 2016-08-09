@@ -1,3 +1,4 @@
+rm ../WebContent/jscore/min/flatfull/*.js
 
 cat ../WebContent/flatfull/jscore/backbone/*.js > ../WebContent/jscore/min/flatfull/js-all-min-1.js
 
@@ -25,20 +26,10 @@ rm js-file-list
 
 ## Social suite into templates
 cat ../WebContent/flatfull/jscore/social-suite/*.js > ../WebContent/jscore/min/flatfull/social-suite-all-min.js
-java -jar yuicompressor-2.4.7.jar ../WebContent/jscore/min/flatfull/social-suite-all-min.js --line-break 10000 --type js -o  ../WebContent/jscore/min/flatfull/social-suite-all-min.js
-cat ../WebContent/tpl/min/precompiled/flatfull/socialsuite.js >  ../WebContent/tpl/min/precompiled/flatfull/socialsuite-all.js
-cat ../WebContent/jscore/min/flatfull/social-suite-all-min.js >> ../WebContent/tpl/min/precompiled/flatfull/socialsuite-all.js
 #rm ../WebContent/tpl/min/precompiled/flatfull/temp.js
 
 ## Tickets module min file
 cat ../WebContent/flatfull/jscore/tickets/base-model/*.js ../WebContent/flatfull/jscore/tickets/*.js > ../WebContent/jscore/min/flatfull/tickets-min.js
-java -jar yuicompressor-2.4.7.jar ../WebContent/jscore/min/flatfull/tickets-min.js --line-break 10000 --type js -o  ../WebContent/jscore/min/flatfull/tickets-min.js
-
-
-## Webrules into templates
-#cat ../WebContent/flatfull/jscore/web-rules/*.js > ../WebContent/jscore/min/flatfull/web-rules-min.js
-#java -jar yuicompressor-2.4.7.jar ../WebContent/jscore/min/flatfull/web-rules-min.js --line-break 10000 --type js -o  ../WebContent/jscore/min/flatfull/web-rules-min.js
-#cat ../WebContent/jscore/min/flatfull/web-rules-min.js >> ../WebContent/tpl/min/precompiled/flatfull/web-rules.js
 
 cat ../WebContent/flatfull/controllers/app.js >> ../WebContent/jscore/min/flatfull/js-all-min-4.js
 
@@ -46,40 +37,21 @@ cat ../WebContent/stats/js/*.js > ../WebContent/stats/min/agile-min.js
 
 java -jar yuicompressor-2.4.7.jar ../WebContent/stats/min/agile-min.js --type js -o  ../WebContent/stats/min/agile-min.js
 
-java -jar yuicompressor-2.4.7.jar ../WebContent/jscore/min/flatfull/js-all-min-1.js --line-break 10000 --type js -o  ../WebContent/jscore/min/flatfull/js-all-min-1.js
-
-java -jar yuicompressor-2.4.7.jar ../WebContent/jscore/min/flatfull/js-all-min-2.js --line-break 10000 --type js -o  ../WebContent/jscore/min/flatfull/js-all-min-2.js
-
-java -jar yuicompressor-2.4.7.jar ../WebContent/jscore/min/flatfull/js-all-min-3.js --line-break 10000 --type js -o  ../WebContent/jscore/min/flatfull/js-all-min-3.js
-
-java -jar yuicompressor-2.4.7.jar ../WebContent/jscore/min/flatfull/js-all-min-4.js --line-break 10000 --type js -o  ../WebContent/jscore/min/flatfull/js-all-min-4.js
-
 echo 'Minifying helpcenter files...'
-
 cat ../WebContent/flatfull/jscore/backbone/*.js > ../WebContent/jscore/min/flatfull/helpcenter-all-min.js
-
-cat $(find ../WebContent/helpcenter/controllers ! -path ../WebContent/helpcenter/controllers/app.js -name "*.js") >> ../WebContent/jscore/min/flatfull/helpcenter-all-min.js
-
-cat ../WebContent/flatfull/jscore/form/*.js ../WebContent/flatfull/jscore/handlebars/*.js >> ../WebContent/jscore/min/flatfull/helpcenter-all-min.js
-
+cat $(find ../WebContent/helpcenter/controllers ! -path ../WebContent/helpcenter/controllers/app.js -name "knowledgebase-router.js") >> ../WebContent/jscore/min/flatfull/helpcenter-all-min.js
+cat ../WebContent/flatfull/prereq/*.js ../WebContent/flatfull/jscore/form/*.js ../WebContent/flatfull/jscore/handlebars/*.js >> ../WebContent/jscore/min/flatfull/helpcenter-all-min.js
 cat ../WebContent/helpcenter/jscore/*.js >> ../WebContent/jscore/min/flatfull/helpcenter-all-min.js
-
 cat ../WebContent/helpcenter/controllers/app.js >> ../WebContent/jscore/min/flatfull/helpcenter-all-min.js
+#End of Helpcenter
 
-java -jar yuicompressor-2.4.7.jar ../WebContent/jscore/min/flatfull/helpcenter-all-min.js --line-break 10000 --type js -o  ../WebContent/jscore/min/flatfull/helpcenter-all-min.js
-
-
-#java -jar yuicompressor-2.4.7.jar ../WebContent/jscore/min/flatfull/portlets-min.js --line-break 10000 --type js -o  ../WebContent/jscore/min/flatfull/portlets-min.js
-
-#java -jar yuicompressor-2.4.7.jar ../WebContent/css/agilecrm.css --type css -o  ../WebContent/css/agilecrm.css
-
-
-#cat ../WebContent/flatfull/css/misc/*.css > ../WebContent/flatfull/css/misc/min/agilecrm-misc.css
-
-#java -jar yuicompressor-2.4.7.jar ../WebContent/flatfull/css/misc/min/agilecrm-misc.css --type css -o  ../WebContent/flatfull/css/misc/min/agilecrm-misc-min.css
-
-#java -jar yuicompressor-2.4.7.jar ../WebContent/tpl/min/precompiled/tpl.html --type css -o  ../WebContent/tpl/min/precompiled/tpl.html
-
-#find ../WebContent/flatfull/widgets/*.js -prune | while read f; do (echo "$f"; java -jar yuicompressor-2.4.7.jar "$f" --type js -o "$f"); done 
-
-#find ../WebContent/tpl/min/precompiled/*.html -prune | while read htmlFile; do java -jar yuicompressor-2.4.7.jar "$htmlFile" --type css -o "$htmlFile"; done
+#Localize and Minify
+if [ -n "$1" ]; then
+    echo "not empty"
+    java -jar agilelocalize.jar ../WebContent/jscore/min/flatfull ../WebContent/jscore/min $1
+    sh yui-minifier.sh $1
+else
+    echo "empty"
+    java -jar agilelocalize.jar ../WebContent/jscore/min/flatfull ../WebContent/jscore/min en
+    sh yui-minifier.sh en
+fi

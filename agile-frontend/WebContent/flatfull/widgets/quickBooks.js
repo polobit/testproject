@@ -2,7 +2,7 @@ function showQuickbooksContacts(contact_id)
 {
     if (!Email)
     {
-	quickBooksError("<div class='wrapper-sm'>Please provide email for this contact</div>");
+	quickBooksError("<div class='wrapper-sm'>"+_agile_get_translated_val('widgets','pl-give-contact-email')+"</div>");
 	return;
     }
 
@@ -25,10 +25,7 @@ function showQuickbooksContacts(contact_id)
 	    var template = $('#' + QUICKBOOKS_PLUGIN_NAME).html(getTemplate('quickbooks-profile', data));
 	    console.log("libpath is" + LIB_PATH);
 	    console.log(template)
-	    head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
-	    {
-		$(".time-ago", template).timeago();
-	    });
+	    agileTimeAgoWithLngConversion($(".time-ago", $('#' + QUICKBOOKS_PLUGIN_NAME)));
 
 	}
 	else
@@ -46,7 +43,7 @@ function showQuickbooksContacts(contact_id)
 	}
 	else if(data.responseText.indexOf('Exception Timeout while fetching') != -1)
 	{
-		quickBooksError("<div class='wrapper-sm'>Timeout while fetching Please refresh</div>");
+		quickBooksError("<div class='wrapper-sm'>" + _agile_get_translated_val('widgets', 'quickbooks-error')+"</div>");
 	}
 	else
 	{
@@ -153,8 +150,8 @@ function startQuickBooksWidget(contact_id){
 
     showQuickbooksContacts(contact_id);
 
-    $("#widgets").off("click", '#quickbooks_add_contact');
-	$("#widgets").on("click", '#quickbooks_add_contact', function(e)
+    $("#"+WIDGET_PARENT_ID).off("click", '#quickbooks_add_contact');
+	$("#"+WIDGET_PARENT_ID).on("click", '#quickbooks_add_contact', function(e)
     {
 		e.preventDefault();
 		addContactToQuickbooks(first_name, last_name, contact_id, Email);
