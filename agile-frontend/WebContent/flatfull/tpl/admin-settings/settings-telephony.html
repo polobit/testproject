@@ -12,7 +12,7 @@
 			<div id="telephony-callstatus-fields">
 				<div class="panel-heading" role="tab" id="headingTwo">
 					<div class="panel-title">
-						<a class="collapsed accordion-toggle" aria-controls="collapseOne" aria-expanded="false"  data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">Call Status</a>
+						<a class="collapsed accordion-toggle" aria-controls="collapseOne" aria-expanded="false"  data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">{{agile_lng_translate 'campaigns' 'call-status'}}</a>
 					</div>
 				</div>
 
@@ -27,10 +27,10 @@
 					</tbody>
 					</table>
 					</div>
-					<div class="p-l p-t p-b show_telephony_status_field "><a href="#" class="text-info"><i class="icon-plus-sign"></i> Add status </a></div>
+					<div class="p-l p-t p-b show_telephony_status_field "><a href="#" class="text-info"><i class="icon-plus-sign"></i> {{agile_lng_translate 'campaigns' 'add-status'}} </a></div>
 					<div class="show_field p-l p-t p-b" style="display:none;">
-						<input id="add_new_telephony_status" class="form-control input-sm" style="width:145px;display:inline-block" type="text" placeholder="New Status">
-						<a class="btn btn-info btn-addon btn-sm" data-toggle="modal" id="add_telephony_status" href="#">Add</a>
+						<input id="add_new_telephony_status" class="form-control input-sm" style="width:145px;display:inline-block" type="text" placeholder="{{agile_lng_translate 'campaigns' 'new-status'}}">
+						<a class="btn btn-info btn-addon btn-sm" data-toggle="modal" id="add_telephony_status" href="#">{{agile_lng_translate 'other' 'add'}}</a>
 						<span class="save-status"></span>
 					</div>
     			</div> 
@@ -49,11 +49,12 @@
         <div class="data-block">
             <div class="p-l p-r">
 				<h4 class="m-t-none">
-                    Help
+                   {{agile_lng_translate 'campaigns' 'help'}}
                 </h4>
                 
-				<p>You can define the status here for call. This will appear on call log after each call.<br/>
-				
+				<p>
+				{{agile_lng_translate 'campaigns' 'telephony-help-text'}}
+				<br/>
             </div>
         </div>
     </div>
@@ -66,18 +67,18 @@
     <div class="modal-content">
 	<div class="modal-header">
         <button class="close" data-dismiss="modal">x</button>
-        <h3>Delete Status</h3>
+		 <h3>{{agile_lng_translate 'campaigns' 'delete-status'}}</h3>
     </div>
 	<div class="modal-body">
         <div id="delete-telephony-confirm-dialog">
 			<input type="hidden" name="id"></input>
-             <p>Are you sure you want to delete the Status - <span id="telephony-status-name"></span> ? </p>
+             <p>{{agile_lng_translate 'campaigns' 'confirm-delete-status'}} - <span id="telephony-status-name"></span> ? </p>
         </div>
     </div>
     <div class="modal-footer">
     <span class="category-delete-message" style="margin-right:5px;color:red;"></span>
-	<a href="#" id="telephony-status-delete-confirm" class="btn btn-primary">Yes</a>
-	<a  href="#" class="btn btn-default" data-dismiss="modal">No</a>
+	<a href="#" id="telephony-status-delete-confirm" class="btn btn-primary">{{agile_lng_translate 'portlets' 'yes'}}</a>
+	<a  href="#" class="btn btn-default" data-dismiss="modal">{{agile_lng_translate 'portlets' 'no'}}</a>
     </div>
 </div>
 </div>
