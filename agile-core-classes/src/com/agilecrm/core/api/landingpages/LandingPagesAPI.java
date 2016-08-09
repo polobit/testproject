@@ -33,7 +33,7 @@ public class LandingPagesAPI
 	
 	@Path("/getframe/{landingPageId}/{frameId}")
 	@GET
-	@Produces({ MediaType.TEXT_HTML })
+	@Produces(MediaType.TEXT_HTML + ";charset=utf-8")
 	public String getLandingPageFrame(@PathParam("landingPageId") Long id,@PathParam("frameId") int requestedFrameId)
 	{
 		LandingPage landingPage = LandingPageUtil.getLandingPage(id);
@@ -103,13 +103,15 @@ public class LandingPagesAPI
 	 */
 	@GET
 	@Produces({ MediaType.APPLICATION_JSON })
-	public List<LandingPage> getAllWebPages(@QueryParam("cursor") String cursor, @QueryParam("page_size") String count)
+	public List<LandingPage> getAllWebPages(@QueryParam("cursor") String cursor, @QueryParam("page_size") String count ,  @QueryParam("global_sort_key") String fieldName)
 	{
+		if(fieldName == null)
+			fieldName = "name";
 		if (count != null)
 		{
-			return LandingPageUtil.getLandingPages((Integer.parseInt(count)), cursor);
+			return LandingPageUtil.getLandingPages((Integer.parseInt(count)), cursor , fieldName);
 		}
-		return LandingPageUtil.getLandingPages();
+		return LandingPageUtil.getLandingPages(fieldName);
 	}
 
 	@Path("{landingPageId}")
@@ -206,7 +208,7 @@ public class LandingPagesAPI
 	{
 		System.out.println(landingPage);
 		if(landingPage.version >= 2.0) {	    
-        	landingPage.html = LandingPageUtil.getFullHtmlCode(landingPage.blocks);
+        	landingPage.html = LandingPageUtil.getFullHtmlCode(landingPage);
         }
 		landingPage.save();
 		
@@ -224,7 +226,7 @@ public class LandingPagesAPI
 	public LandingPage updateLandingPage(LandingPage landingPage)
 	{
 		if(landingPage.version >= 2.0) {	    
-        	landingPage.html = LandingPageUtil.getFullHtmlCode(landingPage.blocks);
+        	landingPage.html = LandingPageUtil.getFullHtmlCode(landingPage);
         }
 		landingPage.updated_time = System.currentTimeMillis() / 1000;
 		landingPage.save();

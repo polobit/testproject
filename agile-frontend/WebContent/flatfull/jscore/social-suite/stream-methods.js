@@ -27,8 +27,8 @@ function fillStreamDetail()
 	$('#add_twitter_stream').hide();
 
 	// To hide stream type description.
-	document.getElementById("stream_description_label").className = 'description-hidden txt-mute';
-
+	$("#stream_description_label").removeAttr("class").attr("class", "description-hidden txt-mute");
+	
 	// Empty hidden profile image on form.
 	$('#twitter_profile_img_url').attr("src", "");
 }

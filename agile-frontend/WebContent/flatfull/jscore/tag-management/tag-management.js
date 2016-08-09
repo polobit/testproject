@@ -105,16 +105,16 @@ var TAG_MODEL_VIEW = Backbone.View
 
 				var message = "";
 				if (is_merge)
-					message = '<p>Tag "' + newTag
-							+ '" exists already. Do you want to merge "'
-							+ oldTag + '" and "' + newTag + '" ?</p>';
+					message = '<p>{{agile_lng_translate "contact-edit" "tag"}} "' + newTag
+							+ '" {{agile_lng_translate "tags" "exists-merge"}} "'
+							+ oldTag + '" {{agile_lng_translate "contacts-view" "and"}} "' + newTag + '" ?</p>';
 				else
-					message = "<p>Rename tag \"" + oldTag + "\" to \"" + newTag
+					message = "<p>{{agile_lng_translate 'tags' 'rename'}} \"" + oldTag + "\" {{agile_lng_translate 'contacts-view' 'to'}} \"" + newTag
 							+ "\" ?</p>";
 
 				var _that = this;
 				r = showModalConfirmation(
-						'Tag Management Action',
+						'{{agile_lng_translate "tags" "tag-management-action"}}',
 						message,
 						function() {
 							_that.model.url = 'core/api/tags/bulk/rename?tag='
@@ -128,20 +128,12 @@ var TAG_MODEL_VIEW = Backbone.View
 													if (is_merge)
 														showNotyPopUp(
 																'information',
-																"Merging tags \""
-																		+ oldTag
-																		+ "\" and \""
-																		+ newTag
-																		+ "\". This may take a while.  You may see the merged tag on some contacts cc",
+																getTemplate("js-merge-tags", {oldTag : oldTag, newTag: newTag}),
 																"top", 5000);
 													else
 														showNotyPopUp(
 																'information',
-																"Renaming tag \""
-																		+ oldTag
-																		+ "\" to \""
-																		+ newTag
-																		+ "\". This may take a while. You may see the renamed tag on some contacts while this happens",
+																getTemplate("js-rename-tags", {oldTag : oldTag, newTag: newTag}),
 																"top", 5000);
 
 													renameTags(newTag, oldTag);
@@ -201,8 +193,8 @@ var TAG_MODEL_VIEW = Backbone.View
 				e.preventDefault();
 				var _that = this;
 				showModalConfirmation(
-						'Tag Management',
-						"<p>Delete \"" + this.model.get('tag') + "\" tag ?</p>",
+						'{{agile_lng_translate "tags" "tag-management"}}',
+						"<p>{{agile_lng_translate 'contact-details' 'delete'}} \"" + this.model.get('tag') + "\" {{agile_lng_translate 'tags' 'tag-sm'}} ?</p>",
 						function() {
 							_that.model.url = "core/api/tags/bulk/delete?tag="
 									+ escape(_that.model.get('tag'));
@@ -214,10 +206,7 @@ var TAG_MODEL_VIEW = Backbone.View
 										success : function(model, respone) {
 											showNotyPopUp(
 													'information',
-													"Deleting tag \""
-															+ _that.model
-																	.get('tag')
-															+ "\".  You may see the deleted tag on some contacts while this happens",
+													getTemplate("js-deleting-tags", {tag : _that.model.get('tag')}),
 													"top", 5000);
 											App_Admin_Settings.tagManagement();
 										}
@@ -356,11 +345,11 @@ function saveTag(field) {
 	}
 	var existingTagObject = App_Admin_Settings.tagsview1.collection.where({tag:fieldValue.trim()});
 	if(existingTagObject && existingTagObject.length > 0) {
-		var message = "<p>Tag \"" + fieldValue.trim() + "\" exists already. Please choose a different name.</p>";
+		var message = "<p>{{agile_lng_translate 'contact-edit' 'tag'}} \"" + fieldValue.trim() + "\" {{agile_lng_translate 'tags' 'name-exists'}}</p>";
 
 		var _that = this;
 		r = showModalConfirmation(
-				'Tag Management Action',
+				'{{agile_lng_translate "tags" "tag-management-action"}}',
 				message,
 				function() {
 					return;
@@ -368,7 +357,7 @@ function saveTag(field) {
 					return;
 				},function() {
 					return;
-				}, 'Ok');
+				}, '{{agile_lng_translate "reputation" "Ok"}}');
 
 		return;
 	}
@@ -466,15 +455,15 @@ function addTagsArrayasTypeaheadSource(tagsJSON, element) {
 	// $("input", element).attr("data-provide","typeahead");
 	$("input", element).typeahead({
 		"source" : tags_array
-	}).attr('placeholder', "Enter Tag");
+	}).attr('placeholder', "{{agile_lng_translate 'contacts-view' 'Enter Tag'}}");
 }
 
 function showModalConfirmation(title, body, yes_callback, no_callback,
 		close_callback, yes_button_text, no_button_text) {
 	if(!yes_button_text && !no_button_text)
 	{
-		yes_button_text = "Yes";
-		no_button_text = "No";
+		yes_button_text = "{{agile_lng_translate 'portlets' 'yes'}}";
+		no_button_text = "{{agile_lng_translate 'portlets' 'no'}}";
 	}
 	var yes_action = "";
 	var no_action = "";

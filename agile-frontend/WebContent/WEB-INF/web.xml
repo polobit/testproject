@@ -1238,6 +1238,16 @@
     </servlet-mapping>
     
     <servlet>
+		<servlet-name>AgileGlobalPropertyServlet</servlet-name>
+		<servlet-class>com.agilecrm.AgileGlobalPropertyServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+
+		<servlet-name>AgileGlobalPropertyServlet</servlet-name>
+		<url-pattern>/ag-global-props/*</url-pattern>
+	</servlet-mapping>
+    
+    <servlet>
 		<servlet-name>OpportunitySchemaChange</servlet-name>
 		<servlet-class>com.agilecrm.OpportunitySchemaChangeServlet</servlet-class>
 	</servlet>
@@ -1401,4 +1411,13 @@
 		<url-pattern>/pagebuilder/*</url-pattern>
 	</servlet-mapping>	
 
+	 <servlet>
+		<servlet-name>AmazonSESWebhook</servlet-name>
+		<servlet-class>com.thirdparty.amazon.httpendpoint.AmazonSESWebhook</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>AmazonSESWebhook</servlet-name>
+		<url-pattern>/backend/amazonseswebhook</url-pattern>
+	</servlet-mapping>
 </web-app>

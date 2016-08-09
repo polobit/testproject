@@ -1,9 +1,9 @@
 (function (){
-	"use strict";
+    "use strict";
 
-	var canvasElement = require('./canvasElement.js').Element;
-	var bConfig = require('./config.js');
-	var siteBuilder = require('./builder.js');
+    var canvasElement = require('./canvasElement.js').Element;
+    var bConfig = require('./config.js');
+    var siteBuilder = require('./builder.js');
     var publisher = require('../vendor/publisher');
     var current_agileform;
 
@@ -238,7 +238,7 @@
 
             }
 
-			if( $(this.activeElement.element).prop('tagName') === 'IMG' ){
+            if( $(this.activeElement.element).prop('tagName') === 'IMG' ){
 
                 if($(this.activeElement.element).parent().attr("id")=== 'agileform_div')
                     this.editAgileForm(this.activeElement.element);
@@ -251,14 +251,14 @@
                 this.editAgileForm(this.activeElement.element);
             }
 
-			if( $(this.activeElement.element).attr('data-type') === 'video' ) {
+            if( $(this.activeElement.element).attr('data-type') === 'video' ) {
 
                 this.editVideo(this.activeElement.element);
                 this.editImage(this.activeElement.element);
 
             }
 
-			if( $(this.activeElement.element).hasClass('fa') ) {
+            if( $(this.activeElement.element).hasClass('fa') ) {
 
                 this.editIcon(this.activeElement.element);
 
@@ -378,7 +378,10 @@
 
                 }
 
-                newStyleEl.css('display', 'block');
+                if(newStyleEl.find('input').attr("name")==="content")
+                    newStyleEl.css('display', 'none');
+                else 
+                    newStyleEl.css('display', 'block'); 
 
                 $('#styleElements').append( newStyleEl );
 
@@ -399,11 +402,11 @@
 
             $('#styleEditor #tab1 .form-group:not(#styleElTemplate) input, #styleEditor #tab1 .form-group:not(#styleElTemplate) select').each(function(){
 
-				if( $(this).attr('name') !== undefined ) {
+                if( $(this).attr('name') !== undefined ) {
 
-                	$(styleeditor.activeElement.element).css( $(this).attr('name'),  $(this).val());
+                    $(styleeditor.activeElement.element).css( $(this).attr('name'),  $(this).val());
 
-				}
+                }
 
                 /* SANDBOX */
 

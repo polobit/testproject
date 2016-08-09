@@ -183,7 +183,10 @@ function getNextContactIdSet()
 	// fetch next 25 contacts id
 	
 	console.log("in getNextContactIdSet");
-	if ((CALL_CAMPAIGN.select_all == true) && (CALL_CAMPAIGN.current_count == (CALL_CAMPAIGN.contact_id_list.length - 1)))
+	var currentCount_Ind = CALL_CAMPAIGN.current_count;
+	var totalItemsCount = CALL_CAMPAIGN.contact_id_list.length ;
+	// we start fetching the contact when more 3 contacts in array are left to contact .. 
+	if ((CALL_CAMPAIGN.select_all == true) && (currentCount_Ind <= (totalItemsCount -1)) && currentCount_Ind >= (totalItemsCount-3))
 	{
 		if (CALL_CAMPAIGN.current_count == (CALL_CAMPAIGN.total_count-1))
 			return;
@@ -623,20 +626,91 @@ function getNextContactsId(callback)
 	if (!CALL_CAMPAIGN.cursor)
 		return;
 
+	var param = {};
+	var method = "";
 	// If there is a filter saved in cookie then show filter results
-	if (_agile_get_prefs('dynamic_contact_filter') && !_agile_get_prefs('company_filter'))
-		url = 'core/api/filters/filter/dynamic-filter?data=' + encodeURIComponent(_agile_get_prefs('dynamic_contact_filter')) + '&cursor=' + CALL_CAMPAIGN.cursor + '&page_size=25&global_sort_key=' + sortKey;
-	else if (_agile_get_prefs('dynamic_company_filter') && _agile_get_prefs('company_filter'))
-		url = 'core/api/filters/filter/dynamic-filter?data=' + encodeURIComponent(_agile_get_prefs('dynamic_company_filter')) + '&cursor=' + CALL_CAMPAIGN.cursor + '&page_size=25&global_sort_key=' + sortKey;
-	else if (_agile_get_prefs('contact_filter'))
+	if(_agile_get_prefs('dynamic_contact_filter')){
+		
+		url = 'core/api/filters/filter/dynamic-filter';
+		param['filterJson'] = _agile_get_prefs('dynamic_contact_filter');
+		param['cursor'] = CALL_CAMPAIGN.cursor;
+		param['page_size'] = 25;
+		param['global_sort_key'] = sortKey;
+		method = "POST";
+	}else if(_agile_get_prefs('contact_filter')){
+		param = {};
 		url = 'core/api/filters/query/' + _agile_get_prefs('contact_filter') + '?cursor=' + CALL_CAMPAIGN.cursor + '&page_size=25&global_sort_key=' + sortKey;
+		method = "GET";
+	}else{
+		param = {};
+		url = '/core/api/contacts?cursor=' + CALL_CAMPAIGN.cursor + '&page_size=25&global_sort_key=' + sortKey;
+		method = "GET";
+	}
+
+// Get next 25 contacts
+	
+	
+	makeAjaxCall(url, false, method, param, 'json', function(nextContacts)
+	{
+		console.log("nextContacts");
+		console.log(nextContacts);
+		// update CURRENT_CURSOR for next fetch
+		CALL_CAMPAIGN.cursor = 0;
+		console.log("after contacts fetch CALL_CAMPAIGN.cursor");
+		// Get Id of fetched contact
+		var idArray = getIdOfContacts(nextContacts);
+		return callback(idArray);
+	});
+	
+/*	$.ajax({
+	url : url,
+	async : false,
+	method : method,
+	data : param,
+	dataType : 'json',
+	success : function(nextContacts)
+	{
+
+		console.log("nextContacts");
+		console.log(nextContacts);
+
+		// update CURRENT_CURSOR for next fetch
+		CALL_CAMPAIGN.cursor = 0;
+
+		console.log("after contacts fetch CALL_CAMPAIGN.cursor");
+
+		// Get Id of fetched contact
+		var idArray = getIdOfContacts(nextContacts);
+
+		return callback(idArray);
+		
+	},
+	error:function(data){
+		console.log("error occured while fetching next set of contact");
+	}
+	});*/
+	
+	/*if (_agile_get_prefs('dynamic_contact_filter') && !_agile_get_prefs('company_filter')){
+		url = 'core/api/filters/filter/dynamic-filter'?data=' + encodeURIComponent(_agile_get_prefs('dynamic_contact_filter')) + '&cursor=' + CALL_CAMPAIGN.cursor + '&page_size=25&global_sort_key=' + sortKey;
+	}
+		
+	else if (_agile_get_prefs('dynamic_company_filter') && _agile_get_prefs('company_filter')){
+		url = 'core/api/filters/filter/dynamic-filter?data=' + encodeURIComponent(_agile_get_prefs('dynamic_company_filter')) + '&cursor=' + CALL_CAMPAIGN.cursor + '&page_size=25&global_sort_key=' + sortKey;
+	}
+		
+	else if (_agile_get_prefs('contact_filter')){
+		url = 'core/api/filters/query/' + _agile_get_prefs('contact_filter') + '?cursor=' + CALL_CAMPAIGN.cursor + '&page_size=25&global_sort_key=' + sortKey;
+	}
+		
 	else if (_agile_get_prefs('company_filter'))
 		url = 'core/api/contacts/companies?cursor=' + CALL_CAMPAIGN.cursor + '&page_size=25&global_sort_key=' + sortKey;
-	else
+	else{
 		url = '/core/api/contacts?cursor=' + CALL_CAMPAIGN.cursor + '&page_size=25&global_sort_key=' + sortKey;
+	}*/
+		
 
 	// Get next 25 contacts
-	$.ajax({ url : url, dataType : 'json', success : function(nextContacts)
+/*	$.ajax({ url : url, dataType : 'json', success : function(nextContacts)
 	{
 
 		console.log("nextContacts");
@@ -653,9 +727,10 @@ function getNextContactsId(callback)
 
 		return callback(idArray);
 
-	} });
+	} });*/
 
 }
+
 
 /**
  * Get cursor from contacts collection
@@ -664,9 +739,16 @@ function getNextContactsId(callback)
  */
 function getCursor()
 {
-	console.log("In getCursor");
-	var contactsJson = App_Contacts.contactsListView.collection.toJSON();
-	return contactsJson[CALL_CAMPAIGN.current_count].cursor;
+	try{
+		console.log("In getCursor");
+		var contactsJson = App_Contacts.contactsListView.collection.toJSON();
+		var indexOfCursor = CALL_CAMPAIGN.contact_id_list.length-1;
+		
+		return contactsJson[indexOfCursor].cursor;
+	}catch(e){
+		return 0;
+	}
+
 }
 
 /**
@@ -869,7 +951,8 @@ function setSelectedPhone(arrayObject, id)
 function changeContactDeatilView()
 {
 	var id = (CALL_CAMPAIGN.contact_id_list[CALL_CAMPAIGN.current_count]);
-	Backbone.history.navigate("contact/" + id, { trigger : true });
+	//Backbone.history.navigate("contact/" + id, { trigger : true });
+	routeToPage("contact/" + id);
 }
 
 /**
@@ -1030,4 +1113,23 @@ function getTimeInArray(time)
 	timeArray = [hours,minutes,seconds];
 	
 	return timeArray;
+}
+
+function makeAjaxCall(url, async, method, param, typeFromServer, successFn, errorFn){
+	if(!(successFn && typeof successFn === 'function')){
+		successFn = function(){};
+	}
+	if(!(errorFn && typeof errorFn === 'function')){
+		errorFn = function(){};
+	}
+	
+	$.ajax({
+		url : url,
+		async : async,
+		method : method,
+		data : param,
+		dataType : typeFromServer,
+		success : successFn,
+		error : errorFn
+		});
 }

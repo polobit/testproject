@@ -48,7 +48,7 @@ public class LandingPage
     public Long updated_time = 0L;
 
     @NotSaved(IfDefault.class)
-    public float version = 0.2f;
+    public float version = 0f;
     
 //    For site builder (v2.x)
     @NotSaved(IfDefault.class)

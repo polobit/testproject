@@ -9,29 +9,71 @@ var LandingPageRouter = Backbone.Router.extend({
     "landing-page-copy/:id" : "copySelectedLandingPage"
 	},
 
-	getListOfLandingPages : function(){
+	getListOfLandingPages : function()
+    {
+    $('#content').html("<div id='landingpages-listeners'></div>");
 
-        $('#content').html("<div id='landingpages-listeners'></div>");
-        
-        this.LandingPageCollectionView = new Base_Collection_View({ url : 'core/api/landingpages', templateKey : "landingpages", cursor : true, page_size : 20,
-            individual_tag_name : 'tr', postRenderCallback : function(el)
+        getTemplate('landingpages-static-container', {}, undefined, function(template_ui) {
+                    
+                    $("#content").html(getTemplate("landingpages-static-container"));
+                    // Add top view
+                    var sortKey = _agile_get_prefs("landingpage_sort_menu");
+                    if(sortKey == undefined || sortKey == null){
+                        sortKey = "dummy_name";
+                        _agile_set_prefs("landingpage_sort_menu", sortKey);
+                    }
+
+                    var that = this;
+                    var landingpagesStaticModelview = new  LandingPages_Top_Header_Modal_Events({
+                        template : 'landing-pages-top-header',
+                        isNew : true,
+                        model : new Backbone.Model({"sortKey" : sortKey}),
+                        postRenderCallback : function(el){
+                            // Add collection view
+                            console.log("Load collection");
+                            App_LandingPageRouter.loadLandingPagesCollection($("#content"));
+                        }
+                    });
+
+                    $("#content").find("#Landingpages-top-view").html(landingpagesStaticModelview.render().el);
+
+                }, $("#content"));
+            },
+    loadLandingPagesCollection : function(el){
+
+        var sortKey = _agile_get_prefs("landingpage_sort_menu");
+                if (this.LandingPageCollectionView && this.LandingPageCollectionView.options.global_sort_key == sortKey && this.LandingPageCollectionView.collection && this.LandingPageCollectionView.collection.length > 0)
+                {
+                    $(el).find("#landing-pages-collection-container").html(this.LandingPageCollectionView.render(true).el);
+                    return;
+                }
+        this.LandingPageCollectionView = new landingpage_collection_events({ 
+            url : 'core/api/landingpages',
+            sort_collection : false,
+            templateKey : "landingpages",
+            cursor : true,
+            page_size : 20,  
+            individual_tag_name : 'tr',
+            customLoaderTemplate : 'agile-app-collection-loader',
+            customLoader : true,
+            global_sort_key : sortKey,
+            postRenderCallback : function(el)
             {
                 includeTimeAgo(el);
+               // updateSortKeyTemplate(sortKey, el);
+               // $("#landingpages-list").html(collectiondata);
+                $(".active").removeClass("active");
+                $("#landing-pages-menu").addClass("active");
+                
             },
             appendItemCallback : function(el)
             { 
                 // To show time ago for models appended by infinite scroll
                 includeTimeAgo(el);
-            } });
-        
+            }});
         this.LandingPageCollectionView.collection.fetch();
-
-        $("#landingpages-listeners").html(this.LandingPageCollectionView.render().el);
-        
-        $(".active").removeClass("active");
-	$("#landing-pages-menu").addClass("active");
-
-	},
+       $("#content").find("#landing-pages-collection-container").html(App_LandingPageRouter.LandingPageCollectionView.el);
+    },
 
 	showLandingPageBuilder : function() {
         $('#content').html("<div id='landingpages-listeners'></div>");

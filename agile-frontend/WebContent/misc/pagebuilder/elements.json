@@ -42,7 +42,7 @@
     "Team":[
     	{"url":"elements/team1.html","height":644, "thumbnail":"elements/images/thumbs/team1.png"},
     	{"url":"elements/team2.html","height":810, "thumbnail":"elements/images/thumbs/team2.png"},
-    	{"url":"elements/team3.html","height":752, "thumbnail":"elements/images/thumbs/team3.png"}
+        {"url":"elements/team3.html","height":752, "thumbnail":"elements/images/thumbs/team3.png"}
     ],
     "Pricing Tables":[
     	{"url":"elements/pricing_table1.html","height":628, "thumbnail":"elements/images/thumbs/pricing_table1.png"},

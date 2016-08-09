@@ -65,7 +65,7 @@ var SubscribeRouter = Backbone.Router
 				var card_details = new Base_Model_View({ url : "core/api/subscription", template : "creditcard-update", window : 'subscribe',
 					saveCallback : function()
 					{
-						showNotyPopUp("information", "Card has been updated successfully.", "top");
+						showNotyPopUp("information", _agile_get_translated_val('billing','card-updated'), "top");
 					}, errorCallback : function(data)
 					{
 						showNotyPopUp("warning", data.responseText, "top");
@@ -187,7 +187,7 @@ var SubscribeRouter = Backbone.Router
 
 				saveCallback : function()
 				{
-					showNotyPopUp("information", "Emails have been added successfully. It will take a few seconds to update on your account. <a href='#subscribe' onclick='document.location.reload();'>Click here</a> if they are not added.", "top", 15000);
+					showNotyPopUp("information", _agile_get_translated_val('billing','email-added-success') + " <a href='#subscribe' onclick='document.location.reload();'>"+_agile_get_translated_val('others','click-here')+"</a> " + _agile_get_translated_val('others','if-not-added'), "top", 15000);
 				}, postRenderCallback : function(el)
 				{
 					_IS_EMAIL_PLAN_ACTIVE = true;
@@ -283,7 +283,7 @@ var SubscribeRouter = Backbone.Router
 //						else if("PRO_YEARLY" == planType)
 //							planType = "ENTERPRISE_YEARLY";
 					}
-					planDetails = "<span class='text-head-black'>Current Plan</span></br><span class='text-head-black'>" + quantity + " Users</span>";
+					planDetails = "<span class='text-head-black'>"+_agile_get_translated_val('plan-and-upgrade','current-plan')+"</span></br><span class='text-head-black'>" + quantity + " "+_agile_get_translated_val('admin-settings','users')+"</span>";
 					if (planType.indexOf('STARTER') == 0)
 					{
 						id = $('#starter_plan');
@@ -309,7 +309,7 @@ var SubscribeRouter = Backbone.Router
 					price = update_price();
 					$("#user_quantity").val(quantity);
 					$("#users_quantity").text(quantity);
-					(quantity && quantity > 1) ? $("#users_quantity_text").text("Users") : $("#users_quantity_text").text("User");
+					(quantity && quantity > 1) ? $("#users_quantity_text").text("{{agile_lng_translate 'plan-and-upgrade' 'users'}}") : $("#users_quantity_text").text("{{agile_lng_translate 'plan-and-upgrade' 'user'}}");
 					$("#users_total_cost").text((quantity * price).toFixed(2));
 					if ($.isEmptyObject(data))
 						setPlan("free");
@@ -385,12 +385,12 @@ var SubscribeRouter = Backbone.Router
 
 					}, function(response)
 					{
-						showNotyPopUp("information", "error occured please try again", "top");
+						showNotyPopUp("information", _agile_get_translated_val('billing','error-occured'), "top");
 					});
 
 				}, function(response)
 				{
-					showNotyPopUp("information", "error occured please try again", "top");
+					showNotyPopUp("information", _agile_get_translated_val('billing','error-occured'), "top");
 				});
 
 			},
@@ -409,7 +409,7 @@ var SubscribeRouter = Backbone.Router
 					saveCallback : function()
 					{
 						window.navigate("subscribe", { trigger : true });
-						showNotyPopUp("information", "Your plan has been updated successfully. Please logout and login again for the new changes to apply.",
+						showNotyPopUp("information", _agile_get_translated_val('billing','plan-updated'),
 								"top");
 					}, postRenderCallback : function(el)
 					{
@@ -520,7 +520,7 @@ var SubscribeRouter = Backbone.Router
 									$("body").append(appendItem);
 								}
 								window.navigate("subscribe", { trigger : true });
-								showNotyPopUp("information", "Your plan has been updated successfully", "top");
+								showNotyPopUp("information", _agile_get_translated_val('plan-and-upgrade','your-plan-has-been-updated-successfully'), "top");
 
 								try
 								{
@@ -603,7 +603,7 @@ var SubscribeRouter = Backbone.Router
 				if (!subscription.get("billingData"))
 				{
 					$("#invoice-details-holder").html("");
-					$('#invoice-details-holder').append("<div class='text-lg p-l-sm p-t-sm'>No invoices</div>");
+					$('#invoice-details-holder').append("<div class='text-lg p-l-sm p-t-sm'>"+_agile_get_translated_val('billing','no-invoices')+"</div>");
 					return;
 				}
 
@@ -629,7 +629,7 @@ var SubscribeRouter = Backbone.Router
 					
 				})
 				.fail(function() {
-					$('#recent_invoice').html("You do not have any invoices yet.");
+					$('#recent_invoice').html(_agile_get_translated_val('plan-and-upgrade','you-do-not-have-any-invoices-yet'));
 				});
 
 			},
@@ -641,8 +641,7 @@ var SubscribeRouter = Backbone.Router
 				{
 					$("#invoice-details-holder").html("");
 					$('#invoice-details-holder')
-							.append(
-									"<div class='text-lg p-l-sm p-t-sm'>Invoices</div><hr><div class='text-center p-b-lg'><p class='m-b-none' style='font-size: 18px;'>You do not have any invoices yet</p><p>Generated invoices will be shown here.</p></div>");
+							.append(getTemplate("js-recent-invoice"));
 					return;
 				}
 
