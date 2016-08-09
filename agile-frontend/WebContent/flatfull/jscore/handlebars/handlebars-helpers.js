@@ -1684,11 +1684,13 @@ $(function()
 			else if (value.indexOf("CUSTOM_") != -1)
 				value = value.split("CUSTOM_")[1];
 			else if (value == "created_time")
-				value = _agile_get_translated_val("misc-keys", "created_time");
+				value = "Created Date";
 			else if (value == "updated_time")
-				value = _agile_get_translated_val("misc-keys", "updated_time");
+				value = "Updated Date";
 
 			value = value.replace("_", " ");
+			// I18n conversion
+			value = getTableLanguageConvertHeader(value);
 
 			if (--count == 0)
 			{
