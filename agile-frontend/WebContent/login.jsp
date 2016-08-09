@@ -294,7 +294,7 @@ if(isSafari && isWin)
 				<div class="wrapper text-center tags-color text-white tags-color">
       				<strong>Sign in using your registered account</strong>
    				</div>
-				<form name='agile' id="agile" method='post' action="/login" onsubmit="return isValid();">
+				<form name='agile' id="agile" method='post' action="/login" onsubmit="return isLoginFormValid();">
 					
 					<!-- <h3><small>Sign in using your registered account</small></h3> -->
 					<input type='hidden' name='newui' value="true">
@@ -324,7 +324,7 @@ if(isSafari && isWin)
 							<label class="checkbox" style="display:none;">
 							    <input type="checkbox" checked="checked" name="signin">Keep me signed in 
 							</label>
-							<input type='submit' value="Sign In" disabled class='agile-submit btn btn-lg btn-primary btn-block'>
+							<input type='submit' value="Sign In" class='agile-submit btn btn-lg btn-primary btn-block'>
 							 
 						
 					
@@ -391,13 +391,20 @@ if(isSafari && isWin)
 					});
 			}
 	      	
+			function randomString(length) {
+				length = length || 32;
+				var chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+			    var result = '';
+			    for (var i = length; i > 0; --i) result += chars[Math.floor(Math.random() * chars.length)];
+			    return result;
+			}
+			
       		// Get print value to notify user 
 			_agile_get_fingerprint(function(result){
 				if(!result)
 					 return;
 
 				$("#finger_print").val(result);
-				$(".agile-submit").removeAttr("disabled");
 				// Reset val
 				_agile_storage.set(result);
 			});
@@ -447,10 +454,20 @@ if(isSafari && isWin)
 		});
 		
 		// Validates the form fields
-		function isValid()
+		function isLoginFormValid()
 		{
-			// $("#agile").validate();
-			// return $("#agile").valid();
+			if( !($('#finger_print').val()) )
+			{
+				console.log("No value in fingerprint");
+				var fingerprint = randomString();
+				
+				$('#finger_print').val(fingerprint);
+				
+				_agile_storage.set(fingerprint);
+				console.log("Generated fingerprint: " + fingerprint);
+			}
+			
+			return true;
 		}
 
 		function preload_dashlet_libs(){ 

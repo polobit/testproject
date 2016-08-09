@@ -155,7 +155,7 @@ var Tickets = {
 			!App_Ticket_Module.ticketsCollection.collection || 
 			App_Ticket_Module.ticketsCollection.collection.length == 0){
 
-			$('.ticket-count-text').html('0 tickets found');
+			$('.ticket-count-text').html('{{agile_lng_translate "tickets" "zero-tickets-found"}}');
 			return;
 		}
 
@@ -163,7 +163,7 @@ var Tickets = {
 
 		var count = (last_model.count) ? last_model.count : App_Ticket_Module.ticketsCollection.collection.length;
 		
-		$('.ticket-count-text').html('Showing ' + App_Ticket_Module.ticketsCollection.collection.length + ' of ' + count);
+		$('.ticket-count-text').html('{{agile_lng_translate "calendar" "showing"}} ' + App_Ticket_Module.ticketsCollection.collection.length + ' {{agile_lng_translate "tickets" "of"}} ' + count);
 	},
 	renderExistingCollection: function(){
 
@@ -284,14 +284,14 @@ var Tickets = {
 					url += "/" + ticket_id + "/activity/change-status";
 					json = {status: action_value, id: ticket_id};
 
-			        message = 'Status has been updated to ' + action_value.toLowerCase();
+			        message = '{{agile_lng_translate "tickets" "status-updated-to"}} ' + get_ticket_translated_text("status", action_value);
 					break;
 				case 'priority':
 
 					url += "/" + ticket_id + "/activity/change-priority";
 					json = {priority: action_value, id: ticket_id};
 
-					message = 'Priority has been updated to ' + action_value.toLowerCase();
+					message = '{{agile_lng_translate "tickets" "priority-updated-to"}} ' + get_ticket_translated_text("priority", action_value);
 					break;
 				case 'assignee':
 				{	
@@ -303,10 +303,10 @@ var Tickets = {
 					url += "/" + ticket_id + "/assign-ticket/" + group_id + "/" + action_value;
 
 					if(action_value == 0){
-						message = 'Ticket group has been changed to ' + $that.data('name');
+						message = '{{agile_lng_translate "tickets" "group-changed-to"}} ' + $that.data('name');
 					}
 					else{
-						message = 'Assignee has been changed to ' + $that.data('name');
+						message = '{{agile_lng_translate "tickets" "assignee-changed-to"}} ' + $that.data('name');
 			        }
 
 			        action_value = $that.data('name');
@@ -319,7 +319,7 @@ var Tickets = {
 
 				Ticket_Utils.showNoty('information', message, 'bottomRight', 5000);
 
-				$that.closest('tr').find('a.' + action_type).html(action_value);
+				$that.closest('tr').find('a.' + action_type).html(get_ticket_translated_text(action_type, action_value));
 				$that.closest('div').find('.dropdown-menu').dropdown('toggle');
 
 				if(action_type == 'priority'){
@@ -497,12 +497,12 @@ var Tickets = {
 			if(_agile_get_prefs('hide_ticket_lhs_filter')){
 
 				_agile_delete_prefs('hide_ticket_lhs_filter');
-				$(this).find('i').attr('data-original-title', 'Hide Filters').css(
+				$(this).find('i').attr('data-original-title', "{{agile_lng_translate 'tickets' 'hide-filters'}}").css(
 					'opacity', 1);
 
 			}else{
 				_agile_set_prefs('hide_ticket_lhs_filter', true);
-				$(this).find('i').attr('data-original-title', 'Show Filters').css(
+				$(this).find('i').attr('data-original-title', "{{agile_lng_translate 'tickets' 'show-filters'}}").css(
 					'opacity', 0.7);
 			}
 
@@ -1001,7 +1001,7 @@ var Tickets = {
 
 			Tickets_Rest.updateDataInModelAndCollection(Current_Ticket_ID, json);
 
-			var msg = (command == 'remove') ? email + ' removed from CC emails' : email + ' added to CC emails';
+			var msg = (command == 'remove') ? email + ' {{agile_lng_translate "tickets" "email-removed-from-cc"}}' : email + ' {{agile_lng_translate "tickets" "email-added-to-cc"}}';
                 
             if(command != 'remove')
             $('ul.cc-emails').prepend(getTemplate('cc-email-li', {email: email}));
@@ -1359,8 +1359,8 @@ var Tickets = {
 
 			$(".remove-date").css("display", "block");
 
-			var msg = (due_date_present) ? ("Due date has been changed to " + formatted_date) 
-						: ("Due date has been set to " + formatted_date);
+			var msg = (due_date_present) ? ("{{agile_lng_translate 'contacts-view' 'due-date-has-been-changed-to'}} " + formatted_date) 
+						: ("{{agile_lng_translate 'contacts-view' 'due-date-has-been-set-to'}} " + formatted_date);
 
 			Ticket_Utils.showNoty('information', msg, 'bottomRight', 5000);
 
@@ -1392,7 +1392,7 @@ var Tickets = {
 		
 		var ticket = App_Ticket_Module.ticketView.model.toJSON();
 
-		head.load(LIB_PATH + 'lib/date-charts.js', function()
+		head.load(LIB_PATH + 'lib/date-charts-en.js', function()
 		{
 			$('#ticket_change_sla', el).datepicker({ 
 				drops: "down", 
@@ -1608,13 +1608,13 @@ var Tickets = {
 
 		if(type && type == "hide"){
 			targetEle.attr("rel", "activities");
-			targetEle.attr("data-original-title", "Hide Activities");
+			targetEle.attr("data-original-title", "{{agile_lng_translate 'tickets' 'hide-activities'}}");
 			targetEle.html("<i class='fa fa-ellipsis-v'></i>");
 		}
 		else{
 			//Rendering ticket notes
 			targetEle.attr("rel", "notes");
-			targetEle.attr("data-original-title", "Show Activities");
+			targetEle.attr("data-original-title", "{{agile_lng_translate 'tickets' 'show-activities'}}");
 			targetEle.html("<i class='fa fa-ellipsis-h'></i>");
 		}
 
@@ -1770,7 +1770,7 @@ var Tickets = {
 			if(!email || email == 'No email'){
 				var $span = $('.form-action-error');
 
-				$span.html('No email address found.');
+				$span.html('{{agile_lng_translate "tickets" "no-email-address"}}');
 
 				setTimeout(function(){
 					$span.html('');

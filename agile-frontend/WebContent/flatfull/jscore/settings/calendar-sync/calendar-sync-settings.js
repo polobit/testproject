@@ -6,7 +6,7 @@ var Calendar_Sync_Settings_View = Base_Model_View.extend({
 	options :{
 		errorCallback : function(data){							
 			$('.tab-content').removeClass('c-progress');		
-			showNotyPopUp("error", "Invalid Details", "bottomRight", 1000);
+			showNotyPopUp("error", "{{agile_lng_translate 'others' 'invalid-details'}}", "bottomRight", 1000);
 		}
 	},
 	save_calendar_prefs : function (e, data)

@@ -15,44 +15,44 @@
                              <input type ="hidden" name="type" value = "SALESFORCE" name ="id">
                           
                         <div class="form-group">
-                            <label for="username">Username</label>
-                            <input type="text" required="required" class="form-control" id="username" name="userName" placeholder="Username" value="{{username}}">
+                            <label for="username">{{agile_lng_translate 'admin-settings-integrations' 'username'}}</label>
+                            <input type="text" required="required" class="form-control" id="username" name="userName" placeholder="{{agile_lng_translate 'admin-settings-integrations' 'username'}}" value="{{username}}">
                         </div>
                         <div class="form-group">
-                            <label for="password">Password</label>
-                            <input type="password" required="required" class="form-control" id="password" name="password" placeholder="Password" value="{{password}}">
+                            <label for="password">{{agile_lng_translate 'prefs-settings' 'password'}}</label>
+                            <input type="password" required="required" class="form-control" id="password" name="password" placeholder="{{agile_lng_translate 'prefs-settings' 'password'}}" value="{{password}}">
                         </div>
                         <div class="form-group">
-                            <label for="apiKey">API Token</label>
-                            <input id="apiKey" required="required" name="apiKey" class="form-control"  type="text" placeholder="API Key" value="{{apiKey}}">
+                            <label for="apiKey">{{agile_lng_translate 'prefs-data-sync' 'api-token'}}</label>
+                            <input id="apiKey" required="required" name="apiKey" class="form-control"  type="text" placeholder="{{agile_lng_translate 'prefs-data-sync' 'api-token'}}" value="{{apiKey}}">
                         </div>
 
                         <div class="control-group form-group multiple-checkbox checkedMultiCheckbox" name="importOptions">
-                            <label class="control-label">Select Below List Items to Import</label>
+                            <label class="control-label">{{agile_lng_translate 'prefs-data-sync' 'select-below-list-items-to-import'}}</label>
                             <div class="controls">
                                 <div class="checkbox">
                                     <label class="i-checks i-checks-sm">
-                                    <input id="accounts" type="checkbox" value="accounts" {{#unless id}}checked="checked"{{/unless}}><i></i> Accounts
+                                    <input id="accounts" type="checkbox" value="accounts" {{#unless id}}checked="checked"{{/unless}}><i></i> {{agile_lng_translate 'admin-settings-integrations' 'accounts'}}
                                     </label>
                                 </div>       
                             </div>
                             <div class="controls">
                                 <div class="checkbox">
                                     <label class="i-checks i-checks-sm">
-                                    <input id="contacts" type="checkbox" value="contacts" {{#unless id}}checked="checked"{{/unless}}><i></i> Contacts
+                                    <input id="contacts" type="checkbox" value="contacts" {{#unless id}}checked="checked"{{/unless}}><i></i> {{agile_lng_translate 'contacts-view' 'contacts'}}
                                     </label>
                                 </div>       
                             </div>
                             <div class="controls">
                                 <div class="checkbox">
                                     <label class="i-checks i-checks-sm">
-                                    <input id="tasks" type="checkbox" value="tasks" {{#unless id}}checked="checked"{{/unless}}><i></i> Tasks
+                                    <input id="tasks" type="checkbox" value="tasks" {{#unless id}}checked="checked"{{/unless}}><i></i> {{agile_lng_translate 'deal-view' 'tasks'}}
                                     </label>
                                 </div>       
                             </div>
                             <div class="controls">
                                 <small>
-                                    Note : Associated notes will automatically be added to the selected list items.
+                                    {{agile_lng_translate 'deal-view' 'notes-desc'}}
                                 </small>       
                             </div>
                             
@@ -62,11 +62,11 @@
                 </form>
                 <div class="form-actions text-center">
                    {{#if id}}
-                    <a class="btn btn-sm btn-danger " data_sync_type="SALESFORCE" data_sync_id="{{id}}" id="sync-import-prefs-delete">Disable</a>
+                    <a class="btn btn-sm btn-danger " data_sync_type="SALESFORCE" data_sync_id="{{id}}" id="sync-import-prefs-delete">{{agile_lng_translate 'prefs-email' 'disable'}}</a>
                    {{else}}
-                     <a type="reset" class="btn btn-default btn-sm" href="#import" onclick="import_tab_Id='salesforce-tab'">Cancel</a>
+                     <a type="reset" class="btn btn-default btn-sm" href="#import" onclick="import_tab_Id='salesforce-tab'">{{agile_lng_translate 'contact-details' 'cancel'}}</a>
                    {{/if}}
-                    <a type="submit" class="save btn btn-sm btn-primary">Import</a>
+                    <a type="submit" class="save btn btn-sm btn-primary">{{agile_lng_translate 'contacts-view' 'import'}}</a>
                 </div>  
             </div>
         </div>

@@ -7,7 +7,7 @@ var Helcenter_Events = {
          e.preventDefault();
          var id = $(this).data("id");
                   
-         showModalConfirmation("Delete Category", "Are you sure, you want to delete category ", function(){
+         showModalConfirmation("{{agile_lng_translate 'admin-settings-tasks' 'delete-category'}}", "{{agile_lng_translate 'admin-settings-tasks' 'confirm-delete-category'}}", function(){
 
                      
                      
@@ -25,7 +25,7 @@ var Helcenter_Events = {
             });                                    
                      
 
-         }, null,null, "Yes", "No");
+         }, null,null, "{{agile_lng_translate 'portlets' 'yes'}}", "{{agile_lng_translate 'portlets' 'no'}}");
 
       });
    },
@@ -37,7 +37,7 @@ var Helcenter_Events = {
          e.preventDefault();
          var id = $(this).data("id");
                   
-         showModalConfirmation("Delete Article", "Are you sure, you want to delete article", function(){
+         showModalConfirmation("{{agile_lng_translate 'article' 'delete-text'}}", "{{agile_lng_translate 'article' 'delete-confirm'}}", function(){
 
             console.log(id);
                      
@@ -53,7 +53,7 @@ var Helcenter_Events = {
             });                                    
                      
 
-         }, null,null, "Yes", "No");
+         }, null,null, "{{agile_lng_translate 'portlets' 'yes'}}", "{{agile_lng_translate 'portlets' 'no'}}");
 
       });
    },
@@ -65,7 +65,7 @@ var Helcenter_Events = {
          e.preventDefault();
          var id = $(this).data("id");
                   
-         showModalConfirmation("Delete Section", "Are you sure, you want to delete section", function(){
+         showModalConfirmation("{{agile_lng_translate 'section' 'delete-text'}}", "{{agile_lng_translate 'section' 'delete-confirm'}}", function(){
 
             console.log(id);
                      
@@ -81,7 +81,7 @@ var Helcenter_Events = {
             });                                    
                      
 
-         }, null,null, "Yes", "No");
+         }, null,null, "{{agile_lng_translate 'portlets' 'yes'}}", "{{agile_lng_translate 'portlets' 'no'}}");
 
       });
    }

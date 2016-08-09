@@ -49,9 +49,14 @@ var contacts_view_loader = {
 			App_Contacts.contactsListView = new  Contacts_Events_Collection_View({ url : url, modelData : modelData, sort_collection : false, templateKey : templateKey, individual_tag_name : individual_tag_name,
 				post_data: postData, cursor : true, page_size : 25, global_sort_key : sortKey, slateKey : slateKey, request_method : 'POST', postRenderCallback : function(cel, collection)
 				{	
+
 					that.setUpContactView($("#content"));	  
 					that.setupContactFilterName(cel, tag_id);
-
+					if(CURRENT_DOMAIN_USER.domain=='fieldglobal'){
+						head.js(LIB_PATH + 'lib/jquery.timeago.js', function() {
+					$('time',cel).timeago();
+				});
+										}
 					if(App_Contacts.contactsListView.collection.models.length > 0 && !App_Contacts.contactsListView.collection.models[0].get("count"))
 					{
 						// Call to get Count 
@@ -64,7 +69,13 @@ var contacts_view_loader = {
 					
 					contactListener();
 
-				} });
+				},
+					appendItemCallback : function(p_el) {
+						if(CURRENT_DOMAIN_USER.domain=='fieldglobal'){
+						includeTimeAgo(p_el);
+					}
+				}
+				 });
 			App_Contacts.contactsListView.collection.fetch();
 
 			App_Contacts.contactsListView.appendItem = function(base_model){
@@ -185,7 +196,7 @@ var contacts_view_loader = {
 	{
 		if (_agile_get_prefs("agile_contact_view"))
 		{
-			$('#contacts-view-options', cel).html("<a data-toggle='tooltip' data-placement='bottom' data-original-title='List View' class='btn btn-default btn-sm contacts-view' data='list'><i class='fa fa-list'  style='margin-right:3px'></i></a>");
+			$('#contacts-view-options', cel).html("<a data-toggle='tooltip' data-placement='bottom' data-original-title='{{agile_lng_translate 'deal-view' 'list-view'}}' class='btn btn-default btn-sm contacts-view' data='list'><i class='fa fa-list'  style='margin-right:3px'></i></a>");
 			$("#contacts-grid-view-checkbox", cel).show();
 			$("#contacts-list-view-checkbox", cel).hide();
 			$("#contactTabelView", cel).hide();
@@ -193,7 +204,7 @@ var contacts_view_loader = {
 			return;
 		}
 		
-		$('#contacts-view-options', cel).html("<a data-toggle='tooltip' data-placement='bottom' data-original-title='Grid View' class='btn btn-default btn-sm contacts-view' data='grid'><i class='fa fa-th-large' style='margin-right:3px'></i></a>");
+		$('#contacts-view-options', cel).html("<a data-toggle='tooltip' data-placement='bottom' data-original-title='{{agile_lng_translate 'tasks' 'grid-view'}}' class='btn btn-default btn-sm contacts-view' data='grid'><i class='fa fa-th-large' style='margin-right:3px'></i></a>");
 		$("#contacts-grid-view-checkbox", cel).hide();
 		$("#contacts-list-view-checkbox", cel).show();
 		$("#bulk-action-btns", cel).css("border-bottom", "0");

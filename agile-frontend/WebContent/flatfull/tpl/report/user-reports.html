@@ -4,7 +4,7 @@
 <div class="row">
     <div class="col-sm-12 col-md-12">
               <div class="col-md-4 col-sm-6" style="padding-left:0px;padding-bottom:8px">
-            <h3 class="font-thin h3">User Reports
+            <h3 class="font-thin h3">{{agile_lng_translate 'report-view' 'user-reports'}}
             </h3>
             </div>
             <div class="clearfix"></div>
@@ -16,12 +16,10 @@
 
 			<div class="pull-right" style="padding:0px 8px 10px">
 				<select name="owner" id="owner" class="required form-control">
-					<option value="All Owners">All Owners</option>
+					<option value="All Owners">{{agile_lng_translate 'report-add' 'all-owners'}}</option>
                 </select>
 			</div>
-			
-   
-        </div>
+</div>
 
 </div>
 </div>
@@ -33,7 +31,7 @@
 <div class="panel wrapper">
            
             
-            	<div><h4 class="font-thin">Sales Forecast<h4></div>
+            	<div><h4 class="font-thin">{{agile_lng_translate 'report-view' 'sales-forecast'}}<h4></div>
           
 {{#hasMenuScope 'DEALS'}}
 
@@ -41,7 +39,7 @@
 </div>
 {{else}}
 <div style="height:400px;">
-<div class='portlet-error-message' style="padding-top: 50%;font-size: 14px;font-style: normal"><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;Sorry, you do not have the privileges to access this.</div>
+<div class='portlet-error-message' style="padding-top: 50%;font-size: 14px;font-style: normal"><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;{{agile_lng_translate 'report-add' 'sorry-you-do-not-have-privileges-access'}}</div>
 </div>
 
 {{/hasMenuScope}}
@@ -51,13 +49,13 @@
         			<div  class="col-md-4">
 <div class="panel wrapper">
            
-            <div><h4 class="font-thin">Deals Lost by Reason<h4></div>
+            <div><h4 class="font-thin">{{agile_lng_translate 'portlets' 'deals-lost-reason'}}<h4></div>
             
 {{#hasMenuScope 'DEALS'}}
 <div id="lossreasonpie-chart-users"></div>
 {{else}}
 <div style="height:400px;">
-<div class='portlet-error-message' style="padding-top: 50%;font-size: 14px;font-style: normal"><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;Sorry, you do not have the privileges to access this.</div>
+<div class='portlet-error-message' style="padding-top: 50%;font-size: 14px;font-style: normal"><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;{{agile_lng_translate 'report-add' 'sorry-you-do-not-have-privileges-access'}}</div>
 </div>  
  {{/hasMenuScope}} 
   
@@ -67,7 +65,7 @@
 			<div  class="col-md-4">
 <div class="panel wrapper">
            
-            <div><h4 class="font-thin">Call Outcomes<h4></div>
+            <div><h4 class="font-thin">{{agile_lng_translate 'report-view' 'call-outcomes'}}<h4></div>
             <div id="calls-chart-user" style="height:400px;"></div>
 
 				</div>
@@ -86,7 +84,7 @@
 <div class="row">
     <div class="col-sm-12 col-md-12">
              	<div class="col-md-4 col-sm-6" style="padding-left:0px;padding-bottom:8px">
-            <h3 class="font-thin h3">Comparison Reports
+            <h3 class="font-thin h3">{{agile_lng_translate 'report-view' 'comparison-reports'}}
             </h3>
 			
 			</div>
@@ -99,11 +97,10 @@
 
 			<div class="pull-right" style="padding:0px 8px 10px">
 				<select name="pipeline_track" id="pipeline_track" class="required form-control">
-					<option value="">Select</option>
+					<option value="">{{agile_lng_translate 'plan-and-upgrade' 'select'}}</option>
                 </select>
 			</div>
-		 
-        </div>
+</div>
 
 </div>
 </div>
@@ -118,7 +115,7 @@
 </div>
 {{else}}
 <div style="height:400px;">
-<div class='portlet-error-message' style="padding-top: 50%;font-size: 14px;font-style: normal"><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;Sorry, you do not have the privileges to access this.</div>
+<div class='portlet-error-message' style="padding-top: 50%;font-size: 14px;font-style: normal"><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;{{agile_lng_translate 'report-add' 'sorry-you-do-not-have-privileges-access'}}</div>
 </div>
 
 {{/hasMenuScope}}
