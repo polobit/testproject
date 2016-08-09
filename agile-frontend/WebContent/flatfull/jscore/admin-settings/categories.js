@@ -25,11 +25,15 @@
 		categories.getCategories(function(cats){
 			var html = '';
 			$.each(cats, function(index,cat){
-				//console.log(customfield);
+				var catLabel = cat.label;
+				if(catLabel){
+					catLabel = getTranslatedPortletName(catLabel.toUpperCase());
+				}
+				
 				if(type == cat.name)
-					html += '<option value="'+cat.name+'" selected="selected">'+cat.label+'</option>';
+					html += '<option value="'+cat.name+'" selected="selected">'+catLabel+'</option>';
 				else
-					html += '<option value="'+cat.name+'">'+cat.label+'</option>';
+					html += '<option value="'+cat.name+'">'+catLabel+'</option>';
 			});
 			if (callback && typeof (callback) === "function")
 				callback(html);
@@ -109,9 +113,9 @@
     	
     	if (!categories.isValid(label)) {
     		if(label.length === 0)
-    			$(that).parent().find('.save-status').html('<span style="color:red;">This field is required.</span>');
+    			$(that).parent().find('.save-status').html('<span style="color:red;">'+_agile_get_translated_val('validation-msgs','required')+'</span>');
     		else
-    			$(that).parent().find('.save-status').html('<span style="color:red;">Category name should start with an alphabet and can not contain special characters other than underscore, space and hyphen</span>');
+    			$(that).parent().find('.save-status').html('<span style="color:red;">'+_agile_get_translated_val('category','name-error')+'</span>');
     		setTimeout(function(){ 
     			$(that).parent().find('.save-status').html();
     			}, 3000);

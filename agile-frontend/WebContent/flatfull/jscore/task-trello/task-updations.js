@@ -241,7 +241,7 @@ function completeTask(taskId, taskListId, taskListOwnerId)
 	},
 	error : function(model, response)
 	{
-		showModalConfirmation("Complete Task", 
+		showModalConfirmation("{{agile_lng_translate 'tasks' 'completed'}}", 
 			response.responseText, 
 			function (){
 				return;
@@ -252,7 +252,7 @@ function completeTask(taskId, taskListId, taskListOwnerId)
 			function(){
 				return;
 			},
-			"Cancel"
+			"{{agile_lng_translate 'other' 'cancel'}}"
 		);
 	} });
 }

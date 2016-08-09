@@ -33,7 +33,7 @@ var timeline_entity_loader = {
 		this.load_campaign_logs(contactId);
 		
 		this.get_stats(getPropertyValue(contact.properties, "email"), contact, App_Contacts.contactDetailView.el);
-		//setTimeout(this.load_reload_emails, 30000);
+		//setTimeout(this.load_reload_emails, 5000);
 	},
 	
 	load_reload_emails : function(contactId)
@@ -41,17 +41,14 @@ var timeline_entity_loader = {
 		divArr = $('.isotope-item');
 		$.each(divArr,function(index, data){
 			parentEMailDivId = divArr[index].id;
-			childEMailDivId = $('#'+parentEMailDivId).next('div').id;
-			childParentId = $('#'+childEMailDivId).attr('parentid');
-			try{
-				if(childEMailDivId.indexOf(parentEMailDivId)!=-1){
-					//if($('#'+childEMailDivId).parentNode.id!=parentEMailDivId){
-					if(parentEMailDivId==childParentId){
-						$('#'+parentEMailDivId).html($('#'+childEMailDivId).html());
-						$('#'+childEMailDivId).remove();
-					}
-				}
-			}catch(err){}
+			childEMailDivId = parentEMailDivId+'-inner';
+			if($('#'+childEMailDivId).length==0){
+				childEMailDivId = parentEMailDivId+'\\/-inner';
+				//$('#'+parentEMailDivId).html($('#'+childEMailDivId).html());
+				$('#'+parentEMailDivId).html($('#'+childEMailDivId).wrapAll('<div>').parent().html());
+				$('#'+childEMailDivId).remove();
+			}
+			//$('#message-'+parentEMailDivId).show();
 		});
 	},
 

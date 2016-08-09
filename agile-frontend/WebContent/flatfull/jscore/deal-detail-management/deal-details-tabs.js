@@ -530,7 +530,8 @@ var Deal_Modal_Event_View = Base_Model_View.extend({
 		var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
 	    fillSelect('document-select','core/api/documents', 'documents',  function fillNew()
 		{
-			el.find("#document-select > option:first").after("<option value='new'>Add New Doc</option><option style='font-size: 1pt; background-color: #EDF1F2;'disabled>&nbsp;</option>");
+			var text = _agile_get_translated_val("misc-keys", "add-new-doc");
+			el.find("#document-select > option:first").after("<option value='new'>" + text + "</option><option style='font-size: 1pt; background-color: #EDF1F2;'disabled>&nbsp;</option>");
 			el.find("#document-select > option:first").remove();
 		}, optionsTemplate, false, el); 
 	},
@@ -548,7 +549,8 @@ var Deal_Modal_Event_View = Base_Model_View.extend({
 			// To check whether the document is selected or not
 	    if(document_id == "")
 	    {
-	    	saveBtn.closest("span").find(".save-status").html("<span style='color:red;margin-left:10px;'>This field is required.</span>");
+	    	var linkedtext = _agile_get_translated_val("validation-msgs", "this-field-is-required");
+	    	saveBtn.closest("span").find(".save-status").html("<span style='color:red;margin-left:10px;'>" + linkedtext + "</span>");
 	    	saveBtn.closest("span").find('span.save-status').find("span").fadeOut(5000);
 	    	return;
 	    }	    	
@@ -772,13 +774,13 @@ var Deal_Modal_Event_View = Base_Model_View.extend({
 		}
 		if (value.description)
 		{
-			var description = '<label class="control-label"><b>Description </b></label><div class="controls"><textarea id="description" name="description" rows="3" class="input form-control" placeholder="Add Description"></textarea></div>'
+			var description = '<label class="control-label"><b>'+_agile_get_translated_val("misc-keys", "description")+' </b></label><div class="controls"><textarea id="description" name="description" rows="3" class="input form-control" placeholder="' + _agile_get_translated_val("misc-keys", "add-description") + '"></textarea></div>'
 			$("#event_desc").html(description);
 			$("textarea#description").val(value.description);
 		}
 		else
 		{
-			var desc = '<div class="row-fluid">' + '<div class="control-group form-group m-b-none">' + '<a href="#" id="add_event_desctiption"><i class="icon-plus"></i> Add Description </a>' + '<div class="controls event_discription hide">' + '<textarea id="description" name="description" rows="3" class="input form-control w-full col-md-8" placeholder="Add Description"></textarea>' + '</div></div></div>'
+			var desc = '<div class="row-fluid">' + '<div class="control-group form-group m-b-none">' + '<a href="#" id="add_event_desctiption"><i class="icon-plus"></i> ' + _agile_get_translated_val("misc-keys", "add-description") + ' </a>' + '<div class="controls event_discription hide">' + '<textarea id="description" name="description" rows="3" class="input form-control w-full col-md-8" placeholder="' + _agile_get_translated_val("misc-keys", "add-description") + '"></textarea>' + '</div></div></div>'
 			$("#event_desc").html(desc);
 		}
 		// Fills owner select element

@@ -40,8 +40,8 @@ $(function(){
 			
 			if(!hasScope('DELETE_CONTACT'))
 			{
-				showModalConfirmation("Bulk Delete", 
-						"You do not have permission to delete contacts.", 
+				showModalConfirmation(_agile_get_translated_val("bulk-delete", "bulk-delete"), 
+						_agile_get_translated_val("contacts", "no-permission-to-delete"), 
 						function (){
 							return;
 						}, 
@@ -51,7 +51,7 @@ $(function(){
 						function() {
 							
 						},
-						"Cancel", "");
+						_agile_get_translated_val("contact-details", "cancel"), "");
 			}
 			else
 			{
@@ -67,9 +67,11 @@ $(function(){
 							return;
 
 						$('#ticketsModal').html($(template_ui)).modal('show').on('shown.bs.modal', function(){
-
-							$('#ticketsModal').on('click', 'a.bulk-delete', function(e){
-
+							
+							$('#ticketsModal a.bulk-delete').off('click');
+							$('#ticketsModal a.bulk-delete').click(function(e){
+								console.log("tickets clicked");
+								
 								$('#ticketsModal').modal('hide');
 								$(this).after('<img class="bulk-delete-loading" style="padding-right:5px;margin-bottom:15px" src= "img/21-0.gif"></img>');
 								bulk_delete_operation($(table).attr('url'), id_array, index_array, table, undefined, data_array);
@@ -87,7 +89,7 @@ $(function(){
 				}
 				if(($(table).attr("id") == "document-list" || $(table).attr("id") == "task-list") && !hasScope("EDIT_CONTACT"))
 				{
-					showModalConfirmation("Bulk Delete", 
+					showModalConfirmation(_agile_get_translated_val("bulk-delete", "bulk-delete"), 
 						related_contacts_update_acl_error, 
 						function (){
 							bulk_delete_operation($(table).attr('url'), id_array, index_array, table, undefined, data_array);
@@ -110,13 +112,13 @@ $(function(){
 					return;
 
 				// Default message for all tables
-				var confirm_msg = "Are you sure you want to delete?";
+				var confirm_msg = _agile_get_translated_val("others", "delete-warn");
 				var $that = $(this);
 				// Shows confirm alert, if Cancel clicked, return false
- -				showAlertModal(confirm_msg, "confirm", function(){
+ 				showAlertModal(confirm_msg, "confirm", function(){
 				// Appends campaign-name for active subscribers
 				if($(table).attr('id') === "active-campaign")
-					confirm_msg = "Delete selected contacts from " +$('#subscribers-campaign-name').text()+" Campaign?";
+					confirm_msg = _agile_get_translated_val("contacts", "delete-contacts-from") + " " +$('#subscribers-campaign-name').text()+" " +_agile_get_translated_val("contact-details", "campaign")+ "?";
 					$that.append('<img class="bulk-delete-loading" style="padding-right:5px;margin-bottom:15px" src= "'+updateImageS3Path("img/21-0.gif")+'"></img>');
 				
 					var url = $(table).attr('url');
@@ -137,7 +139,7 @@ $(function(){
 					}
 					
 					bulk_delete_operation(url, id_array, index_array, table, undefined, data_array);
-				}, undefined, "Bulk Delete");
+				}, undefined, _agile_get_translated_val("bulk-delete", "bulk-delete"));
 			}
 						
 		}	
@@ -147,7 +149,7 @@ $(function(){
 			if($(this).attr('disabled') === "disabled")
 				return;
 			
-			$('body').find(".select-none").html('<div class="alert alert-danger m-t-sm"><a class="close" data-dismiss="alert" href="#">&times;</a>You have not selected any records to delete. Please select at least one record to continue.</div>').show().delay(3000).hide(1);
+			$('body').find(".select-none").html('<div class="alert alert-danger m-t-sm"><a class="close" data-dismiss="alert" href="#">&times;</a>' + _agile_get_translated_val("others", "bulk-delete-no-select") + '</div>').show().delay(3000).hide(1);
 		}
 			
 	});
@@ -190,8 +192,8 @@ $(function(){
 				
 				if(!canRunBulkOperations())
 				{
-					showModalConfirmation("Bulk Delete", 
-							"You may not have permission to delete some of the contacts selected. Proceeding with this operation will delete only the contacts that you are permitted to delete.<br/><br/> Do you want to proceed?",
+					showModalConfirmation(_agile_get_translated_val("bulk-delete", "bulk-delete"), 
+							_agile_get_translated_val("contacts", "no-previlige-to-delete") + "<br/><br/> " + _agile_get_translated_val("deal-view",  "do-you-want-to-proceed"),
 							function (){
 								// Customize the bulk delete operations
 								if(!customize_bulk_delete(id_array, data_array))
@@ -222,7 +224,7 @@ $(function(){
 				
 			}	
 			else
-	            $('body').find(".select-none").html('<div class="alert alert-danger"><a class="close" data-dismiss="alert" href="#">&times;</a>You have not selected any records to delete. Please select at least one record to continue.</div>').show().delay(3000).hide(1);
+	            $('body').find(".select-none").html('<div class="alert alert-danger"><a class="close" data-dismiss="alert" href="#">&times;</a>' + _agile_get_translated_val("others", "bulk-delete-no-select") + '</div>').show().delay(3000).hide(1);
 				
 		});
 
@@ -254,7 +256,7 @@ $(function(){
 			
 			if(!hasScope("DELETE_DEALS"))
 			{
-				showModalConfirmation("Bulk Delete", 
+				showModalConfirmation(_agile_get_translated_val("bulk-delete", "bulk-delete"), 
 						"You do not have permission to delete deals.", 
 						function (){
 							return;
@@ -271,7 +273,7 @@ $(function(){
 
 			if(!hasScope("EDIT_CONTACT"))
 			{
-				showModalConfirmation("Bulk Delete", 
+				showModalConfirmation(_agile_get_translated_val("bulk-delete", "bulk-delete"), 
 						DEALS_CONTACTS_BULK_DELETE_ERROR, 
 						function (){
 					
@@ -311,8 +313,8 @@ $(function(){
 			}
 			else
 			{
-				showModalConfirmation("Bulk Delete", 
-						"Delete "+dealsCount+" Deal(s)?", 
+				showModalConfirmation(_agile_get_translated_val("bulk-delete", "bulk-delete"), 
+						_agile_get_translated_val("contact-details", "delete") + " " + dealsCount + " " + _agile_get_translated_val("deal-view", "Deals?"), 
 						function (){
 							// Customize the bulk delete operations
 							if(!customize_bulk_delete(id_array, data_array))
@@ -343,7 +345,7 @@ $(function(){
 			if($(this).attr('disabled') === "disabled")
 				return;
 			
-			$('body').find(".select-none").html('<div class="alert alert-danger m-t-sm"><a class="close" data-dismiss="alert" href="#">&times;</a>You have not selected any records to delete. Please select at least one record to continue.</div>').show().delay(3000).hide(1);
+			$('body').find(".select-none").html('<div class="alert alert-danger m-t-sm"><a class="close" data-dismiss="alert" href="#">&times;</a>' + _agile_get_translated_val("others", "bulk-delete-no-select") + '</div>').show().delay(3000).hide(1);
 		}
 			
 	});
@@ -368,7 +370,7 @@ function customize_bulk_delete(id_array, data_array){
 			}	
 		});
 		if(id_array.length == 0){
-			$('body').find(".select-none").html('<div class="alert alert-danger"><a class="close" data-dismiss="alert" href="#">&times;</a>Sorry, can not delete user having <i>admin</i> privilege.</div>').show().delay(5000).hide(1);
+			$('body').find(".select-none").html('<div class="alert alert-danger"><a class="close" data-dismiss="alert" href="#">&times;</a>' + _agile_get_translated_val("users", "delete-user-error") + '</div>').show().delay(5000).hide(1);
 			return false;
 		}
 	}
@@ -447,20 +449,20 @@ function bulk_delete_operation(url, id_array, index_array, table, is_grid_view, 
 			{
 				var message;
 				if(count > 1)
-					message = "Users have been deleted successfully. Please adjust your billing plan to avoid being billed for the deleted users.";
-				else
-					message = "User has been deleted successfully. Please adjust your billing plan to avoid being billed for the deleted user.";
+				 message = _agile_get_translated_val("users", "deleted-users");
+			    else
+			     message = _agile_get_translated_val("users", "deleted-user");
 				showNotyPopUp('information', message, "top", 10000);
 			}
 			if(count >= 100 || count == 0)
 			{
 				if($(table).attr('id') == "contacts-table")
 				{
-					showNotyPopUp('information', "Your contacts deletion will be processed shortly", "top", 5000);
+					showNotyPopUp('information', _agile_get_translated_val("contacts", "delete-process-info"), "top", 5000);
 					CONTACTS_HARD_RELOAD = true;
 				}
 				if($(table).attr('id') == "companies"){
-					showNotyPopUp('information', "Your companies deletion will be processed shortly", "top", 5000);
+					showNotyPopUp('information', _agile_get_translated_val("companies", "delete-process-info"), "top", 5000);
 					COMPANIES_HARD_RELOAD = true;
 				}
 			}
@@ -563,11 +565,11 @@ function customize_delete_message(table)
 	}
 	
 	// Default message for all tables
-	var confirm_msg = "Are you sure you want to delete?";
+	var confirm_msg = _agile_get_translated_val("others", "delete-warn");
 	
 	// Appends campaign-name for active subscribers
 	if($(table).attr('id') === "active-campaign")
-		confirm_msg = "Delete selected contacts from " +$('#subscribers-campaign-name').text()+" Campaign?";
+		confirm_msg = _agile_get_translated_val("contacts", "delete-contacts-from") +$('#subscribers-campaign-name').text()+" " + _agile_get_translated_val("contact-details", "campaign") + "?";
 
 	// Shows confirm alert, if Cancel clicked, return false
 	//if(!confirm(confirm_msg))   //changed 21/6 adi

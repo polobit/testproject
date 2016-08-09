@@ -83,7 +83,7 @@ public class InvoiceCreatedWebhookHandler extends StripeWebhookHandler
 	    {
 		JSONObject planJSON = data.getJSONObject("plan");
 		String planName = planJSON.get("name").toString();
-		if(planJSON.get("name").toString().equals("month")){
+		if(planJSON.get("interval").toString().equals("month")){
 			System.out.println("This is monthly subscription. returning null");
 			return null;
 		}
@@ -102,8 +102,8 @@ public class InvoiceCreatedWebhookHandler extends StripeWebhookHandler
 	    {
 		JSONObject period = data.getJSONObject("period");
 		SimpleDateFormat formater = new SimpleDateFormat("EEE MMM dd yyyy");
-		plan.put("start_date", formater.format(new Date(Long.parseLong(period.getString("start")) * 1000).toString()));
-		plan.put("end_date", formater.format(new Date(Long.parseLong(period.getString("end")) * 1000).toString()));
+		plan.put("start_date", formater.format(new Date(Long.parseLong(period.getString("start")) * 1000)));
+		plan.put("end_date", formater.format(new Date(Long.parseLong(period.getString("end")) * 1000)));
 	    }
 	    Float amount = Float.valueOf(obj.getString("amountDue"));
 	    if(amount <= 0)

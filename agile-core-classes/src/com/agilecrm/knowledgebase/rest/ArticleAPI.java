@@ -26,6 +26,7 @@ import org.json.JSONObject;
 import com.agilecrm.knowledgebase.entity.Article;
 import com.agilecrm.knowledgebase.entity.Categorie;
 import com.agilecrm.knowledgebase.entity.Section;
+import com.agilecrm.knowledgebase.entity.Section.Visible_To;
 import com.agilecrm.knowledgebase.util.ArticleUtil;
 import com.agilecrm.search.document.HelpcenterArticleDocument;
 import com.agilecrm.ticket.entitys.TicketStats;
@@ -54,7 +55,8 @@ public class ArticleAPI
 		try
 		{
 			Article article = Article.dao.getByProperty("title", title);
-			if(article == null){
+			if (article == null)
+			{
 				return null;
 			}
 			article.categorie = Categorie.dao.get(article.categorie_key);
@@ -81,6 +83,7 @@ public class ArticleAPI
 	{
 		return ArticleUtil.getArticles(section_name);
 	}
+
 	/**
 	 * 
 	 * @param section_name
@@ -89,9 +92,9 @@ public class ArticleAPI
 	@Path("/admin-articles")
 	@GET
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public List<Article> getAdminArticles(@QueryParam("section_name") String section_name)
+	public List<Article> getAdminArticles(@QueryParam("section_id") Long section_id)
 	{
-		return ArticleUtil.getAdminArticles(section_name);
+		return Article.dao.listByProperty("section_key", new Key<>(Section.class, section_id));
 	}
 
 	/**
@@ -123,9 +126,13 @@ public class ArticleAPI
 
 			for (Article ac : articleList)
 			{
-				if (ac.is_article_published == false)
+				Key<Section> skey = ac.section_key;
+				if (Section.dao.get(skey).visible_to == Visible_To.CUSTOMER)
 				{
-					articleListreturn.add(ac);
+					if (ac.is_article_published == false)
+					{
+						articleListreturn.add(ac);
+					}
 				}
 			}
 			return articleListreturn;
@@ -212,7 +219,7 @@ public class ArticleAPI
 			article.categorie_key = categorie_key;
 
 			article.save();
-			
+
 			// Updating ticket count DB
 			TicketStatsUtil.updateEntity(TicketStats.Article_Count);
 		}
@@ -238,7 +245,7 @@ public class ArticleAPI
 			Article.dao.deleteBulkByIds(new JSONArray(model_ids));
 			JSONArray article_ids = new JSONArray(model_ids);
 			ArticleUtil.deletefromdocumentsearch(article_ids);
-			
+
 		}
 		catch (Exception e)
 		{

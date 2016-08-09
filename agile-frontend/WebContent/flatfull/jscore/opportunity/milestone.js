@@ -108,7 +108,7 @@ function setup_deals_in_milestones(id){
 										App_Deals.deal_lost_reason_for_update = "";
 										populateLostReasons($('#dealLostReasonModal'), undefined);
 										$('#deal_lost_reason',$('#dealLostReasonModal')).removeClass("hidden");
-										$('#dealLostReasonModal > .modal-dialog > .modal-content > .modal-footer > a#deal_lost_reason_save').text('Save');
+										$('#dealLostReasonModal > .modal-dialog > .modal-content > .modal-footer > a#deal_lost_reason_save').text("{{agile_lng_translate 'modals' 'save'}}");
 										$('#dealLostReasonModal > .modal-dialog > .modal-content > .modal-footer > a#deal_lost_reason_save').attr('disabled',false);
 										$('#'+id).attr('data',newMilestone);
 									}
@@ -132,6 +132,7 @@ function setup_deals_in_milestones(id){
 		
 		$('li.delete-deal-action').droppable({
 			accept: ".deal-color",
+			hoverClass: "deal-actions-overlap",
 			drop: function( event, ui ) {
 				$("li.ui-sortable-placeholder").hide();
 				$(ui.draggable).hide();
@@ -190,6 +191,7 @@ function setup_deals_in_milestones(id){
 		});
 		$('li.archive-deal-action').droppable({
 			accept: ".deal-color",
+			hoverClass: "deal-actions-overlap",
 			drop: function( event, ui ) {
 				$("li.ui-sortable-placeholder", $("#opportunity-listners")).hide();
 				$(ui.draggable).hide();
@@ -217,6 +219,7 @@ function setup_deals_in_milestones(id){
 
 		$('li.restore-deal-action').droppable({
 			accept: ".deal-color",
+			hoverClass: "deal-actions-overlap",
 			drop: function( event, ui ) {
 				$("li.ui-sortable-placeholder", $("#opportunity-listners")).hide();
 				$(ui.draggable).hide();
@@ -244,6 +247,7 @@ function setup_deals_in_milestones(id){
 
 		$('li.move-deal-action').droppable({
 			accept: ".deal-color",
+			hoverClass: "deal-actions-overlap",
 			drop: function( event, ui ) {
 				is_deal_drop_to_track = true;
 				DEAL_DRAG_EVENT = event;
@@ -322,11 +326,11 @@ function update_milestone(data, id, newMilestone, oldMilestone, updateCollection
 		error : function(model, response) {
 			$('ul.milestones').sortable("enable");
 			if(response && (response.responseText == "Deal not saved properly." || response.responseText == "Deal not updated properly." || response && response.status == 403)) {
-				showModalConfirmation("Deals", response.responseText, function(element){
+				showModalConfirmation("{{agile_lng_translate 'contact-details' 'deals'}}", response.responseText, function(element){
 					App_Deals.deals();	
 				},
 				"",
-				"", "Cancel", "");
+				"", "{{agile_lng_translate 'other' 'cancel'}}", "");
 			}
 		}
 	});

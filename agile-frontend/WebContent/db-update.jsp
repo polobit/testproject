@@ -1,3 +1,5 @@
+<%@page import="com.agilecrm.subscription.SubscriptionUtil"%>
+<%@page import="com.agilecrm.subscription.Subscription"%>
 <%@page import="com.agilecrm.user.util.DomainUserUtil"%>
 <%@page import="com.agilecrm.user.DomainUser"%>
 <%@page import="com.agilecrm.workflows.util.WorkflowUtil"%>
@@ -11,10 +13,14 @@
 <%@page import="com.agilecrm.db.ObjectifyGenericDao"%>
 <%@page import="com.google.appengine.api.NamespaceManager"%>
 <%
-	List<DomainUser> domainUsers = DomainUserUtil.dao.fetchAll();
-	for (DomainUser user : domainUsers){
-		user.domain = "";
-		user.save();
-	}
+String domainName = request.getParameter("domain");
+
+NamespaceManager.set(domainName);
+
+// Set status and save subscription
+Subscription subscription = SubscriptionUtil.getSubscription();
+System.out.println(subscription);
+subscription.status = Subscription.BillingStatus.BILLING_SUCCESS;
+subscription.save();
 		
 %>

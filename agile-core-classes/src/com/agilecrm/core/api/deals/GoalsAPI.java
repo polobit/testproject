@@ -85,6 +85,6 @@ public class GoalsAPI
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public List<Goals> getGoalsForUser(@PathParam("owner-id") Long owner_id,@QueryParam("start_time") Long start_time,@QueryParam("end_time") Long end_time)
     {
-    	return GoalsUtil.getAllGoalsForUser(owner_id, start_time, end_time);
+    	return GoalsUtil.getAllGoalsForUser(owner_id, start_time, end_time,null);
     }
 }

@@ -3,7 +3,7 @@
 	<div class="modal-content">
 		<div class="modal-header">
 	        <a href="#" class="close" data-dismiss="modal">&times;</a>
-	        <h3 class="modal-title">Refer a Friend</h3>
+	        <h3 class="modal-title">{{agile_lng_translate 'menu' 'refer'}}</h3>
 	    </div>
 		<div class="modal-body">
 		</div>
@@ -12,8 +12,8 @@
 </script>
 
 <script id="refer-modal-body-template" type="text/html">
-	<div class="text-md p-l-lg">Hope you love Agile CRM, {{get_current_domain_name}}</div>
-	<div class="text-muted p-l-lg">Spread the feeling and help us grow Agile! :)</div>
+	<div class="text-md p-l-lg">{{agile_lng_translate 'Refer-friend' 'love-agile-crm'}} {{get_current_domain_name}}</div>
+	<div class="text-muted p-l-lg">{{agile_lng_translate 'Refer-friend' 'spread-feeling-and-help-us-grow-agile'}}! :)</div>
 	<ul class="list-group list-group-lg m-b-none">
 
 	    <li id="follow_on_twitter" class="list-group-item clearfix p-n {{#containsScope 'twitter_follow' usedReferTypes}}c-na{{else}}c-p{{/containsScope}}">
@@ -25,11 +25,11 @@
 	        	500
 	        	<i class="icon icon-check pos-abs refer-checked {{#containsScope 'twitter_follow' usedReferTypes}}{{else}}hide{{/containsScope}}"></i>
 	        </div>
-			<div class="text-xs text-muted"  style="letter-spacing: 0.75px;">Emails</div> 
+			<div class="text-xs text-muted"  style="letter-spacing: 0.75px;">{{agile_lng_translate 'portlets' 'emails'}}</div> 
 	      </div>
 	      <div class="clear">
-	        <div class="text-lg text-info">Follow us on Twitter</div>
-	        <div class="text-ellipsis">Follow & share about Agile CRM on Twitter!</div>
+	        <div class="text-lg text-info">{{agile_lng_translate 'Refer-friend' 'follow-us-on-twitter'}}</div>
+	        <div class="text-ellipsis">{{agile_lng_translate 'Refer-friend' 'follow-us-and-about-agilecrm-on-twitter'}}</div>
 	      </div>      
 	    </li>
 
@@ -42,11 +42,11 @@
 	        	500
 	        	<i class="icon icon-check pos-abs refer-checked {{#containsScope 'twitter_tweet' usedReferTypes}}{{else}}hide{{/containsScope}}"></i>
 	        </div>
-			<div class="text-xs text-muted"  style="letter-spacing: 0.75px;">Emails</div> 
+			<div class="text-xs text-muted"  style="letter-spacing: 0.75px;">{{agile_lng_translate 'portlets' 'emails'}}</div> 
 	      </div>
 	      <div class="clear">
-	        <div class="text-lg text-info">Tweet about us</div>
-	        <div class="text-ellipsis">Mention Agile CRM on your Twitter timeline!</div>
+	        <div class="text-lg text-info">{{agile_lng_translate 'Refer-friend' 'tweet-about-us'}}</div>
+	        <div class="text-ellipsis">{{agile_lng_translate 'Refer-friend' 'mention-agilecrm-on-your-timeline'}}</div>
 	      </div>      
 	    </li>
 
@@ -59,11 +59,11 @@
 	        	500
 	        	<i class="icon icon-check pos-abs refer-checked {{#containsScope 'facebook_share' usedReferTypes}}{{else}}hide{{/containsScope}}"></i>
 	        </div>
-			<div class="text-xs text-muted"  style="letter-spacing: 0.75px;">Emails</div> 
+			<div class="text-xs text-muted"  style="letter-spacing: 0.75px;">{{agile_lng_translate 'portlets' 'emails'}}</div> 
 	      </div>
 	      <div class="clear">
-	        <div class="text-lg text-info">Share on Facebook</div>
-	        <div class="text-ellipsis">Share Agile updates with your Facebook contacts!</div>
+	        <div class="text-lg text-info"{{agile_lng_translate 'Refer-friend' 'share-us-on-facebook'}}</div>
+	        <div class="text-ellipsis">{{agile_lng_translate 'Refer-friend' 'share-agile-updates-on-facebook-contacts'}}</div>
 	      </div>      
 	    </li>
 
@@ -73,38 +73,41 @@
 	      </a>
 	      <div class="pull-right" style="padding:15px 15px;">
 	        <div class="text-lg m-t-xs text-center pos-rlt" style="opacity: .785;">500</div>
-			<div class="text-xs text-muted"  style="letter-spacing: 0.75px;">Emails/Sign up</div> 
+			<div class="text-xs text-muted"  style="letter-spacing: 0.75px;">{{agile_lng_translate 'portlets' 'emails'}}/{{agile_lng_translate 'Refer-friend' 'sign-up'}}</div> 
 	      </div>
 	      <div class="clear">
-	        <div class="text-lg text-info">Refer friends</div>
-	        <div class="text-ellipsis">Invite friends to try Agile CRM!</div>
+	        <div class="text-lg text-info">{{agile_lng_translate 'Refer-friend' 'refer-friedns'}}</div>
+	        <div class="text-ellipsis">{{agile_lng_translate 'Refer-friend' 'invite-frinds-to-try-agilecrm'}}</div>
 	      </div>      
 	    </li>
 		
-	    <li id="write_blog" class="list-group-item clearfix p-n c-p">
+	    <li id="write_blog" class="list-group-item clearfix p-n c-p" style="border-bottom-left-radius: 4px;border-bottom-right-radius: 4px;">
 	      <a class="pull-left" href="#">
 	        <img src="img/referrals/blogger.png" >
 	      </a>
 	      <div class="pull-right" style="padding:15px 39px;">
 	        <div class="text-lg m-t-xs text-center pos-rlt" style="opacity: .785;">2500</div>
-			<div class="text-xs text-muted"  style="letter-spacing: 0.75px;">Emails</div> 
+			<div class="text-xs text-muted"  style="letter-spacing: 0.75px;">{{agile_lng_translate 'portlets' 'emails'}}</div> 
 	      </div>
 	      <div class="clear">
-	        <div class="text-lg text-info">Write a blog about us</div>
-	        <div class="text-ellipsis">Blog about Agile CRM and spread the word!</div>
+	        <div class="text-lg text-info">{{agile_lng_translate 'Refer-friend' 'write-a-blog-about-us'}}</div>
+	        <div class="text-ellipsis">{{agile_lng_translate 'Refer-friend' 'blog-about-agile-crm-and-spread-the-word'}}</div>
 	      </div>      
 	    </li>
-	    <div class="m-t-sm p-xs p-l text-ellipsis" style="background-color: #f6f6f6;">
-		Refer:<a href="http://www.agilecrm.com/pricing?utm_source=affiliates&amp;utm_medium=web&amp;utm_campaign={{get_current_domain}}" class="text-xs" target="_blank"> http://www.agilecrm.com/pricing?utm_source=affiliates&amp;utm_medium=web&amp;utm_campaign={{get_current_domain}}</a></div>
+	    <!-- <div class="m-t-sm p-xs p-l text-ellipsis" style="background-color: #f6f6f6;">
+		Refer:<a href="http://www.agilecrm.com/pricing?utm_source=affiliates&amp;utm_medium=web&amp;utm_campaign={{get_current_domain}}" class="text-xs" target="_blank"> http://www.agilecrm.com/pricing?utm_source=affiliates&amp;utm_medium=web&amp;utm_campaign={{get_current_domain}}</a></div> -->
+		<div class="m-t-sm p-xs p-l" style="border: 1px solid #E7ECEE;border-radius: 4px;background-color: #f6f6f6;">
+Also look at our Affiliate Program - a great opportunity to earn additional income of 20% on each sale<a href="https://www.agilecrm.com/affiliates" target="_blank" onclick="Agile_GA_Event_Tracker.track_event('Affiliate - Join Now')" class="btn btn-xs btn-primary m-l-xs m-b-xs" style="margin-top:3px;">Join Now</a>
+</div>
 	 </ul>
 	 <div class="text-right p-l-lg p-r-lg">
-	 <a href="#referral" class="text-info" style="font-size:11px;"id="refered_users">Referrals</a>
+	 <a href="#referral" class="text-info" style="font-size:11px;"id="refered_users">{{agile_lng_translate 'Refer-friend' 'referrals'}}</a>
 	 </div>
 </script>
 
 <script id="refer-blog-template" type="text/html">
 	<div class="">
-		<p>Please enter the URL to your blog post about Agile CRM here. Once validated, the email quota will be automatically updated in your account.</p>
+		<p>{{agile_lng_translate 'Refer-friend' 'enter-referal-url-once-after-validation-your-emails-will-be-vadated'}}</p>
   		<form id="blogmailForm" class="form-horizontal">
   		<input type="hidden" name="from" value="{{get_current_domain_email}}">
   		<input type="hidden" name="to" value="shreyansh@agilecrm.com">
@@ -119,8 +122,8 @@
   			</div>
 			<div class="form-group">
 				<div class="col-md-offset-1 col-sm-8">
-					<a href="#" id="go_to_referrals" class="btn btn-sm btn-default m-r-xs">Back</a>
-					<a href="#" id="blogMail" type="submit" class="btn btn-sm btn-primary">Send</a>
+					<a href="#" id="go_to_referrals" class="btn btn-sm btn-default m-r-xs">{{agile_lng_translate 'plan-and-upgrade' 'back'}}</a>
+					<a href="#" id="blogMail" type="submit" class="btn btn-sm btn-primary">{{agile_lng_translate 'tasks' 'Send'}}</a>
             	</div>
 			</div>
 		</form>
@@ -132,14 +135,14 @@
   		<form id="blogmailForm" class="form-horizontal">
 			<div class="form-group">
 				<div class="col-sm-12">
-					<textarea class="input-xlarge required form-control p-t" disabled="disabled" rows="5">Try @agilecrm. I am using Agile CRM and really love it. An all-in-one CRM which enables you sell like the Fortune 500!</textarea>
+					<textarea class="input-xlarge required form-control p-t" disabled="disabled" rows="5">{{agile_lng_translate 'Refer-friend' 'referral-detail'}}</textarea>
 			  	</div>
   			</div>
 			<div class="form-group">
 				<div class="col-sm-12">
 					<div class="pull-right">
-					  <a href="#" id="go_to_referrals" class="btn btn-sm btn-default">Back</a>
-					  <a href="#" id="refer_by_tweet" type="submit" class="btn btn-sm btn-primary m-r-xs">Tweet</a>
+					  <a href="#" id="go_to_referrals" class="btn btn-sm btn-default">{{agile_lng_translate 'plan-and-upgrade' 'back'}}</a>
+					  <a href="#" id="refer_by_tweet" type="submit" class="btn btn-sm btn-primary m-r-xs">{{agile_lng_translate 'admin-settings-tasks' 'Tweet'}}</a>
 
 					</div>
             	</div>
@@ -158,9 +161,9 @@
                     <img alt="Clipboard" src="/img/clipboard.png">
                 </div>
                 <div class="box-right pull-left">
-                    <h4 class="text-lg" style="opacity:0.8;"> You have not referred anybody yet.</h4>
+                    <h4 class="text-lg" style="opacity:0.8;"> {{agile_lng_translate 'Refer-friend' 'you-have-not-referred-anybody-yet'}}</h4>
                     <div class="text-base" style="opacity:0.5">
-                    Share the following link with your network and get free emails.
+                    {{agile_lng_translate 'Refer-friend' 'share-the-following-link-and-get-free-emails'}}
 						 <div class=" p-l text-ellipsis">
 							<a href="http://www.agilecrm.com/pricing?utm_source=affiliates&amp;utm_medium=web&amp;utm_campaign={{get_current_domain}}" class="text-xs" target="_blank"> http://www.agilecrm.com/pricing?utm_source=affiliates&amp;utm_medium=web&amp;utm_campaign={{get_current_domain}}</a></div>
                     </div>
@@ -172,7 +175,7 @@
 		{{/unless}}
 {{#if this.length}}
 <div class="bg-light lter b-b wrapper-md">
- <h3 class="inline-block m-n text-black font-thin">Referrals</h3>
+ <h3 class="inline-block m-n text-black font-thin">{{agile_lng_translate 'Refer-friend' 'referrals'}}</h3>
 	<div class="clearfix"></div>
  </div>
 <div class="tab-content wrapper-md">
@@ -183,11 +186,11 @@
             <table class="table table-striped  agile-table panel table-layout-mob-view" url="core/api/refered_domains">
                 <thead>
                     <tr>
-					 <th style="width:25%;padding-left:25px;" >UserName</th>
-						<th style="width:25%" >User ID</th>
-                        <th style="width:25%" >Plan</th>
+					 <th style="width:25%;padding-left:25px;" >{{agile_lng_translate 'admin-settings-integrations' 'username'}}</th>
+						<th style="width:25%" >{{agile_lng_translate 'Refer-friend' 'user-id'}}</th>
+                        <th style="width:25%" >{{agile_lng_translate 'portlets' 'plan'}}</th>
                         <th style="width:25%" >
-             				Created On	</th>
+             				{{agile_lng_translate 'admin-settings-users' 'created-on'}}	</th>
                     </tr>
                  </thead>
                  <tbody id='refer-users-model-list' route='/'>

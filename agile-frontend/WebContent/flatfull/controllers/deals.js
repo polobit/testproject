@@ -126,7 +126,7 @@ var DealsRouter = Backbone.Router.extend({
 	{
 		if (!hasScope("CREATE_DEALS"))
 		{
-			$('#content').html('<h2 class="p-l-md"><strong><i class="fa-exclamation-triangle icon-white"></i>&nbsp;&nbsp; Sorry, you do not have privileges to import deals.</strong></h2>');
+			$('#content').html('<h2 class="p-l-md"><strong><i class="fa-exclamation-triangle icon-white"></i>&nbsp;&nbsp; '+_agile_get_translated_val('import','deals-no-priviliges')+'</strong></h2>');
 			hideTransitionBar();
 			return;
 		}
@@ -149,10 +149,7 @@ var DealsRouter = Backbone.Router.extend({
 			individual_tag_name : 'tr', sort_collection : false,
 			postRenderCallback : function(el)
 			{
-							head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
-							{
-											$(".created_time", el).timeago();
-							});
+				agileTimeAgoWithLngConversion($(".created_time", el));
 
 			}});
 

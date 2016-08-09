@@ -73,8 +73,9 @@ public class ContactCSVExport
     public static final String ZIP = "Zip Code";
 
     public static final String TAGS = "Tags";
-    public static final String TAGS_TIME = "Tags time";
-    
+    public static final String TAGS_TIME = "Tags Time Epoch";
+    public static final String TAGS_TIME_NEW = "Tags Time";
+
     //specific to company
     public static final String NAME = "Name";
     public static final String URL = "Url";
@@ -82,6 +83,7 @@ public class ContactCSVExport
     //created time column added - 05.06 - prakash
     public static final String CREATED_TIME = "Created Date";
     private static final DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+    private static final DateFormat dateTimeFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
     /**
      * Inserts contact properties into CSV w.r.t header name.
      * 
@@ -292,6 +294,7 @@ public class ContactCSVExport
 	
 	setFieldAtIndex(TAGS, tagWithTimes[0], str, indexMap);
 	setFieldAtIndex(TAGS_TIME, tagWithTimes[1], str, indexMap);
+	setFieldAtIndex(TAGS_TIME_NEW, tagWithTimes[2], str, indexMap);
 
 	//Add creted time in MM/dd/yyyy format
 	Date date = new Date();
@@ -313,15 +316,20 @@ public class ContactCSVExport
     {
 	String tags = "";
 	String tagTimes = "";
+	String tagTimesNew = "";
 
 	for (Tag tag : contact.tagsWithTime)
 	{
 	    tags += tag.tag + ",";
 	    tagTimes += tag.createdTime + ",";
+	    
+	    Date date = new Date();
+		date.setTime(tag.createdTime);	
+	    tagTimesNew += dateTimeFormat.format(date) + ",";
 	}
 
 	// Return array having tags and tagTimes without trailing commas
-	return new String[] { StringUtils.chop(tags), StringUtils.chop(tagTimes) };
+	return new String[] { StringUtils.chop(tags), StringUtils.chop(tagTimes), StringUtils.chop(tagTimesNew)};
     }
     
     private static void setFieldAtIndex(String fieldName, String fieldValue, String[] values, Map<String, Integer> indexMap) {

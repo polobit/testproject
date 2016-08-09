@@ -4,9 +4,9 @@
 <div class="row">
     <div class="col-md-12">
         
-            <h3 class="pull-left font-thin h3">Deals <small>Opportunities</small>
+            <h3 class="pull-left font-thin h3">{{agile_lng_translate 'deal-view' 'deals'}} <small>{{agile_lng_translate 'deal-view' 'opportunities'}}</small>
 			<div id="milestone-set-msg" class="alert alert-warning p-sm" role="alert" style="margin-left:100px;display:none;">
-  				For better deal reports and sales forecasting, please set your 'Won' and 'Lost' milestones in the <a href="#milestones" style="font-style:italic;text-decoration: initial;color: #337ab7;">Deal settings</a> page.
+  				{{agile_lng_translate 'deal-view' 'for-better-deal-reports-and-sales'}} <a href="#milestones" style="font-style:italic;text-decoration: initial;color: #337ab7;">{{agile_lng_translate 'deal-view' 'deal-settings'}}</a> {{agile_lng_translate 'deal-view' 'page'}}
 			</div>
 			</h3>
 <div class="pull-right">
@@ -21,19 +21,19 @@
 						<span class="caret deals-view-caret"></span>
 					</a>
 					<ul class="dropdown-menu pull-right" role="menu">
-						<li><a href="#deal-rc-0" class="deals-list-view">List View</a></li>
-						<li class="dropdown-submenu do-onclick-nothing"><a href="#deal-rc-1" data-toggle="dropdown" class="deals-pipelined-view">Milestone View</a>
+						<li><a href="#deal-rc-0" class="deals-list-view">{{agile_lng_translate 'deal-view' 'list-view'}}</a></li>
+						<li class="dropdown-submenu do-onclick-nothing"><a href="#deal-rc-1" data-toggle="dropdown" class="deals-pipelined-view">{{agile_lng_translate 'deal-view' 'milestone-view'}}</a>
 
 							<ul class="dropdown-menu" style="min-width:130px" role="menu">
-								<li><a href="#deal-rc-1" id="deal-milestone-regular">Relaxed</a></li>
-								<li><a href="#deal-rc-2" id="deal-milestone-compact">Compact</a></li>
-								<li><a href="#deal-rc-3" id="deal-milestone-fit">Fit</a></li>
+								<li><a href="#deal-rc-1" id="deal-milestone-regular">{{agile_lng_translate 'deal-view' 'relaxed'}}</a></li>
+								<li><a href="#deal-rc-2" id="deal-milestone-compact">{{agile_lng_translate 'deal-view' 'compact'}}</a></li>
+								<li><a href="#deal-rc-3" id="deal-milestone-fit">{{agile_lng_translate 'deal-view' 'fit'}}</a></li>
 							</ul>
 						</li>
 					</ul>
 			</div>
 			<div class="btn-group inline-block m-l-xs" id="deals-action">
-					<a href="#deals-add" class="deals-add btn btn-sm  btn-default" onclick="Agile_GA_Event_Tracker.track_event('Add Deal')"><i class="icon-plus-sign" /> Add Deal
+					<a href="#deals-add" class="deals-add btn btn-sm  btn-default" onclick="Agile_GA_Event_Tracker.track_event('Add Deal')"><i class="icon-plus-sign" /> {{agile_lng_translate 'contact-details' 'add-deal'}}
 					</a>
 					<a class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" href="#">
 						<span class="caret"></span>
@@ -41,12 +41,12 @@
 
 					<ul class="dropdown-menu pull-right" role="menu">
 						{{#hasScope "CREATE_DEALS"}}
-						<li><a href="#import-deals" onclick="Agile_GA_Event_Tracker.track_event('Deals Import from CSV')">Import</a></li>
+						<li><a href="#import-deals" onclick="Agile_GA_Event_Tracker.track_event('Deals Import from CSV')">{{agile_lng_translate 'contacts-view' 'import'}}</a></li>
 						{{/hasScope}}
 						{{#hasScope "UPDATE_DEALS"}}
-						<li><a href="#" class="deals-export-csv" onclick="Agile_GA_Event_Tracker.track_event('Deals Export as CSV')">Export</a></li>
+						<li><a href="#" class="deals-export-csv" onclick="Agile_GA_Event_Tracker.track_event('Deals Export as CSV')">{{agile_lng_translate 'deal-view' 'export'}}</a></li>
 						{{/hasScope}}
-						<li><a href="#add-dashlet" onclick="Agile_GA_Event_Tracker.track_event('Deals Add Dashlet')">Add Dashlet</a></li>
+						<li><a href="#add-dashlet" onclick="Agile_GA_Event_Tracker.track_event('Deals Add Dashlet')">{{agile_lng_translate 'portlets' 'add-dashlet'}}</a></li>
 					</ul>
 					<!--
 					{{#is_mobile}}
@@ -88,7 +88,56 @@
     </div>
 </div>
 </div>
-	
+<!-- Archive confirmation-->
+<script type="text/html" id="deal_archive_confirm_modal-template">
+	<div class="modal-dialog">
+    <div class="modal-content">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h3>{{agile_lng_translate 'deal-view' 'archive-deal'}}</h3>
+  </div>
+  <div class="modal-body">
+    <div id="deal-bulk-confirm">
+		<input id="archived-deal-id" name="id" type="hidden" value="{{id}}" />
+		<input id="archived-deal-milestone" name="milestone" type="hidden" value="{{milestone}}"/>
+		{{agile_lng_translate 'deal-view' 'deals-can-be-archived-desc'}}  
+		<br/> {{agile_lng_translate 'deal-view' 'are-you-sure-to-archive-this-deal'}}
+	</div>
+  </div>
+  <div class="modal-footer">
+  	<span class="error-status text-danger"></span>
+	<button type="button" class="btn btn-sm btn-default" data-dismiss="modal" aria-hidden="true">{{agile_lng_translate 'portlets' 'no'}}</button>
+    <a href="#" id="deal-quick-archive" class="btn btn-sm btn-primary">{{agile_lng_translate 'portlets' 'yes'}}</a>
+  </div>
+ </div>
+  </div>
+</script>
+
+<!-- Restore confirmation-->
+<script type="text/html" id="deal_restore_confirm_modal-template">
+	<div class="modal-dialog">
+    <div class="modal-content">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h3>{{agile_lng_translate 'deal-view' 'restore-deal'}}</h3>
+  </div>
+  <div class="modal-body">
+	<input id="restored-deal-id" name="id" type="hidden"/>
+	<input id="restored-deal-milestone" name="milestone" type="hidden"/>
+    <div id="deal-bulk-confirm">
+		{{agile_lng_translate 'deal-view' 'restoring-the-deal-desc'}}
+	</div>
+  </div>
+  <div class="modal-footer">
+  	<span class="error-status"></span>
+	<button type="button" class="btn btn-sm btn-default" data-dismiss="modal" aria-hidden="true">{{agile_lng_translate 'portlets' 'no'}}</button>
+    <a href="#" id="deal-quick-restore" class="btn btn-sm btn-primary">{{agile_lng_translate 'portlets' 'yes'}}</a>
+  </div>
+	</div>
+  </div>
+</div>
+</div>
+</script>
 </script>
 
 <script id="opportunities-by-paging-collection-template" type="text/html">
@@ -103,8 +152,8 @@
 		 <div class="pull-right">
 		    <div style="font-size:14px; float:left">
 		       <input type="hidden" id="{{remove_spaces heading}}_totalvalue" name="0" />	  
-			{{#if lost_milestone}}<i data-toogle="tooltip" title="" class="icon-dislike mark-lost" data-original-title="Deals with this milestone are considered as Lost." style="font-size: 14px;position: relative;top: 2px;"></i>{{/if}}
-			{{#if won_milestone}}<i data-toogle="tooltip" title="" class="icon-like mark-won" data-original-title="Deals with this milestone are considered as Won." style="font-size: 14px;position: relative;top: 2px;"></i>{{/if}}
+			{{#if lost_milestone}}<i data-toogle="tooltip" title="" class="icon-dislike mark-lost" data-original-title="{{agile_lng_translate 'admin-settings-deals' 'lost-message'}}" style="font-size: 14px;position: relative;top: 2px;"></i>{{/if}}
+			{{#if won_milestone}}<i data-toogle="tooltip" title="" class="icon-like mark-won" data-original-title="{{agile_lng_translate 'admin-settings-deals' 'won-message'}}" style="font-size: 14px;position: relative;top: 2px;"></i>{{/if}}
 
 			<span id="{{remove_spaces heading}}_count" class="txt-mute badge"></span><span class="pull-right pos-abs pos-r-sm pos-t-xs"><img class="loading_img" src="{{getS3ImagePath '/img/ajax-loader-cursor.gif'}}" width="12px"></span> </div>
 		</div>
@@ -150,7 +199,7 @@
 	<span class="pull-right  dealnotes-view">
 			{{#if notes}}
 
-             <span class="txt-small note-count" title="Notes" >{{notes.length}}</span><a title="Notes" data-toggle="tooltip" data-placement="top" data-trigger="hover" data-container="No Notes" class="deal-notes deal-edit c-p text-l-none"><i class="deal-action icon icon-comment-alt deal-notes" data="{{id}}"></i></a>
+             <span class="txt-small note-count" title="{{agile_lng_translate 'deal-view' 'notes'}}" >{{notes.length}}</span><a title="{{agile_lng_translate 'deal-view' 'notes'}}" data-toggle="tooltip" data-placement="top" data-trigger="hover" data-container="No Notes" class="deal-notes deal-edit c-p text-l-none"><i class="deal-action icon icon-comment-alt deal-notes" data="{{id}}"></i></a>
               
 			{{/if}}
 		</span>
@@ -188,9 +237,9 @@
 				<a class="archived-deal vis-hide" data-archive="true" />
 			{{/if_equals}}
 			{{#if_equals archived false}}
-			<a title="Edit" class="deal-edit" style="cursor:pointer;text-decoration:none;"> <i style="width: 0.9em!important;" class="fa fa-edit"></i> </a>
+			<a title="{{agile_lng_translate 'contact-details' 'edit'}}" class="deal-edit" style="cursor:pointer;text-decoration:none;"> <i style="width: 0.9em!important;" class="fa fa-edit"></i> </a>
             {{/if_equals}}
-			<!-- <a title="Delete" class="deal-delete" style="cursor:pointer;text-decoration:none;"><i style="width: 0.9em!important;" class="icon-trash"></i></a> -->
+			<!-- <a title="{{agile_lng_translate 'contact-details' 'delete'}}" class="deal-delete" style="cursor:pointer;text-decoration:none;"><i style="width: 0.9em!important;" class="icon-trash"></i></a> -->
 			{{#if_equals archived false}}
 			<!-- <a title="Archive" class="deal-archive" style="cursor:pointer;text-decoration:none;"> <i style="width: 0.9em!important;" class="fa fa-file-archive-o"></i> </a> -->
 				<a class="archived-deal vis-hide" data-archive="false" />
@@ -214,7 +263,7 @@
 
 	<div class="pull-right dealnotes-view" style="margin-top:-3px;padding-right:1px;">
 			{{#if notes}}
-             <span class="txt-small note-count" title="Notes" >{{notes.length}}</span><a title="Notes" data-toggle="tooltip" data-placement="top" data-trigger="hover" data-container="No Notes" class="deal-notes deal-edit" style="cursor:pointer;text-decoration:none;"><i class="deal-action icon icon-comment-alt deal-notes" data="{{id}}"></i></a>
+             <span class="txt-small note-count" title="{{agile_lng_translate 'deal-view' 'notes'}}" >{{notes.length}}</span><a title="{{agile_lng_translate 'deal-view' 'notes'}}" data-toggle="tooltip" data-placement="top" data-trigger="hover" data-container="No Notes" class="deal-notes deal-edit" style="cursor:pointer;text-decoration:none;"><i class="deal-action icon icon-comment-alt deal-notes" data="{{id}}"></i></a>
               
 			{{/if}}
 		</div>
@@ -239,25 +288,25 @@
 
 	{{#if_equals pipeline.won_milestone milestone}}
 		{{#if won_date}}
-			<div style="cursor:default;" class="pull-left inline-block deal_won_date" id="deal_won_date_{{id}}" data-toggle="tooltip" title="Won date">
+			<div style="cursor:default;" class="pull-left inline-block deal_won_date" id="deal_won_date_{{id}}" data-toggle="tooltip" title="{{agile_lng_translate 'deal-view' 'won-date'}}">
       			<small>{{epochToHumanDateInFormat won_date}}</small>
       		</div>
       		<div class="clearfix"></div>
       	{{else}}
       		{{#if milestone_changed_time}}
-      			<div style="cursor:default;" class="pull-left inline-block deal_won_date" id="deal_won_date_{{id}}" data-toggle="tooltip" title="Won date">
+      			<div style="cursor:default;" class="pull-left inline-block deal_won_date" id="deal_won_date_{{id}}" data-toggle="tooltip" title="{{agile_lng_translate 'deal-view' 'won-date'}}">
       				<small>{{epochToHumanDateInFormat milestone_changed_time}}</small>
       			</div>
       			<div class="clearfix"></div>
       		{{else}}
-      			<div style="cursor:default;" class="pull-left inline-block hide deal_won_date" id="deal_won_date_{{id}}" data-toggle="tooltip" title="Won date">
+      			<div style="cursor:default;" class="pull-left inline-block hide deal_won_date" id="deal_won_date_{{id}}" data-toggle="tooltip" title="{{agile_lng_translate 'deal-view' 'won-date'}}">
       				<small></small>
       			</div>
       			<div class="clearfix"></div>
       		{{/if}}
 		{{/if}}
 	{{else}}
-		<div style="cursor:default;" class="pull-left inline-block hide deal_won_date" id="deal_won_date_{{id}}" data-toggle="tooltip" title="Won date">
+		<div style="cursor:default;" class="pull-left inline-block hide deal_won_date" id="deal_won_date_{{id}}" data-toggle="tooltip" title="{{agile_lng_translate 'deal-view' 'won-date'}}">
       		<small></small>
       	</div>
       	<div class="clearfix"></div>
@@ -279,9 +328,9 @@
 				<a class="archived-deal vis-hide" data-archive="true" />
 			{{/if_equals}}
 			{{#if_equals archived false}}
-			<a title="Edit" class="deal-edit c-p text-l-none" style="text-decoration:none;color:#727272;"> <i style="width: 0.9em!important;" class="fa fa-edit"></i> </a>
+			<a title="{{agile_lng_translate 'contact-details' 'edit'}}" class="deal-edit c-p text-l-none" style="text-decoration:none;color:#727272;"> <i style="width: 0.9em!important;" class="fa fa-edit"></i> </a>
             {{/if_equals}}
-			<!-- <a title="Delete" class="deal-delete c-p text-l-none" style="text-decoration:none;color:#727272;"><i style="width: 0.9em!important;" class="icon-trash"></i></a> -->
+			<!-- <a title="{{agile_lng_translate 'contact-details' 'delete'}}" class="deal-delete c-p text-l-none" style="text-decoration:none;color:#727272;"><i style="width: 0.9em!important;" class="icon-trash"></i></a> -->
 			{{#if_equals archived false}}
 			<!-- <a title="Archive" class="deal-archive c-p text-l-none" style="text-decoration:none;color:#727272;"> <i style="width: 0.9em!important;" class="fa fa-file-archive-o"></i> </a> -->
 				<a class="archived-deal vis-hide" data-archive="false" />
@@ -319,7 +368,7 @@
 {{#if name}}
 <a id='{{id}}' class="pipeline c-p" data="{{name}}">{{name}}</a>
  {{else}}
-<a id='{{id}}' class="pipeline c-p" data="Default">Default</a>
+<a id='{{id}}' class="pipeline c-p" data="Default">{{agile_lng_translate 'companies-view' 'default'}}</a>
 {{/if}}
 </script>
 
@@ -333,8 +382,9 @@
     <p class="deal-popover-p pull-left" style="margin:2px;overflow:hidden !important;text-overflow:ellipsis;max-width:calc(100% - 35px);">
     	<span>{{heading}}</span ></p><span class="pull-right">{{dealNumber}}</span><div class="clearfix"></div>
      </div>
-    <p class="deal-popover-p" style="margin:2px;margin-top:4px;"><span>Total:</span><span> {{symbol}}{{dealcount}}</span></p>
-    <p class="deal-popover-p" style="margin:2px"><span>Average:</span><span> {{symbol}}{{avgDeal}}</span></p>
+    <p class="deal-popover-p" style="margin:2px;margin-top:4px;"><span>{{agile_lng_translate 'contacts-view' 'total'}}:</span><span> {{symbol}}{{dealcount}}</span></p>
+    <p class="deal-popover-p" style="margin:2px"><span>{{agile_lng_translate 'deal-view' 'average'}}:
+    </span><span> {{symbol}}{{avgDeal}}</span></p>
 </div>
 </script>
 
@@ -361,12 +411,11 @@
        		<div class="b-b b-light p-b-xs">
        			
        	<div class="contact-owner text-base" id="change-owner-element">
-        	
-		<p class="deal-popover-p" style="margin:2px;margin-top:4px;"><span>Total:</span><span> {{symbol}}{{dealcount}}</span></p>
+		<p class="deal-popover-p" style="margin:2px;margin-top:4px;"><span>{{agile_lng_translate 'contacts-view' 'total'}}:</span><span> {{symbol}}{{dealcount}}</span></p>
        </div>
        </div>
        		<div class=" p-b-xs">
-			<p class="deal-popover-p" style="margin:2px"><span>Average:</span><span> {{symbol}}{{avgDeal}}</span></p>
+			<p class="deal-popover-p" style="margin:2px"><span>{{agile_lng_translate 'deal-view' 'average'}}:</span><span> {{symbol}}{{avgDeal}}</span></p>
        		</div>
                    </div>
 	   	          </div>	
