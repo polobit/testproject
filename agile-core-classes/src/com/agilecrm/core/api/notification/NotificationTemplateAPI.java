@@ -132,6 +132,10 @@ public class NotificationTemplateAPI
 	    JSONObject json = new JSONObject(notification);
 	    
 	    String browser_id = json.getString("browserId");
+	    String iconURL = json.getString("notificationIcon");
+	    
+	    if(StringUtils.isBlank(iconURL))
+	    	iconURL = "https://media.licdn.com/mpr/mpr/shrink_200_200/AAEAAQAAAAAAAAWJAAAAJDQwNmRhNGNmLTlmNWMtNGZkMC1hZDJhLWI0ODE1NDQxMmNhNA.png";
 	    
 	    if(StringUtils.isBlank(browser_id))
 	    	return;
@@ -142,7 +146,7 @@ public class NotificationTemplateAPI
     	notification_message.put(PushNotification.NOTIFICATION_TITLE_VALUE, json.getString("notificationTitle"));
     	notification_message.put(PushNotification.NOTIFICATION_MESSAGE_VALUE, json.getString("notificationMessage"));
     	notification_message.put(PushNotification.NOTIFICATION_LINK_URL_VALUE, json.getString("notificationLink"));
-    	notification_message.put(PushNotification.NOTIFICATION_ICON_URL_VALUE, json.getString("notificationIcon"));
+    	notification_message.put(PushNotification.NOTIFICATION_ICON_URL_VALUE, iconURL);
     	long created_time = System.currentTimeMillis()/1000l;
     	
     	

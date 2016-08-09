@@ -117,6 +117,11 @@ public class PushNotification extends TaskletAdapter
 		String linkURL = notificationTemplate.notificationLink;
 		String iconURL = notificationTemplate.notificationIcon;
 		
+		  
+	    if(StringUtils.isBlank(iconURL))
+	    	iconURL = "https://media.licdn.com/mpr/mpr/shrink_200_200/AAEAAQAAAAAAAAWJAAAAJDQwNmRhNGNmLTlmNWMtNGZkMC1hZDJhLWI0ODE1NDQxMmNhNA.png";
+	    
+		
 		String pushParam = notificationTemplate.push_param;
 		 
 		 if(notificationTemplate.push_param.equals("YES_AND_PUSH")){
