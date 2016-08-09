@@ -3,7 +3,7 @@
 <div class="wrapper-md bg-light lter b-b">
 	<div class="row">
 		<div class="col-md-12">
-			<h3 class="h3 font-thin pull-left">Theme & Layout</h3>
+			<h3 class="h3 font-thin pull-left">{{agile_lng_translate 'menu' 'theme-and-layout'}}</h3>
 		</div>
 	</div>
 </div>
@@ -14,12 +14,13 @@
         	<div class="row">
                 <div class="col-md-6 col-sm-6 col-sm-offset-0 col-xs-offset-3 col-xs-6">
                    <div class="control-group form-group hidden-xs">
-                        <label class="control-label col-sm-4">Menu position</label> 
+                        <label class="control-label col-sm-4">{{agile_lng_translate 'theme' 'menu-position'}}
+                        </label> 
                         <div class="controls col-sm-8">
                             <select name="menuPosition" id="menuPosition" class="form-control">
-								<option value="leftcol">Left - Collapsed</option>
-								<option value="left">Left - Expanded</option>
-                                <option value="top">Top</option>
+								<option value="leftcol">{{agile_lng_translate 'theme' 'left-collapsed'}}</option>
+								<option value="left">{{agile_lng_translate 'theme' 'left-expanded'}}</option>
+                                <option value="top">{{agile_lng_translate 'web-rules' 'top'}}</option>
                             </select>
                         </div>
                     </div>
@@ -34,7 +35,7 @@
                     </div>	-->
 					<input type="hidden" name="layout" id="layout" value={{layout}}>
 					<div class="control-group form-group">
-                        <label class="control-label col-sm-4">Theme</label> 
+                        <label class="control-label col-sm-4">{{agile_lng_translate 'theme' 'theme'}}</label> 
                         <div class="controls col-sm-8">
                             
                        
@@ -228,7 +229,8 @@
                   </div>
                     </div>   	
             <div class="control-group form-group">
-                        <label class="control-label col-sm-4">Animations</label> 
+                        <label class="control-label col-sm-4">{{agile_lng_translate 'theme' 'animations'}}
+                        </label> 
                         <div class="controls col-sm-8">
                             <label class="i-switch m-t-xs m-r">
                           		<input type="checkbox" id="animations" class="left" name="animations">
@@ -238,11 +240,11 @@
              </div>        	
                 </div>
             </div>
-            <span class="theme-save-status text-danger col-md-offset-2" style="display:none;">Your settings are not saved yet.</span>
+            <span class="theme-save-status text-danger col-md-offset-2" style="display:none;">{{agile_lng_translate 'theme' 'your-settings-are-not-saved-yet'}}</span>
 			<div class="line  b-b line-lg"></div>
             <div class="form-group">
 				<div class="col-md-offset-2 col-sm-8 col-xs-offset-3 col-xs-3">
-					<a href="#themeandlayout" type="submit" id="saveTheme" class="btn btn-sm btn-primary">Save</a>
+					<a href="#themeandlayout" type="submit" id="saveTheme" class="btn btn-sm btn-primary">{{agile_lng_translate 'report-add' 'save'}}</a>
             	</div>
 			</div>
         </fieldset>

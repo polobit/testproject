@@ -2,14 +2,15 @@
 	<div>
 		<form id="freshbooks_login_form" name="freshbooks_login_form" method="post">
 	    	<fieldset>
-				<p>Create and manage customer invoices and track payments with Freshbooks. </p>
+				<p>{{agile_lng_translate 'widgets' 'FreshBooks-content'}} </p>
 				
-				<label>Enter your Freshbooks details: </label>
+				<label><b>{{agile_lng_translate 'widgets' 'enter-freshBooks-widget-details'}}</b> 
+				</label>
 				<div class="control-group form-group"><div class="controls"><input type="url" id="freshbooks_url" class="input-medium required form-control"  placeholder="https://company.freshbooks.com" value="" name="freshbooks_url"></input></div></div>
-				<div class="control-group form-group"><div class="controls"><input type="text" id="freshbooks_apiKey" class="input-medium required form-control"  placeholder="API Token" value="" name="freshbooks_apiKey"></input></div></div>
+				<div class="control-group form-group"><div class="controls"><input type="text" id="freshbooks_apiKey" class="input-medium required form-control"  placeholder="{{agile_lng_translate 'prefs-data-sync' 'api-token'}}" value="" name="freshbooks_apiKey"></input></div></div>
 				<div class="text-center">
-				<a href="#add-widget" class="btn btn-default btn-sm">Cancel</a>
-				<a href="#" id="freshbooks_save_token" class="save-agile-widget btn btn-sm btn-primary ml_5">Save</a>
+				<a href="#add-widget" class="btn btn-default btn-sm">{{agile_lng_translate 'other' 'cancel'}}</a>
+				<a href="#" id="freshbooks_save_token" class="save-agile-widget btn btn-sm btn-primary ml_5">{{agile_lng_translate 'portlets' 'save'}}</a>
 				</div>
 			 </fieldset>
 	    </form>
@@ -18,8 +19,8 @@
 <script id="freshbooks-profile-template" type="text/html">
 {{#if_equals total "0"}}
 	<div class="wrapper-sm">
-		<div>No clients matching this contact.</div>
-		<a class="btn btn-xs btn-default m-t-sm c-p" id="freshbooks_add_client">Add client</a>
+		<div>{{agile_lng_translate 'widgets' 'no-clients-matching-this-contact'}}</div>
+		<a class="btn btn-xs btn-default m-t-sm c-p" id="freshbooks_add_client">{{agile_lng_translate 'widgets' 'add-client'}}</a>
 	</div>
 {{else}}
 	<div class="wrapper-sm">
@@ -28,14 +29,25 @@
 				<div class="inline-block text-sm">
 					<div class="title_txt inline-block">
 						<a href="{{client.0.links.statement}}" target="_blank"><h4 class="text-u-c m-t-none text-sm text-info">
-							{{#if_equals client.0.first_name ""}}{{#if_equals client.0.last_name ""}}
-								{{getCurrentContactProperty "first_name"}} {{getCurrentContactProperty "last_name"}}{{/if_equals}}
+							{{#if_equals client.0.first_name ""}}
+								{{#if_equals client.0.last_name ""}}
+									{{getCurrentContactProperty "first_name"}}
+									{{getCurrentContactProperty "last_name"}}
+								{{/if_equals}}
 							{{else}}
 								{{client.0.first_name}} {{client.0.last_name}}
 							{{/if_equals}}
 						</h4></a>
 					</div>
-					{{#if_equals client.0.organization ""}}<div></div>{{else}}, <div class="inline-block"><a href="{{client.0.links.view}}" target="_blank"><h4 class="text-u-c m-t-none text-sm text-info">{{client.0.organization}}</h4></a></div>{{/if_equals}}
+					{{#if_equals client.0.organization ""}}
+						<div></div>
+					{{else}}, 
+						<div class="inline-block">
+							<a href="{{client.0.links.view}}" target="_blank">
+								<h4 class="text-u-c m-t-none text-sm text-info">{{client.0.organization}}</h4>
+							</a>
+						</div>
+					{{/if_equals}}
 				</div>
 			{{/if}}
 			<p class="m-b-none text-sm">
@@ -67,7 +79,15 @@
 							{{/if_equals}}
 						</span></a>
 					</div>
-					{{#if_equals client.organization ""}}<div></div>{{else}}, <div class="inline-block text-base"><a href="{{client.links.view}}" target="_blank"><span class="text-u-c m-t-none">{{client.organization}}</span></a></div>{{/if_equals}}
+					{{#if_equals client.organization ""}}
+						<div></div>
+					{{else}}
+						<div class="text-xs">
+							<a href="{{client.links.view}}" target="_blank">
+								<span class="text-u-c m-t-none">{{client.organization}}</span>
+							</a>
+						</div>
+					{{/if_equals}}
 				</div>
 			{{/if}}
 			<p class="text-muted m-b-xs text-sm">
@@ -84,22 +104,20 @@
 					{{client.p_country}}
 				{{/if}}
 			</p>	
-			{{#if client.home_phone}}<i class="icon icon-phone text-muted text-sm"></i><a class="text-muted" href="tel:{{client.home_phone}}" > {{client.home_phone}} (home)<br> </a>{{/if}}
-			{{#if client.work_phone}}<i class="icon icon-phone text-muted text-sm"></i><a class="text-muted" href="tel:{{client.work_phone}}" > {{client.work_phone}} (work)<br> </a>{{/if}}
+			{{#if client.home_phone}}<i class="icon icon-phone text-muted text-sm"></i><a class="text-muted" href="tel:{{client.home_phone}}" > {{client.home_phone}} ({{agile_lng_translate 'social' 'Home'}})<br> </a>{{/if}}
+			{{#if client.work_phone}}<i class="icon icon-phone text-muted text-sm"></i><a class="text-muted" href="tel:{{client.work_phone}}" > {{client.work_phone}} ({{agile_lng_translate 'other' 'work'}})<br> </a>{{/if}}
 			{{#if client.mobile}}<i class="icon icon-phone text-muted"></i><a class="text-muted" href="tel:{{client.mobile}}"> {{client.mobile}} (mobile)</a>{{/if}}
 		{{/isArray}}
 	</div>
 	<div class="wrapper-sm b-t b-light">
 		{{#isArray client}}
-			<a href="{{client.0.links.statement}}" target="_blank"><h4 class="h4 m-t-none m-b-none text-sm">Invoices</h4></a>
+			<a href="{{client.0.links.statement}}" target="_blank"><h4 class="h4 m-t-none m-b-none text-sm">{{agile_lng_translate 'plan-and-upgrade' 'invoices'}}</h4></a>
 		{{else}}
-			<a href="{{client.links.statement}}" target="_blank"><h4 class="h4 m-t-none m-b-none text-sm">Invoices</h4></a>
+			<a href="{{client.links.statement}}" target="_blank"><h4 class="h4 m-t-none m-b-none text-sm">{{agile_lng_translate 'plan-and-upgrade' 'invoices'}}</h4></a>
 		{{/isArray}}
 	</div>
 	<ul class="list-group m-b-none text-base" id="freshbooks_invoice_panel">
-		<li class="list-group-item r-none b-l-none b-r-none">
-			<center><img id="freshbooks_invoice_load" src="{{getS3ImagePath 'img/ajax-loader-cursor.gif'}}" class="m-t m-b-sm"></img></center>
-		</li>
+		<img id="freshbooks_invoice_load" src="{{getS3ImagePath 'img/ajax-loader-cursor.gif'}}" class="m-t m-b-sm"></img>
 	</ul>
 {{/if_equals}}
 </script>
@@ -107,7 +125,7 @@
 <script id="freshbooks-invoice-template" type="text/html">
 	{{#if_equals total "0"}}
 		<li class="list-group-item r-none b-l-none b-r-none text-light">
-	    	No invoices			
+	    	{{agile_lng_translate 'widgets' 'no-invoices'}}			
 		</li>		
 	{{else}}
 		{{#isArray invoice}}
@@ -146,7 +164,7 @@
 							{{/if}}
 						{{/isArray}}
 						{{#if discount}}
-							<div class="pull-left">Discount</div>
+							<div class="pull-left">{{agile_lng_translate 'plan-and-upgrade' 'discount'}}</div>
 							<div class="pull-right">{{discount}}%</div><br>
 						{{/if}}
 					</div>
@@ -188,7 +206,7 @@
 							{{/if}}
 						{{/isArray}}
 						{{#if invoice.discount}}
-							<div class="pull-left">Discount</div>
+							<div class="pull-left">{{agile_lng_translate 'plan-and-upgrade' 'discount'}}</div>
 							<div class="pull-right">{{invoice.discount}}%</div><br>
 						{{/if}}
 					</div>
@@ -197,19 +215,19 @@
 		{{/isArray}}
 	{{/if_equals}}
 	<div class="widget_tab_footer freshdesk_show_more hide" align="center">
-		<a class="c-p text-info" id="freshdesk_show_more" rel="tooltip" title="Click to see more tickets">Show More</a>
+		<a class="c-p text-info" id="freshdesk_show_more" rel="tooltip" title="{{agile_lng_translate 'widgets' 'click-to-see-more-tickets'}}">{{agile_lng_translate 'widgets' 'show-more'}}</a>
 	</div>
 </script>
 
 <script id="freshbooks-items-template" type="text/html">
 	{{#if_equals total "0"}}
 		<li class="list-group-item r-none b-l-none b-r-none text-light">
-	    	No Items available. Add an item in your account to generate invoice.
+	    	{{agile_lng_translate 'widgets' 'no-items-available'}}
 		</li>		
 	{{else}}
 		<li class="list-group-item r-none b-l-none b-r-none">
-			<div class="pull-left">Item name</div>
-			<div class="pull-right text-right">Unit cost</div>
+			<div class="pull-left">{{agile_lng_translate 'web-rules' 'item-name'}}</div>
+			<div class="pull-right text-right">{{agile_lng_translate 'widgets' 'unit-cost'}}</div>
 			<div class="clearfix"></div>
 		</li>
 		{{#isArray item}}
@@ -254,13 +272,13 @@
 							<table id="invoice-table" class="table table-bordered w-auto" style="table-layout:fixed;">
 								<thead style="background: rgba(240, 240, 240, .2);">
 									<tr>
-									<th >Item</th>
-									<th >Description</th>
-									<th >Unit Cost</th>
-									<th >Quantity</th>
-									<th >Tax1</th>
-									<th >Tax2</th>
-									<th >Line Total</th>
+									<th >{{agile_lng_translate 'widgets' 'item'}}</th>
+									<th >{{agile_lng_translate 'other' 'description'}}</th>
+									<th >{{agile_lng_translate 'widgets' 'unit-cost'}}</th>
+									<th >{{agile_lng_translate 'plan-and-upgrade' 'quantity'}}</th>
+									<th >{{agile_lng_translate 'widgets' 'tax1'}}</th>
+									<th >{{agile_lng_translate 'widgets' 'tax2'}}</th>
+									<th >{{agile_lng_translate 'widgets' 'line-total'}}</th>
 									</tr>
 								</thead>
 								<tbody>
@@ -332,7 +350,7 @@
 											</select>
 										</td>
 										<td id="item_total">
-											<input type="text" placeholder="total" name="line_total" id="line-total" class="w-auto form-control"/>
+											<input type="text" placeholder="{{agile_lng_translate 'contacts-view' 'total'}}" name="line_total" id="line-total" class="w-auto form-control"/>
 										</td>
 									</tr>
 								</tbody>
@@ -345,7 +363,7 @@
         </form>
     </div>
     <div class="modal-footer">
-       <a href="#" class="btn btn-sm btn-primary" id="send_request">Send</a>
+       <a href="#" class="btn btn-sm btn-primary" id="send_request">{{agile_lng_translate 'tasks' 'Send'}}</a>
        <span class="save-status"></span>
     </div>
 </div>

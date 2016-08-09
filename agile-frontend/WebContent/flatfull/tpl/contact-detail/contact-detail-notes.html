@@ -6,15 +6,16 @@
                     <img alt="Clipboard" src="{{getS3ImagePath '/img/clipboard.png'}}" />
                 </div>
                 <div class="box-right pull-left">
-                    <h4 class="m-t-none">You have no notes for {{contactShortName}}.</h4>
+                    <h4 class="m-t-none">{{agile_lng_translate 'contact-details' 'you-have-no-notes-for'}} {{contactShortName}}.</h4>
                     <div class="text">
-                        You can save specific information about {{#isCompany}}companies{{else}}contacts{{/isCompany}} as a Note.
+                        {{agile_lng_translate 'contact-details' 'you-can-save-specific-information-about'}} {{#isCompany}}companies{{else}}contacts{{/isCompany}} {{agile_lng_translate 'contact-details' 'as-a-note'}}.
                     </div>
 					<div class="btn-group">
-            			<a href="#noteModal" data-toggle="modal" class="btn m-t-xs btn-default btn-sm btn-slate-action contact-add-note"><i class="icon-plus-sign"></i>&nbsp;Add Note</a>
+            			<a href="#noteModal" class="btn m-t-xs btn-default btn-sm btn-slate-action contact-add-note"><i class="icon-plus-sign"></i>&nbsp;{{agile_lng_translate 'contact-details' 'add-note'}}
+            			</a>
             			<button class="btn dropdown-toggle m-t-xs btn-sm btn-default" data-toggle="dropdown" aria-expanded="false"><span class="caret"></span></button>
 						<ul class="dropdown-menu pull-right" style="padding:2px" role="menu">
-							<li style="padding:0px; text-align: center;"><a href="javascript:void(0)" class="show-logPhone ">&nbsp;Add Call-log</a> </li>
+							<li style="padding:0px; text-align: center;"><a href="javascript:void(0)" class="show-logPhone ">&nbsp;{{agile_lng_translate 'contact-details' 'add-call-log'}}</a> </li>
 						</ul>
 					</div>
                 </div>
@@ -26,10 +27,11 @@
 {{#if this.length}}
 <div class="m-b-md m-t-md m-r-sm" align="right">
 <div class="btn-group" align="right">
-   <a href="#noteModal" data-toggle="modal" class="btn btn-default btn-sm btn-slate-action contact-add-note"><i class="icon-plus-sign"></i>&nbsp;Add Note</a>
-               			<button class="btn dropdown-toggle btn-sm btn-default" data-toggle="dropdown" aria-expanded="false"><span class="caret"></span></button>
+   <a href="#noteModal" class="btn btn-default btn-sm btn-slate-action contact-add-note"><i class="icon-plus-sign"></i>&nbsp;{{agile_lng_translate 'contact-details' 'add-note'}}</a>
+               			<button class="btn dropdown-toggle btn-sm btn-default" data-toggle="dropdown" aria-expanded="false"><span class="caret">
+               			</span></button>
 						<ul class="dropdown-menu pull-right" style="padding:2px" role="menu">
-							<li style="padding:0px; text-align: center;"><a href="javascript:void(0)" class="show-logPhone ">&nbsp;Add Call-log</a> </li>
+							<li style="padding:0px; text-align: center;"><a href="javascript:void(0)" class="show-logPhone ">&nbsp;{{agile_lng_translate 'contact-details' 'add-call-log'}}</a> </li>
 						</ul>
 						</div>
 						</div>
@@ -72,7 +74,7 @@
 	{{#if_equals callType ""}}
 
 	{{else}}
-			{{#if_equals callType "inbound"}}Incoming call from{{else}}Outgoing call to{{/if_equals}}  {{phone}} </br>
+			{{#if_equals callType "inbound"}}{{agile_lng_translate 'Contacts-view' 'incoming-call-from'}}{{else}}{{agile_lng_translate 'Contacts-view' 'outgoing-call-to'}}{{/if_equals}}  {{phone}} </br>
 			{{#if status}} Status: {{status}} {{/if}}</br>
 			{{#if_equals status "busy"}}
 			{{else}}
@@ -117,16 +119,16 @@
 	{{else}}
 
 		<span class="actions  text-sm">
-		<a title="Edit"  data="{{id}}" class="edit-logPhone c-p text-l-none p-r-sm">  <i class="fa fa-edit"></i> </a>
+		<a title="{{agile_lng_translate 'contact-details' 'edit'}}"  data="{{id}}" class="edit-logPhone c-p text-l-none p-r-sm">  <i class="fa fa-edit"></i> </a>
 		
 	{{/if_equals}}
 
 {{else}}
 		<span class="actions  text-sm">
-		<a title="Edit"  data="{{id}}" data-toggle="modal" class="edit-note c-p text-l-none p-r-sm"> <i class="fa fa-edit"></i> </a>
+		<a title="{{agile_lng_translate 'contact-details' 'edit'}}"  data="{{id}}" data-toggle="modal" class="edit-note c-p text-l-none p-r-sm"> <i class="fa fa-edit"></i> </a>
 
 {{/if}}
-            <a title="Delete" class="c-p text-l-none"><span class="activity-delete icon-trash" id="{{id}}" url="core/api/notes/bulk"></span></a>
+            <a title="{{agile_lng_translate 'contact-details' 'delete'}}" class="c-p text-l-none"><span class="activity-delete icon-trash" id="{{id}}" url="core/api/notes/bulk"></span></a>
         </span>
 </div>
 </div>

@@ -41,17 +41,14 @@
       <div class="btn-toolbar m-l-none pos-rlt">
          <div class="filters-drp-down btn-group dropdown m-l-none" style="float: none;">
          <div class="">
-            <h3 class="inline-block m-n text-black font-thin">Visitors
-               <span style=" color: grey; position: absolute;left: 69px;"> <img border="0" src="//doxhze3l6s7v9.cloudfront.net/beta/static//img/help.png" style="height: 8px; position: absolute; top: 4px; left:2px" rel="popover" data-placement="right" data-title:" data-content=" Slice and Dice your Contacts on their web visits" id="element" data-trigger="hover"">
+            <h3 class="inline-block m-n text-black font-thin">{{agile_lng_translate 'menu' 'menu-visitors'}}
+               <span style=" color: grey;"> <img border="0" src="//doxhze3l6s7v9.cloudfront.net/beta/static//img/help.png" style="height: 8px;vertical-align: top; position: relative;left: -5px;" rel="popover" data-placement="right" data-title:" data-content=" {{agile_lng_translate 'visitors' 'data-content-desc'}}" id="element" data-trigger="hover"">
                </span>
-               <span id="visitors-count" class="m-l-xs">{{contacts_count}}</span>               
-               <a id="segmentation-left-filters-toggle" class="m-l-xs text-lg" data-toggle="tooltip" data-placement="right" title="" data-original-title="Filters">
+               <span id="visitors-count">{{contacts_count}}</span>               
+               <a id="segmentation-left-filters-toggle" class="m-l-xs text-lg" data-toggle="tooltip" data-placement="right" title="" data-original-title="{{agile_lng_translate 'contacts-view' 'filters'}}">
                      <i id="icon-filter" class="fa fa-bars icon-white"></i>
                </a>
             </h3>            
-            <small><span class="label label-sm bg-danger m-l-xs" style="position: relative;
-                  top: -3px;">Beta</span>
-            </small>   
          </div>
          </div>
          <div class="pull-right">
@@ -82,11 +79,11 @@
                <thead>
                   <tr>
                      <th style="display: none;width:5%;"></th>
-                     <th>Basic Info</th>
-                     <th>Company</th>
-                     <th>Tags</th>
-                     <th class="text-ellipsis">Lead Score</th>
-                     <th class="text-ellipsis">Star Value</th>
+                     <th>{{agile_lng_translate 'contacts-view' 'Basic info'}}</th>
+                     <th>{{agile_lng_translate 'contacts-view' 'Company'}}</th>
+                     <th>{{agile_lng_translate 'contacts-view' 'Tags'}}</th>
+                     <th class="text-ellipsis">{{agile_lng_translate 'contacts-view' 'Lead score'}}</th>
+                     <th class="text-ellipsis">{{agile_lng_translate 'contacts-view' 'Star Value'}}</th>
                   </tr>
                </thead>
                <tbody id="segmentation-custom-view-model-list" route="contact/">
@@ -115,11 +112,11 @@
          <thead>
             <tr>
                <th style="display: none; width:5%;"></th>
-               <th>Basic Info</th>
-               <th>Company</th>
-               <th>Tags</th>
-               <th class="text-ellipsis">Lead Score</th>
-               <th class="text-ellipsis">Star Value</th>
+               <th>{{agile_lng_translate 'contacts-view' 'Basic info'}}</th>
+               <th>{{agile_lng_translate 'contacts-view' 'Company'}}</th>
+               <th>{{agile_lng_translate 'contacts-view' 'Tags'}}</th>
+               <th class="text-ellipsis">{{agile_lng_translate 'contacts-view' 'Lead score'}}</th>
+               <th class="text-ellipsis">{{agile_lng_translate 'contacts-view' 'Star Value'}}</th>
             </tr>
          </thead>
          <tbody id="segmentation-custom-view-table-model-list" route="contact/"
@@ -149,7 +146,7 @@
 {{getPropertyValue properties "last_name"}} </a>
 <div><small class="text-muted  block text-ellipsis">{{getPropertyValue properties "email"}}</small></div>
 {{else}}
-<span class="text-cap custom-link">Someone visited your website </span>
+<span class="text-cap custom-link">{{agile_lng_translate 'contact-details' 'someone-visited-your-website'}} </span>
 <div><small class="text-muted  block text-ellipsis">{{getPropertyValue properties "email"}}</small></div>
 {{/if}}
 </div>  
@@ -200,7 +197,7 @@
 {{getPropertyValue properties "last_name"}} </a>
 <div><small class="text-muted  block text-ellipsis">{{getPropertyValue properties "email"}}</small></div>
 {{else}}
-<span class="text-cap custom-link">Someone visited your website </span>
+<span class="text-cap custom-link">{{agile_lng_translate 'contact-details' 'someone-visited-your-website'}} </span>
 <div><small class="text-muted  block text-ellipsis">{{getPropertyValue properties "email"}}</small></div>
 {{/if}}
 </div>  

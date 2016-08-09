@@ -280,7 +280,9 @@ public class ActivitySave
 	Object task_description[] = tasks.get("task_description");
 
 	JSONObject js = new JSONObject(new Gson().toJson(task));
-	JSONArray jsn = getExistingContactsJsonArray(js.getJSONArray("contacts"));
+	JSONArray jsn = new JSONArray();
+	if(js.has("contacts") && !js.getJSONArray("contacts").equals(null) && !js.getJSONArray("contacts").equals("null"))		
+		jsn = getExistingContactsJsonArray(js.getJSONArray("contacts"));
 	System.out.println(due + "  " + priority + "  " + status + "  " + progress + "  " + subject + " " + task_type
 	        + "  " + owner_name+""+task_description);
 	if (tasks.size() > 0)

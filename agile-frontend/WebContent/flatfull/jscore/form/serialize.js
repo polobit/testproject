@@ -257,9 +257,21 @@ function serializeChainedElement(element)
 
 		// If type of the field is "date" then return epoch time
 		if ($(data).hasClass("date")) {
-			var date = getFormattedDateObjectWithString($(data).val());
+			if($(data).closest('td').siblings('td.lhs-block').find("select#LHS").val() == "closed_time" && $(data).closest('tr').parent().parent().hasClass('opportunity'))
+			{
+				var date = getFormattedDateObjectWithString($(data).val());
 
-			value = getGMTEpochFromDateForCustomFilters(date);
+				if(date)
+				{
+					value = date.getTime();
+				}
+			}
+			else
+			{
+				var date = getFormattedDateObjectWithString($(data).val());
+
+				value = getGMTEpochFromDateForDynamicFilters(date);
+			}
 		}
 		else if ($(data).hasClass("contact_custom_field") || $(data).hasClass("company_custom_field")) {
 			value = $(data).attr("data");

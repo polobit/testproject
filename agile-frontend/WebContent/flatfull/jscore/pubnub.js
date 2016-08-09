@@ -98,7 +98,7 @@ function sendMessage(publishJSON)
 		// The internet is gone. // TRY SENDING AGAIN!
 		{
 			console.log("publish_message unsuccessfull to Sent!");
-			showNotyPopUp('information', "You are not connected with Twitter server or you have problem with connection!", "top", 5000);
+			showNotyPopUp('information', "{{agile_lng_translate 'socialsuite' 'connection-error'}}", "top", 5000);
 			displayErrorInStream(publishJSON.stream);
 			
 			// How many streams are register.			

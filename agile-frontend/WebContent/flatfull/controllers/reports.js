@@ -150,7 +150,7 @@ var ReportsRouter = Backbone.Router
 					postRenderCallback : function(el)
 					{
 						initializeReportsListeners();
-						var optionsTemplate = "<option value='{{id}}'{{#if is_disabled}}disabled=disabled>{{name}} (Disabled){{else}}>{{name}}{{/if}}</option>";
+						var optionsTemplate = "<option value='{{id}}'{{#if is_disabled}}disabled=disabled>{{name}} ("+_agile_get_translated_val('campaigns','disabled')+"){{else}}>{{name}}{{/if}}</option>";
 						fillSelect('campaign-select', '/core/api/workflows', 'workflow', function(id)
 							{
 								//$('#campaign-select', el).find('option[value=' + campaign_id + ']').attr('selected', 'selected');
@@ -201,7 +201,7 @@ var ReportsRouter = Backbone.Router
 						if (count != 0)
 							return;
 
-						var optionsTemplate = "<option value='{{id}}'{{#if is_disabled}}disabled=disabled>{{name}} (Disabled){{else}}>{{name}}{{/if}}</option>";
+						var optionsTemplate = "<option value='{{id}}'{{#if is_disabled}}disabled=disabled>{{name}} ("+_agile_get_translated_val('campaigns','disabled')+"){{else}}>{{name}}{{/if}}</option>";
 
 
 						fillSelect('campaign-select', '/core/api/workflows', 'workflow', function fillCampaign()

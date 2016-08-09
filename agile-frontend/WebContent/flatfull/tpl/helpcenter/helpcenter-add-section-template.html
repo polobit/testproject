@@ -4,7 +4,7 @@
     	<div class="col-md-10">
         	<div class="panel panel-default">
         		<div class="panel-heading">
-        			{{#if id}}Edit{{else}}Add{{/if}} Section
+        			{{#if id}}{{agile_lng_translate 'contact-details' 'edit'}}{{else}}{{agile_lng_translate 'other' 'add'}}{{/if}} Section
     			</div>
                 <form id="userForm" name="userForm" method="get" action="" class="form-horizontal">
                     {{#if id}}
@@ -12,15 +12,15 @@
                     {{/if}}
                     <fieldset class="wrapper"><br/>
                         <div class="control-group form-group">
-                            <label class="control-label col-md-3" for="name">Name <span class="field_req">*</span></label> 
+                            <label class="control-label col-md-3" for="name">{{agile_lng_translate 'deal-view' 'name'}} <span class="field_req">*</span></label> 
                             <div class="col-md-5">
                                 <div class="controls">
-                                    <input type="text" name="name" id="name"  placeholder="Name" class="required form-control" maxlength="60">
+                                    <input type="text" name="name" id="name"  placeholder="{{agile_lng_translate 'deal-view' 'name'}}" class="required form-control" maxlength="35">
                                 </div>
                             </div>
                         </div>
                         <div class="control-group form-group">
-                            <label class="control-label col-md-3" for="description">Description <span class="field_req">*</span></label> 
+                            <label class="control-label col-md-3" for="description">{{agile_lng_translate 'misc-keys' 'description'}} <span class="field_req">*</span></label> 
                             <div class="col-md-6 m-t-xs">
                                 <div class="controls">
                                     <textarea id="description" class="form-control required" name="description" style="min-height: 100px;"></textarea>
@@ -28,22 +28,22 @@
                             </div>
                         </div>
                         <div class="control-group form-group">
-                            <label class="control-label col-md-3" for="Catogery">Catogery<span class="field_req">*</span></label> 
+                            <label class="control-label col-md-3" for="Catogery">{{agile_lng_translate 'portlets' 'category'}}<span class="field_req">*</span></label> 
                             <div class="col-md-6 m-t-xs">
                                 <div class="controls">
-                                    <select name="categorie_id" class="form-control" id="category">
+                                    <select name="categorie_id" class="form-control" id="catogery">
                                     </select>
                                 </div>    
                             </div>
                         </div>
                         <div class="control-group form-group">
-                            <label class="control-label col-md-3" for="Visible_To">Visible To<span class="field_req">*</span></label> 
+                            <label class="control-label col-md-3" for="Visible_To">{{agile_lng_translate 'Help-center' 'visible-to'}}<span class="field_req">*</span></label> 
                             <div class="col-md-6 m-t-xs">
                                 <div class="controls">
                                     <select name="visible_to" class=" form-control" id="visible_to">
-                                        <option  value="CUSTOMER" selected="selected">Customer</option>
-                                        <option value="AGENTS">Agents</option>
-                                        <option value="ADMIN">Admin</option>            
+                                        <option  value="CUSTOMER" selected="selected">{{agile_lng_translate 'plan-and-upgrade' 'customer'}}</option>
+                                        <option value="AGENTS">{{agile_lng_translate 'Help-center' 'Agents'}}</option>
+                                        <option value="ADMIN">Admin{{agile_lng_translate 'admin-settings-users' 'admin'}}</option>            
                                     </select>
                                 </div>
                             </div>
@@ -55,7 +55,7 @@
                             <div class="form-actions col-sm-offset-3 col-md-9">
                                 <div class="form-actions">
                                     <a type="reset" href='javascript:history.back()' class="btn btn-default btn-sm">Cancel</a>
-                                    <button type="submit" class="save btn btn-sm btn-primary m-l-xs">Save</button>
+                                    <button type="submit" class="save btn btn-sm btn-primary m-l-xs">{{agile_lng_translate 'modals' 'save'}}</button>
                                 </div>
                             </div>
                         </div>

@@ -115,14 +115,14 @@ public class CSVUtil
 	dBbillingRestriction = (ContactBillingRestriction) DaoBillingRestriction.getInstace(
 		Contact.class.getSimpleName(), this.billingRestriction);
 
-	if (!VersioningUtil.isLocalHost())
-	{
+	//if (!VersioningUtil.isLocalHost())
+	//{
 	    GcsFileOptions options = new GcsFileOptions.Builder().mimeType("text/csv").contentEncoding("UTF-8")
 		    .acl("public-read").addUserMetadata("domain", NamespaceManager.get()).build();
 
 	    service = new GCSServiceAgile(NamespaceManager.get() + "_failed_contacts_" + GoogleSQL.getFutureDate()
 		    + ".csv", "agile-exports", options);
-	}
+	//}
 
 	this.accessControl = accessControl;
 
@@ -449,12 +449,15 @@ public class CSVUtil
 			    if (addressField != null && addressField.value != null)
 			    {
 				addressJSON = new JSONObject(addressField.value);
-				addressJSON.put(field.value, csvValues[j]);
+				
+				CountryUtil.setCountryCode(addressJSON, field, csvValues[j]);
+				
 				addressField.value = addressJSON.toString();
 			    }
 			    else
 			    {
-				addressJSON.put(field.value, csvValues[j]);
+			    CountryUtil.setCountryCode(addressJSON, field, csvValues[j]);
+			    
 				tempContact.properties.add(new ContactField(Contact.ADDRESS, addressJSON.toString(),
 					field.type.toString()));
 			    }
@@ -747,9 +750,14 @@ public class CSVUtil
 
 	// creates contacts by iterating contact properties
 
+   
+    
 	for (String[] csvValues : companies)
 	{
 
+		 // Set to hold the notes column positions so they can be created
+	    // after a contact is created.
+	    Set<Integer> notes_positions = new TreeSet<Integer>();
 	    Contact tempContact = new Contact();
 	    tempContact.tags = (LinkedHashSet<String>) contact.tags.clone();
 
@@ -785,6 +793,11 @@ public class CSVUtil
 
 		// Trims content of field to 490 characters. It should not
 		// be trimmed for notes
+		 if ("note".equals(field.name))
+		    {
+			notes_positions.add(j);
+			continue;
+		    }
 		csvValues[j] = checkAndTrimValue(csvValue);
 
 		if ("tags".equals(field.name))
@@ -829,12 +842,12 @@ public class CSVUtil
 			if (addressField != null && addressField.value != null)
 			{
 			    addressJSON = new JSONObject(addressField.value);
-			    addressJSON.put(field.value, csvValues[j]);
+			    CountryUtil.setCountryCode(addressJSON, field, csvValues[j]);
 			    addressField.value = addressJSON.toString();
 			}
 			else
 			{
-			    addressJSON.put(field.value, csvValues[j]);
+				CountryUtil.setCountryCode(addressJSON, field, csvValues[j]);
 			    tempContact.properties.add(new ContactField(Contact.ADDRESS, addressJSON.toString(),
 				    field.subtype.toString()));
 			}
@@ -950,6 +963,28 @@ public class CSVUtil
 		savedCompany++;
 	    }
 
+	    
+	    try
+	    {
+
+		// Creates notes, set CSV heading as subject and value as
+		// description.
+		for (Integer i : notes_positions)
+		{
+		    Note note = new Note();
+		    note.subject = headings[i];
+		    note.description = csvValues[i];
+		    note.addRelatedContacts(String.valueOf(tempContact.id));
+
+		    note.setOwner(new Key<AgileUser>(AgileUser.class, tempContact.id));
+		    note.save();
+		}
+	    }
+	    catch (Exception e)
+	    {
+		System.out.println("exception while saving contacts");
+		e.printStackTrace();
+	    }
 	}
 
 	buildCSVImportStatus(status, ImportStatus.TOTAL, companies.size());
@@ -1108,7 +1143,7 @@ public class CSVUtil
 	    return;
 	}
 	// remove header information form csv
-	deals.remove(0);
+	String[] dealHeader =  deals.remove(0);
 
 	// Creates domain user key, which is set as a contact owner
 	Key<DomainUser> ownerKey = new Key<DomainUser>(DomainUser.class, Long.parseLong(ownerId));
@@ -1122,6 +1157,7 @@ public class CSVUtil
 	while (it.hasNext())
 	{
 	    Opportunity opportunity = new Opportunity();
+	    Set<Long> noteId = new TreeSet<>();
 	    String[] dealPropValues = it.next();
 	    String mileStoneValue = null;
 	    boolean trackFound = false;
@@ -1361,9 +1397,15 @@ public class CSVUtil
 			}
 			else if (value.equalsIgnoreCase("note"))
 			{
-			    Note note = new Note();
-			    note.description = dealPropValues[i];
-			    note.save();
+				try{
+					  Note note = new Note();
+					    note.subject = dealHeader[i];
+					    note.description = dealPropValues[i];
+					    note.save();
+					    noteId.add(note.id);
+				}catch(Exception e){
+					System.out.println("note not saved for header while saving deals from import" + dealHeader[i]);
+				}
 			}
 			else if(value.equalsIgnoreCase("dealSource"))
 			{
@@ -1410,6 +1452,11 @@ public class CSVUtil
 
 	    }
 
+	    //setting related notes in deals if any is present 
+	    
+	    if(noteId != null && noteId.size() > 0){
+	    	opportunity.setRelatedNotes(noteId);
+	    }
 	    opportunity.setOpportunityOwner(ownerKey);
 
 	    // case2: if track is mapped and milestone is not mapped then deal
@@ -1583,19 +1630,33 @@ public class CSVUtil
 	    writeFailedContactsInCSV(getCSVWriterForFailedContacts(), failedContacts, headings);
 
 	    System.out.println("wrote files to CSV");
+	    byte[] data=null;
+	    
+	    try{
 
 	    service.getOutputchannel().close();
 
 	    System.out.println("closing stream");
 
-	    byte[] data = service.getDataFromFile();
+	    
+	    data = service.getDataFromFile();
 
 	    System.out.println("byte data");
 
 	    System.out.println(data.length);
+	    }
+	    catch(Exception e)
+	    {
+	    	e.printStackTrace();
+	    }
 	    System.out.println(domainUser.email);
-
+	    
+	    if(data==null)
+	    {
+	    	sendFailedContactImportFile(domainUser, "", failedContacts.size(), status);
+	    }
 	    // Send every partition as separate email
+	    else
 	    sendFailedContactImportFile(domainUser, new String(data, "UTF-8"), failedContacts.size(), status);
 
 	    service.deleteFile();
@@ -1660,7 +1721,10 @@ public class CSVUtil
     {
 	try
 	{
-	    properties.add(index - 1, errorMsg);
+		for(int i=properties.size();i<index-1;i++){
+			properties.add("");
+		}
+	    properties.add(errorMsg);
 	}
 	catch (ArrayIndexOutOfBoundsException e)
 	{
@@ -1805,10 +1869,17 @@ public class CSVUtil
 
     private CSVWriter getCSVWriterForFailedContacts() throws IOException
     {
+    	try{
 	if (failedContactsWriter != null)
 	    return failedContactsWriter;
 
 	System.out.println("building failed contacts service");
 	return failedContactsWriter = new CSVWriter(service.getOutputWriter());
+    	}
+    	catch(Exception e)
+    	{
+    		e.printStackTrace();
+    		return failedContactsWriter;
+    	}
     }
 }

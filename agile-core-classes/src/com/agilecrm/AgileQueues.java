@@ -87,4 +87,8 @@ public class AgileQueues
 	public static final String NAME_UPDATE_COMPANIES = "name-update-companies-queue";
 	public static final String BULK_CALL_PULL_QUEUE = "bulk-call-pull-queue";
 		
+	//Email attachemnt queue for send an attachment
+	public static final String EMAIL_ATTACHEMNT_QUEUE = "email-attachment-queue";
+	
+	public static final String IP_FILTERS_TRANSFER_QUEUE = "ip-filters-transfer-queue";
 }

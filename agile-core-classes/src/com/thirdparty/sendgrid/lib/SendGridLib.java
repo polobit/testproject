@@ -13,6 +13,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import javax.xml.stream.events.Namespace;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.http.HttpEntity;
@@ -22,9 +24,14 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.agilecrm.queues.backend.ModuleUtil;
 import com.agilecrm.sendgrid.util.SendGridUtil;
+import com.agilecrm.user.DomainUser;
 import com.agilecrm.util.Base64Encoder;
 import com.agilecrm.util.HttpClientUtil;
+import com.agilecrm.util.VersioningUtil;
+import com.google.appengine.api.NamespaceManager;
+import com.google.appengine.api.blobstore.BlobstoreInputStream.ClosedStreamException;
 import com.thirdparty.mandrill.exception.RetryException;
 import com.thirdparty.sendgrid.SendGrid;
 import com.thirdparty.sendgrid.subusers.SendGridSubUser;
@@ -111,7 +118,7 @@ public class SendGridLib {
         return this;
     }
 
-    public HttpEntity buildBody(Email email) {
+    public HttpEntity buildBody(Email email) throws IOException {
         MultipartEntityBuilder builder = MultipartEntityBuilder.create();
 
         // We are using an API key
@@ -144,7 +151,9 @@ public class SendGridLib {
             Iterator it = email.getAttachments().entrySet().iterator();
             while (it.hasNext()) {
                 Map.Entry entry = (Map.Entry) it.next();
-                builder.addBinaryBody(String.format(PARAM_FILES, entry.getKey()), (InputStream) entry.getValue());
+                InputStream is = (InputStream) entry.getValue();
+                
+				builder.addBinaryBody(String.format(PARAM_FILES, entry.getKey()), is);
             }
         }
 
@@ -196,7 +205,7 @@ public class SendGridLib {
         return builder.build();
     }
 
-    public String send(Email email) {
+    public String send(Email email) throws Exception {
     	
         	HttpClientUtil.URLBuilder urlBuilder = new HttpClientUtil.URLBuilder(this.url + this.endpoint);
         	urlBuilder.setMethod("POST");
@@ -215,12 +224,46 @@ public class SendGridLib {
         	urlBuilder.setHeaders(headers);
         	
         	String response = null;
+        	boolean retry = false;
+        	int count = 0, maxRetries = 2;
         	
         	try
 			{
-        		response = HttpClientUtil.accessURLUsingHttpClient(urlBuilder, this.buildBody(email));
-        	
-        		System.out.println("Response for first attempt is " + response);
+				do{
+	        		try
+					{
+	        			// On retry get the stream again.
+	        			if(retry && !email.attachments.isEmpty())
+	        				throw new IOException("InputStream got closed.");
+	        			
+						response = HttpClientUtil.accessURLUsingHttpClient(urlBuilder, this.buildBody(email));
+						
+						System.out.println("Response of email sent: " + response);
+     	
+						// Try again with updated password
+						if(StringUtils.contains(this.username, SendGridSubUser.AGILE_SUB_USER_NAME_TOKEN) && StringUtils.containsIgnoreCase(response, "Bad username"))
+						{
+							SendGridSubUser.updateSendGridSubUserPassword(NamespaceManager.get()); // Updates password
+							
+							// Sample email after password update
+		        			SendGrid.sendMail(this.username, this.password, "alert@agilecrm.com", "Agile CRM Alert", "naresh@agilecrm.com", 
+		        					null, null, "SubUser Password is updated in " + NamespaceManager.get(), null, null, "Sample Email after password update. \n Username: " + this.username + "\n Pwd: " + this.password+ "\n Application id: " 
+		        							+ VersioningUtil.getApplicationAPPId() + " \n Module: " + ModuleUtil.getCurrentModuleName(), null);
+		        			
+							retry = true;
+						}
+						else
+							retry = false;
+					}
+					catch (SendGridException e) // To handle new sub user
+					{
+						System.err.println("SendGrid exception occured " + e.getMessage());
+						break;
+					}
+	        		
+	        		count++; // To restrict iterations
+	        		
+				}while(retry && count < maxRetries);
         		
 	        	// If response consists of 'Bad Username', throws Retry exception
         		if(StringUtils.contains(this.username, SendGridSubUser.AGILE_SUB_USER_NAME_TOKEN) && StringUtils.containsIgnoreCase(response, "Bad username"))
@@ -238,12 +281,29 @@ public class SendGridLib {
 				{
 					e1.printStackTrace();
 				}
-				System.out.println("Retrying again for sending email....");
 				
-				response = HttpClientUtil.accessURLUsingHttpClient(urlBuilder, this.buildBody(email));
+				System.out.println("Retrying again after creating subuser...");
+				
+				try
+				{
+					// On retry get the stream again for attachments.
+        			if(!email.attachments.isEmpty())
+        				throw new IOException("InputStream got closed.");
+        			
+					response = HttpClientUtil.accessURLUsingHttpClient(urlBuilder, this.buildBody(email));
+				}
+				catch (IOException e1) // To handle BlobStream closed exception
+				{
+					throw e1;
+				}
 				
 				System.out.println("Response after second attempt..." + response);
 			}
+        	catch(IOException ex) // To handle BlobStream closed exception
+        	{
+        		System.out.println("IO Exception occured....");
+        		throw ex;
+        	}
         	catch(Exception ex)
         	{
         		System.err.println(ExceptionUtils.getFullStackTrace(ex));
@@ -259,21 +319,32 @@ public class SendGridLib {
      * @return subject jsonobject
      */
    public static String getSMTPHeadersSubject(String SMTPHeaderJSON, String subject){
-	 try 
-	   {
+	 try
+	 {
 		JSONObject subjectJSON=new JSONObject();
 		subjectJSON.put(PARAM_SUBJECT, subject);
 		
 		JSONObject SMTPJSON=new JSONObject(SMTPHeaderJSON);
-		SMTPJSON.put(SendGrid.SENDGRID_API_PARAM_UNIQUE_ARGUMENTS, subjectJSON);
-		System.out.println("nnnnnnnnnnnnnnnnnn"+SMTPJSON.toString());
+		
+		if(SMTPJSON.has(SendGrid.SENDGRID_API_PARAM_UNIQUE_ARGUMENTS))
+			SMTPJSON.getJSONObject(SendGrid.SENDGRID_API_PARAM_UNIQUE_ARGUMENTS).put(PARAM_SUBJECT, subject);
+		else
+			SMTPJSON.put(SendGrid.SENDGRID_API_PARAM_UNIQUE_ARGUMENTS, subjectJSON);
+		
+		System.out.println("SMTP json " +SMTPJSON.toString());
 		return SMTPJSON.toString();
-		 } 
-   	catch (JSONException e) {
+	 } 
+     catch(JSONException e){
 			System.out.println("Error ocurred while creating SMTPJSON...."+e.getMessage());
-		}	
-	return null;
+     }
+	 catch(Exception e)
+	 {
+		 e.getStackTrace();
+	 }
+	 
+	return SMTPHeaderJSON;
  }
+   
     public static class Email implements Serializable {
         /**
 		 * 
@@ -647,5 +718,4 @@ public class SendGridLib {
             return this.message;
         }
     }
-    
 }

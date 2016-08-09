@@ -139,7 +139,7 @@ public class SendGridInboundWebhook extends HttpServlet
 		}
 	}
 
-	private JSONObject getJSONFromMIME(HttpServletRequest request)
+	public static JSONObject getJSONFromMIME(HttpServletRequest request)
 	{
 		JSONObject dataJSON = new JSONObject();
 

@@ -131,6 +131,10 @@ AGILE_LP_OPTIONS['templateId'] = "";
                                     <h3 class="accordion-heading">Agile Forms <small>create form & select here</small> <i class="icon icon-down-open-1"></i></h3>
                                     <div class="accordion-body"><ul class="list-unstyled"></ul></div>
                                 </div>
+                                <div class="elements-box accordion-item" id="knowledgebase">
+                                    <h3 class="accordion-heading">Knowledge Base<i class="icon icon-down-open-1"></i></h3>
+                                    <div class="accordion-body"><ul class="list-unstyled"></ul></div>
+                                </div>
                             </div>
                         </div>
                         <aside id="inspector" ng-class="{ open: panels.active === 'inspector' }" class="panel" data-name="inspector" ng-controller="InspectorController" bl-color-picker bl-panels-accordion>
@@ -213,10 +217,10 @@ AGILE_LP_OPTIONS['templateId'] = "";
                                     <div id="background-flyout-panel" class="hidden">
                                         <div class="bl-panel-header clearfix"><div class="name">{{ 'background' | translate }}</div><div class="bl-panel-btns" ng-click="closePanel"><i class="icon icon-cancel"></i></div></div>
                                         <div ng-controller="MediaManagerController">
-                                            <button type="button" ng-file-select="onFileSelect($files, 'bg')" class="btn btn-primary btn-block">{{ 'uploadImage' | translate }}</button>
+                                            <button id= "upload-image-lp" type="button" ng-file-select="onFileSelect($files, 'bg')" class="btn btn-primary btn-block">{{ 'uploadImage' | translate }}</button>
                                         </div>
                                         <div id="texturePresets">
-                                            <h5>{{ 'textures' | translate }}</h5>
+                                            <!-- <h5 style="dispaly:none">{{ 'textures' | translate }}</h5> -->
                                             <ul class="img-presets-list" bl-pretty-scrollbar>
                                                 <li ng-repeat="texture in textures track by $index">
                                                     <div ng-click="selectPreset($event)" class="preset" ng-style="{ 'background-image': 'url(/public/images/textures/'+$index+'.png)' }"></div>
@@ -242,7 +246,7 @@ AGILE_LP_OPTIONS['templateId'] = "";
                                             </div>
                                         </div>
                                         <div id="gradientPresets">
-                                            <h5>{{ 'gradients' | translate }}</h5>
+                                            <!-- <h5>{{ 'gradients' | translate }}</h5> -->
                                             <ul class="img-presets-list" bl-pretty-scrollbar>
                                                 <li ng-repeat="gradient in gradients track by $index">
                                                     <div class="preset" ng-click="selectPreset($event)" ng-style="{ 'background-image': gradient }"></div>

@@ -48,35 +48,67 @@ var WorkflowsRouter = Backbone.Router
 			 */
 			workflows : function()
 			{
+				$(".active").removeClass("active");
+				$("#workflowsmenu").addClass("active");
 
-				if (this.workflow_list_view && this.workflow_list_view.collection && this.workflow_list_view.collection.length > 0)
+				// Render static template
+				getTemplate('workflows-static-container', {}, undefined, function(template_ui) {
+					$("#content").html(getTemplate("workflows-static-container"));
+
+					// Add top view
+					var sortKey = _agile_get_prefs("workflow_sort_key");
+					if(sortKey == undefined || sortKey == null){
+						sortKey = "name_dummy";
+						_agile_set_prefs("workflow_sort_key", sortKey);
+					}
+
+					var that = this;
+					var workflowTopModal = new Workflow_Top_Header_Model_Events({
+						template : 'workflows-top-header',
+						isNew : true,
+						model : new Backbone.Model({"sortKey" : sortKey}),
+						postRenderCallback : function(el){
+							// Add collection view
+							console.log("Load collection");
+							App_Workflows.loadworkflows($("#content"));
+						}
+					});
+
+					$("#content").find("#workflows-top-view").html(workflowTopModal.render().el);
+
+				}, $("#content"));
+			},
+
+			loadworkflows : function(el){
+
+				var sortKey = _agile_get_prefs("workflow_sort_key");
+				if (App_Workflows.workflow_list_view && App_Workflows.workflow_list_view.options.global_sort_key == sortKey && App_Workflows.workflow_list_view.collection && App_Workflows.workflow_list_view.collection.length > 0)
 				{
-					//$('body').trigger('agile_collection_loaded');
-					$("#content").html('<div id="workflows-listener-container"></div>').find('#workflows-listener-container').html(this.workflow_list_view.render(true).el);
-					$(".active").removeClass("active");
-					$("#workflowsmenu").addClass("active");
+					$(el).find("#workflows-collection-container").html(App_Workflows.workflow_list_view.render(true).el);
 					return;
 				}
 
-				var sortKey = _agile_get_prefs("workflow_sort_key");
-				if(sortKey == undefined || sortKey == null){
-					sortKey = "name_dummy";
-					_agile_set_prefs("workflow_sort_key", sortKey);
-				}
-				this.workflow_list_view = new Workflow_Collection_Events({ url : '/core/api/workflows', restKey : "workflow", sort_collection : false,
-					templateKey : "workflows", individual_tag_name : 'tr', cursor : true, page_size : 20, global_sort_key : sortKey, postRenderCallback : function(el)
+				App_Workflows.workflow_list_view = new Base_Collection_View({ 
+					url : '/core/api/workflows', 
+					restKey : "workflow", 
+					sort_collection : false,
+					templateKey : "workflows", 
+					individual_tag_name : 'tr', 
+					customLoader : true,
+					customLoaderTemplate : 'agile-app-collection-loader',
+					cursor : true, 
+					page_size : 20, 
+					global_sort_key : sortKey, 
+					postRenderCallback : function(col_el)
 					{
-						head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
-						{
-							$("time.campaign-created-time", el).timeago();
-
-						});
-						updateSortKeyTemplate(sortKey, el);
+						agileTimeAgoWithLngConversion($("time.campaign-created-time", col_el));
+						
+						// updateSortKeyTemplate(sortKey, el);
 						start_tour(undefined, el);
 
 						// If workflows not empty, show triggers
 						if (App_Workflows.workflow_list_view && !(App_Workflows.workflow_list_view.collection.length === 0))
-							show_triggers_of_each_workflow(el);
+							show_triggers_of_each_workflow(col_el);
 						
 						if (App_Workflows.workflow_list_view && !(App_Workflows.workflow_list_view.collection.length === 0))
 						{
@@ -105,14 +137,8 @@ var WorkflowsRouter = Backbone.Router
 
 					} });
 
-				this.workflow_list_view.collection.fetch();
-			
-				$("#content").html('<div id="workflows-listener-container"></div>').find('#workflows-listener-container').html(this.workflow_list_view.el);
-				// initializeWorkflowsListeners();
-				
-				$(".active").removeClass("active");
-				$("#workflowsmenu").addClass("active");
-				
+					App_Workflows.workflow_list_view.collection.fetch();
+					$("#content").find("#workflows-collection-container").html(App_Workflows.workflow_list_view.el);
 			},
 
 			/**
@@ -385,11 +411,8 @@ var WorkflowsRouter = Backbone.Router
 								cursor : true,page_size :20, individual_tag_name : 'tr', sort_collection :false, postRenderCallback : function(el)
 								{
 									initializeTriggersListeners();
-									head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
-									{
-										$("time.log-created-time", el).timeago();
-									});
-
+									agileTimeAgoWithLngConversion($("time.log-created-time", el));
+									
 									$('#log-filter-title').html(log_filter_title);
 									
 								},appendItemCallback : function(el)
@@ -427,7 +450,7 @@ var WorkflowsRouter = Backbone.Router
 					$('#content').html($(template_ui));	
 
 					// Show bar graph for campaign stats
-					showBar('/core/api/campaign-stats/stats/', 'campaign-stats-chart', 'Campaigns Comparison', 'Email Stats', null);
+					showBar('/core/api/campaign-stats/stats/', 'campaign-stats-chart', _agile_get_translated_val('campaigns','campaigns-comparison'), _agile_get_translated_val('campaigns','email-stats'), null);
 
 					$(".active").removeClass("active");
 					$("#workflowsmenu").addClass("active");
@@ -525,8 +548,7 @@ var WorkflowsRouter = Backbone.Router
 
 				$('#content').html(this.triggersCollectionView.el);
 
-				$(".active").removeClass("active");
-				$("#workflowsmenu").addClass("active");
+				make_menu_item_active("triggersmenu");
 			},
 
 			/**
@@ -625,7 +647,7 @@ var WorkflowsRouter = Backbone.Router
 
 								});
 
-								var optionsTemplate = "<option value='{{id}}'{{#if is_disabled}}disabled=disabled>{{name}} (Disabled){{else}}>{{name}}{{/if}}</option>";
+								var optionsTemplate = "<option value='{{id}}'{{#if is_disabled}}disabled=disabled>{{name}} ("+_agile_get_translated_val('campaigns','disabled')+"){{else}}>{{name}}{{/if}}</option>";
 
 								/**
 								* Shows given values when trigger selected
@@ -836,7 +858,7 @@ var WorkflowsRouter = Backbone.Router
 								 */
 								fillSelect('email-tracking-campaign-id', '/core/api/workflows?allow_campaign=' + currentTrigger.toJSON().email_tracking_campaign_id, 'workflow', function fillCampaign()
 								{
-									$('#email-tracking-campaign-id option:first').after('<option value="0">All</option>');
+									$('#email-tracking-campaign-id option:first').after('<option value="0">{{agile_lng_translate "subscriber_type" "all"}}</option>');
 
 									var value = currentTrigger.toJSON();
 									if (value)
@@ -875,7 +897,7 @@ var WorkflowsRouter = Backbone.Router
 							populate_call_trigger_options($('form#addTriggerForm', el), currentTrigger.toJSON());
 						}
 
-						var optionsTemplate = "<option value='{{id}}'{{#if is_disabled}}disabled=disabled>{{name}} (Disabled){{else}}>{{name}}{{/if}}</option>";
+						var optionsTemplate = "<option value='{{id}}'{{#if is_disabled}}disabled=disabled>{{name}} ("+_agile_get_translated_val('campaigns','disabled')+"){{else}}>{{name}}{{/if}}</option>";
 
 						/**
 						 * Fills campaign select drop down with existing

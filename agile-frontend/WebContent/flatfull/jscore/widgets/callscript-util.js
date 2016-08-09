@@ -104,7 +104,7 @@ function initializeCallScriptListeners(){
 	$('#prefs-tabs-content').on('click', '#save_prefs', function(e)
 	{	e.preventDefault();
 
-		if ($(this).text() == "Saving..." || $(this).text() == "Loading...") {
+		if ($(this).text() == "{{agile_lng_translate 'others' 'saving'}}" || $(this).text() == "{{agile_lng_translate 'tickets' 'loading'}}") {
 			console.log("Do not hit me again " + $(this).text());
 			return;
 		}
@@ -135,7 +135,7 @@ function initializeCallScriptListeners(){
 function adjust_form()
 {
 	// Disable add rule btn
-	$("#add_csrule").text("Loading...");
+	$("#add_csrule").text("{{agile_lng_translate 'tickets' 'loading'}}");
 	$("#add_csrule").attr("disabled", true);
 
 	// if widget is already added so display showrules and hide add rule btn
@@ -156,7 +156,7 @@ function adjust_form()
 		$(".no-rule-added").show();
 
 	// Enable add rule btn
-	$("#add_csrule").text('Add Rule');
+	$("#add_csrule").text('{{agile_lng_translate "widgets" "add-rule"}}');
 	$("#add_csrule").attr("disabled", false);
 }
 
@@ -583,7 +583,7 @@ function makeWidgetTabActive()
  * in CallScript widget object
  */
 function saveCallScriptWidgetPrefs() {
-	$("#save_prefs").text("Saving...");
+	$("#save_prefs").text("{{agile_lng_translate 'others' 'saving'}}");
 	$("#save_prefs").attr("disabled", true);
 
 	// Retrieve and store the Sip preferences entered by the user as
@@ -613,8 +613,6 @@ function saveCallScriptWidgetPrefs() {
 function callscript_save_widget_prefs() {
 	
 }
-
-
 
 function build_custom_widget_form(el)
 {

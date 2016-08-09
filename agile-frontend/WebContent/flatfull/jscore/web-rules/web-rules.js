@@ -40,6 +40,7 @@ function chainWebRules(el, data, isNew, actions)
 	$("#noty-message", el).chained($("#action", el), function(select, self){
 		var value = $("select", select).val();					
 		$(self).show();
+		$('#twilio_call_setup').hide();
 		console.log(value);
 	
 		if(value == "MODAL_POPUP" || value == "CORNER_NOTY" || value== "CALL_POPUP")
@@ -49,10 +50,24 @@ function chainWebRules(el, data, isNew, actions)
 
 				if(value=="CALL_POPUP"){
 					loadSavedTemplate("call/callpopup.html");
-					$('#twilio-info',self).show();
+					$.ajax({
+						url: '/core/api/sms-gateway/twilio',
+						type : 'GET',
+						success : function(data) {
+							App_WebReports.isTwilioSMS=data;
+						},
+						error : function(data) {
+							App_WebReports.isTwilioSMS=false;
+						}
+					});
 				}
 				self.find(".web-rule-preview").show();
 			return;
+			} else if(value == "SITE_BAR") {
+				loadSavedTemplate("bar/sitebar.html");
+				$("#tiny_mce_webrules_link", self).show();
+				self.find(".web-rule-preview").show();
+				return;
 			}
 		self.find(".web-rule-preview").hide();
 	});
@@ -90,10 +105,13 @@ var Web_Rules_Event_View = Base_Model_View.extend({
 					var htmlContent = $(template_ui).find('.webrule-actions > div').clone();
 					var action_count=$('#action select').length;
 					for(var i=0;i<action_count;i++){
+						var actionSelected = $($('#action select')[i]).val();
 
-						if($($('#action select')[i]).val()==='CALL_POPUP' || $($('#action select')[i]).val()==='MODAL_POPUP'){
-							$($(htmlContent).find('#action select optgroup option')[0]).remove();
-							$($(htmlContent).find('#action select optgroup option')[1]).remove();
+						if(actionSelected === 'CALL_POPUP' || actionSelected === 'MODAL_POPUP' || actionSelected === 'SITE_BAR'){
+							var listOfOptions = $(htmlContent).find('#action select optgroup option');
+							listOfOptions[0].remove();//MODAL_POPUP
+							listOfOptions[2].remove();//CALL_POPUP
+							listOfOptions[3].remove();//SITE_BAR
 						}
 					}
 					chainWebRules($(htmlContent)[0], undefined, true);
@@ -142,7 +160,7 @@ var Web_Rules_Event_View = Base_Model_View.extend({
 			webrulePreview: function(e){
 				e.preventDefault();
 				var that = $(e.currentTarget);
-				_agile_require_js("https://s3.amazonaws.com/agilecrm/web-rules-static/agile-webrules-min.js", function(){
+				_agile_require_js("https://s3.amazonaws.com/agilecrm/web-rules-static/agile-webrules-min-26-4.js", function(){
 
 					// Serializes webrule action to show preview
 					var action = serializeChainedElement($(that).closest('table'));
@@ -160,7 +178,7 @@ var Web_Rules_Event_View = Base_Model_View.extend({
 				e.preventDefault();
 
 				// If not empty, redirect to tinymce
-				if($('#tinyMCEhtml_email').val() !== "" && $('#action select').val()!='CALL_POPUP')
+				if(typeof $('#tinyMCEhtml_email').val() != "undefined" && $('#tinyMCEhtml_email').val() != "")
 				{
 					if($('.custom_html').length > 1){
 						showAlertModal("webrule_popup_limit", undefined, function(){
@@ -171,7 +189,7 @@ var Web_Rules_Event_View = Base_Model_View.extend({
 					loadTinyMCE("tinyMCEhtml_email");
 					return;
 
-				}else if($('#callwebrule-code').val() !== "" && $('#action select').val()=='CALL_POPUP'){
+				}else if($('#callwebrule-code').val() !== "" && $('#action select').val() == 'CALL_POPUP'){
 
 					if($('.custom_html').length > 1){
 						showAlertModal("webrule_popup_limit", undefined, function() {
@@ -180,6 +198,9 @@ var Web_Rules_Event_View = Base_Model_View.extend({
 						return;
 					}
 					loadTinyMCE("callwebrule-code");
+					return;
+				} else if($('#agile-bar-code').val() !== "" && $('#action select').val()=='SITE_BAR') {
+					loadTinyMCE("agile-bar-code");
 					return;
 				}
 				var strWindowFeatures = "height=650, width=800,menubar=no,location=yes,resizable=yes,scrollbars=yes,status=yes";
@@ -229,25 +250,26 @@ function getMergeFields(type, callback)
 {
 	var options=
 	{
-		"Select Merge Field": "",
-		"First Name": "{{first_name}}",
-		"Last Name": "{{last_name}}",
-		"Email": "{{email}}",
-		"Company":"{{company}}",
-		"Title": "{{title}}",
-		"Website": "{{website}}",
-		"Phone": "{{phone}}",
-		"City": "{{city}}",
-		"State": "{{state}}",
-		"Country": "{{country}}",
-		"Zip": "{{zip}}",
-		"Domain": "{{domain}}",
-		"Address": "{{address}}",
-		"Score": "{{score}}",
-		"Created Time": "{{created_time}}",
-		"Modified Time": "{{modified_time}}",
-		"Owner Name": "{{owner_name}}",
-		"Owner Email": "{{owner_email}}"
+		"{{agile_lng_translate 'contact-view' 'select-merge-fields'}}": "",
+		"{{agile_lng_translate 'contacts-view' 'First Name'}}": "{{first_name}}",
+		"{{agile_lng_translate 'contacts-view' 'Last name'}}": "{{last_name}}",
+		"{{agile_lng_translate 'modals' 'email'}}": "{{email}}",
+		"{{agile_lng_translate 'contacts-view' 'Company'}}": "{{company}}",
+		"{{agile_lng_translate 'other' 'title'}}": "{{title}}",
+		"{{agile_lng_translate 'other' 'website'}}": "{{website}}",
+		"{{agile_lng_translate 'contacts-view' 'Phone'}}": "{{phone}}",
+		"{{agile_lng_translate 'contact-edit' 'city'}}": "{{location.city}}",
+		"{{agile_lng_translate 'contact-edit' 'state'}}":"{{location.state}}",
+		"{{agile_lng_translate 'contacts-view' 'country'}}":"{{location.country}}",
+		"{{agile_lng_translate 'contact-edit' 'zip'}}": "{{zip}}",
+		"{{agile_lng_translate 'prefs-settings' 'domain'}}": "{{domain}}",
+		"{{agile_lng_translate 'other' 'address'}}": "{{location.address}}",
+		"{{agile_lng_translate 'report-add' 'score'}}": "{{score}}",
+		"{{agile_lng_translate 'contacts-view' 'Created time'}}": "{{created_time}}",
+		"{{agile_lng_translate 'contact-view' 'modified-time'}}": "{{modified_time}}",
+		"{{agile_lng_translate 'contact-view' 'owner-name'}}":"{{owner.name}}",
+		"{{agile_lng_translate 'contact-view' 'owner-email'}}":"{{owner.email}}", 
+		"{{agile_lng_translate 'domain-user' 'phone'}}":"{{owner.phone}}"
 	};
 	
 	// Get Custom Fields in template format

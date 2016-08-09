@@ -365,18 +365,90 @@ public class ContactUtil
 	}
 
     }
+    
+    public static Contact searchContactByEmailID(String email)
+    {
+		if (StringUtils.isBlank(email))
+		    return null;
+	
+		Map<String, Object> searchMap = new HashMap<String, Object>();
+		searchMap.put("properties.name", Contact.EMAIL);
+		searchMap.put("type", Type.PERSON);
+		searchMap.put("properties.value", email.toLowerCase());
+		return dao.getByProperty(searchMap);
 
+    }
+
+    public static Contact searchCompanyByEmail(String email)
+    {
+	if (StringUtils.isBlank(email))
+	    return null;
+
+	Query<Contact> q = dao.ofy().query(Contact.class);
+	q.filter("properties.name", Contact.EMAIL);
+	q.filter("type", Type.COMPANY);
+	q.filter("properties.value", email.toLowerCase());
+
+	try
+	{
+	    return dao.get(q.getKey());
+	}
+	catch (Exception e)
+	{
+	    return null;
+	}
+
+    }
+
+    /**
+     * Gets a contact based on its email
+     * 
+     * @param email
+     *            email value to get a contact
+     * @return {@Contact} related to an email
+     */
+    public static Contact searchContactByTypeAndEmail(String email,String type){
+    
+		if (StringUtils.isBlank(email)){
+		    return null;
+		}
+
+		Query<Contact> q = dao.ofy().query(Contact.class);
+		q.filter("properties.name", Contact.EMAIL);
+		q.filter("type", type);
+		q.filter("properties.value", email.toLowerCase());
+
+		try{
+		    return dao.get(q.getKey());
+		}catch (Exception e){
+		    return null;
+		}
+
+    }
+
+    
+    
     public static Contact searchContactByCompanyName(String companyName)
     {
 	if (StringUtils.isBlank(companyName))
 	    return null;
 
 	Map<String, Object> searchMap = new HashMap<String, Object>();
-	searchMap.put("properties.name", "name");
-	searchMap.put("properties.value", companyName);
+	searchMap.put("name", companyName);
 	searchMap.put("type", Type.COMPANY);
 	return dao.getByProperty(searchMap);
 
+    }
+    
+    public static Contact searchContactByPesonName(String personName)
+    {
+    	if (StringUtils.isBlank(personName))
+		    return null;
+	
+		Map<String, Object> searchMap = new HashMap<String, Object>();
+		searchMap.put("first_name", personName);		
+		searchMap.put("type", Type.PERSON);
+		return dao.getByProperty(searchMap);
     }
 
     public static Contact searchContactByPhoneNumber(String phoneNumber)
@@ -1206,8 +1278,6 @@ public class ContactUtil
 		System.out.println(e.getMessage());
 	}
 	
-	
-
 	newContact=oldContact;
 	return 	newContact;
     }

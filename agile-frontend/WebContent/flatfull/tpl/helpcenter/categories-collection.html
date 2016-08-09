@@ -1,45 +1,7 @@
 <script id="helpcenter-categories-collection-template" type="text/html">
-   <div class="wrapper-md">
-      <div class="row">
-         <div class="col-md-9 col-sm-9">
-            {{#unless this.length}}
-                <div class="alert bg-white">
-                   <div class="slate-content  p-md">
-                      <div class="box-left pull-left m-r-md">
-                         <img alt="Clipboard" src="/img/clipboard.png" />
-                      </div>
-                      <div class="box-right pull-left">
-
-                         <h4 class="m-t-none">There are no categories.</h4>
-                         <div class="text">
-                            You can add category by clicking the button below or the one on the right side of the page.
-                         </div>
-                         <a href="#helpcenter/add-category" class="m-t-xs btn btn-default btn-sm"><i class="icon-plus-sign"></i>Add Category</a>
-                      </div>
-                      <div class="clearfix">
-                      </div>
-                   </div>
-                </div>
-            {{/unless}}
-            {{#if this.length}}
-                <div class="row" id="helpcenter-categories-model-list"></div>
-            {{/if}}
-         </div>
-         <div class="col-md-3 col-sm-3" id="learn-workflows" style="display:none;">
-            <h4 class="m-t-none h4 m-b-sm">
-               What is Help Center?
-            </h4>
-            <p>
-               Help Center content yet to prepare!.....
-            </p>
-            <br>
-            {{#if this.length}}
-            <p>
-               <a href="https://www.youtube.com/watch?v=vrxV_52QQTc" target="_blank">
-               <img src="{{getS3ImagePath '../../img/landingpage-info.png'}}" class="img-responsive w-full">
-               </a>
-            </p>
-            <br>
-            {{/if}}
-      
+	<h1 class="m-n font-thin h3 text-black m-b-sm"> {{agile_lng_translate 'admin-settings-tasks' 'categories'}}</h1>
+	<div class="row">
+    	<div class="col-md-8 m-t-lg" id="helpcenter-categories-model-list">
+    	</div>
+	</div>
 </script>

@@ -1,7 +1,7 @@
 
 var paypalOBJ = {};
 var paymentINVCount = 1;
-var showMorePaypalINV = '<div class="widget_tab_footer paypal_inv_show_more" align="center"><a class="c-p text-info" id="paypal_inv_show_more" rel="tooltip" title="Click to see more tickets">Show More</a></div>';
+var showMorePaypalINV = '<div class="widget_tab_footer paypal_inv_show_more" align="center"><a class="c-p text-info" id="paypal_inv_show_more" rel="tooltip" title="'+_agile_get_translated_val('widgets', 'click-to-see-more-tickets')+'">'+_agile_get_translated_val('widgets', 'show-more')+'</a></div>';
 
 
 function loadPaypalInvoices(offSet){
@@ -12,14 +12,16 @@ function loadPaypalInvoices(offSet){
 			if(paypalOBJ.invoices && paypalOBJ.invoices.length > 0){				
 				result.invoices = paypalOBJ.invoices.slice(0, 5);
 			}else{
-				result.content = "No invoices found.";
+				result.content = _agile_get_translated_val('plan-and-upgrade','no-invoices-found') + ".";
 			}
 		}else{
-			result.content = "Please provide email for this contact.";
+			result.content = _agile_get_translated_val('widgets','pl-give-contact-email') + ".";
 		}
 
 		getTemplate('paypal-invoices', result, undefined, function(template_inv){						
 			$('#PayPal').html(template_inv);
+			agileTimeAgoWithLngConversion($( ".time-ago", $('#PayPal')));
+			
 		},null);
 
 		if(paypalOBJ.invoices && paypalOBJ.invoices.length > 5){
@@ -29,13 +31,19 @@ function loadPaypalInvoices(offSet){
 		var result = {};
 		result.invoices = paypalOBJ.invoices.slice(offSet, (offSet+5));
 		$('.paypal_inv_show_more').remove();
-		$('#PayPal').apped(getTemplate('paypal-invoices', result));
-		$('#PayPal').append(showMorePaypalINV);
+		getTemplate('paypal-invoices', result, undefined, function(template_inv){
+			$('#PayPal').apped(template_inv);			
+			$( ".time-ago", $('#PayPal')).timeago();						
+			$('#PayPal').append(showMorePaypalINV);
+		});		
 	}else{
 		var result = {};
 		result.invoices = paypalOBJ.invoices.slice(offSet, paypalOBJ.invoices.length);
 		$('.paypal_inv_show_more').remove();
-		$('#PayPal').append(getTemplate('paypal-invoices', result));
+		getTemplate('paypal-invoices', result, undefined, function(template_inv){
+			$('#PayPal').append(template_inv);
+			$( ".time-ago", $('#PayPal')).timeago();									
+		});
 	}
 
 }
@@ -50,7 +58,7 @@ function loadProfile(contact_id, callback){
 			callback(data);
 	}, 
 	function error(data){
-		$('#PayPal').html('<div class="wrapper-sm">Error Occured while fetching invoices</div>');
+		$('#PayPal').html('<div class="wrapper-sm">'+_agile_get_translated_val('widgets', 'paypal-error')+'</div>');
 	});
 }
 
@@ -98,8 +106,8 @@ function startPayPalWidget(contact_id){
 	Email = agile_crm_get_contact_property('email');
 
 
-	$("#widgets").off("click", "#paypal_inv_show_more");
-	$("#widgets").on("click", "#paypal_inv_show_more", function(e){
+	$("#"+WIDGET_PARENT_ID).off("click", "#paypal_inv_show_more");
+	$("#"+WIDGET_PARENT_ID).on("click", "#paypal_inv_show_more", function(e){
 		e.preventDefault();
 		var offSet = paymentINVCount * 5;
 		loadPaypalInvoices(offSet);

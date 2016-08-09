@@ -105,10 +105,25 @@ angular.module('builder')
 
                         //make sure we don't select resize handles
                         if (node.className.indexOf('ui-resizable-handle') == -1) {
-                            $scope.hover.node = node;
-
+                            var inline_element = ['U', 'S', 'B', 'BIG', 'I', 'SMALL', 'EM', 'KBD', 'STRONG', 'SAMP', 'TIME', 'VAR', 'BR', 'SPAN', 'SUB', 'SUP'];
+                            if (inline_element.includes(node.tagName)) {
+                                var k = 0;
+                                var i = node;
+                                while (k == 0) {
+                                    if (!inline_element.includes(i.tagName)) {
+                                        $scope.hover.node = i;
+                                        k = 1;
+                                    } 
+                                    else
+                                    i = i.parentNode;
+                                }
+                            }
+                             else {
+                               $scope.hover.node = node;
+                            } 
+                           /* $scope.hover.node = node;
+                            console.log($scope.hover.node);*/
                             $scope.hover.element = elements.match($scope.hover.node, 'hover', true);
-                            
                             //only reposition hover box during drag on webkit browsers
                             //as it will cause fairly significant lag on IE and Firefox
                             if ( ! $scope.dragging || $scope.isWebkit) {

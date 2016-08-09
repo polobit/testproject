@@ -3,10 +3,10 @@
     <div class="wrapper-md lter bg-light b-b">
         <div class="row">
             <div class="col-sm-12 col-md-12">
-                <h3 class="pull-left font-thin h3">Reports</h3>
+                <h3 class="pull-left font-thin h3">{{agile_lng_translate 'tickets' 'reports'}}</h3>
                 <div class="pull-right">
-                    <a href="#add-dashlet" data-toggle="tooltip" data-placement="bottom" data-original-title="You can also configure more reports as dashlets on your dashboard" 
-                        class="text-info m-t-sm inline-block">Configure Dashlet Reports</a>
+                    <a href="#add-dashlet" data-toggle="tooltip" data-placement="bottom" data-original-title="{{agile_lng_translate 'tickets' 'configure-more-reports-desc'}}" 
+                        class="text-info m-t-sm inline-block">{{agile_lng_translate 'tickets' 'configure-dashlet-reports'}}</a>
                 </div>
             </div>
         </div>
@@ -16,16 +16,16 @@
             <div class="tab-container">
                 <ul class="nav nav-tabs" id="subTab">
                     <li role="presentation" data-tab="6" id="dealstab">
-                        <a href="#overview" role="tab" data-toggle="tab">Overview</a>
+                        <a href="#overview" role="tab" data-toggle="tab">{{agile_lng_translate 'tickets' 'overview'}}</a>
                     </li>
                     <li role="presentation" data-tab="5" id="callstab">
-                        <a href="#leaderboard"   role="tab" data-toggle="tab" >Leaderboard</a>
+                        <a href="#leaderboard"   role="tab" data-toggle="tab" >{{agile_lng_translate 'tickets' 'leaderboard'}}</a>
                     </li>
                     <li role="presentation" data-tab="4">
-                        <a href="#satisfaction"  role="tab" data-toggle="tab" >Satisfaction</a>
+                        <a href="#satisfaction"  role="tab" data-toggle="tab" >{{agile_lng_translate 'tickets' 'satisfaction'}}</a>
                     </li>
                     <li role="presentation" data-tab="2">
-                        <a href="#insights"  role="tab" data-toggle="tab">Insights</a>
+                        <a href="#insights"  role="tab" data-toggle="tab">{{agile_lng_translate 'tickets' 'insights'}}</a>
                     </li>
                 </ul>
                 <div class="tab-content wrapper-md-panel" style="display:block">
@@ -38,16 +38,16 @@
                                         <div>
                                             <i class="icon-tasks icon-3x"></i>
                                         </div>
-                                        <b>Daily tickets</b>
+                                        <b>{{agile_lng_translate 'tickets' 'daily-tickets'}}</b>
                                     </div>
                                     <br />
                                     <!-- Description -->
                                     <div class="ellipsis-multiline m-b-md" rel="tooltip" title="{{description}}">
-                                        Get periodic email reports with a list of new leads, conversions, or as per your custom criteria.
+                                        {{agile_lng_translate 'tickets' 'daily-tickets-reports-desc'}}
                                     </div>
                                     <!-- Add button -->
                                     <div>
-                                        <a class="btn btn-sm btn-default" href="#ticket-report/daily-tickets">Go</a>
+                                        <a class="btn btn-sm btn-default" href="#ticket-report/daily-tickets">{{agile_lng_translate 'campaigns' 'go'}}</a>
                                     </div>
                                 </div>
                             </div>
@@ -58,16 +58,16 @@
                                         <div>
                                             <i class="icon-clock icon-3x"></i>
                                         </div>
-                                        <b>Hourly tickets</b>
+                                        <b>{{agile_lng_translate 'tickets' 'hourly-tickets'}}</b>
                                     </div>
                                     <br />
                                     <!-- Description -->
                                     <div class="ellipsis-multiline m-b-md" rel="tooltip" title="{{description}}">
-                                        Get periodic email reports with a list of new leads, conversions, or as per your custom criteria.
+                                        {{agile_lng_translate 'tickets' 'hourly-tickets-reports-desc'}}
                                     </div>
                                     <!-- Add button -->
                                     <div>
-                                        <a class="btn btn-sm btn-default" href="#ticket-report/hourly-tickets">Go</a>
+                                        <a class="btn btn-sm btn-default" href="#ticket-report/hourly-tickets">{{agile_lng_translate 'campaigns' 'go'}}</a>
                                     </div>
                                 </div>
                             </div>
@@ -78,16 +78,16 @@
                                         <div>
                                             <i class="fa fa-check-square-o fa-3x"></i>
                                         </div>
-                                        <b>SLA Report</b>
+                                        <b>{{agile_lng_translate 'tickets' 'sla-report'}}</b>
                                     </div>
                                     <br />
                                     <!-- Description -->
                                     <div class="ellipsis-multiline m-b-md" rel="tooltip" title="{{description}}">
-                                        Get periodic email reports with a list of new leads, conversions, or as per your custom criteria.
+                                        {{agile_lng_translate 'tickets' 'sla-report-desc'}}
                                     </div>
                                     <!-- Add button -->
                                     <div>
-                                        <a class="btn btn-sm btn-default" href="#ticket-report/sla-report">Go</a>
+                                        <a class="btn btn-sm btn-default" href="#ticket-report/sla-report">{{agile_lng_translate 'campaigns' 'go'}}</a>
                                     </div>
                                 </div>
                             </div>
@@ -98,16 +98,16 @@
                                         <div>
                                             <i class="fa fa-star fa-3x"></i>
                                         </div>
-                                        <b>Ticket priority</b>
+                                        <b>{{agile_lng_translate 'tickets' 'ticket-priority'}}</b>
                                     </div>
                                     <br />
                                     <!-- Description -->
                                     <div class="ellipsis-multiline m-b-md" rel="tooltip" title="{{description}}">
-                                        Get periodic email reports with a list of new leads, conversions, or as per your custom criteria.
+                                        {{agile_lng_translate 'tickets' 'ticket-priority-desc'}}
                                     </div>
                                     <!-- Add button -->
                                     <div>
-                                        <a class="btn btn-sm btn-default" href="#ticket-report/priority-report">Go</a>
+                                        <a class="btn btn-sm btn-default" href="#ticket-report/priority-report">{{agile_lng_translate 'campaigns' 'go'}}</a>
                                     </div>
                                 </div>
                             </div>
@@ -120,16 +120,16 @@
                                         <div>
                                             <i class="fa fa-th-large fa-3x"></i>
                                         </div>
-                                        <b>Ticket status</b>
+                                        <b>{{agile_lng_translate 'tickets' 'ticket-status'}}</b>
                                     </div>
                                     <br />
                                     <!-- Description -->
                                     <div class="ellipsis-multiline m-b-md" rel="tooltip" title="{{description}}">
-                                        Get periodic email reports with a list of new leads, conversions, or as per your custom criteria.
+                                        {{agile_lng_translate 'tickets' 'ticket-status-desc'}}
                                     </div>
                                     <!-- Add button -->
                                     <div>
-                                        <a class="btn btn-sm btn-default" href="#ticket-report/status-report">Go</a>
+                                        <a class="btn btn-sm btn-default" href="#ticket-report/status-report">{{agile_lng_translate 'campaigns' 'go'}}</a>
                                     </div>
                                 </div>
                             </div>
@@ -140,16 +140,16 @@
                                         <div>
                                             <i class="icon-tasks icon-3x"></i>
                                         </div>
-                                        <b>Weekly tickets</b>
+                                        <b>{{agile_lng_translate 'tickets' 'weekly-tickets'}}</b>
                                     </div>
                                     <br />
                                     <!-- Description -->
                                     <div class="ellipsis-multiline m-b-md" rel="tooltip" title="{{description}}">
-                                        Get periodic email reports with a list of new leads, conversions, or as per your custom criteria.
+                                        {{agile_lng_translate 'tickets' 'weekly-tickets-desc'}}
                                     </div>
                                     <!-- Add button -->
                                     <div>
-                                        <a class="btn btn-sm btn-default" href="#contact-reports">Go</a>
+                                        <a class="btn btn-sm btn-default" href="#contact-reports">{{agile_lng_translate 'campaigns' 'go'}}</a>
                                     </div>
                                 </div>
                             </div>
