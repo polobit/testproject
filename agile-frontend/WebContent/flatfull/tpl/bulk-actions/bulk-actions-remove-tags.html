@@ -20,7 +20,11 @@
 <div class="row">
 <div class="col-sm-offset-2 col-sm-10">
                 <div class="form-actions">          
-					<a href="#contacts" class="btn btn-sm btn-danger">Close</a>
+					 {{#if company_route}}   
+                    <a href="#{{company_route}}" class="btn btn-default btn-sm">Close</a> 
+            {{else}}
+                    <a href="#contacts" class="btn btn-default btn-sm">Close</a> 
+            {{/if}}  
                     <a href="#" type="submit" id="removeTagsToContactsBulk" class="btn btn-sm btn-primary">Remove</a> 
                     <span class="save-status"></span>
                 </div>

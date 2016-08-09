@@ -1455,7 +1455,10 @@ function getAndUpdateCollectionCount(type, el, countFetchURL){
     	$("#contacts-count").html(count_message);
 
     	var countURL = "";
-    	if(type == "contacts")
+
+    	if(type == "contacts-company")
+    		countURL = App_Companies.contacts_Company_List.options.url + "/count";
+    	else if(type == "contacts")
     		countURL = App_Contacts.contactsListView.options.url + "/count";
 
     	else if(type == "workflows")
@@ -1480,7 +1483,9 @@ function getAndUpdateCollectionCount(type, el, countFetchURL){
 						  $("span.badge.bg-primary", el).html(data);
 
 					// Reset collection
-					if(type == "contacts")
+					if(type == "contacts-company")
+    					App_Companies.contacts_Company_List.collection.models[0].set("count", data, {silent: true});
+					else if(type == "contacts")
 						App_Contacts.contactsListView.collection.models[0].set("count", data, {silent: true});
 					else if(type == "workflows"){
 						if(App_Workflows.active_subscribers_collection && App_Workflows.active_subscribers_collection.collection && App_Workflows.active_subscribers_collection.collection.length > 0)

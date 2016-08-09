@@ -18,7 +18,11 @@
 <div class="row">
 <div class="col-sm-offset-3 col-sm-9">
                 <div class="form-actions">          
-					<a href="#contacts" class="btn btn-sm btn-danger">Close</a>
+					{{#if company_route}}   
+                    <a href="#{{company_route}}" class="btn btn-default btn-sm">Close</a> 
+            {{else}}
+                    <a href="#contacts" class="btn btn-default btn-sm">Close</a> 
+            {{/if}} 
                     <a href="#" type="submit" id="addBulkTocampaign" class="btn btn-sm btn-primary">Add</a> 
                     <span class="save-status"></span>
                 </div>

@@ -1971,4 +1971,18 @@ public class ContactsAPI
 		}
 	    return null ; 
     }
+    
+    /* Fetch all contacts related to a company */
+    @Path("/related/{id}/count")
+    @GET
+    public int getContactsOfCompanyCount(@QueryParam("cursor") String cursor,
+	    @QueryParam("page_size") String count, @PathParam("id") String id)
+    {
+    	
+    	Map searchMap = new HashMap();
+    	searchMap.put("type", Contact.Type.PERSON);
+    	searchMap.put("contact_company_key", new Key<Contact>(Contact.class, Long.valueOf(id)));
+
+    	return Contact.dao.getCountByProperty(searchMap);
+    }
 }

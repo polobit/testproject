@@ -977,7 +977,11 @@ function getContactofCompanies(modelData,el,companyId)
 				cursor : true, page_size : 25, slateKey : slateKey, request_method : 'GET', postRenderCallback : function(cel, collection)
 				{	
 					
-					
+					if(App_Companies.contacts_Company_List.collection.models.length > 0
+					 && !App_Companies.contacts_Company_List.collection.models[0].get("count")){
+						// Call to get Count 
+						getAndUpdateCollectionCount("contacts-company", el);						
+					}
 					contactListener();
 
 				} });
