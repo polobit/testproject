@@ -85,8 +85,7 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 	/**
 	 * Phone number of user
 	 */
-	@NotSaved(IfDefault.class)
-	public String phone = null;
+	public String phone = "";
 	
 	/** The Reference tracking object represents referercount and referece key */
 

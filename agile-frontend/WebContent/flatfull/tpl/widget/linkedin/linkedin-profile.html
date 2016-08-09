@@ -11,21 +11,21 @@
 	<div class="clearfix"></div>	
 	<p>{{show_link_in_statement summary}}</p>	
 	{{#if is_connected}}
-		<a href="#message" class="btn btn-sm btn-default pull-left" id="linkedin_message">Send Message</a>
+		<a href="#message" class="btn btn-sm btn-default pull-left" id="linkedin_message">{{agile_lng_translate 'widjets' 'send-message'}}</a>
 	{{else}}
-		<a href="#connect" class="btn btn-sm btn-default pull-left" id="linkedin_connect" name="{{name}}">Connect</a>
+		<a href="#connect" class="btn btn-sm btn-default pull-left" id="linkedin_connect" name="{{name}}">{{agile_lng_translate 'prefs-data-sync' 'connect'}}</a>
 	{{/if}}
 	<div class="pull-right" style="text-align: right;">
 		<b style="color:#0088CC;">{{#if_equals num_connections "500"}}{{num_connections}}+{{else}}{{num_connections}}{{/if_equals}}</b>
-		<div style="font-size: 11px;margin-top: -5px;">Connections</div>
+		<div style="font-size: 11px;margin-top: -5px;">{{agile_lng_translate 'widjets' 'connetions'}}</div>
 	</div>
 </div>
 <div class="" id="linkedin-error-panel" style="display:none;">
 </div>
 <ul class="nav nav-tabs text-base" id="myTab">
-	<li class="active" style="width:32%; margin-left: 2%; text-align: center;" align="center"><a data-toggle="tab" href="#experience" id="linkedin_experience"><h4>Work</h4><small></small></a></li>
-	<li style="width:32%; text-align: center;" align="center"><a data-toggle="tab" href="#updates" id="linkedin_update_tab"><h4>Activity</h4><small></small></a></li>
-	<li style="width:32%;text-align: center;" align="center"><a data-toggle="tab" href="#connections" id="linkedin_shared_connections"><h4>Shared</h4><small></small></a></li>
+	<li class="active" style="width:32%; margin-left: 2%; text-align: center;" align="center"><a data-toggle="tab" href="#experience" id="linkedin_experience"><h4>{{agile_lng_translate 'contact-details' 'work'}}</h4><small></small></a></li>
+	<li style="width:32%; text-align: center;" align="center"><a data-toggle="tab" href="#updates" id="linkedin_update_tab"><h4>{{agile_lng_translate 'deal-view' 'activity'}}</h4><small></small></a></li>
+	<li style="width:32%;text-align: center;" align="center"><a data-toggle="tab" href="#connections" id="linkedin_shared_connections"><h4>{{agile_lng_translate 'other' 'shared'}}</h4><small></small></a></li>
 </ul>
 <div class="tab-content" id="myTabContent">
 	<div id="experience" class="tab-pane fade active in">
@@ -38,7 +38,7 @@
 			<ul class="widget_tab_content linkedin_current_activity text-base" style="display:none">
 				<li >	
 					{{#is_link current_update}}
-	        			<a href="{{url}}" target="_blank" >{{name}}</a> shared a link {{show_link_in_statement current_update}}
+	        			<a href="{{url}}" target="_blank" >{{name}}</a> {{agile_lng_translate 'other' 'share-a-link'}} {{show_link_in_statement current_update}}
 					{{else}}
 						{{current_update}}
 					{{/is_link}}
@@ -47,7 +47,7 @@
 		{{else}}
 			<ul class="widget_tab_content linkedin_current_activity text-base" style="display:none">
 				<li>	
-					No updates available
+					{{agile_lng_translate 'widjets' 'no-updates-avaliable'}}
 				</li>
 			</ul>
 		{{/if}}
@@ -57,10 +57,10 @@
 		<div class="clearfix" id="status-error-panel" style="display:none;">
 		</div>
 		<div class="widget_tab_footer" align="center">
-			<a href="#more" class="linkedin_stream" id="linkedin_stream" rel="tooltip" title="Click to see more updates">Show More</a>
-			<a href="#less" data-toggle="collapse" data-target="#linkedin_social_stream" id="linkedin_less" style="display:none">Show Less..</a>
+			<a href="#more" class="linkedin_stream" id="linkedin_stream" rel="tooltip" title="{{agile_lng_translate 'widjets' 'click-to-see-more-updates'}}">{{agile_lng_translate 'widgets' 'show-more'}}</a>
+			<a href="#less" data-toggle="collapse" data-target="#linkedin_social_stream" id="linkedin_less" style="display:none">{{agile_lng_translate 'widgets' 'show-less'}}</a>
 			<img src="{{getS3ImagePath 'img/ajax-spinner.gif'}}" id="spinner-status" style="display:none;"></img>
-			<a href="#refresh" id="linkedin_refresh_stream" class="icon-refresh pull-right" rel="tooltip" title="Refresh to get current updates" style="display:none"></a>
+			<a href="#refresh" id="linkedin_refresh_stream" class="icon-refresh pull-right" rel="tooltip" title="{{agile_lng_translate 'widjets' 'refresh-to-get-updates'}}" style="display:none"></a>
 		</div>
 	</div>
 	<div id="connections" class="tab-pane fade">
@@ -93,12 +93,12 @@
 												<a target="_blank" href="{{message.current-share.content.shortenedUrl}}">{{message.current-share.content.title}}</a>
 											{{/if}}
 										{{else}}
-											{{message.current-share.author.firstName}} shared a link {{show_link_in_statement message.current-share.content.shortenedUrl}}
+											{{message.current-share.author.firstName}}  {{agile_lng_translate 'other' 'share-a-link'}} {{show_link_in_statement message.current-share.content.shortenedUrl}}
 										{{/if}}
 									</p>
 									<small class="text-muted"><i class="fa fa-clock-o m-r-xs text-muted"></i><time class="time-ago" datetime="{{epochToHumanDate "" created_time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created_time}}</time></small>
 									<ul class="widget_tab_link text-base">										
-										<li><a href="#share" rel="tooltip" title="Share activity in LinkedIn"><i class="linkedin_share icon-share" id="{{id}}"></i></a></li>
+										<li><a href="#share" rel="tooltip" title="{{agile_lng_translate 'widjets' 'share-activity-in-linkedin'}}"><i class="linkedin_share icon-share" id="{{id}}"></i></a></li>
 									</ul>
 								</div>
 							{{else}}
@@ -126,7 +126,7 @@
 			</li>													
 		{{/each}}
 {{else}}
-		<div class="row-fluid" style="padding: 7px 5px 0px 5px;line-height: 140%;color: #999999;">This person does not share his/her updates</div>
+		<div class="row-fluid" style="padding: 7px 5px 0px 5px;line-height: 140%;color: #999999;">{{agile_lng_translate 'widgets' 'this-person-doesnt-share-his-her'}}</div>
 {{/if}}
 
 </script>
@@ -161,7 +161,7 @@
 				{{/if_overflow}}
 			{{/if}}			
 			<div style="margin-top:5px;">
-			{{#if summary}}{{#if_overflow summary "36px"}}<a href="#summary-expand-{{id}}" class="right show-summary" id={{id}} hide="false" style="display:none">More</a>{{/if_overflow}}{{/if}}
+			{{#if summary}}{{#if_overflow summary "36px"}}<a href="#summary-expand-{{id}}" class="right show-summary" id={{id}} hide="false" style="display:none">{{agile_lng_translate 'plan-and-upgrade' 'more'}}</a>{{/if_overflow}}{{/if}}
 			<small>
 				{{#if startDate}}
 					{{#if startDate.month}}{{startDate.month}}, {{/if}}
@@ -200,24 +200,24 @@
 	                <div class="control-group">	                    
 	                    <div class="controls">
 							{{#if_equals headline "Send Message"}}
-								<label class="control-label"><b>Subject: </b><span class="field_req">*</span></label>	                        
-								<input type="text" placeholder="About" name="subject" id="subject" class="required form-control span4" maxlength="150" onkeydown="if (event.keyCode == 13) { event.preventDefault(); }"/>
+								<label class="control-label"><b>{{agile_lng_translate 'emailbuilder' 'subject'}} </b><span class="field_req">*</span></label>	                        
+								<input type="text" placeholder="{{agile_lng_translate 'help' 'about'}}" name="subject" id="subject" class="required form-control span4" maxlength="150" onkeydown="if (event.keyCode == 13) { event.preventDefault(); }"/>
 							{{else}}
 								<select name="subject" class="required span4 form-control" >
-									<option value="Indicated you as friend">Friend</option>
-									<option value="Indicated you as colleague">Colleague</option>
-									<option value="Indicated you as classmate">Classmate</option>
-									<option value="Indicated you as other">Other</option>
+									<option value="Indicated you as friend">{{agile_lng_translate 'widgets' 'friend'}}</option>
+									<option value="Indicated you as colleague">{{agile_lng_translate 'other' 'colleague'}}</option>
+									<option value="Indicated you as classmate">{{agile_lng_translate 'other' 'classmate'}}</option>
+									<option value="Indicated you as other">{{agile_lng_translate 'admin-settings-tasks' 'Other'}}</option>
 								</select>
 							{{/if_equals}}
 	                    </div>
 	                </div>
 	                <div class="control-group">
-	                    <label class="control-label"><b>Message: </b><span class="field_req">*</span></label>
+	                    <label class="control-label"><b>{{agile_lng_translate 'other' 'message'}} </b><span class="field_req">*</span></label>
 	                    <div class="controls span4" style="margin-left:0px;">
 							{{#if_equals headline "Connect"}}
 	                        	<textarea rows="4" class="required span4 linkedin_connect_limit" name="message" id="link-connect" data-provide="limit" data-counter="#counter"  style="max-width:500px;" maxlength="275">{{description}}</textarea>
-								<div class="right"><small style="font-style: italic;">Characters Left <em id="linkedin_counter" style="margin-right:5px;">275</em></small></div> 
+								<div class="right"><small style="font-style: italic;"> {{agile_lng_translate 'widgets' 'characters-left'}} <em id="linkedin_counter" style="margin-right:5px;">275</em></small></div> 
 							{{else}}
 	                        	<textarea rows="4" class="required span4 linkedin_message_limit" name="message" id="link-message" style="max-width:500px;" maxlength="7000"></textarea>
 							{{/if_equals}} 
@@ -227,7 +227,7 @@
 	        </form>
 	    </div>
 	    <div class="modal-footer">
-	        <a href="#" class="btn btn-sm btn-primary" id="send_linked_request">Send</a>
+	        <a href="#" class="btn btn-sm btn-primary" id="send_linked_request">{{agile_lng_translate 'tasks' 'Send'}}</a>
 	    </div>
 	</div>
 </script>
@@ -247,17 +247,16 @@
 			<!-- Commented the code to show the LinkedIn discontinue message due to change in API.
 				{{message}}
 			-->
-			We are forced to discontinue LinkedIn widget because of API restrictions from LinkedIn.
-			You can read more on this from our 
-			<a href="https://www.agilecrm.com/blog/linkedout-agile-crm-forced-to-discontinue-linkedin-intergation/">blog</a>.<br/>
-			<a class="btn btn-sm btn-danger" id="delete-widget" widget-name="Linkedin" style="margin-top:5px;">Delete Widget</a>
+			 {{agile_lng_translate 'widgets' 'we-are-forced-to-discontinue-linkedin-widget'}}
+			<a href="https://www.agilecrm.com/blog/linkedout-agile-crm-forced-to-discontinue-linkedin-intergation/">{{agile_lng_translate 'contact-edit' 'blog'}}</a>.<br/>
+			<a class="btn btn-sm btn-danger" id="delete-widget" widget-name="Linkedin" style="margin-top:5px;">{{agile_lng_translate 'widgets' 'widget-delete'}}</a>
 		</div>
 	{{/check_length}}	
 {{/if}}
 </script>
 
 <script id="linkedin-shared-template" type="text/html">
-<a href="{{url}}" target="_blank"><img  rel='popover' data-original-title='LinkedIn Profile' class='linkedinSharedImage thumbnail' id="{{id}}" src ="{{picture}}"
+<a href="{{url}}" target="_blank"><img  rel='popover' data-original-title="{{agile_lng_translate 'widjets' 'linkedin-profile'}}" class='linkedinSharedImage thumbnail' id="{{id}}" src ="{{picture}}"
    style='width: 35px;height: 35px; display:inline-block; margin-right:2px; margin-bottom:2px; cursor:pointer;'
    data-content="
 		<div class='row-fluid' style='padding-bottom:10px;'>
@@ -284,20 +283,23 @@
 <div id="linkedin-image-save-modal" class="modal fade in" >
 	<div class="modal-header" >
     	<a href="#" data-dismiss="modal" class="close">&times;</a>
-		<h3>Add Profile</h3></div>
+		<h3>{{agile_lng_translate 'widgets' 'add-profile'}}</h3></div>
         <div class="modal-body" >
-		<p>Associate LinkedIn profile to contact?</p>
+		<p>
+		{{agile_lng_translate 'Widgets' 'accociate-linkedin-profile-to-contact'}}
+		</p>
         <p>
 			{{#if image}}
 			<label class="i-checks i-checks-sm">
 				<input type="checkbox" name="add-image" id="save_linkedin_image"/><i></i></label>
-				Add LinkedIn image to contact
+				
+				{{agile_lng_translate 'Widgets' 'add-linked-image-to-contact'}}
 			{{/if}}
 		</p>
 	</div>
 	<div class="modal-footer" >
-		<a href="#" class="btn btn-sm close save-linkedin-profile" resp="no">No</a>
-		<a href="#" class="btn btn-sm btn-primary save-linkedin-profile" resp="yes">Yes</a>
+		<a href="#" class="btn btn-sm close save-linkedin-profile" resp="no">{{agile_lng_translate 'portlets' 'no'}}</a>
+		<a href="#" class="btn btn-sm btn-primary save-linkedin-profile" resp="yes">{{agile_lng_translate 'portlets' 'yes'}}</a>
 	</div>
 </div>
 </script>
@@ -306,13 +308,13 @@
 	<div display:inline;  line-height:12px;word-wrap: break-word;">
 		<form class="widget_content" style="border-bottom:none;" id="linkedin-search_form" name="linkedin-search_form" method="post">
 	    	<fieldset>
-				<p><label>Enter search details</label></p>
+				<p><label>{{agile_lng_translate 'widgets' 'enter-search-details'}}</label></p>
 				<div class="control-group"><div class="controls">
-					<input type="text" id="linkedin_keywords" class="input-medium required widget_input_box form-control" style="width:90%" placeholder="Key Words" value="{{keywords}}" name="keywords" onkeydown="if (event.keyCode == 13) { getModifiedLinkedinMatchingProfiles({{plugin_id}}); return false; }"  maxlength="40"></input>
+					<input type="text" id="linkedin_keywords" class="input-medium required widget_input_box form-control" style="width:90%" placeholder="{{agile_lng_translate 'widgets' 'key-words'}}" value="{{keywords}}" name="keywords" onkeydown="if (event.keyCode == 13) { getModifiedLinkedinMatchingProfiles({{plugin_id}}); return false; }"  maxlength="40"></input>
 				</div></div>
-				<a href="#" id="linkedin_search_btn" class="btn btn-sm btn-default" style="text-decoration:none;">Search</a>
+				<a href="#" id="linkedin_search_btn" class="btn btn-sm btn-default" style="text-decoration:none;">{{agile_lng_translate 'menu' 'search'}}</a>
 				<span><img src="{{getS3ImagePath 'img/ajax-spinner.gif'}}" id="spinner-linked-search" style="display:none;"></img></span>
-				<a href="#" id="linkedin_search_close" class="btn btn-sm btn-default close" style="float:none;margin-left:5px;">Close</a>
+				<a href="#" id="linkedin_search_close" class="btn btn-sm btn-default close" style="float:none;margin-left:5px;">{{agile_lng_translate 'contact-details' 'CLOSE'}}</a>
 			 </fieldset>
 	    </form>
 	</div>
@@ -320,9 +322,9 @@
 
 <script id="linkedin-login-template" type="text/html">
 <div class='widget_content' style='border-bottom:none;line-height: 160%;' >
-	Build professional relationships with contacts and keep a tab on their business interests.
+	{{agile_lng_translate 'widjets' 'build-professional-relationship-with-contacts'}}
 	<p style='margin: 10px 0px 5px 0px;' >
-		<a class='btn btn-sm btn-default' href="{{url}}" style='text-decoration: none;'>Link your LinkedIn</a>
+		<a class='btn btn-sm btn-default' href="{{url}}" style='text-decoration: none;'> {{agile_lng_translate 'widjets' 'link-your-linkedin'}}</a>
 	</p>
 </div>
 </script>
@@ -347,8 +349,8 @@
 	<div>
 		<p style='margin: 10px 0px 5px 0px;' >
 			<div class="text=center">
-			<a class='btn btn-sm btn-danger revoke-widget ml_5' style='text-decoration: none;' widget-name="Linkedin">Revoke Access</a>
-			<a href="#add-widget" class='btn btn-default btn-sm ml_5' style='text-decoration: none;' widget-name="Linkedin">Cancel</a>
+			<a class='btn btn-sm btn-danger revoke-widget ml_5' style='text-decoration: none;' widget-name="Linkedin">{{agile_lng_translate 'widgets' 'revoke-access'}}</a>
+			<a href="#add-widget" class='btn btn-default btn-sm ml_5' style='text-decoration: none;' widget-name="Linkedin">{{agile_lng_translate 'contact-details' 'CLOSE'}}</a>
 			</div>
 		</p>
 	</div>

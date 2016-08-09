@@ -43,7 +43,7 @@ var Track_And_Milestone_Events_Collection_View = Base_Collection_View.extend({
             $(this).attr('disabled', 'disabled');
             var that = $(this);
              // Shows message
-            $save_info = $('<img src="'+updateImageS3Path("img/1-0.gif")+'" height="18px" width="18px" style="opacity:0.5;"></img>&nbsp;&nbsp;<span><small class="text-success" style="font-size:15px; display:inline-block"><i>Deleting track.</i></small></span>');
+            $save_info = $('<img src="'+updateImageS3Path("img/1-0.gif")+'" height="18px" width="18px" style="opacity:0.5;"></img>&nbsp;&nbsp;<span><small class="text-success" style="font-size:15px; display:inline-block"><i>{{agile_lng_translate "deals" "delete-track"}}</i></small></span>');
             $(this).parent('.modal-footer').find('.pipeline-delete-message').append($save_info);
             $save_info.show();
             // Export Deals.
@@ -149,14 +149,7 @@ var Track_And_Milestone_Events_Collection_View = Base_Collection_View.extend({
             
             if(add_milestone)
             {
-
-                var html = "<tr data='{{new_milestone}}' style='display: table-row;'><td><div class='milestone-name-block inline-block v-top text-ellipsis' style='width:80%'>";
-                html += "{{new_milestone}}</div></td><td class='b-r-none'><div class='m-b-n-xs'>";
-                html += "<a class='milestone-won text-l-none-hover c-p text-xs hover-show' style='visibility:hidden;' data-toggle='tooltip' title='Set as Won Milestone'><i class='icon-like'></i></a>";
-                html += "<a class='milestone-lost text-l-none-hover c-p text-xs m-l-sm hover-show' style='visibility:hidden;' data-toggle='tooltip' title='Set as Lost Milestone'><i class='icon-dislike'></i></a>";
-                html += "<a class='milestone-delete c-p m-l-sm text-l-none text-xs hover-show' style='visibility:hidden;' data-toggle='tooltip' title='Delete Milestone'><i class='icon icon-trash'></i>" +
-                "</a><a class='text-l-none-hover c-p text-xs m-l-sm hover-show' style='visibility:hidden;'><i title='Drag' class='icon-move'></i></a></div></td></tr>";
-                milestone_list.append(Handlebars.compile(html)({new_milestone : new_milestone}));
+                milestone_list.append(getTemplate("js-new-milestone", {new_milestone : new_milestone}));
                 //milestone_list.append("<tr data='"+new_milestone+"' style='display: table-row;'><td><div style='display:inline-block;vertical-align:top;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;width:80%'>"+new_milestone+"</div></td><td><div class='m-b-n-xs' style='display:none;'><a class='text-l-none-hover c-p'><i title='Drag' class='icon-move'></i></a><a class='milestone-delete' style='cursor: pointer;margin-left:10px; text-decoration: none;' data-toggle='modal' role='button' href='#'><i title='Delete Milestone' class='task-action icon icon-trash'></i></a></div></td></tr>");
                 //milestone_list.append("<li data='" + new_milestone + "'><div><span>" + new_milestone + "</span><a class='milestone-delete right' href='#'>&times</a></div></li>");
                 fill_ordered_milestone(form.attr('id'));
