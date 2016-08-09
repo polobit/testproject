@@ -950,7 +950,7 @@ cancellation.was-just-checkoin-it-out,Was just checking it out. Don't need it.,S
 cancellation.sorry-to-see-you-go,Sorry to see you go. Please tell us why?,Siento verte ir. Haznos saber por qué?
 portlets.workflows-pad-content-title,You do not have any Campaigns currently.,Usted no tiene ninguna Campaña actualmente.
 icalfeed.login-to-your-google-calendar-and-tell,Log into your Google Calendar and select,Ingrese a su calendario de Google y seleccione
-tickets.create-lables-to-streamline-your-tickets,Create lables to streamline your tickets,Crear etiquetas para agilizar tus tickets
+tickets.create-lables-to-streamline-your-tickets,You can add label by clicking the button below to streamline your tickets.,Usted puede agregar la etiqueta haciendo clic en el botón de abajo para racionalizar sus entradas .
 report-chart-forms.you-do-not-have-any-companies-currently,You do not have any companies currently.,Aún no tienes ninguna compañía.
 validation-msgs.creditcard,Please enter a valid credit card number.,Por favor&#44; introduzca un número de tarjeta de crédito válida.
 campaigns.campaign-has-been-disabled-successfully,Campaign has been disabled successfully.,Campaña se ha desactivado con éxito.
@@ -1401,7 +1401,7 @@ contacts-view.removed-contacts-from-task,Removed Contact(s) from Task,Contacto (
 tickets.status-closed,and status changed to Closed,y el estado cambia a Cerrado
 admin-settings-users.manage-your-tasks-and-events,Manage your tasks and events,Administrar tareas y eventos
 campaigns.what-is-workflow-automation,What is Workflow Automation?,¿Qué es la automatización del flujo de trabajo?
-tickets.ticket-forwarded,Ticket has been forwarded to,Venta de entradas ha sido remitida a
+tickets.ticket-forwarded,Ticket has been forwarded,Venta de entradas ha sido remitida
 other.email-send-and-receive-email,Email Send and Receive Email,Email enviar y recibir email
 description.agile-crm-for-saas-companies,Agile CRM for SaaS Companies,Agile CRM SaaS para empresas
 tickets.label-deleted,has been deleted from ticket,ha sido borrado de entradas
@@ -1574,7 +1574,7 @@ countries.PM,Saint Pierre and Miquelon,San Pedro y Miquelón
 modals.separate-tags-with-commas,Separate tags with commas,Separar las etiquetas con comas
 countries.SX,Sint Maarten (Dutch part),Sint Maarten (parte neerlandesa)
 settings.list-of-all-domain-users,List of All Domain Users,Lista de todos los usuarios del dominio
-tickets.you-do-not-have-any-labels,You dont have any labels,Aún no tienes ninguna etiqueta
+tickets.you-do-not-have-any-labels,You don't have any labels,Aún no tienes ninguna etiqueta
 social.sent-hover-content,Tweets sent by the user.,Tweets enviados por el usuario
 portlets.dashboard-workflows-title,No campaign activity yet,No hay actividad de campaña todavía
 contacts-view.csv-contacts-import-list,CSV Contacts Import List,Importar lista de contactos CSV
@@ -2619,7 +2619,7 @@ contacts-view.campaign-status,Campaign Status,Estado de la campaña
 timezone.available-on,Availability on,disponibilidad bajo
 portlets.recent-contacts,Recent Contacts,Contactos recientes
 portlets.Account Details,Account Details,detalles de la cuenta
-tickets.search-contacts,Search contacts,Buscar contactos
+tickets.search-contacts,Search Contacts,Buscar contactos
 reasons.let-us-help-you,Let us help you,Dejanos ayudarte
 contacts-view.import-from-csv,Import from CSV,Importar desde CSV
 admin-settings-deals.new-loss-reason,New Loss Reason,Nueva razón de pérdida
@@ -3047,6 +3047,7 @@ preferences.notifications,Notifications,Notificaciones
 countries.NC,New Caledonia,Nueva Caledonia
 plan-and-upgrade.one-time-free,One Time FREE,Una vez GRATUITO
 tickets.show-original,Show original,Mostrar original
+tickets.show-original-cap,Show Original,Mostrar original
 social.detail-status,Detail Status,Estatus del detalle
 report-view.funnel-graphs,Funnel Graphs,Gráfica de embudo
 contact-details.outgoing-call,Outgoing Call,Llamada saliente
@@ -3308,7 +3309,7 @@ report-chart-forms.add-company,Add Company,Agregar Compañía
 bulk-delete.bulk-delete,Bulk Delete,Eliminar Bulk
 deal-view.probability,Probability,Probabilidad
 tickets.show-fields,Show fields,Mostrar campos
-tickets.you-dont-have-any-sections,You don&#39,Usted don \'
+tickets.you-dont-have-any-sections,You don't have any sections,Usted no tiene ninguna de las secciones
 web-rules.immediately,Immediately,Inmediatamente
 deal-goals.total,Total Goals,Total de goles
 companies-view.Companies,Companie(s),Compañías)
@@ -3377,7 +3378,7 @@ deal-view.avg-value,Avg. Value:,Valor promedio:
 other.change-card,Change Card,Tarjeta de cambio
 other.attach-file,Attach File,Adjuntar archivo
 modals.add-contact,Add Contact,Agregar contacto
-tickets.you-dont-have-any-articles,You don&#39,Usted don \'
+tickets.you-dont-have-any-articles,You don't have any articles,Usted no tiene ninguno de los artículos
 contacts-view.due-date-to,due date to,fecha de vencimiento para
 tickets.leaderboard,Leaderboard,Leaderboard
 contacts-view.import-help,Import Help,Importar Ayuda

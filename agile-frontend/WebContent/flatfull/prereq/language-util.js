@@ -1,4 +1,8 @@
 function _agile_get_translated_val(module_name, key){
+
+	if(typeof _Agile_Resources_Json === "undefined")
+		  _Agile_Resources_Json = {};
+
 	if(!key)
 		return _Agile_Resources_Json[module_name];
 		
