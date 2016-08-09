@@ -5205,3 +5205,7 @@ widgets.view-cus-order-details,View Customer Orders Details,Ordenes de los Clien
 widgets.add-your-widgets,Add your widgets,Añadir sus widgets
 widgets.custom-widgets,Custom Widgets,Reproductores personalizados
 widgets.stripe-custom-field-select,Stripe uses Stripe ID stored in text custom field to fetch data. Select the custom field to be used.,Raya utiliza identificador de banda almacenado en el campo de texto personalizado para obtener los datos . Seleccionar el campo personalizado que se utilizará .
+twill.add-another-number,Do you want to add another number to existing call?,
+twill.failed-join-another-number,Failed to add another number to the conference call. Please try again.,
+twill.connection-lost-conference,The connection is not active to dial another call.,
+twill.error-start-conference, Problem in starting the conference. Please start again.,
