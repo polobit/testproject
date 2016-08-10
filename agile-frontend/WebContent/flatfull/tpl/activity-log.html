@@ -357,10 +357,14 @@
 	<div>{{agile_lng_translate 'other' 'deals-tags-changed-from'}} {{custom2}} to {{custom1}}. </div>
 {{/if_equals}}
 {{#if_equals "DEAL_TAG_ADD" activity_type}}
-        <div>{{agile_lng_translate 'other' 'deals-tag-added-to-deal-are'}} {{commaSeparateTags custom1}}. </div>
+        <div>{{agile_lng_translate 'other' 'tags-added-to-deal'}} <a href="#deal/{{entity_id}}">{{label}}</a>  </div>
+		<small class="activities_second_line m-t-none text-sm">
+		<i class="icon-tag"></i> '{{commaSeparateTags custom1}}' {{agile_lng_translate 'contacts-view' 'added'}}</small>
 {{/if_equals}}
 {{#if_equals "DEAL_TAG_DELETE" activity_type}}
-        <div>{{agile_lng_translate 'other' 'deals-tags-removed-to-deal-are'}} {{commaSeparateTags custom2}}.</div>
+		<div>{{agile_lng_translate 'other' 'tags-removed-to-deal'}} <a href="#deal/{{entity_id}}">{{label}}</a>  </div>
+		<small class="activities_second_line m-t-none text-sm">
+		<i class="icon-tag"></i> '{{commaSeparateTags custom2}}' {{agile_lng_translate 'contacts-view' 'removed'}}</small>
 {{/if_equals}}
 
 

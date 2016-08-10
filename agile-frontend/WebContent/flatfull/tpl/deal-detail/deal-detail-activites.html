@@ -73,16 +73,16 @@
      {{/if_equals}}
 
 {{#if_equals "DEAL_OWNER_CHANGE" activity_type}}
-        <div>Owner changed from {{custom2}} {{agile_lng_translate 'other' 'to-small'}} {{custom1}}. </div>
+        <div>{{agile_lng_translate 'Deal-detail' 'owner-changed-from'}} {{custom2}} {{agile_lng_translate 'other' 'to-small'}} {{custom1}}. </div>
      {{/if_equals}}
 {{#if_equals "DEAL_TAG_CHANGE" activity_type}}
         <div>{{agile_lng_translate 'Deal-detail' 'tags-changed-from'}} {{custom2}} {{agile_lng_translate 'other' 'to-small'}} {{custom1}}. </div>
      {{/if_equals}}
 {{#if_equals "DEAL_TAG_ADD" activity_type}}
-        <div>{{agile_lng_translate 'Deal-detail' 'tags-added-to-deal-are'}} : {{commaSeparateTags custom1}}. </div>
+        <div>{{agile_lng_translate 'other' 'tags-added-to-deal'}} - {{commaSeparateTags custom1}}. </div>
      {{/if_equals}}
 {{#if_equals "DEAL_TAG_DELETE" activity_type}}
-        <div>{{agile_lng_translate 'Deal-detail' 'tags-removed-to-deal-are'}} : {{commaSeparateTags custom2}}.</div>
+        <div>{{agile_lng_translate 'other' 'tags-removed-to-deal'}} - {{commaSeparateTags custom2}}.</div>
      {{/if_equals}}
 {{#if_equals "DEAL_RELATED_CONTACTS" activity_type}}
          {{#if related_contact_ids}}

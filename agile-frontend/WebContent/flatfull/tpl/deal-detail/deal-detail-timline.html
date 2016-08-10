@@ -6,7 +6,7 @@
     <div class="timestamp">{{time}}</div>
       <div class="text-md text-cap pull-left">  
         <div class="contact-job-title text-base custom-color">
-          <i class="icon-tasks text-muted p-r-xs"></i>Deal {{label}} created
+          <i class="icon-tasks text-muted p-r-xs"></i>{{agile_lng_translate 'menu' 'deal'}} {{label}} {{agile_lng_translate 'contacts-view' 'created'}}
         </div>
       </div>
       <div class="pull-right" style="font-size:11px;margin-top: 3px;"><i class="fa fa-clock-o m-r-xs"></i>
@@ -15,7 +15,7 @@
       <div class="clearfix"></div>
       <div class="date" title='{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}'>{{epochToTaskDate time}}</div>
       <div class="body">
-      <span class="text-xs"><div>Deal created for {{custom1}} ({{currencySymbol}}{{numberWithCommas entityObject.expected_value}}, {{entityObject.probability}}%). </div></span>
+      <span class="text-xs"><div>{{agile_lng_translate 'Deal-detail' 'deal-created-for'}} {{custom1}} ({{currencySymbol}}{{numberWithCommas entityObject.expected_value}}, {{entityObject.probability}}%). </div></span>
     </div>
   </div>
 {{/if_equals}}
@@ -24,7 +24,7 @@
     <div class="timestamp">{{time}}</div>
     <div class="text-md text-cap pull-left">  
       <div class="contact-job-title text-base custom-color">
-        <i class="icon-list-alt text-muted p-r-xs"></i>Deal Edited
+        <i class="icon-list-alt text-muted p-r-xs"></i>{{agile_lng_translate 'activity_type' 'DEAL_EDIT'}}
       </div>
     </div>
     <div class="pull-right" style="font-size:11px;margin-top: 3px;"><i class="fa fa-clock-o m-r-xs"></i>
@@ -33,7 +33,7 @@
     <div class="clearfix"></div>
     <div class="date" title='{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}'>{{epochToTaskDate time}}</div>
     <div class="body">
-      <span class="text-xs"><div>{{displayActivityFieldText custom3}} modified.</div></span>
+      <span class="text-xs"><div>{{displayActivityFieldText custom3}} {{agile_lng_translate 'contacts-view' 'modified'}}</div></span>
     </div>
   </div>
 {{/if_equals}}
@@ -42,7 +42,7 @@
     <div class="timestamp">{{time}}</div>
     <div class="text-md text-cap pull-left">  
       <div class="contact-job-title text-base custom-color">
-        <i class="icon-list-alt text-muted p-r-xs"></i>Deal Won
+        <i class="icon-list-alt text-muted p-r-xs"></i>{{agile_lng_translate 'Deal-detail' 'deal-won'}}
       </div>
     </div>
     <div class="pull-right" style="font-size:11px;margin-top: 3px;"><i class="fa fa-clock-o m-r-xs"></i>
@@ -51,7 +51,7 @@
     <div class="clearfix"></div>
     <div class="date" title='{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}'>{{epochToTaskDate time}}</div>
     <div class="body">
-      <span class="text-xs"><div>Hurray. {{entityObject.owner.name}} has won deal worth {{currencySymbol}}{{numberWithCommas entityObject.expected_value}}.</div></span>
+      <span class="text-xs"><div>{{agile_lng_translate 'Deal-detail' 'hurry'}} {{entityObject.owner.name}} {{agile_lng_translate 'Deal-detail' 'has-won-deal-worth'}} {{currencySymbol}}{{numberWithCommas entityObject.expected_value}}.</div></span>
     </div>
   </div>
 {{/if_equals}}
@@ -60,7 +60,7 @@
     <div class="timestamp">{{time}}</div>
     <div class="text-md text-cap pull-left">  
       <div class="contact-job-title text-base custom-color">
-        <i class="icon-list-alt text-muted p-r-xs"></i>Deal Lost.
+        <i class="icon-list-alt text-muted p-r-xs"></i>{{agile_lng_translate 'activity_type' 'DEAL_LOST'}}
       </div>
     </div>
     <div class="pull-right" style="font-size:11px;margin-top: 3px;"><i class="fa fa-clock-o m-r-xs"></i>
@@ -69,7 +69,7 @@
     <div class="clearfix"></div>
     <div class="date" title='{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}'>{{epochToTaskDate time}}</div>
     <div class="body">
-      <span class="text-xs"><div>Alas. {{entityObject.owner.name}} has lost the deal worth {{currencySymbol}}{{numberWithCommas entityObject.expected_value}}.</div></span>
+      <span class="text-xs"><div>Alas. {{entityObject.owner.name}} {{agile_lng_translate 'Deal-detail' 'has-lost-the-deal-worth'}} {{currencySymbol}}{{numberWithCommas entityObject.expected_value}}.</div></span>
     </div>
   </div>
 {{/if_equals}}
@@ -78,7 +78,7 @@
     <div class="timestamp">{{time}}</div>
     <div class="text-md text-cap pull-left">  
       <div class="contact-job-title text-base custom-color">
-        <i class="icon-list-alt text-muted p-r-xs"></i>Deal Milestone Changed.
+        <i class="icon-list-alt text-muted p-r-xs"></i>{{agile_lng_translate 'activity_type' 'DEAL_MILESTONE_CHANGE'}}
       </div>
     </div>
     <div class="pull-right" style="font-size:11px;margin-top: 3px;"><i class="fa fa-clock-o m-r-xs"></i>
@@ -87,7 +87,7 @@
     <div class="clearfix"></div>
     <div class="date" title='{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}'>{{epochToTaskDate time}}</div>
     <div class="body">
-      <span class="text-xs"><div>Milestone changed from {{custom2}} to {{custom1}}.</div></span>
+      <span class="text-xs"><div>{{agile_lng_translate 'contacts-view' 'milestone-changed-from'}} {{custom2}} {{agile_lng_translate 'other' 'to-small'}} {{custom1}}.</div></span>
     </div>
   </div>
 {{/if_equals}}
@@ -96,7 +96,7 @@
     <div class="timestamp">{{time}}</div>
     <div class="text-md text-cap pull-left">  
       <div class="contact-job-title text-base custom-color">
-        <i class="icon-list-alt text-muted p-r-xs"></i>Deal Archived.
+        <i class="icon-list-alt text-muted p-r-xs"></i>{{agile_lng_translate 'activity_type' 'DEAL_ARCHIVE'}}
       </div>
     </div>
     <div class="pull-right" style="font-size:11px;margin-top: 3px;"><i class="fa fa-clock-o m-r-xs"></i>
@@ -111,7 +111,7 @@
     <div class="timestamp">{{time}}</div>
     <div class="text-md text-cap pull-left">  
       <div class="contact-job-title text-base custom-color">
-        <i class="icon-list-alt text-muted p-r-xs"></i>Deal Restored.
+        <i class="icon-list-alt text-muted p-r-xs"></i>{{agile_lng_translate 'activity_type' 'DEAL_RESTORE'}}
       </div>
     </div>
     <div class="pull-right" style="font-size:11px;margin-top: 3px;"><i class="fa fa-clock-o m-r-xs"></i>
@@ -126,7 +126,7 @@
     <div class="timestamp">{{time}}</div>
     <div class="text-md text-cap pull-left">  
       <div class="contact-job-title text-base custom-color">
-        <i class="icon-tag text-muted p-r-xs"></i>Tags added - {{commaSeparateTags custom1}}
+        <i class="icon-tag text-muted p-r-xs"></i>{{agile_lng_translate 'other' 'tags-added-to-deal'}} - {{commaSeparateTags custom1}}
       </div>
     </div>
     <div class="pull-right" style="font-size:11px;margin-top: 3px;"><i class="fa fa-clock-o m-r-xs"></i>
@@ -141,7 +141,7 @@
     <div class="timestamp">{{time}}</div>
     <div class="text-md text-cap pull-left">  
       <div class="contact-job-title text-base custom-color">
-        <i class="icon-tag text-muted p-r-xs"></i>Tags removed - {{commaSeparateTags custom2}}
+        <i class="icon-tag text-muted p-r-xs"></i>{{agile_lng_translate 'other' 'tags-removed-to-deal'}} - {{commaSeparateTags custom2}}
       </div>
     </div>
     <div class="pull-right" style="font-size:11px;margin-top: 3px;"><i class="fa fa-clock-o m-r-xs"></i>
@@ -174,7 +174,7 @@
     <div class="timestamp">{{time}}</div>
     <div class="text-md text-cap pull-left">  
       <div class="contact-job-title text-base custom-color">
-        <i class="icon-list-alt text-muted p-r-xs"></i>Deal Owner Changed.
+        <i class="icon-list-alt text-muted p-r-xs"></i>{{agile_lng_translate 'activity_type' 'DEAL_OWNER_CHANGE'}}
       </div>
     </div>
     <div class="pull-right" style="font-size:11px;margin-top: 3px;"><i class="fa fa-clock-o m-r-xs"></i>
@@ -183,7 +183,7 @@
     <div class="clearfix"></div>
     <div class="date" title='{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}'>{{epochToTaskDate time}}</div>
     <div class="body">
-      <span class="text-xs"><div>Owner changed from {{custom2}} to {{custom1}}.</div></span>
+      <span class="text-xs"><div>{{agile_lng_translate 'Deal-detail' 'owner-changed-from'}} {{custom2}} {{agile_lng_translate 'other' 'to-small'}} {{custom1}}.</div></span>
     </div>
   </div>
 {{/if_equals}}
@@ -194,7 +194,7 @@
         <div class="timestamp">{{time}}</div>
         <div class="text-md text-cap pull-left">  
           <div class="contact-job-title text-base custom-color">
-            <i class="icon-list-alt text-muted p-r-xs"></i>All Contacts Removed.
+            <i class="icon-list-alt text-muted p-r-xs"></i>{{agile_lng_translate 'Deal-detail' 'all-contacts-removed'}}
           </div>
         </div>
         <div class="pull-right" style="font-size:11px;margin-top: 3px;"><i class="fa fa-clock-o m-r-xs"></i>
@@ -203,7 +203,7 @@
         <div class="clearfix"></div>
         <div class="date" title='{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}'>{{epochToTaskDate time}}</div>
         <div class="body">
-          <span class="text-xs"><div>{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}" data="{{this.contactid}}" class="popover_contact">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} removed from deal. </div></span>
+          <span class="text-xs"><div>{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}" data="{{this.contactid}}" class="popover_contact">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} {{agile_lng_translate 'Deal-detail' 'remove-from-deal'}} </div></span>
         </div>
       </div>
     {{/if_equals}}
@@ -212,7 +212,7 @@
         <div class="timestamp">{{time}}</div>
         <div class="text-md text-cap pull-left">  
           <div class="contact-job-title text-base custom-color">
-            <i class="icon-list-alt text-muted p-r-xs"></i>Contacts Removed.
+            <i class="icon-list-alt text-muted p-r-xs"></i>{{agile_lng_translate 'Deal-detail' 'contacts-removed'}}
           </div>
         </div>
         <div class="pull-right" style="font-size:11px;margin-top: 3px;"><i class="fa fa-clock-o m-r-xs"></i>
@@ -221,7 +221,7 @@
         <div class="clearfix"></div>
         <div class="date" title='{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}'>{{epochToTaskDate time}}</div>
         <div class="body">
-          <span class="text-xs"><div>{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}" data="{{this.contactid}}" class="popover_contact">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} removed from deal. </div></span>
+          <span class="text-xs"><div>{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}" data="{{this.contactid}}" class="popover_contact">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} {{agile_lng_translate 'Deal-detail' 'remove-from-deal'}} </div></span>
         </div>
       </div>
     {{/if_equals}}
@@ -231,7 +231,7 @@
         <div class="timestamp">{{time}}</div>
         <div class="text-md text-cap pull-left">  
           <div class="contact-job-title text-base custom-color">
-            <i class="icon-list-alt text-muted p-r-xs"></i>Contacts Added.
+            <i class="icon-list-alt text-muted p-r-xs"></i>{{agile_lng_translate 'Deal-detail' 'contacts-added'}}
           </div>
         </div>
         <div class="pull-right" style="font-size:11px;margin-top: 3px;"><i class="fa fa-clock-o m-r-xs"></i>
@@ -240,7 +240,7 @@
         <div class="clearfix"></div>
         <div class="date" title='{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}'>{{epochToTaskDate time}}</div>
         <div class="body">
-          <span class="text-xs"><div>{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}" data="{{this.contactid}}" class="popover_contact">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} added to deal. </div> </span>
+          <span class="text-xs"><div>{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}" data="{{this.contactid}}" class="popover_contact">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} {{agile_lng_translate 'Deal-detail' 'added-to-deal'}} </div> </span>
         </div>
       </div>
     {{/if_equals}}
@@ -251,7 +251,7 @@
     <div class="timestamp">{{time}}</div>
     <div class="text-md text-cap pull-left">  
       <div class="contact-job-title text-base custom-color">
-        <i class="icon-list-alt text-muted p-r-xs"></i>Deal Note Added.
+        <i class="icon-list-alt text-muted p-r-xs"></i>{{agile_lng_translate 'Deal-detail' 'note-added'}}
       </div>
     </div>
     <div class="pull-right" style="font-size:11px;margin-top: 3px;"><i class="fa fa-clock-o m-r-xs"></i>

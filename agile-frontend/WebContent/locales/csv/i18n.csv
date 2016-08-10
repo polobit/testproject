@@ -3875,7 +3875,7 @@ contact-details.campaigns,Campaigns,campañas
 portlets.send-rate,Send Rate,Enviar Tasa
 plan-and-upgrade.plan-with,plan with,plan con
 contact-edit.add-email,Add Email,Añadir Correo
-others.add-new,+ Add new,+ Añadir nuevo
+others.add-new,#NAME?,#NAME?
 widgets.ClickDesk,ClickDesk,ClickDesk
 contacts-view.condition,Condition,Condición
 modals.edit-note,Edit Note,Editar nota
@@ -4695,7 +4695,7 @@ deal-view.clear,Clear,Limpiar
 admin-settings-stats.count,Count,Contar
 prefs-settings.alias,Alias,Alias
 calendar.Apply,Apply,Aplicar
-tickets.false,False,0
+tickets.false,FALSE,0
 prefs-online-calendar.hours,Hours,horas
 calendar.Clear,Clear,Limpiar
 plan-and-upgrade.users,users,usuarios
@@ -4807,7 +4807,7 @@ report-add.placeholder-time,time,hora
 prefs-data-sync.shop,Shop,Comprar
 other.data,Data,Datos
 visitors.site,site,sitio
-tickets.true,True,1
+tickets.true,TRUE,1
 modals.save,Save,Guardar
 admin-settings-tasks.call,Call,Llamar
 plan-and-upgrade.back,Back,Detrás
@@ -4823,7 +4823,7 @@ currency.Euro,Euro,Euro
 deal-view.name,Name,Nombre
 tasks.High,High,Alta
 menu.help,Help,Ayuda
-portlets.+add,+Add,+Agregar
+portlets.+add,#NAME?,#NAME?
 portlets.tags,Tags,Etiquetas
 report-add.name,Name,Nombre
 contact-edit.main,Main,Principal
@@ -5205,3 +5205,11 @@ widgets.view-cus-order-details,View Customer Orders Details,Ordenes de los Clien
 widgets.add-your-widgets,Add your widgets,Añadir sus widgets
 widgets.custom-widgets,Custom Widgets,Reproductores personalizados
 widgets.stripe-custom-field-select,Stripe uses Stripe ID stored in text custom field to fetch data. Select the custom field to be used.,Raya utiliza identificador de banda almacenado en el campo de texto personalizado para obtener los datos . Seleccionar el campo personalizado que se utilizará .
+other.tags-added-to-deal,Tags Added to Deal,
+other.tags-removed-to-deal,Tags Removed to Deal,
+Deal-detail.deal-won,Deal Won,
+Deal-detail.owner-changed-from,Owner changed from,
+Deal-detail.all-contacts-removed,All Contacts Removed.,
+Deal-detail.contacts-removed,Contacts Removed.,
+Deal-detail.contacts-added,Contacts Added.,
+Deal-detail.note-added,Deal Note Added.,
