@@ -399,36 +399,24 @@ try{
 	if(CallLogVariables.id){
 		contactDetailsObj = CallLogVariables.id;
 	}else{
-		contactDetailsObj = agile_crm_get_contact();	
+		if(company_util.isCompany()){
+			contactDetailsObj = App_Companies.companyDetailView.model.toJSON();
+		} else {
+			contactDetailsObj = App_Contacts.contactDetailView.model.toJSON();
+		}
 	}
 	
-	if($("#saveActivity",form).val() == "true"){
-		try{
-			var data1 ={};
-			data1.url = "/core/api/notes/save_logPhoneActivity";
-			data1.id = contactDetailsObj.id;
-			data1.callType = logPhone.callType;
-			data1.number = logPhone.phone;
-			data1.status = logPhone.status;
-			data1.duration = logPhone.duration;
-			data1.widget = $("#callWidgetName",form).val();
-			CallLogVariables.callActivitySaved = true;
-			saveLogPhoneActivity(data1);
-		}catch(e){
-			console.log("activities not saved AS CONTACT NOT FOUND");
-		}
-	}else
-		{
+	if(company_util.isCompany()){
+		
+		twilioIOSaveContactedTime(contactDetailsObj.id);
+		
+	}else{
+		
+		
+		if($("#saveActivity",form).val() == "true"){
 			try{
-				var contactDetailsObj;
-				if(CallLogVariables.id){
-					contactDetailsObj = CallLogVariables.id;
-				}else{
-					contactDetailsObj = agile_crm_get_contact();	
-				}
 				var data1 ={};
-				data1.url = "/core/api/notes/update_logPhoneActivity?note_id="+
-				logPhone.id+'&subject='+logPhone.subject;
+				data1.url = "/core/api/notes/save_logPhoneActivity";
 				data1.id = contactDetailsObj.id;
 				data1.callType = logPhone.callType;
 				data1.number = logPhone.phone;
@@ -437,19 +425,45 @@ try{
 				data1.widget = $("#callWidgetName",form).val();
 				CallLogVariables.callActivitySaved = true;
 				saveLogPhoneActivity(data1);
-
-
 			}catch(e){
 				console.log("activities not saved AS CONTACT NOT FOUND");
 			}
-		}
+		}else
+			{
+				try{
+					var contactDetailsObj;
+					if(CallLogVariables.id){
+						contactDetailsObj = CallLogVariables.id;
+					}else{
+						contactDetailsObj = agile_crm_get_contact();	
+					}
+					var data1 ={};
+					data1.url = "/core/api/notes/update_logPhoneActivity?note_id="+
+					logPhone.id+'&subject='+logPhone.subject;
+					data1.id = contactDetailsObj.id;
+					data1.callType = logPhone.callType;
+					data1.number = logPhone.phone;
+					data1.status = logPhone.status;
+					data1.duration = logPhone.duration;
+					data1.widget = $("#callWidgetName",form).val();
+					CallLogVariables.callActivitySaved = true;
+					saveLogPhoneActivity(data1);
+
+
+				}catch(e){
+					console.log("activities not saved AS CONTACT NOT FOUND");
+				}
+			}
+			
 		
-	
-	if(logPhone.status == 'answered' || logPhone.status == 'inquiry' || logPhone.status == 'interest' || logPhone.status == 'no interest' || logPhone.status == 'incorrect referral' || logPhone.status == 'voicemail' || logPhone.status == 'new opportunity' || logPhone.status == 'meeting scheduled'){
-		if(!$("#callWidgetName",form).val()){
-			twilioIOSaveContactedTime(contactDetailsObj.id);
+		if(logPhone.status == 'answered' || logPhone.status == 'inquiry' || logPhone.status == 'interest' || logPhone.status == 'no interest' || logPhone.status == 'incorrect referral' || logPhone.status == 'voicemail' || logPhone.status == 'new opportunity' || logPhone.status == 'meeting scheduled'){
+			if(!$("#callWidgetName",form).val()){
+				twilioIOSaveContactedTime(contactDetailsObj.id);
+			}
 		}
 	}
+	
+
 }catch (e) {}
 
 		modal.modal('hide');
