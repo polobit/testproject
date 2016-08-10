@@ -4,6 +4,8 @@
  */
 package com.agilecrm.contact.sync.service;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,11 +13,16 @@ import java.util.Map;
 import org.apache.commons.lang.StringUtils;
 import org.scribe.utils.Preconditions;
 
+import au.com.bytecode.opencsv.CSVWriter;
+
 import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.sync.ImportStatus;
 import com.agilecrm.contact.sync.Type;
 import com.agilecrm.contact.sync.wrapper.ContactWrapper;
 import com.agilecrm.contact.util.ContactUtil;
+import com.agilecrm.db.GoogleSQL;
+import com.agilecrm.export.gcs.GCSServiceAgile;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.subscription.restrictions.db.BillingRestriction;
@@ -26,7 +33,11 @@ import com.agilecrm.user.access.UserAccessControl;
 import com.agilecrm.user.access.UserAccessControl.AccessControlClasses;
 import com.agilecrm.user.access.exception.AccessDeniedException;
 import com.agilecrm.user.util.DomainUserUtil;
+import com.agilecrm.util.CSVUtil;
+import com.agilecrm.util.FailedContactBean;
 import com.agilecrm.util.email.SendMail;
+import com.google.agile.repackaged.appengine.tools.cloudstorage.GcsFileOptions;
+import com.google.appengine.api.NamespaceManager;
 import com.googlecode.objectify.Key;
 import com.thirdparty.google.ContactPrefs;
 
@@ -114,7 +125,7 @@ public abstract class ContactSyncService implements IContactSyncService
     {
 	if (total_synced_contact >= MAX_SYNC_LIMIT)
 	{
-	    sendNotification(prefs.type.getNotificationEmailSubject());
+	    sendNotification(prefs.type.getNotificationEmailSubject(),null);
 	    return true;
 	}
 
@@ -144,7 +155,7 @@ public abstract class ContactSyncService implements IContactSyncService
      *            the object
      * @return the contact
      */
-    public Contact wrapContactToAgileSchemaAndSave(Object object)
+    public Contact wrapContactToAgileSchemaAndSave(Object object,List<FailedContactBean> mergedContacts)
     {
 	try
 	{
@@ -155,7 +166,7 @@ public abstract class ContactSyncService implements IContactSyncService
 
 	    ++total_synced_contact;
 
-	    contact = saveContact(contact);
+	    contact = saveContact(contact,mergedContacts);
 	    System.out.println("Contact After saving"+contact);
 	   contactWrapper.updateContact(contact);
 	    // Works as save callback to perform actions like creating
@@ -224,7 +235,7 @@ public abstract class ContactSyncService implements IContactSyncService
      * 
      */
 
-    public void sendNotification(String notificationSubject)
+    public void sendNotification(String notificationSubject,List<FailedContactBean> mergedContacts)
     {
 	DomainUser user = DomainUserUtil.getCurrentDomainUser();
 
@@ -232,11 +243,69 @@ public abstract class ContactSyncService implements IContactSyncService
 	restriction.save();
 
 	buildNotificationStatus();
-
+	
 	System.out.println("----Synced contacts------" + syncStatus.get(ImportStatus.TOTAL));
 
 	if (syncStatus.get(ImportStatus.TOTAL) != null && syncStatus.get(ImportStatus.TOTAL).intValue() == 0)
 	    return;
+	
+	if(mergedContacts.size()>0){
+	  GCSServiceAgile service;
+	  CSVWriter failedContactsWriter = null;
+	  String[] headings={"First name","Last name","Email"};
+		GcsFileOptions options = new GcsFileOptions.Builder().mimeType("text/csv").contentEncoding("UTF-8")
+			    .acl("public-read").addUserMetadata("domain", "local").build();
+
+		    service = new GCSServiceAgile("local" + "_failed_contacts_" + GoogleSQL.getFutureDate()
+			    + ".csv", "agile-exports", options);
+	  try
+	{
+		failedContactsWriter = new CSVWriter(service.getOutputWriter());
+	}
+	catch (IOException e)
+	{
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	};
+	
+	writeFailedContactsInCSV(failedContactsWriter, mergedContacts, headings);
+	 byte[] data=null;
+	 String[] strArr = new String[3];
+	 try{
+
+		    service.getOutputchannel().close();
+
+		    System.out.println("closing stream");
+
+		    
+		   data = service.getDataFromFile();
+
+		    System.out.println("byte data");
+
+		    System.out.println(data.length);
+		    
+		    
+	 //sendFailedContactImportFile(domainUser, new String(data, "UTF-8"), failedContacts.size(), status);
+	 strArr[0] = "text/csv";
+	 strArr[1]="FailedContacts.csv";
+	 strArr[2]=new String(data, "UTF-8");
+	 if (user != null)
+		{
+
+		    int emailRequired = syncStatus.get(ImportStatus.EMAIL_REQUIRED);
+		    if (emailRequired == 0)
+			syncStatus.remove(ImportStatus.EMAIL_REQUIRED);
+	    	SendMail.sendMail(user.email, notificationSubject, NOTIFICATION_TEMPLATE, 
+		    		new Object[] { user, syncStatus },SendMail.AGILE_FROM_EMAIL, SendMail.AGILE_FROM_NAME, strArr);
+		}
+	    service.deleteFile();
+	 }
+	    catch(Exception e)
+	    {
+	    	e.printStackTrace();
+	    }
+	}
+	
 
 	if (user != null)
 	{
@@ -244,8 +313,9 @@ public abstract class ContactSyncService implements IContactSyncService
 	    int emailRequired = syncStatus.get(ImportStatus.EMAIL_REQUIRED);
 	    if (emailRequired == 0)
 		syncStatus.remove(ImportStatus.EMAIL_REQUIRED);
-
+	   
 	    SendMail.sendMail(user.email, notificationSubject, NOTIFICATION_TEMPLATE, new Object[] { user, syncStatus });
+    	
 
 	    SendMail.sendMail("yaswanth@agilecrm.com", notificationSubject + " - " + user.domain,
 		    NOTIFICATION_TEMPLATE, new Object[] { user, syncStatus });
@@ -297,11 +367,11 @@ public abstract class ContactSyncService implements IContactSyncService
      * com.agilecrm.contact.sync.service.SyncService#saveContact(java.util.List)
      */
     @Override
-    public void saveContact(List<Contact> contacts)
+    public void saveContact(List<Contact> contacts,List<FailedContactBean> mergedContacts)
     {
 	for (Contact contact : contacts)
 	{
-	    saveContact(contact);
+	    saveContact(contact,mergedContacts);
 	}
 
 	// Sets total number of contacts imported/updated
@@ -375,7 +445,7 @@ public abstract class ContactSyncService implements IContactSyncService
 	return ContactUtil.mergeContactFields(contact);
     }
     
-    private Contact saveContact(Contact contact)
+    private Contact saveContact(Contact contact,List<FailedContactBean> mergedContacts)
     {
 	addTagToContact(contact);
 	Map<String, Object> queryMap = null;
@@ -413,7 +483,7 @@ public abstract class ContactSyncService implements IContactSyncService
 
 		contact.bulkActionTracker = bulk_action_tracker;
 		contact.save();
-		
+		mergedContacts.add(new FailedContactBean(contact , "Contact is merged"));
 		syncStatus.put(ImportStatus.MERGED_CONTACTS, syncStatus.get(ImportStatus.MERGED_CONTACTS) + 1);
 		System.out.println("Total merged contact " + syncStatus.get(ImportStatus.MERGED_CONTACTS));
 	    }
@@ -488,4 +558,97 @@ public abstract class ContactSyncService implements IContactSyncService
 
 	contact.tags.add(StringUtils.capitalize(tag));
     }
+    
+    
+    /**
+     * write contacts in csv file
+     * 
+     * @param contact
+     * @return
+     */
+
+    public void writeFailedContactsInCSV(CSVWriter writer, List<FailedContactBean> failedContacts, String[] headings)
+    {
+	try
+	{
+	    String[] heads = getHeading(headings);
+	    writer.writeNext(heads);
+	    for (FailedContactBean bean : failedContacts)
+	    {
+		writer.writeNext(toArray(toList(bean.getContact().properties), bean.getCauses(), heads.length));
+	    }
+
+	    writer.close();
+
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    System.err.println("Exception occured in writeContactCSV " + e.getMessage());
+	}
+    }
+    
+    /**
+     * helper function which convert contact property into Array of string for
+     * write data in file
+     * 
+     * @param contact
+     * @return
+     */
+    private String[] getHeading(String[] csvHeading)
+    {
+	String[] headings = new String[csvHeading.length + 1];
+	int i = 0;
+	for (String s : csvHeading)
+	{
+	    headings[i++] = s;
+	}
+	headings[i] = "Error";
+	return headings;
+
+    }
+
+    private String[] toArray(List<String> properties, String errorMsg, int index)
+    {
+	try
+	{
+		for(int i=properties.size();i<index-1;i++){
+			properties.add("");
+		}
+	    properties.add(errorMsg);
+	}
+	catch (ArrayIndexOutOfBoundsException e)
+	{
+	    e.printStackTrace();
+	}
+	String[] values = new String[properties.size()];
+
+	int i = 0;
+	for (String s : properties)
+	{
+	    values[i++] = s;
+	}
+
+	return values;
+
+    }
+
+    /**
+     * helper function which convert contact property into Array of string for
+     * write data in file
+     * 
+     * @param contact
+     * @return
+     */
+    private List<String> toList(List<ContactField> contactProperties)
+    {
+	List<String> list = new ArrayList<String>();
+	for (ContactField field : contactProperties)
+	{
+	    list.add(field.value);
+	}
+
+	return list;
+    }
+
 }

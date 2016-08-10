@@ -7,6 +7,7 @@ import java.util.List;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.sync.wrapper.IContactWrapper;
+import com.agilecrm.util.FailedContactBean;
 import com.thirdparty.google.ContactPrefs;
 
 /**
@@ -43,7 +44,7 @@ public interface IContactSyncService
      * @param contact
      *            the contact
      */
-    public void saveContact(List<Contact> contact);
+    public void saveContact(List<Contact> contact,List<FailedContactBean> mergedContacts);
 
     /**
      * Return Contact Wrapper serviceObject dynamically.

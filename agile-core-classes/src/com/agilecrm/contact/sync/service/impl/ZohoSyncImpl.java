@@ -74,7 +74,7 @@ public class ZohoSyncImpl extends OneWaySyncService
 		{
 		    try
 		    {
-			wrapContactToAgileSchemaAndSave(array.get(i));
+			wrapContactToAgileSchemaAndSave(array.get(i),null);
 		    }
 		    catch (Exception e)
 		    {

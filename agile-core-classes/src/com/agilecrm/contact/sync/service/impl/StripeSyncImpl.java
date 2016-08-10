@@ -127,7 +127,7 @@ public class StripeSyncImpl extends OneWaySyncService
 				++total_synced_contact;
 				continue;
 				}
-			Contact contact = wrapContactToAgileSchemaAndSave(customer);
+			Contact contact = wrapContactToAgileSchemaAndSave(customer,null);
 
 			printCustomerCharges(contact, customer);
 		    }
@@ -145,7 +145,7 @@ public class StripeSyncImpl extends OneWaySyncService
 	    moveCurrentCursorToTop();
 	    prefs.othersParams = "second";
 	    prefs.save();
-	    sendNotification(prefs.type.getNotificationEmailSubject());
+	    sendNotification(prefs.type.getNotificationEmailSubject(),null);
 
 	}
 	catch (AuthenticationException | InvalidRequestException | APIConnectionException | CardException

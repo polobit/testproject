@@ -80,14 +80,14 @@ public class FreshbooksSyncImpl extends OneWaySyncService
 				}
 
 				// save main contacts
-				Contact ctx = wrapContactToAgileSchemaAndSave(customers.get(i));
+				Contact ctx = wrapContactToAgileSchemaAndSave(customers.get(i),null);
 				saveInvoices(ctx, customers.get(i));
 				ContactField organization = ctx.getContactFieldByName(Contact.COMPANY);
 
 				// saves sub contacts withing organization
 				for (int j = 0; j < contacts.length(); j++)
 				{
-				    Contact subContact = wrapContactToAgileSchemaAndSave(contacts.get(j));
+				    Contact subContact = wrapContactToAgileSchemaAndSave(contacts.get(j),null);
 				    // check if company already set in contact
 				    subContact.properties.add(organization);
 
@@ -100,7 +100,7 @@ public class FreshbooksSyncImpl extends OneWaySyncService
 			    }
 			    else
 			    {
-				Contact ctx = wrapContactToAgileSchemaAndSave(customers.get(i));
+				Contact ctx = wrapContactToAgileSchemaAndSave(customers.get(i),null);
 				saveInvoices(ctx, customers.get(i));
 			    }
 			}
@@ -110,7 +110,7 @@ public class FreshbooksSyncImpl extends OneWaySyncService
 
 		CURRENT_PAGE = CURRENT_PAGE + 1;
 	    }
-	    sendNotification(prefs.type.getNotificationEmailSubject());
+	    sendNotification(prefs.type.getNotificationEmailSubject(),null);
 	    updateLastSyncedInPrefs();
 
 	}

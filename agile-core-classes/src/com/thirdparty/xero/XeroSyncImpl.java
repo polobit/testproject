@@ -58,7 +58,7 @@ public class XeroSyncImpl extends OneWaySyncService
 			for (int i = 0; i < contacts.length(); i++)
 			{
 
-			    Contact agileContact = wrapContactToAgileSchemaAndSave(contacts.get(i));
+			    Contact agileContact = wrapContactToAgileSchemaAndSave(contacts.get(i),null);
 			    addCustomerInvoiceNote(agileContact, contacts.get(i));
 			}
 
@@ -79,7 +79,7 @@ public class XeroSyncImpl extends OneWaySyncService
 	    currentPage += 1;
 	}
 	// send email notification after import
-	sendNotification(prefs.type.getNotificationEmailSubject());
+	sendNotification(prefs.type.getNotificationEmailSubject(),null);
 	// update last sync time
 	updateLastSyncedInPrefs();
     }

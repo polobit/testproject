@@ -282,7 +282,7 @@ public class SalesforceSync extends OneWaySyncService
 			    if(contactAccountIdssMap.containsKey(accountId))
 			    	entry = entry.put("CompanyName", contactAccountIdssMap.get(accountId).toString());
 			    
-			   wrapContactToAgileSchemaAndSave(entry);
+			   wrapContactToAgileSchemaAndSave(entry,null);
 			   
 			} catch (Exception e) {
 			}

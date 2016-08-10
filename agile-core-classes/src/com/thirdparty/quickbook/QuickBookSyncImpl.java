@@ -54,7 +54,7 @@ public class QuickBookSyncImpl extends OneWaySyncService
 	System.out.println("Total customer fetch in quickbook is " + total_customer);
 	if (total_customer == 0)
 	{
-	    sendNotification(prefs.type.getNotificationEmailSubject());
+	    sendNotification(prefs.type.getNotificationEmailSubject(),null);
 	    updateLastSyncedInPrefs();
 	    return;
 	}
@@ -74,7 +74,7 @@ public class QuickBookSyncImpl extends OneWaySyncService
 			System.out.println("Customers of quickbook"+customers);
 		    for (int i = 0; i < customers.length(); i++)
 		    {
-			Contact contact = wrapContactToAgileSchemaAndSave(customers.get(i));
+			Contact contact = wrapContactToAgileSchemaAndSave(customers.get(i),null);
 			System.out.println("Contact returned"+contact);
 			addCustomerInvoiceNote(contact, customers.get(i));
 			printPaymentDetails(customers.get(i));
@@ -90,7 +90,7 @@ public class QuickBookSyncImpl extends OneWaySyncService
 	    START_POSITION = MAX_RESULT + START_POSITION;
 
 	}
-	sendNotification(prefs.type.getNotificationEmailSubject());
+	sendNotification(prefs.type.getNotificationEmailSubject(),null);
 	updateLastSyncedInPrefs();
 
     }

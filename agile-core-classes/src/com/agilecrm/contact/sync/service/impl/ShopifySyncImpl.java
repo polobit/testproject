@@ -141,7 +141,7 @@ public class ShopifySyncImpl extends OneWaySyncService
 			for (int i = 0; i < customers.size(); i++)
 			{
 
-			    Contact contact = wrapContactToAgileSchemaAndSave(customers.get(i));
+			    Contact contact = wrapContactToAgileSchemaAndSave(customers.get(i),null);
 			    System.out.println("Contact-------" + contact);
 
 			    addCustomerRelatedNote(customers.get(i).get("note"), contact);
@@ -161,7 +161,7 @@ public class ShopifySyncImpl extends OneWaySyncService
 		// isLimitExceeded()
 		// otherwise we call mail notification from here
 		if (!limitExceeded)
-		    sendNotification(prefs.type.getNotificationEmailSubject());
+		    sendNotification(prefs.type.getNotificationEmailSubject(),null);
 		System.out.println("After mail notification, updating last sync prefs");
 		updateLastSyncedInPrefs();
 	    }
