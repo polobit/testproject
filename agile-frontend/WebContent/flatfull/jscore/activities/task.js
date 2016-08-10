@@ -1129,7 +1129,7 @@ function saveBulkTaskProperties(task_ids,priorityJson,form_id){
 						App_Calendar.allTasksListView.collection.get(data[i].id).set(data[i]);
 					}
 					App_Calendar.allTasksListView.render(true);
-					showTaskNotyMessage(""+data.length+" task(s) are modified","information","bottomRight",5000);
+					showTaskNotyMessage(""+data.length+" {{agile_lng_translate 'bulk-task-noty' 'tasks-modified'}}","information","bottomRight",5000);
 				}
 				else{
 					var i;
@@ -1137,7 +1137,7 @@ function saveBulkTaskProperties(task_ids,priorityJson,form_id){
 					for(i=0;i<t;i++){
 						App_Calendar.allTasksListView.collection.remove(task_ids[i]);
 					}
-					showTaskNotyMessage(""+t+" task(s) deleted","information","bottomRight",5000);
+					showTaskNotyMessage(""+t+" {{agile_lng_translate 'bulk-task-noty' 'tasks-deleted'}}","information","bottomRight",5000);
 					if(t){
 						var count = $('#tasks-list-template').find('.tasks-count').attr('data');
 						count = count - t ;
@@ -1179,7 +1179,7 @@ function saveBulkTaskAction(task_ids,priorityJson,form_id){
 			contentType: 'application/json', 
 			data : JSON.stringify(sendData),
 			success : function(data){				
-				showNotyPopUp('information', "Task scheduled", "top", 5000);
+				showNotyPopUp('information', "{{agile_lng_translate 'bulk-task-noty' 'task-scheduled'}}", "top", 5000);
 				console.log(data);
 				App_Calendar.allTasksListView.render(true);
 				SELECT_ALL_TASKS = false ;
