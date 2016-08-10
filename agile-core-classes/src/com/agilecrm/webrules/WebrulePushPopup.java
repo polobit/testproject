@@ -11,7 +11,7 @@ import com.agilecrm.webrules.util.WebRuleUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.datastore.Text;
 
-public class Webrule_PushPopup {
+public class WebrulePushPopup {
 
 	public static void CreateWebrule() {
 
