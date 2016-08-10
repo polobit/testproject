@@ -268,18 +268,18 @@ AGILE_EB_OPTIONS['templateId'] = "";
                             </div>
 
                             <div class="row">
-                                <div class="col-xs-1" style="display:none">
+                                <div class="col-xs-1" <!-- style="display:none" -->>
                                     W:
                                 </div>
-                                <div class="col-xs-3" style="display:none">
+                                <div class="col-xs-3" <!-- style="display:none" -->>
                                     <input type="text" id="image-w" class="form-control" name="director" />
                                 </div>
 
-                                <div class="col-xs-1" style="display:none">
+                                <div class="col-xs-1" <!-- style="display:none" -->>
                                     H:
                                 </div>
 
-                                <div class="col-xs-3" style="display:none">
+                                <div class="col-xs-3" <!-- style="display:none" -->>
                                     <input type="text" id="image-h"class="form-control" name="writer" />
                                 </div>
 
