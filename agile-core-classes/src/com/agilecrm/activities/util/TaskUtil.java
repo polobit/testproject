@@ -1008,7 +1008,13 @@ public class TaskUtil
 				}
 				ActivitySave.createBulkActionActivityForTasks(taskList.size(), "BULK_TASK_CHANGE_OWNER", owner_name, "tasks", "");
 			}
-			else if (formId.equalsIgnoreCase("bulkTaskDuedateForm")) {
+			else if (formId.equalsIgnoreCase("bulkTaskDeleteForm")){
+				int taskcount  = taskIdList.size();
+				org.json.JSONArray taskId = new org.json.JSONArray(taskIdList);
+				Task.dao.deleteBulkByIds(taskId);
+				ActivitySave.createBulkActionActivityForTasks(taskcount, "BULK_TASK_DELETE", "", "tasks", "");
+			}
+			else {
 				newProperty = priority.getString("due");
 				for(String taskId : taskIdList){
 					Task task = getTask(Long.parseLong(taskId));
@@ -1020,12 +1026,7 @@ public class TaskUtil
 				}
 				ActivitySave.createBulkActionActivityForTasks(taskList.size(), "BULK_TASK_CHANGE_DUEDATE", newProperty, "tasks", "");
 			}
-			else {
-				int taskcount  = taskIdList.size();
-				org.json.JSONArray taskId = new org.json.JSONArray(taskIdList);
-				Task.dao.deleteBulkByIds(taskId);
-				ActivitySave.createBulkActionActivityForTasks(taskcount, "BULK_TASK_DELETE", "", "tasks", "");
-			}
+			
 			return taskList ;
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

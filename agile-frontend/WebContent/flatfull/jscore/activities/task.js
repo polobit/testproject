@@ -1137,8 +1137,15 @@ function saveBulkTaskProperties(task_ids,priorityJson,form_id){
 					for(i=0;i<t;i++){
 						App_Calendar.allTasksListView.collection.remove(task_ids[i]);
 					}
-					App_Calendar.allTasksListView.render(true);
 					showTaskNotyMessage(""+t+" task(s) deleted","information","bottomRight",5000);
+					if(t){
+						var count = $('#tasks-list-template').find('.tasks-count').attr('data');
+						count = count - t ;
+						$('#tasks-list-template').find('.tasks-count').removeAttr('data');
+						$('#tasks-list-template').find('.tasks-count').attr('data' , count);
+						$('#tasks-list-template').find('.tasks-count').text('('+count+' ' +_agile_get_translated_val('other','total')+ ')');
+					}
+					App_Calendar.allTasksListView.render(true);
 				}
 			},
 			error: function(jqXHR, textStatus, errorThrown) {

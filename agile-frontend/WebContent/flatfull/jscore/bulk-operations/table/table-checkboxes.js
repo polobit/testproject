@@ -111,8 +111,9 @@ $(function(){
 				toggle_admin_user_bulk_actions_delete(this, true,$(this).parents('table').attr('id'));		
 
 		else
-			toggle_contacts_bulk_actions_dropdown(this, true,$(this).parents('table').attr('id'));
-		
+			if(Current_Route != 'tasks'){
+				toggle_contacts_bulk_actions_dropdown(this, true,$(this).parents('table').attr('id'));
+			}
 	});
 	
    /**
@@ -134,7 +135,9 @@ $(function(){
 		else if(Current_Route == 'users')			
 				toggle_admin_user_bulk_actions_delete(this, true,$(this).parents('table').attr('id'));
 		else
-			toggle_contacts_bulk_actions_dropdown(this,false,$(this).parents('table').attr("id"));
+			if(Current_Route != 'tasks'){
+				toggle_contacts_bulk_actions_dropdown(this,false,$(this).parents('table').attr("id"));
+			}
 	});
 });
 
