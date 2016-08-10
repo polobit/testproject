@@ -67,7 +67,7 @@ public class PushNotificationServlet extends HttpServlet {
 			}
 		    
 		    //sending the push notification mesage to the browser
-		    response.setContentType("application/json");
+		    response.setContentType("application/json; charset=UTF-8");
 		    response.getWriter().print(message);
 		
 		
