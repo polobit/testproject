@@ -758,7 +758,7 @@ $(document).ready(function () {
                 var anchorTag = $('#'+id).parent("a");
                 $(anchorTag).attr('href', addhttp($('#image-link').val())) ;
             } else {
-                $('#'+id).wrap("<a target='_blank' class='imgLink' href='"+$('#image-link').val()+"'>");
+                $('#'+id).wrap("<a target='_blank' class='imgLink' href='http://"+$('#image-link').val()+"'>");
             }
          }
        /*adding new select-box for the image adjustment /alignment
