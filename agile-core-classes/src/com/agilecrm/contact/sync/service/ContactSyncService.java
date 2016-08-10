@@ -254,10 +254,10 @@ public abstract class ContactSyncService implements IContactSyncService
 	  CSVWriter failedContactsWriter = null;
 	  String[] headings={"First name","Last name","Email"};
 		GcsFileOptions options = new GcsFileOptions.Builder().mimeType("text/csv").contentEncoding("UTF-8")
-			    .acl("public-read").addUserMetadata("domain", "local").build();
+			    .acl("public-read").addUserMetadata("domain", NamespaceManager.get()).build();
 
-		    service = new GCSServiceAgile("local" + "_failed_contacts_" + GoogleSQL.getFutureDate()
-			    + ".csv", "agile-exports", options);
+		    service = new GCSServiceAgile(NamespaceManager.get() + "_merged_contacts_" + GoogleSQL.getFutureDate()
+			    + ".csv", "agile-reports", options);
 	  try
 	{
 		failedContactsWriter = new CSVWriter(service.getOutputWriter());
@@ -287,7 +287,7 @@ public abstract class ContactSyncService implements IContactSyncService
 		    
 	 //sendFailedContactImportFile(domainUser, new String(data, "UTF-8"), failedContacts.size(), status);
 	 strArr[0] = "text/csv";
-	 strArr[1]="FailedContacts.csv";
+	 strArr[1]="MergedContacts.csv";
 	 strArr[2]=new String(data, "UTF-8");
 	 if (user != null)
 		{

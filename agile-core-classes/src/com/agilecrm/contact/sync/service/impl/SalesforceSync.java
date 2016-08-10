@@ -31,6 +31,7 @@ import com.agilecrm.contact.util.bulk.BulkActionNotifications;
 import com.agilecrm.contact.util.bulk.BulkActionNotifications.BulkAction;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
+import com.agilecrm.util.FailedContactBean;
 import com.agilecrm.util.JSONUtil;
 import com.agilecrm.util.email.SendMail;
 import com.google.appengine.api.NamespaceManager;
@@ -253,7 +254,7 @@ public class SalesforceSync extends OneWaySyncService
      */
     private void saveContactsInAgile(JSONArray entries)
     {
-    	
+    	List<FailedContactBean> mergedContacts = new ArrayList<FailedContactBean>();
     	System.out.println("contactNotesMap = " + contactNotesMap);
 		for (int i = 0; i < entries.length(); i++)
 		{
@@ -282,7 +283,7 @@ public class SalesforceSync extends OneWaySyncService
 			    if(contactAccountIdssMap.containsKey(accountId))
 			    	entry = entry.put("CompanyName", contactAccountIdssMap.get(accountId).toString());
 			    
-			   wrapContactToAgileSchemaAndSave(entry,null);
+			   wrapContactToAgileSchemaAndSave(entry,mergedContacts);
 			   
 			} catch (Exception e) {
 			}

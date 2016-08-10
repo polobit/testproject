@@ -25,6 +25,7 @@ import com.agilecrm.contact.sync.service.OneWaySyncService;
 import com.agilecrm.contact.sync.wrapper.IContactWrapper;
 import com.agilecrm.contact.util.NoteUtil;
 import com.agilecrm.scribe.util.SignpostUtil;
+import com.agilecrm.util.FailedContactBean;
 
 /**
  * @author jitendra Sync Quickbooks Cusomters as Contact in agile CRM its cursor
@@ -51,10 +52,11 @@ public class QuickBookSyncImpl extends OneWaySyncService
 
 	int noOfPages = 1;
 	int total_customer = getTotalCustomer();
+	List<FailedContactBean> mergedContacts=new ArrayList<FailedContactBean>();
 	System.out.println("Total customer fetch in quickbook is " + total_customer);
 	if (total_customer == 0)
 	{
-	    sendNotification(prefs.type.getNotificationEmailSubject(),null);
+	    sendNotification(prefs.type.getNotificationEmailSubject(),mergedContacts);
 	    updateLastSyncedInPrefs();
 	    return;
 	}
@@ -74,7 +76,7 @@ public class QuickBookSyncImpl extends OneWaySyncService
 			System.out.println("Customers of quickbook"+customers);
 		    for (int i = 0; i < customers.length(); i++)
 		    {
-			Contact contact = wrapContactToAgileSchemaAndSave(customers.get(i),null);
+			Contact contact = wrapContactToAgileSchemaAndSave(customers.get(i),mergedContacts);
 			System.out.println("Contact returned"+contact);
 			addCustomerInvoiceNote(contact, customers.get(i));
 			printPaymentDetails(customers.get(i));
@@ -90,7 +92,7 @@ public class QuickBookSyncImpl extends OneWaySyncService
 	    START_POSITION = MAX_RESULT + START_POSITION;
 
 	}
-	sendNotification(prefs.type.getNotificationEmailSubject(),null);
+	sendNotification(prefs.type.getNotificationEmailSubject(),mergedContacts);
 	updateLastSyncedInPrefs();
 
     }

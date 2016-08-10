@@ -5,6 +5,7 @@
 package com.agilecrm.contact.sync.service.impl;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -20,6 +21,7 @@ import com.agilecrm.contact.sync.wrapper.IContactWrapper;
 import com.agilecrm.contact.sync.wrapper.impl.StripeContactWrapperImpl;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.subscription.stripe.StripeUtil;
+import com.agilecrm.util.FailedContactBean;
 import com.stripe.exception.APIConnectionException;
 import com.stripe.exception.APIException;
 import com.stripe.exception.AuthenticationException;
@@ -101,7 +103,7 @@ public class StripeSyncImpl extends OneWaySyncService
 	    {
 		pages = pages + 1;
 	    }*/
-
+	    List<FailedContactBean> mergedContacts = new ArrayList<FailedContactBean>();
 	    while (true)
 	    {
 		CustomerCollection customerCollections = Customer.all(Options(syncTime),requestOptions());
@@ -127,7 +129,7 @@ public class StripeSyncImpl extends OneWaySyncService
 				++total_synced_contact;
 				continue;
 				}
-			Contact contact = wrapContactToAgileSchemaAndSave(customer,null);
+			Contact contact = wrapContactToAgileSchemaAndSave(customer,mergedContacts);
 
 			printCustomerCharges(contact, customer);
 		    }
@@ -145,7 +147,7 @@ public class StripeSyncImpl extends OneWaySyncService
 	    moveCurrentCursorToTop();
 	    prefs.othersParams = "second";
 	    prefs.save();
-	    sendNotification(prefs.type.getNotificationEmailSubject(),null);
+	    sendNotification(prefs.type.getNotificationEmailSubject(),mergedContacts);
 
 	}
 	catch (AuthenticationException | InvalidRequestException | APIConnectionException | CardException

@@ -6,7 +6,9 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.TimeZone;
 
 import oauth.signpost.OAuthConsumer;
@@ -23,6 +25,7 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Note;
 import com.agilecrm.contact.sync.service.OneWaySyncService;
 import com.agilecrm.contact.sync.wrapper.IContactWrapper;
+import com.agilecrm.util.FailedContactBean;
 
 public class XeroSyncImpl extends OneWaySyncService
 {
@@ -38,7 +41,7 @@ public class XeroSyncImpl extends OneWaySyncService
     @Override
     public void initSync()
     {
-
+    	List<FailedContactBean> mergedContacts = new ArrayList<FailedContactBean>();
 	while (true)
 	{
 
@@ -58,7 +61,7 @@ public class XeroSyncImpl extends OneWaySyncService
 			for (int i = 0; i < contacts.length(); i++)
 			{
 
-			    Contact agileContact = wrapContactToAgileSchemaAndSave(contacts.get(i),null);
+			    Contact agileContact = wrapContactToAgileSchemaAndSave(contacts.get(i),mergedContacts);
 			    addCustomerInvoiceNote(agileContact, contacts.get(i));
 			}
 
@@ -79,7 +82,7 @@ public class XeroSyncImpl extends OneWaySyncService
 	    currentPage += 1;
 	}
 	// send email notification after import
-	sendNotification(prefs.type.getNotificationEmailSubject(),null);
+	sendNotification(prefs.type.getNotificationEmailSubject(),mergedContacts);
 	// update last sync time
 	updateLastSyncedInPrefs();
     }

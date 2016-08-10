@@ -9,6 +9,7 @@ import org.codehaus.jettison.json.JSONArray;
 import com.agilecrm.contact.sync.service.OneWaySyncService;
 import com.agilecrm.contact.sync.wrapper.IContactWrapper;
 import com.agilecrm.contact.sync.wrapper.impl.ZohoContactWrapperImpl;
+import com.agilecrm.util.FailedContactBean;
 import com.thirdparty.zoho.ZohoUtils;
 
 /**
@@ -67,14 +68,15 @@ public class ZohoSyncImpl extends OneWaySyncService
 		    .toIndex(100).build();
 	    System.out.println(url);
 	    JSONArray array = ZohoUtils.getData(url);
-
+	    List<FailedContactBean> mergedContacts = new ArrayList<FailedContactBean>();
+		
 	    if (array != null && array.length() > 0)
 	    {
 		for (int j = 0; j < array.length(); j++)
 		{
 		    try
 		    {
-			wrapContactToAgileSchemaAndSave(array.get(i),null);
+			wrapContactToAgileSchemaAndSave(array.get(i),mergedContacts);
 		    }
 		    catch (Exception e)
 		    {
