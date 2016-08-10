@@ -905,12 +905,6 @@
 </script>
 
 <script id="company-contacts-collection-template" type="text/html">
-
-	<div align="right" class="m-b-md m-t-md m-r-sm">
-		<a href="#" class="contact-add-contact btn btn-default btn-sm btn-addon">
-			<span><i class="icon-plus-sign"></i></span> {{agile_lng_translate 'contacts-view' 'add-contact'}}
-		</a>
-	</div>
 	<div class="contacts-companies-div">
 <div id="bulk-action-btns" class="panel-heading no-shadow p-r-none b-r m-r-sm" style="border-bottom: 0;background-color: rgba(246,248,248,1);position:relative;">
 				      	<span id="contacts-list-view-checkbox">
@@ -971,7 +965,26 @@
 			<div class="dta-contatiner table-responsive b-n contacts-inner-div">
 				<div class="panel panel-default m-b-none b-n no-radius" style="overflow-x:hidden;">
 					{{#unless this.length}}
-		        		<div class="m-l-sm" id="slate"></div>
+		        		  <div class="p-sm">
+			<div>
+            	<div class="slate-content mobile-pad-content">
+                	<div class="box-left pull-left m-r-md">
+                    	<img alt="Clipboard" src="{{getS3ImagePath '/img/clipboard.png'}}">
+                	</div>
+                	<div class="box-right pull-left">
+                    	<h4 class="m-t-none">{{contactShortName}} {{agile_lng_translate 'company-details' 'is-not-associated-with-any-person'}} </h4>
+                    	<div class="text">
+							{{agile_lng_translate 'company-details' 'all-contacts-that-have-this-company-in'}}
+						</div>
+                    	<a href="#" class="contact-add-contact btn btn-default btn-sm left m-t-xs">
+								<i class="icon-plus-sign"></i> {{agile_lng_translate 'contact-details' 'add-contact'}}
+							</a>
+                	</div>
+					<div class="clearfix">
+					</div>
+            	</div>
+        	</div>
+           </div>
 		        	{{/unless}}
 		        	{{#if this.length}}
 	                	<table id="contacts-table" class="table b-n no-radius no-sorting onlySorting panel agile-table noDelete"  url="core/api/contacts/delete?action=DELETE">                
@@ -987,7 +1000,26 @@
 			<div class="btn-group inline-block  text-center" style="display: none;border:1px solid #dee5e7;width:100%;padding:5px; background-color:#edf1f2;" id="bulk-select"></div>
 			<div class="panel panel-default" style="overflow-x:auto; border-left:none;">
 	    		{{#unless this.length}}
-        			<div class="m-l-sm" id="slate"></div>
+        			  <div class="p-sm">
+			<div>
+            	<div class="slate-content mobile-pad-content">
+                	<div class="box-left pull-left m-r-md">
+                    	<img alt="Clipboard" src="{{getS3ImagePath '/img/clipboard.png'}}">
+                	</div>
+                	<div class="box-right pull-left">
+                    	<h4 class="m-t-none">{{contactShortName}} {{agile_lng_translate 'company-details' 'is-not-associated-with-any-person'}} </h4>
+                    	<div class="text">
+							{{agile_lng_translate 'company-details' 'all-contacts-that-have-this-company-in'}}
+						</div>
+                    	<a href="#" class="contact-add-contact btn btn-default btn-sm left m-t-xs">
+								<i class="icon-plus-sign"></i> {{agile_lng_translate 'contact-details' 'add-contact'}}
+							</a>
+                	</div>
+					<div class="clearfix">
+					</div>
+            	</div>
+        	</div>
+           </div>
         		{{/unless}}
         		{{#if this.length}}
               			<table id="contacts-table" class="table contacts-custom noDelete table-striped showCheckboxes no-sorting panel agile-table no-header-checkbox"  url="core/api/contacts/delete?action=DELETE" style="table-layout:auto">                
