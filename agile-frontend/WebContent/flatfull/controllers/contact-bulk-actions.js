@@ -156,9 +156,9 @@ var ContactBulkActionRouter = Backbone.Router.extend({
 			}, "#send-email-listener-container");			
 		}
 
-		var options = {
-		"+ Add new" : "verify_email"
-		};
+		var options = {};
+		options[_agile_get_translated_val('others','add-new')] = "verify_email";
+		
 
 	fetchAndFillSelect(
 			'core/api/account-prefs/verified-emails/all',

@@ -111,8 +111,13 @@ public class QuickBookSyncImpl extends OneWaySyncService
 	    String result = SignpostUtil
 		    .accessURLWithOauth(Globals.QUICKBOOKS_CONSUMER_KEY, Globals.QUICKBOOKS_CONSUMER_SECRET,
 			    prefs.token, prefs.secret, invoicesURL, "GET", "", "quickbooks");
-	    JSONObject response = new JSONObject(result);
-	    JSONObject queryResponse = (JSONObject) response.get("QueryResponse");
+	    JSONObject response=null;
+	    JSONObject queryResponse=null;
+	    if(result!=null)
+	    response = new JSONObject(result);
+	    if(response!=null)
+	    	 queryResponse = (JSONObject) response.get("QueryResponse");
+	    if(queryResponse!=null){
 	    if (queryResponse.has("Payment"))
 	    {
 		JSONArray payments = (JSONArray) queryResponse.get("Payment");
@@ -136,12 +141,14 @@ public class QuickBookSyncImpl extends OneWaySyncService
 			.println("===================================================================================================");
 
 	    }
+	}
 
 	}
 	catch (Exception e)
 	{
 
-	    updateLastSyncedInPrefs();
+	  //  updateLastSyncedInPrefs();
+		System.out.println("Quickbook issue" + e.getMessage());
 	    e.printStackTrace();
 	}
 
@@ -238,7 +245,8 @@ public class QuickBookSyncImpl extends OneWaySyncService
 	catch (JSONException e)
 	{
 	    // update last sync date even if got some exceptions
-	    updateLastSyncedInPrefs();
+	    //updateLastSyncedInPrefs();
+		System.out.println("Inside addCustomerInvoiceNote"+e.getMessage());
 	    e.printStackTrace();
 	}
 
@@ -313,16 +321,21 @@ public class QuickBookSyncImpl extends OneWaySyncService
 	    String result = SignpostUtil
 		    .accessURLWithOauth(Globals.QUICKBOOKS_CONSUMER_KEY, Globals.QUICKBOOKS_CONSUMER_SECRET,
 			    prefs.token, prefs.secret, invoicesURL, "GET", "", "quickbooks");
-	    JSONObject response = new JSONObject(result);
-	    JSONObject invoice = (JSONObject) response.get("QueryResponse");
-	    if (invoice.has("Invoice"))
+	   JSONObject response=null;
+	   JSONObject invoice=null;
+	    if(result!=null)
+	     response = new JSONObject(result);
+	    if(response!=null)
+	     invoice = (JSONObject) response.get("QueryResponse");
+	    if (invoice!=null && invoice.has("Invoice"))
 	    {
 		allInvoices = (JSONArray) invoice.get("Invoice");
 	    }
 	}
 	catch (Exception e)
 	{
-	    updateLastSyncedInPrefs();
+	    //updateLastSyncedInPrefs();
+		System.out.println("Inside getnvoices"+e.getMessage());
 	    e.printStackTrace();
 	}
 
@@ -340,8 +353,12 @@ public class QuickBookSyncImpl extends OneWaySyncService
 	{
 	    String result = SignpostUtil.accessURLWithOauth(Globals.QUICKBOOKS_CONSUMER_KEY,
 		    Globals.QUICKBOOKS_CONSUMER_SECRET, prefs.token, prefs.secret, url, "GET", "", "quickbooks");
-	    JSONObject response = new JSONObject(result);
-	    JSONObject queryResponse = (JSONObject) response.get("QueryResponse");
+	    JSONObject response = null;
+	    JSONObject queryResponse = null;
+	    if(result!=null)
+	    		response = new JSONObject(result);
+	    if(response!=null)
+	    	queryResponse = (JSONObject) response.get("QueryResponse");
 	    if (queryResponse != null)
 	    {
 		JSONArray listCompany = (JSONArray) queryResponse.get("Company");
@@ -366,6 +383,7 @@ public class QuickBookSyncImpl extends OneWaySyncService
 	}
 	catch (Exception e)
 	{
+		System.out.println("Inside updatelastsync"+e.getMessage());
 	    e.printStackTrace();
 	}
 
@@ -393,9 +411,14 @@ public class QuickBookSyncImpl extends OneWaySyncService
 	    String response = SignpostUtil.accessURLWithOauth(Globals.QUICKBOOKS_CONSUMER_KEY,
 		    Globals.QUICKBOOKS_CONSUMER_SECRET, prefs.token, prefs.secret, customerAccessURl, "GET", "",
 		    "quickbooks");
-	    JSONObject object = new JSONObject(response);
-
-	    JSONObject queryResponse = (JSONObject) object.get("QueryResponse");
+	    System.out.println("Response returned:"+response);
+	    JSONObject object=null;
+	    JSONObject queryResponse=null;
+	    if(response!=null)
+	     object = new JSONObject(response);
+	    
+	    if(object!=null)
+	    	queryResponse = (JSONObject) object.get("QueryResponse");
 	    if (queryResponse != null)
 	    {
 		if (queryResponse.has("Customer"))
@@ -442,6 +465,7 @@ public class QuickBookSyncImpl extends OneWaySyncService
 	}
 	catch (Exception e)
 	{
+		 System.out.println("Inside GetCustomers:"+e.getMessage());
 	    e.printStackTrace();
 	}
 	return customers;

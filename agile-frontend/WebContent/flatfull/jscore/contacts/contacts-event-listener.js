@@ -339,10 +339,10 @@ var Contacts_And_Companies_Events_View = Base_Model_View.extend({
     toggleContactFilters : function(e){
     	if (_agile_get_prefs("hide_contacts_lhs_filter")) {
             _agile_delete_prefs("hide_contacts_lhs_filter");
-            $(e.currentTarget).attr("data-original-title", "Hide Filters").tooltip("hide");
+            $(e.currentTarget).attr("data-original-title", "{{agile_lng_translate 'tickets' 'hide-filters'}}").tooltip("hide");
         } else {
             _agile_set_prefs("hide_contacts_lhs_filter", true);
-            $(e.currentTarget).attr("data-original-title", "Show Filters").tooltip("hide");
+            $(e.currentTarget).attr("data-original-title", "{{agile_lng_translate 'tickets' 'show-filters'}}").tooltip("hide");
         }
 
         if ($('#contacts-lhs-filters-toggle', $("#contacts-listener-container")).is(':visible'))
@@ -405,10 +405,10 @@ var Contacts_And_Companies_Events_View = Base_Model_View.extend({
     	if (_agile_get_prefs("companiesFilterStatus") == "display:none") 
         {
             _agile_delete_prefs("companiesFilterStatus");
-            $(e.currentTarget).attr("data-original-title", "Hide Filters").tooltip("hide");
+            $(e.currentTarget).attr("data-original-title", "{{agile_lng_translate 'tickets' 'hide-filters'}}").tooltip("hide");
         } else {
             _agile_set_prefs("companiesFilterStatus", "display:none");
-            $(e.currentTarget).attr("data-original-title", "Show Filters").tooltip("hide");
+            $(e.currentTarget).attr("data-original-title", "{{agile_lng_translate 'tickets' 'show-filters'}}").tooltip("hide");
         }
     }
 

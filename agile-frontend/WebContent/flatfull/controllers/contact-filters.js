@@ -27,11 +27,8 @@ var ContactFiltersRouter = Backbone.Router.extend({
 			individual_tag_name : 'tr', sort_collection : false,
 			postRenderCallback : function(el)
 			{
-							head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
-							{
-											$(".created_time", el).timeago();
-							});
-
+				agileTimeAgoWithLngConversion($(".created_time", el));
+				
 			}});
 
 		this.contactFiltersList.collection.fetch();

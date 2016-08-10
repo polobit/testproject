@@ -11,7 +11,7 @@
 <div class="row">
 <div class="span12">
     <div class="page-header">
-        <h1>List of All Domain Users <small>{{count}}</small></h1>
+        <h1>{{agile_lng_translate 'settings' 'list-of-all-domain-users'}} <small>{{count}}</small></h1>
     </div>
 </div>
 </div>
@@ -24,12 +24,12 @@
                 <img alt="Clipboard" src="{{getS3ImagePath '/img/clipboard.png'}}" />
             </div>
             <div class="box-right pull-left">
-                <h4 class="m-t-none">You don't have Domain Users.</h4>
+                <h4 class="m-t-none">{{agile_lng_translate 'settings' 'you-dont-have-domain-users'}}</h4>
                 <div class="text">
-                    No user is registered yet.
+                   {{agile_lng_translate 'settings' 'no-user-is-registered-yet'}}
                 </div>
                 <br />
-                <a href="#" class="btn btn-default btn-sm blue btn-slate-action m-t-xs"><i class="icon-plus-sign"></i> Domain Users </a>
+                <a href="#" class="btn btn-default btn-sm blue btn-slate-action m-t-xs"><i class="icon-plus-sign"></i> {{agile_lng_translate 'other' 'domain-users'}}</a>
             </div>
 			<div class="clearfix">
 			</div>
@@ -43,10 +43,10 @@
                 <thead>
                     <tr>
                         <th></th>
-						<th>Domain</th>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Account Owner</th>
+						<th>{{agile_lng_translate 'prefs-settings' 'domain'}}</th>
+                        <th>{{agile_lng_translate 'deal-view' 'name'}}</th>
+                        <th>{{agile_lng_translate 'modals' 'email'}}</th>
+                        <th>{{agile_lng_translate 'other' 'account-owner'}}</th>
 						
                     </tr>
                 </thead>

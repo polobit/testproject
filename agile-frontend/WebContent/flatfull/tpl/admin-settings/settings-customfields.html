@@ -34,7 +34,7 @@
 			<div id="CONTACT-custom-fields">
 				<div class="panel-heading" role="tab" id="headingOne">
 					<div class="panel-title">
-						<a class="accordion-toggle" data-toggle="collapse"  aria-controls="collapseOne" aria-expanded="true"  data-parent="#accordion" href="#collapseOne">Contacts</a>
+						<a class="accordion-toggle" data-toggle="collapse"  aria-controls="collapseOne" aria-expanded="true"  data-parent="#accordion" href="#collapseOne">{{agile_lng_translate 'contact-details' 'Contacts'}}</a>
 					</div>
 				</div>
 				<div class="panel-collapse collapse in" role="tabpanel"  aria-labelledby="headingOne" id="collapseOne" >
@@ -47,7 +47,7 @@
 			<div id="COMPANY-custom-fields">
 				<div class="panel-heading" role="tab" id="headingTwo">
 					<div class="panel-title">
-						<a class="collapsed accordion-toggle" aria-controls="collapseTwo" aria-expanded="false"  data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">Companies</a>
+						<a class="collapsed accordion-toggle" aria-controls="collapseTwo" aria-expanded="false"  data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">{{agile_lng_translate 'admin-settings-custom-fields' 'companies'}}</a>
 					</div>
 				</div>
 				<div class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo" id="collapseTwo" >
@@ -61,7 +61,7 @@
 			<div id="DEAL-custom-fields">
 				<div class="panel-heading" role="tab" id="headingThree">
 					<div class="panel-title">
-						<a class="collapsed accordion-toggle" aria-controls="collapseThree" aria-expanded="false"   data-toggle="collapse" data-parent="#accordion" href="#collapseThree">Deals</a>
+						<a class="collapsed accordion-toggle" aria-controls="collapseThree" aria-expanded="false"   data-toggle="collapse" data-parent="#accordion" href="#collapseThree">{{agile_lng_translate 'contact-details' 'deals'}}</a>
 					</div>
 				</div>
 				<div class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree" id="collapseThree" >
@@ -74,7 +74,7 @@
 			<div id="CASE-custom-fields">
 				<div class="panel-heading" role="tab" id="headingFour">
 					<div class="panel-title">
-						<a class="collapsed accordion-toggle" aria-controls="collapseFour"  aria-expanded="false"  data-toggle="collapse" data-parent="#accordion" href="#collapseFour">Cases</a>
+						<a class="collapsed accordion-toggle" aria-controls="collapseFour"  aria-expanded="false"  data-toggle="collapse" data-parent="#accordion" href="#collapseFour">{{agile_lng_translate 'contact-details' 'cases'}}</a>
 					</div>
 				</div>
 				<div class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFour" id="collapseFour" >
@@ -92,23 +92,21 @@
         <div class="data-block">
             <div class="p-l p-r">
 				<h4 class="m-t-none">
-                    Help
+                    {{agile_lng_translate 'menu' 'help'}}
                 </h4>
                 
-				<p>You can define custom fields for Contacts here. They appear in new contact form in Agile and can also be updated using our <a href="#analytics-code">API</a>.</p>
-				Agile provides the following custom field types:<br/>
-				<ul class="p-l-md">
-					<li>Text field - A simple text field</li>
-					<li>Date field - A calendar date input field. (If you are providing this field value through API, provide an epoch number)</li>
-					<li>List field - A drop down list option</li>
-					<li>Check box - A true/false check box option</li>
-					<li>Text area -A large text input field</li>
-					<li>Number - A number value</li>
-					<li>Formula - An arithmetic formula in following format \{{number1}}*\{{number2}} - works with numerical custom fields only. <a class="text-info" href="http://mustache.github.io/" target="_blank">Mustache conditions</a> can be used here.</li>
-					<li>Contact - A contact name</li>
-					<li>Company - A company name</li>
-				</ul>
-				Enabling the 'Searchable' option in the custom field dialog will allow you to search contacts in Agile using the custom field value.
+				<p>{{agile_lng_translate 'admin-settings-custom-fields' 'custom-fields-desc'}}</p>
+				{{agile_lng_translate 'admin-settings-custom-fields' 'agile-provides-the-following-custom-field-types'}}<br/>
+			<ul class="p-l-md">
+				<li>{{agile_lng_translate 'admin-settings-custom-fields' 'text-field-desc'}}</li>
+				<li>{{agile_lng_translate 'admin-settings-custom-fields' 'date-field-desc'}}</li>
+				<li>{{agile_lng_translate 'admin-settings-custom-fields' 'list-field-desc'}}</li>
+				<li>{{agile_lng_translate 'admin-settings-custom-fields' 'check-box-desc'}}</li>
+				<li>{{agile_lng_translate 'admin-settings-custom-fields' 'text-area-desc'}}</li>
+				<li>{{agile_lng_translate 'admin-settings-custom-fields' 'number-desc'}}</li>
+				<li>{{agile_lng_translate 'admin-settings-custom-fields' 'formula-desc'}}</li>
+			</ul>
+				{{agile_lng_translate 'admin-settings-custom-fields' 'custom-fields-help-text'}}
             </div>
         </div>
     </div>
@@ -130,7 +128,7 @@
                     </tbody>
                 </table> 
 		<div class="p-l p-t p-b">
-			<a href="#contactCustomFModal" class="fieldmodal text-info" data-toggle="modal" type="CONTACT" ><i class="icon-plus-sign" /> Add </a>
+			<a href="#contactCustomFModal" class="fieldmodal text-info" data-toggle="modal" type="CONTACT" ><i class="icon-plus-sign" /> {{agile_lng_translate 'admin-settings-custom-fields' 'add'}} </a>
 		</div>
 </script>
 
@@ -147,21 +145,21 @@
     <td class="p-r-none b-r-none" style="width:20%;">
 		<div class="text-right">
 			{{#if_equals searchable true}}
-				<span class="label m-r-xs bg-light dk text-tiny">Searchable</span>
+				<span class="label m-r-xs bg-light dk text-tiny">{{agile_lng_translate 'admin-settings-custom-fields' 'searchable'}}</span>
 			{{/if_equals}}
 			<span class="label m-r-xs bg-light dk text-tiny">{{choose_custom_field_type field_type}}</span>
 		</div>
 	</td>
 	<td align="right" class="b-r-none p-l-none" style="width:10%;">
 		<div class="m-l" style="visibility:hidden;">
-			<a class="text-l-none-hover c-p text-sm"><i title="Drag" class="icon-move"></i></a>
+			<a class="text-l-none-hover c-p text-sm"><i title="{{agile_lng_translate 'admin-settings-custom-fields' 'drag'}}" class="icon-move"></i></a>
 		</div>
 		<div style="visibility:hidden;">
 			<a id="edit-custom-field" class="c-p t-l-none text-sm"  data-toggle="modal" role="button" href="#">
-				<i title="Edit Contact Custom Field" class="task-action icon icon-edit"></i>
+				<i title="{{agile_lng_translate 'admin-settings-custom-fields' 'edit-contact-custom-field'}}" class="task-action icon icon-edit"></i>
 			</a>
 			<a id="delete-custom-field" class="c-p t-l-none text-sm"  data-toggle="modal" role="button" href="#">
-				<i title="Delete Contact Custom Field" class="task-action icon icon-trash"></i>
+				<i title="{{agile_lng_translate 'admin-settings-custom-fields' 'delete-contact-custom-field'}}" class="task-action icon icon-trash"></i>
 			</a>
 		</div>
 	</td>
@@ -176,7 +174,7 @@
                 </table>
         {{/if}}
 		<div class="p-l p-t p-b">
-			<a href="#contactCustomFModal" class="fieldmodal text-info" data-toggle="modal" type="COMPANY"><i class="icon-plus-sign" /> Add </a>
+			<a href="#contactCustomFModal" class="fieldmodal text-info" data-toggle="modal" type="COMPANY"><i class="icon-plus-sign" /> {{agile_lng_translate 'admin-settings-custom-fields' 'add'}} </a>
 		</div>
 </script>
 <script id="admin-settings-customfields-company-model-template" type="text/html">
@@ -192,21 +190,21 @@
     <td class="p-r-none b-r-none" style="width:20%;">
 		<div class="text-right">
 			{{#if_equals searchable true}}
-				<span class="label m-r-xs bg-light dk text-tiny">Searchable</span>
+				<span class="label m-r-xs bg-light dk text-tiny">{{agile_lng_translate 'admin-settings-custom-fields' 'searchable'}}</span>
 			{{/if_equals}}
 			<span class="label m-r-xs bg-light dk text-tiny">{{choose_custom_field_type field_type}}</span>
 		</div>
 	</td>
 	<td align="right" class="b-r-none" style="width:10%;"> 
 		<div  class="m-l-sm" style="visibility:hidden;">
-			<a class="text-l-none-hover c-p text-sm"><i title="Drag" class="icon-move"></i></a>
+			<a class="text-l-none-hover c-p text-sm"><i title="{{agile_lng_translate 'admin-settings-custom-fields' 'drag'}}" class="icon-move"></i></a>
 		</div>
 		<div style="visibility:hidden;">
 			<a id="edit-custom-field" class="c-p t-l-none text-sm"  data-toggle="modal" role="button" href="#">
-				<i title="Edit Company Custom Field" class="task-action icon icon-edit"></i>
+				<i title="{{agile_lng_translate 'admin-settings-custom-fields' 'edit-company-custom-field'}}" class="task-action icon icon-edit"></i>
 			</a>
 			<a id="delete-custom-field" class="c-p t-l-none text-sm" data-toggle="modal" role="button" href="#">
-				<i title="Delete Company Custom Field" class="task-action icon icon-trash"></i>
+				<i title="{{agile_lng_translate 'admin-settings-custom-fields' 'delete-company-custom-field'}}" class="task-action icon icon-trash"></i>
 			</a>
 		</div>
 	</td>
@@ -221,7 +219,7 @@
                 </table>
         {{/if}}
 		<div class="p-l p-t p-b">
-			<a href="#contactCustomFModal" class="fieldmodal text-info" data-toggle="modal" type="DEAL"><i class="icon-plus-sign" /> Add </a>
+			<a href="#contactCustomFModal" class="fieldmodal text-info" data-toggle="modal" type="DEAL"><i class="icon-plus-sign" /> {{agile_lng_translate 'admin-settings-custom-fields' 'add'}} </a>
 		</div>
 </script>
 
@@ -238,21 +236,21 @@
     <td class="p-r-none b-r-none" style="width:20%;">
 		<div class="text-right">
 			{{#if_equals searchable true}}
-				<span class="label m-r-xs bg-light dk text-tiny">Searchable</span>
+				<span class="label m-r-xs bg-light dk text-tiny">{{agile_lng_translate 'admin-settings-custom-fields' 'searchable'}}</span>
 			{{/if_equals}}
 			<span class="label m-r-xs bg-light dk text-tiny">{{choose_custom_field_type field_type}}</span>
 		</div>
 	</td>
 	<td align="right" class="b-r-none" style="width:10%;">
 		<div class="m-l m-b-n-xs" style="visibility:hidden;">
-			<a class="text-l-none-hover c-p text-sm"><i title="Drag" class="icon-move"></i></a>
+			<a class="text-l-none-hover c-p text-sm"><i title="{{agile_lng_translate 'admin-settings-custom-fields' 'drag'}}" class="icon-move"></i></a>
 		</div>
 		<div style="visibility:hidden;">
 			<a id="edit-custom-field" class="c-p t-l-none text-sm"  data-toggle="modal" role="button" href="#">
-				<i title="Edit Deal Custom Field" class="task-action icon icon-edit"></i>
+				<i title="{{agile_lng_translate 'admin-settings-custom-fields' 'edit-deal-custom-field'}}" class="task-action icon icon-edit"></i>
 			</a>
 			<a id="delete-custom-field" class="c-p t-l-none text-sm" data-toggle="modal" role="button" href="#">
-				<i title="Delete Deal Custom Field" class="task-action icon icon-trash"></i>
+				<i title="{{agile_lng_translate 'admin-settings-custom-fields' 'delete-deal-custom-field'}}" class="task-action icon icon-trash"></i>
 			</a>
 		</div>
 	</td>
@@ -267,7 +265,7 @@
                 </table>
         {{/if}}
 		<div class="p-l p-t p-b">
-			<a href="#contactCustomFModal" class="fieldmodal text-info" data-toggle="modal" type="CASE"><i class="icon-plus-sign" /> Add </a>
+			<a href="#contactCustomFModal" class="fieldmodal text-info" data-toggle="modal" type="CASE"><i class="icon-plus-sign" /> {{agile_lng_translate 'admin-settings-custom-fields' 'add'}} </a>
 		</div>
 </script>
 <script id="admin-settings-customfields-case-model-template" type="text/html">
@@ -283,7 +281,7 @@
     <td class="p-r-none b-r-none" style="width:20%;">
 		<div class="text-right">
 			{{#if_equals searchable true}}
-				<span class="label m-r-xs bg-light dk text-tiny">Searchable</span>
+				<span class="label m-r-xs bg-light dk text-tiny">{{agile_lng_translate 'admin-settings-custom-fields' 'searchable'}}</span>
 			{{/if_equals}}
 			<span class="label m-r-xs bg-light dk text-tiny">{{choose_custom_field_type field_type}}</span>
 		</div>
@@ -294,10 +292,10 @@
 		</div>
 		<div style="visibility:hidden;">
 			<a id="edit-custom-field" class="c-p t-l-none text-sm" data-toggle="modal" role="button" href="#">
-				<i title="Edit Case Custom Field" class="task-action icon icon-edit"></i>
+				<i title="{{agile_lng_translate 'admin-settings-custom-fields' 'edit-case-custom-field'}}" class="task-action icon icon-edit"></i>
 			</a>
 			<a id="delete-custom-field" class="c-p t-l-none text-sm" data-toggle="modal" role="button" href="#">
-				<i title="Delete Case Custom Field" class="task-action icon icon-trash"></i>
+				<i title="{{agile_lng_translate 'admin-settings-custom-fields' 'delete-case-custom-field'}}" class="task-action icon icon-trash"></i>
 			</a>
 		</div>
 	</td>

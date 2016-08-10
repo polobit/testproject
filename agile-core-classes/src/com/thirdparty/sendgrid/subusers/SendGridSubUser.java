@@ -174,7 +174,7 @@ public class SendGridSubUser extends SendGridLib
 		public SubUser()
 		{
 			this.ips = new ArrayList<String>();
-			ips.add("167.89.89.43");
+			ips.add("167.89.30.183");
 		}
 		
 		public String getName()

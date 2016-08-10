@@ -696,10 +696,10 @@ show and hide the input for editing the contact name and saving that
     onChangeOwner : function(e){
          e.preventDefault();
          	var contact_owner = $(e.currentTarget).attr("data");
-         	var error_msg = "You do not have permission to change owner.";
+         	var error_msg = _agile_get_translated_val('contact-details','no-perm-to-update');
     			if(contact_owner != CURRENT_DOMAIN_USER.id && !hasScope("EDIT_CONTACT"))
     			{
-    				showModalConfirmation("Owner Change", 
+    				showModalConfirmation(_agile_get_translated_val('contact-details','owner-changed'), 
     						error_msg, 
     						function (){
     							return;
@@ -710,7 +710,7 @@ show and hide the input for editing the contact name and saving that
     						function() {
     							
     						},
-    						"Cancel", "");
+    						_agile_get_translated_val('contact-details', 'cancel'), "");
     				return;
     			}
          fill_owners(undefined, undefined, function(){
@@ -950,7 +950,7 @@ show and hide the input for editing the contact name and saving that
 		
 		$("#map").css('display', 'none');
 		$("#contacts-local-time").hide();
-		$("#map_view_action").html("<i class='icon-plus text-sm c-p' title='Show map' id='enable_map_view'></i>");
+		$("#map_view_action").html("<i class='icon-plus text-sm c-p' title='"+_agile_get_translated_val('contact-details','show-map')+"' id='enable_map_view'></i>");
 		
     },
 
