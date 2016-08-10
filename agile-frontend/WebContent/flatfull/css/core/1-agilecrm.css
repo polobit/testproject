@@ -3856,7 +3856,7 @@ div.list-tasks.panel-body:hover
   margin-right:3px;
 }
 .taskfooter{
-  margin-top:12px;
+ /* margin-top:12px;*/
   margin-bottom:10px;
 }
 
@@ -3872,3 +3872,7 @@ div.list-tasks.panel-body:hover
     display: none;
 } */
 
+.task-circle
+{
+  float:none!important;
+}

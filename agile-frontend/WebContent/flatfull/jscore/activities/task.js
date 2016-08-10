@@ -203,6 +203,10 @@ function initializeTasksListeners(){
 		taskAutoWidth(this);
 		
 	});	*/
+$('#tasks-list-template').on("click", "#taskheading", function(e){
+		e.stopPropagation();
+		taskAutoWidth(this);
+});
 
 	
 	$('#tasks-list-template').on('click','.taskComplete',function(e){
