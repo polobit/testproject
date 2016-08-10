@@ -156,7 +156,7 @@ String _VERSION_ID = VersioningUtil.getVersion();
 List<Dashboard> dashboardsList = DashboardUtil.getAddedDashboardsForCurrentUser();
 
 String _LANGUAGE = currentUserPrefs.language;
-JSONObject localeJSON = LanguageUtil.getLocaleJSON(currentUserPrefs, application);
+JSONObject localeJSON = LanguageUtil.getLocaleJSON(currentUserPrefs, application, "menu");
 %>
 
 

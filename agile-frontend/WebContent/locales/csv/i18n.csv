@@ -5206,3 +5206,18 @@ widgets.add-your-widgets,Add your widgets,Añadir sus widgets
 widgets.custom-widgets,Custom Widgets,Reproductores personalizados
 widgets.stripe-custom-field-select,Stripe uses Stripe ID stored in text custom field to fetch data. Select the custom field to be used.,Raya utiliza identificador de banda almacenado en el campo de texto personalizado para obtener los datos . Seleccionar el campo personalizado que se utilizará .
 others.chat-with-us,Chat With Us,Habla con nosotros
+prefs-online-calendar.welcome-message-bulk,Welcome to our scheduling page. Please follow the instructions to book an appointment.,Bienvenido a nuestra página de planificación . Por favor&#44; siga las instrucciones para reservar una cita .
+prefs-online-calendar.select-a-person,Select a Person,Seleccionar una persona
+prefs-online-calendar.welcome-message-single,Welcome to my scheduling page. Please follow the instructions to book an appointment.,Bienvenidos a mi programación page. Por favor&#44; siga las instrucciones para reservar una cita .
+prefs-online-calendar.holiday-today,Today is holiday,Hoy es día festivo
+prefs-online-calendar.choose-time-slot,Choose a Time Slot,Elija un intervalo de tiempo
+prefs-online-calendar.select-date-time,Select Date and Time,Seleccione Fecha y hora
+prefs-online-calendar.on-availability,Availability on,Disponibilidad bajo
+prefs-online-calendar.sendconfirmation,Send me a confirmation email,Envíame un correo electrónico de confirmación
+prefs-online-calendar.user-phone-details,Notes (Phone number/Skype details),Notas (número de teléfono / datos de Skype )
+prefs-online-calendar.email-format,Your email address must be in the format of name@domain.com,Su dirección de correo electrónico debe estar en el formato de name@domain.com
+prefs-online-calendar.name-validation,Please specify your name,Por favor&#44; indique su nombre
+prefs-online-calendar.email-validation,We need your email address to contact you,Necesitamos su dirección de correo electrónico para comunicarse con usted
+prefs-online-calendar.no-working-hrs,No working hours,No hay horas de trabajo
+common-words.for,for,para
+common-words.mins-on,mins on,en minutos
