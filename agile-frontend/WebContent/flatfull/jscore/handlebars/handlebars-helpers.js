@@ -1082,7 +1082,12 @@ $(function()
 
 	Handlebars.registerHelper('iscompactTabel', function(type , options)
 	{
-		var setCompactView = (type != "PERSON") ? _agile_get_prefs("companyTabelView") : _agile_get_prefs("contactTabelView");
+		var setCompactView;
+		if(App_Companies.companyDetailView && App_Companies.companyDetailView.model && 
+			window.location.hash.split("#")[1] == "company/" + App_Companies.companyDetailView.model.get('id'))
+ 		setCompactView=_agile_get_prefs("contactCompanyTabelView");
+ 		else
+		 setCompactView=(type != "PERSON") ? _agile_get_prefs("companyTabelView") : _agile_get_prefs("contactTabelView");
 
 		if(setCompactView)
 				return options.fn(this);
@@ -7501,7 +7506,7 @@ Handlebars.registerHelper('if_asc_sork_key', function(value, options)
   			if (element == "basic_info" || element == "image")
   			{
 					
-					if(_agile_get_prefs("contactTabelView"))
+					if(_agile_get_prefs("contactCompanyTabelView"))
 					{
 						// if the compact view is present the remove th basic info heading and add the empty heading for the image
 

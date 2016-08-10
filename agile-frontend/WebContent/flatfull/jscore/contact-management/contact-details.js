@@ -403,6 +403,7 @@ var Contact_Details_Model_Events = Base_Model_View.extend({
 		'blur #company-Input input ' : 'companyInlineEdit',
     'keydown #company-inline-input' : 'companyNameChange' ,
     'click #company-contacts .contactcoloumn' : 'addOrRemoveContactCompanyColumns',
+    'click #contactCompanyTabelView' : 'toggleCustomFieldsForContacts',
     },
     
     
@@ -1559,13 +1560,31 @@ updateScoreValue :function(){
       data :JSON.stringify(json),
       success : function(data)
       {
-        console.log("Hi");
         App_Contacts.contactCompanyViewModel = data;
         fetchContactCompanyHeadings(function(modelData){
         getContactofCompanies(modelData, $("#contacts-listener-container"));
         });
       } 
     });
+    },
+
+    toggleCustomFieldsForContacts : function(e){
+
+
+      if(_agile_get_prefs("contactCompanyTabelView")){
+        _agile_delete_prefs("contactCompanyTabelView");
+        $(e.currentTarget).find("i").removeClass("fa fa-ellipsis-h");
+        $(e.currentTarget).find("i").addClass("fa fa-navicon");
+      }
+      else{
+        _agile_set_prefs("contactCompanyTabelView","true");
+        $(e.currentTarget).find("i").removeClass("fa fa-navicon");
+        $(e.currentTarget).find("i").addClass("fa fa-ellipsis-h");
+      }
+      $(e.currentTarget).parent().parent().toggleClass("compact");
+      $(".thead_check", $("#contacts-listener-container")).prop("checked", false);
+    getContactofCompanies(App_Companies.contactCompanyViewModel, $("#contacts-listener-container"));
+
     },
 });
 
@@ -1670,3 +1689,6 @@ function setleadScoreStyles(scoreboxval){
   $("#scorebox").addClass("hide").val(scoreboxval);
   $("#lead-score").attr("title",scoreboxval);
 }
+
+
+    

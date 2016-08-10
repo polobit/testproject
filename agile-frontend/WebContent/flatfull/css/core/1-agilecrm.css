@@ -4434,3 +4434,8 @@ border: 1px solid #e5e5e5;
 .ticket-collection-container th {
   white-space: nowrap;
 }
+
+
+#company-contacts ul li {
+    padding-right: 0px!important;
+}
