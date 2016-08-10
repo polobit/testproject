@@ -13,7 +13,7 @@ if(!$.fn.datepicker){
 }
    
 
-$.fn.datepicker.dates['en'] = {
+$.fn.datepicker.dates['en'] = { 
     days: ["{{agile_lng_translate 'prefs-settings' 'sunday'}}", "{{agile_lng_translate 'prefs-settings' 'monday'}}", "{{agile_lng_translate 'calendar' 'tuesday'}}", "{{agile_lng_translate 'calendar' 'wednesday'}}", "{{agile_lng_translate 'calendar' 'thursday'}}", "{{agile_lng_translate 'calendar' 'friday'}}", "{{agile_lng_translate 'calendar' 'saturday'}}", "{{agile_lng_translate 'prefs-settings' 'sunday'}}"],
     daysExact: ["{{agile_lng_translate 'prefs-settings' 'sunday'}}", "{{agile_lng_translate 'prefs-settings' 'monday'}}", "{{agile_lng_translate 'calendar' 'tuesday'}}", "{{agile_lng_translate 'calendar' 'wednesday'}}", "{{agile_lng_translate 'calendar' 'thursday'}}", "{{agile_lng_translate 'calendar' 'friday'}}", "{{agile_lng_translate 'calendar' 'saturday'}}"],
     daysShort: ["{{agile_lng_translate 'prefs-online-calendar' 'Sun'}}", "{{agile_lng_translate 'prefs-online-calendar' 'Mon'}}", "{{agile_lng_translate 'prefs-online-calendar' 'Tue'}}", "{{agile_lng_translate 'prefs-online-calendar' 'Wed'}}", "{{agile_lng_translate 'prefs-online-calendar' 'Thu'}}", "{{agile_lng_translate 'prefs-online-calendar' 'Fri'}}", "{{agile_lng_translate 'prefs-online-calendar' 'Sat'}}", "{{agile_lng_translate 'prefs-online-calendar' 'Sun'}}"],

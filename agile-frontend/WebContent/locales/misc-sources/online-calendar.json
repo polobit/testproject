@@ -1,4 +1,4 @@
-{
+{ 
     "online-appointment-scheduling" : "{{agile_lng_translate 'prefs-online-calendar' 'online-appointment-scheduling'}}",  
     "welcome-message-bulk" : "{{agile_lng_translate 'prefs-online-calendar' 'welcome-message-bulk'}}",
     "select-a-person" : "{{agile_lng_translate 'prefs-online-calendar' 'select-a-person'}}",

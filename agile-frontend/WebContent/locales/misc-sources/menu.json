@@ -1,4 +1,4 @@
-{
+{ 
       "agile-crm": "{{agile_lng_translate 'menu' 'agile-crm'}}",
       "menu-contacts": "{{agile_lng_translate 'menu' 'menu-contacts'}}",
       "menu-companies": "{{agile_lng_translate 'menu' 'menu-companies'}}",
