@@ -449,11 +449,12 @@ public class CSVUtil
 			    if (addressField != null && addressField.value != null)
 			    {
 				addressJSON = new JSONObject(addressField.value);
-				
+				addressJSON.put(field.value, csvValues[j]);
 				addressField.value = addressJSON.toString();
 			    }
 			    else
 			    {
+			    addressJSON.put(field.value, csvValues[j]);
 			    tempContact.properties.add(new ContactField(Contact.ADDRESS, addressJSON.toString(),
 					field.type.toString()));
 			    }
@@ -838,10 +839,12 @@ public class CSVUtil
 			if (addressField != null && addressField.value != null)
 			{
 			    addressJSON = new JSONObject(addressField.value);
+			    addressJSON.put(field.value, csvValues[j]);
 			    addressField.value = addressJSON.toString();
 			}
 			else
 			{
+				addressJSON.put(field.value, csvValues[j]);
 				tempContact.properties.add(new ContactField(Contact.ADDRESS, addressJSON.toString(),
 				    field.subtype.toString()));
 			}
