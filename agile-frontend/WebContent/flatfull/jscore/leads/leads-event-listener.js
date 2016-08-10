@@ -6,6 +6,9 @@ var Leads_Header_Events_View = Base_Model_View.extend({
     	'click .leadcolumn' : 'addOrRemoveLeadColumns',
     	'click .toggle-lead-filters' : 'toggleLeadFilters',
         'click #bulk-tags' : 'bulkActionAddTags',
+        'click #bulk-tags-remove' : 'bulkActionRemoveTags',
+        'click #bulk-owner' : 'bulkOwnerChange',
+        'click #bulk-delete' : 'leadsBulkDelete'
     },
 
     addLead : function(e)
@@ -108,8 +111,134 @@ var Leads_Header_Events_View = Base_Model_View.extend({
 
     bulkActionAddTags :  function(e){
         e.preventDefault();
-        Backbone.history.navigate("lead-bulk-tags", { trigger : true });
+        App_Leads.idArray = App_Leads.leadsBulkActions.getLeadsBulkIds();
+        if (!canRunBulkOperations())
+        {
+            showModalConfirmation(
+                _agile_get_translated_val('bulk-actions','add-tag'),
+                _agile_get_translated_val('bulk-actions','add-tag') + "<br/><br/> " + _agile_get_translated_val('deal-view','do-you-want-to-proceed'),
+
+                function()
+                {
+                    Backbone.history.navigate("lead-bulk-tags", { trigger : true });
+                }, 
+                function()
+                {
+                    return;
+                }
+            );
+        }
+
+        if (is_free_plan() && has_more_than_limit())
+        {
+            showModalConfirmation(
+                _agile_get_translated_val('contacts-view','add-tags'),
+                _agile_get_translated_val('bulk-actions','limit-on-contacts'),
+                function()
+                {
+                    Backbone.history.navigate("subscribe", { trigger : true });
+                }, function()
+                {
+                    return;
+                }, function()
+                {
+                    return;
+                },  
+                _agile_get_translated_val('portlets','upgrade'), 
+                _agile_get_translated_val('contact-details','CLOSE')
+            );
+        }
+        else
+        {
+            Backbone.history.navigate("lead-bulk-tags", { trigger : true });
+        }
     },
+
+    bulkActionRemoveTags : function(e)
+    {
+        e.preventDefault();
+        App_Leads.idArray = App_Leads.leadsBulkActions.getLeadsBulkIds();
+        if (!canRunBulkOperations())
+        {
+            showModalConfirmation(
+                _agile_get_translated_val('bulk-actions','remove-tag'),
+                _agile_get_translated_val('bulk-actions','bulk-update-ur-contacts') + "<br/><br/> " + _agile_get_translated_val('deal-view','do-you-want-to-proceed'),
+                function()
+                {
+                    Backbone.history.navigate("lead-bulk-tags-remove", { trigger : true });
+                }, function()
+                {
+                    return;
+                }
+            );
+        }
+        if (is_free_plan() && has_more_than_limit())
+        {
+            showModalConfirmation(
+                _agile_get_translated_val('contacts-view','remove-tags'),
+                _agile_get_translated_val('bulk-actions','limit-on-contacts'),
+                function()
+                {
+                    Backbone.history.navigate("subscribe", { trigger : true });
+                }, function()
+                {
+                    return;
+                }, function()
+                {
+                    return;
+                }, 
+                _agile_get_translated_val('portlets','upgrade'), 
+                _agile_get_translated_val('contact-details','CLOSE')
+            );
+        }
+        else
+        {
+            Backbone.history.navigate("lead-bulk-tags-remove", { trigger : true });
+        }
+    },
+
+    bulkOwnerChange : function(e)
+    {
+        e.preventDefault();
+        App_Leads.idArray = App_Leads.leadsBulkActions.getLeadsBulkIds();
+        if (!canRunBulkOperations())
+        {
+            showModalConfirmation(
+                _agile_get_translated_val('bulk-actions','change-owner'),
+                _agile_get_translated_val('bulk-actions','no-pem-to-change-owners') + "<br/><br/> " + _agile_get_translated_val('deal-view','do-you-want-to-proceed'),
+                function()
+                {
+                    Backbone.history.navigate("lead-bulk-owner", { trigger : true });
+                }, function()
+                {
+                    return;
+                }
+            );
+        }
+        else
+        {
+            Backbone.history.navigate("lead-bulk-owner", { trigger : true });
+        }
+    },
+
+    leadsBulkDelete : function(e)
+    {
+        e.preventDefault();
+
+        var url = '/core/api/bulk/update?action_type=DELETE';
+        var json = {};
+        json.contact_ids = App_Leads.leadsBulkActions.getLeadsBulkIds();
+
+        var confirm_msg = _agile_get_translated_val("others", "delete-warn");
+        // Shows confirm alert, if Cancel clicked, return false
+        showAlertModal(confirm_msg, "confirm", function(){
+            $(e.currentTarget).append('<img class="bulk-delete-loading" style="width:15px;" src= "'+updateImageS3Path("img/21-0.gif")+'"></img>');
+            App_Leads.leadsBulkActions.postBulkOperationData(url, json, undefined, undefined, function(data)
+            {
+                
+            }, Handlebars.compile("{{agile_lng_translate 'bulk-actions' 'leads-delete-scheduled'}}"));
+        }, undefined, _agile_get_translated_val("bulk-delete", "bulk-delete"));
+    }
 
 });
 
@@ -708,12 +837,150 @@ var Leads_Collection_Events_View = Base_Collection_View.extend({
 
 var Leads_Bulk_Action_Events_View = Base_Model_View.extend({
     events: {
-        'click #addTagsToLeadsBulk' : 'addTagsToLeadsBulk'
+        'click #addTagsToLeadsBulk' : 'addTagsToLeadsBulk',
+        'click #removeTagsToLeadsBulk' : 'removeTagsToLeadsBulk',
+        'click #changeOwnerToLeadsBulk' : 'changeOwnerToLeadsBulk'
     },
 
     addTagsToLeadsBulk : function(e)
     {
+        e.preventDefault();
+        var tags = get_tags('tagsBulkForm');
+
+        var tag_input = $('#addBulkTags').val().trim();
+        $('#addBulkTags').val("");
         
+        if(tag_input && tag_input.length>=0 && !(/^\s*$/).test(tag_input))
+        {
+            var template = Handlebars.compile('<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="{{name}}">{{name}}<a class="close" id="remove_tag" tag="{{name}}">&times</a></li>');
+            // Adds contact name to tags ul as li element
+            $('#addBulkTags').closest(".control-group").find('ul.tags').append(template({name : tag_input}));
+        }   
+        
+        if(tag_input != "")
+            tags[0].value.push(tag_input);
+
+        if (tags[0].value.length > 0)
+        {
+            var tags_valid = true;
+            $.each(tags[0].value, function(index, value)
+                {
+                    if(!isValidTag(value, false)) {
+                        tags_valid = false;
+                        return false;
+                    }
+                });
+            if(!tags_valid) {
+                $('.invalid-tags').show().delay(6000).hide(1);
+                return false;
+            }
+            // Show loading symbol until model get saved
+            var saveButton=$(e.currentTarget);
+
+            disable_save_button(saveButton);
+            
+            var url = '/core/api/bulk/update?action_type=ADD_TAG';
+            var json = {};
+            json.data = JSON.stringify(tags[0].value);
+            json.contact_ids = App_Leads.idArray;
+
+            acl_util.canAddTag(json.data,function(result){
+                App_Leads.leadsBulkActions.postBulkOperationData(url, json, $('#tagsBulkForm'), undefined, function(data)
+                {
+                    enable_save_button(saveButton);
+                    // Add the added tags to the collection of tags
+                    $.each(tags[0].value, function(index, tag)
+                    {
+                        tagsCollection.add({ "tag" : tag });
+                    });
+                }, _agile_get_translated_val('contacts','add-tag-scheduled'));
+            }, function(error){
+                enable_save_button(saveButton);
+            });
+        }
+        else 
+        {
+            $('#addBulkTags').focus();
+            $('.error-tags').show().delay(3000).hide(1);
+            return;
+        }
+    },
+
+    removeTagsToLeadsBulk : function(e)
+    {
+        e.preventDefault();
+        var tags = get_tags('tagsRemoveBulkForm');
+
+        // To add input field value as tags
+        var tag_input = $('#removeBulkTags').val().trim();
+        $('#removeBulkTags').val("");
+
+        if (tag_input && tag_input.length >= 0 && !(/^\s*$/).test(tag_input))
+        {
+            var template = Handlebars.compile('<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="{{name}}">{{name}}<a class="close" id="remove_tag" tag="{{name}}">&times</a></li>');
+            // Adds contact name to tags ul as li element
+            $('#removeBulkTags').closest(".control-group").find('ul.tags').append(template({name : tag_input}));
+            
+        }
+
+        if (tag_input != "")
+            tags[0].value.push(tag_input);
+
+        if (tags[0].value.length > 0)
+        {
+            // Show loading symbol until model get saved
+            var saveButton = $(e.currentTarget);
+
+            disable_save_button(saveButton);
+
+            // $('#tagsBulkForm').find('span.save-status').html(getRandomLoadingImg());
+
+            var url = '/core/api/bulk/update?action_type=REMOVE_TAG';
+            var json = {};
+            json.data = JSON.stringify(tags[0].value);
+            json.contact_ids = App_Leads.idArray;
+
+            App_Leads.leadsBulkActions.postBulkOperationData(url, json, $('#tagsRemoveBulkForm'), undefined, function(data)
+            {
+                enable_save_button(saveButton);
+                // Add the added tags to the collection of
+                // tags
+                $.each(tags[0].value, function(index, tag)
+                {
+                    tagsCollection.add({ "tag" : tag });
+                });
+            }, _agile_get_translated_val('contacts','delete-tag-scheduled'));
+        }
+        else
+        {
+            $('#removeBulkTags').focus();
+            $('.error-tags').show().delay(3000).hide(1);
+            return;
+        }
+    },
+
+    changeOwnerToLeadsBulk : function(e)
+    {
+        e.preventDefault();
+        var $form = $('#ownerBulkForm');
+
+        if ($(e.currentTarget).attr('disabled') == 'disabled' || !isValidForm($form))
+        {
+            return;
+        }
+
+        var saveButton = $(e.currentTarget);
+
+        disable_save_button(saveButton);
+        
+        var new_owner = $('#ownerBulkSelect option:selected').prop('value');
+        var url = '/core/api/bulk/update?action_type=CHANGE_OWNER&owner=' + new_owner;
+        var json = {};
+        json.contact_ids = App_Leads.idArray;
+        App_Leads.leadsBulkActions.postBulkOperationData(url, json, $form, undefined, function(data)
+        {
+            enable_save_button(saveButton);
+        }, Handlebars.compile("{{agile_lng_translate 'bulk-actions' 'leads-owner-change-scheduled'}}"));
     }
 
 });

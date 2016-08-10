@@ -121,10 +121,10 @@
 							</span>
 							<button id="bulk-tags" class="btn btn-default bulk-action-btn _lead_bulk_action btn-sm disabled txt-small">Add Tags</button>
 						    <button id="bulk-tags-remove" class="btn btn-default bulk-action-btn _lead_bulk_action btn-sm disabled txt-small">Remove Tags</button>
-						    <button id="bulk-email" class="btn btn-default bulk-action-btn _lead_bulk_action btn-sm disabled txt-small">Send Email</button>
+						    <!-- <button id="bulk-email" class="btn btn-default bulk-action-btn _lead_bulk_action btn-sm disabled txt-small">Send Email</button> -->
 						    <button id="bulk-owner" class="btn btn-default bulk-action-btn _lead_bulk_action btn-sm disabled txt-small">Change Owner</button>
-						    <button id="bulk-leads-export" class="btn btn-default bulk-action-btn _lead_bulk_action btn-sm disabled txt-small" onclick="Agile_GA_Event_Tracker.track_event('Export as CSV');">Export as CSV</button>
-						    <button class="btn btn-default bulk-action-btn delete-checked-leads btn-sm disabled txt-small">Delete</button>
+						    <!-- <button id="bulk-leads-export" class="btn btn-default bulk-action-btn _lead_bulk_action btn-sm disabled txt-small" onclick="Agile_GA_Event_Tracker.track_event('Export as CSV');">Export as CSV</button> -->
+						    <button id="bulk-delete" class="btn btn-default bulk-action-btn delete-checked-leads btn-sm disabled txt-small">Delete</button>
 							<div class="btn-group dropdown pull-right {{#iscompactTabel 'LEAD'}}compact {{/iscompactTabel}} multiple-checkbox" style="padding-right: 10px;" id="lead-custom-coloumns">
 								<div class="btn-group dropdown  multiple-checkbox" style="padding-right: 10px;position:absolute;right:0px;" id="lead-custom-coloumns">
 									<button class="btn btn-default dropdown-toggle  btn-sm" data-toggle="dropdown" aria-expanded="true" id="leadTabelView"><i class="{{#iscompactTabel 'LEAD'}} fa fa-ellipsis-h {{else}} fa fa-navicon {{/iscompactTabel}}"></"></i></button> 

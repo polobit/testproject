@@ -153,14 +153,14 @@ function append_checkboxes(el)
 	var checkbox_element = $('tr:last > td.select_checkbox', el);
 	if(checkbox_element.length != 0)
 	{
-		if(SELECT_ALL == true || (Current_Route == 'deals' && SELECT_ALL_DEALS==true) || SUBSCRIBERS_SELECT_ALL == true)
+		if(SELECT_ALL == true || (Current_Route == 'deals' && SELECT_ALL_DEALS==true) || SUBSCRIBERS_SELECT_ALL == true || (Current_Route == "leads" && App_Leads.leadsBulkActions && App_Leads.leadsBulkActions.SELECT_ALL_LEADS == true))
 		$('.tbody_check', checkbox_element).attr('checked', 'checked');
 		
 		return;
 	}
 
 	// If select all is chosen then all the upcomming models with in table should have checked checkboxes
-	if(SELECT_ALL == true || (Current_Route == 'deals' && SELECT_ALL_DEALS==true) || SUBSCRIBERS_SELECT_ALL == true)
+	if(SELECT_ALL == true || (Current_Route == 'deals' && SELECT_ALL_DEALS==true) || SUBSCRIBERS_SELECT_ALL == true || (Current_Route == "leads" && App_Leads.leadsBulkActions && App_Leads.leadsBulkActions.SELECT_ALL_LEADS == true))
 	{
 		$.each($('tr td:nth-child(1)', el).not(".checkbox"), function(key, value){
 			$(this).closest('tr').prepend('<td class="checkbox"><label class="i-checks i-checks-sm"><input class="tbody_check" type="checkbox" checked="checked"/><i></i></label></td>');

@@ -62,7 +62,11 @@ public class BulkActionNotifications
 	 * Companies tag operation
 	 */
 	COMPANY_ADD_TAGS("Tag(s) %s added to %s companies"), COMPANY_REMOVE_TAGS(
-			"Tag(s) %s removed from %s companies");
+			"Tag(s) %s removed from %s leads"),
+			
+	LEAD_ADD_TAGS("Tag(s) %s added to %s leads"), LEAD_REMOVE_TAGS(
+					"Tag(s) %s removed from %s leads");
+	
 	String message;
 
 	BulkAction(String message)

@@ -20,7 +20,7 @@ var tagsCollectionView;
  * @method setup_tags_typeahead
  * 
  */
-function setup_tags_typeahead(callback) {
+function setup_tags_typeahead(callback, el) {
 	var tags_list = [];
 	
 	
@@ -48,7 +48,7 @@ function setup_tags_typeahead(callback) {
     /**
      * typeahead is activated to the input field, having the class "tags-typeahead" 
      */
-    $('.tags-typeahead').typeahead({
+    $('.tags-typeahead', el).typeahead({
         
     	/**
     	 * Shows a drop down list of matched elements to the key, entered in the 
