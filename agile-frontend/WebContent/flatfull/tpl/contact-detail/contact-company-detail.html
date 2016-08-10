@@ -911,7 +911,6 @@
 			<span><i class="icon-plus-sign"></i></span> {{agile_lng_translate 'contacts-view' 'add-contact'}}
 		</a>
 	</div>
-<<<<<<< HEAD
 	<div class="contacts-companies-div">
 <div id="bulk-action-btns" class="panel-heading no-shadow p-r-none b-r m-r-sm" style="border-bottom: 0;background-color: rgba(246,248,248,1);position:relative;">
 				      	<span id="contacts-list-view-checkbox">
@@ -921,21 +920,21 @@
 				          		</label>
 							</span>
 				      	
-					    <button id="bulk-tags" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled txt-small">Add Tags</button>
-					    <button id="bulk-tags-remove" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled txt-small">Remove Tags</button>
-					    {{#hasMenuScope 'CAMPAIGN'}}
-					    <button id="bulk-campaigns" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled txt-small" onclick="Agile_GA_Event_Tracker.track_event('Add to Campaign');">Add to Campaign</button>
-					    {{/hasMenuScope}}
-					    <button id="show-callcampaignModal" class="btn btn-default bulk-action-btn btn-sm disabled txt-small">Start Call Campaign</button>
-					    <button id="bulk-email" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled txt-small" onclick="Agile_GA_Event_Tracker.track_event('Send Email');">Send Email</button>
-					    <button id="bulk-owner" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled txt-small">Change Owner</button>
-					    {{#hasScope "EXPORT_CONTACTS"}}
-					    <button id="bulk-contacts-export" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled txt-small" onclick="Agile_GA_Event_Tracker.track_event('Export as CSV');">Export as CSV</button>
-					    {{/hasScope}}
-					    {{#hasRestrictedMenuScope 'DELETE_CONTACT'}} {{else}}
-					    <button class="btn btn-default bulk-action-btn delete-checked-contacts btn-sm disabled txt-small">Delete</button>
-
-					     {{/hasRestrictedMenuScope}}
+					    <button id="bulk-tags" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled txt-small">{{agile_lng_translate 'contacts-view' 'add-tags'}}</button>
+						    <button id="bulk-tags-remove" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled txt-small">{{agile_lng_translate 'contacts-view' 'remove-tags'}}</button>
+						    {{#hasMenuScope 'CAMPAIGN'}}
+						    	<button id="bulk-campaigns" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled txt-small" onclick="Agile_GA_Event_Tracker.track_event('Add to Campaign');">{{agile_lng_translate 'contacts-view' 'add-to-campaign'}}</button>
+						    {{/hasMenuScope}}
+						    <button id="show-callcampaignModal" class="btn btn-default bulk-action-btn btn-sm disabled txt-small">{{agile_lng_translate 'contacts-view' 'start-call-campaign'}}</button>
+						    <button id="bulk-email" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled txt-small" onclick="Agile_GA_Event_Tracker.track_event('Send Email');">{{agile_lng_translate 'contacts-view' 'send-email'}}</button>
+						    <button id="bulk-owner" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled txt-small">{{agile_lng_translate 'contacts-view' 'change-owner'}}</button>
+						    {{#hasScope "EXPORT_CONTACTS"}}
+						    	<button id="bulk-contacts-export" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled txt-small" onclick="Agile_GA_Event_Tracker.track_event('Export as CSV');">{{agile_lng_translate 'deal-view' 'export-as-csv'}}</button>
+						    {{/hasScope}}
+						    {{#hasRestrictedMenuScope 'DELETE_CONTACT'}}
+						    {{else}}
+						    	<button class="btn btn-default bulk-action-btn delete-checked-contacts btn-sm disabled txt-small">{{agile_lng_translate 'contacts-view' 'delete'}}</button>
+							{{/hasRestrictedMenuScope}}
 
 					    <div class="btn-group dropdown pull-right {{#iscompactTabel 'PERSON'}}compact {{/iscompactTabel}} multiple-checkbox" style="padding-right: 10px;" id="contact-custom-coloumns">
 							<div class="btn-group dropdown  multiple-checkbox" style="padding-right: 10px;position:absolute;right:0px;" id="contact-custom-coloumns">
