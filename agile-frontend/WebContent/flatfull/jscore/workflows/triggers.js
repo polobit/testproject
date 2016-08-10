@@ -552,6 +552,8 @@ function resetAndFillFromSelect(selected_val) {
 				if($select.find('option').size()===1)
 					$select.find("option:first").before("<option value='NOEMAIL'>-No Verified Email-</option>");
 				
+				if(selected_val)
+					$select.val(selected_val).attr("selected", "selected");
 				rearrange_from_email_options($select, data);
 			});
 }
