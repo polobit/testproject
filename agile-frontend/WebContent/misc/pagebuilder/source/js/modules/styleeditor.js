@@ -552,7 +552,9 @@
             });
 
             //adjust frame height
-            styleeditor.activeElement.parentBlock.heightAdjustment();
+            if(typeof styleeditor.activeElement.parentBlock.heightAdjustment !== "undefined") {
+                styleeditor.activeElement.parentBlock.heightAdjustment();
+            }
 
 
             //we've got pending changes
