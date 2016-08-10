@@ -1112,6 +1112,7 @@ function setUpGlobalTwilio()
 			if (Twilio.Device.status() != "busy")
 			{
 				if(callConference.hideNoty){
+					callConference.totalMember = 0;
 					closeTwilioNoty();
 				}else{
 					callConference.hideNoty = true;
