@@ -1,6 +1,7 @@
 package com.agilecrm.webrules;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,14 +23,30 @@ import com.google.appengine.api.datastore.*;
 public class WebruleServlet extends HttpServlet {
 
 	public void service(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-		
+
 		doGet(req, resp);
-	
+
 	}
 
 	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 
-		WebrulePushPopup.CreateWebrule();
+		System.out.println(" host url is " + req.getRequestURL().toString());
+
+		String url = req.getRequestURL().toString();
+		String domainName;
+
+		try {
+
+			domainName = WebrulePushPopup.getDomainName(url);
+			System.out.println("host name is " + domainName);
+
+		} catch (URISyntaxException e) {
+
+			domainName = "AGILE CRM";
+			e.printStackTrace();
+		}
+
+		WebrulePushPopup.CreateWebrule(domainName);
 
 	}
 
