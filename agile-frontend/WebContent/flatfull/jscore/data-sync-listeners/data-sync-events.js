@@ -83,7 +83,7 @@ var DataSync_Event_Modal_View = Base_Model_View.extend({
               if(mod!=undefined){
                 if(mod.inProgress==true)
                 {
-                     show_success_message_after_save_button("Sync in progress", App_Datasync.dataSync.el);
+                     show_success_message_after_save_button(_agile_get_translated_val("misc-keys", "sync-in-progress"), App_Datasync.dataSync.el);
                       setTimeout(function() {
             $(ele).removeAttr("disabled");
             },3000);
@@ -104,11 +104,11 @@ var DataSync_Event_Modal_View = Base_Model_View.extend({
             model.url = url + "?sync=true"
             model.save({}, {
                 success: function(data) {
-                    show_success_message_after_save_button("Sync initiated", App_Datasync.dataSync.el);
+                    show_success_message_after_save_button(_agile_get_translated_val("misc-keys", "sync-init"), App_Datasync.dataSync.el);
                     setTimeout(function() {
                  $(ele).removeAttr("disabled");
                      },3000);
-                    showNotyPopUp("information", "Contacts sync initiated", "top", 1000);
+                    showNotyPopUp("information", _agile_get_translated_val("misc-keys", "sync-contacts-init"), "top", 1000);
                 }
             });
         },true);
@@ -167,7 +167,7 @@ var DataSync_Event_Modal_View = Base_Model_View.extend({
 
              if(mod.inProgress==true)
                 {
-                     show_success_message_after_save_button("Sync in progress", App_Datasync.dataSync.el);
+                     show_success_message_after_save_button(_agile_get_translated_val("misc-keys", "sync-in-progress"), App_Datasync.dataSync.el);
                      setTimeout(function() {
                                  $(ele).removeAttr("disabled");
                                      },3000);
@@ -184,11 +184,11 @@ var DataSync_Event_Modal_View = Base_Model_View.extend({
             model.url = url + "?sync=true"
             model.save({}, {
                 success: function(data) {
-                    show_success_message_after_save_button("Sync initiated", App_Datasync.dataSync.el);
+                    show_success_message_after_save_button(_agile_get_translated_val("misc-keys", "sync-init"), App_Datasync.dataSync.el);
                     setTimeout(function() {
                                  $(ele).removeAttr("disabled");
                                      },3000);
-                    showNotyPopUp("information", "Contacts sync initiated", "top", 1000);
+                    showNotyPopUp("information", _agile_get_translated_val("misc-keys", "sync-contacts-init"), "top", 1000);
                 }
             });
         },true);
@@ -233,7 +233,7 @@ var DataSync_Event_Modal_View = Base_Model_View.extend({
 
              if(mod.inProgress==true)
                 {
-                     show_success_message_after_save_button("Sync in progress", App_Datasync.dataSync.el);
+                     show_success_message_after_save_button(_agile_get_translated_val("misc-keys", "sync-in-progress"), App_Datasync.dataSync.el);
                      setTimeout(function() {
                                  $(ele).removeAttr("disabled");
                                      },3000);
@@ -251,11 +251,11 @@ var DataSync_Event_Modal_View = Base_Model_View.extend({
             model.url = url + "?sync=true"
             model.save({}, {
                 success: function(data) {
-                    show_success_message_after_save_button("Sync initiated", App_Datasync.dataSync.el);
+                    show_success_message_after_save_button(_agile_get_translated_val("misc-keys", "sync-init"), App_Datasync.dataSync.el);
                     setTimeout(function() {
                                  $(ele).removeAttr("disabled");
                                      },3000);
-                    showNotyPopUp("information", "Contacts sync initiated", "top", 1000);
+                    showNotyPopUp("information", _agile_get_translated_val("misc-keys", "sync-contacts-init"), "top", 1000);
                 }
             });
         },true);
@@ -280,7 +280,7 @@ var DataSync_Event_Modal_View = Base_Model_View.extend({
 
              if(mod.inProgress==true)
                 {
-                     show_success_message_after_save_button("Sync in progress", App_Datasync.dataSync.el);
+                     show_success_message_after_save_button(_agile_get_translated_val("misc-keys", "sync-in-progress"), App_Datasync.dataSync.el);
                      setTimeout(function() {
                                  $(ele).removeAttr("disabled");
                                      },3000);
@@ -298,11 +298,11 @@ var DataSync_Event_Modal_View = Base_Model_View.extend({
             model.url = url + "?sync=true"
             model.save({}, {
                 success: function(data) {
-                    show_success_message_after_save_button("Sync initiated", App_Datasync.dataSync.el);
+                    show_success_message_after_save_button(_agile_get_translated_val("misc-keys", "sync-init"), App_Datasync.dataSync.el);
                     setTimeout(function() {
                                  $(ele).removeAttr("disabled");
                                      },3000);
-                    showNotyPopUp("information", "Contacts sync initiated", "top", 1000);
+                    showNotyPopUp("information", _agile_get_translated_val("misc-keys", "sync-contacts-init"), "top", 1000);
                 }
             });
         },true);
@@ -326,7 +326,7 @@ var DataSync_Event_Modal_View = Base_Model_View.extend({
 
                          if(mod.inProgress==true)
                 {
-                     show_success_message_after_save_button("Sync in progress", App_Datasync.dataSync.el);
+                     show_success_message_after_save_button(_agile_get_translated_val("misc-keys", "sync-in-progress"), App_Datasync.dataSync.el);
                      setTimeout(function() {
                       $(ele).removeAttr("disabled");
                       },3000);
@@ -344,12 +344,12 @@ var DataSync_Event_Modal_View = Base_Model_View.extend({
                         model.url = url + "?sync=true"
                         model.save({}, {
                             success: function(data) {
-                                show_success_message_after_save_button("Sync initiated", App_Datasync.dataSync.el);
+                                show_success_message_after_save_button(_agile_get_translated_val("misc-keys", "sync-init"), App_Datasync.dataSync.el);
                             setTimeout(function() {
                                  $(ele).removeAttr("disabled");
                                      },3000);
                             
-                                showNotyPopUp("information", "Contacts sync initiated", "top", 1000);
+                                showNotyPopUp("information", _agile_get_translated_val("misc-keys", "sync-contacts-init"), "top", 1000);
                             }
                         });
                     },true);

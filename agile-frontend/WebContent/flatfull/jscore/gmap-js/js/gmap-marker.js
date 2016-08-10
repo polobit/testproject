@@ -379,25 +379,25 @@ function timeSince(dateStr) {
     var interval = Math.floor(seconds / 31536000);
 
     if (interval > 1) {
-        return interval + " years ago";
+        return interval + " {{agile_lng_translate 'misc-keys' 'yrs_ago'}}";
     }
     interval = Math.floor(seconds / 2592000);
     if (interval > 1) {
-        return interval + " months ago";
+        return interval + " {{agile_lng_translate 'misc-keys' 'mnths_ago'}}";
     }
     interval = Math.floor(seconds / 86400);
     if (interval > 1) {
-        return interval + " days ago";
+        return interval + " {{agile_lng_translate 'misc-keys' 'days_ago'}}";
     }
     interval = Math.floor(seconds / 3600);
     if (interval > 1) {
-        return interval + " hours ago";
+        return interval + " {{agile_lng_translate 'misc-keys' 'hrs_ago'}}";
     }
     interval = Math.floor(seconds / 60);
     if (interval > 1) {
-        return interval + " minutes ago";
+        return interval + " {{agile_lng_translate 'misc-keys' 'mins_ago'}}";
     }
-    return Math.floor(seconds) + " seconds ago";
+    return Math.floor(seconds) + " {{agile_lng_translate 'misc-keys' 'secs_ago'}}";
 }
 
 

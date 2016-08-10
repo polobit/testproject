@@ -4430,3 +4430,7 @@ border: 1px solid #e5e5e5;
 .update-drag-deal + .tooltip{
   width: auto!important;
 }
+
+.ticket-collection-container th {
+  white-space: nowrap;
+}

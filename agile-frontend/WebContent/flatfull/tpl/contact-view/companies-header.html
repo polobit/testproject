@@ -26,7 +26,7 @@
 	    					<div class="filters-drp-down btn-group dropdown m-l-none" style="float: none;">
 	    						<div class="">
 									<h4 class="inline-block m-n">
-		    							Companies
+		    							{{agile_lng_translate 'companies-view' 'companies'}}
 		    							<div class="inline-block" id="filter-list"></div>
 		    							<span id="contacts-count" class=""></span>
 		    							{{#is_mobile}}
@@ -53,14 +53,14 @@
 				                	<i></i>                
 				          		</label>
 							</span>							
-							<button id="bulk-tags" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm m-r-xs txt-small disabled" >Add Tags</button>
-							<button id="bulk-tags-remove" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm m-r-xs txt-small disabled" >Remove Tags</button>	
-							<button id="bulk-email" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm m-r-xs txt-small disabled" >Send Email</button>	
-							<button id="bulk-owner" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm m-r-xs txt-small disabled" >Change Owner</button>
+							<button id="bulk-tags" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm m-r-xs txt-small disabled" >{{agile_lng_translate 'contacts-view' 'add-tags'}}</button>
+							<button id="bulk-tags-remove" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm m-r-xs txt-small disabled" >{{agile_lng_translate 'contacts-view' 'remove-tags'}}</button>	
+							<button id="bulk-email" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm m-r-xs txt-small disabled" >{{agile_lng_translate 'contacts-view' 'send-email'}}</button>	
+							<button id="bulk-owner" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm m-r-xs txt-small disabled" >{{agile_lng_translate 'contacts-view' 'change-owner'}}</button>
 							{{#hasScope "EXPORT_CONTACTS"}}
-								<button id="bulk-companies-export" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm m-r-xs txt-small disabled" >Export as CSV</button>
+								<button id="bulk-companies-export" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm m-r-xs txt-small disabled" >{{agile_lng_translate 'contacts-view' 'export-as-csv'}}</button>
 							{{/hasScope}}				    
-							<button class="btn btn-default bulk-action-btn delete-checked-contacts btn-sm m-r-xs txt-small disabled" >Delete</button>
+							<button class="btn btn-default bulk-action-btn delete-checked-contacts btn-sm m-r-xs txt-small disabled" >{{agile_lng_translate 'contacts-view' 'delete'}}</button>
 							<div class="btn-group dropdown pull-right {{#iscompactTabel 'company'}} compact {{/iscompactTabel}} multiple-checkbox" style="padding-right: 10px;" id="companies-custom-coloumns">
 					    		<button class="btn btn-default dropdown-toggle btn-sm " data-toggle="dropdown" aria-expanded="true" id="companiesTabelView"><i class="{{#iscompactTabel 'company'}} fa fa-ellipsis-h {{else}}fa fa-navicon {{/iscompactTabel}}"></i></button>
                 				<ul class="pull-right dropdown-menu  p-l"  role="menu">

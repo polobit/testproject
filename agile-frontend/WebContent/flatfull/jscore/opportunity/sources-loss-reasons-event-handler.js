@@ -345,7 +345,7 @@ var Sources_Loss_Reasons_Events_Collection_View = Base_Collection_View.extend({
                             amount=amount+parseFloat(that.find('.amount').val());
                     });
                     percentCountAndAmount(count,amount);
-                    $save_info = $('<div style="display:inline-block"><small><p class="text-info"><i>Changes Saved</i></p></small></div>');
+                    $save_info = $('<div style="display:inline-block"><small><p class="text-info"><i>{{agile_lng_translate "deals" "changes-saved"}}</i></p></small></div>');
 
                     $('.Goals_message').html($save_info);
 

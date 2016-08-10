@@ -358,6 +358,7 @@ public class AgileTaskletUtil {
 				owner.put("id", domainUser.id);
 				owner.put("name", domainUser.name);
 				owner.put("email", domainUser.email);
+				owner.put("phone", domainUser.phone);
 				owner.put("calendar_url", MergeFieldsUtil
 						.addCalendarMergeField(domainUser, subscriberJSON));
 				owner.put("timezone", domainUser.timezone);
