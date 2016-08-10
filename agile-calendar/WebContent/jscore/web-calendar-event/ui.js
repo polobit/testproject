@@ -9,7 +9,7 @@ $(function()
 	// Select slot duration 60/30/15min
 	//$(".selected_meeting_time").die().live('click', function(e)
 	$('body').on('click','.selected_meeting_time',function(e)
-	{		
+	{
 		// e.preventDefault();
 
 		$("#details").empty();
@@ -107,7 +107,7 @@ $(function()
 				{
 					$(".meetingtypes").show();
 					$(".meetingtypes").empty();
-					$(".meetingtypes").append("<option selected disabled>Meeting Type</option>");
+					$(".meetingtypes").append("<option selected disabled>" + LOCALES_JSON['meeting-type'] + "</option>");
 					for (var i = 0; i < meeting_types.length; i++)
 					{
 						$(".meetingtypes").append("<option value='" + meeting_types[i] + "'>" + meeting_types[i] + "</option>");
