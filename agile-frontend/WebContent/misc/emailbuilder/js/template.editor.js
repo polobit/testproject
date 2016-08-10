@@ -349,10 +349,10 @@ function handleObjects() {
 }
 
 function addhttp(url) {
-     if (url != null && url.substr(0, 7) != 'http://' && url.substr(0, 8) != 'https://') {
+     if (url.substr(0, 7) != 'http://' && url.substr(0, 8) != 'https://') {
          url = 'http://' + url;
     }
-     if (url != null && url.substr(url.length - 1, 1) != '/') {
+     if (url.substr(url.length - 1, 1) != '/') {
          url = url + '/';
     }
     return url;
