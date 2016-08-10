@@ -30,4 +30,16 @@
 	"scheduled-another-appointment" : "{{agile_lng_translate 'calendar' 'scheduled-another-appointment'}}",
 	"solt-book-error" : "{{agile_lng_translate 'calendar' 'solt-book-error'}}",
 	"slot-exists" : "{{agile_lng_translate 'calendar' 'slot-exists'}}",
+	"online-appointment-cancellation" : "{{agile_lng_translate 'prefs-online-calendar' 'online-appointment-cancellation'}}",
+	"cancel" : "{{agile_lng_translate 'other' 'cancel'}}",
+	"with" : "{{agile_lng_translate 'common-words' 'with'}}",
+	"event-starts" : "{{agile_lng_translate 'prefs-online-calendar' 'event-starts'}}",
+	"cancel-appointment" : "{{agile_lng_translate 'prefs-online-calendar' 'cancel-appointment'}}",
+	"cancelled-already" : "{{agile_lng_translate 'prefs-online-calendar' 'cancelled-already'}}",
+	"cancelled-appointment" : "{{agile_lng_translate 'prefs-online-calendar' 'cancelled-appointment'}}",
+	"your-appointment-with" : "{{agile_lng_translate 'prefs-online-calendar' 'your-appointment-with'}}",
+	"is-cancelled" : "{{agile_lng_translate 'prefs-online-calendar' 'is-cancelled'}}",
+	"schedule-new" : "{{agile_lng_translate 'prefs-online-calendar' 'schedule-new'}}",
+	"something-wrong" : "{{agile_lng_translate 'prefs-online-calendar' 'something-wrong'}}",
+	"reasong-for-cancel" : "{{agile_lng_translate 'prefs-online-calendar' 'reasong-for-cancel'}}"
 }

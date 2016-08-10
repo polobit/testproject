@@ -5221,3 +5221,14 @@ prefs-online-calendar.email-validation,We need your email address to contact you
 prefs-online-calendar.no-working-hrs,No working hours,No hay horas de trabajo
 common-words.for,for,para
 common-words.mins-on,mins on,en minutos
+common-words.with,with,con
+prefs-online-calendar.online-appointment-cancellation,Online Appointment Cancellation,Designación de cancelación en línea
+prefs-online-calendar.event-starts,Event starts,Evento comienza 
+prefs-online-calendar.cancel-appointment,Cancel Appointment,Revocar la designación
+prefs-online-calendar.cancelled-already,Looks like this appointment is already cancelled.,Parece que esta cita ya está cancelada .
+prefs-online-calendar.cancelled-appointment,Appointment Cancelled,Cita cancelada
+prefs-online-calendar.your-appointment-with,Your appointment with,Su cita con
+prefs-online-calendar.is-cancelled,is cancelled,está cancelado
+prefs-online-calendar.schedule-new,Schedule new appointment,Programar nueva cita
+prefs-online-calendar.something-wrong,Something is wrong,Algo está mal
+prefs-online-calendar.reasong-for-cancel,Reason for cancellation,Razón de la cancelación

@@ -30,7 +30,7 @@
 <%
 
 // User Language 
-String _LANGUAGE = "en";
+String _LANGUAGE = "en", _LANGUAGE_USER = "en";
 
 // Locales JSON
 JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "online-calendar");
@@ -179,7 +179,7 @@ if(scheduleid.contains(",")){
 	System.out.println("userPrefs " + userPrefs);
 	if(userPrefs!=null){
 	profile_pic = userPrefs.pic;
-	_LANGUAGE = userPrefs.language;
+	_LANGUAGE_USER = userPrefs.language;
 	}
 	
 	user_name = domainUser.name;
@@ -221,7 +221,10 @@ if(scheduleid.contains(",")){
 	}
 
 	ObjectMapper mapper = new ObjectMapper();
-	localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "online-calendar");
+	if(!StringUtils.equals(_LANGUAGE, _LANGUAGE_USER)){
+		_LANGUAGE = _LANGUAGE_USER;
+		localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "online-calendar");
+	}
 
 	// Page title
 	String _page_title = LanguageUtil.getLocaleJSONValue(localeJSON, "online-appointment-scheduling");
