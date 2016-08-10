@@ -19,9 +19,9 @@ git checkout .
 
 git stash
 
-git checkout sandbox_live
+git checkout version28-7
 
-git pull origin sandbox_live
+git pull origin version28-7
 
 ant create-target  -DRELEASE_VERSION=$2 -DPRODUCTION=true;
 
@@ -29,6 +29,6 @@ echo "deploying in version $2"
 
 appcfg.sh --oauth2 -A agile-crm-cloud -V $2 update $PROJECT_TARGET_LOCATION/agile-java-server/"$1".war/
 
-notify-send "Version Update Notification" "Verstion Updatation Completed"
+notify-send "Version Update Notification" "Verstion Updation Completed"
 
 #cd ../
