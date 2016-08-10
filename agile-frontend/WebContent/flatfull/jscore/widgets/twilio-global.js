@@ -219,12 +219,12 @@ $(function(){
 		TWILIO_CONTACT = contactDetailsObj;*/
 //		alert(TWILIO_CONTACT_ID);
 		var number = $(this).closest(".contact-make-call").attr("phone");
-		
+		var contactToCall  = agile_crm_get_contact();
 		if (checkForActiveCall())
 		{
 			var jsonParam = {};
 			jsonParam['number'] = number;
-			//jsonParam['contact'] = TWILIO_CONTACT;
+			jsonParam['contact'] = contactToCall;
 			confirmConferenceCallToDial(jsonParam);
 			return;
 		}
@@ -371,9 +371,9 @@ $(function(){
 			if(paramJson.attribute == "conference-confirm"){
 				var number = paramJson.number;
 				var callSid = paramJson.callSid;
-				//var contact = paramJson.contact;
-				//dialConferenceCall(number,callSid,contact);
-				dialConferenceCall(number,callSid);
+				var contact = paramJson.contact;
+				dialConferenceCall(number,callSid,contact);
+				//dialConferenceCall(number,callSid);
 			}
 		}catch(e){}
 		$("#globalModal").modal('hide');
@@ -393,14 +393,16 @@ $(function(){
 
 // newNum is the number of second party whom we have to make the call..
 //contact is the contact of old party whom call has been made.
-function dialConferenceCall(newNum, callSid){
+function dialConferenceCall(newNum, callSid, newCnt){
 	
 
-	var number = newNum;
+	var numberToDial = newNum;
+	var newContact = newCnt;
 	var oldContact = TWILIO_CONTACT;
 	var oldNumber = To_Number;
 	
 	try{
+		var number = getFormattedPhone(numberToDial, newContact);
 		
 		if(Twilio.Device.status() == "busy"){
 				
@@ -1096,7 +1098,7 @@ function setUpGlobalTwilio()
 			if(CALL_CAMPAIGN.start){
 				CALL_CAMPAIGN.call_status = "DISCONNECTED";
 			}
-			callConference.totalMember = 0;
+			//callConference.totalMember = 0;
 			
 			// Called for all disconnections
 			console.log(conn);
@@ -2081,7 +2083,7 @@ function confirmConferenceCallToDial(jsonParam){
 					param['number'] = jsonParam.number;
 					param['callSid'] = globalconnection.parameters.CallSid;
 					param['attribute'] = "conference-confirm"; // this attribute is used to check if-else condition to find
-					//param['contact'] = jsonParam.contact;
+					param['contact'] = jsonParam.contact;
 					$("#callModalConfirm_info_ok","#globalModal").data("param", param);
 					$("#globalModal").modal('show');
 					return;
