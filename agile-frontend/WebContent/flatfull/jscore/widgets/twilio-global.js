@@ -2057,11 +2057,15 @@ function confirmConferenceCallToDial(jsonParam){
 		if(Twilio.Device.status() == "busy"){
 				if(globalconnection && globalconnection.parameters){
 					// this will build the confirm message and show modal
+					var newNum = jsonParam.number;
+					var newCnt = jsonParam.contact;
+					var number = getFormattedPhone(newNum, newCnt);
+					
 					
 					if(callConference.totalMember >= 1){  // total member == 1
 								$.post( "/core/api/widgets/twilio/confCall", {
 									From: Verfied_Number,
-									To: jsonParam.number,
+									To: number,
 									conferenceName: callConference.name
 								},function(data){
 									console.log(data);
