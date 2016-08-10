@@ -269,6 +269,7 @@ function getMergeFields(type, callback)
 		"{{agile_lng_translate 'contact-view' 'modified-time'}}": "{{modified_time}}",
 		"{{agile_lng_translate 'contact-view' 'owner-name'}}":"{{owner.name}}",
 		"{{agile_lng_translate 'contact-view' 'owner-email'}}":"{{owner.email}}", 
+		"{{agile_lng_translate 'domain-user' 'phone'}}":"{{owner.phone}}"
 	};
 	
 	// Get Custom Fields in template format

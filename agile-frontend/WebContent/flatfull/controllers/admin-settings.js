@@ -1374,11 +1374,8 @@ var AdminSettingsRouter = Backbone.Router.extend({
 
 function initQuota(callback)
 {
-	$("#goal_duration span.date").datepicker({ format :"MM yyyy", minViewMode:"months",weekStart : CALENDAR_WEEK_START_DAY, autoclose : true ,
-						
-				}).on('changeMonth',function(e) {
-       						console.log(e);
-       						
+	$("#goal_duration span.date").datepicker({ format :"MM yyyy", minViewMode:"months",weekStart : CALENDAR_WEEK_START_DAY, autoclose : true})
+		.on('changeMonth',function(e) {
        						$("#goal_duration span").html( e.date.format("mmmm yyyy"));
        						 callback();
 

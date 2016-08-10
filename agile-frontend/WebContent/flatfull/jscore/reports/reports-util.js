@@ -18,6 +18,14 @@ load_activities : function(el)
 				$("#reports-listerners-container").html(el);
 
 			$('.activity_time_timepicker', el).timepicker({ 'timeFormat' : 'H:i ', 'step' : 30 });
+			$('.activity_time_timepicker').focus(function(){
+ 				$('#activityModal').css("overflow", "hidden");
+ 			});
+ 			
+ 			$('.activity_time_timepicker').blur(function(){
+ 				$('#activityModal').css("overflow", "auto");
+ 			});
+
 			$(".activity_time_timepicker", el).val("09:00");
 			$("#report_timezone", el).val(ACCOUNT_PREFS.timezone);
 
@@ -56,6 +64,14 @@ edit_activities : function(el, json)
 	// month fields
 	updateWeekDayReportVisibility(frequency, "activity");
 	$('.activity_time_timepicker').timepicker({ 'timeFormat' : 'H:i ', 'step' : 30 });
+
+	$('.activity_time_timepicker').focus(function(){
+		$('#activityModal').addClass('overflow-hidden');
+	});
+	
+	$('.activity_time_timepicker').blur(function(){
+		$('#activityModal').removeClass('overflow-hidden');
+	});
 },
 
 /** Loads add report for contact email report* */
@@ -76,6 +92,14 @@ load_contacts : function(el)
 				$("#reports-listerners-container").html(el);
 
 			$('.report_time_timepicker', el).timepicker({ 'timeFormat' : 'H:i ', 'step' : 30 });
+			$('.report_time_timepicker').focus(function(){
+ 				$('#activityModal').css("overflow", "hidden");
+ 			});
+ 			
+ 			$('.report_time_timepicker').blur(function(){
+ 				$('#activityModal').css("overflow", "auto");
+ 			});
+
 			$(".report_time_timepicker", el).val("09:00");
 			$("#report_timezone", el).val(ACCOUNT_PREFS.timezone);
 
@@ -108,6 +132,14 @@ edit_contacts : function(el, report, flag)
 	setTimeout(function()
 	{
 		$('.report_time_timepicker').timepicker({ 'timeFormat' : 'H:i ', 'step' : 30 });
+
+		$('.report_time_timepicker').focus(function(){
+			$('#activityModal').css("overflow", "hidden");
+		});
+		
+		$('.report_time_timepicker').blur(function(){
+			$('#activityModal').css("overflow", "auto");
+		});
 
 		var frequency = report.toJSON().duration;
 		updateWeekDayReportVisibility(frequency,"contact");

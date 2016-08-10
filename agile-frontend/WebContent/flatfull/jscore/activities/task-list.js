@@ -53,9 +53,7 @@ function updateData(params) {
 		this.App_Calendar.allTasksListView = new Base_Collection_View({
 		url : '/core/api/tasks/based' + params,
 		restKey : "task",
-		sort_collection : true,
-		descending:false,
-		sortKey:'due',
+		sort_collection : false,
 		templateKey : "tasks-list",
 		cursor : true, page_size : 25,
 		individual_tag_name : 'tr',
