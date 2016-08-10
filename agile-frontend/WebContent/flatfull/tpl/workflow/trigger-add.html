@@ -63,7 +63,7 @@
 										<optgroup label="Call">
 										<option value="INBOUND_CALL">Inbound Call</option>
 										<option value="OUTBOUND_CALL">Outbound Call</option>
-										<option value="REPLY_SMS">Reply sms</option>
+										<option value="REPLY_SMS">{{agile_lng_translate 'campaigns' 'reply-sms'}}</option>
 										<optgroup label="Ecommerce">
 										<option value="SHOPIFY_EVENT" id="shopify-event">Shopify Event</option>
 										<optgroup label="Form">
@@ -123,8 +123,8 @@
 										<option value="meeting scheduled" class="INBOUND_CALL OUTBOUND_CALL">Meeting Scheduled</option>
 										<option value="new opportunity" class="INBOUND_CALL OUTBOUND_CALL">New Opportunity</option>
 										<option value="voicemail" class="OUTBOUND_CALL">Voicemail</option>
-										<option value="yes" class="REPLY_SMS">YES</option>
-										<option value="no" class="REPLY_SMS">NO</option>
+										<option value="yes" class="REPLY_SMS">{{agile_lng_translate 'campaigns' 'reply-yes'}}</option>
+										<option value="no" class="REPLY_SMS">{{agile_lng_translate 'campaigns' 'reply-no'}}</option>
 									</select>
 								</div>
 							</div>
@@ -828,15 +828,15 @@
                         <div>
                             <i class="icon-call-in icon-3x"></i>
                         </div>
-                        <b>Reply sms</b>
+                        <b>{{agile_lng_translate 'campaigns' 'reply-sms'}}</b>
                     </div>
                     <br/>
                     <div class="ellipsis-multiline m-b-md" rel="tooltip">
-                        Run a campaign on a contact when they reply to your Twilio number.
+                        {{agile_lng_translate 'campaigns' 'reply-sms-desc'}}
                     </div>
                     <!-- Add button -->
                     <div>
-                        <a class="btn btn-sm btn-default add-trigger" data = "REPLY_SMS"  >Go</a>
+                        <a class="btn btn-sm btn-default add-trigger" data = "REPLY_SMS"  >{{agile_lng_translate 'campaigns' 'go'}}</a>
                     </div>
                 </div>
             </div>
