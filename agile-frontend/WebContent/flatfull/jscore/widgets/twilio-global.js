@@ -1527,10 +1527,16 @@ function showNoteAfterCall(callRespJson,messageObj,paramJson)
 				if(paramJson.cnf_started){
 					if(!callConference.addnote){
 						if(callRespJson.duration != "undefined"){
+							if(!callRespJson.duration){
+								callRespJson.duration = 0;
+							}
 							callConference.conferenceDuration = parseInt(callConference.conferenceDuration)+parseInt(callRespJson.duration);
 							return;
 						}
 					}else{
+						if(!callRespJson.duration){
+							callRespJson.duration = 0;
+						}
 						callConference.conferenceDuration = parseInt(callConference.conferenceDuration)+parseInt(callRespJson.duration);
 						var jsonParam = {};
 						jsonParam['noteSub'] = TWILIO_CALLTYPE + " call - Done";
