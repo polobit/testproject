@@ -30,8 +30,6 @@ public class WebruleServlet extends HttpServlet {
 
 	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 
-		System.out.println(" host url is " + req.getRequestURL().toString());
-
 		String url = req.getRequestURL().toString();
 		String domainName;
 
