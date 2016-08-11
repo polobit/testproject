@@ -11,6 +11,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -55,6 +56,7 @@ import com.agilecrm.deals.CustomFieldData;
 import com.agilecrm.deals.Milestone;
 import com.agilecrm.deals.Opportunity;
 import com.agilecrm.deals.util.MilestoneUtil;
+import com.agilecrm.deals.util.OpportunityUtil;
 import com.agilecrm.exception.InvalidTagException;
 import com.agilecrm.export.gcs.GCSServiceAgile;
 import com.agilecrm.subscription.restrictions.db.BillingRestriction;
@@ -1131,6 +1133,7 @@ public class CSVUtil
 	Integer nameMissing = 0;
 	Integer trackMissing = 0;
 	Integer milestoneMissing = 0;
+	Integer mergedDeals = 0;
 
 	/**
 	 * Reading CSV file from input stream
@@ -1167,6 +1170,7 @@ public class CSVUtil
 	    List<Milestone> list = null;
 	    List<Category> source_list = null;
 	    List<Category> reason_list = null;
+	    Set<String> relatedContactIds = new HashSet<String>();
 	    for (int i = 0; i < dealPropValues.length; i++)
 	    {
 
@@ -1179,7 +1183,39 @@ public class CSVUtil
 		    String value = prop.get("value");
 		    if (type.equalsIgnoreCase("SYSTEM"))
 		    {
-			if (value.equalsIgnoreCase("name"))
+		    if(value != null && value.equalsIgnoreCase("id") && StringUtils.isNotEmpty(dealPropValues[i]))
+		    {
+		    	Long opportunityId = null;
+		    	try 
+		    	{
+		    		opportunityId = Long.valueOf(dealPropValues[i].substring(3));
+				}
+		    	catch (Exception e) 
+		    	{
+					System.out.println("Exception while converting id in deals import.");
+				}
+		    	
+		    	if(opportunityId != null)
+		    	{
+		    		opportunity = OpportunityUtil.getOpportunity(opportunityId);
+		    	}
+	    		if(opportunity != null)
+	    		{
+	    			List<String> conIdsList = opportunity.getContact_ids();
+	    			System.out.println("conIdsList in deals import-----------"+conIdsList);
+	    			if(conIdsList != null && conIdsList.size() > 0)
+	    			{
+	    				relatedContactIds.addAll(conIdsList);
+	    				opportunity.setContact_ids(new ArrayList<String>());
+	    			}
+	    		}
+	    		if(opportunity == null)
+	    		{
+	    			opportunity = new Opportunity();
+	    		}
+		    	
+		    }
+		    else if (value.equalsIgnoreCase("name"))
 			{
 			    opportunity.name = dealPropValues[i];
 			}
@@ -1299,7 +1335,9 @@ public class CSVUtil
 			    {
 				try
 				{
+					System.out.println("Inside try block---Imported deal value---"+val);
 				    Double dealValue = Double.parseDouble(parse(val));
+				    System.out.println("Inside try block---Imported deal value after conversion---"+dealValue);
 				    if (dealValue > Double.valueOf(1000000000000.0))
 				    {
 					opportunity.expected_value = 0.0;
@@ -1311,6 +1349,7 @@ public class CSVUtil
 				}
 				catch (NumberFormatException e)
 				{
+					System.out.println("Exception occured while setting deal value in import");
 				    e.printStackTrace();
 				}
 			    }
@@ -1378,10 +1417,14 @@ public class CSVUtil
 				    {
 					try
 					{
+						System.out.println("Related contact email in deals import----"+emails[k]);
 					    Contact contact = ContactUtil.searchContactByEmail(emails[k]);
-					    if (contact != null && contact.id != null)
+					    if (contact != null && contact.id != null && !relatedContactIds.contains(contact.id.toString()))
 					    {
+					    System.out.println("Related contct id in deals import-----"+contact.id);
+					    System.out.println("Contains Id------"+relatedContactIds.contains(contact.id.toString()));
 						opportunity.addContactIds(contact.id.toString());
+						relatedContactIds.add(contact.id.toString());
 					    }
 					}
 					catch (NullPointerException e)
@@ -1455,6 +1498,20 @@ public class CSVUtil
 	    //setting related notes in deals if any is present 
 	    
 	    if(noteId != null && noteId.size() > 0){
+	    	if(opportunity.id != null && StringUtils.isNotEmpty(opportunity.id.toString()))
+	    	{
+	    		List<String> oldDealNoteIds = opportunity.getNote_ids();
+	    		if(oldDealNoteIds != null)
+	    		{
+	    			for(String str : oldDealNoteIds)
+	    			{
+	    				if(StringUtils.isNotEmpty(str))
+	    				{
+	    					noteId.add(Long.valueOf(str));
+	    				}
+	    			}
+	    		}
+	    	}
 	    	opportunity.setRelatedNotes(noteId);
 	    }
 	    opportunity.setOpportunityOwner(ownerKey);
@@ -1512,7 +1569,13 @@ public class CSVUtil
 	    opportunity.custom_data = customFields;
 	    try
 	    {
-		if (!StringUtils.isEmpty(opportunity.name) && opportunity.pipeline_id != null
+    	if (opportunity.id != null && !StringUtils.isEmpty(opportunity.id.toString()) && !StringUtils.isEmpty(opportunity.name) && opportunity.pipeline_id != null
+    			&& opportunity.milestone != null && !wrongMilestone)
+		{
+		    opportunity.save();
+		    mergedDeals++;
+		}
+    	else if (!StringUtils.isEmpty(opportunity.name) && opportunity.pipeline_id != null
 			&& opportunity.milestone != null && !wrongMilestone)
 		{
 		    opportunity.save();
@@ -1540,8 +1603,9 @@ public class CSVUtil
 	}
 
 	buildDealsImportStatus(status, "SAVED", savedDeals);
-	buildDealsImportStatus(status, "FAILED", totalDeals - savedDeals);
+	buildDealsImportStatus(status, "FAILED", totalDeals - (savedDeals + mergedDeals));
 	buildDealsImportStatus(status, "TOTAL", totalDeals);
+	buildDealsImportStatus(status, "MERGED", mergedDeals);
 	if (nameMissing > 0)
 	{
 	    buildDealsImportStatus(status, "NAMEMISSING", nameMissing);

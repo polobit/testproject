@@ -5208,3 +5208,4 @@ widgets.stripe-custom-field-select,Stripe uses Stripe ID stored in text custom f
 events.rescheduled,Rescheduled,Reprogramada
 events.cancelled,Cancelled,Cancelado
 events.no-show,No Show,No Show
+deal-view.deal-id,Deal ID,
