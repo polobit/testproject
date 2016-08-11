@@ -285,12 +285,12 @@ public class CountryUtil
 	 */
 	public static String getCountryCode(String countryName)
 	{
-		if(countryName != null && "land Islands".equalsIgnoreCase(countryName.substring(1)))
+		if(countryName != null && countryName.length()>0 && "land Islands".equalsIgnoreCase(countryName.substring(1)))
 		{
 			return "AX";
 		}
 		
-		if(countryName != null && "te d'Ivoire".equalsIgnoreCase(countryName.substring(2)))
+		if(countryName != null && countryName.length()>1 && "te d'Ivoire".equalsIgnoreCase(countryName.substring(2)))
 		{
 			return "CI";
 		}

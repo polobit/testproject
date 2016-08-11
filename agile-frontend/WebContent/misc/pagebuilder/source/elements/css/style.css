@@ -214,3 +214,7 @@ header .navbar-white a {
 	height: 100%;
 	background: none;
 }
+
+.img-responsive {
+	display: inline;
+}

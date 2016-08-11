@@ -1,4 +1,6 @@
 <!DOCTYPE html>
+<%@page import="org.json.JSONObject"%>
+<%@page import="com.agilecrm.util.language.LanguageUtil"%>
 <%@page import="com.agilecrm.user.DomainUser.ROLE"%>
 <%@page import="com.campaignio.servlets.deferred.WorkflowAddAccessLevelDeferredTask"%>
 <%@page import="com.google.appengine.api.taskqueue.Queue"%>
@@ -60,6 +62,9 @@ pageEncoding="UTF-8"%>
 	
 	function _agile_get_file_hash(filename)
 	{
+    if(true)
+      return _AGILE_VERSION;
+      
 		if( !filename || filename == '' )	return _AGILE_VERSION;
 		
 		if( _AGILE_FILE_HASH && _AGILE_FILE_HASH[filename] )	return _AGILE_FILE_HASH[filename];
@@ -149,6 +154,9 @@ String _AGILE_VERSION = SystemProperty.applicationVersion.get();
 String _VERSION_ID = VersioningUtil.getVersion();
 
 List<Dashboard> dashboardsList = DashboardUtil.getAddedDashboardsForCurrentUser();
+
+String _LANGUAGE = currentUserPrefs.language;
+JSONObject localeJSON = LanguageUtil.getLocaleJSON(currentUserPrefs, application);
 %>
 
 
@@ -194,6 +202,11 @@ content="<%=domainUser.getInfo(DomainUser.LAST_LOGGED_IN_TIME)%>" />
   display: none !important;
 }
 
+.leftcol-menu-folded{display: none;}
+.leftcol-menu-expanded{display: block;}
+.app-aside-folded .leftcol-menu-folded {display: block;}
+.app-aside-folded .leftcol-menu-expanded {display: none;}
+.app-aside-dock .leftcol-menu-expanded {display: none!important;}
 .search label { position:absolute; margin:5px 0 0 5px; }
 .search input[type="text"]{
     text-indent:1px;
@@ -255,9 +268,9 @@ function isIE() {
 
 <div id="free_plan_alert_info" class="free_plan_alert alert alert-info" role="alert" style="display:none;"> 
   <span class="free_plan_message">
-   You are currently on FREE Plan.
+   <%=LanguageUtil.getLocaleJSONValue(localeJSON, "you-are-currently-on-free-plan") %>.
   </span>
-  <a href="#subscribe" class="text-info font-bold" onclick="Agile_GA_Event_Tracker.track_event('Upgrade from Nav Bar Message')">Upgrade</a>
+  <a href="#subscribe" class="text-info font-bold" onclick="Agile_GA_Event_Tracker.track_event('Upgrade from Nav Bar Message')"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "noty-upgrade") %></a>
   <span class="free_plan_strip_close p-l-sm c-p">&times</span>
 </div>
 
@@ -299,11 +312,11 @@ function isIE() {
          %>" screen_name="Need Help? We are one click away." data-content="<div class='row' id='need_help_header'>
                   <ul class='col-xs-12 col-sm-12 grid-sub-nav text-center m-t-md p-l-md p-r-md'>
                     
-                <li class='pull-left m-b-sm'><a href='#' class='menu-service-select' data-service-name='SALES' data-dashboard='SalesDashboard'><i class='thumb'><img src='img/sales.svg'></i><span class='block'>Sales</span></a></li>
+                <li class='pull-left m-b-sm'><a href='#' class='menu-service-select' data-service-name='SALES' data-dashboard='SalesDashboard'><i class='thumb'><img src='img/sales.svg'></i><span class='block'><%=LanguageUtil.getLocaleJSONValue(localeJSON, "sales") %></span></a></li>
 
-                <li class='pull-left m-b-sm'><a href='#' class='menu-service-select' data-service-name='MARKETING' data-dashboard='MarketingDashboard'><i class='thumb'><img src='img/marketing.svg'></i> <span class='block'>Marketing</span></a></li>
+                <li class='pull-left m-b-sm'><a href='#' class='menu-service-select' data-service-name='MARKETING' data-dashboard='MarketingDashboard'><i class='thumb'><img src='img/marketing.svg'></i> <span class='block'><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-marketing") %></span></a></li>
 
-                <li class='pull-left m-b-sm'><a href='#' class='menu-service-select' data-service-name='SERVICE' data-dashboard='dashboard'><i class='thumb'><img src='img/service.svg'></i> <span class='block'>Service</span></a></li>
+                <li class='pull-left m-b-sm'><a href='#' class='menu-service-select' data-service-name='SERVICE' data-dashboard='dashboard'><i class='thumb'><img src='img/service.svg'></i> <span class='block'><%=LanguageUtil.getLocaleJSONValue(localeJSON, "service") %></span></a></li>
 
                 </ul>
                 </div>
@@ -374,7 +387,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
 	<!-- Sales menu -->  	
   <%if(domainUser.role == ROLE.SALES){ %>
    <li class="hidden-folded padder m-t-xs m-b-xs text-muted text-xs">
-     <span>Sales</span>
+     <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "sales") %></span>
    </li>
         
   <%
@@ -383,7 +396,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
   <li id="contactsmenu">
     <a  href="#contacts">
       <i class="icon icon-user"></i>
-      <span>Contacts</span>
+      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-contacts") %></span>
     </a>
   </li>
   <%
@@ -393,7 +406,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
   <li id="companiesmenu">
     <a  href="#companies">
       <i class="icon icon-building"></i>
-      <span>Companies</span>
+      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-companies") %></span>
     </a>
   </li>
 
@@ -403,7 +416,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
    <li  id="dealsmenu">
     <a  href="#deals">
       <i class="fa fa-money"></i>
-      <span>Deals</span>
+      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-deals") %></span>
     </a>
   </li>
   <%
@@ -415,7 +428,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
   <li id="casesmenu">
     <a  href="#cases">
       <i class="icon icon-folder"></i>
-      <span>Cases</span>
+      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-cases") %></span>
     </a>
   </li> 
   <%
@@ -428,7 +441,11 @@ if(currentUserPrefs.menuPosition.equals("top")){
    <li id="documentsmenu">
     <a  href="#documents">
       <i class="icon icon-doc"></i>
-      <span><%if(currentUserPrefs.menuPosition.equals("leftcol")){%>Docs<%}else{ %>Documents<%} %></span>
+      <span class="leftcol-menu-folded"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-docs") %></span>
+      <span class="leftcol-menu-expanded"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-documents") %></span>
+      <%if(currentUserPrefs.menuPosition.equals("leftcol")){%>
+      <%}else {%>
+      <%}%>
     </a>
   </li>
   <%
@@ -442,7 +459,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
   <li id="calendarmenu">
     <a href="#calendar" onclick="Agile_GA_Event_Tracker.track_event('Calendar Option in Nav Bar')">
     	<i class="icon icon-calendar"></i> 
-    	<span>Calendar</span> 
+    	<span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "calendar") %></span> 
     </a>
   </li>
   <%
@@ -452,8 +469,8 @@ if(currentUserPrefs.menuPosition.equals("top")){
   <li id="tasksmenu">
     <a href="#tasks" onclick="Agile_GA_Event_Tracker.track_event('Tasks Option in Nav Bar')">
       <i class="icon-list" data-original-title="" title=""></i>
-      <span>Tasks</span>
-      <span title="Tasks due" class="navbar_due_tasks pull-right tasks-span-top">
+      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "tasks") %></span>
+      <span title="<%=LanguageUtil.getLocaleJSONValue(localeJSON, "tasks-due") %>" class="navbar_due_tasks pull-right tasks-span-top">
           <span  id="due_tasks_count" class="badge badge-sm bg-danger"></span>
       </span>
     </a>
@@ -472,7 +489,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
     <li id="activitiesmenu">
     <a  href="#activities">
       <i class="icon-speedometer icon-white"></i>
-      <span>Activities</span>
+      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-activities") %></span>
     </a>
   </li>
     <%
@@ -484,7 +501,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
   <li id="reportsmenu">
     <a  href="#reports">
       <i class="icon-bar-chart icon-white"></i>
-      <span>Reports</span>
+      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-reports") %></span>
     </a>
   </li> 
     <%
@@ -500,22 +517,22 @@ if(currentUserPrefs.menuPosition.equals("top")){
   <!-- Marketing menu -->  	
   <%if(domainUser.role == ROLE.MARKETING){ %>
   <li class="hidden-folded padder m-t-xs m-b-xs text-muted text-xs">
-                <span>Marketing</span>
-              </li>
+      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-marketing") %></span>
+  </li>
    <%
       if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.CAMPAIGN)){
    %>
    <li id="workflowsmenu">
     <a  href="#workflows">
       <i class="icon icon-sitemap"></i>
-      <span>Campaigns</span>
+      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-campaigns") %></span>
     </a>
   </li>
 
   <li id="triggersmenu">
     <a  href="#triggers">
       <i class="icon icon-magic-wand"></i>
-      <span>Triggers</span>
+      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "triggers") %></span>
     </a>
   </li>
     <%
@@ -527,7 +544,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
    <li id="web-rules-menu">
     <a  href="#web-rules">
       <i class="icon icon-globe"></i>
-      <span>Web Rules</span>
+      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-web-rules") %></span>
     </a>
   </li>
     <%
@@ -536,13 +553,13 @@ if(currentUserPrefs.menuPosition.equals("top")){
    <li id="segmentationmenu">
     <a  href="#visitors">
        <i class="icon-eye"></i>
-      <span>Visitors</span>  
+      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-visitors") %></span> 
     </a>
   </li>
   <li id="landing-pages-menu">
     <a href="#landing-pages">
       <i class="fa fa-file-code-o"></i>
-      <span>Landing Pages</span>
+      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-landing-pages") %></span>
     </a>
   </li>
 
@@ -552,7 +569,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
   <li id="formsmenu">
     <a  href="#forms">
        <i class="icon-large1 icon-docs"></i>
-      <span>Forms</span>  
+      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "forms") %></span>  
     </a>
   </li>
   <%}%>
@@ -560,7 +577,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
   <li id="email-templates-menu">
     <a href="#email-templates">
       <i class="icon-envelope-letter"></i>
-      <span>Email Templates</span>
+      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "email-templates") %></span>
     </a>
   </li>
 
@@ -570,7 +587,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
    <li id="socialsuitemenu">
     <a  href="#social">
       <i class="icon-bubbles"></i>
-      <span>Social</span>
+      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-social") %></span>
     </a>
   </li>
     <%
@@ -583,7 +600,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
     <li id="activitiesmenu">
     <a  href="#activities">
       <i class="icon-speedometer icon-white"></i>
-      <span>Activities</span>
+      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-activities") %></span>
     </a>
   </li>
     <%
@@ -595,14 +612,14 @@ if(currentUserPrefs.menuPosition.equals("top")){
   <li id="reportsmenu">
     <a  href="#reports">
       <i class="icon-bar-chart icon-white"></i>
-      <span>Reports</span>
+      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-reports") %></span>
     </a>
   </li> 
   <li id="tasksmenu" class="hide">
     <a href="#tasks" onclick="Agile_GA_Event_Tracker.track_event('Tasks Option in Nav Bar')">
       <i class="icon-list" data-original-title="" title=""></i>
       <span>Tasks</span>
-      <span title="Tasks due" class="navbar_due_tasks pull-right tasks-span-top">
+      <span title="<%=LanguageUtil.getLocaleJSONValue(localeJSON, "tasks-due") %>" class="navbar_due_tasks pull-right tasks-span-top">
           <span  id="due_tasks_count" class="badge badge-sm bg-danger"></span>
       </span>
     </a>
@@ -619,13 +636,13 @@ if(currentUserPrefs.menuPosition.equals("top")){
   <%if(domainUser.role == ROLE.SERVICE){ %>
   
   <li class="hidden-folded padder m-t-xs m-b-xs text-muted text-xs">
-    <span>Service</span>
+    <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "service") %></span>
   </li>
   
   <li id="tickets">
     <a href="#tickets">
       <i class="icon icon-ticket"></i>
-      <span>Help Desk</span>
+      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "help-desk") %></span>
     </a>
   </li>
 
@@ -633,7 +650,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
     <a href="#tasks" onclick="Agile_GA_Event_Tracker.track_event('Tasks Option in Nav Bar')">
       <i class="icon-list" data-original-title="" title=""></i>
       <span>Tasks</span>
-      <span title="Tasks due" class="navbar_due_tasks pull-right tasks-span-top">
+      <span title="<%=LanguageUtil.getLocaleJSONValue(localeJSON, "tasks-due") %>" class="navbar_due_tasks pull-right tasks-span-top">
           <span  id="due_tasks_count" class="badge badge-sm bg-danger"></span>
       </span>
     </a>
@@ -641,35 +658,35 @@ if(currentUserPrefs.menuPosition.equals("top")){
 
   <%
   if(domainUser.is_admin && !domainUser.restricted_menu_scopes.contains(NavbarConstants.HELPDESK)){
-  %>
+  %>          
   <li id="ticketgroupsmenu">
     <a href="#ticket-groups">
       <i class="icon icon-users"></i>
-      <span>Groups</span>
+      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "groups") %></span>
     </a>
   </li>
   <li id="ticketlabelsmenu">
     <a href="#ticket-labels">
       <i class="icon icon-flag"></i>
-      <span>Labels</span>
+      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "labels") %></span>
     </a>
   </li>
   <li id="ticketcannedmessagesmenu">
     <a href="#canned-responses">
       <i class="icon icon-cursor"></i>
-      <span>Canned Responses</span>
+      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "canned-responses") %></span>
     </a>
   </li>
   <li id="ticketviewsmenu">
     <a href="#ticket-views">
       <i class="icon icon-directions"></i>
-      <span>Views</span>
+      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "views") %></span>
     </a>
   </li>
   <li id="ticketknowledgebasemenu">
     <a href="#knowledgebase">
       <i class="fa fa-search"></i>
-      <span>Knowledge Base</span>
+      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "knowledge-base") %></span>
     </a>
   </li>
    <%
@@ -682,7 +699,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
     <li id="activitiesmenu">
     <a  href="#activities">
       <i class="icon-speedometer icon-white"></i>
-      <span>Activities</span>
+      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-activities") %></span>
     </a>
   </li>
     <%
@@ -694,7 +711,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
   <li id="reportsmenu">
     <a  href="#reports">
       <i class="icon-bar-chart icon-white"></i>
-      <span>Reports</span>
+      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-reports") %></span>
     </a>
   </li> 
     <%
@@ -729,111 +746,33 @@ if(currentUserPrefs.menuPosition.equals("top")){
                           + "><i class='icon-off'></i>Logout</a></li>");
                     } else {
               %>
-
-              <%--
-              <%
-              
-                for(NavbarConstants constant : domainUser.menu_scopes)
-                {
-              %>
-                    <li id="<%=constant.id%>"><a href="<%=constant.href%>"><i
-                    class="<%=constant.icon%> icon-white"></i> <%=constant.heading%></a></li>
-              <%
-                }
-              %>
-              
-              
-              <%
-              String css_classes = "";
-              int size = domainUser.menu_scopes.size();
-              if(size <=7)
-              {
-                  
-                  css_classes = css_classes + " more-menu-hide-medium";
-              }
-              else
-              {
-                  css_classes = css_classes + " more-menu-show-medium";
-              }
-              if(size <= 4)
-              {
-                  css_classes = css_classes + " more-menu-hide-low";
-              }
-              else
-              {
-                  css_classes = css_classes + " more-menu-show-low";
-              }
-              
-              
-                  if (domainUser.menu_scopes.size() > 3) {
-              %>
-                <li id="more-menu" class="dropdown <%=css_classes%>"><a
-                  class="dropdown-toggle" data-toggle="dropdown" href=""> More
-                    <i class='caret'></i>
-                </a>
-                <%
-                  } else
-                  {
-                %>
-                <li id="more-menu" class="dropdown <%=css_classes%>"><a
-                  class="dropdown-toggle" data-toggle="dropdown" href=""> More
-                    <i class='caret'></i>
-                </a>
-              <%
-                  }
-              %>
-                <ul class="dropdown-menu drop-drop">
-                  <%
-                Iterator<NavbarConstants> iterator = domainUser.menu_scopes.iterator();
-                int index = 0;
-                for(NavbarConstants constant : domainUser.menu_scopes)
-                {
-                    
-                    if(index < 2)
-                    {
-                    ++index;
-                    continue;
-                    }
-                    
-              %>
-                    <li  id="<%=constant.id%>"><a href="<%=constant.href%>"><i
-                    class="<%=constant.icon%> icon-white"></i> <%=constant.heading%></a></li>
-              <%
-                }
-              %>
-                </ul>
-              </li> 
-              --%>
               
              <!--  <li class="line dk"></li>
             <li class="hidden-folded padder m-t m-b-sm text-muted text-xs">
                 <span>More</span>
               </li>
-                <li data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Calendar"><a href="#calendar"><i class="icon icon-calendar"></i> <span class="visible-xs">Calendar</span> </a></li>
+                <li data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Calendar"><a href="#calendar"><i class="icon icon-calendar"></i> <span class="visible-xs"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "calendar") %></span> </a></li>
                 <li id="due_tasks"  data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Tasks"><a class="pos-rlt" href="#tasks"><i class="icon-list"></i>
-                  <span class="visible-xs">Tasks</span>
-
+                  <span class="visible-xs"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "tasks") %></span>
                       <span title="Tasks due" class="navbar_due_tasks pull-right-xs"><span  id="due_tasks_count" class="badge badge-sm up bg-danger"></span></span></a></li> -->
-              
-              
             </ul>
   
       <ul class="nav  navbar-nav  navbar-right show_shortcuts"> 
-              <li rel="popover" data-trigger="click" class="need_help hidden-xs" screen_name="Need Help? We are one click away." data-content="<div class='row' id='need_help_header'  style='color:#7D7474'>
-                  <div class='col-md-12 text-sm p-b-xs'>Need Help? We are one click away.</div>
+              <li rel="popover" data-trigger="click" class="need_help hidden-xs" screen_name='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "need-help") %>' data-content="<div class='row' id='need_help_header'  style='color:#7D7474'>
+                  <div class='col-md-12 text-sm p-b-xs'><%=LanguageUtil.getLocaleJSONValue(localeJSON, "need-help") %></div>
                 </div>
                 <div class='row m-none' style='color:#7D7474'>
                 <div class='pull-left inline-block' style='width:50%;border-right: 1px solid #E2E4E4;'>
                  <div class='p-r-none p-l-none'>
                   <div class='text-center'>
-                   <div class='text-xs' style='margin-top:-2px;padding-bottom:2px;'><b><a href='https://our.agilecrm.com/calendar/Vikas,Mrudula,Shravi_Sharma,Bharat,Manish,Nick,Stephen' target='_blank' rep class='text-info'>Sales</a></b>
+                   <div class='text-xs' style='margin-top:-2px;padding-bottom:2px;'><b><a href='https://our.agilecrm.com/calendar/Vikas,Mrudula,Shravi_Sharma,Bharat,Manish,Nick,Stephen' target='_blank' rep class='text-info'><%=LanguageUtil.getLocaleJSONValue(localeJSON, "sales") %></a></b>
                    </div>
                   </div> 
                    </div>
                   </div>
                   <div class='pull-right' style='width:50%;border-left: 1px solid #FFFFFF;'>
                  <div class='p-r-none p-l-none'>
-                  <div class=' text-center text-xs'  style='margin-top:-2px;padding-bottom:2px;'><b><a href='https://our.agilecrm.com/calendar/Haaris_farooqi,Khader' target='_blank' rep class='text-info'>Support</a></b>
+                  <div class=' text-center text-xs'  style='margin-top:-2px;padding-bottom:2px;'><b><a href='https://our.agilecrm.com/calendar/Haaris_farooqi,Khader' target='_blank' rep class='text-info'><%=LanguageUtil.getLocaleJSONValue(localeJSON, "support") %></a></b>
                   </div>
                  </div>
                 </div><div class='clearfix'></div>
@@ -879,15 +818,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
              <!-- <b class="caret"></b> -->   
 
              <div  class="">
-                      <%-- <%
-                          if (!StringUtils.isEmpty(currentUserPrefs.pic))
-                                out.println("<img src='"
-                                    + currentUserPrefs.pic
-                                    + "'style='padding:2px !important' class='thumbnail m-b-none thumb-xxs m-r-xs inline'></img>");
-                              else
-                                out.println("<img src='img/gravatar.png' style='padding:2px !important' class='thumbnail m-b-none thumb-xxs m-r-xs inline'></img>");
-                      %> --%> <span class="text-sm m-r-md"> <%=SafeHtmlUtil.sanitize(user.getEmail())%></span>
-
+                     <span class="text-sm m-r-md"> <%=SafeHtmlUtil.sanitize(user.getEmail())%></span>
                   </div>
                   </span>              
                    </a>
@@ -897,32 +828,25 @@ if(currentUserPrefs.menuPosition.equals("top")){
 
                   <li><a href="#user-prefs"><!-- <i class="icon-cog"></i> -->
 
-                      <div class="pull-left">Preferences</div><div class='pull-right shortcuts'>Shift + P</div><div class="clearfix"></div></a></li>
+                      <div class="pull-left"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "preferences") %></div><div class='pull-right shortcuts'>Shift + P</div><div class="clearfix"></div></a></li>
 
                   <%
                       if (domainUser != null && domainUser.is_admin)
                       {
-                            out.print("<li><a href='#account-prefs'><div class='pull-left'>Admin Settings</div><div class='pull-right shortcuts'>Shift + A</div><div class='clearfix'></div></a></li>");
-                          //  out.println("<li><a href='#subscribe'><i class='icon-shopping-cart'></i> Plan & Upgrade</a></li>");
+                            out.print("<li><a href='#account-prefs'><div class='pull-left'>" + LanguageUtil.getLocaleJSONValue(localeJSON, "admin-settings") + "</div><div class='pull-right shortcuts'>Shift + A</div><div class='clearfix'></div></a></li>");
                       }
                   %>
                   <li><a href="#themeandlayout"><!-- <i class="icon-off"></i> -->
-                      <div class="pull-left">Theme & Layout</div><div class='pull-right shortcuts'>Shift + L</div><div class="clearfix"></div></a></li>
+                      <div class="pull-left"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "theme-and-layout") %></div><div class='pull-right shortcuts'>Shift + L</div><div class="clearfix"></div></a></li>
                   
                   <li><a href="#subscribe"><!-- <i class="icon-cog"></i> -->
-                      <div class="pull-left">Upgrade</div><div class='pull-right shortcuts'>Shift + U</div><div class="clearfix"></div></a></li>
+                      <div class="pull-left"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "upgrade") %></div><div class='pull-right shortcuts'>Shift + U</div><div class="clearfix"></div></a></li>
                   <li><a href="https://www.agilecrm.com/product-updates" target="_blank"><!-- <i class="icon-off"></i> -->
-                      <div class="pull-left">Product Updates</div><div class='pull-right shortcuts'>Shift + R</div><div class="clearfix"></div></a></li>
+                      <div class="pull-left"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "product-updates") %></div><div class='pull-right shortcuts'>Shift + R</div><div class="clearfix"></div></a></li>
                   <li><a href="https://www.agilecrm.com/support" target="_blank"><!-- <i class="icon-off"></i> -->
-                      <div class="pull-left">Help</div><div class='pull-right shortcuts'>Shift + H</div><div class="clearfix"></div></a></li>
-                  <!-- <li><a href="https://www.agilecrm.com/support.html" target="_blank"><i class="icon-facetime-video"></i> Help
-                      Videos</a></li>
-                  <li><a href="#" onclick="$('li#fat-menu').removeClass('open');clickdesk_show_livechat_popup();"><i class="icon-comment"></i> Live Chat</a></li>  -->
-                  <!-- <li><a href="#help"><i class="icon-question"></i>
-                      Help</a></li> -->
-                  
+                      <div class="pull-left"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "help") %></div><div class='pull-right shortcuts'>Shift + H</div><div class="clearfix"></div></a></li>
                   <li><a href="<%=logoutURL%>"><!-- <i class="icon-off"></i> -->
-                      <div class="pull-left">Logout</div><div class='pull-right shortcuts'>Shift + G</div><div class="clearfix"></div></a></li>
+                      <div class="pull-left"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "logout") %></div><div class='pull-right shortcuts'>Shift + G</div><div class="clearfix"></div></a></li>
 
                 </li>
               <%
@@ -978,10 +902,9 @@ if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Produ
     production = true;
    
 }
-
+// String tplFile = "tpl/min/precompiled/locales/" + _LANGUAGE + "/" + _LANGUAGE + ".html";
+String tplFile = _LANGUAGE + ".html";
 %>
-
- <%@ include file="tpl/min/precompiled/flatfull/tpl.html"%>
 
   <!-- Include bootstrap modal divs-->
  <%@ include file="flatfull/modals.html"%>
@@ -992,6 +915,7 @@ if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Produ
 <jsp:include page="flatfull/footer.jsp" />
 
 <script src='//cdnjs.cloudflare.com/ajax/libs/headjs/1.0.3/head.min.js'></script>
+<script src='<%=FLAT_FULL_PATH%>jscore/handlebars/download-template.js'></script>
 <script>
 
 try{console.time("startbackbone");}catch(e){}
@@ -1073,20 +997,26 @@ var HANDLEBARS_LIB = LOCAL_SERVER ? "/lib/handlebars-v1.3.0.js" : "//cdnjs.cloud
 var _billing_restriction = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(restriction))%>;
 var USER_BILLING_PREFS = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(subscription))%>;
 
+// Load language JSON
+var _LANGUAGE = "<%=_LANGUAGE%>";
+// var _Agile_Resources_Json = {};
+// head.js("locales/" + _LANGUAGE + "/" + _LANGUAGE + ".json?" + _agile_get_file_hash('lib-all-new-2.js'));
+
 head.load(	"https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js",
 			LIB_PATH + 'final-lib/min/lib-all-new-1.js?_=' + _agile_get_file_hash('lib-all-new-1.js'),
 			"https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.3.0/handlebars.min.js",
 			LIB_PATH + 'final-lib/min/backbone-min.js',
-			LIB_PATH + 'final-lib/min/lib-all-new-2.js?_=' + _agile_get_file_hash('lib-all-new-2.js')+'_', 
+			LIB_PATH + 'final-lib/min/lib-all-new-2.js?_=' + _agile_get_file_hash('lib-all-new-2.js'),  
 			function(){
-		        load_globalize();
-		        showVideoForRegisteredUser();
+         // Load tpl.html
+        load_tpl_html();
+		    showVideoForRegisteredUser();
 		});
 
 // head.js({ library  : LIB_PATH + 'final-lib/min/lib-all-min-1.js?_=' + _AGILE_VERSION });
 
 if(HANDLEBARS_PRECOMPILATION)
-head.js(CLOUDFRONT_PATH + "tpl/min/precompiled/" + FLAT_FULL_PATH + "tpl.js" + "?_=" + _agile_get_file_hash('tpl.js'));	
+head.js(CLOUDFRONT_PATH + "tpl/min/precompiled/locales/" + _LANGUAGE + "/" + _LANGUAGE + ".js" + "?_=" + _agile_get_file_hash(_LANGUAGE + '.js'));	
 
 var en;
 
@@ -1099,7 +1029,7 @@ var Agile_Contact = {};
 head.ready(function() {
 
 if(!HANDLEBARS_PRECOMPILATION){
-    head.js(HANDLEBARS_LIB, FLAT_FULL_PATH + "jscore/handlebars/download-template.js" + "?_=" + _agile_get_file_hash('download-template.js'), function()
+    head.js(HANDLEBARS_LIB, function()
     {
         downloadTemplate("tpl.js");
         downloadTemplate("contact-view.js");
@@ -1111,12 +1041,13 @@ $('body').css('background-image', 'none');
 //$('#content').html('ready');
 $("img.init-loading", $('#content')).attr("src", "<%=CLOUDFRONT_TEMPLATE_LIB_PATH%>/img/ajax-loader-cursor.gif");
 
-head.load([{'js-core-1': CLOUDFRONT_PATH + 'jscore/min/' + FLAT_FULL_PATH +'js-all-min-1.js' + "?_=" + _agile_get_file_hash('js-all-min-1.js')+"_"}, 
-		{'js-core-2': CLOUDFRONT_PATH + 'jscore/min/' + FLAT_FULL_PATH +'js-all-min-2.js' + "?_=" + _agile_get_file_hash('js-all-min-2.js')+"_"}, 
-		{'js-core-3': CLOUDFRONT_PATH + 'jscore/min/' + FLAT_FULL_PATH +'js-all-min-3.js' + "?_=" + _agile_get_file_hash('js-all-min-3.js')+"_"}, 
-		{'js-core-4': CLOUDFRONT_PATH + 'jscore/min/' + FLAT_FULL_PATH +'js-all-min-4.js' + "?_=" + _agile_get_file_hash('js-all-min-4.js')+"_"}, 
-		CLOUDFRONT_PATH + "tpl/min/precompiled/" + FLAT_FULL_PATH + "contact-view.js" + "?_=" + _agile_get_file_hash('contact-view.js')+"_"], function(){
+head.load([{'js-core-1': CLOUDFRONT_PATH + 'jscore/min/locales/' + _LANGUAGE  +'/js-all-min-1.js' + "?_=" + _agile_get_file_hash('js-all-min-1.js')}, 
+		{'js-core-2': CLOUDFRONT_PATH + 'jscore/min/locales/' + _LANGUAGE +'/js-all-min-2.js' + "?_=" + _agile_get_file_hash('js-all-min-2.js')}, 
+		{'js-core-3': CLOUDFRONT_PATH + 'jscore/min/locales/' + _LANGUAGE +'/js-all-min-3.js' + "?_=" + _agile_get_file_hash('js-all-min-3.js')}, 
+		{'js-core-4': CLOUDFRONT_PATH + 'jscore/min/locales/' + _LANGUAGE +'/js-all-min-4.js' + "?_=" + _agile_get_file_hash('js-all-min-4.js')}, 
+		CLOUDFRONT_PATH + "tpl/min/precompiled/locales/" + _LANGUAGE + "/contact-view.js" + "?_=" + _agile_get_file_hash('contact-view.js')], function(){
 			console.log("All files loaded. Now continuing with script");
+      load_globalize();
 			try{
 				$('[data-toggle="tooltip"]').tooltip();  
 				//Code to display alerts of widgets.
@@ -1150,6 +1081,10 @@ head.load([{'js-core-1': CLOUDFRONT_PATH + 'jscore/min/' + FLAT_FULL_PATH +'js-a
 // head.js({"stats" : '<%=CLOUDFRONT_TEMPLATE_LIB_PATH%>stats/min/agile-min.js' + "?_=" + _AGILE_VERSION});
 	
 }); //End of head.ready() function. Check above.
+
+function load_tpl_html(){
+    downloadTemplate('<%=tplFile%>', function(){});
+}
 
 function load_globalize()
 {

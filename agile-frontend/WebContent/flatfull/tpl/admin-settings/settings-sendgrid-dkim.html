@@ -1,14 +1,15 @@
 <script id="admin-setting-sendgrid-whitelabel-template" type="text/html">
 {{#if mail_server}}    
 <div class="controls dkim_spf">
-<label>Copy the below settings and update in your Web domain DNS. </label>   
+<label>
+{{agile_lng_translate 'Admin-settings-users' 'copy-the-below-setting-and-update-in-web-domain'}} </label>   
 <div class="controls">  
   <table class="table">
     <thead>
       <tr>
-       <th>TYPE</th>
-        <th>HOST</th>
-        <th>DATA</th>
+       <th>{{agile_lng_translate 'dkim' 'type'}}</th>
+        <th>{{agile_lng_translate 'other' 'host'}}</th>
+        <th>{{agile_lng_translate 'other' 'data'}}</th>
       </tr>
     </thead>
     <tbody>
@@ -32,7 +33,7 @@
     </tbody>
   </table>
   {{else}}
-  <label>Try again</label>
+  <label>{{agile_lng_translate 'widgets' 'try-again'}}</label>
   {{/if}}
 </div>
 </div>
@@ -45,28 +46,29 @@
   <table class="table">
     <thead>
       <tr>
-       <th>VALID</th>
-        <th>REASON</th>
+       <th> {{agile_lng_translate 'other' 'valid'}}</th>
+        <th>{{agile_lng_translate 'widgets' 'reason'}}</th>
       </tr>
     </thead>
     <tbody>
       <tr>
         <td>{{{validateSendgridWhitelabel mail_server.valid}}}</td>
-        <td> <code class="prettyprint pull-left Api_span">{{#if mail_server.reason}}{{mail_server.reason}}{{else}} <span style="color:green;">Mail Server settings is verified successfully. {{/if}}</span> </code> </td>
+        <td> <code class="prettyprint pull-left Api_span">{{#if mail_server.reason}}{{mail_server.reason}}{{else}} <span style="color:green;">{{agile_lng_translate 'other' 'mail-server-setings-verified-succefully'}} {{/if}}</span> </code> </td>
       </tr>
       <tr>
         <td>{{{validateSendgridWhitelabel subdomain_spf.valid}}}</td>
-        <td><code class="prettyprint pull-left Api_span" >{{#if subdomain_spf.reason}}{{subdomain_spf.reason}} {{else}}<span style="color:green;"> SPF settings is verified successfully. {{/if}}</span></code></td>
+        <td><code class="prettyprint pull-left Api_span" >{{#if subdomain_spf.reason}}{{subdomain_spf.reason}} {{else}}<span style="color:green;"> {{agile_lng_translate 'other' 'spf-settings-verified-successfully'}} {{/if}}</span></code></td>
       </tr>
       <tr>
         <td>{{{validateSendgridWhitelabel dkim.valid}}}</td>
-        <td><code class="prettyprint pull-left Api_span" >{{#if dkim.reason}} {{dkim.reason}}{{else}}<span style="color:green;"> DKIM settings is verified successfully. {{/if}}</span></code></td>
+        <td><code class="prettyprint pull-left Api_span" >{{#if dkim.reason}} {{dkim.reason}}{{else}}<span style="color:green;"> {{agile_lng_translate 'other' 'dkim-setting-is-verified-successfully'}} {{/if}}</span></code></td>
        
       </tr>
     </tbody>
   </table>
   {{else}}
-  <label class="dkim_spf" style="color:red">Please click on Get Settings first to register your domain.</label>
+  <label class="dkim_spf" style="color:red">
+  {{agile_lng_translate 'other' 'click-on-get-settings-to-register-domain'}}</label>
   {{/if}}
 </div>
 </div>
@@ -74,11 +76,12 @@
 
 <script id="admin-setting-sendgrid-whitelabel-permission-template" type="text/html">
 {{#if plan}}
- <div class="m-xs " style="text-align:center;font-size: 13px; margin-top: 15px;"><span style="padding: 3px 10px 3px 10px;border: 1px solid #E2E29C;background-color: #F7F7D0;"> Please <a href="#subscribe-plan" class="c-p text-info">upgrade</a> plan to use this feature. </span>
+ <div class="m-xs " style="text-align:center;font-size: 13px; margin-top: 15px;"><span style="padding: 3px 10px 3px 10px;border: 1px solid #E2E29C;background-color: #F7F7D0;"> Please <a href="#subscribe-plan" class="c-p text-info">upgrade</a> {{agile_lng_translate 'other' 'plan-to-use-this-feature'}} </span>
  </div>
  {{else}}
     {{#if emailGateway}}
-     <div class="m-xs " style="text-align:center;font-size: 13px;margin-top: 15px;"><span style="padding: 3px 10px 3px 10px;border: 1px solid #E2E29C;background-color: #F7F7D0;"> You are using your own Email Gateway </span>
+     <div class="m-xs " style="text-align:center;font-size: 13px;margin-top: 15px;"><span style="padding: 3px 10px 3px 10px;border: 1px solid #E2E29C;background-color: #F7F7D0;"> 
+     {{agile_lng_translate 'other' 'you-are-using-your-own-email-gateway'}} </span>
      </div>
      {{else}}
      undefined

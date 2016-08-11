@@ -206,7 +206,7 @@ public class ShopifySyncImpl extends OneWaySyncService
 	    BufferedReader br = new BufferedReader(new InputStreamReader(response.getStream()));
 	    String str;
 	    JSONObject shopObject = null;
-	    while ((str = br.readLine()) != null)
+	    if ((str = br.readLine()) != null)
 	    {
 		shopObject = new JSONObject(str);
 	    }

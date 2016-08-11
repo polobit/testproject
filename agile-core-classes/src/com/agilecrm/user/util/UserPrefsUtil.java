@@ -120,6 +120,7 @@ public class UserPrefsUtil
 				continue;
 			
 			AgileUser agileUser1 = AgileUser.getCurrentAgileUserFromDomainUser(key.getId());
+			
 			if(agileUser1 == null || !isUserHavingPrefs(agileUser1))
 				 continue;
 			

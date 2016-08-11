@@ -8,7 +8,7 @@ var Ticket_Labels = {
 			var $select = $(".chosen-select", el);
 
 			// Initliazing multi select drop down
-			$select.chosen({no_results_text: "No labels found"});
+			$select.chosen({no_results_text: "{{agile_lng_translate 'tickets' 'no-labels-found'}}"});
             
             if(execute_callback) {
 				$select.off('change');
@@ -125,10 +125,10 @@ var Ticket_Labels = {
 		    ticket_model.set({labels:ticket_labels},{silent: true});
 		} 		         
 		
-       		var msg = "Label "+ label_text + " has been deleted from ticket";
+       		var msg = "{{agile_lng_translate 'contacts-view' 'label'}} "+ label_text + " {{agile_lng_translate 'tickets' 'label-deleted'}}";
 
        		if(json.command == 'add')
-				msg = "Label " + label_text + " has been added to ticket" ;
+				msg = "{{agile_lng_translate 'contacts-view' 'label'}} " + label_text + " {{agile_lng_translate 'tickets' 'label-added'}}" ;
                    		
        		Ticket_Utils.showNoty('information', msg, 'bottomRight', 5000);
 

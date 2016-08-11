@@ -70,7 +70,7 @@ public class Widget {
 	/** Logo URL of the widget to show it in add widget page */
 	public String logo_url = null;
 
-	public boolean add_by_admin = false;
+	public Long add_by;
 
 	@NotSaved
 	public String listOfUsers = null;
@@ -250,8 +250,9 @@ public class Widget {
 	public void save() {
 		// User is not added, Adding the Current user obj.
 		AgileUser agileUser = AgileUser.getCurrentAgileUser();
+		Long agileUserID = agileUser.id;
 		if (user == null) {			
-			user = new Key<AgileUser>(AgileUser.class, agileUser.id);
+			user = new Key<AgileUser>(AgileUser.class, agileUserID);
 		}
 
 		if(this.widget_type.equals(WidgetType.INTEGRATIONS)){
@@ -262,30 +263,33 @@ public class Widget {
 			}
 			
 			DomainUser domainUser = agileUser.getDomainUser();
-			boolean isAdmin = domainUser.is_admin;
+			boolean isAdmin = domainUser.is_admin;			
+			
 			if(isAdmin){
-				List<Widget> widgetList = WidgetUtil.getWigetUserListByAdmin(name);
-				if (widgetList != null && widgetList.size() > 0) {
-					for (Widget widget : widgetList) {						
-						widget.prefs = this.prefs;
-						widget.widget_type = this.widget_type;
-						widget.logo_url = this.logo_url;
-						widget.mini_logo_url = this.mini_logo_url;
-						widget.description = this.description;
-						widget.display_name = this.display_name;
-						widget.name = this.name;
-						widget.fav_ico_url = this.fav_ico_url;
-						widget.integration_type = this.integration_type;
-						widget.add_by_admin = true;
-						widget.script = this.script;
-						widget.script_type = this.script_type;
-						widget.url = this.url;
-						dao.put(widget);
+				if(this.id != null){
+					List<Widget> widgetList = WidgetUtil.getWigetUserListByAdmin(name, agileUserID);
+					if (widgetList != null && widgetList.size() >0) {
+						for (Widget widget : widgetList) {						
+							widget.prefs = this.prefs;
+							widget.widget_type = this.widget_type;
+							widget.logo_url = this.logo_url;
+							widget.mini_logo_url = this.mini_logo_url;
+							widget.description = this.description;
+							widget.display_name = this.display_name;
+							widget.name = this.name;
+							widget.fav_ico_url = this.fav_ico_url;
+							widget.integration_type = this.integration_type;
+							widget.add_by = agileUserID;
+							widget.script = this.script;
+							widget.script_type = this.script_type;
+							widget.url = this.url;
+							dao.put(widget);
+						}
+						return;
 					}
-					return;
-				}	
-				this.add_by_admin = true;
+				}				
 			}
+			this.add_by = agileUserID;
 			dao.put(this);
 		}		
 	}
@@ -297,11 +301,9 @@ public class Widget {
 		}		
 	}
 	
-	public void updateStatus(boolean status){
-		this.isActive = status;
-		if(status){
-			this.add_by_admin = true;
-		}
+	public void updateStatus(boolean status, Long agileUserID){
+		this.isActive = status;		
+		this.add_by = agileUserID;
 		dao.put(this);
 	}
 

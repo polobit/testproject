@@ -40,14 +40,14 @@ $(function(){
 			}
 			Backbone.history.navigate("merge-companies", { trigger : true });
 		}else{
-			$('body').find(".select-none").html('<div class="alert alert-danger m-t-sm"><a class="close" data-dismiss="alert" href="#">&times;</a>You have not selected any records to merge. Please select at least one record to continue.</div>').show().delay(3000).hide(1);
+			$('body').find(".select-none").html('<div class="alert alert-danger m-t-sm"><a class="close" data-dismiss="alert" href="#">&times;</a>'+_agile_get_translated_val('contacts','merge-error')+'</div>').show().delay(3000).hide(1);
 		}
 	});
 
 	$('body').off('click', '#merge-companies-model');
 	$('body').on('click', '#merge-companies-model', function(event){
 		event.preventDefault();
-		var confirm_message = "Selected data will be merged into master company record. Do you want to proceed?";
+		var confirm_message = _agile_get_translated_val('contacts','merge-confirm');
 	
 		var $that = $(this);
 		showAlertModal(confirm_message, "confirm", function(){

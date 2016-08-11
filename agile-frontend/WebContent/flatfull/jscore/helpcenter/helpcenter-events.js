@@ -11,14 +11,14 @@ var Helcenter_Events = {
             var flag = $( "."+article_id ).is(":checked");
             
             if(!flag)
-            	msg = "Do you want to save the article as draft";     
+            	msg = "{{agile_lng_translate 'article' 'save-as-draft'}}";     
 
    				var data = true;
 
                    if(!flag)
                       data = false; 
                     
-               showModalConfirmation("Status", msg, function(){
+               showModalConfirmation("{{agile_lng_translate 'widgets' 'status'}}", msg, function(){
    					
                   if(!App_Helpcenter_Module.articlesCollection)
                         return;
@@ -66,7 +66,7 @@ var Helcenter_Events = {
          e.preventDefault();
          var id = $(this).data("id");
                   
-         showModalConfirmation("Delete Category", "Are you sure, you want to delete category ", function(){
+         showModalConfirmation("{{agile_lng_translate 'admin-settings-tasks' 'delete-category'}}", "{{agile_lng_translate 'admin-settings-tasks' 'confirm-delete-category'}} ", function(){
 
                      
                      
@@ -84,7 +84,7 @@ var Helcenter_Events = {
             });                                    
                      
 
-         }, null,null, "Yes", "No");
+         }, null,null, "{{agile_lng_translate 'portlets' 'yes'}}", "{{agile_lng_translate 'portlets' 'no'}}");
 
       });
    }

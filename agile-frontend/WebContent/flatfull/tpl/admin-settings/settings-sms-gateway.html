@@ -44,7 +44,7 @@
 										{{#if_equals "TWILIO" sms_api}}
 											<div class="control-group" style="margin-bottom: 0px; margin-top: -12px;">
 												<div class="controls">
-													<input type="text" class="input-medium required TWILIO PLIVO form-control" style="width: 90%" placeholder="ACCOUNT SID"  name="account_sid" value="{{account_sid}}"/>
+													<input type="text" class="input-medium required TWILIO PLIVO form-control" style="width: 90%" placeholder="{{agile_lng_translate 'admin-settings-integrations' 'account-sid'}}"  name="account_sid" value="{{account_sid}}"/>
 												</div>
 											</div>
 
@@ -52,7 +52,7 @@
 
 										<div class="control-group" style="margin-bottom: 0px; margin-top: -12px;">
 											<div class="controls">
-												<input type="text" class="input-medium required TWILIO PLIVO form-control" style="width: 90%" placeholder="ACCOUNT ID" name="account_id" value="{{account_id}}"/>
+												<input type="text" class="input-medium required TWILIO PLIVO form-control" style="width: 90%" placeholder="{{agile_lng_translate 'admin-settings-integrations' 'account-id'}}" name="account_id" value="{{account_id}}"/>
 											</div>
 										</div>
 
@@ -60,7 +60,7 @@
 
 										<div class="control-group form-group" style="margin-bottom: 0px;">
 											<div class="controls">
-												<input type="text" class="input-medium required TWILIO PLIVO form-control" style="width: 90%; margin-top: 10px;" placeholder="Auth Token" name="auth_token" value="{{auth_token}}" id = "auth_token" />
+												<input type="text" class="input-medium required TWILIO PLIVO form-control" style="width: 90%; margin-top: 10px;" placeholder="{{agile_lng_translate 'admin-settings-integrations' 'auth-token'}}" name="auth_token" value="{{auth_token}}" id = "auth_token" />
 											</div>
 										</div>
 
@@ -84,7 +84,7 @@
 
 							<div class="control-group form-group" style="margin-bottom: 0px;">
 								<div class="controls">
-									<input type="text" class="input-medium required TWILIO PLIVO form-control" style="width: 90%; margin-top: 10px" placeholder="Auth Token" name="auth_token" id = "auth_token" />
+									<input type="text" class="input-medium required TWILIO PLIVO form-control" style="width: 90%; margin-top: 10px" placeholder="{{agile_lng_translate 'admin-settings-integrations' 'auth-token'}}" name="auth_token" id = "auth_token" />
 								</div>
 							</div>
 
@@ -95,7 +95,7 @@
 				<div id="sms-integration-error">
 					<p class="text-center" style="margin: 10px 0px 5px 0px;">
 						<a type="reset" class="btn btn-default btn-sm" href="#integrations" style="text-decoration: none;">Cancel</a>
-						<a type="submit" href="#" class="save btn-sm btn btn-primary" style="text-decoration: none;">Save</a> 
+						<a type="submit" href="#" class="save btn-sm btn btn-primary" style="text-decoration: none;">{{agile_lng_translate 'modals' 'save'}}</a> 
 					</p>
 				</div>
 				</div>

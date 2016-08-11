@@ -106,7 +106,7 @@ var Ticket_Utils = {
 
 	loadDateChartAndDatePicker: function(callback){
 
-		head.js(LIB_PATH + 'lib/date-charts.js', 
+		head.js(LIB_PATH + 'lib/date-charts-en.js', 
 				  LIB_PATH + 'lib/date-range-picker.js'+'?_=' + _agile_get_file_hash('date-range-picker.js'), function(){
 
 			if(callback)
@@ -137,8 +137,7 @@ var Ticket_Utils = {
 	},
 
 	loadTimeAgoPlugin: function(callback){
-		head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
-			
+		agileTimeAgoWithLngConversion(undefined, function(){
 			if(callback)
 				callback();
 		});
