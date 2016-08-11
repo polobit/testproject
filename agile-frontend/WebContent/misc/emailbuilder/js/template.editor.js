@@ -169,6 +169,7 @@ function handleObjects() {
                         hideAllSettings();
                         $('#imageproperties').show();
                         $("#select_alignment").show();
+                        $('#image-width-height').show();
 
                         break;
                     case 'imgtxtcol':
@@ -615,7 +616,7 @@ function getIndex(itm, list) {
 
 function hideAllSettings(exceptThisElement) {
 
-    var settingsHolderSelectors = ['#editor','#buttons','#buttonstxt','#imageproperties','#social-links', '#user-poll', '#select_alignment'];
+    var settingsHolderSelectors = ['#editor','#buttons','#buttonstxt','#imageproperties','#social-links', '#user-poll', '#select_alignment', '#image-width-height'];
 
     if(typeof exceptThisElement != "undefined") {
         var index = settingsHolderSelectors.indexOf(exceptThisElement);
