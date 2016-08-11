@@ -386,7 +386,7 @@ public class TasksAPI
 	 if(tasksJSONArray!=null && tasksJSONArray.length()>0){		 
 		 try {
 			for (int i = 0; i < tasksJSONArray.length(); i++) {
-				 String taskId =  (String) tasksJSONArray.get(i);
+				 String taskId = tasksJSONArray.getString(i);
 				 Task task = TaskUtil.getTask(Long.parseLong(taskId));
 				 List<ContactPartial> contactsList = task.getContacts();
 				 List<String> conIds = new ArrayList<String>();

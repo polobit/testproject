@@ -4373,7 +4373,7 @@ border: 1px solid #e5e5e5;
     display: block;
     float: left;
     margin-left: -32px;
-    margin-top: -8px;
+    margin-top: -15px;
     background-color: #337ab7;
     padding: .2em .6em .3em;
     font-size: 75%;
@@ -4429,4 +4429,8 @@ border: 1px solid #e5e5e5;
 }
 .update-drag-deal + .tooltip{
   width: auto!important;
+}
+
+.ticket-collection-container th {
+  white-space: nowrap;
 }

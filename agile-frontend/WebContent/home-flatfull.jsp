@@ -206,6 +206,7 @@ content="<%=domainUser.getInfo(DomainUser.LAST_LOGGED_IN_TIME)%>" />
 .leftcol-menu-expanded{display: block;}
 .app-aside-folded .leftcol-menu-folded {display: block;}
 .app-aside-folded .leftcol-menu-expanded {display: none;}
+.app-aside-dock .leftcol-menu-expanded {display: none!important;}
 .search label { position:absolute; margin:5px 0 0 5px; }
 .search input[type="text"]{
     text-indent:1px;
