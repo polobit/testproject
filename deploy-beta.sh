@@ -28,7 +28,7 @@ git pull origin maven_backends
 ant create-target  -DRELEASE_VERSION="$2" -DPRODUCTION=false;
 
 
-appcfg.sh --oauth --email=naresh@faxdesk.com -A agilecrmbeta -V "$2" update "$PROJECT_TARGET_LOCATION"/agile-java-server/"$1".war/
+appcfg.sh --oauth2 --email=naresh@faxdesk.com -A agilecrmbeta -V "$2" update "$PROJECT_TARGET_LOCATION"/agile-java-server/"$1".war/
 
 #cd ../
 
