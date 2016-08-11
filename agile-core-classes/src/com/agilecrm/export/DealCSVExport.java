@@ -21,6 +21,7 @@ import com.agilecrm.deals.Opportunity;
 import com.agilecrm.deals.util.MilestoneUtil;
 import com.agilecrm.deals.util.OpportunityUtil;
 import com.agilecrm.user.util.UserPrefsUtil;
+import com.googlecode.objectify.Key;
 
 /**
  * <code>DealCSVExport</code> handles building CSV file for obtained Deals.
@@ -46,6 +47,7 @@ public class DealCSVExport
     public static final String LOSSREASON = "Loss Reason";
     public static final String CREATED_DATE = "Created Date";
     public static final String WON_DATE = "Won Date";
+    public static final String ID = "Deal ID";
 
     private static final DateFormat date = new SimpleDateFormat("MM/dd/yyyy");
 
@@ -67,6 +69,7 @@ public class DealCSVExport
 
 	try
 	{
+		str[indexMap.get(ID)] = "ID_"+String.valueOf(deal.id);
 	    str[indexMap.get(NAME)] = deal.name;
 	    str[indexMap.get(DESCRIPTION)] = deal.description;
 	    try
