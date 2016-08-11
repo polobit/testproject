@@ -294,11 +294,15 @@ function initializeTasksListeners(){
 
 	});
 	$('#task-bulk-change-status').on("shown.bs.modal", function()
-	{	
+	{
 		var el = $('#bulkTaskStatusForm');
 		loadProgressSlider(el);
-		$("#task-bulk-change-status").find('#status').val('YET_TO_START');
+	});
+	$('#task-bulk-change-status').on("hidden.bs.modal", function()
+	{	
+		$(this).find('#bulkTaskStatusForm')[0].reset();
 		$("#task-bulk-change-status").find('.progress-slider').css('display','none');
+		$("#task-bulk-change-status").find('.progress-slider').slider("value", 0);
 	});
 	$('#task-bulk-change-owner, #task-bulk-change-status, #task-bulk-change-priority , #task-bulk-change-duedate').on('click', '#task_bulk_validate', function(e)
 	{
