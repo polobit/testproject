@@ -157,25 +157,10 @@ function setup_deals_in_milestones(id){
 
 				if(dealPipelineModel)
 		        {
-		            if(!hasScope("MANAGE_DEALS"))
+		            if(!hasScope("DELETE_DEALS"))
 		            {
-		                if(dealPipelineModel[0].get('dealCollection').get(id).get('owner').id != CURRENT_DOMAIN_USER.id)
-		                {
-		                    $('#deal_delete_privileges_error_modal').html(getTemplate("deal-delete-privileges-error-modal")).modal('show');
-		                    return;
-		                }
-		                else
-		                {
-		                    showAlertModal("delete", "confirm", function(){
-		                        deleteDeal(id, milestone, dealPipelineModel, that);
-		                    }, function(){
-		                    	if(!IS_DEAL_DELETED)
-								{
-									revertDeal(event, ui, pos);
-								}
-		                    });
-		                    return;
-		                }
+		                $('#deal_delete_privileges_error_modal').html(getTemplate("deal-delete-privileges-error-modal")).modal('show');
+		                return;
 		            }
 		            else
 		            {
