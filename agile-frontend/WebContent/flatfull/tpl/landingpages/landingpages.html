@@ -1,28 +1,7 @@
-
 <script id="landingpages-static-container-template" type="text/html">
-<div class="custom-animated custom-fadeInUp"> 
 {{#hasMenuScope 'LANDINGPAGES'}}
+<div class="custom-animated custom-fadeInUp"> 
 <div id="Landingpages-top-view"></div>
-<div class="wrapper-md lter bg-light b-b">
-<div class="row">
-    <div class="col-sm-12 col-md-12">
-        
-            	<h3 class="pull-left font-thin h3">Landing Pages <small><span class="label label-sm bg-danger">Beta</span></small></h3>
-			
-			<div class="pull-right">
-				<div class="btn-group right pos-rlt pull-right">
-            		<a href="pagebuilder" class="btn btn-default btn-addon pull-right btn-sm" id="addLandingPage"><i class="icon-plus-sign"></i> Add Landing Page</a>
-				</div> 	
-			</div>
-            <div class="m-r-sm pull-right">
-                <a href="#forms" class="btn btn-default btn-sm btn-addon"><i class="icon-cog"></i>Manage Forms</a>
-            </div>
-			<div class="clearfix"></div>
-        
-    </div>
-</div>
-</div>
-
 <div class="wrapper-md">
 <div class="row">
 <div class="col-md-9" id="landing-pages-collection-container"></div>
@@ -50,18 +29,18 @@
 </div>
 </div>
 {{else}}
-<div class="well">
-
-<div class="alert bg-white text-center">
-<div class="slate-content p-md text text-center">
-
-<h4 style="opacity:0.8;margin-bottom:5px!important;">&nbsp;&nbsp; {{agile_lng_translate 'acl' 'please-contact-your-admin-to-enable-this-option'}}</h4>
-<div class="text" style="opacity:0.6;">{{agile_lng_translate 'acl' 'please-contact-your-admin-to-enable-this-option'}}
-</div>
-</div>
-</div>
-</div>
-{{/hasMenuScope}}
+ <div class="well">
+ 
+ <div class="alert bg-white text-center">
+ <div class="slate-content p-md text text-center">
+ 
+ <h4 style="opacity:0.8;margin-bottom:5px!important;">&nbsp;&nbsp; {{agile_lng_translate 'acl' 'please-contact-your-admin-to-enable-this-option'}}</h4>
+ <div class="text" style="opacity:0.6;">{{agile_lng_translate 'acl' 'please-contact-your-admin-to-enable-this-option'}}
+ </div>
+ </div>
+ </div>
+ </div>
+ {{/hasMenuScope}}
 </div>
 </script>
         <script id="landing-pages-top-header-template" type="text/html">
