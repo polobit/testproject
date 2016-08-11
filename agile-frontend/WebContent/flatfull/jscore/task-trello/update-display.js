@@ -188,8 +188,7 @@ function addTaskCount(target)
 function displayTaskCount(count, heading, owner_id)
 {
 	if (count == 0)
-		count = "";
-
+		count=0;
 	if (owner_id)
 	{
 		$("span[id='task-count-" + heading + "-" + owner_id + "']").html(count);
