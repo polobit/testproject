@@ -11,12 +11,15 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.knowledgebase.entity.Article;
@@ -54,6 +57,28 @@ public class TicketNotesRest
 				throw new Exception("Ticket ID is missing.");
 
 			return TicketNotesUtil.getTicketNotes(ticketID, "-created_time");
+		}
+		catch (Exception e)
+		{
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+					.build());
+		}
+	}
+
+	
+	@GET
+	@Path("/feedback")
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	public String getFeedbackdata(@QueryParam("start_time") Long startTime, @QueryParam("end_time") Long endTime,
+			@QueryParam("feedback") String feedback, @QueryParam("group") Long group)
+	{
+		try
+		{
+			if (startTime == null || endTime == null )
+				throw new Exception("Strat and end times is missing.");
+
+			return TicketNotesUtil.getJsonFeedback(startTime,endTime,feedback,group).toString();
 		}
 		catch (Exception e)
 		{
@@ -183,19 +208,21 @@ public class TicketNotesRest
 		try
 		{
 			
+			
 			System.out.println(comment);
 			String[] fbarray = comment.split("\\&", -1);
 			System.out.println(fbarray);
 		    String feed_back = fbarray[1].split("\\=",-1)[1];
 		    String feedback_comment = fbarray[2].split("\\=",-1)[1];
-			
+		    String result = java.net.URLDecoder.decode(feedback_comment, "UTF-8");
+		    
 			if (id == null)
 				throw new Exception("Required params missing.");
 			
 			TicketNotes dbNotes = TicketNotes.ticketNotesDao.get(id);
 			dbNotes.feedback_flag = true;
 			dbNotes.feed_back = feed_back;
-			dbNotes.feedback_comment = feedback_comment;
+			dbNotes.feedback_comment = result;
 
 					TicketNotes.ticketNotesDao.put(dbNotes);
 					}

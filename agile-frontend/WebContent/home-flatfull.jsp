@@ -674,7 +674,20 @@ if(currentUserPrefs.menuPosition.equals("top")){
   </li>
    <%
       }
-  %> 
+  %>
+
+  <%
+      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.ACTIVITY)){
+    %>
+    <li id="feedbackactivitiesmenu">
+    <a  href="#ticket-feedback">
+      <i class="m-r-sm fa fa-thumbs-up v-middle"></i>
+      <span>Feedback</span>
+    </a>
+  </li>
+    <%
+          }
+    %>  
 
   <%
       if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.ACTIVITY)){
@@ -699,7 +712,9 @@ if(currentUserPrefs.menuPosition.equals("top")){
   </li> 
     <%
           }
-    %> 
+    %>
+
+
  
   <!-- End of Service menu -->
   <%} %>

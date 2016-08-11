@@ -464,6 +464,18 @@ Handlebars.registerHelper('replace_newline_with_br', function(str, options) {
     return str;
 });
 
+Handlebars.registerHelper('replace_newline_with_br_feedback', function(object, options) {
+
+	var str = object.toString();
+	if(!str)
+		return "";
+
+	str = str.trim();
+
+	str = str.replace(/(?:\r\n|\r|\n)/g, '<br />');
+    return str;
+});
+
 Handlebars.registerHelper('get_ticket_uri', function(str, options) {
 	
     	if(Ticket_Filter_ID)

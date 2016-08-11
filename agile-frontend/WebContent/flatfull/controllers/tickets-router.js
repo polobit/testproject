@@ -39,6 +39,7 @@
 		/*Ticket reports*/
 		"ticket-reports" : "ticketReports",
 		"ticket-report/:report_type" : "ticketReport",
+		"ticket-feedback":"ticketFeedback",
 	     
          /*Help center Routes*/
 		"knowledgebase" : "categories",
@@ -67,6 +68,115 @@
 			App_Ticket_Module.ticketsByFilter(Ticket_Filter_ID);
 		});
 		make_menu_item_active("tickets");
+	},
+
+	ticketFeedback: function(){
+		
+		initReportLibs(function(){
+
+			loadServiceLibrary(function(){
+			
+
+				if(!$('#ticket-feedback').length){	
+									
+					getTemplate("ticket-feedback-header", {}, undefined, function(template_ui){
+			 		
+			 		if(!template_ui)
+			 			return;
+			 		
+			 		var el = $('#content').html($(template_ui));
+			 		
+			 		$("#feedback").off();
+					$("#feedback").on('change',function(){
+						App_Ticket_Module.renderfeedbackmodel(el);
+					});
+
+					$("#group_names").off();
+					$("#group_names").on('change',function(){
+						App_Ticket_Module.renderfeedbackmodel(el);
+						
+					//initializing date range picket
+					initDateRange(App_Ticket_Module.renderfeedbackmodel(el));
+					});
+			 		//initializing date range picket
+					initDateRange(App_Ticket_Module.ticketFeedback);
+
+						var optionTemplate = "<option value='{{id}}'>{{group_name}}</option>";
+						fillSelect('group_names', '/core/api/tickets/groups?only_groups='+true, '', 
+							function(){
+																						
+							}, optionTemplate, false,el,"Group");
+
+						App_Ticket_Module.renderfeedbackmodel(el);
+			 		});
+						
+				}				
+			});		
+		});
+	make_menu_item_active("feedbackactivitiesmenu");
+	},	 	
+
+	renderfeedbacktemplate :function(start_time,end_time,feedback,group){
+		//Rendering root template	
+		App_Ticket_Module.feedbackollection = new Base_Collection_View({
+			url : '/core/api/tickets/notes/feedback/?start_time=' + start_time + '&end_time=' 
+			+ end_time + '&feedback=' + feedback+ '&group=' + group,
+				templateKey : "ticket-feedback-log",
+				isNew : true,
+			individual_tag_name : 'div',
+			sort_collection : true, 
+			sortKey : 'updated_time',
+			descending : true,
+			postRenderCallback:function(el,model){
+				/*Ticket related click event to show the modal when requester or assignee replies*/
+				$("#ticket-feedback").on('click', '.ticket-activity-feedback', function(e){
+					e.preventDefault();
+					var id = $(this).data("id");
+
+					var activity_ticket_feedback = App_Ticket_Module.feedbackollection.collection.get(id).toJSON();
+
+					console.log(activity_ticket_feedback);
+
+					getTemplate("ticket-feedback-modal", activity_ticket_feedback, undefined, function(template_ui){
+
+						if(!template_ui)
+							  return;
+
+						var emailinfo = $(template_ui);
+
+						emailinfo.modal('show');
+					}, null);
+
+				});
+			}			
+	
+		});
+		App_Ticket_Module.feedbackollection.collection.fetch();
+
+		$('#ticket-feedback').html(App_Ticket_Module.feedbackollection.render().el);	
+	},
+
+	renderfeedbackmodel: function(el){
+		var range = $('#range',el).html().split("-");
+		var start_time = getUTCMidNightEpochFromDate(new Date(range[0]));
+	    var d = new Date();
+	    start_time=start_time+(d.getTimezoneOffset()*60*1000);
+	    var end_value = $.trim(range[1]);
+	    // To make end value as end time of day
+	    if (end_value)
+	        end_value = end_value + " 23:59:59";
+
+	    var group = 0;
+	    	if($('#group_names').find('option:selected').val())
+	    	group = $('#group_names').find('option:selected').val();
+	    var end_time = getUTCMidNightEpochFromDate(new Date(end_value));
+
+	    end_time += (((23*60*60)+(59*60)+59)*1000);
+	    end_time=end_time+(d.getTimezoneOffset()*60*1000);
+		var feedback = null;
+	    feedback = $('#feedback').find('option:selected').val();
+		
+		App_Ticket_Module.renderfeedbacktemplate(start_time,end_time,feedback,group);
 	},
 
 	/**

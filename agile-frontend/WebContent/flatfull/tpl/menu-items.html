@@ -254,6 +254,16 @@
   {{/isRestrictedMenuScope}}
   {{/isAdmin}}
 
+  {{#isRestrictedMenuScope "ACTIVITY"}} {{else}}
+    <li id="feedbackactivitiesmenu">
+      <a  href="#ticket-feedback">
+        <i class="m-r-sm fa fa-thumbs-up v-middle"></i>
+        <span>Feedback</span>
+      </a>
+    </li>
+   {{/isRestrictedMenuScope}}
+
+
    {{#isRestrictedMenuScope "ACTIVITY"}} {{else}}
     <li id="activitiesmenu">
       <a  href="#activities">

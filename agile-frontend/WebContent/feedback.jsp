@@ -177,18 +177,19 @@ var id = <%=note_id%>
                      <tbody>
                          <tr>
                              <td width="7%" style="padding-left:56px">
-								 <span style=" font-size: 130%;padding-left: 8px; display:none;" id="YAY">&#10004;</span>									
-                             	<button style="line-height: 25px;font-size: 12px;" class="transperantbutton" value="YAY"  onclick="changeFeedback(event,this)"><h4>YAY</h4></button>
+								 <span style=" font-size: 130%;padding-left: 8px; display:none;" id="YAY">&#10004;</span>	
+															
+                             	<input type="image" src="/flatfull/img/smile.svg" style="line-height: 25px;font-size: 12px; width: 31px;" class="transperantbutton" id="YAY_Image" value="YAY"  onclick="changeFeedback(event,this)"/>
 	                         </td>
 		                     <td width="7%" style="padding-left:10px">	
 		                      <span style="font-size: 130%;padding-left: 8px; display:none;" id="OK">&#10004;</span>
-                             	<button style="line-height: 25px;font-size: 12px;" class="transperantbutton" value="OK" onclick="changeFeedback(event,this)"><h4>OK</h4></button>
+                             	<input type="image" src="/flatfull/img/speechless.svg" style="line-height: 25px;font-size: 12px; width: 31px;" id="OK_Image" class="transperantbutton" value="OK" onclick="changeFeedback(event,this)"/>
 		                     </td>
 		                      
 		                     <td width="7%" style="padding-left:10px">
                              <span style="font-size: 130%;padding-left: 8px; display:none;" id="BOO">&#10004;</span>
-                             	<button style="line-height: 25px;font-size: 12px;" class="transperantbutton" value="BOO" onclick="changeFeedback(event,this)"><h4>BOO</h4></button>
-		                     </td>
+                             	<input type="image" src="/flatfull/img/angry.svg" style="line-height: 25px;font-size: 12px; width: 31px;" class="transperantbutton" id="BOO_Image" value="BOO" onclick="changeFeedback(event,this)"/>		                     
+                             </td>
                          </tr>
                      </tbody>
                  </table>
@@ -215,6 +216,7 @@ var id = <%=note_id%>
  feedback = "<%=feedback%>";
 var thick = document.getElementById(feedback);
 thick.style.display="block";
+document.getElementById("#"+feedback+"_Image").style.width="31px";
 if(feedback == "BOO" || feedback == "OK")
 {
 	var d = document.getElementById("myTextarea");
@@ -241,13 +243,15 @@ function changeFeedback(e,objButton){
 			var data = document.getElementById("myTextarea").value;
 			json.id = id;
 			json.feed_back = feedback;
+			 var data = decodeURI(data);
+			data.replace(new RegExp("\\+","g"),' ');
 			json.feedback_comment = data;
 			$.ajax({ type : 'PUT', 
 				url : 'feedbackapi/api/tickets/notes/feedback-comment/'+id, 
 				data : json,
 				success:function(){
 					console.log(json);	
-					document.getElementById("addfeedback-message").innerHTML = "<div style=font-size:20px;padding-left:40px;>Your feed back submitted successfully!</div>";
+					document.getElementById("addfeedback-message").innerHTML = "<div style=font-size:20px;padding-left:40px;>Your feedback submitted successfully!</div>";
 				}
 				
 		});

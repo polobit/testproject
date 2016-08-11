@@ -12,6 +12,7 @@ import java.util.regex.Pattern;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -23,7 +24,9 @@ import com.agilecrm.account.util.AccountPrefsUtil;
 import com.agilecrm.account.util.EmailGatewayUtil;
 import com.agilecrm.account.util.EmailTemplatesUtil;
 import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.util.ContactUtil;
+import com.agilecrm.projectedpojos.ContactPartial;
 import com.agilecrm.projectedpojos.DomainUserPartial;
 import com.agilecrm.projectedpojos.TicketNotesPartial;
 import com.agilecrm.subscription.Subscription;
@@ -334,6 +337,57 @@ public class TicketNotesUtil
 		}
 	}
 
+	
+	public static JSONArray getJsonFeedback(Long startTime, Long endTime, String feedback, Long group) throws JSONException, EntityNotFoundException{
+		
+		JSONArray json = new JSONArray();
+		
+		Map<String, Object> map =  new HashMap<String, Object>(); 
+		map.put("created_by", CREATED_BY.AGENT);
+		map.put("created_time >", startTime);
+		map.put("created_time <", endTime);
+		map.put("feedback_flag", true);
+		if(!feedback.isEmpty())
+			map.put("feed_back",feedback);	
+		List<TicketNotes> ticketnotes = TicketNotes.ticketNotesDao.listByProperty(map);
+		
+		
+			for(TicketNotes tn: ticketnotes ){
+				
+				if(group != 0){
+					if(tn.group_id.longValue()!=group)
+						continue;
+				}		
+				JSONObject jsonobject = new JSONObject();
+				jsonobject.append("note", tn.html_text);
+				jsonobject.append("feedback_comment", tn.feedback_comment);
+				jsonobject.append("feedback", tn.feed_back);
+				
+				Long ticketfeedback_id = tn.ticket_id;		
+				Tickets ticket = Tickets.ticketsDao.get(ticketfeedback_id);
+				jsonobject.append("ticket_subject", ticket.subject);
+				jsonobject.append("contact_id", ticket.contactID);
+				
+				Contact contact = ContactUtil.getContact(ticket.contactID);
+				jsonobject.append("first_name",contact.first_name );
+				jsonobject.append("last_name",contact.last_name );
+			
+				String imageURL = contact.getContactFieldValue(Contact.IMAGE);
+
+				if (imageURL == null)
+					imageURL = Globals.GRAVATAR_SECURE_DEFAULT_IMAGE_URL;
+
+				jsonobject.append("img_url", imageURL);
+
+				jsonobject.append("ticket_id",tn.ticket_id);
+				jsonobject.append("id",tn.id);
+				
+				json.put(jsonobject);
+			}
+			
+			System.out.println(json);
+		return json;
+	}
 	/**
 	 * 
 	 * @param notes
