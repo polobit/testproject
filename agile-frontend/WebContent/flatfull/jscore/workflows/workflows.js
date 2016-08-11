@@ -89,7 +89,8 @@ var Workflow_Model_Events = Base_Model_View.extend({
     unsubscribeCampaign : function(e){
         e.preventDefault();
         $(e.currentTarget).find('i').toggleClass('icon-plus').toggleClass('icon-minus');
-        $("#workflow-unsubscribe-block").slideToggle('fast');        
+        $("#workflow-unsubscribe-block").slideToggle('fast');
+        showHide_UnsubscribeEmail_Status();        
     },
 
         
@@ -158,12 +159,19 @@ var Workflow_Model_Events = Base_Model_View.extend({
         if(e.type == "change" && is_disabled)
             is_disabled = !JSON.parse(is_disabled);
 
+        var is_unsubscribe_email_disabled = false;
+        var unsubscribe_email_status = $("[id^='unsubscribe-email-']:checked").val();
+        if (unsubscribe_email_status != 'undefined' && unsubscribe_email_status == "true") {
+            is_unsubscribe_email_disabled = true;
+        }
+
         var unsubscribe_json ={
                                     "tag":unsubscribe_tag,
                                     "action":unsubscribe_action,
                                     "unsubscribe_email": unsubscribe_email,
                                     "unsubscribe_name": unsubscribe_name,
-                                    "unsubscribe_subject": unsubscribe_subject
+                                    "unsubscribe_subject": unsubscribe_subject,
+                                    "is_unsubscribe_email_disabled": is_unsubscribe_email_disabled
                                }
 
         // Access Level
@@ -772,3 +780,20 @@ var Workflow_Top_Header_Model_Events = Base_Model_View.extend({
         this.model.set({"sortKey" : sortkey});
     },  
 });
+
+function showHide_UnsubscribeEmail_Status(alertMsg){
+    var is_email_status = $("[id^='unsubscribe-email-']:checked").val();
+    if (is_email_status != 'undefined' && is_email_status == "true") {
+        $("#unsubscribe-email").attr('disabled',true);
+        $("#unsubscribe-email").parent().parent().attr("style","pointerEvents:none; opacity: 0.4;");
+    }else{
+        $("#unsubscribe-email").removeAttr('disabled');
+        $("#unsubscribe-email").parent().parent().removeAttr("style");
+    }
+    if(alertMsg){
+        var msg = "You have unsaved changes. Click on ‘Save Campaign’ to save.";
+        msg = '<span style="color: red;">'+msg+'</span>';
+        $("#unsubscribe-email_status-msg").html(msg).show();  
+    }
+    
+}
