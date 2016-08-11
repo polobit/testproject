@@ -1,0 +1,23 @@
+<!-- Ticket (feedback) Modal -->
+<script id="ticket-feedback-modal-template" type="text/html">
+<div class="modal fade infoModal" id="ticket_activity_notes_modal">
+ 	<div class="modal-dialog">
+	    <div class="modal-content">
+	    <div class="modal-header">
+	        <button class="close" data-dismiss="modal">x</button>
+	        <h3>Feedback</h3>
+	    </div>
+	    <div class="modal-body">
+			<div style="margin-bottom:5px;">
+			 {{#if_equals feedback_comment ""}}
+			 {{else}}
+			 Comment: {{{replace_newline_with_br_feedback feedback_comment}}}
+			 {{/if_equals}}
+
+               <br/>Feedback: {{feedback}}
+
+	       	</div>
+	    </div>
+	</div>
+</div>
+</script>
