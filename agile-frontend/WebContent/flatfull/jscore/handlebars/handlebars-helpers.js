@@ -4714,7 +4714,7 @@ $(function()
 			return;
 
 		var name_json = { "HIGH" : "High", "LOW" : "Low", "NORMAL" : "Normal", "YET_TO_START" : "Yet To Start",
-			"IN_PROGRESS" : "In Progress", "COMPLETED" : "Completed", "TODAY" : "Today", "TOMORROW" : "Tomorrow", "OVERDUE" : "Overdue", "LATER" : "Later" };
+			"IN_PROGRESS" : "In Progress", "FOLLOW_UP" : "Follow Up" , "COMPLETED" : "Completed", "TODAY" : "Today", "TOMORROW" : "Tomorrow", "OVERDUE" : "Overdue", "LATER" : "Later" };
 
 		$.extend(name_json,categories.CATEGORIES,name_json);
 

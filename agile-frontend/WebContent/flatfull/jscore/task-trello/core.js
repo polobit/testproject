@@ -122,8 +122,14 @@ function initTaskListCollection()
 // Append sub collection and model
 function taskAppend(base_model)
 { var Trackstatus = getTaskTrackAutoWidthCurrentState(base_model.get("heading"))
-	var tasksListModel = new Base_List_View({ model : base_model, "view" : "inline", template : "new-tasks-lists-model", tagName : 'div',
-		className : "task-trello-list col-md-3 "+Trackstatus +" p-n pull-none inline-block m-r-none min-h-auto-xl", id : base_model.get("heading"),postRenderCallback :function(el){
+	var tasksListModel = new Base_List_View({ 
+	model : base_model,
+	 "view" : "inline", 
+	 template : "new-tasks-lists-model", 
+	 tagName : 'div',
+		className : "task-trello-list col-md-3 "+Trackstatus +" p-n pull-none inline-block m-r-none min-h-auto-xl", 
+		id : base_model.get("heading"),
+		postRenderCallback :function(el){
 			var status = JSON.parse(_agile_get_prefs('task-page-status'));
 
 		}});
@@ -171,6 +177,7 @@ function taskFetch(base_model)
 				flag = $("div[id='list-tasks-" + base_model.get("heading") + "']")[0];
 
 			// If we have task list then only need to apply following
+			$(taskCollection.el).find("#no_task").addClass("no_task_"+base_model.get("heading"));
 			if (flag)
 			{
 				// Remove loading icon from task list header
@@ -186,7 +193,17 @@ function taskFetch(base_model)
 				else
 					initialize_infinite_scrollbar($("div[id='list-tasks-" + base_model.get("heading") + "']")[0], taskCollection);
 			}
-		} });
+					
+		},appendItemCallback : function(el , collection){
+			
+			console.log("on append item call back");
+			$(el[0]).find("#no_task").addClass("hide");
+		}, removeItem : function(el,collection){
+			console.log("inside the reemove item callback");
+			if(collection.length == 0)
+			$(el[0]).find("#no_task").removeClass("hide");
+		}
+		 });
 
 	// Fetch task from DB for sub collection
 	taskCollection.collection.fetch({ success : function(data)

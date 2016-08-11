@@ -71,9 +71,12 @@ function setup_sortable_tasks()
 						if (ui.sender == null)
 							return;
 
+						
 						// Make UI and DB changes after task dropped.
-						changeAfterDrop(event, ui);
 
+						changeAfterDrop(event, ui);
+						ui.item[0].parentNode.removeChild(ui.item[0]);
+						
 					} }).disableSelection();
 	});
 }
@@ -202,28 +205,13 @@ function saveAfterDrop(oldTask, criteria, newTaskListId, newTaskListOwnerId, tas
 		// Update task in UI
 		if (criteria == "OWNER")
 			$(".list-header[ownerID=" + newTaskListOwnerId + "]").parent().find("#" + taskId).parent().html(getTemplate('task-model', data.toJSON()));
-		else{
+		else
 			$("#" + newTaskListId).find("#" + taskId).parent().html(getTemplate('task-model', data.toJSON()));
-			$("#" + newTaskListId).find("#no_task").addClass("hide");
-		}
-			
 
 		// Maintain changes in UI
 		displaySettings();
-		if(oldTask.count == 0){
-			$("#no_task", $('#' + oldTask.taskListId)).removeClass("hide");
-		}
-		else{
-			$("#no_task").addClass("hide");
-		}
 
-		// Get old task list
-		var modelOldTaskList = getTaskList(criteria, oldTask.taskListId, newTaskListOwnerId);
-		if(modelOldTaskList && modelOldTaskList[0].toJSON().taskCollection){
-			if(modelOldTaskList[0].toJSON().taskCollection.length == 0)
-				$("#no_task", $('#' + oldTask.taskListId)).removeClass("hide");
-		}
-		
+		var modeloldtask = getTaskList(criteria, oldTask.oldTaskListId, oldTask.owner_id);
 		// Get new task list
 		var modelNewTaskList = getTaskList(criteria, newTaskListId, newTaskListOwnerId);
 
@@ -232,23 +220,31 @@ function saveAfterDrop(oldTask, criteria, newTaskListId, newTaskListOwnerId, tas
 		getDueTasksCount(function(count){
 			var due_task_count= count;
 			if(due_task_count==0)
-			{
 				$(".navbar_due_tasks").css("display", "none");
-				
-			}
-				
 			else
 				$(".navbar_due_tasks").css("display", "block");
 			if(due_task_count !=0)
-			{
 				$('#due_tasks_count').html(due_task_count);
-				
-			}
-				
 			else
 				$('#due_tasks_count').html("");
 
 		});
 		
+	},
+	error : function(model, response)
+	{
+		showModalConfirmation("Update Task", 
+			response.responseText, 
+			function (){
+				getDetailsForCollection();
+			}, 
+			function(){
+				return;
+			},
+			function(){
+				return;
+			},
+			"Cancel"
+		);
 	} });
 }

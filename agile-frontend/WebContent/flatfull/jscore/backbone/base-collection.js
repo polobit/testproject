@@ -276,7 +276,7 @@ var Base_Collection_View = Backbone.View
 				    showTransitionBar();
 
 				// Binds functions to view
-				_.bindAll(this, 'render', 'appendItem', 'appendItemOnAddEvent', 'buildCollectionUI');
+				_.bindAll(this, 'render', 'appendItem', 'appendItemOnAddEvent', 'buildCollectionUI','removeItem');
 
 				if (this.options.data)
 				{
@@ -306,6 +306,7 @@ var Base_Collection_View = Backbone.View
 				 */
 				this.collection.bind('sync', this.appendItem);
 				this.collection.bind('add', this.appendItemOnAddEvent);
+				this.collection.bind('remove', this.removeItem);
 
 				var that = this;
 
@@ -504,7 +505,9 @@ var Base_Collection_View = Backbone.View
 				return itemView
 			}, appendItemOnAddEvent : function(base_model)
 			{
-				this.appendItem(base_model, true);
+				
+				
+				var appendedEl = this.appendItem(base_model, true);
 				/*
 				 * if(this.collection && this.collection.length) {
 				 * if(this.collection.at(0).attributes.count)
@@ -515,7 +518,7 @@ var Base_Collection_View = Backbone.View
 				var appendItemCallback = this.options.appendItemCallback;
 
 				if (appendItemCallback && typeof (appendItemCallback) === "function")
-					appendItemCallback($(this.el));
+					appendItemCallback($(this.el),this.collection);
 				
 
 				if ($('table', this.el).length != 0){
@@ -563,6 +566,18 @@ var Base_Collection_View = Backbone.View
 				//endFunctionTimer("appendItemsOnAddEvent");
 
 			},
+			/*
+			 *callback for remove item when an item is removed from the collection
+			*/
+			removeItem : function(base_model, removeditem)
+			{
+
+				var removeItem = this.options.removeItem;
+
+				if (removeItem && typeof (removeItem) === "function")
+					removeItem($(this.el),this.collection);
+			},
+
 			/**
 			 * Renders the collection to a template specified in options, uses
 			 * handlebars to populate collection data in to vew
