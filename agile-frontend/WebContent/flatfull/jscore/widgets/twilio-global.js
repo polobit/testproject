@@ -1401,14 +1401,14 @@ function setUpGlobalTwilio()
 		 * Called for each available client when this device becomes ready and
 		 * every time another client's availability changes.
 		 */
-		Twilio.Device.presence(function(presenceEvent)
+/*		Twilio.Device.presence(function(presenceEvent)
 		{
 			// name of client whose availablity changed
 			console.log(presenceEvent.from);
 
 			// true or false
 			console.log(presenceEvent.available);
-		});
+		});*/
 	});
 }
 function twiliocall(phoneNumber, toName,conferenceName, contact)
