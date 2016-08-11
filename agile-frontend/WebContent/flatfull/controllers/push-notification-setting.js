@@ -30,17 +30,14 @@ var PushNotificationRouter = Backbone.Router.extend({
 			postRenderCallback : function(el)
 			{
 			  $("#content").html(el);
-			   head.js('stats/js/cookie.js', function(e)
-                 {
-                    var browserId = agile_read_data("agile-browser-id");
-                    if(browserId !=null || browserId != undefined){
-                    	$("#previewBtn").text("Send Preview"); 
-                    	$("#previewBtn").attr("btn-value","send");  
-
-                    }
-                });
+			  head.js(LIB_PATH + 'lib/desktop-notify-min.js', function(el)
+						{
+							if(notify.permissionLevel() != notify.PERMISSION_DENIED)
+                    		 $('#push-notification-content').hide();
+                   });
 				
-			} });
+			} 
+		});
 
 		$("#content").html(getRandomLoadingImg());
 		push_notification_add.render();
@@ -64,15 +61,11 @@ var PushNotificationRouter = Backbone.Router.extend({
 			postRenderCallback : function(el)
 			{
 				$("#content").html(el);
-				  head.js('stats/js/cookie.js', function(e)
-                 {
-                    var browserId = agile_read_data("agile-browser-id");
-                    if(browserId !=null || browserId != undefined){
-                    	$("#previewBtn").text("Send Preview"); 
-                    	$("#previewBtn").attr("btn-value","send");  
-
-                    }
-                });
+				  head.js(LIB_PATH + 'lib/desktop-notify-min.js', function(el)
+						{
+							if(notify.permissionLevel() != notify.PERMISSION_DENIED)
+                    		 $('#push-notification-content').hide();
+                   });
 
 			} });
 

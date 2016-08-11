@@ -15,6 +15,7 @@ var Push_Notification_Event_View = Base_Model_View.extend({
 		 		'click #prev-notification-icon' : 'changeNotificationIcon',
 		 		'change #notification-icon' : 'changeNotificationIcon',
         'click #previewBtn' : 'sendPushNotificationPreview',
+        'click #enable-notification' : 'enablePushNotification',
 		    },
 
 			// Add notification title in preview
@@ -50,16 +51,30 @@ var Push_Notification_Event_View = Base_Model_View.extend({
          	  	 $('#prev-notification-icon').attr('src', 'https://media.licdn.com/mpr/mpr/shrink_200_200/AAEAAQAAAAAAAAWJAAAAJDQwNmRhNGNmLTlmNWMtNGZkMC1hZDJhLWI0ODE1NDQxMmNhNA.png');
 				
 			},
+      enablePushNotification: function(e)
+      {
+         e.preventDefault();
+         if($('#notification-enable-help-modal').length == 0){
+            getTemplate('notification-enable-help-modal', {}, undefined, function(template_ui){
+             if(!template_ui)
+                  return;
+             $("body").append($(template_ui)); 
+              }, null);
+
+            }
+        $('#notification-enable-help-modal').modal("show");
+      },
       sendPushNotificationPreview: function(e)
       {
          e.preventDefault();
           notify.requestPermission(function() {
-           if(notify.permissionLevel() == notify.PERMISSION_GRANTED)
-               sendPushNotification();
+           if(notify.permissionLevel() == notify.PERMISSION_GRANTED){
+             $('#push-notification-content').hide(); 
+              sendPushNotification();
+           }
            else
             {
-                    console.log("hello");
-            }
+               $('#push-notification-content').show();            }
         });
       },
 		});
@@ -126,7 +141,7 @@ function uploadIconToS3ThroughBtn(file) {
               $('#notification-icon').val(decodeURIComponent(url));
               $('#prev-notification-icon').trigger('click');
               $("#browseBtn").prop("disabled",false);
-              $("#browseBtn").text("Upload Image");
+              $("#browseBtn").text("Upload");
             }
         });
     }
