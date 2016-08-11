@@ -50,6 +50,11 @@ var ContactSearchRouter = Backbone.Router.extend({
 							{
 								var module_name = App_Contact_Search.getModuleName(collection.url);
 								
+									initializeDealDetailSearch();
+								
+									initializeDocumentSearch(el);
+								
+								
 								// el.find("table").removeClass("showCheckboxes");
 
 								// Shows the query string as heading of search results
