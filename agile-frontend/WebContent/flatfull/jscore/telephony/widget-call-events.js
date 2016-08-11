@@ -198,9 +198,11 @@ function makeCallAction(json){
 //function for sending DTMF
 function sendDTMF(digit)
 {
+	var caller_id;
+	caller_id= $("#notyCallDetails").attr("callId"); 		
 	if(digit){
 			play_sound("dtmf");
-			var action = {"command":  "sendDTMF", "number": digit, "callId": ""};
+			var action = {"command":  "sendDTMF", "number": digit, "callId": caller_id};
 			sendActionToClient(action);
 			return;
 	}
