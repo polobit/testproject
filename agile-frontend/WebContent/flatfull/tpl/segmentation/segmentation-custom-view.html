@@ -1,5 +1,6 @@
 
 <script id="segmentation-custom-view-collection-template" type="text/html">
+{{#hasMenuScope 'VISITORS'}}
 {{#is_mobile}}
 <!-- Newly Added -->
 <div class="hbox hbox-auto-xs hbox-auto-sm">
@@ -96,6 +97,19 @@
 </div>
 <!-- Newly Added -->
 {{/is_mobile}}
+{{else}}
+<div class="well">
+
+<div class="alert bg-white text-center">
+<div class="slate-content p-md text text-center">
+
+<h4 style="opacity:0.8;margin-bottom:5px!important;">&nbsp;&nbsp; Sorry, you do not have the privileges to access Visitors.</h4>
+<div class="text" style="opacity:0.6;">Please contact your admin or account owner to enable this option.
+</div>
+
+</div>
+</div>
+</div>{{/hasMenuScope}}
       
 </script>
 <script id="segmentation-custom-view-table-collection-template" type="text/html">

@@ -549,6 +549,17 @@
                                     {{agile_lng_translate 'admin-settings-users' 'web-rule'}}<br/>
                                     <div style="margin-left:6px;"><small> {{agile_lng_translate 'admin-settings-users' 'enagage-your-website-visitors'}} </small></div>
                                 </label>
+                                 <label class="i-checks i-checks-sm checkbox">
+                                    <input type="checkbox" name="scopes-temp"  class="required" value="LANDINGPAGES" {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
+                                    Landing Pages<br/>
+                                    <div style="margin-left:6px;"><small>  A web page created to gather leads online. 
+                                      </small></div>
+                                </label>
+                                </label><label class="i-checks i-checks-sm checkbox">
+                                    <input type="checkbox" name="scopes-temp"  class="required" value="VISITORS" {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
+                                    Visitors<br/>
+                                    <div style="margin-left:6px;"><small> View contacts visited your  website</small></div>
+                                </label>
                                 </label><label class="i-checks i-checks-sm checkbox">
                                     <input type="checkbox" name="scopes-temp"  class="required" value="ACTIVITY" {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
                                     {{agile_lng_translate 'portlets' 'activities'}}<br/>
@@ -560,6 +571,8 @@
                                     {{agile_lng_translate 'campaigns' 'reports'}}<br/>
                                     <div style="margin-left:6px;"><small> {{agile_lng_translate 'admin-settings-users' 'stay-on-top-of-your-data'}}</small></div>
                                 </label>
+                                 </label>
+                                
 
                         {{else}} 
                                 <label class="i-checks i-checks-sm checkbox">
@@ -579,6 +592,16 @@
                                     <div style="margin-left:6px;"><small> {{agile_lng_translate 'admin-settings-users' 'enagage-your-website-visitors'}} </small></div>
                                 </label>
                                 <label class="i-checks i-checks-sm checkbox">
+                                    <input type="checkbox" name="scopes-temp"  class="required" value="LANDINGPAGES" checked {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
+                                    Landing Pages<br/>
+                                    <div style="margin-left:6px;"><small> A web page created to gather leads online.</small></div>
+                                </label>
+                                </label><label class="i-checks i-checks-sm checkbox">
+                                    <input type="checkbox" name="scopes-temp"  class="required" value="VISITORS" checked{{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
+                                    Visitors<br/>
+                                    <div style="margin-left:6px;"><small> View contacts visited your  website</small></div>
+                                </label>
+                                <label class="i-checks i-checks-sm checkbox">
                                     <input type="checkbox" name="scopes-temp"  class="required" value="ACTIVITY" checked {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
                                     {{agile_lng_translate 'portlets' 'activities'}}<br/>
                                     <div style="margin-left:6px;"><small> {{agile_lng_translate 'admin-settings-users' 'know-what-other-users-are-doing'}}
@@ -589,6 +612,8 @@
                                     {{agile_lng_translate 'campaigns' 'reports'}}<br/>
                                     <div style="margin-left:6px;"><small> {{agile_lng_translate 'admin-settings-users' 'stay-on-top-of-your-data'}}</small></div>
                                 </label>
+                                
+
 
                         {{/if}}
                         </div>

@@ -34,7 +34,12 @@ public enum NavbarConstants
 
     REPORT("Reports", "#reports", "icon-bar-chart", "reportsmenu"),
 	
-	HELPDESK("Help Desk", "#tickets", "icon-ticket", "tickets");
+	HELPDESK("Help Desk", "#tickets", "icon-ticket", "tickets"),
+	
+	LANDINGPAGES("LANDING PAGES", "#landing-pages", "fa-file-code-o", "landing-pages-menu"),
+	
+	VISITORS("VISITORS" , "#visitors" , "icon-eye" , "segmentationmenu");
+	
 
     public String heading = null;
     public String href = null;
