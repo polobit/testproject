@@ -79,11 +79,13 @@
 		{{/if_equals}}
 		<option value="DEFINED">{{agile_lng_translate 'contacts-view' 'is-defined'}}</option>
 		<option value="NOT_DEFINED">{{agile_lng_translate 'contacts-view' 'is-not-defined'}}</option>
+		{{#if_equals "CONTACT" this.scope}}
 		<optgroup label="{{agile_lng_translate 'common-words' 'relative-cap'}}">
 				<option value="BY_MONTH_ONLY">{{agile_lng_translate "contacts-view" "on"}}</option>
 				<option value="IS_AFTER_IN_DAYS">{{agile_lng_translate "contacts-view" "on-after"}}</option>
 				<option value="IS_BEFORE_IN_DAYS">{{agile_lng_translate "contacts-view" "on-before"}}</option>
 		</optgroup>
+		{{/if_equals}}
 	</select>
 
 	<div class="AFTER BEFORE ON condition_container m-t-xs">
