@@ -157,6 +157,8 @@ var ContactBulkActionRouter = Backbone.Router.extend({
 					$select.find("option:first").before("<option value='NOEMAIL'>-No Verified Email-</option>");
 					$select.find('option[value ="NOEMAIL"]').attr("selected", "selected");
 			}
+			else
+					$select.val($select.find('option')[0].value);
 				rearrange_from_email_options($select, data);
 			});
 	},
