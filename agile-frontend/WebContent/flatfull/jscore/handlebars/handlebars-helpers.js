@@ -7545,3 +7545,8 @@ Handlebars.registerHelper('is_Particular_Domain', function(options)
 		else
 			return options.inverse(this);
 });
+
+Handlebars.registerHelper('agile_lng_translate', function(key, value, options)
+{
+	console.log("Not found " + key + " : " + value);
+});
