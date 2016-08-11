@@ -12,7 +12,7 @@
 	<div class="row">
  		<div class="col-md-9">
 			{{#unless this.length}}
-			<div style="height: 245px;">
+			<div>
 				<div class="alert bg-white">
 					<div class="slate-content  p-md">
 						<div class="box-left pull-left m-r-md">
@@ -22,16 +22,10 @@
 							<h4 class="m-t-none">Engage with your audience easily through Browser Push Notification.</h4>
 								<div class="text">Define the Push Notifications and engage with your audience both on the web page and off the web page.
 								</div>
-								<a href="#push-notification-add" class="m-t-xs btn blue btn-slate-action btn-info btn-addon btn-sm"><i class="icon-plus-sign"></i> Add Push Notification</a>
+								<a href="#push-notification-add" class="m-t-xs btn btn-sm btn-default btn-slate-action"><i class="icon-plus-sign"></i> Add Push Notification</a>
 						</div>
 						<div class="clearfix"></div>
-						<br>
-						<p class="text" style="text-align:center;">For Push Notifications to work, Just complete the below 3 steps and you are ready to Go. </p>
-						<div id="whitelist-disabled">
-							<pre class="prettyprint">1.Create a directory with name notification in your web hosting directory and place the below files 
-   under it.<br>  <a href="/downloadpush?q=json" style="color: blue">Click here to dowhload manifest.json</a><br>  <a href="/downloadpush?q=js" style="color: blue">Click here to download agile-servise-workers.js</a><br>2.Create a Web rule of Type Enable Push Notification<br>3.Your website should be certified (Valid HTTPS)
-							</pre>
-						</div>
+							
 					</div>
 				</div>
 			</div>
@@ -94,7 +88,7 @@
 				{{#if id}}
 					<h3 class="formheading h3 font-thin"> <i class="fa fa-pencil-square"> </i> Edit Push Notification</h3>
 				{{else}}
-					<h3 class="formheading h3 font-thin"> <i class="fa fa-plus-circle"></i> Add Push Notification	</h3>
+					<h3 class="formheading h3 font-thin"> Add Push Notification	</h3>
 				{{/if}}
 				<div class="clearfix"></div> 
     		</div>
@@ -103,51 +97,53 @@
 
 <div class="wrapper-sm">
 <div class="row">
-<div class="col-md-8">
+<div class="col-md-7">
     <div class="panel panel-default">
-    <div class="panel-body">
+    <div class="panel-body wrapper-lg">
         <form id='notificationForm' name="notificationForm" class="form-horizontal" accept-charset="UTF-8">
             <fieldset>
            	 <div class="control-group form-group">
-                      <label class="control-label col-sm-2 col-xs-12">Name<span class="field_req">*</span></label>
-                	 <div class="controls col-sm-10 col-xs-12">
+                      <label class="control-label col-sm-4 col-xs-12">Name<span class="field_req">*</span></label>
+                	 <div class="controls col-sm-6 col-xs-12">
                     	 <input type="text" placeholder="Name of Push Notification" class="required form-control" id="notification-name" name="notificationName"/>
                     </div>
                 </div>
 
 				<div class="control-group form-group">
-                      <label class="control-label col-sm-2 col-xs-12">Title<span class="field_req">*</span></label>
-                	 <div class="controls col-sm-10 col-xs-12">
+                      <label class="control-label col-sm-4 col-xs-12">Title<span class="field_req">*</span></label>
+                	 <div class="controls col-sm-6 col-xs-12">
                     	 <input type="text" maxlength=45 placeholder="Maximum 45 Characters." class="required form-control" id="notification-title" name="notificationTitle"/>
                     </div>
                 </div>
 
                 <div class="control-group form-group">
-                    <label class="control-label col-sm-2 col-xs-12">Message<span class="field_req">*</span></label>
-                	 <div class="controls col-sm-10 col-xs-12">
+                    <label class="control-label col-sm-4 col-xs-12">Message<span class="field_req">*</span></label>
+                	 <div class="controls col-sm-6 col-xs-12">
                     	 <textarea type="text" maxlength=160 placeholder="Maximum 160 Characters." class="required form-control " id="notification-message" name="notificationMessage"/>
                     </div>
                 </div>
                
                <div class="control-group form-group">
-                      <label class="control-label col-sm-2 col-xs-12">Destination URL</label>
-                	 <div class="controls col-sm-10 col-xs-12">
-                    	 <input type="url" placeholder="URL to open when user clicks the push notification." class="form-control" id="notification-link" name="notificationLink"/>
+                      <label class="control-label col-sm-4 col-xs-12">Destination URL</label>
+                	 <div class="controls col-sm-6 col-xs-12">
+                    	 <input type="url" placeholder="Destination url" class="form-control" id="notification-link" name="notificationLink"/>
+                    	 <p class="help-block m-b-none">URL to open when user clicks the push notification.</p>
                     </div>
                 </div>
 
                 <div class="control-group form-group">
-                      <label class="control-label col-sm-2 col-xs-12">Image URL</label>
-                	 <div class="controls col-sm-8 col-xs-12">
-                    	 <input type="url" placeholder="Image address url (Recommended 200*200 px)" class="form-control" id="notification-icon" name="notificationIcon"/>
+                      <label class="control-label col-sm-4 col-xs-12">Image URL</label>
+                	 <div class="controls col-sm-6 col-xs-12">
+                    	 <input type="url" placeholder="Image url" class="form-control" id="notification-icon" name="notificationIcon"/>
+                    	 <p class="help-block m-b-none">Image address url (Recommended 200*200 px)</p>
                 	</div>
-                	 <a class="btn btn-xm btn-primary" id="browseBtn" onclick="$('#uploadIconToS3Btn').click() ">Upload Image</a>
+                	 <a class="btn btn-xs btn-default" id="browseBtn" onclick="$('#uploadIconToS3Btn').click() " style="margin-top:11px;">Upload</a>
 			        <input type="file" id="uploadIconToS3Btn" class="hidden">
                 </div>
 
-               <div class="control-group form-group col-sm-8">
-			   <div class="control-label col-sm-3 col-xs-5">Tracking</div>
-			        <div class="controls col-sm-5 col-xs-5">
+               <div class="control-group form-group">
+			   <div class="control-label col-sm-4 col-xs-5">Tracking</div>
+			        <div class="controls col-sm-4 col-xs-5">
 			              <select name="push_param" class="form-control">
 			                   <option value="YES">Yes</option>
 			                   <option value="YES_AND_PUSH_EMAIL_ONLY"> Yes &amp; Push (Email only)</option>
@@ -158,9 +154,9 @@
 			 
 				<div class="clearfix"></div>           
 				<div class="line ling-lg b-b"></div>
-                <div class="form-actions col-sm-offset-2 col-sm-8">          
+                <div class="form-actions col-sm-offset-4 col-sm-8" style="margin-left:32.6%;">          
 					<a href="#push-notification" class="btn btn-sm btn-default " id="push-notification-close">Close</a>
-                    <a href="#push-notification"  id="saveNotification" class="btn btn-sm btn-info save">Save Notification</a>
+                    <a href="#push-notification"  id="saveNotification" class="btn btn-sm btn-primary save">Save Notification</a>
                     &nbsp;&nbsp;<span id="msg"></span>  
                 </div>
 
@@ -172,10 +168,10 @@
 </div>
 </div>
 
-<div class="col-md-4" style="padding:1px 7px 0px 0px" >
+<div class="col-md-5" style="min-height:">
     <div class="panel panel-default" >
       <div class="panel-heading h4">
-           <p>Preview</p>
+           <p class="m-none">Preview</p>
        </div>
       <div class="overflow-hidden" style="margin: 10px; box-shadow: 1px 1px 20px 0px #afaaaa;">
                 <div class="notification-demo">
@@ -184,7 +180,7 @@
                             <img id="prev-notification-icon" class="js-custom-notifications-image" src="https://media.licdn.com/mpr/mpr/shrink_200_200/AAEAAQAAAAAAAAWJAAAAJDQwNmRhNGNmLTlmNWMtNGZkMC1hZDJhLWI0ODE1NDQxMmNhNA.png" alt="" style="width: 140%;">
                         </div>
                             <div class="col-md-9 col-xs-9" style="padding-left: 20px;">
-                                <p style="color: black;" id = "prev-notification-title" class="h4 p-b-sm">Notification Title </p>
+                                <p style="color: black;" id = "prev-notification-title" class="h4 text-md p-b-xs">Notification Title </p>
                                 <p style="color: black;" id="prev-notification-message" class="h5 p-b-sm">Notification Message </p>
                                 <p  style="color: #989898;" class="h6 p-b-xs"><b>domain.agilecrm.com</b> </p>
                             </div>
