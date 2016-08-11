@@ -350,7 +350,7 @@ function getTemplateUrls(templateName)
 	}
 	if (templateName.indexOf("push-notification") == 0)
 	{
-		template_relative_urls.push("push-notification.js");
+		template_relative_urls.push("notification.js");
 	}
 	return template_relative_urls;
 }

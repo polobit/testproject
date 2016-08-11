@@ -1,9 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-
   <title>Push Notification of Agile CRM</title>
-
 </head>
 
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
@@ -11,18 +9,33 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.11.1/jquery.validate.min.js"></script>
 
 <body>
-
-  <h1>Push Notification By Agile CRM</h1>
-  <button onclick="enablePushNotification1()">Click</button>
-
-  <p>If allow and block popup is not comming the reload the page.. Thank You</p>
-  
+<div style="margin-top:15%;text-align: center;">
+  <img src="https://media.licdn.com/mpr/mpr/shrink_200_200/AAEAAQAAAAAAAAWJAAAAJDQwNmRhNGNmLTlmNWMtNGZkMC1hZDJhLWI0ODE1NDQxMmNhNA.png" >
+  <p></p>
+  </div>
 </body>
 <script type="text/javascript">
 	// Call this method through Web rules for enable push notification
-
   $(document).ready(function(){
-enablePushNotification1();
+
+  $.getScript("../flatfull/lib/desktop-notify-min.js").done(function( script) {
+   
+    var host = getUrlParameter("host");
+     if(notify.permissionLevel() == notify.PERMISSION_GRANTED)
+      { 
+        $('p').html("You already subscribe notification for " + host + ". Thank you for subscription");
+         enablePushNotification1();
+      }
+      else if (notify.permissionLevel() == notify.PERMISSION_DEFAULT)
+      {
+         $('p').html("Get Notifications from " + host + ". You can also block the Notifications anytime you want.");
+        enablePushNotification1();
+      } 
+      else
+      {
+        $('p').html("You block the notification. Reenable the notification instruction <a target='blank' href='//doxhze3l6s7v9.cloudfront.net/beta/static//img/notification-help/notification-enable-help.png'>click here</a>");
+      }
+    });
 
   });
 
@@ -33,7 +46,6 @@ function enablePushNotification1(){
   fileref.setAttribute("type", "text/json")
   fileref.setAttribute("href", "manifest.json");
   document.getElementsByTagName("head")[0].appendChild(fileref);
-
   regiseterServiceWorkers();
 }
 
@@ -118,13 +130,13 @@ function regiseterServiceWorkers()  {
 
      var params = "browserId=" +encodeURIComponent(browser_id); 
 
-     if(email != 'null' || email != undefined)
+     if(email != 'null' && email != undefined)
         params = params + "&email=" + encodeURIComponent(email);
 
-     if(guid != 'null' || guid != undefined)
+     if(guid != 'null' && guid != undefined)
         params = params + "&guid=" + encodeURIComponent(guid);
 
-      if(apiKey != 'null' || apiKey != undefined)
+      if(apiKey != 'null' && apiKey != undefined)
         params = params + "&id=" + encodeURIComponent(apiKey);
 
      var agile_url = window.location.origin + "/core/js/api/contacts/push-notification/subscriber?"+ params;

@@ -48,7 +48,7 @@ function regiseterServiceWorkers()  {
           // Check if we have an existing pushSubscription
           if (subscription)
            {
-                  if(subscription !=null || subscription !=undefined){
+                  if(subscription !=null && subscription !=undefined){
                        browser_id = subscription.endpoint.substring(subscription.endpoint.lastIndexOf("/")+1)
 
                    if(subscription.endpoint.indexOf("mozilla")>0)
@@ -140,10 +140,10 @@ function regiseterServiceWorkers()  {
 
     params = params+ "&contact={0}".format(encodeURIComponent(JSON.stringify(model)));
 
-     if(email != null || email != undefined)
+     if(email != null && email != undefined)
         params = params + "&email=" + encodeURIComponent(email);
 
-      if(guid != null || guid != undefined)
+      if(guid != null && guid != undefined)
         params = params + "&guId=" + encodeURIComponent(guid);
 
      var agile_url = agile_id.getURL() + "/contacts/push-notification?&id=" + agile_id.get() + "&" + params;

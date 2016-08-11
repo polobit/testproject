@@ -53,28 +53,29 @@ var Push_Notification_Event_View = Base_Model_View.extend({
       sendPushNotificationPreview: function(e)
       {
          e.preventDefault();
-         var btnValue = $("#previewBtn").attr("btn-value");
-         if($("#previewBtn").attr("btn-value")== 'send')         
-                sendPushNotification();
-          else
-          {
-            head.js('flatfull/push_notification/push_notification.js', function(e)
+          notify.requestPermission(function() {
+           if(notify.permissionLevel() == notify.PERMISSION_GRANTED)
+               sendPushNotification();
+           else
             {
-               enablePushNotification();
-               $("#previewBtn").text("Send Preview"); 
-               $("#previewBtn").attr("btn-value","send");
-             });
-           }
+                    console.log("hello");
+            }
+        });
       },
-
-
 		});
 
 
 //Preview
 function sendPushNotification(){
-  var jsonData = serializeForm("notificationForm");
-  jsonData.browserId = agile_read_data("agile-browser-id");
+  var json = serializeForm("notificationForm");
+
+  if(json.notificationIcon =="" || json.notificationIcon==undefined )
+     json.notificationIcon = "https://media.licdn.com/mpr/mpr/shrink_200_200/AAEAAQAAAAAAAAWJAAAAJDQwNmRhNGNmLTlmNWMtNGZkMC1hZDJhLWI0ODE1NDQxMmNhNA.png";
+  show_desktop_notification(json.notificationIcon, json.notificationTitle, json.notificationMessage, json.notificationLink);
+  
+
+  //show_desktop_notification(imageURL, title, message, link, tag,timeout);
+ /* jsonData.browserId = agile_read_data("agile-browser-id");
   
   $("#PreviewBtn").text("Sending");
    $.ajax({
@@ -88,7 +89,7 @@ function sendPushNotification(){
             },
         });
 
-
+*/
 }
 
 

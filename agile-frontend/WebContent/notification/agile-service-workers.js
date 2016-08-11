@@ -2,7 +2,7 @@
  self.addEventListener('push', function(event) 
  {
     var url="/push?id="; 
-    url = event.srcElement.registration.scope.split("/n")[0]+url;
+    url = event.currentTarget.location.href.split("/n")[0]+url;
     event.waitUntil(  
         self.registration.pushManager.getSubscription().then(function(subscription) {
               console.log("got subscription id: ", subscription.endpoint)
