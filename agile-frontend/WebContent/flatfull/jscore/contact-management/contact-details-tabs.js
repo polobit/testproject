@@ -218,12 +218,12 @@ var Contact_Details_Tab_Actions = {
 		  		owner = App_Deal_Details.dealDetailView.model.get("owner").id;
 		  	}
 
-		  	if(!hasScope("MANAGE_DEALS") && (CURRENT_DOMAIN_USER.id != owner) && model.get("entity_type") && model.get("entity_type") == "deal"){
+		  	if(!hasScope("DELETE_DEALS") && model.get("entity_type") && model.get("entity_type") == "deal"){
 		  		$('#deal_delete_privileges_error_modal').html(getTemplate("deal-delete-privileges-error-modal")).modal('show');
 		  		return;
 		  	}
 
-		  	if(model.get("entity_type") && model.get("entity_type") == "note" && Current_Route.indexOf("deal/") == 0 && model.get("domainOwner") && !hasScope("MANAGE_DEALS") && (CURRENT_DOMAIN_USER.id != owner)){
+		  	if(model.get("entity_type") && model.get("entity_type") == "note" && Current_Route.indexOf("deal/") == 0 && model.get("domainOwner") && !hasScope("UPDATE_DEALS") && (CURRENT_DOMAIN_USER.id != owner)){
 		  		$('#deal_update_privileges_error_modal').html(getTemplate("deal-update-privileges-error-modal")).modal('show');
 		  		return;
 		  	}
@@ -927,5 +927,20 @@ function modelDelete(model, targetEl, callback){
 		if(callback && typeof(callback) === "function"){
 			callback();
 		}
+	}, error : function(response){
+		showModalConfirmation("Delete <span class='text-cap'>"+model.get("entity_type")+"</span>", 
+			'<span>'+response.responseText+'</span>', 
+			function (){
+				return;
+			}, 
+			function(){
+				return;
+			},
+			function (){
+				return;
+			},
+			'Cancel'
+		);
+		return;
 	} });
 }

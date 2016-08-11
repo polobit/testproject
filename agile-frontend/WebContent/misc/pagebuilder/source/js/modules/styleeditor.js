@@ -326,27 +326,13 @@
 
                     if( bConfig.editableItems[theSelector][x] === 'background-image' ) {
 
-                        newStyleEl.find('input').bind('focus', function(){
-
-                            var theInput = $(this);
-
+                        newStyleEl.find('input').off('click');
+                        newStyleEl.find('input').on('click', function(event){
+                             var theInput = $(this);
                             $('#imageModal').modal('show');
                             $('#imageModal .image button.useImage').unbind('click');
-                            $('#imageModal').on('click', '.image button.useImage', function(){
-
-                                $(styleeditor.activeElement.element).css('background-image',  'url("'+$(this).attr('data-url')+'")');
-
-                                //update live image
-                                theInput.val( 'url("'+$(this).attr('data-url')+'")' );
-
-                                //hide modal
-                                $('#imageModal').modal('hide');
-
-                                //we've got pending changes
-                                siteBuilder.site.setPendingChanges(true);
-
-                            });
-
+                        
+                            console.log("hi");
                         });
 
                     } else if( bConfig.editableItems[theSelector][x].indexOf("color") > -1 ) {
@@ -405,7 +391,11 @@
                 if( $(this).attr('name') !== undefined ) {
 
                     $(styleeditor.activeElement.element).css( $(this).attr('name'),  $(this).val());
-
+                    if($(this).attr("name") === 'font-size'){
+                        var nodeName=styleeditor.activeElement.element.nodeName;
+                        if(nodeName==='DIV' || nodeName==='BLOCKQUOTE')
+                            $(styleeditor.activeElement.element).children().css($(this).attr("name"),$(this).val());
+                    }                     
                 }
 
                 /* SANDBOX */
@@ -576,14 +566,16 @@
         /*
             on focus, we'll make the input fields wider
         */
-        animateStyleInputIn: function() {
-
+        animateStyleInputIn: function() {            
             $(this).css('position', 'absolute');
             $(this).css('right', '0px');
             $(this).animate({'width': '100%'}, 500);
-            $(this).focus(function(){
-                this.select();
-            });
+            if($(this).attr("name")!=="background-image"){
+                $(this).focus(function(){
+                    this.select();
+                });
+            }    
+            
 
         },
 
