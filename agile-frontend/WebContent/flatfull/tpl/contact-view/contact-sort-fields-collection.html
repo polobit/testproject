@@ -1,5 +1,5 @@
 <script id="contact-view-sort-collection-template" type="text/html">
-<div class="btn-group pull-left m-r-xs contacts-toolbar">
+<div class="btn-group{{#is_mobile}} {{else}}pull-left{{/is_mobile}} m-r-xs contacts-toolbar">
 	   <div class="btn-group dropdown m-l-none" style="float: none;">
                 <button class="btn btn-sm no-shadow p-n b-n bg-transparent text-base" style="font-size: 11px;" data-toggle="dropdown" id="contact-sort" aria-expanded="false">
                     <span class="text-muted">{{agile_lng_translate 'contacts-view' 'sort-by'}} </span>
