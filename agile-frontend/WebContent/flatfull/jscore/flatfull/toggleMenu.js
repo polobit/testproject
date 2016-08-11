@@ -336,6 +336,7 @@ $("#activityModal").on("click", "#eventDescriptionLink", function(e){
 	$('#searchText').on('keydown', function(e){
 
 		if(e.keyCode == 13){
+			$("#searchForm").find(".dashboard-search-scroll-bar").css({"display":"none"});
 			$('.searchicon-dropdown').removeClass('open');
 			//$("#search-results").trigger("click");
 			showSearchResults();
