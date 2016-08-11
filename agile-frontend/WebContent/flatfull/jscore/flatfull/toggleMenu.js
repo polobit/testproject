@@ -339,6 +339,7 @@ $("#activityModal").on("click", "#eventDescriptionLink", function(e){
 			$('.searchicon-dropdown').removeClass('open');
 			//$("#search-results").trigger("click");
 			showSearchResults();
+			$("#navbar").removeClass("show");
 			e.preventDefault();
 			//return;
 		}
