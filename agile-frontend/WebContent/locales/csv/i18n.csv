@@ -5209,3 +5209,9 @@ events.rescheduled,Rescheduled,Reprogramada
 events.cancelled,Cancelled,Cancelado
 events.no-show,No Show,No Show
 deal-view.deal-id,Deal ID,
+admin-settings-users.view-deals-owned-by-others,View deals owned by other users,
+admin-settings-users.create-deals,Create Deals,
+admin-settings-users.update-deals,Update Deals,
+admin-settings-users.delete-deals,Delete Deals,
+admin-settings-users.create-update-delete-deals-content,Add and edit deals owned by other users. Delete own and other user deals,
+deal-view.persmission-to-delete-deals,You do not have permission to delete deals.,

@@ -164,6 +164,14 @@ public class EventsAPI
     	{
     		throw new AccessDeniedException("Event cannot be deleted because you do not have permission to update associated contact.");
     	}
+    	
+    	List<String> dealIds = event.getDeal_ids();
+    	List<String> modifiedDealIds = UserAccessControlUtil.checkUpdateAndmodifyRelatedDeals(dealIds);
+    	if(dealIds != null && modifiedDealIds != null && dealIds.size() != modifiedDealIds.size())
+    	{
+    		throw new AccessDeniedException("Event cannot be deleted because you do not have permission to update associated deal.");
+    	}
+    	
     	try
     	{
     	    ActivitySave.createEventDeleteActivity(event);
@@ -204,6 +212,14 @@ public class EventsAPI
     {
     	throw new AccessDeniedException("Event cannot be created because you do not have permission to update associated contact(s).");
     }
+    
+    List<String> dealIds = event.getDeal_ids();
+    List<String> modifiedDealIds = UserAccessControlUtil.checkUpdateAndmodifyRelatedDeals(dealIds);
+    if(dealIds != null && modifiedDealIds != null && dealIds.size() != modifiedDealIds.size())
+    {
+    	throw new AccessDeniedException("Event cannot be created because you do not have permission to update associated deal(s).");
+    }
+    
 	event.save();
 	try
 	{
@@ -266,6 +282,13 @@ public class EventsAPI
     	{
     		throw new AccessDeniedException("Event cannot be updated because you do not have permission to update associated contact(s).");
     	}
+    	
+    	List<String> dealIds = oldEvent.getDeal_ids();
+        List<String> modifiedDealIds = UserAccessControlUtil.checkUpdateAndmodifyRelatedDeals(dealIds);
+        if(dealIds != null && modifiedDealIds != null && dealIds.size() != modifiedDealIds.size())
+        {
+        	throw new AccessDeniedException("Event cannot be updated because you do not have permission to update associated deal(s).");
+        }
     }
 	List<String> conIds = event.contacts;
 	List<String> modifiedConIds = UserAccessControlUtil.checkUpdateAndmodifyRelatedContacts(conIds);
@@ -273,6 +296,12 @@ public class EventsAPI
 	{
 		throw new AccessDeniedException("Event cannot be updated because you do not have permission to update associated contact(s).");
 	}
+	List<String> dealIds = event.getDeal_ids();
+    List<String> modifiedDealIds = UserAccessControlUtil.checkUpdateAndmodifyRelatedDeals(dealIds);
+    if(dealIds != null && modifiedDealIds != null && dealIds.size() != modifiedDealIds.size())
+    {
+    	throw new AccessDeniedException("Event cannot be updated because you do not have permission to update associated deal(s).");
+    }
     try {
 		if(oldEvent != null &&!(oldEvent.getDeal_ids()).isEmpty())
 		{
@@ -545,5 +574,61 @@ public class EventsAPI
     {
 	return EventUtil.getEventsRelatedContacts(id);
     }
+     
+	 @Path("delete")
+	 @POST
+	 @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	 @Produces({ MediaType.APPLICATION_JSON })
+	 public void deleteEvent(@FormParam("ids") String model_ids) throws JSONException
+	 {
+	 	JSONArray eventsJSONArray = new JSONArray(model_ids);
+	 	if(eventsJSONArray != null)
+	 	{
+	 		Long id = eventsJSONArray.getLong(0);
+	 		Event event = EventUtil.getEvent(id);
+	 	    UserAccessControlUtil.check(Event.class.getSimpleName(), event, CRUDOperation.DELETE, true);
+	 	    if(event != null)
+	 	    {
+	 	    	List<ContactPartial> contList = event.getContacts();
+	 	    	List<String> conIds = new ArrayList<String>();
+	 	    	for(ContactPartial con : contList)
+	 	    	{
+	 	    		conIds.add(String.valueOf(con.id));
+	 	    	}
+	 	    	List<String> modifiedConIds = UserAccessControlUtil.checkUpdateAndmodifyRelatedContacts(conIds);
+	 	    	if(conIds != null && modifiedConIds != null && conIds.size() != modifiedConIds.size())
+	 	    	{
+	 	    		throw new AccessDeniedException("Event cannot be deleted because you do not have permission to update associated contact.");
+	 	    	}
+	 	    	
+	 	    	List<String> dealIds = event.getDeal_ids();
+	 	    	List<String> modifiedDealIds = UserAccessControlUtil.checkUpdateAndmodifyRelatedDeals(dealIds);
+	 	    	if(dealIds != null && modifiedDealIds != null && dealIds.size() != modifiedDealIds.size())
+	 	    	{
+	 	    		throw new AccessDeniedException("Event cannot be deleted because you do not have permission to update associated deal.");
+	 	    	}
+	 	    	
+	 	    	try
+	 	    	{
+	 	    	    ActivitySave.createEventDeleteActivity(event);
+	 	    		if (event.type.toString().equalsIgnoreCase("WEB_APPOINTMENT"))
+	 	    		    GoogleCalendarUtil.deleteGoogleEvent(event);
+	 	    		  if(!(event.getDeal_ids()).isEmpty())
+	 	    	    	{
+	 	    	    		for(String oppr : event.getDeal_ids())
+	 	    	    		{
+	 	    	    			Opportunity opportuinty = OpportunityUtil.getOpportunity(Long.valueOf(oppr));
+	 	    	    			opportuinty.save();
+	 	    	    		}
+	 	    	    	}
+	 	    		event.delete();
+	 	    	}
+	 	    	catch (Exception e)
+	 	    	{
+	 	    	    e.printStackTrace();
+	 	    	}
+	 	    }
+	 	}
+	 }
 
 }
