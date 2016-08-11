@@ -153,8 +153,6 @@ margin: 0px 0 15px;
 #plan-details-pane .btn, .pricing-btn {
   position: static!Important;
 }
-.tickets-main{ display: table;}
-.tickets-main .vbox, .tickets-main .row-row{ display: inline;}
 }
 /**
 * Custom hide
@@ -1999,10 +1997,6 @@ display: block!important;
 
 .grid-icon-header:hover, .grid-icon-header:focus{background-color:inherit !important;}
 .grid_icon_center{ z-index: 0 !important;}
-.ticket-head-filters{ display: block; text-align: center;}
-.ticket-showing-no{ float: none !important; display: block; text-align: center; margin-top: 0px !important;}
-.icons-left{ float: left !important; margin-top: 5px;}
-.ticket-subj-block{ display: block;}
 }
 
 @media all and (min-width: 768px) {
@@ -2274,7 +2268,6 @@ display: block!important;
 .companyDetails .vbox{ min-height: auto;}
 .taskTabListCenter{ margin-left: 15px; margin-right: 15px; margin-top: 15px;}
 .contDetails .col, .companyDetails .col, .taskListDetails .col, .dealDetailList .col, .taskDetailsCol{ border-right: none;}
-#ticket-model-list > tr > td:first-child{display: none;}
 }
 
 @media (max-width: 420px){
@@ -2403,12 +2396,6 @@ transform: translateX(-50%);}
     border-color: #dee5e7;
   }
 
-.ticket-b-t .table tbody tr:first-child td{border-top: 0px;}
-.ticket-name, .ticket-subject{ color: #697073;max-width: 20em;}
-.reply-textarea-h{ height: 120px !important;}
- @media (max-width:420px){
-  .ticket-name, .ticket-subject{ max-width: 13em;}
-} 
 
 
 /*end custom css code*/
