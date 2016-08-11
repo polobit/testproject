@@ -21,9 +21,9 @@ git checkout .
 
 git stash
 
-git checkout sandbox_beta_maven
+git checkout maven_backends
 
-git pull origin sandbox_beta_maven
+git pull origin maven_backends
 
 ant create-target  -DRELEASE_VERSION="$2" -DPRODUCTION=false;
 
