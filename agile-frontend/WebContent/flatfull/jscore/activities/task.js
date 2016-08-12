@@ -165,8 +165,10 @@ function initializeTasksListeners(){
 	$('#tasks-list-template').on('click', '.delete-task', function(event)
 	{
 		if (!confirm("Are you sure you want to delete?"))
+		{
+			$(this).closest('.task-content-view').find(".taskComplete").attr('checked', false);
 			return;
-
+		}
 		// Delete Task.
 		deleteTask(getTaskId(this), getTaskListId(this), getTaskListOwnerId(this));
 	});
