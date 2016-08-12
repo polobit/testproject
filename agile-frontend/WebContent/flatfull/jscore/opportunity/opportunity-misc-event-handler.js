@@ -7,6 +7,113 @@ $(function()
 		setup_tags_typeahead();
 	});
 
+
+	$('#opportunityUpdateModal, #opportunityModal').off('click', '#opportunity_archive');
+  $('#opportunityUpdateModal, #opportunityModal').on('click', '#opportunity_archive', function(e)
+  {
+    e.preventDefault();
+    $('#archived', $('#opportunityUpdateForm')).prop('checked', 'checked');
+    $("#opportunityUpdateModal #opportunity_validate").trigger('click');
+  });
+
+  $('#opportunityUpdateModal, #opportunityModal').off('click', '#opportunity_unarchive');
+  $('#opportunityUpdateModal, #opportunityModal').on('click', '#opportunity_unarchive', function(e)
+  {
+    e.preventDefault();
+    $('#archived', $('#opportunityUpdateForm')).removeAttr('checked');
+    $('#opportunityUpdateModal #opportunity_validate').trigger('click');
+  });
+
+
+  /**
+   * Validates deal and saves
+   */
+  $('#opportunityUpdateModal, #opportunityModal').off('click', '#opportunity_validate');
+  $('#opportunityUpdateModal, #opportunityModal').on('click', '#opportunity_validate', function(e)
+  {
+    e.preventDefault();
+
+    var color = {"#ee82ee":"VIOLET","#4b0082":"INDIGO","#0000ff":"BLUE","#00ff00":"GREEN","#ffff00":"YELLOW"
+                   ,"#ff6600":"ORANGE","#ff0000":"RED","#000000":"BLACK","#ffffff":"WHITE","#808080":"GREY"}; 
+       
+                    
+    // To know updated or added deal form names
+    var modal_id = $(this).closest('.opportunity-modal').attr("id");
+    var form_id = $(this).closest('.opportunity-modal').find('form').attr("id");
+    var colorcode = $(this).closest('.opportunity-modal').find('form').find("#color1").val();
+
+    var json = serializeForm(form_id);
+    json["custom_data"] = serialize_custom_fields(form_id);
+    json["colorName"]  = color[colorcode];
+    var tagsSourceId ;          
+        if (!tagsSourceId)
+                tagsSourceId = form_id;
+        var tagobj = get_tags(tagsSourceId);
+        var i;
+        var tags;
+        for (i = 0; i < tagobj.length ; i++) {
+                        if(tagobj[i].name == "tags" && tagobj[i].value != "")
+                                tags = tagobj[i];
+    }   
+        if (tags != undefined && tags.length != 0)
+        {
+            json.tags = [];
+            var tags_valid = true;
+            if (!json['tagsWithTime'] || json['tagsWithTime'].length == 0)
+            {
+                $.each(tags.value, function(index, value)
+                {
+                    if(!isValidTag(value, false)) {
+                        tags_valid = false;
+                        return false;
+                    }
+                });
+                json['tagsWithTime'] = [];
+                $.each(tags.value, function(index, value)
+                {
+                    json.tagsWithTime.push({ "tag" : value });
+                });
+            }
+            else
+            {
+                var tag_objects_temp = [];
+                $.each(tags.value, function(index, value)
+                {
+                    var is_new = true;
+                    $.each(json['tagsWithTime'], function(index, tagObject)
+                    {
+                        if (value == tagObject.tag)
+                        {
+                                tag_objects_temp.push(tagObject);
+                                is_new = false
+                                return false;
+                        }
+                    });
+
+                    if (is_new) {
+                        tag_objects_temp.push({ "tag" : value });
+                        //check if tags are valid if they are newly adding to the contact.
+                        if(!isValidTag(value, false)) {
+                                tags_valid = false;
+                                return false;
+                        }
+                    }
+                });
+                json['tagsWithTime'] = tag_objects_temp;
+            }
+            if(!tags_valid) {
+                    $('.invalid-tags-person').show().delay(6000).hide(1);
+                    enable_save_button($(saveBtn));
+                    return false;
+            }
+        }
+    console.log(json);
+    if (form_id == "opportunityForm")
+      saveDeal(form_id, modal_id, this, json, false);
+    else
+      saveDeal(form_id, modal_id, this, json, true);
+  });
+
 	/**
 	 * When mouseover on any row of opportunities list, the popover of deal is shown
 	 **/
