@@ -2224,7 +2224,7 @@ li.error {
 
 .list-tasks {
   /*box-sizing: border-box;*/
-  overflow: auto;
+  overflow: auto !Important;
   /*margin-right: -4px;
   margin-top: 5px;*/
 }
