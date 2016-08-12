@@ -11,6 +11,8 @@ public class JerseyApplication extends Application
 	public Set<Class<?>> getClasses()
 	{
 		Set<Class<?>> s = new HashSet<Class<?>>();
+		
+		s.addAll(com.agilecrm.core.si.JerseyApplication.getJerseyClasses());
 
 		s.add(org.codehaus.jackson.jaxrs.JacksonJaxbJsonProvider.class);
 		s.add(org.codehaus.jackson.jaxrs.JacksonJsonProvider.class);

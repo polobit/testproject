@@ -316,6 +316,11 @@
    --><welcome-file-list>
     <welcome-file>home</welcome-file>
   </welcome-file-list>
+  
+	<listener>
+		<listener-class>com.agilecrm.reports.AgileServletContextListener</listener-class>
+	</listener>
+  
   <servlet>
     <servlet-name>RedirectServlet</servlet-name>
     <servlet-class>com.campaignio.servlets.RedirectServlet</servlet-class>
