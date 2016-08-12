@@ -129,7 +129,8 @@
 							<input id="searchText" type="text"
 										data-provide="typeahead"
 										class="typeahead typeahead_contacts search-query form-control-custom input-sm bg-light no-border rounded padder"
-										placeholder="Search" onclick="Agile_GA_Event_Tracker.track_event('Search option in Nav Bar')">
+										placeholder="Search" style="border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;" onclick="Agile_GA_Event_Tracker.track_event('Search option in Nav Bar')">
 										
 										 <!-- <input id="search-results" 
 										type="image" src="img/SearchIcon.png" class="searchbox hidden" /> -->
@@ -139,7 +140,9 @@
               </div>				
 								</form>
 							</li>
-							<%}%>
+							<%
+							}
+							%>
 
 
                  
@@ -214,19 +217,21 @@
 						<ul class="nav navbar-nav agile-menu">
 
 					<li>
-					<div class="dropdown m-l-sm navbar-searchicon">
-					<button class="fa fa-search text-base p-n btn btn-sm dropdown-toggle no-shadow bg-transparent b-n" type="button" data-toggle="dropdown"></button>
-					<ul class="dropdown-menu search-view animated fadeInRight">
+					<div class="dropdown m-l-sm navbar-searchicon searchicon-dropdown">
+					<button class="fa fa-search text-base p-n btn btn-sm dropdown-toggle no-shadow bg-transparent b-n show-search-dropdown" type="button"></button>
+					<ul class="dropdown-menu search-view animated fadeInRight agile-search">
 					<li>
 
 					<div class="col-sm-12">
 
-					<form class=" m-t-sm m-b-sm" id="searchbar-input" role="search">
+					<form class=" m-t-sm m-b-sm" id="searchForm" role="search">
 					<div class="input-group add-on">
-					<input type="text" class="form-control r-5x">
+					<input type="text" id="searchText" data-provide="typeahead"
+										class="typeahead form-control r-5x typeahead_contacts form-control-custom"
+										placeholder="Search" onclick="Agile_GA_Event_Tracker.track_event('Search option in Nav Bar')">
 					<div class="input-group-btn">
-					<button class="btn btn-default no-shadow" type="submit" id="speechicon"onclick="startDictation()"><i class="icon-microphone"></i></button>
-					<button class="btn btn-default no-shadow r-5x" type="submit"><i class="fa fa-search"></i></button>
+					<button class="btn btn-default no-shadow" onclick="startDictation()" src="https://i.imgur.com/cHidSVu.gif" class="btn btn-sm bg-light"  ><i class="icon-microphone"></i></button>
+					<button class="btn btn-default no-shadow r-5x" id="search-results" type="submit"><i class="fa fa-search"></i></button>
 					</div>
 					</div>
 					</form>
@@ -238,107 +243,52 @@
 
 
 					<li>
-					<ul class="col-sm-12 list-none search-filters" id="advanced-search-fields-group">           			
+					<ul class="col-sm-12 list-none search-filters" id="advanced-search-fields-group" name="fields_set">
 					<li>
-					<a href="javascript:void(0);">
-					<label class="i-checks i-checks-sm ">
-					<input name="person" value="person" type="checkbox">
-					<i></i></label>Contacts</a>
-					</li>
-
-					<li>
-					<a href="javascript:void(0);">
-					<label class="i-checks i-checks-sm  searchtype"><input name="company" value="company" type="checkbox" class="choose-column-chbx"><i></i></label>Companies</a>
-					</li>
-
-					<li>
-					<a href="javascript:void(0);">
-					<label class="i-checks i-checks-sm">
-					<input name="opportunity" value="opportunity" type="checkbox"><i></i></label>Deals</a>
-					</li>
-
-					<li>
-					<a href="javascript:void(0);">
-					<label class="i-checks i-checks-sm "><input name="document" value="document" type="checkbox"><i></i></label>Documents</a>
-					</li>
-
-					<li>
-					<a href="javascript:void(0);">
-					<label class="i-checks i-checks-sm"><input name="tickets" value="tickets" type="checkbox"><i></i></label>Tickets</a>
-					</li>
-
-					<li>
-					<button style="margin-left:2px; margin-top:3px;" class="btn m-b-sm w-xs btn-xs btn-info text-base">Go</button>
-					</li>
-
-					</ul>
-
-					</li>
-
-					</ul>
-					</div>
-
-					</li>
-							<li class="nav-bar-search m-r hide" >
-								<form id="searchForm" class=" navbar-search  navbar-search navbar-form navbar-form-sm navbar-left shift p-r-none">
-					<div class="input-group">
-						    <label for="searchText" class="fa fa-search global-search-label" id="search-results"></label>
-							<input id="searchText" type="text"
-										data-provide="typeahead"
-										class="typeahead typeahead_contacts search-query form-control-custom input-sm no-border no-border-radius rounded bg-light"
-										placeholder="Search" onclick="Agile_GA_Event_Tracker.track_event('Search option in Nav Bar')">
-										
-										 <!-- <input id="search-results" 
-										type="image" src="img/SearchIcon.png" class="searchbox hidden" /> -->
-					</div>
-				</form>
-
-				<form id="advanced-search-filter " class="pull-right m-t-sm hide">
-
-                <span class="input-group-btn inline-block">
-                <button type="submit" class="btn btn-sm bg-light rounded" id="search-results" style="height:30px;"><i class="fa fa-search"></i></button>
-
-                <!--<img onclick="startDictation()" src="https://i.imgur.com/cHidSVu.gif" class="btn btn-sm bg-light" style="width:30px;height:30px;padding:0px">-->
-                <button class="dropdown-toggle btn btn-sm bg-light rounded searchFilterDropdown" data-toggle="dropdown" style="height:30px;border-top-right-radius: 500px;border-bottom-right-radius: 500px;"><i style="opacity:0.7;" class="fa fa-filter"></i></button>
-							<ul class="dropdown-menu animated fadeInRight multiple-checkbox" name="fields_set" id="advanced-search-fields-group">           			
-                			
-                			<li>
 		       		  		<a href="javascript:void(0);" class="p-b-none">
 								<label class="i-checks i-checks-sm searchtypeall "><input name="all" value = "" type="checkbox" class="choose-column-chbx"><i></i></label>All</a>
 							</li>
-							
-	                   		<li>
-	       		  			<a href="javascript:void(0);" class="p-b-none">
-								<label class="i-checks i-checks-sm  searchtype"><input name="person" value = "person" type="checkbox" class="choose-column-chbx"><i></i></label>Contacts</a>
-							</li>
+	                   	           			
+					<li>
+   		  			<a href="javascript:void(0);" class="p-b-none">
+						<label class="i-checks i-checks-sm  searchtype"><input name="person" value = "person" type="checkbox" class="choose-column-chbx"><i></i></label>Contacts</a>
+					</li>
 
-							<li>
-	       		  			<a href="javascript:void(0);" class="p-b-none">
+					<li>
+					<a href="javascript:void(0);" class="p-b-none">
 								<label class="i-checks i-checks-sm  searchtype"><input name="company" value = "company" type="checkbox" class="choose-column-chbx"><i></i></label>Companies</a>
-							</li>
+					</li>
 
-							<li>
-	       		  			<a href="javascript:void(0);" class="p-b-none">
+					<li>
+					<a href="javascript:void(0);" class="p-b-none">
 								<label class="i-checks i-checks-sm  searchtype"><input name="opportunity" value = "opportunity" type="checkbox" class="choose-column-chbx"><i></i></label>Deals</a>
-							</li>
-							
-							<li>
-	       		  			<a href="javascript:void(0);" class="p-b-none">
+					</li>
+
+					<li>
+					<a href="javascript:void(0);" class="p-b-none">
 								<label class="i-checks i-checks-sm  searchtype"><input name="document" value = "document" type="checkbox" class="choose-column-chbx"><i></i></label>Documents</a>
-							</li>
-							<!-- <li>
-	       		  			<a href="javascript:void(0);" class="p-b-none">
-								<label class="i-checks i-checks-sm  searchtype"><input name="cases" value = "cases" type="checkbox" class="choose-column-chbx"><i></i></label>Cases</a>
-							</li> -->
-							<li>
-	       		  			<a href="javascript:void(0);" class="p-b-none">
+					</li>
+
+					<li>
+					<a href="javascript:void(0);" class="p-b-none">
 								<label class="i-checks i-checks-sm  searchtype"><input name="tickets" value = "tickets" type="checkbox" class="choose-column-chbx"><i></i></label>Tickets</a>
-							</li>
-                			
-                			</ul>
-              </span>
-              			
-								</form>
+					</li>
+
+					</ul>
+
+					</li>
+
+					</ul>
+					</div>
+
+					</li>
+							
+				</form>
+
+				
+
+                <!--<img onclick="startDictation()" src="https://i.imgur.com/cHidSVu.gif" class="btn btn-sm bg-light" style="width:30px;height:30px;padding:0px">-->
+                
 							</li>
 							
 
@@ -615,19 +565,9 @@
 					</header>
 					<!--/.nav-collapse -->
 			
+
 <script type="text/javascript">
-/*//Remove the search filter cookie if it exists
-function removeSearchFilter(){
-        	var savefilters = _agile_get_prefs("agile_search_filter");
-        	console.log("savefilters = "+savefilters);
-        	if(!savefilter){
-        		_agile_delete_prefs(savefilters);
-
-        	}
-
-        	//_agile_delete_prefs(savefilters);
-        }*/
-      function startDictation(e) {
+  function startDictation() {
       var recognition = new webkitSpeechRecognition();
  
       recognition.continuous = false;
@@ -635,22 +575,19 @@ function removeSearchFilter(){
  
       recognition.lang = "en-US";
       recognition.start();
-      $(document.getElementById('speechicon')).addClass("agile-feature-item-blink");
  
       recognition.onresult = function(e) {
         document.getElementById('searchText').value
                                  = e.results[0][0].transcript;
         $("#search-results").trigger('click')
         recognition.stop();
-        $(document.getElementById('speechicon')).removeClass("agile-feature-item-blink");
        
       };
  
       recognition.onerror = function(e) {
       	console.log(e)
         recognition.stop();
-        $(document.getElementById('speechicon')).removeClass("agile-feature-item-blink");
       }
     }
+  
 </script>
-		
