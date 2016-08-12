@@ -1026,17 +1026,13 @@ var USER_BILLING_PREFS = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(subs
 var _LANGUAGE = "<%=_LANGUAGE%>";
 // var _Agile_Resources_Json = {};
 // head.js("locales/" + _LANGUAGE + "/" + _LANGUAGE + ".json?" + _agile_get_file_hash('lib-all-new-2.js'));
-// load_tpl_html();
-
 head.load(	"https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js",
 			LIB_PATH + 'final-lib/min/lib-all-new-1.js?_=' + _agile_get_file_hash('lib-all-new-1.js'),
 			"https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.3.0/handlebars.min.js",
 			LIB_PATH + 'final-lib/min/backbone-min.js',
 			LIB_PATH + 'final-lib/min/lib-all-new-2.js?_=' + _agile_get_file_hash('lib-all-new-2.js'),  
 			function(){
-         // Load tpl.html
-        // load_tpl_html();
-		    showVideoForRegisteredUser();
+        showVideoForRegisteredUser();
 		});
 
 // head.js({ library  : LIB_PATH + 'final-lib/min/lib-all-min-1.js?_=' + _AGILE_VERSION });
@@ -1067,7 +1063,6 @@ $('body').css('background-image', 'none');
 //$('#content').html('ready');
 $("img.init-loading", $('#content')).attr("src", "<%=CLOUDFRONT_TEMPLATE_LIB_PATH%>/img/ajax-loader-cursor.gif");
 
-// load_tpl_html(function(){
 head.load([{'js-core-1': CLOUDFRONT_PATH + 'jscore/min/locales/' + _LANGUAGE  +'/js-all-min-1.js' + "?_=" + _agile_get_file_hash('js-all-min-1.js')}, 
 		{'js-core-2': CLOUDFRONT_PATH + 'jscore/min/locales/' + _LANGUAGE +'/js-all-min-2.js' + "?_=" + _agile_get_file_hash('js-all-min-2.js')}, 
 		{'js-core-3': CLOUDFRONT_PATH + 'jscore/min/locales/' + _LANGUAGE +'/js-all-min-3.js' + "?_=" + _agile_get_file_hash('js-all-min-3.js')}, 
@@ -1106,24 +1101,9 @@ head.load([{'js-core-1': CLOUDFRONT_PATH + 'jscore/min/locales/' + _LANGUAGE  +'
 	});
 
 // head.js({"stats" : '<%=CLOUDFRONT_TEMPLATE_LIB_PATH%>stats/min/agile-min.js' + "?_=" + _AGILE_VERSION});
-// });// End of template loading
 
 }); //End of head.ready() function. Check above.
 
-function load_tpl_html(callback){
-  // For localhost
-  if(!HANDLEBARS_PRECOMPILATION){
-        if(callback)
-           callback();
-    return;
-  }
-  
-  downloadTemplate('<%=tplFile%>', function(){
-    // initializeDealModalEvents();
-    if(callback)
-         callback();
-  });
-}
 
 function load_globalize()
 {
@@ -1162,10 +1142,6 @@ function closeVideo(){
        $('#dashboard_video').modal("hide");
         $('#dashboard_video iframe').removeAttr("src");
     });
-}
-
-// Deal Modals Event Listeners
-function initializeDealModalEvents(){
 }
 </script>
 
