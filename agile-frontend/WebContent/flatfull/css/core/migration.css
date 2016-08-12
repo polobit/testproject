@@ -574,17 +574,20 @@ left:0;
 {
   padding:15px;
 }
-#task-model-list .task-striped:nth-child(odd),.social-striped:nth-child(odd),.RTuserlist-
+.social-striped:nth-child(odd),.RTuserlist-
 
 modal li:nth-child(odd),.milestones li:nth-child(odd)
 {
   background:#fff;
 }
-#task-model-list .task-striped:nth-child(even),.social-striped:nth-child
+#task-model-list .task-striped:nth-child(),.social-striped:nth-child
 
 (even),.RTuserlist-modal li:nth-child(even),.milestones li:nth-child(even)
 {
   background:rgb(250, 251, 252);
+}
+#task-model-list .task-striped{
+  background:#fff;
 }
 
 
@@ -1384,7 +1387,9 @@ border-left:none;
 }
 
 /* media queries for contact details left , right icons auto hide show */
-
+@media (min-width:1100px){
+.min-h-auto-xl{ min-height: 490px;}
+}
 @media (min-width:1340px){
 .app-aside-dock #contacts-inner-tabs #prev,.app-aside-dock #contacts-inner-tabs #next {
 display:none;
@@ -2330,6 +2335,7 @@ color:#484848!important;
 .mobile-contact-filter-list .dropdown-menu li a{ padding: 8px 15px;}
 #lhs-contact-filter-form #lhs-filters-header{ display: block;}
 .contactTableHeadName thead tr th{ display: none;}
+
 .pos-t-1{ top: 1px;}
 .icons-text-sm .actions i, .icons-text-sm .actions span.icon-trash{ font-size: 13px;}
 .icons-text-sm.actions i, .icons-text-sm.actions span.icon-trash{ font-size: 13px !important;}
@@ -2358,6 +2364,10 @@ color:#484848!important;
   overflow: auto;
   overflow-y:hidden;
 }
+
+.transform-rotate{ transform: rotate(45deg);}
+.taskavatarimg img{ border-radius: 4px;}
+
 
 .dkim_spf::-webkit-scrollbar-thumb,.dkim_spf::-webkit-scrollbar-thumb, .dkim_spf::-webkit-scrollbar-thumb {
  -webkit-border-radius: 10px;

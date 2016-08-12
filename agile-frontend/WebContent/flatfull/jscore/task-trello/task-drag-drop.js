@@ -17,12 +17,23 @@ function setup_sortable_tasks()
 					revert : true,
 
 					start: function(e, ui){
-				        ui.placeholder.height(ui.item.height());
+						ui.placeholder.height(ui.item.height());
 				    },
 					
+					beforeStart : function(event, ui) {
+                          console.log("start");
+                          if($(ui).hasClass("ui-state-disabled"))
+							return false;
+
+					},
 					beforeStop : function(event, ui)
 					{
+
 						// If sender and receiver is same
+						if ($(ui.helper).hasClass('ui-state-disabled')){
+							return false;
+						}
+
 						if ($(ui.helper).closest('.task-trello-list').find('.list-header').attr('attr') === $(ui.placeholder).closest('.task-trello-list').find('.list-header').attr(
 								'attr'))
 						{
@@ -60,9 +71,12 @@ function setup_sortable_tasks()
 						if (ui.sender == null)
 							return;
 
+						
 						// Make UI and DB changes after task dropped.
-						changeAfterDrop(event, ui);
 
+						changeAfterDrop(event, ui);
+						ui.item[0].parentNode.removeChild(ui.item[0]);
+						
 					} }).disableSelection();
 	});
 }
@@ -197,6 +211,7 @@ function saveAfterDrop(oldTask, criteria, newTaskListId, newTaskListOwnerId, tas
 		// Maintain changes in UI
 		displaySettings();
 
+		var modeloldtask = getTaskList(criteria, oldTask.oldTaskListId, oldTask.owner_id);
 		// Get new task list
 		var modelNewTaskList = getTaskList(criteria, newTaskListId, newTaskListOwnerId);
 
