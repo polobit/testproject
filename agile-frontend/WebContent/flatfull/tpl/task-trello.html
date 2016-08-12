@@ -3,20 +3,20 @@
   <div class="wrapper-md lter bg-light b-b">
     <div class="row">  
 	     <div class="col-md-12">   
-			   <h3 id="new-task-heading" class="task-heading pull-left font-thin h3">My Pending Tasks<small class="tasks-count"></small></h3>
+			   <h3 id="new-task-heading" class="task-heading pull-left font-thin h3">{{agile_lng_translate 'tasks' 'My Pending Tasks'}}<small class="tasks-count"></small></h3>
 		      <div class="pull-right">
             <div class="inline-block m-r hide" id="calendarTasksButtons">
-                <button type="button" class="btn btn-sm btn-default" onclick="taskCalendarToday()">Today
+                <button type="button" class="btn btn-sm btn-default" onclick="taskCalendarToday()">{{agile_lng_translate 'calendar' 'Today'}}
                 </button>
                 <div class="btn-group m-l-xs">
-                  <button id="agendaDay" class="btn btn-sm btn-default taskDayWeekMonth" >Day
+                  <button id="agendaDay" class="btn btn-sm btn-default taskDayWeekMonth" >{{agile_lng_translate 'calendar' 'day'}}
                   </button>
-                  <button id="month" class="btn btn-sm btn-default taskDayWeekMonth" >Month
+                  <button id="month" class="btn btn-sm btn-default taskDayWeekMonth" >{{agile_lng_translate 'calendar' 'month'}}
                   </button>
                 </div>
             </div>
 		        <div class="btn-group owner-task-button m-r">
-	            <button class="btn btn-default btn-sm fnew-task-subject selected_name">My Pending Tasks
+	            <button class="btn btn-default btn-sm fnew-task-subject selected_name">{{agile_lng_translate 'tasks' 'My Pending Tasks'}}
               </button>
 	            <a class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" href="#">
 	               <span class="caret">
@@ -28,7 +28,7 @@
             {{#is_mobile}}
             {{else}}
 			       <div class="btn-group type-task-button c-p m-r">
-		            <button class="btn btn-default btn-sm selected_name">Due
+		            <button class="btn btn-default btn-sm selected_name">{{agile_lng_translate 'tasks' 'due'}}
                 </button>
 		            <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" href="#">
 		              <span class="caret">
@@ -36,41 +36,41 @@
 		            </button>
 		            <ul class="dropdown-menu main-menu" id="new-type-tasks" role="menu">
 		                <li class="dropdown-submenu do-onclick-nothing">
-		                    <a data-toggle="dropdown">Group By
+		                    <a data-toggle="dropdown">{{agile_lng_translate 'tasks' 'group-by'}}
                         </a>
 		                    <ul class="dropdown-menu w-xs" id="new-type-tasks" style="left:-159px">
 		                      <li>
-                            <a href="CATEGORY" class="new-type-task">Category
+                            <a href="CATEGORY" class="new-type-task">{{agile_lng_translate 'portlets' 'category'}}
                             </a>
                           </li>
 		                      <li>
-                            <a href="OWNER" class="hide-on-pending hide-on-my-task new-type-task">Owner
+                            <a href="OWNER" class="hide-on-pending hide-on-my-task new-type-task">{{agile_lng_translate 'portlets' 'owner'}}
                             </a>
                           </li>
 		                      <li>
-                              <a href="DUE" class="new-type-task">Due
+                              <a href="DUE" class="new-type-task">{{agile_lng_translate 'tasks' 'due'}}
                               </a>
                           </li>
 		                      <li>
-                              <a href="PRIORITY" class="new-type-task">Priority
+                              <a href="PRIORITY" class="new-type-task">{{agile_lng_translate 'tasks' 'priority'}}
                               </a>
                           </li>
 		                      <li>
-                              <a href="STATUS" class="hide-on-pending hide-on-all-pending new-type-task">Status
+                              <a href="STATUS" class="hide-on-pending hide-on-all-pending new-type-task">{{agile_lng_translate 'portlets' 'status'}}
                               </a>
                           </li>
 		                    </ul>
 		                </li>
 		                <li>
-                        <a href="LIST" class="list-view new-type-task">List View
+                        <a href="LIST" class="list-view new-type-task">{{agile_lng_translate 'tasks' 'list-view'}}
                         </a>
                     </li>
 		                <li>
-                        <a href="GroupView" class="group-view" style="display:none;">Group View
+                        <a href="GroupView" class="group-view" style="display:none;">{{agile_lng_translate 'tasks' 'group-view'}}
                         </a>
                     </li>
                     <li>
-                        <a href="CALENDAR" class="calendar-view new-type-task">Calendar View
+                        <a href="CALENDAR" class="calendar-view new-type-task">{{agile_lng_translate 'report-view' 'calendar-view'}}
                         </a>
                     </li>                     
 		            </ul>
@@ -78,7 +78,8 @@
             <div class="btn-group type-task-button c-p pull-right">
                 <a href="#add-dashlet" id="add-portlet" class="btn btn-default btn-sm btn-addon add-portlet add-stream-tab pos-rlt">
                  <i class="icon icon-plus-sign">
-                 </i> Add Dashlet
+                 </i> {{agile_lng_translate 'portlets' 'add-dashlet'}}
+
                   </a>
             </div>
 	        {{/is_mobile}}		
@@ -121,11 +122,11 @@
     <div class="list-header panel-heading" style="height:75vh;border-bottom:1px solid #ddd !important;" attr="{{heading}}" ownerID={{owner_id}} >
       <div> 
           <div class="compressedHeading text-center">
-            <div class="task-count block">
+            <div class="task-count block" style="margin-right:6px;">
                 <span id="task-count-{{heading}}-{{owner_id}}" {{getthemecolor}} class="label   m-r-sm" style="vertical-align:middle; position:relative;margin-top:5px;background-color:#cfdadd;">0</span> 
                 </div>
                 <div class="expand-button inline-block m-t-md">
-                <span class="inline-block pull-left transform-rotate"><a class="text-info expandbutton"><i class="fa fa-expand text-xs" data-toggle="tooltip" data-placement="top" data-container="body"  data-original-title="Click to Expand" title="Click to Expand"></i></a></span>
+                <span class="inline-block pull-left transform-rotate"><a class="text-info expandbutton"><i class="fa fa-expand text-xs" data-toggle="tooltip" data-placement="top" data-container="body"  data-original-title="Click to expand" title="Click to expand"></i></a></span>
                 </div>
           </div>
       </div>
@@ -137,28 +138,24 @@
     </div>
 <div class=" panel-default w-full m-r-none m-b-none" style="border:none;"> 
 
-        <div class="list-header panel-heading" style="border-bottom: 1px solid #dee5e7!important;"attr="{{heading}}" ownerID={{owner_id}}>
+        <div class="list-header panel-heading task-list-heading" style="border-bottom: 1px solid #dee5e7!important;"attr="{{heading}}" ownerID={{owner_id}}>
 <div class="pull-left" style="margin-top:-2px;"> 
-<div class="compressedHeading">
-        
-        </div>
 </div> 
 <div class="pull-left"> 
          <span class="m-r-xs text-ellipsis font-bold" id="taskheading" style="opacity:0.6;width: 220px;display: block;">{{get_normal_name heading}}
        
 </div>
  
-
+  <span id="task-count-{{heading}}-{{owner_id}}"  {{getthemecolor}} class="label pull-left" style="vertical-align:middle; margin-top:2px; background-color:#cfdadd;">0</span></span>
 
          <div class=" taskexpandbutton" >
-         <span id="task-count-{{heading}}-{{owner_id}}"  {{getthemecolor}} class="label" style="vertical-align:middle; margin-top:2px; background-color:#cfdadd;">0</span></span>
          <img id="task-list-loading-img-{{heading}}-{{owner_id}}"  src="{{getS3ImagePath 'img/ajax-loader-cursor.gif'}}">
-         <div class="inline-block">
-         <span class="list-bottom  add-task m-r-xs" heading="{{heading}}" ownerID={{owner_id}}><a class="text-info" href="#">
+         <div class="inline-block m-l-xs">
+         <span class="list-bottom  add-task m-r-xs" heading="{{heading}}" ownerID={{owner_id}} style="margin-left:3px;"><a class="text-info" href="#">
 <i class="icon-plus text-xs"  data-toggle="tooltip" data-placement="top" data-container="body"  data-original-title="Add Task" title="Add Task"></i>
 </a></span>
 
-<span class="inline-block  transform-rotate m-r-sm " data-toggle="tooltip" data-placement="top" data-container="body"  data-original-title="Click to Compress" title="Click to Compress"><a class="text-info expandbutton"><i class="fa fa-compress text-xs"></i></a></span>
+<span class="inline-block  transform-rotate m-r-sm " data-toggle="tooltip" data-placement="top" data-container="body"  data-original-title="Click to collapse" title="Click to collapse"><a class="text-info expandbutton"><i class="fa fa-compress text-xs"></i></a></span>
  
  </div>
 </div>  
@@ -178,9 +175,9 @@
 </script>
 
 <script id="task-collection-template" type="text/html">
-<div id="task-model-list" class="task-model-list ">
+<div id="task-model-list" class="task-model-list m-t-sm">
 
-            <div class="alert bg-white ui-state-disabled {{#unless this.length}} {{else}} hide {{/unless}} m-xs" id="no_task" style="border:none;border-radius:0px;margin-bottom:0px;">
+            <div class="alert bg-white ui-state-disabled   {{#unless this.length}} {{else}} hide {{/unless}} m-xs" id="no_task" style="border:none;border-radius:0px;margin-bottom:0px;">
             <div class="slate-content " style="padding:18px;">
                 <div class="box-right pull-left">
                     <h4 class="text-lg" style="opacity:0.8;font-size:14px;">No Tasks Found</h4>
@@ -200,13 +197,13 @@
 
   <div class="p-xs p-b-xs">    
    
-<div class="pull-left task-content-view" style="width:100%; margin-bottom:5spx;">
+<div class=" task-content-view" style="width:100%; margin-bottom:5spx;">
 <div>
-<div class="">
+<div>
 
    {{#if_equals status "IN_PROGRESS"}}
       
-       <label class="i-checks pull-left i-checks-sm" data-placement="top" data-container="body" title="Mark as Complete" style='margin-top:-2px;'><input type="checkbox taskComplete" class="tbody_check taskComplete" value=""><i></i></label>
+       <label class="i-checks pull-left i-checks-sm" data-placement="top" data-container="body" title="Mark as Complete" ><input type="checkbox taskComplete" class="tbody_check taskComplete" value=""><i></i></label>
  
 <div class="task-circle m-r-xs" style="display:table-cell;">
     <div id="activeBorder" class="active-border m-r-xs " style="height:17px;width:17px;float:left!important;{{getcircle progress}}">
@@ -219,7 +216,7 @@
 
 {{/if_equals}}
 {{#if_equals status "YET_TO_START"}}
-<label class="i-checks pull-left i-checks-sm" style='margin-top:-2px;' data-placement="top" data-container="body" title="Mark as Complete"><input type="checkbox" class="tbody_check taskComplete" data ='{{id}}' value=""><i></i></label>
+<label class="i-checks pull-left i-checks-sm" data-placement="top" data-container="body" title="Mark as Complete"><input type="checkbox" class="tbody_check taskComplete" data ='{{id}}' value=""><i></i></label>
  {{/if_equals}}
  {{#if_equals status "COMPLETED"}}
  <label class="icon icon-check m-r-xs" data-toggle="tooltip" style="float:left;font-size:15px;color:green;margin-top:3px;" data-placement="top" data-container="body" title="Completed"></label>
@@ -276,7 +273,7 @@
 
      
 
-<p class="word-break-all white-space-normal text-xs m-r-sm m-t-n-sm m-b-xs m-l">{{taskDescription}}</p>
+<p class="word-break-all white-space-normal text-xs m-r-sm  m-b-xs m-l">{{taskDescription}}</p>
 
 <div class="clearfix"></div>
     </div> <!--task-body--> 
@@ -298,7 +295,7 @@
   </div>  
   
 <i class="fa fa-clock-o  m-l-sm m-b-sm"></i>
-    <time class="new-task-due-time time-ago" data-toggle="tooltip" data-placement="top" data-container="body"  data-original-title="Due date" datetime="{{epochToHumanDate "" due}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM" due}}</time> <label class="label bg-light dk text-tiny m-l-xs" title="Category" data-toggle="tooltip" data-placement="top" data-container="body">{{capFirstLetter type}}</label>
+    <time class="new-task-due-time time-ago" data-toggle="tooltip" data-placement="top" data-container="body"  data-original-title="Due date" >{{epochToHumanDate "ddd mmm dd yyyy HH:MM" due}}</time> <label class="label bg-light dk text-tiny m-l-xs" title="Category" data-toggle="tooltip" data-placement="top" data-container="body">{{capFirstLetter type}}</label>
 
  
    
@@ -329,5 +326,5 @@
 </script>
 
 <script id="note-form-template" type="text/html">
-   <textarea placeholder="Detailed Note" name="note_description" rows="3" class="input form-control form-control-F-width" id="note_description"></textarea> 
+   <textarea placeholder="{{agile_lng_translate 'deal-view' 'detailed-note'}}" name="note_description" rows="3" class="input form-control form-control-F-width" id="note_description"></textarea> 
 </script>

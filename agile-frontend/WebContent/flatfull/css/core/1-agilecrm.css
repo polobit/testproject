@@ -3876,3 +3876,14 @@ div.list-tasks.panel-body:hover
 {
   float:none!important;
 }
+.task-list-heading
+{
+  padding:10px 10px!important;
+}
+.task-striped:first-child
+{
+  margin-top:10px;
+}
+/*.task-model-list .alert:first-child{
+  margin-left:10px;
+}*/
