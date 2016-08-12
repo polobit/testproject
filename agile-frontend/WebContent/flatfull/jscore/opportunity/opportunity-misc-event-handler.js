@@ -7,84 +7,6 @@ $(function()
 		setup_tags_typeahead();
 	});
 
-	/**
-	 * When mouseover on any row of opportunities list, the popover of deal is shown
-	 **/
-	$('#opportunity-listners').off('mouseenter', '#opportunities-model-list > tr');
-	$('#opportunity-listners').on('mouseenter', '#opportunities-model-list > tr', function(e) {
-        var data = $(this).find('.data').attr('data');
-
-        var currentDeal = App_Deals.opportunityCollectionView.collection.get(data);
-        var that = this;
-        
-        getTemplate("opportunity-detail-popover", currentDeal.toJSON(), undefined, function(template_ui){
-			if(!template_ui)
-				  return;
-			
-			var ele = $(template_ui);
-	        console.log(ele);
-	        console.log(that);
-	        $(that).popover({
-	        	"rel" : "popover",
-	        	"trigger" : "hover",
-	        	"placement" : 'right',
-	        	"original-title" : currentDeal.toJSON().name,
-	        	"content" :  ele,
-	        	"html" : true,
-	        	"container": 'body'
-	        });
-       
-	        /**
-	         * Checks for last 'tr' and change placement of popover to 'top' inorder
-	         * to prevent scrolling on last row of list
-	         **/
-	       $('#opportunities-model-list > tr:last').popover({
-	        	"rel" : "popover",
-	        	"trigger" : "hover",
-	        	"placement" : 'top',
-	        	"original-title" : currentDeal.toJSON().name,
-	        	"content" :  ele,
-	        	"html" : true,
-	        	"container": 'body'
-	        });
-
-	        $(that).popover('show');
-
-		}, null);
-
-     });
-	
-    /**
-     * On mouse out on the row hides the popover.
-     **/
-    $('#opportunity-listners').off('mouseleave', '#opportunities-model-list > tr');
-	$('#opportunity-listners').on('mouseleave', '#opportunities-model-list > tr', function(e) {
-    	 $(this).popover('hide');
-    });
-	
-    /**
-     * On click on the row hides the popover.
-     **/
-    $('#opportunity-listners').off('click', '#opportunities-model-list > tr, .hide-popover');
-	$('#opportunity-listners').on('click', '#opportunities-model-list > tr, .hide-popover', function(e) {
-    	 $(this).closest('tr').popover('hide');
-    });
-    
-   /**
-    * When deal is added from contact-detail by selecting 'Add Opportunity' from actions 
-    * and then close button of deal is clicked, it should navigate to contact-detail.
-    **/
-    $('#opportunity-listners').off('click', '#close-deal');
-	$('#opportunity-listners').on('click', '#close-deal', function(e) {
-    	e.preventDefault();
-    	window.history.back();
-    });
-	
-});
-
-
-// Deal Modals Event Listeners
-function initializeDealModalEvents(){
 	$('#opportunityUpdateModal, #opportunityModal').off('click', '#opportunity_archive');
 	$('#opportunityUpdateModal, #opportunityModal').on('click', '#opportunity_archive', function(e)
 	{
@@ -190,6 +112,86 @@ function initializeDealModalEvents(){
 		else
 			saveDeal(form_id, modal_id, this, json, true);
 	});
+
+	/**
+	 * When mouseover on any row of opportunities list, the popover of deal is shown
+	 **/
+	$('#opportunity-listners').off('mouseenter', '#opportunities-model-list > tr');
+	$('#opportunity-listners').on('mouseenter', '#opportunities-model-list > tr', function(e) {
+        var data = $(this).find('.data').attr('data');
+
+        var currentDeal = App_Deals.opportunityCollectionView.collection.get(data);
+        var that = this;
+        
+        getTemplate("opportunity-detail-popover", currentDeal.toJSON(), undefined, function(template_ui){
+			if(!template_ui)
+				  return;
+			
+			var ele = $(template_ui);
+	        console.log(ele);
+	        console.log(that);
+	        $(that).popover({
+	        	"rel" : "popover",
+	        	"trigger" : "hover",
+	        	"placement" : 'right',
+	        	"original-title" : currentDeal.toJSON().name,
+	        	"content" :  ele,
+	        	"html" : true,
+	        	"container": 'body'
+	        });
+       
+	        /**
+	         * Checks for last 'tr' and change placement of popover to 'top' inorder
+	         * to prevent scrolling on last row of list
+	         **/
+	       $('#opportunities-model-list > tr:last').popover({
+	        	"rel" : "popover",
+	        	"trigger" : "hover",
+	        	"placement" : 'top',
+	        	"original-title" : currentDeal.toJSON().name,
+	        	"content" :  ele,
+	        	"html" : true,
+	        	"container": 'body'
+	        });
+
+	        $(that).popover('show');
+
+		}, null);
+
+     });
+	
+    /**
+     * On mouse out on the row hides the popover.
+     **/
+    $('#opportunity-listners').off('mouseleave', '#opportunities-model-list > tr');
+	$('#opportunity-listners').on('mouseleave', '#opportunities-model-list > tr', function(e) {
+    	 $(this).popover('hide');
+    });
+	
+    /**
+     * On click on the row hides the popover.
+     **/
+    $('#opportunity-listners').off('click', '#opportunities-model-list > tr, .hide-popover');
+	$('#opportunity-listners').on('click', '#opportunities-model-list > tr, .hide-popover', function(e) {
+    	 $(this).closest('tr').popover('hide');
+    });
+    
+   /**
+    * When deal is added from contact-detail by selecting 'Add Opportunity' from actions 
+    * and then close button of deal is clicked, it should navigate to contact-detail.
+    **/
+    $('#opportunity-listners').off('click', '#close-deal');
+	$('#opportunity-listners').on('click', '#close-deal', function(e) {
+    	e.preventDefault();
+    	window.history.back();
+    });
+	
+});
+
+
+// Deal Modals Event Listeners
+function initializeDealModalEvents(){
+	
 }
 
 // Deal Listeners

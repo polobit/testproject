@@ -1096,7 +1096,7 @@ head.load([{'js-core-1': CLOUDFRONT_PATH + 'jscore/min/locales/' + _LANGUAGE  +'
 
 function load_tpl_html(){
     downloadTemplate('<%=tplFile%>', function(){
-      initializeDealModalEvents();
+      // initializeDealModalEvents();
     });
 }
 
