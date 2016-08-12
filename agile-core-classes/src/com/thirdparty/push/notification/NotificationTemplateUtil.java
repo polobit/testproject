@@ -1,14 +1,20 @@
 package com.thirdparty.push.notification;
 
 import java.util.List;
-
-import com.agilecrm.contact.Contact;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.notification.NotificationTemplate;
 import com.googlecode.objectify.Query;
 
 /**
- * This <NotificationTemplateUtil> class is used 
+ * This <NotificationTemplateUtil> is a utility class to process the data of Push
+ * Notification Template class, it processes when fetching the data and saving bulk amount of Notification
+ * Template to database.
+ * <p>
+ * This utility class includes methods needs to return Notification Template based on id,
+ *  etc..Also includes methods which perform bulk operations on
+ * Notification Template.
+ * </p>
+ *
  * @author Prashannjet
  *
  */
@@ -47,7 +53,13 @@ public class NotificationTemplateUtil
 	  */
 	 public static int getNotificationTemplateCount()
 	    {
-		 return NotificationTemplate.dao.count();
+		 try{
+			 return NotificationTemplate.dao.count();
+		 }
+		 catch(Exception e){
+			 return 0;
+		 }
+		 
 	    }
 
 }

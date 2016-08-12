@@ -24,7 +24,7 @@ var Push_Notification_Event_View = Base_Model_View.extend({
 				$("#prev-notification-title").text($("#notification-title").val());
 
 				if($("#prev-notification-title").text()=="")
-					 $("#prev-notification-title").text("Notifiation Title");
+					 $("#prev-notification-title").text("Notification Title");
 			},
 			
 			notificationMessageAdd: function(e)
@@ -70,7 +70,14 @@ var Push_Notification_Event_View = Base_Model_View.extend({
           notify.requestPermission(function() {
            if(notify.permissionLevel() == notify.PERMISSION_GRANTED){
              $('#push-notification-content').hide(); 
-              sendPushNotification();
+
+             if($("#notification-message").val()=="" || $("#notification-title").val()=="")
+                $("#prev-warning-msg").show();
+             else
+             {
+              $("#prev-warning-msg").hide();
+               sendPushNotification();
+             }
            }
            else
             {

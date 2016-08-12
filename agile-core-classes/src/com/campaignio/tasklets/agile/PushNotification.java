@@ -108,7 +108,6 @@ public class PushNotification extends TaskletAdapter
 			 TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, null);
 	    		return;
 		 }
-		 System.out.println("nnnnnnnnnnnnnnn"+notificationTemplateId);
 		 		 
 		String title = notificationTemplate.notificationTitle;
 		String message = notificationTemplate.notificationMessage;
@@ -129,7 +128,9 @@ public class PushNotification extends TaskletAdapter
 			 linkURL = EmailLinksConversion.convertLinksUsingRegex(linkURL, AgileTaskletUtil.getId(subscriberJSON), AgileTaskletUtil.getId(campaignJSON), pushParam);
 		 }
 		
-
+       //add param for push notification linked identity
+		 linkURL = linkURL + "&n=1";
+		 
 		try
 		{
 		    // Get Contact Id and Contact

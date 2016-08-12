@@ -1,10 +1,7 @@
 package com.agilecrm.notification;
 import javax.persistence.Id;
 import javax.xml.bind.annotation.XmlRootElement;
-
-import com.agilecrm.cursor.Cursor;
 import com.agilecrm.db.ObjectifyGenericDao;
-import com.agilecrm.user.DomainUser;
 import com.googlecode.objectify.annotation.Indexed;
 import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.condition.IfDefault;
