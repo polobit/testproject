@@ -2405,13 +2405,15 @@ function showAgileCRMForm(formJson,formHolderId) {
                 var iframe=$("iframe")[i]; 
                 var iframe_id=iframe.getAttribute("id");
                 var replace_form_class=$('#'+iframe_id).contents().find('.agile_crm_form_embed');
-
+                try{
                 if($('#'+iframe_id).contents().find('#agileform').size()!==0){
-
-                    $('#'+iframe_id).contents().find('#agileform_div').empty();
-                    var div = $("<div class='agile_crm_form_embed' id='"+window.CURRENT_AGILE_DOMAIN+"_"+formJson.id+"' ></div>");
-                    div.html(formJson.formHtml); 
-                    $('#'+iframe_id).contents().find('#agileform_div').append(div);            return;
+                    if(window.current_agileform!=null){
+                        $('#'+iframe_id).contents().find('#agileform_div').empty();
+                        var div = $("<div class='agile_crm_form_embed' id='"+window.CURRENT_AGILE_DOMAIN+"_"+formJson.id+"' ></div>");
+                        div.html(formJson.formHtml); 
+                        $('#'+iframe_id).contents().find('#agileform_div').append(div);
+                    }            
+                    return;
                 } 
                 else {            
                     if(window.current_agileform!=null){
@@ -2422,7 +2424,8 @@ function showAgileCRMForm(formJson,formHolderId) {
                         replace_form_class.html(formJson.formHtml);
                     }                    
                     return;
-                }    
+                } 
+                }catch(err){}   
             }
          }
     });

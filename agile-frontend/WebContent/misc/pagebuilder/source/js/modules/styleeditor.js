@@ -13,6 +13,7 @@
         allStyleItemsOnCanvas: [],
         _oldIcon: [],
         _oldForm:[],
+        preForm_id:[],
         styleEditor: document.getElementById('styleEditor'),
         formStyle: document.getElementById('stylingForm'),
         buttonRemoveElement: document.getElementById('deleteElementConfirm'),
@@ -556,10 +557,12 @@
                 window.current_agileform=$(styleeditor.activeElement.element).closest("#page").children().attr("id");
                 var current_element=$(styleeditor.activeElement.element).children();
 
-                if(current_element.attr("class")==="agile_crm_form_embed")
-                    current_element=$(styleeditor.activeElement.element).children().children();                    
+                if(current_element.attr("class")==="agile_crm_form_embed"){
+                    current_element=$(styleeditor.activeElement.element).children().children();
+                    styleeditor.preForm_id[window.current_agileform]=$(styleeditor.activeElement.element).children().attr("id");
+                }               
 
-                styleeditor._oldForm[window.current_agileform]=current_element;
+                styleeditor._oldForm[window.current_agileform]=current_element;                
                 styleeditor.loadAgileCRMFormInLandingPage(form_id);
             }
 
@@ -1090,10 +1093,13 @@
             $("iframe").each(function(i) { 
                 if($("iframe")[i].hasAttribute('data-originalurl') && ($("iframe")[i].getAttribute('data-originalurl').includes(window.current_agileform))){
                    var iframe_id=$("iframe")[i].getAttribute("id");                   
-                   if(styleeditor._oldForm[window.current_agileform].size()===1)
-                        $('#'+iframe_id).contents().find('#agileform_div').html(styleeditor._oldForm[window.current_agileform]);
+                   if(styleeditor._oldForm[window.current_agileform].size()===1){
+                        $('#agileform_id').val('default').attr('selected','selected');
+                        $('#'+iframe_id).contents().find('#agileform_div').html(styleeditor._oldForm[window.current_agileform]);           
+                    }
                    else {
-                        $('#'+iframe_id).contents().find('.agile_crm_form_embed').attr("id",styleeditor.preForm_id);
+                        $('#'+iframe_id).contents().find('.agile_crm_form_embed').attr("id",styleeditor.preForm_id[window.current_agileform]);
+                        $('#agileform_id').val(styleeditor.preForm_id[window.current_agileform]).attr('selected','selected');
                         $('#'+iframe_id).contents().find('.agile_crm_form_embed').html(styleeditor._oldForm[window.current_agileform]);
                     }
                    return;

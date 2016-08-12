@@ -380,7 +380,7 @@ public class LandingPageUtil
 	   
 		try
 		{
-//		    String fileContent=FileStreamUtil.readResource("D:/jpreddy/EclipseWorkSpace/final/.metadata/.plugins/org.eclipse.wst.server.core/tmp0/agile-java-server/agile-frontend.war/misc/pagebuilder/elements/skeleton.html");
+		    //String fileContent=FileStreamUtil.readResource("/home/agile21/eclipsestore/workplace(luna)/.metadata/.plugins/org.eclipse.wst.server.core/tmp0/agile-java-server/agile-frontend.war/misc/pagebuilder/elements/skeleton.html");
 		    String fileContent=FileStreamUtil.readResource("misc/pagebuilder/elements/skeleton.html");
 		    Document skeletonDoc = Jsoup.parse(fileContent);
 		    Element mainPageElement = skeletonDoc.getElementById("page");
@@ -389,6 +389,8 @@ public class LandingPageUtil
 		    for (int i = 0; i < jsonArray.length(); i++) {					
 		        JSONObject lpElements = jsonArray.getJSONObject(i);				        
 		        Document doc = Jsoup.parse(lpElements.getString("frameContent"));
+		        if(doc.body().getElementById("page").getElementsByClass("agile_crm_form_embed")!=null)
+		            doc.body().getElementById("page").getElementsByClass("agile_crm_form_embed").empty();
 		        fullbodyHtml=fullbodyHtml+doc.body().getElementById("page").children();				        
 		    }
 		    
