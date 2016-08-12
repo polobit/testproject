@@ -33,5 +33,21 @@
         "value": "Reset"
       }
     }
+  },
+  {
+  "title": "Styled Button",
+    "fields": {
+      "label": {
+        "label": "Label Text",
+        "type": "input",
+        "value": ""
+      },
+      "buttonlabel": {
+        "label": "Button Label",
+        "type": "input",
+        "value": "Submit"
+      }
+    }
   }
+
 ]

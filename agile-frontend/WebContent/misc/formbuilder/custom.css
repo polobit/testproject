@@ -304,109 +304,63 @@ fieldset {
 .form-view .agile-hiddenEle-group{
 	display: none;
 }
-.theme5 .agile-input-group input[type=text]:last-child {
-    border-top-right-radius: 20px!important;
-    border-bottom-right-radius: 20px!important;
-    height: 43px;
-}
-.theme5 .agile-input-group input[type=text]:first-child {
-    border-top-left-radius: 20px!important;
-    border-bottom-left-radius: 20px!important;
-    height: 43px;
-}
-.theme5 .agile-field>input[type=text],.theme5 .agile-field>input[type=email],#target .agile-group select:not([multiple]) {
-  border: 1px solid #cfdadd;
-	  -webkit-border-radius: 50px;
-	  -moz-border-radius: 50px;
-	  border-radius: 50px;
-	  color: #333!important;
-	  font-weight: 100;
-	  font-size: 14px!important;
-	  line-height: 20px!important;
-	  outline: 0;
-	  background-color: #fff;
-	  padding: 10px 20px !important;
-	  display: block;
-	  font-family: 'Open Sans', sans-serif;
-	  box-sizing: border-box;
-}
-.theme5 .agile-field{
-      width:100%;
-}
-.theme5 .agile-group button{
-     background-color: #23b7e5;
-     border: 1px solid #23b7e5;
-     -webkit-border-radius: 50px;
-     -moz-border-radius: 50px;
-     border-radius: 50px;
-     color: #fff;
-     cursor: pointer;
-     font-size: 18px;
-     padding: 6px 20px;
-     width: 100% !important;
-     margin-top: 20px;
-     outline: none;
-     height: 48px;
-     font-family: 'Open Sans', sans-serif;
- }
-.theme5 .agile-group button:hover{
-	  background-color: #19a9d5;
-	  border-color: #189ec8;
+
+#target .agile-stylebutton:hover{
+	  background-color: #19a9d5!important;
+	  border-color: #189ec8!important;
 	}
-
-.theme5 .agile-label{ 
-		display: block; 
-		font-size:14px; 
-		font-weight: 100; 
-	  	margin-bottom: 5px;
-}
-
-.theme5 .agile-group-addon:first-child{
-border-top-left-radius: 50px;
-border-bottom-left-radius: 50px;
-}
-.theme5 .agile-group-addon:last-child{
-border-top-right-radius: 50px;
-border-bottom-right-radius: 50px;  
-}
-.theme5 .agile-group textarea{
-height:119px;
-}
-.theme5 legend{
-text-align: center;
-font-size: 18px;
-font-weight: 600;
-margin-bottom: 10px;
-border-bottom: none;
-}
-.theme5 .agile-input-group{
-width: 100%;
-}
-.theme5 .agile-group{
-padding: 0px 35px;
-}
-.theme5 .agile-group input::-webkit-input-placeholder,.theme5 .agile-group button{
-/*font-family:'Open Sans', serif;*/
-}
-.theme5 fieldset{
-	margin: 0;
-padding: 0;
-}
-.theme5 .agile-group select{
-	background-color: white;
-}
-.theme5{
-/* font-family:'Open Sans', serif;*/
-color: #333;
-font-size: 14px;
-font-weight: 400;
-}
-
 #target .popover form{
-	font-family:sans-serif;
+	font-family:sans-serif!important;
 }
 #agiletheme{
-	display: none;
+	display: none!important;
+}
+form .popover form .form-control{
+    display: block!important;
+    width: 100%!important;
+    height: 34px!important;
+    padding: 6px 12px!important;
+    font-size: 14px!important;
+    line-height: 1.428571429!important;
+    color: #555!important;
+    vertical-align: middle!important;
+    background-color: #fff!important;
+    border: 1px solid #ccc!important;
+    border-radius: 4px!important;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,0.075);
+    box-shadow: inset 0 1px 1px rgba(0,0,0,0.075)!important;
+    -webkit-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+}
+
+.popover-content form .btn-info {
+    color: #fff!important;
+    background-color: #5bc0de!important;
+    border-color: #46b8da!important;
+}
+.popover-content form .btn {
+    /* display: inline-block; */
+    padding: 6px 12px!important;
+    margin-bottom: 0!important;
+    font-size: 14px!important;
+    font-weight: normal!important;
+    line-height: 1.428571429!important;
+    text-align: center!important;
+    white-space: nowrap!important;
+    vertical-align: middle!important;
+    cursor: pointer!important;
+    border: 1px solid transparent!important;
+    border-radius: 4px!important;
+    -webkit-user-select: none!important;
+     max-width: 70px!important;
+}
+.popover-content form .btn-danger {
+    color: #fff!important;
+    background-color: #d9534f!important;
+    border-color: #d43f3a!important;
+}
+form .popover form .btn {
+	font-family:sans-serif!important;
 }
 
 

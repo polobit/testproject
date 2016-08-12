@@ -68,8 +68,8 @@ var addAgileApi = function(json, api, callback)
 	var agiletheme = {};
 	agiletheme.label = "";
 	agiletheme.type = "select";
-	agiletheme.value = [{value : "", selected : false, label : "default"}, {value : " theme1", selected : false, label: "Theme1"},
-	{value : " theme2", selected : false, label: "Theme2"},{value : " theme3", selected : false, label: "Theme3"},{value : " theme4", selected : false, label: "Theme4"},,{value : " theme5", selected : true, label: "Theme5"}];
+	agiletheme.value = [{value : "", selected : true, label : "default"}, {value : " theme1", selected : false, label: "Theme1"},
+	{value : " theme2", selected : false, label: "Theme2"},{value : " theme3", selected : false, label: "Theme3"},{value : " theme4", selected : false, label: "Theme4"},{value : " theme5", selected : false, label: "Theme5"}];
 
 	for ( var b = 0; b < json.length; b++)
 	{

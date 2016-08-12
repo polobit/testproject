@@ -21,9 +21,30 @@
                 },
                 {
                    "id": "getintouchwithus",
-                    "displayname": "Get I Touch With Us",
+                    "displayname": "Get In Touch With Us",
                     "description": "this is sample text"  
-                }                   	
+                },
+                {
+                   "id": "schedulenow",
+                    "displayname": "Schedule Now",
+                    "description": "this is sample text"  
+                },
+                {
+                   "id": "theme2",
+                    "displayname": "Company Name",
+                    "description": "this is sample text"  
+                },
+                {
+                   "id": "theme3",
+                    "displayname": "Request a Quote",
+                    "description": "this is sample text"  
+                },
+                {
+                   "id": "theme4",
+                    "displayname": "Request a Quote",
+                    "description": "this is sample text"  
+                }
+
             ]
         }
     ]
