@@ -14,6 +14,7 @@ import com.agilecrm.contact.util.bulk.BulkActionNotifications;
 import com.agilecrm.deals.CustomFieldData;
 import com.agilecrm.deals.Milestone;
 import com.agilecrm.deals.Opportunity;
+import com.agilecrm.deals.util.MilestoneUtil;
 import com.agilecrm.deals.util.OpportunityUtil;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
@@ -85,6 +86,7 @@ public class DealTriggerUtil
 	 */
 	public static void checkMilestoneChange(Opportunity oldOpportunity, Opportunity updatedOpportunity)
 	{
+		String wonMilestone= "Won";
 		try
 		{
 			// if no change in pipeline and milestone, return
@@ -94,6 +96,10 @@ public class DealTriggerUtil
 
 			System.out.println("Milestone changed from " + oldOpportunity.milestone + " to " + updatedOpportunity.milestone
 				+ " of deal " + updatedOpportunity.name);
+			Milestone mile = MilestoneUtil.getMilestone(updatedOpportunity.pipeline_id);
+			
+			if (mile.won_milestone != null)
+			    wonMilestone = mile.won_milestone;
 
 			DomainUser users=DomainUserUtil.getCurrentDomainUser();
 			System.out.println("Cur domain ="+users);
@@ -107,7 +113,7 @@ public class DealTriggerUtil
 			}
 			
 			
-			if(updatedOpportunity.milestone.equals("Won"))
+			if(updatedOpportunity.milestone.equals(wonMilestone))
 			{
 				String domain = NamespaceManager.get();	
 				String msg = "Deal won alert"; 
