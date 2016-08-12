@@ -914,12 +914,11 @@ if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Produ
     production = true;
    
 }
-String tplFile = "tpl/min/precompiled/locales/" + _LANGUAGE + "/" + _LANGUAGE + ".html";
-// String tplFile = _LANGUAGE + ".html";
+// String tplFile = "tpl/min/precompiled/locales/" + _LANGUAGE + "/" + _LANGUAGE + ".html";
+String tplFile = _LANGUAGE + ".html";
 %>
 
 <!-- Including Footer page -->
-<jsp:include page="<%=tplFile%>" />
 
 <!-- Include bootstrap modal divs-->
 <%@ include file="flatfull/modals.html"%>
@@ -1060,6 +1059,7 @@ $('body').css('background-image', 'none');
 //$('#content').html('ready');
 $("img.init-loading", $('#content')).attr("src", "<%=CLOUDFRONT_TEMPLATE_LIB_PATH%>/img/ajax-loader-cursor.gif");
 
+load_tpl_html(function(){
 head.load([{'js-core-1': CLOUDFRONT_PATH + 'jscore/min/locales/' + _LANGUAGE  +'/js-all-min-1.js' + "?_=" + _agile_get_file_hash('js-all-min-1.js')}, 
 		{'js-core-2': CLOUDFRONT_PATH + 'jscore/min/locales/' + _LANGUAGE +'/js-all-min-2.js' + "?_=" + _agile_get_file_hash('js-all-min-2.js')}, 
 		{'js-core-3': CLOUDFRONT_PATH + 'jscore/min/locales/' + _LANGUAGE +'/js-all-min-3.js' + "?_=" + _agile_get_file_hash('js-all-min-3.js')}, 
@@ -1098,13 +1098,23 @@ head.load([{'js-core-1': CLOUDFRONT_PATH + 'jscore/min/locales/' + _LANGUAGE  +'
 	});
 
 // head.js({"stats" : '<%=CLOUDFRONT_TEMPLATE_LIB_PATH%>stats/min/agile-min.js' + "?_=" + _AGILE_VERSION});
-	
+});// End of template loading
+
 }); //End of head.ready() function. Check above.
 
-function load_tpl_html(){
-    downloadTemplate('<%=tplFile%>', function(){
-      initializeDealModalEvents();
-    });
+function load_tpl_html(callback){
+  // For localhost
+  if(!HANDLEBARS_PRECOMPILATION){
+        if(callback)
+           callback();
+    return;
+  }
+  
+  downloadTemplate('<%=tplFile%>', function(){
+    // initializeDealModalEvents();
+    if(callback)
+         callback();
+  });
 }
 
 function load_globalize()
