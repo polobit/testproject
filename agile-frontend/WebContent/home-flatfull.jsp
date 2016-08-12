@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<%@page import="com.agilecrm.util.FileStreamUtil"%>
 <%@page import="org.json.JSONObject"%>
 <%@page import="com.agilecrm.util.language.LanguageUtil"%>
 <%@page import="com.agilecrm.user.DomainUser.ROLE"%>
@@ -914,11 +915,17 @@ if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Produ
     production = true;
    
 }
-// String tplFile = "tpl/min/precompiled/locales/" + _LANGUAGE + "/" + _LANGUAGE + ".html";
-String tplFile = _LANGUAGE + ".html";
+String tplFile = "tpl/min/precompiled/locales/" + _LANGUAGE + "/" + _LANGUAGE + ".html";
+// String tplFile = _LANGUAGE + ".html";
+try{
+  if(HANDLEBARS_PRECOMPILATION)
+    out.println(FileStreamUtil.readResource(application.getRealPath("/") + "/" + tplFile));  
+}catch(Exception e){
+	e.printStackTrace();
+}
 %>
 
-<!-- Including Footer page -->
+<!-- Including Template page -->
 
 <!-- Include bootstrap modal divs-->
 <%@ include file="flatfull/modals.html"%>
@@ -1019,7 +1026,7 @@ var USER_BILLING_PREFS = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(subs
 var _LANGUAGE = "<%=_LANGUAGE%>";
 // var _Agile_Resources_Json = {};
 // head.js("locales/" + _LANGUAGE + "/" + _LANGUAGE + ".json?" + _agile_get_file_hash('lib-all-new-2.js'));
-load_tpl_html();
+// load_tpl_html();
 
 head.load(	"https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js",
 			LIB_PATH + 'final-lib/min/lib-all-new-1.js?_=' + _agile_get_file_hash('lib-all-new-1.js'),
