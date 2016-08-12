@@ -1,28 +1,10 @@
 <script id="new-tasks-list-header-template" type="text/html">
 <div class="custom-animated custom-fadeInUp">
-<<<<<<< HEAD
-<div class="wrapper-md lter bg-light b-b">
-<div class="row">  
-	<div class="col-md-12">
-		     
-			<h3 id="new-task-heading" class="task-heading pull-left font-thin h3">{{agile_lng_translate 'tasks' 'My Pending Tasks'}}<small class="tasks-count"></small></h3>
-		<div class="pull-right">
-    <div class="inline-block m-r hide" id="calendarTasksButtons">
-      <button type="button" class="btn btn-sm btn-default" onclick="taskCalendarToday()">{{agile_lng_translate 'calendar' 'Today'}}</button>
-      <div class="btn-group m-l-xs">
-        <button id="agendaDay" class="btn btn-sm btn-default taskDayWeekMonth" >{{agile_lng_translate 'calendar' 'day'}}</button>
-        <!-- <button id="agendaWeek" class="btn btn-sm btn-default taskDayWeekMonth" >Week</button> -->
-        <button id="month" class="btn btn-sm btn-default taskDayWeekMonth" >{{agile_lng_translate 'calendar' 'month'}}</button>
-      </div>
-    </div>
-		<div class="btn-group owner-task-button m-r">
-	            <button class="btn btn-default btn-sm selected_name">{{agile_lng_translate 'tasks' 'My Pending Tasks'}}</button>
-=======
   <div class="wrapper-md lter bg-light b-b">
     <div class="row">  
-	     <div class="col-md-12">   
-			   <h3 id="new-task-heading" class="task-heading pull-left font-thin h3">{{agile_lng_translate 'tasks' 'My Pending Tasks'}}<small class="tasks-count"></small></h3>
-		      <div class="pull-right">
+       <div class="col-md-12">   
+         <h3 id="new-task-heading" class="task-heading pull-left font-thin h3">{{agile_lng_translate 'tasks' 'My Pending Tasks'}}<small class="tasks-count"></small></h3>
+          <div class="pull-right">
             <div class="inline-block m-r hide" id="calendarTasksButtons">
                 <button type="button" class="btn btn-sm btn-default" onclick="taskCalendarToday()">{{agile_lng_translate 'calendar' 'Today'}}
                 </button>
@@ -33,89 +15,57 @@
                   </button>
                 </div>
             </div>
-		        <div class="btn-group owner-task-button m-r">
-	            <button class="btn btn-default btn-sm fnew-task-subject selected_name">{{agile_lng_translate 'tasks' 'My Pending Tasks'}}
+            <div class="btn-group owner-task-button m-r">
+              <button class="btn btn-default btn-sm fnew-task-subject selected_name">{{agile_lng_translate 'tasks' 'My Pending Tasks'}}
               </button>
->>>>>>> vertical_view
-	            <a class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" href="#">
-	               <span class="caret">
+              <a class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" href="#">
+                 <span class="caret">
                  </span>
-	            </a>
-	            <ul class="dropdown-menu" id="new-owner-tasks">   		 
-	            </ul>
-<<<<<<< HEAD
-	        </div> 	
-          {{#is_mobile}}
-          {{else}}
-			<div class="btn-group type-task-button c-p m-r">
-		        <button class="btn btn-default btn-sm selected_name">{{agile_lng_translate 'tasks' 'due'}}</button>
-		        <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" href="#">
-		        <span class="caret"></span>
-		        </button>
-		        <ul class="dropdown-menu main-menu" id="new-type-tasks" role="menu">
-		           <li class="dropdown-submenu do-onclick-nothing">
-		               <a data-toggle="dropdown">{{agile_lng_translate 'tasks' 'group-by'}}</a>
-		               <ul class="dropdown-menu w-xs" id="new-type-tasks" style="left:-159px">
-		                  <li><a href="CATEGORY" class="new-type-task">{{agile_lng_translate 'portlets' 'category'}}</a></li>
-		                  <li><a href="OWNER" class="hide-on-pending hide-on-my-task new-type-task">{{agile_lng_translate 'portlets' 'owner'}}</a></li>
-		                  <li><a href="DUE" class="new-type-task">{{agile_lng_translate 'tasks' 'due'}}</a></li>
-		                  <li><a href="PRIORITY" class="new-type-task">{{agile_lng_translate 'tasks' 'priority'}}</a></li>
-		                  <li><a href="STATUS" class="hide-on-pending hide-on-all-pending new-type-task">{{agile_lng_translate 'portlets' 'status'}}</a></li>
-		               </ul>
-		           </li>
-
-		           <li><a href="LIST" class="list-view new-type-task">{{agile_lng_translate 'tasks' 'list-view'}}</a></li>
-		           <li><a href="GroupView" class="group-view" style="display:none;">{{agile_lng_translate 'tasks' 'group-view'}}</a></li>
-               <li><a href="CALENDAR" class="calendar-view new-type-task">{{agile_lng_translate 'report-view' 'calendar-view'}}</a></li>                     
-		        </ul>
-		    </div>
-        <div class="btn-group type-task-button c-p pull-right">
-        <a href="#add-dashlet" id="add-portlet" class="btn btn-default btn-sm btn-addon add-portlet add-stream-tab pos-rlt">
-          <i class="icon icon-plus-sign"></i> {{agile_lng_translate 'portlets' 'add-dashlet'}}
-        </a>
-=======
-	           </div> 	
+              </a>
+              <ul class="dropdown-menu" id="new-owner-tasks">        
+              </ul>
+             </div>   
             {{#is_mobile}}
             {{else}}
-			       <div class="btn-group type-task-button c-p m-r">
-		            <button class="btn btn-default btn-sm selected_name">{{agile_lng_translate 'tasks' 'due'}}
+             <div class="btn-group type-task-button c-p m-r">
+                <button class="btn btn-default btn-sm selected_name">{{agile_lng_translate 'tasks' 'due'}}
                 </button>
-		            <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" href="#">
-		              <span class="caret">
+                <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" href="#">
+                  <span class="caret">
                   </span>
-		            </button>
-		            <ul class="dropdown-menu main-menu" id="new-type-tasks" role="menu">
-		                <li class="dropdown-submenu do-onclick-nothing">
-		                    <a data-toggle="dropdown">{{agile_lng_translate 'tasks' 'group-by'}}
+                </button>
+                <ul class="dropdown-menu main-menu" id="new-type-tasks" role="menu">
+                    <li class="dropdown-submenu do-onclick-nothing">
+                        <a data-toggle="dropdown">{{agile_lng_translate 'tasks' 'group-by'}}
                         </a>
-		                    <ul class="dropdown-menu w-xs" id="new-type-tasks" style="left:-159px">
-		                      <li>
+                        <ul class="dropdown-menu w-xs" id="new-type-tasks" style="left:-159px">
+                          <li>
                             <a href="CATEGORY" class="new-type-task">{{agile_lng_translate 'portlets' 'category'}}
                             </a>
                           </li>
-		                      <li>
+                          <li>
                             <a href="OWNER" class="hide-on-pending hide-on-my-task new-type-task">{{agile_lng_translate 'portlets' 'owner'}}
                             </a>
                           </li>
-		                      <li>
+                          <li>
                               <a href="DUE" class="new-type-task">{{agile_lng_translate 'tasks' 'due'}}
                               </a>
                           </li>
-		                      <li>
+                          <li>
                               <a href="PRIORITY" class="new-type-task">{{agile_lng_translate 'tasks' 'priority'}}
                               </a>
                           </li>
-		                      <li>
+                          <li>
                               <a href="STATUS" class="hide-on-pending hide-on-all-pending new-type-task">{{agile_lng_translate 'portlets' 'status'}}
                               </a>
                           </li>
-		                    </ul>
-		                </li>
-		                <li>
+                        </ul>
+                    </li>
+                    <li>
                         <a href="LIST" class="list-view new-type-task">{{agile_lng_translate 'tasks' 'list-view'}}
                         </a>
                     </li>
-		                <li>
+                    <li>
                         <a href="GroupView" class="group-view" style="display:none;">{{agile_lng_translate 'tasks' 'group-view'}}
                         </a>
                     </li>
@@ -123,8 +73,8 @@
                         <a href="CALENDAR" class="calendar-view new-type-task">{{agile_lng_translate 'report-view' 'calendar-view'}}
                         </a>
                     </li>                     
-		            </ul>
-		        </div>
+                </ul>
+            </div>
             <div class="btn-group type-task-button c-p pull-right">
                 <a href="#add-dashlet" id="add-portlet" class="btn btn-default btn-sm btn-addon add-portlet add-stream-tab pos-rlt">
                  <i class="icon icon-plus-sign">
@@ -132,30 +82,29 @@
 
                   </a>
             </div>
-	        {{/is_mobile}}		
-		    </div>
-		    <div class="clearfix">
->>>>>>> vertical_view
+          {{/is_mobile}}    
         </div>
-	     </div>  	  
+        <div class="clearfix">
+        </div>
+       </div>     
     </div>
   </div>
   <div class="route_Portlet b-b" style="display:none">
-	   <div class="row">
-		    <div class="col-md-12">
-			     <div>
-				      <div id="portlets">&nbsp;
+     <div class="row">
+        <div class="col-md-12">
+           <div>
+              <div id="portlets">&nbsp;
               </div>
-			     </div>
-		    </div>
-	     </div>
-	</div>
+           </div>
+        </div>
+       </div>
+  </div>
   <div class="wrapper-md p-b-none p-t-none" style="position:relative;">
-	   <div id="new-task-list-based-condition"> 
-    		<img class="loading_task_img thumb-xs p-r-xs" src= "{{getS3ImagePath 'img/21-0-new.gif'}}">
+     <div id="new-task-list-based-condition"> 
+        <img class="loading_task_img thumb-xs p-r-xs" src= "{{getS3ImagePath 'img/21-0-new.gif'}}">
         </img>
-	     </div>
-	   <div id="task-list-based-condition">
+       </div>
+     <div id="task-list-based-condition">
      </div>
       <div id="task-calendar-based-condition" class="hide">
       </div>
@@ -174,7 +123,7 @@
       <div> 
           <div class="compressedHeading text-center">
             <div class="task-count block" style="margin-right:6px;">
-                <span id="task-count-{{heading}}-{{owner_id}}" {{getthemecolor}} class="label   m-r-sm" style="vertical-align:middle; position:relative;margin-top:5px;background-color:#cfdadd;">0</span> 
+                <span id="task-count-{{heading}}-{{owner_id}}" class="label   m-r-sm" style="vertical-align:middle; position:relative;margin-top:5px;background-color:#cfdadd;">0</span> 
                 </div>
                 <div class="expand-button inline-block m-t-md">
                 <span class="inline-block pull-left transform-rotate"><a class="text-info expandbutton"><i class="fa fa-expand text-xs" data-toggle="tooltip" data-placement="top" data-container="body"  data-original-title="Click to expand" title="Click to expand"></i></a></span>
@@ -219,15 +168,10 @@
      {{/if}}
         
      </div>  
-<<<<<<< HEAD
-     <div id="show_loader"></div>      
-     <div class="list-bottom left add-task panel-footer" heading="{{heading}}" ownerID={{owner_id}}><a class="text-info" href="#"><i class="icon-plus" /> {{agile_lng_translate 'tasks' 'add-a-task'}}</a></div>     
-=======
      <div id="show_loader"></div>   
      <div class="hide CollapsedPanel">{{get_normal_name heading}}</div>   
     
     </div>  
->>>>>>> vertical_view
 </script>
 
 <script id="task-collection-template" type="text/html">
@@ -249,7 +193,7 @@
 <script id="task-model-template" type="text/html">
 
     <div class="listed-task  ui-state-default " id="{{id}}">
-
+<div>
 
   <div class="p-xs p-b-xs">    
    
@@ -278,14 +222,6 @@
  <label class="icon icon-check m-r-xs" data-toggle="tooltip" style="float:left;font-size:15px;color:green;margin-top:3px;" data-placement="top" data-container="body" title="Completed"></label>
  {{/if_equals}}  
       {{#if is_complete}}
-<<<<<<< HEAD
-         {{#is_link subject}}<a href="#task/{{id}}"><span class="new-task-subject w-full block text-ellipsis activate-link task-completed" title="{{safe_string subject}}">{{else}}<a href="#task/{{id}}"><span class="new-task-subject w-full block text-ellipsis task-completed" title="{{safe_string subject}}">{{/is_link}}{{safe_string subject}}</span></a>
-      {{else}}
-         {{#if_equals status "COMPLETED"}}
-           {{#is_link subject}}<a href="#task/{{id}}"><span class="new-task-subject w-full block text-ellipsis activate-link task-completed" title="{{safe_string subject}}">{{else}}<a href="#task/{{id}}"><span class="new-task-subject w-full block text-ellipsis task-completed" title="{{safe_string subject}}">{{/is_link}}{{safe_string subject}}</span></a>
-         {{else}}
-           {{#is_link subject}}<a href="#task/{{id}}"><span class="new-task-subject w-full block text-ellipsis activate-link" title="{{safe_string subject}}">{{else}}<a href="#task/{{id}}"><span class="new-task-subject w-full block text-ellipsis" title="{{safe_string subject}}">{{/is_link}}{{safe_string subject}}</span></a>
-=======
          {{#if_equals priority_type "HIGH"}} <span style="display:inline-block;color:red;font-size:15px;">!</span>{{/if_equals}}{{#is_link subject}}<a href="#task/{{id}}"><span class="new-task-subject word-break white-space-normal font-bold w-full   activate-link" style="opacity:0.75;text-transform: capitalize;">{{else}}<a href="#task/{{id}}" style=""><span class="new-task-subject word-break-all white-space-normal w-full font-bold " style="opacity:0.75;top:0px;text-transform: capitalize;">{{/is_link}}
          {{safe_string subject}}
          </span></a>
@@ -294,7 +230,6 @@
            {{#if_equals priority_type "HIGH"}} <span style="display:inline-block;color:red;font-size:15px;">!</span>{{/if_equals}}{{#is_link subject}}<a href="#task/{{id}}"><span class="new-task-subject font-bold w-full word-break white-space-normal  activate-link" style="opacity:0.75;text-transform: capitalize;">{{else}}<a href="#task/{{id}}" style=""><span class="new-task-subject font-bold word-break-all white-space-normal w-full " style="opacity:0.75;top: 0px;text-transform: capitalize;">{{/is_link}}{{safe_string subject}} </span></a>
          {{else}}
            {{#if_equals priority_type "HIGH"}} <span style="display:inline-block;color:red;font-size:15px;">!</span>{{/if_equals}}{{#is_link subject}}<a href="#task/{{id}}"><span class="new-task-subject word-break white-space-normal font-bold w-full activate-link" style="opacity:0.75;text-transform: capitalize;">{{else}}<a href="#task/{{id}}" style=""><span class="new-task-subject word-break-all white-space-normal w-full  font-bold " style="opacity:0.75;top:0px;text-transform: capitalize;">{{/is_link}} {{safe_string subject}} </span></a> 
->>>>>>> vertical_view
          {{/if_equals}}       
       {{/if}}   
       <span class="task-actions pos-abs pos-r-xs tasktime pos-t-xs" style="display: none;  background-color: white;">
@@ -308,19 +243,14 @@
       </span>   
 </div>
 </div>
-<<<<<<< HEAD
-<div class="task-right text-ellipsis" style="width:30%">
-      <label class="label bg-light dk text-tiny" title="{{agile_lng_translate 'portlets' 'category'}}">{{get_normal_name type}}</label>
-=======
->>>>>>> vertical_view
   </div>
 
   
 
     <!--<div class="clearfix"></div>-->
       {{#if contacts}}  
-         <div class="task-related-to task-related-contacts" title="{{agile_lng_translate 'cases' 'related-to'}}">
-        	{{#each contacts}}
+         <div class="task-related-to task-related-contacts" title="Related To">
+          {{#each contacts}}
             {{#if_contact_type "PERSON"}}
               <a href="#contact/{{id}}" class="activate-link text-xs text-muted popover_contact text-cap" data="{{id}}">{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</a>
             {{/if_contact_type}}
@@ -329,7 +259,7 @@
             {{/if_contact_type}}
             {{#if @last}} {{else}},{{/if}}
           {{/each}}
-		 </div> 
+     </div> 
       {{/if}}
 
       
@@ -343,7 +273,7 @@
 
      
 
-<p class="word-break-all white-space-normal text-xs m-r-sm  m-b-xs m-l">{{taskDescription}}</p>
+<p class="word-break-all white-space-normal text-xs m-r-sm  m-b-xs m-t-n-xs m-l">{{taskDescription}}</p>
 
 <div class="clearfix"></div>
     </div> <!--task-body--> 
@@ -368,34 +298,11 @@
     <time class="new-task-due-time time-ago" data-toggle="tooltip" data-placement="top" data-container="body"  data-original-title="Due date" >{{epochToHumanDate "ddd mmm dd yyyy HH:MM" due}}</time> <label class="label bg-light dk text-tiny m-l-xs" title="Category" data-toggle="tooltip" data-placement="top" data-container="body">{{capFirstLetter type}}</label>
 
  
-<<<<<<< HEAD
-   <div class="new-task-footer">
-<div class="pull-left w-half text-ellipsis text-muted" style="margin-left:35px;">
-     <i class="fa fa-clock-o text-muted" style="{{#unless due}}visibility: hidden;{{/unless}}"></i> <time class="new-task-due-time time-ago" data="{{id}}" value="{{due}}" datetime="{{epochToHumanDate "" due}}">{{epochToHumanDate "ddd mmm dd yyyy h:MM TT" due}}</time>
-</div>    
-<div class="pull-right pos-rlt pos-t-xs"> 
- <div class="task-actions text-sm">
-           <i class="task-action icon icon-check is-task-complete m-r-xs" data="{{id}}" title="{{agile_lng_translate 'report-view' 'mark-as-complete'}}"></i>
-           <i class="task-action icon icon-edit edit-task" data="{{id}}" title="{{agile_lng_translate 'modals' 'edit-task'}}"></i>          
-          <i class="task-action icon icon-trash delete-task" data="{{id}}" title="{{agile_lng_translate 'report-view' 'delete-task'}}"></i>
-           {{#if notes}} 
-             <i class="task-action icon icon-comment notes-task-popover edit-task" data="{{id}}" title="{{agile_lng_translate 'contact-details' 'notes'}}"></i>
-             <span class="txt-small note-count" title="{{agile_lng_translate 'contact-details' 'notes'}}">{{notes.length}}</span>
-           {{/if}}
-      </div>
-      {{#if notes}} 
-           <div class="task-note-action text-sm">
-             <i class="task-action icon icon-comment" data="{{id}}" title="{{agile_lng_translate 'contact-details' 'notes'}}"></i>
-             <span class="txt-small note-count" title="{{agile_lng_translate 'contact-details' 'notes'}}">{{notes.length}}</span>
-           </div>
-      {{/if}}
-=======
    
->>>>>>> vertical_view
 </div>
 <div class="clearfix"></div>
    </div> <!--task-footer-->
-
+</div>
 </div>
 </script>
 
@@ -403,13 +310,13 @@
 <li class="task-note" data="{{id}}"> 
 <div class="thumb avatar">
 {{#if domainOwner}}
-	{{#if domainOwner.pic}}
-		<img class="thumbnail" width="20" height="20" alt="" src="{{domainOwner.pic}}" title="{{domainOwner.name}}">
-	{{else}}
-		<img class="thumbnail" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{domainOwner.name}}">
-	{{/if}}
+  {{#if domainOwner.pic}}
+    <img class="thumbnail" width="20" height="20" alt="" src="{{domainOwner.pic}}" title="{{domainOwner.name}}">
+  {{else}}
+    <img class="thumbnail" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{domainOwner.name}}">
+  {{/if}}
 {{else}}
-	{{#getCurrentUserPrefs}}<img class="thumbnail" width="20" height="20" alt="" title="{{currentDomainUserName}}" src="{{#if pic}}{{pic}}{{else}}{{defaultGravatarurl 40}}{{/if}}">{{/getCurrentUserPrefs}}
+  {{#getCurrentUserPrefs}}<img class="thumbnail" width="20" height="20" alt="" title="{{currentDomainUserName}}" src="{{#if pic}}{{pic}}{{else}}{{defaultGravatarurl 40}}{{/if}}">{{/getCurrentUserPrefs}}
 {{/if}}
 </div>
 <div class="r-3x m-l-xs p-l-xs" style="border: 1px solid #cccccc; width: 92%;"> 

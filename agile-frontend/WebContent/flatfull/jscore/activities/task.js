@@ -223,7 +223,10 @@ function initializeTasksListeners(){
 	{
 		event.preventDefault();
 		if(!confirm(_agile_get_translated_val('tasks','confirm-delete')))
-			return;
+		{	
+			$(this).closest('.task-content-view').find(".taskComplete").attr('checked', false);
+				return;
+		}
 		if(!getTaskListId(this)  && $(this).parent().attr('data')){
 			completeTask(getTaskId(this), $(this).parent().attr('data'), parseInt(getTaskListOwnerId(this)));
 		}

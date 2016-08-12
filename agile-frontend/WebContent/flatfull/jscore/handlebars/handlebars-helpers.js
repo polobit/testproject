@@ -337,10 +337,7 @@ $(function()
 		return new Handlebars.SafeString('https://secure.gravatar.com/avatar/' + Agile_MD5("") + '.jpg?s=' + width + '' + backup_image + data_name);
 
 	});
-	Handlebars.registerHelper('getthemecolor', function(items, name)
-	{
-		return THEME_COLOR;
-	});
+	
 
 	Handlebars.registerHelper('defaultGravatarurl', function(width)
 	{
