@@ -238,6 +238,7 @@ function initializeTasksListeners(){
 		else
 			editTask(getTaskId(this), getTaskListId(this), parseInt(getTaskListOwnerId(this)));
 	});
+	$('#tasks-list-template').off('click', '#bulk-change-owner , #bulk-change-priority , #bulk-change-status , #bulk-change-dueDate');
 	$('#tasks-list-template').on('click', '#bulk-change-owner , #bulk-change-priority , #bulk-change-status , #bulk-change-dueDate ', function(event)
 	{
 		task_ids = null ;
@@ -308,6 +309,7 @@ function initializeTasksListeners(){
 		$(this).find('#bulkTaskStatusForm')[0].reset();
 		$("#task-bulk-change-status").find('.progress-slider').empty();
 	});
+	$('#task-bulk-change-owner, #task-bulk-change-status, #task-bulk-change-priority , #task-bulk-change-duedate').off('click', '#task_bulk_validate');
 	$('#task-bulk-change-owner, #task-bulk-change-status, #task-bulk-change-priority , #task-bulk-change-duedate').on('click', '#task_bulk_validate', function(e)
 	{
 		e.preventDefault();
@@ -341,6 +343,7 @@ function initializeTasksListeners(){
 			saveBulkTaskAction(task_ids,priorityJson,form_id);
 		}
 	});
+	$('#tasks-list-template').off('click', '#bulk-delete-tasks');
 	$('#tasks-list-template').on('click', '#bulk-delete-tasks', function(e)
 	{
 		task_ids = null ; var priorityJson = null ;
@@ -359,6 +362,7 @@ function initializeTasksListeners(){
 								
 			}, undefined, "Bulk Task Delete");
 	});
+	$('#tasks-list-template').off('click', '.tbody_check');
 	$('#tasks-list-template').on('click', '.tbody_check', function(event)
 	{
 		var isChecked  = false;
@@ -379,6 +383,7 @@ function initializeTasksListeners(){
 		}
 
 	});
+	$('#tasks-list-template').off('click', '.thead_check , #select_chosen_tasks');
 	$('#tasks-list-template').on('click', '.thead_check , #select_chosen_tasks', function(event)
 	{
 		if(this.checked || this.id == 'select_chosen_tasks'){
@@ -404,6 +409,7 @@ function initializeTasksListeners(){
 		}
 
 	});
+	$('#tasks-list-template').off('click', '#select_total_tasks');
 	$('#tasks-list-template').on('click', '#select_total_tasks', function(event)
 	{
 		SELECT_ALL_TASKS = true ;	
