@@ -105,6 +105,8 @@
 													<option value="LAST" class="created_time updated_time last_contacted last_emailed last_called last_campaign_emaild">{{agile_lng_translate 'contacts-view' 'in-last'}}</option>
 													<option value="NEXT" class="created_time updated_time">{{agile_lng_translate 'contacts-view' 'in-next'}}
 														</option>
+													<option value="ON_AFTER" class="created_time updated_time">{{agile_lng_translate 'contacts-view' 'on-after'}}</option>
+													<option value="ON_BEFORE" class="created_time updated_time">{{agile_lng_translate 'contacts-view' 'on-before'}}</option>
 													<option value="EQUALS" class="tag org_tag">{{agile_lng_translate 'contacts-view' 'is'}}</option>
 													<option value="ANYOF" class="tag">{{agile_lng_translate 'contacts-view' 'is-any-of'}}</option>
 													<option value="CONTAINS" class="address">{{agile_lng_translate 'contacts-view' 'contains-word'}}</option>
@@ -134,7 +136,7 @@
 										<td class="rhs-block  controls v-top">
 											<div id="RHS" class="rhs" name="RHS">
 												<input type="text" name="temp"
-													class="LAST NEXT required form-control" placeholder="{{agile_lng_translate 'contacts-view' 'number-of-days'}}"/>
+													class="LAST NEXT ON_AFTER ON_BEFORE required form-control" placeholder="{{agile_lng_translate 'contacts-view' 'number-of-days'}}"/>
 												<input type="text" name="temp" 
 													class="EQUALS NOTEQUALS ANYOF CONTAINS NOT_CONTAINS required form-control"/>
 												<input type="text" name="temp" 
