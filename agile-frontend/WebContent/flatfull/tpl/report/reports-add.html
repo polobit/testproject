@@ -151,6 +151,21 @@
 												<input id="updated_date" type="text" name="updated_date"
 													class="ON AFTER BEFORE BETWEEN input required date form-control"
 													placeholder="{{dateFormat}}" data-date-format="{{dateFormat}}"/>
+												<input type="number" class="IS_AFTER_IN_DAYS IS_BEFORE_IN_DAYS input required form-control" placeholder="Number of days"/>
+												<select class="form-control">
+													<option value="01" class="BY_MONTH_ONLY">{{agile_lng_translate 'months' 'January'}}</option>
+													<option value="02" class="BY_MONTH_ONLY">{{agile_lng_translate 'months' 'February'}}</option>
+													<option value="03" class="BY_MONTH_ONLY">{{agile_lng_translate 'months' 'March'}}</option>
+													<option value="04" class="BY_MONTH_ONLY">{{agile_lng_translate 'months' 'April'}}</option>
+													<option value="05" class="BY_MONTH_ONLY">{{agile_lng_translate 'months' 'May'}}</option>
+													<option value="06" class="BY_MONTH_ONLY">{{agile_lng_translate 'months' 'June'}}</option>
+													<option value="07" class="BY_MONTH_ONLY">{{agile_lng_translate 'months' 'July'}}</option>
+													<option value="08" class="BY_MONTH_ONLY">{{agile_lng_translate 'months' 'August'}}</option>
+													<option value="09" class="BY_MONTH_ONLY">{{agile_lng_translate 'months' 'September'}}</option>
+													<option value="10" class="BY_MONTH_ONLY">{{agile_lng_translate 'months' 'October'}}</option>
+													<option value="11" class="BY_MONTH_ONLY">{{agile_lng_translate 'months' 'November'}}</option>
+													<option value="12" class="BY_MONTH_ONLY">{{agile_lng_translate 'months' 'December'}}</option>
+												</select>
 											</div>
 										</td>
 										<td class="rhs-new-block controls v-top">
