@@ -3176,6 +3176,7 @@
             widget_grid_data.row = next_row;
             this.update_widget_position(widget_grid_data, $widget);
             $widget.attr('data-row', widget_grid_data.row);
+            $widget.attr('id',"ui-id-"+widget_grid_data.col+'-'+widget_grid_data.row);
             this.$changed = this.$changed.add($widget);
 
             moved.push($widget);
