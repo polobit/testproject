@@ -10,6 +10,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TimeZone;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.time.DateUtils;
@@ -557,18 +558,33 @@ public class SearchUtil
 		}
 	}
 
-    public static String getDateWithoutTimeComponent(Long millSeconds)
+    public static String getDateWithoutTimeComponent(Long millSeconds,TimeZone timezone)
     {
 	/*
 	 * Truncate date Document search date is without time component
 	 */
-	Date truncatedDate = DateUtils.truncate(new Date(millSeconds), Calendar.DATE);
+    	try{
+        	//Calendar cal=Calendar.getInstance(Timezone);
+        	//cal.setTimeInMillis(millSeconds);
+        	SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        	formatter.setTimeZone(timezone);
+        	
+        	return formatter.parse(new Date(millSeconds).toString()).toString();
+    	//Date truncatedDate = DateUtils.truncate(new Date(millSeconds), Calendar.DATE);
+    	
+    	//Date truncatedDate1=truncatedDate.getTime();
+    	
+    	//System.out.println("Time string"+truncatedDate);
 
-	// Format date(formated as stored in document)
-	Format formatter = new SimpleDateFormat("yyyy-MM-dd");
-
-	// Formated to build query
-	return formatter.format(truncatedDate);
+    	// Format date(formated as stored in document)
+    	
+    	// Formated to build query
+    	//return formatter.format(truncatedDate);
+        	}
+        	catch(Exception e)
+        	{
+        		return null;
+        	}
     }
 
     public static String getDateWithoutTimeComponent(Long millSeconds, String format)
