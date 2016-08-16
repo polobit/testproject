@@ -245,7 +245,11 @@ public class DealsBulkActionsAPI
 		    System.out.println("total sublist -----" + subList.size());
 		    subList.clear();
 		}
+		System.out.println("calling method createSingleDealBulkActivity");	
+
 		ActivityUtil.createSingleDealBulkActivity(ActivityType.DEAL_OWNER_CHANGE, deal,newOwner, oldOwner);
+		System.out.println("called method createSingleDealBulkActivity");	
+
 		
 	    }
 
@@ -324,7 +328,11 @@ public class DealsBulkActionsAPI
 		// If there is change in pipeline or milestone
 		if (!oldPipelineId.equals(deal.pipeline_id) || !oldMilestone.equals(deal.milestone)){
 		    subList.add(deal);
+			System.out.println("calling method createSingleDealBulkActivity");	
+
 		    ActivityUtil.createSingleDealBulkActivity(ActivityType.DEAL_MILESTONE_CHANGE, deal, milestone_name, oldMilestone);
+			System.out.println("called method createSingleDealBulkActivity");	
+
 		}
 
 		if (subList.size() >= 100)

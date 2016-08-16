@@ -441,7 +441,8 @@ public class ActivityUtil
 	 *            nothing.
 	 */
 	public static void createSingleDealBulkActivity(ActivityType activity_type,Opportunity deal,String new_data,String old_data){
-		try{		
+		try{
+		System.out.println("inside method createSingleDealBulkActivity");	
 		Activity activity = new Activity();
 		activity.label = deal.name;
 		activity.activity_type = activity_type;
@@ -454,6 +455,8 @@ public class ActivityUtil
 		
 		activity.custom4 = deal.owner_id;
 		activity.save();
+		System.out.println("after method createSingleDealBulkActivity");	
+
 		}
 		catch(Exception e){
 			System.out.println(e.getMessage());
