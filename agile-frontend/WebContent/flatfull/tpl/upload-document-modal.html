@@ -37,7 +37,7 @@
             </div>
 
             <div class="control-group form-group" style="margin-bottom:0px;">
-              <label class="control-label col-sm-3">Related Contacts</label>
+              <label class="control-label col-sm-3">Related Contacts<span class="field_req  related-contacts-required">*</span></label>
               <div class="controls col-sm-9" id="contactTypeAhead">
                 <div>
                   <input type="text" id="document_relates_to_contacts" name="related_contacts"
@@ -47,6 +47,7 @@
                     <ul name="contact_ids" class="contacts tagsinput tags p-n"></ul>
                   </div>
                   <div class="clearfix"></div>  
+                  <span class="contacts_relatedto_error" style="color:#d9534f;display:none;">Please relate the document to a contact.</span>
                 </div>
               </div>
           </div>

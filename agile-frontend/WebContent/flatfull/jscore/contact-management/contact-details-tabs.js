@@ -561,7 +561,7 @@ function initializeSendEmailListeners(){
 				$('.add-attachment-select').hide();
 				$('#eattachment_error').hide();
 			}
-			else if(!model.attachment_id)
+			else if(!model.attachment_id && $("#eattachment_key","#emailForm").attr('name')!="edoc_key")
 			{
 				$('.add-attachment-cancel').trigger("click");
 				$('#eattachment_error').hide();
@@ -675,7 +675,7 @@ function initializeSendEmailListeners(){
 	$('#send-email-listener-container').on('click', '#send-email-close', function(e)
 	{
 		e.preventDefault();
-		if(Current_Route.indexOf("/documents/")>0){
+		if(Current_Route.indexOf("/documents/")>0 && Current_Route.indexOf("/send")>0){
 
 				Backbone.history.navigate("#documents/" + Current_Route.split("/")[2], { trigger : true });
 			}
@@ -739,12 +739,12 @@ function emailSend(ele,json)
 
 			// Enables Send Email button.
 			enable_send_button($('#sendEmail'));
-			if(Current_Route.indexOf("/documents/")>0){
+			if(Current_Route.indexOf("/documents/")>0 && Current_Route.indexOf("/send")>0){
 
 				Backbone.history.navigate("#documents/" + Current_Route.split("/")[2], { trigger : true });
 			}
 			else
-			window.history.back();
+				window.history.back();
 
 		},
 		error : function(response)

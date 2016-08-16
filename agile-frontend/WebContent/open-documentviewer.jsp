@@ -46,20 +46,28 @@ Long agile_user_id = 0L;
 
 String htmlContent="";
 String docTitle="";
-
-
-URL ur=new URL(url);
-String d_name=domain_name= NamespaceUtil.getNamespaceFromURL(ur);
-String _AGILE_VERSION = SystemProperty.applicationVersion.get();
-String baseUrl=VersioningUtil.getStaticFilesBaseURL();
-String sDocumentId=ar[ar.length-2];
-String sContactId=ar[ar.length-1];
-Long dDocumentId= Long.parseLong(sDocumentId);
-Long dContactId= Long.parseLong(sContactId);
-Document document =DocumentUtil.getDocument(dDocumentId);
-List<DocumentNote> notes=null;
+String sDocumentId="";
+String _AGILE_VERSION ="";
+String d_name="";
+String sContactId="";
 String sContactName="";
 String bDocumentFound="0";
+List<DocumentNote> notes=null;
+Long dDocumentId=0L;
+Long dContactId=0L;
+Document document=null;
+try{
+URL ur=new URL(url);
+d_name=domain_name= NamespaceUtil.getNamespaceFromURL(ur);
+_AGILE_VERSION = SystemProperty.applicationVersion.get();
+String baseUrl=VersioningUtil.getStaticFilesBaseURL();
+sDocumentId=ar[ar.length-2];
+sContactId=ar[ar.length-1];
+dDocumentId= Long.parseLong(sDocumentId);
+dContactId= Long.parseLong(sContactId);
+document =DocumentUtil.getDocument(dDocumentId);
+
+
 if(document!=null)
 {
 
@@ -88,7 +96,13 @@ if(document!=null)
 	user_id = domainUser.id;
 	agile_user_id = agileUser.id;
 }
+}catch(Exception e)
+{
 
+}
+finally{
+	
+}
 
 
 ObjectMapper mapper = new ObjectMapper();
@@ -145,6 +159,14 @@ var subject=<%=mapper.writeValueAsString(sNoteSubject)%>
   bottom: auto;
   left: 0;
   z-index: 1020;
+}
+.p-l-4
+{
+	padding-left: 4px;
+}
+.p-r-4
+{
+	padding-right: 4px;
 }
 .page__wrap {
   position: relative;

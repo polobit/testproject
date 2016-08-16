@@ -228,7 +228,13 @@ function saveDocument(form_id, modal_id, saveBtn, isUpdate, json, contact_id)
 		}
 		else
 		{
+			if($('#' + form_id).find('.contacts').children().length==0)
+			{
 
+				$(".contacts_relatedto_error",'#uploadDocumentForm,#uploadDocumentUpdateForm').show().delay(5000).hide(1);
+				enable_save_button($(saveBtn));
+				return;
+			}
 		}
 	}
 	
@@ -431,12 +437,16 @@ function saveDocument(form_id, modal_id, saveBtn, isUpdate, json, contact_id)
 			
 			if (Current_Route.indexOf("documents") == 0) 
 			{
-				if (isUpdate)
-					App_Documents.DocumentCollectionView.collection.remove(json);
 
-				App_Documents.DocumentCollectionView.collection.add(data);
+				if(App_Documents.DocumentCollectionView && App_Documents.DocumentCollectionView.collection)
+				{
+					if (isUpdate)
+						App_Documents.DocumentCollectionView.collection.remove(json);
 
-				App_Documents.DocumentCollectionView.render(true);
+					App_Documents.DocumentCollectionView.collection.add(data);
+					App_Documents.DocumentCollectionView.render(true);
+				}
+				
 				if(document.doc_type!="SENDDOC")
 				{
 					App_Documents.navigate("documents", {trigger : true});

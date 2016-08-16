@@ -46,6 +46,7 @@ var ContactsRouter = Backbone.Router.extend({
 		"send-email" : "sendEmail",
 		
 		"send-email/documents/:id" : "sendDocumentEmail",
+		"send-email/documents/:id/send" : "sendDocumentEmail",
 
 		"send-email/:id" : "sendEmail",
 

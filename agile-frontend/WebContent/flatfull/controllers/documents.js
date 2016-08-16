@@ -455,6 +455,7 @@ function process_add_document_templatemodel(template_model)
 
 function initializeDocumentsListeners()
 {
+
 	$('#uploadDocumentUpdateForm,#uploadDocumentForm').on('click', '#document-send-comments', function(e)
 	{
 		e.preventDefault();
@@ -595,7 +596,7 @@ function initializeDocumentsListeners()
 	{
  		e.preventDefault();
 
- 		var sURL="#send-email/documents/" + $('#uploadDocumentUpdateForm,#uploadDocumentForm').find("#id").val();
+ 		var sURL="#send-email/documents/" + $('#uploadDocumentUpdateForm,#uploadDocumentForm').find("#id").val() + "/send";
 		Backbone.history.navigate(sURL, { trigger : true });
  		return;
  		
@@ -733,6 +734,7 @@ function proc_add_document(model_json)
 				}	
 				else
 				{
+						$(".related-contacts-required",'#uploadDocumentForm,#uploadDocumentUpdateForm').remove();
 						agile_type_ahead("document_relates_to_contacts", el_form, contacts_typeahead);
 
 						// Deals type-ahead
@@ -794,32 +796,32 @@ function get_pricingtable_from_deal(model_json)
 			var sImage="";
 			if(data.image)
 			{
-				sImage="<td style='border:none;' rowspan='2'><img src='" + data.image	+"' style='width:85px;'></img></td>";	
+				sImage="<td style='border:none;' ><img src='" + data.image	+"' style='width:50px;'></img></td>";	
 			}
-			sProductsTR+="<tr><td><table style='border:none;' border='0' cellpadding='0' cellspacing='0'><tr><td style='border:none;'>" + data.name	+"</td>" + sImage + "</tr>" + "<tr><td style='border:none;'>"+ data.description + "</td></tr></table></td><td  align='center' style='align:center;'>" + sCurrency + data.price.toFixed(2)+"</td><td  align='center'  style='align:right;'>"+data.qty+ "</td><td  align='right' style='align:right;'>" + sCurrency + data.total.toFixed(2) + "</tr>"
+			sProductsTR+="<tr><td><table style='border:none;' border='0' cellpadding='0' cellspacing='0'><tr><td style='border:none;padding-left:4px;'>" + data.name	+"</td></tr>" + "<tr><td style='border:none;'><table style='border:none;' border='0' cellpadding='0' cellspacing='0'><tr><td style='border:none;padding-left:4px;'>"+ data.description + "</td>" + sImage + "</tr></table></td></tr></table></td><td  align='center' style='align:center;'>" + sCurrency + data.price.toFixed(2)+"</td><td  align='center'  style='align:right;'>"+data.qty+ "</td><td  align='right' style='align:right;padding-right:4px;'>" + sCurrency + data.total.toFixed(2) + "</td></tr>"
 			iTotal+=data.total;
 		});			
 		if(sProductsTR!="")
 		{
-			sProductsHead="<thead><tr><th style='background:#dedede;'><b>Name</b></th><th style='background:#dedede;'><b>Price</b></th><th style='background:#dedede;'><b>QTY</b></th><th align='right' style='background:#dedede;'><b>Subtotal</b></th></tr></thead>"
+			sProductsHead="<thead><tr><th style='background:#dedede;text-align:center;'><b>Name</b></th><th style='background:#dedede;text-align:center;'><b>Price</b></th><th style='background:#dedede;text-align:center;'><b>QTY</b></th><th align='right' style='background:#dedede;padding-right:4px;align:right;text-align:right;'><b>Subtotal</b></th></tr></thead>"
 			if(model_json.apply_discount)	
-			sProductsTR+= "<tr><td colspan='3' align='right'><b>Current Subtotal</b></td><td  align='right' style='align:right;'>" + sCurrency + iTotal.toFixed(2) + "</tr></tbody>"
+			sProductsTR+= "<tr><td colspan='3' align='right' style='padding-right:4px;'><b>Current Subtotal</b></td><td  align='right' style='align:right;padding-right:4px;'>" + sCurrency + iTotal.toFixed(2) + "</tr></tbody>"
 			else
-			sProductsTR+= "<tr><td colspan='3' align='right'><b>Grand Total</b></td><td  align='right' style='align:right;'>" + sCurrency + iTotal.toFixed(2) + "</tr></tbody>"	
+			sProductsTR+= "<tr><td colspan='3' align='right' style='padding-right:4px;'><b>Grand Total</b></td><td  align='right' style='align:right;padding-right:4px;'>" + sCurrency + iTotal.toFixed(2) + "</tr></tbody>"	
 		}
 		if(model_json.apply_discount)
 		{
 			var iDiscountAmt=0	
-    		sProductsTR+= "<tr><td colspan='3' align='right'><b>Discount</b></td><td align='right'  style='align:right;'>" + sCurrency + model_json.discount_amt.toFixed(2) + "</tr>"
-    		sProductsTR+= "<tr><td colspan='3' align='right'><b>Grand Total</b></td><td  align='right' style='align:right;'>" + sCurrency + iDealAmt.toFixed(2) + "</tr>"
+    		sProductsTR+= "<tr><td colspan='3' align='right' style='padding-right:4px;'><b>Discount</b></td><td align='right'  style='align:right;padding-right:4px;'>" + sCurrency + model_json.discount_amt.toFixed(2) + "</tr>"
+    		sProductsTR+= "<tr><td colspan='3' align='right' style='padding-right:4px;'><b>Grand Total</b></td><td  align='right' style='align:right;padding-right:4px;'>" + sCurrency + iDealAmt.toFixed(2) + "</tr>"
 		}
 	}	
 	else
 	{
 		if(model_json.apply_discount)
 		{
-    		sProductsTR+= "<tr><td><b>Discount</b></td><td  align='right' style='align:right;'>" + sCurrency +  model_json.discount_amt.toFixed(2) + "</tr>"
-    		sProductsTR+= "<tr><td><b>Grand Total</b></td><td  align='right' style='align:right;'>" + sCurrency + iDealAmt.toFixed(2) + "</tr>"
+    		sProductsTR+= "<tr><td><b>Discount</b></td><td  align='right' style='align:right;padding-right:4px;'>" + sCurrency +  model_json.discount_amt.toFixed(2) + "</tr>"
+    		sProductsTR+= "<tr><td><b>Grand Total</b></td><td  align='right' style='align:right;padding-right:4px;'>" + sCurrency + iDealAmt.toFixed(2) + "</tr>"
 		}	
 	}
 	
@@ -1001,6 +1003,7 @@ function load_document_from_edit_model(model)
 				if($("#doc_type",'#uploadDocumentForm,#uploadDocumentUpdateForm').val()=="SENDDOC")
 				{
 
+
 						$(".email-send-doc",'#uploadDocumentForm,#uploadDocumentUpdateForm').removeClass("hide ");
 						$(".senddoc",'#uploadDocumentForm,#uploadDocumentUpdateForm').removeClass("hide ");
 						$(".send-doc-button",'#uploadDocumentForm,#uploadDocumentUpdateForm').removeClass("hide ");
@@ -1100,6 +1103,7 @@ function load_document_from_edit_model(model)
 				}
 				else
 				{
+						$(".related-contacts-required",'#uploadDocumentForm,#uploadDocumentUpdateForm').remove();
 						if(model.network_type)
 						{
 							$('#uploadDocumentUpdateForm').find("#" + model.network_type).closest(".link").find(".icon-ok").css("display", "inline");
