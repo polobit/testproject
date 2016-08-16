@@ -80,7 +80,8 @@ public class StripeChargeWebhook extends HttpServlet
 	    JSONObject stripeJson = new JSONObject(stripeData);
 	    System.out.println("stripe json is " + stripeJson);
 	    
-	    if (stripeJson.getJSONObject("data").getJSONObject("object").has("amount")){
+	    if (stripeJson.getJSONObject("data").getJSONObject("object").has("amount"))
+	    {
 	    String amount = stripeJson.getJSONObject("data").getJSONObject("object").getString("amount");
 	    System.out.println("Amount is :"+ amount);
 	    stripeJson.getJSONObject("data").getJSONObject("object").remove("amount");
@@ -118,8 +119,10 @@ public class StripeChargeWebhook extends HttpServlet
 		String namespace = NamespaceUtil.getNamespaceFromURL(url);
 		
 	    JSONObject stripeEventJson = getStripeEventJson(stripeJson, eventType);
+	    System.out.println(stripeEventJson);
 	    if (stripeEventJson == null)
 	    {
+		 System.out.println("return null due to null");
 		// response.sendError(HttpServletResponse.SC_BAD_REQUEST);
 		return;
 	    }

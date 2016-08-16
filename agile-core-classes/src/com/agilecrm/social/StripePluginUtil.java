@@ -65,7 +65,7 @@ public class StripePluginUtil {
 		 */
 		RequestOptionsBuilder builder = new RequestOptionsBuilder();
 		builder.setApiKey(apiKey);
-		builder.setStripeVersion("2012-09-24");
+		builder.setStripeVersion("2016-07-06");
 		RequestOptions options = builder.build();
 		Customer customer = Customer.retrieve(customerId.trim(), options);
 
@@ -78,7 +78,7 @@ public class StripePluginUtil {
 		 */
 		RequestOptionsBuilder builder2 = new RequestOptionsBuilder();
 		builder2.setApiKey(apiKey);
-		builder2.setStripeVersion("2014-12-08");
+		builder2.setStripeVersion("2016-07-06");
 		RequestOptions options2 = builder2.build();
 		List<Invoice> invoiceList = Invoice.all(invoiceParams, options2)
 				.getData();
