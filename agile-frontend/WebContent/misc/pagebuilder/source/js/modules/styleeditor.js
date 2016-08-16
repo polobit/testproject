@@ -1095,11 +1095,13 @@
                    var iframe_id=$("iframe")[i].getAttribute("id");                   
                    if(styleeditor._oldForm[window.current_agileform].size()===1){
                         $('#agileform_id').val('default').attr('selected','selected');
+                        siteBuilder.site.setPendingChanges(true);
                         $('#'+iframe_id).contents().find('#agileform_div').html(styleeditor._oldForm[window.current_agileform]);           
                     }
                    else {
                         $('#'+iframe_id).contents().find('.agile_crm_form_embed').attr("id",styleeditor.preForm_id[window.current_agileform]);
                         $('#agileform_id').val(styleeditor.preForm_id[window.current_agileform]).attr('selected','selected');
+                        siteBuilder.site.setPendingChanges(true);
                         $('#'+iframe_id).contents().find('.agile_crm_form_embed').html(styleeditor._oldForm[window.current_agileform]);
                     }
                    return;
