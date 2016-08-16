@@ -472,6 +472,7 @@ public class GoogleSyncImpl extends TwoWaySyncService
 	{
 
 	    Contact contact = contacts.get(i);
+	    System.out.println("Current Contact"+contact);
 	    
 	    List<ContactField> emails = contact.getContactPropertiesList(Contact.EMAIL);
 
@@ -596,6 +597,7 @@ public class GoogleSyncImpl extends TwoWaySyncService
 	for (int i = 0; i < contacts_list_size; i++)
 	{
 	    Contact contact = contacts.get(i);
+	    System.out.println("Current Contact in updation"+contact);
 	    
 	    List<ContactField> emails = contact.getContactPropertiesList(Contact.EMAIL);
 	    // Added condition to mandate emails. It is added here as other sync
