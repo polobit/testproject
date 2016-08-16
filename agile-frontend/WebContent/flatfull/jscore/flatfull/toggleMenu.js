@@ -53,22 +53,33 @@ function showTrailAlertMessage(){
 $(document).ready(function(){
 
 
-$('body').on('click','#speechDectation',function(){
+$('body').on('click','#speechDectation',function(e){
+
+	e.preventDefault();
       var recognition = new webkitSpeechRecognition();
  
       recognition.continuous = false;
       recognition.interimResults = false;
  
       recognition.lang = "en-US";
+      if($(document.getElementById('speechDectation')).hasClass("agile-feature-item-blink"))
+      	return false ;
       recognition.start();
+      $(document.getElementById('speechDectation')).addClass("agile-feature-item-blink");
  
       recognition.onresult = function(e) {
         document.getElementById('serachtext').value
                                  = e.results[0][0].transcript;
         //$("#search-results").trigger('click')
         recognition.stop();
+         $(document.getElementById('speechDectation')).removeClass("agile-feature-item-blink");
        
       };
+      recognition.onerror = function(e) {
+      	console.log(e)
+        recognition.stop();
+        $(document.getElementById('speechDectation')).removeClass("agile-feature-item-blink");
+      }
   });
 
 $(".trial_strip_close").click(function(e){
