@@ -24,5 +24,6 @@ cat flatfull/tpl/emailbuilder/*.html > tpl/min/flatfull/emailbuilder.js
 cat flatfull/tpl/segmentation/*.html > tpl/min/flatfull/segmentation.js
 cat flatfull/tpl/referals/*.html > tpl/min/flatfull/referals.js
 cat flatfull/tpl/helpcenter/*.html  > tpl/min/flatfull/helpcenter.js
+cat flatfull/tpl/affiliate/*.html  > tpl/min/flatfull/affiliate.js
 cat ../WebContent/helpcenter/helpcenter-tpl/*.html  > ../WebContent/tpl/min/flatfull/helpcenter-tpl.js
 cd ../util

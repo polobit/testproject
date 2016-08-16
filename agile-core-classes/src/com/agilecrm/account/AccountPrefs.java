@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.List;
 
 import javax.persistence.Id;
-import javax.persistence.PostLoad;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -77,6 +76,12 @@ public class AccountPrefs implements Serializable
 	 */
 	@NotSaved(IfDefault.class)
 	public boolean sendInvoiceBeforeCharge = false;
+	
+	/**
+	 * DomainId of Referenced domain for Affiliate Program
+	 */
+	@NotSaved(IfDefault.class)
+	public Long affiliatedBy;
 	
 	/**
 	 * Default AccountPrefs.

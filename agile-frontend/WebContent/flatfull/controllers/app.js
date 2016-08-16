@@ -44,6 +44,7 @@ $(function()
 	App_Dashboards = new DashboardsRouter();
 	App_EmailBuilderRouter = new EmailBuilderRouter();
 	App_VisitorsSegmentation=new VisitorsSegmentationRouter();
+	App_Affiliate = new AffiliateRouter();
 	// Binds an event to activate infinite page scrolling
 	Backbone.history.bind("all", currentRoute)
 

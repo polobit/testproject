@@ -54,6 +54,9 @@ public class SendMail
 
     public static final String WELCOME = "welcome";
     public static final String WELCOME_SUBJECT = "Welcome to Agile CRM";
+    
+    public static final String AFFILIATE_REPORT = "welcome";
+    public static final String AFFILIATE_REPORT_SUBJECT = "Affiliate Report for the month of ";
 
     public static final String VERIFICATION_EMAIL = "verification_email";
     public static final String VERIFICATION_EMAIL_SUBJECT = "Verify your Agile CRM Account";

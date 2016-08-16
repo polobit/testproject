@@ -7676,3 +7676,10 @@ Handlebars.registerHelper('if_asc_sork_key', function(value, options)
 	else
 		return options.fn(this); 
 });
+
+Handlebars.registerHelper('affiliateCommission', function(amount, commission)
+{
+	if(!amount || !commission)
+		return 0;
+	return (((amount/100)*commission)/100).toFixed(2);
+});

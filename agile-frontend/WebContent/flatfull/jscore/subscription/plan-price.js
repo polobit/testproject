@@ -833,3 +833,12 @@ $(function(){
 
 });
 
+function addAsAffiliate(amount){
+	$.ajax({ type : 'POST', url : '/core/api/affiliate?am='+amount,	contentType : "application/json; charset=utf-8", dataType : 'json', 
+		success : function(data){
+
+		},error : function(){
+
+	}});
+}
+

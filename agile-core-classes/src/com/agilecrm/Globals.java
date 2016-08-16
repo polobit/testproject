@@ -153,6 +153,9 @@ public class Globals
 
     // Max Plan Users
     public static final int TRIAL_USERS_COUNT = 10;
+    
+    // Affiliate commission percentage
+    public static final int AFFILIATE_COMMISION = 10;
 
     // Cheat Code
     public static final String MASTER_CODE_INTO_SYSTEM = "AgileRocks#@!";

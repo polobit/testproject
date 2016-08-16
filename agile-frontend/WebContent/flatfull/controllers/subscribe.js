@@ -518,6 +518,7 @@ var SubscribeRouter = Backbone.Router
 									var cus_id = JSON.parse(data.billingData).id;
 									var appendItem = '<img src="https://shareasale.com/sale.cfm?amount='+plan_json.cost+'&tracking='+cus_id+'&transtype=sale&merchantID=65450" width="1" height="1">'
 									$("body").append(appendItem);
+									addAsAffiliate(plan_json.cost * 100);
 								}
 								window.navigate("subscribe", { trigger : true });
 								showNotyPopUp("information", "Your plan has been updated successfully", "top");

@@ -95,7 +95,6 @@ public class RegisterServlet extends HttpServlet
     {
 	String type = request.getParameter("type");
 	System.out.println("type   " + type);
-
 	// Type the type of registration for the user - oauth or agile
 	try
 	{
@@ -452,6 +451,7 @@ public class RegisterServlet extends HttpServlet
 	String utmcampaign = null;
 	String utmmedium = null;
 	String utmreferencedomain = null;
+	String utmAffiliatedBy = null;
 	String referrar_note_description = null;
 
 	if (cookies != null && cookies.length > 0)
@@ -476,9 +476,13 @@ public class RegisterServlet extends HttpServlet
 		{
 		    utmreferencedomain = cookie.getValue();
 		}
+		if (cookie.getName().equals("agile_affiliated_by"))
+		{
+		    utmAffiliatedBy = cookie.getValue();
+		}
 		System.out.println("in cookies utm source " + utmsource + " utm medium " + utmmedium + " utm campaign "
 			+ utmcampaign + " reference domain " + utmreferencedomain);
-		if (cookie.getName().equals("agile_reference_domain"))
+		if (cookie.getName().equals("agile_reference_domain") || cookie.getName().equals("agile_affiliated_by"))
 		    cookie.setMaxAge(0);
 
 	    }
@@ -490,6 +494,27 @@ public class RegisterServlet extends HttpServlet
 	}
 
 	return referrar_note_description;
+    }
+    
+    private String getCookie(HttpServletRequest request, String cookieName)
+    {
+
+	Cookie[] cookies = request.getCookies();
+	String cookieValue = null;
+	if (cookieName != null && cookies != null && cookies.length > 0)
+	{
+	    for (int i = 0; i < cookies.length; i++)
+	    {
+			Cookie cookie = cookies[i];
+			System.out.println("cookie " + cookie);
+			if (cookie.getName().equals(cookieName))
+			{
+				cookieValue = cookie.getValue();
+				break;
+			}
+		}
+	}
+	return cookieValue;
     }
 
     /**
@@ -649,13 +674,14 @@ public class RegisterServlet extends HttpServlet
 	try
 	{
 	    // Set timezone in account prefs.
+		String affiliatedBy = req.getParameter("utm_affiliate");
 	    AccountPrefs accPrefs = AccountPrefsUtil.getAccountPrefs();
+	    if(affiliatedBy != null)
+    		accPrefs.affiliatedBy = Long.parseLong(affiliatedBy);
 	    if (StringUtils.isEmpty(accPrefs.timezone) || "UTC".equals(accPrefs.timezone)
 		    || "GMT".equals(accPrefs.timezone))
-	    {
-		accPrefs.timezone = req.getParameter("account_timezone");
-		accPrefs.save();
-	    }
+			accPrefs.timezone = req.getParameter("account_timezone");
+	    accPrefs.save();
 	}
 	catch (Exception e)
 	{

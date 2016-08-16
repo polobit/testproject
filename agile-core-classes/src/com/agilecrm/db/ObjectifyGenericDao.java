@@ -32,6 +32,8 @@ import com.agilecrm.activities.Category;
 import com.agilecrm.activities.Event;
 import com.agilecrm.activities.Task;
 import com.agilecrm.activities.WebCalendarEvent;
+import com.agilecrm.affiliate.Affiliate;
+import com.agilecrm.affiliate.AffiliateDetails;
 import com.agilecrm.cases.Case;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.CustomFieldDef;
@@ -300,6 +302,10 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	
 	// AgileGlobalProperties
 	ObjectifyService.register(AgileGlobalProperties.class);
+	
+	//Affiliate program
+	ObjectifyService.register(Affiliate.class);
+	ObjectifyService.register(AffiliateDetails.class);
 
     }
 

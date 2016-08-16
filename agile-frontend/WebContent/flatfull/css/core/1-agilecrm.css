@@ -4430,3 +4430,10 @@ border: 1px solid #e5e5e5;
 .update-drag-deal + .tooltip{
   width: auto!important;
 }
+
+@media (max-width: 767px){
+  #affiliate-datepicker {
+    ext-align: center;
+    width: 100%;
+  }
+}

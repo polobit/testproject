@@ -349,6 +349,10 @@ function getTemplateUrls(templateName)
 	{
 		template_relative_urls.push("helpcenter.js");
 	}
+	if (templateName.indexOf("affiliate") == 0)
+	{
+		template_relative_urls.push("affiliate.js");
+	}
 	
 	return template_relative_urls;
 }

@@ -1,0 +1,147 @@
+<script id="affiliate-template" type="text/html">
+  <div id="affiliate-container" class="bg-light lter b-b wrapper-md">
+    <h1 class="pull-left font-thin h3">Affiliate Program</h1>
+    <div id="affiliate-datepicker" class="pull-right"></div>
+    <div class="clearfix"></div>    
+  </div>
+  <div class="hbox hbox-auto-xs hbox-auto-sm bg-light agile-tab">
+	<div id="affiliate-tabs" class="col w b-r">
+     <div class="vbox">
+      <div class="row-row">
+		<div class="list-group list-group-lg no-radius no-border no-bg m-b-none">
+			<a href="#commission" class="commission-details-tab list-group-item select">Commission Details</a>
+			<a href="#affiliate" class="referrals-tab list-group-item">Referrals</a>
+			<a href="#tools" class="badges-tab list-group-item">Affiliate Tools</a>
+		</div>
+	  </div>
+	 </div>
+	</div>
+	<div class="tab-content wrapper-md ">
+	  <div class="tabs" id="affiliate-tabs-content"></div>
+	</div>
+  </div>
+</script>
+
+
+
+
+<script id="affiliate-collection-template" type="text/html">
+{{#unless this.length}}
+	<div class="alert bg-white ">
+        <div class="slate-content p-md">
+            <div class="box-left pull-left m-r-md">
+                <img alt="Clipboard" src="/img/clipboard.png">
+            </div>
+            <div class="box-right pull-left">
+                <h4 class="text-lg" style="opacity:0.8;">There are no affiliates </h4>
+            </div>
+			<div class="clearfix">
+			</div>
+        </div>
+    </div>
+{{/unless}}
+{{#if this.length}}
+<div class="panel panel-default">
+ <div class="panel-heading">
+	<div class="pull-left  m-t-xs">Referrals</div>
+	<div class="pull-right m-t-xs">
+		<span><span class="p-r-xs">Total Count:</span><span id="aff-count"></span></span>
+		<span class="p-l-sm"><span class="p-r-xs">Total Commission:</span>$<span id="aff-commission"></span></span>
+	</div>
+	<div class="clearfix"></div>
+ </div>
+<div class="row">
+<div class="col-md-12 col-sm-12">
+	    <div class=" table-responsive"> 
+	    <table class="table table-striped agile-table panel table-layout-mob-view">
+	        <thead>
+	            <tr>
+	                <th style="width:20%" class="header">Email</th>
+					<th style="width:15%" class="header">Domain</th>
+					<th style="width:20%" class="header">Plan</th>
+	                <th style="width:15%" class="header">Commission</th>
+					<th style="width:25%">Created Time</th>  
+	            </tr>
+	         </thead>
+	         <tbody id='affiliate-model-list'>
+	         </tbody>
+	    </table>
+	    </div>
+    </div>
+</div>
+</div>
+{{/if}}
+</script>
+
+<script id="affiliate-model-template" type="text/html">
+	<td>
+		<div class="table-resp">
+		<div class="text-base text-ellipsis">{{email}}</div>
+		</div>
+	</td>
+	<td>
+		<div class="table-resp">
+		<div class="text-base text-ellipsis">{{domain}}</div>
+		</div>
+	</td>
+	<td>
+		<div class="table-resp">
+		<div class="text-base text-ellipsis">{{usersCount}} x {{getFullAccountPlanName plan}}</div>
+		</div>
+	</td>
+	<td>
+		<div class="table-resp">
+		<div class="text-base text-ellipsis">${{affiliateCommission amount commission}}</div>
+		</div>
+	</td>
+	<td class="text-muted">
+		<div class="table-resp">
+			<i class="fa fa-clock-o m-r-xs"></i>
+			<time class="document-created-time b-b-dotted" value="{{createdTime}}" datetime="{{epochToHumanDate "" createdTime}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" createdTime}}</time>
+		</div>
+	</td>
+</script>
+
+<script id="affiliate-tools-template" type="text/html">
+  <div class="row">
+  	<div class="col-md-6">
+  	  <img width="150" alt="AgileCRM" src="https://doxhze3l6s7v9.cloudfront.net/img/agile-crm-logo-1.png">
+  	</div>
+  </div>
+  <div class="row">
+  	<div class="col-md-6">
+  	  <img width="150" alt="AgileCRM" src="https://doxhze3l6s7v9.cloudfront.net/img/agile-crm-logo-1.png">
+  	</div>
+  </div>
+</script>
+
+<script id="affiliate-datepicker-template" type="text/html">
+<div id="reportrange" class="pull-right m-r-xs p-t-xs p-b-xs p-l-sm p-r-sm" style="box-shadow: 0 0px 0px rgba(0, 0, 0, 0), inset 0 -0 0 rgba(0, 0, 0, .1);border: 1px solid rgb(207, 218, 221);padding-top: 3px;padding-bottom: 3px;">
+     <i class="icon-calendar icon-large"></i>
+     <span id="range">{{date-range "today" "-6"}}</span>
+</div>
+</script>
+
+<script id="affiliate-commission-details-template" type="text/html">
+	<div class="row">
+		<div class="col-md-4">
+	  		<div class="panel panel-default">
+	          <div class="panel-heading text-lg">
+	            Total Commission
+	          </div>
+	          <div class="panel-body text-center m-t m-b" style="font-size: 40px;">
+	            ${{numeric_operation commission 100 "/"}}
+	          </div>
+	      </div>
+	  	</div><div class="col-md-4">
+	  		<div class="panel panel-default">
+	          <div class="panel-heading text-lg">
+	            Amount added to your account
+	          </div>
+	          <div class="panel-body text-center m-t m-b" style="font-size: 40px;">
+	            ${{numeric_operation amountAdded 100 "/"}}
+	          </div>
+	      </div>
+	  	</div>
+	</div>
+</script>
