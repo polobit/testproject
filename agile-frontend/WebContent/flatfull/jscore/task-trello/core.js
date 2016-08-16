@@ -196,6 +196,15 @@ function taskFetch(base_model)
 					initialize_infinite_scrollbar($("div[id='list-tasks-" + base_model.get("heading") + "']")[0], taskCollection);
 			}
 					
+		},collection_removal_update : function(collection, el){
+			console.log("collection_removal_update");
+			checkAndUpdateTaskCollectiontasks(collection, el);
+		},
+		appendItemCallback : function(el){
+
+			$(el).find("#no_task").addClass("hide");
+
+
 		}
 		 });
 
@@ -227,3 +236,13 @@ function taskFetch(base_model)
 		//fetchForNextTaskList();
 	} });
 }
+
+function checkAndUpdateTaskCollectiontasks(collection, el){
+console.log("checkAndUpdateTaskCollectiontasks")
+if(collection.length == 0)
+return $(el).find("#no_task").removeClass("hide");
+
+return $(el).find("#no_task").addClass("hide");
+
+}
+

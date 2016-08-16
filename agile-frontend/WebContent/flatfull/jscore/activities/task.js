@@ -257,6 +257,10 @@ function initializeTasksListeners(){
 	 	$(this).find(".expandbutton").trigger('click');
 	 	
 	 });
+	$("#tasks-list-template").on("click", "#taskheading", function(b) {
+        b.stopPropagation();
+        taskAutoWidth(this)
+    });
 
 	$('#tasks-list-template').on('click', '.tasks-list-image', function(event)
 			{
