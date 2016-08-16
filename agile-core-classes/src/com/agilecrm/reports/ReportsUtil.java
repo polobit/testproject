@@ -540,7 +540,7 @@ public class ReportsUtil {
 											|| field.equalsIgnoreCase("last_emailed") || field
 												.equalsIgnoreCase("last_called")))
 								fieldValue = " ";
-
+							System.out.println("Field value Before:"+fieldValue);
 							if ((field.contains("time")
 									|| field.equalsIgnoreCase("last_contacted")
 									|| field.equalsIgnoreCase("last_emailed") || field
@@ -549,6 +549,7 @@ public class ReportsUtil {
 								fieldValue = SearchUtil
 										.getDateWithoutTimeComponent(Long
 												.parseLong(fieldValue) * 1000,TimeZone.getTimeZone(timezone));
+							System.out.println("Field value After:"+fieldValue);
 						}
 
 					} catch (Exception e) {

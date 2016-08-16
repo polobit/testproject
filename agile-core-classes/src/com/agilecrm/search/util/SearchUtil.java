@@ -566,6 +566,7 @@ public class SearchUtil
     	try{
         	//Calendar cal=Calendar.getInstance(Timezone);
         	//cal.setTimeInMillis(millSeconds);
+    		System.out.println("Time string"+millSeconds);
         	SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         	formatter.setTimeZone(timezone);
         	
