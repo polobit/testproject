@@ -529,6 +529,11 @@ $(function()
 		}
 	});
 	
+	Handlebars.registerHelper('agile_lng_translate', function(key, value, options)
+	{
+		console.log("Not found " + key + " : " + value);
+	});
+	
 	Handlebars.registerHelper("isCompany", function(options)
 			{
 				if (company_util.isCompany())
