@@ -238,7 +238,7 @@ $("#activityModal").on("click", "#eventDescriptionLink", function(e){
 
    $("#searchText").keyup(function(e){
     if(e.which == 13) {
-   	$("#mobile-menu-settings").trigger('click');
+   	//$("#mobile-menu-settings").trigger('click');
    }
    });
 

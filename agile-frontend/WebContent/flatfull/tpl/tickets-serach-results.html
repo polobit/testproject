@@ -2,13 +2,6 @@
 	<td></td>
 	<td class="data" data="{{id}}">
      <div class="table-resp">
-        <div class="thumb-sm agile-img m-r-sm">
-        {{#if contact.properties}}
-            <img data-name="{{dataNameAvatar contact.properties 42}}" style="height:34px;width:34px;"  src="{{gravatarurl contact.properties 24}}" class="r-5x">
-        {{else}}
-            <img src="{{emailGravatarurl 42 requester_email}}">
-        {{/if}}
-        </div>
         <div class="agile-thumb agile-thumb-view" style="width:calc(100% - 60px);">
             <div class="text-cap custom-link">#{{id}}</div> 
             <div> <small class="text-muted m-t-xs">{{subject}} </small></div>
