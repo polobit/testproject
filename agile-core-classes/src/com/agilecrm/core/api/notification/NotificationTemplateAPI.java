@@ -81,7 +81,7 @@ public class NotificationTemplateAPI
     {
     	
     	int isDuplicate = NotificationTemplateUtil.getNotificationTemplateCountByName(notificationTemplate.notificationName);
-		if (isDuplicate > 0)
+		if (isDuplicate > 1)
 		{
 		    System.out.println("Duplicate Push Notification Template found");
 		    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)

@@ -129,7 +129,10 @@ public class PushNotification extends TaskletAdapter
 		 }
 		
        //add param for push notification linked identity
-		 linkURL = linkURL + "&n=1";
+		 if(notificationTemplate.push_param.equals("YES"))
+		     linkURL = linkURL + "?n=1";
+		 else
+			  linkURL = linkURL + "&n=1";
 		 
 		try
 		{

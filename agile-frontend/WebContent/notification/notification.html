@@ -87,24 +87,31 @@ function regiseterServiceWorkers()  {
           if (pushSubscription)
            {
                  
-                 console.log("You already having subscription"+pushSubscription.endpoint);
+                 console.log("You already having subscription : "+ pushSubscription.endpoint);
+                 sendPushNotificationSubscription(pushSubscription);
            } 
           else
            {
              registration.pushManager.subscribe({  userVisibleOnly: true }).then(function(sub)
               {
                   sendPushNotificationSubscription(sub);
-               });
+               }).catch(function (error) 
+                {
+                  window.close();
+                });
            }
         });
 
      }).catch(function (error) 
       {
         console.log("Error occured while Registering service worker for push notification"+error);
+        window.close();
       });
   }
-   else
+   else{
        console.log("The current browser doesn't support service workers.");
+       window.close();
+     }
 
     }
    
