@@ -995,7 +995,7 @@ $('#content').html('<div id="import-contacts-event-listener"></div>');
 			function($select, data) {
 				
 				if($select.find('option').size()===1){
-					$select.find("option:first").before("<option value='NOEMAIL'>-No Verified Email-</option>");
+					$select.find("option:first").before("<option value='NOEMAIL'>- No Verified Email -</option>");
 					$select.find('option[value ="NOEMAIL"]').attr("selected", "selected");
 				}
 				else
