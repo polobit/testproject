@@ -1001,7 +1001,8 @@ function getContactofCompanies(modelData,el,companyId)
 					 templateKey : "company-contacts-list-view", individual_tag_name : individual_tag_name,
 				cursor : true, page_size : 25, slateKey : slateKey, request_method : 'GET', postRenderCallback : function(cel, collection)
 				{	
-					
+					if(App_Companies.contacts_Company_List.collection.models.length == 0)	
+					$('.add-contact-extra').parent().hide();
 					if(App_Companies.contacts_Company_List.collection.models.length > 0
 					 && !App_Companies.contacts_Company_List.collection.models[0].get("count")){
 						// Call to get Count 
