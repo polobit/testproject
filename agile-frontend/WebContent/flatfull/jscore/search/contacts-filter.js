@@ -773,14 +773,14 @@ function fillCustomFields(fields, el, callback, is_webrules)
 			add_custom_class_to_filter_elements(element, field.field_label+'_time');
 			$(element).addClass(field.field_label+'_time' + _AGILE_CUSTOM_DIVIDER_);
 			
+			var $defined_options = 
+				'<option value="DEFINED" custom_chained_class= "'+field.field_label+'_time'+ " " + _AGILE_CUSTOM_DIVIDER_ +'  custom_field" class="'+field.field_label +'_time '+ _AGILE_CUSTOM_DIVIDER_ + ' custom_field" field_type="'+field.field_type+'" field_name="'+field.field_label+'">{{agile_lng_translate "contacts-view" "is-defined"}}</option>' 
+					+
+				'<option value="NOT_DEFINED" custom_chained_class= "'+field.field_label+'_time'+ " " +_AGILE_CUSTOM_DIVIDER_+'  custom_field" class="'+field.field_label +'_time '+ _AGILE_CUSTOM_DIVIDER_ + ' custom_field" field_type="'+field.field_type+'" field_name="'+field.field_label+'">{{agile_lng_translate "contacts-view" "is-not-defined"}}</option>';
+
 			if(!is_webrules)
 			{
-				var $month_optgroup = condition.find('optgroup.relative-grp');
-
-				var $defined_options = 
-				'<option value="DEFINED" custom_chained_class= "'+field.field_label+'_time'+ " " + _AGILE_CUSTOM_DIVIDER_ +'  custom_field" class="'+field.field_label +'_time '+ _AGILE_CUSTOM_DIVIDER_ + ' custom_field" field_type="'+field.field_type+'" field_name="'+field.field_label+'">{{agile_lng_translate "contacts-view" "is-defined"}}</option>' 
-									+
-				'<option value="NOT_DEFINED" custom_chained_class= "'+field.field_label+'_time'+ " " +_AGILE_CUSTOM_DIVIDER_+'  custom_field" class="'+field.field_label +'_time '+ _AGILE_CUSTOM_DIVIDER_ + ' custom_field" field_type="'+field.field_type+'" field_name="'+field.field_label+'">{{agile_lng_translate "contacts-view" "is-not-defined"}}</option>';
+				var $month_optgroup = condition.find('optgroup.relative-grp');				
 
 				// To prepend optgroup
 				if($month_optgroup.length != 0)
@@ -805,6 +805,10 @@ function fillCustomFields(fields, el, callback, is_webrules)
 						'<option value="IS_BEFORE_IN_DAYS" custom_chained_class= "'+field.field_label+'_time'+ " " + _AGILE_CUSTOM_DIVIDER_ +'  custom_field" class="'+field.field_label +'_time '+ _AGILE_CUSTOM_DIVIDER_ + ' custom_field" field_type="'+field.field_type+'" field_name="'+field.field_label+'">{{agile_lng_translate "contacts-view" "on-before"}}</option>'
 						);
 			    }
+			}
+			else
+			{
+				condition.append($defined_options);
 			}
 		} else if(field.field_type == "NUMBER")
 		{
