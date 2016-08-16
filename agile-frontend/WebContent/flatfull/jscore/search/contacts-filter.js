@@ -462,11 +462,12 @@ function chainFilters(el, data, callback, is_webrules, is_company)
 					// execute the callback, passing parameters as necessary
 					callback();
 				}
-			}, is_webrules)
+			}, is_webrules);
+			
 			return;
 		}
 		
-		fillCustomFields(SEARCHABLE_CONTACT_CUSTOM_FIELDS, el, undefined, false)
+		fillCustomFields(SEARCHABLE_CONTACT_CUSTOM_FIELDS, el, undefined, is_webrules);
 	}
 	
 	
