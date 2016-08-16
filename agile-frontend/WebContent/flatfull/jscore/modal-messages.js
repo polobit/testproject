@@ -1,264 +1,264 @@
 /*JSON object for alert type modals and confirm modals*/
 var GLOBAL_MODAL_MESSAGES = {
-	"global_delete": "Are you sure you want to delete?",
-	"global_error_title" : "Error",
-	"global_validation_title" : "Validation",
-	"global_error_message" : "Error occured. Please try again"
+	"global_delete": "{{agile_lng_translate 'others' 'delete-warn'}}",
+	"global_error_title" : "{{agile_lng_translate 'contact-details' 'error'}}",
+	"global_validation_title" : "{{agile_lng_translate 'admin-settings-custom-fields' 'validation'}}",
+	"global_error_message" : "{{agile_lng_translate 'others' 'error-occured'}}"
 }
 var MODAL_MESSAGES = {
 
 
 	"delete" : {
-		"title": "Delete",
+		"title": "{{agile_lng_translate 'contact-details' 'delete'}}",
 		"message" : GLOBAL_MODAL_MESSAGES.global_delete
 	},
 	"error" : {
-		"title": "Error",
-		"message" : "Error occured. Please Reload the page."
+		"title": "{{agile_lng_translate 'contact-details' 'error'}}",
+		"message" : "{{agile_lng_translate 'others' 'error-occured-reload'}}"
 	},
 	"retry" : {
-		"title": "Error",
+		"title": "{{agile_lng_translate 'contact-details' 'error'}}",
 		"message" : GLOBAL_MODAL_MESSAGES.global_error_message
 	},
 	"delete_task" : {
-		"title": "Delete Task",
+		"title": "{{agile_lng_translate 'report-view' 'delete-task'}}",
 		"message" : GLOBAL_MODAL_MESSAGES.global_delete
 	},
 	"delete_contact" : {
-		"title": "Delete Contact",
+		"title": "{{agile_lng_translate 'contacts-view' 'delete-contact'}}",
 		"message" : GLOBAL_MODAL_MESSAGES.global_delete
 	},
 	"delete_company" : {
-		"title": "Delete Company",
+		"title": "{{agile_lng_translate 'companies' 'delete-company'}}",
 		"message" : GLOBAL_MODAL_MESSAGES.global_delete
 	},
 	"delete_event" : {
-		"title": "Delete Event",
+		"title": _agile_get_translated_val('events','delete-event'),
 		"message" : GLOBAL_MODAL_MESSAGES.global_delete
 	},
 	"delete_opportunity" : {
-		"title": "Delete Deal",
+		"title": "{{agile_lng_translate 'deals' 'delete-deal'}}",
 		"message" : GLOBAL_MODAL_MESSAGES.global_delete
 	},
 	"delete_custom_field" : {
-		"title": "Delete Custom field",
+		"title": "{{agile_lng_translate 'customfields' 'delete'}}",
 		"message" : GLOBAL_MODAL_MESSAGES.global_delete
 	},
 	"delete_milestone" : {
-		"title": "Delete Milestone",
+		"title": "{{agile_lng_translate 'admin-settings-deals' 'delete-milestone'}}",
 		"message" : GLOBAL_MODAL_MESSAGES.global_delete
 	},
 	"delete_stream" : {
-		"title": "Delete Stream",
+		"title": "{{agile_lng_translate 'social' 'delete-stream'}}",
 		"message" : GLOBAL_MODAL_MESSAGES.global_delete
 	},
 	"delete_calendar_prefs" : {
-		"title": "Delete Calendar Preferences",
+		"title": "{{agile_lng_translate 'calendar' 'delete-prefs'}}",
 		"message" : GLOBAL_MODAL_MESSAGES.global_delete
 	},
 	"delete_lost_reason" : {
-		"title": "Delete Loss Reason",
+		"title": "{{agile_lng_translate 'deals' 'delete-loss'}}",
 		"message" : GLOBAL_MODAL_MESSAGES.global_delete
 	},
 	"delete_deal_source" : {
-		"title": "Delete Deal Source",
+		"title": "{{agile_lng_translate 'deals' 'delete-source'}}",
 		"message" : GLOBAL_MODAL_MESSAGES.global_delete
 	},
 	"event_drop" : {
-		"title": "Update Event",
-		"message" : "Are you sure about this change?"
+		"title": _agile_get_translated_val('events','update-event'),
+		"message" : "{{agile_lng_translate 'users' 'confirm-change'}}"
 	},
 	"delete_user" : {
-		"title": "Delete User",
+		"title": "{{agile_lng_translate 'users' 'deleted-user-text'}}",
 		"message" : GLOBAL_MODAL_MESSAGES.global_delete
 	},
 	"delete_account" : {
-		"title": "Delete Account",
+		"title": "{{agile_lng_translate 'users' 'delete-account'}}",
 		"message" : GLOBAL_MODAL_MESSAGES.global_delete
 	},
 	"delete_free_trial" : {
-		"title": "Cancel Free Trial",
-		"message" : "Are you sure you want to cancel your free trial?"
+		"title": "{{agile_lng_translate 'account' 'cancel-account'}}",
+		"message" : "{{agile_lng_translate 'users' 'delete-account-confirm'}}"
 	},
 	"delete_subscription" : {
-		"title": "Delete Subscription",
-		"message" : "Are you sure you want to cancel this subscription ?"
+		"title": "{{agile_lng_translate 'account' 'delete-subscription'}}",
+		"message" : "{{agile_lng_translate 'account' 'delete-subscription-confirm'}}"
 	},
 	"delete_rule" : {
-		"title": "Delete Rule",
-		"message" : "Are you sure to delete a rule?"
+		"title": "{{agile_lng_translate 'webrule' 'delete'}}",
+		"message" : "{{agile_lng_translate 'webrule' 'delete-confirm'}}"
 	},
 	"delete_facebook_linked_page" : {
-		"title": "Delete",
-		"message" : "Are you sure you want to delete this Form from your Facebook page?"
+		"title": "{{agile_lng_translate 'contact-details' 'delete'}}",
+		"message" : "{{agile_lng_translate 'forms' 'delete-confirm'}}"
 	},
 	"delete_facebook_linked_page_error" : {
-		"title": "Error",
-		"message" : "To delete the Form from Page, Link your Facebook account which is associated to the Page."
+		"title": "{{agile_lng_translate 'contact-details' 'error'}}",
+		"message" : "{{agile_lng_translate 'forms' 'delete-ass-page'}}"
 	},
 	"delete_campaign_logs" : {
-		"title": "Delete Campaign logs",
-		"message" : "Are you sure you want to delete all logs?"
+		"title": "{{agile_lng_translate 'campaigns' 'delete-logs'}}",
+		"message" : "{{agile_lng_translate 'campaigns' 'delete-logs-confirm'}}"
 	},
 	"bulk_delete" : {
-		"title": "Bulk Delete",
+		"title": "{{agile_lng_translate 'bulk-delete' 'bulk-delete'}}",
 		"message" : GLOBAL_MODAL_MESSAGES.global_delete
 	},
 	"delete_activity" : {
-		"title": "Delete Activity",
+		"title": "{{agile_lng_translate 'bulk-delete' 'bulk-activity'}}",
 		"message" : GLOBAL_MODAL_MESSAGES.global_delete
 	},
 	"unlink_facebook" : {
-		"title": "Unlink Facebook",
-		"message" : "Are you sure you want to unlink your Facebook account ?"
+		"title": "{{agile_lng_translate 'pages' 'unlink-fb'}}",
+		"message" : "{{agile_lng_translate 'pages' 'unlink-fb-confirm'}}"
 	},
 	"regenerate_api_key" : {
-		"title": "Regenerate API key",
-		"message" : "Resetting the API Key will break all existing integrations you may have setup using the current key. Are you sure you want to reset the API key?"
+		"title": "{{agile_lng_translate 'apikeys' 'regenerate'}}",
+		"message" : "{{agile_lng_translate 'apikeys' 'regenerate-confirm'}}"
 	},
 	"delete_tweet" : {
-		"title": "Delete Tweet",
-		"message" : "Are you sure you want to delete this tweet?"
+		"title": "{{agile_lng_translate 'tweets' 'delete'}}",
+		"message" : "{{agile_lng_translate 'tweets' 'delete-confirm'}}"
 	},
 	"undow_retweet_status" : {
-		"title": "Undow Retweet status",
-		"message" : "Are you sure you want to undo retweet this status?"
+		"title": "{{agile_lng_translate 'tweets' 'undo-retweet'}}",
+		"message" : "{{agile_lng_translate 'tweets' 'undo-retweet-confirm'}}"
 	},
 
 	"activity_error" : {
 		"title": GLOBAL_MODAL_MESSAGES.global_error_title,
-		"message" : "Category name should start with an alphabet and can not contain special characters other than underscore, space and hyphen"
+		"message" : _agile_get_translated_val('category','name-error')
 	},
 	"user_deleted" : {
-		"title": "Delete",
-		"message" : "User Deleted"
+		"title": "{{agile_lng_translate 'contact-details' 'delete'}}",
+		"message" : "{{agile_lng_translate 'activity_type' 'User_Deleted'}}"
 	},
 	"download_error" : {
 		"title": GLOBAL_MODAL_MESSAGES.global_error_title,
-		"message" : "Error downloading a file!"
+		"message" : "{{agile_lng_translate 'downloads' 'error'}}"
 	},
 	"number_validation" : {
 		"title": GLOBAL_MODAL_MESSAGES.global_validation_title,
-		"message" : "Please enter a valid number."
+		"message" : "{{agile_lng_translate 'validation-msgs' 'number'}}"
 	},
 	"freshbook_domain_error" : {
 		"title": GLOBAL_MODAL_MESSAGES.global_validation_title,
-		"message" : "Please Enter Domain Name only"
+		"message" : "{{agile_lng_translate 'validation-msgs' 'domain-name-only'}}"
 	},
 	"companies_merge_limit" : {
-		"title": "Merge Companies",
-		"message" : "Maximum of 2 companies can be merged at a time."
+		"title": "{{agile_lng_translate 'companies' 'merge'}}",
+		"message" : "{{agile_lng_translate 'companies' 'merge-max'}}"
 	},
 	"contacts_merge_limit" : {
-		"title": "Merge Contacts",
-		"message" : "You can merge maximum of 2 records at a time with master record."
+		"title": "{{agile_lng_translate 'contacts' 'merge'}}",
+		"message" : "{{agile_lng_translate 'contacts' 'merge-max'}}"
 	},
 	"empty_shop" : {
 		"title": GLOBAL_MODAL_MESSAGES.global_validation_title,
-		"message" : "Enter Shop name"
+		"message" : "{{agile_lng_translate 'widgets' 'enter-shop'}}"
 	},
 	"won_milestone_delete_error" : {
 		"title": GLOBAL_MODAL_MESSAGES.global_error_title,
-		"message" : "'Won' milestone cannot be changed now as the track already has deals."
+		"message" : "{{agile_lng_translate 'deals' 'milestone-change-error'}}"
 	},
 	"lost_milestone_delete_error" : {
 		"title": GLOBAL_MODAL_MESSAGES.global_error_title,
-		"message" : "'Lost' milestone cannot be changed now as the track already has deals."
+		"message" : "{{agile_lng_translate 'deals' 'lost-milestone-change-error'}}"
 	},
 	"multiple_conditions" : {
 		"title": GLOBAL_MODAL_MESSAGES.global_error_title,
-		"message" : "Sorry. You can't have multiple 'Between' conditions."
+		"message" : "{{agile_lng_translate 'validation-msgs' 'between-error'}}"
 	},
 	"add_error" : {
 		"title": GLOBAL_MODAL_MESSAGES.global_error_title,
-		"message" : "Failed to add."
+		"message" : "{{agile_lng_translate 'validations' 'failed-to-add'}}"
 	},
 	"future_date" : {
 		"title": GLOBAL_MODAL_MESSAGES.global_error_title,
-		"message" : "Please select Date/Time in future."
+		"message" : "{{agile_lng_translate 'validations' 'future-date-error'}}"
 	},
 	"select_plan" : {
 		"title": GLOBAL_MODAL_MESSAGES.global_error_title,
-		"message" : "Please select a plan to proceed"
+		"message" : "{{agile_lng_translate 'billing' 'plan-select'}}"
 	},
 	"change_plan" : {
 		"title": GLOBAL_MODAL_MESSAGES.global_error_title,
-		"message" : "Please change your plan to proceed"
+		"message" : "{{agile_lng_translate 'billing' 'plan-change-select'}}"
 	},
 	"social_access" : {
-		"title": "Social Access",
-		"message" : "You have to give access to your social account."
+		"title": "{{agile_lng_translate 'social' 'access'}}",
+		"message" : "{{agile_lng_translate 'social' 'give-access'}}"
 	},
 	"tag_name_restriction" : {
-		"title": "Tag Validation",
-		"message" : "Tag name should start with an alphabet and cannot contain special characters other than underscore and space."
+		"title": "{{agile_lng_translate 'tags' 'validation'}}",
+		"message" : "{{agile_lng_translate 'tags' 'invalid-tag'}}"
 	},
 	"on_call" : {
-		"title": "Call",
-		"message" : "Already on call."
+		"title": "{{agile_lng_translate 'admin-settings-tasks' 'call'}}",
+		"message" : "{{agile_lng_translate 'calls' 'already-on-call'}}"
 	},
 	"appointment_time" : {
 		"title": GLOBAL_MODAL_MESSAGES.global_error_title,
-		"message" : "Please select appointment time."
+		"message" : "{{agile_lng_translate 'calendar' 'select-appointment'}}"
 	},
 	"slot_booking" : {
-		"title": "Slot Booking",
-		"message" : "Looks like this slot is booked already. Please try another one."
+		"title": "{{agile_lng_translate 'calendar' 'solt-book'}}",
+		"message" : "{{agile_lng_translate 'calendar' 'solt-book-error'}}"
 	},
 	"webrule_popup_limit" : {
 		"title": GLOBAL_MODAL_MESSAGES.global_error_title,
-		"message" : "Only one popup is allowed per webrule. You have already set a popup action for this webrule."
+		"message" : "{{agile_lng_translate 'webrule' 'popup-error'}}"
 	},
 	"duplicate_widget" : {
-		"title": "Duplicate Widget",
-		"message" : "A widget with this name exists already. Please choose a different name"
+		"title": "{{agile_lng_translate 'widgets' 'duplicate'}}",
+		"message" : "{{agile_lng_translate 'widgets' 'name-exists'}}"
 	},
 	"no_twilio_numbers" : {
 		"title": GLOBAL_MODAL_MESSAGES.global_error_title,
-		"message" : "You have no twilio numbers. Please buy or port a number in your Twilio account."
+		"message" : "{{agile_lng_translate 'twillio' 'invalid-number'}}"
 	},
 	"no_verified_num" : {
 		"title": GLOBAL_MODAL_MESSAGES.global_error_title,
-		"message" : "You have no verified numbers. Please verify number in your Twilio account."
+		"message" : "{{agile_lng_translate 'twillio' 'no-verified-number'}}"
 	},
 	"valid_details" : {
 		"title": GLOBAL_MODAL_MESSAGES.global_error_title,
-		"message" : "Please enter valid details."
+		"message" : "{{agile_lng_translate 'twill' 'enter-valid-details'}}"
 	},
 	"valid_details_try_again" : {
 		"title": GLOBAL_MODAL_MESSAGES.global_error_title,
-		"message" : "Please try again with valid details."
+		"message" : "{{agile_lng_translate 'twill' 'try-valid-details'}}"
 	},
 	"active_connection" : {
 		"title": GLOBAL_MODAL_MESSAGES.global_error_title,
-		"message" : "A connection is currently active."
+		"message" : "{{agile_lng_translate 'social' 'connection-active'}}"
 	},
 	"enter_shop_name" : {
 		"title": GLOBAL_MODAL_MESSAGES.global_error_title,
-		"message" : "Enter Shop name"
+		"message" : "{{agile_lng_translate 'widgets' 'enter-shop'}}"
 	},
 	"name_not_valid" : {
 		"title": GLOBAL_MODAL_MESSAGES.global_error_title,
-		"message" : "Name not valid"
+		"message" : "{{agile_lng_translate 'social' 'name-not-valid'}}"
 	},
 	"duplicate_workflow" : {
 		"title": GLOBAL_MODAL_MESSAGES.global_error_title,
-		"message" : "Please change the name and click on 'Create a Copy' again."
+		"message" : "{{agile_lng_translate 'social' 'pl-change-name'}}"
 	},
 	"linkedin_invalid_url" : {
 		"title": GLOBAL_MODAL_MESSAGES.global_error_title,
-		"message" : "URL provided for linkedin is not valid"
+		"message" : "{{agile_lng_translate 'linkedin' 'url-invalid'}}"
 	},
 	"proper_amount" : {
 		"title": GLOBAL_MODAL_MESSAGES.global_error_title,
-		"message" : "Please enter proper amount"
+		"message" : "{{agile_lng_translate 'widgets' 'enter-valid-amount'}}"
 	},
 	"twitter_invalid_url" : {
 		"title": GLOBAL_MODAL_MESSAGES.global_error_title,
-		"message" : "URL provided for Twitter is not valid"
+		"message" : "{{agile_lng_translate 'twitter' 'url-invalid'}}"
 	},
 	"stripe_customfield_selection_error" : {
-		"title": "Stripe Custom Field",
-		"message" : "Please select one custom field to save the Stripe ID."
+		"title": "{{agile_lng_translate 'stripe' 'custom-field'}}",
+		"message" : "{{agile_lng_translate 'stripe' 'select-custom-field'}}"
 	}
 };

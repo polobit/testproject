@@ -210,7 +210,11 @@ function showCalendar(users)
 						 *            fullCalendar
 						 * 
 						 */
-
+						monthNames: $.fn.datepicker.dates['en'].months,
+					    monthNamesShort: $.fn.datepicker.dates['en'].monthsShort,
+					    dayNames: $.fn.datepicker.dates['en'].days,
+					    dayNamesShort: $.fn.datepicker.dates['en'].daysShort,
+					    allDayText: '{{agile_lng_translate "calendar" "all-day"}}',
 						eventSources : [
 								{ 	
 									events : function(start, end, callback)
@@ -315,7 +319,7 @@ function showCalendar(users)
 								$("#loading_calendar_events").remove();
 								$('.fc-header-left','#calendar_event')
 										.append(
-												'<span id="loading_calendar_events" style="margin-left:5px;vertical-align:middle;padding-top: 5px;position: absolute;">loading...</span>')
+												'<span id="loading_calendar_events" style="margin-left:5px;vertical-align:middle;padding-top: 5px;position: absolute;">'+_agile_get_translated_val('tickets','loading')+'</span>')
 										.show();
 								$('.fc-header-left','#calendar_event').show();
 
@@ -511,7 +515,7 @@ function showCalendar(users)
 
 								eventModel.save(event, { 
 									error : function(model, response){
-										showModalConfirmation("Update Event", 
+										showModalConfirmation(_agile_get_translated_val('events','update-event'), 
 											response.responseText, 
 											function (){
 												revertFunc();
@@ -522,7 +526,7 @@ function showCalendar(users)
 											function(){
 												return;
 											},
-											"Cancel"
+											_agile_get_translated_val('contact-details','cancel')
 										);
 									} 
 								});
@@ -598,13 +602,13 @@ function showCalendar(users)
 							}
 							if (event.description)
 							{
-								var description = '<label class="control-label"><b>Description </b></label><div class="controls"><textarea id="description" name="description" rows="3" class="input form-control" placeholder="Add Description"></textarea></div>'
+								var description = '<label class="control-label"><b>'+_agile_get_translated_val("misc-keys", "description")+' </b></label><div class="controls"><textarea id="description" name="description" rows="3" class="input form-control" placeholder="' + _agile_get_translated_val("misc-keys", "add-description") + '"></textarea></div>'
 								$("#event_desc").html(description);
 								$("textarea#description").val(event.description);
 							}
 							else
 							{
-								var desc = '<div class="row-fluid">' + '<div class="control-group form-group m-b-none " id="addEventDescription">' + '<a href="#" id="add_event_desctiption"><i class="icon-plus"></i> Add Description </a>' + '<div class="controls event_discription hide">' + '<textarea id="description" name="description" rows="3" class="input form-control w-full col-md-8" placeholder="Add Description"></textarea>' + '</div></div></div>'
+								var desc = '<div class="row-fluid">' + '<div class="control-group form-group m-b-none " id="addEventDescription">' + '<a href="#" id="add_event_desctiption"><i class="icon-plus"></i> ' + _agile_get_translated_val("misc-keys", "add-description") + ' </a>' + '<div class="controls event_discription hide">' + '<textarea id="description" name="description" rows="3" class="input form-control w-full col-md-8" placeholder="' + _agile_get_translated_val("misc-keys", "add-description") + '"></textarea>' + '</div></div></div>'
 								$("#event_desc").html(desc);
 							}
 							
@@ -649,14 +653,14 @@ function buildEventFilters()
 			$.each(users, function(i, user)
 			{
 				if (CURRENT_DOMAIN_USER.id == user.domain_user_id)
-					html1 = '<option value=' + user.id + '>Me</option>';
+					html1 = '<option value=' + user.id + '>'+_agile_get_translated_val('others','me')+'</option>';
 				else
 				{
 					if (user.domainUser)
 						html += '<option value=' + user.id + '>' + user.domainUser.name + '</option>';
 				}
 			});
-			html += '<option value="">Any</option>';
+			html += '<option value="">'+_agile_get_translated_val('portlets','any')+'</option>';
 		}
 		$('#event-owner').html(html1 + html);
 	});

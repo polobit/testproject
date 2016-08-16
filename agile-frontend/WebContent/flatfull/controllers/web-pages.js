@@ -33,10 +33,7 @@ var WebpagesRouter = Backbone.Router
 					cursor : true,
 					page_size : 20,
 					postRenderCallback : function(el) {
-						head.js(LIB_PATH + 'lib/jquery.timeago.js', function() {
-							$("time.webpage-created-time", el).timeago();
-
-						});
+						agileTimeAgoWithLngConversion($("time.webpage-created-time", el));
 
 						start_tour(undefined, el);
 

@@ -135,9 +135,9 @@ deleteConfirm : function(e)
 							   {
 							    var message;
 							    if(count > 1)
-							     message = "Users have been deleted successfully. Please adjust your billing plan to avoid being billed for the deleted users.";
+							     message = _agile_get_translated_val("users", "deleted-users");
 							    else
-							     message = "User has been deleted successfully. Please adjust your billing plan to avoid being billed for the deleted user.";
+							     message = _agile_get_translated_val("users", "deleted-user");
 							    showNotyPopUp('information', message, "top", 10000);
 							   }
 
@@ -146,7 +146,7 @@ deleteConfirm : function(e)
        					error : function(response)
 						{
 							console.log("error");
-							confirmModal.find(".modal-footer").find("#delete-user").html('<small class="text-danger" style="font-size:15px;margin-right:172px;">Sorry, can not delete user having admin privilege.</small>');
+							confirmModal.find(".modal-footer").find("#delete-user").html('<small class="text-danger" style="font-size:15px;margin-right:172px;">' + _agile_get_translated_val("users", "delete-user-error") + '</small>');
 							console.log(response);
 
 						}

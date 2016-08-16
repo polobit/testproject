@@ -82,7 +82,10 @@ public class WufooWebhook extends HttpServlet
 		// Get agile user, assign contact owner, update contact
 		// properties, save contact
 		Key<AgileUser> user = new Key<AgileUser>(AgileUser.class, owner.getId());
-		contact.setContactOwner(owner);
+		if(contact.getContactOwner() == null)
+		{
+    		contact.setContactOwner(owner);
+    	}
 		contact.properties = FormsUtil.updateContactProperties(properties, contact.properties);
 
 		if(tags != null && tags.length > 0)

@@ -3,10 +3,10 @@
 	<div class="hbox h-auto m-b-lg">
     <div class="panel panel-default">
         <div class="panel-heading">
-            <div class="pull-left m-t-xs">campaign Templates</div>
+            <div class="pull-left m-t-xs">{{agile_lng_translate 'web-rules' 'campaign-templates'}}</div>
 			<div class="pull-right">
             	<a href="#campaign-template-add" class="btn btn-default btn-sm btn-addon" id="addcampaignTemplate">
-           		<span><i class="icon-plus-sign" /></span> New</a>
+           		<span><i class="icon-plus-sign" /></span> {{agile_lng_translate 'menu' 'new'}}</a>
 			</div>
 			<div class="clearfix"></div>
         </div>
@@ -18,9 +18,9 @@
            
             <thead>
                 <tr>
-                    <th class="hide">Id</th>                    
-					<th style="width:30%;">Campaign</th>
-                    <th style="width:30%;">Subject</th>
+                    <th class="hide">{{agile_lng_translate 'tickets' 'id'}}</th>                    
+					<th style="width:30%;">{{agile_lng_translate 'contact-details' 'campaign'}}</th>
+                    <th style="width:30%;">{{agile_lng_translate 'contact-details' 'subject'}}</th>
                     <th style="width:40%;"></th>
                 </tr>
             </thead>
@@ -37,14 +37,14 @@
         <div class="data-block">
         <div class="p-l p-r">
             <h4 class="m-t-none">
-                campaign Templates
+                {{agile_lng_translate 'web-rules' 'campaign-templates'}}
             </h4>
             
             <p>
-                Personalize and customize campaign templates for every scenario in the sales cycle. Make sure you send a great looking campaign every single time.
+                {{agile_lng_translate 'campaigns' 'personalize-and-customize-campaign-desc'}}
             </p>
             <p>
-                You can create custom campaign template for every sales scenario.
+                {{agile_lng_translate 'campaigns' 'create-custom-campaign-template-desc'}}
             </p>
            </div>
         </div>
@@ -67,7 +67,7 @@
     <td class="text-muted" style="color: #b2b0b1;">
        {{#if created_time}}
           <div class="text-muted table-resp text-xs"> <i class="fa fa-clock-o m-r-xs"></i>
-    	       Created <time class="created_time time-ago" value="{{created_time}}" datetime="{{epochToHumanDate "" created_time}}">{{epochToHumanDate "ddd mmm dd yyyy" created_time}}</time> by {{campaignTemplateOwner.name}}
+    	       {{agile_lng_translate 'contact-details' 'created'}} <time class="created_time time-ago" value="{{created_time}}" datetime="{{epochToHumanDate "" created_time}}">{{epochToHumanDate "ddd mmm dd yyyy" created_time}}</time> {{agile_lng_translate 'contact-details' 'by'}} {{campaignTemplateOwner.name}}
           </div>
        {{/if}}
     </td>

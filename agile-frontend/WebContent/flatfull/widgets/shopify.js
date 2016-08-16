@@ -1,7 +1,7 @@
 
 var SHOPIFYTickets = {};
 var SHOPIFYCount = 1;
-var showMoreSHOPIFY = '<div class="widget_tab_footer shopify_show_more" align="center"><a class="c-p text-info" id="SHOPIFY_show_more" rel="tooltip" title="Click to see more tickets">Show More</a></div>';
+var showMoreSHOPIFY = '<div class="widget_tab_footer shopify_show_more" align="center"><a class="c-p text-info" id="SHOPIFY_show_more" rel="tooltip" title="' + _agile_get_translated_val('widgets','click-to-see-more-tickets') + '">' +_agile_get_translated_val('widgets', 'show-more')+ '</a></div>';
 
 function loadSHOPIFYTickets(offSet){
 	if(offSet == 1){
@@ -23,9 +23,7 @@ function loadSHOPIFYTickets(offSet){
 		});
 
 		// Load jquery time ago function to show time ago in tickets
-		head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
-			$(".time-ago", $('#shopify_orders_panel')).timeago();
-		});
+		agileTimeAgoWithLngConversion($(".time-ago", $('#shopify_orders_panel')));
 
 	}else if(offSet > 1  && (offSet + 5) < SHOPIFYTickets.length){
 		var result = {};
@@ -49,7 +47,7 @@ function showShopifyClient(shop, contact_id)
 
 		if (EmailList.length == 0)
 		{
-			shopifyError(Shopify_PLUGIN_NAME, "Please provide email for this contact");
+			shopifyError(Shopify_PLUGIN_NAME, _agile_get_translated_val('widgets', 'pl-give-contact-email'));
 			return;
 		}
 		var emailArray = [];
@@ -94,9 +92,7 @@ function showShopifyClient(shop, contact_id)
 				    	var template = $(template_ui);
 				    	console.log("libpath is" + LIB_PATH);
 						console.log(template)
-						head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
-							$(".time-ago", template).timeago();
-						});
+						agileTimeAgoWithLngConversion($(".time-ago", template));
 
 						$('#Shopify').html(template);
 						loadSHOPIFYTickets(1); 

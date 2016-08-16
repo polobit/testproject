@@ -4,16 +4,16 @@
     <div class="modal-content">
 	<div class="modal-header">
         <button class="close" data-dismiss="modal">x</button>
-        <h3><i class="icon-file-text"></i> Campaign Node Limit Reached</h3>
+        <h3><i class="icon-file-text"></i> {{agile_lng_translate 'campaigns' 'campaign-node-limit-reached'}}</h3>
     </div>
 	<div class="modal-body">
         <div id="limit-alert-details">
-            <p>You have reached the limit of {{campaignNodesLimit}} nodes in your current plan {{planName}}. Please consider upgrading or splitting the campaign and use the 'Transfer' option.</p>
+            <p>{{agile_lng_translate 'campaigns' 'you-have-reached-limit-of'}} {{campaignNodesLimit}}  {{agile_lng_translate 'campaigns' 'nodes-in-your-current-plan'}}{{planName}}. {{agile_lng_translate 'campaigns' 'please-consider-upgrading-or-splitting-the-campaign'}}</p>
         </div>
     </div>
     <div class="modal-footer">
     <span class="contacts-export-csv-message m-r-xs"></span>
-    <a href="#" class="btn btn-sm btn-primary" data-dismiss="modal">OK</a>
+    <a href="#" class="btn btn-sm btn-primary" data-dismiss="modal">{{agile_lng_translate 'reputation' 'Ok'}}</a>
     </div>
 </div>
 </div>
@@ -42,7 +42,7 @@
 		</div>
 		<div class="modal-footer">
 			<span class="contacts-export-csv-message m-r-xs"></span>
-			<a href="#" class="btn btn-sm btn-primary" data-dismiss="modal">OK</a>
+			<a href="#" class="btn btn-sm btn-primary" data-dismiss="modal">{{agile_lng_translate 'reputation' 'Ok'}}</a>
 		</div>
 	</div>
 </div>
@@ -64,7 +64,7 @@
 		</div>
 		<div class="modal-footer">
 			<span class="m-r-xs"></span>
-			<a href="#" class="btn btn-sm btn-primary" data-dismiss="modal">OK</a>
+			<a href="#" class="btn btn-sm btn-primary" data-dismiss="modal">{{agile_lng_translate 'reputation' 'Ok'}}</a>
 		</div>
 	</div>
 </div>
@@ -85,9 +85,9 @@
                 		<div class="control-group form-group">
 	                		<div class="row">
 	                			<div class="col-md-5">
-		                    		<label class="control-label"><b>Email</b> <span class="field_req">*</span></label>
+		                    		<label class="control-label"><b>{{agile_lng_translate 'Tickets' 'Requester-Email'}}</b> <span class="field_req">*</span></label>
 		                    		<div class="controls">
-		                        		<span><input name="email" class="email form-control required" type="text" placeholder="Enter the From email address" value="{{email}}" autofocus></span>
+		                        		<span><input name="email" class="email form-control required" type="text" placeholder="{{agile_lng_translate 'workflows' 'enter-from-email-address'}}" value="{{email}}" autofocus></span>
 		                    		</div>
 								</div>
 								<span id="alert-msg"></span>
@@ -98,8 +98,8 @@
 		</div>
 		<div class="modal-footer">
 			<span class="m-r-xs"></span>
- 			<button type="button" class="btn btn-danger" data-dismiss="modal" id="verify-ignore" style="display:none;">Ignore</button>
-			<a href="#" class="btn btn-sm btn-primary" id="verify-email-send">Send verification Email</a>
+ 			<button type="button" class="btn btn-danger" data-dismiss="modal" id="verify-ignore" style="display:none;">{{agile_lng_translate 'contacts-view' 'ignore'}}</button>
+			<a href="#" class="btn btn-sm btn-primary" id="verify-email-send">{{agile_lng_translate 'campaigns' 'send-verification-email'}}</a>
 		</div>
 	</div>
 </div>
@@ -112,7 +112,7 @@
     <div class="modal-content">
 		<div class="modal-header">
 			<button class="close" data-dismiss="modal">x</button>
-			<h3 class="modal-title"><i class="icon-edit"></i> Share with</h3>
+			<h3 class="modal-title"><i class="icon-edit"></i> {{agile_lng_translate 'campaigns' 'share-with'}}</h3>
 		</div>
 		<div class="modal-body">
 				<form id="verify-email">
@@ -120,9 +120,9 @@
                 		<div class="control-group form-group">
 	                		<div class="row">
 	                			<div class="col-md-5">
-		                    		<label class="control-label"><b>Email</b> <span class="field_req">*</span></label>
+		                    		<label class="control-label"><b>{{agile_lng_translate 'modals' 'email'}}</b> <span class="field_req">*</span></label>
 		                    		<div class="controls">
-		                        		<span><input name="email" id="emailId" onkeypress="return event.keyCode != 13;" class="email form-control required" type="text" placeholder="Enter the email address" autofocus></span>
+		                        		<span><input name="email" id="emailId" onkeypress="return event.keyCode != 13;" class="email form-control required" type="text" placeholder="{{agile_lng_translate 'widjets' 'enter-email-address'}}" autofocus></span>
 		                    		</div>
 								</div>
 								<span id="alert-msg"></span>
@@ -133,8 +133,8 @@
 		</div>
 		<div class="modal-footer">
 			<span class="m-r-xs"></span>
- 			<button type="button" class="btn btn-danger" data-dismiss="modal" id="verify-ignore" style="display:none;">Ignore</button>
-			<a href="javascript:void(0)" class="btn btn-sm btn-primary" id="verify-email" onclick="createJSON()">Done</a>
+ 			<button type="button" class="btn btn-danger" data-dismiss="modal" id="verify-ignore" style="display:none;">{{agile_lng_translate 'contacts-view' 'ignore'}}</button>
+			<a href="javascript:void(0)" class="btn btn-sm btn-primary" id="verify-email" onclick="createJSON()">{{agile_lng_translate 'deal-view' 'done'}}</a>
 		</div>
 	</div>
 </div>
@@ -154,9 +154,9 @@
       						<div class='panel-heading' ><strong>{{checkSpamMessage score}}<span class='pull-right badge'> Score = {{score}} </span></strong></div>
   								<table  class="table table-condensed">
     	 							<thead>
-							      		<th class="col-xs-1"> Points </h>
-							      		<th class="col-xs-1"> Rules Name </th>
-							      		<th class="col-xs-10"> Description </th>
+							      		<th class="col-xs-1">{{agile_lng_translate 'campaigns' 'points'}} </h>
+							      		<th class="col-xs-1">  {{agile_lng_translate 'campaigns' 'rule-name'}}</th>
+							      		<th class="col-xs-10"> {{agile_lng_translate 'misc-keys' 'description'}} </th>
 							    	 </thead>
     								 <tbody>
     	  								{{#each reason}}
@@ -173,8 +173,8 @@
 					</div>
 				<div class="modal-footer" style="padding-right: 15px;">
 					<span class="m-r-xs"></span>
-					<span style="float: left;">Powered by Spamassassin</span>
-					<a href="#" class="btn btn-sm btn-primary" data-dismiss="modal">OK</a>
+					<span style="float: left;">{{agile_lng_translate 'campaigns' 'powered-by-spamassassin'}}</span>
+					<a href="#" class="btn btn-sm btn-primary" data-dismiss="modal">{{agile_lng_translate 'reputation' 'Ok'}}</a>
 				</div>
 			</div>
 		</div>
@@ -188,20 +188,21 @@
 				<div class="modal-header">
 					<button class="close" data-dismiss="modal">x</button>
 					<h3 class="modal-title">
-						<h6 id="popup-msg" style="margin:5px"><span style="color: green;">Campaign saved successfully</span></h6>
-						<i class="glyphicon glyphicon-arrow-right"></i> <strong> {{title}} </strong> Assign contact(s) to the Campaign</h3>
+						<h6 id="popup-msg" style="margin:5px"><span style="color: green;">
+						{{agile_lng_translate 'Campaigns' 'campaign-saved-sucessfully'}}</span></h6>
+						<i class="glyphicon glyphicon-arrow-right"></i> <strong> {{title}} </strong> {{agile_lng_translate 'Campaigns' 'assign-contacts-to-campaign'}}</</h3>
 				</div> 
 				<div class="modal-body">
 					<form id="workflow-save-popup-form" >
 						<fieldset>            
                 			<div class="control-group form-group">
-								<div class="radio col-sm-6">
-   							  			<label  onclick="popupCampaignContact();">
-   								 	<i class="icon-user icon-4x" style="margin-left: 40px;"></i><br> Add Contacts Manually</label>
+								<div class="radio col-sm-6 text-center">
+   							  			<label  onclick="popupCampaignContact();" style="padding:0px;">
+   								 	<i class="icon-user icon-4x"></i><br> {{agile_lng_translate 'Campaigns' 'add-contacts-manually'}}</label>
 								</div>
-								<div class="radio col-sm-6" style="margin-top:11px;" >
-   							  		<label onclick="popupCampaignTrigger();">
-   								 		<i class="fa fa-bullseye icon-4x" style="margin-left: 40px;"></i><br> Add Trigger to Campaign</label>
+								<div class="radio col-sm-6 text-center" style="margin-top:11px;" >
+   							  		<label onclick="popupCampaignTrigger();" style="padding:0px;">
+   								 		<i class="fa fa-bullseye icon-4x"></i><br> {{agile_lng_translate 'Campaigns' 'add-triggers-maually'}}</label>
 								</div>
 							</div>
 						</fieldset>
@@ -209,10 +210,10 @@
 				</div>
 				<div class="modal-footer">
 					<div class="checkbox col-sm-6" style="margin-top:4px; margin-bottom:4px;">
-    					<label class="pull-left" onclick="hideCampaignPopup();"><input type="checkbox" id="campaign-save-popup" value="false">Don't show me again</label>
+    					<label class="pull-left" onclick="hideCampaignPopup();"><input type="checkbox" id="campaign-save-popup" value="false">{{agile_lng_translate 'landingpages' 'dont-show-me-again'}}</label>
 					</div>
   					<div class="col-sm-6">	
- 						<button type="button" class="btn btn-sm btn-primary" data-dismiss="modal" id="ok">Close</button>
+ 						<button type="button" class="btn btn-sm btn-primary" data-dismiss="modal" id="ok">{{agile_lng_translate 'contact-details' 'CLOSE'}}</button>
   					</div>
   				</div>	
 			</div>
@@ -254,7 +255,7 @@
 		</div>
 		<div class="modal-footer">
 			<span class="contacts-export-csv-message m-r-xs"></span>
-			<a href="#" class="btn btn-sm btn-primary" data-dismiss="modal">OK</a>
+			<a href="#" class="btn btn-sm btn-primary" data-dismiss="modal">{{agile_lng_translate 'reputation' 'Ok'}}</a>
 		</div>
 	</div>
 </div>

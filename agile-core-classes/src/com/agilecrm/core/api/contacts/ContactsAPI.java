@@ -1376,6 +1376,16 @@ public class ContactsAPI
 		    cas.addContactToCase(contact.id.toString());
 		    cas.save();
 		}
+		
+		// merge contacts of companies
+
+		List<Contact> companies_contacts = ContactUtil.getAllContactsOfCompany(id, 0, null);
+		for (Contact companies_contact : companies_contacts)
+		{
+			companies_contact.contact_company_id=contact.id.toString();
+			companies_contact.save();
+		}
+				
 		// delete duplicated record
 		ContactUtil.getContact(Long.valueOf(id)).delete();
 		// save master reccord

@@ -391,13 +391,12 @@ $("#activityModal").on("click", "#eventDescriptionLink", function(e){
 	});
 
 	// Add blinker
-	if(!_agile_get_prefs("menu_blinker")){
+	/*if(!_agile_get_prefs("menu_blinker")){
 		_agile_set_prefs("menu_blinker", "shown");
 		$(".grid_icon_center a.grid-icon-header").addClass("agile-feature-item-blink");	
-	}
+	}*/
 
-	//$(".grid_icon_center a.grid-icon-header").addClass("agile-feature-item-blink");	
-   });
+});
 
 
 // Click handlers to role menu items

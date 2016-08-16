@@ -163,7 +163,8 @@
                 return;
             //Element object extention
             canvasElement.prototype.clickHandler = function(el) {
-                styleeditor.styleClick(this);
+                if(el.style.cursor === "pointer")                   
+                   styleeditor.styleClick(this);
             };
 
             var newElement = new canvasElement(element);
@@ -326,27 +327,13 @@
 
                     if( bConfig.editableItems[theSelector][x] === 'background-image' ) {
 
-                        newStyleEl.find('input').bind('focus', function(){
-
-                            var theInput = $(this);
-
+                        newStyleEl.find('input').off('click');
+                        newStyleEl.find('input').on('click', function(event){
+                             var theInput = $(this);
                             $('#imageModal').modal('show');
                             $('#imageModal .image button.useImage').unbind('click');
-                            $('#imageModal').on('click', '.image button.useImage', function(){
-
-                                $(styleeditor.activeElement.element).css('background-image',  'url("'+$(this).attr('data-url')+'")');
-
-                                //update live image
-                                theInput.val( 'url("'+$(this).attr('data-url')+'")' );
-
-                                //hide modal
-                                $('#imageModal').modal('hide');
-
-                                //we've got pending changes
-                                siteBuilder.site.setPendingChanges(true);
-
-                            });
-
+                        
+                            console.log("hi");
                         });
 
                     } else if( bConfig.editableItems[theSelector][x].indexOf("color") > -1 ) {
@@ -405,7 +392,11 @@
                 if( $(this).attr('name') !== undefined ) {
 
                     $(styleeditor.activeElement.element).css( $(this).attr('name'),  $(this).val());
-
+                    if($(this).attr("name") === 'font-size'){
+                        var nodeName=styleeditor.activeElement.element.nodeName;
+                        if(nodeName==='DIV' || nodeName==='BLOCKQUOTE')
+                            $(styleeditor.activeElement.element).children().css($(this).attr("name"),$(this).val());
+                    }                     
                 }
 
                 /* SANDBOX */
@@ -562,7 +553,9 @@
             });
 
             //adjust frame height
-            styleeditor.activeElement.parentBlock.heightAdjustment();
+            if(typeof styleeditor.activeElement.parentBlock.heightAdjustment !== "undefined") {
+                styleeditor.activeElement.parentBlock.heightAdjustment();
+            }
 
 
             //we've got pending changes
@@ -577,14 +570,14 @@
             on focus, we'll make the input fields wider
         */
         animateStyleInputIn: function() {
-
-            $(this).css('position', 'absolute');
-            $(this).css('right', '0px');
-            $(this).animate({'width': '100%'}, 500);
-            $(this).focus(function(){
-                this.select();
-            });
-
+            if($(this).attr("name") !== "background-image") {
+                $(this).css('position', 'absolute');
+                $(this).css('right', '0px');
+                $(this).animate({'width': '100%'}, 500);
+                $(this).focus(function(){
+                    this.select();
+                });
+            }
         },
 
 
@@ -1136,6 +1129,9 @@
 
             if ( e !== undefined ) e.preventDefault();
 
+            if(styleeditor.activeElement.element)
+                 styleeditor.activeElement.editableAttributes=bConfig.editableItems[styleeditor.activeElement.element.getAttribute('data-selector')];
+            
             if ( styleeditor.activeElement.editableAttributes && styleeditor.activeElement.editableAttributes.indexOf('content') === -1 ) {
                 styleeditor.activeElement.removeOutline();
                 styleeditor.activeElement.activate();

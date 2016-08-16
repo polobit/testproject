@@ -101,12 +101,8 @@ var WorkflowsRouter = Backbone.Router
 					global_sort_key : sortKey, 
 					postRenderCallback : function(col_el)
 					{
-						head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
-						{
-							$("time.campaign-created-time", col_el).timeago();
-
-						});
-
+						agileTimeAgoWithLngConversion($("time.campaign-created-time", col_el));
+						
 						// updateSortKeyTemplate(sortKey, el);
 						start_tour(undefined, el);
 
@@ -239,13 +235,14 @@ var WorkflowsRouter = Backbone.Router
 
 				this.workflow_json = this.workflow_model.get("rules");
 				this.is_disabled = this.workflow_model.get("is_disabled");
+				this.is_unsubscribe_email_disabled = this.workflow_model.get("unsubscribe").is_unsubscribe_email_disabled;
 				var that = this;
-
+				
 				var workflowModal = new Workflow_Model_Events({
 					url : 'core/api/workflow', 
 					template : 'workflow-add',
 					isNew : 'true',
-					data :  {"is_disabled" : ""+that.is_disabled},
+					data :  {"is_disabled" : ""+that.is_disabled, "is_unsubscribe_email_disabled" : ""+that.is_unsubscribe_email_disabled},
 					postRenderCallback : function(el){
 						head.load(CSS_PATH + 'css/bootstrap_switch.css', LIB_PATH + 'lib/bootstrapSwitch.js', LIB_PATH + 'lib/desktop-notify-min.js');
 						
@@ -253,12 +250,12 @@ var WorkflowsRouter = Backbone.Router
 						$('#workflow-name', el).val(that.workflow_model.get("name"));
 
 						var unsubscribe = that.workflow_model.get("unsubscribe");
-
+						
 						$('#unsubscribe-email', el).val(unsubscribe.unsubscribe_email);
 						$('#unsubscribe-name', el).val(unsubscribe.unsubscribe_name);
 						$('#unsubscribe-tag', el).val(unsubscribe.tag);
 						$('#unsubscribe-action', el).val(unsubscribe.action);
-						
+
 						$('#unsubscribe-action', el).trigger('change');
 
 						var level = that.workflow_model.get("access_level");
@@ -415,11 +412,8 @@ var WorkflowsRouter = Backbone.Router
 								cursor : true,page_size :20, individual_tag_name : 'tr', sort_collection :false, postRenderCallback : function(el)
 								{
 									initializeTriggersListeners();
-									head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
-									{
-										$("time.log-created-time", el).timeago();
-									});
-
+									agileTimeAgoWithLngConversion($("time.log-created-time", el));
+									
 									$('#log-filter-title').html(log_filter_title);
 									
 								},appendItemCallback : function(el)
@@ -457,7 +451,7 @@ var WorkflowsRouter = Backbone.Router
 					$('#content').html($(template_ui));	
 
 					// Show bar graph for campaign stats
-					showBar('/core/api/campaign-stats/stats/', 'campaign-stats-chart', 'Campaigns Comparison', 'Email Stats', null);
+					showBar('/core/api/campaign-stats/stats/', 'campaign-stats-chart', _agile_get_translated_val('campaigns','campaigns-comparison'), _agile_get_translated_val('campaigns','email-stats'), null);
 
 					$(".active").removeClass("active");
 					$("#workflowsmenu").addClass("active");
@@ -654,7 +648,7 @@ var WorkflowsRouter = Backbone.Router
 
 								});
 
-								var optionsTemplate = "<option value='{{id}}'{{#if is_disabled}}disabled=disabled>{{name}} (Disabled){{else}}>{{name}}{{/if}}</option>";
+								var optionsTemplate = "<option value='{{id}}'{{#if is_disabled}}disabled=disabled>{{name}} ("+_agile_get_translated_val('campaigns','disabled')+"){{else}}>{{name}}{{/if}}</option>";
 
 								/**
 								* Shows given values when trigger selected
@@ -865,7 +859,7 @@ var WorkflowsRouter = Backbone.Router
 								 */
 								fillSelect('email-tracking-campaign-id', '/core/api/workflows?allow_campaign=' + currentTrigger.toJSON().email_tracking_campaign_id, 'workflow', function fillCampaign()
 								{
-									$('#email-tracking-campaign-id option:first').after('<option value="0">All</option>');
+									$('#email-tracking-campaign-id option:first').after('<option value="0">{{agile_lng_translate "subscriber_type" "all"}}</option>');
 
 									var value = currentTrigger.toJSON();
 									if (value)
@@ -904,7 +898,7 @@ var WorkflowsRouter = Backbone.Router
 							populate_call_trigger_options($('form#addTriggerForm', el), currentTrigger.toJSON());
 						}
 
-						var optionsTemplate = "<option value='{{id}}'{{#if is_disabled}}disabled=disabled>{{name}} (Disabled){{else}}>{{name}}{{/if}}</option>";
+						var optionsTemplate = "<option value='{{id}}'{{#if is_disabled}}disabled=disabled>{{name}} ("+_agile_get_translated_val('campaigns','disabled')+"){{else}}>{{name}}{{/if}}</option>";
 
 						/**
 						 * Fills campaign select drop down with existing

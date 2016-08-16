@@ -21,7 +21,10 @@ function getCalendarView() {
 						 *            fullCalendar
 						 * 
 						 */
-
+						monthNames: $.fn.datepicker.dates['en'].months,
+					    monthNamesShort: $.fn.datepicker.dates['en'].monthsShort,
+					    dayNames: $.fn.datepicker.dates['en'].days,
+					    dayNamesShort: $.fn.datepicker.dates['en'].daysShort,
 						events : function(start, end, callback)
 						{
 							var tasksURL = "core/api/tasks/calendar/"
@@ -60,7 +63,7 @@ function getCalendarView() {
 								$("#loading_calendar_events").remove();
 								$('.fc-header-left','#task-calendar-based-condition')
 										.append(
-												'<span id="loading_calendar_events" style="margin-left:5px;vertical-align:middle;padding-top: 5px;position: absolute;">loading...</span>')
+												'<span id="loading_calendar_events" style="margin-left:5px;vertical-align:middle;padding-top: 5px;position: absolute;">{{agile_lng_translate "tickets" "loading"}}</span>')
 										.show();
 								$('.fc-header-left','#task-calendar-based-condition').show();
 
@@ -126,7 +129,7 @@ function getCalendarView() {
 								var popover_min_width = 300;
 									
 									if (event.meeting_type && event.description){
-										meeting_type = '<i class="icon-comment-alt text-muted m-r-xs"></i><span>Meeting Type - ' + event.meeting_type + '</span><br/><span title=' + event.description + '>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + addDotsAtEnd(event.description) + '</span>';
+										meeting_type = '<i class="icon-comment-alt text-muted m-r-xs"></i><span>'+ _agile_get_translated_val('events','meeting-type') +' - ' + event.meeting_type + '</span><br/><span title=' + event.description + '>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + addDotsAtEnd(event.description) + '</span>';
 									}else if (event.description){
 										meeting_type = '<i class="icon-comment-alt text-muted m-r-xs"></i><span title=' + event.description + '>' + addDotsAtEnd(event.description) + '</span>';
 									}
@@ -327,7 +330,24 @@ function getCalendarView() {
 							$('#task-date-1').val(getDateInFormatFromEpoc(start.getTime()));
 							if(calendarView == 'agendaDay')
 							{
-								$('.new-task-timepicker').timepicker({ defaultTime : start.getHours()+':'+start.getMinutes(), showMeridian : false });
+								head.js(CSS_PATH + 'css/businesshours/jquerytimepicker.css',
+										LIB_PATH + 'lib/businesshours/jquerytimepicker.js',
+										function(){
+								 			$('.new-task-timepicker').timepicker({ 'timeFormat' : 'H:i', 'step' : 15 });
+
+								 			$('.new-task-timepicker').focus(function(){
+								 				$('#activityTaskModal').css("overflow", "hidden");
+								 			});
+								 			
+								 			$('.new-task-timepicker').blur(function(){
+								 				$('#activityTaskModal').css("overflow", "auto");
+								 			});
+		 			
+											// sets the time in time picker if it is empty
+											if ($('.new-task-timepicker').val() == '')
+												$('.new-task-timepicker').val(get_hh_mm());
+								 		}
+								);
 							}
 						},
 						/**

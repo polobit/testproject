@@ -2391,6 +2391,11 @@ transform: translateX(-50%);}
 .bg-primary .grid-icon-header:hover, .bg-primary .grid-icon-header:focus{background-color: #6658b8;}
 .bg-success .grid-icon-header:hover, .bg-success .grid-icon-header:focus{background-color: #22b846;}
 .bg-danger .grid-icon-header:hover, .bg-danger .grid-icon-header:focus{background-color: #f13f3f;}
+.editicon-option.btn-default:hover, .editicon-option.btn-default:focus{
+    background-color: #f6f6f6;
+    border-color: #dee5e7;
+  }
+
 
 
 /*end custom css code*/

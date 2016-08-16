@@ -62,6 +62,9 @@ public class RegisterVerificationServlet extends HttpServlet
 		email = URLDecoder.decode(email, "UTF-8");
 	} catch (Exception e) {
 	}
+	if(domain != null)
+		domain = domain.toLowerCase();
+
 	String userAgent = request.getHeader("User-Agent");
 
 	// AppEngine Headers

@@ -369,7 +369,7 @@ public class DealsBulkActionsAPI
 	{
 	    List<Opportunity> all_deals = OpportunityUtil.getOpportunitiesForBulkActions(ids, filters, 100);
 	    DealFilterIdsFetcher dealFilterIdsFetcher = new DealFilterIdsFetcher(all_deals, currentUserId);
-	    List<Opportunity> deals = dealFilterIdsFetcher.getDealsAfterResriction();
+	    List<Opportunity> deals = dealFilterIdsFetcher.getDealsAfterResriction(true);
 	    System.out.println("total deals -----" + deals.size());
 	    JSONArray dealIdsArray = new JSONArray();
 	    List<Opportunity> subList = new ArrayList<Opportunity>();

@@ -45,24 +45,14 @@ var Deals_Milestone_Events_Collection_View = Base_Collection_View.extend({
         var that = e.currentTarget;
         if(dealPipelineModel)
         {
-            if(!hasScope("MANAGE_DEALS"))
+            if(!hasScope("DELETE_DEALS"))
             {
-                if(dealPipelineModel[0].get('dealCollection').get(id).get('owner').id != CURRENT_DOMAIN_USER.id)
-                {
-                    $('#deal_delete_privileges_error_modal').html(getTemplate("deal-delete-privileges-error-modal")).modal('show');
-                    return;
-                }
-                else
-                {
-                    showAlertModal("delete", "confirm", function(){
-                        deleteDeal(id, milestone, dealPipelineModel, that);
-                    });
-                    return;
-                }
+                $('#deal_delete_privileges_error_modal').html(getTemplate("deal-delete-privileges-error-modal")).modal('show');
+                return;
             }
             else
             {
-                showAlertModal("delete", "confirm", function(){
+                showAlertModal("{{agile_lng_translate 'contact-details' 'delete'}}", "{{agile_lng_translate 'others' 'confirm'}}", function(){
                     deleteDeal(id, milestone, dealPipelineModel, that);
                 });
                 return;
@@ -70,7 +60,7 @@ var Deals_Milestone_Events_Collection_View = Base_Collection_View.extend({
         }
         else
         {
-            showAlertModal("delete", "confirm", function(){
+            showAlertModal("{{agile_lng_translate 'contact-details' 'delete'}}", "{{agile_lng_translate 'others' 'confirm'}}", function(){
                 deleteDeal(id, milestone, dealPipelineModel, that);
             });
             return;
@@ -137,10 +127,10 @@ var Deals_Milestone_Events_Collection_View = Base_Collection_View.extend({
             if(!template_ui)
                   return;
 
-            if(!hasScope("MANAGE_DEALS") && hasScope("VIEW_DEALS"))
+            if(!hasScope("UPDATE_DEALS") && hasScope("VIEW_DEALS"))
             {
                 showModalConfirmation("Bulk Update", 
-                        "You may not have permission to update some of the deals selected. Proceeding with this operation will update only the deals that you are permitted to update.<br/><br/> Do you want to proceed?", 
+                        "{{agile_lng_translate 'bulk-actions' 'no-perm-to-some-deals'}}<br/><br/> {{agile_lng_translate 'deal-view' 'do-you-want-to-proceed'}}", 
                         function (){
                             $("#deal_mile_change_modal").html($(template_ui)).modal("show");
                         });
@@ -227,7 +217,7 @@ var Deals_Milestone_Events_Collection_View = Base_Collection_View.extend({
     bulkDealsArchive : function(e){
         e.preventDefault();
         var template_key = "deal-bulk-archive-modal";
-        if(!hasScope("MANAGE_DEALS") && hasScope("VIEW_DEALS"))
+        if(!hasScope("UPDATE_DEALS") && hasScope("VIEW_DEALS"))
         {
             template_key = "deal-bulk-archive-acl-modal";
         }
@@ -236,7 +226,7 @@ var Deals_Milestone_Events_Collection_View = Base_Collection_View.extend({
             if(!template_ui)
                   return;
 
-            if(!hasScope("MANAGE_DEALS") && hasScope("VIEW_DEALS"))
+            if(!hasScope("UPDATE_DEALS") && hasScope("VIEW_DEALS"))
             {
                 $('#deal_bulk_archive_acl_modal').html($(template_ui)).modal("show");
             }else
@@ -267,7 +257,7 @@ var Deals_Milestone_Events_Collection_View = Base_Collection_View.extend({
     bulkDealsRestore : function(e){
         e.preventDefault();
         var template_key = "deal-bulk-restore-modal";
-        if(!hasScope("MANAGE_DEALS") && hasScope("VIEW_DEALS"))
+        if(!hasScope("UPDATE_DEALS") && hasScope("VIEW_DEALS"))
         {
             template_key = "deal-bulk-restore-acl-modal";
         }
@@ -276,7 +266,7 @@ var Deals_Milestone_Events_Collection_View = Base_Collection_View.extend({
             if(!template_ui)
                   return;
 
-            if(!hasScope("MANAGE_DEALS") && hasScope("VIEW_DEALS"))
+            if(!hasScope("UPDATE_DEALS") && hasScope("VIEW_DEALS"))
             {
                 $('#deal_bulk_restore_acl_modal').html($(template_ui)).modal("show");
             }else
@@ -307,7 +297,7 @@ var Deals_Milestone_Events_Collection_View = Base_Collection_View.extend({
     bulkDealsDelete : function(e){
         e.preventDefault();
         var template_key = "deal-bulk-delete-modal";
-        if(!hasScope("MANAGE_DEALS") && hasScope("VIEW_DEALS"))
+        if(!hasScope("DELETE_DEALS"))
         {
             template_key = "deal-bulk-delete-acl-modal";
         }
@@ -316,9 +306,10 @@ var Deals_Milestone_Events_Collection_View = Base_Collection_View.extend({
             if(!template_ui)
                   return;
 
-            if(!hasScope("MANAGE_DEALS") && hasScope("VIEW_DEALS"))
+            if(!hasScope("DELETE_DEALS"))
             {
                 $('#deal_bulk_delete_acl_modal').html($(template_ui)).modal("show");
+                return;
             }else
             {
                 $('#deal_bulk_delete_modal').html($(template_ui));
@@ -354,7 +345,7 @@ var Deals_Milestone_Events_Collection_View = Base_Collection_View.extend({
             {
                 deals_count_with_commas = deal_bulk_actions.numberWithCommas(total_available_deals - 1)+"+";
             }
-            $('body').find('#bulk-select').html("Selected " + deals_count_with_commas + " deals. <a id='select-choosen-deals' href='#'>Select choosen deals only.</a>");
+            $('body').find('#bulk-select').html("{{agile_lng_translate 'companies-view' 'selected'}} " + deals_count_with_commas + " {{agile_lng_translate 'deals' 'deals-sm'}}. <a id='select-choosen-deals' href='#'>{{agile_lng_translate 'bulk-actions' 'select-choosen'}}</a>");
         });
     },
 
@@ -368,7 +359,7 @@ var Deals_Milestone_Events_Collection_View = Base_Collection_View.extend({
             {
                 deals_count_with_commas = deal_bulk_actions.numberWithCommas(total_available_deals - 1)+"+";
             }
-            $('body').find('#bulk-select').html("Selected " + deal_bulk_actions.numberWithCommas(App_Deals.opportunityCollectionView.collection.length) + " deals. <a id='select-all-available-deals' class='text-info' href='#'>Select all " + deals_count_with_commas + " deals</a>");
+            $('body').find('#bulk-select').html("{{agile_lng_translate 'companies-view' 'selected'}} " + deal_bulk_actions.numberWithCommas(App_Deals.opportunityCollectionView.collection.length) + " {{agile_lng_translate 'deals' 'deals-sm'}}. <a id='select-all-available-deals' class='text-info' href='#'>{{agile_lng_translate 'portlets' 'select-all'}} " + deals_count_with_commas + " {{agile_lng_translate 'deals' 'deals-sm'}}</a>");
         });
     }
 });
@@ -449,7 +440,7 @@ var Deals_Filter_Change_Events_Collection_View = Base_Collection_View.extend({
 
             if(filter_id && filter_id == 'my-deals'){
                 $('#opportunity-listners').find('h3').find('.remove_deal_filter').parent().remove();
-                $('#opportunity-listners').find('h3').find('small').after('<div class="inline-block tag btn btn-xs btn-primary m-l-xs"><span class="inline-block m-r-xs v-middle pull-left">My Deals</span><a class="close remove_deal_filter">×</a></div>');
+                $('#opportunity-listners').find('h3').find('small').after('<div class="inline-block tag btn btn-xs btn-primary m-l-xs"><span class="inline-block m-r-xs v-middle pull-left">{{agile_lng_translate "portlets" "my-deals"}}</span><a class="close remove_deal_filter">×</a></div>');
             }
             startGettingDeals();
             setupTracksAndMilestones($('#opportunity-listners'));

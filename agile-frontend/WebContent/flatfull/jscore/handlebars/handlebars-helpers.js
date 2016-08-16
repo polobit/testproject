@@ -505,7 +505,7 @@ $(function()
 				{
 					return last_name;
 				}
-				return "Contact";
+				return "{{agile_lng_translate 'menu' 'contact'}}";
 			}
 			else
 			{
@@ -514,7 +514,7 @@ $(function()
 					if (contact_properties[i].name == "name")
 						return contact_properties[i].value;
 				}
-				return "Company";
+				return "{{agile_lng_translate 'menu' 'company'}}";
 			}
 		} else if (App_Companies.companyDetailView && App_Companies.companyDetailView.model)
 		{
@@ -525,7 +525,7 @@ $(function()
 				if (contact_properties[i].name == "name")
 					return contact_properties[i].value;
 			}
-			return "Company";
+			return "{{agile_lng_translate 'menu' 'company'}}";
 		}
 	});
 	
@@ -562,7 +562,7 @@ $(function()
 	{
 
 		if (value == "FOLLOW_UP")
-			return "Follow Up";
+			return "{{agile_lng_translate 'tasks' 'Follow Up'}}";
 		else
 			return ucfirst(value);
 
@@ -715,7 +715,7 @@ $(function()
 										{
 											if (count == 1 && key == "")
 											{
-												html += '<div class="alert-info alert"><div class="slate-content"><div class="box-left pull-left m-r-md"><img alt="Clipboard" src="'+updateImageS3Path("/img/clipboard.png")+'"></div><div class="box-right pull-left"><h4 class="m-t-none">You have no milestones defined</h4><br><a href="#milestones" class="btn btn-default btn-sm m-t-xs"><i class="icon icon-plus-sign"></i> Add Milestones</a></div><div class="clearfix"></div></div></div>';
+												html += '<div class="alert-info alert"><div class="slate-content"><div class="box-left pull-left m-r-md"><img alt="Clipboard" src="'+updateImageS3Path("/img/clipboard.png")+'"></div><div class="box-right pull-left"><h4 class="m-t-none">{{agile_lng_translate "deals" "no-milestone"}}</h4><br><a href="#milestones" class="btn btn-default btn-sm m-t-xs"><i class="icon icon-plus-sign"></i> Add Milestones</a></div><div class="clearfix"></div></div></div>';
 											}
 											else
 											{
@@ -738,8 +738,8 @@ $(function()
 					function(data)
 					{
 						var html = "";
-						var wonMsg = 'Deals with this milestone are considered as Won.';
-						var lostMsg = 'Deals with this milestone are considered as Lost.';
+						var wonMsg = '{{agile_lng_translate "admin-settings-deals" "won-message"}}';
+						var lostMsg = '{{agile_lng_translate "admin-settings-deals" "lost-message"}}';
 						// var html = "<ul class='milestone-value-list
 						// tagsinput' style='padding:1px;list-style:none;'>";
 						if (data)
@@ -750,19 +750,19 @@ $(function()
 								html += "<tr data='" + milestones[i] + "' style='display: table-row;'><td><div class='milestone-name-block inline-block v-top text-ellipsis' style='width:80%'>";
 								if(milestones[i] == data.won_milestone){
 									html += milestones[i] + "<i data-toogle='tooltip' title='"+wonMsg+"' class='icon-like mark-won m-l-sm'></i></div></td><td class='b-r-none'><div class='m-b-n-xs'>";
-									html += "<a class='milestone-won text-l-none-hover c-p text-xs hover-show disabled' style='visibility:hidden;' data-toggle='tooltip' title='Set as Won Milestone'><i class='icon-like'></i></a>";
-									html += "<a class='milestone-lost text-l-none-hover c-p text-xs m-l-sm not-applicable hover-show' style='visibility:hidden;' data-toggle='tooltip' title='Set as Lost Milestone'><i class='icon-dislike'></i></a>";
+									html += "<a class='milestone-won text-l-none-hover c-p text-xs hover-show disabled' style='visibility:hidden;' data-toggle='tooltip' title='{{agile_lng_translate 'admin-settings-deals' 'set-as-won-milestone'}}'><i class='icon-like'></i></a>";
+									html += "<a class='milestone-lost text-l-none-hover c-p text-xs m-l-sm not-applicable hover-show' style='visibility:hidden;' data-toggle='tooltip' title='{{agile_lng_translate 'admin-settings-deals' 'set-as-lost-milestone'}}'><i class='icon-dislike'></i></a>";
 								} else if(milestones[i] == data.lost_milestone){
 									html += milestones[i] + "<i data-toogle='tooltip' title='"+lostMsg+"' class='icon-dislike mark-lost m-l-sm'></i></div></td><td class='b-r-none'><div class='m-b-n-xs'>";
-									html += "<a class='milestone-won text-l-none-hover c-p text-xs not-applicable hover-show' style='visibility:hidden;' data-toggle='tooltip' title='Set as Won Milestone'><i class='icon-like'></i></a>";
-									html += "<a class='milestone-lost text-l-none-hover c-p text-xs m-l-sm hover-show disabled' style='visibility:hidden;' data-toggle='tooltip' title='Set as Lost Milestone'><i class='icon-dislike'></i></a>";
+									html += "<a class='milestone-won text-l-none-hover c-p text-xs not-applicable hover-show' style='visibility:hidden;' data-toggle='tooltip' title='{{agile_lng_translate 'admin-settings-deals' 'set-as-won-milestone'}}'><i class='icon-like'></i></a>";
+									html += "<a class='milestone-lost text-l-none-hover c-p text-xs m-l-sm hover-show disabled' style='visibility:hidden;' data-toggle='tooltip' title='{{agile_lng_translate 'admin-settings-deals' 'set-as-lost-milestone'}}'><i class='icon-dislike'></i></a>";
 								} else{
 									html += milestones[i] + "</div></td><td class='b-r-none'><div class='m-b-n-xs'>";
-									html += "<a class='milestone-won text-l-none-hover c-p text-xs hover-show' style='visibility:hidden;' data-toggle='tooltip' title='Set as Won Milestone'><i class='icon-like'></i></a>";
-									html += "<a class='milestone-lost text-l-none-hover c-p text-xs m-l-sm hover-show' style='visibility:hidden;' data-toggle='tooltip' title='Set as Lost Milestone'><i class='icon-dislike'></i></a>";
+									html += "<a class='milestone-won text-l-none-hover c-p text-xs hover-show' style='visibility:hidden;' data-toggle='tooltip' title='{{agile_lng_translate 'admin-settings-deals' 'set-as-won-milestone'}}'><i class='icon-like'></i></a>";
+									html += "<a class='milestone-lost text-l-none-hover c-p text-xs m-l-sm hover-show' style='visibility:hidden;' data-toggle='tooltip' title='{{agile_lng_translate 'admin-settings-deals' 'set-as-lost-milestone'}}'><i class='icon-dislike'></i></a>";
 								}
-								html +=	"<a class='milestone-delete c-p m-l-sm text-l-none text-xs hover-show' style='visibility:hidden;' data-toggle='tooltip' title='Delete Milestone'><i class='icon icon-trash'></i>" +
-										"</a><a class='text-l-none-hover c-p text-xs m-l-sm hover-show' style='visibility:hidden;'><i title='Drag' class='icon-move'></i></a></div></td></tr>";
+								html +=	"<a class='milestone-delete c-p m-l-sm text-l-none text-xs hover-show' style='visibility:hidden;' data-toggle='tooltip' title='{{agile_lng_translate 'admin-settings-deals' 'delete-milestone'}}'><i class='icon icon-trash'></i>" +
+										"</a><a class='text-l-none-hover c-p text-xs m-l-sm hover-show' style='visibility:hidden;'><i title='{{agile_lng_translate 'admin-settings-custom-fields' 'drag'}}' class='icon-move'></i></a></div></td></tr>";
 								// html += "<li data='" + milestones[i] +
 								// "'><div><span>" + milestones[i] + "</span><a
 								// class='milestone-delete right'
@@ -785,9 +785,9 @@ $(function()
 		if (!date)
 			return;
 
+		console.log(format + " : " + date);
 		if ((date / 100000000000) > 1)
 		{
-			console.log(new Date(parseInt(date)).format(format));
 			return new Date(parseInt(date)).format(format, 0);
 		}
 		// date form milliseconds
@@ -856,7 +856,7 @@ $(function()
 	Handlebars.registerHelper('dateFormat', function()
 	{
 
-		return "Select Date";
+		return _agile_get_translated_val("contacts", "select-date");
 		
 	});
 
@@ -935,7 +935,7 @@ $(function()
 				"Jan", "Feb", "March", "April", "May", "June", "July", "Aug", "Sept", "Oct", "Nov", "Dec"
 		];
 
-		return (monthArray[intMonth] + " " + intDay);
+		return (_agile_get_translated_val("months-xs", monthArray[intMonth]) + " " + intDay);
 	});
 
 	/**
@@ -985,9 +985,9 @@ $(function()
 	Handlebars.registerHelper('network', function(type)
 	{
 		if (type == 'GOOGLE')
-			return 'Google Drive';
+			return '{{agile_lng_translate "documents" "google-drive"}}';
 		if (type == 'S3')
-			return 'Uploaded Doc';
+			return '{{agile_lng_translate "documents" "uploaded-doc"}}';
 	});
 
 	/**
@@ -1027,7 +1027,7 @@ $(function()
 					"Jan", "Feb", "March", "April", "May", "June", "July", "Aug", "Sept", "Oct", "Nov", "Dec"
 			];
 
-			return (monthArray[intMonth] + " " + intDay + ", " + intYear);
+			return (_agile_get_translated_val("months-xs", monthArray[intMonth]) + " " + intDay + ", " + intYear);
 		}
 	});
 
@@ -1150,8 +1150,9 @@ $(function()
 			element = element.replace("_", " ");
 			cls = "";
 	 	}
-	 
-	 		el = el.concat('<th class="'+ cls +'">' + ucfirst(element) + '</th>');	
+	 	
+	 	element = getTableLanguageConvertHeader(element);
+	 	el = el.concat('<th class="'+ cls +'">' + ucfirst(element) + '</th>');	
 	  
 	 });
 		return new Handlebars.SafeString(el);
@@ -1207,6 +1208,8 @@ $(function()
 		if (!value)
 			return;
 
+		// CALL_DONE,CALL_FAILED,UPDATE_DEAL,EMAIL_QUEUED, EMAIL_SENT, EMAIL_OPENED, EMAIL_CLICKED, EMAIL_REPLIED,EMAIL_HARD_BOUNCED, EMAIL_SPAM, EMAIL_SOFT_BOUNCED, WAIT, CLICKED, OPENED, AB, URL_VISITED, TWEET, ADD_NOTE, TAGS, CHECK_TAGS, CONDITION, JSONIO, SCORE, SET_OWNER, ADD_TASK, ADD_DEAL, ADD_CASE, TRANSFER, GENDER, EMAIL_NOT_REPLIED, CHANGED_DEAL_MILESTONE, EMAIL_SLEEP, EMAIL_SENDING_FAILED, EMAIL_SENDING_SKIPPED, UNSUBSCRIBED, SET_PROPERTY, CAMPAIGN_STOPPED, WAIT_TILL, SMS_SENT, SMS_FAILED, SMS_LINK_CLICKED, TWEET_LINK_CLICKED, UNSUBSCRIBE, CLOSED_TASK, ADD_EVENT, SET_PROPERTY_FAILED,  TICKET_STATUS, TICKET_ASSIGNEE_CHANGED, TICKET_EMAIL_GROUP, TICKET_EMAIL_USER, TICKET_GROUP_CHANGED, TICKET_LABELS, TICKET_PRIORITY, TICKET_TYPE, TICKET_SET_SLA
+
 		var str = value.replace(/_/g, ' ');
 		return ucfirst(str.toLowerCase());
 
@@ -1217,6 +1220,21 @@ $(function()
 		if (!actions)
 			return;
 
+		var action_types = {
+			"MODAL_POPUP" : "{{agile_lng_translate 'web-rules' 'modal-popup'}}",
+			"CORNER_NOTY" : "{{agile_lng_translate 'web-rules' 'noty-message'}}",
+			"CALL_POPUP" : "{{agile_lng_translate 'webrules' 'call-popup'}}",
+			"SITE_BAR" : "{{agile_lng_translate 'webrules' 'site-bar'}}",
+			"ASSIGN_CAMPAIGN" : "{{agile_lng_translate 'contact-details' 'add-to-campaign'}}",
+			"UNSUBSCRIBE_CAMPAIGN" : "{{agile_lng_translate 'contact-details' 'remove-from-campaign'}}",
+			"ADD_TAG" : "{{agile_lng_translate 'web-rules' 'add-tag'}}",
+			"REMOVE_TAG" : "{{agile_lng_translate 'web-rules' 'remove-tag'}}",
+			"ADD_SCORE" : "{{agile_lng_translate 'web-rules' 'add-score'}}",
+			"SUBTRACT_SCORE" : "{{agile_lng_translate 'web-rules' 'substract-score'}}",
+			"JAVA_SCRIPT" : "{{agile_lng_translate 'web-rules' 'java-script'}}",	
+		};
+		
+
 		var actions_count = actions.length;
 
 		var el = '<div class="table-resp">';
@@ -1225,10 +1243,10 @@ $(function()
 		{
 			if (--actions_count == 0)
 			{
-				el = el.concat(titleFromEnums(val.action));
+				el = el.concat(titleFromEnums(action_types[val.action] ? action_types[val.action] : val.action));
 				return;
 			}
-			el = el.concat(titleFromEnums(val.action) + ", ");
+			el = el.concat(titleFromEnums(action_types[val.action] ? action_types[val.action] : val.action) + ", ");
 		});
 
 		el = el.concat('</div>');
@@ -1238,8 +1256,43 @@ $(function()
 
 	Handlebars.registerHelper('triggerType', function(value)
 	{
+		var trigger_types = {
+			"TAG_IS_ADDED" : "{{agile_lng_translate 'campaigns' 'tag-is-added'}}",
+	        "TAG_IS_DELETED" : "{{agile_lng_translate 'campaigns' 'tag-is-deleted'}}",
+			"CONTACT_IS_ADDED" : "{{agile_lng_translate 'campaigns' 'contact-is-added'}}",
+	        "DEAL_IS_ADDED" : "{{agile_lng_translate 'campaigns' 'deal-is-added'}}",
+	        "DEAL_IS_DELETED" : "{{agile_lng_translate 'campaigns' 'deal-is-deleted'}}",
+	        "DEAL_MILESTONE_IS_CHANGED" : "{{agile_lng_translate 'campaigns' 'deal-milestone-is-changed'}}",
+			"RUNS_DAILY" : "{{agile_lng_translate 'portlets' 'daily'}}",
+	        "RUNS_WEEKLY" : "{{agile_lng_translate 'portlets' 'weekly'}}",
+	        "RUNS_MONTHLY" : "{{agile_lng_translate 'portlets' 'monthly'}}",
+			"STRIPE_CHARGE_EVENT" : "{{agile_lng_translate 'campaigns' 'stripe-event'}}",
+			"INBOUND_MAIL_EVENT"  : "{{agile_lng_translate 'campaigns' 'new-email'}}",
+			"EMAIL_OPENED" : "{{agile_lng_translate 'contact-details' 'email-opened'}}",
+			"EMAIL_LINK_CLICKED" : "{{agile_lng_translate 'campaigns' 'email-link-clicked'}}",
+			"UNSUBSCRIBED" : "{{agile_lng_translate 'contacts-view' 'unsubscribed'}}",
+			"SOFT_BOUNCE" : "{{agile_lng_translate 'campaigns' 'soft-bounce'}}",
+			"HARD_BOUNCE" : "{{agile_lng_translate 'campaigns' 'hard-bounce'}}",
+			"SPAM_REPORT" : "{{agile_lng_translate 'campaigns' 'spam-report'}}",
+			"EVENT_IS_ADDED" : "{{agile_lng_translate 'campaigns' 'event-is-added'}}",
+			"INBOUND_CALL" : "{{agile_lng_translate 'campaigns' 'inbound-call'}}",
+			"OUTBOUND_CALL" : "{{agile_lng_translate 'campaigns' 'outbound-call'}}",
+			"SHOPIFY_EVENT" : "{{agile_lng_translate 'campaigns' 'shopify-event'}}",
+			"FORM_SUBMIT" : "{{agile_lng_translate 'campaigns' 'form-submit'}}",
+			"NEW_TICKET_IS_ADDED" : "{{agile_lng_translate 'campaigns' 'new-ticket-is-added'}}",
+			"TICKET_NOTE_ADDED_BY_USER" : "{{agile_lng_translate 'campaigns' 'note-is-added-by-user'}}",
+			"TICKET_NOTE_ADDED_BY_CUSTOMER" : "{{agile_lng_translate 'campaigns' 'note-is-added-by-customer'}}",
+			"TICKET_IS_CLOSED" : "{{agile_lng_translate 'campaigns' 'ticket-is-closed'}}",
+			"TICKET_SLA_REACHED" : "{{agile_lng_translate 'campaigns' 'sla-reached'}}",
+			"TICKET_ASSIGNEE_CHANGED" : "{{agile_lng_translate 'campaigns' 'ticket-assignee-changed'}}",
+			"TICKET_LABEL_IS_ADDED" : "{{agile_lng_translate 'campaigns' 'ticket-label-is-added'}}",
+			"TICKET_LABEL_IS_DELETED" : "{{agile_lng_translate 'campaigns' 'ticket-label-is-deleted'}}",
+		};
 		if (value == 'ADD_SCORE')
-			return value.replace('ADD_SCORE', 'Score (>=)');
+			return value.replace('ADD_SCORE', '{{agile_lng_translate "deals" "score-g-o-e"}}');
+
+		if(trigger_types[value])
+			return titleFromEnums(trigger_types[value]);
 
 		return titleFromEnums(value);
 	});
@@ -1403,25 +1456,6 @@ $(function()
 		
 		return options.inverse(this);
 	});
-
-
-	/*Handlebars.registerHelper('property_json_is_remote_addr', function(name, properties, options)
-	{
-
-        var value = getPropertyValue(properties, name);
-        if(!value)
-        {
-        	return options.inverse(this);
-        }
-        try{
-        	value = JSON.parse(value);
-        }catch(e){}
-
-		if (value && Object.keys(value) && Object.keys(value).length == 1 && value.remote_add!=undefined)
-			return options.fn(this);
-		
-		return options.inverse(this);
-	});*/
 
 	/**
 	 * returns online scheduling url of current user
@@ -1655,6 +1689,8 @@ $(function()
 				value = "Updated Date";
 
 			value = value.replace("_", " ");
+			// I18n conversion
+			value = getTableLanguageConvertHeader(value);
 
 			if (--count == 0)
 			{
@@ -1758,7 +1794,7 @@ $(function()
 	{
 		var val = value.split("_").join("").trim().toLowerCase();
 		if (val == "yettostart")
-			return "Not Started";
+			return _agile_get_translated_val("misc-keys", "yet-to-start");
 		else
 			return ucfirst(value.split("_").join(" ").trim());
 
@@ -1848,15 +1884,6 @@ $(function()
 	Handlebars.registerHelper("getBase64ActualDomain", function()
 			{
 				return window.btoa(CURRENT_DOMAIN_USER.domain);
-	});
-
-	// Gets date in given range
-	Handlebars.registerHelper('date-range', function(from_date_string, no_of_days, options)
-	{
-		var from_date = Date.parse(from_date_string);
-		var to_date = Date.today().add({ days : parseInt(no_of_days) });
-		return to_date.toString('MMMM d, yyyy') + " - " + from_date.toString('MMMM d, yyyy');
-
 	});
 
 	Handlebars.registerHelper("extractEmail", function(content, options)
@@ -2135,11 +2162,11 @@ $(function()
 		var min = Math.floor(sec / 60);
 
 		if (min < 1)
-			return Math.ceil(sec) + " secs";
+			return Math.ceil(sec) + " {{agile_lng_translate 'misc-keys' 'mins'}}";
 
 		var remainingSec = Math.ceil(sec % 60);
 
-		return min + " mins, " + remainingSec + " secs";
+		return min + " {{agile_lng_translate 'misc-keys' 'mins'}}, " + remainingSec + " {{agile_lng_translate 'misc-keys' 'secs'}}";
 	});
 
 	Handlebars.registerHelper('if_overflow', function(content, div_height, options)
@@ -2336,7 +2363,7 @@ $(function()
 						if (search[i].indexOf('q=') != -1)
 						{
 							search = search[i].split('=');
-							return new Handlebars.SafeString('( Keyword : ' + search[1].split('+').join(" ") + ' )');
+							return new Handlebars.SafeString('( {{agile_lng_translate "search" "keyword"}} : ' + search[1].split('+').join(" ") + ' )');
 						}
 					}
 				}
@@ -2367,7 +2394,7 @@ $(function()
 					return properties[i].value;
 			}
 
-			return "Contact";
+			return "{{agile_lng_translate 'menu' 'contact'}}";
 		}
 
 		// COMPANY type
@@ -2376,7 +2403,7 @@ $(function()
 			if (properties[i].name === "name")
 				return properties[i].value;
 		}
-		return "Company";
+		return "{{agile_lng_translate 'menu' 'company'}}";
 	});
 
 	/**
@@ -2696,17 +2723,7 @@ $(function()
 		if (!name)
 			return;
 
-		var name_json = { "HIGH" : "High", "LOW" : "Low", "NORMAL" : "Normal", "EMAIL" : "Email", "CALL" : "Call", "SEND" : "Send", "TWEET" : "Tweet",
-			"FOLLOW_UP" : "Follow Up", "MEETING" : "Meeting", "MILESTONE" : "Milestone", "OTHER" : "Other", "YET_TO_START" : "Yet To Start",
-			"IN_PROGRESS" : "In Progress", "COMPLETED" : "Completed", "TODAY" : "Today", "TOMORROW" : "Tomorrow", "OVERDUE" : "Overdue", "LATER" : "Later" };
-
-		name = name.trim();
-
-		if (name_json[name])
-			return name_json[name];
-
-		return name;
-
+		return getTranslatedPortletName(name);
 	});
 	/** put the users according to the plan
 	*/
@@ -2717,10 +2734,10 @@ $(function()
 		var temp = plantype[0].toLowerCase();
 		
 		if(plantype.length == 1)
-		var string = plan.quantity + " Users  " + temp.charAt(0).toUpperCase() + temp.slice(1);
+		var string = plan.quantity + " {{agile_lng_translate 'admin-settings' 'users'}}  " + temp.charAt(0).toUpperCase() + temp.slice(1);
 		else{
 			var temp1 = plantype[1].toLowerCase();
-			var string = plan.quantity + " Users  " + temp.charAt(0).toUpperCase() + temp.slice(1) + " (" + temp1.charAt(0).toUpperCase() +temp1.slice(1)+ ")";
+			var string = plan.quantity + " {{agile_lng_translate 'admin-settings' 'users'}}  " + temp.charAt(0).toUpperCase() + temp.slice(1) + " (" + temp1.charAt(0).toUpperCase() +temp1.slice(1)+ ")";
 		}
 		
 		return string;
@@ -2752,7 +2769,7 @@ $(function()
 		return value.trim();
 	});
 
-	/**
+/**
 	 * Returns reputation name based on value
 	 * 
 	 */
@@ -2765,25 +2782,25 @@ $(function()
 		if (value > 1 && value < 40)
 		{
 			type = "label-danger text-tiny";
-			reputation = "Poor";
+			reputation = "{{agile_lng_translate 'reputation' 'Poor'}}";
 			badge="progress-bar-danger";
 		}
 		else if (value >= 40 && value < 75)
 		{
 			type = "label-warning text-tiny";
-			reputation = "Ok";
+			reputation = "{{agile_lng_translate 'reputation' 'Ok'}}";
 			badge="progress-bar-warning";
 		}
 		else if (value >= 75 && value < 90)
 		{
 			type = "label-primary text-tiny";
-			reputation = "Good";
+			reputation = "{{agile_lng_translate 'reputation' 'Good'}}";
 			badge="progress-bar-info";
 		}
 		else if (value >= 90)
 		{
 			type = "label-success text-tiny";
-			reputation = "Excellent";
+			reputation = "{{agile_lng_translate 'reputation' 'Excellent'}}";
 			badge="progress-bar-success"
 		}
 		var data = {'type':type, 'reputation':reputation, 'value':value,'badge':badge};
@@ -2791,7 +2808,6 @@ $(function()
 		return html;
 
 	});
-
 
 	/**
 	 * Returns id from hash. It returns id from hash iff id exists at last.
@@ -2858,7 +2874,7 @@ $(function()
 
 	Handlebars.registerHelper('xeroType', function(type)
 	{
-		return (type == "ACCPAY") ? "Payable" : "Receivable";
+		return (type == "ACCPAY") ? "{{agile_lng_translate 'widgets' 'payable'}}" : "{{agile_lng_translate 'widgets' 'receivable'}}";
 	});
 
 	/**
@@ -2866,7 +2882,7 @@ $(function()
 	 */
 	Handlebars.registerHelper('xeroTypeToolTip', function(type)
 	{
-		return (type == "ACCPAY") ? "Payable" : "Receivable";
+		return (type == "ACCPAY") ? "{{agile_lng_translate 'widgets' 'payable'}}" : "{{agile_lng_translate 'widgets' 'receivable'}}";
 	});
 
 	/**
@@ -3214,10 +3230,13 @@ $(function()
 		var monthArray = [
 				"January", "february", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"
 		];
+		var name = "";
 		if (month_index > 12)
-			return monthArray[11];
+			name = monthArray[11];
 
-		return monthArray[month_index - 1];
+		name =  monthArray[month_index - 1];
+
+		return _agile_get_translated_val("months", name);
 	});
 
 	Handlebars.registerHelper('xeroOrganisationShortCode', function(block)
@@ -3294,48 +3313,6 @@ $(function()
 
 	});
 
-	function getCustomFormatedDate(date)
-	{
-
-		var months = [
-				'Jan', 'Feb', 'March', 'April', 'May', 'Jun', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'
-		];
-
-		if (!date)
-			return;
-
-		if ((date / 100000000000) > 1)
-		{
-			var d = new Date(parseInt(date));
-			var hours = d.getHours();
-			var year = d.getFullYear();
-			var date = d.getDate();
-			var month = d.getMonth();
-			var min = d.getMinutes();
-			if (min == 0)
-				min = "00"
-			var ampm = hours >= 12 ? "PM" : "AM";
-			if (hours > 12)
-				hours = hours - 12;
-			return months[month] + " " + date + ", " + year + " " + hours + ":" + min + " " + ampm;
-
-		}
-		// date form milliseconds
-
-		var d = new Date(parseInt(date) * 1000);
-		var hours = d.getHours();
-		var year = d.getFullYear();
-		var date = d.getDate();
-		var month = d.getMonth();
-		var min = d.getMinutes();
-		if (min == 0)
-			min = "00"
-		var ampm = hours >= 12 ? "PM" : "AM";
-		if (hours > 12)
-			hours = hours - 12;
-		return months[month] + " " + date + ", " + year + " " + hours + ":" + min + " " + ampm;
-
-	}
 	function extractTimeFromDate(date)
 	{
 		if (!date)
@@ -3489,42 +3466,6 @@ $(function()
 	{
 		if (value)
 			return value.toFixed(2).toString().replace(/\B(?=(?:\d{3})+(?!\d))/g, ",").replace('.00', '');
-	});
-
-	/**
-	 * Converts reports/view field element as comma seprated values and returns
-	 * as handlebars safe string.
-	 */
-	Handlebars.registerHelper('field_Element', function(properties)
-	{
-		var el = "";
-		var count = properties.length;
-
-		$.each(properties, function(key, value)
-		{
-
-			if (value.indexOf("properties_") != -1)
-				value = value.split("properties_")[1];
-			else if (value.indexOf("custom_") != -1)
-				value = value.split("custom_")[1];
-			else if (value.indexOf("CUSTOM_") != -1)
-				value = value.split("CUSTOM_")[1];
-			else if (value == "created_time")
-				value = "Created Date";
-			else if (value == "updated_time")
-				value = "Updated Date";
-
-			value = value.replace("_", " ");
-
-			if (--count == 0)
-			{
-				el = el.concat(value);
-				return;
-			}
-			el = el.concat(value + ", ");
-		});
-
-		return new Handlebars.SafeString(el);
 	});
 
 	/**
@@ -3691,13 +3632,13 @@ $(function()
 						{
 
 							if (this[0].count > 9999 && (_agile_get_prefs('contact_filter') || _agile_get_prefs('dynamic_contact_filter')))
-								count_message = "<small> (" + 10000 + "+ Total) </small>" + '<span style="vertical-align: text-top; margin-left: -5px">' + '<img border="0" src="'+updateImageS3Path("/img/help.png")+'"' + 'style="height: 10px; vertical-align: middle" rel="popover"' + 'data-placement="bottom" data-title="Lead Score"' + 'data-content="Looks like there are over 10,000 results. Sorry we can\'t give you a precise number in such cases."' + 'id="element" data-trigger="hover">' + '</span>';
+								count_message = "<small> (" + 10000 + "+ " + _agile_get_translated_val('other','total') + " ) </small>" + '<span style="vertical-align: text-top; margin-left: -5px">' + '<img border="0" src="'+updateImageS3Path("/img/help.png")+'"' + 'style="height: 10px; vertical-align: middle" rel="popover"' + 'data-placement="bottom" data-title="Lead Score"' + 'data-content="'+_agile_get_translated_val('results','over-count')+'"' + 'id="element" data-trigger="hover">' + '</span>';
 
 							else
-								count_message = "<small> (" + this[0].count + " Total) </small>";
+								count_message = "<small> (" + this[0].count + " " + _agile_get_translated_val('other','total') + " ) </small>";
 						}
 						else
-							count_message = "<small> (" + this.length + " Total) </small>";
+							count_message = "<small> (" + this.length + " " + _agile_get_translated_val('other','total')+ " ) </small>";
 
 						return new Handlebars.SafeString(count_message);
 					});
@@ -3708,10 +3649,10 @@ $(function()
 		if (this[0] && this[0].count && (this[0].count != -1))
 		{
 			var count = this[0].count - 1;
-			count_message = "<small> (" + count + " Total) </small>";
+			count_message = "<small> (" + count + " " + _agile_get_translated_val('other','total') +" ) </small>";
 		}
 		else
-			count_message = "<small> (" + this.length + " Total) </small>";
+			count_message = "<small> (" + this.length + " " + _agile_get_translated_val('other','total') + " ) </small>";
 
 		return new Handlebars.SafeString(count_message);
 	});
@@ -3786,7 +3727,7 @@ $(function()
 	Handlebars.registerHelper('tl_log_string', function(string)
 	{
 
-		return string.replace("Sending email From:", "Email sent From:");
+		return string.replace("Sending email From:", "{{agile_lng_translate 'timeline' 'email-sent-from'}}:");
 	});
 
 	/**
@@ -3919,9 +3860,9 @@ $(function()
 			val = value[0].count;
 
 		if (val <= 20)
-			return "Workflows";
+			return "{{agile_lng_translate 'campaigns' 'workflows'}}";
 
-		return "(" + val + " Total)";
+		return "(" + val + _agile_get_translated_val('other','total')+ " )";
 	});
 
 	/**
@@ -4281,22 +4222,6 @@ $(function()
 		return ret;
 	});
 
-	// Gets minutes from milli seconds
-	Handlebars.registerHelper('millSecondsToMinutes', function(timeInMill)
-	{
-		if (isNaN(timeInMill))
-			return;
-		var sec = timeInMill / 1000;
-		var min = Math.floor(sec / 60);
-
-		if (min < 1)
-			return Math.ceil(sec) + " secs";
-
-		var remainingSec = Math.ceil(sec % 60);
-
-		return min + " mins, " + remainingSec + " secs";
-	});
-
 	Handlebars.registerHelper('if_overflow', function(content, div_height, options)
 	{
 
@@ -4538,7 +4463,7 @@ $(function()
 					return properties[i].value;
 			}
 
-			return "Contact";
+			return "{{agile_lng_translate 'menu' 'contact'}}";
 		}
 
 		// COMPANY type
@@ -4547,7 +4472,7 @@ $(function()
 			if (properties[i].name === "name")
 				return properties[i].value;
 		}
-		return "Company";
+		return "{{agile_lng_translate 'menu' 'company'}}";
 	});
 
 	/**
@@ -4833,46 +4758,16 @@ $(function()
 	});
 
 	/**
-	 * Get task list name without underscore and caps, for new task UI.
-	 */
-	Handlebars.registerHelper('get_normal_name', function(name)
-	{
-		if (!name)
-			return;
-
-		var name_json = { "HIGH" : "High", "LOW" : "Low", "NORMAL" : "Normal", "YET_TO_START" : "Yet To Start",
-			"IN_PROGRESS" : "In Progress", "COMPLETED" : "Completed", "TODAY" : "Today", "TOMORROW" : "Tomorrow", "OVERDUE" : "Overdue", "LATER" : "Later" };
-
-		$.extend(name_json,categories.CATEGORIES,name_json);
-
-		name = name.trim();
-
-		if (name_json[name])
-			return name_json[name];
-
-		return name;
-
-	});
-
-	/**
 	 * Get activity type without underscore and caps, for deal _details page.
 	 */
 	Handlebars.registerHelper('get_normal_activity_type', function(name)
 	{
 		if (!name)
 			return;
-
-		var name_json = { "DEAL_ADD" : "Deal Created", "DEAL_EDIT" : "Deal Edited", "DEAL_CLOSE" : "Deal Closed", "DEAL_LOST" : "Deal Lost",
-			"DEAL_RELATED_CONTACTS" : " Deal Contacts Changed", "DEAL_OWNER_CHANGE" : "Deal Owner Changed", "DEAL_MILESTONE_CHANGE" : "Deal Milestone Changed",
-			"DEAL_ARCHIVE" : "Deal Archived", "DEAL_RESTORE" : "Deal Restored","DEAL_TAG_CHANGE" : "Deal Tags Changed","DEAL_TAG_ADD" : "Deal Tags Added","DEAL_TAG_DELETE" : "Deal Tags Deleted",
-			"User_Email_Changed" : "User email","User_Name_Changed" :"User Name Changed","User_Created" : "New User Created","User_Deleted" : "User Deleted","User_Permissions_Change" : "User Permissions Changed",
-
-			"NOTE_ADD" : "Note Added", "TASK_ADD" : "Task Created", "TASK_EDIT" : "Task Updated", "TASK_PROGRESS_CHANGE" : "Progress Changed",
-			"TASK_OWNER_CHANGE" : "Owner Changed", "TASK_STATUS_CHANGE" : "Status Changed", "TASK_COMPLETED" : "Task Completed",
-			"TASK_DELETE" : "Task Deleted", "TASK_RELATED_CONTACTS" : "Contacts Modified" };
-
+	
 		name = name.trim();
 
+		var name_json = _agile_get_translated_val("activity_type");
 		if (name_json[name])
 			return name_json[name];
 
@@ -4917,28 +4812,30 @@ $(function()
 					function(value)
 					{
 						var type = "bg-light dk text-tiny";
-						var reputation = "Unknown";
+						var reputation = "{{agile_lng_translate 'report-add' 'unknown'}}";
 
 						if (value > 1 && value < 40)
 						{
 							type = "label-danger text-tiny";
-							reputation = "Poor";
+							reputation = "{{agile_lng_translate 'reputation' 'Poor'}}";
 						}
 						else if (value >= 40 && value < 75)
 						{
 							type = "bg-light text-tiny";
-							reputation = "Ok";
+							reputation = "{{agile_lng_translate 'reputation' 'Ok'}}";
 						}
 						else if (value >= 75 && value < 90)
 						{
 							type = "label-success";
-							reputation = "Good";
+							reputation = "{{agile_lng_translate 'reputation' 'Good'}}";
 						}
 						else if (value >= 90)
 						{
 							type = "label-success";
-							reputation = "Excellent";
+							reputation = "{{agile_lng_translate 'reputation' 'Excellent'}}";
 						}
+
+						reputation = _agile_get_translated_val("reputation", reputation);
 
 						return "<span style='top: -3px' class='text-sm pos-rlt label " + type + "'>" + reputation + "</span> <!--<span class='badge badge-" + type + "'>" + value + "</span>-->";
 
@@ -4961,29 +4858,11 @@ $(function()
 		// Returns "workflows" from "#workflows"
 		var hash = window.location.hash.substr(1);
 
-		if (hash.indexOf("all") != -1)
-			return "All";
-
-		if (hash.indexOf("active") != -1)
-			return "Active";
-
-		if (hash.indexOf("completed") != -1)
-			return "Completed";
-
-		if (hash.indexOf("removed") != -1)
-			return "Removed";
-
-		if (hash.indexOf("unsubscribed") != -1)
-			return "Unsubscribed";
-
-		if (hash.indexOf("hardbounced") != -1)
-			return "Hard Bounced";
-
-		if (hash.indexOf("softbounced") != -1)
-			return "Soft Bounced";
-
-		if (hash.indexOf("spam-reported") != -1)
-			return "Spam Reported";
+		var types = _agile_get_translated_val("subscriber_type");
+		for(var key in types){
+			if (hash.indexOf(key) != -1)
+				  return types[key];			
+		}
 	});
 
 	Handlebars.registerHelper("check_plan", function(plan, options)
@@ -5349,12 +5228,15 @@ $(function()
 	Handlebars.registerHelper("getMonthFromIndex", function(month_index)
 	{
 		var monthArray = [
-				"January", "february", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"
+				"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"
 		];
+		var name = "";
 		if (month_index > 12)
-			return monthArray[11];
+			name =  monthArray[11];
+		else 
+			name =  monthArray[month_index - 1];
 
-		return monthArray[month_index - 1];
+		return _agile_get_translated_val("months", name);
 	});
 
 	Handlebars.registerHelper('xeroOrganisationShortCode', function(block)
@@ -5569,7 +5451,7 @@ $(function()
 			var ampm = hours >= 12 ? "PM" : "AM";
 			if (hours > 12)
 				hours = hours - 12;
-			return months[month] + " " + date + ", " + year + " " + hours + ":" + min + " " + ampm;
+			return _agile_get_translated_val("months-xs", months[month]) + " " + date + ", " + year + " " + hours + ":" + min + " " + ampm;
 
 		}
 		// date form milliseconds
@@ -5585,7 +5467,7 @@ $(function()
 		var ampm = hours >= 12 ? "PM" : "AM";
 		if (hours > 12)
 			hours = hours - 12;
-		return months[month] + " " + date + ", " + year + " " + hours + ":" + min + " " + ampm;
+		return _agile_get_translated_val("months-xs", months[month]) + " " + date + ", " + year + " " + hours + ":" + min + " " + ampm;
 
 	}
 	function extractTimeFromDate(date)
@@ -5856,19 +5738,19 @@ $(function()
 	{
 		var field_type_name = '';
 		if (field_type == "TEXT")
-			field_type_name = "Text Field";
+			field_type_name = "{{agile_lng_translate 'admin-settings-custom-fields' 'TEXT'}}";
 		else if (field_type == "TEXTAREA")
-			field_type_name = "Text Area";
+			field_type_name = "{{agile_lng_translate 'admin-settings-custom-fields' 'TEXTAREA'}}";
 		else if (field_type == "DATE")
-			field_type_name = "Date";
+			field_type_name = "{{agile_lng_translate 'admin-settings-custom-fields' 'DATE'}}";
 		else if (field_type == "CHECKBOX")
-			field_type_name = "Checkbox";
+			field_type_name = "{{agile_lng_translate 'admin-settings-custom-fields' 'CHECKBOX'}}";
 		else if (field_type == "LIST")
-			field_type_name = "List";
+			field_type_name = "{{agile_lng_translate 'admin-settings-custom-fields' 'LIST'}}";
 		else if (field_type == "NUMBER")
-			field_type_name = "Number";
+			field_type_name = "{{agile_lng_translate 'admin-settings-custom-fields' 'NUMBER'}}";
 		else if (field_type == "FORMULA")
-			field_type_name = "Formula";
+			field_type_name = "{{agile_lng_translate 'admin-settings-custom-fields' 'FORMULA'}}";
 		return field_type_name;
 	});
 
@@ -5906,28 +5788,28 @@ $(function()
 		case "no interest":
 		case "incorrect referral":
 		case "meeting scheduled":
-		case "new opportunity":
-			return "Call duration";
+		case "new oppurtunity":
+			return _agile_get_translated_val("call_activity", "duration");
 			break;
 		case "busy":
 		case "no-answer":
 			if (direction == 'outgoing')
-				return "Contact busy";
+				return _agile_get_translated_val("call_activity", "busy");
 			else
-				return "Not answered";
+				return _agile_get_translated_val("call_activity", "no_answer");
 			break;
 		case "failed":
-			return "Failed";
+			return _agile_get_translated_val("call_activity", "fail");
 			break;
 		case "missed":
-			return "Call Missed";
+			return _agile_get_translated_val("call_activity", "missed");
 			break;	
 		case "in-progress":
 		case "voicemail":
-			return "Left voicemail";
+			return _agile_get_translated_val("call_activity", "voicemail");
 			break;
 		case "missed":
-			return "Call missed";
+			return _agile_get_translated_val("call_activity", "missed");
 			break;
 		default:
 			return "";
@@ -5956,52 +5838,67 @@ $(function()
 	{
 		var portlet_name = '';
 		if (p_name == 'Filter Based')
-			portlet_name = 'Contact List';
+			portlet_name = 'contact-list';
 		else if (p_name == 'Emails Opened')
-			portlet_name = 'Email Opens';
+			portlet_name = 'email-opens';
 		else if (p_name == 'Emails Sent')
-			portlet_name = 'Emails';
+			portlet_name = 'emails';
 		else if (p_name == 'Growth Graph')
-			portlet_name = 'Tag Graph';
+			portlet_name = 'tag-graph';
 		else if (p_name == 'Calls Per Person')
-			portlet_name = 'Calls';
+			portlet_name = 'calls';
 		else if (p_name == 'Pending Deals')
-			portlet_name = 'Pending Deals';
+			portlet_name = 'pending-deals';
 		else if (p_name == 'Deals By Milestone')
-			portlet_name = 'Deals by Milestone';
+			portlet_name = 'deals-by-milestone';
 		else if (p_name == 'Closures Per Person')
-			portlet_name = 'Closures per Person';
+			portlet_name = 'closures-per-person';
 		else if (p_name == 'Deals Won')
-			portlet_name = 'Deals Won';
+			portlet_name = 'deals-won';
 		else if (p_name == 'Deals Funnel')
-			portlet_name = 'Deals Funnel';
+			portlet_name = 'deals-funnel';
 		else if (p_name == 'Deals Assigned')
-			portlet_name = 'Deals Assigned';
+			portlet_name = 'deals-assigned';
 		else if (p_name == 'Agenda')
-			portlet_name = "Events";
+			portlet_name = "events";
 		else if (p_name == 'Today Tasks')
-			portlet_name = "Tasks";
+			portlet_name = "tasks";
 		else if (p_name == 'Agile CRM Blog')
-			portlet_name = "Agile CRM Blog";
+			portlet_name = "agile-crm-blog";
 		else if (p_name == 'Task Report')
-			portlet_name = "Task Report";
+			portlet_name = "task-report";
 		else if(p_name=='Stats Report')
-			portlet_name = "Activity Overview";
+			portlet_name = "activity-overview";
 		else if(p_name=='Campaign stats')
-			portlet_name = "Campaign Stats";
+			portlet_name = "campaign-stats";
 		else if(p_name=='Campaign graph')
-			portlet_name = "Campaign Status";
+			portlet_name = "campaign-status";
 		else if(p_name=='Average Deviation')
-			portlet_name = "Tasks Completion Time Deviation";
+			portlet_name = "task_deviation";
 		else if(p_name == 'Webstat Visits')
-			portlet_name = "Visits";
+			portlet_name = "visits";
 		else if(p_name=='Referralurl stats')
- 			portlet_name = "Referral URL Stats";
+ 			portlet_name = "ref-url-stats";
  		else if (p_name == 'Lost Deal Analysis')
-			portlet_name = "Deals Lost by Reason";
+			portlet_name = "deals-lost-reason";
+		else if (p_name== 'Revenue Graph')
+			portlet_name = 'revenue-graph';
+		else if (p_name== 'Mini Calendar')
+			portlet_name = 'mini-calendar'
+		else if(p_name == 'Deal Goals')
+			portlet_name = 'deal-goals'
+		else if(p_name == 'Incoming Deals')
+			portlet_name = 'incoming-deals'
+		else if(p_name == 'Leaderboard')
+			portlet_name = 'leaderboard'
+		else if(p_name == 'Account Details')
+			portlet_name = 'account-details'
+		else if(p_name == 'User Activities')
+			portlet_name = 'user-activities'
 		else
 			portlet_name = p_name;
-		return portlet_name;
+
+		return _agile_get_translated_val("portlets", portlet_name);
 	});
 	/**
 	 * getting portlet icons
@@ -6484,105 +6381,26 @@ $(function()
 	 */
 	Handlebars.registerHelper('get_portlet_duration', function(duration)
 	{
-		var time_period = 'Today';
-		if (duration == 'yesterday')
-		{
-			time_period = 'Yesterday';
-		}
-		else if (duration == '1-day' || duration == 'today')
-		{
-			time_period = 'Today';
-		}
-		else if (duration == '2-days')
-		{
-			time_period = 'Last 2 Days';
-		}
-		else if (duration == 'this-week')
-		{
-			time_period = 'This Week';
-		}
-		else if (duration == 'last-week')
-		{
-			time_period = 'Last Week';
-		}
-		else if (duration == '1-week')
-		{
-			time_period = 'Last 7 Days';
-		}
-		else if (duration == 'this-month')
-		{
-			time_period = 'This Month';
-		}
-		else if (duration == 'last-month')
-		{
-			time_period = 'Last Month';
-		}
-		else if (duration == '1-month')
-		{
-			time_period = 'Last 30 Days';
-		}
-		else if (duration == 'this-quarter')
-		{
-			time_period = 'This Quarter';
-		}
-		else if (duration == 'last-quarter')
-		{
-			time_period = 'Last Quarter';
-		}
-		else if (duration == '3-months')
-		{
-			time_period = 'Last 3 Months';
-		}
-		else if (duration == '6-months')
-		{
-			time_period = 'Last 6 Months';
-		}
-		else if (duration == '12-months')
-		{
-			time_period = 'Last 12 Months';
-		}
-		else if (duration == 'today-and-tomorrow')
-		{
-			time_period = 'Today and Tomorrow';
-		}
-		else if (duration == 'all-over-due')
-		{
-			time_period = 'All Over Due';
-		}
-		else if (duration == 'next-7-days')
-		{
-			time_period = 'Next 7 Days';
-		}
-		else if (duration == '24-hours')
-		{
-			time_period = 'Last 24 Hours';
-		}
-		else if (duration == 'next-quarter')
-		{
-			time_period = 'Next Quarter';
-		}
-		else if (duration == 'this-and-next-quarter')
-		{
-			time_period = 'This and Next Quarter';
-		}
-		else if (duration == 'this-year')
-		{
-			time_period = 'This Year';
-		}
-		else if (duration == 'next-year')
-		{
-			time_period = 'Next Year';
-		}
-		else if (duration == 'last-year')
-		{
-			time_period = 'Last Year';
-		}
-		else if (duration == 'Custom')
-		{
-			time_period = 'Custom';
-		}
-		
-		return time_period;
+		console.log("duration = " + duration);
+		if(!duration)
+			duration = "today";
+
+		return _agile_get_translated_val("portlets", duration);
+	});
+
+	/**
+	 * getting duration for campaign reports
+	 */
+	Handlebars.registerHelper('get_campaign_reports_duration', function(duration)
+	{
+		console.log("duration = " + duration);
+		var report_duration = {
+				"DAILY" : "{{agile_lng_translate 'report-add' 'daily'}}",
+				"WEEKLY" : "{{agile_lng_translate 'report-add' 'weekly'}}",
+				"MONTHLY" : "{{agile_lng_translate 'report-add' 'monthly'}}",
+		};
+
+		return report_duration[duration];
 	});
 	
 	/**
@@ -6609,30 +6427,27 @@ $(function()
 	    var seconds = Math.floor((new Date() - date) / 1000);
 
 	    var interval = Math.floor(seconds / 31536000);
-
+	    
 	    if (interval > 1) {
-	        return interval + " years ago";
+	        return interval + " " + _agile_get_translated_val("misc-keys", "yrs_ago");
 	    }
 	    interval = Math.floor(seconds / 2592000);
 	    if (interval > 1) {
-	        return interval + " months ago";
+	        return interval + " " + _agile_get_translated_val("misc-keys", "mnths_ago");
 	    }
 	    interval = Math.floor(seconds / 86400);
 	    if (interval > 1) {
-	        return interval + " days ago";
+	        return interval + " " + _agile_get_translated_val("misc-keys", "days_ago");
 	    }
 	    interval = Math.floor(seconds / 3600);
 	    if (interval > 1) {
-	        return interval + " hours ago";
+	        return interval + " " + _agile_get_translated_val("misc-keys", "hrs_ago");
 	    }
 	    interval = Math.floor(seconds / 60);
 	    if (interval > 1) {
-	        return interval + " minutes ago";
+	        return interval + " " + _agile_get_translated_val("misc-keys", "mins_ago");
 	    }
-	    return new Handlebars.SafeString(Math.floor(seconds) + " seconds ago");
-
-		
-	
+	    return new Handlebars.SafeString(Math.floor(seconds) + " " + _agile_get_translated_val("misc-keys", "secs_ago"));
 		
 	});
 	
@@ -6707,7 +6522,9 @@ $(function()
 			element = element.replace("_", " ");
 			cls = "";
 	 	}
-	 		el = el.concat('<th class="'+ cls +'">' + ucfirst(element) + '</th>');	
+
+	 	element = getTableLanguageConvertHeader(element);
+	 	el = el.concat('<th class="'+ cls +'">' + ucfirst(element) + '</th>');	
 	  
   		});
 		return new Handlebars.SafeString(el);
@@ -6724,13 +6541,13 @@ $(function()
 				{
 
 					if (this[0].count > 9999 && (_agile_get_prefs('company_filter') || _agile_get_prefs('dynamic_company_filter')))
-						count_message = "<small> (" + 10000 + "+ Total) </small>" + '<span style="vertical-align: text-top; margin-left: -5px">' + '<img border="0" src="'+updateImageS3Path("/img/help.png")+'"' + 'style="height: 10px; vertical-align: middle" rel="popover"' + 'data-placement="bottom" data-title="Lead Score"' + 'data-content="Looks like there are over 10,000 results. Sorry we can\'t give you a precise number in such cases."' + 'id="element" data-trigger="hover">' + '</span>';
+						count_message = "<small> (" + 10000 + "+ " +_agile_get_translated_val('other','total')+ ") </small>" + '<span style="vertical-align: text-top; margin-left: -5px">' + '<img border="0" src="'+updateImageS3Path("/img/help.png")+'"' + 'style="height: 10px; vertical-align: middle" rel="popover"' + 'data-placement="bottom" data-title="Lead Score"' + 'data-content="'+_agile_get_translated_val('results','over-count')+'"' + 'id="element" data-trigger="hover">' + '</span>';
 
 					else
-						count_message = "<small> (" + this[0].count + " Total) </small>";
+						count_message = "<small> (" + this[0].count + " " +_agile_get_translated_val('other','total')+ ") </small>";
 				}
 				else
-					count_message = "<small> (" + this.length + " Total) </small>";
+					count_message = "<small> (" + this.length + " " +_agile_get_translated_val('other','total')+ ") </small>";
 
 				return new Handlebars.SafeString(count_message);
 			});
@@ -6807,61 +6624,63 @@ Handlebars.registerHelper('SALES_CALENDAR_URL', function()
 
 });
 
-	Handlebars.registerHelper('get_portlet_description', function(p_name)
-			{
+Handlebars.registerHelper('get_portlet_description', function(p_name)
+{
+
 	var description = '';
 	if (p_name == 'Filter Based')
-		description = 'See a list of 50 recently added contacts customizable by filters.';
+		description = 'contact-list-desc';
 	else if (p_name == 'Emails Opened')
-		description = 'See what percentage of people open your direct emails.';
+		description = 'email-opens-desc';
 	else if (p_name == 'Growth Graph')
-		description = 'Gain a quick insight on how contacts with specific tag(s) have changed over time.';
+		description = 'tag-graph-desc';
 	else if (p_name == 'Calls Per Person')
-		description = 'Detailed reports on call activity of your team.';
+		description = 'calls-desc';
 	else if (p_name == 'Pending Deals')
-		description = 'Gives you a heads up on all your pending Deals.';
+		description = 'pending-deals-desc';
 	else if (p_name == 'Deals By Milestone')
-		description = 'A pie-chart of Deals grouped by Milestone.';
+		description = 'deals-by-milestone-desc';
 	else if (p_name == 'Deals Funnel')
-		description = 'A funnel report of total Deals value in each Milestone.';
+		description = 'deals-funnel-desc';
 	else if (p_name == 'Agenda')
-		description = 'A quick view of events from your calendar.';
+		description = 'events-desc';
 	else if (p_name == 'Today Tasks')
-		description = 'A list of your upcoming or due Tasks';
+		description = 'tasks-desc';
 	else if (p_name == 'Task Report')
-		description = 'Get a quick view of tasks by all users reported by status and duration.';
+		description = 'task-report-desc';
 	else if (p_name == 'Agile CRM Blog')
-		description = "A feed of what's happening at our end including updates on new features.";
+		description = "agile-crm-blog-desc";
 	else if(p_name=='Stats Report')
-		description = 'Detailed list of activities done by your team members.';
+		description = 'stats-report-desc';
 	else if (p_name == 'Leaderboard')
-		description = ' A leaderboard for your team based on revenue won, tasks done, calls etc.';
+		description = 'leaderboard-desc';
 	else if (p_name== 'User Activities')
-		description = 'See a timeline of user actions in Agile CRM.';
+		description = 'user-activities-desc';
 	else if (p_name== 'Account Details')
-		description = 'Find current plan information, number of users and more.';
+		description = 'account-details-desc';
 	else if (p_name== 'Revenue Graph')
-		description = 'Forecasted revenue graph based on your Deals.';
+		description = 'revenue-graph-desc';
 	else if (p_name== 'Mini Calendar')
-		description = 'A mini calendar with an overview of your agenda for the day.'
+		description = 'mini-calendar-desc'
 	else if (p_name == 'Campaign stats')
-		description = 'See how your campaigns are performing with stats on email opens and link clicks.'
+		description = 'campaign-stats-desc'
 	else if (p_name == 'Campaign graph')
-		description = 'A pie chart of active, completed and removed subscribers of Campaigns'
+		description = 'campaign-graph-desc'
 	else if(p_name == 'Deal Goals')
-		description = 'See how much sales target you have achieved.'
+		description = 'deal-goals-desc'
 	else if(p_name == 'Incoming Deals')
-		description = 'See how your deal sources are performing over time.'
+		description = 'incoming-deals-desc'
 	else if(p_name == 'Lost Deal Analysis')
-		description = 'Get insights into why deals were lost. Filter by owner, track and source.'
+		description = 'lost-deals-description'
 	else if(p_name == 'Average Deviation')
-		description = 'A quick view of deviation in tasks completion times.'
+		description = 'average-deviation-desc'
 	else if (p_name== 'Webstat Visits')
-		description = 'A pie chart of Known and Unknown Visits on your website.';
+		description = 'webstat-visits-desc';
 	else if(p_name == 'Referralurl stats')
-		description = 'A quick view of Top 5 Referral URL’s for your website traffic.'
-	return description;
-			});
+		description = 'top-ref-url-desc'
+
+	return _agile_get_translated_val("portlets", description);
+});
 
 	Handlebars.registerHelper('trialEndDate', function(billingData, options)
 			{
@@ -6977,16 +6796,16 @@ Handlebars.registerHelper('SALES_CALENDAR_URL', function()
 	Handlebars.registerHelper('contact_filter_tooltip', function(options)
 			{	        
 		 	 if( _agile_get_prefs(CONTACTS_DYNAMIC_FILTER_COOKIE_STATUS)=="hide")
-		 	 	return "Show Filters" ;
+		 	 	return "{{agile_lng_translate 'tickets' 'show-filters'}}" ;
 		 	 else
-		 	 	return "Hide Filters" ;	
+		 	 	return "{{agile_lng_translate 'tickets' 'hide-filters'}}" ;	
 			});
 	Handlebars.registerHelper('company_filter_tooltip', function(options)
 			{	        
 		 	 if( _agile_get_prefs('companiesFilterStatus') == "display:none")
-		 	 	return "Show Filters" ;
+		 	 	return "{{agile_lng_translate 'tickets' 'show-filters'}}" ;
 		 	 else
-		 	 	return "Hide Filters" ;	
+		 	 	return "{{agile_lng_translate 'tickets' 'hide-filters'}}" ;	
 			});
 
 	
@@ -7010,7 +6829,7 @@ Handlebars.registerHelper('SALES_CALENDAR_URL', function()
 					{
 						allowed_domains[i] = allowed_domains[i].trim();
 						html += "<tr data='" + allowed_domains[i] + "' style='display: table-row;'><td><div class='inline-block v-top text-ellipsis' style='width:80%'>";
-						html += allowed_domains[i] + "</div></td><td class='b-r-none'><div class='m-b-n-xs' style='display:none;'><a class='allowed-domain-delete c-p m-l-sm text-l-none text-xs'  data-toggle='modal' role='button' href='#'><i title='Delete Allowed Domain' class='task-action icon icon-trash'></i></a></div></td></tr>";
+						html += allowed_domains[i] + "</div></td><td class='b-r-none'><div class='m-b-n-xs' style='display:none;'><a class='allowed-domain-delete c-p m-l-sm text-l-none text-xs'  data-toggle='modal' role='button' href='#'><i title='{{agile_lng_translate 'admin-settings-api-analytics' 'delete-allowed-domain'}}' class='task-action icon icon-trash'></i></a></div></td></tr>";
 					}
 				}
 				return html;
@@ -7027,7 +6846,7 @@ Handlebars.registerHelper('SALES_CALENDAR_URL', function()
 					{
 						blocked_ips[i] = blocked_ips[i].trim();
 						html += "<tr data='" + blocked_ips[i] + "' style='display: table-row;'><td><div class='inline-block v-top text-ellipsis' style='width:80%'>";
-						html += blocked_ips[i] + "</div></td><td class='b-r-none'><div class='m-b-n-xs' style='display:none;'><a class='blocked-ip-delete c-p m-l-sm text-l-none text-xs'  data-toggle='modal' role='button' href='#'><i title='Delete Blocked IP' class='task-action icon icon-trash'></i></a></div></td></tr>";
+						html += blocked_ips[i] + "</div></td><td class='b-r-none'><div class='m-b-n-xs' style='display:none;'><a class='blocked-ip-delete c-p m-l-sm text-l-none text-xs'  data-toggle='modal' role='button' href='#'><i title='{{agile_lng_translate 'admin-settings-api-analytics' 'delete-blocked-ip'}}' class='task-action icon icon-trash'></i></a></div></td></tr>";
 					}
 				}
 				return html;
@@ -7061,13 +6880,14 @@ Handlebars.registerHelper('SALES_CALENDAR_URL', function()
 		    });
 	Handlebars.registerHelper('invoice_description', function(description) {
 
+		console.log(description);
 		if (!description)
 			return description;
 
 		if (description.indexOf("Unused time on") != -1) {
-			description = "Balance from previous transaction";
+			description = _agile_get_translated_val('billing','invoice-bal-from');
 		} else if (description.indexOf("Remaining") != -1) {
-			description = "Changed on " + description.substring(description.indexOf("after") + 5);
+			description = _agile_get_translated_val('billing','invoice-changed-on') + description.substring(description.indexOf("after") + 5);
 		}
 
 		return description + " ";
@@ -7328,8 +7148,7 @@ Handlebars.registerHelper('convert_toISOString', function(dateInepoch, options) 
 	{
 		var options_el = "";
 		if(type == 'portlet'){
-			options_el +="<option value='MarketingDashboard' lass='user-dashboard' title='Marketing Dashboard'>Marketing</option>"
-						+ "<option value='SalesDashboard' class='user-dashboard' title='Sales Dashboard'>Sales</option>"; 
+			options_el += getTemplate('js-dashboards-options');
 		}
 		if(CURRENT_USER_DASHBOARDS)
 		{
@@ -7375,11 +7194,11 @@ Handlebars.registerHelper('convert_toISOString', function(dateInepoch, options) 
 					}
 					if(index == 0 && (!selected_li_id || !is_active_added))
 					{
-						options_el += "<li class='active'><a id='Dashboard' class='user-defined-dashboard predefined-dashboard' href='#'>Dashboard</a></li>";
+						options_el += "<li class='active'><a id='Dashboard' class='user-defined-dashboard predefined-dashboard' href='#'>{{agile_lng_translate 'portlets' 'dashboard'}}</a></li>";
 					}
 					else if(index == 0)
 					{
-						options_el += "<li><a id='Dashboard' class='user-defined-dashboard predefined-dashboard' href='#'>Dashboard</a></li>";
+						options_el += "<li><a id='Dashboard' class='user-defined-dashboard predefined-dashboard' href='#'>{{agile_lng_translate 'portlets' 'dashboard'}}</a></li>";
 					}
 
 					if(selected_li_id == this.id)
@@ -7392,10 +7211,7 @@ Handlebars.registerHelper('convert_toISOString', function(dateInepoch, options) 
 					}
 					if(index == CURRENT_USER_DASHBOARDS.length-1)
 					{
-						options_el += "<li><a id='MarketingDashboard' title='Marketing Dashboard' class='user-defined-dashboard' href='#'>Marketing</a></li>";
-						options_el += "<li><a id='SalesDashboard' title='Sales Dashboard' class='user-defined-dashboard' href='#'>Sales </a></li>";					
-						options_el += "<li class='divider'></li>";
-						options_el += "<li><a id='dashboards' href='#dashboards'>Manage Dashboards</a></li>";
+						options_el += getTemplate("js-dashboards-options-newui");
 					}
 					
 				}
@@ -7404,11 +7220,8 @@ Handlebars.registerHelper('convert_toISOString', function(dateInepoch, options) 
 
 			if(CURRENT_USER_DASHBOARDS.length == 0 && type == 'dashboard')
 			{
-				options_el += "<li><a id='Dashboard' class='user-defined-dashboard predefined-dashboard' href='#'>Dashboard</a></li>";
-				options_el += "<li><a id='MarketingDashboard' title='Marketing Dashboard' class='user-defined-dashboard' href='#'>Marketing</a></li>";
-				options_el += "<li><a id='SalesDashboard' title='Sales Dashboard' class='user-defined-dashboard' href='#'>Sales</a></li>";
-				options_el += "<li class='divider'></li>";	
-				options_el += "<li><a id='dashboards' href='#dashboards'>Manage Dashboards</a></li>";
+				options_el += "<li><a id='Dashboard' class='user-defined-dashboard predefined-dashboard' href='#'>{{agile_lng_translate 'portlets' 'dashboard'}}</a></li>";
+				options_el += getTemplate("js-dashboards-options-newui");
 			}			
 		}
 
@@ -7682,4 +7495,62 @@ Handlebars.registerHelper('affiliateCommission', function(amount, commission)
 	if(!amount || !commission)
 		return 0;
 	return (((amount/100)*commission)/100).toFixed(2);
+});
+Handlebars.registerHelper('get_default_label', function(label, module_name, options)
+{
+	var i18nKeyPrefix = "admin-settings-tasks";
+	if(module_name == "category"){
+		i18nKeyPrefix = "admin-settings-tasks";
+	}
+
+	if(_Agile_Resources_Json[i18nKeyPrefix] && _Agile_Resources_Json[i18nKeyPrefix][label])
+		return _Agile_Resources_Json[i18nKeyPrefix][label];
+	else
+		return label;
+
+});
+
+Handlebars.registerHelper('get_widget_translation', function(widget_name, type, options)
+{
+	if(!type)
+		  type = "content";
+
+	var val = _agile_get_translated_val("widgets", widget_name + "-" + type);
+	if(!val)
+		 return widget_name;
+
+	return val;
+});
+
+Handlebars.registerHelper('get_datasync_translation', function(sync_name, type, options)
+{
+	if(!type)
+		  type = "content";
+
+	return _agile_get_translated_val("prefs-data-sync", sync_name + "-" + type);
+});
+
+function getTableLanguageConvertHeader(element){
+	if(!element)
+		 return element;
+
+	if(_agile_get_translated_val("contacts-view", element))
+	   return _agile_get_translated_val("contacts-view", element);
+
+	element = ucfirst(element);
+	if(_agile_get_translated_val("contacts-view", element))
+	   return _agile_get_translated_val("contacts-view", element);
+
+	element = element.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+	if(_agile_get_translated_val("contacts-view", element))
+	   return _agile_get_translated_val("contacts-view", element);
+
+	return element;
+}
+Handlebars.registerHelper('is_Particular_Domain', function(options)
+{
+	if(CURRENT_DOMAIN_USER.domain=='fieldglobal')
+	return options.fn(this);
+		else
+			return options.inverse(this);
 });

@@ -382,7 +382,7 @@ function getLogsForBria(num){
 	
 	var logNumber;
 	var parameter = {};
-	parameter['error_message'] = "There is no phone number associated with this contact. <a href='#contact-edit' class='text-info' style='color:#23b7e5'>Add phone number</a>";
+	parameter['error_message'] = _agile_get_translated_val('widgets', 'no-phone-number-to-contact') +  " <a href='#contact-edit' class='text-info' style='color:#23b7e5'>" +_agile_get_translated_val('campaigns', 'add-phone-number')+"</a>";
 	parameter['num'] = agile_crm_get_contact_properties_list("phone");
 
 	if($("#bria-logs-panel").length > 0){
@@ -440,10 +440,7 @@ function handleLogsForBria(message){
 		$('#bria-logs-panel').html(bria_logs_template);
 
 			// Load jquery time ago function to show time ago in logs
-			head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
-			{
-				$(".time-ago", bria_logs_template).timeago();
-			});
+			agileTimeAgoWithLngConversion($(".time-ago", bria_logs_template));
 
 	}, "#bria-logs-panel");
 }
