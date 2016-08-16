@@ -570,7 +570,7 @@ public class SearchUtil
         	SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         	formatter.setTimeZone(timezone);
         	
-        	return formatter.parse(new Date(millSeconds).toString()).toString();
+        	return formatter.format(new Date(millSeconds));
     	//Date truncatedDate = DateUtils.truncate(new Date(millSeconds), Calendar.DATE);
     	
     	//Date truncatedDate1=truncatedDate.getTime();
