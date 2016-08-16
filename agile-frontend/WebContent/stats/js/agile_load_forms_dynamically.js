@@ -18,6 +18,20 @@ function showAgileCRMForm(formJson,formHolderId) {
     script.id = "agileCRMFormLoadScript";
     script.text = onloadScript;
     document.body.appendChild(script);
+
+    /*form preaload for the   */
+
+    var formJsonObj = JSON.parse(formJson.formJson);
+    for (var key in formJsonObj[0].fields.agilepreloadfields["value"]) { 
+        if(formJsonObj[0].fields.agilepreloadfields["value"][key]["selected"]) {
+            if(formJsonObj[0].fields.agilepreloadfields["value"][key]["value"]) {
+                _agile_load_form_fields();
+            }
+        }
+    }
+
+
+
 }
 
 window.addEventListener('load', function() { 
