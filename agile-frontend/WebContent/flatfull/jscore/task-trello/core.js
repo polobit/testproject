@@ -121,18 +121,20 @@ function initTaskListCollection()
 
 // Append sub collection and model
 function taskAppend(base_model)
-{ var Trackstatus = getTaskTrackAutoWidthCurrentState(base_model.get("heading"))
+
+{
+if (!base_model)
+		return;
+
+	var Trackstatus = getTaskTrackAutoWidthCurrentState(base_model.get("heading"))
 	var tasksListModel = new Base_List_View({ 
 	model : base_model,
 	 "view" : "inline", 
 	 template : "new-tasks-lists-model", 
 	 tagName : 'div',
-		className : "task-trello-list col-md-3 "+Trackstatus +" p-n pull-none inline-block m-r-none min-h-auto-xl", 
-		id : base_model.get("heading"),
-		postRenderCallback :function(el){
-			var status = JSON.parse(_agile_get_prefs('task-page-status'));
-
-		}});
+	className : "task-trello-list col-md-3 "+Trackstatus +" p-n pull-none inline-block m-r-none min-h-auto-xl", 
+	id : base_model.get("heading"),
+	});
 
 	// Render model in main collection
 	var el = tasksListModel.render().el;
@@ -194,14 +196,6 @@ function taskFetch(base_model)
 					initialize_infinite_scrollbar($("div[id='list-tasks-" + base_model.get("heading") + "']")[0], taskCollection);
 			}
 					
-		},appendItemCallback : function(el , collection){
-			
-			console.log("on append item call back");
-			$(el[0]).find("#no_task").addClass("hide");
-		}, removeItem : function(el,collection){
-			console.log("inside the reemove item callback");
-			if(collection.length == 0)
-			$(el[0]).find("#no_task").removeClass("hide");
 		}
 		 });
 

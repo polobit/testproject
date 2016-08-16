@@ -172,29 +172,24 @@ function initializeTasksListeners(){
 	 * });
 	 */
 
-	 $('#tasks-list-template').on('mouseenter', '.task-striped', function(e)
+	 $('#tasks-list-template').on('mouseenter', '.listed-task', function(e)
 	{
-		$(this).closest(".task-striped").find(".task-actions").css("display", "table-cell");
-		$(this).closest(".task-striped ").find(".task-note-action").hide();
+		$(this).find(".task-actions").css("display", "block");
+		$(this).find(".task-note-action").hide();
 	});
 
 	// Hide task actions
-	$('#tasks-list-template').on('mouseleave', '.task-striped', function(e)
+	$('#tasks-list-template').on('mouseleave', '.listed-task', function(e)
 	{
-		$(this).closest(".task-striped ").find(".task-actions").css("display", "none");
-		$(this).closest(".task-striped ").find(".task-note-action").show();
+		$(this).find(".task-actions").css("display", "none");
+		$(this).find(".task-note-action").show();
 	});
-
+	
 	$('#tasks-list-template').on('mouseenter', 'tr', function(e)
 	{
 		$(this).find("#task-list-actions").removeClass("hidden");
 	});
 
-	 $('#tasks-list-template').on('click','.task-list-minimized',function(e)
-	 {
-	 	$(this).find(".expandbutton").trigger('click');
-	 	
-	 });
 	// Hide task actions
 	$('#tasks-list-template').on('mouseleave', 'tr', function(e)
 	{
@@ -223,10 +218,7 @@ function initializeTasksListeners(){
 	{
 		event.preventDefault();
 		if(!confirm(_agile_get_translated_val('tasks','confirm-delete')))
-		{	
-			$(this).closest('.task-content-view').find(".taskComplete").attr('checked', false);
-				return;
-		}
+			return;
 		if(!getTaskListId(this)  && $(this).parent().attr('data')){
 			completeTask(getTaskId(this), $(this).parent().attr('data'), parseInt(getTaskListOwnerId(this)));
 		}
@@ -244,33 +236,8 @@ function initializeTasksListeners(){
 		else
 			editTask(getTaskId(this), getTaskListId(this), parseInt(getTaskListOwnerId(this)));
 	});
-
-	/*
-	* expand-collapse for the task models
-	*/
-
-	$('#tasks-list-template').on("click", ".expandbutton", function(e)
-	{	
-		e.stopPropagation();
-		taskAutoWidth(this);
-	});	
-	/*$('#tasks-list-template').on("click", ".task-list-minimized", function(e)
-	{	
-		taskAutoWidth(this);
-		
-	});	*/
-$('#tasks-list-template').on("click", "#taskheading", function(e){
-		e.stopPropagation();
-		taskAutoWidth(this);
-});
-
 	
-	$('#tasks-list-template').on('click','.taskComplete',function(e){
-		if($(this).prop("checked") == true)
-		{
-			$(this).closest(".task-striped").find(".is-task-complete").trigger("click");
-		}
-	});
+	
 
 	/*
 	 * In new/update task modal, on selection of status, show progress slider
@@ -285,6 +252,11 @@ $('#tasks-list-template').on("click", "#taskheading", function(e){
 		// Change UI and input field
 		applyDetailsFromGroupView();
 	});	
+	$('#tasks-list-template').on('click','.task-list-minimized',function(e)
+	 {
+	 	$(this).find(".expandbutton").trigger('click');
+	 	
+	 });
 
 	$('#tasks-list-template').on('click', '.tasks-list-image', function(event)
 			{
@@ -294,7 +266,18 @@ $('#tasks-list-template').on("click", "#taskheading", function(e){
 				routeToPage(url);
 				event.stopPropagation();
 				
-			});	
+			});
+	$('#tasks-list-template').on('click','.taskComplete',function(e){
+		if($(this).prop("checked") == true)
+		{
+			$(this).closest(".task-striped").find(".is-task-complete").trigger("click");
+		}
+	});
+	$('#tasks-list-template').on("click", ".expandbutton", function(e)
+	{	
+		e.stopPropagation();
+		taskAutoWidth(this);
+	});	
 	$('#tasks-list-template').on('click', '.view-task-details', function(event)
 	{
 		event.preventDefault();
@@ -309,7 +292,6 @@ $('#tasks-list-template').on("click", "#taskheading", function(e){
 	});	
 }
 
-
 $("body").on("change", '.status', function()
 	{
 		console.log("status change event");
@@ -317,75 +299,6 @@ $("body").on("change", '.status', function()
 		// Change status UI and input field
 		changeStatus($(this).val(), $(this).closest("form"));
 	});	
-
-
-function getTaskTrackAutoWidthCurrentState(track_name){
-   if(!track_name)
-   	  return "compress";
-
-   	// Get prefs form storage 
-   	var prefs = _agile_get_prefs("task-page-status");
-   	if(prefs && prefs.indexOf(track_name) != -1)
-   		 return "expand";
-
-   	return "compress";
-}
-/*function checkboxTaskCompleted(taskId, taskListId, taskListOwnerId){
-
-	var modelTaskList;
-
-	if (taskListOwnerId)
-		modelTaskList = getTaskList("OWNER", taskListId, taskListOwnerId);
-	else
-		modelTaskList = getTaskList(null, taskListId, null);
-
-	if (!modelTaskList)
-		return;
-
-	var modelTask = modelTaskList[0].get('taskCollection').get(taskId);
-
-	modelTask.set("is_complete" , "true");
-	modelTask.set("status" , "completed");
-	modelTask.save();
-}*/
-
-
-/*auto width for the task expand 
-*/
-function taskAutoWidth(el)
-{	
-	var arr = _agile_get_prefs("task-page-status");
-	if(!arr)
-		arr = [];
-	else 
-		arr = arr.split(",");
-
-	var id = $(el).closest(".task-trello-list").attr("id");
-	if(arr.indexOf(id) != -1)
-	{
-		delete arr[arr.indexOf(id)]
-	}
-
-	var expanded = $(el).closest(".task-trello-list").hasClass("compress");
-	if(expanded)
-	{
-		arr.push($(el).closest(".task-trello-list").attr("id"))
-		
-		$(el).children().removeClass("fa fa-expand")
-		$(el).children().addClass("fa fa-compress")
-	}
-
-	else
-	{
-		
-		$(el).children().removeClass("fa fa-compress")
-		$(el).children().addClass("fa fa-expand")
-		
-	}
-	$(el).closest(".task-trello-list").toggleClass("expand compress");
-	_agile_set_prefs('task-page-status' , arr.toString());
-		
-}
 
 /**
  * Highlights the task portion of activity modal (Shows task form and hides
@@ -498,7 +411,6 @@ function save_task(formId, modalId, isUpdate, saveBtn)
 									$(".navbar_due_tasks").css("display", "inline-block");
 								if(due_task_count !=0)
 									$('#due_tasks_count').html(due_task_count);
-									
 								else
 									$('#due_tasks_count').html("");
 
@@ -764,6 +676,52 @@ function get_due(due)
 	date = date.getTime() / 1000;
 	// console.log("Today " + date + " Due " + due);
 	return Math.floor((due - date) / (24 * 3600));
+}
+function taskAutoWidth(el)
+{	
+	var arr = _agile_get_prefs("task-page-status");
+	if(!arr)
+		arr = [];
+	else 
+		arr = arr.split(",");
+
+	var id = $(el).closest(".task-trello-list").attr("id");
+	if(arr.indexOf(id) != -1)
+	{
+		delete arr[arr.indexOf(id)]
+	}
+
+	var expanded = $(el).closest(".task-trello-list").hasClass("compress");
+	if(expanded)
+	{
+		arr.push($(el).closest(".task-trello-list").attr("id"))
+		
+		$(el).children().removeClass("fa fa-expand")
+		$(el).children().addClass("fa fa-compress")
+	}
+
+	else
+	{
+		
+		$(el).children().removeClass("fa fa-compress")
+		$(el).children().addClass("fa fa-expand")
+		
+	}
+	$(el).closest(".task-trello-list").toggleClass("expand compress");
+	_agile_set_prefs('task-page-status' , arr.toString());
+		
+}
+
+function getTaskTrackAutoWidthCurrentState(track_name){
+   if(!track_name)
+   	  return "compress";
+
+   	// Get prefs form storage 
+   	var prefs = _agile_get_prefs("task-page-status");
+   	if(prefs && prefs.indexOf(track_name) != -1)
+   		 return "expand";
+
+   	return "compress";
 }
 
 function increaseCount(heading)
