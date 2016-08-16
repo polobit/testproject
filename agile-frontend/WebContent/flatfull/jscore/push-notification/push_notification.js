@@ -68,7 +68,7 @@ var Push_Notification_Event_View = Base_Model_View.extend({
       {
          e.preventDefault();
           notify.requestPermission(function() {
-           if(notify.permissionLevel() == notify.PERMISSION_GRANTED){
+           if(notify.permissionLevel() == notify.PERMISSION_GRANTED || notify.permissionLevel() == notify.PERMISSION_DEFAULT){
              $('#push-notification-content').hide(); 
 
              if($("#notification-message").val()=="" || $("#notification-title").val()=="")

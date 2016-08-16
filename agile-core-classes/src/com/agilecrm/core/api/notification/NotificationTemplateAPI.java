@@ -12,10 +12,14 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+
 import org.json.JSONArray;
 import org.json.JSONException;
+
 import com.agilecrm.notification.NotificationTemplate;
 import com.thirdparty.push.notification.NotificationTemplateUtil;
 
@@ -52,22 +56,22 @@ public class NotificationTemplateAPI
 	return NotificationTemplateUtil.getNotificationTemplateById(notificationTemplateId);
     }
 
+    @Path("/")
     @POST
     @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public NotificationTemplate saveNotificationTemplate(@Context HttpServletResponse response, NotificationTemplate notificationTemplate) throws IOException
+    public NotificationTemplate saveNotificationTemplate( NotificationTemplate notificationTemplate) throws IOException
     {
-	try
-	{
-	    notificationTemplate.save();
+		int isDuplicate = NotificationTemplateUtil.getNotificationTemplateCountByName(notificationTemplate.notificationName);
+		if (isDuplicate > 0)
+		{
+		    System.out.println("Duplicate Push Notification Template found");
+		    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+			    .entity("Sorry, Notification Template with the same name already exist.").build());
+		}
+		
+		notificationTemplate.save();
 	   return notificationTemplate;
-	}
-	catch (Exception e)
-	{
-	    System.out.println(e.getMessage());
-	    response.sendError(HttpServletResponse.SC_BAD_REQUEST);
-	    return null;
-	}
     }
 
     @PUT
@@ -75,19 +79,17 @@ public class NotificationTemplateAPI
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     public NotificationTemplate updateNotificationTemplate(@Context HttpServletResponse response, NotificationTemplate notificationTemplate) throws IOException
     {
-	try
-	{
-		NotificationTemplate.dao.put(notificationTemplate);
-		System.out.println("notification update method is calling");
-	   
+    	
+    	int isDuplicate = NotificationTemplateUtil.getNotificationTemplateCountByName(notificationTemplate.notificationName);
+		if (isDuplicate > 0)
+		{
+		    System.out.println("Duplicate Push Notification Template found");
+		    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+			    .entity("Sorry, Notification Template with the same name already exist.").build());
+		}
+		NotificationTemplate.dao.put(notificationTemplate);	   
 	   return notificationTemplate;
-	}
-	catch (Exception e)
-	{
-	    System.out.println(e.getMessage());
-	    response.sendError(HttpServletResponse.SC_BAD_REQUEST);
-	    return null;
-	}
+	
     }
     
     
