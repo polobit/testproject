@@ -283,7 +283,7 @@ var timeline_entity_loader = {
 
 			    try{
 				    if(data!=null && data.toJSON().length > 0){
-				    	if(contatc.updated_time!=null){
+				    	if(contact.updated_time!=null){
 					    contact_updated_time = new Date(0).setUTCSeconds(contact.updated_time);
 					    }
 					    if(data.toJSON()[0].stats_time!=null){
