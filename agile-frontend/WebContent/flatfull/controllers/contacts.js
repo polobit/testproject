@@ -993,20 +993,13 @@ $('#content').html('<div id="import-contacts-event-listener"></div>');
 			$('#from_email'),
 			"prepend",
 			function($select, data) {
-			
-			var ownerEmail = $select.find('option[value = \"'+CURRENT_DOMAIN_USER.email+'\"]').val();
 				
-				if(typeof(ownerEmail) == "undefined")
-				{
-				$select
-						.find("option:first")
-						.before(
-								"<option value="+CURRENT_DOMAIN_USER.email+">"+CURRENT_DOMAIN_USER.email+"</option>");
-
-					$select.val(CURRENT_DOMAIN_USER.email).attr("selected", "selected");
+				if($select.find('option').size()===1){
+					$select.find("option:first").before("<option value='NOEMAIL'>- No Verified Email -</option>");
+					$select.find('option[value ="NOEMAIL"]').attr("selected", "selected");
 				}
 				else
-					$select.val(CURRENT_DOMAIN_USER.email).attr("selected", "selected");
+					$select.val($select.find('option')[0].value);		
 				rearrange_from_email_options($select, data);
 			});
 	},
