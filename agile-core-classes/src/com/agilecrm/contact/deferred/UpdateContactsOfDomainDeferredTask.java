@@ -90,9 +90,6 @@ public class UpdateContactsOfDomainDeferredTask implements DeferredTask
 				
 				for (Contact contact : contacts_list)
 				{
-					//Updates old contact countries with country code
-					updateCountry(contact);
-					
 					contact.updated_time = System.currentTimeMillis() / 1000;
 					//builderObjects.add(contactDocuments.buildDocument(contact));
 					try {

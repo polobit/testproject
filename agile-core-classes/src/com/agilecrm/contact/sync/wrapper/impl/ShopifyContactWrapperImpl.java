@@ -203,8 +203,7 @@ public class ShopifyContactWrapperImpl extends ContactWrapper
 
 		if (defaultAddress.containsKey("country"))
 		{
-			String sCountry = defaultAddress.get("country");
-			CountryUtil.setCountryCode(address, null, sCountry);
+			address.put("country", defaultAddress.get("country"));
 		}
 
 		if (defaultAddress.containsKey("zip"))

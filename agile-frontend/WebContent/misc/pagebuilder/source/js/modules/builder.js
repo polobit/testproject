@@ -1681,8 +1681,7 @@
                     }
                     if( data.pages !== undefined ) {
                         site.pages = data.pages;
-                    }
-                    
+                    }                
                     site.is_admin = data.is_admin;
                     
                     if( $('#pageList').size() > 0 ) {
@@ -1705,7 +1704,7 @@
             $.getJSON(appUI.siteUrl+"core/api/forms", function(respData){
                
                for(var i=0;i<respData.length;i++){
-                 $('#agileform_id').append("<option value= "+respData[i].id +">"+respData[i].formName+"</option>");
+                 $('#agileform_id').append("<option value= "+ window.CURRENT_AGILE_DOMAIN +"_"+respData[i].id +">"+respData[i].formName+"</option>");
                }    
                 
             }).fail(function(jqXHR) {

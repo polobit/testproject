@@ -313,8 +313,7 @@ public class GoogleContactWrapperImpl extends ContactWrapper
 	
 			    if (address.hasCountry() && address.getCountry().hasValue())
 			    {
-			    	String gCountry = address.getCountry().getValue();
-			    	CountryUtil.setCountryCode(json, null, gCountry);
+			    	json.put("country", address.getCountry().getValue());
 			    }
 				
 	

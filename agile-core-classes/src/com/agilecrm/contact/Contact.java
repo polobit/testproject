@@ -17,6 +17,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.annotate.JsonIgnore;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import com.agilecrm.contact.ContactField.FieldType;
 import com.agilecrm.contact.email.bounce.EmailBounceStatus;
@@ -35,6 +37,7 @@ import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.notification.util.ContactNotificationPrefsUtil;
 import com.agilecrm.user.util.DomainUserUtil;
+import com.agilecrm.util.CountryUtil;
 import com.agilecrm.workflows.status.CampaignStatus;
 import com.agilecrm.workflows.triggers.util.ContactTriggerUtil;
 import com.agilecrm.workflows.unsubscribe.UnsubscribeStatus;
@@ -1168,6 +1171,30 @@ public class Contact extends Cursor
     @PrePersist
     private void PrePersist()
     {
+    	
+	ContactField addressField = this.getContactField(Contact.ADDRESS);
+    try
+    {
+		if (addressField != null && addressField.value != null)
+		{
+			JSONObject addressJSON = new JSONObject(addressField.value);
+			if(addressJSON != null && addressJSON.has("country"))
+			{
+				String contactCountry = addressJSON.getString("country");
+				CountryUtil.setCountryCode(addressJSON, null, contactCountry);
+			}
+		    addressField.value = addressJSON.toString();
+		}
+    }
+    catch (JSONException e)
+    {
+    	e.printStackTrace();
+    }
+    catch (Exception e)
+    {
+    	e.printStackTrace();
+    }
+    
 	// Set owner, when only the owner_key is null
 	if (owner_key == null)
 	{

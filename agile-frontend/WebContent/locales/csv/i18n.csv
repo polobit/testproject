@@ -5216,5 +5216,12 @@ admin-settings-users.delete-deals,Delete Deals,
 admin-settings-users.create-update-delete-deals-content,Add and edit deals owned by other users. Delete own and other user deals,
 deal-view.persmission-to-delete-deals,You do not have permission to delete deals.,
 acl.sorry-you-donot-have-previlage-to-access-landingpage,Sorry&#44;  you do not have the privileges to access Landing Pages.,
+
 others.moreresults,More,Más
 other.title,Title,Título
+
+twill.add-another-number,Do you want to add another number to existing call?,
+twill.failed-join-another-number,Failed to add another number to the conference call. Please try again.,
+twill.connection-lost-conference,The connection is not active to dial another call.,
+twill.error-start-conference, Problem in starting the conference. Please start again.,
+

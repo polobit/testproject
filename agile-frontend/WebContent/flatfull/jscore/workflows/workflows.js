@@ -111,6 +111,7 @@ var Workflow_Model_Events = Base_Model_View.extend({
             if(nodeLength-1 > campaignNodeLimit)
             {
                 $("#workflow-edit-msg").hide();
+                $("#unsubscribe-email_status-msg").html(""); 
                 $("#nodes-limit-reached").show();
                 campaignAlert("nodeLimit");
                 return;
@@ -226,6 +227,7 @@ var Workflow_Model_Events = Base_Model_View.extend({
                 }
                 // Hide message
                 $('#workflow-edit-msg').hide();
+                $("#unsubscribe-email_status-msg").html(""); 
 
                 if(e.type == "change"){
                      var disabled = $(".is-disabled-top");
@@ -464,6 +466,7 @@ function create_new_workflow(e,name, designerJSON, unsubscribe_json, $clicked_bu
                 
                 // Hide edit message
                 $('#workflow-edit-msg').hide();
+                $("#unsubscribe-email_status-msg").html(""); 
                 
                 // $(".save-workflow-img").remove();
                         
@@ -786,9 +789,13 @@ function showHide_UnsubscribeEmail_Status(alertMsg){
     if (is_email_status != 'undefined' && is_email_status == "true") {
         $("#unsubscribe-email").attr('disabled',true);
         $("#unsubscribe-email").parent().parent().attr("style","pointerEvents:none; opacity: 0.4;");
+        $("#sendEmailSelect").attr('disabled',true);
+        $("#sendEmailSelect").parent().parent().attr("style","pointerEvents:none; opacity: 0.4;");
     }else{
         $("#unsubscribe-email").removeAttr('disabled');
         $("#unsubscribe-email").parent().parent().removeAttr("style");
+        $("#sendEmailSelect").removeAttr('disabled');
+        $("#sendEmailSelect").parent().parent().removeAttr("style");
     }
     if(alertMsg){
         var msg = "You have unsaved changes. Click on ‘Save Campaign’ to save.";
