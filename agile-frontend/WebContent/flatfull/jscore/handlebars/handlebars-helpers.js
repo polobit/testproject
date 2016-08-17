@@ -337,7 +337,7 @@ $(function()
 		return new Handlebars.SafeString('https://secure.gravatar.com/avatar/' + Agile_MD5("") + '.jpg?s=' + width + '' + backup_image + data_name);
 
 	});
-
+	
 
 	Handlebars.registerHelper('defaultGravatarurl', function(width)
 	{
@@ -394,6 +394,21 @@ $(function()
 			return;
 
 		return text_gravatar_initials(items, char_count);
+
+	});
+	/**
+	 * task page expand and compress icon 
+	 */
+
+	Handlebars.registerHelper('tasksttausicon', function(heading)
+	{
+
+		var c = getTaskTrackAutoWidthCurrentState('heading');
+		 if(c == 'expand')
+		 
+		 	return 'fa fa-compresss'
+		 
+		 return 'fa fa-expand'
 
 	});
 
@@ -4757,6 +4772,7 @@ $(function()
 
 	});
 
+
 	/**
 	 * Get activity type without underscore and caps, for deal _details page.
 	 */
@@ -6457,6 +6473,10 @@ $(function()
 	 */
 	Handlebars.registerHelper('capitalizeFirstLetter',function(city,country){
 		return new Handlebars.SafeString(city.charAt(0).toUpperCase() + city.slice(1)+", "+country);
+		
+	});
+	Handlebars.registerHelper('getFirstLetter',function(string){
+		return new Handlebars.SafeString(string.charAt(0).toLowerCase());
 		
 	});
 	
