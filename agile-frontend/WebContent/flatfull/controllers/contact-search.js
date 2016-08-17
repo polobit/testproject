@@ -19,6 +19,8 @@ var ContactSearchRouter = Backbone.Router.extend({
 		try{query = query.trim();}catch(e){}
 		
 		 $("#searchForm").find(".dashboard-search-scroll-bar").css({"display":"none"});
+		 currentRoute();
+		 
 		 var search_filters = _agile_get_prefs('agile_search_filter_'+CURRENT_DOMAIN_USER.id);
 		 var search_list_filters = JSON.parse(search_filters);
 
