@@ -700,6 +700,7 @@ function contact_list_starify(el,listView) {
     	// contact_model.url = 'core/api/contacts';    	
     	$('#star', el).raty({
     		
+    		
     		/**
     		 * When a star is clicked, the position of the star is set as star_value of
     		 * the contact and saved.    
@@ -709,10 +710,13 @@ function contact_list_starify(el,listView) {
            		if(listView!=undefined)   
         		App_Contacts.contact_popover.set({'star_value': score});
       				 else{
-      				 	App_Contacts.contact_popover.set({'star_value': score},{silent:true});
+      				 App_Contacts.contact_popover.set({'star_value': score},{silent:true});
+
+      				 var id = App_Contacts.contact_popover.toJSON().id;		 
+      	 			App_Contacts.contactsListView.collection.get(id).set({'star_value': score},{silent:true});
       				 App_Contacts.contact_popover.trigger('popoverChange');
       					 }
-
+      	
       	contact_model =  App_Contacts.contact_popover.toJSON();
 			
 		if(contact_model && contact_model.star_value == 1)  //pnt1       
