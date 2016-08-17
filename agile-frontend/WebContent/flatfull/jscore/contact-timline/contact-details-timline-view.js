@@ -91,6 +91,7 @@ function quedfunction(models)
 	// timeline_collection_view.queue.running = true;
 	getTemplate("timeline1", models, undefined, function(result)
 	{
+		$(".inner style").html("");
 		$("#timeline", $(App_Contacts.contactDetailView.el)).isotope('insert', $(result), function(ele)
 		{
 			timeline_collection_view.queue.running = false;

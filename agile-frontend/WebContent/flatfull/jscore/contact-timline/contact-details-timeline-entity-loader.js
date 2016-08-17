@@ -278,7 +278,23 @@ var timeline_entity_loader = {
 				is_mails_fetched = true;
 				is_logs_fetched = false;
 				is_array_urls_fetched = false;
+				var contact_updated_time=0;
+				var web_stats_time=0;
 
+			    try{
+				    if(data!=null && data.toJSON().length > 0){
+				    	if(contatc.updated_time!=null){
+					    contact_updated_time = new Date(0).setUTCSeconds(contact.updated_time);
+					    }
+					    if(data.toJSON()[0].stats_time!=null){
+					    web_stats_time = new Date(data.toJSON()[0].stats_time).getTime();
+					   }
+				    }
+			    }
+			    catch(e){
+
+			     }
+            if(contact_updated_time<=web_stats_time){
 				// show_timeline_padcontent(is_logs_fetched, is_mails_fetched,
 				// is_array_urls_fetched);
 
@@ -320,6 +336,7 @@ var timeline_entity_loader = {
 
 					addTagAgile(CODE_SETUP_TAG);
 				}
+			}
 			});
 
 		});
