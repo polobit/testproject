@@ -40,6 +40,7 @@ public class FormRenderingServlet extends HttpServlet
 	    if (form == null)
 		throw new Exception("No form found.");
 	    String htmlBody = form.formHtml;
+	    htmlBody = updateMethodType(htmlBody);
 	    String htmlHeading = "<!DOCTYPE html>\n<html>\n<head>\n<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\"/>\n<title>Form</title>\n</head>\n<body>\n<div id=\"agileFormHolder\" style=\"margin:0 auto;width:450px\">\n";
 	    String htmlButtom = "\n</div>\n</body>\n</html>";
 	    String fullHtml = htmlHeading + htmlBody + htmlButtom;
@@ -50,5 +51,31 @@ public class FormRenderingServlet extends HttpServlet
 	{
 	    out.print("<h1>" + e.getMessage() + "</h1>");
 	}
+    }
+    
+    private String updateMethodType(String inputHtml)
+    {
+    	try 
+    	{
+    		String methodGetWithDoubleQuotes = "method=\"GET\"";
+    		String methodPostWithDoubleQuotes = "method=\"POST\"";
+    		
+    		String methodGetWithSingleQuotes = "method='GET'";
+    		String methodPostWithSingleQuotes = "method='POST'";
+    		
+    		if(inputHtml.indexOf(methodGetWithDoubleQuotes) != -1)
+    		{
+    			inputHtml = inputHtml.replaceFirst(methodGetWithDoubleQuotes, methodPostWithDoubleQuotes);
+    		}
+    		else if (inputHtml.indexOf(methodGetWithSingleQuotes) != -1) 
+    		{
+    			inputHtml = inputHtml.replaceFirst(methodGetWithSingleQuotes, methodPostWithSingleQuotes);
+    		}
+		} 
+    	catch (Exception e) 
+    	{
+			e.printStackTrace();
+		}
+    	return inputHtml;
     }
 }
