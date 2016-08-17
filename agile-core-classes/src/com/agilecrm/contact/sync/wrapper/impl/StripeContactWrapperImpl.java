@@ -105,8 +105,7 @@ public class StripeContactWrapperImpl extends ContactWrapper
 				address.put("state", card.getAddressState());
 			if(card != null && card.getAddressCountry() != null)
 			{
-				String sCountry = card.getAddressCountry();
-				CountryUtil.setCountryCode(address, null, sCountry);
+				address.put("country", card.getAddressCountry());
 			}
 			address.put("zip", card.getAddressZip());
 		}
