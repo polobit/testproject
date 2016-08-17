@@ -107,9 +107,9 @@
 </div>
 {{/if}}
 
-{{#each contacts}}
+	{{#each contacts}}
         		{{#if_contact_type "PERSON"}}
-        		 <a href="#contact/{{id}}" class="activate-link thumb m-b-xs popover_contact" data="{{id}}"><img class="r r-2x" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"   title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" /></a>
+        		 <a href="#contact/{{id}}" class="activate-link thumb m-b-xs popover_contact" data="{{id}}"><img class="r r-2x" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"   title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" id="img{{id}}" /></a>
         		{{/if_contact_type}}
 				{{#if_contact_type "COMPANY"}}
         		 <a href="#company/{{id}}" class="activate-link thumb m-b-xs popover_contact" data="{{id}}"><img class="r r-2x" {{getCompanyImage "40" "display:inline;"}} title="{{getPropertyValue properties "name"}}"/></a>
@@ -292,13 +292,13 @@
 <div class="activity block pos-rlt">
 
 	<div class="activity-block-owner thumb-xs pull-left m-r-sm b-light b avatar">
-         {{#if this.user}}
-				<img class="user-img ref-roundedimg"  alt="" src="{{this.user.ownerPic}}" title="{{this.user.name}}">
+         {{#if this.domainUser}}
+				<img class="user-img ref-roundedimg"  alt="" src="{{this.domainUser.pic}}" title="{{this.domainUser.name}}">
 			{{else}}
 				<img class="user-img ref-roundedimg"  alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
 			{{/if}}
 
-     <span class="owner-name hide">{{user.name}}</span>
+     <span class="owner-name hide">{{domainUser.name}}</span>
 
 	</div>
 	
@@ -454,8 +454,8 @@
 <td>
 <div class="text-ellipsis">
     <div class="thumb-sm avatar">
-       {{#if pic}}
-        <img class="r r-2x" src="{{pic}}"  title="{{owner.name}}" />
+       {{#if owner}}
+        <img class="r r-2x" src="{{owner.pic}}"  title="{{owner.name}}" />
 	   {{else}}
 		<img class="r r-2x" src="{{defaultGravatarurl 50}}"  title="{{owner.name}}" />
        {{/if}}

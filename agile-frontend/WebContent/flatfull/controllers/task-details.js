@@ -24,7 +24,7 @@ taskDetailView : function(id)
 
 				initializeTaskDetailListeners();
 				task_details_tab.loadActivitiesView();
-
+				showContactImagesTaskView(id);
 			}, "#content");
 			
 
@@ -75,6 +75,7 @@ taskDetailView : function(id)
 
 					initializeTaskDetailListeners();
 					task_details_tab.loadActivitiesView();
+					showContactImagesTaskView(id);
 				}, "#content");				
 			} });
 
@@ -563,4 +564,19 @@ function saveTaskNote(form, noteModal, element, note)
 		}
 
 	} });
+}
+
+function showContactImagesTaskView(id){
+	$.ajax({ url : "core/api/tasks/" + id+"/contacts",dataType:"json",success : function(data)
+			{
+				$.each(data, function(i, item) {
+					for(var j=0;j<(item.properties).length;j++){
+						if(item.properties[j].name == "image")
+	    				$("#img"+item.id).attr("src", item.properties[j].value);
+					}
+    			});
+						
+			} 
+		});
+
 }

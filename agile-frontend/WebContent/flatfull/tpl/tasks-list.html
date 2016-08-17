@@ -86,7 +86,7 @@
         	{{#each contacts}}
         		{{#if_contact_type "PERSON"}}
         				<a href="#contact/{{id}}"  class="activate-link thumb tasks-list-image popover_contact" data="{{id}}">
-							<img class="r r-2x" url="contact/{{id}}" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 50}}"  title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" />
+							<img class="r r-2x img{{id}}" url="contact/{{id}}" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 50}}"  title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" />
 						</a>
         		{{/if_contact_type}}
 				{{#if_contact_type "COMPANY"}}
