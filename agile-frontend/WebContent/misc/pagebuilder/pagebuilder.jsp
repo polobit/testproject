@@ -5,7 +5,7 @@
 String AGILE_VERSION = SystemProperty.applicationVersion.get();
 
 //local,beta,live
-String ENVIRONMENT = "local";
+String ENVIRONMENT = "live";
 String MAIN_URL = "http://localhost:8888/";
 
 if(ENVIRONMENT == "live")
@@ -52,7 +52,7 @@ if(idPath != null && !StringUtils.isEmpty(idPath) && !idPath.equals("/")) {
     var siteUrl = '<%=MAIN_URL%>';
     var agilePageId = <%=pageId%>;
     var s3BaseUrl = '<%=S3_STATIC_FILES_URL%>';
-    var CURRENT_AGILE_DOMAIN = 'localhost'/*<%=NamespaceManager.get()%>*/;
+    var CURRENT_AGILE_DOMAIN = '<%=NamespaceManager.get()%>';
     var current_agileform;
     </script>
 </head>
