@@ -2413,3 +2413,5 @@ transform: translateX(-50%);}
 .navbar-searchicon > .btn.focus{ color: inherit;}
 .search-filters li{ width:50%; float: left;}
 /*end custom css code*/
+.search-filters li a
+{ color: #363f44 !important;}
