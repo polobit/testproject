@@ -40,6 +40,7 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Contact.Type;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.Note;
+import com.agilecrm.contact.Tag;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.NoteUtil;
 import com.agilecrm.deals.Milestone;
@@ -440,10 +441,10 @@ public class JSAPI
 
 		    // Sets owner key to contact before saving
 		    contact.setContactOwner(JSAPIUtil.getDomainUserKeyFromInputKey(apiKey));
-		    
 		  //Adding tag for push notification  
-		  contact.addTags("Push Notification");
-	    // return mapper.writeValueAsString(contact);
+			  contact.addTag(new Tag("Push Notification"));
+			  
+			  contact.save();
 	    return JSAPIUtil.limitPropertiesInContactForJSAPI(contact);
 	}
 	catch (PlanRestrictedException e){

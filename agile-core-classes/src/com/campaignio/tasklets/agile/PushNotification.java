@@ -127,12 +127,11 @@ public class PushNotification extends TaskletAdapter
 		 else if(notificationTemplate.push_param.equals("YES_AND_PUSH_EMAIL_ONLY")){
 			 linkURL = EmailLinksConversion.convertLinksUsingRegex(linkURL, AgileTaskletUtil.getId(subscriberJSON), AgileTaskletUtil.getId(campaignJSON), pushParam);
 		 }
+		 else
+			 linkURL = EmailLinksConversion.convertLinksUsingRegex(linkURL, AgileTaskletUtil.getId(subscriberJSON), AgileTaskletUtil.getId(campaignJSON), null);
 		
        //add param for push notification linked identity
-		 if(notificationTemplate.push_param.equals("YES"))
-		     linkURL = linkURL + "?n=1";
-		 else
-			  linkURL = linkURL + "&n=1";
+		   linkURL = linkURL + "&n=1";
 		 
 		try
 		{
