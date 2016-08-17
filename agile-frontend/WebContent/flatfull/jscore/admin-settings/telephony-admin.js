@@ -152,7 +152,7 @@ function saveTelephonyStatus(that){
 	var regexString = '^[a-zA-Z][a-zA-Z 0-9_-]*$';
 	var is_valid = new RegExp(regexString).test(label);
 		if(!is_valid){
-			$(that).parent().find('.save-status').html('<span style="color:red;">Status should begin with alphabet and can contain "-" and "_" as special character</span>');
+			$(that).parent().find('.save-status').html('<span style="color:red;">{{agile_lng_translate "campaigns" "telephony-status-invalid-text"}}</span>');
 			setTimeout(function(){ 
 				$(that).parent().find('.save-status').html("");
 				}, 3000);
@@ -161,7 +161,7 @@ function saveTelephonyStatus(that){
 			return false;
 		}
 		if(label.length === 0){
-			$(that).parent().find('.save-status').html('<span style="color:red;">This field is required.</span>');
+			$(that).parent().find('.save-status').html('<span style="color:red;">{{agile_lng_translate "validation-msgs" "this-field-is-required"}}</span>');
 			setTimeout(function(){ 
 				$(that).parent().find('.save-status').html("");
 				}, 3000);
