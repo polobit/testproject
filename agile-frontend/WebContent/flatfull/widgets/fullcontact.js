@@ -214,7 +214,7 @@ function loadFullContactData(apikey, emailID){
  						$('#FullContact').html("<div class='p-sm'><p> New data - "+displayData+"</p></div>");
 
 
- 						showAlertModal("New data is available for customer profile. Do you want to update the profile? <p>New data - " + displayData + "</p>", "confirm", function(){
+ 						showAlertModal(_agile_get_translated_val('widgets', 'fullcontact-newdata') + " <p>New data - " + displayData + "</p>", "confirm", function(){
 							// Reads current contact model form the contactDetailView
 							var contact_model = App_Contacts.contactDetailView.model;
 							var contactId = contact_model.id;
@@ -236,12 +236,12 @@ function loadFullContactData(apikey, emailID){
 						},undefined, "FullContact"); 						
 
 					}else{								
-						$('#FullContact').html("<div class='p-sm'>No new data available for update.</div>");										
+						$('#FullContact').html("<div class='p-sm'>"+_agile_get_translated_val('widgets', 'fullcontact-nodata')+"</div>");															
 					}					
  				}else{ 
  					var errorMessage = contactObj.message;		
- 					if(errorMessage == "Forbidden"){	
- 						errorMessage = "API key is invalid. Please provide valid API key.";
+ 					if(errorMessage == "Forbidden"){	 						
+ 						errorMessage = _agile_get_translated_val('widgets', 'fullcontact-invalid-api-key');
  					}
 
  					$('#FullContact').html("<div class='p-sm'>"+errorMessage+"</div>");
@@ -267,8 +267,8 @@ function startFullContactWidget(contact_id){
 
 	if(contact_email){		
 		loadFullContactData(fcApiKey, contact_email);
-	}else{
-		$('#FullContact').html('<div class="p-sm">Please update the email address to get any new information from FullContact.</div>');	
+	}else{						
+		$('#FullContact').html('<div class="p-sm">'+_agile_get_translated_val('widgets', 'fullcontact-email-required')+'</div>');	
 	}
 }
 
