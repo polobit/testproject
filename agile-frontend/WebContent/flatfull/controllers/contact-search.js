@@ -19,6 +19,8 @@ var ContactSearchRouter = Backbone.Router.extend({
 		try{query = query.trim();}catch(e){}
 		
 		 $("#searchForm").find(".dashboard-search-scroll-bar").css({"display":"none"});
+		 currentRoute();
+		 
 		 var search_filters = _agile_get_prefs('agile_search_filter_'+CURRENT_DOMAIN_USER.id);
 		 var search_list_filters = JSON.parse(search_filters);
 
@@ -49,11 +51,12 @@ var ContactSearchRouter = Backbone.Router.extend({
 							postRenderCallback : function(el, collection)
 							{
 								var module_name = App_Contact_Search.getModuleName(collection.url);
-								
-									initializeDealDetailSearch();
-								
-									initializeDocumentSearch(el);
-								
+
+								var collectionURL = collection.url;
+								if(collectionURL && collectionURL.indexOf("type=opportunity") != -1)
+									   initializeDealDetailSearch();
+								else if(collectionURL && collectionURL.indexOf("type=document") != -1)
+									   initializeDocumentSearch(el);
 								
 								// el.find("table").removeClass("showCheckboxes");
 

@@ -330,6 +330,7 @@ $("#activityModal").on("click", "#eventDescriptionLink", function(e){
 
 	$(".show-search-dropdown").on("click",function(e){
 		$("#searchText").val("");
+		$("#searchForm").find(".dashboard-search-scroll-bar").css({"display":"none"});
 		$(this).parent().toggleClass("open");
 	});
 

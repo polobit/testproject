@@ -97,6 +97,8 @@ function quedfunction(models)
 			timeline_collection_view.queue.running = false;
 			timeline_collection_view.queue.next();
 		});
+		$(".inner style").html("");
+
 	});
 }
 

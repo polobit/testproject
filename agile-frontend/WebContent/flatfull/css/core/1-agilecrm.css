@@ -4362,7 +4362,7 @@ border: 1px solid #e5e5e5;
 }
 
 .search-results-scroll-container {
-    max-height: 600px;
+    max-height: 700px;
     overflow: hidden;
     overflow-y : auto!important;
     margin-bottom: 30px;
@@ -4531,7 +4531,7 @@ div.list-tasks.panel-body:hover
 
 
 .search-results-scroll-container {
-    max-height: 300px;
+    max-height: 700px;
     overflow: hidden;
     overflow-y : auto!important;
     margin-bottom: 30px;
