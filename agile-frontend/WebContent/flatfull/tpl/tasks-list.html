@@ -11,20 +11,11 @@
 		<div class="panel panel-default">
 		<div class="panel-heading">{{agile_lng_translate 'task' 'task-list'}}</div>
         <div class="table-responsive">
-        <table class="table table-striped showCheckboxes no-sorting panel m-b-none 
+        <table class="table{{#is_mobile}} {{else}} table-striped {{/is_mobile}} showCheckboxes no-sorting panel m-b-none 
         {{#is_mobile}} {{else}} agile-table {{/is_mobile}} table-layout-mob-view" url="core/api/tasks/bulk" id="task-list">
             
             {{#is_mobile}}
-            <thead>
-                <tr>
-					<th style="width:10%;" class="header text-ellipsis">{{agile_lng_translate 'contact-details' 'owner'}}</th>
-					<th style="width:30%;" class="header text-ellipsis">{{agile_lng_translate 'tasks' 'task-name'}}</th>
-                    <th style="width:10%;" class="header text-ellipsis">{{agile_lng_translate 'portlets' 'category'}}</th>
-                   	<th style="width:10%;" class="header text-ellipsis">{{agile_lng_translate 'widgets' 'priority'}}</th>
-					<th style="width:10%;" class="header text-ellipsis">{{agile_lng_translate 'portlets' 'due-date'}}</th>
-                    <th style="width:30%;" class="header text-ellipsis">{{agile_lng_translate 'deal-view' 'related-to'}}</th>
-                </tr>
-            </thead>
+            
 
             {{else}}
 
@@ -41,7 +32,7 @@
 
             {{/is_mobile}}
 
-            <tbody id="tasks-list-model-list" class="c-p" route="task/">
+            <tbody id="tasks-list-model-list" class="c-p {{#is_mobile}}tasklist-checkbox{{/is_mobile}}" route="task/">
             </tbody>
         </table>
         </div>
@@ -53,6 +44,26 @@
 </script>
 
 <script id="tasks-list-model-template" type="text/html">
+{{#is_mobile}}
+<td class="data" data="{{id}}">  
+  <div class="h-auto">
+    {{#if taskOwner.pic}}
+        <span class="thumb avatar">
+            <img class="r r-2x" src="{{taskOwner.pic}}"  title="{{taskOwner.name}}"/>
+        </span>
+    {{else}}
+        <span class="thumb">
+            <img class="r r-2x" src="{{defaultGravatarurl 50}}" title="{{taskOwner.name}}"/>
+        </span>
+    {{/if}}
+  </div>
+
+  
+</td>
+
+
+{{else}}
+
 <td class="data" data="{{id}}">  
   <div class="h-auto">
 	{{#if taskOwner.pic}}
@@ -106,6 +117,8 @@
            
         </div>
     </td>
+
+    {{/is_mobile}}
 </script>
 <script id="tasks-list-header-template" type="text/html">
 <div class="wrapper-md lter bg-light b-b">

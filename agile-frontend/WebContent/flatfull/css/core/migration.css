@@ -2392,5 +2392,5 @@ transform: translateX(-50%);}
 .bg-success .grid-icon-header:hover, .bg-success .grid-icon-header:focus{background-color: #22b846;}
 .bg-danger .grid-icon-header:hover, .bg-danger .grid-icon-header:focus{background-color: #f13f3f;}
 
-
+.tasklist-checkbox tr td:first-child{ display: none;}
 /*end custom css code*/
