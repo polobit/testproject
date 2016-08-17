@@ -727,8 +727,8 @@ public class TwilioUtil
 		 */
 
 		// For Main
-		params.put("VoiceUrl", "https://" + NamespaceManager.get() + ".agilecrm.com/twilioiovoice?record=" + record
-				+ "&agileuserid=" + agileUserID + "&twimleturl=" + twimletUrlToSend);
+		//params.put("VoiceUrl", "https://" + NamespaceManager.get() + ".agilecrm.com/twilioiovoice?record=" + record
+		//		+ "&agileuserid=" + agileUserID + "&twimleturl=" + twimletUrlToSend);
 
 		// For Beta
 		/*
@@ -739,12 +739,12 @@ public class TwilioUtil
 		 */
 
 		// For Version
-		/*
-		 * params.put("VoiceUrl", "https://" + NamespaceManager.get() +
-		 * "-dot-5-2-dot-agile-crm-cloud.appspot.com/twilioiovoice?record=" +
-		 * record + "&agileuserid=" + agileUserID + "&twimleturl=" +
-		 * twimletUrlToSend);
-		 */
+		
+		  params.put("VoiceUrl", "https://" + NamespaceManager.get() +
+		  "-dot-28-9-dot-agile-crm-cloud.appspot.com/twilioiovoice?record=" +
+		  record + "&agileuserid=" + agileUserID + "&twimleturl=" +
+		  twimletUrlToSend);
+		 
 
 		params.put("VoiceMethod", "GET");
 
@@ -980,7 +980,7 @@ public class TwilioUtil
 			Map<String, String> params = new HashMap<String, String>();
 				params.put("From",from);
 				params.put("To", to);
-				params.put("Url","https://"+NamespaceManager.get()+"-dot-sandbox-dot-agilecrmbeta.appspot.com/conftwiml?conference=" + conferenceName +  "&endConferenceOnExit=no&recordConference=" + record + "&maxParticipants=3");
+				params.put("Url","https://"+NamespaceManager.get()+"-dot-28-9-dot-agile-crm-cloud.appspot.com/conftwiml?conference=" + conferenceName +  "&endConferenceOnExit=no&recordConference=" + record + "&maxParticipants=3");
 				TwilioRestResponse response = client.request("/" + APIVERSION + "/Accounts/" + account_sid + "/Calls/", "POST", params);
 				JSONObject responseTextJson = XML.toJSONObject(response.getResponseText()).getJSONObject("TwilioResponse");
 				JSONObject callResponse = responseTextJson.getJSONObject("Call");
@@ -1014,7 +1014,7 @@ public class TwilioUtil
 		String status = "400";
 		try{
 			
-			System.out.println("IN add to conference methods");
+			System.out.println("IN modify call methods");
 			String account_sid = widget.getProperty("twilio_acc_sid");
 			String auth_token = widget.getProperty("twilio_auth_token");
 			System.out.println("account_sid" + account_sid);
@@ -1047,7 +1047,7 @@ public class TwilioUtil
 				childCallSid = responseTextJson.getString("parent_call_sid");
 			}
 			
-				params.put("Url","https://"+NamespaceManager.get()+"-dot-sandbox-dot-agilecrmbeta.appspot.com/conftwiml?conference=" + conferenceName + "&endConferenceOnExit=yes&recordConference=" + record+ "&maxParticipants=3");
+				params.put("Url","https://"+NamespaceManager.get()+"-dot-28-9-dot-agile-crm-cloud.appspot.com/conftwiml?conference=" + conferenceName + "&endConferenceOnExit=yes&recordConference=" + record+ "&maxParticipants=3");
 				params.put("Method", "POST");
 				TwilioRestResponse response = client.request("/" + APIVERSION + "/Accounts/" + account_sid + "/Calls/" +childCallSid, "POST", params);
 				System.out.println("respomse for modify call is -" + XML.toJSONObject(response.getResponseText()).getJSONObject("TwilioResponse"));
