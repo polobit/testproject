@@ -1,10 +1,8 @@
 // Twilio call noty when user change tab
 var Twilio_Call_Noty;
 var Twilio_Call_Noty_IMG = "";
-
 var To_Number;
 var To_Name = "";
-
 var Twilio_Token;
 var Verfied_Number;
 var globalconnection;
@@ -247,7 +245,7 @@ $(function(){
 		TWILIO_DIRECTION = "outbound-dial";
 		TWILIO_IS_VOICEMAIL = false;
 		callConference.started = false;
-		twiliocall($(this).closest(".contact-make-call").attr("phone"), getContactName(contactDetailsObj));
+		twiliocall($(this).closest(".contact-make-call").attr("phone"), getContactName(contactDetailsObj), null, contactDetailsObj);
 	});
 
 	$('body').off('click', '#twilio_acc_sid, #twilio_auth_token');
@@ -988,6 +986,10 @@ function fill_twilioio_numbers()
 
 function setUpGlobalTwilio()
 {
+/*	head.js(LIB_PATH + "jscore/telephony/i18PhoneFormat.js", function()
+			{
+				console.log("i18PhoneFormat  loaded for validating numbers");
+			});*/
 	// Loads twilio min.js to intiliaze twilio call events
 	//head.js("https://static.twilio.com/libs/twiliojs/1.2/twilio.min.js", function()
 	head.js("https://static.twilio.com/libs/twiliojs/1.2/twilio.min.js", function()
@@ -1145,15 +1147,15 @@ function setUpGlobalTwilio()
 					
 					if(!cnf_started){
 						// getting logs if the conference call is not there
-						getTwilioIOLogs(phoneNumber);
+						getTwilioIOLogs(phoneNumber,null, TWILIO_CONTACT);
 						// Change selected number if its different than calling number.
 						var selectedNumber = $('#contact_number').val();
 						if(selectedNumber != phoneNumber)
 						{
 							$("#contact_number").val(phoneNumber);
 						}
-					}
-				  }		
+				  }	
+				  }	
 			}catch(err){
 				console.log('error in log fetching' + err.message);
 			}
@@ -1300,7 +1302,8 @@ function setUpGlobalTwilio()
 							showCallNotyPopup("missedCall", "error",'<span class="noty_contact_details"><b>Missed call : </b><br>' + conn.parameters.From + '<br></span><div class="clearfix"></div>', 5000);
 							//showCallNotyPopup("missedCall", "error", Twilio_Call_Noty_IMG+'<span class="noty_contact_details"><b>Missed call : </b><br>' + conn.parameters.From + '<br></span><div class="clearfix"></div>', 5000);
 							if(previousDialled){
-								To_Number = previousDialled ;  
+								To_Number = previousDialled ; 
+								previousDialled = "";
 							}
 							conn.reject();						
 							if (conn)
@@ -1416,14 +1419,17 @@ function twiliocall(phoneNumber, toName,conferenceName, contact)
 	// get the phone number to connect the call to
 	console.log("In twilio call finction after makingcall function and starting call");
 	
+	var num = phoneNumber;
+	var cont = contact;
+	var numberToDial = getFormattedPhone(num, cont);
+	// converting number to dial i 164 format...
 	
 	if(conferenceName){
-		params = { "from" : Verfied_Number, "PhoneNumber" : phoneNumber, "conference" : conferenceName};
+		params = { "from" : Verfied_Number, "PhoneNumber" : numberToDial, "conference" : conferenceName};
 	}else{
-		params = { "from" : Verfied_Number, "PhoneNumber" : phoneNumber};
+		params = { "from" : Verfied_Number, "PhoneNumber" : numberToDial};
 	}
 	
-
 	// if call campaign is running then modify call container	
 	try{
 		if(CALL_CAMPAIGN.start)
@@ -1463,7 +1469,7 @@ function twiliocall(phoneNumber, toName,conferenceName, contact)
 	
 	To_Number = phoneNumber;
 	To_Name = toName;
-	TWILIO_CALLED_NO = To_Number;	
+	TWILIO_CALLED_NO = numberToDial;	
 	
 	if(!CALL_CAMPAIGN.call_from_campaign){
 		addContactImg("Outgoing", function(img){
@@ -1619,8 +1625,7 @@ function showNoteAfterCall(callRespJson,messageObj,paramJson)
 			if(TWILIO_DIRECTION == "outbound-dial") {
 		//				phoneNumber = callRespJson.to;
 						phoneNumber = TWILIO_CALLED_NO;
-						TWILIO_CALLED_NO = "";
-						
+						//TWILIO_CALLED_NO = "";
 					}else{
 						phoneNumber = callRespJson.from;
 					}
@@ -1673,15 +1678,6 @@ function showNoteAfterCall(callRespJson,messageObj,paramJson)
 								});
 						}
 					}else{
-						try{
-							if(paramJson){
-								if(!jQuery.isEmptyObject(paramJson)){
-									if(paramJson.cnf_started){
-										phoneNumber = TWILIO_CALLED_NO;
-									}
-								}
-							}
-						}catch (e) {}
 
 						if(callStatus != "completed") {
 							$.post( "/core/api/widgets/twilio/savecallactivity?note_id="+
@@ -1691,8 +1687,8 @@ function showNoteAfterCall(callRespJson,messageObj,paramJson)
 								status : data.status,
 								duration : data.duration 
 								});
-						}
-					}
+						};
+					};
 					TWILIO_CONTACT_ID = null;
 				});
 						
@@ -2174,5 +2170,49 @@ function saveNotesAndActivitiesForConference(jsonParam){
 			duration : callRespJson.duration 
 			});*/
 
-
+}
+// this function will take number, contact and required format as parameter and gives the desired number..
+// country code is taken from contact if available..
+function getFormattedPhone(number, cont, format){
+	try{
+		
+		if(!cont || !number){
+			return number;
+		}
+		var numToReturn = number;
+		var numberToFormat = number;
+		var contact = cont;
+		var code ;
+		var formattedNumber;
+		var countryCode;
+		var address = getPropertyValue(contact.properties,'address');
+		countryCode = JSON.parse(address).country;
+		code = countryCode;
+		
+		// this will call the library method and gets output in json format
+		formattedNumber = phoneNumberParser(numberToFormat,code);
+		
+		// check if the formatted number is valid
+		var formattedNumberResult;	
+		if(format){
+			if(format == "national"){
+				formattedNumberResult =formattedNumber.result.nationalFormat;
+			}else if(format == "international"){
+				formattedNumberResult = formattedNumber.result.internationalFormat;
+			}else if(format == "carrierFormat"){
+				formattedNumberResult = formattedNumber.result.carrierFormat;
+			}else{
+				formattedNumberResult = formattedNumber.result.format164;
+			}
+		}else{
+			formattedNumberResult =  formattedNumber.result.format164;
+		}
+			
+		if(formattedNumberResult && formattedNumberResult!= "invalid"){
+			numToReturn = formattedNumberResult;
+		}
+		console.log("changes format phonenumber is " + formattedNumber);
+		
+	}catch(e){}
+	return numToReturn;
 }
