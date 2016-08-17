@@ -308,17 +308,17 @@ function handleObjects() {
                         }
 
 
-                        $('input.social-input[name="facebook"]').val(addhttp(self.find('a.facebook').attr('href')));
+                        $('input.social-input[name="facebook"]').val(self.find('a.facebook').attr('href'));
 
-                        $('input.social-input[name="twitter"]').val(addhttp(self.find('a.twitter').attr('href')));
+                        $('input.social-input[name="twitter"]').val(self.find('a.twitter').attr('href'));
 
-                        $('input.social-input[name="linkedin"]').val(addhttp(self.find('a.linkedin').attr('href')));
+                        $('input.social-input[name="linkedin"]').val(self.find('a.linkedin').attr('href'));
 
-                        $('input.social-input[name="youtube"]').val(addhttp(self.find('a.youtube').attr('href')));
+                        $('input.social-input[name="youtube"]').val(self.find('a.youtube').attr('href'));
 
-                        $('input.social-input[name="instagram"]').val(addhttp(self.find('a.instagram').attr('href')));
+                        $('input.social-input[name="instagram"]').val(self.find('a.instagram').attr('href'));
 
-                        $('input.social-input[name="pinterest"]').val(addhttp(self.find('a.pinterest').attr('href')));
+                        $('input.social-input[name="pinterest"]').val(self.find('a.pinterest').attr('href'));
 
                         hideAllSettings();
                         $('#social-links').show();
