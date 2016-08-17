@@ -2154,7 +2154,7 @@ function saveNotesAndActivitiesForConference(jsonParam){
 		CallLogVariables.phone = jsonParam.phoneNumber;
 		CallLogVariables.duration = jsonParam.duration;
 		CallLogVariables.status = "answered";
-		return showNewContactModal(phoneNumber);
+		return showNewContactModal(jsonParam.phoneNumber);
 	}	
 	
 
