@@ -401,7 +401,14 @@ var Contact_Details_Model_Events = Base_Model_View.extend({
 		/** inliner edits input fields**/
 		'click #company-name-text '  : 'toggleinline_company',
 		'blur #company-Input input ' : 'companyInlineEdit',
-    'keydown #company-inline-input' : 'companyNameChange'  
+    'keydown #company-inline-input' : 'companyNameChange',
+
+      /** Leads events **/
+      'click #contactDetailsTab a[href="#leads-notes"]' : 'openLeadNotes',
+      'click #contactDetailsTab a[href="#leads-events"]' : 'openLeadEvents',
+      'click #contactDetailsTab a[href="#leads-tasks"]' : 'openLeadTasks',
+      'click #contactDetailsTab a[href="#leads-deals"]' : 'openLeadDeals',
+      'click .remove-lead-tags' : 'removeLeadTags' 
     },
     
     
@@ -1536,7 +1543,93 @@ updateScoreValue :function(){
 			}
 		}
 		setleadScoreStyles(scoreboxval)
-	}
+	},
+
+  openLeadNotes :  function(e)
+  {
+    e.preventDefault();
+    App_Leads.leadDetails.saveLeadTabPosition("notes");
+    App_Leads.leadDetails.loadNotes();
+  },
+
+  openLeadTasks :  function(e)
+  {
+    e.preventDefault();
+    App_Leads.leadDetails.saveLeadTabPosition("tasks");
+    App_Leads.leadDetails.loadTasks();
+  },
+
+  openLeadEvents :  function(e)
+  {
+    e.preventDefault();
+    App_Leads.leadDetails.saveLeadTabPosition("events");
+    App_Leads.leadDetails.loadEvents();
+  },
+
+  openLeadDeals :  function(e)
+  {
+    e.preventDefault();
+    App_Leads.leadDetails.saveLeadTabPosition("deals");
+    App_Leads.leadDetails.loadDeals();
+  },
+
+  removeLeadTags :  function(e){
+    e.preventDefault();
+    var targetEl = $(e.currentTarget);
+
+    var tag = $(targetEl).attr("tag");
+    //removeItemFromTimeline($("#" +  tag.replace(/ +/g, '') + '-tag-timeline-element', $('#timeline')).parent('.inner'))
+    console.log($(targetEl).closest("li").parent('ul').append(getRandomLoadingImg()));
+    
+      var json = App_Leads.leadDetailView.model.toJSON();
+      
+      // Returns contact with deleted tag value
+      json = delete_contact_tag(json, tag);
+      var that = targetEl;
+      
+      // Unbinds click so user cannot select delete again
+      $(targetEl).unbind("click");
+      
+        var contact = new Backbone.Model();
+        contact.url = 'core/api/contacts';
+        contact.save(json, {
+          success: function(data)
+            {             
+              $(that).closest("li").parent('ul').find('.loading').remove();
+              $(that).closest("li").remove();
+              
+            // Updates to both model and collection
+              App_Leads.leadDetailView.model.set(data.toJSON(), {silent : true});
+              
+            //  App_Contacts.contactDetailView.model.set({'tags' : data.get('tags')}, {silent : true}, {merge:false});
+              
+              // Also deletes from Tag class if no more contacts are found with this tag
+
+             //Check if any deals are having the tag.If yes dont remove it from the app
+              $.ajax({
+                url: 'core/api/opportunity/based/tags?tag=' + tag,
+                type: 'GET',
+                success: function(data)
+                { 
+                  console.log(data);
+                  if(data == "fail"){
+                      // Also deletes from Tag class if no more contacts are found with this tag
+                    $.ajax({
+                      url: 'core/api/tags/' + tag,
+                      type: 'DELETE',
+                      success: function()
+                      {
+                      if(tagsCollection)
+                        tagsCollection.remove(tagsCollection.where({'tag': tag})[0]);
+                      }
+                    });
+                  }
+                }
+              });
+            }
+        });
+  },
+
 });
 
 $(function(){

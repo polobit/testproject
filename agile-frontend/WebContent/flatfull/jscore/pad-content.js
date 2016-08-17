@@ -224,6 +224,25 @@ var CONTENT_JSON = {
 		"route" : "#webrules-add",
 		"image" : updateImageS3Path("/img/clipboard.png")
 	}*/
+	"leads" : {
+		"title" : "{{agile_lng_translate 'leads' 'no-leads-pad-content'}}",
+		"description" : "{{agile_lng_translate 'leads' 'no-leads-pad-content-title'}}",
+		"button_text" : "{{agile_lng_translate 'leads' 'leads-btn-text'}}",
+		"route" : "#add-lead",
+		"image" : updateImageS3Path("/img/clipboard.png")
+	},
+	"filter_results_leads" : {
+		"title" : "{{agile_lng_translate 'leads' 'leads-filter-results-title'}}",
+		"route" : "#",
+		"image" : updateImageS3Path("/img/clipboard.png")
+	},
+	"lead-filters" : {
+		"title" : "{{agile_lng_translate 'portlets' 'deal-filters-pad-content-title'}}",
+		"description" : "{{agile_lng_translate 'leads' 'lead-filters-pad-content-desc'}}",
+		"button_text" : "{{agile_lng_translate 'portlets' 'deal-filters-btn-text'}}",
+		"route" : "#lead-filter-add",
+		"image" : updateImageS3Path("/img/clipboard.png")
+	},
 	
 };
 
@@ -334,7 +353,7 @@ function getLeadPadcontentKey(url)
 		return "tag_results";
 	
 	if(url.indexOf('filter') > 0)
-		return "filter_results";
+		return "filter_results_leads";
 	
 	return "leads";
 		

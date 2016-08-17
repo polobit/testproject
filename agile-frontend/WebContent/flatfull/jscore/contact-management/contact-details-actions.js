@@ -275,7 +275,9 @@ function fill_relation(el){
 	var json = null;
 	if(company_util.isCompany()){
 		json = App_Companies.companyDetailView.model.toJSON();
-	} else {
+	} else if(Current_Route && (Current_Route == "leads" || Current_Route.indexOf("lead/") == 0)){
+    json = App_Leads.leadDetailView.model.toJSON();
+  } else {
 		json = App_Contacts.contactDetailView.model.toJSON();
 	}
  	var contact_name = getContactName(json);//getPropertyValue(json.properties, "first_name")+ " " + getPropertyValue(json.properties, "last_name");

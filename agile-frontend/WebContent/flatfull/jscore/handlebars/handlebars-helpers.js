@@ -485,7 +485,7 @@ $(function()
 	 */
 	Handlebars.registerHelper('contactShortName', function()
 	{
-		if (App_Contacts.contactDetailView && App_Contacts.contactDetailView.model && !company_util.isCompany())
+		if (App_Contacts.contactDetailView && App_Contacts.contactDetailView.model && !company_util.isCompany() && Current_Route.indexOf("lead") != 0)
 		{
 
 			var contact_properties = App_Contacts.contactDetailView.model.get('properties');
@@ -516,7 +516,7 @@ $(function()
 				}
 				return "{{agile_lng_translate 'menu' 'company'}}";
 			}
-		} else if (App_Companies.companyDetailView && App_Companies.companyDetailView.model)
+		} else if (App_Companies.companyDetailView && App_Companies.companyDetailView.model && Current_Route.indexOf("lead") != 0)
 		{
 			var contact_properties = App_Companies.companyDetailView.model.get('properties');
 
@@ -526,6 +526,37 @@ $(function()
 					return contact_properties[i].value;
 			}
 			return "{{agile_lng_translate 'menu' 'company'}}";
+		} 
+		else if (App_Leads.leadDetailView && App_Leads.leadDetailView.model && !company_util.isCompany() && Current_Route.indexOf("lead") == 0)
+		{
+			var lead_properties = App_Leads.leadDetailView.model.get('properties');
+
+			if (App_Leads.leadDetailView.model.get('type') == 'LEAD')
+			{
+				var last_name;
+				for (var i = 0; i < lead_properties.length; i++)
+				{
+
+					if (lead_properties[i].name == "last_name")
+						last_name = lead_properties[i].value;
+					else if (lead_properties[i].name == "first_name")
+						return lead_properties[i].value;
+				}
+				if (last_name && last_name != null)
+				{
+					return last_name;
+				}
+				return "{{agile_lng_translate 'menu' 'lead'}}";
+			}
+			else
+			{
+				for (var i = 0; i < lead_properties.length; i++)
+				{
+					if (lead_properties[i].name == "name")
+						return lead_properties[i].value;
+				}
+				return "{{agile_lng_translate 'menu' 'company'}}";
+			}
 		}
 	});
 	
@@ -7594,4 +7625,18 @@ Handlebars.registerHelper('is_Particular_Domain', function(options)
 	return options.fn(this);
 		else
 			return options.inverse(this);
+});
+
+Handlebars.registerHelper('getLeadStatus', function(leadStatusId, options)
+{
+	if(App_Leads.leadStatusesListView && App_Leads.leadStatusesListView.collection)
+	{
+		var leadStatusModel = App_Leads.leadStatusesListView.collection.get(leadStatusId);
+
+		if(leadStatusModel)
+		{
+			return leadStatusModel.get("label");
+		}
+	}
+	return "";
 });

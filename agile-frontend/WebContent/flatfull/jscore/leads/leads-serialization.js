@@ -1,4 +1,4 @@
-function serialize_and_save_continue_lead(e, form_id, modal_id, continueContact, saveBtn, tagsSourceId)
+function serialize_and_save_continue_lead(e, form_id, modal_id, continueLead, saveBtn, tagsSourceId)
 {
 
 	// Prevents the default event, if any
@@ -48,20 +48,14 @@ function serialize_and_save_continue_lead(e, form_id, modal_id, continueContact,
 	if (id)
 	{
 
-		// If user refreshes in contact details page, then none of the list
-		// views are defined so, contact will be fetched from detailed view
-		if (App_Contacts.contactDetailView && App_Contacts.contactDetailView.model != null && App_Contacts.contactDetailView.model.get('id') == id)
-			obj = App_Contacts.contactDetailView.model.toJSON();
+		// If user refreshes in lead details page, then none of the list
+		// views are defined so, lead will be fetched from detailed view
+		if (App_Leads.leadDetailView && App_Leads.leadDetailView.model != null && App_Leads.leadDetailView.model.get('id') == id)
+			obj = App_Leads.leadDetailView.model.toJSON();
 
-		// If contact list view is defined, then contact is fetched from list.
-		else if (App_Contacts.contactsListView && App_Contacts.contactsListView.collection.get(id) != null)
-			obj = App_Contacts.contactsListView.collection.get(id).toJSON();
-
-		// If contact list is under a selected custom view, then contact is
-		// fetched from the custom view list.
-		else if (App_Contacts.contact_custom_view && App_Contacts.contact_custom_view.collection.get(id) != null)
-			obj = App_Contacts.contact_custom_view.collection.get(id).toJSON();
-
+		// If lead list view is defined, then contact is fetched from list.
+		else if (App_Leads.leadsListView && App_Leads.leadsListView.collection.get(id) != null)
+			obj = App_Leads.leadsListView.collection.get(id).toJSON();
 	}
 
 	// Loads continue editing form
@@ -106,10 +100,19 @@ function serialize_and_save_continue_lead(e, form_id, modal_id, continueContact,
 	// Stores person's continue editing form template key
 	template = 'update-lead';
 	obj.type = 'LEAD';
-    /*@priyanka
-    *saving first_name,last_name,picture and its TwitterId Pre-populate into the saving
-    * person model and continue saving it will also appers with same field
-    */
+
+	var leadSourceId = $("#" + form_id + " #lead_source_id").val();
+	var leadStatusId = $("#" + form_id + " #lead_status_id").val();
+	if(leadSourceId)
+	{
+		obj.lead_source_id = leadSourceId;
+	}
+
+	if(leadStatusId)
+	{
+		obj.lead_status_id = leadStatusId;
+	}
+    
 	if(contact_source)
 		obj.source = contact_source ;
 
@@ -131,7 +134,7 @@ function serialize_and_save_continue_lead(e, form_id, modal_id, continueContact,
   
 	// /give preference to autofilled company, ignore any text in textfield
 	// for filling company name
-	var company_el = $("#" + form_id + " [name='contact_company_id']").find('li');
+	var company_el = $("#" + form_id + " [name='lead_company_id']").find('li');
 	if (company_el && company_el.length)
 	{
 		var company_id = $(company_el.get(0)).attr('data');
@@ -159,9 +162,6 @@ function serialize_and_save_continue_lead(e, form_id, modal_id, continueContact,
 
 	if (isValidField(form_id + ' #phone'))
 		properties.push(property_JSON('phone', form_id + ' #phone'));
-	
-/*		if (isValidField(form_id + ' #skypePhone'))
-		properties.push(property_JSON('skypePhone', form_id + ' #skypePhone'));*/
 
 	if (isValidField(form_id + ' #job_title'))
 		properties.push(property_JSON('title', form_id + ' #job_title'));
@@ -237,20 +237,20 @@ function serialize_and_save_continue_lead(e, form_id, modal_id, continueContact,
 			success: function(company){
 				if(company){
 					contact_company = company ;
-					return serialize_lead_properties_and_save(e, form_id, obj, properties, modal_id, continueContact, saveBtn, tagsSourceId, id, created_time, custom_fields_in_template, template , company);
+					return serialize_lead_properties_and_save(e, form_id, obj, properties, modal_id, continueLead, saveBtn, tagsSourceId, id, created_time, custom_fields_in_template, template , company);
 				}
 			},
 			error: function(){
 				console.log("company fetch failed.");
-				return serialize_lead_properties_and_save(e, form_id, obj, properties, modal_id, continueContact, saveBtn, tagsSourceId, id, created_time, custom_fields_in_template, template);
+				return serialize_lead_properties_and_save(e, form_id, obj, properties, modal_id, continueLead, saveBtn, tagsSourceId, id, created_time, custom_fields_in_template, template);
 			}
 		});
 	}
 	else
-		return serialize_lead_properties_and_save(e, form_id, obj, properties, modal_id, continueContact, saveBtn, tagsSourceId, id, created_time, custom_fields_in_template, template);
+		return serialize_lead_properties_and_save(e, form_id, obj, properties, modal_id, continueLead, saveBtn, tagsSourceId, id, created_time, custom_fields_in_template, template);
 }
 
-function serialize_lead_properties_and_save(e, form_id, obj, properties, modal_id, continueContact, saveBtn, tagsSourceId, id, created_time, custom_fields_in_template, template ,contact_company){
+function serialize_lead_properties_and_save(e, form_id, obj, properties, modal_id, continueLead, saveBtn, tagsSourceId, id, created_time, custom_fields_in_template, template ,contact_company){
 				
 		if (isValidField(form_id + ' #company_url'))
 			properties.push(property_JSON('url', form_id + ' #company_url'));		
@@ -328,14 +328,13 @@ function serialize_lead_properties_and_save(e, form_id, obj, properties, modal_i
 		{
 			var addressJSON = {};
 			var subtype;
-			/*var remote_addr=false; */ 
+			
 			$.each($(element).find(":input,select"), function(index, subelement)
 			{
-
 				if ($(subelement).val() == undefined || $(subelement).val().length == 0)
-					{  /*remote_addr =true;
-						addressJSON['remote_add'] = remote_addr;*/
-						return;}
+				{  
+					return;
+				}
 
 				if ($(subelement).attr('name') == 'address-type')
 					subtype = $(subelement).val();
@@ -449,20 +448,15 @@ function serialize_lead_properties_and_save(e, form_id, obj, properties, modal_i
 	obj["created_time"] = created_time;
 	var clickButtonId = e.currentTarget.id; 
 	// Saves contact
-	var contactModel = new BaseModel();
-	contactModel.url = 'core/api/contacts';
-	contactModel.save(obj, { success : function(data)
+	var leadModel = new BaseModel();
+	leadModel.url = 'core/api/contacts';
+	leadModel.save(obj, { success : function(data)
 	{
-
-		// Remove social search results from local storage after editing a
-		// contact
-		_agile_delete_prefs("Agile_linkedin_matches_" + data.get('id'));
-		_agile_delete_prefs("Agile_twitter_matches_" + data.get('id'));
 
 		// Removes disabled attribute of save button
 		enable_save_button($(saveBtn));
 
-		add_contact_to_view(App_Contacts.contactsListView, data, obj.id);
+		//add_contact_to_view(App_Leads.leadsListView, data, obj.id);
 
 		// Adds the tags to tags collection
 		if (tags != undefined && tags.length != 0)
@@ -478,7 +472,7 @@ function serialize_lead_properties_and_save(e, form_id, obj, properties, modal_i
 		$('#' + modal_id).find('img.person-img').remove();
 
 		// Loads continue editing form along with custom fields if any
-		if (continueContact)
+		if (continueLead)
 		{
 
 			add_custom_fields_to_form(data.toJSON(), function(contact)
@@ -492,13 +486,11 @@ function serialize_lead_properties_and_save(e, form_id, obj, properties, modal_i
 		else
 		{
 			// update contacts-details view
-			if (App_Contacts.contactDetailView)
-				App_Contacts.contactDetailView.model = data;
+			if (App_Leads.leadDetailView)
+				App_Leads.leadDetailView.model = data;
 
-			// App_Contacts.contactDetails(data.id,data);
-			// App_Contacts.navigate("contact/"+data.id);
-			if(!CALL_CAMPAIGN.start && Current_Route != "contact/" + data.id)
-			App_Contacts.navigate("contact/" + data.id, { trigger : true });
+			if(!CALL_CAMPAIGN.start && Current_Route != "lead/" + data.id)
+			App_Leads.navigate("lead/" + data.id, { trigger : true });
 		}
 
 		// Hides the modal
@@ -537,7 +529,7 @@ function serialize_lead_properties_and_save(e, form_id, obj, properties, modal_i
 					CALL_CAMPAIGN.current_count = CALL_CAMPAIGN.current_count - 1;
 					CALL_CAMPAIGN.contact_update = false;
 					dialNextCallAutomatically();
-					Backbone.history.loadUrl("contact/" + id);
+					Backbone.history.loadUrl("lead/" + id);
 					$( window ).scrollTop( 0 );
 					return;
 				}else{
@@ -549,8 +541,8 @@ function serialize_lead_properties_and_save(e, form_id, obj, properties, modal_i
 					
 				}
 				
-				if(Current_Route != "contact/" + id)
-				Backbone.history.navigate("contact/" + id, { trigger : true });	
+				if(Current_Route != "lead/" + id)
+				Backbone.history.navigate("lead/" + id, { trigger : true });	
 				$( window ).scrollTop( 0 );
 				
 				

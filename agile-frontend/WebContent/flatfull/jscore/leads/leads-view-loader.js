@@ -187,7 +187,7 @@ var LeadsViewLoader = (function(){
 
 	LeadsViewLoader.prototype.setUpLeadView = function(cel)
 	{
-		if (_agile_get_prefs("agile_lead_view"))
+		/*if (_agile_get_prefs("agile_lead_view"))
 		{
 			$('#leads-view-options', cel).html("<a data-toggle='tooltip' data-placement='bottom' data-original-title='List View' class='btn btn-default btn-sm leads-view' data='list'><i class='fa fa-list'  style='margin-right:3px'></i></a>");
 			$("#leads-grid-view-checkbox", cel).show();
@@ -201,7 +201,7 @@ var LeadsViewLoader = (function(){
 		$("#leads-grid-view-checkbox", cel).hide();
 		$("#leads-list-view-checkbox", cel).show();
 		$("#bulk-action-btns", cel).css("border-bottom", "0");
-		return;
+		return;*/
 	}
 
 	LeadsViewLoader.prototype.setUpLeadsCount = function(el)
@@ -337,9 +337,56 @@ var LeadsViewLoader = (function(){
 		$('#filter-list', cel).html(App_Leads.leadFiltersListView.render().el);
 	}
 
+	LeadsViewLoader.prototype.setupSources = function(el, obj)
+	{
+		App_Leads.leadSourcesListView = new Base_Collection_View({ url : '/core/api/categories?entity_type=LEAD_SOURCE', sort_collection : false });
+
+		App_Leads.leadSourcesListView.collection.fetch({ success: function(data){
+			if(data)
+			{
+				var $optEle = $('#lead_source_id', el);
+				var template = "<option value='{{id}}'>{{label}}</option>";
+				var compiledTemplate = Handlebars.compile(template);
+				var sources = data.toJSON();
+				$.each(sources, function(index, sourceJSON){
+					$optEle.append(compiledTemplate(sourceJSON));
+				});
+				if(obj)
+				{
+					$optEle.find("option[value="+obj.lead_source_id+"]").attr("selected", "selected");
+				}
+			}
+			hideTransitionBar();
+		} });
+	}
+
+	LeadsViewLoader.prototype.setupStatuses = function(el, obj)
+	{
+		App_Leads.leadStatusesListView = new Base_Collection_View({ url : '/core/api/categories?entity_type=LEAD_STATUS', sort_collection : false });
+
+		App_Leads.leadStatusesListView.collection.fetch({ success: function(data){
+			if(data && el)
+			{
+				var $optEle = $('#lead_status_id', el);
+				var template = "<option value='{{id}}'>{{label}}</option>";
+				var compiledTemplate = Handlebars.compile(template);
+				var statuses = data.toJSON();
+				$.each(statuses, function(index, statusJSON){
+					$optEle.append(compiledTemplate(statusJSON));
+				});
+				if(obj)
+				{
+					$optEle.find("option[value="+obj.lead_status_id+"]").attr("selected", "selected");
+				}
+			}
+			hideTransitionBar();
+		} });
+	}
+
 	LeadsViewLoader.prototype.buildLeadsView = function(el, tag_id)
 	{
 		var that = this;
+		this.setupStatuses();
 		this.setUpLeadView(el);
 		this.setupFilterList(el, tag_id);
 		this.setUpLeadSortFilters(el);

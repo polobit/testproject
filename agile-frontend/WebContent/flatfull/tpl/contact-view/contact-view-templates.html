@@ -79,6 +79,12 @@
         		{{getSystemPropertyValue properties "last_name"}} </a>
         		<div><small class="text-muted  block text-ellipsis">{{getSystemPropertyValue properties "email"}}</small></div>
         	{{/if_contact_type}}
+
+        	{{#if_contact_type "LEAD"}}
+        		<a class="text-cap custom-link">{{getSystemPropertyValue properties "first_name"}}
+        		{{getSystemPropertyValue properties "last_name"}} </a>
+        		<div><small class="text-muted  block text-ellipsis">{{getSystemPropertyValue properties "email"}}</small></div>
+        	{{/if_contact_type}}
         
 			{{#if_contact_type "COMPANY"}}
         		<a class="text-cap">{{getSystemPropertyValue properties "name"}}</a>
@@ -118,6 +124,14 @@
     	<div class="text-ellipsis"style="width:12em;" >
         	<a class="text-cap">{{getSystemPropertyValue properties "last_name"}}</a>
         </div>
+	</td>
+</script>
+
+<script id = "contacts-custom-view-status-template" type="text/html">
+	<td class="data" data="{{id}}">
+    	<div class="text-ellipsis "style="width:12em;">
+    		<span class="label m-r-xs bg-light dk">{{getLeadStatus lead_status_id}}</span>
+    	</div>
 	</td>
 </script>
 

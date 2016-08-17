@@ -5206,7 +5206,14 @@ widgets.add-your-widgets,Add your widgets,Añadir sus widgets
 widgets.custom-widgets,Custom Widgets,Reproductores personalizados
 widgets.stripe-custom-field-select,Stripe uses Stripe ID stored in text custom field to fetch data. Select the custom field to be used.,Raya utiliza identificador de banda almacenado en el campo de texto personalizado para obtener los datos . Seleccionar el campo personalizado que se utilizará .
 leads-view.add-tags-to-selected-leads,Add tags to selected leads,
-leads-view.remove-tags-from-selected-leads,Remove tags from selected leads,Eliminar las etiquetas de las empresas seleccionadas
-leads-view.change-owner-to-leads-bulk,Change owner to leads bulk,Cambiar propietario a compañías masivamente
-bulk-actions.leads-owner-change-scheduled,Leads owner change scheduled,Propietario de los contactos cambio programado
+leads-view.remove-tags-from-selected-leads,Remove tags from selected leads,
+leads-view.change-owner-to-leads-bulk,Change owner to leads bulk,
+bulk-actions.leads-owner-change-scheduled,Leads owner change scheduled,
 bulk-actions.leads-delete-scheduled,Leads delete scheduled,
+leads.no-leads-pad-content-title,Leads are your customers or prospects that you interact with using Agile.,
+leads.no-leads-pad-content,You do not have any leads currently.,
+leads.leads-btn-text,Add Leads,
+leads.leads-filter-results-title,No leads matching this criteria.,
+leads.lead-filters-pad-content-desc,Filters are used to sort leads with a specific criteria to find patterns.,
+menu.lead,Lead,
+menu.leads,Leads,

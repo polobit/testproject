@@ -94,6 +94,8 @@ function setup_tags_typeahead(callback, el) {
                     id = App_Deal_Details.dealDetailView.model.id;
                     url = 'core/api/opportunity/AddDealTag?tag='+tag+'&id='+id; 
                 }
+                else if(Current_Route && Current_Route.indexOf("lead/") == 0)
+                    json = App_Leads.leadDetailView.model.toJSON();
     			else if(company_util.isCompany())
     				json = App_Companies.companyDetailView.model.toJSON();
     			else
@@ -145,6 +147,22 @@ function setup_tags_typeahead(callback, el) {
                                     } );
                         }
 	       			}
+                    else if(Current_Route && Current_Route.indexOf("lead/") == 0){
+                        App_Leads.leadDetailView.model.set(data.toJSON(), {silent : true});
+                        // Append to the list, when no match is found 
+                        if ($.inArray(tag, old_tags) == -1) {
+                            var template = Handlebars.compile('<li class="tag btn btn-xs btn-default m-r-xs m-b-xs inline-block" data="{{name}}"><span><a class="anchor m-r-xs" href="#tags/{{name}}" >{{name}}</a><a class="close remove-lead-tags" id="{{name}}" tag="{{name}}">&times</a></span></li>');
+                            // Adds lead name to tags ul as li element
+                            $('#added-tags-ul').append(template({name : tag}));
+                            $.each(data.get("tagsWithTime"), function(e, d) 
+                            {
+                                if (d.tag == tag)
+                                {
+                                    $('#added-tags-ul').find("li[data='"+tag+"']").attr('title',epochToHumanDate("mmmm dd, yyyy 'at' hh:MM tt",d.createdTime));
+                                }
+                            } );
+                        }
+                    }
 	       			else{
 	       				App_Contacts.contactDetailView.model.set(data.toJSON(), {silent : true});
 	       				addTagToTimelineDynamically(tag, data.get("tagsWithTime"));

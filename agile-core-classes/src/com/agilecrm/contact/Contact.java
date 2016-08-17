@@ -18,6 +18,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.annotate.JsonIgnore;
 
+import com.agilecrm.activities.Category;
 import com.agilecrm.contact.ContactField.FieldType;
 import com.agilecrm.contact.email.bounce.EmailBounceStatus;
 import com.agilecrm.contact.email.bounce.util.EmailBounceStatusUtil;
@@ -295,8 +296,58 @@ public class Contact extends Cursor
     @JsonIgnore
     @NotSaved
     public boolean forceSearch = false;
+    
+    /**
+     * Lost source Id of the Lead.
+     */
+    @NotSaved
+    private Long lead_source_id = 0L;
 
     /**
+     * Key object of Lead source
+     */
+    @NotSaved(IfDefault.class)
+    private Key<Category> leadSource = null;
+
+    /**
+     * Lead status Id
+     */
+    @NotSaved
+    private Long lead_status_id = 0L;
+
+    /**
+     * Key object of Lead status
+     */
+    @NotSaved(IfDefault.class)
+    private Key<Category> leadStatus = null;
+    
+    
+
+    public Long getLead_source_id() {
+    	if(leadSource != null)
+    	{
+    		lead_source_id = leadSource.getId();
+    	}
+		return lead_source_id;
+	}
+
+	public void setLead_source_id(Long lead_source_id) {
+		this.lead_source_id = lead_source_id;
+	}
+
+	public Long getLead_status_id() {
+		if(leadStatus != null)
+    	{
+			lead_status_id = leadStatus.getId();
+    	}
+		return lead_status_id;
+	}
+
+	public void setLead_status_id(Long lead_status_id) {
+		this.lead_status_id = lead_status_id;
+	}
+
+	/**
      * Default constructor
      */
     public Contact()
@@ -1174,8 +1225,21 @@ public class Contact extends Cursor
 	    // Set lead owner(current domain user)
 	    owner_key = new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId());
 	}
+	
+	if(this.type == Type.LEAD)
+	{
+		if(lead_source_id != null && lead_source_id > 0)
+		{
+			this.leadSource = new Key<Category>(Category.class, lead_source_id);
+		}
+		
+		if(lead_status_id != null && lead_status_id > 0)
+		{
+			this.leadStatus = new Key<Category>(Category.class, lead_status_id);
+		}
+	}
 
-	if (this.type == Type.PERSON)
+	if (this.type == Type.PERSON || this.type == Type.LEAD)
 	{
 	    System.out.println("type of contact is person");
 	    if (this.properties.size() > 0)

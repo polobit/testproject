@@ -54,6 +54,7 @@ cat ../WebContent/helpcenter/helpcenter-tpl/*.html  > ../WebContent/tpl/min/flat
 cat flatfull/tpl/leads-filters/*.html  > tpl/min/flatfull/leads-filters.js
 cat flatfull/tpl/leads-view/*.html  > tpl/min/flatfull/leads-view.js
 cat flatfull/tpl/leads-form/*.html  > tpl/min/flatfull/leads-form.js
+cat flatfull/tpl/leads-detail/*.html  > tpl/min/flatfull/leads-details.js
 
 ## Widgets
 cat flatfull/tpl/widget/braintree/*.html > tpl/min/flatfull/braintree.js

@@ -93,7 +93,7 @@ function setupLhsFilters(cel, is_company)
 
 }
 
-function loadCustomFiledsFilters(fields, cel, is_company)
+function loadCustomFiledsFilters(fields, cel, is_company, is_lead)
 {
 	getTemplate("contacts-lhs-filters-custom", fields, undefined, function(template_ui){
 		if(!template_ui)
@@ -108,11 +108,15 @@ function loadCustomFiledsFilters(fields, cel, is_company)
 		// 'mm/dd/yyyy'});
 
 		scramble_filter_input_names(cel);
-		if (is_company && _agile_get_prefs('dynamic_company_filter'))
+		if (is_lead && _agile_get_prefs('dynamic_lead_filter'))
+		{
+			deserializeLhsFilters($('#lhs-lead-filter-form'), _agile_get_prefs('dynamic_lead_filter'));
+		}
+		if (is_company && _agile_get_prefs('dynamic_company_filter') && !is_lead)
 		{
 			deserializeLhsFilters($('#lhs-contact-filter-form'), _agile_get_prefs('dynamic_company_filter'));
 		}
-		if (!is_company && _agile_get_prefs('dynamic_contact_filter'))
+		if (!is_company && _agile_get_prefs('dynamic_contact_filter') && !is_lead)
 		{
 			deserializeLhsFilters($('#lhs-contact-filter-form'), _agile_get_prefs('dynamic_contact_filter'));
 		}
@@ -868,6 +872,7 @@ function submitLeadLhsFilters()
 	var formData = serializeLhsFilters($('#lhs-lead-filter-form'))
 	var contact_type = formData.contact_type;
 	_agile_delete_prefs('lead_filter');
+	_agile_delete_prefs('dynamic_lead_filter');
 	if (formData != null && (formData.rules.length > 0 || formData.or_rules.length > 0))
 	{
 		_agile_set_prefs('dynamic_lead_filter', JSON.stringify(formData));

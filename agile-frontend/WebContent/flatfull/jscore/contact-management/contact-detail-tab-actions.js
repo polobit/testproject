@@ -183,6 +183,8 @@ var contact_details_documentandtasks_actions = {
 				var json = null;
 				if(company_util.isCompany()){
 					json = App_Companies.companyDetailView.model.toJSON();
+				} else if(Current_Route && Current_Route.indexOf("lead/") == 0){
+					json = App_Leads.leadDetailView.model.toJSON();
 				} else {
 					json = App_Contacts.contactDetailView.model.toJSON();
 				}

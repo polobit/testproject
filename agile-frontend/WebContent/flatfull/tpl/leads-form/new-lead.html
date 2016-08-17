@@ -57,7 +57,7 @@
                         			<input name="phone" class="phone form-control field_length" max_len="500" type="text" id="phone" placeholder="Phone Number" />
                     			</div>
                 		</div>
-                		<div class="control-group form-group" id='tags_source_lead_modal' style="margin-bottom:1px">
+                		<div class="control-group form-group" id='tags_source_lead_modal'>
                     		<label class="control-label col-sm-3">Tags</label>
    							<div class="controls col-sm-7">
                         		<input name="tags" type="text" id="tags-new-lead" class="tags-typeahead form-control" maxlength="500" placeholder="Separate tags with commas"/>
@@ -72,6 +72,30 @@
                     			<div style="color:red;" class="text-sm">Tag name should start with an alphabet and cannot contain special characters other than underscore and space.</div>
                 			</div>
             			</div>
+                        <div class="control-group form-group">
+                            <label class="control-label col-sm-3">Source</label>
+                            <div class="col-sm-7">
+                                <div class="control-group">
+                                    <span class="controls">
+                                        <select name="lead_source_id" type="text" class="required form-control" max_len="500" id="lead_source_id">
+                                            <option value="">Select</option>
+                                        </select>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="control-group form-group">
+                            <label class="control-label col-sm-3">Status</label>
+                            <div class="col-sm-7">
+                                <div class="control-group">
+                                    <span class="controls">
+                                        <select name="lead_status_id" type="text" class="required form-control" max_len="500" id="lead_status_id">
+                                            <option value="">Select</option>
+                                        </select>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
             		</fieldset>
     			</form>
 			</div>

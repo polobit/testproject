@@ -4,7 +4,9 @@ var LeadsRouter = Backbone.Router.extend({
 	routes : {
 		"leads" : "leads",
 		"lead-filters" : "leadFilters",
-		"lead-filter-add" : "leadFilterAdd"
+		"lead-filter-add" : "leadFilterAdd",
+		"lead/:id" : "leadsDetails",
+		"lead-edit" : "editLead"
 	},
 
 	leads : function()
@@ -16,6 +18,8 @@ var LeadsRouter = Backbone.Router.extend({
 			postRenderCallback : function(el)
 			{
 				that.leadsViewLoader.buildLeadsView(el);
+
+				that.leadsViewLoader.setUpLeadsCount(el);
 			} 
 		});
 		$('#content').html(leadsHeader.render().el);
@@ -60,4 +64,138 @@ var LeadsRouter = Backbone.Router.extend({
 		$("#content").html(LOADING_HTML);
 		leadFilter.render();		
 	},
+
+	leadsDetails : function(id, lead)
+	{
+		// For getting custom fields
+		if (App_Leads.customFieldsList == null || App_Leads.customFieldsList == undefined)
+		{
+			App_Leads.customFieldsList = new Base_Collection_View({ url : '/core/api/custom-fields/position', sort_collection : false,
+				restKey : "customFieldDefs", templateKey : "admin-settings-customfields", individual_tag_name : 'tr' });
+			App_Leads.customFieldsList.collection.fetch();
+		}
+
+		var lead_collection;
+
+		if (!lead && this.leadDetailView && this.leadDetailView.model != null)
+		{
+			if (id == this.leadDetailView.model.toJSON()['id'])
+			{
+				App_Leads.leadsDetails(id, this.leadDetailView.model);
+				
+				return;
+			}
+		}
+
+		// If user refreshes the leads detail view page directly - we
+		// should load from the model
+		if (!lead && !this.leadsListView || (this.leadsListView && this.leadsListView.collection.length == 0) || (this.leadsListView && this.leadsListView.collection.get(id) == null))
+		{
+
+			var lead_details_model = Backbone.Model.extend({ url : function()
+			{
+				return '/core/api/contacts/' + this.id;
+			} });
+
+			var model = new lead_details_model();
+			model.id = id;
+			model.fetch({ success : function(data)
+			{
+				// Call Lead Details again
+				App_Leads.leadsDetails(id, model);
+
+			}, 
+			error: function(data, response)
+			{
+				if(response && response.status == '403')
+
+					$("#content").html ("<div class='well'><div class='alert bg-white text-center'><div class='slate-content p-md text'><h4 style='opacity:0.8;margin-bottom:5px!important;'> "+_agile_get_translated_val('contacts','invalid-viewer')+"</h4><div class='text'style='opacity:0.6;'>"+_agile_get_translated_val('companies','enable-permission')+"</div></div></div></div>");
+
+			}
+			});
+			
+			return;
+		}
+
+		// If not downloaded fresh during refresh - read from collection
+		if (!lead)
+		{
+			lead = this.leadsListView.collection.get(id);
+		}
+		
+		// Assigning lead collection
+		if(this.leadsListView && this.leadsListView.collection)
+			lead_collection = this.leadsListView.collection;
+
+		this.leadDetailView = new Contact_Details_Model_Events({ data : lead, isNew : true, template : "leads-details",
+			postRenderCallback : function(el)
+			{
+				App_Leads.leadDetails = new LeadDetails();
+
+				App_Leads.leadDetails.loadLeadTabs(el, lead.toJSON());
+
+				loadWidgets(el, lead, "widgets");
+			} 
+		});
+
+		$('#content').html(this.leadDetailView.render().el);
+		
+	},
+
+	editLead : function(lead)
+	{
+		var lead = null;
+
+		// Takes back to companies if companies detailview is not defined
+		if (!this.leadDetailView || !this.leadDetailView.model.id)
+		{
+			this.navigate("leads", { trigger : true });
+			return;
+		}
+
+		// If company detail view is defined the get current company
+		// model id
+		var id = this.leadDetailView.model.id;
+
+		if (this.leadDetailView && this.leadDetailView.model.id)
+		{
+			lead = this.leadDetailView.model.toJSON();
+		}
+
+		// If contact list is defined the get contact to edit from the
+		// list
+		else if (this.leadsListView && this.leadsListView.collection && this.leadsListView.collection.get(id))
+		{
+			lead = this.leadsListView.collection.get(id).toJSON();
+		}
+
+		// If contact list view and custom view list is not defined then
+		// download contact
+		else if (!lead)
+		{
+			// Download contact for edit since list is not defined
+			var lead_details_model = Backbone.Model.extend({ url : function()
+			{
+				return '/core/api/contacts/' + id;
+			} });
+
+			var model = new lead_details_model();
+
+			model.fetch({ success : function(contact)
+			{
+
+				// Call Contact edit again with downloaded contact
+				// details
+				App_Leads.editLead(lead.toJSON());
+			} });
+
+			return;
+		}
+
+		// Contact Edit - take him to continue-contact form
+		add_custom_fields_to_form(lead, function(lead)
+		{
+				deserialize_contact(lead, 'update-lead');
+		}, lead.type);
+	}
 });

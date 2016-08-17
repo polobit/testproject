@@ -71,6 +71,10 @@ public class ContactViewPrefsUtil
 	{
 	    return getDefaultCompanyViewPrefs(agileUser);
 	}
+	else if ("LEAD".equalsIgnoreCase(type))
+	{
+	    return getDefaultLeadViewPrefs(agileUser);
+	}
 	else
 	{
 	    return getDefaultContactViewPrefs(agileUser);
@@ -214,6 +218,31 @@ public class ContactViewPrefsUtil
 	    e.printStackTrace();
 	    return null;
 	}
+    }
+    
+    /**
+     * Returns default LeadViewPrefs.
+     * 
+     * @param agileUser
+     *            - AgileUser Object.
+     * @return default LeadViewPrefs.
+     */
+    private static ContactViewPrefs getDefaultLeadViewPrefs(AgileUser agileUser)
+    {
+	LinkedHashSet<String> fields_set = new LinkedHashSet<String>();
+	fields_set.add("basic_info");
+	fields_set.add("image");
+	fields_set.add("first_name");
+	fields_set.add("last_name");
+	fields_set.add("status");
+	fields_set.add("email");
+	fields_set.add("company");
+	fields_set.add("tags");
+	fields_set.add("lead_score");
+	ContactViewPrefs viewPrefs = new ContactViewPrefs(agileUser.id, fields_set);
+	viewPrefs.type = ContactViewPrefs.Type.LEAD;
+	viewPrefs.save();
+	return viewPrefs;
     }
 
 }
