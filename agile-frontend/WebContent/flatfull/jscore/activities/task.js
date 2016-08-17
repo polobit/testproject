@@ -252,6 +252,15 @@ function initializeTasksListeners(){
 		// Change UI and input field
 		applyDetailsFromGroupView();
 	});	
+	$('#tasks-list-template').on('click','.task-list-minimized',function(e)
+	 {
+	 	$(this).find(".expandbutton").trigger('click');
+	 	
+	 });
+	$("#tasks-list-template").on("click", "#taskheading", function(b) {
+        b.stopPropagation();
+        taskAutoWidth(this)
+    });
 
 	$('#tasks-list-template').on('click', '.tasks-list-image', function(event)
 			{
@@ -261,7 +270,18 @@ function initializeTasksListeners(){
 				routeToPage(url);
 				event.stopPropagation();
 				
-			});	
+			});
+	$('#tasks-list-template').on('click','.taskComplete',function(e){
+		if($(this).prop("checked") == true)
+		{
+			$(this).closest(".task-striped").find(".is-task-complete").trigger("click");
+		}
+	});
+	$('#tasks-list-template').on("click", ".expandbutton", function(e)
+	{	
+		e.stopPropagation();
+		taskAutoWidth(this);
+	});	
 	$('#tasks-list-template').on('click', '.view-task-details', function(event)
 	{
 		event.preventDefault();
@@ -660,6 +680,52 @@ function get_due(due)
 	date = date.getTime() / 1000;
 	// console.log("Today " + date + " Due " + due);
 	return Math.floor((due - date) / (24 * 3600));
+}
+function taskAutoWidth(el)
+{	
+	var arr = _agile_get_prefs("task-page-status");
+	if(!arr)
+		arr = [];
+	else 
+		arr = arr.split(",");
+
+	var id = $(el).closest(".task-trello-list").attr("id");
+	if(arr.indexOf(id) != -1)
+	{
+		delete arr[arr.indexOf(id)]
+	}
+
+	var expanded = $(el).closest(".task-trello-list").hasClass("compress");
+	if(expanded)
+	{
+		arr.push($(el).closest(".task-trello-list").attr("id"))
+		
+		$(el).children().removeClass("fa fa-expand")
+		$(el).children().addClass("fa fa-compress")
+	}
+
+	else
+	{
+		
+		$(el).children().removeClass("fa fa-compress")
+		$(el).children().addClass("fa fa-expand")
+		
+	}
+	$(el).closest(".task-trello-list").toggleClass("expand compress");
+	_agile_set_prefs('task-page-status' , arr.toString());
+		
+}
+
+function getTaskTrackAutoWidthCurrentState(track_name){
+   if(!track_name)
+   	  return "compress";
+
+   	// Get prefs form storage 
+   	var prefs = _agile_get_prefs("task-page-status");
+   	if(prefs && prefs.indexOf(track_name) != -1)
+   		 return "expand";
+
+   	return "compress";
 }
 
 function increaseCount(heading)
