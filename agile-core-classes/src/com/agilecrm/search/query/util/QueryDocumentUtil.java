@@ -6,10 +6,12 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.TimeZone;
 
 import org.apache.commons.lang.StringUtils;
 
 import com.agilecrm.SearchFilter;
+import com.agilecrm.account.util.AccountPrefsUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.core.api.search.SearchAPI;
@@ -18,6 +20,7 @@ import com.agilecrm.search.AppengineSearch;
 import com.agilecrm.search.BuilderInterface;
 import com.agilecrm.search.QueryInterface.Type;
 import com.agilecrm.search.ui.serialize.SearchRule;
+import com.agilecrm.search.ui.serialize.SearchRule.RuleCondition;
 import com.agilecrm.search.util.SearchUtil;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.access.UserAccessScopes;
@@ -25,6 +28,7 @@ import com.agilecrm.user.access.util.UserAccessControlUtil;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.DateUtil;
 import com.agilecrm.util.StringUtils2;
+import com.amazonaws.services.s3.model.BucketLifecycleConfiguration.Rule;
 import com.googlecode.objectify.Key;
 
 /**
@@ -232,13 +236,12 @@ public class QueryDocumentUtil {
 			}
 
 			// Queries on created or updated times
-			else if ((lhs.contains("last_contacted") || lhs.contains("time")
-					|| lhs.contains("last_emailed")
-					|| lhs.contains("last_called") || lhs
-						.contains("last_campaign_emaild"))
-					&& !lhs.contains("tags")) {
-				query = createTimeQueryEpoch(query, lhs, condition, rhs,
-						rhs_new, joinCondition);
+			else if ((lhs.contains("last_contacted") || lhs.contains("time") || lhs.contains("last_emailed") || lhs.contains("last_called") || lhs.contains("last_campaign_emaild")) && !lhs.contains("tags"))
+			{
+				if(SearchRule.RuleCondition.partialDateConditions.contains(condition))
+					query = createPartialDateQuery(query, lhs, condition, rhs, rhs_new, joinCondition);
+				else
+					query = createTimeQueryEpoch(query, lhs, condition, rhs, rhs_new, joinCondition);
 			}
 
 			else if (lhs.contains("time") && lhs.contains("tags")) {
@@ -595,6 +598,50 @@ public class QueryDocumentUtil {
 			epochQuery = "(" + epochQuery + ")";
 			query = buildNestedCondition(joinCondition, query, epochQuery);
 		}
+		else if (condition.equals(SearchRule.RuleCondition.ON_AFTER) && StringUtils.isNumeric(rhs)) {
+			Calendar cal = Calendar.getInstance();
+			cal.setTimeZone(TimeZone.getTimeZone(AccountPrefsUtil.getTimeZone()));
+			cal.add(Calendar.DATE, Integer.parseInt(rhs)); // Add days
+			
+			cal.set(Calendar.HOUR_OF_DAY, 0);
+			cal.set(Calendar.MINUTE, 0);
+			cal.set(Calendar.SECOND, 0);
+			
+			long currentTime = cal.getTimeInMillis() / 1000;
+
+			cal.set(Calendar.HOUR_OF_DAY, 23);
+			cal.set(Calendar.MINUTE, 59);
+			cal.set(Calendar.SECOND, 59);
+			long limitTime = cal.getTimeInMillis()/1000;
+
+			String epochQuery = lhs + "_epoch >= " + currentTime;
+			epochQuery = buildNestedCondition("AND", epochQuery, lhs
+					+ "_epoch <=" + limitTime);
+			epochQuery = "(" + epochQuery + ")";
+			query = buildNestedCondition(joinCondition, query, epochQuery);
+		}
+		else if (condition.equals(SearchRule.RuleCondition.ON_BEFORE) && StringUtils.isNumeric(rhs)) {
+			Calendar cal = Calendar.getInstance();
+			cal.setTimeZone(TimeZone.getTimeZone(AccountPrefsUtil.getTimeZone()));
+			cal.add(Calendar.DATE, -(Integer.parseInt(rhs))); // Subtract days
+			
+			cal.set(Calendar.HOUR_OF_DAY, 0);
+			cal.set(Calendar.MINUTE, 0);
+			cal.set(Calendar.SECOND, 0);
+			
+			long currentTime = cal.getTimeInMillis() / 1000;
+
+			cal.set(Calendar.HOUR_OF_DAY, 23);
+			cal.set(Calendar.MINUTE, 59);
+			cal.set(Calendar.SECOND, 59);
+			long limitTime = cal.getTimeInMillis()/1000;
+
+			String epochQuery = lhs + "_epoch >= " + currentTime;
+			epochQuery = buildNestedCondition("AND", epochQuery, lhs
+					+ "_epoch <=" + limitTime);
+			epochQuery = "(" + epochQuery + ")";
+			query = buildNestedCondition(joinCondition, query, epochQuery);
+		}
 
 		return query;
 
@@ -920,5 +967,96 @@ public class QueryDocumentUtil {
 			return contacts.get(0);
 		}
 		return null;
+	}
+	
+	/**
+	 * Returns query string 
+	 * 
+	 * @param query - Query
+	 * @param lhs - Property key string
+	 * @param condition - comparator
+	 * @param rhs - First Value
+	 * @param rhs_new - Second Value
+	 * @param joinCondition - OR rules or AND rules
+	 * 
+	 * @return String
+	 */
+	public static String createPartialDateQuery(String query, String lhs, SearchRule.RuleCondition condition, String rhs,
+			String rhs_new, String joinCondition)
+	{
+		if(!(SearchRule.RuleCondition.partialDateConditions.contains(condition)))
+			return query;
+		
+		int value = Integer.valueOf(rhs);
+		
+		lhs = SearchUtil.normalizeTextSearchString(lhs);
+		
+		String lhsMonth = lhs + "__mm__", lhsDate = lhs + "__dd__";
+		
+		if(condition.equals(RuleCondition.BY_MONTH_ONLY))
+		{
+			Calendar cal = Calendar.getInstance();
+			cal.set(Calendar.MONTH, value - 1); // In Calendar Jan starts with 0
+			
+			String partialDateQuery = lhsMonth + " = " + value;
+			
+			String timezoneOffset = AccountPrefsUtil.getTimeZoneInOffset(null);
+			
+			if(!StringUtils.equalsIgnoreCase(timezoneOffset, "+00:00") 
+					&& StringUtils.startsWith(timezoneOffset, "+"))
+			{
+				int firstDayOfCurrentMonth = cal.getMinimum(Calendar.DAY_OF_MONTH);
+				int lastDayOfCurrentMonth = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
+				
+				cal.add(Calendar.MONTH, -1); // Goto previous month
+				int previousMonth = cal.get(Calendar.MONTH) + 1; 
+				int lastDayOfPreviousMonth = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
+	
+				partialDateQuery =  "(" + lhsMonth + " = " + value + " AND " + "(" + lhsDate + " < " + lastDayOfCurrentMonth 
+						+ " AND "
+						+ lhsDate + " >= " + firstDayOfCurrentMonth
+						+"))";
+				partialDateQuery += " OR " + "(" + lhsMonth + " = " + previousMonth + " AND " + lhsDate + " = " + lastDayOfPreviousMonth + ")";
+			}
+			
+			query = buildNestedCondition(joinCondition, query, partialDateQuery);
+		}
+		
+		if(condition.equals(RuleCondition.IS_AFTER_IN_DAYS) || condition.equals(RuleCondition.IS_BEFORE_IN_DAYS))
+		{
+			String timeZone = AccountPrefsUtil.getTimeZone();
+			
+			Calendar cal = Calendar.getInstance();
+			cal.setTimeZone(TimeZone.getTimeZone(timeZone));
+			cal.set(Calendar.HOUR_OF_DAY, 0);
+			cal.set(Calendar.MINUTE, 0);
+			
+			String timezoneOffset = AccountPrefsUtil.getTimeZoneInOffset(timeZone);
+			
+			if(!StringUtils.equalsIgnoreCase(timezoneOffset, "+00:00") 
+					&& StringUtils.startsWith(timezoneOffset, "+"))
+			{
+				if(condition.equals(RuleCondition.IS_AFTER_IN_DAYS))
+					value = value - 1; // If timezone is ahead of GMT, decrease by one day
+				
+				if(condition.equals(RuleCondition.IS_BEFORE_IN_DAYS))
+					value = value + 1; // If timezone is ahead of GMT, increase by one day
+			}
+			
+			// Add '-' to decrease days
+			if(condition.equals(RuleCondition.IS_BEFORE_IN_DAYS))
+				value = -value;
+			
+			cal.add(Calendar.DATE, value);
+			
+			String partialDateQuery = lhsMonth + " = " + (cal.get(Calendar.MONTH) + 1);
+			
+			partialDateQuery += " AND " +  lhsDate+ " = " + (cal.get(Calendar.DATE));
+			
+			query = buildNestedCondition(joinCondition, query, partialDateQuery);
+		}
+		
+		return query;
+		
 	}
 }
