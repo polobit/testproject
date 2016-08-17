@@ -714,6 +714,7 @@ function contact_list_starify(el,listView) {
 
       				 var id = App_Contacts.contact_popover.toJSON().id;		 
       	 			App_Contacts.contactsListView.collection.get(id).set({'star_value': score},{silent:true});
+      	 			
       				 App_Contacts.contact_popover.trigger('popoverChange');
       					 }
       	
