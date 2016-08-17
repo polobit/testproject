@@ -141,7 +141,7 @@
         <div class="list-header panel-heading task-list-heading" style="border-bottom: 1px solid #dee5e7!important;"attr="{{heading}}" ownerID={{owner_id}}>
 <div class="pull-left" style="margin-top:-2px;"> 
 </div> 
-<div class="pull-left"> 
+<div class="pull-left" style="width:79%;"> 
          <span class="m-r-xs text-ellipsis font-bold" id="taskheading" style="opacity:0.6;width: 220px;display: block;">{{get_normal_name heading}}
        
 </div>
@@ -295,7 +295,7 @@
   </div>  
   
 <i class="fa fa-clock-o  m-l-sm m-b-sm"></i>
-    <time class="new-task-due-time time-ago" data-toggle="tooltip" data-placement="top" data-container="body"  >{{epochToHumanDate "ddd mmm dd yyyy HH:MM" due}}</time> <label class="label bg-light dk text-tiny m-l-xs" title="Category" data-toggle="tooltip" data-placement="top" data-container="body">{{capFirstLetter type}}</label>
+    <time class="new-task-due-time time-ago" title="{{epochToHumanDate "" due}}"  >{{epochToTaskDate due}}</time> <label class="label bg-light dk text-tiny m-l-xs" title="Category" data-toggle="tooltip" data-placement="top" data-container="body">{{capFirstLetter type}}</label>
 
  
    
