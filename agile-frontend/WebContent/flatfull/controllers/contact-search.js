@@ -49,11 +49,12 @@ var ContactSearchRouter = Backbone.Router.extend({
 							postRenderCallback : function(el, collection)
 							{
 								var module_name = App_Contact_Search.getModuleName(collection.url);
-								
-									initializeDealDetailSearch();
-								
-									initializeDocumentSearch(el);
-								
+
+								var collectionURL = collection.url;
+								if(collectionURL && collectionURL.indexOf("type=opportunity") != -1)
+									   initializeDealDetailSearch();
+								else if(collectionURL && collectionURL.indexOf("type=document") != -1)
+									   initializeDocumentSearch(el);
 								
 								// el.find("table").removeClass("showCheckboxes");
 
