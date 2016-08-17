@@ -1,5 +1,7 @@
 package com.agilecrm.account.util;
 
+import java.util.TimeZone;
+
 import com.agilecrm.AgileQueues;
 import com.agilecrm.account.AccountPrefs;
 import com.agilecrm.db.ObjectifyGenericDao;
@@ -115,5 +117,20 @@ public class AccountPrefsUtil
 		queue.add(TaskOptions.Builder.withPayload(task));
 	}
 	
+	public static String getTimeZoneInOffset(String timezone)
+	{
+		if(timezone == null)
+			timezone = getTimeZone();
+		
+		TimeZone tz = TimeZone.getTimeZone(timezone);
+		long offsetInMillis = tz.getOffset(System.currentTimeMillis());
+		
+		String offset = String.format("%02d:%02d", Math.abs(offsetInMillis / 3600000), Math.abs((offsetInMillis / 60000) % 60));
+	    offset = (offsetInMillis >= 0 ? "+" : "-") + offset;
+		
+	    System.out.println("Timezone in offset " + offset);
+		
+	    return offset;
+	}
 	
 }
