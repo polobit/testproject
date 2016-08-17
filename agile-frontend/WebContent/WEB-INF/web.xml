@@ -1234,6 +1234,14 @@
 		<servlet-name>TicketsPdfServlet</servlet-name>
 		<url-pattern>/ticketsPdfServlet</url-pattern>
 	</servlet-mapping>
+	<servlet>
+		<servlet-name>EmailPollServlet</servlet-name>
+		<servlet-class>com.agilecrm.emailbuilder.EmailPollServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>EmailPollServlet</servlet-name>
+		<url-pattern>/emailPollServlet</url-pattern>
+	</servlet-mapping>
 	
     <servlet>
     
