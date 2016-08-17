@@ -28,8 +28,8 @@ public class AffiliateApi {
 	
 	@GET
 	@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-	public List<Affiliate> getAffiliates(@QueryParam("userId") Long userId, @QueryParam("startTime") Long startTime, @QueryParam("endTime") Long endTime){
-		List<Affiliate> affiliates = AffiliateUtil.getAffiliates(userId, startTime, endTime);
+	public List<Affiliate> getAffiliates(@QueryParam("cursor") String cursor, @QueryParam("page_size") String count, @QueryParam("userId") Long userId, @QueryParam("startTime") Long startTime, @QueryParam("endTime") Long endTime){
+		List<Affiliate> affiliates = AffiliateUtil.getAffiliates(userId, startTime, endTime, (Integer.parseInt(count)), cursor);
 		return affiliates;
 	}
 	

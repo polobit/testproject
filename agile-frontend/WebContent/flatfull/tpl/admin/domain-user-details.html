@@ -1,6 +1,5 @@
 <script id="all-domain-model-template" type="text/html">
 
-<td></td>
 <td>{{name}}</td>
 <td>
 {{email}}
@@ -13,7 +12,7 @@
 <td ><a href="/#change-password-admin/{{id}}"  >{{agile_lng_translate 'settings' 'reset-password'}}</a></td>
 <td><a href="#" data="{{id}}" class="delete_user btn-mini btn-danger">{{agile_lng_translate 'contact-details' 'delete'}}</a></td>
 <td>{{#if is_account_owner}}<i class="agilecrm-profile-dropdown"></i>{{/if}}</td>
- 
+ <td><a href="#" class="text-info check_affiliate" domain="{{domain}}" userId="{{id}}">add</a></td>
 
 </script>
 <script id="all-domain-collection-template" type="text/html">
@@ -48,12 +47,12 @@
             <table class="table table-striped onlySorting">
                 <thead>
                     <tr>
-                        <th></th>
                         <th>{{agile_lng_translate 'deal-view' 'name'}}</th>
                         <th>{{agile_lng_translate 'modals' 'email'}}</th>
                         <th>{{agile_lng_translate 'admin-settings-users' 'last-logged-in'}}</th>
                         <th>{{agile_lng_translate 'settings' 'reset-password'}}</th>
 						<th>{{agile_lng_translate 'other' 'delete-user'}}</th>
+                        <th>Affiliate Amount</th>
                     </tr>
                 </thead>
                 <tbody id="all-domain-model-list" ></tbody>
@@ -241,6 +240,35 @@
 {{/if}}
 <a  align="center" data="" class="delete-namespace data btn btn-danger">{{agile_lng_translate 'other' 'delete-account'}}</a>
 
+</div>
+</div>
+</script>
+
+<script id="affiliate-add-amount-template" type="text/html">
+<div class="modal-dialog">
+    <div class="modal-content">
+    <div class="modal-header">
+        <button class="close" data-dismiss="modal">x</button>
+        <h3 class="modal-title">Add Amount</h3>
+    </div>
+    <div class="modal-body">
+        <form id="affiliate-add-amount-form" name="affiliate-add-amount-form">
+            <fieldset>    
+            <input type="hidden" id="domain" value="{{domain}}"></input>
+            <input type="hidden" id="userId" value="{{userId}}"></input>
+                <div class="control-group form-group">
+                    <label class="control-label">Amount
+                    <span class="field_req">*</span></label>
+                    <div class="controls">
+                        <input type="text" name="amount" class="required number form-control" min="0"/>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <a href="#" id="add_amount" class="btn btn-sm btn-primary">Add</a>
+    </div>
 </div>
 </div>
 </script>

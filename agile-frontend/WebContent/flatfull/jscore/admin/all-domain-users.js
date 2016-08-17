@@ -108,7 +108,6 @@ function initializeAdminpanelListner(el){
 		});
 	$("#admin-panel-listners").on("click", '.refundpopup', function(e) {
 			e.preventDefault();
-			
 			var chargeid = $(this).attr("chargeid");
 			var totalamount = $(this).attr("totalamount");
 			var refundedAmount = $(this).attr("refundedAmount");
@@ -263,5 +262,55 @@ function initializeAdminpanelListner(el){
 					}
 				});
 			});
+		});
+
+		$("#admin-panel-listners .check_affiliate").off("click");
+		$("#admin-panel-listners").on("click", ".check_affiliate", function(e){
+			e.preventDefault();
+			var domain = $(this).attr(domain);
+			var userId = $(this).attr("userId");
+			$.ajax({
+					url : 'core/api/admin_panel/affiliateDetails?d='+domain+'&id='+userId,
+					type : 'GET',
+					success : function(data){
+						if(data && data.id){
+							getTemplate('affiliate-add-amount', {"domain":domain, "userId":userId}, undefined, function(template_ui){
+								if(!template_ui)
+									  return;
+								$('#affiliateAddAmountModal').html($(template_ui)).show();
+							}, "#content");
+						}else{
+							showAlertModal("affiliate_error");
+						}
+					},
+					error : function(response){
+						showNotyPopUp("error", response.responseText, "top");
+					}
+				});
+		});
+
+		$("#affiliateAddAmountModal #add_amount").off("click");
+		$("#affiliateAddAmountModal").on("click", "#add_amount", function(e){
+			e.preventDefault();
+			if (!isValidForm($("#affiliate-add-amount-form")))
+			{
+			    return;
+			}
+			$(this).attr("disabled", "disabled");
+			var domain = $("#affiliateAddAmountModal").find("input[name='domain']");
+			var userId = $("#affiliateAddAmountModal").find("input[name='userId']");
+			var amount = $("#affiliateAddAmountModal").find("input[name='amount']");
+			$.ajax({
+					url : 'core/api/admin_panel/affiliate/addAmount?d='+domain+'&id='+userId+'&amount='+amount,
+					type : 'POST',
+					success : function(data){
+						showNotyPopUp("information", "Amount added successfully", "top");
+						$("#affiliateAddAmountModal").hide();
+					},
+					error : function(response){
+						showNotyPopUp("error", response.responseText, "top");
+						$("#affiliateAddAmountModal").hide();
+					}
+				});
 		});
 }

@@ -78,28 +78,11 @@ public class AffiliateReportServlet extends HttpServlet {
       		try{
       			List<DomainUser> users = DomainUserUtil.getAllAdminUsers(namespace);
       			for(DomainUser user : users){
-      				List<Affiliate> affiliates = AffiliateUtil.getAffiliates(user.id, firstDateOfPreviousMonth, lastDateOfPreviousMonth);
-      				if(affiliates.size() > 0){
       					map.put("userId", user.id);
       					AffiliateDetails affDetails = AffiliateDetailsUtil.getAffiliateDetailsbyUserId(user.id);
       					if(affDetails != null && affDetails.getPaypalId() != null)
       						map.put("paypalId", affDetails.getPaypalId());
-      					// MORE DETAILS
-      					/*int totalAmount = 0;
-      					int totalCommission = 0;
-      					for(Affiliate affiliate : affiliates){
-      						Map<String, Object> details = new HashMap<String, Object>();
-      						details.put("name",affiliate.getEmail());
-      						details.put("domain",affiliate.getDomain());
-      						int amount = affiliate.getAmount()/100;
-      						int commission = affiliate.getCommission();
-      						details.put("amount",amount);
-      						details.put("commission",commission);
-      						int commissionAmount = (amount/100) * commission;
-      						details.put("commissionAmount",commissionAmount);
-      						totalAmount = totalAmount + amount;
-      						totalCommission = totalCommission + commissionAmount;
-      					}*/
+      					
       					String details;
 						try {
 							details = AffiliateUtil.getTotalCommisionAmount(user.id, firstDateOfPreviousMonth, lastDateOfPreviousMonth);
@@ -111,7 +94,6 @@ public class AffiliateReportServlet extends HttpServlet {
 							e.printStackTrace();
 						}
       					
-      				}
       			}
       		}finally{
       			

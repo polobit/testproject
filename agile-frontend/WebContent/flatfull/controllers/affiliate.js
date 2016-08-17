@@ -41,7 +41,7 @@ var AffiliateRouter = Backbone.Router.extend({
 				if(!template_ui)
 					  return;
 				$('#content').html($(template_ui));
-				head.js(LIB_PATH + 'lib/date-charts.js', LIB_PATH + 'lib/date-range-picker.js' + '?_=' + _agile_get_file_hash('date-range-picker.js'), function() {
+				head.js(LIB_PATH + 'lib/date-charts-en.js', LIB_PATH + 'lib/date-range-picker.js' + '?_=' + _agile_get_file_hash('date-range-picker.js'), function() {
 					that.showDateRangePicker();
 				});
 				$('#affiliate-tabs .select').removeClass('select');
@@ -76,7 +76,19 @@ var AffiliateRouter = Backbone.Router.extend({
 			saveCallback : function(data){
 				AFFILIATE_DETAILS = data;
 				App_Affiliate.listAffiliates();
-			}
+			},prePersist : function(model){
+				var addressJSON = {};
+				$.each($(".address").find('input'), function(index, data) {
+					addressJSON[$(data).attr('name')] = $(data).val();
+				});
+				addressJSON['country'] = $(".address").find("#country").val();
+			    model.set({ 
+			       'address' : JSON.stringify(addressJSON)
+			      }, 
+			      { 
+			       silent : true 
+			      });
+			   }
 			});
 		$('#content').html(this.affiliateDetailsView.render().el);
 	},
@@ -84,7 +96,7 @@ var AffiliateRouter = Backbone.Router.extend({
 	showAffiliateCollection : function()
 	{
 		var time = getTimeFromDatePicker();
-		this.affiliateCollectionView = new Base_Collection_View({ url : 'core/api/affiliate?startTime='+time.start+'&endTime='+time.end, sort_collection : false, templateKey : "affiliate",
+		this.affiliateCollectionView = new Base_Collection_View({ url : 'core/api/affiliate?userId='+CURRENT_DOMAIN_USER.id+'&startTime='+time.start+'&endTime='+time.end, sort_collection : false, templateKey : "affiliate",
 			cursor : true, page_size : 25, individual_tag_name : 'tr', postRenderCallback : function(el){
 				head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
 				{

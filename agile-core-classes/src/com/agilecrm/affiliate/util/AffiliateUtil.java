@@ -3,7 +3,9 @@
  */
 package com.agilecrm.affiliate.util;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -38,17 +40,22 @@ public class AffiliateUtil {
 	private static ObjectifyGenericDao<Affiliate> dao = new ObjectifyGenericDao<Affiliate>(Affiliate.class);
 	
 	public static List<Affiliate> getAffiliates(Long userId){
-		return getAffiliates(userId, null, null);
+		return getAffiliates(userId, null, null, 100, null);
 	}
 	
-	public static List<Affiliate> getAffiliates(Long userId, Long startTime, Long endTime){
-		Query<Affiliate> query = dao.ofy().query(Affiliate.class);
-		if(startTime != null && endTime != null)
-			query.filter("createdTime >", startTime).filter("createdTime <=", endTime);
+	public static List<Affiliate> getAffiliates(Long userId,int max, String cursor){
+		return getAffiliates(userId, null, null, max, cursor);
+	}
+	
+	public static List<Affiliate> getAffiliates(Long userId, Long startTime, Long endTime, int max, String cursor){
+		Map<String, Object> map = new HashMap<String, Object>();
+		if(startTime != null && endTime != null){
+			map.put("createdTime >=", startTime);
+			map.put("createdTime <=", endTime);
+		}
 		if(userId != null)
-			query.filter("relatedUserId", userId);
-		List<Affiliate> affiliates = query.list();
-		return affiliates;
+			map.put("relatedUserId", userId);
+		return dao.fetchAll();
 	}
 	
 	public static String getTotalCommisionAmount(Long userId, Long startTime, Long endTime) throws JSONException{

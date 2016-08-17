@@ -1,6 +1,6 @@
 <script id="affiliate-template" type="text/html">
   <div id="affiliate-container" class="bg-light lter b-b wrapper-md">
-    <h1 class="pull-left font-thin h3">Affiliate Program</h1>
+    <h1 class="pull-left font-thin h3">{{agile_lng_translate 'affiliate' 'affiliate-program'}}</h1>
     <div id="affiliate-datepicker" class="pull-right"></div>
     <div class="clearfix"></div>    
   </div>
@@ -9,9 +9,9 @@
      <div class="vbox">
       <div class="row-row">
 		<div class="list-group list-group-lg no-radius no-border no-bg m-b-none">
-			<a href="#commission" class="commission-details-tab list-group-item select">Commission Details</a>
-			<a href="#affiliate" class="referrals-tab list-group-item">Referrals</a>
-			<a href="#tools" class="badges-tab list-group-item">Affiliate Tools</a>
+			<a href="#commission" class="commission-details-tab list-group-item select">{{agile_lng_translate 'affiliate' 'commission-details'}}</a>
+			<a href="#affiliate" class="referrals-tab list-group-item">{{agile_lng_translate 'affiliate' 'referrals'}}</a>
+			<a href="#tools" class="badges-tab list-group-item">{{agile_lng_translate 'affiliate' 'affiliate-tools'}}</a>
 		</div>
 	  </div>
 	 </div>
@@ -33,7 +33,7 @@
                 <img alt="Clipboard" src="/img/clipboard.png">
             </div>
             <div class="box-right pull-left">
-                <h4 class="text-lg" style="opacity:0.8;">There are no affiliates </h4>
+                <h4 class="text-lg" style="opacity:0.8;">{{agile_lng_translate 'affiliate' 'no-affiliates'}} </h4>
             </div>
 			<div class="clearfix">
 			</div>
@@ -43,10 +43,10 @@
 {{#if this.length}}
 <div class="panel panel-default">
  <div class="panel-heading">
-	<div class="pull-left  m-t-xs">Referrals</div>
+	<div class="pull-left  m-t-xs">{{agile_lng_translate 'affiliate' 'referrals'}}</div>
 	<div class="pull-right m-t-xs">
-		<span><span class="p-r-xs">Total Count:</span><span id="aff-count"></span></span>
-		<span class="p-l-sm"><span class="p-r-xs">Total Commission:</span>$<span id="aff-commission"></span></span>
+		<span><span class="p-r-xs">{{agile_lng_translate 'affiliate' 'total-count'}}:</span><span id="aff-count"></span></span>
+		<span class="p-l-sm"><span class="p-r-xs">{{agile_lng_translate 'affiliate' 'total-commission'}}:</span>$<span id="aff-commission"></span></span>
 	</div>
 	<div class="clearfix"></div>
  </div>
@@ -56,11 +56,11 @@
 	    <table class="table table-striped agile-table panel table-layout-mob-view">
 	        <thead>
 	            <tr>
-	                <th style="width:20%" class="header">Email</th>
-					<th style="width:15%" class="header">Domain</th>
-					<th style="width:20%" class="header">Plan</th>
-	                <th style="width:15%" class="header">Commission</th>
-					<th style="width:25%">Created Time</th>  
+	                <th style="width:20%" class="header">{{agile_lng_translate 'affiliate' 'email'}}</th>
+					<th style="width:15%" class="header">{{agile_lng_translate 'affiliate' 'domain'}}</th>
+					<th style="width:20%" class="header">{{agile_lng_translate 'affiliate' 'plan'}}</th>
+	                <th style="width:15%" class="header">{{agile_lng_translate 'affiliate' 'commission'}}</th>
+					<th style="width:25%">{{agile_lng_translate 'affiliate' 'created-time'}}</th>  
 	            </tr>
 	         </thead>
 	         <tbody id='affiliate-model-list'>
@@ -127,7 +127,7 @@
 		<div class="col-md-4">
 	  		<div class="panel panel-default">
 	          <div class="panel-heading text-lg">
-	            Total Commission
+	            {{agile_lng_translate 'affiliate' 'total-commission'}}
 	          </div>
 	          <div class="panel-body text-center m-t m-b" style="font-size: 40px;">
 	            ${{numeric_operation commission 100 "/"}}
@@ -136,7 +136,7 @@
 	  	</div><div class="col-md-4">
 	  		<div class="panel panel-default">
 	          <div class="panel-heading text-lg">
-	            Amount added to your account
+	            {{agile_lng_translate 'affiliate' 'amount-added-to-your-account'}}
 	          </div>
 	          <div class="panel-body text-center m-t m-b" style="font-size: 40px;">
 	            ${{numeric_operation amountAdded 100 "/"}}
