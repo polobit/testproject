@@ -141,15 +141,16 @@
         <div class="list-header panel-heading task-list-heading" style="border-bottom: 1px solid #dee5e7!important;"attr="{{heading}}" ownerID={{owner_id}}>
 <div class="pull-left" style="margin-top:-2px;"> 
 </div> 
-<div class="pull-left" style="width:79%;"> 
-         <span class="m-r-xs text-ellipsis font-bold" id="taskheading" style="opacity:0.6;width: 220px;display: block;">{{get_normal_name heading}}
+<div class="pull-left" style="width:60%;"> 
+         <span class="m-r-xs text-ellipsis font-bold" id="taskheading" style="opacity:0.6;display: block;">{{get_normal_name heading}}</span>
        
 </div>
  
-  <span id="task-count-{{heading}}-{{owner_id}}"  {{getthemecolor}} class="label pull-left" style="vertical-align:middle; margin-top:2px; background-color:#cfdadd;">0</span></span>
+  
 
-         <div class=" taskexpandbutton" >
+         <div class=" taskexpandbutton pull-right" >
          <img id="task-list-loading-img-{{heading}}-{{owner_id}}"  src="{{getS3ImagePath 'img/ajax-loader-cursor.gif'}}">
+         <span id="task-count-{{heading}}-{{owner_id}}"  {{getthemecolor}} class="label pull-left" style="vertical-align:middle; margin-top:2px; background-color:#cfdadd;">0</span>
          <div class="inline-block m-l-xs">
          <span class="list-bottom  add-task m-r-xs" heading="{{heading}}" ownerID={{owner_id}} style="margin-left:3px;"><a class="text-info" href="#">
 <i class="icon-plus text-xs"  data-toggle="tooltip" data-placement="top" data-container="body"  data-original-title="Add Task" title="Add Task"></i>
