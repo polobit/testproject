@@ -444,10 +444,9 @@ function update_task(value)
 		showNoteOnForm("updateTaskForm", value.notes);
 
 	});
-	//deserializeForm(value, $("#updateTaskForm"));
-	$('.update-task-timepicker').val(fillTimePicker(value.due));
-
 	
+	// deserializeForm(value, $("#updateTaskForm"));
+	$('.update-task-timepicker', $("#updateTaskModal")).val(fillTimePicker(value.due));	
 }
 
 /**

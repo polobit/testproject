@@ -43,7 +43,7 @@ var TYPEHEAD_DEAL_RELATED_CONTACTS = {};
  * @author Yaswanth
  * 
  */
-function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, url, isEmailSearch, isDealSearch, appendNameToEmail, page_size)
+function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, url, isEmailSearch, isDealSearch, appendNameToEmail, page_size, urlParamsCallback)
 {
 	// Turn off browser default auto complete
 	$('#' + id, el).attr("autocomplete", "off");
@@ -80,6 +80,10 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
 							// Get data on query
 
 							var type_url = "";
+
+							if(urlParamsCallback){
+								urlParams = urlParamsCallback();
+							}
 
 							if (urlParams && urlParams.length)
 								type_url = '&' + urlParams;
@@ -120,7 +124,7 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
 								 */
 								if (data.length == 0)
 								{
-									var txt = '<b>No Results Found</b>';
+									var txt = '<b>{{agile_lng_translate "others" "no-reults-found"}}</b>';
 
 									if (noResultText && noResultText.length)
 										txt = noResultText;
@@ -259,7 +263,7 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
 							var searchToken = $('#searchText').val();
 							var appenditem = '';
 							if(id == "searchText"){
-								appenditem = '<li><a href="#contacts/search/'+searchToken+'"><p align="center"><b>More...</b></p></a></li>';
+								appenditem = '<li><a href="#contacts/search/'+searchToken+'"><p align="center"><b>{{agile_lng_translate "others" "more"}}</b></p></a></li>';
 							}
 							$('body').find('#more-results').html(appenditem);
 

@@ -42,8 +42,16 @@ request.setAttribute("agile_email", email);
 String error = request.getParameter("error");
 if(error != null)
   System.out.println(error);
-else
-  error = "";
+else {
+	String sessionError = (String)request.getSession().getAttribute("sso_error");
+	if(sessionError != null)
+	{
+	    error = sessionError; 
+		request.getSession().removeAttribute("sso_error");
+	} 
+	else
+		error = "";	 
+}
 
 if("multi-login".equalsIgnoreCase(error)){
 Cookie[] cookies = request.getCookies();
@@ -211,6 +219,7 @@ if(isSafari && isWin)
 </script>
 
 <script type='text/javascript' src='//cdnjs.cloudflare.com/ajax/libs/jquery/1.10.2/jquery.min.js'></script>
+<script type='text/javascript' src='//cdn.jsdelivr.net/fingerprintjs2/1.1.2/fingerprint2.min.js'></script>
 
 <!--[if lt IE 10]>
 <script src="flatfull/lib/ie/placeholders.jquery.min.js"></script>
@@ -254,7 +263,7 @@ if(isSafari && isWin)
                    <%
                    }
                    %>
-                  
+                   
                    
 				<form id='oauth' name='oauth' method='post'>
               <%--      <div><h3>Sign In
@@ -285,7 +294,7 @@ if(isSafari && isWin)
 				<div class="wrapper text-center tags-color text-white tags-color">
       				<strong>Sign in using your registered account</strong>
    				</div>
-				<form name='agile' id="agile" method='post' action="/login" onsubmit="return isValid();">
+				<form name='agile' id="agile" method='post' action="/login" onsubmit="return isLoginFormValid();">
 					
 					<!-- <h3><small>Sign in using your registered account</small></h3> -->
 					<input type='hidden' name='newui' value="true">
@@ -315,7 +324,7 @@ if(isSafari && isWin)
 							<label class="checkbox" style="display:none;">
 							    <input type="checkbox" checked="checked" name="signin">Keep me signed in 
 							</label>
-							<input type='submit' value="Sign In" class='btn btn-lg btn-primary btn-block'>
+							<input type='submit' value="Sign In" class='agile-submit btn btn-lg btn-primary btn-block'>
 							 
 						
 					
@@ -350,31 +359,73 @@ if(isSafari && isWin)
 	
 	<!-- JQUery Core and UI CDN -->
 	
+                  
+		<script type="text/javascript">
+			// localStorage setup
+			var _agile_storage = {
+				key : "_agile_user_fingerprint",
+				get : function(){
+					if(!this.is_strorage_supports())
+						 return;
+					return localStorage.getItem(this.key);
+				},
+				set :  function(val){
+					if(this.is_strorage_supports())
+						localStorage.setItem(this.key, val);
+				},
+				is_strorage_supports : function(){
+					return (typeof localStorage ? true : false);
+				}
+			};		
+			
+			function _agile_get_fingerprint(callback){
+					
+					// Get stored value
+					var finger_print = _agile_storage.get();
+					if(finger_print)
+						return callback(finger_print);
+	
+					// Load js and fetch print
+					new Fingerprint2().get(function(result, components){
+							return callback(result);
+					});
+			}
+	      	
+			function randomString(length) {
+				length = length || 32;
+				var chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+			    var result = '';
+			    for (var i = length; i > 0; --i) result += chars[Math.floor(Math.random() * chars.length)];
+			    return result;
+			}
+			
+      		// Get print value to notify user 
+			_agile_get_fingerprint(function(result){
+				if(!result)
+					 return;
+
+				$("#finger_print").val(result);
+				// Reset val
+				_agile_storage.set(result);
+			});
+		</script>
+		
 	<script src='//cdnjs.cloudflare.com/ajax/libs/headjs/1.0.3/head.min.js'></script>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/jstimezonedetect/1.0.4/jstz.min.js" type="text/javascript"></script>
-	<script type="text/javascript" src="https://cdn.jsdelivr.net/fingerprintjs2/1.1.2/fingerprint2.min.js"></script>
-
 	
 	<script type="text/javascript">
 		$(document).ready(function()
 		{
 
-
-			var login_hash = window.location.hash;
-
+			// Reset form action param
+			if(window.location.href.indexOf("/normal") != -1)
+				$("form#agile").attr("action", "/login/normal");
+			
 			// Sets location hash in hidden fields
+			var login_hash = window.location.hash;
 			if(login_hash)
 				$("#location_hash").val(login_hash);
-        /*var newImg = new Image;
-        newImg.onload = function() {
-        
-        $("body").css("background-image","url('"+this.src+"')");
-       
-
-        }*/
-
-
-      	
+			
         	// agile-login-page-high.png
         	preload_login_pages();
 			// Pre load dashlet files when don is active
@@ -403,10 +454,20 @@ if(isSafari && isWin)
 		});
 		
 		// Validates the form fields
-		function isValid()
+		function isLoginFormValid()
 		{
-			// $("#agile").validate();
-			// return $("#agile").valid();
+			if( !($('#finger_print').val()) )
+			{
+				console.log("No value in fingerprint");
+				var fingerprint = randomString();
+				
+				$('#finger_print').val(fingerprint);
+				
+				_agile_storage.set(fingerprint);
+				console.log("Generated fingerprint: " + fingerprint);
+			}
+			
+			return true;
 		}
 
 		function preload_dashlet_libs(){ 
@@ -418,7 +479,14 @@ if(isSafari && isWin)
 				return;
 			}
 
-			head.load('<%=CLOUDFRONT_STATIC_FILES_PATH %>final-lib/min/lib-all-min-1.js?_=<%=_AGILE_VERSION%>', '<%=CLOUDFRONT_TEMPLATE_LIB_PATH %>jscore/min/flatfull/js-all-min.js?_=<%=_AGILE_VERSION%>', '<%=CLOUDFRONT_TEMPLATE_LIB_PATH%>tpl/min/precompiled/<%=FLAT_FULL_PATH%>tpl.js?_=<%=_AGILE_VERSION%>', '<%=CLOUDFRONT_TEMPLATE_LIB_PATH%>tpl/min/precompiled/<%=FLAT_FULL_PATH%>portlets.js?_=<%=_AGILE_VERSION%>');
+			head.load('<%=CLOUDFRONT_STATIC_FILES_PATH %>final-lib/min/lib-all-min-1.js?_=<%=_AGILE_VERSION%>', 
+					'<%=CLOUDFRONT_TEMPLATE_LIB_PATH %>jscore/min/flatfull/js-all-min-1.js?_=<%=_AGILE_VERSION%>', 
+					'<%=CLOUDFRONT_TEMPLATE_LIB_PATH %>jscore/min/flatfull/js-all-min-2.js?_=<%=_AGILE_VERSION%>', 
+					'<%=CLOUDFRONT_TEMPLATE_LIB_PATH %>jscore/min/flatfull/js-all-min-3.js?_=<%=_AGILE_VERSION%>', 
+					'<%=CLOUDFRONT_TEMPLATE_LIB_PATH %>jscore/min/flatfull/js-all-min-4.js?_=<%=_AGILE_VERSION%>', 
+					'<%=CLOUDFRONT_TEMPLATE_LIB_PATH%>tpl/min/precompiled/<%=FLAT_FULL_PATH%>tpl.js?_=<%=_AGILE_VERSION%>', 
+					'<%=CLOUDFRONT_TEMPLATE_LIB_PATH%>tpl/min/precompiled/<%=FLAT_FULL_PATH%>portlets.js?_=<%=_AGILE_VERSION%>'
+							);
 		}
 
 		function preload_login_pages(){
@@ -437,153 +505,174 @@ if(isSafari && isWin)
 
 			}
 		}
-		$(function(){
-			new Fingerprint2().get(function(result, components){
-					$("#finger_print").val(result);
-		  			console.log(result);
 
+		// localStorage setup
+		var _agile_storage = {
+			key : "_agile_user_fingerprint",
+			get : function(){
+				if(!this.is_strorage_supports())
+					 return;
+				return localStorage.getItem(this.key);
+			},
+			set :  function(val){
+				if(this.is_strorage_supports())
+					localStorage.setItem(this.key, val);
+			},
+			is_strorage_supports : function(){
+				return (typeof localStorage ? true : false);
+			}
+		};		
+		function _agile_get_fingerprint(callback){
+				
+				// Get stored value
+				var finger_print = _agile_storage.get();
+				if(finger_print)
+					return callback(finger_print);
+
+				// Load js and fetch print
+				new Fingerprint2().get(function(result, components){
+						return callback(result);
 				});
-		});
-		$(function(){
-			var BrowserDetect = {
-					init : function() {
-						this.browser = this.searchString(this.dataBrowser)
-								|| "An unknown browser";
-						this.version = this.searchVersion(navigator.userAgent)
-								|| this.searchVersion(navigator.appVersion)
-								|| this.searchMobileVersion(navigator.userAgent)
-								|| "An unknown version";
-						this.OS = this.searchString(this.dataOS) || "unknown";
-					},
-					searchString : function(data) {
-						for ( var i = 0; i < data.length; i++) {
-							var dataString = data[i].string;
-							var dataProp = data[i].prop;
-							var match = data[i].match;
-							this.versionSearchString = data[i].versionSearch
-									|| data[i].identity;
+		}
 
-							if (match && dataString.match(match))
-								return data[i].identity;
+		var BrowserDetect = {
+			init : function() {
+				this.browser = this.searchString(this.dataBrowser)
+						|| "An unknown browser";
+				this.version = this.searchVersion(navigator.userAgent)
+						|| this.searchVersion(navigator.appVersion)
+						|| this.searchMobileVersion(navigator.userAgent)
+						|| "An unknown version";
+				this.OS = this.searchString(this.dataOS) || "unknown";
+			},
+			searchString : function(data) {
+				for ( var i = 0; i < data.length; i++) {
+					var dataString = data[i].string;
+					var dataProp = data[i].prop;
+					var match = data[i].match;
+					this.versionSearchString = data[i].versionSearch
+							|| data[i].identity;
 
-							if (dataString) {
-								if (dataString.indexOf(data[i].subString) != -1)
-									return data[i].identity;
-							} else if (dataProp)
-								return data[i].identity;
-						}
-					},
-					searchMobileVersion : function(dataString) {
+					if (match && dataString.match(match))
+						return data[i].identity;
 
-						try {
-							match = dataString.match(/Mobile Safari\/([\d.]+)/);
-							if (match)
-								return parseFloat(match[1]);
-						} catch (e) {
-						}
+					if (dataString) {
+						if (dataString.indexOf(data[i].subString) != -1)
+							return data[i].identity;
+					} else if (dataProp)
+						return data[i].identity;
+				}
+			},
+			searchMobileVersion : function(dataString) {
 
-					},
-					searchVersion : function(dataString) {
+				try {
+					match = dataString.match(/Mobile Safari\/([\d.]+)/);
+					if (match)
+						return parseFloat(match[1]);
+				} catch (e) {
+				}
 
-						var index = dataString.indexOf(this.versionSearchString);
-						if (index == -1)
-							return;
-						return parseFloat(dataString.substring(index
-								+ this.versionSearchString.length + 1));
-					},
-					dataBrowser : [ {
-						string : navigator.userAgent,
-						subString : "Chrome",
-						identity : "Chrome"
-					}, {
-						string : navigator.userAgent,
-						subString : "OmniWeb",
-						versionSearch : "OmniWeb/",
-						identity : "OmniWeb"
-					}, {
-						string : navigator.vendor,
-						subString : "Apple",
-						identity : "Safari",
-						versionSearch : "Version"
-					}, {
-						prop : window.opera,
-						identity : "Opera"
-					}, {
-						string : navigator.vendor,
-						subString : "iCab",
-						identity : "iCab"
-					}, {
-						string : navigator.vendor,
-						subString : "KDE",
-						identity : "Konqueror"
-					}, {
-						string : navigator.userAgent,
-						subString : "Firefox",
-						identity : "Firefox"
-					}, {
-						string : navigator.vendor,
-						subString : "Camino",
-						identity : "Camino"
-					}, { // for newer Netscapes (6+)
-						string : navigator.userAgent,
-						subString : "Netscape",
-						identity : "Netscape"
-					}, {
-						// For IE11
-						string : navigator.userAgent,
-						match : /Trident.*rv[ :]*11\./,
-						identity : "Explorer"
-					}, {
-						string : navigator.userAgent,
-						subString : "MSIE",
-						identity : "Explorer",
-					}, {
-						string : navigator.userAgent,
-						match : /Mobile Safari\/([\d.]+)/,
-						identity : "Mobile Safari",
-						versionSearch : "/AppleWebKit\/([\d.]+)/",
-					}, {
-						string : navigator.userAgent,
-						subString : "Gecko",
-						identity : "Mozilla",
-						versionSearch : "rv"
-					}, { // for older Netscapes (4-)
-						string : navigator.userAgent,
-						subString : "Mozilla",
-						identity : "Netscape",
-						versionSearch : "Mozilla"
-					} ],
-					dataOS : [ {
-						string : navigator.platform,
-						subString : "Win",
-						identity : "Windows"
-					}, {
-						string : navigator.platform,
-						subString : "Mac",
-						identity : "Mac"
-					}, {
-						string : navigator.userAgent,
-						match : /Android\s([0-9\.]*)/,
-						subString : "Android",
-						identity : "Android"
-					}, {
-						string : navigator.userAgent,
-						subString : "iPhone",
-						identity : "iPhone/iPod"
-					}, {
-						string : navigator.platform,
-						subString : "Linux",
-						identity : "Linux"
-					}
+			},
+			searchVersion : function(dataString) {
 
-					]
+				var index = dataString.indexOf(this.versionSearchString);
+				if (index == -1)
+					return;
+				return parseFloat(dataString.substring(index
+						+ this.versionSearchString.length + 1));
+			},
+			dataBrowser : [ {
+				string : navigator.userAgent,
+				subString : "Chrome",
+				identity : "Chrome"
+			}, {
+				string : navigator.userAgent,
+				subString : "OmniWeb",
+				versionSearch : "OmniWeb/",
+				identity : "OmniWeb"
+			}, {
+				string : navigator.vendor,
+				subString : "Apple",
+				identity : "Safari",
+				versionSearch : "Version"
+			}, {
+				prop : window.opera,
+				identity : "Opera"
+			}, {
+				string : navigator.vendor,
+				subString : "iCab",
+				identity : "iCab"
+			}, {
+				string : navigator.vendor,
+				subString : "KDE",
+				identity : "Konqueror"
+			}, {
+				string : navigator.userAgent,
+				subString : "Firefox",
+				identity : "Firefox"
+			}, {
+				string : navigator.vendor,
+				subString : "Camino",
+				identity : "Camino"
+			}, { // for newer Netscapes (6+)
+				string : navigator.userAgent,
+				subString : "Netscape",
+				identity : "Netscape"
+			}, {
+				// For IE11
+				string : navigator.userAgent,
+				match : /Trident.*rv[ :]*11\./,
+				identity : "Explorer"
+			}, {
+				string : navigator.userAgent,
+				subString : "MSIE",
+				identity : "Explorer",
+			}, {
+				string : navigator.userAgent,
+				match : /Mobile Safari\/([\d.]+)/,
+				identity : "Mobile Safari",
+				versionSearch : "/AppleWebKit\/([\d.]+)/",
+			}, {
+				string : navigator.userAgent,
+				subString : "Gecko",
+				identity : "Mozilla",
+				versionSearch : "rv"
+			}, { // for older Netscapes (4-)
+				string : navigator.userAgent,
+				subString : "Mozilla",
+				identity : "Netscape",
+				versionSearch : "Mozilla"
+			} ],
+			dataOS : [ {
+				string : navigator.platform,
+				subString : "Win",
+				identity : "Windows"
+			}, {
+				string : navigator.platform,
+				subString : "Mac",
+				identity : "Mac"
+			}, {
+				string : navigator.userAgent,
+				match : /Android\s([0-9\.]*)/,
+				subString : "Android",
+				identity : "Android"
+			}, {
+				string : navigator.userAgent,
+				subString : "iPhone",
+				identity : "iPhone/iPod"
+			}, {
+				string : navigator.platform,
+				subString : "Linux",
+				identity : "Linux"
+			}
 
-				};
-				BrowserDetect.init();
-				$('#browser_os').val(BrowserDetect.OS);
-				$('#browser_Name').val(BrowserDetect.browser);
-				$('#browser_version').val(BrowserDetect.version);
-		});
+			]
+
+		};
+		BrowserDetect.init();
+		$('#browser_os').val(BrowserDetect.OS);
+		$('#browser_Name').val(BrowserDetect.browser);
+		$('#browser_version').val(BrowserDetect.version);
 	</script>
 
 	<!-- Clicky code -->

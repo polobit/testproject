@@ -10,13 +10,14 @@
 				{{#if msg}}
 					{{msg}}
 				{{else}}	
-					Are you sure, you want to delete?
+				{{agile_lng_translate 'Bulk-actions' 'are-you-sure-you-want-to-delete'}}
+					
 				{{/if}}<br/><br/>
 			</form>	
 		</div>
 		<div class="modal-footer">
-			<a href="javascript:void(0);" data-dismiss="modal" class="btn btn-sm btn-default">Close</a>
-            <a href="javascript:void(0);" data-loading-text='Deleting...' class="btn btn-sm btn-primary bulk-delete">Delete</a>
+			<a href="javascript:void(0);" data-dismiss="modal" class="btn btn-sm btn-default">{{agile_lng_translate 'contact-details' 'CLOSE'}}</a>
+            <a href="javascript:void(0);" data-loading-text='Deleting...' class="btn btn-sm btn-primary bulk-delete">{{agile_lng_translate 'contact-details' 'delete'}}</a>
 			&nbsp;&nbsp;<span id="msg"></span>
 		</div>
 	</div>

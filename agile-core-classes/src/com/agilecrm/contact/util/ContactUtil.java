@@ -1278,8 +1278,6 @@ public class ContactUtil
 		System.out.println(e.getMessage());
 	}
 	
-	
-
 	newContact=oldContact;
 	return 	newContact;
     }

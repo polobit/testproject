@@ -161,6 +161,7 @@ public class TaskReminderDeferredTask implements DeferredTask
 		// for each Contact add ContactField in ContactField.name
 		// property.So like
 		// {'FIRST_NAME':contactField1,'LAST_NAME':contactField2...}
+		int index = 0;
 		for (Contact contact : contactList)
 		{
 		    Map<String, Object> mapContact = new HashMap<String, Object>();
@@ -172,6 +173,8 @@ public class TaskReminderDeferredTask implements DeferredTask
 		  	mapContact.put("email_image", ContactUtil.getMD5EncodedImage(contact));	
 				
 		    // save id of this contact for href
+		  	if(++index == contactList.size())
+		  		mapContact.put("last", true);
 
 		    contactListMap.add(mapContact);
 		}

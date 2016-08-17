@@ -59,7 +59,10 @@ var AdminSettingsRouter = Backbone.Router.extend({
 	"change-domain" : "changeDomain",
 
 	/* Java Script API Permission*/
-	"js-security" : "jsSecuritySettings"
+	"js-security" : "jsSecuritySettings",
+
+	/* SSO Login */
+	"sso-login" : "ssoLoginSettings"
 
 
 	},
@@ -123,7 +126,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 				  return;
 			$('#account-pref').html($(template_ui));
 			$('#account-pref').find('#admin-prefs-tabs-content').html(getTemplate("settings-account-tab"), {});	
-			var view = new Base_Model_View({ url : '/core/api/account-prefs', template : "admin-settings-account-prefs", postRenderCallback : function()
+			var view = new AccountPrefs_Events_Model_View({ url : '/core/api/account-prefs', template : "admin-settings-account-prefs", postRenderCallback : function()
 			{
 				ACCOUNT_DELETE_REASON_JSON = undefined;
 				
@@ -172,7 +175,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 					
 				}, saveCallback : function(){
 				console.log("saveCallback");
-				showNotyPopUp("information", "Your IP Address has been updated successfully.", "top", 4000);
+				showNotyPopUp("information", _agile_get_translated_val('security','ip-added'), "top", 4000);
 				App_Admin_Settings.ipaccess();
 			},errorCallback : function(data){
 				showNotyPopUp("warning", data.responseText, "top");
@@ -207,14 +210,14 @@ var AdminSettingsRouter = Backbone.Router.extend({
                 if($(".checkedMultiCheckbox").find('input:checked').length > 0)
                       return true;
                 else{
-                    $(".checkedMultiCheckbox").append("<span generated='true' class='help-inline col-sm-offset-4 col-xs-offset-4 controls col-sm-8 col-xs-8' style='display: block;'>Please select at least one option.</span>"); 
+                    $(".checkedMultiCheckbox").append("<span generated='true' class='help-inline col-sm-offset-4 col-xs-offset-4 controls col-sm-8 col-xs-8' style='display: block;'>" +_agile_get_translated_val('validation-msgs', 'select-atleast-one')+ "</span>"); 
                 }
                 
                  return false;
 			}, saveCallback : function(){
 				console.log("saveCallback");
 				App_Admin_Settings.webhookSettings();
-				showNotyPopUp("information", "Preferences saved successfully", "top", 1000);
+				showNotyPopUp("information", _agile_get_translated_val('others', 'prefs-saved-success'), "top", 1000);
 			},
 			errorCallback : function(data){
 				showNotyPopUp("warning", data.responseText, "top",2000);
@@ -244,18 +247,60 @@ var AdminSettingsRouter = Backbone.Router.extend({
                 if($(".checkedMultiCheckbox").find('input:checked').length > 0)
                       return true;
                 else{
-                    $(".checkedMultiCheckbox").append("<span generated='true' class='help-inline col-sm-offset-4 col-xs-offset-4 controls col-sm-8 col-xs-8' style='display: block;'>Please select at least one option.</span>"); 
+                    $(".checkedMultiCheckbox").append("<span generated='true' class='help-inline col-sm-offset-4 col-xs-offset-4 controls col-sm-8 col-xs-8' style='display: block;'>" +_agile_get_translated_val('validation-msgs', 'select-atleast-one')+ "</span>"); 
                 }
                 
                  return false;
 			}, saveCallback : function(){
 				console.log("saveCallback");
 				App_Admin_Settings.jsSecuritySettings();
-				showNotyPopUp("information", "Preferences saved successfully", "top", 1000);
+				showNotyPopUp("information", _agile_get_translated_val('others', 'prefs-saved-success'), "top", 1000);
 			} });
 
 			$('#content').find('#js-security-accordian-template').html(view.render().el);
 	
+	},
+
+	ssoLoginSettings : function()
+	{
+			
+			if (!CURRENT_DOMAIN_USER.is_admin)
+		{
+			$('#content').html(getTemplate('others-not-allowed',{}));
+			return;
+		}
+		var that = this;
+		$('#content').html("<div id='account-pref'>&nbsp;</div>");
+		getTemplate("admin-settings", {}, undefined, function(template_ui){
+			if(!template_ui)
+				  return;
+				
+			$('#account-pref').html($(template_ui));
+			$('#account-pref').find('#admin-prefs-tabs-content').html(getTemplate("settings-account-tab"), {});
+			var view = new Base_Model_View({ url : '/core/api/sso/jwt', template : "admin-settings-sso-login",
+			postRenderCallback : function()
+			{
+				
+			},saveCallback : function(){
+				console.log("saveCallback");
+				App_Admin_Settings.ssoLoginSettings();
+				showNotyPopUp("information", _agile_get_translated_val('others', 'prefs-saved-success'), "top", 1000);
+			},
+			deleteCallback : function(){
+				console.log("deleteCallback");
+				App_Admin_Settings.ssoLoginSettings();
+			} });
+			
+			$('#content').find('#admin-prefs-tabs-content').find('#settings-account-tab-content').html(view.render().el);
+			$('#content').find('#AdminPrefsTab .select').removeClass('select');
+			$('#content').find('.account-prefs-tab').addClass('select');
+			$(".active").removeClass("active");
+			$('.settings-sso-login').addClass('active');
+			$('#account-pref').find('#admin-prefs-tabs-content').parent().removeClass('bg-white');
+			//$('.settings-sso-login').parent().removeClass('b-b-none');
+
+		}, "#account-pref");
+
 	},
 	
 	/**
@@ -284,10 +329,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			individual_tag_name : "tr", sortKey : "name", postRenderCallback : function(el)
 			{
 				$('i').tooltip();
-				head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
-				{
-					$(".last-login-time", el).timeago();
-				});
+				agileTimeAgoWithLngConversion($(".last-login-time", el));
 				
 			} });
 			that.usersListView.collection.fetch();
@@ -431,7 +473,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 					if (needLogout && CURRENT_DOMAIN_USER.email != response.email)
 					{
 						console.log('Logging out...');
-						showNotyPopUp("information", "You Email has been updated successfully. Logging out...", "top");
+						showNotyPopUp("information", _agile_get_translated_val('domain-user', 'email-edited'), "top");
 						var hash = window.location.hash;
 
 						setTimeout(function()
@@ -845,7 +887,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 				acl_util.initTagACL(el);
 				initializeTagManagementListeners();
 				$(".allow_users_switch").tooltip({
-			        title: "<p>Allow all users to add New Tags.</p><p>Disable this option if you don't want users (non-admin) to add new tags on contacts or companies, apart from the tags listed here.</p>",  
+			        title: "<p>" +_agile_get_translated_val('tag-manage','allow-users-to-add')+ "</p><p>" +_agile_get_translated_val('tag-manage', 'allow-tooltip')+ "</p>",  
 			        html: true,
 			        placement : 'bottom'
 			    }); 
@@ -894,6 +936,8 @@ var AdminSettingsRouter = Backbone.Router.extend({
 					value = 'MANDRILL';
 				else if (id == 'ses')
 	                value = 'SES';
+	            else if(id=='mailgun')
+	            	value='MAILGUN';
 
 				var emailGateway;
 				$.each(that.integrations.collection.where({name:"EmailGateway"}),function(key,value){
@@ -907,7 +951,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 				{
 					if(emailGateway["email_api"].toUpperCase() != value)//checks if the current email gateway is the same as the clicked one
 					{
-					modalAlert("sms-integration-alert-modal","You have a Email Gateway already configured. Please disable that to configure a new one.","Email Gateway Configured");
+					modalAlert("sms-integration-alert-modal", _agile_get_translated_val('emailgateway','already-exists'), _agile_get_translated_val('emailgateway', 'configured'));
 					that.navigate("integrations", { trigger : true });
 					return;	
 					}
@@ -933,6 +977,9 @@ var AdminSettingsRouter = Backbone.Router.extend({
 
 						if(id=="ses"){
 							$("#integrations-image",el).attr("src","img/crm-plugins/ses_logo.png");
+					    }
+					    if(id=="mailgun"){
+							$("#integrations-image",el).attr("src","img/crm-plugins/mailgun.png");
 					    }
 						
 					}, saveCallback : function()
@@ -962,10 +1009,10 @@ var AdminSettingsRouter = Backbone.Router.extend({
 						var msg = response.responseText;
 
 						if(msg.indexOf('SignatureDoesNotMatch') != -1)
-	                        msg = msg.replace('SignatureDoesNotMatch', 'Signature Mismatch');
+	                        msg = msg.replace('SignatureDoesNotMatch', _agile_get_translated_val('emailgateway','sign-mis-match'));
 
 	                    if(msg.indexOf('InvalidClientTokenId') != -1)
-	                    	msg = msg.replace('InvalidClientTokenId', 'Invalid Access Key');
+	                    	msg = msg.replace('InvalidClientTokenId', _agile_get_translated_val('emailgateway','invalid-acceess-key'));
 
 						// Show cause of error in saving
 						var $save_info = $('<div style="display:inline-block"><small><p style="color:#B94A48; font-size:14px"><i>'
@@ -1046,8 +1093,8 @@ var AdminSettingsRouter = Backbone.Router.extend({
 					// gateway is the same as
 					// the clicked one
 					{
-						modalAlert("sms-integration-alert-modal", "You have a SMS Gateway already configured. Please disable that to configure a new one.",
-								"SMS Gateway Configured");
+						modalAlert("sms-integration-alert-modal", _agile_get_translated_val('smsgateway', 'already-exists'),
+								_agile_get_translated_val('smsgateway','configured'));
 						that.navigate("integrations", { trigger : true });
 						return;
 					}
@@ -1073,15 +1120,15 @@ var AdminSettingsRouter = Backbone.Router.extend({
 						{
 							$("#integrations-image", el).attr("src", "/img/plugins/plivo.png");
 							$("#accoundID", el).attr("name", "account_id");
-							$("#accoundID", el).attr("placeholder", "Auth ID");
-							$("#integrations-label", el).text("You need a Paid Plivo account to be able to send SMS");
+							$("#accoundID", el).attr("placeholder", _agile_get_translated_val("integrations", "auth-id"));
+							$("#integrations-label", el).text(_agile_get_translated_val('integrations', 'you-need-a-paid-plivo-account'));
 						}
 						if (id == "twilio")
 						{
 							$("#integrations-image", el).attr("src", "/img/plugins/twilio.png");
 							$("#accoundID", el).attr("name", "account_sid");
-							$("#accoundID", el).attr("placeholder", "Account SID");
-							$("#integrations-label", el).text("Please provide your account details");
+							$("#accoundID", el).attr("placeholder", _agile_get_translated_val("integrations", "account-sid"));
+							$("#integrations-label", el).text(_agile_get_translated_val('integrations', 'account-details'));
 						}
 					}, saveCallback : function(data)
 					{
@@ -1301,7 +1348,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 				if(domain == null)
 					window.location.href = "/login";
 				if(domain != response.alias[0]){
-					showNotyPopUp("information", "Your domain name has been updated successfully. Logging out...", "top");
+					showNotyPopUp("information", _agile_get_translated_val('domain-user','domain-edited'), "top");
 					setTimeout(function()
 					{
 						window.location.href = window.location.protocol + "//" + response.alias[0] + ".agilecrm.com/login" + window.location.hash;
@@ -1327,10 +1374,8 @@ var AdminSettingsRouter = Backbone.Router.extend({
 
 function initQuota(callback)
 {
-	$("#goal_duration span.date").datepicker({ format :"MM yyyy", minViewMode:"months",weekStart : CALENDAR_WEEK_START_DAY, autoclose : true ,
-						
-				}).on('changeMonth',function(e) {
-       						/// alert(e);
+	$("#goal_duration span.date").datepicker({ format :"MM yyyy", minViewMode:"months",weekStart : CALENDAR_WEEK_START_DAY, autoclose : true})
+		.on('changeMonth',function(e) {
        						$("#goal_duration span").html( e.date.format("mmmm yyyy"));
        						 callback();
 
@@ -1383,4 +1428,24 @@ function getDomainFromURL(){
 	return temp[0];
 }
 
+var AccountPrefs_Events_Model_View = Base_Model_View.extend({
+    events: {
+    	
+    	'click .invoice_option' : 'toggleInvoiceOption',
+    	
 
+    },
+
+	toggleInvoiceOption :  function(e)
+	{
+		e.preventDefault();
+		var target_el = $(e.currentTarget);
+		$(target_el).toggleClass("fa-toggle-off fa-toggle-on");
+		var checkbox_el = $("#sendInvoiceBeforeCharge");
+		if(checkbox_el.is(':checked'))
+			checkbox_el.removeAttr("checked");
+		else
+			checkbox_el.attr("checked","checked");
+
+	},
+});

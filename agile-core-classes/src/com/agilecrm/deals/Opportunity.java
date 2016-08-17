@@ -1126,5 +1126,14 @@ public class Opportunity extends Cursor implements Serializable
 	;
 	return builder.toString();
     }
+    
+    @JsonIgnore
+    public void setRelatedNotes(Set<Long> noteId)
+    {
+    	for(Long eachNoteId : noteId){
+    		this.related_notes.add(new Key<>(Note.class,eachNoteId));
+    	}
+    
+    }
 
 }

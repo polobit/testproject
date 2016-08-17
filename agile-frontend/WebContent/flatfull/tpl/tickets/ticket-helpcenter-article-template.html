@@ -1,0 +1,22 @@
+<script id="ticket-helpcenter-article-template" type="text/html">
+<div class="col-md-10">
+      <div class="wrapper">
+          <div class="panel panel-default">
+              <div class="panel-heading h4"> {{title}} 
+                  <a title= "Delete" class="delete"><small class="text-muted m-b-sm" style="position:relative;vertical-align:top;top: -1px;"><i class="fa fa-trash"></i></small></a>
+
+              </div>                     
+		    	<div class="panel-body">	
+	 	       <div class="text-ellipsis" >
+             {{{content}}}                  
+           </div> 
+           <div>
+             <small class="text-muted text-xs">
+            		{{agile_lng_translate 'admin-settings-users' 'created-on'}} {{epochToHumanDate "ddd mmm dd, yyyy" created_time}}
+       		   </small>
+  		    </div>
+        </div>  	
+      </div>
+ 	</div>
+</div> 
+</script>

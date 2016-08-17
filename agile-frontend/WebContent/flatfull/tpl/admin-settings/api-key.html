@@ -8,29 +8,29 @@
                      <div id="settings-api">
                         <div class="panel-heading" role="tab" id="headingOne">
                            <div class="panel-title">
-                              <a class="accordion-toggle" data-toggle="collapse" aria-controls="collapseOne" aria-expanded="true" data-parent="#accordion" href="#api-key">API Key</a>
+                              <a class="accordion-toggle" data-toggle="collapse" aria-controls="collapseOne" aria-expanded="true" data-parent="#accordion" href="#api-key">{{agile_lng_translate 'admin-settings-integrations' 'api-key'}}</a>
                            </div>
                         </div>
                         <div class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne" id="api-key">
                            <div class="panel-body" id="api-accordion">
                               <div class="tab-pane api_key_code active" id="api">
-                                 <b>REST API</b>
+                                 <b>{{agile_lng_translate 'admin-settings-integrations' 'rest-api'}}</b>
                                  <div class="clearfix"></div>
                                 {{#is_mobile}}
-                                <div><code  class="prettyprint pull-left" id="api_key_code"style="letter-spacing:1px;width:100%">{{api_key}}</code></div><div><span class=" inline-block p-xs api-key-pos"><a id="api_key_generate_icon" class="c-p m-l-n-xs m-r-xs btn btn-sm  btn-danger text-white">Reset</a></span></div>
+                                <div><code  class="prettyprint pull-left" id="api_key_code"style="letter-spacing:1px;width:100%">{{api_key}}</code></div><div><span class=" inline-block p-xs api-key-pos"><a id="api_key_generate_icon" class="c-p m-l-n-xs m-r-xs btn btn-sm  btn-danger text-white">{{agile_lng_translate 'admin-settings-integrations' 'reset'}}</a></span></div>
                                 {{else}}
-                                <div><code  class="prettyprint pull-left" id="api_key_code"style="letter-spacing:1px;">{{api_key}}</code></div><div><span class=" inline-block p-xs api-key-pos"><a id="api_key_generate_icon" class="c-p m-t-n-xs m-r-xs btn btn-sm  btn-danger text-white">Reset</a></span></div>
+                                <div><code  class="prettyprint pull-left" id="api_key_code"style="letter-spacing:1px;">{{api_key}}</code></div><div><span class=" inline-block p-xs api-key-pos"><a id="api_key_generate_icon" class="c-p m-t-n-xs m-r-xs btn btn-sm  btn-danger text-white">{{agile_lng_translate 'admin-settings-integrations' 'reset'}}</a></span></div>
                                 {{/is_mobile}}
                                 
-                                 <br/>For Java, PHP, .Net wrappers and integrations like Zapier, Wufoo, Unbounce, Chrome extension etc.<br /><hr />
-   					  			 <b>Javascript API Key</b>
+                                 <br/>{{agile_lng_translate 'admin-settings-integrations' 'for-java-php-desc'}}<br /><hr />
+                     <b>{{agile_lng_translate 'admin-settings-api-analytics' 'Javascript-API-Key'}}</b>
                                  <div class="clearfix"></div>
                              {{#is_mobile}}
-                             <div> <code class="prettyprint pull-left Api_code" id="jsapi_key_code"style="letter-spacing:1px;width:100%">{{js_api_key}}</code></div><div><span class="inline-block p-xs api-key-pos " ><a id="jsapi_key_generate_icon" class="c-p m-l-n-xs m-r-xs btn btn-sm  btn-danger text-white">Reset</a></span></div>
+                             <div> <code class="prettyprint pull-left Api_code" id="jsapi_key_code"style="letter-spacing:1px;width:100%">{{js_api_key}}</code></div><div><span class="inline-block p-xs api-key-pos " ><a id="jsapi_key_generate_icon" class="c-p m-l-n-xs m-r-xs btn btn-sm  btn-danger text-white">{{agile_lng_translate 'admin-settings-integrations' 'reset'}}</a></span></div>
                              {{else}}
-                             <div> <code class="prettyprint pull-left Api_code" id="jsapi_key_code"style="letter-spacing:1px;">{{js_api_key}}</code></div><div><span class="inline-block p-xs api-key-pos " ><a id="jsapi_key_generate_icon" class="c-p m-t-n-xs m-r-xs btn btn-sm  btn-danger text-white">Reset</a></span></div>
+                             <div> <code class="prettyprint pull-left Api_code" id="jsapi_key_code"style="letter-spacing:1px;">{{js_api_key}}</code></div><div><span class="inline-block p-xs api-key-pos " ><a id="jsapi_key_generate_icon" class="c-p m-t-n-xs m-r-xs btn btn-sm  btn-danger text-white">{{agile_lng_translate 'admin-settings-integrations' 'reset'}}</a></span></div>
                              {{/is_mobile}}
-                                <br />Only for tracking code on website.
+                                <br />{{agile_lng_translate 'admin-settings-integrations' 'tracking-code-on-website'}}
                                  <div class="clearfix"></div>
                               </div>
                            </div>
@@ -41,17 +41,17 @@
                      <div id="settings-analytics">
                         <div class="panel-heading" role="tab" id="headingTwo">
                            <div class="panel-title">
-                              <a class="accordion-toggle" data-toggle="collapse" aria-controls="collapseTwo" aria-expanded="true" data-parent="#accordion" href="#analytics-code">Analytics Code</a>
+                              <a class="accordion-toggle" data-toggle="collapse" aria-controls="collapseTwo" aria-expanded="true" data-parent="#accordion" href="#analytics-code">{{agile_lng_translate 'admin-settings-api-analytics' 'analytics-code'}}</a>
                            </div>
                         </div>
                         <div class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo" id="analytics-code">
                            <div class="panel-body" id="api-accordion">
                               <div class="tab-pane" id="analytics">
-                                 <p>You can use javascript API to track page views on your site, add / delete contacts from your website or blog directly. Copy and paste the below code in your webpage's HTML just before the <b>&lt;/BODY&gt;</b> tag to enable tracking / API methods.</p>
+                                 <p>{{agile_lng_translate 'admin-settings-api-analytics' 'analytics-code-desc'}} <b>&lt;/BODY&gt;</b> {{agile_lng_translate 'admin-settings-api-analytics' 'analytics-code-desc-1'}}</p>
                                  <ul class="nav nav-tabs" id="TrackingTab">
-                                    <li class="tracking-tab"><a data-toggle="tab" href="#tracking">Tracking code</a></li>
-                                    <li class="tracking-webrules-tab active"><a data-toggle="tab" href="#tracking-webrules">Tracking code with Web Rules enabled</a></li>
-                                    <li class="tracking-webrules-whitelist-tab active"><a data-toggle="tab" href="#tracking-webrules-whitelist">Tracking code with Web Rules Whitelist enabled</a></li>
+                                    <li class="tracking-tab"><a data-toggle="tab" href="#tracking">{{agile_lng_translate 'admin-settings-api-analytics' 'tracking-code'}}</a></li>
+                                    <li class="tracking-webrules-tab active"><a data-toggle="tab" href="#tracking-webrules">{{agile_lng_translate 'admin-settings-api-analytics' 'tracking-code-with-web-rules-enabled'}}</a></li>
+                                    <li class="tracking-webrules-whitelist-tab active"><a data-toggle="tab" href="#tracking-webrules-whitelist">{{agile_lng_translate 'admin-settings-api-analytics' 'tracking-code-with-web-rules-whitelist-enabled'}}</a></li>
                                  </ul>
                                  <div class="tab-content p-t-sm">
                                     <!--  Tracking code templete -->
@@ -59,13 +59,13 @@
                                        <div class="clearfix"></div>
                                        <div>
                                         <code  id="api_track_code" class="prettyprint">
-   				&lt;script type="text/javascript" src="https://{{get_current_domain}}.agilecrm.com/stats/min/agile-min.js"&gt; 
-   				&lt;/script&gt;
-   				&lt;script type="text/javascript" &gt;
-   				 _agile.set_account('{{js_api_key}}', '{{get_current_domain}}');
-   				 _agile.track_page_view();
-   				&lt;/script&gt;
-   				</code>
+          &lt;script type="text/javascript" src="https://{{get_current_domain}}.agilecrm.com/stats/min/agile-min.js"&gt; 
+          &lt;/script&gt;
+          &lt;script type="text/javascript" &gt;
+           _agile.set_account('{{js_api_key}}', '{{get_current_domain}}');
+           _agile.track_page_view();
+          &lt;/script&gt;
+          </code>
                                        </div>
                                     </div>
                                     <!-- End of Tracking code templete -->
@@ -74,14 +74,14 @@
                                        <div class="clearfix"></div>
                                        <div>
                                           <code  id="api_track_webrules_code" class="prettyprint">
-   				&lt;script type="text/javascript" src="https://{{get_current_domain}}.agilecrm.com/stats/min/agile-min.js"&gt; 
-   				&lt;/script&gt;
-   				&lt;script type="text/javascript" &gt;
-   				 _agile.set_account('{{js_api_key}}', '{{get_current_domain}}');
-   				 _agile.track_page_view();
-   				 _agile_execute_web_rules();
-   				&lt;/script&gt;
-   				</code>
+          &lt;script type="text/javascript" src="https://{{get_current_domain}}.agilecrm.com/stats/min/agile-min.js"&gt; 
+          &lt;/script&gt;
+          &lt;script type="text/javascript" &gt;
+           _agile.set_account('{{js_api_key}}', '{{get_current_domain}}');
+           _agile.track_page_view();
+           _agile_execute_web_rules();
+          &lt;/script&gt;
+          </code>
                                        </div>
                                     </div>
                                     <!-- Tracking code with Web Rules templete -->
@@ -90,15 +90,15 @@
                                        <div class="clearfix"></div>
                                        <div>
                                           <code class="prettyprint" id="api_track_webrules_code">
-   			&lt;script type="text/javascript" src="https://{{get_current_domain}}.agilecrm.com/stats/min/agile-min.js"&gt;
-   			&lt;/script&gt;
-   			&lt;script type="text/javascript" &gt;
-    			 _agile.set_account('{{js_api_key}}', '{{get_current_domain}}');
-    			 _agile_set_whitelist('{{getBase64ActualDomain}}');
-    			 _agile.track_page_view();
-    			 _agile_execute_web_rules();
-   			&lt;/script&gt;
-   			</code>
+        &lt;script type="text/javascript" src="https://{{get_current_domain}}.agilecrm.com/stats/min/agile-min.js"&gt;
+        &lt;/script&gt;
+        &lt;script type="text/javascript" &gt;
+           _agile.set_account('{{js_api_key}}', '{{get_current_domain}}');
+           _agile_set_whitelist('{{getBase64ActualDomain}}');
+           _agile.track_page_view();
+           _agile_execute_web_rules();
+        &lt;/script&gt;
+        </code>
                                        </div>
                                     </div>
                                     <!-- / Tracking code with Web Rules whitelist enabled -->
@@ -113,61 +113,61 @@
                      <div id="settings-allowed-domains">
                         <div class="panel-heading" role="tab" id="headingTwo">
                            <div class="panel-title">
-                              <a class="accordion-toggle" data-toggle="collapse" aria-controls="collapseTwo" aria-expanded="true" data-parent="#accordion" href="#allowed-domains">Allowed Domains</a>
+                              <a class="accordion-toggle" data-toggle="collapse" aria-controls="collapseTwo" aria-expanded="true" data-parent="#accordion" href="#allowed-domains">{{agile_lng_translate 'admin-settings-api-analytics' 'allowed-domains'}}</a>
                            </div>
                         </div>
                         <div class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo" id="allowed-domains">
                            <div class="panel-body p-n" id="api-accordion">
    {{#hide_allowed_domains_text allowed_domains}}
-   			<div class="p-t-sm p-l-sm p-r-sm p-b-xs">
-   				<div><b>API & Analytics</b> will be enabled on following domains. All domains are allowed by default using wildcard <b>"*"</b></div>
-   			</div>
+        <div class="p-t-sm p-l-sm p-r-sm p-b-xs">
+          <div><b>{{agile_lng_translate 'admin-settings' 'api-and-analytics'}}</b> {{agile_lng_translate 'admin-settings-api-analytics' 'allowed-domains-desc'}} <b>"*"</b></div>
+        </div>
    {{/hide_allowed_domains_text}}
-   					<table class="table table-hover custom-fields-table bg-white m-b-none">
-   						<colgroup><col width="50%"><col width="4%"></colgroup>
-   						<tbody id="allowed_domains_list">
-   							{{#allowed_domain_list allowed_domains}}{{/allowed_domain_list}}
-   						</tbody>
-   					</table>
-   					<div class="show_field p-l p-t p-b">
-   						<input type="text" id="new_allowed_domain" name="new_allowed_domain" style="width:250px;display:inline-block;" class="form-control input-sm" placeholder="New Allowed Domain">
-   						<a href="#analytics-code" class="btn btn-sm btn-primary" id="update_allowed_domains">Add</a>
-   					</div>
+            <table class="table table-hover custom-fields-table bg-white m-b-none">
+              <colgroup><col width="50%"><col width="4%"></colgroup>
+              <tbody id="allowed_domains_list">
+                {{#allowed_domain_list allowed_domains}}{{/allowed_domain_list}}
+              </tbody>
+            </table>
+            <div class="show_field p-l p-t p-b">
+              <input type="text" id="new_allowed_domain" name="new_allowed_domain" style="width:250px;display:inline-block;" class="form-control input-sm" placeholder="{{agile_lng_translate 'admin-settings-api-analytics' 'new-allowed-domain'}}">
+              <a href="#analytics-code" class="btn btn-sm btn-primary" id="update_allowed_domains">{{agile_lng_translate 'other 'add}}</a>
+            </div>
                            </div>
                         </div>
                      </div>
                   </div>
                   <!-- end of Allowed Domains template -->
-       			  <!-- Blocked IP's template -->
+              <!-- Blocked IP's template -->
                   <div class="panel panel-default">
                      <div id="settings-blocked-ips">
                         <div class="panel-heading" role="tab" id="headingTwo">
                            <div class="panel-title" id="ip_filters">
-                              <a class="accordion-toggle" data-toggle="collapse" aria-controls="collapseTwo" aria-expanded="true" data-parent="#accordion" href="#ip-filters">IP Filters</a>
+                              <a class="accordion-toggle" data-toggle="collapse" aria-controls="collapseTwo" aria-expanded="true" data-parent="#accordion" href="#ip-filters">{{agile_lng_translate 'admin-settings-api-analytics' 'ip-filters'}}</a>
                            </div>
                         </div>
                         <div class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo" id="ip-filters">
                            <div class="panel-body p-n" id="api-accordion">
    {{#unless blocked_ips}}
-   			<div class="p-t-sm p-l-sm p-r-sm p-b-xs">
-   				<div>By creating IP filters you can disable <b>Web Stats</b> and <b>Tracking</b>.</div>
-   			</div>
+        <div class="p-t-sm p-l-sm p-r-sm p-b-xs">
+          <div>{{agile_lng_translate 'admin-settings-api-analytics' 'ip-filters-desc'}} <b>{{agile_lng_translate 'contact-details' 'web-stats'}}</b> {{agile_lng_translate 'contacts-view' 'and'}} <b>{{agile_lng_translate 'admin-settings-api-analytics' 'tracking'}}</b>.</div>
+        </div>
    {{/unless}}
    
-   					<table class="table table-hover custom-fields-table bg-white m-b-none">
-   						<colgroup><col width="50%"><col width="4%"></colgroup>
-   						<tbody id="blocked_ips_list">
-   							{{#blocked_ips_list blocked_ips}}{{/blocked_ips_list}}
-   						</tbody>
-   					</table>
-   					<div class="show_field p-l p-t p-b">
-   			<input type="text" id="new_blocked_ip" name="new_blocked_ip" style="width:250px;display:inline-block;" class="form-control input-sm" placeholder="New IP Address">
-   						<a href="#blocked-ips" class="btn btn-sm btn-primary" id="update_blocked_ips">Add</a>
+            <table class="table table-hover custom-fields-table bg-white m-b-none">
+              <colgroup><col width="50%"><col width="4%"></colgroup>
+              <tbody id="blocked_ips_list">
+                {{#blocked_ips_list blocked_ips}}{{/blocked_ips_list}}
+              </tbody>
+            </table>
+            <div class="show_field p-l p-t p-b">
+        <input type="text" id="new_blocked_ip" name="new_blocked_ip" style="width:250px;display:inline-block;" class="form-control input-sm" placeholder="{{agile_lng_translate 'admin-settings-api-analytics' 'new-ip-address'}}">
+              <a href="#blocked-ips" class="btn btn-sm btn-primary" id="update_blocked_ips">{{agile_lng_translate 'other' 'add'}}</a>
                      <div>
-                     <span id="empty_ip_message" class="text-danger hide text-sm">Enter a valid IP Address</span>
-                     <span id="ip_error_message" class="text-danger hide text-sm"> This IP Address already exists</span></div>
-                    <div> <a id = "get_my_ip" class="inline-block text-sm text-info">Get my IP Address</a></div>
-   					</div>
+                     <span id="empty_ip_message" class="text-danger hide text-sm">{{agile_lng_translate 'Admin-settings-api-analytics' 'enter-a-valid-ip'}}</span>
+                     <span id="ip_error_message" class="text-danger hide text-sm"> {{agile_lng_translate 'Admin-settings-api-analytics' 'this-ip-alreday-exist'}}</span></div>
+                    <div> <a id = "get_my_ip" class="inline-block text-sm text-info">{{agile_lng_translate 'Admin-settings-api-analytics' 'get-my-ip'}}</a></div>
+            </div>
                            </div>
                         </div>
                      </div>
@@ -177,7 +177,7 @@
                      <div id="">
                         <div class="panel-heading" role="tab" id="">
                            <div class="panel-title">
-                              <a class="accordion-toggle" data-toggle="collapse" aria-controls="collapseTwo" aria-expanded="true" data-parent="#accordion" href="#admin-settings-webhook"id="webhook_accordian">Webhooks<span class="label label-sm bg-danger m-l-xs" style="position: relative;top: -2px;">Beta</span></a>
+                              <a class="accordion-toggle" data-toggle="collapse" aria-controls="collapseTwo" aria-expanded="true" data-parent="#accordion" href="#admin-settings-webhook"id="webhook_accordian">{{agile_lng_translate 'admin-settings-integrations' 'webhooks'}}</a>
                            </div>
                         </div>
                         <div class="panel-collapse collapse " role="tabpanel" aria-labelledby="headingTwo" id="admin-settings-webhook" aria-expanded="true">
@@ -188,22 +188,22 @@
                      <div id="">
                         <div class="panel-heading" role="tab" id="">
                            <div class="panel-title">
-                              <a class="accordion-toggle" data-toggle="collapse" aria-controls="collapseTwo" aria-expanded="true" data-parent="#accordion" href="#admin-settings-sendgrid-dkim"id="sendgrid-dkim_accordian">Email (DKIM & SPF) Settings<span class="label label-sm bg-danger m-l-xs" style="position: relative;top: -2px;">Beta</span></a>
+                              <a class="accordion-toggle" data-toggle="collapse" aria-controls="collapseTwo" aria-expanded="true" data-parent="#accordion" href="#admin-settings-sendgrid-dkim"id="sendgrid-dkim_accordian">{{agile_lng_translate 'Admin-settings-api-analytics' 'email-dkim-settings'}}<span class="label label-sm bg-danger m-l-xs" style="position: relative;top: -2px;">{{agile_lng_translate 'deal-view' 'beta'}}</span></a>
                            </div>
                         </div>
                         <div class="panel-collapse collapse " role="tabpanel" aria-labelledby="headingTwo" id="admin-settings-sendgrid-dkim" aria-expanded="true"> <div class="row">
                      <div class="col-md-12 col-xs-12" id="sendgrid-dkim-restriction-template"></div>
                      <div class="col-md-12 col-xs-12" id="sendgrid-dkim-accordian-template"> <br> 
                        <div class="control-group form-group">
-                           <label class="control-label col-sm-3 col-xs-3" style="margin-top: 2px;">Email Sending Domain<span class="field_req">*</span>
+                           <label class="control-label col-sm-3 col-xs-3" style="margin-top: 2px;">{{agile_lng_translate 'Admin-settings-api-analytics' 'email-sending-domain'}}<span class="field_req">*</span>
                            </label> 
                            <div class="controls col-sm-5 col-xs-5">
-                               <input name="whitelabel-domain" id="whitelabel-domain" class="input-medium required form-control" type="domain" value="" placeholder="Enter your Email Sending Domain" style="height: 31px;" title=" ex: if you are sending email from sender@domain.com then enter domain.com here.">
-                                <span id="empty_domain_message" class="text-danger hide text-sm">Please enter a valid domain name.</span>
+                               <input name="whitelabel-domain" id="whitelabel-domain" class="input-medium required form-control" type="domain" value="" placeholder="{{agile_lng_translate 'Admin-settings-api-analytics' 'email-sending-domain'}}" style="height: 31px;" title=" {{agile_lng_translate 'Admin-settings-api-analytics' 'example-for-email-sending-domain'}}">
+                                <span id="empty_domain_message" class="text-danger hide text-sm">{{agile_lng_translate 'Admin-settings-api-analytics' 'please-enter-valid-domain-name'}}</span>
                            </div>
                            <div>
-                               <a href="#analytics-code" class="btn btn-sm btn-primary" id="get_whitelabel_key">Get Settings</a>
-                               <a href="#analytics-code" class="btn btn-sm btn-success" style="margin-left: 3px;" id="validate_whitelabel">Verify</a>
+                               <a href="#analytics-code" class="btn btn-sm btn-primary" id="get_whitelabel_key">{{agile_lng_translate 'Admin-settings-api-analytics' 'get-settings'}}</a>
+                               <a href="#analytics-code" class="btn btn-sm btn-success" style="margin-left: 3px;" id="validate_whitelabel">{{agile_lng_translate 'landing-pages' 'verify'}}</a>
                            </div>
                        </div>
                        <div id="sendgrid-whitelabel-key-template"></div>
@@ -215,7 +215,7 @@
                      <div id="">
                         <div class="panel-heading" role="tab" id="">
                            <div class="panel-title">
-                              <a class="accordion-toggle" data-toggle="collapse" aria-controls="collapseTwo" aria-expanded="true" data-parent="#accordion" href="#admin-settings-js-security"id="js-security_accordian">JS API Security<span class="label label-sm bg-danger m-l-xs" style="position: relative;top: -2px;">Beta</span></a>
+                              <a class="accordion-toggle" data-toggle="collapse" aria-controls="collapseTwo" aria-expanded="true" data-parent="#accordion" href="#admin-settings-js-security"id="js-security_accordian">{{agile_lng_translate 'Admin-settings-api-analytics' 'js-api-security'}}</a>
                            </div>
                         </div>
                         <div class="panel-collapse collapse " role="tabpanel" aria-labelledby="headingTwo" id="admin-settings-js-security" aria-expanded="true">
@@ -233,27 +233,27 @@
       <div class="data-block">
          <div class="p-l p-r">
             <h4 class="m-t-none">
-               Help
+               {{agile_lng_translate 'menu' 'help'}}
             </h4>
-            <p>Agile supports open standard REST. You can use any language which supports REST.</p>
-            We currently have the following libraries for your convenience<br/>
+            <p>{{agile_lng_translate 'admin-settings-api-analytics' 'desc-1'}}</p>
+            {{agile_lng_translate 'admin-settings-api-analytics' 'desc-2'}}<br/>
             <ul class="p-l-md">
-               <li>Java - <a href="https://github.com/agilecrm/java-api" target="_blank" rel="nofollow" title="Link: https://github.com/agilecrm/java-api">GitHub</a></li>
-               <li>Javascript - <a href="https://github.com/agilecrm/javascript-api" target="_blank" rel="nofollow" title="Link: https://github.com/agilecrm/javascript-api">GitHub</a></li>
-               <li>PHP - <a href="https://github.com/agilecrm/php-api" target="_blank" rel="nofollow" title="Link: https://github.com/agilecrm/php-api">GitHub</a></li>
-               <li>.NET - <a href="https://github.com/agilecrm/c-sharp-api" target="_blank" rel="nofollow" title="Link: https://github.com/agilecrm/c-sharp-api">GitHub</a></li>
+               <li>{{agile_lng_translate 'admin-settings-api-analytics' 'java'}} - <a href="https://github.com/agilecrm/java-api" target="_blank" rel="nofollow" title="Link: https://github.com/agilecrm/java-api">{{agile_lng_translate 'contact-edit' 'github'}}</a></li>
+               <li>{{agile_lng_translate 'admin-settings-api-analytics' 'javascript'}} - <a href="https://github.com/agilecrm/javascript-api" target="_blank" rel="nofollow" title="Link: https://github.com/agilecrm/javascript-api">{{agile_lng_translate 'contact-edit' 'github'}}</a></li>
+               <li>{{agile_lng_translate 'admin-settings-api-analytics' 'php'}} - <a href="https://github.com/agilecrm/php-api" target="_blank" rel="nofollow" title="Link: https://github.com/agilecrm/php-api">{{agile_lng_translate 'contact-edit' 'github'}}</a></li>
+               <li>{{agile_lng_translate 'admin-settings-api-analytics' '.net'}} - <a href="https://github.com/agilecrm/c-sharp-api" target="_blank" rel="nofollow" title="Link: https://github.com/agilecrm/c-sharp-api">{{agile_lng_translate 'contact-edit' 'github'}}</a></li>
             </ul>
-            We will be publishing API for other languages very soon.
+            {{agile_lng_translate 'admin-settings-api-analytics' 'we-will-be-publishing-api'}}
    
    <h4 class="m-t-md">
-   	Allowed Domains
+    {{agile_lng_translate 'admin-settings-api-analytics' 'allowed-domains'}}
    </h4>
-   <p>To enable on domain eg: <b>https://www.example.com</b> and its subdomain eg: <b>https://test.example.com</b> you can add the hostname i.e <b>example.com</b>.</p>
-   <p>To allow only on a particular subdomain eg: <b>https://test.example.com</b> please add as <b>test.example.com</b> or <b>*.example.com</b>.</p>
+   <p>{{agile_lng_translate 'admin-settings-api-analytics' 'helptext-domain'}}: <b>https://www.example.com</b> {{agile_lng_translate 'admin-settings-api-analytics' 'helptext-subdomain'}}: <b>https://test.example.com</b> {{agile_lng_translate 'admin-settings-api-analytics' 'helptext-hostname'}} <b>example.com</b>.</p>
+   <p>{{agile_lng_translate 'admin-settings-api-analytics' 'desc-subdomain'}}: <b>https://test.example.com</b> {{agile_lng_translate 'admin-settings-api-analytics' 'desc-pl-add'}} <b>test.example.com</b> {{agile_lng_translate 'others' 'or'}} <b>*.example.com</b>.</p>
    
-   <h4 class="m-t-md">IP Filters</h4>
-               <p>To disable tracking on a particular IP address, add as eg: <b>192.168.1.1</b> and also you can specify range of IP addresses using wildcard character <b>"*"</b> as <b>192.168.1.* | 192.168.*.* | 192.*.*.*</b></p>
-               <p>To block tracking from all IP Addresses a Filter can be added as <b>*.*.*.*</b></p>
+   <h4 class="m-t-md">{{agile_lng_translate 'admin-settings-api-analytics' 'ip-filters'}}</h4>
+               <p>{{agile_lng_translate 'admin-settings-api-analytics' 'ip-filters-help-IP'}} {{agile_lng_translate 'admin-settings-api-analytics' 'ip-filters-help-as-eg'}}: <b>192.168.1.1</b> {{agile_lng_translate 'admin-settings-api-analytics' 'ip-filters-help-range'}} <b>"*"</b> {{agile_lng_translate 'admin-settings-api-analytics' 'ip-filters-help-as'}} <b>192.168.1.* | 192.168.*.* | 192.*.*.*</b></p>
+               <p>{{agile_lng_translate 'admin-settings-api-analytics' 'ip-filters-help-2'}} <b>*.*.*.*</b></p>
          </div>
       </div>
    </div>

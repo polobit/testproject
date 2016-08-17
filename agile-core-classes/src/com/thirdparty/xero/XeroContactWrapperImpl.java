@@ -13,6 +13,7 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.Note;
 import com.agilecrm.contact.sync.wrapper.ContactWrapper;
+import com.agilecrm.util.CountryUtil;
 
 /**
  * @author jitendra
@@ -196,7 +197,7 @@ public class XeroContactWrapperImpl extends ContactWrapper
 			}
 			
 			if(!country.toString().isEmpty()){
-			    addressObject.put("country", country.toString());
+				CountryUtil.setCountryCode(addressObject, null, country.toString());
 			}
 		    }
 		}

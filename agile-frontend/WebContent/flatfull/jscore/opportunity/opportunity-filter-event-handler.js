@@ -148,7 +148,7 @@ var Opportunity_Filters_Event_View = Base_Model_View.extend({
 		if(selected_val == "archived")
 		{
 			var field_name = $rhs_ele.find("input").attr("name");
-			$rhs_ele.html("<select name='"+field_name+"' class='form-control'><option value='true'>Archived</option><option value='false'>Active</option><option value='all'>Any</option></select>");
+			$rhs_ele.html(getTemplate("js-deal-filters", {field_name : field_name}));
 		}
 	},
 

@@ -39,20 +39,32 @@ var Ticket_Custom_Filters = {
 			$('.daterangepicker').remove();
 
 			// Bootstrap date range picker.
-			$('#created-date-input').daterangepicker({drops: 'up', locale : { applyLabel : 'Apply', cancelLabel : 'Cancel', firstDay : parseInt(CALENDAR_WEEK_START_DAY)}}, function(start, end)
-			{
-				var range = $('#created-date-input').val();
+			$('#created-date-input').daterangepicker({
+				drops: 'up', 
+				locale : 
+				{  applyLabel: '{{agile_lng_translate "calendar" "Apply"}}',
+		            clearLabel: '{{agile_lng_translate "deal-view" "clear"}}',
+		            fromLabel: '{{agile_lng_translate "calendar" "from"}}',
+		            toLabel: '{{agile_lng_translate "calendar" "to"}}',
+		            customRangeLabel: '{{agile_lng_translate "campaigns" "custom"}}',
+		            daysOfWeek: $.fn.datepicker.dates['en'].daysExactMin,
+		            monthNames: $.fn.datepicker.dates['en'].months,
+		            firstDay: parseInt(CALENDAR_WEEK_START_DAY)
+				}
+				}, function(start, end)
+				{
+					var range = $('#created-date-input').val();
 
-				if(!range)
-					return;
-				
-				var range_array = range.split('-');
+					if(!range)
+						return;
+					
+					var range_array = range.split('-');
 
-				$('#clear-created-date').show();
+					$('#clear-created-date').show();
 
-				Ticket_Custom_Filters.changeCreatedDate(range_array[0], range_array[1]);
+					Ticket_Custom_Filters.changeCreatedDate(range_array[0], range_array[1]);
+				});
 			});
-		});
 
 		var options = [];
 		
@@ -284,7 +296,7 @@ var Ticket_Custom_Filters = {
 					$select.html(optionList);
 
 					// Initliazing multi select drop down
-					$select.chosen({no_results_text: "No labels found"});
+					$select.chosen({no_results_text: "{{agile_lng_translate 'tickets' 'no-labels-found'}}"});
 
 					//Initializes click events
 		  			Ticket_Custom_Filters.initEvents();

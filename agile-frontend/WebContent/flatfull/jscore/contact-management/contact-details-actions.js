@@ -88,7 +88,7 @@
             var targetEl = $(e.currentTarget);
 
             var contact_id = App_Contacts.contactDetailView.model.id;
-            var optionsTemplate = "<option value='{{id}}'{{#if is_disabled}}disabled=disabled>{{name}} (Disabled){{else}}>{{name}}{{/if}}</option>";
+            var optionsTemplate = "<option value='{{id}}'{{#if is_disabled}}disabled=disabled>{{name}} ("+_agile_get_translated_val('campaigns','disabled')+"){{else}}>{{name}}{{/if}}</option>";
             
             // Navigate to Add Campaigns page
             if($(targetEl).hasClass('contact-add-campaign'))
@@ -180,12 +180,12 @@
                 {
                     var properties = App_Contacts.contactDetailView.model.get('properties');
                     
-                    var name = "Contact";
+                    var name = "{{agile_lng_translate 'menu' 'contact'}}";
                     
                     if(properties)
                         name = getPropertyValue(properties, "first_name");
                     
-                    var message = name + " is already active in Campaign '" + workflow_name+"'.";
+                    var message = name + " "+_agile_get_translated_val('campaigns','contact-active-in-campaign')+" '" + workflow_name+"'.";
                     
                     showNotyPopUp("information", message, "top", 10000);
                     

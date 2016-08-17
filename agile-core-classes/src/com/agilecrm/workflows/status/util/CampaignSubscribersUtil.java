@@ -173,6 +173,7 @@ public class CampaignSubscribersUtil
 	Map<String, Object> subscribers = new HashMap<String, Object>();
 	subscribers.put("emailBounceStatus.emailBounceType", emailBounceType);
 	subscribers.put("emailBounceStatus.campaign_id", campaignId);
+	subscribers.put("campaignStatus.campaign_id", campaignId);
 
 	return dao.getCountByProperty(subscribers);
     }

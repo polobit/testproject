@@ -101,8 +101,13 @@ public abstract class AbstractCSVExporter<T> implements Exporter<T>
 
 	for (T entity : entities)
 	{
-
+        try{
 	    csvWriter.writeNext(convertEntityToCSVRow(entity, getIndexMap(), getIndexMap().size()));
+    }
+    catch(Exception e)
+    {
+        e.printStackTrace();
+    }
 	}
     }
 

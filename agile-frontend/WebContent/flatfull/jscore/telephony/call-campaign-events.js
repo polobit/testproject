@@ -135,7 +135,8 @@ $(function(){
 					clearTimeout(CALL_CAMPAIGN.callObject);
 					CALL_CAMPAIGN.callObject = null;
 				}
-				routeToPage("contacts");
+				Backbone.history.navigate("contacts", { trigger : true });
+				//routeToPage("contacts");
 
 	});	
 	
@@ -152,7 +153,7 @@ $(function(){
 					
 					// Disabled the buttons and fields......
 					$("#bulk-start-call-campaign").attr("disabled","disabled");
-					$("#bulk-start-call-campaign").html("Loading...");
+					$("#bulk-start-call-campaign").html("{{agile_lng_translate 'tickets' 'loading'}}");
 					$("#call_campaign_autodial").attr("disabled","disabled");
 					$("#addTag").attr("disabled","disabled");
 					$("#rampTimeButton").attr("disabled","disabled");
@@ -179,7 +180,7 @@ $(function(){
 							console.log("not valid tag");
 							$('#correctTag').modal('show');
 							$("#bulk-start-call-campaign").removeAttr('disabled');
-							$("#bulk-start-call-campaign").html("Start Campaign");
+							$("#bulk-start-call-campaign").html("{{agile_lng_translate 'contacts-view' 'start-campaign'}}");
 							$("#call_campaign_autodial").removeAttr('disabled');
 							$("#addTag").removeAttr('disabled');
 							$("#addTag").val("");
@@ -220,7 +221,7 @@ $(function(){
 										}else{
 											
 											$("#bulk-start-call-campaign").removeAttr('disabled');
-											$("#bulk-start-call-campaign").html("Start Campaign");
+											$("#bulk-start-call-campaign").html("{{agile_lng_translate 'contacts-view' 'start-campaign'}}");
 											$("#call_campaign_autodial").removeAttr('disabled');
 											$("#addTag").removeAttr('disabled');
 											if(CALL_CAMPAIGN.autodial == true){
@@ -243,7 +244,7 @@ $(function(){
 			console.log("error in -start-call-campaign " + err.message);
 			CALL_CAMPAIGN.last_clicked = null;
 			$("#bulk-start-call-campaign").removeAttr('disabled');
-			$("#bulk-start-call-campaign").html("Start Campaign");
+			$("#bulk-start-call-campaign").html("{{agile_lng_translate 'contacts-view' 'start-campaign'}}");
 			$("#call_campaign_autodial").removeAttr('disabled');
 			$("#addTag").removeAttr('disabled');
 			if(CALL_CAMPAIGN.autodial == true){
@@ -261,7 +262,7 @@ $(function(){
 				
 				if (CALL_CAMPAIGN.start)
 				{
-					var alertMessage = '<center><div class="alert alert-danger fade in" style="z-index:10000;margin-bottom:0px;margin-right:-4px;font-size: 14px;"><a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a><strong>Alert!</strong> Call campaign is already running.</div></center>';
+					var alertMessage = '<center><div class="alert alert-danger fade in" style="z-index:10000;margin-bottom:0px;margin-right:-4px;font-size: 14px;"><a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a><strong>{{agile_lng_translate "others" "alert"}}!</strong> {{agile_lng_translate "calls" "campaign-running"}}</div></center>';
 					var timeToDisplay = 10000;
 					showCampaignAlert(alertMessage,timeToDisplay);
 					return;
@@ -574,7 +575,7 @@ $(function(){
 					}
 				
 					stopCallCampaign();
-					 var alertMessage = '<center><div class="alert alert-success fade in" style="z-index:10000;margin-bottom:0px;margin-right:-4px;font-size: 14px;"><a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a>You have successfully exited the call campaign.</div></center>'; 
+					 var alertMessage = '<center><div class="alert alert-success fade in" style="z-index:10000;margin-bottom:0px;margin-right:-4px;font-size: 14px;"><a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a>{{agile_lng_translate "calls" "campaign-exited"}}</div></center>'; 
 					 var timeToDisplay = 10000;
 					 showCampaignAlert(alertMessage,timeToDisplay) 
 				}
@@ -699,7 +700,7 @@ $(function(){
 				$("#campaign_resumeCall").show();
 				$("#callPauseText").show();
 				$("#pauseCallDiv").tooltip('hide')
-				  .attr('data-original-title', "Resume current call.")
+				  .attr('data-original-title', "{{agile_lng_translate 'calls' 'resume-call'}}")
 				  .tooltip('fixTitle')
 				  .tooltip('show');
 				
@@ -725,7 +726,7 @@ $(function(){
 				$("#campaign_pauseCall").show();
 				$("#callPauseText").hide();
 				$("#pauseCallDiv").tooltip('hide')
-				  .attr('data-original-title', "Pause current call.")
+				  .attr('data-original-title', "{{agile_lng_translate 'calls' 'pause-call'}}")
 				  .tooltip('fixTitle')
 				  .tooltip('show');
 				var time = CALL_CAMPAIGN.countdown_timer * 1000;
@@ -788,7 +789,7 @@ $(function(){
 	
 	
 	window.onbeforeunload = function() {
-		var message = 'You are currently running a call campaign. If you reload the page the current call campaign will be exited automatically.';
+		var message = '{{agile_lng_translate "calls" "reload-page"}}';
 		 if(CALL_CAMPAIGN.start){
 			 return message;
 		 }else{
