@@ -96,7 +96,6 @@ AGILE_EB_OPTIONS['templateId'] = "";
                                 <!-- SOCIAL LINKS -->
                                 <%@ include file="blocks/social-links.html" %>
 
-                                <%@ include file="blocks/user-poll.html"%>
                             </li>
                         </ul>
                     </div>
@@ -341,7 +340,7 @@ AGILE_EB_OPTIONS['templateId'] = "";
                         </ul>
                     </div>
 
-                    <div id="user-poll">
+                    <!-- <div id="user-poll">
                         <h4 class="text text-info">User Poll</h4>
                         <ul class="list-group" id="poll-list">
                             <li class="hide" >
@@ -362,30 +361,8 @@ AGILE_EB_OPTIONS['templateId'] = "";
                                 </div>
                         </div>
                         <br>
-                    </div>
+                    </div> -->
 
-                    <div id="user-poll">
-                        <h4 class="text text-info">User Poll</h4>
-                        <ul class="list-group" id="poll-list">
-                            <li class="hide" >
-                                <div class="input-group">
-                                <input type="text" class="form-control" name="poll_value" placeholder="poll" style="width:45%">
-                                <input type="text" class="form-control" name="poll_tag" placeholder="Related Tag" style="width:55%">
-                                <span class="input-group-addon delbutton"><a>x</a></span>
-                                </div>
-                            </li>
-                        </ul>
-                        <div>
-                                <div>
-                                    <button class="btn pull-right" id="add-poll">Add More</button>
-                                </div>
-                                <br><br><br>
-                                <div>
-                                <input type="text" class="form-control" name="poll_url" placeholder="Redirect URL">
-                                </div>
-                        </div>
-                        <br>
-                    </div>
 
                     <div id="buttons" style="max-width: 400px">
                         <h4 class="text text-info">Buttons</h4>
