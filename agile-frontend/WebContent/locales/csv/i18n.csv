@@ -5225,3 +5225,7 @@ twill.failed-join-another-number,Failed to add another number to the conference 
 twill.connection-lost-conference,The connection is not active to dial another call.,
 twill.error-start-conference, Problem in starting the conference. Please start again.,
 
+common-words.relative-cap,Relative,
+contacts-view.on-after,on after,
+contacts-view.on-before,on before,
+months.February,February,
