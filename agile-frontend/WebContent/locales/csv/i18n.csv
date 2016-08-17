@@ -2061,6 +2061,7 @@ prefs-settings.enter-new-password,Enter New Password,Introduzca nueva contraseñ
 report-view.comparison-reports,Comparison Reports,Reportes de comparación
 activity.no-recent,No Recent Activity,No hay actividad reciente
 campaigns.incorrect-referral,Incorrect Referral,Referencia incorrecta
+campaigns.Incorrect Referral,Incorrect Referral,Referencia incorrecta
 activity_type.DEAL_OWNER_CHANGE,Deal Owner Changed,Propietario ha cambiado mucho
 contacts-view.created-new-user,created a New User,creado un nuevo usuario
 contacts-view.add/remove-columns,Add/Remove Columns,Añadir / quitar columnas
@@ -2276,6 +2277,7 @@ widgets.bria-recommend,We recommend Bria,Recomendamos Bria
 campaigns.compare-campaigns,Compare Campaigns,Comparar campañas
 widgets.add-for-all-users,Add for all users,Añadir para todos los usuarios
 campaigns.meeting-scheduled,Meeting Scheduled,Reunión programada
+campaigns.Meeting Scheduled,Meeting Scheduled,Reunión programada
 report-view.goals-attainment,Goals Attainment,objetivos de logro
 social.adding-stream,Adding Stream...,Añadiendo stream…
 contacts-view.deleted-campaign,Deleted Campaign,Campaña eliminada
@@ -2449,6 +2451,7 @@ admin-settings-users.import-contacts,Import Contacts,Importar contactos
 Help-content.create-an-event,create an event,crear un evento
 contacts-view.email-primary,Email (Primary),Correo electrónico (Primario)
 campaigns.new-opportunity,New Opportunity,Nueva oportunidad
+campaigns.New Opportunity,New Opportunity,Nueva oportunidad
 other.enable-tracking,Enable Tracking,Activar seguimiento
 bulk-actions.remove-tag,Bulk Remove Tag,Elimina la etiqueta a granel
 contact-details.active-campaign,Active Campaign,Campaña activa
@@ -3338,6 +3341,7 @@ web-rules.modal-popup,Modal Popup,Modal popup
 help.google-sync,Google Sync,Google Sync
 plan-and-upgrade.change-plan,Change Plan,Cambiar de plan
 campaigns.no-interest,No Interest,Sin interés
+campaigns.No Interest,No Interest,Sin interés
 contact-details.add-contact,Add Contact,Agregar contacto
 prefs-online-calendar.add-to-site,Add to Site,Añadir al sitio
 report-view.total-sales,Total Sales,Ventas totales
@@ -3740,6 +3744,7 @@ other.important,Important,Importante
 contacts-view.is-any-of,is any of,es cualquiera de
 help.live-chat,Live Chat,Chat en vivo
 campaigns.voicemail,Voicemail,Mensaje de voz
+campaigns.Voicemail,Voicemail,Mensaje de voz
 contacts-view.select,Select...,Seleccionar...
 countries.VE,Venezuela,Venezuela
 contact-details.web-stats,Web Stats,web Stats
@@ -4068,6 +4073,7 @@ admin-settings-deals.Proposal,Proposal,Propuesta
 portlets.due-date,Due Date,Fecha de vencimiento
 tasks.priority,Priority,Prioridad
 campaigns.answered,Answered,Respondido
+campaigns.Answered,Answered,Respondido
 admin-settings-integrations.accounts,Accounts,cuentas
 social.tweet-to,Tweet to,Twittear a
 tasks.group-by,Group By,Agrupar por
@@ -4128,6 +4134,7 @@ tickets.assignee,Assignee,Cesionarios
 deal-view.Deals?,Deal(s)?,Oferta(s)?
 months-xs.Dec,Dec,Dic
 campaigns.interest,Interest,Interés
+campaigns.Interest,Interest,Interés
 other.schedule,Schedule,Programar
 prefs-settings.language,Language,Idioma
 campaigns.triggers,Triggers,Disparadores
@@ -4265,6 +4272,7 @@ widgets.Zendesk-displayName,Zendesk,Zendesk
 tickets.send-as,Send as,Enviar como
 report-add.unknown,Unknown,Desconocido
 campaigns.inquiry,Inquiry,Solicitud
+campaigns.Inquiry,Inquiry,Solicitud
 portlets.monthly,Monthly,Mensual
 widgets.subject,Subject,Asunto
 companies-edit.primary,Primary,Principal
@@ -4471,6 +4479,7 @@ menu.search,Search,Búsqueda
 report-add.hourly,Hourly,Cada hora
 tickets.medium,Medium,Media
 call_activity.fail,Failed,Ha fallado
+campaigns.Failed,Failed,Ha fallado
 contacts-view.called,Called,Llamado
 deal-view.select,Select,Seleccionar
 tickets.remove,remove,remover  
@@ -4509,6 +4518,7 @@ campaigns.stripe,Stripe,Stripe
 contacts-view.equals,equals,es igual a
 social.Search,Search,Búsqueda
 campaigns.missed,Missed,Perdida
+campaigns.Missed,Missed,Perdida
 tickets.ticket,Ticket,Boleto
 campaigns.ticket,Ticket,Ticket
 tickets.visits,Visits,Visitas
@@ -4908,6 +4918,7 @@ months-xs.Sept,Sept,Sept
 contacts-view.date,Date,Fecha
 campaigns.deal,Deal,Oferta
 campaigns.busy,Busy,Ocupado
+campaigns.Busy,Busy,Ocupado
 admin-settings-custom-fields.LIST,List,Lista
 dkim.type,TYPE,TIPO
 report-view.name,Name,Nombre

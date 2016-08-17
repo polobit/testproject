@@ -90,7 +90,52 @@
 <script id="admin-settings-telephony-model-template" type="text/html">
     	
 	<td>
-		<div class="inline-block v-top text-ellipsis" style="width:80%">{{label}}</div>
+	{{#if_equals label "Answered"}}		
+		<div class="inline-block v-top text-ellipsis" style="width:80%">{{agile_lng_translate 'campaigns' 'answered'}}</div>
+	{{else}}
+		{{#if_equals label "Busy"}}		
+			<div class="inline-block v-top text-ellipsis" style="width:80%">{{agile_lng_translate 'campaigns' 'busy'}}</div>
+		{{else}}
+			{{#if_equals label "Failed"}}		
+				<div class="inline-block v-top text-ellipsis" style="width:80%">{{agile_lng_translate 'call_activity' 'fail'}}</div>
+			{{else}}
+				{{#if_equals label "Missed"}}		
+					<div class="inline-block v-top text-ellipsis" style="width:80%">{{agile_lng_translate 'campaigns' 'missed'}}</div>
+				{{else}}
+					{{#if_equals label "Voicemail"}}		
+						<div class="inline-block v-top text-ellipsis" style="width:80%">{{agile_lng_translate 'campaigns' 'voicemail'}}</div>
+					{{else}}
+						{{#if_equals label "Inquiry"}}		
+							<div class="inline-block v-top text-ellipsis" style="width:80%">{{agile_lng_translate 'campaigns' 'inquiry'}}</div>
+						{{else}}
+							{{#if_equals label "Interest"}}		
+								<div class="inline-block v-top text-ellipsis" style="width:80%">{{agile_lng_translate 'campaigns' 'interest'}}</div>
+							{{else}}
+								{{#if_equals label "No Interest"}}		
+									<div class="inline-block v-top text-ellipsis" style="width:80%">{{agile_lng_translate 'campaigns' 'no-interest'}}</div>
+								{{else}}
+									{{#if_equals label "Incorrect Referral"}}		
+										<div class="inline-block v-top text-ellipsis" style="width:80%">{{agile_lng_translate 'campaigns' 'incorrect-referral'}}</div>
+									{{else}}
+										{{#if_equals label "Meeting Scheduled"}}		
+											<div class="inline-block v-top text-ellipsis" style="width:80%">{{agile_lng_translate 'campaigns' 'meeting-scheduled'}}</div>
+										{{else}}
+											{{#if_equals label "New Opportunity"}}		
+												<div class="inline-block v-top text-ellipsis" style="width:80%">{{agile_lng_translate 'campaigns' 'new-opportunity'}}</div>
+											{{else}}
+													<div class="inline-block v-top text-ellipsis" style="width:80%">{{label}}</div>
+											{{/if_equals}}
+										{{/if_equals}}				
+									{{/if_equals}}
+								{{/if_equals}}
+							{{/if_equals}}	
+						{{/if_equals}}
+					{{/if_equals}}
+				{{/if_equals}}
+			{{/if_equals}}				
+		{{/if_equals}}
+	{{/if_equals}}
+
 		<input type="hidden" name="id" value="{{id}}" order="{{order}}">
 	</td>	
 	<td class="b-r-none" style="text-align: right;">
