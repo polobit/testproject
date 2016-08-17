@@ -1139,9 +1139,9 @@ time {
 .agile-menu > li:nth-child(n + 4):not(.nav-bar-search):not(#more-menu) {
 	display:none;
 }
-#searchText {
+/*#searchText {
 	width:100px;
-}
+}*/
 }
 
 
@@ -9990,7 +9990,7 @@ left:0;
 
 /*animation for search box field*/
 
-#searchText
+/*#searchText
 {
 	border-top-right-radius: 0px;
   border-bottom-right-radius: 0px;
@@ -10004,7 +10004,7 @@ left:0;
 	
 	width:200px;
 }
-
+*/
 
 
 /*.app-aside-folded .navi > ul > li::after {
