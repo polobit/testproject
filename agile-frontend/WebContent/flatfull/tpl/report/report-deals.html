@@ -1,10 +1,10 @@
 <script id="report-deals-template" type="text/html">
 <div class="custom-animated custom-fadeInUp">
 {{#hasMenuScope 'DEALS'}}
-<div class="wrapper bg-light padder-md padder-v m-r-sm p-r-none" style="border-bottom: 1px solid rgba(140, 139, 139, 0.2);">
+<div class="wrapper bg-light lter padder-sm padder-v p-r-sm" style="border-bottom: 1px solid rgba(140, 139, 139, 0.2);">
 <div class="row">
     <div class="col-sm-12 col-md-12">
-              <div class="col-md-3 col-sm-6" style="padding-left:0px;padding-bottom:8px">
+              <div class="col-md-3 col-sm-6 p-r-none p-l-none" style="padding-bottom:8px">
             <h3 class="font-thin h3"> {{agile_lng_translate 'report-view' 'incoming-deals'}}</h3>
                 
             </div>
@@ -16,7 +16,7 @@
                 <span id="range">{{date-range "today" "-6"}}</span>
               </div>
 
-			<div class="pull-right" style="padding:0px 8px 10px">
+			<div class="pull-right" style="padding:0px 4px 10px 2px">
 				<select name="frequency" id="frequency" class="required form-control" style="width:100px">
 					<option value="daily">{{agile_lng_translate 'report-add' 'daily'}}</option>
 					<option value="weekly">{{agile_lng_translate 'report-add' 'weekly'}}</option>
@@ -24,13 +24,13 @@
                 </select>
 			</div>
 			
-			<div class="pull-right" style="padding:0px 8px 10px">
+			<div class="pull-right" style="padding:0px 2px 10px">
 				<select name="owner" id="owner" class="required form-control"  style="width:140px">
 					<option value="All Owners">{{agile_lng_translate 'report-add' 'all-owners'}}</option>
                 </select>
 			</div>
 
-            <div class="pull-right" style="padding:0px 8px 10px">
+            <div class="pull-right" style="padding:0px 2px 10px">
                 <select name="type" id="type" class="required form-control">
                     <option value="deals">{{agile_lng_translate 'report-add' 'total-deals'}}</option>
                     <option value="Revenue">{{agile_lng_translate 'report-add' 'total-revenue'}}</option>

@@ -1,6 +1,6 @@
 <script id="tickets-report-template" type="text/html">
 <div class="custom-animated custom-fadeInUp">
-    <div class="wrapper bg-light padder-md padder-v m-r-sm p-r-none" style="border-bottom: 1px solid rgba(140, 139, 139, 0.2);">
+    <div class="wrapper bg-light lter padder-sm padder-v p-r-sm b-b">
         <div class="row">
             <div class="col-sm-12 col-md-12">
             <div class="col-md-4 col-sm-6" style="padding-left:0px;padding-bottom:8px">
@@ -11,13 +11,13 @@
                     <i class="icon-calendar icon-large"></i>
                     <span id="range">{{date-range "today" "-6"}}</span>
                 </div>
-                <div class="pull-right" style="padding:0px 8px 10px">
+                <div class="pull-right" style="padding:0px 4px 10px 2px">
                     <select name="status" id="status" class="required form-control" style="width:100px">
                         <option value="NEW">{{agile_lng_translate 'menu' 'new'}}</option>
                         <option value="CLOSED">{{agile_lng_translate 'cases' 'closed'}}</option>
                     </select>
                 </div>
-                <div class="pull-right" style="padding:0px 8px 10px">
+                <div class="pull-right" style="padding:0px 2px 10px">
                     <select name="frequency" id="frequency" class="required form-control" style="width:100px">
                         <option value="daily" selected>{{agile_lng_translate 'report-add' 'daily'}}</option>
                         <option value="weekly">{{agile_lng_translate 'report-add' 'weekly'}}
@@ -29,7 +29,7 @@
             </div>
         </div>
     </div>
-    <div style="padding:10px">    
+    <div class="wrapper-sm">    
         <div class="row">
             <div class="col-md-12">
                 <div id="tickets-chart" class="panel"></div>
@@ -41,7 +41,7 @@
 </script>
 <script id="ticket-hourly-report-template" type="text/html">
 <div class="custom-animated custom-fadeInUp">
-    <div class="wrapper bg-light padder-md padder-v m-r-sm p-r-none" style="border-bottom: 1px solid rgba(140, 139, 139, 0.2);">
+    <div class="wrapper bg-light lter padder-sm padder-v p-r-sm b-b">
         <div class="row">
             <div class="col-sm-12 col-md-12">
                 <div id="reportrange" class="pull-right" style="box-shadow: 0 0px 0px rgba(0, 0, 0, 0), inset 0 -0 0 rgba(0, 0, 0, .1); border:1px solid #cfdadd;height:34px;padding:5px">
@@ -63,7 +63,7 @@
             </div>
         </div>
     </div>
-    <div style="padding:10px">    
+    <div class="wrapper-sm">   
         <div class="row">
             <div class="col-md-12">
                 <div id="hourly-tickets-chart" class="panel"></div>
@@ -75,7 +75,7 @@
 </script>
 <script id="ticket-weekly-report-template" type="text/html">
 <div class="custom-animated custom-fadeInUp">
-    <div class="wrapper bg-light padder-md padder-v m-r-sm p-r-none" style="border-bottom: 1px solid rgba(140, 139, 139, 0.2);">
+    <div class="wrapper bg-light lter padder-sm padder-v p-r-sm b-b">
         <div class="row">
             <div class="col-sm-12 col-md-12">
                 <div id="reportrange" class="pull-right" style="box-shadow: 0 0px 0px rgba(0, 0, 0, 0), inset 0 -0 0 rgba(0, 0, 0, .1); border:1px solid #cfdadd;height:34px;padding:5px">
@@ -97,7 +97,7 @@
             </div>
         </div>
     </div>
-    <div style="padding:10px">    
+    <div class="wrapper-sm">    
         <div class="row">
             <div class="col-md-12">
                 <div id="weekly-tickets-chart" class="panel"></div>
@@ -109,7 +109,7 @@
 </script>
 <script id="ticket-priority-report-template" type="text/html">
 <div class="custom-animated custom-fadeInUp">
-    <div class="wrapper bg-light padder-md padder-v m-r-sm p-r-none" style="border-bottom: 1px solid rgba(140, 139, 139, 0.2);">
+    <div class="wrapper bg-light lter padder-sm padder-v p-r-sm b-b">
         <div class="row">
             <div class="col-sm-12 col-md-12">
             <div class="col-md-4 col-sm-6" style="padding-left:0px;padding-bottom:8px">
@@ -120,7 +120,7 @@
                     <i class="icon-calendar icon-large"></i>
                     <span id="range">{{date-range "today" "-6"}}</span>
                 </div>
-                <div class="pull-right" style="padding:0px 8px 10px">
+                <div class="pull-right" style="padding:0px 4px 10px 2px">
                     <select name="report_type" id="report_type" class="required form-control" style="width:100px">
                         <option value="priority" selected>{{agile_lng_translate 'tasks' 'priority'}}</option>
                         <option value="status">{{agile_lng_translate 'portlets' 'status'}}</option>
@@ -129,7 +129,7 @@
             </div>
         </div>
     </div>
-    <div style="padding:10px">    
+    <div class="wrapper-sm">    
         <div class="row">
             <div class="col-md-12">
                 <div id="report-chart" class="panel"></div>
@@ -141,7 +141,7 @@
 </script>
 <script id="ticket-status-report-template" type="text/html">
 <div class="custom-animated custom-fadeInUp">
-    <div class="wrapper bg-light padder-md padder-v m-r-sm p-r-none" style="border-bottom: 1px solid rgba(140, 139, 139, 0.2);">
+    <div class="wrapper bg-light lter padder-sm padder-v p-r-sm b-b">
         <div class="row">
             <div class="col-sm-12 col-md-12">
             <div class="col-md-4 col-sm-6" style="padding-left:0px;padding-bottom:8px">
@@ -162,7 +162,7 @@
             </div>
         </div>
     </div>
-    <div style="padding:10px">    
+    <div class="wrapper-sm">    
         <div class="row">
             <div class="col-md-12">
                 <div id="status-report-chart" class="panel"></div>
@@ -174,7 +174,7 @@
 </script>
 <script id="ticket-sla-report-template" type="text/html">
 <div class="custom-animated custom-fadeInUp">
-    <div class="wrapper bg-light padder-md padder-v m-r-sm p-r-none" style="border-bottom: 1px solid rgba(140, 139, 139, 0.2);">
+    <div class="wrapper bg-light lter padder-sm padder-v p-r-sm b-b">
         <div class="row">
             <div class="col-sm-12 col-md-12">
             <div class="col-md-4 col-sm-6" style="padding-left:0px;padding-bottom:8px">
@@ -188,7 +188,7 @@
                 </div>
         </div>
     </div>
-    <div style="padding:10px">    
+    <div class="wrapper-sm">    
         <div class="row">
             <div class="col-md-12">
                 <div id="sla-report-chart" class="panel"></div>
@@ -200,7 +200,7 @@
 </script>
 <script id="ticket-avg-first-resp-time-template" type="text/html">
 <div class="custom-animated custom-fadeInUp">
-    <div class="wrapper bg-light padder-md padder-v m-r-sm p-r-none" style="border-bottom: 1px solid rgba(140, 139, 139, 0.2);">
+    <div class="wrapper bg-light lter padder-sm padder-v p-r-sm b-b">
         <div class="row">
             <div class="col-sm-12 col-md-12">
              <div class="col-md-4 col-sm-6" style="padding-left:0px;padding-bottom:8px">
@@ -214,7 +214,7 @@
             </div>
         </div>
     </div>
-    <div style="padding:10px">    
+    <div class="wrapper-sm">    
         <div class="row">
             <div class="col-md-12">
                 <div id="avg-first-resp-time-chart" class="panel"></div>
