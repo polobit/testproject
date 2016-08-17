@@ -168,7 +168,7 @@ function handleObjects() {
 
                         hideAllSettings();
                         $('#imageproperties').show();
-                        $("#select_alignment").show();
+                        //$("#select_alignment").show();
                         $('#image-width-height').show();
 
                         break;
@@ -767,7 +767,7 @@ $(document).ready(function () {
         * and whenever user will select any of the three align option 
         *and click on apply button then it will adjust the image on the basis of the option 
         */
-       
+       /*
          var select_alignment=document.getElementById("image-alt-text");
         if(document.getElementById("select_alignment")==null){
          var array = ["Center","Right","Left"];
@@ -791,7 +791,7 @@ $(document).ready(function () {
        
         //for the alignment left/right/center
         var align = $("#select_alignment").val();
-            $("#"+id).attr("align",align);
+            $("#"+id).attr("align",align);*/
          
     });
 
