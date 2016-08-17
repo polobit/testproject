@@ -294,11 +294,11 @@
        {{/if}}
       </div> 
   </div>  
-  
-<i class="fa fa-clock-o  m-l-sm m-b-sm"></i>
-    <time class="new-task-due-time time-ago" title="{{epochToHumanDate "" due}}"  >{{epochToHumanDate "mmm dd yyyy HH:MM:ss" due}}</time> <label class="label bg-light dk text-tiny m-l-xs" title="Category" data-toggle="tooltip" data-placement="top" data-container="body">{{capFirstLetter type}}</label>
+  <div style="display:inline-flex;margin-top:6px;">
+<i class="fa fa-clock-o  m-l-sm m-r-xs" style="margin-top:4px;"></i>
+    <time class="new-task-due-time time-ago" title="{{epochToHumanDate "" due}}"  >{{epochToHumanDate "mmm dd yyyy HH:MM:ss" due}}</time> <label class="label bg-light dk text-tiny m-l-xs text-ellipsis" style="max-width:100px" title="Category" data-toggle="tooltip" data-placement="top" data-container="body">{{capFirstLetter type}}</label>
 
- 
+ </div>
    
 </div>
 <div class="clearfix"></div>
