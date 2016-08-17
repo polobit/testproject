@@ -287,7 +287,7 @@
     <div class="pull-right"> 
 <div class="new-task-owner  thumb-xxs avatar taskavatarimg p-b-xs">     
          {{#if taskOwner.pic}}
-          <img src="{{taskOwner.pic}}" style="height:20px;width:20px;" class="thumb-xxs m-r-n-xs r r-2x" data-toggle="tooltip" data-placement="top" data-container="body" title="{{taskOwner.name}}"/>
+          <img src="{{taskOwner.pic}}" style="height:20px;width:20px; " class="thumb-xxs m-r-n-xs r r-2x m-b-xs" data-toggle="tooltip" data-placement="top" data-container="body" title="{{taskOwner.name}}"/>
        {{else}}
       <img src="{{defaultGravatarurl 50}}" class="thumb-xxs r r-2x m-r-n-xs" data-toggle="tooltip" data-placement="top" data-container="body" title="{{taskOwner.name}}"/>
        {{/if}}
@@ -295,7 +295,7 @@
   </div>  
   
 <i class="fa fa-clock-o  m-l-sm m-b-sm"></i>
-    <time class="new-task-due-time time-ago" title="{{epochToHumanDate "" due}}"  >{{epochToTaskDate due}}</time> <label class="label bg-light dk text-tiny m-l-xs" title="Category" data-toggle="tooltip" data-placement="top" data-container="body">{{capFirstLetter type}}</label>
+    <time class="new-task-due-time time-ago" title="{{epochToHumanDate "" due}}"  >{{epochToHumanDate "mmm dd yyyy HH:MM:ss" due}}</time> <label class="label bg-light dk text-tiny m-l-xs" title="Category" data-toggle="tooltip" data-placement="top" data-container="body">{{capFirstLetter type}}</label>
 
  
    
