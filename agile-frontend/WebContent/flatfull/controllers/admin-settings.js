@@ -1391,7 +1391,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 				  return;
 			$('#telephony-listner').html($(template_ui));
 			
-			that.telephonyGridView = new Base_Collection_View({ url : '/core/api/categories?entity_type=TELEPHONY_STATUS', templateKey : "admin-settings-telephony",
+			that.telephonyGridView = new Telephony_Status_Collection_View({ url : '/core/api/categories?entity_type=TELEPHONY_STATUS', templateKey : "admin-settings-telephony",
 				individual_tag_name : 'tr', sortKey : "order", postRenderCallback : function(el)
 				{
 					

@@ -2,7 +2,7 @@ function initializeTelephonyListners(el){
 	
 	console.log("initialised telephony admin sttting prefs initialising clicks");
 	makeTDSortable(el);
-	initializeTelephonyEvents(el);
+	//initializeTelephonyEvents(el);
 	
 }
 
@@ -77,7 +77,7 @@ function saveTelephonyStatusOrder(){
 
 
 
-function initializeTelephonyEvents(el){
+/*function initializeTelephonyEvents(el){
 	
 	$(el).on('click','.show_telephony_status_field',function(e){
 		e.preventDefault();
@@ -85,13 +85,13 @@ function initializeTelephonyEvents(el){
 			$(this).hide();
 	});
 	
-/*	$(el).on('keypress','#add_new_telephony_status',function(e){
+	$(el).on('keypress','#add_new_telephony_status',function(e){
 		e.preventDefault();
 		if(e.keyCode == 13)
     	{
     		$("#add_telephony_status").click();
     	}
-    });*/
+    });
 	
 	$(el).on('click','#add_telephony_status',function(e){
 
@@ -118,7 +118,7 @@ function initializeTelephonyEvents(el){
 		deleteTelephonyStatus(data);
 	});
 	
-	}
+	}*/
 
 function deleteTelephonyStatus(data){
 
@@ -143,16 +143,27 @@ function deleteTelephonyStatus(data){
 function saveTelephonyStatus(that){
 	
 	var label = $('#add_new_telephony_status').val().trim();
-	// Returns, if the save button has disabled attribute
+	// Returns, if the save button has disabled attributeR
 	if ($(that).attr('disabled'))
 		return;
 	// Disables save button to prevent multiple click event issues
 	disable_save_button($(that));//$(saveBtn).attr('disabled', 'disabled');
 	
+	var regexString = '^[a-zA-Z][a-zA-Z 0-9_-]*$';
+	var is_valid = new RegExp(regexString).test(label);
+		if(!is_valid){
+			$(that).parent().find('.save-status').html('<span style="color:red;">Status should begin with alphabet and can contain "-" and "_" as special character</span>');
+			setTimeout(function(){ 
+				$(that).parent().find('.save-status').html("");
+				}, 3000);
+			// Removes disabled attribute of save button
+			enable_save_button($(that));//$(saveBtn).removeAttr('disabled');
+			return false;
+		}
 		if(label.length === 0){
 			$(that).parent().find('.save-status').html('<span style="color:red;">This field is required.</span>');
 			setTimeout(function(){ 
-				$(that).parent().find('.save-status').html();
+				$(that).parent().find('.save-status').html("");
 				}, 3000);
 			// Removes disabled attribute of save button
 			enable_save_button($(that));//$(saveBtn).removeAttr('disabled');
@@ -192,26 +203,10 @@ function saveTelephonyStatus(that){
 		error: function(data,response){
 			console.log(response,data);
 			$(that).parent().find('.save-status').html('<span style="color:red;">'+response.responseText+'</span>');
+			setTimeout(function(){ 
+				$('.save-status','#telephony-callstatus-fields').html("");
+				}, 3000);
 			enable_save_button($(that));
 		}
 	});
 }
-
-
-/*(function(telephony, $, undefined) {
-	
-	
-	*//**
-	 * Init all the telephony related click events. Call this only when the telephony page is opened.
-	 *//*
-	telephony.init = function(){
-			console.log("initialised telephony admin sttting prefs initialising clicks");
-			
-			
-			
-			
-	    
-	};
-	
-	
-}(window.telephony = window.telephony || {}, $));*/
