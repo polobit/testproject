@@ -1,5 +1,10 @@
 package com.campaignio.tasklets.agile;
 
+import static com.agilecrm.util.DateUtil.CustomFieldDateFormat;
+import static com.agilecrm.util.DateUtil.CustomFieldDateRegEx;
+import static com.agilecrm.util.DateUtil.WaiTillDateRegEx;
+import static com.agilecrm.util.DateUtil.WaitTillDateFormat;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -154,10 +159,12 @@ public class SetProperty extends TaskletAdapter
 
 			case DATE:
 				if (field == null)
-					field = dateSetProperty(true, updated_field, updated_value, new ContactField(updated_field,
-							updated_value, null), campaignJSON, subscriberJSON);
+					field = dateSetProperty(true, updated_field, updated_value, 
+							new ContactField(updated_field, updated_value, null), campaignJSON, subscriberJSON);
 				else
-					field = dateSetProperty(false, updated_field, updated_value, field, campaignJSON, subscriberJSON);
+					field = dateSetProperty(false, updated_field, updated_value, 
+							field, campaignJSON, subscriberJSON);
+				
 				if (isIncOrDesc(updated_value))
 					isDate = " days";
 
@@ -273,95 +280,68 @@ public class SetProperty extends TaskletAdapter
 		return contact_field;
 	}
 
-		private ContactField dateSetProperty(boolean isNew, String updated_field, String updated_value,
-				ContactField contact_field, JSONObject campaignJSON, JSONObject subscriberJSON)
-		{
-			String timezone = null;
-			int updatedNumber = 0;
-			try
-			{
-				timezone = subscriberJSON.getJSONObject("data").getString("timezone");
+	private ContactField dateSetProperty(boolean isNew, String updated_field, String updated_value,
+			ContactField contact_field, JSONObject campaignJSON, JSONObject subscriberJSON) {
+		
+		String timeZone = null;
+		int updatedNumber = 0;
+		
+		try {
+			timeZone = subscriberJSON.getJSONObject("data").getString("timezone");
+		} 
+		catch(Exception e) {
+			System.out.println("No timezone found in subscriberJSON: " + e.getMessage());
+			timeZone = AccountPrefsUtil.getTimeZone();
+		}
+
+		SimpleDateFormat sdf = null;
+		
+		try {
+			Pattern mmdd_Pattern = Pattern.compile(WaiTillDateRegEx);
+			Pattern dd_MMM_Pattern = Pattern.compile(CustomFieldDateRegEx);
+			
+			Matcher matcher1 = mmdd_Pattern.matcher(updated_value);
+			Matcher matcher2 = dd_MMM_Pattern.matcher(updated_value);
+
+			if(matcher1.matches()) {
+				sdf = new SimpleDateFormat(WaitTillDateFormat);
+			} 
+			else if(matcher2.matches()) {
+				sdf = new SimpleDateFormat(CustomFieldDateFormat);
 			}
-			catch (Exception e)
-			{
-				System.out.println("No timezone found in subscriberJSON: " + e.getMessage());
-				timezone = AccountPrefsUtil.getTimeZone();
+			
+			if(sdf == null && isIncOrDesc(updated_value)) {
+				updatedNumber = Integer.parseInt(updated_value);
 			}
-	
-			try
-			{
-				SimpleDateFormat sdf = null;
+			
+			if(!StringUtils.isEmpty(timeZone)) {
+
+				Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone(timeZone));
 				
-					// For Current Date merge field(dd mmm yyyy)
-					 Pattern calendarPatternCurrentDate = Pattern.compile(DateUtil.CustomFieldDateRegEx);
-					 Matcher calendarMatcherCurrentDate = calendarPatternCurrentDate.matcher(updated_value);
-					
-				Pattern calendarPattern = Pattern.compile(DateUtil.WaiTillDateRegEx);
-				Matcher calendarMatcher = calendarPattern.matcher(updated_value);
-				
-				 // Date Matcher for dd MMM yyyy format..
-				if (calendarMatcherCurrentDate.matches())
-						sdf = new SimpleDateFormat(DateUtil.CustomFieldDateFormat);
-	
-				if (calendarMatcher.matches())
-					sdf = new SimpleDateFormat(DateUtil.WaitTillDateFormat);
-				
-				if (sdf == null)
-					if (isIncOrDesc(updated_value))
-					{
-						updatedNumber = Integer.parseInt(updated_value);
-	
-						if (!isNew)
-							if (updatedNumber != 0 && calendarMatcher.matches())
-								sdf = new SimpleDateFormat(DateUtil.WaitTillDateFormat);
-						
-						if (updatedNumber != 0 && calendarMatcherCurrentDate.matches())
-							 sdf = new SimpleDateFormat(DateUtil.CustomFieldDateFormat);
-					}
-	
-				if (sdf != null)
-				{
-					TimeZone timeZone = null;
-					if (!StringUtils.isEmpty(timezone))
-					{
-						timeZone = TimeZone.getTimeZone(timezone);
-	
-						Calendar calendar = Calendar.getInstance(timeZone);
-						if (updatedNumber == 0)
-							calendar.setTime(sdf.parse(updated_value));
-						else
-						{
-							DateUtil dateUtil = new DateUtil();
-	
-							dateUtil.toTZ(timezone);
-							dateUtil.setTime(new Date(Long.parseLong(contact_field.value) * 1000));
-							dateUtil.addDays(updatedNumber);
-	
-							System.out.println("date util" + dateUtil.getTime().getTime());
-	
-							contact_field.value = dateUtil.getTime().getTime() / 1000L + "";
-							return contact_field;
-						}
-	
+				if(updatedNumber != 0) {
+					DateUtil dateUtil = new DateUtil();
+
+					dateUtil.toTZ(timeZone);
+					dateUtil.setTime(new Date(Long.parseLong(contact_field.value) * 1000));
+					dateUtil.addDays(updatedNumber);
+
+					contact_field.value = (dateUtil.getTime().getTime() / 1000L) + "";
+				}
+				else {
+					if(sdf != null) {
+						calendar.setTime(sdf.parse(updated_value));
 						contact_field.value = (calendar.getTimeInMillis() / 1000L) + "";
 					}
-					else
-					{
-						contact_field.value = updated_value;
-					}
 				}
-				else
-					return null;
 			}
-			catch (Exception e)
-			{
-				System.out.println("Inside set property. Exception caught in list type: " + e.getMessage());
-				contact_field.value = updated_value;
-				return null;
-			}
-	
-			return contact_field;
 		}
+		catch(Exception e) {
+			System.out.println("Inside set property. Exception caught in list type: " + e.getMessage());
+			return null;
+		}
+
+		return contact_field;
+	}
 
 	private ContactField numberSetProperty(boolean isNew, String updated_field, String updated_value,
 			ContactField contact_field, JSONObject campaignJSON, JSONObject subscriberJSON)

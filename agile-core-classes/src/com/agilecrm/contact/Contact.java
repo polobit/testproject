@@ -1569,7 +1569,7 @@ public class Contact extends Cursor
     public String toString()
     {
 	return "id: " + id + " created_time: " + created_time + " updated_time" + updated_time + " type: " + type
-		+ " tags: " + tags + " properties: " + properties + " Owner: " + Owner;
+		+ " tags: " + tags + " properties: " + properties + " owner_key: " + owner_key;
     }
 }
 

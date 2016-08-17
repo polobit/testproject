@@ -572,17 +572,20 @@ left:0;
 {
   padding:15px;
 }
-#task-model-list .task-striped:nth-child(odd),.social-striped:nth-child(odd),.RTuserlist-
+.social-striped:nth-child(odd),.RTuserlist-
 
 modal li:nth-child(odd),.milestones li:nth-child(odd)
 {
   background:#fff;
 }
-#task-model-list .task-striped:nth-child(even),.social-striped:nth-child
+#task-model-list .task-striped:nth-child(),.social-striped:nth-child
 
 (even),.RTuserlist-modal li:nth-child(even),.milestones li:nth-child(even)
 {
   background:rgb(250, 251, 252);
+}
+#task-model-list .task-striped{
+  background:#fff;
 }
 
 
@@ -631,7 +634,7 @@ label#search-results{
   cursor: pointer;
 }
 label#search-results.active{color: #58666e;}
-#searchText
+/*#searchText
 {
   width:0px;
   transition:width 0.5s  ease-in-out;
@@ -647,7 +650,7 @@ label#search-results.active{color: #58666e;}
   cursor: text;
   border-bottom: 1px solid #eee;
   background-color: #edf1f2;
-}
+}*/
 
 }
 
@@ -1382,7 +1385,9 @@ border-left:none;
 }
 
 /* media queries for contact details left , right icons auto hide show */
-
+@media (min-width:1100px){
+.min-h-auto-xl{ min-height: 490px;}
+}
 @media (min-width:1340px){
 .app-aside-dock #contacts-inner-tabs #prev,.app-aside-dock #contacts-inner-tabs #next {
 display:none;
@@ -1943,11 +1948,11 @@ width: 1%!important;
   display: none!important;
 }
 
-#searchText {
+/*#searchText {
   border-top-right-radius: 0px;
   border-bottom-right-radius: 0px;
   width: 100%;
-}
+}*/
 
 #searchForm .typeahead {
   width: 100%!important;
@@ -2323,6 +2328,7 @@ color:#484848!important;
 .mobile-contact-filter-list .dropdown-menu li a{ padding: 8px 15px;}
 #lhs-contact-filter-form #lhs-filters-header{ display: block;}
 .contactTableHeadName thead tr th{ display: none;}
+
 .pos-t-1{ top: 1px;}
 .icons-text-sm .actions i, .icons-text-sm .actions span.icon-trash{ font-size: 13px;}
 .icons-text-sm.actions i, .icons-text-sm.actions span.icon-trash{ font-size: 13px !important;}
@@ -2351,6 +2357,10 @@ color:#484848!important;
   overflow: auto;
   overflow-y:hidden;
 }
+
+.transform-rotate{ transform: rotate(45deg);}
+.taskavatarimg img{ border-radius: 4px;}
+
 
 .dkim_spf::-webkit-scrollbar-thumb,.dkim_spf::-webkit-scrollbar-thumb, .dkim_spf::-webkit-scrollbar-thumb {
  -webkit-border-radius: 10px;
@@ -2397,5 +2407,11 @@ transform: translateX(-50%);}
   }
 
 
-
+.navbar-searchicon{ padding: 13px 15px;}
+.search-view{ width:320px;}
+.navbar-searchicon > .btn:hover, .navbar-searchicon > .btn:focus, 
+.navbar-searchicon > .btn.focus{ color: inherit;}
+.search-filters li{ width:50%; float: left;}
 /*end custom css code*/
+.search-filters li a
+{ color: #363f44 !important;}

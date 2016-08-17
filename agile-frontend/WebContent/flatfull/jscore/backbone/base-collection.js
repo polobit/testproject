@@ -275,7 +275,7 @@ var Base_Collection_View = Backbone.View
 				    showTransitionBar();
 
 				// Binds functions to view
-				_.bindAll(this, 'render', 'appendItem', 'appendItemOnAddEvent', 'appendItemsOnAddEvent', 'buildCollectionUI');
+				_.bindAll(this, 'render', 'appendItem', 'appendItemOnAddEvent', 'appendItemsOnAddEvent', 'buildCollectionUI', 'removeItemOnEvent');
 
 				if (this.options.data)
 				{
@@ -306,6 +306,7 @@ var Base_Collection_View = Backbone.View
 				this.collection.bind('sync', this.appendItem);
 				this.collection.bind('add', this.appendItemOnAddEvent);
 				this.collection.bind('addAll', this.appendItemsOnAddEvent);
+				this.collection.bind('remove', this.removeItemOnEvent);
 
 				var that = this;
 
@@ -456,6 +457,14 @@ var Base_Collection_View = Backbone.View
 				e.preventDefault();
 				this.infiniScroll.fetchNext();
 			},
+			removeItemOnEvent : function(){
+				var collection_removal_update = this.options.collection_removal_update;
+				console.log("removeItemOnEvent");
+				
+				if (collection_removal_update)
+					this.options.collection_removal_update(this.collection, this.el);
+
+			},
 
 			/**
 			 * Takes each model and creates a view for each model using model
@@ -511,9 +520,12 @@ var Base_Collection_View = Backbone.View
 				 * if(this.collection.at(0).attributes.count)
 				 * this.collection.at(0).attributes.count+=1; }
 				 */
-
 				// callback for newly added models
 				var appendItemCallback = this.options.appendItemCallback;
+				var collection_count_update = this.options.collection_count_update;
+
+				if (collection_count_update && typeof (collection_count_update) === "function")
+					collection_count_update($(this.el),base_model);
 
 				if (appendItemCallback && typeof (appendItemCallback) === "function")
 					appendItemCallback($(this.el));

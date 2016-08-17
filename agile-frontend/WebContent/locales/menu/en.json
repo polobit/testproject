@@ -58,5 +58,11 @@
             "views" : "Views",
             "knowledge-base" : "Knowledge Base",
             "chat-with-us" : "Chat With Us",
+            "all" : "All",
+            "contacts" : "Contacts",
+            "companies" : "Companies",
+            "deals" : "Deals",
+            "documents" : "Documents",
+            "tickets" : "Tickets",
       }
 }

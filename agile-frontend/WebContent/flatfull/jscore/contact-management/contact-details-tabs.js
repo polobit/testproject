@@ -77,7 +77,7 @@ var Contact_Details_Tab_Actions = {
 	  // to remove contact from active campaign.
 	  removeActiveCampaigns : function(e){
 	  	var targetEl = $(e.currentTarget);
-	  	showAlertModal(_agile_get_translated_val('campaigns','sure-remove-active') + " " + $(targetEl).attr("contact_name") +  _agile_get_translated_val('calendar','from') + $(targetEl).attr("campaign_name") + -_agile_get_translated_val('contact-details','campaign') +" ?", "confirm", function(){
+	  	showAlertModal("{{agile_lng_translate 'campaigns' 'sure-remove-active'}} " + $(targetEl).attr("contact_name") + " {{agile_lng_translate 'contacts-view' 'from'}}  " + $(targetEl).attr("campaign_name") + " {{agile_lng_translate 'contact-details' 'campaign'}} ?", "confirm", function(){
 			var $active_campaign = $(targetEl).closest('span#active-campaign');
 			var campaign_id = $active_campaign.attr('data');
 			var contact_id;
