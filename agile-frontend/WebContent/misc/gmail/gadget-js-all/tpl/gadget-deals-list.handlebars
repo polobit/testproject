@@ -1,23 +1,58 @@
 <!-- Deals list tab -->
-<ul style="list-style-type:none; margin-right:25px;"> 
+<ul style="list-style-type:none; margin-right:25px;margin-left:10px;"> 
 {{#if this.length}}
 		{{#each this}}
 			{{#stringToJSON this ""}}
-<li style="padding:5px;margin:5px;border:1px solid #ddd;">
+<li style="margin:5px;border-bottom:1px solid #F5F5F5;padding-top: 5px;">
 	<div style="display:block;" class="activity">
 		<div id="notes" class="activity-text-block">
-			<h4 style="margin-bottom: 9px;"><a style="text-decoration: none"><b>{{ucfirst name}}</b></a><span style="margin-left:20px;">{{milestone}} ({{probability}} %)</span></h4>
-			<p><span style="margin-right: 10px;">Value : </span>
-				{{#if prefs.currency}}{{currencySymbol prefs.currency}}{{else}}<span>$</span>{{/if}} {{numberWithCommas expected_value}}
+			<!--<h4 style="margin-bottom:2px;"><a style="text-decoration: none"><b>{{ucfirst name}}</b></a><span style="margin-left:10px;" data-toggle="tooltip" title="Probability">({{probability}}%)</span></h4>
+			<p>
+			
+			<span data-toggle="tooltip" title="Value">	{{#if prefs.currency}}{{currencySymbol prefs.currency}}{{else}}<span>$</span>{{/if}}{{numberWithCommas expected_value}}</span>
+			<span>Owner:{{owner.name}}</span>
 			</p>
-			<div class="clear">
-				<small class="edit-hover" style="margin-right:10px; color:#b2b0b1;">
+			<div class="clear pull-right" style="margin-top:-15px;">
+				<span style="margin-right:5px;" data-toggle="tooltip" class="label label-info" title="Milestone">{{milestone}} </span>
+				<small class="edit-hover" style="margin-right:5px; color:#b2b0b1;">
 					<time class="deal-created-time" datetime="{{epochToHumanDate "" created_time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created_time}}</time>
 				</small>
+				
+			</div>-->
+			<span class="activity-block-owner pull-left" style=" margin-right: 5px;min-height: 37px;">
+			{{#if owner.pic}}
+				<img class="user-img" width="30" height="30" style="border-radius:3px;" data-toggle="tooltip" title="{{owner.name}}" alt="" src="{{owner.pic}}">
+			{{else}}
+				<img class="user-img" width="30" height="30" style="border-radius:3px;" src="https://d13pkp0ru5xuwf.cloudfront.net/css/images/user-default.png">
+			{{/if}}
+			</span>
+
+			<a style="text-decoration: none"><b>{{ucfirst name}}</b></a>
+			<span style="margin-left:2px;" data-toggle="tooltip" class="label label-info" title="Milestone">{{milestone}} </span>
+			<span style="margin-left:5px;" data-toggle="tooltip" title="Probability">({{probability}}%)</span>
+			<p >
+			<!--<span data-toggle="tooltip" title="Owner">{{owner.name}}</span>-->
+			<span style="color: #909090;">Close Date: <time class="task-created-time" datetime="{{epochToHumanDate "" close_date}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" close_date}}</time></span><br>
+			<span data-toggle="tooltip" title="Value" class="label  dk text-tiny" style="color: black;opacity: 0.7;padding: 2px 4px 2px 4px;font-weight: normal;background-color: #edf1f2;">	{{#if prefs.currency}}{{currencySymbol prefs.currency}}{{else}}<span>$</span>{{/if}}{{numberWithCommas expected_value}}</span>	
+			
+			</p>
+
+			<!--<span >Close Date: <time class="task-created-time" datetime="{{epochToHumanDate "" close_date}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" close_date}}</time></span><br>-->
+
+			<div class="clear pull-right" style="margin-top:-25px;">
+				
+				<small class="edit-hover" style="margin-right:5px; color:#b2b0b1;">
+					<time class="deal-created-time" datetime="{{epochToHumanDate "" created_time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created_time}}</time>
+				</small>
+				<!--<span style="margin-right:5px;" data-toggle="tooltip" class="pull-right label label-info" title="Milestone">{{milestone}} </span>-->
+				
 			</div>
+			</div>
+
 		</div>
 	</div>
 </li>
+
 			{{/stringToJSON}}
 		{{/each}}
 	{{else}}
@@ -25,7 +60,8 @@
 			<div style="display:block;" class="activity">
 				<div id="notes" class="activity-text-block">
 					<p style="display:inline; margin-right:10px;">You have no deals for this contact.</p>
-					<a class="action-add-deal" style="display:inline-block; cursor:pointer; margin-left:-3px; text-decoration:underline; line-height:25px;"><i class="icon-plus" style="text-decoration:none; margin-right:2px;"></i><span>Add Deal</span></a>
+					<br>
+					<a class="action-add-deal btn  btn-default btn-addon btn-sm" style="padding: 0;text-align: center;margin-top: 10px;margin-bottom: 10px;"><i  class="fa fa-plus-circle" style="border-right: 1px solid #ccc; padding: 6px;"></i><span style="padding: 5px;">Add Deal</span></a>
 				</div>
 			</div>
 		</li>

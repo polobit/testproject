@@ -74,7 +74,7 @@ function agile_get_emails()
 				{ name_from : "Devika Jakkannagari" },
 				{ email_to : "abhi@gashok.mygbiz.com;rahul@gashok.mygbiz.com;dheeraj@gashok.mygbiz.com;chandan@gashok.mygbiz.com;abhiranjan@gashok.mygbiz.com" },
 				{ name_to : "Abhi;;D j p;;" }, { email_cc : "devikatest1@gmail.com;devikatest@gmail.com;teju@gmail.com" }, { name_cc : "Dev T1;;Teju" },
-				{ email : "devikatest@gmail.com" }, { email : "test1@gmail.com" }, { email : "test1@gmail.com" }, { email : "pbx.kumar@gmail.com" },
+				{ email : "devikatest@gmail.com" }, { email : "vsrija17@gmail.com" },{ email : "ragaqt@gmail.com" }, { email : "test1@gmail.com" }, { email : "test1@gmail.com" }, { email : "pbx.kumar@gmail.com" },
 				{email_body : "Testing local emails body extractor."},{subject : "Testing local subject extractor."}
 		];
 
@@ -302,7 +302,7 @@ function agile_user_associated() {
 	head.js(LIB_PATH + 'lib/bootstrap.min.js', LIB_PATH + 'jscore/md5.js', function() {
 		
 		set_html($('#agile_content'), 'search', Contacts_Json);
-		$('#agile_content').prepend('<span style="float:right;cursor:pointer;margin-top:10px;" id="delete-button"><i class="icon-trash" style="font-size:1em;"></i></span>');
+		$('#agile_content').prepend('<span style="float:right;cursor:pointer;margin-top:11px;margin-right:2px;" id="delete-button"><i class="icon-trash" data-toggle="tooltip" title="Uninstall" style="font-size:1em;"></i></span>');
 		$('#delete-button').live('click',agile_delete_all_prefs);
 	});
 	
@@ -1349,6 +1349,7 @@ function isValidTag(tag, showAlert) {
 		//  ------ Build contact add template. ------ 
 		agile_build_form_template($(this), "gadget-add-contact", ".show-add-contact-form", function() {
 
+			$(this).find("i").removeClass("fa fa-plus").addClass("fa fa-minus");
 			$(".show-add-contact-form", el).toggle();
 			agile_gadget_adjust_height();
 			
@@ -1390,7 +1391,8 @@ function isValidTag(tag, showAlert) {
 
 			//  ------ Hide list view of contact. ------ 
 			$(".display-toggle", el).addClass("hide-contact-summery").removeClass("gadget-show-contact");
-			$(".display-toggle i", el).removeClass("icon-plus").addClass("icon-minus");
+			$(".display-toggle i", el).removeClass("fa fa-caret-right").addClass("fa fa-caret-down");
+			$(".display-toggle i", el).attr("title", "Hide Details");
 			$(".display-toggle span", el).text("Hide Details");
 			$(".display-toggle", el).next().hide();
 			
@@ -1427,7 +1429,8 @@ function isValidTag(tag, showAlert) {
 
 		//  ------ Show list view of contact. ------ 
 		$(".display-toggle", el).removeClass("hide-contact-summery").addClass("gadget-show-contact");
-		$(".display-toggle i", el).removeClass("icon-minus").addClass("icon-plus");
+		$(".display-toggle i", el).removeClass("fa fa-caret-down ").addClass("fa fa-caret-right");
+		$(".display-toggle i", el).attr("title", "Show Details");
 		$(".display-toggle span", el).text("Show");
 		$(".display-toggle", el).next().show();
 		
