@@ -21,9 +21,9 @@ git checkout .
 
 git stash
 
-git checkout maven_backends
+git checkout version29-1
 
-git pull origin maven_backends
+git pull origin version29-1
 
 ant create-target  -DRELEASE_VERSION="$2" -DPRODUCTION=false;
 
