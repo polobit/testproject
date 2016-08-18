@@ -56,6 +56,11 @@ $(document).ready(function(){
 $('body').on('click','#speechDectation',function(e){
 	e.preventDefault();
     startDictation(this);
+    setTimeout(function()
+	{
+		$("#speechDectation").removeClass("agile-feature-item-blink");
+	}, 8000);
+
 });
 
 $("#searchForm").on("submit",function(){
