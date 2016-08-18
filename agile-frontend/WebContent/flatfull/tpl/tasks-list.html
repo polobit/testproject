@@ -7,12 +7,11 @@
 </div>
 {{else}}
 <div class="data-block">
-    <div class="table-responsive">
+    <div class="table-responsive {{#is_mobile}} b-n m-b-none {{/is_mobile}}">
 		<div class="panel panel-default">
-		<div class="panel-heading">{{agile_lng_translate 'task' 'task-list'}}</div>
+		<div class="panel-heading {{#is_mobile}} b-b-none {{/is_mobile}}">{{agile_lng_translate 'task' 'task-list'}}</div>
         <div class="table-responsive">
-        <table class="table{{#is_mobile}} {{else}} table-striped {{/is_mobile}} showCheckboxes no-sorting panel m-b-none 
-        {{#is_mobile}} {{else}} agile-table {{/is_mobile}} table-layout-mob-view" url="core/api/tasks/bulk" id="task-list">
+        <table class="table{{#is_mobile}} noDelete{{else}} table-striped showCheckboxes agile-table{{/is_mobile}} no-sorting panel m-b-none table-layout-mob-view" url="core/api/tasks/bulk" id="task-list">
             
             {{#is_mobile}}
             
@@ -32,7 +31,7 @@
 
             {{/is_mobile}}
 
-            <tbody id="tasks-list-model-list" class="c-p {{#is_mobile}}tasklist-checkbox{{/is_mobile}}" route="task/">
+            <tbody id="tasks-list-model-list" class="c-p {{#is_mobile}}agile-row{{/is_mobile}}" route="task/">
             </tbody>
         </table>
         </div>
@@ -45,21 +44,56 @@
 
 <script id="tasks-list-model-template" type="text/html">
 {{#is_mobile}}
-<td class="data" data="{{id}}">  
-  <div class="h-auto">
+<td class="data data-contact" data="{{id}}">  
+  <div class="h-auto pull-left ">
     {{#if taskOwner.pic}}
-        <span class="thumb avatar">
+        <span class="thumb m-r-sm">
             <img class="r r-2x" src="{{taskOwner.pic}}"  title="{{taskOwner.name}}"/>
         </span>
     {{else}}
-        <span class="thumb">
+        <span class="thumb m-r-sm">
             <img class="r r-2x" src="{{defaultGravatarurl 50}}" title="{{taskOwner.name}}"/>
         </span>
     {{/if}}
   </div>
 
+            <div class="m-l-xxxl">
+
+            {{#if is_complete}}
+            <div class='view-task-details m-t-n-xs'><div class="text-l-t table-resp">{{#is_link subject}}<span class="activate-link">{{else}}<span>{{/is_link}}{{safe_string subject}}</span></div>
+            </div>
+            {{else}}
+            <div class='view-task-details m-t-n-xs'><div class="table-resp">{{#is_link subject}}<span class="activate-link">{{else}}<span>{{/is_link}}{{safe_string subject}}</span></div></div>
+            {{/if}}
+            
+
+            <div>
+            {{#each contacts}}
+                <a href="#" class="text-info">{{contact_name properties type}}{{#if @last}}{{else}},{{/if}} </a>
+            {{/each}}
+            </div>
+
+            <div>
+            {{#if is_complete}}
+            <div class='view-task-details'><div class="text-l-t"><span class="label label-{{task_label_color priority_type}}">{{ucfirst priority_type}}</span></div></div>
+
+            <div class='view-task-details inline-block'><div class="text-l-t"><span class="label bg-light dk text-tiny">{{task_property type}}</span></div></div>
+            
+            {{else}}
+
+            <span class="m-r pull-left" class="label label-{{task_label_color priority_type}}">{{ucfirst priority_type}}</span>
+
+            <div class="view-task-details inline-block"><div class="table-resp">
+            <span class="label bg-light dk text-tiny m-r-xs">{{task_property type}}</span></div></div>
+           
+            {{/if}}
+            </div>
+
+            </div>
   
 </td>
+
+<td class="data-contact"><div class="text-md text-muted m-t contact-list-mobile text-right block"><i class="fa fa-angle-right"></i></div></td>
 
 
 {{else}}
