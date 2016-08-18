@@ -313,7 +313,17 @@ This is where you and your users will log in to your account
 <input type='hidden' id="user_name" name='name' value="<%=request.getParameter("name")%>"></input>
 <input type='hidden' name='account_timezone' id='account_timezone' value=''></input>
 <input type="password" class="hide" name='password' id="password" value="<%=request.getParameter("password")%>"></input>
-	<input type='hidden' name='type' value='agile'></input>
+
+<!-- Origin Name -->
+<%
+  if(request.getParameter("origin_from") != null) {
+%>
+	<input type='hidden' name='origin_from' id="origin_from" value='<%=request.getParameter("origin_from")%>'></input>
+<%
+  }
+%>
+
+<input type='hidden' name='type' value='agile'></input>
 <div class="line line-lg b-b" style="margin-top:25px;"></div>
 
 <div class="row">

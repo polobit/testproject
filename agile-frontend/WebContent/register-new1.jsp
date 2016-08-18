@@ -9,7 +9,6 @@
 
 <%
 	
-
 	if (request.getAttribute("javax.servlet.forward.request_uri") == null) {
 		response.sendRedirect("/register");
 		return;
@@ -163,6 +162,15 @@ if(isSafari && isWin)
 <div id="openid_btns">
 <input type='hidden' name='type' value='agile'></input>
 <input type='hidden' name='step' id="step" value="1"></input>
+
+<!-- Origin Name -->
+<%
+  if(request.getParameter("origin_from") != null) {
+%>
+	<input type='hidden' name='origin_from' id="origin_from" value='<%=request.getParameter("origin_from")%>'></input>
+<%
+  }
+%>
 
 <div class="list-group list-group-sm" style="margin-bottom:4px;">
 <div class="list-group-item">
