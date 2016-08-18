@@ -728,7 +728,7 @@ function contact_list_starify(el,listView) {
               console.log("count_clicks="+count_clicks);
                 if(count_clicks==2)
                   {
-              App_Contacts.contact_popover.set({'star_value': 0}, {silent : true});
+              App_Contacts.contact_popover.set({'star_value': 0});
               contact_model =  App_Contacts.contact_popover.toJSON();
               
               count_clicks=0;
