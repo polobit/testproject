@@ -31,6 +31,7 @@ $('#app-aside-folded').on('click', function(e) {
 		$(this).parent().highcharts().reflow();
 	});
 	
+
     
 	});
 
@@ -50,6 +51,22 @@ function showTrailAlertMessage(){
 
 	
 $(document).ready(function(){
+
+
+$('body').on('click','#speechDectation',function(e){
+	e.preventDefault();
+    startDictation(this);
+    setTimeout(function()
+	{
+		$("#speechDectation").removeClass("agile-feature-item-blink");
+	}, 6000);
+
+});
+
+$("#searchForm").on("submit",function(){
+
+	return false;
+})
 
 $(".trial_strip_close").click(function(e){
 	$(this).closest("#trial_alert_info").hide();
