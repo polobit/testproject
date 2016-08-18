@@ -213,8 +213,7 @@ function loadFullContactData(apikey, emailID){
 
  						$('#FullContact').html("<div class='p-sm'><p> New data - "+displayData+"</p></div>");
 
-
- 						showAlertModal(_agile_get_translated_val('widgets', 'fullcontact-newdata') + " <p>New data - " + displayData + "</p>", "confirm", function(){
+ 						showAlertModal("{{agile_lng_translate 'widgets', 'fullcontact-newdata'}}" + " <p>New data - " + displayData + "</p>", "confirm", function(){
 							// Reads current contact model form the contactDetailView
 							var contact_model = App_Contacts.contactDetailView.model;
 							var contactId = contact_model.id;
@@ -235,13 +234,13 @@ function loadFullContactData(apikey, emailID){
 							contact_model.save();	
 						},undefined, "FullContact"); 						
 
-					}else{								
-						$('#FullContact').html("<div class='p-sm'>"+_agile_get_translated_val('widgets', 'fullcontact-nodata')+"</div>");															
+					}else{													
+						$('#FullContact').html("<div class='p-sm'>"+"{{agile_lng_translate 'widgets', 'fullcontact-nodata'}}"+"</div>");															
 					}					
  				}else{ 
  					var errorMessage = contactObj.message;		
- 					if(errorMessage == "Forbidden"){	 						
- 						errorMessage = _agile_get_translated_val('widgets', 'fullcontact-invalid-api-key');
+ 					if(errorMessage == "Forbidden"){ 							 					
+ 						errorMessage = "{{agile_lng_translate 'widgets', 'fullcontact-invalid-api-key'}}";
  					}
 
  					$('#FullContact').html("<div class='p-sm'>"+errorMessage+"</div>");
@@ -267,8 +266,8 @@ function startFullContactWidget(contact_id){
 
 	if(contact_email){		
 		loadFullContactData(fcApiKey, contact_email);
-	}else{						
-		$('#FullContact').html('<div class="p-sm">'+_agile_get_translated_val('widgets', 'fullcontact-email-required')+'</div>');	
+	}else{								
+		$('#FullContact').html('<div class="p-sm">'+"{{agile_lng_translate 'widgets', 'fullcontact-email-required'}}"+'</div>');	
 	}
 }
 
