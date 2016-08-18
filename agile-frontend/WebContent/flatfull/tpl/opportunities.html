@@ -52,8 +52,8 @@
 <td>
 <div class="text-ellipsis" style="width:5em">
     <div class="thumb-sm avatar">
-       {{#if pic}}
-        <img class="r r-2x" src="{{pic}}"  title="{{owner.name}}" />
+       {{#if owner}}
+        <img class="r r-2x" src="{{owner.pic}}"  title="{{owner.name}}" />
      {{else}}
     <img class="r r-2x" src="{{defaultGravatarurl 50}}"  title="{{owner.name}}" />
        {{/if}}
