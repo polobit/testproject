@@ -459,12 +459,12 @@ public abstract class ContactSyncService implements IContactSyncService
 	String tag;
 	if (prefs.type == Type.GOOGLE){
 	    tag = "gmail contact".toLowerCase();
-	    //adding source of the contact for reference
+	     //adding source of the contact for reference
 	    contact.source = "google sync";
 	}
 	else{
 	    tag = prefs.type.toString().toLowerCase() + " contact";
-	  //adding source of the contact for reference
+	    //adding source of the contact for reference
 	    contact.source = prefs.type.toString().toLowerCase() + " sync";
 	}
 

@@ -796,7 +796,7 @@ public class WebCalendarEventUtil
 					// Set lead owner(current domain user)
 					Key<DomainUser> owner_key = new Key<DomainUser>(DomainUser.class, domainUserId);
 					contact.setContactOwner(owner_key);
-					//source of the contact
+					 //source of the contact
 					contact.source = "Online calendar" ; 
 					// Save as new contact
 					contact.save();
