@@ -506,6 +506,7 @@ function loadAllMailsView(contact_details_tab_scope,has_email_configured,fetched
 	templateKey : "email-social", sort_collection : true, sortKey : "date_secs", descending : true, individual_tag_name : "li",
 	postRenderCallback : function(el)
 	{
+		$(el).find('style').html("");
 		agileTimeAgoWithLngConversion($(".email-sent-time", el));
 		
 		if(email_server_type!="agilecrm")
