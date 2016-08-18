@@ -306,7 +306,7 @@ public abstract class ContactSyncService implements IContactSyncService
 	    }
 	}
 	
-
+	else{
 	if (user != null)
 	{
 
@@ -320,7 +320,9 @@ public abstract class ContactSyncService implements IContactSyncService
 	    SendMail.sendMail("yaswanth@agilecrm.com", notificationSubject + " - " + user.domain,
 		    NOTIFICATION_TEMPLATE, new Object[] { user, syncStatus });
 	}
+	}
     }
+	
 
     /**
      * Builds the notification status creates Map of Total New Contact,Merge
