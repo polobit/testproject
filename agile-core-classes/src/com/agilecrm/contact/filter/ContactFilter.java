@@ -159,8 +159,19 @@ public class ContactFilter extends SearchFilter implements Serializable, Compara
 	{
 	    return cotactFilters;
 	}
-	Collections.sort(cotactFilters);
-	return cotactFilters;
+	List<ContactFilter> result = new ArrayList<ContactFilter>();
+
+	for (ContactFilter filter : cotactFilters)
+	{
+	    if (filter.contact_type == Type.PERSON || filter.contact_type == Type.COMPANY)
+	    {
+	    	result.add(filter);
+	    }
+	}
+
+	Collections.sort(result);
+
+	return result;
     }
 
     /**

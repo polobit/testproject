@@ -237,7 +237,8 @@ function getTemplateUrls(templateName)
 	{
 		template_relative_urls.push("leads-form.js");
 	}
-	if (templateName.indexOf("leads-header") == 0 || templateName.indexOf("leads-list-view") == 0 || templateName.indexOf("leads-sources-statuses") == 0)
+	if (templateName.indexOf("leads-header") == 0 || templateName.indexOf("leads-list-view") == 0 || 
+		templateName.indexOf("leads-sources-statuses") == 0 || templateName.indexOf("leads-grid") == 0)
 	{
 		template_relative_urls.push("leads-view.js");
 	}

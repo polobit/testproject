@@ -24,6 +24,10 @@ function contactTableView(base_model,customDatefields,view,customContactfields,c
 	
 	var templateKey = 'contacts-list-view-model';
 	var gridViewEl = _agile_get_prefs("agile_contact_view");
+	if(base_model.get("type") == "LEAD")
+	{
+		gridViewEl = _agile_get_prefs("agile_lead_view");
+	}
 	if (gridViewEl) {
 		templateKey = 'contacts-grid';
 	}
@@ -213,7 +217,12 @@ function contactTableView(base_model,customDatefields,view,customContactfields,c
 		
 
 	} else  {
-		getTemplate('contacts-grid-view-model', contact, undefined, function(template_ui){
+		var tplName = "contacts-grid-view-model";
+		if(base_model.get("type") == "LEAD")
+		{
+			tplName = "leads-grid-view-model";
+		}
+		getTemplate(tplName, contact, undefined, function(template_ui){
 				if(!template_ui)
 					  return;
 				$(el).append($(template_ui));

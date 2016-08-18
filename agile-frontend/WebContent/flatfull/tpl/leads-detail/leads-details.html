@@ -78,7 +78,7 @@
 															{{/hasMenuScope}}
 															{{#canEditContact owner.id}}
 																<li class='divider'></li>
-																<li>
+																<!-- <li>
 																	<a href='#bulk-campaigns' class="contact-add-campaign" id="contact-add-campaign">
 																		<i class="icon-sitemap"></i> {{agile_lng_translate 'contact-details' 'add-to-campaign'}}
 																	</a>
@@ -88,8 +88,8 @@
 																		<i class="icon-envelope"></i> {{agile_lng_translate 'contact-details' 'send-email'}}
 																	</a>
 																</li>
-																<li class='divider'></li>
-																<li>
+																<li class='divider'></li> -->
+																<!-- <li>
 																	<a href='#contact-duplicate'>
 																		<i class="icon-docs"></i>
 																		{{agile_lng_translate 'contact-details' 'duplicate'}}
@@ -100,12 +100,12 @@
 																		<i class="icon-code-fork"></i>
 																		{{agile_lng_translate 'contact-details' 'merge-duplicates'}}
 																	</a>
-																</li>
+																</li> -->
 															{{/canEditContact}}
 															{{#canDeleteContact owner.id}}
 																<li class='divider'></li>
 																<li>
-																	<a href='#' id='contact-actions-delete'>
+																	<a href='#' id='lead-actions-delete'>
 																		<i class="icon-trash"></i> 
 																		{{agile_lng_translate 'contact-details' 'delete'}}
 																	</a>
@@ -648,7 +648,7 @@
 					                                     	</li>
 					                                     {{/hasMenuScope}}
 					                                     {{#canEditContact owner.id}}
-					                                     	<li class='divider'></li>
+					                                     	<!-- <li class='divider'></li>
 					                                     	<li>
 					                                     		<a href='#bulk-campaigns' class="contact-add-campaign" id="contact-add-campaign">
 					                                     			<i class="icon-sitemap"></i>
@@ -672,12 +672,12 @@
 																	<i class="icon-code-fork"></i>
 																	{{agile_lng_translate 'contact-details' 'merge-duplicates'}}
 																</a>
-															</li>
+															</li> -->
 														{{/canEditContact}}
 														{{#canDeleteContact owner.id}}
 															<li class='divider'></li>
 															<li>
-																<a href='#' id='contact-actions-delete'>
+																<a href='#' id='lead-actions-delete'>
 																<i class="icon-trash"></i>
 																{{agile_lng_translate 'contact-details' 'delete'}}
 																</a>

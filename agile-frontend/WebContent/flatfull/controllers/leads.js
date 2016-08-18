@@ -5,6 +5,7 @@ var LeadsRouter = Backbone.Router.extend({
 		"leads" : "leads",
 		"lead-filters" : "leadFilters",
 		"lead-filter-add" : "leadFilterAdd",
+		"lead-filter-edit/:id" : "leadFilterEdit",
 		"lead/:id" : "leadsDetails",
 		"lead-edit" : "editLead"
 	},
@@ -31,7 +32,7 @@ var LeadsRouter = Backbone.Router.extend({
 
 	leadFilters : function()
 	{
-		this.leadFiltersList = new Base_Collection_View({ url : '/core/api/filters', restKey : "ContactFilter", templateKey : "leads-filter",
+		this.leadFiltersList = new Base_Collection_View({ url : '/core/api/filters?type=LEAD', restKey : "ContactFilter", templateKey : "leads-filter",
 			individual_tag_name : 'tr', sort_collection : false,
 			postRenderCallback : function(el)
 			{
@@ -55,6 +56,31 @@ var LeadsRouter = Backbone.Router.extend({
 				head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js?_='+_agile_get_file_hash("agile.jquery.chained.min.js"), function()
 				{
 					chainFiltersForLead(el, undefined, function()
+					{
+						$('#content').html(el);
+						scramble_input_names($(el).find('#filter-settings'));
+					});
+				});				
+			} });
+		$("#content").html(LOADING_HTML);
+		leadFilter.render();		
+	},
+
+	leadFilterEdit : function(id)
+	{
+		if (!this.leadFiltersList || this.leadFiltersList.collection.length == 0 || this.leadFiltersList.collection.get(id) == null)
+		{
+			this.navigate("lead-filters", { trigger : true });
+			return;
+		}
+
+		var lead_filter = this.leadFiltersList.collection.get(id);
+		var leadFilter = new Leads_Filter_Events_View({ url : 'core/api/filters', model : lead_filter, template : "leads-filter-add", window : "lead-filters",
+			postRenderCallback : function(el)
+			{
+				head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js?_='+_agile_get_file_hash("agile.jquery.chained.min.js"), function()
+				{
+					chainFiltersForLead(el, lead_filter.toJSON(), function()
 					{
 						$('#content').html(el);
 						scramble_input_names($(el).find('#filter-settings'));

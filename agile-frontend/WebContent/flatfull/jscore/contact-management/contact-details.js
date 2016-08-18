@@ -408,7 +408,8 @@ var Contact_Details_Model_Events = Base_Model_View.extend({
       'click #contactDetailsTab a[href="#leads-events"]' : 'openLeadEvents',
       'click #contactDetailsTab a[href="#leads-tasks"]' : 'openLeadTasks',
       'click #contactDetailsTab a[href="#leads-deals"]' : 'openLeadDeals',
-      'click .remove-lead-tags' : 'removeLeadTags' 
+      'click .remove-lead-tags' : 'removeLeadTags',
+      'click #lead-actions-delete' : 'leadDelete', 
     },
     
     
@@ -1628,6 +1629,17 @@ updateScoreValue :function(){
               });
             }
         });
+  },
+
+  leadDelete :  function(e)
+  { 
+    e.preventDefault();
+    showAlertModal("delete_lead", "confirm", function(){
+        App_Leads.leadDetailView.model.url = "core/api/contacts/" + App_Leads.leadDetailView.model.id;
+        App_Leads.leadDetailView.model.destroy({success: function(model, response) {
+            Backbone.history.navigate("leads",{trigger: true});
+        }});
+    });
   },
 
 });

@@ -1,7 +1,7 @@
 var Leads_Header_Events_View = Base_Model_View.extend({
     events: {
     	'click #add-lead' : 'addLead',
-    	'click .lead-view' : 'toggleLeadsView',
+    	'click .leads-view' : 'toggleLeadsView',
     	'click #leadTabelView' : 'toggleLeadsListView',
     	'click .leadcolumn' : 'addOrRemoveLeadColumns',
     	'click .toggle-lead-filters' : 'toggleLeadFilters',

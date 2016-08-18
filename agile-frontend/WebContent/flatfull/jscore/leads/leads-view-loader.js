@@ -187,7 +187,7 @@ var LeadsViewLoader = (function(){
 
 	LeadsViewLoader.prototype.setUpLeadView = function(cel)
 	{
-		/*if (_agile_get_prefs("agile_lead_view"))
+		if (_agile_get_prefs("agile_lead_view"))
 		{
 			$('#leads-view-options', cel).html("<a data-toggle='tooltip' data-placement='bottom' data-original-title='List View' class='btn btn-default btn-sm leads-view' data='list'><i class='fa fa-list'  style='margin-right:3px'></i></a>");
 			$("#leads-grid-view-checkbox", cel).show();
@@ -201,7 +201,7 @@ var LeadsViewLoader = (function(){
 		$("#leads-grid-view-checkbox", cel).hide();
 		$("#leads-list-view-checkbox", cel).show();
 		$("#bulk-action-btns", cel).css("border-bottom", "0");
-		return;*/
+		return;
 	}
 
 	LeadsViewLoader.prototype.setUpLeadsCount = function(el)
