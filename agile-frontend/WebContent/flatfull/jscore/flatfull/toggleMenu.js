@@ -58,6 +58,11 @@ $('body').on('click','#speechDectation',function(e){
     startDictation(this);
 });
 
+$("#searchForm").on("submit",function(){
+
+	return false;
+})
+
 $(".trial_strip_close").click(function(e){
 	$(this).closest("#trial_alert_info").hide();
 	_agile_set_prefs("free_trial_time", parseInt(new Date().getTime()/1000));
