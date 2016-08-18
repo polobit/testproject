@@ -2002,6 +2002,10 @@ display: block!important;
 
 .grid-icon-header:hover, .grid-icon-header:focus{background-color:inherit !important;}
 .grid_icon_center{ z-index: 0 !important;}
+.ticket-head-filters{ display: block; text-align: center;}
+.ticket-showing-no{ float: none !important; display: block; text-align: center; margin-top: 0px !important;}
+.icons-left{ float: left !important; margin-top: 5px;}
+.ticket-subj-block{ width: 100% !important;}
 }
 
 @media all and (min-width: 768px) {
@@ -2406,12 +2410,13 @@ transform: translateX(-50%);}
     border-color: #dee5e7;
   }
 
-
 .navbar-searchicon{ padding: 13px 15px;}
 .search-view{ width:320px;}
 .navbar-searchicon > .btn:hover, .navbar-searchicon > .btn:focus, 
 .navbar-searchicon > .btn.focus{ color: inherit;}
 .search-filters li{ width:50%; float: left;}
+.ticket-subject-md{ width: 58%;}
+.ticket-subj-block{ width: 62%;}
 /*end custom css code*/
 .search-filters li a
 { color: #363f44 !important;}
