@@ -210,10 +210,10 @@
 
           <!-- Start of ticket notes -->
           <div class="wrapper bg-light p-t-sm p-b-sm pos-rlt b-b">
-            <div class="font-thin text-md m-t-none m-b-none inline-block 
+            <div class="font-thin text-md m-t-none m-b-none inline-block ticket-subject-md 
             {{#is_mobile}}ticket-subj-block{{/is_mobile}}">
 
-               <i class="fa {{#if_equals is_favorite "true"}}fa-star text-warning {{else}}fa-star-o text-light{{/if_equals}} toggle-favorite"></i>  
+               <i class="m-r-xs fa {{#if_equals is_favorite "true"}}fa-star text-warning {{else}}fa-star-o text-light{{/if_equals}} toggle-favorite"></i>  
 
                 {{subject}}
 
@@ -239,7 +239,11 @@
                 
             </div> 
 
+            {{#is_mobile}}
+            {{else}}
+
             <button class="fa fa-dedent btn btn-sm p-ver-2 btn-default m-l-xs toggle-widgets" data-toggle="tooltip" data-container="body" data-placement="bottom" data-original-title="Toggle Widgets"></button>
+            {{/is_mobile}}
              
             </div>
 

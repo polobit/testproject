@@ -2002,7 +2002,7 @@ display: block!important;
 .ticket-head-filters{ display: block; text-align: center;}
 .ticket-showing-no{ float: none !important; display: block; text-align: center; margin-top: 0px !important;}
 .icons-left{ float: left !important; margin-top: 5px;}
-.ticket-subj-block{ display: block;}
+.ticket-subj-block{ width: 100% !important;}
 }
 
 @media all and (min-width: 768px) {
@@ -2406,4 +2406,6 @@ transform: translateX(-50%);}
   .ticket-name, .ticket-subject{ max-width: 13em;}
 } 
 
+.ticket-subject-md{ width: 58%;}
+.ticket-subj-block{ width: 62%;}
 /*end custom css code*/

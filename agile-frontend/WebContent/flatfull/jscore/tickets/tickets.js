@@ -1213,6 +1213,9 @@ var Tickets = {
 	},
 
 	isSingleRowView: function(){
+		if(agile_is_mobile_browser())
+			return false;
+
 		return (CURRENT_DOMAIN_USER.helpdeskSettings && CURRENT_DOMAIN_USER.helpdeskSettings.ticket_view_type == 'SINGLELINE')
 								 ? true : false;
 	},
