@@ -149,7 +149,7 @@ var Workflow_Model_Events = Base_Model_View.extend({
         
         var unsubscribe_tag = $('#unsubscribe-tag').val().trim();
         var unsubscribe_action = $('#unsubscribe-action').val();
-        var unsubscribe_email = $('#unsubscribe-email').val().trim();
+        var unsubscribe_email = $('#from_email').val();
         var unsubscribe_name = $('#unsubscribe-name').val().trim();
         var unsubscribe_subject = "";
         if(unsubscribe_fill_select.id)

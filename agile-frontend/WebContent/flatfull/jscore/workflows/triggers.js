@@ -531,9 +531,9 @@ function rearrange_from_email_options($select, data) {
 
 }
 
-function resetAndFillFromSelect(selected_val) {
+function resetAndFillFromSelect(selected_val,el) {
 	// Make send email node from email empty
-	$('#from_email').empty();
+	$('#from_email',el).empty();
 
 	var options = {};
 	options[_agile_get_translated_val('others','add-new')] = "verify_email";
@@ -544,7 +544,7 @@ function resetAndFillFromSelect(selected_val) {
 			"email",
 			undefined,
 			options,
-			$('#from_email'),
+			$('#from_email',el),
 			"prepend",
 			function($select, data) {
 				var ownerEmail = $select.find('option[value = \"'+CURRENT_DOMAIN_USER.email+'\"]').val();

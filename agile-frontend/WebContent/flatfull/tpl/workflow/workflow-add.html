@@ -122,6 +122,7 @@
                     	</div>
                         </div>
 						<div class="text-sm text-light">{{agile_lng_translate 'campaigns' 'agilecan-unsubscribe-desc'}}</div>
+
                         <br/>
                         <br>
                     	<div class="row">
@@ -158,8 +159,12 @@
 								<b>{{agile_lng_translate 'campaigns' 'unsubscribe-email'}}:</b>
 							</label>
 							<div class="controls col-sm-4">
-								<input type="text" name="unsubscribe_email" id="unsubscribe-email" placeholder="{{agile_lng_translate 'campaigns' 'from-email-address'}}" class="email form-control">
-							</div>
+                              <select class="email required form-control verified-email" id="from_email" 
+                                name="unsubscribe_email" fieldType="dynamicselect"
+                               type="verified_email" onchange="openVerifyEmailModal(this)"
+                              style="margin-left:-1px;"><option value=""></option>
+                             <option value="verify_email">{{agile_lng_translate 'others' 'add-new'}}</option></select>
+                          </div>
                     	</div>
                         </div>
 						<div class="text-sm text-light">{{agile_lng_translate 'campaigns' 'when-a-contact-unsubscribes-from-your-campaign'}}</div>
