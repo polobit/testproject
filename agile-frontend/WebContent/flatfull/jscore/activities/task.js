@@ -296,6 +296,7 @@ function initializeTasksListeners(){
 		}
 
 	});
+	$('#task-bulk-change-status').off("shown.bs.modal");
 	$('#task-bulk-change-status').on("shown.bs.modal", function()
 	{	
 		var el = $('#bulkTaskStatusForm');
