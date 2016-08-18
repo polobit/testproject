@@ -101,12 +101,12 @@
 			{{#if_equals "1" custom3}}
 				Changed owner for {{custom3}} Task 
 				<div class="activities_second_line m-t-none"><small>
-				<i class="icon-money icon-white"></i> Task assigned to {{custom2}}.
+				<i class="icon-money icon-white"></i> {{agile_lng_translate 'campaigns' 'task-assigned-to'}} {{custom2}}.
 				</small></div>
 			{{else}}
 				Changed owner for {{custom3}} Tasks 
 				<div class="activities_second_line m-t-none"><small>
-				<i class="icon-money icon-white"></i> Tasks assigned to {{custom2}}.
+				<i class="icon-money icon-white"></i> {{agile_lng_translate 'activity' 'tasks-assigned'}} {{custom2}}.
 				</small></div>
 			{{/if_equals}}
 		{{/if_equals}}
@@ -114,12 +114,12 @@
 			{{#if_equals "1" custom3}}
 				Status changed for {{custom3}} Task 
 				<div class="activities_second_line m-t-none"><small>
-				<i class="icon-money icon-white"></i> Task status changed to '{{taskBulkStatus custom2}}'.
+				<i class="icon-money icon-white"></i> {{agile_lng_translate 'activity' 'task-bulk-status'}} '{{taskBulkStatus custom2}}'.
 				</small></div>
 			{{else}}
 				Status changed for {{custom3}} Tasks 
 				<div class="activities_second_line m-t-none"><small>
-				<i class="icon-money icon-white"></i> Tasks status changed to '{{taskBulkStatus custom2}}'.
+				<i class="icon-money icon-white"></i> {{agile_lng_translate 'activity' 'tasks-bulk-status'}} '{{taskBulkStatus custom2}}'.
 				</small></div>
 			{{/if_equals}}
 		{{/if_equals}}
@@ -127,12 +127,12 @@
 			{{#if_equals "1" custom3}}
 				Priority changed for {{custom3}} Task 
 				<div class="activities_second_line m-t-none"><small>
-				<i class="icon-money icon-white"></i> Task priority changed to '{{taskBulkPriority custom2}}'.
+				<i class="icon-money icon-white"></i> {{agile_lng_translate 'activity' 'tasks-bulk-priority'}} '{{taskBulkPriority custom2}}'.
 				</small></div>
 			{{else}}
 				Priority changed for {{custom3}} Tasks 
 				<div class="activities_second_line m-t-none"><small>
-				<i class="icon-money icon-white"></i> Tasks priority changed to '{{taskBulkPriority custom2}}'.
+				<i class="icon-money icon-white"></i> {{agile_lng_translate 'activity' tasks-bulk-priority'}} '{{taskBulkPriority custom2}}'.
 				</small></div>
 			{{/if_equals}}
 		{{/if_equals}}
@@ -140,12 +140,12 @@
 			{{#if_equals "1" custom3}}
 				Task Deleted
 				<div class="activities_second_line m-t-none"><small>
-				<i class="icon-money icon-white"></i>{{custom3}} Task deleted.
+				<i class="icon-money icon-white"></i>{{custom3}} {{agile_lng_translate 'activity_type' 'TASK_DELETE'}}
 				</small></div>
 			{{else}}
 				Tasks Deleted
 				<div class="activities_second_line m-t-none"><small>
-				<i class="icon-money icon-white"></i>{{custom3}} Tasks deleted.
+				<i class="icon-money icon-white"></i>{{custom3}} {{agile_lng_translate 'activity' 'tasks-bulk-delete'}}
 				</small></div>
 			{{/if_equals}}
 		{{/if_equals}}
@@ -153,12 +153,12 @@
 			{{#if_equals "1" custom3}}
 				Due date changed for {{custom3}} Task
 				<div class="activities_second_line m-t-none"><small>
-				<i class="icon-money icon-white"></i> Task due date changed to {{epochToHumanDate "ddd mmm dd yyyy" custom2}}.
+				<i class="icon-money icon-white"></i> {{agile_lng_translate 'activity' 'task-bulk-duedate'}} {{epochToHumanDate "ddd mmm dd yyyy" custom2}}.
 				</small></div>
 			{{else}}
 				Due date changed for {{custom3}} Tasks
 				<div class="activities_second_line m-t-none"><small>
-				<i class="icon-money icon-white"></i>Tasks due date changed to {{epochToHumanDate "ddd mmm dd yyyy" custom2}}.
+				<i class="icon-money icon-white"></i> {{agile_lng_translate 'activity' 'tasks-bulk-duedate'}} {{epochToHumanDate "ddd mmm dd yyyy" custom2}}.
 				</small></div>
 			{{/if_equals}}
 		{{/if_equals}}
