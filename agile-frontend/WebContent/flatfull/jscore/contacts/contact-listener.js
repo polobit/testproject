@@ -712,7 +712,8 @@ function contact_list_starify(el,listView) {
       				 else{
       				 App_Contacts.contact_popover.set({'star_value': score},{silent:true});
 
-      				 var id = App_Contacts.contact_popover.toJSON().id;		 
+      				 var id = App_Contacts.contact_popover.toJSON().id;		
+      				if(App_Contacts.contactsListView && App_Contacts.contactsListView.collection &&App_Contacts.contactsListView.collection.get(id))  
       	 			App_Contacts.contactsListView.collection.get(id).set({'star_value': score},{silent:true});
       	 			
       				 App_Contacts.contact_popover.trigger('popoverChange');
