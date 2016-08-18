@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.StringTokenizer;
 
+import javax.mail.internet.InternetAddress;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 
@@ -20,6 +21,7 @@ import com.agilecrm.account.util.EmailGatewayUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.email.EmailSender;
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
+import com.amazonaws.services.simpleemail.model.Message;
 import com.campaignio.tasklets.util.MergeFieldsUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.blobstore.BlobKey;
@@ -429,4 +431,17 @@ public class EmailUtil
 
 	return to;
     }
+    
+    /**
+     * creating an method for the count the cc and bcc 
+     * */
+    public static int getCountForEmails(String emails){
+    	
+    	
+    return	StringUtils.countMatches(emails, ",");
+    	
+    		
+    } 
+    
+    
    }

@@ -197,15 +197,20 @@ public class EmailSender
 	String domain = NamespaceManager.get();
 	try
 	{
+		int emailCount = EmailUtil.getCountForEmails(to);
+	    emailCount += EmailUtil.getCountForEmails(cc);
+	    emailCount += EmailUtil.getCountForEmails(bcc);
 	    if (canSend())
 	    {
 		EmailGatewayUtil.sendEmail(emailGateway, domain, fromEmail, fromName, to, cc, bcc, subject, replyTo,
 		        html, text, mandrillMetadata, documentIds, blobKeys, attachments);
 
 		// Sets Billing restriction limit and account email stats
+		    
+		    
 		if (!EmailUtil.isToAgileEmail(to))
 		{
-		    setCount(1);
+		    setCount(emailCount);
 
 		    updateOneTimeEmailStats();
 		}
