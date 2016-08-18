@@ -491,4 +491,7 @@
     <filter-name>EcommerceWebhookFilter</filter-name>
     <url-pattern>/ecommerce</url-pattern>
   </filter-mapping> -->
+	<listener>
+		<listener-class>com.agilecrm.export.AgileServletContextListener</listener-class>
+	</listener>
 </web-app>

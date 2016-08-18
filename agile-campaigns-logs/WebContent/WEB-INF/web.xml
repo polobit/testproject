@@ -281,4 +281,8 @@
     <servlet-name>BackendPullServlet</servlet-name>
     <url-pattern>/backend-pull</url-pattern>
   </servlet-mapping>
+  
+	<listener>
+		<listener-class>com.agilecrm.campaignsLogs.AgileServletContextListener</listener-class>
+	</listener>  
 </web-app>
