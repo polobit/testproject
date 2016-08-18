@@ -1,3 +1,4 @@
+<%@page import="com.thirdparty.PubNub"%>
 <%@page import="com.google.appengine.api.NamespaceManager"%>
 <%@page import="org.json.JSONObject"%>
 <%@page import="com.agilecrm.session.SessionManager"%>
@@ -16,6 +17,12 @@
 	userJSON.put("email", userInfo.getEmail());
 	userJSON.put("password", request.getAttribute("password"));
 	userJSON.put("domain", NamespaceManager.get());
+	userJSON.put("channel", request.getAttribute("channel"));
+
+	System.out.println(userJSON);
+
+	// Pubnub changes
+	PubNub.pubNubPush(request.getAttribute("channel"), userJSON);
 %>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -27,7 +34,7 @@
 
 <script type="text/javascript">
 
-window.opener.agileRegisterSuccessCallback(<%=userJSON%>);
+// window.opener.agileRegisterSuccessCallback(<%=userJSON%>);
 window.close();
 
 </script>

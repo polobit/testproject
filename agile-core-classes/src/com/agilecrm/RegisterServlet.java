@@ -287,6 +287,7 @@ public class RegisterServlet extends HttpServlet
 	if(StringUtils.isNotBlank(originName))
 	{
 		request.setAttribute("password", password);
+		request.setAttribute("channel", request.getParameter("domain_channel"));
 		request.getRequestDispatcher("register_success_callback.jsp").forward(request, response);
 		return;
 	}

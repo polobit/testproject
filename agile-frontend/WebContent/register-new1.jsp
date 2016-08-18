@@ -168,6 +168,7 @@ if(isSafari && isWin)
   if(request.getParameter("origin_from") != null) {
 %>
 	<input type='hidden' name='origin_from' id="origin_from" value='<%=request.getParameter("origin_from")%>'></input>
+	<input type='hidden' name='domain_channel' id="domain_channel" value='<%=request.getParameter("domain_channel")%>'></input>
 <%
   }
 %>
