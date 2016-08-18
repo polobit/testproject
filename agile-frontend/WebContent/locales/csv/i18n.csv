@@ -5216,11 +5216,3 @@ widgets.view-cus-order-details,View Customer Orders Details,Ordenes de los Clien
 widgets.add-your-widgets,Add your widgets,Añadir sus widgets
 widgets.custom-widgets,Custom Widgets,Reproductores personalizados
 widgets.stripe-custom-field-select,Stripe uses Stripe ID stored in text custom field to fetch data. Select the custom field to be used.,Raya utiliza identificador de banda almacenado en el campo de texto personalizado para obtener los datos . Seleccionar el campo personalizado que se utilizará .
-campaigns.call-status,Call Status,
-campaigns.add-status,Add status,
-campaigns.new-status,New Status,
-campaigns.delete-status,Delete Status,
-campaigns.confirm-delete-status,Are you sure you want to delete the Status,
-campaigns.help,Help,
-campaigns.telephony-help-text,Help text for Telephony,
-campaigns.telephony-status-invalid-text,Status should begin with alphabet and can contain "-" and "_" only as special character,
