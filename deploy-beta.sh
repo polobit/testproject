@@ -25,11 +25,18 @@ git checkout version29-1
 
 git pull origin version29-1
 
+# Change queue acls in beta before deploy
+
+sed -i 's/yaswanth@agilecrm.com/naresh@faxdesk.com/g' "$PROJECT_TARGET_LOCATION"/../agile-frontend/WebContent/WEB-INF/queue.xml
+
 ant create-target  -DRELEASE_VERSION="$2" -DPRODUCTION=false;
 
 
 appcfg.sh --oauth2 --email=naresh@faxdesk.com -A agilecrmbeta -V "$2" update "$PROJECT_TARGET_LOCATION"/agile-java-server/"$1".war/
 
-#cd ../
+# Reset queue acls after deploy
 
+sed -i 's/naresh@faxdesk.com/yaswanth@agilecrm.com/g' "$PROJECT_TARGET_LOCATION"/../agile-frontend/WebContent/WEB-INF/queue.xml
+
+#cd ../
 

@@ -256,7 +256,7 @@
    <queue>
     <name>bulk-emails-queue</name>
     <acl> 
-      <user-email>yaswanth@agilecrm.com</user-email>
+      <user-email>naresh@faxdesk.com</user-email>
     </acl>
     <rate>5/s</rate>
     
@@ -436,7 +436,7 @@
   <queue>
   <name>normal-email-pull-queue</name>
     <acl> 
-      <user-email>yaswanth@agilecrm.com</user-email>
+      <user-email>naresh@faxdesk.com</user-email>
     </acl>
   <mode>pull</mode>
   <retry-parameters>
@@ -448,7 +448,7 @@
   <name>bulk-email-pull-queue</name>
   <mode>pull</mode>
   <acl> 
-    <user-email>yaswanth@agilecrm.com</user-email>
+    <user-email>naresh@faxdesk.com</user-email>
   </acl>
   <retry-parameters>
       <task-retry-limit>2</task-retry-limit>
@@ -459,7 +459,7 @@
   <name>amazon-ses-pull-queue</name>
   <mode>pull</mode>
   <acl> 
-    <user-email>yaswanth@agilecrm.com</user-email>
+    <user-email>naresh@faxdesk.com</user-email>
   </acl>
   <retry-parameters>
       <task-retry-limit>2</task-retry-limit>
@@ -479,7 +479,7 @@
   <queue>
   <name>normal-personal-email-pull-queue</name>
     <acl>
-      <user-email>yaswanth@agilecrm.com</user-email>
+      <user-email>naresh@faxdesk.com</user-email>
     </acl>
   <mode>pull</mode>
   <retry-parameters>
@@ -490,7 +490,7 @@
   <queue>
   <name>bulk-personal-email-pull-queue</name>
     <acl> 
-      <user-email>yaswanth@agilecrm.com</user-email>
+      <user-email>naresh@faxdesk.com</user-email>
     </acl>
   <mode>pull</mode>
   <retry-parameters>
@@ -554,7 +554,7 @@
     <name>notification-pull-queue</name>
     <mode>pull</mode>
        <acl> 
-      <user-email>yaswanth@agilecrm.com</user-email>
+      <user-email>naresh@faxdesk.com</user-email>
     </acl>
     <retry-parameters>
       <task-retry-limit>2</task-retry-limit>
