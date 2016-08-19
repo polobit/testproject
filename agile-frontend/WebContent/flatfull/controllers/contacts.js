@@ -998,8 +998,15 @@ $('#content').html('<div id="import-contacts-event-listener"></div>');
 					$select.find("option:first").before("<option value='NOEMAIL'>- No Verified Email -</option>");
 					$select.find('option[value ="NOEMAIL"]').attr("selected", "selected");
 				}
-				else
-					$select.val($select.find('option')[0].value);		
+				else {
+					var ownerEmail = $select.find('option[value = \"'+CURRENT_DOMAIN_USER.email+'\"]').val();
+					if(typeof(ownerEmail) !== "undefined")
+						$select.find('option[value = \"'+CURRENT_DOMAIN_USER.email+'\"]').attr("selected", "selected");
+					else{
+						$select.find("option:first").before("<option value='SELECTEMAIL'>- Select one Email -</option>");
+						$select.find('option[value ="SELECTEMAIL"]').attr("selected", "selected");
+					}
+				}
 				rearrange_from_email_options($select, data);
 			});
 	},
