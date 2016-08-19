@@ -2,6 +2,7 @@ package com.agilecrm.affiliate.cron;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
@@ -61,7 +62,8 @@ public class AffiliateReportServlet extends HttpServlet {
 		
 		//Fetches all namespaces
       	Set<String> namespaces = NamespaceUtil.getAllNamespacesNew();
-      	Map<String, Object> map = new HashMap<String, Object>();
+      	Map<String, Object> finalMap = new HashMap<String, Object>();
+      	List<Map<String, Object>>  list = new ArrayList<Map<String, Object>>();
       	Calendar calendar = Calendar.getInstance();
 		// add -1 month to current month
 		calendar.add(Calendar.MONTH, -1);
@@ -76,9 +78,12 @@ public class AffiliateReportServlet extends HttpServlet {
       	for(String namespace : namespaces){
       		NamespaceManager.set(namespace);
       		try{
+      			Map<String, Object> map = new HashMap<String, Object>();
       			List<DomainUser> users = DomainUserUtil.getAllAdminUsers(namespace);
       			for(DomainUser user : users){
+      					map.put("domain", user.domain);
       					map.put("userId", user.id);
+      					map.put("email", user.email);
       					AffiliateDetails affDetails = AffiliateDetailsUtil.getAffiliateDetailsbyUserId(user.id);
       					if(affDetails != null && affDetails.getPaypalId() != null)
       						map.put("paypalId", affDetails.getPaypalId());
@@ -88,7 +93,9 @@ public class AffiliateReportServlet extends HttpServlet {
 							details = AffiliateUtil.getTotalCommisionAmount(user.id, firstDateOfPreviousMonth, lastDateOfPreviousMonth);
 							JSONParser parser = new JSONParser();
 	      					JSONObject json = (JSONObject) parser.parse(details);
-	      					map.put("commission", json.getInt("commission"));
+	      					float commission = (json.getInt("commission"));
+	      					map.put("commission", commission/100);
+	      					list.add(map);
 						} catch (JSONException | ParseException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
@@ -99,8 +106,9 @@ public class AffiliateReportServlet extends HttpServlet {
       			
       		}
       	}
+      	finalMap.put("details", list);
       	String month = new SimpleDateFormat("MMM").format(calendar.getTime());
-      	SendMail.sendMail("mogulla@agilecrm.com", SendMail.AFFILIATE_REPORT_SUBJECT+month, SendMail.AFFILIATE_REPORT, map);
+      	SendMail.sendMail("mogulla@agilecrm.com", SendMail.AFFILIATE_REPORT_SUBJECT+month, SendMail.AFFILIATE_REPORT, finalMap);
 	}
 
 }

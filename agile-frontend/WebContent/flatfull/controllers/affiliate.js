@@ -63,7 +63,7 @@ var AffiliateRouter = Backbone.Router.extend({
 			initDateRange(that.showAffiliateCollection);
 			that.showAffiliateCollection();
 
-		});
+		}, null);
 	},
 	showaffiliateDetails : function()
 	{
@@ -108,5 +108,19 @@ var AffiliateRouter = Backbone.Router.extend({
 		this.affiliateCollectionView.collection.fetch();
 		$('#affiliate-tabs-content').html(this.affiliateCollectionView.render().el);
 	},
+	tools : function(){
+		getTemplate('affiliate', {}, undefined, function(template_ui){
+			if(!template_ui)
+				  return;
+			$('#content').html($(template_ui));
+			getTemplate('affiliate-tools', {}, undefined, function(template_ui){
+				if(!template_ui)
+					  return;
+				$('#affiliate-tabs-content').html($(template_ui));
+				$('#affiliate-tabs .select').removeClass('select');
+				$('.tools-tab').addClass('select');
+			},null);
+		}, "#content");
+	}
 
 });
