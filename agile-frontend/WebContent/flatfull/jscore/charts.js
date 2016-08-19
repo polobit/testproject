@@ -291,8 +291,8 @@ function showBar(url, selector, name, yaxis_name, stacked, selected_colors)
 			        }
 			    },
 			    legend: {
-			        align: 'right',
-			        x: -52,
+			        align: 'center',
+			        x: -10,
 			        verticalAlign: 'top',
 			        y: 0,
 			        floating: true,
