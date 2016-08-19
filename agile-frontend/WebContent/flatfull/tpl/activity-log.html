@@ -46,6 +46,8 @@
 
 
 <script id="activity-list-log-model-template" type="text/html">
+{{#if_equals "bulk individual" show_bulk_activity}}
+{{else}}
 {{#if_equals "CALL" activity_type}}
 		{{#if custom1}}
     		<div class="pos-rlt list-group-item"> 
@@ -1347,6 +1349,7 @@ Deleted  {{custom1}} Campaigns<br/>
 </div>
 </div>
 	
+{{/if_equals}}
 {{/if_equals}}
 <div class="clearfix"></div>
 
