@@ -16,6 +16,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.codehaus.jackson.annotate.JsonIgnore;
 
 import com.agilecrm.contact.ContactField.FieldType;
@@ -295,6 +296,20 @@ public class Contact extends Cursor
     @JsonIgnore
     @NotSaved
     public boolean forceSearch = false;
+    
+    /**
+     * To check Owner updated or not 
+     */
+    @JsonIgnore
+    @NotSaved
+    private boolean owner_updated = false;
+    
+    /**
+     * To check with old Contact 
+     */
+    @JsonIgnore
+    @NotSaved
+    private ContactSavePreprocessor preProcessor = null;
 
     /**
      * Default constructor
@@ -470,7 +485,7 @@ public class Contact extends Cursor
 	// Stores current contact id in to a temporary variable, to check
 	// whether contact is newly created or being edited.
 
-	ContactSavePreprocessor preProcessor = new ContactSavePreprocessor(this);
+    preProcessor = new ContactSavePreprocessor(this);
 	preProcessor.preProcess(args);
 
 	Contact oldContact = preProcessor.getOldContact();
@@ -1168,6 +1183,7 @@ public class Contact extends Cursor
     @PrePersist
     private void PrePersist()
     {
+    	
 	// Set owner, when only the owner_key is null
 	if (owner_key == null)
 	{
@@ -1177,6 +1193,10 @@ public class Contact extends Cursor
 
 	if (this.type == Type.PERSON)
 	{
+
+		// Checks Owner change
+		checkOwnerChange();
+    	
 	    System.out.println("type of contact is person");
 	    if (this.properties.size() > 0)
 	    {
@@ -1264,6 +1284,37 @@ public class Contact extends Cursor
 	}
 	
     }
+
+	private void checkOwnerChange()
+	{
+		try
+		{
+			// Set old owner only if owner_updated is false
+			if(id == null || owner_key == null || owner_updated)
+				return;
+				
+			Contact oldContact = null;
+			
+			if(preProcessor != null)
+			    oldContact = preProcessor.getOldContact();
+			else
+				oldContact = ContactUtil.getContact(id);
+			
+			if(oldContact == null || oldContact.getContactOwnerKey() == null)
+				return;
+			
+			// If updated owner key doesn't match with old owner key
+			if(!oldContact.getContactOwnerKey().equals(owner_key))
+			{
+				System.out.println("Setting owner back to old...");
+				setContactOwner(oldContact.getContactOwnerKey());
+			}
+		}
+		catch (Exception e)
+		{
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+		}
+	}
 
     /**
      * A person must have contact_company_key, if not all company info is
