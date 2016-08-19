@@ -395,6 +395,7 @@ function fetchMails(contact_details_tab_scope,has_email_configured,mail_server_u
 	templateKey : "email-social", sort_collection : true, sortKey : "date_secs", descending : true, individual_tag_name : "li",
 	postRenderCallback : function(el)
 	{
+		$(el).find('style').html("");
 		$('#mail', App_Contacts.contactDetailView.el).find("#no-email").css('display','block');
 		agileTimeAgoWithLngConversion($(".email-sent-time", el));
 		
