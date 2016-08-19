@@ -747,6 +747,16 @@ function fillCustomFields(fields, el, callback, is_webrules)
 	if($(el).hasClass('hide'))
 		return;
 
+	// To know WebRules
+	if(!is_webrules)
+	{
+		try
+		{
+			is_webrules = $(el).closest('table').hasClass('web-rule-contact-condition-table');
+		}
+		catch(err){}
+	}
+
 	var lhs_element = $("#LHS > select > #custom-fields", el);
 	var rhs_element = $("#RHS", el);
 	var condition = $("#condition > select", el);
