@@ -22,7 +22,7 @@
 	System.out.println(userJSON);
 
 	// Pubnub changes
-	PubNub.pubNubPush(request.getAttribute("channel"), userJSON);
+	PubNub.pubNubPush((String) request.getAttribute("channel"), userJSON);
 %>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
