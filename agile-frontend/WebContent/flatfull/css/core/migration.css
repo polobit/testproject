@@ -2006,13 +2006,16 @@ display: block!important;
 .ticket-showing-no{ float: none !important; display: block; text-align: center; margin-top: 0px !important;}
 .icons-left{ float: left !important; margin-top: 5px;}
 .ticket-subj-block{ width: 100% !important;}
+ .ticket-name, .ticket-subject{ max-width: 20em;}
 }
 
 @media all and (min-width: 768px) {
   .addField > .col-sm-9:nth-of-type(n+3) {
   margin-left: 25%;
   }
-} 
+.ticket-name, .ticket-subject{ color: #697073;max-width: 20em;}
+
+}
 .tagsinput li {
   word-break:break-all;
   white-space: pre-wrap;
@@ -2032,6 +2035,13 @@ display: block!important;
     .deals-name{
       width: 40em;
     }
+}
+
+@media all and (orientation:landscape) and (max-width: 480px) { 
+    .ticket-name, .ticket-subject{ max-width: 26em !important;}
+}
+@media all and (orientation:landscape) and (max-width: 640px) { 
+    .ticket-name, .ticket-subject{ max-width: 38em;}
 }
 
 @media all and (orientation:landscape) and (min-width: 480px) and (max-width: 600px) { 
@@ -2277,6 +2287,7 @@ display: block!important;
 .companyDetails .vbox{ min-height: auto;}
 .taskTabListCenter{ margin-left: 15px; margin-right: 15px; margin-top: 15px;}
 .contDetails .col, .companyDetails .col, .taskListDetails .col, .dealDetailList .col, .taskDetailsCol{ border-right: none;}
+#ticket-model-list > tr > td:first-child{display: none;}
 }
 
 @media (max-width: 420px){
@@ -2415,8 +2426,15 @@ transform: translateX(-50%);}
 .navbar-searchicon > .btn:hover, .navbar-searchicon > .btn:focus, 
 .navbar-searchicon > .btn.focus{ color: inherit;}
 .search-filters li{ width:50%; float: left;}
-.ticket-subject-md{ width: 58%;}
-.ticket-subj-block{ width: 62%;}
+
+.ticket-b-t .table tbody tr:first-child td{border-top: 0px;}
+.reply-textarea-h{ height: 120px !important;}
+ @media (max-width:420px){
+  .ticket-name, .ticket-subject{ max-width: 14em !important;}
+} 
+
+.ticket-subject-md{ width: 56%;}
+.ticket-subj-block{ width: 60%;}
 /*end custom css code*/
 .search-filters li a
 { color: #363f44 !important;}

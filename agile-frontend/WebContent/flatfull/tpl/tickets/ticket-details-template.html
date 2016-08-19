@@ -3,12 +3,13 @@
 </script>
 <script id="ticket-details-template" type="text/html">
 
+
 {{#get_current_user_prefs this}}{{/get_current_user_prefs}}
 
 <div id="contact-dtl" class="app-content-full  h-full dock-view-fixing">
-  <div class="hbox hbox-auto-xs hbox-auto-sm bg-light">
+  <div class="hbox hbox-auto-xs hbox-auto-sm bg-light tickets-main">
     <!-- first column in details view -->
-    <div class="col bg-light lter b-r w-lg" style="width:299px;">
+    <div class="col bg-light lter b-r w-lg">
       <div class="vbox">
         <div class="row-row">
 
@@ -113,24 +114,24 @@
                       </a>
                     </div>
                       
-                    <input type="text" style="width:70%;float:left"class="form-control text-xs" id="ticket_change_sla" placeholder="{{agile_lng_translate 'contacts-view' 'select-date'}}" value="{{#if due_time}}{{epochToHumanDate "mm/dd/yyyy" due_time}}{{/if}}" {{#if_equals status "CLOSED"}}disabled="disabled"{{/if_equals}}/>
+                    <input type="text" style="width:70%;float:left" class="form-control text-xs" id="ticket_change_sla" placeholder="{{agile_lng_translate 'contacts-view' 'select-date'}}" value="{{#if due_time}}{{epochToHumanDate "mm/dd/yyyy" due_time}}{{/if}}" {{#if_equals status "CLOSED"}}disabled="disabled"{{/if_equals}}/>
                     
                     <input type="text" style="width:30%;float:right" class="form-control text-xs ticket_change_slatime" placeholder="Time" {{#if_equals status "CLOSED"}}disabled="disabled"{{/if_equals}}/>
                    
-                    <div class="col-md-12 p-n">
-                      <div class="col-md-3 p-n">
+                    <div class="col-xs-12 col-sm-12 col-md-12 p-n">
+                      <div class="col-xs-3 col-sm-3 col-md-3 p-n">
                         <a href="javascript:void(0);" class="c-p text-info link-color choose-due-date txt-small" data-value="tomorrow">{{agile_lng_translate 'tasks' 'Tomorrow'}}</a>
                       </div>
-                      <div class="col-md-1 p-n text-center"> | </div>
-                      <div class="col-md-1 p-n text-center">
+                      <div class="col-xs-1 col-sm-1 col-md-1 p-n text-center"> | </div>
+                      <div class="col-xs-1 col-sm-1 col-md-1 p-n text-center">
                         <a href="javascript:void(0);" class="c-p text-info link-color choose-due-date txt-small" data-value="next_two_days">+2</a>
                       </div>
-                      <div class="col-md-1 p-n text-center"> | </div>
-                      <div class="col-md-1 p-n text-center">
+                      <div class="col-xs-1 col-sm-1 col-md-1 p-n text-center"> | </div>
+                      <div class="col-xs-1 col-sm-1 col-md-1 p-n text-center">
                         <a href="javascript:void(0);" class="c-p text-info link-color choose-due-date txt-small" data-value="next_three_days">+3</a>
                       </div>
-                      <div class="col-md-1 p-n text-center"> | </div>
-                      <div class="col-md-1 p-n text-center">
+                      <div class="col-xs-1 col-sm-1 col-md-1 p-n text-center"> | </div>
+                      <div class="col-xs-1 col-sm-1 col-md-1 p-n text-center">
                         <a href="javascript:void(0);" class="c-p text-info link-color choose-due-date txt-small" data-value="next_five_days">+5</a>
                     </div>
                   </div>
@@ -217,8 +218,8 @@
 
             </div>
              
-            <div class="pos-abs" style="right: 15px; top: 9px;">{{agile_lng_translate 'campaigns' 'workflows'}}
-            <div class="btn-group dropdown m-l-xs" data-toggle="tooltip" data-container="body" data-placement="bottom" data-original-title="{{agile_lng_translate 'campaigns' 'workflows'}}">
+            <div class="pull-right {{#is_mobile}} icons-left {{/is_mobile}}">
+            <div class="btn-group dropdown" data-toggle="tooltip" data-container="body" data-placement="bottom" data-original-title="{{agile_lng_translate 'campaigns' 'workflows'}}">
               <button class="fa fa-sitemap btn btn-sm btn-default show-workflows p-ver-2" data-toggle="dropdown"></button>
 
               <ul id="workflows_list" class="dropdown-menu">
@@ -243,14 +244,16 @@
             <button class="fa fa-dedent btn btn-sm p-ver-2 btn-default m-l-xs toggle-widgets" data-toggle="tooltip" data-container="body" data-placement="bottom" data-original-title="{{agile_lng_translate 'tickets' 'toggle-widgets'}}"></button>
             {{/is_mobile}}             
             </div>
+            <div class="clearfix"></div>
           </div>
 
         <div class="clearfix m-b-lg m-md">
-            <a class="pull-left thumb-sm"><img src="{{current_logged_in_user.ownerPic}}" class="r-5x" alt="User Image"></a>
-            <div class="m-l-xxl bg-white">
+            <a class="pull-left {{#is_mobile}}thumb-small{{else}}thumb-sm{{/is_mobile}}"><img src="{{current_logged_in_user.ownerPic}}" class="r-5x" alt="User Image"></a>
+            <div class="{{#is_mobile}}m-l-xl{{else}}m-l-xxl{{/is_mobile}} bg-white">
                <div id="send-reply-container">
                </div>
             </div>
+
 
             <div class="b-b b-light m-b-sm position-relative">
               <span class="label label-default toggle-timeline cursor-pointer pull-right position-relative" style="bottom: 8px;">{{agile_lng_translate 'tickets' 'show-timeline-cap'}}</span>
@@ -318,6 +321,18 @@
         </div>
       
         {{#if canned_responses}}
+        
+         {{#is_mobile}}   
+        <div class="btn-group dropdown m-l-xs pull-right">    
+          <a class="btn btn-default btn-sm" style="border-radius:2px;" id="macro_list" data-toggle="dropdown" aria-expanded="false"><i class="icon-action-redo"></i></a>    
+          <ul class="dropdown-menu">    
+            {{#each canned_responses}}    
+            <li class="text-cap" id="ticket_canned_response" rel="{{id}}"><a href="javascript:void(0);" id={{id}}>{{title}}</a></li>    
+            {{/each}}   
+          </ul>   
+        </div>    
+        {{else}}
+
         <div class="btn-group dropdown m-l-xs pull-right">
           <a class="link-color text-sm"  id="macro_list" data-toggle="dropdown" aria-expanded="false">{{agile_lng_translate 'tickets' 'canned-responses'}} <span class="caret"></span></a>
           <ul class="dropdown-menu">
@@ -326,6 +341,7 @@
             {{/each}}
           </ul>
         </div>
+        {{/is_mobile}}
         {{/if}}
 
         </div>
@@ -333,14 +349,14 @@
                   <div id="reply-editor" class="m-t-sm">
 
                     {{#if_equals reply_type "forward"}}
-                     <ul class="forward-emails m-n p-a-sm b-a p-xs p-b-none r" name="forward_emails">
+                     <ul class="forward-emails m-b-xs p-a-sm b-a p-xs p-b-none r" name="forward_emails">
                           <li class="tag m-r-xs m-b-xs inline-block w-full">
                              <input type="text" id="forward_email_input" name="email" class="b-n w-full" placeholder="{{agile_lng_translate 'tickets' 'to-email'}}" autocomplete="off"/>
                           </li>
                       </ul> 
                     {{/if_equals}}
 
-                     <textarea id="reply_textarea" name="html_text" class="form-control required 
+                     <textarea id="reply_textarea" name="html_text" class="{{#is_mobile}}reply-textarea-h{{/is_mobile}} form-control required 
                      {{#if_equals reply_type "forward"}}forward{{/if_equals}} 
                      {{#if_equals reply_type "reply"}}reply{{/if_equals}} 
                      {{#if_equals reply_type "comment"}} bg-lightyellow comment{{/if_equals}}
@@ -546,20 +562,21 @@
       {{/if}}
 
     </div>
-    <div class="text-md m-t-sm m-b-xxs overflow-elipsis m-b-none" style="max-width: 230px"> <span class="">
+    <div style="max-width: 210px; margin:auto;">
+    <div class="text-md m-t-sm m-b-xxs overflow-elipsis m-b-none"> <span class="">
         {{getPropertyValue properties "first_name"}}
         {{getPropertyValue properties "last_name"}} 
       </span>
     </div>
-    <div class="overflow-elipsis m-b-none" style="max-width: 230px">
+    <div class="overflow-elipsis m-b-none">
       <span class="">
         {{getPropertyValue properties "company"}}
       </span>
     </div>
-    <div class="overflow-elipsis m-b-none" style="max-width: 230px">
+    <div class="overflow-elipsis m-b-none">
         {{getPropertyValue properties "email"}}
     </div>
-     <div class="overflow-elipsis m-b-none" style="max-width: 230px">
+     <div class="overflow-elipsis m-b-none">
          <a href="tel:{{getPropertyValue properties "phone"}}" class="contact-make-call contact-call-button" phone="{{getPropertyValue properties "phone"}}">
             {{getPropertyValue properties "phone"}}
           </a>
@@ -575,7 +592,7 @@
         </div>
       {{/if}}
 
-      <div class="col-md-12 p-n m-t-xso verflow-elipsis m-b-none" style="max-width: 230px">
+      <div class="col-md-12 p-n m-t-xso verflow-elipsis m-b-none">
 
         {{#each properties}}
             {{#if_equals name "website"}}
@@ -603,6 +620,7 @@
               {{/if}}
             {{/if_equals}}
         {{/each}}
+      </div>
       </div>
   </div>
 </script>
