@@ -113,13 +113,20 @@ var AffiliateRouter = Backbone.Router.extend({
 			if(!template_ui)
 				  return;
 			$('#content').html($(template_ui));
-			getTemplate('affiliate-tools', {}, undefined, function(template_ui){
-				if(!template_ui)
-					  return;
-				$('#affiliate-tabs-content').html($(template_ui));
-				$('#affiliate-tabs .select').removeClass('select');
-				$('.tools-tab').addClass('select');
-			},null);
+			head.js(LIB_PATH + '../lib/zeroclipboard/ZeroClipboard.js', function()
+			{
+				hideTransitionBar();
+				getTemplate('affiliate-tools', {}, undefined, function(template_ui){
+					if(!template_ui)
+						  return;
+					$('#affiliate-tabs-content').html($(template_ui));
+					for(var i=1; i<=6; i++){
+						initZeroClipboard("url_clip_button"+i, "referral_url"+i);
+					}
+					$('#affiliate-tabs .select').removeClass('select');
+					$('.tools-tab').addClass('select');
+				},null);
+			});
 		}, "#content");
 	}
 

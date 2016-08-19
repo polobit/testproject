@@ -104,16 +104,62 @@
 
 <script id="affiliate-tools-template" type="text/html">
   <div class="row">
-  	<div class="col-md-3">
-  	 <div class="pos-rlt affiliate_baner">
-  	  <img alt="AgileCRM" src="data:image/png;base64,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" style="width: 230px;">
-  	  
-  	 </div>
+  	<div class="col-md-4 text-center">
+  		<img alt="AgileCRM" src="/img/affiliate-baners/250X250.gif">
+  		<div class="panel m-t-sm p-t-xs p-b-xs pos-rlt">
+  			<span id="referral_url1">{{getAffiliateLink "/img/affiliate-baners/250X250.gif"}}</span>
+			<a id="url_clip_button1" class="pos-abs pos-r-sm" data-clipboard-text="{{getAffiliateLink '/img/affiliate-baners/250X250.gif'}}">
+				<i class="icon-copy copy_email_clipboard_icon p-r-xs" title=""></i>
+			</a>
+  		</div>
   	</div>
-  
-  
-  	<div class="col-md-6">
-  	  <img width="150" alt="AgileCRM" src="https://media.licdn.com/mpr/mpr/shrink_200_200/AAEAAQAAAAAAAAWJAAAAJDQwNmRhNGNmLTlmNWMtNGZkMC1hZDJhLWI0ODE1NDQxMmNhNA.png">
+  	<div class="col-md-4 text-center {{#is_mobile}}{{else}} p-t-xxl{{/is_mobile}}">
+  		<img alt="AgileCRM" src="/img/affiliate-baners/200X200.gif">
+  		<div class="panel m-t-sm p-t-xs p-b-xs pos-rlt">
+  			<span id="referral_url2">{{getAffiliateLink "/img/affiliate-baners/200X200.gif"}}</span>
+			<a id="url_clip_button2" class="pos-abs pos-r-sm" data-clipboard-text="{{getAffiliateLink '/img/affiliate-baners/200X200.gif'}}">
+				<i class="icon-copy copy_email_clipboard_icon p-r-xs" title=""></i>
+			</a>
+  		</div>
+  	</div>
+  	<div class="col-md-4 text-center {{#is_mobile}}{{else}} p-t-xxl{{/is_mobile}}">
+  		<img alt="AgileCRM" src="/img/affiliate-baners/200X200(1).gif">
+  		<div class="panel m-t-sm p-t-xs p-b-xs pos-rlt">
+  			<span id="referral_url3">{{getAffiliateLink "/img/affiliate-baners/200X200(1).gif"}}</span>
+			<a id="url_clip_button3" class="pos-abs pos-r-sm" data-clipboard-text="{{getAffiliateLink '/img/affiliate-baners/200X200(1).gif'}}">
+				<i class="icon-copy copy_email_clipboard_icon p-r-xs" title=""></i>
+			</a>
+  		</div>
+  	 </div> 
+  </div>
+  <div class="line  b-b m-t-sm m-b-lg"></div>
+  <div class="row">
+  	<div class="col-md-4 text-center">
+  		<img alt="AgileCRM" src="/img/affiliate-baners/300X250.gif">
+  		<div class="panel m-t-sm p-t-xs p-b-xs pos-rlt">
+  			<span id="referral_url4">{{getAffiliateLink "/img/affiliate-baners/300X250.gif"}}</span>
+			<a id="url_clip_button4" class="pos-abs pos-r-sm" data-clipboard-text="{{getAffiliateLink '/img/affiliate-baners/300X250.gif'}}">
+				<i class="icon-copy copy_email_clipboard_icon p-r-xs" title=""></i>
+			</a>
+  		</div>
+  	</div>
+  	<div class="col-md-4 text-center">
+  		<img alt="AgileCRM" src="/img/affiliate-baners/300X250(1).gif">
+  		<div class="panel m-t-sm p-t-xs p-b-xs pos-rlt">
+  			<span id="referral_url5">{{getAffiliateLink "/img/affiliate-baners/300X250(1).gif"}}</span>
+			<a id="url_clip_button5" class="pos-abs pos-r-sm" data-clipboard-text="{{getAffiliateLink '/img/affiliate-baners/300X250(1).gif'}}">
+				<i class="icon-copy copy_email_clipboard_icon p-r-xs" title=""></i>
+			</a>
+  		</div>
+  	</div>
+  	<div class="col-md-4 text-center">
+  		<img alt="AgileCRM" src="/img/affiliate-baners/250X250(1).gif">
+  		<div class="panel m-t-sm p-t-xs p-b-xs pos-rlt">
+  			<span id="referral_url6">{{getAffiliateLink "/img/affiliate-baners/250X250(1).gif"}}</span>
+			<a id="url_clip_button6" class="pos-abs pos-r-sm" data-clipboard-text="{{getAffiliateLink '/img/affiliate-baners/250X250(1).gif'}}">
+				<i class="icon-copy copy_email_clipboard_icon p-r-xs" title=""></i>
+			</a>
+  		</div>
   	</div>
   </div>
 </script>

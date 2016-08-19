@@ -1489,6 +1489,20 @@ $(function()
 		return name.charAt(0).toUpperCase() + name.slice(1);
 	});
 
+	Handlebars.registerHelper('getPropertyFromUser', function(property)
+	{
+		if(property)
+			return CURRENT_DOMAIN_USER[property];
+		else
+			return "";
+	});
+
+	Handlebars.registerHelper('getAffiliateLink', function(img)
+	{
+		var el = "<a href='https://my.agilecrm.com/register?utm_affiliate="+CURRENT_DOMAIN_USER.id+"' target='_blank'><img alt='AgileCRM' src='"+img+"'/></a>";
+		//return Handlebars.Utils.escapeExpression(el);
+		return el;
+	});
 	
 	/*
 	 * To add comma in between the elements.
