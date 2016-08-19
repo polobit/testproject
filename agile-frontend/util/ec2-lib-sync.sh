@@ -11,5 +11,5 @@ else
 	scp -i $EC2_PERMISSIONS -r ../WebContent/jscore/min/flatfull/ ec2-user@ec2-54-210-171-176.compute-1.amazonaws.com:~/cdn/beta/$1/jscore/min/
 	scp -i $EC2_PERMISSIONS -r ../WebContent/jscore/min/locales/ ec2-user@ec2-54-210-171-176.compute-1.amazonaws.com:~/cdn/beta/$1/jscore/min/
 	scp -i $EC2_PERMISSIONS -r ../WebContent/tpl/min/precompiled/flatfull/ ec2-user@ec2-54-210-171-176.compute-1.amazonaws.com:~/cdn/beta/$1/tpl/min/precompiled/
-	scp -i $EC2_PERMISSIONS -r ../WebContent/tpl/min/precompiled/locales/ ec2-user@ec2-54-210-171-176.compute-1.amazonaws.com:~/cdn/beta/$1/tpl/min/precompiled/locales/
+	scp -i $EC2_PERMISSIONS -r ../WebContent/tpl/min/precompiled/locales/ ec2-user@ec2-54-210-171-176.compute-1.amazonaws.com:~/cdn/beta/$1/tpl/min/precompiled/
 fi;
