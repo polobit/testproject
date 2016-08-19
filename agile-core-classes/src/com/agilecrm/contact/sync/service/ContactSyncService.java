@@ -257,7 +257,7 @@ public abstract class ContactSyncService implements IContactSyncService
 			    .acl("public-read").addUserMetadata("domain", NamespaceManager.get()).build();
 
 		    service = new GCSServiceAgile(NamespaceManager.get() + "_merged_contacts_" + GoogleSQL.getFutureDate()
-			    + ".csv", "agile-reports", options);
+			    + ".csv", "agile-export", options);
 	  try
 	{
 		failedContactsWriter = new CSVWriter(service.getOutputWriter());
