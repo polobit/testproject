@@ -36,11 +36,15 @@ var ContactBulkActionRouter = Backbone.Router.extend({
 	{
 
 		// On reloading redirecting to contacts/companies list
-		if (!App_Contacts.contactsListView)
+		if (!App_Contacts.contactsListView && !App_Companies.contacts_Company_List)
 			Backbone.history.navigate("contacts", { trigger : true });
 		else
 		{
-			getTemplate("bulk-actions-owner", {}, undefined, function(template_ui){
+			var name_json = {
+			"company_route" : App_Companies.Company_detail_route
+		}
+
+			getTemplate("bulk-actions-owner", name_json, undefined, function(template_ui){
 				if(!template_ui)
 					  return;
 				$('#content').html($(template_ui));	
@@ -64,11 +68,14 @@ var ContactBulkActionRouter = Backbone.Router.extend({
 	{
 
 		// On reloading redirecting to contacts list
-		if (!App_Contacts.contactsListView)
+		if (!App_Contacts.contactsListView && !App_Companies.contacts_Company_List)
 			Backbone.history.navigate("contacts", { trigger : true });
 		else
 		{
-			getTemplate("bulk-actions-campaign", {}, undefined, function(template_ui){
+			var name_json = {
+			"company_route" : App_Companies.Company_detail_route
+		}
+			getTemplate("bulk-actions-campaign", name_json, undefined, function(template_ui){
 				if(!template_ui)
 					  return;
 				$('#content').html($(template_ui));	
@@ -84,11 +91,13 @@ var ContactBulkActionRouter = Backbone.Router.extend({
 	tagsBulk : function()
 	{
 		// On reloading redirecting to contacts list
-		if (!App_Contacts.contactsListView)
+		if (!App_Contacts.contactsListView && !App_Companies.contacts_Company_List )
 			Backbone.history.navigate("contacts", { trigger : true });
 		else{
-
-			getTemplate("bulk-actions-tags", {}, undefined, function(template_ui){
+			var name_json = {
+			"company_route" : App_Companies.Company_detail_route
+		}
+			getTemplate("bulk-actions-tags", name_json, undefined, function(template_ui){
 				if(!template_ui)
 					  return;
 				$('#content').html($(template_ui));
@@ -103,14 +112,19 @@ var ContactBulkActionRouter = Backbone.Router.extend({
 	tagsRemoveBulk : function()
 	{
 		// On reloading redirecting to contacts list
-		if (!App_Contacts.contactsListView)
+		if (!App_Contacts.contactsListView && !App_Companies.contacts_Company_List)
 			Backbone.history.navigate("contacts", { trigger : true });
 		else
-			getTemplate("bulk-actions-tags-remove", {}, undefined, function(template_ui){
+		{
+			var name_json = {
+			"company_route" : App_Companies.Company_detail_route
+		}
+			getTemplate("bulk-actions-tags-remove", name_json, undefined, function(template_ui){
 				if(!template_ui)
 					  return;
 				$('#content').html($(template_ui));
 			}, "#content");	
+		}
 	},
 
 	/**
@@ -122,12 +136,15 @@ var ContactBulkActionRouter = Backbone.Router.extend({
 	{
 
 		// On reloading redirecting to contacts list
-		if (!App_Contacts.contactsListView)
+		if (!App_Contacts.contactsListView && !App_Companies.contacts_Company_List)
 			Backbone.history.navigate("contacts", { trigger : true });
 		else
 		{
+				var name_json = {
+			"company_route" : App_Companies.Company_detail_route
+		}
 			$("#content").html('<div id="send-email-listener-container"></div>');
-			getTemplate("send-email", {}, undefined, function(template_ui){
+			getTemplate("send-email", name_json, undefined, function(template_ui){
 				if(!template_ui)
 					  return;
 				$('#send-email-listener-container').html($(template_ui));
@@ -183,6 +200,7 @@ var ContactBulkActionRouter = Backbone.Router.extend({
 			Backbone.history.navigate("companies", { trigger : true });
 		else
 		{
+
 			getTemplate("bulk-actions-company-owner", {}, undefined, function(template_ui){
 				if(!template_ui)
 					  return;

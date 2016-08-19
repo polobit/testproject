@@ -1097,7 +1097,12 @@ $(function()
 
 	Handlebars.registerHelper('iscompactTabel', function(type , options)
 	{
-		var setCompactView = (type != "PERSON") ? _agile_get_prefs("companyTabelView") : _agile_get_prefs("contactTabelView");
+		var setCompactView;
+		if(App_Companies.companyDetailView && App_Companies.companyDetailView.model && 
+			window.location.hash.split("#")[1] == "company/" + App_Companies.companyDetailView.model.get('id'))
+ 		setCompactView=_agile_get_prefs("contactCompanyTabelView");
+ 		else
+		 setCompactView=(type != "PERSON") ? _agile_get_prefs("companyTabelView") : _agile_get_prefs("contactTabelView");
 
 		if(setCompactView)
 				return options.fn(this);
@@ -7509,6 +7514,61 @@ Handlebars.registerHelper('if_asc_sork_key', function(value, options)
 	else
 		return options.fn(this); 
 });
+
+/**
+	 * Returns table headings for custom contacts list view
+	 */
+	Handlebars.registerHelper('companyContactsTableHeadings', function(item)
+  	{
+		var el = "", cls = ""; 
+		$.each(App_Companies.contactCompanyViewModel[item], function(index, element)
+  		{
+  			if (element == "basic_info" || element == "image")
+  			{
+					
+					if(_agile_get_prefs("contactCompanyTabelView"))
+					{
+						// if the compact view is present the remove th basic info heading and add the empty heading for the image
+
+						if(element == "basic_info")
+							return ;
+	
+						if(element == "image")
+						{
+							element = "";
+							cls = "";
+						}
+							  
+					}
+					else
+					{
+						if(element == "image")
+						{
+							element = "";
+							cls = "compactcontact";
+						}
+						if(element == "basic_info")
+							element = "Basic Info";
+					}
+			}
+
+		else if (element.indexOf("CUSTOM_") == 0) 
+		{
+  			element = element.split("_")[1];
+  			cls = "text-muted";
+  		}
+  		else 
+  		{
+			element = element.replace("_", " ");
+			cls = "";
+	 	}
+	 	
+	 			element = getTableLanguageConvertHeader(element);
+	 		el = el.concat('<th class="'+ cls +'">' + ucfirst(element) + '</th>');	
+	  
+	 });
+		return new Handlebars.SafeString(el);
+	});
 Handlebars.registerHelper('get_default_label', function(label, module_name, options)
 {
 	var i18nKeyPrefix = "admin-settings-tasks";

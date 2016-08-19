@@ -602,10 +602,23 @@ function show_bulk_owner_change_page()
 		});
 
 		// Navigate to show form
-		if(company_util.isCompany())
+
+		if (company_util.isCompanyContact()) {
+			App_Companies.Company_detail_route=Current_Route;
+        Backbone.history.navigate("bulk-owner", {
+            trigger: true
+        })
+    }
+		else if(company_util.isCompany())
+		{
+			App_Companies.Company_detail_route="";
 			Backbone.history.navigate("company-bulk-owner", { trigger : true });
+		}
 		else
+		{
+			App_Companies.Company_detail_route="";
 			Backbone.history.navigate("bulk-owner", { trigger : true });
+		}
 
 		/**
 		 * Changes the owner by sending the new owner name as path parameter and
@@ -664,6 +677,10 @@ function show_bulk_owner_change_page()
 			});
 
 			// Navigate to show form
+			App_Companies.Company_detail_route="";
+			if (company_util.isCompanyContact()) {
+			App_Companies.Company_detail_route=Current_Route;
+    		}
 			Backbone.history.navigate("bulk-campaigns", { trigger : true });
 
 			/**
@@ -708,12 +725,19 @@ function show_bulk_owner_change_page()
 
 		// var tags = get_tags('tagsBulkForm');
 
-		 if (company_util.isCompany()) {
+		if (company_util.isCompanyContact()) {
+			App_Companies.Company_detail_route=Current_Route;
+        Backbone.history.navigate("bulk-tags", {
+            trigger: true
+        })
+    }
+		 else if (company_util.isCompany()) {
+		 	App_Companies.Company_detail_route="";
         Backbone.history.navigate("company-bulk-tags", {
             trigger: true
         })
     } else {
-
+    	App_Companies.Company_detail_route="";
 		Backbone.history.navigate("bulk-tags", { trigger : true });
 	}
 
@@ -815,15 +839,24 @@ function show_bulk_owner_change_page()
 		var id_array = get_contacts_bulk_ids();
 
 		// var tags = get_tags('tagsBulkForm');
-		 if (company_util.isCompany()) {
+
+
+		if (company_util.isCompanyContact()) {
+			App_Companies.Company_detail_route=Current_Route;
+        Backbone.history.navigate("bulk-tags-remove", {
+            trigger: true
+        })
+    }
+		 else if (company_util.isCompany()) {
+		 	App_Companies.Company_detail_route="";
         Backbone.history.navigate("company-bulk-tags-remove", {
             trigger: true
         })
     } else {
-
+    	App_Companies.Company_detail_route="";
 		Backbone.history.navigate("bulk-tags-remove", { trigger : true });
 	}
-
+		
 		setup_tags_typeahead();
 
 	/**	$('#removeBulkTags')
@@ -943,7 +976,9 @@ function show_bulk_owner_change_page()
 			// Shows selected contacts count in Send-email page.
 			$emailForm.find('div#bulk-count').css('display', 'inline-block');
 			
-			if(company_util.isCompany())
+			if (company_util.isCompanyContact())
+				$emailForm.find('div#bulk-count p').html(_agile_get_translated_val('companies-view','selected') + " <b>" + count + _agile_get_translated_val('companies-view','Contacts') + " </b> " + _agile_get_translated_val('companies-view','for-sending-email'));
+			else if(company_util.isCompany())
 				$emailForm.find('div#bulk-count p').html(_agile_get_translated_val('companies-view','selected') +" <b>" + count + _agile_get_translated_val('companies-view','Companies') + " </b> " + _agile_get_translated_val('companies-view','for-sending-email'));
 			else
 				$emailForm.find('div#bulk-count p').html(_agile_get_translated_val('companies-view','selected') + " <b>" + count + _agile_get_translated_val('companies-view','Contacts') + " </b> " + _agile_get_translated_val('companies-view','for-sending-email'));
@@ -955,14 +990,25 @@ function show_bulk_owner_change_page()
 			// Change ids of Send and Close button, to avoid normal send-email
 			// actions.
 			$emailForm.find('.form-actions a#sendEmail').removeAttr('id').attr('id', 'bulk-send-email');
-			$emailForm.find('.form-actions a#send-email-close').removeAttr('id');
+			//$emailForm.find('.form-actions a#send-email-close').removeAttr('id');
 
 		});
-
-		if(company_util.isCompany())
+		
+		if (company_util.isCompanyContact()) {
+			App_Companies.Company_detail_route=Current_Route;
+        Backbone.history.navigate("bulk-email", {
+            trigger: true
+        })
+    }
+		 else if(company_util.isCompany()){
+		 	App_Companies.Company_detail_route="";
 			Backbone.history.navigate("company-bulk-email", { trigger : true });
+		}
 		else
+		{
+			App_Companies.Company_detail_route="";
 			Backbone.history.navigate("bulk-email", { trigger : true });
+		}
 
 		$("body #bulk-send-email").off("click");
 		$("#bulk-send-email").click(function(e)
@@ -1077,7 +1123,28 @@ function toggle_contacts_bulk_actions_dropdown(clicked_ele, isBulk, isCampaign)
 		var appCount = 0;
 		var limitValue = 10000;		
 
-		if(company_util.isCompany()){
+		if(company_util.isCompanyContact()){
+			$("#bulk-action-btns button").removeClass("disabled");
+			resultCount = App_Companies.contacts_Company_List.collection.length;
+			appCount = total_available_contacts;
+
+			if (isBulk && appCount != resultCount){
+				if(localStorage.getItem("dynamic_company_filter") != null || localStorage.getItem("company_filter") != null){				
+					if(resultCount > limitValue){
+						resultCount = limitValue + "+";
+					}
+
+					if(appCount > limitValue){
+						appCount = limitValue + "+";
+					}
+				}
+
+				$('body').find('#bulk-select').css('display', 'block')
+				.html("Selected " + resultCount + " companies. <a id='select-all-available-contacts' class='c-p text-info' href='#'>Select all " + appCount + " companies</a>");
+				$('#bulk-select').css("display","block");
+			}
+		}
+		else if(company_util.isCompany()){
 			$("#bulk-action-btns button").removeClass("disabled");
 			resultCount = App_Companies.companiesListView.collection.length;
 			appCount = total_available_contacts;
@@ -1166,12 +1233,19 @@ function toggle_contacts_bulk_actions_dropdown(clicked_ele, isBulk, isCampaign)
  */
 function getAvailableContacts()
 {
-		if (company_util.isCompany() && App_Companies.companiesListView.collection.toJSON()[0] && App_Companies.companiesListView.collection.toJSON()[0].count)
+		if(company_util.isCompanyContact() && App_Companies.contacts_Company_List)
+		{
+			//
+			current_view_contacts_count = App_Companies.contacts_Company_List.collection.toJSON()[0].count;
+			return current_view_contacts_count;
+		}
+		else if (company_util.isCompany() && App_Companies.companiesListView && App_Companies.companiesListView.collection.toJSON()[0] && App_Companies.companiesListView.collection.toJSON()[0].count)
 		{
 			//
 			current_view_contacts_count = App_Companies.companiesListView.collection.toJSON()[0].count;
 			return current_view_contacts_count;
-		} else if (App_Contacts.contactsListView.collection.toJSON()[0] && App_Contacts.contactsListView.collection.toJSON()[0].count)
+		}
+		 else if (App_Contacts.contactsListView.collection.toJSON()[0] && App_Contacts.contactsListView.collection.toJSON()[0].count)
 		{
 			//
 			current_view_contacts_count = App_Contacts.contactsListView.collection.toJSON()[0].count;
@@ -1273,7 +1347,9 @@ function postBulkOperationData(url, data, form, contentType, callback, error_mes
 		if (callback && typeof (callback) === "function")
 			callback(data);
 
-		if(!company_util.isCompany())
+		if(App_Companies.Company_detail_route)
+			Backbone.history.navigate(App_Companies.Company_detail_route,{trigger : true});
+		else if(!company_util.isCompany())
 			// On save back to contacts list
 			Backbone.history.navigate("contacts", { trigger : true });
 		else
