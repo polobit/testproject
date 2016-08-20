@@ -577,7 +577,7 @@ public abstract class ContactSyncService implements IContactSyncService
 	    writer.writeNext(heads);
 	    for (FailedContactBean bean : failedContacts)
 	    {
-		writer.writeNext(toArray(toList(bean.getContact().properties), bean.getCauses(), heads.length));
+		writer.writeNext(toArray(toList(bean.getContact()), bean.getCauses(), heads.length));
 	    }
 
 	    writer.close();
@@ -642,14 +642,17 @@ public abstract class ContactSyncService implements IContactSyncService
      * @param contact
      * @return
      */
-    private List<String> toList(List<ContactField> contactProperties)
+    private List<String> toList(Contact contact)
     {
 	List<String> list = new ArrayList<String>();
-	for (ContactField field : contactProperties)
-	{
-	    list.add(field.value);
-	}
-
+	ContactField first_name=contact.getContactField(Contact.FIRST_NAME);
+	list.add(first_name!=null ? first_name.value : " ");
+	ContactField last_name=contact.getContactField(Contact.LAST_NAME);
+	list.add(last_name!=null ? last_name.value : " ");
+	ContactField email=contact.getContactField(Contact.EMAIL);
+	list.add(email!=null ? email.value : " ");
+	
+	System.out.println("List of csv data"+list);
 	return list;
     }
 
