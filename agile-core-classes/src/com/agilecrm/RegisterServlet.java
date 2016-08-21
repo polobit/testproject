@@ -676,8 +676,10 @@ public class RegisterServlet extends HttpServlet
 	    // Set timezone in account prefs.
 		String affiliatedBy = req.getParameter("utm_affiliate");
 	    AccountPrefs accPrefs = AccountPrefsUtil.getAccountPrefs();
-	    if(affiliatedBy != null)
+	    if(affiliatedBy != null){
+	    	System.out.println("setting affiliated by... "+affiliatedBy);
     		accPrefs.affiliatedBy = Long.parseLong(affiliatedBy);
+	    }
 	    if (StringUtils.isEmpty(accPrefs.timezone) || "UTC".equals(accPrefs.timezone)
 		    || "GMT".equals(accPrefs.timezone))
 			accPrefs.timezone = req.getParameter("account_timezone");

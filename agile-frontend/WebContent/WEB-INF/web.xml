@@ -504,7 +504,7 @@
  
     <servlet-mapping>
         <servlet-name>AffiliateReportServlet</servlet-name>
-        <url-pattern>//backend/cron/affiliateReport</url-pattern>
+        <url-pattern>/backend/cron/affiliateReport</url-pattern>
     </servlet-mapping>
     
     <servlet>

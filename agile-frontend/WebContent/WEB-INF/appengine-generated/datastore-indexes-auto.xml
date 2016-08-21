@@ -601,4 +601,17 @@
         <property name="type" direction="asc"/>
         <property name="updated_time" direction="asc"/>
     </datastore-index>
+    
+    <datastore-index kind="Affiliate" ancestor="false" source="manual">
+        <property name="relatedUserId" direction="asc"/>
+        <property name="createdTime" direction="asc"/>
+        <property name="amount" direction="asc"/>
+        <property name="commission" direction="asc"/>
+    </datastore-index>
+    
+    <datastore-index kind="Affiliate" ancestor="false" source="manual">
+        <property name="relatedUserId" direction="asc"/>
+        <property name="amount" direction="asc"/>
+        <property name="commission" direction="asc"/>
+    </datastore-index>
 </datastore-indexes>

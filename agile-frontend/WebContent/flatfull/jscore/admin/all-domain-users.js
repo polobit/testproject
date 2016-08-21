@@ -267,7 +267,7 @@ function initializeAdminpanelListner(el){
 		$("#admin-panel-listners .check_affiliate").off("click");
 		$("#admin-panel-listners").on("click", ".check_affiliate", function(e){
 			e.preventDefault();
-			var domain = $(this).attr(domain);
+			var domain = $(this).attr("domain");
 			var userId = $(this).attr("userId");
 			$.ajax({
 					url : 'core/api/admin_panel/affiliateDetails?d='+domain+'&id='+userId,

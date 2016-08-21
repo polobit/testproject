@@ -55,7 +55,7 @@ public class AffiliateUtil {
 		}
 		if(userId != null)
 			map.put("relatedUserId", userId);
-		return dao.fetchAll();
+		return dao.fetchAll(max, cursor, map, true, false);
 	}
 	
 	public static String getTotalCommisionAmount(Long userId, Long startTime, Long endTime) throws JSONException{
@@ -89,17 +89,22 @@ public class AffiliateUtil {
 	
 	public static Affiliate createAffiliate(int amount){
 		AccountPrefs accPrefs = AccountPrefsUtil.getAccountPrefs();
-		if(accPrefs.affiliatedBy == null)
+		if(accPrefs.affiliatedBy == null){
+			System.out.println("No affiliated by id found. Returning null");
 			return null;
+		}
 		DomainUser user = DomainUserUtil.getCurrentDomainUser();
 		Subscription subscription = SubscriptionUtil.getSubscription();
 		String oldNamespace = NamespaceManager.get();
 		DomainUser affiliatedBy = DomainUserUtil.getDomainUser(accPrefs.affiliatedBy);
-		if(affiliatedBy == null)
+		if(affiliatedBy == null){
+			System.out.println("Domain user with id "+accPrefs.affiliatedBy+" not found. Returning null");
 			return null;
+		}
+		System.out.println("Setting namespace to "+affiliatedBy.domain);
 		NamespaceManager.set(affiliatedBy.domain);
 		try{
-			if(dao.ofy().query(Affiliate.class).filter("domain", user.domain).count() != 0){
+			if(dao.ofy().query(Affiliate.class).filter("domain", user.domain).count() == 0){
 				Affiliate affiliate = new Affiliate();
 				affiliate.setDomain(user.domain);
 				affiliate.setEmail(user.email);

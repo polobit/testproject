@@ -11,8 +11,8 @@
 <td class="text-muted"><i class="fa fa-clock-o m-r-xs"></i><time class="last-login-time" datetime="{{epochToDate info_json_string "logged_in_time"}}" style="border-bottom:dotted 1px #999">{{epochToDate info_json_string "logged_in_time"}}</time></td>
 <td ><a href="/#change-password-admin/{{id}}"  >{{agile_lng_translate 'settings' 'reset-password'}}</a></td>
 <td><a href="#" data="{{id}}" class="delete_user btn-mini btn-danger">{{agile_lng_translate 'contact-details' 'delete'}}</a></td>
-<td>{{#if is_account_owner}}<i class="agilecrm-profile-dropdown"></i>{{/if}}</td>
  <td><a href="#" class="text-info check_affiliate" domain="{{domain}}" userId="{{id}}">add</a></td>
+ <td>{{#if is_account_owner}}<i class="agilecrm-profile-dropdown"></i>{{/if}}</td>
 
 </script>
 <script id="all-domain-collection-template" type="text/html">
