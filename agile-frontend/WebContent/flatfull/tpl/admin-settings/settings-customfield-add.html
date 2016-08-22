@@ -10,6 +10,23 @@
     <div class="modal-body">
         <form id="textModalForm" name="textModalForm" method="post" class="form-horizontal">
             <fieldset>
+<div class="row">            
+  <div>          
+    <label class="control-label pull-left m-r-sm">{{agile_lng_translate 'contact-details' 'contacts'}} </label>
+    <label class="i-checks i-checks-sm">
+    <input name="contacts" type="checkbox" id="contacts" /><i></i></label>
+  </div>
+  <div>
+    <label class="control-label pull-left m-r-sm">{{agile_lng_translate 'contact-details' 'companies'}} </label>
+    <label class="i-checks i-checks-sm"> 
+         <input name="companies" type="checkbox" id="companies" /><i></i> </label>
+   </div>  
+   <div>    
+    <label class="control-label pull-left m-r-sm">{{agile_lng_translate 'contact-details' 'deals'}} </label>
+    <label class="i-checks i-checks-sm"> 
+         <input name="deals" type="checkbox" id="deals" /><i></i> </label>
+   </div>      
+</div>
                 <div class="control-group form-group">
                     <label class="control-label col-sm-3">{{agile_lng_translate 'contacts-view' 'label'}} <span class="field_req">*</span></label> 
                     <div class="controls col-sm-7">
