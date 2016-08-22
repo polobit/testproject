@@ -1446,58 +1446,6 @@ public class JSAPI
 	}
     }
 
-    @Path("formsubmit")
-    @GET
-    public void formSubmitTrigger(@QueryParam("formname") String formName, @QueryParam("contactid") String contactId,
-	    @QueryParam("formdata") String formData, @QueryParam("new") Boolean newContact,@QueryParam("checkId") String idCheck)
-    {
-	try
-	{
-	    Form form=null;
-	    JSONObject formFields = new JSONObject(formData);
-	    if(idCheck.equalsIgnoreCase("true"))
-		form=FormUtil.getFormById(Long.parseLong(formFields.get("_agile_form_id").toString()));
-	    else
-		form = FormUtil.getFormByName(formName);
-	    
-	    if (contactId == null || form == null)
-		return;
-
-	    Contact contact = ContactUtil.getContact(Long.parseLong(contactId));
-	    contact.formId = form.id;
-	    contact.save();
-
-	    /*@Priyanka
-	     * Send a mail to owner when new contact created and when it clicked 
-	     * on submit button
-	     * 
-	     * */
-	       if(form.emailNotification && newContact)
-	       FormUtil.sendMailToContactOwner(contact,formName);
-	    
-	    List<Trigger> triggers = TriggerUtil.getAllTriggers();
-	    for (Trigger trigger : triggers)
-	    {
-		if (StringUtils.equals(trigger.type.toString(), "FORM_SUBMIT")
-			&& (newContact || !TriggerUtil.getTriggerRunStatus(trigger)))
-		{
-		    System.out.println("trigger condition, event match ...");
-		    if (StringUtils.equals(trigger.trigger_form_event, form.id.toString()))
-		    {
-			System.out.println("Assigning campaign to contact ...");
-			WorkflowSubscribeUtil.subscribeDeferred(contact, trigger.campaign_id,
-				new JSONObject().put("form", formFields));
-		    }
-		}
-	    }
-	}
-	catch (Exception e)
-	{
-	    System.out.println("Error is " + e.getMessage());
-	    return;
-	}
-    }
-
     @Path("/case")
     @GET
     @Produces("application / x-javascript;charset=UTF-8;")
