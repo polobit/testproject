@@ -745,6 +745,25 @@ function initializeSubscriptionListeners()
 			return;
 		$("#total_credits_cost").html(quantity*4);
 	});
+
+	$("#manage_auto_recharge").off("click");
+	$("#email-content").on("click","#manage_auto_recharge", function(e){
+		e.preventDefault();
+		var data = {};
+		if(_billing_restriction.nextRechargeCount != undefined)
+			data.nextRechargeCount = _billing_restriction.nextRechargeCount;
+		if(_billing_restriction.autoRenewalPoint != undefined)
+			data.autoRenewalPoint = _billing_restriction.autoRenewalPoint;
+		if(_billing_restriction.isAutoRenewalEnabled != undefined)
+			data.isAutoRenewalEnabled = _billing_restriction.isAutoRenewalEnabled;
+		getTemplate("auto-recharge",data , undefined, function(template_ui){
+			if(!template_ui)
+				  return;
+			$("#auto-recharge-modal").html($(template_ui)).modal("show");
+		}, null);
+			
+	});
+
 }
 
 function is_new_signup_payment()
@@ -831,5 +850,48 @@ $(function(){
 		});
 	});
 
-});
+	//auto recharge related events
+	$("#auto-recharge-modal #save_auto_recharge").off("click");
+	$("#auto-recharge-modal").on("click","#save_auto_recharge", function(e){
+		e.preventDefault();
+		var $form = $("#auto-recharge-form");
+		if(!isValidForm($form))
+			return;
+		var json = serializeForm("auto-recharge-form");
+		json.isAutoRenewalEnabled = true;
+		disable_save_button($(this));
+		var $that = $(this);
+		$.post("core/api/subscription/auto_recharge", json, function(data){
+			$that.closest(".modal").modal("hide");
+			_billing_restriction.isAutoRenewalEnabled = json.isAutoRenewalEnabled;
+			_billing_restriction.nextRechargeCount = json.nextRechargeCount;
+			_billing_restriction.autoRenewalPoint = json.autoRenewalPoint;
+			$that.html("save").removeAttr("disabled");
+			showNotyPopUp("information","Auto Recharge Enabled", "top");
+		}).fail(function(data) {
+			$that.closest(".modal").modal("hide");
+		    showNotyPopUp("warning", data.responseText, "top");
+  		});
+			
+	});
 
+	$("#auto-recharge-modal #disable_auto_recharge").off("click");
+	$("#auto-recharge-modal").on("click","#disable_auto_recharge", function(e){
+		e.preventDefault();
+		var json = {};
+		json.isAutoRenewalEnabled = false;
+		var $that = $(this);
+		$.post("core/api/subscription/auto_recharge", json, function(data){
+			$that.closest(".modal").modal("hide");
+			_billing_restriction.isAutoRenewalEnabled = json.isAutoRenewalEnabled;
+			_billing_restriction.nextRechargeCount = undefined;
+			_billing_restriction.autoRenewalPoint = undefined;
+			showNotyPopUp("information","Auto Recharge Disabled", "top");
+		}).fail(function(data) {
+			$that.closest(".modal").modal("hide");
+		    showNotyPopUp("warning", data.responseText, "top");
+  		});
+			
+	});
+
+});

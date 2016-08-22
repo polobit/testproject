@@ -728,6 +728,8 @@ function getMaxEmailsLimit()
 }
 function canSendEmails(emails_to_send)
 {
+	if(_billing_restriction.isAutoRenewalEnabled)
+		return true;
 	var pending = getPendingEmails() + getEmailCreditsCount();
 	if (pending >= emails_to_send)
 		return true;

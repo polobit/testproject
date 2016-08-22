@@ -7627,3 +7627,11 @@ Handlebars.registerHelper('is_Particular_Domain', function(options)
 		else
 			return options.inverse(this);
 });
+
+Handlebars.registerHelper('isEmailCreditsExists', function(options)
+	{
+		var credits = _billing_restriction.email_credits_count;
+		if (credits != undefined && credits > 0)
+			return options.fn(this);
+		return options.inverse(this);
+	});

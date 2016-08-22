@@ -158,6 +158,7 @@ public class Subscription {
 
 	@NotSaved
 	public BillingRestriction cachedData;
+	
 
 	private static ObjectifyGenericDao<Subscription> dao = new ObjectifyGenericDao<Subscription>(
 			Subscription.class);
@@ -448,7 +449,14 @@ public class Subscription {
 	 * @throws Exception
 	 */
 	public void purchaseEmailCredits(Integer quantity) throws Exception {
-		getAgileBilling().purchaseEmailCredits(billing_data, quantity);
+		String invoiceItemId = getAgileBilling().purchaseEmailCredits(billing_data, quantity);
+		BillingRestriction restriction = BillingRestrictionUtil.getBillingRestrictionFromDB();
+		restriction.incrementEmailCreditsCount(quantity*1000);
+		System.out.println("last_credit_id:: "+invoiceItemId+" Credits count:: "+restriction.email_credits_count+" at:: "+System.currentTimeMillis());
+		restriction.last_credit_id = invoiceItemId;
+		restriction.lastAutoRechargeTime = System.currentTimeMillis();
+		restriction.save();
+		System.out.println("Credits purchased successfully ::"+System.currentTimeMillis());
 	}
 	
 	/**
@@ -507,6 +515,7 @@ public class Subscription {
 
 			if (billing_data_json_string != null)
 				billing_data = new JSONObject(billing_data_json_string);
+			
 
 		} catch (Exception e) {
 			e.printStackTrace();

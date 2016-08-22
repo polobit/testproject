@@ -4560,3 +4560,10 @@ div.list-tasks.panel-body:hover
 #company-contacts ul li {
     padding-right: 0px!important;
 }
+
+#purchase_credits, #manage_auto_recharge{
+	background-color: #f6f6f6;
+    padding: 5px 10px;
+    border-radius: 3px;
+}
+
