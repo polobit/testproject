@@ -7567,3 +7567,22 @@ Handlebars.registerHelper('is_Particular_Domain', function(options)
 		else
 			return options.inverse(this);
 });
+
+Handlebars.registerHelper('can_api_js_serve_from_cloud', function(options)
+{
+	var plan = USER_BILLING_PREFS.plan.plan_type;
+
+	var allowed_plans = ["ENTERPRISE", "REGULAR"];
+	var isOK = false;
+	for (var i = 0; i < allowed_plans.length; i++) {
+		if(plan && plan.indexOf(allowed_plans[i]) != -1){
+			isOK = true;
+			break;
+		}
+	};
+
+	if(isOK)
+		return options.fn(this);
+	else
+		return options.inverse(this);
+});

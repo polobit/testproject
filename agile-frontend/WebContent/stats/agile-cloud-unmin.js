@@ -26,10 +26,7 @@ function _agile_load_cloud_file() {
 			nav = parseFloat(nav[1]);
 
 		// Choose live/test environment
-		var script_file_url = "https://doxhze3l6s7v9.cloudfront.net/stats/min/app/1/agile-min.js";
-		// For testing ENV
-		if(_agile.from_url)
-			 script_file_url = _agile.from_url;
+		var script_file_url = "https://doxhze3l6s7v9.cloudfront.net/stats/min/app/v2/agile-min.js";
 
 		// Create script element
 		var _agile_script = document.createElement('script');
