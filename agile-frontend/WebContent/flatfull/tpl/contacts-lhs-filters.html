@@ -72,17 +72,30 @@
 		<option value="BETWEEN">{{agile_lng_translate 'contacts-view' 'is-between'}}</option>
 		<option value="LAST">{{agile_lng_translate 'contacts-view' 'in-last'}}</option>
 		<option value="NEXT">{{agile_lng_translate 'contacts-view' 'in-next'}}</option>
+		{{!--Options only for Contact Fields--}}
+		{{#if_equals "CONTACT" this.scope}}
+			<option value="ON_AFTER">{{agile_lng_translate 'contacts-view' 'on-after'}}</option>
+			<option value="ON_BEFORE">{{agile_lng_translate 'contacts-view' 'on-before'}}</option>
+		{{/if_equals}}
 		<option value="DEFINED">{{agile_lng_translate 'contacts-view' 'is-defined'}}</option>
 		<option value="NOT_DEFINED">{{agile_lng_translate 'contacts-view' 'is-not-defined'}}</option>
+		{{#if_equals "CONTACT" this.scope}}
+		<optgroup label="{{agile_lng_translate 'common-words' 'relative-cap'}}">
+				<option value="BY_MONTH_ONLY">{{agile_lng_translate "contacts-view" "on"}}</option>
+				<option value="IS_AFTER_IN_DAYS">{{agile_lng_translate "contacts-view" "on-after"}}</option>
+				<option value="IS_BEFORE_IN_DAYS">{{agile_lng_translate "contacts-view" "on-before"}}</option>
+		</optgroup>
+		{{/if_equals}}
 	</select>
+
 	<div class="AFTER BEFORE ON condition_container m-t-xs">
 		<span id="RHS">
 			<input type="text" placeholder="{{dateFormat}}" prev-val="" class="date required form-control text-xs" style="height:30px;">
 		</span>
 	</div>
-	<div class="LAST NEXT condition_container hide m-t-xs">
+	<div class="LAST NEXT ON_AFTER ON_BEFORE condition_container hide m-t-xs">
 		<span id="RHS">
-			<input type="number" placeholder="{{agile_lng_translate 'contacts-view' 'number-of-days'}}" prev-val="" class="form-control required text-xs" style="height:30px;">
+			<input type="number" min="0" placeholder="{{agile_lng_translate 'contacts-view' 'number-of-days'}}" prev-val="" class="form-control required text-xs" style="height:30px;">
 		</span>
 	</div>
 	<div class="BETWEEN condition_container hide m-t-xs">
@@ -92,6 +105,31 @@
 		</span>
 		<span id="RHS_NEW">
 			<input type="text" placeholder="{{dateFormat}}" prev-val="" class="date required form-control text-xs" style="height:30px;">
+		</span>
+	</div>
+	<div class="IS_AFTER_IN_DAYS IS_BEFORE_IN_DAYS condition_container hide m-t-xs">
+		<span id="RHS">
+			<input type="number" min="0" class="input required form-control"
+													placeholder="Number of days"/>
+		</span>
+	</div>
+	<div class="BY_MONTH_ONLY condition_container hide m-t-xs">
+		<span id="RHS">
+		<select class="required form-control companies_input" name="temp1" prev-val="" >
+			<option class="default-select" value="">Select...</option>
+			<option value="01" class="BY_MONTH_ONLY">{{agile_lng_translate 'months' 'January'}}</option>
+			<option value="02" class="BY_MONTH_ONLY">{{agile_lng_translate 'months' 'February'}}</option>
+			<option value="03" class="BY_MONTH_ONLY">{{agile_lng_translate 'months' 'March'}}</option>
+			<option value="04" class="BY_MONTH_ONLY">{{agile_lng_translate 'months' 'April'}}</option>
+			<option value="05" class="BY_MONTH_ONLY">{{agile_lng_translate 'months' 'May'}}</option>
+			<option value="06" class="BY_MONTH_ONLY">{{agile_lng_translate 'months' 'June'}}</option>
+			<option value="07" class="BY_MONTH_ONLY">{{agile_lng_translate 'months' 'July'}}</option>
+			<option value="08" class="BY_MONTH_ONLY">{{agile_lng_translate 'months' 'August'}}</option>
+			<option value="09" class="BY_MONTH_ONLY">{{agile_lng_translate 'months' 'September'}}</option>
+			<option value="10" class="BY_MONTH_ONLY">{{agile_lng_translate 'months' 'October'}}</option>
+			<option value="11" class="BY_MONTH_ONLY">{{agile_lng_translate 'months' 'November'}}</option>
+			<option value="12" class="BY_MONTH_ONLY">{{agile_lng_translate 'months' 'December'}}</option>
+		</select>
 		</span>
 	</div>
 	<div class="m-t-xs"><a class="hide pull-right clear-filter-condition-lhs" style="opacity: 0.9;"><i class="icon-trash text-l-none-hover c-p text-muted text-sm" id="removeBtn"></i></a></div>
@@ -347,7 +385,7 @@
 					<option value="NOT_ADDED">{{agile_lng_translate 'contacts-view' 'never-added'}}</option>
 					<option value="ACTIVE">{{agile_lng_translate 'contacts-view' 'active'}}</option>
 					<option value="DONE">{{agile_lng_translate 'contacts-view' 'completed'}}</option>
-					<option value="REMOVED">{{agile_lng_translate 'contacts-view' 'removed'}}</option>
+					<option value="REMOVED">{{agile_lng_translate 'subscriber_type' 'removed'}}</option>
 					<option value="BOUNCED">{{agile_lng_translate 'contacts-view' 'bounced'}}</option>
 					<option value="UNSUBSCRIBED">{{agile_lng_translate 'contacts-view' 'unsubscribed'}}</option>
 					<option value="SPAM">{{agile_lng_translate 'contacts-view' 'spam-reported'}}</option>
@@ -369,7 +407,7 @@
 					<option value="NOT_ADDED">{{agile_lng_translate 'contacts-view' 'never-added'}}</option>
 					<option value="ACTIVE">{{agile_lng_translate 'contacts-view' 'active'}}</option>
 					<option value="DONE">{{agile_lng_translate 'contacts-view' 'completed'}}</option>
-					<option value="REMOVED">{{agile_lng_translate 'contacts-view' 'removed'}}</option>
+					<option value="REMOVED">{{agile_lng_translate 'subscriber_type' 'removed'}}</option>
 					<option value="HARDBOUNCED">{{agile_lng_translate 'contacts-view' 'hard-bounced'}}</option>
 					<option value="SOFTBOUNCED">{{agile_lng_translate 'contacts-view' 'soft-bounced'}}</option>
 					<option value="UNSUBSCRIBED">{{agile_lng_translate 'contacts-view' 'unsubscribed'}}</option>

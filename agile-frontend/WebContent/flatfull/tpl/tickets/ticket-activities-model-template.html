@@ -1,7 +1,6 @@
 <script id="ticket-activities-model-template" type="text/html">
-
 <div class="p-t-xxs p-b-xxs">
-	<span class="pull-left thumb-sm">
+	<span class="pull-left thumb-small m-t-xs">
 
 		<img class="r-5x" alt="..." src="{{#if user.name}}{{user.ownerPic}}{{else}}flatfull/images/flatfull/user-default.jpg{{/if}}"/>
 		<!-- {{#is_ticket_requester_activity activity_type}}
@@ -14,9 +13,8 @@
 
 	</span>
 
-	<div class="m-l-xl p-l-sm">
-	 
-	  <span>
+	<div class="m-l-xl">
+	 <div class="pull-left w-full l-h-xs">
 
 	  			{{#is_ticket_requester_activity activity_type}}
 
@@ -40,9 +38,9 @@
 		              		{{epochToHumanDate "ddd mmm dd yyyy HH:MM" time}}
 		              	</time>
    				</span>
-	  </span>
+	  </div>
 
-	 <div class="block m-t-xxs word-break-full word-break-all">
+	 <div class="pull-left word-break-full word-break-all">
 
 	  		{{#if_equals activity_type 'TICKET_CREATED'}}
 	  			{{#if custom2}}
@@ -151,6 +149,7 @@
 	      		</span>
 	        {{/if_equals}}
 	    </div>
+	    <div class="clearfix"></div>
 	</div>
 </div>
 

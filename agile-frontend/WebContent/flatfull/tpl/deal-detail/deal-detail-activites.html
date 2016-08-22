@@ -47,11 +47,11 @@
 		<div class="clearfix"></div>
 	<div class="word-break-all">
 {{#if_equals "DEAL_ADD" activity_type}}
-        <div>{{agile_lng_translate 'Deal-detail' 'deal-created-for'}} {{custom1}} ({{currencySymbol}}{{numberWithCommas entityObject.expected_value}}, {{entityObject.probability}}%). </div>
+        <div>{{agile_lng_translate 'Deal-detail' 'deal-created-for'}} {{custom1}} ({{currencySymbol}}{{numberWithCommas entityObject.expected_value}}, {{entityObject.probability}}%) </div>
      {{/if_equals}}
 
 {{#if_equals "DEAL_EDIT" activity_type}}
-        <div>{{displayActivityFieldText custom3}}{{agile_lng_translate 'contacts-view' 'modified'}} .</div>
+        <div>{{displayActivityFieldText custom3}} {{agile_lng_translate 'contacts-view' 'modified'}}</div>
      {{/if_equals}}
 
 {{#if_equals "DEAL_CLOSE" activity_type}}

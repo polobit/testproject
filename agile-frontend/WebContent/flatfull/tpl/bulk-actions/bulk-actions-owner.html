@@ -19,7 +19,11 @@
 				<div class="row">
 				<div class="col-sm-offset-2 col-sm-10">
                 <div class="form-actions">          
+					 {{#if company_route}}   
+                    <a href="#{{company_route}}" class="btn btn-default btn-sm">{{agile_lng_translate 'contact-details' 'close'}}</a> 
+            {{else}}
 					<a href="#contacts" class="btn btn-sm btn-default">{{agile_lng_translate 'contact-details' 'close'}}</a>
+                {{/if}}
                     <a href="#" type="submit" id="changeOwnerToBulk" class="btn btn-sm btn-primary">{{agile_lng_translate 'contact-details' 'add'}}</a> 
                     <span class="save-status"></span>
                 </div>

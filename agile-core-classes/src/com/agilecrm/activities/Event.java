@@ -501,7 +501,10 @@ public class Event extends Cursor
     @XmlElement(name = "deal_ids")
     public List<String> getDeal_ids()
     {
-	deal_ids = new ArrayList<String>();
+    if(deal_ids == null || (deal_ids != null && deal_ids.size() == 0))
+    {
+    	deal_ids = new ArrayList<String>();
+    }
 
 	for (Key<Opportunity> dealKey : related_deals)
 	    deal_ids.add(String.valueOf(dealKey.getId()));

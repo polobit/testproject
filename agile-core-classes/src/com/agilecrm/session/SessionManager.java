@@ -52,6 +52,17 @@ public class SessionManager
     {
 	return threadLocal.get();
     }
+    
+    /**
+     * Gets the {@link UserInfo} from the current {@link ThreadLocal} object
+     * 
+     * @return
+     */
+    public static UserInfo getFromRequest(HttpServletRequest request)
+    {
+    	 return (UserInfo) request.getSession().getAttribute(
+    				AUTH_SESSION_COOKIE_NAME);
+    }
 
     /**
      * Sets UserInfo from request in to {@link SessionManager}'s

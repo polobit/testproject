@@ -283,8 +283,7 @@ public class QuickBookContactWrapperImpl extends ContactWrapper
 
 		    if (billingAddrss.has("Country"))
 		    {
-		    String qCountry = billingAddrss.getString("Country");
-		    CountryUtil.setCountryCode(address, null, qCountry);
+		    address.put("country", billingAddrss.getString("Country"));
 		    }
 		    if (billingAddrss.has("CountrySubDivisionCode"))
 		    {

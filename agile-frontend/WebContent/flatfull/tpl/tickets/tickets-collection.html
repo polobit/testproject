@@ -1,8 +1,11 @@
 <script id="ticket-collection-template" type="text/html">
+
 	{{#unless this.length}}
 		<div class="tickets-div">
 			<div class="wrapper p-n">
 	    		<div class="panel panel-default no-radius no-shadow" style="border-left: 0;border-right: 0;">
+	    		{{#is_mobile}}		
+					{{else}}
 					<div class="panel-heading no-shadow" style="border-bottom: 0;">
 				      	<label class="i-checks i-checks-sm" style="margin-left: 3px;">
 					      <input class="ticket-checkbox select-all" type="checkbox" disabled><i></i>
@@ -27,6 +30,8 @@
 					    	</button>
 				        </div>
 				    </div>
+				    {{/is_mobile}}		
+
 				    <div class="form-inline no-footer">
 			    		<div class="row m-n">
 			    			<div class="col-sm-12 p-n">
@@ -71,6 +76,8 @@
 		<div class="tickets-div">
 			<div class="wrapper p-n">
 	    		<div class="panel panel-default no-radius no-shadow" style="border-left: 0;border-right: 0;">
+	    		{{#is_mobile}}		
+					{{else}}
 					<div class="panel-heading no-shadow" style="border-bottom: 0;">
 				      	<label class="i-checks i-checks-sm select-all" style="margin-left: 1px;vertical-align: text-top;">
 					      <input class="ticket-checkbox select-all" type="checkbox"><i></i>
@@ -107,10 +114,11 @@
 					    	</button>
 				        </div>
 				    </div>
+				    {{/is_mobile}}
 				    <div class="form-inline no-footer">
 			    		<div class="row m-n">
 			    			<div id="tickets-bulk-select" class="text-center"></div>
-			    			<div class="col-sm-12 p-n ticket-collection-container">
+			    			<div class="col-sm-12 p-n ticket-collection-container {{#is_mobile}}ticket-b-t{{/is_mobile}}">
 			    				<table class="table table-striped onlySorting m-b-none t-l-fix">
 									<tbody id="ticket-model-list" route="ticket/" class="tickets-collection"></tbody>
 								</table>
@@ -385,6 +393,8 @@
 <script  id="ticket-collection-loader-template" type="text/html">
 <div class="tickets-div">
 	<div class="wrapper p-n">
+	{{#is_mobile}}		
+		{{else}}
 		<div class="panel panel-default no-radius no-shadow" style="border-bottom: 0;border-left: 0;">
 			<div class="panel-heading">
 				<label class="i-checks i-checks-sm" style="margin-left: 1px;vertical-align: text-top;">
@@ -421,6 +431,7 @@
 			    	</button>
 		        </div>
 		    </div>
+		     {{/is_mobile}}
 		    <div class="form-inline no-footer">
 	    		<div class="row m-n">
 	    			<div class="col-sm-12 p-t">

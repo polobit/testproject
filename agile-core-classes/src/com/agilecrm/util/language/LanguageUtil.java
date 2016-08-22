@@ -1,5 +1,7 @@
 package com.agilecrm.util.language;
 
+import java.util.ArrayList;
+
 import javax.servlet.ServletContext;
 
 import org.apache.commons.lang.StringUtils;
@@ -49,7 +51,13 @@ public class LanguageUtil {
 
 		return null;
 	}
-
+	
+	/**
+	 * 
+	 * @param localeJSON
+	 * @param key
+	 * @return
+	 */
 	public static String getLocaleJSONValue(JSONObject localeJSON, String key) {
 
 		if (localeJSON == null || !localeJSON.has(key))
@@ -61,6 +69,23 @@ public class LanguageUtil {
 		}
 
 		return "";
+	}
+
+	/**
+	 * 
+	 * @param language
+	 * @return
+	 */
+	public static boolean isLanguageSupportByAgile(String language) {
+
+		ArrayList<String> supporttedLangauges = new ArrayList<String>();
+		supporttedLangauges.add("en");
+		supporttedLangauges.add("es");
+
+		if (StringUtils.isBlank(language) || !supporttedLangauges.contains(language))
+			return false;
+
+		return true;
 	}
 
 }

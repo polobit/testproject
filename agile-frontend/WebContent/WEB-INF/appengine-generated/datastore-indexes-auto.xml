@@ -596,4 +596,9 @@
         <property name="close_date" direction="asc"/>
         <property name="expected_value" direction="asc"/>
     </datastore-index>
+    
+     <datastore-index kind="Contact" ancestor="false" source="auto">
+        <property name="type" direction="asc"/>
+        <property name="updated_time" direction="asc"/>
+    </datastore-index>
 </datastore-indexes>

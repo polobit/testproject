@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<%@page import="com.agilecrm.util.FileStreamUtil"%>
 <%@page import="org.json.JSONObject"%>
 <%@page import="com.agilecrm.util.language.LanguageUtil"%>
 <%@page import="com.agilecrm.user.DomainUser.ROLE"%>
@@ -206,6 +207,7 @@ content="<%=domainUser.getInfo(DomainUser.LAST_LOGGED_IN_TIME)%>" />
 .leftcol-menu-expanded{display: block;}
 .app-aside-folded .leftcol-menu-folded {display: block;}
 .app-aside-folded .leftcol-menu-expanded {display: none;}
+.app-aside-dock .leftcol-menu-expanded {display: none!important;}
 .search label { position:absolute; margin:5px 0 0 5px; }
 .search input[type="text"]{
     text-indent:1px;
@@ -549,18 +551,30 @@ if(currentUserPrefs.menuPosition.equals("top")){
     <%
           }
     %>
+     <%
+      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.VISITORS)){
+    %>
    <li id="segmentationmenu">
     <a  href="#visitors">
        <i class="icon-eye"></i>
       <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-visitors") %></span> 
     </a>
   </li>
+   <%
+          }
+    %>
+     <%
+      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.LANDINGPAGES)){
+    %>
   <li id="landing-pages-menu">
     <a href="#landing-pages">
       <i class="fa fa-file-code-o"></i>
       <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-landing-pages") %></span>
     </a>
   </li>
+  <%
+          }
+    %>
 
   <%
   if(domainUser.is_admin){
@@ -901,17 +915,29 @@ if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Produ
     production = true;
    
 }
-// String tplFile = "tpl/min/precompiled/locales/" + _LANGUAGE + "/" + _LANGUAGE + ".html";
-String tplFile = _LANGUAGE + ".html";
+String tplFile = "tpl/min/precompiled/locales/" + _LANGUAGE + "/" + _LANGUAGE + ".html";
+// String tplFile = _LANGUAGE + ".html";
+try{
+  if(HANDLEBARS_PRECOMPILATION)
+    out.println(FileStreamUtil.readResource(application.getRealPath("/") + "/" + tplFile));  
+}catch(Exception e){
+	e.printStackTrace();
+}
 %>
 
-  <!-- Include bootstrap modal divs-->
- <%@ include file="flatfull/modals.html"%>
+<!-- Including Template page -->
+
+<!-- Include bootstrap modal divs-->
+<%@ include file="flatfull/modals.html"%>
 
 </div>
 
+
+
 <!-- Including Footer page -->
-<jsp:include page="flatfull/footer.jsp" />
+<jsp:include page="flatfull/footer.jsp" /> 
+
+
 
 <script src='//cdnjs.cloudflare.com/ajax/libs/headjs/1.0.3/head.min.js'></script>
 <script src='<%=FLAT_FULL_PATH%>jscore/handlebars/download-template.js'></script>
@@ -1000,16 +1026,13 @@ var USER_BILLING_PREFS = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(subs
 var _LANGUAGE = "<%=_LANGUAGE%>";
 // var _Agile_Resources_Json = {};
 // head.js("locales/" + _LANGUAGE + "/" + _LANGUAGE + ".json?" + _agile_get_file_hash('lib-all-new-2.js'));
-
 head.load(	"https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js",
 			LIB_PATH + 'final-lib/min/lib-all-new-1.js?_=' + _agile_get_file_hash('lib-all-new-1.js'),
 			"https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.3.0/handlebars.min.js",
 			LIB_PATH + 'final-lib/min/backbone-min.js',
 			LIB_PATH + 'final-lib/min/lib-all-new-2.js?_=' + _agile_get_file_hash('lib-all-new-2.js'),  
 			function(){
-         // Load tpl.html
-        load_tpl_html();
-		    showVideoForRegisteredUser();
+        showVideoForRegisteredUser();
 		});
 
 // head.js({ library  : LIB_PATH + 'final-lib/min/lib-all-min-1.js?_=' + _AGILE_VERSION });
@@ -1078,12 +1101,9 @@ head.load([{'js-core-1': CLOUDFRONT_PATH + 'jscore/min/locales/' + _LANGUAGE  +'
 	});
 
 // head.js({"stats" : '<%=CLOUDFRONT_TEMPLATE_LIB_PATH%>stats/min/agile-min.js' + "?_=" + _AGILE_VERSION});
-	
+
 }); //End of head.ready() function. Check above.
 
-function load_tpl_html(){
-    downloadTemplate('<%=tplFile%>', function(){});
-}
 
 function load_globalize()
 {

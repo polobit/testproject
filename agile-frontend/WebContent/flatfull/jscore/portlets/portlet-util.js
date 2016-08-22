@@ -2714,5 +2714,5 @@ function getTranslatedPortletName(name){
 	};
 
 	name = name.trim();
-	return (name_json[name] ? name_json[name] : name);
+	return (name_json[name] ? name_json[name] : ucfirst(name));
 }

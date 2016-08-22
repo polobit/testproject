@@ -73,8 +73,9 @@ public class ContactDocument extends com.agilecrm.search.document.Document imple
 	public void add(Object entity)
 	{
 		Contact contact = (Contact) entity;
-		Builder doc = buildDocument(contact);
 		
+		Builder doc = buildDocument(contact);
+		System.out.println(" after contact document buildDocument...." );
 		// Adds document to Index
 		addToIndex(doc);   
 			
@@ -100,7 +101,6 @@ public class ContactDocument extends com.agilecrm.search.document.Document imple
 			
 			
 			
-			doc.setId(contact.id.toString()).build();
 			
 			//schema version for ignoring stale data.
 			doc.addField(Field.newBuilder().setName("schema_version").setNumber(1.0));
@@ -205,20 +205,33 @@ public class ContactDocument extends com.agilecrm.search.document.Document imple
 
 			DomainUser user = contact.getContactOwner();
 
+			System.out.println("after add owner to document");
 			// Add owner to document
 			if (user != null)
 				doc.addField(Field.newBuilder().setName("owner_id").setText(String.valueOf(user.id)));
 			
+			System.out.println("before campaign status");
 			if(contact.campaignStatus != null && !contact.campaignStatus.isEmpty())
 			    doc.addField(Field.newBuilder().setName("campaign_status").setText(SearchUtil.getCampaignStatus(contact)));
+			
+			System.out.println("after campaign status");
 			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			System.out.println("error in contact doc:"+ e.getStackTrace());
+			System.err.println("Exception occured in buildDocument..." + e.getMessage());
 			
-			ExceptionUtil.catchException(e);
+			//ExceptionUtil.catchException(e);
 		}
+		
+		try{
+		System.out.println("building textsearch for contact:" + contact.id.toString());
+		doc.setId(contact.id.toString()).build();
+		}catch(Exception e)
+		{
+			System.err.println("Exception occured in build id..." + e.getMessage());
+		}
+		System.out.println("return doc");
 		return doc;
 	}
 	
@@ -262,11 +275,14 @@ public class ContactDocument extends com.agilecrm.search.document.Document imple
 		// Adds document to index
 		try
 		{
+			System.out.println("before addToIndex...." );
 			index.put(docs);
+			System.out.println("after addToIndex...." );
 		}
 		catch (Exception e)
 		{
-			System.out.println(e.getMessage());
+			//System.out.println(e.getMessage());
+			 System.err.println("Exception occured in addToIndex..." + e.getMessage());
 			e.printStackTrace();
 		}
 
@@ -283,11 +299,13 @@ public class ContactDocument extends com.agilecrm.search.document.Document imple
 		// Adds document to index
 		try
 		{
+			System.out.println("before addToIndex...." );
 			index.put(doc);
+			System.out.println("after addToIndex...." );
 		}
 		catch (Exception e)
 		{
-			System.out.println(e.getMessage());
+			System.err.println("Exception occured in addToIndex..." + e.getMessage());
 			e.printStackTrace();
 		}
 

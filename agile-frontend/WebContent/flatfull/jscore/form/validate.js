@@ -325,7 +325,7 @@ function isValidForm(form) {
  				
  					return false;
  		}
- 	},_agile_get_translated_val("validation-msgs",'date'));
+ 	},_agile_get_translated_val("validation-msgs",'verify-email'));
 
 	jQuery.validator.addMethod("month_date", function(value, element){
 		if(value=="")
@@ -334,7 +334,7 @@ function isValidForm(form) {
 		return !/Invalid|NaN/.test(getFormattedDateObjectForMonthWithString(value));
 
 			
-	},_agile_get_translated_val("validation-msgs",'verify-email'));
+	}, _agile_get_translated_val("validation-msgs",'date'));
 
 	$(form).validate({
 		ignoreTitle: true,

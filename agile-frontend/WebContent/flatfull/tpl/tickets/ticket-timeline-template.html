@@ -1,4 +1,5 @@
 <script id="ticket-timeline-template" type="text/html">
+
 <div class="ticket-timeline-container bg-light lter m-t-md m-b-md"> 
      
     <div class="m-b b-l m-l-md streamline">
@@ -20,7 +21,7 @@
 
     			<div class="comment">
 
-			        <a class="pull-left thumb-xs m-l-n-md">
+			        <a class="pull-left thumb-small m-l-n">
 
 			        	{{#if_equals activity_type 'TICKET_CREATED'}}
 			        		<img src="{{get_contact_image 24}}" class="r-5x" alt="..." onerror="image_error(this);" _data-name="{{requester_name}}">
@@ -97,7 +98,7 @@
 
 	        	<div class="{{#if_equals activity_type 'TICKET_PRIVATE_NOTES_ADD'}}comment{{else}}activity{{/if_equals}} m-l-lg">
 
-			        <a class="pull-left thumb-xs m-l-n-md">
+			        <a class="pull-left thumb-small m-l-n-md">
 
 		        		<img class="r-5x" src="{{#if domainUser.pic}}{{domainUser.pic}}{{else}}flatfull/images/flatfull/user-default.jpg{{/if}}" data-toggle="tooltip" data-placement="top" data-original-title="{{domainUser.name}}"/>
 			        	

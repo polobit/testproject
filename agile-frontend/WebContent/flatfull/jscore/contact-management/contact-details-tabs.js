@@ -23,8 +23,17 @@ var email_server_type_cookie_name = "email_server_type_" + CURRENT_DOMAIN_USER.i
 function fill_company_related_contacts(companyId, htmlId, context_el)
 {
 	$('#' + htmlId).html(LOADING_HTML);
+	var contactsHeader = new Contacts_And_Companies_Events_View({ data : {}, template : "company-contacts-collection", isNew : true,
+			postRenderCallback : function(el)
+			{
+				setupContactCompanyFields(el);
+				fetchContactCompanyHeadings(function(modelData){
+					getContactofCompanies(modelData,el,companyId);
+		});
+			}
+		});
 
-	var companyContactsView = new Base_Collection_View({ url : 'core/api/contacts/related/' + companyId, templateKey : 'company-contacts',
+	/*var companyContactsView = new Base_Collection_View({ url : 'core/api/contacts/related/' + companyId, templateKey : 'company-contacts',
 		individual_tag_name : 'tr', cursor : true, page_size : 25, sort_collection : false, scroll_target : (context_el ? $("#infinite-scroller-company-details", context_el) : "#infinite-scroller-company-details"), postRenderCallback : function(el)
 		{
 			// var cel = App_Contacts.contactsListView.el;
@@ -32,12 +41,12 @@ function fill_company_related_contacts(companyId, htmlId, context_el)
 			contactListener();
 		} });
 
-	companyContactsView.collection.fetch();
+	companyContactsView.collection.fetch();*/
 
 	if(context_el)
-		$('#' + htmlId, $(context_el)).html(companyContactsView.render().el);
+		$('#' + htmlId, $(context_el)).html(contactsHeader.render().el);
 	else
-		$('#' + htmlId,App_Companies.companyDetailView.el).html(companyContactsView.render().el);
+		$('#' + htmlId,App_Companies.companyDetailView.el).html(contactsHeader.render().el);
 }
 
 var Contact_Details_Tab_Actions = {
@@ -77,7 +86,7 @@ var Contact_Details_Tab_Actions = {
 	  // to remove contact from active campaign.
 	  removeActiveCampaigns : function(e){
 	  	var targetEl = $(e.currentTarget);
-	  	showAlertModal(_agile_get_translated_val('campaigns','sure-remove-active') + " " + $(targetEl).attr("contact_name") +  _agile_get_translated_val('calendar','from') + $(targetEl).attr("campaign_name") + -_agile_get_translated_val('contact-details','campaign') +" ?", "confirm", function(){
+	  	showAlertModal("{{agile_lng_translate 'campaigns' 'sure-remove-active'}} " + $(targetEl).attr("contact_name") + " {{agile_lng_translate 'contacts-view' 'from'}}  " + $(targetEl).attr("campaign_name") + " {{agile_lng_translate 'contact-details' 'campaign'}} ?", "confirm", function(){
 			var $active_campaign = $(targetEl).closest('span#active-campaign');
 			var campaign_id = $active_campaign.attr('data');
 			var contact_id;
@@ -218,12 +227,12 @@ var Contact_Details_Tab_Actions = {
 		  		owner = App_Deal_Details.dealDetailView.model.get("owner").id;
 		  	}
 
-		  	if(!hasScope("MANAGE_DEALS") && (CURRENT_DOMAIN_USER.id != owner) && model.get("entity_type") && model.get("entity_type") == "deal"){
+		  	if(!hasScope("DELETE_DEALS") && model.get("entity_type") && model.get("entity_type") == "deal"){
 		  		$('#deal_delete_privileges_error_modal').html(getTemplate("deal-delete-privileges-error-modal")).modal('show');
 		  		return;
 		  	}
 
-		  	if(model.get("entity_type") && model.get("entity_type") == "note" && Current_Route.indexOf("deal/") == 0 && model.get("domainOwner") && !hasScope("MANAGE_DEALS") && (CURRENT_DOMAIN_USER.id != owner)){
+		  	if(model.get("entity_type") && model.get("entity_type") == "note" && Current_Route.indexOf("deal/") == 0 && model.get("domainOwner") && !hasScope("UPDATE_DEALS") && (CURRENT_DOMAIN_USER.id != owner)){
 		  		$('#deal_update_privileges_error_modal').html(getTemplate("deal-update-privileges-error-modal")).modal('show');
 		  		return;
 		  	}
@@ -927,5 +936,113 @@ function modelDelete(model, targetEl, callback){
 		if(callback && typeof(callback) === "function"){
 			callback();
 		}
+	}, error : function(response){
+		showModalConfirmation("Delete <span class='text-cap'>"+model.get("entity_type")+"</span>", 
+			'<span>'+response.responseText+'</span>', 
+			function (){
+				return;
+			}, 
+			function(){
+				return;
+			},
+			function (){
+				return;
+			},
+			'Cancel'
+		);
+		return;
 	} });
 }
+
+function setupContactCompanyFields(el){
+		// Update el with default dropdown
+		$('#contact-static-fields-group', el).html(getTemplate("contact-custom-fields"));
+
+		get_custom_fields(function(data){
+		
+ 		for(i=0; i<data.length; i++){
+		getTemplate("contact-custom-fields-append", data[i], undefined, function(template_ui){
+     				if(!template_ui)
+    					  return;
+    		$("#custom-fields-group",el).append(template_ui);
+ 		});
+	}
+
+			$.ajax({
+					url : 'core/api/contact-view-prefs/contact-company',
+					type : 'GET',
+					dataType : 'json',
+					
+					success : function(data)
+						{
+							console.log("")
+						var customfields = $("#contact-static-fields");
+						deserializecontactsForm(data.fields_set, customfields);
+						console.log(data);
+					}
+				});
+			
+		
+		});
+
+
+}
+
+function fetchContactCompanyHeadings(callback,url)
+	{
+			var view = new Backbone.Model();
+			view.url = 'core/api/contact-view-prefs/contact-company';
+			view.fetch({ success : function(data)
+			{		
+				App_Companies.contactCompanyViewModel = data.toJSON();
+				if(callback && typeof callback === "function")
+				{
+					return callback(App_Companies.contactCompanyViewModel);
+				}
+
+			} });
+	}
+
+function getContactofCompanies(modelData,el,companyId)
+{
+						var url = 'core/api/contacts/related/' + companyId;
+		var slateKey = getContactPadcontentKey(url);
+		var individual_tag_name = contacts_view_loader.getContactsIndividualTagName();
+		//var postData = {'filterJson': contacts_view_loader.getPostData()};
+		//var sortKey = contacts_view_loader.getContactsSortKey();
+		if(companyId)
+		{
+					App_Companies.contacts_Company_List = new  Contacts_Events_Collection_View({ url : url, modelData : modelData, sort_collection : false,
+					 templateKey : "company-contacts-list-view", individual_tag_name : individual_tag_name,
+				cursor : true, page_size : 25, slateKey : slateKey, request_method : 'GET', postRenderCallback : function(cel, collection)
+				{	
+					if(App_Companies.contacts_Company_List.collection.models.length == 0)	
+					$('.add-contact-extra').parent().hide();
+					if(App_Companies.contacts_Company_List.collection.models.length > 0
+					 && !App_Companies.contacts_Company_List.collection.models[0].get("count")){
+						// Call to get Count 
+						getAndUpdateCollectionCount("contacts-company", el);						
+					}
+					contactListener();
+
+				} });
+			App_Companies.contacts_Company_List.collection.fetch();
+
+			App_Companies.contacts_Company_List.appendItem = function(base_model){
+				contactTableView(base_model,CONTACTS_DATE_FIELDS,this,CONTACTS_CONTACT_TYPE_FIELDS,CONTACTS_COMPANY_TYPE_FIELDS);
+			};
+
+			$("#company-contacts-list-view", el).html(App_Companies.contacts_Company_List.render().el);
+		}
+
+		else
+		{
+			App_Companies.contacts_Company_List.options.modelData = modelData;
+
+			App_Companies.contacts_Company_List.appendItem = function(base_model){
+				contactTableView(base_model,CONTACTS_DATE_FIELDS,this,CONTACTS_CONTACT_TYPE_FIELDS,CONTACTS_COMPANY_TYPE_FIELDS);
+			};
+
+			$("#company-contacts-list-view", el).html(App_Companies.contacts_Company_List.render(true).el);
+		}
+		}

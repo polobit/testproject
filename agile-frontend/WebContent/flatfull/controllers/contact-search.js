@@ -16,10 +16,19 @@ var ContactSearchRouter = Backbone.Router.extend({
 	 */
 	searchResults : function(query)
 	{
+		try{query = query.trim();}catch(e){}
+		
+		 $("#searchForm").find(".dashboard-search-scroll-bar").css({"display":"none"});
+		 currentRoute();
+		 
 		 var search_filters = _agile_get_prefs('agile_search_filter_'+CURRENT_DOMAIN_USER.id);
 		 var search_list_filters = JSON.parse(search_filters);
-		 if(!search_list_filters)
-		 	  return;
+
+		 if(search_list_filters.length == 0){
+		 var $allitems = $("#advanced-search-fields-group a input");
+		 var list = $allitems.not("[value='']").map(function(){return $(this).prop("value");}).get();
+		 	search_list_filters = list;
+		}
 
 		 // Add containers
 		 this.addResultsContainers(search_list_filters);
@@ -42,6 +51,12 @@ var ContactSearchRouter = Backbone.Router.extend({
 							postRenderCallback : function(el, collection)
 							{
 								var module_name = App_Contact_Search.getModuleName(collection.url);
+
+								var collectionURL = collection.url;
+								if(collectionURL && collectionURL.indexOf("type=opportunity") != -1)
+									   initializeDealDetailSearch();
+								else if(collectionURL && collectionURL.indexOf("type=document") != -1)
+									   initializeDocumentSearch(el);
 								
 								// el.find("table").removeClass("showCheckboxes");
 

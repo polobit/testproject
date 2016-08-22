@@ -386,6 +386,11 @@ function saveDocument(form_id, modal_id, saveBtn, isUpdate, json, contact_id)
 					// Removes the contact id from related to contacts
 					json.contact_ids.splice(json.contact_ids.indexOf(contact_id), 1);
 				}
+				if(!modal_id && json && json.deal_ids && App_Deal_Details.dealDetailView && Current_Route == "deal/"+ App_Deal_Details.dealDetailView.model.id)
+				{
+					// Removes the contact id from related to contacts
+					json.deal_ids.splice(json.deal_ids.indexOf(App_Deal_Details.dealDetailView.model.id), 1);
+				}
 				var $ele = saveBtn.parent().find(".save-status");
 				$ele.html("<i style='color:#B94A48;'>"+Handlebars.compile('{{name}}')({name : response.responseText})+"</i>");
 				setTimeout(function()

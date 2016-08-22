@@ -337,7 +337,7 @@ $(function()
 		return new Handlebars.SafeString('https://secure.gravatar.com/avatar/' + Agile_MD5("") + '.jpg?s=' + width + '' + backup_image + data_name);
 
 	});
-
+	
 
 	Handlebars.registerHelper('defaultGravatarurl', function(width)
 	{
@@ -394,6 +394,21 @@ $(function()
 			return;
 
 		return text_gravatar_initials(items, char_count);
+
+	});
+	/**
+	 * task page expand and compress icon 
+	 */
+
+	Handlebars.registerHelper('tasksttausicon', function(heading)
+	{
+
+		var c = getTaskTrackAutoWidthCurrentState('heading');
+		 if(c == 'expand')
+		 
+		 	return 'fa fa-compresss'
+		 
+		 return 'fa fa-expand'
 
 	});
 
@@ -1082,7 +1097,12 @@ $(function()
 
 	Handlebars.registerHelper('iscompactTabel', function(type , options)
 	{
-		var setCompactView = (type != "PERSON") ? _agile_get_prefs("companyTabelView") : _agile_get_prefs("contactTabelView");
+		var setCompactView;
+		if(App_Companies.companyDetailView && App_Companies.companyDetailView.model && 
+			window.location.hash.split("#")[1] == "company/" + App_Companies.companyDetailView.model.get('id'))
+ 		setCompactView=_agile_get_prefs("contactCompanyTabelView");
+ 		else
+		 setCompactView=(type != "PERSON") ? _agile_get_prefs("companyTabelView") : _agile_get_prefs("contactTabelView");
 
 		if(setCompactView)
 				return options.fn(this);
@@ -1684,11 +1704,13 @@ $(function()
 			else if (value.indexOf("CUSTOM_") != -1)
 				value = value.split("CUSTOM_")[1];
 			else if (value == "created_time")
-				value = _agile_get_translated_val("misc-keys", "created_time");
+				value = "Created Date";
 			else if (value == "updated_time")
-				value = _agile_get_translated_val("misc-keys", "updated_time");
+				value = "Updated Date";
 
 			value = value.replace("_", " ");
+			// I18n conversion
+			value = getTableLanguageConvertHeader(value);
 
 			if (--count == 0)
 			{
@@ -3630,13 +3652,13 @@ $(function()
 						{
 
 							if (this[0].count > 9999 && (_agile_get_prefs('contact_filter') || _agile_get_prefs('dynamic_contact_filter')))
-								count_message = "<small> (" + 10000 + "+" + _agile_get_translated_val('other','total') + " ) </small>" + '<span style="vertical-align: text-top; margin-left: -5px">' + '<img border="0" src="'+updateImageS3Path("/img/help.png")+'"' + 'style="height: 10px; vertical-align: middle" rel="popover"' + 'data-placement="bottom" data-title="Lead Score"' + 'data-content="'+_agile_get_translated_val('results','over-count')+'"' + 'id="element" data-trigger="hover">' + '</span>';
+								count_message = "<small> (" + 10000 + "+ " + _agile_get_translated_val('other','total') + " ) </small>" + '<span style="vertical-align: text-top; margin-left: -5px">' + '<img border="0" src="'+updateImageS3Path("/img/help.png")+'"' + 'style="height: 10px; vertical-align: middle" rel="popover"' + 'data-placement="bottom" data-title="Lead Score"' + 'data-content="'+_agile_get_translated_val('results','over-count')+'"' + 'id="element" data-trigger="hover">' + '</span>';
 
 							else
-								count_message = "<small> (" + this[0].count + _agile_get_translated_val('other','total') + " ) </small>";
+								count_message = "<small> (" + this[0].count + " " + _agile_get_translated_val('other','total') + " ) </small>";
 						}
 						else
-							count_message = "<small> (" + this.length + _agile_get_translated_val('other','total')+ " ) </small>";
+							count_message = "<small> (" + this.length + " " + _agile_get_translated_val('other','total')+ " ) </small>";
 
 						return new Handlebars.SafeString(count_message);
 					});
@@ -3647,10 +3669,10 @@ $(function()
 		if (this[0] && this[0].count && (this[0].count != -1))
 		{
 			var count = this[0].count - 1;
-			count_message = "<small> (" + count + _agile_get_translated_val('other','total') +" ) </small>";
+			count_message = "<small> (" + count + " " + _agile_get_translated_val('other','total') +" ) </small>";
 		}
 		else
-			count_message = "<small> (" + this.length + _agile_get_translated_val('other','total') + " ) </small>";
+			count_message = "<small> (" + this.length + " " + _agile_get_translated_val('other','total') + " ) </small>";
 
 		return new Handlebars.SafeString(count_message);
 	});
@@ -4754,6 +4776,7 @@ $(function()
 		return "icon-globe";
 
 	});
+
 
 	/**
 	 * Get activity type without underscore and caps, for deal _details page.
@@ -6457,6 +6480,10 @@ $(function()
 		return new Handlebars.SafeString(city.charAt(0).toUpperCase() + city.slice(1)+", "+country);
 		
 	});
+	Handlebars.registerHelper('getFirstLetter',function(string){
+		return new Handlebars.SafeString(string.charAt(0).toLowerCase());
+		
+	});
 	
 	/**
 	 * Returns a default image url .
@@ -7487,6 +7514,61 @@ Handlebars.registerHelper('if_asc_sork_key', function(value, options)
 	else
 		return options.fn(this); 
 });
+
+/**
+	 * Returns table headings for custom contacts list view
+	 */
+	Handlebars.registerHelper('companyContactsTableHeadings', function(item)
+  	{
+		var el = "", cls = ""; 
+		$.each(App_Companies.contactCompanyViewModel[item], function(index, element)
+  		{
+  			if (element == "basic_info" || element == "image")
+  			{
+					
+					if(_agile_get_prefs("contactCompanyTabelView"))
+					{
+						// if the compact view is present the remove th basic info heading and add the empty heading for the image
+
+						if(element == "basic_info")
+							return ;
+	
+						if(element == "image")
+						{
+							element = "";
+							cls = "";
+						}
+							  
+					}
+					else
+					{
+						if(element == "image")
+						{
+							element = "";
+							cls = "compactcontact";
+						}
+						if(element == "basic_info")
+							element = "Basic Info";
+					}
+			}
+
+		else if (element.indexOf("CUSTOM_") == 0) 
+		{
+  			element = element.split("_")[1];
+  			cls = "text-muted";
+  		}
+  		else 
+  		{
+			element = element.replace("_", " ");
+			cls = "";
+	 	}
+	 	
+	 			element = getTableLanguageConvertHeader(element);
+	 		el = el.concat('<th class="'+ cls +'">' + ucfirst(element) + '</th>');	
+	  
+	 });
+		return new Handlebars.SafeString(el);
+	});
 Handlebars.registerHelper('get_default_label', function(label, module_name, options)
 {
 	var i18nKeyPrefix = "admin-settings-tasks";
