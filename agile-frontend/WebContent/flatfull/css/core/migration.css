@@ -2391,5 +2391,10 @@ transform: translateX(-50%);}
 .bg-primary .grid-icon-header:hover, .bg-primary .grid-icon-header:focus{background-color: #6658b8;}
 .bg-success .grid-icon-header:hover, .bg-success .grid-icon-header:focus{background-color: #22b846;}
 .bg-danger .grid-icon-header:hover, .bg-danger .grid-icon-header:focus{background-color: #f13f3f;}
+.tasklist-cont{ left: 0; padding-left: 75px; right: 0;}
+.task-label{ display: table-cell; vertical-align: middle; width: 100%; padding-left: 0; position: relative;}
+.tasklist-table tbody tr td{ padding-top: 10px; padding-bottom: 11px;}
+.table-cell-list{ display: table-cell;}
+.display-table-list{ display: table;}
 
 /*end custom css code*/

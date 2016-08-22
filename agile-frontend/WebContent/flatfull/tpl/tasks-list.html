@@ -11,7 +11,7 @@
 		<div class="panel panel-default">
 		<div class="panel-heading {{#is_mobile}} b-b-none {{/is_mobile}}">{{agile_lng_translate 'task' 'task-list'}}</div>
         <div class="table-responsive">
-        <table class="table{{#is_mobile}} noDelete{{else}} table-striped showCheckboxes agile-table{{/is_mobile}} no-sorting panel m-b-none table-layout-mob-view" url="core/api/tasks/bulk" id="task-list">
+        <table class="table {{#is_mobile}}tasklist-table noDelete{{else}} table-striped showCheckboxes agile-table{{/is_mobile}} no-sorting panel m-b-none table-layout-mob-view" url="core/api/tasks/bulk" id="task-list">
             
             {{#is_mobile}}
             
@@ -44,7 +44,7 @@
 
 <script id="tasks-list-model-template" type="text/html">
 {{#is_mobile}}
-<td class="data data-contact" data="{{id}}">  
+<td class="data data-contact pos-rlt" data="{{id}}">  
   <div class="h-auto pull-left ">
     {{#if taskOwner.pic}}
         <span class="thumb m-r-sm">
@@ -57,34 +57,36 @@
     {{/if}}
   </div>
 
-            <div class="m-l-xxxl">
+            <div class="pos-abs tasklist-cont">
 
             {{#if is_complete}}
-            <div class='view-task-details m-t-n-xs'><div class="text-l-t table-resp">{{#is_link subject}}<span class="activate-link">{{else}}<span>{{/is_link}}{{safe_string subject}}</span></div>
+            <div class='view-task-details m-t-n-xs'><div class="text-l-t table-resp text-ellipsis text-cap">{{#is_link subject}}<span class="activate-link">{{else}}<span>{{/is_link}}{{safe_string subject}}</span></div>
             </div>
             {{else}}
-            <div class='view-task-details m-t-n-xs'><div class="table-resp">{{#is_link subject}}<span class="activate-link">{{else}}<span>{{/is_link}}{{safe_string subject}}</span></div></div>
+            <div class='view-task-details m-t-n-xs'><div class="table-resp text-ellipsis text-cap">{{#is_link subject}}<span class="activate-link">{{else}}<span>{{/is_link}}{{safe_string subject}}</span></div></div>
             {{/if}}
             
 
-            <div>
+            <div class="text-ellipsis">
             {{#each contacts}}
                 <a href="#" class="text-info">{{contact_name properties type}}{{#if @last}}{{else}},{{/if}} </a>
             {{/each}}
             </div>
 
-            <div>
+            <div class="pos-rlt display-table-list">
             {{#if is_complete}}
             <div class='view-task-details'><div class="text-l-t"><span class="label label-{{task_label_color priority_type}}">{{ucfirst priority_type}}</span></div></div>
 
-            <div class='view-task-details inline-block'><div class="text-l-t"><span class="label bg-light dk text-tiny">{{task_property type}}</span></div></div>
+            <div class='view-task-details task-label'><div class="text-l-t text-ellipsis pos-abs pos-t-0 pos-r-0 pos-l-0"><span class="label bg-light dk text-tiny l-h">{{task_property type}}</span></div>
+            </div>
             
             {{else}}
 
-            <span class="m-r pull-left" class="label label-{{task_label_color priority_type}}">{{ucfirst priority_type}}</span>
+            <span class="table-cell-list p-r-xs" class="label label-{{task_label_color priority_type}}">{{ucfirst priority_type}}</span>
 
-            <div class="view-task-details inline-block"><div class="table-resp">
-            <span class="label bg-light dk text-tiny m-r-xs">{{task_property type}}</span></div></div>
+            <div class="view-task-details task-label">
+            <div class="table-resp text-ellipsis pos-abs pos-t-0 pos-r-0 pos-l-0">
+            <span class="label bg-light dk text-tiny m-r-xs l-h">{{task_property type}}</span></div></div>
            
             {{/if}}
             </div>
@@ -93,7 +95,7 @@
   
 </td>
 
-<td class="data-contact"><div class="text-md text-muted m-t contact-list-mobile text-right block"><i class="fa fa-angle-right"></i></div></td>
+<td class="data-contact" width="40"><div class="text-md text-muted m-t contact-list-mobile text-right block"><i class="fa fa-angle-right"></i></div></td>
 
 
 {{else}}
