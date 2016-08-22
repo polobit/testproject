@@ -362,21 +362,22 @@
 
 <script id="affiliate-commission-details-template" type="text/html">
 	<div class="row">
-		<div class="col-md-4">
+		<div class="col-md-6">
 	  		<div class="panel panel-default">
 	          <div class="panel-heading text-lg">
 	            {{agile_lng_translate 'affiliate' 'total-commission'}}
 	          </div>
-	          <div class="panel-body text-center m-t m-b" style="font-size: 40px;">
+	          <div class="panel-body text-center m-t-xxl m-b-xxl" style="font-size: 60px;">
 	            ${{numeric_operation commission 100 "/"}}
 	          </div>
 	      </div>
-	  	</div><div class="col-md-4">
+	  	</div>
+	  	<div class="col-md-6">
 	  		<div class="panel panel-default">
 	          <div class="panel-heading text-lg">
 	            {{agile_lng_translate 'affiliate' 'amount-added-to-your-account'}}
 	          </div>
-	          <div class="panel-body text-center m-t m-b" style="font-size: 40px;">
+	          <div class="panel-body text-center m-t-xxl m-b-xxl" style="font-size: 60px;">
 	            ${{numeric_operation amountAdded 100 "/"}}
 	          </div>
 	      </div>

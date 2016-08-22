@@ -617,4 +617,19 @@
         <property name="commission" direction="asc"/>
     </datastore-index>
     
+    <datastore-index kind="Affiliate" ancestor="false" source="manual">
+        <property name="relatedUserId" direction="asc"/>
+        <property name="createdTime" direction="asc"/>
+    </datastore-index>
+    
+    <datastore-index kind="Affiliate" ancestor="false" source="manual">
+        <property name="amount" direction="asc"/>
+        <property name="createdTime" direction="asc"/>
+    </datastore-index>
+    
+    <datastore-index kind="Affiliate" ancestor="false" source="manual">
+        <property name="createdTime" direction="asc"/>
+        <property name="commission" direction="asc"/>
+    </datastore-index>
+    
 </datastore-indexes>

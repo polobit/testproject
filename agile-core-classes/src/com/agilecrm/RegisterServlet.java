@@ -679,7 +679,10 @@ public class RegisterServlet extends HttpServlet
 	    // Set timezone in account prefs.
 	    AccountPrefs accPrefs = AccountPrefsUtil.getAccountPrefs();
 	    System.out.println("Setting timezone in AccountPrefs");
-	    String affiliateReference = getCookie(req, "agile_affiliated_by");
+	    String affiliateReference;
+	    affiliateReference = req.getParameter("utm_affiliate");
+		if(affiliateReference == null)
+			affiliateReference = getCookie(req, "agile_affiliated_by");
 	    System.out.println("affiliateReference in cookie is: "+affiliateReference);
 	    if(affiliateReference != null)
     		accPrefs.affiliatedBy = Long.parseLong(affiliateReference);
