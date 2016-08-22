@@ -886,7 +886,8 @@ public class OpportunityUtil
 
 		// If the deal is lost, change the probability to 0.
 		if (opportunity.milestone.equalsIgnoreCase(lostMilestone))
-		    opportunity.probability = 0;
+			continue;
+		    //opportunity.probability = 0;
 		// Total and Pipeline (total * probability)
 		double total = 0D;
         double pipeline = 0D;
