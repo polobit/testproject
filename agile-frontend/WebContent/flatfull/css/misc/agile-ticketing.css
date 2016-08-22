@@ -40,6 +40,27 @@
   padding-top: 15px;
 }
 
+
+#ticket-feedback-comment {
+  display: none;
+  position: absolute;
+  width: 450px;
+  max-height: 320px;
+  top: 60px;
+  left: 25%;
+  background-color: white;
+  z-index: 10;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+  background-clip: padding-box;
+  overflow-y: hidden;
+  text-overflow: ellipsis;
+  cursor: default !important;
+  pointer-events: none;
+  padding-bottom: 15px;
+  padding-top: 15px;
+}
+
 #recent-reply-notes {
 	display: -webkit-box;
 	max-height: 65px;

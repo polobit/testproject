@@ -1,18 +1,18 @@
-	<script id="company-search-model-template" type="text/html">
-	<td></td>
-	<td class="data" data="{{id}}">
+    <script id="company-search-model-template" type="text/html">
+    <td></td>
+    <td class="data" data="{{id}}">
     <div class="table-resp">
-    	<div class="thumb-sm agile-img m-r-sm" style="margin-right:10px;">
-        	{{#if_contact_type "COMPANY"}} <img class="img-inital r r-2x" {{getCompanyImage "40" "display:inline;"}} /> {{/if_contact_type}}
-    	</div>
-    	<div class="agile-thumb agile-thumb-view" style="width:calc(100% - 60px);">
-        	{{#if_contact_type "COMPANY"}} <div class="text-cap custom-link"> {{getPropertyValue properties
-        	"name"}}</div> 
+        <div class="thumb-sm agile-img m-r-sm" style="margin-right:10px;">
+            {{#if_contact_type "COMPANY"}} <img class="img-inital r r-2x" {{getCompanyImage "40" "display:inline;"}} /> {{/if_contact_type}}
+        </div>
+        <div class="agile-thumb agile-thumb-view" style="width:calc(100% - 60px);">
+            {{#if_contact_type "COMPANY"}} <div class="text-cap custom-link"> {{getPropertyValue properties
+            "name"}}</div> 
            <div> <small class="text-muted m-t-xs"> {{getPropertyValue properties "url"}} </small> </div>
             {{/if_contact_type}}
-    	</div>
+        </div>
        </div>
-	</td>
+    </td>
 
     <td>
     <div class="overflow-hidden line-clamp line-clamp-2">
@@ -30,7 +30,7 @@
 
     <td>{{lead_score}}</td>
    
-	
+    
 </script>
 <script id="company-search-collection-template" type="text/html">
 <div class="wrapper-md lter bg-light b-b">
@@ -64,9 +64,9 @@
                     </button>
                     <ul class="dropdown-menu" id="view-actions" role="menu">
                         <li><a href="#" id="bulk-owner">Change owner</a></li>
-						{{#hasMenuScope 'CAMPAIGN'}}
+                        {{#hasMenuScope 'CAMPAIGN'}}
                         <li><a href="#" id="bulk-campaigns">Add to campaign</a></li>
-						{{/hasMenuScope}}
+                        {{/hasMenuScope}}
                         <li class="hide"><a href="#" id="bulk-email">Send email</a></li>
                         <li><a href="#" id="bulk-tags">Add tags</a></li>
                     </ul>
@@ -77,11 +77,11 @@
                     <thead>
                         <tr>
 
-							<th style="width:2%"></th>
-                            <th style="width:25%">Name</th>
-                            <th  style="width:25%">Owner</th>
-                            <th  style="width:30%">Tags</th>
-                            <th  style="width:25%">Lead Score</th>
+                            <th style="width:2%"></th>
+                            <th style="width:25%">{{agile_lng_translate 'deal-view' 'name'}}</th>
+                            <th  style="width:25%">{{agile_lng_translate 'contact-details' 'owner'}}</th>
+                            <th  style="width:30%">{{agile_lng_translate 'report-add' 'tags'}}</th>
+                            <th  style="width:25%">{{agile_lng_translate 'contact-details' 'lead-score'}}</th>
                             
                         </tr>
                     </thead>
@@ -91,7 +91,8 @@
                 </div>
             </div>
         </div>
-        <div><a href="#" class="searchFetchNext pull-right text-info p-r-sm">More..</a></div>
+
+        <div><a href="#" class="searchFetchNext pull-right text-info p-r-sm p-t-sm">{{agile_lng_translate 'others' 'moreresults'}}</a></div>
         {{/if}}
     </div>
    

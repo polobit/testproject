@@ -73,7 +73,7 @@ public class ContactViewPrefsUtil
 	}
 	else
 	{
-	    return getDefaultContactViewPrefs(agileUser);
+	    return getDefaultContactViewPrefs(agileUser,type);
 	}
 
     }
@@ -103,7 +103,7 @@ public class ContactViewPrefsUtil
 
 	}
 
-	return getDefaultContactViewPrefs(agileUser);
+	return getDefaultContactViewPrefs(agileUser,"PERSON");
 
     }
 
@@ -156,7 +156,7 @@ public class ContactViewPrefsUtil
      *            - AgileUser Object.
      * @return default ContactViewPrefs.
      */
-    private static ContactViewPrefs getDefaultContactViewPrefs(AgileUser agileUser)
+    private static ContactViewPrefs getDefaultContactViewPrefs(AgileUser agileUser,String type)
     {
 	LinkedHashSet<String> fields_set = new LinkedHashSet<String>();
 	fields_set.add("basic_info");
@@ -168,6 +168,8 @@ public class ContactViewPrefsUtil
 	fields_set.add("tags");
 	fields_set.add("lead_score");
 	ContactViewPrefs viewPrefs = new ContactViewPrefs(agileUser.id, fields_set);
+	if(type.equalsIgnoreCase("CONTACT_COMPANY"))
+		viewPrefs.type = ContactViewPrefs.Type.CONTACT_COMPANY;
 	viewPrefs.save();
 	return viewPrefs;
     }

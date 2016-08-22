@@ -37,8 +37,15 @@ function addTaskToTaskList(headingToSearch, tasksToAdd, conditionToCheck)
 	tasksToAdd = setCursor(modelTaskList[0], tasksToAdd, conditionToCheck);
 
 	// Add task in sub collection means in Task List
-	if (conditionToCheck == "dragged") // if dragged task then do not update UI
+	if (conditionToCheck == "dragged"){
+		// if dragged task then do not update UI
 		modelTaskList[0].get('taskCollection').add(tasksToAdd.toJSON(), { silent : true });// sub-collection
+		// Condition check for collection length
+		console.log(modelTaskList);
+
+		modelTaskList[0].get('taskCollection').trigger('remove', {});
+		// checkAndUpdateTaskCollectiontasks(modelTaskList[0].get('taskCollection'), el);	
+	} 
 	else
 	{
 		modelTaskList[0].get('taskCollection').add(tasksToAdd);// sub-collection
@@ -91,7 +98,7 @@ function deleteTask(taskId, taskListId, taskListOwnerId)
 		{
 			updateTask(false, model, model.toJSON());
 			TASKS_LIST_COLLECTION.render(true);
-			showModalConfirmation("Delete Task", 
+			showModalConfirmation("{{agile_lng_translate 'report-view' 'delete-task'}}", 
 				response.responseText, 
 				function (){
 					return;
@@ -102,7 +109,7 @@ function deleteTask(taskId, taskListId, taskListOwnerId)
 				function(){
 					return;
 				},
-				"Cancel"
+				"{{agile_lng_translate 'other' 'cancel'}}"
 			);
 		} });
 	}
@@ -118,7 +125,7 @@ function deleteTask(taskId, taskListId, taskListOwnerId)
 					count = count - 1 ;
 					$('#tasks-list-template').find('.tasks-count').removeAttr('data');
 					$('#tasks-list-template').find('.tasks-count').attr('data' , count);
-					$('#tasks-list-template').find('.tasks-count').text('('+count+' Total)');
+					$('#tasks-list-template').find('.tasks-count').text('('+count+' ' +_agile_get_translated_val('other','total')+ ')');
 				}
 			} 
 		});

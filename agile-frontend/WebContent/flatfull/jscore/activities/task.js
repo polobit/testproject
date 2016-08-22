@@ -54,19 +54,40 @@ $( document ).ready(function() {
 
 		agile_type_ahead("update_task_relates_to_deals", el, deals_typeahead, false,null,null,"core/api/search/deals",false, true);
 
-		$('.update-task-timepicker').timepicker({ defaultTime : get_hh_mm(true), showMeridian : false });
-		$('.update-task-timepicker').timepicker().on('show.timepicker', function(e)
-		{
-			if ($('.update-task-timepicker').prop('value') != "" && $('.update-task-timepicker').prop('value') != undefined)
-			{
-				if ($('.update-task-timepicker').prop('value').split(":")[0] != undefined)
-					e.time.hours = $('.update-task-timepicker').prop('value').split(":")[0];
-				if ($('.update-task-timepicker').prop('value').split(":")[0] != undefined)
-					e.time.minutes = $('.update-task-timepicker').prop('value').split(":")[1];
-			}
-			$('.bootstrap-timepicker-hour').val(e.time.hours);
-			$('.bootstrap-timepicker-minute').val(e.time.minutes);
-		});
+		head.js(CSS_PATH + 'css/businesshours/jquerytimepicker.css',
+				LIB_PATH + 'lib/businesshours/jquerytimepicker.js',
+				function(){
+		 			$('.update-task-timepicker').timepicker({ 'timeFormat' : 'H:i', 'step' : 15 });
+		 			
+		 			$('.update-task-timepicker').focus(function(){
+		 				$('#activityModal').css("overflow", "hidden");
+		 			});
+		 			
+		 			$('.update-task-timepicker').blur(function(){
+		 				$('#activityModal').css("overflow", "auto");
+		 			});
+
+		 			/**
+					 * Fills current time only when there is no time in the fields
+					 */
+					if ($('.update-task-timepicker', el).val() == '')
+						$('.update-task-timepicker', el).val(get_hh_mm());
+		 		}
+		);
+		
+		// $('.update-task-timepicker').timepicker({ defaultTime : get_hh_mm(true), showMeridian : false });
+		// $('.update-task-timepicker').timepicker().on('show.timepicker', function(e)
+		// {
+		// 	if ($('.update-task-timepicker').prop('value') != "" && $('.update-task-timepicker').prop('value') != undefined)
+		// 	{
+		// 		if ($('.update-task-timepicker').prop('value').split(":")[0] != undefined)
+		// 			e.time.hours = $('.update-task-timepicker').prop('value').split(":")[0];
+		// 		if ($('.update-task-timepicker').prop('value').split(":")[0] != undefined)
+		// 			e.time.minutes = $('.update-task-timepicker').prop('value').split(":")[1];
+		// 	}
+		// 	$('.bootstrap-timepicker-hour').val(e.time.hours);
+		// 	$('.bootstrap-timepicker-minute').val(e.time.minutes);
+		// });
 
 		// Fill details in form
 		setForm(el);
@@ -80,20 +101,32 @@ $( document ).ready(function() {
 function activateSliderAndTimerToTaskModal(el){
 
 	console.log("activateSliderAndTimerToTaskModal");
+
+	head.js(CSS_PATH + 'css/businesshours/jquerytimepicker.css',
+			LIB_PATH + 'lib/businesshours/jquerytimepicker.js',
+			function(){
+	 			$('.new-task-timepicker').timepicker({ 'timeFormat' : 'H:i', 'step' : 15 });
+	 		}
+	);
 	
-	$('.new-task-timepicker').timepicker({ defaultTime : '12:00', showMeridian : false });
-	$('.new-task-timepicker').timepicker().on('show.timepicker', function(e)
-	{
-		if ($('.new-task-timepicker').prop('value') != "" && $('.new-task-timepicker').prop('value') != undefined)
-		{
-			if ($('.new-task-timepicker').prop('value').split(":")[0] != undefined)
-				e.time.hours = $('.new-task-timepicker').prop('value').split(":")[0];
-			if ($('.new-task-timepicker').prop('value').split(":")[0] != undefined)
-				e.time.minutes = $('.new-task-timepicker').prop('value').split(":")[1];
-		}
-		$('.bootstrap-timepicker-hour').val(e.time.hours);
-		$('.bootstrap-timepicker-minute').val(e.time.minutes);
-	});
+	// sets the time in time picker if it is empty
+	if ($('.new-task-timepicker').val() == ''){
+		$('.new-task-timepicker').val(get_hh_mm());
+	}
+
+	// $('.new-task-timepicker').timepicker({ defaultTime : '12:00', showMeridian : false });
+	// $('.new-task-timepicker').timepicker().on('show.timepicker', function(e)
+	// {
+	// 	if ($('.new-task-timepicker').prop('value') != "" && $('.new-task-timepicker').prop('value') != undefined)
+	// 	{
+	// 		if ($('.new-task-timepicker').prop('value').split(":")[0] != undefined)
+	// 			e.time.hours = $('.new-task-timepicker').prop('value').split(":")[0];
+	// 		if ($('.new-task-timepicker').prop('value').split(":")[0] != undefined)
+	// 			e.time.minutes = $('.new-task-timepicker').prop('value').split(":")[1];
+	// 	}
+	// 	$('.bootstrap-timepicker-hour').val(e.time.hours);
+	// 	$('.bootstrap-timepicker-minute').val(e.time.minutes);
+	// });
 
 	console.log("loadProgressSlider");
 
@@ -104,8 +137,7 @@ function activateSliderAndTimerToTaskModal(el){
 	/**
 	 * Date Picker Activates datepicker for task due element
 	 */
-
-	// $('#task-date-1').datepicker({ format : CURRENT_USER_PREFS.dateFormat , weekStart : CALENDAR_WEEK_START_DAY});
+	 
 	$('#update-task-date-1').datepicker({ format : CURRENT_USER_PREFS.dateFormat , weekStart : CALENDAR_WEEK_START_DAY, autoclose: true});
 
 
@@ -185,8 +217,12 @@ function initializeTasksListeners(){
 	$('#tasks-list-template').on('click', '.is-task-complete', function(event)
 	{
 		event.preventDefault();
-		if(!confirm("Are you sure to complete this task ?"))
-			return;
+		if(!confirm(_agile_get_translated_val('tasks','confirm-delete')))
+		{
+			$(this).closest(".task-content-view").find(".taskComplete").attr("checked", false);
+				return;
+		}
+		
 		if(!getTaskListId(this)  && $(this).parent().attr('data')){
 			completeTask(getTaskId(this), $(this).parent().attr('data'), parseInt(getTaskListOwnerId(this)));
 		}
@@ -220,6 +256,15 @@ function initializeTasksListeners(){
 		// Change UI and input field
 		applyDetailsFromGroupView();
 	});	
+	$('#tasks-list-template').on('click','.task-list-minimized',function(e)
+	 {
+	 	$(this).find(".expandbutton").trigger('click');
+	 	
+	 });
+	$("#tasks-list-template").on("click", "#taskheading", function(b) {
+        b.stopPropagation();
+        taskAutoWidth(this)
+    });
 
 	$('#tasks-list-template').on('click', '.tasks-list-image', function(event)
 			{
@@ -229,7 +274,18 @@ function initializeTasksListeners(){
 				routeToPage(url);
 				event.stopPropagation();
 				
-			});	
+			});
+	$('#tasks-list-template').on('click','.taskComplete',function(e){
+		if($(this).prop("checked") == true)
+		{
+			$(this).closest(".task-striped").find(".is-task-complete").trigger("click");
+		}
+	});
+	$('#tasks-list-template').on("click", ".expandbutton", function(e)
+	{	
+		e.stopPropagation();
+		taskAutoWidth(this);
+	});	
 	$('#tasks-list-template').on('click', '.view-task-details', function(event)
 	{
 		event.preventDefault();
@@ -395,7 +451,7 @@ function save_task(formId, modalId, isUpdate, saveBtn)
 							if (isUpdate)
 								App_Calendar.allTasksListView.collection.remove(json);
 
-							if ((old_owner_id == "All Categories" || old_owner_id.toUpperCase() == json.type) && (old_type == "All Tasks" || json.owner_id == CURRENT_DOMAIN_USER.id))
+							if ((old_owner_id == "All Categories" || old_owner_id.toUpperCase() == json.type) && (old_type == _agile_get_translated_val('tasks', 'All Tasks') || json.owner_id == CURRENT_DOMAIN_USER.id))
 								App_Calendar.allTasksListView.collection.add(data);
 
 							App_Calendar.allTasksListView.render(true);
@@ -629,6 +685,52 @@ function get_due(due)
 	// console.log("Today " + date + " Due " + due);
 	return Math.floor((due - date) / (24 * 3600));
 }
+function taskAutoWidth(el)
+{	
+	var arr = _agile_get_prefs("task-page-status");
+	if(!arr)
+		arr = [];
+	else 
+		arr = arr.split(",");
+
+	var id = $(el).closest(".task-trello-list").attr("id");
+	if(arr.indexOf(id) != -1)
+	{
+		delete arr[arr.indexOf(id)]
+	}
+
+	var expanded = $(el).closest(".task-trello-list").hasClass("compress");
+	if(expanded)
+	{
+		arr.push($(el).closest(".task-trello-list").attr("id"))
+		
+		$(el).children().removeClass("fa fa-expand")
+		$(el).children().addClass("fa fa-compress")
+	}
+
+	else
+	{
+		
+		$(el).children().removeClass("fa fa-compress")
+		$(el).children().addClass("fa fa-expand")
+		
+	}
+	$(el).closest(".task-trello-list").toggleClass("expand compress");
+	_agile_set_prefs('task-page-status' , arr.toString());
+		
+}
+
+function getTaskTrackAutoWidthCurrentState(track_name){
+   if(!track_name)
+   	  return "compress";
+
+   	// Get prefs form storage 
+   	var prefs = _agile_get_prefs("task-page-status");
+   	if(prefs && prefs.indexOf(track_name) != -1)
+   		 return "expand";
+
+   	return "compress";
+}
 
 function increaseCount(heading)
 {
@@ -831,6 +933,22 @@ function complete_task(taskId, collection, ui, callback)
 			// execute the callback, passing parameters as necessary
 			callback(model);
 		}
+	},
+	error : function(model, response){
+		showModalConfirmation("Complete Task", 
+			'<span>'+response.responseText+'</span>', 
+			function (){
+				return;
+			}, 
+			function(){
+				return;
+			},
+			function (){
+				return;
+			},
+			'Cancel'
+		);
+		return;
 	} });
 
 	// Set is complete flag to be true

@@ -71,14 +71,14 @@ public class TicketNotesRest
 	@Path("/feedback")
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public String getFeedbackdata(@QueryParam("start_time") Long startTime, @QueryParam("end_time") Long endTime,
-			@QueryParam("feedback") String feedback, @QueryParam("group") Long group)
+			@QueryParam("feedback") String feedback, @QueryParam("group") Long group, @QueryParam("assignee") Long assignee)
 	{
 		try
 		{
 			if (startTime == null || endTime == null )
 				throw new Exception("Strat and end times is missing.");
 
-			return TicketNotesUtil.getJsonFeedback(startTime,endTime,feedback,group).toString();
+			return TicketNotesUtil.getJsonFeedback(startTime,endTime,feedback,group,assignee).toString();
 		}
 		catch (Exception e)
 		{

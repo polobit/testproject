@@ -180,13 +180,13 @@ var _agile = {
 			});
 			
 		},
-		/*create_company : function(data, callback)
+		create_company : function(data, callback)
 		{
 			_agile._filter(function(){
 			   agile_createCompany(data, callback);					// Create company
 			});
 			
-		},*/
+		},
 		get_property : function (name, callback, email)
 		{
 			_agile._filter(function(){

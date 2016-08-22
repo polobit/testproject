@@ -338,7 +338,7 @@ public class TicketNotesUtil
 	}
 
 	
-	public static JSONArray getJsonFeedback(Long startTime, Long endTime, String feedback, Long group) throws JSONException, EntityNotFoundException{
+	public static JSONArray getJsonFeedback(Long startTime, Long endTime, String feedback, Long group, Long assignee) throws JSONException, EntityNotFoundException{
 		
 		JSONArray json = new JSONArray();
 		
@@ -358,6 +358,12 @@ public class TicketNotesUtil
 					if(tn.group_id.longValue()!=group)
 						continue;
 				}		
+				if(assignee != 0){
+					if(tn.assignee_id.longValue()!=assignee)
+						continue;
+				}		
+				
+				
 				JSONObject jsonobject = new JSONObject();
 				jsonobject.append("note", tn.html_text);
 				jsonobject.append("feedback_comment", tn.feedback_comment);

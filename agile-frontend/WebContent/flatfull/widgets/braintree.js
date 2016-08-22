@@ -1,7 +1,7 @@
 var BrainTreeObj = {};
 var transactionCount = 1;
 
-var showMoreBraintreeTrans = '<div class="widget_tab_footer braintree_trans_show_more" align="center"><a class="c-p text-info" id="braintree_trans_show_more" rel="tooltip" title="Click to see more tickets">Show More</a></div>';
+var showMoreBraintreeTrans = '<div class="widget_tab_footer braintree_trans_show_more" align="center"><a class="c-p text-info" id="braintree_trans_show_more" rel="tooltip" title="' +_agile_get_translated_val('widgets', 'click-to-see-more-tickets')+ '">'+ _agile_get_translated_val('widgets', 'show-more') +'</a></div>';
 
 
 function getTransactions(callback, contact_id){
@@ -26,10 +26,10 @@ function getTransactions(callback, contact_id){
 
 		}, function error(data){
 			console.log("Brain tree failed ");
-			$('#Braintree').html('<div class="wrapper-sm">Please configure widget properly</div>');
+			$('#Braintree').html('<div class="wrapper-sm">'+_agile_get_translated_val('widgets', 'configure-properly')+'</div>');
 		});
 	}else{
-		$('#Braintree').html('<div class="wrapper-sm">Please provide ' + braintree_customField + ' for this contact.</div>');
+		$('#Braintree').html('<div class="wrapper-sm">'+_agile_get_translated_val('widgets', 'pl-provide')+' ' + braintree_customField + ' '+_agile_get_translated_val('widgets', 'for-this-contact')+'.</div>');
 	}
 }
 
@@ -48,9 +48,8 @@ function loadTransaction(offSet){
 
 		getTemplate('braintree-transactions', result, undefined, function(template){					
 			$('#Braintree').html(template);
-			head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
-				$( ".time-ago", $('#Braintree')).timeago();
-			});
+			agileTimeAgoWithLngConversion($( ".time-ago", $('#Braintree')));
+			
 		},null);
 
 		if(BrainTreeObj.transaction.length > 5){

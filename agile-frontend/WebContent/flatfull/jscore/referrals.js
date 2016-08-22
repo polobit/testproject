@@ -71,7 +71,7 @@ $(function() {
 			{
 				enable_send_button($that);
 				trackReferrals("blogpost");
-				showNotyPopUp("information", "Your submission is successful, thank you.", "top");
+				showNotyPopUp("information", "{{agile_lng_translate 'socialsuite' 'submission-success'}}", "top");
 				
 			},
 			error : function(response)
@@ -207,21 +207,21 @@ function trackReferrals(type){
 		return;
 	switch(type){
 			case "facebook":
-				showNotyPopUp("information", "Your submission is successful, thank you.", "top");
+				showNotyPopUp("information", "{{agile_lng_translate 'socialsuite' 'submission-success'}}", "top");
 				$("#share_on_fb").css("cursor", "not-allowed");
 				$("#share_on_fb .refer-checked").removeClass("hide");
 				sendReferralTrackMail("Shared on facebook");
 				REFER_DATA.usedReferTypes.push("facebook_share");
 				return;
 			case "follow":
-				showNotyPopUp("information", "You are following Agile CRM on Twitter. Congratulations!", "top");
+				showNotyPopUp("information", "{{agile_lng_translate 'socialsuite' 'follow-twitter'}}", "top");
 				$("#follow_on_twitter").css("cursor", "not-allowed");
 				$("#follow_on_twitter .refer-checked").removeClass("hide");
 				sendReferralTrackMail("Following on twitter");
 				REFER_DATA.usedReferTypes.push("twitter_follow");
 				return;
 			case "tweet":
-				showNotyPopUp("information", "Your tweet has been posted successfully.", "top");
+				showNotyPopUp("information", "{{agile_lng_translate 'socialsuite' 'posted-twitter'}}", "top");
 				$("#tweet_about_us").css("cursor", "not-allowed");
 				$("#tweet_about_us .refer-checked").removeClass("hide");
 				sendReferralTrackMail("Tweet");

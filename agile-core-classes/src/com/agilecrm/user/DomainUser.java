@@ -85,8 +85,7 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 	/**
 	 * Phone number of user
 	 */
-	@NotSaved(IfDefault.class)
-	public String phone = null;
+	public String phone = "";
 	
 	/** The Reference tracking object represents referercount and referece key */
 
@@ -657,6 +656,10 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 	    if(role == null && this.id != null && domainUser != null)
 	    	role = domainUser.role;
 	    
+	    // Reset finger_prints
+	    if(finger_prints == null && this.id != null && domainUser != null)
+	    	finger_prints = domainUser.finger_prints;
+	    
 	    // Set user version
 	    if(this.id == null)
 	    	version = "v1";
@@ -1051,6 +1054,14 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 			restricted_scopes.remove(UserAccessScopes.DELETE_CONTACTS);
 			restricted_scopes.add(UserAccessScopes.EDIT_CONTACT);
 			restricted_scopes.add(UserAccessScopes.DELETE_CONTACT);
+		}
+		
+		if(restricted_scopes != null && restricted_scopes.contains(UserAccessScopes.MANAGE_DEALS))
+		{
+			restricted_scopes.remove(UserAccessScopes.MANAGE_DEALS);
+			restricted_scopes.add(UserAccessScopes.CREATE_DEALS);
+			restricted_scopes.add(UserAccessScopes.UPDATE_DEALS);
+			restricted_scopes.add(UserAccessScopes.DELETE_DEALS);
 		}
 
 		if (restricted_scopes != null)

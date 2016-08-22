@@ -94,18 +94,24 @@
 					$("#group_names").off();
 					$("#group_names").on('change',function(){
 						App_Ticket_Module.renderfeedbackmodel(el);
-						
-					//initializing date range picket
-					initDateRange(App_Ticket_Module.renderfeedbackmodel(el));
 					});
 			 		//initializing date range picket
-					initDateRange(App_Ticket_Module.ticketFeedback);
+					initDateRange(App_Ticket_Module.renderfeedbackmodel);
+						
+			fillSelect('group_names', '/core/api/tickets/groups', '', function(collection){
+			 	 			getTemplate("ticket-feedback-group", collection.toJSON(), undefined, function(template_ui){						
 
-						var optionTemplate = "<option value='{{id}}'>{{group_name}}</option>";
-						fillSelect('group_names', '/core/api/tickets/groups?only_groups='+true, '', 
-							function(){
-																						
-							}, optionTemplate, false,el,"Group");
+								if(!template_ui)
+									return;
+
+				                $('#group_names', el).html($(template_ui));
+				       
+				  
+									
+								
+			               	} );		
+					
+					},'', true);
 
 						App_Ticket_Module.renderfeedbackmodel(el);
 			 		});
@@ -116,39 +122,114 @@
 	make_menu_item_active("feedbackactivitiesmenu");
 	},	 	
 
-	renderfeedbacktemplate :function(start_time,end_time,feedback,group){
+	renderfeedbacktemplate :function(start_time,end_time,feedback,group,assignee){
 		//Rendering root template	
 		App_Ticket_Module.feedbackollection = new Base_Collection_View({
 			url : '/core/api/tickets/notes/feedback/?start_time=' + start_time + '&end_time=' 
-			+ end_time + '&feedback=' + feedback+ '&group=' + group,
+			+ end_time + '&feedback=' + feedback+ '&group=' + group + '&assignee=' + assignee,
 				templateKey : "ticket-feedback-log",
 				isNew : true,
-			individual_tag_name : 'div',
+			individual_tag_name : 'tr',
 			sort_collection : true, 
 			sortKey : 'updated_time',
 			descending : true,
 			postRenderCallback:function(el,model){
 				/*Ticket related click event to show the modal when requester or assignee replies*/
-				$("#ticket-feedback").on('click', '.ticket-activity-feedback', function(e){
-					e.preventDefault();
-					var id = $(this).data("id");
 
-					var activity_ticket_feedback = App_Ticket_Module.feedbackollection.collection.get(id).toJSON();
+				
+				/*$(el)
+			.on('mouseover mouseout', 'tbody#ticket-feedback-log-model-list> tr',
+				function(event) {
 
-					console.log(activity_ticket_feedback);
+										
+					    
+					if (event.type == 'mouseover'){
 
-					getTemplate("ticket-feedback-modal", activity_ticket_feedback, undefined, function(template_ui){
+						var $that = $(this);
+						
+						
 
-						if(!template_ui)
-							  return;
+							var id = $that.data("id");
+		
+							var ticketJSON = App_Ticket_Module.feedbackollection.collection.get(id).toJSON();
+							getTemplate("ticket-feedback-modal", ticketJSON, undefined, function(template_ui){
 
-						var emailinfo = $(template_ui);
+                               
+                               
+                            	  if(!template_ui)
+							  		return;
 
-						emailinfo.modal('show');
-					}, null);
+								var emailinfo = $(template_ui);
 
-				});
-			}			
+						emailinfo.modal('show');                                
+								
+							});
+						
+						
+					}else{
+						$('div#ticket_activity_notes_modal').remove();
+					}
+			});*/
+
+			/*
+		 * Hover event on ticket subject single line ticket collection view
+		 */
+		$(el)
+			.on('mouseover mouseout', 'tbody#ticket-feedback-log-model-list> tr',
+				function(event) {
+
+					clearTimeout(popoverFunction);
+					
+					    
+					if (event.type == 'mouseover'){
+
+						var $that = $(this);
+						
+						popoverFunction = setTimeout(function(){
+
+							var id = $that.data("id");
+							var ticketJSON = App_Ticket_Module.feedbackollection.collection.get(id).toJSON();
+
+							getTemplate("ticket-feedback-popup", ticketJSON, undefined, function(template_ui){
+
+                               
+                               
+                            	  if(!template_ui)
+							  		return;
+
+								$('body').append($(template_ui));
+								
+								         
+								if(Current_Ticket_ID || Current_Route.indexOf('ticket') == -1)
+									return;
+
+								//Get closest div with row class to set left alignment. Table row left doesn't work as table have scrolling.
+								var $closest_div = $that.closest('div.row');
+								var top = 0, left = $closest_div.offset().left + 70 + 'px';
+
+								if (window.innerHeight - ($that.offset().top - $(window).scrollTop()) >= 250)
+									top = $that.offset().top + 35 + 'px';
+								else
+									top = $that.offset().top - $('#ticket-feedback-comment').height() + 'px';
+                                
+                                Ticket_Utils.loadTimeAgoPlugin(function(){
+					        	     var x = $("time","#ticket-feedback-comment").timeago();
+					        	 });
+								 
+                                
+								$('#ticket-feedback-comment').css('top', top).css('left', left).css('display', 'block');
+							});
+						},600);
+						
+					}else{
+						$('div.ticket-feedback-comment').remove();
+					}
+
+			});	
+
+			}
+
+
 	
 		});
 		App_Ticket_Module.feedbackollection.collection.fetch();
@@ -167,8 +248,15 @@
 	        end_value = end_value + " 23:59:59";
 
 	    var group = 0;
-	    	if($('#group_names').find('option:selected').val())
-	    	group = $('#group_names').find('option:selected').val();
+	    var assignee = 0;
+	    	if($('#group_names').find('option:selected').val()){
+	    		group = $('#group_names').find('option:selected').val();
+	    	}
+
+	    	if($('#group_names').find('option:selected').data('assignee-id')){
+	    		assignee = $('#group_names').find('option:selected').data('assignee-id');
+
+	    	}
 	    var end_time = getUTCMidNightEpochFromDate(new Date(end_value));
 
 	    end_time += (((23*60*60)+(59*60)+59)*1000);
@@ -176,8 +264,9 @@
 		var feedback = null;
 	    feedback = $('#feedback').find('option:selected').val();
 		
-		App_Ticket_Module.renderfeedbacktemplate(start_time,end_time,feedback,group);
+		App_Ticket_Module.renderfeedbacktemplate(start_time,end_time,feedback,group,assignee);
 	},
+
 
 	/**
 	 * Shows new ticket form

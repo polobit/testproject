@@ -4,7 +4,7 @@
         <div class="row">
             <div class="col-sm-12 col-md-12">
             <div class="col-md-4 col-sm-6" style="padding-left:0px;padding-bottom:8px">
-                    <h3 class="font-thin h3">Tickets</h3>
+                    <h3 class="font-thin h3">{{agile_lng_translate 'report-view' 'tickets'}}</h3>
                 </div>
                 <div class="clearfix"></div> 
                 <div id="reportrange" class="pull-right" style="box-shadow: 0 0px 0px rgba(0, 0, 0, 0), inset 0 -0 0 rgba(0, 0, 0, .1); border:1px solid #cfdadd;height:34px;padding:5px">
@@ -13,18 +13,19 @@
                 </div>
                 <div class="pull-right" style="padding:0px 8px 10px">
                     <select name="status" id="status" class="required form-control" style="width:100px">
-                        <option value="NEW">New</option>
-                        <option value="CLOSED">Closed</option>
+                        <option value="NEW">{{agile_lng_translate 'menu' 'new'}}</option>
+                        <option value="CLOSED">{{agile_lng_translate 'cases' 'closed'}}</option>
                     </select>
                 </div>
                 <div class="pull-right" style="padding:0px 8px 10px">
                     <select name="frequency" id="frequency" class="required form-control" style="width:100px">
-                        <option value="daily" selected>Daily</option>
-                        <option value="weekly">Weekly</option>
-                        <option value="monthly">Monthly</option>
+                        <option value="daily" selected>{{agile_lng_translate 'report-add' 'daily'}}</option>
+                        <option value="weekly">{{agile_lng_translate 'report-add' 'weekly'}}
+                        </option>
+                        <option value="monthly">{{agile_lng_translate 'report-add' 'monthly'}}
+                        </option>
                     </select>
                 </div>
-                
             </div>
         </div>
     </div>
@@ -49,13 +50,15 @@
                 </div>
                 <div class="pull-right" style="padding:0px 8px 10px">
                     <select name="frequency" id="frequency" class="required form-control" style="width:100px">
-                        <option value="daily">Daily</option>
-                        <option value="hourly" selected>Hourly</option>
-                        <option value="weekly">Weekly</option>
+                        <option value="daily">{{agile_lng_translate 'report-add' 'daily'}}</option>
+                        <option value="hourly" selected>{{agile_lng_translate 'report-add' 'hourly'}}</option>
+                        <option value="weekly">{{agile_lng_translate 'report-add' 'weekly'}}
+                        </option>
                     </select>
                 </div>
                 <div class="col-md-4 col-sm-6" style="padding-left:0px;">
-                    <h3 class="font-thin h3">Hourly tickets</h3>
+                    <h3 class="font-thin h3">{{agile_lng_translate 'tickets' 'hourly-tickets'}}
+                    </h3>
                 </div>
             </div>
         </div>
@@ -81,13 +84,15 @@
                 </div>
                 <div class="pull-right" style="padding:0px 8px 10px">
                     <select name="frequency" id="frequency" class="required form-control" style="width:100px">
-                        <option value="daily">Daily</option>
-                        <option value="hourly">Hourly</option>
-                        <option value="weekly" selected>Weekly</option>
+                        <option value="daily">{{agile_lng_translate 'report-add' 'daily'}}</option>
+                        <option value="hourly">{{agile_lng_translate 'report-add' 'hourly'}}
+                        </option>
+                        <option value="weekly" selected>{{agile_lng_translate 'report-add' 'weekly'}}</option>
                     </select>
                 </div>
                 <div class="col-md-4 col-sm-6" style="padding-left:0px;">
-                    <h3 class="font-thin h3">Weekly tickets</h3>
+                    <h3 class="font-thin h3">{{agile_lng_translate 'tickets' 'weekly-tickets'}}
+                    </h3>
                 </div>
             </div>
         </div>
@@ -108,7 +113,7 @@
         <div class="row">
             <div class="col-sm-12 col-md-12">
             <div class="col-md-4 col-sm-6" style="padding-left:0px;padding-bottom:8px">
-                    <h3 class="font-thin h3 report_name">Priority report</h3>
+                    <h3 class="font-thin h3 report_name">{{agile_lng_translate 'tickets' 'priority-report'}}</h3>
                 </div>
                 <div class="clearfix"></div>
                 <div id="reportrange" class="pull-right" style="box-shadow: 0 0px 0px rgba(0, 0, 0, 0), inset 0 -0 0 rgba(0, 0, 0, .1); border:1px solid #cfdadd;height:34px;padding:5px">
@@ -117,11 +122,10 @@
                 </div>
                 <div class="pull-right" style="padding:0px 8px 10px">
                     <select name="report_type" id="report_type" class="required form-control" style="width:100px">
-                        <option value="priority" selected>Priority</option>
-                        <option value="status">Status</option>
+                        <option value="priority" selected>{{agile_lng_translate 'tasks' 'priority'}}</option>
+                        <option value="status">{{agile_lng_translate 'portlets' 'status'}}</option>
                     </select>
                 </div>
-                
             </div>
         </div>
     </div>
@@ -141,7 +145,7 @@
         <div class="row">
             <div class="col-sm-12 col-md-12">
             <div class="col-md-4 col-sm-6" style="padding-left:0px;padding-bottom:8px">
-                    <h3 class="font-thin h3">Status report</h3>
+                    <h3 class="font-thin h3">{{agile_lng_translate 'tickets' 'status-report'}}</h3>
                 </div>
                 <div class="clearfix"></div>
                 <div id="reportrange" class="pull-right" style="box-shadow: 0 0px 0px rgba(0, 0, 0, 0), inset 0 -0 0 rgba(0, 0, 0, .1); border:1px solid #cfdadd;height:34px;padding:5px">
@@ -150,11 +154,11 @@
                 </div>
                 <div class="pull-right" style="padding:0px 8px 10px">
                     <select name="report_type" id="report_type" class="required form-control" style="width:100px">
-                        <option value="priority">Priority</option>
-                        <option value="status" selected>Status</option>
+                        <option value="priority">{{agile_lng_translate 'tasks' 'priority'}}
+                        </option>
+                        <option value="status" selected>{{agile_lng_translate 'portlets' 'status'}}</option>
                     </select>
                 </div>
-                
             </div>
         </div>
     </div>
@@ -174,7 +178,7 @@
         <div class="row">
             <div class="col-sm-12 col-md-12">
             <div class="col-md-4 col-sm-6" style="padding-left:0px;padding-bottom:8px">
-                    <h3 class="font-thin h3">SLA Report</h3>
+                    <h3 class="font-thin h3">{{agile_lng_translate 'report-view' 'SLA-Report'}}</h3>
                 </div>
 
             <div class="clearfix"></div>
@@ -182,7 +186,6 @@
                     <i class="icon-calendar icon-large"></i>
                     <span id="range">{{date-range "today" "-6"}}</span>
                 </div>
-                            </div>
         </div>
     </div>
     <div class="wrapper-md">    
@@ -201,14 +204,13 @@
         <div class="row">
             <div class="col-sm-12 col-md-12">
              <div class="col-md-4 col-sm-6" style="padding-left:0px;padding-bottom:8px">
-                    <h3 class="font-thin h3">First Response Time</h3>
+                    <h3 class="font-thin h3">{{agile_lng_translate 'report-view' 'first-response-time'}}</h3>
                 </div>
                 <div class="clearfix"></div>
                 <div id="reportrange" class="pull-right" style="box-shadow: 0 0px 0px rgba(0, 0, 0, 0), inset 0 -0 0 rgba(0, 0, 0, .1); border:1px solid #cfdadd;height:34px;padding:5px">
                     <i class="icon-calendar icon-large"></i>
                     <span id="range">{{date-range "today" "-6"}}</span>
                 </div>
-               
             </div>
         </div>
     </div>

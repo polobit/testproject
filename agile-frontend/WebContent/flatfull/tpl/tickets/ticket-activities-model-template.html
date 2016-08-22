@@ -1,7 +1,6 @@
 <script id="ticket-activities-model-template" type="text/html">
-
 <div class="p-t-xxs p-b-xxs">
-	<span class="pull-left thumb-sm">
+	<span class="pull-left thumb-small m-t-xs">
 
 		<img class="r-5x" alt="..." src="{{#if user.name}}{{user.ownerPic}}{{else}}flatfull/images/flatfull/user-default.jpg{{/if}}"/>
 		<!-- {{#is_ticket_requester_activity activity_type}}
@@ -14,9 +13,8 @@
 
 	</span>
 
-	<div class="m-l-xl p-l-sm">
-	 
-	  <span>
+	<div class="m-l-xl">
+	 <div class="pull-left w-full l-h-xs">
 
 	  			{{#is_ticket_requester_activity activity_type}}
 
@@ -40,9 +38,9 @@
 		              		{{epochToHumanDate "ddd mmm dd yyyy HH:MM" time}}
 		              	</time>
    				</span>
-	  </span>
+	  </div>
 
-	 <div class="block m-t-xxs word-break-full word-break-all">
+	 <div class="pull-left word-break-full word-break-all">
 
 	  		{{#if_equals activity_type 'TICKET_CREATED'}}
 	  			{{#if custom2}}
@@ -80,66 +78,66 @@
 		  	{{/if_equals}}
 
 		  	{{#if_equals activity_type 'TICKET_ASSIGNED'}}
-		        Ticket assigned to <span>{{custom2}}</span>
+		        {{agile_lng_translate 'tickets' 'ticket-assigned-to'}} <span>{{custom2}}</span>
 		    {{/if_equals}}
 
 		    {{#if_equals activity_type 'TICKET_ASSIGNEE_CHANGED'}}
-	        	Ticket assignee changed to <span>{{custom2}}</span>
+	        	{{agile_lng_translate 'tickets' 'ticket-assignee-changed-to'}} <span>{{custom2}}</span>
 		    {{/if_equals}}
 
 		    {{#if_equals activity_type 'TICKET_GROUP_CHANGED'}}
-	                Ticket group changed to <span>{{custom2}}</span>
+	                {{agile_lng_translate 'tickets' 'ticket-group-changed-to'}} <span>{{custom2}}</span>
 		    {{/if_equals}}
 
 		    {{#if_equals activity_type 'TICKET_STATUS_CHANGE'}}
-	            Status changed to <span class="first-letter-cap inline-block">{{custom2}}</span>
+	            {{agile_lng_translate 'contacts-view' 'status-changed-to'}} <span class="first-letter-cap inline-block">{{custom2}}</span>
 	        {{/if_equals}}
 
 	        {{#if_equals activity_type 'TICKET_PRIORITY_CHANGE'}}
-	           Priority changed to <span class="first-letter-cap inline-block">{{custom2}}</span>
+	           {{agile_lng_translate 'contacts-view' 'priority-changed-to'}} <span class="first-letter-cap inline-block">{{custom2}}</span>
 	        {{/if_equals}}
 
 		    {{#if_equals activity_type 'TICKET_TYPE_CHANGE'}}
-	            Type changed to <span class="first-letter-cap inline-block">{{custom2}}</span>
+	            {{agile_lng_translate 'contacts-view' 'type-changed-to'}} <span class="first-letter-cap inline-block">{{custom2}}</span>
 	         {{/if_equals}}
 		                        
 	        {{#if_equals activity_type 'TICKET_LABEL_ADD'}}
-	            Label added - <label class="label bg-success m-l-xs">{{custom2}}</label>
+	            {{agile_lng_translate 'campaigns' 'label-added'}} - <label class="label bg-success m-l-xs">{{custom2}}</label>
 	         {{/if_equals}}
 
 	        {{#if_equals activity_type 'TICKET_LABEL_REMOVE'}}
-	            Label removed - <label class="label bg-info m-l-xs">{{custom2}}</label>
+	            {{agile_lng_translate 'tickets' 'label-removed'}} - <label class="label bg-info m-l-xs">{{custom2}}</label>
 	         {{/if_equals}}
 
 	         {{#if_equals activity_type 'TICKET_CC_EMAIL_ADD'}}
-	            CC email added - <label class="label bg-success m-l-xs">{{custom2}}</label>
+	            {{agile_lng_translate 'tickets' 'cc-email-added'}} - <label class="label bg-success m-l-xs">{{custom2}}</label>
 	         {{/if_equals}}
 	         {{#if_equals activity_type 'SET_DUE_DATE'}}
 		         <!--<span class="first-letter-cap inline-block">{{domainUser.name}}</span>-->
-		          Due date set to {{epochToHumanDate "mmm dd, yyyy HH:MM" custom2}}
+		          {{agile_lng_translate 'tickets' 'due-date-set-to'}} {{epochToHumanDate "mmm dd, yyyy HH:MM" custom2}}
 		     {{/if_equals}}
 		     {{#if_equals activity_type 'DUE_DATE_REMOVED'}}
 		         <!--<span class="first-letter-cap inline-block">{{domainUser.name}}</span>-->
-				Due date removed
+				{{agile_lng_translate 'tickets' 'due-date-removed'}}
 		     {{/if_equals}}
 		         {{#if_equals activity_type 'TICKET_NOTES_FORWARD'}}
-		             Ticket has been forwarded to {{custom2}}
+		             {{agile_lng_translate 'tickets' 'ticket-has-been-forwarded-to'}} {{custom2}}
 		     {{/if_equals}}
 
 	        {{#if_equals activity_type 'TICKET_CC_EMAIL_REMOVE'}}
-	            CC email removed - <label class="label bg-info m-l-xs">{{custom2}}</label>
+	            {{agile_lng_translate 'tickets' 'cc-email-removed'}} - <label class="label bg-info m-l-xs">{{custom2}}</label>
 	         {{/if_equals}}
 
 	        {{#if_equals activity_type 'TICKET_MARKED_FAVORITE'}}
-	            Marked as Favorite
+	            {{agile_lng_translate 'contacts-view' 'marked-as-favorite'}}
 	        {{/if_equals}}
 
 	        {{#if_equals activity_type 'TICKET_MARKED_UNFAVORITE'}}
-	            Marked as Unfavorite
+	            {{agile_lng_translate 'contacts-view' 'marked-as-unfavorite'}}
 	        {{/if_equals}}
 
 	        {{#if_equals activity_type 'TICKET_MARKED_SPAM'}}
-	            Marked as Spam
+	            {{agile_lng_translate 'contacts-view' 'marked-as-spam'}}
 	        {{/if_equals}}
 
 	        {{#if_equals activity_type 'TICKET_MARKED_UNSPAM'}}
@@ -147,10 +145,11 @@
 	        {{/if_equals}}
 
 	        {{#if_equals activity_type 'DUE_DATE_CHANGED'}}
-	            <span class="first-letter-cap inline-block">{{user.name}}</span>  Changed due date to {{epochToHumanDate "mmm dd, yyyy HH:MM" custom2}}
+	            <span class="first-letter-cap inline-block">{{user.name}}</span>  {{agile_lng_translate 'tickets' 'changed-due-date-to'}} {{epochToHumanDate "mmm dd, yyyy HH:MM" custom2}}
 	      		</span>
 	        {{/if_equals}}
 	    </div>
+	    <div class="clearfix"></div>
 	</div>
 </div>
 

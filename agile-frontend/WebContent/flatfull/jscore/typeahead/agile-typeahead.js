@@ -124,7 +124,7 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
 								 */
 								if (data.length == 0)
 								{
-									var txt = '<b>No Results Found</b>';
+									var txt = '<b>{{agile_lng_translate "others" "no-reults-found"}}</b>';
 
 									if (noResultText && noResultText.length)
 										txt = noResultText;
@@ -190,7 +190,7 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
 							/* Sets css to html data to be displayed */
 							if(self.$element.attr("id") == "searchText")
 							{
-								self.$menu.css({"width" : 300, "max-height" : "calc(100vh - 50px)", "overflow-y" : "auto"});
+								self.$menu.css({"width" : 300, "max-height" : "540px", "overflow-y" : "auto"});
 								self.$menu.addClass("dashboard-search-scroll-bar");	
 							}
 							else
@@ -263,7 +263,7 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
 							var searchToken = $('#searchText').val();
 							var appenditem = '';
 							if(id == "searchText"){
-								appenditem = '<li><a href="#contacts/search/'+searchToken+'"><p align="center"><b>More...</b></p></a></li>';
+								appenditem = '<li><a href="#contacts/search/'+searchToken+'"><p align="center"><b>{{agile_lng_translate "others" "more"}}</b></p></a></li>';
 							}
 							$('body').find('#more-results').html(appenditem);
 

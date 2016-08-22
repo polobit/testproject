@@ -75,7 +75,7 @@ function showRapleafDetails(contact_id)
 	 */
 	if (!Email)
 	{
-		rapleafError(RAPLEAF_PLUGIN_NAME, "Please provide email for this contact");
+		rapleafError(RAPLEAF_PLUGIN_NAME, _agile_get_translated_val('widgets','pl-give-contact-email'));
 		return;
 	}
 

@@ -5,8 +5,7 @@
     var bConfig = require('./config.js');
     var siteBuilder = require('./builder.js');
     var publisher = require('../vendor/publisher');
-    var current_agileform;
-
+    
     var styleeditor = {
 
         buttonSaveChanges: document.getElementById('saveStyling'),
@@ -14,6 +13,7 @@
         allStyleItemsOnCanvas: [],
         _oldIcon: [],
         _oldForm:[],
+        preForm_id:[],
         styleEditor: document.getElementById('styleEditor'),
         formStyle: document.getElementById('stylingForm'),
         buttonRemoveElement: document.getElementById('deleteElementConfirm'),
@@ -137,8 +137,14 @@
 
             if ( block === undefined ) return false;
 
-            var i;
+            //render agileform latest code
+            if(!window.current_agileform && block.frame.hasAttribute('data-originalurl') && (block.frame.getAttribute('data-originalurl').includes("agileform") || block.frame.getAttribute('data-originalurl').includes("header10")))
+            {    var agileform_class=$(block.frame.contentWindow.document).find('.agile_crm_form_embed');
+                if(agileform_class.size()!==0)
+                    styleeditor.loadAgileCRMFormInLandingPage(agileform_class.attr("id")); 
+            } 
 
+            var i;           
             //create an object for every editable element on the canvas and setup it's events
 
             for( var key in bConfig.editableItems ) {
@@ -161,9 +167,11 @@
 
             if(key==='img' && element.id !==null && element.id==='agileform')
                 return;
+                         
             //Element object extention
             canvasElement.prototype.clickHandler = function(el) {
-                styleeditor.styleClick(this);
+                if(el.style.cursor === "pointer")                   
+                   styleeditor.styleClick(this);
             };
 
             var newElement = new canvasElement(element);
@@ -326,27 +334,13 @@
 
                     if( bConfig.editableItems[theSelector][x] === 'background-image' ) {
 
-                        newStyleEl.find('input').bind('focus', function(){
-
-                            var theInput = $(this);
-
+                        newStyleEl.find('input').off('click');
+                        newStyleEl.find('input').on('click', function(event){
+                             var theInput = $(this);
                             $('#imageModal').modal('show');
                             $('#imageModal .image button.useImage').unbind('click');
-                            $('#imageModal').on('click', '.image button.useImage', function(){
-
-                                $(styleeditor.activeElement.element).css('background-image',  'url("'+$(this).attr('data-url')+'")');
-
-                                //update live image
-                                theInput.val( 'url("'+$(this).attr('data-url')+'")' );
-
-                                //hide modal
-                                $('#imageModal').modal('hide');
-
-                                //we've got pending changes
-                                siteBuilder.site.setPendingChanges(true);
-
-                            });
-
+                        
+                            console.log("hi");
                         });
 
                     } else if( bConfig.editableItems[theSelector][x].indexOf("color") > -1 ) {
@@ -378,7 +372,10 @@
 
                 }
 
-                newStyleEl.css('display', 'block');
+                if(newStyleEl.find('input').attr("name")==="content")
+                    newStyleEl.css('display', 'none');
+                else 
+                    newStyleEl.css('display', 'block'); 
 
                 $('#styleElements').append( newStyleEl );
 
@@ -402,7 +399,11 @@
                 if( $(this).attr('name') !== undefined ) {
 
                     $(styleeditor.activeElement.element).css( $(this).attr('name'),  $(this).val());
-
+                    if($(this).attr("name") === 'font-size'){
+                        var nodeName=styleeditor.activeElement.element.nodeName;
+                        if(nodeName==='DIV' || nodeName==='BLOCKQUOTE')
+                            $(styleeditor.activeElement.element).children().css($(this).attr("name"),$(this).val());
+                    }                     
                 }
 
                 /* SANDBOX */
@@ -546,10 +547,17 @@
                 var form_id=$('select[id=agileform_id]').val();
                 if(form_id==='default')                 
                     return;
-                current_agileform=$(styleeditor.activeElement.element).closest("#page").children().attr("id");
+
+                window.current_agileform=$(styleeditor.activeElement.element).closest("#page").children().attr("id");
                 var current_element=$(styleeditor.activeElement.element).children();
-                styleeditor._oldForm[current_agileform]=current_element;
-                styleeditor.loadAgileCRMFormInLandingPage($(styleeditor.activeElement.element),form_id);
+
+                if(current_element.attr("class")==="agile_crm_form_embed"){
+                    current_element=$(styleeditor.activeElement.element).children().children();
+                    styleeditor.preForm_id[window.current_agileform]=$(styleeditor.activeElement.element).children().attr("id");
+                }               
+
+                styleeditor._oldForm[window.current_agileform]=current_element;                
+                styleeditor.loadAgileCRMFormInLandingPage(form_id);
             }
 
             $('#detailsAppliedMessage').fadeIn(600, function(){
@@ -559,7 +567,9 @@
             });
 
             //adjust frame height
-            styleeditor.activeElement.parentBlock.heightAdjustment();
+            if(typeof styleeditor.activeElement.parentBlock.heightAdjustment !== "undefined") {
+                styleeditor.activeElement.parentBlock.heightAdjustment();
+            }
 
 
             //we've got pending changes
@@ -574,14 +584,14 @@
             on focus, we'll make the input fields wider
         */
         animateStyleInputIn: function() {
-
-            $(this).css('position', 'absolute');
-            $(this).css('right', '0px');
-            $(this).animate({'width': '100%'}, 500);
-            $(this).focus(function(){
-                this.select();
-            });
-
+            if($(this).attr("name") !== "background-image") {
+                $(this).css('position', 'absolute');
+                $(this).css('right', '0px');
+                $(this).animate({'width': '100%'}, 500);
+                $(this).focus(function(){
+                    this.select();
+                });
+            }
         },
 
 
@@ -1077,10 +1087,19 @@
             //agile form reset 
            if($(styleeditor.activeElement.element).attr('id')==='agileform_div'){
             $("iframe").each(function(i) { 
-                if($("iframe")[i].src.includes(current_agileform)){
-                   var iframe_id=$("iframe")[i].getAttribute("id");
-                   $('#'+iframe_id).contents().find('#agileform_div').empty();
-                   $('#'+iframe_id).contents().find('#agileform_div').append(styleeditor._oldForm[current_agileform]);
+                if($("iframe")[i].hasAttribute('data-originalurl') && ($("iframe")[i].getAttribute('data-originalurl').includes(window.current_agileform))){
+                   var iframe_id=$("iframe")[i].getAttribute("id");                   
+                   if(styleeditor._oldForm[window.current_agileform].size()===1){
+                        $('#agileform_id').val('default').attr('selected','selected');
+                        siteBuilder.site.setPendingChanges(true);
+                        $('#'+iframe_id).contents().find('#agileform_div').html(styleeditor._oldForm[window.current_agileform]);           
+                    }
+                   else {
+                        $('#'+iframe_id).contents().find('.agile_crm_form_embed').attr("id",styleeditor.preForm_id[window.current_agileform]);
+                        $('#agileform_id').val(styleeditor.preForm_id[window.current_agileform]).attr('selected','selected');
+                        siteBuilder.site.setPendingChanges(true);
+                        $('#'+iframe_id).contents().find('.agile_crm_form_embed').html(styleeditor._oldForm[window.current_agileform]);
+                    }
                    return;
                 }
             }); 
@@ -1133,6 +1152,9 @@
 
             if ( e !== undefined ) e.preventDefault();
 
+            if(styleeditor.activeElement.element)
+                 styleeditor.activeElement.editableAttributes=bConfig.editableItems[styleeditor.activeElement.element.getAttribute('data-selector')];
+            
             if ( styleeditor.activeElement.editableAttributes && styleeditor.activeElement.editableAttributes.indexOf('content') === -1 ) {
                 styleeditor.activeElement.removeOutline();
                 styleeditor.activeElement.activate();
@@ -1163,14 +1185,22 @@
         editAgileForm: function(){
             $('a#agileform_link').parent().show();
             $('a#agileform_link').click();
-            $('a#default-tab1').css('display','none');           
+            $('a#default-tab1').css('display','none');
+            if($(this.activeElement.element).find('.agile_crm_form_embed').size()!==0)
+                $('#agileform_id').val($(this.activeElement.element).find('.agile_crm_form_embed').attr('id')).attr('selected','selected');
+            else
+                $('#agileform_id').val('default').attr('selected','selected');
+
         },
 
-        loadAgileCRMFormInLandingPage: function(element,formId){
-            element.parent().addClass('agile_crm_form_embed');
-            var script = document.createElement('script');
+        loadAgileCRMFormInLandingPage: function(id){
+            id = id.split("_");
+             var agileDomain = id[0];
+             var formId = id[id.length-1];
+             console.log("domain is :"+agileDomain);
+             var script = document.createElement('script');
             script.src = window.siteUrl+'core/api/forms/form/js/'+formId;
-            document.body.appendChild(script);
+            document.body.appendChild(script);  
         }
 
     };

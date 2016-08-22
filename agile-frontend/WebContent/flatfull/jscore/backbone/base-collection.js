@@ -135,9 +135,9 @@ deleteConfirm : function(e)
 							   {
 							    var message;
 							    if(count > 1)
-							     message = "Users have been deleted successfully. Please adjust your billing plan to avoid being billed for the deleted users.";
+							     message = _agile_get_translated_val("users", "deleted-users");
 							    else
-							     message = "User has been deleted successfully. Please adjust your billing plan to avoid being billed for the deleted user.";
+							     message = _agile_get_translated_val("users", "deleted-user");
 							    showNotyPopUp('information', message, "top", 10000);
 							   }
 
@@ -146,7 +146,7 @@ deleteConfirm : function(e)
        					error : function(response)
 						{
 							console.log("error");
-							confirmModal.find(".modal-footer").find("#delete-user").html('<small class="text-danger" style="font-size:15px;margin-right:172px;">Sorry, can not delete user having admin privilege.</small>');
+							confirmModal.find(".modal-footer").find("#delete-user").html('<small class="text-danger" style="font-size:15px;margin-right:172px;">' + _agile_get_translated_val("users", "delete-user-error") + '</small>');
 							console.log(response);
 
 						}
@@ -275,7 +275,7 @@ var Base_Collection_View = Backbone.View
 				    showTransitionBar();
 
 				// Binds functions to view
-				_.bindAll(this, 'render', 'appendItem', 'appendItemOnAddEvent', 'appendItemsOnAddEvent', 'buildCollectionUI');
+				_.bindAll(this, 'render', 'appendItem', 'appendItemOnAddEvent', 'appendItemsOnAddEvent', 'buildCollectionUI', 'removeItemOnEvent');
 
 				if (this.options.data)
 				{
@@ -306,6 +306,7 @@ var Base_Collection_View = Backbone.View
 				this.collection.bind('sync', this.appendItem);
 				this.collection.bind('add', this.appendItemOnAddEvent);
 				this.collection.bind('addAll', this.appendItemsOnAddEvent);
+				this.collection.bind('remove', this.removeItemOnEvent);
 
 				var that = this;
 
@@ -456,6 +457,14 @@ var Base_Collection_View = Backbone.View
 				e.preventDefault();
 				this.infiniScroll.fetchNext();
 			},
+			removeItemOnEvent : function(){
+				var collection_removal_update = this.options.collection_removal_update;
+				console.log("removeItemOnEvent");
+				
+				if (collection_removal_update)
+					this.options.collection_removal_update(this.collection, this.el);
+
+			},
 
 			/**
 			 * Takes each model and creates a view for each model using model
@@ -511,9 +520,12 @@ var Base_Collection_View = Backbone.View
 				 * if(this.collection.at(0).attributes.count)
 				 * this.collection.at(0).attributes.count+=1; }
 				 */
-
 				// callback for newly added models
 				var appendItemCallback = this.options.appendItemCallback;
+				var collection_count_update = this.options.collection_count_update;
+
+				if (collection_count_update && typeof (collection_count_update) === "function")
+					collection_count_update($(this.el),base_model);
 
 				if (appendItemCallback && typeof (appendItemCallback) === "function")
 					appendItemCallback($(this.el));

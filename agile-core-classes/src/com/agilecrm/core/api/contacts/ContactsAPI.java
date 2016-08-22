@@ -1376,6 +1376,16 @@ public class ContactsAPI
 		    cas.addContactToCase(contact.id.toString());
 		    cas.save();
 		}
+		
+		// merge contacts of companies
+
+		List<Contact> companies_contacts = ContactUtil.getAllContactsOfCompany(id, 0, null);
+		for (Contact companies_contact : companies_contacts)
+		{
+			companies_contact.contact_company_id=contact.id.toString();
+			companies_contact.save();
+		}
+				
 		// delete duplicated record
 		ContactUtil.getContact(Long.valueOf(id)).delete();
 		// save master reccord
@@ -1970,5 +1980,19 @@ public class ContactsAPI
 			e.printStackTrace();
 		}
 	    return null ; 
+    }
+    
+    /* Fetch all contacts related to a company */
+    @Path("/related/{id}/count")
+    @GET
+    public int getContactsOfCompanyCount(@QueryParam("cursor") String cursor,
+	    @QueryParam("page_size") String count, @PathParam("id") String id)
+    {
+    	
+    	Map searchMap = new HashMap();
+    	searchMap.put("type", Contact.Type.PERSON);
+    	searchMap.put("contact_company_key", new Key<Contact>(Contact.class, Long.valueOf(id)));
+
+    	return Contact.dao.getCountByProperty(searchMap);
     }
 }

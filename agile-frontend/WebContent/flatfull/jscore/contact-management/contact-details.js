@@ -401,7 +401,9 @@ var Contact_Details_Model_Events = Base_Model_View.extend({
 		/** inliner edits input fields**/
 		'click #company-name-text '  : 'toggleinline_company',
 		'blur #company-Input input ' : 'companyInlineEdit',
-    'keydown #company-inline-input' : 'companyNameChange'  
+    'keydown #company-inline-input' : 'companyNameChange' ,
+    'click #company-contacts .contactcoloumn' : 'addOrRemoveContactCompanyColumns',
+    'click #contactCompanyTabelView' : 'toggleCustomFieldsForContacts',
     },
     
     
@@ -695,10 +697,10 @@ show and hide the input for editing the contact name and saving that
     onChangeOwner : function(e){
          e.preventDefault();
          	var contact_owner = $(e.currentTarget).attr("data");
-         	var error_msg = "You do not have permission to change owner.";
+         	var error_msg = _agile_get_translated_val('contact-details','no-perm-to-update');
     			if(contact_owner != CURRENT_DOMAIN_USER.id && !hasScope("EDIT_CONTACT"))
     			{
-    				showModalConfirmation("Owner Change", 
+    				showModalConfirmation(_agile_get_translated_val('contact-details','owner-changed'), 
     						error_msg, 
     						function (){
     							return;
@@ -709,7 +711,7 @@ show and hide the input for editing the contact name and saving that
     						function() {
     							
     						},
-    						"Cancel", "");
+    						_agile_get_translated_val('contact-details', 'cancel'), "");
     				return;
     			}
          fill_owners(undefined, undefined, function(){
@@ -949,7 +951,7 @@ show and hide the input for editing the contact name and saving that
 		
 		$("#map").css('display', 'none');
 		$("#contacts-local-time").hide();
-		$("#map_view_action").html("<i class='icon-plus text-sm c-p' title='Show map' id='enable_map_view'></i>");
+		$("#map_view_action").html("<i class='icon-plus text-sm c-p' title='"+_agile_get_translated_val('contact-details','show-map')+"' id='enable_map_view'></i>");
 		
     },
 
@@ -1536,7 +1538,54 @@ updateScoreValue :function(){
 			}
 		}
 		setleadScoreStyles(scoreboxval)
-	}
+	},
+
+  addOrRemoveContactCompanyColumns :function(e){
+      e.preventDefault();
+      var $checkboxInput = $(e.currentTarget).find("input");
+      if($checkboxInput.is(":checked"))
+      {
+        $checkboxInput.prop("checked", false);
+      }
+      else
+      {
+        $checkboxInput.prop("checked", true);
+      }
+      var json = serializeForm("contact-static-fields");
+    $.ajax({
+      url : 'core/api/contact-view-prefs/contact-company',
+      type : 'PUT',
+      contentType : 'application/json',
+      dataType : 'json',
+      data :JSON.stringify(json),
+      success : function(data)
+      {
+        App_Contacts.contactCompanyViewModel = data;
+        fetchContactCompanyHeadings(function(modelData){
+        getContactofCompanies(modelData, $("#contacts-listener-container"));
+        });
+      } 
+    });
+    },
+
+    toggleCustomFieldsForContacts : function(e){
+
+
+      if(_agile_get_prefs("contactCompanyTabelView")){
+        _agile_delete_prefs("contactCompanyTabelView");
+        $(e.currentTarget).find("i").removeClass("fa fa-ellipsis-h");
+        $(e.currentTarget).find("i").addClass("fa fa-navicon");
+      }
+      else{
+        _agile_set_prefs("contactCompanyTabelView","true");
+        $(e.currentTarget).find("i").removeClass("fa fa-navicon");
+        $(e.currentTarget).find("i").addClass("fa fa-ellipsis-h");
+      }
+      $(e.currentTarget).parent().parent().toggleClass("compact");
+      $(".thead_check", $("#contacts-listener-container")).prop("checked", false);
+    getContactofCompanies(App_Companies.contactCompanyViewModel, $("#contacts-listener-container"));
+
+    },
 });
 
 $(function(){
@@ -1640,3 +1689,6 @@ function setleadScoreStyles(scoreboxval){
   $("#scorebox").addClass("hide").val(scoreboxval);
   $("#lead-score").attr("title",scoreboxval);
 }
+
+
+    
