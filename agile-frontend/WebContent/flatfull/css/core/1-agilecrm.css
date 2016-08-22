@@ -4560,3 +4560,9 @@ div.list-tasks.panel-body:hover
 #company-contacts ul li {
     padding-right: 0px!important;
 }
+
+@media (max-width: 767px){
+  .searchForm {
+    padding: 0px !important;
+  }
+}

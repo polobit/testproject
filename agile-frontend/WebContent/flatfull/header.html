@@ -99,9 +99,62 @@
                 src='img/ajax-loader.gif' />
                 --></li>
 
-        <button class="pull-right hide visible-xs search-menu-mobile" id="search-menu-mobile" ui-toggle-class="off-screen" data-target=".app-aside" ui-scroll-to="app">
-          <i class="icon-magnifier search-menu-mobile"></i>
-        </button>
+		        <li class="dropdown hide visible-xs pull-right wrapper-sm p-t p-r-md" id="menu2">
+				    <a class="dropdown-toggle" data-toggle="dropdown" href=""><i class="fa fa-search"></i></a>
+				    <ul class="dropdown-menu search-view animated fadeInRight agile-search" role="menu">
+				      	<div class="col-sm-12">
+							<form class=" m-t-sm m-b-sm searchForm" id="searchForm" role="search">
+							<div class="input-group add-on">
+							<input type="text" id="searchText" data-provide="typeahead"
+												class="typeahead form-control r-5x typeahead_contacts form-control-custom"
+												placeholder='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "search")%>' onclick="Agile_GA_Event_Tracker.track_event('Search option in Nav Bar')">
+							<div class="input-group-btn">
+
+							<a class="btn btn-default no-shadow" href="#" id="speechDectation"src="https://i.imgur.com/cHidSVu.gif"  ><i class="icon-microphone"></i></a>
+
+							<button class="btn btn-default no-shadow r-5x" id="search-results" type="submit"><i class="fa fa-search"></i></button>
+							</div>
+							</div>
+							</form>
+						</div>
+
+						<li>
+							<ul class="col-sm-12 list-none search-filters" id="advanced-search-fields-group" name="fields_set">
+								<li>
+					       		  		<a href="javascript:void(0);" class="p-b-none">
+											<label class="i-checks i-checks-sm searchtypeall "><input name="all" value = "" type="checkbox" class="choose-column-chbx"><i></i></label><%=LanguageUtil.getLocaleJSONValue(localeJSON, "all")%></a>
+								</li>
+				                   	           			
+								<li>
+						  			<a href="javascript:void(0);" class="p-b-none">
+									<label class="i-checks i-checks-sm  searchtype"><input name="person" value = "person" type="checkbox" class="choose-column-chbx"><i></i></label><%=LanguageUtil.getLocaleJSONValue(localeJSON, "contacts")%></a>
+								</li>
+
+								<li>
+								<a href="javascript:void(0);" class="p-b-none">
+											<label class="i-checks i-checks-sm  searchtype"><input name="company" value = "company" type="checkbox" class="choose-column-chbx"><i></i></label><%=LanguageUtil.getLocaleJSONValue(localeJSON, "companies")%></a>
+								</li>
+
+								<li>
+								<a href="javascript:void(0);" class="p-b-none">
+											<label class="i-checks i-checks-sm  searchtype"><input name="opportunity" value = "opportunity" type="checkbox" class="choose-column-chbx"><i></i></label><%=LanguageUtil.getLocaleJSONValue(localeJSON, "deals")%></a>
+								</li>
+
+								<li>
+								<a href="javascript:void(0);" class="p-b-none">
+											<label class="i-checks i-checks-sm  searchtype"><input name="document" value = "document" type="checkbox" class="choose-column-chbx"><i></i></label><%=LanguageUtil.getLocaleJSONValue(localeJSON, "documents")%></a>
+								</li>
+
+								<li>
+								<a href="javascript:void(0);" class="p-b-none">
+											<label class="i-checks i-checks-sm  searchtype"><input name="tickets" value = "tickets" type="checkbox" class="choose-column-chbx"><i></i></label><%=LanguageUtil.getLocaleJSONValue(localeJSON, "tickets")%></a>
+
+								</li>
+				        			
+				        	</ul>
+							</li>
+				    </ul> 
+				</li>
 
         <div rel="popover" data-custom-popover-class='grid_custom_popover' data-trigger="click"  data-original-title="" title="" data-placement="bottom" class="need_help grid_icon_center visible-xs" screen_name="Need Help? We are one click away." data-content="<div class='row' id='need_help_header'>
 									<ul class='col-xs-12 col-sm-12 grid-sub-nav text-center m-t-md p-l-md p-r-md'>
@@ -120,40 +173,6 @@
 							 </div>
 
          
-
-                <%
-						   if(MobileUADetector.isMobile(request.getHeader("user-agent"))){
-						  %>
-							<li class="nav-bar-search pull-right  search-mobile hide">
-								<form id="searchForm" class=" navbar-search  navbar-search navbar-form navbar-form-sm navbar-left shift">
-					<div class="input-group">
-							<input id="searchText" type="text" style="border-top-right-radius: 0px;
-   								 border-bottom-right-radius: 0px;"
-										data-provide="typeahead"
-										class="typeahead typeahead_contacts search-query form-control-custom input-sm bg-light no-border rounded padder"
-										placeholder='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "search")%>' onclick="Agile_GA_Event_Tracker.track_event('Search option in Nav Bar')">
-										
-										 <!-- <input id="search-results" 
-										type="image" src="img/SearchIcon.png" class="searchbox hidden" /> -->
-						<span class="input-group-btn">
-                <button type="submit" class="btn btn-sm bg-light rounded" id="search-results" style="height:30px;"><i class="fa fa-search"></i></button>
-              </span>
-              </div>				
-								</form>
-							</li>
-							<%
-							}
-							%>
-
-
-                 
-             
-
-
-				
-			
-        
-       
 				   <%
 				      if(MobileUADetector.isMobile(request.getHeader("user-agent"))){
 				   %>
@@ -223,7 +242,7 @@
 
 					<div class="col-sm-12">
 
-					<form class=" m-t-sm m-b-sm" id="searchForm" role="search">
+					<form class=" m-t-sm m-b-sm searchForm" id="searchForm" role="search">
 					<div class="input-group add-on">
 					<input type="text" id="searchText" data-provide="typeahead"
 										class="typeahead form-control r-5x typeahead_contacts form-control-custom"
