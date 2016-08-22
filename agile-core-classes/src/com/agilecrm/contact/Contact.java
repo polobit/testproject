@@ -997,6 +997,9 @@ public class Contact extends Cursor
     public void setContactOwner(Key<DomainUser> owner_key)
     {
 	this.owner_key = owner_key;
+	
+	if(this.type == Contact.Type.PERSON)
+		this.owner_updated = true;
     }
 
     @JsonIgnore
