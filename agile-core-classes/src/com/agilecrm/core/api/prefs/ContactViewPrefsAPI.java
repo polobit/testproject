@@ -8,6 +8,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.exception.ExceptionUtils;
 
 import com.agilecrm.user.ContactViewPrefs;
 import com.agilecrm.user.util.ContactViewPrefsUtil;
@@ -40,6 +41,7 @@ public class ContactViewPrefsAPI
 	}
 	catch (Exception e)
 	{
+		System.out.println(ExceptionUtils.getFullStackTrace(e));
 	    e.printStackTrace();
 	    return null;
 	}

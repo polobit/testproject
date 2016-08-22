@@ -5,7 +5,6 @@ import java.util.Set;
 
 import javax.ws.rs.core.Application;
 
-import com.agilecrm.ipaccess.IpAccess;
 import com.agilecrm.ipaccess.IpAccessAPI;
 
 public class JerseyApplication extends Application
@@ -14,6 +13,8 @@ public class JerseyApplication extends Application
     public Set<Class<?>> getClasses()
     {
 	Set<Class<?>> s = new HashSet<Class<?>>();
+	
+	s.addAll(com.agilecrm.core.si.JerseyApplication.getJerseyClasses());
 
 	s.add(org.codehaus.jackson.jaxrs.JacksonJaxbJsonProvider.class);
 	s.add(org.codehaus.jackson.jaxrs.JacksonJsonProvider.class);
@@ -28,7 +29,6 @@ public class JerseyApplication extends Application
 	s.add(com.agilecrm.core.api.prefs.NotificationsAPI.class);
 	s.add(com.agilecrm.core.api.reports.ReportsAPI.class);
 	s.add(com.agilecrm.core.api.calendar.TasksAPI.class);
-	s.add(com.agilecrm.core.api.prefs.UserPrefsAPI.class);
 	s.add(com.agilecrm.core.api.prefs.ContactViewPrefsAPI.class);
 	s.add(com.agilecrm.core.api.contacts.customview.CustomViewAPI.class);
 	s.add(com.agilecrm.core.api.contacts.ContactsAPI.class);
@@ -36,7 +36,6 @@ public class JerseyApplication extends Application
 	s.add(com.agilecrm.core.api.contacts.ContactFilterAPI.class);
 	s.add(com.agilecrm.core.api.contacts.NotesAPI.class);
 	s.add(com.agilecrm.core.api.contacts.CustomFieldsAPI.class);
-	s.add(com.agilecrm.core.api.prefs.AccountPrefsAPI.class);
 	s.add(com.agilecrm.core.api.deals.MilestoneAPI.class);
 	s.add(com.agilecrm.core.api.prefs.IMAPAPI.class);
 	s.add(com.agilecrm.core.api.prefs.OfficePrefsAPI.class);
@@ -48,9 +47,6 @@ public class JerseyApplication extends Application
 	s.add(com.agilecrm.core.api.campaigns.WorkflowsAPI.class);
 	s.add(com.agilecrm.core.api.campaigns.WorkflowTemplatesAPI.class);
 	s.add(com.agilecrm.core.api.prefs.SocialPrefsAPI.class);
-	s.add(com.agilecrm.core.api.UsersAPI.class);
-	s.add(com.agilecrm.core.api.AliasDomainAPI.class);
-	s.add(com.agilecrm.core.api.ReferAPI.class);
 	s.add(com.agilecrm.core.api.API.class);
 	s.add(com.agilecrm.core.api.widgets.WidgetsAPI.class);
 	s.add(com.agilecrm.core.api.bulkactions.backends.BulkActionsAPI.class);
@@ -151,6 +147,7 @@ public class JerseyApplication extends Application
 	s.add(com.agilecrm.core.api.JavaScriptPermissionAPI.class);
 	// SSO feature
 	s.add(com.agilecrm.ssologin.SingleSignOnAPI.class);
+	
 	return s;
     }
 }

@@ -256,7 +256,7 @@ function isValidForm(form) {
 	// domain name validation
 	jQuery.validator.addMethod("domain_format", function(value, element){
 		
-		return /^[a-zA-Z][a-zA-Z0-9-_\.]{3,20}$/.test(value);
+		return /^[a-zA-Z][a-zA-Z0-9-_]{3,20}$/.test(value);	   
 	},_agile_get_translated_val("validation-msgs",'domain-validation'));
     
 
