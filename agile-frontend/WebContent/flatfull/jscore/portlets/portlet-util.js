@@ -1886,7 +1886,7 @@ var portlet_utility = {
 
 			$('#ms-category-list', elData).remove();
 			head.js(LIB_PATH + 'lib/jquery.multi-select.js', function() {
-				$('#category-list, #user-list', elData).multiSelect();
+				$('#category-list', elData).multiSelect();
 				$('#ms-category-list .ms-selection', elData).children('ul')
 						.addClass('multiSelect').attr("name", "category-list")
 						.attr("id", "category");
