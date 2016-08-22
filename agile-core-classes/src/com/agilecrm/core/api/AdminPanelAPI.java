@@ -688,8 +688,6 @@ public class AdminPanelAPI
     
     @Path("affiliate/addAmount")
     @POST
-	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public void addAffiliateAmountAmount(@QueryParam("d") String namespace, @QueryParam("id") Long userId, @QueryParam("am") int amount){
     	String oldNamespace = NamespaceManager.get();
 		NamespaceManager.set(namespace);
