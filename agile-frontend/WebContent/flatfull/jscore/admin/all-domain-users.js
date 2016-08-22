@@ -297,9 +297,9 @@ function initializeAdminpanelListner(el){
 			    return;
 			}
 			$(this).attr("disabled", "disabled");
-			var domain = $("#affiliateAddAmountModal").find("input[name='domain']");
-			var userId = $("#affiliateAddAmountModal").find("input[name='userId']");
-			var amount = $("#affiliateAddAmountModal").find("input[name='amount']");
+			var domain = $("#affiliateAddAmountModal").find("input[name='domain']").val();
+			var userId = $("#affiliateAddAmountModal").find("input[name='userId']").val();
+			var amount = $("#affiliateAddAmountModal").find("input[name='amount']").val();
 			$.ajax({
 					url : 'core/api/admin_panel/affiliate/addAmount?d='+domain+'&id='+userId+'&amount='+amount,
 					type : 'POST',

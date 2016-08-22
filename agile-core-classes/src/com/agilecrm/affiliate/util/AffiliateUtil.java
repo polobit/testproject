@@ -38,16 +38,8 @@ import com.googlecode.objectify.Query;
 public class AffiliateUtil {
 	
 	private static ObjectifyGenericDao<Affiliate> dao = new ObjectifyGenericDao<Affiliate>(Affiliate.class);
-	
-	public static List<Affiliate> getAffiliates(Long userId){
-		return getAffiliates(userId, null, null, 100, null);
-	}
-	
-	public static List<Affiliate> getAffiliates(Long userId,int max, String cursor){
-		return getAffiliates(userId, null, null, max, cursor);
-	}
-	
-	public static List<Affiliate> getAffiliates(Long userId, Long startTime, Long endTime, int max, String cursor){
+		
+	public static List<Affiliate> getAffiliates(Long userId, Long startTime, Long endTime, int max, String cursor, String orderBy){
 		Map<String, Object> map = new HashMap<String, Object>();
 		if(startTime != null && endTime != null){
 			map.put("createdTime >=", startTime);
@@ -55,7 +47,7 @@ public class AffiliateUtil {
 		}
 		if(userId != null)
 			map.put("relatedUserId", userId);
-		return dao.fetchAll(max, cursor, map, true, false);
+		return dao.fetchAllByOrder(max, cursor, map, true, false, orderBy);
 	}
 	
 	public static String getTotalCommisionAmount(Long userId, Long startTime, Long endTime) throws JSONException{

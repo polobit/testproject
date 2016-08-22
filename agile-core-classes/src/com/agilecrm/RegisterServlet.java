@@ -120,7 +120,15 @@ public class RegisterServlet extends HttpServlet
 		    request, response);
 	    return;
 	}
-
+	//Get affiliate reference
+	String affiliateReference = request.getParameter("utm_affiliate");
+	if(affiliateReference != null){
+		Cookie cookie = new Cookie("agile_affiliated_by", affiliateReference);
+		System.out.println("Setting agile_affiliated_by cookie value: "+affiliateReference);
+		response.addCookie(cookie);
+	}else{
+		System.out.println("affiliateReference value is null");
+	}
 	request.getRequestDispatcher("register-new1.jsp").forward(request, response);
     }
 
@@ -451,7 +459,6 @@ public class RegisterServlet extends HttpServlet
 	String utmcampaign = null;
 	String utmmedium = null;
 	String utmreferencedomain = null;
-	String utmAffiliatedBy = null;
 	String referrar_note_description = null;
 
 	if (cookies != null && cookies.length > 0)
@@ -476,13 +483,9 @@ public class RegisterServlet extends HttpServlet
 		{
 		    utmreferencedomain = cookie.getValue();
 		}
-		if (cookie.getName().equals("agile_affiliated_by"))
-		{
-		    utmAffiliatedBy = cookie.getValue();
-		}
 		System.out.println("in cookies utm source " + utmsource + " utm medium " + utmmedium + " utm campaign "
 			+ utmcampaign + " reference domain " + utmreferencedomain);
-		if (cookie.getName().equals("agile_reference_domain") || cookie.getName().equals("agile_affiliated_by"))
+		if (cookie.getName().equals("agile_reference_domain"))
 		    cookie.setMaxAge(0);
 
 	    }
@@ -674,12 +677,12 @@ public class RegisterServlet extends HttpServlet
 	try
 	{
 	    // Set timezone in account prefs.
-		String affiliatedBy = req.getParameter("utm_affiliate");
 	    AccountPrefs accPrefs = AccountPrefsUtil.getAccountPrefs();
-	    if(affiliatedBy != null){
-	    	System.out.println("setting affiliated by... "+affiliatedBy);
-    		accPrefs.affiliatedBy = Long.parseLong(affiliatedBy);
-	    }
+	    System.out.println("Setting timezone in AccountPrefs");
+	    String affiliateReference = getCookie(req, "agile_affiliated_by");
+	    System.out.println("affiliateReference in cookie is: "+affiliateReference);
+	    if(affiliateReference != null)
+    		accPrefs.affiliatedBy = Long.parseLong(affiliateReference);
 	    if (StringUtils.isEmpty(accPrefs.timezone) || "UTC".equals(accPrefs.timezone)
 		    || "GMT".equals(accPrefs.timezone))
 			accPrefs.timezone = req.getParameter("account_timezone");
