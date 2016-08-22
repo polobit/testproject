@@ -30,6 +30,13 @@ request.setAttribute("agile_email", email);
 }
 //Gets the Ip 
 
+// Get the language
+String _LANGUAGE = request.getParameter("lang");
+if(StringUtils.isBlank(_LANGUAGE) || !LanguageUtil.isLanguageSupportByAgile(_LANGUAGE))
+   _LANGUAGE = "en";
+
+// Locales JSON
+JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "page-builder");
 
 	
 // Checks if it is being access directly and not through servlet
@@ -205,7 +212,7 @@ position: fixed;width: 100%;top: 0px;
 	left: 30px;
 }
 .lang-identifier a {
-	text-decoration: none;
+	/*text-decoration: none; */
 }
 
 </style>
@@ -251,8 +258,8 @@ if(isSafari && isWin)
 			<span id="lang-code-name">English</span> <span class="caret"></span> 
 		</a>
 	    <ul class="dropdown-menu">
-	     	<li><a href="en">English</a></li>
-	    	<li><a href="es">Spanish</a></li>
+	     	<li><a href="?lang=en">English</a></li>
+	    	<li><a href="?lang=es">Español</a></li>
 	  	</ul>
 	</div>
 	<!-- End of Language -->
@@ -386,14 +393,20 @@ if(isSafari && isWin)
 			// localStorage setup
 			var _agile_storage = {
 				key : "_agile_user_fingerprint",
-				get : function(){
+				get : function(key){
+					if(!key)
+						key = this.key;
+
 					if(!this.is_strorage_supports())
 						 return;
-					return localStorage.getItem(this.key);
+					return localStorage.getItem(key);
 				},
-				set :  function(val){
+				set :  function(val, key){
+					if(!key)
+						key = this.key;
+
 					if(this.is_strorage_supports())
-						localStorage.setItem(this.key, val);
+						localStorage.setItem(key, val);
 				},
 				is_strorage_supports : function(){
 					return (typeof localStorage ? true : false);
