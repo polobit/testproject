@@ -30,7 +30,7 @@ public class AffiliateApi {
 	@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 	public List<Affiliate> getAffiliates(@QueryParam("cursor") String cursor, @QueryParam("page_size") String count, @QueryParam("userId") Long userId, @QueryParam("startTime") Long startTime, @QueryParam("endTime") Long endTime, @QueryParam("global_sort_key") String sortFieldName){
 		if(sortFieldName == null)
-			sortFieldName = "createdTime";
+			sortFieldName = "-createdTime";
 		List<Affiliate> affiliates = AffiliateUtil.getAffiliates(userId, startTime, endTime, (Integer.parseInt(count)), cursor, sortFieldName);
 		return affiliates;
 	}

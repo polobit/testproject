@@ -277,7 +277,7 @@ function initializeAdminpanelListner(el){
 							getTemplate('affiliate-add-amount', {"domain":domain, "userId":userId}, undefined, function(template_ui){
 								if(!template_ui)
 									  return;
-								$('#affiliateAddAmountModal').html($(template_ui)).show();
+								$('#affiliateAddAmountModal').html($(template_ui)).modal("show");
 							}, "#content");
 						}else{
 							showAlertModal("affiliate_error");
@@ -305,11 +305,11 @@ function initializeAdminpanelListner(el){
 					type : 'POST',
 					success : function(data){
 						showNotyPopUp("information", "Amount added successfully", "top");
-						$("#affiliateAddAmountModal").hide();
+						$("#affiliateAddAmountModal").modal("hide");
 					},
 					error : function(response){
 						showNotyPopUp("error", response.responseText, "top");
-						$("#affiliateAddAmountModal").hide();
+						$("#affiliateAddAmountModal").modal("hide");
 					}
 				});
 		});
