@@ -568,9 +568,7 @@
         <property name="ticket_key" direction="asc"/>
         <property name="created_time" direction="desc"/>
     </datastore-index>
-    <datastore-index kind="TicketGroups" ancestor="true" source="manual">
-        <property name="group_name" direction="asc"/>
-    </datastore-index>
+    
     <datastore-index kind="TicketNotes" ancestor="false" source="manual">
         <property name="ticket_key" direction="asc"/>
         <property name="created_time" direction="desc"/>
@@ -601,7 +599,11 @@
         <property name="feed_back" direction="asc"/>
         <property name="feedback_flag" direction="asc"/>
         <property name="created_time" direction="asc"/>
+    </datastore-index>
+         <datastore-index kind="TicketNotes" ancestor="false" source="manual">
         <property name="created_by" direction="asc"/>
+        <property name="feedback_flag" direction="asc"/>
+        <property name="created_time" direction="asc"/>
     </datastore-index>
      <datastore-index kind="Contact" ancestor="false" source="auto">
         <property name="type" direction="asc"/>
