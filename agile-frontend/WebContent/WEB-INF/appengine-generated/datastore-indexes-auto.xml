@@ -601,6 +601,7 @@
         <property name="feed_back" direction="asc"/>
         <property name="feedback_flag" direction="asc"/>
         <property name="created_time" direction="asc"/>
+        <property name="created_by" direction="asc"/>
     </datastore-index>
      <datastore-index kind="Contact" ancestor="false" source="auto">
         <property name="type" direction="asc"/>
