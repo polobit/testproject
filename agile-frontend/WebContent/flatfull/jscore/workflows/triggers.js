@@ -323,14 +323,14 @@ function populate_owners_in_trigger(trigger_form, owner_select_id, trigger_owner
 	fillSelect(owner_select_id, '/core/api/users/partial', 'users', function()
 			{
 		
-			$("#" + owner_select_id +' option:first').after('<option value="ANY">{{agile_lng_translate "triggers" "any-owner"}}</option>');
+			$("#" + owner_select_id +' option:first', trigger_form).after('<option value="ANY">{{agile_lng_translate "triggers" "any-owner"}}</option>');
 			
 			if (trigger_owner_id)
 			{
 				$('#'+owner_select_id, trigger_form).find('option[value=' + trigger_owner_id + ']').attr('selected', 'selected');
 			}
 		
-	}, optionsTemplate, false, undefined, "{{agile_lng_translate 'campaigns' 'select-event-owner'}}");
+	}, optionsTemplate, false, trigger_form, "{{agile_lng_translate 'campaigns' 'select-event-owner'}}");
 }
 
 function populate_call_trigger_options(trigger_form, triggerJSON)
