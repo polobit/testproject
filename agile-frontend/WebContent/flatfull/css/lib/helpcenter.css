@@ -531,4 +531,10 @@ body,input,button,select,textarea {
 	padding: 56px;
 	background-size: cover;
 }
+.help-searchbox #article_search_form{ margin: auto; float: none;}
+.help-searchbox #hc_query{ width: 100%; border: 1px solid #ccc;}
+
+@media (max-width: 480px){
+.categories-column{ width: 100% !important; text-align: center;}
+}
 			        
