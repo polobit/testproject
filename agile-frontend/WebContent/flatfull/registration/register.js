@@ -72,12 +72,15 @@ function submitForm(form, submit_button)
 
 function getRegisterURL(domain)
 {
+	var parameters = window.location.href.split("?")[1];
+	var url;
 	if(typeof version === "undefined" || version == null || version === "null")
-	{
-		return  "https://" + domain + ".agilecrm.com/register";
-	}
-			
-	return "https://" + domain + "-dot-" + version + "-dot-"+applicationId + ".appspot.com/register";
+		url = "https://" + domain + ".agilecrm.com/register";
+	else		
+		url = "https://" + domain + "-dot-" + version + "-dot-"+applicationId + ".appspot.com/register";
+	if(parameters)
+		url = url+"?"+parameters;
+	return url;
 }
 
 //validates the form fields
