@@ -21,9 +21,9 @@ git checkout .
 
 git stash
 
-git checkout version29-1
+git checkout maven_version29-2
 
-git pull origin version29-1
+git pull origin maven_version29-2
 
 # Change queue acls in beta before deploy
 
