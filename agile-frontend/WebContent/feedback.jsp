@@ -85,7 +85,7 @@ a:hover {
 .text-area {
 	height: 117px;
 	width: 532px;
-	margin-top: 20px;
+	margin-top: 7px;
     margin-left: 34px;
 }
 
@@ -162,33 +162,43 @@ var id = <%=note_id%>
 
 	<div class="app" id="app">
 		<div ui-view="" class=" smooth">
+
 			<div class="container w-auto-xs">
+
+				<div id="addfeedback-message">
+				<a href="https://www.agilecrm.com/" class="navbar-brand block text-white m-t" style="color: #363f44;">
+						<img  src="https://s3.amazonaws.com/agilecrm/panel/uploaded-logo/1383722651000?id=upload-container" style="max-height: 50px;">
+					</a>
+			<div>
+
 				<form name='feedback_ticket' id="feedback_ticket" method='post'
 					style="margin-left: 300px" onsubmit="saveTicketFeedback(event)">
-					<div id="addfeedback-message">
+					
 					<% if(!StringUtils.isEmpty(error)){%>
 					<div class="alert alert-danger error login-error m-b-none">
 						<a class="close m-t-n-sm" data-dismiss="alert" href="#">&times</a><%=error%>
 					</div>
 					
+
 					<%}%>
 					<% if(!StringUtils.isEmpty(success)){%>
-							<table width="21%" cellpadding="0" cellspacing="0" border="0">
+							<table width="60%" cellpadding="0" cellspacing="0" border="0" style="margin-top: 40px;">
                      <tbody>
                          <tr>
-                             <td width="7%" style="padding-left:56px">
-								 <span style=" font-size: 130%;padding-left: 8px; display:none;" id="YAY">&#10004;</span>	
+                         	<td  width="35%"style="padding-top: 20px;padding-left: 34px;">How would you rate the support recived?</td>
+                             <td width="5%" style="padding-left:7px">
+								 <span style=" font-size: 130%;padding-left: 8px; visibility:hidden;" id="YAY">&#10004;</span>	
 															
-                             	<input type="image" src="/flatfull/img/smile.svg" style="line-height: 25px;font-size: 12px; width: 31px;" class="transperantbutton" id="YAY_Image" value="YAY"  onclick="changeFeedback(event,this)"/>
+                             	<input type="image" src="/flatfull/img/smile.svg" style="line-height: 25px;font-size: 12px; width: 25px;" class="transperantbutton" id="YAY_Image" value="YAY"  onclick="changeFeedback(event,this)"/>
 	                         </td>
-		                     <td width="7%" style="padding-left:10px">	
-		                      <span style="font-size: 130%;padding-left: 8px; display:none;" id="OK">&#10004;</span>
-                             	<input type="image" src="/flatfull/img/speechless.svg" style="line-height: 25px;font-size: 12px; width: 31px;" id="OK_Image" class="transperantbutton" value="OK" onclick="changeFeedback(event,this)"/>
+		                     <td width="5%" style="padding-left:10px">	
+		                      <span style="font-size: 130%;padding-left: 8px; visibility:hidden;" id="OK">&#10004;</span>
+                             	<input type="image" src="/flatfull/img/speechless.svg" style="line-height: 25px;font-size: 12px; width: 25px;" id="OK_Image" class="transperantbutton" value="OK" onclick="changeFeedback(event,this)"/>
 		                     </td>
 		                      
-		                     <td width="7%" style="padding-left:10px">
-                             <span style="font-size: 130%;padding-left: 8px; display:none;" id="BOO">&#10004;</span>
-                             	<input type="image" src="/flatfull/img/angry.svg" style="line-height: 25px;font-size: 12px; width: 31px;" class="transperantbutton" id="BOO_Image" value="BOO" onclick="changeFeedback(event,this)"/>		                     
+		                     <td width="5%" style="padding-left:10px">
+                             <span style="font-size: 130%;padding-left: 8px; visibility:hidden;" id="BOO">&#10004;</span>
+                             	<input type="image" src="/flatfull/img/angry.svg" style="line-height: 25px;font-size: 12px; width: 25px;" class="transperantbutton" id="BOO_Image" value="BOO" onclick="changeFeedback(event,this)"/>		                     
                              </td>
                          </tr>
                      </tbody>
@@ -197,36 +207,46 @@ var id = <%=note_id%>
 					<%}%>
 					<!--  <h3><small>Enter Your Email </small></h3>	 -->
 					
-					<div class="list-group-sm">
+					<div class="list-group-sm" style="padding-top: 14px;">
 
-						<textarea class="text-area" id="myTextarea" name='comment' placeholder="Comments" style="padding-top:5px;padding-left:10px;font-size:14px;"></textarea>
+						<span style="color:#2B2929;padding-left:33px;font-size:14px;font-size: 15px;">Add a Comment about the quality of support you received:</span>
+						
+						<textarea class="text-area" id="myTextarea" name='comment' style="padding-top:5px;padding-left:10px;font-size:14px;"></textarea>
 
 					</div>
-					<input type='submit'  style="width: 10%; margin-left: 34px;"
+					<div>
+					<input type='submit'  style="width: 10%; margin-left: 34px;float:left; margin-right:15px;"
 						class='btn btn-sm btn-primary btn-block '>
-					<div class="text-center m-t">
-					</div>	
-					</div>
+					<input type='button'  style="width: 10%; margin-left: 34px;"
+						class='btn btn-sm btn-primary btn-block ' onclick="functioncancel()" value="Cancel"/>		
+					</div>	 
+						<br/>
+						<br/>
 				</form>
+			
 			</div>
 		</div>
 	</div>
-
+	</div>	
 <script>
  feedback = "<%=feedback%>";
 var thick = document.getElementById(feedback);
-thick.style.display="block";
-document.getElementById("#"+feedback+"_Image").style.width="31px";
+thick.style.visibility="visible";
 if(feedback == "BOO" || feedback == "OK")
 {
 	var d = document.getElementById("myTextarea");
 	d.required = true;
 }
 
+function functioncancel(){
+document.getElementById("addfeedback-message").innerHTML = "<div style=font-size:20px;padding-left:40px;text-align:center;>No feedback was submitted!</div>";
+
+}
+
 function changeFeedback(e,objButton){
 	e.preventDefault();
-	document.getElementById(feedback).style.display="none";
-	document.getElementById(objButton.value).style.display="block";
+	document.getElementById(feedback).style.visibility="hidden";
+	document.getElementById(objButton.value).style.visibility="visible";
 	feedback = ""+objButton.value;
 	var d = document.getElementById("myTextarea");
 	d.required = false;
@@ -251,7 +271,7 @@ function changeFeedback(e,objButton){
 				data : json,
 				success:function(){
 					console.log(json);	
-					document.getElementById("addfeedback-message").innerHTML = "<div style=font-size:20px;padding-left:40px;>Your feedback submitted successfully!</div>";
+					document.getElementById("addfeedback-message").innerHTML = "<div style=font-size:20px;padding-left:40px;text-align:center;>Your feedback submitted successfully!</div>";
 				}
 				
 		});

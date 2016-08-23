@@ -475,6 +475,17 @@ Handlebars.registerHelper('replace_newline_with_br_feedback', function(object, o
 	str = str.replace(/(?:\r\n|\r|\n)/g, '<br />');
     return str;
 });
+Handlebars.registerHelper('replace_br_with_space_feedback', function(object, options)
+{
+	var text = object.toString();
+
+	if(!text)
+		return;
+	
+	var regex = /<br\s*[\/]?>/gi;
+
+	return text.replace(regex, " ");
+});
 
 Handlebars.registerHelper('get_ticket_uri', function(str, options) {
 	

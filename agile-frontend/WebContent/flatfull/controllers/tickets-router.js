@@ -134,48 +134,9 @@
 			sortKey : 'updated_time',
 			descending : true,
 			postRenderCallback:function(el,model){
-				/*Ticket related click event to show the modal when requester or assignee replies*/
 
-				
-				/*$(el)
-			.on('mouseover mouseout', 'tbody#ticket-feedback-log-model-list> tr',
-				function(event) {
-
-										
-					    
-					if (event.type == 'mouseover'){
-
-						var $that = $(this);
-						
-						
-
-							var id = $that.data("id");
-		
-							var ticketJSON = App_Ticket_Module.feedbackollection.collection.get(id).toJSON();
-							getTemplate("ticket-feedback-modal", ticketJSON, undefined, function(template_ui){
-
-                               
-                               
-                            	  if(!template_ui)
-							  		return;
-
-								var emailinfo = $(template_ui);
-
-						emailinfo.modal('show');                                
-								
-							});
-						
-						
-					}else{
-						$('div#ticket_activity_notes_modal').remove();
-					}
-			});*/
-
-			/*
-		 * Hover event on ticket subject single line ticket collection view
-		 */
 		$(el)
-			.on('mouseover mouseout', 'tbody#ticket-feedback-log-model-list> tr',
+			.on('mouseover mouseout', 'tbody#ticket-feedback-log-model-list> tr>td#ticket_note',
 				function(event) {
 
 					clearTimeout(popoverFunction);
@@ -205,7 +166,7 @@
 
 								//Get closest div with row class to set left alignment. Table row left doesn't work as table have scrolling.
 								var $closest_div = $that.closest('div.row');
-								var top = 0, left = $closest_div.offset().left + 70 + 'px';
+								var top = 0, left = $closest_div.offset().left + 280 + 'px';
 
 								if (window.innerHeight - ($that.offset().top - $(window).scrollTop()) >= 250)
 									top = $that.offset().top + 35 + 'px';
