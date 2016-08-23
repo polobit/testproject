@@ -26,7 +26,7 @@ public class FormSubmitServlet extends HttpServlet {
 	    String formName=request.getParameter("formname");
 	    String contactId=request.getParameter("contactid");
 	    String formData=request.getParameter("formdata");
-	    Boolean newContact=Boolean.getBoolean(request.getParameter("new"));
+	    Boolean newContact=Boolean.parseBoolean(request.getParameter("new"));
 	    String idCheck=request.getParameter("checkId");	    
 	    
 	    Form form=null;
