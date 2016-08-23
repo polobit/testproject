@@ -515,6 +515,19 @@ function bulk_delete_operation(url, id_array, index_array, table, is_grid_view, 
 
 					break;
 				}
+
+				case 'core/api/contacts/delete?action=DELETE':{
+					 
+			    	  $.each(id_array, function(index, data){
+					
+					if(Current_Route == "contacts")
+					App_Contacts.contactsListView.collection.remove(data)
+					else
+					App_Companies.companiesListView.collection.remove(data)	
+		      		});
+					break;
+				}
+				
 				case 'core/api/tickets/labels/bulk':{
 					if(id_array.length == Ticket_Labels.labelsCollection.collection.length)
 						App_Ticket_Module.ticketLabels();
