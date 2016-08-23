@@ -90,7 +90,7 @@ public class AffiliateReportServlet extends HttpServlet {
       					
       					String details;
 						try {
-							details = AffiliateUtil.getTotalCommisionAmount(user.id, firstDateOfPreviousMonth, lastDateOfPreviousMonth);
+							details = AffiliateUtil.getTotalCommisionAmount(user.id, firstDateOfPreviousMonth, lastDateOfPreviousMonth, "-createdTime");
 							JSONParser parser = new JSONParser();
 	      					JSONObject json = (JSONObject) parser.parse(details);
 	      					float commission = (json.getInt("commission"));
