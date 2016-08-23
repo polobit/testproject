@@ -99,7 +99,7 @@
                 src='img/ajax-loader.gif' />
                 --></li>
 
-                <%
+        <%
 				      if(MobileUADetector.isMobile(request.getHeader("user-agent"))){
 				   %>
 		        <li class="dropdown hide visible-xs pull-right wrapper-sm p-t p-r-md" id="menu2">
@@ -179,6 +179,17 @@
 							 </div>
 
          
+
+                
+
+                 
+             
+
+
+				
+			
+        
+       
 				   <%
 				      if(MobileUADetector.isMobile(request.getHeader("user-agent"))){
 				   %>
@@ -234,15 +245,17 @@
 				  		
 				 %>">
 
+				 <%
+				      if(!MobileUADetector.isMobile(request.getHeader("user-agent"))){
+				   %>
+
 					 <div class="nav navbar-nav hidden-xs">
 <a href="#" id="app-aside-folded" style="top:8px;" class="p-b-sm p-l-sm p-r-sm inline-block pos-rlt pos-t-xs  no-shadow navbar-btn" ui-toggle="app-aside-folded" target=".app">
             <i class="fa fa-dedent fa-fw text"></i>
              <!--   <i class="fa fa-indent fa-fw text-active"></i> -->
           </a>
 </div> 
-				<%
-				      if(!MobileUADetector.isMobile(request.getHeader("user-agent"))){
-				   %>
+
 					<ul class="nav navbar-nav agile-menu">
 					<li>
 					<div class="dropdown m-l-sm navbar-searchicon searchicon-dropdown">
@@ -251,7 +264,7 @@
 
 					<div class="col-sm-12">
 
-					<form class=" m-t-sm m-b-sm searchForm" id="searchForm" role="search">
+					<form class=" m-t-sm m-b-sm" id="searchForm" role="search">
 					<div class="input-group add-on">
 					<input type="text" id="searchText" data-provide="typeahead"
 										class="typeahead form-control r-5x typeahead_contacts form-control-custom"
@@ -308,10 +321,6 @@
 					</li>
 
 					</ul>
-					<%
-				      }
-				   %>
-
 					</div>
 					</li>
 					
@@ -319,7 +328,9 @@
 
 					</ul>
 
-				
+				<%
+				      }
+				   %>
 
                 <!--<img onclick="startDictation()" src="https://i.imgur.com/cHidSVu.gif" class="btn btn-sm bg-light" style="width:30px;height:30px;padding:0px">-->
                
