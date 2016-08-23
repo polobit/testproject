@@ -51,6 +51,7 @@ function initializeCustomFieldsListeners(){
 					else if(custom_field.get("scope")=="CASE")
 						App_Admin_Settings.caseCustomFieldsListView.collection.remove(custom_field.id);
 					currentElement.closest('tr').remove();
+					location.reload(true);
 				}, dataType : 'json' });
 		});
 	});
@@ -136,6 +137,7 @@ function showCustomFieldModel(data)
 
 			$("#custom-field-add-modal").modal('hide');
 			$("body").removeClass("modal-open").css("padding-right", "");
+			location.reload(true);
 		},
 		errorCallback : function(response)
 		{
@@ -223,6 +225,9 @@ function bindCustomFiledChangeEvent(el){
 		{ 	
 			$("#searchable").prop('checked', true);
 			$("#searchable").prop('disabled', true);
+			$("#custom-field-data").hide();
+			$("#custom-field-list-values").hide();
+			$("#custom-field-formula-data").hide();
 
 		}
 		
