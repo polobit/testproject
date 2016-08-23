@@ -1880,7 +1880,7 @@ public class ActivityUtil
 			String cursor, Long starttime, Long endtime, Long entityId)
 	{
 		Map<String, Object> searchMap = new HashMap<String, Object>();
-		if (!entitytype.equalsIgnoreCase("ALL") && !entitytype.equalsIgnoreCase("CALL"))
+		if (!entitytype.equalsIgnoreCase("ALL") && !entitytype.equalsIgnoreCase("CALL") && !entitytype.equalsIgnoreCase("EMAIL_SENT"))
 			searchMap.put("entity_type", entitytype);
 		if (entitytype.equalsIgnoreCase("CALL"))
 			searchMap.put("activity_type", entitytype);
@@ -1896,6 +1896,33 @@ public class ActivityUtil
 		}
 		if (userid != null)
 			searchMap.put("user", new Key<DomainUser>(DomainUser.class, userid));
+		
+		if(entitytype.equalsIgnoreCase("EMAIL_SENT")){
+			List<Activity> list1=new ArrayList<Activity>();
+			List<Activity> list2=new ArrayList<Activity>();
+			searchMap.put("activity_type", entitytype);
+			if (max != 0){
+				list1 = dao.fetchAllByOrder(max, cursor, searchMap, true, false, "-time");
+			    searchMap.put("activity_type", "BULK_ACTION");
+		        searchMap.put("custom1", "SEND_EMAIL");
+			    list2 = dao.fetchAllByOrder(max, cursor, searchMap, true, false, "-time");
+			}
+			else{
+			    list1 = dao.listByPropertyAndOrder(searchMap, "-time");
+		        searchMap.put("activity_type", "BULK_ACTION");
+		        searchMap.put("custom1", "SEND_EMAIL");
+		        list2 = dao.listByPropertyAndOrder(searchMap, "-time");
+			}
+			
+			if(list2 != null && list2.size()>0){
+				if(list1 != null)
+				list1.addAll(list2);
+				else
+					list1=list2;
+			}
+
+		   return list1;    
+		}
 
 		if (max != 0)
 			return dao.fetchAllByOrder(max, cursor, searchMap, true, false, "-time");
