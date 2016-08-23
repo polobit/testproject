@@ -249,7 +249,7 @@ public abstract class ContactSyncService implements IContactSyncService
 	if (syncStatus.get(ImportStatus.TOTAL) != null && syncStatus.get(ImportStatus.TOTAL).intValue() == 0)
 	    return;
 	
-	if(mergedContacts.size()>0){
+	if(mergedContacts!=null && mergedContacts.size()>0){
 	  GCSServiceAgile service;
 	  CSVWriter failedContactsWriter = null;
 	  String[] headings={"First name","Last name","Email"};
@@ -605,7 +605,7 @@ public abstract class ContactSyncService implements IContactSyncService
 	{
 	    headings[i++] = s;
 	}
-	headings[i] = "Error";
+	headings[i] = "Remarks";
 	return headings;
 
     }
