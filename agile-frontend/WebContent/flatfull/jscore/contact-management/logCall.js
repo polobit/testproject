@@ -395,18 +395,18 @@ function saveLogPhone(form, modal, element, logPhone)
 		var logPhone = data.toJSON();
 
 try{
-	var contactDetailsObj;
+	var contactDetailsObjId;
 	if(CallLogVariables.id){
-		contactDetailsObj = CallLogVariables.id;
+		contactDetailsObjId = CallLogVariables.id;
 	}else{
-		contactDetailsObj = agile_crm_get_contact();	
+		contactDetailsObjId = agile_crm_get_contact().id;	
 	}
 	
 	if($("#saveActivity",form).val() == "true"){
 		try{
 			var data1 ={};
 			data1.url = "/core/api/notes/save_logPhoneActivity";
-			data1.id = contactDetailsObj.id;
+			data1.id = contactDetailsObjId;
 			data1.callType = logPhone.callType;
 			data1.number = logPhone.phone;
 			data1.status = logPhone.status;
@@ -420,16 +420,11 @@ try{
 	}else
 		{
 			try{
-				var contactDetailsObj;
-				if(CallLogVariables.id){
-					contactDetailsObj = CallLogVariables.id;
-				}else{
-					contactDetailsObj = agile_crm_get_contact();	
-				}
+				
 				var data1 ={};
 				data1.url = "/core/api/notes/update_logPhoneActivity?note_id="+
 				logPhone.id+'&subject='+logPhone.subject;
-				data1.id = contactDetailsObj.id;
+				data1.id = contactDetailsObjId;
 				data1.callType = logPhone.callType;
 				data1.number = logPhone.phone;
 				data1.status = logPhone.status;
@@ -437,8 +432,6 @@ try{
 				data1.widget = $("#callWidgetName",form).val();
 				CallLogVariables.callActivitySaved = true;
 				saveLogPhoneActivity(data1);
-
-
 			}catch(e){
 				console.log("activities not saved AS CONTACT NOT FOUND");
 			}
@@ -447,7 +440,7 @@ try{
 	
 	if(logPhone.status == 'answered' || logPhone.status == 'inquiry' || logPhone.status == 'interest' || logPhone.status == 'no interest' || logPhone.status == 'incorrect referral' || logPhone.status == 'voicemail' || logPhone.status == 'new opportunity' || logPhone.status == 'meeting scheduled'){
 		if(!$("#callWidgetName",form).val()){
-			twilioIOSaveContactedTime(contactDetailsObj.id);
+			twilioIOSaveContactedTime(contactDetailsObjId);
 		}
 	}
 }catch (e) {}

@@ -87,6 +87,7 @@ public class NotesAPI
 	    // TODO Auto-generated catch block
 	    e.printStackTrace();
 	}
+	System.out.println("notes saved returning notes ...");
 	return note;
     }
 
@@ -198,36 +199,45 @@ public class NotesAPI
 			@QueryParam("note_id") Long note_id) {		
 
 		Contact contact  = null;
-		
+		System.out.println("in saveCallActivity in notesapi =============================================================================");
 		if (null != id ){
+			System.out.println("id in savecallactivity is " + id);
     		contact = ContactUtil.getContact(id);
+    		System.out.println("contact in savecallactivity is " + contact);
 		}else{
 			if(!StringUtils.isBlank(phone)){
+				System.out.println("phone in savecallactivity is " + phone);
 				contact = ContactUtil.searchContactByPhoneNumber(phone);
+				System.out.println("contact in savecallactivity is " + contact);
 			}
 		}
 		
 		if(null == contact){
+			System.out.println("contact is null in savecallactivity so returing");
 			return "";
 		}
 		
 	    		if (direction.equalsIgnoreCase("outbound-dial") || direction.equalsIgnoreCase("Outgoing"))
 	    		{
+	    			
+	    			System.out.println("saving outbound call in saveCallActivity  callWidget, phone, Call.OUTBOUND, status.toLowerCase(), duration,note_id == " + callWidget +" --- " + phone+" --- " +Call.OUTBOUND+" --- " +status.toLowerCase()+" --- " +duration+" --- " +note_id);
 	    			ActivityUtil.createLogForCalls(callWidget, phone, Call.OUTBOUND, status.toLowerCase(), duration,note_id);
 
 	    		    // Trigger for outbound
+	    			System.out.println("executeTriggerForCall in saveCallActivity contact, callWidget, Call.OUTBOUND, status.toLowerCase(), duration" + contact+" --- " +callWidget+" --- " +Call.OUTBOUND+" --- " +status.toLowerCase()+" --- " +duration);
 	    			 CallTriggerUtil.executeTriggerForCall(contact, callWidget, Call.OUTBOUND, status.toLowerCase(), duration);
 	    		}
 
 	    		if (direction.equalsIgnoreCase("inbound") || direction.equalsIgnoreCase("Incoming"))
 	    		{
+	    			System.out.println("saving inbound call in saveCallActivity ");
 	    			 ActivityUtil.createLogForCalls(callWidget, phone, Call.INBOUND, status.toLowerCase(), duration,note_id);
 	    			 
 
 	    		    // Trigger for inbound
 	    		    CallTriggerUtil.executeTriggerForCall(contact, callWidget, Call.INBOUND, status.toLowerCase(), duration);
 	    		}
-
+	    		System.out.println("saving done in saveCallActivity and return");
 	   return "";
 	}
 	
