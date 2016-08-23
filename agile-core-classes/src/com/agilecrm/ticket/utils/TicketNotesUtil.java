@@ -185,6 +185,7 @@ public class TicketNotesUtil
 			throw new Exception("No group found with id " + group.id + " or group has been deleted.");
 		}
 
+		Boolean groupFeedback = group.feedback_flag;
 		String groupName = group.group_name;
 		String agentName = DomainUserUtil.getDomainUser(ticket.assigneeID).name;
 
@@ -196,6 +197,7 @@ public class TicketNotesUtil
 		json.put("agent_name", agentName);
 		json.put("tracking_img", appendTrackingImage(ticket.id, notesList.get(0).id));
 
+		json.put("feedback_flag",groupFeedback);
 		String companyName = AccountPrefsUtil.getAccountPrefs().company_name;
 
 		if (companyName != null)

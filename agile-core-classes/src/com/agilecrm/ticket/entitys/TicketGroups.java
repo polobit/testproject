@@ -69,6 +69,8 @@ public class TicketGroups
 	@JsonIgnore
 	public Key<EmailTemplates> email_template_key = null;
 	
+	public Boolean feedback_flag;
+	
 	/**
 	 * Stores list of agent id's
 	 */
