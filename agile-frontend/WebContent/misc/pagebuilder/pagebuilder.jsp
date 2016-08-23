@@ -9,7 +9,7 @@ String ENVIRONMENT = "live";
 String MAIN_URL = "http://localhost:8888/";
 
 if(ENVIRONMENT == "live")
-  MAIN_URL = "https://"+NamespaceManager.get()+"-dot-maven-dot-agilecrmbeta.appspot.com/";
+  MAIN_URL = "https://"+NamespaceManager.get()+".agilecrm.com/";
 else if(ENVIRONMENT == "beta")
   MAIN_URL = "https://"+NamespaceManager.get()+"-dot-sandbox-dot-agilecrmbeta.appspot.com/";
 
