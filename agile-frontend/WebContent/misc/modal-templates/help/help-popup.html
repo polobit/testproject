@@ -158,13 +158,34 @@ margin-bottom: 5px!important;
 </div>
 </form>
 <style type="text/css">
+
+@media(max-width:375px){
+  footer #agile_submit{
+  margin-left: 260px !important;
+ }
+ .label-header{
+  margin-left: 60px !important;
+ }
+}
+
+@media(max-width:320px){
+  .label-header{
+  margin-left: 0px !important;
+ }
+ .query-form-div{
+  width: 95%;
+ }
+ footer #agile_submit{
+  margin-left: 215px !important;
+ }
+}
+
 .query-form-div{
 border-radius: .66667rem;
 overflow: hidden!important;
-width: 95%;
 right: 10px;
 bottom: 10px;
-position: fixed;
+position: absolute;
 border: solid 1px #ddd;
 background-color: #fff;
 }
