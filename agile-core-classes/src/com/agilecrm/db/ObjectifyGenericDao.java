@@ -32,6 +32,7 @@ import com.agilecrm.activities.Category;
 import com.agilecrm.activities.Event;
 import com.agilecrm.activities.Task;
 import com.agilecrm.activities.WebCalendarEvent;
+import com.agilecrm.addon.AddOn;
 import com.agilecrm.cases.Case;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.CustomFieldDef;
@@ -40,8 +41,8 @@ import com.agilecrm.contact.Tag;
 import com.agilecrm.contact.customview.CustomView;
 import com.agilecrm.contact.email.ContactEmail;
 import com.agilecrm.contact.filter.ContactFilter;
-import com.agilecrm.dashboards.Dashboard;
 import com.agilecrm.contact.upload.blob.status.ImportStatus;
+import com.agilecrm.dashboards.Dashboard;
 import com.agilecrm.deals.Goals;
 import com.agilecrm.deals.Milestone;
 import com.agilecrm.deals.Opportunity;
@@ -49,13 +50,13 @@ import com.agilecrm.deals.filter.DealFilter;
 import com.agilecrm.document.Document;
 import com.agilecrm.facebookpage.FacebookPage;
 import com.agilecrm.forms.Form;
+import com.agilecrm.ipaccess.IpAccess;
 import com.agilecrm.knowledgebase.entity.Article;
 import com.agilecrm.knowledgebase.entity.Categorie;
 import com.agilecrm.knowledgebase.entity.Comment;
 import com.agilecrm.knowledgebase.entity.HelpcenterUser;
 import com.agilecrm.knowledgebase.entity.LandingPageKnowledgebase;
 import com.agilecrm.knowledgebase.entity.Section;
-import com.agilecrm.ipaccess.IpAccess;
 import com.agilecrm.landingpages.LandingPage;
 import com.agilecrm.landingpages.LandingPageCNames;
 import com.agilecrm.portlets.Portlet;
@@ -300,6 +301,8 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	
 	// AgileGlobalProperties
 	ObjectifyService.register(AgileGlobalProperties.class);
+	
+	ObjectifyService.register(AddOn.class);
 
     }
 

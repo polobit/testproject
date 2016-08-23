@@ -15,6 +15,7 @@ import org.apache.commons.lang.exception.ExceptionUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.agilecrm.addon.AddOn;
 import com.agilecrm.contact.CustomFieldDef;
 import com.agilecrm.contact.CustomFieldDef.SCOPE;
 import com.agilecrm.contact.util.CustomFieldDefUtil;
@@ -25,6 +26,7 @@ import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
+import com.agilecrm.util.CacheUtil;
 import com.agilecrm.util.Defaults;
 import com.google.appengine.api.NamespaceManager;
 
@@ -225,7 +227,11 @@ public class HomeServlet extends HttpServlet
     		
     		SessionCache.removeObject(SessionCache.CURRENT_AGILE_USER);
     		SessionCache.removeObject(SessionCache.CURRENT_DOMAIN_USER);
-
+    		try{
+    			CacheUtil.deleteCache(AddOn.getCacheKey());
+    		}catch(Exception e){
+    			e.printStackTrace();
+    		}
     		// Avoid saving the DomainUser twice.
     		DomainUser domainUser = DomainUserUtil.getCurrentDomainUser();
     		

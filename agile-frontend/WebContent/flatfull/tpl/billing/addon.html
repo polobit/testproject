@@ -1,0 +1,144 @@
+<script id="acl-addon-model-template" type="text/html">
+<form name="addOn" class="form-horizontal" id="aclInfo">
+  <div class="panel panel-default">
+    <div class="panel-heading">ACLs</div>
+	<div class="panel-body">
+	  <div class="row">
+	    <div class="col-md-6">
+        <div class="text-md font-bold">Users</div>
+	      <div class="multiple-checkbox" name="aclUsers">
+	      	{{#each users}}
+			<label class="i-checks i-checks-sm checkbox">
+			  <input type="checkbox" value="{{this.id}}"><i></i>
+				{{this.email}}
+			</label>
+			{{/each}}
+		  </div>
+        </div>
+      	<div class="col-md-6">
+          <div class="text-md font-bold m-b-sm m-l">Billing Details</div> 
+
+          <label class="col-sm-6 p-t-none col-xs-6">Number of Users</label>
+          <div class="quantity col-sm-6 col-xs-6">0</div>
+          <div class="clearfix"></div>
+
+          <label class="col-sm-6 p-t-none col-xs-6">Cost per User</label>
+          <div class="col-sm-6 col-xs-6">$<span class="cost">7.99</span></div>
+          <div class="clearfix"></div>
+
+          <div class="line ling-lg b-b"></div>
+
+          <label class="col-sm-6 p-t-none col-xs-6 font-bold">Total</label>
+          <div class="col-sm-6 col-xs-6">$<span class="total_cost">0</span></div>
+          <div class="clearfix"></div>
+
+
+        </div>
+      </div>
+      <div class="line ling-lg b-b"></div>
+      <a href="#" class="save btn btn-sm btn-primary pull-right">Proceed</a>
+      {{#if this.aclInfo.subscriptionId}}
+      <a href="#" class="cancel_addon btn btn-sm btn-default pull-right m-r-xs">Cancel Subscription</a>
+      {{/if}}
+    </div>
+  </div>
+</form>
+</script>
+
+<script id="campaign-addon-model-template" type="text/html">
+<form name="addOn" id="addOn">
+</form>
+<form name="campaignInfo" class="form-horizontal" id="campaignInfo">
+	<div class="panel panel-default">
+    <div class="panel-heading">Campaigns</div>
+	<div class="panel-body">
+	  <div class="row">
+	    <div class="col-md-6">
+        <div class="text-md font-bold">Campaigns</div>
+	      <div class="control-group form-group">
+            <label class="control-label text-left col-sm-5">Number of Campaigns </label>
+            <div class="controls col-sm-3 p-l-none">
+                <select name="quantity" class="campaign_quantity form-control">
+                	{{#fillSelectOptionWithNumbers "0" "20"}}{{/fillSelectOptionWithNumbers}}
+                </select>
+            </div>
+          </div>
+        </div>
+      	<div class="col-md-6">
+          <div class="text-md font-bold m-b-sm m-l">Billing Details</div> 
+
+          <label class="col-sm-6 p-t-none col-xs-6">Number of Campaigns</label>
+          <div class="quantity col-sm-6 col-xs-6">0</div>
+          <div class="clearfix"></div>
+
+          <label class="col-sm-6 p-t-none col-xs-6">Cost per Campaign</label>
+          <div class="col-sm-6 col-xs-6">$<span class="cost">9.99</span></div>
+          <div class="clearfix"></div>
+
+          <div class="line ling-lg b-b"></div>
+
+          <label class="col-sm-6 p-t-none col-xs-6 font-bold">Total</label>
+          <div class="col-sm-6 col-xs-6">$<span class="total_cost">0</span></div>
+          <div class="clearfix"></div>
+
+
+        </div>
+      </div>
+      <div class="line ling-lg b-b"></div>
+      <a href="#" class="save btn btn-sm btn-primary pull-right">Proceed</a>
+      {{#if this.campaignInfo.subscriptionId}}
+      <a href="#" class="cancel_addon btn btn-sm btn-default pull-right m-r-xs">Cancel Subscription</a>
+      {{/if}}
+    </div>
+  </div>
+</form>
+</script>
+
+<script id="trigger-addon-model-template" type="text/html">
+<form name="addOn" id="addOn">
+</form>
+<form name="triggerInfo" class="form-horizontal" id="triggerInfo">
+	<div class="panel panel-default">
+    <div class="panel-heading">Triggers</div>
+	<div class="panel-body">
+	  <div class="row">
+	    <div class="col-md-6">
+        <div class="text-md font-bold">Triggers</div>
+        <div class="control-group form-group">
+      		<label class="control-label text-left col-sm-5">Number of Triggers</label>
+          <div class="controls col-sm-3 p-l-none">
+            <select name="quantity" class="trigger_quantity form-control">
+                {{#fillSelectOptionWithNumbers "0" "20"}}{{/fillSelectOptionWithNumbers}}
+            </select>
+          </div>
+        </div>
+      </div>
+    	<div class="col-md-6">
+        <div class="text-md font-bold m-b-sm m-l">Billing Details</div> 
+
+        <label class="col-sm-6 p-t-none col-xs-6">Number of Triggers</label>
+        <div class="quantity col-sm-6 col-xs-6">0</div>
+        <div class="clearfix"></div>
+
+        <label class="col-sm-6 p-t-none col-xs-6">Cost per Trigger</label>
+        <div class="col-sm-6 col-xs-6">$<span class="cost">17.99</span></div>
+        <div class="clearfix"></div>
+
+        <div class="line ling-lg b-b"></div>
+
+        <label class="col-sm-6 p-t-none col-xs-6 font-bold">Total</label>
+        <div class="col-sm-6 col-xs-6">$<span class="total_cost">0</span></div>
+        <div class="clearfix"></div>
+
+
+      </div>
+      </div>
+      <div class="line ling-lg b-b"></div>
+      <a href="#" class="save btn btn-sm btn-primary pull-right">Proceed</a>
+      {{#if this.triggerInfo.subscriptionId}}
+      <a href="#" class="cancel_addon btn btn-sm btn-default pull-right m-r-xs">Cancel Subscription</a>
+      {{/if}}
+    </div>
+  </div>
+</form>
+</script>

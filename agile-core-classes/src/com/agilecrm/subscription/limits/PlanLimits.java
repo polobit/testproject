@@ -4,6 +4,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 
+import com.agilecrm.addon.AddOnUtil;
 import com.agilecrm.subscription.limits.plan.FreePlanLimits;
 import com.agilecrm.subscription.limits.plan.ProPlanLimits;
 import com.agilecrm.subscription.limits.plan.RegularPlanLimits;
@@ -298,8 +299,7 @@ public class PlanLimits
     {
 	if (workflowLimit == Integer.MAX_VALUE)
 	    return workflowLimit;
-
-	return workflowLimit;
+	return workflowLimit + AddOnUtil.getAddOn().campaignInfo.quantity;
     }
 
     public Integer getGoogleContactsLimit()
@@ -362,7 +362,7 @@ public class PlanLimits
 
     public Integer getTriggersLimit()
     {
-	return TriggersLimit;
+	return TriggersLimit + AddOnUtil.getAddOn().triggerInfo.quantity;
     }
 
     public Boolean getACL()
