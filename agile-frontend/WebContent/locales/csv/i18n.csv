@@ -5259,3 +5259,14 @@ common-words.relative-cap,Relative,
 contacts-view.on-after,on after,
 contacts-view.on-before,on before,
 months.February,February,
+login.duplicate-login,We had to log you out as you seem to have logged in from some other browser,Tuvimos realice la desconexión ya que parecen haber iniciado sesión desde otro navegador
+login.login,Login,Iniciar sesión
+login.signin-using-registration,Sign in using your registered account,Entra con tu cuenta registrada
+login.user-id-your-email,User ID (Your Email Address),ID de usuario (su dirección de correo electrónico )
+login.sign-in,Sign In,Registrarse
+login.login-with,Login with,Inicia con
+login.login-with-google,Login with Google,Ingresar con Google
+login.login-with-yahoo,Login with Yahoo,Inicia sesión con Yahoo
+login.dont-have-account,Do not have an account,No tiene una cuenta
+login.sign-up,Sign Up,Regístrate
+login.forgot,Forgot,Olvidó

@@ -892,10 +892,8 @@ var SettingsRouter = Backbone.Router
 
 			//preferences reminders tab
 			userPrefsReminders : function(data)
-			{
-				var prefs_reminders_view = new Base_Model_View({ url : 'core/api/user-prefs', model : data, template : 'settings-reminders', change : false, reload : true,
-				postRenderCallback : function(el){
-						
+			{  var prefs_reminders_view = new Base_Model_View({ url : 'core/api/user-prefs', model : data, template : 'settings-reminders', change : false, reload : true,
+				postRenderCallback : function(el, data){
 					}
 				});
 				$("#settings-user-prefs-tab-content").html(prefs_reminders_view.render(true).el);
@@ -905,8 +903,11 @@ var SettingsRouter = Backbone.Router
 			userPrefsAdvanced : function(data)
 			{
 				var prefs_advanced_view = new Base_Model_View({ url : 'core/api/user-prefs', model : data, template : 'settings-advanced', change : false, reload : true, 
-					postRenderCallback : function(el){
-						
+					postRenderCallback : function(el, data){
+					},saveCallback : function(response){
+						console.log(response);
+						// Save language cookie
+						createCookie("user_lang", response.language, 360);
 					}
 				});
 				$("#settings-user-prefs-tab-content").html(prefs_advanced_view.render(true).el);

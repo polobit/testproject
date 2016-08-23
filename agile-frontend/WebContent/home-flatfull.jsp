@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<%@page import="com.agilecrm.util.CookieUtil"%>
 <%@page import="com.agilecrm.util.FileStreamUtil"%>
 <%@page import="org.json.JSONObject"%>
 <%@page import="com.agilecrm.util.language.LanguageUtil"%>
@@ -40,7 +41,7 @@ pageEncoding="UTF-8"%>
 
 
 
-<html lang="en">
+<html>
 <head>
 <meta charset="utf-8">
 <title>Agile CRM Dashboard</title>
@@ -155,8 +156,21 @@ String _AGILE_VERSION = SystemProperty.applicationVersion.get();
 String _VERSION_ID = VersioningUtil.getVersion();
 
 List<Dashboard> dashboardsList = DashboardUtil.getAddedDashboardsForCurrentUser();
+String _LANGUAGE = currentUserPrefs.language; 
 
-String _LANGUAGE = currentUserPrefs.language;
+// Read language cookie
+String languageCookieValue = CookieUtil.readCookieValue(request, "user_lang");
+if(StringUtils.isBlank(languageCookieValue)){
+	languageCookieValue = _LANGUAGE;
+}
+
+// Check and resave language if they are not same
+if(!StringUtils.equalsIgnoreCase(languageCookieValue, _LANGUAGE) && LanguageUtil.isSupportedlanguageFromKey(languageCookieValue)){
+	currentUserPrefs.language = languageCookieValue;
+	currentUserPrefs.save();
+	_LANGUAGE = currentUserPrefs.language;
+}
+
 JSONObject localeJSON = LanguageUtil.getLocaleJSON(currentUserPrefs, application, "menu");
 %>
 

@@ -1,3 +1,6 @@
+<%@page import="com.agilecrm.util.CookieUtil"%>
+<%@page import="java.util.Map"%>
+<%@page import="com.agilecrm.util.language.LanguageUtil"%>
 <%@page import="com.agilecrm.ipaccess.IpAccessUtil"%>
 <%@page import="com.agilecrm.util.MathUtil"%>
 <%@page import="com.google.appengine.api.utils.SystemProperty"%>
@@ -9,6 +12,9 @@
 <%@page import="java.net.URLDecoder"%>
 <%@page import="org.json.JSONObject"%>
 <%@page import="com.agilecrm.util.MobileUADetector"%>
+<%@page language="java" contentType="text/html; charset=UTF-8"
+pageEncoding="UTF-8"%>
+
 <%
 /*
 we use setAttribute() to store the username and to autofill if he want to resubmit the form after correcting the error occurred. 
@@ -30,13 +36,22 @@ request.setAttribute("agile_email", email);
 }
 //Gets the Ip 
 
-// Get the language
-String _LANGUAGE = request.getParameter("lang");
-if(StringUtils.isBlank(_LANGUAGE) || !LanguageUtil.isLanguageSupportByAgile(_LANGUAGE))
-   _LANGUAGE = "en";
+// Get the language and save as cookie
+String reqlanguage = request.getParameter("lang");
+String _LANGUAGE = CookieUtil.readCookieValue(request, "user_lang");
+
+if(StringUtils.isNotBlank(reqlanguage) && LanguageUtil.isSupportedlanguageFromKey(reqlanguage)){
+	_LANGUAGE = reqlanguage;
+	CookieUtil.createCookieWithDomain(null, "user_lang", _LANGUAGE, response);
+}
+
+if(StringUtils.isBlank(_LANGUAGE) || !LanguageUtil.isSupportedlanguageFromKey(_LANGUAGE)) {
+	_LANGUAGE = LanguageUtil.getSupportedLocale(request);
+	CookieUtil.createCookieWithDomain(null, "user_lang", _LANGUAGE, response);
+}
 
 // Locales JSON
-JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "page-builder");
+JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "login");
 
 	
 // Checks if it is being access directly and not through servlet
@@ -92,7 +107,7 @@ if(cookieJSON.has("userAgent"))
     JSONObject user_details = cookieJSON.getJSONObject("userAgent");
     cookieJSON.put("user_details", user_details);
     agent = user_details.get("OSName") + " - " +user_details.get("browser_name") ;
-    error="We had to log you out as you seem to have logged in from some other browser <span style='font-size:12px'>("+ agent+ ")</span>";
+    error = LanguageUtil.getLocaleJSONValue(localeJSON, "duplicate-login") + " <span style='font-size:12px'>("+ agent+ ")</span>";
 }
 }
 
@@ -127,12 +142,12 @@ int randomBGImageInteger = MathUtil.randomWithInRange(1, 9);
 %>
 <!DOCTYPE html>
 
-<html lang="en" style="background:transparent;">
+<html lang="<%=_LANGUAGE %>" style="background:transparent;">
 <head>
 <meta charset="utf-8">
 <meta name="globalsign-domain-verification"
 	content="-r3RJ0a7Q59atalBdQQIvI2DYIhVYtVrtYuRdNXENx" />
-<title>Login</title>
+<title><%=LanguageUtil.getLocaleJSONValue(localeJSON, "login")%></title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0 maximum-scale=1">
 <meta name="description" content="">
 <meta name="author" content="">
@@ -210,9 +225,11 @@ position: fixed;width: 100%;top: 0px;
 	position: absolute; 
 	top:30px; 
 	left: 30px;
+	font-size: 12px;
 }
 .lang-identifier a {
 	/*text-decoration: none; */
+	ont-size: 12px;
 }
 
 </style>
@@ -255,11 +272,16 @@ if(isSafari && isWin)
 	<!-- Language -->
 	<div class="lang-identifier">
 		<a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-			<span id="lang-code-name">English</span> <span class="caret"></span> 
+			<span id="lang-code-name"><%=LanguageUtil.getSupportedlanguageFromKey(_LANGUAGE)%></span> <span class="caret"></span> 
 		</a>
 	    <ul class="dropdown-menu">
-	     	<li><a href="?lang=en">English</a></li>
-	    	<li><a href="?lang=es">Español</a></li>
+	    	<%
+	    	   for (Map.Entry<String, String> entry : LanguageUtil.getSupportedlanguages().entrySet()) {
+	    	%>
+	    	   <li><a href="?lang=<%=entry.getKey()%>"><%=entry.getValue()%></a></li>
+	    	<%
+				}
+	    	%>
 	  	</ul>
 	</div>
 	<!-- End of Language -->
@@ -321,7 +343,7 @@ if(isSafari && isWin)
 				</form>
 			<!-- 	<div class="clearfix"></div> -->
 				<div class="wrapper text-center tags-color text-white tags-color">
-      				<strong>Sign in using your registered account</strong>
+      				<strong><%=LanguageUtil.getLocaleJSONValue(localeJSON, "signin-using-registration")%></strong>
    				</div>
 				<form name='agile' id="agile" method='post' action="/login" onsubmit="return isLoginFormValid();">
 					
@@ -332,12 +354,12 @@ if(isSafari && isWin)
 					<div class="list-group list-group-sm">
 						
 						<div class="list-group-item">
-							<input class="input-xlarge required email field form-control no-border" name='email' type="email" required placeholder="User ID (Your Email Address)" autocapitalize="off" autofocus
+							<input class="input-xlarge required email field form-control no-border" name='email' type="email" required placeholder='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "user-id-your-email")%>' autocapitalize="off" autofocus
 						<%if(request.getAttribute("agile_email")  != null) {%> value="<%=request.getAttribute("agile_email") %>" <%}%>>
 						</div>
 						
 						<div class="list-group-item">
-					    	<input class="input-xlarge required field form-control no-border" required maxlength="20" minlength="4" name='password' type="password" placeholder="Password" autocapitalize="off">
+					    	<input class="input-xlarge required field form-control no-border" required maxlength="20" minlength="4" name='password' type="password" placeholder='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "password")%>' autocapitalize="off">
 						</div>
 
 						 
@@ -353,7 +375,7 @@ if(isSafari && isWin)
 							<label class="checkbox" style="display:none;">
 							    <input type="checkbox" checked="checked" name="signin">Keep me signed in 
 							</label>
-							<input type='submit' value="Sign In" class='agile-submit btn btn-lg btn-primary btn-block'>
+							<input type='submit' value='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "sign-in")%>' class='agile-submit btn btn-lg btn-primary btn-block'>
 							 
 						
 					
@@ -367,11 +389,11 @@ if(isSafari && isWin)
 		id="mobile"
 	<% }else {  %> <%}%> >
 	<div class="text-center tags-color text-white m-t m-b" >
-		<small>Login with</small> 
-		<a title="Login with Google" data='google' href='#' class="openid_large_btn google tags-color text-white">Google</a>&nbsp|&nbsp
-		<a title="Login with Yahoo" data='yahoo' href="#" class="openid_large_btn yahoo tags-color text-white">Yahoo</a><br/>	
-		<small>Do not have an account?</small> <a href="/register" class="tags-color text-white">Sign Up</a><br/>
-		<small>Forgot</small> <a href="/forgot-password" class="tags-color text-white">Password? </a><a href="/forgot-domain" class="tags-color text-white">Domain?</a>
+		<small><%=LanguageUtil.getLocaleJSONValue(localeJSON, "login-with")%></small> 
+		<a title='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "login-with-google")%>' data='google' href='#' class="openid_large_btn google tags-color text-white">Google</a>&nbsp|&nbsp
+		<a title='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "login-with-yahoo")%>' data='yahoo' href="#" class="openid_large_btn yahoo tags-color text-white">Yahoo</a><br/>	
+		<small><%=LanguageUtil.getLocaleJSONValue(localeJSON, "dont-have-account")%>?</small> <a href="/register" class="tags-color text-white"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "sign-up")%></a><br/>
+		<small><%=LanguageUtil.getLocaleJSONValue(localeJSON, "forgot")%></small> <a href="/forgot-password" class="tags-color text-white"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "password")%>? </a><a href="/forgot-domain" class="tags-color text-white"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "domain")%>?</a>
 		</div>
 	</div>
 		
