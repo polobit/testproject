@@ -110,6 +110,11 @@ var addAgileFields = function(json, fields, callback)
 	{
 		for ( var i = 0; i < json[k].length; i++)
 		{
+			if(json[k][i]["title"]=="Search Input"){
+				json[k].splice(i,1);
+				i--;
+				continue;
+			}
 			json[k][i].fields["agilefield"] = agilefield;
 		}
 	}
