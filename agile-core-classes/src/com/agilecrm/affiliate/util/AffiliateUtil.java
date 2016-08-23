@@ -7,8 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import net.sf.json.JSONObject;
 
 import com.agilecrm.Globals;
 import com.agilecrm.account.AccountPrefs;
@@ -49,7 +48,7 @@ public class AffiliateUtil {
 		return dao.fetchAllByOrder(max, cursor, map, true, false, orderBy);
 	}
 	
-	public static String getTotalCommisionAmount(Long userId, Long startTime, Long endTime) throws JSONException{
+	public static String getTotalCommisionAmount(Long userId, Long startTime, Long endTime){
 		DatastoreService dataStore = DatastoreServiceFactory.getDatastoreService();
 		com.google.appengine.api.datastore.Query query = new com.google.appengine.api.datastore.Query("Affiliate");
 		query.addProjection(new PropertyProjection("amount", Integer.class));

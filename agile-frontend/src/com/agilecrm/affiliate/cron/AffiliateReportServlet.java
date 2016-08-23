@@ -88,17 +88,22 @@ public class AffiliateReportServlet extends HttpServlet {
       						map.put("paypalId", affDetails.getPaypalId());
       					
       					String details;
-						try {
 							details = AffiliateUtil.getTotalCommisionAmount(user.id, firstDateOfPreviousMonth, lastDateOfPreviousMonth);
 							JSONParser parser = new JSONParser();
-	      					JSONObject json = (JSONObject) parser.parse(details);
-	      					float commission = (json.getInt("commission"));
-	      					map.put("commission", commission/100);
-	      					list.add(map);
-						} catch (JSONException | ParseException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
+	      					JSONObject json;
+							try {
+								json = (JSONObject) parser.parse(details);
+								int count = (json.getInt("count"));
+								if(count > 0){
+									System.out.println("domain: "+user.domain);
+									float commission = (json.getInt("commission"));
+			      					map.put("commission", commission/100);
+			      					list.add(map);
+								}
+							} catch (ParseException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
       					
       			}
       		}finally{
