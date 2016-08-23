@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.agilecrm.TaskQueueStatsDaemon;
 import com.agilecrm.ThreadPoolQueueStatsDaemon;
+import com.agilecrm.services.ServiceLocator;
 import com.auth.Authorization;
 import com.google.api.services.taskqueue.Taskqueue;
 
@@ -58,6 +59,16 @@ public class TaskDaemonInitializer
 
     public static void main(String[] args)
     {
+	//Registering core services and core objectify classes 
+	System.out.println("Entered Servlet Context Listener");
+	
+	System.out.println("Registering services from core Service Registry");
+	// Register Services from different modules with ServiceLocator
+	ServiceLocator.registerServicesFromRegistry(new com.agilecrm.services.core.ServiceRegistry());
+	
+	// Register objectify entities
+	com.agilecrm.coreComponents.ObjectifyRegistry.registerEntities();
+	//
 
 	System.out.println(Runtime.getRuntime().availableProcessors());
 	if (args == null || args.length < 1)
