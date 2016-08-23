@@ -17,7 +17,7 @@ var AffiliateRouter = Backbone.Router.extend({
 			if(!template_ui)
 				  return;
 			$('#content').html($(template_ui));
-			that.commissionDetailsView = new Base_Model_View({ url : 'core/api/affiliate/total?', template : "affiliate-commission-details",
+			that.commissionDetailsView = new Base_Model_View({ url : 'core/api/affiliate/total?userId='+CURRENT_DOMAIN_USER.id, template : "affiliate-commission-details",
 			    postRenderCallback : function(el){
 			    }
 			});
@@ -96,7 +96,7 @@ var AffiliateRouter = Backbone.Router.extend({
 	showAffiliateCollection : function()
 	{
 		var time = getTimeFromDatePicker();
-		this.affiliateCollectionView = new Base_Collection_View({ url : 'core/api/affiliate?&startTime='+time.start+'&endTime='+time.end, sort_collection : false, templateKey : "affiliate",
+		this.affiliateCollectionView = new Base_Collection_View({ url : 'core/api/affiliate?userId='+CURRENT_DOMAIN_USER.id+'&startTime='+time.start+'&endTime='+time.end, sort_collection : false, templateKey : "affiliate",
 			cursor : true, page_size : 25, individual_tag_name : 'tr', postRenderCallback : function(el){
 				head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
 				{

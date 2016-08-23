@@ -20,7 +20,6 @@ import org.json.JSONException;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import com.agilecrm.affiliate.Affiliate;
 import com.agilecrm.affiliate.AffiliateDetails;
 import com.agilecrm.affiliate.util.AffiliateDetailsUtil;
 import com.agilecrm.affiliate.util.AffiliateUtil;
@@ -90,7 +89,7 @@ public class AffiliateReportServlet extends HttpServlet {
       					
       					String details;
 						try {
-							details = AffiliateUtil.getTotalCommisionAmount(user.id, firstDateOfPreviousMonth, lastDateOfPreviousMonth, "-createdTime");
+							details = AffiliateUtil.getTotalCommisionAmount(user.id, firstDateOfPreviousMonth, lastDateOfPreviousMonth);
 							JSONParser parser = new JSONParser();
 	      					JSONObject json = (JSONObject) parser.parse(details);
 	      					float commission = (json.getInt("commission"));

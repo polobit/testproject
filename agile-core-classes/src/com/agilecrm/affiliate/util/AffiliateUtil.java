@@ -27,7 +27,6 @@ import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.FetchOptions;
 import com.google.appengine.api.datastore.PropertyProjection;
 import com.google.appengine.api.datastore.Query.FilterOperator;
-import com.googlecode.objectify.Query;
 
 /**
  * Utility functions for Affiliate
@@ -50,7 +49,7 @@ public class AffiliateUtil {
 		return dao.fetchAllByOrder(max, cursor, map, true, false, orderBy);
 	}
 	
-	public static String getTotalCommisionAmount(Long userId, Long startTime, Long endTime, String orderBy) throws JSONException{
+	public static String getTotalCommisionAmount(Long userId, Long startTime, Long endTime) throws JSONException{
 		DatastoreService dataStore = DatastoreServiceFactory.getDatastoreService();
 		com.google.appengine.api.datastore.Query query = new com.google.appengine.api.datastore.Query("Affiliate");
 		query.addProjection(new PropertyProjection("amount", Integer.class));
@@ -61,7 +60,6 @@ public class AffiliateUtil {
 			query.addFilter("createdTime", FilterOperator.GREATER_THAN_OR_EQUAL, startTime);
 			query.addFilter("createdTime", FilterOperator.LESS_THAN_OR_EQUAL, endTime);
 		}
-		query.addSort(orderBy);
 		List<Entity> list = dataStore.prepare(query).asList(FetchOptions.Builder.withDefaults());
 		long totalCommissionAmount = 0;
 		for(Entity entity : list){

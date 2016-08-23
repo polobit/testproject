@@ -40,7 +40,7 @@ public class AffiliateApi {
 	@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 	public String getTotalcommisionAmount(@QueryParam("userId") Long userId, @QueryParam("startTime") Long startTime, @QueryParam("endTime") Long endTime){
 		try{
-			return AffiliateUtil.getTotalCommisionAmount(userId, startTime, endTime, "-createdTime");
+			return AffiliateUtil.getTotalCommisionAmount(userId, startTime, endTime);
 		}catch (Exception e) {
 			e.printStackTrace();
 			throw new WebApplicationException(Response
