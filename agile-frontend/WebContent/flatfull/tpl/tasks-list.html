@@ -11,7 +11,7 @@
 		<div class="panel panel-default">
 		<div class="panel-heading {{#is_mobile}} b-b-none {{/is_mobile}}">{{agile_lng_translate 'task' 'task-list'}}</div>
         <div class="table-responsive">
-        <table class="table {{#is_mobile}}tasklist-table noDelete{{else}} table-striped showCheckboxes agile-table{{/is_mobile}} no-sorting panel m-b-none table-layout-mob-view" url="core/api/tasks/bulk" id="task-list">
+        <table class="table {{#is_mobile}} onlySorting tasklist-table noDelete {{else}} table-striped showCheckboxes agile-table{{/is_mobile}} no-sorting panel m-b-none table-layout-mob-view" url="core/api/tasks/bulk" id="task-list">
             
             {{#is_mobile}}
             
