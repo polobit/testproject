@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+	<script src='//cdnjs.cloudflare.com/ajax/libs/headjs/1.0.3/head.min.js'></script>
+</head>
+<body>
+   <script>
+   function get_cloudfront_path(type){
+			if(type == "static")
+				return "<%=CLOUDFRONT_STATIC_FILES_PATH%>";
+			else if(type == "lib")
+				return "<%=CLOUDFRONT_TEMPLATE_LIB_PATH%>";
+			else if(type == "version")
+				return "<%=_AGILE_VERSION%>";
+		}
+
+       var CLOUDFRONT_STATIC_FILES_PATH = parent.get_cloudfront_path("static");
+       var CLOUDFRONT_TEMPLATE_LIB_PATH = parent.get_cloudfront_path("lib");
+       var _AGILE_VERSION = parent.get_cloudfront_path("version");
+       var _AGILE_LANGUAGE = parent.get_cloudfront_path("language");
+
+       head.load(CLOUDFRONT_STATIC_FILES_PATH + 'final-lib/min/lib-all-new-1.js?_=' + _AGILE_VERSION,
+       			CLOUDFRONT_STATIC_FILES_PATH + 'final-lib/min/lib-all-new-2.js?_=' + _AGILE_VERSION, 
+					CLOUDFRONT_TEMPLATE_LIB_PATH + 'jscore/min/locales/'+ _AGILE_LANGUAGE +'/js-all-min-1.js?_=' + _AGILE_VERSION, 
+					CLOUDFRONT_TEMPLATE_LIB_PATH + 'jscore/min/locales/'+ _AGILE_LANGUAGE + '/js-all-min-2.js?_=' + _AGILE_VERSION, 
+					CLOUDFRONT_TEMPLATE_LIB_PATH + 'jscore/min/locales/' + _AGILE_LANGUAGE + '/js-all-min-3.js?_=' + _AGILE_VERSION, 
+					CLOUDFRONT_TEMPLATE_LIB_PATH + 'jscore/min/locales/' + _AGILE_LANGUAGE + '/js-all-min-4.js?_=' + _AGILE_VERSION, 
+					CLOUDFRONT_TEMPLATE_LIB_PATH + 'tpl/min/precompiled/locales/' + _AGILE_LANGUAGE + '/tpl.js?_=' + _AGILE_VERSION, 
+					CLOUDFRONT_TEMPLATE_LIB_PATH + 'tpl/min/precompiled/locales/' + _AGILE_LANGUAGE + '/portlets.js?_=' + _AGILE_VERSION
+							);
+   </script>
+
+</body>
+</html>
