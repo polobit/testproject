@@ -888,7 +888,8 @@ var WorkflowsRouter = Backbone.Router
 
 							$('#email-type', el).find('option[value=' + currentTrigger.toJSON()["email_type"] + ']').attr('selected', 'selected').trigger(
 									'change');
-
+							console.log(currentTrigger.toJSON());
+							
 							populate_owners_in_trigger($('form#addTriggerForm', el), 'event-owner-id', currentTrigger.toJSON()["event_owner_id"]);
 						}
 
