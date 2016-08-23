@@ -4,7 +4,7 @@ cd ../
 git stash
 
 chmod u+x ./../deploy-beta.sh
-./../deploy-beta.sh agile-frontend sandbox
+./../deploy-beta.sh agile-frontend maven
 
 # git checkout sandbox_sync_conversion
 
