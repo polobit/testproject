@@ -520,7 +520,7 @@ function bulk_delete_operation(url, id_array, index_array, table, is_grid_view, 
 					 
 			    	  $.each(id_array, function(index, data){
 					
-					if(Current_Route == "contacts")
+					if(Current_Route == "contacts") 
 					App_Contacts.contactsListView.collection.remove(data)
 					else
 					App_Companies.companiesListView.collection.remove(data)	
