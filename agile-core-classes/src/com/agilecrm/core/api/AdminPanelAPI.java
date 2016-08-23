@@ -693,7 +693,7 @@ public class AdminPanelAPI
 		NamespaceManager.set(namespace);
     	try {
     		AffiliateDetails details = AffiliateDetailsUtil.getAffiliateDetailsbyUserId(userId);
-    		details.setAmount(details.getAmount() + amount);
+    		details.setAmount(details.getAmount() + amount * 100);
     		details.save();
 		} catch (Exception e) {
 			e.printStackTrace();

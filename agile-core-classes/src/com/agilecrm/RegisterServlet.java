@@ -124,7 +124,15 @@ public class RegisterServlet extends HttpServlet
 	String affiliateReference = request.getParameter("utm_affiliate");
 	if(affiliateReference != null){
 		Cookie cookie = new Cookie("agile_affiliated_by", affiliateReference);
-		System.out.println("Setting agile_affiliated_by cookie value: "+affiliateReference);
+		String version = request.getServerName();
+		String domain;
+		String applicationId = SystemProperty.applicationId.get();
+		if (StringUtils.isEmpty(version))
+		    domain = "agilecrm.com";
+		else
+			domain = version + "-dot-" + applicationId + ".appspot.com/";
+		System.out.println("Setting affiliate reference cookie to "+domain);
+		cookie.setDomain(domain);
 		response.addCookie(cookie);
 	}else{
 		System.out.println("affiliateReference value is null");

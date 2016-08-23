@@ -110,7 +110,8 @@ public class AffiliateDetails {
 	
 	@PrePersist
 	public void prePersist(){
-		this.userId = DomainUserUtil.getCurrentDomainUser().id;
+		if(this.userId == null)
+			this.userId = DomainUserUtil.getCurrentDomainUser().id;
 	}
 	
 	public void save(){
