@@ -33,7 +33,7 @@
 		    </div>
 	    {{/if_equals}}
 
-         <div class="pull-left w-full l-h-xs">
+         <div class="pull-left w-full">
 	  	{{#if_equals created_by 'REQUESTER'}}
           	<span class="m-r-xs"><b class="text-sm vertical-align-top">{{requester_name}}</b></span>
           	<span class="txt-small text-xs text-muted">
@@ -51,7 +51,7 @@
 	   	{{/if_equals}}
 	  </div>
 
-	  <div class="pull-left m-t-n-xxs word-break-all {{#if plain_text}}plain-text-comment{{/if}}">
+	  <div class="inline-block w-full {{#if plain_text}}plain-text-comment{{/if}}">
 
 	  {{#if plain_text}}
 
