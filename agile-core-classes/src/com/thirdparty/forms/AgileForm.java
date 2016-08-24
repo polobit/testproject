@@ -26,6 +26,7 @@ import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.ContactField.FieldType;
 import com.agilecrm.contact.CustomFieldDef;
 import com.agilecrm.contact.Note;
+import com.agilecrm.contact.Tag;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.CustomFieldDefUtil;
 import com.agilecrm.contact.util.TagUtil;
@@ -82,10 +83,8 @@ public class AgileForm extends HttpServlet
 	    String[] tags = getContactTags(formJson);
 	    
 	    
-	    if (!ArrayUtils.isEmpty(tags))
-		contact.addTags(tags);
-	    else
-		contact.save();
+		 
+	    updateContactWithOldTag(contact, tags);
 
 	    addNotesToContact(contact, owner, formJson);   	   
 	    
@@ -411,5 +410,18 @@ public class AgileForm extends HttpServlet
 	field.value = value;
 	field.subtype = subType;
 	return field;
+    }
+    
+    /**
+     * THis method update contact if same tag is exist
+     * @param contact
+     * @param tags
+     */
+    
+    private void updateContactWithOldTag(Contact contact, String [] tags){
+    	for(String tag:tags){
+    		contact.addTag(new Tag(tag));
+    	}
+    contact.save();
     }
 }
