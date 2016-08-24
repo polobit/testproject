@@ -24,7 +24,8 @@ function showAgileCRMForm(formJson,formHolderId) {
     var formJsonObj = JSON.parse(formJson.formJson);
     for (var key in formJsonObj[0].fields.agilepreloadfields["value"]) { 
         if(formJsonObj[0].fields.agilepreloadfields["value"][key]["selected"]) {
-            if(formJsonObj[0].fields.agilepreloadfields["value"][key]["value"]) {
+            if(formJsonObj[0].fields.agilepreloadfields["value"][key]["value"]=="true"
+                ) {
                 _agile_load_form_fields();
             }
         }
