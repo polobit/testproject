@@ -50,13 +50,7 @@ function regiseterServiceWorkers()  {
            {
                   if(subscription !=null && subscription !=undefined){
                        browser_id = subscription.endpoint.substring(subscription.endpoint.lastIndexOf("/")+1)
-
-                   if(subscription.endpoint.indexOf("mozilla")>0)
-                       browser_id = "mozilla" + browser_id;
-                   else
-                     browser_id = "chrome" + browser_id;
-
-                       agile_store_data("agile-browser-id",browser_id);
+                        sendPushNotificationSubscription(subscription);
                        console.log("You already having subscription"+subscription.endpoint);
                 }
            } 

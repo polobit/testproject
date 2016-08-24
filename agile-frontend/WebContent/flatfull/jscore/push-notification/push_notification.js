@@ -67,6 +67,15 @@ var Push_Notification_Event_View = Base_Model_View.extend({
       sendPushNotificationPreview: function(e)
       {
          e.preventDefault();
+          
+          if(notify.permissionLevel() == notify.PERMISSION_DEFAULT){
+             head.js("flatfull/push_notification/push_notification.js", function(el)
+              {
+                enablePushNotification();
+             });
+
+          }
+
           notify.requestPermission(function() {
            if(notify.permissionLevel() == notify.PERMISSION_GRANTED || notify.permissionLevel() == notify.PERMISSION_DEFAULT){
              $('#push-notification-content').hide(); 
@@ -81,7 +90,9 @@ var Push_Notification_Event_View = Base_Model_View.extend({
            }
            else
             {
-               $('#push-notification-content').show();            }
+               $('#push-notification-content').show();    
+            }  
+
         });
       },
 		});
