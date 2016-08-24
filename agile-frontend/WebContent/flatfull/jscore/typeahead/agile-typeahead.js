@@ -263,7 +263,7 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
 							var searchToken = $('#searchText').val();
 							var appenditem = '';
 							if(id == "searchText"){
-								appenditem = '<li><a href="#contacts/search/'+searchToken+'"><p align="center"><b>{{agile_lng_translate "others" "more"}}</b></p></a></li>';
+								appenditem = '<li><a href="#contacts/search/'+searchToken+'" style="color: #363f44 !important"><p align="center"><b>{{agile_lng_translate "others" "more"}}</b></p></a></li>';
 							}
 							$('body').find('#more-results').html(appenditem);
 
