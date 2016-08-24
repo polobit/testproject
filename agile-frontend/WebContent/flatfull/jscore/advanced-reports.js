@@ -87,6 +87,7 @@ function initReportsForCalls(callback){
 	
 	$('#typeCall').change(function()
 		{
+			$(this).attr("title", $("#typeCall option:selected").text());
 			callback();
 		});
 	
