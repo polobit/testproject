@@ -15,8 +15,8 @@
               </div>
 
 			<div class="pull-right" style="padding:0px 4px 10px">
-				<select name="owner" id="owner" class="required form-control">
-					<option value="All Owners">{{agile_lng_translate 'report-add' 'all-owners'}}</option>
+				<select name="owner" id="owner" class="required form-control {{#is_mobile}} {{else}} text-ellipsis w-120 {{/is_mobile}}">
+					<option value="All Owners" title="All Owners">{{agile_lng_translate 'report-add' 'all-owners'}}</option>
                 </select>
 			</div>
 </div>
@@ -96,7 +96,7 @@
               </div>
 
 			<div class="pull-right" style="padding:0px 4px 10px">
-				<select name="pipeline_track" id="pipeline_track" class="required form-control">
+				<select name="pipeline_track" id="pipeline_track" class="required form-control {{#is_mobile}} {{else}} text-ellipsis w-120 {{/is_mobile}}">
 					<option value="">{{agile_lng_translate 'plan-and-upgrade' 'select'}}</option>
                 </select>
 			</div>

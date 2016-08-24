@@ -18,18 +18,18 @@
                 <span id="range">{{date-range "today" "-6"}}</span>
               </div>
 			<div class="pull-right" style="padding:0px 4px 10px 2px">
-				<select name="source" id="source" class="required form-control" style="width: 120px">
-					<option value="All Sources">{{agile_lng_translate 'report-add' 'all-sources'}}</option>
+				<select name="source" id="source" class="required form-control {{#is_mobile}} {{else}} text-ellipsis w-120 {{/is_mobile}}">
+					<option value="All Sources" title="All Sources">{{agile_lng_translate 'report-add' 'all-sources'}}</option>
                 </select>
 			</div>
 			<div class="pull-right" style="padding:0px 2px 10px">
-				<select name="track" id="track" class="required form-control" style="width: 120px">
-					<option value="All Tracks">{{agile_lng_translate 'report-add' 'all-tracks'}}</option>
+				<select name="track" id="track" class="required form-control {{#is_mobile}} {{else}} text-ellipsis w-120 {{/is_mobile}}">
+					<option value="All Tracks" title="All Tracks">{{agile_lng_translate 'report-add' 'all-tracks'}}</option>
                 </select>
 			</div>
 			<div class="pull-right" style="padding:0px 2px 10px">
-				<select name="owner" id="owner" class="required form-control" style="width: 120px">
-					<option value="All Owners">{{agile_lng_translate 'report-add' 'all-owners'}}</option>
+				<select name="owner" id="owner" class="required form-control {{#is_mobile}} {{else}} text-ellipsis w-120 {{/is_mobile}}">
+					<option value="All Owners" title="All Owners">{{agile_lng_translate 'report-add' 'all-owners'}}</option>
                 </select>
 			</div>
         </div>
@@ -71,8 +71,8 @@
                 <span id="range">{{date-range "today" "-6"}}</span>
               </div>
 			<div class="pull-right" style="padding:0px 4px 10px 2px">
-				<select name="owner" id="owner" class="required form-control" style="width: 120px">
-					<option value="All Owners">{{agile_lng_translate 'report-add' 'all-owners'}}</option>
+				<select name="owner" id="owner" class="required form-control {{#is_mobile}} {{else}} text-ellipsis w-120 {{/is_mobile}}">
+					<option value="All Owners" title="All Owners">{{agile_lng_translate 'report-add' 'all-owners'}}</option>
                 </select>
 			</div>
   			<div class="pull-right" style="padding:0px 2px 10px">
