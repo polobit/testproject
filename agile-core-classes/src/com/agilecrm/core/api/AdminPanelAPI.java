@@ -688,7 +688,7 @@ public class AdminPanelAPI
     
     @Path("affiliate/addAmount")
     @POST
-	public void addAffiliateAmountAmount(@QueryParam("d") String namespace, @QueryParam("id") Long userId, @QueryParam("am") int amount){
+	public void addAffiliateAmountAmount(@QueryParam("d") String namespace, @QueryParam("id") Long userId, @QueryParam("amount") int amount){
     	String oldNamespace = NamespaceManager.get();
 		NamespaceManager.set(namespace);
     	try {
