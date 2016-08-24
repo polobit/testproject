@@ -72,6 +72,15 @@ function showCustomFieldModel(data)
 		isNew : isNew,
 		postRenderCallback : function(el) {
 			console.log($("#custom-field-add-modal", el));
+			
+			var scope = $("#textModalForm", el).find("input[name=scope]").val();
+			if( scope=="CONTACT")
+			   	$('#textModalForm',el).find("#contacts").prop('checked', true); 
+			else if(scope=="COMPANY")
+				$('#textModalForm',el).find("#companies").prop('checked', true); 
+			else if(scope =="DEAL")
+				$('#textModalForm',el).find("#deals").prop('checked', true); 
+			
 			//This code will scroll to top to see the modal.
 			
 			if(!modelViewCount){
@@ -84,6 +93,7 @@ function showCustomFieldModel(data)
 		     $('#custom-field-add-modal').css("left", "50%");
 		     $('#custom-field-add-modal').css("width", modalWidth);
 		     $('#custom-field-add-modal').css("margin", (modalWidth/2)*-1);
+
 		     bindCustomFiledChangeEvent(el);
 		},
 		saveCallback : function(model)
@@ -171,7 +181,9 @@ function showCustomFieldModel(data)
 				$('#duplicate-custom-field-err').addClass("hide");
 				$('#duplicate-custom-field-type-err').addClass("hide");
 			},3000);
+
 		}
+
 	});
 
 	$('#custom-field-modal').html(modelView.render(true).el);
@@ -1054,6 +1066,7 @@ function groupingCustomFields(base_model){
 		App_Admin_Settings.caseCustomFieldsListView = new Base_Collection_View({ url : '/core/api/custom-fields/scope/position?scope='+base_model.get("scope"), sortKey : "position", restKey : "customFieldDefs",
 			templateKey : templateKey, individual_tag_name : 'tr',
 			postRenderCallback : function(custom_el){
+		
 				enableCustomFieldsSorting(custom_el,'custom-fields-'+base_model.get("scope").toLowerCase()+'-tbody','admin-settings-customfields-'+base_model.get("scope").toLowerCase()+'-model-list');
 			}});
 		App_Admin_Settings.caseCustomFieldsListView.collection.fetch();
