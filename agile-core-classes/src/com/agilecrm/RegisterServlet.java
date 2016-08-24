@@ -127,7 +127,7 @@ public class RegisterServlet extends HttpServlet
 		if (request.getRequestURI().contains("agilecrm.com"))
 		    cookie.setDomain("agilecrm.com");
 		else
-			cookie.setDomain("appspot.com");
+			cookie.setDomain("agilecrmbeta.appspot.com");
 		response.addCookie(cookie);
 	}else{
 		System.out.println("affiliateReference value is null");
@@ -683,6 +683,7 @@ public class RegisterServlet extends HttpServlet
 	    AccountPrefs accPrefs = AccountPrefsUtil.getAccountPrefs();
 	    System.out.println("Setting timezone in AccountPrefs");
 	    String affiliateReference;
+	    System.out.println("requestURI is "+req.getRequestURI());
 	    affiliateReference = req.getParameter("utm_affiliate");
 		if(affiliateReference == null)
 			affiliateReference = getCookie(req, "agile_affiliated_by");

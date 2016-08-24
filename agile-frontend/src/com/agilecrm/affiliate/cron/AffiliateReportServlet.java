@@ -14,9 +14,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import net.sf.json.JSONObject;
-
-import org.json.JSONException;
+import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
@@ -93,10 +91,10 @@ public class AffiliateReportServlet extends HttpServlet {
 	      					JSONObject json;
 							try {
 								json = (JSONObject) parser.parse(details);
-								int count = (json.getInt("count"));
+								int count = (Integer) json.get("count");
 								if(count > 0){
 									System.out.println("domain: "+user.domain);
-									float commission = (json.getInt("commission"));
+									float commission = (Integer) json.get("commission");
 			      					map.put("commission", commission/100);
 			      					list.add(map);
 								}

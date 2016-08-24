@@ -1425,20 +1425,9 @@
 		<servlet-name>AmazonSESWebhook</servlet-name>
 		<servlet-class>com.thirdparty.amazon.httpendpoint.AmazonSESWebhook</servlet-class>
 	</servlet>
-	 <servlet>
-	 	<description>
-	 	</description>
-	 	<display-name>AffiliateReportServlet</display-name>
-	 	<servlet-name>AffiliateReportServlet</servlet-name>
-	 	<servlet-class>com.agilecrm.affiliate.cron.AffiliateReportServlet</servlet-class>
-	 </servlet>
 
 	<servlet-mapping>
 		<servlet-name>AmazonSESWebhook</servlet-name>
 		<url-pattern>/backend/amazonseswebhook</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
-		<servlet-name>AffiliateReportServlet</servlet-name>
-		<url-pattern>/AffiliateReportServlet</url-pattern>
 	</servlet-mapping>
 </web-app>
