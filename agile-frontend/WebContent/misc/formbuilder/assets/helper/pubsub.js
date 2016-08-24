@@ -99,7 +99,7 @@ var addAgileFields = function(json, fields, callback)
 	];
 	for ( var j = 0; j < fields.length; j++)
 	{
-		if(fields[j].field_type=="TEXT"||fields[j].field_type=="TEXTAREA"){
+		if(fields[j].field_type == "TEXT" || fields[j].field_type == "TEXTAREA" || fields[j].field_type == "LIST"){
 
 			var value = {};
 			value.value = fields[j].field_label;

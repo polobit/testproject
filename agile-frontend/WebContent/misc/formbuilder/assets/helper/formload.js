@@ -49,7 +49,7 @@ define([
 					{ 
 					for ( var i = 0; i < fields.length; i++)
 						{
-							if(fields[i].field_type=="TEXT"||fields[i].field_type=="TEXTAREA"){
+							if(fields[i].field_type == "TEXT" || fields[i].field_type == "TEXTAREA" || fields[i].field_type == "LIST"){
 								var value = {};
 								value.value = fields[i].field_label;
 								value.label = fields[i].field_label;
