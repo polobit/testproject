@@ -28,7 +28,7 @@ function _getMessageSkype(message, callback){
 		var inValid = /^\s/;
 		var k = inValid.test(number);
 		if(k){
-			number = "+" + number.trimLeft()
+			number = "+" + number.trimLeft();
 		}
 	}catch(e){
 	}
