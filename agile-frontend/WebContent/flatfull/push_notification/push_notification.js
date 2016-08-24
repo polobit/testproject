@@ -15,7 +15,7 @@ function enablePushNotification(){
 function regiseterServiceWorkers()  {
    if ('serviceWorker' in navigator) 
       {
-        navigator.serviceWorker.register('notification/agile-service-workers.js',{ scope: './notification/'}).then(function (registration) 
+        navigator.serviceWorker.register('notification/our-agile-service-workers.js',{ scope: './notification/'}).then(function (registration) 
           {
               var serviceWorker; 
               // Are Notifications supported in the service worker?  
