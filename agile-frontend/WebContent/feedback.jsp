@@ -165,14 +165,14 @@ var id = <%=note_id%>
 
 			<div class="container w-auto-xs">
 
-				<div id="addfeedback-message">
+				<div id="addfeedback-message" style="margin-left: 0px;">
 				<a href="https://www.agilecrm.com/" class="navbar-brand block text-white m-t" style="color: #363f44;">
 						<img  src="https://s3.amazonaws.com/agilecrm/panel/uploaded-logo/1383722651000?id=upload-container" style="max-height: 50px;">
 					</a>
-			<div>
+			<div style="box-shadow: 2px 2px 2px 2px;width: 700px;margin: auto;">
 
 				<form name='feedback_ticket' id="feedback_ticket" method='post'
-					style="margin-left: 300px" onsubmit="saveTicketFeedback(event)">
+					 onsubmit="saveTicketFeedback(event)" style="margin-left: 34px;">
 					
 					<% if(!StringUtils.isEmpty(error)){%>
 					<div class="alert alert-danger error login-error m-b-none">
@@ -180,12 +180,13 @@ var id = <%=note_id%>
 					</div>
 					
 
+
 					<%}%>
 					<% if(!StringUtils.isEmpty(success)){%>
 							<table width="60%" cellpadding="0" cellspacing="0" border="0" style="margin-top: 40px;">
                      <tbody>
                          <tr>
-                         	<td  width="35%"style="padding-top: 20px;padding-left: 34px;">How would you rate the support recived?</td>
+                         	<td  width="50%"style="padding-top: 20px;padding-left: 34px;">How would you rate the support recived?</td>
                              <td width="5%" style="padding-left:7px">
 								 <span style=" font-size: 130%;padding-left: 8px; visibility:hidden;" id="YAY">&#10004;</span>	
 															
@@ -215,7 +216,7 @@ var id = <%=note_id%>
 
 					</div>
 					<div>
-					<input type='submit'  style="width: 10%; margin-left: 34px;float:left; margin-right:15px;"
+					<input type='submit'  style="width: 10%; margin-left: 34px;float:left; margin-right:15px;margin-left:412px;"
 						class='btn btn-sm btn-primary btn-block '>
 					<input type='button'  style="width: 10%; margin-left: 34px;"
 						class='btn btn-sm btn-primary btn-block ' onclick="functioncancel()" value="Cancel"/>		
