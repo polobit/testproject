@@ -312,4 +312,50 @@ public class SocialPrefsAPI
 	result = users.toString();
 	return result;
     }
+    
+    /**
+     * Rajesh Code
+     * 
+     */
+    /**
+     * Returns google emails merging with contact emails, when imap preferences
+     * are set. Otherwise simply returns contact emails. Emails json string are
+     * returned in the format {emails:[]}.
+     * 
+     * @param searchEmail
+     *            - to get emails related to search email
+     * @param count
+     *            - required number of emails.
+     * @param offset
+     *            - offset.
+     * @return String
+     */
+    @Path("all-google-emails")
+    @GET
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public List<EmailWrapper> getAllGoogleEmails(@QueryParam("from_email") String fromEmail, @QueryParam("page_size") String pageSize,
+	    @QueryParam("cursor") String cursor)
+    {
+	List<EmailWrapper> emails = null;
+	try
+	{
+	    if (StringUtils.isBlank(cursor))
+		cursor = "0";
+	    // Removes unwanted spaces in between commas
+	    String normalisedFromEmail = AgileTaskletUtil.normalizeStringSeparatedByDelimiter(',', fromEmail);
+	    // Gets GmailPrefs url
+	    String gmailURL = ContactGmailUtil
+		    .getGmailNewURL(normalisedFromEmail, cursor, pageSize);
+	    // If both are not set, return Contact emails.
+	    if (StringUtils.isNotBlank(gmailURL))
+		emails = ContactEmailUtil.getEmailsfromServer(gmailURL, pageSize, cursor, normalisedFromEmail);
+	}
+	catch (Exception e)
+	{
+	    System.out.println("Got an exception in SocialPrefsAPI: " + e.getMessage());
+	    e.printStackTrace();
+	    return null;
+	}
+	return emails;
+    }
 }

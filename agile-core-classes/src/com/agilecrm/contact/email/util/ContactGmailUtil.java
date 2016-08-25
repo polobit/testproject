@@ -156,4 +156,75 @@ public class ContactGmailUtil
 	        + URLEncoder.encode(consumerKey) + "&consumer_secret=" + URLEncoder.encode(consumerSecret)
 	        + "&oauth_key=" + URLEncoder.encode(oauth_key) + "&oauth_secret=" + URLEncoder.encode(oauth_secret);
     }
+    
+   
+    /**
+     * Rajesh Code
+     */
+    /**
+     * Returns GmailURL to fetch emails from given "from-email" gmail
+     * user-account.
+     * 
+     * @param fromEmail
+     *            -gmail username
+     * 
+     * @param searchEmail
+     *            - search email-id.
+     * @param offset
+     *            - offset.
+     * @param count
+     *            - count or limit to number of emails.
+     * @return String
+     */
+    @SuppressWarnings("deprecation")
+    public static String getGmailNewURL(String fromEmail, String offset, String count)
+    {
+    // Get Gmail Social Prefs
+    Type socialPrefsTypeEnum = SocialPrefs.Type.GMAIL;
+    Objectify ofy = ObjectifyService.begin();
+    SocialPrefs gmailPrefs = ofy.query(SocialPrefs.class).filter("email", fromEmail)
+            .filter("type", socialPrefsTypeEnum).get();
+
+    if (gmailPrefs == null)
+        return null;
+
+    if (gmailPrefs.expires_at > 0l && gmailPrefs.expires_at <= System.currentTimeMillis())
+    {
+        resetAccessToken(gmailPrefs);
+    }
+
+    return ContactGmailUtil.getGmailNewURLForPrefs(gmailPrefs, offset, count);
+
+    }
+    
+    public static String getGmailNewURLForPrefs(SocialPrefs gmailPrefs, String offset, String count)
+    {
+	String userName = gmailPrefs.email;
+	String host = "imap.gmail.com";
+	String port = "993";
+	String consumerKey = "anonymous";
+	String consumerSecret = "anonymous";
+
+	String oauth_key = gmailPrefs.token;
+	String oauth_secret = gmailPrefs.secret;
+
+	String command = "oauth_email";
+    String hostUrl = "http://localhost:8080";
+	// Gmail Prefs has been updated from oauth1 (deprecated) to oauth2. For
+	// oauth2, we store secret as v2
+	if (StringUtils.equalsIgnoreCase(gmailPrefs.secret, "v2"))
+	{
+	    return hostUrl+"/imap?command=oauth_email2&user_name=" + URLEncoder.encode(userName)
+		    + "&fetch_items=mails&host=" + URLEncoder.encode(host) + "&port="
+		    + URLEncoder.encode(port) + "&offset=" + offset + "&count=" + count + "&oauth_key="
+		    + URLEncoder.encode(oauth_key);
+	}
+
+	return hostUrl+"/imap?command=oauth_email&user_name=" + URLEncoder.encode(userName)
+	        + "&fetch_items=mails&host=" + URLEncoder.encode(host) + "&port="
+	        + URLEncoder.encode(port) + "&offset=" + offset + "&count=" + count + "&consumer_key="
+	        + URLEncoder.encode(consumerKey) + "&consumer_secret=" + URLEncoder.encode(consumerSecret)
+	        + "&oauth_key=" + URLEncoder.encode(oauth_key) + "&oauth_secret=" + URLEncoder.encode(oauth_secret);
+    }
+
 }
