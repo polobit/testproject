@@ -5,7 +5,12 @@ $(function()
 	$('body').on('click', '.show-dialler', function(e)
 			{
 			  	e.preventDefault();
+			  	if(default_call_option.callOption.length == 0){
+			  	$('#twilioStateModal').modal('show'); // using it as it fulfill the requrements
+			  		return;
+			  	}
 			  	
+			  	// loading the direct -dialing template
 				  	getTemplate('dialler-page', {}, undefined, function(template_ui){
 						if(!template_ui)
 							  return;
@@ -15,19 +20,25 @@ $(function()
 						$("#direct-dialler-div").css({'left':x,'top': y});
 						$("#direct-dialler-div").show();
 						
-						var selectedWidget = _agile_get_prefs("dial-default-widget");
-						if(selectedWidget){
-						  	var value = selectedWidget;
-						  	var html = getIcon(value);
-						  	$("#dialler-widget-name-span").html(html);
-						  	$("#dialler-widget-name-span").attr("value",value);
-						}
-						
+				// adding active and inactive widget to dial		
+				if(default_call_option.callOption.length>1){	
 						$.each(default_call_option.callOption, function(i, obj){
 							var name = widgetCallName[obj.name];
-							$(".dialler-widget-name-" + name).show();
+							$(".dialler-widget-name-" + name +"> a").removeClass("inactive");
+							$(".dialler-widget-name-" + name).removeClass("none");
+							$(".dialler-widget-name-" + name +"> a").removeClass("selected-widget");
+							$(".dialler-widget-name-" + name +"> a").addClass("active");
+							
 						});
-						
+				// selecting the default widget or preffed widget		
+						var selectedWidget = _agile_get_prefs("dial-default-widget");
+						if(selectedWidget){
+							$(".dialler-widget-name-" + selectedWidget +"> a").addClass("selected-widget");
+						}
+				}else{
+					$(".panel-heading","#dialler-page").css("height",0);
+				}
+				// start- dialler configuring		
 						dialled.using = "default";
 						
 						$("#direct-dialler-div").draggableTouch();
@@ -54,7 +65,7 @@ $(function()
 					}, "#direct-dialler-div");
 			});
 	
-	$('#agilecrm-container #direct-dialler-div').on('click', '.clear-dialler', function(e)
+	$('#agilecrm-container #direct-dialler-div').on('click', '#clear-dialler', function(e)
 			{
 			  	e.preventDefault();
 			  	$("#dail_phone_number").val("");
@@ -64,11 +75,13 @@ $(function()
 	$('#agilecrm-container #direct-dialler-div').on('click', '.dialler-widget-li', function(e)
 			{
 			  	e.preventDefault();
-			  	var html = $(this).find("a").html();
+			  	var flag = $(this).find("a").hasClass("active");
+			  	if(!flag){
+			  		return;
+			  	}
+			  	$(this).parent().find("a").removeClass("selected-widget");
+		  		$(this).find("a").addClass("selected-widget");	
 			  	var value = $(this).find("a").attr("value");
-			  	$("#dialler-widget-name-span").html(html);
-			  	$("#dialler-widget-name-span").attr("value",value);
-			  	
 			  	_agile_set_prefs("dial-default-widget", value);
 			});
 	
@@ -104,7 +117,17 @@ $(function()
 			  	e.preventDefault();
 			  	var to = $("#dail_phone_number").val();
 			  	var from ;
-			  	var widgetName = $("#dialler-widget-name-span").attr("value");
+			  	var widgetName;
+			  	if(default_call_option.callOption.length>1){
+			  		widgetName = $(".dialler-widget-li").parent().find("a.selected-widget").attr("value");
+			  	}else if(default_call_option.callOption.length == 1){
+			  		if(_agile_get_prefs("dial-default-widget")){
+			  			widgetName = _agile_get_prefs("dial-default-widget");
+			  		}else{
+			  			widgetName = widgetCallName[default_call_option.callOption[0].name];
+			  		}
+			  		
+			  	}
 			  	
 			  	if(!widgetName){
 			  		$("#diallerInfoModal").html(getTemplate("diallerInfoModal"));
