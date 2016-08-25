@@ -17,12 +17,13 @@
 </div>
 {{/unless}}
 {{#if this.length}}
-    <div class="panel panel-default">
+    <div class="panel panel-default wrapper p-b-xs{{#is_mobile}} b-n {{/is_mobile}}">
         <div class="pull-right m-b-2">
-            <a href="#add-ticket-label" class="btn btn-sm btn-default btn-addon"
-                style="margin-top:20px;margin-right:20px"><span><i class="icon-plus-sign"></i></span> {{agile_lng_translate 'tickets' 'add-label'}}
+            <a href="#add-ticket-label" class="btn btn-sm btn-default btn-addon">
+            <span><i class="icon-plus-sign"></i></span> {{agile_lng_translate 'tickets' 'add-label'}}
             </a>
         </div>
+        <div class="table-responsive inline-block">
         <table class="table table-striped showCheckboxes m-b-none agile-table panel table-layout-mob-view show-delete-modal tableHeader tab-layout tickets-border" url="core/api/tickets/labels/bulk" data-bulk-delete-title="{{agile_lng_translate 'contact-details' 'delete'}}"
             data-bulk-delete-msg="{{agile_lng_translate 'tickets' 'conformation-messge-for-deletion'}}" data-resizable-columns-id="tickets-labels">
                 <thead>
@@ -34,6 +35,7 @@
                 </thead>
                 <tbody id="ticket-label-model-list" route="ticket-label/" class="c-p"> </tbody>
         </table>
+        </div>
     
     </div>
 {{/if}}

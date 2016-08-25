@@ -17,13 +17,14 @@
     </div>
 {{/unless}}
 {{#if this.length}}
-    <div class="col panel wrapper">
-        <div class="hbox h-auto m-b-sm">
+    <div class="col panel wrapper p-b-xs">
+        <div class="hbox h-auto">
             <div class="pull-right">
                 <a href="#add-canned-response" class="btn btn-sm btn-default btn-addon">
                     <span><i class="icon-plus-sign"></i></span> {{agile_lng_translate 'tickets' 'add-canned-response'}}
                 </a>
             </div>
+            <div class="table-responsive b-n inline-block m-b-none">
             <table class="table table-striped showCheckboxes m-b-none agile-table panel table-layout-mob-view show-delete-modal" url="core/api/tickets/canned-messages/bulk" data-bulk-delete-title="{{agile_lng_translate 'contacts-view' 'delete'}}" data-bulk-delete-msg="{{agile_lng_translate 'others' 'delete-warn'}}">
                     <thead>
                         <tr>
@@ -37,6 +38,8 @@
                     <tbody id="ticket-canned-response-model-list" route="edit-canned-response/" class="c-p"> </tbody>
             </table>
         </div>
+
+        </div>
     </div>
     <div class="col w-md  wrapper pos-rlt track-milestone-text p-t-none">
         <div class="data-block">
@@ -47,7 +50,7 @@
                 </p>
                 <br/>
                 <p>
-                    <iframe width="254" height="142" src="https://www.youtube.com/embed/I4mj_MpQsUI" frameborder="0" allowfullscreen></iframe>
+                    <iframe class="canned-video-xs" width="254" height="142" src="https://www.youtube.com/embed/I4mj_MpQsUI" frameborder="0" allowfullscreen></iframe>
                 </p>
             </div>
         </div>

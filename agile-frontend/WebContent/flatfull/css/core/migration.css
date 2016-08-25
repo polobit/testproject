@@ -2007,6 +2007,7 @@ display: block!important;
 .icons-left{ float: left !important; margin-top: 5px;}
 .ticket-subj-block{ width: 100% !important;}
  .ticket-name, .ticket-subject{ max-width: 20em;}
+ .plan-upgrade-center{ text-align: center; float: none !important;}
 }
 
 @media all and (min-width: 768px) {
@@ -2435,6 +2436,13 @@ transform: translateX(-50%);}
 
 .ticket-subject-md{ width: 56%;}
 .ticket-subj-block{ width: 60%;}
-/*end custom css code*/
+
 .search-filters li a
 { color: #363f44 !important;}
+
+ @media (max-width:480px){
+ .canned-video-xs{width: 100% !important;}
+} 
+.service-tabs-list i{ opacity: 0.6;}
+.service-tabs-list li a{ border-bottom: 0px; padding: 10px 15px;}
+/*end custom css code*/

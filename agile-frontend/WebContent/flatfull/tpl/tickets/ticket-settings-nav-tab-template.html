@@ -1,5 +1,39 @@
  <script id="ticket-settings-nav-tab-template" type="text/html">	
-	<div class="tab-container m-b-none">
+	{{#is_mobile}}
+
+    <div class="tab-container m-b-none">
+        <ul class="nav nav-tabs b-b-none service-tabs-list">
+            <li {{#if groups}}class="active"{{/if}}>
+                <a href="#ticket-groups" class="b-l-none" title="Groups">
+                    <i class="icon icon-users"></i>
+                </a>
+            </li>
+            <li {{#if labels}}class="active"{{/if}}>
+                <a href="#ticket-labels" class="b-l-none" title="Labels">
+                    <i class="icon icon-flag"></i>
+                </a>
+            </li>
+            <li {{#if canned_responses}}class="active"{{/if}}>
+                <a href="#canned-responses" class="b-l-none">
+                    <i class="icon icon-cursor" title="Canned Responses"></i>
+                </a>
+            </li>
+            <li {{#if filters}}class="active"{{/if}}>
+                <a href="#ticket-views" class="b-l-none">
+                    <i class="icon icon-directions" title="Views"></i>
+                </a>
+            </li>
+            <li {{#if knowledgebase}}class="active"{{/if}}>
+                <a href="#knowledgebase" class="b-l-none">
+                    <i class="fa fa-search" title="Knowledge Base"></i>
+                </a>
+            </li>
+       </ul>
+    </div>
+
+    {{else}}
+
+    <div class="tab-container m-b-none">
         <ul class="nav nav-tabs b-b-none">
         	<li {{#if groups}}class="active"{{/if}}>
          		<a href="#ticket-groups" class="b-l-none">
@@ -28,5 +62,7 @@
             </li>
        </ul>
 	</div>
+    {{/is_mobile}}
+
 	<div class="tab-pane active ticket-settings"></div>
 </script>	
