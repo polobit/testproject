@@ -4575,10 +4575,21 @@ div.list-tasks.panel-body:hover
 .mobile-search-view{
   width: 250px !important;
 }
+.w-115{
+  width: 115px;
+}
 .w-120{
   width: 120px;
 }
 .w-125
 {
   width:125px;
+}
+.w-175
+{
+  width:175px;
+}
+.w-150
+{
+  width:150px;
 }

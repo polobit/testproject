@@ -12,7 +12,7 @@
              <!-- <div class="clearfix"></div> -->            
              <div id="reportrange" class="pull-right" style="box-shadow: 0 0px 0px rgba(0, 0, 0, 0), inset 0 -0 0 rgba(0, 0, 0, .1);
 			border:1px solid #cfdadd;height:34px;padding:5px">
-			<i class="icon-calendar icon-large"></i>
+			<i class="icon-calendar icon-large text-xs"></i>
                 <span id="range">{{date-range "today" "-6"}}</span>
               </div>
 
@@ -26,14 +26,14 @@
 			
 			<div class="pull-right" style="padding:0px 2px 10px">
 				<select name="owner" id="owner" class="required form-control {{#is_mobile}} {{else}} text-ellipsis w-125 {{/is_mobile}}">
-					<option value="All Owners" title="All Owners">{{agile_lng_translate 'report-add' 'all-owners'}}</option>
+					<option value="All Owners">{{agile_lng_translate 'report-add' 'all-owners'}}</option>
                 </select>
 			</div>
 
             <div class="pull-right" style="padding:0px 2px 10px">
                 <select name="type" id="type" class="required form-control">
-                    <option value="deals" title="Total Deals">{{agile_lng_translate 'report-add' 'total-deals'}}</option>
-                    <option value="Revenue" title="Total Revenue">{{agile_lng_translate 'report-add' 'total-revenue'}}</option>
+                    <option value="deals">{{agile_lng_translate 'report-add' 'total-deals'}}</option>
+                    <option value="Revenue">{{agile_lng_translate 'report-add' 'total-revenue'}}</option>
                 </select>
             </div>  
         </div>
