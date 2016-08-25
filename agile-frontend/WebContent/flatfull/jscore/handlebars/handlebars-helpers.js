@@ -2255,6 +2255,10 @@ $(function()
 		{
 			template = $(getTemplate('csv_deals_options', context));
 		}
+		else if (type == "leads")
+		{
+			template = $(getTemplate('leads_csv_upload_options', context));
+		}
 
 		// Replaces _ with spaces
 		key = key.replace("_", " ");
@@ -4286,107 +4290,6 @@ $(function()
 			element = element.concat('<li style="display: inline;"><img src="'+updateImageS3Path("img/star-value-off.png")+'" alt="' + i + '"></li>');
 		}
 		return new Handlebars.SafeString(element);
-	});
-
-	/**
-	 * Builds options to be shown in the table heading of CSV import. Also tries
-	 * to match headings in select field
-	 */
-	Handlebars.registerHelper('setupCSVUploadOptions', function(type, key, context)
-	{
-		// console.log(context.toJSON());
-		var template;
-		if (type == "contacts")
-		{
-			getTemplate('csv_upload_options', context, undefined, function(template_ui){
-		 		if(!template_ui)
-		    		return;
-		    	template = $(template_ui);
-				
-			}, null);
-
-		}
-		else if (type == "company")
-		{
-			getTemplate('csv_companies_upload_options', context, undefined, function(template_ui){
-		 		if(!template_ui)
-		    		return;
-		    	template = $(template_ui);
-				
-			}, null);
-		}
-		else if (type == "deals")
-		{
-			getTemplate('csv_deals_options', context, undefined, function(template_ui){
-		 		if(!template_ui)
-		    		return;
-		    	template = $(template_ui);
-				
-			}, null);
-		}
-
-		// Replaces _ with spaces
-		key = key.replace("_", " ");
-
-		var isFound = false;
-
-		var match_weight = 0;
-
-		var key_length = key.length;
-		var key = key.toLowerCase();
-		var matched_value;
-
-		var selected_element;
-		template.find('option').each(function(index, element)
-		{
-			if ($(element).text().toLowerCase().indexOf(key) != -1)
-			{
-
-				var current_match_weight = key_length / $(element).text().length;
-				if (match_weight >= current_match_weight)
-					return;
-
-				selected_element = $(element);
-				matched_value = $(element).text();
-				match_weight = current_match_weight;
-			}
-		})
-
-		console.log(matched_value + ", " + key + " : " + match_weight);
-
-		for (var i = 0; i < key.length - 3; i++)
-		{
-			template.find('option').each(function(index, element)
-			{
-				if ($(element).text().toLowerCase().indexOf(key.substr(0, key.length - i).toLowerCase()) != -1)
-				{
-					console.log(key.substr(0, key.length - i) + " , " + $(element).text());
-					var current_match_weight = key.substr(0, key.length - i).length / $(element).text().length;
-					console.log(current_match_weight);
-					if (match_weight >= current_match_weight)
-						return;
-					selected_element = $(element);
-					matched_value = $(element).text();
-					match_weight = current_match_weight;
-				}
-			})
-		}
-
-		$(selected_element).attr("selected", true);
-
-		/*
-		 * // Iterates to create various combinations and check with the header
-		 * for ( var i = 0; i < key.length - 3; i++) {
-		 * template.find('option').each(function(index, element) { if
-		 * ($(element).val().toLowerCase().indexOf(key) != -1) { isFound = true;
-		 * $(element).attr("selected", true); return false; } else if
-		 * ($(element).val().toLowerCase().indexOf(key.substr(0, key.length -
-		 * i).toLowerCase()) != -1) { isFound = true;
-		 * $(element).attr("selected", true); return false; }
-		 * 
-		 * }); if (isFound) break; }
-		 */
-		return new Handlebars.SafeString($('<div>').html(template).html());
 	});
 
 	/**

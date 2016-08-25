@@ -9,6 +9,8 @@ import java.util.regex.Pattern;
 
 import com.agilecrm.activities.Category;
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.lead.LeadConversion;
+import com.agilecrm.lead.util.LeadConversionUtil;
 
 /**
  * All the utility methods and the dao methods for saving, updating and
@@ -343,13 +345,18 @@ public class CategoriesUtil
     	else if (type.equals(Category.EntityType.LEAD_STATUS.toString()))
     	{
     		Category cat2 = new Category("New", 1, Category.EntityType.LEAD_STATUS);
-    		categories.add(cat2);
+    		createCategory(cat2);
     		Category cat3 = new Category("Unqualified", 2, Category.EntityType.LEAD_STATUS);
-    		categories.add(cat3);
+    		createCategory(cat3);
     		Category cat4 = new Category("Working", 3, Category.EntityType.LEAD_STATUS);
-    		categories.add(cat4);
+    		createCategory(cat4);
     		Category cat5 = new Category("Converted", 4, Category.EntityType.LEAD_STATUS);
-    		categories.add(cat5);
+    		createCategory(cat5);
+    		
+    		LeadConversionUtil leadConversionUtil = new LeadConversionUtil();
+    		LeadConversion leadConversion = new LeadConversion();
+    		leadConversion.setConversion_status(cat5.getId());
+    		leadConversionUtil.createConversionStatus(leadConversion);
     	}
     	dao.putAll(categories);
     	return categories;

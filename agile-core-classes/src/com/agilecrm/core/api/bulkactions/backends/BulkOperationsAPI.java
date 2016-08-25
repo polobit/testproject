@@ -652,6 +652,12 @@ public class BulkOperationsAPI
 		new CSVUtil(restrictions, accessControl, dao)
 			.createCompaniesFromCSV(blobStream, contact, ownerId, type);
 	    }
+	    else if (type.equalsIgnoreCase("leads"))
+	    {
+		ImportStatusDAO dao = new ImportStatusDAO(NamespaceManager.get(), ImportType.LEADS);
+		new CSVUtil(restrictions, accessControl, dao)
+			.createLeadsFromCSV(blobStream, contact, ownerId);
+	    }
 
 	    ContactUtil.eraseContactsCountCache();
 	}

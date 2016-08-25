@@ -383,6 +383,28 @@ var LeadsViewLoader = (function(){
 		} });
 	}
 
+	LeadsViewLoader.prototype.setupConversionStatus = function(el, obj)
+	{
+		if(App_Leads.leadConversionStatusJSON && App_Leads.leadConversionStatusJSON.conversion_status_id)
+		{
+			$('#lead_conversion_status', el).val(App_Leads.leadConversionStatusJSON.conversion_status_id);
+			return;
+		}
+
+		var view = new Backbone.Model();
+		view.url = 'core/api/leads/conversion-status';
+		view.fetch({ 
+			success : function(data)
+			{	
+				if(data)
+				{
+					App_Leads.leadConversionStatusJSON = data.toJSON();
+					$('#lead_conversion_status', el).val(App_Leads.leadConversionStatusJSON.conversion_status);
+				}	
+			} 
+		});
+	}
+
 	LeadsViewLoader.prototype.buildLeadsView = function(el, tag_id)
 	{
 		var that = this;

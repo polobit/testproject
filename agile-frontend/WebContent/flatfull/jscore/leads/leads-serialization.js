@@ -101,6 +101,13 @@ function serialize_and_save_continue_lead(e, form_id, modal_id, continueLead, sa
 	template = 'update-lead';
 	obj.type = 'LEAD';
 
+	//If lead status equals to converted, we are updating the lead as contact
+	if($("#lead_conversion_status", $("#"+form_id)).val() == $("#lead_status_id", $("#"+form_id)).val())
+	{
+		obj.type = 'PERSON';
+		obj.is_lead_converted = true;
+	}
+
 	var leadSourceId = $("#" + form_id + " #lead_source_id").val();
 	var leadStatusId = $("#" + form_id + " #lead_status_id").val();
 	if(leadSourceId)

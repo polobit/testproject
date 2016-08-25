@@ -20,6 +20,8 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Contact.Type;
 import com.agilecrm.contact.filter.util.ContactFilterUtil;
 import com.agilecrm.contact.util.ContactUtil;
+import com.agilecrm.lead.LeadConversion;
+import com.agilecrm.lead.util.LeadConversionUtil;
 
 @Path("api/leads")
 public class LeadsAPI
@@ -93,5 +95,14 @@ public class LeadsAPI
 
 	return Contact.dao.getCountByProperty(searchMap);
 
+    }
+    
+    @Path("conversion-status")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public LeadConversion getLeadConversionStatus()
+    {
+	LeadConversionUtil leadConversionUtil = new LeadConversionUtil();
+	return leadConversionUtil.getConversionStatus();
     }
 }

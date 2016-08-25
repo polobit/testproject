@@ -737,6 +737,171 @@ $('#' + id).on('click', '#import-deals', function(e)
 
 				});
 
+$('#' + id).off('click', '#import-leads');
+$('#' + id).on('click', '#import-leads', function(e)
+{
+
+	if ($(this).attr('disabled'))
+		return;
+	if(!importContactsValidate())
+	      return false;
+	 else		
+		$(this).attr('disabled', true);
+
+	var properties = [];
+
+	/*
+	 * Iterates through all tbody tr's and reads the table
+	 * heading from the table, push the table name as
+	 * property name and value as property value as
+	 * ContactField properties.
+	 */
+	var model = {};
+
+	// Add Tags
+	var tags = get_tags('import-contact-tags');
+	console.log(tags);
+	var tags_valid = true;
+	if (tags != undefined)
+	{
+		$.each(tags[0].value, function(index, value)
+		{
+			if(!isValidTag(value, false)) {
+				tags_valid = false;
+				return false;
+			}
+			if (!model.tags)
+				model.tags = [];
+
+			console.log(model);
+
+			model.tags.push(value);
+		});
+	}
+	if(!tags_valid) {
+		getTemplate("import-contacts-validation-message", upload_valudation_errors.invalid_tag, undefined, function(template_ui){
+			if(!template_ui)
+				  return;
+			$('#import-validation-error').html($(template_ui));	
+		}, "#import-validation-error");
+
+		return false;
+	}
+	
+	$(this).attr('disabled', true);
+
+	/*
+	 * After validation checks are passed then loading is
+	 * shown
+	 */
+	$waiting = $('<div style="display:inline-block;padding-left:5px"><small><p class="text-success"><i><span id="status-message">'+_agile_get_translated_val('campaigns','please-wait')+'</span></i></p></small></div>');
+	$waiting.insertAfter($('#import-cancel'));
+
+	$('td.import-lead-fields').each(function(index, element)
+	{
+
+		console.log(this);
+		console.log(index);
+		// Empty property map (Represents
+		// ContactField in contact.java)
+
+		var property = {};
+
+		// Read the name of the property from
+		// table heading
+		var select = $(this).find('select');
+		console.log(select);
+		var name = $(select).val();
+		var type = $(select).find(":selected").attr('class') == 'CUSTOM' ? 'CUSTOM' : 'SYSTEM';
+		console.log("name :" + name + ", type" + type);
+
+		if (name.indexOf("properties_") != -1)
+		{
+			name = name.split("properties_")[1];
+			property["type"] = type;
+			if (name.indexOf('address-') != -1)
+			{
+				var splits = name.split("-");
+				name = "address";
+				property["subtype"] = "home";
+				property["type"] = type;
+				console.log(splits);
+				// Set the value and name fields
+				property["value"] = splits[1];
+			}
+
+			// Reads the sub type of the fields
+			else if (name.indexOf("-") != -1)
+			{
+				var splits = name.split("-");
+				name = splits[1];
+				var subType = splits[0];
+				if(subType=="GOOGLE"){
+					property["subtype"] = "GOOGLE-PLUS";
+				}else{
+				property["subtype"] = subType;
+				console.log($(select).attr('class'));
+				property["type"] = type;
+				}
+			}
+
+			// Set the value and name fields
+			if (!property["value"])
+				property["value"] = name;
+
+			property["name"] = name;
+			console.log(property);
+			if (name.indexOf("_ignore_") != -1)
+				property = {};
+		}
+		else
+		{
+			property["name"] = name;
+		}
+
+		// Push in to properties array (represents
+		// ContactField array)
+		properties.push(property);
+
+	});
+
+	model.properties = properties;
+	model.type = "PERSON";
+
+	// Shows Updating
+	/*$waiting.find('#status-message').html(getRandomLoadingImg());*/
+
+	// Represents prototype of contact, which specifies the
+	// order of properties
+	var contact = model;
+
+	console.log(contact);
+
+	// Sends request to save the contacts uploaded from csv,
+	// present in the blobstore. Contact is sent to save
+	// each row in csv file in to a contact
+	$.ajax({ type : 'POST', url : "/core/api/upload/save?type=Leads&key=" + BLOB_KEY, data : JSON.stringify(contact),
+		contentType : "application/json", success : function(data)
+		{
+			// Navigate to contacts page
+			// Sends empty JSON to remove
+			// contact uploaded
+			var $firstDiv = $('#content').first();
+
+			App_Contacts.importContacts.model.fetch({
+				success : function(data)
+				{
+					showNotyPopUp('information', _agile_get_translated_val('contacts','import-success'), "top", 5000);
+					addTagAgile(IMPORT_TAG);
+					console.log(data);
+				}
+
+			})
+			
+		}});
+
+});
+
 }
 // Validation function for import contacts.
 function importContactsValidate() 
@@ -937,6 +1102,8 @@ function parseCSV(key, type)
 					  	  template_name = "import-companies";
 					else if(type == "deals")
 					  	  template_name = "import-deals2";
+					else if(type == "leads")
+					  	  template_name = "import-leads";
 
 					
 					var $firstDiv = $('#content').children().first();
@@ -987,6 +1154,10 @@ function constructCustomfieldOptions(type, callback)
 	else if (type == "deals")
 	{
 		custom_fields = Backbone.Collection.extend({ url : 'core/api/custom-fields/byscope?scope=DEAL' });
+	}
+	else if (type == "leads")
+	{
+		custom_fields = Backbone.Collection.extend({ url : 'core/api/custom-fields/byscope?scope=LEAD' });
 	}
 
 	new custom_fields().fetch({ success : function(data)

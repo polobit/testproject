@@ -321,6 +321,18 @@ public class Contact extends Cursor
     @NotSaved(IfDefault.class)
     private Key<Category> leadStatus = null;
     
+    /**
+     * boolean value to know lead is converted or not
+     */
+    @NotSaved
+    private boolean is_lead_converted = false;
+    
+    /**
+     * Converted time of a lead into contact
+     */
+    @NotSaved(IfDefault.class)
+    private Long lead_converted_time = 0L;
+    
     
 
     public Long getLead_source_id() {
@@ -345,6 +357,22 @@ public class Contact extends Cursor
 
 	public void setLead_status_id(Long lead_status_id) {
 		this.lead_status_id = lead_status_id;
+	}
+
+	public boolean isIs_lead_converted() {
+		return is_lead_converted;
+	}
+
+	public void setIs_lead_converted(boolean is_lead_converted) {
+		this.is_lead_converted = is_lead_converted;
+	}
+
+	public Long getLead_converted_time() {
+		return lead_converted_time;
+	}
+
+	public void setLead_converted_time(Long lead_converted_time) {
+		this.lead_converted_time = lead_converted_time;
 	}
 
 	/**
@@ -1226,7 +1254,7 @@ public class Contact extends Cursor
 	    owner_key = new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId());
 	}
 	
-	if(this.type == Type.LEAD)
+	if(this.type == Type.LEAD || (this.lead_converted_time != null && this.lead_converted_time > 0))
 	{
 		if(lead_source_id != null && lead_source_id > 0)
 		{
@@ -1237,6 +1265,11 @@ public class Contact extends Cursor
 		{
 			this.leadStatus = new Key<Category>(Category.class, lead_status_id);
 		}
+	}
+	
+	if(this.is_lead_converted)
+	{
+		this.lead_converted_time = System.currentTimeMillis() / 1000;
 	}
 
 	if (this.type == Type.PERSON || this.type == Type.LEAD)

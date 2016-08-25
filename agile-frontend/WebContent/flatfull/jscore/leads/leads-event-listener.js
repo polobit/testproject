@@ -19,6 +19,7 @@ var Leads_Header_Events_View = Base_Model_View.extend({
                 leadsViewLoader = new LeadsViewLoader();
                 leadsViewLoader.setupSources(el);
                 leadsViewLoader.setupStatuses(el);
+                leadsViewLoader.setupConversionStatus(el);
                 setup_tags_typeahead(undefined, el);
                 var fxn_display_company = function(data, item)
                 {

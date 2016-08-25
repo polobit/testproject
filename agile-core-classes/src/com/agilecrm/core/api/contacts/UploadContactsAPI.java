@@ -157,6 +157,21 @@ public class UploadContactsAPI
 		// Task is added into queue
 		queue.addAsync(taskOptions);
 	    }
+	    else if (s.equalsIgnoreCase("leads"))
+	    {
+		// Backends should be initialized using a task queue
+		Queue queue = QueueFactory.getQueue(AgileQueues.CONTACTS_UPLOAD_QUEUE);
+
+		TaskOptions taskOptions = TaskOptions.Builder
+			.withUrl(
+				"/core/api/bulk-actions/upload/"
+					+ String.valueOf(SessionManager.get().getDomainId() + "/"
+						+ request.getParameter("key"))).payload(bytes)
+			.header("Content-Type", request.getContentType()).method(Method.POST);
+
+		// Task is added into queue
+		queue.addAsync(taskOptions);
+	    }
 	    else
 	    {
 		// Backends should be initialized using a task queue

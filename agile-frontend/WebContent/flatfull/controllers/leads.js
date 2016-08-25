@@ -115,32 +115,35 @@ var LeadsRouter = Backbone.Router.extend({
 
 		// If user refreshes the leads detail view page directly - we
 		// should load from the model
-		if (!lead && !this.leadsListView || (this.leadsListView && this.leadsListView.collection.length == 0) || (this.leadsListView && this.leadsListView.collection.get(id) == null))
+		if(!lead)
 		{
-
-			var lead_details_model = Backbone.Model.extend({ url : function()
+			if (!this.leadsListView || (this.leadsListView && this.leadsListView.collection.length == 0) || (this.leadsListView && this.leadsListView.collection.get(id) == null))
 			{
-				return '/core/api/contacts/' + this.id;
-			} });
 
-			var model = new lead_details_model();
-			model.id = id;
-			model.fetch({ success : function(data)
-			{
-				// Call Lead Details again
-				App_Leads.leadsDetails(id, model);
+				var lead_details_model = Backbone.Model.extend({ url : function()
+				{
+					return '/core/api/contacts/' + this.id;
+				} });
 
-			}, 
-			error: function(data, response)
-			{
-				if(response && response.status == '403')
+				var model = new lead_details_model();
+				model.id = id;
+				model.fetch({ success : function(data)
+				{
+					// Call Lead Details again
+					App_Leads.leadsDetails(id, model);
 
-					$("#content").html ("<div class='well'><div class='alert bg-white text-center'><div class='slate-content p-md text'><h4 style='opacity:0.8;margin-bottom:5px!important;'> "+_agile_get_translated_val('contacts','invalid-viewer')+"</h4><div class='text'style='opacity:0.6;'>"+_agile_get_translated_val('companies','enable-permission')+"</div></div></div></div>");
+				}, 
+				error: function(data, response)
+				{
+					if(response && response.status == '403')
 
+						$("#content").html ("<div class='well'><div class='alert bg-white text-center'><div class='slate-content p-md text'><h4 style='opacity:0.8;margin-bottom:5px!important;'> "+_agile_get_translated_val('contacts','invalid-viewer')+"</h4><div class='text'style='opacity:0.6;'>"+_agile_get_translated_val('companies','enable-permission')+"</div></div></div></div>");
+
+				}
+				});
+				
+				return;
 			}
-			});
-			
-			return;
 		}
 
 		// If not downloaded fresh during refresh - read from collection

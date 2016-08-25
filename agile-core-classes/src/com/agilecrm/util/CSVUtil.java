@@ -1882,4 +1882,410 @@ public class CSVUtil
     		return failedContactsWriter;
     	}
     }
+    
+    public void createLeadsFromCSV(InputStream blobStream, Contact contact, String ownerId) throws PlanRestrictedException, IOException
+    {
+    	// Creates domain user key, which is set as a contact owner
+    	this.ownerKey = new Key<DomainUser>(DomainUser.class, Long.parseLong(ownerId));
+
+    	domainUser = DomainUserUtil.getDomainUser(ownerKey.getId());
+
+    	BulkActionUtil.setSessionManager(domainUser);
+
+    	// Refreshes count of contacts. This is removed as it already calculated
+    	// in deferred task; there is limation on count in remote api (max count
+    	// it gives is 1000)
+    	// billingRestriction.refreshContacts();
+
+    	System.out.println(billingRestriction.getCurrentLimits().getPlanId() + " : "
+    		+ billingRestriction.getCurrentLimits().getPlanName());
+    	int allowedContacts = billingRestriction.getCurrentLimits().getContactLimit();
+    	boolean limitCrossed = false;
+    	// stores list of failed contacts in beans with causes
+    	List<FailedContactBean> failedContacts = new ArrayList<FailedContactBean>();
+
+    	List<String[]> csvData = getCSVDataFromStream(blobStream, "UTF-8");
+    	reportStatus(csvData.size());
+
+    	if (csvData.isEmpty())
+    	    return;
+    	// extract csv heading from csv file
+    	String[] headings = csvData.remove(0);
+
+    	contact.type = Contact.Type.LEAD;
+
+    	LinkedHashSet<String> tags = new LinkedHashSet<String>();
+
+    	// Adds new tags to temporary list to save them in all contacts
+    	tags.addAll(contact.tags);
+
+    	List<ContactField> properties = contact.properties;
+
+    	System.out.println(csvData.size());
+
+    	System.out.println("available scopes for user " + domainUser.email + ", scopes = "
+    		+ accessControl.getCurrentUserScopes());
+
+    	// Counters to count number of contacts saved contacts
+    	int savedContacts = 0;
+    	int mergedContacts = 0;
+    	int limitExceeded = 0;
+    	int accessDeniedToUpdate = 0;
+    	Map<Object, Object> status = new HashMap<Object, Object>();
+    	status.put("type", "Leads");
+
+    	List<CustomFieldDef> customFields = CustomFieldDefUtil.getCustomFieldsByScopeAndType(SCOPE.CONTACT, "DATE");
+    	List<CustomFieldDef> imagefield = CustomFieldDefUtil.getCustomFieldsByScopeAndType(SCOPE.CONTACT, "text");
+
+    	/**
+    	 * Processed contacts count.
+    	 */
+    	int processedContacts = 0;
+    	int resettedProcessedcontacts = 0;
+    	/**
+    	 * Iterates through all the records from blob
+    	 */
+    	for (String[] csvValues : csvData)
+    	{
+    	    processedContacts++;
+    	    resettedProcessedcontacts++;
+    	    if (resettedProcessedcontacts >= 1000)
+    	    {
+    		try
+    		{
+    		    resettedProcessedcontacts = 0;
+    		    importStatusDAO.updateStatus(processedContacts);
+    		}
+    		catch (Exception e)
+    		{
+    		    e.printStackTrace();
+    		}
+
+    	    }
+
+    	    // Set to hold the notes column positions so they can be created
+    	    // after a contact is created.
+    	    Set<Integer> notes_positions = new TreeSet<Integer>();
+    	    Contact tempContact = new Contact();
+
+    	    boolean isMerged = false;
+    	    try
+    	    {
+    		// create dummy contact
+
+    		// Cloning so that wrong tags don't get to some contact if
+    		// previous
+    		// contact is merged with exiting contact
+    		tempContact.tags = (LinkedHashSet<String>) contact.tags.clone();
+    		tempContact.setContactOwner(ownerKey);
+
+    		tempContact.properties = new ArrayList<ContactField>();
+
+    		for (int j = 0; j < csvValues.length; j++)
+    		{
+    		    String csvValue = csvValues[j];
+    		    if (StringUtils.isBlank(csvValue))
+    			continue;
+
+    		    ContactField field = null;
+    		    if (j < properties.size())
+    		    {
+    			field = properties.get(j);
+    		    }
+    		    else
+    		    {
+    			break;
+    		    }
+
+    		    // This is hardcoding but found no way to get
+    		    // tags
+    		    // from the CSV file
+    		    if (field == null)
+    		    {
+    			continue;
+    		    }
+
+    		    if ("note".equals(field.name))
+    		    {
+    			notes_positions.add(j);
+    			continue;
+    		    }
+
+    		    // Trims content of field to 490 characters. It should not
+    		    // be trimmed for notes
+    		    csvValues[j] = checkAndTrimValue(csvValue);
+
+    		    if ("tags".equals(field.name))
+    		    {
+    			// Multiple tags are supported. Multiple tags are added
+    			// split at , or ;
+    			String[] tagsArray = csvValues[j].split("[,;]+");
+
+    			for (String tag : tagsArray)
+    			{
+    			    tag = tag.trim();
+    			    if (!TagValidator.getInstance().validate(tag))
+    			    {
+    				throw new InvalidTagException();
+    			    }
+    			    tempContact.tags.add(tag);
+    			}
+    			continue;
+    		    }
+    		    if (Contact.ADDRESS.equals(field.name))
+    		    {
+    			ContactField addressField = tempContact.getContactField(contact.ADDRESS);
+
+    			JSONObject addressJSON = new JSONObject();
+
+    			try
+    			{
+    			    if (addressField != null && addressField.value != null)
+    			    {
+    				addressJSON = new JSONObject(addressField.value);
+    				
+    				CountryUtil.setCountryCode(addressJSON, field, csvValues[j]);
+    				
+    				addressField.value = addressJSON.toString();
+    			    }
+    			    else
+    			    {
+    			    CountryUtil.setCountryCode(addressJSON, field, csvValues[j]);
+    			    
+    				tempContact.properties.add(new ContactField(Contact.ADDRESS, addressJSON.toString(),
+    					field.type.toString()));
+    			    }
+
+    			}
+    			catch (JSONException e)
+    			{
+    			    e.printStackTrace();
+    			}
+    			continue;
+    		    }
+
+    		    // To avoid saving ignore field value/ and avoid fields with
+    		    // empty values
+    		    if (field.name == null)
+    			continue;
+
+    		    field.value = csvValues[j];
+
+    		    if (field.type.equals(FieldType.CUSTOM))
+    		    {
+    			for (CustomFieldDef customFieldDef : customFields)
+    			{
+    			    if (field.name.equalsIgnoreCase(customFieldDef.field_label))
+    			    {
+    				String customDate = csvValues[j];
+
+    				if (customDate != null && !customDate.isEmpty())
+    				{
+    				    field.value = getFormattedDate(customDate);
+    				}
+
+    			    }
+    			}
+
+    			// set image in custom fields
+    			if (field.name.equalsIgnoreCase(Contact.IMAGE))
+    			{
+
+    			    for (CustomFieldDef customFieldDef : imagefield)
+    			    {
+    				if (field.name.equalsIgnoreCase(customFieldDef.field_label))
+    				{
+    				    String img = csvValues[j];
+    				    if (!StringUtils.isBlank(img))
+    				    {
+    					field.value = img;
+    				    }
+    				}
+    			    }
+    			}
+
+    		    }
+    		    if (field.name.equalsIgnoreCase(Contact.COMPANY))
+    		    {
+    		    	String companyName = csvValues[j].trim();
+    			tempContact.properties.add(new ContactField(Contact.COMPANY, companyName,
+    				null));
+    		    }
+
+    		    tempContact.properties.add(field);
+    		    tempContact.source = "import" ;
+    		    System.out.println("temp contact source is "+tempContact.source);
+
+    		}// end of inner for loop
+
+    		// Contact dummy = getDummyContact(properties, csvValues);
+
+    		if (!isValidFields(tempContact, status, failedContacts, properties, csvValues))
+
+    		    continue;
+
+    		// If contact is duplicate, it fetches old contact and updates
+    		// data.
+    		if (ContactUtil.isDuplicateContact(tempContact))
+    		{
+    		    // Checks if user can update the contact
+
+    		    // Sets current object to check scope
+
+    		    tempContact = ContactUtil.mergeContactFields(tempContact);
+    		    accessControl.setObject(tempContact);
+    		    if (!accessControl.canCreate())
+    		    {
+    			accessDeniedToUpdate++;
+    			failedContacts.add(new FailedContactBean(getDummyContact(properties, csvValues),
+    				"Access denied to update contact"));
+
+    			continue;
+    		    }
+    		    isMerged = true;
+    		}
+    		else
+    		{
+
+    		    // If it is new contacts billingRestriction count is
+    		    // increased
+    		    // and checked with plan limits
+
+    		    ++billingRestriction.contacts_count;
+    		    System.out.println("Contacts limit - Allowed : "
+    			    + billingRestriction.getCurrentLimits().getContactLimit() + " current contacts count : "
+    			    + billingRestriction.contacts_count);
+    		    if (limitCrossed)
+    		    {
+    			++limitExceeded;
+    			failedContacts.add(new FailedContactBean(getDummyContact(properties, csvValues),
+    				"limit is exceeded"));
+    			continue;
+    		    }
+
+    		    if (billingRestriction.contacts_count >= allowedContacts)
+    		    {
+    			limitCrossed = true;
+
+    			continue;
+    		    }
+    		}
+
+    		tempContact.bulkActionTracker = bulk_action_tracker;
+    		tempContact.save(false);
+    	    }// end of try
+    	    catch (InvalidTagException e)
+    	    {
+
+    		System.out.println("Invalid tag exception raised while saving contact ");
+    		e.printStackTrace();
+    		failedContacts.add(new FailedContactBean(getDummyContact(properties, csvValues), e.getMessage()));
+    		continue;
+    	    }
+    	    catch (AccessDeniedException e)
+    	    {
+
+    		accessDeniedToUpdate++;
+    		System.out.println("ACL exception raised while saving contact ");
+    		e.printStackTrace();
+    		failedContacts.add(new FailedContactBean(getDummyContact(properties, csvValues), e.getMessage()));
+
+    	    }
+    	    catch (Exception e)
+    	    {
+
+    		System.out.println("exception raised while saving contact ");
+    		e.printStackTrace();
+    		if (tempContact.id != null)
+    		{
+    		    failedContacts.add(new FailedContactBean(getDummyContact(properties, csvValues),
+    			    "Exception raise while saving contact"));
+    		}
+
+    	    }
+
+    	    if (isMerged)
+    	    {
+    		mergedContacts++;
+    	    }
+    	    else
+    	    {
+    		// Increase counter on each contact save
+    		savedContacts++;
+    	    }
+
+    	    try
+    	    {
+
+    		// Creates notes, set CSV heading as subject and value as
+    		// description.
+    		for (Integer i : notes_positions)
+    		{
+    		    Note note = new Note();
+    		    note.subject = headings[i];
+    		    note.description = csvValues[i];
+    		    note.addRelatedContacts(String.valueOf(tempContact.id));
+
+    		    note.setOwner(new Key<AgileUser>(AgileUser.class, tempContact.id));
+    		    note.save();
+    		}
+    	    }
+    	    catch (Exception e)
+    	    {
+    		System.out.println("exception while saving contacts");
+    		e.printStackTrace();
+    	    }
+
+    	    processedContacts++;
+
+    	}// end of for loop
+
+    	try
+    	{
+    	    importStatusDAO.deleteStatus();
+    	}
+    	catch (Exception e)
+    	{
+    	    e.printStackTrace();
+    	}
+
+    	if (failedContacts.size() > 0)
+    	    buildCSVImportStatus(status, ImportStatus.TOTAL_FAILED, failedContacts.size());
+
+    	buildCSVImportStatus(status, ImportStatus.TOTAL, csvData.size());
+
+    	if (savedContacts > 0)
+    	{
+    	    buildCSVImportStatus(status, ImportStatus.NEW_CONTACTS, savedContacts);
+    	    buildCSVImportStatus(status, ImportStatus.SAVED_CONTACTS, savedContacts);
+    	}
+    	if (mergedContacts > 0)
+    	{
+    	    buildCSVImportStatus(status, ImportStatus.SAVED_CONTACTS, mergedContacts);
+
+    	    buildCSVImportStatus(status, ImportStatus.MERGED_CONTACTS, mergedContacts);
+
+    	}
+    	if (limitExceeded > 0)
+    	{
+    	    buildCSVImportStatus(status, ImportStatus.LIMIT_REACHED, limitExceeded);
+    	}
+    	if (accessDeniedToUpdate > 0)
+    	{
+    	    buildCSVImportStatus(status, ImportStatus.ACCESS_DENIED, accessDeniedToUpdate);
+    	}
+    	buildCSVImportStatus(status, ImportStatus.FAILEDCSV, 1);
+
+    	// Sends notification on CSV import completion
+    	dBbillingRestriction.send_warning_message();
+
+    	// Send notification after contacts save complete
+    	BulkActionNotifications.publishconfirmation(BulkAction.CONTACTS_CSV_IMPORT, String.valueOf(savedContacts));
+    	// create failed contact csv
+
+    	buildFailedContacts(domainUser, failedContacts, headings, status);
+    	if (savedContacts != 0 || mergedContacts != 0)
+    	    ActivityUtil.createLogForImport(ActivityType.CONTACT_IMPORT, EntityType.CONTACT, savedContacts,
+    		    mergedContacts);
+    }
 }

@@ -5218,3 +5218,8 @@ leads.lead-filters-pad-content-desc,Filters are used to sort leads with a specif
 menu.lead,Lead,
 menu.leads,Leads,
 leads-view.delete-lead,Delete Lead,
+leads-view.csv-leads-import,CSV Leads Import,
+leads-view.import-upto-10000-leads-from-a-CSV-file,Import upto 10&#44;000 leads from a CSV file,
+leads-view.csv-leads-import-list,CSV Leads Import List,
+leads-view.lead-source,Lead Source,
+leads-view.lead-status,Lead Status,

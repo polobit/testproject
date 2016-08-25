@@ -39,6 +39,36 @@
 <div class="tab-content wrapper-md panel">
 		<div class="tab-pane active" id="csv-tab">
 			<div class="row">
+				<!-- Start leads import -->
+				<div  class="col-sm-6 col-xs-12 col-md-4">
+				    <div>
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							{{agile_lng_translate 'leads-view' 'csv-leads-import'}} 
+						</div>
+						<div class="panel-body">
+						<form id="lead-import-form">
+        					<div class="p-b-sm">
+								{{agile_lng_translate 'leads-view' 'import-upto-10000-leads-from-a-CSV-file'}}
+							</div>
+							<input type="hidden" id="type" value="leads" class="form-control">
+        					<fieldset>
+							{{#canSyncContacts}}
+	           					<div class="btn btn-sm upload upload-contacts-ele btn-default inline-block">{{agile_lng_translate 'contacts-view' 'upload-csv-file'}}</div>
+	           					<a href="/flatfull/images/SampleCompanies.csv" title="{{agile_lng_translate 'other' 'sample-csv-file'}}" download><i class="fa fa-download btn btn-sm  btn-default inline-block" style="margin-left: -2px;border-left: 0px;    border-radius: 0px 2px 2px 0px;"></i></a>
+							{{else}}
+	           					<span class="btn btn-sm btn-default inline-block"  disabled="">{{agile_lng_translate 'contacts-view' 'upload-csv-file'}}</span>
+								<span style="margin-left:5px"><i>{{agile_lng_translate 'prefs-data-sync' 'needs-import-privilege'}}</i></span>
+								<a href="/flatfull/images/SampleCompanies.csv" title="{{agile_lng_translate 'other' 'sample-csv-file'}}" download><i class="fa fa-download btn btn-sm  btn-default inline-block" style="margin-left: -2px;border-left: 0px;    border-radius: 0px 2px 2px 0px;"></i></a>
+							{{/canSyncContacts}}
+           					</fieldset>
+    					</form>
+						</div>
+					</div>
+					</div>
+				</div>
+				<!-- End leads import -->
+
 				<div  class="col-sm-6 col-xs-12 col-md-4">
 					<div class="panel panel-default">
 						<div class="panel-heading">
@@ -721,6 +751,157 @@
 <option value="properties_lossReason">{{agile_lng_translate 'deal-view' 'loss-reason'}}</option> 
 {{#if custom_fields}}
 <optgroup label="Custom field" id = "custom_fields">
+   
+		{{#each custom_fields}}
+			<option class="CUSTOM" value="properties_{{this.field_label}}">{{this.field_label}}</option>
+		{{/each}}
+</optgroup>
+{{/if}}
+</select>
+
+
+</script>
+
+<script id="import-leads-template" type="text/html">
+<div class="wrapper-md lter bg-light b-b">
+<div class="row">
+    <div class="col-sm-12 col-md-12">
+            <h3 class="font-thin h3">{{agile_lng_translate 'leads-view' 'csv-leads-import'}} <br><small> {{agile_lng_translate 'contacts-view' 'field-mapping'}} </small></h3>
+    </div>
+</div>
+</div>
+<div class="wrapper-md">
+<div class="row">
+    <div class="col-sm-9 col-md-9">
+		<div class="panel panel-default">
+			<div class="panel-heading">{{agile_lng_translate 'leads-view' 'csv-leads-import-list'}}</div>	 
+				<table class="table table-striped showCheckboxes m-b-none agile-table panel">
+			    <thead id="import-header">
+			       </thead><thead>
+						<tr><th style="width:50%;">
+							{{agile_lng_translate 'contacts-view' 'csv-headings'}}
+						</th>
+						<th style="width:50%;">	
+							{{agile_lng_translate 'report-view' 'fields'}}
+						</th>
+					</tr></thead>
+			 <tbody id="import-tbody">
+				{{#each_with_index1 data}}
+				<tr>
+			 		<td>
+					{{#is_blank this.value}}
+							{{../index}}
+						{{else}}
+							{{this}}		
+					{{/is_blank}}	
+			        </td>
+					<td class="import-lead-fields">
+						{{setupCSVUploadOptions "leads" this.value ../this}}
+					</td>
+				 </tr>
+			{{/each_with_index1}} 
+			</tbody>
+			</table>
+		
+		<footer class="panel-footer">
+		<div class="row">
+		  <div class="col-md-12 col-sm-12 col-xs-12">
+			<form id="import-contact-tags">
+			    <div class="form-group control-group">
+			        <label class="control-label">{{agile_lng_translate 'contacts-view' 'tags-optional'}}
+			        </label><br>
+			        <div class="pull-left" style="margin-top:0px;">
+			            <ul name="tags" class="tagsinput tags p-l-none"></ul>
+			        </div>
+			        <div class="controls">
+			            <input id="tags-import" class="tags-typeahead form-control" name="tags" type="text" placeholder="{{agile_lng_translate 'contacts-view' 'tags-should-be-separated-by-comma'}}">
+			        </div>
+					<p class="help-block">{{agile_lng_translate 'contacts-view' 'optionally-add-tags-desc'}}
+					</p>
+				
+			    </div>
+			</form>
+			</div>
+			</div>
+			<div class="row">
+			<div class="col-ms-12 col-sm-12 col-xs-12">
+			<a class="btn btn-sm btn-primary pull-right" id="import-leads" style="margin-left:2px">{{agile_lng_translate 'contacts-view' 'import'}}</a>
+			<a class="btn btn-default btn-sm pull-right" id="import-cancel">{{agile_lng_translate 'contact-details' 'cancel'}}</a>
+			<div id="import-validation-error"></div>
+			</div>
+			</div>
+			</footer>
+		</div>
+	</div>
+	<div class="col-sm-3 col-md-3 p-none">
+        <div class="data-block">
+            <div class="wrapper-sm">
+				<h4 class="m-t-none h4">
+                    {{agile_lng_translate 'contacts-view' 'import-help'}}
+                </h4>
+                
+				<ul class="p-l-md">
+					<li>{{agile_lng_translate 'contacts-view' 'email-is-mandatory-for-all-contacts-desc'}}</li>
+					<li>{{agile_lng_translate 'contacts-view' 'first-name-or-last-name-is-mandatory'}}</li>
+					<li>{{agile_lng_translate 'contacts-view' 'define'}} <a href="#custom-fields">{{agile_lng_translate 'contacts-view' 'custom_fields'}}</a> {{agile_lng_translate 'contacts-view' 'import-some-of-the-columns-desc'}}</li>
+					<li>{{agile_lng_translate 'contacts-view' 'notes-can-be-imported-desc'}}</li>
+                    <li>{{agile_lng_translate 'contacts-view' 'acceptable-date-format-are'}}</li>
+					<li>{{agile_lng_translate 'contacts-view' 'tags-can-be-imported-desc'}}</li>
+				</ul>
+            </div>
+
+        </div>
+	</div>
+</div>
+</div>
+</script>
+
+<script id="leads_csv_upload_options-template" type="text/html">
+<select class="import-select form-control contacts-import-select">
+<option value="properties__ignore_">-{{agile_lng_translate 'contacts-view' 'ignore'}}-</option>
+<option value="properties_first_name">{{agile_lng_translate 'other' 'first-name'}}</option>
+<option value="properties_last_name">{{agile_lng_translate 'other' 'last-name'}}</option>
+<option value="properties_company">{{agile_lng_translate 'other' 'company'}}</option>
+<option value="tags">{{agile_lng_translate 'contact-edit' 'tag'}}</option>
+<option value="note">{{agile_lng_translate 'menu' 'note'}}</option>
+<option value="lead_source">{{agile_lng_translate 'leads-view' 'lead-source'}}</option>
+<option value="lead_status">{{agile_lng_translate 'leads-view' 'lead-status'}}</option>
+<option value="properties_title">{{agile_lng_translate 'contact-edit' 'job-description'}}</option>
+<optgroup label="Email">
+    <option value="properties_home-email">{{agile_lng_translate 'contacts-view' 'email-personal'}}</option>
+    <option value="properties_work-email">{{agile_lng_translate 'contacts-view' 'email-work'}}</option>
+</optgroup>
+<optgroup label="Phone">
+    <option value="properties_home-phone">{{agile_lng_translate 'contacts-view' 'phone-home'}}</option>
+    <option value="properties_work-phone">{{agile_lng_translate 'contacts-view' 'phone-work'}}</option>
+    <option value="properties_mobile-phone">{{agile_lng_translate 'contacts-view' 'phone-mobile'}}</option>
+    <option value="properties_main-phone">{{agile_lng_translate 'contacts-view' 'phone-main'}}</option>
+    <option value="properties_home fax-phone">{{agile_lng_translate 'contacts-view' 'phone-home-fax'}}</option>
+    <option value="properties_work fax-phone">{{agile_lng_translate 'contacts-view' 'phone-work-fax'}}</option>
+    <option value="properties_other-phone">{{agile_lng_translate 'contacts-view' 'phone-other'}}</option>
+</optgroup>
+<optgroup label="Website">
+    <option value="properties_URL-website">{{agile_lng_translate 'other' 'website'}}</option>
+    <option value="properties_SKYPE-website">{{agile_lng_translate 'contact-edit' 'skype'}}</option>
+    <option value="properties_TWITTER-website">{{agile_lng_translate 'contact-edit' 'twitter'}}</option>
+    <option value="properties_LINKEDIN-website">{{agile_lng_translate 'contact-edit' 'linkedin'}}</option>
+    <option value="properties_FACEBOOK-website">{{agile_lng_translate 'contact-edit' 'facebook'}}</option>
+    <option value="properties_XING-website">{{agile_lng_translate 'contact-edit' 'xing'}}</option>
+    <option value="properties_FEED-website">{{agile_lng_translate 'contact-edit' 'blog'}}</option>
+    <option value="properties_GOOGLE-website">{{agile_lng_translate 'contact-edit' 'google-plus'}}</option>
+    <option value="properties_FLICKR-website">{{agile_lng_translate 'contact-edit' 'flickr'}}</option>
+    <option value="properties_GITHUB-website">{{agile_lng_translate 'contact-edit' 'github'}}</option>
+    <option value="properties_YOUTUBE-website">{{agile_lng_translate 'contact-edit' 'youtube'}}</option>
+</optgroup>
+<optgroup label="Address">
+    <option value="properties_address-address">{{agile_lng_translate 'contact-edit' 'home'}}</option>
+    <option value="properties_address-city">{{agile_lng_translate 'contact-edit' 'city'}}</option>
+    <option value="properties_address-state">{{agile_lng_translate 'contact-edit' 'state'}}</option>
+    <option value="properties_address-zip">{{agile_lng_translate 'contact-edit' 'zip'}}</option>
+    <option value="properties_address-country">{{agile_lng_translate 'contacts-view' 'country'}}</option>
+</optgroup>
+ {{#if custom_fields}}
+<optgroup label="Custom field" id="custom_fields">
    
 		{{#each custom_fields}}
 			<option class="CUSTOM" value="properties_{{this.field_label}}">{{this.field_label}}</option>
