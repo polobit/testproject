@@ -719,8 +719,10 @@ function showContactMergeOption(jsonObj){
 	 			'<a class="text-white" href="#contact/{{id}}">{{name}}</a><a class="close text-white m-l-xs v-middle" id="remove_tag">×</a></li>');
 	 	// Adds contact name to tags ul as li element
 	 	$("#relates_to_call_contact_ul").html(template({name : item, id : data}));
+	 	 $(".modal-backdrop", $(".modal:visible")).height(screen.height);
 	 	//$("#relates_to_call_contact").attr("data",data);
 	   },10);
+	   
 	  }
 	agile_type_ahead("relates_to_call_contact", el, contacts_typeahead, contact_display, "type=PERSON");
 }
