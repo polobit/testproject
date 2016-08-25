@@ -5838,7 +5838,7 @@ $(function()
 			return _agile_get_translated_val("call_activity", "missed");
 			break;
 		default:
-			return "";
+			return status;
 		}
 
 	});
@@ -7574,6 +7574,7 @@ Handlebars.registerHelper('if_asc_sork_key', function(value, options)
 	 });
 		return new Handlebars.SafeString(el);
 	});
+
 Handlebars.registerHelper('get_default_label', function(label, module_name, options)
 {
 	var i18nKeyPrefix = "admin-settings-tasks";
@@ -7631,4 +7632,46 @@ Handlebars.registerHelper('is_Particular_Domain', function(options)
 	return options.fn(this);
 		else
 			return options.inverse(this);
+});
+
+
+// multiple equality and OR condition
+
+
+/**
+ * Compares the arguments (value and target) and executes the template based
+ * It will split the target based on , and checks the value with the target.
+ * If any one target matches with value it will return true otherwise false
+ */
+Handlebars.registerHelper('if_anyone_equals', function(value, target, options)
+{
+
+	/*
+	 * console.log("typeof target: " + typeof target + " target: " +
+	 * target); console.log("typeof value: " + typeof value + " value: " +
+	 * value);
+	 */
+	/*
+	 * typeof is used beacuse !target returns true if it is empty string,
+	 * when string is empty it should not go undefined
+	 */
+	var flag = false;
+	
+	if ((typeof target === "undefined") || (typeof value === "undefined"))
+		return options.inverse(this);
+	
+	var tarArray = target.split(",");
+	
+	for(i=0; i<tarArray.length; i++){
+		if (value.toString().trim() == tarArray[i].toString().trim()){
+			flag = true;
+			break;
+		}
+	}
+
+	if(flag)
+		return options.fn(this);
+	else
+		return options.inverse(this);
+	
 });
