@@ -5838,7 +5838,7 @@ $(function()
 			return _agile_get_translated_val("call_activity", "missed");
 			break;
 		default:
-			return "";
+			return status;
 		}
 
 	});
@@ -7632,3 +7632,25 @@ Handlebars.registerHelper('is_Particular_Domain', function(options)
 		else
 			return options.inverse(this);
 });
+
+//returning 0sec in case of no time
+Handlebars.registerHelper('secondsToCallActivitiesTime', function(time)
+		{
+			var hours = Math.floor(time / 3600);
+			if (hours > 0)
+				time = time - hours * 60 * 60;
+			var minutes = Math.floor(time / 60);
+			var seconds = time - minutes * 60;
+			var friendlyTime = "";
+			if (hours == 1)
+				friendlyTime = hours + "h ";
+			if (hours > 1)
+				friendlyTime = hours + "h ";
+			if (minutes > 0)
+				friendlyTime += minutes + "m ";
+			if (seconds > 0)
+				friendlyTime += seconds + "s ";
+			if (friendlyTime != "")
+				return ' - ' + friendlyTime;
+			return " - 0s ";
+		});
