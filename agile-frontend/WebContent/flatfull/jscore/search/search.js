@@ -175,6 +175,6 @@ $(function()
 		// e.preventDefault();
 		$('.searchicon-dropdown').removeClass('open');
 		showSearchResults();
-		$("#searchText").val("");
+		//$("#searchText").val("");
 	});
 });
