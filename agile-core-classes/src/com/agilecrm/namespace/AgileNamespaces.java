@@ -3,6 +3,8 @@ package com.agilecrm.namespace;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.exception.ExceptionUtils;
+
 import com.google.appengine.api.datastore.Cursor;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
@@ -21,14 +23,22 @@ public class AgileNamespaces
 
 	public List<String> getAllNamespaces()
 	{
-		fetchNamespaces();
+		try
+		{
+			fetchNamespaces();
+		}
+		catch (Exception e)
+		{
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+		}
+		
 		return namespaces;
 	}
 
 	private void fetchNamespaces()
 	{
 		DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
-		FetchOptions options = FetchOptions.Builder.withLimit(300);
+		FetchOptions options = FetchOptions.Builder.withLimit(1000);
 
 		if (cursor != null)
 			options.startCursor(Cursor.fromWebSafeString(cursor));

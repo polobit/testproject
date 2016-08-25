@@ -4,6 +4,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.exception.ExceptionUtils;
+
 import com.agilecrm.util.NamespaceUtil;
 import com.agilecrm.workflows.triggers.util.TriggerUtil;
 import com.google.appengine.api.NamespaceManager;
@@ -60,7 +62,8 @@ public class TriggerServlet extends HttpServlet
 		}
 		catch (Exception e)
 		{
-			e.printStackTrace();
+			System.err.println("Exception occured in TriggerServlet...");
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
 		}
 	}
 }
