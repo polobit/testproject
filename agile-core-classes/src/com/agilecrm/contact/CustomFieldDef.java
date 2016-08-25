@@ -1,5 +1,7 @@
 package com.agilecrm.contact;
 
+import java.util.List;
+
 import javax.persistence.Id;
 import javax.persistence.PostLoad;
 import javax.ws.rs.WebApplicationException;
@@ -85,6 +87,9 @@ public class CustomFieldDef
      */
     @NotSaved
     public String search_key;
+    
+    @NotSaved
+    public String scopeExtension;
 
     /**
      * Specifies the scope of the custom field should be added

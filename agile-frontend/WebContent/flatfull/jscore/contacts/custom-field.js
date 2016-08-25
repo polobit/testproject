@@ -61,6 +61,7 @@ function showCustomFieldModel(data)
 	var modelViewCount = 0;
 	var isNew = false;
 	isNew = !data.id;
+
 	// Creating model for bootstrap-modal
 	var modelView = new Base_Model_View({
 		url : '/core/api/custom-fields',
@@ -70,6 +71,18 @@ function showCustomFieldModel(data)
 		//reload : true,
 		modal : "#custom-field-add-modal",
 		isNew : isNew,
+		prePersist : function(model){
+			var scopeExtension = [];
+			var scopeFields = $("#textModalForm").find(".CustomFieldScope");
+			$.each(scopeFields , function(index,element){
+				console.log("wefaer");
+				if($(element).find('input').is(':checked'))
+					scopeExtension.push($(element).find('input').attr('id'));
+			});
+			model.set({scopeExtension : scopeExtension.toString()});
+			//model.scopeExtension = scopeExtension.toString(); 
+			console.log("test");
+		},
 		postRenderCallback : function(el) {
 			console.log($("#custom-field-add-modal", el));
 			
@@ -99,7 +112,9 @@ function showCustomFieldModel(data)
 		saveCallback : function(model)
 		{
 			console.log(model);
-			//var custom_field_model_json = App_Admin_Settings.customFieldsListView.collection.get(model.id);
+		
+
+					//var custom_field_model_json = App_Admin_Settings.customFieldsListView.collection.get(model.id);
 			var custom_field_model_json;
 			if(model.scope=="CONTACT")
 				custom_field_model_json = App_Admin_Settings.contactCustomFieldsListView.collection.get(model.id);
@@ -127,18 +142,40 @@ function showCustomFieldModel(data)
 			
 			else
 			{
-				if(model.scope=="CONTACT"){
-					App_Admin_Settings.contactCustomFieldsListView.collection.add(model);
-				}else if(model.scope=="COMPANY"){
-					App_Admin_Settings.companyCustomFieldsListView.collection.add(model);
+				var scopeDetails =[];
+				scopeDetails = model.scopeExtension.split(',');
+				var i;
+				for (i=0;i<scopeDetails.length;i++)
+					{
+						if(scopeDetails[i]== "contacts")
+						App_Admin_Settings.contactCustomFieldsListView.collection.add(model);
+						if(scopeDetails[i]== "companies")
+						{
+							App_Admin_Settings.companyCustomFieldsListView.collection.add(model);
+							App_Admin_Settings.companyCustomFieldsListView.render(true);
+						}
+						if(scopeDetails[i]== "deals")
+						{
+							App_Admin_Settings.dealCustomFieldsListView.collection.add(model);
+							App_Admin_Settings.dealCustomFieldsListView.render(true);
+						}
+					}
+				//if(model.scope=="CONTACT"){
+					//App_Admin_Settings.contactCustomFieldsListView.collection.add(model);
+				//}else if(model.scope=="COMPANY"){
+				/*if(	$('#textModalForm').find("#companies").is(':checked')== true)
+					{
+						App_Admin_Settings.companyCustomFieldsListView.collection.add(model);
 					App_Admin_Settings.companyCustomFieldsListView.render(true);
-				}else if(model.scope=="DEAL"){
+					}
+				//}else if(model.scope=="DEAL"){
+					if(	$('#textModalForm').find("#deals").is(':checked')== true){
 					App_Admin_Settings.dealCustomFieldsListView.collection.add(model);
-					App_Admin_Settings.dealCustomFieldsListView.render(true);
-				}else if(model.scope=="CASE"){
+					App_Admin_Settings.dealCustomFieldsListView.render(true);}
+				/*}else if(model.scope=="CASE"){
 					App_Admin_Settings.caseCustomFieldsListView.collection.add(model);
 					App_Admin_Settings.caseCustomFieldsListView.render(true);
-				}
+				}*/
 				/*App_Admin_Settings.customFieldsListView.collection.add(model);
 				if(App_Admin_Settings.customFieldsListView.collection.length == 1)
 					App_Admin_Settings.customFieldsListView.render(true);*/
@@ -182,7 +219,7 @@ function showCustomFieldModel(data)
 				$('#duplicate-custom-field-type-err').addClass("hide");
 			},3000);
 
-		}
+		}		
 
 	});
 

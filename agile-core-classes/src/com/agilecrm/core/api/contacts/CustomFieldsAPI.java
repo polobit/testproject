@@ -318,6 +318,11 @@ public class CustomFieldsAPI
     {
 	try
 	{
+		CustomFieldDef cfd= new CustomFieldDef();
+		String scopecf[]=new String[3];
+		scopecf=cfd.scopeExtension.split(",");
+		for(int i=0;i<scopecf.length;i++)
+			System.out.println("----"+ scopecf[i]);
 	    customField.save();
 	}
 	catch (DuplicateCustomFieldException e)
