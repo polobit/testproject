@@ -518,6 +518,8 @@ public class GoogleSyncImpl extends TwoWaySyncService
 
 	    if (!skip)
 	    {
+	    	try
+	    	{
 		    if(createContact.getId() == null)
 		    {
 				BatchUtils.setBatchOperationType(createContact, BatchOperationType.INSERT);
@@ -533,6 +535,11 @@ public class GoogleSyncImpl extends TwoWaySyncService
 				requestFeed.getEntries().add(createContact);
 		    }
 			insertRequestCount++;
+	    }
+		catch(Exception e)
+		{
+			System.out.println("Exception occured while updating contact:"+e);
+		}
 	    }
 
 	    if (insertRequestCount >= 95 || (i >= contacts.size() - 1 && insertRequestCount != 0))
@@ -635,6 +642,8 @@ public class GoogleSyncImpl extends TwoWaySyncService
 		}
 		if (!skip)
 		{
+			
+			try{
 			 if(createContact.getId() == null)
 			    {
 					BatchUtils.setBatchOperationType(createContact, BatchOperationType.INSERT);
@@ -650,6 +659,11 @@ public class GoogleSyncImpl extends TwoWaySyncService
 					updateFeed.getEntries().add(createContact);
 			    }
 				updateRequestCount++;
+			}
+			catch(Exception e)
+			{
+				System.out.println("Exception occured while updating contact:"+e);
+			}
 		}
 		    
 		if (updateRequestCount >= 95 || ((i >= (contacts.size() - 1) && updateRequestCount != 0)))

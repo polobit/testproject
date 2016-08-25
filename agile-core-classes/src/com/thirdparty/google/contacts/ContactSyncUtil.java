@@ -28,6 +28,7 @@ import com.google.gdata.data.TextContent;
 import com.google.gdata.data.contacts.ContactEntry;
 import com.google.gdata.data.contacts.ContactFeed;
 import com.google.gdata.data.contacts.GroupMembershipInfo;
+import com.google.gdata.data.contacts.Website;
 import com.google.gdata.data.extensions.City;
 import com.google.gdata.data.extensions.Country;
 import com.google.gdata.data.extensions.Email;
@@ -171,6 +172,7 @@ public class ContactSyncUtil
 		addPhoneNumbersToGoogleContact(contact, createContact);
 		addOrganizationDetailsToGoogleContact(contact, createContact);
 		addAddressToGoogleContact(contact, createContact);
+		addWebsiteToGoogleContact(contact, createContact);
 		addNotesToGoogleContact(contact,createContact);
 
 		// If group is defined then group id is added which save contact in
@@ -816,5 +818,58 @@ public class ContactSyncUtil
 		System.out.println("Notes not found");
 		e.printStackTrace();
 	}
+	}
+	
+	/**
+	 * 
+	 * @param contact
+	 * @param googleContactEntry
+	 * 
+	 * This is to add website from Agile to Google
+	 */
+	public static void addWebsiteToGoogleContact(Contact contact, ContactEntry googleContactEntry)
+	{
+		List<ContactField> websiteList = contact.getContactPropertiesList(Contact.WEBSITE);
+		List<ContactField> newWebsitesToAdd = new ArrayList<ContactField>();
+
+		boolean isNewContact = StringUtils.isEmpty(googleContactEntry.getId());
+
+		if (!isNewContact)
+		{
+			// Sets Emails to contact
+			for (ContactField field : websiteList)
+			{
+				boolean isNew = true;
+				for (Website website : googleContactEntry.getWebsites())
+				{
+					if (StringUtils.equals(website.getHref(), field.value))
+					{
+						isNew = false;
+						break;
+					}
+				}
+				if (isNew)
+				{
+					newWebsitesToAdd.add(field);
+				}
+			}
+		}
+		else
+		{
+			newWebsitesToAdd = websiteList;
+		}
+
+		for (ContactField field : newWebsitesToAdd)
+		{
+			Website primarywebsite = new Website();
+			primarywebsite.setHref(field.value);
+			primarywebsite.setLabel(field.value);
+		/*	if (!StringUtils.isEmpty(field.subtype))
+				primaryPhone.setRel(rel);
+			else
+				primaryPhone.setRel("http://schemas.google.com/g/2005#work");*/
+
+			googleContactEntry.addWebsite(primarywebsite);
+		}
 	}
 }
