@@ -399,31 +399,23 @@ try{
 	if(CallLogVariables.id){
 		contactDetailsObjId = CallLogVariables.id;
 	}else{
-		contactDetailsObjId = agile_crm_get_contact().id;	
+		if(company_util.isCompany()){
+			contactDetailsObjId = App_Companies.companyDetailView.model.toJSON();
+		} else {
+			contactDetailsObjId = App_Contacts.contactDetailView.model.toJSON();
+		}
 	}
 	
-	if($("#saveActivity",form).val() == "true"){
-		try{
-			var data1 ={};
-			data1.url = "/core/api/notes/save_logPhoneActivity";
-			data1.id = contactDetailsObjId;
-			data1.callType = logPhone.callType;
-			data1.number = logPhone.phone;
-			data1.status = logPhone.status;
-			data1.duration = logPhone.duration;
-			data1.widget = $("#callWidgetName",form).val();
-			CallLogVariables.callActivitySaved = true;
-			saveLogPhoneActivity(data1);
-		}catch(e){
-			console.log("activities not saved AS CONTACT NOT FOUND");
-		}
-	}else
-		{
+	if(company_util.isCompany()){
+		
+		twilioIOSaveContactedTime(contactDetailsObjId);
+		
+	}else{
+		
+		if($("#saveActivity",form).val() == "true"){
 			try{
-				
 				var data1 ={};
-				data1.url = "/core/api/notes/update_logPhoneActivity?note_id="+
-				logPhone.id+'&subject='+logPhone.subject;
+				data1.url = "/core/api/notes/save_logPhoneActivity";
 				data1.id = contactDetailsObjId;
 				data1.callType = logPhone.callType;
 				data1.number = logPhone.phone;
@@ -435,14 +427,34 @@ try{
 			}catch(e){
 				console.log("activities not saved AS CONTACT NOT FOUND");
 			}
-		}
+		}else
+			{
+				try{
+					var data1 ={};
+					data1.url = "/core/api/notes/update_logPhoneActivity?note_id="+
+					logPhone.id+'&subject='+logPhone.subject;
+					data1.id = contactDetailsObjId;
+					data1.callType = logPhone.callType;
+					data1.number = logPhone.phone;
+					data1.status = logPhone.status;
+					data1.duration = logPhone.duration;
+					data1.widget = $("#callWidgetName",form).val();
+					CallLogVariables.callActivitySaved = true;
+					saveLogPhoneActivity(data1);
+				}catch(e){
+					console.log("activities not saved AS CONTACT NOT FOUND");
+				}
+			}
+			
 		
-	
-	if(logPhone.status == 'answered' || logPhone.status == 'inquiry' || logPhone.status == 'interest' || logPhone.status == 'no interest' || logPhone.status == 'incorrect referral' || logPhone.status == 'voicemail' || logPhone.status == 'new opportunity' || logPhone.status == 'meeting scheduled'){
-		if(!$("#callWidgetName",form).val()){
-			twilioIOSaveContactedTime(contactDetailsObjId);
+		if(logPhone.status == 'answered' || logPhone.status == 'inquiry' || logPhone.status == 'interest' || logPhone.status == 'no interest' || logPhone.status == 'incorrect referral' || logPhone.status == 'voicemail' || logPhone.status == 'new opportunity' || logPhone.status == 'meeting scheduled'){
+			if(!$("#callWidgetName",form).val()){
+				twilioIOSaveContactedTime(contactDetailsObj.id);
+			}
 		}
 	}
+	
+
 }catch (e) {}
 
 		modal.modal('hide');
