@@ -4566,3 +4566,11 @@ div.list-tasks.panel-body:hover
     padding: 0px !important;
   }
 }
+@media (max-width: 767px){
+  ul.typeahead.dropdown-menu.dashboard-search-scroll-bar {
+    max-height: 330px !important;
+  }
+}
+.mobile-search-view{
+  width: 255px !important;
+}
