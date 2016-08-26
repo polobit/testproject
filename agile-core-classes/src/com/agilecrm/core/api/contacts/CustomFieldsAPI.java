@@ -460,8 +460,10 @@ public class CustomFieldsAPI
     @Path("/syncappdata")
     @GET
     @Produces({ MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON })
-    public String syncAppData(@QueryParam("domain") String domain){
+    public String syncAppData(@QueryParam("domain") String domain,@QueryParam("domainusermail") String domainusermail){
     	String domainUser = domain;
+    	System.out.println("domain ="+domainUser);
+    	System.out.println("domainusermail ="+domainusermail);
     	if( domainUser != null){
     		try {
 				Long updated_time = null;
@@ -473,23 +475,33 @@ public class CustomFieldsAPI
 					update_date = new Date(updated_time);
 				}
 				Date current_date = new Date(); 
-				if(schema == null || (update_date.getMonth() < current_date.getMonth() && update_date.getYear() <= current_date.getYear())){
-					if(schema == null){
-						String oldNamespace = NamespaceManager.get();
-						NamespaceManager.set("");
+				String oldNamespace = NamespaceManager.get();
+				NamespaceManager.set("");
+				//if(schema == null || (update_date.getMonth() < current_date.getMonth() && update_date.getYear() <= current_date.getYear())){
+				if(schema == null){					
 						ContactSchemaUpdateStats newSchema = new ContactSchemaUpdateStats();					
 						newSchema.updated_time = System.currentTimeMillis() / 1000 ;
 						newSchema.domain = domainUser;
+						newSchema.domainusermail=domainusermail;   
+						System.out.println("domain ="+domainUser);
+						System.out.println("domainusermail ="+domainusermail);
 						newSchema.save();
-						NamespaceManager.set(oldNamespace);
 					}
+				else {
+					schema.domainusermail = domainusermail ; 
+					
+					System.out.println("domainusermail ="+domainusermail); 
+					schema.save();				
+				}
+				NamespaceManager.set(oldNamespace);
 					UpdateContactsDeferredTask updateContactDeferredTask = new UpdateContactsDeferredTask(domainUser);					
 					// Add to queue
 					Queue queue = QueueFactory.getQueue(AgileQueues.CONTACTS_SCHEMA_CHANGE_QUEUE);
 					queue.add(TaskOptions.Builder.withPayload(updateContactDeferredTask));
 					return "success";
-				}
-				return "limitReached" ;
+				
+    	//}
+			//return "limitReached" ;
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

@@ -85,10 +85,13 @@ public class SendMail
 
     public static final String EMAIL_PLAN_CHANGED = "subscription/add-on/email/plan_changed";
     public static final String EMAIL_PLAN_CHANGED_SUBJECT = "Your Agile CRM plan has changed";
-    
+
     public static final String FREE_EMAILS_UPDATED = "subscription/emails_updated";
     public static final String FREE_EMAILS_UPDATED_SUBJECT = "Your Free 5000 Branded Emails Are Updated";
 
+    public static final String TRIAL_END_WARNING = "subscription/trial_end_warning";
+    public static final String TRIAL_END_WARNING_SUBJECT = "Your trial is going to expire";
+    
     public static final String FAILED_BILLINGS_FIRST_TIME = "subscription/payments/failed/failed_billings_first_time";
     public static final String FAILED_BILLINGS_FIRST_TIME_SUBJECT = "[Notice #1] Your Payment to Agile CRM has Declined";
 
@@ -117,6 +120,9 @@ public class SendMail
 
     public static final String CSV_IMPORT_NOTIFICATION = "csv_reports";
     public static final String CSV_IMPORT_NOTIFICATION_SUBJECT = "CSV Import report";
+    
+    public static final String DOMAIN_DELETE_WARNING = "domain_delete_warning";
+    public static final String DOMAIN_DELETE_WARNING_SUBJECT = "Account Delete Warning";
 
     public static final String CSV_IMPORT_DELAY_NOTIFICATION = "csv_delay_notifier";
     public static final String CSV_IMPORT_DELAY_NOTIFICATION_SUBJECT = "CSV Import Delay";
@@ -138,25 +144,28 @@ public class SendMail
 	// For campaign sharing
 	public static final String SHARE_CAMPAIGN_CONFIRMATION = "share_campaign_confirmation";
 	public static final String SHARE_CAMPAIGN_SUBJECT = " Campaign Shared - Agile CRM";
-
-	//For AllowAccessIP
-	public static final String ALLOW_IP_ACCESS = "allow_ip_access";
-	public static final String ALLOW_IP_ACCESS_SUBJECT = "Verify Your New IP Address for Uninterrupted Access";
-
 	//for formBuider
 	public static final String CONTACT_FORM_SUBMITTED_SUBJECT = " Form Submitted - ";
 	public static final String CONTACT_FORM_SUBMITTED ="contact_form_submitted";
+	
 	// Ticket template names
    	public static final String TICKET_REPLY = "ticket_reply_email";
    	public static final String TICKET_SEND_EMAIL_TO_USER = "ticket_send_email_to_user";
    	public static final String TICKET_FORWARD = "ticket_forward_email";
    	public static final String TICKET_STATS = "ticket_stats";
    	public static final String TICKET_COMMENTS = "ticket_comments";
+
    	public static final String TICKET_FOOTER = "ticket_footer";
 
-   	//For browser Fingerprint
-	public static final String OTP_EMAIL_TO_USER = "otp_email_to_user";
+	//For AllowAccessIP
+	public static final String ALLOW_IP_ACCESS = "allow_ip_access";
+	public static final String ALLOW_IP_ACCESS_SUBJECT = "Verify Your New IP Address for Uninterrupted Access";
 
+   	//For browser Fingerprint
+   	public static final String OTP_EMAIL_TO_USER = "otp_email_to_user";
+   
+   	
+   	
    	//Helpcenter
    	public static final String HELPCENTER_VERIFICATION = "helpcenter_verification_email";
    	public static final String HELPCENTER_VERIFICATION_SUBJECT = "Verify your Helpcenter Account";
@@ -185,6 +194,8 @@ public class SendMail
      * Text(or Body) template extension.
      */
     public static final String TEMPLATE_BODY_EXT = "_body.html";
+    
+    public static final String Contacts_update_status = "Domainuser_updates";
 
     @SuppressWarnings("unused")
     private static Object String;
