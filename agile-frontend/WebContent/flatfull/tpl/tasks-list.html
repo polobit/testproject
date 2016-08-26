@@ -69,7 +69,7 @@
 
             <div class="text-ellipsis">
             {{#each contacts}}
-                <a href="#" class="text-info">{{contact_name properties type}}{{#if @last}}{{else}},{{/if}} </a>
+                <a onclick="$(event).stopPropagation();" href="#{{#if_contact_type 'PERSON'}}contact{{else}}company{{/if_contact_type}}/{{id}}" class="text-info stop-propogate">{{contact_name properties type}}{{#if @last}}{{else}},{{/if}} </a>
             {{/each}}
             </div>
 
