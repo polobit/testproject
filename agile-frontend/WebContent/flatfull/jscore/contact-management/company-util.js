@@ -270,7 +270,7 @@
 	    head.js(LIB_PATH + 'lib/jquery.raty.min.js', function(){
 	    	
 	    	var company_model  =  App_Companies.companyDetailView.model;
-	    	
+	    	var count_clicks=0;
 	    	// If contact update is not allowed then start rating does not allow user to change it
 	    	if(App_Companies.companyDetailView.model.get('owner') && !canEditContact(App_Companies.companyDetailView.model.get('owner').id))
 	    	{
@@ -300,8 +300,30 @@
 	        		// Save model
 	           		contact_model.save();*/
 	           		
-	        		App_Companies.companyDetailView.model.set({'star_value': score}, {silent : true});
-	        		company_model =  App_Companies.companyDetailView.model.toJSON();
+	 App_Companies.companyDetailView.model.set({'star_value': score}, {silent : true});
+	 		company_model =  App_Companies.companyDetailView.model.toJSON();
+
+
+
+        		
+            if(company_model && company_model.star_value == 1)         
+             {
+              count_clicks++;
+              $(this.children[0]).attr('src','img/star-on.png');
+              
+                if(count_clicks==2)
+                  {
+              App_Companies.companyDetailView.model.set({'star_value': 0}, {silent : true});
+	 		company_model =  App_Companies.companyDetailView.model.toJSON();
+              
+              count_clicks=0;
+              $(this.children[0]).attr('src','img/star-off.png');
+              $(this).find('input').attr('value',0);
+              console.log("count_clicks="+count_clicks);
+                  }   
+             }
+             else count_clicks=0;
+           
 	        		var new_model = new Backbone.Model();
 	        		new_model.url = 'core/api/contacts';
 	        		new_model.save(company_model, {

@@ -10,7 +10,7 @@ function starify(el) {
     head.js(LIB_PATH + 'lib/jquery.raty.min.js', function(){
     	
     	var contact_model  =  App_Contacts.contactDetailView.model;
-    	
+    	var count_clicks=0;
     	// If contact update is not allowed then start rating does not allow user to change it
     	if(App_Contacts.contactDetailView.model.get('owner') && !canEditContact(App_Contacts.contactDetailView.model.get('owner').id))
     	{
@@ -25,16 +25,33 @@ function starify(el) {
     	// contact_model.url = 'core/api/contacts';    	
     	$('#star', el).raty({
     		
-    		/**
+    		/*
     		 * When a star is clicked, the position of the star is set as star_value of
     		 * the contact and saved.    
     		 */
+         
         	click: function(score, evt) {
-        	         		
-           		
+
         		App_Contacts.contactDetailView.model.set({'star_value': score}, {silent : true});
         		contact_model =  App_Contacts.contactDetailView.model.toJSON();
-        		var new_model = new Backbone.Model();
+        		
+            if(contact_model && contact_model.star_value == 1)         
+             {
+              count_clicks++;
+              $(this.children[0]).attr('src','img/star-on.png');
+              
+                if(count_clicks==2)
+                  {
+                  App_Contacts.contactDetailView.model.set({'star_value': 0}, {silent : true});
+                  contact_model =  App_Contacts.contactDetailView.model.toJSON();
+                  count_clicks=0;
+                  $(this.children[0]).attr('src','img/star-off.png');
+                  $(this).find('input').attr('value',0);
+                  }   
+            }
+             else count_clicks=0;
+           
+            var new_model = new Backbone.Model();
         		new_model.url = 'core/api/contacts';
         		new_model.save(contact_model, {
         			success: function(model){
