@@ -49,17 +49,19 @@ define([
 					{ 
 					for ( var i = 0; i < fields.length; i++)
 						{
-							var value = {};
-							value.value = fields[i].field_label;
-							value.label = fields[i].field_label;
-							value.selected = false;
-							var count = 0;
-							for(var k=agileFields.length-1; k>=15; k--){
-								if(value.label == agileFields[k].label)
-									count++;								
-							}
-							if(count == 0)
+							if(fields[i].field_type == "TEXT" || fields[i].field_type == "TEXTAREA" || fields[i].field_type == "LIST"){
+								var value = {};
+								value.value = fields[i].field_label;
+								value.label = fields[i].field_label;
+								value.selected = false;
+								var count = 0;
+								for(var k=agileFields.length-1; k>=15; k--){
+									if(value.label == agileFields[k].label)
+										count++;								
+								}
+								if(count == 0)
 								agileFields.push(value);
+						    }
 						}
 						saveform[j].fields.agilefield.value = agileFields;
 					}else{
