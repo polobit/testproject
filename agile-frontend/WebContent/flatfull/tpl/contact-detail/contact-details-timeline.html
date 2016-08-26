@@ -472,6 +472,9 @@
 				<div class="contact-job-title text-base custom-color">
 					<i class={{#if_log_type_equals this "log_type" "EMAIL_SENT"}}"icon-envelope text-muted p-r-xs"{{else}} {{#if_log_type_equals this "log_type" "EMAIL_OPENED"}}"icon-folder-open-alt text-muted p-r-xs"{{else}}"icon-inbox text-muted p-r-xs"{{/if_log_type_equals}}{{/if_log_type_equals}}></i>{{titleFromEnums log_type}}
 				</div>
+                <div class="pull-right" style="font-size:11px;margin-top: 3px; text-transform: initial;">
+                        <i class="fa fa-clock-o m-r-xs"></i> {{epochToHumanDate "hh:MM tt" created_time}}
+                </div>
 			</div>
             <div class="date">{{epochToTaskDate time}}</div>
             <div class="body">
