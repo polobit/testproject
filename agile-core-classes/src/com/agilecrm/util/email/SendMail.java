@@ -156,7 +156,7 @@ public class SendMail
 
    	//For browser Fingerprint
 	public static final String OTP_EMAIL_TO_USER = "otp_email_to_user";
-
+	public static final String Deal_Won_status = "deal_won_notify";
    	//Helpcenter
    	public static final String HELPCENTER_VERIFICATION = "helpcenter_verification_email";
    	public static final String HELPCENTER_VERIFICATION_SUBJECT = "Verify your Helpcenter Account";
