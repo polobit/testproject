@@ -46,13 +46,14 @@ function navigateToDetailsPage(data, name)
 		model = QUERY_RESULTS[i];
 		break;
 	}
+	$('.searchicon-dropdown').removeClass('open');
 	console.log(model);
 	if (model.entity_type == "contact_entity" || model.entity_type == "company_entity")
 	{
 		if(model.type == "COMPANY")
-			App_Companies.navigate("company/" + data, { trigger : true });
+			Backbone.history.navigate("company/" + data, { trigger : true });
 		else
-			App_Contacts.navigate("contact/" + data, { trigger : true });
+			Backbone.history.navigate("contact/" + data, { trigger : true });
 		return;
 	}
 	if(model.entity_type == "deal")

@@ -17,6 +17,11 @@ var ContactSearchRouter = Backbone.Router.extend({
 	searchResults : function(query)
 	{
 		try{query = query.trim();}catch(e){}
+
+		if ( $.trim(query) == '' )
+    			return;
+    		
+    	$('.searchicon-dropdown').removeClass('open');
 		
 		 $("#searchForm").find(".dashboard-search-scroll-bar").css({"display":"none"});
 		 currentRoute();
