@@ -135,6 +135,13 @@
 			descending : true,
 			postRenderCallback:function(el,model){
 
+				console.log(model);
+			var feedback_rating = model.feedback;
+			for(var i=1;i<=feedback_rating;i++){
+				var image = document.getElementById(i+"_Image")
+				if(image.src.includes("star-off.png") )
+					image.src="/flatfull/img/star-on.png";
+			}			
 		$(el)
 			.on('mouseover mouseout', 'tbody#ticket-feedback-log-model-list> tr>td#ticket_note',
 				function(event) {
@@ -222,7 +229,7 @@
 
 	    end_time += (((23*60*60)+(59*60)+59)*1000);
 	    end_time=end_time+(d.getTimezoneOffset()*60*1000);
-		var feedback = null;
+		var feedback = 0;
 	    feedback = $('#feedback').find('option:selected').val();
 		
 		App_Ticket_Module.renderfeedbacktemplate(start_time,end_time,feedback,group,assignee);

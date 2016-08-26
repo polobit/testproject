@@ -12,9 +12,9 @@ String error = "", success = "";
 System.out.println(success);
 String feedback = request.getParameter("feedback");
 Long note_id = Long.parseLong(request.getParameter("note"));
-DomainUser domainUser = null;
+int feedback_rating = Integer.parseInt(feedback);
+
 if (!StringUtils.isEmpty(feedback)) {
-	TicketNotesUtil.savefeedback(note_id, feedback);
 		
 	success = "Your Feedback is successfully submmited.Add a comment about the quality of support you received.";
 }
@@ -183,23 +183,19 @@ var id = <%=note_id%>
 
 					<%}%>
 					<% if(!StringUtils.isEmpty(success)){%>
-							<table width="60%" cellpadding="0" cellspacing="0" border="0" style="margin-top: 40px;">
+							<table width="80%" cellpadding="0" cellspacing="0" border="0" style="margin-top: 40px;">
                      <tbody>
                          <tr>
-                         	<td  width="50%"style="padding-top: 20px;padding-left: 34px;">How would you rate the support recived?</td>
-                             <td width="5%" style="padding-left:7px">
-								 <span style=" font-size: 130%;padding-left: 8px; visibility:hidden;" id="YAY">&#10004;</span>	
-															
-                             	<input type="image" src="/flatfull/img/smile.svg" style="line-height: 25px;font-size: 12px; width: 25px;" class="transperantbutton" id="YAY_Image" value="YAY"  onclick="changeFeedback(event,this)"/>
-	                         </td>
-		                     <td width="5%" style="padding-left:10px">	
-		                      <span style="font-size: 130%;padding-left: 8px; visibility:hidden;" id="OK">&#10004;</span>
-                             	<input type="image" src="/flatfull/img/speechless.svg" style="line-height: 25px;font-size: 12px; width: 25px;" id="OK_Image" class="transperantbutton" value="OK" onclick="changeFeedback(event,this)"/>
-		                     </td>
-		                      
-		                     <td width="5%" style="padding-left:10px">
-                             <span style="font-size: 130%;padding-left: 8px; visibility:hidden;" id="BOO">&#10004;</span>
-                             	<input type="image" src="/flatfull/img/angry.svg" style="line-height: 25px;font-size: 12px; width: 25px;" class="transperantbutton" id="BOO_Image" value="BOO" onclick="changeFeedback(event,this)"/>		                     
+                         	<td  width="55%"style="padding-top: 20px;padding-left: 34px;">How would you rate the support recived?</td>
+                             <td width="40%" style="padding-top: 20px;">
+                             	<input type="image" src="/flatfull/img/star-off.png" style="width:18px;float:left" class="transperantbutton" id="1_Image" value="1"  onclick="changeFeedback(event,this);"/>
+                             	<input type="image" src="/flatfull/img/star-off.png" style="width:18px;float:left" class="transperantbutton" id="2_Image" value="2"  onclick="javascript:return changeFeedback(event,this)"/> 
+                             	<input type="image" src="/flatfull/img/star-off.png" style="width:18px;float:left" class="transperantbutton" id="3_Image" value="3"  onclick="changeFeedback(event,this)";/>
+                             	<input type="image" src="/flatfull/img/star-off.png" style="width:18px;float:left" class="transperantbutton" id="4_Image" value="4"  onclick="changeFeedback(event,this);"/>
+                             	<input type="image" src="/flatfull/img/star-off.png" style="width:18px;float:left" class="transperantbutton" id="5_Image" value="5"  onclick="changeFeedback(event,this);"/>
+
+                             	 
+	                         </td>		                     
                              </td>
                          </tr>
                      </tbody>
@@ -231,9 +227,13 @@ var id = <%=note_id%>
 	</div>	
 <script>
  feedback = "<%=feedback%>";
-var thick = document.getElementById(feedback);
-thick.style.visibility="visible";
-if(feedback == "BOO" || feedback == "OK")
+feedback_rating = "<%=feedback_rating%>";
+for(var i=1;i<=feedback_rating;i++){
+	var image = document.getElementById(i+"_Image")
+	if(image.src.includes("star-off.png") )
+	image.src="/flatfull/img/star-on.png";		
+		}
+if(feedback_rating < 3)
 {
 	var d = document.getElementById("myTextarea");
 	d.required = true;
@@ -246,13 +246,27 @@ document.getElementById("addfeedback-message").innerHTML = "<div style=font-size
 
 function changeFeedback(e,objButton){
 	e.preventDefault();
-	document.getElementById(feedback).style.visibility="hidden";
-	document.getElementById(objButton.value).style.visibility="visible";
-	feedback = ""+objButton.value;
+	feedback_rating = ""+objButton.value;
 	var d = document.getElementById("myTextarea");
 	d.required = false;
-	if(feedback == "BOO" || feedback == "OK")
+	if(feedback_rating < 3)
 	d.required = true;
+	if(objButton.src.includes("star-off.png") ){
+		for(var i=1;i<=feedback_rating;i++){
+			var image = document.getElementById(i+"_Image")
+			if(image.src.includes("star-off.png") )
+				image.src="/flatfull/img/star-on.png";		
+		}
+	}	
+	else{
+		
+		for(i=5;feedback_rating<i;i--){
+			var image = document.getElementById(i+"_Image")
+			if(image.src.includes("star-on.png") )
+				image.src="/flatfull/img/star-off.png";		
+			
+		}
+	}	
 }
 </script>
 	<script type="text/javascript">		
@@ -263,16 +277,19 @@ function changeFeedback(e,objButton){
 			e.preventDefault();
 			var data = document.getElementById("myTextarea").value;
 			json.id = id;
-			json.feed_back = feedback;
+			json.feed_back = feedback_rating;
 			 var data = decodeURI(data);
 			data.replace(new RegExp("\\+","g"),' ');
 			json.feedback_comment = data;
-			$.ajax({ type : 'PUT', 
+			$.ajax({ type : 'POST', 
 				url : 'feedbackapi/api/tickets/notes/feedback-comment/'+id, 
 				data : json,
 				success:function(){
 					console.log(json);	
 					document.getElementById("addfeedback-message").innerHTML = "<div style=font-size:20px;padding-left:40px;text-align:center;>Your feedback submitted successfully!</div>";
+				},
+				error:function(){
+					alert("i am in error");
 				}
 				
 		});

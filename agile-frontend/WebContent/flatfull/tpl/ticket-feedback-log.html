@@ -19,10 +19,12 @@
                                           
 
                 <select name="feedback" class="form-control" id="feedback" style="width: 160px;float: right;margin-left: 20px;">
-                    <option value=''>All</option>
-                    <option value='YAY'>Yaay</option>
-                    <option value='OK'>OK</option>
-                    <option value='BOO'>Boo</option>
+                    <option value=0>All</option>
+                    <option value='1'>1</option>
+                    <option value='2'>2</option>
+                    <option value='3'>3</option>
+                    <option value='4'>4</option>
+                    <option value='5'>5</option>
                 </select>
 
      
@@ -89,17 +91,15 @@
               </div>
     </td>
     <td>
-        {{#if_equals feedback 'YAY'}}
-          <img src="/flatfull/img/smile.svg" style="line-height: 25px;font-size: 12px; width: 31px;" class="transperantbutton" id="YAY_Image" value="YAY"/> 
-        {{/if_equals}}
+        
+          <input type="image" src={{#get_feedback feedback 1}}{{/get_feedback}} style="width:18px;float:left" class="transperantbutton" id="1_Image" value="1"  onclick="changeFeedback(event,this);"/>
+                              <input type="image" src={{#get_feedback feedback 2}}{{/get_feedback}}  style="width:18px;float:left" class="transperantbutton" id="2_Image" value="2"  onclick="javascript:return changeFeedback(event,this)"/> 
+                              <input type="image" src={{#get_feedback feedback 3}}{{/get_feedback}}  style="width:18px;float:left" class="transperantbutton" id="3_Image" value="3"  onclick="changeFeedback(event,this)";/>
+                              <input type="image" src={{#get_feedback feedback 4}}{{/get_feedback}} style="width:18px;float:left" class="transperantbutton" id="4_Image" value="4"  onclick="changeFeedback(event,this);"/>
+                              <input type="image" src= {{#get_feedback feedback 5}}{{/get_feedback}} style="width:18px;float:left" class="transperantbutton" id="5_Image" value="5"  onclick="changeFeedback(event,this);"/>
 
-        {{#if_equals feedback 'OK'}}
-          <img src="/flatfull/img/speechless.svg" style="line-height: 25px;font-size: 12px; width: 31px;" class="transperantbutton" id="YAY_Image" value="YAY"/>
-        {{/if_equals}}
+        
 
-        {{#if_equals feedback 'BOO'}}
-          <img src="/flatfull/img/angry.svg" style="line-height: 25px;font-size: 12px; width: 31px;" class="transperantbutton" id="YAY_Image" value="YAY"/>
-        {{/if_equals}}
     </td>          
      <td>        
               

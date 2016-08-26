@@ -26,6 +26,14 @@ Handlebars.registerHelper('get_ticket_id', function(action_type, options) {
 	return Tickets.get_next_prev_ticket_id(action_type);
 });
 
+Handlebars.registerHelper('get_feedback', function(feedback_rating,value,options) {
+			
+			if(feedback_rating >= value )
+				return "/flatfull/img/star-on.png";		
+			return "/flatfull/img/star-off.png";	
+	
+});
+
 Handlebars.registerHelper('calculate_due_date', function(due_date, options) {
 	var currentEpoch = new Date().getTime();
 

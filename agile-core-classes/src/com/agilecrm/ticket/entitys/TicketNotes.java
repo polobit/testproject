@@ -88,7 +88,7 @@ public class TicketNotes
 	/**
 	 * Stores feed back for a note
 	 */
-	public String feed_back = "";
+	public int feed_back = 0;
 	
 	/**
 	 * Stores name of customer who created ticket
