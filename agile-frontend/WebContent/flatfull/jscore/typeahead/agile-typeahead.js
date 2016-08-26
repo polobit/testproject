@@ -14,7 +14,8 @@ var TYPEHEAD_TYPE = {};
 
 // Saves map of key: name and value: related contacts of a deal
 var TYPEHEAD_DEAL_RELATED_CONTACTS = {};
-
+//query and url params for validation
+var searchUrl ; var searchParams ;
 /**
  * This script file defines simple search keywords entered in input fields are
  * sent to back end as query through bootstrap typeahead. Methods render,
@@ -79,14 +80,16 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
 
 							// Get data on query
 
-							var type_url = "";
+							var type_url = "";searchUrl = url ;
 
 							if(urlParamsCallback){
 								urlParams = urlParamsCallback();
 							}
 
-							if (urlParams && urlParams.length)
+							if (urlParams && urlParams.length){
 								type_url = '&' + urlParams;
+								searchParams = urlParams ;
+							}
 
 							// Sends search request and holds request object,
 							// which can be reference to cancel request if there
@@ -124,7 +127,12 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
 								 */
 								if (data.length == 0)
 								{
-									var txt = '<b>{{agile_lng_translate "others" "no-reults-found"}}</b>';
+									var txt ;
+									if(!searchParams && searchUrl != "core/api/search/deals")
+										txt = '<b>{{agile_lng_translate "others" "no-reults-found"}}</b><p class="text-center"><a onclick="createtypeheadcontact($(this));" type="contact">Add as New contact</a></p><p class="text-center"><a onclick="createtypeheadcontact($(this));" type="company">Add as New company</a></p>';
+									else
+										txt = '<b>{{agile_lng_translate "others" "no-reults-found"}}</b>' ; 
+									searchParams = "";searchUrl = "";
 
 									if (noResultText && noResultText.length)
 										txt = noResultText;

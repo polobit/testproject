@@ -6,8 +6,10 @@ $(function()
 		show_deal();
 		setup_tags_typeahead();
 	});
-
-
+	$('.newtypeheadcompany').click(function(e){
+		e.preventDefault();
+		var cname = $(a.currentTarget).closest("form").find('#relates_to').val();
+	});
 	$('#opportunityUpdateModal, #opportunityModal').off('click', '#opportunity_archive');
   $('#opportunityUpdateModal, #opportunityModal').on('click', '#opportunity_archive', function(e)
   {
@@ -595,4 +597,40 @@ function initializeMilestoneListners(el){
     	});
     	
     });
+}
+function createtypeheadcontact(el){
+	console.log('whbdfv');
+	var cname = el.closest('form').find('.typeahead_contacts').val();
+	var type = $(el).attr('type') ; 
+	var contact = {}; var url = '/core/api/contacts' ;
+	var properties = []; var json = {};
+	json.name = "first_name";
+	json.type = "SYSTEM";json.value = cname ;
+	properties.push(json);
+	contact.properties = properties ; 
+	if(type == "contact")
+		contact['type'] = 'PERSON' ; 
+	else 
+		contact['type'] = 'COMPANY' ;
+	$.ajax({
+	  type: "POST",
+	  url: url,contentType : "application/json; charset=utf-8",
+	  dataType : 'json',
+	  data: JSON.stringify(contact),
+	  success: function(data){
+	  	console.log(data);
+	  	var properties = [];var i ;var coname ; 
+	  	properties = data['properties'] ; 
+	  	for(i=0 ; i< properties.length ; i++){
+	  		if(properties[i].name == 'first_name'){
+	  			coname = properties[i].value;
+	  			break ; 
+	  		}
+	  	}
+	  	el.closest('form')
+			.find(".newtypeaheadcontact")
+			.append(
+					'<li class="tag  btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="' + data.id + '"><a class="text-white v-middle" href="#contact/' + data.id + '">' + coname + '</a><a class="close" id="remove_tag">&times</a></li>');
+	  }
+	});
 }
