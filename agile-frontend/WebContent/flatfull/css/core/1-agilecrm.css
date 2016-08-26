@@ -3766,7 +3766,7 @@ opacity: .3;
 
 .report-selected
 {
-	background-color: #e4eaec!important;
+	/*background-color: #f6f8f8!important;*/
 }
 
 .sub-nav-tab li
@@ -4575,6 +4575,7 @@ div.list-tasks.panel-body:hover
 .mobile-search-view{
   width: 250px !important;
 }
+
 .w-115{
   width: 115px;
 }
@@ -4593,3 +4594,4 @@ div.list-tasks.panel-body:hover
 {
   width:150px;
 }
+
