@@ -1,20 +1,22 @@
-<html lang="en">
+<html lang="en" data-modal-version="2" data-modal-type="agile-modal-sm agile-modal-choicetwo split-xs">
    <head>
       <meta http-equiv="content-type" content="text/html;charset=utf-8" />
       <title>Popup</title>
       <style>
-         body {
-         background: #333;
-         width: 700px;
-         height: 450px;
-         }
+         @media (max-width:425px){ 
+          #popup-form input.popup-button{
+          margin-top: 10px;
+          width: 100%;
+          }
+          #popup-form input.popup-text{
+          width: 100% !important;
+          }
+        }
          #popup {
          background: #fff;
          color: #000!important;
          font: 19px/23px Calibri, "Trebuchet MS", Arial, Helvetica, sans-serif!important;
          letter-spacing: 0;
-         position: fixed;
-         width: 700px;
          }
          #popup-body {
          padding: 40px 60px;
@@ -41,8 +43,8 @@
          font: 21px/26px Calibri, "Trebuchet MS", Arial, Helvetica, sans-serif!important;
          margin: 0;
          outline: 0;
-         padding: 16px 20px;
-         width: 350px;
+         padding: 16px 0px;
+         width: 70%;
          }
          #popup-form input.popup-text.popup-text-error {
          border-color: #c00!important;
@@ -67,9 +69,8 @@
          cursor: pointer;
          font: bold 21px/26px Calibri, "Trebuchet MS", Arial, Helvetica, sans-serif!important;
          outline: 0;
-         padding: 15px;
+         padding: 15px 0px;
          text-transform: uppercase;
-         width: 200px;
          }
          #popup-form input.popup-button:active {
          box-shadow: inset 0 0 10px #fff;
