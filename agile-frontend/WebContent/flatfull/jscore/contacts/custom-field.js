@@ -75,7 +75,7 @@ function showCustomFieldModel(data)
 			var scopeExtension = [];
 			var scopeFields = $("#textModalForm").find(".CustomFieldScope");
 			$.each(scopeFields , function(index,element){
-				console.log("wefaer");
+				
 				if($(element).find('input').is(':checked'))
 					scopeExtension.push($(element).find('input').attr('id'));
 			});
@@ -160,19 +160,23 @@ function showCustomFieldModel(data)
 							App_Admin_Settings.dealCustomFieldsListView.render(true);
 						}
 					}
-				//if(model.scope=="CONTACT"){
-					//App_Admin_Settings.contactCustomFieldsListView.collection.add(model);
-				//}else if(model.scope=="COMPANY"){
-				/*if(	$('#textModalForm').find("#companies").is(':checked')== true)
-					{
+
+					if(model.scope=="CASE"){
+					App_Admin_Settings.caseCustomFieldsListView.collection.add(model);
+					App_Admin_Settings.caseCustomFieldsListView.render(true);
+				}
+				/*if(model.scope=="CONTACT"){
+					App_Admin_Settings.contactCustomFieldsListView.collection.add(model);
+				}else if(model.scope=="COMPANY"){
+				
 						App_Admin_Settings.companyCustomFieldsListView.collection.add(model);
 					App_Admin_Settings.companyCustomFieldsListView.render(true);
 					}
-				//}else if(model.scope=="DEAL"){
+				}else if(model.scope=="DEAL"){
 					if(	$('#textModalForm').find("#deals").is(':checked')== true){
 					App_Admin_Settings.dealCustomFieldsListView.collection.add(model);
 					App_Admin_Settings.dealCustomFieldsListView.render(true);}
-				/*}else if(model.scope=="CASE"){
+				}else if(model.scope=="CASE"){
 					App_Admin_Settings.caseCustomFieldsListView.collection.add(model);
 					App_Admin_Settings.caseCustomFieldsListView.render(true);
 				}*/

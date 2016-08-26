@@ -318,12 +318,27 @@ public class CustomFieldsAPI
     {
 	try
 	{
-		CustomFieldDef cfd= new CustomFieldDef();
-		String scopecf[]=new String[3];
-		scopecf=cfd.scopeExtension.split(",");
+			String scopecf[]=new String[3];
+			if(customField.scopeExtension != null){
+				scopecf=customField.scopeExtension.split(",");
+			}
 		for(int i=0;i<scopecf.length;i++)
-			System.out.println("----"+ scopecf[i]);
+		{
+			customField.id=null;
+				if(scopecf[i].equalsIgnoreCase("contacts"))
+				{
+					customField.scope=CustomFieldDef.SCOPE.valueOf("CONTACT");
+				}
+				else if(scopecf[i].equalsIgnoreCase("companies"))
+				{
+					customField.scope=CustomFieldDef.SCOPE.valueOf("COMPANY");
+				}
+				else if(scopecf[i].equalsIgnoreCase("deals"))
+				{
+					customField.scope=CustomFieldDef.SCOPE.valueOf("DEAL");
+				}			
 	    customField.save();
+		}
 	}
 	catch (DuplicateCustomFieldException e)
 	{
