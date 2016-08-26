@@ -536,5 +536,6 @@ body,input,button,select,textarea {
 
 @media (max-width: 480px){
 .categories-column{ width: 100% !important; text-align: center;}
+.search-box1 { padding-left: 0; padding-right: 0;}
 }
 			        

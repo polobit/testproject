@@ -19,13 +19,14 @@
 </div>
 {{/unless}}
 {{#if this.length}}
-    <div class="col panel wrapper">
-        <div class="hbox h-auto m-b-sm">
+    <div class="col panel wrapper p-b-xs">
+        <div class="hbox h-auto">
             <div class="pull-right">
                 <a href="#knowledgebase/add-section{{#helpcenter_url}}{{/helpcenter_url}}" class="btn btn-sm btn-default btn-addon">
                     <span><i class="icon-plus-sign"></i></span>  {{agile_lng_translate 'tickets' 'add-section'}}
                 </a>
             </div>
+            <div class="table-responsive b-n inline-block m-b-none">
             <table class="table table-striped showCheckboxes m-b-none agile-table panel table-layout-mob-view show-delete-modal" url="core/api/knowledgebase/section/bulk" data-bulk-delete-title="{{agile_lng_translate 'contact-details' 'delete'}}"
                 data-bulk-delete-msg="{{agile_lng_translate 'tickets' 'conformation-messge-for-deletion'}}" id="ticket-section-table">
                     <thead>
@@ -37,6 +38,7 @@
                     </thead>
                     <tbody id="ticket-helpcenter-sections-model-list"  class="c-p"> </tbody>
             </table>
+        </div>
         </div>
     </div>
     <div class="col w-md  wrapper pos-rlt track-milestone-text p-t-none" >
