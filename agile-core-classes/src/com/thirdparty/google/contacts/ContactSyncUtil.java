@@ -123,7 +123,7 @@ public class ContactSyncUtil
 		// Retrieves contact based on contact emails
 		List<ContactEntry> entries = retrieveContactBasedOnEmailFromGoogle(contact, prefs);
 		// List<ContactEntry> entries = new ArrayList<ContactEntry>();
-
+		System.out.println("Email entries:"+entries);
 		ContactEntry createContact = null;
 
 		// If duplicate contacts exists first contact is considered as perfect
