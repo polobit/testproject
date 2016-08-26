@@ -2432,6 +2432,11 @@ transform: translateX(-50%);}
  @media (max-width:420px){
   .ticket-name, .ticket-subject{ max-width: 14em !important;}
 } 
+.tasklist-cont{ left: 0; padding-left: 75px; right: 0;}
+.task-label{ display: table-cell; vertical-align: middle; width: 100%; padding-left: 0; position: relative;}
+.tasklist-table tbody tr td{ padding-top: 10px; padding-bottom: 11px;}
+.table-cell-list{ display: table-cell;}
+.display-table-list{ display: table;}
 
 .ticket-subject-md{ width: 56%;}
 .ticket-subj-block{ width: 60%;}

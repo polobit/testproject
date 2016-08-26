@@ -349,6 +349,8 @@ $("#activityModal").on("click", "#eventDescriptionLink", function(e){
 		$("#searchText").val("");
 		$("#searchForm").find(".dashboard-search-scroll-bar").css({"display":"none"});
 		$(this).parent().toggleClass("open");
+		$("#searchText").focus();
+		$('body').on("click",clickOutsideSearchDropdownEventHandler);
 	});
 
 	$('#searchText').on('keydown', function(e){
@@ -366,15 +368,22 @@ $("#activityModal").on("click", "#eventDescriptionLink", function(e){
 		e.stopPropagation()
 	});
 
-	$('body').on('click', function (e) {
+	function clickOutsideSearchDropdownEventHandler(e){
 	    if (!e.target.closest(".agile-search") 
 	        && $('.searchicon-dropdown').has(e.target).length === 0 
 	        && $('.open').has(e.target).length === 0 || e.which == 13
 	    ) {
-
-	        $('.searchicon-dropdown').removeClass('open');
+	    	closeSearchDropdown();
+	        
 	    }
-	});
+	}
+	 
+
+
+	function closeSearchDropdown(){
+			$('.searchicon-dropdown').removeClass('open');
+	    	$('body').unbind("click",clickOutsideSearchDropdownEventHandler);
+	}
 
 	$( '#advanced-search-fields-group a' ).on( 'click', function( event ) {
 
