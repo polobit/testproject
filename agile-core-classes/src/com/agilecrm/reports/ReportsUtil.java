@@ -538,7 +538,8 @@ public class ReportsUtil {
 									&& (field
 											.equalsIgnoreCase("last_contacted")
 											|| field.equalsIgnoreCase("last_emailed") || field
-												.equalsIgnoreCase("last_called")))
+												.equalsIgnoreCase("last_called") || field
+												.equalsIgnoreCase("updated_time")))
 								fieldValue = " ";
 							System.out.println("Field value Before:"+fieldValue);
 							if ((field.contains("time")
