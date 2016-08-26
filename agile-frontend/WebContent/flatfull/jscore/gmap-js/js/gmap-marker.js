@@ -257,6 +257,14 @@ $(document).on('click','.agile-row > tr > td', function(e) {
 		window.open(refererUrl);
 		
 	}else{
+
+		// Check propogotation classname to not navigate
+		if(e.target && $(e.target).hasClass("stop-propogate"))
+		{
+			e.stopPropogation();
+			return;
+		}
+		
 		var route = $('.agile-edit-row').attr('route');
 		// Newly added code for displaying contacts and companies in same table with different routes.
 		if($(this).closest('tr').find('[route]').length != 0)
