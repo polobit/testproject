@@ -86,6 +86,7 @@ public class ContactSavePreprocessor
 	updateUpdatedTime();
 
 	newContact.convertEmailToLower();
+	newContact.checkOwnerChange();
 
 	updateTagsEntity();
 	checkBounceStatus();

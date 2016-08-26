@@ -538,6 +538,9 @@ public class Contact extends Cursor
 	if (this.id == null || this.id == 0l)
 	    return;
 
+	// Checks Owner change
+	checkOwnerChange();
+			
 	dao.put(this);
 
 	addToSearch();
@@ -1197,9 +1200,6 @@ public class Contact extends Cursor
 	if (this.type == Type.PERSON)
 	{
 
-		// Checks Owner change
-		checkOwnerChange();
-    	
 	    System.out.println("type of contact is person");
 	    if (this.properties.size() > 0)
 	    {
@@ -1288,7 +1288,7 @@ public class Contact extends Cursor
 	
     }
 
-	private void checkOwnerChange()
+	public void checkOwnerChange()
 	{
 		try
 		{
