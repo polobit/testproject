@@ -602,10 +602,11 @@
         <property name="type" direction="asc"/>
         <property name="updated_time" direction="asc"/>
     </datastore-index>
-</datastore-indexes>
-
-<datastore-index kind="Activity" ancestor="false" source="manual">
+    <datastore-index kind="Activity" ancestor="false" source="manual">
         <property name="activity_type" direction="asc"/>
         <property name="custom1" direction="asc"/>
         <property name="time" direction="desc"/>
     </datastore-index>
+</datastore-indexes>
+
+
