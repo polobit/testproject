@@ -249,7 +249,7 @@ if(message.state == "connected"){
 		}
 		var btns = [{"id":"", "class":"btn btn-primary noty_"+widgetype+"_answer","title":"Answer"},{"id":"","class":"btn btn-danger noty_"+widgetype+"_ignore","title":'{{agile_lng_translate "contacts-view" "ignore"}}'}];
 		var json = {"callId": callId};
-		showDraggableNoty(widgetype, globalCall.contactedContact, "incoming", number, btns,json);
+		showDraggableNoty(widgetype, globalCall.contactedContact, "incoming", globalCall.callNumber, btns,json);
 	});
 }else if(message.state == "missed"){
 	var btns = [];
@@ -259,7 +259,7 @@ if(message.state == "connected"){
 	
 	var btns = [{"id":"", "class":"btn btn-default btn-sm noty_"+widgetype+"_cancel","title":'{{agile_lng_translate "contacts-view" "cancel"}}'}];
 	var json = {"callId": callId};
-	showDraggableNoty(widgetype, globalCall.contactedContact , "outgoing", number, btns, json);
+	showDraggableNoty(widgetype, globalCall.contactedContact , "outgoing", globalCall.callNumber, btns, json);
 	
 }else if(message.state == "failed"){
 	
