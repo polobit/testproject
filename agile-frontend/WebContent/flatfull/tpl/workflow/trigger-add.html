@@ -42,6 +42,9 @@
                                         <option value="DEAL_IS_DELETED">{{agile_lng_translate 'campaigns' 'deal-is-deleted'}}</option>
                                         <option value="DEAL_MILESTONE_IS_CHANGED">{{agile_lng_translate 'campaigns' 'deal-milestone-is-changed'}}</option>
 										<optgroup label="{{agile_lng_translate 'campaigns' 'timer'}}">
+										{{#isAllowedInCurrentPlan "is_activity_reports_enabled"}}
+										<option value="RUNS_HOURLY">{{agile_lng_translate 'report-add' 'hourly'}}</option>
+										{{/isAllowedInCurrentPlan}}
 										<option value="RUNS_DAILY">{{agile_lng_translate 'portlets' 'daily'}}</option>
                                         <option value="RUNS_WEEKLY">{{agile_lng_translate 'portlets' 'weekly'}}</option>
                                         <option value="RUNS_MONTHLY">{{agile_lng_translate 'portlets' 'monthly'}}</option>
