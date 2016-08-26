@@ -400,9 +400,9 @@ try{
 		contactDetailsObjId = CallLogVariables.id;
 	}else{
 		if(company_util.isCompany()){
-			contactDetailsObjId = App_Companies.companyDetailView.model.toJSON();
+			contactDetailsObjId = App_Companies.companyDetailView.model.toJSON().id;
 		} else {
-			contactDetailsObjId = App_Contacts.contactDetailView.model.toJSON();
+			contactDetailsObjId = App_Contacts.contactDetailView.model.toJSON().id;
 		}
 	}
 	
