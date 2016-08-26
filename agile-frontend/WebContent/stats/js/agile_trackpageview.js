@@ -55,6 +55,7 @@ function agile_trackPageview(callback)
 
 	agile_json(agile_url_new);
 
+
 }
 
 function agile_trackingDomain(host){
