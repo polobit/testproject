@@ -2,7 +2,6 @@ function loadAgileCRMForm(id){
 	id = id.split("_");
 	var agileDomain = id[0];
 	var formId = id[id.length-1];
-    console.log("domain is :"+agileDomain);
 	var script = document.createElement('script');
     script.src = window.location.protocol+'//'+agileDomain+'.agilecrm.com/core/api/forms/form/js/'+formId;
     document.body.appendChild(script);      
@@ -11,27 +10,22 @@ function loadAgileCRMForm(id){
 function showAgileCRMForm(formJson,formHolderId) {   
 	document.getElementById(formHolderId).innerHTML = formJson.formHtml;
 	var onloadScript = document.getElementById(formHolderId).getElementsByTagName("script");
-	console.log(onloadScript);
     onloadScript = onloadScript[0].innerHTML;
-    console.log(onloadScript);
 	var script = document.createElement('script');
     script.id = "agileCRMFormLoadScript";
     script.text = onloadScript;
     document.body.appendChild(script);
 
-    /*form preaload for the   */
+    /*form preload for the   */
 
     var formJsonObj = JSON.parse(formJson.formJson);
     for (var key in formJsonObj[0].fields.agilepreloadfields["value"]) { 
         if(formJsonObj[0].fields.agilepreloadfields["value"][key]["selected"]) {
-            if(formJsonObj[0].fields.agilepreloadfields["value"][key]["value"]=="true"
-                ) {
+            if(formJsonObj[0].fields.agilepreloadfields["value"][key]["value"]=="true") {
                 _agile_load_form_fields();
             }
         }
     }
-
-
 
 }
 
