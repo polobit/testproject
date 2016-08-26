@@ -102,62 +102,73 @@
         <%
 				      if(MobileUADetector.isMobile(request.getHeader("user-agent"))){
 				   %>
-		        <li class="dropdown hide visible-xs pull-right wrapper-sm p-t p-r-md searchicon-dropdown show-search-dropdown" id="menu2">
-				    <a class="dropdown-toggle" data-toggle="dropdown" href=""><i class="fa fa-search"></i></a>
-				    <ul class="dropdown-menu search-view mobile-search-view animated fadeInRight agile-search" role="menu" style="right:-15px;min-width:100% !important">
-				      	<div class="col-sm-12">
-							<form class=" m-t-sm m-b-sm searchForm" id="searchForm" role="search">
-							<div class="input-group add-on">
-							<input type="text" id="searchText" data-provide="typeahead"
-												class="typeahead form-control r-5x typeahead_contacts form-control-custom"
-												placeholder='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "search")%>' onclick="Agile_GA_Event_Tracker.track_event('Search option in Nav Bar')">
-							<div class="input-group-btn">
+		        <li class="pull-right list-none">
+					<div class="dropdown m-l-sm navbar-searchicon searchicon-dropdown">
+					<button class="fa fa-search text-base p-n btn btn-sm dropdown-toggle no-shadow bg-transparent b-n show-search-dropdown" type="button"></button>
+					<ul class="dropdown-menu search-view animated fadeInRight agile-search mobile-search-view pos-r-0" style="left:auto">
 
-							<a class="btn btn-default no-shadow" href="#" id="speechDectation"src="https://i.imgur.com/cHidSVu.gif"  ><i class="icon-microphone"></i></a>
+					<div class="col-sm-12">
 
-							<button class="btn btn-default no-shadow r-5x" id="search-results" type="submit"><i class="fa fa-search"></i></button>
-							</div>
-							</div>
-							</form>
-						</div>
+					<form class=" m-t-sm m-b-sm searchForm" id="searchForm" role="search">
+					<div class="input-group add-on">
+					<input type="text" id="searchText" data-provide="typeahead"
+										class="typeahead form-control r-5x typeahead_contacts form-control-custom"
+										placeholder='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "search")%>' onclick="Agile_GA_Event_Tracker.track_event('Search option in Nav Bar')">
+					<div class="input-group-btn">
 
-						<li>
-							<ul class="col-sm-12 list-none search-filters" id="advanced-search-fields-group" name="fields_set">
-								<li>
-					       		  		<a href="javascript:void(0);" class="p-b-none">
-											<label class="i-checks i-checks-sm searchtypeall "><input name="all" value = "" type="checkbox" class="choose-column-chbx"><i></i></label><%=LanguageUtil.getLocaleJSONValue(localeJSON, "all")%></a>
-								</li>
-				                   	           			
-								<li>
-						  			<a href="javascript:void(0);" class="p-b-none">
-									<label class="i-checks i-checks-sm  searchtype"><input name="person" value = "person" type="checkbox" class="choose-column-chbx"><i></i></label><%=LanguageUtil.getLocaleJSONValue(localeJSON, "contacts")%></a>
-								</li>
+					<a class="btn btn-default no-shadow" href="#" id="speechDectation"src="https://i.imgur.com/cHidSVu.gif"  ><i class="icon-microphone"></i></a>
 
-								<li>
-								<a href="javascript:void(0);" class="p-b-none">
-											<label class="i-checks i-checks-sm  searchtype"><input name="company" value = "company" type="checkbox" class="choose-column-chbx"><i></i></label><%=LanguageUtil.getLocaleJSONValue(localeJSON, "companies")%></a>
-								</li>
+					<button class="btn btn-default no-shadow r-5x" id="search-results" type="submit"><i class="fa fa-search"></i></button>
+					</div>
+					</div>
+					</form>
 
-								<li>
-								<a href="javascript:void(0);" class="p-b-none">
-											<label class="i-checks i-checks-sm  searchtype"><input name="opportunity" value = "opportunity" type="checkbox" class="choose-column-chbx"><i></i></label><%=LanguageUtil.getLocaleJSONValue(localeJSON, "deals")%></a>
-								</li>
+					</div>
 
-								<li>
-								<a href="javascript:void(0);" class="p-b-none">
-											<label class="i-checks i-checks-sm  searchtype"><input name="document" value = "document" type="checkbox" class="choose-column-chbx"><i></i></label><%=LanguageUtil.getLocaleJSONValue(localeJSON, "documents")%></a>
-								</li>
+					
 
-								<li>
-								<a href="javascript:void(0);" class="p-b-none">
-											<label class="i-checks i-checks-sm  searchtype"><input name="tickets" value = "tickets" type="checkbox" class="choose-column-chbx"><i></i></label><%=LanguageUtil.getLocaleJSONValue(localeJSON, "tickets")%></a>
 
-								</li>
-				        			
-				        	</ul>
-							</li>
-				    </ul> 
-				</li>
+
+					<li>
+					<ul class="col-sm-12 list-none search-filters" id="advanced-search-fields-group" name="fields_set">
+					<li>
+		       		  		<a href="javascript:void(0);" class="p-b-none">
+								<label class="i-checks i-checks-sm searchtypeall "><input name="all" value = "" type="checkbox" class="choose-column-chbx"><i></i></label><%=LanguageUtil.getLocaleJSONValue(localeJSON, "all")%></a>
+					</li>
+	                   	           			
+					<li>
+   		  			<a href="javascript:void(0);" class="p-b-none">
+						<label class="i-checks i-checks-sm  searchtype"><input name="person" value = "person" type="checkbox" class="choose-column-chbx"><i></i></label><%=LanguageUtil.getLocaleJSONValue(localeJSON, "contacts")%></a>
+					</li>
+
+					<li>
+					<a href="javascript:void(0);" class="p-b-none">
+								<label class="i-checks i-checks-sm  searchtype"><input name="company" value = "company" type="checkbox" class="choose-column-chbx"><i></i></label><%=LanguageUtil.getLocaleJSONValue(localeJSON, "companies")%></a>
+					</li>
+
+					<li>
+					<a href="javascript:void(0);" class="p-b-none">
+								<label class="i-checks i-checks-sm  searchtype"><input name="opportunity" value = "opportunity" type="checkbox" class="choose-column-chbx"><i></i></label><%=LanguageUtil.getLocaleJSONValue(localeJSON, "deals")%></a>
+					</li>
+
+					<li>
+					<a href="javascript:void(0);" class="p-b-none">
+								<label class="i-checks i-checks-sm  searchtype"><input name="document" value = "document" type="checkbox" class="choose-column-chbx"><i></i></label><%=LanguageUtil.getLocaleJSONValue(localeJSON, "documents")%></a>
+					</li>
+
+					<li>
+					<a href="javascript:void(0);" class="p-b-none">
+								<label class="i-checks i-checks-sm  searchtype"><input name="tickets" value = "tickets" type="checkbox" class="choose-column-chbx"><i></i></label><%=LanguageUtil.getLocaleJSONValue(localeJSON, "tickets")%></a>
+
+					</li>
+                			
+                	</ul>
+          
+					</li>
+
+					</ul>
+					</div>
+					</li>
 		<%
 			}
 		%>
@@ -281,6 +292,7 @@
 					</div>
 
 					
+
 
 
 					<li>
