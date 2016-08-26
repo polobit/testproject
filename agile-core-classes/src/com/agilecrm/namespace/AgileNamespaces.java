@@ -49,7 +49,7 @@ public class AgileNamespaces
 		try
 		{
 			
-			Query q = new Query(Entities.NAMESPACE_METADATA_KIND);
+			Query q = new Query(Entities.NAMESPACE_METADATA_KIND).setKeysOnly();
 			PreparedQuery pq = ds.prepare(q);
 			
 			results = pq.asQueryResultList(options);
