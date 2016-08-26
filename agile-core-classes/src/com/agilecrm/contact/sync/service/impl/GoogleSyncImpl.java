@@ -518,8 +518,11 @@ public class GoogleSyncImpl extends TwoWaySyncService
 
 	    if (!skip)
 	    {
+	    	try
+	    	{
 		    if(createContact.getId() == null)
 		    {
+		    	System.out.println("Inside_Create of Create");
 				BatchUtils.setBatchOperationType(createContact, BatchOperationType.INSERT);
 				BatchUtils.setBatchId(createContact,"create");
 				requestFeed.getEntries().add(createContact);
@@ -528,11 +531,17 @@ public class GoogleSyncImpl extends TwoWaySyncService
 		    {
 		    	//If contact already present in google with this email, we just update this
 		    	//instead of creating new contact
+		    	System.out.println("Inside_update of Create");
 				BatchUtils.setBatchOperationType(createContact, BatchOperationType.UPDATE);
 				BatchUtils.setBatchId(createContact,"update");
 				requestFeed.getEntries().add(createContact);
 		    }
 			insertRequestCount++;
+	    }
+		catch(Exception e)
+		{
+			System.out.println("Exception occured while updating contact:"+e);
+		}
 	    }
 
 	    if (insertRequestCount >= 95 || (i >= contacts.size() - 1 && insertRequestCount != 0))
@@ -635,8 +644,11 @@ public class GoogleSyncImpl extends TwoWaySyncService
 		}
 		if (!skip)
 		{
+			
+			try{
 			 if(createContact.getId() == null)
 			    {
+				 System.out.println("Inside_create_of_update");
 					BatchUtils.setBatchOperationType(createContact, BatchOperationType.INSERT);
 					BatchUtils.setBatchId(createContact,"create");
 					updateFeed.getEntries().add(createContact);
@@ -645,11 +657,17 @@ public class GoogleSyncImpl extends TwoWaySyncService
 			    {
 			    	//If contact already present in google with this email, we just update this
 			    	//instead of creating new contact
+			    	System.out.println("Inside_update_of_update");
 					BatchUtils.setBatchOperationType(createContact, BatchOperationType.UPDATE);
 					BatchUtils.setBatchId(createContact,"update");
 					updateFeed.getEntries().add(createContact);
 			    }
 				updateRequestCount++;
+			}
+			catch(Exception e)
+			{
+				System.out.println("Exception occured while updating contact:"+e);
+			}
 		}
 		    
 		if (updateRequestCount >= 95 || ((i >= (contacts.size() - 1) && updateRequestCount != 0)))
