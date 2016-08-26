@@ -165,7 +165,7 @@ function globalCallWidgetSet()
 							var name = widgetCallName[obj.name];
 							$(".dialler-widget-name-" + name).removeClass("none");
 							$(".dialler-widget-name-" + name +"> a").removeClass("inactive");
-							$(".dialler-widget-name-" + name +"> a").addClass("active");
+							$(".dialler-widget-name-" + name +"> a").addClass("actives");
 						});
 						
 						// saving the name in local storage to show in direct dial 

@@ -27,7 +27,7 @@ $(function()
 							$(".dialler-widget-name-" + name +"> a").removeClass("inactive");
 							$(".dialler-widget-name-" + name).removeClass("none");
 							$(".dialler-widget-name-" + name +"> a").removeClass("selected-widget");
-							$(".dialler-widget-name-" + name +"> a").addClass("active");
+							$(".dialler-widget-name-" + name +"> a").addClass("actives");
 							
 						});
 				// selecting the default widget or preffed widget		
@@ -75,7 +75,7 @@ $(function()
 	$('#agilecrm-container #direct-dialler-div').on('click', '.dialler-widget-li', function(e)
 			{
 			  	e.preventDefault();
-			  	var flag = $(this).find("a").hasClass("active");
+			  	var flag = $(this).find("a").hasClass("actives");
 			  	if(!flag){
 			  		return;
 			  	}
