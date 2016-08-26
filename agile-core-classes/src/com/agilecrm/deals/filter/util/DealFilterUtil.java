@@ -15,12 +15,15 @@ import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.deals.Opportunity;
 import com.agilecrm.deals.filter.DealFilter;
 import com.agilecrm.search.AppengineSearch;
+import com.agilecrm.search.document.OpportunityDocument;
+import com.agilecrm.search.query.QueryDocument;
 import com.agilecrm.search.ui.serialize.SearchRule;
 import com.agilecrm.search.ui.serialize.SearchRule.RuleCondition;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.access.UserAccessControl;
 import com.agilecrm.user.access.util.UserAccessControlUtil;
 import com.agilecrm.user.util.DomainUserUtil;
+import com.google.appengine.api.search.ScoredDocument;
 import com.itextpdf.text.pdf.PdfStructTreeController.returnType;
 
 public class DealFilterUtil {
@@ -403,5 +406,70 @@ public class DealFilterUtil {
 			}
 		}
 	}
+	
+	@SuppressWarnings("unchecked")
+	public static List<ScoredDocument> getDealSearchDocs(String id, Integer count, String cursor, String orderBy, String pipeline_id, String milstone)
+    {
+	DealFilter filter = null;
+	try
+	{
+		QueryDocument<Opportunity> queryInstace = new QueryDocument<Opportunity>(new OpportunityDocument().getIndex(), Opportunity.class);
+		
+	    System.out.println("cursor : " + cursor + ", count : " + count);
+	    
+	    if(id != null && !id.equalsIgnoreCase("my-deals") && !id.equalsIgnoreCase("null") && StringUtils.isNotEmpty(id))
+	    {
+	    	filter = getDealFilter(Long.valueOf(id));
+	    	if(filter != null && filter.archived != null)
+	    	{
+	    		setOldFiltersData(filter);
+	    	}
+	    	if(filter == null)
+	    	{
+	    		filter = new DealFilter();
+	    		id = "";
+	    	}
+	    	changeStateFilter(filter);
+	    }
+	    else if(id != null && id.equalsIgnoreCase("my-deals"))
+	    {
+	    	filter = new DealFilter();
+	    	setDefaultOwner(filter);
+	    }
+	    else
+	    {
+	    	filter = new DealFilter();
+	    }
+	    
+	    setTrackAndMilestoneFilters(filter, pipeline_id, milstone);
+	    
+	    if(id != null && (id.equalsIgnoreCase("my-deals") || id.equalsIgnoreCase("null") || StringUtils.isEmpty(id)))
+	    {
+	    	setDefaultState(filter);
+	    }
+	    
+	    SearchRule rule = new SearchRule();
+	    rule.LHS = "type";
+	    rule.CONDITION = RuleCondition.EQUALS;
+	    rule.RHS = "Opportunity";
+	    filter.rules.add(rule);
+	    rule = new SearchRule();
+	    rule.LHS = "schema_version";
+	    rule.CONDITION = RuleCondition.EQUALS;
+	    rule.RHS = "1.0";	    
+	    filter.rules.add(rule);
+
+	    // Sets ACL condition
+	    UserAccessControlUtil.checkReadAccessAndModifyTextSearchQuery(UserAccessControl.AccessControlClasses.Opportunity.toString(), filter.rules, null);
+	    
+	    // Fetches 200 deals for every iteration
+	 	return queryInstace.advancedSearchOnlyIds(filter, count, cursor, null);
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
+    }
 
 }

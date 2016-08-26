@@ -14,8 +14,6 @@ import java.util.Set;
 import java.util.TimeZone;
 import java.util.TreeSet;
 
-import javax.xml.bind.annotation.XmlElement;
-
 import net.sf.json.JSONObject;
 
 import org.apache.commons.lang.StringUtils;
@@ -33,17 +31,17 @@ import com.agilecrm.contact.CustomFieldDef.SCOPE;
 import com.agilecrm.contact.CustomFieldDef.Type;
 import com.agilecrm.contact.Note;
 import com.agilecrm.contact.util.CustomFieldDefUtil;
-import com.agilecrm.core.api.deals.MilestoneAPI;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.deals.Milestone;
 import com.agilecrm.deals.Opportunity;
+import com.agilecrm.deals.filter.DealFilter;
 import com.agilecrm.deals.filter.util.DealFilterUtil;
-import com.agilecrm.projectedpojos.DomainUserPartial;
 import com.agilecrm.projectedpojos.OpportunityPartial;
 import com.agilecrm.projectedpojos.PartialDAO;
 import com.agilecrm.reports.ReportsUtil;
 import com.agilecrm.search.AppengineSearch;
 import com.agilecrm.search.document.OpportunityDocument;
+import com.agilecrm.search.query.QueryDocument;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.UserPrefs;
@@ -61,21 +59,14 @@ import com.google.appengine.api.datastore.PropertyProjection;
 import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.datastore.Query.SortDirection;
 import com.google.appengine.api.search.Document.Builder;
-import com.google.appengine.api.NamespaceManager;
-import com.google.appengine.api.datastore.DatastoreService;
-import com.google.appengine.api.datastore.DatastoreServiceFactory;
-import com.google.appengine.api.datastore.Entity;
-import com.google.appengine.api.datastore.KeyFactory;
-import com.google.appengine.api.datastore.PropertyProjection;
-import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.search.Index;
+import com.google.appengine.api.search.ScoredDocument;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
 import com.google.appengine.api.taskqueue.TaskOptions.Method;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Query;
-import com.googlecode.objectify.cache.CachingDatastoreServiceFactory;
 
 /**
  * <code>OpportunityUtil</code> is the utility class to fetch opportunities with
@@ -1834,14 +1825,32 @@ public class OpportunityUtil
 	    }
 	    else
 	    {
-		deals = DealFilterUtil.getDeals(filter, count, null, "created_time", null, null);
-		Integer deals_count = deals.get(deals.size() - 1).count;
-		String cursor = deals.get(deals.size() - 1).cursor;
-		while (deals_count != null && deals != null && deals_count != deals.size())
-		{
-		    deals.addAll(DealFilterUtil.getDeals(filter, count, cursor, "created_time", null, null));
-		    cursor = deals.get(deals.size() - 1).cursor;
-		}
+	    String cursor = null;
+	    Set<Key<Opportunity>> dealsSet = new HashSet<Key<Opportunity>>();
+	    
+	    List<ScoredDocument> scoredDocuments = DealFilterUtil.getDealSearchDocs(filter, 200, cursor, "created_time", null, null);
+	    
+	    while(scoredDocuments != null && scoredDocuments.size() > 0)
+	    {
+			for (ScoredDocument doc : scoredDocuments)
+			{
+			    try
+			    {
+			    dealsSet.add(new Key<Opportunity>(Opportunity.class, Long.parseLong(doc.getId())));
+			    }
+			    catch (Exception e)
+			    {
+				e.printStackTrace();
+			    }
+			}
+
+			ScoredDocument doc = scoredDocuments.get(scoredDocuments.size() - 1);
+		    cursor = doc.getCursor().toWebSafeString();
+		    
+		    deals.addAll(Opportunity.dao.fetchAllByKeys(new ArrayList<Key<Opportunity>>(dealsSet)));
+		    
+		    scoredDocuments = DealFilterUtil.getDealSearchDocs(filter, 200, cursor, "created_time", null, null);
+	    }
 	    }
 	}
 	catch (JSONException je)
