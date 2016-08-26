@@ -8,6 +8,7 @@ import org.apache.commons.lang.exception.ExceptionUtils;
 import com.google.appengine.api.datastore.Cursor;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.DatastoreTimeoutException;
 import com.google.appengine.api.datastore.Entities;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.FetchOptions;
@@ -43,13 +44,14 @@ public class AgileNamespaces
 		if (cursor != null)
 			options.startCursor(Cursor.fromWebSafeString(cursor));
 		
-		Query q = new Query(Entities.NAMESPACE_METADATA_KIND);
-		PreparedQuery pq = ds.prepare(q);
-
 		QueryResultList<Entity> results;
 
 		try
 		{
+			
+			Query q = new Query(Entities.NAMESPACE_METADATA_KIND);
+			PreparedQuery pq = ds.prepare(q);
+			
 			results = pq.asQueryResultList(options);
 			
 			if(results == null || results.size() == 0)
@@ -68,9 +70,14 @@ public class AgileNamespaces
 			addToSet(results);
 
 		}
-		catch (IllegalArgumentException e)
+		catch(DatastoreTimeoutException dte)
 		{
-			
+			System.err.println("Datastore Timeout Exception occured...");
+			System.out.println(ExceptionUtils.getFullStackTrace(dte));
+		}
+		catch (Exception e)
+		{
+			System.err.println("Exception occured: " + ExceptionUtils.getFullStackTrace(e));
 		}
 	}
 
