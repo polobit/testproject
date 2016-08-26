@@ -1830,6 +1830,7 @@ public class OpportunityUtil
 	    
 	    List<ScoredDocument> scoredDocuments = DealFilterUtil.getDealSearchDocs(filter, 200, cursor, "created_time", null, null);
 	    
+	    System.out.println("Start----- Deals fetching in bulk actions with textsearch");
 	    while(scoredDocuments != null && scoredDocuments.size() > 0)
 	    {
 			for (ScoredDocument doc : scoredDocuments)
@@ -1851,6 +1852,7 @@ public class OpportunityUtil
 		    
 		    scoredDocuments = DealFilterUtil.getDealSearchDocs(filter, 200, cursor, "created_time", null, null);
 	    }
+	    System.out.println("End----- Deals fetching in bulk actions with textsearch");
 	    }
 	}
 	catch (JSONException je)
