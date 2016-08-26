@@ -419,9 +419,12 @@ public class AgileForm extends HttpServlet
      */
     
     private void updateContactWithOldTag(Contact contact, String [] tags){
-    	for(String tag:tags){
-    		contact.addTag(new Tag(tag));
+    	if (!ArrayUtils.isEmpty(tags)){
+	    	for(String tag:tags)
+	    	{
+	    	  contact.addTag(new Tag(tag));
+	    	}
     	}
-    contact.save();
+      contact.save();
     }
 }
