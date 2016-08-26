@@ -1,17 +1,19 @@
 package com.campaignio.tasklets.agile;
 
-import java.net.URLEncoder;
+import static com.agilecrm.util.DateUtil.CustomFieldDateFormat;
+import static com.agilecrm.util.DateUtil.CustomFieldDateRegEx;
+import static com.agilecrm.util.DateUtil.WaitTillDateFormat;
+
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Iterator;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-import org.apache.commons.lang.StringEscapeUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import com.agilecrm.util.HTTPUtil;
-import com.campaignio.logger.Log.LogType;
-import com.campaignio.logger.util.LogUtil;
+import com.agilecrm.util.DateUtil;
 import com.campaignio.tasklets.TaskletAdapter;
 import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
 import com.campaignio.tasklets.util.TaskletUtil;
@@ -27,6 +29,9 @@ import com.campaignio.tasklets.util.TaskletUtil;
  */
 public class NewCondition extends TaskletAdapter
 {
+	
+	public static Pattern customDateFieldPattern = Pattern.compile(CustomFieldDateRegEx);
+	
 	/**
 	 * If type - value or string length
 	 */
@@ -124,10 +129,9 @@ public class NewCondition extends TaskletAdapter
 	 * org.json.JSONObject, org.json.JSONObject, org.json.JSONObject)
 	 */
 	public void run(JSONObject campaignJSON, JSONObject subscriberJSON, JSONObject data, JSONObject nodeJSON)
-			throws Exception
-	{
+			throws Exception {
 		
-		String andHttpParams = "";
+		String timezone = null;
 		boolean flag1 = true;
 		boolean flag2 = false;
 
@@ -138,199 +142,172 @@ public class NewCondition extends TaskletAdapter
 
 			JSONArray andParamsJSONArray = new JSONArray(andParamsJSONArrayString);
 			
+			timezone = AgileTaskletUtil.getTimezone(subscriberJSON.getJSONObject("data"));
+			
 		    // Iterate through json array having key-value pairs
-		    for (int i = 0; i < andParamsJSONArray.length(); i++)
+		    for(int i = 0; i < andParamsJSONArray.length(); i++)
 		    {
-			JSONObject andParamJSON = andParamsJSONArray.getJSONObject(i);
-
-			String ifType = andParamJSON.getString("and_if_type");
-			//String conditionMerge = andParamJSON.getString("and_condition_merge");
-			String variable1 = andParamJSON.getString("and_variable");
-			String comparator = andParamJSON.getString("and_comparator");
-			String variable2 = andParamJSON.getString("and_variable_2");
-			flag1 = flag1 & evaluateExpression(variable1, variable2, ifType,comparator);
+				JSONObject andParamJSON = andParamsJSONArray.getJSONObject(i);
+	
+				String ifType = andParamJSON.getString("and_if_type");
+				//String conditionMerge = andParamJSON.getString("and_condition_merge");
+				String variable1 = andParamJSON.getString("and_variable");
+				String comparator = andParamJSON.getString("and_comparator");
+				String variable2 = andParamJSON.getString("and_variable_2");
+				
+				flag1 = flag1 & evaluateExpression(variable1, variable2, ifType,comparator, timezone);
 		    }
 		}
-		catch (Exception e)
-		{
+		catch(Exception e) {
 		    e.printStackTrace();
 		    data.put("error", e.getMessage());
-
-		    
 		}
 		
-				String orHttpParams = "";
-				try
-				{
-					// Parameters
-					String orParamsJSONArrayString = getStringValue(nodeJSON, subscriberJSON, data, OR_PARAMETERS);
+		try {
+			// Parameters
+			String orParamsJSONArrayString = getStringValue(nodeJSON, subscriberJSON, data, OR_PARAMETERS);
 
-					JSONArray orParamsJSONArray = new JSONArray(orParamsJSONArrayString);
-					
-					if (orParamsJSONArray.length() == 0){
-						flag2 = true;
-					}
-					
-				    // Iterate through json array having key-value pairs
-				    for (int i = 0; i < orParamsJSONArray.length(); i++)
-				    {
-					JSONObject orParamJSON = orParamsJSONArray.getJSONObject(i);
-
-					String ifType = orParamJSON.getString("or_if_type");
-					//String conditionMerge = orParamJSON.getString("or_condition_merge");
-					String variable1 = orParamJSON.getString("or_variable");
-					String comparator = orParamJSON.getString("or_comparator");
-					String variable2 = orParamJSON.getString("or_variable_2");
-					flag2 = flag2 | evaluateExpression(variable1, variable2, ifType,comparator);
-				    }
-				}
-				catch (Exception e)
-				{
-				    e.printStackTrace();
-				    data.put("error", e.getMessage());
-
-				    
-				}
-				String branch = "";
-				if(flag1 && flag2 ){
-					branch = BRANCH_YES;
-				}else{
-					branch = BRANCH_NO;
-				}
+			JSONArray orParamsJSONArray = new JSONArray(orParamsJSONArrayString);
+			
+			if(orParamsJSONArray.length() == 0){
+				flag2 = true;
+			}
+			
+		    // Iterate through json array having key-value pairs
+		    for(int i = 0; i < orParamsJSONArray.length(); i++)
+		    {
+				JSONObject orParamJSON = orParamsJSONArray.getJSONObject(i);
+	
+				String ifType = orParamJSON.getString("or_if_type");
+				//String conditionMerge = orParamJSON.getString("or_condition_merge");
+				String variable1 = orParamJSON.getString("or_variable");
+				String comparator = orParamJSON.getString("or_comparator");
+				String variable2 = orParamJSON.getString("or_variable_2");
+				
+				flag2 = flag2 | evaluateExpression(variable1, variable2, ifType,comparator, timezone);
+		    }
+		}
+		catch(Exception e) {
+		    e.printStackTrace();
+		    data.put("error", e.getMessage());
+		}
+		
+		String branch = "";
+		if(flag1 && flag2 ){
+			branch = BRANCH_YES;
+		} else {
+			branch = BRANCH_NO;
+		}
 	
 		// Go to next tasks
 		TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, branch);
 	}
 	
-	public static boolean evaluateExpression(String variable1, String variable2, String ifType,String comparator){
-		// Get Variables
+	public static boolean evaluateExpression(String variable1, String variable2, String ifType,
+			String comparator, String timezone) {
 				
-				boolean branch = false;
-				
-				try
-				{
+		boolean branch = false;
+		
+		try {
+			// Trim the variables-omitting whitespaces
+			if(variable1 != null)
+				variable1 = variable1.trim();
+			if(variable2 != null)
+				variable2 = variable2.trim();
 
-					// Trim the variables-omitting whitespaces
-					if (variable1 != null)
-						variable1 = variable1.trim();
-					if (variable2 != null)
-						variable2 = variable2.trim();
+			if(ifType.equalsIgnoreCase(IF_TYPE_STRLEN))
+				variable1 = variable1.length() + "";
 
-					if (ifType.equalsIgnoreCase(IF_TYPE_STRLEN))
-						variable1 = variable1.length() + "";
+			System.out.println("Variables: " + variable1 + " " + variable2 + " " + comparator);
+			
+			variable1 = convertDateFormat(variable1, timezone);
+			variable2 = convertDateFormat(variable2, timezone);
 
-					System.out.println("Variable 1: " + variable1 + " " + variable2 + " " + comparator);
-
-					// Do the required operation. If matches send to yes
-					if (comparator.equalsIgnoreCase(COMPARATOR_LESS_THAN))
-					{
-
-						if (variable1.contains("/") && variable2.contains("/"))
-						{
-							if (compareDateValues(variable1, variable2) < 0)
-							{
-								branch = true;
-							}
-						}
-						else
-						{
-							// Convert the string into Integer and check
-							if (Long.parseLong(variable1) < Long.parseLong(variable2))
-								branch = true;
-						}
+			System.out.println("ConvertedVariables: " + variable1 + " " + variable2 + " " + comparator);
+			
+			// Do the required operation. If matches send to yes
+			if(comparator.equalsIgnoreCase(COMPARATOR_LESS_THAN)) {
+				if(variable1.contains("/") && variable2.contains("/")) {
+					if(compareDateValues(variable1, variable2) < 0) {
+						branch = true;
 					}
-
-					if (comparator.equalsIgnoreCase(COMPARATOR_LESS_THAN_OR_EQUAL_TO))
-					{
-
-						if (variable1.contains("/") && variable2.contains("/"))
-						{
-							if (compareDateValues(variable1, variable2) <= 0)
-							{
-								branch = true;
-							}
-						}
-						else
-						{
-							// Convert the string into Integer and check
-							if (Long.parseLong(variable1) <= Long.parseLong(variable2))
-								branch = true;
-						}
-					}
-
-					if (comparator.equalsIgnoreCase(COMPARATOR_GREATER_THAN))
-					{
-						if (variable1.contains("/") && variable2.contains("/"))
-						{
-							if (compareDateValues(variable1, variable2) > 0)
-							{
-								branch = true;
-							}
-						}
-						else
-						{
-
-							if (Long.parseLong(variable1) > Long.parseLong(variable2))
-								branch = true;
-						}
-					}
-
-					if (comparator.equalsIgnoreCase(COMPARATOR_GREATER_THAN_OR_EQUAL_TO))
-					{
-						if (variable1.contains("/") && variable2.contains("/"))
-						{
-							if (compareDateValues(variable1, variable2) >= 0)
-							{
-								branch = true;
-							}
-						}
-						else
-						{
-							if (Long.parseLong(variable1) >= Long.parseLong(variable2))
-								branch = true;
-						}
-					}
-
-					if (comparator.equalsIgnoreCase(COMPARATOR_NOT_EQUAL_TO))
-					{
-						if (!variable1.equalsIgnoreCase(variable2))
-							branch = true;
-					}
-
-					if (comparator.equalsIgnoreCase(COMPARATOR_EQUAL_TO))
-					{
-						if (variable1.equalsIgnoreCase(variable2))
-							branch = true;
-					}
-
-					if (comparator.equalsIgnoreCase(COMPARATOR_CONTAINS))
-					{
-						if (variable1.toLowerCase().contains(variable2.toLowerCase()))
-							branch = true;
-					}
-					
-					if (comparator.equalsIgnoreCase(COMPARATOR_IN))
-					{
-						String[] variables = variable2.split(",");
-						for (int i = 0; i < variables.length; i++) {
-							if (variable1.toLowerCase().equalsIgnoreCase(variables[i].trim().toLowerCase())) {
-								branch = true;
-								break;
-							}
-
-					}
-
+				}
+				else {
+					// Convert the string into Integer and check
+					if(Long.parseLong(variable1) < Long.parseLong(variable2))
+						branch = true;
+				}
 			}
 
+			if(comparator.equalsIgnoreCase(COMPARATOR_LESS_THAN_OR_EQUAL_TO)) {
+				if(variable1.contains("/") && variable2.contains("/")) {
+					if(compareDateValues(variable1, variable2) <= 0) {
+						branch = true;
+					}
 				}
-				catch (Exception e)
-				{
-					e.printStackTrace();
-					System.out.println("Exception occured while executing Condition node: " + e.getMessage());
+				else {
+					// Convert the string into Integer and check
+					if(Long.parseLong(variable1) <= Long.parseLong(variable2))
+						branch = true;
 				}
-				
-				return branch;
-				
+			}
+
+			if(comparator.equalsIgnoreCase(COMPARATOR_GREATER_THAN)) {
+				if(variable1.contains("/") && variable2.contains("/")) {
+					if(compareDateValues(variable1, variable2) > 0) {
+						branch = true;
+					}
+				}
+				else {
+					if(Long.parseLong(variable1) > Long.parseLong(variable2))
+						branch = true;
+				}
+			}
+
+			if(comparator.equalsIgnoreCase(COMPARATOR_GREATER_THAN_OR_EQUAL_TO)) {
+				if(variable1.contains("/") && variable2.contains("/")) {
+					if(compareDateValues(variable1, variable2) >= 0) {
+						branch = true;
+					}
+				}
+				else {
+					if(Long.parseLong(variable1) >= Long.parseLong(variable2))
+						branch = true;
+				}
+			}
+
+			if(comparator.equalsIgnoreCase(COMPARATOR_NOT_EQUAL_TO)) {
+				if(!variable1.equalsIgnoreCase(variable2))
+					branch = true;
+			}
+
+			if(comparator.equalsIgnoreCase(COMPARATOR_EQUAL_TO)) {
+				if(variable1.equalsIgnoreCase(variable2))
+					branch = true;
+			}
+
+			if(comparator.equalsIgnoreCase(COMPARATOR_CONTAINS)) {
+				if(variable1.toLowerCase().contains(variable2.toLowerCase()))
+					branch = true;
+			}
+			
+			if(comparator.equalsIgnoreCase(COMPARATOR_IN)) {
+				String[] variables = variable2.split(",");
+				for(int i = 0; i < variables.length; i++) {
+					if(variable1.toLowerCase().equalsIgnoreCase(variables[i].trim().toLowerCase())) {
+						branch = true;
+						break;
+					}
+				}
+			}
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			System.out.println("Exception occured while executing Condition node: " + e.getMessage());
+		}
+		
+		return branch;
 	}
 
 	/**
@@ -358,4 +335,29 @@ public class NewCondition extends TaskletAdapter
 			return null;
 		}
 	}
+	
+	/**
+	 * This method is to convert the date format from 'dd MMM yyyy' pattern
+	 * to MM/dd/yyyy pattern in order to compare the dates in Condition node.
+	 * 
+	 * @param variable
+	 * @return
+	 */
+	public static String convertDateFormat(String variable, String timezone) {
+
+		Matcher dateMatcher = customDateFieldPattern.matcher(variable);
+		
+		if(dateMatcher.matches()) {
+			SimpleDateFormat sdf = new SimpleDateFormat(CustomFieldDateFormat);
+			try {
+				variable = DateUtil.getCalendarString(sdf.parse(variable).getTime(), WaitTillDateFormat, timezone);
+			} 
+			catch(ParseException e) {
+				e.printStackTrace();
+			}
+			System.out.println("converted date: " + variable);
+		}
+		return variable;
+	}
+	
 }

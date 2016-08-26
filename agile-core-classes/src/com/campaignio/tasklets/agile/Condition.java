@@ -6,6 +6,7 @@ import java.util.Date;
 import org.json.JSONObject;
 
 import com.campaignio.tasklets.TaskletAdapter;
+import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
 import com.campaignio.tasklets.util.TaskletUtil;
 
 /**
@@ -112,24 +113,24 @@ public class Condition extends TaskletAdapter
 		
 		try
 		{
-
-			// Trim the variables-omitting whitespaces
 			if (variable1 != null)
 				variable1 = variable1.trim();
 			if (variable2 != null)
 				variable2 = variable2.trim();
 
-			// If Type
 			String ifType = getStringValue(nodeJSON, subscriberJSON, data, IF_TYPE);
 			if (ifType.equalsIgnoreCase(IF_TYPE_STRLEN))
 				variable1 = variable1.length() + "";
 
-			
-
 			String comparator = getStringValue(nodeJSON, subscriberJSON, data, COMPARATOR);
 
-			System.out.println("Variable 1: " + variable1 + " " + variable2 + " " + comparator);
+			System.out.println("Variables 1&2 : " + variable1 + " " + variable2 + " " + comparator);
+	  		  
+			String timezone = AgileTaskletUtil.getTimezone(subscriberJSON.getJSONObject("data"));
 
+			variable1 = NewCondition.convertDateFormat(variable1, timezone);
+			variable2 = NewCondition.convertDateFormat(variable2, timezone);
+			 
 			// Do the required operation. If matches send to yes
 			if (comparator.equalsIgnoreCase(COMPARATOR_LESS_THAN))
 			{

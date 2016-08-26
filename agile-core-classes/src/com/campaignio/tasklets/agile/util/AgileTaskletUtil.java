@@ -1003,4 +1003,23 @@ public class AgileTaskletUtil {
 
 		return campaignIDs;
 	}
+
+	/**
+	 * To fetch the timezone especially while converting the date format in Campaigns.
+	 * 
+	 * @param jsonObj
+	 * @return
+	 */
+	public static String getTimezone(JSONObject jsonObj) {
+		String timezone = null;
+		try {
+			timezone = jsonObj.getString("timezone");
+		}
+		catch (Exception e) {
+			System.out.println("No timezone found in subscriberJSON: " + e.getMessage());
+			timezone = AccountPrefsUtil.getTimeZone();
+		}
+		return timezone;
+	}
+
 }
