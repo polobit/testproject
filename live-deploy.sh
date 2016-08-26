@@ -19,9 +19,9 @@ git checkout .
 
 git stash
 
-git checkout maven_version29-2
+git checkout namespaces-issue-fix
 
-git pull origin maven_version29-2
+git pull origin namespaces-issue-fix
 
 ant create-target  -DRELEASE_VERSION=$2 -DPRODUCTION=true;
 
