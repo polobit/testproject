@@ -12,23 +12,23 @@
             <fieldset>
  {{#if id}}
 {{else}}
-<div class="control-group form-group  "> 
-<div class ="CustomFieldScope" style="    width: 30%;     float: left;    ">          
-    <label class="i-checks i-checks-sm">
+<div class="control-group form-group  " style=" margin-left: 50px;"> 
+<div class="CustomFieldScope col-sm-4 col-md-4" >    
+    <label class="i-checks i-checks-sm" style="padding-top: 7px;">
     <input name="contacts" type="checkbox" id="contacts"><i></i></label>
-    <label class="control-label pull-left m-r-sm">{{agile_lng_translate 'contact-details' 'contacts'}} </label>
+    <label class="control-label pull-left m-r-sm">contacts </label>
     
 </div>
-<div class ="CustomFieldScope" style="width: 30%;    float: left;    ">     
-    <label class="control-label pull-left m-r-sm">{{agile_lng_translate 'contact-details' 'companies'}} </label>
-    <label class="i-checks i-checks-sm"> 
-         <input name="companies" type="checkbox" id="companies" /><i></i> </label>
+<div class="CustomFieldScope col-sm-4 col-md-4">     
+    <label class="control-label pull-left m-r-sm">companies </label>
+    <label class="i-checks i-checks-sm" style="padding-top: 7px;"> 
+         <input name="companies" type="checkbox" id="companies"><i></i> </label>
  </div>        
- <div class ="CustomFieldScope" style="    width: 30%;     float: left;    ">          
-    <label class="control-label pull-left m-r-sm">{{agile_lng_translate 'contact-details' 'deals'}} </label>
-    <label class="i-checks i-checks-sm"> 
-         <input name="deals" type="checkbox" id="deals" /><i></i> </label>
-   </div>      
+ <div class="CustomFieldScope col-sm-4 col-md-4">          
+    <label class="control-label pull-left m-r-sm">Deals </label>
+    <label class="i-checks i-checks-sm" style="padding-top: 7px;"> 
+         <input name="deals" type="checkbox" id="deals"><i></i> </label>
+</div>      
 </div>
 {{/if}}
 
