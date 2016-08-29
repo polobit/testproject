@@ -28,9 +28,10 @@ Handlebars.registerHelper('get_ticket_id', function(action_type, options) {
 
 Handlebars.registerHelper('get_feedback', function(feedback_rating,value,options) {
 			
+			parseInt(feedback_rating);
 			if(feedback_rating >= value )
-				return "/flatfull/img/star-on.png";		
-			return "/flatfull/img/star-off.png";	
+				return "/img/star-on.png";		
+			return "/img/star-off.png";	
 	
 });
 

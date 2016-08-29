@@ -65,6 +65,15 @@ public class TicketNotes
 	/**
 	 * Stores user ID to whom ticket is assigned
 	 */
+	
+	/**
+	 * Stores feed back for a note
+	 */
+	public String feed_back;
+	
+	
+	
+	
 	private Key<DomainUser> assignee_key = null;
 
 	/**
@@ -85,10 +94,6 @@ public class TicketNotes
 	 */
 	public CREATED_BY created_by = CREATED_BY.REQUESTER;
 
-	/**
-	 * Stores feed back for a note
-	 */
-	public String feed_back;
 	
 	/**
 	 * Stores name of customer who created ticket

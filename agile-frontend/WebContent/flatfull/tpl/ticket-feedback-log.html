@@ -19,7 +19,7 @@
                                           
 
                 <select name="feedback" class="form-control" id="feedback" style="width: 160px;float: right;margin-left: 20px;">
-                    <option value=0>All</option>
+                    <option value="">All</option>
                     <option value='1'>1</option>
                     <option value='2'>2</option>
                     <option value='3'>3</option>
@@ -93,10 +93,10 @@
     <td>
         
           <input type="image" src={{#get_feedback feedback 1}}{{/get_feedback}} style="width:18px;float:left" class="transperantbutton" id="1_Image" value="1"  onclick="changeFeedback(event,this);"/>
-                              <input type="image" src={{#get_feedback feedback 2}}{{/get_feedback}}  style="width:18px;float:left" class="transperantbutton" id="2_Image" value="2"  onclick="javascript:return changeFeedback(event,this)"/> 
-                              <input type="image" src={{#get_feedback feedback 3}}{{/get_feedback}}  style="width:18px;float:left" class="transperantbutton" id="3_Image" value="3"  onclick="changeFeedback(event,this)";/>
-                              <input type="image" src={{#get_feedback feedback 4}}{{/get_feedback}} style="width:18px;float:left" class="transperantbutton" id="4_Image" value="4"  onclick="changeFeedback(event,this);"/>
-                              <input type="image" src= {{#get_feedback feedback 5}}{{/get_feedback}} style="width:18px;float:left" class="transperantbutton" id="5_Image" value="5"  onclick="changeFeedback(event,this);"/>
+                              <input type="image" src={{#get_feedback feedback 2}}{{/get_feedback}}  style="width:18px;float:left" class="transperantbutton" id="2_Image" value="2" /> 
+                              <input type="image" src={{#get_feedback feedback 3}}{{/get_feedback}}  style="width:18px;float:left" class="transperantbutton" id="3_Image" value="3" ;/>
+                              <input type="image" src={{#get_feedback feedback 4}}{{/get_feedback}} style="width:18px;float:left" class="transperantbutton" id="4_Image" value="4" />
+                              <input type="image" src= {{#get_feedback feedback 5}}{{/get_feedback}} style="width:18px;float:left" class="transperantbutton" id="5_Image" value="5"/>
 
         
 

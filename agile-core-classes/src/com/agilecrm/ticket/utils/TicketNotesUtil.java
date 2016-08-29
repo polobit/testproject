@@ -369,7 +369,7 @@ public class TicketNotesUtil
 				JSONObject jsonobject = new JSONObject();
 				jsonobject.append("note", tn.html_text);
 				jsonobject.append("feedback_comment", tn.feedback_comment);
-				//jsonobject.append("feedback", tn.feed_back);
+				jsonobject.append("feedback", tn.feed_back);
 				
 				Long ticketfeedback_id = tn.ticket_id;		
 				Tickets ticket = Tickets.ticketsDao.get(ticketfeedback_id);

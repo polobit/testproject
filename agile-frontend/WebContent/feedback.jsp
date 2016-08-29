@@ -169,7 +169,7 @@ var id = <%=note_id%>
 				<a href="https://www.agilecrm.com/" class="navbar-brand block text-white m-t" style="color: #363f44;">
 						<img  src="https://s3.amazonaws.com/agilecrm/panel/uploaded-logo/1383722651000?id=upload-container" style="max-height: 50px;">
 					</a>
-			<div style="box-shadow: 2px 2px 2px 2px;width: 700px;margin: auto;">
+			<div style="box-shadow: 4px 4px 6px 4px;width: 650px;margin: auto;">
 
 				<form name='feedback_ticket' id="feedback_ticket" method='post'
 					 onsubmit="saveTicketFeedback(event)" style="margin-left: 34px;">
@@ -188,11 +188,11 @@ var id = <%=note_id%>
                          <tr>
                          	<td  width="55%"style="padding-top: 20px;padding-left: 34px;">How would you rate the support recived?</td>
                              <td width="40%" style="padding-top: 20px;">
-                             	<input type="image" src="/flatfull/img/star-off.png" style="width:18px;float:left" class="transperantbutton" id="1_Image" value="1"  onclick="changeFeedback(event,this);"/>
-                             	<input type="image" src="/flatfull/img/star-off.png" style="width:18px;float:left" class="transperantbutton" id="2_Image" value="2"  onclick="javascript:return changeFeedback(event,this)"/> 
-                             	<input type="image" src="/flatfull/img/star-off.png" style="width:18px;float:left" class="transperantbutton" id="3_Image" value="3"  onclick="changeFeedback(event,this)";/>
-                             	<input type="image" src="/flatfull/img/star-off.png" style="width:18px;float:left" class="transperantbutton" id="4_Image" value="4"  onclick="changeFeedback(event,this);"/>
-                             	<input type="image" src="/flatfull/img/star-off.png" style="width:18px;float:left" class="transperantbutton" id="5_Image" value="5"  onclick="changeFeedback(event,this);"/>
+                             	<input type="image" src="/img/star-off.png" style="width:18px;float:left" class="transperantbutton" id="1_Image" value="1"  onclick="changeFeedback(event,this);"/>
+                             	<input type="image" src="/img/star-off.png" style="width:18px;float:left" class="transperantbutton" id="2_Image" value="2"  onclick="javascript:return changeFeedback(event,this)"/> 
+                             	<input type="image" src="/img/star-off.png" style="width:18px;float:left" class="transperantbutton" id="3_Image" value="3"  onclick="changeFeedback(event,this)";/>
+                             	<input type="image" src="/img/star-off.png" style="width:18px;float:left" class="transperantbutton" id="4_Image" value="4"  onclick="changeFeedback(event,this);"/>
+                             	<input type="image" src="/img/star-off.png" style="width:18px;float:left" class="transperantbutton" id="5_Image" value="5"  onclick="changeFeedback(event,this);"/>
 
                              	 
 	                         </td>		                     
@@ -231,7 +231,7 @@ feedback_rating = "<%=feedback_rating%>";
 for(var i=1;i<=feedback_rating;i++){
 	var image = document.getElementById(i+"_Image")
 	if(image.src.includes("star-off.png") )
-	image.src="/flatfull/img/star-on.png";		
+	image.src="/img/star-on.png";		
 		}
 if(feedback_rating < 3)
 {
@@ -255,7 +255,7 @@ function changeFeedback(e,objButton){
 		for(var i=1;i<=feedback_rating;i++){
 			var image = document.getElementById(i+"_Image")
 			if(image.src.includes("star-off.png") )
-				image.src="/flatfull/img/star-on.png";		
+				image.src="/img/star-on.png";		
 		}
 	}	
 	else{
@@ -263,7 +263,7 @@ function changeFeedback(e,objButton){
 		for(i=5;feedback_rating<i;i--){
 			var image = document.getElementById(i+"_Image")
 			if(image.src.includes("star-on.png") )
-				image.src="/flatfull/img/star-off.png";		
+				image.src="/img/star-off.png";		
 			
 		}
 	}	
