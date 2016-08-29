@@ -71,7 +71,7 @@ public class TicketNotesRest
 	@Path("/feedback")
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public String getFeedbackdata(@QueryParam("start_time") Long startTime, @QueryParam("end_time") Long endTime,
-			@QueryParam("feedback") int feedback, @QueryParam("group") Long group, @QueryParam("assignee") Long assignee)
+			@QueryParam("feedback") String feedback, @QueryParam("group") Long group, @QueryParam("assignee") Long assignee)
 	{
 		try
 		{
@@ -212,7 +212,7 @@ public class TicketNotesRest
 			System.out.println(comment);
 			String[] fbarray = comment.split("\\&", -1);
 			System.out.println(fbarray);
-		    int feed_back = Integer.parseInt(fbarray[1].split("\\=",-1)[1]);
+		    String feed_back = (fbarray[1].split("\\=",-1)[1]);
 		    String feedback_comment = fbarray[2].split("\\=",-1)[1];
 		    String result = java.net.URLDecoder.decode(feedback_comment, "UTF-8");
 		    

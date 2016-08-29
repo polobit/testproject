@@ -229,7 +229,7 @@
 
 	    end_time += (((23*60*60)+(59*60)+59)*1000);
 	    end_time=end_time+(d.getTimezoneOffset()*60*1000);
-		var feedback = 0;
+		var feedback =null;
 	    feedback = $('#feedback').find('option:selected').val();
 		
 		App_Ticket_Module.renderfeedbacktemplate(start_time,end_time,feedback,group,assignee);

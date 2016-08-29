@@ -12,7 +12,7 @@ String error = "", success = "";
 System.out.println(success);
 String feedback = request.getParameter("feedback");
 Long note_id = Long.parseLong(request.getParameter("note"));
-int feedback_rating = Integer.parseInt(feedback);
+String feedback_rating = feedback;
 
 if (!StringUtils.isEmpty(feedback)) {
 		
@@ -212,7 +212,7 @@ var id = <%=note_id%>
 
 					</div>
 					<div>
-					<input type='submit'  style="width: 10%; margin-left: 34px;float:left; margin-right:15px;margin-left:412px;"
+					<input type='submit'  style="width: 10%; margin-left: 34px;float:left; margin-right:15px;margin-left:420px;"
 						class='btn btn-sm btn-primary btn-block '>
 					<input type='button'  style="width: 10%; margin-left: 34px;"
 						class='btn btn-sm btn-primary btn-block ' onclick="functioncancel()" value="Cancel"/>		

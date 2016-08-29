@@ -108,7 +108,7 @@ public class TicketNotesUtil
 	 * @return
 	 * @throws EntityNotFoundException 
 	 */
-	public static void savefeedback(Long noteId,int feedback) throws EntityNotFoundException
+	public static void savefeedback(Long noteId,String feedback) throws EntityNotFoundException
 	{
 		TicketNotes dbnote = TicketNotes.ticketNotesDao.get(noteId);
 		 
@@ -340,7 +340,7 @@ public class TicketNotesUtil
 	}
 
 	
-	public static JSONArray getJsonFeedback(Long startTime, Long endTime, int feedback, Long group, Long assignee) throws JSONException, EntityNotFoundException{
+	public static JSONArray getJsonFeedback(Long startTime, Long endTime, String feedback, Long group, Long assignee) throws JSONException, EntityNotFoundException{
 		
 		JSONArray json = new JSONArray();
 		
@@ -349,7 +349,7 @@ public class TicketNotesUtil
 		map.put("created_time >", startTime);
 		map.put("created_time <", endTime);
 		map.put("feedback_flag", true);
-		if(feedback != 0)
+		if(StringUtils.isNotEmpty(feedback))
 			map.put("feed_back",feedback);	
 		List<TicketNotes> ticketnotes = TicketNotes.ticketNotesDao.listByProperty(map);
 		
@@ -369,7 +369,7 @@ public class TicketNotesUtil
 				JSONObject jsonobject = new JSONObject();
 				jsonobject.append("note", tn.html_text);
 				jsonobject.append("feedback_comment", tn.feedback_comment);
-				jsonobject.append("feedback", tn.feed_back);
+				//jsonobject.append("feedback", tn.feed_back);
 				
 				Long ticketfeedback_id = tn.ticket_id;		
 				Tickets ticket = Tickets.ticketsDao.get(ticketfeedback_id);
