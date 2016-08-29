@@ -521,9 +521,15 @@ function bulk_delete_operation(url, id_array, index_array, table, is_grid_view, 
 			    	  $.each(id_array, function(index, data){
 					
 					if(Current_Route == "contacts") 
+					{
 					App_Contacts.contactsListView.collection.remove(data)
+					App_Contacts.contactsListView.collection.models[0].attributes.count=App_Contacts.contactsListView.collection.models[0].attributes.count-1;
+					}
 					else
+					{
 					App_Companies.companiesListView.collection.remove(data)	
+					App_Companies.companiesListView.collection.models[0].attributes.count=App_Companies.companiesListView.collection.models[0].attributes.count-1
+		      		}
 		      		});
 					break;
 				}
