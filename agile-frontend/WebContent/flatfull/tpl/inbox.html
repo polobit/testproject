@@ -3,10 +3,21 @@
 	<div class="wrapper-md lter bg-light b-b">
 		<div class="row">
 			<div class="col-md-12">
-				<h3 class="pull-left font-thin h3">{{agile_lng_translate 'menu' 'menu-inbox'}} <small></small></h3>
-				<!--<a id="refrecal" class="text-md btn m-l-none bg-transparent refresh-tickets no-shadow p-t-xs p-l-xs" onclick="refreshcal()">
-					<i class="fa fa-refresh" data-toggle="tooltip" data-placement="bottom" data-original-title="{{agile_lng_translate 'campaigns' 'refresh'}}" style="vertical-align: text-top;"></i>
-				</a>-->   	
+				<div class="col-md-2">
+                  <h3 class="pull-left font-thin h3 col-md-2">Inbox <small></small></h3></div>
+  				<div class="col-md-6">
+                 	<div class="col-md-10">
+    					<input type="search" class="form-control">
+    				</div>
+    				<div class="col-md-2">
+    					<input type="submit" class="form-control btn-primary">
+    				</div>
+    			</div>
+				<div class="col-md-4 pull-right">
+					<div align="right" id="filter-options">
+
+					</div>
+				</div>
 				<div class="clearfix"></div>
 			</div>
 		</div>
@@ -37,53 +48,128 @@
 				</div>
 			</div>
 			<div class="col-md-10" id="myGroup" style="padding: 0px;">
+					<div class="col-md-6" style="padding: 0px;">
+						<div class="bg-light lter" style="background-color:white">
+							<div id="mail-list">
+								<ul class="portlet_body list-group list-group-lg no-radius m-b-none m-t-n-xxs" id="mails-list">
 
+								</ul>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-6 accordion-group" style="padding: 0px;">
+						<div class="bg-light lter" style="background-color:white">
+							<div id="mail-view" class="portlet_body">
+								<ul class="ativity-block-ul list-group list-group-lg no-radius m-b-none m-t-n-xxs" id="mail-details-view">
+
+								</ul>
+							</div>
+						</div>
+					</div>
 			</div>
 		</div>
 	</div>
 </div>
 </script>
+
+<!-- Template for email account types -->
+<script id="account-types-template" type="text/html">
+    <div  class="m-b-md m-t-md m-r-sm" align="right">
+		<a href="#send-email" id="send-new-email" class="btn btn-default btn-sm blue btn-slate-action m-t-none company"><i class="fa fa-envelope"></i> &nbsp; {{agile_lng_translate 'contact-details' 'send-email'}}
+		</a>
+	<div class="btn-group pos-rlt">
+	<button class="btn btn-sm btn-default filter-dropdown" id="inbox-email-type-select">{{agile_lng_translate 'contact-details' 'agile'}}</button>
+	<button class="btn btn-sm btn-default dropdown-toggle" id="inbox-email-type-select-dropdown" data-toggle="dropdown">
+	<span class="caret"></span>
+	</button>
+	<ul id = "mail-account-type-select" class="pull-right dropdown-menu" role="menu">
+    <li>
+	<a href="" class="agile-emails" email-server="all" data-url="all" email-server-type="all">{{agile_lng_translate 'contact-details' 'all-mail'}}</a>
+	</li>
+	{{#if agileUserName}}
+	<li>
+	<a href="" class="agile-emails" email-server="agile" data-url="core/api/emails/agile-emails?search_email=" email-server-type={{this}}><i class="icon-cloud" style="margin-right:4px;font-size: 1.2em"></i>{{agile_lng_translate 'contact-details' 'agile'}}</a>
+	</li>
+	{{/if}}
+	{{#if gmailUserNames}}
+	{{#each gmailUserNames}}
+	<li>
+	<a href="" class="agile-emails" email-server="google" data-url="core/api/social-prefs/google-emails?from_email=" email-server-type={{this}}><i class="fa fa-google" style="margin-right:4px;font-size: 1.2em"></i>{{this}}</a>
+	</li>
+	{{/each}}
+	{{/if}}
+	{{#if imapUserNames}}
+	{{#each imapUserNames}}
+	<li>
+	<a href="" class="agile-emails" email-server="imap" data-url="core/api/imap/imap-emails?from_email=" email-server-type={{this}}><i class="icon-envelope-alt" style="margin-right:4px;font-size: 1.2em"></i>{{this}}</a>
+	</li>
+	{{/each}}
+	{{/if}}
+	{{#if exchangeUserNames}}
+	{{#each exchangeUserNames}}
+	<li>
+	<a href="" class="agile-emails" email-server="exchange" data-url="core/api/office/office365-emails?from_email=" email-server-type={{this}}><i class="icon-windows" style="margin-right:4px;font-size: 1.2em"></i>{{this}}</a>
+	</li>
+	{{/each}}
+	{{/if}}
+	{{#if sharedGmailUserNames}}
+	{{#each sharedGmailUserNames}}
+	<li>
+	<a href="" class="agile-emails" email-server="google" data-url="core/api/social-prefs/google-emails?from_email=" email-server-type={{this}}><i class="icon-google-plus" style="margin-right:4px;font-size: 1.2em"></i>{{this}} (Shared)</a>
+	</li>
+	{{/each}}
+	{{/if}}
+	{{#if sharedImapUserNames}}
+	{{#each sharedImapUserNames}}
+	<li>
+	<a href="" class="agile-emails" email-server="imap" data-url="core/api/imap/imap-emails?from_email=" email-server-type={{this}}><i class="icon-envelope-alt" style="margin-right:4px;font-size: 1.2em"></i>{{this}} (Shared)</a>
+	</li>
+	{{/each}}
+	{{/if}}
+	{{#if sharedExchangeUserNames}}
+	{{#each sharedExchangeUserNames}}
+	<li>
+	<a href="" class="agile-emails" email-server="exchange" data-url="core/api/office/office365-emails?from_email=" email-server-type={{this}}><i class="icon-windows" style="margin-right:4px;font-size: 1.2em"></i>{{this}} (Shared)</a>
+	</li>
+	{{/each}}
+	{{/if}}
+	</ul>
+	
+	<label id="has_email_configured" style="display:none">{{#if hasEmailAccountsConfigured}}{{hasEmailAccountsConfigured}}{{else}}false{{/if}}</label>
+	
+	</div>
+	</div>
+	<div class="clearfix"></div>
+</script>
+<!-- Template for emails list -->
 <script type="text/html" id="mail-template">
-	<div class="col-md-6" style="padding: 0px;">
-		<div class="bg-light lter">
-			<div id="mail-list" class="portlet_body">
-				<ul class="ativity-block-ul list-group list-group-lg no-radius m-b-none m-t-n-xxs" id="mails-list">
-					{{#each []}}
-						<li class="mail-text" style="height:60px;overflow: hidden;border-bottom:1px solid #e7ecee;">
-							<div class="mail-from">
-								<a class="text-primary" data-toggle="collapse" data-target="#{{this.id}}" data-parent="#myGroup">{{this.from}} &nbsp;&nbsp;&nbsp; {{this.subject}}</a>
-							</div>
-							<div class="subject text-muted">
-								- {{{this.message}}}
-							</div>
-						</li>
-					{{/each}}
-				</ul>
+	{{#each []}}
+		<li class="mail-text" style="height:60px;overflow: hidden;border-bottom:1px solid #e7ecee;padding:15px;">
+			<div class="mail-from">
+				<a class="text-primary" data-toggle="collapse" data-target="#{{this.id}}" data-parent="#myGroup">{{this.from}} &nbsp;&nbsp;&nbsp; {{this.subject}}</a>
 			</div>
-		</div>
-	</div>
-	<div class="col-md-6 accordion-group" style="padding: 0px;">
-		<div class="bg-light lter">
-			<div id="mail-view" class="portlet_body">
-				<ul class="ativity-block-ul list-group list-group-lg no-radius m-b-none m-t-n-xxs" id="mail-details-view">
-						{{#each []}}
-							<li class="collapse" id="{{this.id}}">
-								<div class="mail-subject text-primary">
-									<a class="text-primary">{{this.subject}}</a>
-								</div>
-								<div class="mail-from">
-									<a><span class="text-primary">From: </span><span class="text-muted">{{this.from}}</span></a>
-								</div>
-								<div class="mail-to">
-									<a><span class="text-primary">To: </span><span class="text-muted">{{this.to}}</span></a>
-								</div>
-								<div class="email-body m-t-sm space-normal">
-									{{{this.message}}}
-								</div>
-							</li>
-						{{/each}}
-				</ul>
+			<div class="subject text-muted">
+				- {{{this.message}}}
 			</div>
-		</div>
-	</div>
+		</li>
+	{{/each}}
+</script>
+<!-- Template for email view -->
+<script type="text/html" id="mail-view-template">
+	{{#each []}}
+		<li class="collapse" id="{{this.id}}">
+			<div class="mail-subject text-primary">
+				<a class="text-primary">{{this.subject}}</a>
+			</div>
+			<div class="mail-from">
+				<a><span class="text-primary">From: </span><span class="text-muted">{{this.from}}</span></a>
+			</div>
+			<div class="mail-to">
+				<a><span class="text-primary">To: </span><span class="text-muted">{{this.to}}</span></a>
+			</div>
+			<div class="email-body m-t-sm space-normal">
+				{{{this.message}}}
+			</div>
+		</li>
+	{{/each}}
 </script>
