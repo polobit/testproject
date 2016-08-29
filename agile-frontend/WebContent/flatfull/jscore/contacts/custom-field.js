@@ -43,15 +43,38 @@ function initializeCustomFieldsListeners(){
 			$.ajax({ type : 'DELETE', url : '/core/api/custom-fields/' + custom_field.id, contentType : "application/json; charset=utf-8",
 				success : function(data){
 					if(custom_field.get("scope")=="CONTACT")
+					{
 						App_Admin_Settings.contactCustomFieldsListView.collection.remove(custom_field.id);
+						if(App_Contacts.contactViewModel && App_Contacts.contactViewModel.fields_set && 
+							App_Contacts.contactViewModel.fields_set.indexOf("CUSTOM_"+custom_field.get('field_label'))>-1)
+						{
+							var index =App_Contacts.contactViewModel.fields_set.indexOf("CUSTOM_"+custom_field.get('field_label'));
+							App_Contacts.contactViewModel.fields_set.splice(index,1);
+						}
+						if(App_Companies.contactCompanyViewModel && App_Companies.contactCompanyViewModel.fields_set && 
+							App_Companies.contactCompanyViewModel.fields_set.indexOf("CUSTOM_"+custom_field.get('field_label'))>-1)
+						{
+							var index =App_Companies.contactCompanyViewModel.fields_set.indexOf("CUSTOM_"+custom_field.get('field_label'));
+							App_Companies.contactCompanyViewModel.fields_set.splice(index,1);
+						}
+				
+					}
 					else if(custom_field.get("scope")=="COMPANY")
+					{
 						App_Admin_Settings.companyCustomFieldsListView.collection.remove(custom_field.id);
+						if(App_Companies.companyViewModel && App_Companies.companyViewModel.fields_set && 
+							App_Companies.companyViewModel.fields_set.indexOf("CUSTOM_"+custom_field.get('field_label'))>-1)
+						{
+							var index =App_Companies.companyViewModel.fields_set.indexOf("CUSTOM_"+custom_field.get('field_label'));
+							App_Companies.companyViewModel.fields_set.splice(index,1);
+						}
+					}
 					else if(custom_field.get("scope")=="DEAL")
 						App_Admin_Settings.dealCustomFieldsListView.collection.remove(custom_field.id);
 					else if(custom_field.get("scope")=="CASE")
 						App_Admin_Settings.caseCustomFieldsListView.collection.remove(custom_field.id);
 					currentElement.closest('tr').remove();
-					location.reload(true);
+					//location.reload(true);
 				}, dataType : 'json' });
 		});
 	});
@@ -137,7 +160,7 @@ function showCustomFieldModel(data)
 
 			$("#custom-field-add-modal").modal('hide');
 			$("body").removeClass("modal-open").css("padding-right", "");
-			location.reload(true);
+			//location.reload(true);
 		},
 		errorCallback : function(response)
 		{
