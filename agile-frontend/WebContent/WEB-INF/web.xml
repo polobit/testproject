@@ -1024,7 +1024,7 @@
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>WebEventCalendar</servlet-name>
-		<url-pattern>/calendar/*</url-pattern>
+		<url-pattern>/calendar-core/*</url-pattern>
 	</servlet-mapping> 
 	<servlet>
 		<servlet-name>CancelWebAppointment</servlet-name>
