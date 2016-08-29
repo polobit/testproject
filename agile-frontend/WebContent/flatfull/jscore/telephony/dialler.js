@@ -6,12 +6,12 @@ $(function()
 			{
 			  	e.preventDefault();
 			  	if(default_call_option.callOption.length == 0){
-			  	$('#exitCampaignModal').modal('show'); // using it as it fulfill the requrements
+			  	$('#twilioStateModal').modal('show'); // using it as it fulfill the requrements
 			  		return;
 			  	}else if(default_call_option.callOption.length == 1){
 			  		var index = containsOption(default_call_option.callOption, "name", "CallScript");
 			  		if(index != -1){
-			  			$('#exitCampaignModal').modal('show'); // using it as it fulfill the requrements
+			  			$('#twilioStateModal').modal('show'); // using it as it fulfill the requrements
 				  		return;
 			  		}
 			  	}
