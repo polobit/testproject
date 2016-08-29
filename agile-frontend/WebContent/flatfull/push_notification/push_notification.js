@@ -102,7 +102,7 @@ function regiseterServiceWorkers()  {
 
      property.value = email;
 
-     if(email!=null || email != undefined)
+     if(email!=null && email != undefined)
      {
         property.name = "first_name";
 

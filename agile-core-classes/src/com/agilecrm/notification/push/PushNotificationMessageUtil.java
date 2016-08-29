@@ -41,7 +41,7 @@ public class PushNotificationMessageUtil {
     		Map<String, Object> map=new HashMap<String, Object>();
     		map.put(PushNotificationMessage.BROWSER_ID, browser_id);
     		
-    	    notificationMessage=dao.fetchByOrder("created_time", map);
+    	    notificationMessage=dao.fetchAllByOrder("created_time", map).get(0);
     	}
     	catch (Exception e)
     	{
