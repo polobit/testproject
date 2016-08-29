@@ -151,7 +151,8 @@ var Tickets_Rest={
 			if(model.toJSON().is_spam)
 			{
 				$(e.target).addClass("btn-danger").removeClass("btn-default");
-			    message="{{agile_lng_translate 'tickets' 'marked-spam'}}"; 
+			    message="{{agile_lng_translate 'tickets' 'marked-spam'}}";
+			    Tickets_Rest.changeStatus("CLOSED",null); 
 			}
 			else
 			{
