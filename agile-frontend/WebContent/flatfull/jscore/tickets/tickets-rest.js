@@ -152,7 +152,16 @@ var Tickets_Rest={
 			{
 				$(e.target).addClass("btn-danger").removeClass("btn-default");
 			    message="{{agile_lng_translate 'tickets' 'marked-spam'}}";
-			    Tickets_Rest.changeStatus("CLOSED",null); 
+			 	
+			 	if(model.toJSON().status == "CLOSED"){
+			    	$(".remove-date").css("display", "none");
+				    $(".ticket-addnote_close").attr("disabled","disabled"); 
+					$(".ticket-send-reply .btn").attr("disabled","disabled");
+					$('#ticket_change_sla').attr("disabled","disabled");
+					$('.ticket_change_slatime').attr("disabled","disabled");
+					$(".close-current-ticket").attr("disabled","disabled");
+					$(".ticket_status").val("CLOSED");
+				}	
 			}
 			else
 			{
