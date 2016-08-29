@@ -2324,16 +2324,16 @@ Created a new Company {{#if this.entityObject}}<a href="#contact/{{entity_id}}" 
 
 {{#if_equals "CALL" activity_type}}
 {{#if_equals "incoming" custom2}}
-Call from {{#if entity_id}}<a href="#contact/{{entity_id}}"  data="{{entity_id}}" class="popover_contact">{{label}}</a>{{else}}'{{label}}'{{/if}}<br/>
-<div class="activities_second_line p-t-xs m-t-none text-sm text-ellipsis"><small>
-<i class="icon-phone"></i> {{callActivityFriendlyStatus custom3 custom2}}{{#if custom4}}{{secondsToFriendlyTime custom4}}{{/if}} (<span style="text-transform: capitalize;">{{custom1}}</span>)
-</small></div>
+{{agile_lng_translate 'campaigns' 'call-from'}} {{#if entity_id}}<a href="#contact/{{entity_id}}">{{label}}</a>{{else}}{{label}}{{/if}}<br/>
+<small class="activities_second_line m-t-none text-sm">
+<i class="icon-phone"></i> {{callActivityFriendlyStatus custom3 custom2}}{{#if custom4}}{{secondsToCallActivitiesTime custom4}}{{else}} 0s{{/if}} (<span style="text-transform: capitalize;">{{#if custom1}}{{custom1}}{{else}} Manual{{/if}}</span>)
+</small>
 {{/if_equals}}
 {{#if_equals "outgoing" custom2}}	
-{{agile_lng_translate 'contacts-view' 'called'}} {{#if entity_id}}<a href="#contact/{{entity_id}}"  data="{{entity_id}}" class="popover_contact">{{label}}</a>{{else}}'{{label}}'{{/if}}<br/>
-<div class="activities_second_line p-t-xs m-t-none text-sm text-ellipsis"><small>
-<i class="icon-phone"></i> {{callActivityFriendlyStatus custom3 custom2}}{{#if custom4}}{{secondsToFriendlyTime custom4}}{{/if}} (<span style="text-transform: capitalize;">{{custom1}}</span>)
-</small></div>
+{{agile_lng_translate 'contacts-view' 'called'}}{{#if entity_id}}<a href="#contact/{{entity_id}}">{{label}}</a>{{else}}{{label}}{{/if}}<br/>
+<small class="activities_second_line m-t-none text-sm">
+<i class="icon-phone"></i> {{callActivityFriendlyStatus custom3 custom2}}{{#if custom4}}{{secondsToCallActivitiesTime custom4}}{{else}} 0s{{/if}} (<span style="text-transform: capitalize;">{{#if custom1}}{{custom1}}{{else}}Manual{{/if}}</span>)
+</small>
 {{/if_equals}}
 {{/if_equals}}
 
