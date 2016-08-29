@@ -605,10 +605,10 @@ function agile_crm_save_contact_property(propertyName, subtype, value, type)
 
 	console.log(properties);
 
-	contact_model.url = "core/api/contacts"
+	contact_model.url = "core/api/contacts";
 
 	// Save updated contact model
-	contact_model.save()
+	contact_model.save();
 
 }
 

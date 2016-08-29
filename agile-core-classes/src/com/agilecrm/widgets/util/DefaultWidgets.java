@@ -161,6 +161,12 @@ public class DefaultWidgets {
 		 * , "/widgets/linkedin.js", "/img/plugins/linkedin.png",
 		 * "/widgets/linkedin-logo-small.png", null, WidgetType.SOCIAL));
 		 */
+		widgets.add(new Widget(
+				"FullContact",
+				"FullContact",
+				"Stay updated on customers profile through FullContact integration with information like name, photo, company, address and websites.",
+				"/widgets/fullcontact.js", "/img/plugins/fullcontact-lg-logo.png",
+				"/img/plugins/fullcontact-sm-logo.png", null,WidgetType.SOCIAL));
 
 		System.out.println("Default widgets ");
 		System.out.println(widgets);

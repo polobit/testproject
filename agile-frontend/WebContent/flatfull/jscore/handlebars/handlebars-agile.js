@@ -153,8 +153,13 @@ function getTemplateUrls(templateName)
 	}
 	else if (templateName.indexOf("callscript") == 0)
 	{
-	template_relative_urls.push("callscript.js");
+		template_relative_urls.push("callscript.js");
 	}
+	else if (templateName.indexOf("fullcontact") == 0)
+	{
+		template_relative_urls.push("fullcontact.js");
+	}
+
 	if (templateName.indexOf("chargify") == 0)
 	{
 		template_relative_urls.push("chargify.js");
