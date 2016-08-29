@@ -72,7 +72,7 @@ function globalCallWidgetSet()
 					function(call_widget)
 					{
 						console.log("default call option selected is :" + call_widget);
-
+						default_call_option.callOption = [];
 						$("body .contact-make-call").off("click");
 						$("body .contact-make-call").off("dblclick");
 						if(agile_is_mobile_browser()){
@@ -170,6 +170,11 @@ function globalCallWidgetSet()
 						
 						// saving the name in local storage to show in direct dial 
 							_agile_set_prefs("dial-default-widget", nameToStore);
+						// if only one icon is shown we will hide it	
+						if($(".dialler-widget-li:not(.none)").length == 1){
+							$(".dialler-widget-li:not(.none)").addClass("none");
+							$(".panel-heading","#dialler-page").css("height",0);
+						}	
 
 						
 						$('body').on({ mouseenter : function(e)

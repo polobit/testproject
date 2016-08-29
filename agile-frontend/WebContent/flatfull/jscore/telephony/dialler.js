@@ -6,8 +6,14 @@ $(function()
 			{
 			  	e.preventDefault();
 			  	if(default_call_option.callOption.length == 0){
-			  	$('#twilioStateModal').modal('show'); // using it as it fulfill the requrements
+			  	$('#exitCampaignModal').modal('show'); // using it as it fulfill the requrements
 			  		return;
+			  	}else if(default_call_option.callOption.length == 1){
+			  		var index = containsOption(default_call_option.callOption, "name", "CallScript");
+			  		if(index != -1){
+			  			$('#exitCampaignModal').modal('show'); // using it as it fulfill the requrements
+				  		return;
+			  		}
 			  	}
 			  	
 			  	// loading the direct -dialing template
@@ -19,9 +25,15 @@ $(function()
 						$('#direct-dialler-div').html($(template_ui));
 						$("#direct-dialler-div").css({'left':x,'top': y});
 						$("#direct-dialler-div").show();
+						$('[data-toggle="tooltip"]').tooltip();
 						
+						
+				// selecting the default widget or preffed widget	
+				// we are not counting cal script so leaving adding one more condition to check 2 options 		
+				var selectedWidget = _agile_get_prefs("dial-default-widget");
+								
 				// adding active and inactive widget to dial		
-				if(default_call_option.callOption.length>1){	
+				if(default_call_option.callOption.length>2){	
 						$.each(default_call_option.callOption, function(i, obj){
 							var name = widgetCallName[obj.name];
 							$(".dialler-widget-name-" + name +"> a").removeClass("inactive");
@@ -30,14 +42,56 @@ $(function()
 							$(".dialler-widget-name-" + name +"> a").addClass("actives");
 							
 						});
-				// selecting the default widget or preffed widget		
-						var selectedWidget = _agile_get_prefs("dial-default-widget");
+					if(selectedWidget){
+						$(".dialler-widget-name-" + selectedWidget +"> a").addClass("selected-widget");
+					}else{
+						var index = containsOption(default_call_option.callOption, "name", "TwilioIO");
+						if( index == -1){
+							if (widgetCallName[default_call_option.callOption[0].name] != "CallScript"){
+								selectedWidget = widgetCallName[default_call_option.callOption[0].name];
+							}else{
+								selectedWidget = widgetCallName[default_call_option.callOption[1].name];
+							}
+							_agile_set_prefs("dial-default-widget", selectedWidget);
+						}else{
+							selectedWidget = "Twilio";
+							_agile_set_prefs("dial-default-widget", "Twilio");
+						}
+						$(".dialler-widget-name-" + selectedWidget +"> a").addClass("selected-widget");
+					}
+				}else if(default_call_option.callOption.length == 2){
+					var index = containsOption(default_call_option.callOption, "name", "CallScript");
+					$.each(default_call_option.callOption, function(i, obj){
+						var name = widgetCallName[obj.name];
+						$(".dialler-widget-name-" + name +"> a").removeClass("inactive");
+						$(".dialler-widget-name-" + name +"> a").removeClass("selected-widget");
+						$(".dialler-widget-name-" + name +"> a").addClass("actives");
+						if( index == -1){
+							$(".dialler-widget-name-" + name).removeClass("none");
+						}
+					});
+					if( index != -1){
+						$(".panel-heading","#dialler-page").css("height",0);
+						// take name of other and keep it
+					}else{
 						if(selectedWidget){
 							$(".dialler-widget-name-" + selectedWidget +"> a").addClass("selected-widget");
+						}else{
+							var index1 = containsOption(default_call_option.callOption, "name", "TwilioIO");
+							if( index == -1){
+									selectedWidget = widgetCallName[default_call_option.callOption[0].name];
+									_agile_set_prefs("dial-default-widget", selectedWidget);
+							}else{
+								selectedWidget = "Twilio";
+								_agile_set_prefs("dial-default-widget", "Twilio");
+							}
+								$(".dialler-widget-name-" + selectedWidget +"> a").addClass("selected-widget");
 						}
+					}
 				}else{
 					$(".panel-heading","#dialler-page").css("height",0);
 				}
+						
 				// start- dialler configuring		
 						dialled.using = "default";
 						
@@ -118,8 +172,16 @@ $(function()
 			  	var to = $("#dail_phone_number").val();
 			  	var from ;
 			  	var widgetName;
-			  	if(default_call_option.callOption.length>1){
+			  	if(default_call_option.callOption.length>2){
 			  		widgetName = $(".dialler-widget-li").parent().find("a.selected-widget").attr("value");
+			  	}else if(default_call_option.callOption.length == 2){
+			  		var index = containsOption(default_call_option.callOption, "name", "CallScript");
+			  		if(index == -1){
+			  			widgetName = $(".dialler-widget-li").parent().find("a.selected-widget").attr("value");
+			  		}else{
+			  			widgetName = $(".dialler-widget-li").parent().find("a.actives").attr("value");
+			  		}
+			  		
 			  	}else if(default_call_option.callOption.length == 1){
 			  		if(_agile_get_prefs("dial-default-widget")){
 			  			widgetName = _agile_get_prefs("dial-default-widget");
@@ -129,7 +191,7 @@ $(function()
 			  		
 			  	}
 			  	
-			  	if(!widgetName){
+			  	if(!widgetName || widgetName== "CallScript"){
 			  		$("#diallerInfoModal").html(getTemplate("diallerInfoModal"));
 			  		$(".dialler-modal-body").html("Please select a widget from the dropdown to dial.");
 			  		$("#diallerInfoModal").modal("show");
