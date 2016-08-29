@@ -56,7 +56,7 @@ $("#updateActivityModal").on('click', '#delete_web_event', function(e)
 	{
 		e.preventDefault();
 
-		if(hasScope("MANAGE_CALENDAR") || (CURRENT_DOMAIN_USER.id == App_Calendar.current_event.owner.id))
+		if(hasScope("DELETE_CALENDAR"))
 		{
 			var event_id = $('#updateActivityForm input[name=id]').val();
 			$("#updateActivityModal").modal('hide');
