@@ -1,6 +1,6 @@
 <script id="agile-api-script-track-code-template" type="text/html">
 	<code  id="api_track_code" class="prettyprint">
-          &lt;script type="text/javascript" src="{{#can_api_js_serve_from_cloud}}https://doxhze3l6s7v9.cloudfront.net/stats/min/v1/agile-cloud.js{{else}}https://{{get_current_domain}}.agilecrm.com/stats/min/agile-min.js{{/can_api_js_serve_from_cloud}}"&gt; 
+          &lt;script id="_agile_min_js" type="text/javascript" src="{{#can_api_js_serve_from_cloud}}https://doxhze3l6s7v9.cloudfront.net/stats/min/v1/agile-cloud.js{{else}}https://{{get_current_domain}}.agilecrm.com/stats/min/agile-min.js{{/can_api_js_serve_from_cloud}}"&gt; 
           &lt;/script&gt;
           &lt;script type="text/javascript" &gt;
           var Agile_API = Agile_API || {}; Agile_API.on_after_load = function(){_agile.set_account('{{js_api_key}}', '{{get_current_domain}}');
@@ -11,27 +11,27 @@
 
 <script id="agile-api-script-track-webrule-code-template" type="text/html">
 	<code  id="api_track_webrules_code" class="prettyprint">
-          &lt;script type="text/javascript" src="{{#can_api_js_serve_from_cloud}}https://doxhze3l6s7v9.cloudfront.net/stats/min/v1/agile-cloud.js{{else}}https://{{get_current_domain}}.agilecrm.com/stats/min/agile-min.js{{/can_api_js_serve_from_cloud}}"&gt; 
+          &lt;script id="_agile_min_js" type="text/javascript" src="{{#can_api_js_serve_from_cloud}}https://doxhze3l6s7v9.cloudfront.net/stats/min/v1/agile-cloud.js{{else}}https://{{get_current_domain}}.agilecrm.com/stats/min/agile-min.js{{/can_api_js_serve_from_cloud}}"&gt; 
           &lt;/script&gt;
           &lt;script type="text/javascript" &gt;
           var Agile_API = Agile_API || {}; Agile_API.on_after_load = function(){
            _agile.set_account('{{js_api_key}}', '{{get_current_domain}}');
            _agile.track_page_view();
-           _agile_execute_web_rules("{{#can_api_js_serve_from_cloud}}v2{{/can_api_js_serve_from_cloud}}");};
+           _agile_execute_web_rules();};
           &lt;/script&gt;
           </code>
 </script>
 
 <script id="agile-api-script-track-webrule-whitelist-code-template" type="text/html">
 	<code class="prettyprint" id="api_track_webrules_code">
-        &lt;script type="text/javascript" src="{{#can_api_js_serve_from_cloud}}https://doxhze3l6s7v9.cloudfront.net/stats/min/v1/agile-cloud.js{{else}}https://{{get_current_domain}}.agilecrm.com/stats/min/agile-min.js{{/can_api_js_serve_from_cloud}}"&gt;
+        &lt;script id="_agile_min_js" type="text/javascript" src="{{#can_api_js_serve_from_cloud}}https://doxhze3l6s7v9.cloudfront.net/stats/min/v1/agile-cloud.js{{else}}https://{{get_current_domain}}.agilecrm.com/stats/min/agile-min.js{{/can_api_js_serve_from_cloud}}"&gt;
         &lt;/script&gt;
         &lt;script type="text/javascript" &gt;
         var Agile_API = Agile_API || {}; Agile_API.on_after_load = function(){
            _agile.set_account('{{js_api_key}}', '{{get_current_domain}}');
            _agile_set_whitelist('{{getBase64ActualDomain}}');
            _agile.track_page_view();
-           _agile_execute_web_rules("{{#can_api_js_serve_from_cloud}}v2{{/can_api_js_serve_from_cloud}}");};
+           _agile_execute_web_rules();};
         &lt;/script&gt;
         </code>
 </script>
