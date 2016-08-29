@@ -4779,3 +4779,9 @@ ul#recent-menu-model-list li:nth-child(even)
 .call-log-input:focus{
   border-color: rgba(82,168,236,.8) !important;
 }
+.w-83{
+  width: 83% !important;
+}
+.p-l-15{
+  padding-left: 15px !important;
+}

@@ -37,7 +37,7 @@
                       {{agile_lng_translate 'widgets' 'phone-number'}}
                       <span class="field_req">*</span>
                     </label>
-                    <div class="controls contact_phone_controls col-sm-7" style="padding-top:7px">
+                    <div class="controls contact_phone_controls col-sm-7 {{#is_mobile}} p-t-none {{/is_mobile}}" style="padding-top:7px">
                     	{{#if_equals num.length "0"}}
                     		<span title="{{agile_lng_translate 'contact-edit' 'add-phone'}}" class="add_logPhone_span">
                     			<a id="contact_logPhone_number" class="contact_logPhone_number add_logPhone text-info text-l-none" name="contact_logPhone_number" 
@@ -70,12 +70,12 @@
                   		{{/if_equals}}	
                       {{/if_equals}}	
               						<span id="contact-add-phone-span" class="none"> 
-              								<input type="text" id="contact_phone" style="border: 1px solid #ccc;height:34px;border-radius:2px;" class="col-sm-10" /> 
-              								<a class= "btn btn-primary btn-sm contact_phone_add" style="height:33px;margin-left:11px">{{agile_lng_translate 'other' 'add'}} 
+              								<input type="text" id="contact_phone" style="border: 1px solid #ccc;height:34px;border-radius:2px;" class="col-sm-10 {{#is_mobile}} w-83 {{/is_mobile}}"/> 
+              								<a class= "btn btn-primary btn-sm contact_phone_add {{#is_mobile}} m-l-none {{/is_mobile}}" style="height:33px;margin-left:11px">{{agile_lng_translate 'other' 'add'}} 
                               </a>   
               						</span>		
                     </div>
-					             <span id="logPhone_number_error" style="color:#d9534f;display:none;">{{agile_lng_translate 'widjets' 'phone-number-recquired'}}
+					             <span id="logPhone_number_error" class="{{#is_mobile}} p-l-15 {{/is_mobile}}" style="color:#d9534f;display:none;float:left;padding-left:27.5%">{{agile_lng_translate 'widjets' 'phone-number-recquired'}}
                        </span>
                 </div>
                 
@@ -111,7 +111,7 @@
            				   		  <span class="caret"></span>
    							        </button>
 						          </a>
-      								<ul class="dropdown-menu" style="top:32px;left: 15px;" role="menu">
+      								<ul class="dropdown-menu" style="top:32px;left: 15px;{{#is_mobile}} left: 76px{{/is_mobile}}" role="menu">
       									<li><a id = "statusValue"  value = "answered">{{agile_lng_translate 'campaigns' 'answered'}}</a></li>
       									<li><a id = "statusValue"  value = "busy">{{agile_lng_translate 'campaigns' 'busy'}}</a></li>
       									<li><a id = "statusValue"  value = "failed">{{agile_lng_translate 'call_activity' 'fail'}}</a></li>
@@ -135,9 +135,9 @@
                       <span class="field_req">*</span>
                   </label>
                   <div class="controls col-sm-7">
-                      <input type="text" name="hour" id="hour" value="0" style = "max-width:42px;border-radius:2px;border:1px solid #ccc;padding:4px" class="call-log-input"/>&nbsp;<span class="label label-default" style="background-color:#ccc !important">{{agile_lng_translate 'portlets' 'houe-small'}}</span> &nbsp;&nbsp;
-                      <input type="text" name="min" id="min" value="0" style = "max-width:42px;border-radius:2px;border:1px solid #ccc;padding:4px" class="call-log-input"/>&nbsp;<span class="label label-default" style="background-color:#ccc !important">{{agile_lng_translate 'portlets' 'minutes'}}</span> &nbsp;&nbsp;
-                      <input type="text" name="sec" id="sec" value="0" style = "max-width:42px;border-radius:2px;border:1px solid #ccc;padding:4px" class="call-log-input"/>&nbsp;<span class="label label-default" style="background-color:#ccc !important">{{agile_lng_translate 'portlets' 'seconds'}}</span>
+                      <input type="text" name="hour" id="hour" value="0" style = "max-width:42px;border-radius:2px;border:1px solid #ccc;padding:4px" class="call-log-input"/><span class="label label-default" style="background-color:#ccc !important;margin-left:2px;margin-right:3px">{{agile_lng_translate 'portlets' 'houe-small'}}</span> 
+                      <input type="text" name="min" id="min" value="0" style = "max-width:42px;border-radius:2px;border:1px solid #ccc;padding:4px" class="call-log-input"/><span class="label label-default" style="background-color:#ccc !important;margin-left:2px;margin-right:3px">{{agile_lng_translate 'portlets' 'minutes'}}</span> 
+                      <input type="text" name="sec" id="sec" value="0" style = "max-width:42px;border-radius:2px;border:1px solid #ccc;padding:4px" class="call-log-input"/><span class="label label-default" style="background-color:#ccc !important;margin-left:2px">{{agile_lng_translate 'portlets' 'seconds'}}</span>
                       <div id="logPhone_duration_error" style="color:#d9534f;display:none;">{{agile_lng_translate 'portlets' 'for-a-minute-and-second-please-enter-a-value'}}</div>
                       <div id="logPhone_duration_error1" style="color:#d9534f;display:none;">{{agile_lng_translate 'portlets' 'duriation-should-be-in-only-positive-values'}}</div>
                       <div id="logPhone_duration_error2" style="color:#d9534f;display:none;">{{agile_lng_translate 'portlets' 'duriation-cannot-be-zero'}}.</div>
