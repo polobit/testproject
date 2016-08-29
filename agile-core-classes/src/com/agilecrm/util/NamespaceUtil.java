@@ -9,6 +9,7 @@ import org.json.JSONObject;
 
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.deals.util.OpportunityUtil;
+import com.agilecrm.namespace.AgileNamespaces;
 import com.agilecrm.webrules.util.WebRuleUtil;
 import com.agilecrm.workflows.triggers.util.TriggerUtil;
 import com.agilecrm.workflows.util.WorkflowUtil;
@@ -40,29 +41,32 @@ public class NamespaceUtil
 	 */
 	public static Set<String> getAllNamespacesNew()
 	{
-		Set<String> namespaces = new HashSet<String>();
-		DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
-
-		FetchOptions options = FetchOptions.Builder.withChunkSize(50);
-
-		Query q = new Query(Entities.NAMESPACE_METADATA_KIND);
-
-		for (Entity e : ds.prepare(q).asIterable(options))
-		{
-			// A nonzero numeric id denotes the default namespace;
-			// see Namespace Queries, below
-			if (e.getKey().getId() != 0)
-			{
-				continue;
-			}
-			else
-			{
-				namespaces.add(e.getKey().getName());
-			}
-		}
-
-		System.out.println("Total domains : " + namespaces.size());
-		return namespaces;
+//		Set<String> namespaces = new HashSet<String>();
+//		DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
+//
+//		FetchOptions options = FetchOptions.Builder.withChunkSize(150);
+//
+//		Query q = new Query(Entities.NAMESPACE_METADATA_KIND);
+//
+//		for (Entity e : ds.prepare(q).asIterable(options))
+//		{
+//			// A nonzero numeric id denotes the default namespace;
+//			// see Namespace Queries, below
+//			if (e.getKey().getId() != 0)
+//			{
+//				continue;
+//			}
+//			else
+//			{
+//				namespaces.add(e.getKey().getName());
+//			}
+//		}
+//
+//		System.out.println("Total domains : " + namespaces.size());
+//		return namespaces;
+		
+		AgileNamespaces namespaces = new AgileNamespaces();
+		return new HashSet<String>(namespaces.getAllNamespaces());
 	}
 	
 	
