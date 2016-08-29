@@ -211,6 +211,7 @@ public class CustomFieldDefUtil
     		scList.add(SCOPE.COMPANY);
     		scList.add(SCOPE.DEAL);
     		scList.add(SCOPE.CASE);
+    		scList.add(SCOPE.LEAD);
     		for(SCOPE sc : scList){
     			CustomFieldDef cfd = new CustomFieldDef();
 				cfd.scope=sc;

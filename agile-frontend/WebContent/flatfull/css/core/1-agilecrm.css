@@ -4053,6 +4053,15 @@ padding-left:0px;
     margin-top: 0; 
  }
 
+ div#lead-custom-coloumns:hover.compact .dropdown-menu{
+    display: block;
+    margin-top: 0; 
+ }
+ div#lead-custom-coloumns .dropdown-menu{
+    display: none;
+    margin-top: 0; 
+ }
+
 .delete-checked-contacts .bulk-delete-loading
 {
   padding-right: 5px;

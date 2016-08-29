@@ -6,6 +6,10 @@
         	{{#if_contact_type "PERSON"}}
         		<img class="img-inital r r-2x"  title="{{getSystemPropertyValue properties 'first_name'}} {{getSystemPropertyValue properties 'last_name'}}" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"/>
         	{{/if_contact_type}}
+
+        	{{#if_contact_type "LEAD"}}
+        		<img class="img-inital r r-2x"  title="{{getSystemPropertyValue properties 'first_name'}} {{getSystemPropertyValue properties 'last_name'}}" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"/>
+        	{{/if_contact_type}}
         
 			{{#if_contact_type "COMPANY"}}
         		<img class="r r-2x" title="{{getSystemPropertyValue properties 'name'}}" {{getCompanyImage "40" "display:inline;"}}/>
@@ -58,6 +62,10 @@
         	{{#if_contact_type "PERSON"}}
         		<img class="img-inital r r-2x"  title="{{getSystemPropertyValue properties 'first_name'}} {{getSystemPropertyValue properties 'last_name'}}" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"/>
         	{{/if_contact_type}}
+
+        	{{#if_contact_type "LEAD"}}
+        		<img class="img-inital r r-2x"  title="{{getSystemPropertyValue properties 'first_name'}} {{getSystemPropertyValue properties 'last_name'}}" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"/>
+        	{{/if_contact_type}}
         
 			{{#if_contact_type "COMPANY"}}
 
@@ -67,6 +75,12 @@
     	</div>
   		<div class="agile-thumb agile-thumb-view" {{#is_mobile}} style="width:calc(100% - 60px); margin-top:-5px;" {{else}} style="width:calc(100% - 60px);" {{/is_mobile}}>
         	{{#if_contact_type "PERSON"}}
+        		<a class="text-cap custom-link">{{getSystemPropertyValue properties "first_name"}}
+        		{{getSystemPropertyValue properties "last_name"}} </a>
+        		<div><small class="text-muted  block text-ellipsis">{{getSystemPropertyValue properties "email"}}</small></div>
+        	{{/if_contact_type}}
+
+        	{{#if_contact_type "LEAD"}}
         		<a class="text-cap custom-link">{{getSystemPropertyValue properties "first_name"}}
         		{{getSystemPropertyValue properties "last_name"}} </a>
         		<div><small class="text-muted  block text-ellipsis">{{getSystemPropertyValue properties "email"}}</small></div>
@@ -110,6 +124,14 @@
     	<div class="text-ellipsis"style="width:12em;" >
         	<a class="text-cap">{{getSystemPropertyValue properties "last_name"}}</a>
         </div>
+	</td>
+</script>
+
+<script id = "contacts-custom-view-status-template" type="text/html">
+	<td class="data" data="{{id}}">
+    	<div class="text-ellipsis "style="width:12em;">
+    		<span class="label m-r-xs bg-light dk">{{getLeadStatus lead_status_id}}</span>
+    	</div>
 	</td>
 </script>
 

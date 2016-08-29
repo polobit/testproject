@@ -1462,6 +1462,8 @@ function getAndUpdateCollectionCount(type, el, countFetchURL){
 
     	else if(type == "workflows")
     		countURL = countFetchURL + "/count";
+    	else if(type == "leads")
+    		countURL = App_Leads.leadsListView.options.url + "/count";
      	else
     		countURL = App_Companies.companiesListView.options.url + "/count";
 
@@ -1480,6 +1482,10 @@ function getAndUpdateCollectionCount(type, el, countFetchURL){
 
 					if(type == "workflows")
 						  $("span.badge.bg-primary", el).html(data);
+					else if(type == "leads")
+					{
+						$('#leads-count').html(count_message);
+					}
 
 					// Reset collection
 					if(type == "contacts-company")
@@ -1489,6 +1495,8 @@ function getAndUpdateCollectionCount(type, el, countFetchURL){
 					else if(type == "workflows"){
 						if(App_Workflows.active_subscribers_collection && App_Workflows.active_subscribers_collection.collection && App_Workflows.active_subscribers_collection.collection.length > 0)
 							App_Workflows.active_subscribers_collection.collection.models[0].set("count", data, {silent: true});
+					}else if(type == "leads" && App_Leads.leadsListView && App_Leads.leadsListView.collection && App_Leads.leadsListView.collection.length > 0){
+						App_Leads.leadsListView.collection.models[0].set("count", data, {silent: true});
 					} else{
 						App_Companies.companiesListView.collection.models[0].set("count", data, {silent: true});
 					}

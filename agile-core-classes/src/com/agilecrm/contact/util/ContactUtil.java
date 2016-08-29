@@ -2188,4 +2188,14 @@ public static Contact searchMultipleContactByEmail(String email,Contact contact)
     	}
     	return null;
     }
+    
+    public static List<Contact> getAllByOrder(int max, String cursor, String sortKey, Type type)
+    {
+	Map<String, Object> searchMap = new HashMap<String, Object>();
+	searchMap.put("type", type);
+	if (max != 0)
+	    return dao.fetchAllByOrder(max, cursor, searchMap, false, true, sortKey);
+
+	return dao.listByPropertyAndOrder(searchMap, sortKey);
+    }
 }

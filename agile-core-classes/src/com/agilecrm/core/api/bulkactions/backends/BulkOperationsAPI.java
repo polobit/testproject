@@ -461,6 +461,13 @@ public class BulkOperationsAPI
 
 	ActivitySave.createBulkActionActivity(idsFetcher.getTotalCount(), "ADD_TAG", tagsString, "contacts", "");
 	}
+	
+	if(idsFetcher.getLeadCount() > 0){
+		BulkActionNotifications.publishconfirmation(BulkAction.BULK_ACTIONS.LEAD_ADD_TAGS, Arrays.asList(tagsArray)
+			.toString(), String.valueOf(idsFetcher.getTotalCount()));
+
+		ActivitySave.createBulkActionActivity(idsFetcher.getTotalCount(), "ADD_TAG", tagsString, "leads", "");
+	}
     }
 
     @SuppressWarnings("unchecked")
@@ -541,6 +548,13 @@ public class BulkOperationsAPI
 		.toString(), String.valueOf(idsFetcher.getTotalCount()));
 
 	ActivitySave.createBulkActionActivity(idsFetcher.getTotalCount(), "REMOVE_TAG", tagsString, "contacts", "");
+	}
+	
+	if(idsFetcher.getLeadCount() > 0){
+		BulkActionNotifications.publishconfirmation(BulkAction.BULK_ACTIONS.LEAD_REMOVE_TAGS, Arrays.asList(tagsArray)
+			.toString(), String.valueOf(idsFetcher.getTotalCount()));
+
+		ActivitySave.createBulkActionActivity(idsFetcher.getTotalCount(), "REMOVE_TAG", tagsString, "leads", "");
 	}
 
     }

@@ -260,5 +260,9 @@ var MODAL_MESSAGES = {
 	"stripe_customfield_selection_error" : {
 		"title": "{{agile_lng_translate 'stripe' 'custom-field'}}",
 		"message" : "{{agile_lng_translate 'stripe' 'select-custom-field'}}"
-	}
+	},
+	"delete_lead" : {
+		"title": "{{agile_lng_translate 'leads-view' 'delete-lead'}}",
+		"message" : GLOBAL_MODAL_MESSAGES.global_delete
+	},
 };

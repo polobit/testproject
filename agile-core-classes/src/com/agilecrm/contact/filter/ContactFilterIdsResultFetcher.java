@@ -271,9 +271,18 @@ public class ContactFilterIdsResultFetcher
 
 	return 0;
     }
+    
+    public int getLeadCount()
+    {
+	if (isLead())
+	    return getTotalCount();
+
+	return 0;
+    }
 
     private Boolean isContacts;
     private Boolean isCompany;
+    private Boolean isLead;
 
     private boolean isContact()
     {
@@ -297,6 +306,20 @@ public class ContactFilterIdsResultFetcher
 
 	if (type == Type.COMPANY)
 	    return (isCompany = true);
+
+	return false;
+
+    }
+    
+    private boolean isLead()
+    {
+	if (isLead != null)
+	    return isLead;
+
+	Type type = getTypeFromResults();
+
+	if (type == Type.LEAD)
+	    return (isLead = true);
 
 	return false;
 
@@ -443,6 +466,11 @@ public class ContactFilterIdsResultFetcher
 	else if (id.equals("#companies"))
 	{
 	    searchMap.put("type", Type.COMPANY);
+	}
+	
+	else if (id.equals("Leads"))
+	{
+	    searchMap.put("type", Type.LEAD);
 	}
 
 	if (searchMap.isEmpty())

@@ -1,0 +1,71 @@
+<script id="leads-grid-view-model-template" type="text/html">
+	{{#if_contact_type "LEAD"}}
+		<div class="custom-animated custom-fadeInUp">
+			<div class="contacts-grid-view-temp p-b col-md-4 {{id}}">
+				<div class="b r-5x p-sm bg-white" id="{{id}}" style="height: 125px;">
+					<div class="left pos-abs">
+						<label class="i-checks i-checks-sm">
+							<input type="checkbox" class="tbody_check grid-view-checkbox" value=""> <i></i>
+						</label>
+					</div>
+					<div style="margin-left: 25px; margin-bottom: 40px;">
+						<div class="pull-left m-r-xs thumb-sm">
+							<a href="#lead/{{id}}"> <img class="img-inital inline r r-2x" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 50}}" width="40px !important;" height="40px !important" /></a>
+						</div>
+						<div class="pull-left text-ellipsis" style="width: calc(100% - 45px);line-height: 18px;color:#7C7C7C;">
+							<a href="#lead/{{id}}" style="width: calc(100% - 30px);" class="text-cap agile-contact-grid-view text-ellipsis block">
+								{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}
+							</a>
+							<div style="color:#7C7C7C; display:{{checkPropertyValueExistance properties "company" "title"}}">
+								<span class="text-cap grid-view-elipsis" style="vertical-align: bottom;" title="{{getPropertyValue properties "company"}}">
+									{{getPropertyValue properties "company"}}
+								</span>
+								<span style="margin-right: {{getMarginLength properties "company"}};">
+									{{getPropertyValueExists properties "company" "title"}}
+								</span>
+								<span class="text-cap grid-view-elipsis" style="vertical-align: bottom;" title="{{getPropertyValue properties "title"}}">
+									{{getPropertyValue properties "title"}}
+								</span>
+							</div>
+							<div>{{getPropertyValue properties "email"}}</div>
+						</div>
+						<div class="pull-right grid-view-actions grid-view-action-button">
+							<span class="m-r-xs c-p">
+								<a href="#lead/{{id}}">
+									<i data-toggle="tooltip" data-placement="left" title="" data-original-title="Edit" class="fa fa-pencil-square grid-edit-color"></i>
+								</a>
+							</span>
+							<span class='c-p' con_id="{{id}}" id="contact-actions-grid-delete">
+								<i data-toggle="tooltip" data-placement="left" title="" data-original-title="Delete" class="fa fa-trash grid-delete-color"></i>
+							</span>
+						</div>
+					</div>
+					<div class="clearfix"></div>
+					<div class="w-full contact-grid-ellipsis line-clamp line-clamp-1 m-t-xs no-wrap" style="padding-left: 24px;">
+						{{#each tags}}
+							<span class="label bg-light dk text-tiny overflow-visible font-normal grid-tag-color">{{this}}</span>
+						{{/each}}
+					</div>
+					<div class="w-full contact-grid-ellipsis line-clamp line-clamp-1 m-t-xs no-wrap" style="padding-left: 24px;">
+						<span class="label bg-light dk text-tiny overflow-visible font-normal grid-tag-color">{{getLeadStatus lead_status_id}}</span>
+					</div>
+				</div>
+			</div>
+		</div>
+	{{/if_contact_type}}
+</script>
+
+<script id="leads-grid-view-collection-template" type="text/html">
+	<div class="m-l-sm filter-criteria"></div>
+	{{#unless this.length}}
+		<div class="m-l-sm" id="slate"></div>
+	{{/unless}}
+	{{#if this.length}}
+		<div class="data">
+			<div class="data-container leads-inner-div">
+				<div  class="btn-group inline-block text-center" style="display: none; border:1px solid #dee5e7;width:99%;margin-top:-1px; padding:5px;" id="bulk-select"></div>
+                <div id="leads-grid-view-model-list" class="leads-model-list grid-view showCheckboxes row wrapper-md" route="lead/"  url="core/api/contacts/delete?action=DELETE"></div>
+            </div>
+        </div>
+	{{/if}}
+</script>

@@ -780,7 +780,7 @@ function checkEmailValidation(value)
 function getContactName(contact)
 {
 	var name = "";
-	if (!contact.type || contact.type == 'PERSON')
+	if (!contact.type || contact.type == 'PERSON' || contact.type == 'LEAD')
 	{
 		var first_name = getPropertyValue(contact.properties, "first_name");
 		var last_name = getPropertyValue(contact.properties, "last_name");

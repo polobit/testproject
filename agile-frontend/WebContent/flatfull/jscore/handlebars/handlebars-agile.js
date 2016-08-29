@@ -25,7 +25,7 @@ function getTemplateUrls(templateName)
 	{
 		template_relative_urls.push("admin.js");
 	}
-	if (templateName.indexOf("contact-detail") == 0 || templateName.indexOf("timeline") == 0 || templateName.indexOf("company-detail") == 0)
+	if (templateName.indexOf("contact-detail") == 0 || templateName.indexOf("timeline") == 0 || templateName.indexOf("company-detail") == 0 || templateName.indexOf("leads-details") == 0)
 	{
 		template_relative_urls.push("contact-detail.js");
 		if (HANDLEBARS_PRECOMPILATION)
@@ -228,6 +228,23 @@ function getTemplateUrls(templateName)
 	if (templateName.indexOf("helpcenter") == 0)
 	{
 		template_relative_urls.push("helpcenter.js");
+	}
+	if (templateName.indexOf("leads-filter") == 0 || templateName.indexOf("leads-lhs-filters") == 0 || templateName.indexOf("leads-static-filters") == 0)
+	{
+		template_relative_urls.push("leads-filters.js");
+	}
+	if (templateName.indexOf("new-lead") == 0 || templateName.indexOf("update-lead") == 0)
+	{
+		template_relative_urls.push("leads-form.js");
+	}
+	if (templateName.indexOf("leads-header") == 0 || templateName.indexOf("leads-list-view") == 0 || 
+		templateName.indexOf("leads-sources-statuses") == 0 || templateName.indexOf("leads-grid") == 0)
+	{
+		template_relative_urls.push("leads-view.js");
+	}
+	if (templateName.indexOf("leads-details") == 0)
+	{
+		template_relative_urls.push("leads-details.js");
 	}
 	
 	return template_relative_urls;
