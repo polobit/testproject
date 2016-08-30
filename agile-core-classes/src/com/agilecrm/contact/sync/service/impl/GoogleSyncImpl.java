@@ -418,7 +418,7 @@ public class GoogleSyncImpl extends TwoWaySyncService
 	catch (Exception e)
 	{
 	    System.out.println("Error occured while creating contacts in Google" + e.getMessage());
-	    System.out.println("Error occured while creating contacts in Google" + e);
+	    e.printStackTrace();
 	}
 	
     }
@@ -434,6 +434,7 @@ public class GoogleSyncImpl extends TwoWaySyncService
 	{
 		System.out.println("Error occured while updating contacts in Google" + e.getMessage());
 		System.out.println("Error occured while updating contacts in Google" + e);
+		e.printStackTrace();
 	}
 
     }
