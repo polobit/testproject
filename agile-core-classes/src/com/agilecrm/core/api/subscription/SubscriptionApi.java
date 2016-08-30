@@ -156,6 +156,8 @@ public class SubscriptionApi {
 			return subscribe;
 		} catch (PlanRestrictedException e) {
 			throw e;
+		} catch (WebApplicationException e) {
+			throw e;
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println(ExceptionUtils.getFullStackTrace(e));
@@ -200,6 +202,8 @@ public class SubscriptionApi {
 		} catch (PlanRestrictedException e) {
 			System.out.println("excpetion plan exception");
 			throw e;
+		} catch (WebApplicationException e) {
+			throw e;
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println(ExceptionUtils.getFullStackTrace(e));
@@ -233,6 +237,8 @@ public class SubscriptionApi {
 			return SubscriptionUtil.createEmailSubscription(plan);
 		} catch (PlanRestrictedException e) {
 			System.out.println("excpetion plan exception");
+			throw e;
+		} catch (WebApplicationException e) {
 			throw e;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -293,6 +299,8 @@ public class SubscriptionApi {
 	public Invoice getInvoice(@QueryParam("d") String invoice_id) {
 		try {
 			return StripeUtil.getInvoice(invoice_id);
+		} catch (WebApplicationException e) {
+			throw e;
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new WebApplicationException(Response
