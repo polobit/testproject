@@ -438,10 +438,69 @@ public class EmailUtil
     public static int getCountForEmails(String emails){
     	
     	
-    return	StringUtils.countMatches(emails, ",");
+    return	StringUtils.countMatches(emails, ",")+1;
     	
     		
     } 
+    /**
+     * This method along with footer, can be used as a template for sending mail reports.  
+     * 
+     * @param title
+     * @return
+     */
+    public static String templateHeader(String title) {
+		StringBuilder content = new StringBuilder();
+		content.append("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\"> ");
+		content.append("<html xmlns=\"http://www.w3.org/1999/xhtml\"> <head> <meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />");
+		content.append(" <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\"> <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">");
+		content.append(" <title>AgileCRM</title> ");
+		content.append("<style type=\"text/css\">body{margin:0;padding:0}img{border:0!important;outline:none!important;max-width:100%;font-size:12px}");
+		content.append(".container{width:400px}.wrapper{padding:40px 110px;background-color:#fafafa;width:600px;margin:0 auto}@media(max-width:640px)");
+		content.append("{.container{width:90%}h2{font-size:18px!important}.content td{font-size:12px!important;line-height:18px!important}");
+		content.append(".img-responsive{max-width:100%!important;height:auto;display:block}.img-shadow{width:100%!important}}</style> </head> ");
+		content.append("<body style=\"margin:0;padding:0;background-color:#fff\"> ");
+		content.append("<table style=\"width:100%;align:center;border-collapse:collapse;background-repeat:repeat;background-color:#fafafa;display:table\"> ");
+		content.append("<tr> <td style=\"padding:50px 130px 40px\"> <table cellspacing=\"0\" cellpadding=\"0\" align=\"center\"> <tbody> <tr> <td> ");
+		content.append("<table cellspacing=\"0\" cellpadding=\"0\" align=\"center\" style=\"background-color:#fff;border-radius:5px\" class=\"container\"> ");
+		content.append("<tbody> <tr> <td style=\"border:1px solid #ccc;border-radius:2px\" class=\"content\"> <table cellspacing=\"0\" cellpadding=\"0\" ");
+		content.append("style=\"text-align:center;width:100%\"> <tbody> <tr> <td style=\"padding-top:15px;padding-left:20px;padding-bottom:15px;padding-right:20px\"> ");
+		content.append("<table width=\"100%\" cellspacing=\"0\" cellpadding=\"0\"> <tbody> <tr> <td width=\"170\" valign=\"bottom\"> ");
+		content.append("<img width=\"150\" class=\"img-responsive\" alt=\"AgileCRM\" ");
+		content.append("src=\"https://s3.amazonaws.com/agilecrm/panel/uploaded-logo/1383722651000?id=upload-container\"> </td> </tr> </tbody> </table>");
+		content.append(" </td> </tr> </tbody> </table> <table width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" style=\"background-color:#ccc\"> <tbody>");
+		content.append(" <tr> <td height=\"1\"></td> </tr> </tbody> </table> <table width='100%' cellspacing='0' cellpadding='5px'> <tbody> ");
+		content.append("<tr> <td style='color:#1E90FF; font-weight:bold;font-size:16px; text-align:center;'> _title </td> </tr> ");
+		content.append("<tr> <td style='font-weight:bold;font-size:12px; text-align:center;'> _date</td> </tr> </tbody> </table> ");
+		content.append("<table cellspacing=\"0\" cellpadding=\"0\"> <tbody> <tr> ");
+		content.append("<td style=\"padding-right:20px;padding-left:20px;line-height:20px;font-size:14px;font-family:arial,sans-serif;color:#4B4848\"> ");
+
+		String header = StringUtils.replaceOnce(content.toString(), "_title", title);
+		return StringUtils.replaceOnce(header, "_date", DateUtil.getCalendarString(System.currentTimeMillis(), DateUtil.EMAIL_TEMPLATE_DATE_FORMAT, "GMT"));
+    }
+    
+    /**
+     * This method along with header, can be used as a template for sending mail reports.  
+     * 
+     * @param title
+     * @return
+     */
+    public static String templateFooter() {
+    	StringBuilder content = new StringBuilder();
+    	content.append("<br> <br> <br> The Crew at AgileCRM<br> <a target=\"_blank\" href=\"https://www.agilecrm.com\">https://www.agilecrm.com</a><br> ");
+		content.append("<br> <br> </td> </tr> </tbody> </table> </td> </tr> </tbody> </table> </td> </tr> <tr> <td> ");
+		content.append("<table cellspacing=\"0\" cellpadding=\"0\" align=\"center\" class=\"container\"> <tbody> <tr> <td align=\"center\"> ");
+		content.append("<img width=\"600\" height=\"15\" src=\"http://venkat2desk.site90.net/images/border-shadow.png\" alt=\"\" class=\"img-shadow\"> </td> </tr> ");
+		content.append("<tr> <td style=\"font-family:arial,sans-serif;font-size:14px;text-align:center;padding-top:15px;opacity:.6\"> ");
+		content.append("Agile CRM, MS 35, 440 N Wolfe Road, Sunnyvale, CA 94085, USA. </td> </tr> <tr> ");
+		content.append("<td style=\"font-family:arial,sans-serif;font-size:9px;text-align:center;padding-top:15px;padding-left:15px;padding-right:15px;opacity:.6\"> ");
+		content.append("This email sent to {{email}} because with this email an account with Agile CRM has been created and subscribed to our mailing list. ");
+		content.append("If you would no longer get email updates from Agile CRM, you can unsubscribe <a href=\"\">here.</a> </td> </tr> </tbody> </table> ");
+		content.append("</td> </tr> </tbody> </table> </td> </tr> </table> </body> </html>");
+		
+		return content.toString();
+    }
+    
+}
     
     
-   }
+  
