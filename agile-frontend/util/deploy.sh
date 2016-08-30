@@ -33,9 +33,9 @@ rm -r ../WebContent/tpl/localestmp
 java -jar precompile.jar ../WebContent/helpcenter/helpcenter-tpl ../../../tmp/handlebars ../WebContent/tpl/min/precompiled/flatfull
 
 
-sh yui.sh
+#sh yui.sh
 
-sh tpl.sh
+#sh tpl.sh
 
 sh tpl-flatfull.sh
 
