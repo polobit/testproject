@@ -57,4 +57,10 @@
       "views" : "{{agile_lng_translate 'contacts-view' 'views'}}",
       "knowledge-base" : "{{agile_lng_translate 'other' 'knowledge-base'}}",
       "chat-with-us" : "{{agile_lng_translate 'others' 'chat-with-us'}}",
+      "all" : "{{agile_lng_translate 'menu' 'all'}}",
+      "contacts" : "{{agile_lng_translate 'menu' 'contacts'}}",
+      "companies" : "{{agile_lng_translate 'menu' 'companies'}}",
+      "deals" : "{{agile_lng_translate 'menu' 'deals'}}",
+      "documents" : "{{agile_lng_translate 'menu' 'documents'}}",
+      "tickets" : "{{agile_lng_translate 'menu' 'tickets'}}",
 }
