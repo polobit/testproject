@@ -9,7 +9,7 @@
               registration_id=subscription.endpoint.substring(subscription.endpoint.lastIndexOf("/")+1)
            
     
-      fetch(url+registration_id).then(function(response) {  
+     return fetch(url+registration_id).then(function(response) {  
         if (response.status !== 200) {  
         // Either show a message to the user explaining the error    
         console.log('Looks like there was a problem. Status Code: ' + response.status);  
