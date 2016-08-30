@@ -12,7 +12,7 @@ import com.googlecode.objectify.ObjectifyService;
  */
 public class ObjectifyRegistry {
 	
-	public static void registrEntities(){
+	public static void registerEntities(){
 		
 		//Add your entity clas here
 		ObjectifyService.register(PushNotificationMessage.class);

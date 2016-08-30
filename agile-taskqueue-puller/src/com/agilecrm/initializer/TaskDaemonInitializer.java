@@ -68,6 +68,7 @@ public class TaskDaemonInitializer
 	
 	// Register objectify entities
 	com.agilecrm.coreComponents.ObjectifyRegistry.registerEntities();
+	com.agilecrm.coreClasses.ObjectifyRegistry.registerEntities();	
 	//
 
 	System.out.println(Runtime.getRuntime().availableProcessors());

@@ -18,6 +18,8 @@ public class AgileServletContextListener implements ServletContextListener
 		
 		// Register objectify entities
 		com.agilecrm.coreComponents.ObjectifyRegistry.registerEntities();
+		com.agilecrm.coreClasses.ObjectifyRegistry.registerEntities();
+
 	}
 
 	public void contextDestroyed(ServletContextEvent sce) 
