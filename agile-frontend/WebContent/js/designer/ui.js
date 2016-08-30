@@ -143,7 +143,7 @@ function generateDynamicSelectUI(uiFieldDefinition, url, keyField, valField)
 	if(type == "multiselect")
 		attr = "multiple";
 
-	var selectContainer = $("<select "+ attr +" name='" + uiFieldDefinition.name + "' title='" + uiFieldDefinition.title + "'> " + "</select>");
+	var selectContainer = $("<select "+ attr + "required ='" + (uiFieldDefinition.required == "required" ? uiFieldDefinition.required  : "") + "' name='" + uiFieldDefinition.name + "' title='" + uiFieldDefinition.title + "'> " + "</select>");
 
 
 	if(event && eventHandler)

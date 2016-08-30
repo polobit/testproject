@@ -1,3 +1,4 @@
+
 /**
  * If the template is not found in document body, then template paths are built
  * based on template name and download requests are sent. if it is down-loaded
@@ -229,7 +230,10 @@ function getTemplateUrls(templateName)
 	{
 		template_relative_urls.push("helpcenter.js");
 	}
-	
+	if (templateName.indexOf("push-notification") == 0)
+	{
+		template_relative_urls.push("notification.js");
+	}
 	return template_relative_urls;
 }
 

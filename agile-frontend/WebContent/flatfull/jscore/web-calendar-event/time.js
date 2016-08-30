@@ -228,7 +228,7 @@ function getTimeInVisitorTimezoneWhileLoading(time,timezone){
 		workhours=getTimeInVisitorTimezone(times[0],timezone,true)+" - "+getTimeInVisitorTimezone(times[1],timezone,true);
 	}
 	else{
-		workhours="Today is holiday";
+		workhours= LOCALES_JSON['holiday-today'];
 	}
 	return workhours;
 }
@@ -275,7 +275,7 @@ function updateUserBusinessHoursInVisitorTimezone(dates){
 			$("#workhours-"+multi_user_ids[k]).html(getTimeInVisitorTimezone(s.timeFrom)+" - "+getTimeInVisitorTimezone(s.timeTill));
 		}
 		else{
-			$("#workhours-"+multi_user_ids[k]).html("No working hours");
+			$("#workhours-"+multi_user_ids[k]).html(LOCALES_JSON['no-working-hrs']);
 		}
 	}
 }

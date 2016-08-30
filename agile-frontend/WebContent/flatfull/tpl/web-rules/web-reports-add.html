@@ -476,6 +476,7 @@
 												<option value="CORNER_NOTY" class="POPUP">{{agile_lng_translate 'web-rules' 'noty-message'}}</option>
 												<option value="CALL_POPUP" class="POPUP">{{agile_lng_translate 'webrules' 'call-popup'}}</option>
 												<option value="SITE_BAR" class="POPUP">{{agile_lng_translate 'webrules' 'site-bar'}}</option>
+												{{#if id}}<option value="REQUEST_PUSH_POPUP" class="POPUP">Request Push Popup</option>{{/if}}
 											</optgroup>
 											<optgroup label="{{agile_lng_translate 'contact-details' 'campaign'}}">
 												<option value="ASSIGN_CAMPAIGN" class="campaign" 
@@ -499,7 +500,7 @@
 											</optgroup>
 											<optgroup label="{{agile_lng_translate 'web-rules' 'execute-code'}}">
 												<option value="JAVA_SCRIPT">{{agile_lng_translate 'web-rules' 'java-script'}}</option>
-											</opt>
+											</optgroup>
 											</select>
 										</div>
 										</td>
@@ -543,6 +544,7 @@
  													</small>
 													<textarea  cols="" name="webrule-information-field" class="information confirmation CORNER_NOTY span5 required w-full" rows="10" placeholder="{{agile_lng_translate 'web-rules' 'paste-html-context'}}"></textarea>
 													<textarea  cols="" name="webrule-custom-html" id="tinyMCEhtml_email" class="custom_html required MODAL_POPUP w-full form-control" rows="10" placeholder="{{agile_lng_translate 'web-rules' 'paste-html-context'}}"></textarea>
+													<textarea  cols="" name="webrule-custom-html" id="tinyMCEhtml_email" class="custom_html required REQUEST_PUSH_POPUP w-full form-control" rows="10" placeholder="{{agile_lng_translate 'web-rules' 'paste-html-context'}}"></textarea>
 													<textarea  cols="" name="webrule-custom-html" id="callwebrule-code"  class="custom_html required CALL_POPUP w-full form-control" rows="10" ></textarea>
 <textarea  cols="" name="webrule-javascript" class="code  JAVA_SCRIPT form-control w-full required" rows="10" placeholder="">function agile_js_code_exec() {
     // Copy your code here
@@ -575,9 +577,9 @@
 											<div name="position" id="possition">
 												<div class="pull-left p-t-sm"><span style="color:#474444">{{agile_lng_translate 'web-rules' 'where-to-show'}}</span></div></br></br>
 												<select class="required form-control m-t-n-xxs">
-													<option value="CENTER" class="MODAL_POPUP CALL_POPUP">{{agile_lng_translate 'web-rules' 'center'}}</option>
-													<option value="RIGHT_BOTTOM" class="MODAL_POPUP CALL_POPUP">{{agile_lng_translate 'web-rules' 'right-bottom'}}</option>
-													<option value="LEFT_BOTTOM" class="MODAL_POPUP CALL_POPUP">{{agile_lng_translate 'web-rules' 'left-bottom'}}</option>
+													<option value="CENTER" class="MODAL_POPUP CALL_POPUP REQUEST_PUSH_POPUP">{{agile_lng_translate 'web-rules' 'center'}}</option>
+													<option value="RIGHT_BOTTOM" class="MODAL_POPUP CALL_POPUP REQUEST_PUSH_POPUP">{{agile_lng_translate 'web-rules' 'right-bottom'}}</option>
+													<option value="LEFT_BOTTOM" class="MODAL_POPUP CALL_POPUP REQUEST_PUSH_POPUP">{{agile_lng_translate 'web-rules' 'left-bottom'}}</option>
 													<option value="TOP" class="SITE_BAR">Top</option>
 													<option value="BOTTOM" class="SITE_BAR">Bottom</option>
 												</select>
@@ -589,11 +591,11 @@
 											<div name="delay" id="delay">
 												<div class="pull-left p-t-sm"><span style="color:#474444">{{agile_lng_translate 'web-rules' 'when-to-show'}}</span></div></br></br>
 												<select class="required form-control m-t-n-xxs">
-														<option value="IMMEDIATE" class="MODAL_POPUP FORM CORNER_NOTY CALL_POPUP SITE_BAR">{{agile_lng_translate 'web-rules' 'immediately'}}</option>
-														<option value="AFTER_SECS" class="MODAL_POPUP FORM CORNER_NOTY CALL_POPUP SITE_BAR">{{agile_lng_translate 'web-rules' 'after-certain-time'}}</option>
-														<option value="FIRST_SCROLL" class="MODAL_POPUP FORM CORNER_NOTY CALL_POPUP SITE_BAR">{{agile_lng_translate 'web-rules' 'on-starting-scroll'}}</option>
-														<option value="END_OF_PAGE" class="MODAL_POPUP FORM CORNER_NOTY CALL_POPUP SITE_BAR">{{agile_lng_translate 'web-rules' 'on-reaching-end-of-page'}}</option>
-														<option value="EXIT" class="MODAL_POPUP FORM CORNER_NOTY CALL_POPUP SITE_BAR">{{agile_lng_translate 'web-rules' 'about-to-exit-page'}}</option> 
+														<option value="IMMEDIATE" class="MODAL_POPUP FORM CORNER_NOTY CALL_POPUP SITE_BAR REQUEST_PUSH_POPUP">{{agile_lng_translate 'web-rules' 'immediately'}}</option>
+														<option value="AFTER_SECS" class="MODAL_POPUP FORM CORNER_NOTY CALL_POPUP SITE_BAR REQUEST_PUSH_POPUP">{{agile_lng_translate 'web-rules' 'after-certain-time'}}</option>
+														<option value="FIRST_SCROLL" class="MODAL_POPUP FORM CORNER_NOTY CALL_POPUP SITE_BAR REQUEST_PUSH_POPUP">{{agile_lng_translate 'web-rules' 'on-starting-scroll'}}</option>
+														<option value="END_OF_PAGE" class="MODAL_POPUP FORM CORNER_NOTY CALL_POPUP SITE_BAR REQUEST_PUSH_POPUP">{{agile_lng_translate 'web-rules' 'on-reaching-end-of-page'}}</option>
+														<option value="EXIT" class="MODAL_POPUP FORM CORNER_NOTY CALL_POPUP SITE_BAR REQUEST_PUSH_POPUP">{{agile_lng_translate 'web-rules' 'about-to-exit-page'}}</option> 
 												</select>
 											</div>
 										

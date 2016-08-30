@@ -137,6 +137,8 @@ public class BulkActionsAPI
 	if (filterId != null)
 	{
 	    System.out.println("filter id : " + filterId);
+	    if(filterId.equalsIgnoreCase("undefined"))
+	    	return;
 	    BulkActionUtil.postDataToBulkActionBackend(ActionType.valueOf(action_type).getUrl(), contentType,
 		    ActionType.valueOf(action_type).getQueue(), Method.POST, filterId, request.getParameter("data"));
 	    return;

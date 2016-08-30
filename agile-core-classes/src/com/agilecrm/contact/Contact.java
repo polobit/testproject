@@ -298,6 +298,20 @@ public class Contact extends Cursor
     @JsonIgnore
     @NotSaved
     public boolean forceSearch = false;
+    
+    /**
+     * Set of Browser id for push notification
+     *  
+     */
+    @Indexed
+    public Set<String> browserId = new HashSet<String>();
+    
+    /**
+     * Set of Guid of contact
+     *  
+     */
+    @Indexed
+    public String guid = null;
 
     /**
      * Default constructor
@@ -919,6 +933,21 @@ public class Contact extends Cursor
 	    this.save();
 
     }
+    
+    /**
+     * Add push notification browser id
+     * 
+     * @param browserId
+     *            value of the browser id
+     */
+    public void addBrowserId(String browserId)
+    {
+    	if (this.browserId == null)
+    		this.browserId = new HashSet<String>();
+
+    	this.browserId.add(browserId);
+    }
+
 
     /**
      * Deletes a contact from database and search document by executing a

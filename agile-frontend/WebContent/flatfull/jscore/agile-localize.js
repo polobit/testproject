@@ -8,6 +8,11 @@ var _agile_month_short_names_localize = {
 };
 
 // Date picker language settings
+if(!$.fn.datepicker){
+   $.fn.datepicker = {dates : {"en" : {}}};
+}
+   
+
 $.fn.datepicker.dates['en'] = {
     days: ["{{agile_lng_translate 'prefs-settings' 'sunday'}}", "{{agile_lng_translate 'prefs-settings' 'monday'}}", "{{agile_lng_translate 'calendar' 'tuesday'}}", "{{agile_lng_translate 'calendar' 'wednesday'}}", "{{agile_lng_translate 'calendar' 'thursday'}}", "{{agile_lng_translate 'calendar' 'friday'}}", "{{agile_lng_translate 'calendar' 'saturday'}}", "{{agile_lng_translate 'prefs-settings' 'sunday'}}"],
     daysExact: ["{{agile_lng_translate 'prefs-settings' 'sunday'}}", "{{agile_lng_translate 'prefs-settings' 'monday'}}", "{{agile_lng_translate 'calendar' 'tuesday'}}", "{{agile_lng_translate 'calendar' 'wednesday'}}", "{{agile_lng_translate 'calendar' 'thursday'}}", "{{agile_lng_translate 'calendar' 'friday'}}", "{{agile_lng_translate 'calendar' 'saturday'}}"],

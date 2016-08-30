@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Push Notification of Agile CRM</title>
+</head>
+
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.11.1/jquery.validate.min.js"></script>
+
+<body>
+<div style="margin-top:15%;text-align: center;">
+  <img src="https://media.licdn.com/mpr/mpr/shrink_200_200/AAEAAQAAAAAAAAWJAAAAJDQwNmRhNGNmLTlmNWMtNGZkMC1hZDJhLWI0ODE1NDQxMmNhNA.png" >
+  <p></p>
+  </div>
+</body>
+<script type="text/javascript">
+	// Call this method through Web rules for enable push notification
+  $(document).ready(function(){
+
+  $.getScript("../flatfull/lib/desktop-notify-min.js").done(function( script) {
+   
+    var host = getUrlParameter("host");
+     if(notify.permissionLevel() == notify.PERMISSION_GRANTED)
+      { 
+        $('p').html("You already subscribe notification for " + host + ". Thank you for subscription");
+         enablePushNotification1();
+      }
+      else if (notify.permissionLevel() == notify.PERMISSION_DEFAULT)
+      {
+         $('p').html("Get Notifications from " + host + ". You can also block the Notifications anytime you want.");
+        enablePushNotification1();
+      } 
+      else
+      {
+        $('p').html("Notifications are disabled. Enable by following simple instructions. <a target='blank' href='//doxhze3l6s7v9.cloudfront.net/beta/static//img/notification-help/notification-enable-help.png'>click here</a>");
+      }
+    });
+
+  });
+
+function enablePushNotification1(){
+
+  var fileref=document.createElement("link")
+  fileref.setAttribute("rel", "manifest")
+  fileref.setAttribute("type", "text/json")
+  fileref.setAttribute("href", "manifest.json");
+  document.getElementsByTagName("head")[0].appendChild(fileref);
+  regiseterServiceWorkers();
+}
+
+//Registerng Service Workers for Push Notification   
+function regiseterServiceWorkers()  {
+   if ('serviceWorker' in navigator) 
+      {
+        navigator.serviceWorker.register('agile-service-workers.js',{ scope: './'}).then(function (registration) 
+          {
+              var serviceWorker; 
+              // Are Notifications supported in the service worker?  
+              if (!('showNotification' in ServiceWorkerRegistration.prototype)) {  
+                console.warn('Push Notifications aren\'t supported.');  
+                return;  
+               }
+
+            // Check the current Notification permission. 
+            if (Notification.permission === 'denied') {  
+              console.warn('The user has blocked Push Notifications.');  
+               return;  
+            }
+
+              // Check if push messaging is supported  
+              if (!('PushManager' in window)) {  
+                console.warn('Push messaging isn\'t supported.');  
+               // return;  
+              }
+       
+          if (registration.active) 
+           {
+              serviceWorker = registration.active;
+              console.log('active');
+           }
+
+        registration.pushManager.getSubscription().then(
+        function(pushSubscription) 
+        {
+          // Check if we have an existing pushSubscription
+          if (pushSubscription)
+           {
+                 
+                 console.log("You already having subscription : "+ pushSubscription.endpoint);
+                 sendPushNotificationSubscription(pushSubscription);
+           } 
+          else
+           {
+             registration.pushManager.subscribe({  userVisibleOnly: true }).then(function(sub)
+              {
+                  sendPushNotificationSubscription(sub);
+               }).catch(function (error) 
+                {
+                  window.close();
+                });
+           }
+        });
+
+     }).catch(function (error) 
+      {
+        console.log("Error occured while Registering service worker for push notification"+error);
+        window.close();
+      });
+  }
+   else{
+       console.log("The current browser doesn't support service workers.");
+       window.close();
+     }
+
+    }
+   
+  //Create or update contact if visitors click on allow notification
+
+  function sendPushNotificationSubscription(subscription)
+  {
+    
+    //Fetching email id form cookies
+     var email = getUrlParameter("email");
+
+     var guid = getUrlParameter("guid"); 
+
+     var apiKey = getUrlParameter("apiKey"); 
+
+     //Getting browser id for push notification
+     browser_id = subscription.endpoint.substring(subscription.endpoint.lastIndexOf("/")+1)
+
+     if(subscription.endpoint.indexOf("mozilla")>0)
+        browser_id = "mozilla" + browser_id;
+      else
+        browser_id = "chrome" + browser_id;
+
+     var params = "browserId=" +encodeURIComponent(browser_id); 
+
+     if(email != 'null' && email != undefined)
+        params = params + "&email=" + encodeURIComponent(email);
+
+     if(guid != 'null' && guid != undefined)
+        params = params + "&guid=" + encodeURIComponent(guid);
+
+      if(apiKey != 'null' && apiKey != undefined)
+        params = params + "&id=" + encodeURIComponent(apiKey);
+
+     var agile_url = window.location.origin + "/core/js/api/contacts/push-notification/subscriber?"+ params;
+  
+   $.ajax({        
+        url: agile_url ,
+        data: "",
+        type: 'GET',
+       success: function (resp) {
+            window.close();
+       },
+    error: function(e){
+        window.close();
+      }  
+     });           
+  }
+
+
+ function getUrlParameter(sParam) {
+    var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+        sURLVariables = sPageURL.split('&'),
+        sParameterName,
+        i;
+
+    for (i = 0; i < sURLVariables.length; i++) {
+        sParameterName = sURLVariables[i].split('=');
+
+        if (sParameterName[0] === sParam) {
+            return sParameterName[1] === undefined ? true : sParameterName[1];
+        }
+    }
+};
+</script>
+</html>

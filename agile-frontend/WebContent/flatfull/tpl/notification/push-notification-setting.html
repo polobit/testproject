@@ -1,0 +1,202 @@
+<script id="push-notification-collection-template" type="text/html">
+	<div class="wrapper-md lter bg-light b-b">
+		<div class="row">
+    		<div class="col-md-12">
+        		<h3 class="font-thin h3 pull-left">Push Notifications <small> <span class="label label-sm bg-danger">Beta</span></small></h3>
+					<a href="#push-notification-add" class="btn btn-sm btn-default pull-right btn-addon" style="position:relative"><span><i class="icon-plus-sign" /></span> Add Push Notification</a>
+				<div class="clearfix"></div> 
+    		</div>
+		</div>
+	</div>
+	<div class="wrapper-md">
+	<div class="row">
+ 		<div class="col-md-9">
+			{{#unless this.length}}
+			<div>
+				<div class="alert bg-white">
+					<div class="slate-content  p-md">
+						<div class="box-left pull-left m-r-md">
+							<img alt="Clipboard" src="{{getS3ImagePath '/img/clipboard.png'}}" />
+						</div>
+						<div class="box-right pull-left">
+							<h4 class="m-t-none">Engage with your audience easily through Browser Push Notification.</h4>
+								<div class="text">Define the Push Notifications and engage with your audience both on the web page and off the web page.
+								</div>
+								<a href="#push-notification-add" class="m-t-xs btn btn-sm btn-default btn-slate-action"><i class="icon-plus-sign"></i> Add Push Notification</a>
+						</div>
+						<div class="clearfix"></div>
+							
+					</div>
+				</div>
+			</div>
+		{{/unless}}
+		{{#if this.length}}
+		<div class="data-block">
+			<div class="data-container">
+				<div class="panel panel-default">
+					<div class="panel-heading">Push Notifications List</div>
+					<table class="table table-striped showCheckboxes c-p agile-table tableHeader tab-layout" url="core/api/push/notifications/bulk" data-resizable-columns-id="push-notification-template">
+							<thead>
+								<tr>
+									<th data-resizable-column-id="form_title" class="text-ellipsis">Name</th>
+									<th data-resizable-column-id="title" class="text-ellipsis">Title</th>
+									<th data-resizable-column-id="last_modified" class="text-ellipsis">Modified Time</th>
+								</tr>
+							</thead>
+						<tbody id="push-notification-model-list" class="agile-edit-row" route="push-notification-edit/"></tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+		{{/if}}
+ 	</div>
+
+	<div class="col-md-3">
+        <div class="data-block">
+            	<h4 class="h4 m-t-none m-b-sm"> What is Push Notification?	</h4>
+				<p>Engage with your audience easily through Browser notification. Schedule and send messages to engage the right users at the most relevant time through our Marketing Campaigns.
+				</p>
+    	</div>
+	</div>
+ </div>
+</div>
+</script>
+
+<script id="push-notification-model-template" type="text/html">
+	<td  data="{{id}}" class="data c-p">
+			<div class="table-resp">{{notificationName}}</div>
+    </td>
+    <td>
+		<div class="table-resp">{{notificationTitle}}</div>
+	</td>
+	<td>
+			<span style="display:inline-block;vertical-align:top;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;width:100%;">
+				<small class="edit-hover text-muted">
+					<i class="fa fa-clock-o m-r-xs"></i>
+					<time class="form-modified-time" datetime="{{epochToHumanDate "" updated_time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" updated_time}}</time>
+				</small>
+			</span>
+	</td>
+	</br>
+</script>
+
+<script id="push-notification-add-template" type="text/html">
+<div class="wrapper-md lter bg-light b-b">
+		<div class="row">
+    		<div class="col-md-12">
+				{{#if id}}
+					<h3 class="formheading h3 font-thin"> <i class="fa fa-pencil-square"> </i> Edit Push Notification</h3>
+				{{else}}
+					<h3 class="formheading h3 font-thin"> Add Push Notification	</h3>
+				{{/if}}
+				<div class="clearfix"></div> 
+    		</div>
+		</div>
+	</div>
+
+<div class="wrapper-sm">
+<div class="row">
+<div class="col-md-7">
+    <div class="panel panel-default">
+    <div class="panel-body wrapper-lg">
+        <form id='notificationForm' name="notificationForm" class="form-horizontal" accept-charset="UTF-8">
+            <fieldset>
+           	 <div class="control-group form-group">
+                      <label class="control-label col-sm-4 col-xs-12">Name<span class="field_req">*</span></label>
+                	 <div class="controls col-sm-6 col-xs-12">
+                    	 <input type="text" placeholder="Name of Push Notification" class="required form-control" id="notification-name" name="notificationName"/>
+                    </div>
+                </div>
+
+				<div class="control-group form-group">
+                      <label class="control-label col-sm-4 col-xs-12">Title<span class="field_req">*</span></label>
+                	 <div class="controls col-sm-6 col-xs-12">
+                    	 <input type="text" maxlength=45 placeholder="Maximum 45 Characters." class="required form-control" id="notification-title" name="notificationTitle"/>
+                    </div>
+                </div>
+
+                <div class="control-group form-group">
+                    <label class="control-label col-sm-4 col-xs-12">Message<span class="field_req">*</span></label>
+                	 <div class="controls col-sm-6 col-xs-12">
+                    	 <textarea type="text" maxlength=160 placeholder="Maximum 160 Characters." class="required form-control " id="notification-message" name="notificationMessage"/>
+                    </div>
+                </div>
+               
+               <div class="control-group form-group">
+                      <label class="control-label col-sm-4 col-xs-12">Destination URL</label>
+                	 <div class="controls col-sm-6 col-xs-12">
+                    	 <input type="url" placeholder="Destination url" class="form-control" id="notification-link" name="notificationLink"/>
+                    	 <p class="help-block m-b-none">URL to open when user clicks the push notification.</p>
+                    </div>
+                </div>
+
+                <div class="control-group form-group">
+                      <label class="control-label col-sm-4 col-xs-12">Image URL</label>
+                	 <div class="controls col-sm-6 col-xs-12">
+                    	 <input type="url" placeholder="Image url" class="form-control" id="notification-icon" name="notificationIcon"/>
+                    	 <p class="help-block m-b-none">Image address url (Recommended 200*200 px)</p>
+                	</div>
+                	 <a class="btn btn-xs btn-default" id="browseBtn" onclick="$('#uploadIconToS3Btn').click() " style="margin-top:11px;">Upload</a>
+			        <input type="file" id="uploadIconToS3Btn" class="hidden">
+                </div>
+
+               <div class="control-group form-group">
+			   <div class="control-label col-sm-4 col-xs-5">Tracking</div>
+			        <div class="controls col-sm-4 col-xs-5">
+			              <select name="push_param" class="form-control">
+			                   <option value="YES">Yes</option>
+			                   <option value="YES_AND_PUSH_EMAIL_ONLY"> Yes &amp; Push (Email only)</option>
+			                   <option value="YES_AND_PUSH">Yes &amp; Push</option>
+			               </select>
+			         </div>
+			 </div>
+			 
+				<div class="clearfix"></div>           
+				<div class="line ling-lg b-b"></div>
+                <div class="form-actions col-sm-offset-4 col-sm-8" style="margin-left:32.6%;">          
+					<a href="#push-notification" class="btn btn-sm btn-default " id="push-notification-close">Close</a>
+                    <a href="#push-notification"  id="saveNotification" class="btn btn-sm btn-primary save">Save Notification</a>
+                    &nbsp;&nbsp;<span id="msg"></span>  
+                </div>
+
+                {{#if id}} <input type="text" name="id" class="hide" value="{{id}}" />
+			{{/if}}
+            </fieldset>
+        </form>
+    </div>
+</div>
+</div>
+
+<div class="col-md-5" style="min-height:">
+    <div class="panel panel-default" >
+      <div class="panel-heading h4">
+           <p class="m-none">Preview</p>
+       </div>
+      <div class="overflow-hidden" style="margin: 10px; box-shadow: 1px 1px 20px 0px #afaaaa;">
+                <div class="notification-demo">
+                    <div class="row" style="padding: 10px;">
+                       <div class="col-md-3 col-xs-3" style="width: 25%">
+                            <img id="prev-notification-icon" class="js-custom-notifications-image" src="https://media.licdn.com/mpr/mpr/shrink_200_200/AAEAAQAAAAAAAAWJAAAAJDQwNmRhNGNmLTlmNWMtNGZkMC1hZDJhLWI0ODE1NDQxMmNhNA.png" alt="" style="width: 130%;">
+                        </div>
+                            <div class="col-md-9 col-xs-9" style="padding-left: 20px;">
+                                <p style="color: black;" id = "prev-notification-title" class="h4 text-md p-b-xs">Notification Title </p>
+                                <p style="color: black;" id="prev-notification-message" class="h5 p-b-sm">Notification Message </p>
+                                <p  style="color: #989898;" class="h6 p-b-xs"><b>domain.agilecrm.com</b> </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+			
+  			<div class = "panel-footer">
+			 <a class="btn btn-xm btn-primary" id="previewBtn" btn-value="allow" onclick="">Test Now</a>
+			  <span id="push-notification-content" class="right text-base">
+	          <i>Push Notifications are now disabled. 
+	         <a href="#" id="enable-notification" class="text-info" style="text-decoration:underline;">Enable</a>
+				</i>
+			</span>
+			<span id="prev-warning-msg" style="display:none; color:red;" class="right text-base">Please enter Title and Message.</span>
+		</div>
+	</div>
+</div>
+</div>
+</script>
