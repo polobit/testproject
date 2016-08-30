@@ -292,4 +292,44 @@ public class IMAPAPI
 	result = users.toString();
 	return result;
     }
+    /**
+     * Code Added by Rajesh
+     * @param fromEmail
+     * @param searchEmail
+     * @param pageSize
+     * @param cursor
+     * @return
+     */
+    @Path("all-imap-emails")
+    @GET
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public List<EmailWrapper> getAllIMAPEmails(@QueryParam("from_email") String fromEmail,
+	    @QueryParam("search_email") String searchEmail, @QueryParam("page_size") String pageSize,
+	    @QueryParam("cursor") String cursor)
+    {
+	List<EmailWrapper> emails = null;
+	try
+	{
+	    if (StringUtils.isBlank(cursor))
+		cursor = "0";
+	    // Removes unwanted spaces in between commas
+	    //String normalisedSearchEmail = AgileTaskletUtil.normalizeStringSeparatedByDelimiter(',', searchEmail);
+
+	    // Removes unwanted spaces in between commas
+	    String normalisedFromEmail = AgileTaskletUtil.normalizeStringSeparatedByDelimiter(',', fromEmail);
+
+	    // Gets IMAPPrefs url
+	    String imapURL = ContactImapUtil.getNewIMAPURL(normalisedFromEmail, cursor, pageSize);
+
+	    if (StringUtils.isNotBlank(imapURL))
+		emails = ContactEmailUtil.getEmailsfromServer(imapURL, pageSize, cursor, normalisedFromEmail);
+	}
+	catch (Exception e)
+	{
+	    System.out.println("Got an exception in IMAPAPI while fetching mails: " + e.getMessage());
+	    e.printStackTrace();
+	    return null;
+	}
+	return emails;
+    }
 }

@@ -7,10 +7,10 @@
                   <h3 class="pull-left font-thin h3 col-md-2">Inbox <small></small></h3></div>
   				<div class="col-md-6">
                  	<div class="col-md-10">
-    					<input type="search" class="form-control">
+    					<!--<input type="search" class="form-control">-->
     				</div>
     				<div class="col-md-2">
-    					<input type="submit" class="form-control btn-primary">
+    					<!--<input type="submit" class="form-control btn-primary">-->
     				</div>
     			</div>
 				<div class="col-md-4 pull-right">
@@ -38,10 +38,10 @@
 					<div class="data-block todo-block">
 						<div class="data-container">
 							<div id="inbox-links">
-								<a  href="#inbox"  id="mail-inbox"><i class="icon-time" style="margin-right:3px;"></i> {{agile_lng_translate 'menu' 'menu-inbox'}}</a>
+								<a  href="#inbox"  id="mail-inbox"><i class="fa fa-inbox" style="margin-right:3px;"></i> {{agile_lng_translate 'menu' 'menu-inbox'}}</a>
 								<br />
 								<br />
-								<a  href="#sent" id="mail-sent"><i class="icon-calendar" style="margin-right:4px;"></i>{{agile_lng_translate 'inbox' 'sent'}}</a>
+								<a  href="#sent" id="mail-sent"><i class="fa fa-envelope-o" style="margin-right:4px;"></i>{{agile_lng_translate 'inbox' 'sent'}}</a>
 							</div>
 						</div>
 					</div>
@@ -67,6 +67,33 @@
 						</div>
 					</div>
 			</div>
+			<div class="col-md-10 pull-right" id="errormssginbox">
+				<div class="wrapper p-t-none">
+		            <div class="slate-content mobile-pad-content m-t-none" id="inbox-no-email" style="display:none">
+		                <div class="box-left pull-left m-r-md">
+		                    <img alt="Clipboard" src="{{getS3ImagePath '/img/clipboard.png'}}" />
+		                </div>
+		                <div class="box-right pull-left">
+		                    <h4 class="m-t-none">You have no emails</h4>
+		                    <div class="text">
+		                        Your have no emails in agilecrm account
+		                    </div>
+		                    <a href="#send-email" id="send-new-email" class="btn btn-default btn-sm blue btn-slate-action m-t-xs"><i class="icon-envelope pos-rlt pos-t-1"></i>&nbsp; {{agile_lng_translate 'contact-details' 'send-email'}}</a>
+		                </div>
+						<div class="clearfix">
+						</div>
+		            </div>
+		        </div>
+
+               <ul id="inbox-prefs-verification" class="p-n m-t-n-xs" style="display:none;">
+		            <div class="alert alert-warning info-block b">
+		                <div>
+		                <i class="icon-warning-sign"></i><strong style="">{{agile_lng_translate 'contact-details' 'pending-email-configuration'}}</strong>
+		                <p>{{agile_lng_translate 'contact-details' 'you-have-not-yet-configured-your-email'}} <a href='#email'>{{agile_lng_translate 'contact-details' 'here'}}</a> {{agile_lng_translate 'contact-details' 'to-get-started'}}</p>
+		                </div>
+		            </div>
+			     </ul>
+			</div>
 		</div>
 	</div>
 </div>
@@ -74,76 +101,83 @@
 
 <!-- Template for email account types -->
 <script id="account-types-template" type="text/html">
-    <div  class="m-b-md m-t-md m-r-sm" align="right">
+    <div  align="right">
 		<a href="#send-email" id="send-new-email" class="btn btn-default btn-sm blue btn-slate-action m-t-none company"><i class="fa fa-envelope"></i> &nbsp; {{agile_lng_translate 'contact-details' 'send-email'}}
 		</a>
 	<div class="btn-group pos-rlt">
-	<button class="btn btn-sm btn-default filter-dropdown" id="inbox-email-type-select">{{agile_lng_translate 'contact-details' 'agile'}}</button>
+	<button class="btn btn-sm btn-default filter-dropdown" id="inbox-email-type-select"><i class="icon-cloud" style="margin-right:4px;font-size: 1.2em"></i>{{agile_lng_translate 'contact-details' 'agile'}}</button>
 	<button class="btn btn-sm btn-default dropdown-toggle" id="inbox-email-type-select-dropdown" data-toggle="dropdown">
 	<span class="caret"></span>
 	</button>
-	<ul id = "mail-account-type-select" class="pull-right dropdown-menu" role="menu">
+	<ul id = "inbox-account-type-select" class="pull-right dropdown-menu" role="menu">
     <li>
-	<a href="" class="agile-emails" email-server="all" data-url="all" email-server-type="all">{{agile_lng_translate 'contact-details' 'all-mail'}}</a>
+	<a href="" class="inbox-emails" email-server="all" data-url="all" email-server-type="all">{{agile_lng_translate 'contact-details' 'all-mail'}}</a>
 	</li>
+	<li>
+	{{#each []}}
 	{{#if agileUserName}}
 	<li>
-	<a href="" class="agile-emails" email-server="agile" data-url="core/api/emails/agile-emails?search_email=" email-server-type={{this}}><i class="icon-cloud" style="margin-right:4px;font-size: 1.2em"></i>{{agile_lng_translate 'contact-details' 'agile'}}</a>
+	<a href="" class="inbox-emails" email-server="agile" data-url="core/api/emails/agile-emails?search_email=" email-server-type={{this.agileUserNmae}}><i class="icon-cloud" style="margin-right:4px;font-size: 1.2em"></i>{{agile_lng_translate 'contact-details' 'agile'}}</a>
 	</li>
 	{{/if}}
 	{{#if gmailUserNames}}
 	{{#each gmailUserNames}}
 	<li>
-	<a href="" class="agile-emails" email-server="google" data-url="core/api/social-prefs/google-emails?from_email=" email-server-type={{this}}><i class="fa fa-google" style="margin-right:4px;font-size: 1.2em"></i>{{this}}</a>
+	<a href="" class="inbox-emails" email-server="google" data-url="core/api/social-prefs/all-google-emails?from_email=" email-server-type={{this}}><i class="fa fa-google" style="margin-right:4px;font-size: 1.2em"></i>{{this}}</a>
 	</li>
 	{{/each}}
 	{{/if}}
 	{{#if imapUserNames}}
 	{{#each imapUserNames}}
 	<li>
-	<a href="" class="agile-emails" email-server="imap" data-url="core/api/imap/imap-emails?from_email=" email-server-type={{this}}><i class="icon-envelope-alt" style="margin-right:4px;font-size: 1.2em"></i>{{this}}</a>
+	<a href="" class="inbox-emails" email-server="imap" data-url="core/api/imap/all-imap-emails?from_email=" email-server-type={{this}}><i class="icon-envelope-alt" style="margin-right:4px;font-size: 1.2em"></i>{{this}}</a>
 	</li>
 	{{/each}}
 	{{/if}}
 	{{#if exchangeUserNames}}
 	{{#each exchangeUserNames}}
 	<li>
-	<a href="" class="agile-emails" email-server="exchange" data-url="core/api/office/office365-emails?from_email=" email-server-type={{this}}><i class="icon-windows" style="margin-right:4px;font-size: 1.2em"></i>{{this}}</a>
+	<a href="" class="inbox-emails" email-server="exchange" data-url="core/api/office/office365-emails?from_email=" email-server-type={{this}}><i class="icon-windows" style="margin-right:4px;font-size: 1.2em"></i>{{this}}</a>
 	</li>
 	{{/each}}
 	{{/if}}
 	{{#if sharedGmailUserNames}}
 	{{#each sharedGmailUserNames}}
 	<li>
-	<a href="" class="agile-emails" email-server="google" data-url="core/api/social-prefs/google-emails?from_email=" email-server-type={{this}}><i class="icon-google-plus" style="margin-right:4px;font-size: 1.2em"></i>{{this}} (Shared)</a>
+	<a href="" class="inbox-emails" email-server="google" data-url="core/api/social-prefs/google-emails?from_email=" email-server-type={{this}}><i class="icon-google-plus" style="margin-right:4px;font-size: 1.2em"></i>{{this}} (Shared)</a>
 	</li>
 	{{/each}}
 	{{/if}}
 	{{#if sharedImapUserNames}}
 	{{#each sharedImapUserNames}}
 	<li>
-	<a href="" class="agile-emails" email-server="imap" data-url="core/api/imap/imap-emails?from_email=" email-server-type={{this}}><i class="icon-envelope-alt" style="margin-right:4px;font-size: 1.2em"></i>{{this}} (Shared)</a>
+	<a href="" class="inbox-emails" email-server="imap" data-url="core/api/imap/all-imap-emails?from_email=" email-server-type={{this}}><i class="icon-envelope-alt" style="margin-right:4px;font-size: 1.2em"></i>{{this}} (Shared)</a>
 	</li>
 	{{/each}}
 	{{/if}}
 	{{#if sharedExchangeUserNames}}
 	{{#each sharedExchangeUserNames}}
 	<li>
-	<a href="" class="agile-emails" email-server="exchange" data-url="core/api/office/office365-emails?from_email=" email-server-type={{this}}><i class="icon-windows" style="margin-right:4px;font-size: 1.2em"></i>{{this}} (Shared)</a>
+	<a href="" class="inbox-emails" email-server="exchange" data-url="core/api/office/office365-emails?from_email=" email-server-type={{this}}><i class="icon-windows" style="margin-right:4px;font-size: 1.2em"></i>{{this}} (Shared)</a>
 	</li>
 	{{/each}}
 	{{/if}}
+	{{/each}}
 	</ul>
-	
-	<label id="has_email_configured" style="display:none">{{#if hasEmailAccountsConfigured}}{{hasEmailAccountsConfigured}}{{else}}false{{/if}}</label>
-	
 	</div>
+		{{#each []}}
+		<div>
+		<label id="inbox_has_email_configured" data-val="{{#if hasEmailAccountsConfigured}}{{hasEmailAccountsConfigured}}{{else}}false{{/if}}"></label></div>
+		{{/each}}
 	</div>
 	<div class="clearfix"></div>
 </script>
 <!-- Template for emails list -->
 <script type="text/html" id="mail-template">
 	{{#each []}}
+		{{#if errormssg}}
+	    	<span class="text-dark">{{agile_lng_translate 'contact-details' 'error'}}: {{errormssg}}</span>
+	    {{else}}
 		<li class="mail-text" style="height:60px;overflow: hidden;border-bottom:1px solid #e7ecee;padding:15px;">
 			<div class="mail-from">
 				<a class="text-primary" data-toggle="collapse" data-target="#{{this.id}}" data-parent="#myGroup">{{this.from}} &nbsp;&nbsp;&nbsp; {{this.subject}}</a>
@@ -152,11 +186,15 @@
 				- {{{this.message}}}
 			</div>
 		</li>
+		{{/if}}
 	{{/each}}
 </script>
 <!-- Template for email view -->
 <script type="text/html" id="mail-view-template">
 	{{#each []}}
+		{{#if errormssg}}
+	    	
+	    {{else}}	
 		<li class="collapse" id="{{this.id}}">
 			<div class="mail-subject text-primary">
 				<a class="text-primary">{{this.subject}}</a>
@@ -171,5 +209,6 @@
 				{{{this.message}}}
 			</div>
 		</li>
+		{{/if}}
 	{{/each}}
 </script>
