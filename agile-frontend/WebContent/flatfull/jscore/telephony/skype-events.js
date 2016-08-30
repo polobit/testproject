@@ -235,12 +235,16 @@ function saveCallNoteSkype(call){
 	    			data.widget = "Skype";
 	    			CallLogVariables.dynamicData = data;
 	    		}
+	    			CallLogVariables.subject = noteSub;
 		    		CallLogVariables.callWidget = "Skype";
 		    		CallLogVariables.callType = "inbound";
 		    		CallLogVariables.phone = number;
 		    		CallLogVariables.duration = duration;
 		    		CallLogVariables.status = callStatus;
-	    		return showNewContactModal(number);
+		    		var jsonObj = {};
+		    		jsonObj['phoneNumber'] = number;
+		    		return showContactMergeOption(jsonObj);
+	    		//return showNewContactModal(number);
 	    	}
 	    	id = responseJson.id;
 	    	contact = responseJson;
@@ -321,13 +325,16 @@ function saveCallNoteSkype(call){
     			data.widget = "Skype";
     			CallLogVariables.dynamicData = data;
     		}
+				CallLogVariables.subject = noteSub;
 	    		CallLogVariables.callWidget = "Skype";
 	    		CallLogVariables.callType = "outbound-dial";
 	    		CallLogVariables.phone = number;
 	    		CallLogVariables.duration = duration;
 	    		CallLogVariables.status = callStatus;
-    		
-    		return showNewContactModal(number);
+	    		var jsonObj = {};
+	    		jsonObj['phoneNumber'] = number;
+	    		return showContactMergeOption(jsonObj);
+    		//return showNewContactModal(number);
 	}
 	}
 }

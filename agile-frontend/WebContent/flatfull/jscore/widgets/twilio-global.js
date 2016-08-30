@@ -1618,7 +1618,10 @@ function showNoteAfterCall(callRespJson,messageObj,paramJson)
 			console.log(callRespJson);
 			var json = resp;
 			if(json == null) {
-				return showNewContactModal(phoneNumber);
+				var jsonObj = {};
+				jsonObj['phoneNumber'] = phoneNumber;
+				return showContactMergeOption(jsonObj);
+			//	return showNewContactModal(phoneNumber);
 			}
 			var contact_name = getContactName(json);
 
@@ -1715,6 +1718,7 @@ function showNoteAfterCall(callRespJson,messageObj,paramJson)
 			CallLogVariables.dynamicData = data;
 		}
 		
+		CallLogVariables.subject = noteSub;
 		CallLogVariables.callWidget = "Twilio";
 		CallLogVariables.callType = TWILIO_DIRECTION;
 		CallLogVariables.phone = phoneNumber;
@@ -1727,8 +1731,10 @@ function showNoteAfterCall(callRespJson,messageObj,paramJson)
 				status : callRespJson.status,
 				duration : callRespJson.duration 
 				});*/
-
-		return showNewContactModal(phoneNumber);
+		var jsonObj = {};
+		jsonObj['phoneNumber'] = phoneNumber;
+		return showContactMergeOption(jsonObj);
+		//return showNewContactModal(phoneNumber);
 	}
 	
 }
