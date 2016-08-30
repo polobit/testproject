@@ -1,7 +1,6 @@
 package com.agilecrm.contact.deferred;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import com.agilecrm.contact.Contact;
@@ -11,12 +10,10 @@ import com.agilecrm.search.AppengineSearch;
 import com.agilecrm.search.document.ContactDocument;
 import com.agilecrm.search.document.OpportunityDocument;
 import com.agilecrm.search.query.QueryDocument;
-import com.agilecrm.search.query.util.QueryDocumentUtil;
 import com.agilecrm.search.ui.serialize.SearchRule;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.search.ScoredDocument;
 import com.google.appengine.api.taskqueue.DeferredTask;
-import com.sun.xml.internal.fastinfoset.util.StringArray;
 
 public class DeleteTextSearchContactsDeferredTask  implements DeferredTask{
 	
@@ -54,6 +51,7 @@ public class DeleteTextSearchContactsDeferredTask  implements DeferredTask{
 					cursor = doc.getCursor().toWebSafeString();
 					scoredDocs.clear();
 					search.bulkDelete(totalDocs.toArray(new String[scoredDocs.size()]));
+					totalDocs.clear();
 					scoredDocs = queryInstace.advancedSearchOnlyIds(cf, 200, cursor, null); 
 				 }
 			}
@@ -68,6 +66,7 @@ public class DeleteTextSearchContactsDeferredTask  implements DeferredTask{
 					cursor = doc.getCursor().toWebSafeString();
 					scoredDocs.clear();
 					search.bulkDelete(totalDocs.toArray(new String[scoredDocs.size()]));
+					totalDocs.clear();
 					scoredDocs = queryInstace.advancedSearchOnlyIds(cf, 200, cursor, null); 
 				}
 			}	
