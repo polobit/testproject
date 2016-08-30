@@ -43,9 +43,9 @@ function chainWebRules(el, data, isNew, actions)
 		$('#twilio_call_setup').hide();
 		console.log(value);
 	
-		if(value == "MODAL_POPUP" || value == "CORNER_NOTY" || value == "CALL_POPUP" || value == "PUSH_POPUP")
+		if(value == "MODAL_POPUP" || value == "CORNER_NOTY" || value == "CALL_POPUP" || value == "REQUEST_PUSH_POPUP")
 			{
-				if(value == "MODAL_POPUP"  || value=="CALL_POPUP" || value == "PUSH_POPUP")
+				if(value == "MODAL_POPUP"  || value=="CALL_POPUP" || value == "REQUEST_PUSH_POPUP")
 				$("#tiny_mce_webrules_link", self).show();
 
 				if(value=="CALL_POPUP"){

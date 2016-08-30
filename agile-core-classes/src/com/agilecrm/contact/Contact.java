@@ -498,9 +498,9 @@ public class Contact extends Cursor
 
 	if (oldContact != null && !isDocumentUpdateRequired(oldContact))
 	    return;
-	
+	System.out.println("Before add to text search "+NamespaceManager.get());
 	addToSearch();
-
+	System.out.println("After add to text search "+NamespaceManager.get());
     }
 
     public void postSave(Contact oldContact, boolean... args)
@@ -542,25 +542,34 @@ public class Contact extends Cursor
 
 	dao.put(this);
 
+	System.out.println("Before add to text search "+NamespaceManager.get());
 	addToSearch();
+	System.out.println("After add to text search "+NamespaceManager.get());
     }
 
     private void addToSearch()
     {
 	// Enables to build "Document" search on current entity
 	AppengineSearch<Contact> search = new AppengineSearch<Contact>(Contact.class);
-
+	String domain = NamespaceManager.get();
 	// If contact is new then add it to document else edit document
 	if (id == null)
 	{
 	    try
 	    {
+	    System.out.println("Before search add method to text search "+domain);	
 		search.add(this);
+		domain = NamespaceManager.get();
+		System.out.println("After search add method to text search "+domain);
+		
 	    }
 	    
 	    catch (SearchException se)
-	    {
+	    {	domain = NamespaceManager.get();
+	    	System.out.println("Before search add method to text search "+domain);
 	    	search.addAsync(this);
+	    	domain = NamespaceManager.get();
+	    	System.out.println("After search add method to text search "+domain);
 	    }
 	    catch (Exception e)
 	    {
@@ -569,8 +578,11 @@ public class Contact extends Cursor
 	    return;
 	}
 	try
-	{
+	{	domain = NamespaceManager.get();
+		System.out.println("After search add method to text search "+domain);
 	    search.edit(this);
+	    domain = NamespaceManager.get();
+    	System.out.println("After search add method to text search "+domain);
 	}
 	catch (Exception e)
 	{

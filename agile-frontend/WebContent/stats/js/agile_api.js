@@ -260,5 +260,5 @@ var _agile = {
             }   
 
             console.log("%cStop! Function calls from console are disabled.", "color: red;");
-		}
+		},
 };

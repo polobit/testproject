@@ -30,8 +30,6 @@ request.setAttribute("agile_email", email);
 }
 //Gets the Ip 
 
-
-	
 // Checks if it is being access directly and not through servlet
 /* if(request.getAttribute("javax.servlet.forward.request_uri") == null)
 {
@@ -145,7 +143,7 @@ body {
 		background-color: #f0f3f4;
 	
 	<% }else {  %>
-
+background-color: #f0f3f4;
 background-image:url('<%=S3_STATIC_IMAGE_PATH%>images/login-<%=randomBGImageInteger%>-high-prog.jpg');
 	
 		<%}%>
@@ -199,6 +197,15 @@ position: fixed;width: 100%;top: 0px;
     bottom: 0;
 }
 
+.lang-identifier {
+	position: absolute; 
+	top:30px; 
+	left: 30px;
+}
+.lang-identifier a {
+	/*text-decoration: none; */
+}
+
 </style>
 
 <script>
@@ -220,6 +227,7 @@ if(isSafari && isWin)
 
 <script type='text/javascript' src='//cdnjs.cloudflare.com/ajax/libs/jquery/1.10.2/jquery.min.js'></script>
 <script type='text/javascript' src='//cdn.jsdelivr.net/fingerprintjs2/1.1.2/fingerprint2.min.js'></script>
+<script type='text/javascript' src='flatfull/final-lib/final-lib-1/b-bootstrap.js'></script>
 
 <!--[if lt IE 10]>
 <script src="flatfull/lib/ie/placeholders.jquery.min.js"></script>
@@ -234,7 +242,7 @@ if(isSafari && isWin)
 
 <body  class="overlay">
 <div id="openid_btns">
-					   	
+
 	<div class="" id="app">
 
 		<div ui-view="" class="fade-in-right-big smooth">
@@ -364,14 +372,20 @@ if(isSafari && isWin)
 			// localStorage setup
 			var _agile_storage = {
 				key : "_agile_user_fingerprint",
-				get : function(){
+				get : function(key){
+					if(!key)
+						key = this.key;
+
 					if(!this.is_strorage_supports())
 						 return;
-					return localStorage.getItem(this.key);
+					return localStorage.getItem(key);
 				},
-				set :  function(val){
+				set :  function(val, key){
+					if(!key)
+						key = this.key;
+
 					if(this.is_strorage_supports())
-						localStorage.setItem(this.key, val);
+						localStorage.setItem(key, val);
 				},
 				is_strorage_supports : function(){
 					return (typeof localStorage ? true : false);
@@ -509,14 +523,20 @@ if(isSafari && isWin)
 		// localStorage setup
 		var _agile_storage = {
 			key : "_agile_user_fingerprint",
-			get : function(){
+			get : function(key){
+				if(!key)
+					key = this.key;
+
 				if(!this.is_strorage_supports())
 					 return;
-				return localStorage.getItem(this.key);
+				return localStorage.getItem(key);
 			},
-			set :  function(val){
+			set :  function(val, key){
+				if(!key)
+					key = this.key;
+
 				if(this.is_strorage_supports())
-					localStorage.setItem(this.key, val);
+					localStorage.setItem(key, val);
 			},
 			is_strorage_supports : function(){
 				return (typeof localStorage ? true : false);
@@ -534,6 +554,9 @@ if(isSafari && isWin)
 						return callback(result);
 				});
 		}
+
+		// Language Detection
+		
 
 		var BrowserDetect = {
 			init : function() {

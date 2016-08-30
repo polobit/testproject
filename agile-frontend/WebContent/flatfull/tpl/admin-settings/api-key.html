@@ -58,14 +58,7 @@
                                     <div class="tab-pane" id="tracking">
                                        <div class="clearfix"></div>
                                        <div>
-                                        <code  id="api_track_code" class="prettyprint">
-          &lt;script type="text/javascript" src="https://{{get_current_domain}}.agilecrm.com/stats/min/agile-min.js"&gt; 
-          &lt;/script&gt;
-          &lt;script type="text/javascript" &gt;
-           _agile.set_account('{{js_api_key}}', '{{get_current_domain}}');
-           _agile.track_page_view();
-          &lt;/script&gt;
-          </code>
+                                        {{{get_template_type 'agile-api-script-track-code'}}}
                                        </div>
                                     </div>
                                     <!-- End of Tracking code templete -->
@@ -73,15 +66,7 @@
                                     <div class="tab-pane active" id="tracking-webrules">
                                        <div class="clearfix"></div>
                                        <div>
-                                          <code  id="api_track_webrules_code" class="prettyprint">
-          &lt;script type="text/javascript" src="https://{{get_current_domain}}.agilecrm.com/stats/min/agile-min.js"&gt; 
-          &lt;/script&gt;
-          &lt;script type="text/javascript" &gt;
-           _agile.set_account('{{js_api_key}}', '{{get_current_domain}}');
-           _agile.track_page_view();
-           _agile_execute_web_rules();
-          &lt;/script&gt;
-          </code>
+                                          {{{get_template_type 'agile-api-script-track-webrule-code'}}}
                                        </div>
                                     </div>
                                     <!-- Tracking code with Web Rules templete -->
@@ -89,16 +74,7 @@
                                     <div class="tab-pane active" id="tracking-webrules-whitelist">
                                        <div class="clearfix"></div>
                                        <div>
-                                          <code class="prettyprint" id="api_track_webrules_code">
-        &lt;script type="text/javascript" src="https://{{get_current_domain}}.agilecrm.com/stats/min/agile-min.js"&gt;
-        &lt;/script&gt;
-        &lt;script type="text/javascript" &gt;
-           _agile.set_account('{{js_api_key}}', '{{get_current_domain}}');
-           _agile_set_whitelist('{{getBase64ActualDomain}}');
-           _agile.track_page_view();
-           _agile_execute_web_rules();
-        &lt;/script&gt;
-        </code>
+                                          {{{get_template_type 'agile-api-script-track-webrule-whitelist-code'}}}
                                        </div>
                                     </div>
                                     <!-- / Tracking code with Web Rules whitelist enabled -->

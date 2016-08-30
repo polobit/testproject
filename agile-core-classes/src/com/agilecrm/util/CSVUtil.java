@@ -536,10 +536,9 @@ public class CSVUtil
 		    // Checks if user can update the contact
 
 		    // Sets current object to check scope
-
+			failedContacts.add(new FailedContactBean(getDummyContact(properties, csvValues) , "Contact is merged"));
 		    tempContact = ContactUtil.mergeContactFields(tempContact);
 		    accessControl.setObject(tempContact);
-		    failedContacts.add(new FailedContactBean(tempContact , "Contact is merged"));
 		    if (!accessControl.canCreate())
 		    {
 			accessDeniedToUpdate++;
@@ -603,7 +602,7 @@ public class CSVUtil
 	    catch (Exception e)
 	    {
 
-		System.out.println("exception raised while saving contact ");
+		System.out.println("exception raised while saving contact "+e);
 		e.printStackTrace();
 		if (tempContact.id != null)
 		{
