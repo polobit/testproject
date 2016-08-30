@@ -1,7 +1,7 @@
  var registration_id=null; 
  self.addEventListener('push', function(event) 
  {
-    var url="https://our-dot-sandbox-dot-agilecrmbeta.appspot.com/push?id="; 
+    var url="https://our.agilecrm.com/push?id="; 
     event.waitUntil(  
         self.registration.pushManager.getSubscription().then(function(subscription) {
               console.log("got subscription id: ", subscription.endpoint)

@@ -97,6 +97,11 @@ public class PushNotification extends TaskletAdapter
 	 */
 	public static String MOZILLA_BROWSER = "mozilla";
 	
+	/**
+	 * Default destination url
+	 */
+	public static String DESTINATION_URL = "https://www.agilecrm.com";
+	
 	 public void run(JSONObject campaignJSON, JSONObject subscriberJSON, JSONObject data, JSONObject nodeJSON) throws Exception
 	    {
 		// Get Score and Type
@@ -114,6 +119,9 @@ public class PushNotification extends TaskletAdapter
 		String linkURL = notificationTemplate.notificationLink;
 		String iconURL = notificationTemplate.notificationIcon;
 		
+		
+		if(StringUtils.isBlank(linkURL))
+			linkURL = DESTINATION_URL;
 		  
 	    if(StringUtils.isBlank(iconURL))
 	    	iconURL = "https://media.licdn.com/mpr/mpr/shrink_200_200/AAEAAQAAAAAAAAWJAAAAJDQwNmRhNGNmLTlmNWMtNGZkMC1hZDJhLWI0ODE1NDQxMmNhNA.png";

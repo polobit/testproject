@@ -21,6 +21,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import com.agilecrm.notification.NotificationTemplate;
+import com.agilecrm.webrules.WebrulePushPopup;
+import com.google.appengine.api.NamespaceManager;
 import com.thirdparty.push.notification.NotificationTemplateUtil;
 
 /**
@@ -49,10 +51,7 @@ public class NotificationTemplateAPI
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public NotificationTemplate getNotificationTemplateById(@QueryParam("notificationTemplateId") Long notificationTemplateId)
     {
-    	if(NotificationTemplateUtil.getNotificationTemplateCount()==0)
-    	{
-    		//Create webrues for showing push model
-    	}
+    	
 	return NotificationTemplateUtil.getNotificationTemplateById(notificationTemplateId);
     }
 
@@ -69,6 +68,11 @@ public class NotificationTemplateAPI
 		    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
 			    .entity("Sorry, Notification Template with the same name already exist.").build());
 		}
+		if(NotificationTemplateUtil.getNotificationTemplateCount()==0)
+    	{
+    		//Create webrues for showing push model
+			WebrulePushPopup.CreateWebrule(NamespaceManager.get());
+    	}
 		
 		notificationTemplate.save();
 	   return notificationTemplate;
