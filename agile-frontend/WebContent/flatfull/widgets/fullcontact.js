@@ -3,7 +3,9 @@ var fullContactObjects = {};
 function loadFullContactData(apikey, emailID){	
 	head.js('/flatfull/lib/jquery.fullcontact.2.2.js', function(){		
 		//emailID = "bart@fullcontact.com";
-		$.fullcontact.emailLookup(apikey, emailID, function(contactObj){			
+		$.fullcontact.emailLookup(apikey, emailID, function(contactObj){	
+			console.log("fullContactData **** ");
+			console.log(contactObj);
 			if(contactObj){	
  				var status = contactObj.status;
  				var displayData = "";
@@ -21,8 +23,12 @@ function loadFullContactData(apikey, emailID){
 					var PhotosArray = contactObj["photos"];			
 
 					var socialProfilesArray = contactObj["socialProfiles"];
-					var websitesArray =  contactInfo["websites"];
-					var chatsArray = contactInfo["chats"];
+					var websitesArray;
+					var chatsArray;
+					if(contactInfo){
+						websitesArray =  contactInfo["websites"];
+						chatsArray = contactInfo["chats"];
+					}
 
 					var addressObject = contactObj["demographics"];					
 					var locationObject;
