@@ -1831,8 +1831,11 @@ public class OpportunityUtil
 	    List<ScoredDocument> scoredDocuments = DealFilterUtil.getDealSearchDocs(filter, 200, cursor, "created_time", null, null);
 	    
 	    System.out.println("Start----- Deals fetching in bulk actions with textsearch");
+	    int iterationCount = 0;
 	    while(scoredDocuments != null && scoredDocuments.size() > 0)
 	    {
+	    	System.out.println("scoredDocuments size-------"+scoredDocuments.size());
+	    	System.out.println("Iteration Count----"+iterationCount);
 			for (ScoredDocument doc : scoredDocuments)
 			{
 			    try
@@ -1848,7 +1851,13 @@ public class OpportunityUtil
 			ScoredDocument doc = scoredDocuments.get(scoredDocuments.size() - 1);
 		    cursor = doc.getCursor().toWebSafeString();
 		    
+		    System.out.println("Cursor in deals bulk actions-------"+cursor);
+		    
 		    deals.addAll(Opportunity.dao.fetchAllByKeys(new ArrayList<Key<Opportunity>>(dealsSet)));
+		    
+		    System.out.println("Deals size in bulk actions-----"+deals.size());
+		    System.out.println("Start Doc ID----"+scoredDocuments.get(0).getId());
+		    System.out.println("End Doc ID----"+doc.getId());
 		    
 		    scoredDocuments = DealFilterUtil.getDealSearchDocs(filter, 200, cursor, "created_time", null, null);
 	    }
