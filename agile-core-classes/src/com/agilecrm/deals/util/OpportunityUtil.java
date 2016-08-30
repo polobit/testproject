@@ -1856,6 +1856,8 @@ public class OpportunityUtil
 		    
 		    deals.addAll(Opportunity.dao.fetchAllByKeys(new ArrayList<Key<Opportunity>>(dealsSet)));
 		    
+		    dealsSet.clear();
+		    
 		    System.out.println("Deals size in bulk actions-----"+deals.size());
 		    System.out.println("Start Doc ID----"+scoredDocuments.get(0).getId());
 		    System.out.println("End Doc ID----"+doc.getId());
