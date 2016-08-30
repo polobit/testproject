@@ -109,5 +109,9 @@ public class CaseDocument extends com.agilecrm.search.document.Document implemen
 		// TODO Auto-generated method stub
 		
 	}
+	public void bulkDelete(String... id)
+    {
+		// TODO Auto-generated method stub
+    }
 
 }

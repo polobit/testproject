@@ -407,5 +407,19 @@ public class ContactDocument extends com.agilecrm.search.document.Document imple
 		}
 
 	}
+	/**
+       * Deletes an entity from document(called when contact is deleted then
+       * respective entity in document should be deleted)
+       *
+       * @param id
+       *            {@link String}
+       *
+       */
+     public void bulkDelete(String... id)
+     {
+    	 index.delete(id);
+     }
+
+
 
 }

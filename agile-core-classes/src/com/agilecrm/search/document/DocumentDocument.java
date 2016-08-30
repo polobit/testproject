@@ -112,4 +112,8 @@ public class DocumentDocument extends com.agilecrm.search.document.Document impl
 		// TODO Auto-generated method stub
 		
 	}
+	public void bulkDelete(String... id)
+    {
+		// TODO Auto-generated method stub
+    }
 }
