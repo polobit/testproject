@@ -10,9 +10,13 @@ cat $(find ../WebContent/jscore ! -path ../WebContent/jscore/backbone/\*.js ! -p
 
 cat ../WebContent/controllers/app.js >> ../WebContent/jscore/min/js-all-min.js
 
-cat ../WebContent/stats/js/*.js > ../WebContent/stats/min/agile-min.js
-
+# Stats
+cat $(find ../WebContent/stats/js ! -path ../WebContent/stats/js/agile-on-load.js -name "*.js") > ../WebContent/stats/min/agile-min.js
+cat ../WebContent/stats/js/agile-on-load.js >> ../WebContent/stats/min/agile-min.js
+#Minify
 java -jar yuicompressor-2.4.7.jar ../WebContent/stats/min/agile-min.js --type js -o  ../WebContent/stats/min/agile-min.js
+java -jar yuicompressor-2.4.7.jar ../WebContent/stats/agile-cloud-unmin.js --type js -o  ../WebContent/stats/min/agile-cloud.js
+# End of stats
 
 java -jar yuicompressor-2.4.7.jar ../WebContent/jscore/min/js-all-min.js --line-break 10000 --type js -o  ../WebContent/jscore/min/js-all-min.js
 
