@@ -38,9 +38,9 @@ java -jar precompile.jar ../WebContent/helpcenter/helpcenter-tpl ../../../tmp/ha
 
 #sh tpl.sh
 
-sh tpl-flatfull.sh
+#sh tpl-flatfull.sh
 
-sh yui-flat-full.sh
+#sh yui-flat-full.sh
 
 sh lib-minifier.sh
 
