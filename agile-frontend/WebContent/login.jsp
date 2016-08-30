@@ -30,15 +30,6 @@ request.setAttribute("agile_email", email);
 }
 //Gets the Ip 
 
-// Get the language
-String _LANGUAGE = request.getParameter("lang");
-if(StringUtils.isBlank(_LANGUAGE) || !LanguageUtil.isLanguageSupportByAgile(_LANGUAGE))
-   _LANGUAGE = "en";
-
-// Locales JSON
-JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "page-builder");
-
-	
 // Checks if it is being access directly and not through servlet
 /* if(request.getAttribute("javax.servlet.forward.request_uri") == null)
 {
@@ -251,18 +242,6 @@ if(isSafari && isWin)
 
 <body  class="overlay">
 <div id="openid_btns">
-
-	<!-- Language -->
-	<div class="lang-identifier">
-		<a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-			<span id="lang-code-name">English</span> <span class="caret"></span> 
-		</a>
-	    <ul class="dropdown-menu">
-	     	<li><a href="?lang=en">English</a></li>
-	    	<li><a href="?lang=es">Español</a></li>
-	  	</ul>
-	</div>
-	<!-- End of Language -->
 
 	<div class="" id="app">
 
