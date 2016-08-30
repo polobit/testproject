@@ -64,7 +64,8 @@
                            			<span class="caret"></span>
                     	        </button>
                   				</a>
-                  						<ul class="dropdown-menu" style="top:121px;left: 157px;" role="menu">
+                  						<ul class="dropdown-menu" style="top:39px;left: 15px; 
+                              {{#is_mobile}} top:39px;left: 127px; {{/is_mobile}}" role="menu">
                   							{{#each num}}<li><a id = "logPhone_number_option" value = "{{this}}">{{this}}</a></li> {{/each}}
                   						</ul>
                   		{{/if_equals}}	
