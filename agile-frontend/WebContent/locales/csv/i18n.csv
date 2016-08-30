@@ -5236,3 +5236,6 @@ others.verify,verify,verificar
 others.sending,sending,enviando
 admin-settings-integrations.amazon-note-1-new,1. Amazon SES services require verification of email addresses in the 'From' field of sent emails. Please ensure that you,1. Los servicios de Amazon SES requieren la verificación de direcciones de correo electrónico en el campo 'De' de los correos electrónicos enviados . Por favor asegúrese de que
 admin-settings-integrations.amazon-note-1-new1,the email addresses of all your Agile CRM users and the 'From' addresses of all your campaign emails.,las direcciones de correo electrónico de todos sus usuarios ágil de CRM y los 'de' direcciones de todos sus mensajes de correo electrónico de la campaña.
+contacts-view.added-a-tag-to-company,added-a-tag-to-company,
+contacts-view.removed-a-tag-from-company,removed-a-tag-from-company,
+contacts-view.changed-owner-for-company,changed-owner-for-company,

@@ -100,6 +100,7 @@ public class ActivityUtil
 			activity.label = activity.label.trim();
 			contact_name = "";
 			activity.entity_id = contact.id;
+			activity.type = contact.type;
 		}
 		activity.activity_type = activity_type;
 		activity.entity_type = EntityType.CONTACT;
