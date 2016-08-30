@@ -86,8 +86,10 @@ cd ../util
 if [ -n "$1" ]; then
     echo "template not empty"
     java -jar agilelocalize.jar ../WebContent/tpl/min/flatfull ../WebContent/tpl/min $1
+    java -jar agilelocalize.jar ../WebContent/locales/misc-sources ../WebContent/locales $1
 else
     echo "template empty"
     java -jar agilelocalize.jar ../WebContent/tpl/min/flatfull ../WebContent/tpl/min en
+    java -jar agilelocalize.jar ../WebContent/locales/misc-sources ../WebContent/locales en
 fi
 #End of Local Dev

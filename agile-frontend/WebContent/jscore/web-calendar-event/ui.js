@@ -107,7 +107,7 @@ $(function()
 				{
 					$(".meetingtypes").show();
 					$(".meetingtypes").empty();
-					$(".meetingtypes").append("<option selected disabled>Meeting Type</option>");
+					$(".meetingtypes").append("<option selected disabled>" + LOCALES_JSON['meeting-type'] + "</option>");
 					for (var i = 0; i < meeting_types.length; i++)
 					{
 						$(".meetingtypes").append("<option value='" + meeting_types[i] + "'>" + meeting_types[i] + "</option>");

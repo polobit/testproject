@@ -7651,3 +7651,8 @@ Handlebars.registerHelper('can_api_js_serve_from_cloud', function(options)
 	else
 		return options.inverse(this);
 });
+
+Handlebars.registerHelper('agile_lng_translate', function(key, value, options)
+{
+	console.log("Not found " + key + " : " + value);
+});
