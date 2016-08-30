@@ -10,7 +10,6 @@ import com.agilecrm.search.AppengineSearch;
 import com.agilecrm.search.document.ContactDocument;
 import com.agilecrm.search.document.OpportunityDocument;
 import com.agilecrm.search.query.QueryDocument;
-import com.agilecrm.search.query.util.QueryDocumentUtil;
 import com.agilecrm.search.ui.serialize.SearchRule;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.search.ScoredDocument;
@@ -33,7 +32,7 @@ public class DeleteTextSearchContactsDeferredTask  implements DeferredTask{
 		if(!domain.isEmpty() && !domain.equalsIgnoreCase(null) && !domain.equalsIgnoreCase("null") && !type.isEmpty() && !type.equalsIgnoreCase(null) && !type.equalsIgnoreCase("null") ){
 			NamespaceManager.set(domain);String cursor = null;
 			AppengineSearch<Contact> search = new AppengineSearch<Contact>(Contact.class);
-			List<ScoredDocument> totalDocs = new ArrayList<ScoredDocument>();
+			List<String> totalDocs = new ArrayList<String>();
 			List<ScoredDocument> scoredDocs = new ArrayList<ScoredDocument>();
 			ContactFilter cf = new ContactFilter();
 			SearchRule rule = new SearchRule();
@@ -44,32 +43,33 @@ public class DeleteTextSearchContactsDeferredTask  implements DeferredTask{
 			if(type.equals("PERSON") || type.equals("COMPANY")){
 				QueryDocument<Contact> queryInstace = new QueryDocument<Contact>(new ContactDocument().getIndex(), Contact.class);
 				scoredDocs = queryInstace.advancedSearchOnlyIds(cf, 200, cursor, null);
-				 while(scoredDocs != null && scoredDocs.size() > 0){
-					 totalDocs.addAll(scoredDocs);
-					 ScoredDocument doc = scoredDocs.get(scoredDocs.size() - 1);
-					 cursor = doc.getCursor().toWebSafeString();
-					 scoredDocs.clear();
-					 scoredDocs = queryInstace.advancedSearchOnlyIds(cf, 200, cursor, null); 
+				while(scoredDocs != null && scoredDocs.size() > 0){
+					for(ScoredDocument s: scoredDocs){
+						totalDocs.add(s.getId());
+					}
+					ScoredDocument doc = scoredDocs.get(scoredDocs.size() - 1);
+					cursor = doc.getCursor().toWebSafeString();
+					scoredDocs.clear();
+					search.bulkDelete(totalDocs.toArray(new String[scoredDocs.size()]));
+					totalDocs.clear();
+					scoredDocs = queryInstace.advancedSearchOnlyIds(cf, 200, cursor, null); 
 				 }
 			}
 			else {			
 				QueryDocument<Opportunity> queryInstace = new QueryDocument<Opportunity>(new OpportunityDocument().getIndex(), Opportunity.class);
 				scoredDocs = queryInstace.advancedSearchOnlyIds(cf, 200, cursor, null);
-				 while(scoredDocs != null && scoredDocs.size() > 0){
-					 totalDocs.addAll(scoredDocs);
-					 ScoredDocument doc = scoredDocs.get(scoredDocs.size() - 1);
-					 cursor = doc.getCursor().toWebSafeString();
-					 scoredDocs.clear();
-					 scoredDocs = queryInstace.advancedSearchOnlyIds(cf, 200, cursor, null); 
-				 }
-			}			
-			if(totalDocs != null && totalDocs.size() > 0)
-			{
-				for(ScoredDocument sd : totalDocs)
-				{
-					search.delete(sd.getId());
+				while(scoredDocs != null && scoredDocs.size() > 0){
+					for(ScoredDocument s: scoredDocs){
+						totalDocs.add(s.getId());
+					}
+					ScoredDocument doc = scoredDocs.get(scoredDocs.size() - 1);
+					cursor = doc.getCursor().toWebSafeString();
+					scoredDocs.clear();
+					search.bulkDelete(totalDocs.toArray(new String[scoredDocs.size()]));
+					totalDocs.clear();
+					scoredDocs = queryInstace.advancedSearchOnlyIds(cf, 200, cursor, null); 
 				}
-			}
+			}	
 		}
 	}
 

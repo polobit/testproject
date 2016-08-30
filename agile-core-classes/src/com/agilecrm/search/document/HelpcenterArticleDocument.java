@@ -252,4 +252,8 @@ public class HelpcenterArticleDocument implements BuilderInterface
 		// TODO Auto-generated method stub
 
 	}
+	public void bulkDelete(String... id)
+    {
+   	 // TODO Auto-generated method stub
+    }
 }
