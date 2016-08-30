@@ -2008,6 +2008,8 @@ display: block!important;
 .ticket-subj-block{ width: 100% !important;}
  .ticket-name, .ticket-subject{ max-width: 20em;}
  .plan-upgrade-center{ text-align: center; float: none !important;}
+ .add-btn-mobile{ float: none !important; text-align: center;}
+ .categori-btn-center{ display: table; margin: auto;}
 }
 
 @media all and (min-width: 768px) {
@@ -2220,7 +2222,7 @@ display: block!important;
     opacity: 0.4;
 }
 .admin-setting-icon a{
- width:calc(100% / 4);
+ width:calc(100% / 5);
  padding: 10px 0;
  text-align: center;
  opacity: 0.4;
@@ -2445,4 +2447,9 @@ transform: translateX(-50%);}
 } 
 .service-tabs-list i{ opacity: 0.6;}
 .service-tabs-list li a{ border-bottom: 0px; padding: 10px 15px;}
+.add-btn-mobile i, .categori-add-btn-mobile i{width: 24px; height: 24px; margin: -2px -4px; margin-right: 5px; line-height: 24px;}
+.ticket-label-border tr:first-child td {
+    border-top: 1px solid #eaeff0 !important;
+}
+
 /*end custom css code*/

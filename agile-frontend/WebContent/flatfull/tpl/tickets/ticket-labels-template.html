@@ -17,7 +17,24 @@
 </div>
 {{/unless}}
 {{#if this.length}}
-    <div class="panel panel-default wrapper p-b-xs{{#is_mobile}} b-n {{/is_mobile}}">
+    {{#is_mobile}}
+
+    <div class="panel panel-default wrapper p-b-xs b-n">
+        <div class="pull-right m-b-2 add-btn-mobile">
+            <a href="#add-ticket-label" class="btn btn-xs btn-default btn-addon m-b">
+            <span><i class="icon-plus-sign"></i></span> {{agile_lng_translate 'tickets' 'add-label'}}
+            </a>
+        </div>
+        <table class="table no-shadow m-b-none agile-table panel table-layout-mob-view tableHeader tab-layout tickets-border" url="core/api/tickets/labels/bulk" data-bulk-delete-title="{{agile_lng_translate 'contact-details' 'delete'}}"
+            data-bulk-delete-msg="{{agile_lng_translate 'tickets' 'conformation-messge-for-deletion'}}" data-resizable-columns-id="tickets-labels">
+                
+                <tbody id="ticket-label-model-list" class="ticket-label-border" route="ticket-label/" class="c-p"> </tbody>
+        </table>
+        </div>
+
+    {{else}}
+
+    <div class="panel panel-default wrapper p-b-xs">
         <div class="pull-right m-b-2">
             <a href="#add-ticket-label" class="btn btn-sm btn-default btn-addon">
             <span><i class="icon-plus-sign"></i></span> {{agile_lng_translate 'tickets' 'add-label'}}
@@ -38,9 +55,28 @@
         </div>
     
     </div>
+    {{/is_mobile}}
 {{/if}}
 </script>
 <script id="ticket-label-model-template" type="text/html">
+{{#is_mobile}}
+<td class="hide data" data="{{id}}">
+    {{id}}
+</td>
+ <td class="p-r-none p-l-none">
+    <div>{{label}}</div>
+
+    <div class="table-resp overflow-hidden line-clamp no-wrap">
+        <small class="edit-hover text-muted"> 
+            <i class="fa fa-clock-o"></i>
+            <span>{{agile_lng_translate 'tickets' 'last-updated-on'}}&nbsp;</span>
+            <time class="campaign-created-time b-b-dotted" datetime="{{epochToHumanDate "" updated_time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM" updated_time}}</time>
+        </small>
+    </div>
+</td>
+
+{{else}}
+
 <td class="hide data" data="{{id}}">
     {{id}}
 </td>
@@ -56,6 +92,7 @@
         </small>
     </div>
 </td> 
+{{/is_mobile}}
 </script>
 <script id="ticket-label-add-edit-template" type="text/html">
 <div class="wrapper">

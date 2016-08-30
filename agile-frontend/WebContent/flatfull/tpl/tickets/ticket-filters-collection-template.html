@@ -18,6 +18,22 @@
     </div>
 {{/unless}}
 {{#if this.length}}
+    {{#is_mobile}}
+
+    <div class="panel-defaut panel wrapper p-b-xs">
+        <div class="pull-right add-btn-mobile">
+            <a href="#add-ticket-view" class="btn btn-xs m-b btn-default btn-addon">
+                <span><i class="icon-plus-sign"></i></span> {{agile_lng_translate 'contacts-view' 'add-view'}}
+            </a>
+        </div>
+        <table class="table no-shadow m-b-none agile-table panel table-layout-mob-view" url="core/api/tickets/filters/bulk" data-bulk-delete-title="{{agile_lng_translate 'contact-details' 'delete'}}" data-bulk-delete-msg="{{agile_lng_translate 'others' 'delete-warn'}}">
+            
+            <tbody id="ticket-filters-model-list" class="ticket-label-border" route="ticket-view/" class="c-p"></tbody>
+        </table>
+        </div>
+
+    {{else}}
+
     <div class="panel-defaut panel wrapper p-b-xs">
         <div class="pull-right">
             <a href="#add-ticket-view" class="btn btn-sm btn-default btn-addon">
@@ -38,5 +54,7 @@
         </div>
 
     </div>
+    {{/is_mobile}}
+
 {{/if}}
 </script>

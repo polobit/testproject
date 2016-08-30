@@ -17,6 +17,26 @@
     </div>
 {{/unless}}
 {{#if this.length}}
+
+    {{#is_mobile}}
+
+    <div class="col panel wrapper p-b-xs">
+        <div class="hbox h-auto">
+            <div class="pull-right add-btn-mobile">
+                <a href="#add-canned-response" class="btn btn-xs btn-default btn-addon m-b">
+                    <span><i class="icon-plus-sign"></i></span> {{agile_lng_translate 'tickets' 'add-canned-response'}}
+                </a>
+            </div>
+            <table class="table no-shadow m-b-none agile-table panel table-layout-mob-view" url="core/api/tickets/canned-messages/bulk" data-bulk-delete-title="{{agile_lng_translate 'contacts-view' 'delete'}}" data-bulk-delete-msg="{{agile_lng_translate 'others' 'delete-warn'}}">
+                    
+                    <tbody id="ticket-canned-response-model-list" route="edit-canned-response/" class="c-p"> </tbody>
+            </table>
+
+        </div>
+    </div>
+
+    {{else}}
+
     <div class="col panel wrapper p-b-xs">
         <div class="hbox h-auto">
             <div class="pull-right">
@@ -41,6 +61,8 @@
 
         </div>
     </div>
+    {{/is_mobile}}
+
     <div class="col w-md  wrapper pos-rlt track-milestone-text p-t-none">
         <div class="data-block">
             <div class="p-l p-r">

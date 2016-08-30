@@ -1,4 +1,36 @@
 <script id="ticket-groups-model-template" type="text/html">
+{{#is_mobile}}
+<td class="hide data" {{#if is_default}}default_group{{/if}} data="{{id}}">
+		{{id}}
+	</td>
+
+	<td class="p-r-none p-l-none">
+		<div class="table-resp">
+			<div class="text-ellipsis">
+				<a class="pull-left text-ellipsis w-full">{{group_name}}</a>
+			</div>
+		</div>
+		
+		<div>
+		<span id="source-{{id}}" data-clipboard-text="{{group_email}}">{{group_email}}</span>
+   		<a id="grp-{{id}}" class="m-xs a-frwd-email" href="javascript:void(0);" data-toggle="tooltip" data-placement="top" data-copied-text="{{agile_lng_translate 'misc-keys' 'clip-email-copied'}}">
+     			<i class="icon-copy copy_email_clipboard_icon" ></i>
+     	</a>
+     	</div>
+
+     	<div class="table-resp">
+            <small class="edit-hover text-muted"> 
+				<i class="fa fa-clock-o"></i>
+		        <span>{{agile_lng_translate 'tickets' 'last-updated-on'}}&nbsp;</span>
+                <time class="campaign-created-time b-b-dotted" datetime="{{epochToHumanDate "" updated_time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM" updated_time}}</time>
+            </small>
+        </div>
+	</td>
+
+  	<div class="clearfix"></div>
+
+{{else}}
+
 	<td class="hide data" {{#if is_default}}default_group{{/if}} data="{{id}}">
 		{{id}}
 	</td>
@@ -26,4 +58,5 @@
         </div>
     </td> 
 <br />
+{{/is_mobile}}
 </script>

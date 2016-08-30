@@ -1,4 +1,39 @@
 <script id="ticket-canned-response-model-template" type="text/html">
+	{{#is_mobile}}
+
+	<td class="hide data" data="{{id}}">{{id}}</td>
+	<td class="p-r-none p-l-none">
+		<div class="table-resp">
+			<div class="pull-left text-ellipsis">
+				<a class="text-cap pull-left text-ellipsis w-full">{{title}}</a>
+			</div>
+		</div>
+
+		<div class="clearfix"></div>
+    <div class="workflow-triggers"> 
+		<div class="table-resp">
+			{{message}}
+		</div>	
+	</div>
+
+	{{#get_ticket_labels_from_ids labels this}}{{/get_ticket_labels_from_ids}}
+
+	<div class="table-resp">
+            <small class="edit-hover text-muted" 
+            	title="{{epochToHumanDate "mmm dd, yyyy HH:MM" updated_time}}"> 
+				<i class="fa fa-clock-o"></i>
+		        <span>{{agile_lng_translate 'tickets' 'last-updated-on'}}&nbsp;</span>
+                <time class="b-b-dotted" datetime="{{epochToHumanDate "" updated_time}}" 
+                	>{{epochToHumanDate "ddd mmm dd yyyy HH:MM" updated_time}}
+                </time>
+            </small>
+        </div>
+
+
+	</td>
+
+	{{else}}
+
 	<td class="hide data" data="{{id}}">{{id}}</td>
 	<td>
 		<div class="table-resp">
@@ -48,4 +83,5 @@
         </div>
     </td>  
 <br />
+{{/is_mobile}}
 </script>
