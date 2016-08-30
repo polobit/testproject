@@ -39,6 +39,8 @@ sh tpl.sh
 
 sh tpl-flatfull.sh
 
+sh yui-flat-full.sh
+
 sh lib-minifier.sh
 
 #sh ../../appengine-java-sdk-1.8.6/appengine-java-sdk-1.8.6/bin/appcfg.sh -A agilecrmbeta -V sandbox --enable_jar_classes update ../war
