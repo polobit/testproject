@@ -12,7 +12,7 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.Note;
 import com.agilecrm.contact.sync.wrapper.ContactWrapper;
-import com.google.gdata.data.contacts.Website;
+import com.agilecrm.util.CountryUtil;
 
 /**
  * <code>ShopifyContactWrapperImple</code> Implements ContactWrapper This class
@@ -182,7 +182,7 @@ public class ShopifyContactWrapperImpl extends ContactWrapper
     @Override
     public ContactField getAddress()
     {
-	JSONObject address = new JSONObject();
+    	org.json.JSONObject address = new org.json.JSONObject();
 	ContactField field = null;
 	if (defaultAddress != null)
 	{
@@ -202,7 +202,9 @@ public class ShopifyContactWrapperImpl extends ContactWrapper
 		    address.put("state", defaultAddress.get("province"));
 
 		if (defaultAddress.containsKey("country"))
-		    address.put("country", defaultAddress.get("country"));
+		{
+			address.put("country", defaultAddress.get("country"));
+		}
 
 		if (defaultAddress.containsKey("zip"))
 		    address.put("zip", defaultAddress.get("zip"));
@@ -210,11 +212,11 @@ public class ShopifyContactWrapperImpl extends ContactWrapper
 		address.put("address", strete);
 		field = new ContactField(Contact.ADDRESS, address.toString(), "home");
 	    }
-	    catch (JSONException e)
-	    {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	    }
+		catch (org.json.JSONException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	return field;
     }

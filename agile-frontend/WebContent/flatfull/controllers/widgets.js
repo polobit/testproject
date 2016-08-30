@@ -89,8 +89,8 @@ var WidgetsRouter = Backbone.Router
                             $("#prefs-tabs-content").on("click",".tab-container ul li",function(){
                                 var temp = $(this).find("a").attr("href").split("#");
                                 _agile_set_prefs('widget_tab', temp[1]);
-                            });
-                            build_custom_widget_form(el);
+                            });                                                    
+
                             /*setTimeout(function() {
                                 var socialHeight = 0;
                                 $('#social > div', el).each(function() {
@@ -139,6 +139,10 @@ var WidgetsRouter = Backbone.Router
              */
             TwilioIO : function(id) {
                 addConfigurableWidget(id, "TwilioIO", 'twilioio-login');
+            },
+
+            Custom : function(id){                
+                addConfigurableWidget(id, "Custom", 'custom-widget-edit');                
             },
             
 			/**
@@ -416,6 +420,9 @@ function renderWidgetView(templateName, url, model, renderEle){
             if(model && model.name != "Stripe"){
                 deserializeWidget(model, el);
             }
+             if(model && model.name == "CallScript"){
+                adjust_form();
+             }
             var widgetTab = _agile_get_prefs("widget_tab");
             $("#prefs-tabs-content").find('a[href="#'+widgetTab+'"]').closest("li").addClass("active");
             initializeTabListeners("widget_tab", "add-widget");

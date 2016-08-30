@@ -4,7 +4,7 @@ cd ../
 git stash
 
 chmod u+x ./../deploy-beta.sh
-./../deploy-beta.sh agile-frontend async
+./../deploy-beta.sh agile-frontend core
 
 # git checkout sandbox_sync_conversion
 
@@ -18,4 +18,4 @@ rm WebContent/jscore/min/flatfull/js-all-min.js
 
 git stash
 
-git checkout sandbox_beta
+git checkout -f sandbox_beta

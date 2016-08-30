@@ -9,15 +9,49 @@ var Widget_Collection_Events = Base_Collection_View.extend({
    },
 });
 
-
 var Widget_Model_Events = Base_Model_View.extend({
 
-   events : {
-        "click #stripe_url" : "stripeUrl",
+  options : {
+    saveCallback : function(e){            
+      var widgetType = $('#widget-settings').attr('widget-type');
+      if(widgetType == "CUSTOM"){  
+        if(e){      
+          showNotyPopUp("success" , "{{agile_lng_translate 'widgets' 'saved-success'}}", "bottomRight");
+          window.location.href = "#add-widget";
+        }else{
+          showNotyPopUp("error" , "{{agile_lng_translate 'widgets' 'widgetname-exists'}}", "bottomRight");
+        }
+      }
+    }
+  },
+
+  events : {
+      "click #stripe_url" : "stripeUrl",
    	  "click .save-agile-widget" : "saveWidgetPrefs",
    	  "click .connect_shopify" : "connectShopify",
-   	  "click .revoke-widget" : "revokeWidget"
+   	  "click .revoke-widget" : "revokeWidget",
+      "change #script_type" : "scriptType",
+      "click #cancel_custom_widget" : "cancelWidget"
+
    },
+
+  scriptType: function(){
+      var script_type = $('#script_type').val();
+      if (script_type == "script"){
+        $('#script_div').show();
+        $('#url_div').hide();
+        return;
+      }
+
+      if (script_type == "url"){
+        $('#script_div').hide();
+        $('#url_div').show();
+      }
+  },
+
+  cancelWidget: function(){
+    Backbone.history.navigate('add-widget', { trigger : true });
+  },
 
    stripeUrl: function(){
      var url = $('#stripe_url').attr('url');
@@ -61,13 +95,13 @@ var Widget_Model_Events = Base_Model_View.extend({
 		if($(ele).attr("disabled"))
 			  return;
 
-		$(ele).attr("disabled", "disabled").val("Saving...");
+		$(ele).attr("disabled", "disabled").val("{{agile_lng_translate 'others' 'saving'}}");
 
       if(widgetName != "TwilioIO"){
          // Saves the preferences into widget with name
          save_widget_prefs(widgetName, JSON.stringify(prefs), function(data){
             console.log(data);
-            $(ele).removeAttr("disabled").val("Save");
+            $(ele).removeAttr("disabled").val("{{agile_lng_translate 'modals' 'save'}}");
          });
       }else{
          createAppSid(prefs, function(data){
@@ -77,7 +111,7 @@ var Widget_Model_Events = Base_Model_View.extend({
                // Saves the preferences into widget with name
                save_widget_prefs(widgetName, JSON.stringify(prefs), function(data){
                   console.log(data);
-                  $(ele).removeAttr("disabled").val("Save");
+                  $(ele).removeAttr("disabled").val("{{agile_lng_translate 'modals' 'save'}}");
                });
          });
       }
@@ -89,7 +123,7 @@ var Widget_Model_Events = Base_Model_View.extend({
    	  e.preventDefault();
 
       var shopName = $('#shop').val();
-		if (shopName != ""){
+		if (shopName != "" && !validateEmail(shopName)){
 			var domain = window.location.origin;
 			window.location = "/scribe?service_type=shopify&url=shopify&isForAll="+isForAll+"&shop=" + shopName + "&domain=" + domain + "";
 		}else{
@@ -101,3 +135,8 @@ var Widget_Model_Events = Base_Model_View.extend({
    }
 
 });
+
+function validateEmail(email) {
+    var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(email);
+}

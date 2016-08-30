@@ -109,9 +109,10 @@ function initTaskListCollection()
 			// Remove loding imgs
 			$('.loading-img', el).remove();
 			$('.loading', el).remove();
-
 			// Adjust Height Of Task List And Scroll as per window size
-			adjustHeightOfTaskListAndScroll();			
+			adjustHeightOfTaskListAndScroll();
+
+
 		} });
 
 	// Over write append function
@@ -120,15 +121,27 @@ function initTaskListCollection()
 
 // Append sub collection and model
 function taskAppend(base_model)
+
 {
-	var tasksListModel = new Base_List_View({ model : base_model, "view" : "inline", template : "new-tasks-lists-model", tagName : 'div',
-		className : "task-trello-list panel panel-default", id : base_model.get("heading") });
+if (!base_model)
+		return;
+
+	var Trackstatus = getTaskTrackAutoWidthCurrentState(base_model.get("heading"))
+	var tasksListModel = new Base_List_View({ 
+	model : base_model,
+	 "view" : "inline", 
+	 template : "new-tasks-lists-model", 
+	 tagName : 'div',
+	className : "task-trello-list col-md-3 "+Trackstatus +" p-n pull-none inline-block m-r-none min-h-auto-xl", 
+	id : base_model.get("heading"),
+	});
 
 	// Render model in main collection
 	var el = tasksListModel.render().el;
 
 	// Append model from main collection in UI
 	$('#new-tasks-lists-model-list', this.el).append(el);
+
 	taskFetch(base_model);
 }
 
@@ -153,7 +166,12 @@ function taskFetch(base_model)
 		page_size : 20,
 		postRenderCallback : function(el)
 		{
+			// Add tooltip info
+			$('[data-toggle="tooltip"]', el).tooltip();
+
 			var flag = false;
+			console.log("inside the postrender call back of task collec")
+			
 
 			if (base_model.has("owner_id"))
 				flag = $("div[id='list-tasks-" + base_model.get("heading") + "-" + base_model.get("owner_id") + "']")[0];
@@ -161,6 +179,7 @@ function taskFetch(base_model)
 				flag = $("div[id='list-tasks-" + base_model.get("heading") + "']")[0];
 
 			// If we have task list then only need to apply following
+			$(taskCollection.el).find("#no_task").addClass("no_task_"+base_model.get("heading"));
 			if (flag)
 			{
 				// Remove loading icon from task list header
@@ -176,7 +195,18 @@ function taskFetch(base_model)
 				else
 					initialize_infinite_scrollbar($("div[id='list-tasks-" + base_model.get("heading") + "']")[0], taskCollection);
 			}
-		} });
+					
+		},collection_removal_update : function(collection, el){
+			console.log("collection_removal_update");
+			checkAndUpdateTaskCollectiontasks(collection, el);
+		},
+		appendItemCallback : function(el){
+
+			$(el).find("#no_task").addClass("hide");
+
+
+		}
+		 });
 
 	// Fetch task from DB for sub collection
 	taskCollection.collection.fetch({ success : function(data)
@@ -206,3 +236,13 @@ function taskFetch(base_model)
 		//fetchForNextTaskList();
 	} });
 }
+
+function checkAndUpdateTaskCollectiontasks(collection, el){
+console.log("checkAndUpdateTaskCollectiontasks")
+if(collection.length == 0)
+return $(el).find("#no_task").removeClass("hide");
+
+return $(el).find("#no_task").addClass("hide");
+
+}
+

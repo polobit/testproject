@@ -30,7 +30,7 @@ public class EmailGateway implements Serializable
      */
     public enum EMAIL_API
     {
-	SEND_GRID, MANDRILL, SES
+	SEND_GRID, MANDRILL, SES, MAILGUN
     };
 
     public EMAIL_API email_api = EMAIL_API.MANDRILL;

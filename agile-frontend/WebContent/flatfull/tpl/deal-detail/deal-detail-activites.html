@@ -6,7 +6,7 @@
                     <img alt="Clipboard" src="{{getS3ImagePath '/img/clipboard.png'}}" />
                 </div>
                 <div class="box-right pull-left">
-                    <h4 class="m-t-none">No activity on this deal yet.</h4>
+                    <h4 class="m-t-none">{{agile_lng_translate 'deal-view' 'no-activity-on-deal'}}</h4>
                 </div>
 				<div class="clearfix">
 				</div>
@@ -47,46 +47,46 @@
 		<div class="clearfix"></div>
 	<div class="word-break-all">
 {{#if_equals "DEAL_ADD" activity_type}}
-        <div>Deal created for {{custom1}} ({{currencySymbol}}{{numberWithCommas entityObject.expected_value}}, {{entityObject.probability}}%). </div>
+        <div>{{agile_lng_translate 'Deal-detail' 'deal-created-for'}} {{custom1}} ({{currencySymbol}}{{numberWithCommas entityObject.expected_value}}, {{entityObject.probability}}%) </div>
      {{/if_equals}}
 
 {{#if_equals "DEAL_EDIT" activity_type}}
-        <div>{{displayActivityFieldText custom3}} modified.</div>
+        <div>{{displayActivityFieldText custom3}} {{agile_lng_translate 'contacts-view' 'modified'}}</div>
      {{/if_equals}}
 
 {{#if_equals "DEAL_CLOSE" activity_type}}
-       <div>Hurray. {{entityObject.owner.name}} has won deal worth {{currencySymbol}}{{numberWithCommas entityObject.expected_value}}. </div>
+       <div>{{agile_lng_translate 'Deal-detail' 'hurry'}} {{entityObject.owner.name}} {{agile_lng_translate 'Deal-detail' 'has-won-deal-worth'}} {{currencySymbol}}{{numberWithCommas entityObject.expected_value}}. </div>
      {{/if_equals}}
 {{#if_equals "DEAL_LOST" activity_type}}
-        <div>Alas. {{entityObject.owner.name}} has lost the deal worth {{currencySymbol}}{{numberWithCommas entityObject.expected_value}}.</div>
+        <div>Alas. {{entityObject.owner.name}} {{agile_lng_translate 'Deal-detail' 'has-lost-the-deal-worth'}} {{currencySymbol}}{{numberWithCommas entityObject.expected_value}}.</div>
      {{/if_equals}}
 
 {{#if_equals "DEAL_MILESTONE_CHANGE" activity_type}}
-        <div>Milestone changed from {{custom2}} to {{custom1}}. </div>
+        <div> {{agile_lng_translate 'contacts-view' 'milestone-changed-from'}} {{custom2}} {{agile_lng_translate 'other' 'to-small'}} {{custom1}}. </div>
      {{/if_equals}}
 
 {{#if_equals "DEAL_OWNER_CHANGE" activity_type}}
-        <div>Owner changed from {{custom2}} to {{custom1}}. </div>
+        <div>Owner changed from {{custom2}} {{agile_lng_translate 'other' 'to-small'}} {{custom1}}. </div>
      {{/if_equals}}
 {{#if_equals "DEAL_TAG_CHANGE" activity_type}}
-        <div>Tags changed from {{custom2}} to {{custom1}}. </div>
+        <div>{{agile_lng_translate 'Deal-detail' 'tags-changed-from'}} {{custom2}} {{agile_lng_translate 'other' 'to-small'}} {{custom1}}. </div>
      {{/if_equals}}
 {{#if_equals "DEAL_TAG_ADD" activity_type}}
-        <div>Tags Added to deal are : {{custom1}}. </div>
+        <div>{{agile_lng_translate 'Deal-detail' 'tags-added-to-deal-are'}} : {{custom1}}. </div>
      {{/if_equals}}
 {{#if_equals "DEAL_TAG_DELETE" activity_type}}
-        <div>Tags removed to deal are : {{custom2}}.</div>
+        <div>{{agile_lng_translate 'Deal-detail' 'tags-removed-to-deal-are'}} : {{custom2}}.</div>
      {{/if_equals}}
 {{#if_equals "DEAL_RELATED_CONTACTS" activity_type}}
          {{#if related_contact_ids}}
 {{#if_equals "removed_all_relatedcontacts" custom3}}
-<div>{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}" data="{{this.contactid}}" class="popover_contact">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} removed from deal. </div>
+<div>{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}" data="{{this.contactid}}" class="popover_contact">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} {{agile_lng_translate 'Deal-detail' 'remove-from-deal'}} </div>
 {{/if_equals}} 
 {{#if_equals "removed_relatedcontacts" custom3}}
-<div>{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}" data="{{this.contactid}}" class="popover_contact">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} removed from deal. </div>
+<div>{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}" data="{{this.contactid}}" class="popover_contact">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} {{agile_lng_translate 'Deal-detail' 'remove-from-deal'}} </div>
 {{/if_equals}} 
 {{#if_equals "added_relatedcontacts" custom3}}
-<div>{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}" data="{{this.contactid}}" class="popover_contact">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} added to deal. </div> 
+<div>{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}" data="{{this.contactid}}" class="popover_contact">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} {{agile_lng_translate 'Deal-detail' 'added-to-deal'}} </div> 
 {{/if_equals}}
 {{else}}
 Modified deal.   

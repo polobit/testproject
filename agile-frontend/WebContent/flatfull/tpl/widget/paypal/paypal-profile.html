@@ -1,8 +1,8 @@
 <script id="paypal-login-template" type="text/html">
 	<div class="m-t">
-		Configure your PayPal business account to view your PayPal invoices in Agile.
+		{{agile_lng_translate 'widgets' 'PayPal-content'}}
 		<br/>
-		<div class="text-center"><a href="{{url}}" class="btn btn-sm btn-primary m-t-sm" >Link your PayPal</a></div>
+		<div class="text-center"><a href="{{url}}" class="btn btn-sm btn-primary m-t-sm" >{{agile_lng_translate 'widgets' 'link-your-payPal'}}</a></div>
 	</div>
 </script>
 
@@ -12,21 +12,21 @@
 		<li class="list-group-item r-none b-l-none b-r-none">
 			<div class="clear">					
 				<a class="pull-left text-info" data-toggle="collapse" href="#collapse-{{id}}">
-					Invoice: {{number}}
+					{{agile_lng_translate 'plan-and-upgrade' 'invoice'}}: {{number}}
 				</a>
 				<div class="pull-right font-bold">${{total_amount.value}}</div>	
 				<div class="clearfix"></div>
-				<div class="pull-left text-xs">Status</div>	
+				<div class="pull-left text-xs">{{agile_lng_translate 'widgets' 'status'}}</div>	
 				<div class="pull-right text-xs">{{status}}</div>
 				<div class="clearfix"></div>				
 				{{#if metadata.payer_view_url}}			
-					<div class="pull-left"><a class="btn btn-xs btn-default" target="_blank" href="{{metadata.payer_view_url}}">View</a></div>
+					<div class="pull-left"><a class="btn btn-xs btn-default" target="_blank" href="{{metadata.payer_view_url}}">{{agile_lng_translate 'landing-pages' 'view'}}</a></div>
 				{{/if}}
 				<div class="clearfix"></div>
 			</div>		
 			<div class="clearfix"></div>					
 			<div id="collapse-{{id}}" class="collapse" style="color: rgba(0, 0, 0, 0.5);">
-				<span>Note: </span><p>{{note}} </p>
+				<span>{{agile_lng_translate 'menu' 'note'}}: </span><p>{{note}} </p>
 				{{#each lines.data}}
 					// {{#if_equals type "invoiceitem"}}
 					// 	<div class="pull-left">{{description}}</div>					
@@ -35,7 +35,8 @@
 					// {{#if_equals type "subscription"}}
 					// 	<div class="pull-left">{{plan.name}}</div>					
 					// 	<div class="pull-right">$ {{numeric_operation plan.amount 100 "/"}}</div><br>
-					// 	<div class="pull-left">Quantity</div>					
+					// 	<div class="pull-left">{{agile_lng_translate 'plan-and-upgrade' 'quantity'}}
+					</div>					
 					// 	<div class="pull-right">{{quantity}}</div><br>
 					// 	<div class="text-ellipsis w-full">
 					// 		<small>
@@ -46,7 +47,12 @@
 					// {{/if_equals}}	         
 				{{/each}}
 			</div>
-			<small class="text-muted"><i class="fa fa-clock-o m-r-xs"></i><time class="time-ago" datetime="{{paypalInvoiceDate "" invoice_date}}">{{paypalInvoiceDate "ddd mmm dd yyyy" invoice_date}}</time></small>
+			<small class="text-muted">
+				<i class="fa fa-clock-o m-r-xs"></i>
+				<time class="time-ago" datetime="{{paypalInvoiceDate "" invoice_date}}">					
+					{{paypalInvoiceDate "ddd mmm dd yyyy" invoice_date}}
+				</time>
+			</small>
 		</li>
 	{{/each}}
 {{else}}
@@ -56,10 +62,10 @@
 
 <script id="paypal-revoke-access-template" type="text/html">
 	<div class="m-b-lg">
-		<p>Reconfigure your PayPal business account to view your PayPal invoices in Agile.</p>
+		<p>{{agile_lng_translate 'widgets' 'reconfigure-your-payPal-desc'}}</p>
 	</div>
 	<div class="m-t-sm m-r-none m-b-xs m-l-none text-center">
-		<a class='btn btn-danger btn-sm revoke-widget m-l-xs' widget-name="Stripe">Revoke Access</a>
-		<a href="#add-widget" class='btn btn-default btn-sm' widget-name="Stripe">Cancel</a>
+		<a class='btn btn-danger btn-sm revoke-widget m-l-xs' widget-name="Paypal">{{agile_lng_translate 'widgets' 'revoke-access'}}</a>
+		<a href="#add-widget" class='btn btn-default btn-sm' widget-name="Paypal">{{agile_lng_translate 'other' 'cancel'}}</a>
 	</div> 
 </script>

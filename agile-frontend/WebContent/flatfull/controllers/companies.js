@@ -13,7 +13,7 @@ var CompaniesRouter = Backbone.Router
 	routes : {
 	
 		/* Companies */
-		"companies" : "companies",
+		"companies" : "companiesNew",
 	
 		"company/:id" : "companyDetails",
 		
@@ -229,9 +229,9 @@ var CompaniesRouter = Backbone.Router
 						}
 						var count_message;
 						if (count > 9999 && (_agile_get_prefs('company_filter') || _agile_get_prefs('dynamic_company_filter')))
-							count_message = "<small> (" + 10000 + "+ Total) </small>" + '<span style="vertical-align: text-top; margin-left: -5px">' + '<img border="0" src="' + updateImageS3Path("/img/help.png")+ '"' + 'style="height: 10px; vertical-align: middle" rel="popover"' + 'data-placement="bottom" data-title="Lead Score"' + 'data-content="Looks like there are over 10,000 results. Sorry we can\'t give you a precise number in such cases."' + 'id="element" data-trigger="hover">' + '</span>';
+							count_message = "<small> (" + 10000 + "+ " +_agile_get_translated_val('other','total')+ ") </small>" + '<span style="vertical-align: text-top; margin-left: -5px">' + '<img border="0" src="' + updateImageS3Path("/img/help.png")+ '"' + 'style="height: 10px; vertical-align: middle" rel="popover"' + 'data-placement="bottom" data-title="Lead Score"' + 'data-content="'+_agile_get_translated_val('results','over-count')+'"' + 'id="element" data-trigger="hover">' + '</span>';
 						else
-							count_message = "<small> (" + count + " Total) </small>";
+							count_message = "<small> (" + count + " "+_agile_get_translated_val('other','total')+") </small>";
 						$('#contacts-count').html(count_message);
 					}
 
@@ -358,7 +358,7 @@ var CompaniesRouter = Backbone.Router
 				{
 					if (response && response.status == '403')
 
-						$("#content").html("<div class='well'> <div class='alert bg-white text-center'><div class='slate-content p-md text'><h4 style='opacity:0.8'> Sorry, you do not have permission to view this Company.</h4><div class='text'style='opacity:0.6'>Please contact your admin or account owner to enable this option.</div></div></div></div>");
+						$("#content").html("<div class='well'> <div class='alert bg-white text-center'><div class='slate-content p-md text'><h4 style='opacity:0.8'> " +_agile_get_translated_val('companies', 'invalid-viewer')+ "</h4><div class='text'style='opacity:0.6'>" +_agile_get_translated_val('companies','enable-permission')+ "</div></div></div></div>");
 
 				} });
 
@@ -386,7 +386,7 @@ var CompaniesRouter = Backbone.Router
 		this.companyDetailView = new Contact_Details_Model_Events({ model : company, isNew : true, template : "company-detail",
 			postRenderCallback : function(el)
 			{
-				fill_company_related_contacts(id, 'company-contacts', el);
+				//fill_company_related_contacts(id, 'company-contacts', el);
 				// Clone contact model, to avoid render and
 				// post-render fell in to
 				// loop while changing attributes of contact
@@ -399,6 +399,8 @@ var CompaniesRouter = Backbone.Router
 
 				company_util.starify(el);
 				company_util.show_map(el);
+				load_company_tab(el, company.toJSON());
+
 				if(company)
 				addTypeCustomData(company.get('id') , el);
 				// fill_owners(eidl, contact.toJSON());
@@ -605,5 +607,23 @@ var CompaniesRouter = Backbone.Router
 			$("#companiesmenu").addClass("active");
 
 		}, master_record.type);	
+	},
+
+	companiesNew : function(tag_id)
+	{
+		$('#content').html('<div id="companies-listener-container"></div>');
+		var companiesHeader = new Contacts_And_Companies_Events_View({ data : {}, template : "companies-header", isNew : true,
+			postRenderCallback : function(el)
+			{
+				companies_view_loader.buildCompaniesView(el, tag_id);
+				
+				companies_view_loader.setUpCompaniesCount(el);
+			} 
+		});
+		$('#companies-listener-container').html(companiesHeader.render().el);
+
+		$(".active").removeClass("active");
+		$("#companiesmenu").addClass("active");
+		$('[data-toggle="tooltip"]').tooltip();
 	}
 });

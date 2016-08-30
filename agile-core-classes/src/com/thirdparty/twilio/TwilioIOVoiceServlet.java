@@ -9,8 +9,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.tools.ant.types.CommandlineJava.SysProperties;
+
 import com.google.appengine.api.NamespaceManager;
 import com.twilio.sdk.verbs.Client;
+import com.twilio.sdk.verbs.Conference;
 import com.twilio.sdk.verbs.Dial;
 import com.twilio.sdk.verbs.Number;
 import com.twilio.sdk.verbs.Redirect;
@@ -24,6 +27,7 @@ public class TwilioIOVoiceServlet extends HttpServlet
 	{
 		System.out.println("In TwilioIOVoiceServlet for final test");
 
+		
 		// number to which call is made
 		String phoneNumber = request.getParameter("PhoneNumber");
 		System.out.println("Twilio phone number : " + phoneNumber);
@@ -45,6 +49,9 @@ public class TwilioIOVoiceServlet extends HttpServlet
 
 		/* Client have unique name with the help of agileuserid */
 		String agileuserid = request.getParameter("agileuserid");
+		
+		String conference = request.getParameter("conference");
+		
 		TwiMLResponse twiml = new TwiMLResponse();
 		Dial dial = new Dial();
 		try
@@ -92,10 +99,21 @@ public class TwilioIOVoiceServlet extends HttpServlet
 					System.out.println("Outgoing call");
 
 					// Append number
-					dial.append(new Number(phoneNumber));
+					if(conference != null){
+						dial.setHangupOnStar(true);
+						Conference c = new Conference(conference);
 
+
+						c.setStartConferenceOnEnter(true);
+						c.setWaitUrl("https://demo.twilio.com/docs/classic.mp3");
+						c.setWaitMethod("GET");
+						dial.append(c);
+					}else{
+						dial.append(new Number(phoneNumber));
+					}
 					// Set callerID
 					dial.setCallerId(callerId);
+					
 				}
 				else
 				// For incoming call
@@ -113,6 +131,7 @@ public class TwilioIOVoiceServlet extends HttpServlet
 											+ URLEncoder.encode(twimletUrl, "UTF-8"));
 
 					// Append client
+					//dial.append(new Conference("MyRoom1234"));
 					dial.append(new Client("agileclient" + agileuserid));
 					System.out.println("After dial append");
 				}

@@ -8,7 +8,9 @@ import javax.persistence.PrePersist;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import com.agilecrm.account.EmailGateway.EMAIL_API;
+import org.apache.commons.lang.exception.ExceptionUtils;
+import org.apache.commons.lang.StringUtils;
+
 import com.agilecrm.cases.Case;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.ContactUtil;
@@ -60,6 +62,9 @@ public class Document extends Cursor
      */
     @NotSaved(IfDefault.class)
     public String name = null;
+    
+    @NotSaved(IfDefault.class)
+    public String dummy_name = null;
 
     /**
      * Uploaded time of a Document.
@@ -72,16 +77,17 @@ public class Document extends Cursor
     @NotSaved(IfDefault.class)
     public String extension = null;
     
-    public  enum DOC_TYPE
+     public  enum DOC_TYPE
     {
-    	SENDDOC, ATTACHMENT
+        SENDDOC, ATTACHMENT
 
     }
     
     public DOC_TYPE doc_type = DOC_TYPE.ATTACHMENT;
-    
+
     public String text="";
     public String template_type="";
+
     /**
      * Size  of  Document in bytes.
      * zero for old documents and GOOGLE docs.
@@ -92,10 +98,9 @@ public class Document extends Cursor
     /**
      * Network where document is stored.
      */
-    
     public enum NetworkType
     {
-	GOOGLE, S3,NONE
+    GOOGLE, S3,NONE
     };
 
     /**
@@ -161,7 +166,7 @@ public class Document extends Cursor
     @NotSaved(IfDefault.class)
     private Key<DomainUser> ownerKey = null;
 
-	/**
+    /**
      * ObjectifyDao of Document.
      */
     public static ObjectifyGenericDao<Document> dao = new ObjectifyGenericDao<Document>(Document.class);
@@ -175,11 +180,11 @@ public class Document extends Cursor
     @XmlElement
     public List<ContactPartial> getContacts()
     {
-    	return ContactUtil.getPartialContacts(this.related_contacts);
+        return ContactUtil.getPartialContacts(this.related_contacts);
     }
     public List<Contact> getrelatedContacts()
     {
-    	return Contact.dao.fetchAllByKeys(this.related_contacts);
+        return Contact.dao.fetchAllByKeys(this.related_contacts);
     }
 
     /**
@@ -191,8 +196,8 @@ public class Document extends Cursor
     @XmlElement
     public List<Case> getCases()
     {
-	// return Case.dao.fetchAllByKeys(this.related_cases);
-    	return null;
+    // return Case.dao.fetchAllByKeys(this.related_cases);
+        return null;
     }
 
     /**
@@ -204,8 +209,8 @@ public class Document extends Cursor
     @XmlElement
     public List<OpportunityPartial> getDeals()
     {
-    	return OpportunityUtil.getPartialOpportunities(this.related_deals);
-	   
+        return OpportunityUtil.getPartialOpportunities(this.related_deals);
+       
     }
 
     /**
@@ -230,13 +235,13 @@ public class Document extends Cursor
      */
     public Document(String name, String extension, NetworkType network, String url,DOC_TYPE doc_type,String template_type,String text)
     {
-	this.name = name;
-	this.extension = extension;
-	this.network_type = network;
-	this.url = url;
-	this.doc_type=doc_type;
-	this.template_type=template_type;
-	this.text=text;
+    this.name = name;
+    this.extension = extension;
+    this.network_type = network;
+    this.url = url;
+    his.doc_type=doc_type;
+    this.template_type=template_type;
+    this.text=text;
     }
 
     /**
@@ -249,13 +254,13 @@ public class Document extends Cursor
     {
     if((contact_ids != null && contact_ids.size() == 0) || contact_ids == null)
     {
-    	contact_ids = new ArrayList<String>();
+        contact_ids = new ArrayList<String>();
 
-    	for (Key<Contact> contactKey : related_contacts)
-    	    contact_ids.add(String.valueOf(contactKey.getId()));
+        for (Key<Contact> contactKey : related_contacts)
+            contact_ids.add(String.valueOf(contactKey.getId()));
     }
 
-	return contact_ids;
+    return contact_ids;
     }
 
     /**
@@ -266,12 +271,12 @@ public class Document extends Cursor
     @XmlElement(name = "case_ids")
     public List<String> getCase_ids()
     {
-	case_ids = new ArrayList<String>();
+    case_ids = new ArrayList<String>();
 
-	for (Key<Case> caseKey : related_cases)
-	    case_ids.add(String.valueOf(caseKey.getId()));
+    for (Key<Case> caseKey : related_cases)
+        case_ids.add(String.valueOf(caseKey.getId()));
 
-	return case_ids;
+    return case_ids;
     }
 
     /**
@@ -282,20 +287,23 @@ public class Document extends Cursor
     @XmlElement(name = "deal_ids")
     public List<String> getDeal_ids()
     {
-	deal_ids = new ArrayList<String>();
+    if(deal_ids == null || (deal_ids != null && deal_ids.size() == 0))
+    {
+        deal_ids = new ArrayList<String>();
+    }
 
-	for (Key<Opportunity> dealKey : related_deals)
-	    deal_ids.add(String.valueOf(dealKey.getId()));
+    for (Key<Opportunity> dealKey : related_deals)
+        deal_ids.add(String.valueOf(dealKey.getId()));
 
-	return deal_ids;
+    return deal_ids;
     }
     
     public List<Key<Opportunity>> relatedDealKeys(){
-    	return this.related_deals;
+        return this.related_deals;
     }
     
     public List<Key<Contact>> relatedContactKeys(){
-    	return this.related_contacts;
+        return this.related_contacts;
     }
     
 
@@ -309,19 +317,19 @@ public class Document extends Cursor
     @XmlElement(name = "owner")
     public DomainUserPartial getOwner() throws Exception
     {
-	if (ownerKey != null)
-	{
-	    try
-	    {
-		// Gets Domain User Object
-	    return DomainUserUtil.getPartialDomainUser(ownerKey.getId());
-	    }
-	    catch (Exception e)
-	    {
-		e.printStackTrace();
-	    }
-	}
-	return null;
+    if (ownerKey != null)
+    {
+        try
+        {
+        // Gets Domain User Object
+        return DomainUserUtil.getPartialDomainUser(ownerKey.getId());
+        }
+        catch (Exception e)
+        {
+        e.printStackTrace();
+        }
+    }
+    return null;
     }
 
     /**
@@ -329,18 +337,18 @@ public class Document extends Cursor
      */
     public void save()
     {
-	dao.put(this);
+    dao.put(this);
 
-	// Enables to build "Document" search on current entity
-	AppengineSearch<Document> search = new AppengineSearch<Document>(Document.class);
+    // Enables to build "Document" search on current entity
+    AppengineSearch<Document> search = new AppengineSearch<Document>(Document.class);
 
-	// If doc is new then add it to document else edit document
-	if (id == null)
-	{
-	    search.add(this);
-	    return;
-	}
-	search.edit(this);
+    // If doc is new then add it to document else edit document
+    if (id == null)
+    {
+        search.add(this);
+        return;
+    }
+    search.edit(this);
     }
 
     /**
@@ -348,8 +356,8 @@ public class Document extends Cursor
      */
     public void delete()
     {
-	dao.delete(this);
-	new AppengineSearch<Document>(Document.class).delete(id.toString());
+    dao.delete(this);
+    new AppengineSearch<Document>(Document.class).delete(id.toString());
     }
 
     /**
@@ -359,38 +367,44 @@ public class Document extends Cursor
     @PrePersist
     private void PrePersist()
     {
-	// Initializes created Time
-	if (uploaded_time == 0L)
-	    uploaded_time = System.currentTimeMillis() / 1000;
+        
+    // Trim name and make dummy one to sore
+    if(StringUtils.isNotBlank(name)){
+        dummy_name = name.toLowerCase().trim();
+    }
+    
+    // Initializes created Time
+    if (uploaded_time == 0L)
+        uploaded_time = System.currentTimeMillis() / 1000;
 
-	if (contact_ids != null)
-	{
-	    for (String contact_id : this.contact_ids)
-		this.related_contacts.add(new Key<Contact>(Contact.class, Long.parseLong(contact_id)));
-	}
-	if (case_ids != null)
-	{
-	    for (String case_id : this.case_ids)
-		this.related_cases.add(new Key<Case>(Case.class, Long.parseLong(case_id)));
-	}
-	if (deal_ids != null)
-	{
-	    for (String deal_id : this.deal_ids)
-		this.related_deals.add(new Key<Opportunity>(Opportunity.class, Long.parseLong(deal_id)));
-	}
+    if (contact_ids != null)
+    {
+        for (String contact_id : this.contact_ids)
+        this.related_contacts.add(new Key<Contact>(Contact.class, Long.parseLong(contact_id)));
+    }
+    if (case_ids != null)
+    {
+        for (String case_id : this.case_ids)
+        this.related_cases.add(new Key<Case>(Case.class, Long.parseLong(case_id)));
+    }
+    if (deal_ids != null)
+    {
+        for (String deal_id : this.deal_ids)
+        this.related_deals.add(new Key<Opportunity>(Opportunity.class, Long.parseLong(deal_id)));
+    }
 
-	// If owner_id is null
-	if (owner_id == null)
-	{
-	    UserInfo userInfo = SessionManager.get();
-	    if (userInfo == null)
-		return;
+    // If owner_id is null
+    if (owner_id == null)
+    {
+        UserInfo userInfo = SessionManager.get();
+        if (userInfo == null)
+        return;
 
-	    owner_id = SessionManager.get().getDomainId().toString();
-	}
+        owner_id = SessionManager.get().getDomainId().toString();
+    }
 
-	// Saves domain user key
-	ownerKey = new Key<DomainUser>(DomainUser.class, Long.parseLong(owner_id));
+    // Saves domain user key
+    ownerKey = new Key<DomainUser>(DomainUser.class, Long.parseLong(owner_id));
 
     }
 
@@ -401,7 +415,7 @@ public class Document extends Cursor
      */
     public String toString()
     {
-	return "id: " + id + " relatesto: " + contact_ids + " name: " + name + " Owner " + owner_id;
+    return "id: " + id + " relatesto: " + contact_ids + " name: " + name + " Owner " + owner_id;
     }
 
 }

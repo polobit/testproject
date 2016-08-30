@@ -41,7 +41,7 @@ function show_map(el) {
 	
 	var map_view=_agile_get_prefs('MAP_VIEW');
 	if(map_view=="disabled"){
-		$("#map_view_action").html("<i class='icon-plus text-sm c-p' title='Show map' id='enable_map_view'></i>");
+		$("#map_view_action").html("<i class='icon-plus text-sm c-p' title='"+_agile_get_translated_val('contact-details','show-map')+"' id='enable_map_view'></i>");
 		return;
 	}
 		

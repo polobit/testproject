@@ -8,10 +8,16 @@ import org.apache.commons.lang.StringUtils;
 import com.agilecrm.AgileQueues;
 import com.agilecrm.OpportunitySchemaUpdateStats;
 import com.agilecrm.deals.Opportunity;
+import com.agilecrm.deals.filter.DealFilter;
+import com.agilecrm.deals.util.OpportunityUtil;
 import com.agilecrm.search.AppengineSearch;
 import com.agilecrm.search.document.OpportunityDocument;
+import com.agilecrm.search.query.QueryDocument;
+import com.agilecrm.search.query.util.QueryDocumentUtil;
+import com.agilecrm.search.ui.serialize.SearchRule;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.search.Document.Builder;
+import com.google.appengine.api.search.ScoredDocument;
 import com.google.appengine.api.taskqueue.DeferredTask;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
@@ -76,6 +82,22 @@ public class UpdateDealsOfDomainDeferredTask implements DeferredTask
 				return;
 			}
 			AppengineSearch<Opportunity> search = new AppengineSearch<Opportunity>(Opportunity.class);
+			/*QueryDocument<Opportunity> q = new QueryDocument<Opportunity>(search.index, Opportunity.class);
+			DealFilter df = new DealFilter();
+			SearchRule rule = new SearchRule();
+			rule.LHS = "type";
+			rule.CONDITION = SearchRule.RuleCondition.EQUALS;
+			rule.RHS = "Opportunity";
+			df.rules.add(rule);
+			String query = QueryDocumentUtil.constructFilterQuery(df);
+			List<ScoredDocument> scoredDocs = q.getDocuments(query, null);
+			if(scoredDocs != null && scoredDocs.size() > 0)
+			{
+				for(ScoredDocument sd : scoredDocs)
+				{
+					search.delete(sd.getId());
+				}
+			}*/
 			do
 			{
 				currentCount += deals_list.size();
@@ -87,15 +109,15 @@ public class UpdateDealsOfDomainDeferredTask implements DeferredTask
 					try {
 						search.index.putAsync(opportunityDocument.buildOpportunityDoc(opportunity));
 					} catch(Exception e) {
-						System.out.println("Exception while adding deal to text search: "+opportunity.id + e);
 						failedIds = failedIds + ", " + opportunity.id;
+						System.out.println("Exception while adding deal to text search: "+opportunity.id + e.getMessage());						
 					}
 					/*if(builderObjects.size() >= 50) {
 						search.index.putAsync(builderObjects.toArray(new Builder[builderObjects.size() - 1]));
 						builderObjects.clear();
 					}*/
 				}
-				Opportunity.dao.putAll(deals_list);
+				//Opportunity.dao.putAll(deals_list);
 
 				if(builderObjects.size() > 0) {
 					search.index.putAsync(builderObjects.toArray(new Builder[builderObjects.size() - 1]));

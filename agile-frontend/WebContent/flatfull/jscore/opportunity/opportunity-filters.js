@@ -38,7 +38,7 @@ function setNewDealFilters(data){
 
 	if(cookie_filter_id && cookie_filter_id == 'my-deals'){
 		$('#opportunity-listners').find('h3').find('.remove_deal_filter').parent().remove();
-		$('#opportunity-listners').find('h3').find('small').after('<div class="inline-block tag btn btn-xs btn-primary m-l-xs"><span class="inline-block m-r-xs v-middle pull-left">My Deals</span><a class="close remove_deal_filter">×</a></div>');
+		$('#opportunity-listners').find('h3').find('small').after('<div class="inline-block tag btn btn-xs btn-primary m-l-xs"><span class="inline-block m-r-xs v-middle pull-left">{{agile_lng_translate "portlets" "my-deals"}}</span><a class="close remove_deal_filter">×</a></div>');
 		return;
 	}
 
@@ -225,4 +225,97 @@ function dealSourcesSorting()
 				} });
 		});
 	});
+}
+
+/**
+ * Get the deal sort filters in the cookie.
+ * 
+ */
+function getDealSortFilter()
+{
+	var sortFilter = "-created_time";
+	if (_agile_get_prefs("deal_sort_field"))
+	{
+		sortFilter = _agile_get_prefs("deal_sort_field");
+	}
+
+	return sortFilter;
+}
+
+var DEAL_CUSTOM_SORT_VIEW = undefined;
+function setUpDealSortFilters(el)
+{
+	if(DEAL_CUSTOM_SORT_VIEW)
+	{
+		$("#deal-sorter", el).html(DEAL_CUSTOM_SORT_VIEW.render(true).el);
+		return;	
+	}
+
+	var view = DEAL_SORT_FIELDS_VIEW.view();
+	DEAL_CUSTOM_SORT_VIEW = new view ({
+		data : sort_deal_configuration.getDealSortableFields(),
+		templateKey : "contact-view-sort",
+		sortPrefsName : "deal_sort_field",
+		individual_tag_name : "li",
+		sort_collection : false,
+		postRenderCallback: function(el)
+		{
+			DEAL_CUSTOM_SORT_VIEW.postProcess();
+		}
+	});
+
+	
+	DEAL_CUSTOM_SORT_VIEW.init();
+	$("#deal-sorter", el).html(DEAL_CUSTOM_SORT_VIEW.render(true).el);
+	
+}
+
+/**
+ * Chains fields using jquery.chained library. It deserialzed data into form
+ * 
+ * @param el
+ */
+function chainDealFilters(el, data, callback)
+{
+	if(!OPPORTUNITY_CUSTOM_FIELDS)
+	{			
+		fillOpportunityCustomFieldsInFilters(el, function(){
+			show_chained_fields(el, data, true);
+			if (callback && typeof (callback) === "function")
+			{
+				// execute the callback, passing parameters as necessary
+				callback();
+			}
+		})
+		return;
+	}
+	
+	fillCustomFields(OPPORTUNITY_CUSTOM_FIELDS, el, undefined, false)
+	
+	show_chained_fields(el, data);
+	if (callback && typeof (callback) === "function")
+	{
+		// execute the callback, passing parameters as necessary
+		callback();
+	}
+	
+}
+
+function fillOpportunityCustomFieldsInFilters(el, callback)
+{
+	$.getJSON("core/api/custom-fields/searchable/scope?scope=DEAL", function(fields){
+		console.log(fields);
+		OPPORTUNITY_CUSTOM_FIELDS = fields;
+		fillCustomFields(fields, el, callback, false);
+	});
+}
+
+function chainFiltersForOpportunity(el, data, callback) {
+	if(data) {
+		chainDealFilters($(el).find('.chained-table.opportunity.and_rules'), data.rules, undefined);
+		chainDealFilters($(el).find('.chained-table.opportunity.or_rules'), data.or_rules, callback);
+	} else {
+		chainDealFilters($(el).find('.chained-table.opportunity.and_rules'), undefined, undefined);
+		chainDealFilters($(el).find('.chained-table.opportunity.or_rules'), undefined, callback);
+	}
 }

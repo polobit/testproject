@@ -1,129 +1,121 @@
 <!-- Add (Documents) Modal views -->
 <script type="text/html" id="upload-document-update-modal-template">
-<div class="wrapper-md lter bg-light b-b">
-
-  <div class="row">
-    <div class="col-md-12">Edit Document</div>
-  </div>
-</div>
-<div class="wrapper-md">
-  <div class="row">
-  <form id="uploadDocumentUpdateForm" name="uploadDocumentUpdateForm" method="post" class="form-horizontal" accept-charset="UTF-8">
-    <div class="col-md-9">
-      <div class="panel wrapper">
-        
-        <div class="formsection chainedSelect">
-           <fieldset>
-              <input name="id" id="id" type="hidden"/>
-              <input name="extension" id="extension" type="hidden"/>
-                   <div class="control-group form-group hide">
-                              <label class="control-label  col-sm-3"><b>Type </b><span
-                                 class="field_req">*</span></label>
-                              <div class="controls col-sm-9">
-                                 <span>
-                                   <select name="doc_type" id="doc_type"  class="required form-control" placeholder="Type of Document">
-                                       <option value="ATTACHMENT">Attachment</option>
-                                       <option value="SENDDOC">Electronic Document</option>
-                                   </select>
-                                 </span>
-                              </div>
-                           </div>
-              
-                    <div class="control-group form-group">
-                       <label class="control-label  col-sm-3"><b>Title </b><span
-                          class="field_req">*</span></label>
-                       <div class="controls col-sm-9">
-                          <span><input id="name" name="name" maxlength="200" type="text"
-                             class="required form-control" placeholder="Name of Document" /></span>
-                       </div>
+     <div class="wrapper-md lter bg-light b-b">
+        <div class="row">
+          <div class="col-md-12">&nbsp;{{agile_lng_translate 'documents' 'edit-document'}}</div>
+        </div> 
+     </div>
+     <div class="wrapper-md">
+      <div class="row">
+        <form id="uploadDocumentUpdateForm" name="uploadDocumentUpdateForm" method="post" class="form-horizontal">
+          <div class="col-md-9">
+            <div class="panel wrapper">
+              <div class="formsection chainedSelect">
+                 <fieldset>
+                    <input name="id" type="hidden"/>
+                    <input name="extension" id="extension" type="hidden"/>
+                    <div class="control-group form-group hide">
+                        <label class="control-label  col-sm-3"><b>Type </b><span
+                           class="field_req">*</span></label>
+                        <div class="controls col-sm-9">
+                           <span>
+                             <select name="doc_type" id="doc_type"  class="required form-control" placeholder="Type of Document">
+                                 <option value="ATTACHMENT">Attachment</option>
+                                 <option value="SENDDOC">Electronic Document</option>
+                             </select>
+                           </span>
+                        </div>
                     </div>
                     <div class="control-group form-group">
-                 <label class="control-label  col-sm-3"><b>Related Contacts <span class="field_req  related-contacts-required">*</span></b></label>
-                 <div class="controls col-sm-9" id="contactTypeAhead">
-                    <div>
-                     <input type="text" id="document_relates_to_contacts" name="related_contacts"
-                          placeholder="Contact Name" class="typeahead typeahead_contacts form-control"
-                          data-provide="typeahead" data-mode="multiple" />
-                       <div>
-                          <ul name="contact_ids" class="contacts tagsinput tags p-n m-n"></ul>
-                       </div>
-                    </div>
-                    <div class="clearfix"></div>  
-                  <span class="contacts_relatedto_error" style="color:#d9534f;display:none;">Please relate the document to a contact.</span>
-                 </div>
-              </div>
-              <div class="control-group form-group">
-                 <label class="control-label  col-sm-3"><b>Related Deals </b></label>
-                 <div class="controls col-sm-9" id="dealTypeAhead">
-                    <div>
-                       <div>
-                          <ul name="deal_ids" class="deals tagsinput deal_tags tags p-n m-n"></ul>
-                       </div>
-                       <input type="text" id="document_relates_to_deals" name="related_deals"
-                          placeholder="Deal Name" class="typeahead typeahead_deals form-control"
-                          data-provide="typeahead" data-mode="multiple" />
-                    </div>
-                 </div>
-                    
-              </div>
-              
-                    <div class="control-group form-group attachment">
-                       <label class="control-label  col-sm-3"><b>Choose Document </b><span
-                          class="field_req">*</span></label>
-                       <div class="controls col-sm-9" >
-                          <input type="hidden" name="url" id="upload_url" class="required"/>
-                          <input type="hidden" name="size" id="size" class="required"/>
-                          <input type="hidden" name="network_type" id="network_type" class="required"/>
-                          <div class="row">
-                             <div class="col-md-3 col-sm-3 col-xs-3 all-l-none">
-                                <div class="link text-center thumbnail m-b-none "><i class="icon-ok pull-right" style="display:none;"></i><br/>
-                                   <a href="#" id="S3"><i class="icon-desktop icon-2x" title="Custom"></i><br/><span>My Computer</span></a>
-                                </div>
+                             <label class="control-label  col-sm-3">{{agile_lng_translate 'report-add' 'title'}}
+                             <span
+                                class="field_req">*</span></label>
+                             <div class="controls col-sm-9">
+                                <span><input id="name" name="name" type="text"
+                                   class="required form-control" placeholder="{{agile_lng_translate 'modals' 'document-name'}}" /></span>
                              </div>
-                             <div class="col-md-3 col-sm-3 col-xs-3 all-l-none">
-                                <div class="link text-center thumbnail m-b-none"><i class="icon-ok pull-right" style="display:none;"></i><br/>
-                                   <a href="#" id="GOOGLE"><i class="icon-google-plus icon-2x" title="Google"></i><br/><span>Google Drive</span></a>
-                                </div>
+                    </div>
+                    <div class="control-group form-group">
+                       <label class="control-label col-sm-3">{{agile_lng_translate 'documents' 'related-contacts'}}
+                       </label>
+                       <div class="controls col-sm-7" id="contactTypeAhead">
+                          <div>
+                             <div>
+                                <ul name="contact_ids" class="contacts tagsinput tags p-n m-n"></ul>
                              </div>
+                             <input type="text" id="document_relates_to_contacts" name="related_contacts"
+                                placeholder="{{agile_lng_translate 'cases' 'contact-name'}}" class="typeahead typeahead_contacts form-control"
+                                data-provide="typeahead" data-mode="multiple" />
                           </div>
-                    
-                 </div>
-              </div>
+                       </div>
+                    </div>
+                    <div class="control-group form-group">
+                       <label class="control-label col-sm-3">{{agile_lng_translate 'tasks' 'related-deals'}}</label>
+                       <div class="controls col-sm-7" id="dealTypeAhead">
+                          <div>
+                             <div>
+                                <ul name="deal_ids" class="deals tagsinput deal_tags  p-n m-n"></ul>
+                             </div>
+                             <input type="text" id="document_relates_to_deals" name="related_deals"
+                                placeholder="{{agile_lng_translate 'documents' 'deal-name'}}" class="typeahead typeahead_deals form-control"
+                                data-provide="typeahead" data-mode="multiple" />
+                          </div>
+                       </div>
+                    </div>
+                    <div class="control-group form-group attachment">
+                             <label class="control-label col-sm-3">{{agile_lng_translate 'documents' 'choose-document'}}<span
+                                class="field_req">*</span></label>
+                             <div class="controls col-sm-7">
+                                <input type="hidden" name="url" id="upload_url" class="required"/>
+                                <input type="hidden" name="size" id="size" class="required"/>
+                                <input type="hidden" name="network_type" id="network_type" class="required"/>
+                                <div class="row">
+                                   <div class="col-md-4 col-sm-6 col-xs-6" style="width:50%">
+                                      <div class="link text-center thumbnail m-b-none "><i class="icon-ok pull-right" style="display:none;"></i><br/>
+                                         <a href="#" id="S3"><i class="icon-desktop icon-2x" title="{{agile_lng_translate 'campaigns' 'custom'}}"></i><br/><span>{{agile_lng_translate 'documents' 'my-computer'}}</span></a>
+                                      </div>
+                                   </div>
+                                   <div class="col-md-4 col-sm-6 col-xs-6" style="width:50%">
+                                      <div class="link text-center thumbnail m-b-none"><i class="icon-ok pull-right" style="display:none;"></i><br/>
+                                         <a href="#" id="GOOGLE"><i class="icon-google-plus icon-2x" title="{{agile_lng_translate 'prefs-data-sync' 'google'}}"></i><br/><span>{{agile_lng_translate 'documents' 'google-drive'}}
+                                         </span></a>
+                                      </div>
+                                   </div>
+                                </div>
+                             </div>
+                    </div>
                     <div class="senddoc hide">
                          <div class="control-group form-group hide">
-                                <label class="control-label col-sm-3"><b>Select Template </b><span
+                                <label class="control-label col-sm-3"><b>{{agile_lng_translate 'documents' 'select-template'}}</b><span
                                    class="field_req">*</span></label>
                                 <div class="controls col-sm-9">
                                    <span>
-                                     <text name="template_type" type="hide" id="template_type"  class="required form-control" placeholder="Type of Template">
+                                     <text name="template_type" type="hide" id="template_type"  class="required form-control" placeholder="{{agile_lng_translate 'documents' 'document-typeoftemplate'}}">
                                          
                                      </text>
                                    </span>
                                 </div>
                              </div>
                              <div class="control-group form-group">
-                               <label class="control-label col-sm-3"><b>Content </b></label>
+                               <label class="control-label col-sm-3"><b>{{agile_lng_translate 'documents' 'document-content'}}</b></label>
                                 <div class="controls col-sm-9">
                                     <div id="loading-editor" ></div>
-                                     <textarea class="col-md-6 required" style="display: none;" name="text" id="signdoc-template-html" placeholder="Document template html"></textarea>
-                                </div>  
-                              </div>
-                          </div>
-              <div id="error"></div>
-              
-              <div class="form-actions">      
+                                     <textarea class="col-md-6 required" style="display: none;" name="text" id="signdoc-template-html" placeholder="{{agile_lng_translate 'documents' 'document-documenttemplatehtml'}}"></textarea>
+                              </div>  
+                        </div>
+                    </div>
+                    <div id="error"></div>
+                    <div class="form-actions">      
                        <div class="col-sm-offset-3 col-sm-9">    
-                          <a href="#" class="btn btn-default btn-sm cancel-document m-r-xs">Cancel</a> 
-                          <a href="#" class="btn btn-sm btn-primary" id="document_update_validate">Save
-        Changes</a> <span class="save-status"></span>
-                          <a href="#" class="btn btn-sm btn-primary email-send-doc btn-success hide" >Send Email</a>
+                          <a href="#" class="btn btn-default btn-sm cancel-document m-r-xs">{{agile_lng_translate 'documents' 'document-cancel'}}</a> 
+                          <a href="#" class="btn btn-sm btn-primary" id="document_update_validate">{{agile_lng_translate 'prefs-settings' 'save-changes'}}</a> <span class="save-status"></span>
+                          <a href="#" class="btn btn-sm btn-primary email-send-doc btn-success hide" >{{agile_lng_translate 'documents' 'document-sendemail'}}</a>
                        </div>
                    </div>  
-           </fieldset>
-           </div>
-        
-      </div>
-    </div>
+                </fieldset>
+              </div>
+            </div>
+          </div>  
           <div class="col-md-3 documents-activities-container hide">
                 <div class="  documents-activities" style1="height:90%;">
                      
@@ -131,19 +123,20 @@
                 <div class="padder b-t  text-center">
                          <div class="m-t-sm"><div class="row">
                               <textarea class="inputtext " cols="40" rows="6" id="comments" name="notes" placeholder="Comments"></textarea>
-                              <text id="contact_id" name="subject" type="hidden" value="<%=sContactId%>"></text>
-                              <text id="subject" name="subject" type="hidden" value="<%=sNoteSubject%>"></text>
+                              <text id="contact_id" name="subject" type="hidden" ></text>
+                              <text id="subject" name="subject" type="hidden" ></text>
                           </div>
                           <div class="row">
-                              <a  class="text-info" data="{{id}}" id="document-send-comments"><i class1="icon-envelope-alt"></i> Send Comments</a>
+                              <a  class="text-info" data="{{id}}" id="document-send-comments"><i class1="icon-envelope-alt"></i>{{agile_lng_translate 'documents' 'document-sendcomments'}} </a>
 
                           </div>
                           <span class="doc-comment-error-status  " style="color:#d9534f;"></span>
                   </div>
          </div>
-       </form>
-  </div>
-</div>      
+        </form>
+       </div> 
+     </div>
+  
 
 </script>
 <!-- End of Modal views -->

@@ -113,7 +113,19 @@ var WebreportsRouter = Backbone.Router.extend({
 
 				})
 				count++;
-			} });
+			},
+			form_custom_validate : function(){
+				if($('#action select').val()=="CALL_POPUP"){
+				 	if(App_WebReports.isTwilioSMS=="TWILIO")
+						return true;
+					else{
+						$('#twilio_call_setup').show();
+						return false;
+					}
+				}
+				return true;
+			}
+			});
 
 		$("#content").html(getRandomLoadingImg());
 		web_reports_add.render();
@@ -158,6 +170,9 @@ var WebreportsRouter = Backbone.Router.extend({
 			{
 				if(path.includes("callpopup.html"))
 					el.find("#action select").val("CALL_POPUP");
+				else if(path.includes("sitebar.html"))
+					el.find("#action select").val("SITE_BAR");
+				
 				head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js?_='+_agile_get_file_hash("agile.jquery.chained.min.js"), function()
 				{
 					chainFilters(el, undefined, function()
@@ -170,7 +185,20 @@ var WebreportsRouter = Backbone.Router.extend({
 					}, true);
 				})
 				
-			} });
+			},
+			form_custom_validate : function(){
+				if($('#action select').val()=="CALL_POPUP"){
+				 	if(App_WebReports.isTwilioSMS=="TWILIO")
+						return true;
+					else{
+						$('#twilio_call_setup').show();
+						return false;
+					}
+				}
+				return true;
+			}
+
+		});
 
 		$("#content").html(getRandomLoadingImg());
 		web_reports_add.render();
@@ -198,7 +226,19 @@ var WebreportsRouter = Backbone.Router.extend({
 					}, true);
 
 				})
-			} });
+			},
+			form_custom_validate : function(){
+				if($('#action select').val()=="CALL_POPUP"){
+				 	if(App_WebReports.isTwilioSMS=="TWILIO")
+						return true;
+					else{
+						$('#twilio_call_setup').show();
+						return false;
+					}
+				}
+				return true;
+			}
+		});
 
 		$("#content").html(getRandomLoadingImg());
 		web_reports_add.render();
@@ -257,6 +297,8 @@ function loadSavedTemplate(templateURL, callback){
 				}
 				if(templateUrl.includes("callpopup.html"))
 					$("#callwebrule-code").text(data);
+				else if(templateUrl.includes("sitebar.html"))
+					$("#agile-bar-code").text(data);
 				else
                 	$("#tinyMCEhtml_email").text(data);
 				

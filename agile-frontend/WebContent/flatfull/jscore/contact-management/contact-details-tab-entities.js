@@ -6,6 +6,7 @@ var casesView;
 var documentsView;
 var campaignsView;
 var mailsView;
+var mailAccountsView_company;
 var mailAccountsView;
 var email_errors_divs = [];
 var email_requests = [];
@@ -34,11 +35,13 @@ var contact_details_tab = {
 	            sortKey:"created_time",
 	            descending: true,
 	            postRenderCallback: function(el) {
-	            	head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
-	            		 $(".note-created-time", el).timeago();
-	              	})
+	            	agileTimeAgoWithLngConversion($(".note-created-time", el));
+	            	
 	              	contact_detail_page_infi_scroll($('#contact-dtl', App_Contacts.contactDetailView.el), notesView);
-	            }
+	            },
+	            appendItemCallback : function(el) {
+					includeTimeAgo(el);
+				}
 	        });
 	        notesView.collection.fetch();
 	        $('#notes', App_Contacts.contactDetailView.el).html(notesView.el);
@@ -54,9 +57,8 @@ var contact_details_tab = {
 	            sortKey:"created_time",
 	            descending: true,
 	            postRenderCallback: function(el) {
-	            	head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
-	            		 $(".event-created-time", el).timeago();
-	              	});
+	            	agileTimeAgoWithLngConversion($(".event-created-time", el));
+	            	
 	            	$('li',el).each(function(){
 	            	if($(this).find('.priority_type').text().trim() == "High") {
             			$(this).css("border-left","3px solid #f05050");
@@ -82,9 +84,7 @@ var contact_details_tab = {
 		            sortKey:"uploaded_time",
 		            descending: true,
 		            postRenderCallback: function(el) {
-		            	head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
-		            		 $(".document-created-time", el).timeago();
-		              	});
+		            	agileTimeAgoWithLngConversion($(".document-created-time", el));
 		            
 		            }
 		        });
@@ -102,9 +102,8 @@ var contact_details_tab = {
 		            sortKey:"created_time",
 		            descending: true,
 		            postRenderCallback: function(el) {
-		            	head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
-		            		 $(".task-created-time", el).timeago();
-		              	});
+		            	agileTimeAgoWithLngConversion($(".task-created-time", el));
+		            	
 		            	$('li',el).each(function(){
 		            		if($(this).find('.priority_type').text().trim()== "HIGH") {
 		            			$(this).css("border-left","3px solid #f05050");
@@ -131,15 +130,11 @@ var contact_details_tab = {
 	            sortKey:"created_time",
 	            descending: true,
 	            postRenderCallback: function(el) {
-	            	head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
-	            		 $(".deal-created-time", el).timeago();
+	            	agileTimeAgoWithLngConversion($(".deal-created-time", el));
 	            	$(el).find('ul li').each(function(){
-				    $(this).addClass("deal-color");
-				    $(this).addClass($(this).find("input").attr("class"));
+				    	$(this).addClass("deal-color");
+				    	$(this).addClass($(this).find("input").attr("class"));
 			        });
-
-
-	            	})
 	            }
 	        });
 	        dealsView.collection.fetch();
@@ -156,9 +151,7 @@ var contact_details_tab = {
 	            sortKey:"created_time",
 	            descending: true,
 	            postRenderCallback: function(el) {
-	            	head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
-	            		 $(".deal-created-time", el).timeago();
-	            	})
+	            	agileTimeAgoWithLngConversion($(".deal-created-time", el));
 	            }
 	        });
 			casesView.collection.fetch();
@@ -216,7 +209,7 @@ var contact_details_tab = {
 			
 			// Shows an error alert, when there is no email to the contact 
 			if(!email){
-				$('#stats', App_Contacts.contactDetailView.el).html('<div class="alert alert-danger m-sm"><a class="close" data-dismiss="alert" href="#">&times;</a>Sorry! this contact has no email to get the stats.</div>');
+				$('#stats', App_Contacts.contactDetailView.el).html('<div class="alert alert-danger m-sm"><a class="close" data-dismiss="alert" href="#">&times;</a>'+_agile_get_translated_val('contact-details','sorry-this-contact-has-no-email-to-get-the-stats')+'</div>');
 				return;	
 			}
 
@@ -225,7 +218,7 @@ var contact_details_tab = {
 				// To avoid unnecessary JSAPI count, first verify in cookie
 				if(!(_agile_get_prefs('_agile_jsapi') != null && _agile_get_prefs('_agile_jsapi') == "true") && (NO_WEB_STATS_SETUP && count == '0'))
 				{
-					$('#stats', App_Contacts.contactDetailView.el).html('<h4 class="webstats-msg space-normal  wrapper-sm font-normal m-none"><p>You have not yet setup the Javascript API on your website.</p><p>Please <a href="#analytics-code">set it up</a> to see the contact\'s site visits here.</p></h4>');
+					$('#stats', App_Contacts.contactDetailView.el).html('<h4 class="webstats-msg space-normal  wrapper-sm font-normal m-none"><p>'+_agile_get_translated_val('contact-details','you-have-not-yet-setup-the-javascript-api-on-your website')+'</p><p>'+_agile_get_translated_val('contact-details','please')+' <a href="#analytics-code">'+_agile_get_translated_val('contact-details','set-it-up')+'</a> '+_agile_get_translated_val('contact-details','to-see-the-contacts-site-visits-here')+'</p></h4>');
 					return;
 				}
 
@@ -239,11 +232,7 @@ var contact_details_tab = {
 	            individual_tag_name: 'li',
 	            postRenderCallback: function(el)
 	            {
-	            	head.js(LIB_PATH + 'lib/jquery.timeago.js', function() { 
-	        			$(".stats-created-time", el).each(function(index, element) {
-	        				$(element).timeago();
-	        			});
-	    			});
+	            	agileTimeAgoWithLngConversion($(".stats-created-time", el));
 	            	
 	            	var first_model_element = $('#stats-model-list').find('li')[0];
 	            	
@@ -292,10 +281,8 @@ var contact_details_tab = {
 							show_resubscribe_modal();
 
 		            	});
-
-		            	head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
-		              		 $("time.log-created-time", el).timeago();
-		              	});
+		            	agileTimeAgoWithLngConversion($("time.log-created-time", el));
+		            	
 		            	contact_detail_page_infi_scroll($('#contact-dtl', App_Contacts.contactDetailView.el), campaignsView);
 		            },
 		            appendItemCallback : function(el)
@@ -338,6 +325,7 @@ function loadMailTabView(contact_details_tab_scope,email_server,mail_server_url,
 		postRenderCallback : function(el)
 		{	
 			model = mailAccountsView.model.toJSON();
+			
 			if(model.hasEmailAccountsConfigured)
 				has_email_configured = true;
 			else
@@ -377,6 +365,7 @@ function loadMailTabView(contact_details_tab_scope,email_server,mail_server_url,
 			} 						
 		}
 	});
+	
 	$('#mail-account-types', App_Contacts.contactDetailView.el).html(mailAccountsView.render().el);	 
 }
 
@@ -407,13 +396,7 @@ function fetchMails(contact_details_tab_scope,has_email_configured,mail_server_u
 	postRenderCallback : function(el)
 	{
 		$('#mail', App_Contacts.contactDetailView.el).find("#no-email").css('display','block');
-		head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
-		{
-			$(".email-sent-time", el).each(function(index, element)
-			{
-				$(element).timeago();
-			});
-		});
+		agileTimeAgoWithLngConversion($(".email-sent-time", el));
 		
 		if(email_server_type!="agilecrm")
 			contact_details_tab_scope.configured_sync_email = email_server_type;
@@ -423,6 +406,7 @@ function fetchMails(contact_details_tab_scope,has_email_configured,mail_server_u
 		contact_detail_page_infi_scroll($('#contact-dtl', App_Contacts.contactDetailView.el), mailsView);
 		$('#mail #mails-span', App_Contacts.contactDetailView.el).remove();
 	}});
+
 	mailsView.collection.fetch();
 	$('#mails', App_Contacts.contactDetailView.el).html(mailsView.render().el);
 }
@@ -522,13 +506,8 @@ function loadAllMailsView(contact_details_tab_scope,has_email_configured,fetched
 	templateKey : "email-social", sort_collection : true, sortKey : "date_secs", descending : true, individual_tag_name : "li",
 	postRenderCallback : function(el)
 	{
-		head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
-		{
-			$(".email-sent-time", el).each(function(index, element)
-			{
-				$(element).timeago();
-			});
-		});
+		$(el).find('style').html("");
+		agileTimeAgoWithLngConversion($(".email-sent-time", el));
 		
 		if(email_server_type!="agilecrm")
 			contact_details_tab_scope.configured_sync_email = email_server_type;
@@ -603,7 +582,7 @@ function fetch_mailserverurl_from_cookie(model)
 							final_url = 'core/api/social-prefs/google-emails?from_email='+email;
 							html = '<i class="icon-google-plus" style="margin-right:4px;font-size: 1.2em"></i>'+email;
 							if(shared)
-								html = html+ ' (Shared)';
+								html = html+ ' ('+_agile_get_translated_val('contact-details','shared')+')';
 						}
 					}
 					else if(email_server.toLowerCase()==='imap')
@@ -637,7 +616,7 @@ function fetch_mailserverurl_from_cookie(model)
 							final_url = 'core/api/imap/imap-emails?from_email='+email;
 							html = '<i class="icon-envelope-alt" style="margin-right:4px;font-size: 1.2em"></i>'+email;
 							if(shared)
-								html = html+ ' (Shared)';
+								html = html+ ' ('+_agile_get_translated_val('contact-details','shared')+')';
 						}
 					}
 					else if(email_server.toLowerCase()==='exchange')
@@ -671,7 +650,7 @@ function fetch_mailserverurl_from_cookie(model)
 							final_url = 'core/api/office/office365-emails?from_email='+email;
 							html = '<i class="icon-windows" style="margin-right:4px;font-size: 1.2em"></i>'+email;
 							if(shared)
-								html = html+ ' (Shared)';
+								html = html+ ' ('+_agile_get_translated_val('contact-details','shared')+')';
 						}
 					}
 					if(final_url)
@@ -733,7 +712,7 @@ function showMailsInfoMessages()
 	{
 		if(($('#all-emails-info',App_Contacts.contactDetailView.el).length === 0))
 		{
-			$('#mails',App_Contacts.contactDetailView.el).append('<div id="all-emails-info" class="alert alert-info">Showing relevant messages from all accounts. Maximum of 20 messages from each account </div>');
+			$('#mails',App_Contacts.contactDetailView.el).append('<div id="all-emails-info" class="alert alert-info">'+_agile_get_translated_val('mails','show-mails-error')+' </div>');
 		}
 	}
 	$('#mail-account-types', App_Contacts.contactDetailView.el).find('.all-mails-loading').remove();
@@ -766,7 +745,7 @@ function killAllPreviousRequests()
 }
 function show_no_email_alert()
 {
-	$('#mail', App_Contacts.contactDetailView.el).html('<div class="alert alert-danger m-t-sm m-sm"><a class="close" data-dismiss="alert" href="#">&times;</a>Sorry! this contact has no email to get the mails.</div>');
+	$('#mail', App_Contacts.contactDetailView.el).html('<div class="alert alert-danger m-t-sm m-sm"><a class="close" data-dismiss="alert" href="#">&times;</a>{{agile_lng_translate "contact-details" "sorry-this-contact-has-no-email-to-get-the-mails"}}</div>');
 }
 
 function show_resubscribe_modal(){

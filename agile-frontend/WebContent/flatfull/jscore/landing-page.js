@@ -2,30 +2,60 @@ jQuery.validator.addMethod("lpdomain", function(value, element) {
 	if(value == '')
 		return true;
 	return /^[a-zA-Z0-9][a-zA-Z0-9-]{1,61}[a-zA-Z0-9](?:\.[a-zA-Z]{2,})+$/.test(value);
-	 },"Invalid domain.");
+	 },"{{agile_lng_translate 'landingpages' 'invalid-domain'}}");
 	
 jQuery.validator.addMethod("lpsubdomain", function(value, element) {
 	if(value == '')
 		return true;
 	return /^[a-zA-Z0-9-]+$/.test(value);
-	},"Invalid sub domain.");
+	},"{{agile_lng_translate 'landingpages' 'invalid-sub-domain'}}");
 
 jQuery.validator.addMethod("lpdirectorypath", function(value, element) {
 	if(value == '')
 		return true;
 	return /^(\/\w+)+[a-z0-9-.]+$/.test("/"+value);
-	},"Invalid path.");
+	},"{{agile_lng_translate 'landingpages' 'invalid-path'}}");
 
+
+var LandingPages_Top_Header_Modal_Events = Base_Model_View.extend
+({
+	events: {
+        'click #sort_menu > li': 'LandingpageSort',    
+    },
+    LandingpageSort : function(e){
+    	
+		e.preventDefault();
+        var targetEl = $(e.currentTarget);
+        var sortkey = "", 
+        $sort_menu = $("#sort_menu");
+        if($(targetEl).find("a").hasClass("sort-field"))
+        {
+            $sort_menu.find("li").not(targetEl).find("a.sort-field i").addClass("display-none");
+            $(targetEl).find("a.sort-field i").removeClass("display-none");
+        } else {
+            $sort_menu.find("li").not(targetEl).find("a.order-by i").addClass("display-none");
+            $(targetEl).find("a.order-by i").removeClass("display-none");
+        }
+         sortkey = $sort_menu.find(".order-by i:not(.display-none)").closest(".order-by").attr("data");
+        sortkey += $sort_menu.find(".sort-field i:not(.display-none)").closest(".sort-field").attr("data");
+        _agile_set_prefs("landingpage_sort_menu", sortkey);
+        this.model.set({"sortKey" : sortkey});
+        
+}
+});
+
+var landingpage_collection_events = Base_Collection_View.extend({
+	events : {},
+})
  /**making an function  for the reusable the code for the save 
  landing page and here one LandingPageId we are defining with empty  
  **/
-
 function saveLandingPageToDataStore(isAutoSaved,pageId) {
 
 	if (isValidForm('#landingPageBuilderForm')) {
 		$(".saveLandingPageButton").prop("disabled",true);
 		
-		$(".saveLandingPageButtonText").html("Saving...");
+		$(".saveLandingPageButtonText").html("{{agile_lng_translate 'others' 'saving'}}");
 		    		
 		document.getElementById('landingPageBuilder').contentWindow.$('.icon-floppy-1:last').trigger("click");
 		if(App_LandingPageRouter.LandingPageCollectionView) {
@@ -63,7 +93,9 @@ function initializeLandingPageListeners(pageId) {
 		e.preventDefault();
 		var triggeringElement = $(this).data("trigger");
     	var landingPageIframe = document.getElementById('landingPageBuilder').contentWindow;
-    	landingPageIframe.$(triggeringElement).trigger("click");
+    	if($('.lpPreviewView span').text()!=="Close"){
+    		landingPageIframe.$(triggeringElement).trigger("click");
+    	}    	
     	var deviceClass = $(this).data("deviceclass");
     	landingPageIframe.$("#preview-frame").removeClass("xs-width sm-width md-width full-width");
     	landingPageIframe.$("#preview-frame").addClass(deviceClass);
@@ -116,6 +148,7 @@ function initializeLandingPageListeners(pageId) {
 		$("#builderPageOptions").slideToggle('fast');
 	});
 
+	
 	$('#landingpages-listeners').on('click', '#landingPageSettingBtn', function (e) {
 		e.preventDefault();
 
@@ -149,7 +182,7 @@ function initializeLandingPageListeners(pageId) {
 				landingPageSaveCnameSettings(forPageId,"http://"+$("#sub_domain").val()+"."+mainDomain+"/"+$("#directory_path").val());
       			$btn.button('reset');
 			} else {
-				landingPageShowAlertMessage("You cannot add this ("+mainDomain+") domain. It is used in other agile CRM account.","alert-danger");
+				landingPageShowAlertMessage("{{agile_lng_translate 'landingpages' 'not-add'}} ("+mainDomain+") {{agile_lng_translate 'prefs-settings' 'domain'}}. {{agile_lng_translate 'landingpages' 'duplicate-error'}}","alert-danger");
 			}
 		});
 	});
@@ -211,9 +244,9 @@ function initializeLandingPageListeners(pageId) {
 		 			landingPageShowAlertMessage("CNAME is correct. Found " + data.cnames[0],"alert-success");
 		 		} else {
 		 			if(typeof data.cnames != "undefined" && typeof data.cnames[0] != "undefined") {
-		 				landingPageShowAlertMessage("CNAME is incorrect. Found " + data.cnames[0],"alert-danger");
+		 				landingPageShowAlertMessage("{{agile_lng_translate 'landingpages' 'cname-error'}} {{agile_lng_translate 'landingpages' 'cname-exists'}} " + data.cnames[0],"alert-danger");
 		 			} else {
-		 				landingPageShowAlertMessage("CNAME is not found.","alert-danger");
+		 				landingPageShowAlertMessage("{{agile_lng_translate 'landingpages' 'cname-not-found'}}","alert-danger");
 		 			}
 		 		}
 		 	});
@@ -256,13 +289,13 @@ function onLandingPageSaved(landingPage) {
     };
 
     var requestType = "post";
-    var message = "saved";
+    var message = "{{agile_lng_translate 'others' 'saved'}}";
 
     var cnameId = $("#cname_id").val();
     if(cnameId) {
         var requestType = "put";
         cnameSettings["id"] = cnameId;
-        message = "updated";
+        message = "{{agile_lng_translate 'others' 'updated'}}";
     }
       
 
@@ -274,9 +307,9 @@ function onLandingPageSaved(landingPage) {
         contentType: "application/json; charset=utf-8",
         success: function (obj) {
 	       	if(obj["isDuplicateCName"]) {
-				landingPageShowAlertMessage("Custom domain should be unique","alert-danger");
+				landingPageShowAlertMessage("{{agile_lng_translate 'landingpages' 'custom-domain-unique'}}","alert-danger");
 			} else {
-				landingPageShowAlertMessage("Custom domain "+message+" successfully","alert-success");
+				landingPageShowAlertMessage("{{agile_lng_translate 'landingpages' 'custom-domain'}} "+message+" {{agile_lng_translate 'others' 'successfully'}}","alert-success");
 				$("#cname_id").val(obj.id);
 				$("#cname").attr("href",CNAME);
 				$("#landingPageVerifyBtn").show();
@@ -305,4 +338,37 @@ function formEmbedIFrameLoaded(iFrameEl) {
 		    formParentEl.innerHTML = formCode;
 		}
 	}
+}
+
+function landingpagesCollection(sortKey)
+{
+	this.LandingPageCollectionView = new landingpage_collection_events({ 
+            url : 'core/api/landingpages',
+            sort_collection : false,
+            templateKey : "landingpages",
+            cursor : true,
+            page_size : 20,  
+            individual_tag_name : 'tr',
+            global_sort_key : sortKey,
+            postRenderCallback : function(el)
+            {
+                includeTimeAgo(el);
+               // updateSortKeyTemplate(sortKey, el);
+                $("#landingpages-list").html(collectiondata);
+                $(".active").removeClass("active");
+                $("#landing-pages-menu").addClass("active");
+                
+            },
+            appendItemCallback : function(el)
+            { 
+                // To show time ago for models appended by infinite scroll
+                includeTimeAgo(el);
+            }});
+        this.LandingPageCollectionView.collection.fetch();
+        var collectiondata = this.LandingPageCollectionView.render().el;
+}
+
+function resetLandingPageButton(){
+	$(".saveLandingPageButton").prop("disabled",false);
+    $(".saveLandingPageButtonText").html("{{agile_lng_translate 'landing-pages' 'save-page'}}");
 }

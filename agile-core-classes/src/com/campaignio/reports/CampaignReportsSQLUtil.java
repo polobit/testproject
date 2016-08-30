@@ -91,21 +91,21 @@ public class CampaignReportsSQLUtil
 	
 	String query = "SELECT log_type,DATE_FORMAT(" + GoogleSQLUtil.addConvertTZ(timeZoneOffset) + ","+ GoogleSQLUtil.getDateFormatBasedOnType(type)+") AS log_date,"+
 		"count(DISTINCT subscriber_id) AS count,count(subscriber_id) AS total "+  
-		"FROM stats.campaign_logs USE INDEX(campid_domain_logtype_logtime_subid_index) "+
+		"FROM stats2.campaign_logs "+
                 "WHERE DOMAIN="+GoogleSQLUtil.encodeSQLColumnValue(domain)+" AND campaign_id="+GoogleSQLUtil.encodeSQLColumnValue(campaignId)+" AND log_type = 'EMAIL_OPENED' "+
                 "AND log_time BETWEEN CONVERT_TZ("+GoogleSQLUtil.encodeSQLColumnValue(startDate)+","+GoogleSQLUtil.getConvertTZ2(timeZoneOffset)+") " + 
                 "AND CONVERT_TZ("+GoogleSQLUtil.encodeSQLColumnValue(endDate)+","+GoogleSQLUtil.getConvertTZ2(timeZoneOffset)+") GROUP BY log_date "+
 	        "UNION ALL "+
 	        "SELECT log_type,DATE_FORMAT(" + GoogleSQLUtil.addConvertTZ(timeZoneOffset) + ","+ GoogleSQLUtil.getDateFormatBasedOnType(type)+") AS log_date,"+
 		"count(DISTINCT subscriber_id) AS count,count(subscriber_id) AS total "+  
-		"FROM stats.campaign_logs USE INDEX(campid_domain_logtype_logtime_subid_index) "+
+		"FROM stats2.campaign_logs "+
                 "WHERE DOMAIN="+GoogleSQLUtil.encodeSQLColumnValue(domain)+" AND campaign_id="+GoogleSQLUtil.encodeSQLColumnValue(campaignId)+" AND log_type = 'EMAIL_SENT' "+
                 "AND log_time BETWEEN CONVERT_TZ("+GoogleSQLUtil.encodeSQLColumnValue(startDate)+","+GoogleSQLUtil.getConvertTZ2(timeZoneOffset)+") " + 
                 "AND CONVERT_TZ("+GoogleSQLUtil.encodeSQLColumnValue(endDate)+","+GoogleSQLUtil.getConvertTZ2(timeZoneOffset)+") GROUP BY log_date "+
                 "UNION ALL "+
                 "SELECT log_type,DATE_FORMAT(" + GoogleSQLUtil.addConvertTZ(timeZoneOffset) + ","+ GoogleSQLUtil.getDateFormatBasedOnType(type)+") AS log_date,"+
 		"count(DISTINCT subscriber_id) AS count,count(subscriber_id) AS total "+  
-		"FROM stats.campaign_logs USE INDEX(campid_domain_logtype_logtime_subid_index) "+
+		"FROM stats2.campaign_logs "+
                 "WHERE DOMAIN="+GoogleSQLUtil.encodeSQLColumnValue(domain)+" AND campaign_id="+GoogleSQLUtil.encodeSQLColumnValue(campaignId)+" AND log_type = 'EMAIL_CLICKED' "+
                 "AND log_time BETWEEN CONVERT_TZ("+GoogleSQLUtil.encodeSQLColumnValue(startDate)+","+GoogleSQLUtil.getConvertTZ2(timeZoneOffset)+") " + 
                 "AND CONVERT_TZ("+GoogleSQLUtil.encodeSQLColumnValue(endDate)+","+GoogleSQLUtil.getConvertTZ2(timeZoneOffset)+") GROUP BY log_date";
@@ -138,49 +138,49 @@ public class CampaignReportsSQLUtil
 	//NOTE::For optimal use of index , doing union all instead of using IN/OR conditions
         	
 	String query = "SELECT log_type,count(DISTINCT subscriber_id) AS count,count(subscriber_id) AS total "+  
-		"FROM stats.campaign_logs USE INDEX(campid_domain_logtype_logtime_subid_index) "+
+		"FROM stats2.campaign_logs "+
                 "WHERE DOMAIN="+GoogleSQLUtil.encodeSQLColumnValue(domain)+" AND campaign_id="+GoogleSQLUtil.encodeSQLColumnValue(campaignId)+" AND log_type = 'EMAIL_OPENED' "+
                 "AND log_time BETWEEN CONVERT_TZ("+GoogleSQLUtil.encodeSQLColumnValue(startDate)+","+GoogleSQLUtil.getConvertTZ2(timeZoneOffset)+") " + 
                 "AND CONVERT_TZ("+GoogleSQLUtil.encodeSQLColumnValue(endDate)+","+GoogleSQLUtil.getConvertTZ2(timeZoneOffset)+") GROUP BY log_type " +
                 "UNION ALL "+
                 "SELECT log_type,count(DISTINCT subscriber_id) AS count,count(subscriber_id) AS total "+  
-		"FROM stats.campaign_logs USE INDEX(campid_domain_logtype_logtime_subid_index) "+
+		"FROM stats2.campaign_logs "+
                 "WHERE DOMAIN="+GoogleSQLUtil.encodeSQLColumnValue(domain)+" AND campaign_id="+GoogleSQLUtil.encodeSQLColumnValue(campaignId)+" AND log_type = 'EMAIL_SENT' "+
                 "AND log_time BETWEEN CONVERT_TZ("+GoogleSQLUtil.encodeSQLColumnValue(startDate)+","+GoogleSQLUtil.getConvertTZ2(timeZoneOffset)+") " + 
                 "AND CONVERT_TZ("+GoogleSQLUtil.encodeSQLColumnValue(endDate)+","+GoogleSQLUtil.getConvertTZ2(timeZoneOffset)+") GROUP BY log_type "+ 
                 "UNION ALL "+
                 "SELECT log_type,count(DISTINCT subscriber_id) AS count,count(subscriber_id) AS total "+  
-		"FROM stats.campaign_logs USE INDEX(campid_domain_logtype_logtime_subid_index) "+
+		"FROM stats2.campaign_logs "+
                 "WHERE DOMAIN="+GoogleSQLUtil.encodeSQLColumnValue(domain)+" AND campaign_id="+GoogleSQLUtil.encodeSQLColumnValue(campaignId)+" AND log_type = 'EMAIL_CLICKED' "+
                 "AND log_time BETWEEN CONVERT_TZ("+GoogleSQLUtil.encodeSQLColumnValue(startDate)+","+GoogleSQLUtil.getConvertTZ2(timeZoneOffset)+") " + 
                 "AND CONVERT_TZ("+GoogleSQLUtil.encodeSQLColumnValue(endDate)+","+GoogleSQLUtil.getConvertTZ2(timeZoneOffset)+") GROUP BY log_type "+ 
                 "UNION ALL "+
                 "SELECT log_type,count(DISTINCT subscriber_id) AS count,count(subscriber_id) AS total "+  
-		"FROM stats.campaign_logs USE INDEX(campid_domain_logtype_logtime_subid_index) "+
+		"FROM stats2.campaign_logs "+
                 "WHERE DOMAIN="+GoogleSQLUtil.encodeSQLColumnValue(domain)+" AND campaign_id="+GoogleSQLUtil.encodeSQLColumnValue(campaignId)+" AND log_type = 'EMAIL_SENDING_SKIPPED' "+
                 "AND log_time BETWEEN CONVERT_TZ("+GoogleSQLUtil.encodeSQLColumnValue(startDate)+","+GoogleSQLUtil.getConvertTZ2(timeZoneOffset)+") " + 
                 "AND CONVERT_TZ("+GoogleSQLUtil.encodeSQLColumnValue(endDate)+","+GoogleSQLUtil.getConvertTZ2(timeZoneOffset)+") GROUP BY log_type "+ 
                 "UNION ALL "+
                 "SELECT log_type,count(DISTINCT subscriber_id) AS count,count(subscriber_id) AS total "+  
-		"FROM stats.campaign_logs USE INDEX(campid_domain_logtype_logtime_subid_index) "+
+		"FROM stats2.campaign_logs "+
                 "WHERE DOMAIN="+GoogleSQLUtil.encodeSQLColumnValue(domain)+" AND campaign_id="+GoogleSQLUtil.encodeSQLColumnValue(campaignId)+" AND log_type = 'EMAIL_SPAM' "+
                 "AND log_time BETWEEN CONVERT_TZ("+GoogleSQLUtil.encodeSQLColumnValue(startDate)+","+GoogleSQLUtil.getConvertTZ2(timeZoneOffset)+") " + 
                 "AND CONVERT_TZ("+GoogleSQLUtil.encodeSQLColumnValue(endDate)+","+GoogleSQLUtil.getConvertTZ2(timeZoneOffset)+") GROUP BY log_type "+ 
                 "UNION ALL "+
                 "SELECT log_type,count(DISTINCT subscriber_id) AS count,count(subscriber_id) AS total "+  
-		"FROM stats.campaign_logs USE INDEX(campid_domain_logtype_logtime_subid_index) "+
+		"FROM stats2.campaign_logs "+
                 "WHERE DOMAIN="+GoogleSQLUtil.encodeSQLColumnValue(domain)+" AND campaign_id="+GoogleSQLUtil.encodeSQLColumnValue(campaignId)+" AND log_type = 'EMAIL_SOFT_BOUNCED' "+
                 "AND log_time BETWEEN CONVERT_TZ("+GoogleSQLUtil.encodeSQLColumnValue(startDate)+","+GoogleSQLUtil.getConvertTZ2(timeZoneOffset)+") " + 
                 "AND CONVERT_TZ("+GoogleSQLUtil.encodeSQLColumnValue(endDate)+","+GoogleSQLUtil.getConvertTZ2(timeZoneOffset)+") GROUP BY log_type "+ 
                 "UNION ALL "+
                 "SELECT log_type,count(DISTINCT subscriber_id) AS count,count(subscriber_id) AS total "+  
-		"FROM stats.campaign_logs USE INDEX(campid_domain_logtype_logtime_subid_index) "+
+		"FROM stats2.campaign_logs "+
                 "WHERE DOMAIN="+GoogleSQLUtil.encodeSQLColumnValue(domain)+" AND campaign_id="+GoogleSQLUtil.encodeSQLColumnValue(campaignId)+" AND log_type = 'EMAIL_HARD_BOUNCED' "+
                 "AND log_time BETWEEN CONVERT_TZ("+GoogleSQLUtil.encodeSQLColumnValue(startDate)+","+GoogleSQLUtil.getConvertTZ2(timeZoneOffset)+") " + 
                 "AND CONVERT_TZ("+GoogleSQLUtil.encodeSQLColumnValue(endDate)+","+GoogleSQLUtil.getConvertTZ2(timeZoneOffset)+") GROUP BY log_type "+ 
                 "UNION ALL "+
                 "SELECT log_type,count(DISTINCT subscriber_id) AS count,count(subscriber_id) AS total "+  
-		"FROM stats.campaign_logs USE INDEX(campid_domain_logtype_logtime_subid_index) "+
+		"FROM stats2.campaign_logs "+
                 "WHERE DOMAIN="+GoogleSQLUtil.encodeSQLColumnValue(domain)+" AND campaign_id="+GoogleSQLUtil.encodeSQLColumnValue(campaignId)+" AND log_type = 'UNSUBSCRIBED' "+
                 "AND log_time BETWEEN CONVERT_TZ("+GoogleSQLUtil.encodeSQLColumnValue(startDate)+","+GoogleSQLUtil.getConvertTZ2(timeZoneOffset)+") " + 
                 "AND CONVERT_TZ("+GoogleSQLUtil.encodeSQLColumnValue(endDate)+","+GoogleSQLUtil.getConvertTZ2(timeZoneOffset)+") GROUP BY log_type ";
@@ -213,7 +213,7 @@ public class CampaignReportsSQLUtil
     	String timeZoneOffset = GoogleSQLUtil.convertMinutesToTime(timeZone);
     	
     	String query = "SELECT log_type,count(subscriber_id) AS count "+  
-    			"FROM stats.campaign_logs USE INDEX(domain_logtype_logtime_index) "+
+    			"FROM stats2.campaign_logs "+
     	                "WHERE DOMAIN="+GoogleSQLUtil.encodeSQLColumnValue(domain) +" AND log_type = " + GoogleSQLUtil.encodeSQLColumnValue(logType[0]) + 
     	                " AND log_time BETWEEN CONVERT_TZ("+GoogleSQLUtil.encodeSQLColumnValue(startDate)+","+GoogleSQLUtil.getConvertTZ2(timeZoneOffset)+") " + 
     	                "AND CONVERT_TZ("+GoogleSQLUtil.encodeSQLColumnValue(endDate)+","+GoogleSQLUtil.getConvertTZ2(timeZoneOffset)+") GROUP BY log_type ";
@@ -226,7 +226,7 @@ public class CampaignReportsSQLUtil
     	        	query += " UNION ALL ";
     	        	 
     	        	query +=  "SELECT log_type,count(subscriber_id) AS count "+  
-    	    			"FROM stats.campaign_logs USE INDEX(domain_logtype_logtime_index) "+
+    	    			"FROM stats2.campaign_logs "+
     	    	                "WHERE DOMAIN="+GoogleSQLUtil.encodeSQLColumnValue(domain)+ " AND log_type = " + GoogleSQLUtil.encodeSQLColumnValue(logType[i]) + 
     	    	                " AND log_time BETWEEN CONVERT_TZ("+GoogleSQLUtil.encodeSQLColumnValue(startDate)+","+GoogleSQLUtil.getConvertTZ2(timeZoneOffset)+") " + 
     	    	                "AND CONVERT_TZ("+GoogleSQLUtil.encodeSQLColumnValue(endDate)+","+GoogleSQLUtil.getConvertTZ2(timeZoneOffset)+") GROUP BY log_type ";

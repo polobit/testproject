@@ -95,10 +95,10 @@ $(function()
 	$('body #wrap #agilecrm-container').on('click', '.noty_bria_answer, .noty_skype_answer', function(e)
 		{
 			e.preventDefault();
-			
 			var json = {"command" : "answerCall"};
 		  	var action = makeCallAction(json);
 		  	sendActionToClient(action);
+		  	globalCallForActivity.answeredByTab = true;
 		  	play_sound("dtmf");
 	  });
 	  
@@ -109,6 +109,7 @@ $(function()
 			var json = {"command" : "ignoreCall"};
 		  	var action = makeCallAction(json);
 		  	sendActionToClient(action);
+		  	globalCallForActivity.answeredByTab = true;
 		  	play_sound("dtmf");
 	});
 
@@ -197,9 +198,11 @@ function makeCallAction(json){
 //function for sending DTMF
 function sendDTMF(digit)
 {
+	var caller_id;
+	caller_id= $("#notyCallDetails").attr("callId"); 		
 	if(digit){
 			play_sound("dtmf");
-			var action = {"command":  "sendDTMF", "number": digit, "callId": ""};
+			var action = {"command":  "sendDTMF", "number": digit, "callId": caller_id};
 			sendActionToClient(action);
 			return;
 	}
@@ -230,7 +233,9 @@ function sendActionToClient(action){
 	image.onerror= function(png) {
 		console.log("client failure");
 		window.focus();
-		resetglobalCallVariables();
+		if(command != "getLogs"){
+			resetglobalCallVariables();	
+		}
 		if(command == "getLogs"){
 			var message ={};
 			message["data"] = "";

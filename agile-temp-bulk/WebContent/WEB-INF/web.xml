@@ -16,4 +16,12 @@
 		<servlet-name>OpportunitySchemaChange</servlet-name>
 		<url-pattern>/backend/cron/opportunity-schema-change</url-pattern>
 	</servlet-mapping>
+	<servlet>
+		<servlet-name>ContactsDeleteServlet</servlet-name>
+		<servlet-class>com.agilecrm.DeleteContactsFromTextSearchServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ContactsDeleteServlet</servlet-name>
+		<url-pattern>/backend/cron/deleteContactsFromTextSearch</url-pattern>
+	</servlet-mapping>
 </web-app>

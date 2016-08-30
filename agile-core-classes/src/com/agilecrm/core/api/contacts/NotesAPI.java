@@ -11,6 +11,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.commons.lang.StringUtils;
@@ -59,7 +60,7 @@ public class NotesAPI
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public Note saveNote(Note note)
     {
-	List<String> conIds = note.contact_ids;
+	List<String> conIds = note.getContact_ids();
     List<String> modifiedConIds = UserAccessControlUtil.checkUpdateAndmodifyRelatedContacts(conIds);
     if(conIds != null && modifiedConIds != null && conIds.size() != modifiedConIds.size())
     {
@@ -133,7 +134,7 @@ public class NotesAPI
 		}
     	
     }
-	List<String> conIds = note.contact_ids;
+	List<String> conIds = note.getContact_ids();
 	List<String> modifiedConIds = UserAccessControlUtil.checkUpdateAndmodifyRelatedContacts(conIds);
 	if(conIds != null && modifiedConIds != null && conIds.size() != modifiedConIds.size())
 	{
@@ -194,7 +195,8 @@ public class NotesAPI
 	@POST
 	@Produces(MediaType.TEXT_PLAIN)
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-	public String saveCallActivity(@FormParam("id") Long id, @FormParam("direction") String direction,@FormParam("phone") String phone,@FormParam("status") String status,@FormParam("duration") String duration,@FormParam("callWidget") String callWidget) {		
+	public String saveCallActivity(@FormParam("id") Long id, @FormParam("direction") String direction,@FormParam("phone") String phone,@FormParam("status") String status,@FormParam("duration") String duration,@FormParam("callWidget") String callWidget,
+			@QueryParam("note_id") Long note_id) {		
 
 		Contact contact  = null;
 		
@@ -212,7 +214,7 @@ public class NotesAPI
 		
 	    		if (direction.equalsIgnoreCase("outbound-dial") || direction.equalsIgnoreCase("Outgoing"))
 	    		{
-	    			ActivityUtil.createLogForCalls(callWidget, phone, Call.OUTBOUND, status.toLowerCase(), duration);
+	    			ActivityUtil.createLogForCalls(callWidget, phone, Call.OUTBOUND, status.toLowerCase(), duration,note_id);
 
 	    		    // Trigger for outbound
 	    			 CallTriggerUtil.executeTriggerForCall(contact, callWidget, Call.OUTBOUND, status.toLowerCase(), duration);
@@ -220,7 +222,7 @@ public class NotesAPI
 
 	    		if (direction.equalsIgnoreCase("inbound") || direction.equalsIgnoreCase("Incoming"))
 	    		{
-	    			 ActivityUtil.createLogForCalls(callWidget, phone, Call.INBOUND, status.toLowerCase(), duration);
+	    			 ActivityUtil.createLogForCalls(callWidget, phone, Call.INBOUND, status.toLowerCase(), duration,note_id);
 	    			 
 
 	    		    // Trigger for inbound
@@ -286,5 +288,47 @@ public class NotesAPI
 		Note.dao.deleteBulkByIds(notesArray);
 		return contactIdsList;
     }
+    
+    /**
+   	 * Saving call info and history.
+   	 * 
+   	 * @author prakash
+   	 * @created 07-12-2015
+   	 * @return String
+   	 */
+   	@Path("update_logPhoneActivity")
+   	@POST
+   	@Produces(MediaType.TEXT_PLAIN)
+       @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+   	public String updateCallActivity(@FormParam("id") Long id, @FormParam("direction") String direction,@FormParam("phone") String phone,@FormParam("status") String status,@FormParam("duration") String duration,
+   			@FormParam("callWidget") String callWidget,@QueryParam("note_id") Long note_id,@QueryParam("subject") String subject) {		
+
+   		Contact contact  = null;
+   		
+   		if (null != id ){
+       		contact = ContactUtil.getContact(id);
+   		}else{
+   			if(!StringUtils.isBlank(phone)){
+   				contact = ContactUtil.searchContactByPhoneNumber(phone);
+   			}
+   		}
+   		
+   		if(null == contact){
+   			return "";
+   		}
+   		
+   	    		if (direction.equalsIgnoreCase("outbound-dial") || direction.equalsIgnoreCase("Outgoing"))
+   	    		{
+   	    			ActivityUtil.updateLogForCalls(callWidget, phone, Call.OUTBOUND, status.toLowerCase(), duration,note_id,subject);
+   	    		}
+
+   	    		if (direction.equalsIgnoreCase("inbound") || direction.equalsIgnoreCase("Incoming"))
+   	    		{
+   	    			 ActivityUtil.updateLogForCalls(callWidget, phone, Call.INBOUND, status.toLowerCase(), duration,note_id,subject);
+
+   	    		}
+
+   	   return "";
+   	}
   
 }

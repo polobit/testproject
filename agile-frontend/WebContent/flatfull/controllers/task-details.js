@@ -173,7 +173,7 @@ function initializeTaskDetailListeners(){
 
 		} });
 	});
-
+	
 	$('#change-owner-element .task-owner-add').off();
 	$('#change-owner-element').on('click', '.task-owner-add', function(e)
 	{
@@ -372,6 +372,8 @@ $(function(){
 });
 
 
+
+
 /**
  * Activates "Timeline" tab and its tab-content in contact details and also
  * deactivates the other activated tabs.
@@ -444,10 +446,9 @@ function update_task(value)
 		showNoteOnForm("updateTaskForm", value.notes);
 
 	});
-	deserializeForm(value, $("#updateTaskForm"));
-	$('.update-task-timepicker').val(fillTimePicker(value.due));
-
 	
+	// deserializeForm(value, $("#updateTaskForm"));
+	$('.update-task-timepicker', $("#updateTaskModal")).val(fillTimePicker(value.due));	
 }
 
 /**

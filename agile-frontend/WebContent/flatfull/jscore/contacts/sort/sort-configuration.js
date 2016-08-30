@@ -3,23 +3,23 @@
  */
 var agile_contact_sort_configuration = [
 
-	buildProperty("Created Date", "created_time"),
+	buildProperty(_agile_get_translated_val('contacts-view','created_date'), "created_time"),
 
 	// score 
-	buildProperty("Score", "lead_score"),
+	buildProperty(_agile_get_translated_val('contacts-view', 'score'), "lead_score"),
 
 	// Star value
-	buildProperty("Star Value", "star_value", "-star_value"),
+	buildProperty(_agile_get_translated_val('contacts-view','star-value'), "star_value", "-star_value"),
 
 
 	// First name
-	buildProperty("First Name", "first_name"),
+	buildProperty(_agile_get_translated_val('report-add','first-name'), "first_name"),
 
 	// Last name
-	buildProperty("Last Name", "last_name"),
+	buildProperty(_agile_get_translated_val('report-add','last-name'), "last_name"),
 
 	// Last contacted
-	buildProperty("Contacted Date", "last_contacted")
+	buildProperty(_agile_get_translated_val('contacts-view','contacted_date'), "last_contacted")
 ];
 
 function buildProperty (field_label, field_value)
@@ -50,21 +50,47 @@ var sort_configuration = {
  */
 var agile_company_sort_configuration = [
 
-	buildProperty("Created Date", "created_time"),
+	buildProperty(_agile_get_translated_val('contacts-view','created_date'), "created_time"),
 
 	// Star value
-	buildProperty("Star Value", "star_value"),
+	buildProperty(_agile_get_translated_val('contacts-view','star-value'), "star_value"),
 
 	// Name
-	buildProperty("Name", "name"),
+	buildProperty(_agile_get_translated_val('contacts-view','name'), "name"),
 	//Score
-	buildProperty("Score", "lead_score")
+	buildProperty(_agile_get_translated_val('contacts-view', 'score'), "lead_score")
 ];
 
 var sort_company_configuration = {
 	getCompanySortableFields : function()
 	{
 		return agile_company_sort_configuration;
+	},
+	getCustomFieldSortableFields : function()
+	{
+
+	}
+};
+
+/**
+ * Deal sorting.
+ */
+var agile_deal_sort_configuration = [
+
+	buildProperty(_agile_get_translated_val('contacts-view','created_date'), "created_time"),
+
+	buildProperty(_agile_get_translated_val('deal-view','close-date'), "closed_time"),
+
+	buildProperty(_agile_get_translated_val('deal-view','won-date'), "won_time"), 
+
+	buildProperty(_agile_get_translated_val('deal-view','value'), "expected_value")
+
+];
+
+var sort_deal_configuration = {
+	getDealSortableFields : function()
+	{
+		return agile_deal_sort_configuration;
 	},
 	getCustomFieldSortableFields : function()
 	{

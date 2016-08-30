@@ -12,15 +12,16 @@
 			</div>
 			<div class="modal-footer">
 			{{#if_equals type "alert"}}
-				<a href="#" id="success_callback" class="btn btn-sm btn-default">Ok</a>
+				<a href="#" id="success_callback" class="btn btn-sm btn-default">{{agile_lng_translate 'reputation' 'Ok'}}</a>
 			{{else}}
-				<a href="#" id="decline_callback" class="btn btn-sm btn-default">No</a>
-				<a href="#" id="success_callback" class="btn btn-sm btn-primary">Yes</a>
+				<a href="#" id="decline_callback" class="btn btn-sm btn-default">{{agile_lng_translate 'portlets' 'no'}}</a>
+				<a href="#" id="success_callback" class="btn btn-sm btn-primary">{{agile_lng_translate 'portlets' 'yes'}}</a>
 			{{/if_equals}}
 			</div>
 		</div>
 	</div>
 </script>
+
 <script id="agile-app-collection-loader-template" type="text/html">
 	<img class="loading" style="padding-left:10px;padding-right:5px" src= "//doxhze3l6s7v9.cloudfront.net/beta/static/img/ajax-loader-cursor.gif"></img>
 </script>

@@ -1,6 +1,6 @@
 var RELOAD_DEALS = false;
 var SELECT_ALL_DEALS = false;
-var DEALS_BULK_MESSAGE = 'Bulk operation is in progress. You will be notified when it is done.';
+var DEALS_BULK_MESSAGE = '{{agile_lng_translate "bulk-actions" "in-progress"}}';
 
 var deal_bulk_actions = {
 	
@@ -13,7 +13,7 @@ var deal_bulk_actions = {
 		var input = {};
 		if(!SELECT_ALL_DEALS)
 			input.ids = JSON.stringify(deal_bulk_actions.getDealsBulkIds());
-		input.filter = _agile_get_prefs('deal-filters');
+		input.filter = _agile_get_prefs('deal-filter-name');
 		if(form_id){
 			input.form = JSON.stringify(serializeForm(form_id));
 		}
@@ -22,7 +22,7 @@ var deal_bulk_actions = {
 		$.ajax({ url : url, type : 'POST', data : input, contentType : "application/x-www-form-urlencoded", success : function(data)
 		{
 
-			$save_info = $('<div style="display:inline-block"><small><p class="text-success"><i>Task Scheduled.</i></p></small></div>');
+			$save_info = $('<div style="display:inline-block"><small><p class="text-success"><i>'+_agile_get_translated_val('bulk-actions','task-scheduled')+'.</i></p></small></div>');
 
 			if(form_id !== undefined)
 			{
@@ -48,7 +48,7 @@ var deal_bulk_actions = {
 			
 			if(!error_message)
 				{
-					showNotyPopUp('information', "Task scheduled", "top", 5000);
+					showNotyPopUp('information', _agile_get_translated_val('bulk-actions','task-scheduled'), "top", 5000);
 					return;
 				}
 				showNotyPopUp('information', error_message, "top", 5000);
@@ -254,7 +254,7 @@ var deal_bulk_actions = {
 				$.each(campaigns, function(index,camp){
 					var option = '<option value="{{id}}">{{name}}</option></th>';
 					if(camp.is_disabled){
-						option = '<option value="{{id}}" disabled = disabled>{{name}} (Disabled)</option>';
+						option = '<option value="{{id}}" disabled = disabled>{{name}} ('+_agile_get_translated_val('campaigns','disabled')+')</option>';
  					} 
 					html += Handlebars.compile(option)({id : camp.id, name : camp.name});
 				});
@@ -291,7 +291,7 @@ var deal_bulk_actions = {
 							.find('#bulk-select')
 							.show()
 							.html(
-									"Selected " + deal_bulk_actions.numberWithCommas(App_Deals.opportunityCollectionView.collection.length) + " deals. <a id='select-all-available-deals' class='text-info' href='#'>Select all " + deals_count_with_commas + " deals</a>");
+									"{{agile_lng_translate 'companies-view' 'selected'}} " + deal_bulk_actions.numberWithCommas(App_Deals.opportunityCollectionView.collection.length) + " {{agile_lng_translate 'deals' 'deals-sm'}}. <a id='select-all-available-deals' class='text-info' href='#'>{{agile_lng_translate 'portlets' 'select-all'}} " + deals_count_with_commas + " deals</a>");
 			}
 			else
 			{

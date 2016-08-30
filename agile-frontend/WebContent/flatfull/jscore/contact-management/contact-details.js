@@ -394,6 +394,9 @@ var Contact_Details_Model_Events = Base_Model_View.extend({
     	'click #contactDetailsTab a[href="#company-cases"]' : 'listCompanyCases',
     	'click #contactDetailsTab a[href="#company-notes"]' : 'listCompanyNotes',
     	'click #contactDetailsTab a[href="#company-documents"]' : 'listCompanyDocuments',
+    	'click #contactDetailsTab a[href="#company-events"]' : 'listCompanyEvents',
+    	'click #contactDetailsTab a[href="#company-tasks"]' : 'listCompanyTasks',
+    	'click #contactDetailsTab a[href="#company-mail"]' : 'listCompanyMails',
     	'click #company-add-tags' : 'addCompanytags',
     	'keydown #companyAddTags' : 'companyAddTags',
     	'click #company-actions-delete' : 'companyDelete',
@@ -529,7 +532,14 @@ show and hide the input for editing the contact name and saving that
 
 		var email_server = $(targetEl).attr('email-server');
 		var url = $(targetEl).attr('data-url');
-		$('#email-type-select', App_Contacts.contactDetailView.el).html($(targetEl).html());
+    if(Current_Route && Current_Route.indexOf("company/") == 0)
+    {
+      $('#email-type-select', App_Companies.companyDetailView.el).html($(targetEl).html());
+    }
+    else
+    {
+      $('#email-type-select', App_Contacts.contactDetailView.el).html($(targetEl).html());
+    }
 		// Here email_server_type means email/username of mail account
 		email_server_type = $(targetEl).attr('email-server-type');
 		if (email_server && url && (email_server != 'agile'))
@@ -537,7 +547,15 @@ show and hide the input for editing the contact name and saving that
 
 		var cookie_value = email_server_type + '|' + email_server;
 		save_email_server_type_in_cookie(cookie_value);
-		contact_details_tab.load_mail(url, email_server);
+		if(Current_Route && Current_Route.indexOf("company/") == 0)
+    {
+      company_detail_tab.load_company_mail(url, email_server);
+    }
+    else
+    {
+      contact_details_tab.load_mail(url, email_server);
+    }
+
 	},
 
 	
@@ -683,10 +701,10 @@ show and hide the input for editing the contact name and saving that
     onChangeOwner : function(e){
          e.preventDefault();
          	var contact_owner = $(e.currentTarget).attr("data");
-         	var error_msg = "You do not have permission to change owner.";
+         	var error_msg = _agile_get_translated_val('contact-details','no-perm-to-update');
     			if(contact_owner != CURRENT_DOMAIN_USER.id && !hasScope("EDIT_CONTACT"))
     			{
-    				showModalConfirmation("Owner Change", 
+    				showModalConfirmation(_agile_get_translated_val('contact-details','owner-changed'), 
     						error_msg, 
     						function (){
     							return;
@@ -697,7 +715,7 @@ show and hide the input for editing the contact name and saving that
     						function() {
     							
     						},
-    						"Cancel", "");
+    						_agile_get_translated_val('contact-details', 'cancel'), "");
     				return;
     			}
          fill_owners(undefined, undefined, function(){
@@ -937,7 +955,7 @@ show and hide the input for editing the contact name and saving that
 		
 		$("#map").css('display', 'none');
 		$("#contacts-local-time").hide();
-		$("#map_view_action").html("<i class='icon-plus text-sm c-p' title='Show map' id='enable_map_view'></i>");
+		$("#map_view_action").html("<i class='icon-plus text-sm c-p' title='"+_agile_get_translated_val('contact-details','show-map')+"' id='enable_map_view'></i>");
 		
     },
 
@@ -1318,6 +1336,7 @@ enterCompanyScore: function(e){
 	  listCompanyContacts :  function(e)
 	{
 		e.preventDefault();
+    save_company_tab_position_in_cookie("contacts");
 		fill_company_related_contacts(App_Companies.companyDetailView.model.id, 'company-contacts');
 	},
 
@@ -1328,7 +1347,7 @@ enterCompanyScore: function(e){
 	listCompanyDeals : function(e)
 	{
 		e.preventDefault();
-		save_contact_tab_position_in_cookie("deals");
+		save_company_tab_position_in_cookie("deals");
 		company_detail_tab.load_company_deals();
 	},
 
@@ -1338,7 +1357,7 @@ enterCompanyScore: function(e){
 	listCompanyCases :  function(e)
 	{
 		e.preventDefault();
-		save_contact_tab_position_in_cookie("cases");
+		save_company_tab_position_in_cookie("cases");
 
 		company_detail_tab.load_company_cases();
 	},
@@ -1350,7 +1369,7 @@ enterCompanyScore: function(e){
 	listCompanyNotes :  function(e)
 	{
 		e.preventDefault();
-		save_contact_tab_position_in_cookie("notes");
+		save_company_tab_position_in_cookie("notes");
 		company_detail_tab.load_company_notes();
 	},
 	
@@ -1362,10 +1381,47 @@ enterCompanyScore: function(e){
 	listCompanyDocuments : function(e)
 	{
 		e.preventDefault();
-		save_contact_tab_position_in_cookie("documents");
+		save_company_tab_position_in_cookie("documents");
 		company_detail_tab.load_company_documents();
 	},
+
+    /**
+	 * Fetches all the events related to the company and shows the events
+	 * collection as a table in its tab-content, when "Event" tab is
+	 * clicked.
+	 */
+	listCompanyEvents : function(e)
+	{
+		e.preventDefault();
+		save_company_tab_position_in_cookie("events");
+		company_detail_tab.load_company_events();
+	},
+
+	 /**
+	 * Fetches all the tasks related to the company and shows the tasks
+	 * collection as a table in its tab-content, when "Task" tab is
+	 * clicked.
+	 */
 	
+	listCompanyTasks : function(e)
+	{
+		e.preventDefault();
+		save_company_tab_position_in_cookie("tasks");
+		company_detail_tab.load_company_tasks();
+	},
+
+     /**
+	 * Gets every conversation of the contact (if it has email) with the
+	 * associated email (gmail or imap) in Email-preferences of this CRM, when
+	 * "Mail" tab is clicked.
+	 */
+	listCompanyMails : function(e)
+	{
+		e.preventDefault();
+		email_server_type = "agilecrm"
+		save_company_tab_position_in_cookie("mail");
+		company_detail_tab.load_company_mail();
+	},
 	/**
 	 * "click" event of add button of tags form in contact detail view
 	 * Pushes the added tags into tags array attribute of the contact and saves it

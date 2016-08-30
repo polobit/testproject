@@ -16,6 +16,7 @@ import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.search.BuilderInterface;
 import com.agilecrm.search.util.SearchUtil;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.widgets.util.ExceptionUtil;
 import com.google.appengine.api.search.Document;
 import com.google.appengine.api.search.Document.Builder;
 import com.google.appengine.api.search.Field;
@@ -72,8 +73,9 @@ public class ContactDocument extends com.agilecrm.search.document.Document imple
 	public void add(Object entity)
 	{
 		Contact contact = (Contact) entity;
-		Builder doc = buildDocument(contact);
 		
+		Builder doc = buildDocument(contact);
+		System.out.println(" after contact document buildDocument...." );
 		// Adds document to Index
 		addToIndex(doc);   
 			
@@ -87,123 +89,149 @@ public class ContactDocument extends com.agilecrm.search.document.Document imple
 		// Gets builder object required to build a document
 		Document.Builder doc = Document.newBuilder();
 
-		// Processes contact property fields and tags(in normalized form)
-		Map<String, String> fields = SearchUtil.getFieldsMap(contact, doc);
-		
-		/*
-		 * Adds first letter of firstname, lastname for Person and name for
-		 * Company to text search.
-		 */
-		SearchUtil.addNameFirstLetter(contact, doc);
-		//schema version for ignoring stale data.
-		doc.addField(Field.newBuilder().setName("schema_version").setNumber(1.0));
-
-		// Sets created date to document with out time component(Search API
-		// support date without time component)
-		Date truncatedDate = DateUtils.truncate(new Date(contact.created_time * 1000), Calendar.DATE);
-
-		/*
-		 * Date date = DateUtil.deserializeDate(String.valueOf(truncatedDate
-		 * .getTime()));
-		 */
-		System.out.println(truncatedDate);
-		doc.addField(Field.newBuilder().setName("created_time").setDate(truncatedDate));
-
-		doc.addField(Field.newBuilder().setName("type").setText(contact.type.toString()));
-
-		doc.addField(Field.newBuilder().setName("created_time_epoch").setNumber(contact.created_time.doubleValue()));
-
-		// Describes updated time document if updated time is not 0.
-		if (contact.updated_time > 0L)
-		{
-			fields.put("updated_time", contact.updated_time.toString());
-			Date updatedDate = DateUtils.truncate(new Date(contact.updated_time * 1000), Calendar.DATE);
-
-			doc.addField(Field.newBuilder().setName("updated_time").setDate(updatedDate));
-
-			doc.addField(Field.newBuilder().setName("updated_time_epoch").setNumber(contact.updated_time));
-		}
-		
-		// Describes last contacted time document if updated time is not 0.
-		if (contact.last_contacted > 0L)
-		{
-			fields.put("last_contacted", contact.last_contacted.toString());
-			Date updatedDate = DateUtils.truncate(new Date(contact.last_contacted * 1000), Calendar.DATE);
-
-			doc.addField(Field.newBuilder().setName("last_contacted").setDate(updatedDate));
-
-			doc.addField(Field.newBuilder().setName("last_contacted_epoch").setNumber(contact.last_contacted));
-		}
-		
-		// Describes last contacted time document if updated time is not 0.
-		if (contact.last_emailed > 0L)
-		{
-			fields.put("last_emailed", contact.last_emailed.toString());
-			Date updatedDate = DateUtils.truncate(new Date(contact.last_emailed * 1000), Calendar.DATE);
-
-			doc.addField(Field.newBuilder().setName("last_emailed").setDate(updatedDate));
-
-			doc.addField(Field.newBuilder().setName("last_emailed_epoch").setNumber(contact.last_emailed));
-		}
-		
-		// Describes last contacted time document if updated time is not 0.
-		if (contact.last_campaign_emaild > 0L)
-		{
-			fields.put("last_campaign_emaild", contact.last_campaign_emaild.toString());
-			Date updatedDate = DateUtils.truncate(new Date(contact.last_campaign_emaild * 1000), Calendar.DATE);
-
-			doc.addField(Field.newBuilder().setName("last_campaign_emaild").setDate(updatedDate));
-
-			doc.addField(Field.newBuilder().setName("last_campaign_emaild_epoch").setNumber(contact.last_campaign_emaild));
-		}
-		
-		// Describes last contacted time document if updated time is not 0.
-		if (contact.last_called > 0L)
-		{
-			fields.put("last_called", contact.last_called.toString());
-			Date updatedDate = DateUtils.truncate(new Date(contact.last_called * 1000), Calendar.DATE);
-
-			doc.addField(Field.newBuilder().setName("last_called").setDate(updatedDate));
-
-			doc.addField(Field.newBuilder().setName("last_called_epoch").setNumber(contact.last_called));
-		}
-
-		// Adds Other fields in contacts to document
-		doc.addField(Field.newBuilder().setName("lead_score").setNumber(contact.lead_score));
-
-		// Adds Other fields in contacts to document
-		doc.addField(Field.newBuilder().setName("star_value").setNumber(contact.star_value));
-
-		addTagFields(contact.getTagsList(), doc);
-
-		/*
-		 * Get tokens from contact properties and adds it in document
-		 * "search_tokens"
-		 */
-		doc.addField(Field.newBuilder().setName("search_tokens")
-				.setText(SearchUtil.getSearchTokens(contact.properties)));
-		
-		/*
-		 * Get all field names in contact seperated by space and adds it in
-		 * document "field_labels"
-		 */
-		//Remove tags field from fields if the contact has no tags
-		if(contact.tagsWithTime == null || contact.tagsWithTime.size() == 0)
-			fields.keySet().remove("tags");
+		try {
+			// Processes contact property fields and tags(in normalized form)
+			Map<String, String> fields = SearchUtil.getFieldsMap(contact, doc);
 			
-		doc.addField(Field.newBuilder().setName("field_labels")
-				.setText(StringUtils.join(fields.keySet(), " ")));
+			/*
+			 * Adds first letter of firstname, lastname for Person and name for
+			 * Company to text search.
+			 */
+			SearchUtil.addNameFirstLetter(contact, doc);
+			
+			
+			
+			
+			//schema version for ignoring stale data.
+			doc.addField(Field.newBuilder().setName("schema_version").setNumber(1.0));
 
-		DomainUser user = contact.getContactOwner();
+			// Sets created date to document with out time component(Search API
+			// support date without time component)
+			Date truncatedDate = DateUtils.truncate(new Date(contact.created_time * 1000), Calendar.DATE);
 
-		// Add owner to document
-		if (user != null)
-			doc.addField(Field.newBuilder().setName("owner_id").setText(String.valueOf(user.id)));
+			/*
+			 * Date date = DateUtil.deserializeDate(String.valueOf(truncatedDate
+			 * .getTime()));
+			 */
+			System.out.println(truncatedDate);
+			doc.addField(Field.newBuilder().setName("created_time").setDate(truncatedDate));
+
+			doc.addField(Field.newBuilder().setName("type").setText(contact.type.toString()));
+
+			doc.addField(Field.newBuilder().setName("created_time_epoch").setNumber(contact.created_time.doubleValue()));
+
+			// Describes updated time document if updated time is not 0.
+			if (contact.updated_time > 0L)
+			{
+				fields.put("updated_time", contact.updated_time.toString());
+				Date updatedDate = DateUtils.truncate(new Date(contact.updated_time * 1000), Calendar.DATE);
+
+				doc.addField(Field.newBuilder().setName("updated_time").setDate(updatedDate));
+
+				doc.addField(Field.newBuilder().setName("updated_time_epoch").setNumber(contact.updated_time));
+			}
+			
+			// Describes last contacted time document if updated time is not 0.
+			if (contact.last_contacted > 0L)
+			{
+				fields.put("last_contacted", contact.last_contacted.toString());
+				Date updatedDate = DateUtils.truncate(new Date(contact.last_contacted * 1000), Calendar.DATE);
+
+				doc.addField(Field.newBuilder().setName("last_contacted").setDate(updatedDate));
+
+				doc.addField(Field.newBuilder().setName("last_contacted_epoch").setNumber(contact.last_contacted));
+			}
+			
+			// Describes last contacted time document if updated time is not 0.
+			if (contact.last_emailed > 0L)
+			{
+				fields.put("last_emailed", contact.last_emailed.toString());
+				Date updatedDate = DateUtils.truncate(new Date(contact.last_emailed * 1000), Calendar.DATE);
+
+				doc.addField(Field.newBuilder().setName("last_emailed").setDate(updatedDate));
+
+				doc.addField(Field.newBuilder().setName("last_emailed_epoch").setNumber(contact.last_emailed));
+			}
+			
+			// Describes last contacted time document if updated time is not 0.
+			if (contact.last_campaign_emaild > 0L)
+			{
+				fields.put("last_campaign_emaild", contact.last_campaign_emaild.toString());
+				Date updatedDate = DateUtils.truncate(new Date(contact.last_campaign_emaild * 1000), Calendar.DATE);
+
+				doc.addField(Field.newBuilder().setName("last_campaign_emaild").setDate(updatedDate));
+
+				doc.addField(Field.newBuilder().setName("last_campaign_emaild_epoch").setNumber(contact.last_campaign_emaild));
+			}
+			
+			// Describes last contacted time document if updated time is not 0.
+			if (contact.last_called > 0L)
+			{
+				fields.put("last_called", contact.last_called.toString());
+				Date updatedDate = DateUtils.truncate(new Date(contact.last_called * 1000), Calendar.DATE);
+
+				doc.addField(Field.newBuilder().setName("last_called").setDate(updatedDate));
+
+				doc.addField(Field.newBuilder().setName("last_called_epoch").setNumber(contact.last_called));
+			}
+
+			// Adds Other fields in contacts to document
+			doc.addField(Field.newBuilder().setName("lead_score").setNumber(contact.lead_score));
+
+			// Adds Other fields in contacts to document
+			doc.addField(Field.newBuilder().setName("star_value").setNumber(contact.star_value));
+
+			addTagFields(contact.getTagsList(), doc);
+
+			/*
+			 * Get tokens from contact properties and adds it in document
+			 * "search_tokens"
+			 */
+			System.out.println("Before search tokens");
+			doc.addField(Field.newBuilder().setName("search_tokens")
+					.setText(SearchUtil.getSearchTokens(contact.properties)));
+			System.out.println("After search tokens");
+			
+			/*
+			 * Get all field names in contact seperated by space and adds it in
+			 * document "field_labels"
+			 */
+			//Remove tags field from fields if the contact has no tags
+			if(contact.tagsWithTime == null || contact.tagsWithTime.size() == 0)
+				fields.keySet().remove("tags");
+				
+			doc.addField(Field.newBuilder().setName("field_labels")
+					.setText(StringUtils.join(fields.keySet(), " ")));
+
+			DomainUser user = contact.getContactOwner();
+
+			System.out.println("after add owner to document");
+			// Add owner to document
+			if (user != null)
+				doc.addField(Field.newBuilder().setName("owner_id").setText(String.valueOf(user.id)));
+			
+			System.out.println("before campaign status");
+			if(contact.campaignStatus != null && !contact.campaignStatus.isEmpty())
+			    doc.addField(Field.newBuilder().setName("campaign_status").setText(SearchUtil.getCampaignStatus(contact)));
+			
+			System.out.println("after campaign status");
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			System.err.println("Exception occured in buildDocument..." + e.getMessage());
+			
+			//ExceptionUtil.catchException(e);
+		}
 		
-		if(contact.campaignStatus != null && !contact.campaignStatus.isEmpty())
-		    doc.addField(Field.newBuilder().setName("campaign_status").setText(SearchUtil.getCampaignStatus(contact)));
-
+		try{
+		System.out.println("building textsearch for contact:" + contact.id.toString());
 		doc.setId(contact.id.toString()).build();
+		}catch(Exception e)
+		{
+			System.err.println("Exception occured in build id..." + e.getMessage());
+		}
+		System.out.println("return doc");
 		return doc;
 	}
 	
@@ -247,11 +275,14 @@ public class ContactDocument extends com.agilecrm.search.document.Document imple
 		// Adds document to index
 		try
 		{
+			System.out.println("before addToIndex...." );
 			index.put(docs);
+			System.out.println("after addToIndex...." );
 		}
 		catch (Exception e)
 		{
-			System.out.println(e.getMessage());
+			//System.out.println(e.getMessage());
+			 System.err.println("Exception occured in addToIndex..." + e.getMessage());
 			e.printStackTrace();
 		}
 
@@ -268,11 +299,13 @@ public class ContactDocument extends com.agilecrm.search.document.Document imple
 		// Adds document to index
 		try
 		{
+			System.out.println("before addToIndex...." );
 			index.put(doc);
+			System.out.println("after addToIndex...." );
 		}
 		catch (Exception e)
 		{
-			System.out.println(e.getMessage());
+			System.err.println("Exception occured in addToIndex..." + e.getMessage());
 			e.printStackTrace();
 		}
 

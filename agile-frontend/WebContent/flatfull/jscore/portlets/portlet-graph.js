@@ -16,7 +16,7 @@ var portlet_graph_utility = {
 							if (milestonesList.length == 0 || emptyFlag) {
 								$('#' + selector)
 										.html(
-												'<div class="portlet-error-message">No deals found</div>');
+												'<div class="portlet-error-message">{{agile_lng_translate "portlets" "no-deals-found"}}</div>');
 							} else {
 								var data = [];
 								$.each(milestonesList, function(index, value) {
@@ -138,7 +138,7 @@ var portlet_graph_utility = {
 							if (campaignStatusList.length == 0 || emptyFlag) {
 								$('#' + selector)
 										.html(
-												'<div class="portlet-error-message">No Subscribers Found</div>');
+												'<div class="portlet-error-message">{{agile_lng_translate "campaigns" "no-subscribers-found"}}</div>');
 							} else {
 								var data = [];
 								$.each(campaignStatusList, function(index, value) {
@@ -173,8 +173,8 @@ var portlet_graph_utility = {
 																	+ '<tr> <td class="p-n">'
 																	+ '<b>'
 																	+ campaignStatusList[this.point.x]
-																	+ '</b> Subscribers</td></tr>'
-																	+ '<tr><td class="p-n">Total Count: '
+																	+ '</b> {{agile_lng_translate "report-view" "subscribers"}}</td></tr>'
+																	+ '<tr><td class="p-n">{{agile_lng_translate "campaigns" "total-count"}}: '
 																	+ '<b> '
 																	+ campaignValuesList[this.point.x].toLocaleString()
 																	+ '</b></td></tr>'
@@ -315,7 +315,7 @@ var portlet_graph_utility = {
 									|| (funnel_data != undefined && funnel_data.length == 0)) {
 								$('#' + selector)
 										.html(
-												'<div class="portlet-error-message">No deals found</div>');
+												'<div class="portlet-error-message">{{agile_lng_translate "portlets" "no-deals-found"}}</div>');
 								return;
 							}
 							$('#' + selector)
@@ -457,9 +457,9 @@ var portlet_graph_utility = {
 		if (base_model.get("settings").tags == "") {
 			$('#' + selector)
 					.html(
-							"<div class='portlet-error-message'>Please <a href='#' id='"
+							"<div class='portlet-error-message'>{{agile_lng_translate 'contact-details' 'please'}} <a href='#' id='"
 									+ base_model.get("id")
-									+ "-settings' class='portlet-settings text-info' dada-toggle='modal'>configure</a> the dashlet and add the Tags.</div>");
+									+ "-settings' class='portlet-settings text-info' dada-toggle='modal'>{{agile_lng_translate 'portlets' 'configure'}}</a> {{agile_lng_translate 'portlets' 'configure-dashlet-tags'}}</div>");
 			flag = false;
 		}
 		if (flag) {
@@ -639,12 +639,12 @@ var portlet_graph_utility = {
 	 */
 	callsPerPersonBarGraph : function(selector, domainUsersList, series,
 			totalCallsCountList, callsDurationList, text, colors,
-			domainUserImgList,base_model) {
+			domainUserImgList,base_model,averageCallList_temp) {
 			var column_position = $('#'+selector).parent().attr('data-col'), row_position = $('#'+selector).parent().attr('data-row');
 		var pos = '' + column_position + '' + row_position;
-		var	height=domainUsersList.length*30+($('#'+selector).height()-30);
+		/*var	height=domainUsersList.length*30+($('#'+selector).height()-30);
 		if(selector=='calls-chart')
-			height=domainUsersList.length*30+120;
+			height=domainUsersList.length*30+120;*/
 		setupCharts(function(){
 							
 							callschart[parseInt(pos)]=new Highcharts.Chart({
@@ -654,7 +654,7 @@ var portlet_graph_utility = {
 						            marginRight: 100,
 						            plotBorderWidth: 1,
 						            plotBorderColor: '#F4F4F5',
-						            height:height,
+						           // height:height,
 						            events: {
 								   		load: function(){
 								   			console.log("load");
@@ -695,7 +695,8 @@ var portlet_graph_utility = {
 						            gridLineWidth : 0,
 						    		gridLineColor : '#F4F4F5',
 						    		lineWidth : 0,
-						    		tickWidth : 0
+						    		tickWidth : 0,
+						    		tickPixelInterval: 50
 						        },
 						        yAxis: {
 						            min: 0,
@@ -715,7 +716,7 @@ var portlet_graph_utility = {
 						       tooltip: {
 						        	formatter: function(){
 						        		var tt = '';
-						        		if(text=="Calls Duration (Sec)")
+						        		if(text=="{{agile_lng_translate 'calls' 'duration-secs'}}")
 						        			tt = '<table>' + 
 						        					'<tr><td  class="b-b-none"><u style="text-decoration:none;border-bottom:1px solid">'+domainUsersList[this.points[0].point.x]+'</u></td></tr>'+	
 					        		              '<tr><td style="color:'+this.points[0].series.color+';padding:0">'+this.points[0].series.name+':&nbsp; </td>' +
@@ -723,13 +724,14 @@ var portlet_graph_utility = {
 					        		              '<tr><td style="color:'+this.points[0].series.color+';padding:0">Calls:&nbsp; </td>' + 
 					        		        	  '<td style="padding:0"><b>'+totalCallsCountList[this.points[0].point.x]+'</b></td></tr>' +
 					        		        	  '</table>';
-						        		else if(text=="Average Call Duration (Sec)"){
+					        		        	  
+						        		else if(text=="{{agile_lng_translate 'calls' 'avg-duration-secs'}}"){
 						        			
 						        			tt += '<table>';
 						        			if(this.points[0]!=undefined && this.points[0].series!=undefined){
 						        				tt += 	'<tr><td class="b-b-none"><u style="text-decoration:none;border-bottom:1px solid">'+domainUsersList[this.points[0].point.x]+'</u></td></tr>'+	
 						        							'<tr><td style="color:'+this.points[0].series.color+';padding:0">'+this.points[0].series.name+':&nbsp; </td>' +
-							                      		'<td style="padding:0"><b>'+portlet_utility.getPortletsTimeConversion(Math.round(this.points[0].point.y))+'</b></td></tr>';
+							                      		'<td style="padding:0"><b>'+portlet_utility.getPortletsTimeConversion(Math.round(averageCallList_temp[this.points[0].point.x]))+'</b></td></tr>';
 						        			}
 						        			tt += '</table>';
 						        			
@@ -783,7 +785,7 @@ var portlet_graph_utility = {
 						        				tt += 	'<tr><td style="color:'+this.points[11].series.color+';padding:0">'+this.points[11].series.name+':&nbsp; </td>' +
 							                      		'<td style="padding:0"><b>'+this.points[11].point.y+'</b></td></tr>';
 						        			}
-						        			tt += '<tr><td>Total:&nbsp; </td><td class="b-b-none">'+totalCallsCountList[this.points[0].point.x]+'</td></tr></table>';
+						        			tt += '<tr><td>{{agile_lng_translate "other" "total"}}:&nbsp; </td><td class="b-b-none">'+totalCallsCountList[this.points[0].point.x]+'</td></tr></table>';
 						        		}
 						        		return tt;
 						        	},
@@ -827,7 +829,18 @@ var portlet_graph_utility = {
 									verticalAlign : 'top',
 									y:30
 								}
-						    });
+						    },function(chart){
+						    	if(selector=='calls-chart')
+								chart.setSize(chart.chartWidth, domainUsersList.length*30+120);
+								else{
+                                    var max = chart.xAxis[0].max,
+                                        min = chart.xAxis[0].min,
+                                        height = chart.xAxis[0].height;
+                                      if (height - (max - min) * 27 <= 0) {
+                                        chart.setSize(chart.chartWidth, chart.chartHeight + (max - min) * 20)
+                                      }
+                                     }
+                                                    });
 							
 						});
 	},
@@ -846,13 +859,13 @@ var portlet_graph_utility = {
 		});
 		if(categoryList.length==0 || emptyFlag){
 			if(selector == 'calls-chart-user'){
-				$('#'+selector).html('<div class="portlet-error-message" style="font-size: 14px;font-style: normal;padding-top: 174px">No Calls Found</div>');	
+				$('#'+selector).html('<div class="portlet-error-message" style="font-size: 14px;font-style: normal;padding-top: 174px">{{agile_lng_translate "report-add" "no-calls-found"}}</div>');	
 			}
 			else if(selector === 'calls-chart'){
-				$('#'+selector).html('<div class="portlet-error-message" style="padding: 190px;font-style: normal">No Calls Found</div>');	
+				$('#'+selector).html('<div class="portlet-error-message" style="padding: 190px;font-style: normal">{{agile_lng_translate "report-add" "no-calls-found"}}</div>');	
 			}
 			else{
-				$('#'+selector).html('<div class="portlet-error-message">No Calls Found</div>');
+				$('#'+selector).html('<div class="portlet-error-message">{{agile_lng_translate "report-add" "no-calls-found"}}</div>');
 			}
 			
 		}else{
@@ -1202,7 +1215,7 @@ var portlet_graph_utility = {
 									&& categories.length == 0) {
 								$('#' + selector)
 										.html(
-												'<div class="portlet-error-message">No deals found</div>');
+												'<div class="portlet-error-message">{{agile_lng_translate "portlets" "no-deals-found"}}</div>');
 								return;
 							}
 							$('#' + selector)
@@ -1343,7 +1356,7 @@ setupCharts(function(){
 							if (emailsSentCount == 0 && emailsOpenedCount == 0) {
 								$('#' + selector)
 										.html(
-												'<div class="portlet-error-message">No email activity</div>');
+												'<div class="portlet-error-message">{{agile_lng_translate "portlets" "no-email-activity"}}</div>');
 								return;
 							}
 
@@ -1370,11 +1383,11 @@ setupCharts(function(){
 													y : 40,
 													labelFormatter : function() {
 														if (this.name == "Emails Opened")
-															return '<div><span>Opened:'
+															return '<div><span>{{agile_lng_translate "campaigns" "opened"}}:'
 																	+ emailsOpenedCount
 																	+ '</span></div>';
 														else if (this.name == "Emails Sent")
-															return '<div><span>Sent:'
+															return '<div><span>{{agile_lng_translate "social" "Sent"}}:'
 																	+ emailsSentCount
 																	+ '</span></div>';
 
@@ -1729,7 +1742,7 @@ setupCharts(function(){
 			if (known == 0 && anonymous == 0) {
 								$('#' + selector)
 										.html(
-												'<div class="portlet-error-message">No Visits Found</div>');
+												'<div class="portlet-error-message">{{agile_lng_translate "visitors" "no-visits-found"}}</div>');
 								return;
 							}
 								$('#' + selector)
@@ -1759,9 +1772,9 @@ setupCharts(function(){
 															return '<table>'
 																	+ '<tr> <td class="p-n">'
 																	+ (this.point.name)
-																	+ ' Visits:<b> '+(this.point.y)
+																	+ ' {{agile_lng_translate "tickets" "visits"}}:<b> '+(this.point.y)
 																	+ '</b></td></tr>'
-																	+ '<tr><td class="p-n">Total Visits: '
+																	+ '<tr><td class="p-n">{{agile_lng_translate "visitors" "total-visits"}}: '
 																	+ '<b> '
 																	+ totalVisits
 																	+ '</b></td></tr>'

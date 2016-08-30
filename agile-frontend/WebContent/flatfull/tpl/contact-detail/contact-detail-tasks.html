@@ -6,11 +6,11 @@
                     <img alt="Clipboard" src="{{getS3ImagePath '/img/clipboard.png'}}" />
                 </div>
                 <div class="box-right pull-left">
-                    <h4 class="m-t-none">You have no tasks for {{contactShortName}}.</h4>
+                    <h4 class="m-t-none">{{agile_lng_translate 'contact-details' 'you-have-no-tasks-for'}} {{contactShortName}}.</h4>
                     <div class="text">
-                        You can add a task related to a contact for calling, email, follow-up etc.
+                        {{agile_lng_translate 'contact-details' 'add-task-related-to-contact'}}
                     </div>
-                    <a href="#" class="btn blue btn-slate-action btn-default btn-sm contact-add-task m-t-xs"><i class="icon-plus-sign"></i>  Add Task</a>
+                    <a href="#" class="btn blue btn-slate-action btn-default btn-sm contact-add-task m-t-xs"><i class="icon-plus-sign"></i>  {{agile_lng_translate 'contact-details' 'add-task'}}</a>
                 </div>
 				<div class="clearfix">
 				</div>
@@ -19,7 +19,7 @@
         {{/unless}}
         {{#if this.length}}
 	<div class="m-b-md m-t-md m-r-sm" align="right">
-		<a href="#" class="btn btn-default btn-sm contact-add-task pos-rlt m-t-xs btn-addon"><span><i class='icon-plus-sign'/></span> Add Task</a>
+		<a href="#" class="btn btn-default btn-sm contact-add-task pos-rlt m-t-xs btn-addon"><span><i class='icon-plus-sign'/></span> {{agile_lng_translate 'contact-details' 'add-task'}}</a>
 	</div>
 			<ul id="contact-tasks-model-list" class="ativity-block-ul list-group list-group-lg no-radius m-b-none m-t-n-xxs" url="core/api/notes/bulk"></ul>
 		{{/if}} 
@@ -49,7 +49,7 @@
                    <span {{#is_mobile}} class="block" {{/is_mobile}}><label class="label bg-light text-tiny"><!-- <i class="fa {{icons type}} hide"></i>&nbsp; -->{{ucfirst type}}</label></span>
 				</div>
 		{{else}}
-			<div> {{#is_mobile}} {{else}}<label class="i-checks i-checks-sm"><input data="{{id}}" class="complete-task form-control" type="checkbox"/><i></i></label>{{/is_mobile}}<div class="task-subject {{#is_mobile}} block text-ellipsis w-full {{else}} inline {{/is_mobile}}"><a class="space-normal" href="#task/{{id}}">{{subject}}</a></div>{{#if_equals priority_type "NORMAL"}}{{else}}
+			<div> {{#is_mobile}} {{else}}<label class="i-checks i-checks-sm"><input data="{{id}}" class="complete-task form-control" type="checkbox"/><i></i></label>{{/is_mobile}}<div class="task-subject {{#is_mobile}} block text-ellipsis w-full {{else}} text-ellipsis pos-rlt pos-t-xs inline-block {{/is_mobile}}"><a class="space-normal" href="#task/{{id}}">{{subject}}</a></div>{{#if_equals priority_type "NORMAL"}}{{else}}
 					<span class="label hidden label-{{task_label_color priority_type}}">{{ucfirst priority_type}}</span>{{/if_equals}}
                     <span {{#is_mobile}} class="block" {{/is_mobile}}><label class="label bg-light text-tiny"><!-- <i class="fa {{icons type}}"></i>&nbsp; -->{{ucfirst type}}</label></span>
 				</div>
@@ -86,8 +86,8 @@
      </div>
 <div class="pull-right icons-text-sm">
 		<span class="actions">
-			<a title="Edit"  data="{{id}}" class="task-edit-contact-tab c-p text-l-none p-r-sm"> <i class="fa fa-edit"></i> </a>
-            <a title="Delete" class="c-p text-l-none"><span class="activity-delete icon-trash" id="{{id}}" url="core/api/tasks/bulk"><i></i></span></a>
+			<a title="{{agile_lng_translate 'contact-details' 'edit'}}"  data="{{id}}" class="task-edit-contact-tab c-p text-l-none p-r-sm"> <i class="fa fa-edit"></i> </a>
+            <a title="{{agile_lng_translate 'contact-details' 'delete'}}" class="c-p text-l-none"><span class="activity-delete icon-trash" id="{{id}}" url="core/api/tasks/bulk"><i></i></span></a>
         </span>
         </div>
 <div class="clearfix"></div>

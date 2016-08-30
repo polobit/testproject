@@ -87,7 +87,7 @@ function setContactImageURL(url)
 	$('#' + id).find('.contact-image-view').html('');
 	$('#' + id).find('.contact-image-view').html('<img src="' + url + '" class="upload_pic imgholder submit w-full img-circle" style="width:75px;height:75px;" type="submit" />');
 	if($(".toggle-contact-image .contact-delete-option").length == 0) {
- 	$('#' + id).find('.toggle-contact-image').append('|<div style="float:right" class="contact-delete-option"><a name="Delete" value="Delete" onClick="deleteConfirmation();" class="tooltip_info" data-placement="bottom" data-toggle="tooltip" title="Delete"><i class="glyphicon glyphicon-trash" style="color:red"></i></a></div>');	
+ 	$('#' + id).find('.toggle-contact-image').append('|<div style="float:right" class="contact-delete-option"><a name="Delete" value="Delete" onClick="deleteConfirmation();" class="tooltip_info" data-placement="bottom" data-toggle="tooltip" title="{{agile_lng_translate "contact-details" "delete"}}"><i class="glyphicon glyphicon-trash" style="color:red"></i></a></div>');	
 	$('#' + id).find('.toggle-contact-image').find(".contact-edit-option").removeAttr('style');
 	$('#' + id).find('.toggle-contact-image').find(".contact-edit-option").css("float","left");
 	}
@@ -167,7 +167,7 @@ function deleteConfirmation() {
     verifyUpdateImgPermission(function(can_delete_image){
 		if(can_delete_image)
 		{
-			showAlertModal("delete", "confirm", function(){
+			showAlertModal('delete', "confirm", function(){
 		    	deleteContactImage();
 			});
 		}
@@ -181,8 +181,8 @@ function verifyUpdateImgPermission(callback) {
 		var contact_owner = App_Contacts.contactDetailView.model.get("owner");
 		if(contact_owner && contact_owner.id != CURRENT_DOMAIN_USER.id && !hasScope("EDIT_CONTACT"))
 		{
-			showModalConfirmation("Contact Update", 
-					"You do not have permission to update contacts.", 
+			showModalConfirmation(_agile_get_translated_val('contacts','contact-update'), 
+					-_agile_get_translated_val('contacts','no-perm-to-update'), 
 					function (){
 						return;
 					}, 
@@ -192,7 +192,7 @@ function verifyUpdateImgPermission(callback) {
 					function() {
 						
 					},
-					"Cancel", "");
+					_agile_get_translated_val('contact-details', 'cancel'), "");
 			if(callback && typeof callback === "function")
 			{
 				return callback(false);
@@ -204,8 +204,8 @@ function verifyUpdateImgPermission(callback) {
 		var company_owner = App_Companies.companyDetailView.model.get("owner");
 		if(company_owner && company_owner.id != CURRENT_DOMAIN_USER.id && !hasScope("EDIT_CONTACT"))
 		{
-			showModalConfirmation("Company Update", 
-					"You do not have permission to update companies.", 
+			showModalConfirmation(_agile_get_translated_val('companies','company-update'), 
+					_agile_get_translated_val('companies','no-perm-to-update'), 
 					function (){
 						return;
 					}, 
@@ -215,7 +215,7 @@ function verifyUpdateImgPermission(callback) {
 					function() {
 						
 					},
-					"Cancel", "");
+					_agile_get_translated_val('contact-details', 'cancel'), "");
 			if(callback && typeof callback === "function")
 			{
 				return callback(false);

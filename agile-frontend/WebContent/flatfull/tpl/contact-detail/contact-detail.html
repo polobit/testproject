@@ -36,14 +36,14 @@
 									<img class='upload_pic imgholder submit w-full img-circle' style="width:75px;height:75px;" type="submit"
 									src="{{gravatarurl properties 80}}" /></a>
 									<div style="width: 32px;top:53px;position:absolute;font-size: 11px;" class="toggle-contact-image">
-										<div style='float:left;{{#property_is_exists "image" properties}}{{else}}margin-left:10px;{{/property_is_exists}}' class="contact-edit-option"><a name="Delete" class='tooltip_info  edit-pic' data-placement="bottom" data-toggle="tooltip" title="Change"><i class='glyphicon glyphicon-edit'></i></a>
+										<div style='float:left;{{#property_is_exists "image" properties}}{{else}}margin-left:10px;{{/property_is_exists}}' class="contact-edit-option"><a name="Delete" class='tooltip_info  edit-pic' data-placement="bottom" data-toggle="tooltip" title="{{agile_lng_translate 'portlets' 'change'}}"><i class='glyphicon glyphicon-edit'></i></a>
 										</div>
 										{{#property_is_exists "image" properties}}
-										|<div style="float:right" class="contact-delete-option"><a name="Delete" value="Delete" onClick="deleteConfirmation();" class="tooltip_info" data-placement="bottom" data-toggle="tooltip" title="Delete"><i class="glyphicon glyphicon-trash" style="color:red"></i></a>
+										|<div style="float:right" class="contact-delete-option"><a name="Delete" value="Delete" onClick="deleteConfirmation();" class="tooltip_info" data-placement="bottom" data-toggle="tooltip" title="{{agile_lng_translate 'contact-details' 'delete'}}"><i class="glyphicon glyphicon-trash" style="color:red"></i></a>
 										</div>{{/property_is_exists}}
 									</div>
 									<input type="hidden" id="upload_url" name="gravatarurl">
-								<a style="display: none;" class="save_img submit" type="submit">Save</a>
+								<a style="display: none;" class="save_img submit" type="submit"> {{agile_lng_translate 'modals' 'save'}}</a>
 							</form>
 						</div>
 
@@ -56,7 +56,7 @@
 								<span class="caret m-l-none" style="margin-top:-11px;"></span>
 								</button>
 								<ul class="dropdown-menu pull-right text-sm" role="menu">
-                                   <li role="menuitem"><a href='#contact-edit'>
+                                   <!--<li role="menuitem"><a href='#contact-edit'>
 
                                      <div class="pull-left"><i class="fa fa-edit"></i> Edit</div> {{#if_keyboard_shortcuts_enabled}}
                                      <div class='shortcuts pull-right'>Shift + E</div>
@@ -65,37 +65,35 @@
                                      </a></li>
 
                                      
-                                     
-<li class="divider"></li>
+                                    
+<li class="divider"></li>-->
 									<li><a href='#' class="contact-add-note"><i
-											class="icon-note"></i> Add Note</a></li>
+											class="icon-note"></i> {{agile_lng_translate 'contact-details' 'add-note'}}</a></li>
 									<li><a href='#' class="contact-add-task"><i
-											class="icon-tasks"></i> Add Task</a></li>
+											class="icon-tasks"></i> {{agile_lng_translate 'contact-details' 'add-task'}}</a></li>
 									{{#hasMenuScope 'DEALS'}}
 									<li><a href='#' class="contact-add-deal"><i class="icon-money"></i>
-											Add Deal</a></li>
+											{{agile_lng_translate 'contact-details' 'add-deal'}}</a></li>
 									{{/hasMenuScope}}
 							{{#canEditContact owner.id}}
 									<li class='divider'></li>
 									<li><a href='#bulk-campaigns' class="contact-add-campaign"
-										id="contact-add-campaign"><i class="icon-sitemap"></i> Add
-											to Campaign</a></li>
+										id="contact-add-campaign"><i class="icon-sitemap"></i> {{agile_lng_translate 'contact-details' 'add-to-campaign'}}</a></li>
 									<li><a href='#send-email{{#if_propertyName "email"}}/{{value}}{{/if_propertyName}}' id="contact-send-email"><i
-											class="icon-envelope"></i> Send Email</a></li>
+											class="icon-envelope"></i> {{agile_lng_translate 'contact-details' 'send-email'}}</a></li>
 
 									<li class='divider'></li>
 									<li><a href='#contact-duplicate'><i class="icon-docs"></i>
-											Duplicate</a></li>
-											
+											{{agile_lng_translate 'contact-details' 'duplicate'}}</a></li>
 									<li><a href='#duplicate-contacts/{{id}}'><i class="icon-code-fork"></i>
-											Merge Duplicates</a></li>
+											{{agile_lng_translate 'contact-details' 'merge-duplicates'}}</a></li>
 
 							{{/canEditContact}}
 
 							{{#canDeleteContact owner.id}}
 									<li class='divider'></li>
-									<li><a href='#' id='contact-actions-delete'><i
-											class="icon-trash"></i> Delete</a></li>
+									<li><a href='#' id='contact-actions-delete'>
+									<i class="icon-trash"></i> {{agile_lng_translate 'contact-details' 'delete'}}</a></li>
 							{{/canDeleteContact}}		
 
                                     {{#property_is_exists "phone" properties}}
@@ -243,7 +241,7 @@
 						
 						<!--  starting section 3  -->
                      
-<div class="btn-group btn-group-justified m-b hide"> <a class="btn btn-primary btn-rounded" data-toggle="button"> <span class="text"> <i class="fa fa-phone"></i> Call </span> </a> <a class="btn btn-info btn-rounded"> <i class="fa fa-envelope-o"></i> Email </a> </div>
+<div class="btn-group btn-group-justified m-b hide"> <a class="btn btn-primary btn-rounded" data-toggle="button"> <span class="text"> <i class="fa fa-phone"></i> {{agile_lng_translate 'admin-settings-tasks' 'call'}} </span> </a> <a class="btn btn-info btn-rounded"> <i class="fa fa-envelope-o"></i> {{agile_lng_translate 'modals' 'email'}} </a> </div>
 
                     <div class=" panel-middle-align-mobile">	
 
@@ -260,7 +258,7 @@
 							<div style="position:relative;">
 
  								<span class="m-l-n-xs pos-rlt" style="font-size:14px;float:left;margin-left:8px;top:6px">
-								<i class="icon-trophy" border="0" style="height: 6px; vertical-align: middle" rel="popover" data-placement="bottom" data-title="Lead Score" data-content="Score your leads to get high quality leads to appear on top. Manually assign scores or automate the process based on user behavior using Workflow automation." id="element" data-trigger="hover" ></i>
+								<i class="icon-trophy" border="0" style="height: 6px; vertical-align: middle" rel="popover" data-placement="bottom" data-title="Lead Score" data-content="{{agile_lng_translate 'contact-details' 'score-your-leads'}}" id="element" data-trigger="hover" ></i>
 
 								</span>
 
@@ -303,6 +301,13 @@
 						
 
 		</div>
+
+		<a href='#contact-edit'  class="btn btn-default btn-lg editicon-option text-base w-full b-n r-n b-t no-shadow">
+							<div class=""><i class="fa fa-edit"></i> Edit Contact</div> {{#if_keyboard_shortcuts_enabled}}
+							<div class='shortcuts pull-right'>Shift + E</div>
+							{{/if_keyboard_shortcuts_enabled}}
+							<div class="clearfix"></div>
+							</a>
 	</div>
 
 
@@ -310,14 +315,15 @@
 
 	<div class="content-tabs-show moreDetailsTab" role="tablist" aria-multiselectable="true">
 	 <div class="panel panel-default m-b-none"> <div class="panel-heading" role="tab" id="headingOne"> 
-	 <h4 class="panel-title text-left"> <a role="button" data-toggle="collapse" data-parent="#contactDetailsTab" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne" class="collapsed"> More Details</a> </h4> 
+	 <h4 class="panel-title text-left"> <a role="button" data-toggle="collapse" data-parent="#contactDetailsTab" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne" class="collapsed"> 
+	 {{agile_lng_translate 'contacts-view' 'more-details'}}</a> </h4> 
 	 </div> <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne" aria-expanded="false" style="height: 0px;"> 
 	 <div class="panel-body">
 
 			<div class="wrapper text-left m-b-sm p-none">
 			<div class="panel panel-default m-b-none">
 			<div class="panel-body">
-			<small class="text-muted text-base">Owner</small>
+			<small class="text-muted text-base">{{agile_lng_translate 'contact-details' 'owner'}}</small>
 			<div class="change-owner-succes"></div>
 			<div title="Owner">
 			<div class="contact-owner text-xs" id="change-owner-element">
@@ -325,13 +331,13 @@
 			{{#if owner}}
 			<span class="contact-owner-pic"><img class="user-img"  alt="" src="{{defaultGravatarurl 40}}" /></span>
 			{{else}}
-			<span class="contact-owner-pic"><img class="user-img"  alt="" src="{{defaultGravatarurl 40}}" /></span><span class="contact-owner-add"><a class="c-p">Assign Owner</a></span>
+			<span class="contact-owner-pic"><img class="user-img"  alt="" src="{{defaultGravatarurl 40}}" /></span><span class="contact-owner-add"><a class="c-p">{{agile_lng_translate 'contact-details' 'assign-owner'}}</a></span>
 			{{/if}}
 			<a id="contact-owner" class="custom-color text-xs" data={{owner.id}}>{{owner.name}}</a>
 
 			{{#canEditContact owner.id}}
 			<div class="dropdown" id="change-owner-ul"  style="display: none">
-			<button class="btn btn-sm dropdown-toggle btn-default" data-toggle="dropdown">Change Owner <span class="caret"></span></button>
+			<button class="btn btn-sm dropdown-toggle btn-default" data-toggle="dropdown">{{agile_lng_translate 'deal-view' 'change-owner'}} <span class="caret"></span></button>
 			<ul id='contact-detail-owner' class="dropdown-menu" role="menu"></ul>
 			</div> 
 			{{/canEditContact}}
@@ -346,7 +352,7 @@
 <div class="panel panel-default m-b-none">
 <div class="panel-body">
 
-<small class="text-muted text-base">Tags</small>
+<small class="text-muted text-base">{{agile_lng_translate 'report-add' 'tags'}}</small>
 <div class="contact-tags m-b-xs m-t-xs">
 <ul id="added-tags-ul" class="tagsinput inline v-top m-b-sm p-n">
 {{#if tagsWithTime.length}} 
@@ -371,14 +377,14 @@ class="anchor" style="color:#363f44" href="#tags/{{encodeString this.tag}}">{{th
 <div class="control-group save-tag m-b-none">
 <input name="" type="text" id="addTags"
 class="tags-typeahead ignore-comma-keydown form-control inline-block text-xs pull-left addInput"
-style="width: 60%" placeholder="Enter tag" />
-<span><a href="#" class="btn btn-sm btn-default m-l-sm m-r-xs" id="contact-add-tags">Add</a></span>
+style="width: 60%" placeholder="{{agile_lng_translate 'contact-details' 'enter-tag'}}" />
+<span><a href="#" class="btn btn-sm btn-default m-l-sm m-r-xs" id="contact-add-tags">{{agile_lng_translate 'contact-details' 'add'}}</a></span>
 </div>
 </div>
 {{#canEditContact owner.id}}
 <a href="#" id="add-tags" rel="tooltip"
 data-original-title="addtag" data-placement="top" class="text-xs text-muted"><i
-class="icon-plus"></i> <span >Add</span></a>
+class="icon-plus"></i> <span >{{agile_lng_translate 'contact-details' 'add'}}</span></a>
 {{/canEditContact}}
 
 
@@ -421,15 +427,15 @@ class="icon-plus"></i> <span >Add</span></a>
 			{{/property_is_exists}}
 			<h4 class="m-t-xs m-b-xs hide">
 
-			<i class="icon-user text-lg"></i>Contact
+			<i class="icon-user text-lg"></i>{{agile_lng_translate 'menu' 'contact'}}
 			<span class="text-cap">{{getPropertyValue properties "first_name"}}</span>
 
 			</h4>
 			<!-- <div id="qrcode"><img src="{{getS3ImagePath 'img/1-0.gif'}}"></div>
 			For refreshing the contact in the model list -->
-			<div id="refresh_contact" class="m-t-sm m-r-md m-l-md text-sm" style="display:none;">This contact has been updated
+			<div id="refresh_contact" class="m-t-sm m-r-md m-l-md text-sm" style="display:none;">{{agile_lng_translate 'contacts-view' 'this-contact-has-been-updated'}}
 			<a id="action_refresh_contact" class="c-p">
-			<i class="icon-refresh" rel="popover" data-placement="top" data-title="Refresh Contact" data-content="Click to get updated contact details." data-trigger="hover"></i>
+			<i class="icon-refresh" rel="popover" data-placement="top" data-title="Refresh Contact" data-content="{{agile_lng_translate 'Contacts-view' 'click-to-view-the-updated-contact-details'}}" data-trigger="hover"></i>
 			</a>
 			</div>
 
@@ -444,14 +450,14 @@ class="icon-plus"></i> <span >Add</span></a>
 			{{#multiple_Property_Element "phone" properties}}
 
 			<!-- <div style="display: inline-block; text-align: right" class="span4">
-			<span><strong style="color: gray">Phone</strong><span>
+			<span><strong style="color: gray">{{agile_lng_translate 'contacts-view' 'Phone'}}</strong><span>
 			</div> -->
 
 
 
 
 
-			<small class="text-muted text-base" >Contact Info</small>				
+			<small class="text-muted text-base" >{{agile_lng_translate 'contact-details' 'contact-info'}}</small>				
 
 			<div class="contact-phone">
 			{{#each this}}
@@ -503,7 +509,7 @@ class="icon-plus"></i> <span >Add</span></a>
 
 			{{else}}
 
-			<small class="text-muted text-base">Contact Info</small>	
+			<small class="text-muted text-base">{{agile_lng_translate 'contact-details' 'contact-info'}}</small>	
 			{{/property_is_exists}}
 
 			<div class="contact-phone">
@@ -546,7 +552,7 @@ class="icon-plus"></i> <span >Add</span></a>
 			<div class="panel panel-default m-b-none">
 			<div class="panel-body">
 
-			<small class="text-muted text-base" >Contact Info</small>
+			<small class="text-muted text-base" >{{agile_lng_translate 'contact-details' 'contact-info'}}</small>
 
 			{{/property_is_exists}}
 			<div class="contact-email text-sm l-h"> 
@@ -591,7 +597,7 @@ class="icon-plus"></i> <span >Add</span></a>
 
 
 
-			<small class=" text-muted text-base" >Custom Info</small>
+			<small class=" text-muted text-base" >{{agile_lng_translate 'contact-details' 'custom-info'}}</small>
 
 			<div>
 			<div class="contact-custom-icon pull-left hide" style="width:19px;"><i class="icon icon-info text-sm"></i></div>			
@@ -626,7 +632,7 @@ class="icon-plus"></i> <span >Add</span></a>
 			{{else}}
 			<span class="contact-custom-value text-base word-break custom-color custom-value text-xs" name="{{name}}">
 			{{#if_equals subtype "DATE"}} <i class="fa fa-clock-o m-r-xs"></i><time class="note-created-time" >{{stringToHumanDateInFormat value}}</time>
-			{{else}}
+		+	{{else}}
 			{{#if custom_field_type}}
 			{{getContactTypeCustomFields custom_field_type value name}}
 			{{else}}
@@ -661,7 +667,7 @@ class="icon-plus"></i> <span >Add</span></a>
 			<div class="panel panel-default m-b-none">
 			<div class="panel-body">
 
-			<small class="text-base text-muted">Location</small>
+			<small class="text-base text-muted">{{agile_lng_translate 'contact-details' 'location'}}</small>
 
 			<div>{{#address_Element properties}}{{/address_Element}}</div>
 			<div class="clearfix"></div>
@@ -733,14 +739,14 @@ class="icon-plus"></i> <span >Add</span></a>
 									<img class='upload_pic imgholder submit w-full img-circle' style="width:75px;height:75px;" type="submit"
 									src="{{gravatarurl properties 80}}" /></a>
 									<div style="width: 32px;top:53px;position:absolute;font-size: 11px;" class="toggle-contact-image">
-										<div style='float:left;{{#property_is_exists "image" properties}}{{else}}margin-left:10px;{{/property_is_exists}}' class="contact-edit-option"><a name="Delete" class='tooltip_info  edit-pic' data-placement="bottom" data-toggle="tooltip" title="Change"><i class='glyphicon glyphicon-edit'></i></a>
+										<div style='float:left;{{#property_is_exists "image" properties}}{{else}}margin-left:10px;{{/property_is_exists}}' class="contact-edit-option"><a name="Delete" class='tooltip_info  edit-pic' data-placement="bottom" data-toggle="tooltip" title="{{agile_lng_translate 'portlets' 'change'}}"><i class='glyphicon glyphicon-edit'></i></a>
 										</div>
 										{{#property_is_exists "image" properties}}
-										|<div style="float:right" class="contact-delete-option"><a name="Delete" value="Delete" onClick="deleteConfirmation();" class="tooltip_info" data-placement="bottom" data-toggle="tooltip" title="Delete"><i class="glyphicon glyphicon-trash" style="color:red"></i></a>
+										|<div style="float:right" class="contact-delete-option"><a name="Delete" value="Delete" onClick="deleteConfirmation();" class="tooltip_info" data-placement="bottom" data-toggle="tooltip" title="{{agile_lng_translate 'contact-details' 'delete'}}"><i class="glyphicon glyphicon-trash" style="color:red"></i></a>
 										</div>{{/property_is_exists}}
 									</div>
 									<input type="hidden" id="upload_url" name="gravatarurl">
-								<a style="display: none;" class="save_img submit" type="submit">Save</a>
+								<a style="display: none;" class="save_img submit" type="submit">{{agile_lng_translate 'report-add' 'save'}}</a>
 							</form>
 						</div>
 						 <div class="pos-abs pos-r-0 m-t-sm isotope-item" style="margin-top:14px;">
@@ -751,51 +757,48 @@ class="icon-plus"></i> <span >Add</span></a>
 								<span class="caret m-l-none" style="margin-top:-11px;"></span>
 								</button>
 								<ul class="dropdown-menu pull-right text-sm" role="menu">
-                                   <li><a href='#contact-edit'>
+                                   <!--<li><a href='#contact-edit'>
                                      <div class="pull-left"><i class="fa fa-edit"></i> Edit</div> {{#if_keyboard_shortcuts_enabled}}
                                      <div class='shortcuts pull-right'>Shift + E</div>
                                      {{/if_keyboard_shortcuts_enabled}}
                                      <div class="clearfix"></div>
                                      </a></li>
 
-                                     
-                                     
-<li class="divider"></li>
-									<li><a href='#' class="contact-add-note"><i
-											class="icon-note"></i> Add Note</a></li>
+<li class="divider"></li>-->
+								
+									<li><a href='#' class="contact-add-note">
+									<i class="icon-note"></i> {{agile_lng_translate 'contact-details' 'add-note'}}</a></li>
 									<li><a href='#' class="contact-add-task"><i
-											class="icon-tasks"></i> Add Task</a></li>
+											class="icon-tasks"></i> {{agile_lng_translate 'contact-details' 'add-task'}}</a></li>
 									{{#hasMenuScope 'DEALS'}}
 									<li><a href='#' class="contact-add-deal"><i class="icon-money"></i>
-											Add Deal</a></li>
+											{{agile_lng_translate 'contact-details' 'add-deal'}}</a></li>
 									{{/hasMenuScope}}
 							{{#canEditContact owner.id}}
 									<li class='divider'></li>
 									<li><a href='#bulk-campaigns' class="contact-add-campaign"
-										id="contact-add-campaign"><i class="icon-sitemap"></i> Add
-											to Campaign</a></li>
-									<li><a href='#send-email{{#if_propertyName "email"}}/{{value}}{{/if_propertyName}}' id="contact-send-email"><i
-											class="icon-envelope"></i> Send Email</a></li>
+										id="contact-add-campaign"><i class="icon-sitemap"></i> {{agile_lng_translate 'contact-details' 'add-to-campaign'}}</a></li>
+									<li><a href='#send-email{{#if_propertyName "email"}}/{{value}}{{/if_propertyName}}' id="contact-send-email">
+									<i class="icon-envelope"></i> {{agile_lng_translate 'contact-details' 'send-email'}}</a></li>
 
 									<li class='divider'></li>
 									<li><a href='#contact-duplicate'><i class="icon-docs"></i>
-											Duplicate</a></li>
-											
+											{{agile_lng_translate 'contact-details' 'duplicate'}}</a></li>
 									<li><a href='#duplicate-contacts/{{id}}'><i class="icon-code-fork"></i>
-											Merge Duplicates</a></li>
+											{{agile_lng_translate 'contact-details' 'merge-duplicates'}}</a></li>
 
 							{{/canEditContact}}
 
 							{{#canDeleteContact owner.id}}
 									<li class='divider'></li>
 									<li><a href='#' id='contact-actions-delete'><i
-											class="icon-trash"></i> Delete</a></li>
+											class="icon-trash"></i> {{agile_lng_translate 'contact-details' 'delete'}}</a></li>
 							{{/canDeleteContact}}		
 
                                     {{#property_is_exists "phone" properties}}
                                     <li style="display:none;"><a href='#' class="make-call" style="display:none;" fname="{{getPropertyValue properties
 										"first_name"}}" lname="{{getPropertyValue properties "last_name"}}" image="{{getPropertyValue properties
-										"image"}}" phone="{{getPropertyValue properties "phone"}}"><i class="icon-phone"></i> Call</a></li>
+										"image"}}" phone="{{getPropertyValue properties "phone"}}"><i class="icon-phone"></i> {{agile_lng_translate 'campaigns' 'call'}}</a></li>
                                     {{/property_is_exists}}
 								</ul>
 							</div>
@@ -808,8 +811,8 @@ class="icon-plus"></i> <span >Add</span></a>
 					</div>
 					<div class="w-full  m-t-xs  text-lg font-thin custom-color text-ellipsis" style="padding-bottom:1px;padding-right:20px; height:28px;" id ="contactName">
 
-								<span class="text-capitalize " id="contact_name">{{getPropertyValue properties
-										"first_name"}}</span> <span class="text-capitalize "> {{getPropertyValue properties "last_name"}}</span>
+								<span class="text-capitalize " id="contact_name">{{getSystemPropertyValue properties
+										"first_name"}}</span> <span class="text-capitalize "> {{getSystemPropertyValue properties "last_name"}}</span>
 
 
 								 <!-- {{#if_propertyName "email"}}</br> <a href='#send-email/{{value}}'>{{value}}</a>{{/if_propertyName}} -->
@@ -820,9 +823,9 @@ class="icon-plus"></i> <span >Add</span></a>
 						<div class="contact-job-title text-base text-center font-thin custom-color text-ellipsis" style="max-width:100%;">{{#if_propertyName "title"}} {{value}}{{/if_propertyName}}   {{#if contact_company_id}}
 
 
-									<a class = "block text-xs"  href="#company/{{contact_company_id}}">{{getPropertyValue properties "company"}}</a>
+									<a class = "block text-xs"  href="#company/{{contact_company_id}}">{{getSystemPropertyValue properties "company"}}</a>
 								{{else}}
-									{{getPropertyValue properties "company"}}
+									{{getSystemPropertyValue properties "company"}}
 								{{/if}}</div>
 								
 								
@@ -832,9 +835,9 @@ class="icon-plus"></i> <span >Add</span></a>
 						<!-- <div class="contact-company-name text-ellipsis pull-left w-half font-thin">
 														
                          {{#if contact_company_id}} 
-									<a href="#contact/{{contact_company_id}}">{{getPropertyValue properties "company"}}</a>
+									<a href="#contact/{{contact_company_id}}">{{getSystemPropertyValue properties "company"}}</a>
 								{{else}}
-									{{getPropertyValue properties "company"}}
+									{{getSystemPropertyValue properties "company"}}
 								{{/if}}
                          </div> -->
                          <div class="clearfix"></div>
@@ -932,7 +935,7 @@ class="icon-plus"></i> <span >Add</span></a>
 						
 						<!--  starting section 3  -->
                      
-<div class="btn-group btn-group-justified m-b hide"> <a class="btn btn-primary btn-rounded" data-toggle="button"> <span class="text"> <i class="fa fa-phone"></i> Call </span> </a> <a class="btn btn-info btn-rounded"> <i class="fa fa-envelope-o"></i> Email </a> </div>
+<div class="btn-group btn-group-justified m-b hide"> <a class="btn btn-primary btn-rounded" data-toggle="button"> <span class="text"> <i class="fa fa-phone"></i> {{agile_lng_translate 'campaigns' 'call'}} </span> </a> <a class="btn btn-info btn-rounded"> <i class="fa fa-envelope-o"></i> {{agile_lng_translate 'other' 'email'}} </a> </div>
 
                     <div class=" panel-middle-align-mobile">	
 
@@ -949,7 +952,7 @@ class="icon-plus"></i> <span >Add</span></a>
 							<div style="position:relative;">
 
  								<span class="m-l-n-xs pos-rlt" style="font-size:14px;float:left;margin-left:8px;top:6px">
-								<i class="icon-trophy" border="0" style="height: 6px; vertical-align: middle" rel="popover" data-placement="bottom" data-title="Lead Score" data-content="Score your leads to get high quality leads to appear on top. Manually assign scores or automate the process based on user behavior using Workflow automation." id="element" data-trigger="hover" ></i>
+								<i class="icon-trophy" border="0" style="height: 6px; vertical-align: middle" rel="popover" data-placement="bottom" data-title="Lead Score" data-content="{{agile_lng_translate 'contact-details' 'score-your-leads'}}" id="element" data-trigger="hover" ></i>
 								</span>
 
 							  		{{#canEditContact owner.id}}
@@ -988,6 +991,17 @@ class="icon-plus"></i> <span >Add</span></a>
 						
 
 		</div>
+
+							
+							<a href='#contact-edit'  class="btn btn-default btn-lg editicon-option text-base w-full b-n r-n b-t no-shadow">
+							<div class=""><i class="fa fa-edit"></i> Edit Contact</div> {{#if_keyboard_shortcuts_enabled}}
+							<div class='shortcuts pull-right'>Shift + E</div>
+							{{/if_keyboard_shortcuts_enabled}}
+							<div class="clearfix"></div>
+							</a>
+
+							 
+
 	</div>
 
 
@@ -1009,7 +1023,7 @@ class="icon-plus"></i> <span >Add</span></a>
 <div class="wrapper hidden-sm hidden-xs" style="padding-top:0px;">
   <div class="panel panel-default m-b-none">
     <div class="panel-body">
-	<small class="text-muted text-base">Owner</small>
+	<small class="text-muted text-base">{{agile_lng_translate 'contact-details' 'owner'}}</small>
 	<div class="change-owner-succes"></div>
      <div title="Owner">
       	<div class="contact-owner text-xs" id="change-owner-element">
@@ -1017,13 +1031,13 @@ class="icon-plus"></i> <span >Add</span></a>
 			{{#if owner}}
         	<span class="contact-owner-pic"><img class="user-img"  alt="" src="{{defaultGravatarurl 40}}" /></span>
 			{{else}}
-			<span class="contact-owner-pic"><img class="user-img"  alt="" src="{{defaultGravatarurl 40}}" /></span><span class="contact-owner-add"><a class="c-p">Assign Owner</a></span>
+			<span class="contact-owner-pic"><img class="user-img"  alt="" src="{{defaultGravatarurl 40}}" /></span><span class="contact-owner-add"><a class="c-p">{{agile_lng_translate 'contact-details' 'assign-owner'}}</a></span>
  			{{/if}}
         	<a id="contact-owner" class="custom-color text-xs" data={{owner.id}}>{{owner.name}}</a>
         
         	{{#canEditContact owner.id}}
         	<div class="dropdown change-owner" id="change-owner-ul"  style="display: none">
-        		 <button class="btn btn-sm dropdown-toggle btn-default" data-toggle="dropdown">Change Owner <span class="caret"></span></button>
+        		 <button class="btn btn-sm dropdown-toggle btn-default" data-toggle="dropdown">{{agile_lng_translate 'contact-details' 'change-owner'}} <span class="caret"></span></button>
 
         		 <ul id='contact-detail-owner' class="dropdown-menu" role="menu"></ul>
         	</div> 
@@ -1039,7 +1053,7 @@ class="icon-plus"></i> <span >Add</span></a>
   <div class="panel panel-default m-b-none">
     <div class="panel-body">
 
-<small class="text-muted text-base">Tags</small>
+<small class="text-muted text-base">{{agile_lng_translate 'contact-details' 'tags'}}</small>
 						<div class="contact-tags m-b-xs m-t-xs">
 					<ul id="added-tags-ul" class="tagsinput inline v-top m-b-sm p-n">
 							{{#if tagsWithTime.length}} 
@@ -1064,14 +1078,14 @@ class="icon-plus"></i> <span >Add</span></a>
 							<div class="control-group save-tag m-b-none">
 								<input name="" type="text" id="addTags"
 									class="tags-typeahead ignore-comma-keydown form-control inline-block"
-									style="width: 60%" placeholder="Enter tag" />
-								<span><a href="#" class="btn btn-sm btn-default m-l-sm m-r-xs" id="contact-add-tags">Add</a></span>
+									style="width: 60%" placeholder="{{agile_lng_translate 'contacts-view' 'Enter Tag'}}" />
+								<span><a href="#" class="btn btn-sm btn-default m-l-sm m-r-xs" id="contact-add-tags">{{agile_lng_translate 'contact-details' 'add'}}</a></span>
 							</div>
 						</div>
 						{{#canEditContact owner.id}}
 			<a href="#" id="add-tags" rel="tooltip"
-							data-original-title="addtag" data-placement="top" class="text-xs text-muted"><i
-							class="fa fa-plus-square"></i> <span >Add</span></a>
+							data-original-title="addtag" data-placement="top" class="text-xs text-muted">
+							<i class="fa fa-plus-square"></i> <span >{{agile_lng_translate 'contact-details' 'add'}}</span></a>
 						{{/canEditContact}}
 
 						
@@ -1111,15 +1125,15 @@ class="icon-plus"></i> <span >Add</span></a>
 		{{/property_is_exists}}
 						<h4 class="m-t-xs m-b-xs hide">
 							
-							<i class="icon-user text-lg"></i>Contact
+							<i class="icon-user text-lg"></i>{{agile_lng_translate 'menu' 'contact'}}
 									<span class="text-cap">{{getPropertyValue properties "first_name"}}</span>
 							
 						</h4>
 						<!-- <div id="qrcode"><img src="{{getS3ImagePath 'img/1-0.gif'}}"></div>
 						For refreshing the contact in the model list -->
-						<div id="refresh_contact" class="m-t-sm m-r-md m-l-md text-sm" style="display:none;">This contact has been updated
+						<div id="refresh_contact" class="m-t-sm m-r-md m-l-md text-sm" style="display:none;">{{agile_lng_translate 'contacts-view' 'this-contact-has-been-updated'}}
 							<a id="action_refresh_contact" class="c-p">
-								<i class="icon-refresh" rel="popover" data-placement="top" data-title="Refresh Contact" data-content="Click to get updated contact details." data-trigger="hover"></i>
+								<i class="icon-refresh" rel="popover" data-placement="top" data-title="{{agile_lng_translate 'contacts-view' 'refresh-contact'}}" data-content="Click to get updated contact details." data-trigger="hover"></i>
 							</a>
 						</div>
 
@@ -1134,14 +1148,14 @@ class="icon-plus"></i> <span >Add</span></a>
 								{{#multiple_Property_Element "phone" properties}}
 								  
 								<!-- <div style="display: inline-block; text-align: right" class="span4">
-									<span><strong style="color: gray">Phone</strong><span>
+									<span><strong style="color: gray">{{agile_lng_translate 'contacts-view' 'Phone'}}</strong><span>
 								</div> -->
 								
 								
 
 						
 
-				<small class="text-muted text-base" >Contact Info</small>				
+				<small class="text-muted text-base" >{{agile_lng_translate 'contact-details' 'contact-info'}}</small>				
 
 								<div class="contact-phone">
 									{{#each this}}
@@ -1235,7 +1249,7 @@ class="icon-plus"></i> <span >Add</span></a>
   								<div class="panel panel-default m-b-none">
    							    <div class="panel-body">
 
-									<small class="text-muted text-base" >Contact Info</small>
+									<small class="text-muted text-base" >{{agile_lng_translate 'contact-details' 'contact-info'}}</small>
 									
 										{{/property_is_exists}}
 										<div class="contact-email text-sm l-h"> 
@@ -1281,7 +1295,7 @@ class="icon-plus"></i> <span >Add</span></a>
 
 
 
-<small class=" text-muted text-base" >Custom Info</small>
+<small class=" text-muted text-base" >{{agile_lng_translate 'contact-details' 'custom-info'}}</small>
 
 								<div>
 					<div class="contact-custom-icon pull-left hide" style="width:19px;"><i class="icon icon-info text-sm"></i></div>			
@@ -1342,15 +1356,12 @@ class="icon-plus"></i> <span >Add</span></a>
 									<div class="clearfix"></div>
 
 			{{#property_is_exists "address" properties}} 
-				
-									
 				{{#property_json_is_not_empty "address" properties}}
 				
 				 <div class=" wrapper hidden-sm hidden-xs" style="padding-top:0px;">
   						<div class="panel panel-default m-b-none">
     						<div class="panel-body">
-									<small class="text-base text-muted">Location</small>
-
+									<small class="text-base text-muted">{{agile_lng_translate 'contact-details' 'location'}}</small>
 										<div>{{#address_Element properties}}{{/address_Element}}</div>
                                         <div class="clearfix"></div>
                                         <div class="pull-left m-t-sm m-b-sm w-full text-xs">
@@ -1409,17 +1420,20 @@ class="icon-plus"></i> <span >Add</span></a>
         <div class="tab-container bg-light hide-margin-mobile">
 <div class="pull-left p-sm bg-light text-xs text-muted hidden-xs" id="prev"><i class="fa fa-chevron-left"></i></div>
 			<ul class="nav nav-tabs bg-light pull-left b-n content-tabs"  role="tablist" id="contactDetailsTab">
-		<li class=""><a data-toggle="tab" role="tab" href="#timeline" onclick="setTimeout(function(){$(window).resize()}, 1000)">Timeline</a></li>
-				<li class=""><a data-toggle="tab" role="tab"  href="#notes">Notes</a></li>
-				<li class=""><a data-toggle="tab" role="tab" href="#events">Events</a></li>
-				<li class=""><a data-toggle="tab" role="tab" href="#tasks">Tasks</a></li>
-				<li class=""><a data-toggle="tab" role="tab" href="#deals">Deals</a></li>
-				<li class=""><a data-toggle="tab" role="tab" href="#cases">Cases</a></li>
-				<li class=""><a data-toggle="tab" role="tab" href="#campaigns">Campaigns</a></li>
-				<li class=""><a data-toggle="tab" role="tab" href="#stats">Web Stats</a></li>
-				<li class=""><a data-toggle="tab" role="tab" href="#mail">Mail</a></li>
-				<li id="custom-contact-document" class=""><a data-toggle="tab" role="tab" href="#documents">Documents</a></li>
-				<li><a data-toggle="tab" role="tab" href="#tickets">Tickets</a></li>
+		<li class=""><a data-toggle="tab" role="tab" href="#timeline" onclick="setTimeout(function(){$(window).resize()}, 1000)">{{agile_lng_translate 'contact-details' 'timeline'}}</a></li>
+				<li class=""><a data-toggle="tab" role="tab"  href="#notes">{{agile_lng_translate 'contact-details' 'notes'}}</a></li>
+				<li class=""><a data-toggle="tab" role="tab" href="#events">{{agile_lng_translate 'contact-details' 'events'}}</a></li>
+				<li class=""><a data-toggle="tab" role="tab" href="#tasks">{{agile_lng_translate 'contact-details' 'tasks'}}</a></li>
+				<li class=""><a data-toggle="tab" role="tab" href="#deals">{{agile_lng_translate 'contact-details' 'deals'}}</a></li>
+				{{#isNewVersionDomainUser}} {{else}}
+				<li class=""><a data-toggle="tab" role="tab" href="#cases">{{agile_lng_translate 'contact-details' 'cases'}}</a></li>
+				{{/isNewVersionDomainUser}}
+				<li class=""><a data-toggle="tab" role="tab" href="#campaigns">{{agile_lng_translate 'contact-details' 'campaigns'}}</a></li>
+				<li class=""><a data-toggle="tab" role="tab" href="#stats">{{agile_lng_translate 'contact-details' 'web-stats'}}</a></li>
+				<li class=""><a data-toggle="tab" role="tab" href="#mail">{{agile_lng_translate 'contact-details' 'mail'}}</a></li>
+				<li id="custom-contact-document" class=""><a data-toggle="tab" role="tab" href="#documents">{{agile_lng_translate 'contact-details' 'documents'}}</a></li>
+				<li><a data-toggle="tab" role="tab" href="#tickets">{{agile_lng_translate 'report-view' 'tickets'}}</a></li>
+
               <!--  <li role="presentation" class="dropdown custom-contact-menu">
         <a id="drop6" href="#" class="dropdown-toggle" data-toggle="dropdown">
           
@@ -1452,13 +1466,9 @@ class="icon-plus"></i> <span >Add</span></a>
 								<img alt="Clipboard" src="{{getS3ImagePath '/img/clipboard.png'}}" />
 							</div>
 							<div class="box-right pull-left">
-								<h4 class="m-t-none">{{getPropertyValue properties "first_name"}} has no
-									entities (Notes, Tasks, Deals and etc..) related, to show in
-									the Timeline.</h4>
-								<div class="text">You can add entities related to it by
-									selecting suitable option from the above "actions" drop down
-									button.</div>
-								<a href="#">Click here to learn more</a> <br />
+								<h4 class="m-t-none">{{getPropertyValue properties "first_name"}} {{agile_lng_translate 'contacts-view' 'has-no-entities-desc'}}</h4>
+								<div class="text">{{agile_lng_translate 'contacts-view' 'add-entities-desc'}}</div>
+								<a href="#">{{agile_lng_translate 'contacts-view' 'click-here-to-learn-more'}}</a> <br />
 							</div>
 							<div class="clearfix">
 							</div>
@@ -1508,7 +1518,7 @@ class="icon-plus"></i> <span >Add</span></a>
  <div class="wrapper">
  						
  
- 				<div id="widgets" class="contact_{{id}}"></div>
+ 				<div id="widgets" class="contact_{{id}}" style="max-width:250px"></div>
  					</div>
  					</div>
  					</div>
@@ -1522,7 +1532,7 @@ class="icon-plus"></i> <span >Add</span></a>
 <div class="panel panel-default m-b-none">
     <div class="panel-body">
 	    <div class="m-b-xs">
-     		<small class="text-base text-muted">Contact and Company Type</small>
+     		<small class="text-base text-muted">{{agile_lng_translate 'Contacts-view' 'contact-and-company-type'}}</small>
 		</div>
 		{{#each this}}
          	{{#if_contact_type "PERSON"}}

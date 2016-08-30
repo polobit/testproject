@@ -79,9 +79,9 @@ function setupTinyMCEEditor(selector, noAgileContactFields, plugins, callback,me
 			        forced_root_block : false,
 					extended_valid_elements : "*[*]", setup : function(editor)
 					{
-						console.log(that);
-						editor.addButton('merge_fields', { type : 'menubutton', text : 'Merge Fields', icon : false, menu : set_up_merge_fields(editor,that._merge_fields_values_callback) });
-					}
+						editor.addButton('merge_fields', { type : 'menubutton', text : '{{agile_lng_translate "contact-view" "merge-fields"}}', icon : false, menu : set_up_merge_fields(editor,that._merge_fields_values_callback) });
+					},
+					language : get_tinymce_supported_language(),
 					});
 				
 				// callback after tinymce initialised
@@ -277,7 +277,7 @@ function set_up_merge_fields(editor,merge_fields_values_callback)
 			{
 
 				// Insert value without compiling
-				if (Current_Route === "bulk-email" || Current_Route === "send-email" || Current_Route.indexOf('email-template') != -1 || Current_Route.indexOf('emailbuilder') != -1  || Current_Route.indexOf('document-template') != -1)
+				if (Current_Route === "bulk-email" || Current_Route === "send-email" || Current_Route.indexOf('email-template') != -1 || Current_Route.indexOf('emailbuilder') != -1 || Current_Route.indexOf('document-template') != -1)
 				{
 					editor.insertContent(value);
 				}
@@ -323,27 +323,26 @@ function set_up_merge_fields(editor,merge_fields_values_callback)
  */
 function get_merge_fields(callback)
 {
-	
 	var options = {
-			"First Name": "{{first_name}}",
-			"Last Name": "{{last_name}}",
-			"Score": "{{score}}",
-			"Email": "{{email}}",
-			"Company": "{{company}}",
-			"Title": "{{title}}",
-			"Address": "{{location.address}}",
-			"City": "{{location.city}}",
-			"State":"{{location.state}}",
-			"Country":"{{location.country}}",
-			"Owner Name":"{{owner.name}}",
-			"Owner Email":"{{owner.email}}", 
-			"Calendar URL":"{{owner.calendar_url}}"
-			
+			"{{agile_lng_translate 'contacts-view' 'First Name'}}": "{{first_name}}",
+			"{{agile_lng_translate 'contacts-view' 'Last name'}}": "{{last_name}}",
+			"{{agile_lng_translate 'report-add' 'score'}}": "{{score}}",
+			"{{agile_lng_translate 'modals' 'email'}}": "{{email}}",
+			"{{agile_lng_translate 'contacts-view' 'Company'}}": "{{company}}",
+			"{{agile_lng_translate 'other' 'title'}}": "{{title}}",
+			"{{agile_lng_translate 'other' 'address'}}": "{{location.address}}",
+			"{{agile_lng_translate 'contact-edit' 'city'}}": "{{location.city}}",
+			"{{agile_lng_translate 'contact-edit' 'state'}}":"{{location.state}}",
+			"{{agile_lng_translate 'contacts-view' 'country'}}":"{{location.country}}",
+			"{{agile_lng_translate 'contact-view' 'owner-name'}}":"{{owner.name}}",
+			"{{agile_lng_translate 'contact-view' 'owner-email'}}":"{{owner.email}}",
+			"{{agile_lng_translate 'domain-user' 'phone'}}":"{{owner.phone}}", 
+			"{{agile_lng_translate 'contact-view' 'calendar-url'}}":"{{owner.calendar_url}}"
 			}
 	
 	if((Current_Route.indexOf('document-template') != -1 || Current_Route.indexOf('document') != -1))
 	{
-		var document_options={"Pricing Table":"{{{pricing_table}}}"}
+		var document_options={"{{agile_lng_translate 'deals' 'pricing-table'}}":"{{{pricing_table}}}"}
 		options = merge_jsons({}, options,document_options);
 	}
 
@@ -369,6 +368,7 @@ function get_merge_fields(callback)
 	}
 
 
+
 }
 
 /**
@@ -379,55 +379,55 @@ function get_merge_field_objs()
 {
 	
 	var contact_merge_fields = {
-		"First Name": "{{first_name}}",
-		"Last Name": "{{last_name}}",
-		"Score": "{{score}}",
-		"Email": "{{email}}",
-		"Company": "{{company}}",
-		"Title": "{{title}}",
-		"Address": "{{location.address}}",
-		"City": "{{location.city}}",
-		"State":"{{location.state}}",
-		"Country":"{{location.country}}",
-		"Owner Name":"{{owner.name}}",
-		"Owner Email":"{{owner.email}}", 
-		"Calendar URL":"{{owner.calendar_url}}"
+		"{{agile_lng_translate 'contacts-view' 'First Name'}}": "{{first_name}}",
+		"{{agile_lng_translate 'contacts-view' 'Last name'}}": "{{last_name}}",
+		"{{agile_lng_translate 'report-add' 'score'}}": "{{score}}",
+		"{{agile_lng_translate 'modals' 'email'}}": "{{email}}",
+		"{{agile_lng_translate 'contacts-view' 'Company'}}": "{{company}}",
+		"{{agile_lng_translate 'other' 'title'}}": "{{title}}",
+		"{{agile_lng_translate 'other' 'address'}}": "{{location.address}}",
+		"{{agile_lng_translate 'contact-edit' 'city'}}": "{{location.city}}",
+		"{{agile_lng_translate 'contact-edit' 'state'}}":"{{location.state}}",
+		"{{agile_lng_translate 'contacts-view' 'country'}}":"{{location.country}}",
+		"{{agile_lng_translate 'contact-view' 'owner-name'}}":"{{owner.name}}",
+		"{{agile_lng_translate 'contact-view' 'owner-email'}}":"{{owner.email}}", 
+		"{{agile_lng_translate 'domain-user' 'phone'}}":"{{owner.phone}}", 
+		"{{agile_lng_translate 'contact-view' 'calendar-url'}}":"{{owner.calendar_url}}"
 	}
 	
 	// Get Custom Fields in template format
 	var custom_fields = get_custom_merge_fields();
 
-	var json = {Contact: contact_merge_fields};
+	var json = {"{{agile_lng_translate 'contact-details' 'Contact'}}": contact_merge_fields};
 
 	if(custom_fields && !$.isEmptyObject(custom_fields))
-		json['Custom'] = custom_fields;
+		json['{{agile_lng_translate "campaigns" "custom"}}'] = custom_fields;
 
 	if((Current_Route.indexOf('document-template') != -1 || Current_Route.indexOf('document') != -1))
 	{
-		json['Products']={"Pricing Table":"{{{pricing_table}}}"}
+		json['{{agile_lng_translate "documents" "deal-products"}}']={"{{agile_lng_translate 'deals' 'pricing-table'}}":"{{{pricing_table}}}"}
 	}
-
 	//Return json if path isn't email-template
 	if(Current_Route.indexOf('emailbuilder-add') == -1 && 
 		Current_Route.indexOf('email-template-add') == -1 &&
-		Current_Route.indexOf('emailbuilder/') == -1)
+		Current_Route.indexOf('emailbuilder/') == -1 && 
+		Current_Route.indexOf('email-template/') == -1)
 		return json;
 
 	var ticket_merge_fields = {
-		"Ticket ID": "{{ticket_id}}",
-		"Subject": "{{subject}}",
-		"Requester Name": "{{requester_name}}",
-		"Requester Email": "{{requester_email}}",
-		"Priority": "{{priority}}",
-		"Status": "{{status}}",
-		"Ticket Comments": "{{{ticket_comments}}}",
-		"Footer": "{{{ticket_footer}}}",
-		"Group": "{{group_name}}",
-		"Assignee": "{{agent_name}}"
+		"{{agile_lng_translate 'tickets' 'ticket-id'}}": "{{ticket_id}}",
+		"{{agile_lng_translate 'widgets' 'subject'}}": "{{subject}}",
+		"{{agile_lng_translate 'tickets' 'requester-name'}}": "{{requester_name}}",
+		"{{agile_lng_translate 'tickets' 'requester-email'}}": "{{requester_email}}",
+		"{{agile_lng_translate 'widgets' 'priority'}}": "{{priority}}",
+		"{{agile_lng_translate 'widgets' 'status'}}": "{{status}}",
+		"{{agile_lng_translate 'tickets' 'comments'}}": "{{{ticket_comments}}}",
+		"{{agile_lng_translate 'tickets' 'footer'}}": "{{{ticket_footer}}}",
+		"{{agile_lng_translate 'tickets' 'group'}}": "{{group_name}}",
+		"{{agile_lng_translate 'tickets' 'assignee'}}": "{{agent_name}}"
 	};
 
-	json['Ticket'] = ticket_merge_fields
-
+	json['{{agile_lng_translate "contact-details" "ticket"}}'] = ticket_merge_fields
 
 	return json;
 }
@@ -510,7 +510,6 @@ function merge_jsons(target, object1, object2)
  */
 function get_contact_json_for_merge_fields(contact_json)
 {
-
 	if (contact_json==undefined && App_Contacts.contactDetailView != undefined && App_Contacts.contactDetailView.model != undefined)
 	{
 
@@ -523,7 +522,7 @@ function get_contact_json_for_merge_fields(contact_json)
 	{
 
 		// Get Current Contact
-		var contact_property_json = get_property_JSON(contact_json);
+		var contact_property_json = get_property_JSON(contact_json);		
 		try
 		{
 			contact_property_json["score"]= contact_json["lead_score"];
@@ -644,4 +643,12 @@ function register_focus_on_tinymce(selector)
 		$(this).find('body').focus();
 		
 	});
+}
+
+function get_tinymce_supported_language(){
+	var supported_language = "en_US";
+	if(_LANGUAGE == "es")
+		supported_language = "es";
+
+	return supported_language;
 }

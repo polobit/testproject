@@ -22,7 +22,7 @@ var CONTACTS_SORT_LIST={"created_time":"Created Date","lead_score":"Score","star
 var ifFromRender=false;
 function contactTableView(base_model,customDatefields,view,customContactfields,customCompanyfields) {
 	
-	var templateKey = 'contacts-custom-view-model';
+	var templateKey = 'contacts-list-view-model';
 	var gridViewEl = _agile_get_prefs("agile_contact_view");
 	if (gridViewEl) {
 		templateKey = 'contacts-grid';
@@ -75,7 +75,7 @@ function contactTableView(base_model,customDatefields,view,customContactfields,c
 					if(field_name.indexOf("CUSTOM_") != -1)
 					{
 						field_name = field_name.split("CUSTOM_")[1]; 			
-						var property = getProperty(contact.properties, field_name);
+						var property = getCustomProperty(contact.properties, field_name);
 						var json = {};
 						if(!property)
 						{
@@ -98,7 +98,13 @@ function contactTableView(base_model,customDatefields,view,customContactfields,c
 							}, null);
 						}
 						else if(isContactTypeCustomField(customContactfields,property)){
-							var contactIdsJSON = JSON.parse(property.value);
+							var contactIdsJSON =  [];
+							try{ 
+								contactIdsJSON = JSON.parse(property.value);
+							}catch(err){
+								console.log("no contact ids found");
+								console.log(err.message);
+							}
 							var referenceContactIds = "";
 							$.each(contactIdsJSON, function(index, val){
 								referenceContactIds += val+",";
@@ -136,7 +142,13 @@ function contactTableView(base_model,customDatefields,view,customContactfields,c
 							});
 						}
 						else if(isCompanyTypeCustomField(customCompanyfields,property)){
-							var contactIdsJSON = JSON.parse(property.value);
+							var contactIdsJSON =  [];
+							try{ 
+								contactIdsJSON = JSON.parse(property.value);
+							}catch(err){
+								console.log("no contact ids found");
+								console.log(err.message);
+							}
 							var referenceContactIds = "";
 							$.each(contactIdsJSON, function(index, val){
 								referenceContactIds += val+",";
@@ -201,7 +213,7 @@ function contactTableView(base_model,customDatefields,view,customContactfields,c
 		
 
 	} else  {
-		getTemplate('contacts-grid-model', contact, undefined, function(template_ui){
+		getTemplate('contacts-grid-view-model', contact, undefined, function(template_ui){
 				if(!template_ui)
 					  return;
 				$(el).append($(template_ui));

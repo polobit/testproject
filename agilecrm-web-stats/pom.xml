@@ -10,7 +10,7 @@
 	<artifactId>agilecrm-web-stats</artifactId>
 
 	<properties>
-		<!-- <app.id>your-app-id</app.id> -->
+		<app.id>agilecrm-web-stats</app.id>
 		<!-- <app.version>1</app.version> -->
 		<appengine.version>1.9.32</appengine.version>
 		<gcloud.plugin.version>2.0.9.95.v20160203</gcloud.plugin.version>
@@ -107,6 +107,12 @@
 			<artifactId>appengine-api-stubs</artifactId>
 			<version>${appengine.version}</version>
 			<scope>test</scope>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/com.googlecode.objectify/objectify -->
+		<dependency>
+			<groupId>com.googlecode.objectify</groupId>
+			<artifactId>objectify</artifactId>
+			<version>5.1.13</version>
 		</dependency>
 	</dependencies>
 

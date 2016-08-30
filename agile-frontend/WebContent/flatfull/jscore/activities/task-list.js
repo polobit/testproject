@@ -3,10 +3,7 @@
  * @param element
  */
 function includeTimeAgo(element){
-	head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
-			{
-				$("time", element).timeago();
-			});
+	agileTimeAgoWithLngConversion($("time", element));
 }
 
 /**
@@ -57,7 +54,6 @@ function updateData(params) {
 		url : '/core/api/tasks/based' + params,
 		restKey : "task",
 		sort_collection : false,
-		//sortKey :'due',
 		templateKey : "tasks-list",
 		cursor : true, page_size : 25,
 		individual_tag_name : 'tr',
@@ -150,7 +146,7 @@ $(function(){
 			bulk_complete_operation('/core/api/tasks/bulk/complete', index_array, table, data_array);
 		}	
 		else
-            $('body').find(".select-none").html('<div class="alert alert-danger"><a class="close" data-dismiss="alert" href="#">&times;</a>You have not selected any records to complete. Please select at least one record to continue.</div>').show().delay(3000).hide(1);
+            $('body').find(".select-none").html('<div class="alert alert-danger"><a class="close" data-dismiss="alert" href="#">&times;</a>'+_agile_get_translated_val('bulk-actions','no-tasks-delete')+'</div>').show().delay(3000).hide(1);
 	
 		getDueTasksCount(function(count){
 
@@ -180,7 +176,7 @@ function bulk_complete_operation(url, index_array, table, data_array){
 	
 	var tasks = [];
 	$.each(data_array, function(index, task){
-		var contacts = task.contacts;
+		var contacts = task.taskContacts;
 		task.contacts = [];
 		$.each(contacts, function(i, contact){
 			task.contacts.push(contact.id);

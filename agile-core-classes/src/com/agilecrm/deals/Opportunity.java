@@ -306,7 +306,10 @@ public class Opportunity extends Cursor implements Serializable
     @Embedded
     @Indexed
     public ArrayList<Tag> tagsWithTime = new ArrayList<Tag>();
-
+    
+    public void setContact_ids(List<String> contact_ids) {
+		this.contact_ids = contact_ids;
+	}
 
     /**
      * Default Constructor.
@@ -499,7 +502,7 @@ public class Opportunity extends Cursor implements Serializable
     {
 	if (contact_ids != null)
 	{
-	    for (String contact_id : this.contact_ids)
+		for (String contact_id : this.contact_ids)
 	    {
 		this.related_contacts.add(new Key<Contact>(Contact.class, Long.parseLong(contact_id)));
 	    }
@@ -865,7 +868,7 @@ public class Opportunity extends Cursor implements Serializable
     {
 
 	if (colorName == null)
-	    colorName = Color.GREY;
+	    colorName = Color.WHITE;
 
 	// Initializes created Time
 	if (created_time == 0L)
@@ -1149,6 +1152,15 @@ public class Opportunity extends Cursor implements Serializable
 		.append(", deal_source_id=").append(deal_source_id).append("]");
 	;
 	return builder.toString();
+    }
+    
+    @JsonIgnore
+    public void setRelatedNotes(Set<Long> noteId)
+    {
+    	for(Long eachNoteId : noteId){
+    		this.related_notes.add(new Key<>(Note.class,eachNoteId));
+    	}
+    
     }
 
 }

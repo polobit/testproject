@@ -162,9 +162,41 @@ function initializeAdminpanelListner(el){
 				error : function(response)
 				{
 					$("#partialrefund").button('reset');
-					showNotyPopUp("information", "error occured please try again", "top");
+					showNotyPopUp("information", _agile_get_translated_val('billing','error-occured'), "top");
 				}
 			});
+		
+		});
+
+		$("#admin-panel-listners .unblock_user").off("click");
+		$("#admin-panel-listners").on("click", '.unblock_user', function(e) { 
+			
+			e.preventDefault();	
+			var domain = $(this).attr("domain");
+			var that = this;
+			if(domain){
+				$.ajax({
+					url: '/core/api/admin_panel/release_user?d='+domain, 
+					type : 'POST',
+					success : function(data)
+					{	
+						showNotyPopUp("information", "Domain released successfully.", "top");
+						$(that).closest("div").hide();
+						var json = {};
+						json.from="care@agilecrm.com";
+						json.cc = "mogulla@agilecrm.com";
+						json.bcc = "raja@agilecrm.com";
+						json.to = "venkat@agilecrm.com";
+						json.subject = "Domain released from Admin Panel";	
+						json.body = "Domain: "+domain;
+						sendEmail(json);
+					},
+					error : function(data)
+					{
+						showNotyPopUp("warning", data.responseText, "top");
+					}
+				});
+			}
 		
 		});
 		
@@ -228,7 +260,7 @@ function initializeAdminpanelListner(el){
 					},
 					error : function(response){
 						console.log(response);
-						showNotyPopUp("information", "Error occured please try again", "top");
+						showNotyPopUp("information", _agile_get_translated_val('billing','error-occured'), "top");
 					}
 				});
 			});

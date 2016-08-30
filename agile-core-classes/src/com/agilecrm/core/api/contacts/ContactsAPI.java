@@ -481,7 +481,17 @@ public class ContactsAPI
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public List<Opportunity> getCurrentContactOpportunity(@PathParam("contact-id") Long id)
     {
-	return OpportunityUtil.getDeals(id, null, null);
+    
+    	try{
+    		if(id!=null){
+	         return OpportunityUtil.getDeals(id, null, null);
+    		}
+    	}
+    	catch(Exception e){
+    		e.printStackTrace();
+    	}
+    	return null;
+    
     }
 
     /**
@@ -1366,6 +1376,16 @@ public class ContactsAPI
 		    cas.addContactToCase(contact.id.toString());
 		    cas.save();
 		}
+		
+		// merge contacts of companies
+
+		List<Contact> companies_contacts = ContactUtil.getAllContactsOfCompany(id, 0, null);
+		for (Contact companies_contact : companies_contacts)
+		{
+			companies_contact.contact_company_id=contact.id.toString();
+			companies_contact.save();
+		}
+				
 		// delete duplicated record
 		ContactUtil.getContact(Long.valueOf(id)).delete();
 		// save master reccord
@@ -1571,7 +1591,7 @@ public class ContactsAPI
 
 	// Iterate data by keys ignore email key value pair
 	Iterator<?> keys = obj.keys();
-
+	contact.contact_company_id = null;
 	while (keys.hasNext())
 	{
 	    String key = (String) keys.next();
@@ -1579,15 +1599,28 @@ public class ContactsAPI
 	    if (key.equals("properties"))
 	    {
 		JSONArray propertiesJSONArray = new JSONArray(obj.getString(key));
+		List<ContactField> input_properties = new ArrayList<ContactField>();
 		for (int i = 0; i < propertiesJSONArray.length(); i++)
 		{
 		    // Create and add contact field to contact
 		    JSONObject json = new JSONObject();
-		    json.put("name", propertiesJSONArray.getJSONObject(i).getString("name"));
-		    json.put("value", propertiesJSONArray.getJSONObject(i).getString("value"));
+		    JSONObject jsonArrData = new JSONObject();
+		    jsonArrData = propertiesJSONArray.getJSONObject(i);
+		    boolean isSubType = jsonArrData.has("subtype");
+		    if(isSubType){
+			json.put("name", jsonArrData.getString("name"));
+			json.put("value", jsonArrData.getString("value"));
+			json.put("subtype", jsonArrData.getString("subtype"));
+		    }else{
+			json.put("name", jsonArrData.getString("name"));
+			json.put("value", jsonArrData.getString("value"));
+		    }
 		    ContactField field = mapper.readValue(json.toString(), ContactField.class);
-		    contact.addProperty(field);
+		    input_properties.add(field);
+		    
 		}
+		// Partial update, send all properties
+		contact.addPropertiesData(input_properties);
 	    }
 	}
 

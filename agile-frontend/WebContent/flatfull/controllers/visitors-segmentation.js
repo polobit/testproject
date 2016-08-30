@@ -46,7 +46,7 @@ var VisitorsSegmentationRouter = Backbone.Router
             var web_scope = this;
             head
                 .js(
-                    LIB_PATH + 'lib/date-charts.js',
+                    LIB_PATH + 'lib/date-charts-en.js',
                     LIB_PATH + 'lib/date-range-picker.js' + '?_=' + _agile_get_file_hash('date-range-picker.js'),
                     function() {
 
@@ -94,11 +94,11 @@ var VisitorsSegmentationRouter = Backbone.Router
 
                                                                                              
                                if(collection.models.length==0)
-                                     $("#visitors-count").html("<small> (" + 0 + " Total) </small>");
+                                     $("#visitors-count").html("<small> (" + 0 + " " + _agile_get_translated_val('other','total') + " ) </small>");
                                 else if(collection.models[collection.models.length-1].attributes.count){
                                     
                                     total_count = collection.models[collection.models.length-1].attributes.count;
-                                    count_message = "<small> (" + total_count + " Total) </small>";
+                                    count_message = "<small> (" + total_count + " " + _agile_get_translated_val('other','total') + " ) </small>";
                                     $("#visitors-count").html(count_message);
                                 }                                             
                                                              

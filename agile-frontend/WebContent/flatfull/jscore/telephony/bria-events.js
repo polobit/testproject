@@ -137,7 +137,7 @@ function _getMessageBria(message, callback){
 /*
  * This will show the note to the user after the call is completed sucessfully
  */
-function saveCallNoteBria(){
+function saveCallNoteBria(call){
 	
 	if(	globalCallForActivity.justCalledId == globalCallForActivity.justSavedCalledIDForNote){
 		return;
@@ -153,6 +153,7 @@ function saveCallNoteBria(){
 	var number = globalCallForActivity.callNumber;
 	var callId = globalCallForActivity.callId;
 	var duration = globalCallForActivity.duration;
+	var cntId = globalCallForActivity.contactedId;
 	var contact;
 	var desc;
 	resetglobalCallForActivityVariables();
@@ -217,11 +218,10 @@ function saveCallNoteBria(){
 				
 	    	}else{
 	    		var note = {"subject" : noteSub, "message" : "", "contactid" : contact.id,"phone": number, "callType": "inbound", "status": callStatus, "duration" : 0 };
-				autosaveNoteByUser(note);
+				autosaveNoteByUser(note,call,"/core/api/widgets/bria");
 	    	}
 	    });
 	}else{
-		var cntId = globalCall.contactedId;
 		if(cntId){
 				if( callStatus == "Answered"){
 					twilioIOSaveContactedTime(cntId);
@@ -255,7 +255,7 @@ function saveCallNoteBria(){
 					});
 				}else{
 					var note = {"subject" : noteSub, "message" : "", "contactid" : cntId,"phone": number,"callType": "outbound-dial", "status": callStatus, "duration" : 0 };
-					autosaveNoteByUser(note);
+					autosaveNoteByUser(note,call,"/core/api/widgets/bria");
 				}
 		}else{
 			resetCallLogVariables();
@@ -287,7 +287,7 @@ function saveCallNoteBria(){
 /*
  * This will save the note for the call
  */
-function autosaveNoteByUser(note){
+function autosaveNoteByUser(note,call,url){
 	$.post( "/core/api/widgets/twilio/autosavenote", {
 		subject: note.subject,
 		message: note.message,
@@ -295,7 +295,29 @@ function autosaveNoteByUser(note){
 		phone: note.phone,
 		callType: note.callType,
 		status: note.status,
-		duration: note.duration
+		duration: note.duration},
+		function(data){
+			if(call.direction == "Outgoing" || call.direction == "outgoing"){
+		var callerObjectId = call.contactId;
+		if(!callerObjectId){
+			return;
+		}
+		$.post(url+"/savecallactivityById?note_id="+data.id,{
+			id:callerObjectId,
+			direction: call.direction, 
+			phone: call.phone, 
+			status : call.status,
+			duration : call.duration 
+			});
+		
+	}else{
+		$.post( url+"/savecallactivity?note_id="+data.id,{
+			direction: call.direction, 
+			phone: call.phone, 
+			status : call.status,
+			duration : call.duration
+			});
+	}
 		});
 }
 
@@ -309,7 +331,7 @@ function saveCallActivityBria(call){
 	}
 	globalCallForActivity.justSavedCalledIDForActivity = globalCallForActivity.justCalledId;
 
-	if(!globalCall.contactedId && dialled.using == "dialler"){
+/*	if(!globalCall.contactedId && dialled.using == "dialler"){
 		$.post( "/core/api/widgets/bria/savecallactivity",{
 			direction: call.direction, 
 			phone: call.phone, 
@@ -317,16 +339,18 @@ function saveCallActivityBria(call){
 			duration : call.duration
 			});
 		return;
-	}
+	}*/
 	
 	if(call.status == "Answered"){
 		return;
 	}
+	
+	var callerObjectId = call.contactId;
+	if(!callerObjectId){
+		return;
+	}
+	
 	if(call.direction == "Outgoing" || call.direction == "outgoing"){
-		var callerObjectId = globalCall.contactedId;
-		if(!callerObjectId){
-			return;
-		}
 		$.post( "/core/api/widgets/bria/savecallactivityById",{
 			id:callerObjectId,
 			direction: call.direction, 
@@ -343,6 +367,7 @@ function saveCallActivityBria(call){
 			duration : call.duration
 			});
 	}
+
 }
 
 /*
@@ -357,7 +382,7 @@ function getLogsForBria(num){
 	
 	var logNumber;
 	var parameter = {};
-	parameter['error_message'] = "There is no phone number associated with this contact. <a href='#contact-edit' class='text-info' style='color:#23b7e5'>Add phone number</a>";
+	parameter['error_message'] = _agile_get_translated_val('widgets', 'no-phone-number-to-contact') +  " <a href='#contact-edit' class='text-info' style='color:#23b7e5'>" +_agile_get_translated_val('campaigns', 'add-phone-number')+"</a>";
 	parameter['num'] = agile_crm_get_contact_properties_list("phone");
 
 	if($("#bria-logs-panel").length > 0){
@@ -415,10 +440,7 @@ function handleLogsForBria(message){
 		$('#bria-logs-panel').html(bria_logs_template);
 
 			// Load jquery time ago function to show time ago in logs
-			head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
-			{
-				$(".time-ago", bria_logs_template).timeago();
-			});
+			agileTimeAgoWithLngConversion($(".time-ago", bria_logs_template));
 
 	}, "#bria-logs-panel");
 }

@@ -52,7 +52,7 @@
 					<div class="panel panel-default m-b-none">
 					<div class="panel-body">
 					<div class="control-group lhs-row-filter p-n" style="border-bottom:1px solid #dee5e7;position:relative;border-bottom-width:0px;font-size:10px;">
-					<a id="lhs-filters-header" class="c-p text-l-none text-l-none-hover txt-lg-label block">
+					<a id="lhs-customfilters-header" class="c-p text-l-none text-l-none-hover txt-lg-label block">
 					Saved Filters
 					<i class="fa inline pos-abs pos-r-0 fa-plus-square-o"></i></a>
 					 
@@ -66,8 +66,7 @@
 
 			<div class="wrapper bg-light p-b-xs p-t-xs">
   <div class="panel panel-default m-b-sm">
-			<div class="p-t-sm p-b-sm text-center" style="padding-top: 8px; padding-bottom: 8px;">
-      <a href='#contact-filters' class="text-info">Add or Edit Filter</a></div>
+			<a href='#contact-filters' class="text-info block p-t-sm p-b-sm text-center" style="padding-top: 8px; padding-bottom: 8px;">Add or Edit Filter</a>
 </div>
 </div>
 
@@ -141,7 +140,7 @@
 	    <div class="btn-toolbar m-l-none pos-rlt">
 	    	<div class="filters-drp-down btn-group dropdown m-l-none" style="float: none;"><div class="">
 	    		<h4 class="inline-block m-n">
-	    		Contacts
+	    		{{agile_lng_translate 'contacts-view' 'contacts'}}
 	    		<div class="inline-block" id="filter-list"></div>
 	    		<span id="contacts-count" class="">{{contacts_count}}</span>
 	    			 
@@ -170,44 +169,42 @@
         	</li>
 			<li class="divider"></li>-->
 			<li class="dropdown-submenu"><a data-toggle="dropdown" id="mobile-dropdown-click-sort">Sort By</a>
-
 				<ul class="dropdown-menu" id="contact-sort-views" role="menu">
-					<li><a class="sort bold-text" id="sort-by-created_time-desc" data="-created_time" href="#">Newest</a></li>
-					<li><a class="sort" id="sort-by-created_time-asc" data="created_time" href="#">Oldest</a></li>
+					<li><a class="sort bold-text" id="sort-by-created_time-desc" data="-created_time" href="#">{{agile_lng_translate 'contacts-view' 'newest'}}</a>
+					</li>
+					<li><a class="sort" id="sort-by-created_time-asc" data="created_time" href="#">{{agile_lng_translate 'contacts-view' 'oldest'}}</a></li>
 					<li class="divider"></li>
-					<li><a class="sort" id="sort-by-lead_score-desc" data="-lead_score" href="#">Highest Score</a></li>
-					<li><a class="sort" id="sort-by-lead_score-asc" data="lead_score" href="#">Lowest Score</a></li>
+					<li><a class="sort" id="sort-by-lead_score-desc" data="-lead_score" href="#">{{agile_lng_translate 'contacts-view' 'highest-score'}}</a></li>
+					<li><a class="sort" id="sort-by-lead_score-asc" data="lead_score" href="#">{{agile_lng_translate 'contacts-view' 'lowest-score'}}</a></li>
 					<li class="divider"></li>
-					<li><a class="sort" id="sort-by-star_value-desc" data="-star_value" href="#">Highest Starred</a></li>
-					<li><a class="sort" id="sort-by-star_value-asc" data="star_value" href="#">Lowest Starred</a></li>
+					<li><a class="sort" id="sort-by-star_value-desc" data="-star_value" href="#">{{agile_lng_translate 'contacts-view' 'highest-starred'}}</a></li>
+					<li><a class="sort" id="sort-by-star_value-asc" data="star_value" href="#">{{agile_lng_translate 'contacts-view' 'lowest-starred'}}</a></li>
 					<li class="divider"></li>
-					<li><a class="sort" id="sort-by-first_name-desc" data="-first_name" href="#">First Name Desc</a></li>
-					<li><a class="sort" id="sort-by-first_name-asc" data="first_name" href="#">First Name Asc</a></li>
+					<li><a class="sort" id="sort-by-first_name-desc" data="-first_name" href="#">{{agile_lng_translate 'contacts-view' 'first-name-desc'}}</a></li>
+					<li><a class="sort" id="sort-by-first_name-asc" data="first_name" href="#">{{agile_lng_translate 'contacts-view' 'first-name-asc'}}</a></li>
 					<li class="divider"></li>
-					<li><a class="sort" id="sort-by-last_name-desc" data="-last_name" href="#">Last Name Desc</a></li>
-					<li><a class="sort" id="sort-by-last_name-asc" data="last_name" href="#">Last Name Asc</a></li>
+					<li><a class="sort" id="sort-by-last_name-desc" data="-last_name" href="#">{{agile_lng_translate 'contacts-view' 'last-name-desc'}}</a></li>
+					<li><a class="sort" id="sort-by-last_name-asc" data="last_name" href="#">{{agile_lng_translate 'contacts-view' 'last-name-asc'}}</a></li>
 					<li class="divider"></li>
-					<li><a class="sort" id="sort-by-last_contacted-desc" data="-last_contacted" href="#">Contacted Date Desc</a></li>
-					<li><a class="sort" id="sort-by-last_contacted-asc" data="last_contacted" href="#">Contacted Date Asc</a></li>
+					<li><a class="sort" id="sort-by-last_contacted-desc" data="-last_contacted" href="#">{{agile_lng_translate 'contacts-view' 'contacted-date-desc'}}</a></li>
+					<li><a class="sort" id="sort-by-last_contacted-asc" data="last_contacted" href="#">{{agile_lng_translate 'contacts-view' 'contacted-date-asc'}}</a></li>
 				</ul>
 			</li>
         	<li class="divider"></li>
         	<li>
-            	<a href="#contact-view-prefs">Add/Remove Columns</a>
+            	<a href="#contact-view-prefs">{{agile_lng_translate 'contacts-view' 'add-remove-columns'}}</a>
         	</li>
     	</ul>
     	
 	</div>
 	{{#hasRestrictedMenuScope 'CREATE_CONTACT'}} {{else}}
     <div class="btn-group">
-
-        <a href="#contacts" onclick="$('.person').click();Agile_GA_Event_Tracker.track_event('Add Contact');" class="btn btn-default btn-sm"><i class="icon-plus-sign"></i> Add Contact</a>
+        <a href="#contacts" onclick="Agile_GA_Event_Tracker.track_event('Add Contact');" class="person btn btn-default btn-sm"><i class="icon-plus-sign"></i> {{agile_lng_translate 'contacts-view' 'add-contact'}}</a>
         <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
 		<ul class="dropdown-menu pull-right" role="menu">
-			<li><a href="#import" onclick="Agile_GA_Event_Tracker.track_event('Import Contact');">Import from CSV</a></li>
+			<li><a href="#import" onclick="Agile_GA_Event_Tracker.track_event('Import Contact');">{{agile_lng_translate 'contacts-view' 'import-from-csv'}}</a></li>
 
-			<li><a href="#import">Import from Salesforce</a></li>
-			
+			<li><a href="#import">{{agile_lng_translate 'contacts-view' 'import-from-salesforce'}}</a></li>
 		</ul>
 	</div>
 	{{/hasRestrictedMenuScope}}
@@ -229,19 +226,19 @@
 <div id="bulk-action-btns" class="panel-heading no-shadow p-r-none b-r m-r-sm" style="border-bottom: 0;background-color: rgba(246,248,248,1);position:relative;">
 				      	
 				      	
-					    <button id="bulk-tags" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled txt-small">Add Tags</button>
-					    <button id="bulk-tags-remove" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled txt-small">Remove Tags</button>
+					    <button id="bulk-tags" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled txt-small">{{agile_lng_translate 'contacts-view' 'add-tags'}}</button>
+					    <button id="bulk-tags-remove" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled txt-small">{{agile_lng_translate 'contacts-view' 'remove-tags'}}</button>
 					    {{#hasMenuScope 'CAMPAIGN'}}
-					    <button id="bulk-campaigns" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled txt-small" onclick="Agile_GA_Event_Tracker.track_event('Add to Campaign');">Add to Campaign</button>
+					    <button id="bulk-campaigns" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled txt-small" onclick="Agile_GA_Event_Tracker.track_event('Add to Campaign');">{{agile_lng_translate 'contacts-view' 'add-to-campaign'}}</button>
 					    {{/hasMenuScope}}
-					    <button id="show-callcampaignModal" class="btn btn-default bulk-action-btn btn-sm disabled txt-small">Start Call Campaign</button>
-					    <button id="bulk-email" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled txt-small" onclick="Agile_GA_Event_Tracker.track_event('Send Email');">Send Email</button>
-					    <button id="bulk-owner" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled txt-small">Change Owner</button>
+					    <button id="show-callcampaignModal" class="btn btn-default bulk-action-btn btn-sm disabled txt-small">{{agile_lng_translate 'contacts-view' 'start-call-campaign'}}</button>
+					    <button id="bulk-email" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled txt-small" onclick="Agile_GA_Event_Tracker.track_event('Send Email');">{{agile_lng_translate 'contacts-view' 'send-email'}}</button>
+					    <button id="bulk-owner" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled txt-small">{{agile_lng_translate 'contacts-view' 'change-owner'}}</button>
 					    {{#hasScope "EXPORT_CONTACTS"}}
-					    <button id="bulk-contacts-export" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled txt-small" onclick="Agile_GA_Event_Tracker.track_event('Export as CSV');">Export as CSV</button>
+					    <button id="bulk-contacts-export" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled txt-small" onclick="Agile_GA_Event_Tracker.track_event('Export as CSV');">{{agile_lng_translate 'deal-view' 'export-as-csv'}}</button>
 					    {{/hasScope}}
 					    {{#hasRestrictedMenuScope 'DELETE_CONTACT'}} {{else}}
-					    <button class="btn btn-default bulk-action-btn delete-checked-contacts btn-sm disabled txt-small">Delete</button>
+					    <button class="btn btn-default bulk-action-btn delete-checked-contacts btn-sm disabled txt-small">{{agile_lng_translate 'contacts-view' 'delete'}}</button>
 
 					     {{/hasRestrictedMenuScope}}
 
@@ -332,7 +329,7 @@
 		        {{#if this.length}}
 		        <div class="btn-group inline-block  text-center" style="display: none;border:1px solid #dee5e7;width:100%;padding:5px;background-color:#edf1f2;" id="bulk-select"></div>
                 <table id="contacts-table" class="table table-striped    noDelete  no-sorting panel agile-table 
-                {{#is_mobile}}contactTableHeadName onlySorting{{else}} showCheckboxes {{/is_mobile}}"  url="ore/api/contacts/delete?action=DELETE" style="table-layout:auto">
+                {{#is_mobile}}contactTableHeadName onlySorting{{else}} showCheckboxes {{/is_mobile}}"  url="core/api/contacts/delete?action=DELETE" style="table-layout:auto">
 					<div class="filter-criteria">
 					
 					</div>
@@ -353,62 +350,68 @@
 				
 				<li class ="hide">
 	       		  			<a href="javascript:void(0);" class="p-b-none">
-								<label class="i-checks i-checks-sm contactcoloumn"><input name="basic_info"value = "basic_info"   type="checkbox" class="choose-column-chbx"><i></i></label>Basic Info</a></li>
+								<label class="i-checks i-checks-sm contactcoloumn"><input name="basic_info"value = "basic_info"   type="checkbox" class="choose-column-chbx"><i></i></label>{{agile_lng_translate 'contacts-view' 'Basic info'}}</a></li>
 				<li class="hide">
 	       		  			<a href="javascript:void(0);" class="p-b-none">
-								<label class="i-checks i-checks-sm contactcoloumn"><input name="image"value = "image" type="checkbox" class="choose-column-chbx"><i></i></label>Image</a></li>
+								<label class="i-checks i-checks-sm contactcoloumn"><input name="image"value = "image" type="checkbox" class="choose-column-chbx"><i></i></label>{{agile_lng_translate 'contacts-view' 'Image'}}</a></li>
 				
 				
 	       		  
 	                  <li>
 	       		  		<a href="javascript:void(0);" class="p-b-none">
-							<label class="i-checks i-checks-sm contactcoloumn "><input name="first_name" value = "first_name"type="checkbox" class="choose-column-chbx"><i></i></label>First Name</a></li>
+							<label class="i-checks i-checks-sm contactcoloumn "><input name="first_name" value = "first_name"type="checkbox" class="choose-column-chbx"><i></i></label>{{agile_lng_translate 'contacts-view' 'First name'}}</a></li>
 	                   <li>
 	       		  			<a href="javascript:void(0);" class="p-b-none">
-								<label class="i-checks i-checks-sm contactcoloumn "><input name="last_name" value = "last_name"type="checkbox" class="choose-column-chbx"><i></i></label>Last Name</a></li>
+								<label class="i-checks i-checks-sm contactcoloumn "><input name="last_name" value = "last_name"type="checkbox" class="choose-column-chbx"><i></i></label>{{agile_lng_translate 'contacts-view' 'Last Name'}}</a></li>
 						<li>
 	       		  			<a href="javascript:void(0);" class="p-b-none">
-								<label class="i-checks i-checks-sm contactcoloumn "><input name="email" value="email"type="checkbox" class="choose-column-chbx"><i></i></label>Email</a></li>
+								<label class="i-checks i-checks-sm contactcoloumn "><input name="email" value="email"type="checkbox" class="choose-column-chbx"><i></i></label>{{agile_lng_translate 'contacts-view' 'Email'}}</a></li>
 	                   <li>
 	       		  			<a href="javascript:void(0);" class="p-b-none">
-								<label class="i-checks i-checks-sm contactcoloumn"><input name="company" value = "company"type="checkbox" class="choose-column-chbx"><i></i></label>Company</a></li>
+								<label class="i-checks i-checks-sm contactcoloumn"><input name="company" value = "company"type="checkbox" class="choose-column-chbx"><i></i></label>{{agile_lng_translate 'contacts-view' 'Company'}}</a></li>
 	                    
 	                    <li>
 	       		  			<a href="javascript:void(0);" class="p-b-none">
-								<label class="i-checks i-checks-sm contactcoloumn"><input name="title"value="title"type="checkbox" class="choose-column-chbx"><i></i></label>Title</a></li>
+								<label class="i-checks i-checks-sm contactcoloumn"><input name="title"value="title"type="checkbox" class="choose-column-chbx"><i></i></label>{{agile_lng_translate 'contacts-view' 'Title'}}</a></li>
 						<li>
 	       		  			<a href="javascript:void(0);" class="p-b-none">
-								<label class="i-checks i-checks-sm contactcoloumn"><input  name="tags" value = "tags"type="checkbox" class="choose-column-chbx"><i></i></label>Tags</a></li>
+								<label class="i-checks i-checks-sm contactcoloumn"><input  name="tags" value = "tags"type="checkbox" class="choose-column-chbx"><i></i></label>{{agile_lng_translate 'contacts-view' 'tags'}}</a></li>
 	                   <li>
 	       		  			<a href="javascript:void(0);" class="p-b-none">
-								<label class="i-checks i-checks-sm contactcoloumn"><input name="phone" value = "phone"type="checkbox" class="choose-column-chbx"><i></i></label>Phone</a></li>
+								<label class="i-checks i-checks-sm contactcoloumn"><input name="phone" value = "phone"type="checkbox" class="choose-column-chbx"><i></i></label>{{agile_lng_translate 'contacts-view' 'Phone'}}</a></li>
 	                    <li>
 	       		  			<a href="javascript:void(0);" class="p-b-none">
-								<label class="i-checks i-checks-sm contactcoloumn"><input name="address"value ="address"type="checkbox" class="choose-column-chbx"><i></i></label>Address</a></li>
+								<label class="i-checks i-checks-sm contactcoloumn"><input name="address"value ="address"type="checkbox" class="choose-column-chbx"><i></i></label>{{agile_lng_translate 'contacts-view' 'Address'}}</a></li>
 	                   <li>
 	       		  			<a href="javascript:void(0);" class="p-b-none">
-								<label class="i-checks i-checks-sm contactcoloumn"><input name="website"value = "website"type="checkbox" class="choose-column-chbx"><i></i></label>Website</a></li> 
+								<label class="i-checks i-checks-sm contactcoloumn"><input name="website"value = "website"type="checkbox" class="choose-column-chbx"><i></i></label>{{agile_lng_translate 'contacts-view' 'Website'}}</a></li> 
 	                    <li>
 	       		  			<a href="javascript:void(0);" class="p-b-none">
-								<label class="i-checks i-checks-sm contactcoloumn"><input name="created_time"value = "created_time"type="checkbox" class="choose-column-chbx"><i></i></label>Created Date</a></li>
+								<label class="i-checks i-checks-sm contactcoloumn"><input name="created_time"value = "created_time"type="checkbox" class="choose-column-chbx"><i></i></label>{{agile_lng_translate 'contacts-view' 'Created Date'}}</a></li>
 	                    <li>
 	       		  			<a href="javascript:void(0);" class="p-b-none">
-								<label class="i-checks i-checks-sm contactcoloumn"><input name="updated_time"value = "updated_time"type="checkbox" class="choose-column-chbx"><i></i></label>Updated Date</a></li>
+								<label class="i-checks i-checks-sm contactcoloumn"><input name="updated_time"value = "updated_time"type="checkbox" class="choose-column-chbx"><i></i></label>{{agile_lng_translate 'contacts-view' 'updated date'}}</a></li>
 	                  <!-- <li>
 	       		  			<a href="javascript:void(0);" class="p-b-none">
 								<label class="i-checks i-checks-sm contactcoloumn"><input name="image"value = "image"type="checkbox" class="choose-column-chbx"><i></i></label>Image</a></li> -->
 	                    <li>
 	       		  			<a href="javascript:void(0);" class="p-b-none">
-								<label class="i-checks i-checks-sm contactcoloumn"><input name="star_value"value = "star_value"type="checkbox" class="choose-column-chbx"><i></i></label>Star value</a></li> 
+								<label class="i-checks i-checks-sm contactcoloumn"><input name="star_value"value = "star_value"type="checkbox" class="choose-column-chbx"><i></i></label>{{agile_lng_translate 'contacts-view' 'Star value'}}</a></li> 
 	                     <li>
 	       		  			<a href="javascript:void(0);" class="p-b-none">
-								<label class="i-checks i-checks-sm contactcoloumn"><input  name="lead_score"value = "lead_score"type="checkbox" class="choose-column-chbx"><i></i></label>Lead Score</a></li>
+								<label class="i-checks i-checks-sm contactcoloumn"><input  name="lead_score"value = "lead_score"type="checkbox" class="choose-column-chbx"><i></i></label>{{agile_lng_translate 'contacts-view' 'Lead score'}}</a></li>
 	                      <li>
 	       		  			<a href="javascript:void(0);" class="p-b-none">
-								<label class="i-checks i-checks-sm contactcoloumn"><input name="lead_owner"value = "lead_owner"type="checkbox" class="choose-column-chbx"><i></i></label>Lead Owner</a></li>
+								<label class="i-checks i-checks-sm contactcoloumn"><input name="lead_owner"value = "lead_owner"type="checkbox" class="choose-column-chbx"><i></i></label>{{agile_lng_translate 'contacts-view' 'Lead owner'}}</a></li>
 	                     <li>
 	       		  			<a href="javascript:void(0);" class="p-b-none">
 								<label class="i-checks i-checks-sm contactcoloumn"><input name="last_contacted" value = "last_contacted"type="checkbox" class="choose-column-chbx"><i></i></label>Last Contacted</a></li>
+						<li>
+	       		  			<a href="javascript:void(0);" class="p-b-none">
+								<label class="i-checks i-checks-sm contactcoloumn"><input name="last_emailed" value = "last_emailed"type="checkbox" class="choose-column-chbx"><i></i></label>Last Emailed</a></li>
+						<li>
+	       		  			<a href="javascript:void(0);" class="p-b-none">
+								<label class="i-checks i-checks-sm contactcoloumn"><input name="last_called" value = "last_called"type="checkbox" class="choose-column-chbx"><i></i></label>Last Called</a></li>
 	                     <div id="custom-fields-group"class="" ></div>
 	                     
 	      			</script>
@@ -418,5 +421,4 @@
 		<label class="i-checks i-checks-sm contactcoloumn"><input name="CUSTOM_{{field_label}}" value="CUSTOM_{{field_label}}"type="checkbox" class="choose-column-chbx"><i></i></label>{{field_label}}</a></li>
 
 </script>
-
 

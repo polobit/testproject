@@ -155,23 +155,26 @@ function saveCallActivitySkype(call){
 	}
 	globalCallForActivity.justSavedCalledIDForActivity = globalCallForActivity.justCalledId;
 	
-	if(!globalCall.contactedId && dialled.using == "dialler"){
+/*	if(!globalCall.contactedId && dialled.using == "dialler"){
 		$.post( "/core/api/widgets/skype/savecallactivity",{
 			direction: call.direction, 
 			phone: call.phone, 
 			status : call.status,
 			duration : call.duration
 			});
-	}
+	}*/
+	
 	if(call.status == "Answered"){
 		return;
 	}
 	
+	var callerObjectId = call.contactId;
+	if(!callerObjectId){
+		return;
+	}
+	
 	if(call.direction == "Outgoing" || call.direction == "outgoing"){
-		var callerObjectId = globalCall.contactedId;
-		if(!callerObjectId){
-			return;
-		}
+
 		$.post( "/core/api/widgets/skype/savecallactivityById",{
 			id:callerObjectId,
 			direction: call.direction, 
@@ -189,7 +192,7 @@ function saveCallActivitySkype(call){
 	}
 }
 
-function saveCallNoteSkype(){
+function saveCallNoteSkype(call){
 	
 	
 	if(	globalCallForActivity.justCalledId == globalCallForActivity.justSavedCalledIDForNote){
@@ -206,6 +209,7 @@ function saveCallNoteSkype(){
 	var number = globalCallForActivity.callNumber;
 	var callId = globalCallForActivity.callId;
 	var duration = globalCallForActivity.duration;
+	var cntId = globalCallForActivity.contactedId;
 	var contact;
 	var id;
 	var desc;
@@ -264,11 +268,10 @@ function saveCallNoteSkype(){
 				agile_type_ahead("note_related_to", el, contacts_typeahead);*/
 	    	}else{
 	    		var note = {"subject" : noteSub, "message" : "", "contactid" : id,"phone": number, "callType": "inbound", "status": callStatus, "duration" : 0 };
-				autosaveNoteByUser(note);
+				autosaveNoteByUser(note,call,"/core/api/widgets/skype");
 	    	}
 	    });
 	}else{
-		var cntId = globalCall.contactedId;
 		if(cntId){
 				if( callStatus == "Answered"){
 					twilioIOSaveContactedTime(cntId);
@@ -301,7 +304,7 @@ function saveCallNoteSkype(){
 					});
 				}else{
 					var note = {"subject" : noteSub, "message" : "", "contactid" : cntId,"phone": number, "callType": "outbound-dial", "status": callStatus, "duration" : 0 };
-					autosaveNoteByUser(note);
+					autosaveNoteByUser(note,call,"/core/api/widgets/skype");
 				}
 		}else{
 				resetCallLogVariables();
@@ -315,7 +318,7 @@ function saveCallNoteSkype(){
     			data.duration = duration;
     			data.contId = null;
     			data.contact_name = "";
-    			data.widget = "Bria";
+    			data.widget = "Skype";
     			CallLogVariables.dynamicData = data;
     		}
 	    		CallLogVariables.callWidget = "Skype";
@@ -325,7 +328,7 @@ function saveCallNoteSkype(){
 	    		CallLogVariables.status = callStatus;
     		
     		return showNewContactModal(number);
-		}
+	}
 	}
 }
 
@@ -342,7 +345,7 @@ function getLogsForSkype(num){
 	var logNumber;
 	var parameter = {};
 	
-	parameter['error_message'] = "There is no phone number or skype id associated with this contact. <a href='#contact-edit' class='text-info' style='color:#23b7e5'>Add phone number or skype id</a>";
+	parameter['error_message'] = _agile_get_translated_val('widgets', 'skype-contact-info')+  " <a href='#contact-edit' class='text-info' style='color:#23b7e5'>"+_agile_get_translated_val('widgets', 'skype-invalid-number')+"</a>";
 	//var contact = agile_crm_get_contact();
 	//parameter['num'] = getPhoneWithSkypeInArray(contact.properties);
 	parameter['num'] = agile_crm_get_contact_properties_list("phone");
@@ -399,10 +402,7 @@ function handleLogsForSkype(message){
 		$('#skype-logs-panel').html(skype_logs_template);
 
 			// Load jquery time ago function to show time ago in logs
-			head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
-			{
-				$(".time-ago", skype_logs_template).timeago();
-			});
+			agileTimeAgoWithLngConversion($(".time-ago", skype_logs_template));
 
 	}, "#skype-logs-panel");
 }

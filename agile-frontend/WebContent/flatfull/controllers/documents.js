@@ -1,17 +1,18 @@
 /**
  * Creates backbone router for Documents create, read and update operations
  */
-var eDocTemplate_Select_View
 var DocumentsRouter = Backbone.Router.extend({
 
 	routes : {
+
+	/* Documents */
 	"documents" : "documents", 
 	"documents/:idtype" : "editdocument",
 	"documents/:idtype/:templateid" : "editdocument",
 	"documents/:contactcompanydealtype/:contactcompanydealtid/:edocattachtype" : "addcontactcompanydealtypedocument",
 	"documents/:contactcompanydealtype/:contactcompanydealtid/:edocattachtype/:templateid" : "adddocument"	
-	},
-	addcontactcompanydealtypedocument:function(contactcompanydealtype,contactcompanydealid,edocattachtype)
+},
+addcontactcompanydealtypedocument:function(contactcompanydealtype,contactcompanydealid,edocattachtype)
 	{
 		if(edocattachtype=="edoc")
 			this.procdoctemplate(edocattachtype,contactcompanydealtype,contactcompanydealid);		
@@ -229,7 +230,11 @@ var DocumentsRouter = Backbone.Router.extend({
 				
 		});
 		}, "#content");
-	}, 
+	},
+	/**
+	 * Fetches all the documents as list. Fetching makes easy to add/get
+	 * document to the list.
+	 */
 	documents : function()
 	{
 		getTemplate('documents-static-container', {}, undefined, function(template_ui) {
@@ -291,29 +296,18 @@ var DocumentsRouter = Backbone.Router.extend({
 					global_sort_key : sortKey, 
 					postRenderCallback : function(col_el)
 					{
-						//includeTimeAgo(el);
-						//updateSortKeyTemplate(sortField, el);
-						includeTimeAgo(el);
-						$(".active").removeClass("active");
-						$("#documentsmenu").addClass("active");
-						$(".documents-collection").on('click', '.document-url', function(e)
-						{
-						var source = e.target || e.srcElement;
-						var id =$(source).attr("data");
-						Backbone.history.navigate('documents/' + id, { trigger : true });
-						});	 
-					}, appendItemCallback : function(el)
-					{
-					// To show timeago for models appended by infini scroll
-					includeTimeAgo(el);
-					}
-					});
+					//includeTimeAgo(el);
+					//updateSortKeyTemplate(sortField, el);
+					$(".active").removeClass("active");
+					$("#documentsmenu").addClass("active");
+					}});
 					App_Documents.DocumentCollectionView.collection.fetch();
 					// Shows deals as list view
 					$("#content").find("#documents_collection_container").html(App_Documents.DocumentCollectionView.el);
 
 	
 	}
+
 });
 
 function renderEachDocumentActivityView(id)

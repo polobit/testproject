@@ -33,7 +33,25 @@ var timeline_entity_loader = {
 		this.load_campaign_logs(contactId);
 		
 		this.get_stats(getPropertyValue(contact.properties, "email"), contact, App_Contacts.contactDetailView.el);
+		//setTimeout(this.load_reload_emails, 5000);
 	},
+	
+	load_reload_emails : function(contactId)
+	{
+		divArr = $('.isotope-item');
+		$.each(divArr,function(index, data){
+			parentEMailDivId = divArr[index].id;
+			childEMailDivId = parentEMailDivId+'-inner';
+			if($('#'+childEMailDivId).length==0){
+				childEMailDivId = parentEMailDivId+'\\/-inner';
+				//$('#'+parentEMailDivId).html($('#'+childEMailDivId).html());
+				$('#'+parentEMailDivId).html($('#'+childEMailDivId).wrapAll('<div>').parent().html());
+				$('#'+childEMailDivId).remove();
+			}
+			//$('#message-'+parentEMailDivId).show();
+		});
+	},
+
 	load_related_entites : function(contactId)
 	{
 		var entity_types = [
@@ -260,7 +278,23 @@ var timeline_entity_loader = {
 				is_mails_fetched = true;
 				is_logs_fetched = false;
 				is_array_urls_fetched = false;
+				var contact_updated_time=0;
+				var web_stats_time=0;
 
+			    try{
+				    if(data!=null && data.toJSON().length > 0){
+				    	if(contact.updated_time!=null){
+					    contact_updated_time = new Date(0).setUTCSeconds(contact.updated_time);
+					    }
+					    if(data.toJSON()[0].stats_time!=null){
+					    web_stats_time = new Date(data.toJSON()[0].stats_time).getTime();
+					   }
+				    }
+			    }
+			    catch(e){
+
+			     }
+            if(contact_updated_time<=web_stats_time){
 				// show_timeline_padcontent(is_logs_fetched, is_mails_fetched,
 				// is_array_urls_fetched);
 
@@ -302,6 +336,7 @@ var timeline_entity_loader = {
 
 					addTagAgile(CODE_SETUP_TAG);
 				}
+			}
 			});
 
 		});

@@ -60,7 +60,7 @@ function populateUsers(id, el ,value, key, callback) {
  * @param dealDetails - dealDetails value
  * @param value - Deal Object
  **/
-function populateTrackMilestones(el, dealsDetails, value, callback, defaultSelectOption, id){
+function populateTrackMilestones(el, dealsDetails, value, callback, defaultSelectOption, id, filter_el, field_name){
 var tracks = new Base_Collection_View({url : '/core/api/milestone/pipelines'});
 	
 	// If id undefined
@@ -70,11 +70,11 @@ var tracks = new Base_Collection_View({url : '/core/api/milestone/pipelines'});
 	tracks.collection.fetch({
 		success: function(data){
 			var jsonModel = data.toJSON();
-			var html = '<option value="">Select...</option>';
+			var html = '<option value="">{{agile_lng_translate "contact-details" "select"}}</option>';
 			console.log(jsonModel);
 			
 			// If there is only one pipeline, select the option by default and hide the field.
-			if(jsonModel.length==1){
+			if(jsonModel.length==1 && !filter_el){
 				var mile = jsonModel[0];
 				$.each(mile.milestones.split(","), function(index,milestone){
 					var json = {id : mile.id, milestone : milestone};
@@ -86,13 +86,24 @@ var tracks = new Base_Collection_View({url : '/core/api/milestone/pipelines'});
 				if(mile.lost_milestone){
 					html += Handlebars.compile('<option value="{{id}}_{{lost_milestone}}" style="display:none;">{{lost_milestone}}</option>')({id : mile.id, lost_milestone : mile.lost_milestone});
 				}
-				$('#' + id, el).closest('.control-group').find('label').html('Milestone<span class="field_req">*</span>');
+				if(!filter_el)
+				{
+					$('#' + id, el).closest('.control-group').find('label').html('{{agile_lng_translate "admin-settings-tasks" "Milestone"}}<span class="field_req">*</span>');
+				}
 			}
 			else {
 				$.each(jsonModel,function(index,mile){
 					console.log(mile.milestones,value);
 					var array = [];
 					html+='<optgroup label="'+mile.name+'">';
+					if(filter_el && value && mile.id == value.pipeline_id && value.milestone == "ALL@MILESTONES")
+					{
+						html += Handlebars.compile('<option selected="selected" value="{{id}}_ALL@MILESTONES">{{name}} - {{agile_lng_translate "subscriber_type" "all"}}</option>')({id : mile.id, name : mile.name});
+					}
+					else if(filter_el)
+					{
+						html += Handlebars.compile('<option value="{{id}}_ALL@MILESTONES">{{name}} - {{agile_lng_translate "subscriber_type" "all"}}</option>')({id : mile.id, name : mile.name});
+					}
 					$.each(mile.milestones.split(","), function(index,milestone){
 						array.push($.trim(this));
 						var json = {id : mile.id, milestone : milestone, name : mile.name};
@@ -106,12 +117,23 @@ var tracks = new Base_Collection_View({url : '/core/api/milestone/pipelines'});
 					}
 					html+='</optgroup>';
 				});
-				$('#' + id, el).closest('.control-group').find('label').html('Track & Milestone<span class="field_req">*</span>');
+				if(!filter_el)
+				{
+					$('#' + id, el).closest('.control-group').find('label').html('{{agile_lng_translate "deals" "track-and-milestone"}}<span class="field_req">*</span>');
+				}
 			}
 			
-			$('#' + id, el).html(html);
-			console.log('adding');
-			$('#' + id, el).closest('div').find('.loading-img').hide();
+			if(!filter_el)
+			{
+				$('#' + id, el).html(html);
+				console.log('adding');
+				$('#' + id, el).closest('div').find('.loading-img').hide();
+			}
+			else
+			{
+				$(filter_el).html("<select class='form-control required' name='"+field_name+"'>"+html+"</select>");
+			}
+			
 
 			// Hide loading bar
 			hideTransitionBar();
@@ -147,7 +169,7 @@ var tracks = new Base_Collection_View({url : '/core/api/milestone/pipelines'});
 		success: function(data){
 			hideTransitionBar();
 			var jsonModel = data.toJSON();
-			var html = '<option value="">Select..</option>';
+			var html = '<option value="">{{agile_lng_translate "contacts-view" "select"}}</option>';
 			console.log(jsonModel);
 			
 			// If there is only one pipeline, select the option by default and hide the field.
@@ -235,7 +257,7 @@ function populateMilestones(el, dealsDetails, pipeline, value, callback, default
 								
 							// If callback is present, it is called to deserialize the select field
 							if (callback && typeof (callback) === "function") {
-								var optionsHtml = '<option value="">Select...</option>';
+								var optionsHtml = '<option value="">{{agile_lng_translate "contact-details" "select"}}</option>';
 								$.each(array, function(index,element){
 									optionsHtml += Handlebars.compile('<option value="{{element}}">{{element}}</option>')({element : element});
 								});
@@ -569,7 +591,7 @@ function populateLostReasons(el, value){
 	tracks.collection.fetch({
 		success: function(data){
 			var jsonModel = data.toJSON();
-			var html = '<option value="">Select...</option>';
+			var html = '<option value="">{{agile_lng_translate "contact-details" "select"}}</option>';
 			console.log(jsonModel);
 			
 			$.each(jsonModel,function(index,lostReason){
@@ -588,18 +610,21 @@ function populateLostReasons(el, value){
 			hideTransitionBar();
 
 			if($('#pipeline_milestone',el).length>0){
-				var temp = $('#pipeline_milestone',el).val();
-				var track = temp.substring(0, temp.indexOf('_'));
-				var milestone = temp.substring(temp.indexOf('_') + 1, temp.length + 1);
-				$('#pipeline_milestone',el).closest('form').find('#pipeline').val(track);
-				$('#pipeline_milestone',el).closest('form').find('#milestone').val(milestone);
-				console.log(track, '-----------', milestone);
 				var lost_milestone_flag = false;
-				$('#pipeline_milestone',el).find('option').each(function(){
-					if($(this).css("display") == "none" && $(this).val() == temp){
-						lost_milestone_flag = true;
-					}
-				});
+				var temp = $('#pipeline_milestone',el).val();
+				if(temp!=""){
+					var track = temp.substring(0, temp.indexOf('_'));
+					var milestone = temp.substring(temp.indexOf('_') + 1, temp.length + 1);
+					$('#pipeline_milestone',el).closest('form').find('#pipeline').val(track);
+					$('#pipeline_milestone',el).closest('form').find('#milestone').val(milestone);
+					console.log(track, '-----------', milestone);
+					
+					$('#pipeline_milestone',el).find('option').each(function(){
+						if($(this).css("display") == "none" && $(this).val() == temp){
+							lost_milestone_flag = true;
+						}
+					});
+				}
 				if(lost_milestone_flag && $('#lost_reason',$('#pipeline_milestone',el).closest('.modal')).find('option').length>1){
 					$('#deal_lost_reason',$('#pipeline_milestone',el).closest('.modal')).removeClass("hidden");
 				}else{
@@ -1137,7 +1162,7 @@ function populateDealSources(el, value){
 	tracks.collection.fetch({
 		success: function(data){
 			var jsonModel = data.toJSON();
-			var html = '<option value="">Select...</option>';
+			var html = '<option value="">{{agile_lng_translate "contact-details" "select"}}</option>';
 			console.log(jsonModel);
 			
 			$.each(jsonModel,function(index,dealSource){
@@ -1169,30 +1194,26 @@ function populateDealSources(el, value){
  */
 function fetchDealsList(data){
 	var filters_collection = data;
-	var dealTag = null ; var url = null;
+	var dealTag;
     if(!filters_collection && App_Deals.deal_filters && App_Deals.deal_filters.collection)
     {
     	filters_collection = App_Deals.deal_filters.collection;
     }
-    if(filters_collection.dealToFilter){
+    if(filters_collection.dealToFilter)
+    {
 		dealTag = filters_collection.dealToFilter ;
 	}
     setNewDealFilters(filters_collection);
 	var query = ''
-    if (_agile_get_prefs('deal-filters'))
+	var url = 'core/api/deal/filters/query/list/'+_agile_get_prefs('deal-filter-name')+'?order_by='+getDealSortFilter();
+    
+    if(dealTag)
     {
-    	if(dealTag){
-    		url = "core/api/opportunity/based/tags?tag="+dealTag ;
-			$('#opportunity-listners').find("#opp-header").after('<ul id="added-tags-ul" class="tagsinput inline v-top m-b-sm p-n" style="margin-left:10px;"><li class="inline-block tag btn btn-xs btn-primary" data='+dealTag+'><span>'+dealTag+'<a href="#deals" class="anchor close m-l-xs pull-right">×</a></span></li></ul>');
-		}
-		else{
-			query = '&filters=' + encodeURIComponent(getDealFilters());
-			url = 'core/api/opportunity/based?pipeline_id=' + pipeline_id + query ;
-		}
-    }   	
-
+    	url = 'core/api/deal/filters/query/list/tags/'+dealTag+'?order_by='+getDealSortFilter();
+		$('#opportunity-listners').find("#opp-header").after('<ul id="added-tags-ul" class="tagsinput inline v-top m-b-sm p-n" style="margin-left:10px;"><li class="inline-block tag btn btn-xs btn-primary" data='+dealTag+'><span>'+dealTag+'<a href="#deals" class="anchor close m-l-xs pull-right">×</a></span></li></ul>');
+	}
     // Fetches deals as list
-    App_Deals.opportunityCollectionView = new Deals_Milestone_Events_Collection_View({ url : url,
+    App_Deals.opportunityCollectionView = new Deals_Milestone_Events_Collection_View({ url : '' + url,
         templateKey : "opportunities", individual_tag_name : 'tr', sort_collection : false, cursor : true, page_size : 25,
         postRenderCallback : function(el)
         {
@@ -1365,7 +1386,7 @@ function setupTracksAndMilestones(el){
 				}
 				if(is_first_track)
 				{
-					$('#new-track-list-paging').find('#moving-tracks').html("<div style='font-size:18px;' class='m-t-xs'>Tracks & Milestones</div>");
+					$('#new-track-list-paging').find('#moving-tracks').html("<div style='font-size:18px;' class='m-t-xs'>{{agile_lng_translate 'deals' 'tracks-and-milestone'}}</div>");
 					style_class += " m-t-sm";
 					is_first_track = false;
 				}

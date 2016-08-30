@@ -14,6 +14,15 @@ $(function()
 						$('#direct-dialler-div').html($(template_ui));
 						$("#direct-dialler-div").css({'left':x,'top': y});
 						$("#direct-dialler-div").show();
+						
+						var selectedWidget = _agile_get_prefs("dial-default-widget");
+						if(selectedWidget){
+						  	var value = selectedWidget;
+						  	var html = getIcon(value);
+						  	$("#dialler-widget-name-span").html(html);
+						  	$("#dialler-widget-name-span").attr("value",value);
+						}
+						
 						$.each(default_call_option.callOption, function(i, obj){
 							var name = widgetCallName[obj.name];
 							$(".dialler-widget-name-" + name).show();
@@ -49,6 +58,7 @@ $(function()
 			{
 			  	e.preventDefault();
 			  	$("#dail_phone_number").val("");
+			  	$("#clear-dialler").hide();
 			});
 	
 	$('#agilecrm-container #direct-dialler-div').on('click', '.dialler-widget-li', function(e)
@@ -58,6 +68,8 @@ $(function()
 			  	var value = $(this).find("a").attr("value");
 			  	$("#dialler-widget-name-span").html(html);
 			  	$("#dialler-widget-name-span").attr("value",value);
+			  	
+			  	_agile_set_prefs("dial-default-widget", value);
 			});
 	
 	
@@ -75,6 +87,16 @@ $(function()
     			
     			$("#dialler-phone-number-form").submit();
     		}
+
+	});
+	
+	$('#agilecrm-container #direct-dialler-div').on('keyup', '#dail_phone_number', function(e) {
+    	var value = $("#dail_phone_number").val();
+    	if(!value){
+    		$("#clear-dialler").hide();
+    	}else{
+    		$("#clear-dialler").show();
+    	}
 	});
 	
 	$('#agilecrm-container #direct-dialler-div').on('click', '.dial-number', function(e)
@@ -119,6 +141,7 @@ $(function()
 			{
 			  	e.preventDefault();
 			  	insertValueInAt("#dail_phone_number","0");
+			  	$("#clear-dialler").show();
 			  	//var newText = appendToText("#dail_phone_number",0);
 			  	//$("#dail_phone_number").val(newText);
 			});
@@ -128,6 +151,7 @@ $(function()
 			{
 			  	e.preventDefault();
 			  	insertValueInAt("#dail_phone_number","1");
+			  	$("#clear-dialler").show();
 			  	/*var newText = appendToText("#dail_phone_number",1);
 			  	$("#dail_phone_number").val(newText);*/
 			});
@@ -135,6 +159,7 @@ $(function()
 			{
 			  	e.preventDefault();
 			  	insertValueInAt("#dail_phone_number","2");
+			  	$("#clear-dialler").show();
 			  	/*var newText = appendToText("#dail_phone_number",2);
 			  	$("#dail_phone_number").val(newText);*/
 			});
@@ -142,7 +167,8 @@ $(function()
 			{
 			  	e.preventDefault();
 			  	insertValueInAt("#dail_phone_number","3");
-			 /* 	var newText = appendToText("#dail_phone_number",3);
+			  	$("#clear-dialler").show();
+			  	/* 	var newText = appendToText("#dail_phone_number",3);
 			  	$("#dail_phone_number").val(newText);*/
 			  	
 			});
@@ -150,6 +176,7 @@ $(function()
 			{
 			  	e.preventDefault();
 			  	insertValueInAt("#dail_phone_number","4");
+			  	$("#clear-dialler").show();
 			  	/*var newText = appendToText("#dail_phone_number",4);
 			  	$("#dail_phone_number").val(newText);*/
 			  	
@@ -158,7 +185,8 @@ $(function()
 			{
 			  	e.preventDefault();
 			  	insertValueInAt("#dail_phone_number","5");
-			/*  	var newText = appendToText("#dail_phone_number",5);
+			  	$("#clear-dialler").show();
+			  	/*  	var newText = appendToText("#dail_phone_number",5);
 			  	$("#dail_phone_number").val(newText);*/
 			  	
 			});
@@ -166,6 +194,7 @@ $(function()
 			{
 			  	e.preventDefault();
 			  	insertValueInAt("#dail_phone_number","6");
+			  	$("#clear-dialler").show();
 			  	/*var newText = appendToText("#dail_phone_number",6);
 			  	$("#dail_phone_number").val(newText);*/
 			  	
@@ -174,7 +203,8 @@ $(function()
 			{
 			  	e.preventDefault();
 			  	insertValueInAt("#dail_phone_number","7");
-			  /*	var newText = appendToText("#dail_phone_number",7);
+			  	$("#clear-dialler").show();
+			  	/*	var newText = appendToText("#dail_phone_number",7);
 			  	$("#dail_phone_number").val(newText);*/
 			  	
 			});
@@ -182,6 +212,7 @@ $(function()
 			{
 			  	e.preventDefault();
 			  	insertValueInAt("#dail_phone_number","8");
+			  	$("#clear-dialler").show();
 			  	/*var newText = appendToText("#dail_phone_number",8);
 			  	$("#dail_phone_number").val(newText);*/
 			  	
@@ -190,6 +221,7 @@ $(function()
 			{
 			  	e.preventDefault();
 			  	insertValueInAt("#dail_phone_number","9");
+			  	$("#clear-dialler").show();
 			  	/*var newText = appendToText("#dail_phone_number",9);
 			  	$("#dail_phone_number").val(newText);*/
 			  	
@@ -198,6 +230,7 @@ $(function()
 			{
 			  	e.preventDefault();
 			  	insertValueInAt("#dail_phone_number","*");
+			  	$("#clear-dialler").show();
 			  	/*var newText = appendToText("#dail_phone_number","*");
 			  	$("#dail_phone_number").val(newText);*/
 			  	
@@ -207,6 +240,7 @@ $(function()
 			  	e.preventDefault();
 			  	
 			  	insertValueInAt("#dail_phone_number","#");
+			  	$("#clear-dialler").show();
 			  	/*var newText = appendToText("#dail_phone_number","#");
 			  	$("#dail_phone_number").val(newText);*/
 			  	
@@ -361,7 +395,7 @@ function dialFromSip(to,from,contact){
 	{
 		if(contact){
 			User_Name = getContactName(contact);
-			User_Number = removeBracesFromNumber(phone);
+			User_Number = removeBracesFromNumber(to);
 			User_Img = getGravatar(contact.properties, 40);
 			User_ID = contact.id;
 			SIP_Call_Noty_IMG = addSipContactImg();
@@ -382,14 +416,15 @@ function dialFromSip(to,from,contact){
 }
 
 function getIcon(widgetName){
-	
+	var icon = "";
 	if(widgetName == "Twilio"){
-		icon = "<img src='/widgets/twilio-small-logo.png' style='width: 20px; height: 20px;' data-toggle='tooltip' data-placement='top' title='' data-original-title='Twilio' >";
+		icon = "<img src='/widgets/twilio-small-logo.png' style='width: 20px; height: 20px; margin-right: 5px;' data-toggle='tooltip' data-placement='top' title='' data-original-title='Twilio' >Twilio";
 	}else if(widgetName == "Sip"){
-		icon = "<img src='/widgets/sip-logo-small.png' style='width: 20px; height: 20px;' data-toggle='tooltip' data-placement='top' title='' data-original-title='Sip' >";
+		icon = "<img src='/widgets/sip-logo-small.png' style='width: 20px; height: 20px; margin-right: 5px;' data-toggle='tooltip' data-placement='top' title='' data-original-title='Sip' >SIP";
 	}else if(widgetName == "Bria"){
-		icon = "<img src='/img/plugins/bria-call.png' style='width: 20px; height: 20px;' data-toggle='tooltip' data-placement='top' title='' data-original-title='Bria' >";
+		icon = "<img src='/img/plugins/bria-call.png' style='width: 20px; height: 20px; margin-right: 5px;' data-toggle='tooltip' data-placement='top' title='' data-original-title='Bria' >Bria";
 	}else if(widgetName == "Skype"){
-		icon = "<img src='/img/plugins/skype-call.png' style='width: 24px; height: 24px;' data-toggle='tooltip' data-placement='top' title='' data-original-title='Skype' >";
+		icon = "<img src='/img/plugins/skype-call.png' style='width: 24px; height: 24px; margin-right: 5px;' data-toggle='tooltip' data-placement='top' title='' data-original-title='Skype' >Skype";
 	}
+	return icon;
 }

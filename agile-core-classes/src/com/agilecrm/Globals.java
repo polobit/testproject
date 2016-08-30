@@ -5,7 +5,7 @@ public class Globals
     public static String[] URLS = { "agilecrm.com", "helptor.com", "-dot-sandbox-dot-agile-crm-cloud.appspot.com",
 	    "-dot-sandbox-dot-agilecrmbeta.appspot.com", "-dot-addon-dot-agilecrmbeta.appspot.com",
 	    "-dot-mcsandbox-dot-agile-crm-cloud.appspot.com", "-dot-sandbox-dot-agilesanbox.appspot.com",
-	    "agilesanbox.com", "-dot-newui-dot-agilecrmbeta.appspot.com", "-dot-async-dot-agilecrmbeta.appspot.com" };
+	    "agilesanbox.com", "-dot-newui-dot-agilecrmbeta.appspot.com", "-dot-async-dot-agilecrmbeta.appspot.com", "-dot-core-dot-agilecrmbeta.appspot.com" };
 
     public static String SUB_VERSION_URL = "-dot-agile-crm-cloud.appspot.com";
 
@@ -152,7 +152,7 @@ public class Globals
     public static final String FACEBOOK_APP_SECRET = "4b2d379cbb6c33a0bdab9a89dc2bb2c5";
 
     // Max Plan Users
-    public static final int TRIAL_USERS_COUNT = 2;
+    public static final int TRIAL_USERS_COUNT = 10;
 
     // Cheat Code
     public static final String MASTER_CODE_INTO_SYSTEM = "AgileRocks#@!";

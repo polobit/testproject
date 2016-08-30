@@ -4,10 +4,10 @@
 var Document_Collection_Events = Base_Collection_View.extend({
 	
 	events: {
-		'click #documents-model-list > tr > td:not(":first-child")': 'onDocumentListSelect',	
+		
+		'click #documents-model-list > tr > td:not(":first-child")': 'onDocumentListSelect',
 		'click .document-url': 'onDocumentSelect',		
 	},
-
 	onDocumentSelect : function(e){
 			var source = e.target || e.srcElement;
 						var id =$(source).attr("data");
@@ -24,9 +24,24 @@ var Document_Collection_Events = Base_Collection_View.extend({
      	 	updateDocument($(e.currentTarget).closest('tr').data());
      	 }
 	},
+	onAddDocument: function(e){
+					e.preventDefault();
+
+					// Show modal
+					$('#uploadDocumentModal').html(getTemplate("upload-document-modal", {})).modal('show');
+				
+					// Add type a head actions
+					var el = $("#uploadDocumentForm");
+					// Contacts type-ahead
+					agile_type_ahead("document_relates_to_contacts", el, contacts_typeahead);
+					
+					// Deals type-ahead
+					agile_type_ahead("document_relates_to_deals", el, deals_typeahead, false,null,null,"core/api/search/deals",false, true);
+				},
 
 });
-  
+
+
 var Document_Model_Events = Base_Model_View.extend({
  			events: {
  						'click #sort_menu > li': 'documentsSort',
@@ -72,7 +87,8 @@ var Document_Model_Events = Base_Model_View.extend({
 					// Deals type-ahead
 					agile_type_ahead("document_relates_to_deals", el, deals_typeahead, false,null,null,"core/api/search/deals",false, true);
 				},
-			});  
+			});
+  
 /** Modal event initializer **/
 $(function(){
 
@@ -213,15 +229,14 @@ function saveDocument(form_id, modal_id, saveBtn, isUpdate, json, contact_id)
 			
 			return false;
 		}
-		
 		if(json.doc_type!="SENDDOC")
-		{		
+		{	
 			var url = $('#' + form_id).find('#upload_url').val();
 			if(url == "")
 			{
 				$('#' + form_id).find('#network_type').closest(".controls").find(".icon-ok").css("display", "none");
 				$('#' + form_id).find('#network_type').closest(".controls").find("div.link").css("background-color", "#FFFFFF");
-				$('#' + form_id).find('#error').html('<div class="alert alert-danger">Sorry! Document not attached properly.</div>');
+				$('#' + form_id).find('#error').html('<div class="alert alert-danger col-sm-offset-3 col-sm-7">{{agile_lng_translate "documents" "not-attached"}}</div>');
 				enable_save_button($(saveBtn));
 				return;
 			}
@@ -235,19 +250,17 @@ function saveDocument(form_id, modal_id, saveBtn, isUpdate, json, contact_id)
 				enable_save_button($(saveBtn));
 				return;
 			}
-		}
+		}	
 	}
 	
 	var newDocument = new Backbone.Model();
 	newDocument.url = 'core/api/documents';
 	newDocument.save(json, {
-		error : function(er)
-		{
-			console.log(er);
-		},
 		success : function(data) {
 			// reset document size 
 			CUSTOM_DOCUMENT_SIZE = 0;
+
+			
 			var document = data.toJSON();
 			if(document.doc_type=="SENDDOC")
 			{
@@ -258,6 +271,7 @@ function saveDocument(form_id, modal_id, saveBtn, isUpdate, json, contact_id)
 			var id=$('#' + form_id).find("#id")
 			$(id).attr("name","id");
 			$(id).val(data.toJSON().id);
+
 			// While attaching document is from existing documenst list, no need of form verification.
 			/*if(form_id)
 			{
@@ -267,7 +281,9 @@ function saveDocument(form_id, modal_id, saveBtn, isUpdate, json, contact_id)
 				$('#' + form_id).find("#upload_url").val("");
 				$('#' + form_id).find("#extension").val("");
 				
-				
+				$('#' + form_id).each(function() {
+					this.reset();
+				});
 			}*/
 			
 			//$('#' + modalId).find('span.save-status img').remove();
@@ -277,7 +293,6 @@ function saveDocument(form_id, modal_id, saveBtn, isUpdate, json, contact_id)
 			
 			add_recent_view(new BaseModel(document));
 			
-			// Updates data to timeline
 			if (App_Contacts.contactDetailView)
 			{
 					if(Current_Route.indexOf( "contact")>-1)	
@@ -473,7 +488,6 @@ function saveDocument(form_id, modal_id, saveBtn, isUpdate, json, contact_id)
 				}
 				
 			}
-
 		},
 		error : function(model, response)
 		{
@@ -485,6 +499,11 @@ function saveDocument(form_id, modal_id, saveBtn, isUpdate, json, contact_id)
 				{
 					// Removes the contact id from related to contacts
 					json.contact_ids.splice(json.contact_ids.indexOf(contact_id), 1);
+				}
+				if(!modal_id && json && json.deal_ids && App_Deal_Details.dealDetailView && Current_Route == "deal/"+ App_Deal_Details.dealDetailView.model.id)
+				{
+					// Removes the contact id from related to contacts
+					json.deal_ids.splice(json.deal_ids.indexOf(App_Deal_Details.dealDetailView.model.id), 1);
 				}
 				var $ele = saveBtn.parent().find(".save-status");
 				$ele.html("<i style='color:#B94A48;'>"+Handlebars.compile('{{name}}')({name : response.responseText})+"</i>");
@@ -518,4 +537,33 @@ function saveAttachmentBlobKey(blobKey,fileName)
 	var el = $('#emailForm').find(".attachment-document-select");
 	$('#emailForm').find(".attachment-document-select").css('display','none');
 	$("#emailForm").find("#agile_attachment_name").val(fileName);
+}
+
+function documentsCollection(sortField)
+{
+	App_Documents.DocumentCollectionView = new Document_Collection_Events({ 
+			url : 'core/api/documents',
+			sort_collection : false ,
+			templateKey : "documents",
+			cursor : true,
+			page_size : 20,
+			individual_tag_name : 'tr',
+			order_by : sortField,
+			postRenderCallback : function(el)
+			{
+				includeTimeAgo(el);
+				updateSortKeyTemplate(sortField, el);
+				$('#documents_collection').html(documentscollection);
+				$(".active").removeClass("active");
+				$("#documentsmenu").addClass("active");
+				
+			}, appendItemCallback : function(el)
+			{
+				// To show timeago for models appended by infini scroll
+				includeTimeAgo(el);
+			} });
+
+		App_Documents.DocumentCollectionView.collection.fetch();
+		// Shows deals as list view
+		var documentscollection = App_Documents.DocumentCollectionView.render().el;
 }

@@ -348,8 +348,12 @@ html[dir=rtl] .wrapper,html[dir=rtl] .container,html[dir=rtl] label {
 			    if(StringUtils.equalsIgnoreCase(email.trim(), hiddenEmail.trim()))
 			    	email = hiddenEmail;
 
+			    String is_unsubscribe_email_disabled = request.getParameter("is_unsubscribe_email_disabled");
+			    System.out.println("Is Unsubscribe Email Disabled :"+is_unsubscribe_email_disabled);
+			    
 			    String unsubscribe_subject = request.getParameter("unsubscribe_subject");
 			    System.out.println("Unsubscribe subject"+unsubscribe_subject);
+			    
 			    // Used to send as from name in confirmation email
 			    String company = request.getParameter("company");
 
@@ -501,8 +505,12 @@ html[dir=rtl] .wrapper,html[dir=rtl] .container,html[dir=rtl] label {
 						}
 					 	// Add unsubscribe log
 						UnsubscribeStatusUtil.addUnsubscribeLog(campaignId, contactId, "Unsubscribed from campaign " + campaign_name);
-						if(map.size() != 0)
-						   SendMail.sendMail(email, subjectMessage, SendMail.UNSUBSCRIBE_CONFIRMATION , map, StringUtils.isBlank(fromEmail) ? "noreply@agilecrm.com" : fromEmail, company);
+						if(map.size() != 0){
+							if(!(is_unsubscribe_email_disabled !=null && is_unsubscribe_email_disabled.trim().equalsIgnoreCase("true"))){
+								SendMail.sendMail(email, subjectMessage, SendMail.UNSUBSCRIBE_CONFIRMATION , map, StringUtils.isBlank(fromEmail) ? "noreply@agilecrm.com" : fromEmail, company);
+								System.out.println("Email sent successfully...");
+							}
+						}
 					}
 					catch (Exception e)
 					{

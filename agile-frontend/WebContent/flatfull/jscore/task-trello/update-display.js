@@ -4,7 +4,8 @@ function displaySettings()
 	// Creates normal time.
 	displayTimeAgo($(".task-trello-list"));
 
-	$(".listed-task").parent().addClass("task-striped");
+	$(".listed-task").parent().addClass("task-striped m-xs m-r-sm");
+	$(".task-striped").css("padding","0px")
 
 	// Get selected criteria
 	var criteria = getCriteria();
@@ -187,8 +188,7 @@ function addTaskCount(target)
 function displayTaskCount(count, heading, owner_id)
 {
 	if (count == 0)
-		count = "";
-
+		count=0;
 	if (owner_id)
 	{
 		$("span[id='task-count-" + heading + "-" + owner_id + "']").html(count);
@@ -333,7 +333,7 @@ function adjustHeightOfTaskListAndScroll()
 	var bodyheight = $(window).height();
 
 	$("#new-task-list-based-condition").height(bodyheight - 155);
-	$(".list-tasks").css('max-height', bodyheight - 245);
+	$(".list-tasks").css('max-height', bodyheight - 198);
 }
 
 /**
@@ -599,11 +599,10 @@ function displayCalendarView()
 
 	$('#'+calendarView,$('#calendarTasksButtons')).addClass('bg-light');
 
-	head.js(LIB_PATH + 'lib/jquery-ui.min.js', LIB_PATH + 'lib/fullcalendar.min.js', function()
-	{
+	_agile_library_loader.load_fullcalendar_libs(function(){
 		$('#task-calendar-based-condition').html("");
 		getCalendarView();
 		initilizeTasksCalendarViewListeners();
-	});
 
+	});
 }

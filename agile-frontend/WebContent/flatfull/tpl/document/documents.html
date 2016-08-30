@@ -5,9 +5,9 @@
 <div class="row">
 <div id="documents_collection_container" class="col-md-9 col-sm-9" ></div>
 <div class="col-md-3">
-        <div class="data-block documents-activities">
-                    
-                      
+        <div class="data-block  documents-activities">
+                
+            
         </div>
     </div>
     </div>
@@ -19,14 +19,14 @@
 <div class="btn-toolbar m-l-none">
 <div class="btn-group dropdown m-l-none documentsheading" style="float:none;">
 <div>
-<h3 class="pull-left font-thin h3">Documents </h3></div>
+<h3 class="pull-left font-thin h3">{{agile_lng_translate 'deal-view' 'documents'}} </h3></div>
     <div class="btn-group   p-t-n-sm workflow-sortby">
                 <div class="btn-group dropdown">
                                 <button class="btn btn-sm no-shadow p-n b-n bg-transparent text-base" style="font-size: 11px;" data-toggle="dropdown" id="contact-sort">
-                                        <span class="text-muted">Sort by </span>
+                                        <span class="text-muted">{{agile_lng_translate 'contacts-view' 'sort-by'}} </span>
                                         <span class="sort-field-txt">
-                                        {{#if_equals_sork_key sortKey 'dummy_name' }}Name{{/if_equals_sork_key}}
-        {{#if_equals_sork_key sortKey 'uploaded_time' }}Uploaded Time{{/if_equals_sork_key}}</span>
+                                        {{#if_equals_sork_key sortKey 'dummy_name' }}{{agile_lng_translate 'deal-view' 'name'}}{{/if_equals_sork_key}}
+        {{#if_equals_sork_key sortKey 'uploaded_time' }}{{agile_lng_translate 'documents' 'uploaded-time'}}{{/if_equals_sork_key}}</span>
                                     </button>
                                     <button class="btn btn-sm no-shadow dropdown-toggle bg-transparent b-n p-t-none p-b-none p-l-xs" data-toggle="dropdown" aria-expanded="false">
                                         <span class="caret"></span>
@@ -34,43 +34,36 @@
                                     <ul class="dropdown-menu " id="sort_menu" role="menu">
                                         <li>
                                         <a class="sort-link sort-field pos-rlt text-ellipsis" style="width:185px;" href="javascript:void(0);" data="dummy_name" label_name="dummy_name">
-                                        Name
+                                        {{agile_lng_translate 'deal-view' 'name'}}
                                             <i class="fa fa-check pos-abs pos-r-sm txt-small m-t-xs sort-field-check  
                                 {{#if_equals_sork_key sortKey 'dummy_name'}}{{else}}display-none {{/if_equals_sork_key}}"></i> 
                                             </a>
                                     </li>
                                     <li>
                                         <a class="sort-link sort-field pos-rlt text-ellipsis" style="width:185px;" href="javascript:void(0);" data="uploaded_time" label_name="uploaded_time">
-                                        Uploaded Time
+                                        {{agile_lng_translate 'documents' 'uploaded-time'}}
                         <i class="fa fa-check pos-abs pos-r-sm txt-small m-t-xs sort-field-check 
                 {{#if_equals_sork_key sortKey 'uploaded_time'}}{{else}}display-none {{/if_equals_sork_key}}"></i> 
                                         </a>
                                     </li>
                                     <li class="divider" id="sort-divider"></li>
                                             <li>
-                                                <a class="order-by pos-rlt" data="" href="javascript:void(0);">Ascending 
+                                                <a class="order-by pos-rlt" data="" href="javascript:void(0);">{{agile_lng_translate 'contacts-view' 'ascending'}} 
                         <i class="fa fa-check pos-abs pos-r-sm txt-small m-t-xs sort-by-check  
                         {{#if_asc_sork_key sortKey}}{{else}}display-none {{/if_asc_sork_key}}"></i> </a>
                                             </li>
-                                            <li><a class="order-by pos-rlt" data="-" href="javascript:void(0);">Descending  
+                                            <li><a class="order-by pos-rlt" data="-" href="javascript:void(0);">{{agile_lng_translate 'contacts-view' 'descending'}}  
             <i class="fa fa-check pos-abs pos-r-sm txt-small m-t-xs sort-by-check 
             {{#if_asc_sork_key sortKey}}display-none{{else}} {{/if_asc_sork_key}}"></i> </a></li>
                                     </ul>
                                     </div>
                                     </div>
                                     </div>
-                                    <div class="btn-group  pull-right ">
-                                        <a href="#documents/attachment" class="btn btn-default btn-sm documents-add m-t-xs" class1="btn btn-default btn-sm"><i class="icon-plus-sign"></i> Add Document</a>
-                                        <a class="btn btn-default btn-sm dropdown-toggle m-t-xs" data-toggle="dropdown"><span class="caret"></span></a>
+                                    <div class="pull-right m-t-xs" id="document-add">
+            <a href="#documents-add" class="documents-add btn btn-default btn-addon  btn-sm"><i class="fa fa-plus-circle" /> {{agile_lng_translate 'deal-view' 'add-document'}}</a>
 
-                                        <ul class="dropdown-menu pull-right" style="margin-top:3px;">
-                                            <li style="padding:0px 0px;border:0px;"><a href="#documents/edoc" class="edocuments-add">Add eDocument</a></li>
-                                            <li class="divider"></li>
-                                            <li style="padding:0px 0px;border:0px;"><a href="#document-templates" class="edocuments-add">Add Templates</a></li>
-                                        </ul>
-                                        <div class="clearfix"></div>
-                                    </div>
-                                    
+            <div class="clearfix"></div>
+    </div>
 </div>
 </script>
 <script id="documents-send-mail-template" type="text/html">
@@ -86,76 +79,40 @@
 <tbody><tr><td align="center" valign="middle" style="font-size:16px;padding:11px 25px"><a title="Open the document" href="{{domain}}.agilecrm.com/sendemail/document/{{document_id}}/{{contact_id}}"  style="line-height:100%;text-align:center;text-decoration:none;color:#ffffff;word-wrap:break-word;text-transform:uppercase" target="_blank">Open the document</a>
 </td></tr></tbody></table></td></tr></tbody></table></td><td width="40"></td></tr></tbody></table></td></tr><tr><td width="480"  height="50"></td></tr></tbody></table>
 </script>
-<script id="documents-load-template" type="text/html">
-<div class="custom-animated custom-fadeInUp">
-    <div class="wrapper-md lter bg-light b-b">
-            <div class="row">
-                <div class="col-md-12" id="document-add">
-                        <h3 class="pull-left font-thin h3">Documents</h3>
-                        <div class="btn-group  pull-right ">
-                                <a href="#documents/attachment" class="btn btn-default btn-sm documents-add m-t-xs" class1="btn btn-default btn-sm"><i class="icon-plus-sign"></i> Add Document</a>
-                                <a class="btn btn-default btn-sm dropdown-toggle m-t-xs" data-toggle="dropdown"><span class="caret"></span></a>
-
-                                <ul class="dropdown-menu pull-right" style="margin-top:3px;">
-                                    <li style="padding:0px 0px;border:0px;"><a href="#documents/edoc" class="edocuments-add">Add eDocument</a></li>
-                                    <li class="divider"></li>
-                                    <li style="padding:0px 0px;border:0px;"><a href="#document-templates" class="edocuments-add">Add Templates</a></li>
-                                </ul>
-                        </div>
-                        <div class="clearfix"></div>
-                </div>
-            </div>
-    </div>
-    <div class="wrapper-md">
-        <div class="row">
-            <div class="col-md-9 p-r-none">
-                <div class="data-block documents-list">
-                    
-                      
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="data-block documents-activities">
-                    
-                      
-                </div>
-
-            </div>
-        </div>
-    </div>
-</div>
-
-</script>
 <script id="documents-collection-template" type="text/html">
-{{#unless this.length}}
-        <div class="alert bg-white documents-collection">
+
+        {{#unless this.length}}
+        <div class="col-md-12 documents-collection">
+        <div class="alert bg-white">
             <div class="slate-content  p-md">
                 <div class="box-left pull-left m-r-md">
                     <img alt="Clipboard" src="{{getS3ImagePath '/img/clipboard.png'}}" />
                 </div>
                 <div class="box-right pull-left">
-                    <h4 class="m-t-none">There are no documents </h3>
+                    <h4 class="m-t-none">{{agile_lng_translate 'documents' 'there-are-no-documents'}} </h3>
                     <div class="text">
-                        You can add document by clicking the button below or the one on the right side of the page.
+                        {{agile_lng_translate 'documents' 'you-can-add-document-by-clicking'}}
                     </div>
-                    <a href="#documents/edoc" class="edocuments-add btn btn-default btn-addon btn-sm m-t-xs"><i class="fa fa-plus-circle" /> Add eDocument</a> <a href="#documents/attachment" class="documents-add btn btn-default btn-addon  btn-sm m-t-xs m-l-xs"><i class="fa fa-plus-circle"></i>  Add Document</a>
+                    <a href="#documents/edoc" class="edocuments-add btn btn-default btn-addon btn-sm m-t-xs"><i class="fa fa-plus-circle" /> {{agile_lng_translate 'deal-view' 'add-edocument'}}</a> <a href="#documents/attachment" class="documents-add btn btn-default btn-addon  btn-sm m-t-xs m-l-xs"><i class="fa fa-plus-circle"></i>  {{agile_lng_translate 'deal-view' 'add-document'}}</a>
                 </div>
                 <div class="clearfix">
                 </div>
             </div>
         </div>
+        </div>
         {{/unless}}
         {{#if this.length}}
+          
             <div class="panel panel-default  documents-collection">
-                <div class="panel-heading">Documents List</div>
+                <div class="panel-heading"> {{agile_lng_translate 'documents' 'documents-list'}}</div>
                 <div class="table-responsive" style="overflow:hidden;">
-                <table data-resizable-columns-id="document-list" class="table table-striped tableHeader showCheckboxes m-b-none panel agile-table table-layout-mob-view" url="core/api/documents/bulk" id="document-list" style="table-layout:auto">
+                <table class="table table-striped showCheckboxes m-b-none panel agile-table table-layout-mob-view no-sorting" url="core/api/documents/bulk" id="document-list"  style="table-layout:auto">
                     <thead>
                         <tr>
-                            <th style="width:24%" data-resizable-column-id="title">Title</th>
-                            <th style="width:24%" data-resizable-column-id="related_contacts">Related Contacts</th>
-                            <th style="width:24%" data-resizable-column-id="uploaded_date">Uploaded Date</th>
-                            <th style="width:24%" data-resizable-column-id="owner">Owner</th>
+                            <th style="width:30%">{{agile_lng_translate 'report-add' 'title'}}</th>
+                            <th style="width:30%">{{agile_lng_translate 'documents' 'related-contacts'}}</th>
+                            <th style="width:20%">{{agile_lng_translate 'documents' 'uploaded-date'}}</th>
+                            <th style="width:20%">{{agile_lng_translate 'contact-details' 'owner'}}</th>
                         </tr>
                     </thead>
                     <tbody id="documents-model-list" class="c-p">
@@ -163,14 +120,16 @@
                 </table>
                 </div>
             </div>
+        
         {{/if}}
+    
 </script>
 
 <script id="documents-model-template" type="text/html">
 <td data="{{id}}" class="data">
-<div class="pull-left inline-block table-resp line-clamp line-clamp-3" title="{{name}}" style="max-width:90%;width:20em;"><a class="text-cap document-url" href="#documents/{{id}}" data="{{id}}">{{name}}</a></div>
+<div class="pull-left inline-block table-resp line-clamp line-clamp-3"  title="{{name}}"  style="max-width:90%;width:auto;"><a class="text-cap document-url" href="#documents/{{id}}" data="{{id}}">{{name}}</a></div>
 <div class="pull-left m-l-xs">
-<b class="activate-link" style="display:none;">{{#if url}}<a href="{{url}}" target="_blank"><i class="icon-external-link" title="Open Document"></i></a>{{/if}}</b>
+<b class="activate-link" style="display:none;">{{#if url}}<a href="{{url}}" target="_blank"><i class="icon-external-link" title="{{agile_lng_translate 'documents' 'open-document'}}"></i></a>{{/if}}</b>
 </div>
 <div class="clearfix"></div>
 </div>
@@ -179,7 +138,7 @@
     </div>
 </td>
 <td class="overflow-hidden no-wrap">
-<div class="text-ellipsis inline-block">
+    <div class="text-ellipsis inline-block">
 <div  style="width:128px">
         {{#each contacts}}
             {{#if_contact_type "PERSON"}}
@@ -219,7 +178,7 @@
         {{#unless this.length}}
         <div class="bg-light lter b-b wrapper-md">
             <h1 class="m-n font-thin h3"><i class="icon-plus-sign">
-            </i> Select Document Template </h1>
+            </i> {{agile_lng_translate 'documents' 'document-select-doc-template'}} </h1>
             <a href="#document-template-add" class="btn btn-default btn-addon pull-right btn-sm m-l-xs"><i class="fa fa-plus-circle"></i> Add Document Template</a>
                         <div class="clearfix"></div>
         </div>
@@ -229,9 +188,9 @@
                     <img alt="Clipboard" src="{{getS3ImagePath '/img/clipboard.png'}}" />
                 </div>
                 <div class="box-right pull-left">
-                    <h4 class="m-t-none">There are no document templates </h3>
+                    <h4 class="m-t-none">{{agile_lng_translate 'documents' 'document-add-no-doc-template'}} </h3>
                     <div class="text">
-                        You can add document templates through preferences.
+                        {{agile_lng_translate 'documents' 'document-add-template-throug-pref'}}
                     </div>
                 </div>
                 <div class="clearfix">
@@ -242,8 +201,8 @@
         {{#if this.length}}
                 <div class="bg-light lter b-b wrapper-md">
                     <h1 class="m-n font-thin h3 pull-left"><i class="icon-plus-sign">
-                    </i> Select Document Template </h1>
-                    <a href="#document-template-add" class="documents-add btn btn-default btn-addon pull-right btn-sm m-l-xs"><i class="fa fa-plus-circle" /> Add Document Template</a>
+                    </i> {{agile_lng_translate 'documents' 'document-select-doc-template'}} </h1>
+                    <a href="#document-template-add" class="documents-add btn btn-default btn-addon pull-right btn-sm m-l-xs"><i class="fa fa-plus-circle" /> {{agile_lng_translate 'documents' 'document-add-doc-template'}}</a>
                     <div class="clearfix"></div>
                 </div>
                 <div class="wrapper-md">
@@ -302,7 +261,7 @@
         
             <div class="panel wrapper m-b-none ">
                 <header>
-                    <h4 class="m-t-none font-thin"><span><i class="icon-flag"></i></span>Latest Comments</h4>
+                    <h4 class="m-t-none font-thin"><span><i class="icon-flag"></i></span>{{agile_lng_translate 'documents' 'document-latest-comments'}}</h4>
                 </header>
                 <div id="pie-deals-chart" class="w-full" style="height:400px" data-highcharts-chart="5"><div class="highcharts-container" id="highcharts-6" style="position: relative; overflow: hidden; width: 271px; height: 400px; text-align: left; line-height: normal; z-index: 0; -webkit-tap-highlight-color: rgba(0, 0, 0, 0); font-family: 'Lucida Grande', 'Lucida Sans Unicode', Verdana, Arial, Helvetica, sans-serif; font-size: 12px;"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="271" height="400"><desc>Created with Highcharts 3.0.7</desc><defs><clipPath id="highcharts-7"><rect fill="none" x="0" y="0" width="251" height="335"></rect></clipPath></defs><image preserveAspectRatio="none" x="15" y="5" width="200" height="80" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="//doxhze3l6s7v9.cloudfront.net/beta/static/img/donut-tooltip-frame.png"></image><text x="50" y="40" style="font-family:&quot;Lucida Grande&quot;, &quot;Lucida Sans Unicode&quot;, Verdana, Arial, Helvetica, sans-serif;font-size:12px;" class="tooltip-default-message"><tspan x="90">No History</tspan><tspan x="50" dy="16">.</tspan></text><g class="highcharts-series-group" zIndex="3"><g class="highcharts-series highcharts-tracker" visibility="visible" zIndex="0.1" transform="translate(10,50) scale(1 1)" style="cursor:pointer;"><path fill="#7266ba" d="M 230.45 167.5 A 104.95 104.95 0 0 1 230.44994752500438 167.39505001749166 L 188.79996835000264 167.43670001055 A 63.3 63.3 0 0 0 188.8 167.5 Z" stroke-linejoin="round" transform="translate(0,0)"></path><path fill="#23b7e5" d="M 230.45 167.5 A 104.95 104.95 0 0 1 230.44994752500438 167.39505001749166 L 188.79996835000264 167.43670001055 A 63.3 63.3 0 0 0 188.8 167.5 Z" stroke-linejoin="round" transform="translate(0,0)"></path><path fill="#27c24c" d="M 230.45 167.5 A 104.95 104.95 0 0 1 230.44994752500438 167.39505001749166 L 188.79996835000264 167.43670001055 A 63.3 63.3 0 0 0 188.8 167.5 Z" stroke-linejoin="round" transform="translate(0,0)"></path><path fill="#fad733" d="M 230.45 167.5 A 104.95 104.95 0 0 1 230.44994752500438 167.39505001749166 L 188.79996835000264 167.43670001055 A 63.3 63.3 0 0 0 188.8 167.5 Z" stroke-linejoin="round" transform="translate(0,0)"></path><path fill="#f05050" d="M 230.45 167.5 A 104.95 104.95 0 0 1 230.44994752500438 167.39505001749166 L 188.79996835000264 167.43670001055 A 63.3 63.3 0 0 0 188.8 167.5 Z" stroke-linejoin="round" transform="translate(0,0)"></path></g><g class="highcharts-markers" visibility="visible" zIndex="0.1" transform="translate(10,50) scale(1 1)"></g></g><g class="highcharts-data-labels highcharts-tracker" visibility="visible" zIndex="6" transform="translate(10,50) scale(1 1)" style="cursor:pointer;"><g zIndex="1" style="cursor:pointer;" transform="translate(242,147)" visibility="visible"><text x="3" y="15" style="font-family:&quot;Lucida Grande&quot;, &quot;Lucida Sans Unicode&quot;, Verdana, Arial, Helvetica, sans-serif;font-size:11px;color:#000000;line-height:14px;fill:#000000;" zIndex="1"></text></g><g zIndex="1" style="cursor:pointer;" transform="translate(242,153)" visibility="visible"><text x="3" y="15" style="font-family:&quot;Lucida Grande&quot;, &quot;Lucida Sans Unicode&quot;, Verdana, Arial, Helvetica, sans-serif;font-size:11px;color:#000000;line-height:14px;fill:#000000;" zIndex="1"></text></g><g zIndex="1" style="cursor:pointer;" transform="translate(242,159)" visibility="visible"><text x="3" y="15" style="font-family:&quot;Lucida Grande&quot;, &quot;Lucida Sans Unicode&quot;, Verdana, Arial, Helvetica, sans-serif;font-size:11px;color:#000000;line-height:14px;fill:#000000;" zIndex="1"></text></g><g zIndex="1" style="cursor:pointer;" transform="translate(242,165)" visibility="visible"><text x="3" y="15" style="font-family:&quot;Lucida Grande&quot;, &quot;Lucida Sans Unicode&quot;, Verdana, Arial, Helvetica, sans-serif;font-size:11px;color:#000000;line-height:14px;fill:#000000;" zIndex="1"></text></g><g zIndex="1" style="cursor:pointer;" transform="translate(242,171)" visibility="visible"><text x="3" y="15" style="font-family:&quot;Lucida Grande&quot;, &quot;Lucida Sans Unicode&quot;, Verdana, Arial, Helvetica, sans-serif;font-size:11px;color:#000000;line-height:14px;fill:#000000;" zIndex="1"></text></g></g><g class="highcharts-legend" zIndex="7"><g zIndex="1"><g></g></g></g><g class="highcharts-tooltip" zIndex="8" style="cursor:default;padding:0;white-space:nowrap;" transform="translate(0,-999)"><rect rx="0" ry="0" fill="none" x="0" y="0" width="16" height="16"></rect></g></svg><div class="highcharts-tooltip" style="position: absolute; left: 0px; top: -999px;"><span style="position: absolute; white-space: nowrap; font-family: 'Lucida Grande', 'Lucida Sans Unicode', Verdana, Arial, Helvetica, sans-serif; font-size: 12px; color: rgb(239, 239, 239); margin-left: 0px; margin-top: 0px; left: 8px; top: 8px;" zindex="1"></span></div></div></div>
             </div>
@@ -372,7 +331,7 @@
         
             <div class="panel wrapper m-b-none">
                 <header>
-                    <h4 class="m-t-none font-thin"><span><i class="icon-flag"></i></span> eDocs Discussion</h4>
+                    <h4 class="m-t-none font-thin"><span><i class="icon-flag"></i></span> {{agile_lng_translate 'documents' 'document-edoc-dicussion'}}</h4>
                 </header>
                 <div id="pie-deals-chart" class="w-full" style="height:400px" data-highcharts-chart="5"><div class="highcharts-container" id="highcharts-6" style="position: relative; overflow: hidden; width: 271px; height: 400px; text-align: left; line-height: normal; z-index: 0; -webkit-tap-highlight-color: rgba(0, 0, 0, 0); font-family: 'Lucida Grande', 'Lucida Sans Unicode', Verdana, Arial, Helvetica, sans-serif; font-size: 12px;"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="271" height="400"><desc>Created with Highcharts 3.0.7</desc><defs><clipPath id="highcharts-7"><rect fill="none" x="0" y="0" width="251" height="335"></rect></clipPath></defs><image preserveAspectRatio="none" x="15" y="5" width="200" height="80" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="//doxhze3l6s7v9.cloudfront.net/beta/static/img/donut-tooltip-frame.png"></image><text x="90" y="40" style="font-family:&quot;Lucida Grande&quot;, &quot;Lucida Sans Unicode&quot;, Verdana, Arial, Helvetica, sans-serif;font-size:12px;" class="tooltip-default-message"><tspan x="90">No History</tspan></text><g class="highcharts-series-group" zIndex="3"><g class="highcharts-series highcharts-tracker" visibility="visible" zIndex="0.1" transform="translate(10,50) scale(1 1)" style="cursor:pointer;"><path fill="#7266ba" d="M 230.45 167.5 A 104.95 104.95 0 0 1 230.44994752500438 167.39505001749166 L 188.79996835000264 167.43670001055 A 63.3 63.3 0 0 0 188.8 167.5 Z" stroke-linejoin="round" transform="translate(0,0)"></path><path fill="#23b7e5" d="M 230.45 167.5 A 104.95 104.95 0 0 1 230.44994752500438 167.39505001749166 L 188.79996835000264 167.43670001055 A 63.3 63.3 0 0 0 188.8 167.5 Z" stroke-linejoin="round" transform="translate(0,0)"></path><path fill="#27c24c" d="M 230.45 167.5 A 104.95 104.95 0 0 1 230.44994752500438 167.39505001749166 L 188.79996835000264 167.43670001055 A 63.3 63.3 0 0 0 188.8 167.5 Z" stroke-linejoin="round" transform="translate(0,0)"></path><path fill="#fad733" d="M 230.45 167.5 A 104.95 104.95 0 0 1 230.44994752500438 167.39505001749166 L 188.79996835000264 167.43670001055 A 63.3 63.3 0 0 0 188.8 167.5 Z" stroke-linejoin="round" transform="translate(0,0)"></path><path fill="#f05050" d="M 230.45 167.5 A 104.95 104.95 0 0 1 230.44994752500438 167.39505001749166 L 188.79996835000264 167.43670001055 A 63.3 63.3 0 0 0 188.8 167.5 Z" stroke-linejoin="round" transform="translate(0,0)"></path></g><g class="highcharts-markers" visibility="visible" zIndex="0.1" transform="translate(10,50) scale(1 1)"></g></g><g class="highcharts-data-labels highcharts-tracker" visibility="visible" zIndex="6" transform="translate(10,50) scale(1 1)" style="cursor:pointer;"><g zIndex="1" style="cursor:pointer;" transform="translate(242,147)" visibility="visible"><text x="3" y="15" style="font-family:&quot;Lucida Grande&quot;, &quot;Lucida Sans Unicode&quot;, Verdana, Arial, Helvetica, sans-serif;font-size:11px;color:#000000;line-height:14px;fill:#000000;" zIndex="1"></text></g><g zIndex="1" style="cursor:pointer;" transform="translate(242,153)" visibility="visible"><text x="3" y="15" style="font-family:&quot;Lucida Grande&quot;, &quot;Lucida Sans Unicode&quot;, Verdana, Arial, Helvetica, sans-serif;font-size:11px;color:#000000;line-height:14px;fill:#000000;" zIndex="1"></text></g><g zIndex="1" style="cursor:pointer;" transform="translate(242,159)" visibility="visible"><text x="3" y="15" style="font-family:&quot;Lucida Grande&quot;, &quot;Lucida Sans Unicode&quot;, Verdana, Arial, Helvetica, sans-serif;font-size:11px;color:#000000;line-height:14px;fill:#000000;" zIndex="1"></text></g><g zIndex="1" style="cursor:pointer;" transform="translate(242,165)" visibility="visible"><text x="3" y="15" style="font-family:&quot;Lucida Grande&quot;, &quot;Lucida Sans Unicode&quot;, Verdana, Arial, Helvetica, sans-serif;font-size:11px;color:#000000;line-height:14px;fill:#000000;" zIndex="1"></text></g><g zIndex="1" style="cursor:pointer;" transform="translate(242,171)" visibility="visible"><text x="3" y="15" style="font-family:&quot;Lucida Grande&quot;, &quot;Lucida Sans Unicode&quot;, Verdana, Arial, Helvetica, sans-serif;font-size:11px;color:#000000;line-height:14px;fill:#000000;" zIndex="1"></text></g></g><g class="highcharts-legend" zIndex="7"><g zIndex="1"><g></g></g></g><g class="highcharts-tooltip" zIndex="8" style="cursor:default;padding:0;white-space:nowrap;" transform="translate(0,-999)"><rect rx="0" ry="0" fill="none" x="0" y="0" width="16" height="16"></rect></g></svg><div class="highcharts-tooltip" style="position: absolute; left: 0px; top: -999px;"><span style="position: absolute; white-space: nowrap; font-family: 'Lucida Grande', 'Lucida Sans Unicode', Verdana, Arial, Helvetica, sans-serif; font-size: 12px; color: rgb(239, 239, 239); margin-left: 0px; margin-top: 0px; left: 8px; top: 8px;" zindex="1"></span></div></div></div>
             </div>

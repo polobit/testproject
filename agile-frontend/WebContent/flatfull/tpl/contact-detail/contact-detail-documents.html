@@ -6,95 +6,76 @@
                     <img alt="Clipboard" src="{{getS3ImagePath '/img/clipboard.png'}}" />
                 </div>
                 <div class="box-right pull-left">
-                    <h4 class="m-t-none">You have no documents for {{contactShortName}}.</h4>
+                    <h4 class="m-t-none">{{agile_lng_translate 'contact-details' 'you-have-no-documents-for'}} {{contactShortName}}.</h4>
                   {{#hasMenuScope 'DOCUMENT'}}  
                   <div class="text">
-                        You can add a document related to a {{#isCompany}}company{{else}}contact{{/isCompany}}.
+                        {{agile_lng_translate 'contact-details' 'you-can-add-a-document-related-to-a'}} {{#isCompany}}{{agile_lng_translate 'contact-details' 'company'}}{{else}}{{agile_lng_translate 'contact-details' 'contact'}}{{/isCompany}}.
                     </div>
                     {{/hasMenuScope}}
-						<div class="btn-group">
-							{{#hasMenuScope 'DOCUMENT'}}
-								{{#isCompany}}
-							        <a href="#" class="btn btn-default btn-sm add-document-select m-t-xs" class1="btn btn-default btn-sm"><i class="icon-plus-sign"></i> Add Document</a>
+					<div class="btn-group">
+					{{#hasMenuScope 'DOCUMENT'}}
+						{{#isCompany}}
+							        <a href="#" class="btn btn-default btn-sm add-document-select m-t-xs"><i class='icon-plus-sign'/></i> {{agile_lng_translate 'contact-details' 'add-document'}}</a>
 							        <a class="btn btn-default btn-sm dropdown-toggle m-t-xs" data-toggle="dropdown"><span class="caret"></span></a>
 
 									<ul class="dropdown-menu pull-right" style="margin-top:3px;">
-										<li style="padding:0px 0px;border:0px;"><a href="#" class="add-company-edocument-select">Add eDocument</a></li>
+										<li style="padding:0px 0px;border:0px;"><a href="#" class="add-company-edocument-select">{{agile_lng_translate 'deal-view' 'add-edocument'}}</a></li>
 									</ul>
 								{{else}}					
-							        <a href="#" class="btn btn-default btn-sm add-document-select m-t-xs" class1="btn btn-default btn-sm"><i class="icon-plus-sign"></i> Add Document</a>
+							        <a href="#" class="btn btn-default btn-sm add-document-select m-t-xs"><i class='icon-plus-sign'/></i> {{agile_lng_translate 'contact-details' 'add-document'}}</a>
 							        <a class="btn btn-default btn-sm dropdown-toggle m-t-xs" data-toggle="dropdown"><span class="caret"></span></a>
 
 									<ul class="dropdown-menu pull-right" style="margin-top:3px;">
-										<li style="padding:0px 0px;border:0px;"><a href="#" class="add-contact-edocument-select">Add eDocument</a></li>
+										<li style="padding:0px 0px;border:0px;"><a href="#" class="add-contact-edocument-select">{{agile_lng_translate 'deal-view' 'add-edocument'}}</a></li>
 									</ul>
-								{{/isCompany}}
-							{{/hasMenuScope}}
-							<span class="contact-document-select upload-doc-field" style="display:none;">
-								<select id="document-select" class="form-control inline-block w">
-									<option value="">Select...</option>
-								</select>
-			 					<div class="m-t-sm">
-										<a href="#" class="btn btn-default btn-sm add-document-cancel m-r-sm">Cancel</a>
-			                    		{{#isCompany}}
-			                    		<a href="#" class="btn btn-sm btn-primary add-company-document-confirm">Add</a> 
-			                    		{{else}}	
-			                    		<a href="#" class="btn btn-sm btn-primary add-contact-document-confirm">Add</a> 
-										{{/isCompany}}
-										<span class="save-status"></span>
-								</div>
-							</span>	
-						</div>
+						{{/isCompany}}
+					{{/hasMenuScope}}
+						<span class="contact-document-select upload-doc-field" style="display:none;">
+							<select id="document-select" class="form-control inline-block w">
+								<option value="">{{agile_lng_translate 'contacts-view' 'select'}}</option>
+							</select>
+ 					<div class="m-t-sm">
+							<a href="#" class="btn btn-default btn-sm add-document-cancel m-r-sm">{{agile_lng_translate 'contact-details' 'cancel'}}</a>
+                    		<a href="#" class="btn btn-sm btn-primary add-document-confirm">{{agile_lng_translate 'contact-details' 'add'}}</a> 
+							<span class="save-status"></span>
+						</span>
+					</div>
+					</div>
+         			<!--<div class="btn-group" style="margin-top:12px;">
+        				<a href="#" class="btn btn-default btn-sm right contact-add-document"><i class="icon-plus-sign"></i> {{agile_lng_translate 'deal-view' 'add-document'}}</a>
+        				<a class="btn btn-sm dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
+						<ul class="dropdown-menu" style="text-shadow:0px 0px;">
+							<li><a href="#" class="document-exist">{{agile_lng_translate 'contacts-view' 'existing-document'}}</a></li>
+						</ul>
+					</div>-->
                 </div>
-				<div class="clearfix"></div>
+				<div class="clearfix">
+				</div>
             </div>
         </div>
         {{/unless}}
         {{#if this.length}}
-	<div  class="documents-collection">
-		<div  class="m-b-md m-t-md m-r-sm" align="right">
-		{{#hasMenuScope 'DOCUMENT'}}
-						{{#isCompany}}
-							<div class="btn-group">
-						        <a href="#" class="btn btn-default btn-sm add-document-select m-t-xs" class1="btn btn-default btn-sm"><i class="icon-plus-sign"></i> Add Document</a>
-						        <a class="btn btn-default btn-sm dropdown-toggle m-t-xs" data-toggle="dropdown"><span class="caret"></span></a>
-
-								<ul class="dropdown-menu pull-right" style="margin-top:3px;">
-									<li style="padding:0px 0px;border:0px;"><a href="#" class="add-company-edocument-select">Add eDocument</a></li>
-								</ul>
-								<span class="contact-document-select upload-doc-field" style="display:none;">
-									<select class="form-control w m-r-sm p-t-xs inline-block" id="document-select">
-										<option value="">Select...</option>
-									</select>
-									<span class="select-loading">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-					                <a href="#" class="btn btn-sm btn-primary add-company-document-confirm">Add</a> 
-					                <a href="#" class="btn btn-default btn-sm add-document-cancel">Cancel</a>
-									<span class="save-status"></span>
-								</span>
-							</div>
-						{{else}}
-							<div class="btn-group">
-						        <a href="#" class="btn btn-default btn-sm add-document-select m-t-xs" class1="btn btn-default btn-sm"><i class="icon-plus-sign"></i> Add Document</a>
-						        <a class="btn btn-default btn-sm dropdown-toggle m-t-xs" data-toggle="dropdown"><span class="caret"></span></a>
-
-								<ul class="dropdown-menu pull-right" style="margin-top:3px;">
-									<li style="padding:0px 0px;border:0px;"><a href="#" class="add-contact-edocument-select">Add eDocument</a></li>
-								</ul>
-								<span class="contact-document-select" style="display:none;">
-									<select class="form-control w m-r-sm p-t-xs inline-block" id="document-select">
-										<option value="">Select...</option>
-									</select>
-									<span class="select-loading">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-					                <a href="#" class="btn btn-sm btn-primary add-contact-document-confirm">Add</a> 
-					                <a href="#" class="btn btn-default btn-sm add-document-cancel">Cancel</a>
-									<span class="save-status"></span>
-								</span>
-							</div>
-						{{/isCompany}}		
-		{{/hasMenuScope}}
+	<div class="m-b-md m-t-md m-r-sm" align="right">
+        <!--<div class="btn-group right">
+        	<a href="#" class="btn btn-sm btn-default right contact-add-document"><i class="icon-plus-sign"></i> Add Document</a>
+        	<a class="btn btn-sm dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
+			<ul class="dropdown-menu pull-right">
+				<li><a href="#" class="document-exist">Existing Document</a></li>
+			</ul>
+		</div>-->
+		<div>{{#hasMenuScope 'DOCUMENT'}}<a href="#" class="add-document-select btn btn-default btn-sm btn-addon"><i class='icon-plus-sign'/></i> {{agile_lng_translate 'contact-details' 'add-document'}}</a>{{/hasMenuScope}}
+			<span class="contact-document-select upload-doc-field" style="display:none;">
+				<select id="document-select" class="form-control inline-block m-r-sm p-t-xs w"> 
+					<option value="">Select...</option>
+				</select>
+				<span class="select-loading">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                <a href="#" class="btn btn-sm btn-primary add-document-confirm">{{agile_lng_translate 'contact-details' 'add'}}</a> 
+                <a href="#" class="btn btn-default btn-sm add-document-cancel">{{agile_lng_translate 'contact-details' 'cancel'}}</a>
+				<span class="save-status"></span>
+			</span>
+		</div>
 	</div>
-        
-	<ul id="contact-documents-model-list" class="ativity-block-ul list-group list-group-lg no-radius m-b-none m-t-n-xxs"></ul>
+			<ul id="contact-documents-model-list" class="ativity-block-ul list-group list-group-lg no-radius m-b-none m-t-n-xxs"></ul>
 		{{/if}} 
 </script>
 
@@ -111,22 +92,22 @@
 		<span class="owner-name hide">{{owner.name}}</span>
 	</div>
 	<div class="pull-left rightThumbView">
-		<div class="document-title text-md text-cap pull-left contact-title-dynamic custom-color text-ellipsis">{{name}}</div>
-		<div class="pull-right">	
-			 <small class="edit-hover text-muted"> 
-			 <i class="fa fa-clock-o m-r-xs"></i>
-				<time class="document-created-time  text-base" datetime="{{epochToHumanDate "" uploaded_time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" uploaded_time}}</time>
-			</small>
-			</div>
-			<div class="clearfix"></div>
-	    <div>
-	    {{#if url}}
-			{{network network_type}}{{#hasMenuScope 'DOCUMENT'}}&nbsp;&nbsp;<a href="{{url}}" target="_blank"><i class="icon-external-link" title="Open Document"></i></a>{{/hasMenuScope}}
-		{{/if}}		
+	<div class="document-title text-md text-cap pull-left contact-title-dynamic custom-color text-ellipsis">{{name}}</div>
+	<div class="pull-right">	
+		 <small class="edit-hover text-muted"> 
+		 <i class="fa fa-clock-o m-r-xs"></i>
+			<time class="document-created-time  text-base" datetime="{{epochToHumanDate "" uploaded_time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" uploaded_time}}</time>
+		</small>
+		</div>
+		<div class="clearfix"></div>
+    <div>
+    {{#if url}}
+		{{network network_type}}{{#hasMenuScope 'DOCUMENT'}}&nbsp;&nbsp;<a href="{{url}}" target="_blank"><i class="icon-external-link" title="Open Document"></i></a>{{/hasMenuScope}}
+	{{/if}}			
 	</div>
-	<div class="clearfix"></div>
+<div class="clearfix"></div>
 	
-	<div class="agile-thumb">	
+		<div class="agile-thumb">	
 		{{#each contacts}}
            	{{#if id}}
 				{{#isDuplicateContactProperty properties "email"}}
@@ -139,11 +120,13 @@
         					<a href="#company/{{id}}" class="text-capitalize popover_contact" data="{{id}}">{{getPropertyValue properties "name"}}</a>{{#if @last}}{{else}},{{/if}}
         				{{/if_contact_type}}
 				{{/isDuplicateContactProperty}}
-           		
+    
            	{{/if}}
        	{{/each}}
 
        	{{#each deals}}
+
+       	
        	    {{#isCurrentDeal this.id}} {{else}}
                 <a href="#deal/{{this.id}}">{{this.name}}</a>{{#if @last}}{{else}},{{/if}}
        	    {{/isCurrentDeal}}
@@ -153,15 +136,15 @@
 		
 		<div class="actions pull-right pos-abs pos-r-0 pos-b-0 icons-text-sm">
             {{#hasMenuScope 'DOCUMENT'}}
-			{{#isCompany}}
-			<a title="Edit"  data="{{id}}" href="#" href1="#documents/{{id}}" class="document-edit-company-tab c-p text-l-none p-r-sm"> <i class="icon-pencil"></i> </a>
+            {{#isCompany}}
+			<a title="{{agile_lng_translate 'contact-details' 'edit'}}"  data="{{id}}" href="#" href1="#documents/{{id}}" class="document-edit-company-tab c-p text-l-none p-r-sm"> <i class="icon-pencil"></i> </a>
 			{{else}}
-			<a title="Edit"  data="{{id}}" href="#" href1="#documents/{{id}}" class="document-edit-contact-tab c-p text-l-none p-r-sm"> <i class="icon-pencil"></i> </a>
+			<a title="{{agile_lng_translate 'contact-details' 'edit'}}"  data="{{id}}" href="#" href1="#documents/{{id}}" class="document-edit-contact-tab c-p text-l-none p-r-sm"> <i class="icon-pencil"></i> </a>
 			{{/isCompany}}
 			{{#if url}}
-			<a title="Detach"  data="{{id}}" class="document-unlink-contact-tab c-p text-l-none p-r-sm"> <i class="icon-unlink"></i> </a>
+			<a title="{{agile_lng_translate 'contact-details' 'detach'}}"  data="{{id}}" class="document-unlink-contact-tab c-p text-l-none p-r-sm"> <i class="icon-unlink"></i> </a>
 			{{/if}}	
-            <!--<a title="Delete" style="cursor:pointer;text-decoration: none"><span class="activity-delete icon-trash" style="display:inline" id="{{id}}" url="core/api/documents/bulk"><i></i></span></a>-->
+            <!--<a title="{{agile_lng_translate 'contact-details' 'delete'}}" style="cursor:pointer;text-decoration: none"><span class="activity-delete icon-trash" style="display:inline" id="{{id}}" url="core/api/documents/bulk"><i></i></span></a>-->
 			{{/hasMenuScope}}
         </div>
         <div class="clearfix"></div>

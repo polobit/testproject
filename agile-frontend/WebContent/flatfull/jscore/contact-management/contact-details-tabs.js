@@ -10,6 +10,8 @@
 
 var contact_tab_position_cookie_name = "contact_tab_position_" + CURRENT_DOMAIN_USER.id;
 
+var company_tab_position_cookie_name = "company_tab_position_" + CURRENT_DOMAIN_USER.id;
+
 var CONTACT_ASSIGNED_TO_CAMPAIGN = false;
 
 var NO_WEB_STATS_SETUP = true;
@@ -21,8 +23,17 @@ var email_server_type_cookie_name = "email_server_type_" + CURRENT_DOMAIN_USER.i
 function fill_company_related_contacts(companyId, htmlId, context_el)
 {
 	$('#' + htmlId).html(LOADING_HTML);
+	var contactsHeader = new Contacts_And_Companies_Events_View({ data : {}, template : "company-contacts-collection", isNew : true,
+			postRenderCallback : function(el)
+			{
+				setupContactCompanyFields(el);
+				fetchContactCompanyHeadings(function(modelData){
+					getContactofCompanies(modelData,el,companyId);
+		});
+			}
+		});
 
-	var companyContactsView = new Base_Collection_View({ url : 'core/api/contacts/related/' + companyId, templateKey : 'company-contacts',
+	/*var companyContactsView = new Base_Collection_View({ url : 'core/api/contacts/related/' + companyId, templateKey : 'company-contacts',
 		individual_tag_name : 'tr', cursor : true, page_size : 25, sort_collection : false, scroll_target : (context_el ? $("#infinite-scroller-company-details", context_el) : "#infinite-scroller-company-details"), postRenderCallback : function(el)
 		{
 			// var cel = App_Contacts.contactsListView.el;
@@ -30,12 +41,12 @@ function fill_company_related_contacts(companyId, htmlId, context_el)
 			contactListener();
 		} });
 
-	companyContactsView.collection.fetch();
+	companyContactsView.collection.fetch();*/
 
 	if(context_el)
-		$('#' + htmlId, $(context_el)).html(companyContactsView.render().el);
+		$('#' + htmlId, $(context_el)).html(contactsHeader.render().el);
 	else
-		$('#' + htmlId).html(companyContactsView.render().el);
+		$('#' + htmlId,App_Companies.companyDetailView.el).html(contactsHeader.render().el);
 }
 
 var Contact_Details_Tab_Actions = {
@@ -75,7 +86,7 @@ var Contact_Details_Tab_Actions = {
 	  // to remove contact from active campaign.
 	  removeActiveCampaigns : function(e){
 	  	var targetEl = $(e.currentTarget);
-	  	showAlertModal("Are you sure to remove " + $(targetEl).attr("contact_name") + " from " + $(targetEl).attr("campaign_name") + " campaign?", "confirm", function(){
+	  	showAlertModal("{{agile_lng_translate 'campaigns' 'sure-remove-active'}} " + $(targetEl).attr("contact_name") + " {{agile_lng_translate 'contacts-view' 'from'}}  " + $(targetEl).attr("campaign_name") + " {{agile_lng_translate 'contact-details' 'campaign'}} ?", "confirm", function(){
 			var $active_campaign = $(targetEl).closest('span#active-campaign');
 			var campaign_id = $active_campaign.attr('data');
 			var contact_id;
@@ -112,7 +123,7 @@ var Contact_Details_Tab_Actions = {
 				$active_campaign.remove();
 
 			} });
-		},undefined, "Remove Active Campaign");
+		},undefined, _agile_get_translated_val('campaigns','remove-active-campaign'));
 
 		
 	  },
@@ -216,12 +227,12 @@ var Contact_Details_Tab_Actions = {
 		  		owner = App_Deal_Details.dealDetailView.model.get("owner").id;
 		  	}
 
-		  	if(!hasScope("MANAGE_DEALS") && (CURRENT_DOMAIN_USER.id != owner) && model.get("entity_type") && model.get("entity_type") == "deal"){
+		  	if(!hasScope("DELETE_DEALS") && model.get("entity_type") && model.get("entity_type") == "deal"){
 		  		$('#deal_delete_privileges_error_modal').html(getTemplate("deal-delete-privileges-error-modal")).modal('show');
 		  		return;
 		  	}
 
-		  	if(model.get("entity_type") && model.get("entity_type") == "note" && Current_Route.indexOf("deal/") == 0 && model.get("domainOwner") && !hasScope("MANAGE_DEALS") && (CURRENT_DOMAIN_USER.id != owner)){
+		  	if(model.get("entity_type") && model.get("entity_type") == "note" && Current_Route.indexOf("deal/") == 0 && model.get("domainOwner") && !hasScope("UPDATE_DEALS") && (CURRENT_DOMAIN_USER.id != owner)){
 		  		$('#deal_update_privileges_error_modal').html(getTemplate("deal-update-privileges-error-modal")).modal('show');
 		  		return;
 		  	}
@@ -297,7 +308,7 @@ function populate_send_email_details(el)
 
 	// Prefill the templates
 	var optionsTemplate = "<option value='{{id}}'> {{#if name}}{{name}}{{else}}{{subject}}{{/if}}</option>";
-	fillSelect('sendEmailSelect', '/core/api/email/templates', 'emailTemplates', undefined, optionsTemplate, false, el, '- Fill from Template -');
+	fillSelect('sendEmailSelect', '/core/api/email/templates', 'emailTemplates', undefined, optionsTemplate, false, el, _agile_get_translated_val('other','fill-from-template'));
 }
 
 /**
@@ -327,6 +338,22 @@ function activate_timeline_tab()
 	}
 }
 
+function activate_company_contact_tab()
+{
+	$('#contactDetailsTab').find('li.active').removeClass('active');
+	$('#contactDetailsTab li:first-child').addClass('active');
+
+	$('div.tab-content').find('div.active').removeClass('active');
+	$('div.tab-content > div:first-child',App_Companies.companyDetailView.el).addClass('active');
+
+	// $('#time-line').addClass('active'); //old original code for flicking
+	// timeline
+
+	if (App_Companies.companyDetailView.model.get('type') == 'COMPANY')
+	{
+		fill_company_related_contacts(App_Companies.companyDetailView.model.id, 'company-contacts');
+	}
+}
 /**
  * Disables Send button of SendEmail and change text from Send to Sending...
  * 
@@ -375,6 +402,17 @@ function save_contact_tab_position_in_cookie(tab_href)
 	_agile_set_prefs(contact_tab_position_cookie_name, tab_href);
 }
 
+function save_company_tab_position_in_cookie(tab_href)
+{
+
+	var position = _agile_get_prefs(company_tab_position_cookie_name);
+
+	if (position == tab_href)
+		return;
+
+	_agile_set_prefs(company_tab_position_cookie_name, tab_href);
+}
+
 function load_contact_tab(el, contactJSON)
 {
 	timeline_collection_view = null;
@@ -405,6 +443,36 @@ function load_contact_tab(el, contactJSON)
 
 }
 
+function load_company_tab(el, contactJSON)
+{
+	//timeline_collection_view = null;
+	var position = _agile_get_prefs(company_tab_position_cookie_name);
+	if (position == null || position == undefined || position == "")
+		position = "contacts";
+
+	if(position == "contacts" && agile_is_mobile_browser())
+			return;
+
+	$('#contactDetailsTab a[href="#company-' + position + '"]', el).tab('show');
+
+	if (!position || position == "contacts")
+	{
+		activate_company_contact_tab()
+		company_detail_tab.load_fill_company_related_contacts
+		return;
+	}
+
+	if (company_detail_tab["load_company_" + position])
+	{
+
+		// Should add active class, tab is not enough as content might not be
+		// shown in view.
+		$(".tab-content", el).find("#company-" + position).addClass("active");
+		company_detail_tab["load_company_" + position]();
+	}
+
+}
+
 function get_emails_to_reply(emails, configured_email)
 {
 	var emails_array = emails.split(',');
@@ -414,10 +482,10 @@ function get_emails_to_reply(emails, configured_email)
 	for (var i = 0, len = emails_array.length; i < len; i++)
 	{
 
-		var email = emails_array[i].match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+)/gi)[0];
+		var email = emails_array[i].match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+)/gi);
 
 		// Skip configured email
-		if (configured_email && email == configured_email)
+		if (configured_email && email == configured_email || !email)
 			continue;
 
 		// Skip current user email
@@ -545,7 +613,7 @@ function initializeSendEmailListeners(){
 				var optionsTemplate = "<option value='{{id}}' network_type='{{titleFromEnums network_type}}' size='{{size}}' url='{{url}}'>{{name}}</option>";
         		fillSelect('attachment-select','core/api/documents', 'documents',  function fillNew()
 				{
-					el.find("#attachment-select option:first").after("<option value='new'>Upload new doc</option>");
+					el.find("#attachment-select option:first").after("<option value='new'>"+_agile_get_translated_val('others','upload-new-doc')+"</option>");
 					$('#attachment-select').find('option[value='+model.attachment_id+']').attr("selected","selected");
 					$('.add-attachment-confirm').trigger("click");
 
@@ -561,7 +629,7 @@ function initializeSendEmailListeners(){
 				$('.add-attachment-select').hide();
 				$('#eattachment_error').hide();
 			}
-			else if(!model.attachment_id && $("#eattachment_key","#emailForm").attr('name')!="edoc_key")
+			else if(!model.attachment_id)
 			{
 				$('.add-attachment-cancel').trigger("click");
 				$('#eattachment_error').hide();
@@ -613,7 +681,7 @@ function initializeSendEmailListeners(){
 						if (json.to == "" || json.to == null || json.to == undefined)
 						{
 							// Appends error info to form actions block.
-							$save_info = $('<span style="display:inline-block;color:#df382c;">This field is required.</span>');
+							$save_info = $('<span style="display:inline-block;color:#df382c;">'+_agile_get_translated_val('validation-msgs','required')+'</span>');
 							$('#emailForm').find("#to").closest(".controls > div").append($save_info);
 							$('#emailForm').find("#to").focus();
 							// Hides the error message after 3 seconds
@@ -628,23 +696,47 @@ function initializeSendEmailListeners(){
 							return;
 
 						if($("#eattachment_key","#emailForm").attr('name')=="edoc_key")
-						{	
+						{
 							var sMessage=json.message.match(/<body[^>]*>[\s\S]*<\/body>/gi)[0].replace("<body>","").replace("</body>","");
-							
 
 							var email_json={"domain_user_name":CURRENT_DOMAIN_USER.name,
 							"attachment_name": $("#agile_attachment_name","#emailForm").attr("value"),
-								"message": sMessage,
+							"message": sMessage,
 							"domain": CURRENT_DOMAIN_USER.domain,
 							"document_id":json.document_id,
 							"contact_id":json.edoc_contact_id
-							};				
-							var sCompleteMessage=getTemplate("documents-send-mail",email_json);	
+							};
+							var sCompleteMessage=getTemplate("documents-send-mail",email_json);
 							console.log(sCompleteMessage)
 							sCompleteMessage="<!DOCTYPE html><html><head></head><body>" + sCompleteMessage + "</body></html>";
 
 							json.message=sCompleteMessage;
-						}	
+						}
+
+						try
+						{
+							var emails_length = json.to.split(',').length;
+							var MAX_EMAILS_LIMIT = 10;
+
+							if(json.cc)
+								emails_length = json.cc.split(',').length + emails_length;
+
+							if(json.bcc)
+								emails_length = json.bcc.split(',').length + emails_length;
+
+							if(emails_length > MAX_EMAILS_LIMIT)
+							{
+								showAlertModal("Maximum limit of sending emails at once exceeded.", undefined, function(){},
+									function(){},
+									"Alert");
+								return;
+							}
+						}
+						catch(err)
+						{
+							
+						}
+						
 						var that =$(this);
 
 						if(hasScope("EDIT_CONTACT"))
@@ -653,8 +745,8 @@ function initializeSendEmailListeners(){
 						}
 						else
 						{
-							showModalConfirmation("Send Email", 
-								"You may not have the permission to send emails to some of the contacts selected. Email will be sent to only contacts with send email permissions.<br/><br/> Do you want to proceed?",
+							showModalConfirmation(_agile_get_translated_val('contact-details','send-email'), 
+								_agile_get_translated_val('campaigns','no-perm-send-emails') + "<br/><br/> " + _agile_get_translated_val('deal-view','do-you-want-to-proceed'),
 								function (){
 									emailSend(that,json);
 								},
@@ -675,12 +767,8 @@ function initializeSendEmailListeners(){
 	$('#send-email-listener-container').on('click', '#send-email-close', function(e)
 	{
 		e.preventDefault();
-		if(Current_Route.indexOf("/documents/")>0 && Current_Route.indexOf("/send")>0){
 
-				Backbone.history.navigate("#documents/" + Current_Route.split("/")[2], { trigger : true });
-			}
-			else
-				window.history.back();
+		window.history.back();
 	});
 
 
@@ -739,12 +827,8 @@ function emailSend(ele,json)
 
 			// Enables Send Email button.
 			enable_send_button($('#sendEmail'));
-			if(Current_Route.indexOf("/documents/")>0 && Current_Route.indexOf("/send")>0){
 
-				Backbone.history.navigate("#documents/" + Current_Route.split("/")[2], { trigger : true });
-			}
-			else
-				window.history.back();
+			window.history.back();
 
 		},
 		error : function(response)
@@ -786,7 +870,7 @@ function modelDelete(model, targetEl, callback){
 			web_event_contact_name = firstname + " " + lastname;
 		}
 		$("#webEventCancelModel").modal('show');
-		$("#cancel_event_title").html("Delete event &#39" + web_event_title + "&#39");
+		$("#cancel_event_title").html(_agile_get_translated_val('events','delete-event') + " &#39" + web_event_title + "&#39");
 		$("#event_id_hidden").html("<input type='hidden' name='event_id' id='event_id' value='" + entity_id + "'/>");
 		return;
 	}
@@ -827,18 +911,26 @@ function modelDelete(model, targetEl, callback){
 		{
 			var can_edit = false;
 			$.each(response_data, function(index, contactId){
-				if(App_Contacts.contactDetailView.model.get("id") && contactId == App_Contacts.contactDetailView.model.get("id"))
+				if(Current_Route.indexOf("contact/") == 0 && App_Contacts.contactDetailView.model.get("id") && contactId == App_Contacts.contactDetailView.model.get("id"))
+				{
+					can_edit = true;
+				}
+				else if(Current_Route.indexOf("company/") == 0 && App_Companies.companyDetailView.model.get("id") && contactId == App_Companies.companyDetailView.model.get("id"))
 				{
 					can_edit = true;
 				}
 			});
-			if(!App_Contacts.contactDetailView.model.get("id"))
+			if(Current_Route.indexOf("contact/") == 0 && !App_Contacts.contactDetailView.model.get("id"))
+			{
+				can_edit = true;
+			}
+			else if(Current_Route.indexOf("company/") == 0 && !App_Companies.companyDetailView.model.get("id"))
 			{
 				can_edit = true;
 			}
 			if(!can_edit)
 			{
-				showModalConfirmation("Delete <span class='text-cap'>"+model.get("entity_type")+"</span>", 
+				showModalConfirmation(_agile_get_translated_val('contact-details','delete') + " <span class='text-cap'>"+model.get("entity_type")+"</span>", 
 					'<span class="text-cap">'+model.get("entity_type")+'</span> '+CONTACTS_ACTIVITY_ACL_DELETE_ERROR, 
 					function (){
 						return;
@@ -849,18 +941,126 @@ function modelDelete(model, targetEl, callback){
 					function (){
 						return;
 					},
-					'Cancel'
+					_agile_get_translated_val('contact-details','cancel')
 				);
 				return;
 			}
 		}
 		// Removes activity from list
-		$(that).parents(".activity").fadeOut(400, function()
+		$(that).parents(".activity").parent().fadeOut(400, function()
 		{
 			$(targetEl).remove();
 		});
 		if(callback && typeof(callback) === "function"){
 			callback();
 		}
+	}, error : function(response){
+		showModalConfirmation("Delete <span class='text-cap'>"+model.get("entity_type")+"</span>", 
+			'<span>'+response.responseText+'</span>', 
+			function (){
+				return;
+			}, 
+			function(){
+				return;
+			},
+			function (){
+				return;
+			},
+			'Cancel'
+		);
+		return;
 	} });
 }
+
+function setupContactCompanyFields(el){
+		// Update el with default dropdown
+		$('#contact-static-fields-group', el).html(getTemplate("contact-custom-fields"));
+
+		get_custom_fields(function(data){
+		
+ 		for(i=0; i<data.length; i++){
+		getTemplate("contact-custom-fields-append", data[i], undefined, function(template_ui){
+     				if(!template_ui)
+    					  return;
+    		$("#custom-fields-group",el).append(template_ui);
+ 		});
+	}
+
+			$.ajax({
+					url : 'core/api/contact-view-prefs/contact-company',
+					type : 'GET',
+					dataType : 'json',
+					
+					success : function(data)
+						{
+							console.log("")
+						var customfields = $("#contact-static-fields");
+						deserializecontactsForm(data.fields_set, customfields);
+						console.log(data);
+					}
+				});
+			
+		
+		});
+
+
+}
+
+function fetchContactCompanyHeadings(callback,url)
+	{
+			var view = new Backbone.Model();
+			view.url = 'core/api/contact-view-prefs/contact-company';
+			view.fetch({ success : function(data)
+			{		
+				App_Companies.contactCompanyViewModel = data.toJSON();
+				if(callback && typeof callback === "function")
+				{
+					return callback(App_Companies.contactCompanyViewModel);
+				}
+
+			} });
+	}
+
+function getContactofCompanies(modelData,el,companyId)
+{
+						var url = 'core/api/contacts/related/' + companyId;
+		var slateKey = getContactPadcontentKey(url);
+		var individual_tag_name = contacts_view_loader.getContactsIndividualTagName();
+		//var postData = {'filterJson': contacts_view_loader.getPostData()};
+		//var sortKey = contacts_view_loader.getContactsSortKey();
+		if(companyId)
+		{
+					App_Companies.contacts_Company_List = new  Contacts_Events_Collection_View({ url : url, modelData : modelData, sort_collection : false,
+					 templateKey : "company-contacts-list-view", individual_tag_name : individual_tag_name,
+				cursor : true, page_size : 25, slateKey : slateKey, request_method : 'GET', postRenderCallback : function(cel, collection)
+				{	
+					if(App_Companies.contacts_Company_List.collection.models.length == 0)	
+					$('.add-contact-extra').parent().hide();
+					if(App_Companies.contacts_Company_List.collection.models.length > 0
+					 && !App_Companies.contacts_Company_List.collection.models[0].get("count")){
+						// Call to get Count 
+						getAndUpdateCollectionCount("contacts-company", el);						
+					}
+					contactListener();
+
+				} });
+			App_Companies.contacts_Company_List.collection.fetch();
+
+			App_Companies.contacts_Company_List.appendItem = function(base_model){
+				contactTableView(base_model,CONTACTS_DATE_FIELDS,this,CONTACTS_CONTACT_TYPE_FIELDS,CONTACTS_COMPANY_TYPE_FIELDS);
+			};
+
+			$("#company-contacts-list-view", el).html(App_Companies.contacts_Company_List.render().el);
+		}
+
+		else
+		{
+			App_Companies.contacts_Company_List.options.modelData = modelData;
+
+			App_Companies.contacts_Company_List.appendItem = function(base_model){
+				contactTableView(base_model,CONTACTS_DATE_FIELDS,this,CONTACTS_CONTACT_TYPE_FIELDS,CONTACTS_COMPANY_TYPE_FIELDS);
+			};
+
+			$("#company-contacts-list-view", el).html(App_Companies.contacts_Company_List.render(true).el);
+		}
+		}
