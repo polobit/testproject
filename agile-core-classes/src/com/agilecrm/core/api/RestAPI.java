@@ -57,8 +57,9 @@ public class RestAPI
     @Path("contact")
     @Consumes("application/json")
     @Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8;")
-    public String createContact(String data, @QueryParam("id") String apiKey)
+    public String createContact(String data)
     {
+	System.out.println("Input received = " + data);
 	try
 	{
 	    Contact contact = new Contact();
@@ -126,6 +127,7 @@ public class RestAPI
 			    // Iterate data by keys ignore email key value pair
 			    Iterator<?> keys1 = obj1.keys();
 			    JSONObject tester = new JSONObject();
+			    List<ContactField> input_properties = new ArrayList<ContactField>();
 			    while (keys1.hasNext())
 			    {
 				String key = (String) keys1.next();
@@ -199,9 +201,11 @@ public class RestAPI
 				    }
 
 				    ContactField field = mapper.readValue(json.toString(), ContactField.class);
-				    contact1.addProperty(field);
+				    input_properties.add(field);
 				}
 			    }
+			    // Partial update, send all properties
+			    contact1.addPropertiesData(input_properties);
 			    if (tags1.length > 0)
 				contact1.addTags(PHPAPIUtil.getValidTags(tags1));
 			    else
@@ -262,6 +266,7 @@ public class RestAPI
     @Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8;")
     public String updateContact(String data)
     {
+	System.out.println("Input received = " + data);
 	try
 	{
 	    // Get data and check if email is present
@@ -360,6 +365,7 @@ public class RestAPI
 	    // Iterate data by keys ignore email key value pair
 	    Iterator<?> keys = obj.keys();
 	    JSONObject tester = new JSONObject();
+	    List<ContactField> input_properties = new ArrayList<ContactField>();
 	    while (keys.hasNext())
 	    {
 		String key = (String) keys.next();
@@ -433,9 +439,11 @@ public class RestAPI
 		    }
 
 		    ContactField field = mapper.readValue(json.toString(), ContactField.class);
-		    contact.addProperty(field);
+		    input_properties.add(field);
 		}
 	    }
+	    // Partial update, send all properties
+	    contact.addPropertiesData(input_properties);
 	    if (tags.length > 0)
 		contact.addTags(PHPAPIUtil.getValidTags(tags));
 	    else
@@ -586,55 +594,38 @@ public class RestAPI
     public List<Contact> getContactsBasedOnTagFilter(@PathParam("tag") String tag) throws JSONException
     {
 	List<Contact> contactList = new ArrayList<Contact>();
-	long currentTime = System.currentTimeMillis();
-	long initialTime = currentTime - 1200000; // Time befor 20 minutes of
-						  // current time
+	String filterJson = "";
+	
+	filterJson = "{'rules':[{'LHS':'tags','CONDITION':'EQUALS','RHS':'"+tag+"'}],'or_rules':[],'contact_type':'PERSON'}";
+	
+	ContactFilter contact_filter = ContactFilterUtil.getFilterFromJSONString(filterJson);
 
-	JSONObject json = new JSONObject();
-	json.put("LHS", "updated_time");
-	json.put("CONDITION", "BETWEEN");
-	json.put("RHS", initialTime);
-	json.put("RHS_NEW", currentTime);
-
-	JSONArray jsonArray = new JSONArray();
-	jsonArray.add(json);
-	JSONObject json1 = new JSONObject();
-	json1.put("rules", jsonArray);
-	json1.put("contact_type", "PERSON");
-
-	ContactFilter contact_filter = ContactFilterUtil.getFilterFromJSONString(json1.toString());
-	// Sets ACL condition
-	UserAccessControlUtil.checkReadAccessAndModifyTextSearchQuery(
-		UserAccessControl.AccessControlClasses.Contact.toString(), contact_filter.rules, null);
-
-	List<Contact> licontacts = new ArrayList<Contact>(contact_filter.queryContacts(Integer.parseInt("100"), null,
-		"-updated_time"));
-
+	
+	
+	
 	Map<Long, Contact> unsortMap = new HashMap<Long, Contact>();
-
-	List<Contact> licontactsCreatedTime = ContactUtil.getContactsForTag(tag, Integer.parseInt("10"), null,
-		"-created_time");
-	for (Contact c : licontactsCreatedTime)
+	
+	System.out.println("========================  Log 1  =================================== ");
+	for (Contact c : contactList1)
 	{
-	    if (c.updated_time == 0)
-	    {
+	    	System.out.println("========================  Log 2  =================================== ");
 		int index = Arrays.asList(c.tags.toArray()).indexOf(tag);
-		if ((System.currentTimeMillis() - c.tagsWithTime.get(index).createdTime) <= 1200000)
+		if(index != -1 && index >= 0)
 		    unsortMap.put(c.tagsWithTime.get(index).createdTime, c);
-	    }
-
+		
+		System.out.println("========================  Log 3  =================================== ");
+		
 	}
-	for (Contact c : licontacts)
+	
+	System.out.println("========================  Log 4  =================================== ");
+	for (Contact c : contactList2)
 	{
-	    int index = Arrays.asList(c.tags.toArray()).indexOf(tag);
-	    if (index >= 0)
-	    {
-		if ((System.currentTimeMillis() - c.tagsWithTime.get(index).createdTime) <= 1200000)
+	    	System.out.println("========================  Log 5  =================================== ");
+		int index = Arrays.asList(c.tags.toArray()).indexOf(tag);
+		if(index != -1 && index >= 0)
 		    unsortMap.put(c.tagsWithTime.get(index).createdTime, c);
-
-	    }
 	}
-
+	
 	Map<Long, Contact> treeMap = new TreeMap<Long, Contact>(new Comparator<Long>()
 	{
 	    @Override
@@ -649,7 +640,7 @@ public class RestAPI
 	{
 	    contactList.add((Contact) entry.getValue());
 	}
-
+	System.out.println("========================  Log 6  =================================== ");
 	return contactList;
     }
 
