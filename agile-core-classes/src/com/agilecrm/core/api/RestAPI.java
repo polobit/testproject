@@ -601,7 +601,9 @@ public class RestAPI
 	ContactFilter contact_filter = ContactFilterUtil.getFilterFromJSONString(filterJson);
 
 	
+	List<Contact> contactList1 = new ArrayList<Contact>(contact_filter.queryContacts(Integer.parseInt("20"), null, "-updated_time"));
 	
+	List<Contact> contactList2 = new ArrayList<Contact>(contact_filter.queryContacts(Integer.parseInt("20"), null, "-created_time"));
 	
 	Map<Long, Contact> unsortMap = new HashMap<Long, Contact>();
 	
