@@ -408,13 +408,11 @@ public class DealFilterUtil {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public static List<ScoredDocument> getDealSearchDocs(String id, Integer count, String cursor, String orderBy, String pipeline_id, String milstone)
+	public static List<ScoredDocument> getDealSearchDocs(String id, Integer count, String cursor, String orderBy, String pipeline_id, String milstone, QueryDocument<Opportunity> queryInstace)
     {
 	DealFilter filter = null;
 	try
-	{
-		QueryDocument<Opportunity> queryInstace = new QueryDocument<Opportunity>(new OpportunityDocument().getIndex(), Opportunity.class);
-		
+	{	
 	    System.out.println("cursor : " + cursor + ", count : " + count);
 	    
 	    if(id != null && !id.equalsIgnoreCase("my-deals") && !id.equalsIgnoreCase("null") && StringUtils.isNotEmpty(id))

@@ -1796,7 +1796,7 @@ public class OpportunityUtil
      *            deals filters.
      * @return list of deals.
      */
-    public static List<Opportunity> getOpportunitiesForBulkActions(String ids, String filter, int count)
+    public List<Opportunity> getOpportunitiesForBulkActions(String ids, String filter, int count)
     {
 	List<Opportunity> deals = new ArrayList<Opportunity>();
 	try
@@ -1826,9 +1826,10 @@ public class OpportunityUtil
 	    else
 	    {
 	    String cursor = null;
+	    QueryDocument<Opportunity> queryInstace = new QueryDocument<Opportunity>(new OpportunityDocument().getIndex(), Opportunity.class);
 	    Set<Key<Opportunity>> dealsSet = new HashSet<Key<Opportunity>>();
 	    
-	    List<ScoredDocument> scoredDocuments = DealFilterUtil.getDealSearchDocs(filter, 200, cursor, "created_time", null, null);
+	    List<ScoredDocument> scoredDocuments = DealFilterUtil.getDealSearchDocs(filter, 200, cursor, "created_time", null, null, queryInstace);
 	    
 	    System.out.println("Start----- Deals fetching in bulk actions with textsearch");
 	    int iterationCount = 0;
@@ -1859,7 +1860,7 @@ public class OpportunityUtil
 		    System.out.println("Start Doc ID----"+scoredDocuments.get(0).getId());
 		    System.out.println("End Doc ID----"+doc.getId());
 		    
-		    scoredDocuments = DealFilterUtil.getDealSearchDocs(filter, 200, cursor, "created_time", null, null);
+		    scoredDocuments = DealFilterUtil.getDealSearchDocs(filter, 200, cursor, "created_time", null, null, queryInstace);
 	    }
 	    System.out.println("End----- Deals fetching in bulk actions with textsearch");
 	    }
