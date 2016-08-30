@@ -20,6 +20,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.exception.ExceptionUtils;
 
 import net.sf.json.JSONObject;
 
@@ -157,6 +158,7 @@ public class SubscriptionApi {
 			throw e;
 		} catch (Exception e) {
 			e.printStackTrace();
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
 
 			/*
 			 * If Exception is raised during subscription send the exception
