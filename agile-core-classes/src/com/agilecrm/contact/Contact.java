@@ -571,10 +571,10 @@ public class Contact extends Cursor
 	    
 	    catch (SearchException se)
 	    {	domain = NamespaceManager.get();
-	    	System.out.println("Before search add method to text search "+domain);
+	    	System.out.println("Before search addasync method to text search "+domain);
 	    	search.addAsync(this);
 	    	domain = NamespaceManager.get();
-	    	System.out.println("After search add method to text search "+domain);
+	    	System.out.println("After search addasync method to text search "+domain);
 	    }
 	    catch (Exception e)
 	    {
