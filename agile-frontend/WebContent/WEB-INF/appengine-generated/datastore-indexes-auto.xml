@@ -596,9 +596,12 @@
         <property name="close_date" direction="asc"/>
         <property name="expected_value" direction="asc"/>
     </datastore-index>
-    
      <datastore-index kind="Contact" ancestor="false" source="auto">
         <property name="type" direction="asc"/>
         <property name="updated_time" direction="asc"/>
     </datastore-index>
+    <datastore-index kind="PushNotificationMessage" ancestor="false" source="manual">
+       <property name="browser_id" direction="asc"/>
+       <property name="created_time" direction="asc"/>
+ </datastore-index>
 </datastore-indexes>

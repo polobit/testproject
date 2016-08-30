@@ -50,6 +50,26 @@ public class TrackClickUtil
 	    EmailOpenServlet.addEmailOpenedLog(campaignId, subscriberId, workflowName);
     }
 
+
+    /**
+     * Adds push notification clicked log to SQL.
+     * 
+     * @param campaignId
+     *            - Campaign Id
+     * @param subscriberId
+     *            - Contact Id
+     * @param longURL
+     *            - Original url
+     * @param workflowName
+     *            - Workflow Name.
+     */
+    public static void addPushNtificationClickedLog(String campaignId, String subscriberId, String longURL, String workflowName)
+    {
+
+	LogUtil.addLogToSQL(campaignId, subscriberId, "Push Notification link clicked " + longURL + " of campaign " + workflowName,
+	        LogType.PUSH_NOTIFICATION_CLICKED.toString());
+    }
+
     
     /**
      * Shows email clicked notification to the contact.

@@ -2347,7 +2347,7 @@ color:#484848!important;
 .pos-t-1{ top: 1px;}
 .icons-text-sm .actions i, .icons-text-sm .actions span.icon-trash{ font-size: 13px;}
 .icons-text-sm.actions i, .icons-text-sm.actions span.icon-trash{ font-size: 13px !important;}
-.app-aside-folded:not(.app-aside-dock) .navi > ul > li#landing-pages-menu a span, .app-aside-folded:not(.app-aside-dock) .navi > ul > li#tickets a span, .app-aside-folded:not(.app-aside-dock) .navi > ul > li#ticketcannedmessagesmenu a span,.app-aside-folded:not(.app-aside-dock) .navi > ul > li#ticketknowledgebasemenu a span, .app-aside-folded:not(.app-aside-dock) .navi > ul > li#email-templates-menu a span, .app-aside-folded:not(.app-aside-dock) .navi > ul > li#schedulingmenu a span{ padding-top: 10%;}
+.app-aside-folded:not(.app-aside-dock) .navi > ul > li#landing-pages-menu a span, .app-aside-folded:not(.app-aside-dock) .navi > ul > li#tickets a span, .app-aside-folded:not(.app-aside-dock) .navi > ul > li#ticketcannedmessagesmenu a span,.app-aside-folded:not(.app-aside-dock) .navi > ul > li#ticketknowledgebasemenu a span, .app-aside-folded:not(.app-aside-dock) .navi > ul > li#email-templates-menu a span, .app-aside-folded:not(.app-aside-dock) .navi > ul > li#push-notification-menu a span, .app-aside-folded:not(.app-aside-dock) .navi > ul > li#schedulingmenu a span{ padding-top: 10%;}
 .recent-list-text-color a{ color: #363f44 !important;}
 
 .editicon{ border: 1px solid #dee5e7; height: 13px; padding: 0 2px; border-radius: 2px;}
