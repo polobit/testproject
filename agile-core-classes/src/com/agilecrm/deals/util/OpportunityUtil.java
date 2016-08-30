@@ -1835,7 +1835,7 @@ public class OpportunityUtil
 	    while(scoredDocuments != null && scoredDocuments.size() > 0)
 	    {
 	    	System.out.println("scoredDocuments size-------"+scoredDocuments.size());
-	    	System.out.println("Iteration Count----"+iterationCount);
+	    	System.out.println("Iteration Count----"+iterationCount++);
 			for (ScoredDocument doc : scoredDocuments)
 			{
 			    try
