@@ -116,8 +116,8 @@ public class DealTriggerUtil
 			if(updatedOpportunity.milestone.equals(wonMilestone))
 			{
 				String domain = NamespaceManager.get();	
-				String msg = "Deal won alert"; 
-				 BulkActionNotifications.publishNotification(msg);
+				//String msg = "Deal won alert"; 
+				 //BulkActionNotifications.publishNotification(msg);
 				
 				System.out.println("Currrent domain ="+domain);
 				 HashMap<String, Object> map = new HashMap<String, Object>();
