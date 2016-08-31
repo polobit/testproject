@@ -129,7 +129,7 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
 								{
 									var txt ;
 									if(!searchParams && searchUrl != "core/api/search/deals")
-										txt = '<b>{{agile_lng_translate "others" "no-reults-found"}}</b><p class="text-center"><a onclick="createtypeheadcontact($(this));" type="contact">Add as New contact</a></p><p class="text-center"><a onclick="createtypeheadcontact($(this));" type="company">Add as New company</a></p>';
+										txt = '<b>{{agile_lng_translate "others" "no-reults-found"}}</b><p class="text-center"><a onclick="createtypeheadcontact($(this));" type="contact">{{agile_lng_translate "typeahead" "add-as-new-contact"}}</a></p><p class="text-center"><a onclick="createtypeheadcontact($(this));" type="company">{{agile_lng_translate "typeahead" "add-as-new-company"}}</a></p>';
 									else
 										txt = '<b>{{agile_lng_translate "others" "no-reults-found"}}</b>' ; 
 									searchParams = "";searchUrl = "";
