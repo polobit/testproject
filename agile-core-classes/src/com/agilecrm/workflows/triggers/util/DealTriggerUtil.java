@@ -125,7 +125,7 @@ public class DealTriggerUtil
 			for (DomainUser user  : user_list)
 			{
 				 map.put("user", user);
-				SendMail.sendMail(user.email," Deal Won Alert", SendMail.Deal_Won_status,map);
+				//SendMail.sendMail(user.email," Deal Won Alert", SendMail.Deal_Won_status,map);
 			
 			//PubNub.pubNubPush(user.id + "_Channel", messageJson);
 				}
