@@ -17,6 +17,25 @@
     </div>
 {{/unless}}
 {{#if this.length}}
+{{#is_mobile}}
+
+<div class="col panel wrapper p-b-xs">
+        <div class="hbox h-auto">
+            <div class="pull-right add-btn-mobile">
+                <a href="#knowledgebase/add-article{{#helpcenter_url_section}}{{/helpcenter_url_section}}" class="btn btn-xs btn-default btn-addon m-b">
+                    <span><i class="icon-plus-sign"></i></span>{{agile_lng_translate 'Help-center' 'add-article'}}
+                </a>
+            </div>
+            <table class="table service-table-mobile no-shadow m-b-none agile-table panel" url="core/api/knowledgebase/article/bulk" data-bulk-delete-title="{{agile_lng_translate 'contact-details' 'delete'}}"
+                data-bulk-delete-msg="{{agile_lng_translate 'others' 'delete-warn'}}" id="ticket-article-table">
+                   
+                    <tbody id="ticket-helpcenter-articles-model-list" class="c-p"> </tbody>
+            </table>
+
+        </div>
+    </div>
+{{else}}
+
     <div class="col panel wrapper p-b-xs">
         <div class="hbox h-auto">
             <div class="pull-right">
@@ -41,6 +60,8 @@
 
         </div>
     </div>
+{{/is_mobile}}
+
     <div class="col w-md  wrapper pos-rlt track-milestone-text p-t-none" >
             <h4 class="m-t-none h4 m-b-sm">
                {{agile_lng_translate 'tickets' 'how-to-configure-knowledge-base'}}

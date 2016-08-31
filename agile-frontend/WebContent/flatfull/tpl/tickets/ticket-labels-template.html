@@ -25,7 +25,7 @@
             <span><i class="icon-plus-sign"></i></span> {{agile_lng_translate 'tickets' 'add-label'}}
             </a>
         </div>
-        <table class="table no-shadow m-b-none agile-table panel table-layout-mob-view tableHeader tab-layout tickets-border" url="core/api/tickets/labels/bulk" data-bulk-delete-title="{{agile_lng_translate 'contact-details' 'delete'}}"
+        <table class="table service-table-mobile no-shadow m-b-none agile-table panel tableHeader tab-layout tickets-border" url="core/api/tickets/labels/bulk" data-bulk-delete-title="{{agile_lng_translate 'contact-details' 'delete'}}"
             data-bulk-delete-msg="{{agile_lng_translate 'tickets' 'conformation-messge-for-deletion'}}" data-resizable-columns-id="tickets-labels">
                 
                 <tbody id="ticket-label-model-list" class="ticket-label-border" route="ticket-label/" class="c-p"> </tbody>
@@ -64,7 +64,7 @@
     {{id}}
 </td>
  <td class="p-r-none p-l-none">
-    <div>{{label}}</div>
+    <div class="table-resp">{{label}}</div>
 
     <div class="table-resp overflow-hidden line-clamp no-wrap">
         <small class="edit-hover text-muted"> 

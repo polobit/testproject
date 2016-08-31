@@ -1,4 +1,21 @@
 <script id="ticket-helpcenter-sections-model-template" type="text/html">
+{{#is_mobile}}
+<td class="hide data" data="{{id}}">{{id}}</td>
+  <td class="p-r-none p-l-none">
+    <div class="table-resp knowledgebase-name">
+      <div class="text-ellipsis">
+        <a href="#knowledgebase/{{id}}/articles" class="pull-left text-ellipsis w-full">{{name}}</a>
+      </div>
+    </div>
+
+      <div class="pull-right">
+        <a title= "Edit" href="#knowledgebase/category/{{categorie_id}}/section/{{id}}/edit-section"> <small class="text-muted m-b-sm"><i id="{{id}}" data-id="{{name}}"  class="fa fa-pencil-square-o"></i></small>
+        </a>
+      </div>
+  </td>
+    
+{{else}}
+
 <td class="hide data" data="{{id}}">{{id}}</td>
 	<td>
 		<div class="table-resp">
@@ -23,4 +40,5 @@
     </a>
 
   </td>
+  {{/is_mobile}}
 </script>

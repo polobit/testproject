@@ -2010,6 +2010,7 @@ display: block!important;
  .plan-upgrade-center{ text-align: center; float: none !important;}
  .add-btn-mobile{ float: none !important; text-align: center;}
  .categori-btn-center{ display: table; margin: auto;}
+ .service-table-mobile td > div.table-resp{width: 100%}
 }
 
 @media all and (min-width: 768px) {
@@ -2451,5 +2452,5 @@ transform: translateX(-50%);}
 .ticket-label-border tr:first-child td {
     border-top: 1px solid #eaeff0 !important;
 }
-
+.knowledgebase-name{width: 93% !important; float: left;}
 /*end custom css code*/
