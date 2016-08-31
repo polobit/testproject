@@ -1,6 +1,6 @@
 <script id="search-model-template" type="text/html">
 {{#is_mobile}}
-
+    <td class="hide"></td>
     <td class="data icon-append-mobile p-r-none" data="{{id}}">
         <div class="table-resp" style="width:calc(100vw - 60px);">
             <div class="agile-img m-r-sm thumb" style="margin-right:10px;">
@@ -36,7 +36,7 @@
                     <span class="label bg-light dk text-tiny">{{this}}</span>
                 {{/each}}
             </div>
-            <div style="margin-left:59px">{{lead_score}}</div>
+            <!-- <div style="margin-left:59px">{{lead_score}}</div> -->
         </div>
     </td>
     <td style="vertical-align:middle">

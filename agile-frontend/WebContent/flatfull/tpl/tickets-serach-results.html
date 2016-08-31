@@ -1,15 +1,21 @@
 <script id="tickets-search-model-template" type="text/html">
+    <td class="hide"></td>
     <td class="data" data="{{id}}">
         <div class="table-resp">
             <div class="agile-thumb agile-thumb-view" style="width:calc(100% - 60px);">
-                <div class="text-cap custom-link">#{{id}}</div> 
-                <div> <small class="text-muted m-t-xs">{{subject}} </small></div>
+                <div class="text-cap custom-link">{{subject}} (#{{id}})</div>
+                <div>
+                    <small class="text-muted m-t-xs overflow-hidden no-wrap">  {{requester_name}} 
+                    </small>
+                </div> 
+                <!-- <div> <small class="text-muted m-t-xs">{{subject}} </small></div> -->
             </div>
-            <div class="overflow-hidden no-wrap">{{requester_name}}</div>
-            <div class="text-muted">{{priority}}, {{status}}</div>
+            <!-- <div> <small class="text-muted m-t-xs overflow-hidden no-wrap">{{requester_name}} </small></div> -->
+            <!-- <div class="overflow-hidden no-wrap">{{requester_name}}</div> -->
+            <div class="text-muted">{{ucfirst priority}}, {{ucfirst status}}</div>
             <div class="table-resp">
                 <i class="fa fa-clock-o m-r-xs"></i>
-                <time class="document-created-time b-b-dotted" value="{{created_time}}" datetime="{{epochToHumanDate "" created_time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created_time}}</time>
+                <time class="document-created-time b-b-dotted" value="{{created_time}}" datetime="{{epochToHumanDate ""created_time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created_time}}</time>
             </div>
        </div>
     </td>
