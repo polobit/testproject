@@ -77,9 +77,11 @@ public class ShopifyWidgetAPI {
 							.status(Response.Status.NOT_FOUND)
 							.entity("Shop expired choose a plan").build());
 				} else {
+					try{
 					throw new WebApplicationException(Response
 							.status(Response.Status.NOT_FOUND)
 							.entity("No Customer found").build());
+					}catch(Exception e){}
 				}
 			}
 
