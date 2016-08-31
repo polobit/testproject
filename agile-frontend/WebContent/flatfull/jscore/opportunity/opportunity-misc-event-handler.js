@@ -604,14 +604,20 @@ function createtypeheadcontact(el){
 	var type = $(el).attr('type') ; 
 	var contact = {}; var url = '/core/api/contacts' ;
 	var properties = []; var json = {};
-	json.name = "first_name";
-	json.type = "SYSTEM";json.value = cname ;
-	properties.push(json);
-	contact.properties = properties ; 
-	if(type == "contact")
-		contact['type'] = 'PERSON' ; 
-	else 
+	if(type == "contact"){
+		contact['type'] = 'PERSON' ;
+		json.name = "first_name";
+		json.type = "SYSTEM";
+		json.value = cname ; 
+	}
+	else {
 		contact['type'] = 'COMPANY' ;
+		json.name = "name";
+		json.type = "SYSTEM";
+		json.value = cname ;
+	}
+	properties.push(json);
+	contact.properties = properties ;
 	$.ajax({
 	  type: "POST",
 	  url: url,contentType : "application/json; charset=utf-8",
@@ -619,10 +625,13 @@ function createtypeheadcontact(el){
 	  data: JSON.stringify(contact),
 	  success: function(data){
 	  	console.log(data);
-	  	var properties = [];var i ;var coname ; 
-	  	properties = data['properties'] ; 
-	  	for(i=0 ; i< properties.length ; i++){
-	  		if(properties[i].name == 'first_name'){
+	  	var properties = [];var i ;var coname ;var cValue = 'first_name'; 
+	  	var cType = data.type ; 
+	  	properties = data['properties'];
+	  	if(cType == 'COMPANY')
+	  		cValue = 'name';
+	  	for(i=0 ; i<properties.length ; i++){
+	  		if(properties[i].name == cValue){
 	  			coname = properties[i].value;
 	  			break ; 
 	  		}
