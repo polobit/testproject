@@ -1,0 +1,19 @@
+{
+ 	"enter-your-domain": "{{agile_lng_translate 'enter-domain' 'enter-your-domain'}}",
+ 	"enter-your-domain-at": "{{agile_lng_translate 'enter-domain' 'enter-your-domain-at'}}",
+ 	"submit": "{{agile_lng_translate 'admin-settings' 'submit'}}",
+ 	"Company": "{{agile_lng_translate 'contacts-view' 'Company'}}",
+ 	"new-user": "{{agile_lng_translate 'enter-domain' 'new-user'}}",
+ 	"click-here": "{{agile_lng_translate 'others' 'click-here'}}",
+ 	"forgot": "{{agile_lng_translate 'login' 'forgot'}}",
+ 	"domain": "{{agile_lng_translate 'prefs-settings' 'domain'}}",
+ 	"common-domain-issue": "{{agile_lng_translate 'enter-domain' 'common-domain-issue'}}",
+ 	"domain-name-length-error": "{{agile_lng_translate 'enter-domain' 'domain-name-length-error'}}",
+ 	
+ 	// Custom validations
+ 	"invalid-default": "{{agile_lng_translate 'html5Validations' 'invalid-default'}}",
+ 	"invalid-email": "{{agile_lng_translate 'html5Validations' 'invalid-email'}}",
+ 	"invalid-password": "{{agile_lng_translate 'html5Validations' 'invalid-password'}}",
+ 	"name-validation": "{{agile_lng_translate 'register' 'name-validation'}}",
+ 	"invalid-pattern": "{{agile_lng_translate 'register' 'invalid-pattern'}}",
+}

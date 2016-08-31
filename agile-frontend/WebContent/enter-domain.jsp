@@ -1,6 +1,18 @@
+<%@page import="com.agilecrm.util.VersioningUtil"%>
+<%@page import="com.agilecrm.util.MobileUADetector"%>
+<%@page import="com.agilecrm.util.language.LanguageUtil"%>
+<%@page import="org.json.JSONObject"%>
+<%@page import="com.agilecrm.user.UserPrefs"%>
+<%@page import="com.agilecrm.util.CookieUtil"%>
 <%@page import="org.apache.commons.lang.StringUtils"%>
 <%@page import="com.agilecrm.user.util.DomainUserUtil"%>
 <%
+//Language
+String _LANGUAGE = LanguageUtil.getLanguageKeyFromCookie(request);
+
+//Locales JSON
+JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "enter-domain");
+
 /*
 It checks if any user exists in that domain,
 if user exists,it is redirected to login page in the same domain otherwise it is redirected to register page.
@@ -23,12 +35,12 @@ if(redirectTo  != null)
 %>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="<%=_LANGUAGE %>">
 <head>
 <head>
 <meta charset="utf-8">
  <meta name="globalsign-domain-verification" content="-r3RJ0a7Q59atalBdQQIvI2DYIhVYtVrtYuRdNXENx"/>
-<title>Enter Your Domain</title>
+<title><%=LanguageUtil.getLocaleJSONValue(localeJSON, "enter-your-domain")%></title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0 maximum-scale=1">
 <meta name="description" content="">
 <meta name="author" content="">
@@ -46,7 +58,19 @@ if(redirectTo  != null)
 <style>
 body {
 
-  background-image:url('..<%=flatfull_path%>/images/flatfull/buildings-low.jpg');
+<% 
+	if(MobileUADetector.isMobile(request.getHeader("user-agent"))) {%>
+		background-image:url('..<%=flatfull_path%>/images/flatfull/buildings-low.jpg');
+	
+	<% } else if(VersioningUtil.isDevelopmentEnv()){  %>
+		background-image:url('https://doxhze3l6s7v9.cloudfront.net/app/static/images/buildings-low.jpg');
+	
+	<%} else {  %>
+		background-image:url('..<%=flatfull_path%>/images/flatfull/buildings-low.jpg');
+	
+	<%}%>
+	
+  
   background-repeat: no-repeat;
   background-position: center center;
   background-size: 100% 100%;
@@ -131,21 +155,21 @@ padding-left:10px!important;
 			<i class="fa fa-cloud m-r-xs"></i>Agile CRM
 		</a>
   		<div class="wrapper text-center text-white">
-			<strong>Enter your domain at Agile CRM</strong>
+			<strong><%=LanguageUtil.getLocaleJSONValue(localeJSON, "enter-your-domain-at")%> Agile CRM</strong>
 		</div>	
 		<form name='choose_domain' id="choose_domain" method='post'>
 			<div id="domain-error"></div>
 			<div class="list-group list-group-sm">
 				<div class="list-group-item">
-          			<input id='subdomain' type="text" placeholder="Company"
+          			<input id='subdomain' type="text" placeholder='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "Company")%>'
 						   	   name="subdomain" class="input-xlarge  required form-control no-border w pull-left" autocapitalize="off"><div class="inline-block m-t-xs">.agilecrm.com</div><div class="clearfix"></div>
 				</div>
 			</div>
-			<input class="btn btn-lg btn-primary btn-block" type="submit" value="Submit">
+			<input class="btn btn-lg btn-primary btn-block" type="submit" value='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "submit")%>'>
 		</form>
 	 	<div class="text-center text-white m-t m-b">
-	  		<small>New User? </small> <a href="/register" class="text-white">Click here</a><br/>
-	  	 <small>Forgot </small><a href="/forgot-domain" class="text-white">Domain?</a>
+	  		<small><%=LanguageUtil.getLocaleJSONValue(localeJSON, "new-user")%>? </small> <a href="/register" class="text-white"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "click-here")%></a><br/>
+	  	 <small><%=LanguageUtil.getLocaleJSONValue(localeJSON, "forgot")%> </small><a href="/forgot-domain" class="text-white"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "domain")%>?</a>
 		 </div>
 
 	</div>
@@ -180,7 +204,7 @@ padding-left:10px!important;
 			        || !isAlphaNumeric(subdomain) || !isNotValid(subdomain))
 				{
 					//shows error message
-					if(!error)error = "Domain should be 2 to 20 characters."
+					if(!error)error = '<%=LanguageUtil.getLocaleJSONValue(localeJSON, "domain-name-length-error")%>';
 					$("#domain-error").html('<div class="alert error alert-danger login-error m-b-none">'
 							+ '<a class="close m-t-n-sm" data-dismiss="alert" href="#">&times</a>'+ error +'</div>');
 					error = "";
@@ -199,7 +223,7 @@ padding-left:10px!important;
 			var sub_domain = ["my", "agile", "googleapps", "sales", "support", "login", "register", "google", "yahoo", "twitter", "facebook", "aol", "hotmail"];
 			for(var key in sub_domain){
 				if(sub_domain[key] == subdomain.toLowerCase()){
-					error = "Common domain cannot be created.";
+					error = '<%=LanguageUtil.getLocaleJSONValue(localeJSON, "common-domain-issue")%>';
 					return false;
 				} 
 			}
@@ -211,7 +235,7 @@ padding-left:10px!important;
 		  
 		  var regularExpression  = new RegExp(/^[A-Za-z][a-zA-Z0-9]{1,20}$/);
 		  if(!regularExpression.test(subdomain)) {
-		        error = "Domain should start with alphabet and special characters not allowed.";
+		        error = '<%=LanguageUtil.getLocaleJSONValue(localeJSON, "enter-domain.domain-name-issue")%>';
 				return false;
 		    }
 		  return true;

@@ -35,8 +35,10 @@ import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.Referer;
 import com.agilecrm.user.RegisterVerificationServlet;
+import com.agilecrm.user.UserPrefs;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.user.util.ReferUtil;
+import com.agilecrm.util.CookieUtil;
 import com.agilecrm.util.ReferenceUtil;
 import com.agilecrm.util.RegisterUtil;
 import com.agilecrm.util.VersioningUtil;
@@ -211,10 +213,19 @@ public class RegisterServlet extends HttpServlet
 	// Get Origin
 	String originName = request.getParameter("origin_from");
 	
+	// Get lanuage
+	String language = request.getParameter("user_lang");
+	if(StringUtils.isBlank(language))
+		language = UserPrefs.DEFAULT_LANGUAGE;
+	
+	// Add cookie
+	CookieUtil.createCookieWithDomain(null, "user_lang", language, response);
+	
 	System.out.println("email = " + email);
 	System.out.println("name = " + name);
 	System.out.println("password = " + password);
 	System.out.println("originName = " + originName);
+	System.out.println("language = " + language);
 
 	String timezone = request.getParameter("account_timezone");
 
