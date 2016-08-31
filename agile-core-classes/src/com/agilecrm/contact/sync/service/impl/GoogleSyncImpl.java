@@ -418,7 +418,7 @@ public class GoogleSyncImpl extends TwoWaySyncService
 	catch (Exception e)
 	{
 	    System.out.println("Error occured while creating contacts in Google" + e.getMessage());
-	    System.out.println("Error occured while creating contacts in Google" + e);
+	    e.printStackTrace();
 	}
 	
     }
@@ -434,6 +434,7 @@ public class GoogleSyncImpl extends TwoWaySyncService
 	{
 		System.out.println("Error occured while updating contacts in Google" + e.getMessage());
 		System.out.println("Error occured while updating contacts in Google" + e);
+		e.printStackTrace();
 	}
 
     }
@@ -451,7 +452,12 @@ public class GoogleSyncImpl extends TwoWaySyncService
 
 	// Feed that hold s all the batch request entries.
 	ContactFeed requestFeed = new ContactFeed();
-
+	
+	if ((prefs.expires - 60000) <= System.currentTimeMillis())
+	{
+	    System.out.println(prefs.token);
+	    GoogleServiceUtil.refreshGoogleContactPrefsandSave(prefs);
+	}
 	// Fetches contacts service
 	ContactsService contactService = GoogleServiceUtil.getService(token);
 
@@ -548,6 +554,7 @@ public class GoogleSyncImpl extends TwoWaySyncService
 	    {
 	    
 	    Thread.sleep(2000);
+	    System.out.println("Inside batch update");
 		// Submit the batch request to the server.
 		responseFeed = contactService.batch(url, requestFeed);
 		for(int v=0;v<responseFeed.getEntries().size();v++)
@@ -588,7 +595,12 @@ public class GoogleSyncImpl extends TwoWaySyncService
 
 	// Feed that hold s all the batch request entries.
 	ContactFeed updateFeed = new ContactFeed();
-
+	
+	if ((prefs.expires - 60000) <= System.currentTimeMillis())
+	{
+	    System.out.println(prefs.token);
+	    GoogleServiceUtil.refreshGoogleContactPrefsandSave(prefs);
+	}
 	// Fetches google contacts service
 	ContactsService contactService = GoogleServiceUtil.getService(token);
 
@@ -673,6 +685,7 @@ public class GoogleSyncImpl extends TwoWaySyncService
 		if (updateRequestCount >= 95 || ((i >= (contacts.size() - 1) && updateRequestCount != 0)))
 		{
 		    Thread.sleep(2000);
+		    System.out.println("Inside batch update");
 			responseFeed = contactService.batch(new URL("https://www.google.com/m8/feeds/contacts/default/full/batch?"
 				+ "access_token=" + token), updateFeed);
 			for(int v=0;v<responseFeed.getEntries().size();v++)

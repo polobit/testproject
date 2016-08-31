@@ -51,4 +51,6 @@ public interface BuilderInterface
     public Index getIndex();
 
     public List getResults(List<Long> ids);
+    
+    public void bulkDelete(String... ids);
 }
