@@ -1923,6 +1923,7 @@ public class ActivityUtil
 			searchMap.put("entity_type", entitytype);
 		if (entitytype.equalsIgnoreCase("CALL") || entitytype.equalsIgnoreCase("EMAIL_SENT"))
 			searchMap.put("activity_type", entitytype);
+	        searchMap.put("show_bulk_activity", null);
 		if (entityId != null)
 			searchMap.put("entity_id =", entityId);
 		else
