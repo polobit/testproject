@@ -4,6 +4,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -14,6 +15,7 @@ import com.agilecrm.activities.Category;
 import com.agilecrm.activities.util.CategoriesUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
+import com.agilecrm.contact.Tag;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.deals.CustomFieldData;
 import com.agilecrm.deals.Milestone;
@@ -48,6 +50,10 @@ public class DealCSVExport
     public static final String CREATED_DATE = "Created Date";
     public static final String WON_DATE = "Won Date";
     public static final String ID = "Deal ID";
+    public static final String TAGS = "Tags";				
+    public static final String TAGS_TIME_EPOCH = "Tags Time Epoch";	
+    public static final String TAGS_TIME = "Tags Time";	
+    private static final DateFormat dateTimeFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
 
     private static final DateFormat date = new SimpleDateFormat("MM/dd/yyyy");
 
@@ -69,6 +75,26 @@ public class DealCSVExport
 
 	try
 	{
+		
+		//String[] tagWithTimes = getDealTagsWithTimes(deal);
+		str[indexMap.get(TAGS)] = "String.valueOf(tagWithTimes[0])";
+	    str[indexMap.get(TAGS_TIME)] =" String.valueOf(tagWithTimes[1])";
+	    str[indexMap.get(TAGS_TIME_EPOCH)] = "String.valueOf(tagWithTimes[2])";
+		
+		//str[indexMap.get(TAGS)] = String.valueOf(tagWithTimes[0]);
+	    //str[indexMap.get(TAGS_TIME)] = String.valueOf(tagWithTimes[1]);
+	    //str[indexMap.get(TAGS_TIME_EPOCH)] = String.valueOf(tagWithTimes[2]);
+		/*Iterator<Tag> itrTags = deal.tagsWithTime.iterator() ;
+	    String s="";
+	    while(itrTags.hasNext()) s+=itrTags.hasNext(); 
+	    	    str[indexMap.get(TAGS)]=s;
+	    	  
+	    	    System.out.println("test1  :"+s);
+	   Iterator<Tag> itrTagsTime = deal.tagsWithTime.iterator(); 
+	      String s1="";
+	    while(itrTagsTime.hasNext()) s1+=itrTagsTime.hasNext(); 
+	      str[indexMap.get(TAGS_TIME)]=s1;
+	      System.out.println("test2  "+s1);*/
 		str[indexMap.get(ID)] = "ID_"+String.valueOf(deal.id);
 	    str[indexMap.get(NAME)] = deal.name;
 	    str[indexMap.get(DESCRIPTION)] = deal.description;
@@ -211,5 +237,23 @@ public class DealCSVExport
 	}
 
 	return "";
+    }
+    public static String[] getDealTagsWithTimes(Opportunity deal){
+    	String tags = "";
+    	String tagTimes = "";
+    	String tagTimesNew = "";
+
+    	for (Tag tag : deal.tagsWithTime)
+    	{
+    	    tags += tag.tag + ",";
+    	    tagTimes += tag.createdTime + ",";
+    	    
+    	    Date date = new Date();
+    		date.setTime(tag.createdTime);	
+    	    tagTimesNew += dateTimeFormat.format(date) + ",";
+    	}
+
+    	// Return array having tags and tagTimes without trailing commas
+    	return new String[] { StringUtils.chop(tags), StringUtils.chop(tagTimes), StringUtils.chop(tagTimesNew)};
     }
 }

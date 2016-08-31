@@ -271,7 +271,9 @@ public class Opportunity extends Cursor implements Serializable
 	/**
      * ObjectifyDao of Opportunity.
      */
-
+   // public static String _tags[] = {};			
+    //public static String tags_time_epoch[] = {};	//added
+    //public static String tags_time[] = {};	
     public static ObjectifyGenericDao<Opportunity> dao = new ObjectifyGenericDao<Opportunity>(Opportunity.class);
     
     /**
