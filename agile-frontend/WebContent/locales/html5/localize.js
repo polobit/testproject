@@ -3,12 +3,14 @@ function _agile_set_custom_validate(input){
 }
 
 function _agile_reset_custom_validate(input){
-	input.setCustomValidity("");
+    input.setCustomValidity("");
+
+    if(input.checkValidity())
+        input.setCustomValidity("");
 }
 
 function getCustomValidity(input){
 	var type = input.type;
-
 	if(input.validity.valueMissing){
         return localeJSON["invalid-default"];
     } else if(!input.validity.valid) {

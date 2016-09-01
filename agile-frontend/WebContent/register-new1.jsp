@@ -14,7 +14,7 @@ pageEncoding="UTF-8"%>
 
 <%
 	
-	if (request.getAttribute("javax.servlet.forward.request_uri") == null) {
+	/*if (request.getAttribute("javax.servlet.forward.request_uri") == null) {
 		response.sendRedirect("/register");
 		return;
 	}
@@ -23,7 +23,7 @@ pageEncoding="UTF-8"%>
 	{
 	    RegisterUtil.redirectToRegistrationpage(request, response);
 	    return;
-	}
+	}*/
 
   String _source = request.getParameter("_source");
   String registered_email = request.getParameter("email");
@@ -252,7 +252,7 @@ if(isSafari && isWin)
 											href="https://www.agilecrm.com/terms.html" class="terms-field" target="_blank"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "terms-of-service")%></a>
 									</div> 		
 
-<input type='submit' id="register_account" value="Sign Up" class='btn btn-lg btn-primary btn-block'>
+<input type='submit' id="register_account" value='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "sign-up")%>' class='btn btn-lg btn-primary btn-block'>
 <div class="text-center text-white m-t m-b">
 	<small><%=LanguageUtil.getLocaleJSONValue(localeJSON, "forgot")%></small> 
 	<a href="/forgot-domain" class="text-white"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "domain")%>?</a>

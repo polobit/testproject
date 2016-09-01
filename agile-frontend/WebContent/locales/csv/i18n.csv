@@ -5301,7 +5301,7 @@ register.click-signing-info,By clicking sign up&#44 I agree to Agile CRM's,Al cl
 register.terms-of-service,Terms of Service,Terminos del servicio
 register.wait-info-while-setting,Please wait while we are setting up your account...,Por favor espera mientras configuramos tu cuenta...
 register.time-to-configure,It's time to configure your account,Es hora de configurar tu cuenta
-register.domain-name-validation,Name should be between 4-20 characters in length. Both letters and numbers are allowed but it should start with a letter. Cannot contain special characters other than '_' and '-'.,"El nombre debe estar entre 4-20 caracteres. Tanto letras como números están permitidos pero debe comenzar con una letra. No puede contener caracteres especiales aparte de ""_"" y ""-"""
+register.domain-name-validation,Name should be between 4-20 characters in length. Both letters and numbers are allowed but it should start with a letter. Cannot contain special characters other than '_' and '-'.,El nombre debe estar entre 4-20 caracteres. Tanto letras como números están permitidos pero debe comenzar con una letra. No puede contener caracteres especiales aparte de '_' y '-'
 register.domain-name-helptext,This is where you and your users will log in to your account,Aquí es donde tu y tus usuarios se conectaran  en tu cuenta
 register.choose-plan,Choose Plan,Escoger plan
 register.role-helptext,We will create unique experience based on your role and company,Crearemos una experiencia única basada en tu rol y compañía
