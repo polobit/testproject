@@ -53,6 +53,12 @@ public class DeleteTextSearchContactsDeferredTask  implements DeferredTask{
 					search.bulkDelete(totalDocs.toArray(new String[scoredDocs.size()]));
 					totalDocs.clear();
 					scoredDocs = queryInstace.advancedSearchOnlyIds(cf, 200, cursor, null); 
+					try {
+						Thread.sleep(3000);
+					} catch (Exception e){
+						System.out.println("in thread exception in delete text search");
+						e.printStackTrace();
+					}
 				 }
 			}
 			else {			
@@ -67,7 +73,13 @@ public class DeleteTextSearchContactsDeferredTask  implements DeferredTask{
 					scoredDocs.clear();
 					search.bulkDelete(totalDocs.toArray(new String[scoredDocs.size()]));
 					totalDocs.clear();
-					scoredDocs = queryInstace.advancedSearchOnlyIds(cf, 200, cursor, null); 
+					scoredDocs = queryInstace.advancedSearchOnlyIds(cf, 200, cursor, null);
+					try {
+						Thread.sleep(3000);
+					} catch (Exception e){
+						System.out.println("in thread exception in delete text search");
+						e.printStackTrace();
+					}
 				}
 			}	
 		}
