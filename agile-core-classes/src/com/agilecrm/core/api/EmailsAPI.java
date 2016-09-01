@@ -39,6 +39,7 @@ import com.agilecrm.session.SessionManager;
 import com.agilecrm.subscription.SubscriptionUtil;
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
 import com.agilecrm.subscription.ui.serialize.Plan;
+import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.EmailPrefs;
 import com.agilecrm.util.DateUtil;
 import com.agilecrm.util.EmailUtil;
@@ -717,4 +718,69 @@ public String getSendgridWhitelabelPermission() throws Exception
 	return restriction.toString();
 	
 }
+/**
+ * Rajesh Code
+ * @param searchEmail
+ * @param countString
+ * @return
+ */
+	@Path("all-agile-emails")
+	@GET
+	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	public List<ContactEmailWrapper> getAllAgileEmails(@QueryParam("page_size") String countString, @QueryParam("cursor") String offset)
+	{
+	List<ContactEmailWrapper> emailsList = null;
+	try
+	{
+	    List<ContactEmail> contactEmails = null;
+	    
+	    if(StringUtils.isNotBlank(countString))
+	    {
+	    	Integer count = Integer.parseInt(countString);
+    		String cursor = offset;
+    		
+	    	try
+	    	{
+	    		// Fetches latest contact emails
+	    		contactEmails = ContactEmailUtil.getAgileEmails(AgileUser.getCurrentAgileUser().id,count,cursor);
+	    	}
+	    	catch(NumberFormatException e)
+	    	{
+	    		e.printStackTrace();
+	    		contactEmails = ContactEmailUtil.getAgileEmails(AgileUser.getCurrentAgileUser().id,count,cursor);
+	    	}
+	    }
+	    else
+	    {
+	    	contactEmails = ContactEmailUtil.getAgileEmails(AgileUser.getCurrentAgileUser().id);
+	    }
+	    
+	    if(contactEmails!= null)
+	    {
+		    JSONArray agileEmails = new JSONArray();
+		    // Merge Contact Emails with obtained imap emails
+		    for (ContactEmail contactEmail : contactEmails)
+		    {
+			// parse email body
+			contactEmail.message = EmailUtil.parseEmailData(contactEmail.message);
+	
+			ObjectMapper mapper = new ObjectMapper();
+			String emailString = mapper.writeValueAsString(contactEmail);
+			agileEmails.put(new JSONObject(emailString));
+		    }
+	
+		    emailsList = new ObjectMapper().readValue(agileEmails.toString(),
+			    new TypeReference<List<ContactEmailWrapper>>()
+			    {
+			    });
+	    }
+	    return emailsList;
+	}
+	catch (Exception e)
+	{
+	    System.out.println("Got an exception in EmailsAPI: " + e.getMessage());
+	    e.printStackTrace();
+	    return null;
+	}
+	}
 }

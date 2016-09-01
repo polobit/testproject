@@ -1206,6 +1206,129 @@ public class ObjectifyGenericDao<T> extends DAOBase
 
 	return getCount(q);
     }
+   /**
+    * Rajesh Code 
+    */
     
+    public List<T> fetchAllAgileMailsByOrder(int max, String cursor, Map<String, Object> map, boolean forceLoad, boolean cache,
+    	    String orderBy)
+        {
+    	Query<T> query = ofy().query(clazz);
+    	if (map != null)
+    	    for (String propName : map.keySet())
+    	    {
+    		System.out.println(propName);
+    		query.filter(propName, map.get(propName));
+    	    }
+
+    	if (!StringUtils.isEmpty(orderBy))
+    	    query.order(orderBy);
+    	
+    	return fetchAllAgileMailsWithCursor(max, cursor, query, forceLoad, cache);
+        }
+
+        public List<T> fetchAllAgileMailsWithCursor(int max, String cursor, Query<T> query, boolean forceLoad, boolean cache)
+        {
+    	// Checks if read access is allowed to current user. If read access is
+    	// not provided then query is modified such that user can access only
+    	// entities he had created
+    	System.out.println("check read query");
+    	UserAccessControlUtil.checkReadAccessAndModifyQuery(clazz.getSimpleName(), query);
+    	int page_index_for_cursor = 0;
+
+    	if (cursor != null){
+    		
+    		//page_index_for_cursor = Integer.parseInt(cursor.replace("agile_cursor_", "").split("-")[0]);
+			// query.limit(max);
+			query.offset(Integer.parseInt(cursor));
+    		
+    	}
+    	    
+
+    	int index = 0;
+    	
+    	String newCursor = null;
+    	List<T> results = new ArrayList<T>();
+    	QueryResultIterator<T> iterator = query.iterator();
+    	while (iterator.hasNext())
+    	{
+    	    T result = iterator.next();
+
+    	    // Add to list
+    	    results.add(result);
+
+    	    // Check if we have reached the limit
+    	    if (++index == max)
+    	    {
+    		// Sets cursor for client
+    		if (iterator.hasNext())
+    		{
+    		    Cursor cursorDb = iterator.getCursor();
+    		    try {
+    		    	 newCursor = cursorDb.toWebSafeString();
+    			} catch (NullPointerException e) {
+    				/**
+    				 * GAE Query not support cursor with inequality filters in the query.
+    				 */
+    				System.out.println(ExceptionUtils.getFullStackTrace(e));
+    				page_index_for_cursor++;
+    				
+    				newCursor = "agile_cursor_" + page_index_for_cursor + "-" + max;
+    				
+    			}
+    		   
+
+    		    // Store the cursor in the last element
+    		    if (result instanceof com.agilecrm.cursor.Cursor)
+    		    {
+    			com.agilecrm.cursor.Cursor agileCursor = (com.agilecrm.cursor.Cursor) result;
+    			agileCursor.cursor = newCursor;
+    		    }
+    		}
+    		break;
+    	    }
+    	}
+    	// Add count for the first time if next cursor is null
+    	if(results != null && results.size() > 0 && cursor == null)
+    	{
+    		
+    		T result = results.get(0);
+    		// Send totalCount if first time
+    	    if (result != null)
+    	    {
+    		// First time query - let's get the count
+    		if (result instanceof com.agilecrm.cursor.Cursor)
+    		{
+
+    		    String className = this.clazz.getSimpleName().toLowerCase();
+
+    		    com.agilecrm.cursor.Cursor agileCursor = (com.agilecrm.cursor.Cursor) result;
+    		    Object object = forceLoad ? null : CacheUtil.getCache(this.clazz.getSimpleName() + "_"
+    			    + NamespaceManager.get() + "_count");
+
+    		    if (object != null)
+    		    {
+    			if (!Arrays.asList(countRestrictedClassNames).contains(className))
+    			    agileCursor.count = (Integer) object;
+    		    }
+
+    		    else
+    		    {
+    			long startTime = System.currentTimeMillis();
+    			if (!Arrays.asList(countRestrictedClassNames).contains(className))
+    			    agileCursor.count = (newCursor == null ? results.size() : query.count());
+
+    			long endTime = System.currentTimeMillis();
+    			if ((endTime - startTime) > 15 * 1000 && cache)
+    			    CacheUtil.setCache(this.clazz.getSimpleName() + "_" + NamespaceManager.get() + "_count",
+    				    agileCursor.count, 1 * 60 * 60 * 1000);
+    		    }
+    		    
+    		}
+    	    }
+    	}
+    	
+    	return results;
+        }
 
 }

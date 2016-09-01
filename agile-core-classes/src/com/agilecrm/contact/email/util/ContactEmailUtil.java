@@ -945,5 +945,27 @@ public class ContactEmailUtil
 		}
 		return "";
 	}
+	
+	/**
+	 * Rajesh Code
+	 * 
+	 */
+	public static List<ContactEmail> getAgileEmails(Long userid,int count,String offset)
+	{
+		Map<String, Object> conditionsMap = new HashMap<String, Object>();
+		conditionsMap.put("user_id_from_email", userid);
+		return dao.fetchAllAgileMailsByOrder(count,offset,conditionsMap, false, false, "-date_secs");
+	}
+	/**
+	 * Retrieves the ContactEmails based on contactId.
+	 * 
+	 * @param contactId
+	 *            - Contact Id.
+	 * @return List
+	 */
+	public static List<ContactEmail> getAgileEmails(Long userid)
+	{
+		return dao.listByProperty("user_id_from_email", userid);
+	}
 
 }

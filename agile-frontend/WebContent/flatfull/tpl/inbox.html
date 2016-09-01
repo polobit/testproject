@@ -69,6 +69,11 @@
 <script id="account-types-template" type="text/html">
     <div  align="right">
 	<div class="btn-group pos-rlt">
+	{{#each []}}
+		{{#if hasEmailAccountsConfigured}}
+				<label id="inbox_has_email_configured" data-val="{{#if hasEmailAccountsConfigured}}{{hasEmailAccountsConfigured}}{{else}}false{{/if}}"></label>
+		{{/if}}
+	{{/each}}
 	<button class="btn btn-sm btn-default filter-dropdown" id="inbox-email-type-select"><i class="icon-cloud" style="margin-right:4px;font-size: 1.2em"></i>{{agile_lng_translate 'contact-details' 'agile'}}</button>
 	<button class="btn btn-sm btn-default dropdown-toggle" id="inbox-email-type-select-dropdown" data-toggle="dropdown">
 	<span class="caret"></span>
@@ -81,7 +86,7 @@
 	{{#each []}}
 	{{#if agileUserName}}
 	<li>
-	<a href="" class="inbox-emails" email-server="agile" data-url="core/api/emails/agile-emails?search_email=" email-server-type={{this.agileUserNmae}}><i class="icon-cloud" style="margin-right:4px;font-size: 1.2em"></i>{{agile_lng_translate 'contact-details' 'agile'}}</a>
+	<a href="" class="inbox-emails" email-server="agile" data-url="core/api/emails/all-agile-emails?search_email=" email-server-type={{this.agileUserNmae}}><i class="icon-cloud" style="margin-right:4px;font-size: 1.2em"></i>{{agile_lng_translate 'contact-details' 'agile'}}</a>
 	</li>
 	{{/if}}
 	{{#if gmailUserNames}}
@@ -108,7 +113,7 @@
 	{{#if sharedGmailUserNames}}
 	{{#each sharedGmailUserNames}}
 	<li>
-	<a href="" class="inbox-emails" email-server="google" data-url="core/api/social-prefs/google-emails?from_email=" email-server-type={{this}}><i class="icon-google-plus" style="margin-right:4px;font-size: 1.2em"></i>{{this}} (Shared)</a>
+	<a href="" class="inbox-emails" email-server="google" data-url="core/api/social-prefs/all-google-emails?from_email=" email-server-type={{this}}><i class="icon-google-plus" style="margin-right:4px;font-size: 1.2em"></i>{{this}} (Shared)</a>
 	</li>
 	{{/each}}
 	{{/if}}
@@ -125,11 +130,6 @@
 	<a href="" class="inbox-emails" email-server="exchange" data-url="core/api/office/office365-emails?from_email=" email-server-type={{this}}><i class="icon-windows" style="margin-right:4px;font-size: 1.2em"></i>{{this}} (Shared)</a>
 	</li>
 	{{/each}}
-	{{/if}}
-	{{#if hasEmailAccountsConfigured}}
-		<li>
-			<label id="inbox_has_email_configured" data-val="{{#if hasEmailAccountsConfigured}}{{hasEmailAccountsConfigured}}{{else}}false{{/if}}"></label>
-		</li>
 	{{/if}}
 	{{/each}}
 	</ul>
@@ -160,8 +160,6 @@
 </script>
 <!-- Template for email view -->
 <script type="text/html" id="mail-view-template">
-
-
 	{{#each []}}
 		{{#if errormssg}}
 	    	
@@ -394,4 +392,24 @@
     </div>
 </div>
 </div>
+</script>
+
+<script type="text/html" id="no-mail-template">
+	<div class="wrapper" style="margin-top:15px;">
+            <div class="slate-content mobile-pad-content m-t-none" id="no-email">
+                <div class="box-left pull-left m-r-md">
+                    <img alt="Clipboard" src="{{getS3ImagePath '/img/clipboard.png'}}" />
+                </div>
+                <div class="box-right pull-left">
+                    <h4 class="m-t-none">You have no emails</h4>
+                    <div class="text">
+                        You have no emails {{agile_lng_translate 'contact-details' 'in'}} {{read_global_var}} {{agile_lng_translate 'contact-details' 'account'}}
+                    </div>
+					<a href="#compose" id="send-new-email" class="btn btn-default btn-sm blue btn-slate-action m-t-none"><i class="fa fa-envelope"></i> &nbsp; {{agile_lng_translate 'contact-details' 'send-email'}}
+					</a>
+                </div>
+				<div class="clearfix">
+				</div>
+            </div>
+    </div>
 </script>

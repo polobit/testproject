@@ -177,7 +177,7 @@ public class ContactGmailUtil
      * @return String
      */
     @SuppressWarnings("deprecation")
-    public static String getGmailNewURL(String fromEmail, String offset, String count)
+    public static String getGmailNewURL(String fromEmail, String offset, String count, String foldernames)
     {
     // Get Gmail Social Prefs
     Type socialPrefsTypeEnum = SocialPrefs.Type.GMAIL;
@@ -193,11 +193,11 @@ public class ContactGmailUtil
         resetAccessToken(gmailPrefs);
     }
 
-    return ContactGmailUtil.getGmailNewURLForPrefs(gmailPrefs, offset, count);
+    return ContactGmailUtil.getGmailNewURLForPrefs(gmailPrefs, offset, count, foldernames);
 
     }
     
-    public static String getGmailNewURLForPrefs(SocialPrefs gmailPrefs, String offset, String count)
+    public static String getGmailNewURLForPrefs(SocialPrefs gmailPrefs, String offset, String count,String foldernames)
     {
 	String userName = gmailPrefs.email;
 	String host = "imap.gmail.com";
@@ -215,13 +215,13 @@ public class ContactGmailUtil
 	if (StringUtils.equalsIgnoreCase(gmailPrefs.secret, "v2"))
 	{
 	    return hostUrl+"/imap?command=oauth_email2&user_name=" + URLEncoder.encode(userName)
-		    + "&fetch_items=mails&host=" + URLEncoder.encode(host) + "&port="
+		    + "&fetch_items=mails&folder_names="+URLEncoder.encode(foldernames)+"&host=" + URLEncoder.encode(host) + "&port="
 		    + URLEncoder.encode(port) + "&offset=" + offset + "&count=" + count + "&oauth_key="
 		    + URLEncoder.encode(oauth_key);
 	}
 
 	return hostUrl+"/imap?command=oauth_email&user_name=" + URLEncoder.encode(userName)
-	        + "&fetch_items=mails&host=" + URLEncoder.encode(host) + "&port="
+	        + "&fetch_items=mails&folder_names="+URLEncoder.encode(foldernames)+"&host=" + URLEncoder.encode(host) + "&port="
 	        + URLEncoder.encode(port) + "&offset=" + offset + "&count=" + count + "&consumer_key="
 	        + URLEncoder.encode(consumerKey) + "&consumer_secret=" + URLEncoder.encode(consumerSecret)
 	        + "&oauth_key=" + URLEncoder.encode(oauth_key) + "&oauth_secret=" + URLEncoder.encode(oauth_secret);
