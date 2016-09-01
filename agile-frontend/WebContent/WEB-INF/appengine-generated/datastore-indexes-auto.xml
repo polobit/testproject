@@ -604,4 +604,8 @@
        <property name="browser_id" direction="asc"/>
        <property name="created_time" direction="asc"/>
  </datastore-index>
+     <datastore-index kind="CustomFieldDef" ancestor="false" source="manual">
+        <property name="searchable" direction="asc"/>
+        <property name="position" direction="asc"/>
+    </datastore-index>
 </datastore-indexes>
