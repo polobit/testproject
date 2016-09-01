@@ -1,4 +1,4 @@
-f  <script id="company-detail-template" type="text/html">
+<script id="company-detail-template" type="text/html">
 <div class="row hide"><small class="navigation span9" style="min-height:10px!important;font-size:smaller;line-height:6px;"></small></div>
 <div class="app-content-full  h-full dock-view-fixing" id="infinite-scroller-company-details">
 <div class="hbox hbox-auto-xs  bg-light companyDetails">
@@ -296,7 +296,8 @@ f  <script id="company-detail-template" type="text/html">
                                            phone="{{value}}">
                                            {{value}}
                                         </a>
-										<a href="tel:{{value}}" class="contact-make-call">{{value}}</a> 
+										<!--<a href="tel:{{value}}" class="contact-make-call">{{value}}</a>--> 
+										<a href="tel:{{value}}">{{value}}</a>
                                         {{#if subtype}}<span class="label bg-light dk text-tiny">{{subtype}}</span> {{/if}}
 									</div>
 									{{/each}}
@@ -718,7 +719,8 @@ f  <script id="company-detail-template" type="text/html">
                                            phone="{{value}}">
                                            {{value}}
                                         </a>
-										<a href="tel:{{value}}" class="contact-make-call">{{value}}</a> 
+										<!--<a href="tel:{{value}}" class="contact-make-call">{{value}}</a>--> 
+										<a href="tel:{{value}}">{{value}}</a>
                                         {{#if subtype}}<span class="label bg-light dk text-tiny">{{subtype}}</span> {{/if}}
 									</div>
 									{{/each}}
