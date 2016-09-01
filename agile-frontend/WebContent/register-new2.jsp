@@ -5,6 +5,8 @@
 <%@page import="com.google.appengine.api.utils.SystemProperty"%>
 <%@page contentType="text/html; charset=UTF-8" %>
 <%@page import="com.agilecrm.ipaccess.IpAccessUtil"%>
+<%@page language="java" contentType="text/html; charset=UTF-8"
+pageEncoding="UTF-8"%>
 
 <%
 

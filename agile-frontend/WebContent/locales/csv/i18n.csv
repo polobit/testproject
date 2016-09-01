@@ -5259,72 +5259,72 @@ common-words.relative-cap,Relative,
 contacts-view.on-after,on after,
 contacts-view.on-before,on before,
 months.February,February,
-login.duplicate-login,We had to log you out as you seem to have logged in from some other browser,Tuvimos realice la desconexión ya que parecen haber iniciado sesión desde otro navegador
-login.login,Login,Iniciar sesión
-login.signin-using-registration,Sign in using your registered account,Entra con tu cuenta registrada
-login.user-id-your-email,User ID (Your Email Address),ID de usuario (su dirección de correo electrónico )
-login.sign-in,Sign In,Registrarse
-login.login-with,Login with,Inicia con
-login.login-with-google,Login with Google,Ingresar con Google
-login.login-with-yahoo,Login with Yahoo,Inicia sesión con Yahoo
+login.duplicate-login,We had to log you out as you seem to have logged in from some other browser,Te hemos desconectado porque parece que estás conectado desde otro navegador
+login.login,Login,Conéctate 
+login.signin-using-registration,Sign in using your registered account,Ingresa usando tu cuenta registrada.
+login.user-id-your-email,User ID (Your Email Address),Identificación de Usuario (Tu correo electrónico)
+login.sign-in,Sign In,Ingresar
+login.login-with,Login with,Conectando con
+login.login-with-google,Login with Google,Conectando con Google 
+login.login-with-yahoo,Login with Yahoo,Conectando con Yahoo
 login.dont-have-account,Do not have an account,No tiene una cuenta
-login.sign-up,Sign Up,Regístrate
-login.forgot,Forgot,Olvidó
-forgot-domain.forgot-domain,Forgot Domain,Se olvidó de dominio
-forgot-domain.user-not-found,We are not able to find any user,No somos capaces de encontrar usuarios
-forgot-domain.enter-email,Enter Your Email,Introduce tu correo electrónico
-forgot-domain.register,Register,Registro
-enter-domain.enter-your-domain,Enter Your Domain,Introduzca su dominio
-enter-domain.enter-your-domain-at,Enter your domain at ,Introduzca su dominio en
+login.sign-up,Sign Up,Inscríbete
+login.forgot,Forgot,Olvidé
+forgot-domain.forgot-domain,Forgot Domain,Olvidé el dominio
+forgot-domain.user-not-found,We are not able to find any user,No podemos encontrar ningún usuario
+forgot-domain.enter-email,Enter Your Email,Inserta tu correo
+forgot-domain.register,Register,Registrarse
+enter-domain.enter-your-domain,Enter Your Domain,Inserta tu dominio
+enter-domain.enter-your-domain-at,Enter your domain at ,Inserta tu dominio en
 enter-domain.new-user,New User,Nuevo usuario
-enter-domain.common-domain-issue,Common domain cannot be created.,Dominio común no puede ser creado.
-enter-domain.domain-name-issue,Domain should start with alphabet and special characters not allowed.,Dominio debe comenzar con alfabeto y especiales caracteres no permitidos.
-enter-domain.domain-name-length-error,Domain should be 2 to 20 characters.,Dominio debe ser de 2 a 20 caracteres.
-forgot-password.we-sent-email,We have sent you an email,Te hemos enviado un correo electrónico
-forgot-password.signed-up-with-oauth2,You have signed-up using your Google/Yahoo account. Please sign-in through the same account,Que se haya registrado en marcha utilizando su cuenta de Google / Yahoo . Inicia sesión a través de la misma cuenta
-forgot-password.forgot-password,Forgot Password,Se te olvidó tu contraseña
-forgot-password.resend-password,Resend password,Reenvío de contraseña
-forgot-password.already-have-account,Already have an account,Ya tienes una cuenta
-html5Validations.invalid-default,Please fill out this field.,
-html5Validations.invalid-email,Please include an '@' in the email address. $1 is missing '@'.,
-html5Validations.invalid-password,Please lengthen this text $1 characters or more (you are currently using $2 characters).,
-otp-auth.info,Please enter the verification code sent to your email ID to access the account.,
-otp-auth.enter-code,Enter Verification Code,
-otp-auth.resend-code,Resend Verfication Code,
-otp-auth.resend-code-success,We have re-sent the verification code to your registered email. Please enter the code below to get access.,
-register.register-with-free,Register your FREE account,
-register.name-validation,Name should be at least 3 characters,
-register.invalid-pattern,Please match the requested format.,
-register.full-name,Full Name,
-register.email-address,Email Address (User ID),
-register.click-signing-info,By clicking sign up&#44 I agree to Agile CRM's,
-register.terms-of-service,Terms of Service,
-register.wait-info-while-setting,Please wait while we are setting up your account...,
-register.time-to-configure,It's time to configure your account,
-register.domain-name-validation,Name should be between 4-20 characters in length. Both letters and numbers are allowed but it should start with a letter. Cannot contain special characters other than '_' and '-'.,
-register.domain-name-helptext,This is where you and your users will log in to your account,
-register.choose-plan,Choose Plan,
-register.role-helptext,We will create unique experience based on your role and company,
-register.role-and-company,Role & Company,
-register.ceo,CEO,
-register.vp,VP,
-register.vp-sales,VP&#44 Sales,
-register.vp-marketing,VP&#44 Marketing,
-register.cus-suc-manager,Customer Success Manager,
-register.sales-manager,Sales Manager,
-register.marketing-manager,Marketing Manager,
-register.consultant,Consultant,
-register.reseller,Reseller,
-register.recruiter,Recruiter,
-register.developer,Developer,
-register.other,Other,
-register.select-type,Select Type,
-register.b2b,B2B,
-register.saas,SaaS,
-register.ecommerce,Ecommerce,
-register.marketing-agency,Marketing Agency,
-register.contact-centers,Contact Centers,
-register.realty,Realty,
-register.media,Media,
-register.tech-consulting,Technology Consulting,
-register.pnone-num-validation,Please enter valid number,
+enter-domain.common-domain-issue,Common domain cannot be created.,Dominio común no puede ser creado
+enter-domain.domain-name-issue,Domain should start with alphabet and special characters not allowed.,El dominio debe comenzar con el alfabeto y los caracteres especiales no están permitidos
+enter-domain.domain-name-length-error,Domain should be 2 to 20 characters.,El dominio debe tener entre 2 y 20 caracteres
+forgot-password.we-sent-email,We have sent you an email,Te hemos enviado un correo
+forgot-password.signed-up-with-oauth2,You have signed-up using your Google/Yahoo account. Please sign-in through the same account,Has ingresado usando tu cuenta de google/yahoo. Por favor ingresa a través de la misma cuenta
+forgot-password.forgot-password,Forgot Password,Olvidó su contraseña
+forgot-password.resend-password,Resend password,Reenviar contraseña
+forgot-password.already-have-account,Already have an account,Ya tengo una cuenta
+html5Validations.invalid-default,Please fill out this field.,Por favor rellena el campo
+html5Validations.invalid-email,Please include an '@' in the email address. $1 is missing '@'.,Por favor incluye un '@' en el correo electrónico. Se perdió $1 '@'
+html5Validations.invalid-password,Please lengthen this text $1 characters or more (you are currently using $2 characters).,Por favor alargue este texto $1 caracteres o más (por ahora estás usando $2 caracteres)
+otp-auth.info,Please enter the verification code sent to your email ID to access the account.,Por favor inserta eñ código de verificacion enviado a tu dirección de correo electrónico para acceder a la cuenta
+otp-auth.enter-code,Enter Verification Code,Inserte el código de verificación
+otp-auth.resend-code,Resend Verfication Code,Reenviar el código de verificación
+otp-auth.resend-code-success,We have re-sent the verification code to your registered email. Please enter the code below to get access.,Te hemos enviado el código de verificación a tu correo registrado. Por favor inserta un código válido debajo para acceder
+register.register-with-free,Register your FREE account,Registra tu cuenta GRATUITA
+register.name-validation,Name should be at least 3 characters,El nombre debe tener al menos 3 caracteres
+register.invalid-pattern,Please match the requested format.,Por favor coloca el formato requerido
+register.full-name,Full Name,Nombre completo
+register.email-address,Email Address (User ID),Correo electrónico (Identificación del usuario)
+register.click-signing-info,By clicking sign up&#44 I agree to Agile CRM's,Al clicar inscríbete&#44 Estoy de acuerdo con My CRM's
+register.terms-of-service,Terms of Service,Terminos del servicio
+register.wait-info-while-setting,Please wait while we are setting up your account...,Por favor espera mientras configuramos tu cuenta...
+register.time-to-configure,It's time to configure your account,Es hora de configurar tu cuenta
+register.domain-name-validation,Name should be between 4-20 characters in length. Both letters and numbers are allowed but it should start with a letter. Cannot contain special characters other than '_' and '-'.,"El nombre debe estar entre 4-20 caracteres. Tanto letras como números están permitidos pero debe comenzar con una letra. No puede contener caracteres especiales aparte de ""_"" y ""-"""
+register.domain-name-helptext,This is where you and your users will log in to your account,Aquí es donde tu y tus usuarios se conectaran  en tu cuenta
+register.choose-plan,Choose Plan,Escoger plan
+register.role-helptext,We will create unique experience based on your role and company,Crearemos una experiencia única basada en tu rol y compañía
+register.role-and-company,Role & Company,Rol & Compañía
+register.ceo,CEO,CEO
+register.vp,VP,VP
+register.vp-sales,VP&#44 Sales,VP&#44 Ventas
+register.vp-marketing,VP&#44 Marketing,VP&#44 Marketing
+register.cus-suc-manager,Customer Success Manager,Representante del Éxito del Consumidor
+register.sales-manager,Sales Manager,Representante de Ventas
+register.marketing-manager,Marketing Manager,Representante de Marketing
+register.consultant,Consultant,Consultor
+register.reseller,Reseller,Revendedor
+register.recruiter,Recruiter,Reclutador
+register.developer,Developer,Desarrollador
+register.other,Other,Otro
+register.select-type,Select Type,Seleccionar tipo
+register.b2b,B2B,B2B
+register.saas,SaaS,ScuS
+register.ecommerce,Ecommerce,Comercio electrónico
+register.marketing-agency,Marketing Agency,Agencia de Marketing
+register.contact-centers,Contact Centers,Centros de contacto
+register.realty,Realty,Bienes raíces
+register.media,Media,Medios
+register.tech-consulting,Technology Consulting,Consulta de tecnología
+register.pnone-num-validation,Please enter valid number,Por favor inserta un número válido

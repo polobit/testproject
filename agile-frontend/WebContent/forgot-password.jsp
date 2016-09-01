@@ -10,6 +10,9 @@
 <%@page import="com.agilecrm.user.util.DomainUserUtil"%>
 <%@page import="org.apache.commons.lang.StringUtils"%>
 <%@page import="com.agilecrm.user.DomainUser"%>
+<%@page language="java" contentType="text/html; charset=UTF-8"
+pageEncoding="UTF-8"%>
+
 <%
 //Language
 String _LANGUAGE = LanguageUtil.getLanguageKeyFromCookie(request);
