@@ -10,7 +10,7 @@ String template = request.getParameter("template");
       <title>Form Builder</title>
       <link href="misc/formbuilder/bootstrap.min.css" rel="stylesheet">
       <link href="misc/formbuilder/themes.css?v=2" rel="stylesheet">
-      <link href="misc/formbuilder/custom.css?v=2" rel="stylesheet">
+      <link href="misc/formbuilder/custom.css?v=3" rel="stylesheet">
       <!--[if lt IE 9]>
       <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
       <![endif]-->
