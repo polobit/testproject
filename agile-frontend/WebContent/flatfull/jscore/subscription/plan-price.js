@@ -562,9 +562,11 @@ function initializeSubscriptionListeners()
 								return;
 							}
 						}
-						plan_json.date = data.nextPaymentAttempt;
-						if(months == 24)
+						if(USER_DETAILS.getPlanInterval(USER_BILLING_PREFS) == cycle.toUpperCase()){
+							plan_json.date = data.nextPaymentAttempt;
+							if(months == 24)
 							plan_json.date = plan_json.date + 31557600;
+						}
 						Backbone.history.navigate("purchase-plan", { trigger : true });
 							
 					},
