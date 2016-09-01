@@ -491,13 +491,18 @@ public class Contact extends Cursor
 	preProcessor.preProcess(args);
 
 	Contact oldContact = preProcessor.getOldContact();
-
+	String domain = NamespaceManager.get();
 	dao.put(this);
 
 	postSave(oldContact, args);
 
 	if (oldContact != null && !isDocumentUpdateRequired(oldContact))
 	    return;
+	String domain2 = NamespaceManager.get();
+	if(!domain.equals(null) && !domain.equals("") && !domain.equals(domain2)){
+		System.out.println("name space inequal");
+		NamespaceManager.set(domain);
+	}
 	System.out.println("Before add to text search "+NamespaceManager.get());
 	addToSearch();
 	System.out.println("After add to text search "+NamespaceManager.get());
@@ -566,10 +571,10 @@ public class Contact extends Cursor
 	    
 	    catch (SearchException se)
 	    {	domain = NamespaceManager.get();
-	    	System.out.println("Before search add method to text search "+domain);
+	    	System.out.println("Before search addasync method to text search "+domain);
 	    	search.addAsync(this);
 	    	domain = NamespaceManager.get();
-	    	System.out.println("After search add method to text search "+domain);
+	    	System.out.println("After search addasync method to text search "+domain);
 	    }
 	    catch (Exception e)
 	    {
