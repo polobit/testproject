@@ -315,7 +315,7 @@ fieldset {
 #agiletheme{
 	display: none!important;
 }
-form .popover form .form-control{
+form .popover form .form-control,form .popover form .form-control:focus{
     display: block!important;
     width: 100%!important;
     height: 34px!important;
