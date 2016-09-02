@@ -435,12 +435,14 @@ public class EmailUtil
     /**
      * creating an method for the count the cc and bcc 
      * */
-    public static int getCountForEmails(String emails){
+    public static int getCountForEmails(String emails)
+    { 	
+	int count = StringUtils.countMatches(emails, ",");
+    	if(!StringUtils.isBlank(emails))
+    		count = count + 1;
     	
-    	
-    return	StringUtils.countMatches(emails, ",")+1;
-    	
-    		
+       return	count;   		
+		
     } 
     /**
      * This method along with footer, can be used as a template for sending mail reports.  
