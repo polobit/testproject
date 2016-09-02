@@ -478,7 +478,7 @@
                 <div class="text-xs text-ellipsis" style="margin-top:-8px">{{agile_lng_translate 'contact-details' 'campaign'}} - {{campaign_name}}</div>
 
             {{#if message}}
-                    <div class="text-xs text-ellipsis">{{#if_email_sent this "log_type"}} {{agile_lng_translate 'emailbuilder' 'subject'}} {{Subject}} {{else}} {{{message}}} {{/if_email_sent}}
+                    <div class="text-xs text-ellipsis">{{#if_email_sent this "log_type"}} {{agile_lng_translate 'emailbuilder' 'subject'}} {{{Subject}}} {{else}} {{{message}}} {{/if_email_sent}}
                         <div class="right" data="{{#if_email_sent this "log_type"}} {{agile_lng_translate 'emailbuilder' 'subject'}} {{Subject}} {{else}} {{message}} {{/if_email_sent}}"><a href="#" id="tl-log-popover"><i class="glyphicon glyphicon-plus-sign"></i></a></div>
                     </div>   
             {{/if}}        

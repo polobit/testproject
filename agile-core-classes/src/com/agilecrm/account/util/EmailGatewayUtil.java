@@ -16,8 +16,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.agilecrm.AgileQueues;
-import com.agilecrm.Globals;
-import com.thirdparty.mailgun.util.MailgunUtil;
 import com.agilecrm.account.EmailGateway;
 import com.agilecrm.account.EmailGateway.EMAIL_API;
 import com.agilecrm.contact.email.EmailSender;
@@ -37,10 +35,12 @@ import com.campaignio.logger.util.CampaignLogsSQLUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.blobstore.BlobKey;
 import com.google.appengine.api.taskqueue.TaskHandle;
+import com.google.appengine.api.utils.SystemProperty;
+import com.thirdparty.mailgun.MailgunNew;
+import com.thirdparty.mailgun.util.MailgunUtil;
 import com.thirdparty.mandrill.Mandrill;
 import com.thirdparty.sendgrid.SendGrid;
 import com.thirdparty.ses.util.AmazonSESUtil;
-import com.thirdparty.mailgun.MailgunNew;
 
 /**
  * <code>EmailGatewayUtil</code> is the utility class for EmailGateway. It
@@ -117,8 +117,24 @@ public class EmailGatewayUtil
 		campaignName = campaignNameMap.get(mailDeferredTask.campaignId + "-" + mailDeferredTask.domain);
 	    }
 
+	    String to_email_addr=mailDeferredTask.to;
+	    to_email_addr=to_email_addr.replaceAll("<","&lt;");
+	    to_email_addr=to_email_addr.replaceAll(">","&gt;");
+	    String message = "Subject: "+mailDeferredTask.subject+" <br> From: "+mailDeferredTask.fromEmail+" <br> To: "+to_email_addr;
+	    
+	    
+	    // For testing in Localhost
+	    if(SystemProperty.environment.value() == SystemProperty.Environment.Value.Development){
+	    	System.out.println("Development Server...");
+	    	
+	    	CampaignLogsSQLUtil.addToCampaignLogs("localhost", mailDeferredTask.campaignId, campaignName,
+			    mailDeferredTask.subscriberId, message, LogType.EMAIL_SENT.toString(),GoogleSQL.getCurrentDate());
+	    	
+	    	continue;
+	    }
+	    
 	    Object[] newLog = new Object[] { mailDeferredTask.domain, mailDeferredTask.campaignId, campaignName,
-		    mailDeferredTask.subscriberId, GoogleSQL.getCurrentDate(), "Subject: " + mailDeferredTask.subject,
+		    mailDeferredTask.subscriberId, GoogleSQL.getCurrentDate(), message,
 		    LogType.EMAIL_SENT.toString() };
 
 	    queryList.add(newLog);
@@ -129,6 +145,7 @@ public class EmailGatewayUtil
 	{
 	    Long start_time = System.currentTimeMillis();
 	    CampaignLogsSQLUtil.addToCampaignLogs(queryList);
+	    
 //	    CampaignLogsSQLUtil.addCampaignLogsToNewInstance(queryList);
 	    System.out.println("batch request completed : " + (System.currentTimeMillis() - start_time));
 	    System.out.println("Logs size : " + queryList.size());
