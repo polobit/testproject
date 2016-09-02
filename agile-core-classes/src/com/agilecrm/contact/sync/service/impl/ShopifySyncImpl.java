@@ -44,7 +44,7 @@ public class ShopifySyncImpl extends OneWaySyncService
 {
 
     /** shop name */
-    private static String shop;
+    private String shop;
 
     /**
      * set limit for max fetch result per call maximum allowed limit is 250

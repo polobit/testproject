@@ -42,7 +42,7 @@ public class DeleteTextSearchContactsDeferredTask  implements DeferredTask{
 			cf.rules.add(rule);
 			if(type.equals("PERSON") || type.equals("COMPANY")){
 				QueryDocument<Contact> queryInstace = new QueryDocument<Contact>(new ContactDocument().getIndex(), Contact.class);
-				scoredDocs = queryInstace.advancedSearchOnlyIds(cf, 200, cursor, null);
+				scoredDocs = queryInstace.advancedSearchOnlyIds(cf, 50, cursor, null);
 				while(scoredDocs != null && scoredDocs.size() > 0){
 					for(ScoredDocument s: scoredDocs){
 						totalDocs.add(s.getId());
@@ -52,12 +52,18 @@ public class DeleteTextSearchContactsDeferredTask  implements DeferredTask{
 					scoredDocs.clear();
 					search.bulkDelete(totalDocs.toArray(new String[scoredDocs.size()]));
 					totalDocs.clear();
-					scoredDocs = queryInstace.advancedSearchOnlyIds(cf, 200, cursor, null); 
+					scoredDocs = queryInstace.advancedSearchOnlyIds(cf, 50, cursor, null); 
+					try {
+						Thread.sleep(1000);
+					} catch (Exception e){
+						System.out.println("in thread exception in delete text search");
+						e.printStackTrace();
+					}
 				 }
 			}
 			else {			
 				QueryDocument<Opportunity> queryInstace = new QueryDocument<Opportunity>(new OpportunityDocument().getIndex(), Opportunity.class);
-				scoredDocs = queryInstace.advancedSearchOnlyIds(cf, 200, cursor, null);
+				scoredDocs = queryInstace.advancedSearchOnlyIds(cf, 100, cursor, null);
 				while(scoredDocs != null && scoredDocs.size() > 0){
 					for(ScoredDocument s: scoredDocs){
 						totalDocs.add(s.getId());
@@ -67,7 +73,13 @@ public class DeleteTextSearchContactsDeferredTask  implements DeferredTask{
 					scoredDocs.clear();
 					search.bulkDelete(totalDocs.toArray(new String[scoredDocs.size()]));
 					totalDocs.clear();
-					scoredDocs = queryInstace.advancedSearchOnlyIds(cf, 200, cursor, null); 
+					scoredDocs = queryInstace.advancedSearchOnlyIds(cf, 100, cursor, null);
+					try {
+						Thread.sleep(1000);
+					} catch (Exception e){
+						System.out.println("in thread exception in delete text search");
+						e.printStackTrace();
+					}
 				}
 			}	
 		}

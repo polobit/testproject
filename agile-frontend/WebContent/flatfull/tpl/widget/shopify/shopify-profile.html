@@ -72,7 +72,7 @@
 </script>
 
 <script id="shopify-order-list-template" type="text/html">
-{{#each_index_slice this 1}}
+{{#each_index_slice this 0}}
 	<li class="list-group-item r-none b-l-none b-r-none">
 		<div class="pull-left">
 			<a class="order c-p" data-target="collapse-{{this.id}}" data-toggle="collapse" data-placement="top" title= "{{agile_lng_translate 'widgets' 'order'}}" href="#" value="{{this.id}}">

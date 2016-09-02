@@ -9,6 +9,7 @@ import java.net.URLDecoder;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -418,7 +419,7 @@ public class GoogleSyncImpl extends TwoWaySyncService
 	catch (Exception e)
 	{
 	    System.out.println("Error occured while creating contacts in Google" + e.getMessage());
-	    e.printStackTrace();
+	    System.out.println("StackTrace_of_sync"+ExceptionUtils.getFullStackTrace(e));
 	}
 	
     }
@@ -434,7 +435,7 @@ public class GoogleSyncImpl extends TwoWaySyncService
 	{
 		System.out.println("Error occured while updating contacts in Google" + e.getMessage());
 		System.out.println("Error occured while updating contacts in Google" + e);
-		e.printStackTrace();
+		System.out.println("StackTrace_of_sync"+ExceptionUtils.getFullStackTrace(e));
 	}
 
     }
