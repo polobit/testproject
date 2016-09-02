@@ -1,5 +1,5 @@
 <script id="ticket-helpcenter-add-article-template" type="text/html">
-<div class="wrapper">
+<div class="">
     <div class="row">
     	<div class="col-md-10">
         	<div class="panel panel-default">
@@ -10,7 +10,7 @@
                     {{#if id}}
                         <input type="text" name="id" class="hide" value={{id}} >
                     {{/if}}
-                    <fieldset class="wrapper"><br/>
+                    <fieldset class="wrapper p-b-xs">
                         <div class="control-group form-group">
                             <label class="control-label col-md-2" for="Title">{{agile_lng_translate 'Help-center' 'article-title'}}<span class="field_req">*</span></label> 
                             <div class="col-md-10">
@@ -36,15 +36,15 @@
                                 </div>    
                             </div>
                         </div>
-                        <div class="control-group form-group">
-                        <label class="control-label col-md-2" for="description"><span></span></label> 
-                            <div class="col-md-4 m-t-xs">
+                        <div class="control-group form-group m-b-none">
+                        <label class="control-label col-xs-2 col-md-2" for="description"><span></span></label> 
+                            <div class="col-xs-12 col-md-4">
                                 <div class="controls">
                                 <input type="checkbox" name="is_article_published" style="vertical-align: top;">     {{agile_lng_translate 'tickets' 'make-as-private'}}                                
                                 </div> 
                             </div>
                         </div>
-                        <div class="control-group form-group">
+                        <div class="control-group form-group m-b-none">
                         <label class="control-label col-md-3" for="description"><span></span></label> 
                         </div>
                         <div class="row">

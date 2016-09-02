@@ -1,5 +1,5 @@
 <script id="ticket-helpcenter-select-landingpage-template" type="text/html">
-<div class="wrapper">
+<div class="">
     <div class="row">
     	<div class="col-md-9">
         	<div class="panel panel-default">
@@ -10,15 +10,15 @@
     			     </div>
                 </div>   
 
-                <div class="panel-body">
+                <div class="panel-body p-b-xs">
 
                 <form id="userForm" name="userForm" method="get" action="" class="form-horizontal">
                     {{#if id}}
                         <input type="text" name="id" class="hide" value={{id}} >
                     {{/if}}
-                    <fieldset><br/>   
+                    <fieldset>   
                     <div class="control-group form-group">
-                        <label class="control-label col-md-3" style="padding-top:8px;">{{agile_lng_translate 'tickets' 'select-landing-page'}}<span class="field_req">*</span></label> 
+                        <label class="control-label col-md-3">{{agile_lng_translate 'tickets' 'select-landing-page'}}<span class="field_req">*</span></label> 
                         <div class="col-md-6 m-t-xs">
                 
                             <div class="controls">
@@ -29,7 +29,7 @@
                             </div>    
                         </div>
                     </div>    
-                    <br><br>
+                    
                       <div class="row">
                             <div class="col-md-12"><hr></div>
                         </div>  
@@ -42,9 +42,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
-                        <br>
-                        </div>
+                        
                 </fieldset>
                 </form>
                 </div>    

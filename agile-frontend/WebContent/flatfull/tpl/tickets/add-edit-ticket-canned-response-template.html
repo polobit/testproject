@@ -1,5 +1,5 @@
 <script id="ticket-canned-response-add-edit-template" type="text/html">
-<div class="wrapper">
+<div class="">
     <div class="row">
     	<div class="col-md-10">
         	<div class="panel panel-default">
@@ -10,7 +10,7 @@
                     {{#if id}}
                         <input type="text" name="id" class="hide" value={{id}} >
                     {{/if}}
-                    <fieldset class="wrapper"><br/>
+                    <fieldset class="wrapper p-b-xs">
                         <div class="control-group form-group">
                             <label class="control-label col-md-3" for="title">{{agile_lng_translate 'other' 'title'}} <span class="field_req">*</span></label> 
                             <div class="col-md-5">
@@ -28,8 +28,8 @@
                             </div>
                         </div>
                         <div class="control-group form-group">
-                            <label class="control-label col-md-3" for="message"></label> 
-                            <div class="col-md-6 m-t-xs">
+                            <label class="control-label col-xs-3 col-md-3" for="message"></label> 
+                            <div class="col-xs-12 col-md-6 m-t-xs">
                                 <div class="controls">
                                     <div style="line-height:0px;" class="text-xs pull-right">
                                         <div class="pull-right btn-group dropdown dropup">

@@ -542,7 +542,7 @@ body,input,button,select,textarea {
 
 @media (max-width: 767px){
 	.search-box h1{ padding-bottom: 15px;}
-	.search-box1{ margin-bottom: 10px !important; padding-left: 0 !important; padding-right: 0 !important;}
+	.search-box1{ padding: 40px 0 !important; margin-bottom: 10px !important; padding-left: 0 !important; padding-right: 0 !important;}
 	.search-box h1{ font-size: 28px;}
 	.help-searchbox #hc_query{ height: 50px; font-size: 17px; padding: 20px 44px;}
 	.search-box .fa-search{ font-size: 18px;}
