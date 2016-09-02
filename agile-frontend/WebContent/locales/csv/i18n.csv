@@ -3875,7 +3875,7 @@ contact-details.campaigns,Campaigns,campañas
 portlets.send-rate,Send Rate,Enviar Tasa
 plan-and-upgrade.plan-with,plan with,plan con
 contact-edit.add-email,Add Email,Añadir Correo
-others.add-new,#NAME?,#NAME?
+others.add-new,+ Add new,+ Añadir nuevo
 widgets.ClickDesk,ClickDesk,ClickDesk
 contacts-view.condition,Condition,Condición
 modals.edit-note,Edit Note,Editar nota
@@ -4695,7 +4695,7 @@ deal-view.clear,Clear,Limpiar
 admin-settings-stats.count,Count,Contar
 prefs-settings.alias,Alias,Alias
 calendar.Apply,Apply,Aplicar
-tickets.false,FALSE,0
+tickets.false,False,0
 prefs-online-calendar.hours,Hours,horas
 calendar.Clear,Clear,Limpiar
 plan-and-upgrade.users,users,usuarios
@@ -4807,7 +4807,7 @@ report-add.placeholder-time,time,hora
 prefs-data-sync.shop,Shop,Comprar
 other.data,Data,Datos
 visitors.site,site,sitio
-tickets.true,TRUE,1
+tickets.true,True,1
 modals.save,Save,Guardar
 admin-settings-tasks.call,Call,Llamar
 plan-and-upgrade.back,Back,Detrás
@@ -4823,7 +4823,7 @@ currency.Euro,Euro,Euro
 deal-view.name,Name,Nombre
 tasks.High,High,Alta
 menu.help,Help,Ayuda
-portlets.+add,#NAME?,#NAME?
+portlets.+add,+Add,+Agregar
 portlets.tags,Tags,Etiquetas
 report-add.name,Name,Nombre
 contact-edit.main,Main,Principal
