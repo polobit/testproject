@@ -54,6 +54,13 @@ var addAgileApi = function(json, api, callback)
 	formemailnotification.label = "Email Notification";
 	formemailnotification.type = "select";
 	formemailnotification.value = [{value : false, selected : true, label : "false"}, {value : true, selected : false, label: "true"}];
+    //Adding the ca
+
+   var agileformcaptcha = {};
+	agileformcaptcha.label = "Enable Captcha";
+	agileformcaptcha.type = "select";
+	agileformcaptcha.value = [{value : false, selected : true, label : "false"}, {value : true, selected : false, label: "true"}];
+   
 
 	var agileformidtag = {};
 	agileformidtag.label = "Form Tags";
@@ -73,6 +80,7 @@ var addAgileApi = function(json, api, callback)
 		json[b].fields["agilepreloadfields"] = agilepreloadfields;
 		json[b].fields["agileformidtag"] = agileformidtag;
 		json[b].fields["formemailnotification"] = formemailnotification;
+		json[b].fields["agileformcaptcha"]=agileformcaptcha;
 		json[b].fields["agiletransparentbackground"] = agiletransparentbackground;
 	}
 	callback(json);
