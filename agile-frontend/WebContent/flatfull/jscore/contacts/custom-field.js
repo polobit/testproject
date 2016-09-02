@@ -95,6 +95,7 @@ function showCustomFieldModel(data)
 		modal : "#custom-field-add-modal",
 		isNew : isNew,
 		postRenderCallback : function(el) {
+			
 			console.log($("#custom-field-add-modal", el));
 			//This code will scroll to top to see the modal.
 			
@@ -200,6 +201,29 @@ function showCustomFieldModel(data)
 	});
 
 	$('#custom-field-modal').html(modelView.render(true).el);
+	if(!isNew){
+
+			if(data.field_data!="")
+			{
+				if(data.field_type=="LIST")
+				{
+					$('#formulaData').val("");
+					$('#arearows').val("");
+				}
+				if(data.field_type=="TEXTAREA")
+				{
+					$('#formulaData').val("");
+					$('#listvalues').val("");
+				}
+				if(data.field_type=="FORMULA")
+				{
+					$('#listvalues').val("");
+					$('#arearows').val("");
+				}
+
+			}
+
+			}
 	$("#custom-field-type").trigger("change");
 }
 
