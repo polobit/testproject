@@ -363,6 +363,12 @@ function initializeSubscriptionListeners()
 				if(credit == "")
 					credit = 0;
 				var plan = $("#plan_type").val();
+				if(plan != "regular" && addonsExists()){
+					showNotyPopUp("warning", "Please cancel all your addons before change the plan.", "top");
+					$(this).text("Proceed to Pay");
+					$(this).removeAttr("disabled");
+					return;
+				}
 				if("pro" == plan)
 					plan = "enterprise";
 				var discount = "", months = "";
@@ -744,6 +750,11 @@ function initializeSubscriptionListeners()
 		if (isNaN(quantity) || quantity < 0)
 			return;
 		$("#total_credits_cost").html(quantity*4);
+	});
+	$("#subscribe_plan_change").on("click", "#addontab",function(e){
+		App_Subscription.aclAddon();
+		App_Subscription.campaignAddon();
+		App_Subscription.triggerAddon();
 	});
 }
 

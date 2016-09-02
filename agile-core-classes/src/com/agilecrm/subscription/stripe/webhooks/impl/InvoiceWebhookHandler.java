@@ -9,6 +9,7 @@ import org.apache.commons.lang.StringUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.agilecrm.addon.AddOnInfo.AddOnStatus;
 import com.agilecrm.subscription.Subscription;
 import com.agilecrm.subscription.SubscriptionUtil;
 import com.agilecrm.subscription.restrictions.db.BillingRestriction;
@@ -47,6 +48,8 @@ public class InvoiceWebhookHandler extends StripeWebhookHandler
 	    DomainUser user = getUser();
 
 	    System.out.println(user);
+	    if(isAddonPlan())
+	    	updateAddOnStatus(getAddonPlan(), AddOnStatus.SUCCESS);
 	    if (isEmailAddonPlan())
 	    {
 		setEmailsCountBillingRestriction();
@@ -130,6 +133,16 @@ public class InvoiceWebhookHandler extends StripeWebhookHandler
 
 	// If number of attemps to payment is 0 or 1() the send email to domain
 	// owner
+	if(isAddonPlan()){
+		String addOntype = getAddonPlan();
+		System.out.println("addOnInvoice payment failed... type:"+addOntype+" and attemptcount:"+attemptCount);
+		if(attemptCount == 0)
+			updateAddOnStatus(addOntype, AddOnStatus.FAILED1);
+		else if(attemptCount == 2)
+			updateAddOnStatus(addOntype, AddOnStatus.FAILED2);
+		else if(attemptCount == 3)
+			updateAddOnStatus(addOntype, AddOnStatus.FAILED3);
+	}
 	if (attemptCount == 0 || attemptCount == 1)
 	{
 	    // Set subscription flag billing failed

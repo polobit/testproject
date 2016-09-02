@@ -1,5 +1,6 @@
 package com.agilecrm.coreClasses;
 
+import com.agilecrm.addon.AddOn;
 import com.agilecrm.notification.NotificationTemplate;
 import com.agilecrm.notification.push.PushNotificationMessage;
 import com.googlecode.objectify.ObjectifyService;
@@ -17,6 +18,6 @@ public class ObjectifyRegistry {
 		//Add your entity clas here
 		ObjectifyService.register(PushNotificationMessage.class);
 		ObjectifyService.register(NotificationTemplate.class);
-		
+		ObjectifyService.register(AddOn.class);
 	}
 }

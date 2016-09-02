@@ -735,6 +735,13 @@ function showPageBlockModal() {
 			$("body").append(template_ui);
 			$("#user-blocked-modal").modal('show');
 		}, null);
+	}else if(hasAddonDues()){
+		getTemplate("addon-blocked-modal", {}, undefined, function(template_ui){
+			if(!template_ui)
+				  return;
+			$("body").append(template_ui);
+			$("#user-blocked-modal").modal('show');
+		}, null);
 	}
 }
 
