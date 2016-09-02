@@ -17,12 +17,15 @@ import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.map.JsonMappingException;
 
+import com.agilecrm.AgileQueues;
 import com.agilecrm.account.AccountEmailStats;
 import com.agilecrm.account.util.AccountEmailStatsUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.subscription.Subscription;
 import com.agilecrm.subscription.SubscriptionUtil;
+import com.agilecrm.subscription.deferred.EmailsAddedDeferredTask;
+import com.agilecrm.subscription.deferred.RenewalCreditsDeferredTask;
 import com.agilecrm.subscription.limits.PlanLimits;
 import com.agilecrm.subscription.limits.cron.deferred.OurDomainSyncDeferredTask;
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
@@ -99,6 +102,10 @@ public class BillingRestriction
     
     // Life time emails
     public Integer email_credits_count = 0;
+    
+    //Latest invoiceItem id of email credits
+    @NotSaved(IfDefault.class)
+    public String last_credit_id = null;
 
     /**
      * This field is not saved in database, it is used to have a backup emails
@@ -142,6 +149,18 @@ public class BillingRestriction
     @Embedded
     @JsonIgnore
     public PlanLimits planDetails = PlanLimits.getPlanDetails(new Plan("FREE", 2));
+    
+  	//Auto recharge related fields
+  	@NotSaved(IfDefault.class)
+  	public Integer nextRechargeCount = null;
+  	
+  	@NotSaved(IfDefault.class)
+  	public Integer autoRenewalPoint = null;
+  	
+  	@NotSaved(IfDefault.class)
+  	public Boolean isAutoRenewalEnabled = false;
+  	
+  	public Long lastAutoRechargeTime = 0L;
 
     public static ObjectifyGenericDao<BillingRestriction> dao = new ObjectifyGenericDao<BillingRestriction>(
 	    BillingRestriction.class);
@@ -392,6 +411,7 @@ public class BillingRestriction
     @PrePersist
     private void prePersist()
     {
+    	
 	if (this.id == null)
 	    return;
 
@@ -420,6 +440,12 @@ public class BillingRestriction
 	// Updating backup count from that of DB entity
 	this.one_time_emails_backup = one_time_emails_count;
 	this.email_credits_backup = email_credits_count;
+	
+	if(this.lastAutoRechargeTime <= restriction.lastAutoRechargeTime || this.email_credits_count < restriction.email_credits_count){
+		this.lastAutoRechargeTime = restriction.lastAutoRechargeTime;
+		this.last_credit_id = restriction.last_credit_id;
+		this.email_credits_count = restriction.email_credits_count;
+	}
 
     }
 
@@ -465,6 +491,9 @@ public class BillingRestriction
     @PostLoad
     private void postLoad()
     {
+    if(last_credit_id == null)
+    	last_credit_id = NamespaceManager.get()+"_credit";
+    
 	if (one_time_emails_count == null)
 	    one_time_emails_count = 0;
 
@@ -520,9 +549,29 @@ public class BillingRestriction
     
     public void decrementEmailCreditsCount(int count){
     	this.email_credits_count -= count;
+    	if(isAutoRenewalEnabled && email_credits_count <= autoRenewalPoint){
+    		renewalCedits(nextRechargeCount);
+    	}
     }
     
     public void incrementEmailCreditsCount(int count){
     	this.email_credits_count += count;
     }
+    
+    //
+    public void renewalCedits(Integer quantity){
+    	BillingRestriction restriction = BillingRestrictionUtil.getBillingRestrictionFromDB();
+    	if(restriction.email_credits_count <= restriction.autoRenewalPoint){	
+			try {
+				RenewalCreditsDeferredTask task = new RenewalCreditsDeferredTask(NamespaceManager.get(), quantity);
+				// Add to queue
+				Queue queue = QueueFactory.getQueue(AgileQueues.CREDITS_AUTO_RENEWAL_QUEUE);
+				queue.add(TaskOptions.Builder.withTaskName(restriction.last_credit_id).payload(task));
+			} catch (Exception e) {
+				// TODO: handle exception
+				System.out.println("Task already created with domain: "+restriction.last_credit_id);
+				e.printStackTrace();
+			}
+    	}
+	}
 }

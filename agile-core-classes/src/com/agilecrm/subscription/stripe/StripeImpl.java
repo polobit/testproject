@@ -664,7 +664,7 @@ public class StripeImpl implements AgileBilling {
 	}
 	
 	// Create InvoiceIterm and pay to purchase life time emails
-	public void purchaseEmailCredits(JSONObject customerJSON, Integer quantity) throws Exception {
+	public String purchaseEmailCredits(JSONObject customerJSON, Integer quantity) throws Exception {
 		Customer customer = StripeUtil.getCustomerFromJson(customerJSON);
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("customer", customer.getId());
@@ -686,7 +686,7 @@ public class StripeImpl implements AgileBilling {
 			invoiceItems.get(0).delete();
 			throw new Exception(e.getMessage());
 		}
-		
+		return invoiceItem.getId();
 		
 	}
 	
