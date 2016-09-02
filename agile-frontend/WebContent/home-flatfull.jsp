@@ -609,7 +609,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
     <li id="push-notification-menu">
     <a href="#push-notification">
       <i class="fa fa-bell-o"></i>
-      <span>Push Notification</span>
+      <span>Push Notifications</span>
     </a>
   </li>
     <%
