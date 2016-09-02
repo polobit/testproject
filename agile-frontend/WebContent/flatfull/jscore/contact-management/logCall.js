@@ -136,6 +136,10 @@ $(function()
 		var m = json.min;
 		var s =	json.sec;
 		var duration = 0;
+		
+		if(json['status'] == 'busy' || json['status'] == 'failed' || json['status'] == 'missed' ){
+			duration = 0;
+		}else{
 				if(!h || !m || !s){
 					$("#"+formName +" #logPhone_duration_error1").show().delay(5000).hide(1);
 					return;
@@ -165,7 +169,7 @@ $(function()
 					}
 					
 				}
-		
+		}
 
 		disable_save_button($(this));
 		json['phone'] = $("#"+formName +" #contact_logPhone_number").attr("value");
