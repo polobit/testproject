@@ -305,6 +305,7 @@ public class RegisterServlet extends HttpServlet
 	
 	// Redirect to home page
 	response.sendRedirect(redirectionURL);
+	
     }
 
     private void createUserInOurDomain(HttpServletRequest request, DomainUser user)
