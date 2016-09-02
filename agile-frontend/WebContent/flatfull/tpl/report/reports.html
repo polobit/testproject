@@ -101,6 +101,8 @@
                                                 <a href="#deals-tab" role="tab" data-toggle="tab">{{agile_lng_translate 'report-view' 'deals'}}</a>
                                                  <ul class="nav nav-tabs sub-nav-tab" id="subTab1" style="display:none;">
                                                  <li><a href="#IncomingDeals" role="tab" data-toggle="tab"><i class="m-r-sm icon-graph v-middle"></i>{{agile_lng_translate 'report-view' 'incoming-deals'}}</a></li>
+                                                 <li><a href="#WonDealsByUser" role="tab" data-toggle="tab"><i class="m-r-sm icon-graph v-middle"></i>{{agile_lng_translate 'report-view' 'wom-deals-user'}}</a></li>
+
                                                  <li><a href="#LostDeal" role="tab" data-toggle="tab"><i class="m-r-sm icon-pie-chart v-middle"></i>{{agile_lng_translate 'portlets' 'deals-lost-reason'}}</a></li>
                                                  <li><a href="#RevenuebySource" role="tab" data-toggle="tab"><i class="m-r-sm icon-pie-chart v-middle"></i>{{agile_lng_translate 'report-view' 'revenue-by-source'}}</a></li>
                                                  <li><a href="#SalesForecast" role="tab" data-toggle="tab"><i class="m-r-sm icon-graph v-middle"></i> {{agile_lng_translate 'report-view' 'sales-forecast'}}</a></li>
@@ -184,6 +186,23 @@
             {{agile_lng_translate 'report-view' 'contact-reports-details'}}
         </div>
                    <img src='flatfull/img/reports_images/Incoming-Deals.png'></img>
+        <br />
+    </div>
+     </a>
+
+
+
+    </div>
+
+    <div class="tab-pane" id="WonDealsByUser">
+ 
+                   <a class="report-go" href="#report-won-deals">
+                   <div class="text-center show_screenshot">
+                   <!-- Description -->
+        <div class="m-b-sm" rel="tooltip" title="{{description}}">
+            {{agile_lng_translate 'report-view' 'won-deal-details'}}
+        </div>
+               <img src='flatfull/img/reports_images/ratio.png'></img>
         <br />
     </div>
      </a>

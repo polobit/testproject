@@ -1231,6 +1231,27 @@ public class DealsAPI
 	ReportsUtil.check(min * 1000, max * 1000);
 	return OpportunityUtil.getIncomingDealsList(ownerId, min, max, frequency, type).toString();
     }
+    
+    /*
+     * fetches all deals won by user
+     * 
+     * @param min
+     * 
+     * @param max
+     * 
+     * @return deals
+     * 
+     * @throws JSONException
+     */
+    @Path("/won_deals/{owner-Id}/{pipeline-id}/{source-id}")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public String getWonDealsByUser(@PathParam("owner-Id") Long ownerId, @PathParam("pipeline-id") Long pipelineId,
+    @PathParam("source-id") Long sourceId, @QueryParam("min") Long min, @QueryParam("max") Long max, @QueryParam("frequency") String frequency, @QueryParam("type") String type)
+    {
+	ReportsUtil.check(min * 1000, max * 1000);
+	return OpportunityUtil.getWonDealsByUser(ownerId, pipelineId, sourceId, min, max, frequency, type).toString();
+    }
 
     /**
      * Gets sum of expected values and pipeline values of the deals having
