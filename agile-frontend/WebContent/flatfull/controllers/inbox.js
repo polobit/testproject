@@ -26,27 +26,6 @@ var InboxRouter = Backbone.Router.extend({
 		$("#inboxmenu").addClass("active");
 		$('[data-toggle="tooltip"]').tooltip();
 	},
-	/*sent: function(){
-
-		$('#content').html("<div id='inbox-listners'>&nbsp;</div>");
-		showTransitionBar();
-		getTemplate("inbox", {}, undefined, function(template_ui) {
-			if( !template_ui )	return;
-
-			$('#inbox-listners').html($(template_ui));
-			$("#mail-inbox").css({"font-weight":"normal","color":"inherit","background-color": "#inherit"});
-			$("#mail-sent").css({"font-weight":"bold","color":"white","background-color": "#23b7e5"});
-			
-			//var url = 'core/api/social-prefs/google-emails?from_email=rajesh.agilecrm@gmail.com&cursor=0&page_size=20&search_email=rajesh07590@gmail.com';
-			var url = "core/api/categories?entity_type=TASK";
-			renderToMailList(url);
-			
-		}, '#inbox-listners');
-		
-		$(".active").removeClass("active");
-		$("#inboxmenu").addClass("active");
-		$('[data-toggle="tooltip"]').tooltip();
-	},*/
 	compose:function(id, subject, body, cc, bcc){
 		$('#content').html("<div id='inbox-listners'>&nbsp;</div>");
 		getTemplate("inbox", {}, undefined, function(template_ui) {
@@ -148,17 +127,23 @@ function syncContacts(){
 			$("#mails-list").show();
 			$("#mail-details-view").hide();
 			$("#compose").hide();
+			$("#mails-list").remove();
+			$("#mails-list-view").append("<ul class='portlet_body list-group list-group-lg no-radius m-b-none m-t-n-xxs' id='mails-list'></ul>");
+			$("#mails-list").css({"max-height":$(window).height()-128,"height":$(window).height()-128, "overflow-y":"scroll", "padding":"0px"});
 			renderToMailList(url);
 		}
 	});
 	var syncedcontactitem = new syncedContactItem();
 }
 function renderToMailList(url){
-	$("#mails-list").html('');
+	$("#mails-list").empty();
 	$("#mail-details-view").html('');
+	var fetchurl= '';
+	fetchurl = url;
+
 	var mailCollection = Backbone.Collection.extend({
 				url:function () { 
-					return url+'&cursor='+this.offset+'&page_size='+this.page_size
+					return fetchurl+'&cursor='+this.offset+'&page_size='+this.page_size
 				},
 				offset: 0,
     			page_size: 20,
@@ -171,7 +156,7 @@ function renderToMailList(url){
 	      'scroll': 'checkScroll'
 	    },
 		initialize:function(){
-			_.bindAll(this,'render','loadResults','checkScroll','displyNoEmails')
+			//_.bindAll(this,'cleanUp')
 			//var self = this;
 			this.isLoading = false;
 			this.mailCollectionInstance = new mailCollection();
@@ -185,60 +170,54 @@ function renderToMailList(url){
 	        // fetch is Backbone.js native function for calling and parsing the collection url
 	        this.mailCollectionInstance.fetch({
 				success: function(data,response,xhr) {
-					if(data.length > 0){
-						that.render(data);
-						renderToMailView(data);
-						$('.collapse').on('show.bs.collapse', function (e) {
-							$("#mails-list").hide();
-							$("#compose").hide();
-							$("#mail-details-view").show();
-						    $('.collapse').not(e.target).removeClass('in');
-						});
-						$(document).on('click','.back-to-inbox',function(e) {
-							$("#mails-list").show();
-							$("#mail-details-view").hide();
-							$("#compose").hide();
-							$(".inbox-reply-view").html("");
-							$(".ng-show").show();
-						});
-					}else{
-						that.displyNoEmails(data);
-					}
+					that.render(data);
+					renderToMailView(data);
+					$('.collapse').on('show.bs.collapse', function (e) {
+						$("#mails-list").hide();
+						$("#compose").hide();
+						$("#mail-details-view").show();
+					    $('.collapse').not(e.target).removeClass('in');
+					});
+					$(document).on('click','.back-to-inbox',function(e) {
+						$("#mails-list").show();
+						$("#mail-details-view").hide();
+						$("#compose").hide();
+						$(".inbox-reply-view").html("");
+						$(".ng-show").show();
+					});
 					hideTransitionBar();
 					$(".loading").hide();
 				},
 				error: function (errorResponse) {
 					console.log(errorResponse)
 				}
-			});	     
+			});	 
+			this.mailCollectionInstance.reset();
 	    },
 		render:function(data){
 			var source = $('#mail-template').html();
 	        var template = Handlebars.compile(source);
 	        var html = template(data.toJSON());
 	        if(this.mailCollectionInstance.offset == 0){
+	        	if(data.length == 0){
+		        	source = $('#no-mail-template').html();
+			        template = Handlebars.compile(source);
+			        html = template(data.toJSON());
+		    	}
 	        	this.$el.html(html);
-	        	//$( "#mail-details-view li" ).first().addClass("in");
 	        }else{
 	    		this.$el.append(html);
 	    	}
 	    	this.isLoading = false;
 		},
-		displyNoEmails:function(data){
-			var source = $('#no-mail-template').html();
-	        var template = Handlebars.compile(source);
-	        var html = template(data.toJSON());
-	        this.$el.html(html);
-		},
 	    checkScroll: function () {
-
 	        var triggerPoint = 100; // 100px from the bottom
 	        var scrolltop = $("#mails-list").scrollTop();
 	        var scrollheight = $("#mails-list").height();
 	        var totalheight = $("#mails-list").prop("scrollHeight");
+
 	    	if( !this.isLoading && scrolltop + scrollheight + triggerPoint > totalheight) {
 	          this.mailCollectionInstance.offset += 20; // Load next page
-	          //this.mailCollectionInstance.page_size =20;
 	          this.loadResults();
 	        }
 	    }
@@ -317,12 +296,16 @@ function renderToMailView(data){
 	var mailviewitem = new mailViewItem();
 }
 function initializeInboxListeners(){
+
 	$('#inbox-listners').on('click', '#mail-inbox', function(e){
 		e.preventDefault();
 		$("#mail-inbox").css({"font-weight":"bold","color":"white","background-color": "#23b7e5"});
 		$("#mail-sent").css({"font-weight":"normal","color":"inherit","background-color": "transparent"});
 		var url = $('#inbox-email-type-select').attr("data-url");
 		url = url.concat("&folder_name=INBOX");
+		$("#mails-list").remove();
+		$("#mails-list-view").append("<ul class='portlet_body list-group list-group-lg no-radius m-b-none m-t-n-xxs' id='mails-list'></ul>");
+		$("#mails-list").css({"max-height":$(window).height()-128,"height":$(window).height()-128, "overflow-y":"scroll", "padding":"0px"});
 		renderToMailList(url);
 	});
 
@@ -332,6 +315,9 @@ function initializeInboxListeners(){
 		$("#mail-sent").css({"font-weight":"bold","color":"white","background-color": "#23b7e5"});
 		var url = $('#inbox-email-type-select').attr("data-url");
 		url = url.concat("&folder_name=Sent");
+		$("#mails-list").remove();
+		$("#mails-list-view").append("<ul class='portlet_body list-group list-group-lg no-radius m-b-none m-t-n-xxs' id='mails-list'></ul>");
+		$("#mails-list").css({"max-height":$(window).height()-128,"height":$(window).height()-128, "overflow-y":"scroll", "padding":"0px"});
 		renderToMailList(url);
 	});
 }
