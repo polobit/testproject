@@ -175,7 +175,7 @@ $(function()
 			// Removes loading symbol and hides the modal
 			//modal.find('span.save-status img').remove();
 			$("#newNoteModal").modal('hide');
-
+			modal.modal("hide");
 			var note = data.toJSON();
 
 			console.log(note);
