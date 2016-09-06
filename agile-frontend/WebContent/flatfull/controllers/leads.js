@@ -164,6 +164,10 @@ var LeadsRouter = Backbone.Router.extend({
 				App_Leads.leadDetails.loadLeadTabs(el, lead.toJSON());
 
 				loadWidgets(el, lead, "widgets");
+
+				App_Leads.leadDetails.starify(el);
+
+				App_Leads.leadDetails.show_map(el);
 			} 
 		});
 

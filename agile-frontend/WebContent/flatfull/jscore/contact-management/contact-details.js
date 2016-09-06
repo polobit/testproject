@@ -150,7 +150,15 @@ function checkContactUpdated(){
           }*/
           if(agile_crm_is_model_property_changed("first_name", firstName)){
         // Update first name
-              var model_id = App_Contacts.contactDetailView.model.toJSON().id;
+              var model_id;
+              if(Current_Route && Current_Route.indexOf("lead/") == 0 && App_Leads.leadDetailView)
+              {
+                model_id = App_Leads.leadDetailView.model.toJSON().id;
+              }
+              else
+              {
+                model_id = App_Contacts.contactDetailView.model.toJSON().id;
+              }
               agile_crm_update_contact("first_name", firstName, function(contact_model)
               {
                if(model_id != contact_model.id)
@@ -408,8 +416,10 @@ var Contact_Details_Model_Events = Base_Model_View.extend({
       'click #contactDetailsTab a[href="#leads-events"]' : 'openLeadEvents',
       'click #contactDetailsTab a[href="#leads-tasks"]' : 'openLeadTasks',
       'click #contactDetailsTab a[href="#leads-deals"]' : 'openLeadDeals',
+      'click #contactDetailsTab a[href="#leads-time-line"]' : 'openLeadTimeline',
       'click .remove-lead-tags' : 'removeLeadTags',
-      'click #lead-actions-delete' : 'leadDelete', 
+      'click #lead-actions-delete' : 'leadDelete',
+      'click #lead-add-tags' : 'onAddLeadTags', 
     },
     
     
@@ -1574,6 +1584,13 @@ updateScoreValue :function(){
     App_Leads.leadDetails.loadDeals();
   },
 
+  openLeadTimeline :  function(e)
+  {
+    e.preventDefault();
+    App_Leads.leadDetails.saveLeadTabPosition("time-line");
+    App_Leads.leadDetails.loadTimeline();
+  },
+
   removeLeadTags :  function(e){
     e.preventDefault();
     var targetEl = $(e.currentTarget);
@@ -1641,6 +1658,83 @@ updateScoreValue :function(){
         }});
     });
   },
+
+  onAddLeadTags : function(e){
+    e.preventDefault();
+    
+    // Add Tags
+    var new_tags = get_new_tags('addTags');
+    if(new_tags)new_tags=new_tags.trim();
+    
+    if(!new_tags || new_tags.length<=0 || (/^\s*$/).test(new_tags))
+    {
+      console.log(new_tags);
+      return;
+    }
+    if (!isValidTag(new_tags, true)) {
+      return;
+    }
+    $('#add-tags').css("display", "block");
+    $("#addTagsForm").css("display", "none");
+    console.log(new_tags);
+    
+    if(new_tags) {
+      var json = App_Leads.leadDetailView.model.toJSON();
+          
+        
+        // Reset form
+        $('#addTagsForm input').each (function(){
+          $(e.currentTarget).val("");
+        });
+        
+        // Checks if tag already exists in contact
+      if($.inArray(new_tags, json.tags) >= 0)
+        return;
+      acl_util.canAddTag(new_tags.toString(),function(respnse){
+          json.tagsWithTime.push({"tag" : new_tags.toString()});
+          
+          // Save the contact with added tags
+          var contact = new Backbone.Model();
+            contact.url = 'core/api/contacts';
+            contact.save(json,{
+              success: function(data){
+                
+                addTagToTimelineDynamically(new_tags, data.get("tagsWithTime"));
+                
+                // Get all existing tags of the contact to compare with the added tags
+                var old_tags = [];
+                $.each($('#added-tags-ul').children(), function(index, element){
+                  old_tags.push($(element).attr('data'));
+                });
+                
+                // Updates to both model and collection
+                App_Leads.leadDetailView.model.set(data.toJSON(), {silent : true});
+                
+                // Append to the list, when no match is found 
+                if ($.inArray(new_tags, old_tags) == -1) {
+                  var template = Handlebars.compile('<li  class="tag inline-block btn btn-xs btn-default m-r-xs m-b-xs" style="color:#363f44" data="{{name}}"><span><a class="anchor m-r-xs custom-color" style="color:#363f44" href="#tags/{{name}}" >{{name}}</a><a class="close remove-tags" id="{{name}}" tag="{{name}}">&times</a></span></li>');
+
+                  // Adds contact name to tags ul as li element
+                  $('#added-tags-ul').append(template({name : new_tags}));
+                  $.each(data.get("tagsWithTime"), function(e, d) {
+                    if (d.tag == new_tags) {
+                      $('#added-tags-ul').find("li[data='"+new_tags+"']").attr('title',epochToHumanDate("mmmm dd, yyyy 'at' hh:MM tt",d.createdTime));
+                    }
+                  });
+                }
+                
+                console.log(new_tags);
+                // Adds the added tags (if new) to tags collection
+                tagsCollection.add(new BaseModel({"tag" : new_tags}));
+              },
+              error: function(model,response){
+                console.log(response);
+                showAlertModal(response.responseText, undefined, undefined, undefined, "Error");
+              }
+            });
+      });
+    }
+   },
 
 });
 

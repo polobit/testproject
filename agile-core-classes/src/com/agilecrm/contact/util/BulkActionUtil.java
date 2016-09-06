@@ -51,7 +51,8 @@ public class BulkActionUtil
 		"/core/api/bulk-actions/contacts/send-email", AgileQueues.BULK_EMAILS_QUEUE), EXPORT_CONTACTS_CSV(
 		"/core/api/bulk-actions/contacts/export-contacts-csv", AgileQueues.CONTACTS_EXPORT_QUEUE), EXPORT_COMPANIES_CSV(
 		"/core/api/bulk-actions/contacts/export-companies-csv", AgileQueues.CONTACTS_EXPORT_QUEUE), REMOVE_TAG(
-		"/core/api/bulk-actions/contact/remove-tags", AgileQueues.BULK_ACTION_QUEUE);
+		"/core/api/bulk-actions/contact/remove-tags", AgileQueues.BULK_ACTION_QUEUE), EXPORT_LEADS_CSV(
+				"/core/api/bulk-actions/contacts/export-leads-csv", AgileQueues.CONTACTS_EXPORT_QUEUE);
 
 	String url, queue;
 
@@ -462,6 +463,26 @@ public class BulkActionUtil
 	int randomNum = rand.nextInt((max - min) + 1) + min;
 
 	return randomNum;
+    }
+    
+    /**
+     * Filters based on search criteria
+     * 
+     * @param criteria
+     * @param domainUserId
+     * @return
+     */
+    public static List<Contact> getFilterLeads(String criteria, String cursor, Long domainUserId)
+    {
+	if (criteria.isEmpty())
+	    return new ArrayList<Contact>();
+
+	setSessionManager(domainUserId);
+
+	if (criteria.equalsIgnoreCase("Leads"))
+	    return ContactUtil.getAllCompanies(ENTITIES_FETCH_LIMIT, cursor);
+
+	return new ArrayList<Contact>(ContactFilterUtil.getContacts(criteria, ENTITIES_FETCH_LIMIT, cursor, null));
     }
 
 }

@@ -174,6 +174,29 @@ public class ContactDocument extends com.agilecrm.search.document.Document imple
 
 				doc.addField(Field.newBuilder().setName("last_called_epoch").setNumber(contact.last_called));
 			}
+			
+			// Describes lead conversion time document if conversion time is not 0.
+			if (contact.getLead_converted_time() != null && contact.getLead_converted_time() > 0L)
+			{
+				fields.put("lead_converted_time", contact.getLead_converted_time().toString());
+				Date convertedDate = DateUtils.truncate(new Date(contact.getLead_converted_time() * 1000), Calendar.DATE);
+
+				doc.addField(Field.newBuilder().setName("lead_converted_time").setDate(convertedDate));
+
+				doc.addField(Field.newBuilder().setName("lead_converted_time_epoch").setNumber(contact.getLead_converted_time()));
+			}
+			
+			if (contact.getLead_source_id() != null && contact.getLead_source_id() > 0L)
+			{
+				fields.put("lead_source", contact.getLead_source_id().toString());
+				doc.addField(Field.newBuilder().setName("lead_source").setText(contact.getLead_source_id().toString()));
+			}
+			
+			if (contact.getLead_status_id() != null && contact.getLead_status_id() > 0L)
+			{
+				fields.put("lead_status", contact.getLead_status_id().toString());
+				doc.addField(Field.newBuilder().setName("lead_status").setText(contact.getLead_status_id().toString()));
+			}
 
 			// Adds Other fields in contacts to document
 			doc.addField(Field.newBuilder().setName("lead_score").setNumber(contact.lead_score));

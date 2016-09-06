@@ -1448,6 +1448,10 @@ public class Contact extends Cursor
 	{
 		this.entity_type = "company_entity";
 	}
+	else if (this.type == Contact.Type.LEAD)
+	{
+		this.entity_type = "lead_entity";
+	}
     }
 
     /**

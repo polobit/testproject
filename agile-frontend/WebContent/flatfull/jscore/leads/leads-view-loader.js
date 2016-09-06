@@ -293,6 +293,7 @@ var LeadsViewLoader = (function(){
 		App_Leads.leadsLHSFilter = new Leads_LHS_Filters_Events_View({ data : {}, template : "leads-lhs-filters", isNew : true,
 			postRenderCallback : function(el)
 			{
+				//To set lead owners
 				fillSelect('owner_select', '/core/api/users/partial', undefined, function()
 				{
 					if (!that.LEAD_CUSTOM_FIELDS)
@@ -309,6 +310,18 @@ var LeadsViewLoader = (function(){
 						loadCustomFiledsFilters(that.LEAD_CUSTOM_FIELDS, cel, false, true);
 					}
 				}, optionsTemplate, false, $('#lhs_filters_conatiner', cel));
+
+				//To set lead sources
+				fillSelect('lead_source_select', '/core/api/categories?entity_type=LEAD_SOURCE', undefined, function()
+				{
+					
+				}, "<option value='{{id}}'>{{label}}</option>", false, $('#lhs_filters_conatiner', cel));
+
+				//To set lead statuses
+				fillSelect('lead_status_select', '/core/api/categories?entity_type=LEAD_STATUS', undefined, function()
+				{
+					
+				}, "<option value='{{id}}'>{{label}}</option>", false, $('#lhs_filters_conatiner', cel));
 			} 
 		});
 
@@ -373,6 +386,10 @@ var LeadsViewLoader = (function(){
 				var statuses = data.toJSON();
 				$.each(statuses, function(index, statusJSON){
 					$optEle.append(compiledTemplate(statusJSON));
+					if(statusJSON.is_conversion_flag)
+					{
+						$('#lead_conversion_status', el).val(statusJSON.id);
+					}
 				});
 				if(obj)
 				{
@@ -381,28 +398,6 @@ var LeadsViewLoader = (function(){
 			}
 			hideTransitionBar();
 		} });
-	}
-
-	LeadsViewLoader.prototype.setupConversionStatus = function(el, obj)
-	{
-		if(App_Leads.leadConversionStatusJSON && App_Leads.leadConversionStatusJSON.conversion_status_id)
-		{
-			$('#lead_conversion_status', el).val(App_Leads.leadConversionStatusJSON.conversion_status_id);
-			return;
-		}
-
-		var view = new Backbone.Model();
-		view.url = 'core/api/leads/conversion-status';
-		view.fetch({ 
-			success : function(data)
-			{	
-				if(data)
-				{
-					App_Leads.leadConversionStatusJSON = data.toJSON();
-					$('#lead_conversion_status', el).val(App_Leads.leadConversionStatusJSON.conversion_status);
-				}	
-			} 
-		});
 	}
 
 	LeadsViewLoader.prototype.buildLeadsView = function(el, tag_id)

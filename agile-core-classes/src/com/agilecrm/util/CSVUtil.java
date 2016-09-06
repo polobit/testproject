@@ -118,9 +118,9 @@ public class CSVUtil
 	//if (!VersioningUtil.isLocalHost())
 	//{
 	    GcsFileOptions options = new GcsFileOptions.Builder().mimeType("text/csv").contentEncoding("UTF-8")
-		    .acl("public-read").addUserMetadata("domain", NamespaceManager.get()).build();
+		    .acl("public-read").addUserMetadata("domain", "local").build();
 
-	    service = new GCSServiceAgile(NamespaceManager.get() + "_failed_contacts_" + GoogleSQL.getFutureDate()
+	    service = new GCSServiceAgile("local" + "_failed_contacts_" + GoogleSQL.getFutureDate()
 		    + ".csv", "agile-exports", options);
 	//}
 
@@ -1936,6 +1936,9 @@ public class CSVUtil
 
     	List<CustomFieldDef> customFields = CustomFieldDefUtil.getCustomFieldsByScopeAndType(SCOPE.CONTACT, "DATE");
     	List<CustomFieldDef> imagefield = CustomFieldDefUtil.getCustomFieldsByScopeAndType(SCOPE.CONTACT, "text");
+    	CategoriesUtil categoriesUtil = new CategoriesUtil();
+    	List<Category> leadSourceList = categoriesUtil.getCategoriesByType(Category.EntityType.LEAD_SOURCE.toString());
+    	List<Category> leadStatusList = categoriesUtil.getCategoriesByType(Category.EntityType.LEAD_STATUS.toString());
 
     	/**
     	 * Processed contacts count.
@@ -1978,6 +1981,7 @@ public class CSVUtil
     		// contact is merged with exiting contact
     		tempContact.tags = (LinkedHashSet<String>) contact.tags.clone();
     		tempContact.setContactOwner(ownerKey);
+    		tempContact.type = Type.LEAD;
 
     		tempContact.properties = new ArrayList<ContactField>();
 
@@ -2060,6 +2064,32 @@ public class CSVUtil
     			catch (JSONException e)
     			{
     			    e.printStackTrace();
+    			}
+    			continue;
+    		    }
+    		    
+    		    if ("lead_source".equals(field.name))
+    		    {
+    			for(Category leadSource : leadSourceList)
+    			{
+    				if(leadSource.getName() != null && leadSource.getName().equalsIgnoreCase(csvValues[j]))
+    				{
+    					tempContact.setLead_source_id(leadSource.getId());
+    					break;
+    				}
+    			}
+    			continue;
+    		    }
+    		    
+    		    if ("lead_status".equals(field.name))
+    		    {
+    			for(Category leadStatus : leadStatusList)
+    			{
+    				if(leadStatus.getName() != null && leadStatus.getName().equalsIgnoreCase(csvValues[j]))
+    				{
+    					tempContact.setLead_status_id(leadStatus.getId());
+    					break;
+    				}
     			}
     			continue;
     		    }

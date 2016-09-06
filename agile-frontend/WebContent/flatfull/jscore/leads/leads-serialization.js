@@ -459,9 +459,10 @@ function serialize_lead_properties_and_save(e, form_id, obj, properties, modal_i
 	leadModel.url = 'core/api/contacts';
 	leadModel.save(obj, { success : function(data)
 	{
-
 		// Removes disabled attribute of save button
 		enable_save_button($(saveBtn));
+
+		addLeadToView(App_Leads.leadsListView, data, obj.id);
 
 		//add_contact_to_view(App_Leads.leadsListView, data, obj.id);
 
@@ -500,10 +501,6 @@ function serialize_lead_properties_and_save(e, form_id, obj, properties, modal_i
 			App_Leads.navigate("lead/" + data.id, { trigger : true });
 		}
 
-		// Hides the modal
-		if(CallLogVariables.dynamicData != null){
-			CallLogVariables.processed = true;
-		}
 		$('#' + modal_id).modal('hide');
 
 		// Resets each element
@@ -514,46 +511,6 @@ function serialize_lead_properties_and_save(e, form_id, obj, properties, modal_i
 
 		// Removes tags list(remove them from new person modal)
 		$('.tagsinput', $("#" + modal_id)).empty();
-		
-		try{
-			
-			if(clickButtonId != "continue-contact"){
-				if(CallLogVariables.dynamicData != null){
-					var jsonData1 = data.toJSON();
-					var dynamicData = CallLogVariables.dynamicData;
-					dynamicData.contact_name = getContactName(jsonData1);
-					dynamicData.contId = jsonData1.id;
-					showDynamicCallLogs(dynamicData);
-				}
-			}
-		}catch(e){}
-		
-		
-		//added for call campaign - functionality after updating fom call campaign
-			if(CALL_CAMPAIGN.start ){
-				var id = $('#continueform input[name=id]').val();
-				if(CALL_CAMPAIGN.contact_update){
-					CALL_CAMPAIGN.current_count = CALL_CAMPAIGN.current_count - 1;
-					CALL_CAMPAIGN.contact_update = false;
-					dialNextCallAutomatically();
-					Backbone.history.loadUrl("lead/" + id);
-					$( window ).scrollTop( 0 );
-					return;
-				}else{
-					var currentCampaignId = CALL_CAMPAIGN.contact_id_list[CALL_CAMPAIGN.current_count];
-					if(id == currentCampaignId ){
-						CALL_CAMPAIGN.current_count = CALL_CAMPAIGN.current_count-1;
-						dialNextCallAutomatically();
-					}
-					
-				}
-				
-				if(Current_Route != "lead/" + id)
-				Backbone.history.navigate("lead/" + id, { trigger : true });	
-				$( window ).scrollTop( 0 );
-				
-				
-			}
 			
 			
 	}, error : function(model, response)
@@ -587,4 +544,36 @@ function serialize_lead_properties_and_save(e, form_id, obj, properties, modal_i
 
 	return obj;
 
+}
+
+/**
+ * Adds lead to view.
+ * 
+ * @param appView -
+ *            view whose collection to update
+ * @param model -
+ *            the model contact to add
+ * @param isUpdate -
+ *            if undefined, implies that its new one, else an update
+ */
+function addLeadToView(appView, model, isUpdate)
+{
+	if (!appView)
+		return;
+
+	if (!_agile_get_prefs('lead_filter'))
+	{
+		if (appView.collection.get(model.id) != null)
+		{
+			appView.collection.get(model.id).set(model);
+		}
+		else
+		{
+			add_model_cursor(appView.collection, model);
+		}
+	}
+	else
+	{
+		LEADS_HARD_RELOAD = true;
+	}
 }

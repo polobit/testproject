@@ -7543,3 +7543,106 @@ Handlebars.registerHelper('getLeadStatus', function(leadStatusId, options)
 	}
 	return "";
 });
+
+/**
+ * Displays multiple times occurred properties of a lead in its detail
+ * view in single entity
+ */
+Handlebars.registerHelper('multiple_Lead_Property_Element', function(name, properties, options)
+{
+	// Reads current contact model form the contactDetailView
+	var lead_model = App_Leads.leadDetailView.model;
+
+	// Gets properties list field from contact
+	var properties = lead_model.get('properties');
+	var property_list = [];
+
+	/*
+	 * Iterates through each property in contact properties and checks for the
+	 * match in it for the given property name and retrieves value of the
+	 * property if it matches
+	 */
+	$.each(properties, function(index, property)
+	{
+		if (property.name == name)
+		{
+			property_list.push(property);
+		}
+	});
+	if (property_list.length > 0)
+		return options.fn(property_list);
+});
+
+/**
+ * Returns custom fields without few fields like LINKEDIN or TWITTER or
+ * title fields
+ */
+Handlebars.registerHelper('getLeadCustomPropertiesExclusively', function(items, options)
+{
+
+	var exclude_by_subtype = [
+			"LINKEDIN", "TWITTER"
+	];
+	var exclude_by_name = [
+		"title"
+	];
+
+	var fields = getLeadCustomProperties(items);
+
+	var exclusive_fields = [];
+	for (var i = 0; i < fields.length; i++)
+	{
+		if (jQuery.inArray(fields[i].name, exclude_by_name) != -1 || (fields[i].subtype && jQuery.inArray(fields[i].subtype, exclude_by_subtype) != -1))
+		{
+			continue;
+		}
+
+		exclusive_fields.push(jQuery.extend(true, {}, fields[i]));
+	}
+	if (exclusive_fields.length == 0)
+		return options.inverse(exclusive_fields);
+
+	$.getJSON("core/api/custom-fields/type/DATE", function(data)
+	{
+
+		if (data.length == 0)
+			return;
+
+		for (var j = 0; j < data.length; j++)
+		{
+			for (var i = 0; i < exclusive_fields.length; i++)
+			{
+				if (exclusive_fields[i].name == data[j].field_label)
+					try
+					{
+						var value = exclusive_fields[i].value;
+
+						if (!isNaN(value))
+						{
+							exclusive_fields[i].value = value;
+							exclusive_fields[i]["subtype"] = data[j].field_type;
+						}
+
+					}
+					catch (err)
+					{
+						exclusive_fields[i].value = exclusive_fields[i].value;
+					}
+			}
+		}
+		updateLeadCustomData(options.fn(exclusive_fields));
+	});
+
+	return options.fn(exclusive_fields)
+
+});
+
+Handlebars.registerHelper('getLeadCustomProperties', function(items, options)
+{
+	var fields = getLeadCustomProperties(items);
+	if (fields.length == 0)
+		return options.inverse(fields);
+
+	return options.fn(fields);
+
+});

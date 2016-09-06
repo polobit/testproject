@@ -5223,3 +5223,9 @@ leads-view.import-upto-10000-leads-from-a-CSV-file,Import upto 10&#44;000 leads 
 leads-view.csv-leads-import-list,CSV Leads Import List,
 leads-view.lead-source,Lead Source,
 leads-view.lead-status,Lead Status,
+leads-view.created-a-new-lead,Created a new Lead,
+leads-view.lead-deleted-later,Lead deleted later.,El contacto se eliminará más tarde.
+leads-view.lead-assigned-to,Lead assigned to,Contacto asignado a
+leads-view.deleted-lead,Deleted Lead,Contacto eliminado
+leads-view.added-a-tag-to-lead,Added a Tag to Lead,Se ha añadido una etiqueta a Contacto
+leads-view.removed-a-tag-from-lead,Removed a Tag from Lead,Eliminó una etiqueta del Contacto

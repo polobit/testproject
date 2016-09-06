@@ -67,6 +67,8 @@
 																<option value="state">State</option>
 																<option value="country">Country</option>
 																<option value="zip">Zip</option>
+																<option value="lead_source">Lead Source</option>
+																<option value="lead_status">Lead Status</option>
 															</optgroup>
 															 <optgroup label="Custom Fields" id="custom-fields" class="hide">
 															</optgroup>
@@ -77,6 +79,10 @@
 													<div id="condition" name="CONDITION">
 														<select name="temp" class="form-control">
 															<option value="EQUALS" class="first_name last_name phone company title org_tag jobtitle email phone city country state zip org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf">is</option>
+															<option value="EQUALS" class="lead_source" related="RHS" url="core/api/categories?entity_type=LEAD_SOURCE" parse_key="id" parse_value="label">is</option>
+															<option value="NOTEQUALS" class="lead_source" related="RHS" url="core/api/categories?entity_type=LEAD_SOURCE" parse_key="id" parse_value="label">isn't</option>
+															<option value="EQUALS" class="lead_status" related="RHS" url="core/api/categories?entity_type=LEAD_STATUS" parse_key="id" parse_value="label">is</option>
+															<option value="NOTEQUALS" class="lead_status" related="RHS" url="core/api/categories?entity_type=LEAD_STATUS" parse_key="id" parse_value="label">isn't</option>
 															<option value="EQUALS" class="owner_id" related="RHS" url="core/api/users" parse_key="id" parse_value="name">is</option>
 															<option value="NOTEQUALS" class="owner_id" related="RHS" url="core/api/users" parse_key="id" parse_value="name">isn't</option>
 															<option value="NOTEQUALS" class="first_name last_name company owner country org_tag title email phone city state zip org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf">isn't</option>
@@ -208,6 +214,8 @@
 																<option value="state">State</option>
 																<option value="country">Country</option>
 																<option value="zip">Zip</option>
+																<option value="lead_source">Lead Source</option>
+																<option value="lead_status">Lead Status</option>
 															</optgroup>
 															 <optgroup label="Custom Fields" id="custom-fields" class="hide">
 															</optgroup>
@@ -218,6 +226,10 @@
 													<div id="condition" name="CONDITION">
 														<select name="temp" class="form-control">
 															<option value="EQUALS" class="first_name last_name phone company title org_tag jobtitle email phone city country state zip org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf">is</option>
+															<option value="EQUALS" class="lead_source" related="RHS" url="core/api/categories?entity_type=LEAD_SOURCE" parse_key="id" parse_value="label">is</option>
+															<option value="NOTEQUALS" class="lead_source" related="RHS" url="core/api/categories?entity_type=LEAD_SOURCE" parse_key="id" parse_value="label">isn't</option>
+															<option value="EQUALS" class="lead_status" related="RHS" url="core/api/categories?entity_type=LEAD_STATUS" parse_key="id" parse_value="label">is</option>
+															<option value="NOTEQUALS" class="lead_status" related="RHS" url="core/api/categories?entity_type=LEAD_STATUS" parse_key="id" parse_value="label">isn't</option>
 															<option value="EQUALS" class="owner_id" related="RHS" url="core/api/users" parse_key="id" parse_value="name">is</option>
 															<option value="NOTEQUALS" class="owner_id" related="RHS" url="core/api/users" parse_key="id" parse_value="name">isn't</option>
 															<option value="NOTEQUALS" class="first_name last_name company owner country org_tag title email phone city state zip org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf">isn't</option>

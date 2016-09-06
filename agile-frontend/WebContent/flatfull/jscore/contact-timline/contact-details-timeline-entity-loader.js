@@ -5,7 +5,7 @@
 var timeline_entity_loader = {
 
 
-	init : function(contact)
+	init : function(contact, el)
 	{
 		this.active_connections = 0;
 		MONTH_YEARS = [];
@@ -14,8 +14,15 @@ var timeline_entity_loader = {
 		head.load(FLAT_FULL_PATH + "lib/isotope.pkgd.js", FLAT_FULL_PATH + "lib/jquery.event.resize.js", FLAT_FULL_PATH + "css/misc/agile-timline.css", function()
 		{
 			// customize_isotope()
-			configure_timeline();
-			timeline_collection_view = new timeline_view();
+			configure_timeline(el);
+			if(contact && contact.type == "LEAD")
+			{
+				timeline_collection_view = new lead_timeline_view();
+			}
+			else
+			{
+				timeline_collection_view = new timeline_view();
+			}
 			console.log(_this);
 			_this.load_other_timline_entities(contact);
 
@@ -29,10 +36,13 @@ var timeline_entity_loader = {
 		var contactId = contact['id'];
 
 		this.load_related_entites(contactId);
-		this.load_stats(contact);
-		this.load_campaign_logs(contactId);
+		if((contact && contact.type != "LEAD") || !contact)
+		{
+			this.load_stats(contact);
+			this.load_campaign_logs(contactId);
 		
-		this.get_stats(getPropertyValue(contact.properties, "email"), contact, App_Contacts.contactDetailView.el);
+			this.get_stats(getPropertyValue(contact.properties, "email"), contact, App_Contacts.contactDetailView.el);
+		}
 		//setTimeout(this.load_reload_emails, 5000);
 	},
 	
@@ -72,8 +82,14 @@ var timeline_entity_loader = {
 
 			}
 			
-			if(App_Contacts.contactDetailView.model.get('id') == contactId)
-			timeline_collection_view.addItems(entities);
+			if(App_Contacts.contactDetailView && App_Contacts.contactDetailView.model.get('id') == contactId)
+			{
+				timeline_collection_view.addItems(entities);
+			}
+			else if(App_Leads.leadDetailView && App_Leads.leadDetailView.model.get('id') == contactId)
+			{
+				timeline_collection_view.addItems(entities);
+			}
 		});
 	},
 	load_stats : function(contact)

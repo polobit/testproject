@@ -49,7 +49,7 @@ public class ImportStatus implements Serializable
 
     public static enum ImportType implements Serializable
     {
-	CONTACTS, COMPANIES, DEALS;
+	CONTACTS, COMPANIES, DEALS, LEADS;
     };
 
     public Long getId()

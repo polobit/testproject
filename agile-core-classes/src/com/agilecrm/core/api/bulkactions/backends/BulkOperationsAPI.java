@@ -1251,5 +1251,131 @@ public class BulkOperationsAPI
 	    System.err.println("Exception occured while deleting workflow related entities" + e.getMessage());
 	}
     }
+    
+    /**
+     * Sends email with leads csv as an attachment
+     * 
+     * @param currentUserId
+     *            - Current user id.
+     * @param contact_ids
+     *            - list of Contact ids.
+     * @param filter
+     *            - filter id
+     * @param data
+     *            - data request parameter
+     * @throws JSONException
+     */
+    @Path("/contacts/export-leads-csv/{current_user_id}")
+    @POST
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    public void exportLeadsCSV(@PathParam("current_user_id") Long currentUserId,
+	    @FormParam("contact_ids") String contact_ids, @FormParam("filter") String filter,
+	    @FormParam("dynamic_filter") String dynamicFilter, @FormParam("data") String data) throws JSONException
+    {
+	int count = 0;
+
+	if (StringUtils.isBlank(data))
+	{
+	    System.out.println("Not proceeding further as data is null.");
+	    return;
+	}
+
+	List<Contact> contacts_list = new ArrayList<Contact>();
+	String[] header = ContactExportCSVUtil.getCSVHeadersForLead();
+
+	DomainUser user = DomainUserUtil.getDomainUser(currentUserId);
+
+	if (user == null)
+	    return;
+
+	Exporter<Contact> leadExporter = ExportBuilder.buildLeadExporter();
+
+	// If filter is not empty, 500 contacts are fetched on every
+	// iteration
+	if (!StringUtils.isEmpty(filter))
+	{
+	    contacts_list = BulkActionUtil.getFilterLeads(filter, null, currentUserId);
+
+	    String currentCursor = null;
+	    String previousCursor = null;
+	    int firstTime = 0;
+
+	    do
+	    {
+		count += contacts_list.size();
+
+		leadExporter.writeEntitesToCSV(contacts_list);
+
+		System.out.println("Leads Export completed so far: " + count);
+
+		previousCursor = contacts_list.get(contacts_list.size() - 1).cursor;
+
+		if (!StringUtils.isEmpty(previousCursor))
+		{
+		    contacts_list = BulkActionUtil.getFilterLeads(filter, previousCursor, currentUserId);
+
+		    currentCursor = contacts_list.size() > 0 ? contacts_list.get(contacts_list.size() - 1).cursor
+			    : null;
+		    continue;
+		}
+
+		break;
+	    } while (contacts_list.size() > 0 && !StringUtils.equals(previousCursor, currentCursor));
+
+	    // Close channel after contacts completed
+	}
+	else if (!StringUtils.isEmpty(contact_ids))
+	{
+	    BulkActionUtil.setSessionManager(currentUserId);
+	    contacts_list = ContactUtil.getContactsBulk(new JSONArray(contact_ids));
+
+	    count += contacts_list.size();
+
+	    leadExporter.writeEntitesToCSV(contacts_list);
+	}
+	else if (!StringUtils.isEmpty(dynamicFilter))
+	{
+	    BulkActionUtil.setSessionManager(currentUserId);
+	    ContactFilter contact_filter = ContactFilterUtil.getFilterFromJSONString(dynamicFilter);
+	    contacts_list = new ArrayList<Contact>(contact_filter.queryContacts(BulkActionUtil.ENTITIES_FETCH_LIMIT,
+		    null, null));
+
+	    String currentCursor = null;
+	    String previousCursor = null;
+	    int firstTime = 0;
+
+	    do
+	    {
+		count += contacts_list.size();
+
+		// Create new file for first time, then append content to the
+		// existing file.
+		leadExporter.writeEntitesToCSV(contacts_list);
+
+		System.out.println("Leads Export completed so far: " + count);
+
+		previousCursor = contacts_list.get(contacts_list.size() - 1).cursor;
+
+		if (!StringUtils.isEmpty(previousCursor))
+		{
+		    contacts_list = new ArrayList<Contact>(contact_filter.queryContacts(
+			    BulkActionUtil.ENTITIES_FETCH_LIMIT, previousCursor, null));
+
+		    currentCursor = contacts_list.size() > 0 ? contacts_list.get(contacts_list.size() - 1).cursor
+			    : null;
+		    continue;
+		}
+
+		break;
+	    } while (contacts_list.size() > 0 && !StringUtils.equals(previousCursor, currentCursor));
+	}
+	leadExporter.finalize();
+	leadExporter.sendEmail(user.email);
+	ActivityUtil.createLogForImport(ActivityType.LEAD_EXPORT, EntityType.CONTACT, count, 0);
+
+	// creates a log for company export
+
+	BulkActionNotifications.publishconfirmation(BulkAction.EXPORT_LEADS_CSV);
+    }
 
 }

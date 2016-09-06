@@ -8,18 +8,19 @@ var Leads_Header_Events_View = Base_Model_View.extend({
         'click #bulk-tags' : 'bulkActionAddTags',
         'click #bulk-tags-remove' : 'bulkActionRemoveTags',
         'click #bulk-owner' : 'bulkOwnerChange',
-        'click #bulk-delete' : 'leadsBulkDelete'
+        'click #bulk-delete' : 'leadsBulkDelete',
+        'click #bulk-leads-export' : 'leadsExport'
     },
 
     addLead : function(e)
     {
+        e.preventDefault();
     	var newLeadModalView = new Leads_Form_Events_View({ data : {}, template : "new-lead-modal", isNew : true,
             postRenderCallback : function(el)
             {
                 leadsViewLoader = new LeadsViewLoader();
                 leadsViewLoader.setupSources(el);
                 leadsViewLoader.setupStatuses(el);
-                leadsViewLoader.setupConversionStatus(el);
                 setup_tags_typeahead(undefined, el);
                 var fxn_display_company = function(data, item)
                 {
@@ -252,6 +253,81 @@ var Leads_Header_Events_View = Base_Model_View.extend({
                 
             }, Handlebars.compile("{{agile_lng_translate 'bulk-actions' 'leads-delete-scheduled'}}"));
         }, undefined, _agile_get_translated_val("bulk-delete", "bulk-delete"));
+    },
+
+    leadsExport : function(e)
+    {
+        e.preventDefault();
+
+        // Removes if previous modals exist.
+        if ($('#contacts-export-csv-modal').size() != 0)
+        {
+            $('#contacts-export-csv-modal').remove();
+        }
+
+        // Selected Lead ids
+        var id_array = App_Leads.leadsBulkActions.getLeadsBulkIds();
+
+        var count = 0;
+
+        // when SELECT_ALL is true i.e., all contacts are
+        // selected.
+        if (id_array.length === 0)
+            count = App_Leads.leadsBulkActions.getAvailableLeads();
+        else
+            count = id_array.length;
+
+
+        getTemplate('contacts-export-csv-modal', {}, undefined, function(template_ui){
+            if(!template_ui)
+                  return;
+            var leads_csv_modal = $(template_ui);
+            leads_csv_modal.modal('show');
+
+            leads_csv_modal.on('shown.bs.modal', function(){
+                // If Yes clicked
+                $("#contacts-export-csv-modal").on("click",'#contacts-export-csv-confirm', function(e)
+                {
+                    e.preventDefault();
+
+                    if ($(this).attr('disabled'))
+                        return;
+
+                    $(this).attr('disabled', 'disabled');
+
+                    // Shows message
+                    $save_info = $('<img src="' + updateImageS3Path("img/1-0.gif") +'" height="18px" width="18px"></img>&nbsp;&nbsp;<span><small class="text-success" style="font-size:15px; display:inline-block"><i>' +_agile_get_translated_val('campaigns','email-will-be-sent-shortly')+ '</i></small></span>');
+                    $(this).parent('.modal-footer').find('.contacts-export-csv-message').append($save_info);
+                    $save_info.show();
+
+                    var url = '/core/api/bulk/update?action_type=EXPORT_LEADS_CSV';
+
+                    var json = {};
+                    json.contact_ids = id_array;
+                    json.data = JSON.stringify(CURRENT_DOMAIN_USER);
+                    App_Leads.leadsBulkActions.postBulkOperationData(url, json, undefined, undefined, function()
+                    {
+
+                        // hide modal after 3 secs
+                        setTimeout(function()
+                        {
+                            leads_csv_modal.modal('hide');
+                        }, 3000);
+
+                        // Uncheck leads table and
+                        // hide bulk actions button.
+                        $('body').find('#bulk-actions').css('display', 'none');
+                        $('body').find('#bulk-select').css('display', 'none');
+                        $('body').find('#bulk-action-btns button').addClass("disabled");
+                        $('body').find('#bulk-action-btns').find('.thead_check').removeAttr('checked');
+                        $('table#leads-table').find('.tbody_check').removeAttr('checked');
+
+                    }, "no_noty");
+                });
+            });         
+
+
+        }, null);
     }
 
 });

@@ -866,7 +866,7 @@ $('#' + id).on('click', '#import-leads', function(e)
 	});
 
 	model.properties = properties;
-	model.type = "PERSON";
+	model.type = "LEAD";
 
 	// Shows Updating
 	/*$waiting.find('#status-message').html(getRandomLoadingImg());*/

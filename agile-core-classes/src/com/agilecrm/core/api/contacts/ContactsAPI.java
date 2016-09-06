@@ -432,6 +432,8 @@ public class ContactsAPI
 			ActivityUtil.createContactActivity(ActivityType.CONTACT_DELETE, contact, null, null, null);
 		    else if (contact.type.toString().equals(("COMPANY")))
 			ActivityUtil.createContactActivity(ActivityType.COMPANY_DELETE, contact, null, null, null);
+		    else if (contact.type.toString().equals(("LEAD")))
+			ActivityUtil.createContactActivity(ActivityType.LEAD_DELETE, contact, null, null, null);
 		}
 		catch (Exception e)
 		{

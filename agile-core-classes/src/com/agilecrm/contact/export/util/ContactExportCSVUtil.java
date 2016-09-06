@@ -91,6 +91,30 @@ public class ContactExportCSVUtil
 
 	return getHeaders(ContactExportCSVUtil.appendCustomFieldsToHeaders(headers, SCOPE.COMPANY));
     }
+    
+    /**
+     * Returns array of CSV Headers. Appends custom fields labels as CSV Headers
+     * to array.
+     * 
+     * @return String[]
+     */
+    public static String[] getCSVHeadersForLead()
+    {
+	// CSV Header will get initialized in the same order
+	String[] headers = { ContactCSVExport.FIRST_NAME, ContactCSVExport.LAST_NAME, ContactCSVExport.TITLE,
+		ContactCSVExport.COMPANY, ContactCSVExport.EMAIL_DEFAULT, ContactCSVExport.EMAIL_HOME,
+		ContactCSVExport.EMAIL_WORK, ContactCSVExport.PHONE_DEFAULT, ContactCSVExport.PHONE_WORK,
+		ContactCSVExport.PHONE_HOME, ContactCSVExport.PHONE_MOBILE, ContactCSVExport.PHONE_MAIN,
+		ContactCSVExport.PHONE_HOME_FAX, ContactCSVExport.PHONE_WORK_FAX, ContactCSVExport.PHONE_OTHER,
+		ContactCSVExport.ADDRESS, ContactCSVExport.CITY, ContactCSVExport.STATE, ContactCSVExport.COUNTRY,
+		ContactCSVExport.ZIP, ContactCSVExport.WEBSITE_DEFAULT, ContactCSVExport.WEBSITE,
+		ContactCSVExport.SKYPE, ContactCSVExport.TWITTER, ContactCSVExport.LINKEDIN, ContactCSVExport.FACEBOOK,
+		ContactCSVExport.XING, ContactCSVExport.BLOG, ContactCSVExport.GOOGLE_PLUS, ContactCSVExport.FLICKR,
+		ContactCSVExport.GITHUB, ContactCSVExport.YOUTUBE, ContactCSVExport.TAGS, ContactCSVExport.TAGS_TIME, ContactCSVExport.TAGS_TIME_NEW,
+		ContactCSVExport.CREATED_TIME};
+
+	return getHeaders(ContactExportCSVUtil.appendCustomFieldsToHeaders(headers, SCOPE.LEAD));
+    }
 
     /**
      * Appends Custom fields to CSV Headers string array. If Exception occurs it

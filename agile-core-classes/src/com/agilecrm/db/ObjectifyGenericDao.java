@@ -58,7 +58,6 @@ import com.agilecrm.knowledgebase.entity.Section;
 import com.agilecrm.ipaccess.IpAccess;
 import com.agilecrm.landingpages.LandingPage;
 import com.agilecrm.landingpages.LandingPageCNames;
-import com.agilecrm.lead.LeadConversion;
 import com.agilecrm.portlets.Portlet;
 import com.agilecrm.reports.ActivityReports;
 import com.agilecrm.reports.Reports;
@@ -301,9 +300,6 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	
 	// AgileGlobalProperties
 	ObjectifyService.register(AgileGlobalProperties.class);
-	
-	//Lead conversion status
-	ObjectifyService.register(LeadConversion.class);
 
     }
 

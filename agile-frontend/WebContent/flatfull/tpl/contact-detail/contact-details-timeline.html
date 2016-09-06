@@ -634,6 +634,21 @@
                 <div class="text-xs ">{{{convert_to_html plain_text}}}</div>
             </div>
         {{/if_entity}}
+
+        {{#if_entity "lead_entity"}}
+            <div class="timestamp">{{created_time}}</div>
+            <!-- <div class="title"><div class="text-base"><span><a class="no-line"><i class="icon-tasks"></i></a></span> Created</div></div> -->
+            <div class="text-md text-cap pull-left">    
+                <div class="contact-job-title text-base custom-color">
+                    <i class="icon-tasks text-muted p-r-xs"></i>{{agile_lng_translate 'contact-details' 'created'}}
+                </div>
+            </div>
+            <div class="pull-right" style="font-size:11px;margin-top: 3px;"><i class="fa fa-clock-o m-r-xs"></i>{{epochToHumanDate "hh:MM tt" created_time}}</div><div class="clearfix"></div>
+            <div class="date" title="{{epochToHumanDate "mmmm dd, yyyy 'at' hh:MM tt" created_time}}">{{epochToTaskDate created_time}}</div>
+            <!-- <div class="body" style="padding:5px">
+                <div class="text-base ">{{epochToHumanDate "mmmm dd, yyyy 'at' hh:MM tt" created_time}}</div>
+            </div> -->
+        {{/if_entity}}
 	<!-- <a href="#" class="open-close"></a> -->
   </div>
 </div>

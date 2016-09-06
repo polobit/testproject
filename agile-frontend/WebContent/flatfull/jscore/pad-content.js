@@ -228,7 +228,8 @@ var CONTENT_JSON = {
 		"title" : "{{agile_lng_translate 'leads' 'no-leads-pad-content'}}",
 		"description" : "{{agile_lng_translate 'leads' 'no-leads-pad-content-title'}}",
 		"button_text" : "{{agile_lng_translate 'leads' 'leads-btn-text'}}",
-		"route" : "#add-lead",
+		"route" : "#",
+		"id" : "add-lead",
 		"image" : updateImageS3Path("/img/clipboard.png")
 	},
 	"filter_results_leads" : {
@@ -281,7 +282,12 @@ function fill_slate(id, el, key) {
 		getTemplate(template_name, json, undefined, function(template_ui){
 			if(!template_ui)
 				  return;
-			$("#" + id, el).html($(template_ui));	
+			$("#" + id, el).html($(template_ui));
+			
+			if(json && json.id)
+			{
+				$("#" + id, el).find("a").attr("id", json.id);
+			}	
 		}, $("#" + id, el));
 		
 	}
