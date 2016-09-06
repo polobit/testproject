@@ -578,5 +578,4 @@ function showContactImagesTaskView(id){
 						
 			} 
 		});
-
 }

@@ -203,12 +203,15 @@ function bulk_complete_operation(url, index_array, table, data_array){
 }
 
 function showContactImages(collection){
-	var task_id = [];
+	////url = "core/api/tasks/getContactsList"
+	var referenceContactIds = [];
 	for(var i=0;i<collection.length;i++){
-		task_id.push(collection[i].id);
+		for(var j=0;j<collection[i].contacts.length;j++){
+			referenceContactIds.push(collection[i].contacts[j].id);
+		}
 	}
 	var contactid = [];
-	$.ajax({ url : "core/api/tasks/getContactsList",method:"POST",data:JSON.stringify(task_id),dataType:"json",success : function(data)
+	$.ajax({ url : "/core/api/contacts/taskreferences",method:"POST",data:JSON.stringify(referenceContactIds),dataType:"json",success : function(data)
 			{
 				$.each(data, function(j, item) {
 					if(jQuery.inArray(item.id,contactid) == -1){
