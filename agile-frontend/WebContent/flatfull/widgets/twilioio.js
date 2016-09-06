@@ -12,7 +12,8 @@ $(function(){
 		  	{
 		  		to = TwilioIONumbers[0].value;
 			}
-			getTwilioIOLogs(to);
+		var contact = agile_crm_get_contact();
+			getTwilioIOLogs(to,null, contact);
 					
 	});
 
@@ -29,7 +30,8 @@ $(function(){
 	  		{
 	  			to = TwilioIONumbers[0].value;
 			}
-			getTwilioIOLogs(to,"incoming");
+		var contact = agile_crm_get_contact();
+			getTwilioIOLogs(to,"incoming", contact);
 	});
 	
 });
@@ -114,8 +116,9 @@ function showListOfContactNumbers()
  		if(!template_ui)
     		return;
 		$('#TwilioIO').html($(template_ui)); 
+		var contact = agile_crm_get_contact();
 		// Retreive Twilio call logs and show it in Twilio widget panel
-		getTwilioIOLogs(TwilioIONumbers[0].value);
+		getTwilioIOLogs(TwilioIONumbers[0].value, null, contact);
 
 		/*
 		 * On change of number in select box, we retrieve call logs for it and show
@@ -125,11 +128,13 @@ function showListOfContactNumbers()
 			if($(".twilio_outgoing_logs").hasClass("active")){
 				$('#twilio-outgoing-logs-panel').html(TWILIOIO_LOGS_LOAD_IMAGE);
 					var to = $('#contact_number').val();
-					getTwilioIOLogs(to);
+					var contact = agile_crm_get_contact();
+					getTwilioIOLogs(to, null, contact);
 			}else{
 				$('#twilio-incoming-logs-panel').html(TWILIOIO_LOGS_LOAD_IMAGE);
 				var to = $('#contact_number').val();
-				getTwilioIOLogs(to,"incoming");
+				var contact = agile_crm_get_contact();
+				getTwilioIOLogs(to,"incoming", contact);
 			}
 		});
 	}, '#TwilioIO');
@@ -143,11 +148,13 @@ function showListOfContactNumbers()
  * @param to
  *            {@link String} number to which calls are made
  */
-function getTwilioIOLogs(to, direction)
+function getTwilioIOLogs(to, direction, contact)
 {
 
 	var dir = "outgoing";
-	
+	var num = to;
+	var cont = contact;
+	to = getFormattedPhone(num, cont);
 	if(direction){
 		if(direction == "incoming"){
 			dir = "incoming";

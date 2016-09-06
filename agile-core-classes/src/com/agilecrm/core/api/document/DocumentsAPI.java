@@ -105,6 +105,13 @@ public class DocumentsAPI
     		throw new AccessDeniedException("Document cannot be detached because you do not have permission to update associated contact.");
     	}
     	
+    	List<String> dealIds = document.getDeal_ids();
+    	List<String> modifiedDealIds = UserAccessControlUtil.checkUpdateAndmodifyRelatedDeals(dealIds);
+    	if(dealIds != null && modifiedDealIds != null && dealIds.size() != modifiedDealIds.size())
+    	{
+    		throw new AccessDeniedException("Document cannot be detached because you do not have permission to update associated deal.");
+    	}
+    	
     	try
     	{
     		if(!(document.relatedDealKeys()).isEmpty())
@@ -143,6 +150,13 @@ public class DocumentsAPI
     {
     	throw new AccessDeniedException("Document cannot be attached because you do not have permission to update associated contact(s).");
     }
+    
+    List<String> dealIds = document.getDeal_ids();
+	List<String> modifiedDealIds = UserAccessControlUtil.checkUpdateAndmodifyRelatedDeals(dealIds);
+	if(dealIds != null && modifiedDealIds != null && dealIds.size() != modifiedDealIds.size())
+	{
+		throw new AccessDeniedException("Document cannot be attached because you do not have permission to update associated deal(s).");
+	}
     
     document.save();
 
@@ -213,12 +227,26 @@ public class DocumentsAPI
     	{
     		throw new AccessDeniedException("Document cannot be attached because you do not have permission to update associated contact(s).");
     	}
+    	
+    	List<String> dealIds = oldDocument.getDeal_ids();
+    	List<String> modifiedDealIds = UserAccessControlUtil.checkUpdateAndmodifyRelatedDeals(dealIds);
+    	if(dealIds != null && modifiedDealIds != null && dealIds.size() != modifiedDealIds.size())
+    	{
+    		throw new AccessDeniedException("Document cannot be attached because you do not have permission to update associated deal(s).");
+    	}
     }
 	List<String> conIds = document.getContact_ids();
 	List<String> modifiedConIds = UserAccessControlUtil.checkUpdateAndmodifyRelatedContacts(conIds);
 	if(conIds != null && modifiedConIds != null && conIds.size() != modifiedConIds.size())
 	{
 		throw new AccessDeniedException("Document cannot be attached because you do not have permission to update associated contact(s).");
+	}
+	
+	List<String> dealIds = document.getDeal_ids();
+	List<String> modifiedDealIds = UserAccessControlUtil.checkUpdateAndmodifyRelatedDeals(dealIds);
+	if(dealIds != null && modifiedDealIds != null && dealIds.size() != modifiedDealIds.size())
+	{
+		throw new AccessDeniedException("Document cannot be attached because you do not have permission to update associated deal(s).");
 	}
     	
 	try

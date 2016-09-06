@@ -1236,7 +1236,7 @@
             errorDrawer.querySelector('button').addEventListener('click', this, false);
             this.parentLI.parentNode.insertBefore(newLI, this.parentLI.nextSibling);
             
-            ace.config.set("basePath", "https://our.agilecrm.com/misc/landingpage/public/js/vendor/ace");
+            ace.config.set("basePath", "https://s3.amazonaws.com/agilecrm/pagebuilder/static/js/ace");
             
             var theId = theEditor.getAttribute('id');
             var editor = ace.edit( theId );
@@ -1248,7 +1248,7 @@
             
 
             editor.setValue( theHTML );
-            editor.setTheme("ace/theme/twilight");
+            editor.setTheme("ace/theme/chrome");
             editor.getSession().setMode("ace/mode/html");
             
             var block = this;
@@ -1408,7 +1408,8 @@
             //block has changed
             this.status = 'changed';
 
-            publisher.publish('onBlockChange', this, 'change');
+            // publisher.publish('onBlockChange', this, 'change');
+            publisher.publish('onBlockLoaded', this);
 
         };
             
@@ -1680,8 +1681,7 @@
                     }
                     if( data.pages !== undefined ) {
                         site.pages = data.pages;
-                    }
-                    
+                    }                
                     site.is_admin = data.is_admin;
                     
                     if( $('#pageList').size() > 0 ) {
@@ -1704,7 +1704,7 @@
             $.getJSON(appUI.siteUrl+"core/api/forms", function(respData){
                
                for(var i=0;i<respData.length;i++){
-                 $('#agileform_id').append("<option value= "+respData[i].id +">"+respData[i].formName+"</option>");
+                 $('#agileform_id').append("<option value= "+ window.CURRENT_AGILE_DOMAIN +"_"+respData[i].id +">"+respData[i].formName+"</option>");
                }    
                 
             }).fail(function(jqXHR) {

@@ -173,7 +173,7 @@ function initializeTaskDetailListeners(){
 
 		} });
 	});
-
+	
 	$('#change-owner-element .task-owner-add').off();
 	$('#change-owner-element').on('click', '.task-owner-add', function(e)
 	{
@@ -370,6 +370,8 @@ $(function(){
 	});
 
 });
+
+
 
 
 /**

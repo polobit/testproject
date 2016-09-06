@@ -1,5 +1,6 @@
 <script id="landingpages-static-container-template" type="text/html">
 <div class="custom-animated custom-fadeInUp"> 
+{{#hasMenuScope 'LANDINGPAGES'}}
 <div id="Landingpages-top-view"></div>
 <div class="wrapper-md">
 <div class="row">
@@ -17,7 +18,7 @@
             {{#if this.length}}
             <p>
 
-<a href="https://www.youtube.com/watch?v=iVTvUoEXTKY" target="_blank">
+<a href="https://www.youtube.com/watch?v=WwXsiCHZ52Y" target="_blank">
 <img src="{{getS3ImagePath '../../img/landingpage-info-1.png'}}" class="img-responsive w-full">
 </a>
 </p>
@@ -27,6 +28,19 @@
     </div>
 </div>
 </div>
+{{else}}
+ <div class="well">
+ 
+ <div class="alert bg-white text-center">
+ <div class="slate-content p-md text text-center">
+ 
+ <h4 style="opacity:0.8;margin-bottom:5px!important;">&nbsp;&nbsp; {{agile_lng_translate 'acl' 'sorry-you-donot-have-previlage-to-access-landingpage'}}</h4>
+ <div class="text" style="opacity:0.6;">{{agile_lng_translate 'acl' 'please-contact-your-admin-to-enable-this-option'}}
+ </div>
+ </div>
+ </div>
+ </div>
+ {{/hasMenuScope}}
 </div>
 </script>
         <script id="landing-pages-top-header-template" type="text/html">
@@ -118,7 +132,7 @@
                             </div>
                         </div>
                         <div class="embed-responsive embed-responsive-16by9">
-                        <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/iVTvUoEXTKY?rel=0&amp;" frameborder="0" style="
+                        <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/WwXsiCHZ52Y?rel=0&amp;" frameborder="0" style="
                                 width: 58%;
                                 position: absolute;
                                 left: 37%;

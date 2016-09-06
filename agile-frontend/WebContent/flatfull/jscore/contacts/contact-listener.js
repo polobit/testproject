@@ -112,15 +112,15 @@ function contactListener(el)
 	});
 	
 
-	$('#company-contacts-model-list').off('mouseenter','tr > td');
-		$('#company-contacts-model-list').on('mouseenter','tr > td',function(e){
+	$('#company-contacts-list-view-model-list').off('mouseenter','tr > td');
+		$('#company-contacts-list-view-model-list').on('mouseenter','tr > td',function(e){
 			var left=e.pageX;
 			left=left-100;
             var that=$(this).parent();
              popoverEnter(that,left,0,undefined);
 });
-		$('#company-contacts-model-list').off('mouseleave','tr > td');
-	$('#company-contacts-model-list').on('mouseleave','tr > td',function(){
+		$('#company-contacts-list-view-model-list').off('mouseleave','tr > td');
+	$('#company-contacts-list-view-model-list').on('mouseleave','tr > td',function(){
 	var that=$(this).parent();
 		popout(that);
 		

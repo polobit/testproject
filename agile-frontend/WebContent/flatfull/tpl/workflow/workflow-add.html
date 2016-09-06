@@ -142,6 +142,7 @@
 							<label class="control-label col-sm-2">
 								<b>{{agile_lng_translate 'campaigns' 'unsubscribe-name'}}:</b>
 							</label>
+
 							<div class="controls col-sm-4">
 								<input type="text" name="unsubscribe_name" id="unsubscribe-name" class="form-control">
 							</div>
@@ -152,6 +153,41 @@
 
 						<br/>
 						<br/>
+						<div class="row">
+							<div class="control-group form-group">
+								<div class="controls col-sm-2">
+									{{#if is_new}}
+										<label class="radio-inline">
+											<input type="radio" name="is_unsubscribe_email_disabled" id="unsubscribe-email-enable" checked="checked" value="false" onclick="showHide_UnsubscribeEmail_Status()">Enable
+										</label>
+										<label class="radio-inline">
+											<input type="radio" name="is_unsubscribe_email_disabled" id="unsubscribe-email-disable" value="true" onclick="showHide_UnsubscribeEmail_Status()">Disable
+										</label>
+									{{else}}
+										{{#if is_unsubscribe_email_disabled}}
+											<label class="radio-inline">
+												<input type="radio" name="is_unsubscribe_email_disabled" id="unsubscribe-email-enable" value="false" onclick="showHide_UnsubscribeEmail_Status('alertMsg')">Enable
+											</label>
+											<label class="radio-inline">
+												<input type="radio" name="is_unsubscribe_email_disabled" id="unsubscribe-email-disable" checked="checked" value="true" onclick="showHide_UnsubscribeEmail_Status('alertMsg')">Disable
+											</label>
+										{{else}}
+		                      				<label class="radio-inline">
+												<input type="radio" name="is_unsubscribe_email_disabled" id="unsubscribe-email-enable" checked="checked" value="false" onclick="showHide_UnsubscribeEmail_Status('alertMsg')">Enable
+											</label>
+											<label class="radio-inline">
+												<input type="radio" name="is_unsubscribe_email_disabled" id="unsubscribe-email-disable" value="true" onclick="showHide_UnsubscribeEmail_Status('alertMsg')">Disable
+											</label>
+		                         		{{/if}}
+									{{/if}}
+
+								</div>
+								<div class="col-md-4 col-sm-4">
+									<span id="unsubscribe-email_status-msg" class="text-center"></span>
+								</div>
+							</div>
+						</div>
+
                     	<div class="row">
                          <div class="control-group form-group">
 							<label class="control-label col-sm-2">

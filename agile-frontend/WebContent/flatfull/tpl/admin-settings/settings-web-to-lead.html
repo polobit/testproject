@@ -393,7 +393,7 @@
 				<div class="text-center"> 
 					{{#if this.length}}	
 						{{#gateway_exists "SES" this}}
-							<a href="#integrations" class="btn btn-sm btn-danger " id="email-gateway-delete"  data={{id}} >{{agile_lng_translate 'prefs-email' 'enable'}}</a>
+							<a href="#integrations" class="btn btn-sm btn-danger " id="email-gateway-delete"  data={{id}} >{{agile_lng_translate 'web-rules' 'disable'}}</a>
 							<a href="#email-gateways/ses" class="btn btn-sm btn-default">{{agile_lng_translate 'preferences' 'settings'}}</a>
 						{{else}}
 							 {{#isAllowedInCurrentPlan "is_email_gateway_allowed"}}
@@ -971,8 +971,8 @@
 				<div> 
 					{{#if this.length}}	
 						{{#gateway_exists "SES" this}}
-							<a href="#integrations" class="btn btn-sm btn-danger " id="email-gateway-delete"  data={{id}} >Disable</a>
-							<a href="#email-gateways/ses" class="btn btn-sm btn-default">Settings</a>
+							<a href="#integrations" class="btn btn-sm btn-danger " id="email-gateway-delete"  data={{id}} >{{agile_lng_translate 'web-rules' 'disable'}}</a>
+							<a href="#email-gateways/ses" class="btn btn-sm btn-default">{{agile_lng_translate 'preferences' 'settings'}}</a>
 						{{else}}
 							 {{#isAllowedInCurrentPlan "is_email_gateway_allowed"}}
 					         	<div>

@@ -27,7 +27,7 @@
                    {{#each this.active}}
 						<span class="tag inline-block label bg-light" id='active-campaign' data="{{campaign_id}}"><span>
 								<a class="anchor pull-left m-t-xs m-r-xs" href="#workflow/{{campaign_id}}">{{#if campaign_name}}{{trim_space campaign_name}}{{else}}{{agile_lng_translate 'contact-details' 'active-campaign'}}{{/if}}</a>
-								<a class="close remove-active-campaign" contact_name = "{{contactShortName}}" campaign_name="{{campaign_name}}" title="Remove from Campaign">&times</a>
+								<a class="close remove-active-campaign" contact_name = "{{contactShortName}}" campaign_name="{{campaign_name}}" title="{{agile_lng_translate 'contact-details' 'remove-from-campaign'}}">&times</a>
 							
 						</span></span> 
 					{{/each}}

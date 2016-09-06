@@ -13,10 +13,10 @@
             <form id="activityForm" name="activityForm" method="post" class="form-horizontal">
                 <fieldset>
                     <div id="addEvent" class="control-group form-group" style="margin-bottom:0px;">
-                            <label class="control-label col-sm-3">{{agile_lng_translate 'deal-view' 'add-event'}}<span class="field_req">*</span></label>
+                            <label class="control-label col-sm-3">{{agile_lng_translate 'tasks' 'event-name'}}<span class="field_req">*</span></label>
                             <div class="controls col-sm-7">
                             <input type="hidden"  name="current_div" id="current_div"/>
-                                <input id="title" placeholder="{{agile_lng_translate 'tasks' 'name-of-event'}}" type="text" name="title" class="required form-control" />
+                                <input id="title" placeholder="{{agile_lng_translate 'tasks' 'event-name'}}" type="text" name="title" class="required form-control" />
                             </div>
                     </div>
                     <div class="text-muted">
@@ -36,6 +36,22 @@
                                 </span>                          
                             </div>
                     </div>
+
+                    <div class="control-group form-group">
+                          <label class="control-label col-sm-3"> {{agile_lng_translate 'widgets' 'status'}} </label>
+                          <div class="controls col-sm-7">
+                            <span class="input">
+                                    <select name="status" id="status" class="input-small form-control">
+                                        <option value="">{{agile_lng_translate 'deal-view' 'select'}}</option>
+                                        <option value="completed">{{agile_lng_translate 'portlets' 'completed'}}</option>
+                                        <option value="rescheduled">{{agile_lng_translate 'events' 'rescheduled'}}</option>
+                                        <option value="Cancelled">{{agile_lng_translate 'events' 'cancelled'}}</option>
+                                        <option value="no-show">{{agile_lng_translate 'events' 'no-show'}}</option>
+                                    </select>
+                            </span>
+                        </div>
+                    </div>
+
                     <div class="control-group form-group">
                             <label class="control-label col-sm-3">{{agile_lng_translate 'deal-view' 'owner'}}<span class="field_req">*</span></label>
                             <div class="controls col-sm-7" id="event-owners">

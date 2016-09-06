@@ -235,13 +235,14 @@ var WorkflowsRouter = Backbone.Router
 
 				this.workflow_json = this.workflow_model.get("rules");
 				this.is_disabled = this.workflow_model.get("is_disabled");
+				this.is_unsubscribe_email_disabled = this.workflow_model.get("unsubscribe").is_unsubscribe_email_disabled;
 				var that = this;
-
+				
 				var workflowModal = new Workflow_Model_Events({
 					url : 'core/api/workflow', 
 					template : 'workflow-add',
 					isNew : 'true',
-					data :  {"is_disabled" : ""+that.is_disabled},
+					data :  {"is_disabled" : ""+that.is_disabled, "is_unsubscribe_email_disabled" : ""+that.is_unsubscribe_email_disabled},
 					postRenderCallback : function(el){
 						head.load(CSS_PATH + 'css/bootstrap_switch.css', LIB_PATH + 'lib/bootstrapSwitch.js', LIB_PATH + 'lib/desktop-notify-min.js');
 						
@@ -249,12 +250,12 @@ var WorkflowsRouter = Backbone.Router
 						$('#workflow-name', el).val(that.workflow_model.get("name"));
 
 						var unsubscribe = that.workflow_model.get("unsubscribe");
-
+						
 						$('#unsubscribe-email', el).val(unsubscribe.unsubscribe_email);
 						$('#unsubscribe-name', el).val(unsubscribe.unsubscribe_name);
 						$('#unsubscribe-tag', el).val(unsubscribe.tag);
 						$('#unsubscribe-action', el).val(unsubscribe.action);
-						
+
 						$('#unsubscribe-action', el).trigger('change');
 
 						var level = that.workflow_model.get("access_level");

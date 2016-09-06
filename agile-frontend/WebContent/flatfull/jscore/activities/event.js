@@ -893,6 +893,21 @@ $(function()
 		$('#update-event-time-1').closest('.control-group').show();
 		$('#update-event-date-2').closest('.row').show();
 	});
+
+	$('#activityTaskModal').on('hidden.bs.modal', function()
+	 {	
+	 	 $("#taskForm").find("ul").remove();
+	 	
+        remove_validation_errors("activityTaskModal");
+       
+	 });
+	$('#activityModal').on('hidden.bs.modal', function()
+	 {
+	 	
+	 	 $("#activityForm").find("ul").remove();
+        remove_validation_errors("activityModal"); 	
+       
+	 });
 	
 	$('#webEventCancelModel').on('hidden.bs.modal', function()
 	{

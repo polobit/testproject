@@ -219,16 +219,16 @@ public class OpportunityDocument extends com.agilecrm.search.document.Document i
 			fieldLabelsSet.add("probability");
 		}
 		
-		if (opportunity.deal_source_id != null)
+		if (opportunity.getDeal_source_id() != 0)
 		{
-			doc.addField(Field.newBuilder().setName("deal_source").setText(opportunity.deal_source_id.toString()));
+			doc.addField(Field.newBuilder().setName("deal_source").setText(opportunity.getDeal_source_id().toString()));
 			
 			fieldLabelsSet.add("deal_source");
 		}
 		
-		if (opportunity.lost_reason_id != null)
+		if (opportunity.getLost_reason_id() != 0 )
 		{
-			doc.addField(Field.newBuilder().setName("lost_reason").setText(opportunity.lost_reason_id.toString()));
+			doc.addField(Field.newBuilder().setName("lost_reason").setText(opportunity.getLost_reason_id().toString()));
 			
 			fieldLabelsSet.add("lost_reason");
 		}

@@ -148,6 +148,8 @@ public class AddTask extends TaskletAdapter {
 			Long contactOwnerId = ContactUtil.getContactOwnerId(Long
 					.parseLong(contactId));
 
+			System.out.println("Contact owner id is " + contactOwnerId + " and given owner id is " + givenOwnerId);
+			
 			// Adds task
 			addTask(subject, category, priority, epochTime, contactId,
 					givenOwnerId, contactOwnerId, timezone);

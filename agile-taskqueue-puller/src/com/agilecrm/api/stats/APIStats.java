@@ -44,9 +44,11 @@ public class APIStats
 	catch (Exception e)
 	{
 	    System.err.println("Unable to interrupt thread : " + thread.getName());
-	    Mailgun.sendMail("campaigns@agile.com", "Email Observer", "yaswanth@agilecrm.com",
-		    "naresh@agilecrm.com,raja@agilecrm.com", null, "EC2 Error while interrupting thread", null,
-		    "Hi Yaswanth " + "EC2 Error while interrupting thread", null);
+	    e.printStackTrace();
+	    //Mailgun account not having emails, so disabling send email 
+//	    Mailgun.sendMail("campaigns@agile.com", "Email Observer", "yaswanth@agilecrm.com",
+//		    "naresh@agilecrm.com,raja@agilecrm.com", null, "EC2 Error while interrupting thread", null,
+//		    "Hi Yaswanth " + "EC2 Error while interrupting thread", null);
 	}
 
 	try

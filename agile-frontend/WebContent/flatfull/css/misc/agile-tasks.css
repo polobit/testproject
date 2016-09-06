@@ -1,4 +1,4 @@
-/* ************* Task UI (Trello) CSS ***************** */
+f/* ************* Task UI (Trello) CSS ***************** */
 #activityModal>.modal-body, #activityTaskModal>.modal-body {
 	max-height: 453px;
 	padding-bottom: 0 !important;
@@ -65,7 +65,7 @@
 	margin-left: 6px;
 	padding: 32px 7px 40px;*/
 	position: relative;
-	width:280px;
+	/*width:280px;*/
 	vertical-align: top;
 	display: inline-block;
 	margin-right:10px;
@@ -155,23 +155,23 @@
 	left:0px;
 	top: -3px;
 	width: 30px;*/
-	  content: ' ';
-  display: block;
-  height: 31px;
-  position: absolute;
-  left: -15px;
-  top: 0px;
-  width: 2px;
+	   content: ' ';
+    display: block;
+    height: 2px;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    width: 100%;
 }
-
+/*
 .listed-task.yellow:after {
 	background: #fad733;
 }
-
+*/
 .listed-task.red:after {
 	background: #f05050;
 }
-
+/*
 .listed-task.gray:after {
 	background: #edf1f2;
 }
@@ -179,7 +179,7 @@
 .listed-task.blue:after {
 	background: #7266ba;
 }
-
+*/
 .listed-task:first-child {
 	/*margin-top: 0;*/
 }
@@ -318,7 +318,7 @@
 
 .task-actions {
 	color: #888;
-	display: none;
+	display:none;
 	/*padding-right: 4px;*/
 	/*float: right;*/
 	cursor: pointer;
@@ -353,7 +353,7 @@ float:right;
 @-moz-document url-prefix() {
    .task-content-view
 {
-	width:81%;
+	/*width:81%;*/
 }
 }
 

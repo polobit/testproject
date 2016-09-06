@@ -124,7 +124,7 @@ var DealsRouter = Backbone.Router.extend({
 	 */
 	importDeals : function()
 	{
-		if (!hasScope("MANAGE_DEALS"))
+		if (!hasScope("CREATE_DEALS"))
 		{
 			$('#content').html('<h2 class="p-l-md"><strong><i class="fa-exclamation-triangle icon-white"></i>&nbsp;&nbsp; '+_agile_get_translated_val('import','deals-no-priviliges')+'</strong></h2>');
 			hideTransitionBar();

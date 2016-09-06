@@ -253,21 +253,28 @@ $(function(){
 			}
 		});
 		if(checked){
-			var err_msg = "";
 			
-			if((!hasScope("MANAGE_DEALS") && hasScope("VIEW_DEALS")) || !hasScope("EDIT_CONTACT"))
-			{
-				err_msg = _agile_get_translated_val("deal-view", "permission-to-delete-some-of-the-deals-selected") + "<br/><br/> " + _agile_get_translated_val("deal-view", "do-you-want-to-proceed");
-			}
-			else if(!hasScope("EDIT_CONTACT"))
-			{
-				err_msg = DEALS_CONTACTS_BULK_DELETE_ERROR;
-			}
-
-			if((!hasScope("MANAGE_DEALS") && hasScope("VIEW_DEALS")) || !hasScope("EDIT_CONTACT"))
+			if(!hasScope("DELETE_DEALS"))
 			{
 				showModalConfirmation(_agile_get_translated_val("bulk-delete", "bulk-delete"), 
-						err_msg, 
+						_agile_get_translated_val("deal-view", "persmission-to-delete-deals"), 
+						function (){
+							return;
+						}, 
+						function(){
+							return;
+						},
+						function() {
+							
+						},
+						"Cancel", "");
+				return;
+			}
+
+			if(!hasScope("EDIT_CONTACT"))
+			{
+				showModalConfirmation(_agile_get_translated_val("bulk-delete", "bulk-delete"), 
+						DEALS_CONTACTS_BULK_DELETE_ERROR, 
 						function (){
 					
 					// Customize the bulk delete operations

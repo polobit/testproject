@@ -190,7 +190,7 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
 							/* Sets css to html data to be displayed */
 							if(self.$element.attr("id") == "searchText")
 							{
-								self.$menu.css({"width" : 300, "max-height" : "calc(100vh - 50px)", "overflow-y" : "auto"});
+								self.$menu.css({"width" : 300, "max-height" : "540px", "overflow-y" : "auto"});
 								self.$menu.addClass("dashboard-search-scroll-bar");	
 							}
 							else

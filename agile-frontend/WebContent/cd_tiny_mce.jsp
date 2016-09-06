@@ -4,6 +4,7 @@
 <%@page import="org.json.JSONException"%>
 <%@page import="org.codehaus.jackson.map.ObjectMapper"%>
 <%@page import="java.net.URLEncoder"%>
+<%@page import="java.net.URLDecoder"%>
 <%@page import="com.agilecrm.user.util.UserPrefsUtil"%>
 <html xmlns="http://www.w3.org/1999/xhtml">
 
@@ -37,6 +38,7 @@ if(template_json != null){
 	
 try
 {
+	template_json = URLDecoder.decode(template_json);
 	JSONObject template_object = new JSONObject(template_json);
 
 	if (template_object.has("text")){

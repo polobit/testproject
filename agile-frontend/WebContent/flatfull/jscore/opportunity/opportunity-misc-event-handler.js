@@ -7,44 +7,45 @@ $(function()
 		setup_tags_typeahead();
 	});
 
- 	$('#opportunityUpdateModal, #opportunityModal').off('click', '#opportunity_archive');
-	$('#opportunityUpdateModal, #opportunityModal').on('click', '#opportunity_archive', function(e)
-	{
-		e.preventDefault();
-		$('#archived', $('#opportunityUpdateForm')).prop('checked', 'checked');
-		$("#opportunityUpdateModal #opportunity_validate").trigger('click');
-	});
 
-	$('#opportunityUpdateModal, #opportunityModal').off('click', '#opportunity_unarchive');
-	$('#opportunityUpdateModal, #opportunityModal').on('click', '#opportunity_unarchive', function(e)
-	{
-		e.preventDefault();
-		$('#archived', $('#opportunityUpdateForm')).removeAttr('checked');
-		$('#opportunityUpdateModal #opportunity_validate').trigger('click');
-	});
+	$('#opportunityUpdateModal, #opportunityModal').off('click', '#opportunity_archive');
+  $('#opportunityUpdateModal, #opportunityModal').on('click', '#opportunity_archive', function(e)
+  {
+    e.preventDefault();
+    $('#archived', $('#opportunityUpdateForm')).prop('checked', 'checked');
+    $("#opportunityUpdateModal #opportunity_validate").trigger('click');
+  });
+
+  $('#opportunityUpdateModal, #opportunityModal').off('click', '#opportunity_unarchive');
+  $('#opportunityUpdateModal, #opportunityModal').on('click', '#opportunity_unarchive', function(e)
+  {
+    e.preventDefault();
+    $('#archived', $('#opportunityUpdateForm')).removeAttr('checked');
+    $('#opportunityUpdateModal #opportunity_validate').trigger('click');
+  });
 
 
-	/**
-	 * Validates deal and saves
-	 */
-	$('#opportunityUpdateModal, #opportunityModal').off('click', '#opportunity_validate');
-	$('#opportunityUpdateModal, #opportunityModal').on('click', '#opportunity_validate', function(e)
-	{
-		e.preventDefault();
+  /**
+   * Validates deal and saves
+   */
+  $('#opportunityUpdateModal, #opportunityModal').off('click', '#opportunity_validate');
+  $('#opportunityUpdateModal, #opportunityModal').on('click', '#opportunity_validate', function(e)
+  {
+    e.preventDefault();
 
-		var color = {"#ee82ee":"VIOLET","#4b0082":"INDIGO","#0000ff":"BLUE","#00ff00":"GREEN","#ffff00":"YELLOW"
-		               ,"#ff6600":"ORANGE","#ff0000":"RED","#000000":"BLACK","#ffffff":"WHITE","#808080":"GREY"}; 
+    var color = {"#ee82ee":"VIOLET","#4b0082":"INDIGO","#0000ff":"BLUE","#00ff00":"GREEN","#ffff00":"YELLOW"
+                   ,"#ff6600":"ORANGE","#ff0000":"RED","#000000":"BLACK","#ffffff":"WHITE","#808080":"GREY"}; 
        
                     
-		// To know updated or added deal form names
-		var modal_id = $(this).closest('.opportunity-modal').attr("id");
-		var form_id = $(this).closest('.opportunity-modal').find('form').attr("id");
-		var colorcode = $(this).closest('.opportunity-modal').find('form').find("#color1").val();
+    // To know updated or added deal form names
+    var modal_id = $(this).closest('.opportunity-modal').attr("id");
+    var form_id = $(this).closest('.opportunity-modal').find('form').attr("id");
+    var colorcode = $(this).closest('.opportunity-modal').find('form').find("#color1").val();
 
-		var json = serializeForm(form_id);
-		json["custom_data"] = serialize_custom_fields(form_id);
-		json["colorName"]  = color[colorcode];
-		var tagsSourceId ;          
+    var json = serializeForm(form_id);
+    json["custom_data"] = serialize_custom_fields(form_id);
+    json["colorName"]  = color[colorcode];
+    var tagsSourceId ;          
         if (!tagsSourceId)
                 tagsSourceId = form_id;
         var tagobj = get_tags(tagsSourceId);
@@ -53,7 +54,7 @@ $(function()
         for (i = 0; i < tagobj.length ; i++) {
                         if(tagobj[i].name == "tags" && tagobj[i].value != "")
                                 tags = tagobj[i];
-		}   
+    }   
         if (tags != undefined && tags.length != 0)
         {
             json.tags = [];
@@ -106,12 +107,12 @@ $(function()
                     return false;
             }
         }
-		console.log(json);
-		if (form_id == "opportunityForm")
-			saveDeal(form_id, modal_id, this, json, false);
-		else
-			saveDeal(form_id, modal_id, this, json, true);
-	});
+    console.log(json);
+    if (form_id == "opportunityForm")
+      saveDeal(form_id, modal_id, this, json, false);
+    else
+      saveDeal(form_id, modal_id, this, json, true);
+  });
 
 	/**
 	 * When mouseover on any row of opportunities list, the popover of deal is shown

@@ -43,7 +43,7 @@ public class NamespaceUtil
 		Set<String> namespaces = new HashSet<String>();
 		DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
 
-		FetchOptions options = FetchOptions.Builder.withChunkSize(150);
+		FetchOptions options = FetchOptions.Builder.withChunkSize(50);
 
 		Query q = new Query(Entities.NAMESPACE_METADATA_KIND);
 

@@ -406,8 +406,8 @@ $(function(){
 							CALL_CAMPAIGN.state = "START";
 							CALL_CAMPAIGN.last_clicked = null; // this is to check the last
 							CALL_CAMPAIGN.countdown_timer = 0;
-							twiliocall(CALL_CAMPAIGN.selected_number, getContactName(CALL_CAMPAIGN.current_contact));
-						
+							//twiliocall(CALL_CAMPAIGN.selected_number, getContactName(CALL_CAMPAIGN.current_contact));
+							twiliocall(CALL_CAMPAIGN.selected_number, getContactName(CALL_CAMPAIGN.current_contact), null, CALL_CAMPAIGN.current_contact);
 					}else{
 						if(CALL_CAMPAIGN.callObject != null){
 							return;
@@ -734,7 +734,8 @@ $(function(){
 				CALL_CAMPAIGN.callObject = setTimeout( function(){
 					CALL_CAMPAIGN.state = "START";
 					CALL_CAMPAIGN.last_clicked = null;   // this is to check the last click variable in disconnect call
-					twiliocall(CALL_CAMPAIGN.selected_number, getContactName(CALL_CAMPAIGN.current_contact));
+					//twiliocall(CALL_CAMPAIGN.selected_number, getContactName(CALL_CAMPAIGN.current_contact));
+					twiliocall(CALL_CAMPAIGN.selected_number, getContactName(CALL_CAMPAIGN.current_contact), null, CALL_CAMPAIGN.current_contact);
 				}, time);
 	});
 

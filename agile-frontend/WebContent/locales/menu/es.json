@@ -58,5 +58,11 @@
             "views" : "Vistas",
             "knowledge-base" : "Base de conocimiento",
             "chat-with-us" : "Habla con nosotros",
+            "all" : "todas",
+            "contacts" : "contactos",
+            "companies" : "Compañías",
+            "deals" : "ofertas",
+            "documents" : "Documentos",
+            "tickets" : "Entradas",
         }
 }

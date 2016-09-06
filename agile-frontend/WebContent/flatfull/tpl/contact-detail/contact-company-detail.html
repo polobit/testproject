@@ -1,4 +1,4 @@
-  <script id="company-detail-template" type="text/html">
+f  <script id="company-detail-template" type="text/html">
 <div class="row hide"><small class="navigation span9" style="min-height:10px!important;font-size:smaller;line-height:6px;"></small></div>
 <div class="app-content-full  h-full dock-view-fixing" id="infinite-scroller-company-details">
 <div class="hbox hbox-auto-xs  bg-light companyDetails">
@@ -27,13 +27,13 @@
 							</form>
 <div class="pos-abs pos-r-0 m-t-sm isotope-item" style="margin-top:13px;">
 <div>
-	<button class="dropdown-toggle bg-transparent editicon" data-toggle="dropdown">
-	<span class="caret m-l-none" style="margin-top:-11px;"></span>
-	</button>
-	<ul class="dropdown-menu pull-right text-sm">
-<li> <a href="#company-edit"><i class="fa fa-edit" style="margin-right:2px"></i> {{agile_lng_translate 'contact-details' 'edit'}}</a></li>
-<li class="divider"></li>
-
+ 
+								<button class="dropdown-toggle bg-transparent editicon" data-toggle="dropdown">
+								<span class="caret m-l-none" style="margin-top:-11px;"></span>
+								</button>
+								<ul class="dropdown-menu pull-right text-sm">
+<!--<li> <a href="#company-edit"><i class="fa fa-edit" style="margin-right:2px"></i> Edit</a></li>
+<li class="divider"></li>-->
 									<li><a href='#' class="contact-add-note"><i
 											class="fa fa-file-text"></i> {{agile_lng_translate 'deal-view' 'add-note'}}</a></li>
 									<li><a href='#' class="contact-add-task"><i
@@ -153,6 +153,9 @@
 						</div>
 						</div>
 			</div>
+
+			<a href="#company-edit"  class="btn btn-default btn-lg editicon-option text-base w-full b-n r-n b-t no-shadow"><i class="fa fa-edit"></i> Edit Company</a>
+
 			</div>
 			</div>
 
@@ -457,8 +460,10 @@
 								<span class="caret m-l-none" style="margin-top:-11px;"></span>
 								</button>
 								<ul class="dropdown-menu pull-right text-sm"  role="menu">
-<li> <a href="#company-edit"><i class="fa fa-edit" style="margin-right:2px"></i> {{agile_lng_translate 'contact-details' 'edit'}}</a></li>
-<li class="divider"></li>
+<!--<li> <a href="#company-edit"><i class="fa fa-edit" style="margin-right:2px"></i> Edit</a></li>
+<li class="divider"></li>-->
+
+
 									{{#isRestrictedMenuScope "CASES"}} {{else}}
 										{{#isNewVersionDomainUser}} {{else}}
 									<li><a href='#' class="contact-add-case"><i
@@ -580,6 +585,11 @@
 						</div>
 						</div>
 			</div>
+
+			 
+			 <a href="#company-edit"  class="btn btn-default btn-lg editicon-option text-base w-full b-n r-n b-t no-shadow"><i class="fa fa-edit"></i> Edit Company</a>
+			  
+
 			</div>
 			</div>
 
@@ -906,33 +916,71 @@
 
 <script id="company-contacts-collection-template" type="text/html">
 
-{{#if this.length}}
+	<div class="contacts-companies-div">
 	<div align="right" class="m-b-md m-t-md m-r-sm">
-		<a href="#" class="contact-add-contact btn btn-default btn-sm btn-addon">
-			<span><i class="icon-plus-sign"></i></span> {{agile_lng_translate 'contacts-view' 'add-contact'}}
+		<a href="#" class="contact-add-contact btn btn-default btn-sm btn-addon add-contact-extra">
+			<span><i class="icon-plus-sign"></i></span>{{agile_lng_translate 'contact-details' 'add-contact'}}
 		</a>
 	</div>
-	
-		<div class="table-responsive">
-<table id="contacts" class="table table-striped onlySorting b-t  showCheckboxes m-b-none agile-table panel table-layout-mob-view">
-			
-				<thead>
-					<tr>
-<th></th>
-						<th style="width:40%">{{agile_lng_translate 'contact-details' 'name'}}</th>
-						<th style="width:20%">{{agile_lng_translate 'contact-details' 'work'}}</th>
-						<th style="width:20%">{{agile_lng_translate 'contact-details' 'tags'}}</th>
-						<th style="width:20%">{{agile_lng_translate 'contact-details' 'lead-score'}}</th>
-					</tr>
-				</thead>
-				<tbody id="company-contacts-model-list" class="contacts-model-list"
-					route="contact/" style="overflow: scroll;">
-				</tbody>
-			</table>
-			</div>
+<div id="bulk-action-btns" class="panel-heading no-shadow p-r-none b-r m-r-sm" style="border-bottom: 0;background-color: rgba(246,248,248,1);position:relative;">
+				      	<span id="contacts-list-view-checkbox">
+								<label class="i-checks i-checks-sm">
+				                	<input type="checkbox" class="thead_check">
+				                	<i></i>                
+				          		</label>
+							</span>
+				      	
+					    <button id="bulk-tags" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled txt-small">{{agile_lng_translate 'contacts-view' 'add-tags'}}</button>
+						    <button id="bulk-tags-remove" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled txt-small">{{agile_lng_translate 'contacts-view' 'remove-tags'}}</button>
+						    {{#hasMenuScope 'CAMPAIGN'}}
+						    	<button id="bulk-campaigns" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled txt-small" onclick="Agile_GA_Event_Tracker.track_event('Add to Campaign');">{{agile_lng_translate 'contacts-view' 'add-to-campaign'}}</button>
+						    {{/hasMenuScope}}
+						    <button id="bulk-email" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled txt-small" onclick="Agile_GA_Event_Tracker.track_event('Send Email');">{{agile_lng_translate 'contacts-view' 'send-email'}}</button>
+						    <button id="bulk-owner" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled txt-small">{{agile_lng_translate 'contacts-view' 'change-owner'}}</button>
+						    {{#hasScope "EXPORT_CONTACTS"}}
+						    	<button id="bulk-contacts-export" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled txt-small" onclick="Agile_GA_Event_Tracker.track_event('Export as CSV');">{{agile_lng_translate 'deal-view' 'export-as-csv'}}</button>
+						    {{/hasScope}}
+						    {{#hasRestrictedMenuScope 'DELETE_CONTACT'}}
+						    {{else}}
+						    	<button class="btn btn-default bulk-action-btn delete-checked-contacts btn-sm disabled txt-small">{{agile_lng_translate 'contacts-view' 'delete'}}</button>
+							{{/hasRestrictedMenuScope}}
 
-		{{else}}
-            <div class="p-sm">
+					    <div class="btn-group dropdown pull-right {{#iscompactTabel 'PERSON'}}compact {{/iscompactTabel}} multiple-checkbox" style="padding-right: 10px;" id="contact-custom-coloumns">
+							<div class="btn-group dropdown  multiple-checkbox" style="padding-right: 10px;position:absolute;right:0px;" id="contact-custom-coloumns">
+							 <button class="btn btn-default dropdown-toggle  btn-sm" data-toggle="dropdown" aria-expanded="true" id="contactCompanyTabelView"><i class="{{#iscompactTabel 'PERSON'}} fa fa-ellipsis-h {{else}} fa fa-navicon {{/iscompactTabel}}"></"></i></button> 
+							<!-- <button class="dropdown-toggle btn btn-default  btn-sm " data-toggle="dropdown" aria-expanded="true" id="contact_columns" >
+                    		<i class="caret"></i>
+                			</button> -->
+                			<ul class="pull-right dropdown-menu  p-l"  role="menu">
+                			
+                			
+                			<form id="contact-static-fields" class="">
+                			<div class="multiple-checkbox" name="fields_set" id="contact-static-fields-group">
+                			</div>
+                			</form>
+                			
+                			</ul>
+
+				        </div>
+					    
+
+				    </div>
+</div>
+
+					<div id="company-contacts-list-view"></div>
+	 </div>
+			    
+	    	</div>
+
+</script>
+
+<script id="company-contacts-list-view-collection-template" type="text/html">
+	{{#is_mobile}}
+		<div class="contacts-div">
+			<div class="dta-contatiner table-responsive b-n contacts-inner-div">
+				<div class="panel panel-default m-b-none b-n no-radius" style="overflow-x:hidden;">
+					{{#unless this.length}}
+		        		  <div class="p-sm">
 			<div>
             	<div class="slate-content mobile-pad-content">
                 	<div class="box-left pull-left m-r-md">
@@ -952,5 +1000,54 @@
             	</div>
         	</div>
            </div>
-		{{/if}}
+		        	{{/unless}}
+		        	{{#if this.length}}
+	                	<table id="contacts-table" class="table b-n no-radius no-sorting onlySorting panel agile-table noDelete"  url="core/api/contacts/delete?action=DELETE">                
+							<div class="filter-criteria"></div>
+							<tbody id="company-contacts-list-view-model-list" route="contact/"></tbody>
+	                	</table>
+                	{{/if}}
+				</div>
+            </div>
+        </div>
+	{{else}}
+		<div class="dta-contatiner table-responsive m-r-sm contacts-inner-div">
+			<div class="btn-group inline-block  text-center" style="display: none;border:1px solid #dee5e7;width:100%;padding:5px; background-color:#edf1f2;" id="bulk-select"></div>
+			<div class="panel panel-default" style="overflow-x:auto; border-left:none;">
+	    		{{#unless this.length}}
+        			  <div class="p-sm">
+			<div>
+            	<div class="slate-content mobile-pad-content">
+                	<div class="box-left pull-left m-r-md">
+                    	<img alt="Clipboard" src="{{getS3ImagePath '/img/clipboard.png'}}">
+                	</div>
+                	<div class="box-right pull-left">
+                    	<h4 class="m-t-none">{{contactShortName}} {{agile_lng_translate 'company-details' 'is-not-associated-with-any-person'}} </h4>
+                    	<div class="text">
+							{{agile_lng_translate 'company-details' 'all-contacts-that-have-this-company-in'}}
+						</div>
+                    	<a href="#" class="contact-add-contact btn btn-default btn-sm left m-t-xs">
+								<i class="icon-plus-sign"></i> {{agile_lng_translate 'contact-details' 'add-contact'}}
+							</a>
+                	</div>
+					<div class="clearfix">
+					</div>
+            	</div>
+        	</div>
+           </div>
+        		{{/unless}}
+        		{{#if this.length}}
+              			<table id="contacts-table" class="table contacts-custom noDelete table-striped showCheckboxes no-sorting panel agile-table no-header-checkbox"  url="core/api/contacts/delete?action=DELETE" style="table-layout:auto">                
+							<div class="filter-criteria"></div>
+			 				<thead>
+                      			<tr style="text-transform: capitalize;">
+                          			{{companyContactsTableHeadings "fields_set"}}
+                      			</tr>
+                 			</thead>
+                   			<tbody id="company-contacts-list-view-model-list" route="contact/"></tbody>
+              			</table>
+              		{{/if}}
+			</div>
+		</div>
+	{{/is_mobile}}
 </script>

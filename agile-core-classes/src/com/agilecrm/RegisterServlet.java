@@ -208,9 +208,13 @@ public class RegisterServlet extends HttpServlet
 	// Get Name
 	String name = request.getParameter("name");
 	
+	// Get Origin
+	String originName = request.getParameter("origin_from");
+	
 	System.out.println("email = " + email);
 	System.out.println("name = " + name);
 	System.out.println("password = " + password);
+	System.out.println("originName = " + originName);
 
 	String timezone = request.getParameter("account_timezone");
 
@@ -278,6 +282,15 @@ public class RegisterServlet extends HttpServlet
 	
 	// Set misc values at Register before sending user to home page.
 	LoginUtil.setMiscValuesAtLogin(request, domainUser);
+	
+	// If request from plugins forward the request to jsp to call plugin callback
+	if(StringUtils.isNotBlank(originName))
+	{
+		request.setAttribute("password", password);
+		request.setAttribute("channel", request.getParameter("domain_channel"));
+		request.getRequestDispatcher("register_success_callback.jsp").forward(request, response);
+		return;
+	}
 	
 	// Redirect to home page
 	response.sendRedirect(redirectionURL);

@@ -506,6 +506,15 @@
         <url-pattern>/twiml</url-pattern>
     </servlet-mapping>
     
+    <servlet>
+        <servlet-name>TwilioIOConfTwiml</servlet-name>
+        <servlet-class>com.thirdparty.twilio.TwilioIOConferenceTwiml</servlet-class>
+    </servlet> 
+    <servlet-mapping>
+        <servlet-name>TwilioIOConfTwiml</servlet-name>
+        <url-pattern>/conftwiml</url-pattern>
+    </servlet-mapping>
+    
 	<servlet>
 		<servlet-name>ForgotDomain</servlet-name>
 		<jsp-file>/forgot-domain.jsp</jsp-file>
@@ -556,6 +565,10 @@
 	  <servlet-name>appstats</servlet-name>
 	  <url-pattern>/appstats/*</url-pattern>
 	</servlet-mapping>
+	
+	<listener>
+		<listener-class>com.agilecrm.frontend.AgileServletContextListener</listener-class>
+	</listener>
 	
 	<security-constraint>
 	  <web-resource-collection>
@@ -1224,6 +1237,14 @@
 	<servlet-mapping>
 		<servlet-name>TicketsPdfServlet</servlet-name>
 		<url-pattern>/ticketsPdfServlet</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>EmailPollServlet</servlet-name>
+		<servlet-class>com.agilecrm.emailbuilder.EmailPollServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>EmailPollServlet</servlet-name>
+		<url-pattern>/emailPollServlet</url-pattern>
 	</servlet-mapping>
 	
     <servlet>

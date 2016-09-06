@@ -37,8 +37,15 @@ function addTaskToTaskList(headingToSearch, tasksToAdd, conditionToCheck)
 	tasksToAdd = setCursor(modelTaskList[0], tasksToAdd, conditionToCheck);
 
 	// Add task in sub collection means in Task List
-	if (conditionToCheck == "dragged") // if dragged task then do not update UI
+	if (conditionToCheck == "dragged"){
+		// if dragged task then do not update UI
 		modelTaskList[0].get('taskCollection').add(tasksToAdd.toJSON(), { silent : true });// sub-collection
+		// Condition check for collection length
+		console.log(modelTaskList);
+
+		modelTaskList[0].get('taskCollection').trigger('remove', {});
+		// checkAndUpdateTaskCollectiontasks(modelTaskList[0].get('taskCollection'), el);	
+	} 
 	else
 	{
 		modelTaskList[0].get('taskCollection').add(tasksToAdd);// sub-collection

@@ -12,6 +12,7 @@ import javax.ws.rs.core.MediaType;
 
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 import com.agilecrm.activities.Call;
 import com.agilecrm.activities.util.ActivityUtil;
@@ -558,4 +559,135 @@ public class TwilioWidgetsAPI
 		    throw ExceptionUtil.catchWebException(e);
 		}	
 	}
+	
+	/**
+	 * @author Prakash 2/6/16
+	 * it will take the call sid and transfer the call to conference with given room
+	 * @return sucess message
+	 */
+	@Path("confCall")
+	@POST
+	@Produces(MediaType.TEXT_PLAIN)
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	public JSONObject callConferenceCall(@FormParam("From") String from, @FormParam("To") String to,@FormParam("conferenceName") String conferenceName){
+		try{
+			Widget widget = WidgetUtil.getWidget("TwilioIO");
+			JSONObject response = new JSONObject();
+			System.out.println("in conferene calling api from , to and conference name are - >"  + from +" -- "+ to + "---" + conferenceName);
+			String status = TwilioUtil.addToConference(widget, from, to, conferenceName); // queued status for sucess call
+			response.put("conferenceStatus", status);			
+			return response;
+		}catch (Exception e)
+		{
+		    throw ExceptionUtil.catchWebException(e);
+		}	
+	}
+	
+	
+	/**
+	 * @author Prakash 2/6/16
+	 * it will take the call sid and transfer the callsid to another twiml
+	 * @return sucess message
+	 */
+	@Path("modifyCallAddConference")
+	@POST
+	@Produces(MediaType.TEXT_PLAIN)
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	public JSONObject modifyCurrentCall(@FormParam("callSid") String callSid, @FormParam("conferenceName") String conferenceName, 
+			@FormParam("direction") String direction,@FormParam("From") String from, @FormParam("To") String to){
+	
+
+		try{
+			JSONObject response = new JSONObject();
+			response.put("modifyStatus", "");
+			response.put("conferenceStatus", "");
+			
+			Widget widget = WidgetUtil.getWidget("TwilioIO");
+			System.out.println("in modifying call - >" + callSid + "--" + conferenceName + "--" + direction );
+			String status = TwilioUtil.modifyCall(widget, callSid, conferenceName, direction);
+			response.put("modifyStatus", status);
+			if(status.equalsIgnoreCase("in-progress")){
+				String StatusNew = TwilioUtil.addToConference(widget, from, to, conferenceName);
+				response.put("conferenceStatus", StatusNew); //queued will come for success
+			}
+			return response;
+			
+		}catch (Exception e)
+		{
+		    throw ExceptionUtil.catchWebException(e);
+		}	
+	}
+	
+	/**
+	 * @author Prakash 2/6/16
+	 * it will take the call sid and check if there is more than one participant = 
+	 * if the participant count <= 1 we will end the conference
+	 * @return sucess message
+	 */
+	@Path("endSingleConference")
+	@POST
+	@Produces(MediaType.TEXT_PLAIN)
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	public String checkConferenceAndEnd(@FormParam("callSid") String callSid){
+	
+		String numberOfParticipants = null;
+		try{
+
+			
+			Widget widget = WidgetUtil.getWidget("TwilioIO");
+			System.out.println("in endSingleConference call - >" + callSid );
+			numberOfParticipants = TwilioUtil.checkAndEndLastParticipant(widget,callSid);
+			
+			return numberOfParticipants;
+			
+		}catch (Exception e)
+		{
+		    throw ExceptionUtil.catchWebException(e);
+		}	
+	}
+	
+	/**
+	 * @author Prakash 2/6/16
+	 * it will take the call sid and transfer the callsid to another twiml and then redirect the call to conference room
+	 * @return sucess message
+	 */
+	@Path("modifyCall")
+	@POST
+	@Produces(MediaType.TEXT_PLAIN)
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	public String modifyCurrentCallAndDialConference(@FormParam("callSid") String callSid, @FormParam("conferenceName") String conferenceName, @FormParam("direction") String direction){
+		try{
+			Widget widget = WidgetUtil.getWidget("TwilioIO");
+			System.out.println("in modifying call - >" + callSid + "--" + conferenceName + "--" + direction );
+			TwilioUtil.modifyCall(widget, callSid, conferenceName, direction);
+			return "sucess";
+		}catch (Exception e)
+		{
+		    throw ExceptionUtil.catchWebException(e);
+		}	
+	}
+	
+	/**
+	 * Gets the twilio conf call history.
+	 * 
+	 * @author Prakash
+	 * @created 06/04/2016
+	 * 
+	 */
+	@Path("getlastconfcall/{acc-sid}/{auth-token}/{conf-name}")
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	public String getTwilioLastConfLog(@PathParam("acc-sid") String accountSID,
+			@PathParam("auth-token") String authToken, @PathParam("conf-name") String confName)
+	{
+		try
+		{
+				return TwilioUtil.getLastConfCallDetails(accountSID, authToken, confName).toString();
+		}catch (Exception e)
+		{
+		    throw ExceptionUtil.catchWebException(e);
+		}
+	}
+	
+	
 }

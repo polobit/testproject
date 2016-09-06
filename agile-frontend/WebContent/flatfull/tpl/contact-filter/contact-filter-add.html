@@ -137,6 +137,10 @@
 													<option value="NOT_DEFINED" class="last_contacted last_emailed last_called">never</option>
 													<option value="NEXT" class="created_time updated_time">{{agile_lng_translate 'contacts-view' 'in-next'}}
 													</option>
+													<option value="ON_AFTER" class="created_time updated_time">{{agile_lng_translate 'contacts-view' 'on-after'}}
+														</option>
+													<option value="ON_BEFORE" class="created_time updated_time">{{agile_lng_translate 'contacts-view' 'on-before'}}
+													</option>
 													<option value="EQUALS" class="tag org_tag">{{agile_lng_translate 'contacts-view' 'is'}}</option>
 													<option value="ANYOF" class="tag">{{agile_lng_translate 'contacts-view' 'is-any-of'}}</option>
 													<option value="CONTAINS" class="address">{{agile_lng_translate 'contacts-view' 'contains-word'}}</option>
@@ -158,15 +162,14 @@
 													<option value="DEFINED" class="email phone company title address city state zip country custom_label custom_sfsadf org_custom_label org_custom_sfsadf">{{agile_lng_translate 'contacts-view' 'is-defined'}}
 													</option>
 													<option value="NOT_DEFINED" class="email phone company title address city state zip country custom_label custom_sfsadf org_custom_label org_custom_sfsadf">{{agile_lng_translate 'contacts-view' 'is-not-defined'}}
-													</option>
-												
+													</option>												
 												</select>
 											</div>
 										</td>
 										<td class="rhs-block  controls v-top">
 											<div id="RHS" class="rhs" name="RHS">
 												<input type="text" name="temp"
-													class="LAST NEXT required form-control" placeholder="{{agile_lng_translate 'contacts-view' 'number-of-days'}}"/>
+													class="LAST NEXT ON_AFTER ON_BEFORE required form-control" placeholder="{{agile_lng_translate 'contacts-view' 'number-of-days'}}"/>
 												<input type="text" name="temp" 
 													class="EQUALS NOTEQUALS ANYOF CONTAINS NOT_CONTAINS required form-control"/>
 												<input type="text" name="temp" 
@@ -181,6 +184,21 @@
 												<input id="updated_date" type="text" name="updated_date"
 													class="ON AFTER BEFORE BETWEEN input required date form-control"
 													placeholder="{{dateFormat}}" data-date-format="{{dateFormat}}"/>
+												<input type="number" class="IS_AFTER_IN_DAYS IS_BEFORE_IN_DAYS input required form-control"	placeholder="Number of days"/>
+												<select class="form-control">
+														<option value="01" class="BY_MONTH_ONLY">{{agile_lng_translate 'months' 'January'}}</option>
+														<option value="02" class="BY_MONTH_ONLY">{{agile_lng_translate 'months' 'February'}}</option>
+														<option value="03" class="BY_MONTH_ONLY">{{agile_lng_translate 'months' 'March'}}</option>
+														<option value="04" class="BY_MONTH_ONLY">{{agile_lng_translate 'months' 'April'}}</option>
+														<option value="05" class="BY_MONTH_ONLY">{{agile_lng_translate 'months' 'May'}}</option>
+														<option value="06" class="BY_MONTH_ONLY">{{agile_lng_translate 'months' 'June'}}</option>
+														<option value="07" class="BY_MONTH_ONLY">{{agile_lng_translate 'months' 'July'}}</option>
+														<option value="08" class="BY_MONTH_ONLY">{{agile_lng_translate 'months' 'August'}}</option>
+														<option value="09" class="BY_MONTH_ONLY">{{agile_lng_translate 'months' 'September'}}</option>
+														<option value="10" class="BY_MONTH_ONLY">{{agile_lng_translate 'months' 'October'}}</option>
+														<option value="11" class="BY_MONTH_ONLY">{{agile_lng_translate 'months' 'November'}}</option>
+														<option value="12" class="BY_MONTH_ONLY">{{agile_lng_translate 'months' 'December'}}</option>
+												</select>
 													
 											</div>
 										</td>
@@ -313,6 +331,11 @@
 													<option value="NOT_DEFINED" class="last_contacted last_emailed last_called">never</option>
 													<option value="NEXT" class="created_time updated_time">{{agile_lng_translate 'contacts-view' 'in-next'}}
 													</option>
+													<option value="ON_AFTER" class="created_time updated_time">
+														{{agile_lng_translate 'contacts-view' 'on-after'}}
+													</option>
+													<option value="ON_BEFORE" class="created_time updated_time">{{agile_lng_translate 'contacts-view' 'on-before'}}
+													</option>
 													<option value="EQUALS" class="tag org_tag">{{agile_lng_translate 'contacts-view' 'is'}}</option>
 													<option value="ANYOF" class="tag">{{agile_lng_translate 'contacts-view' 'is-any-of'}}</option>
 													<option value="CONTAINS" class="address">{{agile_lng_translate 'contacts-view' 'contains-word'}}</option>
@@ -342,7 +365,7 @@
 											<div id="RHS" class="rhs" name="RHS">
 
 												<input type="text" name="temp"
-													class="LAST NEXT required form-control" placeholder="{{agile_lng_translate 'contacts-view' 'number-of-days'}}"/>
+													class="LAST NEXT ON_AFTER ON_BEFORE required form-control" placeholder="{{agile_lng_translate 'contacts-view' 'number-of-days'}}"/>
 												<input type="text" name="temp"
 													class="EQUALS NOTEQUALS ANYOF CONTAINS NOT_CONTAINS required form-control"/>
 												 
@@ -359,6 +382,23 @@
 												<input id="updated_date" type="text" name="updated_date" style="text-overflow:none; "
 													class="ON AFTER BEFORE BETWEEN input required date form-control"
 													placeholder="MM/DD/YY" data-date-format="mm/dd/yyyy"/>
+												
+												<input type="number" class="IS_AFTER_IN_DAYS IS_BEFORE_IN_DAYS input required form-control"	placeholder="Number of days"/>
+
+												<select class="form-control">
+													<option value="01" class="BY_MONTH_ONLY">{{agile_lng_translate 'months' 'January'}}</option>
+														<option value="02" class="BY_MONTH_ONLY">{{agile_lng_translate 'months' 'February'}}</option>
+														<option value="03" class="BY_MONTH_ONLY">{{agile_lng_translate 'months' 'March'}}</option>
+														<option value="04" class="BY_MONTH_ONLY">{{agile_lng_translate 'months' 'April'}}</option>
+														<option value="05" class="BY_MONTH_ONLY">{{agile_lng_translate 'months' 'May'}}</option>
+														<option value="06" class="BY_MONTH_ONLY">{{agile_lng_translate 'months' 'June'}}</option>
+														<option value="07" class="BY_MONTH_ONLY">{{agile_lng_translate 'months' 'July'}}</option>
+														<option value="08" class="BY_MONTH_ONLY">{{agile_lng_translate 'months' 'August'}}</option>
+														<option value="09" class="BY_MONTH_ONLY">{{agile_lng_translate 'months' 'September'}}</option>
+														<option value="10" class="BY_MONTH_ONLY">{{agile_lng_translate 'months' 'October'}}</option>
+														<option value="11" class="BY_MONTH_ONLY">{{agile_lng_translate 'months' 'November'}}</option>
+														<option value="12" class="BY_MONTH_ONLY">{{agile_lng_translate 'months' 'December'}}</option>
+												</select>
 													
 											</div>
 										</td>

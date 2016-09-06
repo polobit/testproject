@@ -12,6 +12,14 @@
 		
 		return false;
 	};
+
+		company_util.isCompanyContact = function(){
+		
+		if(App_Companies.contacts_Company_List && Current_Route == "company/" + App_Companies.companyDetailView.model.get('id'))
+			return true;
+		
+		return false;
+	};
 	
 	company_util.updateDocumentsList = function(document, isCompany){
 

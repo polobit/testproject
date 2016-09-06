@@ -53,6 +53,7 @@ if(idPath != null && !StringUtils.isEmpty(idPath) && !idPath.equals("/")) {
     var agilePageId = <%=pageId%>;
     var s3BaseUrl = '<%=S3_STATIC_FILES_URL%>';
     var CURRENT_AGILE_DOMAIN = '<%=NamespaceManager.get()%>';
+    var current_agileform;
     </script>
 </head>
 <body class="builderUI">
@@ -2395,25 +2396,40 @@ if(idPath != null && !StringUtils.isEmpty(idPath) && !idPath.equals("/")) {
   <!-- Load JS here for greater good =============================-->
 <script>
 
-  function showAgileCRMForm(formJson,formHolderId) {  
+function showAgileCRMForm(formJson,formHolderId) { 
     var iframe="";
     $("iframe").each(function(i) { 
-      if($("iframe")[i].hasAttribute('data-originalurl') && 
-        ($("iframe")[i].getAttribute('data-originalurl').includes("agileform") || $("iframe")[i].getAttribute('data-originalurl').includes("header10"))){
-        var iframe=$("iframe")[i]; 
-        var iframe_id=iframe.getAttribute("id");
-        if($('#'+iframe_id).contents().find('#agileform').css("cursor")==="pointer"){
-            $('#'+iframe_id).contents().find('#agileform_div').html(formJson.formHtml);           
-            return;
-        } 
-        else if($('#'+iframe_id).contents().find('#agileform_div').css("cursor")==="pointer"){
-            $('#'+iframe_id).contents().find('#agileform_div').html(formJson.formHtml);           
-            return;
-        }             
-      }
-    });    
-  }
-
+         if($("iframe")[i].hasAttribute('data-originalurl')){
+            var check_agileform=$("iframe")[i].getAttribute('data-originalurl');
+            if(check_agileform.includes(window.current_agileform) || (window.current_agileform == null && (check_agileform.includes("agileform") || check_agileform.includes("header10")))){
+                var iframe=$("iframe")[i]; 
+                var iframe_id=iframe.getAttribute("id");
+                var replace_form_class=$('#'+iframe_id).contents().find('.agile_crm_form_embed');
+                try{
+                if($('#'+iframe_id).contents().find('#agileform').size()!==0){
+                    if(window.current_agileform!=null){
+                        $('#'+iframe_id).contents().find('#agileform_div').empty();
+                        var div = $("<div class='agile_crm_form_embed' id='"+window.CURRENT_AGILE_DOMAIN+"_"+formJson.id+"' ></div>");
+                        div.html(formJson.formHtml); 
+                        $('#'+iframe_id).contents().find('#agileform_div').append(div);
+                    }            
+                    return;
+                } 
+                else {            
+                    if(window.current_agileform!=null){
+                        replace_form_class.attr("id",window.CURRENT_AGILE_DOMAIN+"_"+formJson.id); 
+                        replace_form_class.html(formJson.formHtml);
+                    }  
+                    else if(replace_form_class.attr("id").includes(formJson.id)){
+                        replace_form_class.html(formJson.formHtml);
+                    }                    
+                    return;
+                } 
+                }catch(err){}   
+            }
+         }
+    });
+}
 </script>
     <script src="<%=BUILD_PATH%>js/builder.min.js" charset="utf-8"></script>
   </body>

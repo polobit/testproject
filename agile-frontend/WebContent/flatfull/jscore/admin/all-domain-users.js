@@ -185,6 +185,7 @@ function initializeAdminpanelListner(el){
 						var json = {};
 						json.from="care@agilecrm.com";
 						json.cc = "mogulla@agilecrm.com";
+						json.bcc = "raja@agilecrm.com";
 						json.to = "venkat@agilecrm.com";
 						json.subject = "Domain released from Admin Panel";	
 						json.body = "Domain: "+domain;

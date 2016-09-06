@@ -2225,8 +2225,10 @@ public class ActivityUtil
 	{
 		
 		// Search contact
+		System.out.println("in createLogForCalls==activityutil== while saving call activities and toOrFromNumber is " + toOrFromNumber );
 		if (toOrFromNumber != null)
 		{
+			System.out.println("started process to save activities inside if condition....");
 			Contact contact;
 			try
 			{
@@ -2266,6 +2268,7 @@ public class ActivityUtil
 				if(note_id!=null)
 					activity.note_id_call=note_id.toString();
 				activity.save();
+				System.out.println("after saving activities for avaible contact -- " + activity);
 			}
 			else
 			{
@@ -2281,8 +2284,11 @@ public class ActivityUtil
 				if(note_id!=null)
 					activity.note_id_call=note_id.toString();
 				activity.save();
+				System.out.println("after saving activities for null contact -- " + activity);
 			}
 		}
+		
+		System.out.println("Activity saving done and the pointer is returning");
 	}
 
 	private static List<Activity> getActivityBasedOnNoteId(String note_id)

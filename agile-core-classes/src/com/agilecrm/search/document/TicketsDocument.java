@@ -336,6 +336,8 @@ public class TicketsDocument implements BuilderInterface
 
 		for (ScoredDocument document : results)
 		{
+			if(!StringUtils.isNumeric(document.getId()))
+				continue;
 			resultArticleIds.add(new Key<Tickets>(Tickets.class, Long.parseLong(document.getId())));
 
 			try

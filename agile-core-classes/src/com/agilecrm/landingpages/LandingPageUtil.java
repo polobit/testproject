@@ -407,6 +407,8 @@ public class LandingPageUtil
 		    for (int i = 0; i < jsonArray.length(); i++) {					
 		        JSONObject lpElements = jsonArray.getJSONObject(i);				        
 		        Document doc = Jsoup.parse(lpElements.getString("frameContent"));
+		        if(doc.body().getElementById("page").getElementsByClass("agile_crm_form_embed")!=null)
+		            doc.body().getElementById("page").getElementsByClass("agile_crm_form_embed").empty();
 		        fullbodyHtml = fullbodyHtml + doc.body().getElementById("page").children();				        
 		    }
 		    

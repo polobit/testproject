@@ -1818,10 +1818,11 @@ function pieforReports(url, selector, name,show_loading, is_lost_analysis)
                         		else if(deals.id==pieData[i][0]){
                             		pieData[i][0]=deals.label;
                         		}
-                        		 createAPieChart(selector, name, animation, AllData, pieData);
+                        		
                             
                   		  }
                 			});
+                			 createAPieChart(selector, name, animation, AllData, pieData);
 
             	    }		
             	     });

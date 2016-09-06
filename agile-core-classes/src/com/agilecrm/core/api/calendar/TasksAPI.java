@@ -203,6 +203,14 @@ public class TasksAPI
 	{
 		throw new AccessDeniedException("Task cannot be deleted because you do not have permission to update associated contact.");
 	}
+	
+	List<String> dealIds = task.getDeal_ids();
+	List<String> modifiedDealIds = UserAccessControlUtil.checkUpdateAndmodifyRelatedDeals(dealIds);
+	if(dealIds != null && modifiedDealIds != null && dealIds.size() != modifiedDealIds.size())
+	{
+		throw new AccessDeniedException("Task cannot be deleted because you do not have permission to update associated deal.");
+	}
+	
 	try
 	{
 		ActivitySave.createTaskDeleteActivity(task);
@@ -247,6 +255,14 @@ public class TasksAPI
     {
     	throw new AccessDeniedException("Task cannot be created because you do not have permission to update associated contact(s).");
     }
+    
+    List<String> dealIds = task.getDeal_ids();
+    List<String> modifiedDealIds = UserAccessControlUtil.checkUpdateAndmodifyRelatedDeals(dealIds);
+    if(dealIds != null && modifiedDealIds != null && dealIds.size() != modifiedDealIds.size())
+    {
+    	throw new AccessDeniedException("Task cannot be created because you do not have permission to update associated deal(s).");
+    }
+    
 	task.save();
 	try
 	{
@@ -311,6 +327,13 @@ public class TasksAPI
         	{
         		throw new AccessDeniedException("Task cannot be updated because you do not have permission to update associated contact(s).");
         	}
+        	
+        	List<String> dealIds = oldTask.getDeal_ids();
+        	List<String> modifiedDealIds = UserAccessControlUtil.checkUpdateAndmodifyRelatedDeals(dealIds);
+        	if(dealIds != null && modifiedDealIds != null && dealIds.size() != modifiedDealIds.size())
+        	{
+        		throw new AccessDeniedException("Task cannot be updated because you do not have permission to update associated deal(s).");
+        	}
         }
     	List<String> conIds = task.contacts;
     	List<String> modifiedConIds = UserAccessControlUtil.checkUpdateAndmodifyRelatedContacts(conIds);
@@ -318,6 +341,14 @@ public class TasksAPI
     	{
     		throw new AccessDeniedException("Task cannot be updated because you do not have permission to update associated contact(s).");
     	}
+    	
+    	List<String> dealIds = task.getDeal_ids();
+    	List<String> modifiedDealIds = UserAccessControlUtil.checkUpdateAndmodifyRelatedDeals(dealIds);
+    	if(dealIds != null && modifiedDealIds != null && dealIds.size() != modifiedDealIds.size())
+    	{
+    		throw new AccessDeniedException("Task cannot be updated because you do not have permission to update associated deal(s).");
+    	}
+    	
     	  try {
 			if(oldTask != null && !(oldTask.relatedDeals()).isEmpty())
 				{
@@ -386,7 +417,7 @@ public class TasksAPI
 	 if(tasksJSONArray!=null && tasksJSONArray.length()>0){		 
 		 try {
 			for (int i = 0; i < tasksJSONArray.length(); i++) {
-				 String taskId =  (String) tasksJSONArray.get(i);
+				 String taskId = tasksJSONArray.getString(i);
 				 Task task = TaskUtil.getTask(Long.parseLong(taskId));
 				 List<ContactPartial> contactsList = task.getContacts();
 				 List<String> conIds = new ArrayList<String>();
@@ -825,4 +856,70 @@ public class TasksAPI
 	return TaskUtil.getTasksRelatedToOwnerOfTypeAndDue(criteria, type, owner, pending, null, null, startTime, endTime);
     }
     /***************************************************************************/
+    
+    /**
+     * Deletes tasks bulk
+     * 
+     * @param model_ids
+     *            task ids, read as form parameter from request url
+     * @throws JSONException
+     */
+    @Path("delete")
+    @POST
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    @Produces({ MediaType.APPLICATION_JSON })
+    public void deleteTask(@FormParam("ids") String model_ids) throws JSONException
+    {
+	JSONArray tasksJSONArray = new JSONArray(model_ids);
+	if(tasksJSONArray != null)
+	{
+		Long id = tasksJSONArray.getLong(0);
+		Task task = TaskUtil.getTask(id);
+	    if (task != null)
+	    {
+	    List<ContactPartial> contList = task.getContacts();
+		List<String> conIds = new ArrayList<String>();
+		for(ContactPartial con : contList)
+		{
+			conIds.add(String.valueOf(con.id));
+		}
+		List<String> modifiedConIds = UserAccessControlUtil.checkUpdateAndmodifyRelatedContacts(conIds);
+		if(conIds != null && modifiedConIds != null && conIds.size() != modifiedConIds.size())
+		{
+			throw new AccessDeniedException("Task cannot be deleted because you do not have permission to update associated contact.");
+		}
+		
+		List<String> dealIds = task.getDeal_ids();
+		List<String> modifiedDealIds = UserAccessControlUtil.checkUpdateAndmodifyRelatedDeals(dealIds);
+		if(dealIds != null && modifiedDealIds != null && dealIds.size() != modifiedDealIds.size())
+		{
+			throw new AccessDeniedException("Task cannot be deleted because you do not have permission to update associated deal.");
+		}
+		
+		try
+		{
+			ActivitySave.createTaskDeleteActivity(task);
+			if (!task.getNotes(id).isEmpty())
+			    NoteUtil.deleteBulkNotes(task.getNotes(id));
+			try {
+				if(!(task.relatedDeals()).isEmpty())
+				{
+					for(Opportunity oppr : task.relatedDeals())
+					{
+						oppr.save();
+					}
+				}
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			task.delete();
+		}
+		catch (Exception e)
+		{
+		    e.printStackTrace();
+		}
+	    }
+	}
+    }
 }

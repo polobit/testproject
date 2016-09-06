@@ -5,7 +5,7 @@ var globalCallForActivity = { "callDirection" : null, "callId" : null, "callNumb
 var widgetCallName = { "Sip" : "Sip", "TwilioIO" : "Twilio", "Bria" : "Bria", "Skype" : "Skype", "CallScript" : "CallScript" };
 var dialled = {"using" : "default"};
 var CallLogVariables = {"callActivitySaved" : false, "id" : null, "callType" : null, "status" : null, "callWidget" : null, "duration" : null, "phone" : null, "url" : null,"description":null , "dynamicData" : null, "processed" : false};
-
+var callConference = {"started" : false, "name" : "MyRoom1234", "lastContactedId" : null, "hideNoty" : true, "totalMember" : 0, "addnote" : true, "conferenceDuration" : 0 , "phoneNumber" : null};
 $(function()
 {
 	initToPubNub();
@@ -702,4 +702,8 @@ function newCallLogVariables (json){
 			CallLogVariables[obj.key] = obj.value;
 		}
 	});
+}
+
+function resetcallConferenceVariables(){
+	callConference.started = false;
 }
