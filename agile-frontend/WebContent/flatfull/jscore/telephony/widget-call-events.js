@@ -16,9 +16,10 @@ $(function()
 	  	e.preventDefault();
 
 		if(checkForActiveCall()){
-			$('#callStatusModal').html(getTemplate("briaCallStatusModal"));
-			$('#callStatusModal').modal('show');
-			$('#callStatusModal').html("{{agile_lng_translate 'widgets' 'asterisk'}}");
+			$('#callInfoModal').html(getTemplate("callStatusModal"));
+			$('#callInfoModal').modal('show');
+			$('#callStatusModal_title').html("{{agile_lng_translate 'widgets' 'asterisk'}}");
+			
 			return;
 		}
 
@@ -455,7 +456,8 @@ function sendActionToClient(action, manager, asterisk, long_details){
 		}else if(client == "Asterisk"){
 			$('#callInfoModal').html(getTemplate("callInfoModal"));
 			$('#callInfoModal').modal('show');
-			//$('#callModal_title').html("{{agile_lng_translate 'widgets' 'asterisk'}}");
+			$('#callModal_title').html("{{agile_lng_translate 'widgets' 'asterisk'}}");
+			$('#downloadCallJar_widget').setAttr("widget-name","Asterisk");
 			closeCallNoty(true);
 			return;
 		}

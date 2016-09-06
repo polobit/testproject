@@ -666,9 +666,10 @@ $('body').on('click', '#downloadCallJar', function(e)
 });
 
 // this is to download the jar file....
-$('body').on('click', '#downloadCallJar_asterisk', function(e)
+$('body').on('click', '#downloadCallJar_widget', function(e)
 {
 	e.preventDefault();
+	var widget_name = $(this).getAttr("widget-name");
 	window.location.href = 'https://s3.amazonaws.com/agilecrm/website/widgetCall.jar';
 });
 
