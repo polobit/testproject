@@ -231,15 +231,13 @@ function getTemplateUrls(templateName)
 	{
 		template_relative_urls.push("helpcenter.js");
 	}
-<<<<<<< HEAD
 	if (templateName.indexOf("push-notification") == 0)
 	{
 		template_relative_urls.push("notification.js");
-=======
-	
-	{
+	}
+	if (templateName.indexOf("asterisk") == 0)
+	{	
 		template_relative_urls.push("asterisk.js");
->>>>>>> asterisk_spanish
 	}
 	return template_relative_urls;
 }
