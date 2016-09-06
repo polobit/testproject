@@ -104,7 +104,9 @@ function syncContacts(){
 			if(inbox_has_email_configured === 'true'){
 				$("#mails-list").css({"max-height":$(window).height()-128,"height":$(window).height()-128, "overflow-y":"scroll", "padding":"0px"});
 				//$("#mail-view").css({"max-height":$(window).height()-128,"height":$(window).height()-128, "overflow-y":"scroll"});
+
 				url = "core/api/emails/all-agile-emails?";
+				$('#inbox-email-type-select').attr("data-url",url);
 				renderToMailList(url);
 	        }else{
 	        	$("#inbox-prefs-verification").css({"display":"block"});
