@@ -421,6 +421,9 @@ var contacts_bulk_actions = {
 									$("#contacts-export-csv-modal").on("click",'#contacts-export-csv-confirm', function(e)
 									{
 										e.preventDefault();
+										App_Companies.Company_detail_route="";
+										 if (company_util.isCompanyContact())
+        									App_Companies.Company_detail_route = Current_Route;
 
 										if ($(this).attr('disabled'))
 											return;
@@ -553,7 +556,14 @@ select_contacts :  function(e)
 				var resultCount = getAvailableContacts();
 				var limitValue = 10000;
 
-				if(company_util.isCompany()){
+				if(company_util.isCompanyContact()){
+					if(resultCount > limitValue){
+							resultCount = limitValue + "+";
+						}
+						html = ' '+_agile_get_translated_val('contacts','select-all')+' ' + resultCount + ' '+_agile_get_translated_val('contact-details','contacts')+'. <a hrer="#" id="select-all-revert" class="c-p text-info-important">{{agile_lng_translate "contacts" "select-choosen-only"}}</a>';
+				}
+
+				else if(company_util.isCompany()){
 					if(localStorage.getItem("dynamic_company_filter") != null || localStorage.getItem("company_filter") != null){				
 						if(resultCount > limitValue){
 							resultCount = limitValue + "+";
@@ -1140,7 +1150,11 @@ function toggle_contacts_bulk_actions_dropdown(clicked_ele, isBulk, isCampaign)
 				}
 
 				$('body').find('#bulk-select').css('display', 'block')
+<<<<<<< HEAD
 				.html("Selected " + resultCount + " companies. <a id='select-all-available-contacts' class='c-p text-info' href='#'>Select all " + appCount + " companies</a>");
+=======
+				.html(_agile_get_translated_val('companies-view','selected') + " " + resultCount + " " +_agile_get_translated_val('contact-details', 'contacts')+ ". <a id='select-all-available-contacts' class='c-p text-info-important' href='#'>" +_agile_get_translated_val('contacts','select-all')+ " " + appCount + " " +_agile_get_translated_val('contact-details', 'contacts')+ "</a>");
+>>>>>>> 9c32743... Various issues
 				$('#bulk-select').css("display","block");
 			}
 		}
