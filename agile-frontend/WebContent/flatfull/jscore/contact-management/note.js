@@ -129,8 +129,7 @@ $(function()
 	$('body').on('click', '#show-note', function(e)
 	{
 		e.preventDefault();
-		$("#noteModal").modal('show');
-
+		showNoteModel();
 		var el = $("#noteForm");
 		agile_type_ahead("note_related_to", el, contacts_typeahead);
 	});
@@ -175,7 +174,7 @@ $(function()
 
 			// Removes loading symbol and hides the modal
 			//modal.find('span.save-status img').remove();
-			modal.modal('hide');
+			$("#newNoteModal").modal('hide');
 
 			var note = data.toJSON();
 

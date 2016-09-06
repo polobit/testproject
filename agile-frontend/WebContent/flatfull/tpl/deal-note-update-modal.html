@@ -1,5 +1,6 @@
 <!-- New (Note) Modal views -->
-<div class="modal fade dealnoteupdatemodal" id="dealnoteupdatemodal">
+<script type="text/html" id="dealNoteUpdateModal-template">
+<div class="modal-dialog dealnoteupdatemodal" id="dealnoteupdatemodal">
 <div class="modal-dialog">
 <div class="modal-content">
     <div class="modal-header">
@@ -24,8 +25,8 @@
                 <div class="row-fluid">
 	                <div class="control-group">
 	                    <label class="control-label"><b>{{agile_lng_translate 'other' 'description'}}</b></label>
-	                    <div class="controls">
-	                        <textarea rows="3" class="input form-control" placeholder="{{agile_lng_translate 'deal-view' 'detailed-note'}}" name="description" id="description" style="max-width:400px;"></textarea> 
+	                    <div class="controls agiletxexpander">
+	                        <textarea rows="3" class="input form-control textarea" placeholder="{{agile_lng_translate 'deal-view' 'detailed-note'}}" name="description" id="description" data-agileexpand="true" ></textarea> 
 	                    </div>
 	                </div>
                 </div>
@@ -52,3 +53,4 @@
 </div> 
 </div>
 <!-- End of Modal views -->
+</script>

@@ -66,15 +66,13 @@
       add_note : function(e){
             console.log("execution");
             var targetEl = $(e.currentTarget);
-            
-            var el = $("#noteForm");
-            
+            var el = "";
+            showNoteModel(function()
+            {
+              el = $("#noteForm",el);
             // Displays contact name, to indicate the note is related to the contact
-            fill_relation(el);
-
-            if(!$(targetEl).attr("data-toggle"))
-                 $('#noteModal').modal('show');
-             
+              fill_relation(el);
+              },"new-note-model"); 
             agile_type_ahead("note_related_to", el, contacts_typeahead);
       },
 

@@ -4595,3 +4595,13 @@ div.list-tasks.panel-body:hover
   width:150px;
 }
 
+.textarea{
+   min-height: 49px;
+    height: 80px;
+    width: 100%;
+    text-indent: 0px;
+    resize: none;
+    padding: 8px 8px 1px;
+    overflow-y: hidden;
+
+}

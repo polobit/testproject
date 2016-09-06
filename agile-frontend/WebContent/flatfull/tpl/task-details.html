@@ -426,6 +426,48 @@
 		{{/if}}
 </script>
 
+<!-- New (Note) Modal views -->
+<div class="modal  fade task-note-modal" id="new-task-modal">
+<div class="modal-dialog">
+    <div class="modal-content">
+	<div class="modal-header">
+		<button class="close" data-dismiss="modal">x</button>
+		<h3 class="modal-title">
+			<i class="icon-plus-sign"></i>&nbsp;{{agile_lng_translate 'deal-view' 'add-note'}}
+		</h3>
+	</div>
+	<div class="modal-body">
+		<form id="tasknoteForm" name="tasknoteForm" method="post">
+			<fieldset>
+				<div class="control-group form-group">
+					<label class="control-label"><b>{{agile_lng_translate 'widgets' 'subject'}}</b> <span
+						class="field_req">*</span></label>
+					<div class="controls">
+						<input type="text" placeholder="{{agile_lng_translate 'help' 'about'}}" name="subject" id="subject"
+							class="required form-control" />
+					</div>
+				</div>
+				
+					<div class="control-group form-group">
+						<label class="control-label"><b>{{agile_lng_translate 'misc-keys' 'description'}}</b></label>
+						<div class="controls agiletxexpander">
+							<textarea rows="3" class="form-control textarea" data-agileexpand="true" placeholder="{{agile_lng_translate 'deal-view' 'detailed-note'}}"
+								name="description" id="description"></textarea>
+						</div>
+					</div>
+				{{agile_lng_translate 'portlets' 'activity'}}
+
+			</fieldset>
+		</form>
+	</div>
+	<div class="modal-footer">
+		<a href="#" class="btn btn-sm btn-primary" id="tasknote_validate">Save </a> <span
+			class="save-status"></span>
+	</div>
+</div>
+</div>
+</div>
+</script>
 <script id="task-related-deals-model-template" type="text/html">
 <td data="{{id}}" class="data"></td>
 <td>
@@ -462,7 +504,6 @@
     </div>
 </div>
 </td>
-</script>
 
 <!-- New (Note) Modal views -->
 <div class="modal  fade tasknoteupdatemodal"
@@ -494,8 +535,9 @@
 				
 					<div class="control-group form-group">
 						<label class="control-label"><b>{{agile_lng_translate 'misc-keys' 'description'}}</b></label>
-						<div class="controls">
-							<textarea rows="3" class=" form-control" placeholder="{{agile_lng_translate 'deal-view' 'detailed-note'}}"
+						<div class="controls agiletxexpander">
+							<textarea rows="3" class=" form-control textarea" data-agileexpand="true" placeholder="{{agile_lng_translate 'deal-view' 'detailed-note'}}"
+
 								name="description" id="description"></textarea>
 						</div>
 					</div>
@@ -515,45 +557,5 @@
 <!-- End of Modal views -->
 
 
-<!-- New (Note) Modal views -->
-<div class="modal  fade task-note-modal" id="new-task-modal">
-<div class="modal-dialog">
-    <div class="modal-content">
-	<div class="modal-header">
-		<button class="close" data-dismiss="modal">x</button>
-		<h3 class="modal-title">
-			<i class="icon-plus-sign"></i>&nbsp;{{agile_lng_translate 'deal-view' 'add-note'}}
-		</h3>
-	</div>
-	<div class="modal-body">
-		<form id="tasknoteForm" name="tasknoteForm" method="post">
-			<fieldset>
-				<div class="control-group form-group">
-					<label class="control-label"><b>{{agile_lng_translate 'widgets' 'subject'}}</b> <span
-						class="field_req">*</span></label>
-					<div class="controls">
-						<input type="text" placeholder="{{agile_lng_translate 'help' 'about'}}" name="subject" id="subject"
-							class="required form-control" />
-					</div>
-				</div>
-				
-					<div class="control-group form-group">
-						<label class="control-label"><b>{{agile_lng_translate 'misc-keys' 'description'}}</b></label>
-						<div class="controls">
-							<textarea rows="3" class="form-control" placeholder="{{agile_lng_translate 'deal-view' 'detailed-note'}}"
-								name="description" id="description"></textarea>
-						</div>
-					</div>
-				{{agile_lng_translate 'portlets' 'activity'}}
 
-			</fieldset>
-		</form>
-	</div>
-	<div class="modal-footer">
-		<a href="#" class="btn btn-sm btn-primary" id="tasknote_validate">Save </a> <span
-			class="save-status"></span>
-	</div>
-</div>
-</div>
-</div>
 <!-- End of Modal views -->
