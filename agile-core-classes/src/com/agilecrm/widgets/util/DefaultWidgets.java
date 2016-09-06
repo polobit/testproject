@@ -149,6 +149,12 @@ public class DefaultWidgets {
 				"/widgets/skype.js", "/img/plugins/skype-call.png",
 				"/img/plugins/skype-call.png", null, WidgetType.CALL));
 		widgets.add(new Widget(
+				"Asterisk",
+				"Asterisk",
+				"Make and receive calls with your customers using Asterisk account.",
+				"/widgets/asterisk.js", "/img/plugins/asterisk-call.png",
+				"/img/plugins/asterisk-call.png", null, WidgetType.CALL));
+		widgets.add(new Widget(
 				"Custom",
 				"Custom",
 				"Develop custom widget in javascript or any backend server language for your customers.",
@@ -183,8 +189,8 @@ public class DefaultWidgets {
 				.contains(widgetName)) {
 			return WidgetType.SUPPORT;
 		} else if (Arrays.asList(
-				new String[] { "Twilio", "Sip", "TwilioIO", "CallScript",
-						"Bria", "Skype" }).contains(widgetName)) {
+				new String[] { "Twilio", "Sip", "TwilioIO", "CallScript", "Bria","Skype", "Asterisk"})
+				.contains(widgetName)) {
 			return WidgetType.CALL;
 		} else if (Arrays.asList(new String[] { "FreshBooks", "Stripe" })
 				.contains(widgetName)) {

@@ -72,20 +72,20 @@ $(function(){
 				var phoneNumber = CallLogVariables.phone;
 				var status = CallLogVariables.status;
 				var duration = CallLogVariables.duration;
+				var dataParam = {direction: direction, phone: phoneNumber, status : status,duration : duration };
 				var url = "/core/api/widgets/" + widgetType + "/savecallactivity";
-				
+
+				if(widgetType == "asterisk"){
+					url = 	"/core/api/call/widgets/savecallactivity"
+					dataParam.callWidget = CallLogVariables.callWidget;
+				}
 				
 				//url is : 
 				//1)twilio : /core/api/widgets/twilio/savecallactivity
 				//2)bria : /core/api/widgets/bria/savecallactivity
 				//3)skype: /core/api/widgets/skype/savecallactivity
 				
-				$.post( url,{
-				direction: direction, 
-				phone: phoneNumber, 
-				status : status,
-				duration : duration 
-				});
+				$.post( url,dataParam);
 				resetCallLogVariables();
 			}catch(e){
 			}

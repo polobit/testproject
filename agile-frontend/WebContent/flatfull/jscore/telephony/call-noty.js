@@ -229,7 +229,7 @@ function ShowWidgetCallNoty(message){
 if(message.state == "connected"){
 	
 	var btns = [];
-	if(widgetype !=  "skype"){
+	if(widgetype !=  "skype" && widgetype !=  "asterisk"){
 		btns.push({"id":"", "class":"btn btn-sm btn-default p-8 noty_"+widgetype+"_mute icon-microphone","title":""});
 		btns.push({"id":"", "class":"btn btn-sm btn-default p-8 noty_"+widgetype+"_unmute icon-microphone-off none","title":""});
 	}
@@ -239,6 +239,7 @@ if(message.state == "connected"){
 	showDraggableNoty(widgetype, globalCall.contactedContact, "connected", globalCall.callNumber, btns,json);
 	
 }else if(message.state == "ringing"){
+	
 	searchForContactImg(number, function(currentContact){
 		if(!currentContact){
 			globalCall.contactedContact = {};
@@ -247,7 +248,11 @@ if(message.state == "connected"){
 			globalCall.contactedContact = currentContact;
 			globalCall.contactedId = currentContact.id;
 		}
-		var btns = [{"id":"", "class":"btn btn-primary noty_"+widgetype+"_answer","title":"Answer"},{"id":"","class":"btn btn-danger noty_"+widgetype+"_ignore","title":'{{agile_lng_translate "contacts-view" "ignore"}}'}];
+
+		if(widgetype !=  "asterisk"){
+			var btns = [{"id":"", "class":"btn btn-primary noty_"+widgetype+"_answer","title":"Answer"},{"id":"","class":"btn btn-danger noty_"+widgetype+"_ignore","title":'{{agile_lng_translate "contacts-view" "ignore"}}'}];
+		}
+		
 		var json = {"callId": callId};
 		showDraggableNoty(widgetype, globalCall.contactedContact, "incoming", globalCall.callNumber, btns,json);
 	});
@@ -352,6 +357,60 @@ function showSkypeCallNoty(message){
 		
 }
 
+
+	
+			
+// added by prakash for asterisk call notification
+function showAsteriskCallNoty(message){
+
+	var state = message.state;
+	var number = message.number;
+	var callId = message.callId;
+	var displayName = message.displayName;
+	
+		if(!globalCall.lastReceived){
+		}else{
+			if(globalCall.lastReceived == message.state){
+				console.log("duplicate message recived");
+				return;
+			}
+		}
+		globalCall.lastReceived =  message.state;
+
+		if(message.state == "ringing"){
+				if(checkForActiveCall()){
+					sendCommandToClient("busy","Bria");
+					return;
+				}
+		}else if(!globalCall.contactedContact){
+			 accessUrlUsingAjax("core/api/contacts/search/phonenumber/"+number, function(responseJson){
+	    		if(!responseJson){
+	    			globalCall.contactedContact = {};
+	    			globalCall.contactedId = "";
+	    		}else{
+	    			globalCall.contactedContact = responseJson;
+	    			globalCall.contactedId = responseJson.id;
+	    		}
+	    		
+	    		_getMessageAsterisk(message);
+				ShowWidgetCallNoty(message);
+					return;
+
+			});	
+				console.log("contact or id not found to make popup..");
+				return;
+		
+		}
+
+		_getMessageAsterisk(message);
+		ShowWidgetCallNoty(message);
+		return;
+
+
+}
+
+
+
 function showCallNotyMessage(message,type,position,timeout){
 	head.js(LIB_PATH + 'lib/noty/jquery.noty.js', LIB_PATH + 'lib/noty/layouts/bottom.js', LIB_PATH + 'lib/noty/layouts/bottomRight.js',
 			LIB_PATH + 'lib/noty/themes/default.js', LIB_PATH + 'lib/noty/packaged/jquery.noty.packaged.min.js', function()
@@ -359,6 +418,7 @@ function showCallNotyMessage(message,type,position,timeout){
 			noty({ text : message, type : "error", layout : "bottomRight", timeout : 3000});
 		});
 }
+
 
 function showDraggableNoty(widgetName, contact, status, number, btns, json){
 	var w = widgetName;
@@ -385,7 +445,7 @@ function showDraggableNoty(widgetName, contact, status, number, btns, json){
 		if(widgetName == "Twilioio"){
 			makeDraggableVoicemail();
 			makeDraggableDialpad("twilioio-dialpad",{},$('.noty_buttons'));
-		}else if(widgetName == "bria" || widgetName == "skype"){
+		}else if(widgetName == "bria" || widgetName == "skype" || widgetName == "asterisk"){
 			makeDraggableDialpad("bria-widgetdialpad",{},$('.noty_buttons'));
 		}
 		if(containsOption(default_call_option.callOption, "name", "CallScript") != -1 && !jQuery.isEmptyObject(contact)){
@@ -504,5 +564,6 @@ function makeDraggableVoicemail(widgetName){
 	});
 	
 }
+
 
 

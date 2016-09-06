@@ -40,6 +40,13 @@ function subscribeClientChannel(callback)
 		//console.log(message);
 		
 		try{
+			try{
+				if(typeof message == "string"){
+					message = JSON.parse(message);
+				}
+			}catch(e){
+				return;
+			}
 			if((message || {}).type  == "call"){
 				handleCallRequest(message);
 			}else{

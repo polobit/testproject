@@ -19,9 +19,10 @@ $(function()
 				resetCallLogVariables();
 				return;
 			}
+			var widgetName = CallLogVariables.callWidget
 			var data ={};
 			var direction = CallLogVariables.callType;
-			if(direction == "outbound-dial" || direction == "Outgoing" || direction == "outgoing") {
+			if((direction == "outbound-dial" || direction == "Outgoing" || direction == "outgoing") && widgetName != "Asterisk") {
 				data.url = CallLogVariables.url + "savecallactivityById";
 			}else{
 				data.url = CallLogVariables.url + "savecallactivity";
@@ -405,8 +406,10 @@ try{
 	if($("#saveActivity",form).val() == "true"){
 		try{
 			var data1 ={};
-			data1.url = "/core/api/notes/save_logPhoneActivity";
+
+			data1.url = "/core/api/notes/save_logPhoneActivity?note_id="+logPhone.id;
 			data1.id = contactDetailsObjId;
+
 			data1.callType = logPhone.callType;
 			data1.number = logPhone.phone;
 			data1.status = logPhone.status;
