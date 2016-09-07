@@ -4599,4 +4599,6 @@ div.list-tasks.panel-body:hover
   padding: 5px 10px;
   border-radius: 3px;
 }
-
+.text-info-important{
+    color: #23b7e5!important;
+}
