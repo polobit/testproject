@@ -47,7 +47,7 @@
 
 <script id="activity-list-log-model-template" type="text/html">
 {{#if_equals "CALL" activity_type}}
-		{{#if custom1}}
+		
     		<div class="pos-rlt list-group-item"> 
 			<div class="pull-left avatar thumb-xs m-r m-t-xs">
 				{{#if domainUser}}
@@ -59,17 +59,16 @@
 			</div>
 			<div class="activity-tag p-l-xxl">
 			<div class="custom-link">
-			
 			{{#if_equals "incoming" custom2}}
 			{{agile_lng_translate 'campaigns' 'call-from'}} {{#if entity_id}}<a href="#contact/{{entity_id}}">{{label}}</a>{{else}}{{label}}{{/if}}<br/>
 			<small class="activities_second_line m-t-none text-sm">
-			<i class="icon-phone"></i> {{callActivityFriendlyStatus custom3 custom2}}{{#if custom4}}{{secondsToFriendlyTime custom4}}{{/if}} (<span style="text-transform: capitalize;">{{custom1}}</span>)
+			<i class="icon-phone"></i> {{callActivityFriendlyStatus custom3 custom2}}{{#if custom4}}{{secondsToCallActivitiesTime custom4}}{{else}} 0s{{/if}} (<span style="text-transform: capitalize;">{{#if custom1}}{{custom1}}{{else}} Manual{{/if}}</span>)
 			</small>
 			{{/if_equals}}
 			{{#if_equals "outgoing" custom2}}	
 			 {{agile_lng_translate 'contacts-view' 'called'}}{{#if entity_id}}<a href="#contact/{{entity_id}}">{{label}}</a>{{else}}{{label}}{{/if}}<br/>
 			<small class="activities_second_line m-t-none text-sm">
-			<i class="icon-phone"></i> {{callActivityFriendlyStatus custom3 custom2}}{{#if custom4}}{{secondsToFriendlyTime custom4}}{{/if}} (<span style="text-transform: capitalize;">{{custom1}}</span>)
+			<i class="icon-phone"></i> {{callActivityFriendlyStatus custom3 custom2}}{{#if custom4}}{{secondsToCallActivitiesTime custom4}}{{else}} 0s{{/if}} (<span style="text-transform: capitalize;">{{#if custom1}}{{custom1}}{{else}}Manual{{/if}}</span>)
 					</small>
 			{{/if_equals}}
 			</div>
@@ -82,7 +81,6 @@
 			</div>
 			</div>
 			<div class="clearfix"></div>
-		{{/if}}
 {{else}}
 	    <div class="pos-rlt list-group-item"> 
 	<div class="pull-left avatar thumb-xs m-r m-t-xs">
