@@ -23,12 +23,12 @@
     var host = getUrlParameter("host");
      if(notify.permissionLevel() == notify.PERMISSION_GRANTED)
       { 
-        $('p').html("You already subscribe notification for " + host + ". Thank you for subscription");
+        $('p').html("Thank you. You are subscribed for Notifications from " + host );
          enablePushNotification1();
       }
       else if (notify.permissionLevel() == notify.PERMISSION_DEFAULT)
       {
-         $('p').html("Get Notifications from " + host + ". You can also block the Notifications anytime you want.");
+         $('p').html("Click Allow and get Notifications from " + host + ". Notifications can be turned off anytime from browser settings.");
         enablePushNotification1();
       } 
       else
