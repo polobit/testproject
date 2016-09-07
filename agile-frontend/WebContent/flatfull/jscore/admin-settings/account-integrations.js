@@ -103,8 +103,9 @@ function syncAppData(){
 		function()
 		{		
 	 	var domain = CURRENT_DOMAIN_USER.domain ; 
+	 	var domain_user_mail = CURRENT_DOMAIN_USER.email ;
 	 	$.ajax({
-			url : 'core/api/custom-fields/syncappdata?domain='+domain,
+			url : 'core/api/custom-fields/syncappdata?domain='+domain+'&domainusermail='+domain_user_mail,
 			type : 'GET',
 			success : function(data) {
 				console.log(data);
@@ -171,8 +172,12 @@ function syncAppDatatoDeals(){
 		function()
 		{		
 	 	var domain = CURRENT_DOMAIN_USER.domain ; 
+	 	var domain_user_mail = CURRENT_DOMAIN_USER.email ; 
+
 	 	$.ajax({
-			url : 'core/api/custom-fields/syncappdataforDeals?domain='+domain,
+
+			url : 'core/api/custom-fields/syncappdata?domain='+domain +'&domainusermail='+domain_user_mail,
+
 			type : 'GET',
 			success : function(data) {
 				console.log(data);
@@ -181,7 +186,7 @@ function syncAppDatatoDeals(){
 				if(data == "success"){
 					showModalConfirmation(
 						"Update Data",
-						"Update request is successfully scheduled.",
+						"Update request is successfully scheduled. Status will be notified by email.",
 						function()
 						{
 							// No callback
