@@ -7496,6 +7496,13 @@ Handlebars.registerHelper('if_equals_lowerCase', function(value, target, options
 	else
 		return options.inverse(this);
 });
+Handlebars.registerHelper('commaSeparateTags', function(value)
+	{
+		if (value)
+		{
+			return value.replace(/\[|\]/g, "").split(",");
+		}
+	});
 
 Handlebars.registerHelper('if_equals_sork_key', function(value, target, options)
 {

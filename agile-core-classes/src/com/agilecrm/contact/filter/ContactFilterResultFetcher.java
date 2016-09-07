@@ -283,6 +283,16 @@ public class ContactFilterResultFetcher
 	    }
 	    return null;
 	}
+	
+	if(id.startsWith("#company/"))
+	{
+		 String[] companyid = id.split("/");
+		    String company = companyid.length > 0 ? companyid[1] : "";
+
+			searchMap.put("type", Type.PERSON);
+			searchMap.put("contact_company_key", new Key<Contact>(Contact.class, Long.valueOf(company)));
+			return null;
+	}
 	// If criteria is '#contacts' then keys of all available contacts are
 	// returned
 	if (id.equals("#contacts"))

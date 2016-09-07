@@ -531,10 +531,16 @@ public abstract class ContactSyncService implements IContactSyncService
     private void addTagToContact(Contact contact)
     {
 	String tag;
-	if (prefs.type == Type.GOOGLE)
+	if (prefs.type == Type.GOOGLE){
 	    tag = "gmail contact".toLowerCase();
-	else
+	     //adding source of the contact for reference
+	    contact.source = "google sync";
+	}
+	else{
 	    tag = prefs.type.toString().toLowerCase() + " contact";
+	    //adding source of the contact for reference
+	    contact.source = prefs.type.toString().toLowerCase() + " sync";
+	}
 
 	contact.tags.add(StringUtils.capitalize(tag));
     }

@@ -55,9 +55,15 @@ public class Activity extends Cursor
     // Key
     @Id
     public Long id;
+
     
     
     public Type type = null;
+
+    /**
+     * variable to check individual activity
+     */
+    public String show_bulk_activity=null;
 
     /**
      * Key object of DomainUser.
