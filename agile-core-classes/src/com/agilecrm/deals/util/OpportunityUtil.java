@@ -2221,7 +2221,17 @@ public class OpportunityUtil
     	
     	CategoriesUtil categoriesUtil = new CategoriesUtil();
     	//List<Category> sources = categoriesUtil.getCategoriesByType("DEAL_SOURCE");
-    	List<DomainUser> domainUsers=DomainUserUtil.getAllUsers();
+    	List<DomainUser> domainUsers= new ArrayList<DomainUser>();
+    	if(ownerId != null && ownerId != 0){
+    	   if (DomainUserUtil.getDomainUser(ownerId) != null)
+    	        domainUsers.add(DomainUserUtil.getDomainUser(ownerId));
+    	}
+    	else{
+    		DomainUser dUser = DomainUserUtil.getCurrentDomainUser();
+    		if (dUser != null){
+    		    domainUsers = DomainUserUtil.getUsers(dUser.domain);
+    	    }
+    	} 	
     	JSONObject usersCount = new JSONObject();
     	//usersCount.put("0", type.equalsIgnoreCase("deals") ? 0 : 0.0);
     	for (DomainUser user : domainUsers)
