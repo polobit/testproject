@@ -274,7 +274,14 @@ function isIE() {
   <a href="#subscribe" class="text-info font-bold" onclick="Agile_GA_Event_Tracker.track_event('Upgrade from Nav Bar Message')"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "noty-upgrade") %></a>
   <span class="free_plan_strip_close p-l-sm c-p">&times</span>
 </div>
-
+<div style="position: fixed;left: 52%;top: 0;z-index: 1029;-webkit-transform: translateX(-50%);transform: translateX(-50%);">
+<div class="popover right block">
+            <div class="arrow"></div>
+            <div class="popover-content ">
+              <p style="width: 183px;">check our other modules likes sales and marketing</p>
+            </div>
+          </div>
+          </div>
 <div rel="popover" data-custom-popover-class='grid_custom_popover' data-trigger="click"  data-original-title="" title="" data-placement="bottom" class="need_help grid_icon_center hidden-xs <%
           switch (Integer.parseInt(currentUserPrefs.theme)) {
             case 1:  out.print("bg-white-only ");
@@ -325,7 +332,9 @@ function isIE() {
                   </div>">
                    <a href="#" class='grid-icon-header block wrapper' onclick="return false;"><i class="glyphicon glyphicon-th"></i></a>    
                </div>
+ 
 
+       
 <div id="wrap" class="app app-aside-folded-inactive app-header-fixed app-aside-fixed 
 <% 
 if(currentUserPrefs.menuPosition.equals("top")){
