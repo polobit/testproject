@@ -507,6 +507,7 @@ var contacts_bulk_actions = {
 										{
 											e.preventDefault();
 
+												App_Companies.Company_detail_route="";
 											if ($(this).attr('disabled'))
 												return;
 
@@ -1150,11 +1151,7 @@ function toggle_contacts_bulk_actions_dropdown(clicked_ele, isBulk, isCampaign)
 				}
 
 				$('body').find('#bulk-select').css('display', 'block')
-<<<<<<< HEAD
-				.html("Selected " + resultCount + " companies. <a id='select-all-available-contacts' class='c-p text-info' href='#'>Select all " + appCount + " companies</a>");
-=======
 				.html(_agile_get_translated_val('companies-view','selected') + " " + resultCount + " " +_agile_get_translated_val('contact-details', 'contacts')+ ". <a id='select-all-available-contacts' class='c-p text-info-important' href='#'>" +_agile_get_translated_val('contacts','select-all')+ " " + appCount + " " +_agile_get_translated_val('contact-details', 'contacts')+ "</a>");
->>>>>>> 9c32743... Various issues
 				$('#bulk-select').css("display","block");
 			}
 		}
@@ -1282,7 +1279,9 @@ function getSelectionCriteria()
 
 	var filter_id = undefined;
 	
-	if(company_util.isCompany())
+	if(App_Companies.Company_detail_route!="")
+		filter_id = undefined;
+	else if(company_util.isCompany())
 		filter_id = $('.filter-criteria', $(App_Companies.companiesListView.el)).attr("_filter");
 	else
 		filter_id = $('.filter-criteria', $(App_Contacts.contactsListView.el)).attr("_filter");
@@ -1361,7 +1360,7 @@ function postBulkOperationData(url, data, form, contentType, callback, error_mes
 		if (callback && typeof (callback) === "function")
 			callback(data);
 
-		if(App_Companies.Company_detail_route)
+		if(App_Companies.Company_detail_route!="")
 			Backbone.history.navigate(App_Companies.Company_detail_route,{trigger : true});
 		else if(!company_util.isCompany())
 			// On save back to contacts list
