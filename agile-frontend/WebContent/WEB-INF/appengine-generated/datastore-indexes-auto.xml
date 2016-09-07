@@ -2,6 +2,7 @@
 
 <datastore-indexes>
 
+
 	<datastore-index kind="DomainUser" ancestor="true" source="manual">
         <property name="email" direction="asc"/>
         <property name="name" direction="asc"/>
@@ -606,6 +607,13 @@
  </datastore-index>
     <datastore-index kind="Activity" ancestor="false" source="manual">
         <property name="show_bulk_activity" direction="asc"/>
+         <property name="time" direction="desc"/>
+    </datastore-index>
+    <datastore-index kind="Activity" ancestor="false" source="manual">
+        <property name="activity_type" direction="asc"/>
+        <property name="custom1" direction="asc"/>
         <property name="time" direction="desc"/>
     </datastore-index>
 </datastore-indexes>
+
+
