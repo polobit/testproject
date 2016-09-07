@@ -761,9 +761,9 @@ var SettingsRouter = Backbone.Router
 								LIB_PATH + 'lib/businesshours/businesshours.js', LIB_PATH + 'lib/businesshours/jquerytimepicker.js',LIB_PATH+'lib/summer-note/summernote.js',CSS_PATH+'css/summernote/summernote.css', function()
 								{
 									var json = JSON.parse(view.model.get('business_hours'));
-									console.log();
+									
 									businessHoursManager = $("#define-business-hours").businessHours({ operationTime : json,
-
+									weekdays : $.fn.datepicker.dates['en'].daysShortExactFromMon,
 									postInit : function()
 									{
 										$('.operationTimeFrom, .operationTimeTill').timepicker({ 'timeFormat' : 'H:i', 'step' : 30 });

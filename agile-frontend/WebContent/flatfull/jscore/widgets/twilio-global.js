@@ -995,7 +995,7 @@ function setUpGlobalTwilio()
 	head.js("https://static.twilio.com/libs/twiliojs/1.2/twilio.min.js", function()
 	
 	{
-		Twilio.Device.setup(Twilio_Token);
+		Twilio.Device.setup(Twilio_Token, {debug: true});
 
 		if (Twilio_Start)
 			return;
