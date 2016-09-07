@@ -73,7 +73,7 @@ function globalCallWidgetSet()
 					function(call_widget)
 					{
 						console.log("default call option selected is :" + call_widget);
-
+						default_call_option.callOption = [];
 						$("body .contact-make-call").off("click");
 						$("body .contact-make-call").off("dblclick");
 						if(agile_is_mobile_browser()){
@@ -126,7 +126,7 @@ function globalCallWidgetSet()
 
 						callOptionDiv = callOptionDiv.concat("</span>");
 
-						// this is to get the name of widget stored in cache
+						// this is to get the name of widget stored in cache for direct dialing
 						var nameToStore = "";
 						var selectedWidget = _agile_get_prefs("dial-default-widget");
 						var alreadySetPrefs = false;
@@ -164,11 +164,18 @@ function globalCallWidgetSet()
 							
 							// this will show the option of widget to select in direct dial from new tab
 							var name = widgetCallName[obj.name];
-							$(".dialler-widget-name-" + name).show();
+							$(".dialler-widget-name-" + name).removeClass("none");
+							$(".dialler-widget-name-" + name +"> a").removeClass("inactive");
+							$(".dialler-widget-name-" + name +"> a").addClass("actives");
 						});
 						
 						// saving the name in local storage to show in direct dial 
 							_agile_set_prefs("dial-default-widget", nameToStore);
+						// if only one icon is shown we will hide it	
+						if($(".dialler-widget-li:not(.none)").length == 1){
+							$(".dialler-widget-li:not(.none)").addClass("none");
+							$(".panel-heading","#dialler-page").css("height",0);
+						}	
 
 						
 						$('body').on({ mouseenter : function(e)
