@@ -93,7 +93,8 @@ public class DealsBulkActionsAPI
 
 	try
 	{
-	    List<Opportunity> all_deals = OpportunityUtil.getOpportunitiesForBulkActions(ids, filters, 100);
+		OpportunityUtil opportunityUtil = new OpportunityUtil();
+	    List<Opportunity> all_deals = opportunityUtil.getOpportunitiesForBulkActions(ids, filters, 100);
 	    DealFilterIdsFetcher dealFilterIdsFetcher = new DealFilterIdsFetcher(all_deals, currentUserId);
 	    List<Opportunity> deals = dealFilterIdsFetcher.getDealsAfterResriction();
 	    System.out.println("total deals -----" + deals.size());
@@ -154,7 +155,8 @@ public class DealsBulkActionsAPI
 
 	try
 	{
-	    List<Opportunity> all_deals = OpportunityUtil.getOpportunitiesForBulkActions(ids, filters, 100);
+		OpportunityUtil opportunityUtil = new OpportunityUtil();
+	    List<Opportunity> all_deals = opportunityUtil.getOpportunitiesForBulkActions(ids, filters, 100);
 	    DealFilterIdsFetcher dealFilterIdsFetcher = new DealFilterIdsFetcher(all_deals, currentUserId);
 	    List<Opportunity> deals = dealFilterIdsFetcher.getDealsAfterResriction();
 	    System.out.println("total deals -----" + deals.size());
@@ -217,7 +219,8 @@ public class DealsBulkActionsAPI
 
 	try
 	{
-		List<Opportunity> all_deals = OpportunityUtil.getOpportunitiesForBulkActions(ids, filters, 100);
+		OpportunityUtil opportunityUtil = new OpportunityUtil();
+		List<Opportunity> all_deals = opportunityUtil.getOpportunitiesForBulkActions(ids, filters, 100);
 	    DealFilterIdsFetcher dealFilterIdsFetcher = new DealFilterIdsFetcher(all_deals, currentUserId);
 	    List<Opportunity> deals = dealFilterIdsFetcher.getDealsAfterResriction();
 	    System.out.println("total deals -----" + deals.size());
@@ -302,7 +305,8 @@ public class DealsBulkActionsAPI
 	    JSONObject formJSON = new JSONObject(form);
 	    System.out.println("------------" + formJSON.toString());
 
-	    List<Opportunity> all_deals = OpportunityUtil.getOpportunitiesForBulkActions(ids, filters, 100);
+	    OpportunityUtil opportunityUtil = new OpportunityUtil();
+	    List<Opportunity> all_deals = opportunityUtil.getOpportunitiesForBulkActions(ids, filters, 100);
 	    DealFilterIdsFetcher dealFilterIdsFetcher = new DealFilterIdsFetcher(all_deals, currentUserId);
 	    List<Opportunity> deals = dealFilterIdsFetcher.getDealsAfterResriction();
 	    System.out.println("total deals -----" + deals.size());
@@ -395,7 +399,8 @@ public class DealsBulkActionsAPI
 
 	try
 	{
-	    List<Opportunity> all_deals = OpportunityUtil.getOpportunitiesForBulkActions(ids, filters, 100);
+		OpportunityUtil opportunityUtil = new OpportunityUtil();
+	    List<Opportunity> all_deals = opportunityUtil.getOpportunitiesForBulkActions(ids, filters, 100);
 	    DealFilterIdsFetcher dealFilterIdsFetcher = new DealFilterIdsFetcher(all_deals, currentUserId);
 	    List<Opportunity> deals = dealFilterIdsFetcher.getDealsAfterResriction(true);
 	    System.out.println("total deals -----" + deals.size());
@@ -561,8 +566,9 @@ public class DealsBulkActionsAPI
 
 	    if (tagsArray == null)
 		return;
-
-	    List<Opportunity> deals = OpportunityUtil.getOpportunitiesForBulkActions(ids, filters, 100);
+	    
+	    OpportunityUtil opportunityUtil = new OpportunityUtil();
+	    List<Opportunity> deals = opportunityUtil.getOpportunitiesForBulkActions(ids, filters, 100);
 	    System.out.println("total deals -----" + deals.size());
 	    Set<Key<Contact>> contactKeys = new HashSet<Key<Contact>>();
 	    for (Opportunity deal : deals)
@@ -619,8 +625,9 @@ public class DealsBulkActionsAPI
 	{
 	    if (user == null)
 		return;
-
-	    List<Opportunity> deals = OpportunityUtil.getOpportunitiesForBulkActions(ids, filters, 100);
+	    
+	    OpportunityUtil opportunityUtil = new OpportunityUtil();
+	    List<Opportunity> deals = opportunityUtil.getOpportunitiesForBulkActions(ids, filters, 100);
 	    System.out.println("total deals -----" + deals.size());
 	    Set<Key<Contact>> contacts = new HashSet<Key<Contact>>();
 

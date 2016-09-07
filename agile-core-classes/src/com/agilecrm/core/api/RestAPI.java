@@ -1,5 +1,6 @@
 package com.agilecrm.core.api;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -21,10 +22,11 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.codehaus.jackson.JsonGenerationException;
+import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.json.simple.JSONArray;
 
 import com.agilecrm.activities.Event;
 import com.agilecrm.activities.util.ActivitySave;
@@ -37,9 +39,8 @@ import com.agilecrm.contact.filter.util.ContactFilterUtil;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
-import com.agilecrm.user.access.UserAccessControl;
-import com.agilecrm.user.access.util.UserAccessControlUtil;
 import com.agilecrm.util.PHPAPIUtil;
+import com.agilecrm.zapier.util.ZapierUtil;
 
 @Path("/rest/api")
 public class RestAPI
@@ -79,11 +80,7 @@ public class RestAPI
 		// array
 		if (key.equals("tags"))
 		{
-		    String tagString = obj.getString(key);
-		    tagString = tagString.trim();
-		    tagString = tagString.replace("/ /g", " ");
-		    tagString = tagString.replace("/, /g", ",");
-		    tags = tagString.split(",");
+		    tags = ZapierUtil.getModifiedTag(obj.getString(key));
 		}
 		// Prepare Contact Field and add to properties list
 		else
@@ -110,115 +107,7 @@ public class RestAPI
 		{
 		    if (obj.getString("flag").equals("YES"))
 		    {
-			try
-			{
-			    // Get data and check if email is present
-			    JSONObject obj1 = new JSONObject(data);
-			    String[] tags1 = new String[0];
-			    ObjectMapper mapper = new ObjectMapper();
-			    if (!obj1.has("email"))
-				return null;
-
-			    // Search contact if email is present else return
-			    // null
-			    Contact contact1 = ContactUtil.searchContactByEmailZapier(obj1.getString("email")
-				    .toLowerCase());
-
-			    // Iterate data by keys ignore email key value pair
-			    Iterator<?> keys1 = obj1.keys();
-			    JSONObject tester = new JSONObject();
-			    List<ContactField> input_properties = new ArrayList<ContactField>();
-			    while (keys1.hasNext())
-			    {
-				String key = (String) keys1.next();
-				if (key.equals("flag"))
-				    continue;
-				if (key.equals("email"))
-				    continue;
-				else if (key.equals("tags"))
-				{
-				    String tagString = obj1.getString(key);
-				    tagString = tagString.trim();
-				    tagString = tagString.replace("/ /g", " ");
-				    tagString = tagString.replace("/, /g", ",");
-				    tags1 = tagString.split(",");
-				}
-				else
-				{
-				    // Create and add contact field to contact
-				    JSONObject json = new JSONObject();
-				    if (key.equals("address"))
-				    {
-
-					String zapaddress = obj1.getString(key);
-					JSONObject jsonzap = new JSONObject(zapaddress);
-					String oldaddress = contact1.getContactFieldValue("ADDRESS");
-					if (oldaddress == null)
-					{
-					    tester = jsonzap;
-					    json.put("name", key);
-					    json.put("value", "" + tester + "");
-					}
-					else
-					{
-					    JSONObject jsonold = new JSONObject(oldaddress);
-
-					    if (!jsonzap.has("address"))
-					    {
-						if (jsonold.has("address"))
-						    jsonzap.put("address", jsonold.getString("address"));
-					    }
-					    if (!jsonzap.has("city"))
-					    {
-						if (jsonold.has("city"))
-						    jsonzap.put("city", jsonold.getString("city"));
-					    }
-					    if (!jsonzap.has("state"))
-					    {
-						if (jsonold.has("state"))
-						    jsonzap.put("state", jsonold.getString("state"));
-					    }
-					    if (!jsonzap.has("zip"))
-					    {
-						if (jsonold.has("zip"))
-						    jsonzap.put("zip", jsonold.getString("zip"));
-					    }
-					    if (!jsonzap.has("country"))
-					    {
-						if (jsonold.has("country"))
-						    jsonzap.put("country", jsonold.getString("country"));
-					    }
-					    tester = jsonzap;
-					    json.put("name", key);
-					    json.put("value", "" + tester + "");
-					}
-
-				    }
-				    else
-				    {
-					json.put("name", key);
-					json.put("value", obj1.getString(key));
-				    }
-
-				    ContactField field = mapper.readValue(json.toString(), ContactField.class);
-				    input_properties.add(field);
-				}
-			    }
-			    // Partial update, send all properties
-			    contact1.addPropertiesData(input_properties);
-			    if (tags1.length > 0)
-				contact1.addTags(PHPAPIUtil.getValidTags(tags1));
-			    else
-				contact1.save();
-
-			    // Return contact object as String
-			    return mapper.writeValueAsString(contact1);
-			}
-			catch (Exception e)
-			{
-			    e.printStackTrace();
-			    return null;
-			}
+			return ZapierUtil.updateContactCanBeDone(data);
 		    }
 		    else
 		    {
@@ -228,8 +117,9 @@ public class RestAPI
 		}
 		else
 		{
+		    System.out.println("No flag selected");
 		    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-			    .entity("Sorry, duplicate contact found with the same email address.").build());
+			    .entity("No flag selected").build());
 		}
 
 	    }
@@ -246,6 +136,7 @@ public class RestAPI
 	}
 	catch (Exception e)
 	{
+	    e.printStackTrace();
 	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
 		    .entity("Sorry, duplicate contact found with the same email address.").build());
 	}
@@ -259,16 +150,19 @@ public class RestAPI
      * @param apiKey
      *            Agile API key
      * @return returns contact object as String
+     * @throws IOException 
+     * @throws JsonMappingException 
+     * @throws JsonGenerationException 
+     * @throws JSONException 
      */
     @PUT
     @Path("contact")
     @Consumes("application/json")
     @Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8;")
-    public String updateContact(String data)
+    public String updateContact(String data) throws JsonGenerationException, JsonMappingException, IOException, JSONException
     {
-	System.out.println("Input received = " + data);
-	try
-	{
+	    System.out.println("Input received = " + data);
+	    
 	    // Get data and check if email is present
 	    JSONObject obj = new JSONObject(data);
 	    String[] tags = new String[0];
@@ -287,84 +181,21 @@ public class RestAPI
 		{
 		    if (obj.getString("flag").equals("YES"))
 		    {
-			try
-			{
-			    Contact contact1 = new Contact();
-			    List<ContactField> properties = new ArrayList<ContactField>();
-			    String[] tags1 = new String[0];
-
-			    // Get data and iterate over keys
-			    JSONObject obj1 = new JSONObject(data);
-			    Iterator<?> keys = obj1.keys();
-			    while (keys.hasNext())
-			    {
-				String key = (String) keys.next();
-				if (key.equals("flag"))
-				    continue;
-				// If key equals to tags, format tags String and
-				// prepare
-				// tags
-				// array
-				if (key.equals("tags"))
-				{
-				    String tagString = obj1.getString(key);
-				    tagString = tagString.trim();
-				    tagString = tagString.replace("/ /g", " ");
-				    tagString = tagString.replace("/, /g", ",");
-				    tags1 = tagString.split(",");
-				}
-				// Prepare Contact Field and add to properties
-				// list
-				else
-				{
-				    ContactField field = new ContactField();
-				    String value = obj1.getString(key);
-				    field.name = key;
-				    field.value = value;
-				    field.type = PHPAPIUtil.getFieldTypeFromName(key);
-				    properties.add(field);
-				}
-			    }
-
-			    int count = 0;
-
-			    if (obj1.has("email"))
-				count = ContactUtil.searchContactCountByEmail(obj1.getString("email").toLowerCase());
-
-			    System.out.println("contacts available" + count);
-			    if (count != 0)
-			    {
-				System.out.println("duplicate contact");
-				return null;
-			    }
-
-			    // Add properties list to contact properties
-			    contact1.properties = properties;
-			    if (tags1.length > 0)
-				contact1.addTags(PHPAPIUtil.getValidTags(tags1));
-			    else
-				contact1.save();
-
-			    ObjectMapper mapper1 = new ObjectMapper();
-			    return mapper1.writeValueAsString(contact1);
-			}
-			catch (Exception e)
-			{
-			    e.printStackTrace();
-			    return null;
-			}
+			return ZapierUtil.createContactCanBeDone(data);
 		    }
 		    else
 		    {
-			return null;
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+				    .entity("New contact found, but create contact is diasbled").build());
 		    }
 		}
 
 	    }
+	    
+	    contact.contact_company_id = null;
 
 	    // Iterate data by keys ignore email key value pair
 	    Iterator<?> keys = obj.keys();
-	    JSONObject tester = new JSONObject();
 	    List<ContactField> input_properties = new ArrayList<ContactField>();
 	    while (keys.hasNext())
 	    {
@@ -375,11 +206,7 @@ public class RestAPI
 		    continue;
 		else if (key.equals("tags"))
 		{
-		    String tagString = obj.getString(key);
-		    tagString = tagString.trim();
-		    tagString = tagString.replace("/ /g", " ");
-		    tagString = tagString.replace("/, /g", ",");
-		    tags = tagString.split(",");
+		    tags = ZapierUtil.getModifiedTag(obj.getString(key));
 		}
 		else
 		{
@@ -391,45 +218,7 @@ public class RestAPI
 			String zapaddress = obj.getString(key);
 			JSONObject jsonzap = new JSONObject(zapaddress);
 			String oldaddress = contact.getContactFieldValue("ADDRESS");
-			if (oldaddress == null)
-			{
-			    tester = jsonzap;
-			    json.put("name", key);
-			    json.put("value", "" + tester + "");
-			}
-			else
-			{
-			    JSONObject jsonold = new JSONObject(oldaddress);
-
-			    if (!jsonzap.has("address"))
-			    {
-				if (jsonold.has("address"))
-				    jsonzap.put("address", jsonold.getString("address"));
-			    }
-			    if (!jsonzap.has("city"))
-			    {
-				if (jsonold.has("city"))
-				    jsonzap.put("city", jsonold.getString("city"));
-			    }
-			    if (!jsonzap.has("state"))
-			    {
-				if (jsonold.has("state"))
-				    jsonzap.put("state", jsonold.getString("state"));
-			    }
-			    if (!jsonzap.has("zip"))
-			    {
-				if (jsonold.has("zip"))
-				    jsonzap.put("zip", jsonold.getString("zip"));
-			    }
-			    if (!jsonzap.has("country"))
-			    {
-				if (jsonold.has("country"))
-				    jsonzap.put("country", jsonold.getString("country"));
-			    }
-			    tester = jsonzap;
-			    json.put("name", key);
-			    json.put("value", "" + tester + "");
-			}
+			json = ZapierUtil.modifyZapierAddress(oldaddress,jsonzap,key);
 
 		    }
 		    else
@@ -446,17 +235,10 @@ public class RestAPI
 	    contact.addPropertiesData(input_properties);
 	    if (tags.length > 0)
 		contact.addTags(PHPAPIUtil.getValidTags(tags));
-	    else
-		contact.save();
 
 	    // Return contact object as String
 	    return mapper.writeValueAsString(contact);
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	    return null;
-	}
+
     }
 
     /**
@@ -512,7 +294,6 @@ public class RestAPI
 	    return object.toString();
 	}
 
-	Note noteObj = new Note();
 	try
 	{
 	    note.addRelatedContacts(contact.id.toString());
@@ -601,9 +382,9 @@ public class RestAPI
 	ContactFilter contact_filter = ContactFilterUtil.getFilterFromJSONString(filterJson);
 
 	
-	List<Contact> contactList1 = new ArrayList<Contact>(contact_filter.queryContacts(Integer.parseInt("20"), null, "-updated_time"));
+	List<Contact> contactList1 = new ArrayList<Contact>(contact_filter.queryContacts(Integer.parseInt("10"), null, "-updated_time"));
 	
-	List<Contact> contactList2 = new ArrayList<Contact>(contact_filter.queryContacts(Integer.parseInt("20"), null, "-created_time"));
+	List<Contact> contactList2 = new ArrayList<Contact>(contact_filter.queryContacts(Integer.parseInt("10"), null, "-created_time"));
 	
 	Map<Long, Contact> unsortMap = new HashMap<Long, Contact>();
 	
