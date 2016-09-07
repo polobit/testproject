@@ -492,7 +492,8 @@ public class DealsAPI
 	JSONArray opportunitiesJSONArray = new JSONArray(ids);
 	JSONArray oppJSONArray = new JSONArray();
 	List<String> contactIdsList = new ArrayList<String>();
-	List<Opportunity> opportunityList = OpportunityUtil.getOpportunitiesForBulkActions(ids, null, opportunitiesJSONArray.length());
+	OpportunityUtil opportunityUtil = new OpportunityUtil();
+	List<Opportunity> opportunityList = opportunityUtil.getOpportunitiesForBulkActions(ids, null, opportunitiesJSONArray.length());
 	
 	for(Opportunity opp : opportunityList)
 	{
