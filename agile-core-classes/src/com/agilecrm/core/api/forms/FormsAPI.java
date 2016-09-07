@@ -95,7 +95,7 @@ public class FormsAPI
 	     * checking the condition when recaptcha will be selected as true by user  
 	     * */
 	    if(agileformcaptcha==true){	
-	    	html=html.replaceFirst("</style>","</style><script src='https://www.google.com/recaptcha/api.js'></script>"); 	
+	    	html=html.replaceFirst("</style>","</style><script id=\"gRecaptchaSrc\" src='https://www.google.com/recaptcha/api.js'></script>"); 	
 	    	
 	    	html = FormUtil.replaceLast(html, "<div class=\"agile-custom-clear\"></div>", "<br/><br/><div class='g-recaptcha' data-sitekey='6LcBZCgTAAAAAKxJ8QbSrfRh6Js_QpNsPAykamLZ'></div><div class=\"agile-custom-clear\"></div>");
 	    }
