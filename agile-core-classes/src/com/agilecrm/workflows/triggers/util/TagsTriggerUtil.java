@@ -7,12 +7,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.json.JSONObject;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.workflows.triggers.Trigger;
 import com.agilecrm.workflows.triggers.Trigger.Type;
 import com.agilecrm.workflows.util.WorkflowSubscribeUtil;
+import com.google.appengine.api.NamespaceManager;
 
 /**
  * <code>TagsTriggerUtil</code> runs trigger for tag added or tag deleted.
@@ -93,6 +95,9 @@ public class TagsTriggerUtil
 	// Temporary map is taken to avoid duplicate triggers
 	Map<Long, Trigger> triggerMap = new HashMap<Long, Trigger>();
 
+	System.out.println("Namespace while triggering tags..." + NamespaceManager.get());
+	System.out.println("Changed tags in TagsTriggerUtil..." + changedTags);
+	
 	for (String tag : changedTags)
 	{
 	    /*
@@ -107,6 +112,9 @@ public class TagsTriggerUtil
 	    conditionsMap.put("custom_tags IN", tagSet);
 
 	    triggersList = TriggerUtil.dao.listByProperty(conditionsMap);
+	    
+	    System.out.println("Triggers list length is " + triggersList + " for tag " + tag);
+	    
 
 	    for (Trigger trigger : triggersList)
 		triggerMap.put(trigger.id, trigger);
@@ -120,15 +128,20 @@ public class TagsTriggerUtil
 
 	try
 	{
+		System.out.println("Triggers map size is " + triggerMap.size());
+		
 	    for (Trigger trigger : triggerMap.values())
 	    {
-		WorkflowSubscribeUtil.subscribeDeferred(contact, trigger.campaign_id,
-		        new JSONObject().put("tag", getTriggeredTagJSON(changedTags)));
+	    	System.out.println("Triggering campaign " + trigger.campaign_id);
+	    	
+			WorkflowSubscribeUtil.subscribeDeferred(contact, trigger.campaign_id,
+			        new JSONObject().put("tag", getTriggeredTagJSON(changedTags)));
 	    }
 	}
 	catch (Exception e)
 	{
-	    e.printStackTrace();
+		System.out.println("Exception occured while triggering campaign " + e.getMessage());
+	    System.out.println(ExceptionUtils.getFullStackTrace(e));
 	}
     }
 
