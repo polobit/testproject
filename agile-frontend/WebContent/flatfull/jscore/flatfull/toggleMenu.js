@@ -96,6 +96,9 @@ if(!agile_is_mobile_browser() && USER_BILLING_PREFS.freeTrialStatus && USER_BILL
 $(".free_plan_strip_close").click(function(e){
 	$(this).closest(".free_plan_alert").hide().removeAttr("id");
 });
+$(".contact_plan_strip_close").click(function(e){
+	$(this).closest(".contacts_plan_alert").hide().removeAttr("id");
+});
 	
  $("#addDescriptionLink").click(function(e){
  e.preventDefault();

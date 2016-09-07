@@ -227,7 +227,7 @@ content="<%=domainUser.getInfo(DomainUser.LAST_LOGGED_IN_TIME)%>" />
     outline:none;
     cursor:text;
 }
-.free_plan_alert{
+.free_plan_alert , .contacts_plan_alert{
   padding-top: 5px;
   padding-bottom: 7px;
   z-index: 1;top: 65px;
@@ -266,7 +266,13 @@ function isIE() {
 
 </script>
 <div id="alert-message" style="display:none;"></div>
-
+<div id="contacts_plan_alert_info" class="contacts_plan_alert alert alert-info" role="alert" style="display:none;"> 
+  <span class="contacts_limit_message">
+  Your contacts limit reached to 80 percent please upgrade you   r account
+  </span>
+  <a href="#subscribe" class="text-info font-bold">Upgrade</a>
+  <span class="contact_plan_strip_close p-l-sm c-p close" data-dismiss="alert">&times</span>
+</div>
 <div id="free_plan_alert_info" class="free_plan_alert alert alert-info" role="alert" style="display:none;"> 
   <span class="free_plan_message">
    <%=LanguageUtil.getLocaleJSONValue(localeJSON, "you-are-currently-on-free-plan") %>.
