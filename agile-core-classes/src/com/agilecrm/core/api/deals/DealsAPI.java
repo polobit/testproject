@@ -1338,7 +1338,7 @@ public class DealsAPI
 	    return null;
 
 	Iterator<?> keys = obj.keys();
-
+	List<CustomFieldData> input_custom_field = new ArrayList<CustomFieldData>();
 	while (keys.hasNext())
 	{
 	    String key = (String) keys.next();
@@ -1386,8 +1386,10 @@ public class DealsAPI
 		    json.put("name", custom_dataJSONArray.getJSONObject(i).getString("name"));
 		    json.put("value", custom_dataJSONArray.getJSONObject(i).getString("value"));
 		    CustomFieldData field = mapper.readValue(json.toString(), CustomFieldData.class);
-		    opportunity.addCustomData(field);
+		    input_custom_field.add(field);
 		}
+		// Partial update, send all custom datas
+		opportunity.addAllCustomData(input_custom_field);
 	    }
 	}
 
@@ -1402,8 +1404,16 @@ public class DealsAPI
 		return null;
 	    }
 	}
-	else
-	    opportunity.save();
+	else{
+	    try
+	    {
+		opportunity.addContactIdsToDeal(contact_idList);
+	    }
+	    catch (WebApplicationException e)
+	    {
+		return null;
+	    }
+	}
 
 	return opportunity;
     }
