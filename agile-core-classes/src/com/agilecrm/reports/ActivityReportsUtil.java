@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -145,7 +146,7 @@ public class ActivityReportsUtil
 	    // For every user selected in the activity report.
 	    for (DomainUser user : users)
 	    {
-		Map<String, Object> activityReport = new HashMap<String, Object>();
+		Map<String, Object> activityReport = new LinkedHashMap<String, Object>();
 		activityReport.put("user_id", user.id);
 		activityReport.put("user_name", user.name);
 		activityReports.put("domain", user.domain);
@@ -159,6 +160,7 @@ public class ActivityReportsUtil
 		    System.out.println("User not logged in upto now.");
 		}
 		int count = 0;
+		String lastEntry = null;
 		// Check for the entities/activities selected by the user for
 		// activity report.
 		if (activities.contains(ActivityReports.ActivityType.DEAL)
@@ -167,36 +169,42 @@ public class ActivityReportsUtil
 		    activityReport.put("deals",
 			    getDealActivityReport(user, timeBounds.get("startTime"), timeBounds.get("endTime")));
 		    count += getTotalCount((Map<String, Object>) activityReport.get("deals"), "deals_total");
+		    lastEntry = "deals";
 		}
 		if (activities.contains(ActivityReports.ActivityType.EVENT))
 		{
 		    activityReport.put("events",
 			    getEventActivityReport(user, timeBounds.get("startTime"), timeBounds.get("endTime")));
 		    count += getTotalCount((Map<String, Object>) activityReport.get("events"), "events_total");
+		    lastEntry = "events";
 		}
 		if (activities.contains(ActivityReports.ActivityType.TASK))
 		{
 		    activityReport.put("tasks",
 			    getTaskActivityReport(user, timeBounds.get("startTime"), timeBounds.get("endTime")));
 		    count += getTotalCount((Map<String, Object>) activityReport.get("tasks"), "tasks_total");
+		    lastEntry = "tasks";
 		}
 		if (activities.contains(ActivityReports.ActivityType.EMAIL))
 		{
 		    activityReport.put("emails",
 			    getEmailActivityReport(user, timeBounds.get("startTime"), timeBounds.get("endTime")));
 		    count += getTotalCount((Map<String, Object>) activityReport.get("emails"), "emails_count");
+		    lastEntry = "emails";
 		}
 		if (activities.contains(ActivityReports.ActivityType.NOTES))
 		{
 		    activityReport.put("notes",
 			    getNotesActivityReport(user, timeBounds.get("startTime"), timeBounds.get("endTime")));
 		    count += getTotalCount((Map<String, Object>) activityReport.get("notes"), "notes_contacts_count");
+		    lastEntry = "notes";
 		}
 		if (activities.contains(ActivityReports.ActivityType.DOCUMENTS))
 		{
 		    activityReport.put("docs",
 			    getDocumentsActivityReport(user, timeBounds.get("startTime"), timeBounds.get("endTime")));
 		    count += getTotalCount((Map<String, Object>) activityReport.get("docs"), "doc_count");
+		    lastEntry = "docs";
 		}
 
 		if (activities.contains(ActivityReports.ActivityType.CALL))
@@ -204,9 +212,13 @@ public class ActivityReportsUtil
 		    activityReport.put("calls",
 			    getCallActivityReport(user, timeBounds.get("startTime"), timeBounds.get("endTime")));
 		    count += getTotalCount((Map<String, Object>) activityReport.get("calls"), "total_calls");
+		    lastEntry = "calls";
 		}
-		if (count > 0)
+		if (count > 0){
 		    activityReport.put("total", count);
+		    Map<String, Object> subMap = (Map<String, Object>)activityReport.get(lastEntry);
+		    subMap.put("isLast", true);
+		}
 		else
 		    activityReport.put("message", "No activity form " + user.name);
 		allUserCount += count;
