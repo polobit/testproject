@@ -89,7 +89,14 @@ var Deal_Modal_Event_View = Base_Model_View.extend({
 		//agile-x-edit
 		'click #deals-inline' : 'dealInlineEdit', 	
     	'blur #inline-input' : 'dealinlineedit',
-    	'keydown #inline-input' : 'dealNameChange'
+    	'keydown #inline-input' : 'dealNameChange',
+    	'click .change-deal-activity' : 'dealActivityChange'
+    },
+    dealActivityChange : function(e){
+    	console.log(e);
+    	var mode = $('.change-deal-activity').attr('data');
+    	dealDetailMode = mode ;
+    	deal_details_tab.load_deal_activities();
     },
     dealinlineedit : function(e){
     	inlineDealNameChange();
