@@ -43,14 +43,38 @@ function initializeCustomFieldsListeners(){
 			$.ajax({ type : 'DELETE', url : '/core/api/custom-fields/' + custom_field.id, contentType : "application/json; charset=utf-8",
 				success : function(data){
 					if(custom_field.get("scope")=="CONTACT")
+					{
 						App_Admin_Settings.contactCustomFieldsListView.collection.remove(custom_field.id);
+						if(App_Contacts.contactViewModel && App_Contacts.contactViewModel.fields_set && 
+							App_Contacts.contactViewModel.fields_set.indexOf("CUSTOM_"+custom_field.get('field_label'))>-1)
+						{
+							var index =App_Contacts.contactViewModel.fields_set.indexOf("CUSTOM_"+custom_field.get('field_label'));
+							App_Contacts.contactViewModel.fields_set.splice(index,1);
+						}
+						if(App_Companies.contactCompanyViewModel && App_Companies.contactCompanyViewModel.fields_set && 
+							App_Companies.contactCompanyViewModel.fields_set.indexOf("CUSTOM_"+custom_field.get('field_label'))>-1)
+						{
+							var index =App_Companies.contactCompanyViewModel.fields_set.indexOf("CUSTOM_"+custom_field.get('field_label'));
+							App_Companies.contactCompanyViewModel.fields_set.splice(index,1);
+						}
+				
+					}
 					else if(custom_field.get("scope")=="COMPANY")
+					{
 						App_Admin_Settings.companyCustomFieldsListView.collection.remove(custom_field.id);
+						if(App_Companies.companyViewModel && App_Companies.companyViewModel.fields_set && 
+							App_Companies.companyViewModel.fields_set.indexOf("CUSTOM_"+custom_field.get('field_label'))>-1)
+						{
+							var index =App_Companies.companyViewModel.fields_set.indexOf("CUSTOM_"+custom_field.get('field_label'));
+							App_Companies.companyViewModel.fields_set.splice(index,1);
+						}
+					}
 					else if(custom_field.get("scope")=="DEAL")
 						App_Admin_Settings.dealCustomFieldsListView.collection.remove(custom_field.id);
 					else if(custom_field.get("scope")=="CASE")
 						App_Admin_Settings.caseCustomFieldsListView.collection.remove(custom_field.id);
 					currentElement.closest('tr').remove();
+					CONTACT_CUSTOM_FIELDS=App_Admin_Settings.contactCustomFieldsListView.collection.toJSON();
 				}, dataType : 'json' });
 		});
 	});
@@ -71,6 +95,7 @@ function showCustomFieldModel(data)
 		modal : "#custom-field-add-modal",
 		isNew : isNew,
 		postRenderCallback : function(el) {
+			
 			console.log($("#custom-field-add-modal", el));
 			//This code will scroll to top to see the modal.
 			
@@ -133,9 +158,10 @@ function showCustomFieldModel(data)
 				if(App_Admin_Settings.customFieldsListView.collection.length == 1)
 					App_Admin_Settings.customFieldsListView.render(true);*/
 			}
-
+			CONTACT_CUSTOM_FIELDS=App_Admin_Settings.contactCustomFieldsListView.collection.toJSON();
 			$("#custom-field-add-modal").modal('hide');
 			$("body").removeClass("modal-open").css("padding-right", "");
+			//location.reload(true);
 		},
 		errorCallback : function(response)
 		{
@@ -175,6 +201,29 @@ function showCustomFieldModel(data)
 	});
 
 	$('#custom-field-modal').html(modelView.render(true).el);
+	if(!isNew){
+
+			if(data.field_data!="")
+			{
+				if(data.field_type=="LIST")
+				{
+					$('#formulaData').val("");
+					$('#arearows').val("");
+				}
+				if(data.field_type=="TEXTAREA")
+				{
+					$('#formulaData').val("");
+					$('#listvalues').val("");
+				}
+				if(data.field_type=="FORMULA")
+				{
+					$('#listvalues').val("");
+					$('#arearows').val("");
+				}
+
+			}
+
+			}
 	$("#custom-field-type").trigger("change");
 }
 
@@ -223,6 +272,9 @@ function bindCustomFiledChangeEvent(el){
 		{ 	
 			$("#searchable").prop('checked', true);
 			$("#searchable").prop('disabled', true);
+			$("#custom-field-data").hide();
+			$("#custom-field-list-values").hide();
+			$("#custom-field-formula-data").hide();
 
 		}
 		
