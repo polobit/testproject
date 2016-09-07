@@ -177,6 +177,12 @@ function getActivityFilterParameters(loadingFirstTime,campaignHistory)
 		params += ("&entity_type=" + entitytype);
 		return params;
 	}
+    else if (entitytype == 'EMAIL_SENT')
+	{
+		params += ("&entity_type=" + entitytype);
+		return params;
+	}
+
 	else if (entitytype == 'CONTACT')
 	{
 		params += ("&entity_type=" + entitytype);
