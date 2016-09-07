@@ -1058,6 +1058,17 @@ public class Opportunity extends Cursor implements Serializable
 	save();
 
     }
+    
+    /* Zapier use - can be use in many other operation.*/
+    public void addAllCustomData(List<CustomFieldData> input_custom_field)
+    {
+	System.out.println("Custom filed received is = " + input_custom_field);
+	for(int i = 0; i < input_custom_field.size() ; i++){
+	    addCustomDataWithoutSaving(input_custom_field.get(i));
+	}
+	save();
+
+    }
 
     public CustomFieldData addCustomDataWithoutSaving(CustomFieldData dealField)
     {

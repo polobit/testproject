@@ -22,8 +22,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.agilecrm.AgileQueues;
+import com.agilecrm.activities.Activity.ActivityType;
 import com.agilecrm.activities.Activity.EntityType;
 import com.agilecrm.activities.util.ActivitySave;
+import com.agilecrm.activities.util.ActivityUtil;
 import com.agilecrm.bulkaction.deferred.CampaignSubscriberDeferredTask;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.ContactUtil;
@@ -109,6 +111,7 @@ public class DealsBulkActionsAPI
 		    System.out.println("total sublist -----" + subList.size());
 		    subList.clear();
 		}
+		ActivityUtil.createSingleDealBulkActivity(ActivityType.DEAL_ARCHIVE, deal,null,null);
 	    }
 
 	    if (!subList.isEmpty())
@@ -170,6 +173,8 @@ public class DealsBulkActionsAPI
 		    System.out.println("total sublist -----" + subList.size());
 		    subList.clear();
 		}
+		ActivityUtil.createSingleDealBulkActivity(ActivityType.DEAL_RESTORE, deal,null,null);
+
 	    }
 
 	    if (!subList.isEmpty())
@@ -221,8 +226,19 @@ public class DealsBulkActionsAPI
 	    System.out.println("total deals -----" + deals.size());
 
 	    List<Opportunity> subList = new ArrayList<Opportunity>();
+	    String oldOwner=null;
+	    String newOwner=null;
 	    for (Opportunity deal : deals)
 	    {
+	    try{
+		   newOwner = DomainUserUtil.getDomainUser(ownerId).name;
+		  // oldOwner = DomainUserUtil.getDomainUser(Long.parseLong(deal.owner_id)).name;
+		   oldOwner = deal.getOwner().name;
+	
+	    }
+	    catch(Exception e){
+	    	e.printStackTrace();
+	    }
 		deal.owner_id = String.valueOf(ownerId);
 		subList.add(deal);
 		if (subList.size() >= 100)
@@ -232,6 +248,12 @@ public class DealsBulkActionsAPI
 		    System.out.println("total sublist -----" + subList.size());
 		    subList.clear();
 		}
+		System.out.println("calling method createSingleDealBulkActivity");	
+
+		ActivityUtil.createSingleDealBulkActivity(ActivityType.DEAL_OWNER_CHANGE, deal,newOwner, oldOwner);
+		System.out.println("called method createSingleDealBulkActivity");	
+
+		
 	    }
 
 	    if (!subList.isEmpty())
@@ -308,8 +330,14 @@ public class DealsBulkActionsAPI
 		    milestone_name = deal.milestone = formJSON.getString("milestone");
 
 		// If there is change in pipeline or milestone
-		if (!oldPipelineId.equals(deal.pipeline_id) || !oldMilestone.equals(deal.milestone))
+		if (!oldPipelineId.equals(deal.pipeline_id) || !oldMilestone.equals(deal.milestone)){
 		    subList.add(deal);
+			System.out.println("calling method createSingleDealBulkActivity");	
+
+		    ActivityUtil.createSingleDealBulkActivity(ActivityType.DEAL_MILESTONE_CHANGE, deal, milestone_name, oldMilestone);
+			System.out.println("called method createSingleDealBulkActivity");	
+
+		}
 
 		if (subList.size() >= 100)
 		{
@@ -602,6 +630,7 @@ public class DealsBulkActionsAPI
 	    List<Opportunity> deals = opportunityUtil.getOpportunitiesForBulkActions(ids, filters, 100);
 	    System.out.println("total deals -----" + deals.size());
 	    Set<Key<Contact>> contacts = new HashSet<Key<Contact>>();
+
 	    for (Opportunity deal : deals)
 	    {
 		for (String contactId : deal.getContact_ids())
