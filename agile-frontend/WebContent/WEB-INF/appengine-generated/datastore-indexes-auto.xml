@@ -604,4 +604,8 @@
        <property name="browser_id" direction="asc"/>
        <property name="created_time" direction="asc"/>
  </datastore-index>
+    <datastore-index kind="Activity" ancestor="false" source="manual">
+        <property name="show_bulk_activity" direction="asc"/>
+        <property name="time" direction="desc"/>
+    </datastore-index>
 </datastore-indexes>

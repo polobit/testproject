@@ -426,6 +426,45 @@ public class ActivityUtil
 		activity.save();
 		return activity;
 	}
+	
+	/**
+	 * To save  deal bulk action activity.
+	 * 
+	 * @param activity_type
+	 *            the type of the activity performed on the Contact (ADD, EDIT
+	 *            etc..)
+	 * @param deal
+	 *            the deal object on which the activity is performed.
+	 * @param data
+	 *            the extra information about the activity like the new
+	 *            milestone name when the user change the milestone. null if
+	 *            nothing.
+	 */
+	public static void createSingleDealBulkActivity(ActivityType activity_type,Opportunity deal,String new_data,String old_data){
+		try{
+		System.out.println("inside method createSingleDealBulkActivity");	
+		Activity activity = new Activity();
+		activity.label = deal.name;
+		activity.activity_type = activity_type;
+		activity.entity_type = EntityType.DEAL;
+		activity.entity_id = deal.id;
+		if (StringUtils.isNotEmpty(new_data))
+			activity.custom1 = new_data;
+		if (StringUtils.isNotEmpty(old_data))
+			activity.custom2 = old_data;
+		
+		activity.custom4 = deal.owner_id;
+		activity.show_bulk_activity = "bulk individual";
+		activity.save();
+		System.out.println("after method createSingleDealBulkActivity");	
+
+		}
+		catch(Exception e){
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+		}
+		
+	}
 
 	/**
 	 * To save the document activity.
@@ -1882,8 +1921,9 @@ public class ActivityUtil
 		Map<String, Object> searchMap = new HashMap<String, Object>();
 		if (!entitytype.equalsIgnoreCase("ALL") && !entitytype.equalsIgnoreCase("CALL"))
 			searchMap.put("entity_type", entitytype);
-		if (entitytype.equalsIgnoreCase("CALL"))
+		if (entitytype.equalsIgnoreCase("CALL") || entitytype.equalsIgnoreCase("EMAIL_SENT"))
 			searchMap.put("activity_type", entitytype);
+	        searchMap.put("show_bulk_activity", null);
 		if (entityId != null)
 			searchMap.put("entity_id =", entityId);
 		else
