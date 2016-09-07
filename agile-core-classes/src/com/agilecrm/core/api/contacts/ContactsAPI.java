@@ -1930,9 +1930,10 @@ public class ContactsAPI
 	{
 	    BulkActionAdaptor taskRunner = new ContactsBulkDeleteDeferredTask(current_user_id, NamespaceManager.get(),
 		    keys);
-	    taskRunner.run();
 	    ContactsDeleteTask task = new ContactsDeleteTask(idsFetcher, current_user_id);
 	    task.logActivity();
+	    taskRunner.run();
+	    
 	    return;
 	}
 
