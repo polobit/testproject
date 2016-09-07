@@ -1469,4 +1469,14 @@
         <servlet-name>PushNotificationDownload</servlet-name>
         <url-pattern>/downloadpush</url-pattern>
     </servlet-mapping>
+    
+    <servlet>
+		<servlet-name>FormSubmitServlet</servlet-name>
+		<servlet-class>com.agilecrm.forms.FormSubmitServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>FormSubmitServlet</servlet-name>
+		<url-pattern>/formtrigger</url-pattern>
+	</servlet-mapping>
 </web-app>
