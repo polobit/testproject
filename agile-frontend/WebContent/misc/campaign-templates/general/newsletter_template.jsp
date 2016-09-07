@@ -595,7 +595,7 @@
                                 zones.put("Australia asmania", "Australia asmania");
                                 zones.put("Australia/Victoria", "Australia/Victoria");
                                 zones.put("Australia/West", "Australia/West");
-                                zones.put("Australiazones.put(/Yancowinna", "Australia/Yancowinna");
+                                zones.put("Australia/Yancowinna", "Australia/Yancowinna");
                                 zones.put("BET", "BET (Brazil Eastern Time)");
                                 zones.put("BST", "BST (Bangladesh Standard Time)");
                                 zones.put("Brazil/Acre", "Brazil/Acre");
