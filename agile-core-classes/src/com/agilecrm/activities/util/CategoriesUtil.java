@@ -49,8 +49,10 @@ public class CategoriesUtil
      */
     public Category createCategory(Category category)
     {
-	if (!validate(category.getLabel()))
+    	
+	if (!validate(category.getLabel()) && !category.getEntity_type().equals(Category.EntityType.TELEPHONY_STATUS))
 	    return null;
+	
 	dao.put(category);
 	return category;
     }

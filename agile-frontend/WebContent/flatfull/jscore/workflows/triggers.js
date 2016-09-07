@@ -340,6 +340,8 @@ function populate_call_trigger_options(trigger_form, triggerJSON)
 	
 	if(triggerJSON && triggerJSON["call_disposition"])
 		trigger_form.find('div#CALL select').find('option[value="' + triggerJSON["call_disposition"] + '"]').attr('selected', 'selected').trigger('change');
+	
+	getStatusForTriggers(trigger_form);
 }
 
 function populate_forms_in_trigger(trigger_form, trigger_form_select_id, trigger_form_id, trigger_run_on_new_contacts)
@@ -791,7 +793,8 @@ function initializeTriggerListEventListners(id,trigger_type)
 		
 		if(type == 'INBOUND_CALL' || type == 'OUTBOUND_CALL')
 		{
-			populate_call_trigger_options($('form#addTriggerForm'));	
+			populate_call_trigger_options($('form#addTriggerForm'));
+
 		}
 		
 		if(type == 'FORM_SUBMIT')
@@ -854,4 +857,19 @@ function getFormNameForTrigger(formID, callback)
 function getFormNameCellIDForFormSubmitTriggers(formID)
 {
 	return formID + "_formNameField";
+}
+
+function getStatusForTriggers(trigger_form){
+	try{
+		trigger_form.find('div#CALL #status-wait').html('<img class="loading-img" src="../../img/21-0.gif" style="width: 40px;margin-left: 40px;"></img>');
+		getTelephonyStatus(function(status){
+			var statusHtml="";
+			$.each(status,function(index,stats){
+			var labelName = stats.label.toLocaleLowerCase();	
+			statusHtml = statusHtml +	'<option class="INBOUND_CALL OUTBOUND_CALL" value="'+labelName+'" >'+stats.label +'</option>';
+			});
+			trigger_form.find('div#CALL').find("select[name='call_disposition']").append(statusHtml);
+			trigger_form.find('div#CALL #status-wait').html("");
+		});
+	}catch(e){}
 }

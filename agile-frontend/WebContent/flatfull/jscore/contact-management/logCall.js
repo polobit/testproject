@@ -40,7 +40,15 @@ $(function()
 		//This will check if the if the activities is saved or not
 			$('#logCallModal').on('shown.bs.modal', function (e) {
 				$("#phoneLogForm #status-wait").html('<img class="loading-img" src="../../img/21-0.gif" style="width: 40px;margin-left: 40px;"></img>');
-				getTelephonyStatus();
+				getTelephonyStatus(function(status){
+					var statusHtml="";
+					$.each(status,function(index,stats){
+					var labelName = stats.label.toLocaleLowerCase();	
+					statusHtml = statusHtml +	'<li><a id = "statusValue"  value ="'+labelName+'" >'+stats.label +'</a></li>';
+					});
+					$("#phoneLogForm #statusValue-ul").html(statusHtml);
+					$("#phoneLogForm #status-wait").html("");
+				});
 			});
 		
 
@@ -570,16 +578,10 @@ function getTelephonyStatus(callback){
 			type: 'GET',
 			dataType: 'json',
 			success: function(status){
-				
-				var statusHtml="";
-				$.each(status,function(index,stats){
-				var labelName = stats.label.toLocaleLowerCase();	
-				statusHtml = statusHtml +	'<li><a id = "statusValue"  value ='+labelName+' >'+stats.label +'</a></li>';
-				});
-				$("#phoneLogForm #statusValue-ul").html(statusHtml);
-				$("#phoneLogForm #status-wait").html("");
 				if (callback && typeof (callback) === "function"){
-					callback(obj);
+					callback(status);
+				}else{
+					console.log("irrevalent backend fetch for getTelephonyStatus");
 				}
 			}
 		});
