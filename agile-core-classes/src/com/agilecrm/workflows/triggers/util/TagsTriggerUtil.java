@@ -113,8 +113,8 @@ public class TagsTriggerUtil
 
 	    triggersList = TriggerUtil.dao.listByProperty(conditionsMap);
 	    
-	    System.out.println("Triggers list length is " + triggersList + " for tag " + tag);
-	    
+	    if(triggersList != null)
+	    	System.out.println("Triggers list length is " + triggersList.size() + " for tag " + tag);
 
 	    for (Trigger trigger : triggersList)
 		triggerMap.put(trigger.id, trigger);

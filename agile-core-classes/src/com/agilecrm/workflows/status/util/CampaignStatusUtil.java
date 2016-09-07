@@ -224,8 +224,19 @@ public class CampaignStatusUtil
 		boolean isActive = contact.campaignStatus.contains(currentcampaignStatus);
 		
 		if(isActive && currentcampaignStatus != null)
-			System.err.println("Contact id " + contact.id + " is already active " + 
-					" in campaign " + currentcampaignStatus.campaign_id + " at " + currentcampaignStatus.start_time);
+		{	
+			try
+			{
+				System.err.println("Contact id " + contact.id + " is already active" + 
+					" in campaign " + currentcampaignStatus.campaign_id);
+				System.err.println("At " + contact.campaignStatus.get(contact.campaignStatus.indexOf(currentcampaignStatus)).start_time);
+			}
+			catch(Exception e)
+			{
+				System.out.println("Exception occured while debugging " + e.getMessage());
+				System.out.println(ExceptionUtils.getFullStackTrace(e));
+			}
+		}
 		
 		return isActive;
 	}
