@@ -4678,3 +4678,6 @@ div.list-tasks.panel-body:hover
 	}
 	
 /* end of dialler */
+.text-info-important{
+    color: #23b7e5!important;
+}
