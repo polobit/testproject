@@ -4,7 +4,7 @@
   <div class="col w-md bg-light dk b-r bg-auto">
     <div class="wrapper b-b bg">
       <button class="btn btn-sm btn-default pull-right visible-sm visible-xs" ui-toggle-class="show" target="#email-menu"><i class="fa fa-bars"></i></button>
-      <a ui-sref="app.mail.compose" class="btn btn-sm btn-danger w-xs font-bold  mail-compose" href="#compose">Compose</a>
+      <a class="btn btn-sm btn-danger w-xs font-bold  mail-compose" href="#compose">Compose</a>
     </div>
     <div class="wrapper hidden-sm hidden-xs" id="email-menu">
       <ul class="nav nav-pills nav-stacked nav-sm">
@@ -145,7 +145,7 @@
 		{{#if errormssg}}
 	    	<span class="text-dark">{{agile_lng_translate 'contact-details' 'error'}}: {{errormssg}}</span>
 	    {{else}}
-		    <li ng-repeat="mail in mails | filter:fold" ng-class="labelClass(mail.label)" class="list-group-item clearfix b-l-3x ng-scope b-l-info" style="height: 70px;overflow: hidden;">
+		    <li ng-repeat="mail in mails | filter:fold" ng-class="labelClass(mail.label)" class="list-group-item clearfix b-l-3x ng-scope b-l-info {{this.flags}}" style="height: 70px;overflow: hidden;">
 		      <a ui-sref="app.page.profile" class="avatar thumb pull-left m-r" href="#/app/page/profile">
 		        <img ng-src="img/a10.jpg" src="img/a10.jpg">
 		      </a>
@@ -386,7 +386,7 @@
 				<div class="line ling-lg b-b"></div>
                 <div class="form-actions col-sm-offset-2 col-sm-8">          
 					<a href="#inbox" class="btn btn-sm btn-danger" id="inbox-send-email-close">{{agile_lng_translate 'report-add' 'close'}}</a>
-                    <a href="#"  id="sendEmail" class="btn btn-sm btn-primary">{{agile_lng_translate 'tasks' 'Send'}}</a>
+                    <a href="#"  id="sendEmailInbox" class="btn btn-sm btn-primary">{{agile_lng_translate 'tasks' 'Send'}}</a>
                     &nbsp;&nbsp;<span id="msg"></span>  
                 </div>
             </fieldset>

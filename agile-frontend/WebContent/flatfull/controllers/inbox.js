@@ -3,9 +3,9 @@ var InboxRouter = Backbone.Router.extend({
 
 	routes : {
 		/* inbox*/
-		"inbox" : "inbox",
+		"inbox" : "inbox"
 		//"sent" : "sent",
-		"compose":"compose"
+		//"compose":"compose"
 	},
 
 	inbox: function(){
@@ -187,6 +187,10 @@ function renderToMailList(url){
 						$(".inbox-reply-view").html("");
 						$(".ng-show").show();
 					});
+					$(document).on('click','.unread',function(e) {
+						$(this).css({"font-weight":"normal"});
+					});
+					$("li.unread").css({"font-weight":"bold"});
 					hideTransitionBar();
 					$(".loading").hide();
 				},
@@ -291,11 +295,150 @@ function renderToMailView(data){
 				initializeSendEmailListeners();
 				initializeInboxSendEmailListeners();
 				sendEmailAttachmentListeners("send-email-listener-container");
+
+				var options = {};
+				options[_agile_get_translated_val('others','add-new')] = "verify_email";
+				fetchAndFillSelect(
+					'core/api/account-prefs/verified-emails/all',
+					"email",
+					"email",
+					undefined,
+					options,
+					$('#from_email'),
+					"prepend",
+					function($select, data) {
+					
+					if($select.find('option').size()===1){
+							$select.find("option:first").before("<option value='NOEMAIL'>- No Verified Email -</option>");
+							$select.find('option[value ="NOEMAIL"]').attr("selected", "selected");
+					}
+					else
+							$select.val($select.find('option')[0].value);
+						rearrange_from_email_options($select, data);
+				});
 			}, "#"+attrid);
 			$(".ng-show").hide();
 		}
 	});
 	var mailviewitem = new mailViewItem();
+}
+function composeView(){
+	var model = {};
+	var that=this;
+	var body = null;
+
+	var el = $("#mails-list").html('<div id="send-email-listener-container"></div>').find('#send-email-listener-container').html(getTemplate("inbox-compose", model));
+	agile_type_ahead("to", el, contacts_typeahead, null, null, "email-search", null, true, null, true);
+	$("#mails-list").html('<div id="send-email-listener-container"></div>');
+	getTemplate("inbox-compose", model, undefined, function(template_ui){
+		if(!template_ui)
+		return;
+
+		var el = $("#send-email-listener-container").html($(template_ui));
+		agile_type_ahead("to", el, contacts_typeahead, null, null, "email-search", null, true, null, true);
+		agile_type_ahead("email_cc", el, contacts_typeahead, null, null, "email-search", null, true, null, true);
+		agile_type_ahead("email_bcc", el, contacts_typeahead, null, null, "email-search", null, true, null, true);
+		setupTinyMCEEditor('textarea#email-body', true, undefined, function(){
+
+			if(!body)
+			body = '';
+
+			set_tinymce_content('email-body', body);
+			register_focus_on_tinymce('email-body')
+		});
+		initializeSendEmailListeners();
+		initializeComposeEmailListeners();
+		sendEmailAttachmentListeners("send-email-listener-container");
+		var options = {};
+		options[_agile_get_translated_val('others','add-new')] = "verify_email";
+		
+		fetchAndFillSelect(
+				'core/api/account-prefs/verified-emails/all',
+				"email",
+				"email",
+				undefined,
+				options,
+				$('#from_email'),
+				"prepend",
+				function($select, data) {
+				
+				if($select.find('option').size()===1){
+						$select.find("option:first").before("<option value='NOEMAIL'>- No Verified Email -</option>");
+						$select.find('option[value ="NOEMAIL"]').attr("selected", "selected");
+				}
+				else
+						$select.val($select.find('option')[0].value);
+					rearrange_from_email_options($select, data);
+				});
+		}, "#mails-list"); 
+}
+function inboxEmailSend(ele,json){
+	// Disables send button and change text to Sending...
+	disable_send_button(ele);
+
+	// Navigates to previous page on sending email
+	$.ajax({
+		type : 'POST',
+		data : JSON.stringify(json),
+		dataType: 'json',
+		contentType: "application/json",
+		url : 'core/api/emails/contact/send-email',
+		success : function(){
+			// Enables Send Email button.
+			enable_send_button($('#sendEmailInbox'));
+
+			$("#mail-inbox").css({"font-weight":"bold","color":"white","background-color": "#23b7e5"});
+			$("#mail-sent").css({"font-weight":"normal","color":"inherit","background-color": "transparent"});
+			var url = $('#inbox-email-type-select').attr("data-url");
+			url = url.concat("&folder_name=INBOX");
+			$("#mails-list").remove();
+			$("#mails-list-view").append("<ul class='portlet_body list-group list-group-lg no-radius m-b-none m-t-n-xxs' id='mails-list'></ul>");
+			$("#mails-list").css({"max-height":$(window).height()-128,"height":$(window).height()-128, "overflow-y":"scroll", "padding":"0px"});
+			renderToMailList(url);
+		},
+		error : function(response){
+			enable_send_button($('#sendEmailInbox'));
+			// Show cause of error in saving
+			$save_info = $('<div style="display:inline-block"><small><p style="color:#B94A48; font-size:14px"><i>' + response.responseText + '</i></p></small></div>');
+			// Appends error info to form actions
+			// block.
+			$($('#sendEmailInbox')).closest(".form-actions", this.el).append($save_info);
+			// Hides the error message after 3
+			// seconds
+			if (response.status != 406)
+				$save_info.show().delay(10000).hide(1);
+		} 
+	});
+}
+function inboxreplySend(ele,json){
+	// Disables send button and change text to Sending...
+	disable_send_button(ele);
+	// Navigates to previous page on sending email
+	$.ajax({
+		type : 'POST',
+		data : JSON.stringify(json),
+		dataType: 'json',
+		contentType: "application/json",
+		url : 'core/api/emails/contact/send-email',
+		success : function(){
+			// Enables Send Email button.
+			enable_send_button($('#sendEmailInbox'));
+			$(".ng-show").show();
+			$(".ng-hide").html("");
+		},
+		error : function(response){
+			enable_send_button($('#sendEmailInbox'));
+			// Show cause of error in saving
+			$save_info = $('<div style="display:inline-block"><small><p style="color:#B94A48; font-size:14px"><i>' + response.responseText + '</i></p></small></div>');
+			// Appends error info to form actions
+			// block.
+			$($('#sendEmailInbox')).closest(".form-actions", this.el).append($save_info);
+			// Hides the error message after 3
+			// seconds
+			if (response.status != 406)
+				$save_info.show().delay(10000).hide(1);
+		} 
+	});
 }
 function initializeInboxListeners(){
 
@@ -322,11 +465,228 @@ function initializeInboxListeners(){
 		$("#mails-list").css({"max-height":$(window).height()-128,"height":$(window).height()-128, "overflow-y":"scroll", "padding":"0px"});
 		renderToMailList(url);
 	});
+	$('#inbox-listners').on('click', '.mail-compose', function(e){
+		e.preventDefault();
+		$("#mails-list").remove();
+		$("#mails-list-view").append("<ul class='portlet_body list-group list-group-lg no-radius m-b-none m-t-n-xxs' id='mails-list'></ul>");
+		$("#mails-list").css({"max-height":$(window).height()-128,"height":$(window).height()-128, "overflow-y":"scroll", "padding":"0px"});
+		$("#mails-list").append(LOADING_HTML);
+		composeView();
+		$(".loading").hide();
+	});
 }
 function initializeInboxSendEmailListeners(){
 	$('#send-email-listener-container').on('click', '#inbox-send-email-close', function(e){
 		e.preventDefault();
 		$(".ng-show").show();
 		$(".ng-hide").html("");
+	});
+	$('#send-email-listener-container').on('click', '#sendEmailInbox', function(e){
+		e.preventDefault();
+		if ($(this).attr('disabled'))
+			return;
+		var $form = $('#emailForm');
+		// Is valid
+		if (!isValidForm($form))
+			return;
+
+		var network_type = $('#attachment-select').find(":selected").attr('network_type');
+		// checking email attachment type , email doesn't allow
+		// google drive documents as attachments
+		if (network_type)
+		{
+			if (network_type.toUpperCase() === 'GOOGLE')
+				return;
+		}
+
+		// Saves tinymce content to textarea
+		save_content_to_textarea('email-body');
+
+		// serialize form.
+		var json = serializeForm("emailForm");
+		
+		json.from = $(".email").find(":selected").val();
+		if ((json.contact_to_ids).join())
+			json.to += ((json.to != "") ? "," : "") + (json.contact_to_ids).join();
+
+		if ((json.contact_cc_ids).join())
+			json.cc += ((json.cc != "") ? "," : "") + (json.contact_cc_ids).join();
+
+		if ((json.contact_bcc_ids).join())
+			json.bcc += ((json.bcc != "") ? "," : "") + (json.contact_bcc_ids).join();
+
+		if (json.to == "" || json.to == null || json.to == undefined)
+		{
+			// Appends error info to form actions block.
+			$save_info = $('<span style="display:inline-block;color:#df382c;">'+_agile_get_translated_val('validation-msgs','required')+'</span>');
+			$('#emailForm').find("#to").closest(".controls > div").append($save_info);
+			$('#emailForm').find("#to").focus();
+			// Hides the error message after 3 seconds
+			$save_info.show().delay(3000).hide(1);
+
+			enable_send_button($('#sendEmailInbox'));
+			return;
+		}
+
+		// Is valid
+		if (!isValidForm($('#emailForm')))
+			return;
+
+		try
+		{
+			var emails_length = json.to.split(',').length;
+			var MAX_EMAILS_LIMIT = 10;
+
+			if(json.cc)
+				emails_length = json.cc.split(',').length + emails_length;
+
+			if(json.bcc)
+				emails_length = json.bcc.split(',').length + emails_length;
+
+			if(emails_length > MAX_EMAILS_LIMIT)
+			{
+				showAlertModal("Maximum limit of sending emails at once exceeded.", undefined, function(){},
+					function(){},
+					"Alert");
+				return;
+			}
+		}
+		catch(err)
+		{
+			
+		}
+		
+		var that =$(this);
+
+		if(hasScope("EDIT_CONTACT"))
+		{
+			inboxreplySend(that,json);
+		}
+		else
+		{
+			showModalConfirmation(_agile_get_translated_val('contact-details','send-email'), 
+				_agile_get_translated_val('campaigns','no-perm-send-emails') + "<br/><br/> " + _agile_get_translated_val('deal-view','do-you-want-to-proceed'),
+				function (){
+					inboxreplySend(that,json);
+				},
+				function(){
+					return;
+				},
+				function(){
+	
+				});
+		}
+
+	});
+}
+function initializeComposeEmailListeners(){
+	$('#send-email-listener-container').on('click', '#inbox-send-email-close', function(e){
+		e.preventDefault();
+		$("#mail-inbox").css({"font-weight":"bold","color":"white","background-color": "#23b7e5"});
+		$("#mail-sent").css({"font-weight":"normal","color":"inherit","background-color": "transparent"});
+		var url = $('#inbox-email-type-select').attr("data-url");
+		url = url.concat("&folder_name=INBOX");
+		$("#mails-list").remove();
+		$("#mails-list-view").append("<ul class='portlet_body list-group list-group-lg no-radius m-b-none m-t-n-xxs' id='mails-list'></ul>");
+		$("#mails-list").css({"max-height":$(window).height()-128,"height":$(window).height()-128, "overflow-y":"scroll", "padding":"0px"});
+		renderToMailList(url);
+	});
+
+	$('#send-email-listener-container').on('click', '#sendEmailInbox', function(e){
+		e.preventDefault();
+		if ($(this).attr('disabled'))
+			return;
+		var $form = $('#emailForm');
+		// Is valid
+		if (!isValidForm($form))
+			return;
+
+		var network_type = $('#attachment-select').find(":selected").attr('network_type');
+		// checking email attachment type , email doesn't allow
+		// google drive documents as attachments
+		if (network_type)
+		{
+			if (network_type.toUpperCase() === 'GOOGLE')
+				return;
+		}
+
+		// Saves tinymce content to textarea
+		save_content_to_textarea('email-body');
+
+		// serialize form.
+		var json = serializeForm("emailForm");
+		
+		json.from = $(".email").find(":selected").val();
+		if ((json.contact_to_ids).join())
+			json.to += ((json.to != "") ? "," : "") + (json.contact_to_ids).join();
+
+		if ((json.contact_cc_ids).join())
+			json.cc += ((json.cc != "") ? "," : "") + (json.contact_cc_ids).join();
+
+		if ((json.contact_bcc_ids).join())
+			json.bcc += ((json.bcc != "") ? "," : "") + (json.contact_bcc_ids).join();
+
+		if (json.to == "" || json.to == null || json.to == undefined)
+		{
+			// Appends error info to form actions block.
+			$save_info = $('<span style="display:inline-block;color:#df382c;">'+_agile_get_translated_val('validation-msgs','required')+'</span>');
+			$('#emailForm').find("#to").closest(".controls > div").append($save_info);
+			$('#emailForm').find("#to").focus();
+			// Hides the error message after 3 seconds
+			$save_info.show().delay(3000).hide(1);
+
+			enable_send_button($('#sendEmailInbox'));
+			return;
+		}
+
+		// Is valid
+		if (!isValidForm($('#emailForm')))
+			return;
+
+		try
+		{
+			var emails_length = json.to.split(',').length;
+			var MAX_EMAILS_LIMIT = 10;
+
+			if(json.cc)
+				emails_length = json.cc.split(',').length + emails_length;
+
+			if(json.bcc)
+				emails_length = json.bcc.split(',').length + emails_length;
+
+			if(emails_length > MAX_EMAILS_LIMIT)
+			{
+				showAlertModal("Maximum limit of sending emails at once exceeded.", undefined, function(){},
+					function(){},
+					"Alert");
+				return;
+			}
+		}
+		catch(err)
+		{
+			
+		}
+		
+		var that =$(this);
+
+		if(hasScope("EDIT_CONTACT"))
+		{
+			inboxEmailSend(that,json);
+		}
+		else
+		{
+			showModalConfirmation(_agile_get_translated_val('contact-details','send-email'), 
+				_agile_get_translated_val('campaigns','no-perm-send-emails') + "<br/><br/> " + _agile_get_translated_val('deal-view','do-you-want-to-proceed'),
+				function (){
+					inboxEmailSend(that,json);
+				},
+				function(){
+					return;
+				},
+				function(){
+	
+				});
+		}
+
 	});
 }

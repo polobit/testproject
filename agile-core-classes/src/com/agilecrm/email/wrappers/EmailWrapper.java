@@ -123,9 +123,19 @@ public class EmailWrapper extends Cursor
     {
 	this.message = message;
     }
+    public String getFlags()
+    {
+	return flags;
+    }
+
+    public void setFlags(String flags)
+    {
+	this.flags = flags;
+    }
 
     private String mime_type;
     private String from;
     private String to;
     private String message;
+    private String flags;
 }
