@@ -748,11 +748,12 @@
 </small>
 {{else}}
 {{agile_lng_translate 'contacts-view' 'changed-owner-for-company'}} {{#if this.entityObject}}<a href="#contact/{{entity_id}}" data="{{entity_id}}" class="popover_contact">{{label}}</a>{{else}}'{{label}}'{{/if}} <br/>
-{{/if_equals}}	
-
 <small class="activities_second_line m-t-none text-sm">
 <i class="icon-user icon-white"></i>{{#unless this.entityObject}} {{agile_lng_translate 'contacts-view' 'company-deleted-later'}} {{/unless}} {{agile_lng_translate 'contacts-view' 'company-assigned-to'}} {{custom1}}.
 </small>
+{{/if_equals}}	
+
+
 {{/if_equals}}
 
   {{#if_equals "NOTE_ADD" activity_type}}
