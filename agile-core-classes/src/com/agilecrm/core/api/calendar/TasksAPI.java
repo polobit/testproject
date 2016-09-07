@@ -2,8 +2,11 @@ package com.agilecrm.core.api.calendar;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -528,6 +531,7 @@ public class TasksAPI
     {
 	if (count != null)
 	{
+		
 	    return TaskUtil.getTasksRelatedToOwnerOfType(criteria, type, owner, pending, Integer.parseInt(count),
 		    cursor);
 	}
@@ -679,7 +683,8 @@ public class TasksAPI
 	    return null;
 	}
     }
-
+    
+    
     /**
      * change task owner assign new owner to task
      */
@@ -921,5 +926,34 @@ public class TasksAPI
 		}
 	    }
 	}
+    }
+    /**
+     * Getting related contacts based on the taskid
+     * @param id
+     * @return
+     */
+    @Path("/getContactsList")
+    @POST
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public List<Contact> getContactsObjects(String id)
+    {
+		try
+		{
+			List<Contact> list = new ArrayList<Contact>();
+			JSONArray jsonArray = new JSONArray(id);
+			for(int i=0;i<jsonArray.length();i++){
+				Task task = TaskUtil.getTask(Long.parseLong(jsonArray.getString(i))); 
+				List<Contact> listObject = task.relatedContacts(); 
+				if(!listObject.isEmpty() && listObject != null && listObject.size() > 0 && !list.equals(listObject)){
+						list.addAll(listObject);
+				}
+			}
+		    return list;
+		}
+		catch (Exception e)
+		{
+		    e.printStackTrace();
+		    return null;
+		}
     }
 }

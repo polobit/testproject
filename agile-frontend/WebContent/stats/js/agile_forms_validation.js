@@ -12,6 +12,7 @@ function agile_validations(){
 			var spans = document.getElementById("agile_span"+i);
 			var required = agile_form[i].getAttribute("required");
 		
+
 		if(inputId){	
 
 				//if field is not having span,value and having required			
@@ -26,7 +27,6 @@ function agile_validations(){
 						count++;    //if span created then we will increase by one
 						continue;
 			}
-
 		else if(inputNode.value && spans){ //if field having value and span
 
 					// email validations
@@ -60,7 +60,12 @@ function agile_validations(){
  						}	
  					}
 	
-
+ 					if(inputNode.value.length >250 && (inputNode.nodeName=="TEXTAREA" || inputNode.type=="text" )){
+ 						document.getElementById("agile_span"+i).innerHTML = "Please enter upto 250 characters.";
+ 						count++;
+ 						isValid = false;
+ 						continue;
+ 					}
 	
 
 					//other fields if have value 
@@ -111,6 +116,17 @@ function agile_validations(){
  						}
 
  					}	
+ 					if(inputNode.value.length >250 && (inputNode.nodeName=="TEXTAREA" || inputNode.type=="text" )){
+ 						var spanTag = document.createElement("span");
+						spanTag.innerHTML = "Please enter upto 250 characters.";
+						spanTag.id = "agile_span"+i;
+						spanTag.style.color = "red";
+						spanTag.style.fontSize = "12px";
+						inputNode.parentNode.insertBefore(spanTag,inputNode.nextSibling);
+						count++;    //if span created then we will increase by one
+						isValid = false;
+						continue;
+ 					}
 		}
 
 		else if(inputNode.value == "" && spans){ //if field having spans not a value
@@ -120,6 +136,7 @@ function agile_validations(){
 		}	
 
    		}
+
    		
 			if(count != null){	// if form having spans 
 					isValid =false;
