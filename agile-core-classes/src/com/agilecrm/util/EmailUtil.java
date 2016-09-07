@@ -444,7 +444,8 @@ public class EmailUtil
        return	count;   		
 		
     } 
-    /**
+
+	/**
      * This method along with footer, can be used as a template for sending mail reports.  
      * 
      * @param title
@@ -503,6 +504,3 @@ public class EmailUtil
     }
     
 }
-    
-    
-  
