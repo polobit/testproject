@@ -187,8 +187,8 @@ public class DealCSVExport
 	    String[] tagWithTimes = getDealTagsWithTimes(deal);
 	    
 		str[indexMap.get(TAGS)] = tagWithTimes[0];
-	    str[indexMap.get(TAGS_TIME)] = tagWithTimes[1];
-	    str[indexMap.get(TAGS_TIME_EPOCH)] = tagWithTimes[2];
+	    str[indexMap.get(TAGS_TIME)] = tagWithTimes[2];
+	    str[indexMap.get(TAGS_TIME_EPOCH)] = tagWithTimes[1];
 
 	}
 	catch (ParseException e)
