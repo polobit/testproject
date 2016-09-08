@@ -17,7 +17,10 @@ var WidgetsRouter = Backbone.Router
                 "Facebook" : "Facebook",
                 "Facebook/:id" : "Facebook",
                 "FullContact" :"FullContact",
-                "FullContact/:id" :"FullContact",                
+                "FullContact/:id" :"FullContact",
+                "Klout" : "Klout",
+                "Klout/:id" : "Klout",      
+
                 // Support widgets
                 "ClickDesk" : "ClickDesk",
                 "ClickDesk/:id" : "ClickDesk",
@@ -241,6 +244,10 @@ var WidgetsRouter = Backbone.Router
 
             FullContact : function(id){
                 addConfigurableWidget(id, "FullContact", "fullcontact-login");
+            },
+
+            Klout : function(id){
+               addConfigurableWidget(id, "Klout", "klout-login");
             },
 
             /**
