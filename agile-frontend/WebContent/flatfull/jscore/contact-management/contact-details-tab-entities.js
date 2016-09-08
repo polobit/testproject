@@ -695,12 +695,19 @@ function contact_detail_page_infi_scroll(element_id, targetCollection)
 				targetCollection.infiniScroll.disableFetch();
 			}
 			// Remove loading icon
+			if($(targetCollection.el,element_id).find('#company-contacts-list-view-model-list').length>0)
+ 				$(targetCollection.el,element_id).find("#contacts-table").parent().find('.scroll-loading').remove();
+ 			else
 			$(targetCollection.infiniScroll.options.target).find('.scroll-loading').remove();
 		},
 		onFetch : function()
 		{
 			console.log('in fetch');
 			// Add loading icon
+			if($(targetCollection.el,element_id).find('#company-contacts-list-view-model-list').length>0)
+ 				$(targetCollection.el,element_id).find("#contacts-table").parent().
+ 			append('<div class="scroll-loading"> <img src="'+updateImageS3Path("/img/ajax-loader-cursor.gif") +'" style="margin-left: 44%;"> </div>');
+ 		else
 			$(targetCollection.infiniScroll.options.target).append(
 					'<div class="scroll-loading"> <img src="'+updateImageS3Path("/img/ajax-loader-cursor.gif") +'" style="margin-left: 44%;"> </div>');
 		}

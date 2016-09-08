@@ -424,7 +424,6 @@ var contacts_bulk_actions = {
 										App_Companies.Company_detail_route="";
 										 if (company_util.isCompanyContact())
         									App_Companies.Company_detail_route = Current_Route;
-
 										if ($(this).attr('disabled'))
 											return;
 
@@ -506,6 +505,7 @@ var contacts_bulk_actions = {
 						$("#companies-export-csv-modal").on("click", '#companies-export-csv-confirm', function(e)
 										{
 											e.preventDefault();
+											App_Companies.Company_detail_route="";
 
 												App_Companies.Company_detail_route="";
 											if ($(this).attr('disabled'))

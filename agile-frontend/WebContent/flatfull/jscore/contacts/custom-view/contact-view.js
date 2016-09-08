@@ -52,7 +52,7 @@ function contactTableView(base_model,customDatefields,view,customContactfields,c
 	var contact = base_model.toJSON();
 	var el = itemView.el;
 
-	if (!gridViewEl || window.location.hash=="#companies") {
+	if (!gridViewEl || window.location.hash=="#companies" || window.location.hash.indexOf("#company/")>-1) {
 
 		if(agile_is_mobile_browser()){
 

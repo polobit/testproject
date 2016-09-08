@@ -1007,13 +1007,12 @@ function getContactofCompanies(modelData,el,companyId)
 {
 						var url = 'core/api/contacts/related/' + companyId;
 		var slateKey = getContactPadcontentKey(url);
-		var individual_tag_name = contacts_view_loader.getContactsIndividualTagName();
 		//var postData = {'filterJson': contacts_view_loader.getPostData()};
 		//var sortKey = contacts_view_loader.getContactsSortKey();
 		if(companyId)
 		{
 					App_Companies.contacts_Company_List = new  Contacts_Events_Collection_View({ url : url, modelData : modelData, sort_collection : false,
-					 templateKey : "company-contacts-list-view", individual_tag_name : individual_tag_name,
+					 templateKey : "company-contacts-list-view", individual_tag_name : "tr",
 				cursor : true, page_size : 25, slateKey : slateKey, request_method : 'GET', postRenderCallback : function(cel, collection)
 				{	
 					if(App_Companies.contacts_Company_List.collection.models.length == 0)	
@@ -1024,6 +1023,7 @@ function getContactofCompanies(modelData,el,companyId)
 						getAndUpdateCollectionCount("contacts-company", el);						
 					}
 					contactListener();
+					contact_detail_page_infi_scroll($('#infinite-scroller-company-details', App_Companies.companyDetailView.el), App_Companies.contacts_Company_List);
 
 				} });
 			App_Companies.contacts_Company_List.collection.fetch();
