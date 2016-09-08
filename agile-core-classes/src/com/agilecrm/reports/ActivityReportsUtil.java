@@ -166,53 +166,60 @@ public class ActivityReportsUtil
 		if (activities.contains(ActivityReports.ActivityType.DEAL)
 			&& user.menu_scopes.contains(NavbarConstants.DEALS))
 		{
-		    activityReport.put("deals",
-			    getDealActivityReport(user, timeBounds.get("startTime"), timeBounds.get("endTime")));
+			Map<String, Object> dealsMap = getDealActivityReport(user, timeBounds.get("startTime"), timeBounds.get("endTime"));
+			activityReport.put("deals" ,dealsMap);
 		    count += getTotalCount((Map<String, Object>) activityReport.get("deals"), "deals_total");
-		    lastEntry = "deals";
+		    if(dealsMap.size() > 0)
+		    	lastEntry = "deals";
 		}
 		if (activities.contains(ActivityReports.ActivityType.EVENT))
 		{
-		    activityReport.put("events",
-			    getEventActivityReport(user, timeBounds.get("startTime"), timeBounds.get("endTime")));
+			Map<String, Object> eventsMap = getEventActivityReport(user, timeBounds.get("startTime"), timeBounds.get("endTime"));
+			activityReport.put("events" ,eventsMap);
 		    count += getTotalCount((Map<String, Object>) activityReport.get("events"), "events_total");
-		    lastEntry = "events";
+		    if(eventsMap.size() > 0)
+		    	lastEntry = "events";
 		}
 		if (activities.contains(ActivityReports.ActivityType.TASK))
 		{
-		    activityReport.put("tasks",
-			    getTaskActivityReport(user, timeBounds.get("startTime"), timeBounds.get("endTime")));
+			Map<String, Object> tasksMap = getTaskActivityReport(user, timeBounds.get("startTime"), timeBounds.get("endTime"));
+			activityReport.put("tasks" ,tasksMap);
 		    count += getTotalCount((Map<String, Object>) activityReport.get("tasks"), "tasks_total");
-		    lastEntry = "tasks";
+		    if(tasksMap.size() > 0)
+		    	lastEntry = "tasks";
 		}
 		if (activities.contains(ActivityReports.ActivityType.EMAIL))
 		{
-		    activityReport.put("emails",
-			    getEmailActivityReport(user, timeBounds.get("startTime"), timeBounds.get("endTime")));
+			Map<String, Object> emailsMap = getEmailActivityReport(user, timeBounds.get("startTime"), timeBounds.get("endTime"));
+			activityReport.put("emails" ,emailsMap);
 		    count += getTotalCount((Map<String, Object>) activityReport.get("emails"), "emails_count");
-		    lastEntry = "emails";
+		    if(emailsMap.size() > 0)
+		    	lastEntry = "emails";
 		}
 		if (activities.contains(ActivityReports.ActivityType.NOTES))
 		{
-		    activityReport.put("notes",
-			    getNotesActivityReport(user, timeBounds.get("startTime"), timeBounds.get("endTime")));
+			Map<String, Object> notesMap = getNotesActivityReport(user, timeBounds.get("startTime"), timeBounds.get("endTime"));
+		    activityReport.put("notes" ,notesMap);
 		    count += getTotalCount((Map<String, Object>) activityReport.get("notes"), "notes_contacts_count");
-		    lastEntry = "notes";
+		    if(notesMap.size() > 0)
+		    	lastEntry = "notes";
 		}
 		if (activities.contains(ActivityReports.ActivityType.DOCUMENTS))
 		{
-		    activityReport.put("docs",
-			    getDocumentsActivityReport(user, timeBounds.get("startTime"), timeBounds.get("endTime")));
+			Map<String, Object> docsMap = getDocumentsActivityReport(user, timeBounds.get("startTime"), timeBounds.get("endTime"));
+		    activityReport.put("docs" ,docsMap);
 		    count += getTotalCount((Map<String, Object>) activityReport.get("docs"), "doc_count");
-		    lastEntry = "docs";
+		    if(docsMap.size() > 0)
+		    	lastEntry = "docs";
 		}
 
 		if (activities.contains(ActivityReports.ActivityType.CALL))
 		{
-		    activityReport.put("calls",
-			    getCallActivityReport(user, timeBounds.get("startTime"), timeBounds.get("endTime")));
+			Map<String, Object> callMap = getCallActivityReport(user, timeBounds.get("startTime"), timeBounds.get("endTime"));
+		    activityReport.put("calls" ,callMap);
 		    count += getTotalCount((Map<String, Object>) activityReport.get("calls"), "total_calls");
-		    lastEntry = "calls";
+		    if(callMap.size() > 0)
+		    	lastEntry = "calls";
 		}
 		if (count > 0){
 		    activityReport.put("total", count);
