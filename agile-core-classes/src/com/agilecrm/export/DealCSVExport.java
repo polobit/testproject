@@ -75,26 +75,6 @@ public class DealCSVExport
 
 	try
 	{
-		
-		//String[] tagWithTimes = getDealTagsWithTimes(deal);
-		str[indexMap.get(TAGS)] = "String.valueOf(tagWithTimes[0])";
-	    str[indexMap.get(TAGS_TIME)] =" String.valueOf(tagWithTimes[1])";
-	    str[indexMap.get(TAGS_TIME_EPOCH)] = "String.valueOf(tagWithTimes[2])";
-		
-		//str[indexMap.get(TAGS)] = String.valueOf(tagWithTimes[0]);
-	    //str[indexMap.get(TAGS_TIME)] = String.valueOf(tagWithTimes[1]);
-	    //str[indexMap.get(TAGS_TIME_EPOCH)] = String.valueOf(tagWithTimes[2]);
-		/*Iterator<Tag> itrTags = deal.tagsWithTime.iterator() ;
-	    String s="";
-	    while(itrTags.hasNext()) s+=itrTags.hasNext(); 
-	    	    str[indexMap.get(TAGS)]=s;
-	    	  
-	    	    System.out.println("test1  :"+s);
-	   Iterator<Tag> itrTagsTime = deal.tagsWithTime.iterator(); 
-	      String s1="";
-	    while(itrTagsTime.hasNext()) s1+=itrTagsTime.hasNext(); 
-	      str[indexMap.get(TAGS_TIME)]=s1;
-	      System.out.println("test2  "+s1);*/
 		str[indexMap.get(ID)] = "ID_"+String.valueOf(deal.id);
 	    str[indexMap.get(NAME)] = deal.name;
 	    str[indexMap.get(DESCRIPTION)] = deal.description;
@@ -203,6 +183,12 @@ public class DealCSVExport
 		d.setTime(deal.won_date * 1000);
 		str[indexMap.get(WON_DATE)] = date.format(d);
 	    }
+	    
+	    String[] tagWithTimes = getDealTagsWithTimes(deal);
+	    
+		str[indexMap.get(TAGS)] = tagWithTimes[0];
+	    str[indexMap.get(TAGS_TIME)] = tagWithTimes[1];
+	    str[indexMap.get(TAGS_TIME_EPOCH)] = tagWithTimes[2];
 
 	}
 	catch (ParseException e)
