@@ -474,6 +474,16 @@ function initializeInboxListeners(){
 		composeView();
 		$(".loading").hide();
 	});
+
+	$('#inbox-listners').on('click', '#search_email', function(e){
+		var search_val = document.getElementById('search-mail').value;
+		var from_email = $('#inbox-email-type-select').text();
+		url = "core/api/social-prefs/search-google-emails?from_email="+from_email+"&search_content="+search_val;
+		$("#mails-list").remove();
+		$("#mails-list-view").append("<ul class='portlet_body list-group list-group-lg no-radius m-b-none m-t-n-xxs' id='mails-list'></ul>");
+		$("#mails-list").css({"max-height":$(window).height()-128,"height":$(window).height()-128, "overflow-y":"scroll", "padding":"0px"});
+		renderToMailList(url);
+	});
 }
 function initializeInboxSendEmailListeners(){
 	$('#send-email-listener-container').on('click', '#inbox-send-email-close', function(e){

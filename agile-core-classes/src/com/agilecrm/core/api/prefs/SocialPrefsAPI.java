@@ -345,7 +345,43 @@ public class SocialPrefsAPI
 	    String normalisedFromEmail = AgileTaskletUtil.normalizeStringSeparatedByDelimiter(',', fromEmail);
 	    // Gets GmailPrefs url
 	    String gmailURL = ContactGmailUtil
-		    .getGmailNewURL(normalisedFromEmail, cursor, pageSize, foldernames);
+		    .getGmailNewURL(normalisedFromEmail, cursor, pageSize, foldernames,"");
+	    // If both are not set, return Contact emails.
+	    if (StringUtils.isNotBlank(gmailURL))
+		emails = ContactEmailUtil.getEmailsfromServer(gmailURL, pageSize, cursor, normalisedFromEmail);
+	}
+	catch (Exception e)
+	{
+	    System.out.println("Got an exception in SocialPrefsAPI: " + e.getMessage());
+	    e.printStackTrace();
+	    return null;
+	}
+	return emails;
+    }
+    /**
+     * Mail Search functionality
+     * @param fromEmail
+     * @param pageSize
+     * @param cursor
+     * @param foldernames
+     * @return
+     */
+    @Path("search-google-emails")
+    @GET
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public List<EmailWrapper> getGoogleEmailsBySearchCondition(@QueryParam("from_email") String fromEmail, @QueryParam("page_size") String pageSize,
+	    @QueryParam("cursor") String cursor,@QueryParam("search_content") String searchcontent)
+    {
+	List<EmailWrapper> emails = null;
+	try
+	{
+	    if (StringUtils.isBlank(cursor))
+		cursor = "0";
+	    // Removes unwanted spaces in between commas
+	    String normalisedFromEmail = AgileTaskletUtil.normalizeStringSeparatedByDelimiter(',', fromEmail);
+	    // Gets GmailPrefs url
+	    String gmailURL = ContactGmailUtil
+		    .getGmailNewURL(normalisedFromEmail, cursor, pageSize,"", searchcontent);
 	    // If both are not set, return Contact emails.
 	    if (StringUtils.isNotBlank(gmailURL))
 		emails = ContactEmailUtil.getEmailsfromServer(gmailURL, pageSize, cursor, normalisedFromEmail);
