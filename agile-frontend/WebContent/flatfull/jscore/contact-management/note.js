@@ -28,21 +28,9 @@ $(function()
 
 		// Clone modal, so we dont have to create a update modal.
 		// we can clone add change ids and use it as different modal
-
-		$('#noteUpdateModal').remove();
-
-		var noteModal = $("#noteModal").clone();
-
-		$("#noteForm > fieldset", noteModal).prepend('<input name="id" type="hidden"/>');
-		$("#noteForm > fieldset", noteModal).prepend('<input name="created_time" type="hidden"/>');
-		$("#noteForm", noteModal).parent().parent().find(".modal-header > h3").html('<i class="icon-edit"></i>&nbsp;' + _agile_get_translated_val('modals','edit-note'));
-		$("#noteForm", noteModal).attr('id', "noteUpdateForm");
-		noteModal.attr('id', "noteUpdateModal");
-		agile_type_ahead("note_related_to", $("#noteUpdateForm", noteModal), contacts_typeahead);
-		$("#note_validate", noteModal).attr("id", "note_update");
-		deserializeForm(note.toJSON(), $("#noteUpdateForm", noteModal));
-
-		noteModal.modal('show');
+		showNoteModel(note.toJSON() , function(){
+		agile_type_ahead("note_related_to", $("#noteUpdateForm"), contacts_typeahead);
+	},"new-note-model");
 		// noteModal.modal('show');
 	});
 
@@ -129,10 +117,20 @@ $(function()
 	$('body').on('click', '#show-note', function(e)
 	{
 		e.preventDefault();
-		showNoteModel();
+		showNoteModel(undefined ,function(){
+			var el = $("#noteForm");
+		agile_type_ahead("note_related_to", el, contacts_typeahead);
+		} , "new-note-model");
+		
+	});
+/*$('body').on('click', '#show-note', function(e)
+	{
+		e.preventDefault();
+		$("#noteModal").modal('show');
+
 		var el = $("#noteForm");
 		agile_type_ahead("note_related_to", el, contacts_typeahead);
-	});
+	});*/
 	//when click on emailbutton automatically it takes contact details
 
 	

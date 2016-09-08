@@ -460,7 +460,18 @@ $("#activityModal").on("click", "#eventDescriptionLink", function(e){
 
 });
 
+function showNoteModel(json, callback , template)
+{	
+	
+	$("#newNoteModal").html(getTemplate(template , json)).modal('show');
 
+	if(json)
+	deserializeForm(json ,$("#noteUpdateForm"));
+	
+	if (callback && typeof (callback) === "function")
+					callback();
+	
+}
 // Click handlers to role menu items
 function initRolehandlers(){
 	// Remove blink icon from menu group icon
@@ -516,14 +527,6 @@ function initRolehandlers(){
             });
 	});
 }
-
-function showNoteModel(callback , template)
-{	
-	$("#newNoteModal").html(getTemplate(template,{})).modal('show');
-	if (callback && typeof (callback) === "function")
-					callback();
-}
-
 
 
 //checks if there are any custom fields and if if present navigates to contact-add page otherwise opens person-modal

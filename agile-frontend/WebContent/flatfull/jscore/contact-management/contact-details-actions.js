@@ -66,15 +66,31 @@
       add_note : function(e){
             console.log("execution");
             var targetEl = $(e.currentTarget);
-            var el = "";
-            showNoteModel(function()
+            
+            showNoteModel(undefined ,function()
             {
-              el = $("#noteForm",el);
+             var  el = $("#noteForm",el);
             // Displays contact name, to indicate the note is related to the contact
               fill_relation(el);
+              agile_type_ahead("note_related_to", el, contacts_typeahead);
               },"new-note-model"); 
-            agile_type_ahead("note_related_to", el, contacts_typeahead);
+
+            
       },
+      /* add_note : function(e){
+            console.log("execution");
+            var targetEl = $(e.currentTarget);
+            
+            var el = $("#noteForm");
+            
+            // Displays contact name, to indicate the note is related to the contact
+            fill_relation(el);
+
+            if(!$(targetEl).attr("data-toggle"))
+                 $('#noteModal').modal('show');
+             
+            agile_type_ahead("note_related_to", el, contacts_typeahead);
+      },*/
 
 
     /**

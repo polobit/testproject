@@ -347,7 +347,7 @@ var Deal_Modal_Event_View = Base_Model_View.extend({
 
 		var note = dealNotesView.collection.get($(targetEl).attr('data'));
 		console.log(note);
-		showNoteModel(function()
+		showNoteModel(undefined , function()
 		{
 			deserializeForm(note.toJSON(), $("#dealnoteUpdateForm", $('#dealnoteupdatemodal')));
 			fill_relation_deal($('#dealnoteUpdateForm'));
@@ -438,7 +438,7 @@ var Deal_Modal_Event_View = Base_Model_View.extend({
 	{
 		e.preventDefault();
 
-		showNoteModel(function()
+		showNoteModel(undefined , function()
             {
               var el1 = $("#dealnoteForm");
             // Displays contact name, to indicate the note is related to the contact
