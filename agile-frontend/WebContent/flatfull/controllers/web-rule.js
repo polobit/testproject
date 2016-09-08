@@ -301,6 +301,8 @@ function loadSavedTemplate(templateURL, callback){
 					$("#callwebrule-code").text(data);
 				else if(templateUrl.includes("sitebar.html"))
 					$("#agile-bar-code").text(data);
+				else if(templateUrl.includes("pushnoty.html"))
+					$("#agile-push-noty-code").text(data);
 				else
                 	$("#tinyMCEhtml_email").text(data);
 				
