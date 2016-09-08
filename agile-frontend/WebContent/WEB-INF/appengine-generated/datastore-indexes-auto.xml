@@ -614,6 +614,10 @@
         <property name="custom1" direction="asc"/>
         <property name="time" direction="desc"/>
     </datastore-index>
+     <datastore-index kind="CustomFieldDef" ancestor="false" source="manual">
+        <property name="searchable" direction="asc"/>
+        <property name="position" direction="asc"/>
+    </datastore-index>
 </datastore-indexes>
 
 

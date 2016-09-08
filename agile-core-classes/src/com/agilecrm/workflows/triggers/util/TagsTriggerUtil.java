@@ -105,6 +105,8 @@ public class TagsTriggerUtil
 	     * allow String object for Collection comparison
 	     */
 	    tagSet.add(tag);
+	    
+	    System.out.println("Tag set to trigger " + tagSet);
 
 	    // Gets triggers list based on condition and trigger tags
 	    Map<String, Object> conditionsMap = new HashMap<String, Object>();
@@ -114,7 +116,7 @@ public class TagsTriggerUtil
 	    triggersList = TriggerUtil.dao.listByProperty(conditionsMap);
 	    
 	    if(triggersList != null)
-	    	System.out.println("Triggers list length is " + triggersList.size() + " for tag " + tag);
+	    	System.out.println("Triggers list length is " + triggersList.size() + " for tag " + tag + ".");
 
 	    for (Trigger trigger : triggersList)
 		triggerMap.put(trigger.id, trigger);

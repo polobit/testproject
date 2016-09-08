@@ -118,7 +118,8 @@ public class StripeChargeWebhook extends HttpServlet
 	    URL url = new URL(request.getRequestURL().toString());
 		String namespace = NamespaceUtil.getNamespaceFromURL(url);
 		
-	    JSONObject stripeEventJson = getStripeEventJson(stripeJson, eventType);	    
+	    JSONObject stripeEventJson = getStripeEventJson(stripeJson, eventType);	
+	    System.out.println(stripeEventJson);    
 	    if (stripeEventJson == null)
 	    {
 		 // response.sendError(HttpServletResponse.SC_BAD_REQUEST);
