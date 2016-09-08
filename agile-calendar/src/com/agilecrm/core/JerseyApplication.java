@@ -98,8 +98,7 @@ public class JerseyApplication extends Application
 		s.add(com.agilecrm.core.api.voicemail.VoiceMailAPI.class);
 		s.add(com.agilecrm.core.api.deals.DealsBulkActionsAPI.class);
 		s.add(com.agilecrm.core.api.forms.FormsAPI.class);
-		s.add(com.agilecrm.core.api.WebhooksAPI.class);
-		s.add(com.agilecrm.core.api.widgets.KloutWidgetsAPI.class);
+		s.add(com.agilecrm.core.api.WebhooksAPI.class);		
 		return s;
 	}
 }
