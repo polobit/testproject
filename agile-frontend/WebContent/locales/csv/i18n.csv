@@ -3187,7 +3187,8 @@ Admin-settings-users.view-contact,View Contact,Ver contacto
 calendar.meeting-type,Meeting Type,Tipo de reunión
 portlets.all-over-due,All Over Due,Vencimiento general
 portlets.card-details,Card Details,Detalles de tarjeta
-contacts.select-all,Selected All,todos los seleccionados
+contacts.selected-all,Selected All,todos los seleccionados
+contacts.select-all,Select All,Seleccionar todo
 campaigns.soft-bounces,Soft Bounces,Rebotes suaves
 plan-and-upgrade.total-amount,Total Amount,Monto total
 web-rules.referrer-url,Referrer URL,URL de referencia
