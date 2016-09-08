@@ -159,6 +159,10 @@ function getTemplateUrls(templateName)
 	{
 		template_relative_urls.push("fullcontact.js");
 	}
+	else if (templateName.indexOf("klout") == 0)
+ 	{
+ 		template_relative_urls.push("klout.js");
+ 	}
 
 	if (templateName.indexOf("chargify") == 0)
 	{
