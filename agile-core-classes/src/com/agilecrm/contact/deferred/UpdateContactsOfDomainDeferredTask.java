@@ -210,7 +210,7 @@ public class UpdateContactsOfDomainDeferredTask implements DeferredTask
 			if(status.equalsIgnoreCase("COMPLETED"))
 			{		
 				DomainUser dUser=DomainUserUtil.getDomainUserByEmailFromParticularDomain(domainUserMail,domain);
-				SendMail.sendMail(domainUserMail, "Update Contacts & Companies Status", SendMail.Contacts_update_status, dUser);
+				SendMail.sendMail(domainUserMail, "Update Contacts & Companies Status", SendMail.CONTACT_UPDATE_STATUS, dUser);
 				
 				
 			}
