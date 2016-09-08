@@ -1048,6 +1048,17 @@ class="icon-plus"></i> <span >{{agile_lng_translate 'contact-details' 'add'}}</s
    </div>
  </div>
    
+{{#property_is_exists "klout_score" properties}}
+<div id="klout-data-panel" class="hide">
+ <div class="wrapper hidden-sm hidden-xs" style="padding-top:0px;">
+  <div class="panel panel-default m-b-none">
+    <div class="panel-body">
+    	<span class="text-muted text-base">Klout Score: </span>{{getPropertyValue properties "klout_score"}}
+	</div>
+  </div>
+ </div>
+</div>
+{{/property_is_exists}}
 
 <div class="wrapper hidden-sm hidden-xs p-b-xs" style="padding-top:0px;">
   <div class="panel panel-default m-b-none">

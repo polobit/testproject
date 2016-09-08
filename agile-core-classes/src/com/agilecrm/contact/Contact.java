@@ -169,6 +169,11 @@ public class Contact extends Cursor
      */
     @Indexed
     public Integer lead_score = 0;
+    
+    /**
+     * Customer social score.
+     */
+    public String klout_score = "";
 
     /**
      * Schema version of the contact used for updating schema
@@ -253,6 +258,7 @@ public class Contact extends Cursor
     public static final String LAST_NAME = "last_name";
     public static final String EMAIL = "email";
     public static final String COMPANY = "company";
+    public static final String KLOUT_SCORE ="klout_score";
     public static final String TITLE = "title";
     public static final String NAME = "name";
     public static final String URL = "url";
@@ -362,7 +368,7 @@ public class Contact extends Cursor
 	System.out.println("The fieldName is " + fieldName);
 	FieldType type = FieldType.CUSTOM;
 	System.out.println("The FieldType is " + type);
-	if (fieldName.equals(FIRST_NAME) || fieldName.equals(LAST_NAME) || fieldName.equals(EMAIL)
+	if (fieldName.equals(FIRST_NAME) || fieldName.equals(LAST_NAME) || fieldName.equals(KLOUT_SCORE)|| fieldName.equals(EMAIL)
 		|| fieldName.equals(TITLE) || fieldName.equals(WEBSITE) || fieldName.equals(COMPANY)
 		|| fieldName.equals(ADDRESS) || fieldName.equals(URL) || fieldName.equals(PHONE)
 		|| fieldName.equals(NAME) || fieldName.equals(SKYPEPHONE))
