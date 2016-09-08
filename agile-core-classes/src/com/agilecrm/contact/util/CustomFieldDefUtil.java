@@ -90,7 +90,16 @@ public class CustomFieldDefUtil
 	Map<String, Object> map = new HashMap<String, Object>();
 	map.put("searchable", true);
 	map.put("scope", scope);
-	return dao.listByProperty(map);
+	//return dao.listByProperty(map);
+	
+	List returnList = new ArrayList();
+	if(scope==SCOPE.CONTACT || scope==SCOPE.COMPANY || scope==SCOPE.PERSON){
+		returnList = dao.listByPropertyAndOrder(map, "position");
+	}else{
+		returnList = dao.listByProperty(map);
+	}
+	return returnList;
+	
     }
     
     public static List<CustomFieldDef> getAllRequiredCustomFields(boolean isRequired)
