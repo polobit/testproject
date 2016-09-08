@@ -32,7 +32,8 @@ public class WebhookTriggerUtil
 	    throws EntityNotFoundException
     {
 	Webhook hook = WebhookTriggerUtil.getWebhook();
-	System.out.println("hooook" + hook);
+	System.out.println("hook received = " + hook);
+	
 	if (hook == null || hook.modules.size() == 0)
 	    return;
 
@@ -73,7 +74,8 @@ public class WebhookTriggerUtil
 
     private static void createWebhookTrigger(Object obj, Webhook hook, Boolean updated, String simpleName)
     {
-
+	String oldNameSpace = NamespaceManager.get();
+	
 	String eventName = getEventName(simpleName, updated);
 
 	final WebhookEvent evnt = new WebhookEvent(eventName, obj);
@@ -86,7 +88,18 @@ public class WebhookTriggerUtil
 	catch (Exception e)
 	{
 	    System.out.println("In Catch " + e.getMessage());
-	    ThreadManager.createThreadForCurrentRequest(createHookThread(evnt, uRL)).start();
+	    try {
+		ThreadManager.createThreadForCurrentRequest(createHookThread(evnt, uRL)).start();
+	    } catch (Exception e2) {
+		System.out.println("In Catch e2 " + e2.getMessage());
+	    }
+	}
+	finally{
+	    try {
+		NamespaceManager.set(oldNameSpace);
+	    } catch (Exception e2) {
+		System.out.println("In Catch e3 " + e2.getMessage());
+	    }
 	}
 
     }
