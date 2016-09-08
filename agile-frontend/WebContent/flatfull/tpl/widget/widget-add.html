@@ -48,7 +48,7 @@
 				        	{{else}}
 				        	{{#if_equals name "Asterisk"}}
 								<center>  
-  								<span style="font-size: 24px;width: 135px;height: 50px; text-align:center;vertical-align: middle;"><span><img src="{{logo_url}}" style="width: 40px; height: 40px;margin-right: 4px;margin-top: 1px;">{{agile_lng_translate 'widgets' 'asterisk'}}</span></span>
+  								<span style="font-size: 24px;width: 135px;height: 50px; text-align:center;vertical-align: middle;"><span><img src="{{logo_url}}" style="width: 40px; height: 40px;margin-right: 4px;margin-top: 1px;">{{get_widget_translation name 'name'}}</span></span>
 								<span class="label label-sm bg-danger" style="margin: 5px;">
 								{{agile_lng_translate 'deal-view' 'beta'}}
 								</center>  
@@ -72,7 +72,7 @@
 			<div class="text-flow-ellipsis line-clamp line-clamp-4 widget-text" style="height:75px"  rel="tooltip" title="{{get_widget_translation name 'content'}}">
 	 	{{else}}
 	 			{{#if_equals name "Asterisk"}}
-				<div class="text-flow-ellipsis line-clamp line-clamp-4 widget-text" style="height:75px"  rel="tooltip" title="{{get_widget_translation name 'content'}}">aaaa
+				<div class="text-flow-ellipsis line-clamp line-clamp-4 widget-text" style="height:75px"  rel="tooltip" title="{{get_widget_translation name 'content'}}">
  				{{else}}
 					<div class="text-flow-ellipsis line-clamp line-clamp-4 widget-text" style="height:85px"  rel="tooltip">
 				{{/if_equals}}
