@@ -944,3 +944,21 @@ function insertSelectedOption1(ele ,target_id)
 
         return false;
 	}
+
+	// Removes multi select required if merge field is given
+	function disable_owner_multiselect($selector)
+	{
+		try
+		{
+			if($selector.find('#mergefield_owner_id') 
+			&& $selector.find('#mergefield_owner_id').length != 0)
+			{
+				if($selector.find('#mergefield_owner_id').val())
+	        		$selector.find('[name="owner_id"]').removeProp("required");
+			}
+		}
+		catch(err)
+		{
+
+		}	
+	}
