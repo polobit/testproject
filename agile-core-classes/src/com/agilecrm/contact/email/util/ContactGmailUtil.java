@@ -214,17 +214,18 @@ public class ContactGmailUtil
 	// oauth2, we store secret as v2
 	if (StringUtils.equalsIgnoreCase(gmailPrefs.secret, "v2"))
 	{
-	    return hostUrl+"/imap?command=oauth_email2&user_name=" + URLEncoder.encode(userName)
-		    + "&fetch_items=mails&folder_names="+URLEncoder.encode(foldernames)+ "&search_content"+ URLEncoder.encode(search_content) +"&host=" + URLEncoder.encode(host) + "&port="
+		return hostUrl+"/imap?command=oauth_email2&user_name=" + URLEncoder.encode(userName)
+		    + "&fetch_items=mails&folder_names="+URLEncoder.encode(foldernames)+ "&search_content="+ URLEncoder.encode(search_content) +"&host=" + URLEncoder.encode(host) + "&port="
 		    + URLEncoder.encode(port) + "&offset=" + offset + "&count=" + count + "&oauth_key="
 		    + URLEncoder.encode(oauth_key);
 	}
 
 	return hostUrl+"/imap?command=oauth_email&user_name=" + URLEncoder.encode(userName)
 	        + "&fetch_items=mails&folder_names="+URLEncoder.encode(foldernames)+"&host=" + URLEncoder.encode(host) + "&port="
-	        + URLEncoder.encode(port) + "&offset=" + offset + "&count=" + count +"&search_content"+ URLEncoder.encode(search_content) + "&consumer_key="
+	        + URLEncoder.encode(port) + "&offset=" + offset + "&count=" + count +"&search_content="+ URLEncoder.encode(search_content) + "&consumer_key="
 	        + URLEncoder.encode(consumerKey) + "&consumer_secret=" + URLEncoder.encode(consumerSecret)
 	        + "&oauth_key=" + URLEncoder.encode(oauth_key) + "&oauth_secret=" + URLEncoder.encode(oauth_secret);
     }
+    
 
 }

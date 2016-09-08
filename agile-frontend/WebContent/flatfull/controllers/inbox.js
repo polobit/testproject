@@ -132,6 +132,8 @@ function syncContacts(){
 			$("#mails-list").remove();
 			$("#mails-list-view").append("<ul class='portlet_body list-group list-group-lg no-radius m-b-none m-t-n-xxs' id='mails-list'></ul>");
 			$("#mails-list").css({"max-height":$(window).height()-128,"height":$(window).height()-128, "overflow-y":"scroll", "padding":"0px"});
+			$("#mail-details-view").remove();
+			$("#mail-detail-view").append("<div class='portlet_body' id='mail-details-view' style='display:none;'></div>");
 			renderToMailList(url);
 		}
 	});
@@ -174,22 +176,7 @@ function renderToMailList(url){
 				success: function(data,response,xhr) {
 					that.render(data);
 					renderToMailView(data);
-					$('.collapse').on('show.bs.collapse', function (e) {
-						$("#mails-list").hide();
-						$("#compose").hide();
-						$("#mail-details-view").show();
-					    $('.collapse').not(e.target).removeClass('in');
-					});
-					$(document).on('click','.back-to-inbox',function(e) {
-						$("#mails-list").show();
-						$("#mail-details-view").hide();
-						$("#compose").hide();
-						$(".inbox-reply-view").html("");
-						$(".ng-show").show();
-					});
-					$(document).on('click','.unread',function(e) {
-						$(this).css({"font-weight":"normal"});
-					});
+					inboxMailViewListeners();
 					$("li.unread").css({"font-weight":"bold"});
 					hideTransitionBar();
 					$(".loading").hide();
@@ -252,7 +239,6 @@ function renderToMailView(data){
 	        this.$el.append(html);
 		},
 		displayReplyView:function(e){
-			
 			var targetEl = $(e.currentTarget);
 			var attrid = $(targetEl).attr('data-val');
 			
@@ -394,6 +380,8 @@ function inboxEmailSend(ele,json){
 			$("#mails-list").remove();
 			$("#mails-list-view").append("<ul class='portlet_body list-group list-group-lg no-radius m-b-none m-t-n-xxs' id='mails-list'></ul>");
 			$("#mails-list").css({"max-height":$(window).height()-128,"height":$(window).height()-128, "overflow-y":"scroll", "padding":"0px"});
+			$("#mail-details-view").remove();
+			$("#mail-detail-view").append("<div class='portlet_body' id='mail-details-view' style='display:none;'></div>");
 			renderToMailList(url);
 		},
 		error : function(response){
@@ -440,6 +428,27 @@ function inboxreplySend(ele,json){
 		} 
 	});
 }
+function inboxMailViewListeners(){
+	$('.collapse').on('show.bs.collapse', function (e) {
+		$("#mails-list").hide();
+		$("#compose").hide();
+		$("#mail-details-view").show();
+	    $('.collapse').not(e.target).removeClass('in');
+	});
+	$(document).on('click','.back-to-inbox',function(e) {
+		$("#mails-list").show();
+		$("#mail-details-view").hide();
+		$("#compose").hide();
+		$(".inbox-reply-view").html("");
+		$(".ng-show").show();
+	});
+	$(document).on('click','.unread',function(e) {
+		$(this).css({"font-weight":"normal"});
+		var attrid = $(this).attr("id");
+		var url = $('#inbox-email-type-select').attr("data-url");
+		url = url.concat("&folder_name=INBOX&flag=SEEN");
+	});
+}
 function initializeInboxListeners(){
 
 	$('#inbox-listners').on('click', '#mail-inbox', function(e){
@@ -451,6 +460,8 @@ function initializeInboxListeners(){
 		$("#mails-list").remove();
 		$("#mails-list-view").append("<ul class='portlet_body list-group list-group-lg no-radius m-b-none m-t-n-xxs' id='mails-list'></ul>");
 		$("#mails-list").css({"max-height":$(window).height()-128,"height":$(window).height()-128, "overflow-y":"scroll", "padding":"0px"});
+		$("#mail-details-view").remove();
+		$("#mail-detail-view").append("<div class='portlet_body' id='mail-details-view' style='display:none;'></div>");
 		renderToMailList(url);
 	});
 
@@ -463,6 +474,8 @@ function initializeInboxListeners(){
 		$("#mails-list").remove();
 		$("#mails-list-view").append("<ul class='portlet_body list-group list-group-lg no-radius m-b-none m-t-n-xxs' id='mails-list'></ul>");
 		$("#mails-list").css({"max-height":$(window).height()-128,"height":$(window).height()-128, "overflow-y":"scroll", "padding":"0px"});
+		$("#mail-details-view").remove();
+		$("#mail-detail-view").append("<div class='portlet_body' id='mail-details-view' style='display:none;'></div>");
 		renderToMailList(url);
 	});
 	$('#inbox-listners').on('click', '.mail-compose', function(e){
@@ -470,6 +483,8 @@ function initializeInboxListeners(){
 		$("#mails-list").remove();
 		$("#mails-list-view").append("<ul class='portlet_body list-group list-group-lg no-radius m-b-none m-t-n-xxs' id='mails-list'></ul>");
 		$("#mails-list").css({"max-height":$(window).height()-128,"height":$(window).height()-128, "overflow-y":"scroll", "padding":"0px"});
+		$("#mail-details-view").remove();
+		$("#mail-detail-view").append("<div class='portlet_body' id='mail-details-view' style='display:none;'></div>");
 		$("#mails-list").append(LOADING_HTML);
 		composeView();
 		$(".loading").hide();
@@ -477,12 +492,16 @@ function initializeInboxListeners(){
 
 	$('#inbox-listners').on('click', '#search_email', function(e){
 		var search_val = document.getElementById('search-mail').value;
-		var from_email = $('#inbox-email-type-select').text();
-		url = "core/api/social-prefs/search-google-emails?from_email="+from_email+"&search_content="+search_val;
-		$("#mails-list").remove();
-		$("#mails-list-view").append("<ul class='portlet_body list-group list-group-lg no-radius m-b-none m-t-n-xxs' id='mails-list'></ul>");
-		$("#mails-list").css({"max-height":$(window).height()-128,"height":$(window).height()-128, "overflow-y":"scroll", "padding":"0px"});
-		renderToMailList(url);
+		if(search_val){
+			var from_email = $('#inbox-email-type-select').text();
+			url = "core/api/social-prefs/search-google-emails?from_email="+from_email+"&search_content="+search_val;
+			$("#mails-list").remove();
+			$("#mails-list-view").append("<ul class='portlet_body list-group list-group-lg no-radius m-b-none m-t-n-xxs' id='mails-list'></ul>");
+			$("#mails-list").css({"max-height":$(window).height()-128,"height":$(window).height()-128, "overflow-y":"scroll", "padding":"0px"});
+			$("#mail-details-view").remove();
+			$("#mail-detail-view").append("<div class='portlet_body' id='mail-details-view' style='display:none;'></div>");
+			renderToMailList(url);
+		}
 	});
 }
 function initializeInboxSendEmailListeners(){
@@ -599,6 +618,8 @@ function initializeComposeEmailListeners(){
 		$("#mails-list").remove();
 		$("#mails-list-view").append("<ul class='portlet_body list-group list-group-lg no-radius m-b-none m-t-n-xxs' id='mails-list'></ul>");
 		$("#mails-list").css({"max-height":$(window).height()-128,"height":$(window).height()-128, "overflow-y":"scroll", "padding":"0px"});
+		$("#mail-details-view").remove();
+		$("#mail-detail-view").append("<div class='portlet_body' id='mail-details-view' style='display:none;'></div>");
 		renderToMailList(url);
 	});
 

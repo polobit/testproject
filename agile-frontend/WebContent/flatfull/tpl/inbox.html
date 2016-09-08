@@ -34,6 +34,14 @@
       
     </div>
     <div class="btn-toolbar">
+    	<div class="form-group" style="margin-bottom:0px;">
+            <div class="input-group" style="z-index:0; float:none;">
+              <input type="text" class="form-control input-sm bg-light no-border rounded padder ng-pristine ng-valid ng-touched" id="search-mail" placeholder="Search Emails...">
+              <span class="input-group-btn">
+                <button type="submit" class="btn btn-sm bg-light rounded" id="search_email"><i class="fa fa-search"></i></button>
+              </span>
+            </div>
+          </div>
       <!--<div class="btn-group dropdown">
         <button class="btn btn-default btn-sm btn-bg dropdown-toggle" data-toggle="dropdown">
           <span class="dropdown-label">Filter</span>                    
@@ -58,8 +66,10 @@
 	  </ul>
   </div>
   <!-- / list -->
-  <div class="portlet_body" id="mail-details-view" style="display:none;">
+  <div id="mail-detail-view">
+	  <div class="portlet_body" id="mail-details-view" style="display:none;">
 
+	  </div>
   </div>
   <div id="compose" style="display:none;"></div>
 </div></div>
@@ -145,7 +155,7 @@
 		{{#if errormssg}}
 	    	<span class="text-dark">{{agile_lng_translate 'contact-details' 'error'}}: {{errormssg}}</span>
 	    {{else}}
-		    <li ng-repeat="mail in mails | filter:fold" ng-class="labelClass(mail.label)" class="list-group-item clearfix b-l-3x ng-scope b-l-info {{this.flags}}" style="height: 70px;overflow: hidden;">
+		    <li id="flag{{this.id}}" class="list-group-item clearfix b-l-3x ng-scope b-l-info {{this.flags}}" style="height: 70px;overflow: hidden;">
 		      <a ui-sref="app.page.profile" class="avatar thumb pull-left m-r" href="#/app/page/profile">
 		        <img ng-src="img/a10.jpg" src="img/a10.jpg">
 		      </a>

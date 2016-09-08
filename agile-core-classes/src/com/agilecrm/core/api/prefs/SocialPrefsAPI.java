@@ -370,7 +370,7 @@ public class SocialPrefsAPI
     @GET
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     public List<EmailWrapper> getGoogleEmailsBySearchCondition(@QueryParam("from_email") String fromEmail, @QueryParam("page_size") String pageSize,
-	    @QueryParam("cursor") String cursor,@QueryParam("search_content") String searchcontent)
+	    @QueryParam("cursor") String cursor,@QueryParam("search_content") String search_content)
     {
 	List<EmailWrapper> emails = null;
 	try
@@ -381,7 +381,7 @@ public class SocialPrefsAPI
 	    String normalisedFromEmail = AgileTaskletUtil.normalizeStringSeparatedByDelimiter(',', fromEmail);
 	    // Gets GmailPrefs url
 	    String gmailURL = ContactGmailUtil
-		    .getGmailNewURL(normalisedFromEmail, cursor, pageSize,"", searchcontent);
+		    .getGmailNewURL(normalisedFromEmail, cursor, pageSize,"", search_content);
 	    // If both are not set, return Contact emails.
 	    if (StringUtils.isNotBlank(gmailURL))
 		emails = ContactEmailUtil.getEmailsfromServer(gmailURL, pageSize, cursor, normalisedFromEmail);
