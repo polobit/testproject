@@ -158,6 +158,10 @@ public class Trigger
 
 	@NotSaved
 	public Boolean is_disabled = false;
+	
+	
+	@NotSaved(IfDefault.class)
+	public String sms_reply = null;
 
 	/**
 	 * Returns campaign name as an xml element which is retrieved using
