@@ -31,6 +31,26 @@ var ActivitylogRouter = Backbone.Router.extend({
 
                     $('#activities-listners').html($(template_ui));
 
+                    var dashboard_name = _agile_get_prefs("dashboard_"+CURRENT_DOMAIN_USER.id);
+                    var activities_list;
+                    switch(dashboard_name){
+                         case "SalesDashboard" :
+                             activities_list = "sales-activity-list-header"
+                             break;
+                         case "MarketingDashboard" :
+                             activities_list = "marketing-activity-list-header"
+                             break;
+                         case "dashboard" :
+                             activities_list = "service-activity-list-header"
+                             break;
+                     }
+                     getTemplate(activities_list, {}, undefined, function(template) {
+ 
+                         if (!template)
+                             return;
+                         $(".dashboard-activities").append(template);
+                     });
+
                     initActivitiesDateRange();
 
                     //comaign  history
