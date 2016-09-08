@@ -662,14 +662,7 @@ public class GoogleSyncImpl extends TwoWaySyncService
 		{
 			
 			try{
-			 if(createContact.getId() == null)
-			    {
-				 System.out.println("Inside_create_of_update");
-					BatchUtils.setBatchOperationType(createContact, BatchOperationType.INSERT);
-					BatchUtils.setBatchId(createContact,"create");
-					updateFeed.getEntries().add(createContact);
-			    }
-			    else
+			 if(createContact.getId() != null)
 			    {
 			    	//If contact already present in google with this email, we just update this
 			    	//instead of creating new contact
