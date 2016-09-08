@@ -41,16 +41,20 @@ import org.json.JSONObject;
 
 import com.agilecrm.AgileQueues;
 import com.agilecrm.activities.Activity.ActivityType;
+import com.agilecrm.activities.Category;
 import com.agilecrm.activities.Event;
 import com.agilecrm.activities.Task;
 import com.agilecrm.activities.util.ActivitySave;
 import com.agilecrm.activities.util.ActivityUtil;
+import com.agilecrm.activities.util.CategoriesUtil;
 import com.agilecrm.activities.util.EventUtil;
 import com.agilecrm.activities.util.TaskUtil;
 import com.agilecrm.bulkaction.BulkActionAdaptor;
 import com.agilecrm.bulkaction.ContactExportBulkPullTask;
+import com.agilecrm.bulkaction.LeadExportBulkPullTask;
 import com.agilecrm.bulkaction.deferred.ContactExportPullTask;
 import com.agilecrm.bulkaction.deferred.ContactsBulkDeleteDeferredTask;
+import com.agilecrm.bulkaction.deferred.LeadExportPullTask;
 import com.agilecrm.cases.Case;
 import com.agilecrm.cases.util.CaseUtil;
 import com.agilecrm.contact.Contact;
@@ -76,6 +80,7 @@ import com.agilecrm.deals.Opportunity;
 import com.agilecrm.deals.util.OpportunityUtil;
 import com.agilecrm.document.Document;
 import com.agilecrm.document.util.DocumentUtil;
+import com.agilecrm.lead.imports.LeadsCSVImporter;
 import com.agilecrm.queues.util.PullQueueUtil;
 import com.agilecrm.search.query.util.QueryDocumentUtil;
 import com.agilecrm.search.util.SearchUtil;
@@ -1996,5 +2001,117 @@ public class ContactsAPI
     	searchMap.put("contact_company_key", new Key<Contact>(Contact.class, Long.valueOf(id)));
 
     	return Contact.dao.getCountByProperty(searchMap);
+    }
+    
+    @Path("/leads-import/{key}/{type}")
+    @POST
+    @Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public ImportStatus leadsBulkSave(Contact contact, @PathParam("key") String key, @PathParam("type") String type)
+    {
+	// it gives is 1000)
+	int currentEntityCount = ContactUtil.getCount();
+
+	// Creates a blobkey object from blobkey string
+	BlobKey blobKey = new BlobKey(key);
+
+	// new CSVUtil(restrictions,
+	// accessControl).createContactsFromCSV(blobStream, contact,
+	// ownerId);
+	UserInfo info = SessionManager.get();
+
+	CSVImporter<Contact> importer;
+	try
+	{
+	    ImportStatusDAO statusDAO = new ImportStatusDAO(NamespaceManager.get(), ImportType.LEADS);
+	    Key<DomainUser> userKey = new Key<DomainUser>(DomainUser.class, info.getDomainId());
+
+	    statusDAO.createNewImportStatus(userKey, 0, blobKey.getKeyString());
+	    importer = new LeadsCSVImporter(NamespaceManager.get(), blobKey, info.getDomainId(),
+		    new ObjectMapper().writeValueAsString(contact), Contact.class, currentEntityCount, statusDAO);
+
+	    PullQueueUtil.addToPullQueue("contact-import-queue", importer, key);
+	    return statusDAO.getImportStatus(NamespaceManager.get());
+	}
+
+	catch (IOException e)
+	{
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
+
+	return null;
+
+    }
+    
+    @Path("/leads-export")
+    @POST
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    public void exportLeads(@FormParam("contact_ids") String contact_ids, @QueryParam("filter") String filter,
+	    @FormParam("dynamic_filter") String dynamicFilter, @FormParam("data") String data)
+    {
+	if (StringUtils.isBlank(data))
+	{
+	    System.out.println("Not proceeding further as data is null.");
+	    return;
+	}
+
+	Long currentUserId = SessionManager.get().getDomainId();
+
+	ContactFilterResultFetcher fetcher = new ContactFilterResultFetcher(filter, dynamicFilter, 200, contact_ids,
+		currentUserId);
+
+	int totalCount = fetcher.getAvailableLeads();
+
+	DeferredTask task = null;
+	System.out.println("Total leads to export : " + totalCount);
+	List<Category> sourceList = null;
+	List<Category> statusList = null;
+	CategoriesUtil categoriesUtil = new CategoriesUtil();
+	Map<Long, String> sourceMap = new HashMap<Long, String>();
+	Map<Long, String> statusMap = new HashMap<Long, String>();
+	try 
+	{
+		sourceList = categoriesUtil.getCategoriesByType(String.valueOf(Category.EntityType.LEAD_SOURCE));
+		statusList = categoriesUtil.getCategoriesByType(String.valueOf(Category.EntityType.LEAD_STATUS));
+		if (sourceList != null)
+		{
+			for (Category category : sourceList) 
+			{
+				sourceMap.put(category.getId(), category.getLabel());
+			}
+		}
+		if (statusList != null)
+		{
+			for (Category category : statusList) 
+			{
+				statusMap.put(category.getId(), category.getLabel());
+			}
+		}
+	} 
+	catch (Exception e) 
+	{
+		System.out.println("Exception occured while getting lead sources and statuses in leads import");
+		e.printStackTrace();
+	}
+	if (totalCount > 5000)
+	{
+	    task = new LeadExportBulkPullTask(contact_ids, filter, dynamicFilter, currentUserId,
+		    NamespaceManager.get());
+	    PullQueueUtil.addToPullQueue("bulk-export-pull-queue", task, NamespaceManager.get());
+	}
+	else
+	{
+	    task = new LeadExportPullTask(contact_ids, filter, dynamicFilter, currentUserId, NamespaceManager.get(), sourceMap, statusMap);
+	    PullQueueUtil.addToPullQueue("export-pull-queue", task, NamespaceManager.get());
+	}
+
+	// filter, dynamicFilter, data);
+
+	// ContactExportEmailUtil.exportContactCSVAsEmail(data, downloadUrl,
+	// String.valueOf(count),
+	// ContactExportType.CONTACT);
+	// ActivityUtil.createLogForImport(ActivityType.CONTACT_EXPORT,
+	// EntityType.CONTACT, count, 0);
     }
 }

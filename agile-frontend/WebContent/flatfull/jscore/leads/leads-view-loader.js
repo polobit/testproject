@@ -400,6 +400,16 @@ var LeadsViewLoader = (function(){
 		} });
 	}
 
+	LeadsViewLoader.prototype.setupImportView = function(el)
+	{
+		App_Leads.importLeadsView = new CONTACTS_IMPORT_VIEW({
+			url : 'core/api/upload/status/LEADS',
+			template : "import-leads-main"
+		});
+
+		$('#leads-import', el).html(App_Leads.importLeadsView.render().el);
+	}
+
 	LeadsViewLoader.prototype.buildLeadsView = function(el, tag_id)
 	{
 		var that = this;

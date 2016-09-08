@@ -215,6 +215,51 @@ var LeadsBulkActions = (function(){
 		return "Leads";
 	}
 
+	LeadsBulkActions.prototype.showBulkEmailForm = function(id_array)
+	{
+		var count = 0;
+		if(id_array && id_array.length == 0)
+		{
+			id_array = this.getLeadsBulkIds();
+		}
+		Backbone.history.navigate("lead-bulk-email", { trigger : true });
+		this.fillEmails(id_array);
+	}
+
+	LeadsBulkActions.prototype.fillEmails = function(id_array)
+	{
+		var $emailForm = $('#emailForm');
+
+		// Populate from address and templates
+		populate_send_email_details();
+
+		// Setup HTML Editor
+		setupTinyMCEEditor('textarea#email-body', false, undefined, function()
+		{
+			// Reset tinymce content
+			set_tinymce_content('email-body', '');
+		});
+
+		// when SELECT_ALL is true i.e., all contacts are selected.
+		if (id_array.length === 0)
+			count = this.getAvailableLeads();
+		else
+			count = id_array.length;
+
+		// Shows selected contacts count in Send-email page.
+		$emailForm.find('div#bulk-count').css('display', 'inline-block');
+		
+		$emailForm.find('div#bulk-count p').html(_agile_get_translated_val('companies-view','selected') + " <b>" + count + "{{agile_lng_translate 'leads-view' 'leads'}}" + " </b> " + _agile_get_translated_val('companies-view','for-sending-email'));
+
+		// Hide to,cc and bcc
+		$emailForm.find('input[name="to"]').closest('.control-group').attr('class', 'hidden');
+		$emailForm.find('a#cc-link').closest('.control-group').attr('class', 'hidden');
+
+		// Change ids of Send and Close button, to avoid normal send-email
+		// actions.
+		$emailForm.find('.form-actions a#sendEmail').removeAttr('id').attr('id', 'bulk-send-email');
+	}
+
 	return LeadsBulkActions;
 
 })();

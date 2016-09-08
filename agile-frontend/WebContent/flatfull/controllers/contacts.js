@@ -890,6 +890,9 @@ var ContactsRouter = Backbone.Router.extend({
 			template : "import-contacts",
 			postRenderCallback: function(el)
 			{
+				var leadsViewLoader = new LeadsViewLoader();
+				leadsViewLoader.setupImportView(el);
+				
 				initializeImportEvents("import-contacts-event-listener");
 
 				if(import_tab_Id) {
@@ -904,6 +907,7 @@ var ContactsRouter = Backbone.Router.extend({
 		});
 
 		$('#content').html(App_Contacts.importContacts.render().el);
+
 		
 /*
 $('#content').html('<div id="import-contacts-event-listener"></div>');

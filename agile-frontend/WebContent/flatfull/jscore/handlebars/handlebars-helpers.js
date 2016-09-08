@@ -3991,6 +3991,14 @@ $(function()
 
 	Handlebars.registerHelper('getCurrentContactProperty', function(value)
 	{
+		if(App_Leads.leadDetailView && App_Leads.leadDetailView.model 
+			&& Current_Route && Current_Route.indexOf("lead/") == 0)
+		{
+			var lead_properties = App_Leads.leadDetailView.model.get('properties')
+			console.log(App_Leads.leadDetailView.model.toJSON());
+			return getPropertyValue(lead_properties, value);
+		}
+		
 		if (App_Contacts.contactDetailView && App_Contacts.contactDetailView.model)
 		{
 			var contact_properties = App_Contacts.contactDetailView.model.get('properties')

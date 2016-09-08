@@ -8,14 +8,14 @@
   			</button>
 			<ul id = "leads-static-filters-model-list" class="dropdown-menu" role="menu">
 				<li>
-					<a href="#" class="default_filter">Leads</a>
+					<a href="#" class="default_filter">{{agile_lng_translate 'menu' 'leads'}}</a>
 				</li>
 				<li class="divider"></li>
 				<li>
-					<a href='#lead-filters'>Manage Filters</a>
+					<a href='#lead-filters'>{{agile_lng_translate 'leads-view' 'manage-filters'}}</a>
 				</li>
 				<li class="divider"></li>
-				<li><a class="lead_static_filter" id="system-LEADS"  data="My Leads" href="#">My Leads</a></li>
+				<li><a class="lead_static_filter" id="system-LEADS"  data="My Leads" href="#">{{agile_lng_translate 'leads-view' 'my-leads'}}</a></li>
 			</ul>
 		</div>
 	{{/is_mobile}}
@@ -29,8 +29,8 @@
 <div class="wrapper-md lter bg-light b-b">
 	<div class="row">
     	<div class="col-md-12">
-        	<h3 class="pull-left font-thin h3">Lead Filters</h3>
-            <a href="#lead-filter-add" class="btn btn-sm btn-default right" id="leadFilter"><span><i class='icon-plus-sign'/></span>  Add Filter</a>
+        	<h3 class="pull-left font-thin h3">{{agile_lng_translate 'leads-view' 'lead-filters'}}</h3>
+            <a href="#lead-filter-add" class="btn btn-sm btn-default right" id="leadFilter"><span><i class='icon-plus-sign'/></span>  {{agile_lng_translate 'portlets' 'contact-filters-btn-text'}}</a>
             <div class="clearfix"></div>
            
         </div>
@@ -45,7 +45,7 @@
 	        			<table class="table table-bordered showCheckboxes agile-table panel table-layout-mob-view" url="core/api/filters/bulk" id="leads-filter-list">  
 	            			<thead>
 	                			<tr>   
-	                    			<th style="width:50%">Name</th>
+	                    			<th style="width:50%">{{agile_lng_translate 'contacts-view' 'name'}}</th>
 	                    			<th style="width:50%"></th>
 	                			</tr>
 	            			</thead>
@@ -59,9 +59,9 @@
     	<div class='col-md-3'>
         	<div class="wrapper" id='addview'>
              	<h4 class="m-t-none m-b-sm">
-              		What are Filters?
+              		{{agile_lng_translate 'contacts-view' 'what-are-filters'}}
              	</h4>
-            	<p>Filters are used to sort leads with a specific criteria to find patterns. You can save your preferred filters and fetch the leads based on saved preferences.</p>
+            	<p>{{agile_lng_translate 'leads-view' 'lead-filters-desc'}}</p>
         	</div>
     	</div>
 	</div>
@@ -77,7 +77,7 @@
 <td> 
   {{#if created_time}}
       <div>
-         Created <i class="fa fa-clock-o m-r-xs text-muted"></i><time class="created_time time-ago border-highlight text-muted" value="{{created_time}}" datetime="{{epochToHumanDate "" created_time}}">{{epochToHumanDate "ddd mmm dd yyyy" created_time}}</time> by {{filterOwner.name}}
+         {{agile_lng_translate 'contact-details' 'created'}} <i class="fa fa-clock-o m-r-xs text-muted"></i><time class="created_time time-ago border-highlight text-muted" value="{{created_time}}" datetime="{{epochToHumanDate "" created_time}}">{{epochToHumanDate "ddd mmm dd yyyy" created_time}}</time> {{agile_lng_translate 'contact-details' 'by'}} {{filterOwner.name}}
       </div>
   {{/if}}
 </td>

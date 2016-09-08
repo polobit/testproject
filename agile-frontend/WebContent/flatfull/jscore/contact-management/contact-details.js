@@ -418,6 +418,8 @@ var Contact_Details_Model_Events = Base_Model_View.extend({
       'click #contactDetailsTab a[href="#leads-tasks"]' : 'openLeadTasks',
       'click #contactDetailsTab a[href="#leads-deals"]' : 'openLeadDeals',
       'click #contactDetailsTab a[href="#leads-time-line"]' : 'openLeadTimeline',
+      'click #contactDetailsTab a[href="#leads-mail"]' : 'openLeadMails',
+      'click #contactDetailsTab a[href="#leads-documents"]' : 'openLeadDocs',
       'click .remove-lead-tags' : 'removeLeadTags',
       'click #lead-actions-delete' : 'leadDelete',
       'click #lead-add-tags' : 'onAddLeadTags', 
@@ -549,6 +551,10 @@ show and hide the input for editing the contact name and saving that
     {
       $('#email-type-select', App_Companies.companyDetailView.el).html($(targetEl).html());
     }
+    else if(Current_Route && Current_Route.indexOf("lead/") == 0)
+    {
+      $('#email-type-select', App_Leads.leadDetailView.el).html($(targetEl).html());
+    }
     else
     {
       $('#email-type-select', App_Contacts.contactDetailView.el).html($(targetEl).html());
@@ -563,6 +569,10 @@ show and hide the input for editing the contact name and saving that
 		if(Current_Route && Current_Route.indexOf("company/") == 0)
     {
       company_detail_tab.load_company_mail(url, email_server);
+    }
+    else if(Current_Route && Current_Route.indexOf("lead/") == 0)
+    {
+      App_Leads.leadDetails.loadMails(url, email_server);
     }
     else
     {
@@ -1636,6 +1646,20 @@ updateScoreValue :function(){
     e.preventDefault();
     App_Leads.leadDetails.saveLeadTabPosition("time-line");
     App_Leads.leadDetails.loadTimeline();
+  },
+
+  openLeadMails :  function(e)
+  {
+    e.preventDefault();
+    App_Leads.leadDetails.saveLeadTabPosition("mail");
+    App_Leads.leadDetails.loadMails();
+  },
+
+  openLeadDocs : function(e)
+  {
+    e.preventDefault();
+    App_Leads.leadDetails.saveLeadTabPosition("documents");
+    App_Leads.leadDetails.loadDocs();
   },
 
   removeLeadTags :  function(e){

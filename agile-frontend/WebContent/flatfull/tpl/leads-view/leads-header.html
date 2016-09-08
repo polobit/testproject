@@ -70,7 +70,7 @@
 	    					<div class="filters-drp-down btn-group dropdown m-l-none" style="float: none;">
 	    						<div class="">
 	    							<h4 class="inline-block m-n">
-	    								Leads
+	    								{{agile_lng_translate 'menu' 'leads'}}
 	    								<div class="inline-block" id="filter-list"></div>
 	    								<span id="leads-count" class=""></span>
 	    								<a id="leads-lhs-filters-toggle" class="m-l-xs text-lg "  onclick="Agile_GA_Event_Tracker.track_event('Hide/Expand Filters')">
@@ -84,11 +84,11 @@
 			    				<div class="btn-group pull-left m-r-xs" id="leads-view-options" style="pointer-events: auto;"></div>
 								<div id="view-list" class="pull-left btn-group">
 									<div class="btn-group">
-										<button id="add-lead" class="btn btn-default btn-sm"><i class="icon-plus-sign"></i> Add Lead</button>
+										<button id="add-lead" class="btn btn-default btn-sm"><i class="icon-plus-sign"></i> {{agile_lng_translate 'leads-view' 'add-lead'}}</button>
 										<button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
 										<ul class="dropdown-menu pull-right" role="menu">
-											<li><a href="#import">Import</a></li>
-											<!-- <li><a href="#add-dashlet">Add Dashlet</a></li> -->
+											<li><a href="#import">{{agile_lng_translate 'contacts-view' 'import'}}</a></li>
+											<!-- <li><a href="#add-dashlet">{{agile_lng_translate 'portlets' 'add-dashlet'}}</a></li> -->
 										</ul>
     								</div>
 								</div>
@@ -119,12 +119,12 @@
 				                	<i></i>                
 				          		</label>
 							</span>
-							<button id="bulk-tags" class="btn btn-default bulk-action-btn _lead_bulk_action btn-sm disabled txt-small">Add Tags</button>
-						    <button id="bulk-tags-remove" class="btn btn-default bulk-action-btn _lead_bulk_action btn-sm disabled txt-small">Remove Tags</button>
-						    <!-- <button id="bulk-email" class="btn btn-default bulk-action-btn _lead_bulk_action btn-sm disabled txt-small">Send Email</button> -->
-						    <button id="bulk-owner" class="btn btn-default bulk-action-btn _lead_bulk_action btn-sm disabled txt-small">Change Owner</button>
-						    <button id="bulk-leads-export" class="btn btn-default bulk-action-btn _lead_bulk_action btn-sm disabled txt-small" onclick="Agile_GA_Event_Tracker.track_event('Export as CSV');">Export as CSV</button>
-						    <button class="btn btn-default bulk-action-btn delete-checked-contacts btn-sm disabled txt-small">Delete</button>
+							<button id="bulk-tags" class="btn btn-default bulk-action-btn _lead_bulk_action btn-sm disabled txt-small">{{agile_lng_translate 'contacts-view' 'add-tags'}}</button>
+						    <button id="bulk-tags-remove" class="btn btn-default bulk-action-btn _lead_bulk_action btn-sm disabled txt-small">{{agile_lng_translate 'contacts-view' 'remove-tags'}}</button>
+						    <button id="bulk-email" class="btn btn-default bulk-action-btn _lead_bulk_action btn-sm disabled txt-small">{{agile_lng_translate 'contacts-view' 'send-email'}}</button>
+						    <button id="bulk-owner" class="btn btn-default bulk-action-btn _lead_bulk_action btn-sm disabled txt-small">{{agile_lng_translate 'contacts-view' 'change-owner'}}</button>
+						    <button id="bulk-export" class="btn btn-default bulk-action-btn _lead_bulk_action btn-sm disabled txt-small" onclick="Agile_GA_Event_Tracker.track_event('Export as CSV');">{{agile_lng_translate 'deal-view' 'export-as-csv'}}</button>
+						    <button class="btn btn-default bulk-action-btn delete-checked-contacts btn-sm disabled txt-small">{{agile_lng_translate 'contacts-view' 'delete'}}</button>
 							<div class="btn-group dropdown pull-right {{#iscompactTabel 'LEAD'}}compact {{/iscompactTabel}} multiple-checkbox" style="padding-right: 10px;" id="lead-custom-coloumns">
 								<div class="btn-group dropdown  multiple-checkbox" style="padding-right: 10px;position:absolute;right:0px;" id="lead-custom-coloumns">
 									<button class="btn btn-default dropdown-toggle  btn-sm" data-toggle="dropdown" aria-expanded="true" id="leadTabelView"><i class="{{#iscompactTabel 'LEAD'}} fa fa-ellipsis-h {{else}} fa fa-navicon {{/iscompactTabel}}"></"></i></button> 

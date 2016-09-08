@@ -2233,7 +2233,7 @@ public class CSVUtil
     		    {
     			accessDeniedToUpdate++;
     			failedContacts.add(new FailedContactBean(getDummyContact(properties, csvValues),
-    				"Access denied to update contact"));
+    				"Access denied to update lead"));
 
     			continue;
     		    }
@@ -2247,8 +2247,8 @@ public class CSVUtil
     		    // and checked with plan limits
 
     		    ++billingRestriction.contacts_count;
-    		    System.out.println("Contacts limit - Allowed : "
-    			    + billingRestriction.getCurrentLimits().getContactLimit() + " current contacts count : "
+    		    System.out.println("Leads limit - Allowed : "
+    			    + billingRestriction.getCurrentLimits().getContactLimit() + " current leads count : "
     			    + billingRestriction.contacts_count);
     		    if (limitCrossed)
     		    {
@@ -2272,7 +2272,7 @@ public class CSVUtil
     	    catch (InvalidTagException e)
     	    {
 
-    		System.out.println("Invalid tag exception raised while saving contact ");
+    		System.out.println("Invalid tag exception raised while saving lead ");
     		e.printStackTrace();
     		failedContacts.add(new FailedContactBean(getDummyContact(properties, csvValues), e.getMessage()));
     		continue;
@@ -2281,7 +2281,7 @@ public class CSVUtil
     	    {
 
     		accessDeniedToUpdate++;
-    		System.out.println("ACL exception raised while saving contact ");
+    		System.out.println("ACL exception raised while saving lead ");
     		e.printStackTrace();
     		failedContacts.add(new FailedContactBean(getDummyContact(properties, csvValues), e.getMessage()));
 
@@ -2289,12 +2289,12 @@ public class CSVUtil
     	    catch (Exception e)
     	    {
 
-    		System.out.println("exception raised while saving contact ");
+    		System.out.println("exception raised while saving lead ");
     		e.printStackTrace();
     		if (tempContact.id != null)
     		{
     		    failedContacts.add(new FailedContactBean(getDummyContact(properties, csvValues),
-    			    "Exception raise while saving contact"));
+    			    "Exception raise while saving lead"));
     		}
 
     	    }
@@ -2327,7 +2327,7 @@ public class CSVUtil
     	    }
     	    catch (Exception e)
     	    {
-    		System.out.println("exception while saving contacts");
+    		System.out.println("exception while saving leads");
     		e.printStackTrace();
     	    }
 
@@ -2375,12 +2375,100 @@ public class CSVUtil
     	dBbillingRestriction.send_warning_message();
 
     	// Send notification after contacts save complete
-    	BulkActionNotifications.publishconfirmation(BulkAction.CONTACTS_CSV_IMPORT, String.valueOf(savedContacts));
+    	BulkActionNotifications.publishconfirmation(BulkAction.LEADS_CSV_IMPORT, String.valueOf(savedContacts));
     	// create failed contact csv
 
-    	buildFailedContacts(domainUser, failedContacts, headings, status);
+    	buildFailedLeads(domainUser, failedContacts, headings, status);
     	if (savedContacts != 0 || mergedContacts != 0)
-    	    ActivityUtil.createLogForImport(ActivityType.CONTACT_IMPORT, EntityType.CONTACT, savedContacts,
+    	    ActivityUtil.createLogForImport(ActivityType.LEAD_IMPORT, EntityType.CONTACT, savedContacts,
     		    mergedContacts);
+    }
+    
+    /**
+     * build failed lead csv file
+     * 
+     * @param contact
+     */
+    private void buildFailedLeads(DomainUser domainUser, List<FailedContactBean> failedContacts, String[] headings,
+	    Map<Object, Object> status)
+    {
+	String path = null;
+	try
+	{
+	    System.out.println("Export functionality email" + failedContacts);
+	    if (failedContacts == null || failedContacts.size() == 0)
+	    {
+		System.out.println("no failed conditions");
+		// Send every partition as separate email
+		sendFailedLeadImportFile(domainUser, null, 0, status);
+		return;
+	    }
+
+	    System.out.println("writing file service");
+
+	    // Builds Contact CSV
+	    writeFailedContactsInCSV(getCSVWriterForFailedContacts(), failedContacts, headings);
+
+	    System.out.println("wrote files to CSV");
+	    byte[] data=null;
+	    
+	    try{
+
+	    service.getOutputchannel().close();
+
+	    System.out.println("closing stream");
+
+	    
+	    data = service.getDataFromFile();
+
+	    System.out.println("byte data");
+
+	    System.out.println(data.length);
+	    }
+	    catch(Exception e)
+	    {
+	    	e.printStackTrace();
+	    }
+	    System.out.println(domainUser.email);
+	    
+	    if(data==null)
+	    {
+	    	sendFailedLeadImportFile(domainUser, "", failedContacts.size(), status);
+	    }
+	    // Send every partition as separate email
+	    else
+	    sendFailedLeadImportFile(domainUser, new String(data, "UTF-8"), failedContacts.size(), status);
+
+	    service.deleteFile();
+
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
+
+    }
+    
+    /**
+     * helper function for send mail of import leads status with failed
+     * lead csv attachment if failed leads are found then it will send
+     * with failed contact csv file other wise send normal status mail
+     * 
+     */
+    public void sendFailedLeadImportFile(DomainUser domainUser, String csvData, int totalRecords,
+	    Map<Object, Object> status)
+    {
+	if (totalRecords >= 1)
+	{
+	    String[] strArr = { "text/csv", "FailedContacts.csv", csvData };
+	    SendMail.sendMail(domainUser.email, "CSV Leads Import Status", SendMail.CSV_IMPORT_NOTIFICATION,
+		    new Object[] { domainUser, status }, SendMail.AGILE_FROM_EMAIL, SendMail.AGILE_FROM_NAME, strArr);
+	}
+	else
+	{
+	    SendMail.sendMail(domainUser.email, "CSV Leads Import Status", SendMail.CSV_IMPORT_NOTIFICATION,
+		    new Object[] { domainUser, status });
+	}
+
     }
 }

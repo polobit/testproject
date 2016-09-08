@@ -1,6 +1,7 @@
 package com.agilecrm.export;
 
 import java.util.List;
+import java.util.Map;
 
 import com.agilecrm.util.email.SendMail;
 
@@ -30,6 +31,8 @@ public interface Exporter<T>
     }
 
     public void writeEntitesToCSV(List<T> entities);
+    
+    public void writeEntitesToCSV(List<T> entities, Map<Long, String> source_map, Map<Long, String> status_map);
 
     public void finalize();
 

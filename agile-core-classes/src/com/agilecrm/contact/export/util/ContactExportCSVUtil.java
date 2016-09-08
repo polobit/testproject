@@ -112,7 +112,7 @@ public class ContactExportCSVUtil
 		ContactCSVExport.SKYPE, ContactCSVExport.TWITTER, ContactCSVExport.LINKEDIN, ContactCSVExport.FACEBOOK,
 		ContactCSVExport.XING, ContactCSVExport.BLOG, ContactCSVExport.GOOGLE_PLUS, ContactCSVExport.FLICKR,
 		ContactCSVExport.GITHUB, ContactCSVExport.YOUTUBE, ContactCSVExport.TAGS, ContactCSVExport.TAGS_TIME, ContactCSVExport.TAGS_TIME_NEW,
-		ContactCSVExport.CREATED_TIME};
+		ContactCSVExport.CREATED_TIME, ContactCSVExport.LEAD_SOURCE, ContactCSVExport.LEAD_STATUS};
 
 	return getHeaders(ContactExportCSVUtil.appendCustomFieldsToHeaders(headers, SCOPE.LEAD));
     }

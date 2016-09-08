@@ -880,24 +880,19 @@ $('#' + id).on('click', '#import-leads', function(e)
 	// Sends request to save the contacts uploaded from csv,
 	// present in the blobstore. Contact is sent to save
 	// each row in csv file in to a contact
-	$.ajax({ type : 'POST', url : "/core/api/upload/save?type=Leads&key=" + BLOB_KEY, data : JSON.stringify(contact),
+	$.ajax({ type : 'POST', url : "/core/api/contacts/leads-import/"+ BLOB_KEY + "/CONTACTS", data : JSON.stringify(contact),
 		contentType : "application/json", success : function(data)
 		{
 			// Navigate to contacts page
 			// Sends empty JSON to remove
 			// contact uploaded
-			var $firstDiv = $('#content').first();
-
 			App_Contacts.importContacts.model.fetch({
 				success : function(data)
 				{
-					showNotyPopUp('information', _agile_get_translated_val('contacts','import-success'), "top", 5000);
-					addTagAgile(IMPORT_TAG);
-					console.log(data);
+					showNotyPopUp('information', "{{agile_lng_translate 'leads-view' 'import-success'}}", "top", 5000);
 				}
-
-			})
-			
+			});
+			App_Contacts.importContacts.render(true);
 		}});
 
 });
