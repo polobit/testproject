@@ -111,7 +111,6 @@ public class DealsBulkActionsAPI
 		    System.out.println("total sublist -----" + subList.size());
 		    subList.clear();
 		}
-		ActivityUtil.createSingleDealBulkActivity(ActivityType.DEAL_ARCHIVE, deal,null,null);
 	    }
 
 	    if (!subList.isEmpty())
@@ -173,7 +172,6 @@ public class DealsBulkActionsAPI
 		    System.out.println("total sublist -----" + subList.size());
 		    subList.clear();
 		}
-		ActivityUtil.createSingleDealBulkActivity(ActivityType.DEAL_RESTORE, deal,null,null);
 
 	    }
 
@@ -250,7 +248,6 @@ public class DealsBulkActionsAPI
 		}
 		System.out.println("calling method createSingleDealBulkActivity");	
 
-		ActivityUtil.createSingleDealBulkActivity(ActivityType.DEAL_OWNER_CHANGE, deal,newOwner, oldOwner);
 		System.out.println("called method createSingleDealBulkActivity");	
 
 		
@@ -334,7 +331,6 @@ public class DealsBulkActionsAPI
 		    subList.add(deal);
 			System.out.println("calling method createSingleDealBulkActivity");	
 
-		    ActivityUtil.createSingleDealBulkActivity(ActivityType.DEAL_MILESTONE_CHANGE, deal, milestone_name, oldMilestone);
 			System.out.println("called method createSingleDealBulkActivity");	
 
 		}
