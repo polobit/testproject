@@ -342,6 +342,15 @@ function populate_call_trigger_options(trigger_form, triggerJSON)
 		trigger_form.find('div#CALL select').find('option[value="' + triggerJSON["call_disposition"] + '"]').attr('selected', 'selected').trigger('change');
 }
 
+function populate_sms_trigger_options(trigger_form, triggerJSON)
+{
+	
+	trigger_form.find('div#SMS').closest('div.control-group').css('display', '');
+	
+	if(triggerJSON && triggerJSON["sms_reply"])
+		trigger_form.find('div#SMS select').find('option[value="' + triggerJSON["sms_reply"] + '"]').attr('selected', 'selected').trigger('change');
+}
+
 function populate_forms_in_trigger(trigger_form, trigger_form_select_id, trigger_form_id, trigger_run_on_new_contacts)
 {
 	trigger_form.find("#trigger-run-on-new-contacts").css('display', '');
@@ -730,7 +739,7 @@ function initializeTriggerListEventListners(id,trigger_type)
 		}
 		
 		// Hide trigger milestones div for other trigger conditions.
-		if (type !== 'INBOUND_CALL' || type !== 'OUTBOUND_CALL' || type !== 'REPLY_SMS'){
+		if (type !== 'INBOUND_CALL' || type !== 'OUTBOUND_CALL'){
 			$('form#addTriggerForm').find('div#CALL').closest('div.control-group').css('display', 'none');
 		}
 			
@@ -796,7 +805,7 @@ function initializeTriggerListEventListners(id,trigger_type)
 			populate_owners_in_trigger($('form#addTriggerForm'), 'event-owner-id');
 		}
 		
-		if(type == 'INBOUND_CALL' || type == 'OUTBOUND_CALL' || type == 'REPLY_SMS')
+		if(type == 'INBOUND_CALL' || type == 'OUTBOUND_CALL')
 		{
 			populate_call_trigger_options($('form#addTriggerForm'));	
 		}
@@ -808,6 +817,11 @@ function initializeTriggerListEventListners(id,trigger_type)
 
 		if(type == 'UNSUBSCRIBED')
 			show_email_tracking_campaigns();
+
+		if(type == 'REPLY_SMS')
+		{
+			populate_sms_trigger_options($('form#addTriggerForm'));	
+		}
 
 	});
 }

@@ -63,7 +63,6 @@
 										<optgroup label="Call">
 										<option value="INBOUND_CALL">Inbound Call</option>
 										<option value="OUTBOUND_CALL">Outbound Call</option>
-										<option value="REPLY_SMS">{{agile_lng_translate 'campaigns' 'reply-sms'}}</option>
 										<optgroup label="Ecommerce">
 										<option value="SHOPIFY_EVENT" id="shopify-event">Shopify Event</option>
 										<optgroup label="Form">
@@ -79,6 +78,9 @@
 										<option value="TICKET_LABEL_IS_ADDED">Ticket label is added</option>
 										<option value="TICKET_LABEL_IS_DELETED">Ticket label is deleted</option>
 										<!-- <option value="SLA_CROSSED">SLA crossed</option> --> 
+
+										<optgroup label="Sms">
+										<option value="REPLY_SMS">{{agile_lng_translate 'campaigns' 'reply-sms'}}</option>
 
 									</select>
                                 </div>
@@ -106,7 +108,7 @@
 						<!--Call Inbound and Outbound -->
 						<div class="control-group form-group" style="display: none;">
 							<div id="CALL">
-								<label class="control-label REPLY_SMS INBOUND_CALL OUTBOUND_CALL"></label>
+								<label class="control-label  INBOUND_CALL OUTBOUND_CALL"></label>
 								<div class="controls col-sm-offset-4 col-sm-8">	
 									<select name="call_disposition" class="required form-control w-md">
 										<option value="" class="INBOUND_CALL OUTBOUND_CALL">Select call status</option>
@@ -123,8 +125,19 @@
 										<option value="meeting scheduled" class="INBOUND_CALL OUTBOUND_CALL">Meeting Scheduled</option>
 										<option value="new opportunity" class="INBOUND_CALL OUTBOUND_CALL">New Opportunity</option>
 										<option value="voicemail" class="OUTBOUND_CALL">Voicemail</option>
-										<option value="yes" class="REPLY_SMS">{{agile_lng_translate 'campaigns' 'reply-yes'}}</option>
-										<option value="no" class="REPLY_SMS">{{agile_lng_translate 'campaigns' 'reply-no'}}</option>
+										
+									</select>
+								</div>
+							</div>
+						</div>
+						<div class="control-group form-group" style="display: none;">
+							<div id="SMS">
+								<label class="control-label REPLY_SMS "></label>
+								<div class="controls col-sm-offset-4 col-sm-8">	
+									<select name="sms_reply" class="required form-control w-md">
+										 <option value="yes" class="REPLY_SMS">{{agile_lng_translate 'campaigns' 'reply-yes'}}</option>
+                                        <option value="no" class="REPLY_SMS">{{agile_lng_translate 'campaigns' 'reply-no'}}</option>
+										
 									</select>
 								</div>
 							</div>
@@ -330,6 +343,10 @@
 
 											<li role="presentation" data-tab="9">
 												<a href="#service" name="tab9" aria-control="tab9" role="tab" data-toggle="tab" id="tab9">Service</a>
+											</li>
+
+											<li role="presentation" data-tab="10">
+												<a href="#sms" name="tab10" aria-control="tab10"role="tab" data-toggle="tab" id="tab10">{{agile_lng_translate 'campaigns' 'sms_trigger'}}</a>
 											</li>
 </ul>
 
@@ -821,25 +838,6 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-3 col-sm-6 col-xs-12">
-                <div class="panel wrapper text-center b-a">
-                    <!-- Icon and Title -->
-                    <div>
-                        <div>
-                            <i class="icon-call-in icon-3x"></i>
-                        </div>
-                        <b>{{agile_lng_translate 'campaigns' 'reply-sms'}}</b>
-                    </div>
-                    <br/>
-                    <div class="ellipsis-multiline m-b-md" rel="tooltip">
-                        {{agile_lng_translate 'campaigns' 'reply-sms-desc'}}
-                    </div>
-                    <!-- Add button -->
-                    <div>
-                        <a class="btn btn-sm btn-default add-trigger" data = "REPLY_SMS"  >{{agile_lng_translate 'campaigns' 'go'}}</a>
-                    </div>
-                </div>
-            </div>
         </div>
 
                 </div>  <!-- End of tab-pane - call -->
@@ -1044,6 +1042,35 @@
 
                 </div>  
                 <!-- End of tab-pane - service -->
+
+		<!-- Start of tab-pane - sms reply -->
+		<div class="tab-pane" role="tab-panel" id="sms">
+
+		    <div id="general" class="row">
+		            <div class="col-md-3 col-sm-6 col-xs-12">
+		                <div class="panel wrapper text-center b-a">
+		                    <!-- Icon and Title -->
+		                    <div>
+		                        <div>
+		                            <i class="icon-call-in icon-3x"></i>
+		                        </div>
+		                        <b>{{agile_lng_translate 'campaigns' 'reply-sms'}}</b>
+		                    </div>
+		                    <br/>
+		                    <div class="ellipsis-multiline m-b-md" rel="tooltip">
+		                       {{agile_lng_translate 'campaigns' 'reply-sms-desc'}}
+		                    </div>
+		                    <!-- Add button -->
+		                    <div>
+		                        <a class="btn btn-sm btn-default add-trigger" data = "REPLY_SMS"  >{{agile_lng_translate 'campaigns' 'go'}}</a>
+		                    </div>
+		                </div>
+		            </div>
+		    </div>
+
+		</div>  <!-- End of tab-pane - sms reply -->
+
+
 
             </div>  <!-- End of tab-content -->
 
