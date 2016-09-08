@@ -98,21 +98,9 @@
 							
  							</button>
 						</a>
-								<ul class="dropdown-menu" style="top:196px;left: 157px;" role="menu">
-									<li><a id = "statusValue"  value = "answered">{{agile_lng_translate 'campaigns' 'answered'}}</a></li>
-									<li><a id = "statusValue"  value = "busy">{{agile_lng_translate 'campaigns' 'busy'}}</a></li>
-									<li><a id = "statusValue"  value = "failed">{{agile_lng_translate 'call_activity' 'fail'}}</a></li>
-									<li><a id = "statusValue"  value = "missed">{{agile_lng_translate 'campaigns' 'missed'}}</a></li>
-									<li><a id = "statusValue"  value = "inquiry">{{agile_lng_translate 'campaigns' 'inquiry'}}</a></li>
-
-									<li><a id = "statusValue"  value = "interest">{{agile_lng_translate 'campaigns' 'interest'}}</a></li>
-									<li><a id = "statusValue"  value = "no interest">{{agile_lng_translate 'campaigns' 'no-interest'}}</a></li>
-									<li><a id = "statusValue"  value = "incorrect referral">{{agile_lng_translate 'campaigns' 'incorrect-referral'}}</a></li>
-									<li><a id = "statusValue"  value = "meeting scheduled">{{agile_lng_translate 'campaigns' 'meeting-scheduled'}}</a></li>
-									<li><a id = "statusValue"  value = "new opportunity">{{agile_lng_translate 'campaigns' 'new-opportunity'}}</a></li>
-									<li><a id = "statusValue"  value = "voicemail">{{agile_lng_translate 'campaigns' 'voicemail'}}</a></li>
+								<ul id="statusValue-ul" class="dropdown-menu" style="top:196px;left: 157px;" role="menu">
 								</ul>
-								
+						<span id="status-wait"></span>	
                     </div>
                     <span id="logPhone_status_error" style="color:#d9534f;display:none;">{{agile_lng_translate 'campaigns' 'status-not-declared'}}</span>
                 </div>
