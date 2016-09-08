@@ -41,16 +41,24 @@ public class ContactTriggerUtil
 	    executeTriggerForNewContact(newContact);
 	    return;
 	}
-
-	Boolean updated = newContact.isDocumentUpdateRequired(oldContact);
+	Boolean updated = false;
+	try
+	{
+	    updated = newContact.isDocumentUpdateRequired(oldContact); 
+	}
+	catch (Exception e){
+	    System.out.println("Exception in the menthod");
+	}
 	if (updated)
 	{
 	    try
 	    {
+		System.out.println("Update contact webhook trigger going to trigger");
 		WebhookTriggerUtil.triggerWebhook(newContact, "Contact", updated);
 	    }
 	    catch (Exception e)
 	    {
+		System.out.println("Exception in webhook trigger");
 		e.printStackTrace();
 	    }
 	}
