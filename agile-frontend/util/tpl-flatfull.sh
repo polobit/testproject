@@ -52,6 +52,7 @@ cat flatfull/tpl/widget/braintree/*.html > tpl/min/flatfull/braintree.js
 cat flatfull/tpl/widget/facebook/*.html > tpl/min/flatfull/facebook.js
 
 cat ../WebContent/helpcenter/helpcenter-tpl/*.html  > ../WebContent/tpl/min/flatfull/helpcenter-tpl.js
+cat flatfull/tpl/generic-timeline/*.html  > tpl/min/flatfull/generic-timeline.js
 
 ## Widgets
 cat flatfull/tpl/widget/braintree/*.html > tpl/min/flatfull/braintree.js

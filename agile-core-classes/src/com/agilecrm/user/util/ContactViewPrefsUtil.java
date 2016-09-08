@@ -125,8 +125,9 @@ public class ContactViewPrefsUtil
 	for (ContactViewPrefs viewPref : viewPrefs)
 	{
 	    if (type.equalsIgnoreCase(viewPref.type.toString())
-		    || (type.equals(CustomFieldDef.SCOPE.CONTACT.toString()) && viewPref.type
-			    .equals(ContactViewPrefs.Type.PERSON)))
+		    || type.equals(CustomFieldDef.SCOPE.CONTACT.toString()) && ((viewPref.type
+			    .equals(ContactViewPrefs.Type.PERSON)) || (viewPref.type
+					    .equals(ContactViewPrefs.Type.CONTACT_COMPANY))))
 	    {
 		result.add(viewPref);
 	    }

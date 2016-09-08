@@ -5838,7 +5838,7 @@ $(function()
 			return _agile_get_translated_val("call_activity", "missed");
 			break;
 		default:
-			return "";
+			return status;
 		}
 
 	});
@@ -7496,6 +7496,13 @@ Handlebars.registerHelper('if_equals_lowerCase', function(value, target, options
 	else
 		return options.inverse(this);
 });
+Handlebars.registerHelper('commaSeparateTags', function(value)
+	{
+		if (value)
+		{
+			return value.replace(/\[|\]/g, "").split(",");
+		}
+	});
 
 Handlebars.registerHelper('if_equals_sork_key', function(value, target, options)
 {
@@ -7633,6 +7640,7 @@ Handlebars.registerHelper('is_Particular_Domain', function(options)
 			return options.inverse(this);
 });
 
+
 Handlebars.registerHelper('can_api_js_serve_from_cloud', function(options)
 {
 	var plan = USER_BILLING_PREFS.plan.plan_type;
@@ -7656,3 +7664,25 @@ Handlebars.registerHelper('agile_lng_translate', function(key, value, options)
 {
 	console.log("Not found " + key + " : " + value);
 });
+
+//returning 0sec in case of no time
+Handlebars.registerHelper('secondsToCallActivitiesTime', function(time)
+		{
+			var hours = Math.floor(time / 3600);
+			if (hours > 0)
+				time = time - hours * 60 * 60;
+			var minutes = Math.floor(time / 60);
+			var seconds = time - minutes * 60;
+			var friendlyTime = "";
+			if (hours == 1)
+				friendlyTime = hours + "h ";
+			if (hours > 1)
+				friendlyTime = hours + "h ";
+			if (minutes > 0)
+				friendlyTime += minutes + "m ";
+			if (seconds > 0)
+				friendlyTime += seconds + "s ";
+			if (friendlyTime != "")
+				return ' - ' + friendlyTime;
+			return " - 0s ";
+		});
