@@ -1458,7 +1458,7 @@ function getAndUpdateCollectionCount(type, el, countFetchURL){
     	if(type == "contacts-company")
     		countURL = App_Companies.contacts_Company_List.options.url + "/count";
     	else if(type == "contacts")
-    		countURL = App_Contacts.contactsListView.options.url + "/count";
+    		countURL = App_Contacts.contactsListView.options.url + "/count/jsonformat";
 
     	else if(type == "workflows")
     		countURL = countFetchURL + "/count";
@@ -1473,9 +1473,15 @@ function getAndUpdateCollectionCount(type, el, countFetchURL){
     	abortCountQueryCall();
 
     	Count_XHR_Call = $.get(countURL, {}, function(data){
+    			// checking  if the count is from contacts  
+    			if(type == "contacts")
+    			{
+    				data = data.count;
+    				App_Admin_Settings.contactsLimitview.model.set(data);
+    			}
+    			else
     		        data = parseInt(data);
-    		        
-                    count_message = "<small> (" + data + " "+_agile_get_translated_val('other','total')+") </small>";
+    		        count_message = "<small> (" + data + " "+_agile_get_translated_val('other','total')+") </small>";
 					$('#contacts-count').html(count_message);
 
 					if(type == "workflows")

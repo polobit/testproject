@@ -170,6 +170,27 @@ public class ContactsAPI
 	return Contact.dao.getCountByProperty(searchMap);
 
     }
+    
+    /**
+     * Fetches the  contacts count and return in the json format
+     */
+    
+    @Path("/list/count/jsonformat")
+    @GET
+    @Produces({ MediaType.APPLICATION_JSON  , MediaType.APPLICATION_JSON})
+    public String getContactsCountJson()
+    {
+    
+    JSONObject json  = new JSONObject();
+	try {
+		json.put("count", getContactsCount());
+	} catch (JSONException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+	return json.toString(); 
+
+    }
 
     /**
      * Fetches all the contacts (of type person). Activates infiniScroll, if

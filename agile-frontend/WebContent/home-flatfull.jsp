@@ -266,12 +266,7 @@ function isIE() {
 
 </script>
 <div id="alert-message" style="display:none;"></div>
-<div id="contacts_plan_alert_info" class="contacts_plan_alert alert alert-info" role="alert" style="display:none;"> 
-  <span class="contacts_limit_message">
-  Your contacts limit reached to 80 percent please upgrade you   r account
-  </span>
-  <a href="#subscribe" class="text-info font-bold">Upgrade</a>
-  <span class="contact_plan_strip_close p-l-sm c-p close" data-dismiss="alert">&times</span>
+<div id="contacts_limit_alert_info" class="contacts_plan_alert hide"> 
 </div>
 <div id="free_plan_alert_info" class="free_plan_alert alert alert-info" role="alert" style="display:none;"> 
   <span class="free_plan_message">

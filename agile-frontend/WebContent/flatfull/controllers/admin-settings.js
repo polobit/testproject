@@ -1363,10 +1363,21 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			$('#content').find('.account-prefs-tab').addClass('select');
 			$(".active").removeClass("active");
 
-		}, "#content");
+		}, "#content");	
+	},
+	contactsLimitreachedview : function(e){
 
-		
-		
+		console.log("contactsLimitreachedview");
+		// Creata a global view
+		this.contactsLimitview = new Base_Model_View({ 
+			url : '/core/api/contacts/list/count/jsonformat', 
+			template : "contactslimit", 
+			postRenderCallback : function(el){
+					var maxContactLimit = App_Admin_Settings.contactsLimitview.model.toJSON().count;
+					if (maxContactLimit > parseInt(USER_BILLING_PREFS.planLimits.contactLimit*0.8))
+						$("#contacts_limit_alert_info").removeClass("hide");
+			},});
+		$('#contacts_limit_alert_info').html(this.contactsLimitview.render().el);
 	}
 
 });
@@ -1448,4 +1459,5 @@ var AccountPrefs_Events_Model_View = Base_Model_View.extend({
 			checkbox_el.attr("checked","checked");
 
 	},
+	
 });

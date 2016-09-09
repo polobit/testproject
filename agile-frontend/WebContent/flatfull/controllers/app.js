@@ -55,6 +55,8 @@ $(function()
 	 * events, and dispatching routes
 	 */
 	Backbone.history.start();
+	App_Admin_Settings.contactsLimitreachedview();
+
 //	setup_our_domain_sync();
 });
 
