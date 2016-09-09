@@ -249,7 +249,7 @@ function loadFullContactData(apikey, emailID){
  						errorMessage = _agile_get_translated_val('widgets', 'Fullcontact-invalid-api-key');
  					}
 
- 					$('#FullContact').html("<div class='p-sm'>"+errorMessage+"</div>");
+ 					$('#FullContact').html("<div class='p-sm' style='word-break:break-all;'>"+errorMessage+"</div>");
  				}				
 			}            
         });
