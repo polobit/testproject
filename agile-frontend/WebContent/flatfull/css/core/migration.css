@@ -2011,6 +2011,9 @@ display: block!important;
  .add-btn-mobile{ float: none !important; text-align: center;}
  .categori-btn-center{ display: table; margin: auto;}
  .service-table-mobile td > div.table-resp{width: 100%}
+ .ticket-filter-conditions-table tbody tr td select {padding: 6px 0px 6px 5px;}
+ .ticket-filter-conditions-table tbody tr td input {padding: 6px 5px;}
+
 }
 
 @media all and (min-width: 768px) {
@@ -2448,7 +2451,7 @@ transform: translateX(-50%);}
 } 
 .service-tabs-list i{ opacity: 0.6;}
 .service-tabs-list li a{ border-bottom: 0px; padding: 10px 15px;}
-.add-btn-mobile i, .categori-add-btn-mobile i{width: 24px; height: 24px; margin: -2px -4px; margin-right: 5px; line-height: 24px;}
+.add-btn-mobile i, .categori-add-btn-mobile i{width: 20px; height: 20px; margin: -1px -4px; margin-right: 5px; line-height: 20px;}
 .ticket-label-border tr:first-child td {
     border-top: 1px solid #eaeff0 !important;
 }
