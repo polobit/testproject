@@ -749,6 +749,24 @@ getRepPerformanceLog : function(url) {
 					if (!template_ui)
 						return;
 					$('#content').html($(template_ui));
+						var dashboard_name = _agile_get_prefs("dashboard_"+CURRENT_DOMAIN_USER.id);
+	                    var reports_list;
+	                    switch(dashboard_name){
+	                         case "SalesDashboard" :
+	                             reports_list = "salesdashboard-reports";
+	                             break;
+	                         case "MarketingDashboard" :
+	                             reports_list = "marketing-reports";
+	                             break;
+	                         case "dashboard" :
+	                             reports_list = "service-reports"
+	                             break;
+	                     }
+	                     getTemplate(reports_list, {}, undefined, function(template) {
+	                         if (!template)
+	                             return;
+	                         $(".dashboard-wise-reports").html(template);
+                    	});
 
 						preloadImages([
 							'flatfull/img/reports_images/Growth-graph.png',
