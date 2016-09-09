@@ -1,4 +1,4 @@
-<form class="form-view<%=agileformtransbg%> <%=agilethme%>" id="agile-form" action="<%= action %>" method="GET">
+<form class="form-view<%=agileformtransbg%> <%=agilethme%>" id="agile-form" action="<%= action %>"  style= "max-width:450px;" method="GET">
 <fieldset>
 
 <%= text %>
@@ -78,9 +78,9 @@
 .theme1 .agile-input-group{
   width: 100%;
 }
-.theme1 .agile-group{
+/*.theme1 .agile-group{
   padding: 0px 35px;
-}
+}*/
 .theme1 input::-webkit-input-placeholder{
  /*font-family:'Open Sans', serif;*/
  color: #9e9e9e!important;
@@ -247,6 +247,7 @@ margin-left: 35px;
 }
 .i-checks>i {
     vertical-align: middle;
+    box-sizing: initial;
 }
 .i-checks input {
     position: absolute;
