@@ -13,7 +13,11 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.search.AppengineSearch;
 import com.agilecrm.search.document.ContactDocument;
+import com.agilecrm.session.SessionManager;
+import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.CountryUtil;
+import com.agilecrm.util.email.SendMail;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.search.Document.Builder;
 import com.google.appengine.api.taskqueue.DeferredTask;
@@ -47,6 +51,7 @@ public class UpdateContactsOfDomainDeferredTask implements DeferredTask
 	@Override
 	public void run()
 	{
+		
 		System.out.println("Task started for domain: "+ domain);
 		String oldNamespace = NamespaceManager.get();
 		int currentCount = 0;
@@ -90,9 +95,6 @@ public class UpdateContactsOfDomainDeferredTask implements DeferredTask
 				
 				for (Contact contact : contacts_list)
 				{
-					//Updates old contact countries with country code
-					updateCountry(contact);
-					
 					contact.updated_time = System.currentTimeMillis() / 1000;
 					//builderObjects.add(contactDocuments.buildDocument(contact));
 					try {
@@ -134,6 +136,7 @@ public class UpdateContactsOfDomainDeferredTask implements DeferredTask
 						queue.addAsync(taskOptions);
 					} else {
 						//update stats to completion.
+						
 						updateStats(previousCursor,failedIds, "COMPLETED");
 					}
 					break;
@@ -150,6 +153,7 @@ public class UpdateContactsOfDomainDeferredTask implements DeferredTask
 				
 				//update stats to completion.
 				count+=currentCount;
+				
 				updateStats(previousCursor,failedIds, "COMPLETED");
 				break;
 			} while (contacts_list.size() > 0 && !StringUtils.equals(previousCursor, currentCursor));
@@ -185,20 +189,40 @@ public class UpdateContactsOfDomainDeferredTask implements DeferredTask
 
 	private void updateStats(String previousCursor,String failedIds, String status) {
 		NamespaceManager.set("");
+				
 		try {
+			System.out.println(" cur Domain "+ domain);
 			ContactSchemaUpdateStats contactSchemaUpdateStats = ContactSchemaUpdateStats.get(domain);
+
+			String domainUserMail =contactSchemaUpdateStats.domainusermail;
+			System.out.println("Domain user email "+ domainUserMail);
+			
+			
+			
+
 			contactSchemaUpdateStats.count = count;
 			contactSchemaUpdateStats.cursor = previousCursor;
 			contactSchemaUpdateStats.status = status;
 			contactSchemaUpdateStats.failedIds = failedIds;
+			
 			contactSchemaUpdateStats.save();
+			
+			if(status.equalsIgnoreCase("COMPLETED"))
+			{		
+				DomainUser dUser=DomainUserUtil.getDomainUserByEmailFromParticularDomain(domainUserMail,domain);
+				SendMail.sendMail(domainUserMail, "Update Contacts & Companies Status", SendMail.CONTACT_UPDATE_STATUS, dUser);
+				
+				
+			}
+			
 		} catch(Exception e) {
 			System.err.println("Exception while updating stats for domain: "+ domain);
-			e.printStackTrace();
+			System.out.println(e.getMessage());
 		} finally {
 			NamespaceManager.set(domain);
 		}
 	}
+	
 	
 	private void updateCountry(Contact contact)
 	{

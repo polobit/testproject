@@ -1171,7 +1171,7 @@
 
 			   {{#if city}}
                 <li class="row-fluid">	
-					<div class="span3"><b>Location</b>
+					<div class="span3"><b>{{agile_lng_translate 'contact-details' 'location'}}</b>
 						<div class="pull-right">:</div>
 					</div>		
 					<div class="span9" style="margin-left: 10px;">

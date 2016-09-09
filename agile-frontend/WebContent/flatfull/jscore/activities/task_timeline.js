@@ -25,10 +25,8 @@ var task_details_tab = {
 								notesView = new Base_Collection_View({ url : '/core/api/tasks/' + id + "/notes", restKey : "note", templateKey : "task_notes",
 												individual_tag_name : 'li', sortKey : "created_time", descending : true, postRenderCallback : function(el)
 												{
-																head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
-																{
-																				$(".note-created-time", el).timeago();
-																})
+													agileTimeAgoWithLngConversion($(".note-created-time", el));
+																
 												} });
 								notesView.collection.fetch();
 								$('#task_tab_detail').find('#notes').html(notesView.el);
@@ -54,10 +52,8 @@ var task_details_tab = {
 								taskActivitiesView = new Base_Collection_View({ url : '/core/api/activitylog/getActivityByEntityId?entity_id='+taskJSON.id+'', templateKey : "task-related-activity",
 												individual_tag_name : 'li',sortKey : "time", descending : true,cursor : true, page_size : 25, postRenderCallback : function(el)
 												{
-																head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
-																{
-																				$(".event-created-time", el).timeago();
-																})
+													agileTimeAgoWithLngConversion($(".event-created-time", el));
+																
 												} });
 								taskActivitiesView.collection.fetch();
 								$('#task_tab_detail').find('#activity').html(taskActivitiesView.el);

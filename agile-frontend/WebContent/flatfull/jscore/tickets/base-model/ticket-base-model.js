@@ -103,7 +103,7 @@ var Ticket_Base_Model = Base_Model_View.extend({
 
        	Tickets.updateModel(url, json, function(model){
         
-			Ticket_Utils.showNoty('information', 'Assignee has been changed to ' + CURRENT_AGILE_USER.domainUser.name, 'bottomRight', 5000);
+			Ticket_Utils.showNoty('information', '{{agile_lng_translate "tickets" "assignee-changed-to"}} ' + CURRENT_AGILE_USER.domainUser.name, 'bottomRight', 5000);
 
 			$('#ticket-assignee option:selected').attr('selected', false);
 			
@@ -206,7 +206,7 @@ var Ticket_Base_Model = Base_Model_View.extend({
 			//hide more fields
 			$fields.hide();
 
-			$icon.attr('data-original-title', 'Show fields');
+			$icon.attr('data-original-title', '{{agile_lng_translate "tickets" "show-fields"}}');
 
 			//change icon to angle down
 			$icon.removeClass('fa-angle-double-up').addClass('fa-angle-double-down');
@@ -215,7 +215,7 @@ var Ticket_Base_Model = Base_Model_View.extend({
 			//show more fields
 			$fields.show();
 
-			$icon.attr('data-original-title', 'Hide fields');
+			$icon.attr('data-original-title', '{{agile_lng_translate "tickets" "hide-fields"}}');
 
 			//change to angle up icon
 			$icon.removeClass('fa-angle-double-down').addClass('fa-angle-double-up');
@@ -252,7 +252,7 @@ var Ticket_Base_Model = Base_Model_View.extend({
 
 	toggleTimeline: function(e){
 
-		var tooltip_text = 'Show Timeline';
+		var tooltip_text = '{{agile_lng_translate "tickets" "show-timeline-cap"}}';
 		if($('.ticket-timeline-container').is(':visible'))
 		{
 			//Rendering ticket notes
@@ -261,7 +261,7 @@ var Ticket_Base_Model = Base_Model_View.extend({
 		}
 		else{
 			Ticket_Timeline.render_individual_ticket_timeline();
-			tooltip_text = 'Show Comments';
+			tooltip_text = '{{agile_lng_translate "tickets" "show-comments"}}';
 			Tickets.toggleActivitiesUI("hide");
 		}
 
@@ -307,7 +307,7 @@ var Ticket_Base_Model = Base_Model_View.extend({
 
 		if(!contactID)
 		{
-			$('div#contact-deals').html('No deals');
+			$('div#contact-deals').html('{{agile_lng_translate "portlets" "no-deals-found"}}');
 			return;
 		}
 

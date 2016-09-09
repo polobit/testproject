@@ -1,8 +1,9 @@
 <script id="settings-account-tab-template" type="text/html">
     <div class="tab-container m-b-none">
            <ul class="nav nav-tabs b-b-none">
-            <li class="settings-account-prefs"><a href="#account-prefs" class="b-l-none">Preferences</a></li>
-            <li class="settings-account-ips"><a href="#account-ipaccess" class="b-l-none">Security</a></li>
+            <li class="settings-account-prefs"><a href="#account-prefs" class="b-l-none">{{agile_lng_translate 'menu' 'preferences'}}</a></li>
+            <li class="settings-account-ips"><a href="#account-ipaccess" class="b-l-none">{{agile_lng_translate 'admin-settings' 'security'}}</a></li>
+            <li class="settings-sso-login"><a href="#sso-login" class="b-l-none">{{agile_lng_translate 'admin-settings' 'single-sign-on'}}</a></li>
            </ul>
     </div>
     <div class="tab-pane active" id="settings-account-tab-content">
@@ -22,18 +23,18 @@
             <div class="row">
                 <div class="col-md-8 col-xs-12">
                     <div class="control-group form-group">
-                        <label class="control-label col-sm-4 col-xs-4">Plan</label> 
+                        <label class="control-label col-sm-4 col-xs-4">{{agile_lng_translate 'admin-settings-prefs' 'plan'}}</label> 
                         <div class="controls col-sm-8 col-xs-8" style="margin-top:7px;">
                             {{#if plan.plan_id}}
                             {{getFullAccountPlanName plan.plan_type}} <!--<a href="#subscribe" style="font-size:11px;" class="text-info">Upgrade</a> -->
                             {{else}}
-                            Free <a href="#" id="cancel-account" class="text-info p-l-sm text-xs">Cancel Account</a>
+                            {{agile_lng_translate 'portlets' 'free'}} <a href="#" id="cancel-account" class="text-info p-l-sm text-xs">{{agile_lng_translate 'plan-and-upgrade' 'cancel-account'}}</a>
                              <!--<a href="#subscribe" class="text-info">Upgrade</a>-->
                             {{/if}}
                         </div>
                     </div>
                     <div class="control-group form-group">
-                        <label class="control-label col-sm-4 col-xs-4">Users</label>
+                        <label class="control-label col-sm-4 col-xs-4">{{agile_lng_translate 'admin-settings' 'users'}}</label>
                         <div class="controls col-sm-8 col-xs-8" style="margin-top:7px;">
                             {{#if plan.quantity}}
                             {{plan.quantity}}
@@ -42,121 +43,118 @@
                             {{/if}}
                         </div>
                     </div>
-
-                     <div class="control-group form-group">
-                        <label class="control-label col-sm-4 col-xs-4">Currency</label> 
-                        <div class="controls col-sm-8 col-xs-8">
-                        <select id="target_list" name="currency" class="form-control">
-                        <option value="USD-$" selected="1">United States Dollar</option>
-                        <option value="EUR-&euro;">Euro</option>
-                        <option value="DZD-DA">Algerian Dinar</option>
-                        <option value="ARS-$">Argentina Peso</option>
-                        <option value="AUD-$">Australian Dollar</option>
-                        <option value="BHD-BD">Bahraini Dinar</option>
-                        <option value="BOB-$b">Bolivian Boliviano</option>
-                        <option value="BWP-P">Botswanan Pula</option>
-                        <option value="BRL-R$">Brazilian Real</option>
-                        <option value="GBP-&pound;">British Pound Sterling</option>
-                        <option value="BND-$">Brunei Dollar</option>
-                        <option value="BGN-&#1083;&#1074;">Bulgarian Lev</option>
-                        <option value="CAD-$">Canadian Dollar</option>
-                        <option value="KYD-$">Cayman Islands Dollar</option>
-                        <option value="XOF-CFAF">CFA Franc BCEAO</option>
-                        <option value="CLP-$">Chilean Peso</option>
-                        <option value="CNY-&yen;">Chinese Yuan</option>
-                        <option value="COP-$">Colombian Peso</option>
-                        <option value="CRC-&#8353;">Costa Rican Colon</option>
-                        <option value="HRK-kn">Croatian Kuna</option>
-                        <option value="CZK-K&#269;">Czech Republic Koruna</option>
-                        <option value="DKK-kr">Danish Krone</option>
-                        <option value="DOP-RD$">Dominican Peso</option>
-                        <option value="EGP-&pound;">Egyptian Pound</option>
-                        <option value="EEK-kr">Estonian Kroon</option>
-                        <option value="FJD-$">Fijian Dollar</option>
-                        <option value="HNL-L">Honduran Lempira</option>
-                        <option value="HKD-$">Hong Kong Dollar</option>
-                        <option value="HUF-Ft">Hungarian Forint</option>
-                        <option value="ISK-ISK">Icelandic Krona</option>
-                        <option value="INR-Rs">Indian Rupee</option>
-                        <option value="IDR-Rp">Indonesian Rupiah</option>
-                        <option value="ILS-&#8362;">Israeli New Sheqel</option>
-                        <option value="JMD-J$">Jamaican Dollar</option>
-                        <option value="JPY-&yen;">Japanese Yen</option>
-                        <option value="JOD-JOD">Jordanian Dinar</option>
-                        <option value="KZT-&#1083;&#1074;">Kazakhstani Tenge</option>
-                        <option value="KES-KSh">Kenyan Shilling</option>
-                        <option value="KWD-KD">Kuwaiti Dinar</option>
-                        <option value="LVL-Ls">Latvian Lats</option>
-                        <option value="LBP-&pound;">Lebanese Pound</option>
-                        <option value="LYD-LD">Libyan Dinar</option>
-                        <option value="LTL-Lt">Lithuanian Litas</option>
-                        <option value="MKD-&#1076;&#1077;&#1085;">Macedonian Denar</option>
-                        <option value="MYR-RM">Malaysian Ringgit</option>
-                        <option value="MUR-&#8360;">Mauritian Rupee</option>
-                        <option value="MXN-$">Mexican Peso</option>
-                        <option value="MDL-MDL">Moldovan Leu</option>
-                        <option value="MAD-DH">Moroccan Dirham</option>
-                        <option value="NAD-$">Namibian Dollar</option>
-                        <option value="NPR-&#8360;">Nepalese Rupee</option>
-                        <option value="ANG-&fnof;">Netherlands Antillean Guilder</option>
-                        <option value="TWD-NT$">New Taiwan Dollar</option>
-                        <option value="NZD-$">New Zealand Dollar</option>
-                        <option value="NIO-C$">Nicaraguan Cordoba</option>
-                        <option value="NGN-&#8358;">Nigerian Naira</option>
-                        <option value="NOK-kr">Norwegian Krone</option>
-                        <option value="OMR-RO">Omani Rial</option>
-                        <option value="PKR-&#8360;">Pakistani Rupee</option>
-                        <option value="PGK-K">Papua New Guinean Kina</option>
-                        <option value="PYG-Gs">Paraguayan Guarani</option>
-                        <option value="PEN-S/.">Peruvian Nuevo Sol</option>
-                        <option value="PHP-&#8369;">Philippine Peso</option>
-                        <option value="PLN-z&#322;">Polish Zloty</option>
-                        <option value="QAR-QR">Qatari Rial</option>
-                        <option value="RON-lei">Romanian Leu</option>
-                        <option value="RUB-&#1088;&#1091;&#1073;">Russian Ruble</option>
-                        <option value="SVC-&#8353;">Salvadoran Colon</option>
-                        <option value="SAR-SR">Saudi Riyal</option>
-                        <option value="RSD-&#1044;&#1080;&#1085;.">Serbian Dinar</option>
-                        <option value="SCR-&#8360;">Seychellois Rupee</option>
-                        <option value="SLL-Le">Sierra Leonean Leone</option>
-                        <option value="SGD-$">Singapore Dollar</option>
-                        <option value="SKK-Sk">Slovak Koruna</option>
-                        <option value="ZAR-R">South African Rand</option>
-                        <option value="KRW-&#8361;">South Korean Won</option>
-                        <option value="LKR-&#8360;">Sri Lankan Rupee</option>
-                        <option value="SEK-kr">Swedish Krona</option>
-                        <option value="CHF-CHF">Swiss Franc</option>
-                        <option value="TZS-TSh">Tanzanian Shilling</option>
-                        <option value="THB-&#3647;">Thai Baht</option>
-                        <option value="TTD-TT$">Trinidad and Tobago Dollar</option>
-                        <option value="TND-TD">Tunisian Dinar</option>
-                        <option value="TRY-YTL">Turkish Lira</option>
-                        <option value="UGX-USh">Ugandan Shilling</option>
-                        <option value="UAH-UAH">Ukrainian Hryvnia</option>
-                        <option value="AED-Dh">United Arab Emirates Dirham</option>
-                        <option value="UYU-$U">Uruguayan Peso</option>
-                        <option value="UZS-&#1083;&#1074;">Uzbekistan Som</option>
-                        <option value="VEF-VEF">Venezuelan Bolivar</option>
-                        <option value="VND-&#8363;">Vietnamese Dong</option>
-                        <option value="YER-YER">Yemeni Rial</option>
-                        <option value="ZMK-ZK">Zambian Kwacha</option>
-                    </select>
-                        </div>
-                    </div>
-                    
                     <div class="control-group form-group">
-                        <label class="control-label col-sm-4 col-xs-4">Company Name <span class="field_req">*</span></label> 
+                        <label class="control-label col-sm-4 col-xs-4">{{agile_lng_translate 'contacts-view' 'company-name'}} <span class="field_req">*</span></label> 
                         <div class="controls col-sm-8 col-xs-8">
                             <input name="company_name" class="input-medium required form-control" type="text" value="{{company_name}}" />
                         </div>
 
                     </div>
 
-                   
+                    <div class="control-group form-group">
+                        <label class="control-label col-sm-4 col-xs-4">{{agile_lng_translate 'prefs-settings' 'currency'}}</label> 
+                        <div class="controls col-sm-8 col-xs-8">
+                        <select id="target_list" name="currency" class="form-control">
+                        <option value="USD-$" selected="1">{{agile_lng_translate 'currency' 'United States Dollar'}}</option>
+                        <option value="EUR-&euro;">{{agile_lng_translate 'currency' 'Euro'}}</option>
+                        <option value="DZD-DA">{{agile_lng_translate 'currency' 'Algerian Dinar'}}</option>
+                        <option value="ARS-$">{{agile_lng_translate 'currency' 'Argentina Peso'}}</option>
+                        <option value="AUD-$">{{agile_lng_translate 'currency' 'Australian Dollar'}}</option>
+                        <option value="BHD-BD">{{agile_lng_translate 'currency' 'Bahraini Dinar'}}</option>
+                        <option value="BOB-$b">{{agile_lng_translate 'currency' 'Bolivian Boliviano'}}</option>
+                        <option value="BWP-P">{{agile_lng_translate 'currency' 'Botswanan Pula'}}</option>
+                        <option value="BRL-R$">{{agile_lng_translate 'currency' 'Brazilian Real'}}</option>
+                        <option value="GBP-&pound;">{{agile_lng_translate 'currency' 'British Pound Sterling'}}</option>
+                        <option value="BND-$">{{agile_lng_translate 'currency' 'Brunei Dollar'}}</option>
+                        <option value="BGN-&#1083;&#1074;">{{agile_lng_translate 'currency' 'Bulgarian Lev'}}</option>
+                        <option value="CAD-$">{{agile_lng_translate 'currency' 'Canadian Dollar'}}</option>
+                        <option value="KYD-$">{{agile_lng_translate 'currency' 'Cayman Islands Dollar'}}</option>
+                        <option value="XOF-CFAF">{{agile_lng_translate 'currency' 'CFA Franc BCEAO'}}</option>
+                        <option value="CLP-$">{{agile_lng_translate 'currency' 'Chilean Peso'}}</option>
+                        <option value="CNY-&yen;">{{agile_lng_translate 'currency' 'Chinese Yuan'}}</option>
+                        <option value="COP-$">{{agile_lng_translate 'currency' 'Colombian Peso'}}</option>
+                        <option value="CRC-&#8353;">{{agile_lng_translate 'currency' 'Costa Rican Colon'}}</option>
+                        <option value="HRK-kn">{{agile_lng_translate 'currency' 'Croatian Kuna'}}</option>
+                        <option value="CZK-K&#269;">{{agile_lng_translate 'currency' 'Czech Republic Koruna'}}</option>
+                        <option value="DKK-kr">{{agile_lng_translate 'currency' 'Danish Krone'}}</option>
+                        <option value="DOP-RD$">{{agile_lng_translate 'currency' 'Dominican Peso'}}</option>
+                        <option value="EGP-&pound;">{{agile_lng_translate 'currency' 'Egyptian Pound'}}</option>
+                        <option value="EEK-kr">{{agile_lng_translate 'currency' 'Estonian Kroon'}}</option>
+                        <option value="FJD-$">{{agile_lng_translate 'currency' 'Fijian Dollar'}}</option>
+                        <option value="HNL-L">{{agile_lng_translate 'currency' 'Honduran Lempira'}}</option>
+                        <option value="HKD-$">{{agile_lng_translate 'currency' 'Hong Kong Dollar'}}</option>
+                        <option value="HUF-Ft">{{agile_lng_translate 'currency' 'Hungarian Forint'}}</option>
+                        <option value="ISK-ISK">{{agile_lng_translate 'currency' 'Icelandic Krona'}}</option>
+                        <option value="INR-Rs">{{agile_lng_translate 'currency' 'Indian Rupee'}}</option>
+                        <option value="IDR-Rp">{{agile_lng_translate 'currency' 'Indonesian Rupiah'}}</option>
+                        <option value="ILS-&#8362;">{{agile_lng_translate 'currency' 'Israeli New Sheqel'}}</option>
+                        <option value="JMD-J$">{{agile_lng_translate 'currency' 'Jamaican Dollar'}}</option>
+                        <option value="JPY-&yen;">{{agile_lng_translate 'currency' 'Japanese Yen'}}</option>
+                        <option value="JOD-JOD">{{agile_lng_translate 'currency' 'Jordanian Dinar'}}</option>
+                        <option value="KZT-&#1083;&#1074;">{{agile_lng_translate 'currency' 'Kazakhstani Tenge'}}</option>
+                        <option value="KES-KSh">{{agile_lng_translate 'currency' 'Kenyan Shilling'}}</option>
+                        <option value="KWD-KD">{{agile_lng_translate 'currency' 'Kuwaiti Dinar'}}</option>
+                        <option value="LVL-Ls">{{agile_lng_translate 'currency' 'Latvian Lats'}}</option>
+                        <option value="LBP-&pound;">{{agile_lng_translate 'currency' 'Lebanese Pound'}}</option>
+                        <option value="LYD-LD">{{agile_lng_translate 'currency' 'Libyan Dinar'}}</option>
+                        <option value="LTL-Lt">{{agile_lng_translate 'currency' 'Lithuanian Litas'}}</option>
+                        <option value="MKD-&#1076;&#1077;&#1085;">{{agile_lng_translate 'currency' 'Macedonian Denar'}}</option>
+                        <option value="MYR-RM">{{agile_lng_translate 'currency' 'Malaysian Ringgit'}}</option>
+                        <option value="MUR-&#8360;">{{agile_lng_translate 'currency' 'Mauritian Rupee'}}</option>
+                        <option value="MXN-$">{{agile_lng_translate 'currency' 'Mexican Peso'}}</option>
+                        <option value="MDL-MDL">{{agile_lng_translate 'currency' 'Moldovan Leu'}}</option>
+                        <option value="MAD-DH">{{agile_lng_translate 'currency' 'Moroccan Dirham'}}</option>
+                        <option value="NAD-$">{{agile_lng_translate 'currency' 'Namibian Dollar'}}</option>
+                        <option value="NPR-&#8360;">{{agile_lng_translate 'currency' 'Nepalese Rupee'}}</option>
+                        <option value="ANG-&fnof;">{{agile_lng_translate 'currency' 'Netherlands Antillean Guilder'}}</option>
+                        <option value="TWD-NT$">{{agile_lng_translate 'currency' 'New Taiwan Dollar'}}</option>
+                        <option value="NZD-$">{{agile_lng_translate 'currency' 'New Zealand Dollar'}}</option>
+                        <option value="NIO-C$">{{agile_lng_translate 'currency' 'Nicaraguan Cordoba'}}</option>
+                        <option value="NGN-&#8358;">{{agile_lng_translate 'currency' 'Nigerian Naira'}}</option>
+                        <option value="NOK-kr">{{agile_lng_translate 'currency' 'Norwegian Krone'}}</option>
+                        <option value="OMR-RO">{{agile_lng_translate 'currency' 'Omani Rial'}}</option>
+                        <option value="PKR-&#8360;">{{agile_lng_translate 'currency' 'Pakistani Rupee'}}</option>
+                        <option value="PGK-K">{{agile_lng_translate 'currency' 'Papua New Guinean Kina'}}</option>
+                        <option value="PYG-Gs">{{agile_lng_translate 'currency' 'Paraguayan Guarani'}}</option>
+                        <option value="PEN-S/.">{{agile_lng_translate 'currency' 'Peruvian Nuevo Sol'}}</option>
+                        <option value="PHP-&#8369;">{{agile_lng_translate 'currency' 'Philippine Peso'}}</option>
+                        <option value="PLN-z&#322;">{{agile_lng_translate 'currency' 'Polish Zloty'}}</option>
+                        <option value="QAR-QR">{{agile_lng_translate 'currency' 'Qatari Rial'}}</option>
+                        <option value="RON-lei">{{agile_lng_translate 'currency' 'Romanian Leu'}}</option>
+                        <option value="RUB-&#1088;&#1091;&#1073;">{{agile_lng_translate 'currency' 'Russian Ruble'}}</option>
+                        <option value="SVC-&#8353;">{{agile_lng_translate 'currency' 'Salvadoran Colon'}}</option>
+                        <option value="SAR-SR">{{agile_lng_translate 'currency' 'Saudi Riyal'}}</option>
+                        <option value="RSD-&#1044;&#1080;&#1085;.">{{agile_lng_translate 'currency' 'Serbian Dinar'}}</option>
+                        <option value="SCR-&#8360;">{{agile_lng_translate 'currency' 'Seychellois Rupee'}}</option>
+                        <option value="SLL-Le">{{agile_lng_translate 'currency' 'Sierra Leonean Leone'}}</option>
+                        <option value="SGD-$">{{agile_lng_translate 'currency' 'Singapore Dollar'}}</option>
+                        <option value="SKK-Sk">{{agile_lng_translate 'currency' 'Slovak Koruna'}}</option>
+                        <option value="ZAR-R">{{agile_lng_translate 'currency' 'South African Rand'}}</option>
+                        <option value="KRW-&#8361;">{{agile_lng_translate 'currency' 'South Korean Won'}}</option>
+                        <option value="LKR-&#8360;">{{agile_lng_translate 'currency' 'Sri Lankan Rupee'}}</option>
+                        <option value="SEK-kr">{{agile_lng_translate 'currency' 'Swedish Krona'}}</option>
+                        <option value="CHF-CHF">{{agile_lng_translate 'currency' 'Swiss Franc'}}</option>
+                        <option value="TZS-TSh">{{agile_lng_translate 'currency' 'Tanzanian Shilling'}}</option>
+                        <option value="THB-&#3647;">{{agile_lng_translate 'currency' 'Thai Baht'}}</option>
+                        <option value="TTD-TT$">{{agile_lng_translate 'currency' 'Trinidad and Tobago Dollar'}}</option>
+                        <option value="TND-TD">{{agile_lng_translate 'currency' 'Tunisian Dinar'}}</option>
+                        <option value="TRY-YTL">{{agile_lng_translate 'currency' 'Turkish Lira'}}</option>
+                        <option value="UGX-USh">{{agile_lng_translate 'currency' 'Ugandan Shilling'}}</option>
+                        <option value="UAH-UAH">{{agile_lng_translate 'currency' 'Ukrainian Hryvnia'}}</option>
+                        <option value="AED-Dh">{{agile_lng_translate 'currency' 'United Arab Emirates Dirham'}}</option>
+                        <option value="UYU-$U">{{agile_lng_translate 'currency' 'Uruguayan Peso'}}</option>
+                        <option value="UZS-&#1083;&#1074;">{{agile_lng_translate 'currency' 'Uzbekistan Som'}}</option>
+                        <option value="VEF-VEF">{{agile_lng_translate 'currency' 'Venezuelan Bolivar'}}</option>
+                        <option value="VND-&#8363;">{{agile_lng_translate 'currency' 'Vietnamese Dong'}}</option>
+                        <option value="YER-YER">{{agile_lng_translate 'currency' 'Yemeni Rial'}}</option>
+                        <option value="ZMK-ZK">{{agile_lng_translate 'currency' 'Zambian Kwacha'}}</option>
+                    </select>
+                        </div>
+                    </div>
 
 
                     <div class="control-group form-group">
-                    <label class="control-label col-sm-4 col-xs-4">Company Logo</label> 
+                    <label class="control-label col-sm-4 col-xs-4">{{agile_lng_translate 'Contacts-view' 'company-logo'}}</label> 
                     <div id="upload-container" class="controls col-sm-8 col-xs-8" messg="User image has been uploaded">     
                                    <div class="imgholder company_logo form-whitelabel-image thumb-wrapper thumb-lg">
                                             {{#if logo}}
@@ -167,7 +165,7 @@
                                   </div>
                                   <div class="company_logo_upload m-l-sm">
                                      <input type="hidden" id="upload_url" name="logo" class="logo"  />  
-                                     <input  class="upload_s3 btn btn-xs btn-default" type="button" id="account_prefs_image" value="Upload" />
+                                     <input  class="upload_s3 btn btn-xs btn-default" type="button" id="account_prefs_image" value="{{agile_lng_translate 'others' 'upload'}}" />
                                   </div>
                        
                     </div>                        
@@ -176,20 +174,36 @@
 
 
                     <div class="control-group form-group">
-                        <label class="control-label col-sm-4 col-xs-4">Domain</label>
+                        <label class="control-label col-sm-4 col-xs-4">{{agile_lng_translate 'prefs-settings' 'domain'}}</label>
                         <div class="controls col-sm-8 col-xs-8" style="margin-top:7px;">
-                            {{get_current_domain}} {{#unless aliasNames}}<a href="#change-domain" class="text-info p-l-xs text-xs"><i class="icon-plus alias-icon"></i> Add Alias</a>{{/unless}}                           
+                            {{get_current_domain}} {{#unless aliasNames}}<a href="#change-domain" class="text-info p-l-xs text-xs"><i class="icon-plus alias-icon"></i> {{agile_lng_translate 'admin-settings' 'add-alias'}}</a>{{/unless}}                           
                         </div>
                     </div>
                     {{#if aliasNames}}
                     <div class="control-group form-group">
-                        <label class="control-label col-sm-4 col-xs-4">Domain Alias</label>
+                        <label class="control-label col-sm-4 col-xs-4">{{agile_lng_translate 'prefs-settings' 'domain-alias'}}</label>
                         <div class="controls col-sm-8 col-xs-8" style="margin-top:7px;">
-                            {{getAliasFromArry aliasNames}} <a href="#change-domain" class="text-info p-l-xs">Change</a>                           
+                            {{getAliasFromArry aliasNames}} <a href="#change-domain" class="text-info p-l-xs">{{agile_lng_translate 'portlets' 'change'}}
+                            </a>                           
                         </div>
                     </div>
                     {{/if}}
                     
+                    <div class="control-group form-group {{#check_plan_interval 'YEARLY'}}{{else}}
+                        {{#check_plan_interval 'BIENNIAL'}}{{else}}
+                        hide
+                        {{/check_plan_interval}}
+                    {{/check_plan_interval}}">
+                        <label class="control-label col-sm-4 col-xs-4">{{agile_lng_translate 'plan-and-upgrade' 'send-invoice'}}</label>
+                        <div class="controls col-sm-8 col-xs-8">
+                            <div class="checkbox">
+                                
+                                    <input id="sendInvoiceBeforeCharge" class="hidden" type="checkbox" value="off" name="sendInvoiceBeforeCharge">
+                                    <i class="fa fa-lg invoice_option {{#if sendInvoiceBeforeCharge}}fa-toggle-on {{else}} fa-toggle-off {{/if}}" aria-hidden="true" style="color: gray;"></i>
+                                
+                            </div>    
+                        </div>
+                    </div>
 					 <input name="timezone" class="form-control" type="hidden" value="{{timezone}}" />
 				</div>
 
@@ -202,7 +216,7 @@
 <div class="col-md-8 col-xs-8">
 <div class="col-sm-offset-4 col-sm-8 col-xs-offset-4 col-xs-8">
             
-                <a href="#" type="submit" class="save btn btn-sm btn-primary">Save Changes</a>
+                <a href="#" type="submit" class="save btn btn-sm btn-primary">{{agile_lng_translate 'prefs-settings' 'save-changes'}}</a>
            
 
 </div>
@@ -218,7 +232,7 @@
 
 <script id="admin-settings-domain-alias-template" type="text/html">
 <div id="alias_domain" class="panel panel-default">
-    <div class="panel-heading">Domain Alias</div>
+    <div class="panel-heading">{{agile_lng_translate 'prefs-settings' 'domain-alias'}}</div>
     <div class="panel-body">
     <form id="aliasDomain" class="form-horizontal">
         <fieldset>
@@ -232,9 +246,9 @@
                     
                     
                     <div class="control-group form-group">
-                        <label class="control-label col-sm-4 col-xs-4">Alias<span class="field_req">*</span></label> 
+                        <label class="control-label col-sm-4 col-xs-4">{{agile_lng_translate 'prefs-settings' 'alias'}}<span class="field_req">*</span></label> 
                         <div class="controls col-sm-8 col-xs-8">
-                            <input name="alias" id="alias" class="input-medium required domain_format form-control" type="text" placeholder="Domain Alias" value="{{alias}}" />
+                            <input name="alias" id="alias" class="input-medium required domain_format form-control" type="text" placeholder="{{agile_lng_translate 'prefs-settings' 'domain-alias'}}" value="{{alias}}" />
                             <span for="alias" generated="true" class="help-inline text-xs"> </span>
                         </div>
                     </div>
@@ -247,7 +261,7 @@
 <div class="col-md-7 col-xs-8">
 <div class="col-sm-offset-4 col-sm-8 col-xs-offset-4 col-xs-8">
             
-                <a href="#" type="submit" class="save saveAuth btn btn-sm btn-primary">Save</a>
+                <a href="#" type="submit" class="save saveAuth btn btn-sm btn-primary">{{agile_lng_translate 'report-add' 'save'}}</a>
            
 
 </div>
@@ -267,15 +281,15 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button class="close" data-dismiss="modal">&times;</button>
-                <h3 class="modal-title">Domain Alias</h3>
+                <h3 class="modal-title">{{agile_lng_translate 'prefs-settings' 'domain-alias'}}</h3>
             </div>
             <div class="modal-body help-text">
-                <p>Are you sure you want to add an alias name for your current domain?</p>
-                <p>Please note that once the alias name has been updated, you will be redirected to the login page with the domain alias name.</p>
+                <p>{{agile_lng_translate 'prefs-settings' 'delete-alias-domain-desc'}}</p>
+                <p>{{agile_lng_translate 'prefs-settings' 'delete-alias-domain-desc-1'}}</p>
             </div>
             <div class="modal-footer">
-                <a href="#" data-dismiss="modal" class="btn btn-sm btn-default">No</a>
-                <a href="#" data-dismiss="modal" class="saveAuthConform btn btn-sm btn-primary">Yes</a>
+                <a href="#" data-dismiss="modal" class="btn btn-sm btn-default">{{agile_lng_translate 'portlets' 'no'}}</a>
+                <a href="#" data-dismiss="modal" class="saveAuthConform btn btn-sm btn-primary">{{agile_lng_translate 'portlets' 'yes'}}</a>
             </div>
         </div>
     </div>
@@ -287,7 +301,7 @@
     <div class="panel-heading allow_access_panelheading">
     <div class="pull-left  m-t-xs">IP Address List</div>
     <div class="pull-right">
-       <a class="upsert-ip btn btn-sm btn-default btn-addon" ><span><i class='icon-plus-sign'/></span> Add IP Address</a>
+       <a class="upsert-ip btn btn-sm btn-default btn-addon" ><span><i class='icon-plus-sign'/></span> {{agile_lng_translate 'admin-settings' 'add-ip-address'}}</a>
     </div>
     <div class="clearfix"></div>
     </div>
@@ -322,7 +336,7 @@
                         <td class="b-r-none" style="width:8%;">
                             <div class="m-b-n-xs pull-left" style="visibility: hidden;">
                                 <a class="upsert-ip c-p m-l-sm text-l-none text-sm hover-show" data-toggle="modal" role="button" style="margin-left:27px;" data-position="{{@index}}">
-                                        <i title="Edit" class="icon icon-edit"></i>
+                                        <i title="{{agile_lng_translate 'contact-details' 'edit'}}" class="icon icon-edit"></i>
                                 </a>
                                 <a class="blocked-panel-ip-delete c-p m-l-sm text-l-none text-sm" data-toggle="modal" role="button" href="#"><i title="Delete  IP" class="task-action icon icon-trash"></i></a>
                             </div>
@@ -332,8 +346,8 @@
                     <tr data="{{this}}" style="display:none;" >
                         <td>
                         <div class="show_field" style="visibility:hidden;">
-                        <input type="text" id="ipList"  style="width:250px;display:inline-block;" class="form-control input-sm ipValidation newip required" placeholder="New IP Address">
-                        <a href="#" type="submit"  class="save  btn btn-sm btn-primary " >Add</a>
+                        <input type="text" id="ipList"  style="width:250px;display:inline-block;" class="form-control input-sm ipValidation newip required" placeholder="{{agile_lng_translate 'admin-settings-api-analytics' 'new-ip-address'}}">
+                        <a href="#" type="submit"  class="save  btn btn-sm btn-primary " >{{agile_lng_translate 'other' 'add'}}</a>
                         </div>
                         </td>
                         
@@ -349,10 +363,10 @@
                         </div>
                         <div class="box-right pull-left" style="position:relative;top:10px;">
 
-                        <h4 class="m-t-none">Agile takes security seriously.</h4>
-                        <div class="text">Add extra protection by restricting Agile to certain IP addresses.</div>
+                        <h4 class="m-t-none">{{agile_lng_translate 'admin-settings' 'agile-takes-security-seriously'}}</h4>
+                        <div class="text">{{agile_lng_translate 'Admin-settings' 'add-extra-protection-by-adding-security'}}</div>
                         
-                        <a href="#"  class="upsert-ip modal-form btn btn-sm btn-default blue btn-slate-action m-t-xs" role="button" id="newip-add" ><i class="icon-plus-sign"></i> Add IP Address</a>
+                        <a href="#"  class="upsert-ip modal-form btn btn-sm btn-default blue btn-slate-action m-t-xs" role="button" id="newip-add" ><i class="icon-plus-sign"></i> {{agile_lng_translate 'admin-settings' 'add-ip-address'}}</a>
                         </div>
                         </div>
                     <div class="clearfix"></div>
@@ -367,5 +381,72 @@
         </fieldset>
     </form>
 
+</div>
+</script>
+
+<!--  SSO Login Test -->
+<script id="admin-settings-sso-login-template" type="text/html">
+<div class="col-sm-9 panel ">
+    <!--<div class="panel-heading">Webhook URL </div>-->
+    <div class="panel-body">
+    <form id="ssoPrefs" class="form-horizontal" style="margin-top: 16px;">
+        <fieldset>
+            {{#if id}}
+            <input name="id" class="form-control" type="hidden" value="">
+            {{/if}}
+            <div class="row">
+                <div class="col-md-8 col-xs-12">
+                    
+                    <div class="control-group form-group">
+                        <label class="control-label col-sm-4 col-xs-4" style="padding-left: 5px;">{{agile_lng_translate 'admin-settings' 'remote-login-url'}}<span class="field_req">*</span></label> 
+                        <div class="controls col-sm-8 col-xs-8">
+                            <input name="url" id="url" class="input-medium required form-control" type="url" value="" placeholder="https://">
+                        </div>
+                    </div>
+                    
+                    <div class="control-group form-group">
+                        <label class="control-label col-sm-4 col-xs-4">{{agile_lng_translate 'admin-settings' 'shared-secret'}}</label> 
+                        <div class="controls col-sm-8 col-xs-8">
+                            <div>
+                                <input type="hidden" name="secretKey" value="{{secretKey}}">
+                                <pre class="prettyprint pln" id="secret_key_sso_code">{{secretKey}}</pre>
+                                </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+                <div class="clearfix"></div>
+            <div class="line ling-lg b-b"></div>
+            <div class="row">
+            <div class="col-md-8 col-xs-8">
+            <div class="col-sm-offset-4 col-sm-8 col-xs-offset-4 col-xs-8">
+                {{#if id}}
+                    {{#if url}}
+                    <a href="#" type="submit" class="delete btn btn-sm btn-danger">{{agile_lng_translate 'deal-view' 'delete'}}</a>
+                    {{/if}}
+                {{/if}}
+
+                <a href="#" type="submit" class="save btn btn-sm btn-primary">{{agile_lng_translate 'admin-settings' 'submit'}}</a>
+           
+
+            </div>
+            </div>
+            </div>
+                
+            </fieldset></form>
+</div>
+</div>
+<div class="col w-md  wrapper pos-rlt track-milestone-text" style="padding-top: 0px;">
+ <div class="data-block">
+  <div class="p-l p-r">
+   <h4 class="m-t-none">{{agile_lng_translate 'admin-settings' 'sso-help'}}</h4>   
+   <p>{{agile_lng_translate 'admin-settings' 'admin-and-others-can-use-sso-option-to-login-to-agile-crm'}} <br/>
+        <a href="https://github.com/agilecrm/sso" target="_blank" style="color: #337ab7;">{{agile_lng_translate 'admin-settings-integrations' 'learn-more'}}</a>
+    </p>
+   <br>
+   
+  </div>
+ </div>
 </div>
 </script>

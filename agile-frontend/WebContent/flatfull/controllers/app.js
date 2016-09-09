@@ -4,7 +4,7 @@
  */
 
 // All Routers are global
-var App_Contacts, App_Contact_Search, App_Contact_Bulk_Actions, App_Contact_Filters, App_Contact_Views, App_Workflows, App_Deals, App_Admin_Settings, App_Calendar, App_Settings, App_Reports, App_Cases, App_Subscription, App_Visitors, App_WebReports, App_Documents, App_Widgets, App_ShopifyApp, App_Portlets, App_VoiceMailRouter,App_Deal_Details, App_Forms, App_ACL, App_Webpages;
+var App_Contacts, App_Contact_Search, App_Contact_Bulk_Actions, App_Contact_Filters, App_Contact_Views, App_Workflows, App_Deals, App_Admin_Settings, App_Calendar, App_Settings, App_Reports, App_Cases, App_Subscription, App_Visitors, App_WebReports, App_Documents, App_Widgets, App_ShopifyApp, App_Portlets, App_VoiceMailRouter,App_Deal_Details, App_Forms, App_ACL, App_Webpages, App_PushNotification;
 var Collection_View = {};
 $(function()
 {
@@ -44,7 +44,7 @@ $(function()
 	App_Dashboards = new DashboardsRouter();
 	App_EmailBuilderRouter = new EmailBuilderRouter();
 	App_VisitorsSegmentation=new VisitorsSegmentationRouter();
-    App_Helpcenter_Module = new HelpcenterRouter();
+	App_PushNotification = new PushNotificationRouter();
 	// Binds an event to activate infinite page scrolling
 	Backbone.history.bind("all", currentRoute)
 
@@ -145,6 +145,7 @@ function removing_fullscreen()
 /**
  * Clickdesk Widget
  */
+var CLICKDESK_Live_Chat = CLICKDESK_Live_Chat || {};
 function load_clickdesk_code()
 {
 
@@ -161,8 +162,28 @@ function load_clickdesk_code()
 	glcspt.src = glcpath + 'livechat-new.js';
 	var s = document.getElementsByTagName('script')[0];
 	s.parentNode.insertBefore(glcspt, s);
+
+	CLICKDESK_Live_Chat.on_after_load = function(){
+		agile_toggle_chat_option_on_status();
+	};
 }
-_
+
+function clickdesk_livechat_get_current_status(callback){
+	CLICKDESK_Live_Chat.onStatus(function(status){callback(status)});
+}
+
+function agile_toggle_chat_option_on_status(){
+	clickdesk_livechat_get_current_status(function(status){
+		var $li = $("#clickdesk_live_chat").closest("li");
+		$li.removeClass("none block");
+		
+    	if(status == "online")
+	    	$li.addClass("block");
+	    else 
+	    	$li.addClass("none");
+    });
+}
+
 function executeWebRulesOnRoute(){
  	  if(typeof _agile_execute_action == "function")
 	  {
@@ -172,7 +193,7 @@ function executeWebRulesOnRoute(){
 }
 
 $(document).ready(function(){
-
+  load_clickdesk_code();
   setTimeout(function(){$(".modal-header .close").html("&times;");}, 1000);
 });
 

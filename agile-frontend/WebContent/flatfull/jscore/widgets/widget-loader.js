@@ -3,6 +3,9 @@
  */
 var Widgets_View;
 var widget_template_loaded_map = {};
+var WIDGET_LOADED_CONTACT;
+var WIDGET_PARENT_ID;
+var WIDGET_PARENT_ELEMENT;
 
 /**
  * Loads all the widgets for the current agile user
@@ -10,12 +13,16 @@ var widget_template_loaded_map = {};
  * @param el
  * @param contact
  */
-function loadWidgets(el, contact)
+function loadWidgets(el, contactObject, templateID)
 {
 	// Before loading the widgets, clear the queue of requests.
 	// queueClear("widget_queue");
 	// Create Data JSON
-	var data = { contact : contact };
+	var data = { contact : contactObject };
+
+	WIDGET_LOADED_CONTACT = contactObject;
+	WIDGET_PARENT_ID = templateID;
+	WIDGET_PARENT_ELEMENT = el;
 
 	var is_widget_view_new = false;
 	/*
@@ -27,18 +34,16 @@ function loadWidgets(el, contact)
 		// This flag is used to ensure widget script are loaded only once in
 		// postrender. It is set to false after widget setup is initialized
 		is_widget_view_new = true;
-		Widgets_View = new Base_Collection_View({ url : '/core/api/widgets', restKey : "widget", templateKey : "widgets", individual_tag_name : 'li',
+		Widgets_View = new Base_Collection_View({ url : '/core/api/widgets', restKey : "widget", templateKey : WIDGET_PARENT_ID, individual_tag_name : 'li',
 			sortKey : 'position', modelData : data, postRenderCallback : function(widgets_el)
 			{
-				head.load(FLAT_FULL_UI + "css/misc/agile-widgets.css", function()
-				{
+				head.load(FLAT_FULL_UI + "css/misc/agile-widgets.css", function(){
 					// If scripts aren't loaded earlier, setup is initialized
-					if (is_widget_view_new)
-					{
-						set_up_widgets(el, widgets_el, contact.id);
+					if (is_widget_view_new){
+						set_up_widgets(el, widgets_el);
 					}
 					is_widget_view_new = false;
-				})
+				});
 
 			} });
 
@@ -49,7 +54,7 @@ function loadWidgets(el, contact)
 
 		// show widgets
 		var newEl = Widgets_View.render().el;
-		$('#widgets', el).html(newEl);
+		$('#'+templateID, el).html(newEl);
 		widgetBindingsLoader();
 	}
 	else
@@ -70,9 +75,9 @@ function loadWidgets(el, contact)
 				// Sort needs to be called as there could be position change
 				Widgets_View.collection.sort();
 
-				$('#widgets', el).html(Widgets_View.render(true).el);
+				$('#'+templateID, el).html(Widgets_View.render(true).el);
 				// Sets up widget
-				set_up_widgets(el, Widgets_View.el, contact.id);
+				set_up_widgets(el, Widgets_View.el, data.contact.id);
 
 			}
 			widgetBindingsLoader();
@@ -86,8 +91,8 @@ function widgetBindingsLoader(){
 	 * and sets "is_minimized" field of widget as true, we check this while
 	 * loading widgets and skip loading widget if it is minimized
 	 */
-    $('#widgets').off('click', '.widget-minimize');
-	$('#widgets').on('click', '.widget-minimize', function(e)
+    $('#'+WIDGET_PARENT_ID).off('click', '.widget-minimize');
+	$('#'+WIDGET_PARENT_ID).on('click', '.widget-minimize', function(e)
 	{
 		e.preventDefault();
 		var widget_name = $(this).attr('widget');
@@ -122,8 +127,8 @@ function widgetBindingsLoader(){
 	 * widget as false, we check this while loading widgets and skip loading
 	 * widget if it is minimized
 	 */
-    $('#widgets').off('click', '.widget-maximize');
-	$('#widgets').on('click', '.widget-maximize', function(e)
+    $('#'+WIDGET_PARENT_ID).off('click', '.widget-maximize');
+	$('#'+WIDGET_PARENT_ID).on('click', '.widget-maximize', function(e)
 	{
 		e.preventDefault();
 		var widget_name = $(this).attr('widget');
@@ -185,7 +190,7 @@ function process_url(url)
  * @param el
  * @param widgets_el
  */
-function set_up_widgets(el, widgets_el, contact_id)
+function set_up_widgets(el, widgets_el)
 {
 	/*
 	 * Iterates through all the models (widgets) in the collection, and scripts
@@ -205,26 +210,24 @@ function set_up_widgets(el, widgets_el, contact_id)
 		 */
 		$('#' + model.get('selector'), widgets_el).data('model', model);
 
-		if(!contact_id)
-			contact_id = App_Contacts.contactDetailView.model.get("id");
-		
+		var contact_id = WIDGET_LOADED_CONTACT.id;
+
 		/*
 		 * Checks if widget is minimized, if minimized script is not loaded
 		 */
 		if (!model.get("is_minimized") && model.get("widget_type") != "CUSTOM")
 		{
-			if (widget_template_loaded_map[model.get('name').toLowerCase()])
-			{
+			if (widget_template_loaded_map[model.get('name').toLowerCase()]){
 				queueGetRequest("_widgets_" + contact_id, url, "script", function(data, queueName){
 					try{
-					console.log("start" + model.get('name') + "Widget");
-					  eval("start" + model.get('name') + "Widget")(queueName.replace("_widgets_", ""));	
+						console.log("start" + model.get('name') + "Widget");
+					  	eval("start" + model.get('name') + "Widget")(queueName.replace("_widgets_", ""));	
 					}catch(err){console.log(err);}
 					
 				}, undefined, 'true');
-			}
-			else
-				downloadTemplate(model.get('name').toLowerCase() + ".js", function()
+			}else{
+				var download_tpl_js_path = model.get('name').toLowerCase() + ".js";
+				downloadTemplate(download_tpl_js_path, function()
 				{
 					widget_template_loaded_map[model.get('name').toLowerCase()] = true;
 					queueGetRequest("_widgets_" + contact_id, url, "script", function(data, queueName){
@@ -234,6 +237,7 @@ function set_up_widgets(el, widgets_el, contact_id)
 						}catch(err){console.log(err);}						
 					}, undefined, 'true');
 				});
+			}
 		}
 
 		/*
@@ -241,14 +245,11 @@ function set_up_widgets(el, widgets_el, contact_id)
 		 * store the script in script field of widget object, that is retrieved
 		 * and appended in the body
 		 */
-		if (model.get("widget_type") == "CUSTOM")
-		{
-
+		if (model.get("widget_type") == "CUSTOM"){
 			if ($('#' + model.get('selector') + '-container').length){
 				$('#' + model.get('selector') + '-container', widgets_el).show('0', function(e){
 					setup_custom_widget(model, widgets_el);
 				});
-
 				//setup_custom_widget(model, widgets_el)
 			}else {
 				$('#' + model.get('selector') + '-container', widgets_el).show('0', function(e){
@@ -262,17 +263,26 @@ function set_up_widgets(el, widgets_el, contact_id)
 
 function setup_custom_widget(model, widgets_el)
 {
-	try
-	{
+	try{
+
+		var customType;
 		// $('form', this).focus_first();
-		if (model.get('script'))
+		if(model && model.get('script_type')){
+			customType = model.get('script_type');
+		}else if(model.get('url')){
+			customType = 'url';
+		}else{
+			customType = 'script';
+		}
+
+		if (customType == 'script'){
 			$('#' + model.get('selector'), widgets_el).html(model.get('script'));
-		else
-			getScript(model, function(data)
-			{
+		}else if(customType == 'url') {
+			getScript(model, function(data){
 				console.log(data);
 				$('#' + model.get('selector'), widgets_el).html(data);
 			});
+		}
 	}
 	catch (err)
 	{
@@ -280,27 +290,21 @@ function setup_custom_widget(model, widgets_el)
 	}
 }
 
-function getScript(model, callback)
-{
-	try
-	{
+function getScript(model, callback){
+	try{
 		// Gets contact id, to save social results of a particular id
 		var contact_id = agile_crm_get_contact()['id'];
-
-		$.post("core/api/widgets/script/" + contact_id + "/" + model.get("name"), function(data)
-		{
+		$.post("core/api/widgets/script/" + contact_id + "/" + model.get("name"), function(data){
 
 			// If defined, execute the callback function
 			if (callback && typeof (callback) === "function")
 				callback(data);
-		}).error(function(data)
-		{
+		}).error(function(data){
+			$('#' + model.get('selector')).html(data.statusText);
 			console.log(data);
 			console.log(data.responseText);
 		});
-	}
-	catch (err)
-	{
+	}catch (err){
 		console.log(err);
 	}
 }

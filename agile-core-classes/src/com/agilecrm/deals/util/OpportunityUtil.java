@@ -14,8 +14,6 @@ import java.util.Set;
 import java.util.TimeZone;
 import java.util.TreeSet;
 
-import javax.xml.bind.annotation.XmlElement;
-
 import net.sf.json.JSONObject;
 
 import org.apache.commons.lang.StringUtils;
@@ -33,17 +31,17 @@ import com.agilecrm.contact.CustomFieldDef.SCOPE;
 import com.agilecrm.contact.CustomFieldDef.Type;
 import com.agilecrm.contact.Note;
 import com.agilecrm.contact.util.CustomFieldDefUtil;
-import com.agilecrm.core.api.deals.MilestoneAPI;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.deals.Milestone;
 import com.agilecrm.deals.Opportunity;
+import com.agilecrm.deals.filter.DealFilter;
 import com.agilecrm.deals.filter.util.DealFilterUtil;
-import com.agilecrm.projectedpojos.DomainUserPartial;
 import com.agilecrm.projectedpojos.OpportunityPartial;
 import com.agilecrm.projectedpojos.PartialDAO;
 import com.agilecrm.reports.ReportsUtil;
 import com.agilecrm.search.AppengineSearch;
 import com.agilecrm.search.document.OpportunityDocument;
+import com.agilecrm.search.query.QueryDocument;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.UserPrefs;
@@ -61,21 +59,14 @@ import com.google.appengine.api.datastore.PropertyProjection;
 import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.datastore.Query.SortDirection;
 import com.google.appengine.api.search.Document.Builder;
-import com.google.appengine.api.NamespaceManager;
-import com.google.appengine.api.datastore.DatastoreService;
-import com.google.appengine.api.datastore.DatastoreServiceFactory;
-import com.google.appengine.api.datastore.Entity;
-import com.google.appengine.api.datastore.KeyFactory;
-import com.google.appengine.api.datastore.PropertyProjection;
-import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.search.Index;
+import com.google.appengine.api.search.ScoredDocument;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
 import com.google.appengine.api.taskqueue.TaskOptions.Method;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Query;
-import com.googlecode.objectify.cache.CachingDatastoreServiceFactory;
 
 /**
  * <code>OpportunityUtil</code> is the utility class to fetch opportunities with
@@ -886,7 +877,8 @@ public class OpportunityUtil
 
 		// If the deal is lost, change the probability to 0.
 		if (opportunity.milestone.equalsIgnoreCase(lostMilestone))
-		    opportunity.probability = 0;
+			continue;
+		    //opportunity.probability = 0;
 		// Total and Pipeline (total * probability)
 		double total = 0D;
         double pipeline = 0D;
@@ -1062,7 +1054,7 @@ public class OpportunityUtil
 		    searchMap.put("archived", Boolean.parseBoolean(filterJson.getString("archived")));
 	    }
 
-	    if (checkJsonString(filterJson, "value_filter")
+	    /*if (checkJsonString(filterJson, "value_filter")
 		    && filterJson.getString("value_filter").equalsIgnoreCase("equals"))
 	    {
 		if (checkJsonString(filterJson, "value"))
@@ -1084,9 +1076,9 @@ public class OpportunityUtil
 		    double value = Double.parseDouble(filterJson.getString("value_end").replace("%", ""));
 		    searchMap.put("expected_value <=", value);
 		}
-	    }
+	    }*/
 
-	    if (checkJsonString(filterJson, "probability_filter")
+	   /* if (checkJsonString(filterJson, "probability_filter")
 		    && filterJson.getString("probability_filter").equalsIgnoreCase("equals"))
 	    {
 		if (checkJsonString(filterJson, "probability"))
@@ -1108,7 +1100,7 @@ public class OpportunityUtil
 		    long probability = Long.parseLong(filterJson.getString("probability_end").replace("%", ""));
 		    searchMap.put("probability <=", probability);
 		}
-	    }
+	    }*/
 
 	    searchMap.putAll(getDateFilterCondition(filterJson, sortField));
 	    searchMap.putAll(getDateFilterCondition(filterJson, "created_time"));
@@ -1805,7 +1797,7 @@ public class OpportunityUtil
      *            deals filters.
      * @return list of deals.
      */
-    public static List<Opportunity> getOpportunitiesForBulkActions(String ids, String filter, int count)
+    public List<Opportunity> getOpportunitiesForBulkActions(String ids, String filter, int count)
     {
 	List<Opportunity> deals = new ArrayList<Opportunity>();
 	try
@@ -1834,14 +1826,46 @@ public class OpportunityUtil
 	    }
 	    else
 	    {
-		deals = DealFilterUtil.getDeals(filter, count, null, "created_time", null, null);
-		Integer deals_count = deals.get(deals.size() - 1).count;
-		String cursor = deals.get(deals.size() - 1).cursor;
-		while (deals_count != null && deals != null && deals_count != deals.size())
-		{
-		    deals.addAll(DealFilterUtil.getDeals(filter, count, cursor, "created_time", null, null));
-		    cursor = deals.get(deals.size() - 1).cursor;
-		}
+	    String cursor = null;
+	    QueryDocument<Opportunity> queryInstace = new QueryDocument<Opportunity>(new OpportunityDocument().getIndex(), Opportunity.class);
+	    Set<Key<Opportunity>> dealsSet = new HashSet<Key<Opportunity>>();
+	    
+	    List<ScoredDocument> scoredDocuments = DealFilterUtil.getDealSearchDocs(filter, 200, cursor, "created_time", null, null, queryInstace);
+	    
+	    System.out.println("Start----- Deals fetching in bulk actions with textsearch");
+	    int iterationCount = 0;
+	    while(scoredDocuments != null && scoredDocuments.size() > 0)
+	    {
+	    	System.out.println("scoredDocuments size-------"+scoredDocuments.size());
+	    	System.out.println("Iteration Count----"+iterationCount++);
+			for (ScoredDocument doc : scoredDocuments)
+			{
+			    try
+			    {
+			    dealsSet.add(new Key<Opportunity>(Opportunity.class, Long.parseLong(doc.getId())));
+			    }
+			    catch (Exception e)
+			    {
+				e.printStackTrace();
+			    }
+			}
+
+			ScoredDocument doc = scoredDocuments.get(scoredDocuments.size() - 1);
+		    cursor = doc.getCursor().toWebSafeString();
+		    
+		    System.out.println("Cursor in deals bulk actions-------"+cursor);
+		    
+		    deals.addAll(Opportunity.dao.fetchAllByKeys(new ArrayList<Key<Opportunity>>(dealsSet)));
+		    
+		    dealsSet.clear();
+		    
+		    System.out.println("Deals size in bulk actions-----"+deals.size());
+		    System.out.println("Start Doc ID----"+scoredDocuments.get(0).getId());
+		    System.out.println("End Doc ID----"+doc.getId());
+		    
+		    scoredDocuments = DealFilterUtil.getDealSearchDocs(filter, 200, cursor, "created_time", null, null, queryInstace);
+	    }
+	    System.out.println("End----- Deals fetching in bulk actions with textsearch");
 	    }
 	}
 	catch (JSONException je)
@@ -2228,7 +2252,6 @@ public class OpportunityUtil
 	{
 	    sourcecount.put(source.getId().toString(), type.equalsIgnoreCase("deals") ? 0 : 0.0);
 	}
-	System.out.println(sources.get(0).getId());
 	newDealsObject = ReportsUtil.initializeFrequencyForReports(minTime, maxTime, frequency, timeZone, sourcecount);
 
 	System.out.println("Total opportunitite....." + opportunitiesList.size());
@@ -2244,7 +2267,6 @@ public class OpportunityUtil
 		 * Date(opportunity.close_date * 1000));
 		 */
 		Long source_id = opportunity.getDeal_source_id();
-		System.out.println(categoriesUtil.getCategory(source_id));
 		List<Category> sources_id = categoriesUtil.getCategoriesByType("DEAL_SOURCE");
 		for (Category source_temp : sources_id)
 		{

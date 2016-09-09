@@ -4,7 +4,7 @@
     <div class="modal-content">
     <div class="modal-header">
         <button class="close" data-dismiss="modal">&times;</button>
-        <h3 class="modal-title"><i class="icon-plus-sign"></i>&nbsp;New Task</h3>
+        <h3 class="modal-title"><i class="icon-plus-sign"></i>&nbsp;{{agile_lng_translate 'prefs-settings' 'new-task'}}</h3>
     </div>
     <div class="modal-body">
         <input type="hidden" value="task" id="hiddentask" /> 
@@ -17,31 +17,33 @@
                     <input name="is_complete" id="is_complete" type="hidden" value="">
                                         
                         <div id="addTask" class="control-group form-group" style="margin-bottom:0px;">
-                            <label class="control-label col-sm-3">Task<span class="field_req">*</span></label>
+                            <label class="control-label col-sm-3">{{agile_lng_translate 'menu' 'task'}}<span class="field_req">*</span></label>
                             <div class="controls col-sm-7">
-                                <input id="subject" placeholder="Task Name" type="text" name="subject" size="40" class="required form-control" />
+                                <input id="subject" placeholder="{{agile_lng_translate 'tasks' 'task-name'}}" type="text" name="subject" size="40" class="required form-control" />
                             </div>
                         </div>
                         <div class="text-muted">
                             <div class="col-sm-offset-3 col-sm-7" {{#is_mobile}} style="padding-left: 0px !important;font-size: 11px;" {{else}} style="font-size:12px;margin-bottom:10px;padding-left: 9px"{{/is_mobile}}>
-                                 Note: Tasks are like to-dos. Result
-                            oriented. You can assign a category such as call, email etc.
+                                 {{agile_lng_translate 'tasks' 'tasks-description'}}
                             </div>
                         </div>
 
                         <div class="control-group form-group">
-                            <label for="type" class="control-label col-sm-3">Category<span class="field_req">*</span></label>
+                            <label for="type" class="control-label col-sm-3">{{agile_lng_translate 'portlets' 'category'}}<span class="field_req">*</span></label>
                             <div class="controls col-sm-7">
                                 <span class="input ">
                                     <select name="type" id="type" class="input-medium required form-control">
-                                        <option value="CALL">Call</option>
-                                        <option value="EMAIL">Email</option>
-                                        <option value="FOLLOW_UP">Follow-up</option>
-                                        <option value="MEETING">Meeting</option>
-                                        <option value="MILESTONE">Milestone</option>
-                                        <option value="SEND">Send</option>
-                                        <option value="TWEET">Tweet</option>
-                                        <option value="OTHER">Other</option>
+                                        <option value="CALL">{{agile_lng_translate 'tasks' 'Call'}}</option>
+                                        <option value="EMAIL">{{agile_lng_translate 'tasks' 'Email'}}</option>
+                                        <option value="FOLLOW_UP">{{agile_lng_translate 'tasks' 'Follow Up'}}
+                                        </option>
+                                        <option value="MEETING">{{agile_lng_translate 'tasks' 'Meeting'}}
+                                        </option>
+                                        <option value="MILESTONE">{{agile_lng_translate 'tasks' 'Milestone'}}
+                                        </option>
+                                        <option value="SEND">{{agile_lng_translate 'tasks' 'Send'}}</option>
+                                        <option value="TWEET">{{agile_lng_translate 'tasks' 'Tweet'}}</option>
+                                        <option value="OTHER">{{agile_lng_translate 'tasks' 'Other'}}</option>
                                     </select>
                                 </span>
                             </div>
@@ -51,50 +53,49 @@
                     <div class="row">
                         <div class="col-sm-6">
                         <div class="control-group form-group">
-                            <label for="due" class="control-label col-sm-6">Date (Due)<span class="field_req">*</span></label>
+                            <label for="due" class="control-label col-sm-6">{{agile_lng_translate 'tasks' 'date-(due)'}}<span class="field_req">*</span></label>
                             <div class="controls col-sm-5">
-                                <input type="text" name="due" placeholder="Select Date" id="task-date-1" class="required  date form-control" style="font-size:13px">                           
+                                <input type="text" name="due" placeholder="{{agile_lng_translate 'contacts-view' 'select-date'}}" id="task-date-1" class="required  date form-control" style="font-size:13px">                           
                             </div>
                         </div>
                         </div>
                         <div class="col-sm-5">
                         <div class="control-group form-group">
-                            <label class="control-label col-sm-4"> Time<span class="field_req">*</span></label>
+                            <label class="control-label col-sm-4"> {{agile_lng_translate 'report-add' 'time'}}<span class="field_req">*</span></label>
                             <div class="controls col-sm-5" {{#is_mobile}} {{else}} style="padding: 0 2px 0 0px;" {{/is_mobile}}>
-                                <input type="text" name="task_ending_time" class="new-task-timepicker required form-control" id="task_ending_time" style="width:100px" placeholder="Time">     
+                                <input type="text" name="task_ending_time" class="new-task-timepicker required form-control" id="task_ending_time" style="width:100px" placeholder="{{agile_lng_translate 'report-add' 'time'}}">     
                             </div>
                         </div>
                     </div>
 
                 </div>
 
-
                        <div class="control-group form-group">
-                            <label class="control-label col-sm-3">Owner<span class="field_req">*</span></label>
+                            <label class="control-label col-sm-3">{{agile_lng_translate 'report-add' 'owner'}}<span class="field_req">*</span></label>
                             <div class="controls col-sm-7" id="owners">
                                 <select id="owners-list" class="required form-control" name="owner_id"></select>
                                 <img class="loading-img" style="opacity:0.5; position:absolute; right:45px; top:10px;" src="//doxhze3l6s7v9.cloudfront.net/beta/static//v2/img/ajax-loader-cursor.gif">
                             </div>
                         </div>
 
-                    <div class="control-group form-group">
-                            <label for="priority_type" class="control-label col-sm-3">Priority</label>
+                       <div class="control-group form-group">
+                            <label for="priority_type" class="control-label col-sm-3">{{agile_lng_translate 'tasks' 'priority'}}</label>
                             <div class="controls col-sm-7" >
                                 <select name="priority_type" id="priority_type" class="input-medium form-control">
-                                        <option value="HIGH">High</option>
-                                        <option value="NORMAL" selected="selected">Normal</option>
-                                        <option value="LOW">Low</option>
+                                        <option value="HIGH">{{agile_lng_translate 'tasks' 'High'}}</option>
+                                        <option value="NORMAL" selected="selected">{{agile_lng_translate 'tasks' 'Normal'}}</option>
+                                        <option value="LOW">{{agile_lng_translate 'tasks' 'Low'}}</option>
                                     </select>
                             </div>
                        </div>
 
                     <div class="control-group form-group">
-                            <label for="status" class="control-label col-sm-3">Status</label>
+                            <label for="status" class="control-label col-sm-3">{{agile_lng_translate 'portlets' 'status'}}</label>
                             <div class="controls col-sm-7" >
                                 <select name="status" id="status" class="status input-medium form-control">
-                                        <option value="YET_TO_START" selected="selected">Yet to Start</option>
-                                        <option value="IN_PROGRESS">In Progress</option>
-                                        <option value="COMPLETED">Completed</option>                                        
+                                        <option value="YET_TO_START" selected="selected">{{agile_lng_translate 'tasks' 'Yet To Start'}}</option>
+                                        <option value="IN_PROGRESS">{{agile_lng_translate 'tasks' 'In Progress'}}</option>
+                                        <option value="COMPLETED">{{agile_lng_translate 'tasks' 'Completed'}}</option>                                        
                                     </select>
                                 </span>
                             </div>
@@ -114,10 +115,10 @@
 
                     <div class="control-group form-group">
                         <!-- <label class="control-label"><a href="#" id="new-event-related-contacts-label"><i class="icon-plus"></i> Add Contacts</a></label> -->
-                        <label class="control-label new-task-related-contacts-label col-sm-3">Related Contacts</label>
+                        <label class="control-label new-task-related-contacts-label col-sm-3">{{agile_lng_translate 'documents' 'related-contacts'}}</label>
                         <div class="controls new-task-related-contacts-input col-sm-7">
                             <div>
-                                <input type="text" id="task_related_to" class="typeahead typeahead_contacts form-control" placeholder="Related Contacts" data-provide="typeahead" data-mode="multiple" size="40" />
+                                <input type="text" id="task_related_to" class="typeahead typeahead_contacts form-control" placeholder="{{agile_lng_translate 'documents' 'related-contacts'}}" data-provide="typeahead" data-mode="multiple" size="40" />
                                 <div style="padding-top:2px;">
                                     <ul name="contacts" class="contacts tags tagsinput p-n m-n"></ul>
                                 </div>
@@ -127,11 +128,11 @@
                     </div>
                      <div class="control-group form-group">
                         <!-- <label class="control-label"><a href="#" id="new-event-related-deals-label"><i class="icon-plus"></i> Add Deals</a></label> -->
-                        <label class="control-label new-task-related-deals-label col-sm-3">Related Deals</label>
+                        <label class="control-label new-task-related-deals-label col-sm-3">{{agile_lng_translate 'tasks' 'related-deals'}}</label>
                         <div class="controls new-task-related-deals-input col-sm-7" id="dealTypeAhead">
                             <div>
                                 <input type="text" id="task_relates_to_deals" 
-                                placeholder="Related Deals" class="typeahead typeahead_deals form-control"
+                                placeholder="{{agile_lng_translate 'tasks' 'related-deals'}}" class="typeahead typeahead_deals form-control"
                                 data-provide="typeahead" data-mode="multiple" />
                                 <div style="padding-top:2px;">
                                     <ul name="deal_ids" class="deals tagsinput deal_tags p-n m-n"></ul>
@@ -143,9 +144,9 @@
 
                     <div class="row hide">
                         <div class="congrol-group form-group ">
-                            <label for="notes" class="control-label"><b>Notes</b></label>
+                            <label for="notes" class="control-label"><b>{{agile_lng_translate 'deal-view' 'notes'}}</b></label>
                             <div class="controls pull-right task-add-note">
-                                <a href="#"><i class="icon-plus" /> Add Note</a>
+                                <a href="#"><i class="icon-plus" /> {{agile_lng_translate 'contact-details' 'add-note'}}</a>
                             </div>
                             <div id="forNoteForm" class="controls"></div>
                             <ul id="notes" name="notes" class="notes"></ul>
@@ -154,17 +155,17 @@
 
                     <div class="form-group m-b-none">
                     <div class="col-sm-offset-3 col-sm-7 text-left">
-        <a href="javascript:;" id="taskDescriptionLink" class="text-info"><i class="icon-plus"></i> Add Description</a>
+        <a href="javascript:;" id="taskDescriptionLink" class="text-info"><i class="icon-plus"></i> {{agile_lng_translate 'tasks' 'add-description'}}</a>
                     </div>
                     <div class="clearfix"></div>
                 </div>
 
 
                     <div class="control-group form-group" id="taskDescriptionInfo">
-                        <label class="control-label col-sm-3">Description </label>
+                        <label class="control-label col-sm-3">{{agile_lng_translate 'other' 'description'}} </label>
                             <div class="controls col-sm-7">
                                 <textarea id="taskDescription" name="taskDescription" rows="3"
-                                class="input col-md-12 form-control" placeholder="Add Comment"></textarea>
+                                class="input col-md-12 form-control" placeholder="{{agile_lng_translate 'tasks' 'add-comment'}}"></textarea>
                             </div>
                     </div>
                 
@@ -173,7 +174,7 @@
         </div>
     </div>
     <div class="modal-footer">
-        <a href="#" class="btn btn-primary pull-right" id="task_event_validate">Save </a>
+        <a href="#" class="btn btn-primary pull-right" id="task_event_validate">{{agile_lng_translate 'portlets' 'save'}} </a>
         <span class="save-status"></span>
     </div>
 </div>

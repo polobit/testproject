@@ -1,0 +1,67 @@
+<script id="ticket-helpcenter-add-section-template" type="text/html">
+<div class="wrapper">
+    <div class="row">
+    	<div class="col-md-10">
+        	<div class="panel panel-default">
+        		<div class="panel-heading">
+        			{{#if id}}{{agile_lng_translate 'contact-details' 'edit'}}{{else}}{{agile_lng_translate 'portlets' 'add'}}{{/if}} {{agile_lng_translate 'tickets' 'section'}}
+    			</div>
+                <form id="userForm" name="userForm" method="get" action="" class="form-horizontal">
+                    {{#if id}}
+                        <input type="text" name="id" class="hide" value={{id}} >
+                    {{/if}}
+                    <fieldset class="wrapper"><br/>
+                        <div class="control-group form-group">
+                            <label class="control-label col-md-3" for="name">{{agile_lng_translate 'deal-view' 'name'}} <span class="field_req">*</span></label> 
+                            <div class="col-md-6">
+                                <div class="controls">
+                                    <input type="text" name="name" id="name"  placeholder="{{agile_lng_translate 'deal-view' 'name'}}" class="required form-control" maxlength="35">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="control-group form-group">
+                            <label class="control-label col-md-3" for="description">{{agile_lng_translate 'misc-keys' 'description'}} </label> 
+                            <div class="col-md-6 m-t-xs">
+                                <div class="controls">
+                                    <textarea id="description" class="form-control" name="description" style="min-height: 100px;"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="control-group form-group">
+                            <label class="control-label col-md-3" for="Catogery">{{agile_lng_translate 'portlets' 'category'}}<span class="field_req">*</span></label> 
+                            <div class="col-md-6 m-t-xs">
+                                <div class="controls">
+                                    <select name="categorie_id" class="form-control" id="catogery">
+                                    </select>
+                                </div>    
+                            </div>
+                        </div>
+                        <div class="control-group form-group">
+                            <label class="control-label col-md-3" for="Visible_To">{{agile_lng_translate 'Help-center' 'visible-to'}}<span class="field_req">*</span></label> 
+                            <div class="col-md-6 m-t-xs">
+                                <div class="controls">
+                                    <select name="visible_to" class=" form-control" id="visible_to">
+                                        <option  value="CUSTOMER" selected="selected">{{agile_lng_translate 'subscriber_type' 'all'}}</option>
+                                        <option value="ADMIN">{{agile_lng_translate 'admin-settings-users' 'admin'}}</option>           
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                         <div class="row">
+                            <div class="col-md-12"><hr></div>
+                        </div>
+                        <div class="form-group">
+                            <div class="form-actions col-sm-offset-3 col-md-9">
+                                <div class="form-actions">
+                                    <a type="reset" href='javascript:history.back()' class="btn btn-default btn-sm">{{agile_lng_translate 'contacts-view' 'cancel'}}</a>
+                                    <button type="submit" class="save btn btn-sm btn-primary m-l-xs">{{agile_lng_translate 'prefs-settings' 'save-changes'}}</button>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</script>

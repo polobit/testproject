@@ -131,6 +131,10 @@ AGILE_LP_OPTIONS['templateId'] = "";
                                     <h3 class="accordion-heading">Agile Forms <small>create form & select here</small> <i class="icon icon-down-open-1"></i></h3>
                                     <div class="accordion-body"><ul class="list-unstyled"></ul></div>
                                 </div>
+                                <div class="elements-box accordion-item" id="knowledgebase">
+                                    <h3 class="accordion-heading">Knowledge Base<i class="icon icon-down-open-1"></i></h3>
+                                    <div class="accordion-body"><ul class="list-unstyled"></ul></div>
+                                </div>
                             </div>
                         </div>
                         <aside id="inspector" ng-class="{ open: panels.active === 'inspector' }" class="panel" data-name="inspector" ng-controller="InspectorController" bl-color-picker bl-panels-accordion>
@@ -836,7 +840,7 @@ AGILE_LP_OPTIONS['templateId'] = "";
         </script>
 
         <script src="public/js/builder.min.js?v=<%=_AGILE_VERSION%>"></script>
-        <script src="public/js/vendor/ace/ace.js"></script>
+        <script src="https://s3.amazonaws.com/agilecrm/pagebuilder/static/js/ace/ace.js" charset="utf-8"></script>
 
     </div>
 

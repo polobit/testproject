@@ -23,7 +23,7 @@ function startCallScriptWidget(){
 	if (callscript_widget.prefs == undefined || callscript_widget.prefs == "{}")
 	{
 		// show default text
-		$('#CallScript').html("<div class='wrapper-sm'>Welcome to CallScript</div>");
+		$('#CallScript').html("<div class='wrapper-sm'>" +_agile_get_translated_val('widgets', 'welcome-to-callscript')+ "</div>");
 		return;
 	}			
 	

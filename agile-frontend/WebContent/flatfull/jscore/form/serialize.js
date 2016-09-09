@@ -270,7 +270,7 @@ function serializeChainedElement(element)
 			{
 				var date = getFormattedDateObjectWithString($(data).val());
 
-				value = getGMTEpochFromDateForCustomFilters(date);
+				value = getGMTEpochFromDateForDynamicFilters(date);
 			}
 		}
 		else if ($(data).hasClass("contact_custom_field") || $(data).hasClass("company_custom_field")) {

@@ -82,7 +82,7 @@ public class UpdateDealsOfDomainDeferredTask implements DeferredTask
 				return;
 			}
 			AppengineSearch<Opportunity> search = new AppengineSearch<Opportunity>(Opportunity.class);
-			QueryDocument<Opportunity> q = new QueryDocument<Opportunity>(search.index, Opportunity.class);
+			/*QueryDocument<Opportunity> q = new QueryDocument<Opportunity>(search.index, Opportunity.class);
 			DealFilter df = new DealFilter();
 			SearchRule rule = new SearchRule();
 			rule.LHS = "type";
@@ -97,7 +97,7 @@ public class UpdateDealsOfDomainDeferredTask implements DeferredTask
 				{
 					search.delete(sd.getId());
 				}
-			}
+			}*/
 			do
 			{
 				currentCount += deals_list.size();

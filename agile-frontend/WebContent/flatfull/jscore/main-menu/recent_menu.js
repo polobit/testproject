@@ -41,7 +41,7 @@ function populate_recent_menu()
 		});
 		
 	if(recent_view.collection.length==0)	// default text, when list is empty.
-		$('#recent-menu>ul').html('<li class="list-group-item"><a class="disabled" style="color:black;">No Recent Activity</a></li>');
+		$('#recent-menu>ul').html('<li class="list-group-item"><a class="disabled" style="color:black;">{{agile_lng_translate "activity" "no-recent"}}</a></li>');
 	else {recent_view.render(true);
 	}			// populate elements if filled from localStorage
 }

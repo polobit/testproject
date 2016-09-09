@@ -18,6 +18,14 @@ load_activities : function(el)
 				$("#reports-listerners-container").html(el);
 
 			$('.activity_time_timepicker', el).timepicker({ 'timeFormat' : 'H:i ', 'step' : 30 });
+			$('.activity_time_timepicker').focus(function(){
+ 				$('#activityModal').css("overflow", "hidden");
+ 			});
+ 			
+ 			$('.activity_time_timepicker').blur(function(){
+ 				$('#activityModal').css("overflow", "auto");
+ 			});
+
 			$(".activity_time_timepicker", el).val("09:00");
 			$("#report_timezone", el).val(ACCOUNT_PREFS.timezone);
 
@@ -56,6 +64,14 @@ edit_activities : function(el, json)
 	// month fields
 	updateWeekDayReportVisibility(frequency, "activity");
 	$('.activity_time_timepicker').timepicker({ 'timeFormat' : 'H:i ', 'step' : 30 });
+
+	$('.activity_time_timepicker').focus(function(){
+		$('#activityModal').addClass('overflow-hidden');
+	});
+	
+	$('.activity_time_timepicker').blur(function(){
+		$('#activityModal').removeClass('overflow-hidden');
+	});
 },
 
 /** Loads add report for contact email report* */
@@ -76,6 +92,14 @@ load_contacts : function(el)
 				$("#reports-listerners-container").html(el);
 
 			$('.report_time_timepicker', el).timepicker({ 'timeFormat' : 'H:i ', 'step' : 30 });
+			$('.report_time_timepicker').focus(function(){
+ 				$('#activityModal').css("overflow", "hidden");
+ 			});
+ 			
+ 			$('.report_time_timepicker').blur(function(){
+ 				$('#activityModal').css("overflow", "auto");
+ 			});
+
 			$(".report_time_timepicker", el).val("09:00");
 			$("#report_timezone", el).val(ACCOUNT_PREFS.timezone);
 
@@ -108,6 +132,14 @@ edit_contacts : function(el, report, flag)
 	setTimeout(function()
 	{
 		$('.report_time_timepicker').timepicker({ 'timeFormat' : 'H:i ', 'step' : 30 });
+
+		$('.report_time_timepicker').focus(function(){
+			$('#activityModal').css("overflow", "hidden");
+		});
+		
+		$('.report_time_timepicker').blur(function(){
+			$('#activityModal').css("overflow", "auto");
+		});
 
 		var frequency = report.toJSON().duration;
 		updateWeekDayReportVisibility(frequency,"contact");
@@ -145,6 +177,7 @@ call_reports : function(url,reportType,graphOn){
 	var domainUsersList=[];
 	var domainUserImgList=[];
 	var averageCallList=[];
+	var averageCallList_temp=[];
 	var sizey = parseInt($('#'+selector).parent().attr("data-sizey"));
 	var topPos = 50*sizey;
 	if(sizey==2 || sizey==3)
@@ -153,7 +186,7 @@ call_reports : function(url,reportType,graphOn){
 
 	portlet_graph_data_utility.fetchPortletsGraphData(url,function(data){
 		if(data.status==403){
-			$('#'+selector).html("<div class='portlet-error-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;Sorry, you do not have the privileges to access this.</div>");
+			$('#'+selector).html("<div class='portlet-error-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;{{agile_lng_translate 'report-add' 'sorry-you-do-not-have-privileges-access'}}</div>");
 			return;
 		}
 
@@ -333,9 +366,11 @@ call_reports : function(url,reportType,graphOn){
 			    if(duration > 0){
 			    	
 					var callsDurationAvg=duration/answeredCallsCountList[index];
-					averageCallList.push(callsDurationAvg);
+					averageCallList_temp.push(callsDurationAvg);
+					averageCallList.push(callsDurationAvg/60);
 			    	
 			    }else{
+			    	averageCallList_temp.push(0);
 			    	averageCallList.push(0);
 			    }
 				
@@ -343,7 +378,7 @@ call_reports : function(url,reportType,graphOn){
 			    tempData.data=averageCallList;
 			    tempData.showInLegend=false;
 			    series[0]=tempData;
-			    text="Average Call Duration (Sec)";
+			    text="{{agile_lng_translate 'calls' 'avg-duration-secs'}}";
 			    colors=['green'];
 		}
 		else
@@ -353,7 +388,7 @@ call_reports : function(url,reportType,graphOn){
 			var callsDurationInMinsList = [];
 			$.each(callsDurationList,function(index,duration){
 				if(duration > 0){
-					callsDurationInMinsList[index] = duration;
+					callsDurationInMinsList[index] = duration/60;
 				}else{
 					callsDurationInMinsList[index] = 0;
 				}
@@ -362,11 +397,11 @@ call_reports : function(url,reportType,graphOn){
 			tempData.data=callsDurationInMinsList;
 			tempData.showInLegend=false;
 			series[0]=tempData;
-			text="Calls Duration (Sec)";
+			text="{{agile_lng_translate 'calls' 'duration-secs'}}";
 			colors=['green'];
 		}
 		
-		portlet_graph_utility.callsPerPersonBarGraph(selector,domainUsersList,series,totalCallsCountList,callsDurationList,text,colors,domainUserImgList);
+		portlet_graph_utility.callsPerPersonBarGraph(selector,domainUsersList,series,totalCallsCountList,callsDurationList,text,colors,domainUserImgList,undefined,averageCallList_temp);
 	});
 
 	return;
@@ -405,7 +440,7 @@ user_reports :function(callReportUrl){
 		
 		portlet_graph_data_utility.fetchPortletsGraphData(callReportUrl,function(data){
 			if(data.status==403){
-				$('#'+selector).html("<div class='portlet-error-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;Sorry, you do not have the privileges to access this.</div>");
+				$('#'+selector).html("<div class='portlet-error-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;{{agile_lng_translate 'report-add' 'sorry-you-do-not-have-privileges-access'}}</div>");
 				return;
 			}
 			answeredCallsCountList=data["answeredCallsCountList"];
@@ -528,7 +563,7 @@ user_reports :function(callReportUrl){
 					{
 						$('#' + selector1)
 									.html(
-										'<div class="portlet-error-message" style=" font-size: 14px;font-style: normal;padding-top: 174px;padding-bottom : 203px">No Deals Goals set </div>');
+										'<div class="portlet-error-message" style=" font-size: 14px;font-style: normal;padding-top: 174px;padding-bottom : 203px">{{agile_lng_translate "portlets" "no-deals-goals-set"}} </div>');
 								
 					}
 					else{
@@ -539,7 +574,7 @@ user_reports :function(callReportUrl){
 					{
 						$('#' + selector2)
 										.html(
-												'<div class="portlet-error-message" style="font-size: 14px;font-style: normal;padding-top: 174px;padding-bottom : 203px">No Amount Goals set </div>');
+												'<div class="portlet-error-message" style="font-size: 14px;font-style: normal;padding-top: 174px;padding-bottom : 203px">{{agile_lng_translate "report-view" "no-amount-goals-set"}} </div>');
 								
 					}
 					else{
@@ -687,7 +722,7 @@ getRepPerformanceLog : function(url) {
 								goal_url=goal_url+user;
 							}
 							}
-							goal_url=goal_url+ getSelectedDates();
+							goal_url=goal_url+ getSelectedDates()+'&time_zone=' + (new Date().getTimezoneOffset());;
 							report_utility.Goal_report(goal_url);
 
 							var conversion_url='/core/api/opportunity/conversionRate/'+user+getSelectedDates();
@@ -763,7 +798,7 @@ getRepPerformanceLog : function(url) {
 function initReportLibs(callback)
 {
 
-	head.load(LIB_PATH + 'lib/date-charts.js', LIB_PATH + 'lib/date-range-picker.js'+'?_=' + _agile_get_file_hash('date-range-picker.js'), function()
+	head.load(LIB_PATH + 'lib/date-charts-en.js', LIB_PATH + 'lib/date-range-picker.js'+'?_=' + _agile_get_file_hash('date-range-picker.js'), function()
 	{
 		callback();
 

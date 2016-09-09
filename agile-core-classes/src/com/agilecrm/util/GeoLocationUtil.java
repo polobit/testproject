@@ -21,10 +21,15 @@ public class GeoLocationUtil
 	    state = state == null ? "" : state;
 	    city = city == null ? "" : city;
 
-	    String ip = request.getRemoteAddr();
+	    //String ip = request.getRemoteAddr();
 
-	    System.out.println("Countrryyyy" + country + " Stateeeeee" + state + "Cityyy" + city);
+	    System.out.println("Country" + country + " State" + state + "City" + city);
 
+	    if(country.equals("USA"))
+		country = "US";
+	    
+	    System.out.println("Country" + country + " State" + state + "City" + city);
+	    
 	    locationJSON.put("city", city);
 	    locationJSON.put("state", state);
 	    locationJSON.put("country", country);

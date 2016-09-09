@@ -37,7 +37,7 @@ function setupTwilioOAuth()
 	// Connects with ScribeServlet for authentication
 	$('#Twilio')
 			.html(
-					'<div class="widget_content"><p style="border-bottom:none">Call your contacts directly using your Twilio account.</p><a id="twilio-connect-button" class="btn" href="https://www.twilio.com/authorize/CNf63bca035414be121d517a116066a5f8?state=' + encodeURIComponent(window.location.href) + '" style="margin-bottom: 10px;">Link your Twilio</a></div>');
+					'<div class="widget_content"><p style="border-bottom:none">'+_agile_get_translated_val('widgets','call-your-contacts-directly-using-twilio-account')+'</p><a id="twilio-connect-button" class="btn" href="https://www.twilio.com/authorize/CNf63bca035414be121d517a116066a5f8?state=' + encodeURIComponent(window.location.href) + '" style="margin-bottom: 10px;">'+_agile_get_translated_val('widgets','link-your-twilio')+'</a></div>');
 
 }
 
@@ -95,7 +95,7 @@ function getOutgoingNumbers(callback)
 function verifyNumberFromTwilio(from_number, callback)
 {
 	// Shows verifying till the request is sent
-	$('#Twilio').html('<div class="widget_content">Verifying........</div>');
+	$('#Twilio').html('<div class="widget_content">'+_agile_get_translated_val('widgets','twilio-verifing')+'........</div>');
 
 	/*
 	 * Sends GET request to the URL "/core/api/widgets/twilio/verify/numbers/"
@@ -287,7 +287,7 @@ function showTwilioDetails(token, from_number)
 	if (Numbers.length == 0)
 	{
 		// Shows information in Twilio widget panel
-		twilioError(Twilio_PLUGIN_NAME, "There is no phone number associated with this contact. <a href='#contact-edit' class='text-info'>Add phone number</a>");
+		twilioError(Twilio_PLUGIN_NAME, _agile_get_translated_val('widgets','no-phone-number-to-contact')+" <a href='#contact-edit' class='text-info'>"+_agile_get_translated_val('campaigns','add-phone-number')+"</a>");
 		return;
 	}
 
@@ -346,10 +346,8 @@ function getTwilioLogs(to)
 		$('#twilio-logs-panel').html(twilio_logs_template);
 
 		// Load jquery time ago function to show time ago in logs
-		head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
-		{
-			$(".time-ago", twilio_logs_template).timeago();
-		});
+		agileTimeAgoWithLngConversion($(".time-ago", twilio_logs_template));
+		
 		// Add the call logs to the timeline.
 		addLogsToTimeLine($.parseJSON(logs));
 		
@@ -773,7 +771,7 @@ function twilioError(id, message)
 	 */
 	$('#' + id).html(getTemplate('twilio-error', error_json));
 	//$('#' + id).append('<a href="#add-widget" >widget settings page.</a>');
-	$('#' + id).append('<div class="wrapper-sm p-t-none"><a class="btn btn-default" id="delete-widget" widget-name="Twilio" style="margin-top: 5px;">Delete Widget</a></div>');
+	$('#' + id).append('<div class="wrapper-sm p-t-none"><a class="btn btn-default" id="delete-widget" widget-name="Twilio" style="margin-top: 5px;">'+_agile_get_translated_val('widgets','widget-delete')+'</a></div>');
 }
 
 /**
@@ -843,7 +841,7 @@ function startTwilioWidget(contact_id){
 	console.log(twilio_prefs);
 
 	// Because of new widget it is deprecated and all functions are commented.
-	twilioError(Twilio_PLUGIN_NAME, 'Please delete this widget and add the new improved Twilio widget from the <a href="#add-widget" >widget settings page</a>.');
+	twilioError(Twilio_PLUGIN_NAME, _agile_get_translated_val('widgets','remove-twilio-widget') + ' <a href="#add-widget" >'+_agile_get_translated_val('widgets','widget-settings-page')+'</a>.');
 	
 	/*
 	 * Check if Twilio account has registered numbers and shows set up to verify

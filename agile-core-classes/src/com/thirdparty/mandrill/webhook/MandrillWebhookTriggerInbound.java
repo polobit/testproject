@@ -245,11 +245,12 @@ public class MandrillWebhookTriggerInbound extends HttpServlet
 	public String getAgileDetail(String agileEmail, AgileDetail detail)
 	{
 		try
-		{
+		{  
+			/* checking for the API key and the domain user */
 			if (detail == AgileDetail.API_KEY)
-				return agileEmail.split("@")[0].split("-")[1];
+				return StringUtils.substringAfterLast(agileEmail.split("@")[0],"-");
 			else if (detail == AgileDetail.DOMAIN)
-				return agileEmail.split("@")[0].split("-")[0];
+				return StringUtils.substringBeforeLast(agileEmail.split("@")[0],"-");
 			return null;
 		}
 		catch (Exception e)
@@ -257,7 +258,8 @@ public class MandrillWebhookTriggerInbound extends HttpServlet
 			return null;
 		}
 	}
-
+	
+	
 	public Boolean isNewContact(String fromEmail)
 	{
 		return !ContactUtil.isExists(fromEmail.toLowerCase());

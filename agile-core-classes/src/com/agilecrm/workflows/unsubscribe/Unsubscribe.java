@@ -37,6 +37,8 @@ public class Unsubscribe {
     public String unsubscribe_name = null;
 
     public String unsubscribe_subject = null;
+    
+    public boolean is_unsubscribe_email_disabled = false;
 
     /**
      * Default Unsubscribe

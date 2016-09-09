@@ -54,7 +54,7 @@ var portlet_graph_data_utility = {
 							if (data.status == 403) {
 								$('#' + selector)
 										.html(
-												"<div class='portlet-error-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;Sorry, you do not have the privileges to access this.</div>");
+												"<div class='portlet-error-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;{{agile_lng_translate 'report-add' 'sorry-you-do-not-have-privileges-access'}}</div>");
 								return;
 							}
 							milestonesList = data["milestonesList"];
@@ -91,7 +91,7 @@ var portlet_graph_data_utility = {
 							if (data.status == 403) {
 								$('#' + selector)
 										.html(
-												"<div class='portlet-error-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;Sorry, you do not have the privileges to access this.</div>");
+												"<div class='portlet-error-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;{{agile_lng_translate 'report-add' 'sorry-you-do-not-have-privileges-access'}}</div>");
 								return;
 							}
 							campaignStatusList = data["campaignStatusList"];
@@ -119,7 +119,7 @@ var portlet_graph_data_utility = {
 							if (data.status == 403) {
 								$('#' + selector)
 										.html(
-												"<div class='portlet-error-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;Sorry, you do not have the privileges to access this.</div>");
+												"<div class='portlet-error-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;{{agile_lng_translate 'report-add' 'sorry-you-do-not-have-privileges-access'}}</div>");
 								return;
 							}
 							milestoneNumbersList = data["milestoneNumbersList"];
@@ -183,7 +183,7 @@ var portlet_graph_data_utility = {
 							if (data.status == 403) {
 								$('#' + selector)
 										.html(
-												"<div class='portlet-error-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;Sorry, you do not have the privileges to access this.</div>");
+												"<div class='portlet-error-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;{{agile_lng_translate 'report-add' 'sorry-you-do-not-have-privileges-access'}}</div>");
 								return;
 							}
 							milestonesList = data["milestonesList"];
@@ -261,7 +261,7 @@ var portlet_graph_data_utility = {
 							if (data.status == 403) {
 								$('#' + selector)
 										.html(
-												"<div class='portlet-error-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;Sorry, you do not have the privileges to access this.</div>");
+												"<div class='portlet-error-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;{{agile_lng_translate 'report-add' 'sorry-you-do-not-have-privileges-access'}}</div>");
 								return;
 							}
 							domainUsersList = data["domainUsersList"];
@@ -377,6 +377,7 @@ var portlet_graph_data_utility = {
 											LIB_PATH
 													+ 'lib/flot/highcharts-3.js',
 											function() {
+												_agile_library_loader.localize_highcharts();
 												$
 														.each(
 																sortedData,
@@ -637,7 +638,7 @@ var portlet_graph_data_utility = {
 							if (data.status == 403) {
 								$('#' + selector)
 										.html(
-												"<div class='portlet-error-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;Sorry, you do not have the privileges to access this.</div>");
+												"<div class='portlet-error-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;{{agile_lng_translate 'report-add' 'sorry-you-do-not-have-privileges-access'}}</div>");
 								return;
 							}
 							domainUsersList = data["domainUsersList"];
@@ -687,7 +688,7 @@ var portlet_graph_data_utility = {
 							if (data.status == 403) {
 								$('#' + selector)
 										.html(
-												"<div class='portlet-error-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;Sorry, you do not have the privileges to access this.</div>");
+												"<div class='portlet-error-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;{{agile_lng_translate 'report-add' 'sorry-you-do-not-have-privileges-access'}}</div>");
 								return;
 							}
 							answeredCallsCountList = data["answeredCallsCountList"];
@@ -782,11 +783,11 @@ var portlet_graph_data_utility = {
 										.each(
 												callsDurationList,
 												function(index, duration) {
-													callsDurationInMinsList[index] = duration;
+													callsDurationInMinsList[index] = duration/60;
 												});
 								tempData.data = callsDurationInMinsList;
 								series[0] = tempData;
-								text = "Calls Duration (Sec)";
+								text = "{{agile_lng_translate 'calls' 'duration-secs'}}";
 								colors = [ 'green' ];
 							}
 
@@ -823,7 +824,7 @@ var portlet_graph_data_utility = {
 							if (data.status == 403) {
 								$('#' + selector)
 										.html(
-												"<div class='portlet-error-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;Sorry, you do not have the privileges to access this.</div>");
+												"<div class='portlet-error-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;{{agile_lng_translate 'report-add' 'sorry-you-do-not-have-privileges-access'}}</div>");
 								return;
 							}
 							groupByList = data["groupByList"];
@@ -965,7 +966,7 @@ var portlet_graph_data_utility = {
 							if (data.status == 403) {
 								$('#' + selector)
 										.html(
-												"<div class='portlet-error-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;Sorry, you do not have the privileges to access this.</div>");
+												"<div class='portlet-error-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;{{agile_lng_translate 'report-add' 'sorry-you-do-not-have-privileges-access'}}</div>");
 								return;
 							}
 							emailsSentCount = data["emailsSentCount"];
@@ -998,7 +999,7 @@ var portlet_graph_data_utility = {
 					{
 						$('#' + graphSelector1)
 										.html(
-												'<div class="portlet-error-message" style="padding:30px 15px">No Deals Goals set </div>');
+												'<div class="portlet-error-message" style="padding:30px 15px">{{agile_lng_translate "portlets" "no-deals-goals-set"}} </div>');
 								
 					}
 					else{
@@ -1012,7 +1013,7 @@ var portlet_graph_data_utility = {
 					{
 						$('#' + graphSelector2)
 										.html(
-												'<div class="portlet-error-message" style="padding:30px 15px">No Revenue Goals set</div>');
+												'<div class="portlet-error-message" style="padding:30px 15px">{{agile_lng_translate "portlets" "no-revenue-goals-set"}}</div>');
 								
 					}
 					 else{
@@ -1404,7 +1405,7 @@ var sizey = parseInt($('#' + selector).parent().attr("data-sizey"));
 							if (data.status == 403) {
 								$('#' + selector)
 										.html(
-												"<div class='portlet-error-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;Sorry, you do not have the privileges to access this.</div>");
+												"<div class='portlet-error-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;{{agile_lng_translate 'report-add' 'sorry-you-do-not-have-privileges-access'}}</div>");
 								return;
 							}
 							groupByList = data["groupByList"];
@@ -1488,7 +1489,7 @@ var sizey = parseInt($('#' + selector).parent().attr("data-sizey"));
 							if (data.status == 403) {
 								$('#' + selector)
 										.html(
-												"<div class='portlet-error-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;Sorry, you do not have the privileges to access this.</div>");
+												"<div class='portlet-error-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;{{agile_lng_translate 'report-add' 'sorry-you-do-not-have-privileges-access'}}</div>");
 								return;
 							}
 							knownContacts = data[0];

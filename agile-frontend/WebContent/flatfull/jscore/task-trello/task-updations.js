@@ -95,6 +95,7 @@ function updateTask(isUpdate, data, json)
 
 		// Set new details in Task
 		modelTaskList[0].get('taskCollection').get(json.id).set(data);
+		//modelTaskList[0].get('taskCollection').sort();
 
 		// Update task in UI : set() won't work on task which is dragged, so need to do manually. 
 		if (criteria == "OWNER")
@@ -240,7 +241,7 @@ function completeTask(taskId, taskListId, taskListOwnerId)
 	},
 	error : function(model, response)
 	{
-		showModalConfirmation("Complete Task", 
+		showModalConfirmation("{{agile_lng_translate 'tasks' 'completed'}}", 
 			response.responseText, 
 			function (){
 				return;
@@ -251,7 +252,7 @@ function completeTask(taskId, taskListId, taskListOwnerId)
 			function(){
 				return;
 			},
-			"Cancel"
+			"{{agile_lng_translate 'other' 'cancel'}}"
 		);
 	} });
 }

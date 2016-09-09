@@ -55,7 +55,7 @@ $(function(){
 				
 				$("#custom-field-deals", $(target)).html(el);
 				// Add placeholder and date picker to date custom fields
-				$('.date_input', $(target)).attr("placeholder","Select Date");
+				$('.date_input', $(target)).attr("placeholder",_agile_get_translated_val("contacts", "select-date"));
 		    
 				$('.date_input', $(target)).datepicker({
 					format: CURRENT_USER_PREFS.dateFormat, autoclose: true
@@ -97,7 +97,7 @@ $(function(){
 			 		$("#personForm [name='contact_company_id']").html(template({name : item, id : data}));
 					$("#personForm #contact_company").hide();
 				}
-				agile_type_ahead("contact_company",$('#personForm'), contacts_typeahead,fxn_display_company,'type=COMPANY','<b>No Results</b> <br/> Will add a new one');
+				agile_type_ahead("contact_company",$('#personForm'), contacts_typeahead,fxn_display_company,'type=COMPANY','<b>'+_agile_get_translated_val("others","no-results")+'</b> <br/> ' + _agile_get_translated_val("others","add-new-one"));
 			}
 		});
 		

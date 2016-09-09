@@ -69,6 +69,26 @@ var AdminPanelRouter = Backbone.Router.extend({
 
 	},
 
+	get_subscription_from_db : function(el, domainname)
+	{
+		console.log("in accountstats object");
+		console.log(domainname);
+		$.ajax({ url : 'core/api/admin_panel/get_subscription?d=' + domainname, type : 'GET', success : function(data)
+		{
+			if(data && data.status && $.inArray(data.status, PAGEBLOCK_REASON) != -1){
+				$(el).find(".unblock_user").closest("div").show();
+				$(el).find(".unblock_user").attr("domain", domainname);
+			}
+
+
+		}, error : function(response)
+		{
+
+			console.log(response);
+		} });
+
+	},
+
 	// function will be called from getDomainDetails Navigation
 	// todisplay get subscription object for particular domain
 	get_customerobject_for_domain_from_adminpanel : function(el, domainname)
@@ -133,11 +153,8 @@ var AdminPanelRouter = Backbone.Router.extend({
 		this.usersListViewCollection = new Base_Collection_View({ url : 'core/api/admin_panel/getParticularDomainUsers?d=' + id, templateKey : "all-domain",
 			individual_tag_name : 'tr', postRenderCallback : function(el)
 			{
-				head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
-				{
-					$(".last-login-time", el).timeago();
-				});
-
+				agileTimeAgoWithLngConversion($(".last-login-time", el));
+				
 				var mod_collection = self.usersListViewCollection.collection.models;
 
 				domainname = mod_collection[0].get('domain');
@@ -145,6 +162,7 @@ var AdminPanelRouter = Backbone.Router.extend({
 				self.get_customerobject_for_domain_from_adminpanel(el, domainname);
 				$('#account').html("<img src='" + updateImageS3Path("img/21-0.gif")+ "'>");
 				self.get_account_stats_for_domain_from_adminpanel(el, domainname);
+				self.get_subscription_from_db(el, domainname);
 
 				initializeAdminpanelListner(el);
 
@@ -214,13 +232,13 @@ var AdminPanelRouter = Backbone.Router.extend({
 										{
 											add_password_change_info_as_note_to_owner(email);
 											Backbone.history.navigate("all-domain-users", { trigger : true });
-											showNotyPopUp("information", "password changed successfully", "top");
+											showNotyPopUp("information", _agile_get_translated_val("others" ,"pwd-change-success"), "top");
 										},
 										error : function(response)
 										{
 											$('#changePasswordForm').find('span.save-status').html("");
 											$('#changePasswordForm').find('input[name="current_pswd"]').closest(".controls").append(
-													"<span style='color:red;margin-left:10px;'>Incorrect Password</span>");
+													"<span style='color:red;margin-left:10px;'>" + _agile_get_translated_val('others', 'pwd-in-correct') + "</span>");
 											$('#changePasswordForm').find('input[name="current_pswd"]').closest(".controls").find("span").fadeOut(5000);
 											$('#changePasswordForm').find('input[name="current_pswd"]').focus();
 											enable_save_button($(saveBtn));
@@ -337,7 +355,7 @@ var AdminPanelRouter = Backbone.Router.extend({
 			{
 				window.navigate("domainSubscribe/" + plan.domain_name, { trigger : true });
 				add_plan_change_info_as_note_to_owner(email, plan.plan_type, plan.plan_id, plan.quantity);
-				showNotyPopUp("information", "You have been upgraded successfully. Please logout and login again for the new changes to apply.", "top");
+				showNotyPopUp("information", _agile_get_translated_val('billing','upgrade-noty'), "top");
 			}
 
 		});

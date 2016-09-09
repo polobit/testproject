@@ -23,11 +23,13 @@ import org.json.JSONException;
 
 import com.agilecrm.AgileQueues;
 import com.agilecrm.ContactSchemaUpdateStats;
+import com.agilecrm.OpportunitySchemaUpdateStats;
 import com.agilecrm.contact.CustomFieldDef;
 import com.agilecrm.contact.CustomFieldDef.SCOPE;
 import com.agilecrm.contact.deferred.UpdateContactsDeferredTask;
 import com.agilecrm.contact.exception.DuplicateCustomFieldException;
 import com.agilecrm.contact.util.CustomFieldDefUtil;
+import com.agilecrm.deals.deferred.UpdateDealsDeferredTask;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.datastore.EntityNotFoundException;
@@ -316,7 +318,27 @@ public class CustomFieldsAPI
     {
 	try
 	{
+			String scopecf[]=new String[3];
+			if(customField.scopeExtension != null){
+				scopecf=customField.scopeExtension.split(",");
+			}
+		for(int i=0;i<scopecf.length;i++)
+		{
+			customField.id=null;
+				if(scopecf[i].equalsIgnoreCase("contacts"))
+				{
+					customField.scope=CustomFieldDef.SCOPE.valueOf("CONTACT");
+				}
+				else if(scopecf[i].equalsIgnoreCase("companies"))
+				{
+					customField.scope=CustomFieldDef.SCOPE.valueOf("COMPANY");
+				}
+				else if(scopecf[i].equalsIgnoreCase("deals"))
+				{
+					customField.scope=CustomFieldDef.SCOPE.valueOf("DEAL");
+				}			
 	    customField.save();
+		}
 	}
 	catch (DuplicateCustomFieldException e)
 	{
@@ -458,39 +480,94 @@ public class CustomFieldsAPI
     @Path("/syncappdata")
     @GET
     @Produces({ MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON })
-    public String syncAppData(@QueryParam("domain") String domain){
+    public String syncAppData(@QueryParam("domain") String domain,@QueryParam("domainusermail") String domainusermail){
     	String domainUser = domain;
+    	System.out.println("domain ="+domainUser);
+    	System.out.println("domainusermail ="+domainusermail);
     	if( domainUser != null){
     		try {
 				Long updated_time = null;
 				Date update_date = null;
 				ContactSchemaUpdateStats schema = ContactSchemaUpdateStats.get(domainUser);
 				System.out.println(schema);    				
-				if(schema != null){
+				if(schema != null && schema.updated_time != null){
 					updated_time = schema.updated_time * 1000 ;
 					update_date = new Date(updated_time);
 				}
 				Date current_date = new Date(); 
+				String oldNamespace = NamespaceManager.get();
+				NamespaceManager.set("");
 				if(schema == null || (update_date.getMonth() < current_date.getMonth() && update_date.getYear() <= current_date.getYear())){
+				if(schema == null){					
+						ContactSchemaUpdateStats newSchema = new ContactSchemaUpdateStats();					
+						newSchema.updated_time = System.currentTimeMillis() / 1000 ;
+						newSchema.domain = domainUser;
+						newSchema.domainusermail=domainusermail;   
+						System.out.println("domain ="+domainUser);
+						System.out.println("domainusermail ="+domainusermail);
+						newSchema.save();
+					}
+				else {
+					schema.domainusermail = domainusermail ; 
+					
+					System.out.println("domainusermail ="+domainusermail); 
+					schema.save();				
+				}
+				NamespaceManager.set(oldNamespace);
+					UpdateContactsDeferredTask updateContactDeferredTask = new UpdateContactsDeferredTask(domainUser);					
+					// Add to queue
+					Queue queue = QueueFactory.getQueue(AgileQueues.CONTACTS_SCHEMA_CHANGE_QUEUE);
+					queue.add(TaskOptions.Builder.withPayload(updateContactDeferredTask));
+					return "success";
+				
+    	}
+			return "limitReached" ;
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+    	}
+    	return "fail";    	
+    }
+    @Path("/syncappdataforDeals")
+    @GET
+    @Produces({ MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON })
+    public String syncAppDataForDeals(@QueryParam("domain") String domain){
+    	String domainUser = domain;
+    	System.out.println("domain user for deals merge is"+domainUser);
+    	if( domainUser != null){
+    		try {
+				Long updated_time = null;
+				Date update_date = null;
+				OpportunitySchemaUpdateStats schema = OpportunitySchemaUpdateStats.get(domainUser);
+				System.out.println("schema is"+schema);    				
+				if(schema != null && schema.updated_time != null){
+					updated_time = schema.updated_time * 1000 ;
+					update_date = new Date(updated_time);
+				}
+				System.out.println("updated time "+update_date);
+				Date current_date = new Date(); 
+				if(schema == null || updated_time == null || (update_date.getMonth() < current_date.getMonth() && update_date.getYear() <= current_date.getYear())){
 					if(schema == null){
 						String oldNamespace = NamespaceManager.get();
 						NamespaceManager.set("");
-						ContactSchemaUpdateStats newSchema = new ContactSchemaUpdateStats();					
+						OpportunitySchemaUpdateStats newSchema = new OpportunitySchemaUpdateStats();					
 						newSchema.updated_time = System.currentTimeMillis() / 1000 ;
 						newSchema.domain = domainUser;
 						newSchema.save();
 						NamespaceManager.set(oldNamespace);
 					}
-					UpdateContactsDeferredTask updateContactDeferredTask = new UpdateContactsDeferredTask(domainUser);					
+					UpdateDealsDeferredTask updateDealDeferredTask = new UpdateDealsDeferredTask(domainUser);					
 					// Add to queue
-					Queue queue = QueueFactory.getQueue(AgileQueues.CONTACTS_SCHEMA_CHANGE_QUEUE);
-					queue.add(TaskOptions.Builder.withPayload(updateContactDeferredTask));
+					Queue queue = QueueFactory.getQueue(AgileQueues.DEALS_SCHEMA_CHANGE_QUEUE);
+					queue.add(TaskOptions.Builder.withPayload(updateDealDeferredTask));
 					return "success";
 				}
 				return "limitReached" ;
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+				System.out.println("error to update deals is "+e.getMessage());
 			}
     	}
     	return "fail";    	

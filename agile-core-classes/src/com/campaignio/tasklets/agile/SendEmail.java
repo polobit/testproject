@@ -379,7 +379,7 @@ public class SendEmail extends TaskletAdapter
 
 	System.out.println("At  " + at + " On: " + on);
 
-	System.out.println(DateUtil.getCalendarString(calendar.getTimeInMillis()));
+	System.out.println(DateUtil.getCalendarString(calendar.getTimeInMillis(), "dd MMM yyyy HH:mm:ss z", timeZoneString));
 
 	// Any Time
 	if (!at.equalsIgnoreCase(AT_ANY_TIME))
@@ -531,7 +531,7 @@ public class SendEmail extends TaskletAdapter
 	// Check if day matches - otherwise return false
 	if (weekday == Calendar.FRIDAY)
 	{
-	    if (on.equalsIgnoreCase(ON_MON_FRI) || on.equalsIgnoreCase(ON_MON_SAT) || on.equalsIgnoreCase(ON_FRI))
+	    if (on.equalsIgnoreCase(ON_ANY_DAY) || on.equalsIgnoreCase(ON_MON_FRI) || on.equalsIgnoreCase(ON_MON_SAT) || on.equalsIgnoreCase(ON_FRI))
 		return true;
 	}
 

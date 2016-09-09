@@ -8,17 +8,20 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
+import org.json.JSONArray;
 
 import com.agilecrm.activities.Category;
 import com.agilecrm.activities.util.CategoriesUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
+import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.deals.CustomFieldData;
 import com.agilecrm.deals.Milestone;
 import com.agilecrm.deals.Opportunity;
 import com.agilecrm.deals.util.MilestoneUtil;
 import com.agilecrm.deals.util.OpportunityUtil;
 import com.agilecrm.user.util.UserPrefsUtil;
+import com.googlecode.objectify.Key;
 
 /**
  * <code>DealCSVExport</code> handles building CSV file for obtained Deals.
@@ -44,6 +47,7 @@ public class DealCSVExport
     public static final String LOSSREASON = "Loss Reason";
     public static final String CREATED_DATE = "Created Date";
     public static final String WON_DATE = "Won Date";
+    public static final String ID = "Deal ID";
 
     private static final DateFormat date = new SimpleDateFormat("MM/dd/yyyy");
 
@@ -65,6 +69,7 @@ public class DealCSVExport
 
 	try
 	{
+		str[indexMap.get(ID)] = "ID_"+String.valueOf(deal.id);
 	    str[indexMap.get(NAME)] = deal.name;
 	    str[indexMap.get(DESCRIPTION)] = deal.description;
 	    try
@@ -108,6 +113,31 @@ public class DealCSVExport
 	    for (CustomFieldData field : deal.custom_data)
 	    {
 		str[indexMap.get(field.name)] = field.value;
+		try{
+			boolean index = indexMap.containsKey(field.name+" Name");
+			if(index){
+				// this is either contact or company type
+				//fetch the conntact r company
+			List<Contact> customContacts = ContactUtil.getContactsBulk(new JSONArray(field.value));
+			if(customContacts.size() > 0){
+				StringBuffer nameString = new StringBuffer("[");
+				for(Contact cont : customContacts){
+					if(cont.type.equals(Contact.Type.PERSON)){
+						nameString.append(cont.first_name);
+						nameString.append(cont.last_name);
+						
+					}else{
+						nameString.append(cont.name);
+					}
+					nameString.append(",");
+				}
+				nameString.replace(nameString.length()-1, nameString.length(), "");
+				nameString.append("]");
+				str[indexMap.get(field.name+" Name")] = nameString.toString();
+			}
+			}
+		}catch(Exception e){
+		}
 	    }
 	    if(deal.getDeal_source_id()!=null && deal.getDeal_source_id()!=0)
 	    	{

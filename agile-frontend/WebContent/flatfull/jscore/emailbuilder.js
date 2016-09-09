@@ -6,7 +6,7 @@ function initializeEmailBuilderListeners() {
         e.preventDefault();
         if (isValidForm('#emailBuilderForm')) {
             $(".saveEmailBuilderButton").prop("disabled",true);
-            $(".saveEmailBuilderButtonText").html("Saving...");
+            $(".saveEmailBuilderButtonText").html("{{agile_lng_translate 'others' 'saving'}}");
             document.getElementById('emailBuilderFrame').contentWindow.$('#save').trigger("click");
         }
     });
@@ -37,7 +37,7 @@ function initializeEmailBuilderListeners() {
         var optionsTemplate = "<option value='{{id}}' network_type='{{titleFromEnums network_type}}' size='{{size}}'>{{name}}</option>";
         fillSelect('attachmentSelectBox','core/api/documents', 'documents',  function fillNew()
         {
-            el.find("#attachmentSelectBox option:first").after("<option value='new'>Upload new doc</option>");
+            el.find("#attachmentSelectBox option:first").after("<option value='new'>"+_agile_get_translated_val('others','upload-new-doc')+"</option>");
 
         }, optionsTemplate, false, el);
         $('#attachmentSelectBoxRequired').hide();
@@ -98,13 +98,13 @@ function saveEmailTemplateFromBuilder(fullSource,builderSource) {
     };
 
     var requestType = "post";
-    var message = "Template saved.";
+    var message = "{{agile_lng_translate 'emailbuilder' 'saved'}}";
     //to check already template id exists or not
     var templateId = $("#templateid").val();
     if(templateId) {
         var requestType = "put";
         template["id"] = templateId;
-        message = "Template updated.";
+        message = "{{agile_lng_translate 'emailbuilder' 'updated'}}";
     }
 
     $.ajax({
@@ -116,7 +116,7 @@ function saveEmailTemplateFromBuilder(fullSource,builderSource) {
         success: function (data) {
             $("#nameoftemplate-msg",parent.document).html('<br><span style="color: green;">'+message+'</span>').show().fadeOut(3000);
             $(".saveEmailBuilderButton",parent.document).prop("disabled",false);
-            $(".saveEmailBuilderButtonText",parent.document).html("Save");
+            $(".saveEmailBuilderButtonText",parent.document).html("{{agile_lng_translate 'modals' 'save'}}");
             if(requestType == "post") {
                 window.location.hash = "email-templates";
             }
@@ -140,7 +140,7 @@ function sendTestEmailTemplate(fullSource,builderSource) {
     // Verifies merge fields and gives alert
     if ( check_merge_fields_and_send(template) ){
         var requestType = "post";
-        var message = "Test Email Sent.";
+        var message = "{{agile_lng_translate 'emailbuilder' 'sent-testemail'}}";
 
         $.ajax({
             type: requestType, 
@@ -208,8 +208,8 @@ function check_merge_fields_and_send(template)
   }
   
  function show_test_email_alert(template){
-     var title="Send Test Email";
-     var message="Please observe that the merge fields in test emails would not be replaced.";
+     var title=_agile_get_translated_val('emailbuilder','send-testemail');
+     var message=_agile_get_translated_val('emailbuilder','observe-merge-fields');
  
  
      window.parent.workflow_alerts(title, message , "workflow-alert-modal"
@@ -223,9 +223,9 @@ function check_merge_fields_and_send(template)
                      e.preventDefault();
                     
                      // Disable and change text
-                     $(this).attr('disabled', 'disabled').text("Sending");
+                     $(this).attr('disabled', 'disabled').text("{{agile_lng_translate 'other' 'sending'}}");
                      var requestType = "post";
-                    var message = "Test Email Sent.";
+                    var message = _agile_get_translated_val('emailbuilder','sent-testemail');
 
                     $.ajax({
                         type: requestType, 

@@ -4,6 +4,7 @@
 <%@page import="org.json.JSONException"%>
 <%@page import="org.codehaus.jackson.map.ObjectMapper"%>
 <%@page import="java.net.URLEncoder"%>
+<%@page import="java.net.URLDecoder"%>
 <%@page import="com.agilecrm.user.util.UserPrefsUtil"%>
 <html xmlns="http://www.w3.org/1999/xhtml">
 
@@ -37,6 +38,7 @@ if(template_json != null){
 	
 try
 {
+	template_json = URLDecoder.decode(template_json);
 	JSONObject template_object = new JSONObject(template_json);
 
 	if (template_object.has("text")){
@@ -308,7 +310,20 @@ function initialize_tinymce_editor(){
 	// Hide message and show textarea
 	$('#loading-msg').hide();
 	$('textarea#content').show();
-	
+
+	var supported_lang = "en_US", menu_context_text = "Agile Contact Fields";
+	try{
+		supported_lang = window.opener.get_tinymce_supported_language();
+	}catch(e){}
+	if(!supported_lang)
+		supported_lang = "en_US";
+
+	try{
+		menu_context_text = window.opener._agile_get_translated_val('widgets', 'agile-contact-fields');
+	}catch(e){}
+	if(!menu_context_text)
+		menu_context_text = "Agile Contact Fields";
+
 	// Initialize tinymce
 	tinymce.init({
         mode: "textareas",
@@ -328,12 +343,13 @@ function initialize_tinymce_editor(){
 		convert_urls : false,
 		forced_root_block : false,
         extended_valid_elements : "*[*]",
+        language : supported_lang,
         setup: function(editor) {
             
         	// Agile Merge Fields
             editor.addButton('merge_fields', {
                 type: 'menubutton',
-                text: 'Agile Contact Fields',
+                text: menu_context_text,
                 icon: false,
                 menu: set_up_merge_fields(editor)
             });

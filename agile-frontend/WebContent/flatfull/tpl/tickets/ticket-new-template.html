@@ -3,7 +3,7 @@
   <div class="modal-content">
     <div class="modal-header">
       <button class="close" data-dismiss="modal">x</button>
-      <h3 class="modal-title"><i class="icon icon-envelop"></i> Create Ticket</h3>
+      <h3 class="modal-title"><i class="icon icon-envelop"></i> {{agile_lng_translate 'tickets' 'create-ticket'}}</h3>
     </div>
     <div id="modal-body">
       <div class="modal-body">
@@ -14,11 +14,12 @@
                   <input type="hidden" id="contact_id" name="contact_id">
                   <input type="hidden" id="requester_name" name="requester_name">
                   <div class="control-group col-md-6">
-                      <label class="control-label"><b>Email</b> <span class="field_req">*</span></label>
+                      <label class="control-label"><b>{{agile_lng_translate 'menu' 'email'}}</b> 
+                      <span class="field_req">*</span></label>
                       <span class="controls">
-                        <input type="text" id="requester_email" autocomplete="off" name="requester_email" placeholder="Search Contacts" class="required form-control tickets_email">
+                        <input type="text" id="requester_email" autocomplete="off" name="requester_email" placeholder="{{agile_lng_translate 'tickets' 'search-contacts'}}" class="required form-control tickets_email">
                         <a class="text-xs pull-right link-color add-ticket-contact" href="javascript:void(0);">
-                          Add New Contact
+                          {{agile_lng_translate 'tickets' 'add-new-contact'}}
                         </a>
                       </span>
                   </div>
@@ -28,15 +29,18 @@
             <div class="control-group form-group new-contact-row display-none m-b-sm">
               <div class="row">
                   <div class="control-group col-md-6">
-                      <label class="control-label"><b>First name</b> <span class="field_req">*</span></label>
+                      <label class="control-label"><b>{{agile_lng_translate 'other' 'first-name'}}</b> <span class="field_req">*</span></label>
                       <span class="controls">
-                        <input type="text" id="first_name" autocomplete="off" name="first_name" placeholder="E.g Mark" class="required form-control">
+                        <input type="text" id="first_name" autocomplete="off" name="first_name" placeholder="{{agile_lng_translate 'tickets' 'eg-mark'}}" 
+                        class="required form-control">
                       </span>
                   </div>
                   <div class="control-group col-md-6">
-                      <label class="control-label"><b>Last name</b></label>
+                      <label class="control-label"><b>{{agile_lng_translate 'other' 'last-name'}}
+                      </b></label>
                       <span class="controls">
-                        <input type="text" id="last_name" autocomplete="off" name="last_name" placeholder="E.g Twain" class="form-control">
+                        <input type="text" id="last_name" autocomplete="off" name="last_name" placeholder="{{agile_lng_translate 'tickets' 'eg-twain'}}" 
+                        class="form-control">
                       </span>
                   </div>
               </div>
@@ -44,11 +48,14 @@
             <div class="control-group form-group new-contact-row display-none m-b-sm">
               <div class="row">
                   <div class="control-group col-md-6">
-                      <label class="control-label"><b>Email</b> <span class="field_req">*</span></label>
+                      <label class="control-label"><b>{{agile_lng_translate 'menu' 'email'}}</b> 
+                      <span class="field_req">*</span></label>
                       <span class="controls">
-                        <input type="text" id="email_input" autocomplete="off" name="email_input" placeholder="E.g mark.twain@gmail.com" class="required form-control tickets_email">
+                        <input type="text" id="email_input" autocomplete="off" name="email_input" placeholder="{{agile_lng_translate 'tickets' 'eg-email'}}" class="required form-control tickets_email">
                         <a class="text-xs pull-right link-color add-ticket-contact" href="javascript:void(0);">
-                          Search Contact
+
+                          {{agile_lng_translate 'tickets' 'search-contact'}}
+
                         </a>
                       </span>
                   </div>
@@ -57,18 +64,19 @@
             <div class="control-group form-group">
               <div class="row">
                   <div class="control-group col-md-6">
-                    <label class="control-label"><b>Subject</b> <span class="field_req">*</span></label>
+                    <label class="control-label"><b>{{agile_lng_translate 'other' 'subject'}}</b> 
+                    <span class="field_req">*</span></label>
                     <span class="controls">
-                      <input type="text" name="subject" autocomplete="off" class="form-control required"  placeholder="Subject">
+                      <input type="text" name="subject" autocomplete="off" class="form-control required"  placeholder="{{agile_lng_translate 'other' 'subject'}}">
                     </span>
                   </div>
                   <div class="control-group col-md-6">
-                      <label class="control-label"><b>Cc</b></label>
+                      <label class="control-label"><b>{{agile_lng_translate 'contact-details' 'cc'}}</b></label>
                       <span class="controls">
                         <div class="cc-emails-st">
                           <ul class="cc-emails m-n p-n" name="cc_emails">
                               <li class="tag m-r-xs m-b-xs inline-block">
-                                <input type="text" placeholder="Search Contacts" id="cc_email_field" class="cc_emails_st" autocomplete="off">
+                                <input type="text" placeholder="{{agile_lng_translate 'tickets' 'search-contacts'}}" id="cc_email_field" class="cc_emails_st" autocomplete="off">
                               </li>
                           </ul>
                         </div>  
@@ -79,22 +87,27 @@
             <div class="control-group form-group">
               <div class="row">
                   <div class="control-group col-md-6">
-                    <label class="control-label"><b>Status</b></label>
+                    <label class="control-label"><b>{{agile_lng_translate 'portlets' 'status'}}</b></label>
                       <span class="controls">
                         <select id="status" name="status" class="form-control status">
-                            <option value="OPEN">Open</option>
-                            <option value="PENDING">Pending</option>
-                            <option value="CLOSED">Closed</option>
+                            <option value="OPEN">{{agile_lng_translate 'contact-details' 'OPEN'}}
+                            </option>
+                            <option value="PENDING">{{agile_lng_translate 'tickets' 'pending'}}
+                            </option>
+                            <option value="CLOSED">{{agile_lng_translate 'cases' 'closed'}}
+                            </option>
                         </select>
                       </span>
                   </div>
                   <div class="control-group col-md-6">
-                      <label class="control-label"><b>Priority</b></label>
+                      <label class="control-label"><b>{{agile_lng_translate 'tasks' 'priority'}}
+                      </b></label>
                       <span class="controls">
                         <select id="priority" name="priority" class="form-control">
-                            <option value="LOW">Low</option>
-                            <option value="MEDIUM">Medium</option>
-                            <option value="HIGH">High</option>
+                            <option value="LOW">{{agile_lng_translate 'tasks' 'Low'}}</option>
+                            <option value="MEDIUM">{{agile_lng_translate 'tickets' 'medium'}}
+                            </option>
+                            <option value="HIGH">{{agile_lng_translate 'tasks' 'High'}}</option>
                         </select>
                       </span>
                   </div>
@@ -103,7 +116,8 @@
             <div class="control-group form-group">
               <div class="row">
                   <div class="control-group col-md-6">
-                    <label class="control-label"><b>Assignee</b></label>
+                    <label class="control-label"><b>{{agile_lng_translate 'tickets' 'assignee'}}
+                    </b></label>
                       <span class="controls">
                         <select id="groupID" name="groupID" class="form-control required group_id">
                           
@@ -111,9 +125,9 @@
                       </span>
                   </div>
                   <div class="control-group col-md-6">
-                      <label class="control-label block"><b>Labels</b></label>
+                      <label class="control-label block"><b>{{agile_lng_translate 'tickets' 'labels'}}</b></label>
                       <span class="controls">
-                        <select name="labels" data-placeholder="Search Labels" class="chosen-select form-control" multiple class="w-md">
+                        <select name="labels" data-placeholder="{{agile_lng_translate 'tickets' 'search-labels'}}" class="chosen-select form-control" multiple class="w-md">
                         </select>
                       </span>
                   </div>
@@ -122,7 +136,8 @@
             <div class="control-group form-group">
               <div class="row">
                   <div class="control-group col-md-12">
-                    <label class="control-label"><b>Message</b> <span class="field_req">*</span></label>
+                    <label class="control-label"><b>{{agile_lng_translate 'other' 'message'}}</b> 
+                    <span class="field_req">*</span></label>
                     <span class="controls">
                       <textarea name="html_text" class="form-control required create_ticket_textarea" style="min-height:76px;max-height:400px;text-indent: 0px; overflow-y: hidden; resize: none;padding: 8px;"></textarea>
                     </span>
@@ -134,8 +149,8 @@
       </div>
       <div class="modal-footer">
           <span class="form-action-error pull-left" style="color: red;"></span>
-          <a href="javascript:void(0);" data-dismiss="modal" class="btn btn-sm btn-default">Close</a> 
-          <a id="create-ticket" href="javascript:void(0);" class="btn btn-sm btn-primary save" data-loading-text="Create">Create</a>
+          <a href="javascript:void(0);" data-dismiss="modal" class="btn btn-sm btn-default">{{agile_lng_translate 'report-add' 'close'}}</a> 
+          <a id="create-ticket" href="javascript:void(0);" class="btn btn-sm btn-primary save" data-loading-text="Create">{{agile_lng_translate 'tickets' 'create'}}</a>
           <span class="save-status"></span>
       </div>
     </div>
@@ -196,7 +211,9 @@
 {{/each}}
 </script>
 <script id="select-assignee-ticket-dropdown-template" type="text/html">
-<option value="0">Select</option>
+
+<option value="0">{{agile_lng_translate 'deal-view' 'select'}}</option>
+
 {{#each this}}
     <option value="{{id}}" group_id="{{id}}">{{group_name}}</option>
 {{/each}}

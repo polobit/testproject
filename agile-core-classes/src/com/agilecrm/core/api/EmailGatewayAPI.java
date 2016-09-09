@@ -12,6 +12,7 @@ import javax.ws.rs.core.MediaType;
 
 import com.agilecrm.account.EmailGateway;
 import com.agilecrm.account.util.EmailGatewayUtil;
+import com.thirdparty.mailgun.webhook.MailgunWebhookUtil;
 import com.thirdparty.mandrill.webhook.MandrillWebhookUtil;
 import com.thirdparty.sendgrid.webhook.SendGridWebhook;
 import com.thirdparty.sendgrid.webhook.util.SendGridWebhookUtil;
@@ -67,9 +68,9 @@ public class EmailGatewayAPI
      * Adds Agile Webhook to given api Mandrill Account
      * 
      * @param apiKey
-     *            - mandrill api key
+     *            - Mandrill or Mailgun api key
      * @param type
-     *            - EmailGateway email api type e.g., Mandrill or Send Grid
+     *            - EmailGateway email api type e.g., Mandrill, Mailgun or Send Grid
      * @return String
      */
     @Path("/add-webhook")
@@ -83,6 +84,9 @@ public class EmailGatewayAPI
 
 	if(type.equals(EmailGateway.EMAIL_API.SEND_GRID.toString()))
 		return SendGridWebhookUtil.addWebhook(apiUser, apiKey);
+	
+	if(type.equals(EmailGateway.EMAIL_API.MAILGUN.toString()))
+		return MailgunWebhookUtil.addWebhook(apiKey, apiUser);
 	
 	return null;
     }
@@ -99,11 +103,15 @@ public class EmailGatewayAPI
     @Path("/delete-webhook")
     @GET
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public String deleteAgileWebhook(@QueryParam("api_key") String apiKey, @QueryParam("type") String type)
+    public String deleteAgileWebhook(@QueryParam("api_key") String apiKey, @QueryParam("type") String type, @QueryParam("api_user") String apiUser)
     {
 	// Delete webhook
+    	
+    	
 	if (type.equals(EmailGateway.EMAIL_API.MANDRILL.toString()))
 	    return MandrillWebhookUtil.deleteWebhook(apiKey);
+	if(type.equals(EmailGateway.EMAIL_API.MAILGUN.toString()))
+		return MailgunWebhookUtil.deleteWebhook(apiKey, apiUser);
 
 	return null;
     }

@@ -10,8 +10,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TimeZone;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.commons.lang.time.DateUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
@@ -54,6 +56,8 @@ public class SearchUtil
 	// Map to store all the fields
 	Map<String, String> fields = new HashMap<String, String>();
 
+	Calendar cal = Calendar.getInstance();
+	
 	// Sets contactField objects in to map
 	for (ContactField contactField : contact.properties)
 	{
@@ -111,6 +115,21 @@ public class SearchUtil
 		{
 		    doc.addField(Field.newBuilder().setName(normalizeTextSearchString(field_name) + "_time_epoch")
 			    .setNumber(Double.valueOf(contactField.value)));
+		    
+		    try
+			{
+				cal.setTimeInMillis(Long.valueOf(contactField.value) * 1000);
+				
+				doc.addField(Field.newBuilder().setName(normalizeTextSearchString(field_name) + "_time__dd__").setNumber(cal.get(Calendar.DATE)));
+				doc.addField(Field.newBuilder().setName(normalizeTextSearchString(field_name) + "_time__mm__").setNumber(cal.get(Calendar.MONTH)+ 1));
+				doc.addField(Field.newBuilder().setName(normalizeTextSearchString(field_name) + "_time__yy__").setNumber(cal.get(Calendar.YEAR)));
+			}
+			catch (Exception e)
+			{
+				System.err.println("Exception occured while splitting date values..." + e.getMessage());
+				System.out.println(ExceptionUtils.getFullStackTrace(e));
+			}
+		    
 		    fields.put(normalizeTextSearchString(field_name) + "_time", contactField.value);
 		}
 		catch (NumberFormatException e)
@@ -441,6 +460,7 @@ public class SearchUtil
 	 * combinations first_name + last_name , last_name + first_name),
 	 * converts address string to map and saves address keywords to search
 	 */
+	System.out.println("Before properties for loop");
 	for (ContactField contactField : properties)
 	{
 	    if ("first_name".equals(contactField.name))
@@ -465,6 +485,7 @@ public class SearchUtil
 		{
 		    // Converts address JSON string(sent so from client) to a
 		    // map
+			System.out.println("Inside try bolck and before geting address map");
 		    HashMap<String, String> addressMap = new ObjectMapper().readValue(contactField.value,
 			    new TypeReference<HashMap<String, String>>()
 			    {
@@ -472,10 +493,14 @@ public class SearchUtil
 
 		    // save the address values
 		    tokens.addAll(addressMap.values());
+			System.out.println("Inside try bolck and after geting address map");
+
 		}
 		catch (Exception e)
 		{
 		    e.printStackTrace();
+		    System.out.println("Inside catch bolck");
+		    System.out.println(e.getMessage());
 		}
 	    }
 
@@ -486,36 +511,64 @@ public class SearchUtil
 
 	String contactName = "";
 
-	String[] firstNameArr = firstName.split(" ");
-	for(int i=0; i<firstNameArr.length; i++){
-		contactName = normalizeString(firstNameArr[i]);
-		tokens.add(contactName);
+	try {
+		String[] firstNameArr = firstName.split(" ");
+		System.out.println("Before first name for loop");
+		for(int i=0; i<firstNameArr.length; i++){
+			contactName = normalizeString(firstNameArr[i]);
+			tokens.add(contactName);
+		}
+		System.out.println("After first name for loop");
+	} catch (Exception e) {
+		System.out.println("inside catch of first name");
+		e.printStackTrace();
 	}
-	
-	String[] lastNameArr = lastName.split(" ");
-	for(int i=0; i<lastNameArr.length; i++){
-		contactName = normalizeString(lastNameArr[i]);
-		tokens.add(contactName);
-	}
-	
-	String[] nameArr = name.split(" ");
-	for(int i=0; i<nameArr.length; i++){
-		contactName = normalizeString(nameArr[i]);
-		tokens.add(contactName);
-	}
-	
-	// contact contact name first name then last name add to tokens
-	contactName = normalizeString(firstName + lastName);
-	tokens.add(contactName);
 
-	// contact contact name last name then first name add to tokens
-	contactName = normalizeString(lastName + firstName);
-	tokens.add(contactName);
+	try {
+		String[] lastNameArr = lastName.split(" ");
+		System.out.println("Before last name for loop");
+
+		for(int i=0; i<lastNameArr.length; i++){
+			contactName = normalizeString(lastNameArr[i]);
+			tokens.add(contactName);
+		}
+		System.out.println("After last name for loop");
+	} catch (Exception e) {
+		System.out.println("inside catch of last name");
+		e.printStackTrace();
+	}
+
+	try {
+		String[] nameArr = name.split(" ");
+		for(int i=0; i<nameArr.length; i++){
+			contactName = normalizeString(nameArr[i]);
+			tokens.add(contactName);
+		}
+	} catch (Exception e) {
+		System.out.println("inside catch of name");
+		e.printStackTrace();
+	}
+	
+	try {
+		System.out.println("before first and last combination");
+		// contact contact name first name then last name add to tokens
+		contactName = normalizeString(firstName + lastName);
+		tokens.add(contactName);
+
+		// contact contact name last name then first name add to tokens
+		contactName = normalizeString(lastName + firstName);
+		tokens.add(contactName);
+	} catch (Exception e) {
+		System.out.println("inside catch of first and last combination");
+		e.printStackTrace();
+	}
 	// Splits each token in to fragments to search based on keyword
+	System.out.println("Token size is:"+tokens.size());
 	if (tokens.size() != 0)
 	    tokens = StringUtils2.getSearchTokens(tokens);
 
 	// Returns normalized set
+	System.out.println("Before returning the tokens");
 	return normalizeSet(tokens);
     }
     
@@ -544,18 +597,34 @@ public class SearchUtil
 		}
 	}
 
-    public static String getDateWithoutTimeComponent(Long millSeconds)
+    public static String getDateWithoutTimeComponent(Long millSeconds,TimeZone timezone)
     {
 	/*
 	 * Truncate date Document search date is without time component
 	 */
-	Date truncatedDate = DateUtils.truncate(new Date(millSeconds), Calendar.DATE);
+    	try{
+        	//Calendar cal=Calendar.getInstance(Timezone);
+        	//cal.setTimeInMillis(millSeconds);
+    		System.out.println("Time string"+millSeconds);
+        	SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        	formatter.setTimeZone(timezone);
+        	
+        	return formatter.format(new Date(millSeconds));
+    	//Date truncatedDate = DateUtils.truncate(new Date(millSeconds), Calendar.DATE);
+    	
+    	//Date truncatedDate1=truncatedDate.getTime();
+    	
+    	//System.out.println("Time string"+truncatedDate);
 
-	// Format date(formated as stored in document)
-	Format formatter = new SimpleDateFormat("yyyy-MM-dd");
-
-	// Formated to build query
-	return formatter.format(truncatedDate);
+    	// Format date(formated as stored in document)
+    	
+    	// Formated to build query
+    	//return formatter.format(truncatedDate);
+        	}
+        	catch(Exception e)
+        	{
+        		return null;
+        	}
     }
 
     public static String getDateWithoutTimeComponent(Long millSeconds, String format)

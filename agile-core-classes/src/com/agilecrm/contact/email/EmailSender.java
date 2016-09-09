@@ -1,6 +1,10 @@
 package com.agilecrm.contact.email;
 
+import static com.agilecrm.AgileQueues.AMAZON_SES_EMAIL_PULL_QUEUE;
+
 import java.util.List;
+
+import org.apache.commons.lang.StringUtils;
 
 import com.agilecrm.Globals;
 import com.agilecrm.account.AccountEmailStats;
@@ -8,6 +12,7 @@ import com.agilecrm.account.EmailGateway;
 import com.agilecrm.account.EmailGateway.EMAIL_API;
 import com.agilecrm.account.util.AccountEmailStatsUtil;
 import com.agilecrm.account.util.EmailGatewayUtil;
+import com.agilecrm.contact.email.util.ContactEmailUtil;
 import com.agilecrm.mandrill.util.deferred.MailDeferredTask;
 import com.agilecrm.queues.util.PullQueueUtil;
 import com.agilecrm.subscription.restrictions.db.BillingRestriction;
@@ -47,7 +52,7 @@ public class EmailSender
 	emailSender.emailGateway = EmailGatewayUtil.getEmailGateway();
 
 	emailSender.accountEmailStats = AccountEmailStatsUtil.getAccountEmailStats();
-
+	
 	return emailSender;
     }
 
@@ -195,15 +200,20 @@ public class EmailSender
 	String domain = NamespaceManager.get();
 	try
 	{
+		int emailCount = EmailUtil.getCountForEmails(to);
+	    emailCount += EmailUtil.getCountForEmails(cc);
+	    emailCount += EmailUtil.getCountForEmails(bcc);
 	    if (canSend())
 	    {
 		EmailGatewayUtil.sendEmail(emailGateway, domain, fromEmail, fromName, to, cc, bcc, subject, replyTo,
 		        html, text, mandrillMetadata, documentIds, blobKeys, attachments);
 
 		// Sets Billing restriction limit and account email stats
+		    
+		    
 		if (!EmailUtil.isToAgileEmail(to))
 		{
-		    setCount(1);
+		    setCount(emailCount);
 
 		    updateOneTimeEmailStats();
 		}
@@ -227,19 +237,25 @@ public class EmailSender
 	    String fromEmail, String fromName, String to, String cc, String bcc, String subject, String replyTo,
 	    String html, String text, String mandrillMetadata, String subscriberId, String campaignId)
     {
-	MailDeferredTask mailDeferredTask = new MailDeferredTask(emailGatewayType, apiUser, apiKey, domain, fromEmail,
-	        fromName, to, cc, bcc, subject, replyTo, html, text, mandrillMetadata, subscriberId, campaignId);
+    	to = ContactEmailUtil.normalizeEmailIds(to);
+    	if(StringUtils.isBlank(to)) return;
+    	
+    	cc = ContactEmailUtil.normalizeEmailIds(cc);
+    	bcc = ContactEmailUtil.normalizeEmailIds(bcc);
+    	
+		MailDeferredTask mailDeferredTask = new MailDeferredTask(emailGatewayType, apiUser, apiKey, domain, fromEmail,
+		        fromName, to, cc, bcc, subject, replyTo, html, text, mandrillMetadata, subscriberId, campaignId);
+		
+		System.out.println("Emailgatewaytype is:"+emailGatewayType);
+		
+		// Add to pull queue with from email as Tag
+		if(emailGatewayType!=null && emailGatewayType.equalsIgnoreCase("SES")){
+			queueName = AMAZON_SES_EMAIL_PULL_QUEUE;
+			System.out.println("Sending mails through amazon pull queue");
+		}
 	
-	System.out.println("Emailgatewaytype is:"+emailGatewayType);
-	
-	// Add to pull queue with from email as Tag
-	if(emailGatewayType!=null && emailGatewayType.equalsIgnoreCase("SES")){
-		queueName = "amazon-ses-pull-queue";
-		System.out.println("Sending mails through amazon pull queue");
-	}
-
-	// Add to pull queue with from email as Tag
-	PullQueueUtil.addToPullQueue(queueName, mailDeferredTask, fromEmail);
+		// Add to pull queue with from email as Tag
+		PullQueueUtil.addToPullQueue(queueName, mailDeferredTask, fromEmail);
     }
 
 }

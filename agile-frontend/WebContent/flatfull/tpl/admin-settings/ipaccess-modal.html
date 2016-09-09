@@ -5,26 +5,26 @@
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <h4 class="modal-title">IP Address</h4>
+          <h4 class="modal-title">{{agile_lng_translate 'admin-settings' 'ip-address'}}</h4>
         </div>
         <div class="modal-body">
         <!--{{#if position}}
-          <p style=" padding-left: 9px;">Edit an IP address to allow access</p>
+          <p style=" padding-left: 9px;">{{agile_lng_translate 'admin-settings' 'edit-an-ip-address-to-allow-access'}}</p>
         {{else}}
-         <p style=" padding-left: 9px;">Add an IP address to allow access</p>
+         <p style=" padding-left: 9px;">{{agile_lng_translate 'admin-settings' 'add-an-ip-address-to-allow-access'}}</p>
         {{/if}}-->
             <div class="control-group form-group">
-                    <label class="control-label col-sm-3">IP Address</label>
+                    <label class="control-label col-sm-3">{{agile_lng_translate 'admin-settings' 'ip-address'}}</label>
                     <div class="controls col-sm-7">
-                        <input type="text" id="iplist"  class="form-control input-sm ipValidation required" placeholder="IP address" value="{{ip}}">
+                        <input type="text" id="iplist"  class="form-control input-sm ipValidation required" placeholder="{{agile_lng_translate 'admin-settings' 'ip-address'}}" value="{{ip}}">
                     </div>
                     {{#if position}}
                     <div class="text-muted">
-                            <div class="col-sm-offset-3 col-sm-7" style="font-size:12px;margin-bottom:10px;padding-left: 15px;">Edit an IP address to allow access.</div>
+                            <div class="col-sm-offset-3 col-sm-7" style="font-size:12px;margin-bottom:10px;padding-left: 15px;">{{agile_lng_translate 'admin-settings' 'edit-an-ip-address-to-allow-access'}}</div>
                     </div>
                     {{else}}
                     <div class="text-muted">
-                            <div class="col-sm-offset-3 col-sm-7" style="font-size:12px;margin-bottom:10px;padding-left: 15px;">Add an IP address to allow access.</div>
+                            <div class="col-sm-offset-3 col-sm-7" style="font-size:12px;margin-bottom:10px;padding-left: 15px;">{{agile_lng_translate 'admin-settings' 'add-an-ip-address-to-allow-access'}}</div>
                     </div>
                     {{/if}}
             </div>
@@ -33,7 +33,7 @@
         
         <div class="modal-footer">
          
-          <a  type="submit" {{#if position}}data-position="{{position}}"{{/if}} id="ip-add" class="save  btn btn-sm btn-primary " style="margin-top:-1px;" >Save</a>
+          <a  type="submit" {{#if position}}data-position="{{position}}"{{/if}} id="ip-add" class="save  btn btn-sm btn-primary " style="margin-top:-1px;" >{{agile_lng_translate 'modals' 'save'}}</a>
         </div>
       </div>
     </div>

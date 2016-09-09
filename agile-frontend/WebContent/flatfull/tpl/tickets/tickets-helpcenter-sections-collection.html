@@ -1,0 +1,69 @@
+<script id="ticket-helpcenter-sections-collection-template" type="text/html">
+{{#unless this.length}}
+    <div class="col panel wrapper">
+    <div class="hbox h-auto m-b-sm">
+        <div class="text-center padder-v">
+            <h4 class="m-t-none m-b-xs">{{agile_lng_translate 'tickets' 'you-dont-have-any-sections'}}</h4>
+            <div class="m-b-xs text-muted">
+                
+                {{agile_lng_translate 'tickets' 'you-can-add-section-for-category-by-clicking-below'}}
+            </div>
+            <div>
+                <a href="#knowledgebase/add-section{{#helpcenter_url}}{{/helpcenter_url}}" class="btn btn-sm btn-default blue btn-slate-action m-t-xs">
+                    <span><i class="icon-plus-sign"></i></span> 
+                    {{agile_lng_translate 'tickets' 'add-section'}}
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{{/unless}}
+{{#if this.length}}
+    <div class="col panel wrapper">
+        <div class="hbox h-auto m-b-sm">
+            <div class="pull-right">
+                <a href="#knowledgebase/add-section{{#helpcenter_url}}{{/helpcenter_url}}" class="btn btn-sm btn-default btn-addon">
+                    <span><i class="icon-plus-sign"></i></span>  {{agile_lng_translate 'tickets' 'add-section'}}
+                </a>
+            </div>
+            <table class="table table-striped showCheckboxes m-b-none agile-table panel table-layout-mob-view show-delete-modal" url="core/api/knowledgebase/section/bulk" data-bulk-delete-title="{{agile_lng_translate 'contact-details' 'delete'}}"
+                data-bulk-delete-msg="{{agile_lng_translate 'tickets' 'conformation-messge-for-deletion'}}" id="ticket-section-table">
+                    <thead>
+                        <tr>
+                            <th class="hide">Id</th>
+                            <th style="width:30%">Section Name</th>
+                            <th style="width:50%">&nbsp;</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ticket-helpcenter-sections-model-list"  class="c-p"> </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="col w-md  wrapper pos-rlt track-milestone-text p-t-none" >
+            <h4 class="m-t-none h4 m-b-sm">
+              {{agile_lng_translate 'tickets' 'how-to-configure-knowledge-base'}}
+            </h4>
+            <p>
+              {{agile_lng_translate 'tickets' 'configure-your-knowledge-base-by-adding-categories'}}
+            </p> 
+            <ul>
+              <li>
+                 {{agile_lng_translate 'tickets' 'click-on-category-and-see-sections'}}
+              </li>
+              <li>
+                {{agile_lng_translate 'tickets' 'click-on-selection-to-see-how-many-articles-you-have'}}
+              </li>
+            </ul>
+            <br>
+            {{#if this.length}}
+            <p  class="invisible">
+               <a href="https://www.youtube.com/watch?v=vrxV_52QQTc" target="_blank">
+               <img src="{{getS3ImagePath '../../img/landingpage-info.png'}}" class="img-responsive w-full">
+               </a>
+            </p>
+            <br>
+            {{/if}}
+      
+    </div>        
+{{/if}}
+</script>

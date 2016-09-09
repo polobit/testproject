@@ -33,7 +33,10 @@ function minicalendar(el)
 		{
 			month : 'MMM yyyy',
 		},
-
+		monthNames: $.fn.datepicker.dates['en'].months,
+	    monthNamesShort: $.fn.datepicker.dates['en'].monthsShort,
+	    dayNames: $.fn.datepicker.dates['en'].days,
+	    dayNamesShort: $.fn.datepicker.dates['en'].daysShort,
 		eventSources :[
 		               {
 		            	   events : function(start, end, callback)
@@ -56,10 +59,10 @@ function minicalendar(el)
 		            		   var date=new Date();
 		            		   var todayDate=new Date(date.getFullYear(), date.getMonth(), date.getDate(),00,00,00);
 		            		   var endDate=new Date(date.getFullYear(), date.getMonth(), date.getDate(),23,59,59);
-		            		   var todayDiv='<div class="show p-t-xs text-md text-center">Today </div><ul class="list"></ul>';
+		            		   var todayDiv='<div class="show p-t-xs text-md text-center">{{agile_lng_translate "calendar" "Today"}} </div><ul class="list"></ul>';
 		            		   if(_agile_get_prefs('current_date_calendar')!=null)
 		            		   {
-		            			   var days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+		            			   var days = $.fn.datepicker.dates['en'].daysShort;
 		            			   var cookie_date=new Date(_agile_get_prefs('current_date_calendar'));
 		            			   if(cookie_date.getTime()!=todayDate.getTime()){
 		            				   todayDate=cookie_date;
@@ -408,10 +411,10 @@ function minicalendar(el)
 
 		            	   dayClick : function(date,allDay,jsEvent,view){
 		            		   App_Portlets.refetchEvents = false;
-		            		   var days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+		            		   var days = $.fn.datepicker.dates['en'].daysShort;
 		            		   var current_date = new Date();
 		            		   if(date.getFullYear()==current_date.getFullYear() && date.getMonth()==current_date.getMonth() && date.getDate()==current_date.getDate()){
-		            			   $(el).find('.events_show').empty().append('<div class="show p-t-xs text-md text-center">Today</div><ul class="list"></ul>');
+		            			   $(el).find('.events_show').empty().append('<div class="show p-t-xs text-md text-center">{{agile_lng_translate "calendar" "Today"}}</div><ul class="list"></ul>');
 		            		   }
 		            		   else{
 		            			   $(el).find('.events_show').empty().append('<div class="show p-t-xs text-md text-center">'+days[date.getDay()]+', ' +date.format('dd mmm')+' </div><ul class="list"></ul>');
@@ -449,7 +452,7 @@ function minicalendar(el)
 		            			   });
 		            		   }
 		            		   else if(!App_Portlets.refetchEvents){
-		            			   $(el).find('.events_show').append('<div class="portlet-calendar-error-message">No appointments for the day</div><div class="text-center"><a class="minical-portlet-event-add text-info" id='+date.getTime()+' data-date='+date.getTime()+'>+Add</a></div>');
+		            			   $(el).find('.events_show').append('<div class="portlet-calendar-error-message">{{agile_lng_translate "portlets" "no-appointments-for-the-day"}}</div><div class="text-center"><a class="minical-portlet-event-add text-info" id='+date.getTime()+' data-date='+date.getTime()+'>{{agile_lng_translate "portlets" "+add"}}</a></div>');
 		            		   }
 		            	   }
 
@@ -471,7 +474,7 @@ function loadingGoogleEvents(el,startTime,endTime){
 				if($(el).find('.list').find('li').length==0 && $(el).find('.portlet-calendar-error-message').length==0)
 				{
 					var date=new Date();
-					$(el).find('.events_show').append('<div class="portlet-calendar-error-message">No appointments for the day</div><div class="text-center"><a class="minical-portlet-event-add text-info" id='+date.getTime()+' data-date='+date.getTime()+'>+Add</a></div>');
+					$(el).find('.events_show').append('<div class="portlet-calendar-error-message">{{agile_lng_translate "portlets" "no-appointments-for-the-day"}}</div><div class="text-center"><a class="minical-portlet-event-add text-info" id='+date.getTime()+' data-date='+date.getTime()+'>{{agile_lng_translate "portlets" "+add"}}</a></div>');
 				}
 			},7000);
 			_agile_delete_prefs('current_date_calendar');
@@ -617,7 +620,7 @@ function googledata(el,response,startTime,endTime)
 				//_agile_delete_prefs('current_date_calendar');
 				if($(el).find('.list').find('li').length==0 && $(el).find('.portlet-calendar-error-message').length==0)
 				{
-					$(el).find('.events_show').append('<div class="portlet-calendar-error-message">No appointments for the day</div><div class="text-center"><a class="minical-portlet-event-add text-info" id='+date.getTime()+' data-date='+date.getTime()+'>+Add</a></div>');
+					$(el).find('.events_show').append('<div class="portlet-calendar-error-message">{{agile_lng_translate "portlets" "no-appointments-for-the-day"}}</div><div class="text-center"><a class="minical-portlet-event-add text-info" id='+date.getTime()+' data-date='+date.getTime()+'>{{agile_lng_translate "portlets" "+add"}}</a></div>');
 				}
 			},7000);
 		});
@@ -628,7 +631,7 @@ function googledata(el,response,startTime,endTime)
 		if($(el).find('.list').find('li').length==0 && $(el).find('.portlet-calendar-error-message').length==0)
 		{
 			var date=new Date();
-			$(el).find('.events_show').append('<div class="portlet-calendar-error-message">No appointments for the day</div><div class="text-center"><a class="minical-portlet-event-add text-info" id='+date.getTime()+' data-date='+date.getTime()+'>+Add</a></div>');
+			$(el).find('.events_show').append('<div class="portlet-calendar-error-message">{{agile_lng_translate "portlets" "no-appointments-for-the-day"}}</div><div class="text-center"><a class="minical-portlet-event-add text-info" id='+date.getTime()+' data-date='+date.getTime()+'>{{agile_lng_translate "portlets" "+add"}}</a></div>');
 		}
 }
 
@@ -797,7 +800,7 @@ function getOfficeEvents(el, startDateTime, endDateTime){
 			//_agile_delete_prefs('current_date_calendar');
 			if($(el).find('.list').find('li').length==0 && $(el).find('.portlet-calendar-error-message').length==0)
 			{
-				$(el).find('.events_show').append('<div class="portlet-calendar-error-message">No appointments for the day</div><div class="text-center"><a class="minical-portlet-event-add text-info" id='+date.getTime()+' data-date='+date.getTime()+'>+Add</a></div>');
+				$(el).find('.events_show').append('<div class="portlet-calendar-error-message">{{agile_lng_translate "portlets" "no-appointments-for-the-day"}}</div><div class="text-center"><a class="minical-portlet-event-add text-info" id='+date.getTime()+' data-date='+date.getTime()+'>{{agile_lng_translate "portlets" "+add"}}</a></div>');
 			}
 		},7000);				
 		}else{			

@@ -358,6 +358,7 @@ public class AgileTaskletUtil {
 				owner.put("id", domainUser.id);
 				owner.put("name", domainUser.name);
 				owner.put("email", domainUser.email);
+				owner.put("phone", domainUser.phone);
 				owner.put("calendar_url", MergeFieldsUtil
 						.addCalendarMergeField(domainUser, subscriberJSON));
 				owner.put("timezone", domainUser.timezone);
@@ -1002,4 +1003,23 @@ public class AgileTaskletUtil {
 
 		return campaignIDs;
 	}
+
+	/**
+	 * To fetch the timezone especially while converting the date format in Campaigns.
+	 * 
+	 * @param jsonObj
+	 * @return
+	 */
+	public static String getTimezone(JSONObject jsonObj) {
+		String timezone = null;
+		try {
+			timezone = jsonObj.getString("timezone");
+		}
+		catch (Exception e) {
+			System.out.println("No timezone found in subscriberJSON: " + e.getMessage());
+			timezone = AccountPrefsUtil.getTimeZone();
+		}
+		return timezone;
+	}
+
 }

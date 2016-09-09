@@ -2,11 +2,14 @@
 <div class="wrapper-md lter bg-light b-b">
 	<div class="row">
     	<div class="col-md-12">
-        	<h3 class="pull-left font-thin h3">Dashboards</h3>
-            <a href="#add-dashboard" class="btn btn-sm btn-default right" id="addDashboard"><span><i class='icon-plus-sign'/></span>  Add Dashboard</a>
+        	  <h3 class="pull-left font-thin h3">{{agile_lng_translate 'portlets' 'dashboards'}}</h3>
+            <div class="text-center">
+                <a href="#add-dashboard" class="btn btn-sm btn-default right" id="addDashboard">
+                    <span><i class='icon-plus-sign'/></span>  {{agile_lng_translate 'portlets' 'add-dashboard'}}
+                </a>
+            </div>
             <div class="clearfix"></div>
-           
-        </div>
+      </div>
 	</div>
 </div>
 <div class="wrapper-md">
@@ -18,8 +21,8 @@
 	        			<table class="table table-bordered showCheckboxes agile-table panel table-layout-mob-view" url="core/api/dashboards/bulk" id="dashboard-list">  
 	            			<thead>
 	                			<tr>   
-	                    			<th style="width:50%">Name</th>
-	                    			<th style="width:25%">Created Time</th>
+	                    			<th style="width:50%">{{agile_lng_translate 'contacts-view' 'name'}}</th>
+	                    			<th style="width:25%">{{agile_lng_translate 'other' 'created-time'}}</th>
 	                			</tr>
 	            			</thead>
 	            			<tbody id='dashboard-model-list' route='edit-dashboard/'></tbody>
@@ -32,9 +35,9 @@
     	<div class='col-md-3'>
         	<div class="wrapper" id='addview'>
              	<h4 class="m-t-none m-b-sm">
-              		What are User-Defined Dashboards?
+              		{{agile_lng_translate 'portlets' 'what-are-user-defined-dashboards'}}
              	</h4>
-            	<p>User-defined dashboards allow users to create multiple dashboards for various purposes. Each of the user-defined dashboards can have different combinations of dashlets. Some examples can be Sales Dashboard, Marketing Dashboard and so on.</p>
+            	<p>{{agile_lng_translate 'portlets' 'user-defined-dashboards-desc'}}</p>
         	</div>
     	</div>
 	</div>

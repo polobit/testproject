@@ -13,6 +13,7 @@ import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.Note;
 import com.agilecrm.contact.sync.wrapper.ContactWrapper;
 import com.agilecrm.util.CountryUtil;
+import com.agilecrm.contact.util.NoteUtil;
 import com.google.gdata.data.TextContent;
 import com.google.gdata.data.contacts.ContactEntry;
 import com.google.gdata.data.contacts.GroupMembershipInfo;
@@ -312,8 +313,7 @@ public class GoogleContactWrapperImpl extends ContactWrapper
 	
 			    if (address.hasCountry() && address.getCountry().hasValue())
 			    {
-			    	String gCountry = address.getCountry().getValue();
-			    	CountryUtil.setCountryCode(json, null, gCountry);
+			    	json.put("country", address.getCountry().getValue());
 			    }
 				
 	
@@ -408,12 +408,25 @@ public class GoogleContactWrapperImpl extends ContactWrapper
 	TextContent content = null;
 	try
 	{
+		List<Note> notes=NoteUtil.getNotes(contact.id);
 	    content = entry.getTextContent();
+	    boolean New = true;
+	    for(Note note:notes)
+	    {
+	    	if(StringUtils.equalsIgnoreCase(entry.getTextContent().getContent().getPlainText(), note.description))
+	    			{
+	    				New=false;
+	    				break;
+	    			}
+	    }
+	    if(New)
+	    {
+	    	 Note note = new Note("Google Contact Notes", content.getContent().getPlainText());
 
-	    Note note = new Note("Google Contact Notes", content.getContent().getPlainText());
-
-	    note.addContactIds(String.valueOf(contact.id));
-	    note.save();
+	 	    note.addContactIds(String.valueOf(contact.id));
+	 	    note.save();
+	    }
+	   
 	}
 	catch (Exception e)
 	{

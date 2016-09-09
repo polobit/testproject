@@ -17,8 +17,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import com.google.appengine.api.urlfetch.HTTPMethod;
+import com.google.appengine.api.urlfetch.HTTPRequest;
+import com.google.appengine.api.urlfetch.URLFetchService;
+import com.google.appengine.api.urlfetch.URLFetchServiceFactory;
 
 /**
  * <code>HTTPUtil</code> is a utility class used to access data from remote
@@ -528,5 +534,29 @@ public class HTTPUtil
 	reader.close();
 
 	return output;
+    }
+    
+    /**
+     * Connects to the remote object to write (post) the given data.
+     * It sends data asynchronously and it doesn't wait for response.
+     * 
+     * @param postURL
+     * @param data
+     */
+    public static void accessURLAsynchronouslyUsingPost(String postURL, String data)
+    {
+	try
+	{
+	    URL url = new URL(postURL);
+    	    HTTPRequest request = new HTTPRequest(url, HTTPMethod.POST);
+            request.setPayload(data.getBytes());
+    	    URLFetchService fetcher = URLFetchServiceFactory.getURLFetchService();
+    	    fetcher.fetchAsync(request);
+	}
+	catch(Exception e)
+	{
+	    System.err.println(ExceptionUtils.getFullStackTrace(e));
+	}
+	
     }
 }

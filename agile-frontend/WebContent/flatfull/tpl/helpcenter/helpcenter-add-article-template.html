@@ -1,10 +1,10 @@
-<script id="helpcenter-add-article-template" type="text/html">
+<script id="ticket-helpcenter-add-article-template" type="text/html">
 <div class="wrapper">
     <div class="row">
     	<div class="col-md-10">
         	<div class="panel panel-default">
         		<div class="panel-heading">
-        			{{#if id}}Edit {{else}}Add {{/if}}Article
+        			{{#if id}}{{agile_lng_translate 'contact-details' 'edit'}} {{else}}{{agile_lng_translate 'other' 'add'}} {{/if}}{{agile_lng_translate 'Help-center' 'articles'}}
     			</div>
                 <form id="userForm" name="userForm" method="get" action="" class="form-horizontal">
                     {{#if id}}
@@ -12,7 +12,7 @@
                     {{/if}}
                     <fieldset class="wrapper"><br/>
                         <div class="control-group form-group">
-                            <label class="control-label col-md-3" for="Title">Article Title<span class="field_req">*</span></label> 
+                            <label class="control-label col-md-3" for="Title">{{agile_lng_translate 'Help-center' 'article-title'}}<span class="field_req">*</span></label>
                             <div class="col-md-5">
                                 <div class="controls">
                                     <input type="text" name="title" id="title"  placeholder="Title" class="required form-control" maxlength="60">
@@ -20,7 +20,7 @@
                             </div>
                         </div>
                         <div class="control-group form-group">
-                            <label class="control-label col-md-3" for="description">Description </label> 
+                            <label class="control-label col-md-3" for="description">{{agile_lng_translate 'misc-keys' 'description'}} </label> 
                             <div class="col-md-6 m-t-xs">
                                 <div class="controls">
                                     <textarea id="description-article" class="form-control required" name="content" style="min-height: 100px; width:90%; dispaly:none; visibility:hidden;"></textarea>
@@ -40,20 +40,13 @@
                         <label class="control-label col-md-3" for="description"><span></span></label> 
                             <div class="col-md-4 m-t-xs">
                                 <div class="controls">
-                                <input type="radio" name="is_article_published" value="true" checked="" style="vertical-align: top; "> Mark as publish&nbsp;&nbsp;&nbsp;
-                                <input type="radio" name="is_article_published" style="vertical-align: top;" value="false"> Mark as draft                                      
+                                <input type="radio" name="is_article_published" value="true" checked="" style="vertical-align: top; "> {{agile_lng_translate 'Help-center' 'mark-as-publish'}}&nbsp;&nbsp;&nbsp;
+                                <input type="radio" name="is_article_published" style="vertical-align: top;" value="false">{{agile_lng_translate 'Help-center' 'mark-as-draft'}}                                    
                                 </div> 
                             </div>
                         </div>
                         <div class="control-group form-group">
                         <label class="control-label col-md-3" for="description"><span></span></label> 
-                            <div class="col-md-4 m-t-xs" style="padding-left: 36px;">
-                                <div class="controls">
-                            
-                        <label class="checkbox"> <input type="checkbox" id="comments_disabled" name="comments_disabled"> Disable Comments
-                                </label>
-                        </div>
-                        </div>
                         </div>
                         <div class="row">
                             <div class="col-md-12"><hr></div>
@@ -61,8 +54,8 @@
                         <div class="form-group">
                             <div class="form-actions col-sm-offset-3 col-md-9">
                                 <div class="form-actions">
-                                    <a type="reset" href='javascript:history.back()' class="btn btn-default btn-sm">Cancel</a>
-                                    <button type="submit" class="save btn btn-sm btn-primary m-l-xs">Save</button>
+                                    <a type="reset" href='javascript:history.back()' class="btn btn-default btn-sm">{{agile_lng_translate 'other' 'cancel'}}</a>
+                                    <button type="submit" class="save btn btn-sm btn-primary m-l-xs">{{agile_lng_translate 'modals' 'save'}}</button>
                                 </div>
                             </div>
                         </div>

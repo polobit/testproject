@@ -492,7 +492,8 @@ public class DealsAPI
 	JSONArray opportunitiesJSONArray = new JSONArray(ids);
 	JSONArray oppJSONArray = new JSONArray();
 	List<String> contactIdsList = new ArrayList<String>();
-	List<Opportunity> opportunityList = OpportunityUtil.getOpportunitiesForBulkActions(ids, null, opportunitiesJSONArray.length());
+	OpportunityUtil opportunityUtil = new OpportunityUtil();
+	List<Opportunity> opportunityList = opportunityUtil.getOpportunitiesForBulkActions(ids, null, opportunitiesJSONArray.length());
 	
 	for(Opportunity opp : opportunityList)
 	{
@@ -971,9 +972,14 @@ public class DealsAPI
 		JSONArray idsArray = new JSONArray(ids);
 		System.out.println("------------" + idsArray.length());
 	    }
-
+      try{
 	    org.json.JSONObject filterJSON = new org.json.JSONObject(filters);
 	    System.out.println("------------" + filterJSON.toString());
+      }
+      catch(Exception e){
+    	  e.printStackTrace();
+      }
+       
 
 	    String uri = "/core/api/opportunity/backend/archive/" + SessionManager.get().getDomainId();
 
@@ -1000,10 +1006,14 @@ public class DealsAPI
 		JSONArray idsArray = new JSONArray(ids);
 		System.out.println("------------" + idsArray.length());
 	    }
-
+	   
+    try{
 	    org.json.JSONObject filterJSON = new org.json.JSONObject(filters);
 	    System.out.println("------------" + filterJSON.toString());
-
+    }
+    catch(Exception e){
+  	  e.printStackTrace();
+    }
 	    String uri = "/core/api/opportunity/backend/restore/" + SessionManager.get().getDomainId();
 
 	    OpportunityUtil.postDataToDealBackend(uri, filters, ids);
@@ -1030,11 +1040,14 @@ public class DealsAPI
 		JSONArray idsArray = new JSONArray(ids);
 		System.out.println("------------" + idsArray.length());
 	    }
-
+	   
+    try{
 	    org.json.JSONObject filterJSON = new org.json.JSONObject(filters);
 	    System.out.println("------------" + filterJSON.toString());
-	    System.out.println("Owner_id" + ownerId);
-
+    }
+    catch(Exception e){
+  	  e.printStackTrace();
+    }
 	    String uri = "/core/api/opportunity/backend/change-owner/" + ownerId + "/"
 		    + SessionManager.get().getDomainId();
 
@@ -1062,9 +1075,13 @@ public class DealsAPI
 		JSONArray idsArray = new JSONArray(ids);
 		System.out.println("------------" + idsArray.length());
 	    }
-
-	    org.json.JSONObject filterJSON = new org.json.JSONObject(filters);
-	    System.out.println("------------" + filterJSON.toString());
+	      try{
+		    org.json.JSONObject filterJSON = new org.json.JSONObject(filters);
+		    System.out.println("------------" + filterJSON.toString());
+	      }
+	      catch(Exception e){
+	    	  e.printStackTrace();
+	      }
 
 	    String uri = "/core/api/opportunity/backend/change-milestone/" + SessionManager.get().getDomainId();
 
@@ -1092,9 +1109,13 @@ public class DealsAPI
 		JSONArray idsArray = new JSONArray(ids);
 		System.out.println("------------" + idsArray.length());
 	    }
-
-	    org.json.JSONObject filterJSON = new org.json.JSONObject(filters);
-	    System.out.println("------------" + filterJSON.toString());
+	      try{
+		    org.json.JSONObject filterJSON = new org.json.JSONObject(filters);
+		    System.out.println("------------" + filterJSON.toString());
+	      }
+	      catch(Exception e){
+	    	  e.printStackTrace();
+	      }
 
 	    String uri = "/core/api/opportunity/backend/contacts/add-tag/" + SessionManager.get().getDomainId();
 
@@ -1122,11 +1143,13 @@ public class DealsAPI
 		JSONArray idsArray = new JSONArray(ids);
 		System.out.println("------------" + idsArray.length());
 	    }
-
-	    org.json.JSONObject filterJSON = new org.json.JSONObject(filters);
-	    System.out.println("------------" + filterJSON.toString());
-	    System.out.println("Workflow_id" + workflowId);
-
+	      try{
+		    org.json.JSONObject filterJSON = new org.json.JSONObject(filters);
+		    System.out.println("------------" + filterJSON.toString());
+	      }
+	      catch(Exception e){
+	    	  e.printStackTrace();
+	      }
 	    String uri = "/core/api/opportunity/backend/contacts/add-campaign/" + workflowId + "/"
 		    + SessionManager.get().getDomainId();
 
@@ -1316,7 +1339,7 @@ public class DealsAPI
 	    return null;
 
 	Iterator<?> keys = obj.keys();
-
+	List<CustomFieldData> input_custom_field = new ArrayList<CustomFieldData>();
 	while (keys.hasNext())
 	{
 	    String key = (String) keys.next();
@@ -1364,8 +1387,10 @@ public class DealsAPI
 		    json.put("name", custom_dataJSONArray.getJSONObject(i).getString("name"));
 		    json.put("value", custom_dataJSONArray.getJSONObject(i).getString("value"));
 		    CustomFieldData field = mapper.readValue(json.toString(), CustomFieldData.class);
-		    opportunity.addCustomData(field);
+		    input_custom_field.add(field);
 		}
+		// Partial update, send all custom datas
+		opportunity.addAllCustomData(input_custom_field);
 	    }
 	}
 
@@ -1380,8 +1405,16 @@ public class DealsAPI
 		return null;
 	    }
 	}
-	else
-	    opportunity.save();
+	else{
+	    try
+	    {
+		opportunity.addContactIdsToDeal(contact_idList);
+	    }
+	    catch (WebApplicationException e)
+	    {
+		return null;
+	    }
+	}
 
 	return opportunity;
     }
@@ -1524,7 +1557,7 @@ public class DealsAPI
     }
     @Path("/based/tags")
     @GET
-    @Produces({ MediaType.TEXT_HTML, MediaType.APPLICATION_JSON })
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     public List<Opportunity> getDealsByTags(@QueryParam("tag") String tag){
     	List<Opportunity> deals = null;
     	if(tag != null && tag != ""){

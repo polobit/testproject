@@ -1,4 +1,4 @@
-<html lang="en">
+<html lang="en" data-modal-type="agile-modal-xs" data-modal-version="2">
 <head>
 <meta http-equiv="content-type" content="text/html;charset=utf-8" />
 <title>Popup</title>
@@ -8,25 +8,23 @@
 <style type="text/css">
 body {
 	background: #fff;
-	width: 310px;
-	height: 210px;
+	
 }
 
 #popup {
 	background: #FCFCFC;;
 	  border: 1px solid #f6f6f6;
-	border-radius: 5px 5px 0 0;
+	border-radius: 5px;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
 	color: #333 !important;
 	font: 13px/19px "Varela", Arial, Helvetica, sans-serif !important;
 	letter-spacing: 0;
-	width: 302px;
-	position: fixed;
-	bottom: 0;
+	
 }
 #popup-body {
 	border-radius: 8px;
-	margin: 17px;
-	padding: 20px 20px 20px;
+	padding: 20px;
 	position: relative;
 }
 
@@ -69,14 +67,15 @@ body {
 	font: bold 10px/10px "Montserat", Arial, Helvetica,
 		sans-serif !important;
 	letter-spacing: 1px;
-	padding: 8px;
-	text-align: center;
+	padding: 8px 0;
+	text-align: right;
 	text-transform: uppercase;
-	display: none;
+	/*display: none;*/
 }
 
 #popup-footer a {
 	color: #fff;
+	text-decoration: none;
 }
 
 #popup-content {
@@ -112,22 +111,90 @@ margin-bottom: 5px!important;
 </style>
 </head>
 <body>
-	<div id="opened">
+	
 		<div id="popup">
 			<div id="popup-body">
 				<div id="popup-title">Contact Us</div>
 				<div id="popup-content">
-					<p>Looking to talk to our friendly reps?You can call from here.</p>
-					<button data-webruleid='' onclick="parent._agile_call_webrules(this);">Call Now</button>
+
+					<p>Looking to talk to our friendly reps? You can call from here.</p>
+					<button data-webruleid onclick="parent._agile_call_webrules(this,document.getElementById('agile-twilioio-dialpad'));">Call Now</button>
+
 				</div>
 				<div id="popup-close">x</div>
 			</div>
-			<div id="popup-footer">
-				Powered by <a href="https://www.agilecrm.com" target="_blank">AGILE
-					CRM</a>
-			</div>
+		
 		</div>
-	</div>
+	
+	<div id="popup-footer">
+				<div id="agile-copyright">Powered by <a href="https://www.agilecrm.com" target="_blank">AGILE
+					CRM</a></div>
+			</div>
 
 </body>
+
+<script type="text/html" id="agile-twilioio-dialpad">
+<div id="dialpad_in_twilio" class="dialpad_btns" style="display: none;"> 
+  <div  class="campaign_dialpad_bg" >
+     <div class="campaign_dialpad_row">
+       <div class="campaign_dialpad_cell" ><input type="button" value="1" class="button1" id="button1" onclick="parent.agileTwilioSendDTMF('1');"></div>
+       <div class="campaign_dialpad_cell" ><input type="button" value="2" class="button2" id="button2" onclick="parent.agileTwilioSendDTMF('2');"></div>
+       <div class="campaign_dialpad_cell" ><input type="button" value="3" class="button3" id="button3" onclick="parent.agileTwilioSendDTMF('3');"></div>
+ 	   <div class="campaign_dialpad_cell" ><input type="button" value="4" class="button4" id="button4" onclick="parent.agileTwilioSendDTMF('4');"></div>   
+ 	 </div>
+     <div class="campaign_dialpad_row">
+       <div class="campaign_dialpad_cell"><input type="button" value="5" class="button5" id="button5" onclick="parent.agileTwilioSendDTMF('5');"></div>
+       <div class="campaign_dialpad_cell"><input type="button" value="6" class="button6" id="button6" onclick="parent.agileTwilioSendDTMF('6');"></div>
+       <div class="campaign_dialpad_cell"><input type="button" value="7" class="button7" id="button7" onclick="parent.agileTwilioSendDTMF('7');"></div>
+       <div class="campaign_dialpad_cell"><input type="button" value="8" class="button8" id="button8" onclick="parent.agileTwilioSendDTMF('8');"></div>
+	 </div>
+     <div class="campaign_dialpad_row">
+       <div class="campaign_dialpad_cell" ><input type="button" value="9" class="button9" id="button9" onclick="parent.agileTwilioSendDTMF('9');"></div>
+	   <div class="campaign_dialpad_cell"><input type="button" value="0" class="button0" id="button0" onclick="parent.agileTwilioSendDTMF('0');"></div>    
+	   <div class="campaign_dialpad_cell"><input type="button" value="*" class="buttonstar" id="buttonstar" style="width:94%;" onclick="parent.agileTwilioSendDTMF('*');"></div>
+       <div class="campaign_dialpad_cell"><input type="button" value="#" class="buttonpound" id="buttonpound" onclick="parent.agileTwilioSendDTMF('#');"></div> 	
+	 </div>
+  </div>
+</div>
+<div style="clear:both"></div>
+<style type="text/css">
+#campaign_dialpad_btns input[type="button"], .dialpad_btns input[type="button"] {
+    background-color: #fff;
+    border: 0;
+    border-bottom: 1px solid #eee!important;
+    border-right: 1px solid #eee!important;
+    padding: 7px 12px;
+    width: 31px!important;
+    cursor: pointer;
+    height: 30px;
+}
+
+.campaign_dialpad_row {
+    display: table-row;
+    vertical-align: inherit;
+    border-color: inherit;
+}
+.campaign_dialpad_cell {
+    display: table-cell;
+    vertical-align: inherit;
+    border-top: 1px solid #EEE;    
+}
+#dialpad_in_twilio{
+	position: relative;
+    z-index: 1;
+    left: 15px;
+    bottom: -13px;
+    z-index: 9999;
+}
+
+#campaign_dialpad_btns input[type="button"]:hover, .dialpad_btns input[type="button"]:hover {
+    background-color: #efefef;
+    color: #888;
+ }
+
+ .campaign_dialpad_bg{
+  border-left: 1px solid #EEEEEE;
+}
+</style>
+</script>
 </html>

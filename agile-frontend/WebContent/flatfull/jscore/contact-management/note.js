@@ -35,7 +35,7 @@ $(function()
 
 		$("#noteForm > fieldset", noteModal).prepend('<input name="id" type="hidden"/>');
 		$("#noteForm > fieldset", noteModal).prepend('<input name="created_time" type="hidden"/>');
-		$("#noteForm", noteModal).parent().parent().find(".modal-header > h3").html('<i class="icon-edit"></i>&nbsp;Edit Note');
+		$("#noteForm", noteModal).parent().parent().find(".modal-header > h3").html('<i class="icon-edit"></i>&nbsp;' + _agile_get_translated_val('modals','edit-note'));
 		$("#noteForm", noteModal).attr('id', "noteUpdateForm");
 		noteModal.attr('id', "noteUpdateModal");
 		agile_type_ahead("note_related_to", $("#noteUpdateForm", noteModal), contacts_typeahead);

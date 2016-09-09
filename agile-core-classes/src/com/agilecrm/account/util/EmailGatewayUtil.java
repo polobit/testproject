@@ -1,5 +1,7 @@
 package com.agilecrm.account.util;
 
+import static com.agilecrm.AgileQueues.AMAZON_SES_EMAIL_PULL_QUEUE;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -19,6 +21,7 @@ import com.agilecrm.AgileQueues;
 import com.agilecrm.account.EmailGateway;
 import com.agilecrm.account.EmailGateway.EMAIL_API;
 import com.agilecrm.contact.email.EmailSender;
+import com.agilecrm.contact.email.util.ContactEmailUtil;
 import com.agilecrm.db.GoogleSQL;
 import com.agilecrm.mandrill.util.MandrillUtil;
 import com.agilecrm.mandrill.util.deferred.MailDeferredTask;
@@ -35,6 +38,8 @@ import com.campaignio.logger.util.CampaignLogsSQLUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.blobstore.BlobKey;
 import com.google.appengine.api.taskqueue.TaskHandle;
+import com.thirdparty.mailgun.MailgunNew;
+import com.thirdparty.mailgun.util.MailgunUtil;
 import com.thirdparty.mandrill.Mandrill;
 import com.thirdparty.sendgrid.SendGrid;
 import com.thirdparty.ses.util.AmazonSESUtil;
@@ -206,7 +211,7 @@ public class EmailGatewayUtil
 
 	String response = null;
 	JSONObject responseJSON = null;
-
+	
 	// Test email to validate email gateway credentials
 	if (emailGateway.email_api.equals(EMAIL_API.SEND_GRID))
 	    response = SendGrid.sendMail(emailGateway.api_user, emailGateway.api_key, "api_test@agilecrm.com",
@@ -218,7 +223,8 @@ public class EmailGatewayUtil
 		    "Test Email.", "Test Email", null, null, null);
 	else if(emailGateway.email_api.equals(EMAIL_API.SES))
 		response = AmazonSESUtil.verifySESKeys(emailGateway.api_user, emailGateway.api_key, emailGateway.regions);
-
+	else if(emailGateway.email_api.equals(EMAIL_API.MAILGUN))
+		response=MailgunUtil.checkMailgunAuthorization(emailGateway.api_key, emailGateway.api_user);
 	try
 	{
 	    // Handle JSON parse exception
@@ -227,7 +233,6 @@ public class EmailGatewayUtil
 	catch (JSONException e)
 	{
 	    System.err.println("JSON Exception occurred while parsing response " + e.getMessage());
-	    e.printStackTrace();
 	}
 
 	// SendGrid Error
@@ -237,6 +242,10 @@ public class EmailGatewayUtil
 	// Mandrill Error
 	if (responseJSON != null && responseJSON.has("status") && responseJSON.getString("status").equals("error"))
 	    throw new Exception("Error Saving: " + responseJSON.getString("message"));
+	
+	//Mailgun Error
+	 if(response==null || response.contains("401"))
+		 throw new Exception("Error Saving: Mailgun API Key or Domain Name is Invalid." );
 
     }
 
@@ -364,6 +373,12 @@ public class EmailGatewayUtil
     {
 	try
 	{
+		to = ContactEmailUtil.normalizeEmailIds(to);
+    	if(StringUtils.isBlank(to)) return;
+    	
+    	cc = ContactEmailUtil.normalizeEmailIds(cc);
+    	bcc = ContactEmailUtil.normalizeEmailIds(bcc);
+    	
 	    // If no gateway setup, sends email through Agile's default
 	    if (emailGateway == null || (EMAIL_API.SES.equals(emailGateway.email_api))
 	    		&& ((documentIds != null && documentIds.size() != 0) 
@@ -396,6 +411,11 @@ public class EmailGatewayUtil
 	    	// Add to pull queue with from email as Tag
 	    	PullQueueUtil.addToPullQueue(AgileQueues.AMAZON_SES_EMAIL_PULL_QUEUE, mailDeferredTask, fromEmail + "_personal");
 	    }
+	    // If Mailgun
+	    else if (EMAIL_API.MAILGUN.equals(emailGateway.email_api))
+	    	MailgunNew.sendMail(emailGateway.api_key, emailGateway.api_user, fromEmail, fromName, to, cc, bcc, subject, replyTo, html,
+	    			text, mandrillMetadata, documentIds, blobKeys, attachments);
+	    
 
 	}
 	catch (Exception e)
@@ -456,15 +476,18 @@ public class EmailGatewayUtil
 	    String domain, String fromEmail, String fromName, String to, String cc, String bcc, String subject,
 	    String replyTo, String html, String text, String mandrillMetadata, String subscriberId, String campaignId)
     {
-	MailDeferredTask mailDeferredTask = new MailDeferredTask(emailGatewayType, apiUser, apiKey, domain, fromEmail,
-		fromName, to, cc, bcc, subject, replyTo, html, text, mandrillMetadata, subscriberId, campaignId);
-	
-	// Add to pull queue with from email as Tag
-	if(emailGatewayType!=null && emailGatewayType.equalsIgnoreCase("SES")){
-		queueName = "amazon-ses-pull-queue";
-	}
-	PullQueueUtil.addToPullQueue(queueName, mailDeferredTask, fromEmail);
-	
+    	to = ContactEmailUtil.normalizeEmailIds(to);
+    	if(!StringUtils.isBlank(to)) {
+			MailDeferredTask mailDeferredTask = new MailDeferredTask(emailGatewayType, apiUser, apiKey, domain, fromEmail,
+					fromName, to, ContactEmailUtil.normalizeEmailIds(cc), ContactEmailUtil.normalizeEmailIds(bcc), 
+					subject, replyTo, html, text, mandrillMetadata, subscriberId, campaignId);
+			
+			// Add to pull queue with from email as Tag
+			if(emailGatewayType!=null && emailGatewayType.equalsIgnoreCase("SES")){
+				queueName = AMAZON_SES_EMAIL_PULL_QUEUE;
+			}
+			PullQueueUtil.addToPullQueue(queueName, mailDeferredTask, fromEmail);
+    	}	
     }
 
     /**
@@ -581,18 +604,23 @@ public class EmailGatewayUtil
 	    	// If No Gateway or SendGrid
 	    	if (emailGateway == null || emailGateway.email_api == EMAIL_API.SEND_GRID)
 			    SendGridUtil.sendSendGridMails(tasks, emailSender);
-		
+
 	    	// If Mandrill
 	    	else if (emailGateway.email_api == EmailGateway.EMAIL_API.MANDRILL)
 	    		MandrillUtil.splitMandrillTasks(tasks, emailSender);
 		
 	    	else if (emailGateway.email_api == EMAIL_API.SES)
 				AmazonSESUtil.sendSESMails(tasks, emailSender);
+
+			//If Mailgun
+			else if(emailGateway.email_api == EMAIL_API.MAILGUN)
+				 MailgunUtil.sendMailgunMails(tasks, emailSender);
 	
 			addEmailLogs(tasks);
 	
 			emailSender.setCount(tasks.size());
 			emailSender.updateStats();
+
 
 	    }
 	    else

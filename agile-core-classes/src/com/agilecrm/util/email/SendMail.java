@@ -1,5 +1,6 @@
 package com.agilecrm.util.email;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.json.JSONObject;
@@ -75,6 +76,9 @@ public class SendMail
 
     public static final String EMAIL_PAYMENT_RECEIVED = "subscription/add-on/email/payment_received";
     public static final String EMAIL_PAYMENT_RECEIVED_SUBJECT = "Payment Received. Thank you.";
+    
+    public static final String INVOICE_CREATED = "subscription/payments/invoice_created";
+    public static final String INVOICE_CREATED_SUBJECT = "Your Agile CRM Invoice";
 
     public static final String PLAN_CHANGED = "subscription/plan_changed";
     public static final String PLAN_CHANGED_SUBJECT = "Your Agile CRM plan has changed";
@@ -152,7 +156,7 @@ public class SendMail
 
    	//For browser Fingerprint
 	public static final String OTP_EMAIL_TO_USER = "otp_email_to_user";
-
+	public static final String Deal_Won_status = "deal_won_notify";
    	//Helpcenter
    	public static final String HELPCENTER_VERIFICATION = "helpcenter_verification_email";
    	public static final String HELPCENTER_VERIFICATION_SUBJECT = "Verify your Helpcenter Account";
@@ -170,7 +174,7 @@ public class SendMail
     /**
      * Templates path where template files exist.
      */
-    public static final String TEMPLATES_PATH = "misc/email/";
+    public static final String TEMPLATES_PATH ="misc/email/";
 
     /**
      * Html body template extension.
@@ -181,6 +185,8 @@ public class SendMail
      * Text(or Body) template extension.
      */
     public static final String TEMPLATE_BODY_EXT = "_body.html";
+    
+    public static final String CONTACT_UPDATE_STATUS = "Domainuser_updates";
 
     @SuppressWarnings("unused")
     private static Object String;
@@ -258,9 +264,28 @@ public class SendMail
 	    // Merge JSONObjects as a single JSONObject in order to get all
 	    // values in a single object
 	    JSONObject mergedJSON = JSONUtil.mergeJSONs(jsonObjectArray);
+	   // System.out.println("ekkkkkkk"+mergedJSON.getString("unsubscribe_body"));
+	    String emailHTML1 = "";
+	    String emailBody1 = "";
+	    
+	    if(mergedJSON.has("unsubscribe_subject")&& mergedJSON.has("unsubscribe_body")){
+	        emailHTML1 = mergedJSON.getString("unsubscribe_body");
+		    emailBody1 = mergedJSON.getString("unsubscribe_body");
+	    
 
-	    System.out.println("mergedJson in sendemail" + mergedJSON);
+	    // Read template - HTML
+	    if(!(StringUtils.isBlank(emailHTML1) && StringUtils.isBlank(mergedJSON.getString("unsubcribe_subject"))))
+	    {
+	    	        String oldNamespace = NamespaceManager.get();
+	 	            NamespaceManager.set("");
+	    	SendGrid.sendMail(null, null, from, fromName, to, null, null, subject, from, emailHTML1, emailBody1, null, args);
+	    	        NamespaceManager.set(oldNamespace);
+	    	     
+	    	   return;
 
+	  
+	    }
+	  }  
 	    // Read template - HTML
 	    String emailHTML = MustacheUtil.templatize(template + TEMPLATE_HTML_EXT, mergedJSON);
 

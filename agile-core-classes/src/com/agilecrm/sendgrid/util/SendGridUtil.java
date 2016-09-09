@@ -1,9 +1,11 @@
 package com.agilecrm.sendgrid.util;
 
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -13,13 +15,17 @@ import com.agilecrm.account.EmailGateway;
 import com.agilecrm.contact.email.EmailSender;
 import com.agilecrm.mandrill.util.MandrillUtil;
 import com.agilecrm.mandrill.util.deferred.MailDeferredTask;
+import com.agilecrm.queues.backend.ModuleUtil;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.EmailUtil;
 import com.agilecrm.util.HTTPUtil;
 import com.agilecrm.util.HttpClientUtil;
+import com.agilecrm.util.VersioningUtil;
+import com.google.appengine.api.NamespaceManager;
 import com.thirdparty.mandrill.exception.RetryException;
 import com.thirdparty.sendgrid.SendGrid;
+import com.thirdparty.sendgrid.lib.SendGridException;
 import com.thirdparty.sendgrid.subusers.SendGridSubUser;
 
 /**
@@ -180,12 +186,47 @@ public class SendGridUtil
 		
 			try
 			{
-				String response = HttpClientUtil.accessPostURLUsingHttpClient(SendGrid.SENDGRID_API_POST_URL,
-				"application/x-www-form-urlencoded", postData);
+				boolean retry = false;
+				int count = 0, maxRetries = 2;
+				String response = null;
 				
-				// If response consists of 'Bad Username', throws Retry exception
-        		if(StringUtils.contains(apiUser, SendGridSubUser.AGILE_SUB_USER_NAME_TOKEN) && StringUtils.containsIgnoreCase(response, "Bad username"))
-						throw new RetryException(response);
+				// Retry 
+				do{
+					try
+					{
+						response = HttpClientUtil.accessPostURLUsingHttpClient(SendGrid.SENDGRID_API_POST_URL,
+					"application/x-www-form-urlencoded", postData);
+					
+						// If response consists of 'Bad Username', throws Retry exception
+		        		if(StringUtils.contains(apiUser, SendGridSubUser.AGILE_SUB_USER_NAME_TOKEN) && StringUtils.containsIgnoreCase(response, "Bad username"))
+						{
+		        			// Update password and retry again
+		        			SendGridSubUser.updateSendGridSubUserPassword(firstSendGridDefferedTask.domain);
+		        			
+		        			// Sample email after password update
+		        			SendGrid.sendMail(apiUser, apiKey, "alert@agilecrm.com", "Agile CRM Alert", "naresh@agilecrm.com", 
+		        					null, null, "SubUser Password is updated in " + NamespaceManager.get(), null, null, "Sample Email after password update. \n Username: " + apiUser 
+		        					+ "\n Pwd: " + apiKey+ "\n Application id: " + VersioningUtil.getApplicationAPPId() 
+		        					+ " \n Module: " + ModuleUtil.getCurrentModuleName(), null);
+		        			
+		        			retry = true;
+						}
+		        		else
+		        			retry = false;
+		        			
+					}
+					catch (SendGridException e) // To handle new sub user
+					{
+						System.err.println("SendGrid exception occured " + e.getMessage());
+						break;
+					}
+					
+					count++;
+					
+				}while(retry && count < maxRetries);
+        			
+				if(StringUtils.contains(apiUser, SendGridSubUser.AGILE_SUB_USER_NAME_TOKEN) && StringUtils.containsIgnoreCase(response, "Bad username"))
+					throw new RetryException(response);
 				
 			}
 			catch(RetryException rex)
@@ -195,7 +236,9 @@ public class SendGridUtil
 				// Create SubUser
 				SendGridUtil.createSendGridSubUser(StringUtils.remove(apiUser, SendGridSubUser.AGILE_SUB_USER_NAME_TOKEN));
 	        	
-				System.out.println("Retrying again for sending email in bulk emails....");
+				System.out.println("Retrying again after creating subuser in bulk emails....");
+				
+				Thread.sleep(3000); // Wait for 3 secs after creating subuser to fix emails drop
 				
 				String res = HttpClientUtil.accessPostURLUsingHttpClient(SendGrid.SENDGRID_API_POST_URL,
 						"application/x-www-form-urlencoded", postData);
@@ -293,15 +336,22 @@ public class SendGridUtil
 					new JSONObject().put("domain", sendGridDeferred.domain).put("subject", sendGridDeferred.subject)
 						.put("campaign_id", sendGridDeferred.campaignId));
 			SMTPJSON.put(FILTERS, getFilterJSON());
+			
+			SendGrid.sendMail(apiUser, apiKey, sendGridDeferred.fromEmail, sendGridDeferred.fromName, sendGridDeferred.to, sendGridDeferred.cc, sendGridDeferred.bcc, 
+	    			sendGridDeferred.subject, sendGridDeferred.replyTo, sendGridDeferred.html, sendGridDeferred.text, SMTPJSON.toString(), null, null, new String[]{});
 		}
 		catch (JSONException e)
 		{
 			e.printStackTrace();
 			System.err.println("Exception occured while building SMTP JSON..." + e.getMessage());
 		}
+    	catch(Exception ex)
+    	{
+    		System.err.println("Exception occured while sending emails without merging...");
+    		System.out.println(ExceptionUtils.getFullStackTrace(ex));
+    	}
     	
-    	SendGrid.sendMail(apiUser, apiKey, sendGridDeferred.fromEmail, sendGridDeferred.fromName, sendGridDeferred.to, sendGridDeferred.cc, sendGridDeferred.bcc, 
-    			sendGridDeferred.subject, sendGridDeferred.replyTo, sendGridDeferred.html, sendGridDeferred.text, SMTPJSON.toString(), null, null, new String[]{});
+    	
     }
 
     /**
@@ -581,7 +631,12 @@ public static String validateSendgridWhiteLabelDomain(String emailDomain, EmailG
 }
 	
 	public static void main(String asd[]){
-		System.out.println(validateSendgridWhiteLabelDomain("batman1.com", null,"hi"));
+		MailDeferredTask mt = new MailDeferredTask(null, null, null, "naresh", "naresh@agilecrm.com", "Naresh", "naresh@faxdesk.com", null, null, "Hello", null, "<b>Hello</b>", null, null, "333", "222");
+		
+		List<MailDeferredTask> lt = new ArrayList<MailDeferredTask>();
+		lt.add(mt);
+		
+		sendSendGridMails(lt, null);
 	}
     
 }

@@ -1,3 +1,7 @@
+<%@page import="com.agilecrm.util.language.LanguageUtil"%>
+<%@page import="org.json.JSONObject"%>
+<%@page import="com.agilecrm.user.UserPrefs"%>
+<%@page import="com.agilecrm.user.AgileUser"%>
 <%@page import="com.agilecrm.user.util.UserPrefsUtil"%>
 <%@page import="com.agilecrm.activities.util.WebCalendarEventUtil"%>
 <%@page import="com.agilecrm.account.util.AccountPrefsUtil"%>
@@ -14,6 +18,13 @@
 <%@page import="org.codehaus.jackson.map.ObjectMapper"%>
 
 <%
+// User Language 
+String _LANGUAGE = "en";
+String _LANGUAGE_USER = "en";
+
+// Locales JSON
+JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "online-calendar");
+
             String url = request.getRequestURL().toString();
 			System.out.println(url);
 			String[] ar = url.split("/");
@@ -52,6 +63,11 @@
 								event.start * 1000, new SimpleDateFormat(
 										"EEE, MMMM d yyyy, h:mm a (z)"));
 				System.out.println(event_start);
+
+				// Get language
+				AgileUser agileUser = AgileUser.getCurrentAgileUserFromDomainUser(dom_user.id);
+				UserPrefs uerPrefs =  UserPrefsUtil.getUserPrefs(agileUser);
+				_LANGUAGE_USER = uerPrefs.language;
 			}
 
 			
@@ -63,6 +79,12 @@
 
 			
 			ObjectMapper mapper = new ObjectMapper();
+			
+			// Read langauge localeJSON
+			if(!StringUtils.equals(_LANGUAGE, _LANGUAGE_USER)){
+				_LANGUAGE = _LANGUAGE_USER;
+				localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "online-calendar");
+			}
 %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
@@ -317,7 +339,7 @@ a:link, a:active, a:visited, a {
 
 
 </style>
-<title>Online Appointment Cancellation - <%=user_name %></title>
+<title><%=LanguageUtil.getLocaleJSONValue(localeJSON, "online-appointment-cancellation")%> - <%=user_name %></title>
 <script type="text/javascript" src="../../lib/web-calendar-event/jquery.js?_"></script>
 <script type="text/javascript" src="../../lib/jquery.validate.min.js"></script>
 </head>
@@ -329,16 +351,22 @@ a:link, a:active, a:visited, a {
 
 		<div class="wrapper rounded6" id="templateContainer">
 			<div id="templateBody" class="bodyContent rounded6">
-				<h2>Cancel&nbsp;&#39;<%=event_title %>&#39;&nbsp;with&nbsp;<%=user_name%>?</h2>
+				<h2>
+					<%=LanguageUtil.getLocaleJSONValue(localeJSON, "cancel")%>&nbsp;&#39;
+					<%=event_title %>&#39;&nbsp;
+					<%=LanguageUtil.getLocaleJSONValue(localeJSON, "with")%>&nbsp;
+					<%=user_name%>?
+				</h2>
 				
 				<div class="start_time">
-					Event starts <%=event_start%>&nbsp;(<%=duration %>&nbsp;mins)
+					<%=LanguageUtil.getLocaleJSONValue(localeJSON, "event-starts")%> <%=event_start%>&nbsp;
+					(<%=duration %>&nbsp;<%=LanguageUtil.getLocaleJSONValue(localeJSON, "mins")%>)
 				</div>
 				<div class="cancel_reason">
-					<textarea placeholder="Reason for cancellation" rows="7" cols="75" id="cancel_web_appointment_reason" name="cancel_web_appointment_reason"></textarea>
+					<textarea placeholder='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "reasong-for-cancel")%>' rows="7" cols="75" id="cancel_web_appointment_reason" name="cancel_web_appointment_reason"></textarea>
 				</div>
           
-				<br /> <a  class="button" id="cancel_appointment_confirmation" href='#'> Cancel Appointment</a>
+				<br /> <a  class="button" id="cancel_appointment_confirmation" href='#'> <%=LanguageUtil.getLocaleJSONValue(localeJSON, "cancel-appointment")%></a>
 			</div>
 		</div>
 		<br />
@@ -362,7 +390,7 @@ a:link, a:active, a:visited, a {
 		%>
 		<div class="wrapper rounded6" id="templateContainer">
 			<div id="templateBody" class="bodyContent rounded6">
-				<h2>Looks like this appointment is already cancelled.
+				<h2><%=LanguageUtil.getLocaleJSONValue(localeJSON, "cancelled-already")%>
 </h2>
 			</div>
 		</div>
@@ -397,15 +425,15 @@ $("body").on("click","#cancel_appointment_confirmation",function(e)
 		 var ser='<div class="wrapper rounded6" id="templateContainer">'
 		         +'<div id="templateBody" class="bodyContent rounded6">'
 		         +'<h3 style="border-bottom: 1px solid #ddd;padding-bottom:8px;margin-bottom:15px;">'
-		         +'<img style="float: left" src='+appointment_success_img2+'><b style="margin-top: -2px;display: inline-block;margin-left: 9px;"><h3>Appointment Cancelled</h3></b></h3>'
-		         +'<div id="appointment">Your appointment with <b>'+domain_user_name+'</b> is cancelled.</div><br/>'
-		         +'<a  class="button" href="<%=calendar_url %>"> Schedule new appointment</a></div></div><br />';
+		         +'<img style="float: left" src='+appointment_success_img2+'><b style="margin-top: -2px;display: inline-block;margin-left: 9px;"><h3><%=LanguageUtil.getLocaleJSONValue(localeJSON, "cancelled-appointment")%></h3></b></h3>'
+		         +'<div id="appointment"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "your-appointment-with")%> <b>'+domain_user_name+'</b> <%=LanguageUtil.getLocaleJSONValue(localeJSON, "is-cancelled")%>.</div><br/>'
+		         +'<a  class="button" href="<%=calendar_url %>"> <%=LanguageUtil.getLocaleJSONValue(localeJSON, "schedule-new")%></a></div></div><br />';
 		 $("#templateContainer").html(ser);	
 		 
 			}, error : function(response)
 			{
 
-				alert("Something is wrong");
+				alert('<%=LanguageUtil.getLocaleJSONValue(localeJSON, "something-wrong")%>');
 			} });
 });
 </script>

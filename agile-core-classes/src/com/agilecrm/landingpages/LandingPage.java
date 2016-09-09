@@ -3,6 +3,8 @@ package com.agilecrm.landingpages;
 import javax.persistence.Id;
 import javax.persistence.PrePersist;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.condition.IfDefault;
@@ -15,10 +17,14 @@ public class LandingPage
 
     @NotSaved(IfDefault.class)
     public String name = null;
+    
+    @NotSaved(IfDefault.class)
+    public String dummy_name = null;
 
     @NotSaved(IfDefault.class)
     public String html = null;
     
+//    For site builder (v2.x) page_css data will be stored here
     @NotSaved(IfDefault.class)
     public String css = null;
     
@@ -40,6 +46,17 @@ public class LandingPage
     public Long created_time = 0L;
     
     public Long updated_time = 0L;
+
+    @NotSaved(IfDefault.class)
+    public float version = 0f;
+    
+//    For site builder (v2.x)
+    @NotSaved(IfDefault.class)
+    public String header_includes = null;
+
+//    For site builder (v2.x) blocks data will be stored here
+    @NotSaved(IfDefault.class)
+    public String blocks = null;
 
     public static ObjectifyGenericDao<LandingPage> dao = new ObjectifyGenericDao<LandingPage>(LandingPage.class);
 
@@ -74,6 +91,12 @@ public class LandingPage
 	@PrePersist
 	private void PrePersist()
 	{
+		
+		// Trim name and make dummy one to sore
+		if(StringUtils.isNotBlank(name)){
+			dummy_name = name.toLowerCase().trim();
+	    }
+		
 		// Initializes created Time
 		if (created_time == 0L)
 			created_time = System.currentTimeMillis() / 1000;

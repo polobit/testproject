@@ -100,10 +100,11 @@ $('#theme-and-layout').on('change', '.magicMenu input:radio', function(e){
 		var topBarClassName = $(this).attr("target-topbar-class");
 		
 		
-		$(".app-aside,#navbar,.navbar-header").removeClassPrefix("bg-").removeClass("dk").removeClass("dker").removeClass("b-r");
+		$(".app-aside,#navbar,.navbar-header, .grid_icon_center").removeClassPrefix("bg-").removeClass("dk").removeClass("dker").removeClass("b-r");
 		$(".app-aside").addClass(asideClassName);
 		$(".navbar-header").addClass(logoClassName);
 		$("#navbar").addClass(topBarClassName);
+		$(".grid_icon_center").addClass(topBarClassName);
 	});
 
 	

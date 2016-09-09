@@ -214,14 +214,15 @@ public class TriggerFutureHook implements Delegate<Environment>
 		{
 		    try
 		    {
-			Mailgun.sendMail(
-				"campaigns@agile.com",
-				"Remote API Observer",
-				"yaswanth@agilecrm.com",
-				"naresh@agilecrm.com",
-				null,
-				"Error in remote api. Namespace : " + NamespaceManager.get() + " Exception is \n "
-					+ e.getStackTrace(), null, "Hi Yaswanth " + "Retry in remote api failure", null);
+			//Mailgun account not having emails , so disabling following code
+//			Mailgun.sendMail(
+//				"campaigns@agile.com",
+//				"Remote API Observer",
+//				"yaswanth@agilecrm.com",
+//				"naresh@agilecrm.com",
+//				null,
+//				"Error in remote api. Namespace : " + NamespaceManager.get() + " Exception is \n "
+//					+ e.getStackTrace(), null, "Hi Yaswanth " + "Retry in remote api failure", null);
 		    }
 		    catch (Exception e1)
 		    {
@@ -240,10 +241,11 @@ public class TriggerFutureHook implements Delegate<Environment>
 			{
 			    try
 			    {
-				Mailgun.sendMail("campaigns@agile.com", "Remote API Observer", "yaswanth@agilecrm.com",
-					"naresh@agilecrm.com", null, "Error in remote api. Namespace : "
-						+ NamespaceManager.get() + " Exception is \n " + e.getStackTrace(),
-					null, "Hi Yaswanth " + "Retry in remote api", null);
+				//Mailgun account not having emails , so disabling following code
+//				Mailgun.sendMail("campaigns@agile.com", "Remote API Observer", "yaswanth@agilecrm.com",
+//					"naresh@agilecrm.com", null, "Error in remote api. Namespace : "
+//						+ NamespaceManager.get() + " Exception is \n " + e.getStackTrace(),
+//					null, "Hi Yaswanth " + "Retry in remote api", null);
 			    }
 			    catch (Exception e1)
 			    {

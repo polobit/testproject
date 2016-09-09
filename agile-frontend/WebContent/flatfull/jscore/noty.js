@@ -4,14 +4,14 @@ var Nagger_Noty;
 function showUpgradeNoty()
 {
 	if(!_billing_restriction.currentLimits.freePlan || agile_is_mobile_browser()){
-		$(".free-user-alert-message").hide();
+		$("#free_plan_alert_info").hide();
 		return;
 	}
 	if(Current_Route == "subscribe" || Current_Route == "subscribe-plan" || Current_Route == "purchase-plan")
 	{
-		$(".free-user-alert-message").hide();
+		$("#free_plan_alert_info").hide();
 	}else{
-		$(".free-user-alert-message").show();
+		$("#free_plan_alert_info").show();
 	}
 
 	// Returns if account if paid account

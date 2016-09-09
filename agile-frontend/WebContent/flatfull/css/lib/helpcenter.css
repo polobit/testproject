@@ -22,24 +22,20 @@
 /* Search box */
 .search-box {
 	margin: 0 auto 35px;
-	padding: 80px;
+	padding: 10px;
 	text-align: center;
-	background: #EBEBEB;
 	background-size: cover;
-	background-image: url("/flatfull/img/helpcenter.png");
 }
 
 .search-box .input-append {
 	padding: 0 20px;
 }
 
-.search-box h1 {
-	font-weight: bold;
-}
+
 
 .search-box h1,.search-box h3 {
-	padding: 0 0 15px;
-	color: #fff;
+	    padding: 43px 3px 30px;
+	
 }
 
 .search-box .input-append {
@@ -65,22 +61,20 @@ body,input,button,select,textarea {
 }
 
 .search-box input[name='hc_query'] {
-	border-radius: 8px 0 0 8px;
-	background: #fff;
 	font-size: 20px;
-	padding: 20px 30px;
+	padding: 20px 48px;
 	width: 500px;
 	line-height: 1em;
-	width: 550px;
+	height: 58px;
+	width: 760px;
 }
 
-.search-box input[type="submit"] {
-	font-size: 20px;
-	line-height: 1.4em;
-	border-radius: 0 8px 8px 0 !important;
-	padding: 19px 50px;
-	margin-left: -5px;
-	vertical-align: top;
+
+@-moz-document url-prefix() {
+    .search-box input[type="submit"]{
+        height: 64px !important;      
+
+    }
 }
 
 /* /.Search box */
@@ -519,3 +513,22 @@ body,input,button,select,textarea {
 .notes-list .note-body {
 	margin-top: 8px;
 }
+.sectionfont{
+	font-size: 13px;
+	color:#0072EF;
+}
+.categoriefont{
+	font-size: 14px;
+}
+.search-box .fa-search { 
+  position: absolute;
+    margin-top: 16px;
+    margin-left: 18px;
+    font-size: 23px;
+}
+.search-box1{
+	background:url(https://s3.amazonaws.com/agilecrm/landing/landing-page/images/intro-bg.jpg) no-repeat center center;
+	padding: 56px;
+	background-size: cover;
+}
+			        

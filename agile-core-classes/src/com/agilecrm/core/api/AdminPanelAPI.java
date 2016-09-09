@@ -25,6 +25,7 @@ import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.deals.util.OpportunityUtil;
 import com.agilecrm.document.util.DocumentUtil;
 import com.agilecrm.subscription.Subscription;
+import com.agilecrm.subscription.Subscription.BillingStatus;
 import com.agilecrm.subscription.SubscriptionUtil;
 import com.agilecrm.subscription.limits.cron.deferred.AccountLimitsRemainderDeferredTask;
 import com.agilecrm.subscription.restrictions.db.BillingRestriction;
@@ -629,4 +630,37 @@ public class AdminPanelAPI
 	}
     }
 
+    @Path("/get_subscription")
+    @GET
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public Subscription getSubscription(@QueryParam("d") String domainname){
+    	String oldNamespace = NamespaceManager.get();
+    	try{
+    	NamespaceManager.set(domainname);
+    	return SubscriptionUtil.getSubscription();
+    	}catch(Exception e){
+    		e.printStackTrace();
+    	}finally{
+    		NamespaceManager.set(oldNamespace);
+    	}
+    	return null;
+    }
+    
+    @Path("/release_user")
+    @POST
+    public void releaseUser(@QueryParam("d") String domainname){
+    	String oldNamespace = NamespaceManager.get();
+    	try{
+    	NamespaceManager.set(domainname);
+    	Subscription subscription = SubscriptionUtil.getSubscription();
+    	subscription.status = BillingStatus.BILLING_SUCCESS;
+    	subscription.save();
+    	}catch(Exception e){
+    		throw new WebApplicationException(Response
+					.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+					.build());
+    	}finally{
+    		NamespaceManager.set(oldNamespace);
+    	}
+    }
 }

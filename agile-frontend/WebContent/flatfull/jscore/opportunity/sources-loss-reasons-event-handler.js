@@ -320,7 +320,7 @@ var Sources_Loss_Reasons_Events_Collection_View = Base_Collection_View.extend({
 
         });
         if(flag){
-            $(this).attr("disabled","disabled");
+            $('.goalSave').attr("disabled","disabled");
             $('.Count_goal').text(0);
             $('.Amount_goal').text(0);
             $.ajax({ type : 'POST', url : '/core/api/goals', data : JSON.stringify(goals_json),
@@ -333,7 +333,7 @@ var Sources_Loss_Reasons_Events_Collection_View = Base_Collection_View.extend({
                     $("#deal-sources-table").find("tr").not(':first').each(function(index){
                         var that=$(this);
                         $.each(e,function(index,jsond){
-                            if(jsond.domain_user_id==that.find('div').attr('id')){
+                            if(jsond.domain_user_id==that.find('.goalid').attr('id')){
                                 that.attr('id',jsond.id);
                                 that.attr('data',jsond.start_time);
 
@@ -345,7 +345,7 @@ var Sources_Loss_Reasons_Events_Collection_View = Base_Collection_View.extend({
                             amount=amount+parseFloat(that.find('.amount').val());
                     });
                     percentCountAndAmount(count,amount);
-                    $save_info = $('<div style="display:inline-block"><small><p class="text-info"><i>Changes Saved</i></p></small></div>');
+                    $save_info = $('<div style="display:inline-block"><small><p class="text-info"><i>{{agile_lng_translate "deals" "changes-saved"}}</i></p></small></div>');
 
                     $('.Goals_message').html($save_info);
 
@@ -354,7 +354,7 @@ var Sources_Loss_Reasons_Events_Collection_View = Base_Collection_View.extend({
                     setTimeout(function()
                     {
                         $('.Goals_message').empty();
-                        that.removeAttr("disabled");
+                        $('.goalSave').removeAttr("disabled");
                     }, 500);
             
                 }

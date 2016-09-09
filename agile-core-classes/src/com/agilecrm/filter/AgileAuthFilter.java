@@ -80,7 +80,7 @@ public class AgileAuthFilter implements Filter
 
 	// If no sessions are there, redirect to login page
 
-	if (httpRequest.getSession(false) == null)
+	if (!VersioningUtil.isDevelopmentEnv() && httpRequest.getSession(false) == null)
 	{
 	    redirectToLogin(httpRequest, httpResponse);
 	    return;

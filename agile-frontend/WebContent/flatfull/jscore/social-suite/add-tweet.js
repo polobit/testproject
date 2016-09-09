@@ -40,7 +40,7 @@ function rebuildTweet(modelStream, tweet)
 	{
 		tweet["msg_type"] = "NoTweet";
 		tweet["show"] = true;
-		tweet.text = "No Tweets to show here.";
+		tweet.text = "{{agile_lng_translate 'socialsuite' 'no-tweet-show'}}";
 	}
 	else if (tweet.type == "ACK")
 	{
@@ -134,7 +134,8 @@ function addTweetToStream(tweet, modelStream)
 	modelStream.get('tweetListView').sort();
 
 	// Create normal time.
-	displayTimeAgo($(".chirp-container"));
+	
+	($(".chirp-container"));
 }
 
 /**

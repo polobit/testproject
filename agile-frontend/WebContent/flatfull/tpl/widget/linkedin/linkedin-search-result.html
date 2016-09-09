@@ -1,9 +1,9 @@
 <script id="linkedin-search-result-template" type="text/html">
 <div style="padding:10px" id="linkedin-search">
 {{#if_equals this.keywords ""}}
-<p class="a-dotted">Search results. <a href="#" class="linkedin_modify_search">Modify search</a></p>
+<p class="a-dotted">{{agile_lng_translate 'contact-details' 'search-results'}} <a href="#" class="linkedin_modify_search">{{agile_lng_translate 'widjets' 'modify-search'}}</a></p>
 {{else}}
-<p class="a-dotted">Search results for <a href="#" class="linkedin_modify_search">{{this.keywords}}</a></p>
+<p class="a-dotted">{{agile_lng_translate 'contact-details' 'search-results-for'}} <a href="#" class="linkedin_modify_search">{{this.keywords}}</a></p>
 {{/if_equals}}
 {{#each this.search_results}}
 {{#if picture}}
@@ -17,7 +17,7 @@
             </div>
             <div class='span8'>
                <b style='color:#069;font-size:14px;'>{{name}}</b><span class='badge badge-info pull-right'>{{distance}}</span> 
-			   <p>{{location}}<br/>{{#if_equals num_connections "500"}}{{num_connections}}+ connections{{else}}{{num_connections}} connections{{/if_equals}}</p>
+			   <p>{{location}}<br/>{{#if_equals num_connections "500"}}{{num_connections}}+ {{agile_lng_translate 'widjets' 'connetions'}}{{else}}{{num_connections}} {{agile_lng_translate 'widjets' 'connetions'}}{{/if_equals}}</p>
             </div>		
       </div>
 	  <div  class='row-fluid' style='padding-bottom:10px;word-wrap: break-word;'>
@@ -35,7 +35,7 @@
             </div>
             <div class='span8'>
                <b style='color:#069;font-size:14px;'>{{name}}</b><span class='badge badge-info pull-right'>{{distance}}</span>
-			   <p>{{location}}<br/>{{num_connections}} Connections</p>
+			   <p>{{location}}<br/>{{num_connections}} {{agile_lng_translate 'widjets' 'connetions'}}</p>
             </div>		
       </div>
 	  <div  class='row-fluid' style='padding-bottom:10px;word-wrap: break-word;'>

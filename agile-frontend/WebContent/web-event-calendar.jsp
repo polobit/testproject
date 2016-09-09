@@ -1,3 +1,5 @@
+<%@page import="com.agilecrm.util.language.LanguageUtil"%>
+<%@page import="org.jsoup.Jsoup"%>
 <%@page import="com.agilecrm.util.VersioningUtil"%>
 <%@page import="com.agilecrm.account.util.AccountPrefsUtil"%>
 <%@page import="com.agilecrm.account.AccountPrefs"%>
@@ -26,6 +28,12 @@
 <%@page import="java.util.Arrays"%>
 
 <%
+
+// User Language 
+String _LANGUAGE = "en", _LANGUAGE_USER = "en";
+
+// Locales JSON
+JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "online-calendar");
 /**
  * checks for team calendar or individual calendar. gets required details to process 
  *a request and keeps them in global variable to avoid multiple queries to db.
@@ -59,7 +67,10 @@ String domain_name=null;
 Long user_id = 0L;
 Long agile_user_id = 0L;
 String meeting_durations=null;
-String welcome_title="<p class='lead' style='color: #777;font-size: 19px;font-weight:normal'>Welcome to our scheduling page. Please follow the instructions to book an appointment.</p>";
+
+// Welcome message
+String welcomeMessage = LanguageUtil.getLocaleJSONValue(localeJSON, "welcome-message-bulk");
+String welcome_title="<p class='lead' style='color: #777;font-size: 19px;font-weight:normal'>" + welcomeMessage + "</p>";
 String baseUrl=VersioningUtil.getStaticFilesBaseURL();
 
 
@@ -79,26 +90,32 @@ else{
 
 //if schedule id contains , it is team calendar
 //if team calendar then we don't consider available meeting slots
-System.out.println("scheduleid in agile-frontend :: "+scheduleid);
+System.out.println("scheduleid :: "+scheduleid);
 if(scheduleid.contains(",")){
     multiple_users=true; slots_array=null;
     List<String> list=WebCalendarEventUtil.removeDuplicateScheduleIds(scheduleid);
  String _multiple_schedule_ids[]=list.toArray(new String[list.size()]);
  for(int i=0;i<=_multiple_schedule_ids.length-1;i++){
-     System.out.println(_multiple_schedule_ids[i]+"  schedule id");
+     System.out.println(_multiple_schedule_ids[i]+"  schedule d");
      OnlineCalendarPrefs online_prefs=null;
       online_prefs=OnlineCalendarUtil.getOnlineCalendarPrefs(_multiple_schedule_ids[i]);
       System.out.println("online_prefs ::: "+online_prefs);
       if(online_prefs==null)
     	  continue;
 	  
+      System.out.println("In agile-calendar -- web-event-calendar.jsp");
+      
+	  //DomainUser _domain_user= DomainUserUtil.getDomainUser(OnlineCalendarUtil.getDomainUserID(online_prefs));
       Long domainUserId = OnlineCalendarUtil.getDomainUserID(online_prefs);
+      DomainUser _domain_user= null;
       if(domainUserId==null){
 	      domainUserId = 0L; 
+      }else{
+	   	_domain_user= DomainUserUtil.getDomainUser(domainUserId);
       }
     	System.out.println("domainUserId :: "+domainUserId);
-	  DomainUser _domain_user= DomainUserUtil.getDomainUser(domainUserId);
     	System.out.println("_domain_user :: "+_domain_user);
+
 	    if(_domain_user!=null){
 		AgileUser agile_user=AgileUser.getCurrentAgileUserFromDomainUser(_domain_user.id);
 		 if(agile_user==null)
@@ -116,6 +133,7 @@ if(scheduleid.contains(",")){
 	}
 
 		}
+
  System.out.println("Here we are");
 		//if multiple schedule ids were given in url but no matching found
 		if (_multiple_users.size() == 1)
@@ -157,14 +175,21 @@ if(scheduleid.contains(",")){
 	   }
 
 	UserPrefs userPrefs = UserPrefsUtil.getUserPrefs(agileUser);
+	//System.out.println("userPrefs " + userPrefs.pic);
 	System.out.println("userPrefs " + userPrefs);
-	if(userPrefs!=null)
+	if(userPrefs!=null){
 	profile_pic = userPrefs.pic;
+	_LANGUAGE_USER = userPrefs.language;
+	}
+	
 	user_name = domainUser.name;
 	user_id = domainUser.id;
 	agile_user_id = agileUser.id;
 	domain_name = domainUser.domain;
+
+	if(userPrefs!=null && !userPrefs.calendar_wk_start_day.equals(""))
 	calendar_wk_start_day = Integer.parseInt(userPrefs.calendar_wk_start_day);
+	
 	if (online_prefs == null)
 	{
 		meeting_durations = domainUser.meeting_durations;
@@ -196,6 +221,13 @@ if(scheduleid.contains(",")){
 	}
 
 	ObjectMapper mapper = new ObjectMapper();
+	if(!StringUtils.equals(_LANGUAGE, _LANGUAGE_USER)){
+		_LANGUAGE = _LANGUAGE_USER;
+		localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "online-calendar");
+	}
+
+	// Page title
+	String _page_title = LanguageUtil.getLocaleJSONValue(localeJSON, "online-appointment-scheduling");
 %>
 <!DOCTYPE html>
 <%@page import="com.google.appengine.api.utils.SystemProperty"%>
@@ -204,11 +236,11 @@ if(scheduleid.contains(",")){
 <head>
 <% 
 if (scheduleid != null && multiple_users){  %>
-<title>Online Appointment Scheduling - <%=scheduleid %></title>
+<title><%=_page_title%> - <%=scheduleid %></title>
 <%
 } else {
  %>
-<title>Online Appointment Scheduling - <%=user_name %></title>
+<title><%=_page_title%> - <%=user_name %></title>
 <%
 } 
 %>
@@ -217,9 +249,10 @@ if (scheduleid != null && multiple_users){  %>
 <link rel="stylesheet" type="text/css" href="<%=baseUrl%>css/agile-css-framework.css?_=<%=_AGILE_VERSION%>">
 <!-- <link rel="stylesheet" href="../../css/web-calendar-event/font-awesome.min.css"> -->
 <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css">
+<link href='https://fonts.googleapis.com/css?family=Lato:400,300' rel='stylesheet' type='text/css'>
 
-<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jstimezonedetect/1.0.4/jstz.min.js" ></script>
-<script type="text/javascript" src="../../lib/web-calendar-event/jquery.js"></script>
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jstimezonedetect/1.0.4/jstz.min.js" >   </script>
+<script type="text/javascript" src="../../lib/web-calendar-event/jquery.js?_"></script>
 <script type="text/javascript" src="../../lib/jquery.validate.min.js"></script>
 <script type="text/javascript" src="../../lib/date-formatter.js"></script>
 <script type="text/javascript" src="../../lib/web-calendar-event/moment.min.js"></script>
@@ -237,6 +270,13 @@ if (scheduleid != null && multiple_users){  %>
 <script type="text/javascript" src="../../jscore/web-calendar-event/time.js?_=<%=_AGILE_VERSION%>"></script>
 <script type="text/javascript" src="../../jscore/web-calendar-event/util.js?_=<%=_AGILE_VERSION%>"></script>
 <script type="text/javascript" src="../../jscore/web-calendar-event/ui.js?_=<%=_AGILE_VERSION%>"></script>
+<script type="text/javascript" src="../../locales/locales/<%=_LANGUAGE%>/localize.js?_=<%=_AGILE_VERSION%>"></script>
+
+<style type="text/css">
+* {
+	font-family: 'Lato', sans-serif;
+}
+</style>
 </head>
 
 <body onload="bodyLoad();">
@@ -249,28 +289,42 @@ if (scheduleid != null && multiple_users){  %>
 		<img src="<%=profile_pic%>" id="avatar" class="thumbnail" title="<%=user_name%>"/>
 	<div class="text-center"><%=welcome_title%></div>
 <%}else{ %>
-<p class="lead" style="color: #777;font-size: 19px;text-align: center;font-weight:normal"> Welcome to our scheduling page. Please follow the instructions to book an appointment.</p>
+<p class="lead" style="color: #777;font-size: 19px;text-align: center;font-weight:normal"> 
+	<%=welcomeMessage%>
+</p>
 			<div class="col-sm-10 segment segment0">
 			<div class="numberlt" id="users_div">1</div>
-			<div class="event-title">Select a Person</div>
+			<div class="event-title" style="font-weight:normal"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "select-a-person")%></div>
 			<div class="row user_avatars hide">
 		
 			<!-- <div align="center" style="margin: 5px auto;width: 100%;"> -->
-			<% for(int k=0;k<=profile_list.size()-1;k++){
+			<% 
+				List<String> list=WebCalendarEventUtil.removeDuplicateScheduleIds(scheduleid);
+           		String _multiple_schedule_ids[]=list.toArray(new String[list.size()]);
+				for(int k=0;k<=profile_list.size()-1;k++){
+				 System.out.println(_multiple_schedule_ids[k]+"  schedule id");
+                 OnlineCalendarPrefs online_prefs = OnlineCalendarUtil.getOnlineCalendarPrefs(_multiple_schedule_ids[k]);
 				 List<String> pro_pic=profile_list.get(k);
 				 String pr_pic=pro_pic.get(0);
 				 String pr_name=pro_pic.get(1);
 				 String workHours=pro_pic.get(2);
 				 String timezone=pro_pic.get(3);
-				 String domain_user_id=pro_pic.get(4); 
+				 String domain_user_id=pro_pic.get(4);
+				 String custom_message = "";
+				 if(online_prefs!=null)
+					 custom_message = online_prefs.user_calendar_title;
+				 
+				 custom_message = Jsoup.parse(custom_message).text();
+				 if(custom_message == null)
+					 custom_message = LanguageUtil.getLocaleJSONValue(localeJSON, "welcome-message-single"); 
 		   %>
 		   <div class="fluidClass col-xs-12 text-center">
-		   <div style="display: inline-block;width: 150px;margin-right: 5px;">
-		   <img src="<%=pr_pic%>" id="multi-user-avatar" class="thumbnail" style="cursor:pointer;" data="<%=domain_user_id%>" data-toggle="tooltip" data-placement="bottom" title="<%=pr_name%>"/>
-		<span id="user_name" style="display:block;white-space: nowrap;text-overflow: ellipsis;overflow: hidden;width: 100%;font-size:16px;" title="<%=pr_name %>"><%=pr_name %>&nbsp;&nbsp;&nbsp;</span>
-		<span id="workhours-<%= domain_user_id%>" style="display:inline-block;color:#8E8F8F;font-size:16px;" title="Working Hours"><%="<script>document.write(getTimeInVisitorTimezoneWhileLoading('"+workHours+"','"+timezone+"'));</script>"%></span>
-		<span class="user_in_visitor_timezone" style="color:#8E8F8F;font-size:16px;" title="Timezone"><%="<script>document.write(getVisitorWhileLoading());</script>"%></span>
-		<span id="timezone-<%= domain_user_id%>" style="display:none;color:#8E8F8F;font-size:16px;" title="Timezone"><%=timezone %></span>
+		   <div style="display: inline-block;width: 160px;margin-right: 5px;">
+		   <img src="<%=pr_pic%>" id="multi-user-avatar" data-toggle="tooltip" data-placement="bottom" class="thumbnail" style="cursor:pointer;" data="<%=domain_user_id%>" title='<%=custom_message%>'/>
+		<span id="user_name" style="display:block;white-space: nowrap;text-overflow: ellipsis;overflow: hidden;width: 100%;font-size:16px;" ><%=pr_name %>&nbsp;&nbsp;&nbsp;</span>
+		<span id="workhours-<%= domain_user_id%>" style="display:inline-block;color:#8E8F8F;font-size:14px;" ><%="<script>document.write(getTimeInVisitorTimezoneWhileLoading('"+workHours+"','"+timezone+"'));</script>"%></span>
+		<span class="user_in_visitor_timezone" style="color:#8E8F8F;font-size:14px;" ><%="<script>document.write(getVisitorWhileLoading());</script>"%></span>
+		<span id="timezone-<%= domain_user_id%>" style="display:none;color:#8E8F8F;font-size:16px;" ><%=timezone %></span>
 		</div>
 		</div>
 		
@@ -282,7 +336,7 @@ if (scheduleid != null && multiple_users){  %>
 <%} %>
 		<div class="col-sm-10 segment segment1 blockdiv" >
 			<div class="numberlt" id="one">1</div>
-			<div class="event-title">Choose a Time Slot</div>
+			<div class="event-title" style="font-weight:normal;"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "choose-time-slot")%></div>
 
 		</div>
 
@@ -292,9 +346,10 @@ if (scheduleid != null && multiple_users){  %>
 				<div class="col-sm-10 segment segment2 me-disable "
 					style="display: table;display:none">
 					<div class="numberlt" id="two">2</div>
-					<div class="event-title" style="margin-bottom:7px;">
-						<span class="pull-left">Select Date and Time</span>
-						<span class="timezone">												<select name="user_timezone" class="form-control" id="user_timezone" >
+					<div class="event-title" style="margin-bottom:4px;margin-top:2px;font-weight:normal;">
+						<span class="pull-left"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "select-date-time")%></span>
+						<span class="timezone ">											<span id="base_timezone"class="font-normal"></span>
+								<select name="user_timezone" class="form-control hidden m-b-none m-t-n-sm" style="font-weight:normal;height:32px;" id="user_timezone">
                                 	<optgroup label="US/Canada">
 										<option value="US/Arizona">US/Arizona</option>
 										<option value="US/Alaska">US/Alaska</option>
@@ -1103,7 +1158,7 @@ if (scheduleid != null && multiple_users){  %>
 						<div id="datepick" style="height:215px;"></div>
 					</div>
 					<div class="col-md-8 col-sm-12 col-xs-12">
-						<p class="availability">Availability on</p>
+						<p class="availability"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "on-availability")%></p>
 						<ul class="checkbox-main-grid">
 
 						</ul>
@@ -1116,18 +1171,18 @@ if (scheduleid != null && multiple_users){  %>
 				<div class="col-sm-10 segment segment3 me-disable" style="display:none">
 
 					<div class="numberlt" id="three">3</div>
-					<div class="event-title" style="margin-bottom:20;margin-top: 5px;">
-						Contact Info</div>
+					<div class="event-title" style="margin-bottom:20;margin-top: 5px;font-weight:normal">
+						<%=LanguageUtil.getLocaleJSONValue(localeJSON, "contact-info")%></div>
 
 					<div class="col-sm-4">
 						<input type="text" id="userName" name="userName"
-							placeholder="Name" class="required me-disable"
+							placeholder='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "name")%>' class="required me-disable"
 							disabled="disabled" /> <input type="text" id="email"
-							name="email" placeholder="Email" class="required me-disable"
+							name="email" placeholder='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "email")%>' class="required me-disable"
 							disabled="disabled" /> 
 							<%if(StringUtils.isNotEmpty(meeting_types)&& !multiple_users){ %>
 							<select class="form-control meetingtypes" style="border: 1px solid #74B9EF;height:37px" title='Meeting Type' name="phoneNumber" id="phoneNumber">
-							 <option selected disabled>Meeting Type</option>
+							 <option selected disabled><%=LanguageUtil.getLocaleJSONValue(localeJSON, "meeting-type")%></option>
 	<%String []str=meeting_types.split(",");
 	for(int i=0;i<=str.length-1;i++){%>
 		<option value=<%=mapper.writeValueAsString(str[i])%>><%=str[i]%></option>
@@ -1145,19 +1200,19 @@ if (scheduleid != null && multiple_users){  %>
 						<div class="clearfix"></div>
 						<input type="checkbox" id="confirmation" name="confirmation"  checked
 							class="me-disable" disabled="disabled" style="margin-top: 10px;" /> <label
-							style="margin-top: 7px;" for="confirmation" >Send me a confirmation email</label>
+							style="margin-top: 7px;" for="confirmation" ><%=LanguageUtil.getLocaleJSONValue(localeJSON, "sendconfirmation")%></label>
 					</div>
 
 					<div class="col-sm-8">
 						<textarea class="inputtext me-disable" rows="7" cols="90"
-							id="notes" name="notes" placeholder="Notes (Phone number/Skype details)" disabled="disabled"></textarea>
+							id="notes" name="notes" placeholder='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "user-phone-details")%>' disabled="disabled"></textarea>
 					</div>
 					<div class="clearfix"></div>
 				</div>
 
 			</fieldset>
 <div align="center" style="margin:0 auto;width:105px;">
-			<input type="submit" value="Confirm" id="confirm" class="me-disable" style="display:none"
+			<input type="submit" value='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "confirm")%>' id="confirm" class="me-disable" style="display:none"
 				disabled="disabled" />
 				</div>
 		</form>
@@ -1188,6 +1243,7 @@ var single_user_mapobject=<%=single_user_map_object%>;
 var CURRENT_DAY_OPERATION=null;
 var MEETING_DURATION_AND_NAMES=null;
 var BUFFERTIME=null;
+var LOCALES_JSON = <%=localeJSON%>;
  </script>
 
 	<script type="text/javascript">
@@ -1199,10 +1255,13 @@ var BUFFERTIME=null;
 
 		$(document).ready(
 
+
 				function()
 				{
+					
 					//$('img#multi-user-avatar').tooltip();
 					$("img#multi-user-avatar").tooltip({placement:'bottom'});
+					
 					if(User_Id == 0 && !multiple_schedule_ids )
 						return;
 					if(multiple_schedule_ids){
@@ -1228,7 +1287,9 @@ var BUFFERTIME=null;
 					// Initialize date picker
 					$('#datepick').DatePicker({ flat : true, date : [
 							'2014-07-6', '2016-07-28'
-					], current : '' + currentDate, format : 'Y-m-d', calendars : 1,starts: CALENDAR_WEEK_START_DAY, mode : 'single', view : 'days', onRender: function(date) {
+					], current : '' + currentDate, format : 'Y-m-d', calendars : 1,starts: CALENDAR_WEEK_START_DAY, mode : 'single', view : 'days', 
+					locale: $.fn.datepicker.dates['en'],
+					onRender: function(date) {
 						return {
 							disabled: (date.valueOf() < Date.now()-ms),
 							className: date.valueOf() < Date.now()-ms ? 'datepickerNotInMonth' : false
@@ -1272,14 +1333,15 @@ var BUFFERTIME=null;
 
 								// Specify the validation error messages
 								messages : {
-									userName : { required : "Please specify your name", minlength : jQuery.format("At least {0} characters required!") },
-									email : { required : "We need your email address to contact you",
-										email : "Your email address must be in the format of name@domain.com" } },
+									userName : { required : LOCALES_JSON['name-validation'], minlength : jQuery.format(LOCALES_JSON['minlength']) },
+									email : { required : LOCALES_JSON['email-validation'],
+										email : LOCALES_JSON['email-format'] } },
 
 								submitHandler : function(form)
 								{
 									form.submit();
 								} });
+  
 				});
 
 		function bodyLoad()
@@ -1292,6 +1354,12 @@ var BUFFERTIME=null;
 	            }
 			SELECTED_TIMEZONE=jstz.determine().name();			
 			$('#user_timezone').val(SELECTED_TIMEZONE);
+			$('#base_timezone').html(SELECTED_TIMEZONE);
+			$('#base_timezone').click(function()
+			{
+				$('#base_timezone').addClass('hidden');
+				$('#user_timezone').removeClass('hidden');
+			});
 			$("#current_local_time").html("Current Time: "+getConvertedTimeFromEpoch(new Date().getTime()/1000) );
 			console.log("bodyonlod  : " + Selected_Date);
 		
@@ -1308,6 +1376,8 @@ var BUFFERTIME=null;
 	</script>
 	<script src="//static.getclicky.com/js" type="text/javascript"></script>
 <script type="text/javascript">try{ clicky.init(100783726); }catch(e){}</script>
+<script type="text/javascript" src="https://mctest.agilecrm.com/stats/min/agile-min.js"></script>
+<script type="text/javascript">_agile.set_account('fl5qv213433bpc32l2kbfe80s0','our');_agile.track_page_view();_agile_execute_web_rules();</script>
 </body>
 
 </html>

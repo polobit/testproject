@@ -151,6 +151,7 @@ public class PHPAPI
     {
 	try
 	{
+	    System.out.println("Input data received = " + data + "Id = " + apiKey);
 	    Contact contact = new Contact();
 	    List<ContactField> properties = new ArrayList<ContactField>();
 	    String[] tags = new String[0];
@@ -270,6 +271,7 @@ public class PHPAPI
     @Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8;")
     public String addNote(String data)
     {
+	System.out.println("Input data received = " + data);
 	try
 	{
 	    Note note = new Note();
@@ -322,6 +324,7 @@ public class PHPAPI
     @Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8;")
     public String addTask(String data, @QueryParam("id") String apikey)
     {
+	System.out.println("Input data received = " + data + "Id = " + apikey);
 	try
 	{
 	    Contact contact = new Contact();
@@ -378,6 +381,7 @@ public class PHPAPI
     @Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8;")
     public String addDeal(String data, @QueryParam("id") String apikey)
     {
+	System.out.println("Input data received = " + data + "Id = " + apikey);
 	try
 	{
 	    Contact contact = new Contact();
@@ -432,6 +436,7 @@ public class PHPAPI
     @Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8;")
     public String addTags(String data)
     {
+	System.out.println("Input data received = " + data);
 	try
 	{
 	    Contact contact = new Contact();
@@ -495,6 +500,7 @@ public class PHPAPI
     @Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8;")
     public String removeTags(String data)
     {
+	System.out.println("Input data received = " + data);
 	try
 	{
 	    Contact contact = new Contact();
@@ -547,6 +553,7 @@ public class PHPAPI
     @Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8;")
     public String updateScore(String data)
     {
+	System.out.println("Input data received = " + data);
 	try
 	{
 	    // Get data and iterate
@@ -597,6 +604,7 @@ public class PHPAPI
     @Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8;")
     public String getTags(@QueryParam("email") String email)
     {
+	System.out.println("Input data received = " + email);
 	try
 	{
 	    // Search contact by email
@@ -814,6 +822,7 @@ public class PHPAPI
     @Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8;")
     public String updateContact(String data, @QueryParam("id") String apiKey)
     {
+	System.out.println("Input data received = " + data + "Id = " + apiKey);
 	try
 	{
 	    // Get data and check if email is present

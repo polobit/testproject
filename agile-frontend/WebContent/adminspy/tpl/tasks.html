@@ -1,0 +1,93 @@
+<script id="contact-tasks-collection-template" type="text/html">
+		{{#unless this.length}}
+        <div class="wrapper p-t-none">
+            <div class="slate-content mobile-pad-content">
+                <div class="box-left pull-left m-r-md">
+                    <img style="margin-top: -13px;" alt="Clipboard" src="images/clipboard.png" />
+                </div>
+                <div class="box-right pull-left">
+                    <h4 class="m-t-none">No tasks.</h4>
+                    <div class="text">
+                        You can add a task related to a contact for calling, email, follow-up etc.
+                    </div>
+                    
+                </div>
+				<div class="clearfix">
+				</div>
+            </div>
+        </div>
+        {{/unless}}
+        {{#if this.length}}
+	
+			<ul id="contact-tasks-model-list" class="ativity-block-ul list-group list-group-lg no-radius m-b-none m-t-n-xxs" url="core/api/notes/bulk"></ul>
+		{{/if}} 
+</script>
+
+
+<script id="contact-tasks-model-template" type="text/html">
+<div class="activity block pos-rlt">
+	{{#if is_complete}}
+		<div>
+	{{else}}
+		<div>
+	{{/if}}	
+	<div class="activity-block-owner thumb-xs pull-right avatar">
+		{{#if taskOwner}}
+			<img class="user-img r r-2x" alt="" src="{{taskOwner.pic}}" >
+			
+		{{else}}
+			<img class="user-img r r-2x" src="{{defaultGravatarurl 40}}">
+		{{/if}}
+	</div>
+<span class="hidden">{{taskOwner.name}}</span>
+<div class="pull-left rightThumbView">
+<div class="pull-left  text-md text-cap {{#is_mobile}} w-full {{/is_mobile}}">
+    {{#if is_complete}}
+			<div>{{#is_mobile}} {{else}}<span><i class="fa fa-check"></i></span>{{/is_mobile}}<div class="pull-left task-subject {{#is_mobile}} block text-ellipsis w-full m-l-none {{else}} inline m-l-sm {{/is_mobile}} text-l-t" ><a  href="#task/{{id}}" style="{{#value_check_with_boolean is_complete}}text-decoration : line-through{{/value_check_with_boolean}}" class="pull-left space-normal">{{subject}}</a></div>{{#if_equals priority_type "NORMAL"}}{{else}}
+					<span class="label hidden label-{{task_label_color priority_type}}">{{ucfirst priority_type}}</span>{{/if_equals}}
+                   <span {{#is_mobile}} class="block" {{/is_mobile}}><label class="label bg-light text-tiny" style="line-height: 20px;margin-left: 2px;"><!-- <i class="fa {{icons type}} hide"></i>&nbsp; -->{{ucfirst type}}</label></span>
+				</div>
+		{{else}}
+			<div> {{#is_mobile}} {{else}}<label class="pull-left i-checks i-checks-sm"><input data="{{id}}" class="complete-task form-control" type="checkbox"/><i style="margin-top:3px;"></i></label>{{/is_mobile}}<div class="pull-left task-subject {{#is_mobile}} block text-ellipsis w-full {{else}} inline {{/is_mobile}}" ><a class="space-normal" href="#task/{{id}}" style="{{#value_check_with_boolean is_complete}}text-decoration : line-through{{/value_check_with_boolean}}">{{subject}}</a></div>{{#if_equals priority_type "NORMAL"}}{{else}}
+					<span class="label hidden label-{{task_label_color priority_type}}">{{ucfirst priority_type}}</span>{{/if_equals}}
+                    <span {{#is_mobile}} class="block" {{/is_mobile}}><label class="label bg-light text-tiny" style="line-height: 20px;margin-left: 2px;"><!-- <i class="fa {{icons type}}"></i>&nbsp; -->{{ucfirst type}}</label></span>
+				</div>
+	{{/if}}
+</div>
+    
+     <div class="clearfix"></div>
+ 
+	<div><span class="{{#is_mobile}} {{else}} m-l-md p-l-xs {{/is_mobile}}">Due : <i class="fa fa-clock-o m-r-xs hide"></i><time class="task-created-time" datetime="{{epochToHumanDate "" due}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" due}}</span></div>
+    <div class="{{#is_mobile}} {{else}} m-l-md p-l-xs {{/is_mobile}}">	
+		{{#each contacts}}
+           	{{#if id}}
+				{{#isDuplicateContactProperty properties "email"}}
+
+					{{else}}
+						{{#if_contact_type "PERSON"}}	
+							<a  href="#contact/{{id}}" >{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</a>{{#if @last}}{{else}},{{/if}}
+        				{{/if_contact_type}}
+						{{#if_contact_type "COMPANY"}}
+        					<a  href="#company/{{id}}">{{getPropertyValue properties "name"}}</a>{{#if @last}}{{else}},{{/if}}
+        				{{/if_contact_type}}
+				{{/isDuplicateContactProperty}}
+           		
+           	{{/if}}
+       	{{/each}}
+		</div>
+		</div>
+		<div class="clearfix"></div>
+ <div class="pull-left">
+     <small class="edit-hover text-muted {{#is_mobile}} {{else}} m-l-md p-l-xs {{/is_mobile}}"> 
+          <i class="fa fa-clock-o m-r-xs"></i>
+			<time class="task-created-time" datetime="{{epochToHumanDate "" created_time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created_time}}</time>
+		</small>
+     </div>
+
+<div class="clearfix"></div>
+
+ 
+</div>
+</div>
+<div class="priority_type hidden">{{priority_type}}</div>
+</script>

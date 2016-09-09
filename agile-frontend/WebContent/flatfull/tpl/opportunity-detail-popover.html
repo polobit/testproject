@@ -7,8 +7,8 @@
             </div>
             
             <div class="m-xs">
-                <div><b>Owner : </b>{{owner.name}}</div>
-                {{#if contacts}}<p><b>Related To : </b></p>{{/if}}
+                <div><b>{{agile_lng_translate 'contact-details' 'owner'}} : </b>{{owner.name}}</div>
+                {{#if contacts}}<p><b>{{agile_lng_translate 'deal-view' 'related-to'}} </b></p>{{/if}}
                 <div>
 				{{#each contacts}}
                 	<div class="inline-block m-xs">

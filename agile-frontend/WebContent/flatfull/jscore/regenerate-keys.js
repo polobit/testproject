@@ -108,6 +108,16 @@ $("#js-security_accordian").on('click', function(e) {
        
     });
 
+$("#sso-login_accordian").on('click', function(e) {
+        e.preventDefault();
+        if($("#sso-login-accordian-template").html() != "")
+            return;
+        setTimeout(function(){
+             App_Admin_Settings.ssoLoginSettings();
+        },500)
+       
+    });
+
     $(".allowed-domain-delete").off('click');
     $(".allowed-domain-delete").on('click', function(e) {
         e.preventDefault();

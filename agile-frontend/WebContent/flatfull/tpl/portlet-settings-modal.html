@@ -1,16 +1,96 @@
+<script id="portlets-contact-filter-options-template" type="text/html">
+   <option value="">{{agile_lng_translate 'contacts-view' 'select'}}</option>
+   {{#if_equals existed_filter "contacts"}}
+            <option selected='selected' value='contacts'>{{agile_lng_translate 'portlets' 'all-contacts'}}
+            </option>
+        {{else}}
+        	<option value='contacts'>{{agile_lng_translate 'portlets' 'all-contacts'}}</option>
+   {{/if_equals}}
+   {{#if_equals existed_filter "myContacts"}}
+            <option selected='selected' value='myContacts'>{{agile_lng_translate 'portlets' 'my-contacts'}}
+            </option>
+        {{else}}
+        	<option value='myContacts'>{{agile_lng_translate 'portlets' 'my-contacts'}}</option>
+   {{/if_equals}}
+
+   {{#each data}}
+        <option {{#if_equals id existed_filter}} selected='selected' {{/if_equals}} value="{{id}}">{{this.name}}</option>
+   {{/each}}
+</script>
+<script id="portlets-contacts-growthGraph-Settings-tags-template" type="text/html">
+{{#each this}}
+   {{#if this}}
+        <li data='{{this}}' class='tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block'>
+        	{{this}}<a id='remove_tag' class='close m-l-xs'>&times</a>
+        </li>
+   {{/if}}
+{{/each}}
+</script>
+
+<script id="portletsPendingDealsSettingsModal-tracks-template" type="text/html">
+
+    <option value="anyTrack" {{#if_equals track "anyTrack"}} selected="selected" {{/if_equals}}>{{agile_lng_translate 'portlets' 'any'}}</option>
+
+    {{#each data}}	
+         <option value='{{id}}' {{#if_equals track "anyTrack"}} selected="selected" {{/if_equals}}>{{agile_lng_translate 'portlets' 'name'}}
+             </option>
+    {{/each}}	
+  
+</script>
+
+<script id="portletsPendingDealsSettingsModal-milestones-template" type="text/html">
+    <option value="anyMilestone">{{agile_lng_translate 'portlets' 'any'}}</option>
+    {{#each milestonesList}}
+         {{#if_not_equals this ../lost}}
+         	{{#if_not_equals this ../won}}
+                <option value="{{this}}">{{milestone}}</option>
+                {{else}}
+                     {{#if_not_equals this "Won"}}
+                     		{{#if_not_equals this "Lost"}}
+                     		     <option value="{{this}}">{{milestone}}</option>
+                     		{{/if_not_equals}}
+                     {{/if_not_equals}}
+         	{{/if_not_equals}}
+           {{else}}
+       			 {{#if_not_equals this "Won"}}
+                 		{{#if_not_equals this "Lost"}}
+                 		     <option value="{{this}}">{{milestone}}</option>
+                 		{{/if_not_equals}}
+                 {{/if_not_equals}}
+         {{/if_not_equals}}
+    {{/each}}
+</script>
+
+<script id="portlets-deals-track-options-template" type="text/html">
+   <option value="{{id}}">{{agile_lng_translate 'portlets' 'name'}}</option>
+</script>
+
+<script id="portlets-deals-revenueGraph-options-template" type="text/html">
+  <option value="anyTrack">{{agile_lng_translate 'portlets' 'any'}}</option>
+  {{#each tracks}}
+     <option value="{{id}}" {{#if_equals ../track id}} selected="selected" {{/if_equals}}>{{name}}</option>
+  {{/each}}
+</script>
+<script id="portletsCampaignStatsSettingsModal-options-template"  type="text/html">
+	<option value='All'>{{agile_lng_translate 'campaigns' 'all-campaigns'}}</option>
+	{{#each this}}
+	    <option value="{{id}}">{{name}}</option>
+	{{/each}}
+</script>
+
 <div id="portletsContactsFilterBasedSettingsModal" class="modal fade">
 	<div class="modal-dialog">
     <div class="modal-content">
 	<div class="modal-header">
 	 <button class="close" data-dismiss="modal">x</button>
-		<h3 class="modal-title">Dashlet Settings</h3>
+		<h3 class="modal-title">{{agile_lng_translate 'portlets' 'dashlet-settings'}}</h3>
 	</div>
 	<div class="modal-body">
 		<input type="hidden" id="portlet-type" />
 		<input type="hidden" id="portlet-name" />
 		<form id="portletsContactsFilterBasedSettingsForm" name="portletsContactsFilterBasedSettingsForm" method="post" class="form-horizontal" style="margin-top:15px;">
 			<div class="control-group form-group">
-				<label class="control-label col-sm-3">Filter</label>
+				<label class="control-label col-sm-3">{{agile_lng_translate 'portlets' 'filter'}}</label>
 				<div class="controls col-sm-7" id="filterControls">
 					<select id="filter" name="filter" class="required form-control">
 						
@@ -21,8 +101,7 @@
 		</form>
 	</div>
 	<div class="modal-footer">
-		<a id="save-modal" class="portlet-settings-save-modal save-modal btn btn-sm btn-primary" href="#">Save</a>
-		<!--  <a id="cancel-modal" href="#portlets" class="btn" data-dismiss="modal" onclick="hidePortletSettings(this);">Cancel</a>  -->
+		<a id="save-modal" class="portlet-settings-save-modal save-modal btn btn-sm btn-primary" href="#">{{agile_lng_translate 'portlets' 'save'}}</a>
 	</div>
 </div>
 </div>
@@ -34,33 +113,35 @@
     <div class="modal-content">
 	<div class="modal-header">
 		<button class="close" data-dismiss="modal">x</button>
-		<h3 class="modal-title">Dashlet Settings</h3>
+		<h3 class="modal-title">{{agile_lng_translate 'portlets' 'dashlet-settings'}}</h3>
 	</div>
 	<div class="modal-body">
 		<input type="hidden" id="portlet-type" />
 		<input type="hidden" id="portlet-name" />
 		<form id="portletsContactsEmailsOpenedSettingsForm" name="portletsContactsEmailsOpenedSettingsForm" method="post" class="form-horizontal" style="margin-top:15px;">
 			<div class="control-group form-group">
-				<label class="control-label col-sm-3">Duration</label>
+				<label class="control-label col-sm-3">{{agile_lng_translate 'portlets' 'duration'}}</label>
 				<div class="controls col-sm-7">
 					<select id="duration" name="duration" class="required form-control">
-						<option value="1-day" >Today</option>
-						<option value="yesterday" >Yesterday</option>
-						<option value="2-days">Last 2 Days</option>
-						<option value="this-week" >This Week</option>
-						<option value="1-week">Last 7 Days</option>
-						<option value="this-month" >This Month</option>
-						<option value="1-month">Last 30 Days</option>
-					<option value="Custom" class="Custom_range">Custom</option>
+						<option value="1-day" >{{agile_lng_translate 'portlets' 'today'}}</option>
+						<option value="yesterday" >{{agile_lng_translate 'portlets' 'yesterday'}}</option>
+						<option value="2-days">{{agile_lng_translate 'portlets' 'last-2-days'}}</option>
+						<option value="this-week" >{{agile_lng_translate 'portlets' 'this-week'}}</option>
+						<option value="1-week">{{agile_lng_translate 'portlets' 'last-7-days'}}</option>
+						<option value="this-month" >{{agile_lng_translate 'portlets' 'this-month'}}</option>
+						<option value="1-month">{{agile_lng_translate 'portlets' 'last-30-days'}}</option>
+						<option value="Custom" class="Custom_range">{{agile_lng_translate 'campaigns' 'custom'}}</option>
 					</select>
 				</div>
 			</div>
 
 				<div class="control-group form-group hide daterange">
-					<label class="control-label col-sm-3">Range<span class="field_req">*</span></label>
+
+					<label class="control-label col-sm-3">{{agile_lng_translate 'campaigns' 'range'}}<span class="field_req">*</span></label>
+
 					<div class="controls col-sm-8">
-					<div class="col-sm-5" style="padding:0px"><input type="text" id="start_date" name="start-date"  class="start date required form-control" placeholder="Start date"></input></div>  
-					<div class="col-sm-5" style="padding:0px;margin-left:12px"><input type="text" id="end_date" class="end date required form-control" name="end-date"  placeholder="End date"></input></div>
+					<div class="col-sm-5" style="padding:0px"><input type="text" id="start_date" name="start-date"  class="start date required form-control" placeholder="{{agile_lng_translate 'tasks' 'start-date'}}"></input></div>  
+					<div class="col-sm-5" style="padding:0px;margin-left:12px"><input type="text" id="end_date" class="end date required form-control" name="end-date"  placeholder="{{agile_lng_translate 'tasks' 'end-date'}}"></input></div>
 				</div>
 				</div>
 				<div class="control-group form-group" style="display:none;margin-bottom:0px">
@@ -71,42 +152,44 @@
 		</form>
 	</div>
 	<div class="modal-footer">
-		<a id="save-modal" class="portlet-settings-save-modal save-modal btn btn-sm btn-primary" href="#">Save</a>
-		<!--  <a id="cancel-modal" href="#portlets" class="btn" data-dismiss="modal" onclick="hidePortletSettings(this);">Cancel</a>  -->
+		<a id="save-modal" class="portlet-settings-save-modal save-modal btn btn-sm btn-primary" href="#">{{agile_lng_translate 'portlets' 'save'}}</a>
 	</div>
 </div>
 </div>
 </div>
+
+
 
 <div id="portletsContactsEmailsSentSettingsModal" class="modal fade">
 <div class="modal-dialog">
     <div class="modal-content">
 	<div class="modal-header">
 		<button class="close" data-dismiss="modal">x</button>
-		<h3 class="modal-title">Dashlet Settings</h3>
+		<h3 class="modal-title">{{agile_lng_translate 'portlets' 'dashlet-settings'}}</h3>
 	</div>
 	<div class="modal-body">
 		<input type="hidden" id="portlet-type" />
 		<input type="hidden" id="portlet-name" />
 		<form id="portletsContactsEmailsSentSettingsForm" name="portletsContactsEmailsSentSettingsForm" method="post" >
 			<div class="control-group form-group">
-				<label class="control-label">Duration</label>
+				<label class="control-label">{{agile_lng_translate 'portlets' 'duration'}}</label>
 				<div class="controls">
 					<select id="duration" name="duration" class="required form-control">
-						<option value="1-day">1 Day</option>
-						<option value="2-days">2 Days</option>
-						<option value="1-week">1 Week</option>
-						<option value="1-month">1 Month</option>
-					<option value="Custom" class="Custom_range">Custom</option>
+						<option value="1-day">{{agile_lng_translate 'portlets' '1-day'}}</option>
+						<option value="2-days">{{agile_lng_translate 'portlets' '2-days'}}</option>
+						<option value="1-week">{{agile_lng_translate 'portlets' '1-week'}}</option>
+						<option value="1-month">{{agile_lng_translate 'portlets' '1-month'}}</option>
+					<option value="Custom" class="Custom_range">{{agile_lng_translate 'campaigns' 'custom'}}</option>
 					</select>
 				</div>
 			</div>
 
 				<div class="control-group form-group hide daterange">
-					<label class="control-label col-sm-3">Range<span class="field_req">*</span></label>
+			<label class="control-label col-sm-3">{{agile_lng_translate 'campaigns' 'range'}}<span class="field_req">*</span></label>
+
 					<div class="controls col-sm-8">
-					<div class="col-sm-5" style="padding:0px"><input type="text" id="start_date" name="start-date"  class="start date required form-control" placeholder="Start date"></input></div>  
-					<div class="col-sm-5" style="padding:0px;margin-left:12px"><input type="text" id="end_date" class="end date required form-control" name="end-date"  placeholder="End date"></input></div>
+					<div class="col-sm-5" style="padding:0px"><input type="text" id="start_date" name="start-date"  class="start date required form-control" placeholder="{{agile_lng_translate 'tasks' 'start-date'}}"></input></div>  
+					<div class="col-sm-5" style="padding:0px;margin-left:12px"><input type="text" id="end_date" class="end date required form-control" name="end-date"  placeholder="{{agile_lng_translate 'tasks' 'end-date'}}"></input></div>
 				</div>
 				</div>
 				<div class="control-group form-group" style="display:none;margin-bottom:0px">
@@ -117,71 +200,64 @@
 		</form>
 	</div>
 	<div class="modal-footer">
-		<a id="save-modal" class="portlet-settings-save-modal save-modal btn btn-sm btn-primary" href="#">Save</a>
-		<!--  <a id="cancel-modal" href="#portlets" class="btn" data-dismiss="modal" onclick="hidePortletSettings(this);">Cancel</a>  -->
+		<a id="save-modal" class="portlet-settings-save-modal save-modal btn btn-sm btn-primary" href="#">{{agile_lng_translate 'portlets' 'save'}}</a>
 	</div>
 </div>
 </div>
 </div>
+
+
+
 
 <div id="portletsContactsGrowthGraphSettingsModal" class="modal fade">
 <div class="modal-dialog">
     <div class="modal-content">
 	<div class="modal-header">
 		<button class="close" data-dismiss="modal">x</button>
-		<h3 class="modal-title">Dashlet Settings</h3>
+		<h3 class="modal-title">{{agile_lng_translate 'portlets' 'dashlet-settings'}}</h3>
 	</div>
 	<div class="modal-body">
 		<input type="hidden" id="portlet-type"/>
 		<input type="hidden" id="portlet-name"/>
 		<form id="portletsContactsGrowthGraphSettingsForm" name="portletsContactsGrowthGraphSettingsForm" method="post" class="form-horizontal">
 			<div class="control-group form-group">
-				<label class="control-label col-sm-3" style="margin-top: 8px;">Tags<span class="field_req">*</span></label>
+				<label class="control-label col-sm-3" style="margin-top: 8px;">{{agile_lng_translate 'other' 'tags'}}<span class="field_req">*</span></label>
 				<div class="controls col-sm-7">
 					<div  id="portlet-tags">
 						<ul id="portlet-ul-tags" name="tags" class= "tagsinput tags p-n"></ul>
 					</div>
-					<input name="tags" type="text" id="addPortletBulkTags" class="tags-typeahead multi-tags form-control" placeholder="Enter tags separated by comma" onkeyup="hidePortletErrors(this);" />      
+					<input name="tags" type="text" id="addPortletBulkTags" class="tags-typeahead multi-tags form-control" placeholder="{{agile_lng_translate 'portlets' 'tags-desc'}}" onkeyup="hidePortletErrors(this);" />      
 				</div>
 			</div>
 			<div class="control-group form-group">
-				<label class="control-label col-sm-3">Frequency</label>
+				<label class="control-label col-sm-3">{{agile_lng_translate 'portlets' 'frequency'}}</label>
 				<div class="controls col-sm-7">
 					<select name="frequency" id="frequency" class="required form-control">
-						<option value="daily">Daily</option>
-						<option value="weekly">Weekly</option>
-						<option value="monthly">Monthly</option>
+						<option value="daily">{{agile_lng_translate 'portlets' 'daily'}}</option>
+						<option value="weekly">{{agile_lng_translate 'portlets' 'weekly'}}</option>
+						<option value="monthly">{{agile_lng_translate 'portlets' 'monthly'}}</option>
 					</select>
 				</div>
 			</div>
 			
-			<!-- <div class="control-group">
-				<label class="control-label">Duration</label>
-				<div style="box-shadow: 0 0px 2px rgba(0, 0, 0, .25), inset 0 -1px 0 rgba(0, 0, 0, .1);" class="pull-left p-t-xs p-b-xs p-l-sm p-r-sm" id="portlet-reportrange">
-					<i class="icon-calendar icon-large"></i>
-					<span id="range"></span>
-					<input type="hidden" id="start-date" name="start-date" />
-					<input type="hidden" id="end-date" name="end-date" />
-				</div>
-			</div>  -->
 			<div class="control-group form-group">
-				<label class="control-label col-sm-3">Duration</label>
+				<label class="control-label col-sm-3">{{agile_lng_translate 'portlets' 'duration'}}</label>
 				<div class="controls col-sm-7">
 					<select id="duration" name="duration" class="required form-control">
-						<!-- <option value="today" >Today</option>
-						<option value="yesterday">Yesterday</option> -->
-						<option value="1-week">Last 7 Days</option>
-						<option value="1-month">Last 30 Days</option>
-					<option value="Custom" class="Custom_range">Custom</option>
+						<option value="1-week">{{agile_lng_translate 'portlets' 'last-7-days'}}</option>
+						<option value="1-month">{{agile_lng_translate 'portlets' 'last-30-days'}}</option>
+					<option value="Custom" class="Custom_range">{{agile_lng_translate 'campaigns' 'custom'}}</option>
 					</select>
 				</div>
 			</div>
 
 				<div class="control-group form-group hide daterange">
-					<label class="control-label col-sm-3">Range<span class="field_req">*</span></label>
+
+					<label class="control-label col-sm-3">{{agile_lng_translate 'campaigns' 'range'}}<span class="field_req">*</span></label>
+
 					<div class="controls col-sm-8">
-					<div class="col-sm-5" style="padding:0px"><input type="text" id="start_date" name="start-date"  class="start date required form-control" placeholder="Start date"></input></div>  
-					<div class="col-sm-5" style="padding:0px;margin-left:12px"><input type="text" id="end_date" class="end date required form-control" name="end-date"  placeholder="End date"></input></div>
+					<div class="col-sm-5" style="padding:0px"><input type="text" id="start_date" name="start-date"  class="start date required form-control" placeholder="{{agile_lng_translate 'tasks' 'start-date'}}"></input></div>  
+					<div class="col-sm-5" style="padding:0px;margin-left:12px"><input type="text" id="end_date" class="end date required form-control" name="end-date"  placeholder="{{agile_lng_translate 'tasks' 'end-date'}}"></input></div>
 				</div>
 				</div>
 				<div class="control-group form-group" style="display:none;margin-bottom:0px">
@@ -192,18 +268,19 @@
 		</form>
 	</div>
 	<div class="modal-footer">
-		<a id="save-modal" class="portlet-settings-save-modal save-modal btn btn-sm btn-primary" href="#">Save</a>
-		<!--  <a id="cancel-modal" href="#portlets" class="btn" data-dismiss="modal" onclick="hidePortletSettings(this);">Cancel</a>  -->
+		<a id="save-modal" class="portlet-settings-save-modal save-modal btn btn-sm btn-primary" href="#">{{agile_lng_translate 'portlets' 'save'}}</a>
 	</div>
 </div>
 </div>
 </div>
+
+
 <div id="portletsPendingDealsSettingsModal" class="modal fade">
 <div class="modal-dialog">
     <div class="modal-content">
 	<div class="modal-header">
 		<button class="close" data-dismiss="modal">x</button>
-		<h3 class="modal-title">Dashlet Settings</h3>
+		<h3 class="modal-title">{{agile_lng_translate 'portlets' 'dashlet-settings'}}</h3>
 	</div>
 	<div class="modal-body">
 		<input type="hidden" id="portlet-type" />
@@ -211,16 +288,16 @@
 		<form id="portletsPendingDealsSettingsForm" name="portletsPendingDealsSettingsForm" method="post" class="form-horizontal" style="margin-top:15px;">
 			<!-- <input type="text" class="hidden pull-right" /> -->
 			<div class="control-group form-group">
-				<label class="control-label col-sm-3">Deals</label>
+				<label class="control-label col-sm-3">{{agile_lng_translate 'portlets' 'deals'}}</label>
 				<div class="controls col-sm-7">
 					<select id="deals" name="deals" class="required form-control">
-						<option value="all-deals">All Deals</option>
-						<option value="my-deals">My Deals</option>
+						<option value="all-deals">{{agile_lng_translate 'portlets' 'all-deals'}}</option>
+						<option value="my-deals">{{agile_lng_translate 'portlets' 'my-deals'}}</option>
 					</select>
 				</div>
 			</div>
 				<div class="control-group form-group">
-				<label class="control-label col-sm-3">Track</label>
+				<label class="control-label col-sm-3">{{agile_lng_translate 'portlets' 'track'}}</label>
 				<div class="controls col-sm-7">
 					<select id="track" name="track" class="form-control">
 						
@@ -230,7 +307,7 @@
 			</div>
 
 				<div class="control-group form-group">
-				<label class="control-label col-sm-3">Milestone</label>
+				<label class="control-label col-sm-3">{{agile_lng_translate 'deal-view' 'milestone'}}</label>
 				<div class="controls col-sm-7">
 					<select id="milestone" name="milestone" class="form-control">
 						
@@ -240,19 +317,20 @@
 		</form>
 	</div>
 	<div class="modal-footer">
-		<a id="save-modal" class="portlet-settings-save-modal save-modal btn btn-sm btn-primary" href="#">Save</a>
-		<!--  <a id="cancel-modal" href="#portlets" class="btn" data-dismiss="modal" onclick="hidePortletSettings(this);">Cancel</a>  -->
+		<a id="save-modal" class="portlet-settings-save-modal save-modal btn btn-sm btn-primary" href="#">{{agile_lng_translate 'portlets' 'save'}}</a>
 	</div>
 </div>
 </div>
 </div>
+
+
 
 <div id="portletsDealsByMilestoneSettingsModal" class="modal  fade">
 <div class="modal-dialog">
     <div class="modal-content">
 	<div class="modal-header">
 		<button class="close" data-dismiss="modal">x</button>
-		<h3 class="modal-title">Dashlet Settings</h3>
+		<h3 class="modal-title">{{agile_lng_translate 'portlets' 'dashlet-settings'}}</h3>
 	</div>
 	<div class="modal-body">
 		<input type="hidden" id="portlet-type" />
@@ -260,7 +338,7 @@
 		<form id="portletsDealsByMilestoneSettingsForm" name="portletsDealsByMilestoneSettingsForm" method="post" class="form-horizontal" style="margin-top:15px;">
 			<!-- <input type="text" class="hidden pull-right" /> -->
 			<div class="control-group form-group" id="portletsDealsByMilestoneTrack" style="display:none;">
-				<label class="control-label col-sm-3">Track</label>
+				<label class="control-label col-sm-3">{{agile_lng_translate 'portlets' 'track'}}</label>
 				<div class="controls col-sm-7">
 					<select id="track" name="track" class="required form-control">
 						
@@ -269,25 +347,18 @@
 				</div>
 			</div>
 			<div class="control-group form-group">
-				<label class="control-label col-sm-3">Deals</label>
+				<label class="control-label col-sm-3">{{agile_lng_translate 'portlets' 'deals'}}</label>
 				<div class="controls col-sm-7">
 					<select id="deals" name="deals" class="required form-control">
-						<option value="all-deals">All Deals</option>
-						<option value="my-deals">My Deals</option>
+						<option value="all-deals">{{agile_lng_translate 'portlets' 'all-deals'}}</option>
+						<option value="my-deals">{{agile_lng_translate 'portlets' 'my-deals'}}</option>
 					</select>
 				</div>
 			</div>
-			<!-- <div class="control-group">
-				<label class="control-label">Due Date</label>
-				<div class="controls">
-                    <span><input id="due-date" type="text" name="due-date" class="required date form-control" placeholder="MM/DD/YYYY" /></span>
-                </div>
-			</div> -->
 		</form>
 	</div>
 	<div class="modal-footer">
-		<a id="save-modal" class="portlet-settings-save-modal save-modal btn btn-sm btn-primary" href="#">Save</a>
-		<!--  <a id="cancel-modal" href="#portlets" class="btn" data-dismiss="modal" onclick="hidePortletSettings(this);">Cancel</a>  -->
+		<a id="save-modal" class="portlet-settings-save-modal save-modal btn btn-sm btn-primary" href="#">{{agile_lng_translate 'portlets' 'save'}}</a>
 	</div>
 </div>
 </div>
@@ -298,7 +369,7 @@
     <div class="modal-content">
 	<div class="modal-header">
 		<button class="close" data-dismiss="modal">x</button>
-		<h3 class="modal-title">Dashlet Settings</h3>
+		<h3 class="modal-title">{{agile_lng_translate 'portlets' 'dashlet-settings'}}</h3>
 	</div>
 	<div class="modal-body">
 		<input type="hidden" id="portlet-type" />
@@ -306,25 +377,25 @@
 		<form id="portletsDealsClosuresPerPersonSettingsForm" name="portletsDealsClosuresPerPersonSettingsForm" method="post" >
 			<input type="text" class="hidden pull-right form-control" />
 			<div class="control-group form-group">
-				<label class="control-label">Group by</label>
+				<label class="control-label">{{agile_lng_translate 'portlets' 'group-by'}}</label>
 				<div class="controls">
 					<select id="group-by" name="group-by" class="required form-control">
-						<option value="number-of-deals">No. of Deals</option>
-						<option value="deal-value">Deal Value</option>
+						<option value="number-of-deals">{{agile_lng_translate 'portlets' 'no-of-deals'}}
+						</option>
+						<option value="deal-value">{{agile_lng_translate 'portlets' 'deal-value'}}</option>
 					</select>
 				</div>
 			</div>
 			<div class="control-group form-group">
-				<label class="control-label">Due Date</label>
+				<label class="control-label">{{agile_lng_translate 'portlets' 'due-date'}}</label>
 				<div class="controls">
-                    <span><input id="due-date" type="text" placeholder="Select Date" name="due-date" class="required date form-control"/></span>
+                    <span><input id="due-date" type="text" placeholder="{{agile_lng_translate 'contacts-view' 'select-date'}}" name="due-date" class="required date form-control"/></span>
                 </div>
 			</div>
 		</form>
 	</div>
 	<div class="modal-footer">
-		<a id="save-modal" class="portlet-settings-save-modal save-modal btn btn-sm btn-primary" href="#">Save</a>
-		<!--  <a id="cancel-modal" href="#portlets" class="btn" data-dismiss="modal" onclick="hidePortletSettings(this);">Cancel</a>  -->
+		<a id="save-modal" class="portlet-settings-save-modal save-modal btn btn-sm btn-primary" href="#">{{agile_lng_translate 'portlets' 'save'}}</a>
 	</div>
 </div>
 </div>
@@ -335,31 +406,33 @@
     <div class="modal-content">
 	<div class="modal-header">
 		<button class="close" data-dismiss="modal">x</button>
-		<h3 class="modal-title">Dashlet Settings</h3>
+		<h3 class="modal-title">{{agile_lng_translate 'portlets' 'dashlet-settings'}}</h3>
 	</div>
 	<div class="modal-body">
 		<input type="hidden" id="portlet-type" />
 		<input type="hidden" id="portlet-name" />
 		<form id="portletsDealsWonSettingsForm" name="portletsDealsWonSettingsForm" method="post" >
 			<div class="control-group form-group">
-				<label class="control-label">Duration</label>
+				<label class="control-label">{{agile_lng_translate 'portlets' 'duration'}}</label>
 				<div class="controls">
 					<select id="duration" name="duration" class="required form-control">
-						<option value="1-week" >1 Week</option>
-						<option value="1-month">1 Month</option>
-						<option value="3-months">3 Months</option>
-						<option value="6-months">6 Months</option>
-						<option value="12-months">12 Months</option> 
-					<option value="Custom" class="Custom_range">Custom</option>
+						<option value="1-week" >{{agile_lng_translate 'portlets' '1-week'}}</option>
+						<option value="1-month">{{agile_lng_translate 'portlets' '1-month'}}</option>
+						<option value="3-months">{{agile_lng_translate 'portlets' '3-months'}}</option>
+						<option value="6-months">{{agile_lng_translate 'portlets' '6-months'}}</option>
+						<option value="12-months">{{agile_lng_translate 'portlets' '12-months'}}</option>
+					<option value="Custom" class="Custom_range">{{agile_lng_translate 'campaigns' 'custom'}}</option>
 					</select>
 				</div>
 			</div>
 
 				<div class="control-group form-group hide daterange">
-					<label class="control-label col-sm-3">Range<span class="field_req">*</span></label>
+
+					<label class="control-label col-sm-3">{{agile_lng_translate 'campaigns' 'range'}}<span class="field_req">*</span></label>
+
 					<div class="controls col-sm-8">
-					<div class="col-sm-5" style="padding:0px"><input type="text" id="start_date" name="start-date"  class="start date required form-control" placeholder="Start date"></input></div>  
-					<div class="col-sm-5" style="padding:0px;margin-left:12px"><input type="text" id="end_date" class="end date required form-control" name="end-date"  placeholder="End date"></input></div>
+					<div class="col-sm-5" style="padding:0px"><input type="text" id="start_date" name="start-date"  class="start date required form-control" placeholder="{{agile_lng_translate 'tasks' 'start-date'}}"></input></div>  
+					<div class="col-sm-5" style="padding:0px;margin-left:12px"><input type="text" id="end_date" class="end date required form-control" name="end-date"  placeholder="{{agile_lng_translate 'tasks' 'end-date'}}"></input></div>
 				</div>
 				</div>
 				<div class="control-group form-group" style="display:none;margin-bottom:0px">
@@ -375,12 +448,13 @@
 </div>
 </div>
 </div>
+
 <div id="portletsDealsFunnelSettingsModal" class="modal  fade">
 <div class="modal-dialog">
     <div class="modal-content">
 	<div class="modal-header">
 		<button class="close" data-dismiss="modal">x</button>
-		<h3 class="modal-title">Dashlet Settings</h3>
+		<h3 class="modal-title">{{agile_lng_translate 'portlets' 'dashlet-settings'}}</h3>
 	</div>
 	<div class="modal-body">
 		<input type="hidden" id="portlet-type" />
@@ -388,7 +462,7 @@
 		<form id="portletsDealsFunnelSettingsForm" name="portletsDealsFunnelSettingsForm" method="post" class="form-horizontal" style="margin-top:15px;">
 			<!-- <input type="text" class="hidden pull-right" /> -->
 			<div class="control-group form-group" id="portletsDealsFunnelTrack" style="display:none;">
-				<label class="control-label col-sm-3">Track</label>
+				<label class="control-label col-sm-3">{{agile_lng_translate 'portlets' 'track'}}</label>
 				<div class="controls col-sm-7">
 					<select id="track" name="track" class="required form-control">
 					</select>
@@ -396,20 +470,20 @@
 				</div>
 			</div>
 			<div class="control-group form-group">
-				<label class="control-label col-sm-3">Deals</label>
+				<label class="control-label col-sm-3">{{agile_lng_translate 'portlets' 'deals'}}</label>
 				<div class="controls col-sm-7">
 					<select id="deals" name="deals" class="required form-control">
-						<option value="all-deals">All Deals</option>
-						<option value="my-deals">My Deals</option>
+						<option value="all-deals">{{agile_lng_translate 'portlets' 'all-deals'}}</option>
+						<option value="my-deals">{{agile_lng_translate 'portlets' 'my-deals'}}</option>
 					</select>
 				</div>
 			</div>
 			<div class="control-group form-group">
-				<label class="control-label col-sm-3">Split by</label>
+				<label class="control-label col-sm-3">{{agile_lng_translate 'portlets' 'split-by'}}</label>
 				<div class="controls col-sm-7">
 					<select id="deals-funnel-split-by" name="split-by" class="required form-control">
-						<option value="revenue">Revenue</option>
-						<option value="count">Count</option>
+						<option value="revenue">{{agile_lng_translate 'portlets' 'revenue'}}</option>
+						<option value="count">{{agile_lng_translate 'admin-settings-stats' 'count'}}</option>
 					</select>
 				</div>
 			</div>
@@ -423,41 +497,178 @@
 		</form>
 	</div>
 	<div class="modal-footer">
-		<a id="save-modal" class="portlet-settings-save-modal save-modal btn btn-sm btn-primary" href="#">Save</a>
+		<a id="save-modal" class="portlet-settings-save-modal save-modal btn btn-sm btn-primary" href="#">{{agile_lng_translate 'portlets' 'save'}}</a>
 		<!--  <a id="cancel-modal" href="#portlets" class="btn" data-dismiss="modal" onclick="hidePortletSettings(this);">Cancel</a>  -->
 	</div>
 </div>
 </div>
 </div>
 
+<div class="modal  fade" id="portletsIncomingDealsSettingsModal">
+<div class="modal-dialog">
+    <div class="modal-content">
+	<div class="modal-header">
+		<button class="close" data-dismiss="modal">x</button>
+		<h3 class="modal-title">{{agile_lng_translate 'portlets' 'dashlet-settings'}}</h3>
+	</div>
+	<div class="modal-body">
+		<input type="hidden" id="portlet-type" />
+		<input type="hidden" id="portlet-name" />
+		<form id="portletsIncomingDealsSettingssForm" name="portletsIncomingDealsSettingsForm" method="post" class="form-horizontal" style="margin-top:15px;">
+			<div class="control-group form-group">
+				<label class="control-label col-sm-3">{{agile_lng_translate 'portlets' 'split-by'}}</label>
+				<div class="controls col-sm-7">
+					<select id="split-by-incoming-deals" name="type" class="form-control">
+						<option value="deals">{{agile_lng_translate 'report-add' 'total-deals'}}</option>
+                    	<option value="Revenue">{{agile_lng_translate 'report-add' 'total-revenue'}}</option>
+					</select>
+				</div>
+			</div>
+			<div class="control-group form-group" id="portletsIncomingDealsOwner">
+				<label class="control-label col-sm-3">{{agile_lng_translate 'deal-view' 'owner'}}</label>
+				<div class="controls col-sm-7">
+					<select id="owner" name="owner" class="form-control">
+						
+					</select>
+					<img class="loading-img" src="//doxhze3l6s7v9.cloudfront.net/app/static/img/21-0.gif"></img>
+				</div>
+			</div>
+			<div class="control-group form-group">
+				<label class="control-label col-sm-3">{{agile_lng_translate 'portlets' 'frequency'}}</label>
+				<div class="controls col-sm-7">
+					<select id="frequency-incoming-deals" name="frequency" class="form-control">
+						<option value="daily">{{agile_lng_translate 'portlets' 'daily'}}</option>
+						<option value="weekly">{{agile_lng_translate 'portlets' 'weekly'}}</option>
+						<option value="monthly">{{agile_lng_translate 'portlets' 'monthly'}}</option>
+					</select>
+				</div>
+			</div>
+			<div class="control-group form-group">
+				<label class="control-label col-sm-3">{{agile_lng_translate 'portlets' 'duration'}}</label>
+				<div class="controls col-sm-7">
+					<select id="duration-incoming-deals" name="duration" class="form-control">
+						<option value="1-day" >{{agile_lng_translate 'portlets' 'today'}}</option>
+						<option value="yesterday" >{{agile_lng_translate 'portlets' 'yesterday'}}</option>
+						<option value="1-week">{{agile_lng_translate 'portlets' 'last-7-days'}}</option>
+						<option value="1-month">{{agile_lng_translate 'portlets' 'last-30-days'}}</option>
+						<option value="this-month" >{{agile_lng_translate 'portlets' 'this-month'}}</option>
+						<option value="last-month" >{{agile_lng_translate 'portlets' 'last-month'}}</option>
+						<option value="this-quarter">{{agile_lng_translate 'portlets' 'this-quarter'}}
+						</option>
+						<option value="last-quarter">{{agile_lng_translate 'portlets' 'last-quarter'}}
+						</option>
+						<option value="this-year">{{agile_lng_translate 'portlets' 'this-year'}}</option>
+						<option value="last-year">{{agile_lng_translate 'portlets' 'last-year'}}</option>
+					</select>
+				</div>
+			</div>
+		</form>
+	</div>
+	<div class="modal-footer">
+		<a id="save-modal" class="portlet-settings-save-modal save-modal btn btn-sm btn-primary" href="#">{{agile_lng_translate 'portlets' 'save'}}</a>
+	</div>
+</div>
+</div>
+</div>
+
+<div class="modal  fade" id="portletsLostDealAnalysisSettingsModal">
+<div class="modal-dialog">
+    <div class="modal-content">
+	<div class="modal-header">
+		<button class="close" data-dismiss="modal">x</button>
+		<h3 class="modal-title">{{agile_lng_translate 'portlets' 'dashlet-settings'}}</h3>
+	</div>
+	<div class="modal-body">
+		<input type="hidden" id="portlet-type" />
+		<input type="hidden" id="portlet-name" />
+		<form id="portletsLostDealAnalysisSettingsForm" name="portletsLostDealAnalysisSettingsForm" method="post" class="form-horizontal" style="margin-top:15px;">
+			<div class="control-group form-group" id="portletsLostDealAnalysisOwner">
+				<label class="control-label col-sm-3">{{agile_lng_translate 'portlets' 'owner'}}
+				</label>
+				<div class="controls col-sm-7">
+					<select id="owner-lost-deal-analysis" name="owner" class="form-control">
+						
+					</select>
+					<img class="loading-img" src="//doxhze3l6s7v9.cloudfront.net/app/static/img/ajax-loader-cursor.gif"></img>
+				</div>
+			</div>
+			<div class="control-group form-group" id="portletsLostDealAnalysisTrack">
+				<label class="control-label col-sm-3">{{agile_lng_translate 'portlets' 'track'}}</label>
+				<div class="controls col-sm-7">
+					<select id="track-lost-deal-analysis" name="track" class="form-control">
+						
+					</select>
+					<!-- <img class="loading-img" src="//doxhze3l6s7v9.cloudfront.net/app/static/img/21-0.gif"></img> -->
+				</div>
+			</div>
+			<div class="control-group form-group" id="portletsLostDealAnalysisSource">
+				<label class="control-label col-sm-3">{{agile_lng_translate 'portlets' 'source'}}</label>
+				<div class="controls col-sm-7">
+					<select id="source-lost-deal-analysis" name="source" class="form-control">
+						
+					</select>
+					<img class="loading-img" src="//doxhze3l6s7v9.cloudfront.net/app/static/img/ajax-loader-cursor.gif"></img>
+				</div>
+			</div>
+			<div class="control-group form-group">
+				<label class="control-label col-sm-3">{{agile_lng_translate 'portlets' 'duration'}}</label>
+				<div class="controls col-sm-7">
+					<select id="duration-lost-deal-analysis" name="duration" class="form-control">
+						<option value="1-day" >{{agile_lng_translate 'portlets' 'today'}}</option>
+						<option value="yesterday" >{{agile_lng_translate 'portlets' 'yesterday'}}</option>
+						<option value="1-week">{{agile_lng_translate 'portlets' 'last-7-days'}}</option>
+						<option value="1-month">{{agile_lng_translate 'portlets' 'last-30-days'}}</option>
+						<option value="this-month" >{{agile_lng_translate 'portlets' 'this-month'}}</option>
+						<option value="last-month" >{{agile_lng_translate 'portlets' 'last-month'}}</option>
+						<option value="this-quarter">{{agile_lng_translate 'portlets' 'this-quarter'}}
+						</option>
+						<option value="last-quarter">{{agile_lng_translate 'portlets' 'last-quarter'}}
+						</option>
+						<option value="this-year">{{agile_lng_translate 'portlets' 'this-year'}}</option>
+						<option value="last-year">{{agile_lng_translate 'portlets' 'last-year'}}</option>
+					</select>
+				</div>
+			</div>
+		</form>
+	</div>
+	<div class="modal-footer">
+		<a id="save-modal" class="portlet-settings-save-modal save-modal btn btn-sm btn-primary" href="#">{{agile_lng_translate 'portlets' 'save'}}</a>
+	</div>
+</div>
+</div>
+</div>
+
+
 <div id="portletsDealsAssignedSettingsModal" class="modal  fade">
 <div class="modal-dialog">
     <div class="modal-content">
 	<div class="modal-header">
 		<button class="close" data-dismiss="modal">x</button>
-		<h3 class="modal-title">Dashlet Settings</h3>
+		<h3 class="modal-title">{{agile_lng_translate 'portlets' 'dashlet-settings'}}</h3>
 	</div>
 	<div class="modal-body">
 		<input type="hidden" id="portlet-type" />
 		<input type="hidden" id="portlet-name" />
 		<form id="portletsDealsAssignedSettingsForm" name="portletsDealsAssignedSettingsForm" method="post" >
 			<div class="control-group form-group">
-				<label class="control-label">Duration</label>
+				<label class="control-label">{{agile_lng_translate 'portlets' 'duration'}}</label>
 				<div class="controls">
 					<select id="duration" name="duration" class="required form-control">
-						<option value="1-day" >1 Day</option>
-						<option value="1-week">1 Week</option>
-						<option value="1-month">1 Month</option>
-						<option value="Custom" class="Custom_range">Custom</option>
+						<option value="1-day" >{{agile_lng_translate 'portlets' '1-day'}}</option>
+						<option value="1-week">{{agile_lng_translate 'portlets' '1-week'}}</option>
+						<option value="1-month">{{agile_lng_translate 'portlets' '1-month'}}</option>
+						<option value="Custom" class="Custom_range">{{agile_lng_translate 'campaigns' 'custom'}}</option>
 					</select>
 				</div>
 			</div>
 
 				<div class="control-group form-group hide daterange">
-					<label class="control-label col-sm-3">Range<span class="field_req">*</span></label>
+
+					<label class="control-label col-sm-3">{{agile_lng_translate 'campaigns' 'range'}}<span class="field_req">*</span></label>
+
 					<div class="controls col-sm-8">
-					<div class="col-sm-5" style="padding:0px"><input type="text" id="start_date" name="start-date"  class="start date required form-control" placeholder="Start date"></input></div>  
-					<div class="col-sm-5" style="padding:0px;margin-left:12px"><input type="text" id="end_date" class="end date required form-control" name="end-date"  placeholder="End date"></input></div>
+					<div class="col-sm-5" style="padding:0px"><input type="text" id="start_date" name="start-date"  class="start date required form-control" placeholder="{{agile_lng_translate 'tasks' 'start-date'}}"></input></div>  
+					<div class="col-sm-5" style="padding:0px;margin-left:12px"><input type="text" id="end_date" class="end date required form-control" name="end-date"  placeholder="{{agile_lng_translate 'tasks' 'end-date'}}"></input></div>
 				</div>
 				</div>
 				<div class="control-group form-group" style="display:none;margin-bottom:0px">
@@ -468,44 +679,45 @@
 		</form>
 	</div>
 	<div class="modal-footer">
-		<a id="save-modal" class="portlet-settings-save-modal save-modal btn btn-sm btn-primary" href="#">Save</a>
-		<!--  <a id="cancel-modal" href="#portlets" class="btn" data-dismiss="modal" onclick="hidePortletSettings(this);">Cancel</a>  -->
+		<a id="save-modal" class="portlet-settings-save-modal save-modal btn btn-sm btn-primary" href="#">{{agile_lng_translate 'portlets' 'save'}}</a>
 	</div>
 </div>
 </div>
 </div>
 
-<div id="portletsCallsPerPersonSettingsModal" class="modal  fade">
+<div id="portletsCallsPerPersonSettingsModal" class="modal fade">
 <div class="modal-dialog">
     <div class="modal-content">
 	<div class="modal-header">
 		<button class="close" data-dismiss="modal">x</button>
-		<h3 class="modal-title">Dashlet Settings</h3>
+		<h3 class="modal-title">{{agile_lng_translate 'portlets' 'dashlet-settings'}}</h3>
 	</div>
 	<div class="modal-body">
 		<input type="hidden" id="portlet-type" />
 		<input type="hidden" id="portlet-name" />
 		<form id="portletsCallsPerPersonSettingsForm" name="portletsCallsPerPersonSettingsForm" method="post" class="form-horizontal" style="margin-top:15px;">
 			<div class="control-group form-group">
-				<label class="control-label col-sm-3">Duration</label>
+				<label class="control-label col-sm-3">{{agile_lng_translate 'portlets' 'duration'}}</label>
 				<div class="controls col-sm-8">
 					<select id="duration" name="duration" class="required form-control">
-						<option value="1-day" >Today</option>
-						<option value="yesterday" >Yesterday</option>
-						<option value="this-week" >This Week</option>
-						<option value="1-week">Last 7 Days</option>
-						<option value="this-month" >This Month</option>
-						<option value="1-month">Last 30 Days</option>
-					<option value="Custom" class="Custom_range">Custom</option>
+						<option value="1-day" >{{agile_lng_translate 'portlets' 'today'}}</option>
+						<option value="yesterday" >{{agile_lng_translate 'portlets' 'yesterday'}}</option>
+						<option value="this-week" >{{agile_lng_translate 'portlets' 'this-week'}}</option>
+						<option value="1-week">{{agile_lng_translate 'portlets' 'last-7-days'}}</option>
+						<option value="this-month" >{{agile_lng_translate 'portlets' 'this-month'}}</option>
+						<option value="1-month">{{agile_lng_translate 'portlets' 'last-30-days'}}</option>
+					<option value="Custom" class="Custom_range">{{agile_lng_translate 'campaigns' 'custom'}}</option>
 					</select>
 				</div>
 			</div>
 
 				<div class="control-group form-group hide daterange">
-					<label class="control-label col-sm-3">Range<span class="field_req">*</span></label>
+
+					<label class="control-label col-sm-3">{{agile_lng_translate 'campaigns' 'range'}}<span class="field_req">*</span></label>
+
 					<div class="controls col-sm-8">
-					<div class="col-sm-5" style="padding:0px"><input type="text" id="start_date" name="start-date"  class="start date required form-control" placeholder="Start date"></input></div>  
-					<div class="col-sm-5" style="padding:0px;margin-left:12px"><input type="text" id="end_date" class="end date required form-control" name="end-date"  placeholder="End date"></input></div>
+					<div class="col-sm-5" style="padding:0px"><input type="text" id="start_date" name="start-date"  class="start date required form-control" placeholder="{{agile_lng_translate 'tasks' 'start-date'}}"></input></div>  
+					<div class="col-sm-5" style="padding:0px;margin-left:12px"><input type="text" id="end_date" class="end date required form-control" name="end-date"  placeholder="{{agile_lng_translate 'tasks' 'end-date'}}"></input></div>
 				</div>
 				</div>
 				<div class="control-group form-group" style="display:none;margin-bottom:0px">
@@ -514,20 +726,22 @@
 				<div class="invalid-range"></div></div>
 			</div>
 			<div class="control-group form-group">
-				<label class="control-label col-sm-3">Graph on</label>
+				<label class="control-label col-sm-3">{{agile_lng_translate 'portlets' 'graph-on'}}</label>
 				<div class="controls col-sm-8">
 					<select id="group-by" name="group-by" class="required form-control">
-						<option value="number-of-calls" >No. of calls</option>
-						<option value="call-duration">Call duration</option>
+						<option value="number-of-calls" >{{agile_lng_translate 'portlets' 'no-of-calls'}}
+						</option>
+						<option value="call-duration">{{agile_lng_translate 'portlets' 'call-duration'}}
+						</option>
 					</select>
 				</div>
 			</div>
 			<div class="control-group form-group">
-				<label class="control-label col-sm-3">User</label>
+				<label class="control-label col-sm-3">{{agile_lng_translate 'portlets' 'user'}}</label>
 				<div class="controls col-sm-8">
 					<span class="m-xs block">
-						<a href="#" id="calls-user-select-all" class="text-info">Select all</a> |
-						<a href="#" id="calls-user-select-none" class="text-info">Select none</a>
+						<a href="#" id="calls-user-select-all" class="text-info">{{agile_lng_translate 'portlets' 'select-all'}}</a> |
+						<a href="#" id="calls-user-select-none" class="text-info">{{agile_lng_translate 'portlets' 'select-none'}}</a>
 					</span>
 					<select id="calls-user-list" name="calls-user-list" class="required form-control" multiple>
 						
@@ -538,75 +752,78 @@
 		</form>
 	</div>
 	<div class="modal-footer">
-		<a id="save-modal" class="portlet-settings-save-modal save-modal btn btn-sm btn-primary" href="#">Save</a>
+		<a id="save-modal" class="portlet-settings-save-modal save-modal btn btn-sm btn-primary" href="#">{{agile_lng_translate 'portlets' 'save'}}</a>
 		<!--  <a id="cancel-modal" href="#portlets" class="btn" data-dismiss="modal" onclick="hidePortletSettings(this);">Cancel</a>  -->
 	</div>
 </div>
 </div>
 </div>
 
+
 <div id="portletsTaskReportSettingsModal" class="modal fade">
 <div class="modal-dialog">
     <div class="modal-content">
 	<div class="modal-header">
 		<button class="close" data-dismiss="modal">x</button>
-		<h3 class="modal-title">Dashlet Settings</h3>
+		<h3 class="modal-title">{{agile_lng_translate 'portlets' 'dashlet-settings'}}</h3>
 	</div>
 	<div class="modal-body">
 		<input type="hidden" id="portlet-type" />
 		<input type="hidden" id="portlet-name" />
 		<form id="portletsTaskReportSettingsForm" name="portletsTaskReportSettingsForm" method="post" class="form-horizontal" style="margin-top:15px;">
 			<div class="control-group form-group">
-				<label class="control-label col-sm-3">Report by</label>
+				<label class="control-label col-sm-3">{{agile_lng_translate 'portlets' 'report-by'}}</label>
 				<div class="controls col-sm-8">
 					<select id="group-by-task-report" name="group-by" class="required form-control">
-						<option value="user">User</option>
-						<option value="category">Category</option>
-						<option value="status">Status</option>
+						<option value="user">{{agile_lng_translate 'portlets' 'user'}}</option>
+						<option value="category">{{agile_lng_translate 'portlets' 'category'}}</option>
+						<option value="status">{{agile_lng_translate 'portlets' 'status'}}</option>
 					</select>
 				</div>
 			</div>
 
 			<div class="control-group form-group" id="tasks-control-group">
-				<label class="control-label col-sm-3">Tasks</label>
+				<label class="control-label col-sm-3">{{agile_lng_translate 'portlets' 'tasks'}}</label>
 				<div class="controls col-sm-8">
 					<select id="tasks-task-report" name="tasks" class="required form-control">
-						<option value="all-tasks" id="all-tasks">All Tasks</option>
-						<option value="completed-tasks" id="completed-tasks">Completed Tasks</option>
+						<option value="all-tasks" id="all-tasks">{{agile_lng_translate 'portlets' 'all-tasks'}}</option>
+						<option value="completed-tasks" id="completed-tasks">{{agile_lng_translate 'portlets' 'completed-tasks'}}</option>
 					</select>
 				</div>
 			</div>
 
 			<div class="control-group form-group">
-				<label class="control-label col-sm-3">Split by</label>
+				<label class="control-label col-sm-3">{{agile_lng_translate 'portlets' 'split-by'}}</label>
 				<div class="controls col-sm-8">
 					<select id="split-by-task-report" name="split-by" class="required form-control">
-						<option value="user" id="user">User</option>
-						<option value="category" id="category">Category</option>
-						<option value="status" id="status">Status</option>
+						<option value="user" id="user">{{agile_lng_translate 'portlets' 'user'}}</option>
+						<option value="category" id="category">{{agile_lng_translate 'portlets' 'category'}}</option>
+						<option value="status" id="status">{{agile_lng_translate 'portlets' 'status'}}</option>
 					</select>
 				</div>
 			</div>
 			<div class="control-group form-group">
-				<label class="control-label col-sm-3">Duration</label>
+				<label class="control-label col-sm-3">{{agile_lng_translate 'portlets' 'duration'}}</label>
 				<div class="controls col-sm-8">
 					<select id="duration" name="duration" class="required form-control">
-						<option value="1-day" >Today</option>
-						<option value="yesterday" >Yesterday</option>
-						<option value="this-week" >This Week</option>
-						<option value="1-week">Last 7 Days</option>
-						<option value="this-month" >This Month</option>
-						<option value="1-month">Last 30 Days</option>
-					<option value="Custom" class="Custom_range">Custom</option>
+						<option value="1-day" >{{agile_lng_translate 'portlets' 'today'}}</option>
+						<option value="yesterday" >{{agile_lng_translate 'portlets' 'yesterday'}}</option>
+						<option value="this-week" >{{agile_lng_translate 'portlets' 'this-week'}}</option>
+						<option value="1-week">{{agile_lng_translate 'portlets' 'last-7-days'}}</option>
+						<option value="this-month" >{{agile_lng_translate 'portlets' 'this-month'}}</option>
+						<option value="1-month">{{agile_lng_translate 'portlets' 'last-30-days'}}</option>
+					<option value="Custom" class="Custom_range">{{agile_lng_translate 'campaigns' 'custom'}}</option>
 					</select>
 				</div>
 			</div>
 
 				<div class="control-group form-group hide daterange">
-					<label class="control-label col-sm-3">Range<span class="field_req">*</span></label>
+
+					<label class="control-label col-sm-3">{{agile_lng_translate 'campaigns' 'range'}}<span class="field_req">*</span></label>
+
 					<div class="controls col-sm-8">
-					<div class="col-sm-5" style="padding:0px"><input type="text" id="start_date" name="start-date"  class="start date required form-control" placeholder="Start date"></input></div>  
-					<div class="col-sm-5" style="padding:0px;margin-left:12px"><input type="text" id="end_date" class="end date required form-control" name="end-date"  placeholder="End date"></input></div>
+					<div class="col-sm-5" style="padding:0px"><input type="text" id="start_date" name="start-date"  class="start date required form-control" placeholder="{{agile_lng_translate 'tasks' 'start-date'}}"></input></div>  
+					<div class="col-sm-5" style="padding:0px;margin-left:12px"><input type="text" id="end_date" class="end date required form-control" name="end-date"  placeholder="{{agile_lng_translate 'tasks' 'end-date'}}"></input></div>
 				</div>
 				</div>
 				<div class="control-group form-group" style="display:none;margin-bottom:0px">
@@ -615,11 +832,11 @@
 				<div class="invalid-range"></div></div>
 			</div>
 			<div class="control-group form-group">
-				<label class="control-label col-sm-3">User</label>
+				<label class="control-label col-sm-3">{{agile_lng_translate 'portlets' 'user'}}</label>
 				<div class="controls col-sm-8">
 					<span class="m-xs block">
-						<a href="#" id="task-report-user-select-all" class="text-info">Select all</a> |
-						<a href="#" id="task-report-user-select-none" class="text-info">Select none</a>
+						<a href="#" id="task-report-user-select-all" class="text-info">{{agile_lng_translate 'portlets' 'select-all'}}</a> |
+						<a href="#" id="task-report-user-select-none" class="text-info">{{agile_lng_translate 'portlets' 'select-none'}}</a>
 					</span>
 					<select id="task-report-user-list" name="task-report-user-list" class="required form-control" multiple>
 						
@@ -630,48 +847,50 @@
 		</form>
 	</div>
 	<div class="modal-footer">
-		<a id="save-modal" class="portlet-settings-save-modal save-modal btn btn-sm btn-primary" href="#">Save</a>
+		<a id="save-modal" class="portlet-settings-save-modal save-modal btn btn-sm btn-primary" href="#">{{agile_lng_translate 'portlets' 'save'}}</a>
 		<!--  <a id="cancel-modal" href="#portlets" class="btn" data-dismiss="modal" onclick="hidePortletSettings(this);">Cancel</a>  -->
 	</div>
 </div>
 </div>
 </div>
 
-<div id="portletsStatsReportSettingsModal" class="modal  fade">
+<div id="portletsStatsReportSettingsModal" class="modal fade">
 <div class="modal-dialog">
     <div class="modal-content">
 	<div class="modal-header">
 		<button class="close" data-dismiss="modal">x</button>
-		<h3 class="modal-title">Dashlet Settings</h3>
+		<h3 class="modal-title">{{agile_lng_translate 'portlets' 'dashlet-settings'}}</h3>
 	</div>
 	<div class="modal-body">
 		<input type="hidden" id="portlet-type" />
 		<input type="hidden" id="portlet-name" />
 		<form id="portletsStatsReportSettingsForm" name="portletsStatsReportSettingsForm" method="post" class="form-horizontal" style="margin-top:15px;">
 			<div class="control-group form-group">
-				<label class="control-label col-sm-3">Duration</label>
+				<label class="control-label col-sm-3">{{agile_lng_translate 'portlets' 'duration'}}</label>
 				<div class="controls col-sm-7">
 					<select id="duration" name="duration" class="required form-control">
-						<option value="1-day" >Today</option>
-						<option value="yesterday" >Yesterday</option>
-						<option value="24-hours" >Last 24 Hours</option>
-						<option value="this-week" >This Week</option>
-						<option value="last-week" >Last Week</option>
-						<option value="1-week">Last 7 Days</option>
-						<option value="this-month" >This Month</option>
-						<option value="last-month" >Last Month</option>
-						<option value="1-month">Last 30 Days</option>
-						<option value="Custom" class="Custom_range">Custom</option>
+						<option value="1-day" >{{agile_lng_translate 'portlets' 'today'}}</option>
+						<option value="yesterday" >{{agile_lng_translate 'portlets' 'yesterday'}}</option>
+						<option value="24-hours" >{{agile_lng_translate 'portlets' 'last-24-hours'}}</option>
+						<option value="this-week" >{{agile_lng_translate 'portlets' 'this-week'}}</option>
+						<option value="last-week" >{{agile_lng_translate 'portlets' 'last-week'}}</option>
+						<option value="1-week">{{agile_lng_translate 'portlets' 'last-7-days'}}</option>
+						<option value="this-month" >{{agile_lng_translate 'portlets' 'this-month'}}</option>
+						<option value="last-month" >{{agile_lng_translate 'portlets' 'last-month'}}</option>
+						<option value="1-month">{{agile_lng_translate 'portlets' 'last-30-days'}}</option>
+						<option value="Custom" class="Custom_range">{{agile_lng_translate 'campaigns' 'custom'}}</option>
 					</select>
 				</div>
 			</div>
 
 				<div class="control-group form-group hide daterange">
 					<input type="hidden"></input>
-					<label class="control-label col-sm-3">Range<span class="field_req">*</span></label>
+
+					<label class="control-label col-sm-3">{{agile_lng_translate 'campaigns' 'range'}}<span class="field_req">*</span></label>
+
 					<div class="controls col-sm-8">
-					<div class="col-sm-5" style="padding:0px"><input type="text" id="start_date" name="start-date"  class="start date required form-control" placeholder="Start date"></input></div>  
-					<div class="col-sm-5" style="padding:0px;margin-left:12px"><input type="text" id="end_date" class="end date required form-control" name="end-date"  placeholder="End date"></input></div>
+					<div class="col-sm-5" style="padding:0px"><input type="text" id="start_date" name="start-date"  class="start date required form-control" placeholder="{{agile_lng_translate 'tasks' 'start-date'}}"></input></div>  
+					<div class="col-sm-5" style="padding:0px;margin-left:12px"><input type="text" id="end_date" class="end date required form-control" name="end-date"  placeholder="{{agile_lng_translate 'tasks' 'end-date'}}"></input></div>
 				</div>
 				</div>
 				<div class="control-group form-group" style="display:none;margin-bottom:0px">
@@ -682,42 +901,44 @@
 		</form>
 	</div>
 	<div class="modal-footer">
-		<a id="save-modal" class="portlet-settings-save-modal save-modal btn btn-sm btn-primary" href="#">Save</a>
+		<a id="save-modal" class="portlet-settings-save-modal save-modal btn btn-sm btn-primary" href="#">{{agile_lng_translate 'portlets' 'save'}}</a>
 		<!--  <a id="cancel-modal" href="#portlets" class="btn" data-dismiss="modal" onclick="hidePortletSettings(this);">Cancel</a>  -->
 	</div>
 </div>
 </div>
 </div>
 
-<div id="portletsAgendaSettingsModal" class="modal  fade">
+<div id="portletsAgendaSettingsModal" class="modal fade">
 <div class="modal-dialog">
     <div class="modal-content">
 	<div class="modal-header">
 		<button class="close" data-dismiss="modal">x</button>
-		<h3 class="modal-title">Dashlet Settings</h3>
+		<h3 class="modal-title">{{agile_lng_translate 'portlets' 'dashlet-settings'}}</h3>
 	</div>
 	<div class="modal-body">
 		<input type="hidden" id="portlet-type" />
 		<input type="hidden" id="portlet-name" />
 		<form id="portletsAgendaSettingsForm" name="portletsAgendaSettingsForm" method="post" class="form-horizontal" style="margin-top:15px;">
 			<div class="control-group form-group">
-				<label class="control-label col-sm-3">Duration</label>
+				<label class="control-label col-sm-3">{{agile_lng_translate 'portlets' 'duration'}}</label>
 				<div class="controls col-sm-7">
 					<select id="duration" name="duration" class="required form-control">
-						<option value="next-7-days">Next 7 Days</option>
-						<option value="this-week">This Week</option>
-						<option value="today-and-tomorrow">Today & Tomorrow</option>
-						<option value="1-day">Today</option>
-						<option value="Custom" class="Custom_range">Custom</option>
+						<option value="next-7-days">{{agile_lng_translate 'portlets' 'next-7-days'}}</option>
+						<option value="this-week">{{agile_lng_translate 'portlets' 'this-week'}}</option>
+						<option value="today-and-tomorrow">{{agile_lng_translate 'portlets' 'today-and-tomorrow'}}</option>
+						<option value="1-day">{{agile_lng_translate 'portlets' 'today'}}</option>
+						<option value="Custom" class="Custom_range">{{agile_lng_translate 'campaigns' 'custom'}}</option>
 					</select>
 				</div>
 			</div>
 
 				<div class="control-group form-group hide daterange">
-					<label class="control-label col-sm-3">Range<span class="field_req">*</span></label>
+
+					<label class="control-label col-sm-3">{{agile_lng_translate 'campaigns' 'range'}}<span class="field_req">*</span></label>
+
 					<div class="controls col-sm-8">
-					<div class="col-sm-5" style="padding:0px"><input type="text" id="start_date" name="start-date"  class="start date required form-control" placeholder="Start date"></input></div>  
-					<div class="col-sm-5" style="padding:0px;margin-left:12px"><input type="text" id="end_date" class="end date required form-control" name="end-date"  placeholder="End date"></input></div>
+					<div class="col-sm-5" style="padding:0px"><input type="text" id="start_date" name="start-date"  class="start date required form-control" placeholder="{{agile_lng_translate 'tasks' 'start-date'}}"></input></div>  
+					<div class="col-sm-5" style="padding:0px;margin-left:12px"><input type="text" id="end_date" class="end date required form-control" name="end-date"  placeholder="{{agile_lng_translate 'tasks' 'end-date'}}"></input></div>
 				</div>
 				</div>
 				<div class="control-group form-group" style="display:none;margin-bottom:0px">
@@ -728,43 +949,46 @@
 		</form>
 	</div>
 	<div class="modal-footer">
-		<a id="save-modal" class="portlet-settings-save-modal save-modal btn btn-sm btn-primary" href="#">Save</a>
+		<a id="save-modal" class="portlet-settings-save-modal save-modal btn btn-sm btn-primary" href="#">{{agile_lng_translate 'portlets' 'save'}}</a>
 		<!--  <a id="cancel-modal" href="#portlets" class="btn" data-dismiss="modal" onclick="hidePortletSettings(this);">Cancel</a>  -->
 	</div>
 </div>
 </div>
 </div>
 
-<div id="portletsTodayTasksSettingsModal" class="modal  fade">
+<div id="portletsTodayTasksSettingsModal" class="modal fade">
 <div class="modal-dialog">
     <div class="modal-content">
 	<div class="modal-header">
 		<button class="close" data-dismiss="modal">x</button>
-		<h3 class="modal-title">Dashlet Settings</h3>
+		<h3 class="modal-title">{{agile_lng_translate 'portlets' 'dashlet-settings'}}</h3>
 	</div>
 	<div class="modal-body">
 		<input type="hidden" id="portlet-type" />
 		<input type="hidden" id="portlet-name" />
 		<form id="portletsTodayTasksSettingsForm" name="portletsTodayTasksSettingsForm" method="post" class="form-horizontal" style="margin-top:15px;">
 			<div class="control-group form-group">
-				<label class="control-label col-sm-3">Duration</label>
+				<label class="control-label col-sm-3">{{agile_lng_translate 'portlets' 'duration'}}</label>
 				<div class="controls col-sm-7">
 					<select id="duration" name="duration" class="required form-control">
-						<option value="next-7-days">Next 7 Days</option>
-						<option value="this-week">This Week</option>
-						<option value="today-and-tomorrow">Today & Tomorrow</option>
-						<option value="1-day">Today</option>
-						<option value="all-over-due">All Over Due</option>
-						<option value="Custom" class="Custom_range">Custom</option>
+						<option value="next-7-days">{{agile_lng_translate 'portlets' 'next-7-days'}}</option>
+						<option value="this-week">{{agile_lng_translate 'portlets' 'this-week'}}</option>
+						<option value="today-and-tomorrow">{{agile_lng_translate 'portlets' 'today-and-tomorrow'}}</option>
+						<option value="1-day">{{agile_lng_translate 'portlets' 'today'}}</option>
+						<option value="all-over-due">{{agile_lng_translate 'portlets' 'all-over-due'}}
+						</option>
+						<option value="Custom" class="Custom_range">{{agile_lng_translate 'campaigns' 'custom'}}</option>
 					</select>
 				</div>
 			</div>
 
 				<div class="control-group form-group hide daterange">
-					<label class="control-label col-sm-3">Range<span class="field_req">*</span></label>
+
+					<label class="control-label col-sm-3">{{agile_lng_translate 'campaigns' 'range'}}<span class="field_req">*</span></label>
+
 					<div class="controls col-sm-8">
-					<div class="col-sm-5" style="padding:0px"><input type="text" id="start_date" name="start-date"  class="start date required form-control" placeholder="Start date"></input></div>  
-					<div class="col-sm-5" style="padding:0px;margin-left:12px"><input type="text" id="end_date" class="end date required form-control" name="end-date"  placeholder="End date"></input></div>
+					<div class="col-sm-5" style="padding:0px"><input type="text" id="start_date" name="start-date"  class="start date required form-control" placeholder="{{agile_lng_translate 'tasks' 'start-date'}}"></input></div>  
+					<div class="col-sm-5" style="padding:0px;margin-left:12px"><input type="text" id="end_date" class="end date required form-control" name="end-date"  placeholder="{{agile_lng_translate 'tasks' 'end-date'}}"></input></div>
 				</div>
 				</div>
 				<div class="control-group form-group" style="display:none;margin-bottom:0px">
@@ -775,26 +999,26 @@
 		</form>
 	</div>
 	<div class="modal-footer">
-		<a id="save-modal" class="portlet-settings-save-modal save-modal btn btn-sm btn-primary" href="#">Save</a>
+		<a id="save-modal" class="portlet-settings-save-modal save-modal btn btn-sm btn-primary" href="#">{{agile_lng_translate 'portlets' 'save'}}</a>
 		<!--  <a id="cancel-modal" href="#portlets" class="btn" data-dismiss="modal" onclick="hidePortletSettings(this);">Cancel</a>  -->
 	</div>
 </div>
 </div>
 </div>
 
-<div id="portletsLeaderboardSettingsModal" class="modal  fade">
+<div id="portletsLeaderboardSettingsModal" class="modal fade">
 <div class="modal-dialog">
     <div class="modal-content">
 	<div class="modal-header">
 		<button class="close" data-dismiss="modal">x</button>
-		<h3 class="modal-title">Dashlet Settings</h3>
+		<h3 class="modal-title">{{agile_lng_translate 'portlets' 'dashlet-settings'}}</h3>
 	</div>
 	<div class="modal-body">
 		<input type="hidden" id="portlet-type" />
 		<input type="hidden" id="portlet-name" />
 		<form id="portletsLeaderboardSettingsForm" name="portletsLeaderboardSettingsForm" method="post" class="form-horizontal" style="margin-top:15px;">
 			<div class="control-group form-group">
-				<label class="control-label col-sm-3">Board<span class="field_req">*</span></label>
+				<label class="control-label col-sm-3">{{agile_lng_translate 'portlets' 'board'}}<span class="field_req">*</span></label>
 				<!-- <div class="controls">
 					<select id="category" name="category" class="required form-control" multiple>
 						<option value="revenue">Revenue</option>
@@ -805,23 +1029,23 @@
 				</div> -->
 				<div class="controls col-sm-8">
 					<span class="m-xs block">
-						<a href="#" id="category-select-all" class="text-info">Select all</a> |
-						<a href="#" id="category-select-none" class="text-info">Select none</a>
+						<a href="#" id="category-select-all" class="text-info">{{agile_lng_translate 'portlets' 'select-all'}}</a> |
+						<a href="#" id="category-select-none" class="text-info">{{agile_lng_translate 'portlets' 'select-none'}}</a>
 					</span>
 					<select id="category-list" name="category-list" class="required form-control" multiple="multiple">
-						<option value="revenue">Revenue</option>
-						<option value="dealsWon">Deals Won</option>
-						<option value="calls">Calls</option>
-						<option value="tasks">Tasks</option>
+						<option value="revenue">{{agile_lng_translate 'portlets' 'revenue'}}</option>
+						<option value="dealsWon">{{agile_lng_translate 'portlets' 'deals-won'}}</option>
+						<option value="calls">{{agile_lng_translate 'portlets' 'calls'}}</option>
+						<option value="tasks">{{agile_lng_translate 'portlets' 'tasks'}}</option>
 					</select>
 				</div>
 			</div>
 			<div class="control-group form-group">
-				<label class="control-label col-sm-3">User<span class="field_req">*</span></label>
+				<label class="control-label col-sm-3">{{agile_lng_translate 'portlets' 'user'}}<span class="field_req">*</span></label>
 				<div class="controls col-sm-8">
 					<span class="m-xs block">
-						<a href="#" id="user-select-all" class="text-info">Select all</a> |
-						<a href="#" id="user-select-none" class="text-info">Select none</a>
+						<a href="#" id="user-select-all" class="text-info">{{agile_lng_translate 'portlets' 'select-all'}}</a> |
+						<a href="#" id="user-select-none" class="text-info">{{agile_lng_translate 'portlets' 'select-none'}}</a>
 					</span>
 					<select id="user-list" name="user-list" class="required form-control" multiple>
 						
@@ -830,25 +1054,29 @@
 				</div>
 			</div>
 			<div class="control-group form-group">
-				<label class="control-label col-sm-3">Duration<span class="field_req">*</span></label>
+				<label class="control-label col-sm-3">{{agile_lng_translate 'portlets' 'duration'}}<span class="field_req">*</span></label>
 				<div class="controls col-sm-8">
 					<select id="duration" name="duration" class="required form-control">
-						<option value="this-quarter">This Quarter</option>
-						<option value="last-quarter">Last Quarter</option>
-						<option value="this-month">This Month</option>
-						<option value="last-month">Last Month</option>
-						<option value="this-week">This Week</option>
-						<option value="last-week">Last Week</option>
-						<option value="Custom" class="Custom_range">Custom</option>
+						<option value="this-quarter">{{agile_lng_translate 'portlets' 'this-quarter'}}
+						</option>
+						<option value="last-quarter">{{agile_lng_translate 'portlets' 'last-quarter'}}
+						</option>
+						<option value="this-month">{{agile_lng_translate 'portlets' 'this-month'}}</option>
+						<option value="last-month">{{agile_lng_translate 'portlets' 'last-month'}}</option>
+						<option value="this-week">{{agile_lng_translate 'portlets' 'this-week'}}</option>
+						<option value="last-week">{{agile_lng_translate 'portlets' 'last-week'}}</option>
+						<option value="Custom" class="Custom_range">{{agile_lng_translate 'campaigns' 'custom'}}</option>
 					</select>
 				</div>
 			</div>
 
 				<div class="control-group form-group hide daterange">
-					<label class="control-label col-sm-3">Range<span class="field_req">*</span></label>
+
+					<label class="control-label col-sm-3">{{agile_lng_translate 'campaigns' 'range'}}<span class="field_req">*</span></label>
+
 					<div class="controls col-sm-8">
-					<div class="col-sm-5" style="padding:0px"><input type="text" id="start_date" name="start-date"  class="start date required form-control" placeholder="Start date"></input></div>  
-					<div class="col-sm-5" style="padding:0px;margin-left:12px"><input type="text" id="end_date" class="end date required form-control" name="end-date"  placeholder="End date"></input></div>
+					<div class="col-sm-5" style="padding:0px"><input type="text" id="start_date" name="start-date"  class="start date required form-control" placeholder="{{agile_lng_translate 'tasks' 'start-date'}}"></input></div>  
+					<div class="col-sm-5" style="padding:0px;margin-left:12px"><input type="text" id="end_date" class="end date required form-control" name="end-date"  placeholder="{{agile_lng_translate 'tasks' 'end-date'}}"></input></div>
 				</div>
 				</div>
 				<div class="control-group form-group" style="display:none;margin-bottom:0px">
@@ -860,44 +1088,49 @@
 		</form>
 	</div>
 	<div class="modal-footer">
-		<a id="save-modal" class="portlet-settings-save-modal save-modal btn btn-sm btn-primary" href="#">Save</a>
+		<a id="save-modal" class="portlet-settings-save-modal save-modal btn btn-sm btn-primary" href="#">{{agile_lng_translate 'portlets' 'save'}}</a>
 		<!--  <a id="cancel-modal" href="#portlets" class="btn" data-dismiss="modal" onclick="hidePortletSettings(this);">Cancel</a>  -->
 	</div>
 </div>
 </div>
 </div>
 
-<div id="portletsDealsRevenueGraphSettingsModal" class="modal  fade">
+<div id="portletsDealsRevenueGraphSettingsModal" class="modal fade">
 <div class="modal-dialog">
     <div class="modal-content">
 	<div class="modal-header">
 		<button class="close" data-dismiss="modal">x</button>
-		<h3 class="modal-title">Dashlet Settings</h3>
+		<h3 class="modal-title">{{agile_lng_translate 'portlets' 'dashlet-settings'}}</h3>
 	</div>
 	<div class="modal-body">
 		<input type="hidden" id="portlet-type" />
 		<input type="hidden" id="portlet-name" />
 		<form id="portletsDealsRevenueGraphSettingsForm" name="portletsDealsRevenueGraphSettingsForm" method="post" class="form-horizontal" style="margin-top:15px;">
 			<div class="control-group form-group">
-				<label class="control-label col-sm-3">Duration</label>
+				<label class="control-label col-sm-3">{{agile_lng_translate 'portlets' 'duration'}}</label>
 				<div class="controls col-sm-7">
 					<select id="duration" name="duration" class="required form-control">
-						<option value="last-quarter">Last Quarter</option>
-						<option value="this-quarter">This Quarter</option>
-						<option value="next-quarter">Next Quarter</option>
-						<option value="this-and-next-quarter">This & Next Quarter</option>
-						<option value="this-year">This Year</option>
-						<option value="next-year">Next Year</option>
-					<option value="Custom" class="Custom_range">Custom</option>
+						<option value="last-quarter">{{agile_lng_translate 'portlets' 'last-quarter'}}
+						</option>
+						<option value="this-quarter">{{agile_lng_translate 'portlets' 'this-quarter'}}
+						</option>
+						<option value="next-quarter">{{agile_lng_translate 'portlets' 'next-quarter'}}
+						</option>
+						<option value="this-and-next-quarter">{{agile_lng_translate 'portlets' 'this-and-next-quarter-1'}}</option>
+						<option value="this-year">{{agile_lng_translate 'portlets' 'this-year'}}</option>
+						<option value="next-year">{{agile_lng_translate 'portlets' 'next-year'}}</option>
+						<option value="Custom" class="Custom_range">{{agile_lng_translate 'campaigns' 'custom'}}</option>
 					</select>
 				</div>
 			</div>
 
 				<div class="control-group form-group hide daterange">
-					<label class="control-label col-sm-3">Range<span class="field_req">*</span></label>
+
+					<label class="control-label col-sm-3">{{agile_lng_translate 'campaigns' 'range'}}<span class="field_req">*</span></label>
+
 					<div class="controls col-sm-8">
-					<div class="col-sm-5" style="padding:0px"><input type="text" id="start_date" name="start-date"  class="start date required form-control" placeholder="Start date"></input></div>  
-					<div class="col-sm-5" style="padding:0px;margin-left:12px"><input type="text" id="end_date" class="end date required form-control" name="end-date"  placeholder="End date"></input></div>
+					<div class="col-sm-5" style="padding:0px"><input type="text" id="start_date" name="start-date"  class="start date required form-control" placeholder="{{agile_lng_translate 'tasks' 'start-date'}}"></input></div>  
+					<div class="col-sm-5" style="padding:0px;margin-left:12px"><input type="text" id="end_date" class="end date required form-control" name="end-date"  placeholder="{{agile_lng_translate 'tasks' 'end-date'}}"></input></div>
 				</div>
 				</div>
 				<div class="control-group form-group" style="display:none;margin-bottom:0px">
@@ -906,7 +1139,7 @@
 				<div class="invalid-range"></div></div>
 			</div>
 			<div class="control-group form-group" id="portletsDealsRevenueGraphTrack">
-				<label class="control-label col-sm-3">Track</label>
+				<label class="control-label col-sm-3">{{agile_lng_translate 'portlets' 'track'}}</label>
 				<div class="controls col-sm-7">
 					<select id="track" name="track" class="required form-control">
 						
@@ -917,65 +1150,71 @@
 		</form>
 	</div>
 	<div class="modal-footer">
-		<a id="save-modal" class="portlet-settings-save-modal save-modal btn btn-sm btn-primary" href="#">Save</a>
+		<a id="save-modal" class="portlet-settings-save-modal save-modal btn btn-sm btn-primary" href="#">{{agile_lng_translate 'portlets' 'save'}}</a>
 		<!--  <a id="cancel-modal" href="#portlets" class="btn" data-dismiss="modal" onclick="hidePortletSettings(this);">Cancel</a>  -->
 	</div>
 </div>
 </div>
 </div>
 
-<div id="portletDeleteModal" class="modal  fade">
+<div id="portletDeleteModal" class="modal fade">
 <div class="modal-dialog">
     <div class="modal-content">
 	<div class="modal-header">
 		<button class="close" data-dismiss="modal">x</button>
-		<h3 class="modal-title">Delete Dashlet</h3>
+		<h3 class="modal-title">{{agile_lng_translate 'portlets' 'delete-dashlet'}}</h3>
 	</div>
 	<div class="modal-body">
-		Delete this dashlet?
+		{{agile_lng_translate 'portlets' 'delete-this-dashlet'}}
 	</div>
 	<div class="modal-footer">
-		<a id="portlet-delete-cancel-modal" href="#" class="btn btn-sm btn-default" data-dismiss="modal">No</a>
-		<a id="" class="portlet-delete-modal save-modal btn btn-sm btn-primary" href="#">Yes</a>
+		<a id="portlet-delete-cancel-modal" href="#" class="btn btn-sm btn-default" data-dismiss="modal">{{agile_lng_translate 'portlets' 'no'}}</a>
+		<a id="" class="portlet-delete-modal save-modal btn btn-sm btn-primary" href="#">{{agile_lng_translate 'portlets' 'yes'}}</a>
 	</div>
 </div>
 </div>
 </div>
 
-<div id="portletsCampaignStatsSettingsModal" class="modal  fade">
+<div id="portletsCampaignStatsSettingsModal" class="modal fade">
 <div class="modal-dialog">
     <div class="modal-content">
 	<div class="modal-header">
 		<button class="close" data-dismiss="modal">x</button>
-		<h3 class="modal-title">Dashlet Settings</h3>
+		<h3 class="modal-title">{{agile_lng_translate 'portlets' 'dashlet-settings'}}</h3>
 	</div>
 	<div class="modal-body">
 		<input type="hidden" id="portlet-type" />
 		<input type="hidden" id="portlet-name" />
 		<form id="portletsCampaignStatsSettingsForm" name="portletsCampaignStatsSettingsForm" method="post" class="form-horizontal" style="margin-top:15px;">
 			<div class="control-group form-group">
-				<label class="control-label col-sm-3">Duration</label>
+				<label class="control-label col-sm-3">{{agile_lng_translate 'portlets' 'duration'}}</label>
 				<div class="controls col-sm-7">
 					<select id="duration" name="duration" class="required form-control">
-						<option value="1-day" >Today</option>
-						<option value="yesterday" >Yesterday</option>
-						<option value="24-hours" >Last 24 Hours</option>
-						<option value="this-week" >This Week</option>
-						<option value="last-week" >Last Week</option>
-						<option value="1-week">Last 7 Days</option>
-						<option value="this-month" >This Month</option>
-						<option value="last-month" >Last Month</option>
-						<option value="1-month">Last 30 Days</option>
-					<option value="Custom" class="Custom_range">Custom</option>
+						<option value="1-day" >{{agile_lng_translate 'portlets' 'today'}}</option>
+						<option value="yesterday" >{{agile_lng_translate 'portlets' 'yesterday'}}</option>
+
+						<option value="24-hours" >{{agile_lng_translate 'portlets' 'last-24-hours'}}</option>
+
+						<option value="this-week" >{{agile_lng_translate 'portlets' 'this-week'}}</option>
+						<option value="last-week" >{{agile_lng_translate 'portlets' 'last-week'}}</option>
+						<option value="1-week">{{agile_lng_translate 'portlets' 'last-7-days'}}</option>
+						<option value="this-month" >{{agile_lng_translate 'portlets' 'this-month'}}</option>
+
+						<option value="last-month" >{{agile_lng_translate 'portlets' 'last-month'}}</option>
+						<option value="1-month">{{agile_lng_translate 'portlets' 'last-30-days'}}</option>
+					<option value="Custom" class="Custom_range">{{agile_lng_translate 'campaigns' 'custom'}}</option>
+
 					</select>
 				</div>
 			</div>
 
 				<div class="control-group form-group hide daterange">
-					<label class="control-label col-sm-3">Range<span class="field_req">*</span></label>
+
+					<label class="control-label col-sm-3">{{agile_lng_translate 'campaigns' 'range'}}<span class="field_req">*</span></label>
+
 					<div class="controls col-sm-8">
-					<div class="col-sm-5" style="padding:0px"><input type="text" id="start_date" name="start-date"  class="start date required form-control" placeholder="Start date"></input></div>  
-					<div class="col-sm-5" style="padding:0px;margin-left:12px"><input type="text" id="end_date" class="end date required form-control" name="end-date"  placeholder="End date"></input></div>
+					<div class="col-sm-5" style="padding:0px"><input type="text" id="start_date" name="start-date"  class="start date required form-control" placeholder="{{agile_lng_translate 'tasks' 'start-date'}}"></input></div>  
+					<div class="col-sm-5" style="padding:0px;margin-left:12px"><input type="text" id="end_date" class="end date required form-control" name="end-date"  placeholder="{{agile_lng_translate 'tasks' 'end-date'}}"></input></div>
 				</div>
 				</div>
 				<div class="control-group form-group" style="display:none;margin-bottom:0px">
@@ -984,7 +1223,7 @@
 				<div class="invalid-range"></div></div>
 			</div>
 			<div class="control-group form-group">
-				<label class="control-label col-sm-3">Campaign Type</label>
+				<label class="control-label col-sm-3">{{agile_lng_translate 'portlets' 'campaign-type'}}</label>
 				<div class="controls col-sm-7">
 					<select id="campaign_type" name="campaign_type" class="required form-control">
 						
@@ -995,7 +1234,7 @@
 		</form>
 	</div>
 	<div class="modal-footer">
-		<a id="save-modal" class="portlet-settings-save-modal save-modal btn btn-sm btn-primary" href="#">Save</a>
+		<a id="save-modal" class="portlet-settings-save-modal save-modal btn btn-sm btn-primary" href="#">{{agile_lng_translate 'portlets' 'save'}}</a>
 		<!--  <a id="cancel-modal" href="#portlets" class="btn" data-dismiss="modal" onclick="hidePortletSettings(this);">Cancel</a>  -->
 	</div>
 </div>
@@ -1008,28 +1247,32 @@
     <div class="modal-content">
 	<div class="modal-header">
 		<button class="close" data-dismiss="modal">x</button>
-		<h3 class="modal-title">Dashlet Settings</h3>
+		<h3 class="modal-title">{{agile_lng_translate 'portlets' 'dashlet-settings'}}</h3>
 	</div>
 	<div class="modal-body">
 		<input type="hidden" id="portlet-type" />
 		<input type="hidden" id="portlet-name" />
 		<form id="portletsCampaignGraphSettingsForm" name="portletsCampaignGraphSettingsForm" method="post" class="form-horizontal" style="margin-top:15px;">
 			<div class="control-group form-group">
-				<label class="control-label col-sm-3">Duration</label>
+				<label class="control-label col-sm-3">{{agile_lng_translate 'portlets' 'duration'}}</label>
 				<div class="controls col-sm-7">
 					<select id="duration" name="duration" class="required form-control">
-						<option value="1-day" >Today</option>
-						<option value="24-hours" >Last 24 Hours</option>
-						<option value="this-week" >This Week</option>
-						<option value="1-week">Last 7 Days</option>
-						<option value="this-month" >This Month</option>
-						<option value="1-month">Last 30 Days</option>
+						<option value="1-day" >{{agile_lng_translate 'portlets' 'today'}}</option>
+						<option value="yesterday" >{{agile_lng_translate 'portlets' 'yesterday'}}</option>
+						<option value="24-hours" >{{agile_lng_translate 'portlets' 'last-24-hours'}}</option>
+						<option value="this-week" >{{agile_lng_translate 'portlets' 'this-week'}}</option>
+						<option value="last-week" >{{agile_lng_translate 'portlets' 'last-week'}}</option>
+						<option value="1-week">{{agile_lng_translate 'portlets' 'last-7-days'}}</option>
+						<option value="this-month" >{{agile_lng_translate 'portlets' 'this-month'}}</option>
+						<option value="last-month" >{{agile_lng_translate 'portlets' 'last-month'}}</option>
+						<option value="1-month">{{agile_lng_translate 'portlets' 'last-30-days'}}</option>
 					</select>
 				</div>
 			</div>
 
 			<div class="control-group form-group">
-				<label class="control-label col-sm-3">Campaign Type</label>
+				<label class="control-label col-sm-3">{{agile_lng_translate 'portlets' 'campaign-type'}}
+				</label>
 				<div class="controls col-sm-7">
 					<select id="campaign_type" name="campaign_type" class="required form-control">
 						
@@ -1040,42 +1283,45 @@
 		</form>
 	</div>
 	<div class="modal-footer">
-		<a id="save-modal" class="portlet-settings-save-modal save-modal btn btn-sm btn-primary" href="#">Save</a>
+		<a id="save-modal" class="portlet-settings-save-modal save-modal btn btn-sm btn-primary" href="#">{{agile_lng_translate 'portlets' 'save'}}</a>
 		<!--  <a id="cancel-modal" href="#portlets" class="btn" data-dismiss="modal" onclick="hidePortletSettings(this);">Cancel</a>  -->
 	</div>
 </div>
 </div>
 </div>
 
-<div id="portletsGoalsSettingsModal" class="modal  fade">
+<div id="portletsGoalsSettingsModal" class="modal fade">
 <div class="modal-dialog">
     <div class="modal-content">
 	<div class="modal-header">
 		<button class="close" data-dismiss="modal">x</button>
-		<h3 class="modal-title">Dashlet Settings</h3>
+		<h3 class="modal-title">{{agile_lng_translate 'portlets' 'dashlet-settings'}}</h3>
 	</div>
 	<div class="modal-body">
 		<input type="hidden" id="portlet-type" />
 		<input type="hidden" id="portlet-name" />
 			<form id="portletsGoalsSettingsForm" name="portletsGoalsSettingsForm" method="post" class="form-horizontal" style="margin-top:15px;">
 			<div class="control-group form-group">
-				<label class="control-label col-sm-3">Duration</label>
+				<label class="control-label col-sm-3">{{agile_lng_translate 'portlets' 'duration'}}</label>
 				<div class="controls col-sm-7">
 					<select id="duration" name="duration" class="required form-control">
-						<option value="this-month" >This Month</option>
-						<option value="last-month" >Last Month</option>
-						<option value="this-quarter">This Quarter</option>
-						<option value="this-year">This Year</option>
-<option value="Custom" class="Custom_range">Custom</option>
+						<option value="this-month" >{{agile_lng_translate 'portlets' 'this-month'}}</option>
+						<option value="last-month" >{{agile_lng_translate 'portlets' 'last-month'}}</option>
+						<option value="this-quarter">{{agile_lng_translate 'portlets' 'this-quarter'}}
+						</option>
+						<option value="this-year">{{agile_lng_translate 'portlets' 'this-year'}}</option>
+						<option value="Custom" class="Custom_range">{{agile_lng_translate 'campaigns' 'custom'}}</option>
 					</select>
 				</div>
 			</div>
 
 				<div class="control-group form-group hide daterange">
-					<label class="control-label col-sm-3">Range<span class="field_req">*</span></label>
+
+					<label class="control-label col-sm-3">{{agile_lng_translate 'campaigns' 'range'}}<span class="field_req">*</span></label>
+
 					<div class="controls col-sm-8">
-					<div class="col-sm-5" style="padding:0px"><input type="text" id="start_date" name="start-date"  class="start month_date required form-control" placeholder="Start date"></input></div>  
-					<div class="col-sm-5" style="padding:0px;margin-left:12px"><input type="text" id="end_date" class="end month_date required form-control" name="end-date"  placeholder="End date"></input></div>
+					<div class="col-sm-5" style="padding:0px"><input type="text" id="start_date" name="start-date"  class="start month_date required form-control" placeholder="{{agile_lng_translate 'tasks' 'start-date'}}"></input></div>  
+					<div class="col-sm-5" style="padding:0px;margin-left:12px"><input type="text" id="end_date" class="end month_date required form-control" name="end-date"  placeholder="{{agile_lng_translate 'tasks' 'end-date'}}"></input></div>
 				</div>
 				</div>
 				<div class="control-group form-group" style="display:none;margin-bottom:0px">
@@ -1086,35 +1332,35 @@
 		</form>
 	</div>
 	<div class="modal-footer">
-		<a id="save-modal" class="portlet-settings-save-modal save-modal btn btn-sm btn-primary" href="#">Save</a>
+		<a id="save-modal" class="portlet-settings-save-modal save-modal btn btn-sm btn-primary" href="#">{{agile_lng_translate 'portlets' 'save'}}</a>
 		<!--  <a id="cancel-modal" href="#portlets" class="btn" data-dismiss="modal" onclick="hidePortletSettings(this);">Cancel</a>  -->
 	</div>
 </div>
 </div>
 </div>
 
-<div class="modal  fade" id="portletsIncomingDealsSettingsModal">
+<div id="portletsIncomingDealsSettingsModal" class="modal fade">
 <div class="modal-dialog">
     <div class="modal-content">
 	<div class="modal-header">
 		<button class="close" data-dismiss="modal">x</button>
-		<h3 class="modal-title">Dashlet Settings</h3>
+		<h3 class="modal-title">{{agile_lng_translate 'portlets' 'dashlet-settings'}}</h3>
 	</div>
 	<div class="modal-body">
 		<input type="hidden" id="portlet-type" />
 		<input type="hidden" id="portlet-name" />
 		<form id="portletsIncomingDealsSettingssForm" name="portletsIncomingDealsSettingsForm" method="post" class="form-horizontal" style="margin-top:15px;">
 			<div class="control-group form-group">
-				<label class="control-label col-sm-3">Split by</label>
+				<label class="control-label col-sm-3">{{agile_lng_translate 'portlets' 'split-by'}}</label>
 				<div class="controls col-sm-7">
 					<select id="split-by-incoming-deals" name="type" class="form-control">
-						<option value="deals">Total Deals</option>
-                    	<option value="Revenue">Total Revenue</option>
+						<option value="deals">{{agile_lng_translate 'report-add' 'total-deals'}}</option>
+                    	<option value="Revenue">{{agile_lng_translate 'report-add' 'total-revenue'}}</option>
 					</select>
 				</div>
 			</div>
 			<div class="control-group form-group" id="portletsIncomingDealsOwner">
-				<label class="control-label col-sm-3">Owner</label>
+				<label class="control-label col-sm-3">{{agile_lng_translate 'portlets' 'owner'}}</label>
 				<div class="controls col-sm-7">
 					<select id="owner" name="owner" class="form-control">
 						
@@ -1123,39 +1369,43 @@
 				</div>
 			</div>
 			<div class="control-group form-group">
-				<label class="control-label col-sm-3">Frequency</label>
+				<label class="control-label col-sm-3">{{agile_lng_translate 'portlets' 'frequency'}}</label>
 				<div class="controls col-sm-7">
 					<select id="frequency-incoming-deals" name="frequency" class="form-control">
-						<option value="daily">Daily</option>
-						<option value="weekly">Weekly</option>
-						<option value="monthly">Monthly</option>
+						<option value="daily">{{agile_lng_translate 'portlets' 'daily'}}</option>
+						<option value="weekly">{{agile_lng_translate 'portlets' 'weekly'}}</option>
+						<option value="monthly">{{agile_lng_translate 'portlets' 'monthly'}}</option>
 					</select>
 				</div>
 			</div>
 			<div class="control-group form-group">
-				<label class="control-label col-sm-3">Duration</label>
+				<label class="control-label col-sm-3">{{agile_lng_translate 'portlets' 'duration'}}</label>
 				<div class="controls col-sm-7">
 					<select id="duration-incoming-deals" name="duration" class="form-control">
-						<option value="1-day" >Today</option>
-						<option value="yesterday" >Yesterday</option>
-						<option value="1-week">Last 7 Days</option>
-						<option value="1-month">Last 30 Days</option>
-						<option value="this-month" >This Month</option>
-						<option value="last-month" >Last Month</option>
-						<option value="this-quarter">This Quarter</option>
-						<option value="last-quarter">Last Quarter</option>
-						<option value="this-year">This Year</option>
-						<option value="last-year">Last Year</option>
-					<option value="Custom" class="Custom_range">Custom</option>
+						<option value="1-day" >{{agile_lng_translate 'portlets' 'today'}}</option>
+						<option value="yesterday" >{{agile_lng_translate 'portlets' 'yesterday'}}</option>
+						<option value="1-week">{{agile_lng_translate 'portlets' 'last-7-days'}}</option>
+						<option value="1-month">{{agile_lng_translate 'portlets' 'last-30-days'}}</option>
+						<option value="this-month" >{{agile_lng_translate 'portlets' 'this-month'}}</option>
+						<option value="last-month" >{{agile_lng_translate 'portlets' 'last-month'}}</option>
+						<option value="this-quarter">{{agile_lng_translate 'portlets' 'this-quarter'}}
+						</option>
+						<option value="last-quarter">{{agile_lng_translate 'portlets' 'last-quarter'}}
+						</option>
+						<option value="this-year">{{agile_lng_translate 'portlets' 'this-year'}}</option>
+						<option value="last-year">{{agile_lng_translate 'portlets' 'last-year'}}</option>
+					<option value="Custom" class="Custom_range">{{agile_lng_translate 'campaigns' 'custom'}}</option>
 					</select>
 				</div>
 			</div>
 
 				<div class="control-group form-group hide daterange">
-					<label class="control-label col-sm-3">Range<span class="field_req">*</span></label>
+
+					<label class="control-label col-sm-3">{{agile_lng_translate 'campaigns' 'range'}}<span class="field_req">*</span></label>
+
 					<div class="controls col-sm-8">
-					<div class="col-sm-5" style="padding:0px"><input type="text" id="start_date" name="start-date"  class="start date required form-control" placeholder="Start date"></input></div>  
-					<div class="col-sm-5" style="padding:0px;margin-left:12px"><input type="text" id="end_date" class="end date required form-control" name="end-date"  placeholder="End date"></input></div>
+					<div class="col-sm-5" style="padding:0px"><input type="text" id="start_date" name="start-date"  class="start date required form-control" placeholder="{{agile_lng_translate 'tasks' 'start-date'}}"></input></div>  
+					<div class="col-sm-5" style="padding:0px;margin-left:12px"><input type="text" id="end_date" class="end date required form-control" name="end-date"  placeholder="{{agile_lng_translate 'tasks' 'end-date'}}"></input></div>
 				</div>
 				</div>
 				<div class="control-group form-group" style="display:none;margin-bottom:0px">
@@ -1166,25 +1416,25 @@
 		</form>
 	</div>
 	<div class="modal-footer">
-		<a id="save-modal" class="portlet-settings-save-modal save-modal btn btn-sm btn-primary" href="#">Save</a>
+		<a id="save-modal" class="portlet-settings-save-modal save-modal btn btn-sm btn-primary" href="#">{{agile_lng_translate 'portlets' 'save'}}</a>
 	</div>
 </div>
 </div>
 </div>
 
-<div class="modal  fade" id="portletsLostDealAnalysisSettingsModal">
+<div id="portletsLostDealAnalysisSettingsModal" class="modal fade">
 <div class="modal-dialog">
     <div class="modal-content">
 	<div class="modal-header">
 		<button class="close" data-dismiss="modal">x</button>
-		<h3 class="modal-title">Dashlet Settings</h3>
+		<h3 class="modal-title">{{agile_lng_translate 'portlets' 'dashlet-settings'}}</h3>
 	</div>
 	<div class="modal-body">
 		<input type="hidden" id="portlet-type" />
 		<input type="hidden" id="portlet-name" />
 		<form id="portletsLostDealAnalysisSettingsForm" name="portletsLostDealAnalysisSettingsForm" method="post" class="form-horizontal" style="margin-top:15px;">
 			<div class="control-group form-group" id="portletsLostDealAnalysisOwner">
-				<label class="control-label col-sm-3">Owner</label>
+				<label class="control-label col-sm-3">{{agile_lng_translate 'portlets' 'owner'}}</label>
 				<div class="controls col-sm-7">
 					<select id="owner-lost-deal-analysis" name="owner" class="form-control">
 						
@@ -1193,7 +1443,7 @@
 				</div>
 			</div>
 			<div class="control-group form-group" id="portletsLostDealAnalysisTrack">
-				<label class="control-label col-sm-3">Track</label>
+				<label class="control-label col-sm-3">{{agile_lng_translate 'portlets' 'track'}}</label>
 				<div class="controls col-sm-7">
 					<select id="track-lost-deal-analysis" name="track" class="form-control">
 						
@@ -1202,7 +1452,7 @@
 				</div>
 			</div>
 			<div class="control-group form-group" id="portletsLostDealAnalysisSource">
-				<label class="control-label col-sm-3">Source</label>
+				<label class="control-label col-sm-3">{{agile_lng_translate 'portlets' 'source'}}</label>
 				<div class="controls col-sm-7">
 					<select id="source-lost-deal-analysis" name="source" class="form-control">
 						
@@ -1211,29 +1461,35 @@
 				</div>
 			</div>
 			<div class="control-group form-group">
-				<label class="control-label col-sm-3">Duration</label>
+				<label class="control-label col-sm-3">{{agile_lng_translate 'portlets' 'duration'}}</label>
 				<div class="controls col-sm-7">
 					<select id="duration-lost-deal-analysis" name="duration" class="form-control">
-						<option value="1-day" >Today</option>
-						<option value="yesterday" >Yesterday</option>
-						<option value="1-week">Last 7 Days</option>
-						<option value="1-month">Last 30 Days</option>
-						<option value="this-month" >This Month</option>
-						<option value="last-month" >Last Month</option>
-						<option value="this-quarter">This Quarter</option>
-						<option value="last-quarter">Last Quarter</option>
-						<option value="this-year">This Year</option>
-						<option value="last-year">Last Year</option>
-					<option value="Custom" class="Custom_range">Custom</option>
+						<option value="1-day" >{{agile_lng_translate 'portlets' 'today'}}</option>
+						<option value="yesterday" >{{agile_lng_translate 'portlets' 'yesterday'}}</option>
+						<option value="1-week">{{agile_lng_translate 'portlets' 'last-7-days'}}</option>
+						<option value="1-month">{{agile_lng_translate 'portlets' 'last-30-days'}}</option>
+						<option value="this-month" >{{agile_lng_translate 'portlets' 'this-month'}}</option>
+						<option value="last-month" >{{agile_lng_translate 'portlets' 'last-month'}}</option>
+						<option value="this-quarter">{{agile_lng_translate 'portlets' 'this-quarter'}}
+						</option>
+						<option value="last-quarter">{{agile_lng_translate 'portlets' 'last-quarter'}}
+						</option>
+						<option value="this-year">{{agile_lng_translate 'portlets' 'this-year'}}</option>
+						<option value="last-year">{{agile_lng_translate 'portlets' 'last-year'}}</option>
+
+					<option value="Custom" class="Custom_range">{{agile_lng_translate 'campaigns' 'custom'}}</option>
+
 					</select>
 				</div>
 			</div>
 
 				<div class="control-group form-group hide daterange">
-					<label class="control-label col-sm-3">Range<span class="field_req">*</span></label>
+
+					<label class="control-label col-sm-3">{{agile_lng_translate 'campaigns' 'range'}}<span class="field_req">*</span></label>
+
 					<div class="controls col-sm-8">
-					<div class="col-sm-5" style="padding:0px"><input type="text" id="start_date" name="start-date"  class="start date required form-control" placeholder="Start date"></input></div>  
-					<div class="col-sm-5" style="padding:0px;margin-left:12px"><input type="text" id="end_date" class="end date required form-control" name="end-date"  placeholder="End date"></input></div>
+					<div class="col-sm-5" style="padding:0px"><input type="text" id="start_date" name="start-date"  class="start date required form-control" placeholder="{{agile_lng_translate 'tasks' 'start-date'}}"></input></div>  
+					<div class="col-sm-5" style="padding:0px;margin-left:12px"><input type="text" id="end_date" class="end date required form-control" name="end-date"  placeholder="{{agile_lng_translate 'tasks' 'end-date'}}"></input></div>
 				</div>
 				</div>
 				<div class="control-group form-group" style="display:none;margin-bottom:0px">
@@ -1244,44 +1500,47 @@
 		</form>
 	</div>
 	<div class="modal-footer">
-		<a id="save-modal" class="portlet-settings-save-modal save-modal btn btn-sm btn-primary" href="#">Save</a>
+		<a id="save-modal" class="portlet-settings-save-modal save-modal btn btn-sm btn-primary" href="#">{{agile_lng_translate 'portlets' 'save'}}</a>
 	</div>
 </div>
 </div>
 </div>
 
-<div id="portletsTaskClosureSettingsModal" class="modal  fade">
+<div id="portletsTaskClosureSettingsModal" class="modal fade">
 <div class="modal-dialog">
     <div class="modal-content">
 	<div class="modal-header">
 		<button class="close" data-dismiss="modal">x</button>
-		<h3 class="modal-title">Dashlet Settings</h3>
+		<h3 class="modal-title">{{agile_lng_translate 'portlets' 'dashlet-settings'}}</h3>
 	</div>
 	<div class="modal-body">
 		<input type="hidden" id="portlet-type" />
 		<input type="hidden" id="portlet-name" />
 			<form id="portletsTaskClosureSettingsForm" name="portletsTaskClosureSettingsForm" method="post"  class="form-horizontal">
 			<div class="control-group form-group">
-				<label class="control-label col-sm-3">Duration</label>
+				<label class="control-label col-sm-3">{{agile_lng_translate 'portlets' 'duration'}}</label>
 				<div class="controls col-sm-7">
 					<select id="duration" name="duration" class="required form-control">
-						<option value="1-day" >Today</option>
-						<option value="yesterday" >Yesterday</option>
-						<option value="this-week" >This Week</option>
-						<option value="1-week">Last 7 Days</option>
-						<option value="this-month" >This Month</option>
+						<option value="1-day" >{{agile_lng_translate 'portlets' 'today'}}</option>
+						<option value="yesterday" >{{agile_lng_translate 'portlets' 'yesterday'}}</option>
+						<option value="this-week" >{{agile_lng_translate 'portlets' 'this-week'}}</option>
+						<option value="1-week">{{agile_lng_translate 'portlets' 'last-7-days'}}</option>
+						<option value="this-month" >{{agile_lng_translate 'portlets' 'this-month'}}</option>
+						<option value="1-month">{{agile_lng_translate 'portlets' 'last-30-days'}}</option>
 						<option value="1-month">Last 30 Days</option>
 
-					<option value="Custom" class="Custom_range">Custom</option>
+					<option value="Custom" class="Custom_range">{{agile_lng_translate 'campaigns' 'custom'}}</option>
 					</select>
 				</div>
 			</div>
 
 				<div class="control-group form-group hide daterange">
-					<label class="control-label col-sm-3">Range<span class="field_req">*</span></label>
+
+					<label class="control-label col-sm-3">{{agile_lng_translate 'campaigns' 'range'}}<span class="field_req">*</span></label>
+
 					<div class="controls col-sm-8">
-					<div class="col-sm-5" style="padding:0px"><input type="text" id="start_date" name="start-date"  class="start date required form-control" placeholder="Start date"></input></div>  
-					<div class="col-sm-5" style="padding:0px;margin-left:12px"><input type="text" id="end_date" class="end date required form-control" name="end-date"  placeholder="End date"></input></div>
+					<div class="col-sm-5" style="padding:0px"><input type="text" id="start_date" name="start-date"  class="start date required form-control" placeholder="{{agile_lng_translate 'tasks' 'start-date'}}"></input></div>  
+					<div class="col-sm-5" style="padding:0px;margin-left:12px"><input type="text" id="end_date" class="end date required form-control" name="end-date"  placeholder="{{agile_lng_translate 'tasks' 'end-date'}}"></input></div>
 				</div>
 				</div>
 				<div class="control-group form-group" style="display:none;margin-bottom:0px">
@@ -1292,25 +1551,26 @@
 		</form>
 	</div>
 	<div class="modal-footer">
-		<a id="save-modal" class="portlet-settings-save-modal save-modal btn btn-sm btn-primary" href="#">Save</a>
+		<a id="save-modal" class="portlet-settings-save-modal save-modal btn btn-sm btn-primary" href="#">{{agile_lng_translate 'portlets' 'save'}}</a>
 	</div>
 </div>
 </div>
 </div>
 
-<div class="modal  fade" id="portletsUserActivitiesSettingsModal">
+<div id="portletsUserActivitiesSettingsModal" class="modal fade">
 <div class="modal-dialog">
     <div class="modal-content">
 	<div class="modal-header">
 		<button class="close" data-dismiss="modal">x</button>
-		<h3 class="modal-title">Dashlet Settings</h3>
+		<h3 class="modal-title">{{agile_lng_translate 'portlets' 'dashlet-settings'}}</h3>
 	</div>
 	<div class="modal-body">
 		<input type="hidden" id="portlet-type" />
 		<input type="hidden" id="portlet-name" />
 		<form id="portletsUserActivitiesSettingsForm" name="portletsUserActivitiesSettingsForm" method="post" class="form-horizontal" style="margin-top:15px;">
 			<div class="control-group form-group" id="portletsActivitiesOwner">
-				<label class="control-label col-sm-3">Owner</label>
+				<label class="control-label col-sm-3">{{agile_lng_translate 'portlets' 'owner'}}
+				</label>
 				<div class="controls col-sm-7">
 					<select id="owner-user-activities" name="owner" class="form-control">
 						
@@ -1319,52 +1579,66 @@
 				</div>
 			</div>
 			<div class="control-group form-group" id="portletsActivityType">
-				<label class="control-label col-sm-3">Type</label>
+				<label class="control-label col-sm-3">{{agile_lng_translate 'contacts-view' 'type'}}
+				</label>
 				<div class="controls col-sm-7">
 					<select id="activity_type" name="activity_type" class="form-control">
-						<option value="ALL" >All Activities</option>
-						<option value="CALL">Calls</option>
-						<option value="CAMPAIGN">Campaigns</option>
-						<option value="CONTACT">Contacts</option>
+						<option value="ALL" >{{agile_lng_translate 'report-view' 'all-activities'}}
+						</option>
+						<option value="CALL">{{agile_lng_translate 'report-view' 'calls'}}</option>
+						<option value="CAMPAIGN">{{agile_lng_translate 'report-view' 'campaigns'}}
+						</option>
+						<option value="CONTACT">{{agile_lng_translate 'portlets' 'contacts'}}</option>
                      
 					{{#hasMenuScope 'DEALS'}}
-                     	<option value="DEAL">Deals</option>
+                     	<option value="DEAL">{{agile_lng_translate 'report-view' 'deals'}}</option>
 					{{/hasMenuScope}}
                     {{#hasMenuScope 'DOCUMENT'}}
-                       <option value="DOCUMENT">Documents</option>
+                       <option value="DOCUMENT">{{agile_lng_translate 'contact-details' 'documents'}}
+                       </option>
                     {{/hasMenuScope}}
-					 <option value="EVENT">Events</option>
-					 <option value="TASK">Tasks</option>
-					 <option value="TICKET">Ticket</option>
+					 <option value="EVENT">{{agile_lng_translate 'contact-details' 'events'}}</option>
+					 <option value="TASK">{{agile_lng_translate 'contact-details' 'tasks'}}</option>
+					 <option value="TICKET">{{agile_lng_translate 'contact-details' 'ticket'}}</option>
 					 
 					</select>
 				</div>
 			</div>
 			
 			<div class="control-group form-group">
-				<label class="control-label col-sm-3">Duration</label>
+				<label class="control-label col-sm-3">{{agile_lng_translate 'portlets' 'duration'}}
+				</label>
 				<div class="controls col-sm-7">
 					<select id="duration-user-activities" name="duration" class="form-control">
-						<option value="1-day" >Today</option>
-						<option value="yesterday" >Yesterday</option>
-						<option value="1-week">Last 7 Days</option>
-						<option value="1-month">Last 30 Days</option>
-						<option value="this-month" >This Month</option>
-						<option value="last-month" >Last Month</option>
-						<option value="this-quarter">This Quarter</option>
-						<option value="last-quarter">Last Quarter</option>
-						<option value="this-year">This Year</option>
-						<option value="last-year">Last Year</option>
-					<option value="Custom" class="Custom_range">Custom</option>
+						<option value="1-day" >{{agile_lng_translate 'portlets' 'today'}}</option>
+						<option value="yesterday" >{{agile_lng_translate 'portlets' 'yesterday'}}
+						</option>
+						<option value="1-week">{{agile_lng_translate 'portlets' 'last-7-days'}}
+						</option>
+						<option value="1-month">{{agile_lng_translate 'portlets' 'last-30-days'}}
+						</option>
+						<option value="this-month" >{{agile_lng_translate 'portlets' 'this-month'}}
+						</option>
+						<option value="last-month" >{{agile_lng_translate 'portlets' 'last-month'}}
+						</option>
+						<option value="this-quarter">{{agile_lng_translate 'portlets' 'this-quarter'}}</option>
+						<option value="last-quarter">{{agile_lng_translate 'portlets' 'last-quarter'}}</option>
+						<option value="this-year">{{agile_lng_translate 'portlets' 'this-year'}}
+						</option>
+						<option value="last-year">{{agile_lng_translate 'portlets' 'last-year'}}
+						</option>
+					<option value="Custom" class="Custom_range">{{agile_lng_translate 'campaigns' 'custom'}}</option>
 					</select>
 				</div>
 			</div>
 
 				<div class="control-group form-group hide daterange">
-					<label class="control-label col-sm-3">Range<span class="field_req">*</span></label>
+
+					<label class="control-label col-sm-3">{{agile_lng_translate 'campaigns' 'range'}}<span class="field_req">*</span></label>
+
 					<div class="controls col-sm-8">
-					<div class="col-sm-5" style="padding:0px"><input type="text" id="start_date" name="start-date"  class="start date required form-control" placeholder="Start date"></input></div>  
-					<div class="col-sm-5" style="padding:0px;margin-left:12px"><input type="text" id="end_date" class="end date required form-control" name="end-date"  placeholder="End date"></input></div>
+					<div class="col-sm-5" style="padding:0px"><input type="text" id="start_date" name="start-date"  class="start date required form-control" placeholder="{{agile_lng_translate 'tasks' 'start-date'}}"></input></div>  
+					<div class="col-sm-5" style="padding:0px;margin-left:12px"><input type="text" id="end_date" class="end date required form-control" name="end-date"  placeholder="{{agile_lng_translate 'tasks' 'end-date'}}"></input></div>
 				</div>
 				</div>
 				<div class="control-group form-group" style="display:none;margin-bottom:0px">
@@ -1375,41 +1649,46 @@
 		</form>
 	</div>
 	<div class="modal-footer">
-		<a id="save-modal" class="portlet-settings-save-modal save-modal btn btn-sm btn-primary" href="#">Save</a>
+		<a id="save-modal" class="portlet-settings-save-modal save-modal btn btn-sm btn-primary" href="#">{{agile_lng_translate 'portlets' 'save'}}</a>
 	</div>
 </div>
 </div>
 </div>
 
-<div id="portletsWebstatVisitsSettingsModal" class="modal  fade">
+<div id="portletsWebstatVisitsSettingsModal" class="modal fade">
 <div class="modal-dialog">
     <div class="modal-content">
 	<div class="modal-header">
 		<button class="close" data-dismiss="modal">x</button>
-		<h3 class="modal-title">Visits Settings</h3>
+		<h3 class="modal-title">{{agile_lng_translate 'visitors' 'visits-settings'}}</h3>
 	</div>
 	<div class="modal-body">
 		<input type="hidden" id="portlet-type" />
 		<input type="hidden" id="portlet-name" />
 		<form id="portletsWebstatVisitsSettingsForm" name="portletsWebstatVisitsSettingsForm" method="post"  class="form-horizontal" style="margin-top:15px;">
 			<div class="control-group form-group">
-				<label class="control-label col-sm-3">Duration</label>
+				<label class="control-label col-sm-3">{{agile_lng_translate 'portlets' 'duration'}}</label>
 				<div class="controls col-sm-7">
 					<select id="duration" name="duration" class="required form-control">
-						<option value="1-day" >Today</option>
-						<option value="24-hours" >Last 24 Hours</option>
-						<option value="this-week" >This Week</option>
-						<option value="1-week">Last 7 Days</option>
-					<option value="Custom" class="Custom_range">Custom</option>
+						<option value="1-day" >{{agile_lng_translate 'portlets' 'today'}}</option>
+						<option value="24-hours" >{{agile_lng_translate 'portlets' 'last-24-hours'}}
+						</option>
+						<option value="this-week" >{{agile_lng_translate 'portlets' 'this-week'}}
+						</option>
+						<option value="1-week">{{agile_lng_translate 'portlets' 'last-7-days'}}
+						</option>
+						<option value="Custom" class="Custom_range">{{agile_lng_translate 'campaigns' 'custom'}}</option>
 					</select>
 				</div>
 			</div>
 
 				<div class="control-group form-group hide daterange">
-					<label class="control-label col-sm-3">Range<span class="field_req">*</span></label>
+
+					<label class="control-label col-sm-3">{{agile_lng_translate 'campaigns' 'range'}}<span class="field_req">*</span></label>
+
 					<div class="controls col-sm-8">
-					<div class="col-sm-5" style="padding:0px"><input type="text" id="start_date" name="start-date"  class="start date required form-control" placeholder="Start date"></input></div>  
-					<div class="col-sm-5" style="padding:0px;margin-left:12px"><input type="text" id="end_date" class="end date required form-control" name="end-date"  placeholder="End date"></input></div>
+					<div class="col-sm-5" style="padding:0px"><input type="text" id="start_date" name="start-date"  class="start date required form-control" placeholder="{{agile_lng_translate 'tasks' 'start-date'}}"></input></div>  
+					<div class="col-sm-5" style="padding:0px;margin-left:12px"><input type="text" id="end_date" class="end date required form-control" name="end-date"  placeholder="{{agile_lng_translate 'tasks' 'end-date'}}"></input></div>
 				</div>
 				</div>
 				<div class="control-group form-group" style="display:none;margin-bottom:0px">
@@ -1420,7 +1699,57 @@
 		</form>
 	</div>
 	<div class="modal-footer">
-		<a id="save-modal" class="portlet-settings-save-modal save-modal btn btn-sm btn-primary" href="#">Save</a>
+		<a id="save-modal" class="portlet-settings-save-modal save-modal btn btn-sm btn-primary" href="#">{{agile_lng_translate 'portlets' 'save'}}</a>
+	</div>
+</div>
+</div>
+</div>
+
+<div id="portletsCampaignGraphSettingsModal" class="modal fade">
+<div class="modal-dialog">
+    <div class="modal-content">
+	<div class="modal-header">
+		<button class="close" data-dismiss="modal">x</button>
+		<h3 class="modal-title">{{agile_lng_translate 'portlets' 'dashlet-settings'}}</h3>
+	</div>
+	<div class="modal-body">
+		<input type="hidden" id="portlet-type" />
+		<input type="hidden" id="portlet-name" />
+		<form id="portletsCampaignGraphSettingsForm" name="portletsCampaignGraphSettingsForm" method="post" class="form-horizontal" style="margin-top:15px;">
+			<div class="control-group form-group">
+				<label class="control-label col-sm-3">{{agile_lng_translate 'portlets' 'duration'}}
+				</label>
+				<div class="controls col-sm-7">
+					<select id="duration" name="duration" class="required form-control">
+						<option value="1-day" >{{agile_lng_translate 'portlets' 'today'}}</option>
+						<option value="24-hours" >{{agile_lng_translate 'portlets' 'last-24-hours'}}
+						</option>
+						<option value="this-week" >{{agile_lng_translate 'portlets' 'this-week'}}
+						</option>
+						<option value="1-week">{{agile_lng_translate 'portlets' 'last-7-days'}}
+						</option>
+						<option value="this-month" >{{agile_lng_translate 'portlets' 'this-month'}}
+						</option>
+						<option value="1-month">{{agile_lng_translate 'portlets' 'last-30-days'}}
+						</option>
+					</select>
+					
+				</div>
+			</div>
+			<div class="control-group form-group">
+				<label class="control-label col-sm-3">{{agile_lng_translate 'portlets' 'campaign-type'}}</label>
+				<div class="controls col-sm-7">
+					<select id="campaign_type" name="campaign_type" class="required form-control">
+						
+					</select>
+					
+				</div>
+			</div>
+		</form>
+	</div>
+	<div class="modal-footer">
+		<a id="save-modal" class="portlet-settings-save-modal save-modal btn btn-sm btn-primary" href="#">{{agile_lng_translate 'portlets' 'save'}}</a>
+		<!--  <a id="cancel-modal" href="#portlets" class="btn" data-dismiss="modal" onclick="hidePortletSettings(this);">Cancel</a>  -->
 	</div>
 </div>
 </div>
@@ -1431,33 +1760,36 @@
     <div class="modal-content">
 	<div class="modal-header">
 		<button class="close" data-dismiss="modal">x</button>
-		<h3 class="modal-title">Dashlet Settings</h3>
+		<h3 class="modal-title">{{agile_lng_translate 'portlets' 'dashlet-settings'}}</h3>
 	</div>
 	<div class="modal-body">
 		<input type="hidden" id="portlet-type" />
 		<input type="hidden" id="portlet-name" />
 		<form id="portletsReferralurlStatsSettingsForm" name="portletsReferralurlStatsSettingsForm" method="post" class="form-horizontal" style="margin-top:15px;">
 			<div class="control-group form-group">
-				<label class="control-label col-sm-3">Duration</label>
+				<label class="control-label col-sm-3">{{agile_lng_translate 'portlets' 'duration'}}</label>
 				<div class="controls col-sm-7">
 					<select id="duration" name="duration" class="required form-control">
-						<option value="1-day" >Today</option>
-						<option value="yesterday" >Yesterday</option>
-						<option value="24-hours" >Last 24 Hours</option>
-						<option value="this-week" >This Week</option>
-						<option value="1-week">Last 7 Days</option>
-						<option value="this-month" >This Month</option>
-						<option value="1-month">Last 30 Days</option>
-					<option value="Custom" class="Custom_range">Custom</option>
-					</select>
+						<option value="1-day" >{{agile_lng_translate 'portlets' 'today'}}</option>
+						<option value="yesterday" >{{agile_lng_translate 'portlets' 'yesterday'}}</option>
+
+						<option value="24-hours" >{{agile_lng_translate 'portlets' 'last-24-hours'}}</option>
+						<option value="this-week" >{{agile_lng_translate 'portlets' 'this-week'}}</option>
+						<option value="1-week">{{agile_lng_translate 'portlets' 'last-7-days'}}</option>
+						<option value="this-month" >{{agile_lng_translate 'portlets' 'this-month'}}</option>
+						<option value="last-month" >{{agile_lng_translate 'calendar' 'Last Month'}}</option>
+						<option value="1-month">{{agile_lng_translate 'portlets' 'last-30-days'}}</option>
+						<option value="Custom" class="Custom_range">{{agile_lng_translate 'campaigns' 'custom'}}</option>					</select>
 				</div>
 			</div>
 
 				<div class="control-group form-group hide daterange">
-					<label class="control-label col-sm-3">Range<span class="field_req">*</span></label>
+
+					<label class="control-label col-sm-3">{{agile_lng_translate 'campaigns' 'range'}}<span class="field_req">*</span></label>
+
 					<div class="controls col-sm-8">
-					<div class="col-sm-5" style="padding:0px"><input type="text" id="start_date" name="start-date"  class="start date required form-control" placeholder="Start date"></input></div>  
-					<div class="col-sm-5" style="padding:0px;margin-left:12px"><input type="text" id="end_date" class="end date required form-control" name="end-date"  placeholder="End date"></input></div>
+					<div class="col-sm-5" style="padding:0px"><input type="text" id="start_date" name="start-date"  class="start date required form-control" placeholder="{{agile_lng_translate 'tasks' 'start-date'}}"></input></div>  
+					<div class="col-sm-5" style="padding:0px;margin-left:12px"><input type="text" id="end_date" class="end date required form-control" name="end-date"  placeholder="{{agile_lng_translate 'tasks' 'end-date'}}"></input></div>
 				</div>
 				</div>
 				<div class="control-group form-group" style="display:none;margin-bottom:0px">
@@ -1468,7 +1800,7 @@
 		</form>
 	</div>
 	<div class="modal-footer">
-		<a id="save-modal" class="portlet-settings-save-modal save-modal btn btn-sm btn-primary" href="#">Save</a>
+		<a id="save-modal" class="portlet-settings-save-modal save-modal btn btn-sm btn-primary" href="#">{{agile_lng_translate 'portlets' 'save'}}</a>
 		<!--  <a id="cancel-modal" href="#portlets" class="btn" data-dismiss="modal" onclick="hidePortletSettings(this);">Cancel</a>  -->
 	</div>
 </div>

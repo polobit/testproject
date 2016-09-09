@@ -17,7 +17,7 @@
 			sort_collection : function(e)
 			{
 				COMPANIES_HARD_RELOAD=true;						
-				App_Companies.companies();				
+				companies_view_loader.getCompanies(App_Companies.companyViewModel, $('#companies-listener-container'));			
 			}
 		});
 

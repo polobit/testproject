@@ -127,7 +127,7 @@ function addAddonTabTemplate(data, url, callback, container)
                  } 
                  //show modal for integrating twilio call widget
                  if(json.name == "Call"){
-                     var list = getTwilioNumber("twilio_number");
+                     var list = getTwilioIncomingList();
                      if(list == null){
                         window.parent.campaignAlert("Unauthorised_Call_Widget");
                         return; 

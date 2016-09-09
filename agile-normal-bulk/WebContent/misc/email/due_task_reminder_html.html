@@ -1,105 +1,113 @@
-<body>
-	<div>
-		<div
-			style="background-color: #8A6086; font-family: Arial, sans-serif; padding: 5px">
-			<div
-				style="min-height: 36px; font-size: 14px; font-weight: bold; padding-bottom: 4px">
-				<table style="width: 100%">
-					<tbody>
-						<tr>
-							<td valign="middle" height="32px"
-								style="padding: 0; color: white">Due Tasks for Today</td>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-			<div
-				style="font-size: 14px; background-color: #fff; padding: 10px 7px 7px 7px">
-				<p>*****This is an automated email. Please do not reply*****</p>
-				<table width="100%" cellpadding="5" cellspacing="0" style:"margin-top:-40px;">
-					<thead>
-						<tr bgcolor="#CCCCCC">
-							<th align="left" style="font-size: 12px"><strong>Subject</strong></th>
-							<th align="left" style="font-size: 12px;"><strong>Type</strong></th>
-							<th align="left" style="font-size: 12px"><strong>Priority</strong></th>
-							<th align="left" style="font-size: 12px"><strong>Related To</strong></th>
-		      			</tr>
-					</thead>
-					<tbody>
-						{{#tasks}}
-						<tr>
-						   <td align="left" style="font-size: 12px;width:40%;color:#000;vertical-align:top;text-align:justify;border-bottom:1px solid #e6e6e6;padding:5px 8px 0px 5px;">{{{subject}}}</td>
-						   <td align="left" style="font-size: 12px;width:5%;color:#000;vertical-align:top;text-transform:lowercase;border-bottom:1px solid #e6e6e6;padding:5px 8px 0px 5px;">{{type}}</td>
-						   <td align="left" style="font-size: 12px;width:5%;color:#000;vertical-align:top;border-bottom:1px solid #e6e6e6;padding:5px 8px 0px 5px;">{{priority_type}}</td>
-						   <td align="left" style="font-size: 12px;width:50%;color:#000;vertical-align:top;position:relative; text-align: left;border-bottom:1px solid #e6e6e6;padding:5px 8px 0px 5px; ">
-						   		{{#related_contacts}}
-						   		
-						   		<div style="display:inline-table;float:left;margin:2px 10px 10px 0px;width:75px;">
-						   		
-						   		{{#taskOwner.domain}}
-						   			<a href="https://{{taskOwner.domain}}.agilecrm.com/#contact/{{/taskOwner.domain}}
-						   		{{^taskOwner.domain}}
-						   			<a href="http://localhost:8888#contact/{{/taskOwner.domain}}{{id}}" target="_blank" style="text-decoration:none;">
-						   			{{#image}}
-						   				<img style="width:40px; height:40px; max-width:40px; max-height:40px; border: 1px solid #ddd; border-radius: 5px; padding: 4px; " src="{{value}}"
-						   			{{/image}}
-						   			
-						   			{{^image}}
-						   				{{#first_name}}
-						   					<img style="width:40px; height:40px; border: 1px solid #ddd; border-radius: 5px; padding: 4px;" src="https://secure.gravatar.com/avatar/{{email_image}}?s=80&d=https%3A//dpm72z3r2fvl4.cloudfront.net/css/images/user-default.png"
-						   				{{/first_name}}
-						   				{{^first_name}}
-						   					{{#url}}
-						   						<img style="width:32px; height:32px; padding:8px; border: 1px solid #ddd; border-radius: 5px; " src="https://www.google.com/s2/favicons?domain={{value}}"
-						   					{{/url}}
-						   					{{^url}}
-						   						{{#taskOwner.domain}}
-						   						<img src="https://{{taskOwner.domain}}.agilecrm.com/img/company.png" style="width:40px; height:40px; border: 1px solid #ddd; border-radius: 5px; padding: 4px;"
-						   						{{/taskOwner.domain}}
-						   						{{^taskOwner.domain}}
-						   						<img style="width:40px; height:40px; border: 1px solid #ddd; border-radius: 5px; padding: 4px;"
-						   						{{/taskOwner.domain}}
-						   					{{/url}}
-						   				{{/first_name}}
-						   			{{/image}}
-						   			
-						   			title="{{#first_name}}{{value}}{{/first_name}}{{#last_name}} {{value}}{{/last_name}}{{#name}}{{value}}{{/name}}"
-						   			/><span style="display:block;overflow:hidden;color:#000;text-overflow:ellipsis;white-space:nowrap;width:70px;">{{#first_name}}{{value}}{{/first_name}}{{#last_name}} {{value}}{{/last_name}}{{#name}}{{value}}{{/name}}</span>
-						   			</a>
-						   		</div>		
-						   		{{/related_contacts}}
-						   </td>
-						</tr>
-						{{/tasks}}
-				
-					</tbody>
-				</table>
-
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>AgileCRM</title>
+    
+  </head>
+  <body>
+  <div>
+    <table border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color:#edf1f2;padding:6% 10%">
+      <tr>
+        <td align="center">
+          <table border="0" cellpadding="0" cellspacing="0" align="center"  bgcolor="#FFFFFF" style="border:1px solid #ccc;border-radius:2px">
+		    <tr>
+              <td style="font-size: 0; line-height: 0; padding: 0 10px; border-bottom:1px solid #ccc" height="70" align="center" class="responsive-image">
+                <img width="150" alt="AgileCRM" src="https://s3.amazonaws.com/agilecrm/panel/uploaded-logo/1383722651000?id=upload-container">
+              </td>
+            </tr>
+            <tr>
+              <td style="padding: 35px">
+                <div style="font-size: 20px;font-family:arial,sans-serif;color:#4B4848;font-weight:bold">You have {{tasksCount}} tasks due today</div>
+                <br />
+                <div style="font-size:14px;font-family:sans-serif;">
+                  This is a friendly reminder of your tasks that are due for completion today. You can view, edit and complete these tasks directly from the <a href="https://{{domain}}.agilecrm.com">Agile CRM Dashboard</a>.
+                </div>
 				<br />
-				<p style="font-weight: bold;">Have questions or need help?</p>
-				<p>Our customer service and support team is here to help you any
-					way we can. Please email us at care@agilecrm.com</p>
-				<p>Thanks for being a valued customer.</p>
-				<br /> Best Wishes, <br /> AgileCRM Support. <br />
-				http://www.agilecrm.com
-				<div style="text-align: right">
-					<a 
-						{{#tasks}}
-							{{#taskOwner.domain}}
-								href="https://{{taskOwner.domain}}.agilecrm.com"
-							{{/taskOwner.domain}}
-							{{^taskOwner.domain}}
-								href="https://www.agilecrm.com"
-							{{/taskOwner.domain}}
-						{{/tasks}} 
-						target="_blank"> 
-						<img style="border: 0; margin-top: 10px"
-							src="https://s3.amazonaws.com/agilecrm/panel/uploaded-logo/1383722651000?id=upload-container"
-							alt="Logo for AgileCRM" />
-					</a>
+				<div>
+				<table>
+					<tr>
+						<td>
+							<table>
+								<tr>
+									<td>
+										<div style="margin-right:40px;font-weight:bold;font-size:14px;font-family:sans-serif;">Today</div>
+									</td>
+									<td style="border-left:2px solid white">
+										<div></div>
+									</td>
+									<td>
+										<div style="margin-left:5px"></div>
+									</td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+
+					{{#tasks}}
+					<tr>
+						<td>
+							<table style="padding-bottom:10px">
+								<tbody>
+									<tr>
+										<td>
+											<div style="margin-right: 10px;width:65px;font-size:14px;font-family:sans-serif;">{{timeFormatForEmail}}</div>
+										</td>
+										<td style="border-left:2px solid #34A853">
+											<div></div>
+										</td>
+										<td>
+											<table>
+												<tbody>
+													<tr>
+														<td style="font-size:14px;font-family:sans-serif;"><span>{{{subject}}}</span></td>
+													</tr>
+													<tr>
+														<td>
+															{{#related_contacts}}
+						   		
+																<div style="display:inline-block;float:left;margin:0px 0px 0px 2px !important;">
+																{{#taskOwner.domain}}
+																	<a href="https://{{taskOwner.domain}}.agilecrm.com/#contact/{{/taskOwner.domain}}
+																{{^taskOwner.domain}}
+																	<a href="http://localhost:8888#contact/{{/taskOwner.domain}}{{id}}" target="_blank" style="text-decoration:none;">
+																		<span style="display:inline-block;overflow:hidden;color:blue;text-overflow:ellipsis;white-space:nowrap;font-family:sans-serif;">{{#first_name}}{{value}}{{/first_name}}{{#last_name}} {{value}} {{/last_name}}{{#name}}{{value}}{{/name}}{{^last}},{{/last}}</span>
+																	</a>
+																</div>
+																
+															{{/related_contacts}}
+														</td>
+													</tr>
+													<tr>
+														<td><span style="background-color:#f3f3f3;padding:2px 5px;border-radius:2px;display:inline-block;font-size:11px">{{type}}</span></td>
+													</tr>
+												</tbody>
+											</table>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</td>
+					</tr>
+					{{/tasks}}
+				</table>
 				</div>
-			</div>
-		</div>
-	</div>
-</body>
+				<br />	
+              </td>
+            </tr>
+          </table>
+		  <table border="0" cellpadding="0" cellspacing="0" width="100%" align="center">
+			<tr>
+				<td style="font-family:arial,sans-serif; font-size: 9px; text-align:center;padding:15px 15px 0px 15px;opacity:0.6;">
+				This email is sent to <font color="blue">
+					<a href="mailto:{{email_to}}" target="_blank" style="text-decoration:none">{{email_to}}</a></font> because this email ID is linked to an Agile CRM account & is subscribed to our mailing list.
+				</td>
+			</tr>
+		  </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+  </div>
+</html>

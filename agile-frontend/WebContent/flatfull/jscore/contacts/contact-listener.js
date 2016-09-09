@@ -1,90 +1,6 @@
 var timer = undefined;
 
   	$(function(){
-  	
-
-		$('body').on('click','.contactcoloumn',function(e){
-			var json = serializeForm("contact-static-fields");
-			console.log(json)
-			$.ajax({
-					url : 'core/api/contact-view-prefs',
-					type : 'PUT',
-					contentType : 'application/json',
-					dataType : 'json',
-					data :JSON.stringify(json),
-					success : function(data)
-						{
-							
-							location.reload()
-						} 
-					});
-
-					
-			
-		});
-
-		$("body").on('click','#contactTabelView',function(el){
-			
-			if(_agile_get_prefs("contactTabelView"))
-				_agile_delete_prefs("contactTabelView");
-			else
-				_agile_set_prefs("contactTabelView","true");
-			CONTACTS_HARD_RELOAD = true;
-			App_Contacts.contacts();
-	});
-		$("body").on('click','#companiesTabelView',function(el){
-
-		if(_agile_get_prefs("companyTabelView"))
-			_agile_delete_prefs("companyTabelView");
-		else
-			_agile_set_prefs("companyTabelView","true");
-
-		COMPANIES_HARD_RELOAD = true;
-		App_Companies.companies();
-
-		});
-
- 		$("body").on("click", ".toggle-contact-filters", function(b) {
-            if (_agile_get_prefs("hide_contacts_lhs_filter")) {
-                _agile_delete_prefs("hide_contacts_lhs_filter");
-                $(this).attr("data-original-title", "Hide Filters").tooltip("hide");
-            } else {
-                _agile_set_prefs("hide_contacts_lhs_filter", true);
-                $(this).attr("data-original-title", "Show Filters").tooltip("hide");
-            }
-            
-        });
-
-		 $("body").on("click", ".toggle-company-filters", function(b) {
-            if (_agile_get_prefs("companiesFilterStatus") == "display:none") 
-            {
-                _agile_delete_prefs("companiesFilterStatus");
-                $(this).attr("data-original-title", "Hide Filters").tooltip("hide");
-            } else {
-                _agile_set_prefs("companiesFilterStatus", "display:none");
-                $(this).attr("data-original-title", "Show Filters").tooltip("hide");
-            }
-            
-        });
-
-
-			$('body').on('click','.companycoloumn',function(e){
-				var array = serializeForm('companies-static-fields');
-				
-				$.ajax({
-					url : 'core/api/contact-view-prefs/company',
-					type : 'PUT',
-					contentType : 'application/json',
-					dataType : 'json',
-					data :JSON.stringify(array),
-					success : function(data)
-						{
-							location.reload()
-							
-						} 
-					});
-			});
-
 	$('body').off('mouseover','.popover_contact');
 		$('body').on('mouseover','.popover_contact',function(e){
 			//e.stopPropagation();
@@ -156,8 +72,8 @@ var timer = undefined;
 	});
 function contactListener(el)
 {
-	$('#contacts-custom-view-model-list , #contacts-custom-view-table-model-list,#companies-custom-view-model-list , #companies-custom-view-table-model-list').off('mouseenter','tr > td:not(":first-child")');
-		$('#contacts-custom-view-model-list , #contacts-custom-view-table-model-list,#companies-custom-view-model-list , #companies-custom-view-table-model-list').on('mouseenter','tr > td:not(":first-child")',function(e){
+	$('#contacts-list-view-model-list').off('mouseenter','tr > td:not(":first-child")');
+		$('#contacts-list-view-model-list').on('mouseenter','tr > td:not(":first-child")',function(e){
 			//e.stopPropagation();
 				var left=e.pageX;
 				left=left-100;
@@ -171,8 +87,8 @@ function contactListener(el)
 
 		
 });
-		$('#contacts-custom-view-model-list , #contacts-custom-view-table-model-list,#companies-custom-view-model-list , #companies-custom-view-table-model-list').off('mouseleave','tr > td:not(":first-child")');
-	$('#contacts-custom-view-model-list , #contacts-custom-view-table-model-list,#companies-custom-view-model-list , #companies-custom-view-table-model-list').on('mouseleave','tr > td:not(":first-child")',function(){
+		$('#contacts-list-view-model-list').off('mouseleave','tr > td:not(":first-child")');
+	$('#contacts-list-view-model-list').on('mouseleave','tr > td:not(":first-child")',function(){
 		var that=$(this).parent();
 		popout(that);
 		
@@ -196,15 +112,15 @@ function contactListener(el)
 	});
 	
 
-	$('#company-contacts-model-list').off('mouseenter','tr > td');
-		$('#company-contacts-model-list').on('mouseenter','tr > td',function(e){
+	$('#company-contacts-list-view-model-list').off('mouseenter','tr > td');
+		$('#company-contacts-list-view-model-list').on('mouseenter','tr > td',function(e){
 			var left=e.pageX;
 			left=left-100;
             var that=$(this).parent();
              popoverEnter(that,left,0,undefined);
 });
-		$('#company-contacts-model-list').off('mouseleave','tr > td');
-	$('#company-contacts-model-list').on('mouseleave','tr > td',function(){
+		$('#company-contacts-list-view-model-list').off('mouseleave','tr > td');
+	$('#company-contacts-list-view-model-list').on('mouseleave','tr > td',function(){
 	var that=$(this).parent();
 		popout(that);
 		
@@ -684,6 +600,7 @@ function contact_list_starify(el,listView) {
     head.js(LIB_PATH + 'lib/jquery.raty.min.js', function(){
     	
     	var contact_model  =  App_Contacts.contact_popover;
+    	var count_clicks=0;
     	
     	// If contact update is not allowed then start rating does not allow user to change it
     	if(App_Contacts.contact_popover && App_Contacts.contact_popover.get('owner') && !canEditContact(App_Contacts.contact_popover.get('owner').id))
@@ -699,19 +616,50 @@ function contact_list_starify(el,listView) {
     	// contact_model.url = 'core/api/contacts';    	
     	$('#star', el).raty({
     		
+    		
     		/**
     		 * When a star is clicked, the position of the star is set as star_value of
     		 * the contact and saved.    
     		 */
-        	click: function(score, evt) {
-        	         		
-           		if(listView!=undefined) 
-        		App_Contacts.contact_popover.set({'star_value': score});
-      				 else{
-      				 	App_Contacts.contact_popover.set({'star_value': score},{silent:true});
-      				 App_Contacts.contact_popover.trigger('popoverChange');
-      				 }
-        		contact_model =  App_Contacts.contact_popover.toJSON();
+click: function(score, evt) 
+{        	         		  		
+   if(listView!=undefined)   
+        	App_Contacts.contact_popover.set({'star_value': score});
+   else{
+      		App_Contacts.contact_popover.set({'star_value': score},{silent:true});
+      		var id = App_Contacts.contact_popover.toJSON().id;		
+      	if(App_Contacts.contactsListView && App_Contacts.contactsListView.collection &&App_Contacts.contactsListView.collection.get(id))  
+      	 	App_Contacts.contactsListView.collection.get(id).set({'star_value': score},{silent:true});
+  		if (App_Companies.companiesListView && App_Companies.companiesListView.collection && App_Companies.companiesListView.collection.get(id))
+  		    App_Companies.companiesListView.collection.get(id).set({'star_value': score},{silent:true});
+   
+      		 App_Contacts.contact_popover.trigger('popoverChange');
+      	}
+      	
+   contact_model =  App_Contacts.contact_popover.toJSON();
+			
+	if(contact_model && contact_model.star_value == 1)        
+        {
+        count_clicks++;
+        $(this.children[0]).attr('src','img/star-on.png');
+             
+        if(count_clicks==2)
+            {
+            App_Contacts.contact_popover.set({'star_value': 0},{silent:true});
+            contact_model =  App_Contacts.contact_popover.toJSON();
+            count_clicks=0;
+            $(this.children[0]).attr('src','img/star-off.png');
+            $(this).find('input').attr('value',0);
+            
+            var id = App_Contacts.contact_popover.toJSON().id;		
+      		if(App_Contacts.contactsListView && App_Contacts.contactsListView.collection &&App_Contacts.contactsListView.collection.get(id))  
+      	 			App_Contacts.contactsListView.collection.get(id).set({'star_value': 0},{silent:true});
+  			if (App_Companies.companiesListView && App_Companies.companiesListView.collection && App_Companies.companiesListView.collection.get(id))
+  		   			 App_Companies.companiesListView.collection.get(id).set({'star_value': 0},{silent:true});
+             App_Contacts.contact_popover.trigger('popoverChange');              
+              }   
+          }
+             else count_clicks=0;	
         		var new_model = new Backbone.Model();
         		new_model.url = 'core/api/contacts';
         		new_model.save(contact_model, {

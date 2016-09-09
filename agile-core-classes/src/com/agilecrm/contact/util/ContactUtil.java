@@ -85,6 +85,8 @@ import com.googlecode.objectify.Query;
  */
 public class ContactUtil
 {
+	public static String EMAIL_PATTERN = "^[a-zA-Z0-9.!#$%&'*+\\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$";
+	
     // Dao
     private static ObjectifyGenericDao<Contact> dao = new ObjectifyGenericDao<Contact>(Contact.class);
 
@@ -1278,8 +1280,6 @@ public class ContactUtil
 		System.out.println(e.getMessage());
 	}
 	
-	
-
 	newContact=oldContact;
 	return 	newContact;
     }
@@ -2190,4 +2190,60 @@ public static Contact searchMultipleContactByEmail(String email,Contact contact)
     	}
     	return null;
     }
+    
+    
+    /**
+     * Gets a contact based on its push notification browser id
+     * 
+     * @param browserId
+     *            id value to get a contact
+     * @return {@Contact} related to an push notification browser id
+     */
+    public static Contact searchContactByBrowserId(String browserId)
+    {
+	if (StringUtils.isBlank(browserId))
+	    return null;
+
+	Query<Contact> q = dao.ofy().query(Contact.class);
+	q.filter("type", Type.PERSON);
+	q.filter("browserId", browserId);
+
+	try
+	{
+	    return dao.get(q.getKey());
+	}
+	catch (Exception e)
+	{
+	    return null;
+	}
+
+    }
+    
+    /**
+     * Gets a contact based on its guid
+     * 
+     * @param duid
+     *            id value to get a contact
+     * @return {@Contact} related to an push notification guid
+     */
+    public static Contact searchContactByGUId(String guId)
+    {
+	if (StringUtils.isBlank(guId))
+	    return null;
+
+	Query<Contact> q = dao.ofy().query(Contact.class);
+	q.filter("type", Type.PERSON);
+	q.filter("guid", guId);
+
+	try
+	{
+	    return dao.get(q.getKey());
+	}
+	catch (Exception e)
+	{
+	    return null;
+	}
+
+    }
+
 }

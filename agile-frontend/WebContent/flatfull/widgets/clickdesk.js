@@ -76,7 +76,7 @@ function showClickDeskProfile(contact_id)
 	 */
 	if (!Email)
 	{
-		clickDeskError(CLICKDESK_PLUGIN_NAME, "Please provide email for this contact");
+		clickDeskError(CLICKDESK_PLUGIN_NAME, _agile_get_translated_val('widgets', 'pl-give-contact-email'));
 		return;
 	}
 
@@ -177,7 +177,7 @@ function showChats(data)
 		 */
 		if (data.length == 0)
 		{
-			$('#clickdesk_chats_panel').html('<li class="list-group-item r-none b-l-none b-r-none">No chats</li>');
+			$('#clickdesk_chats_panel').html('<li class="list-group-item r-none b-l-none b-r-none">' +_agile_get_translated_val('widgets', 'no-chats')+'</li>');
 			return;
 		}else if(data.length == 5){
 			$('.click-chat-footer').removeClass('hide');
@@ -189,10 +189,8 @@ function showChats(data)
 	    		return;
 			$('#clickdesk_chats_panel').html($(template_ui1)); 
 			// Load jquery time ago function to show time ago in chats
-			head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
-			{
-				$(".time-ago", $('#clickdesk_chats_panel')).timeago();
-			});
+			agileTimeAgoWithLngConversion($(".time-ago", $('#clickdesk_chats_panel')));
+			
 		}, "#clickdesk_chats_panel");
 
 
@@ -238,7 +236,7 @@ function registerClickEventsInChat(chats_data)
 		 */
 		if (!chats_data.length >= 5)
 		{
-			clickDeskStreamError("clickdesk-chats-error-panel", 'No more chats');
+			clickDeskStreamError("clickdesk-chats-error-panel", _agile_get_translated_val('widgets', 'no-more-chats'));
 			return;
 		}
 
@@ -329,7 +327,7 @@ function showMoreChats(data)
 	 */
 	if (data.length == 0)
 	{
-		clickDeskStreamError("clickdesk-chats-error-panel", 'No more chats');
+		clickDeskStreamError("clickdesk-chats-error-panel", _agile_get_translated_val('widgets', 'no-more-chats'));
 		return;
 	}
 
@@ -407,7 +405,7 @@ function showClickDeskTickets(data)
 	 */
 	if (data.length == 0)
 	{
-		$('#clickdesk_tickets_panel').html('<li class="list-group-item r-none b-l-none b-r-none">No tickets</li>');
+		$('#clickdesk_tickets_panel').html('<li class="list-group-item r-none b-l-none b-r-none">' +_agile_get_translated_val('widgets', 'no-tickets')+'</li>');
 		return;
 	}else if(data.length == 5){
 		$('.click-tickets-footer').removeClass('hide');
@@ -421,10 +419,7 @@ function showClickDeskTickets(data)
 		$('#clickdesk_tickets_panel').html($(template_ui));
 
 		// Load jquery time ago function to show time ago in tickets
-		head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
-		{
-			$(".time-ago", $('#clickdesk_tickets_panel')).timeago();
-		});
+		agileTimeAgoWithLngConversion($(".time-ago", $('#clickdesk_tickets_panel')));
 
 	}, "#clickdesk_tickets_panel");
 
@@ -465,7 +460,7 @@ function registerEventsInTickets(tickets_data)
 		 */
 		if (!tickets_data.length >= 5)
 		{
-			clickDeskStreamError("clickdesk-tickets-error-panel", 'No more tickets');
+			clickDeskStreamError("clickdesk-tickets-error-panel", _agile_get_translated_val('widgets', 'no-more-tickets'));
 			return;
 		}
 
@@ -558,7 +553,7 @@ function showMoreTickets(data)
 	 */
 	if (data.length == 0)
 	{
-		clickDeskStreamError("clickdesk-tickets-error-panel", 'No more tickets');
+		clickDeskStreamError("clickdesk-tickets-error-panel", _agile_get_translated_val('widgets', 'no-more-tickets'));
 		return;
 	}
 
@@ -629,6 +624,7 @@ function clickDeskStreamError(id, message)
 }
 
 function startClickDeskWidget(contact_id) {
+
 		// ClickDesk widget name as a global variable
 		CLICKDESK_PLUGIN_NAME = "ClickDesk";
 
@@ -671,15 +667,15 @@ function startClickDeskWidget(contact_id) {
 		 * On mouse enter of ticket, show tab link which has a link to show detailed
 		 * description of ticket
 		 */
-        $("#widgets").off("mouseenter", ".clickdesk_ticket_hover");
-		$("widgets").on("mouseenter", ".clickdesk_ticket_hover", function(e)
+        $("#"+WIDGET_PARENT_ID).off("mouseenter", ".clickdesk_ticket_hover");
+		$("#"+WIDGET_PARENT_ID).on("mouseenter", ".clickdesk_ticket_hover", function(e)
 		{
 			$(this).find('.clickdesk_ticket_tab_link').show();
 		});
 
 		// On mouse leave of ticket, hides tab link
-        $("#widgets").off("mouseleave", ".clickdesk_ticket_hover");
-		$("#widgets").on("mouseleave", ".clickdesk_ticket_hover", function(e)
+        $("#"+WIDGET_PARENT_ID).off("mouseleave", ".clickdesk_ticket_hover");
+		$("#"+WIDGET_PARENT_ID).on("mouseleave", ".clickdesk_ticket_hover", function(e)
 		{
 			$('.clickdesk_ticket_tab_link').hide();
 		});
@@ -688,15 +684,15 @@ function startClickDeskWidget(contact_id) {
 		 * On mouse enter of chat, show tab link which has a link to show detailed
 		 * description of chat
 		 */
-        $("#widgets").off("mouseenter", ".clickdesk_chat_hover");
-		$("#widgets").on("mouseenter", ".clickdesk_chat_hover", function(e)
+        $("#"+WIDGET_PARENT_ID).off("mouseenter", ".clickdesk_chat_hover");
+		$("#"+WIDGET_PARENT_ID).on("mouseenter", ".clickdesk_chat_hover", function(e)
 		{
 			$(this).find('.clickdesk_chat_tab_link').show();
 		});
 
 		// On mouse leave of chat, hides tab link
-        $("#widgets").off("mouseleave", ".clickdesk_chat_hover");
-		$("#widgets").on("mouseleave", ".clickdesk_chat_hover", function(e)
+        $("#"+WIDGET_PARENT_ID).off("mouseleave", ".clickdesk_chat_hover");
+		$("#"+WIDGET_PARENT_ID).on("mouseleave", ".clickdesk_chat_hover", function(e)
 		{
 			$('.clickdesk_chat_tab_link').hide();
 		});

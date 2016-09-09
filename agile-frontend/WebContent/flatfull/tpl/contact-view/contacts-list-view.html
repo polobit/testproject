@@ -1,0 +1,39 @@
+<script id="contacts-list-view-collection-template" type="text/html">
+	{{#is_mobile}}
+		<div class="contacts-div">
+			<div class="dta-contatiner table-responsive b-n contacts-inner-div">
+				<div class="panel panel-default m-b-none b-n no-radius" style="overflow-x:hidden;">
+					{{#unless this.length}}
+		        		<div class="m-l-sm" id="slate"></div>
+		        	{{/unless}}
+		        	{{#if this.length}}
+	                	<table id="contacts-table" class="table b-n no-radius no-sorting onlySorting panel agile-table noDelete"  url="core/api/contacts/delete?action=DELETE">                
+							<div class="filter-criteria"></div>
+							<tbody id="contacts-list-view-model-list" route="contact/"></tbody>
+	                	</table>
+                	{{/if}}
+				</div>
+            </div>
+        </div>
+	{{else}}
+		<div class="dta-contatiner table-responsive m-r-sm contacts-inner-div">
+			<div class="btn-group inline-block  text-center" style="display: none;border:1px solid #dee5e7;width:100%;padding:5px; background-color:#edf1f2;" id="bulk-select"></div>
+			<div class="panel panel-default" style="overflow-x:auto; border-left:none;">
+	    		{{#unless this.length}}
+        			<div class="m-l-sm" id="slate"></div>
+        		{{/unless}}
+        		{{#if this.length}}
+              			<table id="contacts-table" class="table contacts-custom noDelete table-striped showCheckboxes no-sorting panel agile-table no-header-checkbox"  url="core/api/contacts/delete?action=DELETE" style="table-layout:auto">                
+							<div class="filter-criteria"></div>
+			 				<thead>
+                      			<tr style="text-transform: capitalize;">
+                          			{{contactTableHeadings "fields_set"}}
+                      			</tr>
+                 			</thead>
+                   			<tbody id="contacts-list-view-model-list" route="contact/"></tbody>
+              			</table>
+              		{{/if}}
+			</div>
+		</div>
+	{{/is_mobile}}
+</script>

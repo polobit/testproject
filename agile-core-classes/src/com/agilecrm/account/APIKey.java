@@ -8,6 +8,7 @@ import javax.persistence.PostLoad;
 import javax.persistence.PrePersist;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import com.agilecrm.account.util.APIKeyUtil;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.AgileUser;
@@ -198,6 +199,9 @@ public class APIKey
 	APIKey key = getAPIKey();
 	key.blocked_ips = blockedIps;
 	dao.put(key);
+	DomainUser domainUser = DomainUserUtil.getCurrentDomainUser();
+	if(domainUser.is_account_owner)
+	    APIKeyUtil.updateBlockedIpsInStatsServer(blockedIps);
 	return key;
     }
     

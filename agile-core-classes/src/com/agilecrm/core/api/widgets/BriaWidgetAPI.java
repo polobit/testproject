@@ -8,6 +8,7 @@ import javax.ws.rs.FormParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.commons.lang.StringUtils;
@@ -40,14 +41,15 @@ public class BriaWidgetAPI
 	@POST
 	@Produces(MediaType.TEXT_PLAIN)
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-	public String saveCallActivity(@FormParam("direction") String direction,@FormParam("phone") String phone,@FormParam("status") String status,@FormParam("duration") String duration) {		
+	public String saveCallActivity(@FormParam("direction") String direction,@FormParam("phone") String phone,
+			@FormParam("status") String status,@FormParam("duration") String duration,@QueryParam("note_id") Long note_id) {		
 	    
 	    	if (!(StringUtils.isBlank(phone))){
 	    		Contact contact = ContactUtil.searchContactByPhoneNumber(phone);
 
 	    		if (direction.equalsIgnoreCase("Outgoing") || direction.equalsIgnoreCase("outbound-dial"))
 	    		{
-	    		    ActivityUtil.createLogForCalls("Bria", phone, Call.OUTBOUND, status.toLowerCase(), duration);
+	    		    ActivityUtil.createLogForCalls("Bria", phone, Call.OUTBOUND, status.toLowerCase(), duration,note_id);
 
 	    		    // Trigger for outbound
 	    		    CallTriggerUtil.executeTriggerForCall(contact, "Bria", Call.OUTBOUND, status.toLowerCase(), duration);
@@ -55,7 +57,7 @@ public class BriaWidgetAPI
 
 	    		if (direction.equalsIgnoreCase("Incoming") || direction.equalsIgnoreCase("Missed") || direction.equalsIgnoreCase("inbound"))
 	    		{
-	    		    ActivityUtil.createLogForCalls("Bria", phone, Call.INBOUND, status.toLowerCase(), duration);
+	    		    ActivityUtil.createLogForCalls("Bria", phone, Call.INBOUND, status.toLowerCase(), duration,note_id);
 
 	    		    // Trigger for inbound
 	    		    CallTriggerUtil.executeTriggerForCall(contact,  "Bria", Call.INBOUND, status.toLowerCase(), duration);
@@ -75,7 +77,8 @@ public class BriaWidgetAPI
 	@POST
 	@Produces(MediaType.TEXT_PLAIN)
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-	public String saveCallActivityById(@FormParam("id") Long id,@FormParam("direction") String direction,@FormParam("phone") String phone,@FormParam("status") String status,@FormParam("duration") String duration) {		
+	public String saveCallActivityById(@FormParam("id") Long id,@FormParam("direction") String direction,@FormParam("phone") String phone,
+			@FormParam("status") String status,@FormParam("duration") String duration,@QueryParam("note_id") Long note_id) {		
 	    
 	    	if (null != id && !(StringUtils.isBlank(phone))){
 	    		Contact contact = ContactUtil.getContact(id);
@@ -84,7 +87,7 @@ public class BriaWidgetAPI
 	    		}
 	    		if (direction.equalsIgnoreCase("Outgoing") || direction.equalsIgnoreCase("outbound-dial"))
 	    		{
-	    		    ActivityUtil.createLogForCalls("Bria", phone, Call.OUTBOUND, status.toLowerCase(), duration, contact);
+	    		    ActivityUtil.createLogForCalls("Bria", phone, Call.OUTBOUND, status.toLowerCase(), duration, contact,note_id);
 
 	    		    // Trigger for outbound
 	    		    CallTriggerUtil.executeTriggerForCall(contact, "Bria", Call.OUTBOUND, status.toLowerCase(), duration);
@@ -92,7 +95,7 @@ public class BriaWidgetAPI
 
 	    		if (direction.equalsIgnoreCase("Incoming") || direction.equalsIgnoreCase("inbound"))
 	    		{
-	    			ActivityUtil.createLogForCalls("Bria", phone, Call.INBOUND, status.toLowerCase(), duration, contact);
+	    			ActivityUtil.createLogForCalls("Bria", phone, Call.INBOUND, status.toLowerCase(), duration, contact,note_id);
 
 	    		    // Trigger for inbound
 	    			 CallTriggerUtil.executeTriggerForCall(contact,  "Bria", Call.INBOUND, status.toLowerCase(), duration);

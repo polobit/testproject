@@ -177,19 +177,19 @@ $(function(){
 	});
 	$('body').on('click', '#account_resume', function(e) {
 		e.preventDefault();
-		$(this).attr("disabled","disabled").text("Resuming");
+		$(this).attr("disabled","disabled").text("{{agile_lng_translate 'billing' 'resume'}}");
 		$that = $(this);
 		$.ajax({
 			url : 'core/api/subscription/pauseOrResumeSubscriptions?period=0',
 			type : 'POST',
 			success : function(){
-				showNotyPopUp("information", "Welcome back! We are resuming services for your account, please wait for few seconds while we re-activate it.", "top",30000);
+				showNotyPopUp("information", "{{agile_lng_translate 'billing' 'resume-modal'}}", "top",30000);
 				setTimeout(function(){
 					window.location.reload(true);
 				},30000);
 			},
 			error : function(response){
-				$that.text("Resume").removeAttr("disabled");
+				$that.text("{{agile_lng_translate 'billing' 'resume-text'}}").removeAttr("disabled");
 				showNotyPopUp("warning", response.responseText, "top");
 			}
 		});
@@ -254,11 +254,11 @@ $('#send-cancellation').on('click', '#send-delete-request', function(e) {
 					url : "core/api/subscription/cancel/subscription",
 					type : "GET",
 					success : function(data){
-						showNotyPopUp("information","Your subscription has been cancelled successfully.", "top");
+						showNotyPopUp("information","{{agile_lng_translate 'billing' 'canceled-success'}}", "top");
 					}
 				});
 			else
-				showNotyPopUp("information","Your cancellation request has been sent successfully.", "top");
+				showNotyPopUp("information","{{agile_lng_translate 'billing' 'canceled-requested'}}", "top");
 		});
 		
 	});
@@ -272,11 +272,11 @@ $('#send-cancellation').on('change', '#account_cancel_reason', function(e) {
 	else
 		$("#other_cancel_container").hide();
 	if($(this).val() == "Out of Business"){
-		$("#send-delete-request").text("Cancel Subscription");
+		$("#send-delete-request").text("{{agile_lng_translate 'plan-and-upgrade' 'cancel-subscription'}}");
 		$("#cancel_info_msg").show();
 	}
 	else{
-		$("#send-delete-request").text("Send Request");
+		$("#send-delete-request").text("{{agile_lng_translate 'billing' 'canceled-request-sent'}}");
 		$("#cancel_info_msg").hide();
 	}
 });

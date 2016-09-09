@@ -23,7 +23,17 @@ var ReportsRouter = Backbone.Router
 			reports : function()
 			{
 				report_utility.loadReportsTemplate(function(){
-				var tab_active=$('.nav-tabs li:first-child>a').attr('href').substring(1);
+
+
+					getTemplate("reports-basic", {}, undefined, function(template_ui)
+					{
+						if (!template_ui)
+							return;
+
+						// Load Reports Template
+						$('.reports-Container').html($(template_ui));
+						});
+				/*var tab_active=$('.nav-tabs li:first-child>a').attr('href').substring(1);
 				var tav_inner = $('.nav-tabs li li:first-child>a').attr('href').substring(1);
 				$.each($('.tab-content .tab-pane'),function()
 				{
@@ -35,7 +45,7 @@ var ReportsRouter = Backbone.Router
 						Backbone.history.loadUrl(route);
 						return;
 					}
-				});
+				});*/
 			});
 			},
 
@@ -150,7 +160,7 @@ var ReportsRouter = Backbone.Router
 					postRenderCallback : function(el)
 					{
 						initializeReportsListeners();
-						var optionsTemplate = "<option value='{{id}}'{{#if is_disabled}}disabled=disabled>{{name}} (Disabled){{else}}>{{name}}{{/if}}</option>";
+						var optionsTemplate = "<option value='{{id}}'{{#if is_disabled}}disabled=disabled>{{name}} ("+_agile_get_translated_val('campaigns','disabled')+"){{else}}>{{name}}{{/if}}</option>";
 						fillSelect('campaign-select', '/core/api/workflows', 'workflow', function(id)
 							{
 								//$('#campaign-select', el).find('option[value=' + campaign_id + ']').attr('selected', 'selected');
@@ -201,7 +211,7 @@ var ReportsRouter = Backbone.Router
 						if (count != 0)
 							return;
 
-						var optionsTemplate = "<option value='{{id}}'{{#if is_disabled}}disabled=disabled>{{name}} (Disabled){{else}}>{{name}}{{/if}}</option>";
+						var optionsTemplate = "<option value='{{id}}'{{#if is_disabled}}disabled=disabled>{{name}} ("+_agile_get_translated_val('campaigns','disabled')+"){{else}}>{{name}}{{/if}}</option>";
 
 
 						fillSelect('campaign-select', '/core/api/workflows', 'workflow', function fillCampaign()

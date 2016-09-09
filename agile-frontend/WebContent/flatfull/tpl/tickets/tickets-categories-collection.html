@@ -1,0 +1,124 @@
+<script id="ticket-helpcenter-categories-collection-template" type="text/html">
+{{#unless this.length}}
+    <div class="col panel wrapper">
+    <div class="hbox h-auto m-b-sm">
+        <div class="text-center padder-v">
+            <h4 class="m-t-none m-b-xs">{{agile_lng_translate 'tickets' 'you-dont-have-any-categories'}}</h4>
+            <div class="m-b-xs text-muted">
+               
+                {{agile_lng_translate 'tickets' 'you-can-add-categories-by-clicking-below'}}
+            </div>
+            <div>
+                <a href="#knowledgebase/add-category" class="btn btn-sm btn-default blue btn-slate-action m-t-xs ">
+                    <span><i class="icon-plus-sign"></i></span> {{agile_lng_translate 'admin-settings-tasks' 'add-category'}}
+                    
+                </a>
+            </div>
+        </div>
+    </div>
+    </div>
+{{/unless}}
+{{#if this.length}}
+    <div class="col panel wrapper">
+        <div class="hbox h-auto m-b-sm">
+            <div class="pull-right" style="margin-left:10px">
+                <a href="#knowledgebase/add-category" class="btn btn-sm btn-default btn-addon">
+                    <span><i class="icon-plus-sign"></i></span> {{agile_lng_translate 'admin-settings-tasks' 'add-category'}}
+                </a>
+             </div>
+             <div class="pull-right">
+                <a href="#selectlandingpage"  class="btn btn-sm btn-default btn-addon access_kb">
+                    {{agile_lng_translate 'preferences' 'settings'}}
+                </a>
+            </div>
+            <table class="table table-striped showCheckboxes m-b-none agile-table panel table-layout-mob-view show-delete-modal" url="core/api/knowledgebase/categorie/bulk" data-bulk-delete-title="{{agile_lng_translate 'contact-details' 'delete'}}"
+                data-bulk-delete-msg="{{agile_lng_translate 'tickets' 'conformation-messge-for-deletion'}}" id="ticket-categorie-table">
+                    <thead>
+                        <tr>
+                            <th class="hide">Id</th>
+                            <th style="width:40%">{{agile_lng_translate 'category' 'name'}}</th>
+                            <th style="width:40%">&nbsp;</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ticket-helpcenter-categories-model-list" class="c-p ui-sortable deal-tracks-tbody"> </tbody>
+            </table>
+        </div>
+    </div>  
+{{/if}}
+<div class="col w-md  wrapper pos-rlt track-milestone-text p-t-none" >
+            <h4 class="m-t-none h4 m-b-sm">
+             
+               {{agile_lng_translate 'tickets' 'how-to-configure-knowledge-base'}}
+            </h4>
+            <p>
+              {{agile_lng_translate 'tickets' 'configure-your-knowledge-base-by-adding-categories'}}
+            </p> 
+            <ul>
+              <li>
+                 
+                 {{agile_lng_translate 'tickets' 'click-on-category-and-see-sections'}}
+              </li>
+              <li>
+                 
+                  {{agile_lng_translate 'tickets' 'click-on-section-see-how-many-articles-you-have'}}
+              </li>
+            </ul>
+            <br>
+            {{#if this.length}}
+            <p class="invisible">
+               <a href="https://www.youtube.com/watch?v=vrxV_52QQTc" target="_blank">
+               <img src="{{getS3ImagePath '../../img/landingpage-info.png'}}" class="img-responsive w-full">
+               </a>
+            </p>
+            <br>
+            {{/if}}
+      
+    </div>
+</script>
+
+<!--<script id="helpcenter-categories-collection-template" type="text/html">
+   <div class="wrapper-md">
+      <div class="row">
+         <div class="col-md-9 col-sm-9">
+            {{#unless this.length}}
+                <div class="alert bg-white">
+                   <div class="slate-content  p-md">
+                      <div class="box-left pull-left m-r-md">
+                         <img alt="Clipboard" src="/img/clipboard.png" />
+                      </div>
+                      <div class="box-right pull-left">
+
+                         <h4 class="m-t-none">There are no categories.</h4>
+                         <div class="text">
+                            You can add category by clicking the button below or the one on the right side of the page.
+                         </div>
+                         <a href="#helpcenter/add-category" class="m-t-xs btn btn-default btn-sm"><i class="icon-plus-sign"></i>Add Category</a>
+                      </div>
+                      <div class="clearfix">
+                      </div>
+                   </div>
+                </div>
+            {{/unless}}
+            {{#if this.length}}
+                <div class="row" id="helpcenter-categories-model-list"></div>
+            {{/if}}
+         </div>
+         <div class="col-md-3 col-sm-3" id="learn-workflows" style="display:none;">
+            <h4 class="m-t-none h4 m-b-sm">
+               What is Help Center?
+            </h4>
+            <p>
+               Help Center content yet to prepare!.....
+            </p>
+            <br>
+            {{#if this.length}}
+            <p>
+               <a href="https://www.youtube.com/watch?v=vrxV_52QQTc" target="_blank">
+               <img src="{{getS3ImagePath '../../img/landingpage-info.png'}}" class="img-responsive w-full">
+               </a>
+            </p>
+            <br>
+            {{/if}}
+      
+</script>
+-->

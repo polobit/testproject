@@ -137,6 +137,7 @@ public class SignpostUtil
 			try
 			{
 				request.disconnect();
+				
 			}
 			catch (Exception e)
 			{
@@ -196,7 +197,7 @@ public class SignpostUtil
 			// send the request
 			HttpClient httpClient = new DefaultHttpClient();
 			HttpResponse httpResponse = httpClient.execute(httpost);
-			System.out.println(httpResponse.getStatusLine().getStatusCode());
+			System.out.println("Oath Status"+httpResponse.getStatusLine().getStatusCode());
 
 			response = IOUtils.toString(httpResponse.getEntity().getContent());
 		}

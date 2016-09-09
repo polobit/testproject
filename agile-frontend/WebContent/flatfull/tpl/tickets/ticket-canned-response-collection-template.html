@@ -3,13 +3,13 @@
     <div class="col panel wrapper">
         <div class="hbox h-auto m-b-sm">
             <div class="text-center padder-v">
-                <h4 class="m-t-none m-b-xs">You don&#39;t have any canned responses</h4>
+                <h4 class="m-t-none m-b-xs">{{agile_lng_translate 'tickets' 'you-do-not-have-any-canned-responses'}}</h4>
                 <div class="m-b-xs">
-                    Create frequently type messages as canned responses. Choose the required canned response when sending reply to without typing the same message again.
+                    {{agile_lng_translate 'tickets' 'tickets-canned-responses-desc'}}
                 </div>
                 <div>
                     <a href="#add-canned-response" class="btn btn-sm btn-default blue btn-slate-action m-t-xs">
-                        Add Canned Response
+                        {{agile_lng_translate 'tickets' 'add-canned-response'}}
                     </a>
                 </div>
             </div>
@@ -21,15 +21,15 @@
         <div class="hbox h-auto m-b-sm">
             <div class="pull-right">
                 <a href="#add-canned-response" class="btn btn-sm btn-default btn-addon">
-                    <span><i class="icon-plus-sign"></i></span> Add Canned Response
+                    <span><i class="icon-plus-sign"></i></span> {{agile_lng_translate 'tickets' 'add-canned-response'}}
                 </a>
             </div>
-            <table class="table table-striped showCheckboxes m-b-none agile-table panel table-layout-mob-view show-delete-modal" url="core/api/tickets/canned-messages/bulk" data-bulk-delete-title="Delete" data-bulk-delete-msg="Are you sure you want to delete?">
+            <table class="table table-striped showCheckboxes m-b-none agile-table panel table-layout-mob-view show-delete-modal" url="core/api/tickets/canned-messages/bulk" data-bulk-delete-title="{{agile_lng_translate 'contacts-view' 'delete'}}" data-bulk-delete-msg="{{agile_lng_translate 'others' 'delete-warn'}}">
                     <thead>
                         <tr>
-                            <th class="hide">Id</th>
-                            <th style="width:33%">Title</th>
-                            <th style="width:30%">Message</th>
+                            <th class="hide">{{agile_lng_translate 'tickets' 'id'}}</th>
+                            <th style="width:33%">{{agile_lng_translate 'other' 'title'}}</th>
+                            <th style="width:30%">{{agile_lng_translate 'portlets' 'message'}}</th>
                              <!--<th style="width:30%">Labels</th> -->
                             <th style="width:36%">&nbsp;</th>
                         </tr>
@@ -41,9 +41,9 @@
     <div class="col w-md  wrapper pos-rlt track-milestone-text p-t-none">
         <div class="data-block">
             <div class="p-l p-r">
-                <h4 class="m-t-none">What are Recommendations?</h4>           
+                <h4 class="m-t-none">{{agile_lng_translate 'tickets' 'what-are-recommendations'}}</h4>           
                 <p>
-                    Get automated smart recommendations based on canned responses and ticket labels.
+                    {{agile_lng_translate 'tickets' 'get-recommendations-desc'}}
                 </p>
                 <br/>
                 <p>

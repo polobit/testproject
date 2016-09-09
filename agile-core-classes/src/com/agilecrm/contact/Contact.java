@@ -17,6 +17,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.annotate.JsonIgnore;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import com.agilecrm.contact.ContactField.FieldType;
 import com.agilecrm.contact.email.bounce.EmailBounceStatus;
@@ -35,6 +37,7 @@ import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.notification.util.ContactNotificationPrefsUtil;
 import com.agilecrm.user.util.DomainUserUtil;
+import com.agilecrm.util.CountryUtil;
 import com.agilecrm.workflows.status.CampaignStatus;
 import com.agilecrm.workflows.triggers.util.ContactTriggerUtil;
 import com.agilecrm.workflows.unsubscribe.UnsubscribeStatus;
@@ -166,6 +169,11 @@ public class Contact extends Cursor
      */
     @Indexed
     public Integer lead_score = 0;
+    
+    /**
+     * Customer social score.
+     */
+    public String klout_score = "";
 
     /**
      * Schema version of the contact used for updating schema
@@ -250,6 +258,7 @@ public class Contact extends Cursor
     public static final String LAST_NAME = "last_name";
     public static final String EMAIL = "email";
     public static final String COMPANY = "company";
+    public static final String KLOUT_SCORE ="klout_score";
     public static final String TITLE = "title";
     public static final String NAME = "name";
     public static final String URL = "url";
@@ -295,6 +304,20 @@ public class Contact extends Cursor
     @JsonIgnore
     @NotSaved
     public boolean forceSearch = false;
+    
+    /**
+     * Set of Browser id for push notification
+     *  
+     */
+    @Indexed
+    public Set<String> browserId = new HashSet<String>();
+    
+    /**
+     * Set of Guid of contact
+     *  
+     */
+    @Indexed
+    public String guid = null;
 
     /**
      * Default constructor
@@ -345,7 +368,7 @@ public class Contact extends Cursor
 	System.out.println("The fieldName is " + fieldName);
 	FieldType type = FieldType.CUSTOM;
 	System.out.println("The FieldType is " + type);
-	if (fieldName.equals(FIRST_NAME) || fieldName.equals(LAST_NAME) || fieldName.equals(EMAIL)
+	if (fieldName.equals(FIRST_NAME) || fieldName.equals(LAST_NAME) || fieldName.equals(KLOUT_SCORE)|| fieldName.equals(EMAIL)
 		|| fieldName.equals(TITLE) || fieldName.equals(WEBSITE) || fieldName.equals(COMPANY)
 		|| fieldName.equals(ADDRESS) || fieldName.equals(URL) || fieldName.equals(PHONE)
 		|| fieldName.equals(NAME) || fieldName.equals(SKYPEPHONE))
@@ -474,16 +497,21 @@ public class Contact extends Cursor
 	preProcessor.preProcess(args);
 
 	Contact oldContact = preProcessor.getOldContact();
-
+	String domain = NamespaceManager.get();
 	dao.put(this);
 
 	postSave(oldContact, args);
 
 	if (oldContact != null && !isDocumentUpdateRequired(oldContact))
 	    return;
-	
+	String domain2 = NamespaceManager.get();
+	if(!domain.equals(null) && !domain.equals("") && !domain.equals(domain2)){
+		System.out.println("name space inequal");
+		NamespaceManager.set(domain);
+	}
+	System.out.println("Before add to text search "+NamespaceManager.get());
 	addToSearch();
-
+	System.out.println("After add to text search "+NamespaceManager.get());
     }
 
     public void postSave(Contact oldContact, boolean... args)
@@ -525,25 +553,34 @@ public class Contact extends Cursor
 
 	dao.put(this);
 
+	System.out.println("Before add to text search "+NamespaceManager.get());
 	addToSearch();
+	System.out.println("After add to text search "+NamespaceManager.get());
     }
 
     private void addToSearch()
     {
 	// Enables to build "Document" search on current entity
 	AppengineSearch<Contact> search = new AppengineSearch<Contact>(Contact.class);
-
+	String domain = NamespaceManager.get();
 	// If contact is new then add it to document else edit document
 	if (id == null)
 	{
 	    try
 	    {
+	    System.out.println("Before search add method to text search "+domain);	
 		search.add(this);
+		domain = NamespaceManager.get();
+		System.out.println("After search add method to text search "+domain);
+		
 	    }
 	    
 	    catch (SearchException se)
-	    {
+	    {	domain = NamespaceManager.get();
+	    	System.out.println("Before search addasync method to text search "+domain);
 	    	search.addAsync(this);
+	    	domain = NamespaceManager.get();
+	    	System.out.println("After search addasync method to text search "+domain);
 	    }
 	    catch (Exception e)
 	    {
@@ -552,8 +589,11 @@ public class Contact extends Cursor
 	    return;
 	}
 	try
-	{
+	{	domain = NamespaceManager.get();
+		System.out.println("After search add method to text search "+domain);
 	    search.edit(this);
+	    domain = NamespaceManager.get();
+    	System.out.println("After search add method to text search "+domain);
 	}
 	catch (Exception e)
 	{
@@ -904,6 +944,21 @@ public class Contact extends Cursor
 	    this.save();
 
     }
+    
+    /**
+     * Add push notification browser id
+     * 
+     * @param browserId
+     *            value of the browser id
+     */
+    public void addBrowserId(String browserId)
+    {
+    	if (this.browserId == null)
+    		this.browserId = new HashSet<String>();
+
+    	this.browserId.add(browserId);
+    }
+
 
     /**
      * Deletes a contact from database and search document by executing a
@@ -1168,6 +1223,30 @@ public class Contact extends Cursor
     @PrePersist
     private void PrePersist()
     {
+    	
+	ContactField addressField = this.getContactField(Contact.ADDRESS);
+    try
+    {
+		if (addressField != null && addressField.value != null)
+		{
+			JSONObject addressJSON = new JSONObject(addressField.value);
+			if(addressJSON != null && addressJSON.has("country"))
+			{
+				String contactCountry = addressJSON.getString("country");
+				CountryUtil.setCountryCode(addressJSON, null, contactCountry);
+			}
+		    addressField.value = addressJSON.toString();
+		}
+    }
+    catch (JSONException e)
+    {
+    	e.printStackTrace();
+    }
+    catch (Exception e)
+    {
+    	e.printStackTrace();
+    }
+    
 	// Set owner, when only the owner_key is null
 	if (owner_key == null)
 	{
@@ -1542,7 +1621,7 @@ public class Contact extends Cursor
     public String toString()
     {
 	return "id: " + id + " created_time: " + created_time + " updated_time" + updated_time + " type: " + type
-		+ " tags: " + tags + " properties: " + properties;
+		+ " tags: " + tags + " properties: " + properties + " owner_key: " + owner_key;
     }
 }
 

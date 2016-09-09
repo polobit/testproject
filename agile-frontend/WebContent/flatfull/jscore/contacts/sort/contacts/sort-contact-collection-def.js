@@ -22,12 +22,12 @@
 				// list
 				if(!App_Contacts.tag_id)
 				{
-					App_Contacts.contacts(undefined, undefined, undefined, true);
+					contacts_view_loader.getContacts(App_Contacts.contactViewModel, $("#contacts-listener-container"));
 					return;
 				}
 					
 				// If tag filter is applied send tags fetch url and tag_id, which is tobe shown on contacts table.
-				App_Contacts.contacts(App_Contacts.tag_id, undefined, undefined, true);
+				contacts_view_loader.getContacts(App_Contacts.contactViewModel, $("#contacts-listener-container"));
 			}
 		});
 

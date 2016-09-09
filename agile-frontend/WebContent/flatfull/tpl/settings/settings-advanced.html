@@ -9,34 +9,48 @@
             <div class="row">
                 <div class="col-md-6 col-sm-6 col-xs-12">
                     <div class="control-group form-group hidden">
-                        <label class="control-label col-sm-4">Name <span class="field_req">*</span></label>
+                        <label class="control-label col-sm-4">{{agile_lng_translate 'other' 'name'}} <span class="field_req">*</span></label>
                         <div class="controls col-sm-8">
                             <input name="name" type="text" class="required form-control" value="{{currentDomainUserName}}" autocapitalize="off" />
                         </div>
                     </div>
                     <div class="control-group form-group hidden">
-                        <label class="control-label col-sm-4">Color Theme <span class="field_req">*</span></label> 
+                        <label class="control-label col-sm-4">{{agile_lng_translate 'prefs-settings' 'color-theme'}} <span class="field_req">*</span></label> 
                         <div class="controls col-sm-8">
                             <select name="template" id="userPrefsTemplate" class="required form-control">
-								<option value="pink">Purple</option>
-                                <option value="blue">Blue</option>
-                                <option value="green">Green</option>
-                                <option value="brown">Brown</option>
+								<option value="pink">{{agile_lng_translate 'prefs-settings' 'purple'}}
+								</option>
+                                <option value="blue">{{agile_lng_translate 'prefs-settings' 'blue'}}</option>
+                                <option value="green">{{agile_lng_translate 'prefs-settings' 'green'}}
+                                </option>
+                                <option value="brown">{{agile_lng_translate 'prefs-settings' 'brown'}}
+                                </option>
                             </select>
                         </div>
                     </div>
                     <div class="control-group form-group hidden">
-                        <label class="control-label col-sm-4">Width</label> 
+                        <label class="control-label col-sm-4">{{agile_lng_translate 'prefs-settings' 'width'}}</label> 
                         <div class="controls col-sm-8">
                             <select name="width" id="userPrefsWidth" class="form-control">
-                                <option value="">Fixed</option>
-                                <option value="-fluid">Fluid</option>
+                                <option value="">{{agile_lng_translate 'prefs-settings' 'fixed'}}</option>
+                                <option value="-fluid">{{agile_lng_translate 'prefs-settings' 'fluid'}}
+                                </option>
                             </select>
                         </div>
                     </div>
 
-<div class="control-group form-group">
-						<label class="control-label col-sm-4">Time Zone</label>
+                    <div class="control-group form-group">
+                        <label class="control-label col-sm-4">{{agile_lng_translate 'prefs-settings' 'language'}}</label> 
+                        <div class="controls col-sm-8">
+                            <select name="language" id="language" class="form-control">
+                                <option value="en">English</option>
+                                <option value="es">{{agile_lng_translate 'prefs-settings' 'spanish'}}</option>
+                            </select>
+                        </div>
+                    </div>
+
+					<div class="control-group form-group">
+						<label class="control-label col-sm-4">{{agile_lng_translate 'prefs-settings' 'time-zone'}}</label>
 						<div class="controls col-sm-8">
 							<select name="timezone" id="timezone" class="form-control">
 								   <option value="Africa/Abidjan">Africa/Abidjan</option>
@@ -832,107 +846,108 @@
 						</div>
 					</div>
             <div class="control-group form-group hide">
-                <label class="control-label col-sm-4">Currency</label>
+                <label class="control-label col-sm-4">{{agile_lng_translate 'prefs-settings' 'currency'}}</label>
                 <div class="controls col-sm-8">
                     <select id="target_list" name="currency" class="form-control">
-                        <option value="USD-$" selected="1">United States Dollar</option>
-                        <option value="EUR-&euro;">Euro</option>
-                        <option value="DZD-DA">Algerian Dinar</option>
-                        <option value="ARS-$">Argentina Peso</option>
-                        <option value="AUD-$">Australian Dollar</option>
-                        <option value="BHD-BD">Bahraini Dinar</option>
-                        <option value="BOB-$b">Bolivian Boliviano</option>
-                        <option value="BWP-P">Botswanan Pula</option>
-                        <option value="BRL-R$">Brazilian Real</option>
-                        <option value="GBP-&pound;">British Pound Sterling</option>
-                        <option value="BND-$">Brunei Dollar</option>
-                        <option value="BGN-&#1083;&#1074;">Bulgarian Lev</option>
-                        <option value="CAD-$">Canadian Dollar</option>
-                        <option value="KYD-$">Cayman Islands Dollar</option>
-                        <option value="XOF-CFAF">CFA Franc BCEAO</option>
-                        <option value="CLP-$">Chilean Peso</option>
-                        <option value="CNY-&yen;">Chinese Yuan</option>
-                        <option value="COP-$">Colombian Peso</option>
-                        <option value="CRC-&#8353;">Costa Rican Colon</option>
-                        <option value="HRK-kn">Croatian Kuna</option>
-                        <option value="CZK-K&#269;">Czech Republic Koruna</option>
-                        <option value="DKK-kr">Danish Krone</option>
-                        <option value="DOP-RD$">Dominican Peso</option>
-                        <option value="EGP-&pound;">Egyptian Pound</option>
-                        <option value="EEK-kr">Estonian Kroon</option>
-                        <option value="FJD-$">Fijian Dollar</option>
-                        <option value="HNL-L">Honduran Lempira</option>
-                        <option value="HKD-$">Hong Kong Dollar</option>
-                        <option value="HUF-Ft">Hungarian Forint</option>
-                        <option value="ISK-ISK">Icelandic Krona</option>
-                        <option value="INR-Rs">Indian Rupee</option>
-                        <option value="IDR-Rp">Indonesian Rupiah</option>
-                        <option value="ILS-&#8362;">Israeli New Sheqel</option>
-                        <option value="JMD-J$">Jamaican Dollar</option>
-                        <option value="JPY-&yen;">Japanese Yen</option>
-                        <option value="JOD-JOD">Jordanian Dinar</option>
-                        <option value="KZT-&#1083;&#1074;">Kazakhstani Tenge</option>
-                        <option value="KES-KSh">Kenyan Shilling</option>
-                        <option value="KWD-KD">Kuwaiti Dinar</option>
-                        <option value="LVL-Ls">Latvian Lats</option>
-                        <option value="LBP-&pound;">Lebanese Pound</option>
-						<option value="LYD-LD">Libyan Dinar</option>
-                        <option value="LTL-Lt">Lithuanian Litas</option>
-                        <option value="MKD-&#1076;&#1077;&#1085;">Macedonian Denar</option>
-                        <option value="MYR-RM">Malaysian Ringgit</option>
-                        <option value="MUR-&#8360;">Mauritian Rupee</option>
-                        <option value="MXN-$">Mexican Peso</option>
-                        <option value="MDL-MDL">Moldovan Leu</option>
-                        <option value="MAD-DH">Moroccan Dirham</option>
-                        <option value="NAD-$">Namibian Dollar</option>
-                        <option value="NPR-&#8360;">Nepalese Rupee</option>
-                        <option value="ANG-&fnof;">Netherlands Antillean Guilder</option>
-                        <option value="TWD-NT$">New Taiwan Dollar</option>
-                        <option value="NZD-$">New Zealand Dollar</option>
-                        <option value="NIO-C$">Nicaraguan Cordoba</option>
-                        <option value="NGN-&#8358;">Nigerian Naira</option>
-                        <option value="NOK-kr">Norwegian Krone</option>
-                        <option value="OMR-RO">Omani Rial</option>
-                        <option value="PKR-&#8360;">Pakistani Rupee</option>
-                        <option value="PGK-K">Papua New Guinean Kina</option>
-                        <option value="PYG-Gs">Paraguayan Guarani</option>
-                        <option value="PEN-S/.">Peruvian Nuevo Sol</option>
-                        <option value="PHP-&#8369;">Philippine Peso</option>
-                        <option value="PLN-z&#322;">Polish Zloty</option>
-                        <option value="QAR-QR">Qatari Rial</option>
-                        <option value="RON-lei">Romanian Leu</option>
-                        <option value="RUB-&#1088;&#1091;&#1073;">Russian Ruble</option>
-                        <option value="SVC-&#8353;">Salvadoran Colon</option>
-                        <option value="SAR-SR">Saudi Riyal</option>
-                        <option value="RSD-&#1044;&#1080;&#1085;.">Serbian Dinar</option>
-                        <option value="SCR-&#8360;">Seychellois Rupee</option>
-                        <option value="SLL-Le">Sierra Leonean Leone</option>
-                        <option value="SGD-$">Singapore Dollar</option>
-                        <option value="SKK-Sk">Slovak Koruna</option>
-                        <option value="ZAR-R">South African Rand</option>
-                        <option value="KRW-&#8361;">South Korean Won</option>
-                        <option value="LKR-&#8360;">Sri Lankan Rupee</option>
-                        <option value="SEK-kr">Swedish Krona</option>
-                        <option value="CHF-CHF">Swiss Franc</option>
-                        <option value="TZS-TSh">Tanzanian Shilling</option>
-                        <option value="THB-&#3647;">Thai Baht</option>
-                        <option value="TTD-TT$">Trinidad and Tobago Dollar</option>
-                        <option value="TND-TD">Tunisian Dinar</option>
-                        <option value="TRY-YTL">Turkish Lira</option>
-                        <option value="UGX-USh">Ugandan Shilling</option>
-                        <option value="UAH-UAH">Ukrainian Hryvnia</option>
-                        <option value="AED-Dh">United Arab Emirates Dirham</option>
-                        <option value="UYU-$U">Uruguayan Peso</option>
-                        <option value="UZS-&#1083;&#1074;">Uzbekistan Som</option>
-                        <option value="VEF-VEF">Venezuelan Bolivar</option>
-                        <option value="VND-&#8363;">Vietnamese Dong</option>
-                        <option value="YER-YER">Yemeni Rial</option>
-                        <option value="ZMK-ZK">Zambian Kwacha</option>
+                        <option value="USD-$" selected="1">{{agile_lng_translate 'currency' 'United States Dollar'}}</option>
+                        <option value="EUR-&euro;">{{agile_lng_translate 'currency' 'Euro'}}</option>
+                        <option value="DZD-DA">{{agile_lng_translate 'currency' 'Algerian Dinar'}}</option>
+                        <option value="ARS-$">{{agile_lng_translate 'currency' 'Argentina Peso'}}</option>
+                        <option value="AUD-$">{{agile_lng_translate 'currency' 'Australian Dollar'}}</option>
+                        <option value="BHD-BD">{{agile_lng_translate 'currency' 'Bahraini Dinar'}}</option>
+                        <option value="BOB-$b">{{agile_lng_translate 'currency' 'Bolivian Boliviano'}}</option>
+                        <option value="BWP-P">{{agile_lng_translate 'currency' 'Botswanan Pula'}}</option>
+                        <option value="BRL-R$">{{agile_lng_translate 'currency' 'Brazilian Real'}}</option>
+                        <option value="GBP-&pound;">{{agile_lng_translate 'currency' 'British Pound Sterling'}}</option>
+                        <option value="BND-$">{{agile_lng_translate 'currency' 'Brunei Dollar'}}</option>
+                        <option value="BGN-&#1083;&#1074;">{{agile_lng_translate 'currency' 'Bulgarian Lev'}}</option>
+                        <option value="CAD-$">{{agile_lng_translate 'currency' 'Canadian Dollar'}}</option>
+                        <option value="KYD-$">{{agile_lng_translate 'currency' 'Cayman Islands Dollar'}}</option>
+                        <option value="XOF-CFAF">{{agile_lng_translate 'currency' 'CFA Franc BCEAO'}}</option>
+                        <option value="CLP-$">{{agile_lng_translate 'currency' 'Chilean Peso'}}</option>
+                        <option value="CNY-&yen;">{{agile_lng_translate 'currency' 'Chinese Yuan'}}</option>
+                        <option value="COP-$">{{agile_lng_translate 'currency' 'Colombian Peso'}}</option>
+                        <option value="CRC-&#8353;">{{agile_lng_translate 'currency' 'Costa Rican Colon'}}</option>
+                        <option value="HRK-kn">{{agile_lng_translate 'currency' 'Croatian Kuna'}}</option>
+                        <option value="CZK-K&#269;">{{agile_lng_translate 'currency' 'Czech Republic Koruna'}}</option>
+                        <option value="DKK-kr">{{agile_lng_translate 'currency' 'Danish Krone'}}</option>
+                        <option value="DOP-RD$">{{agile_lng_translate 'currency' 'Dominican Peso'}}</option>
+                        <option value="EGP-&pound;">{{agile_lng_translate 'currency' 'Egyptian Pound'}}</option>
+                        <option value="EEK-kr">{{agile_lng_translate 'currency' 'Estonian Kroon'}}</option>
+                        <option value="FJD-$">{{agile_lng_translate 'currency' 'Fijian Dollar'}}</option>
+                        <option value="HNL-L">{{agile_lng_translate 'currency' 'Honduran Lempira'}}</option>
+                        <option value="HKD-$">{{agile_lng_translate 'currency' 'Hong Kong Dollar'}}</option>
+                        <option value="HUF-Ft">{{agile_lng_translate 'currency' 'Hungarian Forint'}}</option>
+                        <option value="ISK-ISK">{{agile_lng_translate 'currency' 'Icelandic Krona'}}</option>
+                        <option value="INR-Rs">{{agile_lng_translate 'currency' 'Indian Rupee'}}</option>
+                        <option value="IDR-Rp">{{agile_lng_translate 'currency' 'Indonesian Rupiah'}}</option>
+                        <option value="ILS-&#8362;">{{agile_lng_translate 'currency' 'Israeli New Sheqel'}}</option>
+                        <option value="JMD-J$">{{agile_lng_translate 'currency' 'Jamaican Dollar'}}</option>
+                        <option value="JPY-&yen;">{{agile_lng_translate 'currency' 'Japanese Yen'}}</option>
+                        <option value="JOD-JOD">{{agile_lng_translate 'currency' 'Jordanian Dinar'}}</option>
+                        <option value="KZT-&#1083;&#1074;">{{agile_lng_translate 'currency' 'Kazakhstani Tenge'}}</option>
+                        <option value="KES-KSh">{{agile_lng_translate 'currency' 'Kenyan Shilling'}}</option>
+                        <option value="KWD-KD">{{agile_lng_translate 'currency' 'Kuwaiti Dinar'}}</option>
+                        <option value="LVL-Ls">{{agile_lng_translate 'currency' 'Latvian Lats'}}</option>
+                        <option value="LBP-&pound;">{{agile_lng_translate 'currency' 'Lebanese Pound'}}</option>
+						<option value="LYD-LD">{{agile_lng_translate 'currency' 'Libyan Dinar'}}</option>
+                        <option value="LTL-Lt">{{agile_lng_translate 'currency' 'Lithuanian Litas'}}</option>
+                        <option value="MKD-&#1076;&#1077;&#1085;">{{agile_lng_translate 'currency' 'Macedonian Denar'}}</option>
+                        <option value="MYR-RM">{{agile_lng_translate 'currency' 'Malaysian Ringgit'}}</option>
+                        <option value="MUR-&#8360;">{{agile_lng_translate 'currency' 'Mauritian Rupee'}}</option>
+                        <option value="MXN-$">{{agile_lng_translate 'currency' 'Mexican Peso'}}</option>
+                        <option value="MDL-MDL">{{agile_lng_translate 'currency' 'Moldovan Leu'}}</option>
+                        <option value="MAD-DH">{{agile_lng_translate 'currency' 'Moroccan Dirham'}}</option>
+                        <option value="NAD-$">{{agile_lng_translate 'currency' 'Namibian Dollar'}}</option>
+                        <option value="NPR-&#8360;">{{agile_lng_translate 'currency' 'Nepalese Rupee'}}</option>
+                        <option value="ANG-&fnof;">{{agile_lng_translate 'currency' 'Netherlands Antillean Guilder'}}</option>
+                        <option value="TWD-NT$">{{agile_lng_translate 'currency' 'New Taiwan Dollar'}}</option>
+                        <option value="NZD-$">{{agile_lng_translate 'currency' 'New Zealand Dollar'}}</option>
+                        <option value="NIO-C$">{{agile_lng_translate 'currency' 'Nicaraguan Cordoba'}}</option>
+                        <option value="NGN-&#8358;">{{agile_lng_translate 'currency' 'Nigerian Naira'}}</option>
+                        <option value="NOK-kr">{{agile_lng_translate 'currency' 'Norwegian Krone'}}</option>
+                        <option value="OMR-RO">{{agile_lng_translate 'currency' 'Omani Rial'}}</option>
+                        <option value="PKR-&#8360;">{{agile_lng_translate 'currency' 'Pakistani Rupee'}}</option>
+                        <option value="PGK-K">{{agile_lng_translate 'currency' 'Papua New Guinean Kina'}}</option>
+                        <option value="PYG-Gs">{{agile_lng_translate 'currency' 'Paraguayan Guarani'}}</option>
+                        <option value="PEN-S/.">{{agile_lng_translate 'currency' 'Peruvian Nuevo Sol'}}</option>
+                        <option value="PHP-&#8369;">{{agile_lng_translate 'currency' 'Philippine Peso'}}</option>
+                        <option value="PLN-z&#322;">{{agile_lng_translate 'currency' 'Polish Zloty'}}</option>
+                        <option value="QAR-QR">{{agile_lng_translate 'currency' 'Qatari Rial'}}</option>
+                        <option value="RON-lei">{{agile_lng_translate 'currency' 'Romanian Leu'}}</option>
+                        <option value="RUB-&#1088;&#1091;&#1073;">{{agile_lng_translate 'currency' 'Russian Ruble'}}</option>
+                        <option value="SVC-&#8353;">{{agile_lng_translate 'currency' 'Salvadoran Colon'}}</option>
+                        <option value="SAR-SR">{{agile_lng_translate 'currency' 'Saudi Riyal'}}</option>
+                        <option value="RSD-&#1044;&#1080;&#1085;.">{{agile_lng_translate 'currency' 'Serbian Dinar'}}</option>
+                        <option value="SCR-&#8360;">{{agile_lng_translate 'currency' 'Seychellois Rupee'}}</option>
+                        <option value="SLL-Le">{{agile_lng_translate 'currency' 'Sierra Leonean Leone'}}</option>
+                        <option value="SGD-$">{{agile_lng_translate 'currency' 'Singapore Dollar'}}</option>
+                        <option value="SKK-Sk">{{agile_lng_translate 'currency' 'Slovak Koruna'}}</option>
+                        <option value="ZAR-R">{{agile_lng_translate 'currency' 'South African Rand'}}</option>
+                        <option value="KRW-&#8361;">{{agile_lng_translate 'currency' 'South Korean Won'}}</option>
+                        <option value="LKR-&#8360;">{{agile_lng_translate 'currency' 'Sri Lankan Rupee'}}</option>
+                        <option value="SEK-kr">{{agile_lng_translate 'currency' 'Swedish Krona'}}</option>
+                        <option value="CHF-CHF">{{agile_lng_translate 'currency' 'Swiss Franc'}}</option>
+                        <option value="TZS-TSh">{{agile_lng_translate 'currency' 'Tanzanian Shilling'}}</option>
+                        <option value="THB-&#3647;">{{agile_lng_translate 'currency' 'Thai Baht'}}</option>
+                        <option value="TTD-TT$">{{agile_lng_translate 'currency' 'Trinidad and Tobago Dollar'}}</option>
+                        <option value="TND-TD">{{agile_lng_translate 'currency' 'Tunisian Dinar'}}</option>
+                        <option value="TRY-YTL">{{agile_lng_translate 'currency' 'Turkish Lira'}}</option>
+                        <option value="UGX-USh">{{agile_lng_translate 'currency' 'Ugandan Shilling'}}</option>
+                        <option value="UAH-UAH">{{agile_lng_translate 'currency' 'Ukrainian Hryvnia'}}</option>
+                        <option value="AED-Dh">{{agile_lng_translate 'currency' 'United Arab Emirates Dirham'}}</option>
+                        <option value="UYU-$U">{{agile_lng_translate 'currency' 'Uruguayan Peso'}}</option>
+                        <option value="UZS-&#1083;&#1074;">{{agile_lng_translate 'currency' 'Uzbekistan Som'}}</option>
+                        <option value="VEF-VEF">{{agile_lng_translate 'currency' 'Venezuelan Bolivar'}}</option>
+                        <option value="VND-&#8363;">{{agile_lng_translate 'currency' 'Vietnamese Dong'}}</option>
+                        <option value="YER-YER">{{agile_lng_translate 'currency' 'Yemeni Rial'}}</option>
+                        <option value="ZMK-ZK">{{agile_lng_translate 'currency' 'Zambian Kwacha'}}</option>
                     </select>
                 </div>
             </div>
             <div class="control-group form-group">
-            	<label class="control-label col-sm-4">Date Format <span class="field_req">*</span></label> 
+            	<label class="control-label col-sm-4">{{agile_lng_translate 'prefs-settings' 'date-format'}}
+            	 <span class="field_req">*</span></label> 
                 <div class="controls col-sm-8">
                 	<select name="dateFormat" id="date-format" class="required form-control">
 						<option value="mm/dd/yyyy">{{currentDateInFormat "mm/dd/yyyy"}}</option>
@@ -951,15 +966,15 @@
                  </div>
              </div>
              <div class="control-group form-group">
-            	<label class="control-label col-sm-4">Calendar Week</label> 
+            	<label class="control-label col-sm-4">{{agile_lng_translate 'prefs-settings' 'calendar-week'}}</label> 
                 <div class="controls col-sm-8">
                 	<select name="calendar_wk_start_day" id="calendar_wk_start_day" class="required form-control">
-						<option value="0">Sunday</option>
-                        <option value="1">Monday</option>
+						<option value="0">{{agile_lng_translate 'prefs-settings' 'sunday'}}</option>
+                        <option value="1">{{agile_lng_translate 'prefs-settings' 'monday'}}</option>
                      </select>
                  </div>
                  <div class="col-sm-offset-4 col-sm-9">
-                 	<span class="text-muted">Your calender week starts with either of the selected days.</span>
+                 	<span class="text-muted">{{agile_lng_translate 'prefs-settings' 'either-of-the-selected-days'}}</span>
                  </div>
              </div>
                 </div>
@@ -977,7 +992,7 @@
                                 <p>
 									<input type="hidden" id="upload_url" name="pic"/>  
                                     <!--<input style="margin: 10px 0px 0px;" class="upload_s3 btn" type="button" id="user_prefs_image" value="Upload"/>-->
-									<a href="#choose-avatar-modal" class="text-info" data-toggle="modal">Change Avatar</a>
+									<a href="#choose-avatar-modal" class="text-info" data-toggle="modal">{{agile_lng_translate 'prefs-settings' 'change-avatar'}}</a>
                                 </p>
                             </div>
                         
@@ -987,10 +1002,11 @@
             <div class="row hidden">
 <div class="col-md-12">
             <div class="control-group form-group">
-                <label class="control-label col-sm-2">Signature</label> 
+                <label class="control-label col-sm-2">{{agile_lng_translate 'prefs-settings' 'signature'}}
+                </label> 
                 <div class="controls col-sm-9">
 					<div id="loading-editor"></div>
-                    <textarea class="col-md-12 form-control" id="WYSItextarea" rows="10" name="signature" style="display: none;" placeholder="Enter text ..."></textarea>
+                    <textarea class="col-md-12 form-control" id="WYSItextarea" rows="10" name="signature" style="display: none;" placeholder="{{agile_lng_translate 'prefs-settings' 'enter-text'}}"></textarea>
                 </div>
             </div>
             </div>
@@ -999,34 +1015,35 @@
 <div class="col-md-12">            
 
 	  <div class="control-group form-group hidden">
-                <label class="control-label col-sm-2">Task Reminders</label>
+                <label class="control-label col-sm-2">{{agile_lng_translate 'prefs-settings' 'task-reminders'}}</label>
                 <div class="controls col-sm-9">
 <div class="checkbox">
                     <label class="i-checks i-checks-sm">
                     <input id="task_remainder" type="checkbox" name="task_reminder" value="true" /><i></i>
-                    Send a daily email reminder when tasks are due 
+                    {{agile_lng_translate 'prefs-settings' 'task-reminders-content'}} 
                     </label>
 </div>       
                 </div>
             </div>
 <div class="control-group form-group hidden">
-                <label class="control-label col-sm-2">Event Reminder</label>
+                <label class="control-label col-sm-2">{{agile_lng_translate 'prefs-settings' 'event-reminder'}}</label>
                 <div class="controls col-sm-9">
                     <div class="checkbox">
 <label class="i-checks i-checks-sm">
                     <input id="event_remainder" type="checkbox" name="event_reminder" value="true" /><i></i>
-                    Send email reminder 10 minutes before a calendar event
+                    {{agile_lng_translate 'prefs-settings' 'event-reminder-content'}}
                     </label>
 </div>       
                 </div>
             </div>
                 <div class="control-group form-group">
-                <label class="control-label col-sm-2">Shortcuts</label>
+                <label class="control-label col-sm-2">{{agile_lng_translate 'prefs-settings' 'shortcuts'}}
+                </label>
                 <div class="controls col-sm-9">
                     <div class="checkbox">
 <label class="i-checks i-checks-sm">
                     <input id="keyboard_shotcuts" type="checkbox" name="keyboard_shotcuts" /><i></i>
-                    Enable keyboard shortcuts <a href="#" data-dismiss="modal" class="t-l-none data-toggle="modal" id="keyboard-shortcuts"><i class="icon-info-sign"></i></a>
+                    {{agile_lng_translate 'prefs-settings' 'enable-keyboard-shortcuts'}} <a href="#" data-dismiss="modal" class="t-l-none data-toggle="modal" id="keyboard-shortcuts"><i class="icon-info-sign"></i></a>
                     </label> 
 </div>      
                 </div>
@@ -1034,7 +1051,7 @@
             <div class="control-group form-group hidden">
 <label class="col-sm-2">&nbsp;</label>
                 <div class="controls col-sm-9">
-					<a href="#change-password" class="text-info">Change Password</a>      
+					<a href="#change-password" class="text-info">{{agile_lng_translate 'prefs-settings' 'change-password'}}</a>      
                 </div>
             </div>
 </div>
@@ -1044,7 +1061,7 @@
 <div class="col-md-12">
 <div class="form-group">
             <div class="col-sm-offset-2 col-sm-9">
-                <a href="#" type="submit" class="save btn btn-sm btn-primary">Save Changes</a>
+                <a href="#" type="submit" class="save btn btn-sm btn-primary">{{agile_lng_translate 'prefs-settings' 'save-changes'}}</a>
                 <!--<a href="#settings" class="btn btn-default btn-sm ">Cancel</a>-->
             </div>
 </div>

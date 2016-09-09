@@ -84,7 +84,7 @@ $(function()
 											{
 												$('#' + elementId + '_list', $('#' + streamId))
 														.append(
-																'<li class="list-clear"><a href="#social" class="unfollow-user" tweet-owner=' + tweetOwner + '>Unfollow @' + tweetOwner + '</a></li>');
+																'<li class="list-clear"><a href="#social" class="unfollow-user" tweet-owner=' + tweetOwner + '>{{agile_lng_translate "socialsuite" "unfollow"}} @' + tweetOwner + '</a></li>');
 											}
 											// Stream owner not following tweet
 											// owner then add follow option
@@ -92,7 +92,7 @@ $(function()
 											{
 												$('#' + elementId + '_list', $('#' + streamId))
 														.append(
-																'<li class="list-clear"><a href="#social" class="follow-user" tweet-owner=' + tweetOwner + '>Follow @' + tweetOwner + '</a></li>');
+																'<li class="list-clear"><a href="#social" class="follow-user" tweet-owner=' + tweetOwner + '>{{agile_lng_translate "widgets" "follow"}} @' + tweetOwner + '</a></li>');
 											}
 
 											// Tweet owner is stream owner's
@@ -100,7 +100,7 @@ $(function()
 											if (data.follower == "true")
 											{
 												$('#' + elementId + '_list', $('#' + streamId)).append(
-														'<li class="list-clear"><a href="#social" class="direct-message">Send Direct Message</a></li>');
+														'<li class="list-clear"><a href="#social" class="direct-message">{{agile_lng_translate "widgets" "send-direct-message"}}</a></li>');
 											}
 
 											// Check tweet owner is Block or
@@ -109,13 +109,13 @@ $(function()
 											{
 												$('#' + elementId + '_list', $('#' + streamId))
 														.append(
-																'<li class="list-clear"><a href="#social" class="unblock-user" tweet-owner=' + tweetOwner + '>Unblock @' + tweetOwner + '</a></li>');
+																'<li class="list-clear"><a href="#social" class="unblock-user" tweet-owner=' + tweetOwner + '>{{agile_lng_translate "socialsuite" "unblock"}} @' + tweetOwner + '</a></li>');
 											}
 											else if (data.blocked == "false")
 											{
 												$('#' + elementId + '_list', $('#' + streamId))
 														.append(
-																'<li class="list-clear"><a href="#social" class="block-user" tweet-owner=' + tweetOwner + '>Block @' + tweetOwner + '</a></li>');
+																'<li class="list-clear"><a href="#social" class="block-user" tweet-owner=' + tweetOwner + '>{{agile_lng_translate "socialsuite" "block"}} @' + tweetOwner + '</a></li>');
 											}
 										}).error(function(data)
 								{
@@ -229,14 +229,14 @@ $(function()
 					// Add back to stream.
 					modelStream.get('tweetListView').add(modelTweet);
 
-					showNotyPopUp('information', "Your tweet has been deleted.", "top", 5000);
+					showNotyPopUp('information', "{{agile_lng_translate 'socialsuite' 'tweet-deleted'}}", "top", 5000);
 
 					// Remove tweet element from ui
 					$('.deleted').remove();
 				}
 				else if (data == "Unsuccessful")
 				{
-					showNotyPopUp('information', "Retry after sometime.", "top", 5000);
+					showNotyPopUp('information', "{{agile_lng_translate 'socialsuite' 'retry-after'}}", "top", 5000);
 				}
 			}).error(function(data)
 			{
@@ -292,7 +292,7 @@ $(function()
 		        console.log("ON ERROR");
 		        console.log(response);
 		        
-		        var data = {}; data["responseText"] = "Sorry, that page does not exist";
+		        var data = {}; data["responseText"] = "{{agile_lng_translate 'socialsuite' 'page-not-foumd'}}";
 		        
 		        displayError("socialsuite_RT_userlistModal", data);
 		    }

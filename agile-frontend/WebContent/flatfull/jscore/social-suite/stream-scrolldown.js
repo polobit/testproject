@@ -44,7 +44,7 @@ function OnScrollDiv(elementDiv)
 
 		/*
 		 * Calls TwitterAPI class to request for 20 more updates tweeted before
-		 * the tweet id of the last update
+		 * the tweet id {{agile_lng_translate 'tickets' 'of'}} the last update
 		 */
 		$
 				.getJSON(
@@ -54,7 +54,7 @@ function OnScrollDiv(elementDiv)
 							// If no more updates available, show message.
 							if (data == null)
 							{
-								showNotyPopUp('information', "No more updates available for stream " + stream.stream_type + " of " + stream.screen_name, "top",
+								showNotyPopUp('information', "{{agile_lng_translate 'socialsuite' 'no-more-updates'}} " + stream.stream_type + " {{agile_lng_translate 'tickets' 'of'}} " + stream.screen_name, "top",
 										5000);
 
 								// Remove loading icon.
@@ -73,7 +73,7 @@ function OnScrollDiv(elementDiv)
 							}
 							if (data.length == 0)
 							{
-								showNotyPopUp('information', "No more updates available for stream " + stream.stream_type + " of " + stream.screen_name, "top",
+								showNotyPopUp('information', "{{agile_lng_translate 'socialsuite' 'no-more-updates'}} " + stream.stream_type + " {{agile_lng_translate 'tickets' 'of'}} " + stream.screen_name, "top",
 										5000);
 								$('#stream-waiting-modal-' + streamId).remove();
 								$(elementDiv).attr("data", "1");
@@ -133,11 +133,11 @@ function OnScrollDiv(elementDiv)
 
 					// Error message is shown to the user
 					if (data.responseText == "")
-						showNotyPopUp('information', "No more updates available for stream " + stream.stream_type + " of " + stream.screen_name, "top", 7000);
+						showNotyPopUp('information', "{{agile_lng_translate 'socialsuite' 'no-more-updates'}} " + stream.stream_type + " {{agile_lng_translate 'tickets' 'of'}} " + stream.screen_name, "top", 7000);
 					else if (result.indexOf("rate") != -1)
-						showNotyPopUp('information', "Request rate limit exceeded, Retry after some time.", "top", 5000);
+						showNotyPopUp('information', "{{agile_lng_translate 'socialsuite' 'limit-reached'}}", "top", 5000);
 					else if (result.indexOf("Could not fetch URL") != -1)
-						showNotyPopUp('information', "Please, check your internet connection.", "top", 5000);
+						showNotyPopUp('information', "{{agile_lng_translate 'socialsuite' 'check-internet'}}", "top", 5000);
 					else
 						showNotyPopUp('information', data.responseText, "top", 5000);
 				});

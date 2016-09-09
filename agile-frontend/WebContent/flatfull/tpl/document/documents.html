@@ -1,109 +1,157 @@
-<script id="documents-collection-template" type="text/html">
+<script id="documents-static-container-template" type="text/html">
 <div class="custom-animated custom-fadeInUp">
-<div class="wrapper-md lter bg-light b-b">
-<div class="row">
-    <div class="col-md-12" id="document-add">
-            <h3 class="pull-left font-thin h3">Documents </h3>
-            <a href="#documents-add" class="documents-add btn btn-default btn-addon pull-right btn-sm"><i class="fa fa-plus-circle" /> Add Document</a>
-			<div class="clearfix"></div>
-    </div>
-</div>
-</div>
+<div id="documents-top-view"></div>
 <div class="wrapper-md">
 <div class="row">
-		{{#unless this.length}}
-		<div class="col-md-9">
-		<div class="alert bg-white">
+<div id="documents_collection_container" class="col-md-9 col-sm-9" ></div>
+<div class="col-md-3">
+        <div class="data-block">
+                <h4 class="m-t-none m-b-sm h4">
+                    {{agile_lng_translate 'documents' 'how-to-use-documents'}}
+                </h4>                
+                <p>{{agile_lng_translate 'documents' 'documents-desc'}}</p>
+            
+        </div>
+    </div>
+    </div>
+    </div>
+    </div>
+</script>
+<script id="documents-top-header-template" type="text/html">
+<div class="wrapper-md lter bg-light b-b">
+<div class="btn-toolbar m-l-none">
+<div class="btn-group dropdown m-l-none documentsheading" style="float:none;">
+<div>
+<h3 class="pull-left font-thin h3">{{agile_lng_translate 'deal-view' 'documents'}} </h3></div>
+    <div class="btn-group   p-t-n-sm workflow-sortby">
+                <div class="btn-group dropdown">
+                                <button class="btn btn-sm no-shadow p-n b-n bg-transparent text-base" style="font-size: 11px;" data-toggle="dropdown" id="contact-sort">
+                                        <span class="text-muted">{{agile_lng_translate 'contacts-view' 'sort-by'}} </span>
+                                        <span class="sort-field-txt">
+                                        {{#if_equals_sork_key sortKey 'dummy_name' }}{{agile_lng_translate 'deal-view' 'name'}}{{/if_equals_sork_key}}
+        {{#if_equals_sork_key sortKey 'uploaded_time' }}{{agile_lng_translate 'documents' 'uploaded-time'}}{{/if_equals_sork_key}}</span>
+                                    </button>
+                                    <button class="btn btn-sm no-shadow dropdown-toggle bg-transparent b-n p-t-none p-b-none p-l-xs" data-toggle="dropdown" aria-expanded="false">
+                                        <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu " id="sort_menu" role="menu">
+                                        <li>
+                                        <a class="sort-link sort-field pos-rlt text-ellipsis" style="width:185px;" href="javascript:void(0);" data="dummy_name" label_name="dummy_name">
+                                        {{agile_lng_translate 'deal-view' 'name'}}
+                                            <i class="fa fa-check pos-abs pos-r-sm txt-small m-t-xs sort-field-check  
+                                {{#if_equals_sork_key sortKey 'dummy_name'}}{{else}}display-none {{/if_equals_sork_key}}"></i> 
+                                            </a>
+                                    </li>
+                                    <li>
+                                        <a class="sort-link sort-field pos-rlt text-ellipsis" style="width:185px;" href="javascript:void(0);" data="uploaded_time" label_name="uploaded_time">
+                                        {{agile_lng_translate 'documents' 'uploaded-time'}}
+                        <i class="fa fa-check pos-abs pos-r-sm txt-small m-t-xs sort-field-check 
+                {{#if_equals_sork_key sortKey 'uploaded_time'}}{{else}}display-none {{/if_equals_sork_key}}"></i> 
+                                        </a>
+                                    </li>
+                                    <li class="divider" id="sort-divider"></li>
+                                            <li>
+                                                <a class="order-by pos-rlt" data="" href="javascript:void(0);">{{agile_lng_translate 'contacts-view' 'ascending'}} 
+                        <i class="fa fa-check pos-abs pos-r-sm txt-small m-t-xs sort-by-check  
+                        {{#if_asc_sork_key sortKey}}{{else}}display-none {{/if_asc_sork_key}}"></i> </a>
+                                            </li>
+                                            <li><a class="order-by pos-rlt" data="-" href="javascript:void(0);">{{agile_lng_translate 'contacts-view' 'descending'}}  
+            <i class="fa fa-check pos-abs pos-r-sm txt-small m-t-xs sort-by-check 
+            {{#if_asc_sork_key sortKey}}display-none{{else}} {{/if_asc_sork_key}}"></i> </a></li>
+                                    </ul>
+                                    </div>
+                                    </div>
+                                    </div>
+                                    <div class="pull-right m-t-xs" id="document-add">
+            <a href="#documents-add" class="documents-add btn btn-default btn-addon  btn-sm"><i class="fa fa-plus-circle" /> {{agile_lng_translate 'deal-view' 'add-document'}}</a>
+
+            <div class="clearfix"></div>
+    </div>
+</div>
+</script>
+<script id="documents-collection-template" type="text/html">
+
+        {{#unless this.length}}
+        <div class="col-md-12">
+        <div class="alert bg-white">
             <div class="slate-content  p-md">
                 <div class="box-left pull-left m-r-md">
                     <img alt="Clipboard" src="{{getS3ImagePath '/img/clipboard.png'}}" />
                 </div>
                 <div class="box-right pull-left">
-                    <h4 class="m-t-none">There are no documents </h3>
+                    <h4 class="m-t-none">{{agile_lng_translate 'documents' 'there-are-no-documents'}} </h3>
                     <div class="text">
-						You can add document by clicking the button below or the one on the right side of the page.
+                        {{agile_lng_translate 'documents' 'you-can-add-document-by-clicking'}}
                     </div>
-                    <a href="#" class="documents-add btn btn-default btn-sm m-t-xs"><i class="fa fa-plus-circle"></i>  Add Document</a>
+                    <a href="#" class="documents-add btn btn-default btn-sm m-t-xs"><i class="fa fa-plus-circle"></i>  {{agile_lng_translate 'deal-view' 'add-document'}}</a>
                 </div>
-				<div class="clearfix">
-				</div>
+                <div class="clearfix">
+                </div>
             </div>
         </div>
-		</div>
-		{{/unless}}
+        </div>
+        {{/unless}}
         {{#if this.length}}
-          <div class="col-md-9">
-			<div class="panel panel-default">
-			    <div class="panel-heading"> Documents List</div>
+          
+            <div class="panel panel-default">
+                <div class="panel-heading"> {{agile_lng_translate 'documents' 'documents-list'}}</div>
                 <div class="table-responsive">
-                <table class="table table-striped showCheckboxes m-b-none panel agile-table table-layout-mob-view" url="core/api/documents/bulk" id="document-list">
+                <table class="table table-striped showCheckboxes m-b-none panel agile-table table-layout-mob-view no-sorting" url="core/api/documents/bulk" id="document-list">
                     <thead>
                         <tr>
-                            <th style="width:30%">Title</th>
-                            <th style="width:30%">Related Contacts</th>
-                            <th style="width:20%">Uploaded Date</th>
-							<th style="width:20%">Owner</th>
+                            <th style="width:30%">{{agile_lng_translate 'report-add' 'title'}}</th>
+                            <th style="width:30%">{{agile_lng_translate 'documents' 'related-contacts'}}</th>
+                            <th style="width:20%">{{agile_lng_translate 'documents' 'uploaded-date'}}</th>
+                            <th style="width:20%">{{agile_lng_translate 'contact-details' 'owner'}}</th>
                         </tr>
                     </thead>
                     <tbody id="documents-model-list" class="c-p">
                     </tbody>
                 </table>
                 </div>
-			</div>
-		</div>
+            </div>
+        
         {{/if}}
-    <div class="col-md-3">
-        <div class="data-block">
-            
-                <h4 class="m-t-none m-b-sm h4">
-                    How to use Documents?
-                </h4>                
-                <p>Documents add more context to Contacts or Deals. To add documents, upload them from your computer or append them from a cloud storage like Google Drive.</p>
-            
-        </div>
-    </div>
-</div>
-</div>
-</div>
+    
 </script>
 
 <script id="documents-model-template" type="text/html">
 <td data="{{id}}" class="data">
 <div class="pull-left inline-block table-resp" style="max-width:90%;width:auto;"><a class="text-cap">{{name}}</a></div>
 <div class="pull-left m-l-xs">
-<b class="activate-link" style="display:none;"><a href="{{url}}" target="_blank"><i class="icon-external-link" title="Open Document"></i></a></b>
+<b class="activate-link" style="display:none;"><a href="{{url}}" target="_blank"><i class="icon-external-link" title="{{agile_lng_translate 'documents' 'open-document'}}"></i></a></b>
 </div>
 <div class="clearfix"></div>
 </div>
-	<div>
-		<small class="text-muted">{{network network_type}}&nbsp;&nbsp;</small>
-	</div>
+    <div>
+        <small class="text-muted">{{network network_type}}&nbsp;&nbsp;</small>
+    </div>
 </td>
 <td class="overflow-hidden no-wrap">
-	<div class="text-ellipsis inline-block" style="width:128px">
+    <div class="text-ellipsis inline-block" style="width:128px">
 <div  style="width:128px">
-		{{#each contacts}}
-        	{{#if_contact_type "PERSON"}}
-        		<a href="#contact/{{id}}" class="activate-link thumb-sm popover_contact" data="{{id}}"><img class="img-inital r r-2x" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}" title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" /></a>
-        	{{/if_contact_type}}
-			{{#if_contact_type "COMPANY"}}
-        		<a href="#company/{{id}}" class="activate-link thumb-sm popover_contact" data="{{id}}"><img class="r r-2x" {{getCompanyImage "40" "display:inline;"}} title="{{getPropertyValue properties "name"}}"/></a>
-        	{{/if_contact_type}}
+        {{#each contacts}}
+            {{#if_contact_type "PERSON"}}
+                <a href="#contact/{{id}}" class="activate-link thumb-sm popover_contact" data="{{id}}"><img class="img-inital r r-2x" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}" title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" /></a>
+            {{/if_contact_type}}
+            {{#if_contact_type "COMPANY"}}
+                <a href="#company/{{id}}" class="activate-link thumb-sm popover_contact" data="{{id}}"><img class="r r-2x" {{getCompanyImage "40" "display:inline;"}} title="{{getPropertyValue properties "name"}}"/></a>
+            {{/if_contact_type}}
         {{/each}}
-	</div>
+    </div>
 </div>
 {{#if_greater this.contacts.length "4"}}<span>...</span>{{/if_greater}}
 </td>
 <td class="text-muted">
-	<div class="table-resp">
-		<i class="fa fa-clock-o m-r-xs"></i>
-		<time class="document-created-time b-b-dotted" value="{{uploaded_time}}" datetime="{{epochToHumanDate "" uploaded_time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" uploaded_time}}</time>
-	</div>
+    <div class="table-resp">
+        <i class="fa fa-clock-o m-r-xs"></i>
+        <time class="document-created-time b-b-dotted" value="{{uploaded_time}}" datetime="{{epochToHumanDate "" uploaded_time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" uploaded_time}}</time>
+    </div>
 </td><td>
     <div class="thumb-sm avatar">
        {{#if owner.pic}}
         <img class="r r-2x" src="{{owner.pic}}"  title="{{owner.name}}" />
-	   {{else}}
+       {{else}}
              <div class="pull-left inline-block table-resp" style="max-width:90%;width:auto;">{{owner.name}}</div>
        {{/if}}
     </div>

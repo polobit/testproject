@@ -84,12 +84,12 @@ public class AmazonSESUtil
 							"Powered by", emailSender.isEmailWhiteLabelEnabled());
 			
 				long start = System.currentTimeMillis();
-				ses.sendEmail(mailDeferredTask.fromEmail, mailDeferredTask.fromName, mailDeferredTask.to, mailDeferredTask.cc, mailDeferredTask.bcc, mailDeferredTask.subject, mailDeferredTask.replyTo, mailDeferredTask.html, mailDeferredTask.text);
+				ses.sendRawEmail(mailDeferredTask.fromEmail, mailDeferredTask.fromName, mailDeferredTask.to, mailDeferredTask.cc, mailDeferredTask.bcc, mailDeferredTask.subject, mailDeferredTask.replyTo, mailDeferredTask.html, mailDeferredTask.text, mailDeferredTask.campaignId, mailDeferredTask.domain);
 				System.out.println("Sent time - " + (System.currentTimeMillis() - start));
 			}
 			catch(Exception ex)
 			{
-				System.err.println("Exception occured in sendSESMails..." + ex.getMessage());
+				System.err.println("Exception occured in sendSESMails..." + ex.getMessage()); 
 			}
 		}
 	}
@@ -109,6 +109,7 @@ public class AmazonSESUtil
 	{
 		
 		String host = "http://54.87.153.50:8080/";
+		//String host = "http://54.84.112.13/";
 		
 		if(SystemProperty.environment.value() == SystemProperty.Environment.Value.Development)
 			host = "http://localhost:8080/ses-beta-app";
@@ -121,7 +122,7 @@ public class AmazonSESUtil
 		
 			// For Production
 			if(SystemProperty.applicationId.get().equals("agile-crm-cloud"))
-				host = host + "ses-beta-app";
+				host = host + "ses-live-app";
 			
 		}
 		

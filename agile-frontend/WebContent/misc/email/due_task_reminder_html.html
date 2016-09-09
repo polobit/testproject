@@ -4,33 +4,14 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>AgileCRM</title>
-    <style type="text/css">
-      body {margin: 10px 0; padding: 0 10px; background: #fafafa; font-size: 14px;font-family:arial,sans-serif;color:#4B4848}
-      \*table {border-collapse: collapse;} */
-      td {font-family: arial, sans-serif; color: #333333;}
-
-      @media only screen and (max-width: 480px) {
-        body,table,td,p,a,li,blockquote {
-          -webkit-text-size-adjust:none !important;
-        }
-        table {width: 100% !important;}
-
-        .responsive-image img {
-          height: auto !important;
-          max-width: 100% !important;
-          width: 60% !important;
-        }
-      }
-	  .verticalLine {
-		border-left: thick solid #ff0000;
-	  }
-    </style>
+    
   </head>
   <body>
-    <table border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color:#edf1f2;padding-top:60px">
+  <div>
+    <table border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color:#edf1f2;padding:6% 10%">
       <tr>
         <td align="center">
-          <table border="0" cellpadding="0" cellspacing="0" align="center" width="640" bgcolor="#FFFFFF" style="border:1px solid #ccc;border-radius:2px">
+          <table border="0" cellpadding="0" cellspacing="0" align="center"  bgcolor="#FFFFFF" style="border:1px solid #ccc;border-radius:2px">
 		    <tr>
               <td style="font-size: 0; line-height: 0; padding: 0 10px; border-bottom:1px solid #ccc" height="70" align="center" class="responsive-image">
                 <img width="150" alt="AgileCRM" src="https://s3.amazonaws.com/agilecrm/panel/uploaded-logo/1383722651000?id=upload-container">
@@ -40,8 +21,8 @@
               <td style="padding: 35px">
                 <div style="font-size: 20px;font-family:arial,sans-serif;color:#4B4848;font-weight:bold">You have {{tasksCount}} tasks due today</div>
                 <br />
-                <div>
-                  This is a friendly reminder of your tasks that are due for completion today. You can view, edit and complete these tasks directly from the <a href="https://{{domain}}.agilecrm.com">Agile CRM dashboard</a>.
+                <div style="font-size:14px;font-family:sans-serif;">
+                  This is a friendly reminder of your tasks that are due for completion today. You can view, edit and complete these tasks directly from the <a href="https://{{domain}}.agilecrm.com">Agile CRM Dashboard</a>.
                 </div>
 				<br />
 				<div>
@@ -51,7 +32,7 @@
 							<table>
 								<tr>
 									<td>
-										<div style="margin-right:40px;font-weight:bold">Today</div>
+										<div style="margin-right:40px;font-weight:bold;font-size:14px;font-family:sans-serif;">Today</div>
 									</td>
 									<td style="border-left:2px solid white">
 										<div></div>
@@ -71,7 +52,7 @@
 								<tbody>
 									<tr>
 										<td>
-											<div style="margin-right: 10px;width:65px">{{timeFormatForEmail}}</div>
+											<div style="margin-right: 10px;width:65px;font-size:14px;font-family:sans-serif;">{{timeFormatForEmail}}</div>
 										</td>
 										<td style="border-left:2px solid #34A853">
 											<div></div>
@@ -80,7 +61,23 @@
 											<table>
 												<tbody>
 													<tr>
-														<td style="padding-bottom:5px"><span>{{{subject}}}</span></td>
+														<td style="font-size:14px;font-family:sans-serif;"><span>{{{subject}}}</span></td>
+													</tr>
+													<tr>
+														<td>
+															{{#related_contacts}}
+						   		
+																<div style="display:inline-block;float:left;margin:0px 0px 0px 2px !important;">
+																{{#taskOwner.domain}}
+																	<a href="https://{{taskOwner.domain}}.agilecrm.com/#contact/{{/taskOwner.domain}}
+																{{^taskOwner.domain}}
+																	<a href="http://localhost:8888#contact/{{/taskOwner.domain}}{{id}}" target="_blank" style="text-decoration:none;">
+																		<span style="display:inline-block;overflow:hidden;color:blue;text-overflow:ellipsis;white-space:nowrap;font-family:sans-serif;">{{#first_name}}{{value}}{{/first_name}}{{#last_name}} {{value}} {{/last_name}}{{#name}}{{value}}{{/name}}{{^last}},{{/last}}</span>
+																	</a>
+																</div>
+																
+															{{/related_contacts}}
+														</td>
 													</tr>
 													<tr>
 														<td><span style="background-color:#f3f3f3;padding:2px 5px;border-radius:2px;display:inline-block;font-size:11px">{{type}}</span></td>
@@ -100,15 +97,11 @@
               </td>
             </tr>
           </table>
-		  <table border="0" cellpadding="0" cellspacing="0" width="640" align="center">      
+		  <table border="0" cellpadding="0" cellspacing="0" width="100%" align="center">
 			<tr>
-				<td style="font-family:arial,sans-serif; font-size: 14px; text-align:center;padding-top:15px;opacity:0.6;">
-				Agile CRM, MS 35, 440 N Wolfe Road, Sunnyvale, CA 94085, USA.
-				</td>
-			</tr>
-			<tr>
-				<td style="font-family:arial,sans-serif; font-size: 9px; text-align:center;padding:15px;opacity:0.6;">
-				This email is sent to {{email_to}} because this email id is linked to an Agile CRM account and is subscribed to our mailing list.
+				<td style="font-family:arial,sans-serif; font-size: 9px; text-align:center;padding:15px 15px 0px 15px;opacity:0.6;">
+				This email is sent to <font color="blue">
+					<a href="mailto:{{email_to}}" target="_blank" style="text-decoration:none">{{email_to}}</a></font> because this email ID is linked to an Agile CRM account & is subscribed to our mailing list.
 				</td>
 			</tr>
 		  </table>
@@ -116,4 +109,5 @@
       </tr>
     </table>
   </body>
+  </div>
 </html>

@@ -8,22 +8,21 @@
 	 <div class="panel-body">
 	   <div class="line-clamp-6 " style="min-height:80px">
 	{{#if id}}
-		Your Google Calendar is now synced with Agile  
- <a href="#calendar" class="text-info">calendar</a>.
+		{{agile_lng_translate 'prefs-data-sync' 'google-calendar-sync-desc-1'}}  
+ <a href="#calendar" class="text-info">{{agile_lng_translate 'portlets' 'calendar'}}</a>.
 	{{else}}
-			Authorize your Google Calendar to sync the events with Agile
- <a href="#calendar" class="text-info">calendar</a>.
+			{{agile_lng_translate 'prefs-data-sync' 'google-calendar-sync-desc-2'}}
+ <a href="#calendar" class="text-info">{{agile_lng_translate 'portlets' 'calendar'}}</a>.
 	{{/if}}
 	<br/>
-	<div>You can also <a href="#icalModal" id="subscribe-ical" data-toggle="modal" class="text-info" >setup Agile calendar inside Google</a>.</div> 
-
+	<div>{{agile_lng_translate 'prefs-data-sync' 'google-calendar-sync-desc-3'}}</div> 
 		</div>
 	    <div class="m-t-md text-center">
 				{{#if id}}
-	    			<a class="btn btn-sm btn-danger" id="sync-google-calendar-delete">Disable</a>
-	    			<a href="#sync/calendar-setup" class="btn btn-sm btn-default" id="setting-widget">Settings</a>
+	    			<a class="btn btn-sm btn-danger" id="sync-google-calendar-delete">{{agile_lng_translate 'prefs-email' 'disable'}}</a>
+	    			<a href="#sync/calendar-setup" class="btn btn-sm btn-default" id="setting-widget">{{agile_lng_translate 'preferences' 'settings'}}</a>
 	    		{{else}}
-	    				<a class="btn btn-sm btn-default" id="sync-google-calendar">Enable</a>
+	    				<a class="btn btn-sm btn-default" id="sync-google-calendar">{{agile_lng_translate 'prefs-email' 'enable'}}</a>
 	    		{{/if}}
 		</div>
 	</div>
@@ -52,7 +51,7 @@
     <form id="google-contacts-import-form" name="prefs">
         <fieldset>
             <div class="control-group form-group">
-				<label class="control-label">Select Calendars To Display</label> 
+				<label class="control-label">{{agile_lng_translate 'prefs-data-sync' 'select-calendars-to-display' }}</label> 
 			</div>
 
         	<div class="control-group form-group" id="sync_from_group_controlgroup">
@@ -63,8 +62,9 @@
 		</div>
         </fieldset>
           <div class="form-actions col-md-7 text-right">
-			<a href="#sync" class="btn btn-default btn-sm ml_5 m-r-xs">Cancel</a>
-			<div class="btn btn-sm btn-primary save inline-block">Save</div>
+			<a href="#sync" class="btn btn-default btn-sm ml_5 m-r-xs">{{agile_lng_translate 'other' 'cancel'}}</a>
+			<div class="btn btn-sm btn-primary save inline-block">{{agile_lng_translate 'portlets' 'save'}}
+			</div>
 		</div>
 
     </form>
@@ -78,7 +78,7 @@
 <select multiple id="multi-select-calendars" name="fields" class="multi-select required"> 
 	{{#each items}}
 		{{#if primary}}
-				<option value={{id}}>Primary</option>	
+				<option value={{id}}>{{agile_lng_translate 'companies-edit' 'primary'}}</option>	
 			{{else}}
 				<option value={{id}}>{{summary}}</option>			
 		{{/if}}

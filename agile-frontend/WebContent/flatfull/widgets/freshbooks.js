@@ -6,7 +6,7 @@
  */
 var FBSmails = {};
 var FBSCount = 1;
-var showMoreHtmlFBS = '<div class="widget_tab_footer freshbooks_show_more" align="center"><a class="c-p text-info" id="FBS_show_more" rel="tooltip" title="Click to see more tickets">Show More</a></div>';
+var showMoreHtmlFBS = '<div class="widget_tab_footer freshbooks_show_more" align="center"><a class="c-p text-info" id="FBS_show_more" rel="tooltip" title="'+_agile_get_translated_val('widgets', 'click-to-see-more-tickets')+'">'+_agile_get_translated_val('widgets', 'show-more')+'</a></div>';
 var FBSclientID = "";
 
 /**
@@ -22,8 +22,8 @@ function setUpFreshbooksAuth(contact_id)
 	$('#FreshBooks').html(getTemplate('freshbooks-login', {}));
 
 	// On click of save button, check input and save details
-    $("#widgets").off("click", "#freshbooks_save_token");
-	$("#widgets").on("click", "#freshbooks_save_token", function(e)
+    $("#"+WIDGET_PARENT_ID).off("click", "#freshbooks_save_token");
+	$("#"+WIDGET_PARENT_ID).on("click", "#freshbooks_save_token", function(e)
 	{
 		e.preventDefault();
 
@@ -48,7 +48,7 @@ function savefreshBooksPrefs(contact_id)
 	var freshbooks_prefs = {};
 	freshbooks_prefs["freshbooks_apiKey"] = $("#freshbooks_apiKey").val();
 	freshbooks_prefs["freshbooks_url"] = $("#freshbooks_url").val();
-
+	
 	// Saves the preferences into widget with FreshBooks widget name
 	agile_crm_save_widget_prefs(FRESHBOOKS_PLUGIN_NAME, JSON.stringify(freshbooks_prefs), function(data)
 	{
@@ -78,7 +78,7 @@ function showFreshBooksClient(contact_id)
 	 */
 	if (!Email)
 	{
-		freshBooksError(FRESHBOOKS_PLUGIN_NAME, "Please provide email for this contact");
+		freshBooksError(FRESHBOOKS_PLUGIN_NAME, _agile_get_translated_val('widgets', 'pl-give-contact-email'));
 		return;
 	}
 
@@ -190,10 +190,7 @@ function getInvoicesOfClient(client_id, offSet)
 			// Show invoices in FreshBooks widget panel
 			$('#freshbooks_invoice_panel').append(freshbooks_invoice_template);
 			// Load jquery time ago function to show time ago in invoices
-			head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
-			{
-				$(".time-ago", freshbooks_invoice_template).timeago();
-			});
+			agileTimeAgoWithLngConversion($(".time-ago", $('#freshbooks_invoice_panel')));
 
 			$('#freshbooks_invoice_load').remove();
 
@@ -332,8 +329,8 @@ function startFreshBooksWidget(contact_id){
 	 * On click of add client button in FreshBooks, calls method to add a client
 	 * in FreshBooks with contact's first name, last name and email
 	 */
-	$("#widgets").off("click", "#freshbooks_add_client");
-	$("#widgets").on("click", "#freshbooks_add_client", function(e)
+	$("#"+WIDGET_PARENT_ID).off("click", "#freshbooks_add_client");
+	$("#"+WIDGET_PARENT_ID).on("click", "#freshbooks_add_client", function(e)
 	{
 		e.preventDefault();
 		addClientToFreshBooks(contact_id, first_name, last_name, Email);
@@ -344,8 +341,8 @@ function startFreshBooksWidget(contact_id){
 	 * On click of add client button in FreshBooks, calls method to add a client
 	 * in FreshBooks with contact's first name, last name and email
 	 */
-	$("#widgets").off("click", "#FBS_show_more");
-	$("#widgets").on("click", "#FBS_show_more", function(e)
+	$("#"+WIDGET_PARENT_ID).off("click", "#FBS_show_more");
+	$("#"+WIDGET_PARENT_ID).on("click", "#FBS_show_more", function(e)
 	{
 		e.preventDefault();
 		var offSet = FBSCount * 5;

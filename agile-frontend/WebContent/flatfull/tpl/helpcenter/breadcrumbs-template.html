@@ -1,0 +1,21 @@
+<script id="categorie-sections-breadcrumb-template" type="text/html">
+  <ul class="breadcrumb bg-white b-a">
+      <li><a href="#"><i class="fa fa-home"></i>  {{agile_lng_translate 'social' 'Home'}}</a></li>
+      <li class="active">{{name}}</li>
+    </ul>
+</script>
+<script id="section-articles-breadcrumb-template" type="text/html">
+	<ul class="breadcrumb bg-white b-a">
+      <li><a href="#"><i class="fa fa-home"></i> {{agile_lng_translate 'social' 'Home'}}</a></li>
+      <li><a href="#category/{{categorie.id}}">{{categorie.name}}</a></li>
+      <li class="active">{{name}}</li>
+    </ul>
+</script>
+<script id="article-breadcrumb-template" type="text/html">
+	<ul class="breadcrumb bg-white b-a">
+      <li><a href="#"><i class="fa fa-home"></i> {{agile_lng_translate 'social' 'Home'}}</a></li>
+      <li><a href="#category{{categorie.id}}">{{categorie.name}}</a></li>
+      <li><a href="#category/{{categorie.id}}/section/{{section.id}}">{{section.name}}</a></li>
+      <li class="active">{{name}}</li>
+    </ul>
+</script>

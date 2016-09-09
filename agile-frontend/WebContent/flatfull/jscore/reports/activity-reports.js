@@ -68,7 +68,7 @@ function initializeReportSendConfirm()
 										{
 
 											console.log("sending email");
-											$save_info = $('<div style="display:inline-block"><small><p class="text-success"><i>Report will be sent shortly</i></p></small></div>');
+											$save_info = $('<div style="display:inline-block"><small><p class="text-success"><i>{{agile_lng_translate "reports" "sent-shortly"}}</i></p></small></div>');
 
 											$('.report-message').html($save_info);
 

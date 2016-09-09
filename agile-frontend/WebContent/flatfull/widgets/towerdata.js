@@ -20,8 +20,8 @@ function setupRapleafAuth(contact_id)
 	console.log('In Rapleaf Auth');
 
 	// Saves the API key
-    $("#widgets").off("click", '#save_api_key');
-	$("#widgets").on("click", '#save_api_key', function(e)
+    $("#"+WIDGET_PARENT_ID).off("click", '#save_api_key');
+	$("#"+WIDGET_PARENT_ID).on("click", '#save_api_key', function(e)
 	{
 		e.preventDefault();
 
@@ -75,7 +75,7 @@ function showRapleafDetails(contact_id)
 	 */
 	if (!Email)
 	{
-		rapleafError(RAPLEAF_PLUGIN_NAME, "Please provide email for this contact");
+		rapleafError(RAPLEAF_PLUGIN_NAME, _agile_get_translated_val('widgets','pl-give-contact-email'));
 		return;
 	}
 

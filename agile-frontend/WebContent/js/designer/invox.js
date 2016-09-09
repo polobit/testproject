@@ -109,7 +109,8 @@ function initTinyMCE()
 	
 	    tinyMCE.init({
 	        mode : "none",
-	        theme : "advanced"
+	        theme : "advanced",
+	        language : parent.get_tinymce_supported_language(),
 	    });
 }
 

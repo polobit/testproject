@@ -70,10 +70,8 @@ function show_dashboard_tasks(el)
 	var task_dashboard_list_view = new Base_Collection_View({ url : '/core/api/tasks/my/dashboardtasks', restKey : "task", sortKey : "due",
 		templateKey : "dashboard1-tasks", individual_tag_name : 'tr', postRenderCallback : function(el)
 		{
-			head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
-			{
-				$(".task-due-time", el).timeago();
-			});
+			agileTimeAgoWithLngConversion($(".task-due-time", el));
+			
 		} });
 
 	task_dashboard_list_view.appendItem = append_tasks_dashboard;
@@ -91,10 +89,8 @@ function show_dashboard_deals(el)
 	var my_deals = new Base_Collection_View({ url : 'core/api/opportunity/my/upcoming-deals', restKey : "opportunity", templateKey : "dashboard-opportunities",
 		individual_tag_name : 'tr', page_size : 5, sortKey : "created_time", descending : true, postRenderCallback : function(el)
 		{
-			head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
-			{
-				$(".deal-close-time", el).timeago();
-			})
+			agileTimeAgoWithLngConversion($(".deal-close-time", el));
+
 		} });
 	my_deals.collection.fetch();
 	$('#my-deals').html(my_deals.el);
@@ -111,10 +107,8 @@ function show_dashboard_workflows(el)
 		templateKey : "dashboard-campaign-logs", individual_tag_name : 'tr', page_size : 10, sortKey : 'time', descending : true,
 		postRenderCallback : function(el)
 		{
-			head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
-			{
-				$("time.log-created-time", el).timeago();
-			});
+			agileTimeAgoWithLngConversion($("time.log-created-time", el));
+			
 		} });
 
 	workflow_list_view.collection.fetch();

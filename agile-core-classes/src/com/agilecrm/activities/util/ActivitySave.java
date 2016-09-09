@@ -491,6 +491,7 @@ public class ActivitySave
     public static void createNoteAddActivity(Note note) throws JSONException
     {
 
+    System.out.println("inside createNoteAddActivity in activitysave and note is====================================== " + note);
 	JSONObject js = new JSONObject(new Gson().toJson(note));
 	System.out.println(js);
 
@@ -503,7 +504,7 @@ public class ActivitySave
 		}else{
 			custom4 +=  "Incoming call from " + note.phone + ", Status is "+ note.status;
 		}
-		System.out.println(custom4);
+		System.out.println("creating custom4 value --- and custom4 value for above is -- " + custom4);
 	}
 	if (jsn != null && jsn.length() > 0)
 	{
@@ -513,6 +514,7 @@ public class ActivitySave
 
 		Contact contact = ContactUtil.getContact(jsn.getLong(i));
 		if(null != note.callType){
+			System.out.println("saving activity for add note createContactActivity with custom4 inside createNoteAddActivity");
 			ActivityUtil.createContactActivity(ActivityType.NOTE_ADD, contact, note.subject, note.description,
 			        note.id.toString(),custom4);
 		}else{

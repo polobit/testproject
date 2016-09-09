@@ -25,6 +25,8 @@ import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpParams;
 import org.apache.http.util.EntityUtils;
 
+import com.google.appengine.api.blobstore.BlobstoreInputStream.ClosedStreamException;
+
 
 /**
  * <code>HttpClientUtil</code> is the utility class that handles URL requests
@@ -120,47 +122,37 @@ public class HttpClientUtil
 	}
     }
     
-    public static String accessURLUsingHttpClient(URLBuilder urlBuilder, HttpEntity httpEntity)
+    public static String accessURLUsingHttpClient(URLBuilder urlBuilder, HttpEntity httpEntity) throws ClosedStreamException, IOException, Exception
     {
     	HttpUriRequest request = null;
 
-    	try
-    	{
-    		if(urlBuilder.getMethod().equalsIgnoreCase("GET"))
-    			request = new HttpGet(urlBuilder.getURL());
-    		
-    		if(urlBuilder.getMethod().equalsIgnoreCase("POST"))
-    		{
-    			request = new HttpPost(urlBuilder.getURL());
-    			((HttpPost)request).setEntity(httpEntity);
-    		}
-    		
-    		// Iterates each header and add to request
-    		if(!urlBuilder.getHeaders().isEmpty())
-    		{
-    			for(Map.Entry<String, String> entry: urlBuilder.getHeaders().entrySet())
-    			{
-    				request.setHeader(entry.getKey(), entry.getValue());
-    			}
-    		}
-    		
-    		HttpResponse response = httpClient.execute(request);
+		if(urlBuilder.getMethod().equalsIgnoreCase("GET"))
+			request = new HttpGet(urlBuilder.getURL());
+		
+		if(urlBuilder.getMethod().equalsIgnoreCase("POST"))
+		{
+			request = new HttpPost(urlBuilder.getURL());
+			((HttpPost)request).setEntity(httpEntity);
+		}
+		
+		// Iterates each header and add to request
+		if(!urlBuilder.getHeaders().isEmpty())
+		{
+			for(Map.Entry<String, String> entry: urlBuilder.getHeaders().entrySet())
+			{
+				request.setHeader(entry.getKey(), entry.getValue());
+			}
+		}
+		
+		HttpResponse response = httpClient.execute(request);
 
-    		System.out.println(response.getStatusLine().getStatusCode());
-    		System.out.println(response.getStatusLine().getReasonPhrase());
-    		String res =  EntityUtils.toString(response.getEntity());
-    		
-    		System.out.println("Response is " + res);
-    		
-    		return res;
-    		
-    	}
-    	catch(Exception e)
-    	{
-    		e.printStackTrace();
-    		System.err.println("Exception occured while sending request..." + e.getMessage());
-    		return null;
-    	}
+		System.out.println(response.getStatusLine().getStatusCode());
+		System.out.println(response.getStatusLine().getReasonPhrase());
+		String res =  EntityUtils.toString(response.getEntity());
+		
+		System.out.println("Response is " + res);
+		
+		return res;
     }
     
   public static class URLBuilder

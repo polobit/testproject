@@ -49,7 +49,7 @@ public class HelpcenterArticleDocument implements BuilderInterface
 
 			Document.Builder document = Document.newBuilder();
 
-			// Set ticket id as doc id
+			// Set article id as doc id
 			document.setId(article.id + "");
 
 			// Setting search tokens
@@ -252,4 +252,8 @@ public class HelpcenterArticleDocument implements BuilderInterface
 		// TODO Auto-generated method stub
 
 	}
+	public void bulkDelete(String... id)
+    {
+   	 // TODO Auto-generated method stub
+    }
 }

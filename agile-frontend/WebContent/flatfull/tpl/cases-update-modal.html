@@ -4,48 +4,50 @@
     <div class="modal-content">
 	<div class="modal-header">
 		<button class="close" data-dismiss="modal">&times;</button>
-		<h3> Edit Case</h3>
+		<h3> {{agile_lng_translate 'cases' 'edit-case'}}</h3>
 	</div>
 	<div class="modal-body">
 		<form id="casesUpdateForm" name="casesUpdateForm" method="post" class="form-horizontal">
 			<fieldset>
 				<input name="id" type="hidden"/>
 				<div class="control-group form-group">
-						<label class="control-label col-sm-3">Title<span
+						<label class="control-label col-sm-3">{{agile_lng_translate 'other' 'title'}}<span
 							class="field_req">*</span></label>
 						<div class="controls col-sm-7">
 							<span><input id="title" name="title" type="text"
-								class="required form-control" placeholder="Title of the Case" /></span>
+								class="required form-control" placeholder="{{agile_lng_translate 'modals' 'case-title'}}" /></span>
 						</div>
 				</div>
 
 				<div class="control-group form-group">
-						<label class="control-label col-sm-3">Owner<span
-							class="field_req">*</span></label>
+						<label class="control-label col-sm-3">{{agile_lng_translate 'deal-view' 'owner'}}
+						<span class="field_req">*</span></label>
 						<div class="controls col-sm-7" id="owners">
 							<select id="owners-list" class="required form-control" name="owner_id"></select>
 						</div>
 				</div>
 
 				<div class="control-group form-group">
-						<label class="control-label col-sm-3">Status<span class="field_req">*</span></label>
+						<label class="control-label col-sm-3">{{agile_lng_translate 'portlets' 'status'}}
+						<span class="field_req">*</span></label>
 						<div class="controls col-sm-7" id='status'>
 							<span>
 								<select id="status-list" class="required form-control" name="status">
-									<option value='OPEN'>Open</option>
-									<option value='CLOSE'>Closed</option>
+									<option value='OPEN'>{{agile_lng_translate 'contact-details' 'OPEN'}}
+									</option>
+									<option value='CLOSE'>{{agile_lng_translate 'cases' 'closed'}}</option>
 								</select>
 							</span>
 						</div>
 				</div>
 
 				<div class="control-group form-group">
-					<label class="control-label col-sm-3">Related Contacts</label>
+					<label class="control-label col-sm-3">{{agile_lng_translate 'documents' 'related-contacts'}}</label>
 					<div class="controls col-sm-7" id="contactTypeAhead">
 						<div>
 							<div>
 								<input type="text" id="contacts-typeahead-input"
-								placeholder="Contact Name" class="typeahead form-control typeahead_contacts"
+								placeholder="{{agile_lng_translate 'cases' 'contact-name'}}" class="typeahead form-control typeahead_contacts"
 								data-provide="typeahead" data-mode="multiple" />
 							</div>
 							<div style="padding-top:3px;">
@@ -57,18 +59,17 @@
 
 				<div id="custom-field-case"></div>
 				<div class="control-group form-group">
-					<label class="control-label col-sm-3">Description</label>
+					<label class="control-label col-sm-3">{{agile_lng_translate 'other' 'description'}}</label>
 					<div class="controls col-sm-7" style="margin-right:10px;">
 						<textarea id="description" name="description" rows="3" style='width:100%;'
-							class="input form-control" placeholder="Add Comment.."></textarea>
+							class="input form-control" placeholder="{{agile_lng_translate 'cases' 'add-comment'}}"></textarea>
 					</div>
 				</div>
 			</fieldset>
 		</form>
 	</div>
 	<div class="modal-footer" id="cases-add-save">
-		<a href="#" class="btn btn-sm btn-primary" id="cases_validate">Save
-			Changes</a> <span class="save-status"></span>
+		<a href="#" class="btn btn-sm btn-primary" id="cases_validate">{{agile_lng_translate 'prefs-settings' 'save-changes'}}</a> <span class="save-status"></span>
 	</div>
 </div>
 </div>

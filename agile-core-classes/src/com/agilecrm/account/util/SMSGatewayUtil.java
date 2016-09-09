@@ -288,4 +288,17 @@ public class SMSGatewayUtil
 		return null;
 
 	}
+	
+	public static String getTwilioSMSGatewayWidget()
+	{
+
+		Widget widget = getSMSGatewayWidget();
+		String isTwilio="";
+		if (widget != null)
+		{
+		    isTwilio=getSMSType(widget);
+		    return isTwilio;
+		}
+		return isTwilio;
+	}
 }

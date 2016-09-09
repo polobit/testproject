@@ -7,44 +7,45 @@ $(function()
 		setup_tags_typeahead();
 	});
 
- 	$('#opportunityUpdateModal, #opportunityModal').off('click', '#opportunity_archive');
-	$('#opportunityUpdateModal, #opportunityModal').on('click', '#opportunity_archive', function(e)
-	{
-		e.preventDefault();
-		$('#archived', $('#opportunityUpdateForm')).prop('checked', 'checked');
-		$("#opportunityUpdateModal #opportunity_validate").trigger('click');
-	});
 
-	$('#opportunityUpdateModal, #opportunityModal').off('click', '#opportunity_unarchive');
-	$('#opportunityUpdateModal, #opportunityModal').on('click', '#opportunity_unarchive', function(e)
-	{
-		e.preventDefault();
-		$('#archived', $('#opportunityUpdateForm')).removeAttr('checked');
-		$('#opportunityUpdateModal #opportunity_validate').trigger('click');
-	});
+	$('#opportunityUpdateModal, #opportunityModal').off('click', '#opportunity_archive');
+  $('#opportunityUpdateModal, #opportunityModal').on('click', '#opportunity_archive', function(e)
+  {
+    e.preventDefault();
+    $('#archived', $('#opportunityUpdateForm')).prop('checked', 'checked');
+    $("#opportunityUpdateModal #opportunity_validate").trigger('click');
+  });
+
+  $('#opportunityUpdateModal, #opportunityModal').off('click', '#opportunity_unarchive');
+  $('#opportunityUpdateModal, #opportunityModal').on('click', '#opportunity_unarchive', function(e)
+  {
+    e.preventDefault();
+    $('#archived', $('#opportunityUpdateForm')).removeAttr('checked');
+    $('#opportunityUpdateModal #opportunity_validate').trigger('click');
+  });
 
 
-	/**
-	 * Validates deal and saves
-	 */
-	$('#opportunityUpdateModal, #opportunityModal').off('click', '#opportunity_validate');
-	$('#opportunityUpdateModal, #opportunityModal').on('click', '#opportunity_validate', function(e)
-	{
-		e.preventDefault();
+  /**
+   * Validates deal and saves
+   */
+  $('#opportunityUpdateModal, #opportunityModal').off('click', '#opportunity_validate');
+  $('#opportunityUpdateModal, #opportunityModal').on('click', '#opportunity_validate', function(e)
+  {
+    e.preventDefault();
 
-		var color = {"#ee82ee":"VIOLET","#4b0082":"INDIGO","#0000ff":"BLUE","#00ff00":"GREEN","#ffff00":"YELLOW"
-		               ,"#ff6600":"ORANGE","#ff0000":"RED","#000000":"BLACK","#ffffff":"WHITE","#808080":"GREY"}; 
+    var color = {"#ee82ee":"VIOLET","#4b0082":"INDIGO","#0000ff":"BLUE","#00ff00":"GREEN","#ffff00":"YELLOW"
+                   ,"#ff6600":"ORANGE","#ff0000":"RED","#000000":"BLACK","#ffffff":"WHITE","#808080":"GREY"}; 
        
                     
-		// To know updated or added deal form names
-		var modal_id = $(this).closest('.opportunity-modal').attr("id");
-		var form_id = $(this).closest('.opportunity-modal').find('form').attr("id");
-		var colorcode = $(this).closest('.opportunity-modal').find('form').find("#color1").val();
+    // To know updated or added deal form names
+    var modal_id = $(this).closest('.opportunity-modal').attr("id");
+    var form_id = $(this).closest('.opportunity-modal').find('form').attr("id");
+    var colorcode = $(this).closest('.opportunity-modal').find('form').find("#color1").val();
 
-		var json = serializeForm(form_id);
-		json["custom_data"] = serialize_custom_fields(form_id);
-		json["colorName"]  = color[colorcode];
-		var tagsSourceId ;          
+    var json = serializeForm(form_id);
+    json["custom_data"] = serialize_custom_fields(form_id);
+    json["colorName"]  = color[colorcode];
+    var tagsSourceId ;          
         if (!tagsSourceId)
                 tagsSourceId = form_id;
         var tagobj = get_tags(tagsSourceId);
@@ -53,7 +54,7 @@ $(function()
         for (i = 0; i < tagobj.length ; i++) {
                         if(tagobj[i].name == "tags" && tagobj[i].value != "")
                                 tags = tagobj[i];
-		}   
+    }   
         if (tags != undefined && tags.length != 0)
         {
             json.tags = [];
@@ -106,12 +107,12 @@ $(function()
                     return false;
             }
         }
-		console.log(json);
-		if (form_id == "opportunityForm")
-			saveDeal(form_id, modal_id, this, json, false);
-		else
-			saveDeal(form_id, modal_id, this, json, true);
-	});
+    console.log(json);
+    if (form_id == "opportunityForm")
+      saveDeal(form_id, modal_id, this, json, false);
+    else
+      saveDeal(form_id, modal_id, this, json, true);
+  });
 
 	/**
 	 * When mouseover on any row of opportunities list, the popover of deal is shown
@@ -274,7 +275,7 @@ function initializeDealListners(el){
 					$('#milestone').html('');
 					if(milestonesList.length > 1)
 					{
-						$('#milestone', el).html('<option value="">Any</option>');
+						$('#milestone', el).html('<option value="">{{agile_lng_translate "portlets" "any"}}</option>');
 					}
 					$.each(milestonesList, function(index, milestone){
 						$('#milestone', el).append('<option value="'+milestone+'">'+milestone+'</option>');
@@ -286,7 +287,7 @@ function initializeDealListners(el){
 		}
 		else
 		{
-			$('#milestone', el).html('<option value="">Any</option>');
+			$('#milestone', el).html('<option value="">{{agile_lng_translate "portlets" "any"}}</option>');
 		}
 		
 	});
@@ -338,7 +339,7 @@ function initializeDealListners(el){
 							var input = {};
 							input.filter = getDealFilters();
 							 // Shows message
-						    $save_info = $('<img src="'+updateImageS3Path("img/1-0.gif")+'" height="18px" width="18px" style="opacity:0.5;"></img>&nbsp;&nbsp;<span><small class="text-success" style="font-size:15px; display:inline-block"><i>Email will be sent shortly.</i></small></span>');
+						    $save_info = $('<img src="'+updateImageS3Path("img/1-0.gif")+'" height="18px" width="18px" style="opacity:0.5;"></img>&nbsp;&nbsp;<span><small class="text-success" style="font-size:15px; display:inline-block"><i>'+_agile_get_translated_val('campaigns','email-will-be-sent-shortly')+'</i></small></span>');
 						    $(this).parent('.modal-footer').find('.deals-export-csv-message').append($save_info);
 							$save_info.show();
 							// Export Deals.
@@ -522,13 +523,18 @@ function initializeDealListners(el){
 
     $('#opportunity-listners').off('click', '.update-drag-deal');
 	$('#opportunity-listners').on('click', '.update-drag-deal', function(e) {
-
+		var posCss = $(this).position();
+		posCss["left"] = parseInt(posCss["left"]) + (($(this).find("div:first").width() - 50) / 2) + "px";
+		posCss["overflow"] = "hidden";
+		posCss["width"] = "50px";
+		$("#moved-deal", $("#new-track-list-paging")).find("li").eq(1).animate(posCss, 700, function(){
+			$("#moved-deal", $("#new-track-list-paging")).find("li").eq(1).css("overflow", "hidden");
+		});
 		var deal_id = $("#moving-deal").find("div:first").attr("id");
 		var heading = $("#moving-deal").attr("data-heading");
 		var track = $(this).find("div:first").attr("data-track");
 		var newMilestone = $(this).find("div:first").text().trim();
 		var dealsCollection = DEALS_LIST_COLLECTION.collection.where({ heading : heading });
-
 		if(dealsCollection) {
 			var dealModel = dealsCollection[0].get("dealCollection").get(deal_id);
 			if(dealModel) {
@@ -538,9 +544,11 @@ function initializeDealListners(el){
 				$('#'+old_milestone.replace(/ +/g, '')+'_count').text(parseInt($('#'+old_milestone.replace(/ +/g, '')+'_count').text())-1);
 			}
 		}
-		$("#new-track-list-paging").hide();
-		$("#new-opportunity-list-paging").show();
-		$("#opportunities-header", $("#opportunity-listners")).show();
+		setTimeout(function(){
+			$("#new-track-list-paging").hide();
+			$("#new-opportunity-list-paging").show();
+			$("#opportunities-header", $("#opportunity-listners")).show();
+		},800);
     });
 
 }

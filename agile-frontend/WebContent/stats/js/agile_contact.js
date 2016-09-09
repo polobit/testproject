@@ -47,6 +47,11 @@ function agile_createContact(data, callback)
 	// Get utm params from cookie
 	var utm_params_from_cookie = agile_getUtmParamsAsProperties();
 
+	//Get Browser id of push notification
+	var push_notification_browser_id = agile_read_data("agile-browser-id");
+
+	 var guid = agile_guid.get();
+
 	// Add properties to model
 	model.properties = properties;
 
@@ -125,6 +130,15 @@ function agile_createContact(data, callback)
 		agile_delete_cookie(agile_guid.cookie_campaigns);
 		params = params + "&campaigns={0}".format(encodeURIComponent(campaigns_from_cookie));
 	}
+
+	//adding Browser id in params
+	if(push_notification_browser_id != "")
+		  params = params + "&browserId="+encodeURIComponent(push_notification_browser_id);
+   
+    //Added guid for unique identification for push notification
+    if(guid != null || guid != undefined)
+        params = params + "&guId=" + encodeURIComponent(guid);
+
 
 	// Get
 	var agile_url = agile_id.getURL() + "/contacts?callback=?&id=" + agile_id.get() + "&" + params;

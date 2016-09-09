@@ -286,13 +286,9 @@ jQuery.validator.setDefaults({
 
 
 		  //form is self submitted
-          $("#forgot_password").validate({
-				 submitHandler: function(form) {
-					   form.submit();
-					 }
-					});
+      
 		  
-  		$("#resend-password").live('click', function(e) {
+  		$("body").on("click", "#resend-password", function(e) {
 			e.preventDefault();
 			$("#resend_password_form").submit();
 		});

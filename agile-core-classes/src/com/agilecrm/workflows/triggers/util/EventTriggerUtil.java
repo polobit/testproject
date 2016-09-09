@@ -106,7 +106,8 @@ public class EventTriggerUtil
 		updatedOwner.put("id", owner.getString("id"));
 		updatedOwner.put("name", owner.getString("name"));
 		updatedOwner.put("email", owner.getString("email"));
-
+		updatedOwner.put("phone", owner.getString("phone"));
+		
 		eventJSON.put("owner", updatedOwner);
 	    }
 

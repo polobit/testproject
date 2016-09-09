@@ -137,4 +137,15 @@ public class SMSGatewayAPI
 
 		return SMSGatewayUtil.getSMSLogs();
 	}
+	 /* Returns current twilio SMSGateway Widget
+	 * 
+	 * @return
+	 */
+	@GET
+	@Path("/twilio")
+	@Produces(MediaType.TEXT_PLAIN)
+	public String getTwilioSMSGateway()
+	{
+		return SMSGatewayUtil.getTwilioSMSGatewayWidget();
+	}
 }

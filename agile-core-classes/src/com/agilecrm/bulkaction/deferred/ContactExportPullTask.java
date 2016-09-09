@@ -53,7 +53,13 @@ public class ContactExportPullTask implements DeferredTask
 	if (user == null)
 	    return;
 
+	try{
 	writeContacts();
+	}
+	catch(Exception e)
+	{
+		e.printStackTrace();
+	}
 
 	getExporter().finalize();
 

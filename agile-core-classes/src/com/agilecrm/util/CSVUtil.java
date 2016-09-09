@@ -11,6 +11,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -55,6 +56,7 @@ import com.agilecrm.deals.CustomFieldData;
 import com.agilecrm.deals.Milestone;
 import com.agilecrm.deals.Opportunity;
 import com.agilecrm.deals.util.MilestoneUtil;
+import com.agilecrm.deals.util.OpportunityUtil;
 import com.agilecrm.exception.InvalidTagException;
 import com.agilecrm.export.gcs.GCSServiceAgile;
 import com.agilecrm.subscription.restrictions.db.BillingRestriction;
@@ -115,14 +117,14 @@ public class CSVUtil
 	dBbillingRestriction = (ContactBillingRestriction) DaoBillingRestriction.getInstace(
 		Contact.class.getSimpleName(), this.billingRestriction);
 
-	if (!VersioningUtil.isLocalHost())
-	{
+	//if (!VersioningUtil.isLocalHost())
+	//{
 	    GcsFileOptions options = new GcsFileOptions.Builder().mimeType("text/csv").contentEncoding("UTF-8")
 		    .acl("public-read").addUserMetadata("domain", NamespaceManager.get()).build();
 
 	    service = new GCSServiceAgile(NamespaceManager.get() + "_failed_contacts_" + GoogleSQL.getFutureDate()
 		    + ".csv", "agile-exports", options);
-	}
+	//}
 
 	this.accessControl = accessControl;
 
@@ -449,16 +451,13 @@ public class CSVUtil
 			    if (addressField != null && addressField.value != null)
 			    {
 				addressJSON = new JSONObject(addressField.value);
-				
-				CountryUtil.setCountryCode(addressJSON, field, csvValues[j]);
-				
+				addressJSON.put(field.value, csvValues[j]);
 				addressField.value = addressJSON.toString();
 			    }
 			    else
 			    {
-			    CountryUtil.setCountryCode(addressJSON, field, csvValues[j]);
-			    
-				tempContact.properties.add(new ContactField(Contact.ADDRESS, addressJSON.toString(),
+			    addressJSON.put(field.value, csvValues[j]);
+			    tempContact.properties.add(new ContactField(Contact.ADDRESS, addressJSON.toString(),
 					field.type.toString()));
 			    }
 
@@ -537,17 +536,20 @@ public class CSVUtil
 		    // Checks if user can update the contact
 
 		    // Sets current object to check scope
-
+			failedContacts.add(new FailedContactBean(getDummyContact(properties, csvValues) , "Contact is merged"));
 		    tempContact = ContactUtil.mergeContactFields(tempContact);
 		    accessControl.setObject(tempContact);
 		    if (!accessControl.canCreate())
 		    {
 			accessDeniedToUpdate++;
 			failedContacts.add(new FailedContactBean(getDummyContact(properties, csvValues),
-				"Access denied to update contact"));
+				"Error! Access denied to update contact"));
 
 			continue;
 		    }
+		    /*else{
+		    	failedContacts.add(new FailedContactBean(tempContact , "Contact is been merged"));
+		    }*/
 		    isMerged = true;
 		}
 		else
@@ -565,7 +567,7 @@ public class CSVUtil
 		    {
 			++limitExceeded;
 			failedContacts.add(new FailedContactBean(getDummyContact(properties, csvValues),
-				"limit is exceeded"));
+				"Error! limit is exceeded"));
 			continue;
 		    }
 
@@ -585,7 +587,7 @@ public class CSVUtil
 
 		System.out.println("Invalid tag exception raised while saving contact ");
 		e.printStackTrace();
-		failedContacts.add(new FailedContactBean(getDummyContact(properties, csvValues), e.getMessage()));
+		failedContacts.add(new FailedContactBean(getDummyContact(properties, csvValues),"Error! "+e.getMessage()));
 		continue;
 	    }
 	    catch (AccessDeniedException e)
@@ -594,18 +596,18 @@ public class CSVUtil
 		accessDeniedToUpdate++;
 		System.out.println("ACL exception raised while saving contact ");
 		e.printStackTrace();
-		failedContacts.add(new FailedContactBean(getDummyContact(properties, csvValues), e.getMessage()));
+		failedContacts.add(new FailedContactBean(getDummyContact(properties, csvValues), "Error! "+e.getMessage()));
 
 	    }
 	    catch (Exception e)
 	    {
 
-		System.out.println("exception raised while saving contact ");
+		System.out.println("exception raised while saving contact "+e);
 		e.printStackTrace();
 		if (tempContact.id != null)
 		{
 		    failedContacts.add(new FailedContactBean(getDummyContact(properties, csvValues),
-			    "Exception raise while saving contact"));
+			    "Error! Exception raise while saving contact"));
 		}
 
 	    }
@@ -656,7 +658,7 @@ public class CSVUtil
 	}
 
 	if (failedContacts.size() > 0)
-	    buildCSVImportStatus(status, ImportStatus.TOTAL_FAILED, failedContacts.size());
+	    buildCSVImportStatus(status, ImportStatus.TOTAL_FAILED, failedContacts.size() - mergedContacts);
 
 	buildCSVImportStatus(status, ImportStatus.TOTAL, csvData.size());
 
@@ -842,13 +844,13 @@ public class CSVUtil
 			if (addressField != null && addressField.value != null)
 			{
 			    addressJSON = new JSONObject(addressField.value);
-			    CountryUtil.setCountryCode(addressJSON, field, csvValues[j]);
+			    addressJSON.put(field.value, csvValues[j]);
 			    addressField.value = addressJSON.toString();
 			}
 			else
 			{
-				CountryUtil.setCountryCode(addressJSON, field, csvValues[j]);
-			    tempContact.properties.add(new ContactField(Contact.ADDRESS, addressJSON.toString(),
+				addressJSON.put(field.value, csvValues[j]);
+				tempContact.properties.add(new ContactField(Contact.ADDRESS, addressJSON.toString(),
 				    field.subtype.toString()));
 			}
 
@@ -1099,13 +1101,13 @@ public class CSVUtil
 		&& StringUtils.isBlank(contact.getContactFieldValue(Contact.LAST_NAME)))
 	{
 	    buildCSVImportStatus(statusMap, ImportStatus.NAME_MANDATORY, 1);
-	    failed.add(new FailedContactBean(getDummyContact(properties, csvValues), "Name field can't be blank"));
+	    failed.add(new FailedContactBean(getDummyContact(properties, csvValues), "Error! Name field can't be blank"));
 	    return false;
 	}
 	if (StringUtils.isBlank(contact.getContactFieldValue(Contact.EMAIL)))
 	{
 	    buildCSVImportStatus(statusMap, ImportStatus.EMAIL_REQUIRED, 1);
-	    failed.add(new FailedContactBean(getDummyContact(properties, csvValues), "Email field can't be blank"));
+	    failed.add(new FailedContactBean(getDummyContact(properties, csvValues), "Error! Email field can't be blank"));
 	    return false;
 	}
 
@@ -1131,6 +1133,7 @@ public class CSVUtil
 	Integer nameMissing = 0;
 	Integer trackMissing = 0;
 	Integer milestoneMissing = 0;
+	Integer mergedDeals = 0;
 
 	/**
 	 * Reading CSV file from input stream
@@ -1143,7 +1146,7 @@ public class CSVUtil
 	    return;
 	}
 	// remove header information form csv
-	deals.remove(0);
+	String[] dealHeader =  deals.remove(0);
 
 	// Creates domain user key, which is set as a contact owner
 	Key<DomainUser> ownerKey = new Key<DomainUser>(DomainUser.class, Long.parseLong(ownerId));
@@ -1157,6 +1160,7 @@ public class CSVUtil
 	while (it.hasNext())
 	{
 	    Opportunity opportunity = new Opportunity();
+	    Set<Long> noteId = new TreeSet<>();
 	    String[] dealPropValues = it.next();
 	    String mileStoneValue = null;
 	    boolean trackFound = false;
@@ -1166,6 +1170,7 @@ public class CSVUtil
 	    List<Milestone> list = null;
 	    List<Category> source_list = null;
 	    List<Category> reason_list = null;
+	    Set<String> relatedContactIds = new HashSet<String>();
 	    for (int i = 0; i < dealPropValues.length; i++)
 	    {
 
@@ -1178,7 +1183,39 @@ public class CSVUtil
 		    String value = prop.get("value");
 		    if (type.equalsIgnoreCase("SYSTEM"))
 		    {
-			if (value.equalsIgnoreCase("name"))
+		    if(value != null && value.equalsIgnoreCase("id") && StringUtils.isNotEmpty(dealPropValues[i]))
+		    {
+		    	Long opportunityId = null;
+		    	try 
+		    	{
+		    		opportunityId = Long.valueOf(dealPropValues[i].substring(3));
+				}
+		    	catch (Exception e) 
+		    	{
+					System.out.println("Exception while converting id in deals import.");
+				}
+		    	
+		    	if(opportunityId != null)
+		    	{
+		    		opportunity = OpportunityUtil.getOpportunity(opportunityId);
+		    	}
+	    		if(opportunity != null)
+	    		{
+	    			List<String> conIdsList = opportunity.getContact_ids();
+	    			System.out.println("conIdsList in deals import-----------"+conIdsList);
+	    			if(conIdsList != null && conIdsList.size() > 0)
+	    			{
+	    				relatedContactIds.addAll(conIdsList);
+	    				opportunity.setContact_ids(new ArrayList<String>());
+	    			}
+	    		}
+	    		if(opportunity == null)
+	    		{
+	    			opportunity = new Opportunity();
+	    		}
+		    	
+		    }
+		    else if (value.equalsIgnoreCase("name"))
 			{
 			    opportunity.name = dealPropValues[i];
 			}
@@ -1298,7 +1335,9 @@ public class CSVUtil
 			    {
 				try
 				{
+					System.out.println("Inside try block---Imported deal value---"+val);
 				    Double dealValue = Double.parseDouble(parse(val));
+				    System.out.println("Inside try block---Imported deal value after conversion---"+dealValue);
 				    if (dealValue > Double.valueOf(1000000000000.0))
 				    {
 					opportunity.expected_value = 0.0;
@@ -1310,6 +1349,7 @@ public class CSVUtil
 				}
 				catch (NumberFormatException e)
 				{
+					System.out.println("Exception occured while setting deal value in import");
 				    e.printStackTrace();
 				}
 			    }
@@ -1377,10 +1417,14 @@ public class CSVUtil
 				    {
 					try
 					{
+						System.out.println("Related contact email in deals import----"+emails[k]);
 					    Contact contact = ContactUtil.searchContactByEmail(emails[k]);
-					    if (contact != null && contact.id != null)
+					    if (contact != null && contact.id != null && !relatedContactIds.contains(contact.id.toString()))
 					    {
+					    System.out.println("Related contct id in deals import-----"+contact.id);
+					    System.out.println("Contains Id------"+relatedContactIds.contains(contact.id.toString()));
 						opportunity.addContactIds(contact.id.toString());
+						relatedContactIds.add(contact.id.toString());
 					    }
 					}
 					catch (NullPointerException e)
@@ -1396,9 +1440,15 @@ public class CSVUtil
 			}
 			else if (value.equalsIgnoreCase("note"))
 			{
-			    Note note = new Note();
-			    note.description = dealPropValues[i];
-			    note.save();
+				try{
+					  Note note = new Note();
+					    note.subject = dealHeader[i];
+					    note.description = dealPropValues[i];
+					    note.save();
+					    noteId.add(note.id);
+				}catch(Exception e){
+					System.out.println("note not saved for header while saving deals from import" + dealHeader[i]);
+				}
 			}
 			else if(value.equalsIgnoreCase("dealSource"))
 			{
@@ -1445,6 +1495,25 @@ public class CSVUtil
 
 	    }
 
+	    //setting related notes in deals if any is present 
+	    
+	    if(noteId != null && noteId.size() > 0){
+	    	if(opportunity.id != null && StringUtils.isNotEmpty(opportunity.id.toString()))
+	    	{
+	    		List<String> oldDealNoteIds = opportunity.getNote_ids();
+	    		if(oldDealNoteIds != null)
+	    		{
+	    			for(String str : oldDealNoteIds)
+	    			{
+	    				if(StringUtils.isNotEmpty(str))
+	    				{
+	    					noteId.add(Long.valueOf(str));
+	    				}
+	    			}
+	    		}
+	    	}
+	    	opportunity.setRelatedNotes(noteId);
+	    }
 	    opportunity.setOpportunityOwner(ownerKey);
 
 	    // case2: if track is mapped and milestone is not mapped then deal
@@ -1500,7 +1569,13 @@ public class CSVUtil
 	    opportunity.custom_data = customFields;
 	    try
 	    {
-		if (!StringUtils.isEmpty(opportunity.name) && opportunity.pipeline_id != null
+    	if (opportunity.id != null && !StringUtils.isEmpty(opportunity.id.toString()) && !StringUtils.isEmpty(opportunity.name) && opportunity.pipeline_id != null
+    			&& opportunity.milestone != null && !wrongMilestone)
+		{
+		    opportunity.save();
+		    mergedDeals++;
+		}
+    	else if (!StringUtils.isEmpty(opportunity.name) && opportunity.pipeline_id != null
 			&& opportunity.milestone != null && !wrongMilestone)
 		{
 		    opportunity.save();
@@ -1528,8 +1603,9 @@ public class CSVUtil
 	}
 
 	buildDealsImportStatus(status, "SAVED", savedDeals);
-	buildDealsImportStatus(status, "FAILED", totalDeals - savedDeals);
+	buildDealsImportStatus(status, "FAILED", totalDeals - (savedDeals + mergedDeals));
 	buildDealsImportStatus(status, "TOTAL", totalDeals);
+	buildDealsImportStatus(status, "MERGED", mergedDeals);
 	if (nameMissing > 0)
 	{
 	    buildDealsImportStatus(status, "NAMEMISSING", nameMissing);
@@ -1618,19 +1694,33 @@ public class CSVUtil
 	    writeFailedContactsInCSV(getCSVWriterForFailedContacts(), failedContacts, headings);
 
 	    System.out.println("wrote files to CSV");
+	    byte[] data=null;
+	    
+	    try{
 
 	    service.getOutputchannel().close();
 
 	    System.out.println("closing stream");
 
-	    byte[] data = service.getDataFromFile();
+	    
+	    data = service.getDataFromFile();
 
 	    System.out.println("byte data");
 
 	    System.out.println(data.length);
+	    }
+	    catch(Exception e)
+	    {
+	    	e.printStackTrace();
+	    }
 	    System.out.println(domainUser.email);
-
+	    
+	    if(data==null)
+	    {
+	    	sendFailedContactImportFile(domainUser, "", failedContacts.size(), status);
+	    }
 	    // Send every partition as separate email
+	    else
 	    sendFailedContactImportFile(domainUser, new String(data, "UTF-8"), failedContacts.size(), status);
 
 	    service.deleteFile();
@@ -1686,7 +1776,7 @@ public class CSVUtil
 	{
 	    headings[i++] = s;
 	}
-	headings[i] = "Error";
+	headings[i] = "Remarks";
 	return headings;
 
     }
@@ -1695,7 +1785,10 @@ public class CSVUtil
     {
 	try
 	{
-	    properties.add(index - 1, errorMsg);
+		for(int i=properties.size();i<index-1;i++){
+			properties.add("");
+		}
+	    properties.add(errorMsg);
 	}
 	catch (ArrayIndexOutOfBoundsException e)
 	{
@@ -1840,10 +1933,17 @@ public class CSVUtil
 
     private CSVWriter getCSVWriterForFailedContacts() throws IOException
     {
+    	try{
 	if (failedContactsWriter != null)
 	    return failedContactsWriter;
 
 	System.out.println("building failed contacts service");
 	return failedContactsWriter = new CSVWriter(service.getOutputWriter());
+    	}
+    	catch(Exception e)
+    	{
+    		e.printStackTrace();
+    		return failedContactsWriter;
+    	}
     }
 }

@@ -19,6 +19,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.DeserializationConfig;
@@ -27,17 +28,19 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.json.XML;
 
 import com.agilecrm.account.APIKey;
 import com.agilecrm.account.util.APIKeyUtil;
+import com.agilecrm.account.util.SMSGatewayUtil;
 import com.agilecrm.activities.Task;
 import com.agilecrm.activities.util.TaskUtil;
 import com.agilecrm.cases.Case;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Contact.Type;
-import com.agilecrm.contact.js.JSContact;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.Note;
+import com.agilecrm.contact.Tag;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.NoteUtil;
 import com.agilecrm.deals.Milestone;
@@ -49,16 +52,15 @@ import com.agilecrm.forms.util.FormUtil;
 import com.agilecrm.gadget.GadgetTemplate;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
+import com.agilecrm.social.TwilioUtil;
 import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
 import com.agilecrm.user.AgileUser;
-import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.GeoLocationUtil;
 import com.agilecrm.util.JSAPIUtil;
 import com.agilecrm.util.JSAPIUtil.Errors;
 import com.agilecrm.webrules.WebRule;
 import com.agilecrm.webrules.util.WebRuleUtil;
 import com.agilecrm.widgets.Widget;
-import com.agilecrm.widgets.util.WidgetUtil;
 import com.agilecrm.workflows.Workflow;
 import com.agilecrm.workflows.status.CampaignStatus;
 import com.agilecrm.workflows.status.CampaignStatus.Status;
@@ -70,8 +72,10 @@ import com.agilecrm.workflows.util.WorkflowUtil;
 import com.campaignio.cron.util.CronUtil;
 import com.campaignio.logger.util.LogUtil;
 import com.campaignio.wrapper.LogWrapper;
-import com.google.appengine.api.NamespaceManager;
-import com.thirdparty.sendgrid.SendGrid;
+import com.googlecode.objectify.Objectify;
+import com.googlecode.objectify.ObjectifyService;
+import com.thirdparty.twilio.sdk.TwilioRestClient;
+import com.thirdparty.twilio.sdk.TwilioRestResponse;
 import com.twilio.sdk.client.TwilioCapability;
 
 /**
@@ -170,7 +174,7 @@ public class JSAPI
     @GET
     @Produces("application/x-javascript;charset=UTF-8;")
     public String createContact(@QueryParam("contact") String json, @QueryParam("campaigns") String campaignIds,
-	    @QueryParam("id") String apiKey, @Context HttpServletRequest request)
+	    @QueryParam("id") String apiKey, @QueryParam("browserId") String browserId, @QueryParam("guId") String guId, @Context HttpServletRequest request)
     {
 	try
 	{
@@ -181,8 +185,21 @@ public class JSAPI
 	    if(!js_scopes.contains("create_contact"))
 		return JSAPIUtil.generateJSONErrorResponse(Errors.CONTACT_CREATE_RESTRICT);
 	    
+	    Contact contact=null;
+	    
+	    //If browser id exist
+	     if(!StringUtils.isBlank(browserId) || browserId !="null"){
+	    	 contact = ContactUtil.searchContactByBrowserId(browserId);
+	     }
+	     
+	     if(contact==null && !StringUtils.isBlank(guId))
+	    		contact =ContactUtil.searchContactByGUId(guId);
+	     
+	     if(contact!=null)
+	    	return JSAPIUtil.updateContactPushNotification(contact, json, campaignIds, request, apiKey);
+	    
 	    ObjectMapper mapper = new ObjectMapper();
-	    Contact contact = mapper.readValue(json, Contact.class);
+	    contact = mapper.readValue(json, Contact.class);
 	    System.out.println(mapper.writeValueAsString(contact));
 
 	    // Get Contact count by email
@@ -247,7 +264,204 @@ public class JSAPI
 	    return null;
 	}
     }
+	/**
+	 *  Adds contact in the domain
+	 * If the click on allow push notification
+	 * popup for both types of visitor.
+	 * @param browserId
+	 * @param campaignIds
+	 * @param apiKey
+	 * @return
+	 */
+    @Path("contacts/push-notification/")
+    @GET
+    @Produces("application/x-javascript;charset=UTF-8;")
+    public String createPushNotificationContact(@QueryParam("contact") String json, @QueryParam("browserId") String browserId, @QueryParam("email") String email,
+	    @QueryParam("id") String apiKey, @QueryParam("guId") String guId, @Context HttpServletRequest request)
+    {
+	try
+	{
+	    UserInfo userInfo = SessionManager.get();
+		
+	    HashSet<String> js_scopes = userInfo.getJsrestricted_scopes();
+	    
+	    if(!js_scopes.contains("create_contact"))
+	    	return JSAPIUtil.generateJSONErrorResponse(Errors.CONTACT_CREATE_RESTRICT);
+	    
+	    if(browserId == "null" || StringUtils.isBlank(browserId))
+	    	return JSAPIUtil.generateJSONErrorResponse(Errors.INVALID_BROWSER_ID);
+	    
+	    //check if contact already exist
+	    if (!StringUtils.isBlank(email))
+	    {
+	    	System.out.println(email.toLowerCase());
+	    	Contact contact =ContactUtil.searchContactByEmail(email);
+	    	
+	    	if(contact==null)
+	    		contact =ContactUtil.searchContactByGUId(guId);
+	    	
+	    	if(contact !=null ){
+	    		contact.addBrowserId(browserId);
+	    		contact.save();
+	    		contact.addTags("Push Notification");
+	    		return JSAPIUtil.generateJSONErrorResponse(Errors.DUPLICATE_CONTACT, email);	
+	    	}
+	    }
+	   
+	    ObjectMapper mapper = new ObjectMapper();
+	    Contact contact = mapper.readValue(json, Contact.class);
+	   
+	    String address = contact.getContactFieldValue(Contact.ADDRESS);
+	    
+	    System.out.println("Address = " + address);
+	    
+	    if (StringUtils.isBlank(address)) {
 
+			org.json.simple.JSONObject locJSON = GeoLocationUtil.getLocation(request);
+			contact.addProperty(new ContactField(Contact.ADDRESS, locJSON.toString(), null));
+	    }
+
+	    // Sets owner key to contact before saving
+	    contact.setContactOwner(JSAPIUtil.getDomainUserKeyFromInputKey(apiKey));
+
+	    //adding browser id
+	    contact.addBrowserId(browserId);
+	    
+	    //add Tag for push Notification
+	    contact.addTags("Push Notification");
+
+	    //Adding tag and save contact
+	    if (contact.tags.size() > 0){
+			String[] tags = new String[contact.tags.size()];
+			contact.tags.toArray(tags);
+			contact.addTags(tags);
+	    }
+	    else {
+		   // If zero, save it
+		   contact.save();
+	    }
+	    
+	    System.out.println(contact);
+	    // return mapper.writeValueAsString(contact);
+	    return JSAPIUtil.limitPropertiesInContactForJSAPI(contact);
+	}
+	catch (PlanRestrictedException e){
+	    return JSAPIUtil.generateJSONErrorResponse(Errors.CONTACT_LIMIT_REACHED);
+	}
+	catch (WebApplicationException e){
+	    return JSAPIUtil.generateJSONErrorResponse(Errors.INVALID_TAGS);
+	}
+	catch (IOException e){
+	    e.printStackTrace();
+	    return null;
+	}
+	catch (Exception e){
+	    e.printStackTrace();
+	    return null;
+	}
+    }
+
+    
+    /**
+	 *  Adds contact in the domain
+	 * If the click on allow push notification
+	 * popup for both types of visitor.
+	 * @param browserId
+	 * @param campaignIds
+	 * @param apiKey
+	 * @return
+	 */
+    @Path("contacts/push-notification/subscriber")
+    @GET
+    @Produces("application/x-javascript;charset=UTF-8;")
+    public String createPushNotificationSubscriber( @QueryParam("browserId") String browserId, @QueryParam("email") String email,
+	    @QueryParam("id") String apiKey,@QueryParam("guid") String guid, @Context HttpServletRequest request)
+    {
+	try
+	{
+	    UserInfo userInfo = SessionManager.get();
+		
+	    HashSet<String> js_scopes = userInfo.getJsrestricted_scopes();
+	    
+	    if(!js_scopes.contains("create_contact"))
+	    	return JSAPIUtil.generateJSONErrorResponse(Errors.CONTACT_CREATE_RESTRICT);
+
+		Contact contact = null;
+		
+		if(StringUtils.isBlank(guid) || StringUtils.isBlank(apiKey) ||StringUtils.isBlank(browserId))
+			return JSAPIUtil.generateJSONErrorResponse(Errors.INVALID_BROWSER_ID);
+		
+	     if(contact == null && !StringUtils.isBlank(guid) && guid !="null"){
+	    		contact =ContactUtil.searchContactByGUId(guid);
+	     }
+	    
+	     if(contact == null && !StringUtils.isBlank(email) && email !="null"){
+	    		contact =ContactUtil.searchContactByEmail(email);
+	     }
+	     
+	     JSONObject jsonObject = new JSONObject();
+	     
+	     JSONArray jsonArray = new JSONArray();
+	     
+	     if(StringUtils.isNotBlank(email))
+	     {
+	    	 jsonObject.put("name",Contact.EMAIL);
+	    	 jsonObject.put("value", email);
+	     }
+	     
+	     else
+	     {
+	    	 jsonObject.put("name", Contact.FIRST_NAME);
+	    	 jsonObject.put("value", "Anonymous"); 
+	     }
+	    	     
+	     jsonArray.put(jsonObject);
+	     
+	     jsonObject =  new JSONObject();
+	     
+	     jsonObject.put("properties", jsonArray);
+	     
+	     if(contact==null){
+	    	 ObjectMapper mapper = new ObjectMapper();
+	 	    contact = mapper.readValue(jsonObject.toString(), Contact.class);
+	     }
+	     contact.addBrowserId(browserId);
+	     contact.guid = guid;
+	         
+	     String address = contact.getContactFieldValue(Contact.ADDRESS);
+		 System.out.println("Address = " + address);
+		 
+		 if (StringUtils.isBlank(address))
+		    {
+			 	System.out.println("Adding location");
+
+			 	org.json.simple.JSONObject locJSON = GeoLocationUtil.getLocation(request);
+			 	contact.addProperty(new ContactField(Contact.ADDRESS, locJSON.toString(), null));
+		    }
+
+		    // Sets owner key to contact before saving
+		    contact.setContactOwner(JSAPIUtil.getDomainUserKeyFromInputKey(apiKey));
+		  //Adding tag for push notification  
+			  contact.addTag(new Tag("Push Notification"));
+			  
+			  contact.save();
+	    return JSAPIUtil.limitPropertiesInContactForJSAPI(contact);
+	}
+	catch (PlanRestrictedException e){
+	    return JSAPIUtil.generateJSONErrorResponse(Errors.CONTACT_LIMIT_REACHED);
+	}
+	catch (WebApplicationException e){
+	    return JSAPIUtil.generateJSONErrorResponse(Errors.INVALID_TAGS);
+	}
+	catch (IOException e){
+	    e.printStackTrace();
+	    return null;
+	}
+	catch (Exception e){
+	    e.printStackTrace();
+	    return null;
+	}
+    }
     /**
      * Adds task. Takes email, task json and callback as query parameters, task
      * is created and related to contact based on the email. If contact doesn't
@@ -400,6 +614,7 @@ public class JSAPI
 		return JSAPIUtil.generateJSONErrorResponse(Errors.INVALID_TAGS);
 	    }
 
+	    System.out.println("Contact with tags = " +contact);
 	    return JSAPIUtil.limitPropertiesInContactForJSAPI(contact);
 	    // return new ObjectMapper().writeValueAsString(contact);
 
@@ -501,6 +716,7 @@ public class JSAPI
 
 	    contact.addScore(score);
 	    // return new ObjectMapper().writeValueAsString(contact);
+	    System.out.println("Contact with score = " +contact);
 	    return JSAPIUtil.limitPropertiesInContactForJSAPI(contact);
 	}
 	catch (Exception e)
@@ -542,6 +758,7 @@ public class JSAPI
 
 	    contact.subtractScore(score);
 	    // return new ObjectMapper().writeValueAsString(contact);
+	    System.out.println("Contact with score = " +contact);
 	    return JSAPIUtil.limitPropertiesInContactForJSAPI(contact);
 	}
 	catch (Exception e)
@@ -681,6 +898,7 @@ public class JSAPI
 	    Note note = mapper.readValue(json, Note.class);
 	    note.addRelatedContacts(contact.id.toString());
 	    note.save();
+	    System.out.println("Contact  = " +contact);
 	    return mapper.writeValueAsString(note);
 	}
 	catch (Exception e)
@@ -1039,6 +1257,7 @@ public class JSAPI
 		contact.save();
 
 	    // return mapper.writeValueAsString(contact);
+	    System.out.println("Contact  = " +contact);
 	    return JSAPIUtil.limitPropertiesInContactForJSAPI(contact);
 	}
 	catch (JsonGenerationException e)
@@ -1180,7 +1399,9 @@ public class JSAPI
 		return JSAPIUtil.generateJSONErrorResponse(Errors.PROPERTY_MISSING);
 	    
 	    contact.removeProperty(name);
-	    contact.setContactOwner(JSAPIUtil.getDomainUserKeyFromInputKey(apiKey));
+	    
+	    // Owner should not be change
+	    //contact.setContactOwner(JSAPIUtil.getDomainUserKeyFromInputKey(apiKey));
 	    contact.save();
 	    ObjectMapper mapper = new ObjectMapper();
 	    return mapper.writeValueAsString(contact);
@@ -1259,22 +1480,104 @@ public class JSAPI
 	String toNumber =null;
 	String token =null;
 	Map<String,String> params= new HashMap<String,String>();
+	String acc_id=null;
+	String auth_token=null;
+	String number_sid=null;
+	String applicationSid=null;
+	JSONObject jsonTwilioPrefs=new JSONObject();
 	try
 	{
-	    Widget twilioObj = WidgetUtil.getWidget("TwilioIO");
+	    Widget twilioObj = SMSGatewayUtil.getSMSGatewayWidget();
+	    if(twilioObj==null)
+		return new JSONObject(params).toString();
 	    JSONObject jsonPrefs= new JSONObject(twilioObj.prefs);
 	    
-	    if(jsonPrefs.has("twilio_from_number") && jsonPrefs.get("twilio_from_number")!=null && !jsonPrefs.get("twilio_from_number").toString().isEmpty())
-		fromNumber=jsonPrefs.get("twilio_from_number").toString();
-	    else if(jsonPrefs.has("twilio_number") && jsonPrefs.get("twilio_number")!=null && !jsonPrefs.get("twilio_number").toString().isEmpty())
-		fromNumber=jsonPrefs.get("twilio_number").toString();
+	   if(!jsonPrefs.getString("sms_api").equalsIgnoreCase("TWILIO"))
+		return new JSONObject(params).toString();
 	   
+	    if(jsonPrefs.has("account_sid") && jsonPrefs.get("account_sid")!=null && !jsonPrefs.get("account_sid").toString().isEmpty())
+		acc_id=jsonPrefs.get("account_sid").toString();
+	    
+	    if(jsonPrefs.has("auth_token") && jsonPrefs.get("auth_token")!=null && !jsonPrefs.get("auth_token").toString().isEmpty())
+		auth_token=jsonPrefs.get("auth_token").toString();
+	    if(jsonPrefs.has("twilio_from_number") && jsonPrefs.get("twilio_from_number")!=null && jsonPrefs.has("account_app_sid") && jsonPrefs.get("account_app_sid")!=null){
+		
+		applicationSid=jsonPrefs.get("account_app_sid").toString();
+		fromNumber=jsonPrefs.get("twilio_from_number").toString();
+	    }
+	    else
+	    {	    
+		    TwilioRestClient client = new TwilioRestClient(acc_id, auth_token, null);
+		    TwilioRestResponse response = client.request(
+				"/" + TwilioUtil.APIVERSION + "/Accounts/" + client.getAccountSid() + "/IncomingPhoneNumbers", "GET",
+				null);	    
+		    JSONObject result = XML.toJSONObject(response.getResponseText()).getJSONObject("TwilioResponse")
+				.getJSONObject("IncomingPhoneNumbers"); 	    
+		    if (result.get("IncomingPhoneNumber") instanceof JSONObject)
+		    {
+			fromNumber=result.getJSONObject("IncomingPhoneNumber").get("PhoneNumber").toString();
+		    }
+		    else
+		    {
+			JSONArray incomingNumberArray = result.getJSONArray("IncomingPhoneNumber");
+			fromNumber=incomingNumberArray.getJSONObject(1).get("PhoneNumber").toString();
+		    }
+		    //for checking twilio widget
+		    Objectify ofy = ObjectifyService.begin();
+		    List<Widget> widgetObjList = ofy.query(Widget.class).filter("name", "TwilioIO").list();
+		    if(!widgetObjList.isEmpty())
+		    {
+		       Iterator itr=widgetObjList.iterator();
+		      
+         		  while(itr.hasNext()){
+         		      
+         			Widget widgetObj=(Widget) itr.next();
+         			if(widgetObj.prefs!=null && !widgetObj.prefs.isEmpty()){
+         			     jsonTwilioPrefs= new JSONObject(widgetObj.prefs);
+         			
+         			if (jsonTwilioPrefs.length() != 0 && jsonTwilioPrefs.has("twilio_acc_sid"))
+         			 {	
+         			    if(jsonTwilioPrefs.get("twilio_acc_sid")!=null && jsonTwilioPrefs.get("twilio_acc_sid").toString().equalsIgnoreCase(acc_id))
+         			     {  
+         				if(jsonTwilioPrefs.has("twilio_from_number"))
+         				    if( jsonTwilioPrefs.get("twilio_from_number") != null && fromNumber.equalsIgnoreCase(jsonTwilioPrefs.get("twilio_from_number").toString()))
+             					applicationSid=jsonTwilioPrefs.get("twilio_app_sid").toString();
+                           		
+         				if(jsonTwilioPrefs.has("twilio_number"))
+         				     if(jsonTwilioPrefs.get("twilio_number") != null && fromNumber.equalsIgnoreCase(jsonTwilioPrefs.get("twilio_number").toString()))
+             					applicationSid=jsonTwilioPrefs.get("twilio_app_sid").toString();             					 
+             				
+         				break;
+         			     }
+         			 }
+         		       }   				
+         		    
+         		}
+		    }
+		  //creating app sid and save into smsgate_way only for twilio
+		    if(applicationSid==null || applicationSid.isEmpty())	
+		    {
+			if (result.get("IncomingPhoneNumber") instanceof JSONObject)
+			  {
+			    number_sid=result.getJSONObject("IncomingPhoneNumber").get("Sid").toString();        
+			  }
+		        else
+			  {
+				JSONArray incomingNumberArray = result.getJSONArray("IncomingPhoneNumber");
+				number_sid=incomingNumberArray.getJSONObject(1).get("Sid").toString();
+			  }
+			applicationSid= TwilioUtil.createAppSidTwilioIO(acc_id, auth_token,number_sid,"false", "None");
+		    }   	
+		    jsonPrefs.put("account_app_sid",applicationSid);
+    		    jsonPrefs.put("twilio_from_number",fromNumber);
+    		    twilioObj.prefs=jsonPrefs.toString();
+    		    twilioObj.save();	
+	    }
 	    toNumber =WebRuleUtil.getPhoneNumberByWebruleId(Long.parseLong(webruleId));
 		
 	    //getting call token here 
 	    Long agileUserID = AgileUser.getCurrentAgileUser().id;
-	    String applicationSid = twilioObj.getProperty("twilio_app_sid");
-	    TwilioCapability capability = new TwilioCapability(twilioObj.getProperty("twilio_acc_sid"),twilioObj.getProperty("twilio_auth_token"));
+	    TwilioCapability capability = new TwilioCapability(acc_id,auth_token);
 	    capability.allowClientOutgoing(applicationSid);
 	    capability.allowClientIncoming("agileclient" + agileUserID);
 	    token = capability.generateToken(86400);
@@ -1282,11 +1585,13 @@ public class JSAPI
 	    params.put("token", token);
 	    params.put("fromNumber", fromNumber);
 	    params.put("toNumber", toNumber);
+	  
 	    
 	}
 	catch (Exception e)
 	{
 	    e.printStackTrace();
+	    System.out.println(ExceptionUtils.getFullStackTrace(e));
 	    return null;
 	}
 	

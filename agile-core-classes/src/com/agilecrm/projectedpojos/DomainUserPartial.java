@@ -20,6 +20,7 @@ public class DomainUserPartial extends ProjectionEntityParse{
 	public Long id;
 	public String domain;
 	public String email;
+	public String phone;
 	public String name;
 	public String pic;
 	public String schedule_id;
@@ -37,6 +38,7 @@ public class DomainUserPartial extends ProjectionEntityParse{
 		domain = NamespaceManager.get();
 		name = (String) getPropertyValue(entity, "name");
 		email = (String) getPropertyValue(entity, "email");
+		phone = (String) getPropertyValue(entity, "phone");
 		pic = (String) getPropertyValue(entity, "pic");
 		schedule_id = (String) getPropertyValue(entity, "schedule_id");
 		

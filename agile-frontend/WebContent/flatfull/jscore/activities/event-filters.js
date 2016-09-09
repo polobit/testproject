@@ -589,7 +589,7 @@ function renderEventBasedOnOwner(data)
 				else if (data.color == '#36C' || data.color == '#23b7e5' || data.color == 'blue')
 					data.className = 'fc-b-l fc-b-2x fc-b-warning fc-border-height fc-event-month';
 				data.color = '';
-				data.backgroundColor = '#fff';
+				//data.backgroundColor = '#fff';
 			}
 
 			else
@@ -601,7 +601,7 @@ function renderEventBasedOnOwner(data)
 				else if (data.color == '#36C' || data.color == '#23b7e5' || data.color == 'blue')
 					data.className = 'normal fc-b-l fc-b-2x fc-b-light fc-border-height fc-event-month';
 				data.color = '';
-				data.backgroundColor = '#fff';
+				//data.backgroundColor = '#fff';
 			}
 		}
 
@@ -664,7 +664,7 @@ function showLoadingOnCalendar(loading)
 		$("#user_cal_sub *").addClass('disable-cp');
 
 		$('.fc-header-left','#calendar_event').append(
-				'<span id="loading_calendar_events" style="margin-left:5px;vertical-align:middle;padding-top: 5px;position: absolute;">loading...</span>')
+				'<span id="loading_calendar_events" style="margin-left:5px;vertical-align:middle;padding-top: 5px;position: absolute;">'+_agile_get_translated_val('tickets','loading')+'</span>')
 				.show();
 		$('.fc-header-left','#calendar_event').show();
 	}

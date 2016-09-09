@@ -505,8 +505,8 @@ function deserializeChainedElement(data, rule_element)
 		{
 			var $rhs_ele = $(input_element).closest('td').siblings('td.rhs-block').find("#RHS");
 			var field_name = $rhs_ele.find("input").attr("name");
-			var archivedVal = data.RHS;
-			$rhs_ele.html("<select name='"+field_name+"' class='form-control'><option value='true'>Archived</option><option value='false'>Active</option><option value='all'>Any</option></select>");
+			var archivedVal = data.RHS; 
+			$rhs_ele.html(getTemplate("js-deal-filters", {field_name : field_name}));
 			$rhs_ele.find("option[value='"+archivedVal+"']").attr("selected", "selected");
 			return;
 		}

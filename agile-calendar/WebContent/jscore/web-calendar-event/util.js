@@ -4,10 +4,10 @@ function change_availability_date(selected_date)
 
 	var date = new Date(selected_date);
 
-	$('.availability').html("Availability on " + date.getDayName() + ", " + date.getMonthName() + " " + date.getDate());
+	$('.availability').html(LOCALES_JSON['on-availability'] + " " + date.getDayName() + ", " + date.getMonthName() + " " + date.getDate());
 }
 
-// Get slot details time and description
+// Get slot details time n description
 function getSlotDurations()
 {
 
@@ -49,7 +49,7 @@ function getSlotDurations()
 							{
 								$('.segment1')
 										.append(
-												'<div class="col-sm-12" align="center"><p class="lead" style="color: #777;font-size: 19px;text-align: center;font-weight:normal">please enter valid slot number </p> </div>');
+												'<div class="col-sm-12" align="center"><p class="lead" style="color: #777;font-size: 19px;text-align: center;font-weight:normal">'+LOCALES_JSON["pl-enter-valid-slot"]+' </p> </div>');
 								return;
 
 							}
@@ -76,7 +76,7 @@ function getSlotDurations()
 								var json = JSON.parse(data[slotDetail]);
 								$('.segment1')
 										.append(
-												'<div class="col-sm-4 show_slots"><p title="' + json.title + '" class="choose timeslot-view" data="' + json.time + '"><span class="minutes">' + json.time + ' mins</span><br />' + addDotsAtEnd(json.title) + '</p></div>');
+												'<div class="col-sm-4 show_slots"><p title="' + json.title + '" class="choose timeslot-view" data="' + json.time + '"><span class="minutes">' + json.time + ' ' + LOCALES_JSON['mins'] + ' </span><br />' + addDotsAtEnd(json.title) + '</p></div>');
 							}
 							$('.segment1').append('<div class="clearfix"></div>');
 						}
@@ -87,7 +87,7 @@ function getSlotDurations()
 								var json = JSON.parse(data[slotDetail]);
 								$('.segment1')
 										.append(
-												'<div class="col-sm-5 col-md-4 show_slots" style="margin-left: 99px;"><p title="' + json.title + '" class="choose" data="' + json.time + '"><span class="minutes">' + json.time + ' mins</span><br />' + addDotsAtEnd(json.title) + '</p></div>');
+												'<div class="col-sm-5 col-md-4 show_slots" style="margin-left: 99px;"><p title="' + json.title + '" class="choose" data="' + json.time + '"><span class="minutes">' + json.time + ' ' + LOCALES_JSON['mins'] + ' </span><br />' + addDotsAtEnd(json.title) + '</p></div>');
 							}
 							$('.segment1').append('<div class="clearfix"></div>');
 						}
@@ -98,7 +98,7 @@ function getSlotDurations()
 								var json = JSON.parse(data[slotDetail]);
 								$('.segment1')
 										.append(
-												'<div class="col-sm-12 show_slots" align="center"><p title="' + json.title + '" class="choose" data="' + json.time + '"><span class="minutes">' + json.time + ' mins</span><br />' + addDotsAtEnd(json.title) + '</p></div>');
+												'<div class="col-sm-12 show_slots" align="center"><p title="' + json.title + '" class="choose" data="' + json.time + '"><span class="minutes">' + json.time + ' ' + LOCALES_JSON['mins'] + ' </span><br />' + addDotsAtEnd(json.title) + '</p></div>');
 							}
 						}
 					});
@@ -194,7 +194,7 @@ function displayNoSlotsMsg()
 
 	var date = new Date(selecteddate);
 
-	$('.availability').html("No slots available for " + date.getDayName() + ", " + date.getMonthName() + " " + date.getDate());
+	$('.availability').html(LOCALES_JSON['no-valid-slot'] + " " + date.getDayName() + ", " + date.getMonthName() + " " + date.getDate());
 
 	// Add msg
 	// $('.checkbox-main-grid').append('<label for="no-slots"
@@ -370,29 +370,28 @@ function save_web_event(formId, confirmBtn)
 						var appointment_success_img1 = "/img/appointment_confirmation.png";
 						var temp = '<div style="margin: 26px;font-size:15px;">'
 
-						+ '<div id="info" ><h3 style="border-bottom: 1px solid #ddd;padding-bottom:8px;margin-bottom:15px;"><img style="margin-right: 8px;margin-top: -4px;" src=' + appointment_success_img1 + '><b>Appointment Scheduled</b></h3>' + '<p >Your appointment (' + appointmenttype + ') has been scheduled with <b>' + User_Name + '</b> for ' + web_calendar_event.slot_time + ' mins on ' + start + '. </div>' + '<div class="row">' + '<div class="col-md-12">' + '<div class="row">' + '<div class="col-md-12">' + '<div class="left">' + '<a class="btn btn-primary" id="create_new_appointment" style="margin-top:20px;">Schedule Another Appointment</a>' + '</div>' + '</div>' + '</div>' + '</div>' + '<div align="right" style="position: absolute;right: 280px;bottom: -80px;">' + '<span style="display: inherit;font-style: italic; font-family: Times New Roman; font-size: 10px; padding-right: 71px;">Powered by</span> <a href="https://www.agilecrm.com?utm_source=powered-by&amp;medium=event_scheduler&amp;utm_campaign=' + domainname + '" rel="nofollow" target="_blank"><img src="https://s3.amazonaws.com/agilecrm/panel/uploaded-logo/1383722651000?id=upload-container" alt="Logo for AgileCRM" style="border: 0;background: white;padding: 0px 10px 5px 2px;height: auto;width: 135px;"></a>' + '</div>'
+						+ '<div id="info" ><h3 style="border-bottom: 1px solid #ddd;padding-bottom:8px;margin-bottom:15px;"><img style="margin-right: 8px;margin-top: -4px;" src=' + appointment_success_img1 + '><b>' +LOCALES_JSON['appointment-scheduled']+ '</b></h3>' + '<p >'+LOCALES_JSON['your-appointment']+' (' + appointmenttype + ') '+LOCALES_JSON['you-scheduled']+' <b>' + User_Name + '</b> '+LOCALES_JSON['for']+' ' + web_calendar_event.slot_time + ' '+LOCALES_JSON['mins-on']+' ' + start + '. </div>' + '<div class="row">' + '<div class="col-md-12">' + '<div class="row">' + '<div class="col-md-12">' + '<div class="left">' + '<a class="btn btn-primary" id="create_new_appointment" style="margin-top:20px;">'+LOCALES_JSON['scheduled-another-appointment']+'</a>' + '</div>' + '</div>' + '</div>' + '</div>' + '<div align="right" style="position: absolute;right: 280px;bottom: -80px;">' + '<span style="display: inherit;font-style: italic; font-family: Times New Roman; font-size: 10px; padding-right: 71px;">Powered by</span> <a href="https://www.agilecrm.com?utm_source=powered-by&amp;medium=event_scheduler&amp;utm_campaign=' + domainname + '" rel="nofollow" target="_blank"><img src="https://s3.amazonaws.com/agilecrm/panel/uploaded-logo/1383722651000?id=upload-container" alt="Logo for AgileCRM" style="border: 0;background: white;padding: 0px 10px 5px 2px;height: auto;width: 135px;"></a>' + '</div>'
 
 						resetAll();
 
 						$(".container").html(temp);
-
-					
 				},
 				error : function(res){
 					console.log(res);
+					
 					if(res.responseText == "slot booked")
 					{
-						alert("Looks like this slot is booked already. Please try another one.");
+						alert(LOCALES_JSON['solt-book-error']);
 						get_slots(selecteddate, Selected_Time);
 						$('#confirm').attr('disabled', false);
 					}
 
 					else
 					{
-						alert("Something went wrong as your appointment was not scheduled. Please try again in few hours. Error: " + res.statusText);
+						alert(LOCALES_JSON['slot-exists'] + "Error: " + res.statusText);
 						resetAll();
 						location.reload(true);
-					}	
+					}		
 				}
 				/*
 				complete : function(res, status)
@@ -404,7 +403,7 @@ function save_web_event(formId, confirmBtn)
 					var d = dates[0];
 					var start = convertToHumanDateUsingMoment("", d.start);
 
-					if (res.statusText == "OK"  && res.responseText != "slot booked")
+					if (res.statusText == "OK" && res.responseText != "slot booked")
 					{
 						$('#mainwrap').addClass("appointment-wrap");
 						var appointment_success_img1 = "/img/appointment_confirmation.png";
@@ -431,17 +430,11 @@ function save_web_event(formId, confirmBtn)
 						location.reload(true);
 					}
 
-				} */
-				});
+				}
+					*/
+				 });
 }
 
-
-/**
- * converts eppoch sec to format we given
- * @param format
- * @param date
- * @returns
- */
 function convertToHumanDate(format, date)
 {
 
@@ -461,13 +454,6 @@ function convertToHumanDate(format, date)
 	return d
 }
 
-
-/**
- * using moment plug in we are converting dates
- * @param format
- * @param date
- * @returns
- */
 function convertToHumanDateUsingMoment(format, date)
 {
 
@@ -481,7 +467,6 @@ function convertToHumanDateUsingMoment(format, date)
 	return time_s;
 }
 
-//$("#create_new_appointment").die().live('click', function(e)
 $(function(){
 	$('body').on('click','#create_new_appointment',function(e)
 	{
@@ -490,7 +475,6 @@ $(function(){
 
 	});	
 });
-
 
 /**
  * if value morethan 50 adds .. at the end
@@ -510,9 +494,6 @@ function addDotsAtEnd(title)
 	return title;
 }
 
-/**
- * for team calendar when clicks on other user it resets to normal
- */
 function resetToPrevious()
 {
 	$("#one").html("2");
@@ -526,11 +507,6 @@ function resetToPrevious()
 	$(".segment2").hide();
 
 }
-
-/**
- * gets the meeting names and durations from global variable and returns
- * @param slot_durations_one_user
- */
 function fillSlotDetails(slot_durations_one_user)
 {
 	var slots_data = data = slot_details;
@@ -558,7 +534,7 @@ function fillSlotDetails(slot_durations_one_user)
 		{
 			$('.segment1')
 					.append(
-							'<div class="col-sm-12" align="center"><p class="lead" style="color: #777;font-size: 19px;text-align: center;font-weight:normal">please enter valid slot number </p> </div>');
+							'<div class="col-sm-12" align="center"><p class="lead" style="color: #777;font-size: 19px;text-align: center;font-weight:normal">'+LOCALES_JSON["pl-enter-valid-slot"]+' </p> </div>');
 			return;
 
 		}
@@ -590,7 +566,7 @@ function fillSlotDetails(slot_durations_one_user)
 		{
 			temp += '<div class="radio"><label><input class="c-p selected_meeting_time" type="radio" data="' + json.time + '" name="selected_meeting_time" value="' + meeting_names[meeting_name] + '"><i></i>' + meeting_names[meeting_name] + '</label></div>';
 		}
-		var select = '<div class="panel panel-default">' + '<div class="panel-heading font-bold">' + json.time + ' mins</div>' + '<div class="panel-body">' + '<form class="bs-example form-horizontal">' + '<div class="form-group" style="margin-left:7px;">' + temp + '</div></form></div></div>';
+		var select = '<div class="panel panel-default">' + '<div class="panel-heading font-bold">' + json.time + ' ' + LOCALES_JSON['mins'] + ' </div>' + '<div class="panel-body">' + '<form class="bs-example form-horizontal">' + '<div class="form-group" style="margin-left:7px;">' + temp + '</div></form></div></div>';
 		$('.segment1').append('<div class="col-sm-' + dataLength + ' show_slots"><p class="timeslot-view">' + select + '</p></div>');
 	}
 	if(multi_user_ids.length<2)
@@ -599,11 +575,6 @@ function fillSlotDetails(slot_durations_one_user)
 
 }
 
-
-/**
- * to set height of panel for all meeting durations
- * @returns {Number}
- */
 function getPanelBodyMaxHeight()
 {
 	var max = 0;
@@ -618,12 +589,6 @@ function getPanelBodyMaxHeight()
 	return max;
 }
 
-
-/**
- * if converts to array when user enters multiple names for same slot
- * @param data
- * @returns {Array}
- */
 function generateNewDataArray(data)
 {
 	var finalJsonArray = [];

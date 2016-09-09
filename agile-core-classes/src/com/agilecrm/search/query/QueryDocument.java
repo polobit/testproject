@@ -106,7 +106,18 @@ public class QueryDocument<T> implements QueryInterface
     public Collection<T> simpleSearchWithType(String keyword, Integer count, String cursor, String type)
     {
 	keyword = SearchUtil.normalizeString(keyword);
-	return processQuery("search_tokens:" + keyword + " AND type:" + type, count, cursor);
+	String typeFields = "";
+	if(type != null){
+		String[] typeStrings = type.split(",");
+		for (int i = 0; i < typeStrings.length; i++) {
+			if(StringUtils.isBlank(typeStrings[i]))
+				continue;
+			
+			typeFields += (i == 0 ? "" : " OR ") + "type : " + typeStrings[i].toUpperCase();
+		}
+	}
+	return processQuery("search_tokens:" + keyword + " AND " + typeFields, count, cursor);
+	//return processQuery("search_tokens:" + keyword + " AND type:" + type, count, cursor);
     }
 
     /**
@@ -776,7 +787,7 @@ public class QueryDocument<T> implements QueryInterface
 	// Gets last entity to set cursor on it
 	Object entity = entities.get(entities.size() - 1);
 
-	if ((entities instanceof com.agilecrm.cursor.Cursor))
+	if ((entity instanceof com.agilecrm.cursor.Cursor))
 	{
 
 	    com.agilecrm.cursor.Cursor agileCursor = null;

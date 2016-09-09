@@ -11,7 +11,7 @@ var portlet_utility = {
 				function(index, trackObj) {
 					if (deal_track == 0 && trackObj.name == "Default")
 						options += "<option value=" + trackObj.id
-								+ " selected='selected'>" + trackObj.name
+								+ " selected='selected'>{{agile_lng_translate 'companies-view' 'default'}}"
 								+ "</option>";
 					else if (deal_track == trackObj.id)
 						options += "<option value=" + trackObj.id
@@ -45,15 +45,15 @@ var portlet_utility = {
 	get_filtered_contact_header : function(base_model, callback) {
 
 		if (base_model.get("settings").filter == 'contacts')
-			return callback("All Contacts");
+			return callback("{{agile_lng_translate 'portlets' 'all-contacts'}}");
 		else if (base_model.get("settings").filter == 'companies')
-			return callback("All Companies");
+			return callback("{{agile_lng_translate 'portlets' 'all-companies'}}");
 		else if (base_model.get("settings").filter == 'recent')
-			return callback = "Recent Contacts";
+			return callback = "{{agile_lng_translate 'portlets' 'recent-contacts'}}";
 		else if (base_model.get("settings").filter == 'myContacts')
-			return callback("My Contacts");
+			return callback("{{agile_lng_translate 'contacts-view' 'my-contacts'}}");
 		else if (base_model.get("settings").filter == 'leads')
-			return callback("Leads");
+			return callback("{{agile_lng_translate 'portlets' 'leads'}}");
 		else {
 
 			var contactFilter = $.ajax({
@@ -66,7 +66,7 @@ var portlet_utility = {
 						header_name = "" + data.name;
 
 					if (!header_name) {
-						header_name = "Contact List";
+						header_name = "{{agile_lng_translate 'portlets' 'contact-list'}}";
 					}
 
 					return callback(header_name);
@@ -95,7 +95,7 @@ var portlet_utility = {
 
 				if (App_Portlets.track_length > 1) {
 					if (track_id == 0)
-						return callback("Default");
+						return callback("{{agile_lng_translate 'companies-view' 'default'}}");
 					else {
 						var milestone = $.ajax({
 							type : 'GET',
@@ -121,7 +121,7 @@ var portlet_utility = {
 		var campaign_id = base_model.get("settings").campaign_type;
 
 		if (campaign_id == 'All')
-			return callback('All Campaigns');
+			return callback('{{agile_lng_translate "campaigns" "all-campaigns"}}');
 		else {
 			var campaign = $.ajax({
 				type : 'GET',
@@ -535,10 +535,9 @@ var portlet_utility = {
 						sortKey : "openedTime",
 						individual_tag_name : 'tr',
 						postRenderCallback : function(p_el) {
-							head.js(LIB_PATH + 'lib/jquery.timeago.js', function() {
-								$(".time-ago", p_el).timeago();
-								initializePortletsListeners();
-							});
+							agileTimeAgoWithLngConversion($(".time-ago", p_el));
+							initializePortletsListeners();
+							
 							portlet_utility.addWidgetToGridster(base_model);
 						}
 					});
@@ -588,10 +587,9 @@ var portlet_utility = {
 						sort_collection : false,
 						individual_tag_name : 'tr',
 						postRenderCallback : function(p_el) {
-							head.js(LIB_PATH + 'lib/jquery.timeago.js', function() {
-								$(".time-ago", p_el).timeago();
-								initializePortletsListeners();
-							});
+							agileTimeAgoWithLngConversion($(".time-ago", p_el));
+							initializePortletsListeners();
+							
 							portlet_utility.addWidgetToGridster(base_model);
 						}
 					});
@@ -607,9 +605,8 @@ var portlet_utility = {
 				templateKey : 'portlets-opportunities',
 				individual_tag_name : 'tr',
 				postRenderCallback : function(p_el) {
-					head.js(LIB_PATH + 'lib/jquery.timeago.js', function() {
-						$(".time-ago", p_el).timeago();
-					});
+					agileTimeAgoWithLngConversion($(".time-ago", p_el));
+					
 					portlet_utility.addWidgetToGridster(base_model);
 				}
 			});
@@ -783,12 +780,8 @@ var portlet_utility = {
 				individual_tag_name : 'div',
 				postRenderCallback : function(p_el) {
 					portlet_utility.addWidgetToGridster(base_model);
-
-					head.js(LIB_PATH + 'lib/jquery.timeago.js', function() {
-						$("time", p_el).timeago();
-						
-
-					});
+					agileTimeAgoWithLngConversion($("time", p_el));
+					
 					contact_detail_page_infi_scroll($('.activity_body',
 							App_Portlets.activitiesView[parseInt(pos)].el),
 							App_Portlets.activity[parseInt(pos)])
@@ -1113,7 +1106,7 @@ var portlet_utility = {
 												portlet_utility
 														.getNumberWithCommasForPortlets(data["newContactsCount"]));
 								that.find('#new-contacts-label').text(
-										"New contacts");
+										"{{agile_lng_translate 'portlets' 'new-contacts'}}");
 							});
 
 			var wonDealsurl = '/core/api/portlets/activity-overview-report?reportType=wonDeals&duration='
@@ -1146,10 +1139,10 @@ var portlet_utility = {
 								that
 										.find('#won-deal-count')
 										.text(
-												"Won from "
+												"{{agile_lng_translate 'portlets' 'won-from'}} "
 														+ portlet_utility
 																.getNumberWithCommasForPortlets(data['wonDealsCount'])
-														+ " deals");
+														+ " {{agile_lng_translate 'deals' 'deals-sm'}}");
 							});
 
 			var newDealsurl = '/core/api/portlets/activity-overview-report?reportType=newDeals&duration='
@@ -1179,7 +1172,7 @@ var portlet_utility = {
 								that
 										.find('#new-deal-count')
 										.text(
-												"New deals worth "
+												"{{agile_lng_translate 'portlets' 'new-deals-worth'}} "
 														+ portlet_utility
 																.getPortletsCurrencySymbol()
 														+ ''
@@ -1208,7 +1201,7 @@ var portlet_utility = {
 				emailsSentCount = _agile_get_prefs('dashboard_campaign_count_'+CURRENT_DOMAIN_USER.id);
 			}
 			that.find('#emails-sent-count').text(portlet_utility.getNumberWithCommasForPortlets(emailsSentCount));
-			that.find('#emails-sent-label').text("Campaign emails sent");
+			that.find('#emails-sent-label').text("{{agile_lng_translate 'portlets' 'campaign-emails-sent'}}");
 			portlet_graph_data_utility
 					.fetchPortletsGraphData(
 							campaignEmailsSentsurl,
@@ -1231,7 +1224,7 @@ var portlet_utility = {
 									  );
 								}
 								that.find('#emails-sent-label').text(
-										"Campaign emails sent");
+										"{{agile_lng_translate 'portlets' 'campaign-emails-sent'}}");
 								_agile_set_prefs('dashboard_campaign_count_'+CURRENT_DOMAIN_USER.id, data["emailsSentCount"]);
 							});
 			setPortletContentHeight(base_model);
@@ -1263,13 +1256,11 @@ var portlet_utility = {
 													App_Portlets.refetchEvents = false;
 													App_Portlets.eventCalendar=$(this);
 													var that=$(this);
-																head
-					.js(
-							LIB_PATH + 'lib/jquery-ui.min.js', LIB_PATH + 
-							'lib/fullcalendar.min.js',
-							function() {
-													minicalendar(that);
-												});
+
+					_agile_library_loader.load_fullcalendar_libs(function(){
+								minicalendar(that);
+					});
+
 							});
  }
             );
@@ -1297,21 +1288,22 @@ var portlet_utility = {
 										.getStartAndEndDatesOnDue(start_date_str,base_model.get('settings')["start-date"])
 								+ '&end-date='
 								+ portlet_utility
-										.getStartAndEndDatesOnDue(end_date_str,base_model.get('settings')["end-date"]);
+										.getStartAndEndDatesOnDue(end_date_str,base_model.get('settings')["end-date"])
+										+ '&time_zone=' + (new Date().getTimezoneOffset());
 			portlet_graph_data_utility
 					.fetchPortletsGraphData(
 							url,
 							function(data) {
 								that.find('.deal_count').html(
 									portlet_utility.getNumberWithCommasForPortlets(data["dealcount"]));
-								that.find('.goal_count').html('Won Deals <br> from '+
-										portlet_utility.getNumberWithCommasForPortlets(data["goalCount"])+' Goals');
+								that.find('.goal_count').html('{{agile_lng_translate "portlets" "won-deals"}} <br> {{agile_lng_translate "contacts-view" "from"}} '+
+										portlet_utility.getNumberWithCommasForPortlets(data["goalCount"])+' {{agile_lng_translate "portlets" "goals"}}');
 								that.find('.deal_amount').html(portlet_utility.getPortletsCurrencySymbol()+
 									'' +
 									portlet_utility.getNumberWithCommasForPortlets(data["dealAmount"]));
-								that.find('.goal_amount').html('Revenue <br> from '+portlet_utility.getPortletsCurrencySymbol()+
+								that.find('.goal_amount').html('{{agile_lng_translate "portlets" "revenue"}} <br> {{agile_lng_translate "contacts-view" "from"}} '+portlet_utility.getPortletsCurrencySymbol()+
 									'' +
-									portlet_utility.getNumberWithCommasForPortlets(data["goalAmount"])+' Goals');
+									portlet_utility.getNumberWithCommasForPortlets(data["goalAmount"])+' {{agile_lng_translate "portlets" "goals"}}');
 									portlet_graph_data_utility.dealGoalsGraphData(selector,data,column_position,row_position);
 							});
 			setPortletContentHeight(base_model);
@@ -1372,7 +1364,7 @@ var portlet_utility = {
 			break;
 		}
 			case "Average Deviation": {
-			var url = '/core/api/portlets/averageDeviation?+start-date='
+			var url = '/core/api/portlets/averageDeviation?start-date='
 								+ portlet_utility
 										.getStartAndEndDatesOnDue(start_date_str,base_model.get('settings')["start-date"])
 								+ '&end-date='
@@ -1414,7 +1406,7 @@ var portlet_utility = {
 					+ '&time_zone=' + (new Date().getTimezoneOffset());
 			portlet_graph_data_utility.fetchPortletsGraphData(url,function(data) {
 				if(data.length==0){
-						$('.'+selector).html('<div class="portlet-error-message">No Referral URL Found</div>');
+						$('.'+selector).html('<div class="portlet-error-message">{{agile_lng_translate "visitors" "no-ref-found"}}</div>');
 								return;
 					}
 				var span;
@@ -1480,18 +1472,18 @@ var portlet_utility = {
 					"portletsContactsFilterBasedSettingsModal");
 			elData = $('#portletsContactsFilterBasedSettingsForm');
 			var existed_filter = base_model.get("settings").filter;
-			var options = '<option value="">Select...</option>';
+			var options = '<option value="">{{agile_lng_translate "contact-details" "select"}}</option>';
 			if (existed_filter == "contacts") {
-				options += "<option selected='selected' value='contacts'>All Contacts</option>";
+				options += "<option selected='selected' value='contacts'>{{agile_lng_translate 'portlets' 'all-contacts'}}</option>";
 			}
 			else {
-				options += "<option value='contacts'>All Contacts</option>";
+				options += "<option value='contacts'>{{agile_lng_translate 'portlets' 'all-contacts'}}</option>";
 			}
 			if (existed_filter == "myContacts") {
-				options += "<option selected='selected' value='myContacts'>My Contacts</option>";
+				options += "<option selected='selected' value='myContacts'>{{agile_lng_translate 'contacts-view' 'my-contacts'}}</option>";
 			}
 			else {
-				options += "<option value='myContacts'>My Contacts</option>";
+				options += "<option value='myContacts'>{{agile_lng_translate 'contacts-view' 'my-contacts'}}</option>";
 			}
 			$.ajax({
 				type : 'GET',
@@ -1584,9 +1576,9 @@ var portlet_utility = {
 					'option[value=' + base_model.get("settings").deals + ']')
 					.attr("selected", "selected");
 			if (base_model.get('settings').track == "anyTrack") {
-				options += '<option value="anyTrack" selected="selected">Any</option>';
+				options += '<option value="anyTrack" selected="selected">{{agile_lng_translate "portlets" "any"}}</option>';
 			} else {
-				options += '<option value="anyTrack">Any</option>';
+				options += '<option value="anyTrack">{{agile_lng_translate "portlets" "any"}}</option>';
 			}
 			$.ajax({
 				type : 'GET',
@@ -1619,7 +1611,7 @@ var portlet_utility = {
 					$('#milestone').html('');
 					if(milestonesList.length > 1)
 					{
-						$('#milestone', elData).html('<option value="anyMilestone">Any</option>');
+						$('#milestone', elData).html('<option value="anyMilestone">{{agile_lng_translate "portlets" "any"}}</option>');
 					}
 					$.each(milestonesList, function(index, milestone){
 						if(lost!=null && won!=null){
@@ -1643,16 +1635,16 @@ var portlet_utility = {
 		}
 		else
 		{
-			$('#milestone', elData).html('<option value="anyMilestone">Any</option>');
+			$('#milestone', elData).html('<option value="anyMilestone">{{agile_lng_translate "portlets" "any"}}</option>');
 		}
 
 				}
 			});
 	
 			/*if (base_model.get('settings').milestone == "anyMilestone") {
-				options += '<option value="anyMilestone" selected="selected">Any</option>';
+				options += '<option value="anyMilestone" selected="selected">{{agile_lng_translate "portlets" "any"}}</option>';
 			} else {
-				options += '<option value="anyMilestone">Any</option>';
+				options += '<option value="anyMilestone">{{agile_lng_translate "portlets" "any"}}</option>';
 			}
 			$("#milestone", elData).find(
 					'option[value=' + base_model.get("settings").milestone + ']')
@@ -1669,7 +1661,7 @@ var portlet_utility = {
 							'option[value='
 									+ base_model.get("settings").duration + ']')
 					.attr("selected", "selected");
-			var options = "<option value='All'>All Campaigns</option>";
+			var options = "<option value='All'>{{agile_lng_translate 'campaigns' 'all-campaigns'}}</option>";
 			$.ajax({
 				type : 'GET',
 				url : '/core/api/workflows',
@@ -1915,7 +1907,7 @@ var portlet_utility = {
 
 			$('#ms-category-list', elData).remove();
 			head.js(LIB_PATH + 'lib/jquery.multi-select.js', function() {
-				$('#category-list, #user-list', elData).multiSelect();
+				$('#category-list', elData).multiSelect();
 				$('#ms-category-list .ms-selection', elData).children('ul')
 						.addClass('multiSelect').attr("name", "category-list")
 						.attr("id", "category");
@@ -1934,9 +1926,9 @@ var portlet_utility = {
 			elData = $('#portletsDealsRevenueGraphSettingsModal');
 			var options = '';
 			if (base_model.get('settings').track == "anyTrack") {
-				options += '<option value="anyTrack" selected="selected">Any</option>';
+				options += '<option value="anyTrack" selected="selected">{{agile_lng_translate "portlets" "any"}}</option>';
 			} else {
-				options += '<option value="anyTrack">Any</option>';
+				options += '<option value="anyTrack">{{agile_lng_translate "portlets" "any"}}</option>';
 			}
 			$.ajax({
 				type : 'GET',
@@ -1973,7 +1965,7 @@ var portlet_utility = {
 							'option[value='
 									+ base_model.get("settings").duration + ']')
 					.attr("selected", "selected");
-			var options = "<option value='All'>All Campaigns</option>";
+			var options = "<option value='All'>{{agile_lng_translate 'campaigns' 'all-campaigns'}}</option>";
 			$.ajax({
 				type : 'GET',
 				url : '/core/api/workflows',
@@ -2266,31 +2258,7 @@ var portlet_utility = {
 		if (!name)
 			return;
 
-		var name_json = {
-			"HIGH" : "High",
-			"LOW" : "Low",
-			"NORMAL" : "Normal",
-			"EMAIL" : "Email",
-			"CALL" : "Call",
-			"SEND" : "Send",
-			"TWEET" : "Tweet",
-			"FOLLOW_UP" : "Follow Up",
-			"MEETING" : "Meeting",
-			"MILESTONE" : "Milestone",
-			"OTHER" : "Other",
-			"YET_TO_START" : "Yet To Start",
-			"IN_PROGRESS" : "In Progress",
-			"COMPLETED" : "Completed",
-			"TODAY" : "Today",
-			"TOMORROW" : "Tomorrow",
-			"OVERDUE" : "Overdue",
-			"LATER" : "Later"
-		};
-
-		name = name.trim();
-
-		return (name_json[name] ? name_json[name] : name);
-
+		return getTranslatedPortletName(name);
 	},
 
 	/**
@@ -2640,7 +2608,7 @@ var portlet_utility = {
 	 * settings.
 	 */
 	setOwners : function(ele_id, base_model, elData) {
-		var options = '<option value="">All</option>';
+		var options = '<option value="">{{agile_lng_translate "subscriber_type" "all"}}</option>';
 		$.ajax({
 			type : 'GET',
 			url : '/core/api/users/partial',
@@ -2662,8 +2630,8 @@ var portlet_utility = {
 		sources.collection.fetch({
 			success: function(data){
 				var jsonModel = data.toJSON();
-				var html =  '<option class="default-select" value="">All Sources</option>' + 
-							'<option class="default-select" value="1">Unknown</option>';
+				var html =  '<option class="default-select" value="">'+_agile_get_translated_val('report-add','all-sources')+'</option>' + 
+							'<option class="default-select" value="1">'+_agile_get_translated_val('report-add','unknown')+'</option>';
 				
 				$.each(jsonModel,function(index,dealSource){
 					html+='<option class="default-select" value="'+dealSource.id+'">'+dealSource.label+'</option>';
@@ -2681,7 +2649,7 @@ var portlet_utility = {
 		fillSelect(ele_id, "/core/api/milestone/pipelines", undefined, function()
 		{
 			$('#'+ele_id, elData).find('option[value='+base_model.get("settings")["track"]+']').attr("selected", "selected");
-		}, '<option class="default-select" value="{{id}}">{{name}}</option>', false, undefined, "All Tracks");
+		}, '<option class="default-select" value="{{id}}">{{name}}</option>', false, undefined, "{{agile_lng_translate 'report-add' 'all-tracks'}}");
 	}
 };
 
@@ -2748,4 +2716,31 @@ var eventDate = $('#start_date',elData).datepicker({ format : CURRENT_USER_PREFS
 function stringToDate(date,format)
 {
 	return new Date(date).format(format);
+}
+
+
+function getTranslatedPortletName(name){
+	var name_json = {
+		"HIGH": "{{agile_lng_translate 'tasks' 'High'}}",
+        "LOW": "{{agile_lng_translate 'tasks' 'Low'}}",
+        "NORMAL": "{{agile_lng_translate 'tasks' 'Normal'}}",
+        "EMAIL": "{{agile_lng_translate 'tasks' 'Email'}}",
+        "CALL": "{{agile_lng_translate 'tasks' 'Call'}}",
+        "SEND": "{{agile_lng_translate 'tasks' 'Send'}}",
+        "TWEET": "{{agile_lng_translate 'tasks' 'Tweet'}}",
+        "FOLLOW_UP": "{{agile_lng_translate 'tasks' 'Follow Up'}}",
+        "MEETING": "{{agile_lng_translate 'tasks' 'Meeting'}}",
+        "MILESTONE": "{{agile_lng_translate 'tasks' 'Milestone'}}",
+        "OTHER": "{{agile_lng_translate 'tasks' 'Other'}}",
+        "YET_TO_START": "{{agile_lng_translate 'tasks' 'Yet To Start'}}",
+        "IN_PROGRESS": "{{agile_lng_translate 'tasks' 'In Progress'}}",
+        "COMPLETED": "{{agile_lng_translate 'tasks' 'Completed'}}",
+        "TODAY": "{{agile_lng_translate 'tasks' 'Today'}}",
+        "TOMORROW": "{{agile_lng_translate 'tasks' 'Tomorrow'}}",
+        "OVERDUE": "{{agile_lng_translate 'tasks' 'Overdue'}}",
+        "LATER": "{{agile_lng_translate 'tasks' 'Later'}}",
+	};
+
+	name = name.trim();
+	return (name_json[name] ? name_json[name] : ucfirst(name));
 }

@@ -16,274 +16,11 @@ var _BULKACTION_FILTER = undefined;
 */
 var Contacts_Events_Collection_View = Base_Collection_View.extend({
     events: {
-    	/** Contacts bulk actions */
-    	'click #bulk-owner' : 'bulkActionAddOwner',
-    	'click #bulk-campaigns' : 'bulkActionAssignToCampaign',
-    	'click #bulk-tags' : 'bulkActionAddTags',
-    	'click #bulk-tags-remove' : 'bulkActionRemoveTags',
-    	'click #bulk-email' : 'bulkActionSendEmail',
-    	'click #bulk-contacts-export' : 'bulkActionExportContacts',
-    	'click #bulk-companies-export' : 'bulkActionExportCompanies',
-    	'click #select-all-available-contacts' : 'bulkActionSelectAvailContacts',
-    	'click #select-all-revert' : 'bulkActionRevertAvailContacts',
-
-    	/** Company bulk actions */
-    	'click .default_company_filter' : 'bulkActionCompanyDefaultFilter',
-    	'click #companies-filter' : 'bulkActionCompaniesFilter',
-    	'click .company_static_filter' : 'bulkActionCompaniesStaticFilter',
-    	'click #comp-sort-by-created_time-desc' : 'bulkActionCompaniesSortonTimeDesc',
-    	'click #comp-sort-by-created_time-asc' : 'bulkActionCompaniesSortonTimeAsec',
-    	'click .comp-sort-by-name' : 'bulkActionCompaniesSortByName',
-    	'click #contact-actions-grid-delete' : 'contactActionsGridDelete',
-    	
-    	'click .filter' : 'filterResults',
-    	'click .default_filter' : 'defaultFilterResults',
-    	// 'click #companies-filter' : 'companyFilterResults',
-    	'click .default_contact_remove_tag' : 'defaultContactRemoveTag',
-
-    	//'click .contact-actions-delete-mobile' : 'onContactDelete'
-    	'click .contact-type-image, .company-type-image' : 'navigateToProperContact'
-    	
+    	'click .contact-type-image, .company-type-image' : 'navigateToProperContact',
+    	'mouseenter #companies-list-view-model-list > tr > td:not(":first-child")' : 'companiesDataPopoverEnter',
+    	'mouseleave #companies-list-view-model-list > tr > td:not(":first-child")' : 'companiesDataPopoverLeave'
     },
-
-    /*onContactDeleteAction : function(e){
-    	e.preventDefault();
-    	event.stopPropagation();
-    	contact_delete_action.onContactDelete(e);
-	},*/
-
-    bulkActionCompaniesSortByName : function(e){
-
-    	e.preventDefault();
-			_agile_set_prefs('company_sort_field',$(e.currentTarget).attr('data'));
-			COMPANIES_HARD_RELOAD=true;
-			App_Companies.companies();
-    },
-
-	defaultContactRemoveTag: function(e)
-	{
-		e.preventDefault();
-		// Navigate to show form
-		Backbone.history.navigate("contacts", { trigger : true });
-	},
-
-    // Fetch filter result without changing route on click
-	filterResults:  function(e)
-	{
-
-		contact_filters_util.filterResults(e);
-	},
-
-	/*
-	 * If default filter is selected, removes filter cookies an load contacts
-	 * with out any query condition
-	 */
-	defaultFilterResults:  function(e)
-	{
-		e.preventDefault();
-		revertToDefaultContacts();
-	},
-
-	companyFilterResults: function(e)
-	{
-		contact_filters_util.companyFilterResults(e);
-		
-	},
     
-	contactActionsGridDelete: function(e){
-		
-		e.preventDefault();
-		var contact_id=$(e.currentTarget).attr('con_id');
-    	var model=App_Contacts.contactsListView.collection.get(contact_id);
-		$('#deleteGridContactModal').modal('show');
-
-		$('#deleteGridContactModal').on("shown.bs.modal", function(){
-
-				// If Yes clicked
-		   $('#deleteGridContactModal').on('click', '#delete_grid_contact_yes', function(e) {
-				e.preventDefault();
-				// Delete Contact.
-				$.ajax({
-    					url: 'core/api/contacts/' + contact_id,
-       					type: 'DELETE',
-       					success: function()
-       					{
-       						$('#deleteGridContactModal').modal('hide');
-       						App_Contacts.contactsListView.collection.remove(model);
-       						if(App_Contacts.contact_custom_view)
-       						App_Contacts.contact_custom_view.collection.remove(model);
-       						CONTACTS_HARD_RELOAD=true;
-       						App_Contacts.contacts();
-       					}
-       				});
-			});
-
-
-		   $('#deleteGridContactModal').on('click', '#delete_grid_contact_no', function(e) {
-				e.preventDefault();
-				if($(this).attr('disabled'))
-			   	     return;
-				$('#deleteGridContactModal').modal('hide');
-			});
-
-		});
-
-    		
-	},
-	/*
-	 * If default filter is selected, removes filter cookies an load contacts
-	 * with out any query condition
-	 */
-	bulkActionCompanyDefaultFilter :  function(e)
-	{
-		e.preventDefault();
-		company_list_view.revertToDefaultCompanies();
-	},
-	
-	bulkActionCompaniesFilter : function(e)
-	{
-
-		e.preventDefault();
-		_agile_delete_prefs('company_filter');
-		//_agile_delete_prefs('contact_filter_type');
-
-		//_agile_set_prefs('company_filter', "Companies");
-		COMPANIES_HARD_RELOAD = true;
-		App_Companies.companies(); // /Show Companies list, explicitly hard
-		// reload
-		return;
-	},
-
-	bulkActionCompaniesStaticFilter :  function(e)
-	{
-
-		e.preventDefault();
-		_agile_delete_prefs('company_filter');
-		//_agile_delete_prefs('dynamic_contact_filter');
-		_agile_delete_prefs('dynamic_company_filter');
-
-		var filter_id = $(e.currentTarget).attr('id');
-		var filter_type = $(e.currentTarget).attr('filter_type');
-
-		// Saves Filter in cookie
-		_agile_set_prefs('company_filter', filter_id)
-		//_agile_set_prefs('company_filter_type', filter_type)
-
-		// Gets name of the filter, which is set as data
-		// attribute in filter
-		filter_name = $(e.currentTarget).attr('data');
-
-		COMPANIES_HARD_RELOAD=true;
-		App_Companies.companies();
-		return;
-		// /removed old code from below,
-		// now filters will work only on contact, not company
-	},
-	
-	bulkActionCompaniesSortonTimeDesc : function(e)
-	{
-		e.preventDefault();
-		_agile_set_prefs('company_sort_field',$(e.currentTarget).attr('data'));
-		COMPANIES_HARD_RELOAD=true;
-		App_Companies.companies();
-	},
-	
-	bulkActionCompaniesSortonTimeAsec : function(e){
-		e.preventDefault();
-		_agile_set_prefs('company_sort_field',$(e.currentTarget).attr('data'));
-		COMPANIES_HARD_RELOAD=true;
-		App_Companies.companies();
-	},
-
-    bulkActionAddOwner : function(e){
-    	e.preventDefault();
-    	contacts_bulk_actions.change_owner(e);
-    },
-
-    bulkActionAssignToCampaign : function(e){
-    	e.preventDefault();
-    	contacts_bulk_actions.assign_to_campaigns(e);
-    },
-
-    bulkActionAddTags :  function(e){
-    	e.preventDefault();
-    	contacts_bulk_actions.add_tags(e);
-    },
-
-    bulkActionRemoveTags :  function(e){
-    	e.preventDefault();
-    	contacts_bulk_actions.remove_tags(e);
-    },
-    bulkActionSendEmail : function(e){
-    	e.preventDefault();
-    	contacts_bulk_actions.send_email(e);
-    },
-
-    bulkActionExportContacts : function(e){
-    	e.preventDefault();
-    	contacts_bulk_actions.export_contacts(e);
-    },
-
-    bulkActionExportCompanies : function(e){
-    	e.preventDefault();
-    	contacts_bulk_actions.export_companies(e);
-    },
-
-    bulkActionSelectAvailContacts : function(e){
-    	e.preventDefault();
-    	contacts_bulk_actions.select_contacts(e);
-    },
-
-    bulkActionRevertAvailContacts : function(e){
-    	e.preventDefault();
-
-    	SELECT_ALL = false;
-		_BULK_CONTACTS = undefined;
-		
-		var html = '';
-
-		var resultCount = 0;
-		var appCount = 0;
-		var limitValue = 10000;		
-
-		if(company_util.isCompany()){
-
-			resultCount = App_Companies.companiesListView.collection.length;
-			appCount = getAvailableContacts();
-
-			if(localStorage.getItem("dynamic_company_filter") != null || localStorage.getItem("company_filter") != null) {				
-				
-				if(resultCount > limitValue){
-					resultCount = limitValue + "+";
-				}
-
-				if(appCount > limitValue){
-					appCount = limitValue + "+";
-				}
-
-			}
-
-			html = "Selected " + resultCount + " companies. <a href='#'  id='select-all-available-contacts' class='c-p text-info'>Select all " + appCount + " companies</a>";
-		}else{
-
-			resultCount = App_Contacts.contactsListView.collection.length;
-			appCount = getAvailableContacts();
-
-			if(localStorage.getItem("dynamic_contact_filter") != null || localStorage.getItem("contact_filter") != null){	
-				if(resultCount > limitValue){
-					resultCount = limitValue + "+";
-				}
-
-				if(appCount > limitValue){
-					appCount = limitValue + "+";
-				}
-			}
-
-			html = "Selected " + resultCount + " contacts. <a href='#'  id='select-all-available-contacts' class='c-p text-info'>Select all " + appCount + " contacts</a>";
-		}
-		$('body').find('#bulk-select').html(html);
-    },
-
     navigateToProperContact : function(e){
     	e.stopPropagation();
 		var currentObjId = $(e.currentTarget).attr("id");
@@ -295,9 +32,26 @@ var Contacts_Events_Collection_View = Base_Collection_View.extend({
 		{
 			Backbone.history.navigate("company/" + currentObjId, { trigger : true });
 		}
-    } 
+    },
 
-   
+    companiesDataPopoverEnter : function(e)
+    {
+    	var left=e.pageX;
+		left=left-100;
+		var top=0;
+		var that=$(e.currentTarget).parent();
+        if($(e.currentTarget).hasClass("contact-type-custom-field-td") || $(e.currentTarget).hasClass("company-type-custom-field-td") || $(e.currentTarget).hasClass("contact-type-image") || $(e.currentTarget).hasClass("company-type-image"))
+        {
+        	return;
+        }
+        popoverEnter(that,left,top,true);
+    },
+
+    companiesDataPopoverLeave : function(e)
+    {
+    	var that=$(e.currentTarget).parent();
+		popout(that);
+    }
 });
 
 $(function(){
@@ -329,8 +83,8 @@ var contacts_bulk_actions = {
 					if (!canRunBulkOperations())
 					{
 						showModalConfirmation(
-								"Bulk Change Owner",
-								"You may not have permission to update some of the contacts selected. " + "Proceeding with this operation will change the owner for only the contacts " + "you are allowed to update.<br/><br/> Do you want to proceed?",
+								_agile_get_translated_val('bulk-actions','change-owner'),
+								_agile_get_translated_val('bulk-actions','no-pem-to-change-owners') + "<br/><br/> " + _agile_get_translated_val('deal-view','do-you-want-to-proceed'),
 								show_bulk_owner_change_page, function()
 								{
 									// No callback
@@ -368,8 +122,8 @@ var contacts_bulk_actions = {
 		{
 			continueAction = false;
 			showModalConfirmation(
-					"Bulk Assign Campaign",
-					"You may not have permission to update some of the contacts selected. Proceeding with this operation will add only your contacts to the campaign.<br/><br/>Do you want to proceed?",
+					_agile_get_translated_val('bulk-actions','assign-campaign'),
+					_agile_get_translated_val('bulk-actions','no-pem-to-update-contacts') + "<br/><br/>" + _agile_get_translated_val('deal-view','do-you-want-to-proceed'),
 					show_bulk_campaign_assign_page, function()
 					{
 						// No callback
@@ -382,8 +136,8 @@ var contacts_bulk_actions = {
 		{
 			continueAction = false;
 			showModalConfirmation(
-					"Add to Campaign",
-					"You can apply this bulk action only on 25 contacts in the FREE Plan. Please choose lesser number of contacts or upgrade your account.",
+					_agile_get_translated_val('contacts-view','add-to-campaign'),
+					_agile_get_translated_val('bulk-actions','limit-on-contacts'),
 					function()
 					{
 						Backbone.history.navigate("subscribe", { trigger : true });
@@ -394,27 +148,27 @@ var contacts_bulk_actions = {
 					}, function()
 					{
 						return;
-					}, "Upgrade", "Close");
+					},  _agile_get_translated_val('portlets','upgrade'), _agile_get_translated_val('contact-details','CLOSE'));
 		}
 		if (!canSendEmails(count))
 		{
 			continueAction = false;
 			var pendingEmails = getPendingEmails() + getEmailCreditsCount();
-			var yes = "Yes";
-			var no = "No"
+			var yes = _agile_get_translated_val('portlets', 'yes');
+			var no = _agile_get_translated_val('portlets', 'no');
 
 			var message = "";
-			var upgrade_link = ' You may <a href="#subscribe" class="action text-info" data-dismiss="modal" subscribe="subscribe" action="deny">purchase </a>more emails if this does not suffice your bulk action.';
-			var title = "Low on Emails"
+			var upgrade_link = _agile_get_translated_val('bulk-actions','you-may') + ' <a href="#subscribe" class="action text-info" data-dismiss="modal" subscribe="subscribe" action="deny">' +_agile_get_translated_val('plan-and-upgrade','purchase')+ ' </a>' + _agile_get_translated_val('bulk-actions','more-emails-to-action');
+			var title = _agile_get_translated_val('bulk-actions','email-low-limit');
 			if (pendingEmails <= 0)
 			{
-				title = "Low on Emails";
+				title = _agile_get_translated_val('bulk-actions','email-low-limit');
 				yes = "";
-				no = "Ok"
-				message = "You have used up all emails in your quota. " + upgrade_link;
+				no = _agile_get_translated_val('reputation','Ok');
+				message = _agile_get_translated_val('bulk-actions','emails-limit-reached') + " " + upgrade_link;
 			}
 			else
-				message = "You have only " + pendingEmails + " emails left as per your quota. " + upgrade_link + " Continuing with this operation will stop sending emails once it crosses the quota.<br/><br/>" + "Do you want to proceed?";
+				message = _agile_get_translated_val('billing','have-only') + " " + pendingEmails + " " +_agile_get_translated_val('bulk-actions','emails-left-quota')+ ". " + upgrade_link + " " +_agile_get_translated_val('bulk-actions','wanna-continue')+ "<br/><br/>" + _agile_get_translated_val('deal-view','do-you-want-to-proceed');
 
 			showModalConfirmation(title, message, show_bulk_campaign_assign_page, function(element)
 			{
@@ -448,8 +202,8 @@ var contacts_bulk_actions = {
 						if (!canRunBulkOperations())
 						{
 							showModalConfirmation(
-									"Bulk Add Tag",
-									"You may not have permission to update some of the contacts selected. Proceeding with this operation will add tag to only the contacts you are allowed to update.<br/><br/> Do you want to proceed?",
+									_agile_get_translated_val('bulk-actions','add-tag'),
+									_agile_get_translated_val('bulk-actions','add-tag') + "<br/><br/> " + _agile_get_translated_val('deal-view','do-you-want-to-proceed'),
 
 									show_add_tag_bulkaction_form, function()
 									{
@@ -464,8 +218,8 @@ var contacts_bulk_actions = {
 						{
 							continueAction = false;
 							showModalConfirmation(
-									"Add tags",
-									"You can apply this bulk action only on 25 contacts in the FREE Plan. Please choose lesser number of contacts or upgrade your account.",
+									_agile_get_translated_val('contacts-view','add-tags'),
+									_agile_get_translated_val('bulk-actions','limit-on-contacts'),
 									function()
 									{
 										Backbone.history.navigate("subscribe", { trigger : true });
@@ -476,7 +230,7 @@ var contacts_bulk_actions = {
 									}, function()
 									{
 										return;
-									}, "Upgrade", "Close");
+									},  _agile_get_translated_val('portlets','upgrade'), _agile_get_translated_val('contact-details','CLOSE'));
 						}
 						else
 						{
@@ -495,8 +249,8 @@ var contacts_bulk_actions = {
 					if (!canRunBulkOperations())
 					{
 						showModalConfirmation(
-								"Bulk Remove Tag",
-								"You may not have permission to update some of the contacts selected. Proceeding with this operation will delete tag to only the contacts you are allowed to update.<br/><br/> Do you want to proceed?",
+								_agile_get_translated_val('bulk-actions','remove-tag'),
+								_agile_get_translated_val('bulk-actions','bulk-update-ur-contacts') + "<br/><br/> " + _agile_get_translated_val('deal-view','do-you-want-to-proceed'),
 
 								show_remove_tag_bulkaction_form, function()
 								{
@@ -511,8 +265,8 @@ var contacts_bulk_actions = {
 					{
 						continueAction = false;
 						showModalConfirmation(
-								"Remove tags",
-								"You can apply this bulk action only on 25 contacts in the FREE Plan. Please choose lesser number of contacts or upgrade your account.",
+								_agile_get_translated_val('contacts-view','remove-tags'),
+								_agile_get_translated_val('bulk-actions','limit-on-contacts'),
 								function()
 								{
 									Backbone.history.navigate("subscribe", { trigger : true });
@@ -523,7 +277,7 @@ var contacts_bulk_actions = {
 								}, function()
 								{
 									return;
-								}, "Upgrade", "Close");
+								}, _agile_get_translated_val('portlets','upgrade'), _agile_get_translated_val('contact-details','CLOSE'));
 					}
 					else
 					{
@@ -545,8 +299,8 @@ var contacts_bulk_actions = {
 						if (!canRunBulkOperations())
 						{
 							showModalConfirmation(
-									"Bulk Email",
-									"You may not be the owner for some of the contacts selected. Proceeding with this operation will send email to only your contacts.<br/><br/> Do you want to proceed?",
+									_agile_get_translated_val('bulk-actions','bulk-email'),
+									_agile_get_translated_val('bulk-actions','bulk-email-ur-contacts') + "<br/><br/> " + _agile_get_translated_val('deal-view','do-you-want-to-proceed'),
 									function()
 									{
 										show_bulk_email_form(id_array)
@@ -563,8 +317,8 @@ var contacts_bulk_actions = {
 						if (has_more_than_limit())
 						{
 							showModalConfirmation(
-									"Send Email",
-									"You can apply this bulk action only on 25 contacts. Please create a campaign.",
+									_agile_get_translated_val('contact-details','send-email'),
+									_agile_get_translated_val('billing', 'not-send->25email'),
 									 function()
 									{
 										Backbone.history.navigate("workflows", { trigger : true })
@@ -575,7 +329,7 @@ var contacts_bulk_actions = {
 									}, function()
 									{
 										return;
-									},"Go to Campaign","Close");
+									},_agile_get_translated_val('campaigns','go-to-campaign'),_agile_get_translated_val('contact-details','CLOSE'));
 						}
 						else
 						{
@@ -591,22 +345,22 @@ var contacts_bulk_actions = {
 							{
 								var pendingEmails = getPendingEmails() + getEmailCreditsCount();
 
-								var yes = "Yes";
-								var no = "No"
+								var yes = _agile_get_translated_val('portlets', 'yes');
+								var no = _agile_get_translated_val('portlets', 'no');
 
 								var message = "";
-								var upgrade_link = 'Please<a href="#subscribe" class="action text-info" data-dismiss="modal" subscribe="subscribe" action="deny"> upgrade</a> your email subscription.';
-								var emialErrormsg = '<div>To continue sending emails from your account, please<a href="#subscribe" class="action text-info" data-dismiss="modal" subscribe="subscribe" action="deny"> purchase</a>  more.</div>';
-								var title = "Not Enough Emails Left"
+								var upgrade_link = _agile_get_translated_val('contact-details','please') + '<a href="#subscribe" class="action text-info" data-dismiss="modal" subscribe="subscribe" action="deny">'+ _agile_get_translated_val('menu','upgrade') + '</a>' +  _agile_get_translated_val('billing','your-email-subscription');
+								var emialErrormsg = '<div>' +_agile_get_translated_val("billing","continue-send-emails")+ ', '+_agile_get_translated_val('contact-details', 'please')+'<a href="#subscribe" class="action text-info" data-dismiss="modal" subscribe="subscribe" action="deny"> '+_agile_get_translated_val('menu', 'upgrade')+'</a>  ' +_agile_get_translated_val('billing','more')+ '.</div>';
+								var title = _agile_get_translated_val('billing','not-enough-emails');
 								if (pendingEmails <= 0)
 								{
-									title = "Emails Limit";
+									title = _agile_get_translated_val('campaigns', 'emails-limit');
 									yes = "";
-									no = "Ok"
-									message = "<div>Sorry, your emails quota has been utilized.</div> " + emialErrormsg;
+									no = _agile_get_translated_val('reputation','Ok');
+									message = "<div>" +_agile_get_translated_val('billing','email-quota-exceed')+ "</div> " + emialErrormsg;
 								}
 								else
-									message = "You have only " + pendingEmails + " emails remaining as per your quota. " + upgrade_link + " Continuing with this operation may not send the email to some contacts. <br/><br/>" + "Do you want to proceed?";
+									message = _agile_get_translated_val('billing','remaining-email') + " " + pendingEmails + " "+_agile_get_translated_val('billing','have-only')+" " + upgrade_link + _agile_get_translated_val('billing','not-send-email') + " <br/><br/>" + _agile_get_translated_val('deal-view','do-you-want-to-proceed');
 
 								showModalConfirmation(title, message, show_bulk_email_form, function(element)
 								{
@@ -667,14 +421,16 @@ var contacts_bulk_actions = {
 									$("#contacts-export-csv-modal").on("click",'#contacts-export-csv-confirm', function(e)
 									{
 										e.preventDefault();
-
+										App_Companies.Company_detail_route="";
+										 if (company_util.isCompanyContact())
+        									App_Companies.Company_detail_route = Current_Route;
 										if ($(this).attr('disabled'))
 											return;
 
 										$(this).attr('disabled', 'disabled');
 
 										// Shows message
-										$save_info = $('<img src="' + updateImageS3Path("img/1-0.gif") +'" height="18px" width="18px"></img>&nbsp;&nbsp;<span><small class="text-success" style="font-size:15px; display:inline-block"><i>Email will be sent shortly.</i></small></span>');
+										$save_info = $('<img src="' + updateImageS3Path("img/1-0.gif") +'" height="18px" width="18px"></img>&nbsp;&nbsp;<span><small class="text-success" style="font-size:15px; display:inline-block"><i>' +_agile_get_translated_val('campaigns','email-will-be-sent-shortly')+ '</i></small></span>');
 										$(this).parent('.modal-footer').find('.contacts-export-csv-message').append($save_info);
 										$save_info.show();
 
@@ -749,14 +505,16 @@ var contacts_bulk_actions = {
 						$("#companies-export-csv-modal").on("click", '#companies-export-csv-confirm', function(e)
 										{
 											e.preventDefault();
+											App_Companies.Company_detail_route="";
 
+												App_Companies.Company_detail_route="";
 											if ($(this).attr('disabled'))
 												return;
 
 											$(this).attr('disabled', 'disabled');
 
 											// Shows message
-											$save_info = $('<img src="img/1-0.gif" height="18px" width="18px"></img>&nbsp;&nbsp;<span><small class="text-success" style="font-size:15px; display:inline-block"><i>Email will be sent shortly.</i></small></span>');
+											$save_info = $('<img src="img/1-0.gif" height="18px" width="18px"></img>&nbsp;&nbsp;<span><small class="text-success" style="font-size:15px; display:inline-block"><i>'+_agile_get_translated_val('campaigns','email-will-be-sent-shortly')+'</i></small></span>');
 											$(this).parent('.modal-footer').find('.companies-export-csv-message').append($save_info);
 											$save_info.show();
 
@@ -799,20 +557,27 @@ select_contacts :  function(e)
 				var resultCount = getAvailableContacts();
 				var limitValue = 10000;
 
-				if(company_util.isCompany()){
+				if(company_util.isCompanyContact()){
+					if(resultCount > limitValue){
+							resultCount = limitValue + "+";
+						}
+						html = ' '+_agile_get_translated_val('contacts','selected-all')+' ' + resultCount + ' '+_agile_get_translated_val('contact-details','contacts')+'. <a hrer="#" id="select-all-revert" class="c-p text-info-important">{{agile_lng_translate "contacts" "select-choosen-only"}}</a>';
+				}
+
+				else if(company_util.isCompany()){
 					if(localStorage.getItem("dynamic_company_filter") != null || localStorage.getItem("company_filter") != null){				
 						if(resultCount > limitValue){
 							resultCount = limitValue + "+";
 						}
 					}
-					html = ' Selected All ' + resultCount + ' companies. <a hrer="#" id="select-all-revert" class="c-p text-info">Select chosen companies only</a>';
+					html = ' '+_agile_get_translated_val('contacts','selected-all')+' ' + resultCount + ' '+_agile_get_translated_val('contact-details','companies')+'. <a hrer="#" id="select-all-revert" class="c-p text-info">{{agile_lng_translate "companies" "select-choosen-only"}}</a>';
 				}else{
 					if(localStorage.getItem("dynamic_contact_filter") != null || localStorage.getItem("contact_filter") != null){				
 						if(resultCount > limitValue){
 							resultCount = limitValue + "+";
 						}
 					}
-					html = ' Selected All ' + resultCount + ' contacts. <a hrer="#" id="select-all-revert" class="c-p text-info">Select chosen contacts only</a>';
+					html = ' '+_agile_get_translated_val('contacts','selected-all')+' ' + resultCount + ' '+_agile_get_translated_val('contact-details','contacts')+'. <a hrer="#" id="select-all-revert" class="c-p text-info">{{agile_lng_translate "contacts" "select-choosen-only"}}</a>';
 				}
 				
 				$('body')
@@ -848,10 +613,23 @@ function show_bulk_owner_change_page()
 		});
 
 		// Navigate to show form
-		if(company_util.isCompany())
+
+		if (company_util.isCompanyContact()) {
+			App_Companies.Company_detail_route=Current_Route;
+        Backbone.history.navigate("bulk-owner", {
+            trigger: true
+        })
+    }
+		else if(company_util.isCompany())
+		{
+			App_Companies.Company_detail_route="";
 			Backbone.history.navigate("company-bulk-owner", { trigger : true });
+		}
 		else
+		{
+			App_Companies.Company_detail_route="";
 			Backbone.history.navigate("bulk-owner", { trigger : true });
+		}
 
 		/**
 		 * Changes the owner by sending the new owner name as path parameter and
@@ -884,7 +662,7 @@ function show_bulk_owner_change_page()
 			postBulkOperationData(url, json, $form, undefined, function(data)
 			{
 				enable_save_button(saveButton);
-			}, 'Contacts owner change scheduled')
+			}, _agile_get_translated_val('bulk-actions','owner-change-scheduled'))
 		});
 
 	}
@@ -905,11 +683,15 @@ function show_bulk_owner_change_page()
 
 	        $("body").off('fill_campaigns').on("fill_campaigns", function(event)
 			{
-				var optionsTemplate = "<option value='{{id}}'{{#if is_disabled}}disabled=disabled>{{name}} (Disabled){{else}}>{{name}}{{/if}}</option>";
+				var optionsTemplate = "<option value='{{id}}'{{#if is_disabled}}disabled=disabled>{{name}} ("+_agile_get_translated_val('campaigns','disabled')+"){{else}}>{{name}}{{/if}}</option>";
  				fillSelect('campaignBulkSelect', '/core/api/workflows', 'workflow', 'no-callback ', optionsTemplate);
 			});
 
 			// Navigate to show form
+			App_Companies.Company_detail_route="";
+			if (company_util.isCompanyContact()) {
+			App_Companies.Company_detail_route=Current_Route;
+    		}
 			Backbone.history.navigate("bulk-campaigns", { trigger : true });
 
 			/**
@@ -942,7 +724,7 @@ function show_bulk_owner_change_page()
 				postBulkOperationData(url, json, $form, undefined, function(data)
 				{
 					enable_save_button(saveButton);
-				}, 'Campaign assigning scheduled');
+				}, _agile_get_translated_val('campaigns','assigned'));
 			});
 		});
 		
@@ -954,12 +736,19 @@ function show_bulk_owner_change_page()
 
 		// var tags = get_tags('tagsBulkForm');
 
-		 if (company_util.isCompany()) {
+		if (company_util.isCompanyContact()) {
+			App_Companies.Company_detail_route=Current_Route;
+        Backbone.history.navigate("bulk-tags", {
+            trigger: true
+        })
+    }
+		 else if (company_util.isCompany()) {
+		 	App_Companies.Company_detail_route="";
         Backbone.history.navigate("company-bulk-tags", {
             trigger: true
         })
     } else {
-
+    	App_Companies.Company_detail_route="";
 		Backbone.history.navigate("bulk-tags", { trigger : true });
 	}
 
@@ -1042,7 +831,7 @@ function show_bulk_owner_change_page()
 								{
 									tagsCollection.add({ "tag" : tag });
 								});
-							}, 'Tags add scheduled');
+							}, _agile_get_translated_val('contacts','add-tag-scheduled'));
 				}, function(error){
 					enable_save_button(saveButton);
 				});
@@ -1061,15 +850,24 @@ function show_bulk_owner_change_page()
 		var id_array = get_contacts_bulk_ids();
 
 		// var tags = get_tags('tagsBulkForm');
-		 if (company_util.isCompany()) {
+
+
+		if (company_util.isCompanyContact()) {
+			App_Companies.Company_detail_route=Current_Route;
+        Backbone.history.navigate("bulk-tags-remove", {
+            trigger: true
+        })
+    }
+		 else if (company_util.isCompany()) {
+		 	App_Companies.Company_detail_route="";
         Backbone.history.navigate("company-bulk-tags-remove", {
             trigger: true
         })
     } else {
-
+    	App_Companies.Company_detail_route="";
 		Backbone.history.navigate("bulk-tags-remove", { trigger : true });
 	}
-
+		
 		setup_tags_typeahead();
 
 	/**	$('#removeBulkTags')
@@ -1144,7 +942,7 @@ function show_bulk_owner_change_page()
 									{
 										tagsCollection.add({ "tag" : tag });
 									});
-								}, 'Tags delete scheduled');
+								}, _agile_get_translated_val('contacts','delete-tag-scheduled'));
 							}
 							else
 							{
@@ -1189,10 +987,12 @@ function show_bulk_owner_change_page()
 			// Shows selected contacts count in Send-email page.
 			$emailForm.find('div#bulk-count').css('display', 'inline-block');
 			
-			if(company_util.isCompany())
-				$emailForm.find('div#bulk-count p').html("Selected <b>" + count + " Companie(s)</b> for sending email.");
+			if (company_util.isCompanyContact())
+				$emailForm.find('div#bulk-count p').html(_agile_get_translated_val('companies-view','selected') + " <b>" + count + _agile_get_translated_val('companies-view','Contacts') + " </b> " + _agile_get_translated_val('companies-view','for-sending-email'));
+			else if(company_util.isCompany())
+				$emailForm.find('div#bulk-count p').html(_agile_get_translated_val('companies-view','selected') +" <b>" + count + _agile_get_translated_val('companies-view','Companies') + " </b> " + _agile_get_translated_val('companies-view','for-sending-email'));
 			else
-				$emailForm.find('div#bulk-count p').html("Selected <b>" + count + " Contact(s)</b> for sending email.");
+				$emailForm.find('div#bulk-count p').html(_agile_get_translated_val('companies-view','selected') + " <b>" + count + _agile_get_translated_val('companies-view','Contacts') + " </b> " + _agile_get_translated_val('companies-view','for-sending-email'));
 
 			// Hide to,cc and bcc
 			$emailForm.find('input[name="to"]').closest('.control-group').attr('class', 'hidden');
@@ -1201,14 +1001,25 @@ function show_bulk_owner_change_page()
 			// Change ids of Send and Close button, to avoid normal send-email
 			// actions.
 			$emailForm.find('.form-actions a#sendEmail').removeAttr('id').attr('id', 'bulk-send-email');
-			$emailForm.find('.form-actions a#send-email-close').removeAttr('id');
+			//$emailForm.find('.form-actions a#send-email-close').removeAttr('id');
 
 		});
-
-		if(company_util.isCompany())
+		
+		if (company_util.isCompanyContact()) {
+			App_Companies.Company_detail_route=Current_Route;
+        Backbone.history.navigate("bulk-email", {
+            trigger: true
+        })
+    }
+		 else if(company_util.isCompany()){
+		 	App_Companies.Company_detail_route="";
 			Backbone.history.navigate("company-bulk-email", { trigger : true });
+		}
 		else
+		{
+			App_Companies.Company_detail_route="";
 			Backbone.history.navigate("bulk-email", { trigger : true });
+		}
 
 		$("body #bulk-send-email").off("click");
 		$("#bulk-send-email").click(function(e)
@@ -1239,9 +1050,9 @@ function show_bulk_owner_change_page()
 			json.contact_ids = id_array;
 			json.data = JSON.stringify(form_json);
 			
-			var msg = "Emails have been queued for " + count + " contacts. They will be sent shortly.";
+			var msg = _agile_get_translated_val('campaigns','emails-queued') + " " + count + " " +_agile_get_translated_val('contact-details','contacts')+ ". " + _agile_get_translated_val('campaigns','emails-sent-shortly');
 			if(company_util.isCompany())
-				msg = "Emails have been queued for " + count + " companies. They will be sent shortly.";
+				msg = _agile_get_translated_val('campaigns','emails-queued') + " " + count + " " +_agile_get_translated_val('contact-details','companies')+ ". "+ _agile_get_translated_val('campaigns','emails-sent-shortly');
 
 			postBulkOperationData(url, json, $form, null, function()
 			{
@@ -1323,7 +1134,28 @@ function toggle_contacts_bulk_actions_dropdown(clicked_ele, isBulk, isCampaign)
 		var appCount = 0;
 		var limitValue = 10000;		
 
-		if(company_util.isCompany()){
+		if(company_util.isCompanyContact()){
+			$("#bulk-action-btns button").removeClass("disabled");
+			resultCount = App_Companies.contacts_Company_List.collection.length;
+			appCount = total_available_contacts;
+
+			if (isBulk && appCount != resultCount){
+				if(localStorage.getItem("dynamic_company_filter") != null || localStorage.getItem("company_filter") != null){				
+					if(resultCount > limitValue){
+						resultCount = limitValue + "+";
+					}
+
+					if(appCount > limitValue){
+						appCount = limitValue + "+";
+					}
+				}
+
+				$('body').find('#bulk-select').css('display', 'block')
+				.html(_agile_get_translated_val('companies-view','selected') + " " + resultCount + " " +_agile_get_translated_val('contact-details', 'contacts')+ ". <a id='select-all-available-contacts' class='c-p text-info-important' href='#'>" +_agile_get_translated_val('contacts','select-all')+ " " + appCount + " " +_agile_get_translated_val('contact-details', 'contacts')+ "</a>");
+				$('#bulk-select').css("display","block");
+			}
+		}
+		else if(company_util.isCompany()){
 			$("#bulk-action-btns button").removeClass("disabled");
 			resultCount = App_Companies.companiesListView.collection.length;
 			appCount = total_available_contacts;
@@ -1340,7 +1172,7 @@ function toggle_contacts_bulk_actions_dropdown(clicked_ele, isBulk, isCampaign)
 				}
 
 				$('body').find('#bulk-select').css('display', 'block')
-				.html("Selected " + resultCount + " companies. <a id='select-all-available-contacts' class='c-p text-info' href='#'>Select all " + appCount + " companies</a>");
+				.html(_agile_get_translated_val('companies-view','selected') + " " + resultCount + " " +_agile_get_translated_val('contact-details', 'companies')+ ". <a id='select-all-available-contacts' class='c-p text-info' href='#'>" +_agile_get_translated_val('contacts','select-all')+ " " + appCount + " " +_agile_get_translated_val('contact-details', 'companies')+ "</a>");
 				$('#bulk-select').css("display","block");
 			}
 		}else{
@@ -1360,7 +1192,7 @@ function toggle_contacts_bulk_actions_dropdown(clicked_ele, isBulk, isCampaign)
 				}
 
 				$('body').find('#bulk-select').css('display', 'block')
-				.html("Selected " + resultCount + " contacts. <a id='select-all-available-contacts' class='c-p text-info' href='#'>Select all " + appCount + " contacts</a>");
+				.html(_agile_get_translated_val('companies-view','selected') + " " + resultCount + " " +_agile_get_translated_val('contact-details', 'contacts')+ ". <a id='select-all-available-contacts' class='c-p text-info' href='#'>" +_agile_get_translated_val('contacts','select-all')+ " " + appCount + " " +_agile_get_translated_val('contact-details', 'contacts')+ "</a>");
 				$('#bulk-select').css("display","block");
 			}			
 		}
@@ -1412,12 +1244,19 @@ function toggle_contacts_bulk_actions_dropdown(clicked_ele, isBulk, isCampaign)
  */
 function getAvailableContacts()
 {
-		if (company_util.isCompany() && App_Companies.companiesListView.collection.toJSON()[0] && App_Companies.companiesListView.collection.toJSON()[0].count)
+		if(company_util.isCompanyContact() && App_Companies.contacts_Company_List)
+		{
+			//
+			current_view_contacts_count = App_Companies.contacts_Company_List.collection.toJSON()[0].count;
+			return current_view_contacts_count;
+		}
+		else if (company_util.isCompany() && App_Companies.companiesListView && App_Companies.companiesListView.collection.toJSON()[0] && App_Companies.companiesListView.collection.toJSON()[0].count)
 		{
 			//
 			current_view_contacts_count = App_Companies.companiesListView.collection.toJSON()[0].count;
 			return current_view_contacts_count;
-		} else if (App_Contacts.contactsListView.collection.toJSON()[0] && App_Contacts.contactsListView.collection.toJSON()[0].count)
+		}
+		 else if (App_Contacts.contactsListView.collection.toJSON()[0] && App_Contacts.contactsListView.collection.toJSON()[0].count)
 		{
 			//
 			current_view_contacts_count = App_Contacts.contactsListView.collection.toJSON()[0].count;
@@ -1440,7 +1279,9 @@ function getSelectionCriteria()
 
 	var filter_id = undefined;
 	
-	if(company_util.isCompany())
+	if(App_Companies.Company_detail_route!="")
+		filter_id = undefined;
+	else if(company_util.isCompany())
 		filter_id = $('.filter-criteria', $(App_Companies.companiesListView.el)).attr("_filter");
 	else
 		filter_id = $('.filter-criteria', $(App_Contacts.contactsListView.el)).attr("_filter");
@@ -1454,7 +1295,7 @@ function getSelectionCriteria()
 		if(filter_id)
 			return filter_id;
 		else
-			return 'Companies';
+			return _agile_get_translated_val('menu','menu-companies');
 	}
 
 	// If filter cookie is not available then it returns either '#contacts' of
@@ -1502,7 +1343,7 @@ function postBulkOperationData(url, data, form, contentType, callback, error_mes
 	$.ajax({ url : url, type : 'POST', data : data, contentType : contentType, success : function(data)
 	{
 
-		$save_info = $('<div style="display:inline-block"><small><p class="text-success"><i>Task Scheduled.</i></p></small></div>');
+		$save_info = $('<div style="display:inline-block"><small><p class="text-success"><i>' +_agile_get_translated_val('bulk-actions','task-scheduled')+'.</i></p></small></div>');
 
 		if (form !== undefined)
 		{
@@ -1519,7 +1360,9 @@ function postBulkOperationData(url, data, form, contentType, callback, error_mes
 		if (callback && typeof (callback) === "function")
 			callback(data);
 
-		if(!company_util.isCompany())
+		if(App_Companies.Company_detail_route!="")
+			Backbone.history.navigate(App_Companies.Company_detail_route,{trigger : true});
+		else if(!company_util.isCompany())
 			// On save back to contacts list
 			Backbone.history.navigate("contacts", { trigger : true });
 		else
@@ -1531,7 +1374,7 @@ function postBulkOperationData(url, data, form, contentType, callback, error_mes
 
 		if (!error_message)
 		{
-			showNotyPopUp('information', "Task scheduled", "top", 5000);
+			showNotyPopUp('information', _agile_get_translated_val('bulk-actions','task-scheduled'), "top", 5000);
 			return;
 		}
 		if(count > 20 || count == 0)

@@ -173,7 +173,9 @@ public class WorkflowUtil
 			set.add(1L);
 			set.add(userId);
 			
-			map.put("access_level in", set);
+			// Conditional check for account level private access 
+			if(dao.getCountByProperty("access_level !=", 1L) > 0)
+				map.put("access_level in", set);
 		}
 		
 		return dao.fetchAllByOrder(max, cursor, map, true, false, orderBy);

@@ -58,6 +58,7 @@ function getMergeFields(type, callback) {
 		"LinkedIn Id" : "{{linkedin_id}}",
 		"Owner Name" : "{{owner.name}}",
 		"Owner Email" : "{{owner.email}}",
+		"Owner Phone" : "{{owner.phone}}",
 		"Owner calendar URL" : "{{owner.calendar_url}}",
 		"Owner Signature" : "{{{owner.signature}}}"
 	};
@@ -596,6 +597,7 @@ function getMergeFieldsWithOptGroups(uiFieldDefinition, selectEventHandler) {
 		"Owner" : {
 			"Owner Name" : "{{owner.name}}",
 			"Owner Email" : "{{owner.email}}",
+			"Owner Phone" : "{{owner.phone}}",
 			"Owner calendar URL" : "{{owner.calendar_url}}",
 			"Owner Signature" : "{{{owner.signature}}}"
 		},
@@ -942,36 +944,3 @@ function insertSelectedOption1(ele ,target_id)
 
         return false;
 	}
-
-function getTwilioNumber(type) {
-	var numbers;
-	$.ajax({
-		url : '/core/api/widgets/TwilioIO',
-		type : "GET",
-		async : false,
-		dataType : 'json',
-		success : function(twilioWidget) {
-
-			if (twilioWidget == null)
-			return;
-
-			if (twilioWidget.prefs != undefined)
-			{
-				twilioWidget.prefs = eval("(" + twilioWidget.prefs + ")");
-				if (twilioWidget.prefs.twilio_from_number)
-					numbers = twilioWidget.prefs.twilio_from_number;
-				else
-					numbers = twilioWidget.prefs.twilio_number;
-			}
-		}
-	});
-	if (numbers == null)
-		return null;
-
-	var numbersList = {};
-	numbersList[numbers] = numbers;
-	return numbersList;
-	
-}
-	
-

@@ -1,9 +1,14 @@
 package com.campaignio.tasklets.agile;
 
+import java.util.List;
+
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.json.XML;
 
+import com.agilecrm.account.util.SMSGatewayUtil;
 import com.agilecrm.account.util.VoiceCallUtil;
+import com.agilecrm.social.TwilioUtil;
 import com.agilecrm.widgets.Widget;
 import com.amazonaws.util.StringUtils;
 import com.campaignio.logger.Log.LogType;
@@ -16,6 +21,9 @@ import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.Phonenumber.PhoneNumber;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
+import com.thirdparty.twilio.sdk.TwilioRestClient;
+import com.thirdparty.twilio.sdk.TwilioRestException;
+import com.thirdparty.twilio.sdk.TwilioRestResponse;
 
 /**
  * <code>VoiceCall</code> represents call node in workflow. It send a voice call
@@ -39,7 +47,7 @@ public class CallNode extends TaskletAdapter
     /**
      * Call Gateway Registered From Number
      */
-    private static String TWILIO_NUMBER   = "twilio_number";
+    private static List<String> TWILIO_NUMBER   = null;
     
     /**
      * From Number from node
@@ -139,27 +147,29 @@ public class CallNode extends TaskletAdapter
 	return false;
     }
     
-    private boolean checkValidFromNumberForCall(String from) throws JSONException
+    private boolean checkValidFromNumberForCall(String from) throws JSONException, TwilioRestException
     {
 	Objectify ofy = ObjectifyService.begin();
-	Widget widgetObj = ofy.query(Widget.class).filter("name", "TwilioIO").get();
-	JSONObject prefsJSON = new JSONObject(widgetObj.prefs);
+	//for calling only admin can set credential that's why here sms-gateway is used
+	 Widget twilioObj = SMSGatewayUtil.getSMSGatewayWidget();
+	 if(twilioObj==null)
+		return false;
+	JSONObject prefsJSON = new JSONObject(twilioObj.prefs);
+	if(!prefsJSON.getString("sms_api").equalsIgnoreCase("TWILIO"))
+		return false;
 	
-	if (prefsJSON.length() != 0 && prefsJSON.has("twilio_acc_sid"))
-	    CALL_ACCOUNT_ID = prefsJSON.get("twilio_acc_sid").toString();
-	if (prefsJSON.length() != 0 && prefsJSON.has("twilio_auth_token"))
-	    CALL_AUTH_TOKEN = prefsJSON.get("twilio_auth_token").toString();
-	if (prefsJSON.has("twilio_from_number") && prefsJSON.get("twilio_from_number") != null
-		&& !prefsJSON.get("twilio_from_number").toString().isEmpty())
-	    TWILIO_NUMBER = prefsJSON.get("twilio_from_number").toString();
-	else if (prefsJSON.has("twilio_number") && prefsJSON.get("twilio_number") != null
-		&& !prefsJSON.get("twilio_number").toString().isEmpty())
-	    TWILIO_NUMBER = prefsJSON.get("twilio_number").toString();
+	if (prefsJSON.length() != 0 && prefsJSON.has("account_sid"))
+	    CALL_ACCOUNT_ID = prefsJSON.get("account_sid").toString();
+	if (prefsJSON.length() != 0 && prefsJSON.has("auth_token"))
+	    CALL_AUTH_TOKEN = prefsJSON.get("auth_token").toString();
+
+	//getting twilio from number    
+	TWILIO_NUMBER=SMSGatewayUtil.incomingNumbers(twilioObj);
 	
 	if (TWILIO_NUMBER.isEmpty() || TWILIO_NUMBER == null)
 	    return false;
 	
-	if (TWILIO_NUMBER.equalsIgnoreCase(from))
+	if (TWILIO_NUMBER.contains(from))
 	    return true;
 	
 	return false;

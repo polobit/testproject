@@ -7,11 +7,13 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.Tag;
+import com.agilecrm.contact.util.ContactUtil;
 
 /**
  * <code>ContactCSVExport</code> handles building CSV file for obtained
@@ -71,8 +73,9 @@ public class ContactCSVExport
     public static final String ZIP = "Zip Code";
 
     public static final String TAGS = "Tags";
-    public static final String TAGS_TIME = "Tags time";
-    
+    public static final String TAGS_TIME = "Tags Time Epoch";
+    public static final String TAGS_TIME_NEW = "Tags Time";
+
     //specific to company
     public static final String NAME = "Name";
     public static final String URL = "Url";
@@ -80,6 +83,7 @@ public class ContactCSVExport
     //created time column added - 05.06 - prakash
     public static final String CREATED_TIME = "Created Date";
     private static final DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+    private static final DateFormat dateTimeFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
     /**
      * Inserts contact properties into CSV w.r.t header name.
      * 
@@ -249,8 +253,31 @@ public class ContactCSVExport
 		try
 		{
 		    // add if not null
-		    if (field.value != null)
+		    if (field.value != null){
 		    	setFieldAtIndex(field.name, field.value, str, indexMap);
+		    	try{
+			    	Integer index = indexMap.get(field.name + " Name");
+			    	if(index != null){  // if the dynamic index is present then it denotes that the custom filed is contact or company type
+			    		List<Contact> contacts = ContactUtil.getContactsBulk(new JSONArray(field.value)) ;
+			    		if (contacts.size() > 0) {
+			    			StringBuilder contactName = new StringBuilder("[");
+				    		for(Contact cont : contacts){
+				    			if(cont.type.equals(Contact.Type.PERSON)){
+				    				contactName.append(cont.first_name);
+					    			contactName.append(cont.last_name);
+				    			}else{
+				    				contactName.append(cont.name);
+				    			}
+				    			
+				    			contactName.append(",");
+				    		}
+				    		contactName.replace(contactName.length()-1, contactName.length(),"");
+				    		contactName.append("]");
+				    		setFieldAtIndex(field.name+" Name", contactName.toString(), str, indexMap); // this is to show the name of the contact	
+			    		}
+			    	}		    			
+		    	}catch(Exception e){}
+		    }
 		}
 		catch (Exception e)
 		{
@@ -267,6 +294,7 @@ public class ContactCSVExport
 	
 	setFieldAtIndex(TAGS, tagWithTimes[0], str, indexMap);
 	setFieldAtIndex(TAGS_TIME, tagWithTimes[1], str, indexMap);
+	setFieldAtIndex(TAGS_TIME_NEW, tagWithTimes[2], str, indexMap);
 
 	//Add creted time in MM/dd/yyyy format
 	Date date = new Date();
@@ -288,15 +316,20 @@ public class ContactCSVExport
     {
 	String tags = "";
 	String tagTimes = "";
+	String tagTimesNew = "";
 
 	for (Tag tag : contact.tagsWithTime)
 	{
 	    tags += tag.tag + ",";
 	    tagTimes += tag.createdTime + ",";
+	    
+	    Date date = new Date();
+		date.setTime(tag.createdTime);	
+	    tagTimesNew += dateTimeFormat.format(date) + ",";
 	}
 
 	// Return array having tags and tagTimes without trailing commas
-	return new String[] { StringUtils.chop(tags), StringUtils.chop(tagTimes) };
+	return new String[] { StringUtils.chop(tags), StringUtils.chop(tagTimes), StringUtils.chop(tagTimesNew)};
     }
     
     private static void setFieldAtIndex(String fieldName, String fieldValue, String[] values, Map<String, Integer> indexMap) {

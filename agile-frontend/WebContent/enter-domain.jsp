@@ -209,9 +209,9 @@ padding-left:10px!important;
 		function isAlphaNumeric(subdomain) {
 			subdomain = subdomain.toString();
 		  
-		  var regularExpression  = new RegExp(/^[A-Za-z][a-zA-Z0-9]{1,20}$/);
+		  var regularExpression  = new RegExp(/^[a-zA-Z0-9][a-zA-Z0-9_-]{1,20}$/);
 		  if(!regularExpression.test(subdomain)) {
-		        error = "Domain should start with alphabet and special characters not allowed.";
+		        error = " Name should be between 4-20 characters in length. Both letters and numbers are allowed but it should start with a letter. Cannot contain special characters other than '_' and '-'";
 				return false;
 		    }
 		  return true;
