@@ -207,7 +207,8 @@ font-family:sans-serif;
 box-sizing: border-box;
 }
 .theme2 .agile-field{
-width:300px;
+/*width:300px;*/
+width:90%;
 }
 .theme2 button{
 background-color: #23b7e5;
@@ -248,7 +249,8 @@ background-color: #fbfbfb;
 color: #333;
 }
 .theme2 .agile-input-group{
-  width: 300px;
+  /*width: 300px;*/
+  width:100%;
 }
  .theme2 input::-webkit-input-placeholder,.theme2 button{
   font-family:sans-serif;
@@ -357,7 +359,8 @@ font-family:sans-serif;
 box-sizing: border-box;
 }
 .theme3 .agile-field{
-  width:300px;
+  /*width:300px;*/
+  width:90%;
 }
 .theme3 button{
  background-color: #00ada7;
@@ -396,7 +399,8 @@ margin-bottom: 0;
 background-color: #d9ede2;
 }
 .theme3 .agile-input-group{
-width: 300px;
+/*width: 300px;*/
+width:100%;
 }
 .theme3 input::-webkit-input-placeholder,.form1 button{
 font-family:sans-serif;
@@ -505,7 +509,8 @@ font-family:sans-serif;
 box-sizing: border-box;
 }
 .theme4 .agile-field{
-width:300px;
+/*width:300px;*/
+width:90%;
 }
 .theme4 button{
 background-color: #77c4d4;
@@ -547,7 +552,8 @@ background-color: #77c4d4;
 color: #fff;
 }
 .theme4 .agile-input-group{
-width: 300px;
+/*width: 300px;*/
+width:100%;
 }
 .theme4 .agile-input-group input{
 padding: 10px 20px !important;
