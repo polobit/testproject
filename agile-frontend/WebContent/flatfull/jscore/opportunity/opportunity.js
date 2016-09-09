@@ -703,6 +703,7 @@ function fetchDealsList(data){
         templateKey : "opportunities", individual_tag_name : 'tr', sort_collection : false, cursor : true, page_size : 25,
         postRenderCallback : function(el)
         {
+
         	$("#deals-new-milestone-view", $("#opportunity-listners")).hide();
         	$('#deals-tracks',$("#opportunity-listners")).hide();
         	$("#deals-new-list-view", $("#opportunity-listners")).show();
@@ -715,6 +716,8 @@ function fetchDealsList(data){
             includeTimeAgo(el);
             initializeDealListners(el);
             contactListener();
+            getRelatedContactImages(App_Deals.opportunityCollectionView.collection);
+
             setTimeout(function(){
                 $('#delete-checked',el).attr("id","deal-delete-checked");
             },500);
@@ -726,8 +729,8 @@ function fetchDealsList(data){
             includeTimeAgo(el);
 
         } });
-    App_Deals.opportunityCollectionView.collection.fetch();
 
+    App_Deals.opportunityCollectionView.collection.fetch();
     $('.new-collection-deal-list', $("#opportunity-listners")).html(App_Deals.opportunityCollectionView.render().el);
 }
 
@@ -901,4 +904,32 @@ function setupTracksAndMilestones(el){
 			}
 		});
 	}
+}
+function getRelatedContactImages(collection){
+	
+	var referenceContactIds = [];
+	for(var i=0;i<collection.length;i++){
+		for(var j=0;j<collection.models[i].get("contacts").length;j++){
+			referenceContactIds.push(collection.models[i].get("contacts")[j].id);
+		}
+		
+
+	}
+	var contactid = [];
+	$.ajax({ url : "/core/api/contacts/taskreferences",method:"POST",data:JSON.stringify(referenceContactIds),dataType:"json",success : function(data)
+			{
+				$.each(data, function(j, item) {
+					if(jQuery.inArray(item.id,contactid) == -1){
+						contactid.push(item.id);
+						for(var k=0;k<(item.properties).length;k++){
+							if(item.properties[k].name == "image"){
+		    					$(".img"+item.id).attr("src", item.properties[k].value);
+		    				}
+						}
+					};
+					
+    			});
+			} 
+		});
+
 }
