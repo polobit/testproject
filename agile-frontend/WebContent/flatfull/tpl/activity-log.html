@@ -1030,9 +1030,15 @@ Added {{custom3}} {{agile_lng_translate 'contacts-view' 'contact-to-campaign'}}<
 	{{/unless}}
 	</span>  
 {{/if_equals}}
+
 {{#if_equals "CAMPAIGN_DELETE" activity_type}}
 {{agile_lng_translate 'contacts-view' 'deleted-campaign'}} '{{label}}'
 {{/if_equals}}
+
+{{#if_equals "CAMPAIGN_RESTORE" activity_type}}
+	Restored Campaign {{label}}
+{{/if_equals}}
+
 {{#if_equals "BULK_DELETE" activity_type}}
   {{#if_equals "1" custom1}}
   {{agile_lng_translate 'contacts-view' 'deleted'}} {{custom1}} {{agile_lng_translate 'contact-details' 'campaign'}} 

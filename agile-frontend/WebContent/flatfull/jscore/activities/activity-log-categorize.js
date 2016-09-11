@@ -113,7 +113,10 @@ $("#activities-listners").on('click', '.email-details', function(e) {
 				var is_equal = _.isEqual(updated_workflow_rules, workflow_backup_rules);
 
 				if(is_equal)
+				{
+					$campaign_history_details.html("<p>No node got modified.</p>");
 					return;
+				}
 
 				get_campaign_changes(updated_workflow_rules, workflow_backup_rules, function(changes_map){
 

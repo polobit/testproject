@@ -360,17 +360,20 @@ var Workflow_Model_Events = Base_Model_View.extend({
                 contentType: 'application/json',
                 success: function(workflow_model_json)
                 {
-                   App_Workflows.workflow_model.set("rules", JSON.stringify(workflow_model_json.rules));
-                   //window.document.getElementById('designer').src = window.document.getElementById('designer').src;
-                   //window.frames.designer.deserialize();
-                   //window.frames.designer.deserializePhoneSystem(JSON.stringify(workflow_model_json.rules));
+                    App_Workflows.workflow_model.set("rules", workflow_model_json.rules);
+                   
+                    App_Workflows.workflow_json = App_Workflows.workflow_model.get("rules");
+                    App_Workflows.is_disabled = App_Workflows.workflow_model.get("is_disabled");
 
                    // Reload iframe
                    var iframe = document.getElementById("designer");
                    iframe.src = iframe.src;
 
                    show_campaign_save(e, "Restored workflow successfully.");
-                }
+                }, 
+                error: function() {
+                   show_campaign_save(e, "No backup is available to restore.", "red");
+                 }
              })
          }, function decline(modal){
 
