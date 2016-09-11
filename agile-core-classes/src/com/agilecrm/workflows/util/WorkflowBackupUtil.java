@@ -1,5 +1,8 @@
 package com.agilecrm.workflows.util;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.workflows.WorkflowBackup;
 import com.google.appengine.api.datastore.EntityNotFoundException;
@@ -11,7 +14,10 @@ public class WorkflowBackupUtil
 	
 	public static WorkflowBackup getWorkflowBackup(Long workflowId) throws EntityNotFoundException
 	{
-		return dao.get(workflowId);
+		Map<String, Object> conditionsMap = new HashMap<String, Object>();
+		conditionsMap.put("workflow_id", workflowId);
+				
+		return dao.getByProperty(conditionsMap);
 	}
 	
 }

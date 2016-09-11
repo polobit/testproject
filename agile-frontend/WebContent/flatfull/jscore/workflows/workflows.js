@@ -836,3 +836,103 @@ function showHide_UnsubscribeEmail_Status(alertMsg){
     }
     
 }
+
+/**
+* Returns campaign modify changes
+*
+* @param updated_workflow_json - updated workflow rules json
+* @param old_workflow_json - old workflow rules json
+**/
+function get_campaign_changes(updated_workflow_json, old_workflow_json, callback)
+{
+    var update_nodes = JSON.parse(updated_workflow_json).nodes;
+    var old_nodes = JSON.parse(old_workflow_json).nodes;
+
+    var map = {"ADDED":[], "MODIFIED":[], "DELETED": []};
+    // var modified_table = {NodeName, Action, FieldName, Previous Value, New Value};
+
+    head.js(LIB_PATH  'lib/underscore-min.1.8.3.js', function(){
+        
+        for(var i=0; i < update_nodes.length; i++){
+        
+            // If Start node
+            if(update_nodes[i].id == "PBXNODE1")
+                continue;
+
+            // Finding in Old workflow json
+            var old_node = _.findWhere(old_nodes, {id: update_nodes[i].id});
+            
+            if(old_node)
+            {
+                //Check both nodes are same or not?
+                var is_equal = _.isEqual(old_node.JsonValues, update_nodes[i].JsonValues);
+
+                if(is_equal)
+                {
+                    // Do Nothing
+                }
+                else
+                {
+                    console.log("Node Modified...");
+                    
+                    // Modified Field Values
+                    var modified_field_values = [];
+                    for(var j=0; j< update_nodes[i].JsonValues.length; j++)
+                    {
+
+                        var updated_node_field = update_nodes[i].JsonValues[j];
+                        var old_node_field  = _.findWhere(old_node.JsonValues, 
+                                                        {name: updated_node_field.name});
+
+                        // Compare update field and old field
+                        var node_equal = _.isEqual(updated_node_field, old_node_field);
+
+                        console.log(node_equal);
+                        console.log("Node.................." +  updated_node_field.name);
+
+                        if(!node_equal)
+                        {
+                            var modified_field = {};
+                            modified_field.node_name = update_nodes[i].displayname;
+                            modified_field.name = updated_node_field.name;
+                            
+                            modified_field.old_value = old_node_field.value;
+                            modified_field.new_value = updated_node_field.value;
+
+                            modified_field_values.push(modified_field);
+                        }
+
+                    }
+
+                    map["MODIFIED"].push(modified_field_values);
+                }
+
+                // Remove existing node from old_nodes
+                old_nodes = _.without(old_nodes, old_node);
+
+            }
+            else
+            {
+                console.log("Newly Added....");
+                map["ADDED"].push("Node " + update_nodes[i].displayname + " is added.");
+            }
+        }
+
+         // If still nodes exists, those are deleted nodes in updated workflow
+        for(var i=0; i< old_nodes.length; i++){
+
+            if(old_nodes[i].id == "PBXNODE1")
+                continue;
+
+            console.log("Node deleted..." + old_nodes[i].displayname);
+
+            map["DELETED"].push("Node " + old_nodes[i].displayname + " is deleted.");
+        }
+
+
+        if(callback && typeof callback == "function"){
+            callback(map);
+        }
+
+    });
+}

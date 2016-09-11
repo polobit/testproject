@@ -1011,9 +1011,24 @@ Added {{custom3}} {{agile_lng_translate 'contacts-view' 'contact-to-campaign'}}<
 {{/if_equals}}
 {{#if_equals "CAMPAIGN_EDIT" activity_type}}
 {{agile_lng_translate 'contacts-view' 'modified-a-campaign'}} {{#if this.entityObject}} <a href="#workflow/{{entity_id}}">{{label}}</a>{{else}}'{{label}}'{{/if}}<br/>	
-<small class="activities_second_line m-t-none text-sm">
- {{#unless this.entityObject}}<i class="icon-sitemap icon-white"></i> {{agile_lng_translate 'contacts-view' 'campaign-deleted-later'}} {{/unless}}
-</span>  
+	{{agile_lng_translate 'contacts-view' 'modified-a-campaign'}}
+	{{#if this.entityObject}}
+		<a href="#workflow/{{entity_id}}">{{label}}</a><br/>
+		{{!--Campaign History Block--}}
+		<div class="campaign-history-block" data-entity-id='{{entity_id}}' style='display: none;'>
+			<a href="#" id="campaign-modify-history" data-entity="{{bindData entityObject}}">
+			Details</br>
+			<div class='campaign-history-details'></div>
+		</div>
+	{{else}}
+		'{{label}}'
+	{{/if}}<br/>
+	
+	<small class="activities_second_line m-t-none text-sm">
+	{{#unless this.entityObject}}
+		<i class="icon-sitemap icon-white"></i> {{agile_lng_translate 'contacts-view' 'campaign-deleted-later'}} 
+	{{/unless}}
+	</span>  
 {{/if_equals}}
 {{#if_equals "CAMPAIGN_DELETE" activity_type}}
 {{agile_lng_translate 'contacts-view' 'deleted-campaign'}} '{{label}}'
@@ -1411,6 +1426,55 @@ Added {{custom3}} {{agile_lng_translate 'contacts-view' 'contact-to-campaign'}}<
 </div>
 </div>
 </script>
+
+<script id="activity-campaign-history-modify-template" type="text/html">
+<div>
+{{#unless this}}
+<p>Nothing changed.</p>
+{{/unless}}
+
+{{#if ADDED}}
+<ul>
+	<li><b>Added</b></li>
+	{{#each ADDED}}
+		<li>{{this}}</li>
+	{{/each}}
+</ul>
+{{/if}}
+{{#if MODIFIED}}
+	<table class="table table-striped" style="margin-left: 5%; width: 50%; border: solid 1px whitesmoke;">
+		<thead>
+			<tr>
+				<th>Node Name</th>
+				<th>Field Name</th>
+				<th>Old Value</th>
+				<th>New Value</th>
+			</tr>
+		</thead>
+		<tbody>
+			{{#each MODIFIED}}
+				{{#each this}}
+					<tr>
+						<td>{{node_name}}</td>
+						<td>{{name}}</td>
+						<td>{{old_value}}</td>
+						<td>{{new_value}}</td>
+					</tr>
+				{{/each}}
+			{{/each}}
+		</tbody>
+	</table>
+{{/if}}
+
+{{#if DELETED}}
+<ul>
+<li><b>Deleted</b></li>
+{{#each DELETED}}
+	<li>{{this}}</li>
+{{/each}}
+</ul>{{/if}}
+</div>
+ </script>
 
     Contact GitHub API Training Shop Blog About 
 

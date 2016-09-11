@@ -601,10 +601,24 @@ public class WorkflowsAPI {
 			throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND).entity("No backup yet").build());
 		
 		Workflow workflow = WorkflowUtil.getWorkflow(backup.campaign_id);
-		workflow.rules = backup.rules;
+		workflow.rules = backup.getRules();
 		workflow.setSkip_verify(true);
 		workflow.save();
 		
 		return workflow;
 	}
+	
+	 @Path("/backups/get/{id}")
+     @GET
+     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+     public WorkflowBackup getWorkflowBackup(@PathParam("id") Long workflowId) throws EntityNotFoundException
+     {
+         WorkflowBackup backup =  WorkflowBackupUtil.getWorkflowBackup(workflowId);
+         
+         if(backup == null)
+                 throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND).entity("No backup yet").build());
+         
+         return backup;
+     }
+
 }

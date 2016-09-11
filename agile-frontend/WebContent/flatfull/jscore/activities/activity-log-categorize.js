@@ -85,6 +85,56 @@ $("#activities-listners").on('click', '.email-details', function(e) {
 
 });
 
+	$("#activities-listners").on('click', '#campaign-modify-history', function(e) 
+	{
+		e.preventDefault();
+
+		var updated_workflow = $(this).data('entity');
+		var updated_workflow_rules = updated_workflow.rules;
+
+		var $campaign_history_details = $(this).parent().find('div.campaign-history-details');
+		// $(this).find("i").toggleClass('icon-plus').toggleClass('icon-minus');
+
+		if($campaign_history_details.html())
+		{
+			$campaign_history_details.slideToggle("slow");
+			return;
+		}
+
+		$.ajax({
+			url: 'core/api/workflows/backups/get/' + updated_workflow.id,
+			dataType: 'json',
+			method: 'GET',
+			contentType: 'application/json',
+			success: function(workflow_backup){
+
+				var workflow_backup_rules = workflow_backup.rules;
+
+				var is_equal = _.isEqual(updated_workflow_rules, workflow_backup_rules);
+
+				if(is_equal)
+					return;
+
+				get_campaign_changes(updated_workflow_rules, workflow_backup_rules, function(changes_map){
+
+						var details = "";
+
+						details = getTemplate('activity-campaign-history-modify', changes_map);
+						
+						$campaign_history_details.html(details);
+						$campaign_history_details.slideToggle("slow");
+				});
+			},
+
+			error: function(){
+
+				$campaign_history_details.html("<p>No backups found for this campaign.</p>");
+				$campaign_history_details.slideToggle("slow");
+			}
+
+		});	
+	});
+
 }
 
 function getEventObject(id, callback)
