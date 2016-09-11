@@ -20,6 +20,7 @@ var Workflow_Model_Events = Base_Model_View.extend({
         'change #disable-workflow':'saveCampaignClick',
         'change .emailSelect,click .emailSelect' : 'fillDetails',
         'click #campaign_access_level': 'accessLevelChange',
+        'click #campaign-restore-alert': 'showRestoreAlert'
     },
 
     fillDetails : function(e)
@@ -343,6 +344,37 @@ var Workflow_Model_Events = Base_Model_View.extend({
         // Change ui text
         change_access_level(level, this.el);
 
+    },
+
+    showRestoreAlert: function(e){
+        e.preventDefault();
+
+        showAlertModal("Are you sure to restore workflow from latest update?", "confirm",
+         function confirm(modal)
+         {
+
+            $.ajax({
+                url: 'core/api/workflows/restore?workflow_id='  App_Workflows.workflow_model.get("id"),
+                method: 'POST',
+                dataType: 'json',
+                contentType: 'application/json',
+                success: function(workflow_model_json)
+                {
+                   App_Workflows.workflow_model.set("rules", JSON.stringify(workflow_model_json.rules));
+                   //window.document.getElementById('designer').src = window.document.getElementById('designer').src;
+                   //window.frames.designer.deserialize();
+                   //window.frames.designer.deserializePhoneSystem(JSON.stringify(workflow_model_json.rules));
+
+                   // Reload iframe
+                   var iframe = document.getElementById("designer");
+                   iframe.src = iframe.src;
+
+                   show_campaign_save(e, "Restored workflow successfully.");
+                }
+             })
+         }, function decline(modal){
+
+         }, "Restore Workflow");  
     }
 
 });

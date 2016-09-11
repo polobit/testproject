@@ -127,6 +127,12 @@ public class Workflow extends Cursor {
 	
 	@Indexed
 	public Long access_level = 1L;  
+	
+	/**
+	 * 
+	 */
+	@NotSaved
+	private boolean skip_verify = false;
 
 	/**
 	 * Initialize DataAccessObject.
@@ -168,11 +174,23 @@ public class Workflow extends Cursor {
 
 	public void setRoundRobinKey(Key<DomainUser> roundRobinKey) {
 		this.round_robin_owner_key = roundRobinKey;
+		
+		this.skip_verify = true;
 	}
 
 	@JsonIgnore
 	public Key<DomainUser> getRoundRobinKey() {
 		return round_robin_owner_key;
+	}
+	
+	public boolean isSkip_verify()
+	{
+		return skip_verify;
+	}
+	
+	public void setSkip_verify(boolean skip_verify)
+	{
+		this.skip_verify = skip_verify;
 	}
 
 	/**
@@ -291,7 +309,8 @@ public class Workflow extends Cursor {
 		Workflow oldWorkflow = null;
 		
 		// Old workflow
-		if (id != null) {
+		if (id != null && !skip_verify) {
+			
 			// to compare given name with existing ones.
 			oldWorkflow = WorkflowUtil.getWorkflow(id);
 
@@ -304,9 +323,22 @@ public class Workflow extends Cursor {
 									.entity("Please change the given name. Same kind of name already exists.")
 									.build());
 			}
+			
+			// Saves Workflow Backup
+			saveWorkflowBackup(oldWorkflow);
 		}
 			
 		setAccessLevel(oldWorkflow);
+	}
+	
+	public void saveWorkflowBackup(Workflow oldWorkflow)
+	{
+		Long updatedTime = (oldWorkflow.updated_time == null) ? oldWorkflow.created_time : oldWorkflow.updated_time;
+		WorkflowBackup workflowBackup = new WorkflowBackup(oldWorkflow.id, updatedTime, oldWorkflow.rules);
+		
+		long startTime = System.currentTimeMillis();
+		workflowBackup.saveAsync();
+		System.out.println("Time taken to workflow backup..." + (System.currentTimeMillis() - startTime));
 	}
 
 	/**

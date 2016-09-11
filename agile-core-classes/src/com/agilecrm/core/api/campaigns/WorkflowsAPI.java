@@ -37,14 +37,17 @@ import com.agilecrm.util.MD5Util;
 import com.agilecrm.util.VersioningUtil;
 import com.agilecrm.util.email.SendMail;
 import com.agilecrm.workflows.Workflow;
+import com.agilecrm.workflows.WorkflowBackup;
 import com.agilecrm.workflows.status.CampaignStatus;
 import com.agilecrm.workflows.status.util.CampaignStatusUtil;
 import com.agilecrm.workflows.status.util.CampaignSubscribersUtil;
 import com.agilecrm.workflows.unsubscribe.util.UnsubscribeStatusUtil;
+import com.agilecrm.workflows.util.WorkflowBackupUtil;
 import com.agilecrm.workflows.util.WorkflowDeleteUtil;
 import com.agilecrm.workflows.util.WorkflowUtil;
 import com.campaignio.cron.util.CronUtil;
 import com.google.appengine.api.NamespaceManager;
+import com.google.appengine.api.datastore.EntityNotFoundException;
 
 /**
  * <code>WorkflowsAPI</code> includes REST calls to interact with
@@ -585,5 +588,23 @@ public class WorkflowsAPI {
 			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
 					.build());
 		}
+	}
+	
+	@Path("/restore")
+	@POST
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	public Workflow restoreWorkflow(@QueryParam("workflow_id") Long workflowId) throws EntityNotFoundException
+	{
+		WorkflowBackup backup =  WorkflowBackupUtil.getWorkflowBackup(workflowId);
+		
+		if(backup == null)
+			throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND).entity("No backup yet").build());
+		
+		Workflow workflow = WorkflowUtil.getWorkflow(backup.campaign_id);
+		workflow.rules = backup.rules;
+		workflow.setSkip_verify(true);
+		workflow.save();
+		
+		return workflow;
 	}
 }
