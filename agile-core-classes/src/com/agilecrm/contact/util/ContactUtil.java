@@ -21,6 +21,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import com.agilecrm.AgileQueues;
+import com.agilecrm.activities.Category;
 import com.agilecrm.activities.util.ActivitySave;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Contact.Type;
@@ -2197,5 +2198,56 @@ public static Contact searchMultipleContactByEmail(String email,Contact contact)
 	    return dao.fetchAllByOrder(max, cursor, searchMap, false, true, sortKey);
 
 	return dao.listByPropertyAndOrder(searchMap, sortKey);
+    }
+    
+    /**
+     * Updates leads with new status
+     * 
+     * @param contacts_list
+     *            contacts collection to updated leads
+     * @param new_status
+     *            update leads with new status
+     * @return
+     */
+    public static void changeStatusToLeadsBulk(List<Contact> contacts_list, String new_status)
+    {
+	if (contacts_list.size() == 0 || new_status == null)
+	{
+	    return;
+	}
+	
+	Key<Category> newStatusKey = new Key<Category>(Category.class, Long.parseLong(new_status));
+	
+	// Enables to build "Document" search on current entity
+	AppengineSearch<Contact> search = new AppengineSearch<Contact>(Contact.class);
+
+	ContactDocument contactDocuments = new ContactDocument();
+	List<Builder> builderObjects = new ArrayList<Builder>();
+	int i = 0;
+	for (Contact contact : contacts_list)
+	{
+
+	    String statusId = String.valueOf(contact.getLead_status_id());
+
+	    if (statusId != null && !statusId.equals(new_status))
+	    {
+			//contact.setLead_status_id(Long.valueOf(new_status));
+			contact.setLeadStatus(newStatusKey);
+			builderObjects.add(contactDocuments.buildDocument(contact));
+			++i;
+	    }
+
+	    if (i >= 50)
+	    {
+		search.index.put(builderObjects.toArray(new Builder[builderObjects.size() - 1]));
+		builderObjects.clear();
+		i = 0;
+	    }
+	}
+
+	if (builderObjects.size() >= 1)
+	    search.index.put(builderObjects.toArray(new Builder[builderObjects.size() - 1]));
+
+	Contact.dao.putAll(contacts_list);
     }
 }

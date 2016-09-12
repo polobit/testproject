@@ -378,6 +378,14 @@ public class Contact extends Cursor
 		this.lead_converted_time = lead_converted_time;
 	}
 
+	public void setLeadSource(Key<Category> leadSource) {
+		this.leadSource = leadSource;
+	}
+
+	public void setLeadStatus(Key<Category> leadStatus) {
+		this.leadStatus = leadStatus;
+	}
+
 	/**
      * Default constructor
      */
@@ -1283,18 +1291,18 @@ public class Contact extends Cursor
 	
 	if(this.type == Type.LEAD || (this.lead_converted_time != null && this.lead_converted_time > 0))
 	{
-		if(lead_source_id != null && lead_source_id > 0)
+		if(this.lead_source_id != null && this.lead_source_id > 0)
 		{
-			this.leadSource = new Key<Category>(Category.class, lead_source_id);
+			this.leadSource = new Key<Category>(Category.class, this.lead_source_id);
 		}
 		
-		if(lead_status_id != null && lead_status_id > 0)
+		if(this.lead_status_id != null && this.lead_status_id > 0)
 		{
-			this.leadStatus = new Key<Category>(Category.class, lead_status_id);
+			this.leadStatus = new Key<Category>(Category.class, this.lead_status_id);
 		}
 	}
 	
-	if(this.is_lead_converted)
+	if(this.is_lead_converted && (this.lead_converted_time == null || (this.lead_converted_time != null && this.lead_converted_time == 0)))
 	{
 		this.lead_converted_time = System.currentTimeMillis() / 1000;
 	}

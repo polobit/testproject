@@ -52,7 +52,8 @@ public class BulkActionUtil
 		"/core/api/bulk-actions/contacts/export-contacts-csv", AgileQueues.CONTACTS_EXPORT_QUEUE), EXPORT_COMPANIES_CSV(
 		"/core/api/bulk-actions/contacts/export-companies-csv", AgileQueues.CONTACTS_EXPORT_QUEUE), REMOVE_TAG(
 		"/core/api/bulk-actions/contact/remove-tags", AgileQueues.BULK_ACTION_QUEUE), EXPORT_LEADS_CSV(
-				"/core/api/bulk-actions/contacts/export-leads-csv", AgileQueues.CONTACTS_EXPORT_QUEUE);
+		"/core/api/bulk-actions/contacts/export-leads-csv", AgileQueues.CONTACTS_EXPORT_QUEUE), CHANGE_STATUS(
+		"/core/api/bulk-actions/change-status/%s", AgileQueues.BULK_ACTION_QUEUE);
 
 	String url, queue;
 
@@ -483,6 +484,45 @@ public class BulkActionUtil
 	    return ContactUtil.getAllCompanies(ENTITIES_FETCH_LIMIT, cursor);
 
 	return new ArrayList<Contact>(ContactFilterUtil.getContacts(criteria, ENTITIES_FETCH_LIMIT, cursor, null));
+    }
+    
+    /**
+     * Formats url with status id. It is called when action is to be performed
+     * based on lead ids list
+     * 
+     * @param data
+     * @param parameter
+     * @param url
+     * @param contentType
+     * @param type
+     */
+    public static void changeStatus(byte[] data, Map<String, Object> parameter, String url, String contentType,
+	    Method type)
+    {
+	String statusId = ((String[]) parameter.get("status"))[0];
+	url = String.format(url, statusId);
+
+	BulkActionUtil.postDataToBulkActionBackend(data, url, contentType, type, AgileQueues.BULK_ACTION_QUEUE);
+    }
+    
+    /**
+     * Formats url with status id. It is called when action is to be performed
+     * based on filter criteria
+     * 
+     * @param id
+     * @param parameter
+     * @param url
+     * @param contentType
+     * @param type
+     */
+    public static void changeStatus(String id, Map<String, Object> parameter, String url, String contentType, Method type)
+    {
+	String statusId = ((String[]) parameter.get("status"))[0];
+	url = String.format(url, statusId);
+
+	System.out.println("url to send : " + url);
+
+	BulkActionUtil.postDataToBulkActionBackend(url, contentType, AgileQueues.BULK_ACTION_QUEUE, type, id);
     }
 
 }

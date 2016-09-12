@@ -328,7 +328,7 @@ public class ContactCSVExport
 		{
 			status_name = status_map.get(status_id);
 		}
-		setFieldAtIndex(LEAD_SOURCE, status_name, str, indexMap);
+		setFieldAtIndex(LEAD_STATUS, status_name, str, indexMap);
 	}
 	
 	return str;

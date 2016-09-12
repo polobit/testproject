@@ -111,6 +111,7 @@ var LeadsBulkActions = (function(){
 
 	LeadsBulkActions.prototype.postBulkOperationData = function(url, data, form, contentType, callback, error_message)
 	{
+		var id_array = data.contact_ids;
 		var that = this;
 		var count = data.contact_ids.length;
 		var dynamic_filter = this.getDynamicFilters();
@@ -130,6 +131,11 @@ var LeadsBulkActions = (function(){
 		}
 		else
 			data.contact_ids = JSON.stringify(data.contact_ids);
+
+		if(url == "/core/api/contacts/delete?action=DELETE")
+		{
+			data.ids = data.contact_ids;
+		}
 
 		data.tracker = Math.floor(Math.random() * (10000 - 1)) + 1;
 		contentType = contentType != undefined ? contentType : "application/x-www-form-urlencoded";
@@ -168,11 +174,22 @@ var LeadsBulkActions = (function(){
 			if(count > 20 || count == 0)
 				showNotyPopUp('information', error_message, "top", 5000);
 
-			if(url == "/core/api/bulk/update?action_type=DELETE")
+			if(url == "/core/api/contacts/delete?action=DELETE")
 			{
-				$("#leads-table > tbody > tr").fadeOut(300, function() { $(this).remove(); });
-				$("#bulk-delete", $("#leads-table")).find("img").remove();
-				that.toggleLeadsBulkActions();
+				var $trEle = $("#leads-table > tbody > tr");
+				for(var i=0;i<id_array.length;i++)
+				{
+					$trEle.find("td[data="+id_array[i]+"]:first").parent().fadeOut(300, function() { $(this).remove(); });
+				}
+				$("#bulk-delete", $("#bulk-action-btns")).find("img").remove();
+				if($(".thead_check").is(":checked"))
+				{
+					$(".thead_check").trigger("click");
+				}
+				else
+				{
+					$("#bulk-action-btns", $(".leads-div")).find("button").attr("disabled", true);
+				}
 			}
 		} });
 	}

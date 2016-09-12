@@ -36,9 +36,9 @@ var timeline_entity_loader = {
 		var contactId = contact['id'];
 
 		this.load_related_entites(contactId);
+		this.load_stats(contact);
 		if((contact && contact.type != "LEAD") || !contact)
 		{
-			this.load_stats(contact);
 			this.load_campaign_logs(contactId);
 		
 			this.get_stats(getPropertyValue(contact.properties, "email"), contact, App_Contacts.contactDetailView.el);

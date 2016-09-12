@@ -5271,4 +5271,12 @@ leads-view.lead-filters-desc,Filters are used to sort leads with a specific crit
 leads-view.add-lead,Add Lead,
 leads-view.leads,Lead(s),
 leads-view.import-success,Leads are now being imported. You will be notified on email when it is done,
-leads-view.export-leads-in-CSV,Export Leads in CSV,Exportar contactos en formato CSV
+leads-view.export-leads-in-CSV,Export Leads in CSV,
+leads-view.change-status,Change Status,
+leads-view.change-status-to-leads-bulk,Change status to leads bulk,
+leads-view.select-status,Select Status,
+bulk-actions.leads-status-change-scheduled,Leads status change scheduled,
+leads-view.leads-were-updated-during-the-import,lead(s) were updated during the import.,
+leads-view.changed-status-for,Changed status for ,
+leads-view.status-changed-to,Status changed to,
+leads-view.leads-assigned-to,Leads assigned to,Compañías asignadas a

@@ -10,7 +10,8 @@ var Leads_Header_Events_View = Base_Model_View.extend({
         'click #bulk-owner' : 'bulkOwnerChange',
         'click #bulk-delete' : 'leadsBulkDelete',
         'click #bulk-export' : 'leadsExport',
-        'click #bulk-email' : 'leadsBulkEmailSend'
+        'click #bulk-email' : 'leadsBulkEmailSend',
+        'click #bulk-status' : 'bulkStatusChange',
     },
 
     addLead : function(e)
@@ -241,7 +242,7 @@ var Leads_Header_Events_View = Base_Model_View.extend({
     {
         e.preventDefault();
 
-        var url = '/core/api/bulk/update?action_type=DELETE';
+        var url = '/core/api/contacts/delete?action=DELETE';
         var json = {};
         json.contact_ids = App_Leads.leadsBulkActions.getLeadsBulkIds();
 
@@ -423,7 +424,31 @@ var Leads_Header_Events_View = Base_Model_View.extend({
 
             App_Leads.leadsBulkActions.showBulkEmailForm(id_array);
         }
-    }
+    },
+
+    bulkStatusChange : function(e)
+    {
+        e.preventDefault();
+        App_Leads.idArray = App_Leads.leadsBulkActions.getLeadsBulkIds();
+        if (!canRunBulkOperations())
+        {
+            showModalConfirmation(
+                "{{agile_lng_translate 'leads-view' 'change-status'}}",
+                _agile_get_translated_val('bulk-actions','no-pem-to-change-owners') + "<br/><br/> " + _agile_get_translated_val('deal-view','do-you-want-to-proceed'),
+                function()
+                {
+                    Backbone.history.navigate("lead-bulk-status", { trigger : true });
+                }, function()
+                {
+                    return;
+                }
+            );
+        }
+        else
+        {
+            Backbone.history.navigate("lead-bulk-status", { trigger : true });
+        }
+    },
 
 });
 
@@ -1033,7 +1058,8 @@ var Leads_Bulk_Action_Events_View = Base_Model_View.extend({
         'click .add-attachment-select' : 'addAttachmentSelect',
         'click .add-attachment-confirm' : 'addAttachmentConfirm',
         'click .add-attachment-cancel' : 'addAttachmentCancel',
-        'click #bulk-send-email' : 'bulkEmailSend'
+        'click #bulk-send-email' : 'bulkEmailSend',
+        'click #changeStatusToLeadsBulk' : 'changeStatusToLeadsBulk'
     },
 
     addTagsToLeadsBulk : function(e)
@@ -1580,7 +1606,31 @@ var Leads_Bulk_Action_Events_View = Base_Model_View.extend({
         {
             enable_send_button($('#bulk-send-email'));
         }, msg);
-    }
+    },
+
+    changeStatusToLeadsBulk : function(e)
+    {
+        e.preventDefault();
+        var $form = $('#statusBulkForm');
+
+        if ($(e.currentTarget).attr('disabled') == 'disabled' || !isValidForm($form))
+        {
+            return;
+        }
+
+        var saveButton = $(e.currentTarget);
+
+        disable_save_button(saveButton);
+        
+        var new_status = $('#statusBulkSelect option:selected').prop('value');
+        var url = '/core/api/bulk/update?action_type=CHANGE_STATUS&status=' + new_status;
+        var json = {};
+        json.contact_ids = App_Leads.idArray;
+        App_Leads.leadsBulkActions.postBulkOperationData(url, json, $form, undefined, function(data)
+        {
+            enable_save_button(saveButton);
+        }, Handlebars.compile("{{agile_lng_translate 'bulk-actions' 'leads-status-change-scheduled'}}"));
+    },
 
 
 

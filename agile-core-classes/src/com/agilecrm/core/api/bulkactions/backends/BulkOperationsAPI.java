@@ -28,14 +28,17 @@ import com.agilecrm.AgileQueues;
 import com.agilecrm.activities.Activity.ActivityType;
 import com.agilecrm.activities.Activity.EntityType;
 import com.agilecrm.activities.BulkActionLog;
+import com.agilecrm.activities.Category;
 import com.agilecrm.activities.util.ActivitySave;
 import com.agilecrm.activities.util.ActivityUtil;
+import com.agilecrm.activities.util.CategoriesUtil;
 import com.agilecrm.bulkaction.deferred.CampaignStatusUpdateDeferredTask;
 import com.agilecrm.bulkaction.deferred.CampaignSubscriberDeferredTask;
 import com.agilecrm.bulkaction.deferred.ContactsBulkDeleteDeferredTask;
 import com.agilecrm.bulkaction.deferred.ContactsBulkTagAddDeferredTask;
 import com.agilecrm.bulkaction.deferred.ContactsBulkTagRemoveDeferredTask;
 import com.agilecrm.bulkaction.deferred.ContactsOwnerChangeDeferredTask;
+import com.agilecrm.bulkaction.deferred.LeadsStatusChangeDeferredTask;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.email.EmailSender;
 import com.agilecrm.contact.email.util.ContactBulkEmailUtil;
@@ -1376,6 +1379,63 @@ public class BulkOperationsAPI
 	// creates a log for company export
 
 	BulkActionNotifications.publishconfirmation(BulkAction.EXPORT_LEADS_CSV);
+    }
+    
+    /**
+     * Change the status of selected leads
+     * 
+     * @param contact_ids
+     *            array of lead ids as String
+     * @param new_status
+     *            id of new status (Category id)
+     * 
+     * @throws JSONException
+     */
+    @Path("/change-status/{new_status}/{current_user}")
+    @POST
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    public void changeStatusToLeads(@FormParam("contact_ids") String contact_ids,
+	    @PathParam("new_status") String new_status, @FormParam("filter") String filter,
+	    @PathParam("current_user") Long current_user, @FormParam("dynamic_filter") String dynamicFilter)
+	    throws JSONException
+    {
+	System.out.println(contact_ids + " model ids " + filter + " filter " + new_status + " new_owner");
+
+	ContactFilterIdsResultFetcher idsFetcher = new ContactFilterIdsResultFetcher(filter, dynamicFilter,
+		contact_ids, null, 200, current_user);
+
+	while (idsFetcher.hasNext())
+	{
+
+	    try
+	    {
+		Set<Key<Contact>> contactSet = idsFetcher.next();
+		LeadsStatusChangeDeferredTask task = new LeadsStatusChangeDeferredTask(current_user,
+			NamespaceManager.get(), contactSet, null, new_status);
+
+		// Add to queue
+		Queue queue = QueueFactory.getQueue(AgileQueues.BULK_ACTION_QUEUE);
+		queue.add(TaskOptions.Builder.withPayload(task));
+
+	    }
+	    catch (Exception e)
+	    {
+		e.printStackTrace();
+	    }
+
+	}
+
+	String message = "Status changed for " + idsFetcher.getLeadCount() + " Leads";
+	if (idsFetcher.getLeadCount() > 0)
+	{
+		CategoriesUtil categoriesUtil = new CategoriesUtil();
+		Category leadStatus = categoriesUtil.getCategory(Long.valueOf(new_status));
+		ActivitySave.createBulkActionActivity(idsFetcher.getLeadCount(), String.valueOf(ActivityType.CHANGE_LEAD_STATUS), leadStatus.getLabel(), "contacts", "");
+	}
+	BulkActionNotifications.publishNotification(message);
+
+	// BulkActionNotifications.publishconfirmation(BulkAction.BULK_ACTIONS.OWNER_CHANGE,
+	// String.valueOf(0));
     }
 
 }

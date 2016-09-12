@@ -128,6 +128,28 @@ public class BulkActionsAPI
 		    ActionType.REMOVE_ACTIVE_SUBSCRIBERS.getUrl(), contentType, Method.POST);
 	    return;
 	}
+	
+	if (ActionType.CHANGE_STATUS.equals(ActionType.valueOf(action_type)))
+	{
+	    /*
+	     * If filter is not null the filter id is sent, which is set as
+	     * param value
+	     */
+	    if (filterId != null)
+	    {
+		System.out.println("filter id is not null");
+		BulkActionUtil.changeStatus(filterId, request.getParameterMap(), ActionType.CHANGE_STATUS.getUrl(),
+		        contentType, Method.POST);
+		return;
+	    }
+
+	    /*
+	     * Else data will be sent as payload which takes byte data
+	     */
+	    BulkActionUtil.changeStatus(bytes, request.getParameterMap(), ActionType.CHANGE_STATUS.getUrl(), contentType,
+		    Method.POST);
+	    return;
+	}
 
 	System.out.println("action type : " + ActionType.valueOf(action_type));
 	/*

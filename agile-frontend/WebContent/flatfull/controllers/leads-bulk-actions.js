@@ -5,7 +5,8 @@ var LeadsBulkActionRouter = Backbone.Router.extend({
 		"lead-bulk-tags" : "addBulkTags",
 		"lead-bulk-tags-remove" : "removeBulkTags",
 		"lead-bulk-owner" : "bulkOwnerChange",
-		"lead-bulk-email" : "bulkEmailsSend"
+		"lead-bulk-email" : "bulkEmailsSend",
+		"lead-bulk-status" : "bulkStatusChange",
 		
 	},
 
@@ -120,6 +121,26 @@ var LeadsBulkActionRouter = Backbone.Router.extend({
 				}	
 				rearrange_from_email_options($select, data);
 			});
-	}
+	},
+
+	bulkStatusChange : function(e)
+	{
+		// On reloading redirecting to leads list
+		if (!App_Leads.leadsListView)
+		{
+			Backbone.history.navigate("leads", { trigger : true });
+		}
+		else
+		{
+			var bulkStatusChangeView = new Leads_Bulk_Action_Events_View({ data : {}, template : "bulk-actions-lead-status", isNew : true,
+				postRenderCallback : function(el)
+				{
+					var optionsTemplate = "<option value='{{id}}'>{{label}}</option>";
+					fillSelect('statusBulkSelect', '/core/api/categories?entity_type=LEAD_STATUS', 'leadStatuses', 'no-callback ', optionsTemplate, undefined, el);
+				} 
+			});
+			$('#content').html(bulkStatusChangeView.render().el);
+		}
+	},
 	
 });
