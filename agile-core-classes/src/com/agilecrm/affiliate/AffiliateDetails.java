@@ -9,6 +9,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.user.util.DomainUserUtil;
+import com.google.appengine.api.NamespaceManager;
 import com.googlecode.objectify.annotation.Cached;
 import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.condition.IfDefault;
@@ -115,7 +116,13 @@ public class AffiliateDetails {
 	}
 	
 	public void save(){
-		dao.put(this);
+		String oldNamespace = NamespaceManager.get();
+		NamespaceManager.set("");
+		try{
+			dao.put(this);
+		}finally{
+			NamespaceManager.set(oldNamespace);
+		}
 	}
 
 	/**

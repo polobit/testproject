@@ -8,6 +8,7 @@ import java.util.List;
 import com.agilecrm.affiliate.AffiliateDetails;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.user.util.DomainUserUtil;
+import com.google.appengine.api.NamespaceManager;
 
 /**
  * Utility functions for AffiliateDetails
@@ -26,10 +27,16 @@ public class AffiliateDetailsUtil {
 	 * fetch specific user Affiliate Details
 	 */
 	public static AffiliateDetails getAffiliateDetailsbyUserId(Long userId){
-		if(userId != null){
-			return dao.getByProperty("userId", userId);
+		String oldNamespace = NamespaceManager.get();
+		NamespaceManager.set("");
+		try{
+			if(userId != null){
+				return dao.getByProperty("userId", userId);
+			}
+			return null;
+		}finally{
+			NamespaceManager.set(oldNamespace);
 		}
-		return null;	
 	}
 	
 	public static AffiliateDetails getAffiliateDetails(){

@@ -688,9 +688,7 @@ public class AdminPanelAPI
     
     @Path("affiliate/addAmount")
     @POST
-	public void addAffiliateAmountAmount(@QueryParam("d") String namespace, @QueryParam("id") Long userId, @QueryParam("amount") int amount){
-    	String oldNamespace = NamespaceManager.get();
-		NamespaceManager.set(namespace);
+	public void addAffiliateAmountAmount(@QueryParam("id") Long userId, @QueryParam("amount") int amount){
     	try {
     		AffiliateDetails details = AffiliateDetailsUtil.getAffiliateDetailsbyUserId(userId);
     		details.setAmount(details.getAmount() + amount * 100);
@@ -700,8 +698,6 @@ public class AdminPanelAPI
 			throw new WebApplicationException(Response
 					.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
 					.build());
-		}finally{
-			NamespaceManager.set(oldNamespace);
 		}
 	}
     
