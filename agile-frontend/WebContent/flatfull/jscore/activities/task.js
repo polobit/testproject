@@ -987,15 +987,15 @@ function getDueTasksCount(callback)
 function showTaskModal(forAddTask)
 {
 
-	showNoteModel(undefined , function(){
-		var el = $("#taskForm");
+	$('#activityTaskModal').html(getTemplate("new-task-modal")).modal('show');
+
+	var el = $("#taskForm");
 
 	agile_type_ahead("task_related_to", el, contacts_typeahead);
 	// Deals type-ahead
 	agile_type_ahead("task_relates_to_deals", el, deals_typeahead, false,null,null,"core/api/search/deals",false, true);
 	
 	highlight_task();
-	} , "new-task-model")
 	categories.getCategoriesHtml(undefined,function(catsHtml){
 		$('#type',el).html(catsHtml);
 		// Fills owner select element
