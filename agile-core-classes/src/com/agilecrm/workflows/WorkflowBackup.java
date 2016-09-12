@@ -14,10 +14,10 @@ public class WorkflowBackup
 	@Id
 	public Long id;
 	
-	public Long updated_time;
+	private Long updated_time;
 	
 	@Indexed
-	public Long workflow_id = 0l;
+	private Long workflow_id = 0l;
 	
 	private String rules = null;
 	
@@ -76,5 +76,25 @@ public class WorkflowBackup
 	public void setRules(String rules)
 	{
 		this.rules = rules;
+	}
+	
+	public Long getUpdated_time()
+	{
+		return updated_time;
+	}
+
+	public void setUpdated_time(Long updated_time)
+	{
+		this.updated_time = updated_time;
+	}
+	
+	public Long getWorkflow_id()
+	{
+		return workflow_id;
+	}
+
+	public void setWorkflow_id(Long workflow_id)
+	{
+		this.workflow_id = workflow_id;
 	}
 }

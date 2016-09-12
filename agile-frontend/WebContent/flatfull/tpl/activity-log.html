@@ -970,10 +970,10 @@ Added {{custom3}} {{agile_lng_translate 'contacts-view' 'contact-to-campaign'}}<
 </span>  
 {{/if_equals}}
 {{#if_equals "CAMPAIGN_EDIT" activity_type}}
-{{agile_lng_translate 'contacts-view' 'modified-a-campaign'}} {{#if this.entityObject}} <a href="#workflow/{{entity_id}}">{{label}}</a>{{else}}'{{label}}'{{/if}}<br/>	
-	{{agile_lng_translate 'contacts-view' 'modified-a-campaign'}}
+	{{agile_lng_translate 'contacts-view' 'modified-a-campaign'}} 
 	{{#if this.entityObject}}
-		<a href="#workflow/{{entity_id}}">{{label}}</a><br/>
+		<a href="#workflow/{{entity_id}}">{{label}}</a>
+		<br/>
 		{{!--Campaign History Block--}}
 		<div class="campaign-history-block" data-entity-id='{{entity_id}}' style='display: none;'>
 			<a href="#" id="campaign-modify-history" data-entity="{{bindData entityObject}}">
@@ -1408,28 +1408,33 @@ Added {{custom3}} {{agile_lng_translate 'contacts-view' 'contact-to-campaign'}}<
 </ul>
 {{/if}}
 {{#if MODIFIED}}
-	<table class="table table-striped" style="margin-left: 5%; width: 50%; border: solid 1px whitesmoke;">
-		<thead>
-			<tr>
-				<th>Node Name</th>
-				<th>Field Name</th>
-				<th>Old Value</th>
-				<th>New Value</th>
-			</tr>
-		</thead>
-		<tbody>
-			{{#each MODIFIED}}
-				{{#each this}}
-					<tr>
-						<td>{{node_name}}</td>
-						<td>{{name}}</td>
-						<td>{{old_value}}</td>
-						<td>{{new_value}}</td>
-					</tr>
+<ul>
+	<li><b>Modified</b></li>
+	<li>
+		<table class="table table-striped" style="width: 50%; border: solid 1px whitesmoke;">
+			<thead>
+				<tr>
+					<th>Node Name</th>
+					<th>Field Name</th>
+					<th>Old Value</th>
+					<th>New Value</th>
+				</tr>
+			</thead>
+			<tbody>
+				{{#each MODIFIED}}
+					{{#each this}}
+						<tr>
+							<td>{{node_name}}</td>
+							<td>{{name}}</td>
+							<td>{{old_value}}</td>
+							<td>{{new_value}}</td>
+						</tr>
+					{{/each}}
 				{{/each}}
-			{{/each}}
-		</tbody>
-	</table>
+			</tbody>
+		</table>
+	</li>
+</ul>
 {{/if}}
 
 {{#if DELETED}}
@@ -1441,8 +1446,4 @@ Added {{custom3}} {{agile_lng_translate 'contacts-view' 'contact-to-campaign'}}<
 </ul>{{/if}}
 </div>
  </script>
-
-    Contact GitHub API Training Shop Blog About 
-
-    © 2016 GitHub, Inc. Terms Privacy Security Status Help 
 

@@ -24,7 +24,9 @@ import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.workflows.unsubscribe.Unsubscribe;
+import com.agilecrm.workflows.util.WorkflowBackupUtil;
 import com.agilecrm.workflows.util.WorkflowUtil;
+import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.apphosting.api.ApiProxy;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.Indexed;
@@ -132,6 +134,7 @@ public class Workflow extends Cursor {
 	 * 
 	 */
 	@NotSaved
+	@JsonIgnore
 	private boolean skip_verify = false;
 
 	/**
@@ -333,12 +336,31 @@ public class Workflow extends Cursor {
 	
 	public void saveWorkflowBackup(Workflow oldWorkflow)
 	{
-		Long updatedTime = (oldWorkflow.updated_time == null) ? oldWorkflow.created_time : oldWorkflow.updated_time;
-		WorkflowBackup workflowBackup = new WorkflowBackup(oldWorkflow.id, updatedTime, oldWorkflow.rules);
-		
-		long startTime = System.currentTimeMillis();
-		workflowBackup.saveAsync();
-		System.out.println("Time taken to workflow backup..." + (System.currentTimeMillis() - startTime));
+		try
+		{
+			Long updatedTime = (oldWorkflow.updated_time == null) ? oldWorkflow.created_time : oldWorkflow.updated_time;
+			
+			WorkflowBackup workflowBackup = WorkflowBackupUtil.getWorkflowBackup(oldWorkflow.id);
+			
+			if(workflowBackup == null)
+				workflowBackup = new WorkflowBackup();
+
+			workflowBackup.setWorkflow_id(oldWorkflow.id);
+			workflowBackup.setRules(oldWorkflow.rules);
+			workflowBackup.setUpdated_time(updatedTime);
+			
+			long startTime = System.currentTimeMillis();
+			workflowBackup.saveAsync();
+			System.out.println("Time taken to workflow backup..." + (System.currentTimeMillis() - startTime));
+		}
+		catch (EntityNotFoundException e)
+		{
+			e.printStackTrace();
+		}
+		catch(Exception e)
+		{
+			
+		}
 	}
 
 	/**

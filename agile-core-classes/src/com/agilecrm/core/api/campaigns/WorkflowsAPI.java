@@ -598,13 +598,21 @@ public class WorkflowsAPI {
 		WorkflowBackup backup =  WorkflowBackupUtil.getWorkflowBackup(workflowId);
 		
 		if(backup == null)
-			throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND).entity("No backup yet").build());
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("No backup yet").build());
 		
-		Workflow workflow = WorkflowUtil.getWorkflow(backup.campaign_id);
+		Workflow workflow = WorkflowUtil.getWorkflow(workflowId);
 		workflow.rules = backup.getRules();
 		workflow.setSkip_verify(true);
 		workflow.save();
 		
+		
+		try 
+		{
+			ActivityUtil.createCampaignActivity(ActivityType.CAMPAIGN_RESTORE, workflow, null);
+		}
+		catch (Exception e){
+			System.out.println("Exception occured while creating workflow restore activity" + e.getMessage());
+		}
 		return workflow;
 	}
 	
@@ -616,7 +624,7 @@ public class WorkflowsAPI {
          WorkflowBackup backup =  WorkflowBackupUtil.getWorkflowBackup(workflowId);
          
          if(backup == null)
-                 throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND).entity("No backup yet").build());
+                 throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("No backup yet").build());
          
          return backup;
      }

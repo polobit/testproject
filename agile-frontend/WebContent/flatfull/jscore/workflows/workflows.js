@@ -354,7 +354,7 @@ var Workflow_Model_Events = Base_Model_View.extend({
          {
 
             $.ajax({
-                url: 'core/api/workflows/restore?workflow_id='  App_Workflows.workflow_model.get("id"),
+                url: 'core/api/workflows/restore?workflow_id=' + App_Workflows.workflow_model.get("id"),
                 method: 'POST',
                 dataType: 'json',
                 contentType: 'application/json',
@@ -854,7 +854,7 @@ function get_campaign_changes(updated_workflow_json, old_workflow_json, callback
     var map = {"ADDED":[], "MODIFIED":[], "DELETED": []};
     // var modified_table = {NodeName, Action, FieldName, Previous Value, New Value};
 
-    head.js(LIB_PATH  'lib/underscore-min.1.8.3.js', function(){
+    head.js(LIB_PATH + 'lib/underscore-min.1.8.3.js', function(){
         
         for(var i=0; i < update_nodes.length; i++){
         

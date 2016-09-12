@@ -2,6 +2,7 @@ package com.agilecrm.coreClasses;
 
 import com.agilecrm.notification.NotificationTemplate;
 import com.agilecrm.notification.push.PushNotificationMessage;
+import com.agilecrm.workflows.WorkflowBackup;
 import com.googlecode.objectify.ObjectifyService;
 /**
  * Register all entities used by Objectify in this module.
@@ -17,6 +18,7 @@ public class ObjectifyRegistry {
 		//Add your entity clas here
 		ObjectifyService.register(PushNotificationMessage.class);
 		ObjectifyService.register(NotificationTemplate.class);
+		ObjectifyService.register(WorkflowBackup.class);
 		
 	}
 }
