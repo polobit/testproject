@@ -158,14 +158,14 @@ public class WorkflowsAPI {
 			throws PlanRestrictedException, WebApplicationException {
 		workflow.save();
 		try {
+			// Inform to CMS plugins
+			CMSPlugin.updateToCmsPlugins(CMSPlugin.EventName.Campaigns, true);
+						
 			ActivityUtil.createCampaignActivity(ActivityType.CAMPAIGN_CREATE,
 					workflow, null);
 			
 			//Increase count of Campaign for AllDomainstats report in database
 			AllDomainStatsUtil.updateAllDomainStats(AllDomainStats.CAMPAIGN_COUNT);
-			
-			// Inform to CMS plugins
-			CMSPlugin.updateToCmsPlugins(CMSPlugin.EventName.Campaigns, true);
 			
 		} catch (Exception e) {
 			System.out
@@ -191,11 +191,11 @@ public class WorkflowsAPI {
 			workflow.save();
 			
 			try {
-				ActivityUtil.createCampaignActivity(ActivityType.CAMPAIGN_EDIT,
-						workflow, null);
-				
 				// Inform to CMS plugins
 				CMSPlugin.updateToCmsPlugins(CMSPlugin.EventName.Campaigns, false);
+				
+				ActivityUtil.createCampaignActivity(ActivityType.CAMPAIGN_EDIT,
+						workflow, null);
 			} catch (Exception e) {
 				System.out
 						.println("exception occured while creating workflow creation activity");
@@ -220,11 +220,12 @@ public class WorkflowsAPI {
 
 		if (workflow != null) {
 			try {
+				// Inform to CMS plugins
+				CMSPlugin.updateToCmsPlugins(CMSPlugin.EventName.Campaigns, false);
+				
 				ActivityUtil.createCampaignActivity(
 						ActivityType.CAMPAIGN_DELETE, workflow, null);
 				
-				// Inform to CMS plugins
-				CMSPlugin.updateToCmsPlugins(CMSPlugin.EventName.Campaigns, false);
 			} catch (Exception e) {
 				System.out
 						.println("exception occured while creating workflow creation activity");
@@ -249,13 +250,13 @@ public class WorkflowsAPI {
 		JSONArray workflowsJSONArray = new JSONArray(model_ids);
 
 		try {
+			// Inform to CMS plugins
+			CMSPlugin.updateToCmsPlugins(CMSPlugin.EventName.Campaigns, false);
+						
 			ActivitySave.createLogForBulkDeletes(EntityType.CAMPAIGN,
 					workflowsJSONArray,
 					String.valueOf(workflowsJSONArray.length()), "");
 			
-			
-			// Inform to CMS plugins
-			CMSPlugin.updateToCmsPlugins(CMSPlugin.EventName.Campaigns, false);
 		} catch (Exception e) {
 			System.out
 					.println("exception occured while creating workflow creation activity");
