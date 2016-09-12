@@ -547,6 +547,19 @@ if(currentUserPrefs.menuPosition.equals("top")){
     </a>
   </li>
    <%
+      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.CONTACT)){
+  %>      
+  <li id="contactsmenu">
+    <a  href="#contacts">
+      <i class="icon icon-user"></i>
+      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-contacts") %></span>
+    </a>
+  </li>
+  <%
+      }
+  %>
+
+   <%
       if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.CAMPAIGN)){
    %>
    <li id="workflowsmenu">
@@ -682,12 +695,28 @@ if(currentUserPrefs.menuPosition.equals("top")){
   <li class="hidden-folded padder m-t-xs m-b-xs text-muted text-xs">
     <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "service") %></span>
   </li>
+
   <li id="home_dashboard">
     <a  href="#">
       <i class="icon icon-home"></i>
       <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "home")%></span>
     </a>
   </li>
+
+
+   <%
+      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.CONTACT)){
+  %>      
+  <li id="contactsmenu">
+    <a  href="#contacts">
+      <i class="icon icon-user"></i>
+      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-contacts") %></span>
+    </a>
+  </li>
+  <%
+      }
+  %>
+
   
   <li id="tickets">
     <a href="#tickets">
