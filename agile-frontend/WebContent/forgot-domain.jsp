@@ -14,8 +14,19 @@ pageEncoding="UTF-8"%>
 
 <%
 
-//Language
-String _LANGUAGE = LanguageUtil.getLanguageKeyFromCookie(request);
+// Get the language and save as cookie
+String reqlanguage = request.getParameter("lang");
+String _LANGUAGE = CookieUtil.readCookieValue(request, "user_lang");
+
+if(StringUtils.isNotBlank(reqlanguage) && LanguageUtil.isSupportedlanguageFromKey(reqlanguage)){
+	_LANGUAGE = reqlanguage;
+	CookieUtil.createCookieWithDomain(null, "user_lang", _LANGUAGE, response);
+}
+
+if(StringUtils.isBlank(_LANGUAGE) || !LanguageUtil.isSupportedlanguageFromKey(_LANGUAGE)) {
+	_LANGUAGE = LanguageUtil.getSupportedLocale(request);
+	CookieUtil.createCookieWithDomain(null, "user_lang", _LANGUAGE, response);
+}
 
 //Locales JSON
 JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "forgot-domain");
