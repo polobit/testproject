@@ -33,7 +33,6 @@ $( document ).ready(function() {
 		e.preventDefault();
 		save_task('updateTaskForm', 'updateTaskModal', true, this);
 	});	
-
 	/**
 	 * Shows activity modal with all the task create fields.
 	 */

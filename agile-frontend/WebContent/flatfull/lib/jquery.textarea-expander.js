@@ -41,6 +41,7 @@
 
 		function ResizeTextarea(e) {
 		    $(e).css(styleObj).height(e.scrollHeight);
+		    $(window).trigger('resize');
 		}
 
 		this.each(function () {
