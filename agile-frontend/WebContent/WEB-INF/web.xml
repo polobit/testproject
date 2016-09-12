@@ -1474,9 +1474,17 @@
 		<servlet-name>FormSubmitServlet</servlet-name>
 		<servlet-class>com.agilecrm.forms.FormSubmitServlet</servlet-class>
 	</servlet>
-
 	<servlet-mapping>
 		<servlet-name>FormSubmitServlet</servlet-name>
 		<url-pattern>/formtrigger</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>VideoServingServlet</servlet-name>
+		<servlet-class>com.agilecrm.videorecords.VideoRecordServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>VideoServingServlet</servlet-name>
+		<url-pattern>/video/*</url-pattern>
 	</servlet-mapping>
 </web-app>

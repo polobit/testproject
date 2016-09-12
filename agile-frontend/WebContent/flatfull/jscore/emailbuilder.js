@@ -82,6 +82,36 @@ function initializeEmailBuilderListeners() {
         BRING_YOUR_CODE_BTN = true;
         window.location.hash = "#email-template-add";
     });
+
+    $('#emailbuilder-listeners').on('click', '.videoRecordHiddenBtn', function(e){
+        e.preventDefault();
+
+        $("#modal-backdrop").hide();
+        var $videoRecordModalEl = $("#videoRecordModal");
+        $.getJSON("core/api/video-record", function(data) {
+           getTemplate("video-record-modal",data, undefined, function(ui){
+            $videoRecordModalEl.html(ui).modal("show");
+           });
+        });
+
+    });
+
+    $('#videoRecordModal').on('submit','#videoRecordForm', function(e){
+        e.preventDefault();
+        var videoRecordType = $("#videoRecordType").val();
+        if(videoRecordType === "new") {
+            emailVideoRecord.uploadVideoToS3();
+        } else {
+            emailVideoRecord.buildVideoPageURL($("#video-record-select").val());
+        }
+    });
+
+    $('#videoRecordModal').on('click','#newRecordBtn', function(e){
+        e.preventDefault();
+        $("#videoRecordSelectFields").hide();
+        $("#videoRecordType").val("new");
+        $("#videoRecordFields").show();
+    });
     
 }
 
@@ -246,3 +276,71 @@ function check_merge_fields_and_send(template)
          });
      }); 
  }
+
+var emailVideoRecord = {
+
+    uploadVideoToS3 : function() {
+        if(typeof emailVideoRecordRecordedData != "undefined") {
+
+            var file = emailVideoRecordRecordedData.video;
+
+            var uploadedFileName = file.name;
+            var filename = uploadedFileName.replace(/[^a-z0-9]/gi, '_').toLowerCase();
+            filename = filename + "_" + new Date().getTime() + "." + uploadedFileName.split('.').pop();
+
+            formData = new FormData();
+            formData.append('key',  "videos/local/"+filename);
+            formData.append('AWSAccessKeyId', 'AKIAIBK7MQYG5BPFHSRQ');
+            formData.append('acl', 'public-read');
+            formData.append('content-type', 'video/webm');
+            formData.append('policy', 'ewogICJleHBpcmF0aW9uIjogIjIwMjUtMDEtMDFUMTI6MDA6MDAuMDAwWiIsCiAgImNvbmRpdGlvbnMiOiBbCiAgICB7ImJ1Y2tldCI6ICJhZ2lsZWNybSIgfSwKICAgIHsiYWNsIjogInB1YmxpYy1yZWFkIiB9LAogICAgWyJzdGFydHMtd2l0aCIsICIka2V5IiwgInZpZGVvcy8iXSwKICAgIFsic3RhcnRzLXdpdGgiLCAiJENvbnRlbnQtVHlwZSIsICJ2aWRlby8iXSwKICAgIFsic3RhcnRzLXdpdGgiLCAiJHN1Y2Nlc3NfYWN0aW9uX3N0YXR1cyIsICIyMDEiXSwKICBdCn0=');
+            formData.append('signature', '/XP/Uq6l0iVo+uNWkwwhC8l4jVY=');
+            formData.append('success_action_status', '201');
+            formData.append('file', file);
+            console.log(formData);
+            
+            $.ajax({
+                data: formData,
+                dataType: 'xml',
+                type: "POST",
+                cache: false,
+                contentType: false,
+                processData: false,
+                url: "https://agilecrm.s3.amazonaws.com/",
+                success: function(data) {
+                  // getting the url of the file from amazon and insert it into the editor
+                  var url = $(data).find('Location').text();
+                  this.videoS3URL = decodeURIComponent(url);
+                  this.saveVideoRecord();
+                }
+            });
+        }
+    },
+
+    saveVideoRecord : function() {
+        var videoMeta = {
+            "name": $("#video-record-name").val(),
+            "url": this.videoS3URL
+        };
+
+        var requestType = "post";
+
+        $.ajax({
+            type: requestType, 
+            url: 'core/api/video-record',       
+            data: JSON.stringify(videoMeta),
+            dataType: 'json',
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                this.buildVideoPageURL(data.id);
+            },
+        });
+    },
+
+    buildVideoPageURL : function(videoId) {
+        var videoURL = window.location.protocol + "//" + window.location.host + "/video/" + videoId;
+        document.getElementById('emailBuilderFrame').contentWindow.$("#image-link").val(videoURL);
+        $("#videoRecordModal").modal("hide");
+    }
+
+};

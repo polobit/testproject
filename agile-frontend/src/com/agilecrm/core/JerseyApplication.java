@@ -150,6 +150,9 @@ public class JerseyApplication extends Application
 	s.add(com.agilecrm.ssologin.SingleSignOnAPI.class);
 	//Push Notification 
 	s.add(com.agilecrm.core.api.notification.NotificationTemplateAPI.class);
+		
+	s.add(com.agilecrm.core.api.videorecords.VideoRecordAPI.class);
+
 	return s;
     }
 }

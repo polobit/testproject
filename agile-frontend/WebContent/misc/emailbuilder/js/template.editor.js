@@ -168,7 +168,37 @@ function handleObjects() {
 
                         hideAllSettings();
                         $('#imageproperties').show();
+                        $('#image-link-holder').show();
                         //$("#select_alignment").show();
+                        $('#image-width-height').show();
+
+                        break;
+                    case 'video-record':
+                        $('.selected-item').removeClass('selected-item').css('border', 'none');
+                        $('#bgcolor').css('backgroundColor', $('#' + $('#path').val()).css('backgroundColor'));
+                        var img = self.find('img');
+                        var imageid = img.attr('id');
+
+                        if (typeof imageid === typeof undefined || imageid === false) {
+                            img.attr('id', guid());
+                            imageid = img.attr('id');
+                        }
+                        $('#imageid').val(imageid);
+                        $('#image-url').val(img.attr('src'));
+                        $('#image-url').data('id', imageid );
+
+                        $('#image-w').val(img.width());
+                        $('#image-h').val(img.height());
+                        $('#image-alt-text').val(img.attr('alt'));
+
+                        /*$('#image-link').val("");
+                        if(img.parent('a').length) {
+                            $('#image-link').val(addhttp(img.parent('a').attr('href')));
+                        }*/
+
+                        hideAllSettings();
+                        $('#imageproperties').show();
+                        $('#video-record-btn-holder').show();
                         $('#image-width-height').show();
 
                         break;
@@ -199,6 +229,7 @@ function handleObjects() {
 
                         hideAllSettings();
                         $('#imageproperties').show();
+                        $('#image-link-holder').show();
                         break;
                     case 'imgtxtincol':
                         $('.selected-item').removeClass('selected-item').css('border', 'none');
@@ -248,6 +279,7 @@ function handleObjects() {
 
                         hideAllSettings();
                         $('#imageproperties').show();
+                        $('#image-link-holder').show();
 
                         break;
 
@@ -616,7 +648,7 @@ function getIndex(itm, list) {
 
 function hideAllSettings(exceptThisElement) {
 
-    var settingsHolderSelectors = ['#editor','#buttons','#buttonstxt','#imageproperties','#social-links', '#user-poll', '#select_alignment', '#image-width-height'];
+    var settingsHolderSelectors = ['#editor','#buttons','#buttonstxt','#imageproperties','#social-links', '#user-poll', '#select_alignment', '#image-width-height', '#video-record-btn-holder', '#image-link-holder'];
 
     if(typeof exceptThisElement != "undefined") {
         var index = settingsHolderSelectors.indexOf(exceptThisElement);
@@ -1318,6 +1350,7 @@ $('div.buttonStyleTxt').on('shown.bs.popover', function () {
         }
         hideAllSettings();
         $('#imageproperties').show();
+        $('#image-link-holder').show();
     });
 
     $('#tosave').on('click','.textFix',function(e) {
@@ -1407,6 +1440,11 @@ $('div.buttonStyleTxt').on('shown.bs.popover', function () {
     removeElm();
     configurationElm();
     hideAllSettings();
+
+    $(document).on('click', '#videoRecordBtn', function(e){
+        e.preventDefault();
+        window.parent.$(".videoRecordHiddenBtn").trigger("click");
+    });
 
 
 });

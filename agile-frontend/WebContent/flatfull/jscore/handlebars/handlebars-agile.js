@@ -247,6 +247,11 @@ function getTemplateUrls(templateName)
 	{
 		template_relative_urls.push("notification.js");
 	}
+	if (templateName.indexOf("video-record") == 0)
+	{
+		template_relative_urls.push("video-record.js");
+	}
+	
 	return template_relative_urls;
 }
 

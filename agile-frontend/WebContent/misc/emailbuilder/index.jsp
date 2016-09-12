@@ -96,6 +96,8 @@ AGILE_EB_OPTIONS['templateId'] = "";
                                 <!-- SOCIAL LINKS -->
                                 <%@ include file="blocks/social-links.html" %>
 
+                                <%@ include file="blocks/video-record.html" %>
+
                             </li>
                         </ul>
                     </div>
@@ -239,7 +241,7 @@ AGILE_EB_OPTIONS['templateId'] = "";
 
                         <div class="form-group">
                             
-                            <div class="row">
+                            <div class="row" id="image-link-holder">
                                 <div class="col-xs-11">
                                     <div class="input-group">
                                         <span class="input-group-addon" id="basic-addon11"><i class="fa fa-paperclip"></i></span>
@@ -255,6 +257,13 @@ AGILE_EB_OPTIONS['templateId'] = "";
                                     <br>
                                 </div>
                             </div>
+
+                            <div class="row" id="video-record-btn-holder" style="display:none;">
+                                <div class="col-xs-11">
+                                    <a class="btn btn-success" id="videoRecordBtn">Select or Record Video</a>
+                                </div>
+                            </div>
+                            
                             <div class="row">
                                 <div class="col-xs-11" id="image-alt-text">
                                <!--  <select id="select_alignment" class="form-control">
