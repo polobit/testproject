@@ -14,7 +14,7 @@ pageEncoding="UTF-8"%>
 
 <%
 	
-	/*if (request.getAttribute("javax.servlet.forward.request_uri") == null) {
+	if (request.getAttribute("javax.servlet.forward.request_uri") == null) {
 		response.sendRedirect("/register");
 		return;
 	}
@@ -23,7 +23,7 @@ pageEncoding="UTF-8"%>
 	{
 	    RegisterUtil.redirectToRegistrationpage(request, response);
 	    return;
-	} */
+	} 
 
   String _source = request.getParameter("_source");
   String registered_email = request.getParameter("email");

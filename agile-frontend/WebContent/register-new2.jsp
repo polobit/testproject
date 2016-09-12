@@ -11,9 +11,10 @@ pageEncoding="UTF-8"%>
 <%
 
 
-/*if (request.getAttribute("javax.servlet.forward.request_uri") == null) {
+if (request.getAttribute("javax.servlet.forward.request_uri") == null) {
     response.sendRedirect("/register");
-}*/
+    return;
+}
 String _AGILE_VERSION = SystemProperty.applicationVersion.get();
 
 String CSS_PATH = "/";
