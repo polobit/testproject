@@ -113,6 +113,7 @@ var AffiliateRouter = Backbone.Router.extend({
 		$('#affiliate-tabs-content').html(this.affiliateCollectionView.render().el);
 	},
 	tools : function(){
+		var that = this;
 		checkForAffiliateDetails(function(){
 			getTemplate('affiliate', {}, undefined, function(template_ui){
 				if(!template_ui)
