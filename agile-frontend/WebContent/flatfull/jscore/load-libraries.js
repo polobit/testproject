@@ -42,6 +42,6 @@ var _agile_library_loader = {
 		head.js(LIB_PATH + '/lib/zeroclipboard/ZeroClipboard.js', function(){
 			if(callback)
 				callback();
-		}
+		});
 	},
 };
