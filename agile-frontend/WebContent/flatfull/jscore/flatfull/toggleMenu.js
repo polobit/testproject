@@ -460,7 +460,18 @@ $("#activityModal").on("click", "#eventDescriptionLink", function(e){
 
 });
 
+function showNoteModel(json, callback , template)
+{	
+	
+	$("#newNoteModal").html(getTemplate(template , json)).modal('show');
 
+	if(json)
+	deserializeForm(json ,$("#noteUpdateForm"));
+	
+	if (callback && typeof (callback) === "function")
+					callback();
+	
+}
 // Click handlers to role menu items
 function initRolehandlers(){
 	// Remove blink icon from menu group icon
