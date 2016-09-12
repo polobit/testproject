@@ -156,6 +156,11 @@ public class StripeSyncImpl extends OneWaySyncService
 		  
 	    e.printStackTrace();
 	}
+	catch (Exception e)
+		{
+			  
+		    e.printStackTrace();
+		}
 
     }
 

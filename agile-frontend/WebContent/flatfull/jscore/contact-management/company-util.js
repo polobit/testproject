@@ -877,7 +877,7 @@ function company_fetchMails(company_detail_tab_scope,has_email_configured,mail_s
 	templateKey : "email-social-company", sort_collection : true, sortKey : "date_secs", descending : true, individual_tag_name : "li",
 	postRenderCallback : function(el)
 	{
-		$(el).find('style').html("");
+		
 		$('#company-mail', App_Companies.companyDetailView.el).find("#no-email").css('display','block');
 		agileTimeAgoWithLngConversion($(".email-sent-time", el));
 		
@@ -988,7 +988,7 @@ function loadAllMailsView(company_detail_tab_scope,has_email_configured,fetched_
 	templateKey : "email-social-company", sort_collection : true, sortKey : "date_secs", descending : true, individual_tag_name : "li",
 	postRenderCallback : function(el)
 	{
-		$(el).find('style').html("");
+		
 		agileTimeAgoWithLngConversion($(".email-sent-time", el));
 		
 		if(email_server_type!="agilecrm")
