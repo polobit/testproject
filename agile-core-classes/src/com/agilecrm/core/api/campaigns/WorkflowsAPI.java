@@ -28,6 +28,7 @@ import com.agilecrm.activities.Activity.EntityType;
 import com.agilecrm.activities.util.ActivitySave;
 import com.agilecrm.activities.util.ActivityUtil;
 import com.agilecrm.alldomainstats.util.AllDomainStatsUtil;
+import com.agilecrm.cms.CMSPlugin;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.email.bounce.EmailBounceStatus.EmailBounceType;
 import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
@@ -163,6 +164,9 @@ public class WorkflowsAPI {
 			//Increase count of Campaign for AllDomainstats report in database
 			AllDomainStatsUtil.updateAllDomainStats(AllDomainStats.CAMPAIGN_COUNT);
 			
+			// Inform to CMS plugins
+			CMSPlugin.updateToCmsPlugins(CMSPlugin.EventName.Campaigns, true);
+			
 		} catch (Exception e) {
 			System.out
 					.println("exception occured while creating workflow creation activity");
@@ -189,6 +193,9 @@ public class WorkflowsAPI {
 			try {
 				ActivityUtil.createCampaignActivity(ActivityType.CAMPAIGN_EDIT,
 						workflow, null);
+				
+				// Inform to CMS plugins
+				CMSPlugin.updateToCmsPlugins(CMSPlugin.EventName.Campaigns, false);
 			} catch (Exception e) {
 				System.out
 						.println("exception occured while creating workflow creation activity");
@@ -215,6 +222,9 @@ public class WorkflowsAPI {
 			try {
 				ActivityUtil.createCampaignActivity(
 						ActivityType.CAMPAIGN_DELETE, workflow, null);
+				
+				// Inform to CMS plugins
+				CMSPlugin.updateToCmsPlugins(CMSPlugin.EventName.Campaigns, false);
 			} catch (Exception e) {
 				System.out
 						.println("exception occured while creating workflow creation activity");
@@ -242,6 +252,10 @@ public class WorkflowsAPI {
 			ActivitySave.createLogForBulkDeletes(EntityType.CAMPAIGN,
 					workflowsJSONArray,
 					String.valueOf(workflowsJSONArray.length()), "");
+			
+			
+			// Inform to CMS plugins
+			CMSPlugin.updateToCmsPlugins(CMSPlugin.EventName.Campaigns, false);
 		} catch (Exception e) {
 			System.out
 					.println("exception occured while creating workflow creation activity");
