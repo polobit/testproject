@@ -1375,7 +1375,15 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			postRenderCallback : function(el){
 					var maxContactLimit = App_Admin_Settings.contactsLimitview.model.toJSON().count;
 					if (maxContactLimit > parseInt(USER_BILLING_PREFS.planLimits.contactLimit*0.8))
-						$("#contacts_limit_alert_info").removeClass("hide");
+					{
+						if(!_agile_get_prefs("contactslimit"))
+						{
+							$("#contacts_limit_alert_info").removeClass("hide");
+							_agile_set_prefs("contactslimit","true",1);
+						}
+							
+					}
+						
 			},});
 		$('#contacts_limit_alert_info').html(this.contactsLimitview.render().el);
 	}
