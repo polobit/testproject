@@ -92,6 +92,73 @@
 <div class="activity-tag p-l-xxl">
 <div class="custom-link">
 {{#if_equals "TASK" entity_type}}
+	{{#if_equals "BULK_ACTION" activity_type}}
+		{{#if_equals "BULK_TASK_CHANGE_OWNER" custom1}}
+			{{#if_equals "1" custom3}}
+				Changed owner for {{custom3}} Task 
+				<div class="activities_second_line m-t-none"><small>
+				<i class="icon-money icon-white"></i> {{agile_lng_translate 'campaigns' 'task-assigned-to'}} {{custom2}}.
+				</small></div>
+			{{else}}
+				Changed owner for {{custom3}} Tasks 
+				<div class="activities_second_line m-t-none"><small>
+				<i class="icon-money icon-white"></i> {{agile_lng_translate 'activity' 'tasks-assigned'}} {{custom2}}.
+				</small></div>
+			{{/if_equals}}
+		{{/if_equals}}
+		{{#if_equals "BULK_TASK_CHANGE_STATUS" custom1}}
+			{{#if_equals "1" custom3}}
+				Status changed for {{custom3}} Task 
+				<div class="activities_second_line m-t-none"><small>
+				<i class="icon-money icon-white"></i> {{agile_lng_translate 'activity' 'task-bulk-status'}} '{{taskBulkStatus custom2}}'.
+				</small></div>
+			{{else}}
+				Status changed for {{custom3}} Tasks 
+				<div class="activities_second_line m-t-none"><small>
+				<i class="icon-money icon-white"></i> {{agile_lng_translate 'activity' 'tasks-bulk-status'}} '{{taskBulkStatus custom2}}'.
+				</small></div>
+			{{/if_equals}}
+		{{/if_equals}}
+		{{#if_equals "BULK_TASK_CHANGE_PRIORITY" custom1}}
+			{{#if_equals "1" custom3}}
+				Priority changed for {{custom3}} Task 
+				<div class="activities_second_line m-t-none"><small>
+				<i class="icon-money icon-white"></i> {{agile_lng_translate 'activity' 'tasks-bulk-priority'}} '{{taskBulkPriority custom2}}'.
+				</small></div>
+			{{else}}
+				Priority changed for {{custom3}} Tasks 
+				<div class="activities_second_line m-t-none"><small>
+				<i class="icon-money icon-white"></i> {{agile_lng_translate 'activity' 'tasks-bulk-priority'}} '{{taskBulkPriority custom2}}'.
+				</small></div>
+			{{/if_equals}}
+		{{/if_equals}}
+		{{#if_equals "BULK_TASK_DELETE" custom1}}
+			{{#if_equals "1" custom3}}
+				Task Deleted
+				<div class="activities_second_line m-t-none"><small>
+				<i class="icon-money icon-white"></i>{{custom3}} {{agile_lng_translate 'activity_type' 'TASK_DELETE'}}
+				</small></div>
+			{{else}}
+				Tasks Deleted
+				<div class="activities_second_line m-t-none"><small>
+				<i class="icon-money icon-white"></i>{{custom3}} {{agile_lng_translate 'activity' 'tasks-bulk-delete'}}
+				</small></div>
+			{{/if_equals}}
+		{{/if_equals}}
+		{{#if_equals "BULK_TASK_CHANGE_DUEDATE" custom1}}
+			{{#if_equals "1" custom3}}
+				Due date changed for {{custom3}} Task
+				<div class="activities_second_line m-t-none"><small>
+				<i class="icon-money icon-white"></i> {{agile_lng_translate 'activity' 'task-bulk-duedate'}} {{epochToHumanDate "ddd mmm dd yyyy" custom2}}.
+				</small></div>
+			{{else}}
+				Due date changed for {{custom3}} Tasks
+				<div class="activities_second_line m-t-none"><small>
+				<i class="icon-money icon-white"></i> {{agile_lng_translate 'activity' 'tasks-bulk-duedate'}} {{epochToHumanDate "ddd mmm dd yyyy" custom2}}.
+				</small></div>
+			{{/if_equals}}
+		{{/if_equals}}
+	{{/if_equals}}
 {{#if_equals "TASK_ADD" activity_type}} 
 {{agile_lng_translate 'report-view' 'created-task'}} {{#if this.entityObject}}<a href="#task/{{entity_id}}">{{safe_string label}}</a>{{else}} '{{safe_string label}}'{{/if}} <br/>
 <div class="activities_second_line m-t-none"><small>
