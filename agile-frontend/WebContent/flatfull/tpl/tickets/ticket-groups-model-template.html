@@ -11,8 +11,8 @@
 			</div>
 		</div>
 		
-		<div class="table-resp text-light">
-		<span id="source-{{id}}" data-clipboard-text="{{group_email}}">{{group_email}}</span>
+		<div class="text-light">
+		<span class="text-ellipsis pull-left" style="width:90%;" id="source-{{id}}" data-clipboard-text="{{group_email}}">{{group_email}}</span>
    		<a id="grp-{{id}}" class="m-xs a-frwd-email text-light" href="javascript:void(0);" data-toggle="tooltip" data-placement="top" data-copied-text="{{agile_lng_translate 'misc-keys' 'clip-email-copied'}}">
      			<i class="icon-copy copy_email_clipboard_icon" ></i>
      	</a>
@@ -21,7 +21,7 @@
      	<div class="table-resp">
             <small class="edit-hover text-muted"> 
 				<i class="fa fa-clock-o"></i>
-		        <span>{{agile_lng_translate 'tickets' 'last-updated-on'}}&nbsp;</span>
+		        <span>{{agile_lng_translate 'tickets' 'last-updated-on'}}</span>
                 <time class="campaign-created-time b-b-dotted" datetime="{{epochToHumanDate "" updated_time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM" updated_time}}</time>
             </small>
         </div>
@@ -51,8 +51,8 @@
    	<td>
         <div class="table-resp">
             <small class="edit-hover text-muted"> 
-				<i class="fa fa-clock-o m-r-xs"></i>
-		        <span>{{agile_lng_translate 'tickets' 'last-updated-on'}}&nbsp;</span>
+				<i class="fa fa-clock-o"></i>
+		        <span>{{agile_lng_translate 'tickets' 'last-updated-on'}}</span>
                 <time class="campaign-created-time b-b-dotted" datetime="{{epochToHumanDate "" updated_time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM" updated_time}}</time>
             </small>
         </div>
