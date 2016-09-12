@@ -55,7 +55,6 @@ $(function()
 	 * events, and dispatching routes
 	 */
 	Backbone.history.start();
-	App_Admin_Settings.contactsLimitreachedview();
 
 //	setup_our_domain_sync();
 });
@@ -107,6 +106,12 @@ function currentRoute(route)
 	}
 	
 	 showUpgradeNoty();
+	 if(!_agile_get_prefs("contactslimit"))
+	{
+	App_Admin_Settings.contactsLimitreachedview();
+	_agile_set_prefs("contactslimit","true",1);
+	}
+
 
 	 // Check the user permission to view the current route.
 	 if(CURRENT_DOMAIN_USER)

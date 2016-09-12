@@ -227,7 +227,7 @@ content="<%=domainUser.getInfo(DomainUser.LAST_LOGGED_IN_TIME)%>" />
     outline:none;
     cursor:text;
 }
-.free_plan_alert , .contacts_plan_alert{
+.free_plan_alert {
   padding-top: 5px;
   padding-bottom: 7px;
   z-index: 1;top: 65px;
@@ -266,7 +266,9 @@ function isIE() {
 
 </script>
 <div id="alert-message" style="display:none;"></div>
-<div id="contacts_limit_alert_info" class="contacts_plan_alert hide"> 
+<div style="position: absolute;right: 0;z-index: 9999;">
+<div id="contacts_limit_alert_info" class="contacts_plan_alert hide" style="position: relative; top:130px;"> 
+</div>
 </div>
 <div id="free_plan_alert_info" class="free_plan_alert alert alert-info" role="alert" style="display:none;"> 
   <span class="free_plan_message">
