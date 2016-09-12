@@ -5,6 +5,7 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -758,7 +759,8 @@ public class PortletUtil {
 			domainUsersList=DomainUserUtil.getUsers(dUser.domain);
 		List<String> domainUserNamesList=new ArrayList<String>();
 		List<String> domainUserImgList=new ArrayList<String>();
-		
+
+		//we dont need this///////////////////////////////
 		List<Integer> answeredCallsCountList=new ArrayList<Integer>();
 		List<Integer> busyCallsCountList=new ArrayList<Integer>();
 		List<Integer> failedCallsCountList=new ArrayList<Integer>();
@@ -771,7 +773,7 @@ public class PortletUtil {
 		List<Integer> newOpportunityCallsCountList=new ArrayList<Integer>();
 		List<Integer> meetingScheduledCallsCountList=new ArrayList<Integer>();
 		List<Integer> queuedCallsCountList=new ArrayList<Integer>();
-		
+		////////////////////////////////////////
 		
 		List<Integer> totalCallsCountList=new ArrayList<Integer>();
 		
@@ -801,7 +803,13 @@ public class PortletUtil {
 			e.printStackTrace();
 		}
 		int i=0;
+		Map<String,Integer> finalCallStatusCount = new HashMap<>();
+		
 		for(DomainUser domainUser : usersList){
+			
+			// loop all the status and generate the count for each .........
+			
+			
 			int answeredCallsCount=0;
 			int busyCallsCount=0;
 			int failedCallsCount=0;
@@ -821,7 +829,28 @@ public class PortletUtil {
 			
 			List<Activity> callActivitiesList = ActivityUtil.getActivitiesByActivityType("CALL",domainUser.id,minTime,maxTime);
 			
-				for(Activity activity : callActivitiesList){
+			for(Activity activity:callActivitiesList){
+				String statusInActivity = activity.custom3;
+				if(statusInActivity != null && !statusInActivity.equals("")){
+					if(statusInActivity.equalsIgnoreCase(Call.ANSWERED) || statusInActivity.equalsIgnoreCase(Call.COMPLETED)){
+						statusInActivity = Call.ANSWERED;
+					}
+					if(finalCallStatusCount.containsKey(statusInActivity)){
+						Integer count = finalCallStatusCount.get(statusInActivity);
+						finalCallStatusCount.put(statusInActivity, ++count);
+					}else{
+						finalCallStatusCount.put(statusInActivity, 1);
+					}
+					totalCallsCount++;
+					if(activity.custom4!=null &&  !activity.custom4.equalsIgnoreCase(null) 
+							&& !activity.custom4.equalsIgnoreCase("null") && !activity.custom4.equalsIgnoreCase(""))
+						callsDuration+=Long.valueOf(activity.custom4);
+				}
+				
+				
+			}
+			
+/*				for(Activity activity : callActivitiesList){
 					try{
 					if(activity.custom3!=null && (activity.custom3.equalsIgnoreCase(Call.ANSWERED) || activity.custom3.equalsIgnoreCase("completed")))
 						answeredCallsCount++;
@@ -845,7 +874,7 @@ public class PortletUtil {
 						newOpportunityCallsCount++;
 					else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.MeetingScheduled))
 						meetingScheduledCallsCount++;
-					else /*if(activity.custom3!=null && activity.custom3.equalsIgnoreCase("queued"))*/
+					else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase("queued"))
 						queuedCallsCount++;
 					totalCallsCount++;
 					if(activity.custom4!=null &&  !activity.custom4.equalsIgnoreCase(null) 
@@ -856,8 +885,8 @@ public class PortletUtil {
 			catch(Exception e){
 				e.printStackTrace();
 			}
-				}
-			
+				}*/
+			// not required
 			answeredCallsCountList.add(answeredCallsCount);
 			busyCallsCountList.add(busyCallsCount);
 			failedCallsCountList.add(failedCallsCount);
@@ -870,6 +899,7 @@ public class PortletUtil {
 			newOpportunityCallsCountList.add(newOpportunityCallsCount);
 			meetingScheduledCallsCountList.add(meetingScheduledCallsCount);
 			queuedCallsCountList.add(queuedCallsCount);
+			/////////////////////////////
 			
 			totalCallsCountList.add(totalCallsCount);
 			
@@ -889,6 +919,8 @@ public class PortletUtil {
 				domainUserImgList.add("no image-"+i);
 			i++;
 		}
+		
+		// not required.............
 		callsPerPersonJSON.put("answeredCallsCountList",answeredCallsCountList);
 		callsPerPersonJSON.put("busyCallsCountList",busyCallsCountList);
 		callsPerPersonJSON.put("failedCallsCountList",failedCallsCountList);
@@ -901,7 +933,9 @@ public class PortletUtil {
 		callsPerPersonJSON.put("newOpportunityCallsCountList",newOpportunityCallsCountList);
 		callsPerPersonJSON.put("meetingScheduledCallsCountList",meetingScheduledCallsCountList);
 		callsPerPersonJSON.put("queuedCallsCountList",queuedCallsCountList);
-
+		////////////////////////////////
+		
+		callsPerPersonJSON.put("finalCallStatusCountMap", finalCallStatusCount);	
 		callsPerPersonJSON.put("callsDurationList",callsDurationList);
 		callsPerPersonJSON.put("totalCallsCountList",totalCallsCountList);
 		callsPerPersonJSON.put("domainUsersList",domainUserNamesList);
