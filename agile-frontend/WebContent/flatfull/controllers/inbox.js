@@ -192,22 +192,7 @@ function renderToMailList(url){
 						$(".ng-show").show();
 					});
 					$("li.unread").css({"font-weight":"bold"});
-					$(".unread").unbind().click(function() {
-						var attrid = $(this).attr("id");
-						var dataVal = $(this).attr("data-val");
-						var from_email = $('#inbox-email-type-select').attr("from_email");
-						var server = $("#inbox-email-type-select").attr("data-server");
-						var url ="";
-
-						if(server == "google")
-							url = "core/api/social-prefs/setFlags?";
-						if(server == "imap")
-							url ="core/api/imap/setFlags?";
-
-						url = url+"from_email="+from_email+"&folder_name=INBOX&flag=SEEN&messageid="+dataVal,
-						setSeenFlag(url, attrid);
-						$(this).css({"font-weight":"normal"});
-					});
+					inboxFlagListners();
 					hideTransitionBar();
 					$(".loading").hide();
 				},
@@ -456,6 +441,45 @@ function inboxreplySend(ele,json){
 			if (response.status != 406)
 				$save_info.show().delay(10000).hide(1);
 		} 
+	});
+}
+function inboxFlagListners(){
+	$(".unread").unbind().click(function() {
+		//var attrid = $(this).attr("id");
+		var dataVal = $(this).attr("data-val");
+		var from_email = $('#inbox-email-type-select').attr("from_email");
+		var server = $("#inbox-email-type-select").attr("data-server");
+		var url ="";
+
+		if(server == "google")
+			url = "core/api/social-prefs/setFlags?";
+		if(server == "imap")
+			url ="core/api/imap/setFlags?";
+
+		url = url+"from_email="+from_email+"&folder_name=INBOX&flag=SEEN&messageid="+dataVal,
+		setSeenFlag(url);
+		$(this).css({"font-weight":"normal"});
+	});
+	$(".delete").unbind().click(function() {
+		var dataVal = $(this).attr("data-id");
+		var from_email = $('#inbox-email-type-select').attr("from_email");
+		var server = $("#inbox-email-type-select").attr("data-server");
+		var url ="";
+
+		if(server == "google")
+			url = "core/api/social-prefs/setFlags?";
+		if(server == "imap")
+			url ="core/api/imap/setFlags?";
+
+		url = url+"from_email="+from_email+"&folder_name=INBOX&flag=DELETED&messageid="+dataVal,
+		setSeenFlag(url);
+
+		$("#flag"+dataVal).remove();
+		$("#"+dataVal).remove();
+		$("#mails-list").show();
+		$("#mail-details-view").hide();
+		$(".inbox-reply-view").html("");
+		$(".ng-show").show();
 	});
 }
 function setSeenFlag(url,dataVal, attrid){
