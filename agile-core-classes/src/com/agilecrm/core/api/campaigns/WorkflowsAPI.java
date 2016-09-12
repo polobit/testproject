@@ -162,6 +162,9 @@ public class WorkflowsAPI {
 			
 			//Increase count of Campaign for AllDomainstats report in database
 			AllDomainStatsUtil.updateAllDomainStats(AllDomainStats.CAMPAIGN_COUNT);
+			//Increase count of top ten nodes count template for AllDomainstats report in database
+			
+			AllDomainStatsUtil.updateWorkflowNodecount(AllDomainStatsUtil.getNodeCountFromWorkflow(workflow.rules));
 			
 		} catch (Exception e) {
 			System.out
