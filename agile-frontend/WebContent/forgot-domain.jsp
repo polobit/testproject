@@ -1,3 +1,4 @@
+<%@page import="com.google.appengine.api.utils.SystemProperty"%>
 <%@page import="org.json.JSONObject"%>
 <%@page import="com.agilecrm.util.MobileUADetector"%>
 <%@page import="com.agilecrm.util.language.LanguageUtil"%>
@@ -31,6 +32,7 @@ if(StringUtils.isBlank(_LANGUAGE) || !LanguageUtil.isSupportedlanguageFromKey(_L
 //Locales JSON
 JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "forgot-domain");
 
+String _AGILE_VERSION = SystemProperty.applicationVersion.get();
 /*
 It checks first if user exists then if user exists,
 he is redirected to his own domain else error is shown in the same page.
@@ -180,7 +182,7 @@ body {
 
 <script type='text/javascript' src='<%=flatfull_path%>/lib/jquery-new/jquery-2.1.1.min.js'></script>
 <script type="text/javascript" src="<%=flatfull_path%>/lib/bootstrap.v3.min.js"></script>
-<script src='locales/html5/localize.js?_='></script>
+<script src='locales/html5/localize.js?_=<%=_AGILE_VERSION%>'></script>
 <!--[if lt IE 10]>
 <script src="flatfull/lib/ie/placeholders.jquery.min.js"></script>
 <![endif]-->

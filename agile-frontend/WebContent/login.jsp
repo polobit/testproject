@@ -259,7 +259,7 @@ if(isSafari && isWin)
 <script type='text/javascript' src='//cdnjs.cloudflare.com/ajax/libs/jquery/1.10.2/jquery.min.js'></script>
 <script type='text/javascript' src='//cdn.jsdelivr.net/fingerprintjs2/1.1.2/fingerprint2.min.js'></script>
 <script type='text/javascript' src='flatfull/final-lib/final-lib-1/b-bootstrap.js'></script>
-<script src='locales/html5/localize.js?_='></script>
+<script src='locales/html5/localize.js?_=<%=_AGILE_VERSION%>'></script>
 
 <!--[if lt IE 10]>
 <script src="flatfull/lib/ie/placeholders.jquery.min.js"></script>

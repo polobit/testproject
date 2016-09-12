@@ -11,9 +11,9 @@ pageEncoding="UTF-8"%>
 <%
 
 
-if (request.getAttribute("javax.servlet.forward.request_uri") == null) {
+/*if (request.getAttribute("javax.servlet.forward.request_uri") == null) {
     response.sendRedirect("/register");
-}
+}*/
 String _AGILE_VERSION = SystemProperty.applicationVersion.get();
 
 String CSS_PATH = "/";
@@ -188,7 +188,7 @@ position:fixed!important;
 
 <script type='text/javascript' src='//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js'></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jstimezonedetect/1.0.4/jstz.min.js" type="text/javascript"></script>
-<script src='locales/html5/localize.js?_='></script>
+<script src='locales/html5/localize.js?_=<%=_AGILE_VERSION%>'></script>
 
 <link rel="stylesheet" type="text/css" href="<%=CSS_PATH %>css/bootstrap.v3.min.css" />
 <link rel="stylesheet" type="text/css" href="/flatfull/css/app.css" />
@@ -241,7 +241,7 @@ if(isSafari && isWin)
 <label class="col-sm-3 control-label">&nbsp;</label>
 <div class="col-sm-6">
 	<div class="input-prepend input-append input-group">
-	<input id='subdomain' type="text" required oninvalid="_agile_set_custom_validate(this);" oninput="_agile_reset_custom_validate(this);" placeholder='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "domain")%>' title='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "domain-name-validation")%>'  name="subdomain"  class="required  domainLength commonDomain domainCharacters domain_input_field form-control" autocapitalize="off" minlength="4" maxlength="20" pattern="^[a-zA-Z][a-zA-Z0-9-_]{3,20}$"> <span class="add-on field_domain_add_on input-group-addon regpage-domain" 
+	<input id='subdomain' type="text" required oninvalid="_agile_set_custom_validate(this);" oninput="_agile_reset_custom_validate(this);" placeholder='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "domain")%>' name="subdomain"  class="required  domainLength commonDomain domainCharacters domain_input_field form-control" autocapitalize="off" minlength="4" maxlength="20" pattern="^[a-zA-Z][a-zA-Z0-9-_]{3,20}$"> <span class="add-on field_domain_add_on input-group-addon regpage-domain" 
 	id="app_address">.agilecrm.com</span>
 	</div>
 	
@@ -256,7 +256,7 @@ if(isSafari && isWin)
 <div class="form-group">
 <label class="col-sm-3 control-label"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "choose-plan")%></label>
 <div class="col-sm-6">
-	<select class="form-control required" required  name="plan_type" data-width="100%" >
+	<select class="form-control required" required  name="plan_type" data-width="100%" oninvalid="_agile_set_custom_validate(this);" oninput="_agile_reset_custom_validate(this);">
 											<option value="" selected disabled><%=LanguageUtil.getLocaleJSONValue(localeJSON, "choose-plan")%></option>
 											<option value="Free">Free</option>
 											<option value="Starter">Starter</option>
@@ -280,7 +280,7 @@ if(isSafari && isWin)
 <div class="form-group m-b-none">
 <label class="col-sm-3 control-label"> <%=LanguageUtil.getLocaleJSONValue(localeJSON, "role-and-company")%></label>
 <div class="col-sm-3 m-b">
-<select class="form-control required" required  name="role">
+<select class="form-control required" required  name="role" oninvalid="_agile_set_custom_validate(this);" oninput="_agile_reset_custom_validate(this);">
 											<option value="" selected disabled><%=LanguageUtil.getLocaleJSONValue(localeJSON, "role")%></option>
 											<option value="CEO"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "ceo")%></option>
 											<option value="VP"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "vp")%></option>
@@ -297,7 +297,7 @@ if(isSafari && isWin)
 								  </select>
 </div>
 <div class="col-sm-3 m-b">
-	<select class="form-control required"  name="company_type" required  data-width="100%">
+	<select class="form-control required"  name="company_type" required  data-width="100%" oninvalid="_agile_set_custom_validate(this);" oninput="_agile_reset_custom_validate(this);">
 											<option value="" selected disabled><%=LanguageUtil.getLocaleJSONValue(localeJSON, "select-type")%></option>
 											<option value="B2B"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "b2b")%></option>
 											<option value="SaaS"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "saas")%></option>
@@ -318,7 +318,7 @@ if(isSafari && isWin)
 <div class="col-sm-6">
 <input
 											class="field form-control required tel-number"
-											id="login_phone_number" name='phone_number' type="text"
+											id="login_phone_number" name='phone_number' type="password"
 											placeholder='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "phone-number")%>' autocapitalize="off" autocomplete="off">
 											<div class='custom-error'><%=LanguageUtil.getLocaleJSONValue(localeJSON, "pnone-num-validation")%></div>
 </div>
@@ -384,6 +384,9 @@ var selected_plan_type = '<%=request.getParameter("plan_type")%>';
 var localeJSON = <%=localeJSON%>;
 $(document).ready(function(){
 
+	// Set domain name error title
+	$("#subdomain").attr("title", localeJSON["domain-name-validation"]);
+
 	// Set selected plan name
 	if(selected_plan_type){
         $("select[name='plan_type']").val(selected_plan_type);
@@ -391,6 +394,8 @@ $(document).ready(function(){
 
 	// Pre load dashlet files when don is active
 	$('#account_timezone').val(jstz.determine().name());
+	$("#login_phone_number").attr("type", "text");
+	
 	var telInput = $("#login_phone_number"),
 	  errorMsg = $("#error-msg"),
 	  validMsg = $("#valid-msg");

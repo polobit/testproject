@@ -16,4 +16,6 @@
  	"invalid-password": "{{agile_lng_translate 'html5Validations' 'invalid-password'}}",
  	"name-validation": "{{agile_lng_translate 'register' 'name-validation'}}",
  	"invalid-pattern": "{{agile_lng_translate 'register' 'invalid-pattern'}}",
+ 	"domain-name-issue": "{{agile_lng_translate 'enter-domain' 'domain-name-issue'}}",
+ 	"email-invalid-after-@": "{{agile_lng_translate 'forgot-domain' 'email-invalid-after-@'}}",
 }

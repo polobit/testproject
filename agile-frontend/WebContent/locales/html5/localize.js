@@ -12,9 +12,11 @@ function _agile_reset_custom_validate(input){
 function getCustomValidity(input){
 	var type = input.type;
 	if(input.validity.valueMissing){
-        return localeJSON["invalid-default"];
+        if(input.nodeName == "SELECT")
+            return localeJSON["invalid-select-one"];
+        else 
+            return localeJSON["invalid-default"];
     } else if(!input.validity.valid) {
-
     	if(input.validity.patternMismatch){
     		return localeJSON["invalid-pattern"] + "\n" + $(input).attr('title'); 
     	}
@@ -24,7 +26,11 @@ function getCustomValidity(input){
     	}
 
     	if(type == "email"){
-    		return localeJSON["invalid-email"].replace("$1", '' + $(input).val() + '');
+            var mssg = localeJSON["invalid-email"];
+            if($(input).val().indexOf("@") != -1)
+                mssg = localeJSON["email-invalid-after-@"];
+
+            return mssg.replace("$1", '' + $(input).val() + '');
     	}
     	if(type == "password"){
     		return localeJSON["invalid-password"].replace("$1", $(input).attr('minlength')).replace("$2", $(input).val().length);

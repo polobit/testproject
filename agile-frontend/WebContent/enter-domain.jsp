@@ -15,7 +15,7 @@ String _LANGUAGE = LanguageUtil.getLanguageKeyFromCookie(request);
 
 //Locales JSON
 JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "enter-domain");
-
+String _AGILE_VERSION = SystemProperty.applicationVersion.get();
 /*
 It checks if any user exists in that domain,
 if user exists,it is redirected to login page in the same domain otherwise it is redirected to register page.
@@ -186,6 +186,7 @@ padding-left:10px!important;
 	<script type='text/javascript' src='<%=flatfull_path%>/lib/jquery-new/jquery-2.1.1.min.js'></script>
 	<script type="text/javascript" src="<%=flatfull_path%>/lib/bootstrap.v3.min.js"></script>
 	<script>
+	var localeJSON = <%=localeJSON%>;
 
 	$(document).ready(function(){
    var newImg = new Image;
@@ -238,7 +239,7 @@ padding-left:10px!important;
 		  
 		  var regularExpression  = new RegExp(/^[A-Za-z][a-zA-Z0-9]{1,20}$/);
 		  if(!regularExpression.test(subdomain)) {
-		        error = '<%=LanguageUtil.getLocaleJSONValue(localeJSON, "enter-domain.domain-name-issue")%>';
+		        error = localeJSON["domain-name-issue"];
 				return false;
 		    }
 		  return true;

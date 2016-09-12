@@ -14,7 +14,7 @@ pageEncoding="UTF-8"%>
 
 <%
 	
-	if (request.getAttribute("javax.servlet.forward.request_uri") == null) {
+	/*if (request.getAttribute("javax.servlet.forward.request_uri") == null) {
 		response.sendRedirect("/register");
 		return;
 	}
@@ -23,7 +23,7 @@ pageEncoding="UTF-8"%>
 	{
 	    RegisterUtil.redirectToRegistrationpage(request, response);
 	    return;
-	}
+	} */
 
   String _source = request.getParameter("_source");
   String registered_email = request.getParameter("email");
@@ -304,7 +304,7 @@ if(isSafari && isWin)
 <script type='text/javascript' src='//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js'></script>
 <script type='text/javascript' src='flatfull/final-lib/final-lib-1/b-bootstrap.js'></script>
 <script src="/flatfull/registration/register.js" type="text/javascript"></script>
-<script src='locales/html5/localize.js?_='></script>
+<script src='locales/html5/localize.js?_=<%=_AGILE_VERSION%>'></script>
 <!--[if lt IE 10]>
 <script src="flatfull/lib/ie/placeholders.jquery.min.js"></script>
 <![endif]-->
