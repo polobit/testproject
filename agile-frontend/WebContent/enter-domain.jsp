@@ -1,3 +1,4 @@
+<%@page import="com.google.appengine.api.utils.SystemProperty"%>
 <%@page import="com.agilecrm.util.VersioningUtil"%>
 <%@page import="com.agilecrm.util.MobileUADetector"%>
 <%@page import="com.agilecrm.util.language.LanguageUtil"%>
