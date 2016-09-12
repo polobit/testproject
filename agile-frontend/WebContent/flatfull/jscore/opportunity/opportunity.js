@@ -727,6 +727,7 @@ function fetchDealsList(data){
 
             // To show timeago for models appended by infini scroll
             includeTimeAgo(el);
+            getRelatedContactImages(App_Deals.opportunityCollectionView.collection);
 
         } });
 
