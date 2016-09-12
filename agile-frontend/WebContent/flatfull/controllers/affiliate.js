@@ -113,8 +113,7 @@ var AffiliateRouter = Backbone.Router.extend({
 			if(!template_ui)
 				  return;
 			$('#content').html($(template_ui));
-			head.js(LIB_PATH + '../lib/zeroclipboard/ZeroClipboard.js', function()
-			{
+			_agile_library_loader.load_zeroclipboard(function(){
 				hideTransitionBar();
 				getTemplate('affiliate-tools', {}, undefined, function(template_ui){
 					if(!template_ui)
