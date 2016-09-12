@@ -24,7 +24,7 @@ function getCustomValidity(input){
     	}
 
     	if(type == "email"){
-    		return localeJSON["invalid-email"].replace("$1", '+ $(input).val() +');
+    		return localeJSON["invalid-email"].replace("$1", '' + $(input).val() + '');
     	}
     	if(type == "password"){
     		return localeJSON["invalid-password"].replace("$1", $(input).attr('minlength')).replace("$2", $(input).val().length);

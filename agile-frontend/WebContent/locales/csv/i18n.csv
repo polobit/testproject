@@ -5278,7 +5278,7 @@ enter-domain.enter-your-domain,Enter Your Domain,Inserta tu dominio
 enter-domain.enter-your-domain-at,Enter your domain at ,Inserta tu dominio en
 enter-domain.new-user,New User,Nuevo usuario
 enter-domain.common-domain-issue,Common domain cannot be created.,Dominio común no puede ser creado
-enter-domain.domain-name-issue,Domain should start with alphabet and special characters not allowed.,El dominio debe comenzar con el alfabeto y los caracteres especiales no están permitidos
+enter-domain.domain-name-issue,Name should be between 2-20 characters in length. Both letters and numbers are allowed but it should start with a letter. Cannot contain special characters other than '_' and '-',Nombre debe ser entre 4-20 caracteres de longitud . Letras y números están permitidos pero deben comenzar con una letra . No pueden contener caracteres especiales que no sean '_' y '-'
 enter-domain.domain-name-length-error,Domain should be 2 to 20 characters.,El dominio debe tener entre 2 y 20 caracteres
 forgot-password.we-sent-email,We have sent you an email,Te hemos enviado un correo
 forgot-password.signed-up-with-oauth2,You have signed-up using your Google/Yahoo account. Please sign-in through the same account,Has ingresado usando tu cuenta de google/yahoo. Por favor ingresa a través de la misma cuenta

@@ -243,7 +243,7 @@ position: fixed;width: 100%;top: 0px;
 
            			</div>
            			 
-           			 <input type='submit' value="Send" class='btn btn-lg btn-primary btn-block'>
+           			 <input type='submit' value='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "Send")%>' class='btn btn-lg btn-primary btn-block'>
            				
            				<div class="text-center text-info m-t m-b">
 							<!--<small>Resend </small> -->

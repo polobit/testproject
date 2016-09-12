@@ -318,7 +318,7 @@ if(isSafari && isWin)
 <div class="col-sm-6">
 <input
 											class="field form-control required tel-number"
-											id="login_phone_number" required name='phone_number' type="text"
+											id="login_phone_number" name='phone_number' type="text"
 											placeholder='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "phone-number")%>' autocapitalize="off" autocomplete="off">
 											<div class='custom-error'><%=LanguageUtil.getLocaleJSONValue(localeJSON, "pnone-num-validation")%></div>
 </div>
