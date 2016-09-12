@@ -109,7 +109,6 @@ function currentRoute(route)
 	 if(!_agile_get_prefs("contactslimit"))
 	{
 	App_Admin_Settings.contactsLimitreachedview();
-	_agile_set_prefs("contactslimit","true",1);
 	}
 
 

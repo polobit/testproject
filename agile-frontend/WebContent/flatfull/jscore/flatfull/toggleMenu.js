@@ -291,6 +291,9 @@ $("#activityModal").on("click", "#eventDescriptionLink", function(e){
    $("#documentsmenu span").text("Documents");
    
    }
+   $("body").on("click",".contactlimit-msg-cross",function(e){
+		_agile_set_prefs("contactslimit","true",1);
+	});
 
 	$(".person").on("click", function(e){
 		e.preventDefault();
@@ -347,6 +350,7 @@ $("#activityModal").on("click", "#eventDescriptionLink", function(e){
 	        }
 	    });
 	});
+
 
 	$(".show-search-dropdown").on("click",function(e){
 		$("#searchText").val("");
