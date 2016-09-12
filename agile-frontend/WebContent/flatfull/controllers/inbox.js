@@ -122,8 +122,10 @@ function syncContacts(){
 			// Here email_server_type means email/username of mail account
 			email_server_type = $(targetEl).attr('email-server-type');
 			if (email_server && url && (email_server != 'agile')){
-				url = url.concat(email_server_type);
+				url = url.concat(email_server_type);;
 				$('#inbox-email-type-select').attr("data-url",url);
+				$('#inbox-email-type-select').attr("from_email",email_server_type);
+				$('#inbox-email-type-select').attr("data-server",email_server);
 				url = url+"&folder_name=INBOX";
 			}
 			$("#mails-list").show();
@@ -176,8 +178,36 @@ function renderToMailList(url){
 				success: function(data,response,xhr) {
 					that.render(data);
 					renderToMailView(data);
-					inboxMailViewListeners();
+					$('.collapse').on('show.bs.collapse', function (e) {
+						$("#mails-list").hide();
+						$("#compose").hide();
+						$("#mail-details-view").show();
+					    $('.collapse').not(e.target).removeClass('in');
+					});
+					$(document).on('click','.back-to-inbox',function(e) {
+						$("#mails-list").show();
+						$("#mail-details-view").hide();
+						$("#compose").hide();
+						$(".inbox-reply-view").html("");
+						$(".ng-show").show();
+					});
 					$("li.unread").css({"font-weight":"bold"});
+					$(".unread").unbind().click(function() {
+						var attrid = $(this).attr("id");
+						var dataVal = $(this).attr("data-val");
+						var from_email = $('#inbox-email-type-select').attr("from_email");
+						var server = $("#inbox-email-type-select").attr("data-server");
+						var url ="";
+
+						if(server == "google")
+							url = "core/api/social-prefs/setFlags?";
+						if(server == "imap")
+							url ="core/api/imap/setFlags?";
+
+						url = url+"from_email="+from_email+"&folder_name=INBOX&flag=SEEN&messageid="+dataVal,
+						setSeenFlag(url, attrid);
+						$(this).css({"font-weight":"normal"});
+					});
 					hideTransitionBar();
 					$(".loading").hide();
 				},
@@ -428,25 +458,10 @@ function inboxreplySend(ele,json){
 		} 
 	});
 }
-function inboxMailViewListeners(){
-	$('.collapse').on('show.bs.collapse', function (e) {
-		$("#mails-list").hide();
-		$("#compose").hide();
-		$("#mail-details-view").show();
-	    $('.collapse').not(e.target).removeClass('in');
-	});
-	$(document).on('click','.back-to-inbox',function(e) {
-		$("#mails-list").show();
-		$("#mail-details-view").hide();
-		$("#compose").hide();
-		$(".inbox-reply-view").html("");
-		$(".ng-show").show();
-	});
-	$(document).on('click','.unread',function(e) {
-		$(this).css({"font-weight":"normal"});
-		var attrid = $(this).attr("id");
-		var url = $('#inbox-email-type-select').attr("data-url");
-		url = url.concat("&folder_name=INBOX&flag=SEEN");
+function setSeenFlag(url,dataVal, attrid){
+	$.ajax({ 
+		url :url,
+		success : function(data){} 
 	});
 }
 function initializeInboxListeners(){
@@ -494,7 +509,15 @@ function initializeInboxListeners(){
 		var search_val = document.getElementById('search-mail').value;
 		if(search_val){
 			var from_email = $('#inbox-email-type-select').text();
-			url = "core/api/social-prefs/search-google-emails?from_email="+from_email+"&search_content="+search_val;
+			var server = $("#inbox-email-type-select").attr("data-server");
+			var url ="";
+
+			if(server == "google")
+				url = "core/api/social-prefs/search-google-emails?";
+			if(server == "imap")
+				url ="core/api/imap/search-imap-emails?";
+
+			url = url+"from_email="+from_email+"&search_content="+search_val;
 			$("#mails-list").remove();
 			$("#mails-list-view").append("<ul class='portlet_body list-group list-group-lg no-radius m-b-none m-t-n-xxs' id='mails-list'></ul>");
 			$("#mails-list").css({"max-height":$(window).height()-128,"height":$(window).height()-128, "overflow-y":"scroll", "padding":"0px"});

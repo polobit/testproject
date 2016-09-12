@@ -223,7 +223,7 @@ public class ContactImapUtil
      *            - count or limit to number of emails.
      * @return String
      */
-    public static String getNewIMAPURL(String fromEmail, String offset, String count)
+    public static String getNewIMAPURL(String fromEmail, String offset, String count, String foldernames,String search_content, String falg,  String messageid)
     {
 	// Fetching ImapPrefs
 	Objectify ofy = ObjectifyService.begin();
@@ -233,7 +233,7 @@ public class ContactImapUtil
 
 	String fetchItems = "mails";
 
-	return ContactImapUtil.getNewIMAPURLForPrefs(imapPrefs, fetchItems, offset, count);
+	return ContactImapUtil.getNewIMAPURLForPrefs(imapPrefs, fetchItems, offset, count, foldernames,search_content, falg, messageid);
     }
     
     /**
@@ -250,7 +250,7 @@ public class ContactImapUtil
      * @return String
      */
 
-    public static String getNewIMAPURLForPrefs(IMAPEmailPrefs imapPrefs, String fetch_items, String offset, String count){
+    public static String getNewIMAPURLForPrefs(IMAPEmailPrefs imapPrefs, String fetch_items, String offset, String count,String foldernames, String search_content, String flag,  String messageid){
 
 	String userName = imapPrefs.user_name;
 	String host = imapPrefs.server_name;
@@ -291,10 +291,17 @@ public class ContactImapUtil
 	{
 	    if (fetch_items.equalsIgnoreCase("mails"))
 	    {
-		url = hostUrl + "/imap?user_name=" + URLEncoder.encode(userName, "UTF-8") + "&host=" + URLEncoder.encode(host, "UTF-8") + "&port="
-		        + URLEncoder.encode(port, "UTF-8") + "&offset=" + offset + "&count=" + count
-		        + "&command=imap_email&fetch_items=mails&password=" + URLEncoder.encode(password, "UTF-8")
-		        + "&folder_names=" + URLEncoder.encode(foldersString, "UTF-8");
+	    	if(flag != null && !flag.equals("") && flag != ""){
+	    		url = hostUrl + "/imap?user_name=" + URLEncoder.encode(userName, "UTF-8") + "&host=" + URLEncoder.encode(host, "UTF-8") + "&port="
+				        + URLEncoder.encode(port, "UTF-8") + "&offset=" + offset + "&count=" + count
+				        + "&command=imap_email&fetch_items=mails&password=" + URLEncoder.encode(password, "UTF-8")
+				        + "&folder_names=" + URLEncoder.encode(foldernames, "UTF-8")+"&flag="+URLEncoder.encode(flag, "UTF-8")+"&mesnum="+URLEncoder.encode(messageid, "UTF-8");
+	    	}else{
+				url = hostUrl + "/imap?user_name=" + URLEncoder.encode(userName, "UTF-8") + "&host=" + URLEncoder.encode(host, "UTF-8") + "&port="
+				        + URLEncoder.encode(port, "UTF-8") + "&offset=" + offset + "&count=" + count
+				        + "&command=imap_email&fetch_items=mails&password=" + URLEncoder.encode(password, "UTF-8")
+				        + "&folder_names=" + URLEncoder.encode(foldernames, "UTF-8")+ "&search_content="+ URLEncoder.encode(search_content, "UTF-8");
+	    	}
 	    }
 	    else if (fetch_items.equalsIgnoreCase("folders"))
 	    {

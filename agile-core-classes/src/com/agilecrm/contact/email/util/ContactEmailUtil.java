@@ -967,5 +967,22 @@ public class ContactEmailUtil
 	{
 		return dao.listByProperty("user_id_from_email", userid);
 	}
+	
+	/**
+	 * Rajesh Code
+	 */
+	
+	public static Boolean sendFlagstoServer(String url){
+		try{
+			
+			HTTPUtil.accessURL(url);
+			
+			return true;
+			
+		}catch(Exception e){
+			e.printStackTrace();
+			return false;
+		}
+	}
 
 }

@@ -345,7 +345,7 @@ public class SocialPrefsAPI
 	    String normalisedFromEmail = AgileTaskletUtil.normalizeStringSeparatedByDelimiter(',', fromEmail);
 	    // Gets GmailPrefs url
 	    String gmailURL = ContactGmailUtil
-		    .getGmailNewURL(normalisedFromEmail, cursor, pageSize, foldernames,"");
+		    .getGmailNewURL(normalisedFromEmail, cursor, pageSize, foldernames,"","","");
 	    // If both are not set, return Contact emails.
 	    if (StringUtils.isNotBlank(gmailURL))
 		emails = ContactEmailUtil.getEmailsfromServer(gmailURL, pageSize, cursor, normalisedFromEmail);
@@ -381,7 +381,7 @@ public class SocialPrefsAPI
 	    String normalisedFromEmail = AgileTaskletUtil.normalizeStringSeparatedByDelimiter(',', fromEmail);
 	    // Gets GmailPrefs url
 	    String gmailURL = ContactGmailUtil
-		    .getGmailNewURL(normalisedFromEmail, cursor, pageSize,"", search_content);
+		    .getGmailNewURL(normalisedFromEmail, cursor, pageSize,"", search_content,"","");
 	    // If both are not set, return Contact emails.
 	    if (StringUtils.isNotBlank(gmailURL))
 		emails = ContactEmailUtil.getEmailsfromServer(gmailURL, pageSize, cursor, normalisedFromEmail);
@@ -393,5 +393,39 @@ public class SocialPrefsAPI
 	    return null;
 	}
 	return emails;
+    }
+    
+    /**
+     * Setting flags
+     * @param fromEmail
+     * @param pageSize
+     * @param cursor
+     * @param foldernames
+     * @return
+     */
+    @Path("setFlags")
+    @GET
+    @Produces({ MediaType.TEXT_HTML})
+    public String setFlags(@QueryParam("from_email") String fromEmail, @QueryParam("folder_name") String folder_name,@QueryParam("flag") String flag, @QueryParam("messageid") String messageid){
+    	
+    	String status="";
+		try{
+		    String normalisedFromEmail = AgileTaskletUtil.normalizeStringSeparatedByDelimiter(',', fromEmail);
+		    // Gets GmailPrefs url
+		    String gmailURL = ContactGmailUtil.getGmailNewURL(normalisedFromEmail,"","", folder_name,"", flag, messageid);
+		    // If both are not set, return Contact emails.
+		    if (StringUtils.isNotBlank(gmailURL)){
+		    	if(ContactEmailUtil.sendFlagstoServer(gmailURL)){
+		    		status = "success";
+		    	}else{
+		    		status = "failed";
+		    	}
+		    }
+		}
+		catch (Exception e){
+		    e.printStackTrace();
+		    status ="error";
+		}
+		return status;
     }
 }

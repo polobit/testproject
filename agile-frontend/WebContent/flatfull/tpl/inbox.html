@@ -155,7 +155,7 @@
 		{{#if errormssg}}
 	    	<span class="text-dark">{{agile_lng_translate 'contact-details' 'error'}}: {{errormssg}}</span>
 	    {{else}}
-		    <li id="flag{{this.id}}" class="list-group-item clearfix b-l-3x ng-scope b-l-info {{this.flags}}" style="height: 70px;overflow: hidden;">
+		    <li id="flag{{this.id}}" data-val="{{this.id}}" class="list-group-item clearfix b-l-3x ng-scope b-l-info {{this.flags}}" style="height: 70px;overflow: hidden;">
 		      <a ui-sref="app.page.profile" class="avatar thumb pull-left m-r" href="#/app/page/profile">
 		        <img ng-src="img/a10.jpg" src="img/a10.jpg">
 		      </a>
