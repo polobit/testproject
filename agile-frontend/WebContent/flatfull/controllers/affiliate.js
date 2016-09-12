@@ -15,17 +15,17 @@ var AffiliateRouter = Backbone.Router.extend({
 		var that = this;
 		checkForAffiliateDetails(function(){
 			getTemplate('affiliate', {}, undefined, function(template_ui){
-			if(!template_ui)
-				  return;
-			$('#content').html($(template_ui));
-			that.commissionDetailsView = new Base_Model_View({ url : 'core/api/affiliate/total?userId='+CURRENT_DOMAIN_USER.id, template : "affiliate-commission-details",
-			    postRenderCallback : function(el){
-			    }
-			});
-			$('#affiliate-tabs-content').html(that.commissionDetailsView.render().el);
-			$('#affiliate-tabs .select').removeClass('select');
-			$('.commission-details-tab').addClass('select');
-		}, "#content");
+				if(!template_ui)
+					  return;
+				$('#content').html($(template_ui));
+				that.commissionDetailsView = new Base_Model_View({ url : 'core/api/affiliate/total?userId='+CURRENT_DOMAIN_USER.id, template : "affiliate-commission-details",
+				    postRenderCallback : function(el){
+				    }
+				});
+				$('#affiliate-tabs-content').html(that.commissionDetailsView.render().el);
+				$('#affiliate-tabs .select').removeClass('select');
+				$('.commission-details-tab').addClass('select');
+			}, "#content");
 		}, function(){
 			that.showaffiliateDetails();
 		});
@@ -40,16 +40,20 @@ var AffiliateRouter = Backbone.Router.extend({
 	listAffiliates : function()
 	{
 		var that = this;
-		getTemplate('affiliate', {}, undefined, function(template_ui){
-			if(!template_ui)
-				  return;
-			$('#content').html($(template_ui));
-			head.js(LIB_PATH + 'lib/date-charts-en.js', LIB_PATH + 'lib/date-range-picker.js' + '?_=' + _agile_get_file_hash('date-range-picker.js'), function() {
-				that.showDateRangePicker();
-			});
-			$('#affiliate-tabs .select').removeClass('select');
-			$('.referrals-tab').addClass('select');
-		}, "#content");
+		checkForAffiliateDetails(function(){
+			getTemplate('affiliate', {}, undefined, function(template_ui){
+				if(!template_ui)
+					  return;
+				$('#content').html($(template_ui));
+				head.js(LIB_PATH + 'lib/date-charts-en.js', LIB_PATH + 'lib/date-range-picker.js' + '?_=' + _agile_get_file_hash('date-range-picker.js'), function() {
+					that.showDateRangePicker();
+				});
+				$('#affiliate-tabs .select').removeClass('select');
+				$('.referrals-tab').addClass('select');
+			}, "#content");
+		}, function(){
+			that.showaffiliateDetails();
+		});
 	},
 
 	showDateRangePicker : function()
@@ -109,24 +113,28 @@ var AffiliateRouter = Backbone.Router.extend({
 		$('#affiliate-tabs-content').html(this.affiliateCollectionView.render().el);
 	},
 	tools : function(){
-		getTemplate('affiliate', {}, undefined, function(template_ui){
-			if(!template_ui)
-				  return;
-			$('#content').html($(template_ui));
-			_agile_library_loader.load_zeroclipboard(function(){
-				hideTransitionBar();
-				getTemplate('affiliate-tools', {}, undefined, function(template_ui){
-					if(!template_ui)
-						  return;
-					$('#affiliate-tabs-content').html($(template_ui));
-					for(var i=1; i<=6; i++){
-						initZeroClipboard("url_clip_button"+i, "referral_url"+i);
-					}
-					$('#affiliate-tabs .select').removeClass('select');
-					$('.tools-tab').addClass('select');
-				},null);
-			});
-		}, "#content");
+		checkForAffiliateDetails(function(){
+			getTemplate('affiliate', {}, undefined, function(template_ui){
+				if(!template_ui)
+					  return;
+				$('#content').html($(template_ui));
+				_agile_library_loader.load_zeroclipboard(function(){
+					hideTransitionBar();
+					getTemplate('affiliate-tools', {}, undefined, function(template_ui){
+						if(!template_ui)
+							  return;
+						$('#affiliate-tabs-content').html($(template_ui));
+						for(var i=1; i<=6; i++){
+							initZeroClipboard("url_clip_button"+i, "referral_url"+i);
+						}
+						$('#affiliate-tabs .select').removeClass('select');
+						$('.tools-tab').addClass('select');
+					},null);
+				});
+			}, "#content");
+		}, function(){
+			that.showaffiliateDetails();
+		});
 	}
 
 });
