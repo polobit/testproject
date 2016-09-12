@@ -14,6 +14,6 @@
    });
  }
 
-  $(document).on('click.bs.agiletxexpander.data-api', '[data-agileexpand="true"]', Agiletextarea.prototype.expand)
+  $(document).on('focus.bs.agiletxexpander.data-api', '[data-agileexpand="true"]', Agiletextarea.prototype.expand)
 
 }(jQuery));
