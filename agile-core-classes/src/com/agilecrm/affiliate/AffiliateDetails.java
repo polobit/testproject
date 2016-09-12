@@ -73,6 +73,18 @@ public class AffiliateDetails {
 	private int amount;
 	
 	/**
+	 * created time
+	 */
+	@NotSaved(IfDefault.class)
+	private Long createdTime;
+	
+	/**
+	 * Last updated time
+	 */
+	@NotSaved(IfDefault.class)
+	private Long updatedTime;
+	
+	/**
 	 * @return the amountAdded
 	 */
 	public int getAmountAdded() {
@@ -119,10 +131,41 @@ public class AffiliateDetails {
 		String oldNamespace = NamespaceManager.get();
 		NamespaceManager.set("");
 		try{
+			this.setUpdatedTime(System.currentTimeMillis()/1000);
+			if(this.id == null)
+				this.setCreatedTime(System.currentTimeMillis()/1000);
 			dao.put(this);
 		}finally{
 			NamespaceManager.set(oldNamespace);
 		}
+	}
+
+	/**
+	 * @return the createdTime
+	 */
+	public Long getCreatedTime() {
+		return createdTime;
+	}
+
+	/**
+	 * @param createdTime the createdTime to set
+	 */
+	public void setCreatedTime(Long createdTime) {
+		this.createdTime = createdTime;
+	}
+
+	/**
+	 * @return the updatedTime
+	 */
+	public Long getUpdatedTime() {
+		return updatedTime;
+	}
+
+	/**
+	 * @param updatedTime the updatedTime to set
+	 */
+	public void setUpdatedTime(Long updatedTime) {
+		this.updatedTime = updatedTime;
 	}
 
 	/**
