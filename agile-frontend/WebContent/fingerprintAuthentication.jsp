@@ -267,7 +267,7 @@ position: fixed;width: 100%;top: 0px;
 	<!-- JQUery Core and UI CDN -->
 	
 	<script src='//cdnjs.cloudflare.com/ajax/libs/headjs/1.0.3/head.min.js'></script>
-	<script src='locales/html5/localize.js'></script>
+	<script src='locales/html5/localize.js?_='></script>
 
 	<script type="text/javascript">
 
