@@ -852,6 +852,8 @@ function get_campaign_changes(updated_workflow_json, old_workflow_json, callback
     var old_nodes = JSON.parse(old_workflow_json).nodes;
 
     var map = {"ADDED":[], "MODIFIED":[], "DELETED": []};
+    var restricted_fields = ["text_email", "html_email"];
+
     // var modified_table = {NodeName, Action, FieldName, Previous Value, New Value};
 
     head.js(LIB_PATH + 'lib/underscore-min.1.8.3.js', function(){
@@ -884,6 +886,7 @@ function get_campaign_changes(updated_workflow_json, old_workflow_json, callback
                     {
 
                         var updated_node_field = update_nodes[i].JsonValues[j];
+
                         var old_node_field  = _.findWhere(old_node.JsonValues, 
                                                         {name: updated_node_field.name});
 
@@ -901,6 +904,12 @@ function get_campaign_changes(updated_workflow_json, old_workflow_json, callback
                             
                             modified_field.old_value = old_node_field.value;
                             modified_field.new_value = updated_node_field.value;
+
+                            if(restricted_fields.indexOf(modified_field.name) != -1)
+                            {
+                                modified_field.old_value = "-";
+                                modified_field.new_value = "Template changed.";
+                            }
 
                             modified_field_values.push(modified_field);
                         }
