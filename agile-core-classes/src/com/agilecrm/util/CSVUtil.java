@@ -136,7 +136,7 @@ public class CSVUtil
     {
 	TOTAL, SAVED_CONTACTS, MERGED_CONTACTS, DUPLICATE_CONTACT, NAME_MANDATORY, EMAIL_REQUIRED, INVALID_EMAIL, TOTAL_FAILED, NEW_CONTACTS, LIMIT_REACHED,
 
-	ACCESS_DENIED, TYPE, PROBABILITY, TRACK, FAILEDCSV, INVALID_TAG;
+	ACCESS_DENIED, TYPE, PROBABILITY, TRACK, FAILEDCSV, INVALID_TAG, SOURCE_MISMATCHED, STATUS_MISMATCHED;
 
     }
 
@@ -1996,14 +1996,30 @@ public class CSVUtil
     	int mergedContacts = 0;
     	int limitExceeded = 0;
     	int accessDeniedToUpdate = 0;
+    	int sourceMismatched = 0;
+    	int statusMismatched = 0;
     	Map<Object, Object> status = new HashMap<Object, Object>();
     	status.put("type", "Leads");
 
     	List<CustomFieldDef> customFields = CustomFieldDefUtil.getCustomFieldsByScopeAndType(SCOPE.CONTACT, "DATE");
     	List<CustomFieldDef> imagefield = CustomFieldDefUtil.getCustomFieldsByScopeAndType(SCOPE.CONTACT, "text");
+    	
     	CategoriesUtil categoriesUtil = new CategoriesUtil();
     	List<Category> leadSourceList = categoriesUtil.getCategoriesByType(Category.EntityType.LEAD_SOURCE.toString());
     	List<Category> leadStatusList = categoriesUtil.getCategoriesByType(Category.EntityType.LEAD_STATUS.toString());
+    	
+    	Map<String, Long> leadSources = new HashMap<String, Long>();
+    	Map<String, Long> leadStatuses = new HashMap<String, Long>();
+    	
+    	for(Category category : leadSourceList)
+    	{
+    		leadSources.put(StringUtils.lowerCase(category.getLabel()), category.getId());
+    	}
+    	
+    	for(Category category : leadStatusList)
+    	{
+    		leadStatuses.put(StringUtils.lowerCase(category.getLabel()), category.getId());
+    	}
 
     	/**
     	 * Processed contacts count.
@@ -2037,6 +2053,8 @@ public class CSVUtil
     	    Contact tempContact = new Contact();
 
     	    boolean isMerged = false;
+    	    boolean is_source_added = false;
+    	    boolean is_status_added = false;
     	    try
     	    {
     		// create dummy contact
@@ -2135,27 +2153,51 @@ public class CSVUtil
     		    
     		    if ("lead_source".equals(field.name))
     		    {
-    			for(Category leadSource : leadSourceList)
-    			{
-    				if(leadSource.getName() != null && leadSource.getName().equalsIgnoreCase(csvValues[j]))
-    				{
-    					tempContact.setLead_source_id(leadSource.getId());
-    					break;
-    				}
-    			}
+    		    is_source_added = true;
+    		    //If no lead source, set Other as source
+		    	if(StringUtils.isEmpty(csvValues[j]))
+				{
+		    		tempContact.setLead_source_id(leadSources.get("other"));
+				}
+		    	else
+		    	{
+		    		Long source_id = leadSources.get(csvValues[j]);
+		    		if(source_id != null && source_id > 0)
+		    		{
+		    			tempContact.setLead_source_id(source_id);
+		    		}
+		    		else
+		    		{
+		    			sourceMismatched++;
+		    			failedContacts.add(new FailedContactBean(getDummyContact(properties, csvValues),
+		        				"source mismatched"));
+		    		}
+		    	}
     			continue;
     		    }
     		    
     		    if ("lead_status".equals(field.name))
     		    {
-    			for(Category leadStatus : leadStatusList)
-    			{
-    				if(leadStatus.getName() != null && leadStatus.getName().equalsIgnoreCase(csvValues[j]))
-    				{
-    					tempContact.setLead_status_id(leadStatus.getId());
-    					break;
-    				}
-    			}
+    		    is_status_added = true;
+    		    //If no lead status, set New as status
+		    	if(StringUtils.isEmpty(csvValues[j]))
+				{
+		    		tempContact.setLead_status_id(leadStatuses.get("new"));
+				}
+		    	else
+		    	{
+		    		Long status_id = leadStatuses.get(csvValues[j]);
+		    		if(status_id != null && status_id > 0)
+		    		{
+		    			tempContact.setLead_status_id(status_id);
+		    		}
+		    		else
+		    		{
+		    			statusMismatched++;
+		    			failedContacts.add(new FailedContactBean(getDummyContact(properties, csvValues),
+		        				"status mismatched"));
+		    		}
+		    	}
     			continue;
     		    }
 
@@ -2267,6 +2309,16 @@ public class CSVUtil
     		}
 
     		tempContact.bulkActionTracker = bulk_action_tracker;
+    		//If no source added, set Other as source
+    		if(!is_source_added)
+    		{
+    			tempContact.setLead_source_id(leadSources.get("other"));
+    		}
+    		//If no status added, set New as status
+    		if(!is_status_added)
+    		{
+    			tempContact.setLead_status_id(leadStatuses.get("new"));
+    		}
     		tempContact.save(false);
     	    }// end of try
     	    catch (InvalidTagException e)
@@ -2368,6 +2420,14 @@ public class CSVUtil
     	if (accessDeniedToUpdate > 0)
     	{
     	    buildCSVImportStatus(status, ImportStatus.ACCESS_DENIED, accessDeniedToUpdate);
+    	}
+    	if (statusMismatched > 0)
+    	{
+    	    buildCSVImportStatus(status, ImportStatus.STATUS_MISMATCHED, statusMismatched);
+    	}
+    	if (sourceMismatched > 0)
+    	{
+    	    buildCSVImportStatus(status, ImportStatus.SOURCE_MISMATCHED, sourceMismatched);
     	}
     	buildCSVImportStatus(status, ImportStatus.FAILEDCSV, 1);
 
