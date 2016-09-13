@@ -15,7 +15,10 @@ import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
+import com.agilecrm.activities.Activity.ActivityType;
+import com.agilecrm.activities.Activity.EntityType;
 import com.agilecrm.activities.util.ActivitySave;
+import com.agilecrm.activities.util.ActivityUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.email.ContactEmail;
 import com.agilecrm.contact.util.ContactUtil;
@@ -137,7 +140,17 @@ public class ContactEmailUtil
 		
 		// Returns set of To Emails
 		Set<String> toEmailSet = getToEmailSet(to);
+		
+		// Returns set of Cc Emails
+		Set<String> ccEmailSet = getToEmailSet(cc);
+		
+		// Returns set of Bcc Emails
+		Set<String> bccEmailSet = getToEmailSet(bcc);
 
+		// it is for calculating total contact emails
+		int contacts_count=0;
+		
+		
 		// Personal Email open tracking id
 		contactEmailWrapper.setTrackerId(String.valueOf(System.currentTimeMillis()));
 		
@@ -164,7 +177,11 @@ public class ContactEmailUtil
 
 		// Sends email
 		EmailUtil.sendMail(contactEmailWrapper.getFrom(), contactEmailWrapper.getFrom_name(), to, cc, bcc, contactEmailWrapper.getSubject(), null, body, null, documentIds, blobKeys);
-
+		
+		//for checking all emails are in contact or not
+		boolean isAllContacts=true; 
+		
+		
 		// If contact is available, no need of fetching contact from
 		// to-email again.
 		if (contact != null)
@@ -177,9 +194,12 @@ public class ContactEmailUtil
 			
 			for (String toEmail : toEmailSet)
 			    ActivitySave.createEmailSentActivityToContact(EmailUtil.getEmail(toEmail), contactEmailWrapper.getSubject(), contactEmailWrapper.getMessage(), contact);
+			
+			contacts_count++;
 		}
 		else
 		{
+			
 			// When multiple emails separated by comma are given
 			for (String toEmail : toEmailSet)
 			{
@@ -203,8 +223,30 @@ public class ContactEmailUtil
 					
 					// Add activity
 					ActivitySave.createEmailSentActivityToContact(email, contactEmailWrapper.getSubject(), contactEmailWrapper.getMessage(), contact);
+					
+					contacts_count++;
+				}
+				else{
+					isAllContacts=false;
 				}
 			}
+			
+		}
+		//total email including cc, bcc also
+		int total_email=toEmailSet.size()+ccEmailSet.size()+bccEmailSet.size();
+		
+		//total emails which are not in our contact list
+		int total_non_contact_email=total_email-contacts_count;
+		
+		/*	If there are some non contact emails in to then this condition will be execute
+		 * 	Here all emails in cc and bcc we are taking as non contact email
+		 * 	only the emails are in "to" which are in our contact list are treated as contact email
+		 * 	for all non contact emails we will save a seperate activities
+		 */
+		if(isAllContacts==false && total_non_contact_email>0){
+			//add activity for non contact emails
+			ActivityUtil.createBulkActionActivity(ActivityType.SEND_EMAIL_BULK.toString(), ActivitySave.html2text(contactEmailWrapper.getMessage()), String.valueOf(total_non_contact_email), "contacts",
+					contactEmailWrapper.getSubject(), EntityType.CONTACT);
 		}
 	}
 
@@ -220,16 +262,18 @@ public class ContactEmailUtil
 	{
 		// Set to avoid duplicate emails
 		Set<String> toEmailSet = new HashSet<String>();
-
-		// If only one email is given, add directly to set
-		if (!to.contains(","))
-		{
-			toEmailSet.add(StringUtils.trim(to));
-		}
-		else
-		{
-			// Splits multiple emails and add each one to set
-			toEmailSet = EmailUtil.getStringTokenSet(to, ",");
+		
+		if(to.length()>0){
+			// If only one email is given, add directly to set
+			if (!to.contains(","))
+			{
+				toEmailSet.add(StringUtils.trim(to));
+			}
+			else
+			{
+				// Splits multiple emails and add each one to set
+				toEmailSet = EmailUtil.getStringTokenSet(to, ",");
+			}
 		}
 
 		return toEmailSet;

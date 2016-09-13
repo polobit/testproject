@@ -854,6 +854,25 @@ Added {{custom3}} {{agile_lng_translate 'contacts-view' 'contact-to-campaign'}}<
 {{/if_equals}}
 {{/if_equals}}
 
+
+{{#if_equals "SEND_EMAIL_BULK" custom1}}
+
+{{#if_equals "contacts" label}}	
+{{#if_equals "1" custom3}}	
+{{agile_lng_translate 'social' 'Sent'}} {{custom3}} {{agile_lng_translate 'menu' 'email'}}<br/>
+<small class="activities_second_line m-t-none text-sm">
+<i class="icon-envelope-alt"></i> {{agile_lng_translate 'contacts-view' 'email-subject'}}- <a href="" class="email-details" data={{id}}>{{custom4}}</a>
+</small> 
+{{else}}
+{{agile_lng_translate 'social' 'Sent'}} {{custom3}} {{agile_lng_translate 'portlets' 'emails'}}<br/>
+<small class="activities_second_line m-t-none text-sm">
+<i class="icon-envelope-alt"></i> {{agile_lng_translate 'contacts-view' 'email-subject'}}- <a href="" class="email-details" data={{id}}>{{custom4}}</a> 
+</small>
+{{/if_equals}}
+{{/if_equals}}
+{{/if_equals}}
+
+
 {{#if_equals "CHANGE_OWNER" custom1}}
 
 {{#if_equals "contacts" label}}	
