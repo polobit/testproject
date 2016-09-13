@@ -125,7 +125,7 @@ var AffiliateRouter = Backbone.Router.extend({
 						if(!template_ui)
 							  return;
 						$('#affiliate-tabs-content').html($(template_ui));
-						for(var i=1; i<=6; i++){
+						for(var i=1; i<=21; i++){
 							initZeroClipboard("url_clip_button"+i, "referral_url"+i);
 						}
 						$('#affiliate-tabs .select').removeClass('select');
