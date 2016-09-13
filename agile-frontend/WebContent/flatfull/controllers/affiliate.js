@@ -8,7 +8,7 @@ var AffiliateRouter = Backbone.Router.extend({
 		"commission" : "showCommissionDetails",
 		"affiliate" : "listAffiliates" ,
 	 	"affiliateDetails" : "showaffiliateDetails",
-	 	"tools" : "tools"
+	 	"creatives" : "creatives"
 	},
 
 	showCommissionDetails : function(){
@@ -112,7 +112,7 @@ var AffiliateRouter = Backbone.Router.extend({
 		this.affiliateCollectionView.collection.fetch();
 		$('#affiliate-tabs-content').html(this.affiliateCollectionView.render().el);
 	},
-	tools : function(){
+	creatives : function(){
 		var that = this;
 		checkForAffiliateDetails(function(){
 			getTemplate('affiliate', {}, undefined, function(template_ui){
