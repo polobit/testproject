@@ -31,6 +31,7 @@ var DealDetailsRouter = Backbone.Router.extend({
 			 * gets the tracks count when user comes to deals page and stores in
 			 * global variable
 			 */
+			 showRelatedContactsImages(id);
 			if (!DEAL_TRACKS_COUNT){
 
 				getTracksCount(function(count){
@@ -102,7 +103,19 @@ var DealDetailsRouter = Backbone.Router.extend({
 
 });
 
-
+function showRelatedContactsImages(id){
+	$.ajax({ url : "core/api/opportunity/" + id+"/related_to",dataType:"json",success : function(data)
+			{
+				$.each(data, function(i, item) {
+					for(var j=0;j<(item.properties).length;j++){
+						if(item.properties[j].name == "image")
+	    				$(".img"+item.id).attr("src", item.properties[j].value);
+					}
+    			});
+						
+			} 
+		});
+}
 
 function dealNameEdit(el)
 {
