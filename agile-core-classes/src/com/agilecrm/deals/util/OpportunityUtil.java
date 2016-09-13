@@ -2226,12 +2226,13 @@ public class OpportunityUtil
 
     	}
     	List<DomainUser> domainUsers= new ArrayList<DomainUser>();
+		DomainUser dUser = DomainUserUtil.getCurrentDomainUser();
+
     	if(ownerId != null && ownerId != 0){
     	   if (DomainUserUtil.getDomainUser(ownerId) != null)
     	        domainUsers.add(DomainUserUtil.getDomainUser(ownerId));
     	}
     	else{
-    		DomainUser dUser = DomainUserUtil.getCurrentDomainUser();
     		if (dUser != null){
     		    domainUsers = DomainUserUtil.getUsers(dUser.domain);
     	    }
@@ -2257,7 +2258,7 @@ public class OpportunityUtil
     		 * Date(opportunity.close_date * 1000));
     		 */
     	    Long user_id = opportunity.getOwner().id;
-    	    List<DomainUser> allUsers = DomainUserUtil.getAllUsers();
+    	    List<DomainUser> allUsers = DomainUserUtil.getUsers(dUser.domain);
     	    for(DomainUser user_temp : allUsers){
     	    	if(user_temp.id.toString().equals(user_id.toString())){
         			flag_reason = false;
