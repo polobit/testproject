@@ -98,19 +98,33 @@ function initializeEmailBuilderListeners() {
 
     $('#videoRecordModal').on('submit','#videoRecordForm', function(e){
         e.preventDefault();
+        $(".videoRecordFormMessageHolder").html("");
         var videoRecordType = $("#videoRecordType").val();
         if(videoRecordType === "new") {
-            emailVideoRecord.uploadVideoToS3();
+            if($("#video-record-name").val() != "") {
+                emailVideoRecord.uploadVideoToS3();
+            } else {
+                $(".videoRecordFormMessageHolder").html("Name field is required.");
+            }
         } else {
-            emailVideoRecord.buildVideoPageURL($("#video-record-select").val());
+            var selectedVal = $("#video-record-select").val();
+            if(selectedVal != "" && selectedVal != "AGILE_CREATE_NEW_VIDEO") {
+                emailVideoRecord.buildVideoPageURL(selectedVal);
+            } else {
+                $(".videoRecordFormMessageHolder").html("Please select a video.");
+            }
         }
     });
 
-    $('#videoRecordModal').on('click','#newRecordBtn', function(e){
+    $('#videoRecordModal').on('change','#video-record-select', function(e){
         e.preventDefault();
-        $("#videoRecordSelectFields").hide();
-        $("#videoRecordType").val("new");
-        $("#videoRecordFields").show();
+        $(".videoRecordFormMessageHolder").html("");
+        var selectedVal = $(this).val();
+        if(selectedVal === "AGILE_CREATE_NEW_VIDEO") {
+            $("#videoRecordSelectFields").hide();
+            $("#videoRecordType").val("new");
+            $("#videoRecordFields").show();
+        }
     });
     
 }
@@ -297,7 +311,6 @@ var emailVideoRecord = {
             formData.append('signature', '/XP/Uq6l0iVo+uNWkwwhC8l4jVY=');
             formData.append('success_action_status', '201');
             formData.append('file', file);
-            console.log(formData);
             
             $.ajax({
                 data: formData,
@@ -310,17 +323,18 @@ var emailVideoRecord = {
                 success: function(data) {
                   // getting the url of the file from amazon and insert it into the editor
                   var url = $(data).find('Location').text();
-                  this.videoS3URL = decodeURIComponent(url);
-                  this.saveVideoRecord();
+                  emailVideoRecord.saveVideoRecord(decodeURIComponent(url));
                 }
             });
+        } else {
+            $(".videoRecordFormMessageHolder").html("Error occured.");
         }
     },
 
-    saveVideoRecord : function() {
+    saveVideoRecord : function(videoS3URL) {
         var videoMeta = {
             "name": $("#video-record-name").val(),
-            "url": this.videoS3URL
+            "url": videoS3URL
         };
 
         var requestType = "post";
@@ -332,7 +346,7 @@ var emailVideoRecord = {
             dataType: 'json',
             contentType: "application/json; charset=utf-8",
             success: function (data) {
-                this.buildVideoPageURL(data.id);
+                emailVideoRecord.buildVideoPageURL(data.id);
             },
         });
     },
