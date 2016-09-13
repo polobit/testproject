@@ -742,6 +742,7 @@ var WorkflowsRouter = Backbone.Router
 							RHS = $("#RHS", el);
 
 							CALL = $('#CALL', el);
+							SMS=$('#SMS', el);
 
 							// Chaining dependencies of input
 							// fields
@@ -750,6 +751,7 @@ var WorkflowsRouter = Backbone.Router
 
 							// Chain Call Trigger options
 							CALL.chained(LHS);
+							SMS.chained(LHS);
 
 						});
 

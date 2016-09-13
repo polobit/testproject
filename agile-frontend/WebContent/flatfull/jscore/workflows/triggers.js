@@ -346,9 +346,9 @@ function populate_call_trigger_options(trigger_form, triggerJSON)
 function populate_sms_trigger_options(trigger_form, triggerJSON)
 {	
 	trigger_form.find('div#SMS').closest('div.control-group').css('display', '');	
-	if(triggerJSON && triggerJSON["sms_reply"])
-		trigger_form.find('div#SMS select').find('option[value="' + triggerJSON["sms_reply"] + '"]').attr('selected', 'selected').trigger('change');
 	getNumbersForSmsTrigger(trigger_form);
+	if(triggerJSON && triggerJSON["sms_reply"] && trigger_form.find('div#SMS select').find('option[value="' + triggerJSON["sms_reply"] + '"]').size()!=0)
+		trigger_form.find('div#SMS select').find('option[value="' + triggerJSON["sms_reply"] + '"]').attr('selected', 'selected').trigger('change');	
 }
 
 function populate_forms_in_trigger(trigger_form, trigger_form_select_id, trigger_form_id, trigger_run_on_new_contacts)
@@ -886,10 +886,13 @@ function getFormNameCellIDForFormSubmitTriggers(formID)
 function getNumbersForSmsTrigger(trigger_form){
 	var numbers=getTwilioIncomingListForSms();
 	var numHtml="";
+	if(numbers==null)
+		return;
 	$.each(numbers,function(index,num){ 				
  		numHtml = numHtml +	'<option class="REPLY_SMS" value="'+num+'" >'+num +'</option>';
  	});
  	trigger_form.find('div#SMS').find("select[name='sms_reply']").append(numHtml);
+
 }
 
 function getTwilioIncomingListForSms() {
