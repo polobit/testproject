@@ -29,6 +29,7 @@
 						<th style="width:40%">{{agile_lng_translate 'web-rules' 'action'}}</th>
 						<th style="width:10%"></th>
 						<th style="width:10%"></th>
+                        <th style="width:10%"></th>
               	  </tr>
            		</thead>
             	<tbody class="webrule-sortable" id="webrule-model-list" route="webrule-edit/">
@@ -140,6 +141,15 @@ var Agile_API = Agile_API || {}; Agile_API.on_after_load = function(){
 {{/if}}
 </div>
 </td>
+<td>
+<div class="table-resp">
+<div class="pull-left text-ellipsis">
+<a href="#webrule-report/{{id}}" class="stop-propagation"><i class="m-r-sm icon-list v-middle"></i>
+</a>
+ </div>
+</div>
+</td>
+
 <td>
 <div style="display:none;"><i class="icon-move"></i></div>
 </td>

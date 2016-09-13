@@ -8,7 +8,99 @@ var WebreportsRouter = Backbone.Router.extend({
 
 	routes : {
 	/* Settings */
-	"web-rules" : "webrules", "webrules-add" : "web_reports_add", "webrule-edit/:id" : "web_reports_edit", "webrules-templates" : "webrules_display", "webrules-add/*path" : "webrules_template_load", "webrules-custom" : "load_empty_editor"},
+	"web-rules" : "webrules", "webrules-add" : "web_reports_add","webrule-report/:id":"WebruleReports", "webrule-edit/:id" : "web_reports_edit", "webrules-templates" : "webrules_display", "webrules-add/*path" : "webrules_template_load", "webrules-custom" : "load_empty_editor"},
+
+	WebruleReports : function(id)
+			{
+				showTransitionBar();
+
+				this.render_email_reports_select_ui(id, function(){
+
+					getTemplate("webrule-analysis-tabs", { "id" : id }, undefined, function(template_ui)
+					{
+						if (!template_ui)
+							return;
+
+						// Render tabs with id
+						$('#webrule-analysis-tabs').html($(template_ui));
+						// Hide bulk subscribers block
+						$('#subscribers-block').hide();
+
+						initReportLibs(function()
+						{
+							// Load Reports Template
+							getTemplate('webrule-reports', {}, undefined, function(template_ui1)
+							{
+								if (!template_ui1)
+									return;
+								
+								$('#webrule-analysis-tabs-content').html($(template_ui1));
+								
+								// Set the name
+								// $('#reports-webrule-name').text(workflowName);
+								initWebruleChartsUI(function()
+								{
+									// Updates table data
+									get_webrule_table_reports(id);
+
+									// shows graphs by default week date range.
+									//showEmailGraphs(id);
+								});
+							}, "#webrule-analysis-tabs-content");
+
+						});
+
+						$(".active").removeClass("actionve");
+						$("#workflowsmenu").addClass("active");
+
+						$('#webrule-tabs .select').removeClass('select');
+						$('.webrule-stats-tab').addClass('select');
+
+						hideTransitionBar();
+
+					}, "#webrule-analysis-tabs");
+				
+				});
+
+			},
+
+
+			render_email_reports_select_ui : function(id, callback){
+
+				 // Fetches webrules if not filled
+				if (!$('#webrule-reports-select').html())
+				{
+					getTemplate('webrule-analysis', {}, undefined, function(template_ui){
+				 		if(!template_ui)
+				    		return;
+
+						$('#content').html($(template_ui)); 
+						var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
+
+						// fill webrules
+						fillSelect('webrule-reports-select', '/core/api/webrule', 'webrule', function fillwebrule()
+						{
+							if(id)
+							$('#webrule-reports-select').find('option[value=' + id + ']').attr('selected', 'selected');
+
+						}, optionsTemplate);
+
+						initializeLogReportHandlers();
+
+						if(callback)
+							  callback();
+						
+					}, "#content");
+
+					return;
+				}
+
+				if(callback)
+					callback(); 		
+
+			},
+
+
 	webrules : function()
 	{
 		var that = this;
@@ -131,6 +223,7 @@ var WebreportsRouter = Backbone.Router.extend({
 		web_reports_add.render();
 	},
 
+
 	webrules_display : function(){
 
 			$('.fancybox-overlay').hide();
@@ -151,7 +244,7 @@ var WebreportsRouter = Backbone.Router.extend({
                     'padding'       : 0,
                     'autoScale'     : true,
                     'overflow'		: 'visible'
-                 });
+                 });f
 
                 hideTransitionBar();
             });
