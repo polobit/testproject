@@ -259,6 +259,7 @@ if(isSafari && isWin)
 <script type='text/javascript' src='//cdnjs.cloudflare.com/ajax/libs/jquery/1.10.2/jquery.min.js'></script>
 <script type='text/javascript' src='//cdn.jsdelivr.net/fingerprintjs2/1.1.2/fingerprint2.min.js'></script>
 <script type='text/javascript' src='flatfull/final-lib/final-lib-1/b-bootstrap.js'></script>
+<script src='locales/html5/localize.js?_=<%=_AGILE_VERSION%>'></script>
 
 <!--[if lt IE 10]>
 <script src="flatfull/lib/ie/placeholders.jquery.min.js"></script>
@@ -279,7 +280,7 @@ if(isSafari && isWin)
 		<a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 			<span id="lang-code-name"><%=LanguageUtil.getSupportedlanguageFromKey(_LANGUAGE)%></span> <span class="caret"></span> 
 		</a>
-	    <ul class="dropdown-menu pull-right">
+	    <ul class="dropdown-menu pull-right" role="menu">
 	    	<%
 	    	   for (Map.Entry<String, String> entry : LanguageUtil.getSupportedlanguages().entrySet()) {
 	    	%>
@@ -359,12 +360,12 @@ if(isSafari && isWin)
 					<div class="list-group list-group-sm">
 						
 						<div class="list-group-item">
-							<input class="input-xlarge required email field form-control no-border" name='email' type="email" required placeholder='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "user-id-your-email")%>' autocapitalize="off" autofocus
+							<input class="input-xlarge required email field form-control no-border" name='email' type="email" required oninvalid="_agile_set_custom_validate(this);" oninput="_agile_reset_custom_validate(this);" placeholder='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "user-id-your-email")%>' autocapitalize="off" autofocus
 						<%if(request.getAttribute("agile_email")  != null) {%> value="<%=request.getAttribute("agile_email") %>" <%}%>>
 						</div>
 						
 						<div class="list-group-item">
-					    	<input class="input-xlarge required field form-control no-border" required maxlength="20" minlength="4" name='password' type="password" placeholder='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "password")%>' autocapitalize="off">
+					    	<input class="input-xlarge required field form-control no-border" oninvalid="_agile_set_custom_validate(this);" oninput="_agile_reset_custom_validate(this);" required maxlength="20" minlength="4" name='password' type="password" placeholder='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "password")%>' autocapitalize="off">
 						</div>
 
 						 
@@ -470,6 +471,9 @@ if(isSafari && isWin)
 				// Reset val
 				_agile_storage.set(result);
 			});
+
+			var localeJSON = <%=localeJSON%>;
+			
 		</script>
 		
 	<script src='//cdnjs.cloudflare.com/ajax/libs/headjs/1.0.3/head.min.js'></script>
@@ -478,7 +482,6 @@ if(isSafari && isWin)
 	<script type="text/javascript">
 		$(document).ready(function()
 		{
-
 			// Reset form action param
 			if(window.location.href.indexOf("/normal") != -1)
 				$("form#agile").attr("action", "/login/normal");

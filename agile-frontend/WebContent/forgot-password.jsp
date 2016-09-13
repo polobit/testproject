@@ -1,3 +1,8 @@
+<%@page import="com.agilecrm.util.CookieUtil"%>
+<%@page import="com.agilecrm.util.MobileUADetector"%>
+<%@page import="com.agilecrm.util.language.LanguageUtil"%>
+<%@page import="org.json.JSONObject"%>
+<%@page import="com.agilecrm.user.UserPrefs"%>
 <%@page import="com.agilecrm.util.VersioningUtil"%>
 <%@page import="com.agilecrm.util.email.SendMail"%>
 <%@page import="com.agilecrm.util.email.AppengineMail"%>
@@ -5,7 +10,16 @@
 <%@page import="com.agilecrm.user.util.DomainUserUtil"%>
 <%@page import="org.apache.commons.lang.StringUtils"%>
 <%@page import="com.agilecrm.user.DomainUser"%>
+<%@page language="java" contentType="text/html; charset=UTF-8"
+pageEncoding="UTF-8"%>
+
 <%
+//Language
+String _LANGUAGE = LanguageUtil.getLanguageKeyFromCookie(request);
+
+//Locales JSON
+JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "forgot-password");
+
 /*
 It checks first if user exists then a mail is sent to that id along with newly generated password 
 and success message is shown. Else error is shown in the same page.
@@ -28,7 +42,7 @@ if (!StringUtils.isEmpty(password)) {
 	AppengineMail.sendMail(email, SendMail.FORGOT_PASSWORD_SUBJECT,
 			SendMail.FORGOT_PASSWORD, domainUser);
 	
-	success = "We have sent you an email";
+	success = LanguageUtil.getLocaleJSONValue(localeJSON, "we-sent-email");
 }
 else if(!StringUtils.isEmpty(email) && StringUtils.isEmpty(password))
 {
@@ -40,16 +54,16 @@ else if(!StringUtils.isEmpty(email) && StringUtils.isEmpty(password))
 		domainUser = DomainUserUtil.generateForgotPassword(email);
 		if(domainUser == null)
 		{
-		    error = "We are not able to find any user";
+		    error = LanguageUtil.getLocaleJSONValue(localeJSON, "user-not-found");
 		}
 		else
 		{
-		   success = "We have sent you an email";
+		   success = LanguageUtil.getLocaleJSONValue(localeJSON, "we-sent-email");
 		}
     }
     catch (Exception e)
     {	
-		error = "You have signed-up using your Google/Yahoo account. Please sign-in through the same account";
+		error = LanguageUtil.getLocaleJSONValue(localeJSON, "signed-up-with-oauth2");
     }
     
 	
@@ -60,11 +74,11 @@ else if(!StringUtils.isEmpty(email) && StringUtils.isEmpty(password))
 String S3_STATIC_IMAGE_PATH = VersioningUtil.getStaticFilesBaseURL().replace("flatfull/", "");
 %>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="<%=_LANGUAGE %>">
 <head>
 <meta charset="utf-8">
  <meta name="globalsign-domain-verification" content="-r3RJ0a7Q59atalBdQQIvI2DYIhVYtVrtYuRdNXENx"/>
-<title>Forgot Password</title>
+<title><%=LanguageUtil.getLocaleJSONValue(localeJSON, "forgot-password")%></title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0 maximum-scale=1">
 <meta name="description" content="">
 <meta name="author" content="">
@@ -89,7 +103,18 @@ String S3_STATIC_IMAGE_PATH = VersioningUtil.getStaticFilesBaseURL().replace("fl
 
 
 body {
-background-image:url('<%=S3_STATIC_IMAGE_PATH%>/images/buildings-low.jpg');
+<% 
+	if(MobileUADetector.isMobile(request.getHeader("user-agent"))) {%>
+		background-image:url('<%=S3_STATIC_IMAGE_PATH%>/images/buildings-low.jpg');
+	
+	<% } else if(VersioningUtil.isDevelopmentEnv()){  %>
+		background-image:url('https://doxhze3l6s7v9.cloudfront.net/app/static/images/buildings-low.jpg');
+	
+	<%} else {  %>
+		background-image:url('<%=S3_STATIC_IMAGE_PATH%>/images/buildings-low.jpg');
+	
+	<%}%>
+	
 background-repeat:no-repeat;
 background-position:center center;
 background-size:100% 100%;
@@ -163,6 +188,7 @@ body {
 <script type="text/javascript" src="/lib/jquery.validate.min.js"></script> -->
 <script type='text/javascript' src='<%=flatfull_path%>/lib/jquery-new/jquery-2.1.1.min.js'></script>
 <script type="text/javascript" src="<%=flatfull_path%>/lib/bootstrap.v3.min.js"></script>
+<script src='locales/html5/localize.js?_='></script>
 
 <!--[if lt IE 10]>
 <script src="flatfull/lib/ie/placeholders.jquery.min.js"></script>
@@ -228,20 +254,20 @@ jQuery.validator.setDefaults({
 				 <%}%>
 				
 				<div class="wrapper text-center text-white">
-      				<strong>Enter Your Email</strong>
+      				<strong><%=LanguageUtil.getLocaleJSONValue(localeJSON, "enter-email")%></strong>
    				</div>
 				<!--  <h3><small>Enter Your Email </small></h3>	 -->
 				<div class="list-group list-group-sm">
 					<div class="list-group-item">
-                   	 <input class="input-xlarge  required email form-control no-border" name='email' maxlength="50" minlength="6" type="email" required placeholder="Email" autocapitalize="off">
+                   	 <input class="input-xlarge  required email form-control no-border" name='email' maxlength="50" minlength="6" type="email" oninvalid="_agile_set_custom_validate(this);" oninput="_agile_reset_custom_validate(this);" required placeholder='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "email")%>' autocapitalize="off">
 					</div>
 				</div>	
-					  <input type='submit' value="Submit" class='btn btn-lg btn-primary btn-block forgot_password_btn'>
+					  <input type='submit' value='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "submit")%>' class='btn btn-lg btn-primary btn-block forgot_password_btn'>
 					  <div class="text-center m-t">
 					  	<%
 				    if (domainUser != null) {
 				%>
-				<a href="#" id="resend-password" class="text-white">Resend password</a><br>
+				<a href="#" id="resend-password" class="text-white"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "resend-password")%></a><br>
 				<%
 				    }
 				%>
@@ -268,16 +294,17 @@ jQuery.validator.setDefaults({
 			</form>
 			
 			<div class="text-center text-white m-t m-b">
-	                 <small>Already have an account?</small> <a href="/login" class="text-white">Login</a><br/>
-	                 <small>Forgot</small> <a href="/forgot-domain" class="text-white">Domain?</a>
+	                 <small><%=LanguageUtil.getLocaleJSONValue(localeJSON, "already-have-account")%>?</small> <a href="/login" class="text-white"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "login")%></a><br/>
+	                 <small><%=LanguageUtil.getLocaleJSONValue(localeJSON, "forgot")%></small> <a href="/forgot-domain" class="text-white"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "domain")%>?</a>
                </div>
              </div>
              </div>  
 		</div>
 		
 		<script type="text/javascript">
+		var localeJSON = <%=localeJSON%>;
+
 		$(document).ready(function() {			
-		  
 		  var newImg = new Image;
       	newImg.onload = function() {
     	$("body").css("background-image","url('"+this.src+"')");

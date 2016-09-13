@@ -1,6 +1,5 @@
 package com.agilecrm.util.language;
 
-import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Locale;
@@ -13,6 +12,7 @@ import org.apache.commons.lang.StringUtils;
 import org.json.JSONObject;
 
 import com.agilecrm.user.UserPrefs;
+import com.agilecrm.util.CookieUtil;
 import com.agilecrm.util.FileStreamUtil;
 
 public class LanguageUtil {
@@ -134,4 +134,17 @@ public class LanguageUtil {
 		return UserPrefs.DEFAULT_LANGUAGE;
 	}
 
+	/**
+	 * 
+	 * @param request
+	 * @return
+	 */
+	public static String getLanguageKeyFromCookie(HttpServletRequest request) {
+		String _LANGUAGE = CookieUtil.readCookieValue(request, "user_lang");
+		if(StringUtils.isBlank(_LANGUAGE))
+			_LANGUAGE = UserPrefs.DEFAULT_LANGUAGE;
+		
+		return _LANGUAGE;
+	}
+	
 }
