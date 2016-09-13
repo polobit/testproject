@@ -117,7 +117,7 @@ var Web_Rules_Event_View = Base_Model_View.extend({
 							listOfOptions[0].remove();//MODAL_POPUP
 							listOfOptions[2].remove();//CALL_POPUP
 							listOfOptions[3].remove();//SITE_BAR
-							listOfOptions[3].remove();//REQUEST_PUSH_POPUP
+							listOfOptions[4].remove();//REQUEST_PUSH_POPUP
 						}
 					}
 					chainWebRules($(htmlContent)[0], undefined, true);
