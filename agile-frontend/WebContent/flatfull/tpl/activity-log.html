@@ -996,7 +996,12 @@ Added {{custom3}} {{agile_lng_translate 'contacts-view' 'contact-to-campaign'}}<
 {{/if_equals}}
 
 {{#if_equals "CAMPAIGN_RESTORE" activity_type}}
-	Restored Campaign {{label}}
+	Restored a Campaign
+	{{#if this.entityObject}}
+		<a href="#workflow/{{entity_id}}">{{label}}</a>
+	{{else}}
+		'{{label}}'
+	{{/if}}
 {{/if_equals}}
 
 {{#if_equals "BULK_DELETE" activity_type}}
