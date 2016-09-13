@@ -112,7 +112,7 @@
 <script id="admin-settings-import-skeleton-template"
 	type="text/html">
 	{{#if_equals type "GOOGLE"}}
-	<div class="panel panel-default widget-add" style="height: 230px;">
+	<div class="panel panel-default widget-add h-230 googleBox">
 	{{else}}
 	<div class="panel panel-default widget-add" style="height: 220px;">
 	{{/if_equals}}
@@ -141,9 +141,9 @@
 				</div>
     		{{else}}
 				{{#canSyncContacts}}
-    					<div class="btn btn-sm btn-default inline-block m-t-md" sync_type="{{type}}" id="data-sync-type">{{agile_lng_translate 'prefs-email' 'enable'}}</div>
+    					<div class="btn btn-sm btn-default inline-block m-t-md m-t-60" sync_type="{{type}}" id="data-sync-type">{{agile_lng_translate 'prefs-email' 'enable'}}</div>
 					{{else}}
-						<span class="btn btn-sm btn-primary inline-block m-t-md" disabled>{{agile_lng_translate 'prefs-email' 'enable'}}</span>
+						<span class="btn btn-sm btn-primary inline-block m-t-md m-t-60" disabled>{{agile_lng_translate 'prefs-email' 'enable'}}</span>
 						<span class="m-l-xs m-t-md"><i>{{agile_lng_translate 'prefs-data-sync' 'needs-import-privilege'}}</i></span>
 				{{/canSyncContacts}}
     		{{/if}}

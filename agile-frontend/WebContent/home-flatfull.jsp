@@ -1237,6 +1237,18 @@ head.load([{'js-core-1': CLOUDFRONT_PATH + 'jscore/min/locales/' + _LANGUAGE  +'
 
 	});
 
+
+// Safari Browser Specific CSS
+
+function isSafari() {
+  return !!navigator.userAgent.match(/Version\/[\d\.]+.*Safari/);
+}
+
+if(isSafari()){
+  head.load("/css/safari-only.css?_=<%=_AGILE_VERSION%>");
+}
+
+
 // head.js({"stats" : '<%=CLOUDFRONT_TEMPLATE_LIB_PATH%>stats/min/agile-min.js' + "?_=" + _AGILE_VERSION});
 
 }); //End of head.ready() function. Check above.
