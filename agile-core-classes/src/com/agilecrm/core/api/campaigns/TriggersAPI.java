@@ -90,6 +90,11 @@ public class TriggersAPI
     public Trigger updateTrigger(Trigger trigger)
     {
 	try {
+
+		if(trigger.type==Type.REPLY_SMS)
+		{
+		    TriggerUtil.setSmsAppSidForSmsTrigger(trigger);
+		}
 		trigger.save();
 		return trigger;
 	} catch (Exception e) {
