@@ -2214,13 +2214,17 @@ public class OpportunityUtil
     	{
     	    timeZone = userPrefs.timezone;
     	}
-    	if ((ownerId != null && ownerId != 0) || (pipelineId != null && pipelineId != 0) || (sourceId != null && sourceId != 0))
+    	if ((ownerId != null && ownerId != 0) || (pipelineId != null && pipelineId != 0) || (sourceId != null && sourceId != 0)){
     	    opportunitiesList = getWonDealsListBasedOnSelectedCondition(minTime, maxTime,ownerId,pipelineId,sourceId);
-    	else
+    	    System.out.println("calling getWonDealList based on selected condition");
+    	    System.out.println("total deals found is : "+opportunitiesList.size());
+    	}
+    	else{
     	opportunitiesList = getWonDealsList(minTime,maxTime);
-    	
-    	CategoriesUtil categoriesUtil = new CategoriesUtil();
-    	//List<Category> sources = categoriesUtil.getCategoriesByType("DEAL_SOURCE");
+    	System.out.println("calling getwonDealList without condtion");
+	    System.out.println("total deals found is : "+opportunitiesList.size());
+
+    	}
     	List<DomainUser> domainUsers= new ArrayList<DomainUser>();
     	if(ownerId != null && ownerId != 0){
     	   if (DomainUserUtil.getDomainUser(ownerId) != null)
@@ -2312,13 +2316,14 @@ public class OpportunityUtil
     		    sourcecount1.put(user_id, count);
     		    newDealsObject.put(createdtime, sourcecount1);
     		}
-
     	    }
     	    catch (Exception e)
     	    {
     		System.out.println("Exception :" + e);
     	    }
     	}
+        System.out.println("total deals returnig is :"+newDealsObject.size());
+
     	return newDealsObject;
     	
 
@@ -2909,10 +2914,7 @@ public class OpportunityUtil
 	    conditionsMap.put("pipeline", new Key<Milestone>(Milestone.class, pipelineId));
     if(sourceId != null && sourceId != 0)
     	conditionsMap.put("dealSource", new Key<Category>(Category.class, sourceId));
-    	
-    
-
-		
+  		
 	conditionsMap.put("won_date >= ", minTime);
 	conditionsMap.put("won_date <= ", maxTime);
 	conditionsMap.put("archived", false);
@@ -2949,10 +2951,7 @@ public class OpportunityUtil
 	    e.printStackTrace();
 	    return null;
 	}
-
-    }
-
-
+ }
     /**
      * Returns list of deals based on ownerId or won-date or all at once
      * 
