@@ -5330,3 +5330,4 @@ register.tech-consulting,Technology Consulting,Consulta de tecnología
 register.pnone-num-validation,Please enter valid number,Por favor inserta un número válido
 forgot-domain.email-invalid-after-@,Please enter a part following '@'. '$1' is incomplete.,Por favor introduzca una parte siguiente '@' . '$1' Es incompleta .
 html5Validations.invalid-select-one,Please select an item in the list.,Por favor seleccione un elemento de la lista.
+html5Validations.enter-number-only,Please enter a number,Por favor introduzca un número

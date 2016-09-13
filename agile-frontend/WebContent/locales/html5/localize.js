@@ -20,10 +20,9 @@ function getCustomValidity(input){
     	if(input.validity.patternMismatch){
     		return localeJSON["invalid-pattern"] + "\n" + $(input).attr('title'); 
     	}
-
-    	if(input.validity.tooShort){
-    		return localeJSON["invalid-password"].replace("$1", $(input).attr('minlength')).replace("$2", $(input).val().length);
-    	}
+        if(type == "number" && input.validity.badInput){
+            return localeJSON["enter-number-only"];
+        }
 
     	if(type == "email"){
             var mssg = localeJSON["invalid-email"];
@@ -32,6 +31,11 @@ function getCustomValidity(input){
 
             return mssg.replace("$1", '' + $(input).val() + '');
     	}
+
+        if(input.validity.tooShort){
+            return localeJSON["invalid-password"].replace("$1", $(input).attr('minlength')).replace("$2", $(input).val().length);
+        }
+
     	if(type == "password"){
     		return localeJSON["invalid-password"].replace("$1", $(input).attr('minlength')).replace("$2", $(input).val().length);
     	}

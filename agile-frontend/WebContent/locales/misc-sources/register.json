@@ -55,4 +55,5 @@
  	"name-validation": "{{agile_lng_translate 'register' 'name-validation'}}",
  	"invalid-pattern": "{{agile_lng_translate 'register' 'invalid-pattern'}}",
  	"email-invalid-after-@": "{{agile_lng_translate 'forgot-domain' 'email-invalid-after-@'}}",
+ 	"enter-number-only": "{{agile_lng_translate 'html5Validations' 'enter-number-only'}}",
 }
