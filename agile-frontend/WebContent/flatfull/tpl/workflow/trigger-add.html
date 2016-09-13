@@ -80,7 +80,7 @@
 										<!-- <option value="SLA_CROSSED">SLA crossed</option> --> 
 
 										<optgroup label="Sms">
-										<option value="REPLY_SMS">{{agile_lng_translate 'campaigns' 'reply-sms'}}</option>
+										<option value="REPLY_SMS">Reply Sms</option>
 
 									</select>
                                 </div>
@@ -97,10 +97,11 @@
 							
                         <div class="control-group form-group" style="display:none;">
                             <div id="RHS" name="RHS">
-                                <label class="control-label TAG_IS_ADDED TAG_IS_DELETED ADD_SCORE EMAIL_OPENED col-sm-4"></label>
+                                <label class="control-label REPLY_SMS TAG_IS_ADDED TAG_IS_DELETED ADD_SCORE EMAIL_OPENED col-sm-4"></label>
                                 <div class="controls col-sm-8">
                                     <input type="text" value="{{custom_tags}}" id="trigger-custom-tags" name="custom_tags" class="required trigger-tags TAG_IS_ADDED TAG_IS_DELETED form-control m-b-n-xxs w-md" placeholder="Enter tag" style ="width:100%!imp" />
                                     <input type="text" placeholder="Enter Score" {{#if custom_score}} value="{{this.custom_score}}" {{/if}} id="trigger-custom-score" name="custom_score" class="ADD_SCORE required custom-value digits form-control w-md" />
+                                    <input type="text" placeholder="Enter KeyWord" id="trigger-custom-keyword" name="sms_keyword" class="REPLY_SMS required form-control w-md" />
                                 </div>
                             </div>
                         </div>
@@ -132,12 +133,8 @@
 						</div>
 						<div class="control-group form-group" style="display: none;">
 							<div id="SMS">
-								<label class="control-label REPLY_SMS "></label>
 								<div class="controls col-sm-offset-4 col-sm-8">	
-									<select name="sms_reply" class="required form-control w-md">
-										 <option value="yes" class="REPLY_SMS">{{agile_lng_translate 'campaigns' 'reply-yes'}}</option>
-                                        <option value="no" class="REPLY_SMS">{{agile_lng_translate 'campaigns' 'reply-no'}}</option>
-										
+									<select name="sms_reply" class="required form-control w-md">		 <option  class="REPLY_SMS" value="">Select a number</option>				
 									</select>
 								</div>
 							</div>
@@ -346,7 +343,7 @@
 											</li>
 
 											<li role="presentation" data-tab="10">
-												<a href="#sms" name="tab10" aria-control="tab10"role="tab" data-toggle="tab" id="tab10">{{agile_lng_translate 'campaigns' 'sms_trigger'}}</a>
+												<a href="#sms" name="tab10" aria-control="tab10"role="tab" data-toggle="tab" id="tab10">Sms</a>
 											</li>
 </ul>
 
@@ -1054,15 +1051,15 @@
 		                        <div>
 		                            <i class="icon-call-in icon-3x"></i>
 		                        </div>
-		                        <b>{{agile_lng_translate 'campaigns' 'reply-sms'}}</b>
+		                        <b>REply Sms</b>
 		                    </div>
 		                    <br/>
 		                    <div class="ellipsis-multiline m-b-md" rel="tooltip">
-		                       {{agile_lng_translate 'campaigns' 'reply-sms-desc'}}
+		                       hello
 		                    </div>
 		                    <!-- Add button -->
 		                    <div>
-		                        <a class="btn btn-sm btn-default add-trigger" data = "REPLY_SMS"  >{{agile_lng_translate 'campaigns' 'go'}}</a>
+		                        <a class="btn btn-sm btn-default add-trigger" data = "REPLY_SMS"  >Go</a>
 		                    </div>
 		                </div>
 		            </div>

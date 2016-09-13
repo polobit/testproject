@@ -340,15 +340,15 @@ function populate_call_trigger_options(trigger_form, triggerJSON)
 	
 	if(triggerJSON && triggerJSON["call_disposition"])
 		trigger_form.find('div#CALL select').find('option[value="' + triggerJSON["call_disposition"] + '"]').attr('selected', 'selected').trigger('change');
+	
 }
 
 function populate_sms_trigger_options(trigger_form, triggerJSON)
-{
-	
-	trigger_form.find('div#SMS').closest('div.control-group').css('display', '');
-	
+{	
+	trigger_form.find('div#SMS').closest('div.control-group').css('display', '');	
 	if(triggerJSON && triggerJSON["sms_reply"])
 		trigger_form.find('div#SMS select').find('option[value="' + triggerJSON["sms_reply"] + '"]').attr('selected', 'selected').trigger('change');
+	getNumbersForSmsTrigger(trigger_form);
 }
 
 function populate_forms_in_trigger(trigger_form, trigger_form_select_id, trigger_form_id, trigger_run_on_new_contacts)
@@ -743,6 +743,11 @@ function initializeTriggerListEventListners(id,trigger_type)
 			$('form#addTriggerForm').find('div#CALL').closest('div.control-group').css('display', 'none');
 		}
 			
+		if(type !== 'REPLY_SMS')
+		{
+			$('form#addTriggerForm').find('div#SMS').closest('div.control-group').css('display', 'none');
+				
+		}
 		if(type != 'FORM_SUBMIT'){
 			$('form#addTriggerForm').find('select#trigger-form-event').closest('div.control-group').css('display', 'none');
 			$('#trigger-run-on-new-contacts').css('display', 'none');
@@ -820,7 +825,9 @@ function initializeTriggerListEventListners(id,trigger_type)
 
 		if(type == 'REPLY_SMS')
 		{
-			populate_sms_trigger_options($('form#addTriggerForm'));	
+			populate_sms_trigger_options($('form#addTriggerForm'));
+			$('form#addTriggerForm').find('#trigger-custom-keyword').closest('div.control-group').css('display', '');
+
 		}
 
 	});
@@ -875,4 +882,38 @@ function getFormNameForTrigger(formID, callback)
 function getFormNameCellIDForFormSubmitTriggers(formID)
 {
 	return formID + "_formNameField";
+}
+function getNumbersForSmsTrigger(trigger_form){
+	var numbers=getTwilioIncomingListForSms();
+	var numHtml="";
+	$.each(numbers,function(index,num){ 				
+ 		numHtml = numHtml +	'<option class="REPLY_SMS" value="'+num+'" >'+num +'</option>';
+ 	});
+ 	trigger_form.find('div#SMS').find("select[name='sms_reply']").append(numHtml);
+}
+
+function getTwilioIncomingListForSms() {
+	var numbers;
+	$.ajax({
+		url : 'core/api/sms-gateway/numbers',
+		type : "GET",
+		async : false,
+		dataType : 'json',
+		success : function(twilioNumbers) {
+			numbers = twilioNumbers;
+		}
+
+	});
+
+	if (numbers == null)
+		return null;
+
+	var numbersList = {};
+	var length = numbers.length;
+	if (length > 0) {
+		for ( var i = 0; i < length; i++)
+			numbersList[numbers[i]] = numbers[i];
+	}
+	// Parse stringify json
+	return numbersList;
 }

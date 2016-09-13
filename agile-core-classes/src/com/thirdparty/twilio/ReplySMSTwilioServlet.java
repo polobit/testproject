@@ -38,7 +38,7 @@ public class ReplySMSTwilioServlet extends HttpServlet
         	    {
         		if (StringUtils.equals(trigger.type.toString(), "REPLY_SMS"))
         		{		   
-        			if (trigger.sms_reply.equalsIgnoreCase(replyMsg))
+        			if (trigger.sms_keyword.equalsIgnoreCase(replyMsg) && trigger.sms_reply.equalsIgnoreCase(phoneNumber))
         			{
         			    System.out.println("Assigning campaign to contact ...");
         			    WorkflowSubscribeUtil.subscribeDeferred(contact, trigger.campaign_id,

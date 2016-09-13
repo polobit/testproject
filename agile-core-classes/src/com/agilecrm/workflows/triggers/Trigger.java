@@ -162,6 +162,9 @@ public class Trigger
 	
 	@NotSaved(IfDefault.class)
 	public String sms_reply = null;
+	
+	@NotSaved(IfDefault.class)
+	public String sms_keyword = null;
 
 	/**
 	 * Returns campaign name as an xml element which is retrieved using

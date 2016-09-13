@@ -178,8 +178,7 @@ public class SendMessage extends TaskletAdapter
 		if (SMS_API.equals("TWILIO"))
 		{
 			ACCOUNT_ID = TwilioUtil.getAccountSID(widget);
-			AUTH_TOKEN = TwilioUtil.getAuthToken(widget);
-			checkSidAndFromNumber(widget,from);
+			AUTH_TOKEN = TwilioUtil.getAuthToken(widget);			
 		}
 		else if (SMS_API.equals("PLIVO"))
 		{
@@ -240,53 +239,5 @@ public class SendMessage extends TaskletAdapter
 		
 		return message;
 	}
-	//checking smsapppsid and from number present in integration or not 
- 	public void checkSidAndFromNumber(Widget twilioObj,String from)
-	{
- 	    try{
- 		JSONObject jsonObj=new JSONObject(twilioObj.prefs);
-             	if(!jsonObj.has("fromnumber") && !jsonObj.has("smsappSid"))              		
-              		setSmsSidAndFromNUmber(twilioObj,from);
-             	else if(jsonObj.get("fromnumber")!=null || !jsonObj.get("fromnumber").toString().isEmpty()){
-             	    if(!from.equalsIgnoreCase(jsonObj.get("fromnumber").toString()))
-             		setSmsSidAndFromNUmber(twilioObj,from);
-             	}    	    	
-             	    
- 	    }
- 	   catch (Exception e)
- 	    {
- 		e.printStackTrace();
- 		System.out.println(ExceptionUtils.getFullStackTrace(e));
- 		
- 	    }
-	}
- 	//set smsappsid and from number if not present
- 	public void setSmsSidAndFromNUmber(Widget twilioObj,String from)
-	{
- 	  try
- 	    {
-         	    String numberSid=null;
-              	    String applicationSid=null;             	    
-              	    JSONObject jsonObj=new JSONObject(twilioObj.prefs);
-         	    TwilioRestClient client = new TwilioRestClient(ACCOUNT_ID, AUTH_TOKEN, null);
-         	    TwilioRestResponse response = client.request(
-        				"/" + TwilioUtil.APIVERSION + "/Accounts/" + client.getAccountSid() + "/IncomingPhoneNumbers.xml?PhoneNumber="+URLEncoder.encode(from, "UTF-8"), "GET",
-        				null);	
-         	    JSONObject result = XML.toJSONObject(response.getResponseText()).getJSONObject("TwilioResponse").getJSONObject("IncomingPhoneNumbers"); 
-         	    numberSid=result.getJSONObject("IncomingPhoneNumber").get("Sid").toString();             		
-        	   
-         	    applicationSid= TwilioUtil.createSMSAppSidTwilioIO(ACCOUNT_ID, AUTH_TOKEN,numberSid);
-         	    jsonObj.put("smsappSid", applicationSid);
-         	    jsonObj.put("fromnumber", from);
-         	    twilioObj.prefs=jsonObj.toString();
-         	    ObjectifyGenericDao<Widget> dao = new ObjectifyGenericDao<Widget>(Widget.class);
-         	    dao.put(twilioObj);
- 	    }
- 	  catch (Exception e)
- 	    {
- 		e.printStackTrace();
- 		System.out.println(ExceptionUtils.getFullStackTrace(e));
- 		
- 	    }
-	}    
+	
  }
