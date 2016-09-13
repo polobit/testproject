@@ -14,8 +14,13 @@ function getCustomValidity(input){
 	if(input.validity.valueMissing){
         if(input.nodeName == "SELECT")
             return localeJSON["invalid-select-one"];
-        else 
+        else {
+            if(type == "number" && input.validity.badInput){
+                return localeJSON["enter-number-only"];
+            }
             return localeJSON["invalid-default"];
+        }
+
     } else if(!input.validity.valid) {
     	if(input.validity.patternMismatch){
     		return localeJSON["invalid-pattern"] + "\n" + $(input).attr('title'); 
