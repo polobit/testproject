@@ -479,10 +479,10 @@
 
     {{#each contacts}}
           {{#if_contact_type "PERSON"}}
-         <a href="#contact/{{id}}" class="activate-link thumb m-b-xs text-xs popover_contact" data="{{id}}"><img  data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"   title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" /></a>
+         <a href="#contact/{{id}}" class="activate-link thumb m-b-xs text-xs popover_contact" data="{{id}}"><img  class="img{{id}}" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"   title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" /></a>
           {{/if_contact_type}}
       {{#if_contact_type "COMPANY"}}
-                <a href="#company/{{id}}" class="activate-link thumb m-b-xs popover_contact" data="{{id}}"> <img  {{getCompanyImage "50" "display:inline;"}} title="{{getPropertyValue properties "name"}}"/></a>
+                <a href="#company/{{id}}" class="activate-link thumb m-b-xs popover_contact" data="{{id}}"> <img  class="img{{id}}" {{getCompanyImage "50" "display:inline;"}} title="{{getPropertyValue properties "name"}}"/></a>
           {{/if_contact_type}}
       {{/each}}
       
@@ -571,8 +571,16 @@
 			 <li><a href="#dealevents" data-toggle="tab">{{agile_lng_translate 'deal-view' 'events'}}</a></li> 
            </ul>
 	</div>
- 	<div class="tab-content {{#is_mobile}}  {{else}} panel {{/is_mobile}}" id="deal-tab-content">
- 		<div class="tab-pane" id="dealactivities"></div>
+ 	<div class="tab-content {{#is_mobile}}  {{else}}  {{/is_mobile}}" id="deal-tab-content">
+ 		<div class="tab-pane" id="dealactivities">
+            <div class="m-auto">
+                        <div id="timeline" style="float:left; z-index:1;">
+                            <div id="line-container">
+                                <div id="line"></div>
+                            </div>
+                        </div>
+                    </div>
+    </div>
  		<div class="tab-pane" id="dealnotes"></div>
  		<div class="tab-pane" id="dealdocs"></div>
  		<div class="tab-pane" id="dealrelated"></div>

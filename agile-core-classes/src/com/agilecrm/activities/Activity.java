@@ -13,6 +13,7 @@ import org.apache.commons.lang.exception.ExceptionUtils;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Note;
+import com.agilecrm.contact.Contact.Type;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.cursor.Cursor;
 import com.agilecrm.db.ObjectifyGenericDao;
@@ -55,6 +56,11 @@ public class Activity extends Cursor
     @Id
     public Long id;
 
+    
+    
+    public Type type = null;
+
+   
     /**
      * Key object of DomainUser.
      */

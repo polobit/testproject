@@ -1613,6 +1613,9 @@ light.lter.b-b.wrapper-md .pull-right:not(.dropdown-menu),.bg-light.lter.b-b.wra
   .filtersTabList #contacts-lhs-filters-toggle{
     display: block;
   }
+  .filtersTabList #companies-lhs-filters-toggle{
+    display: block;
+  }
   .panel-middle-align-mobile .col-xs-6:first-child {
   text-align: right;
   }

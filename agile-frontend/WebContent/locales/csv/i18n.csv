@@ -1447,7 +1447,7 @@ admin-settings-custom-fields.delete-company-custom-field,Delete Company Custom F
 campaigns.email-will-be-sent-shortly,Email will be sent shortly.,Correo electrónico será enviado en breve.
 calls.avg-duration-secs,Average Call Duration (Sec),Promedio de duración de llamada (Sec)
 twill.enter-valid-details,Please enter valid details.,Por favor&#44; introduzca los datos válidos.
-Refer-friend.love-agile-crm,Hope you love Agile CRM&#44;,Esperamos que el amor CRM ágil&#44;
+Refer-friend.love-agile-crm,Hope you love Agile CRM&#48,Esperamos que el amor Agile CRM&#48
 contacts-view.of-the-following-conditions,of the following conditions,de las siguientes condiciones
 validation-msgs.deal_milestone_duplicated,'Milestone' already exists!,\'Milestone\' ya existe!
 widgets.enter-custom-widget-details,Enter custom widget details,Insera los detalles del widget personalizado
@@ -1839,7 +1839,7 @@ other.thinngs-you-need-to-do,Things you need to do,Cosas que hay que hacer
 prefs-notifications.default-notifications,Default Notifications,Notificaciones por defecto
 prefs-settings.new-case-cases-page,New Case (Cases Page),Nuevo caso (Página de casos)
 contacts-view.has-been-forwarded-to,has been forwarded to,se ha reenviado a
-portlets.no-customer-activities,No Customer activites,No hay actividades de los clientes
+portlets.no-customer-activities,No Customer activities,No hay actividades de los clientes
 workflows.what-are-automations,What are Automations?,¿Cuáles son Automations?
 other.existing-card-details,Existing Card Details,Tarjeta existente detalles
 contacts-view.task-owner-changed-to,Task Owner changed to,Propietario de la tarea cambió a
@@ -3187,7 +3187,8 @@ Admin-settings-users.view-contact,View Contact,Ver contacto
 calendar.meeting-type,Meeting Type,Tipo de reunión
 portlets.all-over-due,All Over Due,Vencimiento general
 portlets.card-details,Card Details,Detalles de tarjeta
-contacts.select-all,Selected All,todos los seleccionados
+contacts.selected-all,Selected All,todos los seleccionados
+contacts.select-all,Select All,Seleccionar todo
 campaigns.soft-bounces,Soft Bounces,Rebotes suaves
 plan-and-upgrade.total-amount,Total Amount,Monto total
 web-rules.referrer-url,Referrer URL,URL de referencia
@@ -3875,7 +3876,7 @@ contact-details.campaigns,Campaigns,campañas
 portlets.send-rate,Send Rate,Enviar Tasa
 plan-and-upgrade.plan-with,plan with,plan con
 contact-edit.add-email,Add Email,Añadir Correo
-others.add-new,+ Add new,+ Añadir nuevo
+others.add-new,#NAME?,#NAME?
 widgets.ClickDesk,ClickDesk,ClickDesk
 contacts-view.condition,Condition,Condición
 modals.edit-note,Edit Note,Editar nota
@@ -3906,7 +3907,7 @@ campaigns.auto-dial,Auto Dial,Marcación automática
 help.importing,importing,importador
 tickets.requester,Requester,Solicitante
 landing-pages.save-page,Save Page,Guardar página
-portlets.activites,Activites,actividades
+portlets.activites,Activities,actividades
 widgets.Braintree-displayName,Braintree,Braintree
 tasks.All Tasks,All Tasks,Todas las tareas
 web-rules.templates,Templates,Plantillas
@@ -4695,7 +4696,7 @@ deal-view.clear,Clear,Limpiar
 admin-settings-stats.count,Count,Contar
 prefs-settings.alias,Alias,Alias
 calendar.Apply,Apply,Aplicar
-tickets.false,False,0
+tickets.false,FALSE,0
 prefs-online-calendar.hours,Hours,horas
 calendar.Clear,Clear,Limpiar
 plan-and-upgrade.users,users,usuarios
@@ -4807,7 +4808,7 @@ report-add.placeholder-time,time,hora
 prefs-data-sync.shop,Shop,Comprar
 other.data,Data,Datos
 visitors.site,site,sitio
-tickets.true,True,1
+tickets.true,TRUE,1
 modals.save,Save,Guardar
 admin-settings-tasks.call,Call,Llamar
 plan-and-upgrade.back,Back,Detrás
@@ -4823,7 +4824,7 @@ currency.Euro,Euro,Euro
 deal-view.name,Name,Nombre
 tasks.High,High,Alta
 menu.help,Help,Ayuda
-portlets.+add,+Add,+Agregar
+portlets.+add,#NAME?,#NAME?
 portlets.tags,Tags,Etiquetas
 report-add.name,Name,Nombre
 contact-edit.main,Main,Principal
@@ -5236,34 +5237,157 @@ others.verify,verify,verificar
 others.sending,sending,enviando
 admin-settings-integrations.amazon-note-1-new,1. Amazon SES services require verification of email addresses in the 'From' field of sent emails. Please ensure that you,1. Los servicios de Amazon SES requieren la verificación de direcciones de correo electrónico en el campo 'De' de los correos electrónicos enviados . Por favor asegúrese de que
 admin-settings-integrations.amazon-note-1-new1,the email addresses of all your Agile CRM users and the 'From' addresses of all your campaign emails.,las direcciones de correo electrónico de todos sus usuarios ágil de CRM y los 'de' direcciones de todos sus mensajes de correo electrónico de la campaña.
+contacts-view.added-a-tag-to-company,added a tag to company,
+contacts-view.removed-a-tag-from-company,removed a tag from company,
+contacts-view.changed-owner-for-company,changed owner for company,
+other.tags-added-to-deal,Tags Added to Deal,
+other.tags-removed-to-deal,Tags Removed to Deal,
+Deal-detail.deal-won,Deal Won,
+Deal-detail.owner-changed-from,Owner changed from,
+Deal-detail.all-contacts-removed,All Contacts Removed.,
+Deal-detail.contacts-removed,Contacts Removed.,
+Deal-detail.contacts-added,Contacts Added.,
+Deal-detail.note-added,Deal Note Added.,
+campaigns.call-status,Call Status,
+campaigns.add-status,Add status,
+campaigns.new-status,New Status,
+campaigns.delete-status,Delete Status,
+campaigns.confirm-delete-status,Are you sure you want to delete the Status,
+campaigns.help,Help,
+campaigns.telephony-help-text,Here you can add or remove call status and order them as needed. The status will help you to manage call logs better.,
+campaigns.telephony-status-invalid-text,Status should not start with numeric value,
+contact-details.emails,Email,
+widgets.Klout-update-twitter-profile,Please update the twitter profile to get the Klout score.,
+widgets.Klout-content,Know your customers Klout score&#44; a measure of customers influence on social networks. Klout score is fetched based on Twitter profile.,
+widgets.Klout-error,Unable to fetch the score. It might be due to private/invalid Twitter profile or request time-out.,
+widgets.Klout-label-nickname,Nickname,
+widgets.Klout-label-score,Score,
+widgets.Klout-displayName,Klout,
+widgets.Klout-name,Klout,
+widgets.Fullcontact-email-required,Please update the email address to get any new information from FullContact.,
+widgets.Fullcontact-invalid-api-key,API key is invalid. Please provide valid API key.,
+widgets.Fullcontact-nodata,No new data available for update.,
+widgets.Fullcontact-newdata,New data is available for customer profile. Do you want to update the profile?,
+widgets.FullContact-content,Stay updated on customers profile through FullContact integration with information like name&#44; photo&#44; company&#44; address and websites.,
+widgets.FullContact-enter-your-api-key,Enter your FullContact API Key,
 widgets.newcall,New Call,
 widgets.select-contact-update,Please select a related contact to update.,
 widgets.continue,Continue,
-prefs-online-calendar.welcome-message-bulk,Welcome to our scheduling page. Please follow the instructions to book an appointment.,Bienvenido a nuestra página de planificación . Por favor&#44; siga las instrucciones para reservar una cita .
-prefs-online-calendar.select-a-person,Select a Person,Seleccionar una persona
-prefs-online-calendar.welcome-message-single,Welcome to my scheduling page. Please follow the instructions to book an appointment.,Bienvenidos a mi programación page. Por favor&#44; siga las instrucciones para reservar una cita .
-prefs-online-calendar.holiday-today,Today is holiday,Hoy es día festivo
-prefs-online-calendar.choose-time-slot,Choose a Time Slot,Elija un intervalo de tiempo
-prefs-online-calendar.select-date-time,Select Date and Time,Seleccione Fecha y hora
-prefs-online-calendar.on-availability,Availability on,Disponibilidad bajo
-prefs-online-calendar.sendconfirmation,Send me a confirmation email,Envíame un correo electrónico de confirmación
-prefs-online-calendar.user-phone-details,Notes (Phone number/Skype details),Notas (número de teléfono / datos de Skype )
-prefs-online-calendar.email-format,Your email address must be in the format of name@domain.com,Su dirección de correo electrónico debe estar en el formato de name@domain.com
-prefs-online-calendar.name-validation,Please specify your name,Por favor&#44; indique su nombre
-prefs-online-calendar.email-validation,We need your email address to contact you,Necesitamos su dirección de correo electrónico para comunicarse con usted
-prefs-online-calendar.no-working-hrs,No working hours,No hay horas de trabajo
-common-words.for,for,para
-common-words.mins-on,mins on,en minutos
-common-words.with,with,con
-prefs-online-calendar.online-appointment-cancellation,Online Appointment Cancellation,Designación de cancelación en línea
-prefs-online-calendar.event-starts,Event starts,Evento comienza 
-prefs-online-calendar.cancel-appointment,Cancel Appointment,Revocar la designación
-prefs-online-calendar.cancelled-already,Looks like this appointment is already cancelled.,Parece que esta cita ya está cancelada .
-prefs-online-calendar.cancelled-appointment,Appointment Cancelled,Cita cancelada
-prefs-online-calendar.your-appointment-with,Your appointment with,Su cita con
-prefs-online-calendar.is-cancelled,is cancelled,está cancelado
-prefs-online-calendar.schedule-new,Schedule new appointment,Programar nueva cita
-prefs-online-calendar.something-wrong,Something is wrong,Algo está mal
-prefs-online-calendar.reasong-for-cancel,Reason for cancellation,Razón de la cancelación
-others.chat-with-us,Chat With Us,Habla con nosotros
+prefs-online-calendar.welcome-message-bulk,Welcome to our scheduling page. Please follow the instructions to book an appointment.,"Bienvenido a nuestra página de planificación . Por favor&#44; siga las instrucciones para reservar una cita .		"
+prefs-online-calendar.select-a-person,Select a Person,"Seleccionar una persona		"
+prefs-online-calendar.welcome-message-single,Welcome to my scheduling page. Please follow the instructions to book an appointment.,"Bienvenidos a mi programación page. Por favor&#44; siga las instrucciones para reservar una cita .		"
+prefs-online-calendar.holiday-today,Today is holiday,"Hoy es día festivo		"
+prefs-online-calendar.choose-time-slot,Choose a Time Slot,"Elija un intervalo de tiempo		"
+prefs-online-calendar.select-date-time,Select Date and Time,"Seleccione Fecha y hora		"
+prefs-online-calendar.on-availability,Availability on,"Disponibilidad bajo		"
+prefs-online-calendar.sendconfirmation,Send me a confirmation email,"Envíame un correo electrónico de confirmación		"
+prefs-online-calendar.user-phone-details,Notes (Phone number/Skype details),"Notas (número de teléfono / datos de Skype )		"
+prefs-online-calendar.email-format,Your email address must be in the format of name@domain.com,"Su dirección de correo electrónico debe estar en el formato de name@domain.com		"
+prefs-online-calendar.name-validation,Please specify your name,"Por favor&#44; indique su nombre		"
+prefs-online-calendar.email-validation,We need your email address to contact you,"Necesitamos su dirección de correo electrónico para comunicarse con usted		"
+prefs-online-calendar.no-working-hrs,No working hours,"No hay horas de trabajo		"
+common-words.for,for,"para		"
+common-words.mins-on,mins on,"en minutos		"
+common-words.with,with,"con		"
+prefs-online-calendar.online-appointment-cancellation,Online Appointment Cancellation,"Designación de cancelación en línea		"
+prefs-online-calendar.event-starts,Event starts,"Evento comienza 		"
+prefs-online-calendar.cancel-appointment,Cancel Appointment,"Revocar la designación		"
+prefs-online-calendar.cancelled-already,Looks like this appointment is already cancelled.,"Parece que esta cita ya está cancelada .		"
+prefs-online-calendar.cancelled-appointment,Appointment Cancelled,"Cita cancelada		"
+prefs-online-calendar.your-appointment-with,Your appointment with,"Su cita con		"
+prefs-online-calendar.is-cancelled,is cancelled,"está cancelado		"
+prefs-online-calendar.schedule-new,Schedule new appointment,"Programar nueva cita		"
+prefs-online-calendar.something-wrong,Something is wrong,"Algo está mal		"
+prefs-online-calendar.reasong-for-cancel,Reason for cancellation,"Razón de la cancelación		"
+others.chat-with-us,Chat With Us,"Habla con nosotros		"
 widgets.create-your-own-custom,Create your own custom web forms easily and place them on your website to update web visitor details.,
+bulk-task.change-priority,Change priority of tasks,
+bulk-task.change-status,Change status of tasks,
+bulk-task.change-owner,Change owner of tasks,
+bulk-task.change-duedate,Change due date of tasks,
+bulk-task.duedate,Change Due Date,
+bulk-task.priority,Change Priority,
+bulk-task.status,Change status,
+bulk-task-noty.tasks-deleted,task(s) deleted,
+bulk-task-noty.tasks-modified,task(s) modified,
+bulk-task-noty.task-scheduled,Bulk Task scheduled ,
+activity.tasks-assigned,Tasks assigned to ,
+activity.task-bulk-status,Task status changed to ,
+activity.tasks-bulk-status,Tasks status changed to ,
+activity.task-bulk-priority,Task priority changed to ,
+activity.tasks-bulk-priority,Tasks priority changed to ,
+activity.tasks-bulk-delete,Tasks deleted.,
+activity.task-bulk-duedate,Task due date changed to ,
+activity.tasks-bulk-duedate,Tasks due date changed to ,
+login.duplicate-login,We had to log you out as you seem to have logged in from some other browser,Tuvimos realice la desconexión ya que parecen haber iniciado sesión desde otro navegador
+login.login,Login,Iniciar sesión
+login.signin-using-registration,Sign in using your registered account,Entra con tu cuenta registrada
+login.user-id-your-email,User ID (Your Email Address),ID de usuario (su dirección de correo electrónico )
+login.sign-in,Sign In,Registrarse
+login.login-with,Login with,Inicia con
+login.login-with-google,Login with Google,Ingresar con Google
+login.login-with-yahoo,Login with Yahoo,Inicia sesión con Yahoo
+login.dont-have-account,Do not have an account,No tiene una cuenta
+login.sign-up,Sign Up,Regístrate
+login.forgot,Forgot,Olvidó
+forgot-domain.forgot-domain,Forgot Domain,Olvidé el dominio
+forgot-domain.user-not-found,We are not able to find any user,No podemos encontrar ningún usuario
+forgot-domain.enter-email,Enter Your Email,Inserta tu correo
+forgot-domain.register,Register,Registrarse
+enter-domain.enter-your-domain,Enter Your Domain,Inserta tu dominio
+enter-domain.enter-your-domain-at,Enter your domain at ,Inserta tu dominio en
+enter-domain.new-user,New User,Nuevo usuario
+enter-domain.common-domain-issue,Common domain cannot be created.,Dominio común no puede ser creado
+enter-domain.domain-name-issue,Name should be between 2-20 characters in length. Both letters and numbers are allowed but it should start with a letter. Cannot contain special characters other than '_' and '-',Nombre debe ser entre 4-20 caracteres de longitud . Letras y números están permitidos pero deben comenzar con una letra . No pueden contener caracteres especiales que no sean '_' y '-'
+enter-domain.domain-name-length-error,Domain should be 2 to 20 characters.,El dominio debe tener entre 2 y 20 caracteres
+forgot-password.we-sent-email,We have sent you an email,Te hemos enviado un correo
+forgot-password.signed-up-with-oauth2,You have signed-up using your Google/Yahoo account. Please sign-in through the same account,Has ingresado usando tu cuenta de google/yahoo. Por favor ingresa a través de la misma cuenta
+forgot-password.forgot-password,Forgot Password,Olvidó su contraseña
+forgot-password.resend-password,Resend password,Reenviar contraseña
+forgot-password.already-have-account,Already have an account,Ya tengo una cuenta
+html5Validations.invalid-default,Please fill out this field.,Por favor rellena el campo
+html5Validations.invalid-email,Please include an '@' in the email address. $1 is missing '@'.,Por favor incluye un '@' en el correo electrónico. Se perdió $1 '@'
+html5Validations.invalid-password,Please lengthen this text $1 characters or more (you are currently using $2 characters).,Por favor alargue este texto $1 caracteres o más (por ahora estás usando $2 caracteres)
+otp-auth.info,Please enter the verification code sent to your email ID to access the account.,Por favor inserta eñ código de verificacion enviado a tu dirección de correo electrónico para acceder a la cuenta
+otp-auth.enter-code,Enter Verification Code,Inserte el código de verificación
+otp-auth.resend-code,Resend Verfication Code,Reenviar el código de verificación
+otp-auth.resend-code-success,We have re-sent the verification code to your registered email. Please enter the code below to get access.,Te hemos enviado el código de verificación a tu correo registrado. Por favor inserta un código válido debajo para acceder
+register.register-with-free,Register your FREE account,Registra tu cuenta GRATUITA
+register.name-validation,Name should be at least 3 characters,El nombre debe tener al menos 3 caracteres
+register.invalid-pattern,Please match the requested format.,Por favor coloca el formato requerido
+register.full-name,Full Name,Nombre completo
+register.email-address,Email Address (User ID),Correo electrónico (Identificación del usuario)
+register.click-signing-info,By clicking sign up&#44 I agree to Agile CRM's,Al clicar inscríbete&#44 Estoy de acuerdo con My CRM's
+register.terms-of-service,Terms of Service,Terminos del servicio
+register.wait-info-while-setting,Please wait while we are setting up your account...,Por favor espera mientras configuramos tu cuenta...
+register.time-to-configure,It's time to configure your account,Es hora de configurar tu cuenta
+register.domain-name-validation,Name should be between 4-20 characters in length. Both letters and numbers are allowed but it should start with a letter. Cannot contain special characters other than '_' and '-'.,El nombre debe estar entre 4-20 caracteres. Tanto letras como números están permitidos pero debe comenzar con una letra. No puede contener caracteres especiales aparte de '_' y '-'
+register.domain-name-helptext,This is where you and your users will log in to your account,Aquí es donde tu y tus usuarios se conectaran  en tu cuenta
+register.choose-plan,Choose Plan,Escoger plan
+register.role-helptext,We will create unique experience based on your role and company,Crearemos una experiencia única basada en tu rol y compañía
+register.role-and-company,Role & Company,Rol & Compañía
+register.ceo,CEO,CEO
+register.vp,VP,VP
+register.vp-sales,VP&#44 Sales,VP&#44 Ventas
+register.vp-marketing,VP&#44 Marketing,VP&#44 Marketing
+register.cus-suc-manager,Customer Success Manager,Representante del Éxito del Consumidor
+register.sales-manager,Sales Manager,Representante de Ventas
+register.marketing-manager,Marketing Manager,Representante de Marketing
+register.consultant,Consultant,Consultor
+register.reseller,Reseller,Revendedor
+register.recruiter,Recruiter,Reclutador
+register.developer,Developer,Desarrollador
+register.other,Other,Otro
+register.select-type,Select Type,Seleccionar tipo
+register.b2b,B2B,B2B
+register.saas,SaaS,ScuS
+register.ecommerce,Ecommerce,Comercio electrónico
+register.marketing-agency,Marketing Agency,Agencia de Marketing
+register.contact-centers,Contact Centers,Centros de contacto
+register.realty,Realty,Bienes raíces
+register.media,Media,Medios
+register.tech-consulting,Technology Consulting,Consulta de tecnología
+register.pnone-num-validation,Please enter valid number,Por favor inserta un número válido
+forgot-domain.email-invalid-after-@,Please enter a part following '@'. '$1' is incomplete.,Por favor introduzca una parte siguiente '@' . '$1' Es incompleta .
+html5Validations.invalid-select-one,Please select an item in the list.,Por favor seleccione un elemento de la lista.
+html5Validations.enter-number-only,Please enter a number,Por favor introduzca un número

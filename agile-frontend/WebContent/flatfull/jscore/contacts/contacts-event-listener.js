@@ -33,6 +33,7 @@ var Contacts_And_Companies_Events_View = Base_Model_View.extend({
     	'click .toggle-company-filters' : 'toggleCompanyFilters',
 
     	'click #lhs-customfilters-header' : 'toggleMobileCustomFilters',
+    	'click #lhs-company-customfilters-header' : 'toggleMobileCustomFilters',
 
     },
 
@@ -41,6 +42,11 @@ var Contacts_And_Companies_Events_View = Base_Model_View.extend({
     	event.stopPropagation();
     	contact_delete_action.onContactDelete(e);
 	},*/
+	toggleMobileCustomFilters : function(e){
+		e.preventDefault();
+		$(e.currentTarget).find('i').toggleClass('fa-plus-square-o').toggleClass('fa-minus-square-o');
+		$(e.currentTarget).next().toggleClass('hide');
+	},
 	toggleMobileCustomFilters : function(e){
 		e.preventDefault();
 		$(e.currentTarget).find('i').toggleClass('fa-plus-square-o').toggleClass('fa-minus-square-o');
@@ -241,7 +247,22 @@ var Contacts_And_Companies_Events_View = Base_Model_View.extend({
 		var appCount = 0;
 		var limitValue = 10000;		
 
-		if(company_util.isCompany()){
+		if(company_util.isCompanyContact()){
+			resultCount = App_Companies.contacts_Company_List.collection.length;
+			appCount = getAvailableContacts();
+
+			if(resultCount > limitValue){
+					resultCount = limitValue + "+";
+				}
+
+				if(appCount > limitValue){
+					appCount = limitValue + "+";
+				}
+
+			html = "Selected " + resultCount + " contacts. <a href='#'  id='select-all-available-contacts' class='c-p text-info-important'>Select all " + appCount + " contacts</a>";
+       }	
+
+		else if(company_util.isCompany()){
 
 			resultCount = App_Companies.companiesListView.collection.length;
 			appCount = getAvailableContacts();

@@ -623,28 +623,9 @@
 			
 
 <script type="text/javascript">
-
-  function startDictation() {
-      var recognition = new webkitSpeechRecognition();
- 
-      recognition.continuous = false;
-      recognition.interimResults = false;
- 
-      recognition.lang = "en-US";
-      recognition.start();
- 
-      recognition.onresult = function(e) {
-        document.getElementById('searchText').value
-                                 = e.results[0][0].transcript;
-        
-        recognition.stop();
-       
-      };
- 
-      recognition.onerror = function(e) {
-      	console.log(e)
-        recognition.stop();
-      }
-    }
-
+var item = document.getElementById('speechDectation');
+if(window.hasOwnProperty('webkitSpeechRecognition')) 
+	item.style.display = "inline-block";
+else
+	item.style.display = "none"; 
 </script>

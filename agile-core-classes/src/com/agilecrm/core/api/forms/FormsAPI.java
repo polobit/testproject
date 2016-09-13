@@ -23,6 +23,7 @@ import org.json.JSONObject;
 
 import com.agilecrm.AllDomainStats;
 import com.agilecrm.alldomainstats.util.AllDomainStatsUtil;
+import com.agilecrm.cms.CMSPlugin;
 import com.agilecrm.forms.Form;
 import com.agilecrm.forms.util.FormUtil;
 import com.google.appengine.api.NamespaceManager;
@@ -112,6 +113,9 @@ public class FormsAPI
 
 		form.save();
 		
+		// Inform to CMS plugins
+		CMSPlugin.updateToCmsPlugins(CMSPlugin.EventName.Forms, true);
+		
 		response.setStatus(HttpServletResponse.SC_OK);
 		return;
 	    }
@@ -138,6 +142,9 @@ public class FormsAPI
 	{
 	    JSONArray formsJSONArray = new JSONArray(model_ids);
 	    Form.dao.deleteBulkByIds(formsJSONArray);
+	    
+	    // Inform to CMS plugins
+	    CMSPlugin.updateToCmsPlugins(CMSPlugin.EventName.Forms, true);
 	}
 	catch (JSONException e)
 	{

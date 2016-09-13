@@ -81,7 +81,7 @@
                   <tr>
                      <th style="display: none;width:5%;"></th>
                      <th>{{agile_lng_translate 'contacts-view' 'Basic info'}}</th>
-                     <th>{{agile_lng_translate 'contacts-view' 'Company'}}</th>
+                     <!-- <th>{{agile_lng_translate 'contacts-view' 'Company'}}</th> -->
                      <th>{{agile_lng_translate 'contacts-view' 'Tags'}}</th>
                      <th class="text-ellipsis">{{agile_lng_translate 'contacts-view' 'Lead score'}}</th>
                      <th class="text-ellipsis">{{agile_lng_translate 'contacts-view' 'Star Value'}}</th>
@@ -127,7 +127,7 @@
             <tr>
                <th style="display: none; width:5%;"></th>
                <th>{{agile_lng_translate 'contacts-view' 'Basic info'}}</th>
-               <th>{{agile_lng_translate 'contacts-view' 'Company'}}</th>
+               <!-- <th>{{agile_lng_translate 'contacts-view' 'Company'}}</th> -->
                <th>{{agile_lng_translate 'contacts-view' 'Tags'}}</th>
                <th class="text-ellipsis">{{agile_lng_translate 'contacts-view' 'Lead score'}}</th>
                <th class="text-ellipsis">{{agile_lng_translate 'contacts-view' 'Star Value'}}</th>
@@ -146,7 +146,7 @@
 <script id="segmentation-custom-view-model-template" type="text/html"> 
 <td style="display: none;{{#if id}}{{else}} cursor:default;{{/if}}"></td>
 <td class="data icon-append-mobile {{#is_mobile}} p-r-none {{/is_mobile}}" data="{{id}}" {{#is_mobile}} style="padding:10px 15px !important;" {{/is_mobile}} style="{{#if id}}{{else}} cursor:default;{{/if}}">
-<div class="table-resp" {{#is_mobile}} style="width:calc(100vw - 60px);" {{else}} style="width:17em;" {{/is_mobile}}>
+<div class="table-resp" {{#is_mobile}} style="width:calc(100vw - 60px);" {{else}} style="width:20em;" {{/is_mobile}}>
 <div class="agile-img m-r-sm {{#is_mobile}} thumb {{else}} thumb-sm {{/is_mobile}}" style="margin-right:10px">
    {{#if id}}
    <img class="img-inital r r-2x"  title="{{getPropertyValue properties 'first_name'}} {{getPropertyValue properties 'last_name'}}" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"/>
@@ -166,24 +166,24 @@
 </div>  
 </div>
 </td>
-<td class="data" data="{{id}}" style="{{#if id}}{{else}} cursor:default;{{/if}}">
+<!-- <td class="data" data="{{id}}" style="{{#if id}}{{else}} cursor:default;{{/if}}">
    <div class="text-ellipsis" style="width:15em;">
       <a class="text-cap">{{getPropertyValue properties "company"}}</a>
    </div>
-</td>
+</td> -->
 <td class="data" data="{{id}}" style="{{#if id}}{{else}} cursor:default;{{/if}}">
-   <div class="overflow-hidden line-clamp line-clamp-2 no-wrap" style="width:12em;">  
+   <div class="overflow-hidden line-clamp line-clamp-2 no-wrap" style="width:15em;">  
       {{#each tags}}
       <span class="label bg-light dk text-tiny">{{this}}</span> 
       {{/each}}
    </div>
 </td>
-<td class='data' data='{{id}}' style="{{#if id}}{{else}} cursor:default;{{/if}}width:8em;">
+<td class='data' data='{{id}}' style="{{#if id}}{{else}} cursor:default;{{/if}}width:10em;">
    <div >
       {{lead_score}}
    </div>
 </td>
-<td class='data text-ellipsis' data='{{id}}' style="{{#if id}}{{else}} cursor:default;{{/if}} width:8em;">
+<td class='data text-ellipsis' data='{{id}}' style="{{#if id}}{{else}} cursor:default;{{/if}} width:10em;">
    {{#if id}}
    <ul class="m-n p-n list-none">
       {{setupRating star_value}}
@@ -197,7 +197,7 @@
 <script id="segmentation-custom-view-table-model-template" type="text/html">    
   <td style="display: none;{{#if id}}{{else}} cursor:default;{{/if}}"></td>
 <td class="data icon-append-mobile {{#is_mobile}} p-r-none {{/is_mobile}}" data="{{id}}" {{#is_mobile}} style="padding:10px 15px !important;" {{/is_mobile}} style="{{#if id}}{{else}} cursor:default;{{/if}}">
-<div class="table-resp" {{#is_mobile}} style="width:calc(100vw - 60px);" {{else}} style="width:17em;" {{/is_mobile}}>
+<div class="table-resp" {{#is_mobile}} style="width:calc(100vw - 60px);" {{else}} style="width:20em;" {{/is_mobile}}>
 <div class="agile-img m-r-sm {{#is_mobile}} thumb {{else}} thumb-sm {{/is_mobile}}" style="margin-right:10px">
    {{#if id}}
    <img class="img-inital r r-2x"  title="{{getPropertyValue properties 'first_name'}} {{getPropertyValue properties 'last_name'}}" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"/>
@@ -217,24 +217,24 @@
 </div>  
 </div>
 </td>
-<td class="data" data="{{id}}" style="{{#if id}}{{else}} cursor:default;{{/if}}">
+<!-- <td class="data" data="{{id}}" style="{{#if id}}{{else}} cursor:default;{{/if}}">
    <div class="text-ellipsis" style="width:15em;">
       <a class="text-cap">{{getPropertyValue properties "company"}}</a>
    </div>
-</td>
+</td> -->
 <td class="data" data="{{id}}" style="{{#if id}}{{else}} cursor:default;{{/if}}">
-   <div class="overflow-hidden line-clamp line-clamp-2 no-wrap" style="width:12em;">  
+   <div class="overflow-hidden line-clamp line-clamp-2 no-wrap" style="width:15em;">  
       {{#each tags}}
       <span class="label bg-light dk text-tiny">{{this}}</span> 
       {{/each}}
    </div>
 </td>
-<td class='data' data='{{id}}' style="width:8em;{{#if id}}{{else}} cursor:default;{{/if}}">
+<td class='data' data='{{id}}' style="width:10em;{{#if id}}{{else}} cursor:default;{{/if}}">
    <div>
       {{lead_score}}
    </div>
 </td>
-<td class='data text-ellipsis' data='{{id}}' style="{{#if id}}{{else}} cursor:default;{{/if}}width:8em;">
+<td class='data text-ellipsis' data='{{id}}' style="{{#if id}}{{else}} cursor:default;{{/if}}width:10em;">
    {{#if id}}
    <ul class="m-n p-n list-none">
       {{setupRating star_value}}

@@ -16,6 +16,11 @@ var WidgetsRouter = Backbone.Router
                 "Rapleaf/:id" : "Rapleaf",
                 "Facebook" : "Facebook",
                 "Facebook/:id" : "Facebook",
+                "FullContact" :"FullContact",
+                "FullContact/:id" :"FullContact",
+                "Klout" : "Klout",
+                "Klout/:id" : "Klout",      
+
                 // Support widgets
                 "ClickDesk" : "ClickDesk",
                 "ClickDesk/:id" : "ClickDesk",
@@ -235,6 +240,14 @@ var WidgetsRouter = Backbone.Router
                             "/core/api/widgets/facebook/currentUserProfile/"+id);
                 }
 
+            },
+
+            FullContact : function(id){
+                addConfigurableWidget(id, "FullContact", "fullcontact-login");
+            },
+
+            Klout : function(id){
+               addConfigurableWidget(id, "Klout", "klout-login");
             },
 
             /**

@@ -1,0 +1,159 @@
+<script id="admin-settings-telephony-collection-template" type="text/html">
+	
+
+ <div class="col">
+    <div class="hbox h-auto m-b-lg">
+	<div  id="custom-fields-accordion">
+	<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+	
+<!-- telephony pannel starts-->
+
+	<div class="panel panel-default">
+			<div id="telephony-callstatus-fields">
+				<div class="panel-heading" role="tab" id="headingTwo">
+					<div class="panel-title">
+						<a class="collapsed accordion-toggle" aria-controls="collapseOne" aria-expanded="false"  data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">{{agile_lng_translate 'campaigns' 'call-status'}}</a>
+					</div>
+				</div>
+
+
+				<div class="panel-collapse" role="tabpanel" aria-labelledby="headingTwo" id="collapseTwo" >
+				<div class="panel-body p-n" id="telephony-callstatus-accordion">
+    				<div class="control-group m-b-none">  	 
+                    <div>
+					<table class="table table-hover agile-table custom-fields-table bg-white table-hover m-b-none" >
+					<colgroup><col width="40%"><col width="20%"></colgroup>
+					<tbody id="admin-settings-telephony-model-list" class="telephony-tbody ui-sortable">
+					</tbody>
+					</table>
+					</div>
+					<div class="p-l p-t p-b show_telephony_status_field "><a href="#" class="text-info"><i class="icon-plus-sign"></i> {{agile_lng_translate 'campaigns' 'add-status'}} </a></div>
+					<div class="show_field p-l p-t p-b" style="display:none;">
+						<input id="add_new_telephony_status" class="form-control input-sm" style="width:145px;display:inline-block" type="text" placeholder="{{agile_lng_translate 'campaigns' 'new-status'}}">
+						<a class="btn btn-info btn-addon btn-sm" data-toggle="modal" id="add_telephony_status" href="#">{{agile_lng_translate 'other' 'add'}}</a>
+						<span class="save-status"></span>
+					</div>
+    			</div> 
+				</div>
+			</div>
+			</div>
+			</div>
+
+<!-- telephony pannel ends -->
+
+	</div>
+    </div>
+    </div>
+    </div>
+    <div class="col w-md">
+        <div class="data-block">
+            <div class="p-l p-r">
+				<h4 class="m-t-none">
+                   {{agile_lng_translate 'campaigns' 'help'}}
+                </h4>
+                
+				<p>
+				{{agile_lng_translate 'campaigns' 'telephony-help-text'}}
+				<br/>
+            </div>
+        </div>
+    </div>
+
+<!-- Delete modal script start here -->
+
+
+<div class="modal fade" id="telephony-status-delete-modal">
+<div class="modal-dialog">
+    <div class="modal-content">
+	<div class="modal-header">
+        <button class="close" data-dismiss="modal">x</button>
+		 <h3>{{agile_lng_translate 'campaigns' 'delete-status'}}</h3>
+    </div>
+	<div class="modal-body">
+        <div id="delete-telephony-confirm-dialog">
+			<input type="hidden" name="id"></input>
+             <p>{{agile_lng_translate 'campaigns' 'confirm-delete-status'}} - <span id="telephony-status-name"></span> ? </p>
+        </div>
+    </div>
+    <div class="modal-footer">
+    <span class="category-delete-message" style="margin-right:5px;color:red;"></span>
+	<a href="#" id="telephony-status-delete-confirm" class="btn btn-primary">{{agile_lng_translate 'portlets' 'yes'}}</a>
+	<a  href="#" class="btn btn-default" data-dismiss="modal">{{agile_lng_translate 'portlets' 'no'}}</a>
+    </div>
+</div>
+</div>
+</div>
+
+<!-- Delete modal script ends here -->
+</script>
+
+<script id="admin-settings-telephony-model-template" type="text/html">
+    	
+	<td>
+	{{#if_equals label "Answered"}}		
+		<div class="inline-block v-top text-ellipsis" style="width:80%">{{agile_lng_translate 'campaigns' 'answered'}}</div>
+	{{else}}
+		{{#if_equals label "Busy"}}		
+			<div class="inline-block v-top text-ellipsis" style="width:80%">{{agile_lng_translate 'campaigns' 'busy'}}</div>
+		{{else}}
+			{{#if_equals label "Failed"}}		
+				<div class="inline-block v-top text-ellipsis" style="width:80%">{{agile_lng_translate 'call_activity' 'fail'}}</div>
+			{{else}}
+				{{#if_equals label "Missed"}}		
+					<div class="inline-block v-top text-ellipsis" style="width:80%">{{agile_lng_translate 'campaigns' 'missed'}}</div>
+				{{else}}
+					{{#if_equals label "Voicemail"}}		
+						<div class="inline-block v-top text-ellipsis" style="width:80%">{{agile_lng_translate 'campaigns' 'voicemail'}}</div>
+					{{else}}
+						{{#if_equals label "Inquiry"}}		
+							<div class="inline-block v-top text-ellipsis" style="width:80%">{{agile_lng_translate 'campaigns' 'inquiry'}}</div>
+						{{else}}
+							{{#if_equals label "Interest"}}		
+								<div class="inline-block v-top text-ellipsis" style="width:80%">{{agile_lng_translate 'campaigns' 'interest'}}</div>
+							{{else}}
+								{{#if_equals label "No Interest"}}		
+									<div class="inline-block v-top text-ellipsis" style="width:80%">{{agile_lng_translate 'campaigns' 'no-interest'}}</div>
+								{{else}}
+									{{#if_equals label "Incorrect Referral"}}		
+										<div class="inline-block v-top text-ellipsis" style="width:80%">{{agile_lng_translate 'campaigns' 'incorrect-referral'}}</div>
+									{{else}}
+										{{#if_equals label "Meeting Scheduled"}}		
+											<div class="inline-block v-top text-ellipsis" style="width:80%">{{agile_lng_translate 'campaigns' 'meeting-scheduled'}}</div>
+										{{else}}
+											{{#if_equals label "New Opportunity"}}		
+												<div class="inline-block v-top text-ellipsis" style="width:80%">{{agile_lng_translate 'campaigns' 'new-opportunity'}}</div>
+											{{else}}
+													<div class="inline-block v-top text-ellipsis" style="width:80%">{{label}}</div>
+											{{/if_equals}}
+										{{/if_equals}}				
+									{{/if_equals}}
+								{{/if_equals}}
+							{{/if_equals}}	
+						{{/if_equals}}
+					{{/if_equals}}
+				{{/if_equals}}
+			{{/if_equals}}				
+		{{/if_equals}}
+	{{/if_equals}}
+
+		<input type="hidden" name="id" value="{{id}}" order="{{order}}">
+	</td>	
+	<td class="b-r-none" style="text-align: right;">
+{{#if_anyone_equals label "Answered,Busy,Failed,Missed,Voicemail"}}
+		<div class="m-b-n-xs" style="display:none;">
+			<a class="text-l-none-hover c-p text-xs"><i title="Drag" class="icon-move"></i></a>
+		</div>
+{{else}}
+		<div class="m-b-n-xs" style="display:none;">
+			<a class="text-l-none-hover c-p text-xs"><i title="Drag" class="icon-move"></i></a>
+			<a id="{{id}}" class="telephony-status-delete c-p text-l-none text-xs" data-toggle="modal" role="button" href="#" data="{{label}}">
+				<i title="Delete status" class="telephony-action icon icon-trash"></i>
+			</a>
+		</div>
+{{/if_anyone_equals}}
+
+
+
+	</td>
+		
+</script>

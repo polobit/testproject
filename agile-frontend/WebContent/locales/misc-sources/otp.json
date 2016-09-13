@@ -1,0 +1,15 @@
+{
+ 	"login": "{{agile_lng_translate 'login' 'login'}}",
+ 	"info": "{{agile_lng_translate 'otp-auth' 'info'}}",
+ 	"Send": "{{agile_lng_translate 'tasks' 'Send'}}",
+ 	"enter-code": "{{agile_lng_translate 'otp-auth' 'enter-code'}}",
+ 	"resend-code": "{{agile_lng_translate 'otp-auth' 'resend-code'}}",
+ 	"resend-code-success": "{{agile_lng_translate 'otp-auth' 'resend-code-success'}}",
+ 	
+ 	// Custom validations
+ 	"invalid-default": "{{agile_lng_translate 'html5Validations' 'invalid-default'}}",
+ 	"invalid-email": "{{agile_lng_translate 'html5Validations' 'invalid-email'}}",
+ 	"invalid-password": "{{agile_lng_translate 'html5Validations' 'invalid-password'}}",
+ 	"name-validation": "{{agile_lng_translate 'register' 'name-validation'}}",
+ 	"invalid-pattern": "{{agile_lng_translate 'register' 'invalid-pattern'}}",
+}

@@ -421,7 +421,9 @@ var contacts_bulk_actions = {
 									$("#contacts-export-csv-modal").on("click",'#contacts-export-csv-confirm', function(e)
 									{
 										e.preventDefault();
-
+										App_Companies.Company_detail_route="";
+										 if (company_util.isCompanyContact())
+        									App_Companies.Company_detail_route = Current_Route;
 										if ($(this).attr('disabled'))
 											return;
 
@@ -503,7 +505,9 @@ var contacts_bulk_actions = {
 						$("#companies-export-csv-modal").on("click", '#companies-export-csv-confirm', function(e)
 										{
 											e.preventDefault();
+											App_Companies.Company_detail_route="";
 
+												App_Companies.Company_detail_route="";
 											if ($(this).attr('disabled'))
 												return;
 
@@ -553,20 +557,27 @@ select_contacts :  function(e)
 				var resultCount = getAvailableContacts();
 				var limitValue = 10000;
 
-				if(company_util.isCompany()){
+				if(company_util.isCompanyContact()){
+					if(resultCount > limitValue){
+							resultCount = limitValue + "+";
+						}
+						html = ' '+_agile_get_translated_val('contacts','selected-all')+' ' + resultCount + ' '+_agile_get_translated_val('contact-details','contacts')+'. <a hrer="#" id="select-all-revert" class="c-p text-info-important">{{agile_lng_translate "contacts" "select-choosen-only"}}</a>';
+				}
+
+				else if(company_util.isCompany()){
 					if(localStorage.getItem("dynamic_company_filter") != null || localStorage.getItem("company_filter") != null){				
 						if(resultCount > limitValue){
 							resultCount = limitValue + "+";
 						}
 					}
-					html = ' '+_agile_get_translated_val('contacts','select-all')+' ' + resultCount + ' '+_agile_get_translated_val('contact-details','companies')+'. <a hrer="#" id="select-all-revert" class="c-p text-info">{{agile_lng_translate "companies" "select-choosen-only"}}</a>';
+					html = ' '+_agile_get_translated_val('contacts','selected-all')+' ' + resultCount + ' '+_agile_get_translated_val('contact-details','companies')+'. <a hrer="#" id="select-all-revert" class="c-p text-info">{{agile_lng_translate "companies" "select-choosen-only"}}</a>';
 				}else{
 					if(localStorage.getItem("dynamic_contact_filter") != null || localStorage.getItem("contact_filter") != null){				
 						if(resultCount > limitValue){
 							resultCount = limitValue + "+";
 						}
 					}
-					html = ' '+_agile_get_translated_val('contacts','select-all')+' ' + resultCount + ' '+_agile_get_translated_val('contact-details','contacts')+'. <a hrer="#" id="select-all-revert" class="c-p text-info">{{agile_lng_translate "contacts" "select-choosen-only"}}</a>';
+					html = ' '+_agile_get_translated_val('contacts','selected-all')+' ' + resultCount + ' '+_agile_get_translated_val('contact-details','contacts')+'. <a hrer="#" id="select-all-revert" class="c-p text-info">{{agile_lng_translate "contacts" "select-choosen-only"}}</a>';
 				}
 				
 				$('body')
@@ -1140,7 +1151,7 @@ function toggle_contacts_bulk_actions_dropdown(clicked_ele, isBulk, isCampaign)
 				}
 
 				$('body').find('#bulk-select').css('display', 'block')
-				.html("Selected " + resultCount + " companies. <a id='select-all-available-contacts' class='c-p text-info' href='#'>Select all " + appCount + " companies</a>");
+				.html(_agile_get_translated_val('companies-view','selected') + " " + resultCount + " " +_agile_get_translated_val('contact-details', 'contacts')+ ". <a id='select-all-available-contacts' class='c-p text-info-important' href='#'>" +_agile_get_translated_val('contacts','select-all')+ " " + appCount + " " +_agile_get_translated_val('contact-details', 'contacts')+ "</a>");
 				$('#bulk-select').css("display","block");
 			}
 		}
@@ -1268,7 +1279,9 @@ function getSelectionCriteria()
 
 	var filter_id = undefined;
 	
-	if(company_util.isCompany())
+	if(App_Companies.Company_detail_route!="")
+		filter_id = undefined;
+	else if(company_util.isCompany())
 		filter_id = $('.filter-criteria', $(App_Companies.companiesListView.el)).attr("_filter");
 	else
 		filter_id = $('.filter-criteria', $(App_Contacts.contactsListView.el)).attr("_filter");
@@ -1347,7 +1360,7 @@ function postBulkOperationData(url, data, form, contentType, callback, error_mes
 		if (callback && typeof (callback) === "function")
 			callback(data);
 
-		if(App_Companies.Company_detail_route)
+		if(App_Companies.Company_detail_route!="")
 			Backbone.history.navigate(App_Companies.Company_detail_route,{trigger : true});
 		else if(!company_util.isCompany())
 			// On save back to contacts list

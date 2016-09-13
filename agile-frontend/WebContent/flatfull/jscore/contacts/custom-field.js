@@ -43,14 +43,38 @@ function initializeCustomFieldsListeners(){
 			$.ajax({ type : 'DELETE', url : '/core/api/custom-fields/' + custom_field.id, contentType : "application/json; charset=utf-8",
 				success : function(data){
 					if(custom_field.get("scope")=="CONTACT")
+					{
 						App_Admin_Settings.contactCustomFieldsListView.collection.remove(custom_field.id);
+						if(App_Contacts.contactViewModel && App_Contacts.contactViewModel.fields_set && 
+							App_Contacts.contactViewModel.fields_set.indexOf("CUSTOM_"+custom_field.get('field_label'))>-1)
+						{
+							var index =App_Contacts.contactViewModel.fields_set.indexOf("CUSTOM_"+custom_field.get('field_label'));
+							App_Contacts.contactViewModel.fields_set.splice(index,1);
+						}
+						if(App_Companies.contactCompanyViewModel && App_Companies.contactCompanyViewModel.fields_set && 
+							App_Companies.contactCompanyViewModel.fields_set.indexOf("CUSTOM_"+custom_field.get('field_label'))>-1)
+						{
+							var index =App_Companies.contactCompanyViewModel.fields_set.indexOf("CUSTOM_"+custom_field.get('field_label'));
+							App_Companies.contactCompanyViewModel.fields_set.splice(index,1);
+						}
+				
+					}
 					else if(custom_field.get("scope")=="COMPANY")
+					{
 						App_Admin_Settings.companyCustomFieldsListView.collection.remove(custom_field.id);
+						if(App_Companies.companyViewModel && App_Companies.companyViewModel.fields_set && 
+							App_Companies.companyViewModel.fields_set.indexOf("CUSTOM_"+custom_field.get('field_label'))>-1)
+						{
+							var index =App_Companies.companyViewModel.fields_set.indexOf("CUSTOM_"+custom_field.get('field_label'));
+							App_Companies.companyViewModel.fields_set.splice(index,1);
+						}
+					}
 					else if(custom_field.get("scope")=="DEAL")
 						App_Admin_Settings.dealCustomFieldsListView.collection.remove(custom_field.id);
 					else if(custom_field.get("scope")=="CASE")
 						App_Admin_Settings.caseCustomFieldsListView.collection.remove(custom_field.id);
 					currentElement.closest('tr').remove();
+					CONTACT_CUSTOM_FIELDS=App_Admin_Settings.contactCustomFieldsListView.collection.toJSON();
 				}, dataType : 'json' });
 		});
 	});
@@ -61,6 +85,7 @@ function showCustomFieldModel(data)
 	var modelViewCount = 0;
 	var isNew = false;
 	isNew = !data.id;
+
 	// Creating model for bootstrap-modal
 	var modelView = new Base_Model_View({
 		url : '/core/api/custom-fields',
@@ -70,8 +95,30 @@ function showCustomFieldModel(data)
 		//reload : true,
 		modal : "#custom-field-add-modal",
 		isNew : isNew,
+		prePersist : function(model){
+			var scopeExtension = [];
+			var scopeFields = $("#textModalForm").find(".CustomFieldScope");
+			$.each(scopeFields , function(index,element){
+				
+				if($(element).find('input').is(':checked'))
+					scopeExtension.push($(element).find('input').attr('id'));
+			});
+			model.set({scopeExtension : scopeExtension.toString()});
+			//model.scopeExtension = scopeExtension.toString(); 
+			console.log("test");
+		},
 		postRenderCallback : function(el) {
+			
 			console.log($("#custom-field-add-modal", el));
+			
+			var scope = $("#textModalForm", el).find("input[name=scope]").val();
+			if( scope=="CONTACT")
+			   	$('#textModalForm',el).find("#contacts").prop('checked', true); 
+			else if(scope=="COMPANY")
+				$('#textModalForm',el).find("#companies").prop('checked', true); 
+			else if(scope =="DEAL")
+				$('#textModalForm',el).find("#deals").prop('checked', true); 
+			
 			//This code will scroll to top to see the modal.
 			
 			if(!modelViewCount){
@@ -84,12 +131,15 @@ function showCustomFieldModel(data)
 		     $('#custom-field-add-modal').css("left", "50%");
 		     $('#custom-field-add-modal').css("width", modalWidth);
 		     $('#custom-field-add-modal').css("margin", (modalWidth/2)*-1);
+
 		     bindCustomFiledChangeEvent(el);
 		},
 		saveCallback : function(model)
 		{
 			console.log(model);
-			//var custom_field_model_json = App_Admin_Settings.customFieldsListView.collection.get(model.id);
+		
+
+					//var custom_field_model_json = App_Admin_Settings.customFieldsListView.collection.get(model.id);
 			var custom_field_model_json;
 			if(model.scope=="CONTACT")
 				custom_field_model_json = App_Admin_Settings.contactCustomFieldsListView.collection.get(model.id);
@@ -117,25 +167,52 @@ function showCustomFieldModel(data)
 			
 			else
 			{
-				if(model.scope=="CONTACT"){
-					App_Admin_Settings.contactCustomFieldsListView.collection.add(model);
-				}else if(model.scope=="COMPANY"){
-					App_Admin_Settings.companyCustomFieldsListView.collection.add(model);
-					App_Admin_Settings.companyCustomFieldsListView.render(true);
-				}else if(model.scope=="DEAL"){
-					App_Admin_Settings.dealCustomFieldsListView.collection.add(model);
-					App_Admin_Settings.dealCustomFieldsListView.render(true);
-				}else if(model.scope=="CASE"){
+				var scopeDetails =[];
+				scopeDetails = model.scopeExtension.split(',');
+				var i;
+				for (i=0;i<scopeDetails.length;i++)
+					{
+						if(scopeDetails[i]== "contacts")
+						App_Admin_Settings.contactCustomFieldsListView.collection.add(model);
+						if(scopeDetails[i]== "companies")
+						{
+							App_Admin_Settings.companyCustomFieldsListView.collection.add(model);
+							App_Admin_Settings.companyCustomFieldsListView.render(true);
+						}
+						if(scopeDetails[i]== "deals")
+						{
+							App_Admin_Settings.dealCustomFieldsListView.collection.add(model);
+							App_Admin_Settings.dealCustomFieldsListView.render(true);
+						}
+					}
+
+					if(model.scope=="CASE"){
 					App_Admin_Settings.caseCustomFieldsListView.collection.add(model);
 					App_Admin_Settings.caseCustomFieldsListView.render(true);
 				}
+				/*if(model.scope=="CONTACT"){
+					App_Admin_Settings.contactCustomFieldsListView.collection.add(model);
+				}else if(model.scope=="COMPANY"){
+				
+						App_Admin_Settings.companyCustomFieldsListView.collection.add(model);
+					App_Admin_Settings.companyCustomFieldsListView.render(true);
+					}
+				}else if(model.scope=="DEAL"){
+					if(	$('#textModalForm').find("#deals").is(':checked')== true){
+					App_Admin_Settings.dealCustomFieldsListView.collection.add(model);
+					App_Admin_Settings.dealCustomFieldsListView.render(true);}
+				}else if(model.scope=="CASE"){
+					App_Admin_Settings.caseCustomFieldsListView.collection.add(model);
+					App_Admin_Settings.caseCustomFieldsListView.render(true);
+				}*/
 				/*App_Admin_Settings.customFieldsListView.collection.add(model);
 				if(App_Admin_Settings.customFieldsListView.collection.length == 1)
 					App_Admin_Settings.customFieldsListView.render(true);*/
 			}
-
+			CONTACT_CUSTOM_FIELDS=App_Admin_Settings.contactCustomFieldsListView.collection.toJSON();
 			$("#custom-field-add-modal").modal('hide');
 			$("body").removeClass("modal-open").css("padding-right", "");
+			//location.reload(true);
 		},
 		errorCallback : function(response)
 		{
@@ -171,10 +248,35 @@ function showCustomFieldModel(data)
 				$('#duplicate-custom-field-err').addClass("hide");
 				$('#duplicate-custom-field-type-err').addClass("hide");
 			},3000);
-		}
+
+		}		
+
 	});
 
 	$('#custom-field-modal').html(modelView.render(true).el);
+	if(!isNew){
+
+			if(data.field_data!="")
+			{
+				if(data.field_type=="LIST")
+				{
+					$('#formulaData').val("");
+					$('#arearows').val("");
+				}
+				if(data.field_type=="TEXTAREA")
+				{
+					$('#formulaData').val("");
+					$('#listvalues').val("");
+				}
+				if(data.field_type=="FORMULA")
+				{
+					$('#listvalues').val("");
+					$('#arearows').val("");
+				}
+
+			}
+
+			}
 	$("#custom-field-type").trigger("change");
 }
 
@@ -223,6 +325,9 @@ function bindCustomFiledChangeEvent(el){
 		{ 	
 			$("#searchable").prop('checked', true);
 			$("#searchable").prop('disabled', true);
+			$("#custom-field-data").hide();
+			$("#custom-field-list-values").hide();
+			$("#custom-field-formula-data").hide();
 
 		}
 		
@@ -541,42 +646,42 @@ function show_custom_fields_helper(custom_fields, properties){
 				if(isModal){
 					el = el.concat('<div class="control-group form-group "><label class="control-label word-break-all '+modal_label_style+'">'
 							+field.field_label
-							+'<span class="field_req">*</span></label><div class="controls '+modal_control_style+'"><textarea rows="'
+							+'<span class="field_req">*</span></label><div class="controls agiletxexpander '+modal_control_style+'"><textarea rows="'
 							+rows+'" class="'
 							+field.field_type.toLowerCase()
-							+'_input custom_field required form-control resize-vertical field_length" id='
+							+'_input custom_field required form-control textarea resize-vertical field_length" data-agileexpand="true" id='
 							+field.id+' name="'
 							+field.field_label
 							+'" max_len="'+max_len+'"></textarea></div></div>');
 				}else{
-					el = el.concat('<div class="control-group form-group "><label class="control-label '+label_style+'">'
+					el = el.concat('<div class="control-group form-group  "><label class="control-label '+label_style+'">'
 							+field.field_label
-							+'<span class="field_req">*</span></label><div class="controls col-sm-9 '+div_col9_style+'"><textarea rows="'
+							+'<span class="field_req">*</span></label><div class="controls col-sm-9 agiletxexpander '+div_col9_style+'"><textarea rows="'
 							+rows+'" class="'
 							+field.field_type.toLowerCase()
-							+'_input custom_field required form-control resize-vertical field_length" id='
+							+'_input custom_field required form-control textarea resize-vertical field_length"  data-agileexpand="true" id='
 							+field.id+' name="'
 							+field.field_label
 							+'"  max_len="'+max_len+'"></textarea></div></div>');
 				}
 			}else{
 				if(isModal){
-					el = el.concat('<div class="control-group form-group "><label class="control-label word-break-all '+modal_label_style+'">'
+					el = el.concat('<div class="control-group form-group  "><label class="control-label word-break-all '+modal_label_style+'">'
 							+field.field_label
-							+'</label><div class="controls '+modal_control_style+'"><textarea rows="'
+							+'</label><div class="controls agiletxexpander '+modal_control_style+'"><textarea rows="'
 							+rows+'" class="'
 							+field.field_type.toLowerCase()
-							+'_input custom_field form-control resize-vertical field_length" id='
+							+'_input custom_field form-control textarea resize-vertical field_length" data-agileexpand="true" id='
 							+field.id+' name="'
 							+field.field_label
 							+'"  max_len="'+max_len+'"></textarea></div></div>');
 				}else{
 					el = el.concat('<div class="control-group form-group "><label class="control-label '+label_style+'">'
 							+field.field_label
-							+'</label><div class="controls col-sm-9 '+div_col9_style+'"><textarea rows="'
+							+'</label><div class="controls agiletxexpander col-sm-9 '+div_col9_style+'"><textarea rows="'
 							+rows+'" class="'
 							+field.field_type.toLowerCase()
-							+'_input custom_field form-control resize-vertical field_length" id='
+							+'_input custom_field form-control textarea resize-vertical field_length" data-agileexpand="true" id='
 							+field.id+' name="'
 							+field.field_label
 							+'"  max_len="'+max_len+'"></textarea></div></div>');
@@ -1054,6 +1159,7 @@ function groupingCustomFields(base_model){
 		App_Admin_Settings.caseCustomFieldsListView = new Base_Collection_View({ url : '/core/api/custom-fields/scope/position?scope='+base_model.get("scope"), sortKey : "position", restKey : "customFieldDefs",
 			templateKey : templateKey, individual_tag_name : 'tr',
 			postRenderCallback : function(custom_el){
+		
 				enableCustomFieldsSorting(custom_el,'custom-fields-'+base_model.get("scope").toLowerCase()+'-tbody','admin-settings-customfields-'+base_model.get("scope").toLowerCase()+'-model-list');
 			}});
 		App_Admin_Settings.caseCustomFieldsListView.collection.fetch();

@@ -89,25 +89,38 @@ public class ContactsDeleteTask implements DeferredTask
 
     public void logActivity() throws JSONException
     {
-	System.out.println("contacts : " + fetcher.getContactCount());
-	System.out.println("companies : " + fetcher.getCompanyCount());
+    	int contact_count= fetcher.getContactCount();
+    	int company_count = fetcher.getCompanyCount();
+	System.out.println("contacts : " + contact_count);
+	System.out.println("companies : " + company_count);
 
 	String message = "";
-	if (fetcher.getContactCount() > 0)
+	if (contact_count ==1)
 	{
-	    message = fetcher.getContactCount() + " Contacts deleted";
-	    ActivitySave.createBulkActionActivity(fetcher.getContactCount(), "DELETE", "", "contacts", "");
+	    message = contact_count + " Contact deleted";
+	    ActivitySave.createBulkActionActivity(contact_count, "DELETE", "", "contacts", "");
 	}
-	else if (fetcher.getCompanyCount() > 0)
+	else if (contact_count >1)
 	{
-	    message = fetcher.getCompanyCount() + " Companies deleted";
-	    ActivitySave.createBulkActionActivity(fetcher.getCompanyCount(), "DELETE", "", "companies", "");
+	    message = contact_count + " Contacts deleted";
+	    ActivitySave.createBulkActionActivity(contact_count, "DELETE", "", "contacts", "");
 	}
+	else if (company_count == 1)
+	{
+	    message = company_count + " Company deleted";
+	    ActivitySave.createBulkActionActivity(company_count, "DELETE", "", "companies", "");
+	}	
+	else if (company_count > 1)
+	{
+	    message = company_count + " Companies deleted";
+	    ActivitySave.createBulkActionActivity(company_count, "DELETE", "", "companies", "");
+	}	
 	else
 	{
 	    message = fetcher.getTotalCount() + " Contacts/Companies deleted";
-	}
+	}									
 
-	BulkActionNotifications.publishNotification(message);
+	BulkActionNotifications.publishNotification(message);  		
     }
 }
+

@@ -1,6 +1,9 @@
 package com.campaignio.cron;
 
+import static com.agilecrm.util.DateUtil.EMAIL_TEMPLATE_DATE_FORMAT;
+
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -258,7 +261,7 @@ public class Cron extends HttpServlet
 		data_string = data.toString();
 		node_json_string = node_json.toString();
 		subscriber_json_string = subscriber_json.toString();
-		timeout_string = new Date(timeout * 1000).toString();
+		timeout_string = (new SimpleDateFormat(EMAIL_TEMPLATE_DATE_FORMAT)).format(new Date(timeout));
 	}
 
 	/**
