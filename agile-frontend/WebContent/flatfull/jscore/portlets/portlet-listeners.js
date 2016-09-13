@@ -899,7 +899,9 @@ $('.portlet_body')
 					});
 				}
 			});
-
+	$('.portlet_body').off(
+					"click",
+					'.portlets-tasks-select');
 	$('.portlet_body')
 			.on(
 					"click",
@@ -908,6 +910,12 @@ $('.portlet_body')
 						
 						e.stopPropagation();
 						if ($(this).is(':checked')) {
+
+							if(!confirm(_agile_get_translated_val('tasks','confirm-delete')))
+		{
+			$(this).attr("checked", false);
+				return;
+		}
 
 							// Complete
 							var taskId = $(this).attr('data');
