@@ -101,6 +101,20 @@ var LeadsRouter = Backbone.Router.extend({
 			App_Leads.customFieldsList.collection.fetch();
 		}
 
+		//To fetch lead statuses 
+		if(!App_Leads.leadStatusesListView)
+		{
+			var leadsViewLoader = new LeadsViewLoader();
+			leadsViewLoader.setupStatuses();
+		}
+
+		//To fetch lead statuses 
+		if(!App_Leads.leadSourcesListView)
+		{
+			var leadsViewLoader = new LeadsViewLoader();
+			leadsViewLoader.setupSources();
+		}
+
 		var lead_collection;
 
 		if (!lead && this.leadDetailView && this.leadDetailView.model != null)
@@ -155,6 +169,22 @@ var LeadsRouter = Backbone.Router.extend({
 		// Assigning lead collection
 		if(this.leadsListView && this.leadsListView.collection)
 			lead_collection = this.leadsListView.collection;
+
+		add_recent_view(lead);
+
+		// If contact is of type company , go to company details page
+		if (lead.get('type') == 'COMPANY')
+		{			
+			Backbone.history.navigate( "company/"+id, { trigger : true });
+			return;
+		}
+
+		// If contact is of type contact , go to contact details page
+		if (lead.get('type') == 'CONTACT')
+		{			
+			Backbone.history.navigate( "contact/"+id, { trigger : true });
+			return;
+		}
 
 		this.leadDetailView = new Contact_Details_Model_Events({ data : lead, isNew : true, template : "leads-details",
 			postRenderCallback : function(el)

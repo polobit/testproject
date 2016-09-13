@@ -339,6 +339,8 @@ public class CategoriesUtil
     		categories.add(cat5);
     		Category cat6 = new Category("Social", 5, Category.EntityType.LEAD_SOURCE);
     		categories.add(cat6);
+    		Category cat7 = new Category("Other", 5, Category.EntityType.LEAD_SOURCE);
+    		categories.add(cat7);
     	}
     	else if (type.equals(Category.EntityType.LEAD_STATUS.toString()))
     	{

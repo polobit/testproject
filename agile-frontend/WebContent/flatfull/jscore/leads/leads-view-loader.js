@@ -370,7 +370,7 @@ var LeadsViewLoader = (function(){
 
 	LeadsViewLoader.prototype.setupSourcesView = function(el, obj, data)
 	{
-		if(data)
+		if(data && el)
 		{
 			var $optEle = $('#lead_source_id', el);
 			var template = "<option value='{{id}}'>{{label}}</option>";
@@ -407,10 +407,10 @@ var LeadsViewLoader = (function(){
 
 	LeadsViewLoader.prototype.setupStatusesView = function(el, obj, data)
 	{
-		if(data)
+		if(data && el)
 		{
 			var $optEle = $('#lead_status_id', el);
-			var template = "<option value='{{id}}'>{{label}}</option>";
+			var template = "<option value='{{id}}' label='{{label}}'>{{label}}</option>";
 			var compiledTemplate = Handlebars.compile(template);
 			var statuses = data.toJSON();
 			$.each(statuses, function(index, statusJSON){
@@ -420,9 +420,15 @@ var LeadsViewLoader = (function(){
 					$('#lead_conversion_status', el).val(statusJSON.id);
 				}
 			});
+			
+			//In new lead form we won't add status "converted" as option value
 			if(obj)
 			{
 				$optEle.find("option[value="+obj.lead_status_id+"]").attr("selected", "selected");
+			}
+			else
+			{
+				$optEle.find("option[label=Converted]").remove();
 			}
 		}
 		

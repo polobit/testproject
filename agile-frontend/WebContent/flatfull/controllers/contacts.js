@@ -646,6 +646,13 @@ var ContactsRouter = Backbone.Router.extend({
 			return;
 		}
 
+		// If contact is of type lead , go to lead details page
+		if (contact.get('type') == 'LEAD')
+		{			
+			Backbone.history.navigate( "lead/"+id, { trigger : true });
+			return;
+		}
+
 		this.contactDetailView = new Contact_Details_Model_Events({ model : contact, isNew : true, template : "contact-detail", postRenderCallback : function(el)
 		{
 			

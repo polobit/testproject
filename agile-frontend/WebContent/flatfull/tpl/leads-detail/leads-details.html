@@ -46,17 +46,7 @@
 															<span class="caret m-l-none" style="margin-top:-11px;"></span>
 														</button>
 														<ul class="dropdown-menu pull-right text-sm" role="menu">
-															<li role="menuitem">
-																<a href='#lead-edit'>
-																	<div class="pull-left"><i class="fa fa-edit"></i> {{agile_lng_translate 'contact-details' 'edit'}}</div>
-																	{{#if_keyboard_shortcuts_enabled}}
-	                                     								<div class='shortcuts pull-right'>Shift + E</div>
-	                                     							{{/if_keyboard_shortcuts_enabled}}
-	                                     							<div class="clearfix"></div>
-                                     							</a>
-                                     						</li>
-                                     						<li class="divider"></li>
-                                     						<li>
+															<li>
                                      							<a href='#' class="contact-add-note">
                                      								<i class="icon-note"></i>
                                      								{{agile_lng_translate 'contact-details' 'add-note'}}
@@ -295,6 +285,16 @@
 												</div>
 											</div>
 										</div>
+										<a href='#lead-edit' class="btn btn-default btn-lg editicon-option text-base w-full b-n r-n b-t no-shadow">
+											<div>
+												<i class="fa fa-edit"></i>
+												{{agile_lng_translate 'leads-view' 'edit-lead'}}
+											</div>
+											{{#if_keyboard_shortcuts_enabled}}
+												<div class='shortcuts pull-right'>Shift + E</div>
+											{{/if_keyboard_shortcuts_enabled}}
+											<div class="clearfix"></div>
+										</a>
 										<div class="content-tabs-show moreDetailsTab" role="tablist" aria-multiselectable="true">
 	 										<div class="panel panel-default m-b-none"> <div class="panel-heading" role="tab" id="headingOne"> 
 	 											<h4 class="panel-title text-left">
@@ -326,6 +326,26 @@
 																		{{/canEditContact}}
 																	</div>
 																</div>
+															</div>
+														</div>
+													</div>
+													<div class="wrapper text-left m-b-sm p-none">
+														<div class="panel panel-default m-b-none">
+															<div class="panel-body">
+																{{#if lead_source_id}}
+																	<small class="text-muted text-base">{{agile_lng_translate 'leads-view' 'source'}}</small>
+																	<div title="Source">
+									    								<div class="lead-source text-xs">
+									    									<span id="lead-source" class="custom-color text-xs">{{getLeadSource lead_source_id}}</span>
+									      								</div>
+									   								</div>
+																{{/if}}
+																<small class="text-muted text-base">{{agile_lng_translate 'leads-view' 'status'}}</small>
+																<div title="Status">
+									    							<div class="lead-status text-xs">
+									    								<span id="lead-status" class="custom-color text-xs">{{getLeadStatus lead_status_id}}</span>
+									      							</div>
+									   							</div>
 															</div>
 														</div>
 													</div>
@@ -614,19 +634,6 @@
 														<span class="caret m-l-none" style="margin-top:-11px;"></span>
 													</button>
 													<ul class="dropdown-menu pull-right text-sm" role="menu">
-														<li>
-					                                   		<a href='#lead-edit'>
-					                                     		<div class="pull-left">
-					                                     			<i class="fa fa-edit"></i>
-					                                     			{{agile_lng_translate 'contact-details' 'edit'}}
-					                                     		</div> 
-					                                     		{{#if_keyboard_shortcuts_enabled}}
-					                                     			<div class='shortcuts pull-right'>Shift + E</div>
-					                                     		{{/if_keyboard_shortcuts_enabled}}
-					                                     		<div class="clearfix"></div>
-					                                     	</a>
-					                                     </li>
-					                                     <li class="divider"></li>
 					                                     <li>
 					                                     	<a href='#' class="contact-add-note">
 					                                     		<i class="icon-note"></i>
@@ -874,6 +881,16 @@
 											</div>
 										</div>
 									</div>
+									<a href='#lead-edit' class="btn btn-default btn-lg editicon-option text-base w-full b-n r-n b-t no-shadow">
+										<div>
+											<i class="fa fa-edit"></i>
+											{{agile_lng_translate 'leads-view' 'edit-lead'}}
+					                    </div>
+										{{#if_keyboard_shortcuts_enabled}}
+											<div class='shortcuts pull-right'>Shift + E</div>
+										{{/if_keyboard_shortcuts_enabled}}
+										<div class="clearfix"></div>
+									</a>
 								</div>
 							</div>
 							<div class="text-md ">
@@ -899,6 +916,26 @@
 														<ul id='contact-detail-owner' class="dropdown-menu" role="menu"></ul>
 									       			</div> 
 												{{/canEditContact}}
+									      	</div>
+									   	</div>
+							   		</div>
+							  	</div>
+							</div>
+							<div class="wrapper hidden-sm hidden-xs" style="padding-top:0px;">
+								<div class="panel panel-default m-b-none">
+									<div class="panel-body">
+										{{#if lead_source_id}}
+											<small class="text-muted text-base">{{agile_lng_translate 'leads-view' 'source'}}</small>
+											<div title="Source">
+									    		<div class="lead-source text-xs">
+									    			<span id="lead-source" class="custom-color text-xs">{{getLeadSource lead_source_id}}</span>
+									      		</div>
+									   		</div>
+										{{/if}}
+										<small class="text-muted text-base">{{agile_lng_translate 'leads-view' 'status'}}</small>
+										<div title="Status">
+									    	<div class="lead-status text-xs">
+									    		<span id="lead-status" class="custom-color text-xs">{{getLeadStatus lead_status_id}}</span>
 									      	</div>
 									   	</div>
 							   		</div>

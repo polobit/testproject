@@ -7624,6 +7624,9 @@ Handlebars.registerHelper('is_Particular_Domain', function(options)
 			return options.inverse(this);
 });
 
+/*
+ * Helper to get lead status name based on id
+ */
 Handlebars.registerHelper('getLeadStatus', function(leadStatusId, options)
 {
 	if(App_Leads.leadStatusesListView && App_Leads.leadStatusesListView.collection)
@@ -7739,4 +7742,21 @@ Handlebars.registerHelper('getLeadCustomProperties', function(items, options)
 
 	return options.fn(fields);
 
+});
+
+/*
+ * Helper to get lead source name based on id
+ */
+Handlebars.registerHelper('getLeadSource', function(leadSourceId, options)
+{
+	if(App_Leads.leadSourcesListView && App_Leads.leadSourcesListView.collection)
+	{
+		var leadSourceModel = App_Leads.leadSourcesListView.collection.get(leadSourceId);
+
+		if(leadSourceModel)
+		{
+			return leadSourceModel.get("label");
+		}
+	}
+	return "";
 });
