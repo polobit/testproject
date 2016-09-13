@@ -1839,7 +1839,7 @@ other.thinngs-you-need-to-do,Things you need to do,Cosas que hay que hacer
 prefs-notifications.default-notifications,Default Notifications,Notificaciones por defecto
 prefs-settings.new-case-cases-page,New Case (Cases Page),Nuevo caso (Página de casos)
 contacts-view.has-been-forwarded-to,has been forwarded to,se ha reenviado a
-portlets.no-customer-activities,No Customer activites,No hay actividades de los clientes
+portlets.no-customer-activities,No Customer activities,No hay actividades de los clientes
 workflows.what-are-automations,What are Automations?,¿Cuáles son Automations?
 other.existing-card-details,Existing Card Details,Tarjeta existente detalles
 contacts-view.task-owner-changed-to,Task Owner changed to,Propietario de la tarea cambió a
@@ -3907,7 +3907,7 @@ campaigns.auto-dial,Auto Dial,Marcación automática
 help.importing,importing,importador
 tickets.requester,Requester,Solicitante
 landing-pages.save-page,Save Page,Guardar página
-portlets.activites,Activites,actividades
+portlets.activites,Activities,actividades
 widgets.Braintree-displayName,Braintree,Braintree
 tasks.All Tasks,All Tasks,Todas las tareas
 web-rules.templates,Templates,Plantillas
