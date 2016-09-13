@@ -404,6 +404,12 @@ if(currentUserPrefs.menuPosition.equals("top")){
    <li class="hidden-folded padder m-t-xs m-b-xs text-muted text-xs">
      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "sales") %></span>
    </li>
+   <li id="home_dashboard">
+    <a  href="#">
+      <i class="icon icon-home"></i>
+      <span>Home</span>
+    </a>
+  </li>
         
   <%
       if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.CONTACT)){
@@ -533,6 +539,12 @@ if(currentUserPrefs.menuPosition.equals("top")){
   <%if(domainUser.role == ROLE.MARKETING){ %>
   <li class="hidden-folded padder m-t-xs m-b-xs text-muted text-xs">
       <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-marketing") %></span>
+  </li>
+  <li id="home_dashboard">
+    <a  href="#">
+      <i class="icon icon-home"></i>
+      <span>Home</span>
+    </a>
   </li>
    <%
       if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.CAMPAIGN)){
@@ -669,6 +681,12 @@ if(currentUserPrefs.menuPosition.equals("top")){
   
   <li class="hidden-folded padder m-t-xs m-b-xs text-muted text-xs">
     <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "service") %></span>
+  </li>
+  <li id="home_dashboard">
+    <a  href="#">
+      <i class="icon icon-home"></i>
+      <span>Home</span>
+    </a>
   </li>
   
   <li id="tickets">
