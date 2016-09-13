@@ -149,6 +149,7 @@ function releaseAllAgileCookies(){
           return;
 
     var sessionCookieName = "JSESSIONID";
+    var languageCookieName = "user_lang";
 
     // Split document.cookie into array at each ";" and iterate through it
     var ca = document.cookie.split(';');
@@ -161,7 +162,7 @@ function releaseAllAgileCookies(){
             c = c.substring(1, c.length);
 
         // check if nameEQ starts with c, if yes unescape and return its value
-        if (c.indexOf(sessionCookieName) == 0)
+        if (c.indexOf(sessionCookieName) == 0 || c.indexOf(languageCookieName) == 0)
              continue;
          
         // Remove from cookie

@@ -1,8 +1,13 @@
 package com.agilecrm.util.language;
 
 import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
 
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONObject;
@@ -14,7 +19,13 @@ public class LanguageUtil {
 
 	// Root folder path
 	public static final String NON_APPLICATION_ROOT_PATH = "locales/locales/";
-
+	
+	public static final HashMap<String, String> SUPPORTED_LANGUAGES = new HashMap<String, String>() {
+		{
+			put("en", "English");
+			put("es", "Español");
+		}
+	};
 	public static JSONObject getLocaleJSON(UserPrefs prefs, ServletContext application, String serviceName) {
 
 		String language = UserPrefs.DEFAULT_LANGUAGE;
@@ -51,7 +62,7 @@ public class LanguageUtil {
 
 		return null;
 	}
-	
+
 	/**
 	 * 
 	 * @param localeJSON
@@ -76,16 +87,51 @@ public class LanguageUtil {
 	 * @param language
 	 * @return
 	 */
-	public static boolean isLanguageSupportByAgile(String language) {
+	public static String getSupportedlanguageFromKey(String language) {
 
-		ArrayList<String> supporttedLangauges = new ArrayList<String>();
-		supporttedLangauges.add("en");
-		supporttedLangauges.add("es");
+		if (StringUtils.isBlank(language) || !SUPPORTED_LANGUAGES.containsKey(language))
+			return SUPPORTED_LANGUAGES.get(UserPrefs.DEFAULT_LANGUAGE);
 
-		if (StringUtils.isBlank(language) || !supporttedLangauges.contains(language))
+		return SUPPORTED_LANGUAGES.get(language);
+	}
+
+	/**
+	 * 
+	 * @param language
+	 * @return
+	 */
+	public static Map<String, String> getSupportedlanguages() {
+		return SUPPORTED_LANGUAGES;
+	}
+
+	/**
+	 * 
+	 * @param language
+	 * @return
+	 */
+	public static boolean isSupportedlanguageFromKey(String language) {
+
+		if (StringUtils.isBlank(language) || !SUPPORTED_LANGUAGES.containsKey(language))
 			return false;
 
 		return true;
+	}
+	
+	/**
+	 * 
+	 * @param request
+	 * @return
+	 */
+	public static String getSupportedLocale(HttpServletRequest request) {
+		Enumeration locales = request.getLocales();
+		while (locales.hasMoreElements()) {
+			Locale locale = (Locale) locales.nextElement();
+			System.out.println("locale.getLanguage() = " + locale.getLanguage());
+			if(SUPPORTED_LANGUAGES.containsKey(locale.getLanguage()))
+				  return locale.getLanguage();
+		}
+		
+		return UserPrefs.DEFAULT_LANGUAGE;
 	}
 
 }

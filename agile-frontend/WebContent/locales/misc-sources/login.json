@@ -1,0 +1,16 @@
+{
+ 	"duplicate-login": "{{agile_lng_translate 'login' 'duplicate-login'}}",
+ 	"login": "{{agile_lng_translate 'login' 'login'}}",
+ 	"signin-using-registration": "{{agile_lng_translate 'login' 'signin-using-registration'}}", 
+ 	"user-id": "{{agile_lng_translate 'Refer-friend' 'user-id'}}",
+ 	"user-id-your-email": "{{agile_lng_translate 'login' 'user-id-your-email'}}",
+ 	"password": "{{agile_lng_translate 'prefs-settings' 'password'}}",
+ 	"sign-in": "{{agile_lng_translate 'login' 'sign-in'}}",
+ 	"login-with": "{{agile_lng_translate 'login' 'login-with'}}",
+ 	"login-with-google": "{{agile_lng_translate 'login' 'login-with-google'}}",
+ 	"login-with-yahoo": "{{agile_lng_translate 'login' 'login-with-yahoo'}}",
+ 	"dont-have-account": "{{agile_lng_translate 'login' 'dont-have-account'}}",
+ 	"sign-up": "{{agile_lng_translate 'login' 'sign-up'}}",
+ 	"forgot": "{{agile_lng_translate 'login' 'forgot'}}",
+ 	"domain": "{{agile_lng_translate 'prefs-settings' 'domain'}}",
+}
