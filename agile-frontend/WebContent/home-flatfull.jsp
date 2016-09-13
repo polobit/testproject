@@ -407,7 +407,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
    <li id="home_dashboard">
     <a  href="#">
       <i class="icon icon-home"></i>
-      <span>Home</span>
+      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "home")%></span>
     </a>
   </li>
         
@@ -543,7 +543,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
   <li id="home_dashboard">
     <a  href="#">
       <i class="icon icon-home"></i>
-      <span>Home</span>
+      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "home")%></span>
     </a>
   </li>
    <%
@@ -685,7 +685,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
   <li id="home_dashboard">
     <a  href="#">
       <i class="icon icon-home"></i>
-      <span>Home</span>
+      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "home")%></span>
     </a>
   </li>
   
