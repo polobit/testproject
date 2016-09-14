@@ -152,7 +152,7 @@ function renderToMailList(url){
 					return fetchurl+'&cursor='+this.offset+'&page_size='+this.page_size
 				},
 				offset: 0,
-    			page_size: 20,
+    			page_size: 10,
 			});
 			
 	var mailListItem = Backbone.View.extend({
@@ -170,6 +170,8 @@ function renderToMailList(url){
 		},
 		loadResults: function () {
 			$("#mails-list").append(LOADING_HTML);
+			$("#operation-menu").hide();
+			$("#mark-dropdown").hide();
 	        var that = this;
 	        // we are starting a new load of results so set isLoading to true
 	        this.isLoading = true;
@@ -191,7 +193,7 @@ function renderToMailList(url){
 						$(".inbox-reply-view").html("");
 						$(".ng-show").show();
 					});
-					$("li.unread").css({"font-weight":"bold"});
+					$("div.unread").css({"font-weight":"bold"});
 					inboxFlagListners();
 					hideTransitionBar();
 					$(".loading").hide();
@@ -225,7 +227,8 @@ function renderToMailList(url){
 	        var totalheight = $("#mails-list").prop("scrollHeight");
 
 	    	if( !this.isLoading && scrolltop + scrollheight + triggerPoint > totalheight) {
-	          this.mailCollectionInstance.offset += 20; // Load next page
+	          this.mailCollectionInstance.offset += 10; // Load next page
+	          this.mailCollectionInstance.page_size += 10;
 	          this.loadResults();
 	        }
 	    }
@@ -444,6 +447,17 @@ function inboxreplySend(ele,json){
 	});
 }
 function inboxFlagListners(){
+
+	var color=['b-l-info','b-l-primary','b-l-warning','b-l-success',''];
+	var j =0;
+    $('#mails-list-view ul li').each(function(i){
+        $(this).addClass(color[j]);
+        if(j == 4)
+        	j = 0
+        else
+        	j++
+    });
+
 	$(".unread").unbind().click(function() {
 		//var attrid = $(this).attr("id");
 		var dataVal = $(this).attr("data-val");
@@ -459,6 +473,8 @@ function inboxFlagListners(){
 		url = url+"from_email="+from_email+"&folder_name=INBOX&flag=SEEN&messageid="+dataVal,
 		setSeenFlag(url);
 		$(this).css({"font-weight":"normal"});
+		$(this).removeClass("unread");
+		$(this).addClass("read");
 	});
 	$(".delete").unbind().click(function() {
 		var dataVal = $(this).attr("data-id");
@@ -474,12 +490,22 @@ function inboxFlagListners(){
 		url = url+"from_email="+from_email+"&folder_name=INBOX&flag=DELETED&messageid="+dataVal,
 		setSeenFlag(url);
 
-		$("#flag"+dataVal).remove();
+		$("#li"+dataVal).remove();
 		$("#"+dataVal).remove();
 		$("#mails-list").show();
 		$("#mail-details-view").hide();
 		$(".inbox-reply-view").html("");
 		$(".ng-show").show();
+	});
+	$('input[name="mailcheck"]').on('change', function(e) {
+		var len = $('input[name="mailcheck"]:checked').length
+		if(len == 0){
+			$("#operation-menu").hide();
+			$("#mark-dropdown").hide();
+		}else{
+			$("#operation-menu").show();
+			$("#mark-dropdown").show();
+		}
 	});
 }
 function setSeenFlag(url,dataVal, attrid){
@@ -488,6 +514,7 @@ function setSeenFlag(url,dataVal, attrid){
 		success : function(data){} 
 	});
 }
+var idcol = []
 function initializeInboxListeners(){
 
 	$('#inbox-listners').on('click', '#mail-inbox', function(e){
@@ -550,6 +577,123 @@ function initializeInboxListeners(){
 			renderToMailList(url);
 		}
 	});
+
+	$(".select-mails").unbind().click(function(e) {
+		var dataVal = $(this).attr("data-val");
+		if(dataVal == "All"){
+			$(".mark-read").show();
+			$(".mark-unread").show();
+			$('.mail_check').prop('checked', false);
+			selectCheckBoxes("mail_check")
+		}else if(dataVal == "None"){
+			$("#operation-menu").hide();
+			$("#mark-dropdown").hide();
+			$('.mail_check').prop('checked', false);
+		}else if(dataVal == "Read"){
+			$(".mark-read").hide();
+			$(".mark-unread").show();
+			$('.mail-unread').prop('checked', false);
+			selectCheckBoxes("mail-read")
+		}else if(dataVal == "Unread"){
+			$(".mark-unread").hide();
+			$(".mark-read").show();
+			$('.mail-read').prop('checked', false);
+			selectCheckBoxes("mail-unread")
+		}
+	});
+	$(".bulk-delete").unbind().click(function(e) {
+		idcol = [];
+		var urlval = returnUrl();
+		if(urlval){
+			urlval = urlval+"&flag=DELETED";
+			setSeenFlag(urlval);
+			for(var i=0;i<idcol.length;i++){
+				$("#li"+idcol[i]).remove();
+				$("#"+idcol[i]).remove();
+			}
+			$("#operation-menu").hide();
+			$("#mark-dropdown").hide();
+		}		
+	});
+
+	$(".mark-read").unbind().click(function(e) {
+		idcol = [];
+		var urlval = returnUrl();
+		if(urlval){
+			urlval = urlval+"&flag=SEEN";
+			setSeenFlag(urlval);
+			for(var i=0;i<idcol.length;i++){
+				$("#flag"+idcol[i]).removeClass("unread");
+				$("#flag"+idcol[i]).addClass("read");
+				$(".read").css({"font-weight":"normal"});
+				$("#check-"+idcol[i]).removeClass("mail-unread");
+				$("#check-"+idcol[i]).addClass("mail-read");
+			}
+		}		
+	});
+
+	$(".mark-unread").unbind().click(function(e) {
+		idcol = [];
+		var urlval = returnUrl();
+		if(urlval){
+			urlval = urlval+"&flag=UNREAD";
+			setSeenFlag(urlval);
+			for(var i=0;i<idcol.length;i++){
+				$("#flag"+idcol[i]).removeClass("read");
+				$("#flag"+idcol[i]).addClass("unread");
+				$(".unread").css({"font-weight":"bold"});
+				$("#check-"+idcol[i]).removeClass("mail-read");
+				$("#check-"+idcol[i]).addClass("mail-unread");
+			}
+		}		
+	});
+
+}
+function returnUrl(){
+	var url = "";
+	var meesageids  = null;
+        $.each($("input[name='mailcheck']:checked"), function(){    
+	        if(meesageids == null){
+	            meesageids = $(this).val();
+	        }else{
+	        	meesageids = meesageids+','+$(this).val();
+	        }
+	        idcol.push($(this).val());
+        });
+        if(meesageids){
+			var from_email = $('#inbox-email-type-select').attr("from_email");
+			var server = $("#inbox-email-type-select").attr("data-server");
+
+			if(server == "google")
+				url = "core/api/social-prefs/setFlags?";
+			if(server == "imap")
+				url ="core/api/imap/setFlags?";
+
+			url = url+"from_email="+from_email+"&folder_name=INBOX&messageid="+meesageids;
+			return url;
+		}else{
+			return null;
+		}
+	
+}
+function selectCheckBoxes(classname){
+	if($('.'+classname).is(':visible')) {
+		$("#operation-menu").show();
+		$("#mark-dropdown").show();
+	}
+	checkboxes = document.getElementsByClassName(classname)
+	var checkboxeslength = checkboxes.length;
+	if(checkboxeslength > 0){
+		if(checkboxeslength > 20){
+			checkboxeslength = 20;
+		}
+	    for (var i = 0; i < checkboxeslength; i++) {
+	       checkboxes[i].checked = true;
+	    }
+	}else{
+		$("#operation-menu").hide();
+		$("#mark-dropdown").hide();
+	}
 }
 function initializeInboxSendEmailListeners(){
 	$('#send-email-listener-container').on('click', '#inbox-send-email-close', function(e){

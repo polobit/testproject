@@ -217,25 +217,25 @@ public class ContactGmailUtil
 	if (StringUtils.equalsIgnoreCase(gmailPrefs.secret, "v2"))
 	{
 		if(flag != null && !flag.equals("") && flag != ""){
-			return hostUrl+"/imap?command=oauth_email2&user_name=" + URLEncoder.encode(userName)
+			return hostUrl+"/imapinbox?command=oauth_email2&user_name=" + URLEncoder.encode(userName)
 			    + "&fetch_items=mails&folder_names="+URLEncoder.encode(foldernames)+ "&host=" + URLEncoder.encode(host) + "&port="
 			    + URLEncoder.encode(port) + "&offset=" + offset + "&count=" + count + "&oauth_key="
 			    + URLEncoder.encode(oauth_key)+"&flag="+URLEncoder.encode(flag)+"&mesnum="+URLEncoder.encode(messageid);
 		}else{
-			return hostUrl+"/imap?command=oauth_email2&user_name=" + URLEncoder.encode(userName)
+			return hostUrl+"/imapinbox?command=oauth_email2&user_name=" + URLEncoder.encode(userName)
 				    + "&fetch_items=mails&folder_names="+URLEncoder.encode(foldernames)+ "&search_content="+ URLEncoder.encode(search_content) +"&host=" + URLEncoder.encode(host) + "&port="
 				    + URLEncoder.encode(port) + "&offset=" + offset + "&count=" + count + "&oauth_key="
 				    + URLEncoder.encode(oauth_key);
 		}
 	}
 	if(flag != null && !flag.equals("") && flag != ""){
-		return hostUrl+"/imap?command=oauth_email&user_name=" + URLEncoder.encode(userName)
+		return hostUrl+"/imapinbox?command=oauth_email&user_name=" + URLEncoder.encode(userName)
 		        + "&fetch_items=mails&folder_names="+URLEncoder.encode(foldernames)+ "&host=" + URLEncoder.encode(host) + "&port="
 		        + URLEncoder.encode(port) + "&offset=" + offset + "&count=" + count +"&consumer_key="
 		        + URLEncoder.encode(consumerKey) + "&consumer_secret=" + URLEncoder.encode(consumerSecret)
 		        + "&oauth_key=" + URLEncoder.encode(oauth_key) + "&oauth_secret=" + URLEncoder.encode(oauth_secret)+"&flag="+URLEncoder.encode(flag)+"&mesnum="+URLEncoder.encode(messageid);
     }else{
-    	return hostUrl+"/imap?command=oauth_email&user_name=" + URLEncoder.encode(userName)
+    	return hostUrl+"/imapinbox?command=oauth_email&user_name=" + URLEncoder.encode(userName)
 		        + "&fetch_items=mails&folder_names="+URLEncoder.encode(foldernames)+"&host=" + URLEncoder.encode(host) + "&port="
 		        + URLEncoder.encode(port) + "&offset=" + offset + "&count=" + count + "&search_content="+ URLEncoder.encode(search_content) + "&consumer_key="
 		        + URLEncoder.encode(consumerKey) + "&consumer_secret=" + URLEncoder.encode(consumerSecret)
