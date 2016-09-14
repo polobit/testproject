@@ -4522,7 +4522,7 @@ div.list-tasks.panel-body:hover
 }
 #task-model-list .listed-task .task-content-view a[target="_blank"]
 {
-  font-weight:700;
+  font-weight:500;
   opacity:0.75;
   top:0px;
 }
