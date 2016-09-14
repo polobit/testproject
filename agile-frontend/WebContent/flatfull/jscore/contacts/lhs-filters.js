@@ -785,7 +785,7 @@ function addTagsTypeaheadLhsFilters(tagsJSON, element)
 	});
 
 	// $("input", element).attr("data-provide","typeahead");
-	$("input", element).typeahead({ "source" : tags_array, updater : function(item)
+	$("input", element).typeahead({minLength: 0, highlight:true,hint:true,showHintOnFocus:true, "source" : tags_array, updater : function(item)
 	{
 		console.log("I am in updater " + item);
 		this.$element.val(item);

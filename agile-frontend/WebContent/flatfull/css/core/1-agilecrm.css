@@ -4716,3 +4716,12 @@ ul#recent-menu-model-list li:nth-child(even)
 {
   background-color: #f9f9f9;
 }
+
+.condition_container ul.typeahead.dropdown-menu{
+  width: 100% !important;
+}
+.condition_container ul.typeahead.dropdown-menu li a{
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
