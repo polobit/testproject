@@ -14,6 +14,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -334,7 +335,7 @@ public class Workflow extends Cursor {
 		setAccessLevel(oldWorkflow);
 	}
 	
-	public void saveWorkflowBackup(Workflow oldWorkflow)
+	private void saveWorkflowBackup(Workflow oldWorkflow)
 	{
 		try
 		{
@@ -359,7 +360,8 @@ public class Workflow extends Cursor {
 		}
 		catch(Exception e)
 		{
-			
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+			System.err.println("Exception occured while saving workflow backup..." + e.getMessage());
 		}
 	}
 
