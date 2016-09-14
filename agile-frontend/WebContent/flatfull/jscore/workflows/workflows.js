@@ -848,6 +848,10 @@ function showHide_UnsubscribeEmail_Status(alertMsg){
 **/
 function get_campaign_changes(updated_workflow_json, old_workflow_json, callback)
 {
+    // If any workflow is undefined
+    if(!updated_workflow_json || !old_workflow_json)
+        return;
+
     var update_nodes = JSON.parse(updated_workflow_json).nodes;
     var old_nodes = JSON.parse(old_workflow_json).nodes;
 
@@ -869,7 +873,7 @@ function get_campaign_changes(updated_workflow_json, old_workflow_json, callback
             
             if(old_node)
             {
-                //Check both nodes are same or not?
+                // Check both nodes are same or not?
                 var is_equal = _.isEqual(old_node.JsonValues, update_nodes[i].JsonValues);
 
                 if(is_equal)
