@@ -198,6 +198,7 @@ function handleObjects() {
 
                         hideAllSettings();
                         $('#imageproperties').show();
+                        $('#image-link-holder').show();
                         $('#video-record-btn-holder').show();
                         $('#image-width-height').show();
 

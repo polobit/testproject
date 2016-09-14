@@ -96,12 +96,14 @@ function initializeEmailBuilderListeners() {
 
     });
 
-    $('#videoRecordModal').on('submit','#videoRecordForm', function(e){
+    $('body').on('click','#videoRecordSaveBtn', function(e){
         e.preventDefault();
         $(".videoRecordFormMessageHolder").html("");
         var videoRecordType = $("#videoRecordType").val();
         if(videoRecordType === "new") {
             if($("#video-record-name").val() != "") {
+                $("#videoRecordSaveBtn").text("Saving...");
+                $("#videoRecordSaveBtn").prop('disabled', true);
                 emailVideoRecord.uploadVideoToS3();
             } else {
                 $(".videoRecordFormMessageHolder").html("Name field is required.");
@@ -116,7 +118,7 @@ function initializeEmailBuilderListeners() {
         }
     });
 
-    $('#videoRecordModal').on('change','#video-record-select', function(e){
+    $('body').on('change','#video-record-select', function(e){
         e.preventDefault();
         $(".videoRecordFormMessageHolder").html("");
         var selectedVal = $(this).val();
@@ -328,6 +330,8 @@ var emailVideoRecord = {
             });
         } else {
             $(".videoRecordFormMessageHolder").html("Error occured.");
+            $("#videoRecordSaveBtn").text("Save");
+            $("#videoRecordSaveBtn").prop('disabled', false);
         }
     },
 
@@ -346,6 +350,8 @@ var emailVideoRecord = {
             dataType: 'json',
             contentType: "application/json; charset=utf-8",
             success: function (data) {
+                $("#videoRecordSaveBtn").text("Save");
+                $("#videoRecordSaveBtn").prop('disabled', false);
                 emailVideoRecord.buildVideoPageURL(data.id);
             },
         });
