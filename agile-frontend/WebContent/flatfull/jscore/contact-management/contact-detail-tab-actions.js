@@ -103,24 +103,29 @@ var contact_details_documentandtasks_actions = {
 
         // For adding new deal from contact-details
         add_deal : function(e){
+        	
+        	var e ;
+
+        	showDealsModel({},function(el){
+
         		var targetEl = $(e.currentTarget);
 
-        		var el = $("#opportunityForm");
+        		e = $("#opportunityForm",el);
 
-        		if($('#color1', el).is(':hidden')){
+        		if($('#color1', e).is(':hidden')){
 
-			    	$('.colorPicker-picker', el).remove();
+			    	$('.colorPicker-picker', e).remove();
 
-			    	$('#color1', el).colorPicker();
+			    	$('#color1', e).colorPicker();
 				}
 
 				var colorcode = "#FFFFFF";
-			    $('#color1' , el).attr('value', colorcode);
-			    $('.colorPicker-picker', el).css("background-color", colorcode); 
+			    $('#color1' , e).attr('value', colorcode);
+			    $('.colorPicker-picker', e).css("background-color", colorcode); 
 			    // Disable color input field
 			    $('.colorPicker-palette').find('input').attr('disabled', 'disabled');
-
-				$("#opportunityModal").modal('show');
+			},"new-deal-model");
+				
 
 				add_custom_fields_to_form({}, function(data)
 				{
@@ -129,18 +134,18 @@ var contact_details_documentandtasks_actions = {
 					]);
 					$("#custom-field-deals", $("#opportunityModal")).html($(el_custom_fields));
 
-					$('.contact_input', el).each(function(){
-						agile_type_ahead($(this).attr("id"), $('#custom_contact_'+$(this).attr("id"), el), contacts_typeahead, undefined, 'type=PERSON');
+					$('.contact_input', e).each(function(){
+						agile_type_ahead($(this).attr("id"), $('#custom_contact_'+$(this).attr("id"), e), contacts_typeahead, undefined, 'type=PERSON');
 					});
 
-					$('.company_input', el).each(function(){
-						agile_type_ahead($(this).attr("id"), $('#custom_company_'+$(this).attr("id"), el), contacts_typeahead, undefined, 'type=COMPANY');
+					$('.company_input', e).each(function(){
+						agile_type_ahead($(this).attr("id"), $('#custom_company_'+$(this).attr("id"), e), contacts_typeahead, undefined, 'type=COMPANY');
 					});
 
 				}, "DEAL");
 
 				// Fills owner select element
-				populateUsers("owners-list", el, undefined, undefined, function(data)
+				populateUsers("owners-list", e, undefined, undefined, function(data)
 				{
 
 					$("#opportunityForm").find("#owners-list").html(data);
@@ -148,10 +153,10 @@ var contact_details_documentandtasks_actions = {
 					$("#owners-list", $("#opportunityForm")).closest('div').find('.loading-img').hide();
 				});
 				// Contacts type-ahead
-				agile_type_ahead("relates_to", el, contacts_typeahead);
+				agile_type_ahead("relates_to", e, contacts_typeahead);
 
 				// Fills the pipelines list in select box.
-				populateTrackMilestones(el, undefined, undefined, function(pipelinesList)
+				populateTrackMilestones(e, undefined, undefined, function(pipelinesList)
 				{
 					console.log(pipelinesList);
 					$.each(pipelinesList, function(index, pipe)
@@ -162,22 +167,22 @@ var contact_details_documentandtasks_actions = {
 							if (pipe.milestones.length > 0)
 							{
 								val += pipe.milestones.split(',')[0];
-								$('#pipeline_milestone', el).val(val);
-								$('#pipeline', el).val(pipe.id);
-								$('#milestone', el).val(pipe.milestones.split(',')[0]);
+								$('#pipeline_milestone', e).val(val);
+								$('#pipeline', e).val(pipe.id);
+								$('#milestone', e).val(pipe.milestones.split(',')[0]);
 							}
 
 						}
 					});
 				});
 
-				populateLostReasons(el, undefined);
+				populateLostReasons(e, undefined);
 
-				populateDealSources(el, undefined);
+				populateDealSources(e, undefined);
 
 				// Enable the datepicker
 
-				$('#close_date', el).datepicker({ format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY, autoclose: true});
+				$('#close_date', e).datepicker({ format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY, autoclose: true});
 
 
 				var json = null;
@@ -191,7 +196,7 @@ var contact_details_documentandtasks_actions = {
 				var template = Handlebars.compile('<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="{{id}}">{{name}}</li>');
   
 			 	// Adds contact name to tags ul as li element
-			 	$('#contactTypeAhead .tags',el).html(template({name : contact_name, id : json.id}));
+			 	$('#contactTypeAhead .tags',e).html(template({name : contact_name, id : json.id}));
         },
 
        add_case : function(e){

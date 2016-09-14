@@ -101,6 +101,11 @@ $(".free_plan_strip_close").click(function(e){
  e.preventDefault();
  $(this).hide();
    $("#addDescriptionInfo").toggle();
+  });
+$("#newDealModal").on('click','#addDescriptionLink',function(e){
+ e.preventDefault();
+ $(this).hide();
+   $("#addDescriptionInfo").toggle();
    });
 
  $("#activityTaskModal").on("click", "#taskDescriptionLink", function(e){
@@ -471,6 +476,14 @@ function showNoteModel(json, callback , template)
 	if (callback && typeof (callback) === "function")
 					callback();
 	
+}
+
+function showDealsModel(json,callback,template)
+{
+	
+	$("#newDealModal").html(getTemplate(template)).modal('show');
+		if (callback && typeof (callback) === "function")
+					callback();
 }
 // Click handlers to role menu items
 function initRolehandlers(){
