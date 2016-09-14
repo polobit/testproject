@@ -45,6 +45,7 @@ $(function()
 	App_EmailBuilderRouter = new EmailBuilderRouter();
 	App_VisitorsSegmentation=new VisitorsSegmentationRouter();
 	App_PushNotification = new PushNotificationRouter();
+	App_Affiliate = new AffiliateRouter();
 	// Binds an event to activate infinite page scrolling
 	Backbone.history.bind("all", currentRoute)
 

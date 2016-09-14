@@ -138,3 +138,8 @@ cron:
 - description: Bulk call Cron
   url: /backend/cron/cron-pull?q=bulk-call-pull-queue
   schedule: every 2 mins
+
+- description: monthly report for affiliate program
+  url: /backend/cron/affiliateReport
+  schedule: 1 of month 01:00
+  target: agile-sync
