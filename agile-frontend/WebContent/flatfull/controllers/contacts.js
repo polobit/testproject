@@ -169,6 +169,7 @@ var ContactsRouter = Backbone.Router.extend({
 				loadPortlets(dashboard_name,el);
 
 		}, "#content");
+		$("#home_dashboard").addClass("active");
 
 	},
 	

@@ -223,14 +223,14 @@
  <label class="icon icon-check m-r-xs" data-toggle="tooltip" style="float:left;font-size:15px;color:green;margin-top:3px;" data-placement="top" data-container="body" title="Completed"></label>
  {{/if_equals}}  
       {{#if is_complete}}
-         {{#if_equals priority_type "HIGH"}} <span style="display:inline-block;color:red;font-size:15px;">!</span>{{/if_equals}}{{#is_link subject}}<a href="#task/{{id}}"><span class="new-task-subject word-break white-space-normal font-bold w-full   activate-link" style="opacity:0.75;text-transform: capitalize;">{{else}}<a href="#task/{{id}}" style=""><span class="new-task-subject word-break-all white-space-normal w-full font-bold " style="opacity:0.75;top:0px;text-transform: capitalize;">{{/is_link}}
+         {{#if_equals priority_type "HIGH"}} <span style="display:inline-block;color:red;font-size:15px;">!</span>{{/if_equals}}{{#is_link subject}}<a href="#task/{{id}}"><span class="new-task-subject word-break white-space-normal  w-full   activate-link" style="opacity:0.75;text-transform: capitalize;">{{else}}<a href="#task/{{id}}" style=""><span class="new-task-subject word-break-all white-space-normal w-full  " style="opacity:0.75;top:0px;text-transform: capitalize;">{{/is_link}}
          {{safe_string subject}}
          </span></a>
       {{else}}
          {{#if_equals status "COMPLETED"}}
-           {{#if_equals priority_type "HIGH"}} <span style="display:inline-block;color:red;font-size:15px;">!</span>{{/if_equals}}{{#is_link subject}}<a href="#task/{{id}}"><span class="new-task-subject font-bold w-full word-break white-space-normal  activate-link" style="opacity:0.75;text-transform: capitalize;">{{else}}<a href="#task/{{id}}" style=""><span class="new-task-subject font-bold word-break-all white-space-normal w-full " style="opacity:0.75;top: 0px;text-transform: capitalize;">{{/is_link}}{{safe_string subject}} </span></a>
+           {{#if_equals priority_type "HIGH"}} <span style="display:inline-block;color:red;font-size:15px;">!</span>{{/if_equals}}{{#is_link subject}}<a href="#task/{{id}}"><span class="new-task-subject  w-full word-break white-space-normal  activate-link" style="opacity:0.75;text-transform: capitalize;">{{else}}<a href="#task/{{id}}" style=""><span class="new-task-subject  word-break-all white-space-normal w-full " style="opacity:0.75;top: 0px;text-transform: capitalize;">{{/is_link}}{{safe_string subject}} </span></a>
          {{else}}
-           {{#if_equals priority_type "HIGH"}} <span style="display:inline-block;color:red;font-size:15px;">!</span>{{/if_equals}}{{#is_link subject}}<a href="#task/{{id}}"><span class="new-task-subject word-break white-space-normal font-bold w-full activate-link" style="opacity:0.75;text-transform: capitalize;">{{else}}<a href="#task/{{id}}" style=""><span class="new-task-subject word-break-all white-space-normal w-full  font-bold " style="opacity:0.75;top:0px;text-transform: capitalize;">{{/is_link}} {{safe_string subject}} </span></a> 
+           {{#if_equals priority_type "HIGH"}} <span style="display:inline-block;color:red;font-size:15px;">!</span>{{/if_equals}}{{#is_link subject}}<a href="#task/{{id}}"><span class="new-task-subject word-break white-space-normal  w-full activate-link" style="opacity:0.75;text-transform: capitalize;">{{else}}<a href="#task/{{id}}" style=""><span class="new-task-subject word-break-all white-space-normal w-full   " style="opacity:0.75;top:0px;text-transform: capitalize;">{{/is_link}} {{safe_string subject}} </span></a> 
          {{/if_equals}}       
       {{/if}}   
       <span class="task-actions pos-abs pos-r-xs tasktime pos-t-xs" style="display: none;  background-color: white;">
@@ -284,9 +284,9 @@
  <hr class="taskhead">
    <div class="new-task-footer taskfooter">
   
-<div class="pull-left text-ellipsis" style="width:100%; margin-top:-8px;">
+<div class="pull-left text-ellipsis" style="width:100%; margin-top:-11px;">
     <div class="pull-right"> 
-<div class="new-task-owner  thumb-xxs avatar taskavatarimg p-b-xs">     
+<div class="new-task-owner  thumb-xxs avatar taskavatarimg" style="padding:2px;top:3px;">     
          {{#if taskOwner.pic}}
           <img src="{{taskOwner.pic}}" style="height:20px;width:20px; " class="thumb-xxs m-r-n-xs r r-2x m-b-xs" data-toggle="tooltip" data-placement="top" data-container="body" title="{{taskOwner.name}}"/>
        {{else}}

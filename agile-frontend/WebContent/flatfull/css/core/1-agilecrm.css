@@ -4276,7 +4276,7 @@ background-color : #522E2E;
     pointer-events: none;
     background: orange;
     border-radius: 1000px;
-    right: 5px;
+    right: 14px;
     top: 10px;
 }
 
@@ -4522,7 +4522,7 @@ div.list-tasks.panel-body:hover
 }
 #task-model-list .listed-task .task-content-view a[target="_blank"]
 {
-  font-weight:700;
+  font-weight:500;
   opacity:0.75;
   top:0px;
 }
@@ -4701,3 +4701,8 @@ div.list-tasks.panel-body:hover
 #affiliate-tabs-content .zeroclipboard-is-hover{
   background-color: #fafafa !important;
 }
+
+.bg-light.dker .nav>li:hover>a, .bg-light.dker .nav>li:focus>a, .bg-light.dker .nav>li.active>a{ background-color: #f6f8f8;}
+.bg-light .nav>li:hover>a, .bg-light .nav>li:focus>a, .bg-light .nav>li.active>a{ background-color: #f6f8f8;}
+.bg-white.b-r .nav>li:hover>a,.bg-white.b-r .nav>li:focus>a, .bg-white.b-r .nav>li.active>a{ background-color: #f6f8f8;}
+

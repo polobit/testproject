@@ -321,9 +321,16 @@ function initializePortletsListeners() {
 					html:true,
 					container: 'body',
 					content: function() {
-      return getTemplate("extensions-download-model");
+      				return getTemplate("extensions-download-model");
     }
-				});
+	}).on("show.bs.popover", function(e){ 
+				setTimeout(function(event){
+    				var $target = $(e.target);
+    				console.log("$target = "+ $target);
+    				$('[data-toggle="tooltip"]').tooltip();
+    			},100);	
+    			});
+
 	$('.modal-body').off("click").on('click', '#category-select-all',
 			function(e) {
 				e.preventDefault();
@@ -333,9 +340,18 @@ function initializePortletsListeners() {
    					placement : $(this).attr("data-placement"),
 					html:true,
 					container: 'body',content: function() {
+						$('[data-toggle="tooltip"]').tooltip(); 
       return $(getTemplate("extensions-download-model")).html();
+
     }
-				});
+				}).on("show.bs.popover", function(e){ 
+					
+					setTimeout(function(event){
+    				var $target = $(e.target);
+    				console.log("$target = "+ $target);
+    				$('[data-toggle="tooltip"]').tooltip();
+    			},100);
+    			});
 
 
 	$('.modal-content').off("click").on('click', '#category-select-none',

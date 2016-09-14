@@ -523,6 +523,10 @@ $(function()
 	    });
 
 	  $('body').on('click',".chromeExtension",function(e){
+	  	if (document.getElementById('extension-is-installed')) {
+		  document.getElementById('chrome-extension').addClass("disabled");
+		  alert("Already installed");
+		}
 	  	// e.stopImmediatePropagation();
 	  	$(this).parents(".popover").popover('hide');
 	  	e.stopPropagation();
@@ -531,7 +535,10 @@ $(function()
 	  	try{
 	  		chrome.webstore.install("https://chrome.google.com/webstore/detail/eofoblinhpjfhkjlfckmeidagfogclib", 
 		        function(d){
-		          console.log("installed")
+		          console.log("installed");
+		          var isInstalledNode = document.createElement('div');
+				  isInstalledNode.id = 'extension-is-installed';
+				  document.body.appendChild(isInstalledNode);
 		        },function(e){
 		          console.log("not installed: "+ e)
 		        });
