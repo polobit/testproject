@@ -244,7 +244,7 @@ function getTemplateUrls(templateName)
 	}
 	if (templateName.indexOf("leads-details") == 0)
 	{
-		template_relative_urls.push("leads-details.js");
+		template_relative_urls.push("leads-detail.js");
 	}
 	
 	return template_relative_urls;
