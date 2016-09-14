@@ -848,6 +848,7 @@ function updateSortKeyTemplate(sort_key, el) {
 
 function make_menu_item_active(ele_id){
     $(".active", $("#agile-menu-navigation-container")).removeClass("active");
+    $(".active a", $("#agile-menu-navigation-container")).blur();
 	$("#" + ele_id).addClass("active");
 }
 
