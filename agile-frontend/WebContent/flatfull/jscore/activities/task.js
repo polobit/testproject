@@ -217,17 +217,25 @@ function initializeTasksListeners(){
 	$('#tasks-list-template').on('click', '.is-task-complete', function(event)
 	{
 		event.preventDefault();
-		if(!confirm(_agile_get_translated_val('tasks','confirm-delete')))
+		var that=$(this);
+		/*if(!confirm(_agile_get_translated_val('tasks','confirm-delete')))
 		{
 			$(this).closest(".task-content-view").find(".taskComplete").attr("checked", false);
 				return;
-		}
-		
-		if(!getTaskListId(this)  && $(this).parent().attr('data')){
-			completeTask(getTaskId(this), $(this).parent().attr('data'), parseInt(getTaskListOwnerId(this)));
+		}*/
+		showAlertModal("complete_task", "confirm", function() {
+		if(!getTaskListId(that)  && $(that).parent().attr('data')){
+			completeTask(getTaskId(that), $(that).parent().attr('data'), parseInt(getTaskListOwnerId(that)));
 		}
 		else
-			completeTask(getTaskId(this), getTaskListId(this), parseInt(getTaskListOwnerId(this)));
+			completeTask(getTaskId(that), getTaskListId(that), parseInt(getTaskListOwnerId(that)));
+		},
+		function() {
+								$(that).closest(".task-content-view").find(".taskComplete").attr("checked", false);
+				
+							}
+						);
+
 	});
 
 	// Task Action: Open Task Edit Modal and display details in it.
