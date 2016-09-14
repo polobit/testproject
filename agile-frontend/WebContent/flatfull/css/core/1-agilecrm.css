@@ -4433,6 +4433,12 @@ border: 1px solid #e5e5e5;
   width: auto!important;
 }
 
+@media (max-width: 767px){
+  #affiliate-datepicker {
+    ext-align: center;
+    width: 100%;
+  }
+}
 .ticket-collection-container th {
   white-space: nowrap;
 }
@@ -4690,4 +4696,8 @@ div.list-tasks.panel-body:hover
     padding: 8px 8px 1px;
     overflow-y: hidden;
 
+}
+
+#affiliate-tabs-content .zeroclipboard-is-hover{
+  background-color: #fafafa !important;
 }

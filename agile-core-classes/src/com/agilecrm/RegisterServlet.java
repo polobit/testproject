@@ -97,7 +97,6 @@ public class RegisterServlet extends HttpServlet
     {
 	String type = request.getParameter("type");
 	System.out.println("type   " + type);
-
 	// Type the type of registration for the user - oauth or agile
 	try
 	{
@@ -123,7 +122,18 @@ public class RegisterServlet extends HttpServlet
 		    request, response);
 	    return;
 	}
-
+	//Get affiliate reference
+	String affiliateReference = request.getParameter("utm_affiliate");
+	if(affiliateReference != null){
+		Cookie cookie = new Cookie("agile_affiliated_by", affiliateReference);
+		if (request.getRequestURI().contains("agilecrm.com"))
+		    cookie.setDomain("agilecrm.com");
+		else
+			cookie.setDomain("agilecrmbeta.appspot.com");
+		response.addCookie(cookie);
+	}else{
+		System.out.println("affiliateReference value is null");
+	}
 	request.getRequestDispatcher("register-new1.jsp").forward(request, response);
     }
 
@@ -516,6 +526,27 @@ public class RegisterServlet extends HttpServlet
 
 	return referrar_note_description;
     }
+    
+    private String getCookie(HttpServletRequest request, String cookieName)
+    {
+
+	Cookie[] cookies = request.getCookies();
+	String cookieValue = null;
+	if (cookieName != null && cookies != null && cookies.length > 0)
+	{
+	    for (int i = 0; i < cookies.length; i++)
+	    {
+			Cookie cookie = cookies[i];
+			System.out.println("cookie " + cookie);
+			if (cookie.getName().equals(cookieName))
+			{
+				cookieValue = cookie.getValue();
+				break;
+			}
+		}
+	}
+	return cookieValue;
+    }
 
     /**
      * For creating Domain user, it will check whether the user is present
@@ -675,12 +706,19 @@ public class RegisterServlet extends HttpServlet
 	{
 	    // Set timezone in account prefs.
 	    AccountPrefs accPrefs = AccountPrefsUtil.getAccountPrefs();
+	    System.out.println("Setting timezone in AccountPrefs");
+	    String affiliateReference;
+	    System.out.println("requestURI is "+req.getRequestURI());
+	    affiliateReference = req.getParameter("utm_affiliate");
+		if(affiliateReference == null)
+			affiliateReference = getCookie(req, "agile_affiliated_by");
+	    System.out.println("affiliateReference in cookie is: "+affiliateReference);
+	    if(affiliateReference != null)
+    		accPrefs.affiliatedBy = Long.parseLong(affiliateReference);
 	    if (StringUtils.isEmpty(accPrefs.timezone) || "UTC".equals(accPrefs.timezone)
 		    || "GMT".equals(accPrefs.timezone))
-	    {
-		accPrefs.timezone = req.getParameter("account_timezone");
-		accPrefs.save();
-	    }
+			accPrefs.timezone = req.getParameter("account_timezone");
+	    accPrefs.save();
 	}
 	catch (Exception e)
 	{
