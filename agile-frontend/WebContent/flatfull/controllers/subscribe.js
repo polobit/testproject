@@ -520,7 +520,7 @@ var SubscribeRouter = Backbone.Router
 									$("body").append(appendItem);
 									if(ACCOUNT_PREFS && ACCOUNT_PREFS.affiliatedBy){
 										var amount = parseFloat(plan_json.cost);
-										addAsAffiliate(amount.toFixed(2) * 100);
+										addAsAffiliate(parseInt(amount.toFixed(2) * 100));
 									}
 								}
 								window.navigate("subscribe", { trigger : true });
