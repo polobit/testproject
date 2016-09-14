@@ -1,10 +1,4 @@
 /**
- * email-charts.js - It handles campaign's hourly, weekly or date email-charts. It
- * initializes the date-range-picker and HighChart's bar graphs. It also handles
- * to fetch timezone offset.
- */
-
-/**
  * Initializes the date-range-picker. Calls showWebruleGraphs based on the date
  * range seleted.
  * 
@@ -19,22 +13,6 @@ function initWebruleChartsUI(callback)
 
 }
 
-/**
- * Shows date-wise, hourly and weekly reports of a campaign. Calls showBar
- * function which uses HighCharts plugin to show bar charts.
- */
-/*function showEmailGraphs(campaign_id)
-{
-
-	// Daily
-	showBar('core/api/webrule-stats/email/reports/' + campaign_id + getOptions() + "&type=date", 'line-daily-chart', _agile_get_translated_val('reports','daily') , 'Count', null);
-
-	// Hourly
-	showBar('core/api/webrule-stats/email/reports/' + campaign_id + getOptions() + "&type=hour", 'line-hourly-chart', _agile_get_translated_val('reports','hourly'), 'Count', null);
-
-	// Weekly
-	showBar('core/api/webrule-stats/email/reports/' + campaign_id + getOptions() + "&type=day", 'line-weekly-chart', _agile_get_translated_val('reports','weekly'), 'Count', null);
-}*/
 
 /**
  * Returns start_time, end_time and time_zone (timezone offset like -330) as

@@ -1469,4 +1469,17 @@
         <servlet-name>PushNotificationDownload</servlet-name>
         <url-pattern>/downloadpush</url-pattern>
     </servlet-mapping>
+    
+    
+    <servlet>
+		<servlet-name>SaveWebruleData</servlet-name>
+		<servlet-class>com.analytics.servlets.WebruleReportsServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>SaveWebruleData</servlet-name>
+		<url-pattern>/savedata</url-pattern>
+	</servlet-mapping>
+		
+    
 </web-app>
