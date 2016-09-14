@@ -323,6 +323,7 @@ var emailVideoRecord = {
                 processData: false,
                 url: "https://agilecrm.s3.amazonaws.com/",
                 success: function(data) {
+                  emailVideoRecordRecordedData = undefined;
                   // getting the url of the file from amazon and insert it into the editor
                   var url = $(data).find('Location').text();
                   emailVideoRecord.saveVideoRecord(decodeURIComponent(url));
