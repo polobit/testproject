@@ -79,7 +79,7 @@ var AffiliateRouter = Backbone.Router.extend({
 		    },
 			saveCallback : function(data){
 				AFFILIATE_DETAILS = data;
-				App_Affiliate.listAffiliates();
+				App_Affiliate.showCommissionDetails();
 			},prePersist : function(model){
 				var addressJSON = {};
 				$.each($(".address").find('input'), function(index, data) {
