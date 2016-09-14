@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.agilecrm.account.APIKey;
-import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.google.appengine.api.NamespaceManager;
@@ -92,6 +92,15 @@ public class LandingPageServlet extends HttpServlet {
 					fullXHtml = fullXHtml.replace("</head>", "<style id=\"elements-css\">"+landingPage.elements_css+"</style></head>");	
 				}
 				fullXHtml = fullXHtml.replace("</head>", "<style>"+landingPage.css+"</style></head>");
+				
+				Long brandMessageLaunchedTime = 1473835250L;                
+                String brandMessageStyles = "float: right;  font-family: helvetica; background-color: rgba(0,0,0,.5); bottom: 0; position: fixed; right: 0;  font-size: medium; border-bottom-color: gray; z-index: 100000;";
+                String brandMessageEl = "<div style='"+brandMessageStyles+"'><a target='_blank' style='padding-left: 5px;padding-right: 5px;color: #ffffff;' href='https://www.agilecrm.com/?utm_source=Landing%20Page&utm_medium=Poweredby%20Landingpage'><span style='font-size: small;'> Powered by Agile</span></a></div>";
+                
+                if(BillingRestrictionUtil.getBillingRestrictionFromDB().planDetails.isFreePlan() && landingPage.created_time > brandMessageLaunchedTime ) {
+                  analyticsCode += brandMessageEl;
+                }
+				
 				fullXHtml = fullXHtml.replace("</body>", formSubmitCode+"<script>"+landingPage.js+"</script>"+analyticsCode+"</body>");
 				
 				out.write(fullXHtml);
