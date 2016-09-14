@@ -385,41 +385,26 @@ Proceed to Trial
 <div class="row" style="
 ">
 <!-- start of purchase email -->
-<div class="col-md-4 col-sm-6 col-xs-12  p-r-none" id="purchase-email">
+<div class="col-md-6 col-sm-6 col-xs-12  p-r-none" id="purchase-email">
  
 </div>
 <!-- end of purchase email -->
  <!-- Detailed Info div start -->
-
+{{#check_plan "FREE"}}
 <!-- Detailedinfo first dashlet -->
-<div class="col-md-4 col-sm-3 col-xs-6">
+<div class="col-md-6 col-sm-6 col-xs-6">
 	<div class="panel panel-default m-t-sm">
 		<div class="panel-heading ">
 		{{agile_lng_translate 'plan-and-upgrade' 'branded-emails'}}
 		</div>
 		<div class="panel-body">
-	    	<form class="bs-example form-horizontal p-b-lg">
-	        	{{#getSubscriptionBasedOnPlan billingData emailPlan}} 
+	    	<form class="bs-example form-horizontal ">
+	    {{#getSubscriptionBasedOnPlan billingData emailPlan}} 
             	<div class="form-group m-b-sm">
-              		<label class="col-sm-6 control-label p-t-none">{{agile_lng_translate 'plan-and-upgrade' 'free-emails'}}</label>
+              		<label class="col-sm-6 control-label p-t-none">
+              		{{agile_lng_translate 'plan-and-upgrade' 'free-emails'}}</label>
               		<div class="col-sm-6">
                 		-
-              		</div>
-            	</div>
-				<div class="form-group m-b-sm">
-              		<label class="col-sm-6 control-label p-t-none ">
-              		{{agile_lng_translate 'plan-and-upgrade' 'emails-remaining'}}
-              		</label>
-              		<div class="col-sm-6">
-                		{{getRemaininaEmails}}
-              		</div>
-            	</div>
-				<div class="form-group m-b-sm">
-	         		 <label class="col-sm-6 control-label p-t-none ">
-	         		 	{{agile_lng_translate 'plan-and-upgrade' 'last-purchased-emails'}}
-	         		 </label>
-              		<div class="col-sm-6">
-                		{{numeric_operation ../emailPlan.quantity 1000 "*"}}
               		</div>
             	</div>
 		{{else}}
@@ -431,36 +416,22 @@ Proceed to Trial
                 	{{getFreeEmailsCount}} 
               		</div>
             	</div>
-				<div class="form-group m-b-sm">
-              		<label class="col-sm-6 control-label p-t-none ">
-              		{{agile_lng_translate 'plan-and-upgrade' 'emails-remaining'}}
-              		</label>
-              		<div class="col-sm-6">
-               		{{getRemaininaEmails}} 
-               			{{#is_paid_emails}}
-               			{{else}}
-               				<span class="text-muted text-xs m-l-sm">
-               				({{agile_lng_translate 'plan-and-upgrade' 'next-renewal'}}
-               					<span id="next_emails_renewal">{{emails_next_renewal_time}}</span>)
-               				</span> 
-               			{{/is_paid_emails}}
-              		</div>
-           		 </div>
+				
           	{{/getSubscriptionBasedOnPlan}} 
 			</form>
 	    </div>
 	</div>
 </div>
 <!-- End of detailed Info first dashlet-->
-
+{{else}}
 <!-- Detailedinfo second dashlet -->
-<div class="col-md-4 col-sm-3 col-xs-6">
+<div class="col-md-6 col-sm-6 col-xs-6">
 	<div class="panel panel-default m-t-sm">
 		<div class="panel-heading ">
 		{{agile_lng_translate "portlets" "email-subscription"}}
 		</div>
 		<div class="panel-body">
-        	<form class="bs-example form-horizontal p-b-lg">
+        	<form class="bs-example form-horizontal ">
 				{{#getSubscriptionBasedOnPlan billingData emailPlan}} 
 				<div class="form-group m-b-sm">
               		<label class="col-sm-6 control-label p-t-none ">
@@ -470,6 +441,21 @@ Proceed to Trial
                 	{{numeric_operation ../emailPlan.quantity 1000 "*"}}
               		</div>
             	</div>
+            	<div class="form-group m-b-sm">
+              		<label class="col-sm-6 control-label p-t-none ">
+              		{{agile_lng_translate 'plan-and-upgrade' 'emails-remaining'}}
+              		</label>
+              		<div class="col-sm-6">
+               		{{getRemaininaEmails}} 
+               			{{#is_paid_emails}}
+               			{{else}}
+               				<span class="text-muted text-xs block">
+               				({{agile_lng_translate 'plan-and-upgrade' 'next-renewal'}}
+               					<span id="next_emails_renewal">{{emails_next_renewal_time}}</span>)
+               				</span> 
+               			{{/is_paid_emails}}
+              		</div>
+           		 </div>
 				<div class="form-group m-b-sm">
               		<label class="col-sm-6 control-label p-t-none ">
               		{{agile_lng_translate 'plan-and-upgrade' 'last-purchased-date'}}
@@ -505,6 +491,21 @@ Proceed to Trial
                 -
               </div>
             </div>
+            <div class="form-group m-b-sm">
+              		<label class="col-sm-6 control-label p-t-none ">
+              		{{agile_lng_translate 'plan-and-upgrade' 'emails-remaining'}}
+              		</label>
+              		<div class="col-sm-6">
+               		- &nbsp;{{getRemaininaEmails}} 
+               			{{#is_paid_emails}}
+               			{{else}}
+               				<span class="text-muted text-xs block">
+               				({{agile_lng_translate 'plan-and-upgrade' 'next-renewal'}}
+               					<span id="next_emails_renewal">{{emails_next_renewal_time}}</span>)
+               				</span> 
+               			{{/is_paid_emails}}
+              		</div>
+           		 </div>
 			<div class="form-group m-b-sm">
               <label class="col-sm-6 control-label p-t-none ">
               {{agile_lng_translate 'plan-and-upgrade' 'last-purchased-amount'}}
@@ -518,12 +519,32 @@ Proceed to Trial
 	</div>
 	</div>
 </div>
+{{/check_plan}}
+<!-- start of email credits dashlet -->
+<div class="col-md-6 col-sm-6 col-xs-6">
+<div class="panel panel-default m-t-sm">
+		<div class="panel-heading ">
+		{{agile_lng_translate "portlets" "email-subscription"}}
+		</div>
+		<div class="panel-body">
+        	<form class="bs-example form-horizontal ">
+				<div class="form-group m-b-sm">
+              		<label class="col-sm-6 control-label p-t-none">{{agile_lng_translate 'plan-and-upgrade' 'free-emails'}}
+              		</label>
+              <div class="col-sm-6">
+                -
+              </div>
+            </div>
+		</div>
+		</div>
+		</div>
+<!-- End of email credits dashlet -->
 <!-- End of detailed Info second dashlet-->
 <div class="col-md-8 col-sm-6 col-xs-12">
 <div class="panel panel-default m-t-sm">
         <div class="panel-heading ">{{agile_lng_translate 'plan-and-upgrade' 'detailed-information'}}</div>
         <div class="panel-body">
-        <form class="bs-example form-horizontal p-b-lg">
+        <form class="bs-example form-horizontal ">
 {{#getSubscriptionBasedOnPlan billingData emailPlan}} 
          
             <div class="form-group m-b-sm">
@@ -575,7 +596,7 @@ Proceed to Trial
 <div class="form-group m-b-sm">
               <label class="col-sm-6 control-label p-t-none ">{{agile_lng_translate 'plan-and-upgrade' 'emails-remaining'}}</label>
               <div class="col-sm-6">
-               {{getRemaininaEmails}} {{#is_paid_emails}}{{else}}<span class="text-muted text-xs m-l-sm">({{agile_lng_translate 'plan-and-upgrade' 'next-renewal'}} <span id="next_emails_renewal">{{emails_next_renewal_time}}</span>)</span> {{/is_paid_emails}}
+               {{getRemaininaEmails}} {{#is_paid_emails}}{{else}}<span class="text-muted text-xs block">({{agile_lng_translate 'plan-and-upgrade' 'next-renewal'}} <span id="next_emails_renewal">{{emails_next_renewal_time}}</span>)</span> {{/is_paid_emails}}
               </div>
             </div>
 
