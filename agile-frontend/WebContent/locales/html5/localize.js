@@ -23,7 +23,9 @@ function getCustomValidity(input){
 
     } else if(!input.validity.valid) {
     	if(input.validity.patternMismatch){
-    		return localeJSON["invalid-pattern"] + "\n" + $(input).attr('title'); 
+            var title_mssg = $(input).attr('data-title');
+            if(!title_mssg) title_mssg = $(input).attr('title');
+    		return localeJSON["invalid-pattern"] + "\n" + title_mssg; 
     	}
         if(type == "number" && input.validity.badInput){
             return localeJSON["enter-number-only"];

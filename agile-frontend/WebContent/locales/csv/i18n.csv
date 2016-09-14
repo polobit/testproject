@@ -5273,33 +5273,33 @@ widgets.FullContact-enter-your-api-key,Enter your FullContact API Key,
 widgets.newcall,New Call,
 widgets.select-contact-update,Please select a related contact to update.,
 widgets.continue,Continue,
-prefs-online-calendar.welcome-message-bulk,Welcome to our scheduling page. Please follow the instructions to book an appointment.,"Bienvenido a nuestra página de planificación . Por favor&#44; siga las instrucciones para reservar una cita .		"
-prefs-online-calendar.select-a-person,Select a Person,"Seleccionar una persona		"
-prefs-online-calendar.welcome-message-single,Welcome to my scheduling page. Please follow the instructions to book an appointment.,"Bienvenidos a mi programación page. Por favor&#44; siga las instrucciones para reservar una cita .		"
-prefs-online-calendar.holiday-today,Today is holiday,"Hoy es día festivo		"
-prefs-online-calendar.choose-time-slot,Choose a Time Slot,"Elija un intervalo de tiempo		"
-prefs-online-calendar.select-date-time,Select Date and Time,"Seleccione Fecha y hora		"
-prefs-online-calendar.on-availability,Availability on,"Disponibilidad bajo		"
-prefs-online-calendar.sendconfirmation,Send me a confirmation email,"Envíame un correo electrónico de confirmación		"
-prefs-online-calendar.user-phone-details,Notes (Phone number/Skype details),"Notas (número de teléfono / datos de Skype )		"
-prefs-online-calendar.email-format,Your email address must be in the format of name@domain.com,"Su dirección de correo electrónico debe estar en el formato de name@domain.com		"
-prefs-online-calendar.name-validation,Please specify your name,"Por favor&#44; indique su nombre		"
-prefs-online-calendar.email-validation,We need your email address to contact you,"Necesitamos su dirección de correo electrónico para comunicarse con usted		"
-prefs-online-calendar.no-working-hrs,No working hours,"No hay horas de trabajo		"
-common-words.for,for,"para		"
-common-words.mins-on,mins on,"en minutos		"
-common-words.with,with,"con		"
-prefs-online-calendar.online-appointment-cancellation,Online Appointment Cancellation,"Designación de cancelación en línea		"
-prefs-online-calendar.event-starts,Event starts,"Evento comienza 		"
-prefs-online-calendar.cancel-appointment,Cancel Appointment,"Revocar la designación		"
-prefs-online-calendar.cancelled-already,Looks like this appointment is already cancelled.,"Parece que esta cita ya está cancelada .		"
-prefs-online-calendar.cancelled-appointment,Appointment Cancelled,"Cita cancelada		"
-prefs-online-calendar.your-appointment-with,Your appointment with,"Su cita con		"
-prefs-online-calendar.is-cancelled,is cancelled,"está cancelado		"
-prefs-online-calendar.schedule-new,Schedule new appointment,"Programar nueva cita		"
-prefs-online-calendar.something-wrong,Something is wrong,"Algo está mal		"
-prefs-online-calendar.reasong-for-cancel,Reason for cancellation,"Razón de la cancelación		"
-others.chat-with-us,Chat With Us,"Habla con nosotros		"
+others.chat-with-us,Chat With Us,Habla con nosotros
+prefs-online-calendar.welcome-message-bulk,Welcome to our scheduling page. Please follow the instructions to book an appointment.,Bienvenido a nuestra página de planificación . Por favor&#44; siga las instrucciones para reservar una cita .
+prefs-online-calendar.select-a-person,Select a Person,Seleccionar una persona
+prefs-online-calendar.welcome-message-single,Welcome to my scheduling page. Please follow the instructions to book an appointment.,Bienvenidos a mi programación page. Por favor&#44; siga las instrucciones para reservar una cita .
+prefs-online-calendar.holiday-today,Today is holiday,Hoy es día festivo
+prefs-online-calendar.choose-time-slot,Choose a Time Slot,Elija un intervalo de tiempo
+prefs-online-calendar.select-date-time,Select Date and Time,Seleccione Fecha y hora
+prefs-online-calendar.on-availability,Availability on,Disponibilidad bajo
+prefs-online-calendar.sendconfirmation,Send me a confirmation email,Envíame un correo electrónico de confirmación
+prefs-online-calendar.user-phone-details,Notes (Phone number/Skype details),Notas (número de teléfono / datos de Skype )
+prefs-online-calendar.email-format,Your email address must be in the format of name@domain.com,Su dirección de correo electrónico debe estar en el formato de name@domain.com
+prefs-online-calendar.name-validation,Please specify your name,Por favor&#44; indique su nombre
+prefs-online-calendar.email-validation,We need your email address to contact you,Necesitamos su dirección de correo electrónico para comunicarse con usted
+prefs-online-calendar.no-working-hrs,No working hours,No hay horas de trabajo
+common-words.for,for,para
+common-words.mins-on,mins on,en minutos
+common-words.with,with,con
+prefs-online-calendar.online-appointment-cancellation,Online Appointment Cancellation,Designación de cancelación en línea
+prefs-online-calendar.event-starts,Event starts,Evento comienza 
+prefs-online-calendar.cancel-appointment,Cancel Appointment,Revocar la designación
+prefs-online-calendar.cancelled-already,Looks like this appointment is already cancelled.,Parece que esta cita ya está cancelada .
+prefs-online-calendar.cancelled-appointment,Appointment Cancelled,Cita cancelada
+prefs-online-calendar.your-appointment-with,Your appointment with,Su cita con
+prefs-online-calendar.is-cancelled,is cancelled,está cancelado
+prefs-online-calendar.schedule-new,Schedule new appointment,Programar nueva cita
+prefs-online-calendar.something-wrong,Something is wrong,Algo está mal
+prefs-online-calendar.reasong-for-cancel,Reason for cancellation,Razón de la cancelación
 widgets.create-your-own-custom,Create your own custom web forms easily and place them on your website to update web visitor details.,
 bulk-task.change-priority,Change priority of tasks,
 bulk-task.change-status,Change status of tasks,
@@ -5347,7 +5347,7 @@ forgot-password.resend-password,Resend password,Reenviar contraseña
 forgot-password.already-have-account,Already have an account,Ya tengo una cuenta
 html5Validations.invalid-default,Please fill out this field.,Por favor rellena el campo
 html5Validations.invalid-email,Please include an '@' in the email address. $1 is missing '@'.,Por favor incluye un '@' en el correo electrónico. Se perdió $1 '@'
-html5Validations.invalid-password,Please lengthen this text $1 characters or more (you are currently using $2 characters).,Por favor alargue este texto $1 caracteres o más (por ahora estás usando $2 caracteres)
+html5Validations.invalid-password,Please lengthen this text to $1 characters or more (you are currently using $2 characters).,Por favor alargue este texto $1 caracteres o más (por ahora estás usando $2 caracteres)
 otp-auth.info,Please enter the verification code sent to your email ID to access the account.,Por favor inserta eñ código de verificacion enviado a tu dirección de correo electrónico para acceder a la cuenta
 otp-auth.enter-code,Enter Verification Code,Inserte el código de verificación
 otp-auth.resend-code,Resend Verfication Code,Reenviar el código de verificación
@@ -5391,3 +5391,29 @@ register.pnone-num-validation,Please enter valid number,Por favor inserta un nú
 forgot-domain.email-invalid-after-@,Please enter a part following '@'. '$1' is incomplete.,Por favor introduzca una parte siguiente '@' . '$1' Es incompleta .
 html5Validations.invalid-select-one,Please select an item in the list.,Por favor seleccione un elemento de la lista.
 html5Validations.enter-number-only,Please enter a number,Por favor introduzca un número
+affiliate.affiliate-program,Affiliate Program,
+affiliate.commission-details,Commission Details,
+affiliate.referrals,Referrals,
+affiliate.affiliate-tools,Creatives,
+affiliate.no-affiliates,There are no Referrals,
+affiliate.total-count,Total Referrals,
+affiliate.total-commission,Total Commission,
+affiliate.email,Email,
+affiliate.domain,Domain,
+affiliate.plan,Plan,
+affiliate.commission,Commission,
+affiliate.created-time,Created Time,
+affiliate.amount-added-to-your-account,Total Paid Commission,
+affiliate.name,Name,
+affiliate.paypal-id,Paypal ID,
+affiliate.phone,Phone,
+affiliate.business, Partner Type,
+affiliate.select-type,Select Type,
+affiliate.affiliate,Affiliate,
+affiliate.reseller,Reseller,
+affiliate.managed_service_partner, Managed Service Partner,
+affiliate.register,Register,
+affiliate.click_register,By clicking register&#44; I agree to Agile CRM's Affiliate,
+affiliate.terms_and_conditions,Terms & Conditions,
+webrules.push-popup,Request Push Popup,
+web-rules.Pushnoty,Push Notification,

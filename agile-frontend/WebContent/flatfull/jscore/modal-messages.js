@@ -129,6 +129,10 @@ var MODAL_MESSAGES = {
 		"title": GLOBAL_MODAL_MESSAGES.global_error_title,
 		"message" : _agile_get_translated_val('category','name-error')
 	},
+	"affiliate_error" : {
+		"title": GLOBAL_MODAL_MESSAGES.global_error_title,
+		"message" : "User not registered with affiliate program."
+	},
 	"user_deleted" : {
 		"title": "{{agile_lng_translate 'contact-details' 'delete'}}",
 		"message" : "{{agile_lng_translate 'activity_type' 'User_Deleted'}}"
