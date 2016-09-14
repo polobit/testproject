@@ -5347,7 +5347,7 @@ forgot-password.resend-password,Resend password,Reenviar contraseña
 forgot-password.already-have-account,Already have an account,Ya tengo una cuenta
 html5Validations.invalid-default,Please fill out this field.,Por favor rellena el campo
 html5Validations.invalid-email,Please include an '@' in the email address. $1 is missing '@'.,Por favor incluye un '@' en el correo electrónico. Se perdió $1 '@'
-html5Validations.invalid-password,Please lengthen this text $1 characters or more (you are currently using $2 characters).,Por favor alargue este texto $1 caracteres o más (por ahora estás usando $2 caracteres)
+html5Validations.invalid-password,Please lengthen this text to $1 characters or more (you are currently using $2 characters).,Por favor alargue este texto $1 caracteres o más (por ahora estás usando $2 caracteres)
 otp-auth.info,Please enter the verification code sent to your email ID to access the account.,Por favor inserta eñ código de verificacion enviado a tu dirección de correo electrónico para acceder a la cuenta
 otp-auth.enter-code,Enter Verification Code,Inserte el código de verificación
 otp-auth.resend-code,Resend Verfication Code,Reenviar el código de verificación

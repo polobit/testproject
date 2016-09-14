@@ -386,7 +386,7 @@ var localeJSON = <%=localeJSON%>;
 $(document).ready(function(){
 
 	// Set domain name error title
-	$("#subdomain").attr("title", localeJSON["domain-name-validation"]);
+	$("#subdomain").attr("data-title", localeJSON["domain-name-validation"]);
 
 	// Set selected plan name
 	if(selected_plan_type){
