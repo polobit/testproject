@@ -65,5 +65,7 @@
             "deals" : "Deals",
             "documents" : "Documents",
             "tickets" : "Tickets",
+            "menu-add" : "Add",
+
       }
 }
