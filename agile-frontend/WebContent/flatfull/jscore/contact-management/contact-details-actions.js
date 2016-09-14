@@ -67,6 +67,20 @@
             console.log("execution");
             var targetEl = $(e.currentTarget);
             
+            showNoteModel(undefined ,function()
+            {
+             var  el = $("#noteForm",el);
+            // Displays contact name, to indicate the note is related to the contact
+              fill_relation(el);
+              agile_type_ahead("note_related_to", el, contacts_typeahead);
+              },"new-note-model"); 
+
+            
+      },
+      /* add_note : function(e){
+            console.log("execution");
+            var targetEl = $(e.currentTarget);
+            
             var el = $("#noteForm");
             
             // Displays contact name, to indicate the note is related to the contact
@@ -76,7 +90,7 @@
                  $('#noteModal').modal('show');
              
             agile_type_ahead("note_related_to", el, contacts_typeahead);
-      },
+      },*/
 
 
     /**

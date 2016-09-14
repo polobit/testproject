@@ -154,8 +154,17 @@ function getTemplateUrls(templateName)
 	}
 	else if (templateName.indexOf("callscript") == 0)
 	{
-	template_relative_urls.push("callscript.js");
+		template_relative_urls.push("callscript.js");
 	}
+	else if (templateName.indexOf("fullcontact") == 0)
+	{
+		template_relative_urls.push("fullcontact.js");
+	}
+	else if (templateName.indexOf("klout") == 0)
+ 	{
+ 		template_relative_urls.push("klout.js");
+ 	}
+
 	if (templateName.indexOf("chargify") == 0)
 	{
 		template_relative_urls.push("chargify.js");
@@ -948,6 +957,15 @@ function getCount(collection)
 		return "(" + collection[0].count + " " +_agile_get_translated_val('other','total')+ ")";
 	else
 		return "(" + collection.length + " " +_agile_get_translated_val('other','total')+ ")";
+}
+function getSimpleCount(collection)
+{
+	for(var i=0;i<collection.length;i++){
+		if (collection[i] && collection[i].count && (collection[i].count != -1))
+			return collection[i].count ;
+			
+			}
+		return collection.length ;
 }
 function getTaskCount(collection)
 {

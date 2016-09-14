@@ -10,7 +10,9 @@ import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.WordUtils;
+import org.json.simple.JSONArray;
 
+import com.agilecrm.AgileQueues;
 import com.agilecrm.activities.Task;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.db.ObjectifyGenericDao;
@@ -19,6 +21,12 @@ import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.DateUtil;
+import com.amazonaws.services.datapipeline.model.TaskStatus;
+import com.google.appengine.api.taskqueue.Queue;
+import com.google.appengine.api.taskqueue.QueueFactory;
+import com.google.appengine.api.taskqueue.TaskOptions;
+import com.google.appengine.api.taskqueue.TaskOptions.Method;
+import com.google.appengine.labs.repackaged.org.json.JSONException;
 import com.google.appengine.labs.repackaged.org.json.JSONObject;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Query;
@@ -952,5 +960,92 @@ public class TaskUtil
 			.filter("task_completed_time >= ", start).filter("task_completed_time <=" , end)
 			.order("-task_completed_time").list();
 	    }*/
-
+	public static List<Task> changePropertyBulkTasks(ArrayList<String> taskIdList,JSONObject priority,String formId){
+		String newProperty = null;
+		List<Task> taskList = new ArrayList<Task>();
+		try {
+			if(formId.equalsIgnoreCase("bulkTaskStatusForm")){
+				newProperty = priority.getString("status");
+				for(String taskId : taskIdList){
+					Task task = getTask(Long.parseLong(taskId));
+					if(task != null && newProperty!= null){
+						task.status = Task.Status.valueOf(newProperty);
+						task.is_complete = false ;
+						if(task.status.equals(Task.Status.COMPLETED))
+							task.is_complete = true ; 
+						else if(task.status.equals(Task.Status.IN_PROGRESS)){
+							if(priority.has("progress") && priority.get("progress")!= null)
+								task.progress = priority.getInt("progress") ;
+						}
+						task.save();
+						taskList.add(task);
+					}
+				}
+				ActivitySave.createBulkActionActivityForTasks(taskList.size(), "BULK_TASK_CHANGE_STATUS", newProperty, "tasks", "");
+			}			
+			else if (formId.equalsIgnoreCase("bulkTaskPriorityForm")){
+				newProperty = priority.getString("priority_type");
+				for(String taskId : taskIdList){
+					Task task = getTask(Long.parseLong(taskId));
+					if(task != null && newProperty!= null ){
+						task.priority_type = Task.PriorityType.valueOf(newProperty);
+						task.save();
+						taskList.add(task);
+					}
+				}
+				ActivitySave.createBulkActionActivityForTasks(taskList.size(), "BULK_TASK_CHANGE_PRIORITY", newProperty, "tasks", "");
+			}
+			else if (formId.equalsIgnoreCase("bulkTaskOwnerForm")) {
+				newProperty = priority.getString("owner_id");
+				String owner_name = DomainUserUtil.getDomainUser(Long.parseLong(newProperty)).name;
+				for(String taskId : taskIdList){
+					Task task = getTask(Long.parseLong(taskId));
+					if(task != null && newProperty!= null ){
+						task.owner_id = newProperty ;
+						task.save();
+						taskList.add(task);
+					}
+				}
+				ActivitySave.createBulkActionActivityForTasks(taskList.size(), "BULK_TASK_CHANGE_OWNER", owner_name, "tasks", "");
+			}
+			else if (formId.equalsIgnoreCase("bulkTaskDeleteForm")){
+				int taskcount  = taskIdList.size();
+				org.json.JSONArray taskId = new org.json.JSONArray(taskIdList);
+				Task.dao.deleteBulkByIds(taskId);
+				ActivitySave.createBulkActionActivityForTasks(taskcount, "BULK_TASK_DELETE", "", "tasks", "");
+			}
+			else {
+				newProperty = priority.getString("due");
+				for(String taskId : taskIdList){
+					Task task = getTask(Long.parseLong(taskId));
+					if(task != null && newProperty!= null ){
+						task.due = Long.parseLong(newProperty);
+						task.save();
+						taskList.add(task);
+					}
+				}
+				ActivitySave.createBulkActionActivityForTasks(taskList.size(), "BULK_TASK_CHANGE_DUEDATE", newProperty, "tasks", "");
+			}
+			
+			return taskList ;
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+	public static void postDataToTaskBackend(String uri ,String data)
+    {
+		try {
+			JSONObject json = new JSONObject(data);
+			// Create Task and push it into Task Queue
+			Queue queue = QueueFactory.getQueue(AgileQueues.BULK_TASK_CHANGE_STATUS);
+			TaskOptions taskOptions = TaskOptions.Builder.withUrl(uri).param("data", data).method(Method.POST);
+			queue.addAsync(taskOptions);
+			return;
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    }
 }

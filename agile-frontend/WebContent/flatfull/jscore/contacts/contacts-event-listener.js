@@ -33,6 +33,7 @@ var Contacts_And_Companies_Events_View = Base_Model_View.extend({
     	'click .toggle-company-filters' : 'toggleCompanyFilters',
 
     	'click #lhs-customfilters-header' : 'toggleMobileCustomFilters',
+    	'click #lhs-company-customfilters-header' : 'toggleMobileCustomFilters',
 
     },
 
@@ -41,6 +42,11 @@ var Contacts_And_Companies_Events_View = Base_Model_View.extend({
     	event.stopPropagation();
     	contact_delete_action.onContactDelete(e);
 	},*/
+	toggleMobileCustomFilters : function(e){
+		e.preventDefault();
+		$(e.currentTarget).find('i').toggleClass('fa-plus-square-o').toggleClass('fa-minus-square-o');
+		$(e.currentTarget).next().toggleClass('hide');
+	},
 	toggleMobileCustomFilters : function(e){
 		e.preventDefault();
 		$(e.currentTarget).find('i').toggleClass('fa-plus-square-o').toggleClass('fa-minus-square-o');

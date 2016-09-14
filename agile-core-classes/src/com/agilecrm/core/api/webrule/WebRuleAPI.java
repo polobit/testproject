@@ -17,6 +17,7 @@ import org.json.JSONArray;
 
 import com.agilecrm.AllDomainStats;
 import com.agilecrm.alldomainstats.util.AllDomainStatsUtil;
+import com.agilecrm.cms.CMSPlugin;
 import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
 import com.agilecrm.webrules.WebRule;
 import com.agilecrm.webrules.util.WebRuleUtil;
@@ -44,6 +45,9 @@ public class WebRuleAPI
 	 
 	//Increase count of Web Rules for AllDomainstats report in database
 		AllDomainStatsUtil.updateAllDomainStats(AllDomainStats.WEBRULE_COUNT);
+	
+		// Inform to CMS plugins
+		CMSPlugin.updateToCmsPlugins(CMSPlugin.EventName.WebRule, true);
     }
 
     @PUT
@@ -52,6 +56,9 @@ public class WebRuleAPI
     public void updateWebRule(WebRule webRule)
     {
 	webRule.save();
+	
+	// Inform to CMS plugins
+	CMSPlugin.updateToCmsPlugins(CMSPlugin.EventName.WebRule, false);
     }
 
     /*    *//**
@@ -87,6 +94,10 @@ public class WebRuleAPI
 		e.printStackTrace();
 	    }
 	}
+	
+	// Inform to CMS plugins
+	CMSPlugin.updateToCmsPlugins(CMSPlugin.EventName.WebRule, false);
+			
     }
 
     /**
@@ -110,6 +121,9 @@ public class WebRuleAPI
 	    
 	    // Delete cache also
 	    WebRuleUtil.deleteRulesFromCache();
+	    
+	    // Inform to CMS plugins
+		CMSPlugin.updateToCmsPlugins(CMSPlugin.EventName.WebRule, false);
 
 	}
 	catch (org.json.JSONException e)

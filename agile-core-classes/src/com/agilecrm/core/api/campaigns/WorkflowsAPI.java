@@ -28,6 +28,7 @@ import com.agilecrm.activities.Activity.EntityType;
 import com.agilecrm.activities.util.ActivitySave;
 import com.agilecrm.activities.util.ActivityUtil;
 import com.agilecrm.alldomainstats.util.AllDomainStatsUtil;
+import com.agilecrm.cms.CMSPlugin;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.email.bounce.EmailBounceStatus.EmailBounceType;
 import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
@@ -157,6 +158,9 @@ public class WorkflowsAPI {
 			throws PlanRestrictedException, WebApplicationException {
 		workflow.save();
 		try {
+			// Inform to CMS plugins
+			CMSPlugin.updateToCmsPlugins(CMSPlugin.EventName.Campaigns, true);
+						
 			ActivityUtil.createCampaignActivity(ActivityType.CAMPAIGN_CREATE,
 					workflow, null);
 			
@@ -187,6 +191,9 @@ public class WorkflowsAPI {
 			workflow.save();
 			
 			try {
+				// Inform to CMS plugins
+				CMSPlugin.updateToCmsPlugins(CMSPlugin.EventName.Campaigns, false);
+				
 				ActivityUtil.createCampaignActivity(ActivityType.CAMPAIGN_EDIT,
 						workflow, null);
 			} catch (Exception e) {
@@ -213,8 +220,12 @@ public class WorkflowsAPI {
 
 		if (workflow != null) {
 			try {
+				// Inform to CMS plugins
+				CMSPlugin.updateToCmsPlugins(CMSPlugin.EventName.Campaigns, false);
+				
 				ActivityUtil.createCampaignActivity(
 						ActivityType.CAMPAIGN_DELETE, workflow, null);
+				
 			} catch (Exception e) {
 				System.out
 						.println("exception occured while creating workflow creation activity");
@@ -239,9 +250,13 @@ public class WorkflowsAPI {
 		JSONArray workflowsJSONArray = new JSONArray(model_ids);
 
 		try {
+			// Inform to CMS plugins
+			CMSPlugin.updateToCmsPlugins(CMSPlugin.EventName.Campaigns, false);
+						
 			ActivitySave.createLogForBulkDeletes(EntityType.CAMPAIGN,
 					workflowsJSONArray,
 					String.valueOf(workflowsJSONArray.length()), "");
+			
 		} catch (Exception e) {
 			System.out
 					.println("exception occured while creating workflow creation activity");

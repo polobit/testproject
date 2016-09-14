@@ -7582,6 +7582,24 @@ Handlebars.registerHelper('if_asc_sork_key', function(value, options)
 		return new Handlebars.SafeString(el);
 	});
 
+Handlebars.registerHelper('taskBulkStatus', function(value)
+{
+	if(value && value == "YET_TO_START")
+		return "Yet To Start";
+	else if(value && value == "IN_PROGRESS")
+		return "In Progress"; 
+	else if(value && value == "COMPLETED")
+		return "Completed";
+});
+Handlebars.registerHelper('taskBulkPriority', function(value)
+{
+	if(value && value == "HIGH")
+		return "High";
+	else if(value && value == "LOW")
+		return "Low"; 
+	else if(value && value == "NORMAL")
+		return "Normal";
+});
 Handlebars.registerHelper('get_default_label', function(label, module_name, options)
 {
 	var i18nKeyPrefix = "admin-settings-tasks";
