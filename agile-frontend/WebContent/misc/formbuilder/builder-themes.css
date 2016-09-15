@@ -607,9 +607,12 @@ border-bottom-right-radius: 0px;
 }
 .theme4 input[type=email]:focus,.theme4 input[type=url]:focus,.theme4 input[type=password]:focus,.theme4 input[type=text]:focus,.theme4 select:focus{border-bottom:1px solid #66afe9 !important;}
 .theme4 textarea:focus{border-bottom:1px solid #66afe9 !important;}
-.theme2 .component:nth-child(2),.theme3 .component:nth-child(2),.theme4 .component:nth-child(2) {
+/*.theme2 .component:nth-child(2),.theme3 .component:nth-child(2),.theme4 .component:nth-child(2) {
     padding-top: 30px;
+}*/
+.theme3 .component:nth-child(1),.theme4 .component:nth-child(1) {
+    margin-bottom: 30px;
 }
 .theme2 .component:last-child,.theme3 .component:last-child,.theme4 .component:last-child {
     padding-bottom: 20px;
-} 
+}
