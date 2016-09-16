@@ -658,12 +658,22 @@ function getContactCustomProperties(items)
 		}
 	}
 	
+	var curr_route = Current_Route;
+	if(curr_route == "contacts" || curr_route.indexOf("contact")>=0){
+		curr_route = "CONTACT";
+	}else if(curr_route == "companies" || curr_route.indexOf("company")>=0){
+		curr_route = "COMPANY";
+	}else if(curr_route == "deals" || curr_route.indexOf("deal")>=0){
+		curr_route = "DEAL";
+	}
+
 	//Added for formula type custom field
 	var type='';
 	if(App_Contacts.customFieldsList!=undefined && App_Contacts.customFieldsList!=null){
 		for(var i=0;i<App_Contacts.customFieldsList.collection.models.length;i++){
 			if(App_Contacts.customFieldsList.collection.models[i].get("field_label")==fieldName){
 				type = App_Contacts.customFieldsList.collection.models[i].get("scope");
+				if(curr_route==type)
 				break;
 			}
 		}
