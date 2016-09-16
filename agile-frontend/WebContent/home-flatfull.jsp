@@ -274,14 +274,6 @@ function isIE() {
   <a href="#subscribe" class="text-info font-bold" onclick="Agile_GA_Event_Tracker.track_event('Upgrade from Nav Bar Message')"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "noty-upgrade") %></a>
   <span class="free_plan_strip_close p-l-sm c-p">&times</span>
 </div>
-<div style="position: fixed;left: 52%;top: 0;z-index: 1029;-webkit-transform: translateX(-50%);transform: translateX(-50%);">
-<div class="popover right block">
-            <div class="arrow"></div>
-            <div class="popover-content ">
-              <p style="width: 183px;">check our other modules likes sales and marketing</p>
-            </div>
-          </div>
-          </div>
 <div rel="popover" data-custom-popover-class='grid_custom_popover' data-trigger="click"  data-original-title="" title="" data-placement="bottom" class="need_help grid_icon_center hidden-xs <%
           switch (Integer.parseInt(currentUserPrefs.theme)) {
             case 1:  out.print("bg-white-only ");
@@ -330,8 +322,21 @@ function isIE() {
                 </div>
                 
                   </div>">
-                   <a href="#" class='grid-icon-header block wrapper' onclick="return false;"><i class="glyphicon glyphicon-th"></i></a>    
-               </div>
+                   <a href="#" class='grid-icon-header block wrapper' onclick="return false;"><i class="glyphicon glyphicon-th"></i></a>   
+                             </div>
+
+              <div style="position: fixed;left: 42%;top: 40px;z-index: 1029;-webkit-transform: translateX(-50%);transform: translateX(-50%);" id="helpcontent_popover" class="hide">
+                <div class="popover bottom block" >
+                  <div class="arrow">
+                  </div>
+                  <div class="popover-content ">
+                    <p style="width: 183px;color: #B8BEC1;">check our other modules likes sales and marketing
+                    </p>
+                    <a href="#" class="menugridhelpclose" data-dismiss="alert" aria-label="close"  style="position: absolute;top:0px;color:#a94442 !important;right:5px;font-size: large;">×
+                    </a>
+                  </div>
+                </div>
+              </div> 
  
 
        
@@ -1047,6 +1052,7 @@ head.load(	"https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js",
 			LIB_PATH + 'final-lib/min/lib-all-new-2.js?_=' + _agile_get_file_hash('lib-all-new-2.js'),  
 			function(){
         showVideoForRegisteredUser();
+        
 		});
 
 // head.js({ library  : LIB_PATH + 'final-lib/min/lib-all-min-1.js?_=' + _AGILE_VERSION });
@@ -1151,12 +1157,14 @@ function showVideoForRegisteredUser(){
     localStorage.setItem(domainuser_video_cookie,true);
     
 }
+
 function closeVideo(){
    $('#dashboard_video').on("click", ".close", function () {
        $('#dashboard_video').modal("hide");
         $('#dashboard_video iframe').removeAttr("src");
     });
 }
+
 </script>
 
 
