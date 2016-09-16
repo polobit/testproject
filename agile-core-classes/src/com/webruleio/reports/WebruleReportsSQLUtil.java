@@ -79,9 +79,9 @@ public class WebruleReportsSQLUtil
 
 	//NOTE::For optimal use of index , doing union all instead of using IN/OR conditions
         	
-	String query = "SELECT webrule_type,count(DISTINCT webruleid) AS count,count(webruleid) AS total "+  
-		"FROM stats3.webrule_report "+
-                "WHERE DOMAIN="+GoogleSQLUtil.encodeSQLColumnValue(domain)+" AND webruleid="+GoogleSQLUtil.encodeSQLColumnValue(id)+" AND webrule_type in('MODAL_POPUP','FORM_SUBMITTED','NOTY_MESSAGE','CALL_POPUP','SITE_BAR','REQUEST_PUSH_POPUP','ADD_TO_CAMPAIGN','CORNER_NOTY')"+
+	String query = "SELECT webrule_type,count(DISTINCT webrule_id) AS count,count(webrule_id) AS total "+  
+		"FROM webrule_reports "+
+                "WHERE DOMAIN="+GoogleSQLUtil.encodeSQLColumnValue(domain)+" AND webrule_id="+GoogleSQLUtil.encodeSQLColumnValue(id)+" AND webrule_type in('MODAL_POPUP','FORM_SUBMITTED','NOTY_MESSAGE','CALL_POPUP','SITE_BAR','REQUEST_PUSH_POPUP','ADD_TO_CAMPAIGN','CORNER_NOTY')"+
                 "AND execution_time BETWEEN CONVERT_TZ("+GoogleSQLUtil.encodeSQLColumnValue(startDate)+","+GoogleSQLUtil.getConvertTZ2(timeZoneOffset)+") " + 
                 "AND CONVERT_TZ("+GoogleSQLUtil.encodeSQLColumnValue(endDate)+","+GoogleSQLUtil.getConvertTZ2(timeZoneOffset)+") GROUP BY webrule_type ";
                             
