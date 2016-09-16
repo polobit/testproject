@@ -324,7 +324,7 @@ public class LoginServlet extends HttpServlet {
 		// If not, set these values after verification. Check HomeServlet.doPost() method.
 		if( browser_auth != null && browser_auth.valid_finger_print && browser_auth.valid_ip )
 		{
-			LoginUtil.setMiscValuesAtLogin(request, domainUser);
+			new LoginUtil().setMiscValuesAtLogin(request, domainUser);
 		}
 		
 		hash = (String) request.getSession().getAttribute(

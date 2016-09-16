@@ -23,7 +23,7 @@ import com.agilecrm.user.util.UserPrefsUtil;
 public class LoginUtil 
 {
 
-	private static boolean saveDomainUser = false;
+	private boolean saveDomainUser = false;
 	
 	/**
 	 * This method will set misc values for a User at login. The user is saved, if required.
@@ -33,7 +33,7 @@ public class LoginUtil
 	 * @param request
 	 * @param user
 	 */
-	public static void setMiscValuesAtLogin(HttpServletRequest request, DomainUser user)
+	public void setMiscValuesAtLogin(HttpServletRequest request, DomainUser user)
 	{
 		try {
 
@@ -86,7 +86,7 @@ public class LoginUtil
      * Set the Timezone in the User Preferences if not present
      * @param req
      */
-    private static void setUserInfoTimezone(HttpServletRequest req)
+    private void setUserInfoTimezone(HttpServletRequest req)
     {
 		try
 		{
@@ -108,7 +108,7 @@ public class LoginUtil
      * @param user
      * @return
      */
-    private static DomainUser createOnlineCalendarPrefs(DomainUser user)
+    private DomainUser createOnlineCalendarPrefs(DomainUser user)
     {
 		OnlineCalendarPrefs onlinePrefs = OnlineCalendarUtil.getCalendarPrefs(user.id);
 		if (onlinePrefs == null)
@@ -143,7 +143,7 @@ public class LoginUtil
      * Saves finger print in domain user before request is forwarded to
      * dashboard (home.jsp)
      */
-    private static void saveFingerPrint(HttpServletRequest req, DomainUser domainUser)
+    private void saveFingerPrint(HttpServletRequest req, DomainUser domainUser)
     {
 		try
 		{

@@ -234,7 +234,7 @@ public class HomeServlet extends HttpServlet
     	    setLoggedInTime(req, domainUser);
     	    
     	    if(OnlineCalendarUtil.getCalendarPrefs(domainUser.id) == null){
-    	    	LoginUtil.setMiscValuesAtLogin(req, domainUser);
+    	    	new LoginUtil().setMiscValuesAtLogin(req, domainUser);
     	    }
     	    
     	    try {
@@ -291,7 +291,7 @@ public class HomeServlet extends HttpServlet
     		 * If Browser fingerprint verification succeeds, set Account Timezone, User Timezone
     		 * OnlineCalendarPrefs and Browser Fingerprint.
     		 */
-			LoginUtil.setMiscValuesAtLogin(request, DomainUserUtil.getCurrentDomainUser());
+    		new LoginUtil().setMiscValuesAtLogin(request, DomainUserUtil.getCurrentDomainUser());
 
 			doGet(request, response);
     	}
