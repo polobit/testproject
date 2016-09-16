@@ -233,8 +233,10 @@ public class HomeServlet extends HttpServlet
     	    // Saves logged in time in domain user.
     	    setLoggedInTime(req, domainUser);
     	    
-    	    if(OnlineCalendarUtil.getCalendarPrefs(domainUser.id) == null){
-    	    	new LoginUtil().setMiscValuesAtLogin(req, domainUser);
+    	    LoginUtil loginUtil = new LoginUtil();
+    	    if(!loginUtil.hasValidCalendarPrefs(domainUser) || !loginUtil.hasValidAccountTimezone() 
+    	    		|| !loginUtil.hasValidUserTimezone()) {
+    	    	loginUtil.setMiscValuesAtLogin(req, domainUser);
     	    }
     	    
     	    try {
