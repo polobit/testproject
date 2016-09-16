@@ -2217,14 +2217,15 @@ public class OpportunityUtil
     	if ((ownerId != null && ownerId != 0) || (pipelineId != null && pipelineId != 0) || (sourceId != null && sourceId != 0)){
     	    opportunitiesList = getWonDealsListBasedOnSelectedCondition(minTime, maxTime,ownerId,pipelineId,sourceId);
     	    System.out.println("calling getWonDealList based on selected condition");
-    	    System.out.println("total deals found is : "+opportunitiesList.size());
     	}
     	else{
     	opportunitiesList = getWonDealsList(minTime,maxTime);
     	System.out.println("calling getwonDealList without condtion");
-	    System.out.println("total deals found is : "+opportunitiesList.size());
-
     	}
+    	
+    	if(opportunitiesList != null)
+    	   System.out.println("total deals found is : "+opportunitiesList.size());
+
     	List<DomainUser> domainUsers= new ArrayList<DomainUser>();
 		DomainUser dUser = DomainUserUtil.getCurrentDomainUser();
 
@@ -2246,6 +2247,7 @@ public class OpportunityUtil
     	newDealsObject = ReportsUtil.initializeFrequencyForReports(minTime, maxTime, frequency, timeZone, usersCount);
 
     	System.out.println("Total opportunitite....." + opportunitiesList.size());
+    	if(opportunitiesList != null){
     	for (Opportunity opportunity : opportunitiesList)
     	{
     	    String last = "";
@@ -2322,6 +2324,7 @@ public class OpportunityUtil
     	    {
     		System.out.println("Exception :" + e);
     	    }
+    	}
     	}
         System.out.println("total deals returnig is :"+newDealsObject.size());
 

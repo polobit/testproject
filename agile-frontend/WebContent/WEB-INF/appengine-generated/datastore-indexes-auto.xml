@@ -602,7 +602,7 @@
         <property name="updated_time" direction="asc"/>
     </datastore-index>
      <datastore-index kind="Opportunity" ancestor="false" source="auto">
-        <property name="won_date" direction="asc"/>
-        <property name="dealSource" direction="asc"/>      
+        <property name="dealSource" direction="asc"/>
+        <property name="won_date" direction="asc"/>      
     </datastore-index>
 </datastore-indexes>
