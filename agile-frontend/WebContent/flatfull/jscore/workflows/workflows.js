@@ -894,6 +894,10 @@ function get_campaign_changes(updated_workflow_json, old_workflow_json, callback
                         var old_node_field  = _.findWhere(old_node.JsonValues, 
                                                         {name: updated_node_field.name});
 
+                        // If any of the fields is undefined
+                        if(!updated_node_field || !old_node_field)
+                            continue;
+
                         // Compare update field and old field
                         var node_equal = _.isEqual(updated_node_field, old_node_field);
 
@@ -902,20 +906,28 @@ function get_campaign_changes(updated_workflow_json, old_workflow_json, callback
 
                         if(!node_equal)
                         {
-                            var modified_field = {};
-                            modified_field.node_name = update_nodes[i].displayname;
-                            modified_field.name = updated_node_field.name;
-                            
-                            modified_field.old_value = old_node_field.value;
-                            modified_field.new_value = updated_node_field.value;
-
-                            if(restricted_fields.indexOf(modified_field.name) != -1)
+                            try
                             {
-                                modified_field.old_value = "-";
-                                modified_field.new_value = "Template changed.";
+                                var modified_field = {};
+                                modified_field.node_name = update_nodes[i].displayname;
+                                modified_field.name = updated_node_field.name;
+                            
+                                modified_field.old_value = old_node_field.value;
+                                modified_field.new_value = updated_node_field.value;
+
+                                if(restricted_fields.indexOf(modified_field.name) != -1)
+                                {
+                                    modified_field.old_value = "-";
+                                    modified_field.new_value = "Template changed.";
+                                }
+
+                                modified_field_values.push(modified_field);
+                            }
+                            catch(err)
+                            {
+                                console.debug("Error occured while pushing modified fields...");
                             }
 
-                            modified_field_values.push(modified_field);
                         }
 
                     }
