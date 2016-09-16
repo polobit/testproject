@@ -521,11 +521,12 @@
 								    %>
 									<li><a href="#personModal"  class="person p-r-none" id="person">
 											<div class="pull-left"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "contact") %></div><div class='pull-right shortcuts'>Shift + N</div><div class="clearfix"></div></a></li>
+									<li><a href="#companyModal"  data-toggle="modal"
+										id="company"> <div class="pull-left"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "company") %></div><div class='pull-right shortcuts'>Shift + C</div><div class="clearfix"></div></a></li>
 									<%
 								          }
 								    %> 
-									<li><a href="#companyModal"  data-toggle="modal"
-										id="company"> <div class="pull-left"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "company") %></div><div class='pull-right shortcuts'>Shift + C</div><div class="clearfix"></div></a></li>
+									
 									
 										<%
 										if(domainUser.menu_scopes.contains(NavbarConstants.DEALS) &&          !domainUser.restricted_menu_scopes.contains(NavbarConstants.DEALS)){
