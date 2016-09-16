@@ -1009,8 +1009,6 @@ try{
 <script src='<%=FLAT_FULL_PATH%>jscore/handlebars/download-template.js'></script>
 <script>
 
-try{console.time("startbackbone");}catch(e){}
-
 var USER_IP_ADDRESS = '<%=request.getRemoteAddr()%>'
 
 var S3_STATIC_IMAGE_PATH = '<%=S3_STATIC_IMAGE_PATH%>';
@@ -1088,6 +1086,8 @@ var HANDLEBARS_LIB = LOCAL_SERVER ? "/lib/handlebars-v1.3.0.js" : "//cdnjs.cloud
 var _billing_restriction = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(restriction))%>;
 var USER_BILLING_PREFS = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(subscription))%>;
 
+try{if(!HANDLEBARS_PRECOMPILATION)console.time("startbackbone");}catch(e){}
+
 // Load language JSON
 var _LANGUAGE = "<%=_LANGUAGE%>";
 // var _Agile_Resources_Json = {};
@@ -1134,7 +1134,7 @@ head.load([{'js-core-1': CLOUDFRONT_PATH + 'jscore/min/locales/' + _LANGUAGE  +'
 		{'js-core-3': CLOUDFRONT_PATH + 'jscore/min/locales/' + _LANGUAGE +'/js-all-min-3.js' + "?_=" + _agile_get_file_hash('js-all-min-3.js')}, 
 		{'js-core-4': CLOUDFRONT_PATH + 'jscore/min/locales/' + _LANGUAGE +'/js-all-min-4.js' + "?_=" + _agile_get_file_hash('js-all-min-4.js')}, 
 		CLOUDFRONT_PATH + "tpl/min/precompiled/locales/" + _LANGUAGE + "/contact-view.js" + "?_=" + _agile_get_file_hash('contact-view.js')], function(){
-			console.log("All files loaded. Now continuing with script");
+			// console.log("All files loaded. Now continuing with script");
       load_globalize();
 			try{
 				$('[data-toggle="tooltip"]').tooltip();  
@@ -1187,7 +1187,7 @@ function load_globalize()
 }
 
 function showVideoForRegisteredUser(){
-    console.log("Ref = " + document.referrer);
+    // console.log("Ref = " + document.referrer);
 
     if(!document.referrer || document.referrer.indexOf("register") == -1)
          return;

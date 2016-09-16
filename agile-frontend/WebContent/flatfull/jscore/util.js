@@ -743,11 +743,11 @@ function  printCurrentDateMillis(type){
 }
 
 function  startFunctionTimer(name){
-	try{console.time(name);	}catch(e){}
+	try{if(!HANDLEBARS_PRECOMPILATION)console.time(name);	}catch(e){}
 }
 
 function endFunctionTimer(name){
-	try{console.timeEnd(name);	}catch(e){}
+	try{if(!HANDLEBARS_PRECOMPILATION)console.timeEnd(name);	}catch(e){}
 }
 
 function loadServiceLibrary(callback){
