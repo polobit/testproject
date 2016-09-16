@@ -142,9 +142,10 @@ public class EntityDeferredTask implements DeferredTask {
 		System.out.println("userPrefs = " + userPrefs.size());
 		int noofChanged = 0;
 		for (UserPrefs prefItem : userPrefs) {
+			
 
 			// Trim name and make dummy one to sore
-			if (StringUtils.isNotBlank(prefItem.currency) && (StringUtils.equalsIgnoreCase(prefItem.currency, "GBP-£") || StringUtils.equalsIgnoreCase(prefItem.currency, "SKK-Sk"))) {
+			if (StringUtils.isNotBlank(prefItem.currency) && (StringUtils.equalsIgnoreCase(prefItem.currency.substring(0, 3), "GBP") || StringUtils.equalsIgnoreCase(prefItem.currency.substring(0, 3), "SKK"))) {
 				noofChanged++;
 			}
 
