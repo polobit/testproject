@@ -53,7 +53,7 @@ function getCustomValidity(input){
 }
 
 $(document).ready(function() {
-	$('input[required]').each(function(index, ele){
+	$('input[required]').not(document.getElementById("login_phone_number")).each(function(index, ele){
   		ele.setCustomValidity(getCustomValidity(ele));
   	});
 });
