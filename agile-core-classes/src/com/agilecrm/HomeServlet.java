@@ -25,6 +25,7 @@ import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
+import com.agilecrm.user.util.OnlineCalendarUtil;
 import com.agilecrm.util.Defaults;
 import com.google.appengine.api.NamespaceManager;
 
@@ -231,6 +232,10 @@ public class HomeServlet extends HttpServlet
     		
     	    // Saves logged in time in domain user.
     	    setLoggedInTime(req, domainUser);
+    	    
+    	    if(OnlineCalendarUtil.getCalendarPrefs(domainUser.id) == null){
+    	    	LoginUtil.setMiscValuesAtLogin(req, domainUser);
+    	    }
     	    
     	    try {
     	    	domainUser.save();
