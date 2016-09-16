@@ -61,7 +61,7 @@
 	          <li class="mark-unread" data-val="mark-unread"><a>Mark as unread</a></li>
 	        </ul>
       	</div>
-    	<div class="form-group col-md-6" style="margin-bottom:0px;">
+    	<div class="form-group col-md-4" style="margin-bottom:0px;">
             <div class="input-group" style="z-index:0; float:none;">
               <input type="text" class="form-control input-sm bg-light no-border rounded padder ng-pristine ng-valid ng-touched" id="search-mail" placeholder="Search Emails...">
               <span class="input-group-btn">
@@ -69,9 +69,12 @@
               </span>
             </div>
           </div>
-       	<div class="btn-group pull-right">
-	      <button type="button" class="btn btn-sm btn-bg btn-default"><i class="fa fa-chevron-left"></i></button>
-	      <button type="button" class="btn btn-sm btn-bg btn-default"><i class="fa fa-chevron-right"></i></button>
+       	<div class="btn-group" id="pagination" style="display:none;">
+       		<div class="count-val pull-left" style="margin-top: 5px;"><span class="inti-val"></span> of <span class="totalcount"></span></div>&nbsp;&nbsp;&nbsp;&nbsp;
+	       	<div class="pull-right">
+		      <button type="button" class="btn btn-sm btn-bg btn-default previous"><i class="fa fa-chevron-left"></i></button>
+		      <button type="button" class="btn btn-sm btn-bg btn-default next"><i class="fa fa-chevron-right"></i></button>
+		      </div>
 	    </div>
     </div>
   </div>
@@ -173,6 +176,9 @@
 		{{#if errormssg}}
 	    	<span class="text-dark">{{agile_lng_translate 'contact-details' 'error'}}: {{errormssg}}</span>
 	    {{else}}
+	   		{{#if cursor}}
+	    		<li style="display:none" class="get-counts" data-cursor="{{this.cursor}}" data-count="{{this.count}}"></li>
+	    	{{/if}}
 		    <li id="li{{this.id}}" class="list-group-item clearfix b-l-3x ng-scope" style="height: 70px;overflow: hidden;">
 		      <!--<a ui-sref="app.page.profile" class="avatar thumb pull-left m-r" href="#/app/page/profile">
 		        <img ng-src="img/a10.jpg" src="img/a10.jpg">

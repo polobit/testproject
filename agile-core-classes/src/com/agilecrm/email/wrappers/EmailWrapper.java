@@ -132,10 +132,21 @@ public class EmailWrapper extends Cursor
     {
 	this.flags = flags;
     }
+    
+    public String getMessageCount()
+    {
+	return messagecount;
+    }
+
+    public void setMessageCount(String messagecount)
+    {
+	this.messagecount = messagecount;
+    }
 
     private String mime_type;
     private String from;
     private String to;
     private String message;
     private String flags;
+    private String messagecount;
 }

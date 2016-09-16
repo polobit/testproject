@@ -106,8 +106,9 @@ function syncContacts(){
 				//$("#mail-view").css({"max-height":$(window).height()-128,"height":$(window).height()-128, "overflow-y":"scroll"});
 
 				url = "core/api/emails/all-agile-emails?";
+				$('#inbox-email-type-select').attr("folder-type","inbox");
 				$('#inbox-email-type-select').attr("data-url",url);
-				renderToMailList(url);
+				renderToMailList(url,1,10);
 	        }else{
 	        	$("#inbox-prefs-verification").css({"display":"block"});
 	        	hideTransitionBar();
@@ -136,12 +137,12 @@ function syncContacts(){
 			$("#mails-list").css({"max-height":$(window).height()-128,"height":$(window).height()-128, "overflow-y":"scroll", "padding":"0px"});
 			$("#mail-details-view").remove();
 			$("#mail-detail-view").append("<div class='portlet_body' id='mail-details-view' style='display:none;'></div>");
-			renderToMailList(url);
+			renderToMailList(url,1,10);
 		}
 	});
 	var syncedcontactitem = new syncedContactItem();
 }
-function renderToMailList(url){
+function renderToMailList(url,offset_val,page_size_val){
 	$("#mails-list").empty();
 	$("#mail-details-view").html('');
 	var fetchurl= '';
@@ -151,15 +152,15 @@ function renderToMailList(url){
 				url:function () { 
 					return fetchurl+'&cursor='+this.offset+'&page_size='+this.page_size
 				},
-				offset: 0,
-    			page_size: 10,
+				offset: offset_val,
+    			page_size: page_size_val,
 			});
 			
 	var mailListItem = Backbone.View.extend({
 		el:'#mails-list',
 		// This will simply listen for scroll events on the current el
 	    events: {
-	      'scroll': 'checkScroll'
+	      //'scroll': 'checkScroll'
 	    },
 		initialize:function(){
 			//_.bindAll(this,'cleanUp')
@@ -180,6 +181,7 @@ function renderToMailList(url){
 				success: function(data,response,xhr) {
 					that.render(data);
 					renderToMailView(data);
+					
 					$('.collapse').on('show.bs.collapse', function (e) {
 						$("#mails-list").hide();
 						$("#compose").hide();
@@ -208,7 +210,7 @@ function renderToMailList(url){
 			var source = $('#mail-template').html();
 	        var template = Handlebars.compile(source);
 	        var html = template(data.toJSON());
-	        if(this.mailCollectionInstance.offset == 0){
+	        if(this.mailCollectionInstance.offset == 1){
 	        	if(data.length == 0){
 		        	source = $('#no-mail-template').html();
 			        template = Handlebars.compile(source);
@@ -400,7 +402,7 @@ function inboxEmailSend(ele,json){
 			$("#mails-list").css({"max-height":$(window).height()-128,"height":$(window).height()-128, "overflow-y":"scroll", "padding":"0px"});
 			$("#mail-details-view").remove();
 			$("#mail-detail-view").append("<div class='portlet_body' id='mail-details-view' style='display:none;'></div>");
-			renderToMailList(url);
+			renderToMailList(url,1,10);
 		},
 		error : function(response){
 			enable_send_button($('#sendEmailInbox'));
@@ -447,6 +449,39 @@ function inboxreplySend(ele,json){
 	});
 }
 function inboxFlagListners(){
+
+	var cursor = $(".get-counts").attr("data-cursor");
+	var totalcount = $(".get-counts").attr("data-count");
+
+	if(parseInt(totalcount) > 10){
+		$("#pagination").show();
+	}
+	if(parseInt(cursor) > 10 && parseInt(totalcount) > parseInt(cursor)+9){
+		$(".previous").prop("disabled",false);
+		$(".next").prop("disabled",false);
+		var to_val = parseInt(cursor)+9;
+		$(".inti-val").text(cursor+" - "+to_val);
+	}else{
+		if(parseInt(totalcount) < 10 ){
+			$(".previous").prop("disabled",true);
+			$(".next").prop("disabled",true);
+			$(".inti-val").text(cursor+" - "+totalcount);
+		}else{
+			var to_val = parseInt(cursor)+9;
+			if(to_val  >= totalcount){
+				to_val = totalcount;
+				$(".next").prop("disabled",true);
+				$(".previous").prop("disabled",false);
+			}else{
+				$(".previous").prop("disabled",true);
+				$(".next").prop("disabled",false);
+			}
+			$(".inti-val").text(cursor+" - "+ to_val);
+		}
+	}
+	$(".totalcount").text(totalcount);
+	
+	
 
 	var color=['b-l-info','b-l-primary','b-l-warning','b-l-success',''];
 	var j =0;
@@ -521,6 +556,7 @@ function initializeInboxListeners(){
 		e.preventDefault();
 		$("#mail-inbox").css({"font-weight":"bold","color":"white","background-color": "#23b7e5"});
 		$("#mail-sent").css({"font-weight":"normal","color":"inherit","background-color": "transparent"});
+		$('#inbox-email-type-select').attr("folder-type","inbox");
 		var url = $('#inbox-email-type-select').attr("data-url");
 		url = url.concat("&folder_name=INBOX");
 		$("#mails-list").remove();
@@ -528,13 +564,14 @@ function initializeInboxListeners(){
 		$("#mails-list").css({"max-height":$(window).height()-128,"height":$(window).height()-128, "overflow-y":"scroll", "padding":"0px"});
 		$("#mail-details-view").remove();
 		$("#mail-detail-view").append("<div class='portlet_body' id='mail-details-view' style='display:none;'></div>");
-		renderToMailList(url);
+		renderToMailList(url,1,10);
 	});
 
 	$('#inbox-listners').on('click', '#mail-sent', function(e){
 		e.preventDefault();
 		$("#mail-inbox").css({"font-weight":"normal","color":"inherit","background-color": "transparent"});
 		$("#mail-sent").css({"font-weight":"bold","color":"white","background-color": "#23b7e5"});
+		$('#inbox-email-type-select').attr("folder-type","sent");
 		var url = $('#inbox-email-type-select').attr("data-url");
 		url = url.concat("&folder_name=Sent");
 		$("#mails-list").remove();
@@ -542,7 +579,7 @@ function initializeInboxListeners(){
 		$("#mails-list").css({"max-height":$(window).height()-128,"height":$(window).height()-128, "overflow-y":"scroll", "padding":"0px"});
 		$("#mail-details-view").remove();
 		$("#mail-detail-view").append("<div class='portlet_body' id='mail-details-view' style='display:none;'></div>");
-		renderToMailList(url);
+		renderToMailList(url,1,10);
 	});
 	$('#inbox-listners').on('click', '.mail-compose', function(e){
 		e.preventDefault();
@@ -574,7 +611,7 @@ function initializeInboxListeners(){
 			$("#mails-list").css({"max-height":$(window).height()-128,"height":$(window).height()-128, "overflow-y":"scroll", "padding":"0px"});
 			$("#mail-details-view").remove();
 			$("#mail-detail-view").append("<div class='portlet_body' id='mail-details-view' style='display:none;'></div>");
-			renderToMailList(url);
+			renderToMailList(url,1,10);
 		}
 	});
 
@@ -648,6 +685,53 @@ function initializeInboxListeners(){
 		}		
 	});
 
+	$(".previous").unbind().click(function(e) {
+		var curr_val = $(".inti-val").text();
+		var tot_val = $(".totalcount").text();
+		var offset = curr_val.split(" - ")[0].trim();
+		offset = parseInt(offset)-10;
+		var page_size = curr_val.split(" - ")[1].trim();
+		page_size = parseInt(page_size)-10;
+
+		var url = $('#inbox-email-type-select').attr("data-url");
+		var folder_type = $('#inbox-email-type-select').attr("folder-type");
+		if(folder_type == "inbox")
+			url = url.concat("&folder_name=INBOX");
+		else if(folder_type == "sent")
+				url = url.concat("&folder_name=Sent");
+
+		$("#mails-list").remove();
+		$("#mails-list-view").append("<ul class='portlet_body list-group list-group-lg no-radius m-b-none m-t-n-xxs' id='mails-list'></ul>");
+		$("#mails-list").css({"max-height":$(window).height()-128,"height":$(window).height()-128, "overflow-y":"scroll", "padding":"0px"});
+		$("#mail-details-view").remove();
+		$("#mail-detail-view").append("<div class='portlet_body' id='mail-details-view' style='display:none;'></div>");
+		renderToMailList(url,offset,page_size);
+	});
+
+	$(".next").unbind().click(function(e) {
+		var curr_val = $(".inti-val").text();
+		var tot_val = $(".totalcount").text();
+		var offset = curr_val.split(" - ")[0].trim();
+		offset = parseInt(offset)+10;
+		var page_size = curr_val.split(" - ")[1].trim();
+		page_size = parseInt(page_size)+10;
+
+		var url = $('#inbox-email-type-select').attr("data-url");
+		var folder_type = $('#inbox-email-type-select').attr("folder-type");
+		if(folder_type == "inbox")
+			url = url.concat("&folder_name=INBOX");
+		else if(folder_type == "sent")
+				url = url.concat("&folder_name=Sent");
+
+		$("#mails-list").remove();
+		$("#mails-list-view").append("<ul class='portlet_body list-group list-group-lg no-radius m-b-none m-t-n-xxs' id='mails-list'></ul>");
+		$("#mails-list").css({"max-height":$(window).height()-128,"height":$(window).height()-128, "overflow-y":"scroll", "padding":"0px"});
+		$("#mail-details-view").remove();
+		$("#mail-detail-view").append("<div class='portlet_body' id='mail-details-view' style='display:none;'></div>");
+		renderToMailList(url,offset,page_size);
+
+	});
+	
 }
 function returnUrl(){
 	var url = "";
@@ -811,7 +895,7 @@ function initializeComposeEmailListeners(){
 		$("#mails-list").css({"max-height":$(window).height()-128,"height":$(window).height()-128, "overflow-y":"scroll", "padding":"0px"});
 		$("#mail-details-view").remove();
 		$("#mail-detail-view").append("<div class='portlet_body' id='mail-details-view' style='display:none;'></div>");
-		renderToMailList(url);
+		renderToMailList(url,1,10);
 	});
 
 	$('#send-email-listener-container').on('click', '#sendEmailInbox', function(e){

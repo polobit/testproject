@@ -533,17 +533,17 @@ public class ContactEmailUtil
 			// Add owner email to each email and parse each email body.
 			emailsArray = ContactEmailUtil.addOwnerAndParseEmailBody(emailsArray, fromEmail);
 
-			if (emailsArray.length() < Integer.parseInt(pageSize))
+			/*if (emailsArray.length() < Integer.parseInt(pageSize))
 				return new ObjectMapper().readValue(emailsArray.toString(), new TypeReference<List<EmailWrapper>>()
 				{
-				});
+				});*/
 
 			emailsList = new ObjectMapper().readValue(emailsArray.toString(), new TypeReference<List<EmailWrapper>>()
 			{
 			});
 
 			EmailWrapper lastEmail = emailsList.get(emailsList.size() - 1);
-			lastEmail.cursor = (Integer.parseInt(cursor) + Integer.parseInt(pageSize)) + "";
+			lastEmail.cursor = Integer.parseInt(cursor)+ ""; //(Integer.parseInt(cursor) + Integer.parseInt(pageSize)) + "";
 		}
 
 		catch (Exception e)
