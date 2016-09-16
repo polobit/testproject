@@ -1,11 +1,15 @@
 package com.webruleio.reports;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.json.JSONArray;
+
 import com.agilecrm.db.util.GoogleSQLUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.utils.SystemProperty;
+
 import java.sql.*;
+
 import com.webruleio.reports.AnalyticsDBConnectionFetcher;
 
 
@@ -37,7 +41,8 @@ public class WebruleReportsSQLUtil
 		}
               if(conn!=null)
               {
-	        String sql="insert into stats2.webrule_reports(email,domain,webruleid,webrule_type,execution_time) values('"+email+"','"+domain+"','"+id+"','"+action+"',NOW())";
+	        String sql="insert into webrule_reports(email,domain,webrule_id,webrule_type,execution_time) values('"+email+"','"+domain+"','"+id+"','"+action+"',NOW())";
+	        System.out.println("Statement is " + sql);
 	        try {
 			stmt.executeUpdate(sql);
 			System.out.println("successfully saved");
@@ -46,6 +51,8 @@ public class WebruleReportsSQLUtil
 		 } 
 	        catch (SQLException e)
 	               {
+	            	System.err.println("Exception occured while inserting into table " + e.getMessage());
+	            	System.out.println(ExceptionUtils.getFullStackTrace(e));
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} 
