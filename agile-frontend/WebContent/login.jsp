@@ -280,7 +280,7 @@ if(isSafari && isWin)
 		<a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 			<span id="lang-code-name"><%=LanguageUtil.getSupportedlanguageFromKey(_LANGUAGE)%></span> <span class="caret"></span> 
 		</a>
-	    <ul class="dropdown-menu pull-right" role="menu" style="min-width: 135px;">
+	    <ul class="dropdown-menu pull-right" role="menu" style="min-width: 120px;">
 	    	<%
 	    	   for (Map.Entry<String, String> entry : LanguageUtil.getSupportedlanguages().entrySet()) {
 	    	%>
