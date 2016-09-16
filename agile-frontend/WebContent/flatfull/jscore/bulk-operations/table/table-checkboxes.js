@@ -142,7 +142,7 @@ $(function(){
 				toggle_admin_user_bulk_actions_delete(this, true,$(this).parents('table').attr('id'));
 		else if(Current_Route == 'leads')
 		{
-			App_Leads.leadsBulkActions.toggleLeadsBulkActions(this, true, $(this).parents('table').attr('id'));
+			App_Leads.leadsBulkActions.toggleLeadsBulkActions(this, false, $(this).parents('table').attr('id'));
 		}
 		else
 			toggle_contacts_bulk_actions_dropdown(this,false,$(this).parents('table').attr("id"));

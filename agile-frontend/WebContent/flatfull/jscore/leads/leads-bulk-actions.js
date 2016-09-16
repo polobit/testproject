@@ -132,7 +132,7 @@ var LeadsBulkActions = (function(){
 		else
 			data.contact_ids = JSON.stringify(data.contact_ids);
 
-		if(url == "/core/api/contacts/delete?action=DELETE")
+		if(url && url.indexOf("/core/api/contacts/delete?action=DELETE") == 0)
 		{
 			data.ids = data.contact_ids;
 		}
@@ -174,12 +174,22 @@ var LeadsBulkActions = (function(){
 			if(count > 20 || count == 0)
 				showNotyPopUp('information', error_message, "top", 5000);
 
-			if(url == "/core/api/contacts/delete?action=DELETE")
+			if(url && url.indexOf("/core/api/contacts/delete?action=DELETE") == 0)
 			{
 				var $trEle = $("#leads-table > tbody > tr");
-				for(var i=0;i<id_array.length;i++)
+				if(id_array && id_array.length > 0)
 				{
-					$trEle.find("td[data="+id_array[i]+"]:first").parent().fadeOut(300, function() { $(this).remove(); });
+					for(var i=0;i<id_array.length;i++)
+					{
+						App_Leads.leadsListView.collection.remove(id_array[i]);
+						$trEle.find("td[data="+id_array[i]+"]:first").parent().fadeOut(300, function() { $(this).remove(); });
+					}
+				}
+				else
+				{
+					$trEle.each(function(){
+						$(this).fadeOut(300, function() { $(this).remove(); });
+					});
 				}
 				$("#bulk-delete", $("#bulk-action-btns")).find("img").remove();
 				if($(".thead_check").is(":checked"))
@@ -188,7 +198,19 @@ var LeadsBulkActions = (function(){
 				}
 				else
 				{
-					$("#bulk-action-btns", $(".leads-div")).find("button").attr("disabled", true);
+					$("#bulk-action-btns button").addClass("disabled");
+				}
+				
+				$('body').find('#bulk-select').css('display', 'none');
+
+				if((App_Leads.leadsListView.collection.models.length > 0 && !App_Leads.leadsListView.collection.models[0].get("count")) || App_Leads.leadsListView.collection.models.length == 0)
+				{
+					// Call to get Count 
+					getAndUpdateCollectionCount("leads", $("#content"));					
+				}
+				else
+				{
+					App_Leads.leadsViewLoader.setUpLeadsCount($("#content"));
 				}
 			}
 		} });

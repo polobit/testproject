@@ -37,7 +37,7 @@ var timeline_entity_loader = {
 
 		this.load_related_entites(contactId);
 		this.load_stats(contact);
-		if((contact && contact.type != "LEAD") || !contact)
+		if((contact && contact.type != "LEAD"))
 		{
 			this.load_campaign_logs(contactId);
 		
@@ -122,7 +122,10 @@ var timeline_entity_loader = {
 						
 						});
 
-					if(App_Contacts.contactDetailView.model.get('id') !== contact.id)
+					if(App_Contacts.contactDetailView && App_Contacts.contactDetailView.model.get('id') !== contact.id)
+						return;
+
+					if(App_Leads.leadDetailView && App_Contacts.leadDetailView.model.get('id') !== contact.id)
 						return;
 
 					var contact_emails = [];

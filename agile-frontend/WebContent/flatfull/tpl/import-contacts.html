@@ -929,7 +929,7 @@
 				{{#canSyncContacts}}
 					{{#if ../type}}
 						<span class="btn btn-sm btn-default inline-block" disabled="">{{agile_lng_translate 'contacts-view' 'upload-csv-file'}}</span>
-						<a href="/flatfull/images/SampleContacts.csv" title=" {{agile_lng_translate 'other' 'sample-csv-file'}}" download><i class="fa fa-download btn btn-sm  btn-default inline-block" style="margin-left: -2px;border-left: 0px;border-radius: 0px 2px 2px 0px;"></i></a>
+						<a href="/flatfull/csv/sample-leads.csv" title=" {{agile_lng_translate 'other' 'sample-csv-file'}}" download><i class="fa fa-download btn btn-sm  btn-default inline-block" style="margin-left: -2px;border-left: 0px;border-radius: 0px 2px 2px 0px;"></i></a>
 						<span class="m-l-xs"><i>
 							{{#if total_count}}
 								{{agile_lng_translate 'contacts-view' 'import-in-process'}}
@@ -940,11 +940,11 @@
 						
 					{{else}}
            				<div class="btn btn-sm upload upload-contacts-ele btn-default inline-block">{{agile_lng_translate 'contacts-view' 'upload-csv-file'}}</div>
-           				<a href="/flatfull/images/SampleContacts.csv" title="{{agile_lng_translate 'other' 'sample-csv-file'}}" download><i class="fa fa-download btn btn-sm  btn-default inline-block" style="margin-left: -2px;border-left: 0px;border-radius: 0px 2px 2px 0px;"></i></a>
+           				<a href="/flatfull/csv/sample-leads.csv" title="{{agile_lng_translate 'other' 'sample-csv-file'}}" download><i class="fa fa-download btn btn-sm  btn-default inline-block" style="margin-left: -2px;border-left: 0px;border-radius: 0px 2px 2px 0px;"></i></a>
            			{{/if}}
 				{{else}}
            				<span class="btn btn-sm btn-default inline-block" disabled="">{{agile_lng_translate 'contacts-view' 'upload-csv-file'}}</span>
-           				<a href="/flatfull/images/SampleContacts.csv" title="Sample CSV file" download><i class="fa fa-download btn btn-sm  btn-default inline-block" style="margin-left: -2px;border-left: 0px;border-radius: 0px 2px 2px 0px;"></i></a>
+           				<a href="/flatfull/csv/sample-leads.csv" title="Sample CSV file" download><i class="fa fa-download btn btn-sm  btn-default inline-block" style="margin-left: -2px;border-left: 0px;border-radius: 0px 2px 2px 0px;"></i></a>
 						<span class="m-l-xs"><i>{{agile_lng_translate 'prefs-data-sync' 'needs-import-privilege'}}</i></span>
 				{{/canSyncContacts}}
 			</fieldset>

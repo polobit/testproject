@@ -1,9 +1,12 @@
 package com.agilecrm.bulkaction.deferred;
 
+import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 
+import com.agilecrm.activities.Category;
+import com.agilecrm.activities.util.CategoriesUtil;
 import com.agilecrm.bulkaction.BulkActionAdaptor;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.ContactUtil;
@@ -43,7 +46,15 @@ public class LeadsStatusChangeDeferredTask extends BulkActionAdaptor
     @Override
     protected void performAction()
     {
-	ContactUtil.changeStatusToLeadsBulk(fetchContacts(), new_status);
+    //To get lead conversion status
+    CategoriesUtil categoriesUtil =new CategoriesUtil();
+    Category status = categoriesUtil.getCategory(Long.valueOf(new_status));
+    boolean is_conversion_status = false;
+    if(status != null)
+    {
+    	is_conversion_status = status.getIs_conversion_flag();
+    }
+	ContactUtil.changeStatusToLeadsBulk(fetchContacts(), new_status, is_conversion_status);
     }
 
 }

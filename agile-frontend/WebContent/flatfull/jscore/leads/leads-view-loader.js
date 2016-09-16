@@ -320,8 +320,9 @@ var LeadsViewLoader = (function(){
 				//To set lead statuses
 				fillSelect('lead_status_select', '/core/api/categories?entity_type=LEAD_STATUS', undefined, function()
 				{
-					
-				}, "<option value='{{id}}'>{{label}}</option>", false, $('#lhs_filters_conatiner', cel));
+					//Removing status which is mapped to lead conversion to contact
+					$("#lead_status_select", cel).find("option[data-conversion=true]").remove();
+				}, "<option value='{{id}}' data-conversion='{{is_conversion_flag}}'>{{label}}</option>", false, $('#lhs_filters_conatiner', cel));
 			} 
 		});
 

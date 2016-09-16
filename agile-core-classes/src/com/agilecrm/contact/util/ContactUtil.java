@@ -53,6 +53,7 @@ import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.CacheUtil;
 import com.agilecrm.util.MD5Util;
 import com.agilecrm.workflows.status.CampaignStatus;
+import com.amazonaws.services.route53domains.model.ContactType;
 import com.campaignio.cron.util.CronUtil;
 import com.campaignio.logger.util.LogUtil;
 import com.campaignio.tasklets.agile.CheckCampaign;
@@ -2209,7 +2210,7 @@ public static Contact searchMultipleContactByEmail(String email,Contact contact)
      *            update leads with new status
      * @return
      */
-    public static void changeStatusToLeadsBulk(List<Contact> contacts_list, String new_status)
+    public static void changeStatusToLeadsBulk(List<Contact> contacts_list, String new_status, boolean is_conversion_status)
     {
 	if (contacts_list.size() == 0 || new_status == null)
 	{
@@ -2231,8 +2232,12 @@ public static Contact searchMultipleContactByEmail(String email,Contact contact)
 
 	    if (statusId != null && !statusId.equals(new_status))
 	    {
-			//contact.setLead_status_id(Long.valueOf(new_status));
 			contact.setLeadStatus(newStatusKey);
+			if (is_conversion_status)
+			{
+				contact.type = Contact.Type.PERSON;
+				contact.setIs_lead_converted(is_conversion_status);
+			}
 			builderObjects.add(contactDocuments.buildDocument(contact));
 			++i;
 	    }
