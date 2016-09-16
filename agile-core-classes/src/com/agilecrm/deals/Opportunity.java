@@ -635,7 +635,8 @@ public class Opportunity extends Cursor implements Serializable
 	    this.won_date = System.currentTimeMillis() / 1000;
 	if(oldOpportunity != null){
 		if (oldOpportunity.currency_type != null && oldOpportunity.currency_conversion_value != null){
-			if(this.currency_conversion_value == oldOpportunity.currency_conversion_value && this.currency_type == oldOpportunity.currency_type)
+			int retVal = Double.compare(oldOpportunity.currency_conversion_value, this.currency_conversion_value);
+			if(retVal ==0 && this.currency_type.equals(oldOpportunity.currency_type))
 				isCurrencyUpdateRequired = false;
 		}				
 	}
@@ -966,10 +967,8 @@ public class Opportunity extends Cursor implements Serializable
 			String deal_currency_type = currency_type.substring(0, 3);
 			if (deal_currency_type == null)
 				deal_currency_type = userpref_currency_type;
-			double pre_conversion_value_numerator = (double) listOfRates
-					.getDouble(deal_currency_type);
-			double pre_conversion_value_denominator = (double) listOfRates
-					.getDouble(userpref_currency_type);
+			double pre_conversion_value_numerator = listOfRates.getDouble(deal_currency_type);
+			double pre_conversion_value_denominator = listOfRates.getDouble(userpref_currency_type);
 
 			if (userpref_currency_type.equalsIgnoreCase(deal_currency_type)) {
 				expected_value = currency_conversion_value;

@@ -43,7 +43,7 @@
                             {{/if}}
                         </div>
                     </div>
-
+                    {{#is_enterprise_plan "enterprise" plan}}
                      <div class="control-group form-group">
                         <label class="control-label col-sm-4 col-xs-4">Currency</label> 
                         <div class="controls col-sm-8 col-xs-8">
@@ -144,7 +144,7 @@
                     </select>
                         </div>
                     </div>
-                    
+                    {{/is_enterprise_plan}}
                     <div class="control-group form-group">
                         <label class="control-label col-sm-4 col-xs-4">Company Name <span class="field_req">*</span></label> 
                         <div class="controls col-sm-8 col-xs-8">

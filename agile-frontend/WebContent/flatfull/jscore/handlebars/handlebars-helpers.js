@@ -7684,3 +7684,10 @@ Handlebars.registerHelper('if_asc_sork_key', function(value, options)
 	else
 		return options.fn(this); 
 });
+Handlebars.registerHelper('is_enterprise_plan', function(name, plan, options)
+{
+	if (plan && (plan.plan_type == 'ENTERPRISE_MONTHLY' || plan.plan_type == 'ENTERPRISE_YEARLY'  || plan.plan_type == 'ENTERPRISE_BIENNIAL')) {
+		return options.fn(this);
+	}
+	return options.inverse(this);
+});
