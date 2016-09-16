@@ -319,7 +319,7 @@ public class IMAPAPI
 	    String imapURL = ContactImapUtil.getNewIMAPURL(normalisedFromEmail, cursor, pageSize, foldernames,"","","");
 
 	    if (StringUtils.isNotBlank(imapURL))
-		emails = ContactEmailUtil.getEmailsfromServer(imapURL, pageSize, cursor, normalisedFromEmail);
+		emails = ContactEmailUtil.getInboxEmailsfromServer(imapURL, pageSize, cursor, normalisedFromEmail);
 	}
 	catch (Exception e)
 	{
@@ -350,7 +350,7 @@ public class IMAPAPI
 	    String imapURL = ContactImapUtil.getNewIMAPURL(normalisedFromEmail, cursor, pageSize, "",search_content,"","");
 
 	    if (StringUtils.isNotBlank(imapURL))
-		emails = ContactEmailUtil.getEmailsfromServer(imapURL, pageSize, cursor, normalisedFromEmail);
+		emails = ContactEmailUtil.getInboxEmailsfromServer(imapURL, pageSize, cursor, normalisedFromEmail);
 	}
 	catch (Exception e)
 	{

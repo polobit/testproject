@@ -533,17 +533,17 @@ public class ContactEmailUtil
 			// Add owner email to each email and parse each email body.
 			emailsArray = ContactEmailUtil.addOwnerAndParseEmailBody(emailsArray, fromEmail);
 
-			/*if (emailsArray.length() < Integer.parseInt(pageSize))
+			if (emailsArray.length() < Integer.parseInt(pageSize))
 				return new ObjectMapper().readValue(emailsArray.toString(), new TypeReference<List<EmailWrapper>>()
 				{
-				});*/
+				});
 
 			emailsList = new ObjectMapper().readValue(emailsArray.toString(), new TypeReference<List<EmailWrapper>>()
 			{
 			});
 
 			EmailWrapper lastEmail = emailsList.get(emailsList.size() - 1);
-			lastEmail.cursor = Integer.parseInt(cursor)+ ""; //(Integer.parseInt(cursor) + Integer.parseInt(pageSize)) + "";
+			lastEmail.cursor = (Integer.parseInt(cursor) + Integer.parseInt(pageSize)) + "";
 		}
 
 		catch (Exception e)
@@ -983,6 +983,58 @@ public class ContactEmailUtil
 			e.printStackTrace();
 			return false;
 		}
+	}
+	
+	/**
+	 * Fetches emails from server, server can be either IMAP,Microsoft Exchange
+	 * Fetches emails based on pageSize and cursor
+	 * 
+	 * @param url
+	 *            server url
+	 * @param pageSize
+	 *            number of items to fetch from server
+	 * @param cursor
+	 *            the offset
+	 * @return
+	 */
+	public static List<EmailWrapper> getInboxEmailsfromServer(String url, String pageSize, String cursor, String fromEmail)
+	{
+		List<EmailWrapper> emailsList = null;
+		try
+		{
+			// Returns imap emails, usually in form of {emails:[]}, if not build
+			// result like that.
+			String jsonResult = HTTPUtil.accessURL(url);
+
+			// Convert emails to json.
+			JSONObject emails = ContactEmailUtil.convertEmailsToJSON(jsonResult);
+
+			// Fetches JSONArray from {emails:[]}
+			JSONArray emailsArray = emails.getJSONArray("emails");
+
+			// Add owner email to each email and parse each email body.
+			emailsArray = ContactEmailUtil.addOwnerAndParseEmailBody(emailsArray, fromEmail);
+
+			/*if (emailsArray.length() < Integer.parseInt(pageSize))
+				return new ObjectMapper().readValue(emailsArray.toString(), new TypeReference<List<EmailWrapper>>()
+				{
+				});*/
+
+			emailsList = new ObjectMapper().readValue(emailsArray.toString(), new TypeReference<List<EmailWrapper>>()
+			{
+			});
+
+			EmailWrapper lastEmail = emailsList.get(emailsList.size() - 1);
+			lastEmail.cursor = Integer.parseInt(cursor)+ ""; //(Integer.parseInt(cursor) + Integer.parseInt(pageSize)) + "";
+		}
+
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			System.out.println(e.getMessage());
+			return null;
+		}
+		return emailsList;
 	}
 
 }

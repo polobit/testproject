@@ -348,7 +348,7 @@ public class SocialPrefsAPI
 		    .getGmailNewURL(normalisedFromEmail, cursor, pageSize, foldernames,"","","");
 	    // If both are not set, return Contact emails.
 	    if (StringUtils.isNotBlank(gmailURL))
-		emails = ContactEmailUtil.getEmailsfromServer(gmailURL, pageSize, cursor, normalisedFromEmail);
+		emails = ContactEmailUtil.getInboxEmailsfromServer(gmailURL, pageSize, cursor, normalisedFromEmail);
 	}
 	catch (Exception e)
 	{
@@ -384,7 +384,7 @@ public class SocialPrefsAPI
 		    .getGmailNewURL(normalisedFromEmail, cursor, pageSize,"", search_content,"","");
 	    // If both are not set, return Contact emails.
 	    if (StringUtils.isNotBlank(gmailURL))
-		emails = ContactEmailUtil.getEmailsfromServer(gmailURL, pageSize, cursor, normalisedFromEmail);
+		emails = ContactEmailUtil.getInboxEmailsfromServer(gmailURL, pageSize, cursor, normalisedFromEmail);
 	}
 	catch (Exception e)
 	{
