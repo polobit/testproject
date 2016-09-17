@@ -1,3 +1,9 @@
+/*
+ * Creates a class with necessary functions 
+ * to perform leads bulk action operations.
+ *
+ * @module Leads
+ */
 var LeadsBulkActions = (function(){
 
 	function LeadsBulkActions() {};
@@ -5,6 +11,14 @@ var LeadsBulkActions = (function(){
 	LeadsBulkActions.prototype.SELECT_ALL_LEADS = false;
 	LeadsBulkActions.prototype.BULK_LEADS = undefined;
 
+	/*
+	 * To enable/disable bulk actions like add tags, remove tags etc...
+	 * and enable/disable selection criteria.
+	 *
+	 * @param {Element} clicked_ele - represents the current element
+	 * @param {Boolean} isBulk - represents all leads are selected or not
+	 * @param {Boolean} isCampaign
+	 */
 	LeadsBulkActions.prototype.toggleLeadsBulkActions = function(clicked_ele, isBulk, isCampaign)
 	{
 		this.SELECT_ALL_LEADS = false;
@@ -68,6 +82,11 @@ var LeadsBulkActions = (function(){
 		}
 	}
 
+	/*
+	 * To get available leads count
+	 *
+	 * @return leads count
+	 */
 	LeadsBulkActions.prototype.getAvailableLeads = function()
 	{
 		if(App_Leads.leadsListView && App_Leads.leadsListView.collection && App_Leads.leadsListView.collection.length > 0)
@@ -78,6 +97,11 @@ var LeadsBulkActions = (function(){
 		return 0;
 	}
 
+	/*
+	 * To get selected lead ids, if all leads are not selected
+	 *
+	 * @return {JSONArray} id_array
+	 */
 	LeadsBulkActions.prototype.getLeadsBulkIds = function()
 	{
 		var id_array = [];
@@ -109,6 +133,17 @@ var LeadsBulkActions = (function(){
 		return id_array;
 	}
 
+	/*
+	 * Creates a bulk operation request and send
+	 * it to back end.
+	 *
+	 * @param {String} url - url to send request
+	 * @param {Object} data - data to send back end contains filter information or ids
+	 * @param {String} form - bulk action form id
+	 * @param {String} contentType - represents content type
+	 * @param {Function} callback - callback function
+	 * @param {String} error_message - to show the error message, if any
+	 */
 	LeadsBulkActions.prototype.postBulkOperationData = function(url, data, form, contentType, callback, error_message)
 	{
 		var id_array = data.contact_ids;
@@ -216,6 +251,12 @@ var LeadsBulkActions = (function(){
 		} });
 	}
 
+	/*
+	 * Get lhs filters data as JSON string. It will help
+	 * to perform bulk action based on lhs filters, if any.
+	 *
+	 * @return {String} dynamic_filter
+	 */
 	LeadsBulkActions.prototype.getDynamicFilters = function()
 	{
 		if(!App_Leads.leadsListView || !App_Leads.leadsListView.post_data)
@@ -242,6 +283,12 @@ var LeadsBulkActions = (function(){
 		}
 	}
 
+	/*
+	 * Get the applied static filter id to perform 
+	 * bulk action based on static filter.
+	 *
+	 * @return {String} filter_id
+	 */
 	LeadsBulkActions.prototype.getSelectionCriteria = function()
 	{
 		var filter_id = $('.filter-criteria', $(App_Leads.leadsListView.el)).attr("_filter");;
@@ -254,6 +301,11 @@ var LeadsBulkActions = (function(){
 		return "Leads";
 	}
 
+	/*
+	 * To show send email form with selected leads.
+	 *
+	 * @param {JSONArray} id_arry - lead ids to perform bulk action as array
+	 */
 	LeadsBulkActions.prototype.showBulkEmailForm = function(id_array)
 	{
 		var count = 0;
@@ -265,6 +317,11 @@ var LeadsBulkActions = (function(){
 		this.fillEmails(id_array);
 	}
 
+	/*
+	 * To fill verified emails list in send email form.
+	 *
+	 * @param {JSONArray} id_arry - lead ids to perform bulk action as array
+	 */
 	LeadsBulkActions.prototype.fillEmails = function(id_array)
 	{
 		var $emailForm = $('#emailForm');

@@ -1,7 +1,9 @@
 /**
  * Chains fields using jquery.chained library. It deserialzed data into form
  * 
- * @param el
+ * @param {Element} el - parent element
+ * @param {Object} data - lead filter object
+ * @param {Function} callback - callback function
  */
 function chainLeadFilters(el, data, callback)
 {
@@ -29,6 +31,12 @@ function chainLeadFilters(el, data, callback)
 	
 }
 
+/**
+ * To fill lead custom fields in staric filters.
+ * 
+ * @param {Element} el - parent element
+ * @param {Function} callback - callback function
+ */
 function fillLeadCustomFieldsInFilters(el, callback)
 {
 	$.getJSON("core/api/custom-fields/searchable/scope?scope=LEAD", function(fields){
@@ -38,6 +46,13 @@ function fillLeadCustomFieldsInFilters(el, callback)
 	});
 }
 
+/**
+ * Chains fields using jquery.chained library. It deserialzed data into form
+ * 
+ * @param {Element} el - parent element
+ * @param {Object} data - lead filter object
+ * @param {Function} callback - callback function
+ */
 function chainFiltersForLead(el, data, callback) {
 	if(data) {
 		chainLeadFilters($(el).find('.chained-table.lead.and_rules'), data.rules, undefined);

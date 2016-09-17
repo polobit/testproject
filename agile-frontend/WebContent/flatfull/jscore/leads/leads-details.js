@@ -1,7 +1,19 @@
+/**
+ * Creates leads details view with timeline,
+ * notes, tasks, events, deals etc... information
+ * 
+ * @module Leads
+ */
 var LeadDetails = (function(){
 
 	function LeadDetails() {};
 
+	/*
+	 * To show lead tabs tasks, events, timeline etc...
+	 * 
+	 * @param {Element} el - parent element
+	 * @param {Object} - lead object to show lead information
+	 */
 	LeadDetails.prototype.loadLeadTabs = function(el, leadJSON)
 	{
 		timeline_collection_view = null;
@@ -60,6 +72,9 @@ var LeadDetails = (function(){
 
 	}
 
+	/*
+	 * To load relevant lead timeline
+	 */
 	LeadDetails.prototype.loadTimeline = function()
 	{
 	    $('div.tab-content', App_Leads.leadDetailView.el).find('div.active').removeClass('active');	
@@ -76,6 +91,9 @@ var LeadDetails = (function(){
         this.activateLeadTab(ele);
 	}
 
+	/*
+	 * To load relevant lead notes
+	 */
 	LeadDetails.prototype.loadNotes = function()
 	{
 	    var id = App_Leads.leadDetailView.model.id;
@@ -101,6 +119,9 @@ var LeadDetails = (function(){
         this.activateLeadTab(ele);
 	}
 
+	/*
+	 * To load relevant lead events
+	 */
 	LeadDetails.prototype.loadEvents = function()
 	{
 		var id = App_Leads.leadDetailView.model.id;
@@ -131,6 +152,9 @@ var LeadDetails = (function(){
         this.activateLeadTab(ele);
 	}
 
+	/*
+	 * To load relevant lead tasks
+	 */
 	LeadDetails.prototype.loadTasks = function()
 	{
 		var id = App_Leads.leadDetailView.model.id;
@@ -162,6 +186,9 @@ var LeadDetails = (function(){
         this.activateLeadTab(ele);
 	}
 
+	/*
+	 * To load relevant lead deals
+	 */
 	LeadDetails.prototype.loadDeals = function ()
 	{
 		var id = App_Leads.leadDetailView.model.id;
@@ -186,6 +213,9 @@ var LeadDetails = (function(){
         this.activateLeadTab(ele);
 	}
 
+	/*
+	 * To load relevant lead mails
+	 */
 	LeadDetails.prototype.loadMails = function (mail_server_url, email_server)
 	{
 		var _this = this;
@@ -232,6 +262,9 @@ var LeadDetails = (function(){
         this.activateLeadTab(ele);
 	}
 
+	/*
+	 * To load relevant lead documents
+	 */
 	LeadDetails.prototype.loadDocs = function()
 	{
 		var id = App_Leads.leadDetailView.model.id;
@@ -252,6 +285,12 @@ var LeadDetails = (function(){
         this.activateLeadTab(ele);
 	}
 
+	/*
+	 * Saves selected lead tab as local storage variable
+	 * to show correct tab from second time onwards.
+	 *
+	 * @param {String} tab_href - represents selected tab name
+	 */
 	LeadDetails.prototype.saveLeadTabPosition = function (tab_href)
 	{
 		var position = _agile_get_prefs("lead_tab_position");
@@ -262,12 +301,24 @@ var LeadDetails = (function(){
 		_agile_set_prefs("lead_tab_position", tab_href);
 	}
 
+	/*
+	 * Shows selected tab as active tab.
+	 *
+	 * @param {String} ele - selected tab id
+	 */
 	LeadDetails.prototype.activateLeadTab = function(ele)
 	{
 		$('#contact-tab-content .tab-pane').removeClass('active');
 		$(ele).addClass('active');
 	}
 
+	/*
+	 * Gets lead properties list based on property name.
+	 *
+	 * @param {String} propertyName - lead property name
+	 *
+	 * @return {List} property_list
+	 */
 	LeadDetails.prototype.getLeadPropertiesList = function(propertyName)
 	{
 		// Reads current contact model form the contactDetailView
@@ -765,7 +816,7 @@ var LeadDetails = (function(){
 		return cookie_info;
 	}
 
-	function showMailsInfoMessages()
+	LeadDetails.prototype.showMailsInfoMessages = function ()
 	{
 		this.showMailsErrorMessages();
 		if(mailsView.collection.length > 20)
@@ -778,13 +829,15 @@ var LeadDetails = (function(){
 		$('#mail-account-types', App_Leads.leadDetailView.el).find('.all-mails-loading').remove();
 		$('#mail', App_Leads.leadDetailView.el).find("#no-email").css('display','block');
 	}
-	function showMailsErrorMessages()
+
+	LeadDetails.prototype.showMailsErrorMessages = function ()
 	{
 		for(var i=0;i<email_errors_divs.length;i++)
 			$('#mails',App_Leads.leadDetailView.el).prepend(email_errors_divs[i]);
 		email_errors_divs = [];
 	}
-	function ifNoError(email)
+
+	LeadDetails.prototype.ifNoError = function(email)
 	{
 		if(email && 'errormssg' in email && 'owner_email' in email)
 		{
@@ -795,7 +848,7 @@ var LeadDetails = (function(){
 		return true;
 	}
 
-	function show_no_email_alert()
+	LeadDetails.prototype.show_no_email_alert = function()
 	{
 		$('#mail', App_Leads.leadDetailView.el).html('<div class="alert alert-danger m-t-sm m-sm"><a class="close" data-dismiss="alert" href="#">&times;</a>{{agile_lng_translate "contact-details" "sorry-this-contact-has-no-email-to-get-the-mails"}}</div>');
 	}

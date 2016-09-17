@@ -1,3 +1,8 @@
+/*
+ * Creates backbone collection view with lead timeline information.
+ * It contains functions like appendItem to append lead timeline items,
+ * addItems to add timeline items, render to render timeline etc...
+ */
 var lead_timeline_view = Backbone.View.extend({ initialize : function()
 {
 	// Binds functions to view

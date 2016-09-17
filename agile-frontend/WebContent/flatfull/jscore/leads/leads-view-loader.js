@@ -1,10 +1,22 @@
+/**
+ * Creates leads list view, grid view, static filters 
+ * and lhs filters operations.
+ * 
+ * @module Leads
+ */
 var LeadsViewLoader = (function(){
 
+	//Basic constructor
 	function LeadsViewLoader() {};
 
 	LeadsViewLoader.prototype.LEADS_CUSTOM_SORT_VIEW = undefined;
 	LeadsViewLoader.prototype.LEAD_CUSTOM_FIELDS = undefined;
 
+	/*
+	 * To fetch leads hedings like first name, last name etc...
+	 * which are selected by user.
+	 *
+	 */
 	LeadsViewLoader.prototype.fetchHeadings = function(callback)
 	{
 		if (!App_Leads.leadViewModel)
@@ -27,6 +39,13 @@ var LeadsViewLoader = (function(){
 		}
 	}
 
+	/*
+	 * To get leads based and filter conditions.
+	 * 
+	 * @param {Object} modelData - represents the headers which are selected by user
+	 * @param {Element} el - represents parent element to render leads list view or grid view
+	 * @param {String} tag_id - to filter leads based on tag
+	 */
 	LeadsViewLoader.prototype.getLeads = function(modelData, el, tag_id)
 	{
 		/**
@@ -89,6 +108,11 @@ var LeadsViewLoader = (function(){
 		}
 	}
 
+	/*
+	 * Construct url to get leads based and filter conditions or tag.
+	 * 
+	 * @param {String} tag_id - to filter leads based on tag
+	 */
 	LeadsViewLoader.prototype.getLeadsUrl = function(tag_id)
 	{
 		if(tag_id)
@@ -110,6 +134,14 @@ var LeadsViewLoader = (function(){
 		return "/core/api/leads/list";
 	}
 
+	/*
+	 * To show lead static filter name as a tag in list or grid view.
+	 * If leads are fitered based on tag, show tag name, filtered based
+	 * on static filters, show filter name as a tag.
+	 * 
+	 * @param {Element} el - represents parent element to show filter name
+	 * @param {String} tag_id - to show the tag name based on tag id
+	 */
 	LeadsViewLoader.prototype.setupLeadFilterName = function(el, tag_id)
 	{
 		if (tag_id){
@@ -142,6 +174,11 @@ var LeadsViewLoader = (function(){
 		$('.filter-criteria', el).html(template({name : filter_name})).attr("_filter", lead_filter_id);
 	}
 
+	/*
+	 * To get leads sort key to show leads in sorting order.
+	 * Default sort option is created time with desending order.
+	 *
+	 */
 	LeadsViewLoader.prototype.getLeadsSortKey = function()
 	{
 		var sortKey = _agile_get_prefs("lead_sort_field");
@@ -153,6 +190,11 @@ var LeadsViewLoader = (function(){
 		return "-created_time";
 	}
 
+	/*
+	 * Get leads template (list / grid) to render leads based on selected view.
+	 *
+	 * @return {TemplateKey} templateKey
+	 */
 	LeadsViewLoader.prototype.getLeadsTemplateKey = function()
 	{
 		var templateKey = "leads-list-view";
@@ -164,6 +206,11 @@ var LeadsViewLoader = (function(){
 		return templateKey;
 	}
 
+	/*
+	 * Get leads individual element (tr / div) to form leads collection.
+	 *
+	 * @return {Element} individualTagName
+	 */
 	LeadsViewLoader.prototype.getLeadsIndividualTagName = function()
 	{
 		var individualTagName = "tr";
@@ -175,6 +222,11 @@ var LeadsViewLoader = (function(){
 		return individualTagName;
 	}
 
+	/*
+	 * To send dynamic filters (lhs filters) data along with request as string.
+	 *
+	 * @return {String} lhs_filter_data
+	 */
 	LeadsViewLoader.prototype.getPostData = function()
 	{
 		var lhs_filter_data = _agile_get_prefs('dynamic_lead_filter');
@@ -185,6 +237,11 @@ var LeadsViewLoader = (function(){
 		return "";
 	}
 
+	/*
+	 * To setup leads list view or grid view based on cookie value.
+	 *
+	 * @param {Element} cel - parent element
+	 */
 	LeadsViewLoader.prototype.setUpLeadView = function(cel)
 	{
 		if (_agile_get_prefs("agile_lead_view"))
@@ -204,6 +261,11 @@ var LeadsViewLoader = (function(){
 		return;
 	}
 
+	/*
+	 * To show leads count. If count already present don't send server call again.
+	 *
+	 * @param {Element} el - parent element
+	 */
 	LeadsViewLoader.prototype.setUpLeadsCount = function(el)
 	{
 		if(App_Leads.leadsListView && App_Leads.leadsListView.collection) 
@@ -221,6 +283,11 @@ var LeadsViewLoader = (function(){
 		}
 	}
 
+	/*
+	 * To show lead column names which are selectable.
+	 *
+	 * @param {Element} el - parent element
+	 */
 	LeadsViewLoader.prototype.setupLeadFields = function(el)
 	{
 		$('#lead-static-fields-group', el).html(getTemplate("lead-custom-fields"));
@@ -253,6 +320,12 @@ var LeadsViewLoader = (function(){
 		});
 	}
 
+	/*
+	 * Setup leads sort options like first name, last name, created date etc...
+	 * It includes searchable custom fields also.
+	 *
+	 * @param {Element} el - parent element
+	 */
 	LeadsViewLoader.prototype.setUpLeadSortFilters = function(el)
 	{
 		var that = this;
@@ -286,6 +359,11 @@ var LeadsViewLoader = (function(){
 		
 	}
 
+	/*
+	 * Setup leads lhs filters which includes searchable custom fields.
+	 *
+	 * @param {Element} cel - parent element
+	 */
 	LeadsViewLoader.prototype.setupLhsFilters = function(cel)
 	{
 		var that = this;
@@ -329,6 +407,13 @@ var LeadsViewLoader = (function(){
 		$('#lhs_filters_conatiner', cel).html(App_Leads.leadsLHSFilter.render().el);
 	}
 
+	/*
+	 * Setup leads static filters, set the appropriate filter name as 
+	 * tag after render the filters.
+	 *
+	 * @param {Element} cel - parent element
+	 * @param {String} tag_id - tag id to represent the tag name
+	 */
 	LeadsViewLoader.prototype.setupFilterList = function(cel, tag_id)
 	{
 		App_Leads.leadFiltersListView = new Leads_Filter_Collection_Events_View(
@@ -351,6 +436,12 @@ var LeadsViewLoader = (function(){
 		$('#filter-list', cel).html(App_Leads.leadFiltersListView.render().el);
 	}
 
+	/*
+	 * Setup lead sources in lhs filters, static filters, add and edit lead forms.
+	 *
+	 * @param {Element} el - parent element
+	 * @param {Object} obj - source object to set relevant source name in lead edit form
+	 */
 	LeadsViewLoader.prototype.setupSources = function(el, obj)
 	{
 		var that = this;
@@ -369,6 +460,13 @@ var LeadsViewLoader = (function(){
 		
 	}
 
+	/*
+	 * To render lead sources view in lhs filters, static filters, add and edit lead forms.
+	 *
+	 * @param {Element} el - parent element
+	 * @param {Object} obj - source object to set relevant source name in lead edit form
+	 * @param {Collection} data - sources collection
+	 */
 	LeadsViewLoader.prototype.setupSourcesView = function(el, obj, data)
 	{
 		if(data && el)
@@ -388,6 +486,12 @@ var LeadsViewLoader = (function(){
 		
 	}
 
+	/*
+	 * Setup lead statuses in lhs filters, static filters, add and edit lead forms.
+	 *
+	 * @param {Element} el - parent element
+	 * @param {Object} obj - status object to set relevant status name in lead edit form
+	 */
 	LeadsViewLoader.prototype.setupStatuses = function(el, obj)
 	{
 		var that = this;
@@ -406,6 +510,13 @@ var LeadsViewLoader = (function(){
 		
 	}
 
+	/*
+	 * To render lead statuses view in lhs filters, static filters, add and edit lead forms.
+	 *
+	 * @param {Element} el - parent element
+	 * @param {Object} obj - status object to set relevant status name in lead edit form
+	 * @param {Collection} data - statuses collection
+	 */
 	LeadsViewLoader.prototype.setupStatusesView = function(el, obj, data)
 	{
 		if(data && el)
@@ -435,6 +546,11 @@ var LeadsViewLoader = (function(){
 		
 	}
 
+	/*
+	 * To show leads import view based on leads import status.
+	 *
+	 * @param {Element} el - parent element
+	 */
 	LeadsViewLoader.prototype.setupImportView = function(el)
 	{
 		App_Leads.importLeadsView = new CONTACTS_IMPORT_VIEW({
@@ -445,6 +561,13 @@ var LeadsViewLoader = (function(){
 		$('#leads-import', el).html(App_Leads.importLeadsView.render().el);
 	}
 
+	/*
+	 * To build comlete leads list or grid view by invoke different functions.
+	 * Leads view contains filters (static and dynamic), sort options and view set up.
+	 *
+	 * @param {Element} el - parent element
+	 * @param {String} tag_id - tag id to filter leads based on tags.
+	 */
 	LeadsViewLoader.prototype.buildLeadsView = function(el, tag_id)
 	{
 		var that = this;

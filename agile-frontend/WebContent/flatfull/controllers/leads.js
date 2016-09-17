@@ -1,3 +1,9 @@
+/**
+ * Creates backbone router for leads to create, read and update
+ * operations
+ *
+ * @module Leads
+ */
 LEADS_HARD_RELOAD = true;
 var LEADS_DYNAMIC_FILTER_COOKIE_STATUS = "toggle_leads_lhs_filters_" + CURRENT_DOMAIN_USER.id;
 var LeadsRouter = Backbone.Router.extend({
@@ -10,6 +16,9 @@ var LeadsRouter = Backbone.Router.extend({
 		"lead-edit" : "editLead"
 	},
 
+	/*
+	 * To get Leads and build leads view.
+	 */
 	leads : function()
 	{
 		var that = this;
@@ -30,6 +39,9 @@ var LeadsRouter = Backbone.Router.extend({
 		$('[data-toggle="tooltip"]').tooltip();
 	},
 
+	/*
+	 * To get lead filters and build lead filters list view.
+	 */
 	leadFilters : function()
 	{
 		this.leadFiltersList = new Base_Collection_View({ url : '/core/api/filters?type=LEAD', restKey : "ContactFilter", templateKey : "leads-filter",
@@ -47,6 +59,9 @@ var LeadsRouter = Backbone.Router.extend({
 		$("#content").html(this.leadFiltersList.render().el);
 	},
 
+	/*
+	 * To add lead filter
+	 */
 	leadFilterAdd : function()
 	{
 
@@ -66,6 +81,9 @@ var LeadsRouter = Backbone.Router.extend({
 		leadFilter.render();		
 	},
 
+	/*
+	 * To edit lead filter
+	 */
 	leadFilterEdit : function(id)
 	{
 		if (!this.leadFiltersList || this.leadFiltersList.collection.length == 0 || this.leadFiltersList.collection.get(id) == null)
@@ -91,6 +109,9 @@ var LeadsRouter = Backbone.Router.extend({
 		leadFilter.render();		
 	},
 
+	/*
+	 * To render lead details view
+	 */
 	leadsDetails : function(id, lead)
 	{
 		// For getting custom fields
@@ -205,6 +226,9 @@ var LeadsRouter = Backbone.Router.extend({
 		
 	},
 
+	/*
+	 * To edit lead
+	 */
 	editLead : function(lead)
 	{
 		var lead = null;

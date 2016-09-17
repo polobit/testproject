@@ -1,3 +1,7 @@
+/*
+ * Create, read and update leads sort options.
+ *
+ */
 (function(LEAD_SORT_FIELDS_VIEW, $, undefined) {
 	var config = null;
 	LEAD_SORT_FIELDS_VIEW.view = function ()
