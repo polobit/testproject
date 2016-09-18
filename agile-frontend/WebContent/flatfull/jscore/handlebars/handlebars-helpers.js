@@ -7661,10 +7661,42 @@ Handlebars.registerHelper('can_api_js_serve_from_cloud', function(options)
 	else
 		return options.inverse(this);
 });
-
 Handlebars.registerHelper('agile_lng_translate', function(key, value, options)
 {
 	console.log("Not found " + key + " : " + value);
+});
+Handlebars.registerHelper('getContactNamefromprop', function(properties,position)
+{
+	switch("position")
+	{
+		case "pos1" : if(CURRENT_USER_PREFS.contactsSwap == "fl")
+						return	properties.first_name;
+						else
+						return properties.last_name;
+
+		case "pos2" : if(CURRENT_USER_PREFS.contactsSwap == "lf")
+						return	properties.first_name;
+						else
+						return properties.last_name;
+
+	}
+});
+
+Handlebars.registerHelper('getContactNamefromjson', function(properties,position)
+{
+	switch("position")
+	{
+		case "pos1" : if(CURRENT_USER_PREFS.contactsSwap == "fl")
+						return	properties[1].first_name;
+						else
+						return properties[2].last_name;
+
+		case "pos2" : if(CURRENT_USER_PREFS.contactsSwap == "lf")
+						return	properties[0].first_name;
+						else
+						return properties[1].last_name;
+
+	}
 });
 
 //returning 0sec in case of no time
