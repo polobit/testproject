@@ -2055,6 +2055,8 @@ public class CSVUtil
     	    boolean isMerged = false;
     	    boolean is_source_added = false;
     	    boolean is_status_added = false;
+    	    boolean is_source_mismatch = false;
+    	    boolean is_status_mismatch = false;
     	    try
     	    {
     		// create dummy contact
@@ -2161,13 +2163,14 @@ public class CSVUtil
 				}
 		    	else
 		    	{
-		    		Long source_id = leadSources.get(csvValues[j]);
+		    		Long source_id = leadSources.get(StringUtils.lowerCase(csvValues[j]));
 		    		if(source_id != null && source_id > 0)
 		    		{
 		    			tempContact.setLead_source_id(source_id);
 		    		}
 		    		else
 		    		{
+		    			is_source_mismatch = true;
 		    			sourceMismatched++;
 		    			failedContacts.add(new FailedContactBean(getDummyContact(properties, csvValues),
 		        				"source mismatched"));
@@ -2186,13 +2189,14 @@ public class CSVUtil
 				}
 		    	else
 		    	{
-		    		Long status_id = leadStatuses.get(csvValues[j]);
+		    		Long status_id = leadStatuses.get(StringUtils.lowerCase(csvValues[j]));
 		    		if(status_id != null && status_id > 0)
 		    		{
 		    			tempContact.setLead_status_id(status_id);
 		    		}
 		    		else
 		    		{
+		    			is_status_mismatch = true;
 		    			statusMismatched++;
 		    			failedContacts.add(new FailedContactBean(getDummyContact(properties, csvValues),
 		        				"status mismatched"));
@@ -2309,6 +2313,10 @@ public class CSVUtil
     		}
 
     		tempContact.bulkActionTracker = bulk_action_tracker;
+    		if(is_source_mismatch || is_status_mismatch)
+    		{
+    			continue;
+    		}
     		//If no source added, set Other as source
     		if(!is_source_added)
     		{
@@ -2520,7 +2528,7 @@ public class CSVUtil
     {
 	if (totalRecords >= 1)
 	{
-	    String[] strArr = { "text/csv", "FailedContacts.csv", csvData };
+	    String[] strArr = { "text/csv", "FailedLeads.csv", csvData };
 	    SendMail.sendMail(domainUser.email, "CSV Leads Import Status", SendMail.CSV_IMPORT_NOTIFICATION,
 		    new Object[] { domainUser, status }, SendMail.AGILE_FROM_EMAIL, SendMail.AGILE_FROM_NAME, strArr);
 	}
