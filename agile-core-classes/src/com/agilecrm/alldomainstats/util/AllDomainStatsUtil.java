@@ -269,6 +269,13 @@ public class AllDomainStatsUtil {
    			  for(int index=0; index<jsonArray.length(); index++)
    			  {
    			      String nodeName = jsonArray.getJSONObject(index).getJSONObject("NodeDefinition").getString("name");
+   			      /***
+   			       *Adding this line if like A/B contains then it has 
+   			       *to replace with the "-"
+   			       */
+   			       
+   			      if(nodeName.contains("/"))
+   			    	  nodeName = nodeName.replace("/", "-");
    			      
    			      if(!nodeName.equals("Start"))
    			    	  addNodeStats(nodeName, nodesCountHashMap);
