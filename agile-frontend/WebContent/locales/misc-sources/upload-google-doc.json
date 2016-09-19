@@ -1,0 +1,6 @@
+{ 
+   "upload" : "{{agile_lng_translate 'others' 'upload'}}",
+   "upload-goog-doc" : "{{agile_lng_translate 'upload-google-doc' 'upload-goog-doc'}}",
+   "google-drive-doc" : "{{agile_lng_translate 'upload-google-doc' 'google-drive-doc'}}",
+   "select-doc" : "{{agile_lng_translate 'upload-google-doc' 'select-doc'}}",
+}
