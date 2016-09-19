@@ -302,7 +302,7 @@ public class RegisterServlet extends HttpServlet
 	request.getSession().setAttribute(IS_NEWLY_REGISTERED_USER_ATTR, new Boolean(true));
 	
 	// Set misc values at Register before sending user to home page.
-	LoginUtil.setMiscValuesAtLogin(request, domainUser);
+	new LoginUtil().setMiscValuesAtLogin(request, domainUser);
 	
 	// If request from plugins forward the request to jsp to call plugin callback
 	if(StringUtils.isNotBlank(originName))

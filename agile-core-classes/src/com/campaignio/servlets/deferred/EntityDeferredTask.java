@@ -63,6 +63,10 @@ public class EntityDeferredTask implements DeferredTask {
 				dao = new ObjectifyGenericDao<UserPrefs>(UserPrefs.class);
 				getLanguage(dao.fetchAll(), dao);
 				break;
+			case "getPrefcurrency":
+				dao = new ObjectifyGenericDao<UserPrefs>(UserPrefs.class);
+				getprefCurrency(dao.fetchAll(), dao);
+				break;
 			default:
 				break;
 			}
@@ -133,5 +137,33 @@ public class EntityDeferredTask implements DeferredTask {
 
 			dao.put(pageItem, true);
 		}
+	}
+	void getprefCurrency(List<UserPrefs> userPrefs, ObjectifyGenericDao<UserPrefs> dao) {
+		System.out.println("userPrefs = " + userPrefs.size());
+		int noofChanged = 0;
+		for (UserPrefs prefItem : userPrefs) {
+			
+
+			// Trim name and make dummy one to sore
+			if (StringUtils.isNotBlank(prefItem.currency) && StringUtils.equalsIgnoreCase(prefItem.currency.substring(0, 3), "SKK")) {
+				noofChanged++;
+			}
+
+		}
+
+		if (noofChanged < 1)
+			return;
+
+		{
+			String text = "Domain : " + NamespaceManager.get() + " : " + noofChanged;
+			try {
+				SendGrid.sendMail(null, null, "sankar@agilecrm.com", "Sankar", "sankar@agilecrm.com", null, null, "Lan", null,
+						text, text, null, new String[]{});
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
+			
+		}
+
 	}
 }

@@ -1,10 +1,10 @@
 <script id="affiliate-details-template" type="text/html">
   <div class="bg-light lter b-b wrapper-md">
-    <h3 class="h3 font-thin m-n">{{agile_lng_translate 'affiliate' 'affiliate-program'}}</h3>
+    <h3 class="h3 font-thin m-n">{{agile_lng_translate 'affiliate' 'affiliate-program'}}<small> <span class="label label-sm bg-danger">{{agile_lng_translate 'deal-view' 'beta'}}</span></small></h3>
   </div>
   <div class="wrapper-md">
   <div class="row">
-    <div class="col-md-9">
+    <div class="col-md-8">
       <div class="panel wrapper-lg b b-light">
         <form id="affiliate-details" class="form-horizontal">
             <fieldset>
@@ -309,7 +309,7 @@
                             <option value="AX" >{{agile_lng_translate 'countries' 'AX'}}</option>
                         </select>
                     </div>
-                    <span class="text-xs">{{agile_lng_translate 'affiliate' 'click_register'}} <a href="https://www.agilecrm.com/affiliate-terms.html" class="text-info">{{agile_lng_translate 'affiliate' 'terms_and_conditions'}}</a></span>
+                    <span class="text-xs">{{agile_lng_translate 'affiliate' 'click_register'}} <a href="https://www.agilecrm.com/affiliate-terms.html" class="text-info" target="_blank">{{agile_lng_translate 'affiliate' 'terms_and_conditions'}}</a></span>
                   </div>
                 </div>
                 <div class="line  b-b line-lg"></div>
@@ -325,9 +325,9 @@
             </fieldset>
         </form>
       </div>
-      <div class="col-md-3">
+      <div class="col-md-4">
         <div class="panel panel-default">
-        <div class="panel-header right-pane-header">{{agile_lng_translate 'affiliate' 'earn_20'}}</div>
+        <div class="panel-heading right-pane-header">{{agile_lng_translate 'affiliate' 'earn_20'}}</div>
         <div class="panel-body">
 	      <div class="data-block">
 		      <p>{{agile_lng_translate 'affiliate' 'p1'}}</p>
@@ -353,9 +353,9 @@
 		      <p>{{agile_lng_translate 'affiliate' 'p6'}}</p>
 	      </div>
 	      <div class="data-block">
-            <div class="p-sm">
-		      <p>{{agile_lng_translate 'affiliate' 'p7-1'}}<span class="font-bold text-muted">{{agile_lng_translate 'affiliate' 'p7-2'}}</span>
-              </p>
+            <div class="p-sm" style="background-color: #f8f8f8;">
+		      <p class="m-b-none">{{agile_lng_translate 'affiliate' 'p7-1'}}</p>
+              <div class="font-bold text-muted">{{agile_lng_translate 'affiliate' 'p7-2'}}</div>
             </div>
 	      </div>
         </div>

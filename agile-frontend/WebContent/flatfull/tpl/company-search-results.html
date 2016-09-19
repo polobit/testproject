@@ -1,5 +1,57 @@
-    <script id="company-search-model-template" type="text/html">
-    <td></td>
+<script id="company-search-model-template" type="text/html">
+{{#is_mobile}}
+    <td class="hide"></td>
+    <td class="data icon-append-mobile p-r-none" data="{{id}}">
+        <div class="table-resp" style="width:calc(100vw - 60px);">
+            <div class="agile-img m-r-sm thumb" style="margin-right:10px;">
+                {{#if_contact_type "COMPANY"}} <img class="img-inital r r-2x" {{getCompanyImage "40" "display:inline;"}} /> {{/if_contact_type}}
+            </div>
+            <div class="agile-thumb agile-thumb-view" style="width:calc(100% - 60px); margin-top:-5px;">
+                {{#if_contact_type "COMPANY"}} 
+                <div class="text-cap custom-link"> {{getPropertyValue properties "name"}}
+                </div> 
+               <div> 
+                    <small class="text-muted block text-ellipsis">{{getPropertyValue properties "url"}} 
+                    </small> 
+               </div>
+                {{/if_contact_type}}
+            </div>
+            <div class="overflow-hidden line-clamp line-clamp-2">
+               <div class="text-ellipsis">{{owner.name}}</div>
+            </div>
+            <div class="overflow-hidden line-clamp line-clamp-2">
+                {{#each tags}}
+                    <span class="label bg-light dk text-tiny">{{this}}</span>
+                {{/each}}
+            </div>
+            <!-- <div style="margin-left:59px">{{lead_score}}</div> -->
+        </div>
+    </td>
+    <td style="vertical-align:middle">
+        <div class="text-md text-muted contact-list-mobile text-right block">
+            <i class="fa fa-angle-right"></i>
+        </div>
+    </td>
+
+    <!-- <td>
+    <div class="overflow-hidden line-clamp line-clamp-2">
+           <div class="text-ellipsis">{{owner.name}}</div>
+    </div>
+    </td> -->
+
+    <!-- <td>
+     <div class="overflow-hidden line-clamp line-clamp-2">
+            {{#each tags}}
+                <span class="label bg-light dk text-tiny">{{this}}</span>
+            {{/each}}
+    </div>
+    </td> -->
+
+    <!-- <td>{{lead_score}}</td> -->
+
+{{else}} 
+
+<td></td>
     <td class="data" data="{{id}}">
     <div class="table-resp">
         <div class="thumb-sm agile-img m-r-sm" style="margin-right:10px;">
@@ -29,29 +81,48 @@
     </td>
 
     <td>{{lead_score}}</td>
+
+{{/is_mobile}}
+
    
     
 </script>
 <script id="company-search-collection-template" type="text/html">
-<div class="wrapper-md lter bg-light b-b">
-<div class="row">
-    <div class="col-md-12">
-       
-            
-           
-            <div id="search-query-heading" style="font-size:19px;"class="m-n font-thin h3  pull-left">Search results for 
-            <span style="font-weight:600;">"{{query}}"</span>
+{{#is_mobile}}
+    <div class="wrapper-md lter bg-light b-b">
+        <div class="row">
+            <div class="col-md-12">
+                <div id="search-query-heading" style="font-size:19px;" class="m-n font-thin h3  pull-left">Search results for 
+                    <span style="font-weight:bold;">"{{query}}"</span>
+                </div>
+                <!-- <div class="pull-right">
+                    <div class="btn-group" id="view-list">
+                    </div>
+                    <div class="btn-group right" id="filter-list">
+                    </div>
+                </div> -->
+                <div class="clearfix"></div>
             </div>
-            <div class="pull-right">
-            <div class="btn-group" id="view-list">
-            </div>
-            <div class="btn-group right" id="filter-list">
-            </div>
-            </div>
-        <div class="clearfix"></div>
+        </div>
     </div>
-</div>
-</div>
+{{else}}
+    <div class="wrapper-md lter bg-light b-b">
+        <div class="row">
+            <div class="col-md-12">
+                <div id="search-query-heading" style="font-size:19px;" class="m-n font-thin h3  pull-left">Search results for 
+                <span style="font-weight:600;">"{{query}}"</span>
+                </div>
+                <div class="pull-right">
+                    <div class="btn-group" id="view-list">
+                    </div>
+                    <div class="btn-group right" id="filter-list">
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    </div>
+{{/is_mobile}}
 <div class="row">
     <div class="col-md-12">
         {{#if this.length}}
@@ -71,24 +142,48 @@
                         <li><a href="#" id="bulk-tags">Add tags</a></li>
                     </ul>
                 </div>
-                <div class="table-responsive">
-                <table id="contacts_search" class="table table-striped  panel agile-table onlySorting  
-                table-layout-mob-view m-b-none" url="core/api/bulk/update?action_type=DELETE" style="table-layout:auto;">
-                    <thead>
-                        <tr>
 
-                            <th style="width:2%"></th>
-                            <th style="width:25%">{{agile_lng_translate 'deal-view' 'name'}}</th>
-                            <th  style="width:25%">{{agile_lng_translate 'contact-details' 'owner'}}</th>
-                            <th  style="width:30%">{{agile_lng_translate 'report-add' 'tags'}}</th>
-                            <th  style="width:25%">{{agile_lng_translate 'contact-details' 'lead-score'}}</th>
-                            
-                        </tr>
-                    </thead>
-                    <tbody id="company-search-model-list" class="model-list-cursor" route="contact/">
-                    </tbody>
-                </table>
+                {{#is_mobile}}
+                    <div>
+                        <table id="contacts_search" class="table table-striped  panel agile-table onlySorting  
+                        table-layout-mob-view m-b-none" url="core/api/bulk/update?action_type=DELETE" style="table-layout:auto;">
+                            <!-- <thead>
+                                <tr>
+
+                                    <th style="width:2%"></th>
+                                    <th style="width:25%">{{agile_lng_translate 'deal-view' 'name'}}</th>
+                                    <th  style="width:25%">{{agile_lng_translate 'contact-details' 'owner'}}</th>
+                                    <th  style="width:30%">{{agile_lng_translate 'report-add' 'tags'}}</th>
+                                    <th  style="width:25%">{{agile_lng_translate 'contact-details' 'lead-score'}}</th>
+                                    
+                                </tr>
+                            </thead> -->
+                            <tbody id="company-search-model-list" class="model-list-cursor" route="contact/">
+                            </tbody>
+                        </table>
+                    </div>
+                {{else}}
+                    <div class="table-responsive">
+                        <table id="contacts_search" class="table table-striped  panel agile-table onlySorting  
+                        table-layout-mob-view m-b-none" url="core/api/bulk/update?action_type=DELETE" style="table-layout:auto;">
+                            <thead>
+                                <tr>
+
+                                    <th style="width:2%"></th>
+                                    <th style="width:25%">{{agile_lng_translate 'deal-view' 'name'}}</th>
+                                    <th  style="width:25%">{{agile_lng_translate 'contact-details' 'owner'}}</th>
+                                    <th  style="width:30%">{{agile_lng_translate 'report-add' 'tags'}}</th>
+                                    <th  style="width:25%">{{agile_lng_translate 'contact-details' 'lead-score'}}</th>
+                                    
+                                </tr>
+                            </thead>
+                            <tbody id="company-search-model-list" class="model-list-cursor" route="contact/">
+                            </tbody>
+                        </table>
                 </div>
+
+                {{/is_mobile}}
+
             </div>
         </div>
 
