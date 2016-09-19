@@ -16,6 +16,14 @@
           <a class="ng-binding" href="#sent" id="mail-sent">{{agile_lng_translate 'inbox' 'sent'}}
           </a>
         </li>
+         <li ng-repeat="fold in folds" ui-sref-active="active" class="ng-scope">
+          <a class="ng-binding" href="#sent" id="mail-draft">Drafts
+          </a>
+        </li>
+        <li ng-repeat="fold in folds" ui-sref-active="active" class="ng-scope">
+          <a class="ng-binding" href="#sent" id="mail-trash">Trash
+          </a>
+        </li>
       </ul>
       
       <ul class="nav nav-pills nav-stacked nav-sm">
@@ -79,7 +87,7 @@
     </div>
   </div>
   <!-- / header -->
-
+	<div class="loading" style="disply:none;">Loading&#8230;</div>
   <!-- list -->
   <div id="mails-list-view">
 	  <ul class="portlet_body list-group list-group-lg no-radius m-b-none m-t-n-xxs" id="mails-list">

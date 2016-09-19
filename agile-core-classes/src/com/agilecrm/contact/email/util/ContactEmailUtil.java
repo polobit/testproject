@@ -1011,7 +1011,7 @@ public class ContactEmailUtil
 
 			// Fetches JSONArray from {emails:[]}
 			JSONArray emailsArray = emails.getJSONArray("emails");
-
+			
 			// Add owner email to each email and parse each email body.
 			emailsArray = ContactEmailUtil.addOwnerAndParseEmailBody(emailsArray, fromEmail);
 
@@ -1023,9 +1023,10 @@ public class ContactEmailUtil
 			emailsList = new ObjectMapper().readValue(emailsArray.toString(), new TypeReference<List<EmailWrapper>>()
 			{
 			});
-
-			EmailWrapper lastEmail = emailsList.get(emailsList.size() - 1);
-			lastEmail.cursor = Integer.parseInt(cursor)+ ""; //(Integer.parseInt(cursor) + Integer.parseInt(pageSize)) + "";
+			if(emailsList != null && emailsList.size() > 0){
+				EmailWrapper lastEmail = emailsList.get(emailsList.size() - 1);
+				lastEmail.cursor = Integer.parseInt(cursor)+ ""; //(Integer.parseInt(cursor) + Integer.parseInt(pageSize)) + "";
+			}
 		}
 
 		catch (Exception e)
