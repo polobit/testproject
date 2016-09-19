@@ -67,8 +67,8 @@
     	</div>
   		<div class="agile-thumb agile-thumb-view" {{#is_mobile}} style="width:calc(100% - 60px); margin-top:-5px;" {{else}} style="width:calc(100% - 60px);" {{/is_mobile}}>
         	{{#if_contact_type "PERSON"}}
-        		<a class="text-cap custom-link">{{getSystemPropertyValue properties "first_name"}}
-        		{{getSystemPropertyValue properties "last_name"}} </a>
+        		<a class="text-cap custom-link">{{getContactNameProperty this "first_name"}}
+        		{{getContactNameProperty this "last_name"}} </a>
         		<div><small class="text-muted  block text-ellipsis">{{getSystemPropertyValue properties "email"}}</small></div>
         	{{/if_contact_type}}
         
@@ -336,8 +336,8 @@
        <div class="data panel-default" data={{id}} style="width:260px">
 	   
        <div class="text-cap panel-heading text-ellipsis">
-         {{#if_contact_type "PERSON"}}<div class="text-ellipsis inline-block" style="width:80%" title="{{getSystemPropertyValue properties "first_name"}} {{getSystemPropertyValue properties "last_name"}}">{{getSystemPropertyValue properties "first_name"}}
-        		{{getSystemPropertyValue properties "last_name"}}</div>{{/if_contact_type}}
+         {{#if_contact_type "PERSON"}}<div class="text-ellipsis inline-block" style="width:80%" title="{{getSystemPropertyValue properties "first_name"}} {{getSystemPropertyValue properties "last_name"}}">{{getContactNameProperty this "first_name"}}
+        		{{getContactNameProperty this "last_name"}}</div>{{/if_contact_type}}
              {{#if_contact_type "COMPANY"}}
              <div class="text-ellipsis inline-block" style="width:80%" title="{{getSystemPropertyValue properties "name"}}">{{getSystemPropertyValue properties "name"}}
             </div>{{/if_contact_type}}
