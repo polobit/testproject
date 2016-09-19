@@ -135,7 +135,7 @@ function get_campaign_subscribers_collection(workflow_id, fetch_url, template_ke
 		templateKey : template_key,
 		individual_tag_name : 'tr', 
 		cursor : true,
-		page_size : 20,
+		page_size : getMaximumPageSize(),
 		postRenderCallback : function(el)
 		{
 			agileTimeAgoWithLngConversion($("time.campaign-started-time", el));

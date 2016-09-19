@@ -31,7 +31,7 @@ var WebpagesRouter = Backbone.Router
 					templateKey : "webpages",
 					individual_tag_name : 'tr',
 					cursor : true,
-					page_size : 20,
+					page_size : getMaximumPageSize(),
 					postRenderCallback : function(el) {
 						agileTimeAgoWithLngConversion($("time.webpage-created-time", el));
 
