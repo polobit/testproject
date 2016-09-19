@@ -163,7 +163,7 @@ function taskFetch(base_model)
 		individual_tag_name : 'div',
 		sort_collection : false,
 		cursor : true,
-		page_size : 20,
+		page_size : getCursor(),
 		postRenderCallback : function(el)
 		{
 			// Add tooltip info

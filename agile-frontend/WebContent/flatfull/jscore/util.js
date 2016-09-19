@@ -864,3 +864,6 @@ function agileTimeAgoWithLngConversion(el, callback){
         	 callback();
     });
 }
+function getCursor(){
+	return CURRENT_USER_PREFS.customize_cursor;
+}
