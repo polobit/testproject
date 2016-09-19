@@ -81,7 +81,7 @@ public class AllDomainStats {
      */
     
     @Indexed
-    public String node_count=null;
+    //public String node_count=null;
     
     
     /**
@@ -107,7 +107,7 @@ public class AllDomainStats {
     {
     }
 
-    public AllDomainStats(long created_time, long campaign_count, long webrule_count, long form_count, long landingPage_count, long triggers_count, long emailTemplate_count, long notificationTemplate, String nodeCount)
+    public AllDomainStats(long created_time, long campaign_count, long webrule_count, long form_count, long landingPage_count, long triggers_count, long emailTemplate_count, long notificationTemplate)
     {
 		this.created_time = created_time;
 		this.campaign_count = campaign_count;
@@ -117,7 +117,7 @@ public class AllDomainStats {
 		this.triggers_count=triggers_count;
 		this.emailTemplate_count=emailTemplate_count;
 		this.notificationTemplate_count =notificationTemplate;
-		this.node_count =nodeCount;
+		//this.node_count =nodeCount;
     }
 
     /**
@@ -146,7 +146,7 @@ public class AllDomainStats {
      * @return
      *    HashMap
      */
-    public Map<String, Integer> getNodeCount()
+   /* public Map<String, Integer> getNodeCount()
     {
     	try {
 			return new ObjectMapper().readValue(node_count, new TypeReference<Map<String, Integer>>(){});
@@ -166,7 +166,7 @@ public class AllDomainStats {
 			e.printStackTrace();
 		}
     	
-    }
+    }*/
 
    
 

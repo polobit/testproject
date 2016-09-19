@@ -155,7 +155,7 @@ public class AllDomainStatsUtil {
 			 //If in datastore there is no entity then add new other wise update the entity
 			 if(allDomainStats == null)
 			 {
-				 AllDomainStatsUtil.saveAllDomainStas(new AllDomainStats(created_time, campaign_count, webrule_count, form_count, landingPage_count, triggers_count, emailTemplate_count,notificationTemplate_count,null));
+				 AllDomainStatsUtil.saveAllDomainStas(new AllDomainStats(created_time, campaign_count, webrule_count, form_count, landingPage_count, triggers_count, emailTemplate_count,notificationTemplate_count));
 			 }
 			 else
 			 { 
@@ -196,7 +196,7 @@ public class AllDomainStatsUtil {
      * This method will update AllDomainStats entity with number of node in campaign for all domain
      * @param nodeCount
      */
-    public static void updateWorkflowNodecount( HashMap<String, Integer> workflowNodeCount){
+    /*public static void updateWorkflowNodecount( HashMap<String, Integer> workflowNodeCount){
     	 DateUtil dateUtil=new DateUtil();
 		 
 		 long created_time= dateUtil.toMidnight().getCalendar().getTimeInMillis();
@@ -221,7 +221,7 @@ public class AllDomainStatsUtil {
 		 System.out.println("Stats Report updated for nodes "+ allDomainStats.toString());
 		 
 	    	
-    }
+    }*/
    
     /**
      * This method will merge campaign node count and datastore campaigns node count
@@ -230,7 +230,7 @@ public class AllDomainStatsUtil {
      * @return
      *   HasMap
      */
-    public static  Map<String, Integer> updateNodeCout( HashMap<String, Integer> workflowNodeCount,  Map<String, Integer> dataStoreNodeCount){
+    /*public static  Map<String, Integer> updateNodeCout( HashMap<String, Integer> workflowNodeCount,  Map<String, Integer> dataStoreNodeCount){
    	  
    	 Iterator<String> workflowNodeKey = workflowNodeCount.keySet().iterator();
    	 
@@ -244,7 +244,7 @@ public class AllDomainStatsUtil {
    			dataStoreNodeCount.put(key, workflowNodeCount.get(key));
    	}
    	 return dataStoreNodeCount; 
-    }
+    }*/
     
     
     /**
@@ -256,7 +256,7 @@ public class AllDomainStatsUtil {
      * @return nodesCountHashMap
      * 				-- HashMap
      */
-    public static HashMap<String, Integer> getNodeCountFromWorkflow(String nodeString){
+    /*public static HashMap<String, Integer> getNodeCountFromWorkflow(String nodeString){
    	 
    	 HashMap<String,Integer> nodesCountHashMap=new HashMap<String,Integer>(); 
    	 
@@ -272,7 +272,7 @@ public class AllDomainStatsUtil {
    			      /***
    			       *Adding this line if like A/B contains then it has 
    			       *to replace with the "-"
-   			       */
+   			       
    			       
    			      if(nodeName.contains("/"))
    			    	  nodeName = nodeName.replace("/", "-");
@@ -286,7 +286,7 @@ public class AllDomainStatsUtil {
    			System.out.println("Error occured while counting the node of campaign : " + e.getMessage());
    		  return null;
    		  }
-    }
+    }*/
     
     /**
      * This method will add count of node of the campaign
@@ -300,7 +300,7 @@ public class AllDomainStatsUtil {
      * @return hashMapData
      * 				-HashMap
      */
-    public static HashMap<String, Integer> addNodeStats(String nodeName, HashMap<String, Integer> hashMapData){
+    /*public static HashMap<String, Integer> addNodeStats(String nodeName, HashMap<String, Integer> hashMapData){
    	 
    	 if(hashMapData.get(nodeName)==null)
    		 hashMapData.put(nodeName, 1);
@@ -309,7 +309,7 @@ public class AllDomainStatsUtil {
    	 }
    	 return hashMapData;
    	 
-    }
+    }*/
     
     /**
      * This method will take HashMap Collection and sort in descending order
@@ -318,7 +318,7 @@ public class AllDomainStatsUtil {
      * @return
      *      HashMap<String, Integer>
      */
-    public static  Map<String, Integer> sortHashMapByValues( Map<String, Integer> passedMap) 
+    /*public static  Map<String, Integer> sortHashMapByValues( Map<String, Integer> passedMap) 
     {
    	    List<String> mapKeys = new ArrayList<>(passedMap.keySet());
    	    List<Integer> mapValues = new ArrayList<>(passedMap.values());
@@ -348,6 +348,6 @@ public class AllDomainStatsUtil {
    	        }
    	    }
    	    return sortedMap;
-   	}
+   	}*/
   
 }
