@@ -1411,7 +1411,7 @@ public class PortletUtil {
 						//JSONObject cateJson_total = new JSONObject();
 						callsStatus(domainUser,minTime,maxTime,cateJson);
 						//cateJson.put("value", ActivityUtil.getCompletedCallsCountOfUser(domainUser.id, minTime, maxTime));
-						cateJson.put("name", "Deals Won");
+						cateJson.put("name", "Calls Won");
 						cateJson.put("userName", domainUser.name);
 						if(dUser.id.equals(domainUser.id))
 							cateJson.put("isDomainUser", true);
@@ -1429,13 +1429,18 @@ public class PortletUtil {
 						else
 							cateJson.put("userPic","");
 						cateList.add(cateJson);
-						Collections.sort(cateList,new Comparator<JSONObject>(){
-							@Override  
-			                public int compare(JSONObject o1, JSONObject o2){
-								return Integer.valueOf(o2.getInt("answered")).compareTo(Integer.valueOf(o1.getInt("answered")));  
-			                }
-			            });
 					}
+					Collections.sort(cateList,new Comparator<JSONObject>(){
+						@Override  
+		                public int compare(JSONObject o1, JSONObject o2){
+							if(o1.get("eachCallStatus") instanceof Map<?, ?>){
+								Map<String,Integer> mapO1 = (Map<String, Integer>) o1.get("eachCallStatus");
+								Map<String,Integer> mapO2 = (Map<String, Integer>) o2.get("eachCallStatus");
+								return mapO2.get("answered").compareTo(mapO1.get("answered")); 
+							}
+							return 0;
+		                }
+		            });
 					dataJson.put("callsJson", cateList);
 					dataJson.put("calls", true);
 					categoryCount++;
