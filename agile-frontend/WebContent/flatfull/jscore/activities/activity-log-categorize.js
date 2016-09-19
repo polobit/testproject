@@ -89,17 +89,19 @@ $("#activities-listners").on('click', '.email-details', function(e) {
 	{
 		e.preventDefault();
 
-		var updated_workflow = $(this).data('entity');
-		var updated_workflow_rules = updated_workflow.rules;
+		$(this).find("i").toggleClass('icon-plus').toggleClass('icon-minus');
 
-		var $campaign_history_details = $(this).parent().find('div.campaign-history-details');
-		// $(this).find("i").toggleClass('icon-plus').toggleClass('icon-minus');
-
+		var $campaign_history_details = $(this).siblings('div.campaign-history-details');
+		
+		// If already exists, just show
 		if($campaign_history_details.html())
 		{
 			$campaign_history_details.slideToggle("slow");
 			return;
 		}
+
+		var updated_workflow = $(this).data('entity');
+		var updated_workflow_rules = updated_workflow.rules;
 
 		$.ajax({
 			url: 'core/api/workflows/backups/get/' + updated_workflow.id,
@@ -110,29 +112,32 @@ $("#activities-listners").on('click', '.email-details', function(e) {
 
 				var workflow_backup_rules = workflow_backup.rules;
 
-				var is_equal = _.isEqual(updated_workflow_rules, workflow_backup_rules);
+				head.js(LIB_PATH + 'lib/underscore-min.1.8.3.js', function(){
 
-				if(is_equal)
-				{
-					$campaign_history_details.html("<p>No node got modified.</p>");
-					$campaign_history_details.slideToggle("slow");
-					return;
-				}
+				 	var is_equal = _.isEqual(updated_workflow_rules, workflow_backup_rules);
 
-				get_campaign_changes(updated_workflow_rules, workflow_backup_rules, function(changes_map){
-
-						var details = "";
-
-						details = getTemplate('activity-campaign-history-modify', changes_map);
-						
-						$campaign_history_details.html(details);
+					if(is_equal)
+					{
+						$campaign_history_details.html("<p>No Modifications made to this campaign nodes.</p>");
 						$campaign_history_details.slideToggle("slow");
+						return;
+					}
+
+					get_campaign_changes(updated_workflow_rules, workflow_backup_rules, function(changes_map){
+
+							var details = "";
+
+							details = getTemplate('activity-campaign-history-modify', changes_map);
+							
+							$campaign_history_details.html(details);
+							$campaign_history_details.slideToggle("slow");
+					});
 				});
 			},
 
 			error: function(){
 
-				$campaign_history_details.html("<p>No backups found for this campaign.</p>");
+				$campaign_history_details.html("<p>Modified details will be available on next save.</p>");
 				$campaign_history_details.slideToggle("slow");
 			}
 

@@ -349,7 +349,7 @@ var Workflow_Model_Events = Base_Model_View.extend({
     showRestoreAlert: function(e){
         e.preventDefault();
 
-        showAlertModal("Are you sure to restore workflow from latest update?", "confirm",
+        showAlertModal("Are you sure you want to restore the campaign to earlier version?", "confirm",
          function confirm(modal)
          {
 
@@ -372,7 +372,7 @@ var Workflow_Model_Events = Base_Model_View.extend({
                    show_campaign_save(e, "Restored workflow successfully.");
                 }, 
                 error: function() {
-                   show_campaign_save(e, "No backup is available to restore.", "red");
+                   show_campaign_save(e, "Backup of earlier version is not available.", "red");
                  }
              })
          }, function decline(modal){
@@ -944,10 +944,10 @@ function get_campaign_changes(updated_workflow_json, old_workflow_json, callback
                                 }
                                 
                                 if(!modified_field.old_value)
-                                    modified_field.old_value = old_node_field.value;
+                                    modified_field.old_value = "-";
                                 
                                 if(!modified_field.new_value)
-                                    modified_field.new_value = updated_node_field.value;
+                                    modified_field.new_value = "-";
 
                                 if(restricted_fields.indexOf(modified_field.name) != -1)
                                 {
@@ -976,7 +976,7 @@ function get_campaign_changes(updated_workflow_json, old_workflow_json, callback
             else
             {
                 console.log("Newly Added....");
-                map["ADDED"].push("Node " + update_nodes[i].displayname + " is added.");
+                map["ADDED"].push("Added " + update_nodes[i].displayname + " node.");
             }
         }
 
@@ -988,7 +988,7 @@ function get_campaign_changes(updated_workflow_json, old_workflow_json, callback
 
             console.log("Node deleted..." + old_nodes[i].displayname);
 
-            map["DELETED"].push("Node " + old_nodes[i].displayname + " is deleted.");
+            map["DELETED"].push("Deleted " + old_nodes[i].displayname + " node.");
         }
 
 

@@ -973,13 +973,12 @@ Added {{custom3}} {{agile_lng_translate 'contacts-view' 'contact-to-campaign'}}<
 	{{agile_lng_translate 'contacts-view' 'modified-a-campaign'}} 
 	{{#if this.entityObject}}
 		<a href="#workflow/{{entity_id}}">{{label}}</a>
+		<a href="#" id="campaign-modify-history" class="campaign-history-block text-info" data-entity="{{bindData entityObject}}" data-entity-id='{{entity_id}}' 
+			style='display: none;position: relative;top: 1px;margin-left: 2px;' title = "More details">
+			<i class="icon-plus"></i></a>
 		<br/>
 		{{!--Campaign History Block--}}
-		<div class="campaign-history-block" data-entity-id='{{entity_id}}' style='display: none;'>
-			<a href="#" id="campaign-modify-history" data-entity="{{bindData entityObject}}">
-			Details</a></br>
-			<div class='campaign-history-details' style="display: none;"></div>
-		</div>
+		<div class='campaign-history-details' style="display: none;"></div>
 	{{else}}
 		'{{label}}'
 	{{/if}}<br/>
@@ -1406,7 +1405,7 @@ Added {{custom3}} {{agile_lng_translate 'contacts-view' 'contact-to-campaign'}}<
 
 {{#if ADDED}}
 <ul>
-	<li><b>Added</b></li>
+	<li><b>Nodes added</b></li>
 	{{#each ADDED}}
 		<li>{{this}}</li>
 	{{/each}}
@@ -1414,9 +1413,9 @@ Added {{custom3}} {{agile_lng_translate 'contacts-view' 'contact-to-campaign'}}<
 {{/if}}
 {{#if MODIFIED}}
 <ul>
-	<li><b>Modified</b></li>
+	<li><b>Nodes modified</b></li>
 	<li>
-		<table class="table table-striped" style="width: 50%; border: solid 1px whitesmoke;">
+		<table class="table table-striped" style="border: solid 1px whitesmoke;">
 			<thead>
 				<tr>
 					<th>Node Name</th>
@@ -1431,8 +1430,20 @@ Added {{custom3}} {{agile_lng_translate 'contacts-view' 'contact-to-campaign'}}<
 						<tr>
 							<td>{{node_name}}</td>
 							<td>{{name}}</td>
-							<td>{{old_value}}</td>
-							<td>{{new_value}}</td>
+							<td>
+							{{#if_equals "-" old_value}}
+								<p title="Dynamic values and large content are not shown.">{{old_value}}</p>
+							{{else}}
+								 {{old_value}}
+							{{/if_equals}}
+							</td>
+							<td>
+							{{#if_equals "-" new_value}}
+								<p title="Dynamic values and large content are not shown.">{{new_value}}</p>
+							{{else}}
+								 {{new_value}}
+							{{/if_equals}}
+							</td>
 						</tr>
 					{{/each}}
 				{{/each}}
@@ -1444,7 +1455,7 @@ Added {{custom3}} {{agile_lng_translate 'contacts-view' 'contact-to-campaign'}}<
 
 {{#if DELETED}}
 <ul>
-<li><b>Deleted</b></li>
+<li><b>Nodes deleted</b></li>
 {{#each DELETED}}
 	<li>{{this}}</li>
 {{/each}}
