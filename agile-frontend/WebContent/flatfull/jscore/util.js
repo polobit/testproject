@@ -864,6 +864,6 @@ function agileTimeAgoWithLngConversion(el, callback){
         	 callback();
     });
 }
-function getCursor(){
+function getMaximumPageSize(){
 	return CURRENT_USER_PREFS.customize_cursor;
 }

@@ -299,7 +299,7 @@ addcontactcompanydealtypedocument:function(contactcompanydealtype,contactcompany
 					cursor : true, 
 					customLoader : true,
 					customLoaderTemplate : 'agile-app-collection-loader',
-					page_size : getCursor(), 
+					page_size : getMaximumPageSize(), 
 					global_sort_key : sortKey, 
 					postRenderCallback : function(col_el)
 					{

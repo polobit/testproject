@@ -257,7 +257,7 @@ var AdminPanelRouter = Backbone.Router.extend({
 	allDomainUsers : function()
 	{
 		allDomainUsersCollectionView = new Base_Collection_View({ url : 'core/api/admin_panel/getAllDomainUsers', templateKey : "all-domain-users",
-			individual_tag_name : 'tr', cursor : true, page_size : getCursor(), postRenderCallback : function(el)
+			individual_tag_name : 'tr', cursor : true, page_size : getMaximumPageSize(), postRenderCallback : function(el)
 			{
 				initializeAdminpanelListner(el);
 
