@@ -561,6 +561,9 @@ var ContactsRouter = Backbone.Router.extend({
 		//Removed previous contact timeline nodes from the queue, if existed
 		if(timeline_collection_view && timeline_collection_view.queue)
 		{
+			if($("#timeline").is(":visible")){
+				$("#timeline").empty();
+			}
 			timeline_collection_view.queue.pop();
 		}
 		
