@@ -3,7 +3,7 @@
 	<div class="modal-content">
 		<div class="modal-header">
 			<button class="close" data-dismiss="modal">&times;</button>
-			<h3>Record your video</h3>
+			<h3 id="headerTitle">Select video</h3>
 		</div>
 		<form class="form-horizontal" id="videoRecordForm">
 			<div class="modal-body">
@@ -23,7 +23,7 @@
 						{{#each this}}
 							<option value="{{id}}">{{name}}</option>
 						{{/each}}
-							<option value="AGILE_CREATE_NEW_VIDEO">Record new video</option>
+							<!-- <option value="AGILE_CREATE_NEW_VIDEO">Record new video</option> -->
 						</select>
 						</div>
 					</div>

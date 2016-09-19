@@ -242,15 +242,22 @@ AGILE_EB_OPTIONS['templateId'] = "";
                         <div class="form-group">
                             
                             <div class="row" id="image-link-holder">
-                                <div class="col-xs-11">
-                                    <div class="input-group">
-                                        <span class="input-group-addon" id="basic-addon11"><i class="fa fa-paperclip"></i></span>
-                                        <input type="text" id="image-link" class="form-control" placeholder="Link to Web Address(URL)" aria-describedby="basic-addon11" data-id="none">
-                                    </div>
+                                <div class="col-xs-8">
+                                    <input type="text" id="image-link" class="form-control" placeholder="Link to Video URL" aria-describedby="basic-addon11" data-id="none">
                                     <br>
                                 </div>
+                                
+                                <div class="col-xs-4" id="video-record-btn-holder" style="display:none;">
+                                    <div class="btn-group" role="group">
+                                        <button type="button" class="btn btn-default btn-sm" id="videoRecordBtnNew">
+                                            <span class="fa fa-video-camera fa-lg"></span>
+                                        </button>
+                                        <button type="button" class="btn btn-default btn-sm" id="videoRecordBtn">
+                                            <span class="fa fa-check-circle-o fa-lg"></span>
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
-
                             <div class="row">
                                 <div class="col-xs-11">
                                     <input type="text" id="image-alt-text" class="form-control" placeholder="Alternate Text" data-id="none">
@@ -258,11 +265,6 @@ AGILE_EB_OPTIONS['templateId'] = "";
                                 </div>
                             </div>
 
-                            <div class="row" id="video-record-btn-holder" style="display:none;">
-                                <div class="col-xs-11">
-                                    <a class="btn btn-success" id="videoRecordBtn">Select or Record Video</a>
-                                </div>
-                            </div>
                             
                             <div class="row">
                                 <div class="col-xs-11" id="image-alt-text">

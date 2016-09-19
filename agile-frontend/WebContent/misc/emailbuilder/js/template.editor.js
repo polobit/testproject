@@ -191,10 +191,10 @@ function handleObjects() {
                         $('#image-h').val(img.height());
                         $('#image-alt-text').val(img.attr('alt'));
 
-                        /*$('#image-link').val("");
+                        $('#image-link').val("");
                         if(img.parent('a').length) {
                             $('#image-link').val(addhttp(img.parent('a').attr('href')));
-                        }*/
+                        }
 
                         hideAllSettings();
                         $('#imageproperties').show();
@@ -1445,6 +1445,11 @@ $('div.buttonStyleTxt').on('shown.bs.popover', function () {
     $(document).on('click', '#videoRecordBtn', function(e){
         e.preventDefault();
         window.parent.$(".videoRecordHiddenBtn").trigger("click");
+    });
+
+    $(document).on('click', '#videoRecordBtnNew', function(e){
+        e.preventDefault();
+        window.parent.$(".videoRecordHiddenBtnNew").trigger("click");
     });
 
 

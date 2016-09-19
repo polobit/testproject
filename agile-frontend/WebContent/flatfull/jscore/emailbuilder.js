@@ -123,10 +123,23 @@ function initializeEmailBuilderListeners() {
         $(".videoRecordFormMessageHolder").html("");
         var selectedVal = $(this).val();
         if(selectedVal === "AGILE_CREATE_NEW_VIDEO") {
+            $("#headerTitle").html("Record your video");
             $("#videoRecordSelectFields").hide();
             $("#videoRecordType").val("new");
             $("#videoRecordFields").show();
+
         }
+    });
+
+    $('#emailbuilder-listeners').on('click', '.videoRecordHiddenBtnNew', function(e){
+        e.preventDefault();
+        $("#modal-backdrop").hide();
+        $('#videoRecordModal').html(getTemplate("video-record-modal", {})).modal('show');
+        $("#headerTitle").html("Record your video");
+        $(".videoRecordFormMessageHolder").html("");
+        $("#videoRecordSelectFields").hide();
+        $("#videoRecordType").val("new");
+        $("#videoRecordFields").show();
     });
     
 }
