@@ -104,27 +104,20 @@ var contact_details_documentandtasks_actions = {
         // For adding new deal from contact-details
         add_deal : function(e){
         	
-        	var e ;
+        	$("#newDealModal").html(getTemplate("new-deal-model")).modal('show');
+        	var targetEl = $(e.currentTarget);
+        	var e = $("#opportunityForm",$("#newDealModal"));
 
-        	showDealsModel({},function(el){
-
-        		var targetEl = $(e.currentTarget);
-
-        		e = $("#opportunityForm",el);
-
-        		if($('#color1', e).is(':hidden')){
-
-			    	$('.colorPicker-picker', e).remove();
-
-			    	$('#color1', e).colorPicker();
-				}
+    		if($('#color1', e).is(':hidden')){
+		    	$('.colorPicker-picker', e).remove();
+		    	$('#color1', e).colorPicker();
+			}
 
 				var colorcode = "#FFFFFF";
 			    $('#color1' , e).attr('value', colorcode);
 			    $('.colorPicker-picker', e).css("background-color", colorcode); 
 			    // Disable color input field
 			    $('.colorPicker-palette').find('input').attr('disabled', 'disabled');
-			},"new-deal-model");
 				
 
 				add_custom_fields_to_form({}, function(data)
@@ -152,6 +145,7 @@ var contact_details_documentandtasks_actions = {
 					$("#owners-list", $("#opportunityForm")).find('option[value=' + CURRENT_DOMAIN_USER.id + ']').attr("selected", "selected");
 					$("#owners-list", $("#opportunityForm")).closest('div').find('.loading-img').hide();
 				});
+				
 				// Contacts type-ahead
 				agile_type_ahead("relates_to", e, contacts_typeahead);
 
@@ -191,6 +185,7 @@ var contact_details_documentandtasks_actions = {
 				} else {
 					json = App_Contacts.contactDetailView.model.toJSON();
 				}
+
 				var contact_name = getContactName(json);
 
 				var template = Handlebars.compile('<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="{{id}}">{{name}}</li>');

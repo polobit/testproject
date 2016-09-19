@@ -567,26 +567,17 @@ function updateDeal(ele, editFromMilestoneView)
  */
 function show_deal()
 {
-	var e ;
-
-	showDealsModel({},function(el){
-		
-		$( "#opportunityForm" , el )[ 0 ].reset();
-		
-		 var e = $("#opportunityForm",el);					
-    		
-    	if($('#color1', e).is(':hidden'))
-    	{
-
-    	$('.colorPicker-picker', e).remove();
-
-    	$('#color1', e).colorPicker();
-		}
-		// Disable color input field
-    $('.colorPicker-palette').find('input').attr('disabled', 'disabled');
+	$("#newDealModal").html(getTemplate("new-deal-model")).modal('show');
+	var e = $("#opportunityForm",$("#newDealModal"));							
+	if($('#color1', e).is(':hidden'))
+	{
+		$('.colorPicker-picker', e).remove();
+		$('#color1', e).colorPicker();
+	}
 	
-	},"new-deal-model");
-  
+	// Disable color input field
+    $('.colorPicker-palette').find('input').attr('disabled', 'disabled');
+
   	add_custom_fields_to_form({}, function(data)
 	{
 		var el_custom_fields = show_custom_fields_helper(data["custom_fields"], [

@@ -478,13 +478,6 @@ function showNoteModel(json, callback , template)
 	
 }
 
-function showDealsModel(json,callback,template)
-{
-	
-	$("#newDealModal").html(getTemplate(template)).modal('show');
-		if (callback && typeof (callback) === "function")
-					callback();
-}
 // Click handlers to role menu items
 function initRolehandlers(){
 	// Remove blink icon from menu group icon
