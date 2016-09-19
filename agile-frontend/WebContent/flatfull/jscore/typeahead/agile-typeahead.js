@@ -777,7 +777,7 @@ function checkEmailValidation(value)
 	return /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/i.test(value);
 }
 
-function getContactName(contact)
+function getContactName(contact, prop_key)
 {
 	var name = "";
 	if (!contact.type || contact.type == 'PERSON')
@@ -786,7 +786,9 @@ function getContactName(contact)
 		var last_name = getPropertyValue(contact.properties, "last_name");
 		last_name = last_name != undefined ? last_name.trim() : "";
 		first_name = first_name != undefined ? first_name.trim() : "";
-		name = (first_name + " " + last_name).trim();
+
+		// name = (first_name + " " + last_name).trim();
+		name = _agile_get_contact_display_name(first_name, last_name, prop_key);
 	}
 	else if (contact.type == "COMPANY")
 	{
