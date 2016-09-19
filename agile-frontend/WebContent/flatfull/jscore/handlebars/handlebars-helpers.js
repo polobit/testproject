@@ -7729,3 +7729,35 @@ Handlebars.registerHelper('if_anyone_equals', function(value, target, options)
 		return options.inverse(this);
 	
 });
+
+
+/**
+ * 
+ */
+Handlebars.registerHelper('selectJsonValue', function(json, key)
+{
+	var jsonObject = json;
+	if(jsonObject[key]){
+		return jsonObject[key];
+	}
+	return "";
+});
+
+/**
+ * 
+ */
+Handlebars.registerHelper("convertToi18ForCall",function(value)
+{
+	var constantJson = {"answered":"{{agile_lng_translate 'campaigns' 'answered'}}",
+						"busy":"{{agile_lng_translate 'campaigns' 'busy'}}",
+						"failed" : "{{agile_lng_translate 'call_activity' 'fail'}}",
+						"voicemail" : "{{agile_lng_translate 'campaigns' 'voicemail'}}",
+						"missed":"{{agile_lng_translate 'campaigns' 'missed'}}",
+						"others" : "{{agile_lng_translate 'admin-settings-tasks' 'Other'}}"					
+						};
+	if(constantJson[value]){
+		return constantJson[value];
+	}
+	return value;
+	
+});

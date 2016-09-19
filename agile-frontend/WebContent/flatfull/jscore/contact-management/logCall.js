@@ -491,9 +491,13 @@ try{
 }
 
 function toTitleCase(str) {
+	try{
     return str.replace(/(?:^|\s)\w/g, function(match) {
         return match.toUpperCase();
     });
+	}catch(e){
+		return str;
+	}
 }
 
 function saveLogPhoneActivity(data){

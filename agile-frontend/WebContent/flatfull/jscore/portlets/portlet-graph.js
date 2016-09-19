@@ -645,6 +645,26 @@ var portlet_graph_utility = {
 		/*var	height=domainUsersList.length*30+($('#'+selector).height()-30);
 		if(selector=='calls-chart')
 			height=domainUsersList.length*30+120;*/
+		var colorsToShow = [];
+		var colorForStatus = {"Failed" : "#f05050", "Busy" :"#23b7e5" , "Voicemail" : "#7266ba", "Answered" : "#27c24c", "Missed" : "#fad733","Others": "#ff8080"};
+		var addedColor = {};  // this is temp variable to check whether the color is alread added or not
+		$.each(series, function(index,value){
+			if(colorForStatus[value.name]){
+				colorsToShow.push(colorForStatus[value.name]);
+				addedColor[colorForStatus[value.name]] = colorForStatus[value.name];
+			}else{
+				var colorCode;
+				while(true){
+					colorCode = '#'+Math.floor(Math.random()*16777215 + Math.random()*7777).toString(16);
+					if(!addedColor[colorCode]){
+						break;
+					}
+				}
+				addedColor[colorCode] = colorCode;
+				colorsToShow.push(colorCode);
+			}
+		});
+		colorsToShow = colors || colorsToShow;
 		setupCharts(function(){
 							
 							callschart[parseInt(pos)]=new Highcharts.Chart({
@@ -737,53 +757,11 @@ var portlet_graph_utility = {
 						        			
 						        		}else{
 						        			tt += '<table><tr><td class="b-b-none"><u style="text-decoration:none;border-bottom:1px solid">'+domainUsersList[this.points[0].point.x]+'</u></td></tr>';
-						        			if(this.points[0]!=undefined && this.points[0].series!=undefined){
-						        				tt += 	'<tr><td style="color:'+this.points[0].series.color+';padding:0">'+this.points[0].series.name+':&nbsp; </td>' +
-							                      		'<td style="padding:0"><b>'+this.points[0].point.y+'</b></td></tr>';
-						        			}
-						        			if(this.points[1]!=undefined && this.points[1].series!=undefined){
-						        				tt += 	'<tr><td style="color:'+this.points[1].series.color+';padding:0">'+this.points[1].series.name+':&nbsp; </td>' +
-							                      		'<td style="padding:0"><b>'+this.points[1].point.y+'</b></td></tr>';
-						        			}
-						        			if(this.points[2]!=undefined && this.points[2].series!=undefined){
-						        				tt += 	'<tr><td style="color:'+this.points[2].series.color+';padding:0">'+this.points[2].series.name+':&nbsp; </td>' +
-							                      		'<td style="padding:0"><b>'+this.points[2].point.y+'</b></td></tr>';
-						        			}
-						        			if(this.points[3]!=undefined && this.points[3].series!=undefined){
-						        				tt += 	'<tr><td style="color:'+this.points[3].series.color+';padding:0">'+this.points[3].series.name+':&nbsp; </td>' +
-							                      		'<td style="padding:0"><b>'+this.points[3].point.y+'</b></td></tr>';
-						        			}
-						        			if(this.points[4]!=undefined && this.points[4].series!=undefined){
-						        				tt += 	'<tr><td style="color:'+this.points[4].series.color+';padding:0">'+this.points[4].series.name+':&nbsp; </td>' +
-							                      		'<td style="padding:0"><b>'+this.points[4].point.y+'</b></td></tr>';
-						        			}
-						        			if(this.points[5]!=undefined && this.points[5].series!=undefined){
-						        				tt += 	'<tr><td style="color:'+this.points[5].series.color+';padding:0">'+this.points[5].series.name+':&nbsp; </td>' +
-							                      		'<td style="padding:0"><b>'+this.points[5].point.y+'</b></td></tr>';
-						        			}
-						        			if(this.points[6]!=undefined && this.points[6].series!=undefined){
-						        				tt += 	'<tr><td style="color:'+this.points[6].series.color+';padding:0">'+this.points[6].series.name+':&nbsp; </td>' +
-							                      		'<td style="padding:0"><b>'+this.points[6].point.y+'</b></td></tr>';
-						        			}
-						        			if(this.points[7]!=undefined && this.points[7].series!=undefined){
-						        				tt += 	'<tr><td style="color:'+this.points[7].series.color+';padding:0">'+this.points[7].series.name+':&nbsp; </td>' +
-							                      		'<td style="padding:0"><b>'+this.points[7].point.y+'</b></td></tr>';
-						        			}
-						        			if(this.points[8]!=undefined && this.points[8].series!=undefined){
-						        				tt += 	'<tr><td style="color:'+this.points[8].series.color+';padding:0">'+this.points[8].series.name+':&nbsp; </td>' +
-							                      		'<td style="padding:0"><b>'+this.points[8].point.y+'</b></td></tr>';
-						        			}
-						        			if(this.points[9]!=undefined && this.points[9].series!=undefined){
-						        				tt += 	'<tr><td style="color:'+this.points[9].series.color+';padding:0">'+this.points[9].series.name+':&nbsp; </td>' +
-							                      		'<td style="padding:0"><b>'+this.points[9].point.y+'</b></td></tr>';
-						        			}
-						        			if(this.points[10]!=undefined && this.points[10].series!=undefined){
-						        				tt += 	'<tr><td style="color:'+this.points[10].series.color+';padding:0">'+this.points[10].series.name+':&nbsp; </td>' +
-							                      		'<td style="padding:0"><b>'+this.points[10].point.y+'</b></td></tr>';
-						        			}
-						        			if(this.points[11]!=undefined && this.points[11].series!=undefined){
-						        				tt += 	'<tr><td style="color:'+this.points[11].series.color+';padding:0">'+this.points[11].series.name+':&nbsp; </td>' +
-							                      		'<td style="padding:0"><b>'+this.points[11].point.y+'</b></td></tr>';
+						        			for(var k=0; k<series.length; k++){
+							        			if(this.points[k]!=undefined && this.points[k].series!=undefined){
+							        				tt += 	'<tr><td style="color:'+this.points[k].series.color+';padding:0">'+this.points[k].series.name+':&nbsp; </td>' +
+								                      		'<td style="padding:0"><b>'+this.points[k].point.y+'</b></td></tr>';
+							        			}
 						        			}
 						        			tt += '<tr><td>{{agile_lng_translate "other" "total"}}:&nbsp; </td><td class="b-b-none">'+totalCallsCountList[this.points[0].point.x]+'</td></tr></table>';
 						        		}
@@ -815,7 +793,8 @@ var portlet_graph_utility = {
 						    		}
 						        },
 						        series: series,
-							    colors : [ "#27c24c", "#23b7e5", "#f05050", "#7266ba", '#fad733','#FF9900','#7AF168','#167F80','#0560A2','#D3E6C7','#7798BF'],
+							    //colors : [ "#27c24c", "#23b7e5", "#f05050", "#7266ba", '#fad733','#FF9900','#7AF168','#167F80','#0560A2','#D3E6C7','#7798BF'],
+						        colors : colorsToShow,
 							    legend : {
 									itemStyle : {
 										fontSize : '10px',
@@ -870,15 +849,33 @@ var portlet_graph_utility = {
 			
 		}else{
 			var data = [];
+			var colors = [];
+			var colorForStatus = {"Failed" : "#f05050", "Busy" :"#23b7e5" , "Voicemail" : "#7266ba", "Answered" : "#27c24c", "Missed" : "#fad733","Others": "#ff8080"};
+			var addedColor = {};  // this is temp variable to check whether the color is alread added or not
 			$.each(categoryList,function(index,value){
 				data.push([value,valueList[index]]);
+				if(colorForStatus[value]){
+					colors.push(colorForStatus[value]);
+					addedColor[colorForStatus[value]] = colorForStatus[value];
+				}else{
+					var colorCode;
+					while(true){
+						colorCode = '#'+Math.floor(Math.random()*16777215 + Math.random()*7777).toString(16);
+						if(!addedColor[colorCode]){
+							break;
+						}
+					}
+					addedColor[colorCode] = colorCode;
+					colors.push(colorCode);
+				}
 			});
 			$('#'+selector).highcharts({
 		        chart: {
 		            type: 'pie',
 		            marginRight: 20
 		        },
-		        colors : ["#27c24c", "#23b7e5", "#f05050", "#7266ba", '#fad733','#FF9900','#7AF168','#167F80','#0560A2','#D3E6C7','#7798BF'],
+		       // colors : ["#27c24c", "#23b7e5", "#f05050", "#7266ba", '#fad733','#FF9900','#7AF168','#167F80','#0560A2','#D3E6C7','#7798BF'],
+		        colors :colors,
 		        title: {
 		            text: ''
 		        },
@@ -934,7 +931,6 @@ var portlet_graph_utility = {
 	});
 	},
 	
-
 	/**
 	 * To display task report portlet as bar graph
 	 */

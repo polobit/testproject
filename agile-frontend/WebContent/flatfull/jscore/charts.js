@@ -195,8 +195,29 @@ function showBar(url, selector, name, yaxis_name, stacked, selected_colors)
 			if(selector!='calls-chart')
 				colors=['#23b7e5','#27c24c','#7266ba','#fad733'];
 			else
-				colors=['#27c24c','#23b7e5','#f05050','#7266ba','#fad733','#FF9900','#7AF168','#167F80','#0560A2','#D3E6C7','#7798BF','#B72030'];
-			
+				var colorForStatus = {"failed" : "#f05050", "busy" :"#23b7e5" , "voicemail" : "#7266ba", "answered" : "#27c24c", "missed" : "#fad733", "others": "#ff8080"};
+				var addedColor = {};  // this is temp variable to check whether the color is alread added or not
+					var jsn = data[Object.keys(data)[0]];
+					if(jsn){
+						$.each(jsn, function(key, value){
+							if(colorForStatus[key]){
+								colors.push(colorForStatus[key]);
+								addedColor[colorForStatus[key]] = colorForStatus[key];
+							}else{
+								var colorCode;
+								while(true){
+									colorCode = '#'+Math.floor(Math.random()*16777215 + Math.random()*7777).toString(16);
+									if(!addedColor[colorCode]){
+										break;
+									}
+								}
+								addedColor[colorCode] = colorCode;
+								colors.push(colorCode);
+							}
+						});
+					}else{
+						colors=['#27c24c','#23b7e5','#f05050','#7266ba','#fad733','#FF9900','#7AF168','#167F80','#0560A2','#D3E6C7','#7798BF','#B72030'];	
+					}
 			colors = selected_colors || colors;
 			
 			var dataLength = 0;

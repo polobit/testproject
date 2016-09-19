@@ -10,6 +10,7 @@ import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.TimeZone;
 
 import net.sf.json.JSONObject;
@@ -759,26 +760,9 @@ public class PortletUtil {
 			domainUsersList=DomainUserUtil.getUsers(dUser.domain);
 		List<String> domainUserNamesList=new ArrayList<String>();
 		List<String> domainUserImgList=new ArrayList<String>();
-
-		//we dont need this///////////////////////////////
-		List<Integer> answeredCallsCountList=new ArrayList<Integer>();
-		List<Integer> busyCallsCountList=new ArrayList<Integer>();
-		List<Integer> failedCallsCountList=new ArrayList<Integer>();
-		List<Integer> voiceMailCallsCountList=new ArrayList<Integer>();
-		List<Integer> missedCallsCountList=new ArrayList<Integer>();
-		List<Integer> inquiryCallsCountList=new ArrayList<Integer>();
-		List<Integer> interestCallsCountList=new ArrayList<Integer>();
-		List<Integer> noInterestCallsCountList=new ArrayList<Integer>();
-		List<Integer> incorrectReferralCallsCountList=new ArrayList<Integer>();
-		List<Integer> newOpportunityCallsCountList=new ArrayList<Integer>();
-		List<Integer> meetingScheduledCallsCountList=new ArrayList<Integer>();
-		List<Integer> queuedCallsCountList=new ArrayList<Integer>();
-		////////////////////////////////////////
-		
 		List<Integer> totalCallsCountList=new ArrayList<Integer>();
-		
 		List<Long> callsDurationList=new ArrayList<Long>();
-		
+		List<Long> nonZeroDurationCountList=new ArrayList<Long>();
 		List<DomainUser> usersList = new ArrayList<DomainUser>();
 		
 		try {
@@ -803,114 +787,67 @@ public class PortletUtil {
 			e.printStackTrace();
 		}
 		int i=0;
-		Map<String,Integer> finalCallStatusCount = new HashMap<>();
+		//Map<String,Integer[]> finalCallStatusCount = new HashMap<>();
+		List<Map<String, Integer>> finalCallStatusCountMapList = new ArrayList<>();
+		Map<String,Integer> CallStatusCountMap = new LinkedHashMap<>();
+		
+		CategoriesUtil categoriesUtil = new CategoriesUtil();
+		List<Category> categories = categoriesUtil.getCategoriesByType(Category.EntityType.TELEPHONY_STATUS.toString());
+		CallStatusCountMap.put(Call.ANSWERED,0);
+		CallStatusCountMap.put(Call.BUSY,0);
+		CallStatusCountMap.put(Call.FAILED,0);
+		CallStatusCountMap.put(Call.VOICEMAIL,0);
+		CallStatusCountMap.put(Call.Missed,0);
+		for(Category category : categories){
+			CallStatusCountMap.put(category.getLabel().toLowerCase(), 0);
+		}
+		CallStatusCountMap.put("others",0);
 		
 		for(DomainUser domainUser : usersList){
-			
 			// loop all the status and generate the count for each .........
-			
-			
-			int answeredCallsCount=0;
-			int busyCallsCount=0;
-			int failedCallsCount=0;
-			int voiceMailCallsCount=0;
-			int missedCallsCount=0;
-			int inquiryCallsCount=0;
-			int interestCallsCount=0;
-			int noInterestCallsCount=0;
-			int incorrectReferralCallsCount=0;
-			int newOpportunityCallsCount=0;
-			int meetingScheduledCallsCount=0;
-			int queuedCallsCount=0;
-			
 			int totalCallsCount=0;
-			
 			long callsDuration=0;
-			
 			List<Activity> callActivitiesList = ActivityUtil.getActivitiesByActivityType("CALL",domainUser.id,minTime,maxTime);
-			
+			Map<String,Integer> tempCallStatusCountMap = new LinkedHashMap<>(CallStatusCountMap);
+			Long nonZeroDurationCount = 0L;
 			for(Activity activity:callActivitiesList){
-				String statusInActivity = activity.custom3;
-				if(statusInActivity != null && !statusInActivity.equals("")){
-					if(statusInActivity.equalsIgnoreCase(Call.ANSWERED) || statusInActivity.equalsIgnoreCase(Call.COMPLETED)){
-						statusInActivity = Call.ANSWERED;
+				try{
+					String statusInActivity = activity.custom3;
+					if(statusInActivity != null && !statusInActivity.equals("")){
+						if(statusInActivity.equalsIgnoreCase(Call.ANSWERED) || statusInActivity.equalsIgnoreCase(Call.COMPLETED)){
+							statusInActivity = Call.ANSWERED;
+						}else if((statusInActivity.equalsIgnoreCase(Call.BUSY) || statusInActivity.equalsIgnoreCase(Call.NO_ANSWER))){
+							statusInActivity = Call.BUSY;
+						}else if(activity.custom3!=null){
+							if(tempCallStatusCountMap.containsKey(activity.custom3.toLowerCase())){
+								statusInActivity=activity.custom3.toLowerCase();
+							}else{
+								statusInActivity="others";
+							}
+						}
+						int count1=tempCallStatusCountMap.get(statusInActivity);
+                 		count1++;
+                 		tempCallStatusCountMap.put(statusInActivity,count1);
+		                    
+						totalCallsCount++;
+						if(activity.custom4!=null &&  !activity.custom4.equalsIgnoreCase(null) 
+								&& !activity.custom4.equalsIgnoreCase("null") && !activity.custom4.equalsIgnoreCase("")){
+							callsDuration+=Long.valueOf(activity.custom4);
+							if(Long.valueOf(activity.custom4) > 0){
+								nonZeroDurationCount ++;
+							}
+						}
 					}
-					if(finalCallStatusCount.containsKey(statusInActivity)){
-						Integer count = finalCallStatusCount.get(statusInActivity);
-						finalCallStatusCount.put(statusInActivity, ++count);
-					}else{
-						finalCallStatusCount.put(statusInActivity, 1);
-					}
-					totalCallsCount++;
-					if(activity.custom4!=null &&  !activity.custom4.equalsIgnoreCase(null) 
-							&& !activity.custom4.equalsIgnoreCase("null") && !activity.custom4.equalsIgnoreCase(""))
-						callsDuration+=Long.valueOf(activity.custom4);
+				}catch(Exception e){
+					e.printStackTrace();
 				}
-				
-				
 			}
-			
-/*				for(Activity activity : callActivitiesList){
-					try{
-					if(activity.custom3!=null && (activity.custom3.equalsIgnoreCase(Call.ANSWERED) || activity.custom3.equalsIgnoreCase("completed")))
-						answeredCallsCount++;
-					else if(activity.custom3!=null && (activity.custom3.equalsIgnoreCase(Call.BUSY) || activity.custom3.equalsIgnoreCase(Call.NO_ANSWER)))
-						busyCallsCount++;
-					else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.FAILED))
-						failedCallsCount++;
-					else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.VOICEMAIL))
-						voiceMailCallsCount++;
-					else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.Missed))
-						missedCallsCount++;
-					else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.Inquiry))
-						inquiryCallsCount++;
-					else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.Interest))
-						interestCallsCount++;
-					else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.NoInterest))
-						noInterestCallsCount++;
-					else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.IncorrectReferral))
-						incorrectReferralCallsCount++;
-					else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.NewOpportunity))
-						newOpportunityCallsCount++;
-					else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.MeetingScheduled))
-						meetingScheduledCallsCount++;
-					else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase("queued"))
-						queuedCallsCount++;
-					totalCallsCount++;
-					if(activity.custom4!=null &&  !activity.custom4.equalsIgnoreCase(null) 
-							&& !activity.custom4.equalsIgnoreCase("null") && !activity.custom4.equalsIgnoreCase(""))
-						callsDuration+=Long.valueOf(activity.custom4);
-					
-				}
-			catch(Exception e){
-				e.printStackTrace();
-			}
-				}*/
-			// not required
-			answeredCallsCountList.add(answeredCallsCount);
-			busyCallsCountList.add(busyCallsCount);
-			failedCallsCountList.add(failedCallsCount);
-			voiceMailCallsCountList.add(voiceMailCallsCount);
-			missedCallsCountList.add(missedCallsCount);
-			inquiryCallsCountList.add(inquiryCallsCount);
-			interestCallsCountList.add(interestCallsCount);
-			noInterestCallsCountList.add(noInterestCallsCount);
-			incorrectReferralCallsCountList.add(incorrectReferralCallsCount);
-			newOpportunityCallsCountList.add(newOpportunityCallsCount);
-			meetingScheduledCallsCountList.add(meetingScheduledCallsCount);
-			queuedCallsCountList.add(queuedCallsCount);
-			/////////////////////////////
-			
+			nonZeroDurationCountList.add(nonZeroDurationCount);
 			totalCallsCountList.add(totalCallsCount);
-			
 			callsDurationList.add(callsDuration);
-			
 			domainUserNamesList.add(domainUser.name);
-			
 			AgileUser agileUser = AgileUser.getCurrentAgileUserFromDomainUser(domainUser.id);
-			
 			UserPrefs userPrefs = null;
-			
 			if(agileUser!=null)
 				userPrefs = UserPrefsUtil.getUserPrefs(agileUser);
 			if(userPrefs!=null)
@@ -920,22 +857,8 @@ public class PortletUtil {
 			i++;
 		}
 		
-		// not required.............
-		callsPerPersonJSON.put("answeredCallsCountList",answeredCallsCountList);
-		callsPerPersonJSON.put("busyCallsCountList",busyCallsCountList);
-		callsPerPersonJSON.put("failedCallsCountList",failedCallsCountList);
-		callsPerPersonJSON.put("voiceMailCallsCountList",voiceMailCallsCountList);
-		callsPerPersonJSON.put("missedCallsCountList",missedCallsCountList);
-		callsPerPersonJSON.put("inquiryCallsCountList",inquiryCallsCountList);
-		callsPerPersonJSON.put("interestCallsCountList",interestCallsCountList);
-		callsPerPersonJSON.put("noInterestCallsCountList",noInterestCallsCountList);
-		callsPerPersonJSON.put("incorrectReferralCallsCountList",incorrectReferralCallsCountList);
-		callsPerPersonJSON.put("newOpportunityCallsCountList",newOpportunityCallsCountList);
-		callsPerPersonJSON.put("meetingScheduledCallsCountList",meetingScheduledCallsCountList);
-		callsPerPersonJSON.put("queuedCallsCountList",queuedCallsCountList);
-		////////////////////////////////
-		
-		callsPerPersonJSON.put("finalCallStatusCountMap", finalCallStatusCount);	
+		callsPerPersonJSON.put("totalNonZeroDurationStatusCountList",nonZeroDurationCountList);
+		callsPerPersonJSON.put("finalCallStatusCountMapList", finalCallStatusCountMapList);	
 		callsPerPersonJSON.put("callsDurationList",callsDurationList);
 		callsPerPersonJSON.put("totalCallsCountList",totalCallsCountList);
 		callsPerPersonJSON.put("domainUsersList",domainUserNamesList);
@@ -1976,95 +1899,70 @@ public class PortletUtil {
  
  public static JSONObject callsStatus(DomainUser domainUser,long minTime, long maxTime,JSONObject cateJson)
  {
-			int answeredCallsCount=0;
-		int busyCallsCount=0;
-		int failedCallsCount=0;
-		int voiceMailCallsCount=0;
-		int missedCallsCount=0;
-		int inquiryCallsCount=0;
-		int interestCallsCount=0;
-		int noInterestCallsCount=0;
-		int incorrectReferralCallsCount=0;
-		int newOpportunityCallsCount=0;
-		int meetingScheduledCallsCount=0;
-		int queuedCallsCount=0;
+	 
+		Map<String,Integer> CallStatusCountMap = new LinkedHashMap<>();
+		CategoriesUtil categoriesUtil = new CategoriesUtil();
+		List<Category> categories = categoriesUtil.getCategoriesByType(Category.EntityType.TELEPHONY_STATUS.toString());
+		Map<String,String> colors = new LinkedHashMap<>();
+		colors.put(Call.ANSWERED, "#27c24c");
+		colors.put(Call.BUSY, "#23b7e5");
+		colors.put(Call.Missed, "#fad733");
+		colors.put(Call.VOICEMAIL, "#7266ba");
+		colors.put(Call.FAILED, "#f05050");
 		
+		CallStatusCountMap.put(Call.ANSWERED,0);
+		CallStatusCountMap.put(Call.BUSY,0);
+		CallStatusCountMap.put(Call.FAILED,0);
+		CallStatusCountMap.put(Call.VOICEMAIL,0);
+		CallStatusCountMap.put(Call.Missed,0);
+		
+		for(Category category : categories){
+			CallStatusCountMap.put(category.getLabel().toLowerCase(), 0);
+			if(!colors.containsKey(category.getLabel().toLowerCase())){
+				String tempColor = "#" + Integer.toHexString(new Random().nextInt(0xFFFFFF)+ new Random().nextInt(0x16777)) ;
+				while(true){
+					if(!colors.containsValue(tempColor)){
+						break;
+					}else{
+						tempColor = "#" + Integer.toHexString(new Random().nextInt(0xFFFFFF)+ new Random().nextInt(0x16777));
+					}
+				}
+				colors.put(category.getLabel().toLowerCase(),tempColor);
+			}
+		}
+		colors.put("others", "#ff8080");
+		CallStatusCountMap.put("others",0);
+
 		int total_Calls=0;
-						List<Activity> callActivitiesList=ActivityUtil.getActivitiesByActivityType("CALL",domainUser.id,minTime,maxTime);
-						
-							for(Activity activity : callActivitiesList){
-								try{
-									
-									 	if(activity.custom3!=null)
-								{
-									switch(activity.custom3.toLowerCase()){
-										case Call.ANSWERED :
-										case "completed" :
-											answeredCallsCount++;
-											break;
-										case Call.BUSY :
-										case Call.NO_ANSWER:
-											busyCallsCount++;
-											break;
-										case Call.FAILED :
-											failedCallsCount++;
-											break;
-										case Call.VOICEMAIL :
-											voiceMailCallsCount++;
-											break;	
-										case Call.Missed :
-											missedCallsCount++;
-											break;	
-										case Call.Inquiry :
-											inquiryCallsCount++;
-											break;	
-										case Call.Interest :
-											interestCallsCount++;
-											break;	
-										case Call.NoInterest :
-											noInterestCallsCount++;
-											break;	
-										case Call.IncorrectReferral :
-											incorrectReferralCallsCount++;
-											break;	
-										case Call.NewOpportunity :
-											newOpportunityCallsCount++;
-											break;		
-										case Call.MeetingScheduled :
-											meetingScheduledCallsCount++;
-											break;
-										default :
-											queuedCallsCount++;
-											break;		
-									}
-
-								}
-							
-								total_Calls++;
-								
-								
-							}
-						catch(Exception e){
-							e.printStackTrace();
+		List<Activity> callActivitiesList=ActivityUtil.getActivitiesByActivityType("CALL",domainUser.id,minTime,maxTime);
+		for(Activity activity:callActivitiesList){
+			try{
+				String statusInActivity = activity.custom3;
+				if(statusInActivity != null && !statusInActivity.equals("")){
+					if(statusInActivity.equalsIgnoreCase(Call.ANSWERED) || statusInActivity.equalsIgnoreCase(Call.COMPLETED)){
+						statusInActivity = Call.ANSWERED;
+					}else if((statusInActivity.equalsIgnoreCase(Call.BUSY) || statusInActivity.equalsIgnoreCase(Call.NO_ANSWER))){
+						statusInActivity = Call.BUSY;
+					}else if(activity.custom3!=null){
+						if(CallStatusCountMap.containsKey(activity.custom3.toLowerCase())){
+							statusInActivity=activity.custom3.toLowerCase();
+						}else{
+							statusInActivity="others";
 						}
-							}
+					}
+					int count1=CallStatusCountMap.get(statusInActivity);
+             		count1++;
+             		CallStatusCountMap.put(statusInActivity,count1);
+             		total_Calls++;
+				}
+			}catch(Exception e){
+				e.printStackTrace();
+			}
+		}
+						cateJson.put("eachCallStatus",CallStatusCountMap);
+						cateJson.put("colors",colors);
 						cateJson.put("total", total_Calls);
-						cateJson.put("answered", answeredCallsCount);
-						cateJson.put("busy", busyCallsCount);
-						cateJson.put("missed", missedCallsCount);
-						cateJson.put("failed", failedCallsCount);
-						cateJson.put("voiceMail", voiceMailCallsCount);
-						cateJson.put("missed", missedCallsCount);
-						cateJson.put("inquiry", inquiryCallsCount);
-						cateJson.put("interest", interestCallsCount);
-						cateJson.put("noInterest", noInterestCallsCount);
-						cateJson.put("incorrectReferral", incorrectReferralCallsCount);
-						cateJson.put("newOpportunity", newOpportunityCallsCount);
-						cateJson.put("meetingScheduled", meetingScheduledCallsCount);
-						cateJson.put("other", queuedCallsCount);
 						return cateJson;
-
-
  }
  
  public static void addDefaultMarketingPortlets(){
