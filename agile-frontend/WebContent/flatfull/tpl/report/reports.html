@@ -652,6 +652,15 @@
  <li><a href="#CompareCampaigns" role="tab" data-toggle="tab"><i class="m-r-sm icon-bar-chart v-middle"></i>{{agile_lng_translate 'report-view' 'compare-campaigns'}}</a></li> 
  </ul>
 </li>
+{{#hasMenuScope 'ACTIVITY'}}
+<li role="presentation" data-tab="4" class="maintab">
+<a href="#activities-tab"  role="tab" data-toggle="tab" >{{agile_lng_translate 'portlets' 'activities'}}</a>
+<ul class="nav nav-tabs sub-nav-tab" id="subTab1" style="display:none;">
+ <li><a href="#UserActivities" role="tab" data-toggle="tab"><i class="m-r-sm icon-cogs v-middle"></i>{{agile_lng_translate 'portlets' 'user-activities'}}</a></li>
+ <li><a href="#ContactActivities" role="tab" data-toggle="tab"><i class="m-r-sm icon-cogs v-middle"></i>{{agile_lng_translate 'report-view' 'contact-activities'}}</a></li> 
+ </ul>
+</li>
+{{/hasMenuScope}}
 </script>
 
 <script id="service-reports-template" type="text/html">
@@ -665,5 +674,6 @@
  <li><a href="#FirstResponse" role="tab" data-toggle="tab"><i class="m-r-sm icon-clock v-middle"></i>{{agile_lng_translate 'report-view' 'first-response-time'}}</a></li>
  </ul>
 </li>
+
 </script>
 
