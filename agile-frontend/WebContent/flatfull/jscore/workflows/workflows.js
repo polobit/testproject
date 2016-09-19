@@ -910,10 +910,44 @@ function get_campaign_changes(updated_workflow_json, old_workflow_json, callback
                             {
                                 var modified_field = {};
                                 modified_field.node_name = update_nodes[i].displayname;
-                                modified_field.name = updated_node_field.name;
-                            
-                                modified_field.old_value = old_node_field.value;
-                                modified_field.new_value = updated_node_field.value;
+                               
+                                var modified_field_obj =
+                                 _.find(old_node.NodeDefinition.ui, function(obj)
+                                    {
+                                        if(obj.name == updated_node_field.name)
+                                        {
+                                            return obj; 
+                                        } 
+
+                                    });
+
+                                if(modified_field_obj)
+                                    modified_field.name = modified_field_obj.label;
+                                
+                                // If Modified field undefined
+                                if(!modified_field.name)                            
+                                    modified_field.name = updated_node_field.name;
+
+                                if(modified_field_obj)
+                                {
+                                   modified_field.old_value = _.findKey(modified_field_obj.options, function(value)
+                                    {
+                                        if(value == old_node_field.value)
+                                            return value;
+                                    });
+
+                                   modified_field.new_value = _.findKey(modified_field_obj.options, function(value)
+                                    {
+                                        if(value == updated_node_field.value)
+                                            return value;
+                                    });
+                                }
+                                
+                                if(!modified_field.old_value)
+                                    modified_field.old_value = old_node_field.value;
+                                
+                                if(!modified_field.new_value)
+                                    modified_field.new_value = updated_node_field.value;
 
                                 if(restricted_fields.indexOf(modified_field.name) != -1)
                                 {
