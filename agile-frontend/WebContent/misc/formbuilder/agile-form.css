@@ -19,6 +19,9 @@
   font-family:sans-serif;
   box-sizing: border-box;
 }
+.theme1 .agile-group select[multiple] {
+    font-size: 14px!important;
+}
 .theme1 .agile-field{
  /* width:380px;*/
  width:90%;
