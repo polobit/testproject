@@ -20,6 +20,11 @@
 	cursor: pointer !important;
 }
 
+.ccemailul li{
+  text-align: left;
+  white-space: normal;
+  word-break: break-all;
+}
 .ccemail{
   text-align: left;
   white-space: normal;
