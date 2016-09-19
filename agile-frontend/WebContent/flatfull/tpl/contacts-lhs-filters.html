@@ -243,7 +243,7 @@
 					</select>
 					<div class="EQUALS NOTEQUALS condition_container m-t-xs">
 						<span id="RHS">
-							<input type="text" placeholder="{{agile_lng_translate 'contacts-view' 'value'}}" prev-val="" class="required form-control filters-tags-typeahead text-xs" onchange="setTimeout(function(ele){bindChangeEvent(ele)}, 500, this);" name="temp-0" id="temp-0" style="height:30px;
+							<input type="text" placeholder="{{agile_lng_translate 'contacts-view' 'value'}}" prev-val="" class="required form-control filters-tags-typeahead text-xs" onchange="setTimeout(function(ele){hideTypeaheadMenu(ele);},20, this);setTimeout(function(ele){bindChangeEvent(ele)}, 500, this);" name="temp-0" id="temp-0" style="height:30px;
 							">
 						</span>
 					</div>
@@ -263,7 +263,7 @@
 					</select>
 					<div class="EQUALS NOTEQUALS condition_container m-t-xs">
 						<span id="RHS">
-							<input type="text" placeholder="{{agile_lng_translate 'contacts-view' 'Enter Tag'}}" prev-val="" class="required text-xs form-control filters-tags-typeahead" onchange="setTimeout(function(ele){bindChangeEvent(ele)}, 500, this);" name="temp-1" id="temp-1" style="height:30px;">
+							<input type="text" placeholder="{{agile_lng_translate 'contacts-view' 'Enter Tag'}}" prev-val="" class="required text-xs form-control filters-tags-typeahead" onchange="setTimeout(function(ele){hideTypeaheadMenu(ele);},20, this);setTimeout(function(ele){bindChangeEvent(ele)}, 500, this);" name="temp-1" id="temp-1" style="height:30px;">
 						</span>
 					</div>
 					<div class="m-t-xs"><a class="hide pull-right clear-filter-condition-lhs"><i class="icon-trash text-l-none-hover c-p text-muted text-sm" id="removeBtn"></i></a></div>
@@ -944,7 +944,7 @@
 					</select>
 					<div class="EQUALS NOTEQUALS condition_container m-t-xs companies_input">
 						<span id="RHS" class="no-filter-action">
-							<input type="text" placeholder="{{agile_lng_translate 'contacts-view' 'value'}}" prev-val="" class="required form-control filters-tags-typeahead companies_input" onchange="setTimeout(function(ele){bindChangeEvent(ele)}, 500, this);" name="temp-0" id="temp-0" style="height:30px;font-size:12px;">
+							<input type="text" placeholder="{{agile_lng_translate 'contacts-view' 'value'}}" prev-val="" class="required form-control filters-tags-typeahead companies_input" onchange="setTimeout(function(ele){hideTypeaheadMenu(ele);},20, this);setTimeout(function(ele){bindChangeEvent(ele)}, 500, this);" name="temp-0" id="temp-0" style="height:30px;font-size:12px;">
 						</span>					
 					</div>
 					<a class="pull-right trash-css" style="font-size:16px;opacity: 0.9;"><i class="filter-tags-multiple-remove-lhs icon-trash text-l-none-hover c-p" id="removeBtn"></i></a>
@@ -963,7 +963,7 @@
 						</select>
 					<div class="EQUALS NOTEQUALS condition_container m-t-xs">
 						<span id="RHS">
-							<input type="text" placeholder="{{agile_lng_translate 'contacts-view' 'Enter Tag'}}" prev-val="" class="required form-control filters-tags-typeahead companies_input" onchange="setTimeout(function(ele){bindChangeEvent(ele)}, 500, this);" name="temp-1" id="temp-1" style="height:30px;font-size:12px;">
+							<input type="text" placeholder="{{agile_lng_translate 'contacts-view' 'Enter Tag'}}" prev-val="" class="required form-control filters-tags-typeahead companies_input" onchange="setTimeout(function(ele){hideTypeaheadMenu(ele);},20, this);setTimeout(function(ele){bindChangeEvent(ele)}, 500, this);" name="temp-1" id="temp-1" style="height:30px;font-size:12px;">
 						</span>
 					</div>
 					<div class="m-t-xs"><a class="hide pull-right clear-filter-condition-lhs" style="opacity: 0.9;" ><i class="icon-trash text-l-none-hover c-p text-muted text-sm" id="removeBtn"></i></a></div>

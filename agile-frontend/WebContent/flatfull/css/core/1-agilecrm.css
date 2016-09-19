@@ -4717,11 +4717,29 @@ ul#recent-menu-model-list li:nth-child(even)
   background-color: #f9f9f9;
 }
 
+/*Start of Tags LHS Filters*/
+
 .condition_container ul.typeahead.dropdown-menu{
   width: 100% !important;
+  min-height: 40px;
+  max-height: 250px;
+  overflow-y: auto;
 }
 .condition_container ul.typeahead.dropdown-menu li a{
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
 }
+.condition_container ul.typeahead.dropdown-menu::-webkit-scrollbar {
+  width: 5px;
+}
+.condition_container ul.typeahead.dropdown-menu::-webkit-scrollbar-button {
+  width: 8px;
+  height:5px;
+}
+.condition_container ul.typeahead.dropdown-menu::-webkit-scrollbar-thumb {
+  background:#ccc;
+  border-radius:10px;
+}
+
+/*End of Tags LHS Filters*/
