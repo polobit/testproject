@@ -115,6 +115,7 @@ $("#activities-listners").on('click', '.email-details', function(e) {
 				if(is_equal)
 				{
 					$campaign_history_details.html("<p>No node got modified.</p>");
+					$campaign_history_details.slideToggle("slow");
 					return;
 				}
 
