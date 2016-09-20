@@ -53,6 +53,7 @@ function renderActivityView(params)
 		}, appendItemCallback : function(el)
 		{
 			includeTimeAgo(el);
+			initializeWorkflowBackupListener(el);
 		}
 
 	});
