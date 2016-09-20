@@ -1,0 +1,47 @@
+<script id="form-analysis-template" type="text/html">
+<div class="wrapper-md lter bg-light b-b" id="form-logs-list">
+<div class="row">
+    <div class="col-md-12">
+        
+            <h3 class="pull-left font-thin h3">{{agile_lng_translate 'forms' 'form-analysis'}}</h3>
+
+			<!--Shown only in Subscribers block-->
+			<div id="subscribers-block" class="pull-left" style="margin-top: 2px; margin-left: 11px;">
+				<div class="btn btn-sm btn-default m-l-lg delete-checked-contacts pull-left" id="remove-active-from-form" style="display: none;">{{agile_lng_translate 'web-rules' 'remove-from-form'}}</div>
+            	<!-- Shows selected contacts list and offer to select all if current list is more than the page-size -->
+            	<div class="pull-left m-l-sm"  style="margin-top: 6px;" id="subscribers-bulk-select"></div>
+			</div>
+
+            <div class="right">
+        		<select id="form-reports-select" class="required form-control">
+        			<option value="">{{agile_lng_translate 'contacts-view' 'select'}}</option>
+        		</select>
+			</div>
+            <div class="clearfix"></div>
+       
+    </div>
+</div>
+</div>
+<div id="form-analysis-tabs"></div>
+</script>
+
+<script id="form-analysis-tabs-template" type="text/html">
+
+	<div class="hbox hbox-auto-xs hbox-auto-sm bg-light">	
+<!--		<div class="col w b-r">
+   		<div class="vbox">
+     	<div class="row-row">
+		<div id="form-tabs" class="list-group list-group-lg no-radius no-border no-bg m-b-none">
+			<a href="#email-reports/{{id}}" class="form-stats-tab list-group-item select" data-form-tab-active="STATS">{{agile_lng_translate 'report-view' 'reports'}}</a>
+			<a href="#workflow/all-subscribers/{{id}}" class="form-subscribers-tab list-group-item" data-form-tab-active="SUBSCRIBERS">{{agile_lng_translate 'report-view' 'subscribers'}}</a>
+			<a href="#workflows/logs/{{id}}" class="form-logs-tab list-group-item" data-form-tab-active="LOGS">{{agile_lng_translate 'report-view' 'logs'}}</a>
+		</div>
+		</div>
+		</div>
+		</div> -->
+		<div class="col overflow-visible">
+			<div class="tabs wrapper-md" id="form-analysis-tabs-content"></div>
+		</div>
+	</div>
+
+</script>

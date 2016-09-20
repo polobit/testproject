@@ -1,0 +1,48 @@
+<script id="form-table-reports-template" type="text/html">
+<div class="table-responsive">  
+	<table class="table table-bordered table-layout-mob-view">
+		<tbody>
+			<tr>
+				<th>Total Forms</th>
+				<th>Total Submissions<span
+							style="vertical-align: text-top; margin-left: -3px"> <img
+							border="0" src="{{getS3ImagePath '/img/help.png'}}"
+							style="height: 6px; vertical-align: top" rel="popover"
+							data-placement="right"
+							data-title:" data-content="Will be Zero if the Web Rule has no Input Fields"
+							id="element" data-trigger="hover" />
+						</span></th>
+	<!--			<th>{{agile_lng_translate 'campaigns' 'clicks'}}<span
+
+							style="vertical-align: text-top; margin-left: -3px"> <img
+							border="0" src="{{getS3ImagePath '/img/help.png'}}"
+							style="height: 6px; vertical-align: top" rel="popover"
+							data-placement="right"
+							data-title:" data-content="{{agile_lng_translate 'campaigns' 'total-email-link-clicks-recorded-desc'}}"
+							id="element" data-trigger="hover" /></th>
+				<th>{{agile_lng_translate 'campaigns' 'unsubscriptions'}}</th>
+				<th>{{agile_lng_translate 'campaigns' 'hard-bounces'}} 
+					<span class="v-top m-l-n-xs">
+						<img border="0" src="{{getS3ImagePath '/img/help.png'}}"	class="v-top" style="height: 6px;" rel="popover"
+							data-placement="right" data-title:" data-content="{{agile_lng_translate 'campaigns' 'hard-bounce-occurs-desc'}}"
+							id="element" data-trigger="hover" />
+					</span>
+				</th>
+				<th>{{agile_lng_translate 'campaigns' 'soft-bounces'}} 
+					<span class="v-top m-l-n-xs"> 
+						<img border="0" src="{{getS3ImagePath '/img/help.png'}}" class="v-top" style="height: 6px;" rel="popover"
+							data-placement="right" data-title:" data-content="{{agile_lng_translate 'campaigns' 'soft-bounce-occurs-desc'}}"
+							id="element" data-trigger="hover" />
+					</span>
+				</th>
+				<th>{{agile_lng_translate 'campaigns' 'spam-complaints'}}</th> -->
+			</tr>
+            <tr>
+			   <td>{{#if popup}}{{popup}}{{else}} 0 {{/if}}</td>
+				<td>{{#if submit}}{{submit}}{{else}} 0 {{/if}}</td>
+				               <!-- <td>{{#if spam}}{{spam}} {{else}} 0 {{/if}}</td> -->
+			</tr>
+		</tbody>
+	</table>
+</div>
+</script>
