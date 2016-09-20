@@ -2,6 +2,9 @@
   <div id="affiliate-container" class="bg-light lter b-b wrapper-md">
     <h1 class="pull-left font-thin h3">{{agile_lng_translate 'affiliate' 'affiliate-program'}}<small> <span class="label label-sm bg-danger">{{agile_lng_translate 'deal-view' 'beta'}}</span></small></h1>
     <div id="affiliate-datepicker" class="pull-right"></div>
+    <a href="#affiliate-register-deal" style="display: none;" id="affiliate-register-deal" class="btn btn-default pull-right btn-sm btn-addon">
+          <i class="icon icon-plus-sign"></i> {{agile_lng_translate 'other' 'add'}}
+    </a>
     <div class="clearfix"></div>    
   </div>
   <div class="hbox hbox-auto-xs hbox-auto-sm bg-light agile-tab">
@@ -9,9 +12,10 @@
      <div class="vbox">
       <div class="row-row">
 		<div class="list-group list-group-lg no-radius no-border no-bg m-b-none">
-			<a href="#commission" class="commission-details-tab list-group-item select">{{agile_lng_translate 'affiliate' 'commission-details'}}</a>
-			<a href="#affiliate" class="referrals-tab list-group-item">{{agile_lng_translate 'affiliate' 'referrals'}}</a>
-			<a href="#creatives" class="tools-tab list-group-item">{{agile_lng_translate 'affiliate' 'affiliate-tools'}}</a>
+			<a href="#affiliate-overview" class="commission-details-tab list-group-item select">{{agile_lng_translate 'affiliate' 'commission-details'}}</a>
+			<a href="#affiliate-referrals" class="referrals-tab list-group-item">{{agile_lng_translate 'affiliate' 'referrals'}}</a>
+			<a href="#affiliate-creatives" class="tools-tab list-group-item">{{agile_lng_translate 'affiliate' 'affiliate-tools'}}</a>
+      <a href="#affiliate-deals" class="deal-registration-tab list-group-item">{{agile_lng_translate 'affiliate' 'registered-deals'}}</a>
 		</div>
 	  </div>
 	 </div>
@@ -363,4 +367,123 @@
 	      </div>
 	  	</div>
 	</div>
+</script>
+
+<script id="deal-registration-collection-template" type="text/html">
+{{#unless this.length}}
+  <div class="alert bg-white ">
+        <div class="slate-content p-md">
+            <div class="box-left pull-left m-r-md">
+                <img alt="Clipboard" src="/img/clipboard.png">
+            </div>
+            <div class="box-right pull-left">
+                <h4 class="text-lg" style="opacity:0.8;">{{agile_lng_translate 'affiliate' 'no-registered-deals'}} </h4>
+            </div>
+      <div class="clearfix">
+      </div>
+        </div>
+    </div>
+{{/unless}}
+{{#if this.length}}
+<div class="panel panel-default">
+ <div class="panel-heading">{{agile_lng_translate 'affiliate' 'registered-deals'}}
+ </div>
+<div class="row">
+<div class="col-md-12 col-sm-12">
+      <div class=" table-responsive"> 
+      <table class="table table-striped agile-table panel table-layout-mob-view">
+          <thead>
+              <tr>
+                  <th style="width:20%" class="header">{{agile_lng_translate 'affiliate' 'name'}}</th>
+                  <th style="width:20%" class="header">{{agile_lng_translate 'affiliate' 'personal-email'}}</th>
+                  <th style="width:20%" class="header">{{agile_lng_translate 'affiliate' 'office-email'}}</th>
+                  <th style="width:20%" class="header">{{agile_lng_translate 'affiliate' 'phone'}}</th>
+              </tr>
+           </thead>
+           <tbody id='deal-registration-model-list'>
+           </tbody>
+      </table>
+      </div>
+    </div>
+</div>
+</div>
+{{/if}}
+</script>
+
+<script id="deal-registration-model-template" type="text/html">
+  <td>
+    <div class="table-resp">
+    <div class="text-base text-ellipsis">{{name}}</div>
+    </div>
+  </td>
+  <td>
+    <div class="table-resp">
+    <div class="text-base text-ellipsis">{{personalEmail}}</div>
+    </div>
+  </td>
+  <td>
+    <div class="table-resp">
+    <div class="text-base text-ellipsis">{{officeEmail}}</div>
+    </div>
+  </td>
+  <td>
+    <div class="table-resp">
+    <div class="text-base text-ellipsis">{{phone}}</div>
+    </div>
+  </td>
+</script>
+
+<script id="deal-register-modal-template" type="text/html">
+<div class="modal-dialog">
+  <div class="modal-content">
+    <div class="modal-header">
+      <button class="close" data-dismiss="modal">&times;</button>
+      <h3 class="modal-title">
+        &nbsp;{{agile_lng_translate 'affiliate' 'deal-registration'}}
+      </h3>
+    </div>
+    <div class="modal-body">
+      <form id="deal_registration_form" name="AffiliateDeal" method="post" class="form-horizontal">
+        <fieldset>
+          {{#if id}}
+          <input type="hidden" name="id" value="{{id}}">
+          {{/if}}
+          <div class="form-group control-group">
+             <label class="control-label col-sm-3">{{agile_lng_translate 'affiliate' 'name'}}<span class="field_req">*</span></label> 
+             <div class="controls col-sm-7">
+              <input name="name" type="text" placeholder="{{agile_lng_translate 'affiliate' 'name'}}" class="required form-control"> 
+             </div>
+          </div>
+          <div class="form-group control-group">
+             <label class="control-label col-sm-3">{{agile_lng_translate 'affiliate' 'personal-email'}}<span class="field_req">*</span></label> 
+             <div class="controls col-sm-7">
+              <input name="personalEmail" type="email" placeholder="{{agile_lng_translate 'affiliate' 'personal-email'}}" class="email required form-control"> 
+             </div>
+          </div>
+          <div class="form-group control-group">
+             <label class="control-label col-sm-3">{{agile_lng_translate 'affiliate' 'office-email'}}<span class="field_req">*</span></label> 
+             <div class="controls col-sm-7">
+              <input name="officeEmail" type="email" placeholder="{{agile_lng_translate 'affiliate' 'office-email'}}" class="email required form-control"> 
+             </div>
+          </div>
+          <div class="form-group control-group">
+             <label class="control-label col-sm-3">{{agile_lng_translate 'affiliate' 'website-url'}}<span class="field_req">*</span></label> 
+             <div class="controls col-sm-7">
+              <input name="websiteURL" type="url" placeholder="{{agile_lng_translate 'affiliate' 'website-url'}}" class="required form-control"> 
+             </div>
+          </div>
+          <div class="form-group control-group">
+             <label class="control-label col-sm-3">{{agile_lng_translate 'affiliate' 'phone'}}<span class="field_req">*</span></label> 
+             <div class="controls col-sm-7">
+              <input name="phone" type="text" placeholder="{{agile_lng_translate 'affiliate' 'phone'}}" class="required allow-char-phone form-control"> 
+             </div>
+          </div>
+        </fieldset>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <a href="#" class="btn btn-sm btn-primary" id="deal_register_validate">{{agile_lng_translate 'modals' 'save'}}</a> <span class="save-status"></span>
+    </div>
+  </div>
+</div>
 </script>

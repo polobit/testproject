@@ -5,10 +5,11 @@ var AFFILIATE_DETAILS;
 var AffiliateRouter = Backbone.Router.extend({
 
 	routes : {
-		"commission" : "showCommissionDetails",
-		"affiliate" : "listAffiliates" ,
-	 	"affiliateDetails" : "showaffiliateDetails",
-	 	"creatives" : "creatives"
+		"affiliate-overview" : "showCommissionDetails",
+		"affiliate-referrals" : "listAffiliates" ,
+	 	"affiliate-register" : "showaffiliateDetails",
+	 	"affiliate-creatives" : "creatives",
+	 	"affiliate-deals" : "registeredDeals"
 	},
 
 	showCommissionDetails : function(){
@@ -27,7 +28,7 @@ var AffiliateRouter = Backbone.Router.extend({
 				$('.commission-details-tab').addClass('select');
 			}, "#content");
 		}, function(){
-			that.showaffiliateDetails();
+			window.location.href="#affiliate-register";
 		});
 	},
 
@@ -52,7 +53,7 @@ var AffiliateRouter = Backbone.Router.extend({
 				$('.referrals-tab').addClass('select');
 			}, "#content");
 		}, function(){
-			that.showaffiliateDetails();
+			window.location.href="#affiliate-register";
 		});
 	},
 
@@ -134,7 +135,41 @@ var AffiliateRouter = Backbone.Router.extend({
 				});
 			}, "#content");
 		}, function(){
-			that.showaffiliateDetails();
+			window.location.href="#affiliate-register";
+		});
+	},
+	registeredDeals : function(){
+		var that = this;
+		checkForAffiliateDetails(function(){
+			getTemplate('affiliate', {}, undefined, function(template_ui){
+				if(!template_ui)
+					  return;
+				$('#content').html($(template_ui));
+				that.registeredDealsCollectionView = new Base_Collection_View({ url : 'core/api/affiliate/deals?userId='+CURRENT_DOMAIN_USER.id, sort_collection : false, templateKey : "deal-registration",
+					cursor : true, individual_tag_name : 'tr', postRenderCallback : function(el){
+						head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
+						{
+							$("time", el).timeago();
+						});
+						$("#affiliate-register-deal").show();
+						$("#affiliate-container").on("click", "#affiliate-register-deal", function(e){
+							e.preventDefault();
+							getTemplate('deal-register-modal', {}, undefined, function(template_ui1){
+								if(!template_ui1)
+									  return;
+								$("#register_deal_modal").html($(template_ui1));
+								$("#register_deal_modal").modal("show");
+							}, "#content");
+						});
+					}
+				});
+				that.registeredDealsCollectionView.collection.fetch();
+				$('#affiliate-tabs-content').html(that.registeredDealsCollectionView.render().el);
+				$('#affiliate-tabs .select').removeClass('select');
+				$('.deal-registration-tab').addClass('select');
+			}, "#content");
+		}, function(){
+			window.location.href="#affiliate-register";
 		});
 	}
 

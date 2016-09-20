@@ -57,3 +57,66 @@ function getCommission(userId, time, callback){
 				callback(data);
 		}});
 }
+
+$(document).ready(function(){
+	$("#register_deal_modal").on("click","#deal_register_validate", function(e){
+		e.preventDefault();
+		var modal_id = $(this).closest('.modal').attr("id");
+		var form_id = $(this).closest('.modal').find('form').attr("id");
+		var json = serializeForm(form_id);
+		registerDeal(form_id, modal_id, $(this), json);
+	});
+});
+
+function registerDeal(formId, modalId, saveBtn, json)
+{
+	// Returns, if the save button has disabled attribute
+	if ($(saveBtn).attr('disabled'))
+		return;
+
+	// Disables save button to prevent multiple click event issues
+	disable_save_button($(saveBtn));
+
+	if (!isValidForm('#' + formId))
+	{
+		enable_save_button($(saveBtn));
+		// Removes disabled attribute of save
+		// button
+		return false;
+	}
+
+	var newEntry = false; // test if this model is new, true => new model
+	if (json.id === undefined)
+		newEntry = true;
+
+	var newRegisterDeal = new Backbone.Model();
+	newRegisterDeal.url = 'core/api/affiliate/deals';
+	newRegisterDeal.save(json, { success : function(data)
+	{
+		// Removes disabled attribute of save button
+		enable_save_button($(saveBtn));// $(saveBtn).removeAttr('disabled');
+
+		// $('#' + modalId).find('span.save-status img').remove();
+		$('#' + modalId).modal('hide');
+
+		var registeredDeal = data.toJSON();
+
+		add_recent_view(new BaseModel(registeredDeal));
+
+			// On cases page.. adjust current model
+			if (newEntry == true)
+				App_Affiliate.registeredDealsCollectionView.collection.add(data);
+			else
+			{
+				App_Affiliate.registeredDealsCollectionView.collection.remove(json);
+				App_Affiliate.registeredDealsCollectionView.collection.add(data);
+			}
+			App_Affiliate.registeredDealsCollectionView.render(true);
+	}, error : function(data, response)
+	{
+		enable_save_button($(saveBtn));
+	} });
+}
+
+
+
