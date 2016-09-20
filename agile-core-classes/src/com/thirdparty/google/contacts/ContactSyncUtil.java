@@ -268,8 +268,15 @@ public class ContactSyncUtil
 			PhoneNumber primaryPhone = new PhoneNumber();
 			primaryPhone.setPhoneNumber(field.value);
 			if (!StringUtils.isEmpty(field.subtype))
+			{
+				if(field.subtype.equalsIgnoreCase("Work Fax"))
+					primaryPhone.setRel("http://schemas.google.com/g/2005#work_fax");
+				else if(field.subtype.equalsIgnoreCase("Home Fax"))
+					primaryPhone.setRel("http://schemas.google.com/g/2005#home_fax");
+				else
 				primaryPhone.setRel("http://schemas.google.com/g/2005#"
 						+ StringUtils.lowerCase(field.subtype.toLowerCase()));
+			}
 			else
 				primaryPhone.setRel("http://schemas.google.com/g/2005#work");
 
