@@ -531,4 +531,25 @@ body,input,button,select,textarea {
 	padding: 56px;
 	background-size: cover;
 }
+
+/*css custom responsive code*/
+.help-searchbox #article_search_form{ margin: auto; float: none;}
+.help-searchbox #hc_query{ width: 100%; border: 1px solid #ccc;}
+.search-box h1{ padding: 0px 15px 20px; margin: 0px;}
+.search-box1{ margin-bottom: 20px !important;  padding: 90px 0 !important;}
+.search-box1 #hc_query{ margin-bottom: 10px;}
+.search-box{ margin-bottom: 0px; padding: 70px 0;}
+.imgresponsive img{display: block; max-width: 100%; height: auto;}
+
+@media (max-width: 767px){
+	.search-box h1{ padding-bottom: 15px;}
+	.search-box1{ padding: 40px 0 !important; margin-bottom: 10px !important; padding-left: 0 !important; padding-right: 0 !important;}
+	.search-box h1{ font-size: 28px;}
+	.help-searchbox #hc_query{ height: 50px; font-size: 17px; padding: 20px 44px;}
+	.search-box .fa-search{ font-size: 18px;}
+	.search-box{padding: 40px 0 30px;}
+}
+@media (max-width: 480px){
+.categories-column{ width: 100% !important; text-align: center;}
+}
 			        

@@ -554,12 +554,14 @@ public class GoogleSyncImpl extends TwoWaySyncService
 		}
 	    }
 
-	    if (insertRequestCount >= 95 || (i >= contacts.size() - 1 && insertRequestCount != 0))
+	    if (insertRequestCount >= 2 || (i >= contacts.size() - 1 && insertRequestCount != 0))
 	    {
 	    
 	    Thread.sleep(2000);
 	    System.out.println("Inside batch update");
+	    insertRequestCount = 0;
 		// Submit the batch request to the server.
+	    try{
 		responseFeed = contactService.batch(url, requestFeed);
 		for(int v=0;v<responseFeed.getEntries().size();v++)
 		{
@@ -574,8 +576,14 @@ public class GoogleSyncImpl extends TwoWaySyncService
 		prefs.last_synced_to_client = contact.created_time > prefs.last_synced_to_client ? contact.created_time
 			: prefs.last_synced_to_client;
 
-		insertRequestCount = 0;
+		
 		requestFeed = new ContactFeed();
+	    }
+	    catch(Exception e)
+	    {
+	    	requestFeed = new ContactFeed();
+	    	  System.out.println("StackTrace_of_sync_inside_insert"+ExceptionUtils.getFullStackTrace(e));
+	    }
 
 	    }
 	    limit = i;
@@ -680,10 +688,12 @@ public class GoogleSyncImpl extends TwoWaySyncService
 			}
 		}
 		    
-		if (updateRequestCount >= 95 || ((i >= (contacts.size() - 1) && updateRequestCount != 0)))
+		if (updateRequestCount >= 2 || ((i >= (contacts.size() - 1) && updateRequestCount != 0)))
 		{
 		    Thread.sleep(2000);
 		    System.out.println("Inside batch update");
+		    updateRequestCount = 0;
+		    try{
 			responseFeed = contactService.batch(new URL("https://www.google.com/m8/feeds/contacts/default/full/batch?"
 				+ "access_token=" + token), updateFeed);
 			for(int v=0;v<responseFeed.getEntries().size();v++)
@@ -696,8 +706,13 @@ public class GoogleSyncImpl extends TwoWaySyncService
 			responseFeed = null;
 			prefs.last_synced_updated_contacts_to_client = (contact.updated_time != 0 && contact.updated_time > prefs.last_synced_updated_contacts_to_client) ? contact.updated_time
 				: prefs.last_synced_to_client;
-			updateRequestCount = 0;
+			
 			updateFeed = new ContactFeed();
+		    }
+		    catch(Exception e){
+		    	updateFeed = new ContactFeed();
+		    	 System.out.println("StackTrace_of_sync_inside_update"+ExceptionUtils.getFullStackTrace(e));
+		    }
 		}
 		limit = i;
 	}

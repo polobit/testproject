@@ -153,11 +153,11 @@ var ClickDesk_File_Upload = {
 };
 
 function disableSave(){
-     $("[name='upload']").attr("disabled", "disabled").val("Uploading...");
+     $("[name='upload']").attr("disabled", "disabled").val(localeJSON['uploading'] + "...");
 }
 
 function reenableSave(){
-  $("[name='upload']").removeAttr("disabled").val("Upload");
+  $("[name='upload']").removeAttr("disabled").val(localeJSON['upload']);
 }
 
 function upload_success_callback(){

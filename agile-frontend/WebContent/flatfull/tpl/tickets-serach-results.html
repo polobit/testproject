@@ -1,15 +1,30 @@
 <script id="tickets-search-model-template" type="text/html">
-    <td></td>
+    <td class="hide"></td>
     <td class="data" data="{{id}}">
-     <div class="table-resp">
-        <div class="agile-thumb agile-thumb-view" style="width:calc(100% - 60px);">
-            <div class="text-cap custom-link">#{{id}}</div> 
-            <div> <small class="text-muted m-t-xs">{{subject}} </small></div>
-        </div>
+        <div class="table-resp">
+            <div class="agile-thumb agile-thumb-view" style="width:calc(100% - 60px);">
+                <div class="text-cap custom-link">{{subject}} (#{{id}})</div>
+                <div>
+                    <small class="text-muted m-t-xs overflow-hidden no-wrap">  {{requester_name}} 
+                    </small>
+                </div> 
+                <!-- <div> <small class="text-muted m-t-xs">{{subject}} </small></div> -->
+            </div>
+            <!-- <div> <small class="text-muted m-t-xs overflow-hidden no-wrap">{{requester_name}} </small></div> -->
+            <!-- <div class="overflow-hidden no-wrap">{{requester_name}}</div> -->
+            <div class="text-muted">{{ucfirst priority}}, {{ucfirst status}}</div>
+            <div class="table-resp">
+                <i class="fa fa-clock-o m-r-xs"></i>
+                <time class="document-created-time b-b-dotted" value="{{created_time}}" datetime="{{epochToHumanDate ""created_time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created_time}}</time>
+            </div>
        </div>
     </td>
-
-    <td class="overflow-hidden no-wrap">
+    <td style="vertical-align:middle">
+        <div class="text-md text-muted contact-list-mobile text-right block">
+            <i class="fa fa-angle-right"></i>
+        </div>
+    </td>
+    <!-- <td class="overflow-hidden no-wrap">
         {{requester_name}}
     </td>
 
@@ -23,29 +38,45 @@
         <time class="document-created-time b-b-dotted" value="{{created_time}}" datetime="{{epochToHumanDate "" created_time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created_time}}</time>
         </div>
    
-    </td>
+    </td> -->
     
 </script>
 <script id="tickets-search-collection-template" type="text/html">
-<div class="wrapper-md lter bg-light b-b">
-<div class="row">
-    <div class="col-md-12">
-       
-            
-          
-            <div id="search-query-heading" style="font-size:19px;"class="m-n font-thin h3 pull-left">Search results for 
-            <span style="font-weight:600;">"{{query}}"</span>
+{{#is_mobile}}
+    <div class="wrapper-md lter bg-light b-b">
+        <div class="row">
+            <div class="col-md-12">
+            <div id="search-query-heading" style="font-size:19px;" class="m-n font-thin h3 pull-left">Search results for 
+                <span style="font-weight:bold;">"{{query}}"</span>
             </div>
-            <div class="pull-right">
-            <div class="btn-group" id="view-list">
+                    <!-- <div class="pull-right">
+                    <div class="btn-group" id="view-list">
+                    </div>
+                    <div class="btn-group right" id="filter-list">
+                    </div>
+                    </div> -->
+                <div class="clearfix"></div>
             </div>
-            <div class="btn-group right" id="filter-list">
-            </div>
-            </div>
-        <div class="clearfix"></div>
+        </div>
     </div>
-</div>
-</div>
+{{else}}
+    <div class="wrapper-md lter bg-light b-b">
+        <div class="row">
+            <div class="col-md-12">
+            <div id="search-query-heading" style="font-size:19px;"class="m-n font-thin h3 pull-left">Search results for 
+                    <span style="font-weight:600;">"{{query}}"</span>
+                    </div>
+                    <div class="pull-right">
+                    <div class="btn-group" id="view-list">
+                    </div>
+                    <div class="btn-group right" id="filter-list">
+                    </div>
+                    </div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    </div>
+{{/is_mobile}}
 <div class="row">
     <div class="col-md-12">
         {{#if this.length}}
@@ -65,23 +96,40 @@
                         <li><a href="#" id="bulk-tags">Add tags</a></li>
                     </ul>
                 </div>
-                <div class="table-responsive">
-                <table  class="table table-striped  panel agile-table onlySorting  
-                table-layout-mob-view m-b-none" url="core/api/bulk/update?action_type=DELETE" style="table-layout:auto;">
-                    <thead>
-                        <tr>
-                            <th style="width:2%"></th>
-
-                            <th style="width:25%">{{agile_lng_translate 'tickets' 'id'}}</th>
-                            <th style="width:25%">{{agile_lng_translate 'tickets' 'assignee'}}</th>
-                            <th style="width:30%">{{agile_lng_translate 'tickets' 'priority-and-status'}}</th>
-                            <th style="width:25%">{{agile_lng_translate 'contacts-view' 'created date'}}</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tickets-search-model-list" class="model-list-cursor" route="ticket/">
-                    </tbody>
-                </table>
-                </div>
+                {{#is_mobile}}
+                    <div>
+                        <table class="table table-striped panel agile-table onlySorting table-layout-mob-view m-b-none" url="core/api/bulk/update?action_type=DELETE" style="table-layout:auto;">
+                            <!-- <thead>
+                                <tr>
+                                    <th style="width:2%"></th>
+                                    <th style="width:25%">{{agile_lng_translate 'tickets' 'id'}}</th>
+                                    <th style="width:25%">{{agile_lng_translate 'tickets' 'assignee'}}</th>
+                                    <th style="width:30%">{{agile_lng_translate 'tickets' 'priority-and-status'}}</th>
+                                    <th style="width:25%">{{agile_lng_translate 'contacts-view' 'created date'}}</th>
+                                </tr>
+                            </thead> -->
+                            <tbody id="tickets-search-model-list" class="model-list-cursor" route="ticket/">
+                            </tbody>
+                        </table>
+                    </div>
+                {{else}}
+                    <div class="table-responsive">
+                        <table  class="table table-striped  panel agile-table onlySorting  
+                        table-layout-mob-view m-b-none" url="core/api/bulk/update?action_type=DELETE" style="table-layout:auto;">
+                            <thead>
+                                <tr>
+                                    <th style="width:2%"></th>
+                                    <th style="width:25%">{{agile_lng_translate 'tickets' 'id'}}</th>
+                                    <th style="width:25%">{{agile_lng_translate 'tickets' 'assignee'}}</th>
+                                    <th style="width:30%">{{agile_lng_translate 'tickets' 'priority-and-status'}}</th>
+                                    <th style="width:25%">{{agile_lng_translate 'contacts-view' 'created date'}}</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tickets-search-model-list" class="model-list-cursor" route="ticket/">
+                            </tbody>
+                        </table>
+                    </div>
+                {{/is_mobile}}
             </div>
         </div>
 
