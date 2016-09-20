@@ -5435,4 +5435,24 @@ menu.menu-add,Add,Añadir
 menu.home,Home,Casa
 tickets.sections,Sections,
 tickets.articles,Articles,
-
+upload-image.upload-image,Upload Image,Cargar imagen
+upload-image.upload-valid-image,Please select a valid image file and try again,Por favor&#44 seleccione un archivo de imagen válido y vuelva a intentarlo
+upload-image.upload-your-image,Upload your image file,Sube el archivo de imagen
+upload-image.upload-image-format,For best results&#44 we recommend that you upload .png files. We even support .jpg and .gif formats.,Para obtener los mejores resultados &#44 se recomienda que cargue los archivos .png . incluso apoyamos formatos .jpg y .gif .
+upload-image.cropped-image,Cropped Image,Imagen recortada
+upload-image.uploading,Uploading,Subiendo
+upload-image.avatars,Avatars,Avatares
+upload-attachment.upload-attachment,Upload Attachment,Cargar documento adjunto
+upload-attachment.file-size-exceeded,The file you are trying to send exceeds the 5MB attachment limit,El archivo que está intentando enviar excede el límite de 5 MB de datos adjuntos
+upload-csv.upload-csv,Upload CSV,Subir un archivo CSV
+upload-csv.max-limit-10000,Max limit 10&#44000 contacts,límite máximo de 10 & # 44000 contactos
+upload-csv.pl-upload-a-csv,Please upload a CSV file,Sube un archivo CSV
+upload-custom-doc.upload-new-doc,Upload New Custom Document,Cargar documento personalizado nuevo
+upload-custom-doc.doc-size-limit-exceeded,Document size exceeds the 10MB limit,Tamaño del documento supera el límite de 10 MB
+upload-custom-doc.upload-doc,Upload Document,Cargar documento
+upload-google-doc.upload-goog-doc,Upload Google Document,Sube documento de Google
+upload-google-doc.google-drive-doc,Google Drive Document,Documento de Google Drive
+upload-google-doc.select-doc,Select Document,Seleccionar documento
+upload-voicemail.upload-wav-file,Upload WAV File,Upload WAV FileDocument
+upload-voicemail.not-a-wav-file,File selected is not a WAV file,Archivo seleccionado no es un archivo WAV
+upload-voicemail.wav-file-info,You may upload a recorded voice (.wav) file here,Usted puede cargar una grabación de voz ( .wav) aquí

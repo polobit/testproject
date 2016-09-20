@@ -1,0 +1,6 @@
+{ 
+   "upload" : "{{agile_lng_translate 'others' 'upload'}}",
+   "upload-wav-file" : "{{agile_lng_translate 'upload-voicemail' 'upload-wav-file'}}",
+   "not-a-wav-file" : "{{agile_lng_translate 'upload-voicemail' 'not-a-wav-file'}}",
+   "wav-file-info" : "{{agile_lng_translate 'upload-voicemail' 'wav-file-info'}}",
+}

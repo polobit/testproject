@@ -1,8 +1,38 @@
 
 <!DOCTYPE html>
 
+<%@page import="com.agilecrm.user.UserPrefs"%>
+<%@page import="org.json.JSONObject"%>
+<%@page import="com.agilecrm.util.language.LanguageUtil"%>
 <%@page import="com.agilecrm.user.util.UserPrefsUtil"%>
+<%@page import="org.apache.commons.lang.StringUtils"%>
 <%@page import="java.util.Date"%>
+<%@page import="com.agilecrm.util.language.LanguageUtil"%>
+<%@page import="org.jsoup.Jsoup"%>
+<%@page import="org.codehaus.jackson.map.ObjectMapper"%>
+<%@page import="org.json.JSONObject"%>
+<%@page import="com.agilecrm.user.UserPrefs"%>
+<%@page import="org.json.JSONArray"%>
+<%@page import="java.util.Arrays"%>
+<%@page import="com.agilecrm.user.DomainUser"%>
+<%@page import="com.agilecrm.user.AgileUser"%>
+<%@page import= "com.agilecrm.session.SessionCache"%>
+<%@page import="com.agilecrm.session.SessionManager"%>
+<%@page import="com.agilecrm.user.util.DomainUserUtil"%>
+<%@page language="java" contentType="text/html; charset=UTF-8"
+pageEncoding="UTF-8"%>
+
+<%
+//User Language 
+String _LANGUAGE = "en";
+try{
+	_LANGUAGE = UserPrefsUtil.getCurrentUserPrefsFromRequest(request).language;
+}catch(Exception e){}
+
+//Locales JSON
+JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "upload");
+
+%>
 <html>
 
 <head>
@@ -10,14 +40,16 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0 maximum-scale=1">
 <meta name="description" content="">
 <meta name="author" content="">
-<title>Upload Image</title>
+<title><%=LanguageUtil.getLocaleJSONValue(localeJSON, "upload-image") %></title>
 <%-- <link rel="stylesheet" type="text/css" href="css/bootstrap-<%= UserPrefsUtil.getCurrentUserPrefs().template%>.min.css" /> --%>
 <link rel="stylesheet" type="text/css" href="/css/bootstrap.v3.min.css" />
 <link rel="stylesheet" type="text/css" href="/flatfull/css/app.css" />
 <!-- <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script> -->
 <script type='text/javascript' src='/lib/jquery-new/jquery-2.1.1.min.js'></script>
 <script type="text/javascript" src="/lib/bootstrap.v3.min.js"></script>
-<script type="text/javascript" src="/lib/jquery.validate.min.js"></script>
+<!--<script type="text/javascript" src="/lib/jquery.validate.min.js"></script>-->
+<script type="text/javascript" src="../../lib/jquery.validate.min.js"></script>
+
 <!-- <script type="text/javascript" src="/lib/bootstrap.min.js"></script> -->
 
 <!-- Load angular file -->
@@ -36,11 +68,22 @@
     }
 </style>
 
+<script>
+	function getAgileResource(module, key){
+		if(window.opener.getAgileResource)
+			 return window.opener.getAgileResource(module, key);
+
+		return window.opener._Agile_Resources_Json[module][key]; 
+		}
+</script>
+
 <script type="text/javascript">
+var localeJSON = <%=localeJSON%>;
+
 jQuery.validator.setDefaults({
 	debug: true,
 	success: "valid"
-});;
+});
 
 </script>
 <script type="text/javascript">
@@ -98,13 +141,18 @@ $(function()
 	}
 });
 function isValid(){
+
+	jQuery.extend(jQuery.validator.messages, {
+    	required: '<%=LanguageUtil.getLocaleJSONValue(localeJSON, "required") %>'
+	});
+
     $("#form").validate({
         rules: {
         		file:{required:true,accept:"png|jpg|jpeg|gif"}
                },
          messages: {
               file: {
-                accept: "Please select a valid image file and try again",
+                accept: '<%=LanguageUtil.getLocaleJSONValue(localeJSON, "upload-valid-image") %>',
               },
                },
         submitHandler:function(form)
@@ -133,6 +181,8 @@ function isValid(){
    $( "<style>@media all and (max-width: 767px) {	.mobile-popup {min-height: 50vh; } .mobile-popup * {text-align: center;font-"+"size: 20px;}.mobile-popup input {display: inline-block;}}</style>" ).appendTo( "head" );
     }
  	})();
+
+var upload = window.opener._Agile_Resources_Json.upload_window['upload-img-error'];
 </script>
 <style>
 	label.error {
@@ -150,9 +200,9 @@ function isValid(){
 <div class="row">
 <div class="col-md-12 col-sm-12 col-xs-12">
 <div class="panel panel-default mobile-popup">
-<div class="panel-heading">Upload your image file</div>
+<div class="panel-heading"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "upload-your-image") %></div>
 <div class="panel-body">
-<p>For best results, we recommend that you upload .png files. We even support .jpg and .gif formats.</i></p>
+<p><%=LanguageUtil.getLocaleJSONValue(localeJSON, "upload-image-format") %></i></p>
 
 <br/>
 <form id="form" action="https://agilecrm.s3.amazonaws.com/" method="post" enctype="multipart/form-data" onsubmit="return isValid();"> 
@@ -182,7 +232,7 @@ function isValid(){
 	    <img-crop image="myImage" result-image="myCroppedImage" area-type="{{cropType}}"></img-crop>
 	</div>
 	<div class="col-xs-4 col-sm-4 col-md-4" id="preview">
-		<div>Cropped Image:</div>
+		<div><%=LanguageUtil.getLocaleJSONValue(localeJSON, "cropped-image") %>:</div>
 		<div><img ng-src="{{myCroppedImage}}" style="width: 100%;"/></div>
 	</div>
 </div>
@@ -196,7 +246,7 @@ function isValid(){
 
 
 <br/>
-<input name="upload" value="Upload" class='submit btn btn-primary' type="submit"/> 
+<input name="upload" value='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "upload") %>' class='submit btn btn-primary' type="submit"/> 
 </form> 
 </div>
 </div>
