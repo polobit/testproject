@@ -545,7 +545,7 @@ Plan-and-upgrade.triggers-with-your-current-plan-and-are-trying-to-subscribe,tri
 campaigns.ticket-note-cust,Runs a Campaign on a contact When new note is added by customer.,Ejecuta una campaña en un contacto cuando se añade nueva nota por parte del cliente.
 contacts.merge-max,you can merge maximum of 2 records at a time with master record.,puede combinar máximo de 2 registros a la vez con el registro maestro.
 welcome.you-can-the-API-javascript,you can use the API JavaScript to your web pages and use the API,puede utilizar la API de JavaScript a sus páginas web y el uso de la API
-deal-view.restoring-the-deal-desc,Restoring the Deal will make it active again. Restore this Deal?,La restauración de la Oferta la hará activa de nuevo. Restaurar este oferta?
+deal-view.restoring-the-deal-desc,Restoring the Deal will make it active again.,La restauración de la Oferta la hará activa de nuevo. 
 widgets.sip-desc,Make and receive calls from your contacts using any SIP account.,Haz y recibe llamadas de tus contactos utilizando cualquier cuenta SIP.
 prefs-data-sync.widget-sip-desc,Make and receive calls from your contacts using any SIP account.,Hacer y recibir llamadas de sus contactos utilizando cualquier cuenta SIP.
 prefs-email.office365-content,See all emails related to a contact from your Office365 account.,Ver todos los mensajes de correo electrónico relacionados con un contacto de su cuenta Office365.
