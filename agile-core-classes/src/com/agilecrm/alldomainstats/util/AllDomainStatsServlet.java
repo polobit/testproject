@@ -2,6 +2,8 @@ package com.agilecrm.alldomainstats.util;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Map;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -12,6 +14,7 @@ import org.apache.commons.lang.StringUtils;
 import com.agilecrm.AllDomainStats;
 import com.agilecrm.account.util.DomainLimitsUtil;
 import com.agilecrm.contact.email.EmailSender;
+import com.agilecrm.notification.NotificationTemplate;
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
 import com.agilecrm.util.DateUtil;
 import com.agilecrm.util.EmailUtil;
@@ -54,7 +57,8 @@ public class AllDomainStatsServlet extends HttpServlet {
 		   
 		   if(allDomainStats != null)
 		   {
-			   String textMail=getStatsTemplate(allDomainStats.campaign_count, allDomainStats.landingPage_count, allDomainStats.form_count, allDomainStats.triggers_count, allDomainStats.webrule_count, allDomainStats.emailTemplate_count, current_date);
+			  // Map<String, Integer> workflowNodesCount = AllDomainStatsUtil.sortHashMapByValues(allDomainStats.getNodeCount());
+			   String textMail=getStatsTemplate(allDomainStats.campaign_count, allDomainStats.landingPage_count, allDomainStats.form_count, allDomainStats.triggers_count, allDomainStats.webrule_count, allDomainStats.emailTemplate_count, current_date,allDomainStats.notificationTemplate_count);
 			   
 			   try
 			   	{
@@ -79,7 +83,7 @@ public class AllDomainStatsServlet extends HttpServlet {
 	 * Create Email Template for stats report
 	 * @return Html code in string format
 	 */
-	public static String getStatsTemplate(long campaign, long landingPage, long form, long trigger, long webrule, long email, String report_date)
+	public static String getStatsTemplate(long campaign, long landingPage, long form, long trigger, long webrule, long email, String report_date,long notificationTemplate_count)
 	{
 		String template="<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'> <html xmlns='http://www.w3.org/1999/xhtml'> <head> "
 				+ "<meta http-equiv='Content-Type' content='text/html; charset=utf-8' /> <meta http-equiv='X-UA-Compatible' content='IE=edge'> <meta name='viewport' content='width=device-width, initial-scale=1'>"
@@ -92,7 +96,7 @@ public class AllDomainStatsServlet extends HttpServlet {
 				+ " <tr> <td height='1'></td> </tr> </tbody> </table> <table width='100%' cellspacing='0' cellpadding='5px'> <tbody> <tr> <td style='color:#1E90FF; font-weight:bold;font-size:16px; text-align:center;'>All Domain Stats Report</td> </tr> <tr> <td style='font-weight:bold;font-size:12px;"
 				+ " text-align:center;'>Date</td> </tr> </tbody> </table> <table cellspacing='5px' cellpadding='5px'> <tbody> <tr> <td style='padding-left:40px; width:150px'>Landing Page(s) : </td> <td style='padding-left:40px; width:100px'>landingpage_count</td> </tr> <tr> <td style='padding-left:40px; width:150px'>Email Template(s) : </td>"
 				+ " <td style='padding-left:40px; width:100px'>email_count</td> </tr> <tr> <td style='padding-left:40px; width:150px'>Campaign(s) : </td> <td style='padding-left:40px; width:100px'>campaign_count</td> </tr> <tr> <td style='padding-left:40px; width:150px'>Web Rules : </td> <td style='padding-left:40px; width:100px'>web_count</td> </tr> <tr>"
-				+ " <td style='padding-left:40px; width:150px'>Trigger(s) : </td> <td style='padding-left:40px; width:100px'>trigger_count</td> </tr> <tr> <td style='padding-left:40px; width:150px'>Form(s) : </td> <td style='padding-left:40px; width:100px'>form_count</td> </tr> <br></tbody> </table> </td> </tr> </tbody> </table> </td> </tr> <tr> <td>"
+				+ " <td style='padding-left:40px; width:150px'>Trigger(s) : </td> <td style='padding-left:40px; width:100px'>trigger_count</td> </tr> <tr> <td style='padding-left:40px; width:150px'>Form(s) : </td> <td style='padding-left:40px; width:100px'>form_count</td> </tr><tr> <td style='padding-left:40px; width:150px'>Push Notification(s) : </td> <td style='padding-left:40px; width:100px'>notificationTemplate_count</td> </tr><br></tbody> </table> </td> </tr></tbody> </table> </td> </tr> <tr> <td>"
 				+ " <table cellspacing='0' cellpadding='0' align='center' class='container'> <tbody> <tr> <td align='center'> <img width='600' height='15' src='http://venkat2desk.site90.net/images/border-shadow.png' alt='' class='img-shadow'> </td> </tr> <tr> <td style='font-family:arial,sans-serif;"
 				+ " font-size: 14px; text-align:center;padding-top:15px;opacity:0.6;'> Agile CRM, MS 35, 440 N Wolfe Road, Sunnyvale, CA 94085, USA. </td> </tr>  </tbody> </table> </td> </tr> </tbody> </table> </td> </tr> </table> "
 				+ "</body> </html>";
@@ -103,7 +107,23 @@ public class AllDomainStatsServlet extends HttpServlet {
 		template=StringUtils.replaceOnce(template,"email_count",String.valueOf(email));
 		template=StringUtils.replaceOnce(template,"trigger_count",String.valueOf(trigger));
 		template=StringUtils.replaceOnce(template,"form_count",String.valueOf(form));
+		template=StringUtils.replaceOnce(template,"notificationTemplate_count",String.valueOf(notificationTemplate_count));
+		
+		/*if(workflowNodesCount !=null){
+		//Add top ten nodes count in template
+		  String temp ="";
+		  Iterator itr = workflowNodesCount.entrySet().iterator();
+		  int count=0;
+		    while (itr.hasNext() && count < 10 ) {
+		    	count++;
+		        Map.Entry nodes = (Map.Entry)itr.next();
+		        temp = temp + "<tr> <td style='padding-left:40px; width:150px'>" + nodes.getKey() + "(s) : </td> <td style='padding-left:40px; width:100px'>" + nodes.getValue()+ "</td> </tr>";
+		        System.out.println(nodes.getKey() + " = " + nodes.getValue());
+		        itr.remove(); 
+		    }
+		  template = StringUtils.replaceOnce(template,"node_count",temp);
+		}*/
 		return template;
 	}
-	
 }
+	

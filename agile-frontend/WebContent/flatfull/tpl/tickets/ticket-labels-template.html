@@ -17,12 +17,31 @@
 </div>
 {{/unless}}
 {{#if this.length}}
-    <div class="panel panel-default">
-        <div class="pull-right m-b-2">
-            <a href="#add-ticket-label" class="btn btn-sm btn-default btn-addon"
-                style="margin-top:20px;margin-right:20px"><span><i class="icon-plus-sign"></i></span> {{agile_lng_translate 'tickets' 'add-label'}}
+    {{#is_mobile}}
+
+    <div class="panel panel-default wrapper p-b-xs b-n">
+    <div class="text-center text-md m-b-xs">{{agile_lng_translate 'tickets' 'labels'}}</div>
+        <div class="pull-right m-b-2 add-btn-mobile">
+            <a href="#add-ticket-label" class="btn btn-xs btn-default btn-addon m-b">
+            <span><i class="icon-plus-sign"></i></span> {{agile_lng_translate 'tickets' 'add-label'}}
             </a>
         </div>
+        <table class="table service-table-mobile no-shadow m-b-none agile-table panel tableHeader tab-layout tickets-border" url="core/api/tickets/labels/bulk" data-bulk-delete-title="{{agile_lng_translate 'contact-details' 'delete'}}"
+            data-bulk-delete-msg="{{agile_lng_translate 'tickets' 'conformation-messge-for-deletion'}}" data-resizable-columns-id="tickets-labels">
+                
+                <tbody id="ticket-label-model-list" class="ticket-label-border" route="ticket-label/" class="c-p"> </tbody>
+        </table>
+        </div>
+
+    {{else}}
+
+    <div class="panel panel-default wrapper p-b-xs">
+        <div class="pull-right m-b-2">
+            <a href="#add-ticket-label" class="btn btn-sm btn-default btn-addon">
+            <span><i class="icon-plus-sign"></i></span> {{agile_lng_translate 'tickets' 'add-label'}}
+            </a>
+        </div>
+        <div class="table-responsive inline-block">
         <table class="table table-striped showCheckboxes m-b-none agile-table panel table-layout-mob-view show-delete-modal tableHeader tab-layout tickets-border" url="core/api/tickets/labels/bulk" data-bulk-delete-title="{{agile_lng_translate 'contact-details' 'delete'}}"
             data-bulk-delete-msg="{{agile_lng_translate 'tickets' 'conformation-messge-for-deletion'}}" data-resizable-columns-id="tickets-labels">
                 <thead>
@@ -34,11 +53,31 @@
                 </thead>
                 <tbody id="ticket-label-model-list" route="ticket-label/" class="c-p"> </tbody>
         </table>
+        </div>
     
     </div>
+    {{/is_mobile}}
 {{/if}}
 </script>
 <script id="ticket-label-model-template" type="text/html">
+{{#is_mobile}}
+<td class="hide data" data="{{id}}">
+    {{id}}
+</td>
+ <td class="p-r-none p-l-none">
+    <div class="table-resp">{{label}}</div>
+
+    <div class="table-resp overflow-hidden line-clamp no-wrap">
+        <small class="edit-hover text-muted"> 
+            <i class="fa fa-clock-o"></i>
+            <span>{{agile_lng_translate 'tickets' 'last-updated-on'}}</span>
+            <time class="campaign-created-time b-b-dotted" datetime="{{epochToHumanDate "" updated_time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM" updated_time}}</time>
+        </small>
+    </div>
+</td>
+
+{{else}}
+
 <td class="hide data" data="{{id}}">
     {{id}}
 </td>
@@ -48,15 +87,16 @@
 <td>
     <div class="table-resp overflow-hidden line-clamp no-wrap">
         <small class="edit-hover text-muted"> 
-            <i class="fa fa-clock-o m-r-xs"></i>
-            <span>{{agile_lng_translate 'tickets' 'last-updated-on'}}&nbsp;</span>
+            <i class="fa fa-clock-o"></i>
+            <span>{{agile_lng_translate 'tickets' 'last-updated-on'}}</span>
             <time class="campaign-created-time b-b-dotted" datetime="{{epochToHumanDate "" updated_time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM" updated_time}}</time>
         </small>
     </div>
 </td> 
+{{/is_mobile}}
 </script>
 <script id="ticket-label-add-edit-template" type="text/html">
-<div class="wrapper">
+<div class="">
     <div class="row">
         <div class="col-md-10">
             <div class="panel panel-default">
@@ -67,7 +107,7 @@
                     {{#if id}}
                         <input type="text" name="id" class="hide" value={{id}} >
                     {{/if}}
-                    <fieldset class="wrapper"><br/>
+                    <fieldset class="wrapper p-b-xs">
                         <div class="control-group form-group">
                             <label class="control-label col-md-3" for="label">{{agile_lng_translate 'contacts-view' 'label'}} <span class="field_req">*</span></label> 
                             <div class="col-md-6">
@@ -77,7 +117,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-12"><hr></div>
+                            <div class="col-md-12"><hr class="m-t-sm"></div>
                         </div>
                         <div class="form-group">
                             <div class="form-actions col-sm-offset-3 col-md-9">

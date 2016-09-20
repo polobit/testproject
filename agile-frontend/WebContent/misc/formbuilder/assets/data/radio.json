@@ -5,7 +5,7 @@
       "name": {
         "label": "Group Name",
         "type": "input",
-        "value": "radios"
+        "value": "multiple_radios"
       },
       "label": {
         "label": "Label Text",
@@ -28,7 +28,7 @@
       "name": {
         "label": "Group Name",
         "type": "input",
-        "value": "radios"
+        "value": "inline_radios"
       },
       "label": {
         "label": "Label Text",
@@ -53,7 +53,7 @@
       "name": {
         "label": "Group Name",
         "type": "input",
-        "value": "checkboxes"
+        "value": "multiple_checkboxes"
       },
       "label": {
         "label": "Label Text",
@@ -76,7 +76,7 @@
       "name": {
         "label": "Group Name",
         "type": "input",
-        "value": "checkboxes"
+        "value": "inline_checkboxes"
       },
       "label": {
         "label": "Label Text",

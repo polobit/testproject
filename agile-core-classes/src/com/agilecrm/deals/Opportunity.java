@@ -1114,6 +1114,24 @@ public class Opportunity extends Cursor implements Serializable
 	save();
 
     }
+    
+    public void removeContactIdsToDealWithoutSaving(List<String> contact_idsList)
+    {
+	removeRelatedContactForEditContact();
+	for (String contact_id : contact_idsList)
+	{
+	    contact_ids.remove(contact_id);
+	}
+    }
+	
+    @JsonIgnore
+    public void removeRelatedContactForEditContact()
+    {
+    	for(String eachContactID : contact_ids){
+    		this.related_contacts.remove(new Key<>(Contact.class,Long.parseLong(eachContactID)));
+    	}
+    
+    }
 
     /*
      * (non-Javadoc)
