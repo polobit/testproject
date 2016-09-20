@@ -928,7 +928,7 @@ function get_campaign_changes(updated_workflow_json, old_workflow_json, callback
                                 if(!modified_field.name)                            
                                     modified_field.name = updated_node_field.name;
 
-                                if(modified_field_obj)
+                                if(modified_field_obj.options)
                                 {
                                    modified_field.old_value = _.findKey(modified_field_obj.options, function(value)
                                     {
@@ -941,6 +941,11 @@ function get_campaign_changes(updated_workflow_json, old_workflow_json, callback
                                         if(value == updated_node_field.value)
                                             return value;
                                     });
+                                }
+                                else
+                                {
+                                    modified_field.old_value = old_node_field.value;
+                                    modified_field.new_value = updated_node_field.value;
                                 }
                                 
                                 if(!modified_field.old_value)
@@ -976,7 +981,7 @@ function get_campaign_changes(updated_workflow_json, old_workflow_json, callback
             else
             {
                 console.log("Newly Added....");
-                map["ADDED"].push("Added " + update_nodes[i].displayname + " node.");
+                map["ADDED"].push(update_nodes[i].displayname);
             }
         }
 
@@ -988,7 +993,7 @@ function get_campaign_changes(updated_workflow_json, old_workflow_json, callback
 
             console.log("Node deleted..." + old_nodes[i].displayname);
 
-            map["DELETED"].push("Deleted " + old_nodes[i].displayname + " node.");
+            map["DELETED"].push(old_nodes[i].displayname);
         }
 
 
