@@ -85,6 +85,11 @@ function initReportsForCalls(callback){
 		});
 	}
 	
+	$('#typeCall').change(function()
+ 		{
+ 			$(this).attr("title", $("#typeCall option:selected").text());
+ 			callback();
+ 		});
 	
 	fillSelect("users", "core/api/users/partial", undefined, function()
 			{
