@@ -581,6 +581,7 @@ public class GoogleSyncImpl extends TwoWaySyncService
 	    }
 	    catch(Exception e)
 	    {
+	    	requestFeed = new ContactFeed();
 	    	  System.out.println("StackTrace_of_sync_inside_insert"+ExceptionUtils.getFullStackTrace(e));
 	    }
 
@@ -709,6 +710,7 @@ public class GoogleSyncImpl extends TwoWaySyncService
 			updateFeed = new ContactFeed();
 		    }
 		    catch(Exception e){
+		    	updateFeed = new ContactFeed();
 		    	 System.out.println("StackTrace_of_sync_inside_update"+ExceptionUtils.getFullStackTrace(e));
 		    }
 		}
