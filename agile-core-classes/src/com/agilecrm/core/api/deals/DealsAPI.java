@@ -1566,4 +1566,74 @@ public class DealsAPI
     	}
     	return null;
     }
+    
+    @Path("/partial-update/delete-contact")
+    @PUT
+    @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public Opportunity removeContactByIdsFrmForOpportunity(String inputString) throws JSONException, JsonParseException,
+	    JsonMappingException, IOException
+    {
+
+	// Get data and check if id is present
+	org.json.JSONObject obj = new org.json.JSONObject(inputString);
+	List<String> contact_idList = new ArrayList<String>();
+
+	if (!obj.has("id"))
+	    return null;
+
+	Opportunity opportunity = OpportunityUtil.getOpportunity(obj.getLong("id"));
+
+	System.out.println(opportunity);
+
+	if (opportunity == null)
+	    return null;
+	
+	if(opportunity != null)
+	{
+	    List<String> conIds = opportunity.getContact_ids();
+	    List<String> modifiedConIds = UserAccessControlUtil.checkUpdateAndmodifyRelatedContacts(conIds);
+	    if(conIds != null && modifiedConIds != null && conIds.size() != modifiedConIds.size())
+	    {
+	    	throw new AccessDeniedException("Deal cannot be updated because you do not have permission to update associated contact(s).");
+	    }
+	}
+
+	Iterator<?> keys = obj.keys();
+	while (keys.hasNext())
+	{
+	    String key = (String) keys.next();
+
+	    if (key.equals("contact_ids"))
+	    {
+
+		// contact_ids = contact_idString.split(",");
+		JSONArray contact_idJSONArray = new JSONArray(obj.getString(key));
+		for (int i = 0; i < contact_idJSONArray.length(); i++)
+		{
+		    contact_idList.add(contact_idJSONArray.getString(i));
+
+		}
+	    }
+
+	}
+
+	if (contact_idList.size() > 0)
+	{
+	    try
+	    {
+		opportunity.removeContactIdsToDealWithoutSaving(contact_idList);
+		opportunity.save();
+	    }
+	    catch (WebApplicationException e)
+	    {
+		return null;
+	    }
+	}
+	else{
+	   return null;
+	}
+
+	return opportunity;
+    }
 }
