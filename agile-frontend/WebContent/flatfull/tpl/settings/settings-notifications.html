@@ -76,6 +76,17 @@
                         
                     </div>
                     <div class="control-group form-group">
+                        <label class="control-label col-sm-3">{{agile_lng_translate 'prefs-notifications' 'Deal_won'}}</label>
+                        <div class="controls col-sm-8">
+                            <select id="deal_won" name="deal_won" class="form-control">
+                                <option value="None">{{agile_lng_translate 'widgets' 'none'}}</option>
+                                <option value="ALL Domain users">{{agile_lng_translate 'prefs-notifications' 'All_Domain_users'}}</option>
+                            </select>
+<p class="help-block m-b-none">{{agile_lng_translate 'prefs-notifications' 'get-notified-when-Deal_wons'}}</p>
+                        </div>
+                        
+                    </div>
+                    <div class="control-group form-group">
                         <label class="control-label col-sm-3">{{agile_lng_translate 'campaigns' 'deal'}}</label>
                         <div class="controls col-sm-8">
                             <div class="checkbox">
@@ -170,8 +181,7 @@
                             </select>
 <p class="help-block m-b-none">{{agile_lng_translate 'prefs-notifications' 'get-notified-when-a-contact-clicks-link-in-email'}}</p>
                         </div>
-                        
-                    </div>
+                   
                     <div class="control-group form-group">
                         <label class="control-label col-sm-3">{{agile_lng_translate 'campaigns' 'deal'}}
                         </label>

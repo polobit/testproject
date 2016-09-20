@@ -5208,3 +5208,37 @@ widgets.stripe-custom-field-select,Stripe uses Stripe ID stored in text custom f
 events.rescheduled,Rescheduled,Reprogramada
 events.cancelled,Cancelled,Cancelado
 events.no-show,No Show,No Show
+deal-view.deal-id,Deal ID,
+admin-settings-users.view-deals-owned-by-others,View deals owned by other users,
+admin-settings-users.create-deals,Create Deals,
+admin-settings-users.update-deals,Update Deals,
+admin-settings-users.delete-deals,Delete Deals,
+admin-settings-users.create-update-delete-deals-content,Add and edit deals owned by other users. Delete own and other user deals,
+deal-view.persmission-to-delete-deals,You do not have permission to delete deals.,
+acl.sorry-you-donot-have-previlage-to-access-landingpage,Sorry&#44;  you do not have the privileges to access Landing Pages.,
+others.moreresults,More,Más
+other.title,Title,Título
+menu.all,All,todas
+menu.contacts,Contacts,contactos
+menu.companies,Companies,Compañías
+menu.deals,Deals,ofertas
+menu.documents,Documents,Documentos
+menu.tickets,Tickets,Entradas
+twill.add-another-number,Do you want to add another number to existing call?,
+twill.failed-join-another-number,Failed to add another number to the conference call. Please try again.,
+twill.connection-lost-conference,The connection is not active to dial another call.,
+twill.error-start-conference, Problem in starting the conference. Please start again.,
+common-words.relative-cap,Relative,
+contacts-view.on-after,on after,
+contacts-view.on-before,on before,
+months.February,February,
+others.verify,verify,verificar
+others.sending,sending,enviando
+admin-settings-integrations.amazon-note-1-new,1. Amazon SES services require verification of email addresses in the 'From' field of sent emails. Please ensure that you,1. Los servicios de Amazon SES requieren la verificación de direcciones de correo electrónico en el campo 'De' de los correos electrónicos enviados . Por favor asegúrese de que
+admin-settings-integrations.amazon-note-1-new1,the email addresses of all your Agile CRM users and the 'From' addresses of all your campaign emails.,las direcciones de correo electrónico de todos sus usuarios ágil de CRM y los 'de' direcciones de todos sus mensajes de correo electrónico de la campaña.
+contacts-view.edited-call-log-to,Edited call log to,
+contacts-view.deleted-call-log-to,Deleted call log to,
+contacts-view.deleted-note-to,Deleted note to,
+prefs-notifications.Deal_won,Deal_Won,
+prefs-notifications.All_Domain_users,All_Domain_users,
+prefs-notifications.get-notified-when-Deal_wons,Get notified when a deal wons.,
