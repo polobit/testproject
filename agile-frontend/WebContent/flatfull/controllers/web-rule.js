@@ -14,6 +14,7 @@ var WebreportsRouter = Backbone.Router.extend({
 			{
 				showTransitionBar();
 
+
 				this.render_email_reports_select_ui(id, function(){
 
 					getTemplate("webrule-analysis-tabs", { "id" : id }, undefined, function(template_ui)
@@ -35,6 +36,13 @@ var WebreportsRouter = Backbone.Router.extend({
 									return;
 								
 								$('#webrule-analysis-tabs-content').html($(template_ui1));
+
+								if(id == "all") {
+									var webRuleId = $("#webrule-reports-select option")[1].value;
+									$("#webrule-reports-select").val(webRuleId);
+									id = webRuleId;
+
+								}
 								
 								// Set the name
 								// $('#reports-webrule-name').text(workflowName);
@@ -46,6 +54,9 @@ var WebreportsRouter = Backbone.Router.extend({
 									// shows graphs by default week date range.
 									//showEmailGraphs(id);
 								});
+
+						
+
 							}, "#webrule-analysis-tabs-content");
 
 						});
@@ -83,12 +94,12 @@ var WebreportsRouter = Backbone.Router.extend({
 							if(id)
 							$('#webrule-reports-select').find('option[value=' + id + ']').attr('selected', 'selected');
 
+							if(callback)
+							  callback();
+
 						}, optionsTemplate);
 
 						initializeLogReportHandlers();
-
-						if(callback)
-							  callback();
 						
 					}, "#content");
 

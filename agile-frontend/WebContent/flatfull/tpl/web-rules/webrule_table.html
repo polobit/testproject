@@ -3,8 +3,16 @@
 	<table class="table table-bordered table-layout-mob-view">
 		<tbody>
 			<tr>
-				<th>MODAL POPUP <small>opened count</small></th>
-				<th>FORM SUBMITTED <small>User form submission count</small></th>
+				<th>Total Views</th>
+				<th>Total Submisions<span
+							style="vertical-align: text-top; margin-left: -3px"> <img
+							border="0" src="{{getS3ImagePath '/img/help.png'}}"
+							style="height: 6px; vertical-align: top" rel="popover"
+							data-placement="right"
+							data-title:" data-content="Will be Zero if the Web Rule has no Input Fields."
+							id="element" data-trigger="hover" />
+						</span></th>
+				
 				<!-- <th>NOTY MESSAGE</th>
 				<th>ADD TO CAMPAIGN</th>
 				<th>UNSUBSCRIBE CAMPAIGN</th>
@@ -15,7 +23,7 @@
 				<th>SITE BAR</th>
 				<th>REQUEST PUSH POPUP</th> -->
 			</tr>
-            <tr>
+			<tr>
 			   	<td>{{#if popup}}{{popup}}{{else}} 0 {{/if}}</td>
 				<td>{{#if submit}}{{submit}}{{else}} 0 {{/if}}</td>
 				<!-- <td>{{#if noty}}{{noty}} {{else}} 0 {{/if}}</td>
@@ -31,7 +39,9 @@
 
                <!-- <td>{{#if spam}}{{spam}} {{else}} 0 {{/if}}</td> -->
 			</tr>
+			
 		</tbody>
 	</table>
+
 </div>
 </script>
