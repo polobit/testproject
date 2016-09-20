@@ -128,7 +128,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			$('#account-pref').find('#admin-prefs-tabs-content').html(getTemplate("settings-account-tab"), {});	
 			var view = new AccountPrefs_Events_Model_View({ url : '/core/api/account-prefs', template : "admin-settings-account-prefs",
 			prePersist : function(model){
-				console.log(model);
+				/*console.log(model);
 				var accountCurrency = ACCOUNT_PREFS.currency.substring(0, 3);
 				var changedCurrency = model.get('currency').substring(0, 3);
 				if(accountCurrency && changedCurrency && accountCurrency != changedCurrency){
@@ -145,7 +145,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 						{
 							return;
 						}, "Yes", "No");
-				}
+				}*/
 			},
 			postRenderCallback : function()
 			{
@@ -1458,9 +1458,16 @@ var AccountPrefs_Events_Model_View = Base_Model_View.extend({
     events: {
     	
     	'click .invoice_option' : 'toggleInvoiceOption',
-    	
+    	'click .saveAdminSettings' : 'saveadminsettings' ,
+    	'change #target_list' : 'changeCurrencyPopUp'
 
     },
+ 	//  event to save admin settings 
+	saveadminsettings : function(el){
+		console.log(el);
+		var json = serializeForm("accountPrefs");
+		console.log(json);
+	},
 
 	toggleInvoiceOption :  function(e)
 	{
@@ -1474,4 +1481,23 @@ var AccountPrefs_Events_Model_View = Base_Model_View.extend({
 			checkbox_el.attr("checked","checked");
 
 	},
+	changeCurrencyPopUp : function(e){
+		e.preventDefault();
+		console.log($(e));
+		showModalConfirmation(
+					"Admin Settings",
+					"Changing currency will affect deal reporting. Do you want to change the currency?",
+					function()
+					{
+					
+					},function()
+					{
+						var currency = ACCOUNT_PREFS.currency ;
+						$('#target_list').val(currency) ;
+						return;
+					}, function()
+					{
+						return;
+					}, "Yes", "No");
+	}
 });
