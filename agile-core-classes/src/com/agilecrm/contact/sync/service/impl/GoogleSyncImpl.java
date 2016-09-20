@@ -369,7 +369,14 @@ public class GoogleSyncImpl extends TwoWaySyncService
 		syncStatus.put(ImportStatus.TOTAL_FAILED, syncStatus.get(ImportStatus.TOTAL_FAILED) + 1);
 		continue;
 	    }
-
+	    boolean valid_email=false;
+	    for(Email email:emails){
+	    	
+	    	 if (!StringUtils.isBlank(email.getAddress()) || ContactUtil.isValidEmail(email.getAddress()))
+	    		 valid_email=true;
+	    	
+	    }
+	    	if(valid_email)
 	    			wrapContactToAgileSchemaAndSave(entry);
 	    
 	    
