@@ -66,7 +66,7 @@
 		<div class="custom-link">
 			{{#if_equals "null" log_time}}
 				 {{#if contact}} 
-					<a href="#contact/{{contact.id}}" data="{{contact.id}}" class="popover_contact">{{getPropertyValue contact.properties "first_name"}} {{getPropertyValue contact.properties "last_name"}}
+					<a href="#contact/{{contact.id}}" data="{{contact.id}}" class="popover_contact">{{getContactNameProperty contact "first_name"}} {{getContactNameProperty contact "last_name"}}
 					</a> {{agile_lng_translate 'contact-details' 'visited-your-website'}}
 				{{else}}
 					{{agile_lng_translate 'contact-details' 'someone-visited-your-website'}} 
@@ -81,7 +81,7 @@
 			{{else}}
 				{{#if_equals "EMAIL_OPENED" log_type}}
 					{{#if contact}} 
-						<a href="#contact/{{contact.id}}" data="{{contact.id}}" class="popover_contact">{{getPropertyValue contact.properties "first_name"}} {{getPropertyValue contact.properties "last_name"}}</a> {{agile_lng_translate 'contact-details' 'opened-an-email'}}
+						<a href="#contact/{{contact.id}}" data="{{contact.id}}" class="popover_contact">{{getContactNameProperty contact "first_name"}} {{getContactNameProperty contact "last_name"}}</a> {{agile_lng_translate 'contact-details' 'opened-an-email'}}
 					{{else}}
 						{{agile_lng_translate 'contact-details' 'someone-opened-an-email'}}
 					{{/if}}<br>
@@ -95,7 +95,7 @@
 					
 				{{#if_equals "EMAIL_CLICKED" log_type}}
 					{{#if contact}} 
-						<a href="#contact/{{contact.id}}" data="{{contact.id}}" class="popover_contact">{{getPropertyValue contact.properties "first_name"}} {{getPropertyValue contact.properties "last_name"}} </a> {{agile_lng_translate 'contact-details' 'clicked-an-email'}}
+						<a href="#contact/{{contact.id}}" data="{{contact.id}}" class="popover_contact">{{getContactNameProperty contact "first_name"}} {{getContactNameProperty contact "last_name"}} </a> {{agile_lng_translate 'contact-details' 'clicked-an-email'}}
 					{{else}}
 						{{agile_lng_translate 'contact-details' 'someone-clicked-an-email'}}
 					{{/if}}<br>
@@ -109,7 +109,7 @@
 					
 				{{#if_equals "UNSUBSCRIBED" log_type}}
 					{{#if contact}} 
-			        	<a href="#contact/{{contact.id}}" data="{{contact.id}}" class="popover_contact">{{getPropertyValue contact.properties "first_name"}} {{getPropertyValue contact.properties "last_name"}} </a>
+			        	<a href="#contact/{{contact.id}}" data="{{contact.id}}" class="popover_contact">{{getContactNameProperty contact "first_name"}} {{getContactNameProperty contact "last_name"}} </a>
 					{{else}}
 						{{agile_lng_translate 'contact-details' 'someone'}} 
 					{{/if}}
@@ -128,7 +128,7 @@
 	
 				{{#if_equals "EMAIL_SPAM" log_type}}
 					{{#if contact}} 
-						<a href="#contact/{{contact.id}}" data="{{contact.id}}" class="popover_contact">{{getPropertyValue contact.properties "first_name"}} {{getPropertyValue contact.properties "last_name"}} </a> {{agile_lng_translate 'contact-details' 'marked-an-email-as-spam'}}
+						<a href="#contact/{{contact.id}}" data="{{contact.id}}" class="popover_contact">{{getContactNameProperty contact "first_name"}} {{getContactNameProperty contact "last_name"}} </a> {{agile_lng_translate 'contact-details' 'marked-an-email-as-spam'}}
 					{{else}}
 						{{agile_lng_translate 'contact-details' 'someone-marked-an-email-as-spam'}}
 					{{/if}}<br>
@@ -142,7 +142,7 @@
 		
 				{{#if_equals "EMAIL_HARD_BOUNCED" log_type}}
 					{{#if contact}} 
-						<a href="#contact/{{contact.id}}" data="{{contact.id}}" class="popover_contact">{{getPropertyValue contact.properties "first_name"}} {{getPropertyValue contact.properties "last_name"}} </a> - {{agile_lng_translate 'contact-details' 'email-bounced'}}
+						<a href="#contact/{{contact.id}}" data="{{contact.id}}" class="popover_contact">{{getContactNameProperty contact "first_name"}} {{getContactNameProperty contact "last_name"}} </a> - {{agile_lng_translate 'contact-details' 'email-bounced'}}
 						<br>
 						<span class="activities_second_line">  
 							<i class="icon-undo"></i> 
@@ -157,7 +157,7 @@
 
 				{{#if_equals "EMAIL_SOFT_BOUNCED" log_type}}
 					{{#if contact}} 
-						<a href="#contact/{{contact.id}}" data="{{contact.id}}" class="popover_contact">{{getPropertyValue contact.properties "first_name"}} {{getPropertyValue contact.properties "last_name"}} </a> - {{agile_lng_translate 'contact-details' 'email-bounced'}}
+						<a href="#contact/{{contact.id}}" data="{{contact.id}}" class="popover_contact">{{getContactNameProperty contact "first_name"}} {{getContactNameProperty contact "last_name"}} </a> - {{agile_lng_translate 'contact-details' 'email-bounced'}}
 						<br>
 						<span class="activities_second_line m-t-none">  
 						<i class="icon-undo"></i> 
@@ -172,7 +172,7 @@
 	
 				{{#unless log_time}}
 					{{#if contact}} 
-						<a href="#contact/{{contact.id}}" data="{{contact.id}}" class="popover_contact">{{getPropertyValue contact.properties "first_name"}} {{getPropertyValue contact.properties "last_name"}} </a> {{agile_lng_translate 'contact-details' 'visited-your-website'}}
+						<a href="#contact/{{contact.id}}" data="{{contact.id}}" class="popover_contact">{{getContactNameProperty contact "first_name"}} {{getContactNameProperty contact "last_name"}} </a> {{agile_lng_translate 'contact-details' 'visited-your-website'}}
 					{{else}}
 						{{agile_lng_translate 'contact-details' 'someone-visited-your-website'}}
 					{{/if}}<br>

@@ -5,8 +5,8 @@
         	{{#if_contact_type "COMPANY"}} <img class="thumbnail" {{getCompanyImage "40" "display:inline;"}} /> {{/if_contact_type}}
     	</div>
     	<div class="h-auto inline-block v-top text-ellipsis" style=" width: 12em;">
-        	{{#if_contact_type "PERSON"}} <b> {{getPropertyValue properties
-        	"first_name"}} {{getPropertyValue properties "last_name"}} </b> <br />
+        	{{#if_contact_type "PERSON"}} <b> {{getContactNameProperty this
+        	"first_name"}} {{getContactNameProperty this "last_name"}} </b> <br />
         	{{getPropertyValue properties "email"}} {{/if_contact_type}}
         	{{#if_contact_type "COMPANY"}} <b>{{getPropertyValue properties
         	"name"}}</b></br> {{getPropertyValue properties "url"}} {{/if_contact_type}}

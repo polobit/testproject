@@ -40,7 +40,7 @@
 	<div class="h-auto inline-block">
 		{{#each contacts}}
         	{{#if_contact_type "PERSON"}}
-        		<a href="#contact/{{id}}" class="activate-link"><img class="thumbnail img-inital inline thumb" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}" width="40px" height="40px"  title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" /></a>
+        		<a href="#contact/{{id}}" class="activate-link"><img class="thumbnail img-inital inline thumb" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}" width="40px" height="40px"  title="{{getContactNameProperty this "first_name"}} {{getContactNameProperty this "last_name"}}" /></a>
         	{{/if_contact_type}}
 			{{#if_contact_type "COMPANY"}}
         		<a href="#company/{{id}}" class="activate-link"><img class="thumbnail" {{getCompanyImage "40" "display:inline;"}} title="{{getPropertyValue properties "name"}}"/></a>
@@ -118,7 +118,7 @@
 		{{#each contacts}} 
 			{{#if_contact_type "PERSON"}}
 			 	<a href="#contact/{{id}}" class="activate-link">
-				<img class="thumbnail img-inital inline thumb" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}" width="40px" height="40px" title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" /></a>
+				<img class="thumbnail img-inital inline thumb" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}" width="40px" height="40px" title="{{getContactNameProperty this "first_name"}} {{getContactNameProperty this "last_name"}}" /></a>
 			{{/if_contact_type}}
 			{{#if_contact_type "COMPANY"}} 
 				<a href="#company/{{id}}" class="activate-link">
@@ -145,8 +145,8 @@
     	</div>
     	<div class="h-auto inline-block v-top text-ellipsis" style="width:70%">
         	{{#if_contact_type "PERSON"}}
-        		<b>	{{getPropertyValue properties "first_name"}}
-        		{{getPropertyValue properties "last_name"}} </b>
+        		<b>	{{getContactNameProperty this "first_name"}}
+        		{{getContactNameProperty this "last_name"}} </b>
         		<br />
         		{{getPropertyValue properties "email"}}
         	{{/if_contact_type}}
@@ -275,7 +275,7 @@
     	<img class="thumbnail img-inital inline thumb" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl contact.properties 40}}" width="40px" height="40px" />
     </div>
  	<div class="h-auto inline-block v-top text-ellipsis" style="width:12em;">
-    	<b>	{{getPropertyValue contact.properties "first_name"}} {{getPropertyValue contact.properties "last_name"}} </b>
+    	<b>	{{getContactNameProperty contact "first_name"}} {{getContactNameProperty contact "last_name"}} </b>
         <br />
         	{{getPropertyValue contact.properties "email"}}
     </div>
