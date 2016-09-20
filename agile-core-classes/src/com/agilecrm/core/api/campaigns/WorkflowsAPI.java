@@ -605,6 +605,8 @@ public class WorkflowsAPI {
 		workflow.setSkip_verify(true);
 		workflow.save();
 		
+		// Deleting workflow backup after restore
+		backup.delete();
 		
 		try 
 		{
@@ -613,6 +615,7 @@ public class WorkflowsAPI {
 		catch (Exception e){
 			System.out.println("Exception occured while creating workflow restore activity" + e.getMessage());
 		}
+		
 		return workflow;
 	}
 	

@@ -118,7 +118,7 @@ $("#activities-listners").on('click', '.email-details', function(e) {
 
 					if(is_equal)
 					{
-						$campaign_history_details.html("<p>No Modifications made to this campaign nodes.</p>");
+						$campaign_history_details.html("<p>No modifications made to this campaign nodes.</p>");
 						$campaign_history_details.slideToggle("slow");
 						return;
 					}
