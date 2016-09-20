@@ -373,7 +373,10 @@ public class GoogleSyncImpl extends TwoWaySyncService
 	    for(Email email:emails){
 	    	
 	    	 if (!StringUtils.isBlank(email.getAddress()) || ContactUtil.isValidEmail(email.getAddress()))
+	    	 {
 	    		 valid_email=true;
+	    		 break;
+	    	 }
 	    	
 	    }
 	    	if(valid_email)
