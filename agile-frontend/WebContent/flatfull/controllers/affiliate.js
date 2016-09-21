@@ -162,6 +162,16 @@ var AffiliateRouter = Backbone.Router.extend({
 							$("time", el).timeago();
 						});
 						$("#affiliate-register-deal").show();
+						$("#affiliate-register-deal2").off("click");
+						$("#affiliate-tabs-content").on("click", "#affiliate-register-deal2", function(e){
+							e.preventDefault();
+							getTemplate('deal-register-modal', {}, undefined, function(template_ui1){
+								if(!template_ui1)
+									  return;
+								$("#register_deal_modal").html($(template_ui1));
+								$("#register_deal_modal").modal("show");
+							}, "#content");
+						});
 					}
 				});
 				that.registeredDealsCollectionView.collection.fetch();
