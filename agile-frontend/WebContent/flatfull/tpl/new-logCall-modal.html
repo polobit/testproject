@@ -37,7 +37,7 @@
                       {{agile_lng_translate 'widgets' 'phone-number'}}
                       <span class="field_req">*</span>
                     </label>
-                    <div class="controls contact_phone_controls col-sm-7 {{#is_mobile}} p-t-none {{/is_mobile}}" style="padding-top:7px">
+                    <div class="controls contact_phone_controls col-sm-7 {{#is_mobile}} p-t-none {{else}} p-t-7 {{/is_mobile}}">
                     	{{#if_equals num.length "0"}}
                     		<span title="{{agile_lng_translate 'contact-edit' 'add-phone'}}" class="add_logPhone_span">
                     			<a id="contact_logPhone_number" class="contact_logPhone_number add_logPhone text-info text-l-none" name="contact_logPhone_number" 
@@ -99,35 +99,21 @@
               		    </label>  
                     </div>
                 </div>
-                
-                 <div class="control-group form-group">
-                    <label class="control-label col-sm-3 pull-left">
-                      {{agile_lng_translate 'widgets' 'status'}}
-                      <span class="field_req">*</span>
-                    </label>
+                <div class="control-group form-group">
+                    <label class="control-label col-sm-3 pull-left">{{agile_lng_translate 'widgets' 'status'}} 
+                    <span class="field_req">*</span></label>
                     <div class="controls col-sm-7">
                       <a href="" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false"> 
-      				          <button id="statusButton" type="button" class="btn btn-default">	<span id="callStatus" class="callStatus" name="status" value =     ""> {{agile_lng_translate 'deal-view' 'select'}} 
-                          </span>
-           				   		  <span class="caret"></span>
+      				          <button id="statusButton" type="button" class="btn btn-default w-half text-left">
+  								        <span  id="callStatus" class="callStatus" name="status" value = ""> {{agile_lng_translate 'deal-view' 'select'}} </span>
+           				   		  <i class="caret pull-right" style="margin-top:8px"></i>
    							        </button>
 						          </a>
-      								<ul class="dropdown-menu" style="top:32px;left: 15px;{{#is_mobile}} left: 76px{{/is_mobile}}" role="menu">
-      									<li><a id = "statusValue"  value = "answered">{{agile_lng_translate 'campaigns' 'answered'}}</a></li>
-      									<li><a id = "statusValue"  value = "busy">{{agile_lng_translate 'campaigns' 'busy'}}</a></li>
-      									<li><a id = "statusValue"  value = "failed">{{agile_lng_translate 'call_activity' 'fail'}}</a></li>
-      									<li><a id = "statusValue"  value = "missed">{{agile_lng_translate 'campaigns' 'missed'}}</a></li>
-      									<li><a id = "statusValue"  value = "inquiry">{{agile_lng_translate 'campaigns' 'inquiry'}}</a></li>
-
-      									<li><a id = "statusValue"  value = "interest">{{agile_lng_translate 'campaigns' 'interest'}}</a></li>
-      									<li><a id = "statusValue"  value = "no interest">{{agile_lng_translate 'campaigns' 'no-interest'}}</a></li>
-      									<li><a id = "statusValue"  value = "incorrect referral">{{agile_lng_translate 'campaigns' 'incorrect-referral'}}</a></li>
-      									<li><a id = "statusValue"  value = "meeting scheduled">{{agile_lng_translate 'campaigns' 'meeting-scheduled'}}</a></li>
-      									<li><a id = "statusValue"  value = "new opportunity">{{agile_lng_translate 'campaigns' 'new-opportunity'}}</a></li>
-      									<li><a id = "statusValue"  value = "voicemail">{{agile_lng_translate 'campaigns' 'voicemail'}}</a></li>
+      								<ul id="statusValue-ul" class="dropdown-menu" style="top:32px;left: 15px;{{#is_mobile}} left: 76px{{/is_mobile}}" role="menu">
       								</ul>
                       <div id="logPhone_status_error" style="color:#d9534f;display:none;">{{agile_lng_translate 'campaigns' 'status-not-declared'}}</div>
-                      </div>
+						            <span id="status-wait"></span>	
+                    </div>
                 </div>
                 
                 <div class="control-group form-group">
