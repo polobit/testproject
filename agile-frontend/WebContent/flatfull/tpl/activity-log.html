@@ -973,9 +973,12 @@ Added {{custom3}} {{agile_lng_translate 'contacts-view' 'contact-to-campaign'}}<
 	{{agile_lng_translate 'contacts-view' 'modified-a-campaign'}} 
 	{{#if this.entityObject}}
 		<a href="#workflow/{{entity_id}}">{{label}}</a>
-		<a href="#" id="campaign-modify-history" class="campaign-history-block text-info" data-entity="{{bindData entityObject}}" data-entity-id='{{entity_id}}' 
-			style='display: none;position: relative;top: 1px;margin-left: 2px;' title = "More details">
-			<i class="icon-plus"></i></a>
+
+		{{#if this.entityObject.backupExists}}
+			<a href="#" id="campaign-modify-history" class="campaign-history-block text-info" data-entity="{{bindData entityObject}}" data-entity-id='{{entity_id}}' 
+				style='display: none;position: relative;top: 1px;margin-left: 2px;' title = "More details">
+				<i class="icon-plus"></i></a>
+		{{/if}}
 		<br/>
 		{{!--Campaign History Block--}}
 		<div class='campaign-history-details' style="display: none;"></div>

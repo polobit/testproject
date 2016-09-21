@@ -132,7 +132,12 @@ public class Workflow extends Cursor {
 	public Long access_level = 1L;  
 	
 	/**
-	 * 
+	 * Boolean value to know backup exists or not 
+	 */
+	private boolean is_backup_exists = false;
+	
+	/**
+	 * Skips workflow name verification
 	 */
 	@NotSaved
 	@JsonIgnore
@@ -195,6 +200,22 @@ public class Workflow extends Cursor {
 	public void setSkip_verify(boolean skip_verify)
 	{
 		this.skip_verify = skip_verify;
+	}
+	
+	/**
+	 *  Returns backup exists boolean value
+	 *  @return
+	 */
+	public boolean isBackupExists() {
+		return is_backup_exists;
+	}
+
+	/**
+	 * Sets backup exists boolean value
+	 * @param is_backup_exists - boolean
+	 */
+	public void setBackupExists(boolean is_backup_exists) {
+		this.is_backup_exists = is_backup_exists;
 	}
 
 	/**
@@ -353,6 +374,9 @@ public class Workflow extends Cursor {
 			long startTime = System.currentTimeMillis();
 			workflowBackup.saveAsync();
 			System.out.println("Time taken to workflow backup..." + (System.currentTimeMillis() - startTime));
+			
+			// Sets Backup available true
+			setBackupExists(true);
 		}
 		catch (EntityNotFoundException e)
 		{

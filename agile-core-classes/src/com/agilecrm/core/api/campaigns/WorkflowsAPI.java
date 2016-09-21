@@ -600,13 +600,10 @@ public class WorkflowsAPI {
 		if(backup == null)
 			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("No backup yet").build());
 		
-		Workflow workflow = WorkflowUtil.getWorkflow(workflowId);
-		workflow.rules = backup.getRules();
-		workflow.setSkip_verify(true);
-		workflow.save();
-		
 		// Deleting workflow backup after restore
 		backup.delete();
+		
+		Workflow workflow = WorkflowUtil.restoreWorkflow(workflowId, backup);
 		
 		try 
 		{
@@ -618,7 +615,7 @@ public class WorkflowsAPI {
 		
 		return workflow;
 	}
-	
+
 	 @Path("/backups/get/{id}")
      @GET
      @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
