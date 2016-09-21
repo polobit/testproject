@@ -149,7 +149,8 @@ function saveTelephonyStatus(that){
 	// Disables save button to prevent multiple click event issues
 	disable_save_button($(that));//$(saveBtn).attr('disabled', 'disabled');
 	
-	var regexString = '^[0-9]+(.*?)$';
+	//var regexString = '^[0-9]+(.*?)$';
+	var regexString = '^([0-9]+(.*?))+|(.*\".*)+$';
 	var is_valid = new RegExp(regexString).test(label);
 		if(is_valid){
 			$(that).parent().find('.save-status').html('<span style="color:red;">{{agile_lng_translate "campaigns" "telephony-status-invalid-text"}}</span>');

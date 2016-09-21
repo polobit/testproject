@@ -7758,6 +7758,13 @@ Handlebars.registerHelper("convertToi18ForCall",function(value)
 	if(constantJson[value]){
 		return constantJson[value];
 	}
+	
+	if (value.length > 12) {
+		value = value
+				.slice(0,
+						12)
+				+ '...';
+	} 
 	return value;
 	
 });

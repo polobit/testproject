@@ -842,6 +842,7 @@ public class PortletUtil {
 					e.printStackTrace();
 				}
 			}
+			finalCallStatusCountMapList.add(tempCallStatusCountMap);
 			nonZeroDurationCountList.add(nonZeroDurationCount);
 			totalCallsCountList.add(totalCallsCount);
 			callsDurationList.add(callsDuration);
@@ -1909,6 +1910,7 @@ public class PortletUtil {
 		CategoriesUtil categoriesUtil = new CategoriesUtil();
 		List<Category> categories = categoriesUtil.getCategoriesByType(Category.EntityType.TELEPHONY_STATUS.toString());
 		Map<String,String> colors = new LinkedHashMap<>();
+		String[] lightColors = {"#FFCCCC","#E8E4E3","#F5E7A3","#C2D6C2","#00FF00","#B8BAAB","#C3E619","#5ea1d4","#1d104a","#19A1E6","#0066CC","#E566FF","#FFFF99","#D98026","#FFAA00","#E6FFCC","#BBFF33","#FFFF33","#FF2A00","#66FFE6","#FF0080"};
 		colors.put(Call.ANSWERED, "#27c24c");
 		colors.put(Call.BUSY, "#23b7e5");
 		colors.put(Call.Missed, "#fad733");
@@ -1921,15 +1923,24 @@ public class PortletUtil {
 		CallStatusCountMap.put(Call.VOICEMAIL,0);
 		CallStatusCountMap.put(Call.Missed,0);
 		
+		int lc=0;
 		for(Category category : categories){
 			CallStatusCountMap.put(category.getLabel().toLowerCase(), 0);
 			if(!colors.containsKey(category.getLabel().toLowerCase())){
-				String tempColor = "#" + Integer.toHexString(new Random().nextInt(0xFFFFFF)+ new Random().nextInt(0x16777)) ;
+				String tempColor = "" ;
+				int loop = 0;
 				while(true){
-					if(!colors.containsValue(tempColor)){
-						break;
-					}else{
+					if(lc >= lightColors.length-1 || loop > 1){
 						tempColor = "#" + Integer.toHexString(new Random().nextInt(0xFFFFFF)+ new Random().nextInt(0x16777));
+					}else{
+						loop = loop + 1;
+						tempColor = lightColors[lc];
+					}
+					
+					if(!colors.containsValue(tempColor)){
+						loop = 0;
+						lc = lc+1;
+						break;
 					}
 				}
 				colors.put(category.getLabel().toLowerCase(),tempColor);

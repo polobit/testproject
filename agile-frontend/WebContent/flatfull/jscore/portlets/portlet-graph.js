@@ -1,5 +1,6 @@
 var callschart=new Array();
 var taskReport=new Array();
+var lightColors = ['#FFCCCC','#E8E4E3','#F5E7A3','#C2D6C2','#00FF00','#B8BAAB','#C3E619','#5ea1d4','#1d104a','#19A1E6','#0066CC','#E566FF','#FFFF99','#D98026','#FFAA00','#E6FFCC','#BBFF33','#FFFF33','#FF2A00','#66FFE6','#FF0080'];
 var portlet_graph_utility = {
 
 	/**
@@ -648,15 +649,25 @@ var portlet_graph_utility = {
 		var colorsToShow = [];
 		var colorForStatus = {"Failed" : "#f05050", "Busy" :"#23b7e5" , "Voicemail" : "#7266ba", "Answered" : "#27c24c", "Missed" : "#fad733","Others": "#ff8080"};
 		var addedColor = {};  // this is temp variable to check whether the color is alread added or not
+		var lc = 0;
 		$.each(series, function(index,value){
 			if(colorForStatus[value.name]){
 				colorsToShow.push(colorForStatus[value.name]);
 				addedColor[colorForStatus[value.name]] = colorForStatus[value.name];
 			}else{
 				var colorCode;
+				var loop = 0;
 				while(true){
-					colorCode = '#'+Math.floor(Math.random()*16777215 + Math.random()*7777).toString(16);
+					if(lc >= lightColors.length-1 || loop > 1){
+						colorCode = '#'+Math.floor(Math.random()*16777215 + Math.random()*7777).toString(16);
+					}else{
+						loop = loop + 1;
+						colorCode = lightColors[lc];
+					}
+					
 					if(!addedColor[colorCode]){
+						loop = 0;
+						lc = lc+1;
 						break;
 					}
 				}
@@ -739,7 +750,9 @@ var portlet_graph_utility = {
 						        		if(text=="{{agile_lng_translate 'calls' 'duration-secs'}}")
 						        			tt = '<table>' + 
 						        					'<tr><td  class="b-b-none"><u style="text-decoration:none;border-bottom:1px solid">'+domainUsersList[this.points[0].point.x]+'</u></td></tr>'+	
-					        		              '<tr><td style="color:'+this.points[0].series.color+';padding:0">'+this.points[0].series.name+':&nbsp; </td>' +
+					        		              '<tr><td style="color:'+this.points[0].series.color+';padding:0">'+					        		              
+					        		              this.points[0].series.name
+					        		              +':&nbsp; </td>' +
 					        		              '<td style="padding:0"><b>'+portlet_utility.getPortletsTimeConversion(callsDurationList[this.points[0].point.x])+'</b></td></tr>' +
 					        		              '<tr><td style="color:'+this.points[0].series.color+';padding:0">Calls:&nbsp; </td>' + 
 					        		        	  '<td style="padding:0"><b>'+totalCallsCountList[this.points[0].point.x]+'</b></td></tr>' +
@@ -759,7 +772,16 @@ var portlet_graph_utility = {
 						        			tt += '<table><tr><td class="b-b-none"><u style="text-decoration:none;border-bottom:1px solid">'+domainUsersList[this.points[0].point.x]+'</u></td></tr>';
 						        			for(var k=0; k<series.length; k++){
 							        			if(this.points[k]!=undefined && this.points[k].series!=undefined){
-							        				tt += 	'<tr><td style="color:'+this.points[k].series.color+';padding:0">'+this.points[k].series.name+':&nbsp; </td>' +
+							        				var tooltipLabel="";
+									        		if (this.points[k].series.name.length > 12) {
+									        			tooltipLabel =  this.points[k].series.name
+																.slice(0,
+																		12)
+																+ '...';
+													} else {
+														tooltipLabel = this.points[k].series.name;
+													}
+							        				tt += 	'<tr><td style="color:'+this.points[k].series.color+';padding:0">'+tooltipLabel+':&nbsp; </td>' +
 								                      		'<td style="padding:0"><b>'+this.points[k].point.y+'</b></td></tr>';
 							        			}
 						        			}
@@ -801,6 +823,16 @@ var portlet_graph_utility = {
 										color : '#98a6ad'
 									},
 									borderWidth : 0,
+									labelFormatter : function() {
+										if (this.name.length > 12) {
+											return this.name
+													.slice(0,
+															12)
+													+ '...';
+										} else {
+											return this.name;
+										}
+									},
 									layout : 'vertical',
 									floating : true,
 									align : 'right',
@@ -852,6 +884,7 @@ var portlet_graph_utility = {
 			var colors = [];
 			var colorForStatus = {"Failed" : "#f05050", "Busy" :"#23b7e5" , "Voicemail" : "#7266ba", "Answered" : "#27c24c", "Missed" : "#fad733","Others": "#ff8080"};
 			var addedColor = {};  // this is temp variable to check whether the color is alread added or not
+			var lc = 0;
 			$.each(categoryList,function(index,value){
 				data.push([value,valueList[index]]);
 				if(colorForStatus[value]){
@@ -859,9 +892,17 @@ var portlet_graph_utility = {
 					addedColor[colorForStatus[value]] = colorForStatus[value];
 				}else{
 					var colorCode;
+					var loop = 0;
 					while(true){
-						colorCode = '#'+Math.floor(Math.random()*16777215 + Math.random()*7777).toString(16);
+						if(lc >= lightColors.length-1 || loop > 1 ){
+							colorCode = '#'+Math.floor(Math.random()*16777215 + Math.random()*7777).toString(16);
+						}else{
+							loop = loop + 1;
+							colorCode = lightColors[lc];
+						}
 						if(!addedColor[colorCode]){
+							loop = 0;
+							lc = lc+1;
 							break;
 						}
 					}
@@ -912,7 +953,16 @@ var portlet_graph_utility = {
 		            		/*connectorWidth: 0,*/
 		            		softConnector: true,
 		    	            formatter: function () {
-		    	            	return 	'<div class="text-center"><span style="color:'+this.point.color+'"><b>'+this.point.name+'</b></span><br/>' +
+		    	            	var tooltipLabel="";
+				        		if (this.point.name.length > 12) {
+				        			tooltipLabel =  this.point.name
+											.slice(0,
+													12)
+											+ '...';
+								} else {
+									tooltipLabel = this.point.name;
+								}
+		    	            	return 	'<div class="text-center"><span style="color:'+this.point.color+'"><b>'+tooltipLabel+'</b></span><br/>' +
 		    	            			'<span style="color:'+this.point.color+'"><b>'+Math.round(this.point.percentage)+'%</b></span></div>';
 		    	            },
 		            		/*format: '<b>{point.name}</b>: {point.percentage:.1f}',*/
