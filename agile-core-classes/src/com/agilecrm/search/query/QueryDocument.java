@@ -4,17 +4,16 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 
 import com.agilecrm.SearchFilter;
 import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.filter.util.ContactFilterUtil;
-import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.reports.Reports;
 import com.agilecrm.search.QueryInterface;
@@ -107,16 +106,80 @@ public class QueryDocument<T> implements QueryInterface
     {
 	keyword = SearchUtil.normalizeString(keyword);
 	String typeFields = "";
+	String typeField = null;
 	if(type != null){
 		String[] typeStrings = type.split(",");
 		for (int i = 0; i < typeStrings.length; i++) {
 			if(StringUtils.isBlank(typeStrings[i]))
 				continue;
 			
-			typeFields += (i == 0 ? "" : " OR ") + "type : " + typeStrings[i].toUpperCase();
+			typeField  = typeStrings[i].toUpperCase();
+			typeFields += (i == 0 ? "" : " OR ") + "type : " + typeField;
 		}
 	}
-	return processQuery("search_tokens:" + keyword + " AND " + typeFields, count, cursor);
+	
+		Collection<T> entities = processQuery("search_tokens:" + keyword + " AND " + typeFields, count, cursor);		
+		try{
+			if(typeField != null && (typeFields.indexOf("COMPANY") >= 0 || typeFields.indexOf("PERSON") >= 0)){
+				String localKeyword = keyword.toLowerCase();
+				ArrayList<T> otherList = new ArrayList<T>();
+				ArrayList<Contact> contactsMainList = new ArrayList<Contact>();
+				ArrayList<Contact> contactsSecondarList = new ArrayList<Contact>();
+				ArrayList<Contact> mainList = new ArrayList<Contact>();
+				ArrayList<Contact> secondarList = new ArrayList<Contact>();
+				Iterator<T> itr = entities.iterator();		 
+			    //iterate through the ArrayList values using Iterator's hasNext and next methods
+			    while(itr.hasNext()){
+			    	Object object = itr.next();
+			    	if(object instanceof Contact){
+			    		Contact contact = (Contact) object;
+			    		com.agilecrm.contact.Contact.Type contactType = contact.type;
+			    		if(contactType.equals(com.agilecrm.contact.Contact.Type.PERSON)){
+				    		ContactField firstNameField = contact.getContactField(Contact.FIRST_NAME);
+				    		ContactField lastNameField = contact.getContactField(Contact.LAST_NAME);
+				    		String firstName = null;
+				    		String lastName = null;		
+				    		
+				    		if(firstNameField != null){
+				    			firstName = firstNameField.value.toLowerCase();
+				    		}
+				    		if(lastNameField != null){
+				    			lastName = lastNameField.value.toLowerCase();
+				    		}
+				    		
+					    	if(firstName != null && firstName.indexOf(localKeyword) >= 0){
+					    		contactsMainList.add(contact);
+					    	}else if(lastName != null && lastName.indexOf(localKeyword) >= 0){
+					    		contactsMainList.add(contact);
+					    	}else {
+					    		contactsSecondarList.add(contact);
+					    	}
+					    }else if(contactType.equals(com.agilecrm.contact.Contact.Type.COMPANY)){
+				    		ContactField nameField = contact.getContactField(Contact.NAME);
+				    		if(nameField != null){
+					    		String name = nameField.value.toLowerCase();
+						    	if(name != null && name.indexOf(localKeyword) >= 0){
+						    		mainList.add(contact);
+						    	}else {
+						    		secondarList.add(contact);
+						    	}
+				    		}
+					    }
+				    }else{
+				    	otherList.add((T) object);
+				    }
+			    }
+			    contactsMainList.addAll(contactsSecondarList);
+			    contactsMainList.addAll(mainList);
+			    contactsMainList.addAll(secondarList);			    
+			    entities = (Collection<T>) contactsMainList;	
+			    entities.addAll(otherList);
+			}
+		}catch (Exception e){
+			System.out.println("Exception occured while sorting search results : "+e.getMessage());			
+		}
+		
+		return entities;		
 	//return processQuery("search_tokens:" + keyword + " AND type:" + type, count, cursor);
     }
 

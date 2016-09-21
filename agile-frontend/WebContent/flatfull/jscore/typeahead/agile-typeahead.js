@@ -811,7 +811,11 @@ function getContactName(contact)
 
 function buildcategorizedResultDropdown(items, options)
 {
-	var contact_custom_view = new Base_Collection_View({ data : items, templateKey : "typeahead-contacts", individual_tag_name : 'li',
+	var contact_custom_view = new Base_Collection_View({ 
+		data : items, 
+		templateKey : "typeahead-contacts", 
+		individual_tag_name : 'li',
+		sort_collection: false,
 		typeahead_options : options });
 
 	contact_custom_view.appendItem = appendItemInResult;
