@@ -451,8 +451,12 @@ try{
 				notesView.collection.get(logPhone.id).set(new BaseModel(logPhone));
 			}
 			else
-			{
+			{   
+             if(window.location.hash.indexOf("contact/") != -1 && contactDetailsObjId){  
+			  if(window.location.hash.split("#contact/")[1] == contactDetailsObjId){
 				notesView.collection.add(new BaseModel(logPhone), { sort : false });
+			   }
+			 }
 				notesView.collection.sort();
 			}
 		}

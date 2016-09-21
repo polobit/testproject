@@ -1091,9 +1091,7 @@ function setUpGlobalTwilio()
 						/*showCallNotyPopup("connected", "Twilio", Twilio_Call_Noty_IMG+'<span class="noty_contact_details"><b>On call  </b>' + To_Number +'<br><a href="#contact/'+TWILIO_CONTACT_ID+'" style="color: inherit;">' + To_Name + '</a><br></span><div class="clearfix"></div>', false);*/
 					 }		
 		});
-
-		Twilio.Device.disconnect(function(conn)
-		{
+Twilio.Device.disconnect(function(conn){
 			
 			console.log("Twilio call is disconnected");
 
@@ -1146,15 +1144,32 @@ function setUpGlobalTwilio()
 						return;
 					
 					if(!cnf_started){
-						// getting logs if the conference call is not there
-						getTwilioIOLogs(phoneNumber,null, TWILIO_CONTACT);
+						
 						// Change selected number if its different than calling number.
-						var selectedNumber = $('#contact_number').val();
-						if(selectedNumber != phoneNumber)
+						//var selectedNumber = $('#contact_number').val();
+
+						var contact_id = window.location.hash.split("/")[1];
+						if(contact_id == (TWILIO_CONTACT.id+""))
 						{
+						  var from_number = phoneNumber.replace(/\D/g, "");
+						 // var patt = new RegExp(from_number);
+						  for(var i=0; i<TWILIO_CONTACT.properties.length; i++){
+						  	if(TWILIO_CONTACT.properties[i].name == "phone"){
+						  		var reg_exp = new RegExp(TWILIO_CONTACT.properties[i].value.replace(/\D/g, ""));
+						  		if(reg_exp.test(from_number)){
+						  			$("#contact_number").val(TWILIO_CONTACT.properties[i].value);
+						  			// getting logs if the conference call is not there
+									getTwilioIOLogs(phoneNumber,null, TWILIO_CONTACT);
+									break;
+						  		} 
+						  	}
+						  }
+						  /*if(selectedNumber != phoneNumber)
+						  {
 							$("#contact_number").val(phoneNumber);
+						  }*/
 						}
-				  }	
+				    }	
 				  }	
 			}catch(err){
 				console.log('error in log fetching' + err.message);
