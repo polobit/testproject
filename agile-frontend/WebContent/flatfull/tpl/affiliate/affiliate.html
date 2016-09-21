@@ -399,8 +399,8 @@
           <thead>
               <tr>
                   <th style="width:20%" class="header">{{agile_lng_translate 'affiliate' 'name'}}</th>
-                  <th style="width:20%" class="header">{{agile_lng_translate 'affiliate' 'personal-email'}}</th>
                   <th style="width:20%" class="header">{{agile_lng_translate 'affiliate' 'office-email'}}</th>
+                  <th style="width:20%" class="header">{{agile_lng_translate 'affiliate' 'personal-email'}}</th>
                   <th style="width:20%" class="header">{{agile_lng_translate 'affiliate' 'phone'}}</th>
               </tr>
            </thead>
@@ -422,12 +422,12 @@
   </td>
   <td>
     <div class="table-resp">
-    <div class="text-base text-ellipsis">{{personalEmail}}</div>
+    <div class="text-base text-ellipsis">{{officeEmail}}</div>
     </div>
   </td>
   <td>
     <div class="table-resp">
-    <div class="text-base text-ellipsis">{{officeEmail}}</div>
+    <div class="text-base text-ellipsis">{{#if personalEmail}}{{personalEmail}}{{else}}-{{/if}}</div>
     </div>
   </td>
   <td>
@@ -459,15 +459,15 @@
              </div>
           </div>
           <div class="form-group control-group">
-             <label class="control-label col-sm-3">{{agile_lng_translate 'affiliate' 'personal-email'}}<span class="field_req">*</span></label> 
-             <div class="controls col-sm-7">
-              <input name="personalEmail" type="email" placeholder="{{agile_lng_translate 'affiliate' 'personal-email'}}" class="email required form-control"> 
-             </div>
-          </div>
-          <div class="form-group control-group">
              <label class="control-label col-sm-3">{{agile_lng_translate 'affiliate' 'office-email'}}<span class="field_req">*</span></label> 
              <div class="controls col-sm-7">
               <input name="officeEmail" type="email" placeholder="{{agile_lng_translate 'affiliate' 'office-email'}}" class="email required form-control"> 
+             </div>
+          </div>
+          <div class="form-group control-group">
+             <label class="control-label col-sm-3">{{agile_lng_translate 'affiliate' 'personal-email'}}</label> 
+             <div class="controls col-sm-7">
+              <input name="personalEmail" type="email" placeholder="{{agile_lng_translate 'affiliate' 'personal-email'}}" class="email form-control"> 
              </div>
           </div>
           <div class="form-group control-group">
