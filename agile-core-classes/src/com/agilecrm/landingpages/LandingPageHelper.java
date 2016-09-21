@@ -3,6 +3,7 @@ package com.agilecrm.landingpages;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -11,6 +12,7 @@ import com.agilecrm.account.APIKey;
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
+import com.agilecrm.util.email.MustacheUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.utils.SystemProperty;
 import com.googlecode.objectify.Key;
@@ -25,6 +27,9 @@ public class LandingPageHelper {
   
   public boolean showBrandMessage = true;
   public boolean setAnalyticsCode = true;
+  public boolean compileMergeFields = true;
+  
+  public JSONObject mergeFieldsJson = null;
   
   private String headerContent = "";
   private String footerContent = "";
@@ -32,6 +37,7 @@ public class LandingPageHelper {
   private String pageHeader = "";
   private String pagefooter = "";
   private String fullPage = ""; 
+  private String domainOwnerJsApiKey = "";
 
   private String formSubmitCode = "<script>(function(a){var b=a.onload,p=false;if(p){a.onload=\"function\"!=typeof b?function(){try{_agile_load_form_fields()}catch(a){}}:function(){b();try{_agile_load_form_fields()}catch(a){}}};a.document.forms[\"agile-form\"].onsubmit=function(a){a.preventDefault();try{_agile_synch_form_v3()}catch(b){this.submit()}}})(window);</script>";
 
@@ -67,14 +73,21 @@ public class LandingPageHelper {
     return fullPage;
   }
   
-  private String getDomainOwnerJsApiKey() {
+  public String getDomainOwnerJsApiKey() {
+    if(domainOwnerJsApiKey.isEmpty()) {
+      getDomainOwnerJsApiKeyFromDataStore();
+      return domainOwnerJsApiKey;
+    }
+    return domainOwnerJsApiKey;
+  }
+  
+  private void getDomainOwnerJsApiKeyFromDataStore() {
     Key<DomainUser> userKey = DomainUserUtil.getDomainOwnerKey(requestingDomain);
     Long domainUserId = userKey.getId();
     APIKey apiKey = APIKey.getAPIKeyRelatedToUser(domainUserId);
     if(apiKey != null && apiKey.js_api_key != null) {
-        return apiKey.js_api_key;
-    }    
-    return "";
+      domainOwnerJsApiKey = apiKey.js_api_key;
+    }
   }
   
   private String getAnalyticsCode() {
@@ -140,6 +153,10 @@ public class LandingPageHelper {
     }
   
     addContentToFooter(analyticsCode);
+    
+    if(mergeFieldsJson != null && compileMergeFields) {
+      rawHtml = MustacheUtil.compile(rawHtml, mergeFieldsJson);
+    }
     
     Document lpDocument = Jsoup.parse(rawHtml);
     Element lpHeadSection = lpDocument.head();

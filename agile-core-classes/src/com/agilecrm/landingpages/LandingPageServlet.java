@@ -54,6 +54,8 @@ public class LandingPageServlet extends HttpServlet {
 				LandingPageHelper lpHelper = new LandingPageHelper(landingPage);
 				lpHelper.requestingDomain = lpUtil.requestingDomain;
 				lpHelper.cnameHost = lpUtil.cnameHost;
+				
+				new LandingPageMergeFields(lpHelper, request);
 							
 				out.write(lpHelper.getSourceCode());
 				
