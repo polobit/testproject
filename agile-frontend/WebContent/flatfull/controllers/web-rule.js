@@ -97,9 +97,14 @@ var WebreportsRouter = Backbone.Router.extend({
 							if(callback)
 							  callback();
 
+							$('#content').on('change', '#webrule-reports-select', function (e) {
+		                            get_webrule_table_reports($(this).val());
+
+	                        });
+
 						}, optionsTemplate);
 
-						initializeLogReportHandlers();
+						//initializeLogReportHandlers();
 						
 					}, "#content");
 
