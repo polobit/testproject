@@ -15,11 +15,13 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.filter.util.ContactFilterUtil;
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.deals.Opportunity;
 import com.agilecrm.reports.Reports;
 import com.agilecrm.search.QueryInterface;
 import com.agilecrm.search.query.util.QueryDocumentUtil;
 import com.agilecrm.search.ui.serialize.SearchRule;
 import com.agilecrm.search.util.SearchUtil;
+import com.agilecrm.ticket.entitys.Tickets;
 import com.google.appengine.api.search.Cursor;
 import com.google.appengine.api.search.Document;
 import com.google.appengine.api.search.Index;
@@ -102,32 +104,30 @@ public class QueryDocument<T> implements QueryInterface
      * @return
      */
     @Override
-    public Collection<T> simpleSearchWithType(String keyword, Integer count, String cursor, String type)
-    {
-	keyword = SearchUtil.normalizeString(keyword);
-	String typeFields = "";
-	String typeField = null;
-	if(type != null){
-		String[] typeStrings = type.split(",");
-		for (int i = 0; i < typeStrings.length; i++) {
-			if(StringUtils.isBlank(typeStrings[i]))
-				continue;
-			
-			typeField  = typeStrings[i].toUpperCase();
-			typeFields += (i == 0 ? "" : " OR ") + "type : " + typeField;
+    public Collection<T> simpleSearchWithType(String keyword, Integer count, String cursor, String type){
+		keyword = SearchUtil.normalizeString(keyword);
+		String typeFields = "";
+		String typeField = null;
+		if(type != null){
+			String[] typeStrings = type.split(",");
+			for (int i = 0; i < typeStrings.length; i++) {
+				if(StringUtils.isBlank(typeStrings[i]))
+					continue;
+				
+				typeField  = typeStrings[i].toUpperCase();
+				typeFields += (i == 0 ? "" : " OR ") + "type : " + typeField;
+			}
 		}
-	}
 	
 		Collection<T> entities = processQuery("search_tokens:" + keyword + " AND " + typeFields, count, cursor);		
-		try{
-			if(typeField != null && (typeFields.indexOf("COMPANY") >= 0 || typeFields.indexOf("PERSON") >= 0)){
-				String localKeyword = keyword.toLowerCase();
-				ArrayList<T> otherList = new ArrayList<T>();
-				ArrayList<Contact> contactsMainList = new ArrayList<Contact>();
-				ArrayList<Contact> contactsSecondarList = new ArrayList<Contact>();
-				ArrayList<Contact> mainList = new ArrayList<Contact>();
-				ArrayList<Contact> secondarList = new ArrayList<Contact>();
-				Iterator<T> itr = entities.iterator();		 
+		try{			
+			if(typeField != null){
+				String localKeyword = keyword.toLowerCase();			
+				
+				ArrayList<Object> mainList = new ArrayList<Object>();
+				ArrayList<Object> secondarList = new ArrayList<Object>();
+				
+				Iterator<T> itr = entities.iterator();		 	
 			    //iterate through the ArrayList values using Iterator's hasNext and next methods
 			    while(itr.hasNext()){
 			    	Object object = itr.next();
@@ -148,11 +148,11 @@ public class QueryDocument<T> implements QueryInterface
 				    		}
 				    		
 					    	if(firstName != null && firstName.indexOf(localKeyword) >= 0){
-					    		contactsMainList.add(contact);
+					    		mainList.add(contact);
 					    	}else if(lastName != null && lastName.indexOf(localKeyword) >= 0){
-					    		contactsMainList.add(contact);
+					    		mainList.add(contact);
 					    	}else {
-					    		contactsSecondarList.add(contact);
+					    		secondarList.add(contact);
 					    	}
 					    }else if(contactType.equals(com.agilecrm.contact.Contact.Type.COMPANY)){
 				    		ContactField nameField = contact.getContactField(Contact.NAME);
@@ -165,15 +165,46 @@ public class QueryDocument<T> implements QueryInterface
 						    	}
 				    		}
 					    }
-				    }else{
-				    	otherList.add((T) object);
+				    }else if(object instanceof Opportunity){
+				    	Opportunity deal = (Opportunity) object;
+				    	String name = deal.name;
+			    		if(name != null){
+				    		name = name.toLowerCase();
+					    	if(name != null && name.indexOf(localKeyword) >= 0){
+					    		mainList.add(deal);
+					    	}else {
+					    		secondarList.add(deal);
+					    	}
+			    		}				    	
+				    }else if(object instanceof com.agilecrm.document.Document){
+				    	com.agilecrm.document.Document document  = (com.agilecrm.document.Document) object;
+				    	String name = document.name;
+			    		if(name != null){
+				    		name = name.toLowerCase();
+					    	if(name != null && name.indexOf(localKeyword) >= 0){
+					    		mainList.add(document);
+					    	}else {
+					    		secondarList.add(document);
+					    	}
+			    		}
+				    }else if(object instanceof Tickets){
+				    	Tickets ticket  = (Tickets) object;
+				    	String subject = ticket.subject;
+			    		if(subject != null){
+			    			subject = subject.toLowerCase();
+					    	if(subject != null && subject.indexOf(localKeyword) >= 0){
+					    		mainList.add(ticket);
+					    	}else {
+					    		secondarList.add(ticket);
+					    	}
+			    		}
+				    }else {
+				    	secondarList.add(object);
 				    }
 			    }
-			    contactsMainList.addAll(contactsSecondarList);
-			    contactsMainList.addAll(mainList);
-			    contactsMainList.addAll(secondarList);			    
-			    entities = (Collection<T>) contactsMainList;	
-			    entities.addAll(otherList);
+			    
+			    mainList.addAll(secondarList);			   
+			    entities = (Collection<T>) mainList;			    
 			}
 		}catch (Exception e){
 			System.out.println("Exception occured while sorting search results : "+e.getMessage());			
