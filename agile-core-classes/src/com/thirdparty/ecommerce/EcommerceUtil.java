@@ -3,9 +3,11 @@ package com.thirdparty.ecommerce;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
-import com.agilecrm.account.APIKey;
 import com.agilecrm.account.util.APIKeyUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
@@ -14,12 +16,8 @@ import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.TagUtil;
 import com.agilecrm.projectedpojos.DomainUserPartial;
 import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
-import com.agilecrm.user.DomainUser;
 import com.agilecrm.util.JSAPIUtil;
 import com.agilecrm.util.JSAPIUtil.Errors;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 public class EcommerceUtil
 {
