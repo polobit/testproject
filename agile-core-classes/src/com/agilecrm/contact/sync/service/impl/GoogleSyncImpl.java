@@ -555,6 +555,15 @@ public class GoogleSyncImpl extends TwoWaySyncService
 			ContactEntry entry = responseFeed.getEntries().get(v);
 			String batchId = BatchUtils.getBatchId(responseFeed.getEntries().get(v));
 			IBatchStatus status = BatchUtils.getStatus(entry);
+			if(batchId.equalsIgnoreCase("create")){
+				Email email=entry.getEmailAddresses().get(0);
+				Contact contact_update=ContactUtil.searchContactByEmail(email.getAddress());
+				if(contact_update!=null){
+					ContactField field= new ContactField("Contact type", "Agile_Google", "");
+					contact_update.addProperty(field);
+					contact_update.save();
+				}
+			}
 			System.out.println(batchId + ": " + status.getCode() + " (" + status.getReason() + ")");
 		}
 		
