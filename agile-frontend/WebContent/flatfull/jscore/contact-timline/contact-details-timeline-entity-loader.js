@@ -14,13 +14,22 @@ var timeline_entity_loader = {
 		head.load(FLAT_FULL_PATH + "lib/isotope.pkgd.js", FLAT_FULL_PATH + "lib/jquery.event.resize.js", FLAT_FULL_PATH + "css/misc/agile-timline.css", function()
 		{
 			// customize_isotope()
-			configure_timeline();
-			timeline_collection_view = new timeline_view();
-			console.log(_this);
-			_this.load_other_timline_entities(contact);
+			if(Current_Route.includes('company') || Current_Route.includes('companies')){
+				configure_timeline(App_Companies.companyDetailView.el);
+				timeline_collection_view = new company_timeline_view();
+				console.log(_this);
+				_this.load_other_company_timeline_entities(contact);
+				timeline_collection_view.render(true);
+			}
+			else{
+				configure_timeline();
+				timeline_collection_view = new timeline_view();
+				console.log(_this);
+				_this.load_other_timline_entities(contact);
 
-			timeline_collection_view.render(true);
+				timeline_collection_view.render(true);
 			// timeline_collection_view.render();
+			}
 
 		});
 	},
@@ -33,6 +42,17 @@ var timeline_entity_loader = {
 		this.load_campaign_logs(contactId);
 		
 		this.get_stats(getPropertyValue(contact.properties, "email"), contact, App_Contacts.contactDetailView.el);
+		//setTimeout(this.load_reload_emails, 5000);
+	},
+	load_other_company_timeline_entities : function(contact)
+	{
+		var contactId = contact['id'];
+
+		this.load_related_entites(contactId);
+		this.load_stats(contact);
+		this.load_campaign_logs(contactId);
+		
+		this.get_stats(getPropertyValue(contact.properties, "email"), contact, App_Companies.companyDetailView.el);
 		//setTimeout(this.load_reload_emails, 5000);
 	},
 	
@@ -72,8 +92,8 @@ var timeline_entity_loader = {
 
 			}
 			
-			if(App_Contacts.contactDetailView.model.get('id') == contactId)
-			timeline_collection_view.addItems(entities);
+			if((App_Contacts.contactDetailView && App_Contacts.contactDetailView.model.get('id') == contactId) || (App_Companies.companyDetailView && App_Companies.companyDetailView.model.get('id') == contactId))
+				timeline_collection_view.addItems(entities);
 		});
 	},
 	load_stats : function(contact)
@@ -106,7 +126,7 @@ var timeline_entity_loader = {
 						
 						});
 
-					if(App_Contacts.contactDetailView.model.get('id') !== contact.id)
+					if((App_Contacts.contactDetailView && App_Contacts.contactDetailView.model.get('id') !== contactId) || (App_Companies.companyDetailView && App_Companies.companyDetailView.model.get('id') !== contactId))
 						return;
 
 					var contact_emails = [];
@@ -187,8 +207,8 @@ var timeline_entity_loader = {
 												}
 
 											});
-							if(App_Contacts.contactDetailView.model.get('id') == contactId)
-							timeline_collection_view.addItems(log_models);
+							if((App_Contacts.contactDetailView && App_Contacts.contactDetailView.model.get('id') == contactId) || (App_Companies.companyDetailView && App_Companies.companyDetailView.model.get('id') == contactId))
+								timeline_collection_view.addItems(log_models);
 						})
 	}, timline_fetch_data : function(url, callback)
 	{
@@ -331,8 +351,8 @@ var timeline_entity_loader = {
 							} });
 						}
 					}
-					if(App_Contacts.contactDetailView.model.get('id') == contact.id)
-					timeline_collection_view.addItems(data.toJSON());
+					if((App_Contacts.contactDetailView && App_Contacts.contactDetailView.model.get('id') == contactId) || (App_Companies.companyDetailView && App_Companies.companyDetailView.model.get('id') == contactId))
+						timeline_collection_view.addItems(data.toJSON());
 
 					addTagAgile(CODE_SETUP_TAG);
 				}

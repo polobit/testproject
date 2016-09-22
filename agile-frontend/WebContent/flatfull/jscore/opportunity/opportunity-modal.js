@@ -786,6 +786,7 @@ function saveDeal(formId, modalId, saveBtn, json, isUpdate)
 				&& Current_Route == "company/"
 					+ App_Companies.companyDetailView.model.get('id')){
 			company_util.updateDealsList(deal,true, isUpdate);
+			add_entity_to_timeline(data);
 		}
 		// When deal is added or updated from Deals route
 		else if (Current_Route == 'deals')
