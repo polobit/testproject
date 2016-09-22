@@ -1,4 +1,5 @@
 <script id="tickets-search-model-template" type="text/html">
+{{#is_mobile}}
     <td class="hide"></td>
     <td class="data" data="{{id}}">
         <div class="table-resp">
@@ -39,7 +40,35 @@
         </div>
    
     </td> -->
-    
+{{else}}
+
+    <td></td>
+    <td class="data" data="{{id}}">
+     <div class="table-resp">
+        <div class="agile-thumb agile-thumb-view" style="width:calc(100% - 60px);">
+            <div class="text-cap custom-link">#{{id}}</div> 
+            <div> <small class="text-muted m-t-xs">{{subject}} </small></div>
+        </div>
+       </div>
+    </td>
+
+    <td class="overflow-hidden no-wrap">
+        {{requester_name}}
+    </td>
+
+    <td class="text-muted">
+         {{priority}}, {{status}}
+    </td>
+
+    <td>
+    <div class="table-resp">
+        <i class="fa fa-clock-o m-r-xs"></i>
+        <time class="document-created-time b-b-dotted" value="{{created_time}}" datetime="{{epochToHumanDate "" created_time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created_time}}</time>
+        </div>
+   
+    </td>
+
+{{/is_mobile}}
 </script>
 <script id="tickets-search-collection-template" type="text/html">
 {{#is_mobile}}

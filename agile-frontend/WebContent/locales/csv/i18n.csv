@@ -545,7 +545,7 @@ Plan-and-upgrade.triggers-with-your-current-plan-and-are-trying-to-subscribe,tri
 campaigns.ticket-note-cust,Runs a Campaign on a contact When new note is added by customer.,Ejecuta una campaña en un contacto cuando se añade nueva nota por parte del cliente.
 contacts.merge-max,you can merge maximum of 2 records at a time with master record.,puede combinar máximo de 2 registros a la vez con el registro maestro.
 welcome.you-can-the-API-javascript,you can use the API JavaScript to your web pages and use the API,puede utilizar la API de JavaScript a sus páginas web y el uso de la API
-deal-view.restoring-the-deal-desc,Restoring the Deal will make it active again. Restore this Deal?,La restauración de la Oferta la hará activa de nuevo. Restaurar este oferta?
+deal-view.restoring-the-deal-desc,Restoring the Deal will make it active again.,La restauración de la Oferta la hará activa de nuevo. 
 widgets.sip-desc,Make and receive calls from your contacts using any SIP account.,Haz y recibe llamadas de tus contactos utilizando cualquier cuenta SIP.
 prefs-data-sync.widget-sip-desc,Make and receive calls from your contacts using any SIP account.,Hacer y recibir llamadas de sus contactos utilizando cualquier cuenta SIP.
 prefs-email.office365-content,See all emails related to a contact from your Office365 account.,Ver todos los mensajes de correo electrónico relacionados con un contacto de su cuenta Office365.
@@ -1447,7 +1447,7 @@ admin-settings-custom-fields.delete-company-custom-field,Delete Company Custom F
 campaigns.email-will-be-sent-shortly,Email will be sent shortly.,Correo electrónico será enviado en breve.
 calls.avg-duration-secs,Average Call Duration (Sec),Promedio de duración de llamada (Sec)
 twill.enter-valid-details,Please enter valid details.,Por favor&#44; introduzca los datos válidos.
-Refer-friend.love-agile-crm,Hope you love Agile CRM&#48,Esperamos que el amor Agile CRM&#48
+Refer-friend.love-agile-crm,Hope you love Agile CRM&#44;,Esperamos que el amor Agile CRM&#44;
 contacts-view.of-the-following-conditions,of the following conditions,de las siguientes condiciones
 validation-msgs.deal_milestone_duplicated,'Milestone' already exists!,\'Milestone\' ya existe!
 widgets.enter-custom-widget-details,Enter custom widget details,Insera los detalles del widget personalizado
@@ -5394,7 +5394,8 @@ affiliate.affiliate-program,Affiliate Program,
 affiliate.commission-details,Overview,
 affiliate.referrals,Referrals,
 affiliate.affiliate-tools,Creatives,
-affiliate.no-affiliates,There are no Referrals,
+affiliate.no-affiliates,You have no referrals yet.,
+affiliate.no-affiliates-text,Please share your creatives with your network to get your referrals.,
 affiliate.total-count,Total Referrals,
 affiliate.total-commission,Total Commission,
 affiliate.email,Email,
@@ -5428,12 +5429,14 @@ affiliate.p6,Gain access to real-time reports on paid subscriptions and commissi
 affiliate.p7-1,For any queries about Agile's affiliate program&#44; please contact:,
 affiliate.p7-2,affiliates@agilecrm.com,
 affiliate.earn_20,Get 20% on each sale!,
-affiliate.deal-registration,Add Deal,
-affiliate.registered-deals,Affiliate Deals,
-affiliate.no-registered-deals,There are no Affiliate Deals,
+affiliate.deal-registration,Deal Registration,
+affiliate.registered-deals,Registered Deals,
+affiliate.no-registered-deals,Sorry&#44; we were unable to find any registered deals here.,
+affiliate.no-registered-deals-text,You can register deals before converting and track them in your referrals tab.,
 affiliate.personal-email,Personal Email,
-affiliate.office-email,Office Email,
+affiliate.office-email,Business Email,
 affiliate.website-url,Website URL,
+affiliate.add,Register Deal,
 webrules.push-popup,Request Push Popup,
 web-rules.Pushnoty,Push Notification,
 others.chat-with-us,Chat With Us,Habla con nosotros

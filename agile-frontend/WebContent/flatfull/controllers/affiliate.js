@@ -145,6 +145,16 @@ var AffiliateRouter = Backbone.Router.extend({
 				if(!template_ui)
 					  return;
 				$('#content').html($(template_ui));
+				$("#affiliate-register-deal").off("click");
+				$("#affiliate-container").on("click", "#affiliate-register-deal", function(e){
+					e.preventDefault();
+					getTemplate('deal-register-modal', {}, undefined, function(template_ui1){
+						if(!template_ui1)
+							  return;
+						$("#register_deal_modal").html($(template_ui1));
+						$("#register_deal_modal").modal("show");
+					}, "#content");
+				});
 				that.registeredDealsCollectionView = new Base_Collection_View({ url : 'core/api/affiliate/deals?userId='+CURRENT_DOMAIN_USER.id, sort_collection : false, templateKey : "deal-registration",
 					cursor : true, individual_tag_name : 'tr', postRenderCallback : function(el){
 						head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
@@ -152,7 +162,8 @@ var AffiliateRouter = Backbone.Router.extend({
 							$("time", el).timeago();
 						});
 						$("#affiliate-register-deal").show();
-						$("#affiliate-container").on("click", "#affiliate-register-deal", function(e){
+						$("#affiliate-register-deal2").off("click");
+						$("#affiliate-tabs-content").on("click", "#affiliate-register-deal2", function(e){
 							e.preventDefault();
 							getTemplate('deal-register-modal', {}, undefined, function(template_ui1){
 								if(!template_ui1)

@@ -233,5 +233,4 @@ var LandingPageRouter = Backbone.Router.extend({
     $("#landing-pages-menu").addClass("active");
         hideTransitionBar();
     }
-	
 });

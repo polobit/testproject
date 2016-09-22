@@ -372,7 +372,17 @@ public class GoogleSyncImpl extends TwoWaySyncService
 		syncStatus.put(ImportStatus.TOTAL_FAILED, syncStatus.get(ImportStatus.TOTAL_FAILED) + 1);
 		continue;
 	    }
-
+	    boolean valid_email=false;
+	    for(Email email:emails){
+	    	
+	    	 if (ContactUtil.isValidEmail(email.getAddress()))
+	    	 {
+	    		 valid_email=true;
+	    		 break;
+	    	 }
+	    	
+	    }
+	    	if(valid_email)
 	    			wrapContactToAgileSchemaAndSave(entry,mergedContacts);
 	    
 	    
@@ -558,6 +568,13 @@ public class GoogleSyncImpl extends TwoWaySyncService
 	    {
 	    
 	    Thread.sleep(2000);
+	    if ((prefs.expires - 60000) <= System.currentTimeMillis())
+		{
+		    System.out.println(prefs.token);
+		    GoogleServiceUtil.refreshGoogleContactPrefsandSave(prefs);
+		    contactService = GoogleServiceUtil.getService(prefs.token);
+		}
+		
 	    System.out.println("Inside batch update");
 	    insertRequestCount = 0;
 		// Submit the batch request to the server.
@@ -691,6 +708,12 @@ public class GoogleSyncImpl extends TwoWaySyncService
 		if (updateRequestCount >= 2 || ((i >= (contacts.size() - 1) && updateRequestCount != 0)))
 		{
 		    Thread.sleep(2000);
+		    if ((prefs.expires - 60000) <= System.currentTimeMillis())
+			{
+			    System.out.println(prefs.token);
+			    GoogleServiceUtil.refreshGoogleContactPrefsandSave(prefs);
+			    contactService = GoogleServiceUtil.getService(prefs.token);
+			}
 		    System.out.println("Inside batch update");
 		    updateRequestCount = 0;
 		    try{
