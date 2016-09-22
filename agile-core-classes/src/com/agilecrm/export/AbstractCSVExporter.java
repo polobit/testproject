@@ -177,7 +177,7 @@ public abstract class AbstractCSVExporter<T> implements Exporter<T>
 
     stats.put("count", String.valueOf(csvWriter.getNumberOfRows() - 1));
 
-	SendMail.sendMail("nidhi@agilecrm.com", "CSV Contacts Import Status "+domain, SendMail.CSV_IMPORT_STATS_NOTIFICATION,
+	SendMail.sendMail("nidhi@agilecrm.com", "CSV Contacts Export Status "+domain, SendMail.CSV_IMPORT_STATS_NOTIFICATION,
 		    new Object[] { stats});
     }
 
