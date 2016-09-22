@@ -9,7 +9,7 @@ String ENVIRONMENT = "live";
 String MAIN_URL = "http://localhost:8888/";
 
 if(ENVIRONMENT == "live")
-  MAIN_URL = "https://"+NamespaceManager.get()+".agilecrm.com/";
+  MAIN_URL = "https://"+NamespaceManager.get()+"-dot-30-1-dot-agile-crm-cloud.appspot.com/";
 else if(ENVIRONMENT == "beta")
   MAIN_URL = "https://"+NamespaceManager.get()+"-dot-sandbox-dot-agilecrmbeta.appspot.com/";
 
@@ -2447,6 +2447,6 @@ function showAgileCRMForm(formJson,formHolderId) {
     });
 }
 </script>
-    <script src="<%=BUILD_PATH%>js/builder.min.js" charset="utf-8"></script>
+    <script src="<%=BUILD_PATH%>js/builder-version.min.js" charset="utf-8"></script>
   </body>
 </html>
