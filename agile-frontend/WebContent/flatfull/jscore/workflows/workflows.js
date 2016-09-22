@@ -1042,10 +1042,11 @@ function get_modified_value(modified_field_ui_obj, field_name, field_value)
        {
             // Removed * if occurs in first character
             if(field_value.charAt(0) === '*')
-             {
+            {
                 field_value = field_value.substr(1);
-                return field_value;
-             }
+            }
+
+            return field_value;
        }
 
        value = _.findKey(modified_field_ui_obj.options, function(value)
@@ -1056,8 +1057,9 @@ function get_modified_value(modified_field_ui_obj, field_name, field_value)
                 if(value.charAt(0) === '*')
                 {
                     value = value.substr(1);
-                    return value;
                 }
+
+                return value;
             }
 
         });
