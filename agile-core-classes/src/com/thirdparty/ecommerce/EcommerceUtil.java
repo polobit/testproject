@@ -228,5 +228,30 @@ public class EcommerceUtil
 	}
 	return validTags.toArray(new String[validTags.size()]);
     }
+    
+    public void getEmailFromPayload(String json, EcommerceUtil ecommUtil){
+    	try {
+    		System.out.println("email= "+ecommUtil.email);
+			if(ecommUtil.email.contains("@"))
+				return;
+			
+			JSONObject jsonObj = new JSONObject(json);
+			JSONArray propertiesArray = jsonObj.getJSONArray("properties");
+			for (int i = 0; i < propertiesArray.length(); i++) {
+				
+				String type = propertiesArray.getJSONObject(i).getString("type");
+				String name = propertiesArray.getJSONObject(i).getString("name");
+				
+				if(type.equalsIgnoreCase("system") && name.equalsIgnoreCase("email")) 
+				{
+					ecommUtil.email = propertiesArray.getJSONObject(i).getString("value");
+					return;
+				}
+			}
+			
+		} catch (Exception e) {
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+		}
+    }
 
 }
