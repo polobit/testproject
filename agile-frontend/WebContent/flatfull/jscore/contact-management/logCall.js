@@ -393,7 +393,11 @@ try{
 	if(CallLogVariables.id){
 		contactDetailsObjId = CallLogVariables.id;
 	}else{
-		contactDetailsObjId = agile_crm_get_contact().id;	
+		if(company_util.isCompany()){
+			contactDetailsObjId = App_Companies.companyDetailView.model.toJSON().id;
+		} else {
+			contactDetailsObjId = agile_crm_get_contact().id;
+		}
 	}
 	
 	if($("#saveActivity",form).val() == "true"){
