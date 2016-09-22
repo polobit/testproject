@@ -48,9 +48,12 @@ function renderActivityView(params)
 			initializeActivitiesListner(el);
 			initializeEventListners(el);
 			contactListener(el);
+
+			initializeWorkflowBackupListener(el);
 		}, appendItemCallback : function(el)
 		{
 			includeTimeAgo(el);
+			initializeWorkflowBackupListener(el);
 		}
 
 	});
@@ -310,3 +313,24 @@ function initActivitiesDateRange() {
         $(this).addClass("active");
     });
 }
+
+function initializeWorkflowBackupListener(el)
+{
+	var time = new Date().getTime();
+	var activities = $('[class^="campaign-history-block"]', el);
+	console.log('Time taken ' + (new Date().getTime()) - time);
+
+	var campaign_ids = [];
+
+	$.each(activities, function (index, ele) {
+		
+			var id = $(ele).data('entity-id');
+
+			if(campaign_ids.indexOf(id) !== -1)
+				return true;
+
+			campaign_ids.push(id);
+
+			$(ele).show();
+	});
+ }
