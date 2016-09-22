@@ -7733,3 +7733,9 @@ Handlebars.registerHelper('if_anyone_equals', function(value, target, options)
 		return options.inverse(this);
 	
 });
+
+Handlebars.registerHelper('contactsnamestatus', function(options)
+	{
+
+		return (_agile_get_custom_contact_display_type == "ftl") ?  options.fn(this) : options.inverse(this);
+	});

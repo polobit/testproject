@@ -20,8 +20,7 @@
 
 	              	<span><b class="text-sm vertical-align-top">
 	              				{{#if contact}}
-					                {{getContactNameProperty contact "first_name"}} 
-					                    {{getContactNameProperty contact "last_name"}}
+					                {{contact_name_necessary contact}}
 					                 {{else}}
 					                    {{#if related_contact_ids}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}{{this.contactname}}{{/toLinkTrigger}}{{/stringToJSON}}{{/if}}
 					                {{/if}}

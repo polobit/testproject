@@ -16,8 +16,7 @@
 	</div>
 	<div class="agile-thumb agile-thumb-view">
 	{{#if_contact_type "PERSON"}}
-	<a class="text-cap">{{getContactNameProperty this "first_name"}}
-	{{getContactNameProperty this "last_name"}} </a> </br>
+	<a class="text-cap">{{contact_name_necessary this}}</a> </br>
 	<small class="text-muted">{{getPropertyValue properties "email"}}</small>
 	{{/if_contact_type}}
 

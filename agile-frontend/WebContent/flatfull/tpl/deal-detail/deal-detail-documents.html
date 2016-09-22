@@ -105,7 +105,7 @@
 		{{#each contacts}}
            	{{#if id}}
 						{{#if_contact_type "PERSON"}}	
-							<a href="#contact/{{id}}" data="{{id}}" class="popover_contact">{{getContactNameProperty this "first_name"}} {{getContactNameProperty this "last_name"}}</a>,
+							<a href="#contact/{{id}}" data="{{id}}" class="popover_contact">{{contact_name_necessary this}}</a>,
         				{{/if_contact_type}}
 						{{#if_contact_type "COMPANY"}}
         					<a href="#company/{{id}}" data="{{id}}" class="popover_contact">{{getPropertyValue properties "name"}}</a>,

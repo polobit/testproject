@@ -62,8 +62,7 @@
 {{#if contacts.length}} 
 <div class="ctx contact_text">  
         {{#each contacts}}<a  href ="#contact/{{this.id}}">{{#if_contact_type "PERSON"}}
-        		{{getContactNameProperty this "first_name"}}
-        		{{getContactNameProperty this "last_name"}} 
+        		{{contact_name_necessary this}}
         		
         	{{/if_contact_type}}{{#if_contact_type "COMPANY"}}{{getPropertyValue properties "name"}}{{/if_contact_type}},</a> {{/each}}  
         
@@ -124,8 +123,7 @@
 			{{#if contacts.length}} 
 				{{#each contacts}}
 					<a class="contact_text" href="#contact/{{this.id}}">{{#if_contact_type "PERSON"}}
-        				{{getContactNameProperty this "first_name"}}
-        				{{getContactNameProperty this "last_name"}} 
+        				{{contact_name_necessary this}}
         				{{/if_contact_type}}{{#if_contact_type "COMPANY"}}{{getPropertyValue properties "name"}}{{/if_contact_type}}
 					</a> 
 				{{/each}}
