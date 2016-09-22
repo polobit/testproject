@@ -1434,18 +1434,10 @@ Added {{custom3}} {{agile_lng_translate 'contacts-view' 'contact-to-campaign'}}<
 							<td>{{node_name}}</td>
 							<td>{{name}}</td>
 							<td>
-							{{#if_equals "-" old_value}}
-								<p title="Dynamic values and large content are not shown.">{{old_value}}</p>
-							{{else}}
-								 {{old_value}}
-							{{/if_equals}}
+								{{old_value}}
 							</td>
 							<td>
-							{{#if_equals "-" new_value}}
-								<p title="Dynamic values and large content are not shown.">{{new_value}}</p>
-							{{else}}
-								 {{new_value}}
-							{{/if_equals}}
+								{{new_value}}
 							</td>
 						</tr>
 					{{/each}}

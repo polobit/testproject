@@ -856,25 +856,26 @@ function get_campaign_changes(updated_workflow_json, old_workflow_json, callback
     var old_nodes = JSON.parse(old_workflow_json).nodes;
 
     var map = {"ADDED":[], "MODIFIED":[], "DELETED": []};
-    var restricted_fields = ["text_email", "html_email"];
 
     // var modified_table = {NodeName, Action, FieldName, Previous Value, New Value};
 
     head.js(LIB_PATH + 'lib/underscore-min.1.8.3.js', function(){
         
-        for(var i=0; i < update_nodes.length; i++){
+        for(var i=0; i < update_nodes.length; i++){ // nodes iterator
         
+            var update_node = update_nodes[i];
+
             // If Start node
-            if(update_nodes[i].id == "PBXNODE1")
+            if(update_node.id == "PBXNODE1")
                 continue;
 
             // Finding in Old workflow json
-            var old_node = _.findWhere(old_nodes, {id: update_nodes[i].id});
+            var old_node = _.findWhere(old_nodes, {id: update_node.id});
             
             if(old_node)
             {
                 // Check both nodes are same or not?
-                var is_equal = _.isEqual(old_node.JsonValues, update_nodes[i].JsonValues);
+                var is_equal = _.isEqual(old_node.JsonValues, update_node.JsonValues);
 
                 if(is_equal)
                 {
@@ -886,91 +887,52 @@ function get_campaign_changes(updated_workflow_json, old_workflow_json, callback
                     
                     // Modified Field Values
                     var modified_field_values = [];
-                    for(var j=0; j< update_nodes[i].JsonValues.length; j++)
+                    for(var j=0; j< update_node.JsonValues.length; j++) // Fields Iterator
                     {
 
-                        var updated_node_field = update_nodes[i].JsonValues[j];
-
-                        var old_node_field  = _.findWhere(old_node.JsonValues, 
-                                                        {name: updated_node_field.name});
-
+                        var updated_node_field = update_node.JsonValues[j];
+                        var search_obj = search_for_old_field(updated_node_field, old_node.JsonValues);
+                        var old_node_field = search_obj["field"];
+                        var key_identity = search_obj["key_identity"];
+                       
                         // If any of the fields is undefined
                         if(!updated_node_field || !old_node_field)
                             continue;
 
                         // Compare update field and old field
-                        var node_equal = _.isEqual(updated_node_field, old_node_field);
+                        var field_equal = _.isEqual(updated_node_field, old_node_field);
 
-                        console.log(node_equal);
+                        console.log(field_equal);
                         console.log("Node.................." +  updated_node_field.name);
 
-                        if(!node_equal)
+                        if(!field_equal)
                         {
                             try
                             {
-                                var modified_field = {};
-                                modified_field.node_name = update_nodes[i].displayname;
-                               
-                                var modified_field_obj =
-                                 _.find(old_node.NodeDefinition.ui, function(obj)
-                                    {
-                                        if(obj.name == updated_node_field.name)
-                                        {
-                                            return obj; 
-                                        } 
+                                var modified_field_ui_obj = search_ui_obj(old_node.NodeDefinition.ui, key_identity);
+                                     
+                                var modified_data = {};
+                
+                                modified_data.node_name = update_node.displayname;
+                                modified_data.name = get_modified_name(modified_field_ui_obj);
+                                modified_data.old_value = get_modified_value(modified_field_ui_obj, updated_node_field.name
+                                                                , old_node_field.value);
+                                modified_data.new_value = get_modified_value(modified_field_ui_obj, updated_node_field.name
+                                                                , updated_node_field.value);
 
-                                    });
 
-                                if(modified_field_obj)
-                                    modified_field.name = modified_field_obj.label;
-                                
-                                // If Modified field undefined
-                                if(!modified_field.name)                            
-                                    modified_field.name = updated_node_field.name;
-
-                                if(modified_field_obj.options)
-                                {
-                                   modified_field.old_value = _.findKey(modified_field_obj.options, function(value)
-                                    {
-                                        if(value == old_node_field.value)
-                                            return value;
-                                    });
-
-                                   modified_field.new_value = _.findKey(modified_field_obj.options, function(value)
-                                    {
-                                        if(value == updated_node_field.value)
-                                            return value;
-                                    });
-                                }
-                                else
-                                {
-                                    modified_field.old_value = old_node_field.value;
-                                    modified_field.new_value = updated_node_field.value;
-                                }
-                                
-                                if(!modified_field.old_value)
-                                    modified_field.old_value = "-";
-                                
-                                if(!modified_field.new_value)
-                                    modified_field.new_value = "-";
-
-                                if(restricted_fields.indexOf(modified_field.name) != -1)
-                                {
-                                    modified_field.old_value = "-";
-                                    modified_field.new_value = "Template changed.";
-                                }
-
-                                modified_field_values.push(modified_field);
+                                modified_field_values.push(modified_data);
                             }
                             catch(err)
                             {
-                                console.debug("Error occured while pushing modified fields...");
+                                console.debug("Error occured while pushing modified fields..." + err);
                             }
 
                         }
 
                     }
 
+                    if(modified_field_values && modified_field_values.length > 0)
                     map["MODIFIED"].push(modified_field_values);
                 }
 
@@ -981,7 +943,7 @@ function get_campaign_changes(updated_workflow_json, old_workflow_json, callback
             else
             {
                 console.log("Newly Added....");
-                map["ADDED"].push(update_nodes[i].displayname);
+                map["ADDED"].push(update_node.displayname);
             }
         }
 
@@ -1002,4 +964,115 @@ function get_campaign_changes(updated_workflow_json, old_workflow_json, callback
         }
 
     });
+}
+
+function search_for_old_field(updated_node_field, old_node_json_values)
+{
+    var search_obj = {};
+    var old_field;
+
+    // Search in Old JSONValues and pick that JSONValue
+    if(updated_node_field.hasOwnProperty("name"))
+    {
+        old_field  = _.findWhere(old_node_json_values, 
+                                    {name: updated_node_field.name});
+        key_identity = updated_node_field.name;
+    }
+    else
+    {
+        for(var key in updated_node_field)
+        {
+            old_field = _.find(old_node_json_values, function(obj){
+                if(obj.hasOwnProperty(key)){
+                 key_identity = key;
+                 return obj;
+             }
+            });
+        }
+    }
+
+    search_obj["field"] = old_field;
+    search_obj["key_identity"] = key_identity;
+
+    return search_obj;
+}
+
+function search_ui_obj(node_ui, key_identity)
+{
+     var ui_obj = _.find(node_ui, function(obj)
+        {
+            if(obj.name == key_identity)
+            {
+                return obj; 
+            }
+        });
+
+     return ui_obj;
+}
+
+function get_modified_name(modified_field_ui_obj)
+{
+    var name = "";
+
+    if(modified_field_ui_obj)
+        name = modified_field_ui_obj.label;
+
+    // If Modified field undefined
+    if(!name)                            
+        name = modified_field_ui_obj.name;
+
+    name = name.replace(/:+$/, "");
+
+    return name;
+}
+
+function get_modified_value(modified_field_ui_obj, field_name, field_value)
+{
+    var value = "-";
+    var restricted_fields = ["text_email", "html_email", "unsubscribe", "description", "campaign_id", "milestone"];
+    var allow_select_values = ["from_email"];
+
+    if(restricted_fields.indexOf(field_name) != -1)
+        return "-";
+
+    if(modified_field_ui_obj.options) // For select fields having options, return key's text
+    {
+
+       if(allow_select_values.indexOf(field_name) != -1)
+       {
+            // Removed * if occurs in first character
+            if(field_value.charAt(0) === '*')
+             {
+                field_value = field_value.substr(1);
+                return field_value;
+             }
+       }
+
+       value = _.findKey(modified_field_ui_obj.options, function(value)
+        {
+            if(value == field_value)
+            {
+                // Removed * if occurs in first character
+                if(value.charAt(0) === '*')
+                {
+                    value = value.substr(1);
+                    return value;
+                }
+            }
+
+        });
+    }
+    else
+    {
+       value = field_value;
+    }
+    
+    if(!value)
+        value = "-";
+
+    // Removed * if occurs in first character
+    if(value.charAt(0) === '*')
+        value = value.substr(1);
+
+    return value;
 }
