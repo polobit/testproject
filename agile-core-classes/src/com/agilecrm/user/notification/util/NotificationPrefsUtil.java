@@ -80,7 +80,7 @@ public class NotificationPrefsUtil
     private static NotificationPrefs getDefaultNotifications(AgileUser agileUser)
     {
 	NotificationPrefs notifications = new NotificationPrefs(agileUser.id, true, "ANY_CONTACT", "ANY_CONTACT",
-		"ANY_CONTACT", false, true, false, false, false, false, true, "alert_1","None");
+		"ANY_CONTACT", false, true, false, false, false, false, true, "alert_1",true);
 	notifications.save();
 	return notifications;
     }

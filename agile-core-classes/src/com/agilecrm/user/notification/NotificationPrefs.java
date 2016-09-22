@@ -80,7 +80,7 @@ public class NotificationPrefs {
 	public boolean deal_closed = true;
 
 	@NotSaved(IfDefault.class)
-	public String deal_won = null; // ad
+	public boolean deal_closed_email = true; // ad
 
 	/**
 	 * Tag created notification - default true.
@@ -115,7 +115,7 @@ public class NotificationPrefs {
 	 */
 	public enum Type // ad
 	{
-		IS_BROWSING, OPENED_EMAIL, CLICKED_LINK, DEAL_CREATED, DEAL_CLOSED, DEAL_WON, TAG_ADDED, TAG_DELETED, CONTACT_ADDED, CONTACT_DELETED, CAMPAIGN_NOTIFY
+		IS_BROWSING, OPENED_EMAIL, CLICKED_LINK, DEAL_CREATED, DEAL_CLOSED, DEAL_CLOSED_EMAIL, TAG_ADDED, TAG_DELETED, CONTACT_ADDED, CONTACT_DELETED, CAMPAIGN_NOTIFY
 	};
 
 	/** Notification type. */
@@ -177,14 +177,14 @@ public class NotificationPrefs {
 			String browsing, String email_opened, String link_clicked,
 			boolean deal_created, boolean deal_closed, boolean contact_added,
 			boolean contact_deleted, boolean tag_added, boolean tag_deleted,
-			boolean call, String notification_sound, String Deal_won) {
+			boolean call, String notification_sound, boolean deal_closed_email) {
 		this.control_notifications = control_notifications;
 		this.browsing = browsing;
 		this.email_opened = email_opened;
 		this.link_clicked = link_clicked;
 		this.deal_created = deal_created;
 		this.deal_closed = deal_closed;
-		this.deal_won = Deal_won; // ad
+		this.deal_closed_email = deal_closed_email; // ad
 		this.contact_added = contact_added;
 		this.contact_deleted = contact_deleted;
 		this.tag_added = tag_added;
