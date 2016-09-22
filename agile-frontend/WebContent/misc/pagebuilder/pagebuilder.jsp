@@ -5,7 +5,7 @@
 String AGILE_VERSION = SystemProperty.applicationVersion.get();
 
 //local,beta,live
-String ENVIRONMENT = "local";
+String ENVIRONMENT = "live";
 String MAIN_URL = "http://localhost:8888/";
 
 if(ENVIRONMENT == "live")
