@@ -751,6 +751,21 @@ getRepPerformanceLog : function(url) {
 					$('#content').html($(template_ui));
 						var dashboard_name = _agile_get_prefs("dashboard_"+CURRENT_DOMAIN_USER.id);
 	                    var reports_list;
+	                    if(!dashboard_name){
+	                    	var role = CURRENT_DOMAIN_USER.role;
+	                    	switch(role){
+	                    		case "SERVICE":
+	                    			dashboard_name = "dashboard";
+	                    			break;
+	                    		case "MARKETING":
+	                    			dashboard_name = "MarketingDashboard";
+	                    			break;
+	                    		case "SALES":
+	                    			dashboard_name = "SalesDashboard";
+	                    			break;
+	                    	}
+	                    	
+	                    }
 	                    switch(dashboard_name){
 	                         case "SalesDashboard" :
 	                             reports_list = "salesdashboard-reports";

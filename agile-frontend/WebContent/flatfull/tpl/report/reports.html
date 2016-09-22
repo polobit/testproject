@@ -632,9 +632,27 @@
  <li><a href="#RatioReport" role="tab" data-toggle="tab"><i class="m-r-sm icon-group v-middle"></i> {{agile_lng_translate 'report-view' 'ratio-reports'}}</a></li> 
  </ul>
 </li>
+<li role="presentation"  data-tab="1" class="maintab">
+<a href="#email-tab" role="tab" data-toggle="tab" >{{agile_lng_translate 'report-view' 'reports-via-email'}}</i></a> 
+<ul class="nav nav-tabs sub-nav-tab" id="subTab1" style="display:none;">
+ <li><a href="#ContactReports" role="tab" data-toggle="tab"><i class="m-r-sm icon-user v-middle"></i>{{agile_lng_translate 'report-view' 'contact-reports'}}</a></li>
+ {{#hasMenuScope 'ACTIVITY'}}
+ <li><a href="#ActivityReports" role="tab" data-toggle="tab"><i class="m-r-sm icon-cogs v-middle"></i>{{agile_lng_translate 'report-view' 'activity-reports'}}</a></li> 
+ {{/hasMenuScope}}
+ </ul>
+</li>
 </script>
 
 <script id="marketing-reports-template" type="text/html">
+{{#hasMenuScope 'ACTIVITY'}}
+<li role="presentation" data-tab="4" class="maintab">
+<a href="#activities-tab"  role="tab" data-toggle="tab" >{{agile_lng_translate 'portlets' 'activities'}}</a>
+<ul class="nav nav-tabs sub-nav-tab" id="subTab1" style="display:none;">
+ <li><a href="#UserActivities" role="tab" data-toggle="tab"><i class="m-r-sm icon-cogs v-middle"></i>{{agile_lng_translate 'portlets' 'user-activities'}}</a></li>
+ <li><a href="#ContactActivities" role="tab" data-toggle="tab"><i class="m-r-sm icon-cogs v-middle"></i>{{agile_lng_translate 'report-view' 'contact-activities'}}</a></li> 
+ </ul>
+</li>
+{{/hasMenuScope}}
 <li role="presentation"  data-tab="1" class="maintab">
 <a href="#email-tab" role="tab" data-toggle="tab" >{{agile_lng_translate 'report-view' 'reports-via-email'}}</i></a> 
 <ul class="nav nav-tabs sub-nav-tab" id="subTab1" style="display:none;">
@@ -652,6 +670,10 @@
  <li><a href="#CompareCampaigns" role="tab" data-toggle="tab"><i class="m-r-sm icon-bar-chart v-middle"></i>{{agile_lng_translate 'report-view' 'compare-campaigns'}}</a></li> 
  </ul>
 </li>
+
+</script>
+
+<script id="service-reports-template" type="text/html">
 {{#hasMenuScope 'ACTIVITY'}}
 <li role="presentation" data-tab="4" class="maintab">
 <a href="#activities-tab"  role="tab" data-toggle="tab" >{{agile_lng_translate 'portlets' 'activities'}}</a>
@@ -661,13 +683,17 @@
  </ul>
 </li>
 {{/hasMenuScope}}
-</script>
-
-<script id="service-reports-template" type="text/html">
-
+<li role="presentation"  data-tab="1" class="maintab">
+<a href="#email-tab" role="tab" data-toggle="tab" >{{agile_lng_translate 'report-view' 'reports-via-email'}}</i></a> 
+<ul class="nav nav-tabs sub-nav-tab" id="subTab1" style="display:none;">
+ {{#hasMenuScope 'ACTIVITY'}}
+ <li><a href="#ActivityReports" role="tab" data-toggle="tab"><i class="m-r-sm icon-cogs v-middle"></i>{{agile_lng_translate 'report-view' 'activity-reports'}}</a></li> 
+ {{/hasMenuScope}}
+ </ul>
+</li>
 <li role="presentation" data-tab="3" class="maintab">
 <a href="#helpdesk-tab" role="tab" data-toggle="tab">{{agile_lng_translate 'campaigns' 'service'}}</a>
-<ul class="nav nav-tabs sub-nav-tab" id="subTab1" style="display:block;">
+<ul class="nav nav-tabs sub-nav-tab" id="subTab1" style="display:none;">
  <li><a href="#Tickets" role="tab" data-toggle="tab"><i class="m-r-sm icon-tasks v-middle"></i>{{agile_lng_translate 'report-view' 'tickets'}}</a></li>
  <li><a href="#SLAReport" role="tab" data-toggle="tab"><i class="m-r-sm fa fa-check-square-o v-middle"></i>{{agile_lng_translate 'tickets' 'sla-report'}}</a></li>
   <li><a href="#PriorityReport" role="tab" data-toggle="tab"><i class="m-r-sm fa fa-star v-middle" style="float:left;margin-top: 4px;"></i><div style="display:table-cell">{{agile_lng_translate 'report-view' 'ticket-priority-and-status-reports'}}</div></a></li>
