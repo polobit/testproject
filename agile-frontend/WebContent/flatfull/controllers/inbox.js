@@ -15,64 +15,20 @@ var InboxRouter = Backbone.Router.extend({
 			if( !template_ui )	return;
 
 			$('#inbox-listners').html($(template_ui));
-			$("#mail-inbox").css({"font-weight":"bold","color":"white","background-color": "#23b7e5"});
-			$("#mail-sent").css({"font-weight":"normal","color":"inherit","background-color": "#inherit"});
-			
 			syncContacts();
 			initializeInboxListeners();
 		}, '#inbox-listners');
-		
-		$(".active").removeClass("active");
-		$("#inboxmenu").addClass("active");
-		$('[data-toggle="tooltip"]').tooltip();
-	},
-	compose:function(id, subject, body, cc, bcc){
-		$('#content').html("<div id='inbox-listners'>&nbsp;</div>");
-		getTemplate("inbox", {}, undefined, function(template_ui) {
-			if( !template_ui )	return;
-
-			$('#inbox-listners').html($(template_ui));
-			$("#mail-inbox").css({"font-weight":"bold","color":"white","background-color": "#23b7e5"});
-			syncContacts();
-			var model = {};
-			var that=this;
-			$(document).on('click','.mail-compose',function(e) {
-				$("#mails-list").hide();
-				$("#mail-details-view").hide();
-				$("#compose").show();
-			});
-			$("#mails-list").hide();
-			$("#mail-details-view").hide();
-			$("#compose").show();
-			var el = $("#compose").html('<div id="send-email-listener-container"></div>').find('#send-email-listener-container').html(getTemplate("inbox-compose", model));
-			agile_type_ahead("to", el, contacts_typeahead, null, null, "email-search", null, true, null, true);
-			$("#compose").html('<div id="send-email-listener-container"></div>');
-			getTemplate("inbox-compose", model, undefined, function(template_ui){
-				if(!template_ui)
-				return;
-
-				var el = $("#send-email-listener-container").html($(template_ui));
-				agile_type_ahead("to", el, contacts_typeahead, null, null, "email-search", null, true, null, true);
-				agile_type_ahead("email_cc", el, contacts_typeahead, null, null, "email-search", null, true, null, true);
-				agile_type_ahead("email_bcc", el, contacts_typeahead, null, null, "email-search", null, true, null, true);
-				setupTinyMCEEditor('textarea#email-body', true, undefined, function(){
-
-					if(!body)
-					body = '';
-
-					set_tinymce_content('email-body', body);
-					register_focus_on_tinymce('email-body')
-				});
-				initializeSendEmailListeners();
-				sendEmailAttachmentListeners("send-email-listener-container");
-			}, "#compose"); 
-		}, '#inbox-listners');
-		hideTransitionBar();
-		$(".active").removeClass("active");
+		$("#agile-menu-navigation-container .nav li").removeClass("active");
 		$("#inboxmenu").addClass("active");
 		$('[data-toggle="tooltip"]').tooltip();
 	}
 });
+var globalMailCollection = Backbone.Collection.extend({
+
+});
+var globalMailCollectionInstance = null;
+var mailListItem = null;
+
 function syncContacts(){
 	var syncedContacts = Backbone.Collection.extend({
 		url:"core/api/emails/synced-accounts"
@@ -129,26 +85,16 @@ function syncContacts(){
 				$('#inbox-email-type-select').attr("data-server",email_server);
 				url = url+"&folder_name=INBOX";
 			}
-			$("#mails-list").show();
-			$("#mail-details-view").hide();
-			$("#compose").hide();
-			$("#mails-list").remove();
-			$("#mails-list-view").append("<ul class='portlet_body list-group list-group-lg no-radius m-b-none m-t-n-xxs' id='mails-list'></ul>");
-			$("#mails-list").css({"max-height":$(window).height()-128,"height":$(window).height()-128, "overflow-y":"scroll", "padding":"0px"});
-			$("#mail-details-view").remove();
-			$("#mail-detail-view").append("<div class='portlet_body' id='mail-details-view' style='display:none;'></div>");
-			$("#mail-inbox").css({"font-weight":"bold","color":"white","background-color": "#23b7e5"});
-			$("#mail-draft").css({"font-weight":"normal","color":"inherit","background-color": "transparent"});
-			$("#mail-trash").css({"font-weight":"normal","color":"inherit","background-color": "transparent"});
-			$("#mail-sent").css({"font-weight":"normal","color":"inherit","background-color": "transparent"});
+			helperFunction();
+			$('.inbox-menu li').removeClass('active');
+	        $(".inbox-menu li").first().addClass("active");
+	        globalMailCollectionInstance = new globalMailCollection();
 			renderToMailList(url,1,10);
 		}
 	});
 	var syncedcontactitem = new syncedContactItem();
 }
 function renderToMailList(url,offset_val,page_size_val){
-	/*$("#mails-list").empty();
-	$("#mail-details-view").html('');*/
 	var fetchurl= '';
 	fetchurl = url;
 
@@ -160,7 +106,7 @@ function renderToMailList(url,offset_val,page_size_val){
     			page_size: page_size_val,
 			});
 			
-	var mailListItem = Backbone.View.extend({
+	mailListItem = Backbone.View.extend({
 		el:'#mails-list',
 		// This will simply listen for scroll events on the current el
 	    events: {
@@ -185,7 +131,7 @@ function renderToMailList(url,offset_val,page_size_val){
 				success: function(data,response,xhr) {
 					that.render(data);
 					renderToMailView(data);
-					
+					globalMailCollectionInstance.add(data.toJSON());
 					$('.collapse').on('show.bs.collapse', function (e) {
 						$("#mails-list").hide();
 						$("#compose").hide();
@@ -397,15 +343,10 @@ function inboxEmailSend(ele,json){
 			// Enables Send Email button.
 			enable_send_button($('#sendEmailInbox'));
 
-			$("#mail-inbox").css({"font-weight":"bold","color":"white","background-color": "#23b7e5"});
-			$("#mail-sent").css({"font-weight":"normal","color":"inherit","background-color": "transparent"});
 			var url = $('#inbox-email-type-select').attr("data-url");
 			url = url.concat("&folder_name=INBOX");
-			$("#mails-list").remove();
-			$("#mails-list-view").append("<ul class='portlet_body list-group list-group-lg no-radius m-b-none m-t-n-xxs' id='mails-list'></ul>");
-			$("#mails-list").css({"max-height":$(window).height()-128,"height":$(window).height()-128, "overflow-y":"scroll", "padding":"0px"});
-			$("#mail-details-view").remove();
-			$("#mail-detail-view").append("<div class='portlet_body' id='mail-details-view' style='display:none;'></div>");
+			helperFunction();
+			$("#message_sent_alert_info").show();
 			renderToMailList(url,1,10);
 		},
 		error : function(response){
@@ -440,6 +381,7 @@ function inboxreplySend(ele,json){
 		},
 		error : function(response){
 			enable_send_button($('#sendEmailInbox'));
+			$("#message_sent_alert_info").show();
 			// Show cause of error in saving
 			$save_info = $('<div style="display:inline-block"><small><p style="color:#B94A48; font-size:14px"><i>' + response.responseText + '</i></p></small></div>');
 			// Appends error info to form actions
@@ -540,7 +482,8 @@ function inboxFlagListners(){
 
 		url = url+"from_email="+from_email+"&folder_name=INBOX&flag=DELETED&messageid="+dataVal,
 		setSeenFlag(url);
-
+		var tot_val = $(".totalcount").text();
+		$(".totalcount").text(parseInt(tot_val)-1);
 		$("#li"+dataVal).remove();
 		$("#"+dataVal).remove();
 		$("#mails-list").show();
@@ -568,78 +511,57 @@ function setSeenFlag(url,dataVal, attrid){
 var idcol = []
 function initializeInboxListeners(){
 
+	$('.inbox-menu li a').click(function(e) {
+        $('.inbox-menu li').removeClass('active');
+
+        var $parent = $(this).parent();
+        if (!$parent.hasClass('active')) {
+            $parent.addClass('active');
+        }
+        e.preventDefault();
+    });
+
 	$('#inbox-listners').on('click', '#mail-inbox', function(e){
 		e.preventDefault();
-		$("#mail-inbox").css({"font-weight":"bold","color":"white","background-color": "#23b7e5"});
-		$("#mail-sent").css({"font-weight":"normal","color":"inherit","background-color": "transparent"});
-		$("#mail-trash").css({"font-weight":"normal","color":"inherit","background-color": "transparent"});
+		
 		$('#inbox-email-type-select').attr("folder-type","inbox");
 		var url = $('#inbox-email-type-select').attr("data-url");
 		url = url.concat("&folder_name=INBOX");
-		$("#mails-list").remove();
-		$("#mails-list-view").append("<ul class='portlet_body list-group list-group-lg no-radius m-b-none m-t-n-xxs' id='mails-list'></ul>");
-		$("#mails-list").css({"max-height":$(window).height()-128,"height":$(window).height()-128, "overflow-y":"scroll", "padding":"0px"});
-		$("#mail-details-view").remove();
-		$("#mail-detail-view").append("<div class='portlet_body' id='mail-details-view' style='display:none;'></div>");
+		helperFunction();
 		renderToMailList(url,1,10);
 	});
 
 	$('#inbox-listners').on('click', '#mail-sent', function(e){
 		e.preventDefault();
-		$("#mail-inbox").css({"font-weight":"normal","color":"inherit","background-color": "transparent"});
-		$("#mail-draft").css({"font-weight":"normal","color":"inherit","background-color": "transparent"});
-		$("#mail-trash").css({"font-weight":"normal","color":"inherit","background-color": "transparent"});
-		$("#mail-sent").css({"font-weight":"bold","color":"white","background-color": "#23b7e5"});
+		
 		$('#inbox-email-type-select').attr("folder-type","sent");
 		var url = $('#inbox-email-type-select').attr("data-url");
 		url = url.concat("&folder_name=Sent");
-		$("#mails-list").remove();
-		$("#mails-list-view").append("<ul class='portlet_body list-group list-group-lg no-radius m-b-none m-t-n-xxs' id='mails-list'></ul>");
-		$("#mails-list").css({"max-height":$(window).height()-128,"height":$(window).height()-128, "overflow-y":"scroll", "padding":"0px"});
-		$("#mail-details-view").remove();
-		$("#mail-detail-view").append("<div class='portlet_body' id='mail-details-view' style='display:none;'></div>");
+		helperFunction();
 		renderToMailList(url,1,10);
 	});
 	$('#inbox-listners').on('click', '#mail-draft', function(e){
 		e.preventDefault();
-		$("#mail-inbox").css({"font-weight":"normal","color":"inherit","background-color": "transparent"});
-		$("#mail-sent").css({"font-weight":"normal","color":"inherit","background-color": "transparent"});
-		$("#mail-draft").css({"font-weight":"normal","color":"inherit","background-color": "transparent"});
-		$("#mail-trash").css({"font-weight":"normal","color":"inherit","background-color": "transparent"});
-		$("#mail-draft").css({"font-weight":"bold","color":"white","background-color": "#23b7e5"});
+		
 		$('#inbox-email-type-select').attr("folder-type","draft");
 		var url = $('#inbox-email-type-select').attr("data-url");
 		url = url.concat("&folder_name=Draft");
-		$("#mails-list").remove();
-		$("#mails-list-view").append("<ul class='portlet_body list-group list-group-lg no-radius m-b-none m-t-n-xxs' id='mails-list'></ul>");
-		$("#mails-list").css({"max-height":$(window).height()-128,"height":$(window).height()-128, "overflow-y":"scroll", "padding":"0px"});
-		$("#mail-details-view").remove();
-		$("#mail-detail-view").append("<div class='portlet_body' id='mail-details-view' style='display:none;'></div>");
+		helperFunction();
 		renderToMailList(url,1,10);
 	});
 	$('#inbox-listners').on('click', '#mail-trash', function(e){
 		e.preventDefault();
-		$("#mail-inbox").css({"font-weight":"normal","color":"inherit","background-color": "transparent"});
-		$("#mail-sent").css({"font-weight":"normal","color":"inherit","background-color": "transparent"});
-		$("#mail-draft").css({"font-weight":"normal","color":"inherit","background-color": "transparent"});
-		$("#mail-trash").css({"font-weight":"bold","color":"white","background-color": "#23b7e5"});
+		
 		$('#inbox-email-type-select').attr("folder-type","trash");
 		var url = $('#inbox-email-type-select').attr("data-url");
 		url = url.concat("&folder_name=Trash");
-		$("#mails-list").remove();
-		$("#mails-list-view").append("<ul class='portlet_body list-group list-group-lg no-radius m-b-none m-t-n-xxs' id='mails-list'></ul>");
-		$("#mails-list").css({"max-height":$(window).height()-128,"height":$(window).height()-128, "overflow-y":"scroll", "padding":"0px"});
-		$("#mail-details-view").remove();
-		$("#mail-detail-view").append("<div class='portlet_body' id='mail-details-view' style='display:none;'></div>");
+		helperFunction();
 		renderToMailList(url,1,10);
 	});
 	$('#inbox-listners').on('click', '.mail-compose', function(e){
 		e.preventDefault();
-		$("#mails-list").remove();
-		$("#mails-list-view").append("<ul class='portlet_body list-group list-group-lg no-radius m-b-none m-t-n-xxs' id='mails-list'></ul>");
-		$("#mails-list").css({"max-height":$(window).height()-128,"height":$(window).height()-128, "overflow-y":"scroll", "padding":"0px"});
-		$("#mail-details-view").remove();
-		$("#mail-detail-view").append("<div class='portlet_body' id='mail-details-view' style='display:none;'></div>");
+		helperFunction();
+		$("#pagination").hide();
 		$("#mails-list").append(LOADING_HTML);
 		composeView();
 		$(".loading").hide();
@@ -658,11 +580,7 @@ function initializeInboxListeners(){
 				url ="core/api/imap/search-imap-emails?";
 
 			url = url+"from_email="+from_email+"&search_content="+search_val;
-			$("#mails-list").remove();
-			$("#mails-list-view").append("<ul class='portlet_body list-group list-group-lg no-radius m-b-none m-t-n-xxs' id='mails-list'></ul>");
-			$("#mails-list").css({"max-height":$(window).height()-128,"height":$(window).height()-128, "overflow-y":"scroll", "padding":"0px"});
-			$("#mail-details-view").remove();
-			$("#mail-detail-view").append("<div class='portlet_body' id='mail-details-view' style='display:none;'></div>");
+			helperFunction();
 			renderToMailList(url,1,10);
 		}
 	});
@@ -700,12 +618,14 @@ function initializeInboxListeners(){
 				$("#li"+idcol[i]).remove();
 				$("#"+idcol[i]).remove();
 			}
+			var tot_val = $(".totalcount").text();
+			$(".totalcount").text(parseInt(tot_val)-idcol.length);
 			$("#operation-menu").hide();
 			$("#mark-dropdown").hide();
 
 
 			var curr_val = $(".inti-val").text();
-			var tot_val = $(".totalcount").text();
+			//var tot_val = $(".totalcount").text();
 			var offset = curr_val.split(" - ")[0].trim();
 			offset = parseInt(offset)+10;
 			var page_size = curr_val.split(" - ")[1].trim();
@@ -761,6 +681,9 @@ function initializeInboxListeners(){
 		offset = parseInt(offset)-10;
 		var page_size = curr_val.split(" - ")[1].trim();
 		page_size = parseInt(page_size)-10;
+		if(offset == page_size){
+			page_size = page_size+9;
+		}
 		if(page_size < 10)
 			page_size = 10;
 
@@ -775,12 +698,16 @@ function initializeInboxListeners(){
 		else if(folder_type == "trash")
 			url = url.concat("&folder_name=Trash");
 
-		$("#mails-list").remove();
-		$("#mails-list-view").append("<ul class='portlet_body list-group list-group-lg no-radius m-b-none m-t-n-xxs' id='mails-list'></ul>");
-		$("#mails-list").css({"max-height":$(window).height()-128,"height":$(window).height()-128, "overflow-y":"scroll", "padding":"0px"});
-		$("#mail-details-view").remove();
-		$("#mail-detail-view").append("<div class='portlet_body' id='mail-details-view' style='display:none;'></div>");
-		renderToMailList(url,offset,page_size);
+		if(globalMailCollectionInstance.length > 1){
+			var source = $('#mail-template').html();
+	        var template = Handlebars.compile(source);
+			var html = template(globalMailCollectionInstance.toJSON().slice(offset-1,page_size-1));
+			$("#mails-list").html(html);
+			
+		}else{
+			helperFunction();
+			renderToMailList(url,offset,page_size);
+		}
 	});
 
 	$(".next").unbind().click(function(e) {
@@ -802,18 +729,18 @@ function initializeInboxListeners(){
 		else if(folder_type == "trash")
 			url = url.concat("&folder_name=Trash");
 
-		$("#mails-list").remove();
-		$("#mails-list-view").append("<ul class='portlet_body list-group list-group-lg no-radius m-b-none m-t-n-xxs' id='mails-list'></ul>");
-		$("#mails-list").css({"max-height":$(window).height()-128,"height":$(window).height()-128, "overflow-y":"scroll", "padding":"0px"});
-		$("#mail-details-view").remove();
-		$("#mail-detail-view").append("<div class='portlet_body' id='mail-details-view' style='display:none;'></div>");
+		helperFunction();
 		renderToMailList(url,offset,page_size);
 
+	});
+	$(".message_sent_strip_close").unbind().click(function(e) {
+		$("#message_sent_alert_info").hide();
 	});
 	
 }
 function returnUrl(){
 	var url = "";
+	var folder_name = "";
 	var meesageids  = null;
         $.each($("input[name='mailcheck']:checked"), function(){    
 	        if(meesageids == null){
@@ -832,7 +759,17 @@ function returnUrl(){
 			if(server == "imap")
 				url ="core/api/imap/setFlags?";
 
-			url = url+"from_email="+from_email+"&folder_name=INBOX&messageid="+meesageids;
+			var folder_type = $('#inbox-email-type-select').attr("folder-type");
+			if(folder_type == "inbox")
+				folder_name = "INBOX";
+			else if(folder_type == "sent")
+				folder_name = "Sent";
+			else if(folder_type == "draft")
+				folder_name = "Draft";
+			else if(folder_type == "trash")
+				folder_name = "Trash";
+
+			url = url+"from_email="+from_email+"&folder_name="+folder_name+"&messageid="+meesageids;
 			return url;
 		}else{
 			return null;
@@ -965,15 +902,11 @@ function initializeInboxSendEmailListeners(){
 function initializeComposeEmailListeners(){
 	$('#send-email-listener-container').on('click', '#inbox-send-email-close', function(e){
 		e.preventDefault();
-		$("#mail-inbox").css({"font-weight":"bold","color":"white","background-color": "#23b7e5"});
-		$("#mail-sent").css({"font-weight":"normal","color":"inherit","background-color": "transparent"});
+		$('.inbox-menu li').removeClass('active');
+	    $(".inbox-menu li").first().addClass("active");
 		var url = $('#inbox-email-type-select').attr("data-url");
 		url = url.concat("&folder_name=INBOX");
-		$("#mails-list").remove();
-		$("#mails-list-view").append("<ul class='portlet_body list-group list-group-lg no-radius m-b-none m-t-n-xxs' id='mails-list'></ul>");
-		$("#mails-list").css({"max-height":$(window).height()-128,"height":$(window).height()-128, "overflow-y":"scroll", "padding":"0px"});
-		$("#mail-details-view").remove();
-		$("#mail-detail-view").append("<div class='portlet_body' id='mail-details-view' style='display:none;'></div>");
+		helperFunction();
 		renderToMailList(url,1,10);
 	});
 
@@ -1075,3 +1008,11 @@ function initializeComposeEmailListeners(){
 
 	});
 }
+function helperFunction(){
+	$("#mails-list").remove();
+	$("#mails-list-view").append("<ul class='portlet_body list-group list-group-lg no-radius m-b-none m-t-n-xxs' id='mails-list'></ul>");
+	$("#mails-list").css({"max-height":$(window).height()-128,"height":$(window).height()-128, "overflow-y":"scroll", "padding":"0px"});
+	$("#mail-details-view").remove();
+	$("#mail-detail-view").append("<div class='portlet_body' id='mail-details-view' style='display:none;'></div>");
+}
+

@@ -1,4 +1,10 @@
 <script id="inbox-template" type="text/html">
+<div id="message_sent_alert_info" class="free_plan_alert alert alert-info" role="alert" style="display:none;"> 
+  <span class="free_plan_message">
+   Your message has been sent successfully
+  </span>
+  <span class="message_sent_strip_close p-l-sm c-p">×</span>
+</div>
 <div class="app-content-body fade-in-up ng-scope" ui-view="">
 <div class="hbox hbox-auto-xs hbox-auto-sm ng-scope" ng-controller="MailCtrl">
   <div class="col w-md bg-light dk b-r bg-auto">
@@ -7,7 +13,7 @@
       <a class="btn btn-sm btn-danger w-xs font-bold  mail-compose" href="#compose">Compose</a>
     </div>
     <div class="wrapper hidden-sm hidden-xs" id="email-menu">
-      <ul class="nav nav-pills nav-stacked nav-sm">
+      <ul class="nav nav-pills nav-stacked nav-sm inbox-menu">
        	<li ng-repeat="fold in folds" ui-sref-active="active" class="ng-scope active">
           <a class="ng-binding" href="#inbox" id="mail-inbox">{{agile_lng_translate 'menu' 'menu-inbox'}}
           </a>
@@ -87,7 +93,6 @@
     </div>
   </div>
   <!-- / header -->
-	<div class="loading" style="disply:none;">Loading&#8230;</div>
   <!-- list -->
   <div id="mails-list-view">
 	  <ul class="portlet_body list-group list-group-lg no-radius m-b-none m-t-n-xxs" id="mails-list">
@@ -120,9 +125,9 @@
 	<span class="caret"></span>
 	</button>
 	<ul id = "inbox-account-type-select" class="pull-right dropdown-menu" role="menu">
-    <li>
+    <!--<li>
 	<a href="" class="inbox-emails" email-server="all" data-url="all" email-server-type="all">{{agile_lng_translate 'contact-details' 'all-mail'}}</a>
-	</li>
+	</li>-->
 	<li>
 	{{#each []}}
 	{{#if agileUserName}}
@@ -236,7 +241,7 @@
 			    <div class="panel b-a">
 			      <div class="panel-heading ng-show" id="id{{this.date_secs}}" ng-hide="reply" aria-hidden="false">
 			        <div class="m-b-lg">
-			        Click here to <a data-val="{{this.date_secs}}" class="inbox-reply text-u-l">Reply</a> or <a data-val="{{this.date_secs}}"class="farward text-u-l">Forward</a>
+			        Click here to <a data-val="{{this.date_secs}}" class="inbox-reply text-u-l">Reply</a><!-- or <a data-val="{{this.date_secs}}"class="farward text-u-l">Forward</a>-->
 			        </div>
 			      </div>
 			      <div class="inbox-reply-view ng-hide" id="{{this.date_secs}}">
