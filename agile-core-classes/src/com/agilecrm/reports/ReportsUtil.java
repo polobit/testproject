@@ -27,7 +27,9 @@ import org.json.JSONObject;
 
 import com.agilecrm.activities.Activity;
 import com.agilecrm.activities.Call;
+import com.agilecrm.activities.Category;
 import com.agilecrm.activities.util.ActivityUtil;
+import com.agilecrm.activities.util.CategoriesUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Contact.Type;
 import com.agilecrm.contact.ContactField;
@@ -936,19 +938,14 @@ public class ReportsUtil {
 			e.printStackTrace();
 		}
 			String type="";
-				callsObject.put("answered", 0);
-				callsObject.put("busy",0);
-				callsObject.put("failed",0);
-				callsObject.put("voicemail",0);
-				callsObject.put("missed",0);
-				callsObject.put("inquiry",0);
-				callsObject.put("interest",0);
-				callsObject.put("no interest",0);
-				callsObject.put("incorrect referral",0);
-				callsObject.put("meeting scheduled",0);
-				callsObject.put("new opportunity",0);
-				callsObject.put("other",0);
-
+			CategoriesUtil categoriesUtil = new CategoriesUtil();
+			List<Category> categories = categoriesUtil.getCategoriesByType(Category.EntityType.TELEPHONY_STATUS.toString());
+			for(Category category : categories){
+				callsObject.put(category.getLabel().toLowerCase(), 0);
+			}
+			callsObject.put("others",0);
+			
+			
 				callsPerPersonJSON=initializeFrequencyForReports(minTime,maxTime,frequency,timeZone,callsObject);
 			        try{
 				for(Activity activity : activitieslist){
@@ -971,13 +968,11 @@ public class ReportsUtil {
 			    			     }
 			    			    break;
 			    			}
-			    			
 			    			}
 			            calendar.set(Calendar.HOUR_OF_DAY, 0);
 			            calendar.set(Calendar.MINUTE, 0);
 			            calendar.set(Calendar.SECOND, 0);
 			            calendar.set(Calendar.MILLISECOND, 0);
-			            
 			            String createdTime ;
 			            if(StringUtils.equalsIgnoreCase(frequency,"weekly"))
 			            	createdTime=last;
@@ -995,47 +990,14 @@ public class ReportsUtil {
 								type=Call.BUSY;
 	                    		
 	                    	}
-							else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.FAILED))
+							else if(activity.custom3!=null)
 							{
-		                    	type=Call.FAILED;
-	                    	}
-							else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.VOICEMAIL))
-							{
-		                    	type=Call.VOICEMAIL;
-	                    	}
-							else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.Missed))
-							{
-		                    	type=Call.Missed;
-	                    	}
-							else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.NewOpportunity))
-							{
-		                    	type=Call.NewOpportunity;
-	                    	}
-							else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.MeetingScheduled))
-							{
-		                    	type=Call.MeetingScheduled;
-	                    	}
-							else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.Inquiry))
-							{
-		                    	type=Call.Inquiry;
-	                    	}
-							else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.IncorrectReferral))
-							{
-		                    	type=Call.IncorrectReferral;
-	                    	}
-							else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.Interest))
-							{
-		                    	type=Call.Interest;
-	                    	}
-							else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.NoInterest))
-							{
-		                    	type=Call.NoInterest;
-	                    	}
-							else /*if(activity.custom3!=null && activity.custom3.equalsIgnoreCase("queued"))*/
-							{
-		                    	type="other";
-	                    	}
-		                   
+								if(callsObject.containsKey(activity.custom3.toLowerCase())){
+									type=activity.custom3.toLowerCase();
+								}else{
+			                    	type="others";
+								}
+							}
 		                    int count1=count.getInt(type);
                     		count1++;
                     		count.put(type,count1);
@@ -1046,7 +1008,6 @@ public class ReportsUtil {
 			e.printStackTrace();
 		}
 		return callsPerPersonJSON;
-
 	}
 
 	/*

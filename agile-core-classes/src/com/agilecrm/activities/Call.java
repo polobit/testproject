@@ -22,6 +22,7 @@ public final class Call
 	// The incoming or outgoing call was answered and has ended normally.
 	// (legacy value : completed)
 	public static final String ANSWERED = "answered";
+	public static final String COMPLETED = "completed";
 	// The incoming call was unanswered or missed. And outgoing call was
 	// unanswered.
 	public static final String NO_ANSWER = "no-answer";
