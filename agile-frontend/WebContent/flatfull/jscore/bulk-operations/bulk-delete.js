@@ -37,7 +37,7 @@ $(function(){
 			}
 		});
 		if(checked){
-			
+
 			if(!hasScope('DELETE_CONTACT'))
 			{
 				showModalConfirmation(_agile_get_translated_val("bulk-delete", "bulk-delete"), 
@@ -137,7 +137,7 @@ $(function(){
 						if($(table).attr('id') == "active-campaign")
 							url = url + "&filter=all-active-subscribers";
 					}
-					
+
 					bulk_delete_operation(url, id_array, index_array, table, undefined, data_array);
 				}, undefined, _agile_get_translated_val("bulk-delete", "bulk-delete"));
 			}
@@ -404,7 +404,7 @@ function bulk_delete_operation(url, id_array, index_array, table, is_grid_view, 
 		data: json,
 		contentType : "application/x-www-form-urlencoded",
 		success: function() {
-			
+
 			if(url=='core/api/tasks/bulk'){
 				getDueTasksCount(function(count){
 					var due_task_count= count;
@@ -469,17 +469,46 @@ function bulk_delete_operation(url, id_array, index_array, table, is_grid_view, 
 			
 			if(!is_grid_view)
 			{
+				
 				var tbody = $(table).find('tbody');
 				
 				// To remove table rows on delete 
-				for(var i = 0; i < index_array.length; i++) 
+				for(var i = 0; i < index_array.length; i++) {
 					$(tbody).find('tr:eq(' + index_array[i] + ')').fadeOut(300, function() { $(this).remove(); });				
+				}
+				
+				if(SELECT_ALL && SELECT_ALL == true){
+					var type ="";
+					if($(table).attr('id') == "contacts-table")
+						type = "contacts";
+					if($(table).attr('id') == "companies")
+						type = "companies";
+					/*if(res_count && res_count < 800){
+						setTimeout(function() { getAndUpdateCollectionCount(type, $("#contacts-listener-container")); }, 5000);
+					}*/
+					setTimeout(function() {
+						var count_message = "<small> (0 " +_agile_get_translated_val('other','total')+") </small>";
+						$('#contacts-count').html(count_message);
+					}, 5000);
+				}else{
+					if($("#contacts-count").is(":visible")){
+						var con_count = $('#contacts-count').text();
+						if(con_count){
+							var res_count = con_count.split("(")[1].split(" ")[0];
+							res_count = parseInt(res_count.trim())-count;
+
+							var count_message = "<small> (" + res_count + " " +_agile_get_translated_val('other','total')+") </small>";
+							$('#contacts-count').html(count_message);
+						}
+					}
+					
+				}
 			}
 			else
 			{
 				// To remove table rows on delete 
 				for(var i = 0; i < id_array.length; i++) 
-					$("."+id_array[i]).fadeOut(300, function() { $(this).remove(); });				
+					$("."+id_array[i]).fadeOut(300, function() { $(this).remove(); });		
 			}
 			
 			try{
