@@ -1,0 +1,7 @@
+{ 
+    "required" : "{{agile_lng_translate 'validation-msgs' 'required'}}",
+    "upload" : "{{agile_lng_translate 'others' 'upload'}}",
+    "upload-new-doc" : "{{agile_lng_translate 'upload-custom-doc' 'upload-new-doc'}}",
+    "doc-size-limit-exceeded" : "{{agile_lng_translate 'upload-custom-doc' 'doc-size-limit-exceeded'}}",
+    "upload-doc" : "{{agile_lng_translate 'upload-custom-doc' 'upload-doc'}}",
+}

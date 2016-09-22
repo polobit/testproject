@@ -518,6 +518,10 @@ var SubscribeRouter = Backbone.Router
 									var cus_id = JSON.parse(data.billingData).id;
 									var appendItem = '<img src="https://shareasale.com/sale.cfm?amount='+plan_json.cost+'&tracking='+cus_id+'&transtype=sale&merchantID=65450" width="1" height="1">'
 									$("body").append(appendItem);
+									if(ACCOUNT_PREFS && ACCOUNT_PREFS.affiliatedBy){
+										var amount = parseFloat(plan_json.cost);
+										addAsAffiliate(parseInt(amount.toFixed(2) * 100));
+									}
 								}
 								window.navigate("subscribe", { trigger : true });
 								showNotyPopUp("information", _agile_get_translated_val('plan-and-upgrade','your-plan-has-been-updated-successfully'), "top");

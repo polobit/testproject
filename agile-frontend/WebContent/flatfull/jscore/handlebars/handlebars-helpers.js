@@ -1514,6 +1514,20 @@ $(function()
 		return name.charAt(0).toUpperCase() + name.slice(1);
 	});
 
+	Handlebars.registerHelper('getPropertyFromUser', function(property)
+	{
+		if(property)
+			return CURRENT_DOMAIN_USER[property];
+		else
+			return "";
+	});
+
+	Handlebars.registerHelper('getAffiliateLink', function(img)
+	{
+		var el = "<a href='https://my.agilecrm.com/register?utm_affiliate="+CURRENT_DOMAIN_USER.id+"' target='_blank'><img alt='AgileCRM' src='"+img+"'/></a>";
+		//return Handlebars.Utils.escapeExpression(el);
+		return el;
+	});
 	
 	/*
 	 * To add comma in between the elements.
@@ -7582,6 +7596,30 @@ Handlebars.registerHelper('if_asc_sork_key', function(value, options)
 		return new Handlebars.SafeString(el);
 	});
 
+Handlebars.registerHelper('taskBulkStatus', function(value)
+{
+	if(value && value == "YET_TO_START")
+		return "Yet To Start";
+	else if(value && value == "IN_PROGRESS")
+		return "In Progress"; 
+	else if(value && value == "COMPLETED")
+		return "Completed";
+});
+Handlebars.registerHelper('taskBulkPriority', function(value)
+{
+	if(value && value == "HIGH")
+		return "High";
+	else if(value && value == "LOW")
+		return "Low"; 
+	else if(value && value == "NORMAL")
+		return "Normal";
+});
+Handlebars.registerHelper('affiliateCommission', function(amount, commission)
+{
+	if(!amount || !commission)
+		return 0;
+	return (((amount/100)*commission)/100).toFixed(2);
+});
 Handlebars.registerHelper('get_default_label', function(label, module_name, options)
 {
 	var i18nKeyPrefix = "admin-settings-tasks";

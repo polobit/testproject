@@ -541,6 +541,7 @@ function initializeSubscriptionListeners()
 						}else{
 							var restrictions = data.restrictions;
 							restrictions.plan = data.plan;
+							restrictions.users.limit = parseInt(plan_json.quantity);
 							if(restrictions.contacts.count > restrictions.contacts.limit)
 								errorsCount++;
 							if(restrictions.webrules.count > restrictions.webrules.limit)
@@ -834,4 +835,13 @@ $(function(){
 	});
 
 });
+
+function addAsAffiliate(amount){
+	$.ajax({ type : 'POST', url : '/core/api/affiliate?am='+amount,	contentType : "application/json; charset=utf-8", dataType : 'json', 
+		success : function(data){
+
+		},error : function(){
+
+	}});
+}
 

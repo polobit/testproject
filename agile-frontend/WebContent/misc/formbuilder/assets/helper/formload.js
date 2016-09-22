@@ -12,6 +12,19 @@ define([
 			success: function(data){
 				
 				saveform = JSON.parse(data.formJson);
+				var agilethemeObj=saveform[0].fields.agiletheme;
+				var themeClassName="";
+				if(agilethemeObj!=undefined || agilethemeObj!=null){
+					var agilethemeObjValArr=agilethemeObj.value;
+					for(i=0;i<agilethemeObjValArr.length;i++){
+						if(agilethemeObjValArr[i].selected){
+						     themeClassName=agilethemeObjValArr[i].value;
+						     $("#target").addClass(themeClassName);
+						     break;
+						}
+					}
+				}
+				
 				
 				//Loads form view in form.jsp page
 				if($('#agileFormHolder').length != 0) {

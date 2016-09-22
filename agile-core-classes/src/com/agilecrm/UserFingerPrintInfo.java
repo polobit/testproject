@@ -98,6 +98,9 @@ public class UserFingerPrintInfo implements Serializable{
 		
 		// Create info
 		Map<String, String> data = new HashMap<String, String>();
+		if(StringUtils.isBlank(this.verification_code)){
+			generateOAuthToken(request);
+		}
 		data.put("generatedOTP", this.verification_code);
 		data.put("browser_os", request.getParameter("browser_os"));
 		data.put("browser_name", request.getParameter("browser_Name"));

@@ -219,6 +219,7 @@ public class ContactSyncUtil
 
 		for (ContactField field : newEmails)
 		{
+			if(field.value!=null && StringUtils.isNotBlank(field.value)){
 			Email primaryMail = new Email();
 			primaryMail.setAddress(field.value);
 			if (!StringUtils.isEmpty(field.subtype))
@@ -228,6 +229,7 @@ public class ContactSyncUtil
 				primaryMail.setRel("http://schemas.google.com/g/2005#work");
 
 			googleContactEntry.addEmailAddress(primaryMail);
+			}
 		}
 	}
 
@@ -265,15 +267,24 @@ public class ContactSyncUtil
 
 		for (ContactField field : newPhoneNumbersToAdd)
 		{
+			if(field.value!=null && StringUtils.isNotBlank(field.value)){
 			PhoneNumber primaryPhone = new PhoneNumber();
 			primaryPhone.setPhoneNumber(field.value);
 			if (!StringUtils.isEmpty(field.subtype))
+			{
+				if(field.subtype.equalsIgnoreCase("Work Fax"))
+					primaryPhone.setRel("http://schemas.google.com/g/2005#work_fax");
+				else if(field.subtype.equalsIgnoreCase("Home Fax"))
+					primaryPhone.setRel("http://schemas.google.com/g/2005#home_fax");
+				else
 				primaryPhone.setRel("http://schemas.google.com/g/2005#"
 						+ StringUtils.lowerCase(field.subtype.toLowerCase()));
+			}
 			else
 				primaryPhone.setRel("http://schemas.google.com/g/2005#work");
 
 			googleContactEntry.addPhoneNumber(primaryPhone);
+			}
 		}
 	}
 
@@ -861,6 +872,7 @@ public class ContactSyncUtil
 
 		for (ContactField field : newWebsitesToAdd)
 		{
+			if(field.value!=null && StringUtils.isNotBlank(field.value)){
 			Website primarywebsite = new Website();
 			primarywebsite.setHref(field.value);
 			primarywebsite.setLabel(field.value);
@@ -870,6 +882,7 @@ public class ContactSyncUtil
 				primaryPhone.setRel("http://schemas.google.com/g/2005#work");*/
 
 			googleContactEntry.addWebsite(primarywebsite);
+			}
 		}
 	}
 }

@@ -758,7 +758,14 @@
                 var newBlock = new Block();
             
                 page.blocks[x].frames_original_url = page.blocks[x].originalUrl;
-                page.blocks[x].src = appUI.siteUrl+"core/api/landingpages/getframe/"+appUI.agilePageId+"/"+page.blocks[x].frames_id;
+
+                if (appUI.agilePageId !== 0) {
+                    page.blocks[x].src = appUI.siteUrl+"core/api/landingpages/getframe/"+appUI.agilePageId+"/"+page.blocks[x].frames_id;
+                }else if(appUI.copyPagebuilderId !== 0){
+                    page.blocks[x].src = appUI.siteUrl+"core/api/landingpages/getframe/"+appUI.copyPagebuilderId+"/"+page.blocks[x].frames_id;
+                }else{
+                   page.blocks[x].src = page.blocks[x].originalUrl;
+                }
                 
                 //sandboxed block?
                 if( page.blocks[x].frames_sandbox === '1') {
@@ -1692,13 +1699,59 @@
                     $('body').trigger('siteDataLoaded');
                 
                 });
-            } else {
+            } else if (appUI.selectedTemplateId !== null && appUI.selectedTemplateId === "copy" && appUI.copyPagebuilderId !== 0){
+            
+                $.getJSON(appUI.siteUrl+"core/api/landingpages/"+appUI.copyPagebuilderId, function(respDataCopy){
+                    var data = {
+                        "pages": {
+                            "index": {
+                                "blocks": JSON.parse(respDataCopy.blocks),
+                                "page_id": 0,
+                                "pages_title": '',
+                                "meta_description": respDataCopy.description,
+                                "meta_keywords": respDataCopy.tags,
+                                "header_includes": respDataCopy.header_includes,
+                                "page_css": respDataCopy.css
+                            }
+                        },
+                        "is_admin": 0
+                    };
+
+                    
+                    if( data.site !== undefined ) {
+                        site.data = data.site;
+                    }
+                    if( data.pages !== undefined ) {
+                        site.pages = data.pages;
+                    }
+                    
+                    site.is_admin = data.is_admin;
+
+                    
+                    if( $('#pageList').size() > 0 ) {
+                        builderUI.populateCanvas();
+                    }
+
+                    //fire custom event
+                    $('body').trigger('siteDataLoaded');
+
+
+                    // treated as pending changes
+                    site.setPendingChanges(true);
+                    $("#publishPage").addClass("disabled");
+                    $("#buttonPreview").addClass("disabled");
+                    $("#pagebuilderCopyBtn").addClass("disabled");
+                    
+                });
+
+            }else {
                 site.newPage();
 
                 site.setPendingChanges(false);
 
                 $("#publishPage").addClass("disabled");
                 $("#buttonPreview").addClass("disabled");
+                $("#pagebuilderCopyBtn").addClass("disabled");
             }
 
             $.getJSON(appUI.siteUrl+"core/api/forms", function(respData){
@@ -1879,16 +1932,23 @@
                 if(res.id) {
 
                     appUI.agilePageId = res.id;
+
+                    if(reqMethod === "POST"){
+                        window.location.href  = window.location.origin+"/#landing-pages";
+                    }
         
                     if( showConfirmModal ) {
 
                         var publishPageBtn = $("#publishPage");
                         var buttonPreviewBtn = $("#buttonPreview");
+                        var pagebuilderCopyBtn = $("#pagebuilderCopyBtn");
                         publishPageBtn.removeClass("disabled");
                         buttonPreviewBtn.removeClass("disabled");
+                        pagebuilderCopyBtn.removeClass("disabled");
 
                         $("#markupPreviewForm").attr("action", window.location.origin+"/landing/"+appUI.agilePageId);
                         publishPageBtn.attr("href", window.location.origin+"/#landing-page-settings/"+appUI.agilePageId);
+                        pagebuilderCopyBtn.attr("href", window.location.origin+"/pagebuilder/copy-"+appUI.agilePageId);
         
                         $('#successModal .modal-body').html("Landing page have been saved successfully!");
                         $('#successModal').modal('show');

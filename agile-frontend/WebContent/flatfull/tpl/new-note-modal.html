@@ -1,17 +1,21 @@
 <!-- New (Note) Modal views -->
-<div class="modal  fade note-modal" id="noteModal">
-  <div class="modal-dialog">
+<script type="text/html" id="new-note-model-template">
+<div class="modal-dialog note-modal" id="{{#if id}}noteUpdateModal{{else}}noteModal{{/if}}">
     <div class="modal-content">
     <div class="modal-header">
         <button class="close" data-dismiss="modal">&times;</button>
-        <h3 class="modal-title">&nbsp;{{agile_lng_translate 'prefs-settings' 'new-note'}}</h3>
+        <h3 class="modal-title">&nbsp;{{#if id}}    
+ Edit Note {{else}}New Note {{/if}} </h3>
     </div>
     <div class="modal-body">
-        <form id="noteForm" name="noteForm" method="post" class="form-horizontal">
+        <form id="{{#if id}}noteUpdateForm{{else}}noteForm{{/if}}" name="noteForm" method="post" class="form-horizontal">
             <fieldset>
                 <input name="from_task" id="from_task" type="hidden" value="" />
                 <input name="task_form" id="task_form" type="hidden" value="" />
-                	            
+                {{#if id}}
+                    <input name="id" type="hidden"/>
+                    <input name="created_time" type="hidden"/>
+                {{/if}}            
                 <div class="control-group form-group">
                     <label class="control-label col-sm-3">{{agile_lng_translate 'contact-details' 'subject'}}<span class="field_req">*</span></label>
                     <div class="controls col-sm-7">
@@ -20,9 +24,11 @@
                 </div>
                 
 	                <div class="control-group form-group">
+
 	                    <label class="control-label col-sm-3">{{agile_lng_translate 'other' 'description'}}</label>
-	                    <div class="controls col-sm-7">
-	                        <textarea rows="3" class="form-control-F-width form-control" placeholder="{{agile_lng_translate 'deal-view' 'detailed-note'}}" name="description" id="description"></textarea> 
+	                    <div class="controls col-sm-7 agiletxexpander">
+	                        <textarea rows="3" data-agileexpand="true" class="form-control-F-width form-control textarea" placeholder="{{agile_lng_translate 'deal-view' 'detailed-note'}}" name="description" id="description"></textarea> 
+
 	                    </div>
 	                </div>
                 
@@ -44,7 +50,7 @@
         </form>
     </div>
     <div class="modal-footer">
-        <a href="#" class="btn btn-sm btn-primary pull-right" id="note_validate">{{agile_lng_translate 'report-add' 'save'}}
+        <a href="#" class="btn btn-sm btn-primary pull-right" id="{{#if id}}note_update{{else}}note_validate{{/if}}">{{agile_lng_translate 'report-add' 'save'}}
         </a>
         <span class="save-status"></span>
     </div>
@@ -52,5 +58,5 @@
     </div>
 </div>
 </div>
-</div>
+</script>
 <!-- End of Modal views -->

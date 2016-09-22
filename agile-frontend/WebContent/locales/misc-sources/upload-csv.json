@@ -1,0 +1,9 @@
+{ 
+    "upload-csv" : "{{agile_lng_translate 'upload-csv' 'upload-csv'}}",
+    "uploading" : "{{agile_lng_translate 'upload-image' 'uploading'}}",
+    "required" : "{{agile_lng_translate 'validation-msgs' 'required'}}",
+    "max-limit-10000" : "{{agile_lng_translate 'upload-csv' 'max-limit-10000'}}",
+    "pl-upload-a-csv" : "{{agile_lng_translate 'upload-csv' 'pl-upload-a-csv'}}",
+    "upload" : "{{agile_lng_translate 'others' 'upload'}}",
+    "upload-csv-file" : "{{agile_lng_translate 'contacts-view' 'upload-csv-file'}}",
+}

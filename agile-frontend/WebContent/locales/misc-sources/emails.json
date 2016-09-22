@@ -1,0 +1,267 @@
+{
+		// OTP
+		"otp-dear" : "{{agile_lng_translate 'misc-emails' 'dear'}}",
+		"otp-agile-crm-account" : "{{agile_lng_translate 'misc-emails' 'agile-crm-account'}}",
+		"otp-sign-in-from" : "{{agile_lng_translate 'misc-emails' 'sign-in-from'}}",
+		"otp-on" : "{{agile_lng_translate 'contacts-view' 'on'}}",
+		"otp-from" : "{{agile_lng_translate 'portlets' 'from'}}",
+		"otp-sign-in-security" : "{{agile_lng_translate 'misc-emails' 'sign-in-security'}}",
+		"otp-sign-in-verification-info" : "{{agile_lng_translate 'misc-emails' 'sign-in-verification-info'}}",
+		"otp-sign-in-verification-code" : "{{agile_lng_translate 'misc-emails' 'sign-in-verification-code'}}",
+		"otp-sign-in-verification-assistance" : "{{agile_lng_translate 'misc-emails' 'sign-in-verification-assistance'}}",
+		"otp-sign-in-crewat" : "{{agile_lng_translate 'misc-emails' 'sign-in-crewat'}}",
+
+		// IP Access
+		"invalid-ip-access" : "{{agile_lng_translate 'misc-emails' 'invalid-ip-access'}}",
+		"invalid-ip-access-activity" : "{{agile_lng_translate 'misc-emails' 'invalid-ip-access-activity'}}",
+
+		// Welcome
+		"welcome-thanks" : "{{agile_lng_translate 'misc-emails' 'welcome-thanks'}}",
+		"welcome-login-at" : "{{agile_lng_translate 'misc-emails' 'welcome-login-at'}}",
+		"url" : "{{agile_lng_translate 'widgets' 'url'}}",
+		"username" : "{{agile_lng_translate 'admin-settings-integrations' 'username'}}",
+		"password" : "{{agile_lng_translate 'prefs-settings' 'password'}}",
+
+		// Verification
+		"verify-account" : "{{agile_lng_translate 'misc-emails' 'verify-account'}}",
+		"verify-account-thanks" : "{{agile_lng_translate 'misc-emails' 'verify-account-thanks'}}",
+		"verify-account-now" : "{{agile_lng_translate 'misc-emails' 'verify-account-now'}}",
+		"verify-account-link-info" : "{{agile_lng_translate 'misc-emails' 'verify-account-link-info'}}",
+		"verify-account-ignore" : "{{agile_lng_translate 'misc-emails' 'verify-account-ignore'}}",
+		"verify-account-have-questions" : "{{agile_lng_translate 'misc-emails' 'verify-account-have-questions'}}",
+		"verify-account-drop-us" : "{{agile_lng_translate 'misc-emails' 'verify-account-drop-us'}}",
+		"verify-account-email" : "{{agile_lng_translate 'misc-emails' 'verify-account-email'}}",
+		"verify-account-thanks-for-being" : "{{agile_lng_translate 'misc-emails' 'verify-account-thanks-for-being'}}",
+		"or" : "{{agile_lng_translate 'others' 'or'}}",
+		"verify-account-call-free" : "{{agile_lng_translate 'misc-emails' 'verify-account-call-free'}}",
+		"verify-account-love" : "{{agile_lng_translate 'misc-emails' 'verify-account-love'}}",
+
+		// User Enabled
+		"user-enabled-restore" : "{{agile_lng_translate 'misc-emails' 'user-enabled-restore'}}",
+		"here" : "{{agile_lng_translate 'contact-details' 'here'}}",
+
+		// User disabled
+		"user-disabled" : "{{agile_lng_translate 'misc-emails' 'user-disabled'}}",
+
+		// Contact Unsubscribe from campaign
+		"unsubscribe-success" : "{{agile_lng_translate 'misc-emails' 'unsubscribe-success'}}",
+		"unsubscribe-campaign-success" : "{{agile_lng_translate 'misc-emails' 'unsubscribe-campaign-success'}}",
+		"unsubscribe-success" : "{{agile_lng_translate 'misc-emails' 'unsubscribe-success'}}",
+		"unsubscribe-from-campaign" : "{{agile_lng_translate 'misc-emails' 'unsubscribe-from-campaign'}}",
+		"unsubscribe-by-mistake" : "{{agile_lng_translate 'misc-emails' 'unsubscribe-by-mistake'}}",
+		"unsubscribe-resubscribe" : "{{agile_lng_translate 'misc-emails' 'unsubscribe-resubscribe'}}",
+
+		// Ticket reply
+		"ticket-reply-request" : "{{agile_lng_translate 'misc-emails' 'ticket-reply-request'}}",
+		"ticket-reply-request-reviewed" : "{{agile_lng_translate 'misc-emails' 'ticket-reply-request-reviewed'}}",
+		"attachments" : "{{agile_lng_translate 'tickets' 'attachments'}}",
+		"ticket-reply-service-from" : "{{agile_lng_translate 'misc-emails' 'ticket-reply-service-from'}}",
+		"ticket-reply-service-del-by" : "{{agile_lng_translate 'misc-emails' 'ticket-reply-service-del-by'}}",
+		"requester" : "{{agile_lng_translate 'tickets' 'requester'}}",
+		"Requester-Email" : "{{agile_lng_translate 'Tickets' 'Requester-Email'}}",
+		"created-time" : "{{agile_lng_translate 'other' 'created-time'}}",
+		"assignee" : "{{agile_lng_translate 'tickets' 'assignee'}}",
+		"group" : "{{agile_lng_translate 'tickets' 'group'}}",
+		"type" : "{{agile_lng_translate 'contacts-view' 'type'}}",
+		"status" : "{{agile_lng_translate 'widgets' 'status'}}",
+		"priority" : "{{agile_lng_translate 'widgets' 'priority'}}",
+		
+		// Ticket forward
+		"ticket-forwarded" : "{{agile_lng_translate 'misc-emails' 'ticket-forwarded'}}",
+		
+		// Event reminder
+		"event-reminder" : "{{agile_lng_translate 'prefs-settings' 'event-reminder'}}",
+		"start-event-what" : "{{agile_lng_translate 'misc-emails' 'start-event-what'}}",
+		"start-event-who" : "{{agile_lng_translate 'misc-emails' 'start-event-who'}}",
+		"start-event-when" : "{{agile_lng_translate 'misc-emails' 'start-event-when'}}",
+		"open-agile-cal" : "{{agile_lng_translate 'misc-emails' 'open-agile-cal'}}",
+		
+		// Campaign sharing
+		"shared-campaign" : "{{agile_lng_translate 'misc-emails' 'shared-campaign'}}",
+		"please" : "{{agile_lng_translate 'contact-details' 'please'}}",
+		"click-here" : "{{agile_lng_translate 'others' 'click-here'}}",
+		"shared-campaign-open" : "{{agile_lng_translate 'misc-emails' 'shared-campaign-open'}}",
+		
+		// Import contacts
+		"import-contacts-total" : "{{agile_lng_translate 'misc-emails' 'import-contacts-total'}}",
+		"import-contacts-success-saved" : "{{agile_lng_translate 'misc-emails' 'import-contacts-success-saved'}}",
+		"new-contacts" : "{{agile_lng_translate 'portlets' 'new-contacts'}}",
+		"import-contacts-merged" : "{{agile_lng_translate 'misc-emails' 'import-contacts-merged'}}",
+		"import-contacts-failed" : "{{agile_lng_translate 'misc-emails' 'import-contacts-failed'}}",
+		"import-email-missing" : "{{agile_lng_translate 'misc-emails' 'import-email-missing'}}",
+		"import-limit-exceed" : "{{agile_lng_translate 'misc-emails' 'import-limit-exceed'}}",
+		"import-access-denied" : "{{agile_lng_translate 'misc-emails' 'import-access-denied'}}",
+		
+		// Import Accounts
+		"accounts" : "{{agile_lng_translate 'admin-settings-integrations' 'accounts'}}",
+		"import-total-accounts" : "{{agile_lng_translate 'misc-emails' 'import-total-accounts'}}",
+		"import-merged-accounts" : "{{agile_lng_translate 'misc-emails' 'import-merged-accounts'}}",
+		
+		// Import tasks
+		"tasks" : "{{agile_lng_translate 'portlets' 'tasks'}}",
+		"import-total-tasks" : "{{agile_lng_translate 'misc-emails' 'import-total-tasks'}}",
+		"import-support-help" : "{{agile_lng_translate 'misc-emails' 'import-support-help'}}",
+		"best-wishes" : "{{agile_lng_translate 'misc-emails' 'best-wishes'}}",
+		"support" : "{{agile_lng_translate 'menu' 'support'}}",
+		
+		// Custom reports
+		"reports-automate" : "{{agile_lng_translate 'misc-emails' 'reports-automate'}}",
+		"reports-acc-name" : "{{agile_lng_translate 'misc-emails' 'reports-acc-name'}}",
+		"reports-name" : "{{agile_lng_translate 'misc-emails' 'reports-name'}}",
+		"name" : "{{agile_lng_translate 'deal-view' 'name'}}",
+		"email" : "{{agile_lng_translate 'modals' 'email'}}",
+		"lead-score" : "{{agile_lng_translate 'contact-details' 'lead-score'}}",
+		"tags" : "{{agile_lng_translate 'report-add' 'tags'}}",
+		"reports-support-chat" : "{{agile_lng_translate 'misc-emails' 'reports-support-chat'}}",
+		"reports-support-clickdesk" : "{{agile_lng_translate 'misc-emails' 'reports-support-clickdesk'}}",
+		"report" : "{{agile_lng_translate 'other' 'report'}}",
+		"reports-show-100" : "{{agile_lng_translate 'misc-emails' 'reports-show-100'}}",
+		"of" : "{{agile_lng_translate 'tickets' 'of'}}",
+		"contacts" : "{{agile_lng_translate 'contact-details' 'contacts'}}",
+		"reports-email-by-report-db" : "{{agile_lng_translate 'misc-emails' 'reports-email-by-report-db'}}",
+		"reports-email-at" : "{{agile_lng_translate 'misc-emails' 'reports-email-at'}}",
+		"reports-email-can-manage" : "{{agile_lng_translate 'misc-emails' 'reports-email-can-manage'}}",
+		"reports-sm" : "{{agile_lng_translate 'misc-emails' 'reports-sm'}}",
+		"here" : "{{agile_lng_translate 'contact-details' 'here'}}",
+		
+		// Account verifiy
+		"verify-account-have-questions" : "{{agile_lng_translate 'misc-emails' 'verify-account-have-questions'}}",
+		"reports-help" : "{{agile_lng_translate 'misc-emails' 'reports-help'}}",
+		"support" : "{{agile_lng_translate 'menu' 'support'}}",
+		
+		// Change password
+		"password-changed" : "{{agile_lng_translate 'misc-emails' 'password-changed'}}",
+		"password-changed-now-login" : "{{agile_lng_translate 'misc-emails' 'password-changed-now-login'}}",
+		"password-changed-new-credentials" : "{{agile_lng_translate 'misc-emails' 'password-changed-new-credentials'}}",
+		
+		// User invite
+		"email-address" : "{{agile_lng_translate 'contacts-view' 'email-address'}}",
+		"user-name" : "{{agile_lng_translate 'prefs-email' 'user-name'}}",
+		"invited-to" : "{{agile_lng_translate 'misc-emails' 'invited-to'}}",
+		"invited-user-pwd" : "{{agile_lng_translate 'misc-emails' 'invited-user-pwd'}}",
+		"invited-user-login" : "{{agile_lng_translate 'misc-emails' 'invited-user-login'}}",
+		"wolfe-road" : "{{agile_lng_translate 'other' 'wolfe-road'}}",
+		"sunneyvale-ca" : "{{agile_lng_translate 'other' 'sunneyvale-ca'}}",
+		
+		// Invoice
+		"invoice-to" : "{{agile_lng_translate 'misc-emails' 'invoice-to'}}",
+		"invoice-date" : "{{agile_lng_translate 'misc-emails' 'invoice-date'}}",
+		"plan" : "{{agile_lng_translate 'portlets' 'plan'}}",
+		"description" : "{{agile_lng_translate 'misc-keys' 'description'}}",
+		"amount" : "{{agile_lng_translate 'portlets' 'amount'}}",
+		"invoice-discount" : "{{agile_lng_translate 'misc-emails' 'invoice-discount'}}",
+		"invoice-grand-total" : "{{agile_lng_translate 'misc-emails' 'invoice-grand-total'}}",
+		"thank-you" : "{{agile_lng_translate 'other' 'thank-you'}}",
+		
+		// Email verify
+		"email-verify" : "{{agile_lng_translate 'misc-emails' 'email-verify'}}",
+		"email-verify-now" : "{{agile_lng_translate 'misc-emails' 'email-verify-now'}}",
+		"or" : "{{agile_lng_translate 'others' 'or'}}",
+		"reset-pwd" : "{{agile_lng_translate 'misc-emails' 'reset-pwd'}}",
+		"reset-login-details" : "{{agile_lng_translate 'misc-emails' 'reset-login-details'}}",
+		"url" : "{{agile_lng_translate 'widgets' 'url'}}",
+		"reset-login-now" : "{{agile_lng_translate 'misc-emails' 'reset-login-now'}}",
+		
+		// Deal export
+		"total-deals-exported" : "{{agile_lng_translate 'misc-emails' 'total-deals-exported'}}",
+		"deals-download-link" : "{{agile_lng_translate 'misc-emails' 'deals-download-link'}}",
+		"deals-download-csv" : "{{agile_lng_translate 'misc-emails' 'deals-download-csv'}}",
+		"export-contacts-csv" : "{{agile_lng_translate 'misc-emails' 'export-contacts-csv'}}",
+		
+		// Due tasks
+		"due-tasks-today" : "{{agile_lng_translate 'misc-emails' 'due-tasks-today'}}",
+		"due-tasks-you-have" : "{{agile_lng_translate 'misc-emails' 'due-tasks-you-have'}}",
+		"due-tasks-reminder" : "{{agile_lng_translate 'misc-emails' 'due-tasks-reminder'}}",
+		"dashboard" : "{{agile_lng_translate 'portlets' 'dashboard'}}",
+		"Today" : "{{agile_lng_translate 'calendar' 'Today'}}",
+		"due-tasks-mail-sent-to" : "{{agile_lng_translate 'misc-emails' 'due-tasks-mail-sent-to'}}",
+		"due-tasks-email-linked-to" : "{{agile_lng_translate 'misc-emails' 'due-tasks-email-linked-to'}}",
+		"due-tasks-subscribed" : "{{agile_lng_translate 'misc-emails' 'due-tasks-subscribed'}}",
+		"reports-csv-file" : "{{agile_lng_translate 'misc-emails' 'reports-csv-file'}}",
+		"new" : "{{agile_lng_translate 'menu' 'new'}}",
+		"merged" : "{{agile_lng_translate 'contacts-view' 'merged'}}",
+		"failed" : "{{agile_lng_translate 'campaigns' 'failed'}}",
+		
+		// Custom reports
+		"reports-csv-name-missing" : "{{agile_lng_translate 'misc-emails' 'reports-csv-name-missing'}}",
+		"reports-csv-email-missing" : "{{agile_lng_translate 'misc-emails' 'reports-csv-email-missing'}}",
+		"reports-csv-access-denied" : "{{agile_lng_translate 'misc-emails' 'reports-csv-access-denied'}}",
+		"reports-csv-failed-import" : "{{agile_lng_translate 'misc-emails' 'reports-csv-failed-import'}}",
+		"reports-csv-wrong-track-val" : "{{agile_lng_translate 'misc-emails' 'reports-csv-wrong-track-val'}}",
+		"reports-csv-deal-name-miss" : "{{agile_lng_translate 'misc-emails' 'reports-csv-deal-name-miss'}}",
+		"reports-csv-wrong-track-milestone" : "{{agile_lng_translate 'misc-emails' 'reports-csv-wrong-track-milestone'}}",
+		
+		// Contact from submit
+		"contact-form-submit" : "{{agile_lng_translate 'misc-emails' 'contact-form-submit'}}",
+		"contact-form-submitted" : "{{agile_lng_translate 'misc-emails' 'contact-form-submitted'}}",
+		"successfully" : "{{agile_lng_translate 'others' 'successfully'}}",
+		"address-usa" : "{{agile_lng_translate 'misc-emails' 'address-usa'}}",
+		"email-sent-to" : "{{agile_lng_translate 'misc-emails' 'email-sent-to'}}",
+		"email-mailing-list" : "{{agile_lng_translate 'misc-emails' 'email-mailing-list'}}",
+		"emails-sent" : "{{agile_lng_translate 'portlets' 'emails-sent'}}",
+		"emails-skipped" : "{{agile_lng_translate 'workflows' 'emails-skipped'}}",
+		"emails-opened" : "{{agile_lng_translate 'portlets' 'emails-opened'}}",
+		"emails-clicked" : "{{agile_lng_translate 'campaigns' 'emails-clicked'}}",
+		"hard-bounce" : "{{agile_lng_translate 'campaigns' 'hard-bounce'}}",
+		"soft-bounce" : "{{agile_lng_translate 'campaigns' 'soft-bounce'}}",
+		"unsubscribe" : "{{agile_lng_translate 'contacts-view' 'unsubscribe'}}",
+		"spam" : "{{agile_lng_translate 'tickets' 'spam'}}",
+		"note" : "{{agile_lng_translate 'menu' 'note'}}",
+		
+		// Campaign reports
+		"campaign-report-email-credit" : "{{agile_lng_translate 'misc-emails' 'campaign-report-email-credit'}}",
+		
+		// New Agent
+		"agent-added" : "{{agile_lng_translate 'misc-emails' 'agent-added'}}",
+		"agent-added-welcome" : "{{agile_lng_translate 'misc-emails' 'agent-added-welcome'}}",
+		"agent-added-login-details" : "{{agile_lng_translate 'misc-emails' 'agent-added-login-details'}}",
+		"agent-added-reset-pwd-after-login" : "{{agile_lng_translate 'misc-emails' 'agent-added-reset-pwd-after-login'}}",
+		
+		// Account cancel
+		"account-cancenlled" : "{{agile_lng_translate 'misc-emails' 'account-cancenlled'}}",
+		"account-cancenlled-sorry" : "{{agile_lng_translate 'misc-emails' 'account-cancenlled-sorry'}}",
+		"account-deactiviated" : "{{agile_lng_translate 'misc-emails' 'account-deactiviated'}}",
+		"account-cancel-data-deleted" : "{{agile_lng_translate 'misc-emails' 'account-cancel-data-deleted'}}",
+		"account-cancel-data-deletion-warning" : "{{agile_lng_translate 'misc-emails' 'account-cancel-data-deletion-warning'}}",
+		"account-cancel-thank-you" : "{{agile_lng_translate 'misc-emails' 'account-cancel-thank-you'}}",
+		
+		// Activity report
+		"activity-reports" : "{{agile_lng_translate 'report-view' 'activity-reports'}}",
+		"activity-report-name" : "{{agile_lng_translate 'misc-emails' 'activity-report-name'}}",
+		"activity-report-activities-of" : "{{agile_lng_translate 'misc-emails' 'activity-report-activities-of'}}",
+		"activity-report-no-activities-from" : "{{agile_lng_translate 'misc-emails' 'activity-report-no-activities-from'}}",
+		"deals" : "{{agile_lng_translate 'contact-details' 'deals'}}",
+		"Won" : "{{agile_lng_translate 'admin-settings-deals' 'Won'}}",
+		"total-value" : "{{agile_lng_translate 'deal-view' 'total-value'}}",
+		"activity-report-deals-won-on" : "{{agile_lng_translate 'misc-emails' 'activity-report-deals-won-on'}}",
+		"Lost" : "{{agile_lng_translate 'admin-settings-deals' 'Lost'}}",
+		"activity-report-deals-lost-on" : "{{agile_lng_translate 'misc-emails' 'activity-report-deals-lost-on'}}",
+		"activity-report-deals-assigned-on" : "{{agile_lng_translate 'misc-emails' 'activity-report-deals-assigned-on'}}",
+		"activity-report-deals-milestone-change" : "{{agile_lng_translate 'misc-emails' 'activity-report-deals-milestone-change'}}",
+		"activity-report-deals-changed-on" : "{{agile_lng_translate 'misc-emails' 'activity-report-deals-changed-on'}}",
+		"on" : "{{agile_lng_translate 'contacts-view' 'on'}}",
+		"done" : "{{agile_lng_translate 'deal-view' 'done'}}",
+		"activity-report-tasks-cpmpleted-on" : "{{agile_lng_translate 'misc-emails' 'activity-report-tasks-cpmpleted-on'}}",
+		"activity-report-tasks-in-progress" : "{{agile_lng_translate 'misc-emails' 'activity-report-tasks-in-progress'}}",
+		"activity-report-tasks-assigned" : "{{agile_lng_translate 'misc-emails' 'activity-report-tasks-assigned'}}",
+		"activity-report-tasks-created-on" : "{{agile_lng_translate 'misc-emails' 'activity-report-tasks-created-on'}}",
+		"events" : "{{agile_lng_translate 'deal-view' 'events'}}",
+		"completed" : "{{agile_lng_translate 'portlets' 'completed'}}",
+		"event" : "{{agile_lng_translate 'menu' 'event'}}",
+		"activity-report-event-added-on" : "{{agile_lng_translate 'misc-emails' 'activity-report-event-added-on'}}",
+		"rescheduled" : "{{agile_lng_translate 'events' 'rescheduled'}}",
+		"emails" : "{{agile_lng_translate 'portlets' 'emails'}}",
+		"activity-report-event-sent-on" : "{{agile_lng_translate 'misc-emails' 'activity-report-event-sent-on'}}",
+		"activity-report-notes" : "{{agile_lng_translate 'misc-emails' 'activity-report-notes'}}",
+		"notes" : "{{agile_lng_translate 'contact-details' 'notes'}}",
+		"activity-report-added" : "{{agile_lng_translate 'misc-emails' 'activity-report-added'}}",
+		"documents" : "{{agile_lng_translate 'deal-view' 'documents'}}",
+		"activity-report-docs-uploaded-on" : "{{agile_lng_translate 'misc-emails' 'activity-report-docs-uploaded-on'}}",
+		"calls" : "{{agile_lng_translate 'report-view' 'calls'}}",
+		"activity-report-calls-total" : "{{agile_lng_translate 'misc-emails' 'activity-report-calls-total'}}",
+		"outgoing" : "{{agile_lng_translate 'widgets' 'outgoing'}}",
+		"incoming" : "{{agile_lng_translate 'widgets' 'incoming'}}",
+		"no-answer" : "{{agile_lng_translate 'campaigns' 'no-answer'}}",
+		"total" : "{{agile_lng_translate 'other' 'total'}}",
+}
+

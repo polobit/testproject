@@ -743,11 +743,11 @@ function  printCurrentDateMillis(type){
 }
 
 function  startFunctionTimer(name){
-	try{console.time(name);	}catch(e){}
+	try{if(!HANDLEBARS_PRECOMPILATION)console.time(name);	}catch(e){}
 }
 
 function endFunctionTimer(name){
-	try{console.timeEnd(name);	}catch(e){}
+	try{if(!HANDLEBARS_PRECOMPILATION)console.timeEnd(name);	}catch(e){}
 }
 
 function loadServiceLibrary(callback){
@@ -848,6 +848,7 @@ function updateSortKeyTemplate(sort_key, el) {
 
 function make_menu_item_active(ele_id){
     $(".active", $("#agile-menu-navigation-container")).removeClass("active");
+    $(".active a", $("#agile-menu-navigation-container")).blur();
 	$("#" + ele_id).addClass("active");
 }
 

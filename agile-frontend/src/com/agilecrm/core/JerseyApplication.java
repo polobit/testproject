@@ -143,13 +143,19 @@ public class JerseyApplication extends Application
 	s.add(com.agilecrm.core.api.analytics.VisitorFilterAPI.class);
 	s.add(IpAccessAPI.class);
 	s.add(com.agilecrm.core.api.reports.CampaignReportsAPI.class);
+	s.add(com.agilecrm.core.api.calendar.TaskBulkActionsAPI.class);
 	
 	// JS Permission
 	s.add(com.agilecrm.core.api.JavaScriptPermissionAPI.class);
 	// SSO feature
 	s.add(com.agilecrm.ssologin.SingleSignOnAPI.class);
+
 	//Push Notification 
 	s.add(com.agilecrm.core.api.notification.NotificationTemplateAPI.class);
+	
+	//Affiliate
+	s.add(com.agilecrm.core.api.affiliate.AffiliateDetailsApi.class);
+	s.add(com.agilecrm.core.api.affiliate.AffiliateApi.class);
 	return s;
     }
 }

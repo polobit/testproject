@@ -398,6 +398,7 @@ public class TasksAPI
 		// TODO Auto-generated catch block
 		e1.printStackTrace();
 	}
+    
 	return TaskUtil.getTask(task.id);
     }
 
@@ -955,5 +956,72 @@ public class TasksAPI
 		    e.printStackTrace();
 		    return null;
 		}
+    }
+    @Path("/changeBulkTasks")
+    @POST
+    @Consumes({MediaType.APPLICATION_JSON})
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public List<Task> changeBulkTasksAction(String data) {
+        try {
+        	com.google.appengine.labs.repackaged.org.json.JSONObject priority = new com.google.appengine.labs.repackaged.org.json.JSONObject();
+        	com.google.appengine.labs.repackaged.org.json.JSONArray taskIdArray = new com.google.appengine.labs.repackaged.org.json.JSONArray();
+        	com.google.appengine.labs.repackaged.org.json.JSONObject json = new com.google.appengine.labs.repackaged.org.json.JSONObject(data);
+            System.out.println(json.toString());
+            String formId =  json.getString("form_id");
+            taskIdArray = json.getJSONArray("IdJson");            
+            if(json.has("priority")&& !json.get("priority").equals(null))
+            	priority = json.getJSONObject("priority");
+            ArrayList<String> taskIdList = new ArrayList<String>();
+            if (taskIdArray != null) { 
+               int len = taskIdArray.length();
+               for (int i=0;i<len;i++){ 
+                   taskIdList.add(taskIdArray.get(i).toString());
+               } 
+            }
+            if(taskIdList.size() > 0 && priority != null){
+                List<Task> taskList= TaskUtil.changePropertyBulkTasks(taskIdList , priority , formId);
+                return taskList;
+            }
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } 
+        
+        return null;
+
+    }
+    @Path("/bulk/changeBulkTasksProperties")
+    @POST
+    @Consumes({MediaType.APPLICATION_JSON})
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public List<Task> changeBulkTasksProperties(String data) {
+        try
+        {
+            String uri = "/core/api/bulkTask" ;
+            com.google.appengine.labs.repackaged.org.json.JSONObject json = new com.google.appengine.labs.repackaged.org.json.JSONObject(data);
+            String formId = json.getString("form_id");
+            if(formId.equalsIgnoreCase("bulkTaskStatusForm")){
+                uri = uri + "/ChangeStatus" ;
+            }
+            else if(formId.equalsIgnoreCase("bulkTaskPriorityForm")){
+                uri = uri + "/ChangePriority" ;
+            }
+            else if(formId.equalsIgnoreCase("bulkTaskOwnerForm")){
+                uri = uri + "/ChangeOwner" ;
+            }
+            else if(formId.equalsIgnoreCase("bulkTaskDeleteForm")){
+                uri = uri + "/Delete" ;
+            }
+            else {
+            	uri = uri + "/ChangeDuedate" ;
+            }
+            TaskUtil.postDataToTaskBackend(uri,data);
+        }
+        catch (Exception je)
+        {
+            je.printStackTrace();
+        }
+        
+        return null;
     }
 }

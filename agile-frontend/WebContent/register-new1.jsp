@@ -1,3 +1,6 @@
+<%@page import="java.util.Map"%>
+<%@page import="org.json.JSONObject"%>
+<%@page import="com.agilecrm.util.language.LanguageUtil"%>
 <%@page import="com.agilecrm.ipaccess.IpAccessUtil"%>
 <%@page import="com.agilecrm.util.RegisterUtil"%>
 <%@page import="com.agilecrm.user.RegisterVerificationServlet"%>
@@ -6,19 +9,21 @@
 <%@page import="com.google.appengine.api.utils.SystemProperty"%>
 <%@page import="com.agilecrm.util.MathUtil"%>
 <%@page contentType="text/html; charset=UTF-8" %>
+<%@page language="java" contentType="text/html; charset=UTF-8"
+pageEncoding="UTF-8"%>
 
 <%
 	
 	if (request.getAttribute("javax.servlet.forward.request_uri") == null) {
 		response.sendRedirect("/register");
 		return;
-	} 
+	}
 
-   if(RegisterUtil.isWrongURL(request))
+ if(RegisterUtil.isWrongURL(request))
 	{
 	    RegisterUtil.redirectToRegistrationpage(request, response);
 	    return;
-	}
+	} 
 
   String _source = request.getParameter("_source");
   String registered_email = request.getParameter("email");
@@ -68,16 +73,23 @@ if(SystemProperty.environment.value() == SystemProperty.Environment.Value.Develo
 	  }
 	
   }
-
+  
+//Get the language and save as cookie
+String _LANGUAGE = request.getParameter("lang");
+if(StringUtils.isBlank(_LANGUAGE) || !LanguageUtil.isSupportedlanguageFromKey(_LANGUAGE)) {
+	_LANGUAGE = LanguageUtil.getSupportedLocale(request);
+}
+//Locales JSON
+JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "register");
 %>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="<%=_LANGUAGE %>">
 <head>
 <meta charset="utf-8">
 <meta name="globalsign-domain-verification"
 	content="-r3RJ0a7Q59atalBdQQIvI2DYIhVYtVrtYuRdNXENx" />
-<title>Register</title>
+<title><%=LanguageUtil.getLocaleJSONValue(localeJSON, "register")%></title>
 <meta name="viewport"
 	content="width=device-width, initial-scale=1.0 maximum-scale=1">
 <meta name="description" content="">
@@ -102,6 +114,20 @@ if(SystemProperty.environment.value() == SystemProperty.Environment.Value.Develo
     top: 0;
     background-color: black;
     opacity: 0.25;
+}
+.lang-identifier {
+	position: absolute; 
+	top:30px; 
+	right: 30px;
+	font-size: 12px;
+}
+.lang-identifier a {
+	text-decoration: none; 
+	font-size: 12px;
+	color: #eee;
+}
+#myFrame {
+	display: none;
 }
 </STYLE>
 
@@ -142,18 +168,36 @@ if(isSafari && isWin)
 
 </head>
 <body class="overlay">
+
   <div id="error-area" class="error-top-view">
     <%if(StringUtils.isNotEmpty(errorMessage)){
         out.println(errorMessage);
     }%>
   </div>
 <div class="app app-header-fixed app-aside-fixed transparant">
+	<!-- Language -->
+	<div class="lang-identifier">
+		<a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+			<span id="lang-code-name"><%=LanguageUtil.getSupportedlanguageFromKey(_LANGUAGE)%></span> <span class="caret"></span> 
+		</a>
+	    <ul class="dropdown-menu pull-right" role="menu" style="min-width: 120px;">
+	    	<%
+	    	   for (Map.Entry<String, String> entry : LanguageUtil.getSupportedlanguages().entrySet()) {
+	    	%>
+	    	   <li><a href="?lang=<%=entry.getKey()%>"><%=entry.getValue()%></a></li>
+	    	<%
+				}
+	    	%>
+	  	</ul>
+	</div>
+	<!-- End of Language -->
+	
 <div class="container w-xxl w-auto-xs">
 <a href="https://www.agilecrm.com/" class="navbar-brand block m-t text-white">
 						<i class="fa fa-cloud m-r-xs"></i>Agile CRM
 					</a>
 <div class="wrapper text-center text-white">
-      				<strong>Register your FREE account</strong>
+      				<strong><%=LanguageUtil.getLocaleJSONValue(localeJSON, "register-with-free")%></strong>
    				</div>
 
 <form name='agile' id="agile" method='post'
@@ -173,12 +217,14 @@ if(isSafari && isWin)
   }
 %>
 
+<input type='hidden' name='user_lang' id="user_lang" value='<%=_LANGUAGE%>'></input>
+
 <div class="list-group list-group-sm" style="margin-bottom:4px;">
 <div class="list-group-item">
 <input class="input-xlarge field required form-control no-border" name='name'
-											type="text" required maxlength="50" minlength="3" title="Name should be at least 3 characters" 
+											type="text" required maxlength="50" minlength="3" title='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "name-validation")%>' 
                       pattern="[a-zA-Z0-9\s]+"
-											placeholder="Full Name" autocapitalize="off" autofocus>
+											oninvalid="_agile_set_custom_validate(this);" oninput="_agile_reset_custom_validate(this);" placeholder='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "full-name")%>' autocapitalize="off" autofocus>
 
 </div>
 
@@ -186,7 +232,7 @@ if(isSafari && isWin)
 <div class="list-group-item">
 <input class="input-xlarge field required email form-control no-border"
 			id="login_email" name='email' type="email" required maxlength="50"
-			minlength="6" value="<%=email%>"  placeholder="Email Address (User ID)"
+			minlength="6" value="<%=email%>"  oninvalid="_agile_set_custom_validate(this);" oninput="_agile_reset_custom_validate(this);" placeholder='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "email-address")%>'
 			autocapitalize="off">
 </div>
 
@@ -194,7 +240,7 @@ if(isSafari && isWin)
 <div class="list-group-item">
 <input class="input-xlarge field required form-control no-border"
 											maxlength="20" minlength="4" required name='password' type="password"
-											placeholder="Password" autocapitalize="off" autocomplete="off">
+											oninvalid="_agile_set_custom_validate(this);" oninput="_agile_reset_custom_validate(this);" placeholder='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "password")%>' autocapitalize="off" autocomplete="off">
 </div>
 
 </div>
@@ -202,14 +248,14 @@ if(isSafari && isWin)
 
 
 <div class="text-white m-b-md text-left text-xs">
-     By clicking sign up, I agree to Agile CRM's <a
-											href="https://www.agilecrm.com/terms.html" class="terms-field" target="_blank">Terms of Service</a>
+     <%=LanguageUtil.getLocaleJSONValue(localeJSON, "click-signing-info")%> <a
+											href="https://www.agilecrm.com/terms.html" class="terms-field" target="_blank"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "terms-of-service")%></a>
 									</div> 		
 
-<input type='submit' id="register_account" value="Sign Up" class='btn btn-lg btn-primary btn-block'>
+<input type='submit' id="register_account" value='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "sign-up")%>' class='btn btn-lg btn-primary btn-block'>
 <div class="text-center text-white m-t m-b">
-	<small>Forgot</small> 
-	<a href="/forgot-domain" class="text-white">Domain?</a>
+	<small><%=LanguageUtil.getLocaleJSONValue(localeJSON, "forgot")%></small> 
+	<a href="/forgot-domain?lang=<%=_LANGUAGE%>" class="text-white"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "domain")%>?</a>
 </div>
 </form>
 					
@@ -256,12 +302,15 @@ if(isSafari && isWin)
 </div>
 <!-- JQUery Core and UI CDN -->
 <script type='text/javascript' src='//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js'></script>
+<script type='text/javascript' src='flatfull/final-lib/final-lib-1/b-bootstrap.js'></script>
 <script src="/flatfull/registration/register.js" type="text/javascript"></script>
+<script src='locales/html5/localize.js?_=<%=_AGILE_VERSION%>'></script>
 <!--[if lt IE 10]>
 <script src="flatfull/lib/ie/placeholders.jquery.min.js"></script>
 <![endif]-->
 
   <script type="text/javascript">
+  var localeJSON = <%=localeJSON%>;
   var version = <%="\"" + VersioningUtil.getAppVersion(request) + "\""%>;
   var applicationId = <%="\"" + SystemProperty.applicationId.get() + "\""%>;
 $(document).ready(function() {

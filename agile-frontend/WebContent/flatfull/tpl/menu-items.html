@@ -3,6 +3,12 @@
   <li class="hidden-folded padder m-t-xs m-b-xs text-muted text-xs">
     <span>{{agile_lng_translate 'menu' 'sales'}}</span>
   </li>
+   <li id="home_dashboard">
+    <a  href="#">
+      <i class="icon  icon-home"></i>
+      <span>{{agile_lng_translate 'menu' 'home'}}</span>
+    </a>
+  </li>
   {{#isRestrictedMenuScope "CONTACT"}} {{else}}
     <li id="contactsmenu">
       <a  href="#contacts">
@@ -104,7 +110,24 @@
   <li class="line dk  m-t-none m-b-none" style="height: 1px;"></li>
     <li class="hidden-folded padder m-t-xs m-b-xs text-muted text-xs">
                 <span>{{agile_lng_translate 'menu' 'menu-marketing'}}</span>
-              </li>
+    </li>
+    <li id="home_dashboard">
+    <a  href="#">
+      <i class="icon  icon-home"></i>
+      <span>{{agile_lng_translate 'menu' 'home'}}</span>
+    </a>
+    </li>
+    
+    {{#isRestrictedMenuScope "CONTACT"}} {{else}}
+    <li id="contactsmenu">
+      <a  href="#contacts">
+        <i class="icon icon-user"></i>
+        <span>{{agile_lng_translate 'menu' 'menu-contacts'}}</span>
+      </a>
+    </li>
+  {{/isRestrictedMenuScope}} 
+
+    
 
    {{#isRestrictedMenuScope "CAMPAIGN"}} {{else}}
     <li id="workflowsmenu">
@@ -223,6 +246,24 @@
   <li class="hidden-folded padder m-t-xs m-b-xs text-muted text-xs">
     <span>{{agile_lng_translate 'menu' 'service'}}</span>
   </li>
+
+  <li id="home_dashboard">
+    <a  href="#">
+      <i class="icon  icon-home"></i>
+      <span>{{agile_lng_translate 'menu' 'home'}}</span>
+    </a>
+  </li>
+
+  
+    {{#isRestrictedMenuScope "CONTACT"}} {{else}}
+    <li id="contactsmenu">
+      <a  href="#contacts">
+        <i class="icon icon-user"></i>
+        <span>{{agile_lng_translate 'menu' 'menu-contacts'}}</span>
+      </a>
+    </li>
+  {{/isRestrictedMenuScope}} 
+
 
     <li id="tickets">
       <a href="#tickets">

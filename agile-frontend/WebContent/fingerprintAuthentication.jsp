@@ -1,3 +1,6 @@
+<%@page import="com.agilecrm.user.UserPrefs"%>
+<%@page import="com.agilecrm.util.CookieUtil"%>
+<%@page import="com.agilecrm.util.language.LanguageUtil"%>
 <%@page import="com.agilecrm.util.MathUtil"%>
 <%@page import="com.google.appengine.api.utils.SystemProperty"%>
 <%@page import="com.agilecrm.util.VersioningUtil"%>
@@ -7,7 +10,16 @@
 <%@page import="com.agilecrm.account.AccountPrefs"%>
 <%@page import="java.net.URLDecoder"%>
 <%@page import="org.json.JSONObject"%>
+<%@page language="java" contentType="text/html; charset=UTF-8"
+pageEncoding="UTF-8"%>
+
 <%
+//Language
+String _LANGUAGE = LanguageUtil.getLanguageKeyFromCookie(request);
+
+//Locales JSON
+JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "otp");
+
 /*
 we use setAttribute() to store the username and to autofill if he want to resubmit the form after correcting the error occurred. 
 */
@@ -93,12 +105,12 @@ int randomBGImageInteger = MathUtil.randomWithInRange(1, 9);
 %>
 <!DOCTYPE html>
 
-<html lang="en" style="background:transparent;">
+<html lang="<%=_LANGUAGE %>" style="background:transparent;">
 <head>
 <meta charset="utf-8">
 <meta name="globalsign-domain-verification"
 	content="-r3RJ0a7Q59atalBdQQIvI2DYIhVYtVrtYuRdNXENx" />
-<title>Login</title>
+<title><%=LanguageUtil.getLocaleJSONValue(localeJSON, "login")%></title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0 maximum-scale=1">
 <meta name="description" content="">
 <meta name="author" content="">
@@ -206,7 +218,7 @@ position: fixed;width: 100%;top: 0px;
 		<div ui-view="" class="fade-in-right-big smooth">
 			<div class="wrapper text-center alert free-alert-msg" >
 				<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-      			Please enter the verification code sent to your email ID to access the account.
+      			<%=LanguageUtil.getLocaleJSONValue(localeJSON, "info")%>
    			</div>
   			<div class="container w-xxl w-auto-xs view" style="top:44px;">
 				
@@ -226,16 +238,16 @@ position: fixed;width: 100%;top: 0px;
                          <div class="list-group-item">
                          	<input class="hide" id="ip_validation" name="ip_validation"></input>
                          <input type="hidden"  name="current_div" id="current_div"/>
-                                <input id="finger_print_otp" placeholder="Enter Verification Code" type="text" name="finger_print_otp" class="input-xlarge required form-control no-border" />
+                                <input id="finger_print_otp" required placeholder='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "enter-code")%>' type="text" name="finger_print_otp" class="input-xlarge required form-control no-border" oninvalid="_agile_set_custom_validate(this);" oninput="_agile_reset_custom_validate(this);" />
                          </div>
 
            			</div>
            			 
-           			 <input type='submit' value="Send" class='btn btn-lg btn-primary btn-block'>
+           			 <input type='submit' value='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "Send")%>' class='btn btn-lg btn-primary btn-block'>
            				
            				<div class="text-center text-info m-t m-b">
 							<!--<small>Resend </small> -->
-							<a title="Verification code" id= "resend_otp" class='text-info' href='#'>Resend Verfication Code</a>
+							<a id= "resend_otp" class='text-info' href='#'><%=LanguageUtil.getLocaleJSONValue(localeJSON, "resend-code")%></a>
 
 						</div>
 
@@ -255,11 +267,14 @@ position: fixed;width: 100%;top: 0px;
 	<!-- JQUery Core and UI CDN -->
 	
 	<script src='//cdnjs.cloudflare.com/ajax/libs/headjs/1.0.3/head.min.js'></script>
-	
+	<script src='locales/html5/localize.js?_='></script>
+
 	<script type="text/javascript">
 
 		var LIB_PATH = '<%=CLOUDFRONT_STATIC_FILES_PATH%>';
 
+		var localeJSON = <%=localeJSON%>;
+		
 		//showNotyPopUp
 		function showNotyPopUp(type, message, position, timeout, clickCallback) {
 			if(type != 'null' && message !=  'null'){
@@ -329,7 +344,7 @@ position: fixed;width: 100%;top: 0px;
 	            type : "POST",
 	            url : "/login?resendotp=resendotp",
 	            success : function(data) {
-	               showNotyPopUp("information", "We have re-sent the verification code to your registered email. Please enter the code below to get access.", "top", 6000);
+	               showNotyPopUp("information", '<%=LanguageUtil.getLocaleJSONValue(localeJSON, "resend-code-success")%>', "top", 6000);
 	            }
 	        });
 	    }); 

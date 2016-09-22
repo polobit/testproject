@@ -476,7 +476,7 @@
 												<option value="CORNER_NOTY" class="POPUP">{{agile_lng_translate 'web-rules' 'noty-message'}}</option>
 												<option value="CALL_POPUP" class="POPUP">{{agile_lng_translate 'webrules' 'call-popup'}}</option>
 												<option value="SITE_BAR" class="POPUP">{{agile_lng_translate 'webrules' 'site-bar'}}</option>
-												{{#if id}}<option value="REQUEST_PUSH_POPUP" class="POPUP">Request Push Popup</option>{{/if}}
+												<option value="REQUEST_PUSH_POPUP" class="POPUP">{{agile_lng_translate 'webrules' 'push-popup'}}</option>
 											</optgroup>
 											<optgroup label="{{agile_lng_translate 'contact-details' 'campaign'}}">
 												<option value="ASSIGN_CAMPAIGN" class="campaign" 
@@ -544,7 +544,7 @@
  													</small>
 													<textarea  cols="" name="webrule-information-field" class="information confirmation CORNER_NOTY span5 required w-full" rows="10" placeholder="{{agile_lng_translate 'web-rules' 'paste-html-context'}}"></textarea>
 													<textarea  cols="" name="webrule-custom-html" id="tinyMCEhtml_email" class="custom_html required MODAL_POPUP w-full form-control" rows="10" placeholder="{{agile_lng_translate 'web-rules' 'paste-html-context'}}"></textarea>
-													<textarea  cols="" name="webrule-custom-html" id="tinyMCEhtml_email" class="custom_html required REQUEST_PUSH_POPUP w-full form-control" rows="10" placeholder="{{agile_lng_translate 'web-rules' 'paste-html-context'}}"></textarea>
+													<textarea  cols="" name="webrule-custom-html" id="agile-push-noty-code" class="custom_html required REQUEST_PUSH_POPUP w-full form-control" rows="10" placeholder="{{agile_lng_translate 'web-rules' 'paste-html-context'}}"></textarea>
 													<textarea  cols="" name="webrule-custom-html" id="callwebrule-code"  class="custom_html required CALL_POPUP w-full form-control" rows="10" ></textarea>
 <textarea  cols="" name="webrule-javascript" class="code  JAVA_SCRIPT form-control w-full required" rows="10" placeholder="">function agile_js_code_exec() {
     // Copy your code here

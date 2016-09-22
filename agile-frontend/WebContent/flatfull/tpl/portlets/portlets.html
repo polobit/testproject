@@ -1545,6 +1545,73 @@
 <div class="activity-tag p-l-xxl">
 <div class="custom-link">
 {{#if_equals "TASK" entity_type}}
+{{#if_equals "BULK_ACTION" activity_type}}
+	{{#if_equals "BULK_TASK_CHANGE_OWNER" custom1}}
+		{{#if_equals "1" custom3}}
+			Changed owner for {{custom3}} Task 
+			<div class="activities_second_line m-t-none"><small>
+			<i class="icon-money icon-white"></i> {{agile_lng_translate 'campaigns' 'task-assigned-to'}} {{custom2}}.
+			</small></div>
+		{{else}}
+			Changed owner for {{custom3}} Tasks 
+			<div class="activities_second_line m-t-none"><small>
+			<i class="icon-money icon-white"></i> {{agile_lng_translate 'activity' 'tasks-assigned'}} {{custom2}}.
+			</small></div>
+		{{/if_equals}}
+	{{/if_equals}}
+	{{#if_equals "BULK_TASK_CHANGE_STATUS" custom1}}
+		{{#if_equals "1" custom3}}
+			Status changed for {{custom3}} Task 
+			<div class="activities_second_line m-t-none"><small>
+			<i class="icon-money icon-white"></i> {{agile_lng_translate 'activity' 'task-bulk-status'}} '{{taskBulkStatus custom2}}'.
+			</small></div>
+		{{else}}
+			Status changed for {{custom3}} Tasks 
+			<div class="activities_second_line m-t-none"><small>
+			<i class="icon-money icon-white"></i> {{agile_lng_translate 'activity' 'tasks-bulk-status'}} '{{taskBulkStatus custom2}}'.
+			</small></div>
+		{{/if_equals}}
+	{{/if_equals}}
+	{{#if_equals "BULK_TASK_CHANGE_PRIORITY" custom1}}
+		{{#if_equals "1" custom3}}
+			Priority changed for {{custom3}} Task 
+			<div class="activities_second_line m-t-none"><small>
+			<i class="icon-money icon-white"></i> {{agile_lng_translate 'activity' 'tasks-bulk-priority'}} '{{taskBulkPriority custom2}}'.
+			</small></div>
+		{{else}}
+			Priority changed for {{custom3}} Tasks 
+			<div class="activities_second_line m-t-none"><small>
+			<i class="icon-money icon-white"></i> {{agile_lng_translate 'activity' 'tasks-bulk-priority'}} '{{taskBulkPriority custom2}}'.
+			</small></div>
+		{{/if_equals}}
+	{{/if_equals}}
+	{{#if_equals "BULK_TASK_DELETE" custom1}}
+		{{#if_equals "1" custom3}}
+			Task Deleted
+			<div class="activities_second_line m-t-none"><small>
+			<i class="icon-money icon-white"></i>{{custom3}} {{agile_lng_translate 'activity_type' 'TASK_DELETE'}}
+			</small></div>
+		{{else}}
+			Tasks Deleted
+			<div class="activities_second_line m-t-none"><small>
+			<i class="icon-money icon-white"></i>{{custom3}} {{agile_lng_translate 'activity' 'tasks-bulk-delete'}}
+			</small></div>
+		{{/if_equals}}
+	{{/if_equals}}
+	{{#if_equals "BULK_TASK_CHANGE_DUEDATE" custom1}}
+		{{#if_equals "1" custom3}}
+			Due date changed for {{custom3}} Task
+			<div class="activities_second_line m-t-none"><small>
+			<i class="icon-money icon-white"></i> {{agile_lng_translate 'activity' 'task-bulk-duedate'}} {{epochToHumanDate "ddd mmm dd yyyy" custom2}}.
+			</small></div>
+		{{else}}
+			Due date changed for {{custom3}} Tasks
+			<div class="activities_second_line m-t-none"><small>
+			<i class="icon-money icon-white"></i> {{agile_lng_translate 'activity' 'tasks-bulk-duedate'}} {{epochToHumanDate "ddd mmm dd yyyy" custom2}}.
+			</small></div>
+		{{/if_equals}}
+	{{/if_equals}}
+{{/if_equals}}
 {{#if_equals "TASK_ADD" activity_type}} 
 Created Task {{#if this.entityObject}}<a href="#task/{{this.entity_id}}">{{safe_string label}}</a>{{else}} '{{safe_string label}}'{{/if}} <br/>
 <div class="activities_second_line p-t-xs m-t-none text-ellipsis"><small>
@@ -2733,6 +2800,10 @@ Created a new Company {{#if this.entityObject}}<a href="#contact/{{entity_id}}" 
 		</div>
 	</div>
 	<div class="portlet_body m-l text-lg getting-started-body bg-white">
+	<div style="text-align: center; width :97%; margin-top:4px;">
+		<iframe class="embed-responsive-item" src="https://www.youtube.com/embed/aBUQVVXrf2I" frameborder="0"
+		style=" width: 100%; position: relative; height: 220px;" allowfullscreen></iframe>
+	</div>
 	<div style="font-size: 15px;margin: 10px 0px 7px;" class="text-muted">{{agile_lng_translate 'contacts-view' 'here-are-few-steps-to-kick-start-your-crm'}} </div>
 		<div>
 			{{#if settings.setupDKIM.done}}
@@ -2772,7 +2843,7 @@ Created a new Company {{#if this.entityObject}}<a href="#contact/{{entity_id}}" 
 				<span class="inline-block v-text-bottom"><a href="#integrations">{{agile_lng_translate 'admin-settings-users' 'setup-integrations'}}</a></span>
 			{{/if}}
 			<div class="text-muted text-base m-t-n-xs m-b-n-sm m-l-lg">
-				<p>{{agile_lng_translate 'contacts-view' 'deleted'}}{{agile_lng_translate 'contacts-view' 'configure-agile-with-your-email'}}</p>
+				<p>{{agile_lng_translate 'contacts-view' 'configure-agile-with-your-email'}}</p>
 			</div>
 		</div>
 		<div>
