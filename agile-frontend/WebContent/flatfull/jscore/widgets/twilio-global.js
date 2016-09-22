@@ -1151,11 +1151,11 @@ Twilio.Device.disconnect(function(conn){
 						var contact_id = window.location.hash.split("/")[1];
 						if(contact_id == (TWILIO_CONTACT.id+""))
 						{
-						  var from_number = phoneNumber.replace(/\D/g, "");
+						  var from_number = phoneNumber.replace(/[\+\-\(\)]/gi,'');
 						 // var patt = new RegExp(from_number);
 						  for(var i=0; i<TWILIO_CONTACT.properties.length; i++){
 						  	if(TWILIO_CONTACT.properties[i].name == "phone"){
-						  		var reg_exp = new RegExp(TWILIO_CONTACT.properties[i].value.replace(/\D/g, ""));
+						  		var reg_exp = new RegExp(TWILIO_CONTACT.properties[i].value.replace(/[\+\-\(\)]/gi,''));
 						  		if(reg_exp.test(from_number)){
 						  			$("#contact_number").val(TWILIO_CONTACT.properties[i].value);
 						  			// getting logs if the conference call is not there
