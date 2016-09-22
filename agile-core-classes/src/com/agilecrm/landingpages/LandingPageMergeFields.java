@@ -98,6 +98,7 @@ public class LandingPageMergeFields {
 
   private String getTrackEmailFromCookies() {
     cookies = request.getCookies();
+    System.out.println("cookies array : " + cookies);
     if (cookies != null) {
       String agileTrackingEmailCookieKey = lpHelper.getDomainOwnerJsApiKey() + "-agile-email";
       for (Cookie cookie : cookies) {
