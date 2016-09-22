@@ -171,6 +171,15 @@ public abstract class AbstractCSVExporter<T> implements Exporter<T>
 	SendMail.sendMail(email, export_type.templateSubject, export_type.templaceTemplate, map,
 		SendMail.AGILE_FROM_EMAIL, SendMail.AGILE_FROM_NAME);
     }
+    
+    public final void sendEmail(String email,HashMap<String, String> stats,String domain)
+    {
+
+    stats.put("count", String.valueOf(csvWriter.getNumberOfRows() - 1));
+
+	SendMail.sendMail("nidhi@agilecrm.com", "CSV Contacts Import Status "+domain, SendMail.CSV_IMPORT_STATS_NOTIFICATION,
+		    new Object[] { stats});
+    }
 
     public static void main(String[] args)
     {

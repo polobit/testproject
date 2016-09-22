@@ -319,13 +319,13 @@ public class CSVUtil
 
 	List<String[]> csvData = getCSVDataFromStream(blobStream, "UTF-8");
 	reportStatus(csvData.size());
-	stats.put("count", statusProcessor);
+	
 
 	if (csvData.isEmpty())
 	    return;
 	// extract csv heading from csv file
 	String[] headings = csvData.remove(0);
-
+	stats.put("count", csvData.size());
 	contact.type = Contact.Type.PERSON;
 
 	LinkedHashSet<String> tags = new LinkedHashSet<String>();

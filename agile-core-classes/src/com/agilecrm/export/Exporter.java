@@ -1,5 +1,6 @@
 package com.agilecrm.export;
 
+import java.util.HashMap;
 import java.util.List;
 
 import com.agilecrm.util.email.SendMail;
@@ -32,5 +33,6 @@ public interface Exporter<T>
     public void finalize();
 
     public void sendEmail(String email);
+    public void sendEmail(String email,HashMap<String, String> stats,String domain);
 
 }
