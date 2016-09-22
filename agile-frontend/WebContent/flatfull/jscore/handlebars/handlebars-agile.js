@@ -647,17 +647,45 @@ function getContactCustomProperties(items)
 	var fields = [];
 	var fieldName='';
 	var datajson={};
+
+	var curr_route = Current_Route;
+	if(curr_route == "contacts" || curr_route.indexOf("contact")>=0){
+		curr_route = "CONTACT";
+	}else if(curr_route == "companies" || curr_route.indexOf("company")>=0){
+		curr_route = "COMPANY";
+	}else if(curr_route == "deals" || curr_route.indexOf("deal")>=0){
+		curr_route = "DEAL";
+	}
+
+	var position_arr = {};
+	if(App_Companies.customFieldsList!=undefined && App_Companies.customFieldsList!=null){
+		for(var i=0;i<App_Companies.customFieldsList.collection.models.length;i++){
+			curr_scope = App_Companies.customFieldsList.collection.models[i].get("scope");
+			if(curr_route==curr_scope){
+				position_arr[''+App_Companies.customFieldsList.collection.models[i].get("field_label")] = App_Companies.customFieldsList.collection.models[i].get("position");
+			}
+		}
+	}
+
+	var temp_fields = [];
 	for (var i = 0; i < items.length; i++)
 	{
 		if (items[i].type == "CUSTOM" && items[i].name != "image")
 		{
 			if(fieldName=='')
 				fieldName=items[i].name;
-			fields.push(items[i]);
+			//fields.push(items[i]);
+			temp_fields[position_arr[fieldName]] = items[i];
 			datajson[''+items[i].name]=items[i].value;
 		}
 	}
 	
+	for (var i = 0; i < temp_fields.length; i++){
+		if(temp_fields[i]!=""){
+			fields.push(items[i]);
+		}
+	}
+
 	//Added for formula type custom field
 	var type='';
 	if(App_Contacts.customFieldsList!=undefined && App_Contacts.customFieldsList!=null){
@@ -778,17 +806,45 @@ function getCompanyCustomProperties(items)
 	var fields = [];
 	var fieldName='';
 	var datajson={};
+
+	var curr_route = Current_Route;
+	if(curr_route == "contacts" || curr_route.indexOf("contact")>=0){
+		curr_route = "CONTACT";
+	}else if(curr_route == "companies" || curr_route.indexOf("company")>=0){
+		curr_route = "COMPANY";
+	}else if(curr_route == "deals" || curr_route.indexOf("deal")>=0){
+		curr_route = "DEAL";
+	}
+
+	var position_arr = {};
+	if(App_Companies.customFieldsList!=undefined && App_Companies.customFieldsList!=null){
+		for(var i=0;i<App_Companies.customFieldsList.collection.models.length;i++){
+			curr_scope = App_Companies.customFieldsList.collection.models[i].get("scope");
+			if(curr_route==curr_scope){
+				position_arr[''+App_Companies.customFieldsList.collection.models[i].get("field_label")] = App_Companies.customFieldsList.collection.models[i].get("position");
+			}
+		}
+	}
+
+	var temp_fields = [];
 	for (var i = 0; i < items.length; i++)
 	{
 		if (items[i].type == "CUSTOM" && items[i].name != "image")
 		{
 			if(fieldName=='')
 				fieldName=items[i].name;
-			fields.push(items[i]);
+			//fields.push(items[i]);
+			temp_fields[position_arr[fieldName]] = items[i];
 			datajson[''+items[i].name]=items[i].value;
 		}
 	}
 	
+	for (var i = 0; i < temp_fields.length; i++){
+		if(temp_fields[i]!=""){
+			fields.push(items[i]);
+		}
+	}
+
 	//Added for formula type custom field
 	var type='';
 	if(App_Companies.customFieldsList!=undefined && App_Companies.customFieldsList!=null){
