@@ -674,7 +674,7 @@ function getContactCustomProperties(items)
 			if(App_Contacts.customFieldsList.collection.models[i].get("field_label")==fieldName){
 				type = App_Contacts.customFieldsList.collection.models[i].get("scope");
 				if(curr_route==type)
-				break;
+					break;
 			}
 		}
 	}
@@ -798,6 +798,15 @@ function getCompanyCustomProperties(items)
 			datajson[''+items[i].name]=items[i].value;
 		}
 	}
+
+	var curr_route = Current_Route;
+	if(curr_route == "contacts" || curr_route.indexOf("contact")>=0){
+		curr_route = "CONTACT";
+	}else if(curr_route == "companies" || curr_route.indexOf("company")>=0){
+		curr_route = "COMPANY";
+	}else if(curr_route == "deals" || curr_route.indexOf("deal")>=0){
+		curr_route = "DEAL";
+	}
 	
 	//Added for formula type custom field
 	var type='';
@@ -805,7 +814,8 @@ function getCompanyCustomProperties(items)
 		for(var i=0;i<App_Companies.customFieldsList.collection.models.length;i++){
 			if(App_Companies.customFieldsList.collection.models[i].get("field_label")==fieldName){
 				type = App_Companies.customFieldsList.collection.models[i].get("scope");
-				break;
+				if(curr_route==type)
+					break;
 			}
 		}
 	}
