@@ -2216,10 +2216,16 @@ public class ActivityUtil
 							if (f.name.equals(contact.FIRST_NAME))
 							{
 								calledToName += f.value;
+								continue;
 							}
 							if (f.name.equals(contact.LAST_NAME))
 							{
 								calledToName += " " + f.value;
+								continue;
+							}
+							if(f.name.equals(contact.NAME)){
+								calledToName = f.value;
+								continue;
 							}
 						}
 
