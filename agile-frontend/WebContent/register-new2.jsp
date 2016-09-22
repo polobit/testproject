@@ -321,6 +321,7 @@ if(isSafari && isWin)
 											class="field form-control required tel-number"
 											id="login_phone_number" name='phone' required type="password"
 											placeholder='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "phone-number")%>' autocapitalize="off" autocomplete="tel">
+											<input type="text" name="phone_duplicate" class="hide">
 											<div class='custom-error'><%=LanguageUtil.getLocaleJSONValue(localeJSON, "pnone-num-validation")%></div>
 </div>
 </div>
