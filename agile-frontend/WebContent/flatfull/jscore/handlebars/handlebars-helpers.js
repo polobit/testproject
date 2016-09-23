@@ -1137,12 +1137,10 @@ $(function()
 		$.each(App_Contacts.contactViewModel[item], function(index, element)
   		{
   			if (element == "basic_info" || element == "image")
-  			{
-					
+  			{	
 					if(_agile_get_prefs("contactTabelView"))
 					{
 						// if the compact view is present the remove th basic info heading and add the empty heading for the image
-
 						if(element == "basic_info")
 							return ;
 	
@@ -1150,8 +1148,7 @@ $(function()
 						{
 							element = "";
 							cls = "";
-						}
-							  
+						}			  
 					}
 					else
 					{
@@ -1162,9 +1159,9 @@ $(function()
 						}
 						if(element == "basic_info")
 							element = "Basic Info";
+						
 					}
 			}
-
 		else if (element.indexOf("CUSTOM_") == 0) 
 		{
   			element = element.split("_")[1];
@@ -1172,6 +1169,12 @@ $(function()
   		}
   		else 
   		{
+  			if(!_agile_get_prefs("contactTabelView"))
+  			{
+  				if(element == "first_name" || element =="last_name" || element == "email")
+							return ; 
+  			}
+
 			element = element.replace("_", " ");
 			cls = "";
 	 	}
@@ -6523,7 +6526,7 @@ $(function()
 		$.each(App_Companies.companyViewModel[item], function(index, element)
   		{
 
-  			if (element == "basic_info" || element == "image")
+  			if (element == "basic_info" || element == "image" || element == "url" || element == "name")
   			{
 					
 					if(_agile_get_prefs("companyTabelView"))
@@ -6549,6 +6552,8 @@ $(function()
 						}
 						if(element == "basic_info")
 							element = "Basic Info";
+						if(element == "url" || element == "name")
+							return;
 					}
 			}
 		else if(element == "url")
@@ -6566,7 +6571,6 @@ $(function()
 			element = element.replace("_", " ");
 			cls = "";
 	 	}
-
 	 	element = getTableLanguageConvertHeader(element);
 	 	el = el.concat('<th class="'+ cls +'">' + ucfirst(element) + '</th>');	
 	  

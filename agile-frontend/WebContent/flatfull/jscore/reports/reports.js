@@ -10,10 +10,8 @@ $(function()
       $(this).find('.highcharts-button').hide();
   });
   $('body').on('click','.maintab',function(e){
-     /*var c = $(this).find(".sub-nav-tab").children()[0];
-     var d = c.children;
-     var route = $(d).attr("href").split("#")[1];
-     Backbone.history.navigate(route, true)*/
+     if($(this).hasClass("reportactivities") || $(this).hasClass("reportcampaigns"))
+     	return ; 
      $(this).find(".sub-nav-tab>li:first").trigger('click')
   });
 });
