@@ -43,4 +43,18 @@ public class AffiliateDetailsUtil {
 		return getAffiliateDetailsbyUserId(DomainUserUtil.getCurrentDomainUser().id);
 	}
 	
+	public static void save(AffiliateDetails affiliateDetails){
+		String oldNamespace = NamespaceManager.get();
+		NamespaceManager.set("");
+		try{
+			if(affiliateDetails.getId() == null){
+				affiliateDetails.setCreatedTime(System.currentTimeMillis()/1000);
+				affiliateDetails.setLastAffiliateAddedTime(System.currentTimeMillis()/1000);
+			}
+			dao.put(affiliateDetails);
+		}finally{
+			NamespaceManager.set(oldNamespace);
+		}
+	}
+	
 }
