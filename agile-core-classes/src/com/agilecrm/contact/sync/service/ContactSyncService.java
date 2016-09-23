@@ -471,9 +471,18 @@ public abstract class ContactSyncService implements IContactSyncService
 	System.out.println("Is Contact duplicate  in contactsyncimpl is" + isUpdated);
 	if (isUpdated)
 	{
-		
+		if (prefs.type == Type.GOOGLE){
 	    contact = mergeContacts(contact,queryMap);
+	    ContactField googleContactfield = contact.getContactFieldByName("Contact type");
 
+		// Does not create contact if it is already imported form google
+		if (googleContactfield != null && "Google".equals(googleContactfield.value))
+		{
+			String tag = "gmail contact".toLowerCase();
+
+				contact.tags.remove(StringUtils.capitalize(tag));
+		}
+		}
 	    accessControl.setObject(contact);
 	    if (!accessControl.canCreate())
 	    {

@@ -185,9 +185,9 @@ var DataSync_Event_Modal_View = Base_Model_View.extend({
             model.save({}, {
                 success: function(data) {
                     show_success_message_after_save_button(_agile_get_translated_val("misc-keys", "sync-init"), App_Datasync.dataSync.el);
-                    setTimeout(function() {
+                    /*setTimeout(function() {
                                  $(ele).removeAttr("disabled");
-                                     },3000);
+                                     },3000);*/
                     showNotyPopUp("information", _agile_get_translated_val("misc-keys", "sync-contacts-init"), "top", 1000);
                 }
             });
