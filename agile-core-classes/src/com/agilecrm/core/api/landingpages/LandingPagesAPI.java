@@ -20,6 +20,7 @@ import org.json.JSONObject;
 
 import com.agilecrm.AllDomainStats;
 import com.agilecrm.alldomainstats.util.AllDomainStatsUtil;
+import com.agilecrm.cms.CMSPlugin;
 import com.agilecrm.landingpages.LandingPage;
 import com.agilecrm.landingpages.LandingPageCNames;
 import com.agilecrm.landingpages.LandingPageUtil;
@@ -136,6 +137,9 @@ public class LandingPagesAPI
 				pageIds.put(landingPage.id);
 				LandingPageUtil.deleteLandingPageCNames(pageIds);
 				landingPage.delete();
+				
+				// Inform to CMS plugins
+				CMSPlugin.updateToCmsPlugins(CMSPlugin.EventName.LandingPages, false);
 			}
 		}
 		catch (Exception e)
@@ -186,6 +190,7 @@ public class LandingPagesAPI
 	{
 		landingPageCName.domain = NamespaceManager.get();
 		landingPageCName.save();
+		
 		return landingPageCName;
 	}
 	
@@ -198,6 +203,7 @@ public class LandingPagesAPI
 	{
 		landingPageCName.domain = NamespaceManager.get();
 		landingPageCName.save();
+		
 		return landingPageCName;
 	}
 	
@@ -215,6 +221,9 @@ public class LandingPagesAPI
 		//Increase count of Campaign for AllDomainstats report in database
 		AllDomainStatsUtil.updateAllDomainStats(AllDomainStats.LANDINGPAGE_COUNT);
 		
+		// Inform to CMS plugins
+		CMSPlugin.updateToCmsPlugins(CMSPlugin.EventName.LandingPages, true);
+		
 		return landingPage;
 	}
 	
@@ -230,6 +239,10 @@ public class LandingPagesAPI
         }
 		landingPage.updated_time = System.currentTimeMillis() / 1000;
 		landingPage.save();
+		
+		// Inform to CMS plugins
+		CMSPlugin.updateToCmsPlugins(CMSPlugin.EventName.LandingPages, false);
+				
 		return landingPage;
 	}
 

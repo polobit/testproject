@@ -247,6 +247,11 @@ function getTemplateUrls(templateName)
 	{
 		template_relative_urls.push("notification.js");
 	}
+	if (templateName.indexOf("affiliate") == 0)
+	{
+		template_relative_urls.push("affiliate.js");
+	}
+	
 	return template_relative_urls;
 }
 
@@ -957,6 +962,15 @@ function getCount(collection)
 		return "(" + collection[0].count + " " +_agile_get_translated_val('other','total')+ ")";
 	else
 		return "(" + collection.length + " " +_agile_get_translated_val('other','total')+ ")";
+}
+function getSimpleCount(collection)
+{
+	for(var i=0;i<collection.length;i++){
+		if (collection[i] && collection[i].count && (collection[i].count != -1))
+			return collection[i].count ;
+			
+			}
+		return collection.length ;
 }
 function getTaskCount(collection)
 {

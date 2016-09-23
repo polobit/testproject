@@ -24,10 +24,19 @@ if(ENVIRONMENT == "live" || ENVIRONMENT == "beta")
 
 String idPath = request.getPathInfo();
 String pageId = "0";
+String SELECTED_TEMPLATE = null;
+String copyPageId = "0";
 if(idPath != null && !StringUtils.isEmpty(idPath) && !idPath.equals("/")) {
-  pageId = idPath.substring(1);
+    if(idPath.indexOf("copy") != -1){
+        String[] pathArr = idPath.split("-");
+        SELECTED_TEMPLATE = pathArr[0].substring(1);
+        copyPageId = pathArr[1];
+    }else{
+        pageId = idPath.substring(1);
+    }
+
 } else {
-  pageId = "0";
+    pageId = "0";
 }
 
 %>
@@ -54,6 +63,8 @@ if(idPath != null && !StringUtils.isEmpty(idPath) && !idPath.equals("/")) {
     var s3BaseUrl = '<%=S3_STATIC_FILES_URL%>';
     var CURRENT_AGILE_DOMAIN = '<%=NamespaceManager.get()%>';
     var current_agileform;
+    var selectedTemplateId = '<%=SELECTED_TEMPLATE%>';
+    var copyPagebuilderId = <%=copyPageId%>;
     </script>
 </head>
 <body class="builderUI">
@@ -144,6 +155,11 @@ if(idPath != null && !StringUtils.isEmpty(idPath) && !idPath.equals("/")) {
                 <a href="#previewModal" data-toggle="modal" class="btn btn-inverse btn-embossed pull-right slick" style="display: none" id="buttonPreview">
                     <i class="fui-window"></i> 
                     <span class="slide">Preview</span>
+                </a>
+
+                <a href="<%=MAIN_URL%>pagebuilder/copy-<%=pageId%>" class="btn btn-inverse btn-embossed pull-right slick" id="pagebuilderCopyBtn">
+                    <i class="fui-windows"></i> 
+                    <span class="slide">Create a Copy</span>
                 </a>
                 
                                 <div class="btn-group" style="float: right;">           
@@ -2409,7 +2425,7 @@ function showAgileCRMForm(formJson,formHolderId) {
                 var iframe_id=iframe.getAttribute("id");
                 var replace_form_class=$('#'+iframe_id).contents().find('.agile_crm_form_embed');
                 try{
-                if($('#'+iframe_id).contents().find('#agileform').size()!==0){
+                if($('#'+iframe_id).contents().find('#agileform').size()!==0 || (check_agileform.includes("header10") && $('#'+iframe_id).contents().find('#agileform_div')!==0)){
                     if(window.current_agileform!=null){
                         $('#'+iframe_id).contents().find('#agileform_div').empty();
                         var div = $("<div class='agile_crm_form_embed' id='"+window.CURRENT_AGILE_DOMAIN+"_"+formJson.id+"' ></div>");

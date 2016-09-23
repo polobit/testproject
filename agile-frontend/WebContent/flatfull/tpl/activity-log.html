@@ -1,43 +1,3 @@
-
-Skip to content
-This repository
-
-    Pull requests
-    Issues
-    Gist
-
-    @adiseshu24
-
-27
-1
-
-    1
-
-agilecrm/agile-java-server Private
-Code
-Issues 0
-Pull requests 1
-Wiki
-Pulse
-Graphs
-agile-java-server/agile-frontend/WebContent/flatfull/tpl/activity-log.html
-14ab73a 2 days ago
-@adiseshu24 adiseshu24 adi
-@govindclickdesk
-@adiseshu24
-@vijayagilecrm
-@saiagilecrm
-@somasankar
-@sreedevigadiyaaram
-@santhoshmogulla
-@jagadeeshAgilecrm
-@Nidso
-@santhosh0101
-@santhoshboga
-@prakash-agrawal
-@premnathtammina
-@prashannjeet-agile
-1485 lines (1289 sloc) 90.7 KB
 <script id="activity-list-log-collection-template" type="text/html">
 
 {{#unless this.length}}
@@ -98,13 +58,13 @@ agile-java-server/agile-frontend/WebContent/flatfull/tpl/activity-log.html
 			<div class="activity-tag p-l-xxl">
 			<div class="custom-link">
 			{{#if_equals "incoming" custom2}}
-			{{agile_lng_translate 'campaigns' 'call-from'}} {{#if entity_id}}<a href="#contact/{{entity_id}}">{{label}}</a>{{else}}{{label}}{{/if}}<br/>
+			{{agile_lng_translate 'campaigns' 'call-from'}} {{#if entity_id}}<a href="#contact/{{entity_id}}"> {{label}}</a>{{else}} {{label}}{{/if}}{{#if_equals "company_entity" this.entityObject.entity_type}} ({{agile_lng_translate 'contacts-view' 'Company'}}) {{else}} ({{agile_lng_translate 'contact-details' 'Contact'}}) {{/if_equals}}<br/>
 			<small class="activities_second_line m-t-none text-sm">
 			<i class="icon-phone"></i> {{callActivityFriendlyStatus custom3 custom2}}{{#if custom4}}{{secondsToCallActivitiesTime custom4}}{{else}} 0s{{/if}} (<span style="text-transform: capitalize;">{{#if custom1}}{{custom1}}{{else}} Manual{{/if}}</span>)
 			</small>
 			{{/if_equals}}
 			{{#if_equals "outgoing" custom2}}	
-			 {{agile_lng_translate 'contacts-view' 'called'}}{{#if entity_id}}<a href="#contact/{{entity_id}}">{{label}}</a>{{else}}{{label}}{{/if}}<br/>
+			 {{agile_lng_translate 'contacts-view' 'called'}}{{#if entity_id}} <a href="#contact/{{entity_id}}"> {{label}}</a>{{else}} {{label}}{{/if}}{{#if_equals "company_entity" this.entityObject.entity_type}} ({{agile_lng_translate 'contacts-view' 'Company'}}) {{else}} ({{agile_lng_translate 'contact-details' 'Contact'}}) {{/if_equals}}<br/>
 			<small class="activities_second_line m-t-none text-sm">
 			<i class="icon-phone"></i> {{callActivityFriendlyStatus custom3 custom2}}{{#if custom4}}{{secondsToCallActivitiesTime custom4}}{{else}} 0s{{/if}} (<span style="text-transform: capitalize;">{{#if custom1}}{{custom1}}{{else}}Manual{{/if}}</span>)
 					</small>
@@ -132,6 +92,73 @@ agile-java-server/agile-frontend/WebContent/flatfull/tpl/activity-log.html
 <div class="activity-tag p-l-xxl">
 <div class="custom-link">
 {{#if_equals "TASK" entity_type}}
+	{{#if_equals "BULK_ACTION" activity_type}}
+		{{#if_equals "BULK_TASK_CHANGE_OWNER" custom1}}
+			{{#if_equals "1" custom3}}
+				Changed owner for {{custom3}} Task 
+				<div class="activities_second_line m-t-none"><small>
+				<i class="icon-money icon-white"></i> {{agile_lng_translate 'campaigns' 'task-assigned-to'}} {{custom2}}.
+				</small></div>
+			{{else}}
+				Changed owner for {{custom3}} Tasks 
+				<div class="activities_second_line m-t-none"><small>
+				<i class="icon-money icon-white"></i> {{agile_lng_translate 'activity' 'tasks-assigned'}} {{custom2}}.
+				</small></div>
+			{{/if_equals}}
+		{{/if_equals}}
+		{{#if_equals "BULK_TASK_CHANGE_STATUS" custom1}}
+			{{#if_equals "1" custom3}}
+				Status changed for {{custom3}} Task 
+				<div class="activities_second_line m-t-none"><small>
+				<i class="icon-money icon-white"></i> {{agile_lng_translate 'activity' 'task-bulk-status'}} '{{taskBulkStatus custom2}}'.
+				</small></div>
+			{{else}}
+				Status changed for {{custom3}} Tasks 
+				<div class="activities_second_line m-t-none"><small>
+				<i class="icon-money icon-white"></i> {{agile_lng_translate 'activity' 'tasks-bulk-status'}} '{{taskBulkStatus custom2}}'.
+				</small></div>
+			{{/if_equals}}
+		{{/if_equals}}
+		{{#if_equals "BULK_TASK_CHANGE_PRIORITY" custom1}}
+			{{#if_equals "1" custom3}}
+				Priority changed for {{custom3}} Task 
+				<div class="activities_second_line m-t-none"><small>
+				<i class="icon-money icon-white"></i> {{agile_lng_translate 'activity' 'tasks-bulk-priority'}} '{{taskBulkPriority custom2}}'.
+				</small></div>
+			{{else}}
+				Priority changed for {{custom3}} Tasks 
+				<div class="activities_second_line m-t-none"><small>
+				<i class="icon-money icon-white"></i> {{agile_lng_translate 'activity' 'tasks-bulk-priority'}} '{{taskBulkPriority custom2}}'.
+				</small></div>
+			{{/if_equals}}
+		{{/if_equals}}
+		{{#if_equals "BULK_TASK_DELETE" custom1}}
+			{{#if_equals "1" custom3}}
+				Task Deleted
+				<div class="activities_second_line m-t-none"><small>
+				<i class="icon-money icon-white"></i>{{custom3}} {{agile_lng_translate 'activity_type' 'TASK_DELETE'}}
+				</small></div>
+			{{else}}
+				Tasks Deleted
+				<div class="activities_second_line m-t-none"><small>
+				<i class="icon-money icon-white"></i>{{custom3}} {{agile_lng_translate 'activity' 'tasks-bulk-delete'}}
+				</small></div>
+			{{/if_equals}}
+		{{/if_equals}}
+		{{#if_equals "BULK_TASK_CHANGE_DUEDATE" custom1}}
+			{{#if_equals "1" custom3}}
+				Due date changed for {{custom3}} Task
+				<div class="activities_second_line m-t-none"><small>
+				<i class="icon-money icon-white"></i> {{agile_lng_translate 'activity' 'task-bulk-duedate'}} {{epochToHumanDate "ddd mmm dd yyyy" custom2}}.
+				</small></div>
+			{{else}}
+				Due date changed for {{custom3}} Tasks
+				<div class="activities_second_line m-t-none"><small>
+				<i class="icon-money icon-white"></i> {{agile_lng_translate 'activity' 'tasks-bulk-duedate'}} {{epochToHumanDate "ddd mmm dd yyyy" custom2}}.
+				</small></div>
+			{{/if_equals}}
+		{{/if_equals}}
+	{{/if_equals}}
 {{#if_equals "TASK_ADD" activity_type}} 
 {{agile_lng_translate 'report-view' 'created-task'}} {{#if this.entityObject}}<a href="#task/{{entity_id}}">{{safe_string label}}</a>{{else}} '{{safe_string label}}'{{/if}} <br/>
 <div class="activities_second_line m-t-none"><small>
@@ -1010,14 +1037,42 @@ Added {{custom3}} {{agile_lng_translate 'contacts-view' 'contact-to-campaign'}}<
 </span>  
 {{/if_equals}}
 {{#if_equals "CAMPAIGN_EDIT" activity_type}}
-{{agile_lng_translate 'contacts-view' 'modified-a-campaign'}} {{#if this.entityObject}} <a href="#workflow/{{entity_id}}">{{label}}</a>{{else}}'{{label}}'{{/if}}<br/>	
-<small class="activities_second_line m-t-none text-sm">
- {{#unless this.entityObject}}<i class="icon-sitemap icon-white"></i> {{agile_lng_translate 'contacts-view' 'campaign-deleted-later'}} {{/unless}}
-</span>  
+	{{agile_lng_translate 'contacts-view' 'modified-a-campaign'}} 
+	{{#if this.entityObject}}
+		<a href="#workflow/{{entity_id}}">{{label}}</a>
+
+		{{#if this.entityObject.backupExists}}
+			<a href="#" id="campaign-modify-history" class="campaign-history-block text-info" data-entity="{{bindData entityObject}}" data-entity-id='{{entity_id}}' 
+				style='display: none;position: relative;top: 1px;margin-left: 2px;' title = "More details">
+				<i class="icon-plus"></i></a>
+		{{/if}}
+		<br/>
+		{{!--Campaign History Block--}}
+		<div class='campaign-history-details' style="display: none;"></div>
+	{{else}}
+		'{{label}}'
+	{{/if}}<br/>
+	
+	<small class="activities_second_line m-t-none text-sm">
+	{{#unless this.entityObject}}
+		<i class="icon-sitemap icon-white"></i> {{agile_lng_translate 'contacts-view' 'campaign-deleted-later'}} 
+	{{/unless}}
+	</span>  
 {{/if_equals}}
+
 {{#if_equals "CAMPAIGN_DELETE" activity_type}}
 {{agile_lng_translate 'contacts-view' 'deleted-campaign'}} '{{label}}'
 {{/if_equals}}
+
+{{#if_equals "CAMPAIGN_RESTORE" activity_type}}
+	Restored a Campaign
+	{{#if this.entityObject}}
+		<a href="#workflow/{{entity_id}}">{{label}}</a>
+	{{else}}
+		'{{label}}'
+	{{/if}}
+{{/if_equals}}
+
 {{#if_equals "BULK_DELETE" activity_type}}
   {{#if_equals "1" custom1}}
   {{agile_lng_translate 'contacts-view' 'deleted'}} {{custom1}} {{agile_lng_translate 'contact-details' 'campaign'}} 
@@ -1412,7 +1467,61 @@ Added {{custom3}} {{agile_lng_translate 'contacts-view' 'contact-to-campaign'}}<
 </div>
 </script>
 
-    Contact GitHub API Training Shop Blog About 
+<script id="activity-campaign-history-modify-template" type="text/html">
+<div>
+{{#unless this}}
+<p>Nothing changed.</p>
+{{/unless}}
 
-    © 2016 GitHub, Inc. Terms Privacy Security Status Help 
+{{#if ADDED}}
+<ul>
+	<li><b>Nodes added</b></li>
+	{{#each ADDED}}
+		<li>{{this}}</li>
+	{{/each}}
+</ul>
+{{/if}}
+{{#if MODIFIED}}
+<ul>
+	<li><b>Nodes modified</b></li>
+	<li>
+		<table class="table table-striped" style="border: solid 1px whitesmoke;">
+			<thead>
+				<tr>
+					<th>Node Name</th>
+					<th>Field Name</th>
+					<th>Old Value</th>
+					<th>New Value</th>
+				</tr>
+			</thead>
+			<tbody>
+				{{#each MODIFIED}}
+					{{#each this}}
+						<tr>
+							<td>{{node_name}}</td>
+							<td>{{name}}</td>
+							<td>
+								{{old_value}}
+							</td>
+							<td>
+								{{new_value}}
+							</td>
+						</tr>
+					{{/each}}
+				{{/each}}
+			</tbody>
+		</table>
+	</li>
+</ul>
+{{/if}}
+
+{{#if DELETED}}
+<ul>
+<li><b>Nodes deleted</b></li>
+{{#each DELETED}}
+	<li>{{this}}</li>
+{{/each}}
+</ul>{{/if}}
+</div>
+ </script>
 

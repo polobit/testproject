@@ -604,7 +604,7 @@
     <datastore-index kind="PushNotificationMessage" ancestor="false" source="manual">
        <property name="browser_id" direction="asc"/>
        <property name="created_time" direction="asc"/>
- </datastore-index>
+    </datastore-index>
     <datastore-index kind="Activity" ancestor="false" source="manual">
         <property name="show_bulk_activity" direction="asc"/>
          <property name="time" direction="desc"/>
@@ -618,6 +618,40 @@
         <property name="searchable" direction="asc"/>
         <property name="position" direction="asc"/>
     </datastore-index>
+    
+    <datastore-index kind="Affiliate" ancestor="false" source="manual">
+        <property name="relatedUserId" direction="asc"/>
+        <property name="createdTime" direction="desc"/>
+    </datastore-index>
+    
+    <datastore-index kind="Affiliate" ancestor="false" source="manual">
+        <property name="relatedUserId" direction="asc"/>
+        <property name="createdTime" direction="asc"/>
+    </datastore-index>
+    
+    <datastore-index kind="Affiliate" ancestor="false" source="manual">
+        <property name="relatedUserId" direction="asc"/>
+        <property name="createdTime" direction="asc"/>
+        <property name="amount" direction="asc"/>
+        <property name="commission" direction="asc"/>
+    </datastore-index>
+    
+    <datastore-index kind="Affiliate" ancestor="false" source="manual">
+        <property name="relatedUserId" direction="asc"/>
+        <property name="amount" direction="asc"/>
+        <property name="commission" direction="asc"/>
+    </datastore-index>
+    
+    <datastore-index kind="Affiliate" ancestor="false" source="manual">
+        <property name="amount" direction="asc"/>
+        <property name="commission" direction="asc"/>
+    </datastore-index>
+    
+    <datastore-index kind="AffiliateDeal" ancestor="false" source="manual">
+        <property name="relatedUserId" direction="asc"/>
+        <property name="createdTime" direction="desc"/>
+    </datastore-index>
+    
 </datastore-indexes>
 
 

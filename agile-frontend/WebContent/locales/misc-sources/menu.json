@@ -63,4 +63,8 @@
       "deals" : "{{agile_lng_translate 'menu' 'deals'}}",
       "documents" : "{{agile_lng_translate 'menu' 'documents'}}",
       "tickets" : "{{agile_lng_translate 'menu' 'tickets'}}",
+      "affiliate" : "{{agile_lng_translate 'affiliate' 'affiliate-program'}}",
+      "home" : "{{agile_lng_translate 'menu' 'home'}}",
+      "menu-add" : "{{agile_lng_translate 'menu' 'menu-add'}}",
+
 }

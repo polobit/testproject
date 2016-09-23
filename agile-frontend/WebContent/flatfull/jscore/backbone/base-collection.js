@@ -330,7 +330,7 @@ var Base_Collection_View = Backbone.View
 						handleAjaxError();
 						return;
 					}
-					that.render(true, response.responseText);
+					that.render(true, response);
 				});
 
 				// Commented as it was creating a ripple effect
@@ -597,7 +597,7 @@ var Base_Collection_View = Backbone.View
 			 *            true view is not show and loading image is shown
 			 *            instead
 			 */
-			render : function(force_render, error_message)
+			render : function(force_render, error_response)
 			{
 				// If collection in not reset then show loading in the content,
 				// once collection is fetched, loading is removed by render and
@@ -617,9 +617,12 @@ var Base_Collection_View = Backbone.View
 
 				// If error message is defined the append error message to el
 				// and return
-				if (error_message)
+				if (error_response)
 				{
-					$(this.el).html('<div style="padding:10px;font-size:14px"><b>' + error_message + '<b></div>');
+					if(this.options.errorCallback && typeof(this.options.errorCallback) == "function")
+						this.options.errorCallback(error_response);
+					else
+						$(this.el).html('<div style="padding:10px;font-size:14px"><b>' + error_response.responseText + '<b></div>');
 					return;
 				}
 				// endFunctionTimer("fetch time");

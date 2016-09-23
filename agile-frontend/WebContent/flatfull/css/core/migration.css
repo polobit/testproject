@@ -1613,6 +1613,9 @@ light.lter.b-b.wrapper-md .pull-right:not(.dropdown-menu),.bg-light.lter.b-b.wra
   .filtersTabList #contacts-lhs-filters-toggle{
     display: block;
   }
+  .filtersTabList #companies-lhs-filters-toggle{
+    display: block;
+  }
   .panel-middle-align-mobile .col-xs-6:first-child {
   text-align: right;
   }
@@ -2007,6 +2010,13 @@ display: block!important;
 .icons-left{ float: left !important; margin-top: 5px;}
 .ticket-subj-block{ width: 100% !important;}
  .ticket-name, .ticket-subject{ max-width: 20em;}
+ .plan-upgrade-center{ text-align: center; float: none !important;}
+ .add-btn-mobile{ float: none !important; text-align: center;}
+ .categori-btn-center{ display: table; margin: auto;}
+ .service-table-mobile td > div.table-resp{width: 100%}
+ .ticket-filter-conditions-table tbody tr td select {padding: 6px 0px 6px 5px;}
+ .ticket-filter-conditions-table tbody tr td input {padding: 6px 5px;}
+
 }
 
 @media all and (min-width: 768px) {
@@ -2219,7 +2229,7 @@ display: block!important;
     opacity: 0.4;
 }
 .admin-setting-icon a{
- width:calc(100% / 4);
+ width:calc(100% / 5);
  padding: 10px 0;
  text-align: center;
  opacity: 0.4;
@@ -2440,6 +2450,21 @@ transform: translateX(-50%);}
 
 .ticket-subject-md{ width: 56%;}
 .ticket-subj-block{ width: 60%;}
-/*end custom css code*/
+
 .search-filters li a
 { color: #363f44 !important;}
+.getting-started-body > div {
+    padding: 0px 5px 0px;}
+
+ @media (max-width:480px){
+ .canned-video-xs{width: 100% !important;}
+} 
+.service-tabs-list i{ opacity: 0.6;}
+.service-tabs-list li a{ border-bottom: 0px; padding: 10px 15px;}
+.add-btn-mobile i, .categori-add-btn-mobile i{width: 20px; height: 20px; margin: -1px -4px; margin-right: 5px; line-height: 20px;}
+.ticket-label-border tr:first-child td {
+    border-top: 1px solid #eaeff0 !important;
+}
+.knowledgebase-name{width: 93% !important; float: left;}
+
+/*end custom css code*/

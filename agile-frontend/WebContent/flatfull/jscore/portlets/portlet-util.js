@@ -1253,6 +1253,11 @@ var portlet_utility = {
 			break;
 		}
 
+		case "Marketing Onboarding" : {
+			setPortletContentHeight(base_model);
+			break;
+		}
+
 		case "Deal Goals" : {
 
 					portlet_ele = $('#ui-id-' + column_position + '-' + row_position,

@@ -20,6 +20,8 @@ import javax.ws.rs.core.Response;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import com.agilecrm.AllDomainStats;
+import com.agilecrm.alldomainstats.util.AllDomainStatsUtil;
 import com.agilecrm.notification.NotificationTemplate;
 import com.agilecrm.webrules.WebrulePushPopup;
 import com.google.appengine.api.NamespaceManager;
@@ -73,6 +75,10 @@ public class NotificationTemplateAPI
     		//Create webrues for showing push model
 			WebrulePushPopup.CreateWebrule(NamespaceManager.get());
     	}
+		
+		//Increase count of push_notification template for AllDomainstats report in database
+		AllDomainStatsUtil.updateAllDomainStats(AllDomainStats.NOTIFICATION_TEMPLATE_COUNT);
+		
 		
 		notificationTemplate.save();
 	   return notificationTemplate;

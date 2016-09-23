@@ -15,7 +15,7 @@ var contact_details_tab = {
 		load_timeline : function()
 		{
 			$('div.tab-content', App_Contacts.contactDetailView.el).find('div.active').removeClass('active');
-			
+			$("#timeline").append("<div id='line-container'><div id='line'></div></div>");
 			$('#time-line', App_Contacts.contactDetailView.el).addClass('active');
 			if($("#timeline", App_Contacts.contactDetailView.el).hasClass('isotope'))
 			{

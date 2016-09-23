@@ -28,6 +28,7 @@ import com.agilecrm.activities.Activity.EntityType;
 import com.agilecrm.activities.util.ActivitySave;
 import com.agilecrm.activities.util.ActivityUtil;
 import com.agilecrm.alldomainstats.util.AllDomainStatsUtil;
+import com.agilecrm.cms.CMSPlugin;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.email.bounce.EmailBounceStatus.EmailBounceType;
 import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
@@ -37,14 +38,17 @@ import com.agilecrm.util.MD5Util;
 import com.agilecrm.util.VersioningUtil;
 import com.agilecrm.util.email.SendMail;
 import com.agilecrm.workflows.Workflow;
+import com.agilecrm.workflows.WorkflowBackup;
 import com.agilecrm.workflows.status.CampaignStatus;
 import com.agilecrm.workflows.status.util.CampaignStatusUtil;
 import com.agilecrm.workflows.status.util.CampaignSubscribersUtil;
 import com.agilecrm.workflows.unsubscribe.util.UnsubscribeStatusUtil;
+import com.agilecrm.workflows.util.WorkflowBackupUtil;
 import com.agilecrm.workflows.util.WorkflowDeleteUtil;
 import com.agilecrm.workflows.util.WorkflowUtil;
 import com.campaignio.cron.util.CronUtil;
 import com.google.appengine.api.NamespaceManager;
+import com.google.appengine.api.datastore.EntityNotFoundException;
 
 /**
  * <code>WorkflowsAPI</code> includes REST calls to interact with
@@ -157,11 +161,17 @@ public class WorkflowsAPI {
 			throws PlanRestrictedException, WebApplicationException {
 		workflow.save();
 		try {
+			// Inform to CMS plugins
+			CMSPlugin.updateToCmsPlugins(CMSPlugin.EventName.Campaigns, true);
+						
 			ActivityUtil.createCampaignActivity(ActivityType.CAMPAIGN_CREATE,
 					workflow, null);
 			
 			//Increase count of Campaign for AllDomainstats report in database
 			AllDomainStatsUtil.updateAllDomainStats(AllDomainStats.CAMPAIGN_COUNT);
+			//Increase count of top ten nodes count template for AllDomainstats report in database
+			
+			//AllDomainStatsUtil.updateWorkflowNodecount(AllDomainStatsUtil.getNodeCountFromWorkflow(workflow.rules));
 			
 		} catch (Exception e) {
 			System.out
@@ -187,6 +197,9 @@ public class WorkflowsAPI {
 			workflow.save();
 			
 			try {
+				// Inform to CMS plugins
+				CMSPlugin.updateToCmsPlugins(CMSPlugin.EventName.Campaigns, false);
+				
 				ActivityUtil.createCampaignActivity(ActivityType.CAMPAIGN_EDIT,
 						workflow, null);
 			} catch (Exception e) {
@@ -213,8 +226,12 @@ public class WorkflowsAPI {
 
 		if (workflow != null) {
 			try {
+				// Inform to CMS plugins
+				CMSPlugin.updateToCmsPlugins(CMSPlugin.EventName.Campaigns, false);
+				
 				ActivityUtil.createCampaignActivity(
 						ActivityType.CAMPAIGN_DELETE, workflow, null);
+				
 			} catch (Exception e) {
 				System.out
 						.println("exception occured while creating workflow creation activity");
@@ -239,9 +256,13 @@ public class WorkflowsAPI {
 		JSONArray workflowsJSONArray = new JSONArray(model_ids);
 
 		try {
+			// Inform to CMS plugins
+			CMSPlugin.updateToCmsPlugins(CMSPlugin.EventName.Campaigns, false);
+						
 			ActivitySave.createLogForBulkDeletes(EntityType.CAMPAIGN,
 					workflowsJSONArray,
 					String.valueOf(workflowsJSONArray.length()), "");
+			
 		} catch (Exception e) {
 			System.out
 					.println("exception occured while creating workflow creation activity");
@@ -586,4 +607,44 @@ public class WorkflowsAPI {
 					.build());
 		}
 	}
+	
+	@Path("/restore")
+	@POST
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	public Workflow restoreWorkflow(@QueryParam("workflow_id") Long workflowId) throws EntityNotFoundException
+	{
+		WorkflowBackup backup =  WorkflowBackupUtil.getWorkflowBackup(workflowId);
+		
+		if(backup == null)
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("No backup yet").build());
+		
+		// Deleting workflow backup after restore
+		backup.delete();
+		
+		Workflow workflow = WorkflowUtil.restoreWorkflow(workflowId, backup);
+		
+		try 
+		{
+			ActivityUtil.createCampaignActivity(ActivityType.CAMPAIGN_RESTORE, workflow, null);
+		}
+		catch (Exception e){
+			System.out.println("Exception occured while creating workflow restore activity" + e.getMessage());
+		}
+		
+		return workflow;
+	}
+
+	 @Path("/backups/get/{id}")
+     @GET
+     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+     public WorkflowBackup getWorkflowBackup(@PathParam("id") Long workflowId) throws EntityNotFoundException
+     {
+         WorkflowBackup backup =  WorkflowBackupUtil.getWorkflowBackup(workflowId);
+         
+         if(backup == null)
+                 throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("No backup yet").build());
+         
+         return backup;
+     }
+
 }

@@ -4276,7 +4276,7 @@ background-color : #522E2E;
     pointer-events: none;
     background: orange;
     border-radius: 1000px;
-    right: 5px;
+    right: 14px;
     top: 10px;
 }
 
@@ -4433,6 +4433,12 @@ border: 1px solid #e5e5e5;
   width: auto!important;
 }
 
+@media (max-width: 767px){
+  #affiliate-datepicker {
+    ext-align: center;
+    width: 100%;
+  }
+}
 .ticket-collection-container th {
   white-space: nowrap;
 }
@@ -4516,7 +4522,7 @@ div.list-tasks.panel-body:hover
 }
 #task-model-list .listed-task .task-content-view a[target="_blank"]
 {
-  font-weight:700;
+  font-weight:500;
   opacity:0.75;
   top:0px;
 }
@@ -4596,7 +4602,6 @@ div.list-tasks.panel-body:hover
 {
   width:150px;
 }
-
 
 /* start of dialler */
 
@@ -4680,4 +4685,34 @@ div.list-tasks.panel-body:hover
 /* end of dialler */
 .text-info-important{
     color: #23b7e5!important;
+}
+
+.textarea{
+   min-height: 49px;
+    height: auto;
+    width: 100%;
+    text-indent: 0px;
+    resize: none;
+    padding: 8px 8px 1px;
+    overflow-y: hidden;
+
+}
+
+#affiliate-tabs-content .zeroclipboard-is-hover{
+  background-color: #fafafa !important;
+}
+
+.bg-light.dker .nav>li:hover>a, .bg-light.dker .nav>li:focus>a, .bg-light.dker .nav>li.active>a{ background-color: #f6f8f8;}
+.bg-light .nav>li:hover>a, .bg-light .nav>li:focus>a, .bg-light .nav>li.active>a{ background-color: #f6f8f8;}
+.bg-white.b-r .nav>li:hover>a,.bg-white.b-r .nav>li:focus>a, .bg-white.b-r .nav>li.active>a{ background-color: #f6f8f8;}
+
+.right-pane-header{
+  font-size: 14px;
+  font-weight: 700;
+  color: #58666e!important;
+  background-color: #fff!important;
+}
+ul#recent-menu-model-list li:nth-child(even)
+{
+  background-color: #f9f9f9;
 }

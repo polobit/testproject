@@ -67,6 +67,7 @@ function updateData(params) {
 		appendItemCallback : function(el)
 		{
 			includeTimeAgo(el);
+			showContactImages(this.App_Calendar.allTasksListView.collection.toJSON());
 		}
 
 	});

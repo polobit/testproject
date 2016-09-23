@@ -85,6 +85,65 @@ $("#activities-listners").on('click', '.email-details', function(e) {
 
 });
 
+	$("#activities-listners").on('click', '#campaign-modify-history', function(e) 
+	{
+		e.preventDefault();
+
+		$(this).find("i").toggleClass('icon-plus').toggleClass('icon-minus');
+
+		var $campaign_history_details = $(this).siblings('div.campaign-history-details');
+		
+		// If already exists, just show
+		if($campaign_history_details.html())
+		{
+			$campaign_history_details.slideToggle("slow");
+			return;
+		}
+
+		var updated_workflow = $(this).data('entity');
+		var updated_workflow_rules = updated_workflow.rules;
+
+		$.ajax({
+			url: 'core/api/workflows/backups/get/' + updated_workflow.id,
+			dataType: 'json',
+			method: 'GET',
+			contentType: 'application/json',
+			success: function(workflow_backup){
+
+				var workflow_backup_rules = workflow_backup.rules;
+
+				head.js(LIB_PATH + 'lib/underscore-min.1.8.3.js', function(){
+
+				 	var is_equal = _.isEqual(updated_workflow_rules, workflow_backup_rules);
+
+					if(is_equal)
+					{
+						$campaign_history_details.html("<p>No modifications made to this campaign nodes.</p>");
+						$campaign_history_details.slideToggle("slow");
+						return;
+					}
+
+					get_campaign_changes(updated_workflow_rules, workflow_backup_rules, function(changes_map){
+
+							var details = "";
+
+							details = getTemplate('activity-campaign-history-modify', changes_map);
+							
+							$campaign_history_details.html(details);
+							$campaign_history_details.slideToggle("slow");
+					});
+				});
+			},
+
+			error: function(){
+
+				$campaign_history_details.html("<p>Modified details will be available on next save.</p>");
+				$campaign_history_details.slideToggle("slow");
+			}
+
+		});	
+	});
+
 }
 
 function getEventObject(id, callback)

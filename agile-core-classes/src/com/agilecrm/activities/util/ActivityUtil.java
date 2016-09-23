@@ -1587,10 +1587,16 @@ public class ActivityUtil
 					if (f.name.equals(contact.FIRST_NAME))
 					{
 						calledToName += f.value;
+						continue;
 					}
 					if (f.name.equals(contact.LAST_NAME))
 					{
 						calledToName += " " + f.value;
+						continue;
+					}
+					if(f.name.equals(contact.NAME)){
+						calledToName = f.value;
+						continue;
 					}
 				}
 
@@ -2210,10 +2216,16 @@ public class ActivityUtil
 							if (f.name.equals(contact.FIRST_NAME))
 							{
 								calledToName += f.value;
+								continue;
 							}
 							if (f.name.equals(contact.LAST_NAME))
 							{
 								calledToName += " " + f.value;
+								continue;
+							}
+							if(f.name.equals(contact.NAME)){
+								calledToName = f.value;
+								continue;
 							}
 						}
 
@@ -2292,11 +2304,17 @@ public class ActivityUtil
 					System.out.println("\t" + f.name + " - " + f.value);
 					if (f.name.equals(contact.FIRST_NAME))
 					{
-						calledToName += f.value;
+						calledToName = f.value;
+						continue;
 					}
 					if (f.name.equals(contact.LAST_NAME))
 					{
 						calledToName += " " + f.value;
+						continue;
+					}
+					if(f.name.equals(contact.NAME)){
+						calledToName = f.value;
+						continue;
 					}
 				}
 

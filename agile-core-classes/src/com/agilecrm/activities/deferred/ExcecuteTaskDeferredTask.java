@@ -67,6 +67,7 @@ public class ExcecuteTaskDeferredTask implements DeferredTask
 	    // Iterates over domain users to fetch due tasks of each user.
 	    for (DomainUser domainUser : domainUsers)
 	    {
+	    	try{
 		Long time = null;
 		int sec_per_day = 86400;
 		String timezone = UserPrefsUtil.getUserTimezoneFromUserPrefs(domainUser.id);
@@ -96,6 +97,11 @@ public class ExcecuteTaskDeferredTask implements DeferredTask
 		}
 
 		TaskReminder.sendDailyTaskReminders(domain, time, domainUser.id, timezone, user_email);
+	    	}
+	    	catch (Exception e)
+	    	{
+	    		System.out.println("Exception in task reminder: "+e);
+	    	}
 	    }
 
 	}
@@ -122,7 +128,7 @@ public class ExcecuteTaskDeferredTask implements DeferredTask
 		e.printStackTrace(new PrintWriter(errors));
 		String errorString = errors.toString();
 		e.printStackTrace();
-		System.out.println("exception at taskreminder deferred task " + domain);
+		System.out.println("exception at taskreminder deferred task " + domain+e);
 		/*Mandrill.sendMail("vVC_RtuNFH_5A99TEWXPmA", true, "noreplay@agilecrm.com", "task-reminder-failure",
 		        "jagadeesh@invox.com", null, null, "exception at taskreminder deferred task " + domain, null,
 		        errorString, null, null, null, null);*/
