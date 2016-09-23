@@ -132,20 +132,6 @@ function renderToMailList(url,offset_val,page_size_val){
 					that.render(data);
 					renderToMailView(data);
 					globalMailCollectionInstance.add(data.toJSON());
-					$('.collapse').on('show.bs.collapse', function (e) {
-						$("#mails-list").hide();
-						$("#compose").hide();
-						$("#mail-details-view").show();
-					    $('.collapse').not(e.target).removeClass('in');
-					});
-					$(document).on('click','.back-to-inbox',function(e) {
-						$("#mails-list").show();
-						$("#mail-details-view").hide();
-						$("#compose").hide();
-						$(".inbox-reply-view").html("");
-						$(".ng-show").show();
-					});
-					$("div.unread").css({"font-weight":"bold"});
 					inboxFlagListners();
 					hideTransitionBar();
 					$(".loading").hide();
@@ -439,7 +425,20 @@ function inboxFlagListners(){
 	}
 	$(".totalcount").text(totalcount);
 	
-	
+	$('.collapse').on('show.bs.collapse', function (e) {
+		$("#mails-list").hide();
+		$("#compose").hide();
+		$("#mail-details-view").show();
+	    $('.collapse').not(e.target).removeClass('in');
+	});
+	$(document).on('click','.back-to-inbox',function(e) {
+		$("#mails-list").show();
+		$("#mail-details-view").hide();
+		$("#compose").hide();
+		$(".inbox-reply-view").html("");
+		$(".ng-show").show();
+	});
+	$("div.unread").css({"font-weight":"bold"});
 
 	var color=['b-l-info','b-l-primary','b-l-warning','b-l-success',''];
 	var j =0;
@@ -474,18 +473,41 @@ function inboxFlagListners(){
 		var from_email = $('#inbox-email-type-select').attr("from_email");
 		var server = $("#inbox-email-type-select").attr("data-server");
 		var url ="";
+		var folder_name = "";
 
 		if(server == "google")
 			url = "core/api/social-prefs/setFlags?";
 		if(server == "imap")
 			url ="core/api/imap/setFlags?";
 
-		url = url+"from_email="+from_email+"&folder_name=INBOX&flag=DELETED&messageid="+dataVal,
+		var folder_type = $('#inbox-email-type-select').attr("folder-type");
+		if(folder_type == "inbox")
+			folder_name = "INBOX";
+		else if(folder_type == "sent")
+			folder_name = "Sent";
+		else if(folder_type == "draft")
+			folder_name = "Draft";
+		else if(folder_type == "trash")
+			folder_name = "Trash";
+
+		url = url+"from_email="+from_email+"&folder_name="+folder_name+"&flag=DELETED&messageid="+dataVal,
 		setSeenFlag(url);
+
+		var curr_val = $(".inti-val").text();
+		var offset = curr_val.split(" - ")[0].trim();
+		offset = parseInt(offset)+10;
+		var page_size = curr_val.split(" - ")[1].trim();
+		page_size = parseInt(page_size)+1;
+
+		url = $('#inbox-email-type-select').attr("data-url");
+		url = url.concat("&folder_name="+folder_name);
+
 		var tot_val = $(".totalcount").text();
 		$(".totalcount").text(parseInt(tot_val)-1);
 		$("#li"+dataVal).remove();
 		$("#"+dataVal).remove();
+		globalMailCollectionInstance.remove(dataVal); //.get(dataVal);
+		renderToMailList(url,offset,page_size);
 		$("#mails-list").show();
 		$("#mail-details-view").hide();
 		$(".inbox-reply-view").html("");
@@ -527,6 +549,7 @@ function initializeInboxListeners(){
 		$('#inbox-email-type-select').attr("folder-type","inbox");
 		var url = $('#inbox-email-type-select').attr("data-url");
 		url = url.concat("&folder_name=INBOX");
+		globalMailCollectionInstance = new globalMailCollection();
 		helperFunction();
 		renderToMailList(url,1,10);
 	});
@@ -537,6 +560,7 @@ function initializeInboxListeners(){
 		$('#inbox-email-type-select').attr("folder-type","sent");
 		var url = $('#inbox-email-type-select').attr("data-url");
 		url = url.concat("&folder_name=Sent");
+		globalMailCollectionInstance = new globalMailCollection();
 		helperFunction();
 		renderToMailList(url,1,10);
 	});
@@ -546,6 +570,7 @@ function initializeInboxListeners(){
 		$('#inbox-email-type-select').attr("folder-type","draft");
 		var url = $('#inbox-email-type-select').attr("data-url");
 		url = url.concat("&folder_name=Draft");
+		globalMailCollectionInstance = new globalMailCollection();
 		helperFunction();
 		renderToMailList(url,1,10);
 	});
@@ -555,6 +580,7 @@ function initializeInboxListeners(){
 		$('#inbox-email-type-select').attr("folder-type","trash");
 		var url = $('#inbox-email-type-select').attr("data-url");
 		url = url.concat("&folder_name=Trash");
+		globalMailCollectionInstance = new globalMailCollection();
 		helperFunction();
 		renderToMailList(url,1,10);
 	});
@@ -617,6 +643,7 @@ function initializeInboxListeners(){
 			for(var i=0;i<idcol.length;i++){
 				$("#li"+idcol[i]).remove();
 				$("#"+idcol[i]).remove();
+				globalMailCollectionInstance.remove(idcol[i]);
 			}
 			var tot_val = $(".totalcount").text();
 			$(".totalcount").text(parseInt(tot_val)-idcol.length);
@@ -625,7 +652,6 @@ function initializeInboxListeners(){
 
 
 			var curr_val = $(".inti-val").text();
-			//var tot_val = $(".totalcount").text();
 			var offset = curr_val.split(" - ")[0].trim();
 			offset = parseInt(offset)+10;
 			var page_size = curr_val.split(" - ")[1].trim();
@@ -637,6 +663,10 @@ function initializeInboxListeners(){
 				url = url.concat("&folder_name=INBOX");
 			else if(folder_type == "sent")
 					url = url.concat("&folder_name=Sent");
+			else if(folder_type == "draft")
+					url = url.concat("&folder_name=Draft");
+			else if(folder_type == "trash")
+					url = url.concat("&folder_name=Trash");
 
 			renderToMailList(url,offset,page_size);
 		}		
@@ -699,11 +729,23 @@ function initializeInboxListeners(){
 			url = url.concat("&folder_name=Trash");
 
 		if(globalMailCollectionInstance.length > 1){
+			if(page_size-offset < 9){
+				page_size = offset+9;
+			}
+			$(".inti-val").text(offset+" - "+page_size);
 			var source = $('#mail-template').html();
 	        var template = Handlebars.compile(source);
-			var html = template(globalMailCollectionInstance.toJSON().slice(offset-1,page_size-1));
+			var html = template(globalMailCollectionInstance.toJSON().slice(offset-1,page_size));
 			$("#mails-list").html(html);
-			
+			$("#mails-list").append("<li style='display:none' class='get-counts' data-cursor='"+offset+"' data-count='"+tot_val+"'></li>");
+
+			var source_view = $('#mail-view-template').html();
+	        var template_view = Handlebars.compile(source_view);
+			var html_view = template_view(globalMailCollectionInstance.toJSON().slice(offset-1,page_size));
+			$("#mail-details-view").html(html_view);
+
+			inboxFlagListners();
+
 		}else{
 			helperFunction();
 			renderToMailList(url,offset,page_size);
@@ -729,8 +771,27 @@ function initializeInboxListeners(){
 		else if(folder_type == "trash")
 			url = url.concat("&folder_name=Trash");
 
-		helperFunction();
-		renderToMailList(url,offset,page_size);
+		if(page_size > tot_val){
+			page_size = tot_val;
+		}
+		if(globalMailCollectionInstance.length > page_size ||  globalMailCollectionInstance.length == page_size ){
+			$(".inti-val").text(offset+" - "+page_size);
+			var source = $('#mail-template').html();
+	        var template = Handlebars.compile(source);
+			var html = template(globalMailCollectionInstance.toJSON().slice(offset-1,page_size));
+			$("#mails-list").html(html);
+			$("#mails-list").append("<li style='display:none' class='get-counts' data-cursor='"+offset+"' data-count='"+tot_val+"'></li>");
+
+			var source_view = $('#mail-view-template').html();
+	        var template_view = Handlebars.compile(source_view);
+			var html_view = template_view(globalMailCollectionInstance.toJSON().slice(offset-1,page_size));
+			$("#mail-details-view").html(html_view);
+
+			inboxFlagListners();
+		}else{
+			helperFunction();
+			renderToMailList(url,offset,page_size);
+		}
 
 	});
 	$(".message_sent_strip_close").unbind().click(function(e) {
