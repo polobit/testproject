@@ -82,6 +82,9 @@ public class LandingPageHelper {
   }
   
   private void getDomainOwnerJsApiKeyFromDataStore() {
+    if(requestingDomain != null) {
+      NamespaceManager.set(requestingDomain);
+    }
     Key<DomainUser> userKey = DomainUserUtil.getDomainOwnerKey(requestingDomain);
     Long domainUserId = userKey.getId();
     APIKey apiKey = APIKey.getAPIKeyRelatedToUser(domainUserId);
