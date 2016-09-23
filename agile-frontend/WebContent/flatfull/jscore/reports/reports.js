@@ -10,10 +10,13 @@ $(function()
       $(this).find('.highcharts-button').hide();
   });
   $('body').on('click','.maintab',function(e){
-     /*var c = $(this).find(".sub-nav-tab").children()[0];
+    /* var c = $(this).find(".sub-nav-tab").children()[0];
      var d = c.children;
      var route = $(d).attr("href").split("#")[1];
-     Backbone.history.navigate(route, true)*/
+     Backbone.history.navigate(route, true);*/
+     if(($(this).children()[0].text == "Activities")||($(this).children()[0].text == "Campaigns") ){
+     	return;
+     }
      $(this).find(".sub-nav-tab>li:first").trigger('click')
   });
 });
