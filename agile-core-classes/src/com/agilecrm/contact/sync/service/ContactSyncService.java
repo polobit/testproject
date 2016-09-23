@@ -38,6 +38,7 @@ import com.agilecrm.util.FailedContactBean;
 import com.agilecrm.util.email.SendMail;
 import com.google.agile.repackaged.appengine.tools.cloudstorage.GcsFileOptions;
 import com.google.appengine.api.NamespaceManager;
+import com.google.gdata.data.contacts.ContactEntry;
 import com.googlecode.objectify.Key;
 import com.thirdparty.google.ContactPrefs;
 
@@ -166,7 +167,7 @@ public abstract class ContactSyncService implements IContactSyncService
 
 	    ++total_synced_contact;
 
-	    contact = saveContact(contact,mergedContacts);
+	    contact = saveContact(contact,mergedContacts,object);
 	    System.out.println("Contact After saving"+contact);
 	   contactWrapper.updateContact(contact);
 	    // Works as save callback to perform actions like creating
@@ -373,7 +374,7 @@ public abstract class ContactSyncService implements IContactSyncService
     {
 	for (Contact contact : contacts)
 	{
-	    saveContact(contact,mergedContacts);
+	    saveContact(contact,mergedContacts,null);
 	}
 
 	// Sets total number of contacts imported/updated
@@ -447,7 +448,7 @@ public abstract class ContactSyncService implements IContactSyncService
 	return ContactUtil.mergeContactFields(contact);
     }
     
-    private Contact saveContact(Contact contact,List<FailedContactBean> mergedContacts)
+    private Contact saveContact(Contact contact,List<FailedContactBean> mergedContacts,Object object)
     {
 	addTagToContact(contact);
 	Map<String, Object> queryMap = null;
@@ -471,8 +472,9 @@ public abstract class ContactSyncService implements IContactSyncService
 	System.out.println("Is Contact duplicate  in contactsyncimpl is" + isUpdated);
 	if (isUpdated)
 	{
-		if (prefs.type == Type.GOOGLE){
-	    contact = mergeContacts(contact,queryMap);
+		
+	    if (prefs.type == Type.GOOGLE){
+	    	 contact = mergeContacts(contact,object);
 	    ContactField googleContactfield = contact.getContactFieldByName("Contact type");
 
 		// Does not create contact if it is already imported form google
@@ -483,6 +485,8 @@ public abstract class ContactSyncService implements IContactSyncService
 				contact.tags.remove(StringUtils.capitalize(tag));
 		}
 		}
+	    else
+	    	contact = mergeContacts(contact,queryMap);
 	    accessControl.setObject(contact);
 	    if (!accessControl.canCreate())
 	    {
@@ -531,7 +535,30 @@ public abstract class ContactSyncService implements IContactSyncService
 	return contact;
     }
 
-    /**
+    private Contact mergeContacts(Contact contact,Object object)
+	{
+		// TODO Auto-generated method stub
+    	List<ContactField> emails = contact.getContactPropertiesList(Contact.EMAIL);
+
+    	if (emails.size() == 0)
+    	    return contact;
+
+    	Contact oldContact = ContactUtil.getDuplicateContact(contact);
+
+    	if (oldContact != null && oldContact.updated_time>=((ContactEntry)object).getUpdated().getValue())
+    	{
+    		List<ContactField> field = contact.getContactPropertiesList(Contact.COMPANY);
+    		contact.properties.remove(field.get(0));
+    		field = contact.getContactPropertiesList(Contact.TITLE);
+    		contact.properties.remove(field.get(0));
+    	}
+    	if (oldContact != null)
+    	    return ContactUtil.mergeContactFeilds(contact, oldContact);
+
+    	return oldContact;
+	}
+
+	/**
      * Adds the tag to contact.
      * 
      * @param contact
