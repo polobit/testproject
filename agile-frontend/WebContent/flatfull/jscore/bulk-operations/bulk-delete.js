@@ -479,26 +479,57 @@ function bulk_delete_operation(url, id_array, index_array, table, is_grid_view, 
 				
 				if(SELECT_ALL && SELECT_ALL == true){
 					var type ="";
-					if($(table).attr('id') == "contacts-table")
+					var countURL = "";
+					if($(table).attr('id') == "contacts-table"){
 						type = "contacts";
-					if($(table).attr('id') == "companies")
+						countURL = App_Contacts.contactsListView.options.url + "/count";
+					}
+					if($(table).attr('id') == "companies"){
 						type = "companies";
-					/*if(res_count && res_count < 800){
-						setTimeout(function() { getAndUpdateCollectionCount(type, $("#contacts-listener-container")); }, 5000);
-					}*/
-					setTimeout(function() {
-						var count_message = "<small> (0 " +_agile_get_translated_val('other','total')+") </small>";
-						$('#contacts-count').html(count_message);
+						countURL = App_Companies.companiesListView.options.url + "/count";
+					}
+					var count_one = null;
+					var count_two= 0;
+					i = 0;
+					var couninterval = setInterval(function() {
+						if(count_one != count_two){
+							$.ajax({
+							 	url:countURL,
+							 	method:"GET",
+							 	success:function(data){
+							 		if(i == 0){
+							 			count_one = data;
+							 			i = 1;
+							 		}else{
+							 			count_two = data;
+							 			i = 0;
+							 		}
+							 		var count_message = "<small> (" + data + " "+_agile_get_translated_val('other','total')+") </small>";
+									$('#contacts-count').html(count_message);
+									if(data == 0)
+							 			clearInterval(couninterval);
+							 	}
+							 });
+						}else{
+							clearInterval(couninterval);
+						}
 					}, 5000);
 				}else{
+					var time = "";
+					if(count < 100){
+						time = 1000;
+					}else{
+						time = 5000;
+					}
 					if($("#contacts-count").is(":visible")){
 						var con_count = $('#contacts-count').text();
 						if(con_count){
 							var res_count = con_count.split("(")[1].split(" ")[0];
 							res_count = parseInt(res_count.trim())-count;
-
-							var count_message = "<small> (" + res_count + " " +_agile_get_translated_val('other','total')+") </small>";
-							$('#contacts-count').html(count_message);
+							setTimeout(function() {
+								var count_message = "<small> (" + res_count + " " +_agile_get_translated_val('other','total')+") </small>";
+								$('#contacts-count').html(count_message);
+							},time);
 						}
 					}
 					
