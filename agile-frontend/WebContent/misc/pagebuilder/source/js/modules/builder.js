@@ -1,3 +1,5 @@
+/*global  _AGILE_LOCALE_JSON*/
+/*global  _LANGUAGE*/
 (function () {
     "use strict";
 
@@ -38,7 +40,7 @@
         init: function(){
                                                 
             //load blocks
-            $.getJSON(appUI.baseUrl+'elements.json?v=12345678', function(data){ builderUI.allBlocks = data; builderUI.implementBlocks(); });
+            $.getJSON(appUI.siteUrl+'locales/locales/'+_LANGUAGE+'/elements.json?v=12345678', function(data){ builderUI.allBlocks = data; builderUI.implementBlocks(); });
             
             //sitebar hover animation action
             $(this.menuWrapper).on('mouseenter', function(){
@@ -86,7 +88,7 @@
             
             for( var key in this.allBlocks.elements ) {
                 
-                var niceKey = key.toLowerCase().replace(" ", "_");
+                var niceKey = key.toLowerCase().replace(/\s/g, '_');
                 
                 $('<li><a href="" id="'+niceKey+'">'+key+'</a></li>').appendTo('#menu #main ul#elementCats');
                 
@@ -1072,25 +1074,25 @@
             var delButton = document.createElement('BUTTON');
             delButton.setAttribute('class', 'btn btn-inverse btn-sm deleteBlock');
             delButton.setAttribute('type', 'button');
-            delButton.innerHTML = '<i class="fui-trash"></i> <span>remove</span>';
+            delButton.innerHTML = '<i class="fui-trash"></i> <span>' + _AGILE_LOCALE_JSON['remove'] + '</span>';
             delButton.addEventListener('click', this, false);
                     
             var resetButton = document.createElement('BUTTON');
             resetButton.setAttribute('class', 'btn btn-inverse btn-sm resetBlock');
             resetButton.setAttribute('type', 'button');
-            resetButton.innerHTML = '<i class="fa fa-refresh"></i> <span>reset</span>';
+            resetButton.innerHTML = '<i class="fa fa-refresh"></i> <span>'+ _AGILE_LOCALE_JSON['reset'] + '</span>';
             resetButton.addEventListener('click', this, false);
                     
             var htmlButton = document.createElement('BUTTON');
             htmlButton.setAttribute('class', 'btn btn-inverse btn-sm htmlBlock');
             htmlButton.setAttribute('type', 'button');
-            htmlButton.innerHTML = '<i class="fa fa-code"></i> <span>source</span>';
+            htmlButton.innerHTML = '<i class="fa fa-code"></i> <span>' + _AGILE_LOCALE_JSON['source'] + '</span>';
             htmlButton.addEventListener('click', this, false);
 
             var dragButton = document.createElement('BUTTON');
             dragButton.setAttribute('class', 'btn btn-inverse btn-sm dragBlock');
             dragButton.setAttribute('type', 'button');
-            dragButton.innerHTML = '<i class="fa fa-arrows"></i> <span>Move</span>';
+            dragButton.innerHTML = '<i class="fa fa-arrows"></i> <span>' + _AGILE_LOCALE_JSON['Move']+ '</span>';
             dragButton.addEventListener('click', this, false);
 
             var globalLabel = document.createElement('LABEL');
@@ -1830,7 +1832,7 @@
                 window.clearInterval(this.autoSaveTimer);
                 this.autoSaveTimer = setTimeout(site.autoSave, bConfig.autoSaveTimeout);
                 
-                $('#savePage .bLabel').text("Save now (!)");
+                $('#savePage .bLabel').text(_AGILE_LOCALE_JSON['save-now'] + " (!)");
                 
                 if( site.activePage.status !== 'new' ) {
                 
@@ -1840,7 +1842,7 @@
             
             } else {
     
-                $('#savePage .bLabel').text("Nothing to save");
+                $('#savePage .bLabel').text(_AGILE_LOCALE_JSON['nothing-to-save']);
                 
                 site.updatePageStatus('');
 
@@ -1950,7 +1952,7 @@
                         publishPageBtn.attr("href", window.location.origin+"/#landing-page-settings/"+appUI.agilePageId);
                         pagebuilderCopyBtn.attr("href", window.location.origin+"/pagebuilder/copy-"+appUI.agilePageId);
         
-                        $('#successModal .modal-body').html("Landing page have been saved successfully!");
+                        $('#successModal .modal-body').html(_AGILE_LOCALE_JSON['saved-successfully'] + "!");
                         $('#successModal').modal('show');
                 
                     }
