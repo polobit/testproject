@@ -118,8 +118,8 @@ public class DealTriggerUtil
 			if(updatedOpportunity.milestone.equals(wonMilestone))
 			{
 				String domain = NamespaceManager.get();	
-				String msg = "Deal won alert"; 
-				 BulkActionNotifications.publishNotification(msg);
+				//String msg = "Deal won alert"; 
+				 //BulkActionNotifications.publishNotification(msg);
 				
 				System.out.println("Currrent domain ="+domain);
 				 HashMap<String, Object> map = new HashMap<String, Object>();
@@ -129,9 +129,9 @@ public class DealTriggerUtil
 			{
 				 map.put("user", user);
 				 NotificationPrefs NotePref = NotificationPrefsUtil.getNotificationPrefs(AgileUser.getCurrentAgileUserFromDomainUser(user.id));
-				if(NotePref.deal_closed_email)
-				 SendMail.sendMail(user.email," Deal Won Alert", SendMail.Deal_Won_status,map);
-				}
+				 if(NotePref.deal_closed_email)
+					 SendMail.sendMail(user.email," Deal Won Alert", SendMail.Deal_Won_status,map);
+			}
 			}
 			// execute trigger for deal milestone change.
 			executeTriggerForDealsBasedOnCondition(updatedOpportunity.relatedContacts(), oldOpportunity, updatedOpportunity,
