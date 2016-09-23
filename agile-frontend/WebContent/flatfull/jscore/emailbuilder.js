@@ -94,6 +94,8 @@ function initializeEmailBuilderListeners() {
            });
         });
 
+        videoRecordPreview.videoRecordModalLoad();
+
     });
 
     $('body').on('click','#videoRecordSaveBtn', function(e){
@@ -122,12 +124,15 @@ function initializeEmailBuilderListeners() {
         e.preventDefault();
         $(".videoRecordFormMessageHolder").html("");
         var selectedVal = $(this).val();
-        if(selectedVal === "AGILE_CREATE_NEW_VIDEO") {
+        /*if(selectedVal === "AGILE_CREATE_NEW_VIDEO") {
             $("#headerTitle").html("Record your video");
             $("#videoRecordSelectFields").hide();
             $("#videoRecordType").val("new");
             $("#videoRecordFields").show();
 
+        }*/
+        if(selectedVal !== ""){
+            videoRecordPreview.showVideoPreviewModal(selectedVal);
         }
     });
 
@@ -343,7 +348,7 @@ var emailVideoRecord = {
                 }
             });
         } else {
-            $(".videoRecordFormMessageHolder").html("Error occured.");
+            $(".videoRecordFormMessageHolder").html("Please record a video.");
             $("#videoRecordSaveBtn").text("Save");
             $("#videoRecordSaveBtn").prop('disabled', false);
         }
@@ -372,9 +377,50 @@ var emailVideoRecord = {
     },
 
     buildVideoPageURL : function(videoId) {
-        var videoURL = window.location.protocol + "//" + window.location.host + "/video/" + videoId;
-        document.getElementById('emailBuilderFrame').contentWindow.$("#image-link").val(videoURL);
+        var videoURL = window.location.origin + "/video/" + videoId;
+        document.getElementById('emailBuilderFrame').contentWindow.$("#video-link").val(videoURL);
         $("#videoRecordModal").modal("hide");
     }
 
+};
+
+var videoRecordPreview = {
+
+    videoRecordModalLoad : function(){
+        var videoLinkUrl = document.getElementById('emailBuilderFrame').contentWindow.$("#video-link").val();
+
+        if(videoLinkUrl != undefined && videoLinkUrl != ""){
+
+            var matchResults = videoLinkUrl.match(/video\/([0-9]*)/);
+
+            if(matchResults[1] != ""){
+                $('select[id=video-record-select]').val(matchResults[1]);
+               //$("#video-record-select").val(matchResults[1]);
+               videoRecordPreview.showVideoPreviewModal(matchResults[1]);
+            } 
+        }
+    },
+
+    showVideoPreviewModal : function(selectedVideoId){
+        var url = window.location.origin+"/video/"+selectedVideoId;
+        url += "?embed=true";
+
+        $("#videoPreviewField").show();
+        $('iframe[id=videoPreviewIframeId]').attr('src',url);
+        
+        //url += "&autoplay=1";
+        /*$.ajax({
+            type: "POST", 
+            url: url,       
+            success: function (data) {
+                $("#videoPreviewField").show();
+                $('iframe[id=videoPreviewIframeId]').attr('src',url);
+                $("#videoPreview").html(data);
+            },
+            failure:function(){
+                $("#videoPreviewField").show();
+                $("#videoPreview").html("No video found.").css("color","red"); 
+            }
+        });*/
+    }
 };

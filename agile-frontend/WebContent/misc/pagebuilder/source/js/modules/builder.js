@@ -34,6 +34,8 @@
         tempFrame: {},
 
         currentResponsiveMode: {},
+
+        siteUrl: appUI.siteUrl,
                 
         init: function(){
                                                 
@@ -1705,6 +1707,19 @@
                
                for(var i=0;i<respData.length;i++){
                  $('#agileform_id').append("<option value= "+ window.CURRENT_AGILE_DOMAIN +"_"+respData[i].id +">"+respData[i].formName+"</option>");
+               }    
+                
+            }).fail(function(jqXHR) {
+                //login required
+                if (jqXHR.status === 401) {
+                    window.location = appUI.siteUrl + "login#landing-pages";
+                }
+            });
+
+            $.getJSON(appUI.siteUrl+"core/api/video-record", function(respVideoData){
+               
+               for(var i=0;i<respVideoData.length;i++){
+                 $('#videoRecordId').append("<option value= "+respVideoData[i].id +">"+respVideoData[i].name+"</option>");
                }    
                 
             }).fail(function(jqXHR) {

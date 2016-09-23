@@ -1938,6 +1938,16 @@ if(idPath != null && !StringUtils.isEmpty(idPath) && !idPath.equals("/")) {
                     <label>Vimeo Video ID:</label>
                     
                     <input type="text" class="form-control margin-bottom-20" id="vimeoID" placeholder="Enter a Vimeo video ID" value="">
+
+                    <p class="text-center or">
+                        <span>OR</span>
+                    </p>
+
+                    <label>Your Video:</label>
+                    
+                    <select id="videoRecordId" name="videoRecordlist" class="btn btn-default btn-embossed btn-block margin-bottom-20">
+                        <option value="">Select Video</option>
+                    </select>
                     
                 </div><!-- /.tab-pane -->
             

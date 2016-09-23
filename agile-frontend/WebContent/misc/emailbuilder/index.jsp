@@ -224,9 +224,47 @@ AGILE_EB_OPTIONS['templateId'] = "";
                     </form>
 
                     <div id="imageproperties" style="margin-top:5px">
-                        <h4 class="text text-info">Image</h4>
+                        <h4 class="text text-info" id="imageHeaderId">Image</h4>
+
+                        <div class="form-group" id="video-record-btn-holder" style="display:none;">
+
+                            <div class="row">
+                                <div class="col-xs-8">
+                                    <h5><span>Record a video</span><h5>
+                                </div>
+                                <div class="col-xs-4">
+                                    <button type="button" class="btn btn-default" id="videoRecordBtnNew" style="width:73px;">
+                                        <span class="fa fa-video-camera"></span>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-sm-2 text-right">
+                                    <span>(OR)</span>
+                                </div>
+                            </div>
+                            <br/>
+
+                            <div class="row">
+                                <div class="col-xs-8">
+                                    <input type="text" id="video-link" class="form-control" placeholder="Link to Video URL" aria-describedby="basic-addon11" data-id="none">
+                                </div>
+                                
+                                <div class="col-xs-4">
+                                    <button type="button" class="btn btn-default" id="videoRecordBtn">
+                                        <span>Browse</span>
+                                    </button>
+                                </div>
+                            </div>
+
+                        </div>
+
                         <div class="form-group">
 
+                            <div class="row" id="videoThumbnail" style="display:none;">
+                                <label for="video-record-Thumbnail" class="col-xs-8 control-label">Thumbnail</label>
+                            </div>
                             <div class="row">
                                 <div class="col-xs-8">
                                     <input type="text" id="image-url" class="form-control" data-id="none"/>
@@ -242,22 +280,18 @@ AGILE_EB_OPTIONS['templateId'] = "";
                         <div class="form-group">
                             
                             <div class="row" id="image-link-holder">
-                                <div class="col-xs-8">
-                                    <input type="text" id="image-link" class="form-control" placeholder="Link to Video URL" aria-describedby="basic-addon11" data-id="none">
+                                <div class="col-xs-11">
+                                    <div class="input-group">
+                                        <span class="input-group-addon" id="basic-addon11">
+                                            <i class="fa fa-paperclip"></i>
+                                        </span>
+                                        <input type="text" id="image-link" class="form-control" 
+                                        placeholder="Link to Web Address(URL)" aria-describedby="basic-addon11" data-id="none">
+                                    </div>
                                     <br>
                                 </div>
-                                
-                                <div class="col-xs-4" id="video-record-btn-holder" style="display:none;">
-                                    <div class="btn-group" role="group">
-                                        <button type="button" class="btn btn-default btn-sm" id="videoRecordBtnNew">
-                                            <span class="fa fa-video-camera fa-lg"></span>
-                                        </button>
-                                        <button type="button" class="btn btn-default btn-sm" id="videoRecordBtn">
-                                            <span class="fa fa-check-circle-o fa-lg"></span>
-                                        </button>
-                                    </div>
-                                </div>
                             </div>
+                            
                             <div class="row">
                                 <div class="col-xs-11">
                                     <input type="text" id="image-alt-text" class="form-control" placeholder="Alternate Text" data-id="none">
@@ -273,8 +307,8 @@ AGILE_EB_OPTIONS['templateId'] = "";
                                           <option value="Right">Right</option>
                                            <option value="Left">Left</option>
                                 </select> -->
-                          <br>
-                          </div>
+                                    <br>
+                                </div>
                             </div>
 
                             <div class="row">
@@ -760,8 +794,8 @@ var length = $($('#' + $('#path').val()).find('table tbody tr td:eq(' + indexBnt
                     </form>
                 </div>
 
-                <div class="text text-right" style="margin-top: 5px">
-                    <a href="#" id="saveElement" class="btn btn-info">done</a>
+                <div class="text text-right" style="margin-top: 5px;">
+                    <a href="#" id="saveElement" class="btn btn-info">Done</a>
                 </div>
             </div>
             <!-- END SETTINGS -->

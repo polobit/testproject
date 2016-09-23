@@ -3,7 +3,7 @@
 	<div class="modal-content">
 		<div class="modal-header">
 			<button class="close" data-dismiss="modal">&times;</button>
-			<h3 id="headerTitle">Select video</h3>
+			<h3 id="headerTitle">Video</h3>
 		</div>
 		<form class="form-horizontal" id="videoRecordForm">
 			<div class="modal-body">
@@ -11,12 +11,15 @@
 
 				<div class="form-group" style="margin-bottom:2px;">
 					<label class="col-sm-2 control-label"></label>
-					<div class="col-sm-8"><span generated="true" class="help-inline videoRecordFormMessageHolder"></span></div>
+					<div class="col-sm-8 text-center">
+						<span generated="true" class="help-inline videoRecordFormMessageHolder"></span>
+					</div>
 				</div>
 
 				<div id="videoRecordSelectFields">
 					<div class="form-group">
-						<label for="video-record-select" class="col-sm-2 control-label">Select</label>
+						<!-- <label for="video-record-select" class="col-sm-2 control-label">Select</label> -->
+						<div class="col-sm-2"></div>
 						<div class="col-sm-8">
 						<select class="form-control" id="video-record-select" name="video-record-select">
 						<option value="">Select</option>
@@ -29,11 +32,20 @@
 					</div>
 				</div>
 
+				<div id="videoPreviewField" style="display:none;">
+					<h5>Video Preview</h5>
+					<div class="form-group">
+						<div class="col-sm-12 text-center" id="videoPreview"></div>
+							<iframe src="" frameborder="0" width="100%" height="320" id="videoPreviewIframeId" allowfullscreen></iframe>
+						
+					</div>
+				</div>
+
 				<div id="videoRecordFields" style="display:none;">
 					<div class="form-group">
-						<label for="video-record-name" class="col-sm-2 control-label">Name</label>
+						<label for="video-record-name" class="col-sm-2 control-label">Name <span class="field_req">*</span></label>
 						<div class="col-sm-8">
-						<input type="text" class="form-control" id="video-record-name" name="video-record-name" placeholder="Provide a name to your video">
+						<input type="text" class="form-control" id="video-record-name" name="video-record-name" placeholder="Provide a name to your video" maxlength="25">
 						</div>
 					</div>
 					<iframe src="misc/video-record/audio-video.html" frameborder="0" width="100%" height="460"></iframe>

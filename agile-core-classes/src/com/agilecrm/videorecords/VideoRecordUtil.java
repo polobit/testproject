@@ -3,6 +3,7 @@ package com.agilecrm.videorecords;
 import java.util.List;
 
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.landingpages.LandingPage;
 
 public class VideoRecordUtil {
   public static ObjectifyGenericDao<VideoRecord> dao = new ObjectifyGenericDao<VideoRecord>(
@@ -17,13 +18,15 @@ public class VideoRecordUtil {
     }
   }
 
-  public List<VideoRecord> getAll() {
-    try {
-      return dao.fetchAll();
-    } catch (Exception e) {
-      e.printStackTrace();
-      return null;
-    }
+  public List<VideoRecord> getAll(String fieldName) {
+	  try {
+		  //return dao.fetchAll();
+		  return dao.ofy().query(VideoRecord.class).order(fieldName).list();
+		  
+	} catch (Exception e) {
+		e.printStackTrace();
+		return null;
+	}
   }
 
 }

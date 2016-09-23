@@ -57,9 +57,15 @@ public class VideoRecordServlet extends HttpServlet {
         videoRecord = videoRecordUtil.get(Long.parseLong(videoId));
       }
       if (videoRecord != null) {
+    	String embedFlag = request.getParameter("embed");
         ServletContext context = getServletContext();
         String dirPath = context.getRealPath("misc/video-record");
-        String defaultTemplate = FileStreamUtil.readResource(dirPath + "/player-template.html");
+        String defaultTemplate = "";
+        if(embedFlag != null && embedFlag.equalsIgnoreCase("true")){
+        	defaultTemplate = FileStreamUtil.readResource(dirPath + "/player-template-embed.html");
+        }else{
+        	defaultTemplate = FileStreamUtil.readResource(dirPath + "/player-template.html");
+        }
         defaultTemplate = defaultTemplate.replace("{{VIDEO_SOURCE}}", videoRecord.url);
         out.write(defaultTemplate);
       } else {

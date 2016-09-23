@@ -6,6 +6,8 @@
   <style>
   #myVideo {
       margin: 0 auto;
+      width: 100%;
+      height: 100%;
   }
   .vjs-big-play-button {
       top: 50% !important;
@@ -13,12 +15,15 @@
       /* bring your own prefixes */
       transform: translate(-50%, -50%) !important;
   }
+  /*.vjs-live-display{
+    display: none;
+  }*/
   </style>
 </head>
 
 <body>
 <div id="videoHolder" style="display:none;">
-  <video id="myVideo" class="video-js" controls preload="auto" width="640" height="264" data-setup="{}">
+  <video id="myVideo" class="video-js" controls preload="auto" width="640" height="264" data-setup="{}" autoplay ="true">
     <source src="{{VIDEO_SOURCE}}" type='video/webm'>
     <p class="vjs-no-js">
       To view this video please enable JavaScript, and consider upgrading to a web browser that

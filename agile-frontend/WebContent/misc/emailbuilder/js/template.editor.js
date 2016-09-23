@@ -161,6 +161,7 @@ function handleObjects() {
                         $('#image-h').val(img.height());
                         $('#image-alt-text').val(img.attr('alt'));
 
+                        $('#video-link').val("");
                         $('#image-link').val("");
                         if(img.parent('a').length) {
                             $('#image-link').val(addhttp(img.parent('a').attr('href')));
@@ -168,6 +169,7 @@ function handleObjects() {
 
                         hideAllSettings();
                         $('#imageproperties').show();
+                        $("#imageHeaderId").html("Image");
                         $('#image-link-holder').show();
                         //$("#select_alignment").show();
                         $('#image-width-height').show();
@@ -192,15 +194,18 @@ function handleObjects() {
                         $('#image-alt-text').val(img.attr('alt'));
 
                         $('#image-link').val("");
+                        $('#video-link').val("");
                         if(img.parent('a').length) {
-                            $('#image-link').val(addhttp(img.parent('a').attr('href')));
+                            $('#video-link').val(addhttp(img.parent('a').attr('href')));
                         }
 
                         hideAllSettings();
                         $('#imageproperties').show();
-                        $('#image-link-holder').show();
                         $('#video-record-btn-holder').show();
                         $('#image-width-height').show();
+                        $("#imageHeaderId").html("Video");
+                        $('#videoThumbnail').show();
+                        
 
                         break;
                     case 'imgtxtcol':
@@ -223,6 +228,7 @@ function handleObjects() {
                         $('#image-h').val(img.height());
                         $('#image-alt-text').val(img.attr('alt'));
 
+                        $('#video-link').val("");
                         $('#image-link').val("");
                         if(img.parent('a').length) {
                             $('#image-link').val(addhttp(img.parent('a').attr('href')));
@@ -230,6 +236,7 @@ function handleObjects() {
 
                         hideAllSettings();
                         $('#imageproperties').show();
+                        $("#imageHeaderId").html("Image");
                         $('#image-link-holder').show();
                         break;
                     case 'imgtxtincol':
@@ -273,6 +280,7 @@ function handleObjects() {
                         $('#image-h').val(img.height());
                         $('#image-alt-text').val(img.attr('alt'));
 
+                        $('#video-link').val("");
                         $('#image-link').val("");
                         if(img.parent('a').length) {
                             $('#image-link').val(addhttp(img.parent('a').attr('href')));
@@ -280,6 +288,7 @@ function handleObjects() {
 
                         hideAllSettings();
                         $('#imageproperties').show();
+                        $("#imageHeaderId").html("Image");
                         $('#image-link-holder').show();
 
                         break;
@@ -649,7 +658,7 @@ function getIndex(itm, list) {
 
 function hideAllSettings(exceptThisElement) {
 
-    var settingsHolderSelectors = ['#editor','#buttons','#buttonstxt','#imageproperties','#social-links', '#user-poll', '#select_alignment', '#image-width-height', '#video-record-btn-holder', '#image-link-holder'];
+    var settingsHolderSelectors = ['#editor','#buttons','#buttonstxt','#imageproperties','#social-links', '#user-poll', '#select_alignment', '#image-width-height', '#video-record-btn-holder', '#image-link-holder', '#videoThumbnail'];
 
     if(typeof exceptThisElement != "undefined") {
         var index = settingsHolderSelectors.indexOf(exceptThisElement);
@@ -793,6 +802,13 @@ $(document).ready(function () {
                 $(anchorTag).attr('href', addhttp($('#image-link').val())) ;
             } else {
                 $('#'+id).wrap("<a target='_blank' class='imgLink' href='http://"+$('#image-link').val()+"'>");
+            }
+         }else if ($('#video-link').val()) {
+            if($('#'+id).parent("a").length) {
+                var anchorTag = $('#'+id).parent("a");
+                $(anchorTag).attr('href', addhttp($('#video-link').val())) ;
+            } else {
+                $('#'+id).wrap("<a target='_blank' class='imgLink' href='http://"+$('#video-link').val()+"'>");
             }
          }
        /*adding new select-box for the image adjustment /alignment
@@ -1345,12 +1361,15 @@ $('div.buttonStyleTxt').on('shown.bs.popover', function () {
         $('#image-w').val($(this).width());
         $('#image-h').val($(this).height());
         $('#image-alt-text').val($(this).attr('alt'));
+
+        $('#video-link').val("");
         $('#image-link').val("");
         if(img.parent('a').length) {
             $('#image-link').val(addhttp(img.parent('a').attr('href')));
         }
         hideAllSettings();
         $('#imageproperties').show();
+        $("#imageHeaderId").html("Image");
         $('#image-link-holder').show();
     });
 
