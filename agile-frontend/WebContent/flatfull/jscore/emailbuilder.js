@@ -91,10 +91,9 @@ function initializeEmailBuilderListeners() {
         $.getJSON("core/api/video-record", function(data) {
            getTemplate("video-record-modal",data, undefined, function(ui){
             $videoRecordModalEl.html(ui).modal("show");
+                videoRecordPreview.videoRecordModalLoad();                                                                                                                                                                                                                                                                                                                                                                                                      
            });
         });
-
-        videoRecordPreview.videoRecordModalLoad();
 
     });
 
@@ -395,32 +394,16 @@ var videoRecordPreview = {
 
             if(matchResults[1] != ""){
                 $('select[id=video-record-select]').val(matchResults[1]);
-               //$("#video-record-select").val(matchResults[1]);
-               videoRecordPreview.showVideoPreviewModal(matchResults[1]);
+                videoRecordPreview.showVideoPreviewModal(matchResults[1]);
             } 
         }
     },
 
     showVideoPreviewModal : function(selectedVideoId){
-        var url = window.location.origin+"/video/"+selectedVideoId;
-        url += "?embed=true";
+        var url = window.location.origin+"/video/"+selectedVideoId+"?embed=true";
 
         $("#videoPreviewField").show();
         $('iframe[id=videoPreviewIframeId]').attr('src',url);
         
-        //url += "&autoplay=1";
-        /*$.ajax({
-            type: "POST", 
-            url: url,       
-            success: function (data) {
-                $("#videoPreviewField").show();
-                $('iframe[id=videoPreviewIframeId]').attr('src',url);
-                $("#videoPreview").html(data);
-            },
-            failure:function(){
-                $("#videoPreviewField").show();
-                $("#videoPreview").html("No video found.").css("color","red"); 
-            }
-        });*/
     }
 };
