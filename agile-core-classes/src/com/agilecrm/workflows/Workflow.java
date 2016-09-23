@@ -14,6 +14,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -24,7 +25,9 @@ import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.workflows.unsubscribe.Unsubscribe;
+import com.agilecrm.workflows.util.WorkflowBackupUtil;
 import com.agilecrm.workflows.util.WorkflowUtil;
+import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.apphosting.api.ApiProxy;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.Indexed;
@@ -127,6 +130,18 @@ public class Workflow extends Cursor {
 	
 	@Indexed
 	public Long access_level = 1L;  
+	
+	/**
+	 * Boolean value to know backup exists or not 
+	 */
+	private boolean is_backup_exists = false;
+	
+	/**
+	 * Skips workflow name verification
+	 */
+	@NotSaved
+	@JsonIgnore
+	private boolean skip_verify = false;
 
 	/**
 	 * Initialize DataAccessObject.
@@ -168,11 +183,39 @@ public class Workflow extends Cursor {
 
 	public void setRoundRobinKey(Key<DomainUser> roundRobinKey) {
 		this.round_robin_owner_key = roundRobinKey;
+		
+		this.skip_verify = true;
 	}
 
 	@JsonIgnore
 	public Key<DomainUser> getRoundRobinKey() {
 		return round_robin_owner_key;
+	}
+	
+	public boolean isSkip_verify()
+	{
+		return skip_verify;
+	}
+	
+	public void setSkip_verify(boolean skip_verify)
+	{
+		this.skip_verify = skip_verify;
+	}
+	
+	/**
+	 *  Returns backup exists boolean value
+	 *  @return
+	 */
+	public boolean isBackupExists() {
+		return is_backup_exists;
+	}
+
+	/**
+	 * Sets backup exists boolean value
+	 * @param is_backup_exists - boolean
+	 */
+	public void setBackupExists(boolean is_backup_exists) {
+		this.is_backup_exists = is_backup_exists;
 	}
 
 	/**
@@ -291,7 +334,8 @@ public class Workflow extends Cursor {
 		Workflow oldWorkflow = null;
 		
 		// Old workflow
-		if (id != null) {
+		if (id != null && !skip_verify) {
+			
 			// to compare given name with existing ones.
 			oldWorkflow = WorkflowUtil.getWorkflow(id);
 
@@ -304,9 +348,45 @@ public class Workflow extends Cursor {
 									.entity("Please change the given name. Same kind of name already exists.")
 									.build());
 			}
+			
+			// Saves Workflow Backup
+			saveWorkflowBackup(oldWorkflow);
 		}
 			
 		setAccessLevel(oldWorkflow);
+	}
+	
+	private void saveWorkflowBackup(Workflow oldWorkflow)
+	{
+		try
+		{
+			Long updatedTime = (oldWorkflow.updated_time == null) ? oldWorkflow.created_time : oldWorkflow.updated_time;
+			
+			WorkflowBackup workflowBackup = WorkflowBackupUtil.getWorkflowBackup(oldWorkflow.id);
+			
+			if(workflowBackup == null)
+				workflowBackup = new WorkflowBackup();
+
+			workflowBackup.setWorkflow_id(oldWorkflow.id);
+			workflowBackup.setRules(oldWorkflow.rules);
+			workflowBackup.setUpdated_time(updatedTime);
+			
+			long startTime = System.currentTimeMillis();
+			workflowBackup.saveAsync();
+			System.out.println("Time taken to workflow backup..." + (System.currentTimeMillis() - startTime));
+			
+			// Sets Backup available true
+			setBackupExists(true);
+		}
+		catch (EntityNotFoundException e)
+		{
+			e.printStackTrace();
+		}
+		catch(Exception e)
+		{
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+			System.err.println("Exception occured while saving workflow backup..." + e.getMessage());
+		}
 	}
 
 	/**

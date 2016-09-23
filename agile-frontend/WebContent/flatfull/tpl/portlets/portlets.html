@@ -2371,13 +2371,13 @@ Created a new Company {{#if this.entityObject}}<a href="#contact/{{entity_id}}" 
 
 {{#if_equals "CALL" activity_type}}
 {{#if_equals "incoming" custom2}}
-{{agile_lng_translate 'campaigns' 'call-from'}} {{#if entity_id}}<a href="#contact/{{entity_id}}">{{label}}</a>{{else}}{{label}}{{/if}}<br/>
+{{agile_lng_translate 'campaigns' 'call-from'}} {{#if entity_id}}<a href="#contact/{{entity_id}}"> {{label}}</a>{{else}} {{label}}{{/if}}{{#if_equals "company_entity" this.entityObject.entity_type}} ({{agile_lng_translate 'contacts-view' 'Company'}}) {{else}} ({{agile_lng_translate 'contact-details' 'Contact'}}) {{/if_equals}}<br/>
 <small class="activities_second_line m-t-none text-sm">
 <i class="icon-phone"></i> {{callActivityFriendlyStatus custom3 custom2}}{{#if custom4}}{{secondsToCallActivitiesTime custom4}}{{else}} 0s{{/if}} (<span style="text-transform: capitalize;">{{#if custom1}}{{custom1}}{{else}} Manual{{/if}}</span>)
 </small>
 {{/if_equals}}
 {{#if_equals "outgoing" custom2}}	
-{{agile_lng_translate 'contacts-view' 'called'}}{{#if entity_id}}<a href="#contact/{{entity_id}}">{{label}}</a>{{else}}{{label}}{{/if}}<br/>
+{{agile_lng_translate 'contacts-view' 'called'}}{{#if entity_id}}<a href="#contact/{{entity_id}}"> {{label}}</a>{{else}} {{label}}{{/if}}{{#if_equals "company_entity" this.entityObject.entity_type}} ({{agile_lng_translate 'contacts-view' 'Company'}}) {{else}} ({{agile_lng_translate 'contact-details' 'Contact'}}) {{/if_equals}}<br/>
 <small class="activities_second_line m-t-none text-sm">
 <i class="icon-phone"></i> {{callActivityFriendlyStatus custom3 custom2}}{{#if custom4}}{{secondsToCallActivitiesTime custom4}}{{else}} 0s{{/if}} (<span style="text-transform: capitalize;">{{#if custom1}}{{custom1}}{{else}}Manual{{/if}}</span>)
 </small>
