@@ -191,11 +191,15 @@ function showBar(url, selector, name, yaxis_name, stacked, selected_colors)
 			var categories = [];
 			var tempcategories = [];
 			var colors=[];
+			var colorForStatus = {};
 
 			if(selector!='calls-chart')
 				colors=['#23b7e5','#27c24c','#7266ba','#fad733'];
 			else
-				var colorForStatus = {"failed" : "#f05050", "busy" :"#23b7e5" , "voicemail" : "#7266ba", "answered" : "#27c24c", "missed" : "#fad733", "others": "#ff8080"};
+				{
+					colorForStatus = {"failed" : "#f05050", "busy" :"#23b7e5" , "voicemail" : "#7266ba", "answered" : "#27c24c", "missed" : "#fad733", "others": "#ff8080"}
+				};
+
 				var addedColor = {};  // this is temp variable to check whether the color is alread added or not
 					var jsn = data[Object.keys(data)[0]];
 					var lc = 0;
