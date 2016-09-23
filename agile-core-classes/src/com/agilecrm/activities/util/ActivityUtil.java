@@ -1877,9 +1877,33 @@ public class ActivityUtil
 	 * @return
 	 */
 	public static List<Activity> getActivititesBasedOnSelectedConditon(String entitytype, Long userid, int max,
-			String cursor, Long starttime, Long endtime, Long entityId)
+			String cursor, Long starttime, Long endtime, Long entityId,String dashboardName)
 	{
+		
+		List<String> allEntityType = new ArrayList<String>();
+		String[] sales = {"CONTACT", "DEAL", "TASK","EVENT","DOCUMENT","USER"};
+		String[] marketing = {"CONTACT","CAMPAIGN","USER"};
+		String[] service = {"CONTACT","TICKET","USER"};
+		String[] array = {};
+		switch(dashboardName){
+		 case "SalesDashboard" :
+			 array = sales;
+			 break;
+		 case "MarketingDashboard" :
+			 array = marketing;
+			 break;
+		 case "dashboard" :
+			 array = service;
+			 break;
+		}
+		
+		for(int i=0;i<array.length;i++){
+			allEntityType.add(array[i]);
+		}
+		dao.ofy().query(Activity.class).filter("entity_type", "ALL").filter("entitytype in",allEntityType);
+		
 		Map<String, Object> searchMap = new HashMap<String, Object>();
+		
 		if (!entitytype.equalsIgnoreCase("ALL") && !entitytype.equalsIgnoreCase("CALL"))
 			searchMap.put("entity_type", entitytype);
 		if (entitytype.equalsIgnoreCase("CALL"))

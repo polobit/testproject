@@ -150,6 +150,11 @@ function getActivityFilterParameters(loadingFirstTime,campaignHistory)
 
 	 //For change campaign activity url to activity url
 	 document.location.hash = "activities";
+	 var dashboard_name = _agile_get_prefs("dashboard_"+CURRENT_DOMAIN_USER.id);
+     if(!dashboard_name){
+        dashboard_name = "SalesDashboard";
+     }
+     params += ("&dashboard_name="+dashboard_name);
 	if (user)
 		params += ("&user_id=" + user);
 	// Get owner name and append it to params
