@@ -12,7 +12,7 @@
             <div class="panel wrapper">
               <div class="formsection chainedSelect">
                  <fieldset>
-                    <input name="id" type="hidden"/>
+                    <input name="id"  id="id" type="hidden"/>
                     <input name="extension" id="extension" type="hidden"/>
                     <div class="control-group form-group hide">
                         <label class="control-label  col-sm-3"><b>Type </b><span
@@ -38,7 +38,7 @@
                     <div class="control-group form-group">
                        <label class="control-label col-sm-3">{{agile_lng_translate 'documents' 'related-contacts'}}
                        </label>
-                       <div class="controls col-sm-7" id="contactTypeAhead">
+                       <div class="controls col-sm-9" id="contactTypeAhead">
                           <div>
                              <div>
                                 <ul name="contact_ids" class="contacts tagsinput tags p-n m-n"></ul>
@@ -51,7 +51,7 @@
                     </div>
                     <div class="control-group form-group">
                        <label class="control-label col-sm-3">{{agile_lng_translate 'tasks' 'related-deals'}}</label>
-                       <div class="controls col-sm-7" id="dealTypeAhead">
+                       <div class="controls col-sm-9" id="dealTypeAhead">
                           <div>
                              <div>
                                 <ul name="deal_ids" class="deals tagsinput deal_tags  p-n m-n"></ul>
@@ -100,16 +100,26 @@
                                <label class="control-label col-sm-3"><b>{{agile_lng_translate 'documents' 'document-content'}}</b></label>
                                 <div class="controls col-sm-9">
                                     <div id="loading-editor" ></div>
-                                     <textarea class="col-md-6 required" style="display: none;" name="text" id="signdoc-template-html" placeholder="{{agile_lng_translate 'documents' 'document-document-content'}}"></textarea>
+                                     <textarea class="col-md-6 required" style="display: none;height:30vh;" name="text" id="signdoc-template-html" placeholder="{{agile_lng_translate 'documents' 'document-document-content'}}"></textarea>
                               </div>  
                         </div>
                     </div>
                     <div id="error"></div>
                     <div class="form-actions">      
                        <div class="col-sm-offset-3 col-sm-9">    
-                          <a href="#" class="btn btn-default btn-sm cancel-document m-r-xs">{{agile_lng_translate 'documents' 'document-cancel'}}</a> 
-                          <a href="#" class="btn btn-sm btn-primary" id="document_update_validate">{{agile_lng_translate 'prefs-settings' 'save-changes'}}</a> <span class="save-status"></span>
-                          <a href="#" class="btn btn-sm btn-primary email-send-doc btn-success hide" >{{agile_lng_translate 'documents' 'document-sendemail'}}</a>
+                          <a href="#" class="btn btn-default btn-sm cancel-document m-t-xs m-r-xs">{{agile_lng_translate 'other' 'cancel'}}</a> 
+                          <div class="btn-group ">
+                                        <a href="#documents/attachment" id="document_update_validate" class="btn-primary btn btn-default btn-sm  m-t-xs" > {{agile_lng_translate 'prefs-settings' 'save-changes'}}</a>
+                                        <a class="btn btn-default btn-sm email-send-doc-group hide dropdown-toggle m-t-xs btn-success" data-toggle="dropdown" aria-expanded="false"><span class="caret"></span></a>
+
+                                        <ul class="dropdown-menu pull-right btn-success" style="margin-top:3px;">
+                                            <li style="padding:0px 0px;border:0px;"><a href="#" style="color:#fff;" class="email-send-doc hide">{{agile_lng_translate 'documents' 'document-sendemail'}}</a></li>
+                                           
+                                        </ul>
+                                        <div class="clearfix"></div>
+                          </div>
+                          <span class="save-status"></span>
+                          
                        </div>
                    </div>  
                 </fieldset>
@@ -122,12 +132,12 @@
                 </div>
                 <div class="padder b-t  text-center">
                          <div class="m-t-sm"><div class="row">
-                              <textarea class="inputtext " cols="40" rows="6" id="comments" name="notes" placeholder="Comments"></textarea>
+                              <textarea style="border:1px solid #74B9EF;border-radius:6px;height:150px;max-width:100%;max-height:100%;padding:5px;" class="inputtext " cols="20" rows="6" id="comments" name="notes" placeholder="{{agile_lng_translate 'products' 'add-comments'}}"></textarea>
                               <text id="contact_id" name="subject" type="hidden" ></text>
                               <text id="subject" name="subject" type="hidden" ></text>
                           </div>
                           <div class="row">
-                              <a  class="text-info" data="{{id}}" id="document-send-comments"><i class1="icon-envelope-alt"></i>{{agile_lng_translate 'documents' 'document-sendcomments'}} </a>
+                              <a  class="text-info" data="{{id}}" id="document-send-comments"><i class1="icon-envelope-alt"></i>{{agile_lng_translate 'admin-settings-tasks' 'send'}} </a>
 
                           </div>
                           <span class="doc-comment-error-status  " style="color:#d9534f;"></span>

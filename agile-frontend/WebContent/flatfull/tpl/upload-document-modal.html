@@ -38,7 +38,7 @@
                     </div>
                     <div class="control-group form-group" style="margin-bottom:0px;">
                     <label class="control-label col-sm-3">{{agile_lng_translate 'documents' 'related-contacts'}}</label>
-                    <div class="controls col-sm-7" id="contactTypeAhead">
+                    <div class="controls col-sm-9" id="contactTypeAhead">
                       <div>
                         <input type="text" id="document_relates_to_contacts" name="related_contacts"
                           placeholder="{{agile_lng_translate 'cases' 'contact-name'}}" class="typeahead typeahead_contacts form-control"
@@ -46,14 +46,15 @@
                         <div style="padding-top:2px;">
                           <ul name="contact_ids" class="contacts tagsinput tags p-n"></ul>
                         </div>
-                        <div class="clearfix"></div>  
+                        <div class="clearfix"></div>
+                        <span class="contacts_relatedto_error" style="color:#d9534f;display:none;">Please relate the document to a contact.</span>  
                       </div>
                     </div>
                   </div>
                   <div class="control-group form-group">
                     <label class="control-label col-sm-3">{{agile_lng_translate 'tasks' 'related-deals'}}
                     </label>
-                    <div class="controls col-sm-7" id="dealTypeAhead">
+                    <div class="controls col-sm-9" id="dealTypeAhead">
                       <div>
                         <input type="text" id="document_relates_to_deals" name="related_deals"
                           placeholder="{{agile_lng_translate 'documents' 'deal-name'}}" class="typeahead typeahead_deals form-control"
@@ -86,22 +87,31 @@
                         </div>
                       </div>
                     </div>
-                  </div>
                   <div class="senddoc hide">
                         <div class="control-group form-group">
                                    <label class="control-label col-sm-3"><b>Content </b></label>
                                     <div class="controls col-sm-9">
                                         <div id="loading-editor" ></div>
-                                         <textarea class="col-md-6 required" style="display: none;" name="text" id="signdoc-template-html" placeholder="Document template html"></textarea>
+                                         <textarea class="col-md-6 required" style="display: none;height:50vh;" name="text" id="signdoc-template-html" placeholder="Document template html"></textarea>
                                     </div>  
                         </div>
                   </div>
                   <div id="error"></div>
                   <div class="form-actions">      
                            <div class="col-sm-offset-3 col-sm-9">    
-                              <a href="#" class="btn btn-default btn-sm cancel-document m-r-xs">{{agile_lng_translate 'documents' 'document-cancel'}}</a> 
-                              <a href="#" class="btn btn-sm btn-primary" id="document_update_validate">{{agile_lng_translate 'prefs-settings' 'save-changes'}}</a> <span class="save-status"></span>
-                              <a href="#" class="btn btn-sm btn-primary email-send-doc btn-success hide" >{{agile_lng_translate 'documents' 'document-sendemail'}}</a>
+                              <a href="#" class="btn btn-default btn-sm cancel-document m-t-xs m-r-xs">{{agile_lng_translate 'other' 'cancel'}}</a> 
+                              <a  class="c-p m-r-xs btn btn-sm hide btn-success text-white generate-send-doc">{{agile_lng_translate 'document' 'document-generate'}}</a>
+                              
+                              <div class="btn-group ">
+                                        <a href="#documents/attachment" id="document_validate" class="btn-primary btn btn-default btn-sm  m-t-xs" class1="btn btn-default btn-sm"> {{agile_lng_translate 'modals' 'save'}}</a>
+                                        <a class="btn btn-default btn-sm email-send-doc-group hide dropdown-toggle m-t-xs btn-success" data-toggle="dropdown" aria-expanded="false"><span class="caret"></span></a>
+
+                                        <ul class="dropdown-menu pull-right btn-success" style="margin-top:3px;">
+                                            <li style="padding:0px 0px;border:0px;"><a href="#" style="color:#fff;" class="email-send-doc hide">{{agile_lng_translate 'documents' 'document-sendemail'}}</a></li>
+                                           
+                                        </ul>
+                                        <div class="clearfix"></div>
+                              </div>
                            </div>
                   </div>  
 
@@ -109,8 +119,8 @@
 
             </form>
           </div>
-        </div>
-        <div class="col-md-3">
+          </div>
+          <div class="col-md-3">
            <div class="panel wrapper">
                <h4 class="m-t-none font-thin">
                    {{agile_lng_translate 'documents' 'document-what-are-docs-title'}}
@@ -124,6 +134,8 @@
            <p>{{agile_lng_translate 'documents' 'document-what-are-docs-para5'}} <a class="text-info" href="https://github.com/agilecrm/agile-popups#usage" target="_blank"> {{agile_lng_translate 'documents' 'document-what-are-docs-para6'}}</a></p> 
            </div>
        </div>
+        </div>
+        
       </div>  
 
   </div>

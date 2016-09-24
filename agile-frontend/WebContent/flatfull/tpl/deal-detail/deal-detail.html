@@ -410,7 +410,32 @@
 
 
                            
+<div class="deal-products"> 
+                <div class="l-h">                  
+                  {{#if products}}
+                  <div class="" >
+                  <div class="panel panel-default m-b ">
+                    <div class="panel-body">
+                        <small class="text-base text-muted">{{agile_lng_translate 'documents' 'deal-products'}}</small>
+                    <div>                
+                  
+                  {{#each products}}               
+                      <div class="m-b-xs deal-product" >
+                          
+                            <div style="max-width:90%;width:auto;" class="text-light text-base pull-left  table-resp line-clamp line-clamp-3" title="{{name}}">{{name}}</div>
+                          
+                        </div>                    
+                    {{/each}}
+                  </div>
+                  </div>
+                  </div>
+                  </div>
 
+                 {{/if}}
+                           <div class="clearfix"></div>
+                            </div>  
+
+</div>
 <div class="deal-custom-data"> 
                 
           

@@ -530,7 +530,7 @@ var Base_Collection_View = Backbone.View
         if (appendItemCallback && typeof (appendItemCallback) === "function")
           appendItemCallback($(this.el));
 
-        if ($('table', this.el).hasClass('onlySorting'))
+        if ($('table', this.el).hasClass('onlySorting')  || $('table', this.el).hasClass('noCheckboxes'))
            return;
 
           if ($('table', this.el).length != 0){
@@ -569,7 +569,7 @@ var Base_Collection_View = Backbone.View
         if (appendItemCallback && typeof (appendItemCallback) === "function")
           appendItemCallback($(this.el));
 
-        if ($('table', this.el).hasClass('onlySorting'))
+        if ($('table', this.el).hasClass('onlySorting') || $('table', this.el).hasClass('noCheckboxes'))
            return;
 
           if ($('table', this.el).length != 0){

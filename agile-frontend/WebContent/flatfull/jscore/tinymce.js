@@ -288,6 +288,9 @@ function set_up_merge_fields(editor,merge_fields_values_callback)
 
 					try
 					{
+						if(_merge_fields_values_callback)
+							contact_json=_merge_fields_values_callback(contact_json);
+
 						compiled_template = template(contact_json);
 					}
 					catch(err)
@@ -342,7 +345,7 @@ function get_merge_fields(callback)
 	
 	if((Current_Route.indexOf('document-template') != -1 || Current_Route.indexOf('document') != -1))
 	{
-		var document_options={"{{agile_lng_translate 'deals' 'pricing-table'}}":"{{{pricing_table}}}"}
+		var document_options={"{{agile_lng_translate 'documents' 'pricing-table'}}":"{{{pricing_table}}}"}
 		options = merge_jsons({}, options,document_options);
 	}
 
@@ -405,7 +408,7 @@ function get_merge_field_objs()
 
 	if((Current_Route.indexOf('document-template') != -1 || Current_Route.indexOf('document') != -1))
 	{
-		json['{{agile_lng_translate "documents" "deal-products"}}']={"{{agile_lng_translate 'deals' 'pricing-table'}}":"{{{pricing_table}}}"}
+		json['{{agile_lng_translate "documents" "deal-products"}}']={"{{agile_lng_translate 'documents' 'pricing-table'}}":"{{{pricing_table}}}"}
 	}
 	//Return json if path isn't email-template
 	if(Current_Route.indexOf('emailbuilder-add') == -1 && 

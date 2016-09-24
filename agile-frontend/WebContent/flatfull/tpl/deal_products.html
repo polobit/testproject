@@ -5,12 +5,12 @@
             <thead>
                 <tr>
 					<th style="width:5%;border-top: 1px solid #ddd;border-left: 1px solid #ddd;"><label class="i-checks i-checks-sm m-b-none "><input type="checkbox" class=" dealproducts_th_checkbox " value=""><i></i></label></th>	   
-                    <th  style="width:19%;border-top: 1px solid #ddd;border-left: 1px solid #ddd;" class="header">Name</th>
-					<th  style="width:19%;border-top: 1px solid #ddd;border-left: 1px solid #ddd;" class="header">Description</th>
-					<th  style="width:19%;border-top: 1px solid #ddd;border-left: 1px solid #ddd;" class="header">Qty</th>
-                    <th  style="width:19%;border-top: 1px solid #ddd;border-left: 1px solid #ddd;" class="header">Price</th>
+                    <th  style="width:19%;border-top: 1px solid #ddd;border-left: 1px solid #ddd;" class="header">{{agile_lng_translate 'report-add' 'name'}}</th>
+					<th  style="width:19%;border-top: 1px solid #ddd;border-left: 1px solid #ddd;" class="header">{{agile_lng_translate 'other' 'description'}}</th>
+					<th  style="width:19%;border-top: 1px solid #ddd;border-left: 1px solid #ddd;" class="header">{{agile_lng_translate 'products' 'product-qty'}}</th>
+                    <th  style="width:19%;border-top: 1px solid #ddd;border-left: 1px solid #ddd;" class="header">{{agile_lng_translate 'products' 'product-price'}}</th>
                     <th style="" class="header none"  style="display:none;">Image</th>
-					<th style="width:19%;border-right: 1px solid #ddd;border-top: 1px solid #ddd;border-left: 1px solid #ddd;" class="header" style="">Total</th>
+					<th style="width:19%;border-right: 1px solid #ddd;border-top: 1px solid #ddd;border-left: 1px solid #ddd;" class="header" style="">{{agile_lng_translate 'products' 'product-total'}}</th>
                 </tr>
             </thead>
 			<tbody id='deal-products-model-list' ></tbody>            
@@ -35,7 +35,7 @@
 	</td>
 	<td class='data dealproducts_td_qty' style="border-bottom: 1px solid #ddd;border-left: 1px solid #ddd;">
 	
-    	<span class="dealproducts_td_qty_span" style="cursor:pointer;">{{#if qty}}{{qty}}{{else}}1{{/if}}</span><input class="hide dealproducts_qty_input" maxlength="4" style="width: 100%;margin: 0px;box-sizing: border-box;-moz-box-sizing: border-box;-webkit-box-sizing: border-box;" placeholder="Enter Qty" type="text"  value={{#if qty}}"{{qty}}"{{else}}1{{/if}} />
+    	<span class="dealproducts_td_qty_span" style="cursor:pointer;">{{#if qty}}{{qty}}{{else}}1{{/if}}</span><input class="hide dealproducts_qty_input" maxlength="4" style="width: 100%;margin: 0px;box-sizing: border-box;-moz-box-sizing: border-box;-webkit-box-sizing: border-box;" placeholder="{{agile_lng_translate 'products' 'product-enter-qty'}}" type="text"  value={{#if qty}}"{{qty}}"{{else}}1{{/if}} />
 	</td>
 	<td class='data' style="border-bottom: 1px solid #ddd;border-left: 1px solid #ddd;">
     	{{price}}

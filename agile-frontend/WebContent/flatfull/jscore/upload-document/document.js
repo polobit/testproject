@@ -265,6 +265,7 @@ function saveDocument(form_id, modal_id, saveBtn, isUpdate, json, contact_id)
 			if(document.doc_type=="SENDDOC")
 			{
 				$(".email-send-doc",'#uploadDocumentForm,#uploadDocumentUpdateForm').removeClass("hide");				
+				$(".email-send-doc-group",'#uploadDocumentForm,#uploadDocumentUpdateForm').removeClass("hide");				
 			}
 			// Removes disabled attribute of save button
 			enable_save_button($(saveBtn));//$(saveBtn).removeAttr('disabled');

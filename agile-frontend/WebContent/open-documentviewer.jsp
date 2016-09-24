@@ -232,21 +232,21 @@ var subject=<%=mapper.writeValueAsString(sNoteSubject)%>
 			 <!-- /column -->
 
 			  <!-- column -->
-			 <div class="col w-md lter b-l" style="height:90%;">
+			 <div class="col w-xl lter b-l" style="height:90%;">
 				   <div class="vbox" style="height:85%;">
 					     <div class="wrapper b-b b-light">
-					       <div class="font-thin h4">Comments History</div>
+					       <div class="font-thin h4" style="margin-left:8px;">Comments</div>
 					     </div>
 					     <div class="row-row">
 						       <div class="cell">
 						         <div class="cell-inner">
 						           <div class="wrapper-md comments-history">
 										<% if(notes!=null ){ for(DocumentNote note:notes){ %>
-										             <ul class="list-group">
-										<li class="list-group-item document-notes"><p class="line-clamp line-clamp-3 activity-tag" style="word-wrap: break-word;overflow:hidden;" title="<%=note.description %>" ><%=note.description %></p>
+										             <ul class="list-group" style="margin-bottom:10px;">
+										<li class="list-group-item document-notes"><p class="b-b b-light line-clamp line-clamp-3 activity-tag" style="word-wrap: break-word;overflow:hidden;" title="<%=note.description %>" ><%=note.description %></p>
 											<small class="block text-muted"> 
-							                    	<div class="m-b-none text-flow-ellipsis line-clamp">by <%=note.getcommenter_name()%></div>
-							                    	<small class="block text-muted"><i class="fa fa-fw fa-clock-o"></i> <time 	class="timeago" datetime="<%=note.created_time %>"><%=note.created_time%></time></small>
+							                    	<div class="m-b-none text-flow-ellipsis line-clamp">by <%=note.getcommenter_name()%><small class="pull-right text-muted"><i class="fa fa-fw fa-clock-o"></i> <time 	class="timeago" datetime="<%=note.created_time %>"><%=note.created_time%></time></small></div>
+							                    	
 						                    </small>
 										
 										</li>
@@ -258,12 +258,12 @@ var subject=<%=mapper.writeValueAsString(sNoteSubject)%>
 					     </div>
 					     <div class="padder b-t  text-center">
 						       <div class="m-t-sm"><div class="row">
-						       		<textarea class="inputtext " rows="6" id="comments" name="notes" placeholder="Comments"></textarea>
+						       		<textarea class="inputtext " rows="6" id="comments" name="notes" placeholder="Add Comments"></textarea>
 									<text id="contact_id" name="subject" type="hidden" value="<%=sContactId%>"></text>
 									<text id="subject" name="subject" type="hidden" value="<%=sNoteSubject%>"></text>
 								</div>
 								<div class="row">
-									<a  class="text-info" id="send-comments"><i class="icon-envelope-alt"></i> Send Comments</a>
+									<a  class="text-info" id="send-comments"><i class="icon-envelope-alt"></i> Send </a>
 								</div>
 								<span class="doc-comment-error-status  " style="color:#d9534f;"></span>
 						</div>
@@ -342,7 +342,7 @@ function bodyLoad()
 								var d = new Date();
 								var sSeconds = d.getTime() / 1000;
 								var sComments=$("#comments").val();
-								var sHTML='<ul class="list-group"><li class="list-group-item document-notes"><p class="line-clamp line-clamp-3 activity-tag" style="display:-moz-box;word-wrap: break-word;overflow:hidden;">'+ sComments +'</p><small class="block text-muted"><div class="m-b-none text-flow-ellipsis line-clamp">by ' + contact_name + '</div><small class="block text-muted"><i class="fa fa-fw fa-clock-o"></i> <time class="timeago" datetime="Feb 19 2016 19:02:53" title="'+ sSeconds + '">less than a minute ago</time></small></small></li></ul>'
+								var sHTML='<ul class="list-group"><li class="list-group-item document-notes"><p class="b-b b-light line-clamp line-clamp-3 activity-tag" style="display:-moz-box;word-wrap: break-word;overflow:hidden;">'+ sComments +'</p><small class="block text-muted"><div class="m-b-none text-flow-ellipsis line-clamp">by ' + contact_name + '<small class="pull-right text-muted"><i class="fa fa-fw fa-clock-o"></i> <time class="timeago" datetime="Feb 19 2016 19:02:53" title="'+ sSeconds + '">less than a minute ago</time></small></div></small></li></ul>'
 								$(".comments-history").prepend(sHTML)
 								$("#comments").val("")
 								$('#comments').focus();

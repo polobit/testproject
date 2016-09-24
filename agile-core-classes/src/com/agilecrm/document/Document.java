@@ -239,7 +239,7 @@ public class Document extends Cursor
     this.extension = extension;
     this.network_type = network;
     this.url = url;
-    his.doc_type=doc_type;
+    this.doc_type=doc_type;
     this.template_type=template_type;
     this.text=text;
     }

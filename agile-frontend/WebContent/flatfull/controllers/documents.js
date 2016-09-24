@@ -420,7 +420,7 @@ function process_add_document_templatemodel(template_model)
 	var sPricingTable="";
 	if($("#documents-listener-container").data("deal_model_json"))
 	{
-		sPricingTable=get_pricingtable_from_deal($("#documents-listener-container").data("deal_model_json"));
+		sPricingTable= getTemplate("documents-pricingtable", $("#documents-listener-container").data("deal_model_json"))  //get_pricingtable_from_deal($("#documents-listener-container").data("deal_model_json"));
 	}	
 	
 	var json={};
@@ -570,7 +570,7 @@ function initializeDocumentsListeners()
 				contact_json={}										
 			if($("#documents-listener-container").data("deal_model_json"))
 			{
-				contact_json["pricing_table"]=get_pricingtable_from_deal($("#documents-listener-container").data("deal_model_json"));
+				contact_json["pricing_table"]= getTemplate("documents-pricingtable", $("#documents-listener-container").data("deal_model_json")) //get_pricingtable_from_deal($("#documents-listener-container").data("deal_model_json"));
 			}										
 			return contact_json;
 		});		
@@ -723,6 +723,9 @@ function proc_add_document(model_json)
 					$(".generate-send-doc",'#uploadDocumentForm,#uploadDocumentUpdateForm').removeClass("hide ");
 					$("#document_validate",'#uploadDocumentForm,#uploadDocumentUpdateForm').addClass("hide ");
 					$(".email-send-doc",'#uploadDocumentForm,#uploadDocumentUpdateForm').addClass("hide ");
+					$(".email-send-doc-group",'#uploadDocumentForm,#uploadDocumentUpdateForm').addClass("hide ");
+					
+
 					
 					$(".attachment",'#uploadDocumentForm,#uploadDocumentUpdateForm').addClass("hide");
 				}	
@@ -768,8 +771,11 @@ function process_edoctemplates_model(base_model) {
 
 }
 
-function get_pricingtable_from_deal(model_json)
+/*function get_pricingtable_from_deal(model_json)
 {
+	
+
+
 	var deal_name = model_json.name;
 	
 	var sCurrency = ((CURRENT_USER_PREFS.currency != null) ? CURRENT_USER_PREFS.currency : "USD-$");
@@ -781,7 +787,7 @@ function get_pricingtable_from_deal(model_json)
 	
 	var sProductsTR="",sProductsHead="";
 	var sPricingTable="<table widht='100%'>"
-	if(model_json.products && model_json.products.length)
+	if(model_json.products && model_json.products.length > 0)
 	{
 
 		var iTotal=0
@@ -792,12 +798,12 @@ function get_pricingtable_from_deal(model_json)
 			{
 				sImage="<td style='border:none;' ><img src='" + data.image	+"' style='width:50px;'></img></td>";	
 			}
-			sProductsTR+="<tr><td><table style='border:none;' border='0' cellpadding='0' cellspacing='0'><tr><td style='border:none;padding-left:4px;'>" + data.name	+"</td></tr>" + "<tr><td style='border:none;'><table style='border:none;' border='0' cellpadding='0' cellspacing='0'><tr><td style='border:none;padding-left:4px;'>"+ data.description + "</td>" + sImage + "</tr></table></td></tr></table></td><td  align='center' style='align:center;'>" + sCurrency + data.price.toFixed(2)+"</td><td  align='center'  style='align:right;'>"+data.qty+ "</td><td  align='right' style='align:right;padding-right:4px;'>" + sCurrency + data.total.toFixed(2) + "</td></tr>"
+			sProductsTR+="<tr><td style='width:55%;border-bottom:1px;'><table style='border:none;width:100%;' border='0' cellpadding='0' cellspacing='0'><tr><td style='border:none;padding-left:4px;'>" + data.name	+"</td></tr>" + "<tr><td style='border:none;'><table style='border:none;width:100%;' border='0' cellpadding='0' cellspacing='0'><tr><td style='border:none;padding-left:4px;'>"+ data.description + "</td>" + sImage + "</tr></table></td></tr></table></td><td  align='center' style='align:center;width:15%;border-bottom:1px;'>" + sCurrency + data.price.toFixed(2)+"</td><td  align='center'  style='align:right;width:15%;border-bottom:1px;'>"+data.qty+ "</td><td  align='right' style='align:right;padding-right:4px;width:15%;border-bottom:1px;'>" + sCurrency + data.total.toFixed(2) + "</td></tr>"
 			iTotal+=data.total;
 		});			
 		if(sProductsTR!="")
 		{
-			sProductsHead="<thead><tr><th style='background:#dedede;text-align:center;'><b>Name</b></th><th style='background:#dedede;text-align:center;'><b>Price</b></th><th style='background:#dedede;text-align:center;'><b>QTY</b></th><th align='right' style='background:#dedede;padding-right:4px;align:right;text-align:right;'><b>Subtotal</b></th></tr></thead>"
+			sProductsHead="<thead><tr><th style='background:#dedede;text-align:center;border-top:1px;'><b>Name</b></th><th style='background:#dedede;text-align:center;border-top:1px;'><b>Price</b></th><th style='background:#dedede;text-align:center;border-top:1px;'><b>QTY</b></th><th align='right' style='background:#dedede;padding-right:4px;align:right;text-align:right;border-top:1px;'><b>Subtotal</b></th></tr></thead>"
 			if(model_json.apply_discount)	
 			sProductsTR+= "<tr><td colspan='3' align='right' style='padding-right:4px;'><b>Current Subtotal</b></td><td  align='right' style='align:right;padding-right:4px;'>" + sCurrency + iTotal.toFixed(2) + "</tr></tbody>"
 			else
@@ -819,9 +825,10 @@ function get_pricingtable_from_deal(model_json)
 		}	
 	}
 	
-	sPricingTable="<table widht='100%' border='1' style='width:100%;border-collapse: collapse;border-color: #dfdfdf;border: none;'>"+ sProductsHead+"<tbody>" +sProductsTR+"</tbody></table>"
+	sPricingTable="<table widht='100%' border='0' style='width:100%;border-collapse: collapse;border-color: #dfdfdf;border: none;'>"+ sProductsHead+"<tbody>" +sProductsTR+"</tbody></table>"
 	return sPricingTable;
 }
+*/
 function initialize_add_document_template_listeners(elContainer) {
 
 	$('[data-toggle=popover]').on('shown.bs.popover', function () {
@@ -999,6 +1006,7 @@ function load_document_from_edit_model(model)
 
 
 						$(".email-send-doc",'#uploadDocumentForm,#uploadDocumentUpdateForm').removeClass("hide ");
+						$(".email-send-doc-group",'#uploadDocumentForm,#uploadDocumentUpdateForm').removeClass("hide ");
 						$(".senddoc",'#uploadDocumentForm,#uploadDocumentUpdateForm').removeClass("hide ");
 						$(".send-doc-button",'#uploadDocumentForm,#uploadDocumentUpdateForm').removeClass("hide ");
 						$(".attachment",'#uploadDocumentForm,#uploadDocumentUpdateForm').addClass("hide ");
@@ -1019,7 +1027,7 @@ function load_document_from_edit_model(model)
 								contact_json={}										
 							if($("#documents-listener-container").data("deal_model_json"))
 							{
-								contact_json["pricing_table"]=get_pricingtable_from_deal($("#documents-listener-container").data("deal_model_json"));
+								contact_json["pricing_table"]= getTemplate("documents-pricingtable", $("#documents-listener-container").data("deal_model_json")); //get_pricingtable_from_deal($("#documents-listener-container").data("deal_model_json"));
 							}										
 							return contact_json;
 						});

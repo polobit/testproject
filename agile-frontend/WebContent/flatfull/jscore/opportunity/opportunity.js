@@ -848,7 +848,7 @@ function populate_deal_products(el, value,form_id){
 						if(bProductsFound==false)
 						{
 
-							var sHTML='<tr><td colspan="6"><center>You do not have any Products currently setup.</center></td></tr>';
+							var sHTML='<tr><td colspan="6"><center>{{agile_lng_translate 'products' 'product-not-setup'}}</center></td></tr>';
 							$("#deal-products-model-list").append(sHTML);
 						}
 					}
@@ -1084,7 +1084,7 @@ function ValidateDealDiscountAmt(_form_id)
 		var iDiscountValue=$("#discount_value",_form_id).val();
 			if(iDiscountValue.trim() && !$.isNumeric(iDiscountValue))
 			{
-				$(".calculation-error-status",_form_id).html("Discount should be numeric")
+				$(".calculation-error-status",_form_id).html("{{agile_lng_translate 'products' 'discount-should-be-numeric'}}")
 				return false;
 			}
 		if($("#apply_discount",_form_id).is(':checked'))
@@ -1093,12 +1093,12 @@ function ValidateDealDiscountAmt(_form_id)
 			var RE = /^-{0,1}\d*\.{0,1}\d+$/;
 			if( !(RE.test(iDiscountValue)) )
 			{
-				$(".calculation-error-status",_form_id).html("Discount should be numeric");
+				$(".calculation-error-status",_form_id).html("{{agile_lng_translate 'products' 'discount-should-be-numeric'}}");
 				return false;
 			}
 			if(!$.isNumeric(iDiscountValue))
 			{
-				$(".calculation-error-status",_form_id).html("Discount should be numeric")
+				$(".calculation-error-status",_form_id).html("{{agile_lng_translate 'products' 'discount-should-be-numeric'}}")
 				return false;
 			}
 			if(iDiscountValue!=null && iDiscountValue!=undefined )
@@ -1108,12 +1108,12 @@ function ValidateDealDiscountAmt(_form_id)
 					if(parseFloat(iDiscountValue)>100)
 					{
 						
-						$(".calculation-error-status",_form_id).html("Discount percent cannot be greater than 100")
+						$(".calculation-error-status",_form_id).html("{{agile_lng_translate 'products' 'discount-percent-cannot-greater'}}")
 						return false;
 					}
 					else if(parseFloat(iDiscountValue)<0)
 					{
-						$(".calculation-error-status",_form_id).html("Discount percent cannot be less than 0")
+						$(".calculation-error-status",_form_id).html("{{agile_lng_translate 'products' 'discount-percent-cannot-less'}}")
 						return false;
 					}	
 				}
@@ -1131,17 +1131,17 @@ function ValidateDealDiscountAmt(_form_id)
 					}
 					if(iTotal ==0 )
 					{
-						$(".calculation-error-status",_form_id).html("Atleast one product should be selected to apply discount")
+						$(".calculation-error-status",_form_id).html("{{agile_lng_translate 'products' 'atleast-one-product-should-select'}}")
 						return false;		
 					}
 					if(parseFloat(iDiscountValue)>parseFloat(iTotal))
 					{
-						$(".calculation-error-status",_form_id).html("Discount value cannot be greater than total products value")
+						$(".calculation-error-status",_form_id).html("{{agile_lng_translate 'products' 'discount-value-greater-total-product-value'}}")
 						return false;	
 					}
 					if(parseFloat(iDiscountValue)<0)
 					{
-						$(".calculation-error-status",_form_id).html("Discount value cannot be less than 0")
+						$(".calculation-error-status",_form_id).html("{{agile_lng_translate 'products' 'discount-value-cannot-less-that-zero'}}")
 						return false;	
 					}	
 				

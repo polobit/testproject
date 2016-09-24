@@ -1447,7 +1447,4 @@
         <url-pattern>/sendemail/*</url-pattern>
     </servlet-mapping>
 </web-app>
-=======
-
-</web-app>
 

@@ -7632,3 +7632,19 @@ Handlebars.registerHelper('is_Particular_Domain', function(options)
 		else
 			return options.inverse(this);
 });
+Handlebars.registerHelper('calc_Products_Total', function(products)
+{
+	var iSubTotal=0
+	for (var i = 0; i < products.length; i++)
+	{
+		iSubTotal+=products[i].total
+	}	
+	return iSubTotal;
+});
+Handlebars.registerHelper('retrevie_Deal_Value', function(element)
+{
+	var iDealAmt=element.currency_conversion_value;
+	if(!$.isNumeric(iDealAmt))
+		iDealAmt=element.expected_value;
+	return 	iDealAmt;	
+});
