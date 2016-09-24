@@ -190,6 +190,8 @@ public class SendMail
     public static final String TEMPLATE_BODY_EXT = "_body.html";
     
     public static final String CONTACT_UPDATE_STATUS = "Domainuser_updates";
+    
+    public static final String CSV_IMPORT_STATS_NOTIFICATION="Csv_import_stats";
 
     @SuppressWarnings("unused")
     private static Object String;

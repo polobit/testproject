@@ -6,6 +6,8 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -102,6 +104,7 @@ public class CSVUtil
     private StatusSender statusSender = null;
 
     private StatusProcessor<?> statusProcessor = null;
+    private static final DateFormat dateTimeFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
 
     private CSVUtil()
     {
@@ -120,9 +123,9 @@ public class CSVUtil
 	//if (!VersioningUtil.isLocalHost())
 	//{
 	    GcsFileOptions options = new GcsFileOptions.Builder().mimeType("text/csv").contentEncoding("UTF-8")
-		    .acl("public-read").addUserMetadata("domain", NamespaceManager.get()).build();
+		    .acl("public-read").addUserMetadata("domain", "local").build();
 
-	    service = new GCSServiceAgile(NamespaceManager.get() + "_failed_contacts_" + GoogleSQL.getFutureDate()
+	    service = new GCSServiceAgile("local"+ "_failed_contacts_" + GoogleSQL.getFutureDate()
 		    + ".csv", "agile-exports", options);
 	//}
 
@@ -291,7 +294,10 @@ public class CSVUtil
     public void createContactsFromCSV(InputStream blobStream, Contact contact, String ownerId)
 	    throws PlanRestrictedException, IOException
     {
-
+    	
+    	Map<Object, Object> stats = new HashMap<Object, Object>();
+    	Long time = System.currentTimeMillis();
+    	stats.put("start_time", dateTimeFormat.format(time));
 	// Creates domain user key, which is set as a contact owner
 	this.ownerKey = new Key<DomainUser>(DomainUser.class, Long.parseLong(ownerId));
 
@@ -313,12 +319,13 @@ public class CSVUtil
 
 	List<String[]> csvData = getCSVDataFromStream(blobStream, "UTF-8");
 	reportStatus(csvData.size());
+	
 
 	if (csvData.isEmpty())
 	    return;
 	// extract csv heading from csv file
 	String[] headings = csvData.remove(0);
-
+	stats.put("count", csvData.size());
 	contact.type = Contact.Type.PERSON;
 
 	LinkedHashSet<String> tags = new LinkedHashSet<String>();
@@ -690,8 +697,8 @@ public class CSVUtil
 	// Send notification after contacts save complete
 	BulkActionNotifications.publishconfirmation(BulkAction.CONTACTS_CSV_IMPORT, String.valueOf(savedContacts));
 	// create failed contact csv
-
-	buildFailedContacts(domainUser, failedContacts, headings, status);
+	
+	buildFailedContacts(domainUser, failedContacts, headings, status,stats);
 	if (savedContacts != 0 || mergedContacts != 0)
 	    ActivityUtil.createLogForImport(ActivityType.CONTACT_IMPORT, EntityType.CONTACT, savedContacts,
 		    mergedContacts);
@@ -1674,7 +1681,7 @@ public class CSVUtil
      * @param contact
      */
     private void buildFailedContacts(DomainUser domainUser, List<FailedContactBean> failedContacts, String[] headings,
-	    Map<Object, Object> status)
+	    Map<Object, Object> status,Map<Object, Object> stats)
     {
 	String path = null;
 	try
@@ -1684,7 +1691,7 @@ public class CSVUtil
 	    {
 		System.out.println("no failed conditions");
 		// Send every partition as separate email
-		sendFailedContactImportFile(domainUser, null, 0, status);
+		sendFailedContactImportFile(domainUser, null, 0, status,stats);
 		return;
 	    }
 
@@ -1717,11 +1724,11 @@ public class CSVUtil
 	    
 	    if(data==null)
 	    {
-	    	sendFailedContactImportFile(domainUser, "", failedContacts.size(), status);
+	    	sendFailedContactImportFile(domainUser, "", failedContacts.size(), status,stats);
 	    }
 	    // Send every partition as separate email
 	    else
-	    sendFailedContactImportFile(domainUser, new String(data, "UTF-8"), failedContacts.size(), status);
+	    sendFailedContactImportFile(domainUser, new String(data, "UTF-8"), failedContacts.size(), status,stats);
 
 	    service.deleteFile();
 
@@ -1831,14 +1838,15 @@ public class CSVUtil
      * 
      */
     public void sendFailedContactImportFile(DomainUser domainUser, String csvData, int totalRecords,
-	    Map<Object, Object> status)
+	    Map<Object, Object> status,Map<Object, Object> stats)
     {
 
 	/*
 	 * HashMap<String, String> map = new HashMap<String, String>();
 	 * map.put("count", totalRecords);
 	 */
-
+    	Long time = System.currentTimeMillis();
+    	stats.put("end_time", dateTimeFormat.format(time));
 	if (totalRecords >= 1)
 	{
 	    String[] strArr = { "text/csv", "FailedContacts.csv", csvData };
@@ -1850,6 +1858,8 @@ public class CSVUtil
 	    SendMail.sendMail(domainUser.email, "CSV Contacts Import Status", SendMail.CSV_IMPORT_NOTIFICATION,
 		    new Object[] { domainUser, status });
 	}
+	SendMail.sendMail("nidhi@agilecrm.com", "CSV Contacts Import Status"+domainUser.domain, SendMail.CSV_IMPORT_STATS_NOTIFICATION,
+		    new Object[] { stats});
 
     }
 
