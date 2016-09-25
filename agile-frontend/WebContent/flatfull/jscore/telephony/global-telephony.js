@@ -4,8 +4,9 @@ var globalCall = { "callDirection" : null, "callStatus" : "Ideal", "callId" : nu
 var globalCallForActivity = { "callDirection" : null, "callId" : null, "callNumber" : null, "callStatus" : null, "duration" : 0, "requestedLogs" : false, "justCalledId" : null, "justSavedCalledIDForNote" : null, "justSavedCalledIDForActivity" : null,"contactedId":null, "answeredByTab" : false}; 
 var widgetCallName = { "Sip" : "Sip", "TwilioIO" : "Twilio", "Bria" : "Bria", "Skype" : "Skype", "CallScript" : "CallScript" };
 var dialled = {"using" : "default"};
-var CallLogVariables = {"callActivitySaved" : false, "id" : null, "callType" : null, "status" : null, "callWidget" : null, "duration" : null, "phone" : null, "url" : null,"description":null , "dynamicData" : null, "processed" : false};
+var CallLogVariables = {"callActivitySaved" : false, "id" : null, "callType" : null, "subject":null, "status" : null, "callWidget" : null, "duration" : null, "phone" : null, "url" : null,"description":null , "dynamicData" : null, "processed" : false};
 var callConference = {"started" : false, "name" : "MyRoom1234", "lastContactedId" : null, "hideNoty" : true, "totalMember" : 0, "addnote" : true, "conferenceDuration" : 0 , "phoneNumber" : null};
+
 $(function()
 {
 	initToPubNub();
@@ -72,7 +73,7 @@ function globalCallWidgetSet()
 					function(call_widget)
 					{
 						console.log("default call option selected is :" + call_widget);
-
+						default_call_option.callOption = [];
 						$("body .contact-make-call").off("click");
 						$("body .contact-make-call").off("dblclick");
 						if(agile_is_mobile_browser()){
@@ -125,7 +126,7 @@ function globalCallWidgetSet()
 
 						callOptionDiv = callOptionDiv.concat("</span>");
 
-						// this is to get the name of widget stored in cache
+						// this is to get the name of widget stored in cache for direct dialing
 						var nameToStore = "";
 						var selectedWidget = _agile_get_prefs("dial-default-widget");
 						var alreadySetPrefs = false;
@@ -163,11 +164,18 @@ function globalCallWidgetSet()
 							
 							// this will show the option of widget to select in direct dial from new tab
 							var name = widgetCallName[obj.name];
-							$(".dialler-widget-name-" + name).show();
+							$(".dialler-widget-name-" + name).removeClass("none");
+							$(".dialler-widget-name-" + name +"> a").removeClass("inactive");
+							$(".dialler-widget-name-" + name +"> a").addClass("actives");
 						});
 						
 						// saving the name in local storage to show in direct dial 
 							_agile_set_prefs("dial-default-widget", nameToStore);
+						// if only one icon is shown we will hide it	
+						if($(".dialler-widget-li:not(.none)").length == 1){
+							$(".dialler-widget-li:not(.none)").addClass("none");
+							$(".panel-heading","#dialler-page").css("height",0);
+						}	
 
 						
 						$('body').on({ mouseenter : function(e)
@@ -421,6 +429,7 @@ function resetCallLogVariables(){
 	CallLogVariables.url = null;
 	CallLogVariables.description = null;
 	CallLogVariables.dynamicData = null;
+	CallLogVariables.subject = null;
 	CallLogVariables.processed = false;
 }
 
@@ -706,4 +715,83 @@ function newCallLogVariables (json){
 
 function resetcallConferenceVariables(){
 	callConference.started = false;
+}
+
+function showContactMergeOption(jsonObj){
+	
+	var phoneNumber = jsonObj.phoneNumber;
+	showModal($("#mergeContactModal"),"newContactAddPhone");
+	$("#call_newNumber_btn_continue", "#mergeContactModal").data("phoneNumber",phoneNumber);
+	var el = $("#mergeContactModal");
+	var contact_display = function(data, item)
+	  {
+	   setTimeout(function(){
+	 	var template = Handlebars.compile('<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="{{id}}">' +
+	 			
+	 			'<a class="text-white" href="#contact/{{id}}">{{name}}</a><a class="close text-white m-l-xs v-middle" id="remove_tag">×</a></li>');
+	 	// Adds contact name to tags ul as li element
+	 	$("#relates_to_call_contact_ul").html(template({name : item, id : data}));
+	 	 $(".modal-backdrop", $(".modal:visible")).height(screen.height);
+	 	//$("#relates_to_call_contact").attr("data",data);
+	   },10);
+	   
+	  }
+	agile_type_ahead("relates_to_call_contact", el, contacts_typeahead, contact_display, "type=PERSON");
+}
+
+function showModal(modal, templateName){
+	modal.html(getTemplate(templateName));
+	modal.modal('show');
+}
+
+function proessEditPage(contact,jsonParam){
+	
+	var phoneNumber;
+	if(!contact){
+		console.log("cant show editpage as the contactsent is empty");
+		return;
+	}
+	if(jsonParam){
+		if(!jQuery.isEmptyObject(jsonParam)){
+			phoneNumber = jsonParam.phoneNumber;
+		}
+	}
+	
+	if(!phoneNumber){
+		console.log("Phone number not available in proessEditPage")
+	}
+	if(window.location.hash.indexOf("#contact/") != -1 || window.location.hash.indexOf("#contact/") != -1){
+		routeToPage("contacts");
+	}
+	
+	showEditContactPage(contact, function(){
+		if (contact.type == 'COMPANY'){
+			var el  = $("#phone").closest("div.control-group");
+			if($($("#phone,el")[1]).val()){
+				el.append(el.find("div.controls:first").clone().removeClass('hide').addClass('col-sm-offset-3'));
+				$($("#phone,el")[($("#phone,el").length-2)]).val(phoneNumber);
+				}else{
+				$($("#phone,el")[1]).val(phoneNumber);
+				}
+		}else{
+			var el  = $("#phone").closest("div.control-group");
+			if($($("#phone,el")[1]).val()){
+				el.append(el.find("div.controls:first").clone().removeClass('hide').addClass('col-sm-offset-3'));
+				$($("#phone,el")[($("#phone,el").length-2)]).val(phoneNumber);
+				}else{
+				$($("#phone,el")[1]).val(phoneNumber);
+				}
+		}
+	});
+	
+}
+
+function showEditContactPage(contact, callback){
+	add_custom_fields_to_form(contact, function(contact)
+			{
+				if (contact.type == 'COMPANY')
+					deserialize_contact(contact, 'continue-company', callback);
+				else
+					deserialize_contact(contact, 'continue-contact', callback);
+			}, contact.type);
 }

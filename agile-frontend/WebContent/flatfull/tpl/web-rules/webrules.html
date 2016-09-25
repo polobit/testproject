@@ -50,24 +50,26 @@
 						<p>{{agile_lng_translate 'web-rules' 'web-rules-to-work'}} <code class="text-black">&lt;/body&gt;</code> {{agile_lng_translate 'web-rules' 'tag'}}</p>
 						<div id="whitelist-disabled"><!--<a class="right btn" id="api_track_webrules_code_icon" style="margin:5px 10px 0px 0px;cursor:pointer;"><i class="icon-copy"></i></a>-->
 <pre class="prettyprint" id="api_track_webrules_code">
-&lt;script type="text/javascript" src="https://{{getCurrentDomain}}.agilecrm.com/stats/min/agile-min.js"&gt;
+&lt;script id="_agile_min_js" async type="text/javascript" src="{{#can_api_js_serve_from_cloud}}https://d1gwclp1pmzk26.cloudfront.net/agile/agile-cloud.js{{else}}https://{{get_current_domain}}.agilecrm.com/stats/min/agile-min.js{{/can_api_js_serve_from_cloud}}"&gt;
 &lt;/script&gt;
 &lt;script type="text/javascript" &gt;
+var Agile_API = Agile_API || {}; Agile_API.on_after_load = function(){
  _agile.set_account('{{js_api_key}}', '{{getCurrentDomain}}');
  _agile.track_page_view();
- _agile_execute_web_rules();
+ _agile_execute_web_rules();};
 &lt;/script&gt;
 </pre>
 						</div>
 						<div id="whitelist-enabled" class="hide"><!--<a class="right btn" id="api_track_webrules_code_icon" style="margin:5px 10px 0px 0px;cursor:pointer;"><i class="icon-copy"></i></a>-->
 <pre class="prettyprint" id="api_track_webrules_code">
-&lt;script type="text/javascript" src="https://{{getCurrentDomain}}.agilecrm.com/stats/min/agile-min.js"&gt;
+&lt;script id="_agile_min_js" async type="text/javascript" src=src="{{#can_api_js_serve_from_cloud}}https://d1gwclp1pmzk26.cloudfront.net/agile/agile-cloud.js{{else}}https://{{get_current_domain}}.agilecrm.com/stats/min/agile-min.js{{/can_api_js_serve_from_cloud}}"&gt;
 &lt;/script&gt;
 &lt;script type="text/javascript" &gt;
+var Agile_API = Agile_API || {}; Agile_API.on_after_load = function(){
  _agile.set_account('{{js_api_key}}', '{{getCurrentDomain}}');
  _agile_set_whitelist('{{getBase64Domain}}');
  _agile.track_page_view();
- _agile_execute_web_rules();
+ _agile_execute_web_rules();};
 &lt;/script&gt;
 </pre>
 						</div>

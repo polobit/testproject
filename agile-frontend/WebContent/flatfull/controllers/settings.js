@@ -922,9 +922,9 @@ var SettingsRouter = Backbone.Router
 								LIB_PATH + 'lib/businesshours/businesshours.js', LIB_PATH + 'lib/businesshours/jquerytimepicker.js',LIB_PATH+'lib/summer-note/summernote.js',CSS_PATH+'css/summernote/summernote.css', function()
 								{
 									var json = JSON.parse(view.model.get('business_hours'));
-									console.log();
+									
 									businessHoursManager = $("#define-business-hours").businessHours({ operationTime : json,
-
+									weekdays : $.fn.datepicker.dates['en'].daysShortExactFromMon,
 									postInit : function()
 									{
 										$('.operationTimeFrom, .operationTimeTill').timepicker({ 'timeFormat' : 'H:i', 'step' : 30 });
@@ -1053,10 +1053,8 @@ var SettingsRouter = Backbone.Router
 
 			//preferences reminders tab
 			userPrefsReminders : function(data)
-			{
-				var prefs_reminders_view = new Base_Model_View({ url : 'core/api/user-prefs', model : data, template : 'settings-reminders', change : false, reload : true,
-				postRenderCallback : function(el){
-						
+			{  var prefs_reminders_view = new Base_Model_View({ url : 'core/api/user-prefs', model : data, template : 'settings-reminders', change : false, reload : true,
+				postRenderCallback : function(el, data){
 					}
 				});
 				$("#settings-user-prefs-tab-content").html(prefs_reminders_view.render(true).el);
@@ -1066,8 +1064,11 @@ var SettingsRouter = Backbone.Router
 			userPrefsAdvanced : function(data)
 			{
 				var prefs_advanced_view = new Base_Model_View({ url : 'core/api/user-prefs', model : data, template : 'settings-advanced', change : false, reload : true, 
-					postRenderCallback : function(el){
-						
+					postRenderCallback : function(el, data){
+					},saveCallback : function(response){
+						console.log(response);
+						// Save language cookie
+						createCookie("user_lang", response.language, 360);
 					}
 				});
 				$("#settings-user-prefs-tab-content").html(prefs_advanced_view.render(true).el);

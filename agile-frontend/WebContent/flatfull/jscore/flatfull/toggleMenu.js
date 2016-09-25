@@ -101,6 +101,11 @@ $(".free_plan_strip_close").click(function(e){
  e.preventDefault();
  $(this).hide();
    $("#addDescriptionInfo").toggle();
+  });
+$("#newDealModal").on('click','#addDescriptionLink',function(e){
+ e.preventDefault();
+ $(this).hide();
+   $("#addDescriptionInfo").toggle();
    });
 
  $("#activityTaskModal").on("click", "#taskDescriptionLink", function(e){
@@ -349,6 +354,8 @@ $("#activityModal").on("click", "#eventDescriptionLink", function(e){
 		$("#searchText").val("");
 		$("#searchForm").find(".dashboard-search-scroll-bar").css({"display":"none"});
 		$(this).parent().toggleClass("open");
+		$("#searchText").focus();
+		$('body').on("click",clickOutsideSearchDropdownEventHandler);
 	});
 
 	$('#searchText').on('keydown', function(e){
@@ -366,15 +373,22 @@ $("#activityModal").on("click", "#eventDescriptionLink", function(e){
 		e.stopPropagation()
 	});
 
-	$('body').on('click', function (e) {
+	function clickOutsideSearchDropdownEventHandler(e){
 	    if (!e.target.closest(".agile-search") 
 	        && $('.searchicon-dropdown').has(e.target).length === 0 
 	        && $('.open').has(e.target).length === 0 || e.which == 13
 	    ) {
-
-	        $('.searchicon-dropdown').removeClass('open');
+	    	closeSearchDropdown();
+	        
 	    }
-	});
+	}
+	 
+
+
+	function closeSearchDropdown(){
+			$('.searchicon-dropdown').removeClass('open');
+	    	$('body').unbind("click",clickOutsideSearchDropdownEventHandler);
+	}
 
 	$( '#advanced-search-fields-group a' ).on( 'click', function( event ) {
 
@@ -451,6 +465,18 @@ $("#activityModal").on("click", "#eventDescriptionLink", function(e){
 
 });
 
+function showNoteModel(json, callback , template)
+{	
+	
+	$("#newNoteModal").html(getTemplate(template , json)).modal('show');
+
+	if(json)
+	deserializeForm(json ,$("#noteUpdateForm"));
+	
+	if (callback && typeof (callback) === "function")
+					callback();
+	
+}
 
 // Click handlers to role menu items
 function initRolehandlers(){

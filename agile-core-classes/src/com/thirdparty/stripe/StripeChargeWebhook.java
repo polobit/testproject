@@ -80,7 +80,8 @@ public class StripeChargeWebhook extends HttpServlet
 	    JSONObject stripeJson = new JSONObject(stripeData);
 	    System.out.println("stripe json is " + stripeJson);
 	    
-	    if (stripeJson.getJSONObject("data").getJSONObject("object").has("amount")){
+	    if (stripeJson.getJSONObject("data").getJSONObject("object").has("amount"))
+	    {
 	    String amount = stripeJson.getJSONObject("data").getJSONObject("object").getString("amount");
 	    System.out.println("Amount is :"+ amount);
 	    stripeJson.getJSONObject("data").getJSONObject("object").remove("amount");
@@ -117,10 +118,11 @@ public class StripeChargeWebhook extends HttpServlet
 	    URL url = new URL(request.getRequestURL().toString());
 		String namespace = NamespaceUtil.getNamespaceFromURL(url);
 		
-	    JSONObject stripeEventJson = getStripeEventJson(stripeJson, eventType);
+	    JSONObject stripeEventJson = getStripeEventJson(stripeJson, eventType);	
+	    System.out.println(stripeEventJson);    
 	    if (stripeEventJson == null)
 	    {
-		// response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+		 // response.sendError(HttpServletResponse.SC_BAD_REQUEST);
 		return;
 	    }
 
@@ -315,9 +317,13 @@ public class StripeChargeWebhook extends HttpServlet
 	try
 	{
 	    JSONObject cJson = new JSONObject();
-
-	    if (stripeEventType.contains("charge"))
-		cJson = stripeJson.getJSONObject("data").getJSONObject("object").getJSONObject("card");
+	    System.out.println(stripeJson.toString());
+	    if (stripeEventType.contains("charge")){
+		if(stripeJson.getJSONObject("data").getJSONObject("object").has("card"))
+		    cJson = stripeJson.getJSONObject("data").getJSONObject("object").getJSONObject("card");
+		else
+		    cJson = stripeJson.getJSONObject("data").getJSONObject("object").getJSONObject("source");
+	    }		
 	    else if (stripeEventType.contains("customer"))
 		cJson = getDefaultCustomerCard(stripeJson);
 

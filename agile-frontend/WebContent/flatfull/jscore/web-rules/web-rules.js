@@ -43,9 +43,9 @@ function chainWebRules(el, data, isNew, actions)
 		$('#twilio_call_setup').hide();
 		console.log(value);
 	
-		if(value == "MODAL_POPUP" || value == "CORNER_NOTY" || value== "CALL_POPUP")
+		if(value == "MODAL_POPUP" || value == "CORNER_NOTY" || value == "CALL_POPUP")
 			{
-				if(value == "MODAL_POPUP"  || value=="CALL_POPUP")
+				if(value == "MODAL_POPUP"  || value=="CALL_POPUP" || value == "REQUEST_PUSH_POPUP")
 				$("#tiny_mce_webrules_link", self).show();
 
 				if(value=="CALL_POPUP"){
@@ -65,6 +65,11 @@ function chainWebRules(el, data, isNew, actions)
 			return;
 			} else if(value == "SITE_BAR") {
 				loadSavedTemplate("bar/sitebar.html");
+				$("#tiny_mce_webrules_link", self).show();
+				self.find(".web-rule-preview").show();
+				return;
+			}else if(value == "REQUEST_PUSH_POPUP"){
+				loadSavedTemplate("pushnoty/pushnoty.html");
 				$("#tiny_mce_webrules_link", self).show();
 				self.find(".web-rule-preview").show();
 				return;
@@ -107,11 +112,12 @@ var Web_Rules_Event_View = Base_Model_View.extend({
 					for(var i=0;i<action_count;i++){
 						var actionSelected = $($('#action select')[i]).val();
 
-						if(actionSelected === 'CALL_POPUP' || actionSelected === 'MODAL_POPUP' || actionSelected === 'SITE_BAR'){
+						if(actionSelected === 'CALL_POPUP' || actionSelected === 'MODAL_POPUP' || actionSelected === 'SITE_BAR' || actionSelected === 'REQUEST_PUSH_POPUP'){
 							var listOfOptions = $(htmlContent).find('#action select optgroup option');
 							listOfOptions[0].remove();//MODAL_POPUP
 							listOfOptions[2].remove();//CALL_POPUP
 							listOfOptions[3].remove();//SITE_BAR
+							listOfOptions[4].remove();//REQUEST_PUSH_POPUP
 						}
 					}
 					chainWebRules($(htmlContent)[0], undefined, true);
@@ -199,8 +205,11 @@ var Web_Rules_Event_View = Base_Model_View.extend({
 					}
 					loadTinyMCE("callwebrule-code");
 					return;
-				} else if($('#agile-bar-code').val() !== "" && $('#action select').val()=='SITE_BAR') {
+				} else if($('#agile-bar-code').val() !== "" && $('#action select').val()=='SITE_BAR'){
 					loadTinyMCE("agile-bar-code");
+					return;
+				}else if($('#agile-push-noty-code').val() !== "" && $('#action select').val() == 'REQUEST_PUSH_POPUP') {
+					loadTinyMCE("agile-push-noty-code");
 					return;
 				}
 				var strWindowFeatures = "height=650, width=800,menubar=no,location=yes,resizable=yes,scrollbars=yes,status=yes";

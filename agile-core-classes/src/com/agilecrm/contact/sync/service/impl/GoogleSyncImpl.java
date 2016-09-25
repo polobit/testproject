@@ -6,9 +6,11 @@ package com.agilecrm.contact.sync.service.impl;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLDecoder;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -19,6 +21,7 @@ import com.agilecrm.contact.sync.service.TwoWaySyncService;
 import com.agilecrm.contact.sync.wrapper.IContactWrapper;
 import com.agilecrm.contact.sync.wrapper.impl.GoogleContactWrapperImpl;
 import com.agilecrm.contact.util.ContactUtil;
+import com.agilecrm.util.FailedContactBean;
 import com.google.appengine.api.NamespaceManager;
 import com.google.gdata.client.Query;
 import com.google.gdata.client.contacts.ContactsService;
@@ -79,10 +82,11 @@ public class GoogleSyncImpl extends TwoWaySyncService
 	/**
 	 * Refresh token before starting sync
 	 */
+    	List<FailedContactBean> mergedContacts = new ArrayList<FailedContactBean>();
 	try
 	{
 	    initParameters();
-	    fetchAndSaveContacts();
+	    fetchAndSaveContacts(mergedContacts);
 	}
 	catch (Exception e)
 	{
@@ -92,7 +96,7 @@ public class GoogleSyncImpl extends TwoWaySyncService
 	}
 	finally
 	{
-	    finalizeSync();
+	    finalizeSync(mergedContacts);
 	}
     }
 
@@ -324,7 +328,7 @@ public class GoogleSyncImpl extends TwoWaySyncService
      */
     private String currentEtagInSync = null;
 
-    private void saveContactsInAgile(List<ContactEntry> entries)
+    private void saveContactsInAgile(List<ContactEntry> entries,List<FailedContactBean> mergedContacts)
     {
 	Long created_at = 0l;
 
@@ -368,8 +372,18 @@ public class GoogleSyncImpl extends TwoWaySyncService
 		syncStatus.put(ImportStatus.TOTAL_FAILED, syncStatus.get(ImportStatus.TOTAL_FAILED) + 1);
 		continue;
 	    }
-
-	    			wrapContactToAgileSchemaAndSave(entry);
+	    boolean valid_email=false;
+	    for(Email email:emails){
+	    	
+	    	 if (ContactUtil.isValidEmail(email.getAddress()))
+	    	 {
+	    		 valid_email=true;
+	    		 break;
+	    	 }
+	    	
+	    }
+	    	if(valid_email)
+	    			wrapContactToAgileSchemaAndSave(entry,mergedContacts);
 	    
 	    
 	}
@@ -418,7 +432,7 @@ public class GoogleSyncImpl extends TwoWaySyncService
 	catch (Exception e)
 	{
 	    System.out.println("Error occured while creating contacts in Google" + e.getMessage());
-	    System.out.println("Error occured while creating contacts in Google" + e);
+	    System.out.println("StackTrace_of_sync"+ExceptionUtils.getFullStackTrace(e));
 	}
 	
     }
@@ -434,6 +448,7 @@ public class GoogleSyncImpl extends TwoWaySyncService
 	{
 		System.out.println("Error occured while updating contacts in Google" + e.getMessage());
 		System.out.println("Error occured while updating contacts in Google" + e);
+		System.out.println("StackTrace_of_sync"+ExceptionUtils.getFullStackTrace(e));
 	}
 
     }
@@ -447,11 +462,16 @@ public class GoogleSyncImpl extends TwoWaySyncService
     private void saveNewContactsToGoogle(List<Contact> contacts) throws Exception
     {
     	System.out.println("New contacts from Agile" + contacts);
-	String token = prefs.token;
-
+	
 	// Feed that hold s all the batch request entries.
 	ContactFeed requestFeed = new ContactFeed();
-
+	
+	if ((prefs.expires - 60000) <= System.currentTimeMillis())
+	{
+	    System.out.println(prefs.token);
+	    GoogleServiceUtil.refreshGoogleContactPrefsandSave(prefs);
+	}
+	String token = prefs.token;
 	// Fetches contacts service
 	ContactsService contactService = GoogleServiceUtil.getService(token);
 
@@ -518,8 +538,11 @@ public class GoogleSyncImpl extends TwoWaySyncService
 
 	    if (!skip)
 	    {
+	    	try
+	    	{
 		    if(createContact.getId() == null)
 		    {
+		    	System.out.println("Inside_Create of Create");
 				BatchUtils.setBatchOperationType(createContact, BatchOperationType.INSERT);
 				BatchUtils.setBatchId(createContact,"create");
 				requestFeed.getEntries().add(createContact);
@@ -528,18 +551,34 @@ public class GoogleSyncImpl extends TwoWaySyncService
 		    {
 		    	//If contact already present in google with this email, we just update this
 		    	//instead of creating new contact
+		    	System.out.println("Inside_update of Create");
 				BatchUtils.setBatchOperationType(createContact, BatchOperationType.UPDATE);
 				BatchUtils.setBatchId(createContact,"update");
 				requestFeed.getEntries().add(createContact);
 		    }
 			insertRequestCount++;
 	    }
+		catch(Exception e)
+		{
+			System.out.println("Exception occured while updating contact:"+e);
+		}
+	    }
 
-	    if (insertRequestCount >= 95 || (i >= contacts.size() - 1 && insertRequestCount != 0))
+	    if (insertRequestCount >= 2 || (i >= contacts.size() - 1 && insertRequestCount != 0))
 	    {
 	    
 	    Thread.sleep(2000);
+	    if ((prefs.expires - 60000) <= System.currentTimeMillis())
+		{
+		    System.out.println(prefs.token);
+		    GoogleServiceUtil.refreshGoogleContactPrefsandSave(prefs);
+		    contactService = GoogleServiceUtil.getService(prefs.token);
+		}
+		
+	    System.out.println("Inside batch update");
+	    insertRequestCount = 0;
 		// Submit the batch request to the server.
+	    try{
 		responseFeed = contactService.batch(url, requestFeed);
 		for(int v=0;v<responseFeed.getEntries().size();v++)
 		{
@@ -554,8 +593,14 @@ public class GoogleSyncImpl extends TwoWaySyncService
 		prefs.last_synced_to_client = contact.created_time > prefs.last_synced_to_client ? contact.created_time
 			: prefs.last_synced_to_client;
 
-		insertRequestCount = 0;
+		
 		requestFeed = new ContactFeed();
+	    }
+	    catch(Exception e)
+	    {
+	    	requestFeed = new ContactFeed();
+	    	  System.out.println("StackTrace_of_sync_inside_insert"+ExceptionUtils.getFullStackTrace(e));
+	    }
 
 	    }
 	    limit = i;
@@ -575,11 +620,17 @@ public class GoogleSyncImpl extends TwoWaySyncService
     {
     
     System.out.println("Updated contacts from Agile" + contacts);
-	String token = prefs.token;
+	//String token = prefs.token;
 
 	// Feed that hold s all the batch request entries.
 	ContactFeed updateFeed = new ContactFeed();
-
+	
+	if ((prefs.expires - 60000) <= System.currentTimeMillis())
+	{
+	    System.out.println(prefs.token);
+	    GoogleServiceUtil.refreshGoogleContactPrefsandSave(prefs);
+	}
+	String token = prefs.token;
 	// Fetches google contacts service
 	ContactsService contactService = GoogleServiceUtil.getService(token);
 
@@ -635,26 +686,37 @@ public class GoogleSyncImpl extends TwoWaySyncService
 		}
 		if (!skip)
 		{
-			 if(createContact.getId() == null)
-			    {
-					BatchUtils.setBatchOperationType(createContact, BatchOperationType.INSERT);
-					BatchUtils.setBatchId(createContact,"create");
-					updateFeed.getEntries().add(createContact);
-			    }
-			    else
+			
+			try{
+			 if(createContact.getId() != null)
 			    {
 			    	//If contact already present in google with this email, we just update this
 			    	//instead of creating new contact
+			    	System.out.println("Inside_update_of_update");
 					BatchUtils.setBatchOperationType(createContact, BatchOperationType.UPDATE);
 					BatchUtils.setBatchId(createContact,"update");
 					updateFeed.getEntries().add(createContact);
 			    }
 				updateRequestCount++;
+			}
+			catch(Exception e)
+			{
+				System.out.println("Exception occured while updating contact:"+e);
+			}
 		}
 		    
-		if (updateRequestCount >= 95 || ((i >= (contacts.size() - 1) && updateRequestCount != 0)))
+		if (updateRequestCount >= 2 || ((i >= (contacts.size() - 1) && updateRequestCount != 0)))
 		{
 		    Thread.sleep(2000);
+		    if ((prefs.expires - 60000) <= System.currentTimeMillis())
+			{
+			    System.out.println(prefs.token);
+			    GoogleServiceUtil.refreshGoogleContactPrefsandSave(prefs);
+			    contactService = GoogleServiceUtil.getService(prefs.token);
+			}
+		    System.out.println("Inside batch update");
+		    updateRequestCount = 0;
+		    try{
 			responseFeed = contactService.batch(new URL("https://www.google.com/m8/feeds/contacts/default/full/batch?"
 				+ "access_token=" + token), updateFeed);
 			for(int v=0;v<responseFeed.getEntries().size();v++)
@@ -667,8 +729,13 @@ public class GoogleSyncImpl extends TwoWaySyncService
 			responseFeed = null;
 			prefs.last_synced_updated_contacts_to_client = (contact.updated_time != 0 && contact.updated_time > prefs.last_synced_updated_contacts_to_client) ? contact.updated_time
 				: prefs.last_synced_to_client;
-			updateRequestCount = 0;
+			
 			updateFeed = new ContactFeed();
+		    }
+		    catch(Exception e){
+		    	updateFeed = new ContactFeed();
+		    	 System.out.println("StackTrace_of_sync_inside_update"+ExceptionUtils.getFullStackTrace(e));
+		    }
 		}
 		limit = i;
 	}
@@ -766,7 +833,7 @@ public class GoogleSyncImpl extends TwoWaySyncService
      * Calls fetch functionality and save function if sync is allowed (ACLs and
      * billing restriction).
      */
-    private void fetchAndSaveContacts()
+    private void fetchAndSaveContacts(List<FailedContactBean> mergedContacts)
     {
 	while (canSync() && (fetchIndex < max_limit))
 	{
@@ -796,7 +863,7 @@ public class GoogleSyncImpl extends TwoWaySyncService
 	    // Saves contacts in agile matching accordingly based on entity
 	    // names
 	    System.out.println("Entries size " + entries.size());
-	    saveContactsInAgile(entries);
+	    saveContactsInAgile(entries,mergedContacts);
 
 	    // If fetched contacts size is less than 200, next request is not
 	    // sent to fetch next set of results
@@ -831,12 +898,12 @@ public class GoogleSyncImpl extends TwoWaySyncService
 	}
     }
 
-    private void finalizeSync()
+    private void finalizeSync(List<FailedContactBean> mergedContacts)
     {
 	prefs.inProgress = false;
 	updateLastSyncedInPrefs();
 	updateOtherParameters();
-	sendNotification(prefs.type.getNotificationEmailSubject());
+	sendNotification(prefs.type.getNotificationEmailSubject(),mergedContacts);
     }
 
 }

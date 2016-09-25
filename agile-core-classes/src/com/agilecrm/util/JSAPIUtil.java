@@ -1,12 +1,18 @@
 package com.agilecrm.util;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.WebApplicationException;
+
 import org.apache.commons.lang.StringUtils;
+import org.codehaus.jackson.JsonGenerationException;
+import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -18,6 +24,7 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.ContactField.FieldType;
 import com.agilecrm.contact.js.JSContact;
+import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.TagUtil;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
@@ -34,7 +41,7 @@ public class JSAPIUtil
 	        "API key missing"), DUPLICATE_CONTACT("Duplicate found for \"%s\""), CONTACT_LIMIT_REACHED(
 	        "Contacts limit reached"), PROPERTY_MISSING("Property not found for contact"), INVALID_TAGS(
 	        "Invalid tags"), ID_NOT_FOUND("ID missing in \"%s\" data"), ENTITY_NOT_FOUND("\"%s\" not found with ID"),CONTACT_CREATE_RESTRICT(
-			"Contact cannot be created due to security"), CONTACT_UPDATE_RESTRICT("Contact cannot be updated due to security");
+			"Contact cannot be created due to security"), CONTACT_UPDATE_RESTRICT("Contact cannot be updated due to security"), INVALID_BROWSER_ID("Contact cannot subscribe Push Notification");
 
 	String errorMessage;
 
@@ -212,5 +219,110 @@ public class JSAPIUtil
 	    
 	    return false;
     }
+    
+    /**
+     * 
+     * @param contact1
+     * @param json
+     * @param request 
+     * @param campaignIds 
+     * @param apiKey 
+     * @return contact
+     */
+    public static String updateContactPushNotification(Contact contact, String json, String campaignIds, HttpServletRequest request, String apiKey)
+    {
+	  try
+		 {
+		     ObjectMapper mapper = new ObjectMapper();
+		     
+		     String tags[] = new String[0];
+		     JSONObject obj = new JSONObject(json);
+		     
+		     Iterator<?> keys = obj.keys();
+		     while (keys.hasNext())
+		     {
+			    String key = (String) keys.next();
+				 if (key.equals("tags"))
+				  {
+				      JSONArray tagJSON = new JSONArray(obj.getString(key));
+				      String tagString = "";
+				      
+				      for(int i=0; i < tagJSON.length(); i++)
+				    	  {
+				    	    if(i!=0)
+				    	    	tagString = tagString + "," + tagJSON.getString(i);
+				    	    else
+				    	    	tagString = tagJSON.getString(i);
+				    	  }
+				      tags = tagString.split(",");
+				  }
+				 else if (key.equals("properties"))
+				    {
+						JSONArray propertiesJSONArray = new JSONArray(obj.getString(key));
+						for (int i = 0; i < propertiesJSONArray.length(); i++)
+						{
+						    // Create and add contact field to contact
+						    JSONObject json1 = new JSONObject();
+						    json1.put("name", propertiesJSONArray.getJSONObject(i).getString("name"));
+						    json1.put("value", propertiesJSONArray.getJSONObject(i).getString("value"));
+						    
+						    ContactField field = mapper.readValue(json1.toString(), ContactField.class);
+						    contact.addProperty(field);
+						}
+					    }
+				  else
+				  {
+					  System.out.println("No prop");
+				  }
+		     }
+
+			 String address = contact.getContactFieldValue(Contact.ADDRESS);
+			 System.out.println("Address = " + address);
+			 
+			 if (StringUtils.isBlank(address))
+			    {
+				 	System.out.println("Adding location");
+
+				 	org.json.simple.JSONObject locJSON = GeoLocationUtil.getLocation(request);
+				 	contact.addProperty(new ContactField(Contact.ADDRESS, locJSON.toString(), null));
+			    }
+
+			    // Sets owner key to contact before saving
+			    contact.setContactOwner(JSAPIUtil.getDomainUserKeyFromInputKey(apiKey));
+
+		   if (tags.length > 0)
+		   {
+			  try
+				  {
+				    contact.addTags(tags);
+				   }
+				  catch (WebApplicationException e) {
+				      return JSAPIUtil.generateJSONErrorResponse(Errors.INVALID_TAGS);
+				  }
+			 }
+			else
+			  contact.save();
+				
+		  System.out.println("Browser Id  Contact :" + contact);
+		  
+		  return JSAPIUtil.limitPropertiesInContactForJSAPI(contact);
+	    }
+ catch (JsonGenerationException e) {
+			e.printStackTrace();
+			return null;
+		} catch (JsonMappingException e) {
+			e.printStackTrace();
+			return null;
+		} catch (IOException e) {
+			e.printStackTrace();
+			return null;
+		} catch (JSONException e) {
+			e.printStackTrace();
+			return null;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 
 }

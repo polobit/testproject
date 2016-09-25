@@ -32,7 +32,8 @@ public class WebhookTriggerUtil
 	    throws EntityNotFoundException
     {
 	Webhook hook = WebhookTriggerUtil.getWebhook();
-	System.out.println("hooook" + hook);
+	System.out.println("hook received = " + hook);
+	
 	if (hook == null || hook.modules.size() == 0)
 	    return;
 
@@ -73,7 +74,8 @@ public class WebhookTriggerUtil
 
     private static void createWebhookTrigger(Object obj, Webhook hook, Boolean updated, String simpleName)
     {
-
+	String oldNameSpace = NamespaceManager.get();
+	
 	String eventName = getEventName(simpleName, updated);
 
 	final WebhookEvent evnt = new WebhookEvent(eventName, obj);
@@ -81,39 +83,40 @@ public class WebhookTriggerUtil
 
 	try
 	{
-	    ThreadManager.createBackgroundThread(createHookThread(evnt, uRL)).start();
+	    //ThreadManager.createBackgroundThread(createHookThread(evnt, uRL)).start();
+	    createHookThread(evnt, uRL);
 	}
 	catch (Exception e)
 	{
 	    System.out.println("In Catch " + e.getMessage());
-	    ThreadManager.createThreadForCurrentRequest(createHookThread(evnt, uRL)).start();
+	}
+	finally{
+	    try {
+		NamespaceManager.set(oldNameSpace);
+	    } catch (Exception e2) {
+		System.out.println("In Catch e3 " + e2.getMessage());
+	    }
 	}
 
     }
 
-    static Runnable createHookThread(final WebhookEvent event, final String uRL)
+    static void createHookThread(final WebhookEvent event, final String uRL)
     {
 
-	return new Runnable()
+	System.out.println("Calling run method from thread...");
+	ObjectMapper mapper = new ObjectMapper();
+	try
 	{
-	    public void run()
-	    {
-		System.out.println("Calling run method from thread...");
-		ObjectMapper mapper = new ObjectMapper();
-		try
-		{
-		    String json = mapper.writeValueAsString(event);
+	    String json = mapper.writeValueAsString(event);
 
-		    TaskletWebhooksDeferredTask task = new TaskletWebhooksDeferredTask(json, uRL.toString());
-		    PullQueueUtil.addToPullQueue(AgileQueues.WEBHOOKS_REGISTER_ADD_QUEUE, task, "_personal");
+	    TaskletWebhooksDeferredTask task = new TaskletWebhooksDeferredTask(json, uRL.toString());
+	    PullQueueUtil.addToPullQueue(AgileQueues.WEBHOOKS_REGISTER_ADD_QUEUE, task, "_personal");
 
-		}
-		catch (Exception e)
-		{ // TODO Auto-generated catch block
-		    e.printStackTrace();
-		}
-	    }
-	};
+	}
+	catch (Exception e)
+	{ // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
 
     }
 
@@ -183,7 +186,8 @@ public class WebhookTriggerUtil
 
 	String oldNamespace = NamespaceManager.get();
 	NamespaceManager.set("");
-
+	Webhook hook = null;
+	
 	try
 	{
 	    Map map = new HashMap();
@@ -192,17 +196,18 @@ public class WebhookTriggerUtil
 
 	    List<Webhook> hooks = hooksdao.listByProperty(map);
 	    System.out.println("hoooooooooooooooks" + hooks);
-	    return hooks.get(0);
+	    hook = hooks.get(0);
 	}
 	catch (Exception e)
 	{
-	    return null;
+	    hook = null;
 	}
 	finally
 	{
 	    NamespaceManager.set(oldNamespace);
 	}
-
+	
+	return hook;
     }
 
 }

@@ -217,8 +217,13 @@ function sipSessionEventsListener(e /* SIPml.Session.Event */)
 			// Show add contact modal if contact id not added
 			if(Show_Add_Contact == true)
 				{
-				 $('#personModal').modal('show');
-				 $("#personForm").find("#phone").val(User_Number);
+				if(User_Number){
+					var jsonObj = {};
+					jsonObj['phoneNumber'] = User_Number;
+					return showContactMergeOption(jsonObj);
+					// $('#personModal').modal('show');
+					// $("#personForm").find("#phone").val(User_Number);
+				}
 				}			
 			
 			// call terminated.			

@@ -62,11 +62,9 @@ $(function(){
 		
 		if(CallLogVariables.callWidget){
 
-			if(CallLogVariables.dynamicData != null){
 				if(CallLogVariables.processed){
 					return;
 				}
-			}
 			try{
 				//if the data is not there - it means call status is not completed - so we log the activities of the call
 				var widgetType = CallLogVariables.callWidget.toLowerCase();

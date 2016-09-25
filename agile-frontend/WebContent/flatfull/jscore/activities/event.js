@@ -523,6 +523,7 @@ $(function()
 	    });
 
 	  $('body').on('click',".chromeExtension",function(e){
+	  	
 	  	// e.stopImmediatePropagation();
 	  	$(this).parents(".popover").popover('hide');
 	  	e.stopPropagation();
@@ -531,7 +532,8 @@ $(function()
 	  	try{
 	  		chrome.webstore.install("https://chrome.google.com/webstore/detail/eofoblinhpjfhkjlfckmeidagfogclib", 
 		        function(d){
-		          console.log("installed")
+		          console.log("installed");
+		          
 		        },function(e){
 		          console.log("not installed: "+ e)
 		        });

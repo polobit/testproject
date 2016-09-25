@@ -211,6 +211,11 @@
     <servlet-name>TwilioIOTwiml</servlet-name>
     <url-pattern>/twiml</url-pattern>
   </servlet-mapping>
+  
+	<listener>
+		<listener-class>com.agilecrm.campaignsNormal.AgileServletContextListener</listener-class>
+	</listener>
+  
   <!-- <filter>
     <filter-name>NamespaceFilter</filter-name>
     <filter-class>com.agilecrm.filter.NamespaceFilter</filter-class>

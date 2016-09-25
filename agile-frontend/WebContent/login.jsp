@@ -1,3 +1,6 @@
+<%@page import="com.agilecrm.util.CookieUtil"%>
+<%@page import="java.util.Map"%>
+<%@page import="com.agilecrm.util.language.LanguageUtil"%>
 <%@page import="com.agilecrm.ipaccess.IpAccessUtil"%>
 <%@page import="com.agilecrm.util.MathUtil"%>
 <%@page import="com.google.appengine.api.utils.SystemProperty"%>
@@ -9,6 +12,9 @@
 <%@page import="java.net.URLDecoder"%>
 <%@page import="org.json.JSONObject"%>
 <%@page import="com.agilecrm.util.MobileUADetector"%>
+<%@page language="java" contentType="text/html; charset=UTF-8"
+pageEncoding="UTF-8"%>
+
 <%
 /*
 we use setAttribute() to store the username and to autofill if he want to resubmit the form after correcting the error occurred. 
@@ -30,14 +36,30 @@ request.setAttribute("agile_email", email);
 }
 //Gets the Ip 
 
+// Get the language and save as cookie
+String reqlanguage = request.getParameter("lang");
+String _LANGUAGE = CookieUtil.readCookieValue(request, "user_lang");
+
+if(StringUtils.isNotBlank(reqlanguage) && LanguageUtil.isSupportedlanguageFromKey(reqlanguage)){
+	_LANGUAGE = reqlanguage;
+	CookieUtil.createCookieWithDomain(null, "user_lang", _LANGUAGE, response);
+}
+
+if(StringUtils.isBlank(_LANGUAGE) || !LanguageUtil.isSupportedlanguageFromKey(_LANGUAGE)) {
+	_LANGUAGE = LanguageUtil.getSupportedLocale(request);
+	CookieUtil.createCookieWithDomain(null, "user_lang", _LANGUAGE, response);
+}
+
+// Locales JSON
+JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "login");
 
 	
 // Checks if it is being access directly and not through servlet
-/* if(request.getAttribute("javax.servlet.forward.request_uri") == null)
+if(request.getAttribute("javax.servlet.forward.request_uri") == null)
 {
   response.sendRedirect("/login");
   return;
-} */
+}
 
 String error = request.getParameter("error");
 if(error != null)
@@ -85,7 +107,7 @@ if(cookieJSON.has("userAgent"))
     JSONObject user_details = cookieJSON.getJSONObject("userAgent");
     cookieJSON.put("user_details", user_details);
     agent = user_details.get("OSName") + " - " +user_details.get("browser_name") ;
-    error="We had to log you out as you seem to have logged in from some other browser <span style='font-size:12px'>("+ agent+ ")</span>";
+    error = LanguageUtil.getLocaleJSONValue(localeJSON, "duplicate-login") + " <span style='font-size:12px'>("+ agent+ ")</span>";
 }
 }
 
@@ -120,12 +142,12 @@ int randomBGImageInteger = MathUtil.randomWithInRange(1, 9);
 %>
 <!DOCTYPE html>
 
-<html lang="en" style="background:transparent;">
+<html lang="<%=_LANGUAGE %>" style="background:transparent;">
 <head>
 <meta charset="utf-8">
 <meta name="globalsign-domain-verification"
 	content="-r3RJ0a7Q59atalBdQQIvI2DYIhVYtVrtYuRdNXENx" />
-<title>Login</title>
+<title><%=LanguageUtil.getLocaleJSONValue(localeJSON, "login")%></title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0 maximum-scale=1">
 <meta name="description" content="">
 <meta name="author" content="">
@@ -144,8 +166,10 @@ body {
 
 		background-color: #f0f3f4;
 	
-	<% }else {  %>
-
+	<% }else if(VersioningUtil.isDevelopmentEnv()){  %>
+background-image:url('https://doxhze3l6s7v9.cloudfront.net/app/static/images/login-<%=randomBGImageInteger%>-high-prog.jpg');
+	
+		<%} else {  %>
 background-image:url('<%=S3_STATIC_IMAGE_PATH%>images/login-<%=randomBGImageInteger%>-high-prog.jpg');
 	
 		<%}%>
@@ -199,6 +223,20 @@ position: fixed;width: 100%;top: 0px;
     bottom: 0;
 }
 
+.lang-identifier {
+	position: absolute; 
+	top:30px; 
+	right: 30px;
+	font-size: 12px;
+}
+.lang-identifier a {
+	text-decoration: none; 
+	font-size: 12px;
+	color: #eee;
+}
+#myFrame {
+	display: none;
+}
 </style>
 
 <script>
@@ -220,6 +258,8 @@ if(isSafari && isWin)
 
 <script type='text/javascript' src='//cdnjs.cloudflare.com/ajax/libs/jquery/1.10.2/jquery.min.js'></script>
 <script type='text/javascript' src='//cdn.jsdelivr.net/fingerprintjs2/1.1.2/fingerprint2.min.js'></script>
+<script type='text/javascript' src='flatfull/final-lib/final-lib-1/b-bootstrap.js'></script>
+<script src='locales/html5/localize.js?_=<%=_AGILE_VERSION%>'></script>
 
 <!--[if lt IE 10]>
 <script src="flatfull/lib/ie/placeholders.jquery.min.js"></script>
@@ -234,7 +274,24 @@ if(isSafari && isWin)
 
 <body  class="overlay">
 <div id="openid_btns">
-					   	
+
+	<!-- Language -->
+	<div class="lang-identifier">
+		<a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+			<span id="lang-code-name"><%=LanguageUtil.getSupportedlanguageFromKey(_LANGUAGE)%></span> <span class="caret"></span> 
+		</a>
+	    <ul class="dropdown-menu pull-right" role="menu" style="min-width: 120px;">
+	    	<%
+	    	   for (Map.Entry<String, String> entry : LanguageUtil.getSupportedlanguages().entrySet()) {
+	    	%>
+	    	   <li><a href="?lang=<%=entry.getKey()%>"><%=entry.getValue()%></a></li>
+	    	<%
+				}
+	    	%>
+	  	</ul>
+	</div>
+	<!-- End of Language -->
+
 	<div class="" id="app">
 
 		<div ui-view="" class="fade-in-right-big smooth">
@@ -292,7 +349,7 @@ if(isSafari && isWin)
 				</form>
 			<!-- 	<div class="clearfix"></div> -->
 				<div class="wrapper text-center tags-color text-white tags-color">
-      				<strong>Sign in using your registered account</strong>
+      				<strong><%=LanguageUtil.getLocaleJSONValue(localeJSON, "signin-using-registration")%></strong>
    				</div>
 				<form name='agile' id="agile" method='post' action="/login" onsubmit="return isLoginFormValid();">
 					
@@ -303,12 +360,12 @@ if(isSafari && isWin)
 					<div class="list-group list-group-sm">
 						
 						<div class="list-group-item">
-							<input class="input-xlarge required email field form-control no-border" name='email' type="email" required placeholder="User ID (Your Email Address)" autocapitalize="off" autofocus
+							<input class="input-xlarge required email field form-control no-border" name='email' type="email" required oninvalid="_agile_set_custom_validate(this);" oninput="_agile_reset_custom_validate(this);" placeholder='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "user-id-your-email")%>' autocapitalize="off" autofocus
 						<%if(request.getAttribute("agile_email")  != null) {%> value="<%=request.getAttribute("agile_email") %>" <%}%>>
 						</div>
 						
 						<div class="list-group-item">
-					    	<input class="input-xlarge required field form-control no-border" required maxlength="20" minlength="4" name='password' type="password" placeholder="Password" autocapitalize="off">
+					    	<input class="input-xlarge required field form-control no-border" oninvalid="_agile_set_custom_validate(this);" oninput="_agile_reset_custom_validate(this);" required maxlength="20" minlength="4" name='password' type="password" placeholder='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "password")%>' autocapitalize="off">
 						</div>
 
 						 
@@ -324,7 +381,7 @@ if(isSafari && isWin)
 							<label class="checkbox" style="display:none;">
 							    <input type="checkbox" checked="checked" name="signin">Keep me signed in 
 							</label>
-							<input type='submit' value="Sign In" class='agile-submit btn btn-lg btn-primary btn-block'>
+							<input type='submit' value='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "sign-in")%>' class='agile-submit btn btn-lg btn-primary btn-block'>
 							 
 						
 					
@@ -338,11 +395,11 @@ if(isSafari && isWin)
 		id="mobile"
 	<% }else {  %> <%}%> >
 	<div class="text-center tags-color text-white m-t m-b" >
-		<small>Login with</small> 
-		<a title="Login with Google" data='google' href='#' class="openid_large_btn google tags-color text-white">Google</a>&nbsp|&nbsp
-		<a title="Login with Yahoo" data='yahoo' href="#" class="openid_large_btn yahoo tags-color text-white">Yahoo</a><br/>	
-		<small>Do not have an account?</small> <a href="/register" class="tags-color text-white">Sign Up</a><br/>
-		<small>Forgot</small> <a href="/forgot-password" class="tags-color text-white">Password? </a><a href="/forgot-domain" class="tags-color text-white">Domain?</a>
+		<small><%=LanguageUtil.getLocaleJSONValue(localeJSON, "login-with")%></small> 
+		<a title='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "login-with-google")%>' data='google' href='#' class="openid_large_btn google tags-color text-white">Google</a>&nbsp|&nbsp
+		<a title='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "login-with-yahoo")%>' data='yahoo' href="#" class="openid_large_btn yahoo tags-color text-white">Yahoo</a><br/>	
+		<small><%=LanguageUtil.getLocaleJSONValue(localeJSON, "dont-have-account")%>?</small> <a href="/register" class="tags-color text-white"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "sign-up")%></a><br/>
+		<small><%=LanguageUtil.getLocaleJSONValue(localeJSON, "forgot")%></small> <a href="/forgot-password" class="tags-color text-white"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "password")%>? </a><a href="/forgot-domain" class="tags-color text-white"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "domain")%>?</a>
 		</div>
 	</div>
 		
@@ -364,14 +421,20 @@ if(isSafari && isWin)
 			// localStorage setup
 			var _agile_storage = {
 				key : "_agile_user_fingerprint",
-				get : function(){
+				get : function(key){
+					if(!key)
+						key = this.key;
+
 					if(!this.is_strorage_supports())
 						 return;
-					return localStorage.getItem(this.key);
+					return localStorage.getItem(key);
 				},
-				set :  function(val){
+				set :  function(val, key){
+					if(!key)
+						key = this.key;
+
 					if(this.is_strorage_supports())
-						localStorage.setItem(this.key, val);
+						localStorage.setItem(key, val);
 				},
 				is_strorage_supports : function(){
 					return (typeof localStorage ? true : false);
@@ -408,6 +471,9 @@ if(isSafari && isWin)
 				// Reset val
 				_agile_storage.set(result);
 			});
+
+			var localeJSON = <%=localeJSON%>;
+			
 		</script>
 		
 	<script src='//cdnjs.cloudflare.com/ajax/libs/headjs/1.0.3/head.min.js'></script>
@@ -416,7 +482,6 @@ if(isSafari && isWin)
 	<script type="text/javascript">
 		$(document).ready(function()
 		{
-
 			// Reset form action param
 			if(window.location.href.indexOf("/normal") != -1)
 				$("form#agile").attr("action", "/login/normal");
@@ -427,7 +492,7 @@ if(isSafari && isWin)
 				$("#location_hash").val(login_hash);
 			
         	// agile-login-page-high.png
-        	preload_login_pages();
+        	preload_login_bg_images();
 			// Pre load dashlet files when don is active
 			preload_dashlet_libs();
 
@@ -470,7 +535,7 @@ if(isSafari && isWin)
 			return true;
 		}
 
-		function preload_dashlet_libs(){ 
+		function preload_dashlet_libs() { 
 
 			if ($.active > 0) {
 				setTimeout(function() {
@@ -479,17 +544,27 @@ if(isSafari && isWin)
 				return;
 			}
 
-			head.load('<%=CLOUDFRONT_STATIC_FILES_PATH %>final-lib/min/lib-all-min-1.js?_=<%=_AGILE_VERSION%>', 
-					'<%=CLOUDFRONT_TEMPLATE_LIB_PATH %>jscore/min/flatfull/js-all-min-1.js?_=<%=_AGILE_VERSION%>', 
-					'<%=CLOUDFRONT_TEMPLATE_LIB_PATH %>jscore/min/flatfull/js-all-min-2.js?_=<%=_AGILE_VERSION%>', 
-					'<%=CLOUDFRONT_TEMPLATE_LIB_PATH %>jscore/min/flatfull/js-all-min-3.js?_=<%=_AGILE_VERSION%>', 
-					'<%=CLOUDFRONT_TEMPLATE_LIB_PATH %>jscore/min/flatfull/js-all-min-4.js?_=<%=_AGILE_VERSION%>', 
-					'<%=CLOUDFRONT_TEMPLATE_LIB_PATH%>tpl/min/precompiled/<%=FLAT_FULL_PATH%>tpl.js?_=<%=_AGILE_VERSION%>', 
-					'<%=CLOUDFRONT_TEMPLATE_LIB_PATH%>tpl/min/precompiled/<%=FLAT_FULL_PATH%>portlets.js?_=<%=_AGILE_VERSION%>'
-							);
+			// Load iframe
+			var framejson = {};
+			framejson.src = 'flatfull/preload-js-src-iframe.html';
+			framejson.id = 'myFrame',framejson.frameborder = 0;
+			framejson.scrolling = 'no';
+			$('<iframe>', framejson).appendTo('body');
+
 		}
 
-		function preload_login_pages(){
+		function get_cloudfront_path(type){
+			if(type == "static")
+				return "<%=CLOUDFRONT_STATIC_FILES_PATH%>";
+			else if(type == "lib")
+				return "<%=CLOUDFRONT_TEMPLATE_LIB_PATH%>";
+			else if(type == "version")
+				return "<%=_AGILE_VERSION%>";
+			else if(type == "language")
+				return "<%=_LANGUAGE%>";
+		}
+
+		function preload_login_bg_images(){
 
 			for(var i=1; i < 10; i++){
 
@@ -498,25 +573,26 @@ if(isSafari && isWin)
 				    src: '<%=S3_STATIC_IMAGE_PATH%>/images/login-' + i + '-high.jpg',
 				}).appendTo('body');
 
-				/*$('<img/>', {
-				    class: 'hide',
-				    src: '<%=S3_STATIC_IMAGE_PATH%>/images/login-' + i + '-low.jpg',
-				}).appendTo('body');*/
-
 			}
 		}
 
 		// localStorage setup
 		var _agile_storage = {
 			key : "_agile_user_fingerprint",
-			get : function(){
+			get : function(key){
+				if(!key)
+					key = this.key;
+
 				if(!this.is_strorage_supports())
 					 return;
-				return localStorage.getItem(this.key);
+				return localStorage.getItem(key);
 			},
-			set :  function(val){
+			set :  function(val, key){
+				if(!key)
+					key = this.key;
+
 				if(this.is_strorage_supports())
-					localStorage.setItem(this.key, val);
+					localStorage.setItem(key, val);
 			},
 			is_strorage_supports : function(){
 				return (typeof localStorage ? true : false);
@@ -534,6 +610,9 @@ if(isSafari && isWin)
 						return callback(result);
 				});
 		}
+
+		// Language Detection
+		
 
 		var BrowserDetect = {
 			init : function() {

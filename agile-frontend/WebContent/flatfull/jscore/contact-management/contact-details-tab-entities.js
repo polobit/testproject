@@ -15,7 +15,7 @@ var contact_details_tab = {
 		load_timeline : function()
 		{
 			$('div.tab-content', App_Contacts.contactDetailView.el).find('div.active').removeClass('active');
-			
+			$("#timeline").append("<div id='line-container'><div id='line'></div></div>");
 			$('#time-line', App_Contacts.contactDetailView.el).addClass('active');
 			if($("#timeline", App_Contacts.contactDetailView.el).hasClass('isotope'))
 			{
@@ -395,6 +395,7 @@ function fetchMails(contact_details_tab_scope,has_email_configured,mail_server_u
 	templateKey : "email-social", sort_collection : true, sortKey : "date_secs", descending : true, individual_tag_name : "li",
 	postRenderCallback : function(el)
 	{
+		$(el).find('style').html("");
 		$('#mail', App_Contacts.contactDetailView.el).find("#no-email").css('display','block');
 		agileTimeAgoWithLngConversion($(".email-sent-time", el));
 		
@@ -694,12 +695,19 @@ function contact_detail_page_infi_scroll(element_id, targetCollection)
 				targetCollection.infiniScroll.disableFetch();
 			}
 			// Remove loading icon
+			if($(targetCollection.el,element_id).find('#company-contacts-list-view-model-list').length>0)
+ 				$(targetCollection.el,element_id).find("#contacts-table").parent().find('.scroll-loading').remove();
+ 			else
 			$(targetCollection.infiniScroll.options.target).find('.scroll-loading').remove();
 		},
 		onFetch : function()
 		{
 			console.log('in fetch');
 			// Add loading icon
+			if($(targetCollection.el,element_id).find('#company-contacts-list-view-model-list').length>0)
+ 				$(targetCollection.el,element_id).find("#contacts-table").parent().
+ 			append('<div class="scroll-loading"> <img src="'+updateImageS3Path("/img/ajax-loader-cursor.gif") +'" style="margin-left: 44%;"> </div>');
+ 		else
 			$(targetCollection.infiniScroll.options.target).append(
 					'<div class="scroll-loading"> <img src="'+updateImageS3Path("/img/ajax-loader-cursor.gif") +'" style="margin-left: 44%;"> </div>');
 		}

@@ -2,6 +2,7 @@ cd ../WebContent
 cat flatfull/tpl/*.html > tpl/min/flatfull/tpl.js
 cat flatfull/tpl/dashboards/*.html >  tpl/min/flatfull/dashboards.js
 cat flatfull/tpl/settings/*.html >  tpl/min/flatfull/settings.js
+cat flatfull/tpl/notification/*.html >  tpl/min/flatfull/notification.js
 cat flatfull/tpl/continue/*.html > tpl/min/flatfull/continue.js
 cat flatfull/tpl/deal-detail/*.html > tpl/min/flatfull/deal-detail.js
 cat flatfull/tpl/bulk-actions/*.html > tpl/min/flatfull/bulk-actions.js
@@ -25,6 +26,7 @@ cat flatfull/tpl/emailbuilder/*.html > tpl/min/flatfull/emailbuilder.js
 cat flatfull/tpl/segmentation/*.html > tpl/min/flatfull/segmentation.js
 cat flatfull/tpl/referals/*.html > tpl/min/flatfull/referals.js
 cat flatfull/tpl/helpcenter/*.html  > tpl/min/flatfull/helpcenter.js
+cat flatfull/tpl/affiliate/*.html  > tpl/min/flatfull/affiliate.js
 
 cat flatfull/tpl/widget/zendesk/*.html > tpl/min/flatfull/zendesk.js
 cat flatfull/tpl/widget/helpscout/*.html > tpl/min/flatfull/helpscout.js
@@ -51,6 +53,7 @@ cat flatfull/tpl/widget/braintree/*.html > tpl/min/flatfull/braintree.js
 cat flatfull/tpl/widget/facebook/*.html > tpl/min/flatfull/facebook.js
 
 cat ../WebContent/helpcenter/helpcenter-tpl/*.html  > ../WebContent/tpl/min/flatfull/helpcenter-tpl.js
+cat flatfull/tpl/generic-timeline/*.html  > tpl/min/flatfull/generic-timeline.js
 
 ## Widgets
 cat flatfull/tpl/widget/braintree/*.html > tpl/min/flatfull/braintree.js
@@ -85,8 +88,10 @@ cd ../util
 if [ -n "$1" ]; then
     echo "template not empty"
     java -jar agilelocalize.jar ../WebContent/tpl/min/flatfull ../WebContent/tpl/min $1
+    java -jar agilelocalize.jar ../WebContent/locales/misc-sources ../WebContent/locales $1
 else
     echo "template empty"
     java -jar agilelocalize.jar ../WebContent/tpl/min/flatfull ../WebContent/tpl/min en
+    java -jar agilelocalize.jar ../WebContent/locales/misc-sources ../WebContent/locales en
 fi
 #End of Local Dev

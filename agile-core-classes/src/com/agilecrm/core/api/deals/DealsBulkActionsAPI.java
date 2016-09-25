@@ -22,8 +22,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.agilecrm.AgileQueues;
+import com.agilecrm.activities.Activity.ActivityType;
 import com.agilecrm.activities.Activity.EntityType;
 import com.agilecrm.activities.util.ActivitySave;
+import com.agilecrm.activities.util.ActivityUtil;
 import com.agilecrm.bulkaction.deferred.CampaignSubscriberDeferredTask;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.ContactUtil;
@@ -91,7 +93,8 @@ public class DealsBulkActionsAPI
 
 	try
 	{
-	    List<Opportunity> all_deals = OpportunityUtil.getOpportunitiesForBulkActions(ids, filters, 100);
+		OpportunityUtil opportunityUtil = new OpportunityUtil();
+	    List<Opportunity> all_deals = opportunityUtil.getOpportunitiesForBulkActions(ids, filters, 100);
 	    DealFilterIdsFetcher dealFilterIdsFetcher = new DealFilterIdsFetcher(all_deals, currentUserId);
 	    List<Opportunity> deals = dealFilterIdsFetcher.getDealsAfterResriction();
 	    System.out.println("total deals -----" + deals.size());
@@ -151,7 +154,8 @@ public class DealsBulkActionsAPI
 
 	try
 	{
-	    List<Opportunity> all_deals = OpportunityUtil.getOpportunitiesForBulkActions(ids, filters, 100);
+		OpportunityUtil opportunityUtil = new OpportunityUtil();
+	    List<Opportunity> all_deals = opportunityUtil.getOpportunitiesForBulkActions(ids, filters, 100);
 	    DealFilterIdsFetcher dealFilterIdsFetcher = new DealFilterIdsFetcher(all_deals, currentUserId);
 	    List<Opportunity> deals = dealFilterIdsFetcher.getDealsAfterResriction();
 	    System.out.println("total deals -----" + deals.size());
@@ -168,6 +172,7 @@ public class DealsBulkActionsAPI
 		    System.out.println("total sublist -----" + subList.size());
 		    subList.clear();
 		}
+
 	    }
 
 	    if (!subList.isEmpty())
@@ -212,14 +217,26 @@ public class DealsBulkActionsAPI
 
 	try
 	{
-		List<Opportunity> all_deals = OpportunityUtil.getOpportunitiesForBulkActions(ids, filters, 100);
+		OpportunityUtil opportunityUtil = new OpportunityUtil();
+		List<Opportunity> all_deals = opportunityUtil.getOpportunitiesForBulkActions(ids, filters, 100);
 	    DealFilterIdsFetcher dealFilterIdsFetcher = new DealFilterIdsFetcher(all_deals, currentUserId);
 	    List<Opportunity> deals = dealFilterIdsFetcher.getDealsAfterResriction();
 	    System.out.println("total deals -----" + deals.size());
 
 	    List<Opportunity> subList = new ArrayList<Opportunity>();
+	    String oldOwner=null;
+	    String newOwner=null;
 	    for (Opportunity deal : deals)
 	    {
+	    try{
+		   newOwner = DomainUserUtil.getDomainUser(ownerId).name;
+		  // oldOwner = DomainUserUtil.getDomainUser(Long.parseLong(deal.owner_id)).name;
+		   oldOwner = deal.getOwner().name;
+	
+	    }
+	    catch(Exception e){
+	    	e.printStackTrace();
+	    }
 		deal.owner_id = String.valueOf(ownerId);
 		subList.add(deal);
 		if (subList.size() >= 100)
@@ -229,6 +246,11 @@ public class DealsBulkActionsAPI
 		    System.out.println("total sublist -----" + subList.size());
 		    subList.clear();
 		}
+		System.out.println("calling method createSingleDealBulkActivity");	
+
+		System.out.println("called method createSingleDealBulkActivity");	
+
+		
 	    }
 
 	    if (!subList.isEmpty())
@@ -280,7 +302,8 @@ public class DealsBulkActionsAPI
 	    JSONObject formJSON = new JSONObject(form);
 	    System.out.println("------------" + formJSON.toString());
 
-	    List<Opportunity> all_deals = OpportunityUtil.getOpportunitiesForBulkActions(ids, filters, 100);
+	    OpportunityUtil opportunityUtil = new OpportunityUtil();
+	    List<Opportunity> all_deals = opportunityUtil.getOpportunitiesForBulkActions(ids, filters, 100);
 	    DealFilterIdsFetcher dealFilterIdsFetcher = new DealFilterIdsFetcher(all_deals, currentUserId);
 	    List<Opportunity> deals = dealFilterIdsFetcher.getDealsAfterResriction();
 	    System.out.println("total deals -----" + deals.size());
@@ -304,8 +327,13 @@ public class DealsBulkActionsAPI
 		    milestone_name = deal.milestone = formJSON.getString("milestone");
 
 		// If there is change in pipeline or milestone
-		if (!oldPipelineId.equals(deal.pipeline_id) || !oldMilestone.equals(deal.milestone))
+		if (!oldPipelineId.equals(deal.pipeline_id) || !oldMilestone.equals(deal.milestone)){
 		    subList.add(deal);
+			System.out.println("calling method createSingleDealBulkActivity");	
+
+			System.out.println("called method createSingleDealBulkActivity");	
+
+		}
 
 		if (subList.size() >= 100)
 		{
@@ -367,7 +395,8 @@ public class DealsBulkActionsAPI
 
 	try
 	{
-	    List<Opportunity> all_deals = OpportunityUtil.getOpportunitiesForBulkActions(ids, filters, 100);
+		OpportunityUtil opportunityUtil = new OpportunityUtil();
+	    List<Opportunity> all_deals = opportunityUtil.getOpportunitiesForBulkActions(ids, filters, 100);
 	    DealFilterIdsFetcher dealFilterIdsFetcher = new DealFilterIdsFetcher(all_deals, currentUserId);
 	    List<Opportunity> deals = dealFilterIdsFetcher.getDealsAfterResriction(true);
 	    System.out.println("total deals -----" + deals.size());
@@ -533,8 +562,9 @@ public class DealsBulkActionsAPI
 
 	    if (tagsArray == null)
 		return;
-
-	    List<Opportunity> deals = OpportunityUtil.getOpportunitiesForBulkActions(ids, filters, 100);
+	    
+	    OpportunityUtil opportunityUtil = new OpportunityUtil();
+	    List<Opportunity> deals = opportunityUtil.getOpportunitiesForBulkActions(ids, filters, 100);
 	    System.out.println("total deals -----" + deals.size());
 	    Set<Key<Contact>> contactKeys = new HashSet<Key<Contact>>();
 	    for (Opportunity deal : deals)
@@ -591,10 +621,12 @@ public class DealsBulkActionsAPI
 	{
 	    if (user == null)
 		return;
-
-	    List<Opportunity> deals = OpportunityUtil.getOpportunitiesForBulkActions(ids, filters, 100);
+	    
+	    OpportunityUtil opportunityUtil = new OpportunityUtil();
+	    List<Opportunity> deals = opportunityUtil.getOpportunitiesForBulkActions(ids, filters, 100);
 	    System.out.println("total deals -----" + deals.size());
 	    Set<Key<Contact>> contacts = new HashSet<Key<Contact>>();
+
 	    for (Opportunity deal : deals)
 	    {
 		for (String contactId : deal.getContact_ids())

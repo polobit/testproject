@@ -100,6 +100,7 @@ public class ActivityUtil
 			activity.label = activity.label.trim();
 			contact_name = "";
 			activity.entity_id = contact.id;
+			activity.type = contact.type;
 		}
 		activity.activity_type = activity_type;
 		activity.entity_type = EntityType.CONTACT;
@@ -426,7 +427,8 @@ public class ActivityUtil
 		activity.save();
 		return activity;
 	}
-
+	
+	
 	/**
 	 * To save the document activity.
 	 * 
@@ -749,6 +751,15 @@ public class ActivityUtil
 	public static Map<String, Object[]> dealChangedFields(Opportunity obj) throws JSONException
 	{
 		Opportunity oldobj = OpportunityUtil.getOpportunity(obj.id);
+		JSONObject js = new JSONObject(new Gson().toJson(obj));
+		JSONArray jsn = new JSONArray();
+		try {
+			jsn = js.getJSONArray("contact_ids");
+			jsn = ActivitySave.getExistingContactsJsonArray(jsn);
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		// getJsonCompares(obj, oldobj);
 
 		Map<String, Object[]> dealmap = new HashMap<String, Object[]>();
@@ -849,24 +860,30 @@ public class ActivityUtil
 				dealmap.put("tags", mapvalue);
 				}
 			else if(obj.tagsWithTime.size() >0  &&  oldobj.tagsWithTime.size() >0 ) {
-				Set <String> tagset = new HashSet<String>() ;
-				Object[] mapvalue = new Object[3];
+				Set <String> oldTagset = new HashSet<String>() ;
+				Set <String> newTagset = new HashSet<String>() ;
+				Set <String> deletedTags = new HashSet<String>() ;
+				Set <String> newlyAddedTags = new HashSet<String>() ;
 				for (int i= 0;i< oldobj.tagsWithTime.size();i++){
-					tagset.add(oldobj.tagsWithTime.get(i).tag);
+					oldTagset.add(oldobj.tagsWithTime.get(i).tag);
 				}
-				mapvalue[1] = tagset ;
-				 tagset = new HashSet<String>() ;
 				for (int i= 0;i< obj.tagsWithTime.size();i++){
-					tagset.add(obj.tagsWithTime.get(i).tag);
+					newTagset.add(obj.tagsWithTime.get(i).tag);
+				}	
+				for(String s :oldTagset){
+					if(!newTagset.contains(s))
+						deletedTags.add(s);
 				}
-				mapvalue[0] = tagset;
-				mapvalue[2] = "tags";
-				dealmap.put("tags", mapvalue);
+				for(String s :newTagset){
+					if(!oldTagset.contains(s))
+						newlyAddedTags.add(s);
 				}
+				if(deletedTags.size()>0)
+					createDealActivity(ActivityType.DEAL_TAG_DELETE, obj, "", deletedTags.toString(), "tags", jsn);
+				if(newlyAddedTags.size()>0)
+					createDealActivity(ActivityType.DEAL_TAG_ADD, obj, newlyAddedTags.toString(), "", "tags", jsn);			
+			}
 			
-			JSONObject js = new JSONObject(new Gson().toJson(obj));
-			JSONArray jsn = js.getJSONArray("contact_ids");
-			jsn = ActivitySave.getExistingContactsJsonArray(jsn);
 			List<ContactPartial> contacts = oldobj.getContacts();
 
 			if (obj.archived != oldobj.archived)
@@ -1570,10 +1587,16 @@ public class ActivityUtil
 					if (f.name.equals(contact.FIRST_NAME))
 					{
 						calledToName += f.value;
+						continue;
 					}
 					if (f.name.equals(contact.LAST_NAME))
 					{
 						calledToName += " " + f.value;
+						continue;
+					}
+					if(f.name.equals(contact.NAME)){
+						calledToName = f.value;
+						continue;
 					}
 				}
 
@@ -1880,9 +1903,9 @@ public class ActivityUtil
 			String cursor, Long starttime, Long endtime, Long entityId)
 	{
 		Map<String, Object> searchMap = new HashMap<String, Object>();
-		if (!entitytype.equalsIgnoreCase("ALL") && !entitytype.equalsIgnoreCase("CALL"))
+		if (!entitytype.equalsIgnoreCase("ALL") && !entitytype.equalsIgnoreCase("CALL") && !entitytype.equalsIgnoreCase("EMAIL_SENT"))
 			searchMap.put("entity_type", entitytype);
-		if (entitytype.equalsIgnoreCase("CALL"))
+		if (entitytype.equalsIgnoreCase("CALL") || entitytype.equalsIgnoreCase("EMAIL_SENT"))
 			searchMap.put("activity_type", entitytype);
 		if (entityId != null)
 			searchMap.put("entity_id =", entityId);
@@ -1896,6 +1919,33 @@ public class ActivityUtil
 		}
 		if (userid != null)
 			searchMap.put("user", new Key<DomainUser>(DomainUser.class, userid));
+		
+		if(entitytype.equalsIgnoreCase("EMAIL_SENT")){
+			List<Activity> list1=new ArrayList<Activity>();
+			List<Activity> list2=new ArrayList<Activity>();
+			searchMap.put("activity_type", entitytype);
+			if (max != 0){
+				list1 = dao.fetchAllByOrder(max, cursor, searchMap, true, false, "-time");
+			    searchMap.put("activity_type", "BULK_ACTION");
+		        searchMap.put("custom1", "SEND_EMAIL");
+			    list2 = dao.fetchAllByOrder(max, cursor, searchMap, true, false, "-time");
+			}
+			else{
+			    list1 = dao.listByPropertyAndOrder(searchMap, "-time");
+		        searchMap.put("activity_type", "BULK_ACTION");
+		        searchMap.put("custom1", "SEND_EMAIL");
+		        list2 = dao.listByPropertyAndOrder(searchMap, "-time");
+			}
+			
+			if(list2 != null && list2.size()>0){
+				if(list1 != null)
+				list1.addAll(list2);
+				else
+					list1=list2;
+			}
+
+		   return list1;    
+		}
 
 		if (max != 0)
 			return dao.fetchAllByOrder(max, cursor, searchMap, true, false, "-time");
@@ -2166,10 +2216,16 @@ public class ActivityUtil
 							if (f.name.equals(contact.FIRST_NAME))
 							{
 								calledToName += f.value;
+								continue;
 							}
 							if (f.name.equals(contact.LAST_NAME))
 							{
 								calledToName += " " + f.value;
+								continue;
+							}
+							if(f.name.equals(contact.NAME)){
+								calledToName = f.value;
+								continue;
 							}
 						}
 
@@ -2225,8 +2281,10 @@ public class ActivityUtil
 	{
 		
 		// Search contact
+		System.out.println("in createLogForCalls==activityutil== while saving call activities and toOrFromNumber is " + toOrFromNumber );
 		if (toOrFromNumber != null)
 		{
+			System.out.println("started process to save activities inside if condition....");
 			Contact contact;
 			try
 			{
@@ -2246,11 +2304,17 @@ public class ActivityUtil
 					System.out.println("\t" + f.name + " - " + f.value);
 					if (f.name.equals(contact.FIRST_NAME))
 					{
-						calledToName += f.value;
+						calledToName = f.value;
+						continue;
 					}
 					if (f.name.equals(contact.LAST_NAME))
 					{
 						calledToName += " " + f.value;
+						continue;
+					}
+					if(f.name.equals(contact.NAME)){
+						calledToName = f.value;
+						continue;
 					}
 				}
 
@@ -2266,6 +2330,7 @@ public class ActivityUtil
 				if(note_id!=null)
 					activity.note_id_call=note_id.toString();
 				activity.save();
+				System.out.println("after saving activities for avaible contact -- " + activity);
 			}
 			else
 			{
@@ -2281,8 +2346,11 @@ public class ActivityUtil
 				if(note_id!=null)
 					activity.note_id_call=note_id.toString();
 				activity.save();
+				System.out.println("after saving activities for null contact -- " + activity);
 			}
 		}
+		
+		System.out.println("Activity saving done and the pointer is returning");
 	}
 
 	private static List<Activity> getActivityBasedOnNoteId(String note_id)

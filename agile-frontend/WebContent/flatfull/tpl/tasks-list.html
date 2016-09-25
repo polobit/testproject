@@ -7,24 +7,21 @@
 </div>
 {{else}}
 <div class="data-block">
-    <div class="table-responsive">
+    <div class="table-responsive {{#is_mobile}} b-n m-b-none {{/is_mobile}}">
 		<div class="panel panel-default">
-		<div class="panel-heading">{{agile_lng_translate 'task' 'task-list'}}</div>
+        <div class="panel-heading {{#is_mobile}} b-b-none {{/is_mobile}}">                 
+            <button id="bulk-change-owner" class="btn btn-default task_bulk_action btn-sm disabled txt-small">{{agile_lng_translate 'contacts-view' 'change-owner'}}</button>
+            <button id="bulk-change-priority" class="btn btn-default task_bulk_action btn-sm disabled txt-small">{{agile_lng_translate 'bulk-task' 'priority'}}</button>
+            <button id="bulk-change-status" class="btn btn-default task_bulk_action btn-sm disabled txt-small">{{agile_lng_translate 'bulk-task' 'status'}}</button>
+            <button id="bulk-change-dueDate" class="btn btn-default task_bulk_action btn-sm disabled txt-small">{{agile_lng_translate 'bulk-task' 'duedate'}}</button>
+            <button id="bulk-delete-tasks" class="btn btn-default task_bulk_action btn-sm disabled txt-small">{{agile_lng_translate 'contact-details' 'delete'}}</button>
+            <span id="select_all_tasks"></span>
+        </div>
         <div class="table-responsive">
-        <table class="table table-striped showCheckboxes no-sorting panel m-b-none 
-        {{#is_mobile}} {{else}} agile-table {{/is_mobile}} table-layout-mob-view" url="core/api/tasks/bulk" id="task-list">
+        <table class="table {{#is_mobile}} onlySorting tasklist-table noDelete {{else}} table-striped showCheckboxes agile-table{{/is_mobile}} no-sorting panel m-b-none table-layout-mob-view" url="core/api/tasks/bulk" id="task-list">
             
             {{#is_mobile}}
-            <thead>
-                <tr>
-					<th style="width:10%;" class="header text-ellipsis">{{agile_lng_translate 'contact-details' 'owner'}}</th>
-					<th style="width:30%;" class="header text-ellipsis">{{agile_lng_translate 'tasks' 'task-name'}}</th>
-                    <th style="width:10%;" class="header text-ellipsis">{{agile_lng_translate 'portlets' 'category'}}</th>
-                   	<th style="width:10%;" class="header text-ellipsis">{{agile_lng_translate 'widgets' 'priority'}}</th>
-					<th style="width:10%;" class="header text-ellipsis">{{agile_lng_translate 'portlets' 'due-date'}}</th>
-                    <th style="width:30%;" class="header text-ellipsis">{{agile_lng_translate 'deal-view' 'related-to'}}</th>
-                </tr>
-            </thead>
+            
 
             {{else}}
 
@@ -41,7 +38,7 @@
 
             {{/is_mobile}}
 
-            <tbody id="tasks-list-model-list" class="c-p" route="task/">
+            <tbody id="tasks-list-model-list" class="c-p {{#is_mobile}}agile-row{{/is_mobile}}" route="task/">
             </tbody>
         </table>
         </div>
@@ -53,6 +50,63 @@
 </script>
 
 <script id="tasks-list-model-template" type="text/html">
+{{#is_mobile}}
+<td class="data data-contact pos-rlt" data="{{id}}">  
+  <div class="h-auto pull-left ">
+    {{#if taskOwner.pic}}
+        <span class="thumb m-r-sm">
+            <img class="r r-2x" src="{{taskOwner.pic}}"  title="{{taskOwner.name}}"/>
+        </span>
+    {{else}}
+        <span class="thumb m-r-sm">
+            <img class="r r-2x" src="{{defaultGravatarurl 50}}" title="{{taskOwner.name}}"/>
+        </span>
+    {{/if}}
+  </div>
+
+            <div class="pos-abs tasklist-cont">
+
+            {{#if is_complete}}
+            <div class='view-task-details m-t-n-xs'><div class="text-l-t table-resp text-ellipsis text-cap">{{#is_link subject}}<span class="activate-link">{{else}}<span>{{/is_link}}{{safe_string subject}}</span></div>
+            </div>
+            {{else}}
+            <div class='view-task-details m-t-n-xs'><div class="table-resp text-ellipsis text-cap">{{#is_link subject}}<span class="activate-link">{{else}}<span>{{/is_link}}{{safe_string subject}}</span></div></div>
+            {{/if}}
+            
+
+            <div class="text-ellipsis">
+            {{#each contacts}}
+                <a onclick="$(event).stopPropagation();" href="#{{#if_contact_type 'PERSON'}}contact{{else}}company{{/if_contact_type}}/{{id}}" class="text-info stop-propogate">{{contact_name properties type}}{{#if @last}}{{else}},{{/if}} </a>
+            {{/each}}
+            </div>
+
+            <div class="pos-rlt display-table-list">
+            {{#if is_complete}}
+            <div class='view-task-details'><div class="text-l-t"><span class="label label-{{task_label_color priority_type}}">{{ucfirst priority_type}}</span></div></div>
+
+            <div class='view-task-details task-label'><div class="text-l-t text-ellipsis pos-abs pos-t-0 pos-r-0 pos-l-0"><span class="label bg-light dk text-tiny l-h">{{task_property type}}</span></div>
+            </div>
+            
+            {{else}}
+
+            <span class="table-cell-list p-r-xs" class="label label-{{task_label_color priority_type}}">{{ucfirst priority_type}}</span>
+
+            <div class="view-task-details task-label">
+            <div class="table-resp text-ellipsis pos-abs pos-t-0 pos-r-0 pos-l-0">
+            <span class="label bg-light dk text-tiny m-r-xs l-h">{{task_property type}}</span></div></div>
+           
+            {{/if}}
+            </div>
+
+            </div>
+  
+</td>
+
+<td class="data-contact" width="40"><div class="text-md text-muted m-t contact-list-mobile text-right block"><i class="fa fa-angle-right"></i></div></td>
+
+
+{{else}}
+
 <td class="data" data="{{id}}">  
   <div class="h-auto">
 	{{#if taskOwner.pic}}
@@ -86,12 +140,12 @@
         	{{#each contacts}}
         		{{#if_contact_type "PERSON"}}
         				<a href="#contact/{{id}}"  class="activate-link thumb tasks-list-image popover_contact" data="{{id}}">
-							<img class="r r-2x" url="contact/{{id}}" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 50}}"  title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" />
+							<img class="r r-2x img{{id}}" url="contact/{{id}}" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 50}}"  title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" />
 						</a>
         		{{/if_contact_type}}
 				{{#if_contact_type "COMPANY"}}
         				<a href="#company/{{id}}" class="activate-link thumb tasks-list-image popover_contact" data="{{id}}">
-							<img class="r r-2x" {{getCompanyImage "50" "display:inline;"}} title="{{getPropertyValue properties "name"}}" url="company/{{id}}" />
+							<img class="r r-2x img{{id}}" {{getCompanyImage "50" "display:inline;"}} title="{{getPropertyValue properties "name"}}" url="company/{{id}}" />
 						</a>
         		{{/if_contact_type}}
         	{{/each}}
@@ -106,6 +160,8 @@
            
         </div>
     </td>
+
+    {{/is_mobile}}
 </script>
 <script id="tasks-list-header-template" type="text/html">
 <div class="wrapper-md lter bg-light b-b">

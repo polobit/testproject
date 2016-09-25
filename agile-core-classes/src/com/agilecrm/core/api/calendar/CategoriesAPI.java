@@ -83,7 +83,7 @@ public class CategoriesAPI
 
 	if (!category.getEntity_type().equals(Category.EntityType.DEAL_LOST_REASON) 
 			&& !category.getEntity_type().equals(Category.EntityType.DEAL_SOURCE))
-	if (!categoriesUtil.validate(category.getLabel()))
+	if (!categoriesUtil.validate(category.getLabel()) && !category.getEntity_type().equals(Category.EntityType.TELEPHONY_STATUS))
 	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
 		    .entity("Invalid category name.").build());
 	

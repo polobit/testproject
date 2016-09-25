@@ -307,7 +307,26 @@ public class LoginServlet extends HttpServlet {
 				
 			}
 		}
-
+		
+		request.getSession().setAttribute("account_timezone", timezone);
+		
+		if( AgileUser.getCurrentAgileUserFromDomainUser(domainUser.id) == null )
+		{
+			// Create new Agile User
+			new AgileUser(domainUser.id).save();
+			
+			// New user param to save defaults
+			request.getSession().setAttribute(RegisterServlet.IS_NEWLY_REGISTERED_USER_ATTR, new Boolean(true));
+		}
+		
+		// Set Account Timezone, User Timezone, Browser Fingerprint and OnlineCalendarPrefs
+		// Do this only if the Browser Fingerprint verification is ok.
+		// If not, set these values after verification. Check HomeServlet.doPost() method.
+		if( browser_auth != null && browser_auth.valid_finger_print && browser_auth.valid_ip )
+		{
+			new LoginUtil().setMiscValuesAtLogin(request, domainUser);
+		}
+		
 		hash = (String) request.getSession().getAttribute(
 				RETURN_PATH_SESSION_HASH);
 
@@ -327,25 +346,6 @@ public class LoginServlet extends HttpServlet {
 					.removeAttribute(RETURN_PATH_SESSION_PARAM_NAME);
 			response.sendRedirect(redirect);
 			return;
-		}
-
-		request.getSession().setAttribute("account_timezone", timezone);
-		
-		if( AgileUser.getCurrentAgileUserFromDomainUser(domainUser.id) == null )
-		{
-			// Create new Agile User
-			new AgileUser(domainUser.id).save();
-			
-			// New user param to save defaults
-			request.getSession().setAttribute(RegisterServlet.IS_NEWLY_REGISTERED_USER_ATTR, new Boolean(true));
-		}
-		
-		// Set Account Timezone, User Timezone, Browser Fingerprint and OnlineCalendarPrefs
-		// Do this only if the Browser Fingerprint verification is ok.
-		// If not, set these values after verification. Check HomeServlet.doPost() method.
-		if( browser_auth != null && browser_auth.valid_finger_print && browser_auth.valid_ip )
-		{
-			LoginUtil.setMiscValuesAtLogin(request, domainUser);
 		}
 
 		response.sendRedirect("/");

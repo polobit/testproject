@@ -353,9 +353,9 @@ function addhttp(url) {
      if (url.substr(0, 7) != 'http://' && url.substr(0, 8) != 'https://') {
          url = 'http://' + url;
     }
-     if (url.substr(url.length - 1, 1) != '/') {
-         url = url + '/';
-    }
+       // (url.substr(url.length - 1, 1) != '/') {
+       // url = url + '/';
+       // }
     return url;
 }
 
@@ -759,7 +759,7 @@ $(document).ready(function () {
                 var anchorTag = $('#'+id).parent("a");
                 $(anchorTag).attr('href', addhttp($('#image-link').val())) ;
             } else {
-                $('#'+id).wrap("<a target='_blank' class='imgLink' href='http://"+$('#image-link').val()+"'>");
+                $('#'+id).wrap("<a target='_blank' class='imgLink' href='" + addhttp($('#image-link').val()) + "'>");
             }
          }
        /*adding new select-box for the image adjustment /alignment

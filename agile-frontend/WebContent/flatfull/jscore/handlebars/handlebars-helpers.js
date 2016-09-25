@@ -1514,6 +1514,20 @@ $(function()
 		return name.charAt(0).toUpperCase() + name.slice(1);
 	});
 
+	Handlebars.registerHelper('getPropertyFromUser', function(property)
+	{
+		if(property)
+			return CURRENT_DOMAIN_USER[property];
+		else
+			return "";
+	});
+
+	Handlebars.registerHelper('getAffiliateLink', function(img)
+	{
+		var el = "<a href='https://my.agilecrm.com/register?utm_affiliate="+CURRENT_DOMAIN_USER.id+"' target='_blank'><img alt='AgileCRM' src='"+img+"'/></a>";
+		//return Handlebars.Utils.escapeExpression(el);
+		return el;
+	});
 	
 	/*
 	 * To add comma in between the elements.
@@ -5838,7 +5852,7 @@ $(function()
 			return _agile_get_translated_val("call_activity", "missed");
 			break;
 		default:
-			return "";
+			return status;
 		}
 
 	});
@@ -7496,6 +7510,13 @@ Handlebars.registerHelper('if_equals_lowerCase', function(value, target, options
 	else
 		return options.inverse(this);
 });
+Handlebars.registerHelper('commaSeparateTags', function(value)
+	{
+		if (value)
+		{
+			return value.replace(/\[|\]/g, "").split(",");
+		}
+	});
 
 Handlebars.registerHelper('if_equals_sork_key', function(value, target, options)
 {
@@ -7574,6 +7595,31 @@ Handlebars.registerHelper('if_asc_sork_key', function(value, options)
 	 });
 		return new Handlebars.SafeString(el);
 	});
+
+Handlebars.registerHelper('taskBulkStatus', function(value)
+{
+	if(value && value == "YET_TO_START")
+		return "Yet To Start";
+	else if(value && value == "IN_PROGRESS")
+		return "In Progress"; 
+	else if(value && value == "COMPLETED")
+		return "Completed";
+});
+Handlebars.registerHelper('taskBulkPriority', function(value)
+{
+	if(value && value == "HIGH")
+		return "High";
+	else if(value && value == "LOW")
+		return "Low"; 
+	else if(value && value == "NORMAL")
+		return "Normal";
+});
+Handlebars.registerHelper('affiliateCommission', function(amount, commission)
+{
+	if(!amount || !commission)
+		return 0;
+	return (((amount/100)*commission)/100).toFixed(2);
+});
 Handlebars.registerHelper('get_default_label', function(label, module_name, options)
 {
 	var i18nKeyPrefix = "admin-settings-tasks";
@@ -7631,6 +7677,134 @@ Handlebars.registerHelper('is_Particular_Domain', function(options)
 	return options.fn(this);
 		else
 			return options.inverse(this);
+});
+
+
+
+Handlebars.registerHelper('can_api_js_serve_from_cloud', function(options)
+{
+	var plan = USER_BILLING_PREFS.plan.plan_type;
+
+	var allowed_plans = ["ENTERPRISE", "REGULAR"];
+	var isOK = false;
+	for (var i = 0; i < allowed_plans.length; i++) {
+		if(plan && plan.indexOf(allowed_plans[i]) != -1){
+			isOK = true;
+			break;
+		}
+	};
+
+	if(isOK)
+		return options.fn(this);
+	else
+		return options.inverse(this);
+});
+
+Handlebars.registerHelper('agile_lng_translate', function(key, value, options)
+{
+	console.log("Not found " + key + " : " + value);
+});
+
+//returning 0sec in case of no time
+Handlebars.registerHelper('secondsToCallActivitiesTime', function(time)
+		{
+			var hours = Math.floor(time / 3600);
+			if (hours > 0)
+				time = time - hours * 60 * 60;
+			var minutes = Math.floor(time / 60);
+			var seconds = time - minutes * 60;
+			var friendlyTime = "";
+			if (hours == 1)
+				friendlyTime = hours + "h ";
+			if (hours > 1)
+				friendlyTime = hours + "h ";
+			if (minutes > 0)
+				friendlyTime += minutes + "m ";
+			if (seconds > 0)
+				friendlyTime += seconds + "s ";
+			if (friendlyTime != "")
+				return ' - ' + friendlyTime;
+			return " - 0s ";
+		});
+
+// multiple equality and OR condition
+
+
+/**
+ * Compares the arguments (value and target) and executes the template based
+ * It will split the target based on , and checks the value with the target.
+ * If any one target matches with value it will return true otherwise false
+ */
+Handlebars.registerHelper('if_anyone_equals', function(value, target, options)
+{
+
+	/*
+	 * console.log("typeof target: " + typeof target + " target: " +
+	 * target); console.log("typeof value: " + typeof value + " value: " +
+	 * value);
+	 */
+	/*
+	 * typeof is used beacuse !target returns true if it is empty string,
+	 * when string is empty it should not go undefined
+	 */
+	var flag = false;
+	
+	if ((typeof target === "undefined") || (typeof value === "undefined"))
+		return options.inverse(this);
+	
+	var tarArray = target.split(",");
+	
+	for(i=0; i<tarArray.length; i++){
+		if (value.toString().trim() == tarArray[i].toString().trim()){
+			flag = true;
+			break;
+		}
+	}
+
+	if(flag)
+		return options.fn(this);
+	else
+		return options.inverse(this);
+	
+});
+
+
+/**
+ * 
+ */
+Handlebars.registerHelper('selectJsonValue', function(json, key)
+{
+	var jsonObject = json;
+	if(jsonObject[key]){
+		return jsonObject[key];
+	}
+	return "";
+});
+
+/**
+ * 
+ */
+Handlebars.registerHelper("convertToi18ForCall",function(value)
+{
+	var constantJson = {"answered":"{{agile_lng_translate 'campaigns' 'answered'}}",
+						"busy":"{{agile_lng_translate 'campaigns' 'busy'}}",
+						"failed" : "{{agile_lng_translate 'call_activity' 'fail'}}",
+						"voicemail" : "{{agile_lng_translate 'campaigns' 'voicemail'}}",
+						"missed":"{{agile_lng_translate 'campaigns' 'missed'}}",
+						"others" : "{{agile_lng_translate 'admin-settings-tasks' 'Other'}}"					
+						};
+	if(constantJson[value]){
+		return constantJson[value];
+	}
+	
+	if (value.length > 12) {
+		value = value
+				.slice(0,
+						12)
+				+ '...';
+	} 
+	return value;
+	
 });
 Handlebars.registerHelper('calc_Products_Total', function(products)
 {

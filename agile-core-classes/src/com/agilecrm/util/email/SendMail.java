@@ -55,6 +55,9 @@ public class SendMail
 
     public static final String WELCOME = "welcome";
     public static final String WELCOME_SUBJECT = "Welcome to Agile CRM";
+    
+    public static final String AFFILIATE_REPORT = "welcome";
+    public static final String AFFILIATE_REPORT_SUBJECT = "Affiliate Report for the month of ";
 
     public static final String VERIFICATION_EMAIL = "verification_email";
     public static final String VERIFICATION_EMAIL_SUBJECT = "Verify your Agile CRM Account";
@@ -156,7 +159,7 @@ public class SendMail
 
    	//For browser Fingerprint
 	public static final String OTP_EMAIL_TO_USER = "otp_email_to_user";
-
+	public static final String Deal_Won_status = "deal_won_notify";
    	//Helpcenter
    	public static final String HELPCENTER_VERIFICATION = "helpcenter_verification_email";
    	public static final String HELPCENTER_VERIFICATION_SUBJECT = "Verify your Helpcenter Account";
@@ -185,6 +188,8 @@ public class SendMail
      * Text(or Body) template extension.
      */
     public static final String TEMPLATE_BODY_EXT = "_body.html";
+    
+    public static final String CONTACT_UPDATE_STATUS = "Domainuser_updates";
 
     @SuppressWarnings("unused")
     private static Object String;

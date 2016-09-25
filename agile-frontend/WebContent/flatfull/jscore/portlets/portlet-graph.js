@@ -1,5 +1,6 @@
 var callschart=new Array();
 var taskReport=new Array();
+var lightColors = ['#FFCCCC','#E8E4E3','#F5E7A3','#C2D6C2','#00FF00','#B8BAAB','#C3E619','#5ea1d4','#1d104a','#19A1E6','#0066CC','#E566FF','#FFFF99','#D98026','#FFAA00','#E6FFCC','#BBFF33','#FFFF33','#FF2A00','#66FFE6','#FF0080'];
 var portlet_graph_utility = {
 
 	/**
@@ -645,6 +646,36 @@ var portlet_graph_utility = {
 		/*var	height=domainUsersList.length*30+($('#'+selector).height()-30);
 		if(selector=='calls-chart')
 			height=domainUsersList.length*30+120;*/
+		var colorsToShow = [];
+		var colorForStatus = {"Failed" : "#f05050", "Busy" :"#23b7e5" , "Voicemail" : "#7266ba", "Answered" : "#27c24c", "Missed" : "#fad733","Others": "#ff8080"};
+		var addedColor = {};  // this is temp variable to check whether the color is alread added or not
+		var lc = 0;
+		$.each(series, function(index,value){
+			if(colorForStatus[value.name]){
+				colorsToShow.push(colorForStatus[value.name]);
+				addedColor[colorForStatus[value.name]] = colorForStatus[value.name];
+			}else{
+				var colorCode;
+				var loop = 0;
+				while(true){
+					if(lc >= lightColors.length-1 || loop > 1){
+						colorCode = '#'+Math.floor(Math.random()*16777215 + Math.random()*7777).toString(16);
+					}else{
+						loop = loop + 1;
+						colorCode = lightColors[lc];
+					}
+					
+					if(!addedColor[colorCode]){
+						loop = 0;
+						lc = lc+1;
+						break;
+					}
+				}
+				addedColor[colorCode] = colorCode;
+				colorsToShow.push(colorCode);
+			}
+		});
+		colorsToShow = colors || colorsToShow;
 		setupCharts(function(){
 							
 							callschart[parseInt(pos)]=new Highcharts.Chart({
@@ -719,7 +750,9 @@ var portlet_graph_utility = {
 						        		if(text=="{{agile_lng_translate 'calls' 'duration-secs'}}")
 						        			tt = '<table>' + 
 						        					'<tr><td  class="b-b-none"><u style="text-decoration:none;border-bottom:1px solid">'+domainUsersList[this.points[0].point.x]+'</u></td></tr>'+	
-					        		              '<tr><td style="color:'+this.points[0].series.color+';padding:0">'+this.points[0].series.name+':&nbsp; </td>' +
+					        		              '<tr><td style="color:'+this.points[0].series.color+';padding:0">'+					        		              
+					        		              this.points[0].series.name
+					        		              +':&nbsp; </td>' +
 					        		              '<td style="padding:0"><b>'+portlet_utility.getPortletsTimeConversion(callsDurationList[this.points[0].point.x])+'</b></td></tr>' +
 					        		              '<tr><td style="color:'+this.points[0].series.color+';padding:0">Calls:&nbsp; </td>' + 
 					        		        	  '<td style="padding:0"><b>'+totalCallsCountList[this.points[0].point.x]+'</b></td></tr>' +
@@ -737,53 +770,20 @@ var portlet_graph_utility = {
 						        			
 						        		}else{
 						        			tt += '<table><tr><td class="b-b-none"><u style="text-decoration:none;border-bottom:1px solid">'+domainUsersList[this.points[0].point.x]+'</u></td></tr>';
-						        			if(this.points[0]!=undefined && this.points[0].series!=undefined){
-						        				tt += 	'<tr><td style="color:'+this.points[0].series.color+';padding:0">'+this.points[0].series.name+':&nbsp; </td>' +
-							                      		'<td style="padding:0"><b>'+this.points[0].point.y+'</b></td></tr>';
-						        			}
-						        			if(this.points[1]!=undefined && this.points[1].series!=undefined){
-						        				tt += 	'<tr><td style="color:'+this.points[1].series.color+';padding:0">'+this.points[1].series.name+':&nbsp; </td>' +
-							                      		'<td style="padding:0"><b>'+this.points[1].point.y+'</b></td></tr>';
-						        			}
-						        			if(this.points[2]!=undefined && this.points[2].series!=undefined){
-						        				tt += 	'<tr><td style="color:'+this.points[2].series.color+';padding:0">'+this.points[2].series.name+':&nbsp; </td>' +
-							                      		'<td style="padding:0"><b>'+this.points[2].point.y+'</b></td></tr>';
-						        			}
-						        			if(this.points[3]!=undefined && this.points[3].series!=undefined){
-						        				tt += 	'<tr><td style="color:'+this.points[3].series.color+';padding:0">'+this.points[3].series.name+':&nbsp; </td>' +
-							                      		'<td style="padding:0"><b>'+this.points[3].point.y+'</b></td></tr>';
-						        			}
-						        			if(this.points[4]!=undefined && this.points[4].series!=undefined){
-						        				tt += 	'<tr><td style="color:'+this.points[4].series.color+';padding:0">'+this.points[4].series.name+':&nbsp; </td>' +
-							                      		'<td style="padding:0"><b>'+this.points[4].point.y+'</b></td></tr>';
-						        			}
-						        			if(this.points[5]!=undefined && this.points[5].series!=undefined){
-						        				tt += 	'<tr><td style="color:'+this.points[5].series.color+';padding:0">'+this.points[5].series.name+':&nbsp; </td>' +
-							                      		'<td style="padding:0"><b>'+this.points[5].point.y+'</b></td></tr>';
-						        			}
-						        			if(this.points[6]!=undefined && this.points[6].series!=undefined){
-						        				tt += 	'<tr><td style="color:'+this.points[6].series.color+';padding:0">'+this.points[6].series.name+':&nbsp; </td>' +
-							                      		'<td style="padding:0"><b>'+this.points[6].point.y+'</b></td></tr>';
-						        			}
-						        			if(this.points[7]!=undefined && this.points[7].series!=undefined){
-						        				tt += 	'<tr><td style="color:'+this.points[7].series.color+';padding:0">'+this.points[7].series.name+':&nbsp; </td>' +
-							                      		'<td style="padding:0"><b>'+this.points[7].point.y+'</b></td></tr>';
-						        			}
-						        			if(this.points[8]!=undefined && this.points[8].series!=undefined){
-						        				tt += 	'<tr><td style="color:'+this.points[8].series.color+';padding:0">'+this.points[8].series.name+':&nbsp; </td>' +
-							                      		'<td style="padding:0"><b>'+this.points[8].point.y+'</b></td></tr>';
-						        			}
-						        			if(this.points[9]!=undefined && this.points[9].series!=undefined){
-						        				tt += 	'<tr><td style="color:'+this.points[9].series.color+';padding:0">'+this.points[9].series.name+':&nbsp; </td>' +
-							                      		'<td style="padding:0"><b>'+this.points[9].point.y+'</b></td></tr>';
-						        			}
-						        			if(this.points[10]!=undefined && this.points[10].series!=undefined){
-						        				tt += 	'<tr><td style="color:'+this.points[10].series.color+';padding:0">'+this.points[10].series.name+':&nbsp; </td>' +
-							                      		'<td style="padding:0"><b>'+this.points[10].point.y+'</b></td></tr>';
-						        			}
-						        			if(this.points[11]!=undefined && this.points[11].series!=undefined){
-						        				tt += 	'<tr><td style="color:'+this.points[11].series.color+';padding:0">'+this.points[11].series.name+':&nbsp; </td>' +
-							                      		'<td style="padding:0"><b>'+this.points[11].point.y+'</b></td></tr>';
+						        			for(var k=0; k<series.length; k++){
+							        			if(this.points[k]!=undefined && this.points[k].series!=undefined){
+							        				var tooltipLabel="";
+									        		if (this.points[k].series.name.length > 12) {
+									        			tooltipLabel =  this.points[k].series.name
+																.slice(0,
+																		12)
+																+ '...';
+													} else {
+														tooltipLabel = this.points[k].series.name;
+													}
+							        				tt += 	'<tr><td style="color:'+this.points[k].series.color+';padding:0">'+tooltipLabel+':&nbsp; </td>' +
+								                      		'<td style="padding:0"><b>'+this.points[k].point.y+'</b></td></tr>';
+							        			}
 						        			}
 						        			tt += '<tr><td>{{agile_lng_translate "other" "total"}}:&nbsp; </td><td class="b-b-none">'+totalCallsCountList[this.points[0].point.x]+'</td></tr></table>';
 						        		}
@@ -815,13 +815,24 @@ var portlet_graph_utility = {
 						    		}
 						        },
 						        series: series,
-							    colors : [ "#27c24c", "#23b7e5", "#f05050", "#7266ba", '#fad733','#FF9900','#7AF168','#167F80','#0560A2','#D3E6C7','#7798BF'],
+							    //colors : [ "#27c24c", "#23b7e5", "#f05050", "#7266ba", '#fad733','#FF9900','#7AF168','#167F80','#0560A2','#D3E6C7','#7798BF'],
+						        colors : colorsToShow,
 							    legend : {
 									itemStyle : {
 										fontSize : '10px',
 										color : '#98a6ad'
 									},
 									borderWidth : 0,
+									labelFormatter : function() {
+										if (this.name.length > 12) {
+											return this.name
+													.slice(0,
+															12)
+													+ '...';
+										} else {
+											return this.name;
+										}
+									},
 									layout : 'vertical',
 									floating : true,
 									align : 'right',
@@ -870,15 +881,42 @@ var portlet_graph_utility = {
 			
 		}else{
 			var data = [];
+			var colors = [];
+			var colorForStatus = {"Failed" : "#f05050", "Busy" :"#23b7e5" , "Voicemail" : "#7266ba", "Answered" : "#27c24c", "Missed" : "#fad733","Others": "#ff8080"};
+			var addedColor = {};  // this is temp variable to check whether the color is alread added or not
+			var lc = 0;
 			$.each(categoryList,function(index,value){
 				data.push([value,valueList[index]]);
+				if(colorForStatus[value]){
+					colors.push(colorForStatus[value]);
+					addedColor[colorForStatus[value]] = colorForStatus[value];
+				}else{
+					var colorCode;
+					var loop = 0;
+					while(true){
+						if(lc >= lightColors.length-1 || loop > 1 ){
+							colorCode = '#'+Math.floor(Math.random()*16777215 + Math.random()*7777).toString(16);
+						}else{
+							loop = loop + 1;
+							colorCode = lightColors[lc];
+						}
+						if(!addedColor[colorCode]){
+							loop = 0;
+							lc = lc+1;
+							break;
+						}
+					}
+					addedColor[colorCode] = colorCode;
+					colors.push(colorCode);
+				}
 			});
 			$('#'+selector).highcharts({
 		        chart: {
 		            type: 'pie',
 		            marginRight: 20
 		        },
-		        colors : ["#27c24c", "#23b7e5", "#f05050", "#7266ba", '#fad733','#FF9900','#7AF168','#167F80','#0560A2','#D3E6C7','#7798BF'],
+		       // colors : ["#27c24c", "#23b7e5", "#f05050", "#7266ba", '#fad733','#FF9900','#7AF168','#167F80','#0560A2','#D3E6C7','#7798BF'],
+		        colors :colors,
 		        title: {
 		            text: ''
 		        },
@@ -915,7 +953,16 @@ var portlet_graph_utility = {
 		            		/*connectorWidth: 0,*/
 		            		softConnector: true,
 		    	            formatter: function () {
-		    	            	return 	'<div class="text-center"><span style="color:'+this.point.color+'"><b>'+this.point.name+'</b></span><br/>' +
+		    	            	var tooltipLabel="";
+				        		if (this.point.name.length > 12) {
+				        			tooltipLabel =  this.point.name
+											.slice(0,
+													12)
+											+ '...';
+								} else {
+									tooltipLabel = this.point.name;
+								}
+		    	            	return 	'<div class="text-center"><span style="color:'+this.point.color+'"><b>'+tooltipLabel+'</b></span><br/>' +
 		    	            			'<span style="color:'+this.point.color+'"><b>'+Math.round(this.point.percentage)+'%</b></span></div>';
 		    	            },
 		            		/*format: '<b>{point.name}</b>: {point.percentage:.1f}',*/
@@ -934,7 +981,6 @@ var portlet_graph_utility = {
 	});
 	},
 	
-
 	/**
 	 * To display task report portlet as bar graph
 	 */

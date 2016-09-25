@@ -2,6 +2,7 @@
 
 <datastore-indexes>
 
+
     <datastore-index kind="DomainUser" ancestor="true" source="manual">
         <property name="email" direction="asc"/>
         <property name="name" direction="asc"/>
@@ -596,16 +597,65 @@
         <property name="close_date" direction="asc"/>
         <property name="expected_value" direction="asc"/>
     </datastore-index>
-    
      <datastore-index kind="Contact" ancestor="false" source="auto">
         <property name="type" direction="asc"/>
         <property name="updated_time" direction="asc"/>
     </datastore-index>
+    <datastore-index kind="PushNotificationMessage" ancestor="false" source="manual">
+       <property name="browser_id" direction="asc"/>
+       <property name="created_time" direction="asc"/>
+    </datastore-index>
+    <datastore-index kind="Activity" ancestor="false" source="manual">
+        <property name="show_bulk_activity" direction="asc"/>
+         <property name="time" direction="desc"/>
+    </datastore-index>
+    <datastore-index kind="Activity" ancestor="false" source="manual">
+        <property name="activity_type" direction="asc"/>
+        <property name="custom1" direction="asc"/>
+        <property name="time" direction="desc"/>
+    </datastore-index>
+     <datastore-index kind="CustomFieldDef" ancestor="false" source="manual">
+        <property name="searchable" direction="asc"/>
+        <property name="position" direction="asc"/>
+    </datastore-index>
     
+    <datastore-index kind="Affiliate" ancestor="false" source="manual">
+        <property name="relatedUserId" direction="asc"/>
+        <property name="createdTime" direction="desc"/>
+    </datastore-index>
+    
+    <datastore-index kind="Affiliate" ancestor="false" source="manual">
+        <property name="relatedUserId" direction="asc"/>
+        <property name="createdTime" direction="asc"/>
+    </datastore-index>
+    
+    <datastore-index kind="Affiliate" ancestor="false" source="manual">
+        <property name="relatedUserId" direction="asc"/>
+        <property name="createdTime" direction="asc"/>
+        <property name="amount" direction="asc"/>
+        <property name="commission" direction="asc"/>
+    </datastore-index>
+    
+    <datastore-index kind="Affiliate" ancestor="false" source="manual">
+        <property name="relatedUserId" direction="asc"/>
+        <property name="amount" direction="asc"/>
+        <property name="commission" direction="asc"/>
+    </datastore-index>
+    
+    <datastore-index kind="Affiliate" ancestor="false" source="manual">
+        <property name="amount" direction="asc"/>
+        <property name="commission" direction="asc"/>
+    </datastore-index>
+    
+    <datastore-index kind="AffiliateDeal" ancestor="false" source="manual">
+        <property name="relatedUserId" direction="asc"/>
+        <property name="createdTime" direction="desc"/>
+    </datastore-index>
+
     <datastore-index kind="DocumentNote" ancestor="false" source="manual">
         <property name="document_id" direction="asc"/>
         <property name="created_time" direction="desc"/>
-    </datastore-index>
-
-
+    </datastore-index>    
 </datastore-indexes>
+
+

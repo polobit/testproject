@@ -1253,6 +1253,11 @@ var portlet_utility = {
 			break;
 		}
 
+		case "Marketing Onboarding" : {
+			setPortletContentHeight(base_model);
+			break;
+		}
+
 		case "Deal Goals" : {
 
 					portlet_ele = $('#ui-id-' + column_position + '-' + row_position,
@@ -1886,7 +1891,7 @@ var portlet_utility = {
 
 			$('#ms-category-list', elData).remove();
 			head.js(LIB_PATH + 'lib/jquery.multi-select.js', function() {
-				$('#category-list, #user-list', elData).multiSelect();
+				$('#category-list', elData).multiSelect();
 				$('#ms-category-list .ms-selection', elData).children('ul')
 						.addClass('multiSelect').attr("name", "category-list")
 						.attr("id", "category");

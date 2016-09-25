@@ -459,6 +459,12 @@ public class SendgridInboundParser extends HttpServlet
 			{
 				name = from.substring(0, delimeterIndex).trim();
 				from = from.substring((delimeterIndex + 1), from.indexOf(">")).trim();
+				
+				// If name is blank, extract it from email address.
+				// Empty name is not allowed while creating contact
+				// This covers the case where received email address is in the form "<a@b.c>" 
+				// In the above case, the name is parsed to ""
+				if( StringUtils.isBlank(name) )	name = from.substring(0, from.lastIndexOf("@"));
 			}
 
 			if (name.contains("\""))

@@ -1,0 +1,6 @@
+{ 
+    "upload-attachment" : "{{agile_lng_translate 'upload-attachment' 'upload-attachment'}}",
+    "required" : "{{agile_lng_translate 'validation-msgs' 'required'}}",
+    "uploading" : "{{agile_lng_translate 'upload-image' 'uploading'}}",
+    "upload" : "{{agile_lng_translate 'others' 'upload'}}",
+}

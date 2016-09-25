@@ -23,7 +23,17 @@ var ReportsRouter = Backbone.Router
 			reports : function()
 			{
 				report_utility.loadReportsTemplate(function(){
-				var tab_active=$('.nav-tabs li:first-child>a').attr('href').substring(1);
+
+
+					getTemplate("reports-basic", {}, undefined, function(template_ui)
+					{
+						if (!template_ui)
+							return;
+
+						// Load Reports Template
+						$('.reports-Container').html($(template_ui));
+						});
+				/*var tab_active=$('.nav-tabs li:first-child>a').attr('href').substring(1);
 				var tav_inner = $('.nav-tabs li li:first-child>a').attr('href').substring(1);
 				$.each($('.tab-content .tab-pane'),function()
 				{
@@ -35,7 +45,7 @@ var ReportsRouter = Backbone.Router
 						Backbone.history.loadUrl(route);
 						return;
 					}
-				});
+				});*/
 			});
 			},
 

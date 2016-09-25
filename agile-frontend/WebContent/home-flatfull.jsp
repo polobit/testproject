@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<%@page import="com.agilecrm.util.CookieUtil"%>
 <%@page import="com.agilecrm.util.FileStreamUtil"%>
 <%@page import="org.json.JSONObject"%>
 <%@page import="com.agilecrm.util.language.LanguageUtil"%>
@@ -40,7 +41,7 @@ pageEncoding="UTF-8"%>
 
 
 
-<html lang="en">
+<html>
 <head>
 <meta charset="utf-8">
 <title>Agile CRM Dashboard</title>
@@ -155,9 +156,22 @@ String _AGILE_VERSION = SystemProperty.applicationVersion.get();
 String _VERSION_ID = VersioningUtil.getVersion();
 
 List<Dashboard> dashboardsList = DashboardUtil.getAddedDashboardsForCurrentUser();
+String _LANGUAGE = currentUserPrefs.language; 
 
-String _LANGUAGE = currentUserPrefs.language;
-JSONObject localeJSON = LanguageUtil.getLocaleJSON(currentUserPrefs, application);
+// Read language cookie
+String languageCookieValue = CookieUtil.readCookieValue(request, "user_lang");
+if(StringUtils.isBlank(languageCookieValue)){
+	languageCookieValue = _LANGUAGE;
+}
+
+// Check and resave language if they are not same
+if(!StringUtils.equalsIgnoreCase(languageCookieValue, _LANGUAGE) && LanguageUtil.isSupportedlanguageFromKey(languageCookieValue)){
+	currentUserPrefs.language = languageCookieValue;
+	currentUserPrefs.save();
+	_LANGUAGE = currentUserPrefs.language;
+}
+
+JSONObject localeJSON = LanguageUtil.getLocaleJSON(currentUserPrefs, application, "menu");
 %>
 
 
@@ -390,6 +404,12 @@ if(currentUserPrefs.menuPosition.equals("top")){
    <li class="hidden-folded padder m-t-xs m-b-xs text-muted text-xs">
      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "sales") %></span>
    </li>
+   <li id="home_dashboard">
+    <a  href="#">
+      <i class="icon icon-home"></i>
+      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "home")%></span>
+    </a>
+  </li>
         
   <%
       if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.CONTACT)){
@@ -520,6 +540,25 @@ if(currentUserPrefs.menuPosition.equals("top")){
   <li class="hidden-folded padder m-t-xs m-b-xs text-muted text-xs">
       <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-marketing") %></span>
   </li>
+  <li id="home_dashboard">
+    <a  href="#">
+      <i class="icon icon-home"></i>
+      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "home")%></span>
+    </a>
+  </li>
+   <%
+      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.CONTACT)){
+  %>      
+  <li id="contactsmenu">
+    <a  href="#contacts">
+      <i class="icon icon-user"></i>
+      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-contacts") %></span>
+    </a>
+  </li>
+  <%
+      }
+  %>
+
    <%
       if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.CAMPAIGN)){
    %>
@@ -606,7 +645,12 @@ if(currentUserPrefs.menuPosition.equals("top")){
     <%
           }
     %>
-    
+    <li id="push-notification-menu">
+    <a href="#push-notification">
+      <i class="fa fa-bell-o"></i>
+      <span>Push Notifications</span>
+    </a>
+  </li>
     <%
       if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.ACTIVITY)){
     %>
@@ -651,6 +695,28 @@ if(currentUserPrefs.menuPosition.equals("top")){
   <li class="hidden-folded padder m-t-xs m-b-xs text-muted text-xs">
     <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "service") %></span>
   </li>
+
+  <li id="home_dashboard">
+    <a  href="#">
+      <i class="icon icon-home"></i>
+      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "home")%></span>
+    </a>
+  </li>
+
+
+   <%
+      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.CONTACT)){
+  %>      
+  <li id="contactsmenu">
+    <a  href="#contacts">
+      <i class="icon icon-user"></i>
+      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-contacts") %></span>
+    </a>
+  </li>
+  <%
+      }
+  %>
+
   
   <li id="tickets">
     <a href="#tickets">
@@ -943,8 +1009,6 @@ try{
 <script src='<%=FLAT_FULL_PATH%>jscore/handlebars/download-template.js'></script>
 <script>
 
-try{console.time("startbackbone");}catch(e){}
-
 var USER_IP_ADDRESS = '<%=request.getRemoteAddr()%>'
 
 var S3_STATIC_IMAGE_PATH = '<%=S3_STATIC_IMAGE_PATH%>';
@@ -1022,6 +1086,8 @@ var HANDLEBARS_LIB = LOCAL_SERVER ? "/lib/handlebars-v1.3.0.js" : "//cdnjs.cloud
 var _billing_restriction = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(restriction))%>;
 var USER_BILLING_PREFS = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(subscription))%>;
 
+try{if(!HANDLEBARS_PRECOMPILATION)console.time("startbackbone");}catch(e){}
+
 // Load language JSON
 var _LANGUAGE = "<%=_LANGUAGE%>";
 // var _Agile_Resources_Json = {};
@@ -1068,7 +1134,7 @@ head.load([{'js-core-1': CLOUDFRONT_PATH + 'jscore/min/locales/' + _LANGUAGE  +'
 		{'js-core-3': CLOUDFRONT_PATH + 'jscore/min/locales/' + _LANGUAGE +'/js-all-min-3.js' + "?_=" + _agile_get_file_hash('js-all-min-3.js')}, 
 		{'js-core-4': CLOUDFRONT_PATH + 'jscore/min/locales/' + _LANGUAGE +'/js-all-min-4.js' + "?_=" + _agile_get_file_hash('js-all-min-4.js')}, 
 		CLOUDFRONT_PATH + "tpl/min/precompiled/locales/" + _LANGUAGE + "/contact-view.js" + "?_=" + _agile_get_file_hash('contact-view.js')], function(){
-			console.log("All files loaded. Now continuing with script");
+			// console.log("All files loaded. Now continuing with script");
       load_globalize();
 			try{
 				$('[data-toggle="tooltip"]').tooltip();  
@@ -1121,7 +1187,7 @@ function load_globalize()
 }
 
 function showVideoForRegisteredUser(){
-    console.log("Ref = " + document.referrer);
+    // console.log("Ref = " + document.referrer);
 
     if(!document.referrer || document.referrer.indexOf("register") == -1)
          return;

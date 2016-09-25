@@ -19,8 +19,36 @@
     </div>
 {{/unless}}
 {{#if this.length}}
-    <div class="col panel wrapper">
-        <div class="hbox h-auto m-b-sm">
+
+    {{#is_mobile}}
+    <div class="col panel wrapper p-b-xs">
+        <div class="hbox h-auto">
+        <div class="text-center text-md m-b-xs">{{agile_lng_translate 'other' 'knowledge-base'}}</div>
+            <div class="categori-btn-center">
+            <div class="pull-right categori-add-btn-mobile m-l-sm m-b">
+                <a href="#knowledgebase/add-category" class="btn btn-xs btn-default btn-addon">
+                    <span><i class="icon-plus-sign"></i></span> {{agile_lng_translate 'admin-settings-tasks' 'add-category'}}
+                </a>
+             </div>
+             <div class="pull-right">
+                <a href="#selectlandingpage"  class="btn btn-xs btn-default btn-addon access_kb">
+                    {{agile_lng_translate 'preferences' 'settings'}}
+                </a>
+            </div>
+            </div>
+
+             <table class="table service-table-mobile no-shadow m-b-none agile-table panel" url="core/api/knowledgebase/categorie/bulk" data-bulk-delete-title="{{agile_lng_translate 'contact-details' 'delete'}}"
+                data-bulk-delete-msg="{{agile_lng_translate 'tickets' 'conformation-messge-for-deletion'}}" id="ticket-categorie-table">
+                  
+                    <tbody id="ticket-helpcenter-categories-model-list" class="c-p ui-sortable deal-tracks-tbody"> </tbody>
+            </table>
+        </div>
+    </div> 
+
+    {{else}}
+
+    <div class="col panel wrapper p-b-xs">
+        <div class="hbox h-auto">
             <div class="pull-right" style="margin-left:10px">
                 <a href="#knowledgebase/add-category" class="btn btn-sm btn-default btn-addon">
                     <span><i class="icon-plus-sign"></i></span> {{agile_lng_translate 'admin-settings-tasks' 'add-category'}}
@@ -31,7 +59,8 @@
                     {{agile_lng_translate 'preferences' 'settings'}}
                 </a>
             </div>
-            <table class="table table-striped showCheckboxes m-b-none agile-table panel table-layout-mob-view show-delete-modal" url="core/api/knowledgebase/categorie/bulk" data-bulk-delete-title="{{agile_lng_translate 'contact-details' 'delete'}}"
+             <div class="table-responsive b-n inline-block m-b-none">
+             <table class="table table-striped showCheckboxes m-b-none agile-table panel table-layout-mob-view show-delete-modal" url="core/api/knowledgebase/categorie/bulk" data-bulk-delete-title="{{agile_lng_translate 'contact-details' 'delete'}}"
                 data-bulk-delete-msg="{{agile_lng_translate 'tickets' 'conformation-messge-for-deletion'}}" id="ticket-categorie-table">
                     <thead>
                         <tr>
@@ -42,8 +71,10 @@
                     </thead>
                     <tbody id="ticket-helpcenter-categories-model-list" class="c-p ui-sortable deal-tracks-tbody"> </tbody>
             </table>
+            </div>
         </div>
-    </div>  
+    </div> 
+    {{/is_mobile}} 
 {{/if}}
 <div class="col w-md  wrapper pos-rlt track-milestone-text p-t-none" >
             <h4 class="m-t-none h4 m-b-sm">

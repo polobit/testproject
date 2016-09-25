@@ -1,4 +1,22 @@
 
+<%@page import="org.json.JSONObject"%>
+<%@page import="com.agilecrm.util.language.LanguageUtil"%>
+<%@page import="com.agilecrm.user.util.UserPrefsUtil"%>
+<%@page language="java" contentType="text/html; charset=UTF-8"
+pageEncoding="UTF-8"%>
+
+<%
+//User Language 
+String _LANGUAGE = "en";
+try{
+	_LANGUAGE = UserPrefsUtil.getCurrentUserPrefsFromRequest(request).language;
+}catch(Exception e){}
+
+//Locales JSON
+JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "upload");
+
+%>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -6,7 +24,7 @@
 <head>
 
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Upload WAV File</title>
+<title><%=LanguageUtil.getLocaleJSONValue(localeJSON, "upload-wav-file") %></title>
 
 <link rel="stylesheet" type="text/css" href="/css/bootstrap.v3.min.css" />
 <link rel="stylesheet" type="text/css" href="/flatfull/css/app.css" />
@@ -16,10 +34,16 @@
 <script type="text/javascript" src="/lib/jquery.validate.min.js"></script>
 
 <script type="text/javascript">
+var localeJSON = <%=localeJSON%>;
+
 jQuery.validator.setDefaults({
 	debug: true,
 	success: "valid"
 });;
+jQuery.extend(jQuery.validator.messages, {
+    	required: '<%=LanguageUtil.getLocaleJSONValue(localeJSON, "required") %>'
+	});
+
 </script>
 <script type="text/javascript">
 
@@ -77,7 +101,7 @@ $.validator.addMethod("validWaveFile",
 		else
 			return false;
 		  }, 
-		  "File selected is not a WAV file."
+		  '<%=LanguageUtil.getLocaleJSONValue(localeJSON, "not-a-wav-file") %>.'
 	);
 
 
@@ -123,9 +147,9 @@ function isValid(){
 <div class="row">
 <div class="col-md-3 col-sm-6 col-xs-12">
 <div class="panel panel-default" style="height:215px;">
-<div class="panel-heading">Upload WAV File</div>
+<div class="panel-heading"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "upload-wav-file") %></div>
 <div class="panel-body">
-<p>You may upload a recorded voice (.wav) file here.</p>
+<p><%=LanguageUtil.getLocaleJSONValue(localeJSON, "wav-file-info") %>.</p>
 <form id="form" action="https://agilecrm.s3.amazonaws.com/" method="post" enctype="multipart/form-data" onsubmit="return isValid();"> 
 
 <input type="hidden" id="key" name="key" value="audiofiles/<%=request.getParameter("d")%>" /> 
@@ -142,7 +166,7 @@ function isValid(){
 
 <p><input name="file" id='fileextension' type="file" /></p>
 <br/>
-<input name="upload" value="Upload" class='submit btn btn-primary' type="submit"/> 
+<input name="upload" value='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "upload") %>' class='submit btn btn-primary' type="submit"/> 
 </form> 
 </div>
 </div>

@@ -172,6 +172,7 @@ var ContactsRouter = Backbone.Router.extend({
 				loadPortlets(dashboard_name,el);
 
 		}, "#content");
+		$("#home_dashboard").addClass("active");
 
 	},
 	
@@ -563,6 +564,9 @@ var ContactsRouter = Backbone.Router.extend({
 		//Removed previous contact timeline nodes from the queue, if existed
 		if(timeline_collection_view && timeline_collection_view.queue)
 		{
+			if($("#timeline").is(":visible")){
+				$("#timeline").empty();
+			}
 			timeline_collection_view.queue.pop();
 		}
 		
@@ -1008,8 +1012,15 @@ $('#content').html('<div id="import-contacts-event-listener"></div>');
 					$select.find("option:first").before("<option value='NOEMAIL'>- No Verified Email -</option>");
 					$select.find('option[value ="NOEMAIL"]').attr("selected", "selected");
 				}
-				else
-					$select.val($select.find('option')[0].value);		
+				else {
+					var ownerEmail = $select.find('option[value = \"'+CURRENT_DOMAIN_USER.email+'\"]').val();
+					if(typeof(ownerEmail) !== "undefined")
+						$select.find('option[value = \"'+CURRENT_DOMAIN_USER.email+'\"]').attr("selected", "selected");
+					else{
+						$select.find("option:first").before("<option value='SELECTEMAIL'>- Select one Email -</option>");
+						$select.find('option[value ="SELECTEMAIL"]').attr("selected", "selected");
+					}
+				}
 				rearrange_from_email_options($select, data);
 			});
 	},
@@ -1457,7 +1468,10 @@ function getAndUpdateCollectionCount(type, el, countFetchURL){
     	$("#contacts-count").html(count_message);
 
     	var countURL = "";
-    	if(type == "contacts")
+
+    	if(type == "contacts-company")
+    		countURL = App_Companies.contacts_Company_List.options.url + "/count";
+    	else if(type == "contacts")
     		countURL = App_Contacts.contactsListView.options.url + "/count";
 
     	else if(type == "workflows")
@@ -1482,7 +1496,9 @@ function getAndUpdateCollectionCount(type, el, countFetchURL){
 						  $("span.badge.bg-primary", el).html(data);
 
 					// Reset collection
-					if(type == "contacts")
+					if(type == "contacts-company")
+    					App_Companies.contacts_Company_List.collection.models[0].set("count", data, {silent: true});
+					else if(type == "contacts")
 						App_Contacts.contactsListView.collection.models[0].set("count", data, {silent: true});
 					else if(type == "workflows"){
 						if(App_Workflows.active_subscribers_collection && App_Workflows.active_subscribers_collection.collection && App_Workflows.active_subscribers_collection.collection.length > 0)

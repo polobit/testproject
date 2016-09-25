@@ -2,8 +2,11 @@ package com.agilecrm.core.api.calendar;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -395,6 +398,7 @@ public class TasksAPI
 		// TODO Auto-generated catch block
 		e1.printStackTrace();
 	}
+    
 	return TaskUtil.getTask(task.id);
     }
 
@@ -528,6 +532,7 @@ public class TasksAPI
     {
 	if (count != null)
 	{
+		
 	    return TaskUtil.getTasksRelatedToOwnerOfType(criteria, type, owner, pending, Integer.parseInt(count),
 		    cursor);
 	}
@@ -679,7 +684,8 @@ public class TasksAPI
 	    return null;
 	}
     }
-
+    
+    
     /**
      * change task owner assign new owner to task
      */
@@ -921,5 +927,101 @@ public class TasksAPI
 		}
 	    }
 	}
+    }
+    /**
+     * Getting related contacts based on the taskid
+     * @param id
+     * @return
+     */
+    @Path("/getContactsList")
+    @POST
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public List<Contact> getContactsObjects(String id)
+    {
+		try
+		{
+			List<Contact> list = new ArrayList<Contact>();
+			JSONArray jsonArray = new JSONArray(id);
+			for(int i=0;i<jsonArray.length();i++){
+				Task task = TaskUtil.getTask(Long.parseLong(jsonArray.getString(i))); 
+				List<Contact> listObject = task.relatedContacts(); 
+				if(!listObject.isEmpty() && listObject != null && listObject.size() > 0 && !list.equals(listObject)){
+						list.addAll(listObject);
+				}
+			}
+		    return list;
+		}
+		catch (Exception e)
+		{
+		    e.printStackTrace();
+		    return null;
+		}
+    }
+    @Path("/changeBulkTasks")
+    @POST
+    @Consumes({MediaType.APPLICATION_JSON})
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public List<Task> changeBulkTasksAction(String data) {
+        try {
+        	com.google.appengine.labs.repackaged.org.json.JSONObject priority = new com.google.appengine.labs.repackaged.org.json.JSONObject();
+        	com.google.appengine.labs.repackaged.org.json.JSONArray taskIdArray = new com.google.appengine.labs.repackaged.org.json.JSONArray();
+        	com.google.appengine.labs.repackaged.org.json.JSONObject json = new com.google.appengine.labs.repackaged.org.json.JSONObject(data);
+            System.out.println(json.toString());
+            String formId =  json.getString("form_id");
+            taskIdArray = json.getJSONArray("IdJson");            
+            if(json.has("priority")&& !json.get("priority").equals(null))
+            	priority = json.getJSONObject("priority");
+            ArrayList<String> taskIdList = new ArrayList<String>();
+            if (taskIdArray != null) { 
+               int len = taskIdArray.length();
+               for (int i=0;i<len;i++){ 
+                   taskIdList.add(taskIdArray.get(i).toString());
+               } 
+            }
+            if(taskIdList.size() > 0 && priority != null){
+                List<Task> taskList= TaskUtil.changePropertyBulkTasks(taskIdList , priority , formId);
+                return taskList;
+            }
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } 
+        
+        return null;
+
+    }
+    @Path("/bulk/changeBulkTasksProperties")
+    @POST
+    @Consumes({MediaType.APPLICATION_JSON})
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public List<Task> changeBulkTasksProperties(String data) {
+        try
+        {
+            String uri = "/core/api/bulkTask" ;
+            com.google.appengine.labs.repackaged.org.json.JSONObject json = new com.google.appengine.labs.repackaged.org.json.JSONObject(data);
+            String formId = json.getString("form_id");
+            if(formId.equalsIgnoreCase("bulkTaskStatusForm")){
+                uri = uri + "/ChangeStatus" ;
+            }
+            else if(formId.equalsIgnoreCase("bulkTaskPriorityForm")){
+                uri = uri + "/ChangePriority" ;
+            }
+            else if(formId.equalsIgnoreCase("bulkTaskOwnerForm")){
+                uri = uri + "/ChangeOwner" ;
+            }
+            else if(formId.equalsIgnoreCase("bulkTaskDeleteForm")){
+                uri = uri + "/Delete" ;
+            }
+            else {
+            	uri = uri + "/ChangeDuedate" ;
+            }
+            TaskUtil.postDataToTaskBackend(uri,data);
+        }
+        catch (Exception je)
+        {
+            je.printStackTrace();
+        }
+        
+        return null;
     }
 }

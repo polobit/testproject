@@ -1613,6 +1613,9 @@ light.lter.b-b.wrapper-md .pull-right:not(.dropdown-menu),.bg-light.lter.b-b.wra
   .filtersTabList #contacts-lhs-filters-toggle{
     display: block;
   }
+  .filtersTabList #companies-lhs-filters-toggle{
+    display: block;
+  }
   .panel-middle-align-mobile .col-xs-6:first-child {
   text-align: right;
   }
@@ -2006,13 +2009,23 @@ display: block!important;
 .ticket-showing-no{ float: none !important; display: block; text-align: center; margin-top: 0px !important;}
 .icons-left{ float: left !important; margin-top: 5px;}
 .ticket-subj-block{ width: 100% !important;}
+ .ticket-name, .ticket-subject{ max-width: 20em;}
+ .plan-upgrade-center{ text-align: center; float: none !important;}
+ .add-btn-mobile{ float: none !important; text-align: center;}
+ .categori-btn-center{ display: table; margin: auto;}
+ .service-table-mobile td > div.table-resp{width: 100%}
+ .ticket-filter-conditions-table tbody tr td select {padding: 6px 0px 6px 5px;}
+ .ticket-filter-conditions-table tbody tr td input {padding: 6px 5px;}
+
 }
 
 @media all and (min-width: 768px) {
   .addField > .col-sm-9:nth-of-type(n+3) {
   margin-left: 25%;
   }
-} 
+.ticket-name, .ticket-subject{ color: #697073;max-width: 20em;}
+
+}
 .tagsinput li {
   word-break:break-all;
   white-space: pre-wrap;
@@ -2032,6 +2045,13 @@ display: block!important;
     .deals-name{
       width: 40em;
     }
+}
+
+@media all and (orientation:landscape) and (max-width: 480px) { 
+    .ticket-name, .ticket-subject{ max-width: 26em !important;}
+}
+@media all and (orientation:landscape) and (max-width: 640px) { 
+    .ticket-name, .ticket-subject{ max-width: 38em;}
 }
 
 @media all and (orientation:landscape) and (min-width: 480px) and (max-width: 600px) { 
@@ -2209,7 +2229,7 @@ display: block!important;
     opacity: 0.4;
 }
 .admin-setting-icon a{
- width:calc(100% / 4);
+ width:calc(100% / 5);
  padding: 10px 0;
  text-align: center;
  opacity: 0.4;
@@ -2277,6 +2297,7 @@ display: block!important;
 .companyDetails .vbox{ min-height: auto;}
 .taskTabListCenter{ margin-left: 15px; margin-right: 15px; margin-top: 15px;}
 .contDetails .col, .companyDetails .col, .taskListDetails .col, .dealDetailList .col, .taskDetailsCol{ border-right: none;}
+#ticket-model-list > tr > td:first-child{display: none;}
 }
 
 @media (max-width: 420px){
@@ -2336,7 +2357,7 @@ color:#484848!important;
 .pos-t-1{ top: 1px;}
 .icons-text-sm .actions i, .icons-text-sm .actions span.icon-trash{ font-size: 13px;}
 .icons-text-sm.actions i, .icons-text-sm.actions span.icon-trash{ font-size: 13px !important;}
-.app-aside-folded:not(.app-aside-dock) .navi > ul > li#landing-pages-menu a span, .app-aside-folded:not(.app-aside-dock) .navi > ul > li#tickets a span, .app-aside-folded:not(.app-aside-dock) .navi > ul > li#ticketcannedmessagesmenu a span,.app-aside-folded:not(.app-aside-dock) .navi > ul > li#ticketknowledgebasemenu a span, .app-aside-folded:not(.app-aside-dock) .navi > ul > li#email-templates-menu a span, .app-aside-folded:not(.app-aside-dock) .navi > ul > li#schedulingmenu a span{ padding-top: 10%;}
+.app-aside-folded:not(.app-aside-dock) .navi > ul > li#landing-pages-menu a span, .app-aside-folded:not(.app-aside-dock) .navi > ul > li#tickets a span, .app-aside-folded:not(.app-aside-dock) .navi > ul > li#ticketcannedmessagesmenu a span,.app-aside-folded:not(.app-aside-dock) .navi > ul > li#ticketknowledgebasemenu a span, .app-aside-folded:not(.app-aside-dock) .navi > ul > li#email-templates-menu a span, .app-aside-folded:not(.app-aside-dock) .navi > ul > li#push-notification-menu a span, .app-aside-folded:not(.app-aside-dock) .navi > ul > li#schedulingmenu a span{ padding-top: 10%;}
 .recent-list-text-color a{ color: #363f44 !important;}
 
 .editicon{ border: 1px solid #dee5e7; height: 13px; padding: 0 2px; border-radius: 2px;}
@@ -2415,8 +2436,35 @@ transform: translateX(-50%);}
 .navbar-searchicon > .btn:hover, .navbar-searchicon > .btn:focus, 
 .navbar-searchicon > .btn.focus{ color: inherit;}
 .search-filters li{ width:50%; float: left;}
-.ticket-subject-md{ width: 58%;}
-.ticket-subj-block{ width: 62%;}
-/*end custom css code*/
+
+.ticket-b-t .table tbody tr:first-child td{border-top: 0px;}
+.reply-textarea-h{ height: 120px !important;}
+ @media (max-width:420px){
+  .ticket-name, .ticket-subject{ max-width: 14em !important;}
+} 
+.tasklist-cont{ left: 0; padding-left: 75px; right: 0;}
+.task-label{ display: table-cell; vertical-align: middle; width: 100%; padding-left: 0; position: relative;}
+.tasklist-table tbody tr td{ padding-top: 10px; padding-bottom: 11px;}
+.table-cell-list{ display: table-cell;}
+.display-table-list{ display: table;}
+
+.ticket-subject-md{ width: 56%;}
+.ticket-subj-block{ width: 60%;}
+
 .search-filters li a
 { color: #363f44 !important;}
+.getting-started-body > div {
+    padding: 0px 5px 0px;}
+
+ @media (max-width:480px){
+ .canned-video-xs{width: 100% !important;}
+} 
+.service-tabs-list i{ opacity: 0.6;}
+.service-tabs-list li a{ border-bottom: 0px; padding: 10px 15px;}
+.add-btn-mobile i, .categori-add-btn-mobile i{width: 20px; height: 20px; margin: -1px -4px; margin-right: 5px; line-height: 20px;}
+.ticket-label-border tr:first-child td {
+    border-top: 1px solid #eaeff0 !important;
+}
+.knowledgebase-name{width: 93% !important; float: left;}
+
+/*end custom css code*/

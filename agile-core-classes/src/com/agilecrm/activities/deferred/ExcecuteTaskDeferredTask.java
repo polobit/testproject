@@ -15,6 +15,7 @@ import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.user.util.UserPrefsUtil;
 import com.agilecrm.util.DateUtil;
+import com.agilecrm.util.email.SendMail;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.taskqueue.DeferredTask;
 import com.google.appengine.api.taskqueue.Queue;
@@ -22,6 +23,7 @@ import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
 import com.google.appengine.api.taskqueue.TransientFailureException;
 import com.thirdparty.mandrill.Mandrill;
+import com.thirdparty.sendgrid.SendGrid;
 
 /**
  * <code>ExcecuteTaskDeferredTask</code> is sets name space and initiates task
@@ -54,8 +56,9 @@ public class ExcecuteTaskDeferredTask implements DeferredTask
     {
 	String oldNamespace = NamespaceManager.get();
 	NamespaceManager.set(domain);
+	System.out.println("Domain_taskreminder"+domain);
 	List<DomainUser> domainUsers = DomainUserUtil.getUsers(domain);
-
+	System.out.println("Domain_taskreminder_users"+domainUsers);
 	if (domainUsers == null)
 	    return;
 	try
@@ -64,6 +67,7 @@ public class ExcecuteTaskDeferredTask implements DeferredTask
 	    // Iterates over domain users to fetch due tasks of each user.
 	    for (DomainUser domainUser : domainUsers)
 	    {
+	    	try{
 		Long time = null;
 		int sec_per_day = 86400;
 		String timezone = UserPrefsUtil.getUserTimezoneFromUserPrefs(domainUser.id);
@@ -93,15 +97,20 @@ public class ExcecuteTaskDeferredTask implements DeferredTask
 		}
 
 		TaskReminder.sendDailyTaskReminders(domain, time, domainUser.id, timezone, user_email);
+	    	}
+	    	catch (Exception e)
+	    	{
+	    		System.out.println("Exception in task reminder: "+e);
+	    	}
 	    }
 
 	}
 
 	catch (TransientFailureException tfe)
 	{
-	    Mandrill.sendMail("vVC_RtuNFH_5A99TEWXPmA", true, "noreplay@agilecrm.com", "task-reminder-failure",
+	   /* Mandrill.sendMail("vVC_RtuNFH_5A99TEWXPmA", true, "noreplay@agilecrm.com", "task-reminder-failure",
 		    "jagadeesh@invox.com", null, null, "transient exception " + domain, null, "execute task reminder",
-		    null, null, null, null);
+		    null, null, null, null);*/
 	    ExcecuteTaskDeferredTask task_deferred = new ExcecuteTaskDeferredTask(domain);
 	    Queue queue = QueueFactory.getQueue(TaskReminder.getTaskRemainderQueueName(domain));
 	    TaskOptions options = TaskOptions.Builder.withPayload(task_deferred);
@@ -119,16 +128,16 @@ public class ExcecuteTaskDeferredTask implements DeferredTask
 		e.printStackTrace(new PrintWriter(errors));
 		String errorString = errors.toString();
 		e.printStackTrace();
-
-		Mandrill.sendMail("vVC_RtuNFH_5A99TEWXPmA", true, "noreplay@agilecrm.com", "task-reminder-failure",
+		System.out.println("exception at taskreminder deferred task " + domain+e);
+		/*Mandrill.sendMail("vVC_RtuNFH_5A99TEWXPmA", true, "noreplay@agilecrm.com", "task-reminder-failure",
 		        "jagadeesh@invox.com", null, null, "exception at taskreminder deferred task " + domain, null,
-		        errorString, null, null, null, null);
+		        errorString, null, null, null, null);*/
 	    }
 	    catch (Exception ex)
 	    {
-		Mandrill.sendMail("vVC_RtuNFH_5A99TEWXPmA", true, "noreplay@agilecrm.com", "task-reminder-failure",
+		/*Mandrill.sendMail("vVC_RtuNFH_5A99TEWXPmA", true, "noreplay@agilecrm.com", "task-reminder-failure",
 		        "jagadeesh@invox.com", null, null, "exception occured while sending mail " + domain, null,
-		        "exception occured task reminder deferred task", null, null, null, null);
+		        "exception occured task reminder deferred task", null, null, null, null);*/
 		ex.printStackTrace();
 		System.err.println("Exception occured while sending task notification status mail " + e.getMessage());
 	    }

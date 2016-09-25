@@ -24,4 +24,9 @@
 		<servlet-name>ContactsDeleteServlet</servlet-name>
 		<url-pattern>/backend/cron/deleteContactsFromTextSearch</url-pattern>
 	</servlet-mapping>
+	
+	<listener>
+		<listener-class>com.agilecrm.tempBulk.AgileServletContextListener</listener-class>
+	</listener>
+	
 </web-app>

@@ -27,7 +27,9 @@ import org.json.JSONObject;
 
 import com.agilecrm.activities.Activity;
 import com.agilecrm.activities.Call;
+import com.agilecrm.activities.Category;
 import com.agilecrm.activities.util.ActivityUtil;
+import com.agilecrm.activities.util.CategoriesUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Contact.Type;
 import com.agilecrm.contact.ContactField;
@@ -361,7 +363,7 @@ public class ReportsUtil {
 			if (report.campaignId.equals("All"))
 				statsJSON.put("campaign_name", "All Campaigns");
 			else
-				statsJSON.put("campaign_name", "<b>Campaign Name : </b>"
+				statsJSON.put("campaign_name", "<b style=\"color: #58666e\">Campaign Name : </b>"
 						+ WorkflowUtil.getCampaignName(report.campaignId));
 			statsJSON.put("report_name", report.name);
 			statsJSON.put("domain", NamespaceManager.get());
@@ -414,7 +416,7 @@ public class ReportsUtil {
 		// If report_type if of contacts customize object to show properties
 		if (report.report_type.equals(Reports.ReportType.Contact))
 			domain_details.put("report_results",
-					customizeContactParameters(reportList, report.fields_set));
+					customizeContactParameters(reportList, report.fields_set,report.report_timezone));
 
 		// Return results
 		return domain_details;
@@ -430,7 +432,7 @@ public class ReportsUtil {
 	 * @return
 	 */
 	public static Collection customizeContactParameters(Collection contactList,
-			LinkedHashSet<String> fields_set) {
+			LinkedHashSet<String> fields_set,String timezone) {
 
 		List<CustomFieldDef> fields = CustomFieldDefUtil
 				.getCustomFieldsByScopeAndType(SCOPE.CONTACT,
@@ -493,7 +495,7 @@ public class ReportsUtil {
 							try {
 								contactField.value = SearchUtil
 										.getDateWithoutTimeComponent(Long
-												.parseLong(contactField.value) * 1000);
+												.parseLong(contactField.value) * 1000,net.fortuna.ical4j.model.TimeZone.getTimeZone(timezone));
 							} catch (NumberFormatException e) {
 								e.printStackTrace();
 							}
@@ -538,9 +540,10 @@ public class ReportsUtil {
 									&& (field
 											.equalsIgnoreCase("last_contacted")
 											|| field.equalsIgnoreCase("last_emailed") || field
-												.equalsIgnoreCase("last_called")))
+												.equalsIgnoreCase("last_called") || field
+												.equalsIgnoreCase("updated_time")))
 								fieldValue = " ";
-
+							System.out.println("Field value Before:"+fieldValue);
 							if ((field.contains("time")
 									|| field.equalsIgnoreCase("last_contacted")
 									|| field.equalsIgnoreCase("last_emailed") || field
@@ -548,7 +551,8 @@ public class ReportsUtil {
 									&& !fieldValue.equals(" "))
 								fieldValue = SearchUtil
 										.getDateWithoutTimeComponent(Long
-												.parseLong(fieldValue) * 1000);
+												.parseLong(fieldValue) * 1000,TimeZone.getTimeZone(timezone));
+							System.out.println("Field value After:"+fieldValue);
 						}
 
 					} catch (Exception e) {
@@ -934,19 +938,14 @@ public class ReportsUtil {
 			e.printStackTrace();
 		}
 			String type="";
-				callsObject.put("answered", 0);
-				callsObject.put("busy",0);
-				callsObject.put("failed",0);
-				callsObject.put("voicemail",0);
-				callsObject.put("missed",0);
-				callsObject.put("inquiry",0);
-				callsObject.put("interest",0);
-				callsObject.put("no interest",0);
-				callsObject.put("incorrect referral",0);
-				callsObject.put("meeting scheduled",0);
-				callsObject.put("new opportunity",0);
-				callsObject.put("other",0);
-
+			CategoriesUtil categoriesUtil = new CategoriesUtil();
+			List<Category> categories = categoriesUtil.getCategoriesByType(Category.EntityType.TELEPHONY_STATUS.toString());
+			for(Category category : categories){
+				callsObject.put(category.getLabel().toLowerCase(), 0);
+			}
+			callsObject.put("others",0);
+			
+			
 				callsPerPersonJSON=initializeFrequencyForReports(minTime,maxTime,frequency,timeZone,callsObject);
 			        try{
 				for(Activity activity : activitieslist){
@@ -969,13 +968,11 @@ public class ReportsUtil {
 			    			     }
 			    			    break;
 			    			}
-			    			
 			    			}
 			            calendar.set(Calendar.HOUR_OF_DAY, 0);
 			            calendar.set(Calendar.MINUTE, 0);
 			            calendar.set(Calendar.SECOND, 0);
 			            calendar.set(Calendar.MILLISECOND, 0);
-			            
 			            String createdTime ;
 			            if(StringUtils.equalsIgnoreCase(frequency,"weekly"))
 			            	createdTime=last;
@@ -993,47 +990,14 @@ public class ReportsUtil {
 								type=Call.BUSY;
 	                    		
 	                    	}
-							else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.FAILED))
+							else if(activity.custom3!=null)
 							{
-		                    	type=Call.FAILED;
-	                    	}
-							else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.VOICEMAIL))
-							{
-		                    	type=Call.VOICEMAIL;
-	                    	}
-							else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.Missed))
-							{
-		                    	type=Call.Missed;
-	                    	}
-							else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.NewOpportunity))
-							{
-		                    	type=Call.NewOpportunity;
-	                    	}
-							else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.MeetingScheduled))
-							{
-		                    	type=Call.MeetingScheduled;
-	                    	}
-							else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.Inquiry))
-							{
-		                    	type=Call.Inquiry;
-	                    	}
-							else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.IncorrectReferral))
-							{
-		                    	type=Call.IncorrectReferral;
-	                    	}
-							else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.Interest))
-							{
-		                    	type=Call.Interest;
-	                    	}
-							else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.NoInterest))
-							{
-		                    	type=Call.NoInterest;
-	                    	}
-							else /*if(activity.custom3!=null && activity.custom3.equalsIgnoreCase("queued"))*/
-							{
-		                    	type="other";
-	                    	}
-		                   
+								if(callsObject.containsKey(activity.custom3.toLowerCase())){
+									type=activity.custom3.toLowerCase();
+								}else{
+			                    	type="others";
+								}
+							}
 		                    int count1=count.getInt(type);
                     		count1++;
                     		count.put(type,count1);
@@ -1044,7 +1008,6 @@ public class ReportsUtil {
 			e.printStackTrace();
 		}
 		return callsPerPersonJSON;
-
 	}
 
 	/*
@@ -1202,7 +1165,7 @@ public class ReportsUtil {
 			if (report.campaignId.equals("All"))
 				statsJSON.put("campaign_name", "All Campaigns");
 			else
-				statsJSON.put("campaign_name", "<b>Campaign Name : </b>"
+				statsJSON.put("campaign_name", "<b style=\"color: #58666e\">Campaign Name : </b>"
 						+ WorkflowUtil.getCampaignName(report.campaignId));
 
 			statsJSON.put("report_name", report.name);

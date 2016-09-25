@@ -103,24 +103,22 @@ var contact_details_documentandtasks_actions = {
 
         // For adding new deal from contact-details
         add_deal : function(e){
-        		var targetEl = $(e.currentTarget);
+        	
+        	$("#newDealModal").html(getTemplate("new-deal-model")).modal('show');
+        	var targetEl = $(e.currentTarget);
+        	var e = $("#opportunityForm",$("#newDealModal"));
 
-        		var el = $("#opportunityForm");
-
-        		if($('#color1', el).is(':hidden')){
-
-			    	$('.colorPicker-picker', el).remove();
-
-			    	$('#color1', el).colorPicker();
-				}
+    		if($('#color1', e).is(':hidden')){
+		    	$('.colorPicker-picker', e).remove();
+		    	$('#color1', e).colorPicker();
+			}
 
 				var colorcode = "#FFFFFF";
-			    $('#color1' , el).attr('value', colorcode);
-			    $('.colorPicker-picker', el).css("background-color", colorcode); 
+			    $('#color1' , e).attr('value', colorcode);
+			    $('.colorPicker-picker', e).css("background-color", colorcode); 
 			    // Disable color input field
 			    $('.colorPicker-palette').find('input').attr('disabled', 'disabled');
-
-				$("#opportunityModal").modal('show');
+				
 
 				add_custom_fields_to_form({}, function(data)
 				{
@@ -129,32 +127,30 @@ var contact_details_documentandtasks_actions = {
 					]);
 					$("#custom-field-deals", $("#opportunityModal")).html($(el_custom_fields));
 
-					$('.contact_input', el).each(function(){
-						agile_type_ahead($(this).attr("id"), $('#custom_contact_'+$(this).attr("id"), el), contacts_typeahead, undefined, 'type=PERSON');
+					$('.contact_input', e).each(function(){
+						agile_type_ahead($(this).attr("id"), $('#custom_contact_'+$(this).attr("id"), e), contacts_typeahead, undefined, 'type=PERSON');
 					});
 
-					$('.company_input', el).each(function(){
-						agile_type_ahead($(this).attr("id"), $('#custom_company_'+$(this).attr("id"), el), contacts_typeahead, undefined, 'type=COMPANY');
+					$('.company_input', e).each(function(){
+						agile_type_ahead($(this).attr("id"), $('#custom_company_'+$(this).attr("id"), e), contacts_typeahead, undefined, 'type=COMPANY');
 					});
 
 				}, "DEAL");
 
 				// Fills owner select element
-				populateUsers("owners-list", el, undefined, undefined, function(data)
+				populateUsers("owners-list", e, undefined, undefined, function(data)
 				{
 
 					$("#opportunityForm").find("#owners-list").html(data);
 					$("#owners-list", $("#opportunityForm")).find('option[value=' + CURRENT_DOMAIN_USER.id + ']').attr("selected", "selected");
 					$("#owners-list", $("#opportunityForm")).closest('div').find('.loading-img').hide();
 				});
-
-				//Populate products
-				populate_deal_products(el, undefined,"#opportunityForm");
+				
 				// Contacts type-ahead
-				agile_type_ahead("relates_to", el, contacts_typeahead);
+				agile_type_ahead("relates_to", e, contacts_typeahead);
 
 				// Fills the pipelines list in select box.
-				populateTrackMilestones(el, undefined, undefined, function(pipelinesList)
+				populateTrackMilestones(e, undefined, undefined, function(pipelinesList)
 				{
 					console.log(pipelinesList);
 					$.each(pipelinesList, function(index, pipe)
@@ -165,22 +161,22 @@ var contact_details_documentandtasks_actions = {
 							if (pipe.milestones.length > 0)
 							{
 								val += pipe.milestones.split(',')[0];
-								$('#pipeline_milestone', el).val(val);
-								$('#pipeline', el).val(pipe.id);
-								$('#milestone', el).val(pipe.milestones.split(',')[0]);
+								$('#pipeline_milestone', e).val(val);
+								$('#pipeline', e).val(pipe.id);
+								$('#milestone', e).val(pipe.milestones.split(',')[0]);
 							}
 
 						}
 					});
 				});
 
-				populateLostReasons(el, undefined);
+				populateLostReasons(e, undefined);
 
-				populateDealSources(el, undefined);
+				populateDealSources(e, undefined);
 
 				// Enable the datepicker
 
-				$('#close_date', el).datepicker({ format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY, autoclose: true});
+				$('#close_date', e).datepicker({ format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY, autoclose: true});
 
 
 				var json = null;
@@ -189,12 +185,13 @@ var contact_details_documentandtasks_actions = {
 				} else {
 					json = App_Contacts.contactDetailView.model.toJSON();
 				}
+
 				var contact_name = getContactName(json);
 
 				var template = Handlebars.compile('<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="{{id}}">{{name}}</li>');
   
 			 	// Adds contact name to tags ul as li element
-			 	$('#contactTypeAhead .tags',el).html(template({name : contact_name, id : json.id}));
+			 	$('#contactTypeAhead .tags',e).html(template({name : contact_name, id : json.id}));
         },
 
        add_case : function(e){
@@ -361,55 +358,11 @@ var contact_details_documentandtasks_actions = {
 			} });
        },
 
- 		/*show_document_list : function(e){
-       		var targetEl = $(e.currentTarget);
-       		var el = $(targetEl).closest("div");
-			$(targetEl).css("display", "none");
-			el.find(".contact-document-select").css("display", "inline");
-			var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
-			fillSelect('document-select', 'core/api/documents', 'documents', function fillNew()
-			{
-				el.find("#document-select").append("<option value='new'>Add New Doc</option>");
-
-			}, optionsTemplate, false, el);
-	    },*/
-	    navigate_to_edocument:function(e,type)
-	    {
-	    	var id="";
-	    	if(type=="company")
-	    	{
-				json = App_Companies.companyDetailView.model.toJSON();
-			} else 
-			{
-				json = App_Contacts.contactDetailView.model.toJSON();
-			}
-			
-			
-			Backbone.history.navigate("documents/"+type+"/" + json.id+ "/edoc",{trigger: true});	
-	    },
-	    navigate_to_edit_document:function(e,type)
-	    {
-	    	
-	    	var document_id=$(e.currentTarget).attr("data");
-
-	    	if(type=="company")
-	    	{
-				json = App_Companies.companyDetailView.model.toJSON();
-			} else 
-			{
-				json = App_Contacts.contactDetailView.model.toJSON();
-			}
-			
-			
-			Backbone.history.navigate("documents/"+document_id+"/" + json.id,{trigger: true});	
-	    },
        show_document_list : function(e){
 
        		var targetEl = $(e.currentTarget);
        		var el = $(targetEl).closest("div");
 			$(targetEl).css("display", "none");
-			//$(targetEl).previous().css("display", "none");
-			$(".add-contact-edocument-select,.add-company-edocument-select,.dropdown-toggle",el).css("display", "none");
 			if(agile_is_mobile_browser()){
 			el.find(".contact-document-select").css("display", "block");
 			}
@@ -426,8 +379,7 @@ var contact_details_documentandtasks_actions = {
 			}, optionsTemplate, false, el);
 	    },
 
-
-        add_selected_document : function(e,type){
+       add_selected_document : function(e){
        		var targetEl = $(e.currentTarget);
 
        		var document_id = $(targetEl).closest(".contact-document-select").find("#document-select").val();
@@ -444,20 +396,9 @@ var contact_details_documentandtasks_actions = {
 			else if (document_id == "new")
 			{
 				
-				var id="";
-		    	if(type=="company")
-		    	{
-					json = App_Companies.companyDetailView.model.toJSON();
-				} else 
-				{
-					json = App_Contacts.contactDetailView.model.toJSON();
-				}
-				Backbone.history.navigate("documents/"+type+"/" + json.id + "/attachment",{trigger: true});	        
-				
-				return;
 				$('#uploadDocumentModal').html(getTemplate("upload-document-modal", {})).modal('show');
 				var el = $("#uploadDocumentForm");
-				
+
 				// Contacts type-ahead
 				agile_type_ahead("document_relates_to_contacts", el, contacts_typeahead);
 
@@ -465,12 +406,9 @@ var contact_details_documentandtasks_actions = {
 				agile_type_ahead("document_relates_to_deals", el, deals_typeahead, false, null, null, "core/api/search/deals", false, true);
 
 				var json = null;
-				if(company_util.isCompany())
-				{
+				if(company_util.isCompany()){
 					json = App_Companies.companyDetailView.model.toJSON();
-				}
-				else 
-				{
+				} else {
 					json = App_Contacts.contactDetailView.model.toJSON();
 				}
 				var contact_name = getContactName(json);
@@ -565,11 +503,9 @@ var contact_details_documentandtasks_actions = {
 					$(".send-doc-button",'#uploadDocumentUpdateModal,#uploadDocumentModal').addClass("hide ");
 					$(".attachment",'#uploadDocumentUpdateModal,#uploadDocumentModal').removeClass("hide");	
 				}
-			});	
-
+			});
 		},
 };
-
 
 /**
  * To attach the document to a contact

@@ -38,6 +38,7 @@ public class ContactSavePreprocessor
 	if (contact.id != null)
 	{
 	    oldContact = getOldContact();
+	    System.out.println("In ContactSavePreprocessor--------oldContact----"+oldContact);
 	}
 }
 
@@ -62,7 +63,9 @@ public class ContactSavePreprocessor
     {
 	if (getOldContact() != null || newContact.id != null)
 	{
+		System.out.println("-----Before calling updateOldOwner-------");
 	    updateOldOwner();
+	    System.out.println("-----After calling updateOldOwner-------");
 	    tagsProcessing();
 	    persistOldCreatedTime();
 	}
@@ -120,8 +123,10 @@ public class ContactSavePreprocessor
 
     private void updateOldOwner()
     {
+    System.out.println("In updateOldOwner method---oldContact---"+oldContact);
 	if (newContact.getContactOwnerKey() == null)
 	{
+		System.out.println("In updateOldOwner method---newContact---"+newContact);
 	    newContact.setContactOwner(oldContact.getContactOwnerKey());
 	}
 	
@@ -338,12 +343,19 @@ public class ContactSavePreprocessor
 
     public Contact getOldContact()
     {
+    System.out.println("-------First step in getOldContact------");
 	if (oldContact != null)
 	    return oldContact;
+	
+	System.out.println("-------Second step in getOldContact------");
 
 	if (newContact.id == null)
 	    return oldContact;
+	
+	System.out.println("-------Third step in getOldContact------");
 
-	return oldContact = ContactUtil.getContact(newContact.id);
+	oldContact = ContactUtil.getContact(newContact.id);
+	System.out.println("-----oldContact in getOldContact-----"+oldContact);
+	return oldContact;
     }
 }

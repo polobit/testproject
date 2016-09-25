@@ -3,8 +3,7 @@
 <!-- Check whether DomainUSer has admin Privileges -->
         <div class="bg-light lter b-b wrapper-md">
             <h1 class="pull-left font-thin h3">{{agile_lng_translate 'menu' 'admin-settings'}}</h1>
-<a href="#subscribe" class="pull-right text-lg  text-info {{#is_mobile}} block 
-{{/is_mobile}}">{{agile_lng_translate 'menu' 'upgrade'}}</a>
+<a href="#subscribe" class="pull-right text-lg text-info {{#is_mobile}} plan-upgrade-center block {{/is_mobile}}">{{agile_lng_translate 'menu' 'upgrade'}}</a>
 <div class="clearfix"></div>    
     </div>
    
@@ -20,10 +19,13 @@
 		{{#is_mobile}}
 
 
-			<a href="#users" class="users-tab"><i class="icon-users"></i></a>
-			<a href="#integrations" class="integrations-tab"><i class="icon-settings"></i></a>
-			<a href="#analytics-code" class="analytics-code-tab"><i class="icon-eye"></i></a>		
-		    <a href="#integrations-stats" class="stats-tab"><i class="icon-bar-chart"></i></a>
+			<a href="#users" class="users-tab" title="Users"><i class="icon-users"></i></a>
+			{{#isAdmin}}
+			<a href="#ticket-groups" class="helpdesk-tab" title="Service"><i class="icon-envelope"></i></a>
+			{{/isAdmin}}
+			<a href="#integrations" class="integrations-tab" title="Integrations"><i class="icon-settings"></i></a>
+			<a href="#analytics-code" class="analytics-code-tab" title="API & Analytics"><i class="icon-eye"></i></a>		
+		    <a href="#integrations-stats" class="stats-tab" title="Stats"><i class="icon-bar-chart"></i></a>
 
 		    <div class="clearfix"></div>
 
@@ -35,6 +37,7 @@
 			<a href="#milestones" class="milestones-tab list-group-item">{{agile_lng_translate 'contact-details' 'deals'}}</a>
 			<a href="#tag-management" class="tag-management-tab list-group-item">{{agile_lng_translate 'contact-details' 'tags'}}</a>
 			<a href="#categories" class="categories-tab list-group-item">{{agile_lng_translate 'deal-view' 'tasks'}}</a>
+			<a href="#telephony" class="telephony-tab list-group-item">{{agile_lng_translate 'widgets' 'telephony'}}</a>
 			{{#isAdmin}}
 			<a href="#ticket-groups" class="helpdesk-tab list-group-item">{{agile_lng_translate 'menu' 'service'}}</a>
 			{{/isAdmin}}

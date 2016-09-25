@@ -8,16 +8,16 @@ $(function()
 	});
 
 
-	$('#opportunityUpdateModal, #opportunityModal').off('click', '#opportunity_archive');
-  $('#opportunityUpdateModal, #opportunityModal').on('click', '#opportunity_archive', function(e)
+	$('#opportunityUpdateModal, #newDealModal').off('click', '#opportunity_archive');
+  $('#opportunityUpdateModal, #newDealModal').on('click', '#opportunity_archive', function(e)
   {
     e.preventDefault();
     $('#archived', $('#opportunityUpdateForm')).prop('checked', 'checked');
     $("#opportunityUpdateModal #opportunity_validate").trigger('click');
   });
 
-  $('#opportunityUpdateModal, #opportunityModal').off('click', '#opportunity_unarchive');
-  $('#opportunityUpdateModal, #opportunityModal').on('click', '#opportunity_unarchive', function(e)
+  $('#opportunityUpdateModal, #newDealModal').off('click', '#opportunity_unarchive');
+  $('#opportunityUpdateModal, #newDealModal').on('click', '#opportunity_unarchive', function(e)
   {
     e.preventDefault();
     $('#archived', $('#opportunityUpdateForm')).removeAttr('checked');
@@ -28,8 +28,8 @@ $(function()
   /**
    * Validates deal and saves
    */
-  $('#opportunityUpdateModal, #opportunityModal').off('click', '#opportunity_validate');
-  $('#opportunityUpdateModal, #opportunityModal').on('click', '#opportunity_validate', function(e)
+  $('#opportunityUpdateModal, #newDealModal').off('click', '#opportunity_validate');
+  $('#opportunityUpdateModal, #newDealModal').on('click', '#opportunity_validate', function(e)
   {
     e.preventDefault();
 
@@ -398,8 +398,8 @@ function initializeDealListners(el){
 	/**
 	 * Shows deal popup
 	 */
-	$('#opportunity-listners').off('click', '.deals-add');
-	$('#opportunity-listners').on('click', '.deals-add', function(e)
+	$('#opportunity-listners').off('click', '.deals-add-opportunity');
+	$('#opportunity-listners').on('click', '.deals-add-opportunity', function(e)
 	{
 		e.preventDefault();
 		show_deal();

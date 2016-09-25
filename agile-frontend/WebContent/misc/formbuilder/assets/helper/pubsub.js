@@ -65,6 +65,12 @@ var addAgileApi = function(json, api, callback)
 	agiletransparentbackground.type = "select";
 	agiletransparentbackground.value = [{value : "", selected : true, label : "no"}, {value : " agile-form-transparent", selected : false, label: "yes"}];
 
+	var agiletheme = {};
+	agiletheme.label = "";
+	agiletheme.type = "select";
+	agiletheme.value = [{value : "", selected : true, label : "default"}, {value : " theme1", selected : false, label: "Theme1"},
+	{value : " theme2", selected : false, label: "Theme2"},{value : " theme3", selected : false, label: "Theme3"},{value : " theme4", selected : false, label: "Theme4"},{value : " theme5", selected : false, label: "Theme5"}];
+
 	for ( var b = 0; b < json.length; b++)
 	{
 		json[b].fields["agileapi"] = agileapi;
@@ -74,6 +80,7 @@ var addAgileApi = function(json, api, callback)
 		json[b].fields["agileformidtag"] = agileformidtag;
 		json[b].fields["formemailnotification"] = formemailnotification;
 		json[b].fields["agiletransparentbackground"] = agiletransparentbackground;
+		json[b].fields["agiletheme"] = agiletheme;
 	}
 	callback(json);
 };
@@ -99,17 +106,25 @@ var addAgileFields = function(json, fields, callback)
 	];
 	for ( var j = 0; j < fields.length; j++)
 	{
-		var value = {};
-		value.value = fields[j].field_label;
-		value.label = fields[j].field_label;
-		value.selected = false;
-		values.push(value);
+		if(fields[j].field_type == "TEXT" || fields[j].field_type == "TEXTAREA" || fields[j].field_type == "LIST"){
+
+			var value = {};
+			value.value = fields[j].field_label;
+			value.label = fields[j].field_label;
+			value.selected = false;
+			values.push(value);
+		}	
 	}
 	agilefield.value = values;
 	for ( var k = 0; k < json.length; k++)
 	{
 		for ( var i = 0; i < json[k].length; i++)
 		{
+			if(json[k][i]["title"]=="Search Input"){
+				json[k].splice(i,1);
+				i--;
+				continue;
+			}
 			json[k][i].fields["agilefield"] = agilefield;
 		}
 	}

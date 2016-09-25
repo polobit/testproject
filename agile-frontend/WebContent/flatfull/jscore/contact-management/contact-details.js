@@ -10,7 +10,7 @@ function starify(el) {
     head.js(LIB_PATH + 'lib/jquery.raty.min.js', function(){
     	
     	var contact_model  =  App_Contacts.contactDetailView.model;
-    	
+    	var count_clicks=0;
     	// If contact update is not allowed then start rating does not allow user to change it
     	if(App_Contacts.contactDetailView.model.get('owner') && !canEditContact(App_Contacts.contactDetailView.model.get('owner').id))
     	{
@@ -25,16 +25,33 @@ function starify(el) {
     	// contact_model.url = 'core/api/contacts';    	
     	$('#star', el).raty({
     		
-    		/**
+    		/*
     		 * When a star is clicked, the position of the star is set as star_value of
     		 * the contact and saved.    
     		 */
+         
         	click: function(score, evt) {
-        	         		
-           		
+
         		App_Contacts.contactDetailView.model.set({'star_value': score}, {silent : true});
         		contact_model =  App_Contacts.contactDetailView.model.toJSON();
-        		var new_model = new Backbone.Model();
+        		
+            if(contact_model && contact_model.star_value == 1)         
+             {
+              count_clicks++;
+              $(this.children[0]).attr('src','img/star-on.png');
+              
+                if(count_clicks==2)
+                  {
+                  App_Contacts.contactDetailView.model.set({'star_value': 0}, {silent : true});
+                  contact_model =  App_Contacts.contactDetailView.model.toJSON();
+                  count_clicks=0;
+                  $(this.children[0]).attr('src','img/star-off.png');
+                  $(this).find('input').attr('value',0);
+                  }   
+            }
+             else count_clicks=0;
+           
+            var new_model = new Backbone.Model();
         		new_model.url = 'core/api/contacts';
         		new_model.save(contact_model, {
         			success: function(model){
@@ -407,7 +424,9 @@ var Contact_Details_Model_Events = Base_Model_View.extend({
 		/** inliner edits input fields**/
 		'click #company-name-text '  : 'toggleinline_company',
 		'blur #company-Input input ' : 'companyInlineEdit',
-    'keydown #company-inline-input' : 'companyNameChange'  
+    'keydown #company-inline-input' : 'companyNameChange' ,
+    'click #company-contacts .contactcoloumn' : 'addOrRemoveContactCompanyColumns',
+    'click #contactCompanyTabelView' : 'toggleCustomFieldsForContacts',
     },
     
     
@@ -1584,7 +1603,54 @@ updateScoreValue :function(){
 			}
 		}
 		setleadScoreStyles(scoreboxval)
-	}
+	},
+
+  addOrRemoveContactCompanyColumns :function(e){
+      e.preventDefault();
+      var $checkboxInput = $(e.currentTarget).find("input");
+      if($checkboxInput.is(":checked"))
+      {
+        $checkboxInput.prop("checked", false);
+      }
+      else
+      {
+        $checkboxInput.prop("checked", true);
+      }
+      var json = serializeForm("contact-static-fields");
+    $.ajax({
+      url : 'core/api/contact-view-prefs/contact-company',
+      type : 'PUT',
+      contentType : 'application/json',
+      dataType : 'json',
+      data :JSON.stringify(json),
+      success : function(data)
+      {
+        App_Contacts.contactCompanyViewModel = data;
+        fetchContactCompanyHeadings(function(modelData){
+        getContactofCompanies(modelData, $("#contacts-listener-container"));
+        });
+      } 
+    });
+    },
+
+    toggleCustomFieldsForContacts : function(e){
+
+
+      if(_agile_get_prefs("contactCompanyTabelView")){
+        _agile_delete_prefs("contactCompanyTabelView");
+        $(e.currentTarget).find("i").removeClass("fa fa-ellipsis-h");
+        $(e.currentTarget).find("i").addClass("fa fa-navicon");
+      }
+      else{
+        _agile_set_prefs("contactCompanyTabelView","true");
+        $(e.currentTarget).find("i").removeClass("fa fa-navicon");
+        $(e.currentTarget).find("i").addClass("fa fa-ellipsis-h");
+      }
+      $(e.currentTarget).parent().parent().toggleClass("compact");
+      $(".thead_check", $("#contacts-listener-container")).prop("checked", false);
+    getContactofCompanies(App_Companies.contactCompanyViewModel, $("#contacts-listener-container"));
+
+    },
 });
 
 $(function(){
@@ -1688,3 +1754,6 @@ function setleadScoreStyles(scoreboxval){
   $("#scorebox").addClass("hide").val(scoreboxval);
   $("#lead-score").attr("title",scoreboxval);
 }
+
+
+    

@@ -12,6 +12,19 @@ define([
 			success: function(data){
 				
 				saveform = JSON.parse(data.formJson);
+				var agilethemeObj=saveform[0].fields.agiletheme;
+				var themeClassName="";
+				if(agilethemeObj!=undefined || agilethemeObj!=null){
+					var agilethemeObjValArr=agilethemeObj.value;
+					for(i=0;i<agilethemeObjValArr.length;i++){
+						if(agilethemeObjValArr[i].selected){
+						     themeClassName=agilethemeObjValArr[i].value;
+						     $("#target").addClass(themeClassName);
+						     break;
+						}
+					}
+				}
+				
 				
 				//Loads form view in form.jsp page
 				if($('#agileFormHolder').length != 0) {
@@ -49,17 +62,19 @@ define([
 					{ 
 					for ( var i = 0; i < fields.length; i++)
 						{
-							var value = {};
-							value.value = fields[i].field_label;
-							value.label = fields[i].field_label;
-							value.selected = false;
-							var count = 0;
-							for(var k=agileFields.length-1; k>=15; k--){
-								if(value.label == agileFields[k].label)
-									count++;								
-							}
-							if(count == 0)
+							if(fields[i].field_type == "TEXT" || fields[i].field_type == "TEXTAREA" || fields[i].field_type == "LIST"){
+								var value = {};
+								value.value = fields[i].field_label;
+								value.label = fields[i].field_label;
+								value.selected = false;
+								var count = 0;
+								for(var k=agileFields.length-1; k>=15; k--){
+									if(value.label == agileFields[k].label)
+										count++;								
+								}
+								if(count == 0)
 								agileFields.push(value);
+						    }
 						}
 						saveform[j].fields.agilefield.value = agileFields;
 					}else{

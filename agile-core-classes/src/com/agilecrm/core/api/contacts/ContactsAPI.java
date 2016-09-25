@@ -1930,9 +1930,10 @@ public class ContactsAPI
 	{
 	    BulkActionAdaptor taskRunner = new ContactsBulkDeleteDeferredTask(current_user_id, NamespaceManager.get(),
 		    keys);
-	    taskRunner.run();
 	    ContactsDeleteTask task = new ContactsDeleteTask(idsFetcher, current_user_id);
 	    task.logActivity();
+	    taskRunner.run();
+	    
 	    return;
 	}
 
@@ -1980,5 +1981,38 @@ public class ContactsAPI
 			e.printStackTrace();
 		}
 	    return null ; 
+    }
+    
+    /* Fetch all contacts related to a company */
+    @Path("/related/{id}/count")
+    @GET
+    public int getContactsOfCompanyCount(@QueryParam("cursor") String cursor,
+	    @QueryParam("page_size") String count, @PathParam("id") String id)
+    {
+    	
+    	Map searchMap = new HashMap();
+    	searchMap.put("type", Contact.Type.PERSON);
+    	searchMap.put("contact_company_key", new Key<Contact>(Contact.class, Long.valueOf(id)));
+
+    	return Contact.dao.getCountByProperty(searchMap);
+    }
+    /* Fetch all reference contacts to a contact or company or deal or case */
+    @Path("/taskreferences")
+    @POST
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public List<Contact> getTaskReferenceContacts(String id)
+    {
+    	List<Long> refContactIdsList = new ArrayList<Long>();
+    	try{
+			JSONArray jsonArray = new JSONArray(id);
+			for(int i=0;i<jsonArray.length();i++){
+				if(!(jsonArray.getString(i)).equals("")){
+					refContactIdsList.add(Long.valueOf(jsonArray.getString(i)));
+				}
+			}
+    	}catch(Exception e){
+    		e.printStackTrace();
+    	}
+		return ContactUtil.getContactsBulk(refContactIdsList);
     }
 }

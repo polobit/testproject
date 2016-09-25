@@ -72,9 +72,7 @@
           <button class="pull-left visible-xs" id="mobile-menu" ui-toggle-class="off-screen" data-target=".app-aside" ui-scroll-to="app">
           <i class="glyphicon glyphicon-align-justify"></i>
         </button>
-
-        <li class="dropdown hide add-modal-mobile visible-xs pull-right wrapper-sm p-t p-r-md" id="menu1"><a class="dropdown-toggle"
-                data-toggle="dropdown" href=""><i class="icon-plus"></i></a>
+        <li class="dropdown hide add-modal-mobile visible-xs pull-right wrapper-sm p-t p-r-md" id="menu1"><a class="dropdown-toggle"data-toggle="dropdown" href=""><i class="icon-plus"></i></a>
                 <ul class="dropdown-menu  animated fadeInRight mobile-add-modals" role="menu">
                   <li><a href="#personModal"  class="person" id="person">
                       <div class="pull-left">Contact</div><div class='pull-right shortcuts'>Shift + N</div><div class="clearfix"></div></a></li>
@@ -93,14 +91,85 @@
                  
                   <li><a href="#" id="show-note"> <div class="pull-left">Note</div><div class='pull-right shortcuts'>Shift + O</div><div class="clearfix"></div></a></li>
                   <li><a href="#send-email"> <div class="pull-left">Email</div><div class='pull-right shortcuts'>Shift + M</div><div class="clearfix"></div></a></li>
+                  <li><a href="javascript:void(0);" onclick="App_Ticket_Module.renderNewTicketModalView();"> <div class="pull-left"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "ticket") %></div><div class="clearfix"></div></a></li>
                 </ul> <!-- 
               <img style='display:hidden' id='ajax'
                 src='img/ajax-loader.gif' />
                 --></li>
 
-        <button class="pull-right hide visible-xs search-menu-mobile" id="search-menu-mobile" ui-toggle-class="off-screen" data-target=".app-aside" ui-scroll-to="app">
-          <i class="icon-magnifier search-menu-mobile"></i>
-        </button>
+        <%
+				      if(MobileUADetector.isMobile(request.getHeader("user-agent"))){
+				   %>
+		        <li class="pull-right list-none">
+					<div class="dropdown m-l-sm navbar-searchicon searchicon-dropdown">
+					<button class="fa fa-search text-base p-n btn btn-sm dropdown-toggle no-shadow bg-transparent b-n show-search-dropdown" type="button"></button>
+					<ul class="dropdown-menu search-view animated fadeInRight agile-search mobile-search-view pos-r-0" style="left:auto">
+
+					<div class="col-sm-12">
+
+					<form class=" m-t-sm m-b-sm searchForm" id="searchForm" role="search">
+					<div class="input-group add-on">
+					<input type="text" id="searchText" data-provide="typeahead"
+										class="typeahead form-control r-5x typeahead_contacts form-control-custom"
+										placeholder='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "search")%>' onclick="Agile_GA_Event_Tracker.track_event('Search option in Nav Bar')">
+					<div class="input-group-btn">
+
+					<a class="btn btn-default no-shadow" href="#" id="speechDectation"src="https://i.imgur.com/cHidSVu.gif"  ><i class="icon-microphone" style="position: relative;"></i></a>
+
+					<button class="btn btn-default no-shadow r-5x" id="search-results" type="submit"><i class="fa fa-search"></i></button>
+					</div>
+					</div>
+					</form>
+
+					</div>
+
+					
+
+
+
+					<li>
+					<ul class="col-sm-12 list-none search-filters" id="advanced-search-fields-group" name="fields_set">
+					<li>
+		       		  		<a href="javascript:void(0);" class="p-b-none">
+								<label class="i-checks i-checks-sm searchtypeall "><input name="all" value = "" type="checkbox" class="choose-column-chbx"><i></i></label><%=LanguageUtil.getLocaleJSONValue(localeJSON, "all")%></a>
+					</li>
+	                   	           			
+					<li>
+   		  			<a href="javascript:void(0);" class="p-b-none">
+						<label class="i-checks i-checks-sm  searchtype"><input name="person" value = "person" type="checkbox" class="choose-column-chbx"><i></i></label><%=LanguageUtil.getLocaleJSONValue(localeJSON, "contacts")%></a>
+					</li>
+
+					<li>
+					<a href="javascript:void(0);" class="p-b-none">
+								<label class="i-checks i-checks-sm  searchtype"><input name="company" value = "company" type="checkbox" class="choose-column-chbx"><i></i></label><%=LanguageUtil.getLocaleJSONValue(localeJSON, "companies")%></a>
+					</li>
+
+					<li>
+					<a href="javascript:void(0);" class="p-b-none">
+								<label class="i-checks i-checks-sm  searchtype"><input name="opportunity" value = "opportunity" type="checkbox" class="choose-column-chbx"><i></i></label><%=LanguageUtil.getLocaleJSONValue(localeJSON, "deals")%></a>
+					</li>
+
+					<li>
+					<a href="javascript:void(0);" class="p-b-none">
+								<label class="i-checks i-checks-sm  searchtype"><input name="document" value = "document" type="checkbox" class="choose-column-chbx"><i></i></label><%=LanguageUtil.getLocaleJSONValue(localeJSON, "documents")%></a>
+					</li>
+
+					<li>
+					<a href="javascript:void(0);" class="p-b-none">
+								<label class="i-checks i-checks-sm  searchtype"><input name="tickets" value = "tickets" type="checkbox" class="choose-column-chbx"><i></i></label><%=LanguageUtil.getLocaleJSONValue(localeJSON, "tickets")%></a>
+
+					</li>
+                			
+                	</ul>
+          
+					</li>
+
+					</ul>
+					</div>
+					</li>
+		<%
+			}
+		%>
 
         <div rel="popover" data-custom-popover-class='grid_custom_popover' data-trigger="click"  data-original-title="" title="" data-placement="bottom" class="need_help grid_icon_center visible-xs" screen_name="Need Help? We are one click away." data-content="<div class='row' id='need_help_header'>
 									<ul class='col-xs-12 col-sm-12 grid-sub-nav text-center m-t-md p-l-md p-r-md'>
@@ -120,30 +189,7 @@
 
          
 
-                <%
-						   if(MobileUADetector.isMobile(request.getHeader("user-agent"))){
-						  %>
-							<li class="nav-bar-search pull-right  search-mobile hide">
-								<form id="searchForm" class=" navbar-search  navbar-search navbar-form navbar-form-sm navbar-left shift">
-					<div class="input-group">
-							<input id="searchText" type="text" style="border-top-right-radius: 0px;
-   								 border-bottom-right-radius: 0px;"
-										data-provide="typeahead"
-										class="typeahead typeahead_contacts search-query form-control-custom input-sm bg-light no-border rounded padder"
-										placeholder='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "search")%>' onclick="Agile_GA_Event_Tracker.track_event('Search option in Nav Bar')">
-										
-										 <!-- <input id="search-results" 
-										type="image" src="img/SearchIcon.png" class="searchbox hidden" /> -->
-						<span class="input-group-btn">
-                <button type="submit" class="btn btn-sm bg-light rounded" id="search-results" style="height:30px;"><i class="fa fa-search"></i></button>
-              </span>
-              </div>				
-								</form>
-							</li>
-							<%
-							}
-							%>
-
+                
 
                  
              
@@ -207,6 +253,11 @@
 				 	}
 				  		
 				 %>">
+
+				 <%
+				      if(!MobileUADetector.isMobile(request.getHeader("user-agent"))){
+				   %>
+
 					 <div class="nav navbar-nav hidden-xs">
 <a href="#" id="app-aside-folded" style="top:8px;" class="p-b-sm p-l-sm p-r-sm inline-block pos-rlt pos-t-xs  no-shadow navbar-btn" ui-toggle="app-aside-folded" target=".app">
             <i class="fa fa-dedent fa-fw text"></i>
@@ -229,7 +280,7 @@
 										placeholder='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "search")%>' onclick="Agile_GA_Event_Tracker.track_event('Search option in Nav Bar')">
 					<div class="input-group-btn">
 
-					<a class="btn btn-default no-shadow" href="#" id="speechDectation"src="https://i.imgur.com/cHidSVu.gif"  ><i class="icon-microphone"></i></a>
+					<a class="btn btn-default no-shadow" href="#" id="speechDectation"src="https://i.imgur.com/cHidSVu.gif"  ><i class="icon-microphone" style="position: relative;"></i></a>
 
 					<button class="btn btn-default no-shadow r-5x" id="search-results" type="submit"><i class="fa fa-search"></i></button>
 					</div>
@@ -239,6 +290,7 @@
 					</div>
 
 					
+
 
 
 					<li>
@@ -286,7 +338,9 @@
 
 					</ul>
 
-				
+				<%
+				      }
+				   %>
 
                 <!--<img onclick="startDictation()" src="https://i.imgur.com/cHidSVu.gif" class="btn btn-sm bg-light" style="width:30px;height:30px;padding:0px">-->
                
@@ -456,19 +510,24 @@
 							</a><ul class="dropdown-menu animated fadeInRight recent-view" style="width:23em; right:-11px;"></ul>
 							</li>  
 									
-							<li class="dropdown" id="menu1"><a class="dropdown-toggle"
-								data-toggle="dropdown" href="" onclick="Agile_GA_Event_Tracker.track_event('New Option in Nav Bar')"><i class="icon-plus"></i></a>
+							<li class="dropdown" id="menu1">
+						    <li>
+										<a class="dropdown-toggle p-l-xs"
+								data-toggle="dropdown" href="" onclick="Agile_GA_Event_Tracker.track_event('New Option in Nav Bar')"><span class="m-r-xs pull-left" style="margin-top:1px;"><span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-add") %></span> 
+								</span><i class="caret" style="margin-top:-2px;"></i></a>
 								<ul class="dropdown-menu animated fadeInRight" role="menu">
 									 <%
 								      if(domainUser.restricted_scopes == null || !domainUser.restricted_scopes.contains(UserAccessScopes.CREATE_CONTACT)){
 								    %>
-									<li><a href="#personModal"  class="person" id="person">
+									<li><a href="#personModal"  class="person p-r-none" id="person">
 											<div class="pull-left"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "contact") %></div><div class='pull-right shortcuts'>Shift + N</div><div class="clearfix"></div></a></li>
 									<li><a href="#companyModal"  data-toggle="modal"
 										id="company"> <div class="pull-left"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "company") %></div><div class='pull-right shortcuts'>Shift + C</div><div class="clearfix"></div></a></li>
 									<%
 								          }
 								    %> 
+									
+									
 										<%
 										if(domainUser.menu_scopes.contains(NavbarConstants.DEALS) &&          !domainUser.restricted_menu_scopes.contains(NavbarConstants.DEALS)){
 									%>
@@ -490,6 +549,8 @@
 							<img style='display:hidden' id='ajax'
 								src='img/ajax-loader.gif' />
 								--></li>
+							
+							</li>
 
 							<li id="fat-menu" class="dropdown">
 
@@ -537,9 +598,11 @@
 											<li><a href="https://www.agilecrm.com/product-updates" target="_blank" onclick=\"Agile_GA_Event_Tracker.track_event('Product Updates in Profile Dropdown')\"><!-- <i class="icon-off"></i> -->
 											<div class="pull-left"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "product-updates") %></div><div class='pull-right shortcuts'>Shift + R</div><div class="clearfix"></div></a></li>
 											
+									<li><a href="#affiliate-overview" id="affiliate_link">
+											<div class="pull-left"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "affiliate") %></div><div class='pull-right shortcuts'></div><div class="clearfix"></div></a></li>
 									<li><a href="#refer" id="referrals_link"><!-- <i class="icon-cog"></i> -->
 											<div class="pull-left"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "refer") %></div><div class='pull-right shortcuts'></div><div class="clearfix"></div></a></li>
-									
+						
 									<li><a href="https://www.agilecrm.com/support" target= "_blank" onclick="Agile_GA_Event_Tracker.track_event('Help in Profile Dropdown')"><!-- <i class="icon-off"></i> -->
 									<div class="pull-left"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "help") %></div><div class='pull-right shortcuts'>Shift + H</div><div class="clearfix"></div></a></li>
 
@@ -567,28 +630,9 @@
 			
 
 <script type="text/javascript">
-
-  function startDictation() {
-      var recognition = new webkitSpeechRecognition();
- 
-      recognition.continuous = false;
-      recognition.interimResults = false;
- 
-      recognition.lang = "en-US";
-      recognition.start();
- 
-      recognition.onresult = function(e) {
-        document.getElementById('searchText').value
-                                 = e.results[0][0].transcript;
-        
-        recognition.stop();
-       
-      };
- 
-      recognition.onerror = function(e) {
-      	console.log(e)
-        recognition.stop();
-      }
-    }
-
+var item = document.getElementById('speechDectation');
+if(window.hasOwnProperty('webkitSpeechRecognition')) 
+	item.style.display = "inline-block";
+else
+	item.style.display = "none"; 
 </script>

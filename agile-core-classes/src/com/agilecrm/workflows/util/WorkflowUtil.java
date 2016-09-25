@@ -14,6 +14,7 @@ import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.workflows.Workflow;
+import com.agilecrm.workflows.WorkflowBackup;
 import com.campaignio.tasklets.util.TaskletUtil;
 import com.googlecode.objectify.Key;
 
@@ -301,5 +302,23 @@ public class WorkflowUtil
 	public static int get_enable_campaign_count()
 	{
 		return Workflow.dao.getCountByProperty("is_disabled", false);
+	}
+	
+	/**
+	 * Restores workflow with available backup
+	 * 
+	 * @param workflowId - Workflow id
+	 * @param backup  - backup workflow object
+	 * 
+	 * @return Restored workflow
+	 */
+	public static Workflow restoreWorkflow(Long workflowId, WorkflowBackup backup) {
+		Workflow workflow = WorkflowUtil.getWorkflow(workflowId);
+		workflow.rules = backup.getRules();
+		workflow.setSkip_verify(true);
+		workflow.setBackupExists(false);
+		workflow.save();
+		
+		return workflow;
 	}
 }

@@ -541,6 +541,7 @@ function initializeSubscriptionListeners()
 						}else{
 							var restrictions = data.restrictions;
 							restrictions.plan = data.plan;
+							restrictions.users.limit = parseInt(plan_json.quantity);
 							if(restrictions.contacts.count > restrictions.contacts.limit)
 								errorsCount++;
 							if(restrictions.webrules.count > restrictions.webrules.limit)
@@ -562,9 +563,11 @@ function initializeSubscriptionListeners()
 								return;
 							}
 						}
-						plan_json.date = data.nextPaymentAttempt;
-						if(months == 24)
+						if(USER_DETAILS.getPlanInterval(USER_BILLING_PREFS) == cycle.toUpperCase()){
+							plan_json.date = data.nextPaymentAttempt;
+							if(months == 24)
 							plan_json.date = plan_json.date + 31557600;
+						}
 						Backbone.history.navigate("purchase-plan", { trigger : true });
 							
 					},
@@ -832,4 +835,13 @@ $(function(){
 	});
 
 });
+
+function addAsAffiliate(amount){
+	$.ajax({ type : 'POST', url : '/core/api/affiliate?am='+amount,	contentType : "application/json; charset=utf-8", dataType : 'json', 
+		success : function(data){
+
+		},error : function(){
+
+	}});
+}
 

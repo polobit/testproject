@@ -492,7 +492,8 @@ public class DealsAPI
 	JSONArray opportunitiesJSONArray = new JSONArray(ids);
 	JSONArray oppJSONArray = new JSONArray();
 	List<String> contactIdsList = new ArrayList<String>();
-	List<Opportunity> opportunityList = OpportunityUtil.getOpportunitiesForBulkActions(ids, null, opportunitiesJSONArray.length());
+	OpportunityUtil opportunityUtil = new OpportunityUtil();
+	List<Opportunity> opportunityList = opportunityUtil.getOpportunitiesForBulkActions(ids, null, opportunitiesJSONArray.length());
 	
 	for(Opportunity opp : opportunityList)
 	{
@@ -1338,7 +1339,7 @@ public class DealsAPI
 	    return null;
 
 	Iterator<?> keys = obj.keys();
-
+	List<CustomFieldData> input_custom_field = new ArrayList<CustomFieldData>();
 	while (keys.hasNext())
 	{
 	    String key = (String) keys.next();
@@ -1386,8 +1387,10 @@ public class DealsAPI
 		    json.put("name", custom_dataJSONArray.getJSONObject(i).getString("name"));
 		    json.put("value", custom_dataJSONArray.getJSONObject(i).getString("value"));
 		    CustomFieldData field = mapper.readValue(json.toString(), CustomFieldData.class);
-		    opportunity.addCustomData(field);
+		    input_custom_field.add(field);
 		}
+		// Partial update, send all custom datas
+		opportunity.addAllCustomData(input_custom_field);
 	    }
 	}
 
@@ -1402,8 +1405,16 @@ public class DealsAPI
 		return null;
 	    }
 	}
-	else
-	    opportunity.save();
+	else{
+	    try
+	    {
+		opportunity.addContactIdsToDeal(contact_idList);
+	    }
+	    catch (WebApplicationException e)
+	    {
+		return null;
+	    }
+	}
 
 	return opportunity;
     }
@@ -1554,5 +1565,75 @@ public class DealsAPI
     		return deals;
     	}
     	return null;
+    }
+    
+    @Path("/partial-update/delete-contact")
+    @PUT
+    @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public Opportunity removeContactByIdsFrmForOpportunity(String inputString) throws JSONException, JsonParseException,
+	    JsonMappingException, IOException
+    {
+
+	// Get data and check if id is present
+	org.json.JSONObject obj = new org.json.JSONObject(inputString);
+	List<String> contact_idList = new ArrayList<String>();
+
+	if (!obj.has("id"))
+	    return null;
+
+	Opportunity opportunity = OpportunityUtil.getOpportunity(obj.getLong("id"));
+
+	System.out.println(opportunity);
+
+	if (opportunity == null)
+	    return null;
+	
+	if(opportunity != null)
+	{
+	    List<String> conIds = opportunity.getContact_ids();
+	    List<String> modifiedConIds = UserAccessControlUtil.checkUpdateAndmodifyRelatedContacts(conIds);
+	    if(conIds != null && modifiedConIds != null && conIds.size() != modifiedConIds.size())
+	    {
+	    	throw new AccessDeniedException("Deal cannot be updated because you do not have permission to update associated contact(s).");
+	    }
+	}
+
+	Iterator<?> keys = obj.keys();
+	while (keys.hasNext())
+	{
+	    String key = (String) keys.next();
+
+	    if (key.equals("contact_ids"))
+	    {
+
+		// contact_ids = contact_idString.split(",");
+		JSONArray contact_idJSONArray = new JSONArray(obj.getString(key));
+		for (int i = 0; i < contact_idJSONArray.length(); i++)
+		{
+		    contact_idList.add(contact_idJSONArray.getString(i));
+
+		}
+	    }
+
+	}
+
+	if (contact_idList.size() > 0)
+	{
+	    try
+	    {
+		opportunity.removeContactIdsToDealWithoutSaving(contact_idList);
+		opportunity.save();
+	    }
+	    catch (WebApplicationException e)
+	    {
+		return null;
+	    }
+	}
+	else{
+	   return null;
+	}
+
+	return opportunity;
     }
 }

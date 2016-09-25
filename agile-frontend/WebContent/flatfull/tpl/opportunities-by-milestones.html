@@ -33,7 +33,7 @@
 					</ul>
 			</div>
 			<div class="btn-group inline-block m-l-xs" id="deals-action">
-					<a href="#deals-add" class="deals-add btn btn-sm  btn-default" onclick="Agile_GA_Event_Tracker.track_event('Add Deal')"><i class="icon-plus-sign" /> {{agile_lng_translate 'contact-details' 'add-deal'}}
+					<a href="#deals-add" class="deals-add-opportunity btn btn-sm  btn-default" onclick="Agile_GA_Event_Tracker.track_event('Add Deal')"><i class="icon-plus-sign" /> {{agile_lng_translate 'contact-details' 'add-deal'}}
 					</a>
 					<a class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" href="#">
 						<span class="caret"></span>
@@ -125,7 +125,8 @@
 	<input id="restored-deal-id" name="id" type="hidden"/>
 	<input id="restored-deal-milestone" name="milestone" type="hidden"/>
     <div id="deal-bulk-confirm">
-		{{agile_lng_translate 'deal-view' 'restoring-the-deal-desc'}}
+		{{agile_lng_translate 'deal-view' 'restoring-the-deal-desc'}} <br />
+		{{agile_lng_translate 'Deal-detail' 'restore-this-deal'}}
 	</div>
   </div>
   <div class="modal-footer">
@@ -347,10 +348,10 @@
 
 <script id="related-to-contacts-template" type="text/html">
 	{{#if_contact_type "PERSON"}}
-	<a class="text-info popover_contact" href="#contact/{{id}}" data="{{id}}">{{getPropertyValue properties "first_name"}}{{#property_is_exists "last_name" properties}} {{getPropertyValue properties "last_name"}}{{/property_is_exists}}</a>
+	<a class="text-info popover_contact text-cap" href="#contact/{{id}}" data="{{id}}">{{getPropertyValue properties "first_name"}}{{#property_is_exists "last_name" properties}} {{getPropertyValue properties "last_name"}}{{/property_is_exists}}</a>
 	{{/if_contact_type}}
 	{{#if_contact_type "COMPANY"}}
-     	<a class="text-info popover_contact" href="#company/{{id}}" data="{{id}}">{{getPropertyValue properties "name"}}</a>
+     	<a class="text-info popover_contact text-cap" href="#company/{{id}}" data="{{id}}">{{getPropertyValue properties "name"}}</a>
     {{/if_contact_type}}
 </script>
 <script id="opportunity-track-list-collection-template" type="text/html">

@@ -25,6 +25,7 @@ import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.UserPrefs;
 import com.agilecrm.user.util.UserPrefsUtil;
 import com.agilecrm.util.MD5Util;
+import com.agilecrm.util.VersioningUtil;
 import com.agilecrm.util.email.SendMail;
 import com.google.appengine.api.taskqueue.DeferredTask;
 import com.google.appengine.api.taskqueue.Queue;
@@ -272,8 +273,9 @@ public class SendEventReminderDeferredTask implements DeferredTask
 			    SendMail.START_EVENT_REMINDER, map);
 		}
 	    }
-
-	    EventReminder.getEventReminder(domain, starttime);
+	    
+	    if(!VersioningUtil.isDevelopmentEnv())
+	    	EventReminder.getEventReminder(domain, starttime);
 	}
 
 	catch (TransientFailureException tfe)

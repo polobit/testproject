@@ -1103,6 +1103,9 @@ function getTimeInArray(time)
 	var minutes = 0;
 	var seconds = 0;
 	var timeArray = [0,0,0];
+	if(isNaN(time)){
+		time = 0;
+	}
 	if (time == 0)
 		return timeArray;
 	

@@ -30,10 +30,41 @@ var Widget_Model_Events = Base_Model_View.extend({
    	  "click .save-agile-widget" : "saveWidgetPrefs",
    	  "click .connect_shopify" : "connectShopify",
    	  "click .revoke-widget" : "revokeWidget",
-      "change #script_type" : "scriptType",
-      "click #cancel_custom_widget" : "cancelWidget"
+      "change #script_type" : "scriptType",      
+      "click #cancel_custom_widget" : "cancelWidget",
+      "click .deleteWidget" : "deleteWidget"
 
    },
+
+  deleteWidget : function(e){
+     var ele = $(e.currentTarget);
+    // Fetch widget name from the widget on which delete is clicked
+    var widget_name = $(ele).attr('widget-name');
+    var widgetNameDisplay = $(ele).attr('widget-displayname');
+
+    // If not confirmed to delete, return
+    var displayName;
+    
+    if(widgetNameDisplay){
+      displayName = widgetNameDisplay;
+    }else{
+      displayName = widgetDisplayname[widget_name];
+      if(!displayName){
+        displayName = widget_name;
+      } 
+    }
+    
+
+    showAlertModal("Are you sure to delete " + displayName + "?", "confirm", function(){
+      delete_widget(widget_name);
+
+      if(widget_name == "Linkedin")
+        $('#Linkedin-container').hide();
+      
+      if(widget_name == "Twilio")
+        $('#Twilio-container').hide();
+    },undefined, "Delete Widget");
+  },
 
   scriptType: function(){
       var script_type = $('#script_type').val();

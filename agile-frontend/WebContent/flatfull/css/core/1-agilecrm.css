@@ -1,3 +1,4 @@
+
 /* register.jsp,openid-min.css   */
 .login-page .openid_large_btn:hover {
   margin: 4px 0px 0px 6px;
@@ -3766,7 +3767,7 @@ opacity: .3;
 
 .report-selected
 {
-	background-color: #e4eaec!important;
+	/*background-color: #f6f8f8!important;*/
 }
 
 .sub-nav-tab li
@@ -4275,7 +4276,7 @@ background-color : #522E2E;
     pointer-events: none;
     background: orange;
     border-radius: 1000px;
-    right: 5px;
+    right: 14px;
     top: 10px;
 }
 
@@ -4432,6 +4433,12 @@ border: 1px solid #e5e5e5;
   width: auto!important;
 }
 
+@media (max-width: 767px){
+  #affiliate-datepicker {
+    ext-align: center;
+    width: 100%;
+  }
+}
 .ticket-collection-container th {
   white-space: nowrap;
 }
@@ -4515,7 +4522,7 @@ div.list-tasks.panel-body:hover
 }
 #task-model-list .listed-task .task-content-view a[target="_blank"]
 {
-  font-weight:700;
+  font-weight:500;
   opacity:0.75;
   top:0px;
 }
@@ -4556,3 +4563,156 @@ div.list-tasks.panel-body:hover
 /*.task-model-list .alert:first-child{
   margin-left:10px;
 }*/
+
+#company-contacts ul li {
+    padding-right: 0px!important;
+}
+
+
+@media (max-width: 767px){
+  .searchForm {
+    padding: 0px !important;
+  }
+}
+@media (max-width: 767px){
+  ul.typeahead.dropdown-menu.dashboard-search-scroll-bar {
+    max-height: 330px !important;
+  }
+}
+
+.mobile-search-view{
+  width: 250px !important;
+}
+
+.w-115{
+  width: 115px;
+}
+.w-120{
+  width: 120px;
+}
+.w-125
+{
+  width:125px;
+}
+.w-175
+{
+  width:175px;
+}
+.w-150
+{
+  width:150px;
+}
+
+/* start of dialler */
+
+	.keyPad:hover{
+		background-color: rgba(15, 179, 224, 0.32);
+		color: white !important;
+	}
+/* 	.keyPad div:hover{
+		color: white !important;
+	} */
+	.keyPad{
+		border-radius: 3px;
+	}
+	.actives{
+	 filter: alpha(opacity = 100);
+  	-khtml-opacity: 1;
+  	-moz-opacity: 1;
+  	opacity: 1;
+  	cursor: pointer;
+	}
+	
+	.selected-widget{
+	  	border-bottom:3px solid #00c8ff;
+	}
+	
+	.inactive{
+	 filter: alpha(opacity = 10);
+  	-khtml-opacity: 0.1;
+  	-moz-opacity: 0.1;
+  	opacity: 0.1;
+  	cursor: default;
+	}
+	
+	#dialPad:after{
+	z-index: -1;
+    position: absolute;
+    content: "";
+    bottom: 10px;
+    right: 5px;
+    width: 90%;
+    top: 80%;
+    -webkit-box-shadow: 0 12px 5px rgba(0,0,0,.3);
+    -moz-box-shadow: 0 12px 5px rgba(0,0,0,.3);
+    box-shadow: 0 12px 5px rgba(0,0,0,.3);
+    -webkit-transform: rotate(3deg);
+    -moz-transform: rotate(3deg);
+    -o-transform: rotate(3deg);
+    -ms-transform: rotate(3deg);
+    transform: rotate(3deg);
+	}
+	#dialPad:before{
+	z-index: -1;
+    position: absolute;
+    content: "";
+    bottom: 10px;
+    right: 5px;
+    width: 97%;
+    top: 80%;
+    -webkit-box-shadow: 0 12px 5px rgba(0,0,0,.3);
+    -moz-box-shadow: 0 12px 5px rgba(0,0,0,.3);
+    box-shadow: 0 12px 5px rgba(0,0,0,.3);
+    -webkit-transform: rotate(-3deg);
+    -moz-transform: rotate(-3deg);
+    -o-transform: rotate(-3deg);
+    -ms-transform: rotate(-3deg);
+    transform: rotate(-3deg);
+	}
+	.dial-number:hover{
+		opacity: 0.8;
+	}
+	.list-padding{
+		display: inline-block;
+		padding:4px 18px;
+	}
+	.link-top{
+		height: 40px; 
+		line-height: 40px; 
+		padding-bottom: 5px;
+	}
+	
+/* end of dialler */
+.text-info-important{
+    color: #23b7e5!important;
+}
+
+.textarea{
+   min-height: 49px;
+    height: auto;
+    width: 100%;
+    text-indent: 0px;
+    resize: none;
+    padding: 8px 8px 1px;
+    overflow-y: hidden;
+
+}
+
+#affiliate-tabs-content .zeroclipboard-is-hover{
+  background-color: #fafafa !important;
+}
+
+.bg-light.dker .nav>li:hover>a, .bg-light.dker .nav>li:focus>a, .bg-light.dker .nav>li.active>a{ background-color: #f6f8f8;}
+.bg-light .nav>li:hover>a, .bg-light .nav>li:focus>a, .bg-light .nav>li.active>a{ background-color: #f6f8f8;}
+.bg-white.b-r .nav>li:hover>a,.bg-white.b-r .nav>li:focus>a, .bg-white.b-r .nav>li.active>a{ background-color: #f6f8f8;}
+
+.right-pane-header{
+  font-size: 14px;
+  font-weight: 700;
+  color: #58666e!important;
+  background-color: #fff!important;
+}
+ul#recent-menu-model-list li:nth-child(even)
+{
+  background-color: #f9f9f9;
+}

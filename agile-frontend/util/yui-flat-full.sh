@@ -33,9 +33,13 @@ cat ../WebContent/flatfull/jscore/tickets/base-model/*.js ../WebContent/flatfull
 
 cat ../WebContent/flatfull/controllers/app.js >> ../WebContent/jscore/min/flatfull/js-all-min-4.js
 
-cat ../WebContent/stats/js/*.js > ../WebContent/stats/min/agile-min.js
-
+# Stats
+cat $(find ../WebContent/stats/js ! -path ../WebContent/stats/js/agile-on-load.js -name "*.js") > ../WebContent/stats/min/agile-min.js
+cat ../WebContent/stats/js/agile-on-load.js >> ../WebContent/stats/min/agile-min.js
+#Minify
 java -jar yuicompressor-2.4.7.jar ../WebContent/stats/min/agile-min.js --type js -o  ../WebContent/stats/min/agile-min.js
+java -jar yuicompressor-2.4.7.jar ../WebContent/stats/agile-cloud-unmin.js --type js -o  ../WebContent/stats/min/agile-cloud.js
+# End of stats
 
 echo 'Minifying helpcenter files...'
 cat ../WebContent/flatfull/jscore/backbone/*.js > ../WebContent/jscore/min/flatfull/helpcenter-all-min.js

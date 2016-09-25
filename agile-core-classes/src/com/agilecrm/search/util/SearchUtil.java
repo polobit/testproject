@@ -10,6 +10,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TimeZone;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
@@ -510,36 +511,57 @@ public class SearchUtil
 
 	String contactName = "";
 
-	String[] firstNameArr = firstName.split(" ");
-	System.out.println("Before first name for loop");
-	for(int i=0; i<firstNameArr.length; i++){
-		contactName = normalizeString(firstNameArr[i]);
-		tokens.add(contactName);
+	try {
+		String[] firstNameArr = firstName.split(" ");
+		System.out.println("Before first name for loop");
+		for(int i=0; i<firstNameArr.length; i++){
+			contactName = normalizeString(firstNameArr[i]);
+			tokens.add(contactName);
+		}
+		System.out.println("After first name for loop");
+	} catch (Exception e) {
+		System.out.println("inside catch of first name");
+		e.printStackTrace();
 	}
-	System.out.println("After first name for loop");
 
-	String[] lastNameArr = lastName.split(" ");
-	System.out.println("Before last name for loop");
+	try {
+		String[] lastNameArr = lastName.split(" ");
+		System.out.println("Before last name for loop");
 
-	for(int i=0; i<lastNameArr.length; i++){
-		contactName = normalizeString(lastNameArr[i]);
-		tokens.add(contactName);
+		for(int i=0; i<lastNameArr.length; i++){
+			contactName = normalizeString(lastNameArr[i]);
+			tokens.add(contactName);
+		}
+		System.out.println("After last name for loop");
+	} catch (Exception e) {
+		System.out.println("inside catch of last name");
+		e.printStackTrace();
 	}
-	System.out.println("After last name for loop");
 
-	String[] nameArr = name.split(" ");
-	for(int i=0; i<nameArr.length; i++){
-		contactName = normalizeString(nameArr[i]);
-		tokens.add(contactName);
+	try {
+		String[] nameArr = name.split(" ");
+		for(int i=0; i<nameArr.length; i++){
+			contactName = normalizeString(nameArr[i]);
+			tokens.add(contactName);
+		}
+	} catch (Exception e) {
+		System.out.println("inside catch of name");
+		e.printStackTrace();
 	}
 	
-	// contact contact name first name then last name add to tokens
-	contactName = normalizeString(firstName + lastName);
-	tokens.add(contactName);
+	try {
+		System.out.println("before first and last combination");
+		// contact contact name first name then last name add to tokens
+		contactName = normalizeString(firstName + lastName);
+		tokens.add(contactName);
 
-	// contact contact name last name then first name add to tokens
-	contactName = normalizeString(lastName + firstName);
-	tokens.add(contactName);
+		// contact contact name last name then first name add to tokens
+		contactName = normalizeString(lastName + firstName);
+		tokens.add(contactName);
+	} catch (Exception e) {
+		System.out.println("inside catch of first and last combination");
+		e.printStackTrace();
+	}
 	// Splits each token in to fragments to search based on keyword
 	System.out.println("Token size is:"+tokens.size());
 	if (tokens.size() != 0)
@@ -575,18 +597,34 @@ public class SearchUtil
 		}
 	}
 
-    public static String getDateWithoutTimeComponent(Long millSeconds)
+    public static String getDateWithoutTimeComponent(Long millSeconds,TimeZone timezone)
     {
 	/*
 	 * Truncate date Document search date is without time component
 	 */
-	Date truncatedDate = DateUtils.truncate(new Date(millSeconds), Calendar.DATE);
+    	try{
+        	//Calendar cal=Calendar.getInstance(Timezone);
+        	//cal.setTimeInMillis(millSeconds);
+    		System.out.println("Time string"+millSeconds);
+        	SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        	formatter.setTimeZone(timezone);
+        	
+        	return formatter.format(new Date(millSeconds));
+    	//Date truncatedDate = DateUtils.truncate(new Date(millSeconds), Calendar.DATE);
+    	
+    	//Date truncatedDate1=truncatedDate.getTime();
+    	
+    	//System.out.println("Time string"+truncatedDate);
 
-	// Format date(formated as stored in document)
-	Format formatter = new SimpleDateFormat("yyyy-MM-dd");
-
-	// Formated to build query
-	return formatter.format(truncatedDate);
+    	// Format date(formated as stored in document)
+    	
+    	// Formated to build query
+    	//return formatter.format(truncatedDate);
+        	}
+        	catch(Exception e)
+        	{
+        		return null;
+        	}
     }
 
     public static String getDateWithoutTimeComponent(Long millSeconds, String format)

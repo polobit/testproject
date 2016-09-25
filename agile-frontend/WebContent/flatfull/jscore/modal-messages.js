@@ -129,6 +129,10 @@ var MODAL_MESSAGES = {
 		"title": GLOBAL_MODAL_MESSAGES.global_error_title,
 		"message" : _agile_get_translated_val('category','name-error')
 	},
+	"affiliate_error" : {
+		"title": GLOBAL_MODAL_MESSAGES.global_error_title,
+		"message" : "User not registered with affiliate program."
+	},
 	"user_deleted" : {
 		"title": "{{agile_lng_translate 'contact-details' 'delete'}}",
 		"message" : "{{agile_lng_translate 'activity_type' 'User_Deleted'}}"
@@ -260,5 +264,9 @@ var MODAL_MESSAGES = {
 	"stripe_customfield_selection_error" : {
 		"title": "{{agile_lng_translate 'stripe' 'custom-field'}}",
 		"message" : "{{agile_lng_translate 'stripe' 'select-custom-field'}}"
-	}
+	},
+	"complete_task" : {
+		"title": "{{agile_lng_translate 'tasks' 'completed'}}",
+		"message" : "{{agile_lng_translate 'tasks' 'confirm-delete'}}"
+	},
 };

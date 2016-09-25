@@ -321,9 +321,16 @@ function initializePortletsListeners() {
 					html:true,
 					container: 'body',
 					content: function() {
-      return getTemplate("extensions-download-model");
+      				return getTemplate("extensions-download-model");
     }
-				});
+	}).on("show.bs.popover", function(e){ 
+				setTimeout(function(event){
+    				var $target = $(e.target);
+    				console.log("$target = "+ $target);
+    				$('[data-toggle="tooltip"]').tooltip();
+    			},100);	
+    			});
+
 	$('.modal-body').off("click").on('click', '#category-select-all',
 			function(e) {
 				e.preventDefault();
@@ -333,9 +340,18 @@ function initializePortletsListeners() {
    					placement : $(this).attr("data-placement"),
 					html:true,
 					container: 'body',content: function() {
+						$('[data-toggle="tooltip"]').tooltip(); 
       return $(getTemplate("extensions-download-model")).html();
+
     }
-				});
+				}).on("show.bs.popover", function(e){ 
+					
+					setTimeout(function(event){
+    				var $target = $(e.target);
+    				console.log("$target = "+ $target);
+    				$('[data-toggle="tooltip"]').tooltip();
+    			},100);
+    			});
 
 
 	$('.modal-content').off("click").on('click', '#category-select-none',
@@ -899,7 +915,9 @@ $('.portlet_body')
 					});
 				}
 			});
-
+	$('.portlet_body').off(
+					"click",
+					'.portlets-tasks-select');
 	$('.portlet_body')
 			.on(
 					"click",
@@ -908,14 +926,21 @@ $('.portlet_body')
 						
 						e.stopPropagation();
 						if ($(this).is(':checked')) {
-
+							var that=$(this);
+/*
+							if(!confirm(_agile_get_translated_val('tasks','confirm-delete')))
+		{
+			$(this).attr("checked", false);
+				return;
+		}*/
+				showAlertModal("complete_task", "confirm", function() {
 							// Complete
-							var taskId = $(this).attr('data');
+							var taskId = $(that).attr('data');
 
-							var column_pos = $(this).parentsUntil('.gs-w')
+							var column_pos = $(that).parentsUntil('.gs-w')
 									.last().parent().find('.column_position')
 									.text().trim();
-							var row_pos = $(this).parentsUntil('.gs-w').last()
+							var row_pos = $(that).parentsUntil('.gs-w').last()
 									.parent().find('.row_position').text()
 									.trim();
 							var pos = column_pos + '' + row_pos;
@@ -923,17 +948,23 @@ $('.portlet_body')
 							complete_task(
 									taskId,
 									App_Portlets.tasksCollection[parseInt(pos)].collection,
-									$(this).closest('tr'));
+									$(that).closest('tr'));
 
-							if ($(this).parentsUntil('table').last().find(
+							if ($(that).parentsUntil('table').last().find(
 									'tr:visible').length == 1) {
-								$(this)
+								$(that)
 										.parentsUntil('table')
 										.parent()
 										.parent()
 										.html(
 												'<div class="portlet-error-message">{{agile_lng_translate "tasks" "no-tasks-found"}}</div>');
 							}
+						},
+							function() {
+								$(that).attr("checked", false);
+				
+							}
+						);
 						}
 					});
 

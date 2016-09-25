@@ -1,4 +1,28 @@
 <script id="ticket-helpcenter-sections-model-template" type="text/html">
+{{#is_mobile}}
+<td class="hide data" data="{{id}}">{{id}}</td>
+  <td class="p-r-none p-l-none">
+    <div class="table-resp knowledgebase-name">
+      <div class="text-ellipsis">
+        <a href="#knowledgebase/{{id}}/articles" class="pull-left text-ellipsis w-full">{{name}}</a>
+      </div>
+      <div class="text-ellipsis">
+            <small class="edit-hover text-muted"> 
+        <i class="fa fa-clock-o"></i>
+            <span>{{agile_lng_translate 'tickets' 'last-updated-on'}}</span>
+                <time class="b-b-dotted" datetime="{{epochToHumanDate "" updated_time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM" updated_time}}</time>
+            </small>
+        </div>
+    </div>
+
+      <div class="pull-right">
+        <a title= "Edit" href="#knowledgebase/category/{{categorie_id}}/section/{{id}}/edit-section"> <small class="text-muted m-b-sm"><i id="{{id}}" data-id="{{name}}"  class="fa fa-pencil-square-o"></i></small>
+        </a>
+      </div>
+  </td>
+    
+{{else}}
+
 <td class="hide data" data="{{id}}">{{id}}</td>
 	<td>
 		<div class="table-resp">
@@ -10,8 +34,8 @@
    	<td>
         <div class="table-resp">
             <small class="edit-hover text-muted"> 
-				<i class="fa fa-clock-o m-r-xs"></i>
-		        <span>{{agile_lng_translate 'tickets' 'last-updated-on'}}&nbsp;</span>
+				<i class="fa fa-clock-o"></i>
+		        <span>{{agile_lng_translate 'tickets' 'last-updated-on'}}</span>
                 <time class="b-b-dotted" datetime="{{epochToHumanDate "" updated_time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM" updated_time}}</time>
             </small>
         </div>
@@ -23,4 +47,5 @@
     </a>
 
   </td>
+  {{/is_mobile}}
 </script>

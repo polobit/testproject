@@ -66,7 +66,8 @@
 
 			<div class="wrapper bg-light p-b-xs p-t-xs">
   <div class="panel panel-default m-b-sm">
-			<a href='#contact-filters' class="text-info block p-t-sm p-b-sm text-center" style="padding-top: 8px; padding-bottom: 8px;">Add or Edit Filter</a>
+			<div class="p-t-sm p-b-sm text-center" style="padding-top: 8px; padding-bottom: 8px;">
+      <a href='#contact-filters' class="text-info">Add or Edit Filter</a></div>
 </div>
 </div>
 
@@ -169,9 +170,9 @@
         	</li>
 			<li class="divider"></li>-->
 			<li class="dropdown-submenu"><a data-toggle="dropdown" id="mobile-dropdown-click-sort">Sort By</a>
+
 				<ul class="dropdown-menu" id="contact-sort-views" role="menu">
-					<li><a class="sort bold-text" id="sort-by-created_time-desc" data="-created_time" href="#">{{agile_lng_translate 'contacts-view' 'newest'}}</a>
-					</li>
+					<li><a class="sort bold-text" id="sort-by-created_time-desc" data="-created_time" href="#">{{agile_lng_translate 'contacts-view' 'newest'}}</a></li>
 					<li><a class="sort" id="sort-by-created_time-asc" data="created_time" href="#">{{agile_lng_translate 'contacts-view' 'oldest'}}</a></li>
 					<li class="divider"></li>
 					<li><a class="sort" id="sort-by-lead_score-desc" data="-lead_score" href="#">{{agile_lng_translate 'contacts-view' 'highest-score'}}</a></li>
@@ -199,12 +200,14 @@
 	</div>
 	{{#hasRestrictedMenuScope 'CREATE_CONTACT'}} {{else}}
     <div class="btn-group">
+
         <a href="#contacts" onclick="Agile_GA_Event_Tracker.track_event('Add Contact');" class="person btn btn-default btn-sm"><i class="icon-plus-sign"></i> {{agile_lng_translate 'contacts-view' 'add-contact'}}</a>
         <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
 		<ul class="dropdown-menu pull-right" role="menu">
 			<li><a href="#import" onclick="Agile_GA_Event_Tracker.track_event('Import Contact');">{{agile_lng_translate 'contacts-view' 'import-from-csv'}}</a></li>
 
 			<li><a href="#import">{{agile_lng_translate 'contacts-view' 'import-from-salesforce'}}</a></li>
+			
 		</ul>
 	</div>
 	{{/hasRestrictedMenuScope}}
@@ -406,12 +409,12 @@
 	                     <li>
 	       		  			<a href="javascript:void(0);" class="p-b-none">
 								<label class="i-checks i-checks-sm contactcoloumn"><input name="last_contacted" value = "last_contacted"type="checkbox" class="choose-column-chbx"><i></i></label>Last Contacted</a></li>
-						<li>
-	       		  			<a href="javascript:void(0);" class="p-b-none">
-								<label class="i-checks i-checks-sm contactcoloumn"><input name="last_emailed" value = "last_emailed"type="checkbox" class="choose-column-chbx"><i></i></label>Last Emailed</a></li>
-						<li>
-	       		  			<a href="javascript:void(0);" class="p-b-none">
-								<label class="i-checks i-checks-sm contactcoloumn"><input name="last_called" value = "last_called"type="checkbox" class="choose-column-chbx"><i></i></label>Last Called</a></li>
+						 <li>
+ 	       		  			<a href="javascript:void(0);" class="p-b-none">
+ 								<label class="i-checks i-checks-sm contactcoloumn"><input name="last_emailed" value = "last_emailed"type="checkbox" class="choose-column-chbx"><i></i></label>Last Emailed</a></li>
+ 						 <li>
+ 	       		  			<a href="javascript:void(0);" class="p-b-none">
+ 								<label class="i-checks i-checks-sm contactcoloumn"><input name="last_called" value = "last_called"type="checkbox" class="choose-column-chbx"><i></i></label>Last Called</a></li>
 	                     <div id="custom-fields-group"class="" ></div>
 	                     
 	      			</script>
@@ -421,4 +424,5 @@
 		<label class="i-checks i-checks-sm contactcoloumn"><input name="CUSTOM_{{field_label}}" value="CUSTOM_{{field_label}}"type="checkbox" class="choose-column-chbx"><i></i></label>{{field_label}}</a></li>
 
 </script>
+
 

@@ -17,3 +17,54 @@
     </div>
 
 </script>
+
+
+<script type="text/html" id="newContactAddPhone-template">
+<div class="modal-backdrop fade in" style="min-height:calc(100%) !important;"></div>
+  <div class="modal-dialog">
+    <div class="modal-content">
+    <div class="modal-header">
+        <button class="close" data-dismiss="modal">&times;</button>
+        <h3 class="modal-title">&nbsp;{{agile_lng_translate 'widgets' 'newcall'}}</h3>
+    </div>
+    <div class="modal-body">
+		<form class="bs-example form-horizontal">
+    	 <div class="form-group">
+         	<div class="col-lg-1 p-t-8"></div>
+           	 <div class="col-lg-9 p-t-8">
+            	<label class="i-checks">
+               		<input type="radio" name="call_newNumber_check1" id="call_newNumber_check" checked="checked" value="new" title="New Contact">
+						<i></i>{{agile_lng_translate 'tickets' 'add-new-contact'}}
+ 				</label>
+				&nbsp;&nbsp;&nbsp;
+				<label class="i-checks">
+					 <input type="radio" name="call_newNumber_check1" id="call_newNumber_check" value="update" title="Update Contact">
+						<i></i>{{agile_lng_translate 'contact-edit' 'update'}} {{agile_lng_translate 'web-rules' 'existing-contact'}}
+              	</label>
+             </div>
+         </div>
+
+		<div class="form-group" id="call_newNumber_relatedTo_div" style="display:none;">
+        	<label class="col-lg-3 control-label">{{agile_lng_translate 'deal-view' 'related-to'}}</label>
+			<div class="controls col-lg-7" id="contactTypeAhead"> 
+        		<div> 
+					
+         			<input type="text" id="relates_to_call_contact" name="relates_to_call_contact" placeholder="Contact Name" class="typeahead typeahead_contacts form-control" data-provide="typeahead" data-mode="multiple" autocomplete="off"><ul class="typeahead dropdown-menu" style="width: 300px; top: 34px; left: 15px; display: none;"></ul> 
+         			<div style="padding-top:1px;"> 
+        				<ul id="relates_to_call_contact_ul" class="contacts tagsinput tags p-n"></ul> 
+					</div> 
+					<span id="relates_to_call_error" style="color:#d9534f;display:none;"> {{agile_lng_translate 'widgets' 'select-contact-update'}}</span>
+        		</div> 
+     		</div>
+  		</div>
+		</form>
+    </div>
+    <div class="modal-footer">
+    	<div class="col-lg-offset-3 col-lg-9">
+			<a href="#" class="save btn btn-sm btn-default" id="call_newNumber_btn_continue">{{agile_lng_translate 'widgets' 'continue'}}</a>
+        </div>
+    </div>
+ </div>
+ </div>
+
+</script>

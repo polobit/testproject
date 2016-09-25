@@ -169,6 +169,11 @@ public class Contact extends Cursor
      */
     @Indexed
     public Integer lead_score = 0;
+    
+    /**
+     * Customer social score.
+     */
+    public String klout_score = "";
 
     /**
      * Schema version of the contact used for updating schema
@@ -253,6 +258,7 @@ public class Contact extends Cursor
     public static final String LAST_NAME = "last_name";
     public static final String EMAIL = "email";
     public static final String COMPANY = "company";
+    public static final String KLOUT_SCORE ="klout_score";
     public static final String TITLE = "title";
     public static final String NAME = "name";
     public static final String URL = "url";
@@ -298,6 +304,20 @@ public class Contact extends Cursor
     @JsonIgnore
     @NotSaved
     public boolean forceSearch = false;
+    
+    /**
+     * Set of Browser id for push notification
+     *  
+     */
+    @Indexed
+    public Set<String> browserId = new HashSet<String>();
+    
+    /**
+     * Set of Guid of contact
+     *  
+     */
+    @Indexed
+    public String guid = null;
 
     /**
      * Default constructor
@@ -348,7 +368,7 @@ public class Contact extends Cursor
 	System.out.println("The fieldName is " + fieldName);
 	FieldType type = FieldType.CUSTOM;
 	System.out.println("The FieldType is " + type);
-	if (fieldName.equals(FIRST_NAME) || fieldName.equals(LAST_NAME) || fieldName.equals(EMAIL)
+	if (fieldName.equals(FIRST_NAME) || fieldName.equals(LAST_NAME) || fieldName.equals(KLOUT_SCORE)|| fieldName.equals(EMAIL)
 		|| fieldName.equals(TITLE) || fieldName.equals(WEBSITE) || fieldName.equals(COMPANY)
 		|| fieldName.equals(ADDRESS) || fieldName.equals(URL) || fieldName.equals(PHONE)
 		|| fieldName.equals(NAME) || fieldName.equals(SKYPEPHONE))
@@ -477,16 +497,13 @@ public class Contact extends Cursor
 	preProcessor.preProcess(args);
 
 	Contact oldContact = preProcessor.getOldContact();
-
 	dao.put(this);
 
 	postSave(oldContact, args);
 
 	if (oldContact != null && !isDocumentUpdateRequired(oldContact))
 	    return;
-	
 	addToSearch();
-
     }
 
     public void postSave(Contact oldContact, boolean... args)
@@ -528,25 +545,34 @@ public class Contact extends Cursor
 
 	dao.put(this);
 
+	System.out.println("Before add to text search "+NamespaceManager.get());
 	addToSearch();
+	System.out.println("After add to text search "+NamespaceManager.get());
     }
 
     private void addToSearch()
     {
 	// Enables to build "Document" search on current entity
 	AppengineSearch<Contact> search = new AppengineSearch<Contact>(Contact.class);
-
+	String domain = NamespaceManager.get();
 	// If contact is new then add it to document else edit document
 	if (id == null)
 	{
 	    try
 	    {
+	    System.out.println("Before search add method to text search "+domain);	
 		search.add(this);
+		domain = NamespaceManager.get();
+		System.out.println("After search add method to text search "+domain);
+		
 	    }
 	    
 	    catch (SearchException se)
-	    {
+	    {	domain = NamespaceManager.get();
+	    	System.out.println("Before search addasync method to text search "+domain);
 	    	search.addAsync(this);
+	    	domain = NamespaceManager.get();
+	    	System.out.println("After search addasync method to text search "+domain);
 	    }
 	    catch (Exception e)
 	    {
@@ -555,8 +581,11 @@ public class Contact extends Cursor
 	    return;
 	}
 	try
-	{
+	{	domain = NamespaceManager.get();
+		System.out.println("After search add method to text search "+domain);
 	    search.edit(this);
+	    domain = NamespaceManager.get();
+    	System.out.println("After search add method to text search "+domain);
 	}
 	catch (Exception e)
 	{
@@ -907,6 +936,21 @@ public class Contact extends Cursor
 	    this.save();
 
     }
+    
+    /**
+     * Add push notification browser id
+     * 
+     * @param browserId
+     *            value of the browser id
+     */
+    public void addBrowserId(String browserId)
+    {
+    	if (this.browserId == null)
+    		this.browserId = new HashSet<String>();
+
+    	this.browserId.add(browserId);
+    }
+
 
     /**
      * Deletes a contact from database and search document by executing a

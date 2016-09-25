@@ -1,3 +1,4 @@
+
 /**
  * If the template is not found in document body, then template paths are built
  * based on template name and download requests are sent. if it is down-loaded
@@ -153,8 +154,17 @@ function getTemplateUrls(templateName)
 	}
 	else if (templateName.indexOf("callscript") == 0)
 	{
-	template_relative_urls.push("callscript.js");
+		template_relative_urls.push("callscript.js");
 	}
+	else if (templateName.indexOf("fullcontact") == 0)
+	{
+		template_relative_urls.push("fullcontact.js");
+	}
+	else if (templateName.indexOf("klout") == 0)
+ 	{
+ 		template_relative_urls.push("klout.js");
+ 	}
+
 	if (templateName.indexOf("chargify") == 0)
 	{
 		template_relative_urls.push("chargify.js");
@@ -225,9 +235,21 @@ function getTemplateUrls(templateName)
 	{
 		template_relative_urls.push("referals.js");
 	}
+	if (templateName.indexOf("generic-timeline") == 0)
+	{
+		template_relative_urls.push("generic-timeline.js");
+	}
 	if (templateName.indexOf("helpcenter") == 0)
 	{
 		template_relative_urls.push("helpcenter.js");
+	}
+	if (templateName.indexOf("push-notification") == 0)
+	{
+		template_relative_urls.push("notification.js");
+	}
+	if (templateName.indexOf("affiliate") == 0)
+	{
+		template_relative_urls.push("affiliate.js");
 	}
 	
 	return template_relative_urls;
@@ -940,6 +962,15 @@ function getCount(collection)
 		return "(" + collection[0].count + " " +_agile_get_translated_val('other','total')+ ")";
 	else
 		return "(" + collection.length + " " +_agile_get_translated_val('other','total')+ ")";
+}
+function getSimpleCount(collection)
+{
+	for(var i=0;i<collection.length;i++){
+		if (collection[i] && collection[i].count && (collection[i].count != -1))
+			return collection[i].count ;
+			
+			}
+		return collection.length ;
 }
 function getTaskCount(collection)
 {

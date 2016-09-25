@@ -3,6 +3,7 @@ package com.agilecrm.activities;
 import java.io.IOException;
 
 import com.agilecrm.activities.deferred.SendEventReminderDeferredTask;
+import com.agilecrm.util.VersioningUtil;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
@@ -21,7 +22,8 @@ public class SendEventReminder
 				nosamplevent);
 		Queue queue = QueueFactory.getQueue("event-notifier");
 		TaskOptions options = TaskOptions.Builder.withPayload(sendEventReminder);
-		options.etaMillis((starttime - 600) * 1000);
+		if(!VersioningUtil.isDevelopmentEnv())
+			options.etaMillis((starttime - 600) * 1000);
 		queue.add(options);
 
 	}

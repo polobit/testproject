@@ -1,5 +1,5 @@
 var contacts_view_loader = {
-	fetchHeadings : function(callback)
+	fetchHeadings : function(callback,url)
 	{
 		if (!App_Contacts.contactViewModel)
 		{

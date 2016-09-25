@@ -1,11 +1,15 @@
 package com.agilecrm.contact.email.util;
 
+import static com.agilecrm.contact.util.ContactUtil.EMAIL_PATTERN;
+
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -38,8 +42,9 @@ import com.agilecrm.user.util.SocialPrefsUtil;
 import com.agilecrm.util.EmailLinksConversion;
 import com.agilecrm.util.EmailUtil;
 import com.agilecrm.util.HTTPUtil;
-import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
 import com.google.appengine.api.blobstore.BlobKey;
+import com.google.appengine.repackaged.com.google.common.base.CharMatcher;
+import com.google.appengine.repackaged.com.google.common.base.Splitter;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
@@ -53,6 +58,8 @@ import com.googlecode.objectify.ObjectifyService;
  */
 public class ContactEmailUtil
 {
+	static final Pattern mailIdPattern = Pattern.compile(EMAIL_PATTERN, Pattern.CASE_INSENSITIVE);
+	
 	private static ObjectifyGenericDao<ContactEmail> dao = new ObjectifyGenericDao<ContactEmail>(ContactEmail.class);
 
 	/**
@@ -95,6 +102,68 @@ public class ContactEmailUtil
 	}
 
 	/**
+     * To validate the comma separated list of email ids based on the pattern.
+     * 
+     * @author ravitheja
+     * @param to
+     * @return
+     */
+    public static String normalizeEmailIds(String emailIds) {
+
+		System.out.println("un-normalizeEmailIds ++ " + emailIds);
+
+	    if (!StringUtils.isBlank(emailIds)) {
+
+	    	StringBuilder emails = new StringBuilder();
+			
+			String[] nameId = new String[2];
+			
+			Splitter splitter = Splitter.on(CharMatcher.anyOf(",")).trimResults().omitEmptyStrings();
+	        
+	    	for (String idSubStr : splitter.split(emailIds)) {
+
+	    		if(idSubStr.contains("<")) {
+	    			nameId = StringUtils.split(idSubStr, "<>");
+	    		} else {
+	    			nameId[0] = idSubStr;
+	    		}
+	    		
+	    		if(nameId != null) {
+		    		if(mailIdPattern.matcher(nameId[0]).matches() && emails.indexOf(nameId[0]) == -1) {
+		    			
+		    			if(!StringUtils.isBlank(emails.toString())) emails.append(",");
+		    			
+		    			emails.append(nameId[0]);
+		    		}
+		    		else if(nameId.length > 1 && nameId[1] != null && 
+		    				mailIdPattern.matcher(nameId[1]).matches() && emails.indexOf(nameId[1]) == -1) {
+		    			
+		    			if(!StringUtils.isBlank(emails.toString())) emails.append(",");
+		    			
+		    			if(!StringUtils.isBlank(nameId[0])) 
+		    				emails.append(nameId[0] + " <" + nameId[1] + ">");
+		    			else 
+		    				emails.append(nameId[1]);
+		    		}
+	    		}
+			}
+	    	System.out.println("normalizeEmailIds ++ " + emails.toString());
+	    	
+	    	return emails.toString();
+	    }
+	    return "";
+    }
+    
+    /**
+     * for testing methods in local
+     * 
+     * @param args
+     */
+    public static void main(String[] args) {
+		System.out.println(normalizeEmailIds("ravitheja@gmail.com"));
+	}
+    
+	/**
 	 * 
 	 * @param contactEmailWrapper
 	 * @param contact
@@ -105,14 +174,9 @@ public class ContactEmailUtil
 		System.out.println("saveContactEmailAndSend start---");
 		String to = contactEmailWrapper.getTo(), cc = contactEmailWrapper.getCc(), bcc = contactEmailWrapper.getBcc();
 		
-		// Removes traling commas if any
-	    to = AgileTaskletUtil.normalizeStringSeparatedByDelimiter(',', to);
-
-	    if (!StringUtils.isBlank(cc))
-	    	cc = AgileTaskletUtil.normalizeStringSeparatedByDelimiter(',', cc);
-
-	    if (!StringUtils.isBlank(bcc))
-	    	bcc = AgileTaskletUtil.normalizeStringSeparatedByDelimiter(',', bcc);
+		to = normalizeEmailIds(to);
+	    cc = normalizeEmailIds(cc);
+	    bcc = normalizeEmailIds(bcc);
 
 	    List<Long> documentIds = new ArrayList<Long>();
 	    List<BlobKey> blobKeys = new ArrayList<BlobKey>();
@@ -902,13 +966,7 @@ public class ContactEmailUtil
 		List<String> toEmailsList = new ArrayList<String>();
 		try 
 		{
-			Set<String> toEmailsSet = getToEmailSet(to);
-		    
-		    for(String str : toEmailsSet)
-		    {
-		    	String email = EmailUtil.getEmail(str);
-		    	toEmailsList.add(email);
-		    }
+			toEmailsList = Arrays.asList(normalizeEmailIds(to).split(","));
 		    
 		    List<Contact> toEmailContacts = ContactUtil.searchContactsAndCompaniesByEmailList(toEmailsList);
 		    

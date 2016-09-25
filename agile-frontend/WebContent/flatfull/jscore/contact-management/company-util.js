@@ -12,6 +12,14 @@
 		
 		return false;
 	};
+
+		company_util.isCompanyContact = function(){
+		
+		if(App_Companies.contacts_Company_List && Current_Route == "company/" + App_Companies.companyDetailView.model.get('id'))
+			return true;
+		
+		return false;
+	};
 	
 	company_util.updateDocumentsList = function(document, isCompany){
 
@@ -262,7 +270,7 @@
 	    head.js(LIB_PATH + 'lib/jquery.raty.min.js', function(){
 	    	
 	    	var company_model  =  App_Companies.companyDetailView.model;
-	    	
+	    	var count_clicks=0;
 	    	// If contact update is not allowed then start rating does not allow user to change it
 	    	if(App_Companies.companyDetailView.model.get('owner') && !canEditContact(App_Companies.companyDetailView.model.get('owner').id))
 	    	{
@@ -292,8 +300,30 @@
 	        		// Save model
 	           		contact_model.save();*/
 	           		
-	        		App_Companies.companyDetailView.model.set({'star_value': score}, {silent : true});
-	        		company_model =  App_Companies.companyDetailView.model.toJSON();
+	 App_Companies.companyDetailView.model.set({'star_value': score}, {silent : true});
+	 		company_model =  App_Companies.companyDetailView.model.toJSON();
+
+
+
+        		
+            if(company_model && company_model.star_value == 1)         
+             {
+              count_clicks++;
+              $(this.children[0]).attr('src','img/star-on.png');
+              
+                if(count_clicks==2)
+                  {
+              App_Companies.companyDetailView.model.set({'star_value': 0}, {silent : true});
+	 		company_model =  App_Companies.companyDetailView.model.toJSON();
+              
+              count_clicks=0;
+              $(this.children[0]).attr('src','img/star-off.png');
+              $(this).find('input').attr('value',0);
+              console.log("count_clicks="+count_clicks);
+                  }   
+             }
+             else count_clicks=0;
+           
 	        		var new_model = new Backbone.Model();
 	        		new_model.url = 'core/api/contacts';
 	        		new_model.save(company_model, {
@@ -847,6 +877,7 @@ function company_fetchMails(company_detail_tab_scope,has_email_configured,mail_s
 	templateKey : "email-social-company", sort_collection : true, sortKey : "date_secs", descending : true, individual_tag_name : "li",
 	postRenderCallback : function(el)
 	{
+		
 		$('#company-mail', App_Companies.companyDetailView.el).find("#no-email").css('display','block');
 		agileTimeAgoWithLngConversion($(".email-sent-time", el));
 		
@@ -957,6 +988,7 @@ function loadAllMailsView(company_detail_tab_scope,has_email_configured,fetched_
 	templateKey : "email-social-company", sort_collection : true, sortKey : "date_secs", descending : true, individual_tag_name : "li",
 	postRenderCallback : function(el)
 	{
+		
 		agileTimeAgoWithLngConversion($(".email-sent-time", el));
 		
 		if(email_server_type!="agilecrm")
@@ -1143,13 +1175,21 @@ function contact_detail_page_infi_scroll(element_id, targetCollection)
 				this.strict = true;
 				targetCollection.infiniScroll.disableFetch();
 			}
+			if($(targetCollection.el,element_id).find('#company-contacts-list-view-model-list').length>0)
+				$(targetCollection.el,element_id).find("#contacts-table").parent().find('.scroll-loading').remove();
+			else
 			// Remove loading icon
+			
 			$(targetCollection.infiniScroll.options.target).find('.scroll-loading').remove();
 		},
 		onFetch : function()
 		{
 			console.log('in fetch');
 			// Add loading icon
+				if($(targetCollection.el,element_id).find('#company-contacts-list-view-model-list').length>0)
+ 				$(targetCollection.el,element_id).find("#contacts-table").parent().
+ 			append('<div class="scroll-loading"> <img src="'+updateImageS3Path("/img/ajax-loader-cursor.gif") +'" style="margin-left: 44%;"> </div>');
+ 		else
 			$(targetCollection.infiniScroll.options.target).append(
 					'<div class="scroll-loading"> <img src="'+updateImageS3Path("/img/ajax-loader-cursor.gif") +'" style="margin-left: 44%;"> </div>');
 		}

@@ -86,9 +86,10 @@ function initReportsForCalls(callback){
 	}
 	
 	$('#typeCall').change(function()
-		{
-			callback();
-		});
+ 		{
+ 			$(this).attr("title", $("#typeCall option:selected").text());
+ 			callback();
+ 		});
 	
 	fillSelect("users", "core/api/users/partial", undefined, function()
 			{
