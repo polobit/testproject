@@ -658,11 +658,17 @@ function getContactCustomProperties(items)
 	}
 
 	var position_arr = {};
+	var position_max = App_Companies.customFieldsList.collection.models.length+1;
 	if(App_Companies.customFieldsList!=undefined && App_Companies.customFieldsList!=null){
 		for(var i=0;i<App_Companies.customFieldsList.collection.models.length;i++){
 			curr_scope = App_Companies.customFieldsList.collection.models[i].get("scope");
 			if(curr_route==curr_scope){
-				position_arr[''+App_Companies.customFieldsList.collection.models[i].get("field_label")] = App_Companies.customFieldsList.collection.models[i].get("position");
+				if(App_Companies.customFieldsList.collection.models[i].get("position")==0){
+					position_arr[''+App_Companies.customFieldsList.collection.models[i].get("field_label")] = position_max;
+					position_max++;
+				}else{
+					position_arr[''+App_Companies.customFieldsList.collection.models[i].get("field_label")] = App_Companies.customFieldsList.collection.models[i].get("position");
+				}
 			}
 		}
 	}
@@ -817,11 +823,17 @@ function getCompanyCustomProperties(items)
 	}
 
 	var position_arr = {};
+	var position_max = App_Companies.customFieldsList.collection.models.length+1;
 	if(App_Companies.customFieldsList!=undefined && App_Companies.customFieldsList!=null){
 		for(var i=0;i<App_Companies.customFieldsList.collection.models.length;i++){
 			curr_scope = App_Companies.customFieldsList.collection.models[i].get("scope");
 			if(curr_route==curr_scope){
-				position_arr[''+App_Companies.customFieldsList.collection.models[i].get("field_label")] = App_Companies.customFieldsList.collection.models[i].get("position");
+				if(App_Companies.customFieldsList.collection.models[i].get("position")==0){
+					position_arr[''+App_Companies.customFieldsList.collection.models[i].get("field_label")] = position_max;
+					position_max++;
+				}else{
+					position_arr[''+App_Companies.customFieldsList.collection.models[i].get("field_label")] = App_Companies.customFieldsList.collection.models[i].get("position");
+				}
 			}
 		}
 	}
