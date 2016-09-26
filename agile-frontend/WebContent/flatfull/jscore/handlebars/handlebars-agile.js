@@ -647,6 +647,16 @@ function getContactCustomProperties(items)
 	var fields = [];
 	var fieldName='';
 	var datajson={};
+
+	var curr_route = Current_Route;
+	if(curr_route == "contacts" || curr_route.indexOf("contact")>=0){
+		curr_route = "CONTACT";
+	}else if(curr_route == "companies" || curr_route.indexOf("company")>=0){
+		curr_route = "COMPANY";
+	}else if(curr_route == "deals" || curr_route.indexOf("deal")>=0){
+		curr_route = "DEAL";
+	}
+
 	for (var i = 0; i < items.length; i++)
 	{
 		if (items[i].type == "CUSTOM" && items[i].name != "image")
@@ -656,15 +666,6 @@ function getContactCustomProperties(items)
 			fields.push(items[i]);
 			datajson[''+items[i].name]=items[i].value;
 		}
-	}
-	
-	var curr_route = Current_Route;
-	if(curr_route == "contacts" || curr_route.indexOf("contact")>=0){
-		curr_route = "CONTACT";
-	}else if(curr_route == "companies" || curr_route.indexOf("company")>=0){
-		curr_route = "COMPANY";
-	}else if(curr_route == "deals" || curr_route.indexOf("deal")>=0){
-		curr_route = "DEAL";
 	}
 
 	//Added for formula type custom field
@@ -788,6 +789,16 @@ function getCompanyCustomProperties(items)
 	var fields = [];
 	var fieldName='';
 	var datajson={};
+
+	var curr_route = Current_Route;
+	if(curr_route == "contacts" || curr_route.indexOf("contact")>=0){
+		curr_route = "CONTACT";
+	}else if(curr_route == "companies" || curr_route.indexOf("company")>=0){
+		curr_route = "COMPANY";
+	}else if(curr_route == "deals" || curr_route.indexOf("deal")>=0){
+		curr_route = "DEAL";
+	}
+
 	for (var i = 0; i < items.length; i++)
 	{
 		if (items[i].type == "CUSTOM" && items[i].name != "image")
@@ -799,15 +810,6 @@ function getCompanyCustomProperties(items)
 		}
 	}
 
-	var curr_route = Current_Route;
-	if(curr_route == "contacts" || curr_route.indexOf("contact")>=0){
-		curr_route = "CONTACT";
-	}else if(curr_route == "companies" || curr_route.indexOf("company")>=0){
-		curr_route = "COMPANY";
-	}else if(curr_route == "deals" || curr_route.indexOf("deal")>=0){
-		curr_route = "DEAL";
-	}
-	
 	//Added for formula type custom field
 	var type='';
 	if(App_Companies.customFieldsList!=undefined && App_Companies.customFieldsList!=null){
