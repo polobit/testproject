@@ -57,7 +57,10 @@
     </td>
     <td><div class="text-ellipsis">
 
-        {{#if close_date}}<i class="fa fa-clock-o m-r-xs"></i><time class="deal-close-time" value="{{close_date}}" datetime="{{epochToHumanDate "" close_date}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" close_date}}</time>{{/if}}
+        {{#if close_date}}<i class="fa fa-clock-o m-r-xs"></i><time class="deal-close-time" value="{{close_date}}" datetime="{{epochToHumanDate "" close_date}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" close_date}}</time>
+        {{else}}
+            <time class="deal-close-time" value="" datetime=""></time>
+        {{/if}}
 
     </div>
     </td>

@@ -70,6 +70,8 @@ var ContactSearchRouter = Backbone.Router.extend({
 									$("#search-query-heading", el).html('{{agile_lng_translate "contact-details" "no-matches-found-for"}} "' + query + '" {{agile_lng_translate "contacts-view" "in"}} <span style="font-weight:600;">' + module_name);
 								else
 									$("#search-query-heading", el).html('{{agile_lng_translate "contact-details" "search-results-for"}} "' + query + '" {{agile_lng_translate "contacts-view" "in"}} <span style="font-weight:600;">' + module_name);
+
+								agileTimeAgoWithLngConversion($("time", el));
 							},
 							infini_scroll_cbk : function(ele)
 							{
