@@ -305,11 +305,11 @@ public class Contact extends Cursor
     private boolean owner_updated = false;
     
     /**
-     * To check with old Contact 
+     * To check with old Contact. Transient because to avoid this object to be serialized
      */
     @JsonIgnore
     @NotSaved
-    private ContactSavePreprocessor preProcessor = null;
+    private transient ContactSavePreprocessor preProcessor = null;
 
     /**
      * Default constructor
