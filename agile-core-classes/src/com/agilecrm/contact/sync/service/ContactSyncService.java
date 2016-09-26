@@ -182,7 +182,7 @@ public abstract class ContactSyncService implements IContactSyncService
 
 	    addTagToCompany(related_company);
 	    if (prefs.type == Type.GOOGLE){
-		    ContactField googleContactfield = contact.getContactFieldByName("Contact type");
+		    ContactField googleContactfield = contact.getContactFieldByName("Google_Sync_Type");
 
 			// Does not create contact if it is already imported form google
 			if (googleContactfield != null && "Agile_Google".equals(googleContactfield.value)){
