@@ -12,6 +12,7 @@ $(function()
 	$('body').on('click', '.contact-make-bria-call, .Bria_call', function(e)
 	{
 	  	e.preventDefault();
+	  	e.stopPropagation();
 		if(checkForActiveCall()){
 			$('#briaInfoModal').html(getTemplate("briaCallStatusModal"));
 			$('#briaInfoModal').modal('show');
@@ -43,6 +44,7 @@ $(function()
 	$('body').on('click', '.Skype_call', function(e)
 			{
 			  	e.preventDefault();
+			  	e.stopPropagation();
 				var action ={};
 			  	action['command'] = "startCall";
 			  	action['number'] = $(this).closest(".contact-make-call-div").children().first().attr("phone");

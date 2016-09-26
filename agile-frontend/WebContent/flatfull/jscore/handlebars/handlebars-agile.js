@@ -647,6 +647,16 @@ function getContactCustomProperties(items)
 	var fields = [];
 	var fieldName='';
 	var datajson={};
+
+	var curr_route = Current_Route;
+	if(curr_route == "contacts" || curr_route.indexOf("contact")>=0){
+		curr_route = "CONTACT";
+	}else if(curr_route == "companies" || curr_route.indexOf("company")>=0){
+		curr_route = "COMPANY";
+	}else if(curr_route == "deals" || curr_route.indexOf("deal")>=0){
+		curr_route = "DEAL";
+	}
+
 	for (var i = 0; i < items.length; i++)
 	{
 		if (items[i].type == "CUSTOM" && items[i].name != "image")
@@ -657,14 +667,15 @@ function getContactCustomProperties(items)
 			datajson[''+items[i].name]=items[i].value;
 		}
 	}
-	
+
 	//Added for formula type custom field
 	var type='';
 	if(App_Contacts.customFieldsList!=undefined && App_Contacts.customFieldsList!=null){
 		for(var i=0;i<App_Contacts.customFieldsList.collection.models.length;i++){
 			if(App_Contacts.customFieldsList.collection.models[i].get("field_label")==fieldName){
 				type = App_Contacts.customFieldsList.collection.models[i].get("scope");
-				break;
+				if(curr_route==type)
+					break;
 			}
 		}
 	}
@@ -778,6 +789,16 @@ function getCompanyCustomProperties(items)
 	var fields = [];
 	var fieldName='';
 	var datajson={};
+
+	var curr_route = Current_Route;
+	if(curr_route == "contacts" || curr_route.indexOf("contact")>=0){
+		curr_route = "CONTACT";
+	}else if(curr_route == "companies" || curr_route.indexOf("company")>=0){
+		curr_route = "COMPANY";
+	}else if(curr_route == "deals" || curr_route.indexOf("deal")>=0){
+		curr_route = "DEAL";
+	}
+
 	for (var i = 0; i < items.length; i++)
 	{
 		if (items[i].type == "CUSTOM" && items[i].name != "image")
@@ -788,14 +809,15 @@ function getCompanyCustomProperties(items)
 			datajson[''+items[i].name]=items[i].value;
 		}
 	}
-	
+
 	//Added for formula type custom field
 	var type='';
 	if(App_Companies.customFieldsList!=undefined && App_Companies.customFieldsList!=null){
 		for(var i=0;i<App_Companies.customFieldsList.collection.models.length;i++){
 			if(App_Companies.customFieldsList.collection.models[i].get("field_label")==fieldName){
 				type = App_Companies.customFieldsList.collection.models[i].get("scope");
-				break;
+				if(curr_route==type)
+					break;
 			}
 		}
 	}

@@ -91,6 +91,12 @@ function globalCallWidgetSet()
 									window.location.href="tel://"+phone;
 								});
 							}
+						}else{
+							$("body").on("click", ".contact-make-call", function(e){
+								e.preventDefault();
+								var phone = $(this).attr("phone");
+								window.location.href="tel://"+phone;
+							});
 						}
 						if (call_widget.length == 0)
 						{
