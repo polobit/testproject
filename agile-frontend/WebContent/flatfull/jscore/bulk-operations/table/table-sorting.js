@@ -145,7 +145,7 @@ function sort_deals(table)
         headers: { 
         	0 : {sorter : false	},
         	1 : {sorter : 'text'},
-        	2 : {sorter : 'text'},
+        	2 : {sorter : 'money'},
         	3 : {sorter : 'text'},
         	4 : {sorter : 'time-ago'},
 			5 : {sorter : 'time-ago'},

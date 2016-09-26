@@ -46,7 +46,7 @@
        </div>
     </td>
    
-    <td><div class="text-ellipsis" style="width:10em">
+    <td value="{{#if expected_value}}{{expected_value}}{{else}}0{{/if}}"><div class="text-ellipsis" style="width:10em">
         {{#if expected_value}}{{currencySymbol}}{{numberWithCommas expected_value}}{{else}}-{{/if}}
         </div>
     </td>
