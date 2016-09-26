@@ -476,52 +476,73 @@ function bulk_delete_operation(url, id_array, index_array, table, is_grid_view, 
 				for(var i = 0; i < index_array.length; i++) {
 					$(tbody).find('tr:eq(' + index_array[i] + ')').fadeOut(300, function() { $(this).remove(); });				
 				}
-				
-				if(SELECT_ALL && SELECT_ALL == true){
-					var type ="";
-					var countURL = "";
-					if($(table).attr('id') == "contacts-table"){
-						type = "contacts";
-						countURL = App_Contacts.contactsListView.options.url + "/count";
-					}
-					if($(table).attr('id') == "companies"){
-						type = "companies";
-						countURL = App_Companies.companiesListView.options.url + "/count";
-					}
-					var count_one = null;
-					var count_two= 0;
-					i = 0;
-					var couninterval = setInterval(function() {
-						if(count_one != count_two){
-							$.ajax({
-							 	url:countURL,
-							 	method:"GET",
-							 	success:function(data){
-							 		if(i == 0){
-							 			count_one = data;
-							 			i = 1;
-							 		}else{
-							 			count_two = data;
-							 			i = 0;
-							 		}
-							 		var count_message = "<small> (" + data + " "+_agile_get_translated_val('other','total')+") </small>";
-									$('#contacts-count').html(count_message);
-									if(data == 0)
-							 			clearInterval(couninterval);
-							 	}
-							 });
-						}else{
-							clearInterval(couninterval);
+				if($("#contacts-count").is(":visible")){
+					if(SELECT_ALL && SELECT_ALL == true){
+						var type ="";
+						var countURL = "";
+						if($(table).attr('id') == "contacts-table"){
+							type = "contacts";
+							countURL = App_Contacts.contactsListView.options.url + "/count";
 						}
-					}, 5000);
-				}else{
-					var time = "";
-					if(count < 100){
-						time = 1000;
+						if($(table).attr('id') == "companies"){
+							type = "companies";
+							countURL = App_Companies.companiesListView.options.url + "/count";
+						}
+						var is_curr_route = Current_Route;
+						var count_one = null;
+						var count_two= 0;
+						i = 0;
+						var time = 2500;
+						var isfirst_time = false;
+						var couninterval = setInterval(function() {
+							if(Current_Route == is_curr_route){
+								if(isfirst_time)
+									time = 5000;
+
+								if(count_one != count_two){
+									$.ajax({
+									 	url:countURL,
+									 	method:"GET",
+									 	success:function(data){
+									 		if(i == 0){
+									 			count_one = data;
+									 			i = 1;
+									 		}else{
+									 			count_two = data;
+									 			i = 0;
+									 		}
+									 		var count_message = "<small> (" + data + " "+_agile_get_translated_val('other','total')+") </small>";
+											$('#contacts-count').html(count_message);
+											isfirst_time = true;
+											if(data == 0)
+									 			clearInterval(couninterval);
+									 	}
+									 });
+								}else{
+									if(is_curr_route == "contacts"){
+										CONTACTS_HARD_RELOAD = true;
+									}else{
+										COMPANIES_HARD_RELOAD = true;
+									}
+									clearInterval(couninterval);
+								}
+							}else{
+								if(is_curr_route == "contacts"){
+									CONTACTS_HARD_RELOAD = true;
+								}else{
+									COMPANIES_HARD_RELOAD = true;
+								}
+								clearInterval(couninterval);
+							}
+						}, time);
 					}else{
-						time = 5000;
-					}
-					if($("#contacts-count").is(":visible")){
+						var time = "";
+						if(count < 100){
+							time = 1000;
+						}else{
+							time = 5000;
+						}
+						
 						var con_count = $('#contacts-count').text();
 						if(con_count){
 							var res_count = con_count.split("(")[1].split(" ")[0];
@@ -532,7 +553,6 @@ function bulk_delete_operation(url, id_array, index_array, table, is_grid_view, 
 							},time);
 						}
 					}
-					
 				}
 			}
 			else
