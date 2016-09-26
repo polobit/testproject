@@ -1463,6 +1463,23 @@ public class ContactUtil
     }
 
     /**
+     * Validates name
+     * 
+     * @param hex
+     * @return
+     */
+    public static boolean isValidName(final String hex)
+    {
+    	///^\s*[_a-zA-Z0-9\s]+\s*$/;
+	String NAME_PATTERN = "^[_a-zA-Z0-9\\s]+\\s*$";
+	Pattern pattern = Pattern.compile(NAME_PATTERN);
+
+	Matcher matcher = pattern.matcher(hex);
+	return matcher.matches();
+
+    }
+
+    /**
      * Returns contact owner id.
      * 
      * @param contactId
