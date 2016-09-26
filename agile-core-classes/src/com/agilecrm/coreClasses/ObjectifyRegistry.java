@@ -7,6 +7,10 @@ import com.agilecrm.notification.NotificationTemplate;
 import com.agilecrm.notification.push.PushNotificationMessage;
 import com.agilecrm.workflows.WorkflowBackup;
 import com.googlecode.objectify.ObjectifyService;
+
+import com.agilecrm.account.DocumentTemplates;
+import com.agilecrm.products.Product;
+import com.agilecrm.contact.DocumentNote;
 /**
  * Register all entities used by Objectify in this module.
  * To register a new entity, use ObjectifyService.register(<ClassName>.class);
@@ -25,6 +29,10 @@ public class ObjectifyRegistry {
 		ObjectifyService.register(AffiliateDetails.class);
 		ObjectifyService.register(AffiliateDeal.class);
 		ObjectifyService.register(WorkflowBackup.class);
+		
+		ObjectifyService.register(DocumentTemplates.class);
+		ObjectifyService.register(Product.class);
+		ObjectifyService.register(DocumentNote.class);
 		
 	}
 }
