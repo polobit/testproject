@@ -79,11 +79,15 @@ function syncContacts(){
 			// Here email_server_type means email/username of mail account
 			email_server_type = $(targetEl).attr('email-server-type');
 			if (email_server && url && (email_server != 'agile')){
-				url = url.concat(email_server_type);;
+				url = url.concat(email_server_type);
 				$('#inbox-email-type-select').attr("data-url",url);
 				$('#inbox-email-type-select').attr("from_email",email_server_type);
 				$('#inbox-email-type-select').attr("data-server",email_server);
 				url = url+"&folder_name=INBOX";
+			}else{
+				url = url.concat(email_server_type);
+				$('#inbox-email-type-select').attr("data-server",email_server);
+				$('#inbox-email-type-select').attr("data-url",url);
 			}
 			helperFunction();
 			$('.inbox-menu li').removeClass('active');
