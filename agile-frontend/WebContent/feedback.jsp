@@ -167,12 +167,12 @@ var id = <%=note_id%>
 
 				<div id="addfeedback-message" style="margin-left: 0px;">
 				<a href="https://www.agilecrm.com/" class="navbar-brand block text-white m-t" style="color: #363f44;">
-						<img  src="https://s3.amazonaws.com/agilecrm/panel/uploaded-logo/1383722651000?id=upload-container" style="max-height: 50px;">
+						<img  src="https://s3.amazonaws.com/agilecrm/panel/uploaded-logo/1383722651000?id=upload-container" style="margin-bottom: 35px;max-height: 50px;">
 					</a>
 			<div style="box-shadow: 4px 4px 6px 4px;width: 650px;margin: auto;">
 
 				<form name='feedback_ticket' id="feedback_ticket" method='post'
-					 onsubmit="saveTicketFeedback(event)" style="margin-left: 34px;">
+					 onsubmit="saveTicketFeedback(event)" style="margin-left: 34px;    padding-top: 1px;">
 					
 					<% if(!StringUtils.isEmpty(error)){%>
 					<div class="alert alert-danger error login-error m-b-none">
@@ -183,16 +183,19 @@ var id = <%=note_id%>
 
 					<%}%>
 					<% if(!StringUtils.isEmpty(success)){%>
-							<table width="80%" cellpadding="0" cellspacing="0" border="0" style="margin-top: 40px;">
-                     <tbody>
+							
+							<table width="80%" cellpadding="0" cellspacing="0" border="0" style="margin-top: 40px;margin-left: 34px;">
+                     <tbody style="background-color:#f6f6f6;" >
                          <tr>
-                         	<td  width="55%"style="padding-top: 20px;padding-left: 34px;">How would you rate the support recived?</td>
-                             <td width="40%" style="padding-top: 20px;">
-                             	<input type="image" src="/img/star-off.png" style="width:18px;float:left" class="transperantbutton" id="1_Image" value="1"  onclick="changeFeedback(event,this);"/>
-                             	<input type="image" src="/img/star-off.png" style="width:18px;float:left" class="transperantbutton" id="2_Image" value="2"  onclick="javascript:return changeFeedback(event,this)"/> 
-                             	<input type="image" src="/img/star-off.png" style="width:18px;float:left" class="transperantbutton" id="3_Image" value="3"  onclick="changeFeedback(event,this)";/>
-                             	<input type="image" src="/img/star-off.png" style="width:18px;float:left" class="transperantbutton" id="4_Image" value="4"  onclick="changeFeedback(event,this);"/>
-                             	<input type="image" src="/img/star-off.png" style="width:18px;float:left" class="transperantbutton" id="5_Image" value="5"  onclick="changeFeedback(event,this);"/>
+                         	<td  width="55%"style="padding-top: 10px;padding-left: 10px;color: #2B2929;font-size: 15px;">How would you rate the support recived?</td>
+                         </tr>
+                         <tr>	
+                             <td width="40%" style="padding-top: 6px;padding-left: 10px;padding-bottom: 10px">
+                             	<input type="image" src="/img/star-off.png" style="width:24px;float:left" class="transperantbutton" id="1_Image" value="1"  onclick="changeFeedback(event,this);"/>
+                             	<input type="image" src="/img/star-off.png" style="width:24px;float:left" class="transperantbutton" id="2_Image" value="2"  onclick="javascript:return changeFeedback(event,this)"/> 
+                             	<input type="image" src="/img/star-off.png" style="width:24px;float:left" class="transperantbutton" id="3_Image" value="3"  onclick="changeFeedback(event,this)";/>
+                             	<input type="image" src="/img/star-off.png" style="width:24px;float:left" class="transperantbutton" id="4_Image" value="4"  onclick="changeFeedback(event,this);"/>
+                             	<input type="image" src="/img/star-off.png" style="width:24px;float:left" class="transperantbutton" id="5_Image" value="5"  onclick="changeFeedback(event,this);"/>
 
                              	 
 	                         </td>		                     
@@ -206,16 +209,17 @@ var id = <%=note_id%>
 					
 					<div class="list-group-sm" style="padding-top: 14px;">
 
-						<span style="color:#2B2929;padding-left:33px;font-size:14px;font-size: 15px;">Add a Comment about the quality of support you received:</span>
+						<span style="color:#2B2929;padding-left:34px;font-size:14px;font-size: 15px;">Add a Comment about the quality of support you received:</span>
 						
 						<textarea class="text-area" id="myTextarea" name='comment' style="padding-top:5px;padding-left:10px;font-size:14px;"></textarea>
 
 					</div>
 					<div>
-					<input type='submit'  style="width: 10%; margin-left: 34px;float:left; margin-right:15px;margin-left:420px;"
+					<input type='button'  style="width: 10%;float:left; margin-right:15px;margin-left:428px;"
+						class='btn btn-sm btn-primary btn-block ' onclick="functioncancel()" value="Cancel"/>
+					<input type='submit'  style="width: 10%; margin-left: 34px;"
 						class='btn btn-sm btn-primary btn-block '>
-					<input type='button'  style="width: 10%; margin-left: 34px;"
-						class='btn btn-sm btn-primary btn-block ' onclick="functioncancel()" value="Cancel"/>		
+							
 					</div>	 
 						<br/>
 						<br/>
