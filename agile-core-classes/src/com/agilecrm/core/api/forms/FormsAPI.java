@@ -97,10 +97,11 @@ public class FormsAPI
 	     * */
 	    if(agileformcaptcha==true){	
 	    	html=html.replaceFirst("</form>","</form><script id=\"gRecaptchaSrc\" src='https://www.google.com/recaptcha/api.js'></script>"); 	
-	    	
-	    	//html = FormUtil.replaceLast(html, "<div class=\"agile-custom-clear\"></div>", "<br/><br/><div class='g-recaptcha' data-sitekey='6LcBZCgTAAAAAKxJ8QbSrfRh6Js_QpNsPAykamLZ'></div><div class=\"agile-custom-clear\"></div>");
-	    	html = FormUtil.replaceLast(html, "<div class=\"agile-group\"></div>", "<br/><br/><div class='g-recaptcha' data-sitekey='6LcBZCgTAAAAAKxJ8QbSrfRh6Js_QpNsPAykamLZ'></div><div class=\"agile-group\"></div>");
-	    }
+	    	html = html.replaceFirst("<!--recaptcha aglignment-->", " <!--recaptcha aglignment--><div class=\"agile-group\">"
+		 + "<label class=\"agile-label\"></label>"
+		 + "<div class=\"agile-field-xlarge agile-field\">"
+		 + "<div class='g-recaptcha' style=\"transform:scale(0.77);-webkit-transform:scale(0.77);transform-origin:0 0;-webkit-transform-origin:0 0;\" data-sitekey='6LcBZCgTAAAAAKxJ8QbSrfRh6Js_QpNsPAykamLZ'></div></div></div>");
+			    }
 	    else{
 	    	html = html.replaceFirst("<div class='g-recaptcha' data-sitekey='6LcBZCgTAAAAAKxJ8QbSrfRh6Js_QpNsPAykamLZ'></div>", "</fieldset></fieldset>");
 	    }
