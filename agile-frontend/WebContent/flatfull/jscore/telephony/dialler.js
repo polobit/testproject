@@ -99,6 +99,13 @@ $(function()
 						
 						$("#direct-dialler-div").bind("dragstart", function(e, pos) {
 							 flag = true;
+							 $( "#dail_phone_number" )
+							  .mouseup(function() {
+							    $( this ).focus();
+							  })
+							  .mousedown(function() {
+							  	$( this ).blur();
+							  });
 								//you can do anything related to move
 						    }).bind("dragend", function(e, pos) {
 						    	if(flag){
