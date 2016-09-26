@@ -177,8 +177,21 @@ public abstract class ContactSyncService implements IContactSyncService
 	    System.out.println("Contact-------" + contact);
 	    
 	    if(contact.contact_company_id!=null){
+	    	
 	    Contact related_company=ContactUtil.getContact(Long.parseLong(contact.contact_company_id));
+
 	    addTagToCompany(related_company);
+	    if (prefs.type == Type.GOOGLE){
+		    ContactField googleContactfield = contact.getContactFieldByName("Contact type");
+
+			// Does not create contact if it is already imported form google
+			if (googleContactfield != null && "Agile_Google".equals(googleContactfield.value)){
+				String tag = "gmail company".toLowerCase();
+
+				contact.tags.remove(StringUtils.capitalize(tag));
+			}
+				
+	    }
 	    related_company.save();
 	    }
 	    return contact;
@@ -478,7 +491,7 @@ public abstract class ContactSyncService implements IContactSyncService
 	    ContactField googleContactfield = contact.getContactFieldByName("Contact type");
 
 		// Does not create contact if it is already imported form google
-		if (googleContactfield != null && "Google".equals(googleContactfield.value))
+		if (googleContactfield != null && "Agile_Google".equals(googleContactfield.value))
 		{
 			String tag = "gmail contact".toLowerCase();
 
