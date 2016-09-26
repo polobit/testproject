@@ -483,7 +483,7 @@ class="icon-plus"></i> <span >{{agile_lng_translate 'contact-details' 'add'}}</s
 			<div class="contact-make-call-div" style="height:25px;" data-toggle="tooltip" data-placement="top" title="">
 
 
-			<a class="contact-make-call c-progress text-xs" phone="{{value}}" >{{value}}   {{#if subtype}} <span class="label bg-light dk text-tiny">{{subtype}}</span> {{/if}} </a>
+			<a href="tel:{{remove_spaces value}}" class="contact-make-call c-progress text-xs" phone="{{value}}" >{{value}}   {{#if subtype}} <span class="label bg-light dk text-tiny">{{subtype}}</span> {{/if}} </a>
 			</div>
 
 
@@ -1191,7 +1191,7 @@ class="icon-plus"></i> <span >{{agile_lng_translate 'contact-details' 'add'}}</s
 -->
 <div class="contact-make-call-div" style="height:25px;" data-toggle="tooltip" data-placement="top" title="">
 
-			<a class="contact-make-call c-progress text-xs" phone="{{value}}" >{{value}}   {{#if subtype}} <span class="label bg-light dk text-tiny">{{subtype}}</span> {{/if}} </a>
+			<a href="tel:{{remove_spaces value}}" class="contact-make-call c-progress text-xs" phone="{{value}}" >{{value}}   {{#if subtype}} <span class="label bg-light dk text-tiny">{{subtype}}</span> {{/if}} </a>
 </div>
 
 
