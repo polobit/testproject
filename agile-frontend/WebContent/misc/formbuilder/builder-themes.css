@@ -616,3 +616,6 @@ border-bottom-right-radius: 0px;
 .theme2 .component:last-child,.theme3 .component:last-child,.theme4 .component:last-child {
     padding-bottom: 20px;
 }
+ul li>a[href="#bsourcecodeb"] {
+    display: none;
+}
