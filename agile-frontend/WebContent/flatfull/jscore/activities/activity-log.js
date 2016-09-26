@@ -41,7 +41,7 @@ function renderActivityView(params)
 {
 	// Creates backbone collection view
 	this.activitiesview = new Base_Collection_View({ url : '/core/api/activitylog/getActivitiesOnSelectedCondition' + params, sortKey : 'time',
-		descending : true, templateKey : "activity-list-log", sort_collection : false, cursor : true, scroll_symbol : 'scroll', page_size : 20,
+		descending : true, templateKey : "activity-list-log", sort_collection : false, cursor : true, scroll_symbol : 'scroll', page_size : 10,
 		individual_tag_name : 'li', postRenderCallback : function(el)
 		{
 			includeTimeAgo(el);
@@ -73,6 +73,7 @@ function getActivityFilterParameters(loadingFirstTime,campaignHistory)
 {
 	$("#activities_date_range").show();
 	var params = "?";
+
 
 	var user =null;
 	var entitytype=null;
@@ -137,6 +138,12 @@ function getActivityFilterParameters(loadingFirstTime,campaignHistory)
 		if(user)
 		params += ("&user_id=" + user);
 		params += ("&entity_type=" + entitytype);
+		var dashboard_name = _agile_get_prefs("dashboard_"+CURRENT_DOMAIN_USER.id);
+		 if(!dashboard_name || dashboard_name == undefined ){
+		    dashboard_name = "SalesDashboard";
+		 }
+		 params += ("&dashboard_name=" + dashboard_name);
+
 		return params;
 	}
 
@@ -150,11 +157,29 @@ function getActivityFilterParameters(loadingFirstTime,campaignHistory)
 
 	 //For change campaign activity url to activity url
 	 document.location.hash = "activities";
+	
 	 var dashboard_name = _agile_get_prefs("dashboard_"+CURRENT_DOMAIN_USER.id);
-     if(!dashboard_name){
+     if(!dashboard_name || dashboard_name == undefined ){
         dashboard_name = "SalesDashboard";
      }
-     params += ("&dashboard_name="+dashboard_name);
+     params += ("&dashboard_name=" + dashboard_name);
+
+     /*var activity_json = {};
+
+    switch(dashboard_name){
+     case "SalesDashboard" :
+         activity_json["entity_type"] = ["CONTACT", "DEAL", "TASK","EVENT","DOCUMENT","USER"];
+         break;
+     case "MarketingDashboard" :
+          activity_json["entity_type"] = ["CONTACT","CAMPAIGN","USER"];
+          break;
+     case "dashboard" :
+         activity_json["entity_type"] = ["CONTACT","TICKET","USER"];
+         break;
+	}
+
+	console.log("activity_json = "+activity_json);*/
+
 	if (user)
 		params += ("&user_id=" + user);
 	// Get owner name and append it to params
@@ -212,6 +237,8 @@ function getActivityFilterParameters(loadingFirstTime,campaignHistory)
 		params += ("&entity_type=ALL");
 		return params;
 	}
+
+
 
 	return params;
 }

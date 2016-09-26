@@ -63,7 +63,7 @@ public class ActivityApi
     public List<Activity> getActivityBesedOnSelection(@QueryParam("entity_type") String entitytype,
 	    @QueryParam("user_id") Long userid, @QueryParam("cursor") String cursor,
 	    @QueryParam("page_size") String count, @QueryParam("start_time") Long starttime,
-	    @QueryParam("end_time") Long endtime,@QueryParam("campaign-id") String id,@QueryParam("dashboard-name") String dashboard_name)
+	    @QueryParam("end_time") Long endtime,@QueryParam("campaign-id") String id,@QueryParam("dashboard_name") String dashboard_name)
     {
     
     //filter on campaign id

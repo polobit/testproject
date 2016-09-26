@@ -649,12 +649,12 @@ public class PortletsAPI {
 			@QueryParam("cursor") String cursor,
 			@QueryParam("page_size") String count,
 			@QueryParam("start_time") Long starttime,
-			@QueryParam("end_time") Long endtime) throws Exception {
+			@QueryParam("end_time") Long endtime,@QueryParam("dashboard_name") String dashboard_name) throws Exception {
 
 		PortletUtil.checkPrivilegesForPortlets("ACTIVITY");
 		if (count != null) {
 			return PortletUtil.getPortletActivitydata(entitytype, userid,
-					Integer.parseInt(count), cursor, starttime, endtime);
+					Integer.parseInt(count), cursor, starttime, endtime,dashboard_name);
 		} else
 			return null;
 	}

@@ -1904,6 +1904,10 @@ public class ActivityUtil
 		
 		Map<String, Object> searchMap = new HashMap<String, Object>();
 		
+		if(entitytype.equalsIgnoreCase("ALL")){
+			searchMap.put("entity_type in",allEntityType);
+		}
+		
 		if (!entitytype.equalsIgnoreCase("ALL") && !entitytype.equalsIgnoreCase("CALL"))
 			searchMap.put("entity_type", entitytype);
 		if (entitytype.equalsIgnoreCase("CALL"))
