@@ -88,6 +88,7 @@ function syncContacts(){
 			helperFunction();
 			$('.inbox-menu li').removeClass('active');
 	        $(".inbox-menu li").first().addClass("active");
+	        $('#inbox-email-type-select').attr("folder-type","inbox");
 	        globalMailCollectionInstance = new globalMailCollection();
 			renderToMailList(url,1,10);
 		}
@@ -131,7 +132,9 @@ function renderToMailList(url,offset_val,page_size_val){
 				success: function(data,response,xhr) {
 					that.render(data);
 					renderToMailView(data);
-					globalMailCollectionInstance.add(data.toJSON());
+					if(data.toJSON().indexOf("errormssg") < 0){
+						globalMailCollectionInstance.add(data.toJSON());
+					}
 					inboxFlagListners();
 					hideTransitionBar();
 					$(".loading").hide();
@@ -967,6 +970,7 @@ function initializeComposeEmailListeners(){
 	    $(".inbox-menu li").first().addClass("active");
 		var url = $('#inbox-email-type-select').attr("data-url");
 		url = url.concat("&folder_name=INBOX");
+		$('#inbox-email-type-select').attr("folder-type","inbox");
 		helperFunction();
 		renderToMailList(url,1,10);
 	});
