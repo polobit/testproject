@@ -120,7 +120,7 @@ public class CSVUtil
 	//if (!VersioningUtil.isLocalHost())
 	//{
 	    GcsFileOptions options = new GcsFileOptions.Builder().mimeType("text/csv").contentEncoding("UTF-8")
-		    .acl("public-read").addUserMetadata("domain", NamespaceManager.get()).build();
+	    		.acl("public-read").addUserMetadata("domain", NamespaceManager.get()).build();
 
 	    service = new GCSServiceAgile(NamespaceManager.get() + "_failed_contacts_" + GoogleSQL.getFutureDate()
 		    + ".csv", "agile-exports", options);
@@ -1228,7 +1228,7 @@ public class CSVUtil
 			    list = MilestoneUtil.getMilestonesList(trackName);
 			    if (list.size() == 0)
 			    {
-				trackMissing++;
+				//trackMissing++;
 				break;
 			    }
 			    else
@@ -1247,6 +1247,29 @@ public class CSVUtil
 
 			    mileStoneValue = dealPropValues[i];
 			    milestoneFound = true;
+			    if(!trackFound){
+			    	String trkName = null ;
+			    	for(int m = i++;m < dealPropValues.length ;m++){
+			    		LinkedHashMap<String, String> pr = (LinkedHashMap<String, String>) schema.get(m);
+			    		String tName = pr.get("value"); String tType = pr.get("type");
+			    		if(tType.equals("SYSTEM") && tName.equalsIgnoreCase("track")){
+			    			trkName = dealPropValues[m];
+			 			    trackFound = true;
+			 			    list = MilestoneUtil.getMilestonesList(trkName);
+			 			    break;
+			    		}
+			    	}
+		    		if (list.size() == 0)
+				    {
+		    			trackMissing++;
+		    			break;
+				    }
+				    else
+				    {
+				    	opportunity.track = trkName;
+				    }
+			    	
+			    }
 			    if (trackFound)
 			    {
 				// check list of milestone if track is correct
