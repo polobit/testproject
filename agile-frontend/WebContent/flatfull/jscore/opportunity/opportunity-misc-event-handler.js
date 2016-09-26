@@ -537,6 +537,7 @@ function initializeDealListners(el){
 		var dealsCollection = DEALS_LIST_COLLECTION.collection.where({ heading : heading });
 		if(dealsCollection) {
 			var dealModel = dealsCollection[0].get("dealCollection").get(deal_id);
+			App_Deals.dealModel = dealModel;
 			if(dealModel) {
 				var old_milestone = dealModel.get("milestone");
 				dealModel.set({ "pipeline_id" : track }, { silent : true });
@@ -544,11 +545,24 @@ function initializeDealListners(el){
 				$('#'+old_milestone.replace(/ +/g, '')+'_count').text(parseInt($('#'+old_milestone.replace(/ +/g, '')+'_count').text())-1);
 			}
 		}
-		setTimeout(function(){
-			$("#new-track-list-paging").hide();
-			$("#new-opportunity-list-paging").show();
-			$("#opportunities-header", $("#opportunity-listners")).show();
-		},800);
+		//If deal moves to lost milestone of other track, will ask reasons for lost the deal
+		if($(this).attr("data-lost-milestone") == "true")
+		{
+			App_Deals.newMilestone = newMilestone;
+			App_Deals.old_milestone = old_milestone;
+			App_Deals.lost_reason_milesone_id = deal_id;
+			populateLostReasons($('#dealLostReasonModal'), undefined);
+			$('#deal_lost_reason',$('#dealLostReasonModal')).removeClass("hidden");
+			$('#dealLostReasonModal > .modal-dialog > .modal-content > .modal-footer > a#deal_lost_reason_save').text("{{agile_lng_translate 'modals' 'save'}}");
+			$('#dealLostReasonModal > .modal-dialog > .modal-content > .modal-footer > a#deal_lost_reason_save').attr('disabled',false);
+		}
+		else{
+			setTimeout(function(){
+				$("#new-track-list-paging").hide();
+				$("#new-opportunity-list-paging").show();
+				$("#opportunities-header", $("#opportunity-listners")).show();
+			},800);
+		}
     });
 
 }
