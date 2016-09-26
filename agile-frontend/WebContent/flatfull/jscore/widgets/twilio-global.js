@@ -200,6 +200,7 @@ $(function(){
 	{
 		
 		e.preventDefault();
+		e.stopPropagation();
 
 	if($(this).closest(".contact-make-call").hasClass('popover-call'))
 		{
