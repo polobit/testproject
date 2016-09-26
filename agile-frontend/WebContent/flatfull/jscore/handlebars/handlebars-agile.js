@@ -675,7 +675,7 @@ function getContactCustomProperties(items)
 			if(fieldName=='')
 				fieldName=items[i].name;
 			//fields.push(items[i]);
-			temp_fields[position_arr[fieldName]] = items[i];
+			temp_fields[position_arr[items[i].name]] = items[i];
 			datajson[''+items[i].name]=items[i].value;
 		}
 	}
@@ -834,7 +834,7 @@ function getCompanyCustomProperties(items)
 			if(fieldName=='')
 				fieldName=items[i].name;
 			//fields.push(items[i]);
-			temp_fields[position_arr[fieldName]] = items[i];
+			temp_fields[position_arr[items[i].name]] = items[i];
 			datajson[''+items[i].name]=items[i].value;
 		}
 	}
