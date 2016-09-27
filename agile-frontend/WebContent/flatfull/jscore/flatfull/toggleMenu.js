@@ -434,8 +434,8 @@ $("#activityModal").on("click", "#eventDescriptionLink", function(e){
 		$inputs.filter("[value='']").closest("a").click();
 	}
 	function helpContentPopover(){
-	  if(!document.referrer || document.referrer.indexOf("register") == -1 ||  _agile_get_prefs("menuhelpPopover") == "true")
-	   return ;
+	 /* if(!document.referrer || document.referrer.indexOf("register") == -1 ||  _agile_get_prefs("menuhelpPopover") == "true")
+	   return ;*/
 	 return $("#helpcontent_popover").removeClass("hide");
 	}
 	// initializing need help popover for header page

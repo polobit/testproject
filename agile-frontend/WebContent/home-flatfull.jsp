@@ -325,7 +325,7 @@ function isIE() {
                    <a href="#" class='grid-icon-header block wrapper' onclick="return false;"><i class="glyphicon glyphicon-th"></i></a>   
                              </div>
 
-              <div style="position: fixed;left: 51%;z-index: 1029;-webkit-transform: translateX(-50%);transform: translateX(-50%);" id="helpcontent_popover" class="hide">
+              <div style="position: fixed;left: 51%;z-index: 1029;-webkit-transform: translateX(-50%);transform: translateX(-50%);" id="helpcontent_popover" class="hide agile-feature-item-blink-new">
                 <div class="popover right block" >
                   <div class="arrow" style="top:35%;">
                   </div>
