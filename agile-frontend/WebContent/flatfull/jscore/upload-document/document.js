@@ -401,7 +401,8 @@ function saveDocument(form_id, modal_id, saveBtn, isUpdate, json, contact_id)
 					}
 					else if( Current_Route.indexOf( App_Companies.companyDetailView.model.get('id'))>-1)
 					{
-						company_util.updateDocumentsList(document,true);
+						//if(company_util)
+						//	company_util.updateDocumentsList(document,true);
 						if(document.doc_type!="SENDDOC")
 						{
 							var sURL="company/" + App_Companies.companyDetailView.model.get('id');

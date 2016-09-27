@@ -145,6 +145,9 @@ var contact_details_documentandtasks_actions = {
 					$("#owners-list", $("#opportunityForm")).find('option[value=' + CURRENT_DOMAIN_USER.id + ']').attr("selected", "selected");
 					$("#owners-list", $("#opportunityForm")).closest('div').find('.loading-img').hide();
 				});
+
+				//Populate products
+				populate_deal_products(el, undefined,"#opportunityForm");
 				
 				// Contacts type-ahead
 				agile_type_ahead("relates_to", e, contacts_typeahead);
@@ -357,12 +360,42 @@ var contact_details_documentandtasks_actions = {
 				}
 			} });
        },
+	    navigate_to_edocument:function(e,type)
+	    {
+	    	var id="";
+	    	if(type=="company")
+	    	{
+				json = App_Companies.companyDetailView.model.toJSON();
+			} else 
+			{
+				json = App_Contacts.contactDetailView.model.toJSON();
+			}
+			
+			
+			Backbone.history.navigate("documents/"+type+"/" + json.id+ "/edoc",{trigger: true});	
+	    },
+	    navigate_to_edit_document:function(e,type)
+	    {
+	    	
+	    	var document_id=$(e.currentTarget).attr("data");
 
+	    	if(type=="company")
+	    	{
+				json = App_Companies.companyDetailView.model.toJSON();
+			} else 
+			{
+				json = App_Contacts.contactDetailView.model.toJSON();
+			}
+			
+			
+			Backbone.history.navigate("documents/"+document_id+"/" + json.id,{trigger: true});	
+	    },
        show_document_list : function(e){
 
        		var targetEl = $(e.currentTarget);
        		var el = $(targetEl).closest("div");
 			$(targetEl).css("display", "none");
+			$(".add-contact-edocument-select,.add-company-edocument-select,.dropdown-toggle",el).css("display", "none");
 			if(agile_is_mobile_browser()){
 			el.find(".contact-document-select").css("display", "block");
 			}
@@ -395,7 +428,19 @@ var contact_details_documentandtasks_actions = {
 			}
 			else if (document_id == "new")
 			{
+		
+				var id="";
+		    	if(type=="company")
+		    	{
+					json = App_Companies.companyDetailView.model.toJSON();
+				} else 
+				{
+					json = App_Contacts.contactDetailView.model.toJSON();
+				}
+				Backbone.history.navigate("documents/"+type+"/" + json.id + "/attachment",{trigger: true});	        
 				
+				return;
+		
 				$('#uploadDocumentModal').html(getTemplate("upload-document-modal", {})).modal('show');
 				var el = $("#uploadDocumentForm");
 
