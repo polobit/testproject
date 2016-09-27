@@ -470,8 +470,7 @@ public class CronUtil
 			//check if there is any character with timezone variable or not at beginning
 			//if present them we can split that string
 			if(Character.isAlphabetic(timezone.charAt(0)))
-				timeZone = TimeZone.getTimeZone(timezone);
-			
+				timeZone = TimeZone.getTimeZone(timezone);			
 			else
 				timeZone = TimeZone.getTimeZone(timezone.substring(1));
 			
