@@ -325,14 +325,14 @@ function isIE() {
                    <a href="#" class='grid-icon-header block wrapper' onclick="return false;"><i class="glyphicon glyphicon-th"></i></a>   
                              </div>
 
-              <div style="position: fixed;left: 42%;top: 40px;z-index: 1029;-webkit-transform: translateX(-50%);transform: translateX(-50%);" id="helpcontent_popover" class="hide">
-                <div class="popover bottom block" >
-                  <div class="arrow">
+              <div style="position: fixed;left: 51%;z-index: 1029;-webkit-transform: translateX(-50%);transform: translateX(-50%);" id="helpcontent_popover" class="hide">
+                <div class="popover right block" >
+                  <div class="arrow" style="top:35%;">
                   </div>
                   <div class="popover-content ">
-                    <p style="width: 183px;color: #B8BEC1;">check our other modules likes sales and marketing
+                    <p style="width: 200px;"> Check our other feature sets by clicking this icon.
                     </p>
-                    <a href="#" class="menugridhelpclose" data-dismiss="alert" aria-label="close"  style="position: absolute;top:0px;color:#a94442 !important;right:5px;font-size: large;">×
+                    <a href="#" class="menugridhelpclose" data-dismiss="alert" aria-label="close"  style="position: absolute;top:5px;color:#6b6b6b !important;right:5px;font-size:20px;margin-right:5px;">×
                     </a>
                   </div>
                 </div>
