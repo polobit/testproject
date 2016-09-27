@@ -384,7 +384,7 @@ var Base_Collection_View = Backbone.View
 						 *callback to be fired when next set is fetched. Added by Sasi on Jan/18/2016.
 						 */
 						if (that.options.infini_scroll_cbk)
-							that.options.infini_scroll_cbk();
+							that.options.infini_scroll_cbk(that.el);
 
 						// Remove More option when there is no cursor
 						if(!that.collection.last().get("cursor") || that.collection.first().get("count") == that.collection.models.length){
