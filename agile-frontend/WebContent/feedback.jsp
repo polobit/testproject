@@ -14,11 +14,8 @@ String feedback = request.getParameter("feedback");
 Long note_id = Long.parseLong(request.getParameter("note"));
 String feedback_rating = feedback;
 
-if (!StringUtils.isEmpty(feedback)) {
-		
-	success = "Your Feedback is successfully submmited.Add a comment about the quality of support you received.";
-}
-else if(!StringUtils.isEmpty(feedback) || note_id == null )
+
+if(!StringUtils.isEmpty(feedback) || note_id == null )
 {
     	    error = "Sorry we are not able to save your feedback Please try submitting again";
 		
@@ -42,12 +39,6 @@ String S3_STATIC_IMAGE_PATH = VersioningUtil.getStaticFilesBaseURL().replace("fl
 <meta name="description" content="">
 <meta name="author" content="">
 
-<!-- Le styles -->
-
-<!-- <link href="/css/bootstrap-pink.min.css" rel="stylesheet">
-<link href="/css/bootstrap-responsive.min.css" rel="stylesheet">
-<link type="text/css" rel="stylesheet" href="/css/openid-min.css">
-<link type="text/css" rel="stylesheet" href="/css/signin.css"> -->
 
 <link rel="stylesheet" type="text/css"
 	href="<%=flatfull_path%>/css/bootstrap.v3.min.css" />
@@ -66,6 +57,16 @@ body {
 	background-color: #fff;
 }
 
+label{
+    display: inline-block;
+    max-width: 100%;
+    margin-bottom: 5px;
+    font-weight: bold;
+    font-size: 15px;
+    font-family: Arial;
+}
+
+
 .text-white {
 	color: #fff !important;
 }
@@ -75,7 +76,7 @@ input {
 }
 
 a:hover {
-	text-decoration: underline;
+	text-decoration: none;
 }
 
 .error {
@@ -84,9 +85,7 @@ a:hover {
 
 .text-area {
 	height: 117px;
-	width: 532px;
-	margin-top: 7px;
-    margin-left: 34px;
+	width: 444px;
 }
 
 .close {
@@ -125,6 +124,13 @@ background: none!important;
     font: inherit;
     cursor: pointer;
 }
+.well {
+    border-radius: 0px !important;
+    border-radius: 4px;
+    background-color: #FDFBFB !important;
+    -webkit-box-shadow: inset 0 0px 0px rgba(0,0,0,0.05);
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2), 0 3px 10px 0 rgba(0, 0, 0, 0.19);
+}
 -->
 </style>
 
@@ -159,76 +165,75 @@ jQuery.validator.setDefaults({
 var id = <%=note_id%>
 </script>
 <body>
+<div class="container">
 
-	<div class="app" id="app">
-		<div ui-view="" class=" smooth">
+		
+		<div class="row"></div><br>
 
-			<div class="container w-auto-xs">
+		<!-- Already have an account -->
+		<div  style="margin-top:25px;">
+		<div class="col-sm-6 col-sm-offset-3">
+		<!--<h5 class="ac">Already have an account? <small>Enter your details</small></h5>-->
+		<div class="well" id="addfeedback-message">
 
-				<div id="addfeedback-message" style="margin-left: 0px;">
-				<a href="https://www.agilecrm.com/" class="navbar-brand block text-white m-t" style="color: #363f44;">
-						<img  src="https://s3.amazonaws.com/agilecrm/panel/uploaded-logo/1383722651000?id=upload-container" style="margin-bottom: 35px;max-height: 50px;">
-					</a>
-			<div style="box-shadow: 4px 4px 6px 4px;width: 650px;margin: auto;">
+		<form role="form" id="agile-form" class="form-horizontal"  onsubmit="saveTicketFeedback(event)">
+			 <div class="form-group m-t m-b-none" style="text-align:center;background-color:#FDFBFB;vertical-align: middle;margin-top: 0px;margin-bottom: 14px !important;">			 
+				<img  src="/img/agile-crm-logo.png">			
+			</div>
+			<div class="line line-lg " style="margin-top: 11px;border-bottom: 1px solid #E2DCDC"></div>
+			<div style="display: table;width: 70%;margin: 0 auto;">
+			<div class="form-group" style="margin-top:10px;">
+			<label class="label-opacity" >How would you rate the support recived?</label>
+                             	
 
-				<form name='feedback_ticket' id="feedback_ticket" method='post'
-					 onsubmit="saveTicketFeedback(event)" style="margin-left: 34px;    padding-top: 1px;">
-					
-					<% if(!StringUtils.isEmpty(error)){%>
-					<div class="alert alert-danger error login-error m-b-none">
-						<a class="close m-t-n-sm" data-dismiss="alert" href="#">&times</a><%=error%>
-					</div>
-					
-
-
-					<%}%>
-					<% if(!StringUtils.isEmpty(success)){%>
-							
-							<table width="80%" cellpadding="0" cellspacing="0" border="0" style="margin-top: 40px;margin-left: 34px;">
-                     <tbody style="background-color:#f6f6f6;" >
-                         <tr>
-                         	<td  width="55%"style="padding-top: 10px;padding-left: 10px;color: #2B2929;font-size: 15px;">How would you rate the support recived?</td>
-                         </tr>
-                         <tr>	
-                             <td width="40%" style="padding-top: 6px;padding-left: 10px;padding-bottom: 10px">
-                             	<input type="image" src="/img/star-off.png" style="width:24px;float:left" class="transperantbutton" id="1_Image" value="1"  onclick="changeFeedback(event,this);"/>
+			<div class="input-group">
+				<input type="image" src="/img/star-off.png" style="width:24px;float:left" class="transperantbutton" id="1_Image" value="1"  onclick="changeFeedback(event,this);"/>
                              	<input type="image" src="/img/star-off.png" style="width:24px;float:left" class="transperantbutton" id="2_Image" value="2"  onclick="javascript:return changeFeedback(event,this)"/> 
                              	<input type="image" src="/img/star-off.png" style="width:24px;float:left" class="transperantbutton" id="3_Image" value="3"  onclick="changeFeedback(event,this)";/>
                              	<input type="image" src="/img/star-off.png" style="width:24px;float:left" class="transperantbutton" id="4_Image" value="4"  onclick="changeFeedback(event,this);"/>
                              	<input type="image" src="/img/star-off.png" style="width:24px;float:left" class="transperantbutton" id="5_Image" value="5"  onclick="changeFeedback(event,this);"/>
 
-                             	 
-	                         </td>		                     
-                             </td>
-                         </tr>
-                     </tbody>
-                 </table>
-					
-					<%}%>
-					<!--  <h3><small>Enter Your Email </small></h3>	 -->
-					
-					<div class="list-group-sm" style="padding-top: 14px;">
-
-						<span style="color:#2B2929;padding-left:34px;font-size:14px;font-size: 15px;">Add a Comment about the quality of support you received:</span>
-						
-						<textarea class="text-area" id="myTextarea" name='comment' style="padding-top:5px;padding-left:10px;font-size:14px;"></textarea>
-
-					</div>
-					<div>
-					<input type='button'  style="width: 10%;float:left; margin-right:15px;margin-left:428px;"
-						class='btn btn-sm btn-primary btn-block ' onclick="functioncancel()" value="Cancel"/>
-					<input type='submit'  style="width: 10%; margin-left: 34px;"
-						class='btn btn-sm btn-primary btn-block '>
-							
-					</div>	 
-						<br/>
-						<br/>
-				</form>
-			
 			</div>
+			</div>
+			
+			<div class="form-group">
+				<label class="label-opacity" for="inputEmail">Comments:</label>
+				
+				<textarea class="text-area" id="myTextarea" name='comment' style="padding-top:5px;padding-left:10px;font-size:14px;"></textarea>
+			</div>
+			
+			<div>
+				<div class="col-sm-4"></div>
+			<div class="col-sm-8" style="margin-left: 296px;margin-bottom: 18px;">
+            <div>                      
+               
+               <!-- <input type='button'  style="width: 15%;float:left; margin-right:15px;margin-left:274px;"
+						class='btn btn-sm btn-primary btn-block ' onclick="functioncancel()" value="Cancel"/>
+					<input type='submit'  style="width: 15%; margin-left: 34px;"
+						class='btn btn-sm btn-primary btn-block '> -->
+            	<button onclick="functioncancel()" data-dismiss="modal" class="btn btn-sm btn-default">Cancel</button>
+            	<button id="create-ticket"  class="btn btn-sm btn-primary save" data-loading-text="Create">Submit</button>
+            </div>
+            </div>
+            </div>
+        	</div>
+            <div class="line line-lg " style="margin-top: 11px;border-bottom: 1px solid #E2DCDC"></div>
+
+           	<div>
+
+			<div class="col-sm-4"></div>
+			<div class="col-sm-6">
+			<a target="_blank" href="https://www.agilecrm.com" class="text-muted">Powerd by AgileCRM</a>
+			</div>
+			</div>
+			<div class="row"></div>
+
+		</form>
 		</div>
-	</div>
-	</div>	
+		</div>
+		</div>
+	</div>					
+					
 <script>
  feedback = "<%=feedback%>";
 feedback_rating = "<%=feedback_rating%>";
@@ -293,7 +298,7 @@ function changeFeedback(e,objButton){
 					document.getElementById("addfeedback-message").innerHTML = "<div style=font-size:20px;padding-left:40px;text-align:center;>Your feedback submitted successfully!</div>";
 				},
 				error:function(){
-					alert("i am in error");
+					document.getElementById("addfeedback-message").innerHTML = "<div style=font-size:20px;padding-left:40px;text-align:center;>Sorry, Cannot submit you feedback!</div>";
 				}
 				
 		});
