@@ -74,6 +74,17 @@ $(function()
 
 	});
 
+	/**
+	 * Hide lost reasons popup, if deal moves to lost milestone from other track, 
+	 * hide the tracks list and show milestone view
+	 */
+	$('#dealLostReasonModal').on('hidden.bs.modal', function()
+	{
+		$("#new-track-list-paging").hide();
+		$("#new-opportunity-list-paging").show();
+		$("#opportunities-header", $("#opportunity-listners")).show();
+	});
+
 	
 	/**
 	 * Dash board edit
