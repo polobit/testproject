@@ -1399,12 +1399,12 @@ var portlet_graph_utility = {
 	emailsOpenedPieChart : function(selector, data, emailsSentCount,
 			emailsOpenedCount) {
 setupCharts(function(){
-							if (emailsSentCount == 0 && emailsOpenedCount == 0) {
+							/*if (emailsSentCount == 0 && emailsOpenedCount == 0) {
 								$('#' + selector)
 										.html(
 												'<div class="portlet-error-message">{{agile_lng_translate "portlets" "no-email-activity"}}</div>');
 								return;
-							}
+							}*/
 
 							$('#' + selector)
 									.highcharts(
