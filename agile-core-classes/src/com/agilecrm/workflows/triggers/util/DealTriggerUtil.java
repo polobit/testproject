@@ -124,10 +124,12 @@ public class DealTriggerUtil
 				System.out.println("Currrent domain ="+domain);
 				 HashMap<String, Object> map = new HashMap<String, Object>();
 				    map.put("deal", updatedOpportunity);
-				    	    
+				    	   
 			for (DomainUser user  : user_list)
 			{
 				 map.put("user", user);
+				// if(user.restricted_menu_scopes.equals("deals"))
+				//	 SendMail.sendMail(user.email," Deal Won Alert", SendMail.Deal_Won_status,map);
 				 NotificationPrefs NotePref = NotificationPrefsUtil.getNotificationPrefs(AgileUser.getCurrentAgileUserFromDomainUser(user.id));
 				 if(NotePref.deal_closed_email)
 					 SendMail.sendMail(user.email," Deal Won Alert", SendMail.Deal_Won_status,map);
