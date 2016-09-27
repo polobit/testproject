@@ -830,6 +830,7 @@ public class CSVUtil
 		    if (isInvalid)
 		    {
 			tagInvalid++;
+			failedCompanies.add(new FailedContactBean(getDummyContact(properties, csvValues) , "Invalid tag added"));
 			break;
 		    }
 		    continue;
