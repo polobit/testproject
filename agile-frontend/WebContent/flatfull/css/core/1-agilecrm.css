@@ -4722,8 +4722,10 @@ ul#recent-menu-model-list li:nth-child(even)
 .condition_container ul.typeahead.dropdown-menu{
   width: 100% !important;
   min-height: 40px;
-  max-height: 250px;
+  /*max-height: 250px;*/
   overflow-y: auto;
+  height: auto;
+  z-index: 99 !important;
 }
 .condition_container ul.typeahead.dropdown-menu li a{
   white-space: nowrap;
@@ -4743,3 +4745,29 @@ ul#recent-menu-model-list li:nth-child(even)
 }
 
 /*End of Tags LHS Filters*/
+
+.textarea{
+   min-height: 49px;
+    height: auto;
+    width: 100%;
+    text-indent: 0px;
+    resize: none;
+    padding: 8px 8px 1px;
+    overflow-y: hidden;
+
+}
+
+#affiliate-tabs-content .zeroclipboard-is-hover{
+  background-color: #fafafa !important;
+}
+
+.bg-light.dker .nav>li:hover>a, .bg-light.dker .nav>li:focus>a, .bg-light.dker .nav>li.active>a{ background-color: #f6f8f8;}
+.bg-light .nav>li:hover>a, .bg-light .nav>li:focus>a, .bg-light .nav>li.active>a{ background-color: #f6f8f8;}
+.bg-white.b-r .nav>li:hover>a,.bg-white.b-r .nav>li:focus>a, .bg-white.b-r .nav>li.active>a{ background-color: #f6f8f8;}
+
+.right-pane-header{
+  font-size: 14px;
+  font-weight: 700;
+  color: #58666e!important;
+  background-color: #fff!important;
+}
