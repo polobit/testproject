@@ -234,10 +234,10 @@
                     </div>
 
                     {{#if is_new}}
-                   	<div class="col-md-4 col-sm-5" >
+                   	<div>
 						<button class="btn btn-sm btn-primary" id="save-workflow-bottom">{{agile_lng_translate 'campaigns' 'save-campaign'}}</button>
 						<div class="left m-r-sm">
-						    <label class="btn btn-default btn-sm m-l-xs" id="campaign_access_level"> 
+						    <label class="btn btn-default btn-sm " id="campaign_access_level"> 
 						        <span> {{agile_lng_translate 'campaigns' 'make'}} {{#if access_level}}{{#if_equals access_level "1"}}Private {{else}}Public{{/if_equals}}{{else}}Private{{/if}}</span>
 						    </label>
 						</div>
