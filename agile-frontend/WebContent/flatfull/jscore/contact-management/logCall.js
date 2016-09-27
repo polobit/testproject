@@ -456,8 +456,15 @@ try{
 			}
 			else
 			{
+			if(window.location.hash.split("/")[1]){  
+			   if(window.location.hash.split("/")[1] == contactDetailsObjId){
 				notesView.collection.add(new BaseModel(logPhone), { sort : false });
 				notesView.collection.sort();
+
+			  }
+
+		     }
+		     
 			}
 		}
 		
