@@ -43,7 +43,7 @@
 		{{#each this}}          
 			<li class="list-group-item r-none b-l-none b-r-none">
 			{{#if recording.Recording}}
-				{{#if_equals recording.Recording.Duration "0"}}
+				{{#if_equals recording.Recording.Duration "-1"}}
 				<i class="icon pull-left icon-phone text-muted text-md m-r-xs m-t-xxs v-middle"></i>
 				<div class="pull-left">{{#if_equals call.Status "no-answer"}}{{agile_lng_translate 'widgets' 'call-unanswered'}}{{else}}{{agile_lng_translate 'widgets' 'call-connected'}}{{/if_equals}}</div>
 				<div class="pull-right">{{#is_string call.Duration}}{{toProperFormat call.Duration}}{{else}}0 s{{/is_string}}</div>
