@@ -201,3 +201,8 @@ function  validateCaptcha(){
 			    	//var response = $.ajax({ type : 'GET', url : captchaURL, async : false }).responseText;
 			     }
  }
+//adding this function for the removing the error msg line when user selects the recaptcha box
+var onSuccess = function(recaptcha){
+var element = document.getElementById("captcha-error-msg");
+element.parentNode.removeChild(element);
+};
