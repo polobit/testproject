@@ -2,6 +2,7 @@ package com.agilecrm.workflows.triggers.util;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -9,6 +10,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.agilecrm.account.NavbarConstants;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.bulk.BulkActionNotifications;
 import com.agilecrm.deals.CustomFieldData;
@@ -128,8 +130,10 @@ public class DealTriggerUtil
 			for (DomainUser user  : user_list)
 			{
 				 map.put("user", user);
-				// if(user.restricted_menu_scopes.equals("deals"))
-				//	 SendMail.sendMail(user.email," Deal Won Alert", SendMail.Deal_Won_status,map);
+				
+				if( user.menu_scopes.contains(NavbarConstants.DEALS)){}
+				else
+					 SendMail.sendMail(user.email," Deal Won Alert", SendMail.Deal_Won_status,map);
 				 NotificationPrefs NotePref = NotificationPrefsUtil.getNotificationPrefs(AgileUser.getCurrentAgileUserFromDomainUser(user.id));
 				 if(NotePref.deal_closed_email)
 					 SendMail.sendMail(user.email," Deal Won Alert", SendMail.Deal_Won_status,map);
