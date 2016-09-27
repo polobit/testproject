@@ -137,13 +137,17 @@ public class SendgridInboundParser extends HttpServlet
 					if (toAddressArray.length < 2)
 						return;
 
-					// Adding record to tickets backup db
-					backupKey = new TicketsBackup(json.toString(), toAddressArray[0]).save();
+					try {
+						// Adding record to tickets backup db
+						backupKey = new TicketsBackup(json.toString(), toAddressArray[0]).save();
+					} catch(Exception e) {
+						System.out.println("Error while trying to save ticket backup: " + ExceptionUtils.getFullStackTrace(e));
+					}
 
 					saveTicket(json, toAddressArray);
 
 					// Removing backup if everything is ok
-					TicketsBackup.delete(backupKey);
+					if( backupKey != null )	TicketsBackup.delete(backupKey);
 				}
 			}
 			catch (Exception e)
