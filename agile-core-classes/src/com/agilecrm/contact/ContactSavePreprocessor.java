@@ -61,7 +61,7 @@ public class ContactSavePreprocessor
      */
     public void preProcess(boolean... saveArgs)
     {
-	if (getOldContact() != null || newContact.id != null)
+	if (getOldContact() != null)
 	{
 		System.out.println("-----Before calling updateOldOwner-------");
 	    updateOldOwner();
