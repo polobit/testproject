@@ -35,16 +35,27 @@ define([
 							if(saveform[j].fields.agilefield){							
 							
 							var field = saveform[j].fields.agilefield.value;
-							
-							var agileFields = field.slice(0,15);
-														
-							if(field.length>15){
-								for(var k=field.length-1; k>=15; k--){
-									if(field[k].selected)
-										agileFields.push(field[k]);
+							if(saveform[j].title != "Hidden Input"){
+								var agileFields = field.slice(0,15);
+															
+								if(field.length>15){
+									for(var k=field.length-1; k>=15; k--){
+										if(field[k].selected)
+											agileFields.push(field[k]);
+									}
 								}
-							}								
-					
+						    }
+						    else if(saveform[j].title == "Hidden Input"){
+						    	var agileFields=field.slice(0,1);
+
+						    	if(field.length>0){
+									for(var k=1; k<field.length; k++){
+										if(field[k].selected)
+											agileFields.push(field[k]);
+									}
+								}
+						    }	
+
 					if(fields.length != 0)
 					{ 
 					for ( var i = 0; i < fields.length; i++)
@@ -58,17 +69,32 @@ define([
 								if(value.label == agileFields[k].label)
 									count++;								
 							}
+							if(saveform[j].title == "Hidden Input"){
+								for(var k = 1;k < agileFields.length;k++){
+									if(value.label == agileFields[k].label)
+									count++;	
+							    }
+							}
 							if(count == 0)
 								agileFields.push(value);
+
 						}
 						saveform[j].fields.agilefield.value = agileFields;
+					
 					}else{
 						for ( var i = 0; i < saveform.length; i++){
 							
-							if(saveform[i].fields.agilefield){		
+							if(saveform[i].title != "Hidden Input" && saveform[i].fields.agilefield){		
 							var field = saveform[i].fields.agilefield.value;							
 							if(field.length>15){
 								for(var j=field.length; j>15; j--)
+									field.pop(field[j]);								
+							}
+						}
+						else if(saveform[i].title == "Hidden Input" && saveform[i].fields.agilefield){
+							var field = saveform[i].fields.agilefield.value;							
+							if(field.length>0){
+								for(var j=1;j<field.length;j++)
 									field.pop(field[j]);								
 							}
 						}
