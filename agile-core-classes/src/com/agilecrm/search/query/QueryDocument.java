@@ -21,7 +21,6 @@ import com.agilecrm.search.QueryInterface;
 import com.agilecrm.search.query.util.QueryDocumentUtil;
 import com.agilecrm.search.ui.serialize.SearchRule;
 import com.agilecrm.search.util.SearchUtil;
-import com.agilecrm.ticket.entitys.Tickets;
 import com.google.appengine.api.search.Cursor;
 import com.google.appengine.api.search.Document;
 import com.google.appengine.api.search.Index;
@@ -185,17 +184,6 @@ public class QueryDocument<T> implements QueryInterface
 					    		mainList.add(document);
 					    	}else {
 					    		secondarList.add(document);
-					    	}
-			    		}
-				    }else if(object instanceof Tickets){
-				    	Tickets ticket  = (Tickets) object;
-				    	String subject = ticket.subject;
-			    		if(subject != null){
-			    			subject = subject.toLowerCase();
-					    	if(subject != null && subject.indexOf(localKeyword) >= 0){
-					    		mainList.add(ticket);
-					    	}else {
-					    		secondarList.add(ticket);
 					    	}
 			    		}
 				    }else {
