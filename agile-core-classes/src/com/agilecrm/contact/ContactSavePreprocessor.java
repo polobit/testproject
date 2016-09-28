@@ -28,7 +28,7 @@ public class ContactSavePreprocessor
 
     public ContactSavePreprocessor(Contact contact, Contact oldContact)
     {
-	this.newContact = newContact;
+	this.newContact = contact;
 	this.oldContact = oldContact;
     }
 
@@ -89,6 +89,7 @@ public class ContactSavePreprocessor
 	updateUpdatedTime();
 
 	newContact.convertEmailToLower();
+	newContact.checkOwnerChange();
 
 	updateTagsEntity();
 	checkBounceStatus();
