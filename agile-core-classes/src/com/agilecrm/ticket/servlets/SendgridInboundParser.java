@@ -371,7 +371,15 @@ public class SendgridInboundParser extends HttpServlet
 		 */
 		if( IS_ATTACHMENT_MORE_THAN_1MB )
 		{
-			json.put("attachment-info", "This field is removed as the total size of attachments is very large");
+			String msg = "This field is removed as the total size of attachments is very large";
+			json.put("attachment-info", msg);
+			
+			int count = json.getInt("attachments");
+
+			for (int i = 1; i <= count; i++)
+			{
+				json.put("attachment" + i, msg);
+			}
 		}
 		
 		// Creating new Notes in TicketNotes table
