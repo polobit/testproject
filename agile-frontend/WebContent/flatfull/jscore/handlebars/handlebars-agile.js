@@ -688,7 +688,7 @@ function getContactCustomProperties(items)
 	}
 	
 	for (var i = 0; i < temp_fields.length; i++){
-		if(temp_fields[i]!=""){
+		if(temp_fields[i]!=undefined && temp_fields[i]!=""){
 			fields.push(items[i]);
 		}
 	}
@@ -854,7 +854,7 @@ function getCompanyCustomProperties(items)
 	}
 	
 	for (var i = 0; i < temp_fields.length; i++){
-		if(temp_fields[i]!=""){
+		if(temp_fields[i]!=undefined && temp_fields[i]!=""){
 			fields.push(items[i]);
 		}
 	}
