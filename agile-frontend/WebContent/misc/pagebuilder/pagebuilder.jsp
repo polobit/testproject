@@ -20,9 +20,6 @@ String S3_STATIC_FILES_URL = S3_BASE_URL + "static/";
 String PAGE_BUILDER_URL = MAIN_URL + "misc/pagebuilder/";
 String BUILD_PATH = PAGE_BUILDER_URL + "source/build/";
 
-if(!VersioningUtil.isDevelopmentEnv() && StringUtils.isEmpty(VersioningUtil.getAppVersion(request)))
-	BUILD_PATH = S3_BASE_URL + "live/build/";
-
 String idPath = request.getPathInfo();
 String pageId = "0";
 String SELECTED_TEMPLATE = null;
@@ -61,8 +58,8 @@ JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "page
   <meta charset="utf-8">
   <title>Agile CRM | <%=LanguageUtil.getLocaleJSONValue(localeJSON, "builder-page-title")%></title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">  
-  <link href="<%=BUILD_PATH%>css/main.min.css" rel="stylesheet">    
-  <link href="<%=BUILD_PATH%>css/builder.min.css" rel="stylesheet">      
+  <link href="<%=BUILD_PATH%>css/main.min.css?v=<%=AGILE_VERSION%>" rel="stylesheet">    
+  <link href="<%=BUILD_PATH%>css/builder.min.css?v=<%=AGILE_VERSION%>" rel="stylesheet">      
   <!-- <link rel="shortcut icon" href="<%=S3_STATIC_FILES_URL%>images/favicon.png"> -->
   
   <!-- HTML5 shim, for IE6-8 support of HTML5 elements. All other JS at the end of file. -->
@@ -2466,8 +2463,8 @@ function showAgileCRMForm(formJson,formHolderId) {
     });
 }
 </script>
-    <script src="<%=BUILD_PATH%>js/builder.min.js" charset="utf-8"></script>
-    	<script src="/locales/html5/localize.js" charset="utf-8"></script>
+    <script src="<%=BUILD_PATH%>js/builder.min.js?v=<%=AGILE_VERSION%>" charset="utf-8"></script>
+    <script src="/locales/html5/localize.js?v=<%=AGILE_VERSION%>" charset="utf-8"></script>
 <script>
 function _agile_get_locale_val(key){
     return _AGILE_LOCALE_JSON[key];
