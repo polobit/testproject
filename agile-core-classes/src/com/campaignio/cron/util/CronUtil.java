@@ -475,6 +475,7 @@ public class CronUtil
 				timeZone = TimeZone.getTimeZone(timezone.substring(1));
 			
 			calendar.setTimeZone(timeZone);
+			System.out.println("timezone   :   "+timeZone);
 		}
 
 		// Days
