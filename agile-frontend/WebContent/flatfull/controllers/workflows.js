@@ -48,6 +48,9 @@ var WorkflowsRouter = Backbone.Router
 			 */
 			workflows : function()
 			{
+				if(tight_acl.isRestrictedScope('CAMPAIGN'))
+					return;
+				
 				$(".active").removeClass("active");
 				$("#workflowsmenu").addClass("active");
 
