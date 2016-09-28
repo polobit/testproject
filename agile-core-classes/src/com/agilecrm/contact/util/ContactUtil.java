@@ -2245,5 +2245,16 @@ public static Contact searchMultipleContactByEmail(String email,Contact contact)
 	}
 
     }
+    
+    public static List<Contact> getContactsByIds(List<String> contactsArray){
+		List<Key<Contact>> contactKeys = new ArrayList<Key<Contact>>();
+		for (String id : contactsArray){
+			Long contactID = Long.parseLong(id);
+		    contactKeys.add(new Key<Contact>(Contact.class, contactID));
+		}
+		System.out.println(dao.fetchAllByKeys(contactKeys));
+	
+		return dao.fetchAllByKeys(contactKeys);
+    }
 
 }

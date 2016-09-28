@@ -20,14 +20,15 @@ import com.agilecrm.activities.Event;
 import com.agilecrm.activities.Event.EventType;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
+import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.deals.Opportunity;
-import com.agilecrm.projectedpojos.ContactPartial;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.user.util.UserPrefsUtil;
 import com.agilecrm.util.IcalendarUtil;
+import com.agilecrm.util.VersioningUtil;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Query;
 
@@ -677,5 +678,36 @@ public class EventUtil
     public static List<Contact> getEventsRelatedContacts(Long id){
     	Event event= getEvent(id);
     	return event.relatedContacts();
+    }
+    
+    public static void sendEmailForEventContacts(List<String> contactIds, Event event){
+    	List<Contact> contactsList =  ContactUtil.getContactsByIds(contactIds);
+    	DomainUser user = DomainUserUtil.getCurrentDomainUser();
+    	net.fortuna.ical4j.model.Calendar agileUseiCal = IcalendarUtil.getICalFromEvent(event, user, user.email, user.name);
+    	String[] attachments = { "text/calendar", "mycalendar.ics", agileUseiCal.toString() };
+    	
+    	String domain_url = VersioningUtil.getHostURLByApp(user.domain);
+    	String cancel_link = domain_url + "appointment/cancel/" + event.id;
+    	String link = "https://www.agilecrm.com/?utm_source=powered-by&medium=email&utm_campaign=" + user.domain;
+   		
+		String usermail = "<p>You have a new appointment with <b>" + user.name + "</b> (" + user.email+ ")</p>"
+				+"<span>Duration: " + event.start + "mins</span><br/>";
+				if(event.description != null && event.description.length() > 0){
+					usermail += "<span>Note: " + event.description + "</span><br/>";
+				}
+				usermail += "<p><a href=" + cancel_link
+				+ ">Cancel this appointment</a></p><p>This event has been scheduled using <a href=" + link
+				+ ">Agile CRM</a></p>";
+		
+    	if(contactsList != null){
+    		for (Contact contact : contactsList) {
+    			ContactField emailField = contact.getContactFieldByName(Contact.EMAIL);
+    			String contactEmail = emailField.value;
+    			if(contactEmail != null){    				
+    				EmailGatewayUtil.sendEmail(null, user.email, user.name, contactEmail, null, null, "Appointment Scheduled",
+    						null, usermail, null, null, null, null, attachments);
+    			}
+    		}
+    	}
     }
 }
