@@ -99,22 +99,29 @@ function initializeEmailBuilderListeners() {
 
     $('body').on('click','#videoRecordSaveBtn', function(e){
         e.preventDefault();
-        $(".videoRecordFormMessageHolder").html("");
-        var videoRecordType = $("#videoRecordType").val();
-        if(videoRecordType === "new") {
-            if($("#video-record-name").val() != "") {
-                $("#videoRecordSaveBtn").text("Saving...");
-                $("#videoRecordSaveBtn").prop('disabled', true);
-                emailVideoRecord.uploadVideoToS3();
+
+        var isVideo = $(this).attr("data-id");
+        if(isVideo !== undefined && isVideo === "new"){
+
+            $(".videoRecordFormMessageHolder").html("");
+            var videoRecordType = $("input[id=videoRecordType]").val();
+            if(videoRecordType === "new") {
+                if($("#video-record-name").val() != "") {
+                    $("#videoRecordSaveBtn").text("Saving...");
+                    $("#videoRecordSaveBtn").prop('disabled', true);
+                    $(this).removeAttr("data-id");
+                    emailVideoRecord.uploadVideoToS3();
+                    return;
+                } else {
+                    $(".videoRecordFormMessageHolder").html("Name field is required.");
+                }
             } else {
-                $(".videoRecordFormMessageHolder").html("Name field is required.");
-            }
-        } else {
-            var selectedVal = $("#video-record-select").val();
-            if(selectedVal != "" && selectedVal != "AGILE_CREATE_NEW_VIDEO") {
-                emailVideoRecord.buildVideoPageURL(selectedVal);
-            } else {
-                $(".videoRecordFormMessageHolder").html("Please select a video.");
+                var selectedVal = $("#video-record-select").val();
+                if(selectedVal != "" && selectedVal != "AGILE_CREATE_NEW_VIDEO") {
+                    emailVideoRecord.buildVideoPageURL(selectedVal);
+                } else {
+                    $(".videoRecordFormMessageHolder").html("Please select a video.");
+                }
             }
         }
     });
@@ -350,6 +357,7 @@ var emailVideoRecord = {
             $(".videoRecordFormMessageHolder").html("Please record a video.");
             $("#videoRecordSaveBtn").text("Save");
             $("#videoRecordSaveBtn").prop('disabled', false);
+            $("#videoRecordSaveBtn").attr("data-id", "new");
         }
     },
 
@@ -370,6 +378,7 @@ var emailVideoRecord = {
             success: function (data) {
                 $("#videoRecordSaveBtn").text("Save");
                 $("#videoRecordSaveBtn").prop('disabled', false);
+                $("#videoRecordSaveBtn").attr("data-id", "new");
                 emailVideoRecord.buildVideoPageURL(data.id);
             },
         });

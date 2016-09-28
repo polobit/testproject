@@ -804,11 +804,12 @@ $(document).ready(function () {
                 $('#'+id).wrap("<a target='_blank' class='imgLink' href='http://"+$('#image-link').val()+"'>");
             }
          }else if ($('#video-link').val()) {
+            var absolute_href =  addhttp($('#video-link').val());
             if($('#'+id).parent("a").length) {
                 var anchorTag = $('#'+id).parent("a");
-                $(anchorTag).attr('href', addhttp($('#video-link').val())) ;
+                $(anchorTag).attr('href', absolute_href) ;
             } else {
-                $('#'+id).wrap("<a target='_blank' class='imgLink' href='http://"+$('#video-link').val()+"'>");
+                $('#'+id).wrap("<a target='_blank' class='imgLink' href='"+absolute_href+"'>");
             }
          }
        /*adding new select-box for the image adjustment /alignment
