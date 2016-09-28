@@ -683,6 +683,7 @@ public class EventUtil
     public static void sendEmailForEventContacts(List<String> contactIds, Event event){
     	List<Contact> contactsList =  ContactUtil.getContactsByIds(contactIds);
     	DomainUser user = DomainUserUtil.getCurrentDomainUser();
+    	String domainUserEmail = user.email;
     	net.fortuna.ical4j.model.Calendar agileUseiCal = IcalendarUtil.getICalFromEvent(event, user, user.email, user.name);
     	String[] attachments = { "text/calendar", "mycalendar.ics", agileUseiCal.toString() };
     	
@@ -695,9 +696,8 @@ public class EventUtil
 				if(event.description != null && event.description.length() > 0){
 					usermail += "<span>Note: " + event.description + "</span><br/>";
 				}
-				usermail += "<p><a href=" + cancel_link
-				+ ">Cancel this appointment</a></p><p>This event has been scheduled using <a href=" + link
-				+ ">Agile CRM</a></p>";
+				usermail += "<p><a href=" + cancel_link+ ">Cancel this appointment</a></p>";
+				usermail += "<p>This event has been scheduled using <a href=" + link +">Agile CRM</a></p>";
 		
     	if(contactsList != null){
     		for (Contact contact : contactsList) {
@@ -708,6 +708,11 @@ public class EventUtil
     						null, usermail, null, null, null, null, attachments);
     			}
     		}
+    	}
+    	
+    	if(domainUserEmail != null){			
+			EmailGatewayUtil.sendEmail(null, user.email, user.name, domainUserEmail, null, null, "Appointment Scheduled",
+					null, usermail, null, null, null, null, attachments);		
     	}
     }
 }
