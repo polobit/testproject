@@ -4771,3 +4771,8 @@ ul#recent-menu-model-list li:nth-child(even)
   color: #58666e!important;
   background-color: #fff!important;
 }
+
+.chrome-extenstion-disabled{
+  pointer-events:none;
+  opacity: 0.65;
+}
