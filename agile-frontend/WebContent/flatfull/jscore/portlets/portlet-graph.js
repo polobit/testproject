@@ -136,7 +136,7 @@ var portlet_graph_utility = {
 								if (value > 0)
 									emptyFlag = false;
 							});
-							if (campaignStatusList.length == 0 || emptyFlag) {
+							if (campaignStatusList.length == 0) {
 								$('#' + selector)
 										.html(
 												'<div class="portlet-error-message">{{agile_lng_translate "campaigns" "no-subscribers-found"}}</div>');
@@ -146,6 +146,8 @@ var portlet_graph_utility = {
 									data.push([ value,
 											campaignValuesList[index] ]);
 								});
+								if(!emptyFlag)
+									data[0][1]=1;
 								$('#' + selector)
 										.highcharts(
 												{
