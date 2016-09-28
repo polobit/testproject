@@ -2,9 +2,14 @@ var FormsRouter = Backbone.Router.extend({
 	
 	routes : { 
 		"forms" : "formSettings",
-		"form-builder-templates" : "getListOfTemplates" 
+		"form-builder-templates" : "getListOfTemplates",
+		"formbuilder?template=:id" : "buildForm",
 	},
-
+	buildForm : function(){
+       var loc = window.location.href.replace("#", "");
+       window.location = loc;
+       return;
+	},
 	formSettings : function()
 	{
 		console.log("forms collection template");
