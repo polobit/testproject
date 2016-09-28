@@ -46,11 +46,11 @@ var timeline_entity_loader = {
 	},
 	load_other_company_timeline_entities : function(contact)
 	{
-		var contactId = contact['id'];
+		var companyId = contact['id'];
 
-		this.load_related_entites(contactId);
+		this.load_related_entites(companyId);
 		this.load_stats(contact);
-		this.load_campaign_logs(contactId);
+		this.load_campaign_logs(companyId);
 		
 		this.get_stats(getPropertyValue(contact.properties, "email"), contact, App_Companies.companyDetailView.el);
 		//setTimeout(this.load_reload_emails, 5000);
@@ -104,11 +104,14 @@ var timeline_entity_loader = {
 		 */
 
 		var email = getAllPropertyValuesByName(contact.properties, "email", ",");
-
+		var url = "core/api/emails/imap-email" ;
+		if(Current_Route.includes('company') || Current_Route.includes('companies')){
+			url = "core/api/emails/imap-comEmail" ;
+		}
 		// Go for mails when only the contact has an email
 		if (email)
 		{
-			this.timline_fetch_data('core/api/emails/imap-email?e=' + encodeURIComponent(email) + '&c=10&o=0', function(stats)
+			this.timline_fetch_data(url + '?e=' + encodeURIComponent(email) + '&c=10&o=0', function(stats)
 			{
 				console.log(stats);
 				
@@ -126,7 +129,7 @@ var timeline_entity_loader = {
 						
 						});
 
-					if((App_Contacts.contactDetailView && App_Contacts.contactDetailView.model.get('id') !== contactId) || (App_Companies.companyDetailView && App_Companies.companyDetailView.model.get('id') !== contactId))
+					if((App_Contacts.contactDetailView && App_Contacts.contactDetailView.model.get('id') !== contactId) || (App_Companies.companyDetailView && App_Companies.companyDetailView.model.get('id') !== contact['id']))
 						return;
 
 					var contact_emails = [];
@@ -207,7 +210,7 @@ var timeline_entity_loader = {
 												}
 
 											});
-							if((App_Contacts.contactDetailView && App_Contacts.contactDetailView.model.get('id') == contactId) || (App_Companies.companyDetailView && App_Companies.companyDetailView.model.get('id') == contactId))
+							if((App_Contacts.contactDetailView && App_Contacts.contactDetailView.model.get('id') == contactId) || (App_Companies.companyDetailView && App_Companies.companyDetailView.model.get('id') == contact['id']))
 								timeline_collection_view.addItems(log_models);
 						})
 	}, timline_fetch_data : function(url, callback)
@@ -351,7 +354,7 @@ var timeline_entity_loader = {
 							} });
 						}
 					}
-					if((App_Contacts.contactDetailView && App_Contacts.contactDetailView.model.get('id') == contactId) || (App_Companies.companyDetailView && App_Companies.companyDetailView.model.get('id') == contactId))
+					if((App_Contacts.contactDetailView && App_Contacts.contactDetailView.model.get('id') == contactId) || (App_Companies.companyDetailView && App_Companies.companyDetailView.model.get('id') == contact['id']))
 						timeline_collection_view.addItems(data.toJSON());
 
 					addTagAgile(CODE_SETUP_TAG);
