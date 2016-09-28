@@ -2272,7 +2272,7 @@ public class OpportunityUtil
     		System.out.println("user" + user_id);
     		Double revenue = opportunity.expected_value;
     		Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone(timeZone));
-    		calendar.setTimeInMillis(opportunity.created_time * 1000);
+    		calendar.setTimeInMillis(opportunity.won_date * 1000);
 
     		if (StringUtils.equalsIgnoreCase(frequency, "monthly"))
     		    calendar.set(Calendar.DAY_OF_MONTH, 1);
