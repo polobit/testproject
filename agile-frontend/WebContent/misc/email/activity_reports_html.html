@@ -18,7 +18,7 @@
               </td>
             </tr>
             <tr>
-              <td style="padding: 15px 25px 25px 25px">
+              <td style="padding: 0px 25px 25px 25px">
 				{{#reports}}
 				{{#total}}
 					<table style="width:100%">
@@ -26,12 +26,12 @@
 						<table style="margin-bottom:10px;margin-top:15px">
 						{{#total}}
 							<tr>
-								<td>
+								<td style="vertical-align:top">
 									<div>{{#pic}}<img src="{{pic}}" style="vertical-align:middle;height:35px;width:35px;border-radius:5px;margin-left:2px;padding:2px;"/>{{/pic}}</div>
 								</td>
-								<td>
+								<td style="vertical-align:top">
 									<div style="padding-bottom:5px;font-size:16px;font-weight:bold"><span style="text-transform:capitalize">{{user_name}}</span> Activities</div>
-									<div style="font-size:12px;;color: #58666e">{{start_time}} - {{end_time}}</div>
+									<div style="font-size:12px;color: #58666e">{{start_time}} - {{end_time}}</div>
 								</td>
 							</tr>
 						{{/total}}
@@ -50,13 +50,13 @@
 											<tr>
 												<td style="padding-bottom:5px">
 													<div style="font-weight:bold;font-size:14px;padding-bottom:2px">Won ({{deals.won_count}})</div>
-													<div style="font-size:12px;color: #58666e;font-family: sans-serif;">Total value {{deals.currency}}{{deals.won_value}}</div>
+													<div style="font-size:12px;color: #58666e;font-family: sans-serif;">Total Value {{deals.currency}}{{deals.won_value}}</div>
 												</td>
 											</tr>
 											{{#deals.deals_won}}
 											<tr>
-												<td style="padding-bottom:5px;font-size: 14px;font-family: sans-serif;line-height:17px">
-													<div>{{label}} {{custom4}}</div>
+												<td style="padding-bottom:5px;font-size: 14px;font-family: sans-serif;line-height:17px;word-break: break-all;width:100%">
+													<div style="padding-bottom:5px">{{label}} {{custom4}}</div>
 													<div style="font-size:12px">
 														{{{related_contact_ids}}}
 													</div>
@@ -78,13 +78,13 @@
 											<tr>
 												<td style="padding-bottom:5px">
 													<div style="font-weight:bold;font-size:14px;padding-bottom:2px">Lost ({{deals.lost_count}})</div>
-													<div style="font-size:12px;color: #58666e;font-family: sans-serif;">Total value {{deals.currency}}{{deals.lost_value}}</div>
+													<div style="font-size:12px;color: #58666e;font-family: sans-serif;">Total Value {{deals.currency}}{{deals.lost_value}}</div>
 												</td>
 											</tr>
 											{{#deals.deals_lost}}
 											<tr>
-												<td style="padding-bottom:5px;font-size: 14px;font-family: sans-serif;line-height:17px">
-													<div>{{label}} {{custom4}}</div>
+												<td style="padding-bottom:5px;font-size: 14px;font-family: sans-serif;line-height:17px;word-break: break-all;width:100%">
+													<div style="padding-bottom:5px">{{label}} {{custom4}}</div>
 													<div style="font-size:12px">
 														{{{related_contact_ids}}}
 													</div>
@@ -106,13 +106,13 @@
 											<tr>
 												<td style="padding-bottom:5px">
 													<div style="font-weight:bold;font-size:14px;padding-bottom:2px">New ({{deals.new_count}})</div>
-													<div style="font-size:12px;color: #58666e;font-family: sans-serif;">Total value {{deals.currency}}{{deals.new_value}}</div>
+													<div style="font-size:12px;color: #58666e;font-family: sans-serif;">Total Value {{deals.currency}}{{deals.new_value}}</div>
 												</td>
 											</tr>
 											{{#deals.deals_created}}
 											<tr>
-												<td style="padding-bottom:5px;font-size: 14px;font-family: sans-serif;line-height:17px">
-													<div>{{label}} {{custom4}}</div>
+												<td style="padding-bottom:5px;font-size: 14px;font-family: sans-serif;line-height:17px;word-break: break-all;width:100%">
+													<div style="padding-bottom:5px">{{label}} {{custom4}}</div>
 													<div style="font-size:12px">
 														{{{related_contact_ids}}}
 													</div>
@@ -134,13 +134,13 @@
 											<tr>
 												<td style="padding-bottom:5px">
 													<div style="font-weight:bold;font-size:14px;padding-bottom:2px">Milestone Change ({{deals.mile_count}})</div>
-													<div style="font-size:12px;color: #58666e;font-family: sans-serif;">Total value {{deals.currency}}{{deals.mile_value}}</div>
+													<div style="font-size:12px;color: #58666e;font-family: sans-serif;">Total Value {{deals.currency}}{{deals.mile_value}}</div>
 												</td>
 											</tr>
 											{{#deals.mile_change}}
 											<tr>
-												<td style="padding-bottom:5px;font-size: 14px;font-family: sans-serif;line-height:17px">
-													<div>{{label}} {{custom4}}</div>
+												<td style="padding-bottom:5px;font-size: 14px;font-family: sans-serif;line-height:17px;word-break: break-all;width:100%">
+													<div style="padding-bottom:5px">{{label}} {{custom4}}</div>
 													<div style="font-size:12px">
 														{{{related_contact_ids}}}
 													</div>
@@ -179,8 +179,8 @@
 											</tr>
 											{{#tasks.tasks_done}}
 											<tr>
-												<td style="padding-bottom:5px;font-size: 14px;font-family: sans-serif;line-height:17px">
-													<div>{{label}}</div>
+												<td style="padding-bottom:5px;font-size: 14px;font-family: sans-serif;line-height:17px;word-break: break-all;width:100%">
+													<div style="padding-bottom:5px">{{label}}</div>
 													<div style="font-size:12px">
 														{{{related_contact_ids}}}
 													</div>
@@ -206,8 +206,8 @@
 											</tr>
 											{{#tasks.tasks_inprogress}}
 											<tr>
-												<td style="padding-bottom:5px;font-size: 14px;font-family: sans-serif;line-height:17px">
-													<div>{{label}}</div>
+												<td style="padding-bottom:5px;font-size: 14px;font-family: sans-serif;line-height:17px;word-break: break-all;width:100%">
+													<div style="padding-bottom:5px">{{label}}</div>
 													<div style="font-size:12px">
 														{{{related_contact_ids}}}
 													</div>
@@ -233,8 +233,8 @@
 											</tr>
 											{{#tasks.tasks_assigned}}
 											<tr>
-												<td style="padding-bottom:5px;font-size: 14px;font-family: sans-serif;line-height:17px">
-													<div>{{label}} {{custom4}}</div>
+												<td style="padding-bottom:5px;font-size: 14px;font-family: sans-serif;line-height:17px;word-break: break-all;width:100%">
+													<div style="padding-bottom:5px">{{label}} {{custom4}}</div>
 													<div style="font-size:12px">
 														{{{related_contact_ids}}}
 													</div>
@@ -273,8 +273,8 @@
 											</tr>
 											{{#events.events}}
 											<tr>
-												<td style="padding-bottom:5px;font-size: 14px;font-family: sans-serif;line-height:17px">
-													<div>{{title}}</div>
+												<td style="padding-bottom:5px;font-size: 14px;font-family: sans-serif;line-height:17px;word-break: break-all;width:100%">
+													<div style="padding-bottom:5px">{{title}}</div>
 													<div style="font-size:12px;color:#58666e">On {{color}}</div>
 												</td>
 											</tr>
@@ -297,8 +297,8 @@
 											</tr>
 											{{#events.events_added}}
 											<tr>
-												<td style="padding-bottom:5px;font-size: 14px;font-family: sans-serif;line-height:17px">
-													<div>Event '{{custom1}}' ({{custom4}})</div>
+												<td style="padding-bottom:5px;font-size: 14px;font-family: sans-serif;line-height:17px;word-break: break-all;width:100%">
+													<div style="padding-bottom:5px">Event '{{custom1}}' ({{custom4}})</div>
 													<div style="font-size:12px;color:#58666e">Added on {{time_string}}</div>
 												</td>
 											</tr>
@@ -321,8 +321,8 @@
 											</tr>
 											{{#events.events_moved}}
 											<tr>
-												<td style="padding-bottom:5px;font-size: 14px;font-family: sans-serif;line-height:17px">
-													<div>{{custom4}}</div>
+												<td style="padding-bottom:5px;font-size: 14px;font-family: sans-serif;line-height:17px;word-break: break-all;width:100%">
+													<div style="padding-bottom:5px">{{custom4}}</div>
 													<div style="font-size:12px;color:#58666e">On {{time_string}}</div>
 												</td>
 											</tr>
@@ -356,8 +356,8 @@
 											</tr>
 											{{#emails.emails_sent}}
 											<tr>
-												<td style="padding-bottom:5px;font-size: 14px;font-family: sans-serif;line-height:17px">
-													<div>Email '{{custom3}}'</div>
+												<td style="padding-bottom:5px;font-size: 14px;font-family: sans-serif;line-height:17px;word-break: break-all;width:100%">
+													<div style="padding-bottom:5px">Email '{{custom3}}'</div>
 													<div style="font-size:12px">
 														{{{label}}}
 													</div>
@@ -394,8 +394,8 @@
 											</tr>
 											{{#notes.notes_contacts}}
 												<tr>
-													<td style="padding-bottom:5px;font-size: 14px;font-family: sans-serif;line-height:17px">
-														<div>Note '{{custom1}}'</div>
+													<td style="padding-bottom:5px;font-size: 14px;font-family: sans-serif;line-height:17px;word-break: break-all;width:100%">
+														<div style="padding-bottom:5px">Note '{{custom1}}'</div>
 														<div style="font-size:12px">{{#label}}<a href="https://{{domain}}.agilecrm.com/#contact/{{entity_id}}" style="text-decoration:none;">{{label}}</a>{{/label}}</div>
 														<div style="font-size:12px;color: #58666e">On {{time_string}}</div>
 													</td>
@@ -430,8 +430,8 @@
 											</tr>
 											{{#docs.doc_activities}}
 												<tr>
-													<td style="padding-bottom:5px;font-size: 14px;font-family: sans-serif;line-height:17px">
-														<div><a href="{{custom1}}" style="text-decoration:none">{{label}}</a></div>
+													<td style="padding-bottom:5px;font-size: 14px;font-family: sans-serif;line-height:17px;word-break: break-all;width:100%">
+														<div style="padding-bottom:5px"><a href="{{custom1}}" style="text-decoration:none">{{label}}</a></div>
 														<div style="font-size:12px;color: #58666e">Uploaded on {{time_string}}</div>
 													</td>
 												</tr>
@@ -461,14 +461,14 @@
 										<tbody>
 											<tr>
 												<td>
-													<div style="font-weight:bold;font-size:14px">Done ({{calls.done_count}})</div>
-													<div style="font-size:12px;color: #58666e;font-family: sans-serif;">{{#calls.done_duration}}Total duration {{calls.done_duration}}<br/>{{/calls.done_duration}}(Outgoing - {{calls.out_count}}, Incoming - {{calls.in_count}})</div>
+													<div style="font-weight:bold;font-size:14px;padding-bottom:5px">Done ({{calls.done_count}})</div>
+													<div style="font-size:12px;color: #58666e;font-family: sans-serif;">{{#calls.done_duration}}Total Duration {{calls.done_duration}}{{/calls.done_duration}} (Outgoing - {{calls.out_count}}, Incoming - {{calls.in_count}})</div>
 												</td>
 											</tr>
 											{{#calls.done_calls}}
 												<tr>
-													<td style="padding-bottom:5px;font-size: 14px;font-family: sans-serif;line-height:17px">
-														<div>{{{custom4}}}</div>
+													<td style="padding-bottom:5px;font-size: 14px;font-family: sans-serif;line-height:17px;word-break: break-all;width:100%">
+														<div style="padding-bottom:5px">{{{custom4}}}</div>
 														<div style="font-size:12px;color: #58666e">On {{time_string}}</div>
 													</td>
 												</tr>
@@ -491,8 +491,8 @@
 											</tr>
 											{{#calls.no_ans_calls}}
 												<tr>
-													<td style="padding-bottom:5px;font-size: 14px;font-family: sans-serif;line-height:17px">
-														<div>{{{custom4}}}</div>
+													<td style="padding-bottom:5px;font-size: 14px;font-family: sans-serif;line-height:17px;word-break: break-all;width:100%">
+														<div style="padding-bottom:5px">{{{custom4}}}</div>
 														<div style="font-size:12px;color: #58666e">On {{time_string}}</div>
 													</td>
 												</tr>
@@ -515,8 +515,8 @@
 											</tr>
 											{{#calls.failed_calls}}
 												<tr>
-													<td style="padding-bottom:5px;font-size: 14px;font-family: sans-serif;line-height:17px">
-														<div>{{{custom4}}}</div>
+													<td style="padding-bottom:5px;font-size: 14px;font-family: sans-serif;line-height:17px;word-break: break-all;width:100%">
+														<div style="padding-bottom:5px">{{{custom4}}}</div>
 														<div style="font-size:12px;color: #58666e">On {{time_string}}</div>
 													</td>
 												</tr>
@@ -536,6 +536,18 @@
 					</table>
 				{{/total}}
 				{{/reports}}
+				<table style="width:100%">
+					<tbody>
+						<tr>
+							<td>
+								<div style="font-size:12px;font-family:sans-serif;line-height:16px;padding:5px 0px">You are receiving this email as you have created a report 
+									<span>"{{report_name}}"</span> at Agile CRM.
+									You can manage <a href="https://{{domain}}.agilecrm.com/#activity-reports" target="_blank">reports</a> here.</div>
+								<div style="font-size:12px;font-family:sans-serif;">Thanks for being a valued customer.</div>
+							</td>
+						</tr>
+					</tbody>
+				</table>
               </td>
             </tr>
           </table>
