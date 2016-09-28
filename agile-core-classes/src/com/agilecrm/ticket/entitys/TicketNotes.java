@@ -272,9 +272,19 @@ public class TicketNotes
 					// Execute note created by agent trigger
 					TicketTriggerUtil.executeTriggerForNewNoteAddedByCustomer(ticket);
 			}
+			
+			//removing script from plain text
+			StringBuilder sb = new StringBuilder(plain_text);
+			String startTag = "<script>";
+		    String endTag = "</script>";
+
+		    //removing the text between script
+		    sb.replace(plain_text.indexOf(startTag) + startTag.length(), plain_text.indexOf(endTag), "");
+		    
+		    String plainText = sb.toString();
 
 			// Logging notes activity
-			ActivityUtil.createTicketActivity(activityType, ticket.contactID, ticket.id, plain_text, html_text,
+			ActivityUtil.createTicketActivity(activityType, ticket.contactID, ticket.id, plainText, html_text,
 					"html_text", false);
 		}
 		catch (Exception e)
@@ -306,6 +316,16 @@ public class TicketNotes
 
 		if (assignee_key != null)
 			assignee_id = assignee_key.getId();
+		
+		//removing script from plain text
+		StringBuilder sb = new StringBuilder(plain_text);
+		String startTag = "<script>";
+	    String endTag = "</script>";
+
+	    //removing the text between script
+	    sb.replace(plain_text.indexOf(startTag) + startTag.length(), plain_text.indexOf(endTag), "");
+	    
+	    plain_text = sb.toString();
 	}
 
 	/**

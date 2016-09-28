@@ -264,6 +264,7 @@
 		 				loadWidgets(el, Ticket_Utils.Current_Ticket_Contact.toJSON(), "widgets");
 		 			});
 
+
 		 			// Append reply container
 		 			Tickets_Notes.repltBtn("reply", el);
 

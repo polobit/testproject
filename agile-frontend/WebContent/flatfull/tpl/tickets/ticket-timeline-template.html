@@ -24,6 +24,7 @@
 			        <a class="pull-left thumb-small m-l-n">
 
 			        	{{#if_equals activity_type 'TICKET_CREATED'}}
+
 			        		<img src="{{get_contact_image 24}}" class="r-5x" alt="..." onerror="image_error(this);" _data-name="{{requester_name}}">
 		
 			        	{{/if_equals}}
@@ -75,6 +76,7 @@
 			          <div class="panel-body">
 			          	<div class="word-break-full word-break-all">
 			          		{{#if_equals activity_type 'TICKET_CREATED'}}
+			          		
 			          			{{#if custom2}}
 					  				{{{replace_newline_with_br custom2}}}
 								{{/if}}
