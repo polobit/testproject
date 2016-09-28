@@ -933,11 +933,11 @@ var portlet_graph_data_utility = {
 							var series = [];
 							if(emailsSentCount==0 && emailsOpenedCount==0)
 								series.push([ "Emails Sent",1]);
-							else{
+							else
 								series.push([ "Emails Sent",
 										emailsSentCount - emailsOpenedCount ]);
-								series.push([ "Emails Opened", emailsOpenedCount ]);
-							}
+							series.push([ "Emails Opened", emailsOpenedCount ]);
+							
 
 							portlet_graph_utility.emailsOpenedPieChart(
 									selector, series, emailsSentCount,
