@@ -465,8 +465,17 @@ public class CronUtil
 		// Set timezone
 		if (!Wait.DEFAULT_TIMEZONE.equals(timezone) && !StringUtils.isEmpty(timezone))
 		{
-			TimeZone timeZone = TimeZone.getTimeZone(timezone.substring(1));
+			TimeZone timeZone = null;
+			
+			//check if there is any character with timezone variable or not at beginning
+			//if present them we can split that string
+			if(Character.isAlphabetic(timezone.charAt(0)))
+				timeZone = TimeZone.getTimeZone(timezone);			
+			else
+				timeZone = TimeZone.getTimeZone(timezone.substring(1));
+			
 			calendar.setTimeZone(timeZone);
+			System.out.println("timezone   :   "+timeZone);
 		}
 
 		// Days
