@@ -147,7 +147,7 @@ var contact_details_documentandtasks_actions = {
 				});
 
 				//Populate products
-				populate_deal_products(el, undefined,"#opportunityForm");
+				populate_deal_products(e, undefined,"#opportunityForm");
 				
 				// Contacts type-ahead
 				agile_type_ahead("relates_to", e, contacts_typeahead);
