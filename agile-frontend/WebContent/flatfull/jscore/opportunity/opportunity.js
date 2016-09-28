@@ -1064,6 +1064,8 @@ function populate_deal_products(el, value,form_id){
 						iDiscountAmt=iDiscountAmt.toFixed(2)
 					$("input[name='discount_amt']",$(me._form_id)).val(iDiscountAmt);
 					iTotal-=iDiscountAmt
+					if(iTotal.toFixed)
+						iTotal=iTotal.toFixed(2)
 					if($("input[name='currency_conversion_value']",$(me._form_id)).length)
 						$("input[name='currency_conversion_value']",$(me._form_id)).val(iTotal);
 					else

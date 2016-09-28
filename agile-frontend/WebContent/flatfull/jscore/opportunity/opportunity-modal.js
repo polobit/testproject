@@ -608,7 +608,7 @@ function show_deal()
 	// Contacts type-ahead
 	agile_type_ahead("relates_to", e, contacts_typeahead);
 
-	populate_deal_products(el, undefined,"#opportunityForm");
+	populate_deal_products(e, undefined,"#opportunityForm");
 	
 	// Fills the pipelines list in select box.
 	populateTrackMilestones(e, undefined, undefined, function(pipelinesList)
