@@ -662,6 +662,7 @@ function show_bulk_owner_change_page()
 			postBulkOperationData(url, json, $form, undefined, function(data)
 			{
 				enable_save_button(saveButton);
+				location.reload();
 			}, _agile_get_translated_val('bulk-actions','owner-change-scheduled'))
 		});
 

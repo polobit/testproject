@@ -777,6 +777,9 @@ show and hide the input for editing the contact name and saving that
 				App_Contacts.contactDetailView.model = model;
 				
 		    }});
+
+        Backbone.history.navigate("contacts",{trigger: true});
+        location.reload(); 
     	   
     },
 
@@ -1426,6 +1429,9 @@ enterCompanyScore: function(e){
 		$('#change-owner-ul').css('display', 'none');
 		
 		company_detail_tab.changeOwner($(targetEl));
+
+    Backbone.history.navigate("companies",{trigger: true});
+    location.reload();
 	},
 	
 	/**
