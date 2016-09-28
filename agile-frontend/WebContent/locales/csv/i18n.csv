@@ -5465,3 +5465,80 @@ upload-google-doc.select-doc,Select Document,Seleccionar documento
 upload-voicemail.upload-wav-file,Upload WAV File,Upload WAV FileDocument
 upload-voicemail.not-a-wav-file,File selected is not a WAV file,Archivo seleccionado no es un archivo WAV
 upload-voicemail.wav-file-info,You may upload a recorded voice (.wav) file here,Usted puede cargar una grabación de voz ( .wav) aquí
+landingpage-builder.drag-info,Build your page by dragging blocks onto the canvas,Construir su página arrastrando bloques en el lienzo
+landingpage-builder.builder-page-title,Page Builder,Creador de página
+landingpage-builder.back-modal-info,You've got pending changes&#44; if you leave this page your changes will be lost. Are you sure?,Tienes cambios pendientes&#44; si sale de esta página se perderán los cambios. ¿Estás seguro?
+landingpage-builder.are-you-sure,Are you sure,Estás seguro
+landingpage-builder.stay-on-the-page,Stay on this page!,Permanecer en esta página!
+landingpage-builder.leave-the-page,Leave the page,Salir de la página
+landingpage-builder.update-content,Update Content,actualización de contenido
+landingpage-builder.cancel-and-close,Cancel & Close,Cancelar y cerrar
+landingpage-builder.all-blocks,All Blocks,Todos los bloques
+landingpage-builder.blocks,Blocks,Bloques
+landingpage-builder.add-page,Add Page,Añadir página
+landingpage-builder.page-settings,Page Settings,Configuración de página
+landingpage-builder.nothing-to-save,Nothing to save,No hay nada que salvar
+landingpage-builder.detail-editor,Detail Editor,Editor detalle
+landingpage-builder.editing,editing,edición
+landingpage-builder.style,Style,Estilo
+landingpage-builder.link,Link,Enlazar
+landingpage-builder.icons,Icons,Iconos
+landingpage-builder.video,Video,Vídeo
+landingpage-builder.agile-form,Agile Form,Agile Forma
+landingpage-builder.link-text,Link text,Texto del enlace
+landingpage-builder.choose-a-page,Choose a page,Elija una página
+landingpage-builder.choose-a-block,Choose a block,Elija un bloque
+landingpage-builder.open-img-lib,Open image library,Abrir biblioteca de imágenes
+landingpage-builder.choose-a-icon,Choose an icon below,Elegir un icono de abajo
+landingpage-builder.youtube-video-id,Youtube Video ID,Youtube Video ID
+landingpage-builder.enter-youtube-video-id,Enter a Youtube video ID,Introduzca un ID de vídeo de Youtube
+others.or-cap,OR,O
+landingpage-builder.vimeo-video-id,Vimeo Video ID,Vimeo Video ID
+landingpage-builder.enter-vimeo-video-id,Enter a Vimeo video ID,Introduzca un ID de vídeo Vimeo
+landingpage-builder.changes-applied,The changes were applied successfully!,Los cambios se aplicaron correctamente!
+landingpage-builder.changes-apply,Apply changes,Aplicar cambios
+landingpage-builder.clone,Clone,Clon
+landingpage-builder.img-library,Image Library,Biblioteca de imágenes
+landingpage-builder.uploading-img,Uploading image,Carga de imágenes
+landingpage-builder.upload-img,Upload Image,Cargar imagen
+landingpage-builder.upload-img-info,You currently have no images uploaded. To upload images&#44; please use the upload panel on your left.,Actualmente no tiene imagenes actualizadas . Para subir imágenes&#44; por favor utilice el panel de subida en su izquierda .
+landingpage-builder.select-img,Select Image,Seleccionar imagen
+landingpage-builder.delete-block-confirm,Are you sure you want to delete this block?,¿Está seguro de que desea borrar este bloque ?
+landingpage-builder.reset-block-confirm,Are you sure you want to reset this block?,¿Está seguro de que desea restablecer este bloque ?
+landingpage-builder.all-changed-destroyed,All changes made to the content will be destroyed.,Todos los cambios realizados en el contenido serán destruidos .
+landingpage-builder.reset-block,Reset Block,Restaurar el bloque
+landingpage-builder.delete-page-confirm,Are you sure you want to delete this entire page?,¿Está seguro de que quiere borrar toda esta página ?
+landingpage-builder.delete-page,Delete Page,Eliminar página
+landingpage-builder.delete-element-info,Are you sure you want to delete this element? Once deleted&#44; it can not be restored.,¿Está seguro de que quiere eliminar este elemento ? Una vez eliminada&#44; no puede ser restaurado.
+landingpage-builder.delete-block,Delete Block,Eliminar Bloque
+landingpage-builder.saving-page-changes,Saving page settings,Ahorro de configuración de la página
+landingpage-builder.page-title,Page Title,Título de la Página
+landingpage-builder.page-title-sm,Page title,Título de la página
+landingpage-builder.page-meta-desc,Page Meta Description,La página de Meta Descripción
+landingpage-builder.page-meta-desc-sm,Page meta description,La página de descripción de la meta
+landingpage-builder.page-meta-keywords,Page Meta Keywords,Página Meta Keywords
+landingpage-builder.page-meta-keywords-sm,Page meta keywords,Palabras clave de la página meta
+landingpage-builder.page-header,Header Includes,Cabecera incluye
+landingpage-builder.page-header-info,Additional code you'd like to include in the,Código adicional que le gustaría incluir en el
+landingpage-builder.head-section,section,sección
+landingpage-builder.page-css,Page CSS,La página de CSS
+landingpage-builder.page-css-applied,CSS applied specifically to this page,CSS aplicado específicamente a esta página
+landingpage-builder.save-settings,Save Settings,Guardar ajustes
+landingpage-builder.page-name,Enter a name to the page,Introduzca un nombre para la página
+landingpage-builder.site-preview,Site Preview,Vista previa del sitio
+landingpage-builder.preview-saved-info,Please note that the preview will always show your latest saved version; changes which haven't been saved yet will not be visible in the preview.,Tenga en cuenta que la vista previa siempre mostrará su última versión guardada; cambios que no se han guardado aún no serán visibles en la vista previa .
+landingpage-builder.preview-changes,Preview Changes,Los cambios de previsualización
+landingpage-builder.headers,Headers,Encabezados
+landingpage-builder.save-now,Save now,Guardar ahora
+landingpage-builder.content-sections,Content Sections,Las secciones de contenido
+landingpage-builder.dividers,Dividers,Divisores
+landingpage-builder.portfolios,Portfolios,Carteras
+landingpage-builder.team,Team,Equipo
+landingpage-builder.pricing-tables,Pricing Tables,Las tablas de precios
+landingpage-builder.footers,Footers,Pies de página
+landingpage-builder.forms,Forms,Formas
+landingpage-builder.create-copy,Create a Copy,Crear una copia
+landingpage-builder.saved-successfully,Landing page have been saved successfully,La página de destino ha sido guardado con éxito
+landingpage-builder.publish-title,You can publish your page with a custom domain.,Puede publicar su página con un dominio personalizado .
+landingpage-builder.source,source,fuente
+landingpage-builder.Move,Move,Movimiento
