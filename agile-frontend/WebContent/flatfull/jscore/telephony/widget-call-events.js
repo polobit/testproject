@@ -142,7 +142,7 @@ $(function()
 		
 		e.preventDefault();
 		if(globalCall.lastSent){
-			if(globalCall.lastSent == "endCall"){
+			if(globalCall.lastSent == "cancelCall"){
 				console.log("duplicate command recived endCall");
 				closeCallNoty(true);
 				return;

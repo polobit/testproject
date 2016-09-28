@@ -125,6 +125,7 @@ function _getMessageSkype(message, callback){
 		}else if(globalCall.callStatus && globalCall.callStatus == "Connecting"){
 			globalCall.callStatus = "Busy";
 		}else if(globalCall.callStatus == "Failed" || globalCall.callStatus == "REFUSED" || globalCall.callStatus == "Ringing" || globalCall.callStatus == "Missed"){
+			resetglobalCallVariables();	
 			return;
 		}
 		
