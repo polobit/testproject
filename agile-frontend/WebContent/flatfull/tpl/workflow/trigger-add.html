@@ -101,7 +101,7 @@
                                 <div class="controls col-sm-8">
                                     <input type="text" value="{{custom_tags}}" id="trigger-custom-tags" name="custom_tags" class="required trigger-tags TAG_IS_ADDED TAG_IS_DELETED form-control m-b-n-xxs w-md" placeholder="Enter tag" style ="width:100%!imp" />
                                     <input type="text" placeholder="Enter Score" {{#if custom_score}} value="{{this.custom_score}}" {{/if}} id="trigger-custom-score" name="custom_score" class="ADD_SCORE required custom-value digits form-control w-md" />
-                                    <input type="text" placeholder="Enter KeyWord" {{#if sms_keyword}} value="{{this.sms_keyword}}" {{/if}} id="trigger-custom-keyword" name="sms_keyword" class="REPLY_SMS required form-control w-md" title={{agile_lng_translate 'campaigns' 'keyword-tooltip'}}/>
+                                    <input type="text" placeholder="Enter KeyWord" {{#if sms_keyword}} value="{{this.sms_keyword}}" {{/if}} id="trigger-custom-keyword" name="sms_keyword" class="REPLY_SMS required form-control w-md" title="{{agile_lng_translate 'campaigns' 'keyword-tooltip'}}"/>
                                 </div>
                             </div>
                         </div>
@@ -136,6 +136,10 @@
 								<div class="controls col-sm-offset-4 col-sm-8">	
 									<select name="sms_reply" class="required form-control w-md">		 <option  class="REPLY_SMS" value="">Select a number</option>				
 									</select>
+									<div class="m-t-xs">
+										<small>"{{agile_lng_translate 'campaigns' 'setuptwilio'}}"<a href="#integrations" class="text-info">"{{agile_lng_translate 'campaigns' 'here'}}"</a>
+										</small>
+									</div>
 								</div>
 							</div>
 						</div>
