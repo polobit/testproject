@@ -664,7 +664,7 @@ function getContactCustomProperties(items)
 		for(var i=0;i<App_Companies.customFieldsList.collection.models.length;i++){
 			curr_scope = App_Companies.customFieldsList.collection.models[i].get("scope");
 			if(curr_route==curr_scope){
-				if(App_Companies.customFieldsList.collection.models[i].get("position")==0){
+				if(App_Companies.customFieldsList.collection.models[i].get("position")==0 || App_Companies.customFieldsList.collection.models[i].get("position")==""){
 					position_arr[''+App_Companies.customFieldsList.collection.models[i].get("field_label")] = position_max;
 					position_max++;
 				}else{
@@ -830,7 +830,7 @@ function getCompanyCustomProperties(items)
 		for(var i=0;i<App_Companies.customFieldsList.collection.models.length;i++){
 			curr_scope = App_Companies.customFieldsList.collection.models[i].get("scope");
 			if(curr_route==curr_scope){
-				if(App_Companies.customFieldsList.collection.models[i].get("position")==0){
+				if(App_Companies.customFieldsList.collection.models[i].get("position")==0 || App_Companies.customFieldsList.collection.models[i].get("position")==""){
 					position_arr[''+App_Companies.customFieldsList.collection.models[i].get("field_label")] = position_max;
 					position_max++;
 				}else{
