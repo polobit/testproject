@@ -57,7 +57,16 @@ JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "onli
 				}
 				calendar_url=dom_user.getCalendarURL();
 				appointment_cancel_info = true;
-				event_title=event_title.substring(0,event_title.indexOf("with")).trim();
+				System.out.println("event_title before : "+event_title);
+				int index = event_title.indexOf("with");				
+				if(index >= 0){
+					event_title = event_title.substring(0, index).trim();
+				}	
+				System.out.println("event_title after : "+event_title);			
+				System.out.println("timezone : "+timezone);
+				System.out.println("event : "+event);
+				System.out.println("event : "+event.toString());
+				
 				event_start = WebCalendarEventUtil
 						.getGMTDateInMilliSecFromTimeZone(timezone,
 								event.start * 1000, new SimpleDateFormat(
