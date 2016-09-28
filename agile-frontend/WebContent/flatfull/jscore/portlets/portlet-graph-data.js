@@ -931,9 +931,13 @@ var portlet_graph_data_utility = {
 							emailsOpenedCount = data["emailsOpenedCount"];
 
 							var series = [];
-							series.push([ "Emails Sent",
-									emailsSentCount - emailsOpenedCount ]);
-							series.push([ "Emails Opened", emailsOpenedCount ]);
+							if(emailsSentCount==0 && emailsOpenedCount==0)
+								series.push([ "Emails Sent",1]);
+							else{
+								series.push([ "Emails Sent",
+										emailsSentCount - emailsOpenedCount ]);
+								series.push([ "Emails Opened", emailsOpenedCount ]);
+							}
 
 							portlet_graph_utility.emailsOpenedPieChart(
 									selector, series, emailsSentCount,
