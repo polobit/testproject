@@ -15,6 +15,7 @@ var DataSync_Event_Modal_View = Base_Model_View.extend({
         'click #quickbook_sync_prefs': 'syncQuickbooks',
         'click #freshbooks_sync_prefs': 'syncFreshbooks',
         'click #data-sync-type':'enableDataSyncWidget',
+        'click .my_contacts_set' : 'checkMyContactType'
     },
 
     /**
@@ -181,9 +182,10 @@ var DataSync_Event_Modal_View = Base_Model_View.extend({
 
             var url = DATA_SYNC_URL + "/GOOGLE";
           //  $(ele).after(getRandomLoadingImg());
-            model.url = url + "?sync=true"
+            model.url = url + "?sync=true&my_contacts_enable="+DataSync_Event_Modal_View.my_contacts_value;
             model.save({}, {
                 success: function(data) {
+                  DataSync_Event_Modal_View.my_contacts_value=false;
                     show_success_message_after_save_button(_agile_get_translated_val("misc-keys", "sync-init"), App_Datasync.dataSync.el);
                     /*setTimeout(function() {
                                  $(ele).removeAttr("disabled");
@@ -354,6 +356,12 @@ var DataSync_Event_Modal_View = Base_Model_View.extend({
                         });
                     },true);
                     
+    },
+
+    checkMyContactType :function(e){
+       if($('.my_contacts_set:checked').length==0)
+         DataSync_Event_Modal_View.my_contacts_value=true;
+
     }
 
 });
