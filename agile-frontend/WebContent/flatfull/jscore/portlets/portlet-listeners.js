@@ -326,6 +326,10 @@ function initializePortletsListeners() {
 	}).on("show.bs.popover", function(e){ 
 				setTimeout(function(event){
     				var $target = $(e.target);
+				if (document.getElementById('extension-is-installed')) {
+				  $("#chrome-extension").css({"pointer-events": "none", "opacity": "0.4"});
+				  //alert("Already installed");
+				}
     				console.log("$target = "+ $target);
     				$('[data-toggle="tooltip"]').tooltip();
     			},100);	
