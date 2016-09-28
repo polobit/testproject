@@ -278,10 +278,13 @@ public class TicketNotes
 			String startTag = "<script>";
 		    String endTag = "</script>";
 
+		    String plainText = plain_text;
 		    //removing the text between script
+		    if(plain_text.indexOf(startTag) != -1){
 		    sb.replace(plain_text.indexOf(startTag) + startTag.length(), plain_text.indexOf(endTag), "");
 		    
-		    String plainText = sb.toString();
+		     plainText = sb.toString();
+		    }
 
 			// Logging notes activity
 			ActivityUtil.createTicketActivity(activityType, ticket.contactID, ticket.id, plainText, html_text,
@@ -323,9 +326,11 @@ public class TicketNotes
 	    String endTag = "</script>";
 
 	    //removing the text between script
+	    if(plain_text.indexOf(startTag) != -1){
 	    sb.replace(plain_text.indexOf(startTag) + startTag.length(), plain_text.indexOf(endTag), "");
 	    
 	    plain_text = sb.toString();
+	    }
 	}
 
 	/**
