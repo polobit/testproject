@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <%@page import="com.agilecrm.session.KnowledgebaseUserInfo.Role"%>
 <%@page import="com.agilecrm.session.KnowledgebaseUserInfo"%>
 <%@page import="com.agilecrm.session.KnowledgebaseManager"%>
@@ -76,25 +75,11 @@
 	if(landingPage == null)
 	throw new Exception("No landing page found.");
 
-	String fullXHtml = landingPage.html;
-	fullXHtml =  new LandingPageServlet().getResponsiveMediaIFrame(fullXHtml);
-
-	String domainHost = "http://localhost:8888";
-	if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Production) {
-		domainHost = "https://" + lpUtil.requestingDomain +  ".agilecrm.com";		
-		//domainHost = "https://" + lpUtil.requestingDomain + "-dot-sandbox-dot-agilecrmbeta.appspot.com";
-	}
-
-	String analyticsCode = "";
-			
-	if(landingPage.elements_css != null){
-		fullXHtml = fullXHtml.replace("</head>", "<style id=\"elements-css\">"+landingPage.elements_css+"</style></head>");	
-	}
-	fullXHtml = fullXHtml.replace("</head>", "<style>"+landingPage.css+"</style></head>");
-	fullXHtml = fullXHtml.replace("</body></html>", landingPage.js+"</script>");		
-		
-
-	out.write(fullXHtml);
+	LandingPageHelper lpHelper = new LandingPageHelper(landingPage);
+	lpHelper.constructPageCode();
+	String headerContent = lpHelper.getPageHeader();
+	String footerContent = lpHelper.getPagefooter();
+	
 		}
 	} catch (Exception e) {
 	} finally {
@@ -138,8 +123,14 @@ if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Produ
    
 }
 
+
+out.write(headerContent);
+
+footerContent.replace("</body>","");
+footerContent.replace("</html>","");
+out.write(footerContent);
 %>
-<link rel="stylesheet" type="text/css" href="flatfull/css/min/css-all-min.css?_=<%=_AGILE_VERSION%>"></link>
+
   <script src='//cdnjs.cloudflare.com/ajax/libs/headjs/1.0.3/head.min.js'></script>
 <script>
 
