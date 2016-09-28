@@ -498,7 +498,7 @@ public class Contact extends Cursor
     			ContactField nameField = this.getContactFieldByName(Contact.NAME);
     			if(!ContactUtil.isValidName(nameField.value)){
     				throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-    					    .entity(nameField.value+"::Invalid Company Name. Which contains special characters.").build());
+    					    .entity(nameField.value+"::Invalid Company Name, contains special characters.").build());
     			}
     		}
     	}
