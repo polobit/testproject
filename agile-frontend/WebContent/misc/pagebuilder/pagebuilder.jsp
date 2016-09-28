@@ -11,7 +11,6 @@ pageEncoding="UTF-8"%>
 <%
 String AGILE_VERSION = SystemProperty.applicationVersion.get();
 
-String ENVIRONMENT = "local";
 String MAIN_URL = "http://localhost:8888/";
 if(!VersioningUtil.isDevelopmentEnv())
     MAIN_URL = VersioningUtil.getURL(NamespaceManager.get(), request);
@@ -21,8 +20,8 @@ String S3_STATIC_FILES_URL = S3_BASE_URL + "static/";
 String PAGE_BUILDER_URL = MAIN_URL + "misc/pagebuilder/";
 String BUILD_PATH = PAGE_BUILDER_URL + "source/build/";
 
-if(!VersioningUtil.isDevelopmentEnv() && !StringUtils.isEmpty(VersioningUtil.getAppVersion(request)))
-	BUILD_PATH = S3_BASE_URL + ENVIRONMENT + "/build/";
+if(!VersioningUtil.isDevelopmentEnv() && StringUtils.isEmpty(VersioningUtil.getAppVersion(request)))
+	BUILD_PATH = S3_BASE_URL + "live/build/";
 
 String idPath = request.getPathInfo();
 String pageId = "0";
