@@ -84,6 +84,9 @@
                 <exclude name="misc/landingpage/source/**/*"/>
             </fileset>
         </copy>
+        <copy todir="${TARGET_DIR}/${ant.project.name}.war/misc/pagebuilder/source/build">
+               <fileset dir="WebContent/misc/pagebuilder/source/build" />
+        </copy>
         <!--Copy application libraries to target -->
         <copy todir="${TARGET_DIR}/${ant.project.name}.war/WEB-INF/lib">
             <fileset dir="${LIB_DIR}" />
