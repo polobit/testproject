@@ -2957,7 +2957,7 @@ widgets.validating,Validating...,Validando…,,,,,,,,,,,,,
 companies-view.add-companies,Add Companies,Añadir Empresas,,,,,,,,,,,,,
 campaigns.added-to-deal,Added to Deal,Añadido a Oferta,,,,,,,,,,,,,
 admin-settings-users.manage-events,Manage Events,Manejo de Eventos,,,,,,,,,,,,,
-theme.menu-position,Menu position,Posición de menú,,,,,,,,,,,,,
+theme.menu-position,Menu Position,Posición de menú,,,,,,,,,,,,,
 web-rules.documentation,documentation,documentación,,,,,,,,,,,,,
 admin-settings-integrations.create-a-form,Create a form,Crear un formulario,,,,,,,,,,,,,
 billing.have-only,You have only,Sólo tiene,,,,,,,,,,,,,
@@ -5748,3 +5748,5 @@ Plan-and-upgrade.your-invoice-of,Your invoice of,
 Plan-and-upgrade.has-been-generated-on,has been generated on,
 contacts-view.csv-file-desc-with-activity,We will email you the CSV file shortly and also show it in User Activities. Proceed?,
 web-rules.templates-sub-heading,Select a template and start creating Web Rules.,Seleccione una plantilla y empezar a crear reglas Web.
+theme.maximum-pagesize,Maximum Page Size,Máximo tamaño de página
+theme.showconverstionperpage,Show conversations per page,Mostrar conversaciones por página

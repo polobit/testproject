@@ -26,17 +26,21 @@
                     </div>
 
                     <div class="control-group form-group hidden-xs">
-                        <label class="control-label col-sm-4">Maximum page size 
+                        <label class="control-label col-sm-4">{{agile_lng_translate 'theme' 'maximum-pagesize'}} 
                         </label> 
                         <div class="controls col-sm-8">
                            <!--<input class="field required form-control number" id="page_size" name="page_size" required="" type="number" pattern="\d*" min="1" placeholder="" autocapitalize="off">-->
                            <select name="customize_cursor" id="customize_cursor" class="form-control">
-                           <option value="20">20</option>
+                           
                            <option value="25">25</option>
                           <option value="50">50</option>
+                          <option value="75">75</option>
 
                            </select>
                         </div>
+                        <div class="text-muted">
+                            <div class="col-sm-offset-4 col-sm-8 text-xs p-l">{{agile_lng_translate 'theme' 'showconverstionperpage'}}</div>
+                    </div>
                     </div>
 
 
