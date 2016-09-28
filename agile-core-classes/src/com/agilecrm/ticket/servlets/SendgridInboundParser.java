@@ -602,7 +602,7 @@ public class SendgridInboundParser extends HttpServlet
 				 * any number from 1-9). If so we need to encode content with
 				 * Base64Encoder.
 				 */
-				if (fieldName.matches("^attachment\\d$") && !ignoreBase64Conversion.contains(contentType))
+				if (fieldName.matches("^attachment\\d+$") && !ignoreBase64Conversion.contains(contentType))
 				{
 					System.out.println("Encoding to base64....");
 
