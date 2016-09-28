@@ -1911,7 +1911,7 @@ public class CSVUtil
 
 	if (totalRecords >= 1)
 	{
-	    String[] strArr = { "text/csv", "ImportContactsRemarks.csv", csvData };
+	    String[] strArr = { "text/csv", "Import_Contacts_Remarks.csv", csvData };
 	    SendMail.sendMail(domainUser.email, "CSV Contacts Import Status", SendMail.CSV_IMPORT_NOTIFICATION,
 		    new Object[] { domainUser, status }, SendMail.AGILE_FROM_EMAIL, SendMail.AGILE_FROM_NAME, strArr);
 	}
@@ -1934,7 +1934,7 @@ public class CSVUtil
 
     	if (totalRecords >= 1)
     	{
-    	    String[] strArr = { "text/csv", "ImportCompaniesRemarks.csv", csvData };
+    	    String[] strArr = { "text/csv", "Import_Companies_Remarks.csv", csvData };
     	    SendMail.sendMail(domainUser.email, "CSV Companies Import Status", SendMail.CSV_IMPORT_NOTIFICATION,
     		    new Object[] { domainUser, status }, SendMail.AGILE_FROM_EMAIL, SendMail.AGILE_FROM_NAME, strArr);
     	}
