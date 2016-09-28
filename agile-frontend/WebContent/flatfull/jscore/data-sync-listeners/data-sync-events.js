@@ -359,8 +359,15 @@ var DataSync_Event_Modal_View = Base_Model_View.extend({
     },
 
     checkMyContactType :function(e){
-       if($('.my_contacts_set:checked').length==0)
-         DataSync_Event_Modal_View.my_contacts_value=true;
+       if($('.my_contacts_set:checked').length==0){
+        showAlertModal("sync_contacts", "confirm", function() {
+           DataSync_Event_Modal_View.my_contacts_value=true;
+       },
+         function() {
+             $(".my_contacts_set").prop("checked",true);
+          }
+       );
+       }
 
     }
 
