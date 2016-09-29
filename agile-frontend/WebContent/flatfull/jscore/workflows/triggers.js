@@ -886,8 +886,10 @@ function getFormNameCellIDForFormSubmitTriggers(formID)
 function getNumbersForSmsTrigger(trigger_form){
 	var numbers=getTwilioIncomingListForSms();
 	var numHtml="";
-	if(numbers==null)
+	if(numbers==null){
+		trigger_form.find('div#setuptwilio').show();
 		return;
+	}
 	$.each(numbers,function(index,num){ 				
  		numHtml = numHtml +	'<option class="REPLY_SMS" value="'+num+'" >'+num +'</option>';
  	});

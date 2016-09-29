@@ -79,8 +79,8 @@
 										<option value="TICKET_LABEL_IS_DELETED">Ticket label is deleted</option>
 										<!-- <option value="SLA_CROSSED">SLA crossed</option> --> 
 
-										<optgroup label="Sms">
-										<option value="REPLY_SMS">Reply Sms</option>
+										<optgroup label="{{agile_lng_translate 'campaigns' 'sms_trigger'}}">
+										<option value="REPLY_SMS">{{agile_lng_translate 'campaigns' 'reply-sms'}}</option>
 
 									</select>
                                 </div>
@@ -101,7 +101,7 @@
                                 <div class="controls col-sm-8">
                                     <input type="text" value="{{custom_tags}}" id="trigger-custom-tags" name="custom_tags" class="required trigger-tags TAG_IS_ADDED TAG_IS_DELETED form-control m-b-n-xxs w-md" placeholder="Enter tag" style ="width:100%!imp" />
                                     <input type="text" placeholder="Enter Score" {{#if custom_score}} value="{{this.custom_score}}" {{/if}} id="trigger-custom-score" name="custom_score" class="ADD_SCORE required custom-value digits form-control w-md" />
-                                    <input type="text" placeholder="Enter KeyWord" {{#if sms_keyword}} value="{{this.sms_keyword}}" {{/if}} id="trigger-custom-keyword" name="sms_keyword" class="REPLY_SMS required form-control w-md" title="{{agile_lng_translate 'campaigns' 'keyword-tooltip'}}"/>
+                                    <input type="text" placeholder="{{agile_lng_translate 'campaigns' 'enter-keyword'}}" {{#if sms_keyword}} value="{{this.sms_keyword}}" {{/if}} id="trigger-custom-keyword" name="sms_keyword" class="REPLY_SMS required form-control w-md" title="{{agile_lng_translate 'campaigns' 'keyword-tooltip'}}"/>
                                 </div>
                             </div>
                         </div>
@@ -134,11 +134,12 @@
 						<div class="control-group form-group" style="display: none;">
 							<div id="SMS">
 								<div class="controls col-sm-offset-4 col-sm-8">	
-									<select name="sms_reply" class="required form-control w-md">		 <option  class="REPLY_SMS" value="">Select a number</option>				
+									<select name="sms_reply" class="required form-control w-md">		 <option  class="REPLY_SMS" value="">{{agile_lng_translate 'campaigns' 'reply-number'}}</option>				
 									</select>
-									<div class="m-t-xs">
-										<small style="color: rgba(0,0,0,0.87);">"{{agile_lng_translate 'campaigns' 'setuptwilio'}}"<a href="#integrations" class="text-info">"{{agile_lng_translate 'campaigns' 'here'}}"</a>
-										</small>
+									<div class="m-t-xs " style="display:none;" id="setuptwilio">
+										<small style="color: rgba(0,0,0,0.87);">{{agile_lng_translate 'campaigns' 'setuptwilio'}}
+										<a href="#integrations" class="text-info">{{agile_lng_translate 'campaigns' 'here'}}</a>
+									</small>
 									</div>
 								</div>
 							</div>
@@ -347,7 +348,7 @@
 											</li>
 
 											<li role="presentation" data-tab="10">
-												<a href="#sms" name="tab10" aria-control="tab10"role="tab" data-toggle="tab" id="tab10">Sms</a>
+												<a href="#sms" name="tab10" aria-control="tab10"role="tab" data-toggle="tab" id="tab10">{{agile_lng_translate 'campaigns' 'sms_trigger'}}</a>
 											</li>
 </ul>
 
@@ -1053,17 +1054,17 @@
 		                    <!-- Icon and Title -->
 		                    <div>
 		                        <div>
-		                            <i class="icon-call-in icon-3x"></i>
+		                            <img id="icon" border="0" src="json/nodes/icons/sms/replysmstrigger.png" width="66px" height="66px" >
 		                        </div>
-		                        <b>REply Sms</b>
+		                        <b>{{agile_lng_translate 'campaigns' 'reply-sms'}}</b>
 		                    </div>
 		                    <br/>
 		                    <div class="ellipsis-multiline m-b-md" rel="tooltip">
-		                       hello
+		                       {{agile_lng_translate 'campaigns' 'reply-sms-desc'}}
 		                    </div>
 		                    <!-- Add button -->
 		                    <div>
-		                        <a class="btn btn-sm btn-default add-trigger" data = "REPLY_SMS"  >Go</a>
+		                        <a class="btn btn-sm btn-default add-trigger" data = "REPLY_SMS"  >{{agile_lng_translate 'campaigns' 'go'}}</a>
 		                    </div>
 		                </div>
 		            </div>
