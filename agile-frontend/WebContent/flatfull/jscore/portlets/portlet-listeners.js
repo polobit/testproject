@@ -1473,7 +1473,7 @@ function iosExtensionRequest(){
 }
 
 function installChromeExtension(e){
-		if (document.getElementById('extension-is-installed')) {
+		if (document.getElementById('agilecrm_extension')) {
 			e.preventDefault();
 			return;
 		}

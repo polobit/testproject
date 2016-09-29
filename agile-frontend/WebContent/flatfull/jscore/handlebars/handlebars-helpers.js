@@ -7818,9 +7818,9 @@ Handlebars.registerHelper("convertToi18ForCall",function(value)
 
 Handlebars.registerHelper('isExtensionInstalled', function(options)
 {
-	if (document.getElementById('extension-is-installed')) 
+	if (document.getElementById('agilecrm_extension')) 
 		return options.fn(this);
-	
+
 	return options.inverse(this);
  		 
 });
