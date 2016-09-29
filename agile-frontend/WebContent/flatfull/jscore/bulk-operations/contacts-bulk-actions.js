@@ -1364,13 +1364,19 @@ function postBulkOperationData(url, data, form, contentType, callback, error_mes
 			Backbone.history.navigate(App_Companies.Company_detail_route,{trigger : true});
 		else if(!company_util.isCompany()){
 			// On save back to contacts list
-			CONTACTS_HARD_RELOAD = true;
 			Backbone.history.navigate("contacts", { trigger : true });
+			setTimeout(function(){
+			  CONTACTS_HARD_RELOAD = true;
+				contacts_view_loader.getContacts(App_Contacts.contactViewModel, $("#contacts-listener-container"));
+			}, 700);
 		}
 
 		else{
-			COMPANIES_HARD_RELOAD = true;
 			Backbone.history.navigate("companies", { trigger : true });
+			setTimeout(function(){
+				COMPANIES_HARD_RELOAD = true;
+				companies_view_loader.getCompanies(App_Companies.companyViewModel, $('#companies-listener-container'));
+			}, 700);
 		}
 
 		// If no_noty is given as error message, neglect noty
