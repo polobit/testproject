@@ -1736,10 +1736,10 @@ public class PortletUtil {
 	}
 	
 	public static List<Activity> getPortletActivitydata(String entitytype, Long userid, int max,
-			String cursor, Long starttime, Long endtime,String dashboard_name) {
+			String cursor, Long starttime, Long endtime) {
 		
 		List<Activity> list = ActivityUtil.getActivititesBasedOnSelectedConditon(entitytype, userid, max, cursor,
-	        starttime, endtime,null,dashboard_name);
+	        starttime, endtime,null,"");
 		System.out.println("Size of List"+list.size());
 		System.out.println(list);
 		return list;

@@ -1,6 +1,7 @@
 package com.agilecrm.activities.util;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -1877,35 +1878,18 @@ public class ActivityUtil
 	 * @return
 	 */
 	public static List<Activity> getActivititesBasedOnSelectedConditon(String entitytype, Long userid, int max,
-			String cursor, Long starttime, Long endtime, Long entityId,String dashboardName)
+			String cursor, Long starttime, Long endtime, Long entityId,String activityTypeArray)
 	{
+		List<String> items = new ArrayList<String>();
 		
-		List<String> allEntityType = new ArrayList<String>();
-		String[] sales = {"CONTACT", "DEAL", "TASK","EVENT","DOCUMENT","USER"};
-		String[] marketing = {"CONTACT","CAMPAIGN","USER"};
-		String[] service = {"CONTACT","TICKET","USER"};
-		String[] array = {};
-		switch(dashboardName){
-		 case "SalesDashboard" :
-			 array = sales;
-			 break;
-		 case "MarketingDashboard" :
-			 array = marketing;
-			 break;
-		 case "dashboard" :
-			 array = service;
-			 break;
+		if(StringUtils.isNotEmpty(activityTypeArray)){
+			 items = Arrays.asList(activityTypeArray.split("\\s*,\\s*"));
 		}
-		
-		for(int i=0;i<array.length;i++){
-			allEntityType.add(array[i]);
-		}
-		dao.ofy().query(Activity.class).filter("entity_type", "ALL").filter("entitytype in",allEntityType);
 		
 		Map<String, Object> searchMap = new HashMap<String, Object>();
 		
-		if(entitytype.equalsIgnoreCase("ALL")){
-			searchMap.put("entity_type in",allEntityType);
+		if(entitytype.equalsIgnoreCase("ALL") && items != null && items.size() != 0){
+			searchMap.put("entity_type in",items);
 		}
 		
 		if (!entitytype.equalsIgnoreCase("ALL") && !entitytype.equalsIgnoreCase("CALL"))

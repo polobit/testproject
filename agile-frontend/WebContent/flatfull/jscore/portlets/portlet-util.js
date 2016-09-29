@@ -756,11 +756,6 @@ var portlet_utility = {
 					&& base_model.get('settings').owner != "") 
 				options+='&user_id='+base_model.get('settings').owner;
 
-			 var dashboard_name = _agile_get_prefs("dashboard_"+CURRENT_DOMAIN_USER.id);
-			 if(!dashboard_name || dashboard_name == undefined ){
-			    dashboard_name = "SalesDashboard";
-			 }
-			 options+='&dashboard_name='+dashboard_name;
 			App_Portlets.activity[parseInt(pos)] = new Base_Collection_View({
 				url : '/core/api/portlets/customer-activity'+options
 				+ '&start_time='

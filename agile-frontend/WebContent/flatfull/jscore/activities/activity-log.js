@@ -40,7 +40,7 @@ function buildActivityFilters(name,valueid,clickedFrom){
 function renderActivityView(params)
 {
 	// Creates backbone collection view
-	this.activitiesview = new Base_Collection_View({ url : '/core/api/activitylog/getActivitiesOnSelectedCondition' + params, sortKey : 'time',
+	this.activitiesview = new Base_Collection_View({ url : '/core/api/activitylog/getActivitiesOnSelectedCondition' + params,sortKey : 'time',
 		descending : true, templateKey : "activity-list-log", sort_collection : false, cursor : true, scroll_symbol : 'scroll', page_size : 10,
 		individual_tag_name : 'li', postRenderCallback : function(el)
 		{
@@ -142,7 +142,26 @@ function getActivityFilterParameters(loadingFirstTime,campaignHistory)
 		 if(!dashboard_name || dashboard_name == undefined ){
 		    dashboard_name = "SalesDashboard";
 		 }
-		 params += ("&dashboard_name=" + dashboard_name);
+		
+		var b =[];
+		var listItems= "";
+
+			if(entitytype == "ALL"){
+				$(".dashboard-activities li").each(function( index ) {
+					var eachLi = $(".dashboard-activities li");
+					b.push($(eachLi[index]).attr("data-type"));
+				});
+				var indexofall = b.indexOf("ALL");
+				b.splice(indexofall,1);	
+				listItems = b.join(',');
+			}
+			else{
+				b.push(entitytype);
+				listItems = b.join(',');
+			}
+
+
+		params += ("&activityTypeArray=" +listItems );
 
 		return params;
 	}
@@ -162,84 +181,108 @@ function getActivityFilterParameters(loadingFirstTime,campaignHistory)
      if(!dashboard_name || dashboard_name == undefined ){
         dashboard_name = "SalesDashboard";
      }
-     params += ("&dashboard_name=" + dashboard_name);
+    
 
-     /*var activity_json = {};
+	var allListItemsinDropdown =  $(".dashboard-activities li");
 
-    switch(dashboard_name){
-     case "SalesDashboard" :
-         activity_json["entity_type"] = ["CONTACT", "DEAL", "TASK","EVENT","DOCUMENT","USER"];
-         break;
-     case "MarketingDashboard" :
-          activity_json["entity_type"] = ["CONTACT","CAMPAIGN","USER"];
-          break;
-     case "dashboard" :
-         activity_json["entity_type"] = ["CONTACT","TICKET","USER"];
-         break;
-	}
 
-	console.log("activity_json = "+activity_json);*/
+
 
 	if (user)
 		params += ("&user_id=" + user);
 	// Get owner name and append it to params
 
-	
+	var b= [];
+	var listItems= "";
 	if (entitytype == 'TASK')
 	{
 		params += ("&entity_type=" + entitytype);
+		b.push(entitytype);
+		listItems = b.join(",");
+		params += ("&activityTypeArray=" +listItems);
 		return params;
 	}
 
 	else if (entitytype == 'DEAL')
 	{
 		params += ("&entity_type=" + entitytype);
+		b.push(entitytype);
+		listItems = b.join(",");
+		params += ("&activityTypeArray=" +listItems);
 		return params;
 	}
 	else if (entitytype == 'USER')
 	{
 		params += ("&entity_type=" + entitytype);
+		b.push(entitytype);
+		listItems = b.join(",");
+		params += ("&activityTypeArray=" +listItems);
 		return params;
 	}
 
 	else if (entitytype == 'EVENT')
 	{
 		params += ("&entity_type=" + entitytype);
+		b.push(entitytype);
+		listItems = b.join(",");
+		params += ("&activityTypeArray=" +listItems);
 		return params;
 	}
 	else if (entitytype == 'CONTACT')
 	{
 		params += ("&entity_type=" + entitytype);
+		b.push(entitytype);
+		listItems = b.join(",");
+		params += ("&activityTypeArray=" +listItems);
 		return params;
 	}
 	else if (entitytype == 'DOCUMENT')
 	{
 		params += ("&entity_type=" + entitytype);
+		b.push(entitytype);
+		listItems = b.join(",");
+		params += ("&activityTypeArray=" +listItems);
 		return params;
 	}
 	else if (entitytype == 'CALL')
 	{
 		params += ("&entity_type=" + entitytype);
+		b.push(entitytype);
+		listItems = b.join(",");
+		params += ("&activityTypeArray=" +listItems);
 		return params;
 	}
 	else if (entitytype == 'TICKET')
 	{
 		params += ("&entity_type=" + entitytype);
+		b.push(entitytype);
+		listItems = b.join(",");
+		params += ("&activityTypeArray=" +listItems);
 		return params;
 	}
 	else if (entitytype == 'CAMPAIGN')
 	{
 		params += ("&entity_type=" + entitytype);
+		b.push(entitytype);
+		listItems = b.join(",");
+		params += ("&activityTypeArray=" +listItems);
 		return params;
 	}
 	else
 	{
 		params += ("&entity_type=ALL");
+		$(".dashboard-activities li").each(function( index ) {
+			var eachLi = $(".dashboard-activities li");
+			b.push($(eachLi[index]).attr("data-type"));
+		});
+		var indexofall = b.indexOf("ALL");
+		b.splice(indexofall,1);	
+		listItems = b.join(',');
+		params += ("&activityTypeArray=" + listItems);
 		return params;
 	}
-
-
-
+	
+	
 	return params;
 }
 

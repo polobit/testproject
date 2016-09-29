@@ -164,8 +164,9 @@ public class Activity extends Cursor
     @NotSaved(IfDefault.class)
     public String label = null;
     
+    
     @NotSaved(IfDefault.class)
-    public String dashboard_name = null;
+    public String activityTypeArray = null;
 
     /**
      * Time of activity performed.
