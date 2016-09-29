@@ -4337,7 +4337,7 @@ border-bottom-right-radius:3px;
 text-align:center;
 border: 1px solid #e5e5e5;
 }
-.extensionPopovers
+.extension-popover li
 {
 
   width:60px !important;
@@ -4350,7 +4350,7 @@ border: 1px solid #e5e5e5;
 
 }
 .grid-sub-nav li#betasuccess {
-    width: 213px;
+    width: 213px !important;
 }
 @-moz-document url-prefix(){
     .grid-sub-nav li{
@@ -4772,9 +4772,10 @@ ul#recent-menu-model-list li:nth-child(even)
   background-color: #fff!important;
 }
 
-.chrome-extenstion-disabled{
-  pointer-events:none;
+.disable-chrome-extenstion
+{
   opacity: 0.65;
+  cursor: not-allowed;
 }
 .call-log-input:focus{
   border-color: rgba(82,168,236,.8) !important;
@@ -4788,3 +4789,4 @@ ul#recent-menu-model-list li:nth-child(even)
 .p-t-7{
   padding-top: 7px;
 }
+

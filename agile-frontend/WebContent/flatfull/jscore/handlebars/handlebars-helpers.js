@@ -7815,3 +7815,12 @@ Handlebars.registerHelper("convertToi18ForCall",function(value)
 	return value;
 	
 });
+
+Handlebars.registerHelper('isExtensionInstalled', function(options)
+{
+	if (document.getElementById('extension-is-installed')) 
+		return options.fn(this);
+	
+	return options.inverse(this);
+ 		 
+});
