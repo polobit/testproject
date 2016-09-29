@@ -4,6 +4,8 @@
 <%@page import="com.agilecrm.user.DomainUser"%>
 <%@page import="com.agilecrm.ticket.utils.TicketNotesUtil"%>
 <%@page import="java.lang.*"%>
+<%@page import="com.agilecrm.account.util.AccountPrefsUtil"%>
+<%@page import="com.agilecrm.account.AccountPrefs"%>
 <%
 //flatfull path
 String flatfull_path="/flatfull";
@@ -14,6 +16,9 @@ String feedback = request.getParameter("feedback");
 Long note_id = Long.parseLong(request.getParameter("note"));
 String feedback_rating = feedback;
 
+// Users can show their company logo on login page. 
+AccountPrefs accountPrefs = AccountPrefsUtil.getAccountPrefs();
+String logo_url = accountPrefs.logo;
 
 if(!StringUtils.isEmpty(feedback) || note_id == null )
 {
@@ -53,10 +58,9 @@ String S3_STATIC_IMAGE_PATH = VersioningUtil.getStaticFilesBaseURL().replace("fl
 <%@ include file="ios-native-app-meta-tags.jsp"%>
 
 <style>
-body {
+body{
 	background-color: #fff;
 }
-
 label{
     display: inline-block;
     max-width: 100%;
@@ -65,10 +69,11 @@ label{
     font-size: 15px;
     font-family: Arial;
 }
-
-
-.text-white {
-	color: #fff !important;
+.poweredby{
+	font: 700 12px/11px 'Open Sans',Helvetica,Arial,sans-serif!important;
+    letter-spacing: 2px;
+    right: 20px;
+    bottom: 10px;
 }
 
 input {
@@ -76,12 +81,10 @@ input {
 }
 
 a:hover {
-	text-decoration: none;
+	
+	border-bottom:1px dashed #A9A9A9;
 }
 
-.error {
-	color: red !important;
-}
 
 .text-area {
 	height: 117px;
@@ -92,9 +95,6 @@ a:hover {
 	color: #000 !important;
 }
 
-.alert-success {
-	color: #3c763d !important;
-}
 
 @media all and (max-width: 767px) {
 	body {
@@ -102,27 +102,12 @@ a:hover {
 	}
 }
 
-<!--
-@media ( min-width : 900px) {
-	body {
-		padding-top: 30px;
-	}
-	.navbar-search {
-		padding-left: 10%
-	}
-}
+
 
 .field {
 	height: 30px !important;
 	margin: 8px 0px !important;
 	padding-left: 10px !important;
-}
-.transperantbutton{
-background: none!important;
-    border: none;
-    padding: 0!important;
-    font: inherit;
-    cursor: pointer;
 }
 .well {
     border-radius: 0px !important;
@@ -131,7 +116,7 @@ background: none!important;
     -webkit-box-shadow: inset 0 0px 0px rgba(0,0,0,0.05);
     box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2), 0 3px 10px 0 rgba(0, 0, 0, 0.19);
 }
--->
+
 </style>
 
 <!-- JQUery Core and UI CDN -->
@@ -178,12 +163,12 @@ var id = <%=note_id%>
 
 		<form role="form" id="agile-form" class="form-horizontal"  onsubmit="saveTicketFeedback(event)">
 			 <div class="form-group m-t m-b-none" style="text-align:center;background-color:#FDFBFB;vertical-align: middle;margin-top: 0px;margin-bottom: 14px !important;">			 
-				<img  src="/img/agile-crm-logo.png">			
+				<img  style="width:80px;" src="<%=logo_url%>">			
 			</div>
 			<div class="line line-lg " style="margin-top: 11px;border-bottom: 1px solid #E2DCDC"></div>
 			<div style="display: table;width: 70%;margin: 0 auto;">
-			<div class="form-group" style="margin-top:10px;">
-			<label class="label-opacity" >How would you rate the support recived?</label>
+			<div class="form-group" style="padding: 10px;margin-top: 10px;background-color: #f6f6f6;border-radius: 12px;border: 1px solid #A9A9A9;">
+			<label class="label-opacity" >How would you rate the support received?</label>
                              	
 
 			<div class="input-group">
@@ -199,7 +184,7 @@ var id = <%=note_id%>
 			<div class="form-group">
 				<label class="label-opacity" for="inputEmail">Comments:</label>
 				
-				<textarea class="text-area" id="myTextarea" name='comment' style="padding-top:5px;padding-left:10px;font-size:14px;"></textarea>
+				<textarea class="text-area" id="myTextarea" name='comment' style="padding-top:5px;padding-left:10px;font-size:14px;border-radius: 10px;"></textarea>
 			</div>
 			
 			<div>
@@ -223,7 +208,14 @@ var id = <%=note_id%>
 
 			<div class="col-sm-4"></div>
 			<div class="col-sm-6">
-			<a target="_blank" href="https://www.agilecrm.com" class="text-muted">Powerd by AgileCRM</a>
+			<a target="_blank" href="https://www.agilecrm.com" class="text-muted poweredby">Powered By Agile</a>
+			</div>
+			</div>
+           	<div>
+
+			<div class="col-sm-4"></div>
+			<div class="col-sm-6" style="padding-left: 28px;">
+			<a target="_blank" href="https://www.agilecrm.com" class="text-muted">Powered By Agile</a>
 			</div>
 			</div>
 			<div class="row"></div>
