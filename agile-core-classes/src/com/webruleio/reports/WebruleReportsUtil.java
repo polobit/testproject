@@ -6,6 +6,7 @@ import java.sql.ResultSetMetaData;
 import java.sql.Statement;
 import java.util.Calendar;
 import org.apache.commons.lang.StringUtils;
+import java.util.LinkedHashMap;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import com.webruleio.reports.AnalyticsDBConnectionFetcher;
@@ -34,7 +35,7 @@ public class WebruleReportsUtil
      * 
      */
     
-    
+    public static final String GROUP_BY_LOG_DATE = "log_date";
     
     public static ResultSet executeQuery(String query)
     {
@@ -98,6 +99,7 @@ public class WebruleReportsUtil
 
 	try
 	{
+	    int view =0, sub=0;
 	    // iterate the ResultSet object
 	    while (rs.next())
 	    {
@@ -113,8 +115,46 @@ public class WebruleReportsUtil
 
 		    // put column name and value in json array
 		    eachAgentJSON.put(columnName, "" + rs.getString(columnName));
+		    
+		    if(rs.getString(columnName).equalsIgnoreCase("MODAL_POPUP"))
+			{
+			   view= view+Integer.parseInt(rs.getString("total"));
+		           System.out.println("the view number"+view);
+			}
+		    if(rs.getString(columnName).equalsIgnoreCase("SITE_BAR"))
+			{
+			  view= view+Integer.parseInt(rs.getString("total"));
+			  System.out.println("the view number"+view);
+			}
+		    if(rs.getString(columnName).equalsIgnoreCase("CORNER_NOTY"))
+			{
+			view=view+Integer.parseInt(rs.getString("total"));
+		        System.out.println("the view number"+view);
+		        }
+		    if(rs.getString(columnName).equalsIgnoreCase("CALL_POPUP"))
+			{
+			view=view+Integer.parseInt(rs.getString("total"));
+		        System.out.println("the view number"+view);
+		        }
+		    if(rs.getString(columnName).equalsIgnoreCase("REQUEST_PUSH_POPUP"))
+			{
+			view=view+Integer.parseInt(rs.getString("total"));
+		        System.out.println("the view number"+view);
+		        }
+		    
+		    if(rs.getString(columnName).equalsIgnoreCase("FORM_SUBMITTED"))
+			{
+			sub=sub+Integer.parseInt(rs.getString("total"));
+			System.out.println("the submission number"+sub);
+			}
+		    
+		    
+		    
+		    
 		}
-
+		
+		eachAgentJSON.put("TOTAL_VIEWS", "" + view);
+		eachAgentJSON.put("TOTAL_SUBMISSIONS", "" + sub);
 		// place result data in agentDetailsArray
 		agentDetailsArray.put(eachAgentJSON);
 	    }
@@ -175,6 +215,146 @@ public class WebruleReportsUtil
 	}
 
 	return true;
+    }
+    
+    /**
+     * Returns campaign stats data required for graph. It groups data based on
+     * campaign-name for Campaigns Comparison, otherwise based on log date.
+     * 
+     * @param startDate
+     *            - start date, otherwise null for webrules Comparison
+     * @param endDate
+     *            - end date, otherwise null for webrules Comparison
+     * @param type
+     *            - hourly or weekly or daily.
+     * @param timeZone
+     *            - TimeZone Id obtained from client side. E.g. -330
+     * @param sqlData
+     *            - Obtained sql data.
+     * @return LinkedHashMap
+     */
+    public static LinkedHashMap<String, LinkedHashMap<String, Integer>> getEachWebruleStatsData(String startDate, String endDate, String type, String timeZone,
+	    JSONArray sqlData)
+    {
+	// Types of bars in a bar graph
+	String[] barTypes = {"TOTAL_VIEWS","TOTAL_SUBMISSIONS"};
+
+	// Campaigns Comparison need no initialization as there is no duration.
+	LinkedHashMap<String, LinkedHashMap<String, Integer>> groupByMap = new LinkedHashMap<String, LinkedHashMap<String, Integer>>();
+
+	String groupBy = GROUP_BY_LOG_DATE;
+
+	// Initialize with default date duration.
+	groupByMap = WebruleReportsUtil.getDefaultDateTable(startDate, endDate, type, timeZone, barTypes);
+
+	try
+	{
+	    // Arrange sqlData as required to Graph
+	    for (int index = 0; index < sqlData.length(); index++)
+	    {
+	    LinkedHashMap<String, Integer> countMap = WebruleReportsUtil.getDefaultCountTable(barTypes);
+		JSONObject logJSON = sqlData.getJSONObject(index);
+
+				
+		countMap.put("TOTAL_VIEWS", Integer.parseInt(logJSON.getString("TOTAL_VIEWS")));
+		countMap.put("TOTAL_SUBMISSIONS", Integer.parseInt(logJSON.getString("TOTAL_SUBMISSIONS")));
+		groupByMap.put(logJSON.getString(groupBy), countMap);
+			    }
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    System.err.println(e.getMessage());
+	}
+
+	return groupByMap;
+    } 
+    
+    /**
+     * Constructs a default LinkedHashMap for the dates between the given
+     * duration and sets time value as key and getDefaultCountTable() as value.
+     * For e.g.
+     * {1AM={Totalsubmissions=0,
+     * Totalviews=0},2AM={
+     * Totalsubmissions=0,
+     * Totalviews=0},....}
+     * 
+     * @param startTime
+     *            - Start time of given duration.
+     * @param endTime
+     *            - End time of given duration.
+     * @param type
+     *            - Hour, Day or Date.
+     * @param timeZone
+     *            - timeZoneId received from client.
+     * @param logTypes
+     *            - EmailSent, EmailOpened, UniqueClicks and TotalClicks
+     * @return LinkedHashMap
+     */
+    public static LinkedHashMap<String, LinkedHashMap<String, Integer>> getDefaultDateTable(String startTime, String endTime, String type, String timeZone,
+	    String[] logTypes)
+    {
+
+	LinkedHashMap<String, LinkedHashMap<String, Integer>> dateHashtable = new LinkedHashMap<String, LinkedHashMap<String, Integer>>();
+
+	// Sets calendar with start time.
+	Calendar startCalendar = Calendar.getInstance();
+	startCalendar.setTimeInMillis(Long.parseLong(startTime));
+	long startTimeMilli = startCalendar.getTimeInMillis();
+
+	// Sets calendar with end time.
+	Calendar endCalendar = Calendar.getInstance();
+	endCalendar.setTimeInMillis(Long.parseLong(endTime));
+	long endTimeMilli = endCalendar.getTimeInMillis();
+
+	do
+	{
+	    if (StringUtils.equalsIgnoreCase(type, "date"))
+	    {
+		// to get month and date ( example : Jan 12 )
+		dateHashtable.put(DateUtil.getNearestDateOnlyFromEpoch(startTimeMilli, timeZone), getDefaultCountTable(logTypes));
+		startCalendar.add(Calendar.DAY_OF_MONTH, 1);
+		startTimeMilli = startCalendar.getTimeInMillis();
+	    }
+	    else if (StringUtils.equalsIgnoreCase(type, "hour"))
+	    {
+		// to get 12hours frame ( example : 7 AM )
+		dateHashtable.put(DateUtil.getNearestHourOnlyFromEpoch(startTimeMilli, timeZone), getDefaultCountTable(logTypes));
+		startCalendar.add(Calendar.HOUR, 1);
+		startTimeMilli = startCalendar.getTimeInMillis();
+	    }
+	    else
+	    {
+		// to get day (example : mon , tue etc..)
+		dateHashtable.put(DateUtil.getNearestDayOnlyFromEpoch(startTimeMilli, timeZone), getDefaultCountTable(logTypes));
+		startCalendar.add(Calendar.DAY_OF_WEEK, 1);
+		startTimeMilli = startCalendar.getTimeInMillis();
+	    }
+	}
+	while (startTimeMilli <= endTimeMilli);
+
+	return dateHashtable;
+    }
+
+    /**
+     * Constructs a default LinkedHashMap for the String of arrays and sets
+     * array value as key and '0' as value. For e.g., {Totalsubmissions=0,
+     * Totalviews=0}
+     * 
+     * @param variable
+     *            - array of types like total submissions and Total views
+     * @return LinkedHashMap
+     */
+    public static LinkedHashMap<String, Integer> getDefaultCountTable(String[] variable)
+    {
+	LinkedHashMap<String, Integer> countHashtable = new LinkedHashMap<String, Integer>();
+
+	// Initialize given varibles with zeros.
+	for (String string : variable)
+	{
+	    countHashtable.put(string, 0);
+	}
+	return countHashtable;
     }
 
     

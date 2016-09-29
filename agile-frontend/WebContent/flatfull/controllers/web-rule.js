@@ -52,7 +52,7 @@ var WebreportsRouter = Backbone.Router.extend({
 									get_webrule_table_reports(id);
 
 									// shows graphs by default week date range.
-									//showEmailGraphs(id);
+									showWebruleGraphs(id);
 								});
 
 						

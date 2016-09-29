@@ -12,6 +12,22 @@ function initWebruleChartsUI(callback)
 	callback();
 
 }
+/**
+ * Shows date-wise, hourly and weekly reports of a webrule. Calls showBar
+ * function which uses HighCharts plugin to show bar charts.
+ */
+function showWebruleGraphs(webruleid)
+{
+
+	// Daily
+	showBar('core/api/webrule-analytics/web/graphreports/' + webruleid + getOptions() + "&type=date", 'line-daily-chart', _agile_get_translated_val('reports','daily') , 'Count', null);
+
+	// Hourly
+	showBar('core/api/webrule-analytics/web/graphreports/' + webruleid + getOptions() + "&type=hour", 'line-hourly-chart', _agile_get_translated_val('reports','hourly'), 'Count', null);
+
+	// Weekly
+	showBar('core/api/webrule-analytics/web/graphreports/' + webruleid + getOptions() + "&type=day", 'line-weekly-chart', _agile_get_translated_val('reports','weekly'), 'Count', null);
+}
 
 
 /**
