@@ -540,8 +540,8 @@ function serialize_contact_properties_and_save(e, form_id, obj, properties, moda
 				.each(obj.properties,
 						function(contact_property_index, contact_property)
 						{
-							if(contact_property.name=='Google_Sync_Type')
-								properties.push(contact_property);
+							/*if(contact_property.name=='Google_Sync_Type')
+								properties.push(contact_property);*/
 							$
 									.each(properties_temp,
 											function(new_property_index, new_property)
