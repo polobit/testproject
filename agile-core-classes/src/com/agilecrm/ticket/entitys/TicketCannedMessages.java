@@ -39,6 +39,7 @@ public class TicketCannedMessages
 	 */
 	public String title = "";
 
+	public Boolean is_public = false;
 	/**
 	 * Stores canned message
 	 */

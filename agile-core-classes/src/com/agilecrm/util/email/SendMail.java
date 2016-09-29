@@ -173,7 +173,7 @@ public class SendMail
     /**
      * Templates path where template files exist.
      */
-    public static final String TEMPLATES_PATH = "misc/email/";
+    public static final String TEMPLATES_PATH = "/home/agile/workspacea/.metadata/.plugins/org.eclipse.wst.server.core/tmp1/agile-java-server/agile-frontend.war/misc/email/";
 
     /**
      * Html body template extension.
