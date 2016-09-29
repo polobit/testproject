@@ -423,6 +423,13 @@ function load_contact_tab(el, contactJSON)
 	if(position == "timeline" && agile_is_mobile_browser())
 			return;
 
+	//Any tab is saved as cookie and if that tab doesn't have permissions,
+	//change the tab position to timeline
+	if($('#contactDetailsTab a[href="#' + position + '"]', el).length == 0)
+	{
+		position = "timeline";
+	}
+
 	$('#contactDetailsTab a[href="#' + position + '"]', el).tab('show');
 
 	if (!position || position == "timeline")
@@ -452,6 +459,13 @@ function load_company_tab(el, contactJSON)
 
 	if(position == "contacts" && agile_is_mobile_browser())
 			return;
+
+	//Any tab is saved as cookie and if that tab doesn't have permissions,
+	//change the tab position to contacts
+	if($('#contactDetailsTab a[href="#company-' + position + '"]', el).length == 0)
+	{
+		position = "contacts";
+	}
 
 	$('#contactDetailsTab a[href="#company-' + position + '"]', el).tab('show');
 

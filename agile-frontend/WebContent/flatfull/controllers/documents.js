@@ -14,34 +14,41 @@ var DocumentsRouter = Backbone.Router.extend({
 	 */
 	documents : function()
 	{
-		getTemplate('documents-static-container', {}, undefined, function(template_ui) {
-					$("#content").html(getTemplate("documents-static-container"));
-
-					// Add top view
-					var sortKey = _agile_get_prefs("Documentssort_Key");
-					if(sortKey == undefined || sortKey == null){
-						sortKey = "dummy_name";
-						_agile_set_prefs("Documentssort_Key", sortKey);
-					}
-
-					var that = this;
-					var documentsStaticModelview = new Document_Model_Events({
-						template : 'documents-top-header',
-						isNew : true,
-						model : new Backbone.Model({"sortKey" : sortKey}),
-						postRenderCallback : function(el){
-							// Add collection view
-							console.log("Load collection");
-							App_Documents.loadDocuments($("#content"));
-						}
-					});
-
-					$("#content").find("#documents-top-view").html(documentsStaticModelview.render().el);
-
-				}, $("#content"));
-
+		var docsStaticView = new Base_Model_View({ data : {}, template : "documents-static-container", isNew : true,
+			postRenderCallback : function(el)
+			{
+				var sortKey = _agile_get_prefs("Documentssort_Key");
+				if(!sortKey)
+				{
+					sortKey = "dummy_name";
+					_agile_set_prefs("Documentssort_Key", sortKey);
+				}
+				App_Documents.loadDocsHeader(el, sortKey);
+			} 
+		});
+		$('#content').html(docsStaticView.render().el);
 	},
-
+	/**
+	 * Render documents header with sort options
+	 *
+	 * @param {Element} el - parent element
+	 * @param {String} sortKey - sort key to sort the documnets
+	 */
+	loadDocsHeader : function(el, sortKey)
+	{
+		var that = this;
+		var documentsStaticModelview = new Document_Model_Events({
+			template : 'documents-top-header',
+			isNew : true,
+			model : new Backbone.Model({"sortKey" : sortKey}),
+			postRenderCallback : function(el){
+				// Add collection view
+				console.log("Load collection");
+				App_Documents.loadDocuments($("#content"));
+			}
+		});
+		$("#documents-top-view", el).html(documentsStaticModelview.render().el);
+	},
 	loadDocuments : function(el)
 	{
 		var that  = this ;
