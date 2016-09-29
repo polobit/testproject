@@ -35,6 +35,7 @@
 <%@page	import="com.agilecrm.knowledgebase.entity.LandingPageKnowledgebase"%>
 <%@page	import="com.agilecrm.landingpages.LandingPage"%>
 <%@page	import="com.agilecrm.landingpages.LandingPageServlet"%>
+<%@page import="com.agilecrm.landingpages.LandingPageHelper"%>
 
 <%@page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
@@ -79,6 +80,11 @@
 	lpHelper.constructPageCode();
 	String headerContent = lpHelper.getPageHeader();
 	String footerContent = lpHelper.getPagefooter();
+	out.write(headerContent);
+
+	footerContent.replace("</body>","");
+	footerContent.replace("</html>","");
+	out.write(footerContent);
 	
 		}
 	} catch (Exception e) {
@@ -123,12 +129,6 @@ if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Produ
    
 }
 
-
-out.write(headerContent);
-
-footerContent.replace("</body>","");
-footerContent.replace("</html>","");
-out.write(footerContent);
 %>
 
   <script src='//cdnjs.cloudflare.com/ajax/libs/headjs/1.0.3/head.min.js'></script>
