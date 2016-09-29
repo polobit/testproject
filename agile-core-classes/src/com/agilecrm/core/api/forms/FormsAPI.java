@@ -22,6 +22,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.agilecrm.AllDomainStats;
+import com.agilecrm.account.RecaptchaGateway;
+import com.agilecrm.account.util.RecaptchaGatewayUtil;
 import com.agilecrm.alldomainstats.util.AllDomainStatsUtil;
 import com.agilecrm.cms.CMSPlugin;
 import com.agilecrm.forms.Form;
@@ -96,14 +98,20 @@ public class FormsAPI
 	     * checking the condition when recaptcha will be selected as true by user  
 	     * */
 	    if(agileformcaptcha==true){	
-	    	html=html.replaceFirst("</form>","</form><script id=\"gRecaptchaSrc\" src='https://www.google.com/recaptcha/api.js'></script>"); 	
-	    	html = html.replaceFirst("<!--recaptcha aglignment-->", " <!--recaptcha aglignment--><div class=\"agile-group\">"
-		 + "<label class=\"agile-label\"></label>"
-		 + "<div class=\"agile-field-xlarge agile-field\">"
-		 + "<div class='g-recaptcha' style=\"transform:scale(0.91);-webkit-transform:scale(0.91);transform-origin:0 0;-webkit-transform-origin:0 0; width='304px';\" data-sitekey='6LcBZCgTAAAAAKxJ8QbSrfRh6Js_QpNsPAykamLZ' data-callback='onSuccess'></div></div></div>");
-			    }
-	    else{
-	    	html = html.replaceFirst("<div class='g-recaptcha' data-sitekey='6LcBZCgTAAAAAKxJ8QbSrfRh6Js_QpNsPAykamLZ'></div>", "</fieldset></fieldset>");
+	       RecaptchaGateway recaptchaGateway = RecaptchaGatewayUtil.getRecaptchaGateway();
+	       
+	       if(recaptchaGateway != null)
+	       {
+		    	
+		    	html=html.replaceFirst("</form>","</form><script id=\"gRecaptchaSrc\" src='https://www.google.com/recaptcha/api.js'></script>"); 	
+		    	html = html.replaceFirst("<!--recaptcha aglignment-->", " <!--recaptcha aglignment--><div class=\"agile-group\">"
+			 + "<label class=\"agile-label\"></label>"
+			 + "<div class=\"agile-field-xlarge agile-field\">"
+			 + "<div class='g-recaptcha' style=\"transform:scale(0.91);-webkit-transform:scale(0.91);transform-origin:0 0;-webkit-transform-origin:0 0; width='304px';\" data-sitekey='" + recaptchaGateway.site_key + "' data-callback='onSuccess'></div></div></div>");
+		   }
+	    }
+		 else{
+		    	html = html.replaceFirst("<div class='g-recaptcha' data-sitekey='6LcBZCgTAAAAAKxJ8QbSrfRh6Js_QpNsPAykamLZ'></div>", "</fieldset></fieldset>");
 	    }
 	    if (StringUtils.isBlank(name) || !Character.isLetter(name.charAt(0)))
 	    {

@@ -2,11 +2,16 @@ package com.agilecrm.forms;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.agilecrm.account.RecaptchaGateway;
+import com.agilecrm.account.util.RecaptchaGatewayUtil;
 import com.agilecrm.forms.util.FormUtil;
+
 import org.apache.commons.lang.StringUtils;
 
 /**
@@ -48,12 +53,21 @@ public class FormRenderingServlet extends HttpServlet
 	     * at server side for permanent link
 	     * */
 	    if(form.agileformcaptcha){
-   	     String tempReplace = StringUtils.substringBetween(htmlBody, "<script type=\"text/javascript\">", "</script>");
+	    	
+	    	 RecaptchaGateway recaptchaGateway = RecaptchaGatewayUtil.getRecaptchaGateway();
+		       
+		    if(recaptchaGateway != null)
+		    {
+   	        String tempReplace = StringUtils.substringBetween(htmlBody, "<script type=\"text/javascript\">", "</script>");
 		    
 		    String captchaValidator = "var onSuccess=function(a){var b=document.getElementById('captcha-error-msg');b.parentNode.removeChild(b)}; function validateCaptcha(){var a=grecaptcha.getResponse();if(0==a.length){var b=document.getElementsByClassName(\"g-recaptcha\")[0],c=document.createElement(\"p\");return c.setAttribute(\"id\",\"captcha-error-msg\"),c.innerHTML=\"<span style='color:red;font-size: small;'>Please verify that you are not a robot.</span>\",null==document.getElementById(\"captcha-error-msg\")&&b.appendChild(c),!1}return!0}";
 		    htmlBody = StringUtils.replace(htmlBody, tempReplace, captchaValidator);
 		    
 		    htmlBody = StringUtils.replaceOnce(htmlBody, "<form","<form onsubmit='return validateCaptcha()'");
+		    
+		    htmlBody = StringUtils.replaceOnce(htmlBody, recaptchaGateway.site_key, RecaptchaGatewayUtil.GOOGLE_RECAPTCHA_DATA_SITE_KEY);
+		    
+		  }
     }
 	    
 	    

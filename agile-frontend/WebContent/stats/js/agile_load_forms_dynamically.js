@@ -36,7 +36,6 @@ if(gCaptchaSrc) document.getElementById(formHolderId).removeChild(gCaptchaSrc);
 
    /*loading the captcha js file dynamically*/
     var formJsonObj = JSON.parse(formJson.formJson);
-     if(formJsonObj[0].fields.agileformcaptcha["value"]=="true")
         for (var key in formJsonObj[0].fields.agileformcaptcha["value"]) { 
                 if(formJsonObj[0].fields.agileformcaptcha["value"][key]["selected"]) {
                     if(formJsonObj[0].fields.agileformcaptcha["value"][key]["value"]=="true") {

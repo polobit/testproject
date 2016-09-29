@@ -139,8 +139,75 @@
 				</div>
 				</div>
 			</div>
-			
 			</div>
+
+<!--- Recaptcha integration template-->
+       <div class="row">
+	    <div class="col-md-4 col-sm-6 col-xs-12" id="recaptcha-api-integration">
+			<div class="panel panel-default b-a" style="height:230px;">
+				<div class="panel-heading">
+					<div class="pos-rlt">
+	                    <center>
+								<img style="height:46px" alt="cms-integration" src="img/crm-plugins/recaptcha_logo.png" class=""><span style=" color: #c70000; font-size: 22px; font-weight: bold;"> reCAPTCHA</span>
+						</center>	
+	                    <div class="clearfix"></div>
+					</div>
+				</div>
+				<div class="panel-body">
+					<div class="text-flow-ellipsis line-clamp line-clamp-4 widget-text m-b" style="height:75px" rel="tooltip" title="{{agile_lng_translate 'other' 'mail-gun-is-transactional-product-by-mailchimp'}}">
+						
+						{{agile_lng_translate 'other' 'mail-gun-description'}}
+					</div>
+					<div class="text-center">
+							{{#if this.length}}	
+								{{#gateway_exists "RECAPTCHA" this}}
+									<a href="#" class="btn btn-sm btn-danger " id="recaptcha-gateway-delete">
+									{{agile_lng_translate 'web-rules' 'disable'}}</a>
+									<a href="#recaptcha-gateways/RECAPTCHA" class="btn btn-sm btn-default">
+									{{agile_lng_translate 'preferences' 'settings'}}</a>
+								{{else}}
+									 {{#isAllowedInCurrentPlan "is_email_gateway_allowed"}}
+						                <div>
+	                      					<a href="#recaptcha-gateways/RECAPTCHA" class="btn btn-sm btn-default">
+	                      					{{agile_lng_translate 'prefs-email' 'enable'}}</a> 
+	                					</div>
+	           						 {{else}}
+	            						<div>
+	            						<div style="display:none;width: 65%;left: 18%;z-index: 9;border: 1px solid #E2E29C;background-color: #F7F7D0;" class="mailgun-upgrade fade in p-xs m-b-xs pos-abs">
+	        									Please  
+	        									<strong><a href="#subscribe-plan" style="color:#337ab7;" class='c-p'>{{agile_lng_translate 'portlets' 'upgrade'}}</a></strong> {{agile_lng_translate 'widgets' 'to-enterprise-plan'}}
+	        							</div>
+	        							<div class="clearfix"></div>
+	            						<div class="btn btn-sm btn-default _upgrade" id="mailgun-upgrade">{{agile_lng_translate 'prefs-email' 'enable'}}</div>
+	                 					
+		                 				</div>
+				            					 {{/isAllowedInCurrentPlan}}
+											{{/gateway_exists}}
+										{{else}}
+											 {{#isAllowedInCurrentPlan "is_email_gateway_allowed"}}
+						                <div>
+	                      					<a href="#recaptcha-gateways/RECAPTCHA" class="btn btn-sm btn-default">{{agile_lng_translate 'prefs-email' 'enable'}}</a> 
+	                					</div>
+	           						 {{else}}
+	            						<div>
+	            						<div style="display:none;width: 65%;left: 18%;z-index: 9;border: 1px solid #E2E29C;background-color: #F7F7D0;" class="mailgun-upgrade fade in p-xs m-b-xs pos-abs">
+	        								Please  
+	        									<strong><a href="#subscribe-plan" style="color:#337ab7;" class='c-p'>{{agile_lng_translate 'portlets' 'upgrade'}}</a></strong> {{agile_lng_translate 'widgets' 'to-enterprise-plan'}}
+	        							</div>
+
+	        							<div class="clearfix"></div>
+	            						<div class="btn btn-sm btn-default _upgrade" id="mailgun-upgrade">{{agile_lng_translate 'prefs-email' 'enable'}}</div>
+	                 					
+		                 			</div>
+	            				{{/isAllowedInCurrentPlan}}
+							{{/if}}
+						</div>
+						<div class="clearfix"></div>
+					</div>
+					</div>
+				</div>
+          </div>
+
 		</div>
 		<div class="tab-pane" id="e-commerce-tab">
 			<div class="row">

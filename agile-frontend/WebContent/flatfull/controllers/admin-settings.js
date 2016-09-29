@@ -50,6 +50,8 @@ var AdminSettingsRouter = Backbone.Router.extend({
 
 	"sms-gateways/:id" : "smsGateways",
 
+	"recaptcha-gateways/:id" : "recaptchaGateway",
+
 	"lost-reasons" : "lostReasons",
 
 	"deal-sources" : "dealSources",
@@ -1039,6 +1041,94 @@ var AdminSettingsRouter = Backbone.Router.extend({
 				});
 
 				$('#content').find('#admin-settings-integrations-tab-content').html(that.email_gateway.render().el);
+				$('#content').find('.integrations-tab').addClass('select');
+				//$(".active").removeClass("active");
+			}, "#admin-settings-integrations-tab-content");
+		}, null);
+
+		
+	},
+
+	recaptchaGateway : function(id)
+	{
+		console.log(App_Admin_Settings.integrations.collection);
+		var that = this;
+		getTemplate("admin-settings", {}, undefined, function(template_ui){
+			if(!template_ui)
+				  return;
+			$('#content').html($(template_ui));	
+			getTemplate("web-to-lead-settings", {}, undefined, function(template_ui1){
+				if(!template_ui1)
+					return;
+				$('#admin-prefs-tabs-content').html($(template_ui1));
+				var integrationsTab = _agile_get_prefs("integrations_tab");
+				$("#admin-prefs-tabs-content").find('a[href="#'+integrationsTab+'"]').closest("li").addClass("active");	
+				// On Reload, navigate to integrations
+				if (!that.integrations || that.integrations.collection == undefined)
+				{
+					that.navigate("integrations", { trigger : true });
+					return;
+				}
+
+				var value = 'RECAPTCHA';
+
+				var recaptchaGateway;
+				$.each(that.integrations.collection.where({name:"RecaptchaGateway"}),function(key,value){
+				
+					recaptchaGateway = JSON.parse(value.attributes.prefs);
+				
+				});
+				
+				
+				// To show template according to api. Note: Widget and EmailGateway model is different
+				if(!recaptchaGateway)
+					recaptchaGateway = {"recaptcha_api":value, "api_key": "", "site_key":""}; 
+						
+				that.recaptcha_gateway = new Base_Model_View({ 
+					data : recaptchaGateway,
+					url : 'core/api/recaptcha-gateway',
+					template : 'settings-recaptcha-gateway', postRenderCallback : function(el)
+					{
+						initializeIntegrationsTabListeners("integrations_tab", "integrations");
+							$("#integrations-image",el).attr("src","img/crm-plugins/recaptcha_logo.png");						
+						
+					}, saveCallback : function()
+					{
+						$('.ses-success-msg').show();
+						
+						// On saved, navigate to integrations
+						Backbone.history.navigate("integrations", { trigger : true });
+
+					},
+					errorCallback : function(response)
+					{
+						var $save = $('.save', '#recaptcha-gateway-integration-form');
+
+						disable_save_button($save);
+
+						var msg = response.responseText;
+						// Show cause of error in saving
+						var $save_info = $('<div style="display:inline-block"><small><p style="color:#B94A48; font-size:14px"><i>'
+													+ msg
+													+ '</i></p></small></div>');
+
+						// Appends error info to form actions
+						// block.
+						$save.closest(".form-actions", this.el).append(
+								$save_info);
+
+						// Hides the error message after 3
+						// seconds
+						if(response.status != 406)
+							$save_info.show().delay(3000).hide(1, function(){
+
+								enable_save_button($save);
+							});
+					}
+
+				});
+
+				$('#content').find('#admin-settings-integrations-tab-content').html(that.recaptcha_gateway.render().el);
 				$('#content').find('.integrations-tab').addClass('select');
 				//$(".active").removeClass("active");
 			}, "#admin-settings-integrations-tab-content");

@@ -91,3 +91,45 @@
 </div>
 </div>
 </script>
+
+<script id="settings-recaptcha-gateway-template" type="text/html">
+<div class="row">
+<div class="col-md-4 col-sm-6 col-xs-12">
+	<div class="widget-add">
+		<form style="border-bottom:none;margin-top:-10px;margin-bottom: 0px;" id="recaptcha-gateway-integration-form" autocomplete="off">
+	    	<fieldset>
+				
+				<!--To disable AutoComplete of browsers-->
+				<input type="password" style="display: none">
+
+				<div class="panel panel-default">
+				<div class="panel-heading">
+					<center>
+						<img  alt="recaptcha-integration" id="integrations-image" style="height: 46px;" /><span style=" color: #c70000; font-size: 22px; font-weight: bold;"> reCAPTCHA</span>
+					</center>
+				</div>
+				<div class="panel-body">
+				<input type="hidden" name="recaptcha_api" value="{{recaptcha_api}}">
+				<div class="control-group form-group">
+						<div class="controls">
+							<input type="text" autocomplete="off" class="input-medium required form-control" placeholder="{{agile_lng_translate 'admin-settings-integrations' 'secret-key'}}" value="{{api_key}}" name="api_key">
+						</div>
+				</div>
+				<div class="control-group form-group">
+						<div class="controls">
+							
+								<input type="text" autocomplete="off" class="input-medium form-control required" placeholder="{{agile_lng_translate 'admin-settings-integrations' 'access-key'}}" value="{{site_key}}"  name="site_key"/>
+						</div>
+				</div>
+			
+				<div class="form-actions text-center">
+					<a type="reset" class="btn btn-default btn-sm" href="#integrations">{{agile_lng_translate 'other' 'cancel'}}</a>
+               		<a type="submit" href="#" class="save btn btn-sm btn-primary">{{agile_lng_translate 'report-add' 'save'}}</a>
+            	</div>
+            	</div>
+			 </fieldset>
+	    </form>
+	</div>
+</div>
+</div>
+</script>
