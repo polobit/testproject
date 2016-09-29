@@ -489,7 +489,7 @@ var ReportsRouter = Backbone.Router
 					templateKey : "report-search", individual_tag_name : 'tr', cursor : true, sort_collection : false, page_size : 15, });// Collection
 				var _that = this;
 				
-				$.getJSON("core/api/custom-fields/type/scope?type=DATE&scope=CONTACT", function(customDatefields)
+				$.getJSON("core/api/custom-fields/scope?scope=CONTACT", function(customDatefields)
 				{
 					// Report built with custom table, as reports should be
 					// shown with
