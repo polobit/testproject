@@ -690,29 +690,41 @@ public class EventUtil
     	String domain_url = VersioningUtil.getHostURLByApp(user.domain);
     	String cancel_link = domain_url + "appointment/cancel/" + event.id;
     	String link = "https://www.agilecrm.com/?utm_source=powered-by&medium=email&utm_campaign=" + user.domain;
-   		
-		String usermail = "<p>You have a new appointment with <b>" + user.name + "</b> (" + user.email+ ")</p>"
-				+"<span>Duration: " + event.start + "mins</span><br/>";
-				if(event.description != null && event.description.length() > 0){
-					usermail += "<span>Note: " + event.description + "</span><br/>";
-				}
-				usermail += "<p><a href=" + cancel_link+ ">Cancel this appointment</a></p>";
-				usermail += "<p>This event has been scheduled using <a href=" + link +">Agile CRM</a></p>";
-		
-    	if(contactsList != null){
-    		for (Contact contact : contactsList) {
-    			ContactField emailField = contact.getContactFieldByName(Contact.EMAIL);
-    			String contactEmail = emailField.value;
-    			if(contactEmail != null){    				
-    				EmailGatewayUtil.sendEmail(null, user.email, user.name, contactEmail, null, null, "Appointment Scheduled",
-    						null, usermail, null, null, null, null, attachments);
-    			}
-    		}
-    	}
+    	String startTime = "";
+    	String endTime = "";
     	
-    	if(domainUserEmail != null){			
-			EmailGatewayUtil.sendEmail(null, user.email, user.name, domainUserEmail, null, null, "Appointment Scheduled",
-					null, usermail, null, null, null, null, attachments);		
-    	}
+   		if(startTime != null && endTime != null){
+   			Long sTime,lTime;
+   			sTime = Long.parseLong(startTime);
+   			lTime = Long.parseLong(endTime);
+   			int mins = (int) (lTime - sTime);
+   			
+   			String minsInStr = WebCalendarEventUtil.convertMinstoDateFormat(mins);
+   	    	
+   			String usermail = "<p>You have a new appointment with <b>" + user.name + "</b> (" + user.email+ ")</p>"
+   					+"<span>Duration: " + minsInStr + "</span><br/>";
+   					if(event.description != null && event.description.length() > 0){
+   						usermail += "<span>Note: " + event.description + "</span><br/>";
+   					}
+   					usermail += "<p><a href=" + cancel_link+ ">Cancel this appointment</a></p>";
+   					usermail += "<p>This event has been scheduled using <a href=" + link +">Agile CRM</a></p>";
+   							
+   	    	if(contactsList != null){
+   	    		for (Contact contact : contactsList) {
+   	    			ContactField emailField = contact.getContactFieldByName(Contact.EMAIL);
+   	    			String contactEmail = emailField.value;
+   	    			if(contactEmail != null){    				
+   	    				EmailGatewayUtil.sendEmail(null, user.email, user.name, contactEmail, null, null, "Appointment Scheduled",
+   	    						null, usermail, null, null, null, null, attachments);
+   	    			}
+   	    		}
+   	    	}
+   	    	
+   	    	if(domainUserEmail != null){			
+   				EmailGatewayUtil.sendEmail(null, user.email, user.name, domainUserEmail, null, null, "Appointment Scheduled",
+   						null, usermail, null, null, null, null, attachments);		
+   	    	} 
+   		}
+    	   	
     }
 }
