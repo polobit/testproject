@@ -110,6 +110,7 @@ $(function()
 			e.preventDefault();
 			var json = {"command" : "ignoreCall"};
 		  	var action = makeCallAction(json);
+		  	//globalCall.callStatus = "Missed";
 		  	sendActionToClient(action);
 		  	globalCallForActivity.answeredByTab = true;
 		  	play_sound("dtmf");
