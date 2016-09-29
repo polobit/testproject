@@ -4722,7 +4722,7 @@ ul#recent-menu-model-list li:nth-child(even)
 .condition_container ul.typeahead.dropdown-menu{
   width: 100% !important;
   min-height: 40px;
-  /*max-height: 250px;*/
+  max-height: 250px;
   overflow-y: auto;
   height: auto;
   z-index: 99 !important;
