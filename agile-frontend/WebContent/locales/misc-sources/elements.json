@@ -57,7 +57,7 @@
         {"url":"elements/agileform5.html","height":700, "thumbnail":"elements/images/thumbs/agileform5.png"}
     ],
     "{{agile_lng_translate 'landingpage-builder' 'knowledge-base'}}":[
-        {"url":"elements/Knowledge-base.html","height":294, "thumbnail":"elements/images/thumbs/footer1.png"}
+        {"url":"elements/knowledge-base.html","height":294, "thumbnail":"elements/images/thumbs/knowledge-base.png"}
     ],
     "{{agile_lng_translate 'landingpage-builder' 'footers'}}":[
     	{"url":"elements/footer1.html","height":294, "thumbnail":"elements/images/thumbs/footer1.png"},
