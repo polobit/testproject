@@ -42,10 +42,10 @@
 
 <%@page	import="com.agilecrm.db.ObjectifyGenericDao"%>
 <%@page	import="com.agilecrm.account.APIKey"%>
-<%@page	import="com.agilecrm.knowledgebase.util.KbLandingPageUtil"%>
-
-  
+<%@page	import="com.agilecrm.knowledgebase.util.KbLandingPageUtil"%>  
   <%
+  String headerContent = "";
+  String footerContent = "";
   LandingPageKnowledgebase  kbpage = KbLandingPageUtil.get(); 
 
 	if(kbpage == null ||kbpage.kb_landing_page_id == 0 || kbpage.kb_landing_page_id == 1
@@ -53,7 +53,7 @@
 	%>
 		<%@ include file="/knowledgebase.jsp"%>
 	<%
-	}%> 
+	}else{%> 
 	
 	<% 
   
@@ -70,22 +70,19 @@
 		try{
 	
 	if(kbpage !=null){
-		Long landingpageid = kbpage.kb_landing_page_id;
-	LandingPageUtil lpUtil = new LandingPageUtil();
-	LandingPage landingPage = lpUtil.getLandingPage(landingpageid);
-	if(landingPage == null)
-	throw new Exception("No landing page found.");
-
-	LandingPageHelper lpHelper = new LandingPageHelper(landingPage);
-	lpHelper.constructPageCode();
-	String headerContent = lpHelper.getPageHeader();
-	String footerContent = lpHelper.getPagefooter();
-	out.write(headerContent);
-
-	footerContent.replace("</body>","");
-	footerContent.replace("</html>","");
-	out.write(footerContent);
 	
+		Long landingpageid = kbpage.kb_landing_page_id;
+		LandingPageUtil lpUtil = new LandingPageUtil();
+		LandingPage landingPage = lpUtil.getLandingPage(landingpageid);
+		if(landingPage == null)
+		throw new Exception("No landing page found.");
+
+		LandingPageHelper lpHelper = new LandingPageHelper(landingPage);
+		lpHelper.constructPageCode();
+		headerContent = lpHelper.getPageHeader();
+		footerContent = lpHelper.getPagefooter();
+		
+		
 		}
 	} catch (Exception e) {
 	} finally {
@@ -114,7 +111,16 @@
 	  CLOUDFRONT_TEMPLATE_LIB_PATH = "";	
 	  CSS_PATH = FLAT_FULL_PATH;
   }
+
 %>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<%=headerContent%>
+	<title>Knowledgebase</title>
+</head>
+<body>
+	<%=footerContent%>
 <!-- Determine Console.logging - we log in local boxes -->
 <%
 
@@ -167,7 +173,6 @@ var LOCAL_SERVER = <%=debug%>;
 var IS_FLUID = <%=is_fluid %>
 
 
-
 var HANDLEBARS_LIB = LOCAL_SERVER ? "/lib/handlebars-v1.3.0.js" : "//cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.3.0/handlebars.min.js";
 
 
@@ -202,6 +207,7 @@ var en;
 var Agile_Contact = {};
 
 var _LANGUAGE = "en";
+var kbpagelpid;
 
 
 // head.ready('library', function() {
@@ -248,13 +254,6 @@ head.ready(["core"], function(){
 function load_globalize()
 {
 
-  /*if (typeof Globalize != "function") {
-    setTimeout(function() {
-      load_globalize();
-    }, 100);
-    return;
-  } */
-
   Globalize.load(Globalize_Main_Data);
   en = Globalize("en");
 
@@ -262,3 +261,4 @@ function load_globalize()
 </script>
 </body>
 </html>
+<%}%>

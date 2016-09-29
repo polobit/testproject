@@ -54,8 +54,6 @@ pageEncoding="UTF-8"%>
 
 
 <%
-  ObjectMapper mapper = new ObjectMapper();
-  
   
   // Download the template the user likes
   String template = "default";
