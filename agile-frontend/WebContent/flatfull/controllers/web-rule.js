@@ -68,6 +68,8 @@ var WebreportsRouter = Backbone.Router.extend({
 					{
 						chainWebRules(el, undefined, true);
 						$("#content").html(el);
+						if($('#LHS :selected').val()=="page")
+							$('#RHS input').val("http");
 					}, true);
 
 				})
@@ -225,6 +227,8 @@ var WebreportsRouter = Backbone.Router.extend({
 					{
 						chainWebRules(el, undefined, true);
 						$("#content").html(el);
+						if($('#LHS :selected').val()=="page")
+							$('#RHS input').val("http");
 						$("#tinyMCEhtml_email").text(" ");
 						$("#tiny_mce_webrules_link").trigger('click');
 					}, true);
