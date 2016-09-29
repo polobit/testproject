@@ -550,7 +550,7 @@ function bulk_delete_operation(url, id_array, index_array, table, is_grid_view, 
 							setTimeout(function() {
 								var count_message = "<small> (" + res_count + " " +_agile_get_translated_val('other','total')+") </small>";
 								$('#contacts-count').html(count_message);
-								if(is_curr_route == "contacts"){
+								if($(table).attr('id') == "contacts-table"){
 									CONTACTS_HARD_RELOAD = true;
 									contacts_view_loader.getContacts(App_Contacts.contactViewModel, $("#contacts-listener-container"));
 								}else{
