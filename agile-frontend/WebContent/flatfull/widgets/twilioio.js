@@ -12,7 +12,8 @@ $(function(){
 		  	{
 		  		to = TwilioIONumbers[0].value;
 			}
-			getTwilioIOLogs(to);
+		var contact = agile_crm_get_contact();
+			getTwilioIOLogs(to,null, contact);
 					
 	});
 
@@ -29,7 +30,8 @@ $(function(){
 	  		{
 	  			to = TwilioIONumbers[0].value;
 			}
-			getTwilioIOLogs(to,"incoming");
+		var contact = agile_crm_get_contact();
+			getTwilioIOLogs(to,"incoming", contact);
 	});
 	
 });
@@ -102,7 +104,7 @@ function showListOfContactNumbers()
 	if (TwilioIONumbers.length == 0)
 	{
 		// Shows information in Twilio widget panel
-		twilioIOError(TwilioIO_PLUGIN_NAME, "There is no phone number associated with this contact. <a href='#contact-edit' class='text-info'>Add phone number</a>");
+		twilioIOError(TwilioIO_PLUGIN_NAME,  _agile_get_translated_val('widgets','no-phone-number-to-contact') + " <a href='#contact-edit' class='text-info'>"+_agile_get_translated_val('campaigns','add-phone-number')+"</a>");
 		return;
 	}
 
@@ -114,8 +116,9 @@ function showListOfContactNumbers()
  		if(!template_ui)
     		return;
 		$('#TwilioIO').html($(template_ui)); 
+		var contact = agile_crm_get_contact();
 		// Retreive Twilio call logs and show it in Twilio widget panel
-		getTwilioIOLogs(TwilioIONumbers[0].value);
+		getTwilioIOLogs(TwilioIONumbers[0].value, null, contact);
 
 		/*
 		 * On change of number in select box, we retrieve call logs for it and show
@@ -125,11 +128,13 @@ function showListOfContactNumbers()
 			if($(".twilio_outgoing_logs").hasClass("active")){
 				$('#twilio-outgoing-logs-panel').html(TWILIOIO_LOGS_LOAD_IMAGE);
 					var to = $('#contact_number').val();
-					getTwilioIOLogs(to);
+					var contact = agile_crm_get_contact();
+					getTwilioIOLogs(to, null, contact);
 			}else{
 				$('#twilio-incoming-logs-panel').html(TWILIOIO_LOGS_LOAD_IMAGE);
 				var to = $('#contact_number').val();
-				getTwilioIOLogs(to,"incoming");
+				var contact = agile_crm_get_contact();
+				getTwilioIOLogs(to,"incoming", contact);
 			}
 		});
 	}, '#TwilioIO');
@@ -143,11 +148,13 @@ function showListOfContactNumbers()
  * @param to
  *            {@link String} number to which calls are made
  */
-function getTwilioIOLogs(to, direction)
+function getTwilioIOLogs(to, direction, contact)
 {
 
 	var dir = "outgoing";
-	
+	var num = to;
+	var cont = contact;
+	to = getFormattedPhone(num, cont);
 	if(direction){
 		if(direction == "incoming"){
 			dir = "incoming";
@@ -159,7 +166,7 @@ function getTwilioIOLogs(to, direction)
 	if(to == "" || !to)
 	  {
 		// Shows information in Twilio widget panel
-		twilioIOError(TwilioIO_PLUGIN_NAME, "There is no phone number associated with this contact. <a href='#contact-edit' class='text-info'>Add phone number</a>");
+		twilioIOError(TwilioIO_PLUGIN_NAME,  _agile_get_translated_val('widgets','no-phone-number-to-contact') + " <a href='#contact-edit' class='text-info'>"+_agile_get_translated_val('campaigns','add-phone-number')+"</a>");
 		return;
 	  }		
 	
@@ -191,10 +198,7 @@ function getTwilioIOLogs(to, direction)
 		$("#twilio-"+dir+"-logs-panel").html(twilio_logs_template);
 
 			// Load jquery time ago function to show time ago in logs
-			head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
-			{
-				$(".time-ago", twilio_logs_template).timeago();
-			});
+			agileTimeAgoWithLngConversion($(".time-ago", twilio_logs_template));
 
 			// Add more button if more than 10 call logs present
 			addMoreButton(pageInfo, dir);
@@ -283,7 +287,7 @@ function addMoreButton(pageInfo, direction)
 	if (pageInfo.page)
 		$("#twilio-"+dir+"-logs-panel")
 				.append(
-						'<div class="widget_tab_footer" id="twilioio_show_more" align="center" style="float:none"><a href="#" class="text-info" id="twilioio_more_call_logs" page="' + pageInfo.page + '" pageToken="' + pageInfo.pageToken + '" style="margin-bottom: 10px;"  title="Click to see more call logs" direction="' + dir + '">Show More</a></div>');
+						'<div class="widget_tab_footer" id="twilioio_show_more" align="center" style="float:none"><a href="#" class="text-info" id="twilioio_more_call_logs" page="' + pageInfo.page + '" pageToken="' + pageInfo.pageToken + '" style="margin-bottom: 10px;"  title="'+_agile_get_translated_val('widgets','click-to-see-more-logs')+'" direction="' + dir + '">'+_agile_get_translated_val('widgets','show-more')+'</a></div>');
 }
 
 // Get next 10 calls, add in UI, do "More" btn settings
@@ -320,10 +324,7 @@ function getNextLogs(to, page, pageToken, direction)
 	    	$("#twilio-"+dir+"-logs-panel").append(twilio_logs_template);
 
 			// Load jquery time ago function to show time ago in logs
-			head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
-			{
-				$(".time-ago", twilio_logs_template).timeago();
-			});
+			agileTimeAgoWithLngConversion($(".time-ago", twilio_logs_template));
 
 			// Add more button if more than 10 call logs present
 			addMoreButton(pageInfo, dir);

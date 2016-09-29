@@ -12,6 +12,8 @@ public class JerseyApplication extends Application
     {
 	Set<Class<?>> s = new HashSet<Class<?>>();
 
+	s.addAll(com.agilecrm.core.si.JerseyApplication.getJerseyClasses());
+	
 	s.add(org.codehaus.jackson.jaxrs.JacksonJaxbJsonProvider.class);
 	s.add(org.codehaus.jackson.jaxrs.JacksonJsonProvider.class);
 	s.add(org.codehaus.jackson.jaxrs.JsonParseExceptionMapper.class);
@@ -25,7 +27,6 @@ public class JerseyApplication extends Application
 	s.add(com.agilecrm.core.api.prefs.NotificationsAPI.class);
 	s.add(com.agilecrm.core.api.reports.ReportsAPI.class);
 	s.add(com.agilecrm.core.api.calendar.TasksAPI.class);
-	s.add(com.agilecrm.core.api.prefs.UserPrefsAPI.class);
 	s.add(com.agilecrm.core.api.prefs.ContactViewPrefsAPI.class);
 	s.add(com.agilecrm.core.api.contacts.customview.CustomViewAPI.class);
 	s.add(com.agilecrm.core.api.contacts.ContactsAPI.class);
@@ -33,7 +34,6 @@ public class JerseyApplication extends Application
 	s.add(com.agilecrm.core.api.contacts.ContactFilterAPI.class);
 	s.add(com.agilecrm.core.api.contacts.NotesAPI.class);
 	s.add(com.agilecrm.core.api.contacts.CustomFieldsAPI.class);
-	s.add(com.agilecrm.core.api.prefs.AccountPrefsAPI.class);
 	s.add(com.agilecrm.core.api.deals.MilestoneAPI.class);
 	s.add(com.agilecrm.core.api.prefs.IMAPAPI.class);
 	s.add(com.agilecrm.core.api.prefs.OfficePrefsAPI.class);
@@ -45,7 +45,6 @@ public class JerseyApplication extends Application
 	s.add(com.agilecrm.core.api.campaigns.WorkflowsAPI.class);
 	s.add(com.agilecrm.core.api.campaigns.WorkflowTemplatesAPI.class);
 	s.add(com.agilecrm.core.api.prefs.SocialPrefsAPI.class);
-	s.add(com.agilecrm.core.api.UsersAPI.class);
 	s.add(com.agilecrm.core.api.API.class);
 	s.add(com.agilecrm.core.api.widgets.WidgetsAPI.class);
 	s.add(com.agilecrm.core.api.bulkactions.backends.BulkActionsAPI.class);

@@ -16,7 +16,7 @@
 <div class="wrapper-md lter bg-light b-b">
 	<div class="row">
 		<div class="col-sm-12 col-md-12">
-			<h3 class="pull-left font-thin h3">Referral Program</h3>			
+			<h3 class="pull-left font-thin h3">{{agile_lng_translate 'referrals' 'referral-program'}}</h3>			
 		</div>
 	</div>
 </div>
@@ -29,12 +29,16 @@
 				</div>
 				<div class="box-right pull-left">
 					<h4 class="m-t-none"> 
-						You have not referred Agile CRM yet to any one
+						{{agile_lng_translate 'referrals' 'you-have-not-referred-agile-crm-yet-to-any-one'}}
 					</h4>
+					<div>
+						{{agile_lng_translate 'referrals' 'place-this-link-on-your-website'}}
+					</div>	
+
             		<div class="bg-warning r-5x p-sm">
 		   				<span id="referral_url" class="text-base inline-block m-r-xxl">http://www.agilecrm.com/?utm_source=affiliates&utm_medium=web&utm_campaign={{get_current_domain}}</span>
 						<a  id="url_clip_button" class="inline-block text-l-none" data-clipboard-text="http://www.agilecrm.com/?utm_source=affiliates&utm_medium=web&utm_campaign={{get_current_domain}}">
-						<i class="icon-copy copy_email_clipboard_icon text-xlg p-r-xs font-bold" title=""></i> Copy</a>
+						<i class="icon-copy copy_email_clipboard_icon text-xlg p-r-xs font-bold" title=""></i> {{agile_lng_translate 'referrals' 'copy'}}</a>
 		    		</div>
 				</div>
 				<div class="clearfix"></div>
@@ -47,33 +51,34 @@
 <div class="wrapper-md lter bg-light b-b">
 	<div class="row">
 		<div class="col-sm-12 col-md-12">
-			<h3 class="pull-left font-thin h3">Referral Program</h3>			
+			<h3 class="pull-left font-thin h3">{{agile_lng_translate 'referrals' 'referral-program'}}</h3>			
 		</div>
 	</div>
 </div>
 <div class="wrapper-md">
 	<div class="col-md-8">
-		<h3> Referral Link</h3>
+		<h3> {{agile_lng_translate 'referrals' 'referral-link'}}</h3>
 		<div  style="padding-top: 10px; padding-bottom: 5px;">
-			Place this link on your website, in your email newsletter, or give it to someone when you refer them to AgileCRM.
+			{{agile_lng_translate 'referrals' 'place-this-link-on-your-website'}}
 		</div>
 		<div style="margin-bottom: 20px;" class="data">
 			<div class="data-container">
 				<div  class="p-sm r-5x inline-block">
 					<span class="text-md inline-block m-r-xxl"  id="referral_url">http://www.agilecrm.com/?utm_source=affiliates&utm_medium=web&utm_campaign={{get_current_domain}} </span>
 					<a href="javascript:;" id="url_clip_button" class="text-l-none"  data-clipboard-text="http://www.agilecrm.com/?utm_source=affiliates&utm_medium=web&utm_campaign={{get_current_domain}}">
-					<i class="icon-copy copy_email_clipboard_icon text-xlg font-bold" title=""></i> Copy</a>	
+					<i class="icon-copy copy_email_clipboard_icon text-xlg font-bold" title=""></i> {{agile_lng_translate 'referrals' 'copy'}}</a>	
 				</div>
             </div>
 		</div>		
     </div>        
 	<div id="your_referrals" class="col-md-4">	
 	<div class="panel panel-default">						
-		<div class="panel-heading">Your Referrals till date {{count}}</div>
+		<div class="panel-heading">{{agile_lng_translate 'referrals' 'your-referrals-till-date'}} {{count}}
+		</div>
 		<table id="referrals" class="table" style="table-layout:auto">
 			<thead>
                 <tr style="text-transform: capitalize;">					
-                    <th>Basic info</th>
+                    <th>{{agile_lng_translate 'contacts-view' 'Basic info'}}</th>
                 </tr>
             </thead>
 			<tbody id="referrals-model-list" class="referrals-model-list c-p overflow-scroll"></tbody>

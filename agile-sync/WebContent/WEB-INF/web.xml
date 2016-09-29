@@ -204,6 +204,14 @@
     <url-pattern>/twilioiostatuscallback</url-pattern>
   </servlet-mapping>
   <servlet>
+    <servlet-name>AffiliateReportServlet</servlet-name>
+    <servlet-class>com.agilecrm.affiliate.cron.AffiliateReportServlet</servlet-class>
+  </servlet>   
+  <servlet-mapping>
+    <servlet-name>AffiliateReportServlet</servlet-name>
+    <url-pattern>//backend/cron/affiliateReport</url-pattern>
+  </servlet-mapping>
+  <servlet>
     <servlet-name>TwilioIOTwiml</servlet-name>
     <servlet-class>com.thirdparty.twilio.TwilioIOTwiml</servlet-class>
   </servlet>
@@ -308,6 +316,11 @@
    --><welcome-file-list>
     <welcome-file>home</welcome-file>
   </welcome-file-list>
+  
+	<listener>
+		<listener-class>com.agilecrm.sync.AgileServletContextListener</listener-class>
+	</listener>
+  
   <servlet>
     <servlet-name>RedirectServlet</servlet-name>
     <servlet-class>com.campaignio.servlets.RedirectServlet</servlet-class>

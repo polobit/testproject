@@ -18,13 +18,26 @@ $(function()
 				if ($("#schedule_controls").css("display") == "block")
 				{
 					// Change send button's text.
-					document.getElementById("send_tweet").innerHTML = "Schedule";
+					document.getElementById("send_tweet").innerHTML = "{{agile_lng_translate 'other' 'schedule'}}";
 					$("#send_tweet").attr("disabled", "disable");
 
 					this.className = "tweet-scheduling tweet-scheduling-active";
 
 					// Set current date.
 					$('input.date').val(getDateInFormat(new Date()));
+
+					// head.js(CSS_PATH + 'css/businesshours/jquerytimepicker.css',
+					// 		LIB_PATH + 'lib/businesshours/jquerytimepicker.js',
+					// 		function(){
+					//  			$('#scheduled_time').timepicker({ 'timeFormat' : 'H:i', 'step' : 15 });
+					//  			/**
+					// 			 * Fills current time only when there is no time in the fields
+					// 			 */
+					// 			if ($('#scheduled_time').val() == '')
+					// 				$('#scheduled_time').val(get_hh_mm());
+					//  		}
+					// );
+					
 					$('#scheduled_date').datepicker({ startDate : "today", autoclose : true, todayHighlight : true, format : CURRENT_USER_PREFS.dateFormat }).on('changeDate',
 							function(ev)
 							{
@@ -64,7 +77,7 @@ $(function()
 					Message_Model.model.url = Previous_URL;
 
 					// Change send button's text.
-					document.getElementById("send_tweet").innerHTML = "Send";
+					document.getElementById("send_tweet").innerHTML = "{{agile_lng_translate 'tasks' 'Send'}}";
 					$('#send_tweet').removeAttr("disabled");
 
 					// Scheduling de-select

@@ -18,7 +18,7 @@
 		var optionsTemplate = "<option value='{{id}}' network_type='{{titleFromEnums network_type}}' size='{{size}}' url='{{url}}'>{{name}}</option>";
         fillSelect('attachment-select','core/api/documents', 'documents',  function fillNew()
 		{
-			el.find("#attachment-select option:first").after("<option value='new'>Upload new doc</option>");
+			el.find("#attachment-select option:first").after("<option value='new'>"+_agile_get_translated_val('others','upload-new-doc')+"</option>");
 
 		}, optionsTemplate, false, el); 
 	});
@@ -32,11 +32,11 @@
 		var document_size = $('#attachment-select').find(":selected").attr('size');
 		if(typeof network_type !=='undefined' && network_type.toUpperCase() === 'GOOGLE')
 		{
-			$(this).closest("span").find(".attachment-status").html("<span style='color:#df382c;margin-top:10px; display:block'>Can not attach Google Drive doc to email. You can add a link instead in the email.</span>");
+			$(this).closest("span").find(".attachment-status").html("<span style='color:#df382c;margin-top:10px; display:block'>"+_agile_get_translated_val('documents','gd-error')+"</span>");
 			//$(this).css({'border': '1px solid #df382c','outline': 'none'   });				             	            
 		}
 		else if(document_size >= 5242880){
-			$(this).closest("span").find(".attachment-status").html("<span style='color:#df382c;margin-top:10px; display:block'>Document size exceeds the 5MB limit.</span>");
+			$(this).closest("span").find(".attachment-status").html("<span style='color:#df382c;margin-top:10px; display:block'>"+_agile_get_translated_val('documents','size-exceed-error')+"</span>");
 			//$(this).css({'border': '1px solid #df382c','outline': 'none'   });
 		}
 		else
@@ -49,7 +49,7 @@
 	  		// To check whether the document is selected or not
 		    if(document_id == "")
 		    {
-		    	saveBtn.closest("span").find(".save-status").html("<span style='color:red;margin-left:10px;'>This field is required.</span>");
+		    	saveBtn.closest("span").find(".save-status").html("<span style='color:red;margin-left:10px;'>"+_agile_get_translated_val('validation-msgs','required')+"</span>");
 		    	saveBtn.closest("span").find('span.save-status').find("span").fadeOut(5000);
 		    	return;
 		    }	    	

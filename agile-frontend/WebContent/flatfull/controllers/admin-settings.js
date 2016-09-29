@@ -26,6 +26,9 @@ var AdminSettingsRouter = Backbone.Router.extend({
 	/* Milestones */
 	"milestones" : "milestones",
 	
+	/* telepnony */
+	"telephony" : "telephony",
+	
 	/* Categories */
 	"categories" : "categories",
 
@@ -196,7 +199,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 					
 				}, saveCallback : function(){
 				console.log("saveCallback");
-				showNotyPopUp("information", "Your IP Address has been updated successfully.", "top", 4000);
+				showNotyPopUp("information", _agile_get_translated_val('security','ip-added'), "top", 4000);
 				App_Admin_Settings.ipaccess();
 			},errorCallback : function(data){
 				showNotyPopUp("warning", data.responseText, "top");
@@ -231,14 +234,14 @@ var AdminSettingsRouter = Backbone.Router.extend({
                 if($(".checkedMultiCheckbox").find('input:checked').length > 0)
                       return true;
                 else{
-                    $(".checkedMultiCheckbox").append("<span generated='true' class='help-inline col-sm-offset-4 col-xs-offset-4 controls col-sm-8 col-xs-8' style='display: block;'>Please select at least one option.</span>"); 
+                    $(".checkedMultiCheckbox").append("<span generated='true' class='help-inline col-sm-offset-4 col-xs-offset-4 controls col-sm-8 col-xs-8' style='display: block;'>" +_agile_get_translated_val('validation-msgs', 'select-atleast-one')+ "</span>"); 
                 }
                 
                  return false;
 			}, saveCallback : function(){
 				console.log("saveCallback");
 				App_Admin_Settings.webhookSettings();
-				showNotyPopUp("information", "Preferences saved successfully", "top", 1000);
+				showNotyPopUp("information", _agile_get_translated_val('others', 'prefs-saved-success'), "top", 1000);
 			},
 			errorCallback : function(data){
 				showNotyPopUp("warning", data.responseText, "top",2000);
@@ -268,14 +271,14 @@ var AdminSettingsRouter = Backbone.Router.extend({
                 if($(".checkedMultiCheckbox").find('input:checked').length > 0)
                       return true;
                 else{
-                    $(".checkedMultiCheckbox").append("<span generated='true' class='help-inline col-sm-offset-4 col-xs-offset-4 controls col-sm-8 col-xs-8' style='display: block;'>Please select at least one option.</span>"); 
+                    $(".checkedMultiCheckbox").append("<span generated='true' class='help-inline col-sm-offset-4 col-xs-offset-4 controls col-sm-8 col-xs-8' style='display: block;'>" +_agile_get_translated_val('validation-msgs', 'select-atleast-one')+ "</span>"); 
                 }
                 
                  return false;
 			}, saveCallback : function(){
 				console.log("saveCallback");
 				App_Admin_Settings.jsSecuritySettings();
-				showNotyPopUp("information", "Preferences saved successfully", "top", 1000);
+				showNotyPopUp("information", _agile_get_translated_val('others', 'prefs-saved-success'), "top", 1000);
 			} });
 
 			$('#content').find('#js-security-accordian-template').html(view.render().el);
@@ -305,7 +308,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			},saveCallback : function(){
 				console.log("saveCallback");
 				App_Admin_Settings.ssoLoginSettings();
-				showNotyPopUp("information", "Preferences saved successfully", "top", 1000);
+				showNotyPopUp("information", _agile_get_translated_val('others', 'prefs-saved-success'), "top", 1000);
 			},
 			deleteCallback : function(){
 				console.log("deleteCallback");
@@ -350,10 +353,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			individual_tag_name : "tr", sortKey : "name", postRenderCallback : function(el)
 			{
 				$('i').tooltip();
-				head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
-				{
-					$(".last-login-time", el).timeago();
-				});
+				agileTimeAgoWithLngConversion($(".last-login-time", el));
 				
 			} });
 			that.usersListView.collection.fetch();
@@ -497,7 +497,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 					if (needLogout && CURRENT_DOMAIN_USER.email != response.email)
 					{
 						console.log('Logging out...');
-						showNotyPopUp("information", "You Email has been updated successfully. Logging out...", "top");
+						showNotyPopUp("information", _agile_get_translated_val('domain-user', 'email-edited'), "top");
 						var hash = window.location.hash;
 
 						setTimeout(function()
@@ -911,7 +911,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 				acl_util.initTagACL(el);
 				initializeTagManagementListeners();
 				$(".allow_users_switch").tooltip({
-			        title: "<p>Allow all users to add New Tags.</p><p>Disable this option if you don't want users (non-admin) to add new tags on contacts or companies, apart from the tags listed here.</p>",  
+			        title: "<p>" +_agile_get_translated_val('tag-manage','allow-users-to-add')+ "</p><p>" +_agile_get_translated_val('tag-manage', 'allow-tooltip')+ "</p>",  
 			        html: true,
 			        placement : 'bottom'
 			    }); 
@@ -975,7 +975,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 				{
 					if(emailGateway["email_api"].toUpperCase() != value)//checks if the current email gateway is the same as the clicked one
 					{
-					modalAlert("sms-integration-alert-modal","You have a Email Gateway already configured. Please disable that to configure a new one.","Email Gateway Configured");
+					modalAlert("sms-integration-alert-modal", _agile_get_translated_val('emailgateway','already-exists'), _agile_get_translated_val('emailgateway', 'configured'));
 					that.navigate("integrations", { trigger : true });
 					return;	
 					}
@@ -1033,10 +1033,10 @@ var AdminSettingsRouter = Backbone.Router.extend({
 						var msg = response.responseText;
 
 						if(msg.indexOf('SignatureDoesNotMatch') != -1)
-	                        msg = msg.replace('SignatureDoesNotMatch', 'Signature Mismatch');
+	                        msg = msg.replace('SignatureDoesNotMatch', _agile_get_translated_val('emailgateway','sign-mis-match'));
 
 	                    if(msg.indexOf('InvalidClientTokenId') != -1)
-	                    	msg = msg.replace('InvalidClientTokenId', 'Invalid Access Key');
+	                    	msg = msg.replace('InvalidClientTokenId', _agile_get_translated_val('emailgateway','invalid-acceess-key'));
 
 						// Show cause of error in saving
 						var $save_info = $('<div style="display:inline-block"><small><p style="color:#B94A48; font-size:14px"><i>'
@@ -1117,8 +1117,8 @@ var AdminSettingsRouter = Backbone.Router.extend({
 					// gateway is the same as
 					// the clicked one
 					{
-						modalAlert("sms-integration-alert-modal", "You have a SMS Gateway already configured. Please disable that to configure a new one.",
-								"SMS Gateway Configured");
+						modalAlert("sms-integration-alert-modal", _agile_get_translated_val('smsgateway', 'already-exists'),
+								_agile_get_translated_val('smsgateway','configured'));
 						that.navigate("integrations", { trigger : true });
 						return;
 					}
@@ -1144,15 +1144,15 @@ var AdminSettingsRouter = Backbone.Router.extend({
 						{
 							$("#integrations-image", el).attr("src", "/img/plugins/plivo.png");
 							$("#accoundID", el).attr("name", "account_id");
-							$("#accoundID", el).attr("placeholder", "Auth ID");
-							$("#integrations-label", el).text("You need a Paid Plivo account to be able to send SMS");
+							$("#accoundID", el).attr("placeholder", _agile_get_translated_val("integrations", "auth-id"));
+							$("#integrations-label", el).text(_agile_get_translated_val('integrations', 'you-need-a-paid-plivo-account'));
 						}
 						if (id == "twilio")
 						{
 							$("#integrations-image", el).attr("src", "/img/plugins/twilio.png");
 							$("#accoundID", el).attr("name", "account_sid");
-							$("#accoundID", el).attr("placeholder", "Account SID");
-							$("#integrations-label", el).text("Please provide your account details");
+							$("#accoundID", el).attr("placeholder", _agile_get_translated_val("integrations", "account-sid"));
+							$("#integrations-label", el).text(_agile_get_translated_val('integrations', 'account-details'));
 						}
 					}, saveCallback : function(data)
 					{
@@ -1372,7 +1372,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 				if(domain == null)
 					window.location.href = "/login";
 				if(domain != response.alias[0]){
-					showNotyPopUp("information", "Your domain name has been updated successfully. Logging out...", "top");
+					showNotyPopUp("information", _agile_get_translated_val('domain-user','domain-edited'), "top");
 					setTimeout(function()
 					{
 						window.location.href = window.location.protocol + "//" + response.alias[0] + ".agilecrm.com/login" + window.location.hash;
@@ -1391,6 +1391,46 @@ var AdminSettingsRouter = Backbone.Router.extend({
 
 		
 		
+	},
+	
+	telephony : function(){
+		if (!CURRENT_DOMAIN_USER.is_admin)
+		{
+			getTemplate('others-not-allowed', {}, undefined, function(template_ui){
+				if(!template_ui)
+					  return;
+				$('#content').html($(template_ui));	
+			}, "#content");
+
+			return;
+		}
+		
+		var that = this;
+		$('#content').html("<div id='telephony-listner'>&nbsp;</div>");
+		getTemplate("admin-settings", {}, undefined, function(template_ui){
+			if(!template_ui)
+				  return;
+			$('#telephony-listner').html($(template_ui));
+			
+			that.telephonyGridView = new Telephony_Status_Collection_View({ url : '/core/api/categories?entity_type=TELEPHONY_STATUS', templateKey : "admin-settings-telephony",
+				individual_tag_name : 'tr', sortKey : "order", postRenderCallback : function(el)
+				{
+					
+					console.log("loaded telephony : ", el);
+					
+					initializeTelephonyListners(el);
+					//categories.setup_categories(el);
+					//categories.init();
+				
+				} });
+			that.telephonyGridView.collection.fetch();
+			$('#content').find('#admin-prefs-tabs-content').html(that.telephonyGridView.render().el);
+			$('#content').find('#AdminPrefsTab .select').removeClass('select');
+			$('#content').find('.telephony-tab').addClass('select');
+			$(".active").removeClass("active");
+			
+		}, "#telephony-listner");
+
 	}
 
 });
@@ -1398,10 +1438,8 @@ var AdminSettingsRouter = Backbone.Router.extend({
 
 function initQuota(callback)
 {
-	$("#goal_duration span.date").datepicker({ format :"MM yyyy", minViewMode:"months",weekStart : CALENDAR_WEEK_START_DAY, autoclose : true ,
-						
-				}).on('changeMonth',function(e) {
-       						/// alert(e);
+	$("#goal_duration span.date").datepicker({ format :"MM yyyy", minViewMode:"months",weekStart : CALENDAR_WEEK_START_DAY, autoclose : true})
+		.on('changeMonth',function(e) {
        						$("#goal_duration span").html( e.date.format("mmmm yyyy"));
        						 callback();
 

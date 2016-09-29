@@ -58,6 +58,7 @@ function getMergeFields(type, callback) {
 		"LinkedIn Id" : "{{linkedin_id}}",
 		"Owner Name" : "{{owner.name}}",
 		"Owner Email" : "{{owner.email}}",
+		"Owner Phone" : "{{owner.phone}}",
 		"Owner calendar URL" : "{{owner.calendar_url}}",
 		"Owner Signature" : "{{{owner.signature}}}"
 	};
@@ -596,6 +597,7 @@ function getMergeFieldsWithOptGroups(uiFieldDefinition, selectEventHandler) {
 		"Owner" : {
 			"Owner Name" : "{{owner.name}}",
 			"Owner Email" : "{{owner.email}}",
+			"Owner Phone" : "{{owner.phone}}",
 			"Owner calendar URL" : "{{owner.calendar_url}}",
 			"Owner Signature" : "{{{owner.signature}}}"
 		},
@@ -941,4 +943,22 @@ function insertSelectedOption1(ele ,target_id)
         cache_arr.push(value);
 
         return false;
+	}
+
+	// Removes multi select required if merge field is given
+	function disable_owner_multiselect($selector)
+	{
+		try
+		{
+			if($selector.find('#mergefield_owner_id') 
+			&& $selector.find('#mergefield_owner_id').length != 0)
+			{
+				if($selector.find('#mergefield_owner_id').val())
+	        		$selector.find('[name="owner_id"]').removeProp("required");
+			}
+		}
+		catch(err)
+		{
+
+		}	
 	}

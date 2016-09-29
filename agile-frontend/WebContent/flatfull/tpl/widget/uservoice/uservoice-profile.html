@@ -1,29 +1,29 @@
 <script id="uservoice-login-template" type="text/html">
 	<div>
 		<form  id="uservoice_login_form" name="uservoice_login_form" method="post">
-	    	<fieldset>			
-				<label><b>Enter your UserVoice details</b></label>
+	    	<fieldset>	
+				<label><b>{{agile_lng_translate 'widgets' 'enter-your-userVoice-details'}} </b></label>
 				<div class="control-group form-group">
 					<div class="controls">
-						<input type="text" id="uv_api_key" placeholder="API Key" class="input-medium required widget_input_box form-control" value="" name="uv_api_key">
+						<input type="text" id="uv_api_key" placeholder="{{agile_lng_translate 'admin-settings-integrations' 'api-key'}}" class="input-medium required widget_input_box form-control" value="" name="uv_api_key">
 						</input>
 					</div>
 				</div>
 				<div class="control-group form-group">
 					<div class="controls">
-						<input type="text" id="uv_secert_key" class="input-medium required widget_input_box form-control"  placeholder="Secret Key" value="" name="uv_secert_key">
+						<input type="text" id="uv_secert_key" class="input-medium required widget_input_box form-control"  placeholder="{{agile_lng_translate 'admin-settings-integrations' 'secret-key'}}" value="" name="uv_secert_key">
 						</input>
 					</div>
 				</div>
 				<div class="control-group form-group">
 					<div class="controls">
-						<input type="text" id="uv_domain_name" class="input-medium required widget_input_box form-control"  placeholder="Domain Name" value="" name="uv_domain_name">
+						<input type="text" id="uv_domain_name" class="input-medium required widget_input_box form-control"  placeholder="{{agile_lng_translate 'widgets' 'domain-name'}}" value="" name="uv_domain_name">
 						</input>
 					</div>
 				</div>
 				<div class="text-center">		
-				<a href="#add-widget" class="btn btn-default btn-sm">Cancel</a>
-				<a href="#" id="save_prefs" class="save-agile-widget btn btn-sm btn-primary ml_5">Save</a>
+				<a href="#add-widget" class="btn btn-default btn-sm">{{agile_lng_translate 'other' 'cancel'}}</a>
+				<a href="#" id="save_prefs" class="save-agile-widget btn btn-sm btn-primary ml_5">{{agile_lng_translate 'portlets' 'save'}}</a>
 				</div>
 			 </fieldset>
 	    </form>
@@ -50,25 +50,25 @@
 	{{/if}}		
 	<div class="row">
 			<div class="col-md-5">
-				<div class="pull-right">:</div> Role
+				<div class="pull-right">:</div> {{agile_lng_translate 'widgets' 'role'}}
 			</div>
 			<div class="col-md-6 p-n">
 				{{#if userInfo.is_admin}}
-					 Admin
+					 {{agile_lng_translate 'admin-settings-users' 'admin'}}
 				{{else}}
-					 General User
+					 {{agile_lng_translate 'widgets' 'general-user'}}
 				{{/if}}
 			</div>
 	</div>
 	<div class="row">
 			<div class="col-md-5">
-				<div class="pull-right">:</div> Status
+				<div class="pull-right">:</div> {{agile_lng_translate 'portlets' 'status'}}
 			</div>
 			<div class="col-md-6 p-n">
 				{{#if_equals userInfo.allowed_state "allowed"}}
-					 Active
+					 {{agile_lng_translate 'contacts-view' 'active'}}
 				{{else}}
-					 Blocked
+					 {{agile_lng_translate 'widgets' 'blocked'}}
 				{{/if_equals}}
 			</div>
 	</div>
@@ -79,7 +79,7 @@
 <div id="uservoice-comments"></div>
 {{else}}
 	<div class="wrapper-sm">
-		User not found.
+		{{agile_lng_translate 'widgets' 'user-not-found'}}
 	</div>
 {{/if}}
 </script>
@@ -102,7 +102,7 @@
 				{{#if suggestion.url}}			
 					<div class="pull-left p-sm">
 						<a class="btn btn-xs btn-default" target="_blank" href="{{suggestion.url}}">
-							View on Uservoice
+							{{agile_lng_translate 'widgets' 'view-on-uservoice'}}
 						</a>
 					</div>
 				{{/if}}
@@ -113,6 +113,6 @@
 		</li>
 	{{/each}}
 {{else}}
-	<li class="list-group-item r-none b-l-none b-r-none"> No Comments </li>
+	<li class="list-group-item r-none b-l-none b-r-none"> {{agile_lng_translate 'widgets' 'no-comments'}} </li>
 {{/if}}
 </script>

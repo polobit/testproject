@@ -101,7 +101,7 @@ function save_widget_prefs(pluginName, prefs, callback) {
 				displayName = pluginName;
 			}			
 
-			msg = displayName+" widget saved successfully";
+			msg = displayName+" {{agile_lng_translate 'widget' 'widget-saved'}}";
 
 			if(widgetID){
 

@@ -69,6 +69,11 @@
         <copy todir="${TARGET_DIR}/${ant.project.name}.war">
             <fileset dir="WebContent" />
         </copy>
+    	<!-- Copy locales folder -->
+    	<copy todir="${TARGET_DIR}/${ant.project.name}.war/locales">
+    	      <fileset dir="../agile-frontend/WebContent/locales" />
+    	</copy>
+    	
         <!--Copy application libraries to target -->
         <copy todir="${TARGET_DIR}/${ant.project.name}.war/WEB-INF/lib">
             <fileset dir="${LIB_DIR}" />

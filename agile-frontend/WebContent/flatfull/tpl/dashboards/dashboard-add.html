@@ -1,12 +1,14 @@
 <script id="dashboard-add-template" type="text/html">
 <div class="bg-light lter b-b wrapper-md">
 	{{#if id}} 
-		<h3  class="formheading h3 font-thin m-n">Edit Dashboard
-			<span style="vertical-align: text-top; margin-left: -3px"> <img border="0" src="/img/help.png" style="height: 6px;" rel="popover" data-placement="bottom" data-content="User-defined dashboards allow users to create multiple dashboards for various purposes. Each of the user-defined dashboards can have different combinations of dashlets. Some examples can be Sales Dashboard, Marketing Dashboard and so on." id="element" data-trigger="hover"></span>
+		<h3  class="formheading h3 font-thin m-n">{{agile_lng_translate 'portlets' 'edit-dashboard'}}
+			<span style="vertical-align: text-top; margin-left: -3px"> <img border="0" src="/img/help.png" style="height: 6px;" rel="popover" data-placement="bottom" data-content="{{agile_lng_translate 'portlets' 'user-defined-dashboards-desc'}}" id="element" 
+			data-trigger="hover"></span>
 		</h3>
 	{{else}}
-        <h3 class="formheading h3 font-thin m-n"><i class="icon-plus-sign"></i> Add Dashboard
-        	<span style="vertical-align: text-top; margin-left: -3px"> <img border="0" src="/img/help.png" style="height: 6px;" rel="popover" data-placement="bottom" data-content="User-defined dashboards allow users to create multiple dashboards for various purposes. Each of the user-defined dashboards can have different combinations of dashlets. Some examples can be Sales Dashboard, Marketing Dashboard and so on." id="element" data-trigger="hover">
+        <h3 class="formheading h3 font-thin m-n"><i class="icon-plus-sign"></i> {{agile_lng_translate 'portlets' 'add-dashboard'}}
+        	<span style="vertical-align: text-top; margin-left: -3px"> <img border="0" src="/img/help.png" style="height: 6px;" rel="popover" data-placement="bottom" data-content="{{agile_lng_translate 'portlets' 'user-defined-dashboards-desc'}}" id="element" 
+        	data-trigger="hover">
 			</span>
 		</h3>
      {{/if}}
@@ -17,22 +19,23 @@
 			<form id="dashboardAddForm" name="dashboardAddForm" class="form-horizontal">
 				<fieldset>
 					<div class="control-group form-group">
-						<label class="control-label col-sm-2">Name<span class="field_req">*</span></label>
+						<label class="control-label col-sm-2">{{agile_lng_translate 'other' 'name'}}
+						<span class="field_req">*</span></label>
 						<div class="controls col-sm-6">
-							<input type="text" name="name" placeholder="Dashboard name" class="required form-control" autofocus/>
+							<input type="text" name="name" placeholder="{{agile_lng_translate 'portlets' 'dashboard-name'}}" class="required form-control" autofocus/>
 						</div>
 					</div>
 					<div class="control-group form-group">
-						<label class="control-label col-sm-2">Description</label>
+						<label class="control-label col-sm-2">{{agile_lng_translate 'other' 'description'}}</label>
 						<div class="controls col-sm-6">
-							<textarea name="description" id="description" placeholder="Add description" class="form-control" style="width:100%;" rows="5" />
+							<textarea name="description" id="description" placeholder="{{agile_lng_translate 'tasks' 'add-description'}}" class="form-control" style="width:100%;" rows="5" />
 						</div>
 					</div>
 					<div class="line line-lg b-b"></div>
 					<div class="row">
 						<div class="form-actions col-sm-offset-2 col-sm-10">
-							<a href="#dashboards" class="btn btn-sm btn-default">Cancel</a>
-							<a href="#" type="submit" class="save btn btn-sm btn-primary" id="dashboardAdd">Save</a>
+							<a href="#dashboards" class="btn btn-sm btn-default">{{agile_lng_translate 'other' 'cancel'}}</a>
+							<a href="#" type="submit" class="save btn btn-sm btn-primary" id="dashboardAdd">{{agile_lng_translate 'report-add' 'save'}}</a>
 							<span class="error-message inline-block"></span> 
 						</div>
 					</div>

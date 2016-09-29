@@ -31,10 +31,10 @@ Handlebars.registerHelper('calculate_due_date', function(due_date, options) {
 
 	if (due_date < currentEpoch) {
 
-		return 'Overdue by '+ Ticket_Utils.dateDiff(currentEpoch, due_date);
+		return '{{agile_lng_translate "deals" "overdue-by"}} '+ Ticket_Utils.dateDiff(currentEpoch, due_date);
 	}
 
-	return 'Due in ' + Ticket_Utils.dateDiff(currentEpoch, due_date);
+	return '{{agile_lng_translate "deals" "due-in"}} ' + Ticket_Utils.dateDiff(currentEpoch, due_date);
 });
 
 Handlebars.registerHelper('getInitials', function(name, options) {
@@ -105,12 +105,12 @@ Handlebars
 
 					if (due_date < currentEpoch) {
 
-						return '<span class="label bg-danger first-letter-cap inline-block" title="Overdue by '
+						return '<span class="label bg-danger first-letter-cap inline-block" title="{{agile_lng_translate "deals" "overdue-by"}} '
 								+ Ticket_Utils.dateDiff(currentEpoch, due_date)
-								+ '">Overdue</span>';
+								+ '">{{agile_lng_translate "tasks" "Overdue"}}</span>';
 					}
 
-					return '<span class="label bg-light first-letter-cap inline-block">Due in '
+					return '<span class="label bg-light first-letter-cap inline-block">{{agile_lng_translate "deals" "due-in"}} '
 							+ Ticket_Utils.dateDiff(currentEpoch, due_date)
 							+ '</span>';
 				});
@@ -610,4 +610,30 @@ Handlebars.registerHelper('helpcenter_url_section', function(options)
     var id = idarr[idarr.length-1];
 	return "/"+id;
 });
+
+Handlebars.registerHelper('get_ticket_translated_text', function(module, key, options)
+{
+	return get_ticket_translated_text(module, key);
+	
+});
 /** End of ticketing handlebars* */
+
+function get_ticket_translated_text(module, key){
+	var items = {
+		"priority" : {
+			"LOW" : "{{agile_lng_translate 'tasks' 'Low'}}",
+			"MEDIUM" : "{{agile_lng_translate 'tickets' 'medium'}}",
+			"HIGH" : "{{agile_lng_translate 'tasks' 'High'}}",
+		},
+		"status" : {
+			"OPEN" : "{{agile_lng_translate 'contact-details' 'OPEN'}}",
+			"PENDING" : "{{agile_lng_translate 'tickets' 'pending'}}",
+			"CLOSED" :"{{agile_lng_translate 'cases' 'closed'}}",
+		},
+	};
+	if(items[module] && items[module][key]){
+		return items[module][key];
+	}
+	
+	return key;
+}

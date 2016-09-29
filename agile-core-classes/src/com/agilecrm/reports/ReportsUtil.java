@@ -361,7 +361,7 @@ public class ReportsUtil {
 			if (report.campaignId.equals("All"))
 				statsJSON.put("campaign_name", "All Campaigns");
 			else
-				statsJSON.put("campaign_name", "<b>Campaign Name : </b>"
+				statsJSON.put("campaign_name", "<b style=\"color: #58666e\">Campaign Name : </b>"
 						+ WorkflowUtil.getCampaignName(report.campaignId));
 			statsJSON.put("report_name", report.name);
 			statsJSON.put("domain", NamespaceManager.get());
@@ -414,7 +414,7 @@ public class ReportsUtil {
 		// If report_type if of contacts customize object to show properties
 		if (report.report_type.equals(Reports.ReportType.Contact))
 			domain_details.put("report_results",
-					customizeContactParameters(reportList, report.fields_set));
+					customizeContactParameters(reportList, report.fields_set,report.report_timezone));
 
 		// Return results
 		return domain_details;
@@ -430,7 +430,7 @@ public class ReportsUtil {
 	 * @return
 	 */
 	public static Collection customizeContactParameters(Collection contactList,
-			LinkedHashSet<String> fields_set) {
+			LinkedHashSet<String> fields_set,String timezone) {
 
 		List<CustomFieldDef> fields = CustomFieldDefUtil
 				.getCustomFieldsByScopeAndType(SCOPE.CONTACT,
@@ -493,7 +493,7 @@ public class ReportsUtil {
 							try {
 								contactField.value = SearchUtil
 										.getDateWithoutTimeComponent(Long
-												.parseLong(contactField.value) * 1000);
+												.parseLong(contactField.value) * 1000,net.fortuna.ical4j.model.TimeZone.getTimeZone(timezone));
 							} catch (NumberFormatException e) {
 								e.printStackTrace();
 							}
@@ -538,9 +538,10 @@ public class ReportsUtil {
 									&& (field
 											.equalsIgnoreCase("last_contacted")
 											|| field.equalsIgnoreCase("last_emailed") || field
-												.equalsIgnoreCase("last_called")))
+												.equalsIgnoreCase("last_called") || field
+												.equalsIgnoreCase("updated_time")))
 								fieldValue = " ";
-
+							System.out.println("Field value Before:"+fieldValue);
 							if ((field.contains("time")
 									|| field.equalsIgnoreCase("last_contacted")
 									|| field.equalsIgnoreCase("last_emailed") || field
@@ -548,7 +549,8 @@ public class ReportsUtil {
 									&& !fieldValue.equals(" "))
 								fieldValue = SearchUtil
 										.getDateWithoutTimeComponent(Long
-												.parseLong(fieldValue) * 1000);
+												.parseLong(fieldValue) * 1000,TimeZone.getTimeZone(timezone));
+							System.out.println("Field value After:"+fieldValue);
 						}
 
 					} catch (Exception e) {
@@ -1202,7 +1204,7 @@ public class ReportsUtil {
 			if (report.campaignId.equals("All"))
 				statsJSON.put("campaign_name", "All Campaigns");
 			else
-				statsJSON.put("campaign_name", "<b>Campaign Name : </b>"
+				statsJSON.put("campaign_name", "<b style=\"color: #58666e\">Campaign Name : </b>"
 						+ WorkflowUtil.getCampaignName(report.campaignId));
 
 			statsJSON.put("report_name", report.name);

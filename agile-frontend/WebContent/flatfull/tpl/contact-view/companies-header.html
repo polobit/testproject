@@ -1,6 +1,49 @@
 <script id="companies-header-template" type="text/html">
 	{{#is_mobile}}
 		<div class="hbox hbox-auto-xs hbox-auto-sm">
+		<div class="content-tabs-show filtersTabList m-none" id="filtersTab" role="tablist" aria-multiselectable="true">
+	 			<div class="panel panel-default m-b-sm bg-transparent"> 
+		 			<div class="panel-heading" role="tab" id="headingOne"> 
+		 				<h4 class="panel-title text-left"> 
+		 					<a role="button" data-toggle="collapse" data-parent="#filtersTab" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne" class="collapsed" style="padding-left:16px;"> Filters</a>
+		 				</h4> 
+		 			</div> 
+		 			<div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne" aria-expanded="false" style="height: 0px;"> 
+		 				<div class="panel-body">
+							<div class="" id="companies-lhs-filters-toggle" style="display:{{toggle_companies_filter}}">
+								<div class="data-block mobile_lhs_filters_conatiner">
+									<div id="lhs_filters_conatiner"></div>
+									<hr class="m m-t-sm m-b-sm" style="border-top: 1px solid #DCDCDC;">
+									<div class="wrapper bg-light p-b-xs p-t-xs savedFlitersMain">
+										<div class="panel panel-default m-b-none">
+											<div class="panel-body">
+												<div class="control-group lhs-row-filter p-n" style="border-bottom:1px solid #dee5e7;position:relative;border-bottom-width:0px;font-size:10px;">
+													<a id="lhs-company-customfilters-header" class="c-p text-l-none text-l-none-hover txt-lg-label block">
+														Saved Filters
+														<i class="fa inline pos-abs pos-r-0 fa-plus-square-o"></i>
+													</a>
+													<div id="filter-list" class="hide mobile-contact-filter-list"></div>
+												</div>
+	
+											</div>
+										</div>
+									</div>
+									<div class="wrapper bg-light p-b-xs p-t-xs">
+										<div class="panel panel-default m-b-sm">
+												<a href='#contact-filters' class="text-info block p-t-sm p-b-sm text-center" style="padding-top: 8px; padding-bottom: 8px;">Add or Edit Filter</a>
+											
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="btn-group m-r-xs m-t-n-sm w-full text-center" id="contact-sorter" style="margin-bottom: 7px;">
+			</div>
+
 			<div class="">
 				<div id="right-pane">
 					<div class="contacts-div">
@@ -26,7 +69,7 @@
 	    					<div class="filters-drp-down btn-group dropdown m-l-none" style="float: none;">
 	    						<div class="">
 									<h4 class="inline-block m-n">
-		    							Companies
+		    							{{agile_lng_translate 'companies-view' 'companies'}}
 		    							<div class="inline-block" id="filter-list"></div>
 		    							<span id="contacts-count" class=""></span>
 		    							{{#is_mobile}}
@@ -53,14 +96,14 @@
 				                	<i></i>                
 				          		</label>
 							</span>							
-							<button id="bulk-tags" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm m-r-xs txt-small disabled" >Add Tags</button>
-							<button id="bulk-tags-remove" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm m-r-xs txt-small disabled" >Remove Tags</button>	
-							<button id="bulk-email" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm m-r-xs txt-small disabled" >Send Email</button>	
-							<button id="bulk-owner" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm m-r-xs txt-small disabled" >Change Owner</button>
+							<button id="bulk-tags" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm m-r-xs txt-small disabled" >{{agile_lng_translate 'contacts-view' 'add-tags'}}</button>
+							<button id="bulk-tags-remove" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm m-r-xs txt-small disabled" >{{agile_lng_translate 'contacts-view' 'remove-tags'}}</button>	
+							<button id="bulk-email" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm m-r-xs txt-small disabled" >{{agile_lng_translate 'contacts-view' 'send-email'}}</button>	
+							<button id="bulk-owner" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm m-r-xs txt-small disabled" >{{agile_lng_translate 'contacts-view' 'change-owner'}}</button>
 							{{#hasScope "EXPORT_CONTACTS"}}
-								<button id="bulk-companies-export" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm m-r-xs txt-small disabled" >Export as CSV</button>
+								<button id="bulk-companies-export" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm m-r-xs txt-small disabled" >{{agile_lng_translate 'contacts-view' 'export-as-csv'}}</button>
 							{{/hasScope}}				    
-							<button class="btn btn-default bulk-action-btn delete-checked-contacts btn-sm m-r-xs txt-small disabled" >Delete</button>
+							<button class="btn btn-default bulk-action-btn delete-checked-contacts btn-sm m-r-xs txt-small disabled" >{{agile_lng_translate 'contacts-view' 'delete'}}</button>
 							<div class="btn-group dropdown pull-right {{#iscompactTabel 'company'}} compact {{/iscompactTabel}} multiple-checkbox" style="padding-right: 10px;" id="companies-custom-coloumns">
 					    		<button class="btn btn-default dropdown-toggle btn-sm " data-toggle="dropdown" aria-expanded="true" id="companiesTabelView"><i class="{{#iscompactTabel 'company'}} fa fa-ellipsis-h {{else}}fa fa-navicon {{/iscompactTabel}}"></i></button>
                 				<ul class="pull-right dropdown-menu  p-l"  role="menu">

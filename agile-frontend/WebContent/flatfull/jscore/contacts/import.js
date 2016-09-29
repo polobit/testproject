@@ -35,8 +35,8 @@ function initializeImportListeners(){
 		
 			App_Widgets.xero_import_settings.render(true);
 			App_Widgets.xero_import_settings.model.url = url;	
-				show_success_message_after_save_button("Sync Initiated", App_Widgets.xero_import_settings.el);
-				showNotyPopUp("information", "Contacts sync initiated", "top", 1000);
+				show_success_message_after_save_button(_agile_get_translated_val("misc-keys", "sync-init"), App_Widgets.xero_import_settings.el);
+				showNotyPopUp("information", _agile_get_translated_val("misc-keys", "sync-contacts-init"), "top", 1000);
 			}});
 		
 	});

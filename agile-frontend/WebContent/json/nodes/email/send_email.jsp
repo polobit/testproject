@@ -261,7 +261,7 @@
             "name": "time_zone",
             "title": "Select the time zone for your email delivery.",
             "options": {
-                <%@page import="java.util.Arrays"%>
+                 <%@page import="java.util.Arrays"%>
                         <%@page import="java.util.TimeZone"%>
                         <%
 						String[] allTimeZones = TimeZone.getAvailableIDs();    

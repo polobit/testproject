@@ -66,6 +66,7 @@ public class RedirectServlet extends HttpServlet
 	String originalURL = req.getParameter("u");
 	String push = req.getParameter("p");
 	String personalEmailTrackerId = req.getParameter("t");
+	String pushNotificationLinked = req.getParameter("n");
 	
 	//Get client IP address
 	String clientIPAddress=AnalyticsServlet.getClientIP(req);
@@ -242,12 +243,17 @@ public class RedirectServlet extends HttpServlet
 				return;
 		    	
 		    }
-
-		    TrackClickUtil.addEmailClickedLog(campaignId, subscriberId, originalURL, workflow.name);
-			
+		    
+		    //If linked click is push notification then add push  notification linked log
+		    if(pushNotificationLinked !=null)
+		    	TrackClickUtil.addPushNtificationClickedLog(campaignId, subscriberId, originalURL, workflow.name);
+		    else
+		    {
+		    	TrackClickUtil.addEmailClickedLog(campaignId, subscriberId, originalURL, workflow.name);
 	
 			// Show notification
-			TrackClickUtil.showEmailClickedNotification(contact, workflow.name, originalURL);
+		    	TrackClickUtil.showEmailClickedNotification(contact, workflow.name, originalURL);
+		    }
 	    }
 
 	    // Interrupt cron tasks of clicked.

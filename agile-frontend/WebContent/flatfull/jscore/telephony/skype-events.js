@@ -28,7 +28,7 @@ function _getMessageSkype(message, callback){
 		var inValid = /^\s/;
 		var k = inValid.test(number);
 		if(k){
-			number = "+" + number.trimLeft()
+			number = "+" + number.trimLeft();
 		}
 	}catch(e){
 	}
@@ -235,12 +235,16 @@ function saveCallNoteSkype(call){
 	    			data.widget = "Skype";
 	    			CallLogVariables.dynamicData = data;
 	    		}
+	    			CallLogVariables.subject = noteSub;
 		    		CallLogVariables.callWidget = "Skype";
 		    		CallLogVariables.callType = "inbound";
 		    		CallLogVariables.phone = number;
 		    		CallLogVariables.duration = duration;
 		    		CallLogVariables.status = callStatus;
-	    		return showNewContactModal(number);
+		    		var jsonObj = {};
+		    		jsonObj['phoneNumber'] = number;
+		    		return showContactMergeOption(jsonObj);
+	    		//return showNewContactModal(number);
 	    	}
 	    	id = responseJson.id;
 	    	contact = responseJson;
@@ -321,13 +325,16 @@ function saveCallNoteSkype(call){
     			data.widget = "Skype";
     			CallLogVariables.dynamicData = data;
     		}
+				CallLogVariables.subject = noteSub;
 	    		CallLogVariables.callWidget = "Skype";
 	    		CallLogVariables.callType = "outbound-dial";
 	    		CallLogVariables.phone = number;
 	    		CallLogVariables.duration = duration;
 	    		CallLogVariables.status = callStatus;
-    		
-    		return showNewContactModal(number);
+	    		var jsonObj = {};
+	    		jsonObj['phoneNumber'] = number;
+	    		return showContactMergeOption(jsonObj);
+    		//return showNewContactModal(number);
 	}
 	}
 }
@@ -345,7 +352,7 @@ function getLogsForSkype(num){
 	var logNumber;
 	var parameter = {};
 	
-	parameter['error_message'] = "There is no phone number or skype id associated with this contact. <a href='#contact-edit' class='text-info' style='color:#23b7e5'>Add phone number or skype id</a>";
+	parameter['error_message'] = _agile_get_translated_val('widgets', 'skype-contact-info')+  " <a href='#contact-edit' class='text-info' style='color:#23b7e5'>"+_agile_get_translated_val('widgets', 'skype-invalid-number')+"</a>";
 	//var contact = agile_crm_get_contact();
 	//parameter['num'] = getPhoneWithSkypeInArray(contact.properties);
 	parameter['num'] = agile_crm_get_contact_properties_list("phone");
@@ -402,10 +409,7 @@ function handleLogsForSkype(message){
 		$('#skype-logs-panel').html(skype_logs_template);
 
 			// Load jquery time ago function to show time ago in logs
-			head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
-			{
-				$(".time-ago", skype_logs_template).timeago();
-			});
+			agileTimeAgoWithLngConversion($(".time-ago", skype_logs_template));
 
 	}, "#skype-logs-panel");
 }

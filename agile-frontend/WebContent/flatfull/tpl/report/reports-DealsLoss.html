@@ -1,44 +1,43 @@
 <script id="report-DealsLoss-template" type="text/html">
 <div class="custom-animated custom-fadeInUp">
 {{#hasMenuScope 'DEALS'}}
-<div class="wrapper-md lter bg-light b-b">
+<div class="wrapper bg-light lter padder-sm padder-v p-r-sm" style="border-bottom: 1px solid rgba(140, 139, 139, 0.2);">
 <div class="row">
     <div class="col-sm-12 col-md-12">
-             <div class="col-md-3 col-sm-6" style="padding-left:0px;padding-bottom:8px">
-            <h3 class="font-thin h3">Deals Lost by Reason
+             <div class="col-md-3 col-sm-6 p-r-none p-l-none" style="padding-bottom:8px">
+            <h3 class="font-thin h3">{{agile_lng_translate 'portlets' 'deals-lost-reason'}}
             </h3>
 				  			
 
 			</div>
    				 <div id="plan-limit-error" class="pull-left p-t-4" style="display:none"></div>   
-   				 <div class="clearfix"></div>         
+   				 <!-- <div class="clearfix"></div> -->         
               <div id="reportrange" class="pull-right" style="box-shadow: 0 0px 0px rgba(0, 0, 0, 0), inset 0 -0 0 rgba(0, 0, 0, .1);
 			border:1px solid #cfdadd;height:34px;padding: 5px;">
-			  <i class="icon-calendar icon-large"></i>
+			  <i class="icon-calendar icon-large text-xs"></i>
                 <span id="range">{{date-range "today" "-6"}}</span>
               </div>
-			<div class="pull-right" style="padding:0px 8px 10px">
-				<select name="source" id="source" class="required form-control" style="width: 120px">
-					<option value="All Sources">All Sources</option>
+			<div class="pull-right" style="padding:0px 4px 10px 2px">
+				<select name="source" id="source" class="required form-control {{#is_mobile}} {{else}} text-ellipsis w-120 {{/is_mobile}}">
+					<option value="All Sources">{{agile_lng_translate 'report-add' 'all-sources'}}</option>
                 </select>
 			</div>
-			<div class="pull-right" style="padding:0px 8px 10px">
-				<select name="track" id="track" class="required form-control" style="width: 120px">
-					<option value="All Tracks">All Tracks</option>
+			<div class="pull-right" style="padding:0px 2px 10px">
+				<select name="track" id="track" class="required form-control {{#is_mobile}} {{else}} text-ellipsis w-120 {{/is_mobile}}">
+					<option value="All Tracks">{{agile_lng_translate 'report-add' 'all-tracks'}}</option>
                 </select>
 			</div>
-			<div class="pull-right" style="padding:0px 8px 10px">
-				<select name="owner" id="owner" class="required form-control" style="width: 120px">
-					<option value="All Owners">All Owners</option>
+			<div class="pull-right" style="padding:0px 2px 10px">
+				<select name="owner" id="owner" class="required form-control {{#is_mobile}} {{else}} text-ellipsis w-120 {{/is_mobile}}">
+					<option value="All Owners">{{agile_lng_translate 'report-add' 'all-owners'}}</option>
                 </select>
 			</div>
-			
         </div>
 
 </div>
 </div>
 <div>	
-	<div id="deals-reports" class="wrapper-md">	
+	<div id="deals-reports" style="padding:10px">	
 		<div class="row">
 			<div class="col-md-12">
 				<div id="lossreasonpie-chart" class="panel"></div>
@@ -49,46 +48,45 @@
    </div>
 {{else}}
 
-<h2><strong><i class="fa-exclamation-triangle icon-white"></i>&nbsp;&nbsp; Sorry, you do not have the privileges to access this. </strong></h2>
+<h2><strong><i class="fa-exclamation-triangle icon-white"></i>&nbsp;&nbsp; {{agile_lng_translate 'report-add' 'sorry-you-do-not-have-privileges-access'}} </strong></h2>
 {{/hasMenuScope}}
 </div>
 </script>
 <script id="report-DealsWon-template" type="text/html">
 <div class="custom-animated custom-fadeInUp">
 {{#hasMenuScope 'DEALS'}}
-<div class="wrapper-md lter bg-light b-b">
+<div class="wrapper bg-light lter padder-sm padder-v p-r-sm" style="border-bottom: 1px solid rgba(140, 139, 139, 0.2);">
 <div class="row">
     <div class="col-sm-12 col-md-12">
             <div class="col-md-4 col-sm-6" style="padding-left:0px;padding-bottom:8px">
-            <h3 class="font-thin h3">Revenue by Source 
+            <h3 class="font-thin h3">{{agile_lng_translate 'report-view' 'revenue-by-source'}} 
             </h3>	
 			</div>
    
    				<div id="plan-limit-error" class="pull-left p-t-4" style="display:none"></div>    
-   			 <div class="clearfix"></div> 	 
+   			 <!-- <div class="clearfix"></div>  -->	 
             <div id="reportrange" class="pull-right" style="box-shadow: 0 0px 0px rgba(0, 0, 0, 0), inset 0 -0 0 rgba(0, 0, 0, .1);
 			border:1px solid #cfdadd;height:34px;padding: 5px;">
-				 <i class="icon-calendar icon-large"></i>
+				 <i class="icon-calendar icon-large text-xs"></i>
                 <span id="range">{{date-range "today" "-6"}}</span>
               </div>
-			<div class="pull-right" style="padding:0px 8px 10px">
-				<select name="owner" id="owner" class="required form-control" style="width: 120px">
-					<option value="All Owners">All Owners</option>
+			<div class="pull-right" style="padding:0px 4px 10px 2px">
+				<select name="owner" id="owner" class="required form-control {{#is_mobile}} {{else}} text-ellipsis w-120 {{/is_mobile}}">
+					<option value="All Owners">{{agile_lng_translate 'report-add' 'all-owners'}}</option>
                 </select>
 			</div>
-  			<div class="pull-right" style="padding:0px 8px 10px">
+  			<div class="pull-right" style="padding:0px 2px 10px">
                 <select name="frequency" id="frequency" class="required form-control">
- 					<option value="Revenue">Total Revenue</option>
-                    <option value="deals">Total Deals</option>
+ 					<option value="Revenue">{{agile_lng_translate 'report-add' 'total-revenue'}}</option>
+                    <option value="deals">{{agile_lng_translate 'report-add' 'total-deals'}}</option>
                 </select>
             </div>  
-			
         </div>
 
 </div>
 </div>
 <div>	
-	<div id="deals-reports" class="wrapper-md">	
+	<div id="deals-reports" style="padding:10px">	
 		<div class="row">
 			<div class="col-md-12">
 				<div id="wonpie-chart" class="panel"></div>
@@ -99,7 +97,7 @@
    </div>
 {{else}}
 
-<h2><strong><i class="fa-exclamation-triangle icon-white"></i>&nbsp;&nbsp; Sorry, you do not have the privileges to access this. </strong></h2>
+<h2><strong><i class="fa-exclamation-triangle icon-white"></i>&nbsp;&nbsp; {{agile_lng_translate 'report-add' 'sorry-you-do-not-have-privileges-access'}} </strong></h2>
 {{/hasMenuScope}}
 </div>
 </script>

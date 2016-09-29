@@ -4,7 +4,7 @@ function change_availability_date(selected_date)
 
 	var date = new Date(selected_date);
 
-	$('.availability').html("Availability on " + date.getDayName() + ", " + date.getMonthName() + ", " + date.getDate());
+	$('.availability').html("{{agile_lng_translate 'timezone' 'available-on'}} " + date.getDayName() + ", " + date.getMonthName() + ", " + date.getDate());
 }
 
 // Get slot details time n description
@@ -49,7 +49,7 @@ function getSlotDurations()
 							{
 								$('.segment1')
 										.append(
-												'<div class="col-sm-12" align="center"><p class="lead" style="color: #777;font-size: 19px;text-align: center;font-weight:normal">please enter valid slot number </p> </div>');
+												'<div class="col-sm-12" align="center"><p class="lead" style="color: #777;font-size: 19px;text-align: center;font-weight:normal">{{agile_lng_translate "calendar" "pl-enter-valid-slot"}} </p> </div>');
 								return;
 
 							}
@@ -194,7 +194,7 @@ function displayNoSlotsMsg()
 
 	var date = new Date(selecteddate);
 
-	$('.availability').html("No slots available for " + date.getDayName() + ", " + date.getMonthName() + ", " + date.getDate());
+	$('.availability').html("{{agile_lng_translate 'calendar' 'no-valid-slot'}} " + date.getDayName() + ", " + date.getMonthName() + ", " + date.getDate());
 
 	// Add msg
 	// $('.checkbox-main-grid').append('<label for="no-slots"
@@ -369,7 +369,7 @@ function save_web_event(formId, confirmBtn)
 						var appointment_success_img1 = "/img/appointment_confirmation.png";
 						var temp = '<div style="margin: 26px;font-size:15px;">'
 
-						+ '<div id="info" ><h3 style="border-bottom: 1px solid #ddd;padding-bottom:8px;margin-bottom:15px;"><img style="margin-right: 8px;margin-top: -4px;" src=' + appointment_success_img1 + '><b>Appointment Scheduled</b></h3>' + '<p >Your appointment (' + appointmenttype + ') has been scheduled with <b>' + User_Name + '</b> for ' + web_calendar_event.slot_time + ' mins on ' + start + '. </div>' + '<div class="row">' + '<div class="col-md-12">' + '<div class="row">' + '<div class="col-md-12">' + '<div class="left">' + '<a class="btn btn-primary" id="create_new_appointment" style="margin-top:20px;">Schedule Another Appointment</a>' + '</div>' + '</div>' + '</div>' + '</div>' + '<div align="right" style="position: absolute;right: 280px;bottom: -80px;">' + '<span style="display: inherit;font-style: italic; font-family: Times New Roman; font-size: 10px; padding-right: 71px;">Powered by</span> <a href="https://www.agilecrm.com?utm_source=powered-by&amp;medium=event_scheduler&amp;utm_campaign=' + domainname + '" rel="nofollow" target="_blank"><img src="https://s3.amazonaws.com/agilecrm/panel/uploaded-logo/1383722651000?id=upload-container" alt="Logo for AgileCRM" style="border: 0;background: white;padding: 0px 10px 5px 2px;height: auto;width: 135px;"></a>' + '</div>'
+						+ '<div id="info" ><h3 style="border-bottom: 1px solid #ddd;padding-bottom:8px;margin-bottom:15px;"><img style="margin-right: 8px;margin-top: -4px;" src=' + appointment_success_img1 + '><b>{{agile_lng_translate "calendar" "appointment-scheduled"}}</b></h3>' + '<p >{{agile_lng_translate "calendar" "your-appointment"}} (' + appointmenttype + ') {{agile_lng_translate "calendar" "you-scheduled"}} <b>' + User_Name + '</b> for ' + web_calendar_event.slot_time + ' mins on ' + start + '. </div>' + '<div class="row">' + '<div class="col-md-12">' + '<div class="row">' + '<div class="col-md-12">' + '<div class="left">' + '<a class="btn btn-primary" id="create_new_appointment" style="margin-top:20px;">{{agile_lng_translate "calendar" "scheduled-another-appointment"}}</a>' + '</div>' + '</div>' + '</div>' + '</div>' + '<div align="right" style="position: absolute;right: 280px;bottom: -80px;">' + '<span style="display: inherit;font-style: italic; font-family: Times New Roman; font-size: 10px; padding-right: 71px;">Powered by</span> <a href="https://www.agilecrm.com?utm_source=powered-by&amp;medium=event_scheduler&amp;utm_campaign=' + domainname + '" rel="nofollow" target="_blank"><img src="https://s3.amazonaws.com/agilecrm/panel/uploaded-logo/1383722651000?id=upload-container" alt="Logo for AgileCRM" style="border: 0;background: white;padding: 0px 10px 5px 2px;height: auto;width: 135px;"></a>' + '</div>'
 
 						resetAll();
 
@@ -379,14 +379,14 @@ function save_web_event(formId, confirmBtn)
 					console.log(res);
 					if(res.responseText == "slot booked")
 					{
-						alert("Looks like this slot is booked already. Please try another one.");
+						alert("{{agile_lng_translate 'calendar' 'solt-book-error'}}");
 						get_slots(selecteddate, Selected_Time);
 						$('#confirm').attr('disabled', false);
 					}
 
 					else
 					{
-						alert("Something went wrong as your appointment was not scheduled. Please try again in few hours. Error: " + res.statusText);
+						alert("{{agile_lng_translate 'calendar' 'slot-exists'}} :" + res.statusText);
 						resetAll();
 						location.reload(true);
 					}	
@@ -534,7 +534,7 @@ function fillSlotDetails(slot_durations_one_user)
 		{
 			$('.segment1')
 					.append(
-							'<div class="col-sm-12" align="center"><p class="lead" style="color: #777;font-size: 19px;text-align: center;font-weight:normal">please enter valid slot number </p> </div>');
+							'<div class="col-sm-12" align="center"><p class="lead" style="color: #777;font-size: 19px;text-align: center;font-weight:normal">{{agile_lng_translate "calendar" "pl-enter-valid-slot"}} </p> </div>');
 			return;
 
 		}

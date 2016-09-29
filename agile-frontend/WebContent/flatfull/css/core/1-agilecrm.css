@@ -1,3 +1,4 @@
+
 /* register.jsp,openid-min.css   */
 .login-page .openid_large_btn:hover {
   margin: 4px 0px 0px 6px;
@@ -2120,7 +2121,7 @@ li.error {
 .noty_contact_details{margin-top: 10px;display:table-row;}
 
 .white-space-normal {
-  white-space : normal important;
+  white-space : normal !important;
 }
 .fc_border_height{
   min-height: 20px;
@@ -2159,7 +2160,7 @@ li.error {
   font-size: 0;
   line-height: 0;*/
   overflow-x: auto;
-  overflow-y: hidden;
+  overflow-y: auto;
   padding-bottom: 10px;
   white-space: nowrap;
   width: 100%;
@@ -2195,7 +2196,7 @@ li.error {
   margin-left: 6px;
   padding: 32px 7px 40px;*/
   position: relative;
-  width:280px;
+  /*width:280px;*/
   vertical-align: top;
   display: inline-block;
   margin-right:10px;
@@ -2223,7 +2224,7 @@ li.error {
 
 .list-tasks {
   /*box-sizing: border-box;*/
-  overflow: auto;
+  overflow: auto !Important;
   /*margin-right: -4px;
   margin-top: 5px;*/
 }
@@ -2287,26 +2288,26 @@ li.error {
   top: -3px;
   width: 30px;*/
     content: ' ';
-  display: block;
-  height: 31px;
-  position: absolute;
-  left: -15px;
-  top: 0px;
-  width: 2px;
+    display: block;
+    height: 2px;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    width: 100%;
 }
 
-.listed-task.yellow:after {
+/*.listed-task.yellow:after {
   background: #fad733;
-}
+}*/
 
 .listed-task.red:after {
   background: #f05050;
 }
-
+/*
 .listed-task.gray:after {
   background: #edf1f2;
 }
-
+*/
 .listed-task:first-child {
   /*margin-top: 0;*/
 }
@@ -2410,7 +2411,7 @@ li.error {
   /* right: 5px; */
   /* top: 25px; */
   float: left;
-  margin-right: 7px;
+  margin-right: 0px!Important;
 }
 
 .shift-up {
@@ -2445,7 +2446,7 @@ li.error {
 
 .task-actions {
   color: #888;
-  display: none;
+ display:none;
   /*padding-right: 4px;*/
   /*float: right;*/
   cursor: pointer;
@@ -2480,7 +2481,7 @@ float:right;
 @-moz-document url-prefix() {
    .task-content-view
 {
-  width:81%;
+  /*width:81%;*/
 }
 }
 
@@ -2537,6 +2538,7 @@ div.task-body:hover {
   text-overflow: ellipsis;
   display: block;
   overflow: hidden;
+  margin-left:20px;
 }
 /* .task-actions:hover,.task-actions:focus {display: block;} */
 /* ********************************************************* */
@@ -3819,7 +3821,7 @@ opacity: .3;
 
 .report-selected
 {
-	background-color: #e4eaec!important;
+	/*background-color: #f6f8f8!important;*/
 }
 
 .sub-nav-tab li
@@ -4328,7 +4330,7 @@ background-color : #522E2E;
     pointer-events: none;
     background: orange;
     border-radius: 1000px;
-    right: 5px;
+    right: 14px;
     top: 10px;
 }
 
@@ -4415,7 +4417,7 @@ border: 1px solid #e5e5e5;
 }
 
 .search-results-scroll-container {
-    max-height: 600px;
+    max-height: 700px;
     overflow: hidden;
     overflow-y : auto!important;
     margin-bottom: 30px;
@@ -4427,7 +4429,7 @@ border: 1px solid #e5e5e5;
     display: block;
     float: left;
     margin-left: -32px;
-    margin-top: -8px;
+    margin-top: -15px;
     background-color: #337ab7;
     padding: .2em .6em .3em;
     font-size: 75%;
@@ -4483,4 +4485,284 @@ border: 1px solid #e5e5e5;
 }
 .update-drag-deal + .tooltip{
   width: auto!important;
+}
+
+@media (max-width: 767px){
+  #affiliate-datepicker {
+    ext-align: center;
+    width: 100%;
+  }
+}
+.ticket-collection-container th {
+  white-space: nowrap;
+}
+.task-trello-list.expand .task-list-minimized{
+ display: :block;
+}
+.task-trello-list.expand  .panel-default.w-full.m-r-none.m-b-none
+{
+  display: none;
+}
+.task-trello-list.compress .task-list-minimized
+{
+  display:none;
+}
+.task-trello-list.compress .panel-default.w-full.m-r-none.m-b-none{
+  display:block;
+}
+
+.task-trello-list.expand{
+ width:5%!important;
+}
+.task-trello-list.expand .compressedHeading .task-count
+{
+  transform:rotate(-90deg);
+}
+/*.task-trello-list.expand .panel-default
+{
+  height:77vh;
+}*/
+.task-trello-list.expand .pull-left.text-ellipsis
+{
+  width:62%; 
+  transform: rotate(-90deg);
+   font-size: 18px;
+    margin-top: 90px;
+}
+.task-list-minimized{
+  background-color: #f6f8f8
+   padding: 10px 15px;
+  border: 1px solid #dee5e7;
+}
+/*.expand-button .transform-rotate{
+  position:absolute;
+  padding-left:10px;
+  margin-top:20px;
+}*/
+
+.task-list-minimized .taskheading
+{
+  font-size: 20px;
+  margin-top:150px;
+}
+.fa-hourglass-o:before{
+      content: "\f250";
+}
+
+.task-trello-list .list-header.panel-heading
+{
+  background-color: initial!important;
+  border-color:initial!important;
+}
+.taskhead
+{
+  margin-top:0px!important;
+  margin-bottom:10px!Important;
+}
+.tasktime
+{
+  
+  position:relative;
+  margin-left: 5px;
+  top:2px;
+}
+div.list-tasks.panel-body
+{
+  overflow: hidden;
+}
+div.list-tasks.panel-body:hover
+ {
+  overflow: auto;
+}
+#task-model-list .listed-task .task-content-view a[target="_blank"]
+{
+  font-weight:500;
+  opacity:0.75;
+  top:0px;
+}
+
+.taskchanges{
+  margin-left:3px;
+  margin-right:3px;
+}
+.taskfooter{
+ /* margin-top:12px;*/
+  margin-bottom:10px;
+}
+
+
+.search-results-scroll-container {
+    max-height: 700px;
+    overflow: hidden;
+    overflow-y : auto!important;
+    margin-bottom: 30px;
+    position: relative;
+}
+/*.search-results-scroll-container table td:first-child{
+    display: none;
+} */
+
+.task-circle
+{
+  float:none!important;
+}
+.task-list-heading
+{
+  padding:10px 10px!important;
+}
+.task-striped:first-child
+{
+  margin-top:10px;
+}
+/*.task-model-list .alert:first-child{
+  margin-left:10px;
+}*/
+
+#company-contacts ul li {
+    padding-right: 0px!important;
+}
+
+
+@media (max-width: 767px){
+  .searchForm {
+    padding: 0px !important;
+  }
+}
+@media (max-width: 767px){
+  ul.typeahead.dropdown-menu.dashboard-search-scroll-bar {
+    max-height: 330px !important;
+  }
+}
+
+.mobile-search-view{
+  width: 250px !important;
+}
+
+.w-115{
+  width: 115px;
+}
+.w-120{
+  width: 120px;
+}
+.w-125
+{
+  width:125px;
+}
+.w-175
+{
+  width:175px;
+}
+.w-150
+{
+  width:150px;
+}
+
+/* start of dialler */
+
+	.keyPad:hover{
+		background-color: rgba(15, 179, 224, 0.32);
+		color: white !important;
+	}
+/* 	.keyPad div:hover{
+		color: white !important;
+	} */
+	.keyPad{
+		border-radius: 3px;
+	}
+	.actives{
+	 filter: alpha(opacity = 100);
+  	-khtml-opacity: 1;
+  	-moz-opacity: 1;
+  	opacity: 1;
+  	cursor: pointer;
+	}
+	
+	.selected-widget{
+	  	border-bottom:3px solid #00c8ff;
+	}
+	
+	.inactive{
+	 filter: alpha(opacity = 10);
+  	-khtml-opacity: 0.1;
+  	-moz-opacity: 0.1;
+  	opacity: 0.1;
+  	cursor: default;
+	}
+	
+	#dialPad:after{
+	z-index: -1;
+    position: absolute;
+    content: "";
+    bottom: 10px;
+    right: 5px;
+    width: 90%;
+    top: 80%;
+    -webkit-box-shadow: 0 12px 5px rgba(0,0,0,.3);
+    -moz-box-shadow: 0 12px 5px rgba(0,0,0,.3);
+    box-shadow: 0 12px 5px rgba(0,0,0,.3);
+    -webkit-transform: rotate(3deg);
+    -moz-transform: rotate(3deg);
+    -o-transform: rotate(3deg);
+    -ms-transform: rotate(3deg);
+    transform: rotate(3deg);
+	}
+	#dialPad:before{
+	z-index: -1;
+    position: absolute;
+    content: "";
+    bottom: 10px;
+    right: 5px;
+    width: 97%;
+    top: 80%;
+    -webkit-box-shadow: 0 12px 5px rgba(0,0,0,.3);
+    -moz-box-shadow: 0 12px 5px rgba(0,0,0,.3);
+    box-shadow: 0 12px 5px rgba(0,0,0,.3);
+    -webkit-transform: rotate(-3deg);
+    -moz-transform: rotate(-3deg);
+    -o-transform: rotate(-3deg);
+    -ms-transform: rotate(-3deg);
+    transform: rotate(-3deg);
+	}
+	.dial-number:hover{
+		opacity: 0.8;
+	}
+	.list-padding{
+		display: inline-block;
+		padding:4px 18px;
+	}
+	.link-top{
+		height: 40px; 
+		line-height: 40px; 
+		padding-bottom: 5px;
+	}
+	
+/* end of dialler */
+.text-info-important{
+    color: #23b7e5!important;
+}
+
+.textarea{
+   min-height: 49px;
+    height: auto;
+    width: 100%;
+    text-indent: 0px;
+    resize: none;
+    padding: 8px 8px 1px;
+    overflow-y: hidden;
+
+}
+
+#affiliate-tabs-content .zeroclipboard-is-hover{
+  background-color: #fafafa !important;
+}
+
+.bg-light.dker .nav>li:hover>a, .bg-light.dker .nav>li:focus>a, .bg-light.dker .nav>li.active>a{ background-color: #f6f8f8;}
+.bg-light .nav>li:hover>a, .bg-light .nav>li:focus>a, .bg-light .nav>li.active>a{ background-color: #f6f8f8;}
+.bg-white.b-r .nav>li:hover>a,.bg-white.b-r .nav>li:focus>a, .bg-white.b-r .nav>li.active>a{ background-color: #f6f8f8;}
+
+.right-pane-header{
+  font-size: 14px;
+  font-weight: 700;
+  color: #58666e!important;
+  background-color: #fff!important;
 }

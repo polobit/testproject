@@ -147,14 +147,74 @@ function agile_crm_update_contact(propertyName, value, callback)
 	model.url = "core/api/contacts";
 
 	// Save model
-	model.save(contact_model.toJSON(), { success : function(model, response)
-	{
-	// Reset model view
-	contact_model.set(model.toJSON(), { silent: true });
+	model.save(contact_model.toJSON(), { 
+		success : function(model, response){
+			// Reset model view
+			contact_model.set(model.toJSON(), { silent: true });
 
-	if (callback && typeof (callback) == "function")
-	callback(model.toJSON());
-	} }, { silent : true });
+			if (callback && typeof (callback) == "function")
+				callback(model.toJSON());
+		} 
+	}, { silent : true });
+}
+
+/**
+ * Updates a contact based on the property name and its value specified. If
+ * property name already exists with the given then replaces the value, if
+ * property is new then creates a new field and saves it
+ * 
+ * @param propertyName:
+ *            Name of the property to be created/updated
+ * @param value :
+ *            value for the property
+ */
+function agile_crm_update_contact_render(propertyName, value, callback)
+{
+	// Gets current contact model from the contactDetailView object
+	var contact_model = agile_crm_get_contact_model();
+
+	// Reads properties fied from the contact
+	var properties = contact_model.toJSON()['properties'];
+	var flag = false;
+
+	/*
+	 * Iterates through each property in contact properties and checks for the
+	 * match in it for the given property name and if match is found, updates
+	 * the value of it with the given value
+	 */
+	$.each(properties, function(index, property)
+	{
+		if (property.name == propertyName)
+		{
+			// flag is set true to indicate property already exists in contact
+			flag = true;
+			property.value = value;
+			return false;
+		}
+	});
+
+
+
+	// If flag is false, given property is new then new field is created
+	if (!flag)
+		properties.push({ "name" : propertyName, "value" : value, "type" : "SYSTEM" });
+
+	contact_model.set({ "properties" : properties }, { silent : true });
+
+ 	
+	var model = new Backbone.Model();
+	model.url = "core/api/contacts";
+
+	// Save model
+	model.save(contact_model.toJSON(), { 
+		success : function(model, response){
+			// Reset model view
+			contact_model.set(model.toJSON());
+
+			if (callback && typeof (callback) == "function")
+				callback(model.toJSON());
+		} 
+	});
 }
 
 
@@ -273,7 +333,7 @@ $.each(properties, function(index, property)
 			 	$('#' + id).find('.contact-image-view').html('');
 	            $('#' + id).find('.contact-image-view').html('<img src="' + url + '" class="upload_pic imgholder submit w-full img-circle" style="width:75px;height:75px;" type="submit" />');
 				if($(".toggle-contact-image .contact-delete-option").length == 0) {
-			 	$('#' + id).find('.toggle-contact-image').append('|<div style="float:right" class="contact-delete-option"><a name="Delete" value="Delete" onClick="deleteConfirmation();" class="tooltip_info" data-placement="bottom" data-toggle="tooltip" title="Delete"><i class="glyphicon glyphicon-trash" style="color:red"></i></a></div>');	
+			 	$('#' + id).find('.toggle-contact-image').append('|<div style="float:right" class="contact-delete-option"><a name="Delete" value="Delete" onClick="deleteConfirmation();" class="tooltip_info" data-placement="bottom" data-toggle="tooltip" title="{{agile_lng_translate "contact-details" "delete"}}"><i class="glyphicon glyphicon-trash" style="color:red"></i></a></div>');	
 				$('#' + id).find('.toggle-contact-image').find(".contact-edit-option").removeAttr('style');
 				$('#' + id).find('.toggle-contact-image').find(".contact-edit-option").css("float","left");
 	}

@@ -69,7 +69,7 @@ public class Territory extends TaskletAdapter
 				
 				System.out.println("Zone " + branch + " " + "locationType: " + locationType + " locationValue: " + locationValue + " Comparator: " + comparator);
 				
-				boolean expr = NewCondition.evaluateExpression(locationType, locationValue, NewCondition.IF_TYPE_VALUE, comparator); 
+				boolean expr = NewCondition.evaluateExpression(locationType, locationValue, NewCondition.IF_TYPE_VALUE, comparator, null); 
 				
 				Boolean flag = zonesMap.get(branch);
 				

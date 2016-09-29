@@ -617,8 +617,8 @@ function disable_save_button(elem)
 {
 
 	var loadingText = elem.attr("data-loading-text");
-if(!loadingText)
-	   loadingText = "Saving...";
+	if(!loadingText)
+	   loadingText = _agile_get_translated_val("others", "saving");
 	
 	elem.css('min-width',elem.width()+'px')
 		.attr('disabled', 'disabled')

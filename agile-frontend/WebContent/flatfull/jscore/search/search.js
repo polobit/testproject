@@ -31,7 +31,8 @@ function showSearchResults()
 		App_Contacts = new ContactsRouter();
 
 	// Initialize contacts search results view
-	App_Contact_Search.navigate("contacts/search/" + query_text, { trigger : true });
+	App_Contact_Search.navigate("contacts/search/" + query_text);
+	App_Contact_Search.searchResults(query_text);
 }
 
 function navigateToDetailsPage(data, name)
@@ -45,13 +46,14 @@ function navigateToDetailsPage(data, name)
 		model = QUERY_RESULTS[i];
 		break;
 	}
+	$('.searchicon-dropdown').removeClass('open');
 	console.log(model);
 	if (model.entity_type == "contact_entity" || model.entity_type == "company_entity")
 	{
 		if(model.type == "COMPANY")
-			App_Companies.navigate("company/" + data, { trigger : true });
+			Backbone.history.navigate("company/" + data, { trigger : true });
 		else
-			App_Contacts.navigate("contact/" + data, { trigger : true });
+			Backbone.history.navigate("contact/" + data, { trigger : true });
 		return;
 	}
 	if(model.entity_type == "deal")
@@ -172,6 +174,8 @@ $(function()
 	$('body').on('click', '#search-results', function(e)
 	{
 		// e.preventDefault();
+		$('.searchicon-dropdown').removeClass('open');
 		showSearchResults();
+		//$("#searchText").val("");
 	});
 });

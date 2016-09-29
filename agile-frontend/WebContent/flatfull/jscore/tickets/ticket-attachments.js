@@ -35,7 +35,7 @@ var Ticket_Attachments = {
 				$("#" + selectId).append(modelTemplate(model));
 			});
 
-			$("#" + selectId).append("<option value='new'>Upload new doc</option>");
+			$("#" + selectId).append("<option value='new'>"+_agile_get_translated_val('others','upload-new-doc')+"</option>");
 		}});
 	},
 

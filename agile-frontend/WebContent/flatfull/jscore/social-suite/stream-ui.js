@@ -79,17 +79,19 @@ function initializeSocialSuite()
 		// Enable button of add stream on form of stream detail
 		// $('#addStreamModal').find('#add_twitter_stream').removeAttr('disabled');
 
-		// Fill elements on form related to stream.
-		fillStreamDetail();
+		// Show form modal
+		$('#addStreamModal').html(getTemplate("add-stream-modal"));
+		$('#addStreamModal').modal('show');
 
 		getTemplate('socialsuite-social-network', {}, undefined, function(template_ui){
+
 			if(!template_ui)
 				  return;
 			// Add social network types template
 			$('#streamDetails').html($(template_ui));
 
-			// Show form modal
-			$('#addStreamModal').modal('show');
+			// Fill elements on form related to stream.
+			fillStreamDetail();
 
 		}, "#streamDetails");
 		
@@ -154,7 +156,7 @@ function initializeSocialSuite()
 							// Display keyword field.
 							if (Stream_Type == "Search")
 							{
-								$("#search_stream_keyword").html('<div class="remove-keyword"><div class="row"><div class="control-group col-md-5"><span class="controls"><input id="keyword" name="keyword" type="text" class="required form-control" required="required" autocapitalize="off" placeholder="Search Keyword..." value="" autofocus></span></div></div></div>');
+								$("#search_stream_keyword").html('<div class="remove-keyword"><div class="row"><div class="control-group col-md-5"><span class="controls"><input id="keyword" name="keyword" type="text" class="required form-control" required="required" autocapitalize="off" placeholder="{{agile_lng_translate "socialsuite" "search-keyword"}}..." value="" autofocus></span></div></div></div>');
 							}
 							else
 							{
@@ -236,7 +238,7 @@ function initializeSocialSuite()
 						if (Stream_Type == null || Stream_Type == '')
 						{
 							// To show error description.
-							$("#stream_description_label").addClass("txt-mute").html('<span style="color: red;"><i class="icon-exclamation"></i> You have to select your favorite stream type.</span>');
+							$("#stream_description_label").addClass("txt-mute").html('<span style="color: red;"><i class="icon-exclamation"></i> {{agile_lng_translate "socialsuite" "no-fav-stream"}}</span>');
 							return;
 						}
 
@@ -252,7 +254,7 @@ function initializeSocialSuite()
 						$('#addStreamModal').find('#add_twitter_stream').attr('disabled', 'disabled');
 
 						// Show notification for adding stream.
-						showNotyPopUp('information', "Adding Stream...", "top", 2500);
+						showNotyPopUp('information', "{{agile_lng_translate 'social' 'adding-stream'}}", "top", 2500);
 
 						// Get data from form elements
 						var formData = jQuery(streamDetail).serializeArray();
@@ -284,7 +286,7 @@ function initializeSocialSuite()
 							sendMessage(publishJSON);
 
 							// Notification for stream added.
-							showNotyPopUp('information', "Stream added. You can add another Stream now.", "top", 4000);
+							showNotyPopUp('information', "{{agile_lng_translate 'social' 'add-another-stream-now'}}", "top", 4000);
 
 							setTimeout(function()
 							{

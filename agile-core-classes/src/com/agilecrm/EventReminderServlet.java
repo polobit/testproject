@@ -7,6 +7,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.agilecrm.activities.EventReminder;
 import com.agilecrm.util.NamespaceUtil;
 import com.google.appengine.api.taskqueue.DeferredTask;
@@ -35,6 +37,13 @@ public class EventReminderServlet extends HttpServlet
 	{
 		try
 		{
+			String domainName = req.getParameter("domain");
+			if(domainName != null)
+			{
+				EventReminder.getEventReminder(domainName, null);
+				return;
+			}
+			
 			EventReminderCreateDeferredTask eventReminderTaskDeferredTask = new EventReminderCreateDeferredTask();
 			Queue queue = QueueFactory.getQueue("automations-queue");
 			TaskOptions options = TaskOptions.Builder.withPayload(eventReminderTaskDeferredTask);

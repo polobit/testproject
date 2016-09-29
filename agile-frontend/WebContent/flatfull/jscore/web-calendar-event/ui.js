@@ -104,7 +104,7 @@ $(function()
 				{
 					$(".meetingtypes").show();
 					$(".meetingtypes").empty();
-					$(".meetingtypes").append("<option selected disabled>Meeting Type</option>");
+					$(".meetingtypes").append("<option selected disabled>{{agile_lng_translate 'calendar' 'meeting-type'}}</option>");
 					for (var i = 0; i < meeting_types.length; i++)
 					{
 						$(".meetingtypes").append("<option value='" + meeting_types[i] + "'>" + meeting_types[i] + "</option>");
@@ -133,7 +133,7 @@ $(function()
 
 		if (!selecteddate || !Selected_Time)
 			return;
-		$("#current_local_time").html("Current Time: " + getConvertedTimeFromEpoch(new Date().getTime() / 1000));
+		$("#current_local_time").html("{{agile_lng_translate 'timezone' 'current-time'}}: " + getConvertedTimeFromEpoch(new Date().getTime() / 1000));
 		$('.checkbox-main-grid').html('<img class="loading-img" src="'+updateImageS3Path("../../img/21-0.gif")+'" style="width: 40px;margin-left: 216px;"></img>');
 		get_slots(selecteddate, Selected_Time);
 	});

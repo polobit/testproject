@@ -3,10 +3,7 @@
  * @param element
  */
 function includeTimeAgo(element){
-	head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
-			{
-				$("time", element).timeago();
-			});
+	agileTimeAgoWithLngConversion($("time", element));
 }
 
 /**
@@ -56,9 +53,7 @@ function updateData(params) {
 		this.App_Calendar.allTasksListView = new Base_Collection_View({
 		url : '/core/api/tasks/based' + params,
 		restKey : "task",
-		sort_collection : true,
-		descending:false,
-		sortKey:'due',
+		sort_collection : false,
 		templateKey : "tasks-list",
 		cursor : true, page_size : 25,
 		individual_tag_name : 'tr',
@@ -67,19 +62,21 @@ function updateData(params) {
 
 			$('.tasks-count').attr('data', getTaskCount(this.App_Calendar.allTasksListView.collection.toJSON()));
 			includeTimeAgo(el);
+			showContactImages(this.App_Calendar.allTasksListView.collection.toJSON());
 		},
 		appendItemCallback : function(el)
 		{
 			includeTimeAgo(el);
+			showContactImages(this.App_Calendar.allTasksListView.collection.toJSON());
 		}
 
 	});
 
 	// Fetches data from server
 	this.App_Calendar.allTasksListView.collection.fetch();
-
 	// Renders data to tasks list page.
 	$('#task-list-based-condition').html(this.App_Calendar.allTasksListView.render().el);
+	
 }
 
 /**
@@ -151,7 +148,7 @@ $(function(){
 			bulk_complete_operation('/core/api/tasks/bulk/complete', index_array, table, data_array);
 		}	
 		else
-            $('body').find(".select-none").html('<div class="alert alert-danger"><a class="close" data-dismiss="alert" href="#">&times;</a>You have not selected any records to complete. Please select at least one record to continue.</div>').show().delay(3000).hide(1);
+            $('body').find(".select-none").html('<div class="alert alert-danger"><a class="close" data-dismiss="alert" href="#">&times;</a>'+_agile_get_translated_val('bulk-actions','no-tasks-delete')+'</div>').show().delay(3000).hide(1);
 	
 		getDueTasksCount(function(count){
 
@@ -204,5 +201,31 @@ function bulk_complete_operation(url, index_array, table, data_array){
 				$(tbody).find('tr:eq(' + index_array[i] + ')').find("div:lt(3)").css("text-decoration","line-through");
 		}
 	});
+}
+
+function showContactImages(collection){
+	////url = "core/api/tasks/getContactsList"
+	var referenceContactIds = [];
+	for(var i=0;i<collection.length;i++){
+		for(var j=0;j<collection[i].contacts.length;j++){
+			referenceContactIds.push(collection[i].contacts[j].id);
+		}
+	}
+	var contactid = [];
+	$.ajax({ url : "/core/api/contacts/taskreferences",method:"POST",data:JSON.stringify(referenceContactIds),dataType:"json",success : function(data)
+			{
+				$.each(data, function(j, item) {
+					if(jQuery.inArray(item.id,contactid) == -1){
+						contactid.push(item.id);
+						for(var k=0;k<(item.properties).length;k++){
+							if(item.properties[k].name == "image"){
+		    					$(".img"+item.id).attr("src", item.properties[k].value);
+		    				}
+						}
+					};
+					
+    			});
+			} 
+		});
 }
 		

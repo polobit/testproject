@@ -8,6 +8,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.exception.ExceptionUtils;
 
 import com.agilecrm.user.ContactViewPrefs;
 import com.agilecrm.user.util.ContactViewPrefsUtil;
@@ -40,6 +41,7 @@ public class ContactViewPrefsAPI
 	}
 	catch (Exception e)
 	{
+		System.out.println(ExceptionUtils.getFullStackTrace(e));
 	    e.printStackTrace();
 	    return null;
 	}
@@ -113,6 +115,57 @@ public class ContactViewPrefsAPI
 
 	    viewPrefs.fields_set = prefs.fields_set;
 	    viewPrefs.type = ContactViewPrefs.Type.COMPANY;
+	    viewPrefs.save();
+	    return viewPrefs;
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
+    }
+    
+    /**
+     * Gets ContactViewPrefs of current agile user.
+     * 
+     * @return ContactViewPrefs of current agile user.
+     */
+    @Path("contact-company")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public ContactViewPrefs getContactCompanyViewPrefs()
+    {
+	try
+	{
+	    return ContactViewPrefsUtil.getCurrentUserContactViewPrefs(ContactViewPrefs.Type.CONTACT_COMPANY.toString());
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
+    }
+
+    /**
+     * Updates ContactViewPrefs.
+     * 
+     * @param prefs
+     *            - ContactViewPrefs object to be updated.
+     * @return updated ContactViewPrefs.
+     */
+    @Path("contact-company")
+    @PUT
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public ContactViewPrefs saveContactCompanyViewPrefs(ContactViewPrefs prefs)
+    {
+	try
+	{
+	    // Get UserPrefs of user who is logged in
+	    ContactViewPrefs viewPrefs = ContactViewPrefsUtil
+		    .getCurrentUserContactViewPrefs(ContactViewPrefs.Type.CONTACT_COMPANY.toString());
+
+	    viewPrefs.fields_set = prefs.fields_set;
+	    viewPrefs.type = ContactViewPrefs.Type.CONTACT_COMPANY;
 	    viewPrefs.save();
 	    return viewPrefs;
 	}

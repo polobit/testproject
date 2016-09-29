@@ -4,7 +4,7 @@
 	<div class="col-md-10">
 <div class="panel panel-default">
 <div class="panel-heading">
-			<div class="text-lg">Invoices</div>
+			<div class="text-lg">{{agile_lng_translate 'plan-and-upgrade' 'invoices'}}</div>
 		</div>
 <div class="row">
     <div class="col-md-12">
@@ -12,9 +12,9 @@
         <table class="table table-striped agile-table" id="sort-table">
             <thead>
                 <tr>
-                    <th style="padding-left:15px;">Plan</th>
-                    <th style="padding-left:15px;">Bill Date</th>
-                    <th style="padding-left:15px;">Amount</th>
+                    <th style="padding-left:15px;">{{agile_lng_translate 'portlets' 'plan'}}</th>
+                    <th style="padding-left:15px;">{{agile_lng_translate 'plan-and-upgrade' 'bill-date'}}</th>
+                    <th style="padding-left:15px;">{{agile_lng_translate 'plan-and-upgrade' 'amount'}}</th>
                 </tr>
             </thead>
 
@@ -54,16 +54,16 @@ Emails
 		{{#containString "Email" plan.name}}
         {{epochToHumanDate "mm/dd/yyyy" period.start}}
 <br>
-<small>(charged @ ${{numeric_operation plan.amount 100 "/"}}/1000)</small>
+<small>({{agile_lng_translate 'plan-and-upgrade' 'charged'}} @ ${{numeric_operation plan.amount 100 "/"}}/1000)</small>
         {{else}}
 {{epochToHumanDate "mm/dd/yyyy" period.start}}
 <br>
-			<small>(for the period {{epochToHumanDate "mm/dd/yyyy" period.start}} to {{epochToHumanDate "mm/dd/yyyy" period.end}})</small>
+			<small>({{agile_lng_translate 'billing' 'for-the-period'}} {{epochToHumanDate "mm/dd/yyyy" period.start}} to {{epochToHumanDate "mm/dd/yyyy" period.end}})</small>
 		{{/containString}}
         {{else}}
            {{epochToHumanDate "mm/dd/yyyy" period.start}} 
            <br>
-            <small>(charged @ $4/1000)</small>
+            <small>({{agile_lng_translate 'plan-and-upgrade' 'charged'}} @ $4/1000)</small>
 		{{/if}}
     </td>
 	<td>
@@ -71,7 +71,7 @@ ${{numeric_operation ../../amountDue 100 "/"}}
     </td>
 {{/if_greater}}
 {{else}}
-<div>No Recent Payments</div>
+<div>{{agile_lng_translate 'Plan-and-upgrade' 'no-recent-payments'}}</div>
 {{/each}}
 </script>
 
@@ -79,10 +79,10 @@ ${{numeric_operation ../../amountDue 100 "/"}}
         <table class="table table-striped" id="sort-table">
             <thead>
                 <tr>
-                    <th>Description</th>
-                    <th>From Date</th>
-                    <th>To Date</th>
-                    <th>Amount</th>
+                    <th>{{agile_lng_translate 'other' 'description'}}</th>
+                    <th>{{agile_lng_translate 'plan-and-upgrade' 'from-date'}}</th>
+                    <th>{{agile_lng_translate 'plan-and-upgrade' 'to-date'}}</th>
+                    <th>{{agile_lng_translate 'plan-and-upgrade' 'amount'}}</th>
                 </tr>
             </thead>
             <tbody id="invoice-partial-model-list" class="model-list-cursor">

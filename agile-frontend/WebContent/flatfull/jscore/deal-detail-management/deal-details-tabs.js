@@ -89,7 +89,14 @@ var Deal_Modal_Event_View = Base_Model_View.extend({
 		//agile-x-edit
 		'click #deals-inline' : 'dealInlineEdit', 	
     	'blur #inline-input' : 'dealinlineedit',
-    	'keydown #inline-input' : 'dealNameChange'
+    	'keydown #inline-input' : 'dealNameChange',
+    	'click .change-deal-activity' : 'dealActivityChange'
+    },
+    dealActivityChange : function(e){
+    	console.log(e);
+    	var mode = $('.change-deal-activity').attr('data');
+    	dealDetailMode = mode ;
+    	deal_details_tab.load_deal_activities();
     },
     dealinlineedit : function(e){
     	inlineDealNameChange();
@@ -302,7 +309,7 @@ var Deal_Modal_Event_View = Base_Model_View.extend({
 		e.preventDefault();
 		fill_deal_owners(undefined, undefined, function()
 		{
-			if(hasScope("MANAGE_DEALS") || $(this).attr("data") == CURRENT_DOMAIN_USER.id)
+			if(hasScope("UPDATE_DEALS") || $(this).attr("data") == CURRENT_DOMAIN_USER.id)
 			{
 				$('#deal-owner').css('display', 'none');
 			}
@@ -347,10 +354,11 @@ var Deal_Modal_Event_View = Base_Model_View.extend({
 
 		var note = dealNotesView.collection.get($(targetEl).attr('data'));
 		console.log(note);
-		deserializeForm(note.toJSON(), $("#dealnoteUpdateForm", $('#dealnoteupdatemodal')));
-		fill_relation_deal($('#dealnoteUpdateForm'));
-		$('#dealnoteupdatemodal').modal('show');
-
+		showNoteModel(undefined , function()
+		{
+			deserializeForm(note.toJSON(), $("#dealnoteUpdateForm", $('#dealnoteupdatemodal')));
+			fill_relation_deal($('#dealnoteUpdateForm'));
+		},"dealNoteUpdateModal");
 	},
 	
 
@@ -437,11 +445,15 @@ var Deal_Modal_Event_View = Base_Model_View.extend({
 	{
 		e.preventDefault();
 
-		var el1 = $("#dealnoteForm");
-
+		showNoteModel(undefined , function()
+            {
+              var el1 = $("#dealnoteForm");
+            // Displays contact name, to indicate the note is related to the contact
+              fill_relation_deal(el1);
+              },"new-deal-notemodel");
+		
 		// Displays contact name, to indicate the note is related to the contact
-		fill_relation_deal(el1);
-		$('#deal-note-modal').modal('show');
+		//$('#deal-note-modal').modal('show');
 	},
 
 	dealArchive: function(e)
@@ -497,6 +509,22 @@ var Deal_Modal_Event_View = Base_Model_View.extend({
 			success : function(data) {
 				dealDocsView.collection.remove(json);
 				dealDocsView.render(true);
+			},
+			error : function(model, response){
+				showModalConfirmation("Delete <span class='text-cap'>"+model.get("entity_type")+"</span>", 
+					'<span>'+response.responseText.replace("attached", "detached")+'</span>', 
+					function (){
+						return;
+					}, 
+					function(){
+						return;
+					},
+					function (){
+						return;
+					},
+					'Cancel'
+				);
+				return;
 			}
 		});
 	},
@@ -514,7 +542,8 @@ var Deal_Modal_Event_View = Base_Model_View.extend({
 		var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
 	    fillSelect('document-select','core/api/documents', 'documents',  function fillNew()
 		{
-			el.find("#document-select > option:first").after("<option value='new'>Add New Doc</option><option style='font-size: 1pt; background-color: #EDF1F2;'disabled>&nbsp;</option>");
+			var text = _agile_get_translated_val("misc-keys", "add-new-doc");
+			el.find("#document-select > option:first").after("<option value='new'>" + text + "</option><option style='font-size: 1pt; background-color: #EDF1F2;'disabled>&nbsp;</option>");
 			el.find("#document-select > option:first").remove();
 		}, optionsTemplate, false, el); 
 	},
@@ -532,7 +561,8 @@ var Deal_Modal_Event_View = Base_Model_View.extend({
 			// To check whether the document is selected or not
 	    if(document_id == "")
 	    {
-	    	saveBtn.closest("span").find(".save-status").html("<span style='color:red;margin-left:10px;'>This field is required.</span>");
+	    	var linkedtext = _agile_get_translated_val("validation-msgs", "this-field-is-required");
+	    	saveBtn.closest("span").find(".save-status").html("<span style='color:red;margin-left:10px;'>" + linkedtext + "</span>");
 	    	saveBtn.closest("span").find('span.save-status').find("span").fadeOut(5000);
 	    	return;
 	    }	    	
@@ -756,13 +786,14 @@ var Deal_Modal_Event_View = Base_Model_View.extend({
 		}
 		if (value.description)
 		{
-			var description = '<label class="control-label"><b>Description </b></label><div class="controls"><textarea id="description" name="description" rows="3" class="input form-control" placeholder="Add Description"></textarea></div>'
+			var description = '<label class="control-label"><b>'+_agile_get_translated_val("misc-keys", "description")+' </b></label><div class="controls"><textarea id="description" name="description" rows="3" class="input form-control" placeholder="' + _agile_get_translated_val("misc-keys", "add-description") + '"></textarea></div>'
+
 			$("#event_desc").html(description);
 			$("textarea#description").val(value.description);
 		}
 		else
 		{
-			var desc = '<div class="row-fluid">' + '<div class="control-group form-group m-b-none">' + '<a href="#" id="add_event_desctiption"><i class="icon-plus"></i> Add Description </a>' + '<div class="controls event_discription hide">' + '<textarea id="description" name="description" rows="3" class="input form-control w-full col-md-8" placeholder="Add Description"></textarea>' + '</div></div></div>'
+			var desc = '<div class="row-fluid">' + '<div class="control-group form-group m-b-none">' + '<a href="#" id="add_event_desctiption"><i class="icon-plus"></i> ' + _agile_get_translated_val("misc-keys", "add-description") + ' </a>' + '<div class="controls event_discription hide">' + '<textarea id="description" name="description" rows="3" class="input form-control w-full col-md-8" placeholder="' + _agile_get_translated_val("misc-keys", "add-description") + '"></textarea>' + '</div></div></div>'
 			$("#event_desc").html(desc);
 		}
 		// Fills owner select element
@@ -878,7 +909,7 @@ $(function(){
 	 * Saves note model using "Bcakbone.Model" object, and adds saved data to
 	 * time-line if necessary.
 	 */
-	$('#deal-note-modal').on('click', '#dealnote_validate', function(e)
+	$('#newNoteModal').on('click', '#dealnote_validate', function(e)
 	{
 
 		e.preventDefault();
@@ -901,10 +932,10 @@ $(function(){
 
 		console.log(json);
 
-		saveDealNote($("#dealnoteForm"), $("#deal-note-modal"), this, json);
+		saveDealNote($("#dealnoteForm"), $("#newNoteModal"), this, json);
 	});
 
-	$('#dealnoteupdatemodal').on('click', '#dealnote_update', function(e)
+	$('#newNoteModal').on('click', '#dealnote_update', function(e)
 	{
 
 		e.preventDefault();
@@ -929,7 +960,7 @@ $(function(){
 
 		var json = serializeForm("dealnoteUpdateForm");
 
-		saveDealUpdateNote($("#dealnoteUpdateForm"), $("#dealnoteupdatemodal"), this, json);
+		saveDealUpdateNote($("#dealnoteUpdateForm"), $("#newNoteModal"), this, json);
 
 	});
 

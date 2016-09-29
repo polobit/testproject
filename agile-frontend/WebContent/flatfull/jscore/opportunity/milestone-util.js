@@ -4,9 +4,9 @@
 	
 	var wonIcon = "<i title='Make Milestone Won' class='task-action icon icon-like'></i>";
 	var lostIcon = "<i title='Make Milestone Won' class='task-action icon icon-dislike'></i>";
-	milestone_util.wonMsg = 'Deals with this milestone are considered as Won.';
-	milestone_util.lostMsg = 'Deals with this milestone are considered as Lost.';
-	var milestoneMsg = "For better deal reports and sales forecasting, please set your 'Won' and 'Lost' milestones in the <i style='text-decoration:underline;'>Deal settings</i> page.";
+	milestone_util.wonMsg = '{{agile_lng_translate "admin-settings-deals" "won-message"}}';
+	milestone_util.lostMsg = '{{agile_lng_translate "admin-settings-deals" "lost-message"}}';
+	var milestoneMsg = getTemplate('js-deal-reports');
 	milestone_util.isNotyVisible = true;
 	milestone_util.showMilestonePopup = function(track, callback){
 		

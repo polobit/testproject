@@ -1,114 +1,3 @@
-// We store one template compiled - if repetitive templates are called, we save time on compilations
-var Handlebars_Compiled_Templates = {};
-
-/**
- * Loads the template (script element with its id attribute as templateName
- * appended with "-template". For example if the templateName is "tasks", then
- * the script element id should be as "tasks-template") from html document body.
- * 
- * Compiles the loaded template using handlebars and replaces the context
- * related property names (which are under mustache like {{name}}) in the
- * template, with their associated values, on calling the context with the
- * compiled template.
- * 
- * @method getTemplate
- * @param {String}
- *            templateName name of the tempate to be loaded
- * @param {Object}
- *            context json object to call with the compiled template
- * @param {String}
- *            download verifies whether the template is found or not
- * 
- * @param {callback}
- *            To decide whether templates should be downloaded synchronously or
- *            asynchronously.
- * 
- * @returns compiled html with the context
- */
-function getTemplate(templateName, context, download, callback, loading_place_holder)
-{
-	var is_async = callback && typeof (callback) == "function";
-
-	// Check if it is (compiled template) present in templates
-	if (Handlebars_Compiled_Templates[templateName])
-	{
-		if (callback)
-			return callback(Handlebars_Compiled_Templates[templateName](context));
-		else
-			return Handlebars_Compiled_Templates[templateName](context);
-	}
-	else
-		Handlebars_Compiled_Templates = {};
-
-	// Check if source is available in body
-	if (HANDLEBARS_PRECOMPILATION)
-	{
-		var template = Handlebars.templates[templateName + "-template"];
-
-		// If teplate is found
-		if (template)
-		{
-			// If callback is sent then template is downloaded asynchronously
-			// and content is sent in callback
-			if (is_async)
-			{
-				callback(template(context));
-				return;
-			}
-
-			// console.log("Template " + templateName + " found");
-			return template(context);
-		}
-	}
-	else
-	{
-		var source = $('#' + templateName + "-template").html();
-		if (source)
-		{
-			var template = Handlebars.compile(source);
-			Handlebars_Compiled_Templates[templateName] = template;
-
-			// If callback is sent then template is downloaded asynchronously
-			// and content is sent
-			if (is_async)
-			{
-				callback(template(context));
-				return;
-			}
-			return template(context);
-		}
-	}
-
-	// Check if the download is explicitly set to no
-	if (download == 'no')
-	{
-		console.log("Not found " + templateName);
-		return;
-	}
-
-	// Shows loader icon if there is a loader placeholder
-	if(loading_place_holder)
-	{
-		try{
-			var loaderEl = $(getRandomLoadingImg());
-			$(loading_place_holder).html(loaderEl.css("margin", "10px"));
-		}catch(err){}
-	}
-		   
-
-	// Stores urls of templates to be downloaded.
-	var template_relative_urls = getTemplateUrls(templateName);
-
-	if (is_async)
-	{
-		load_templates_async(templateName, context, template_relative_urls, callback);
-		return;
-	}
-
-	load_templates_sync(template_relative_urls);
-
-	return getTemplate(templateName, context, 'no');
-}
 
 /**
  * If the template is not found in document body, then template paths are built
@@ -265,8 +154,17 @@ function getTemplateUrls(templateName)
 	}
 	else if (templateName.indexOf("callscript") == 0)
 	{
-	template_relative_urls.push("callscript.js");
+		template_relative_urls.push("callscript.js");
 	}
+	else if (templateName.indexOf("fullcontact") == 0)
+	{
+		template_relative_urls.push("fullcontact.js");
+	}
+	else if (templateName.indexOf("klout") == 0)
+ 	{
+ 		template_relative_urls.push("klout.js");
+ 	}
+
 	if (templateName.indexOf("chargify") == 0)
 	{
 		template_relative_urls.push("chargify.js");
@@ -277,15 +175,7 @@ function getTemplateUrls(templateName)
 	}
 	if (templateName.indexOf("socialsuite") == 0)
 	{
-		if(HANDLEBARS_PRECOMPILATION)
-			template_relative_urls.push("socialsuite-all.js");
-		else
-		{
-			template_relative_urls.push("socialsuite.js");
-		}
-
-		if (HANDLEBARS_PRECOMPILATION)
-			template_relative_urls.push("socialsuite.html");
+		template_relative_urls.push("socialsuite.js");
 	}
 
 
@@ -345,9 +235,21 @@ function getTemplateUrls(templateName)
 	{
 		template_relative_urls.push("referals.js");
 	}
+	if (templateName.indexOf("generic-timeline") == 0)
+	{
+		template_relative_urls.push("generic-timeline.js");
+	}
 	if (templateName.indexOf("helpcenter") == 0)
 	{
 		template_relative_urls.push("helpcenter.js");
+	}
+	if (templateName.indexOf("push-notification") == 0)
+	{
+		template_relative_urls.push("notification.js");
+	}
+	if (templateName.indexOf("affiliate") == 0)
+	{
+		template_relative_urls.push("affiliate.js");
 	}
 	
 	return template_relative_urls;
@@ -1057,9 +959,18 @@ function getCurrentContactProperty(value)
 function getCount(collection)
 {
 	if (collection[0] && collection[0].count && (collection[0].count != -1))
-		return "(" + collection[0].count + " Total)";
+		return "(" + collection[0].count + " " +_agile_get_translated_val('other','total')+ ")";
 	else
-		return "(" + collection.length + " Total)";
+		return "(" + collection.length + " " +_agile_get_translated_val('other','total')+ ")";
+}
+function getSimpleCount(collection)
+{
+	for(var i=0;i<collection.length;i++){
+		if (collection[i] && collection[i].count && (collection[i].count != -1))
+			return collection[i].count ;
+			
+			}
+		return collection.length ;
 }
 function getTaskCount(collection)
 {

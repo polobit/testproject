@@ -1,21 +1,21 @@
-<html lang="en">
+<html lang="en" data-modal-version="2" data-modal-type="agile-modal-sm agile-modal-choicetwo minimal-xs">
    <head>
       <meta http-equiv="content-type" content="text/html;charset=utf-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1">
       <title>Popup</title>
       <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,400italic,600,700" rel="stylesheet" type="text/css" />
       <style>
-         body {
-         background: #333;
-         width: 600px;
-         height: 385px;
-         }
+      @media (max-width:425px){ #popup-form input.popup-button{
+          margin-top: 10px;
+        }
+      }
          #popup {
          background: #17aed9;
          color: #fff!important;
          font: 20px/26px 'Open Sans', Helvetica, Arial, sans-serif!important;
          letter-spacing: 0;
          position: fixed;
-         width: 600px;
+         width: 100%;
          }
          #popup-body {
          padding: 40px 30px 0px;
@@ -53,7 +53,6 @@
          border-radius: 3px;
          height: 50px;
          margin: 0 auto 80px;
-         width: 420px;
          }
          #popup-form input.popup-text {
          background: #fff url('https://s3.amazonaws.com/PopupTemplates/form/minimal/images/popup-form-text.png') no-repeat 18px 17px;
@@ -63,9 +62,8 @@
          font: 20px/28px 'Open Sans', Helvetica, Arial, sans-serif!important;
          letter-spacing: -1px;
          margin: 0;
-         padding: 12px 20px 10px 60px;
          outline: 0;
-         width: 270px;
+         width: 80%;
          }
          #popup-form input.popup-text.popup-text-error {
          color: #c00;
@@ -77,20 +75,15 @@
          -moz-border-radius: 0 2px 2px 0;
          border-radius: 0 2px 2px 0;
          color: #fff!important;
-         cursor: pointer;
-         float: left;
          font: 600 20px/50px 'Open Sans', Helvetica, Arial, sans-serif!important;
          line-height: 50px!important;
-         margin: 0;
-         outline: 0;
-         padding: 0;
+         padding: 0px 13px;
          text-transform: uppercase;
-         width: 150px;
-         height: 50px;
          }
          #popup-form input.popup-button:hover, #popup-form input.popup-button:focus {
          background: #e72b2b;
          }
+        }
       </style>
    </head>
    <body>

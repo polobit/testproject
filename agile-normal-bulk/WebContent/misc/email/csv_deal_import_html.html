@@ -1,75 +1,65 @@
-<body>
-	<div>
-		<div
-			style="background-color: #8A6086; font-family: Arial, sans-serif; padding: 5px">
-			<div
-				style="min-height: 36px; font-size: 14px; font-weight: bold; padding-bottom: 4px">
-				<table style="width: 100%; background-color: #8A6086;">
-					<tbody>
-						<tr>
-							<td valign="middle" height="32px"
-								style="padding: 0; color: white">{{email_subject}}</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-			<div
-				style="font-size: 14px; background-color: #fff; padding: 10px 7px 7px 7px">
-				<table width="100%" cellpadding="5" cellspacing="0" style="margin-top:-40px">
-					<tbody>
-						<tr>
-							<td
-								style="padding-right: 20px; padding-left: 20px; line-height: 20px; font-size: 14px; font-family: Lucida Grande, verdana">
-								<b>Total {{HashMap.type}} in CSV file: {{HashMap.TOTAL}} </b><br /> 
-								<b>Successfully Saved: {{HashMap.SAVED}}</b> <br />
-								{{#HashMap.NEW}}
-									&nbsp;- New {{HashMap.type}}: {{HashMap.NEW}}
-									{{/HashMap.NEW}}<br />
-									{{#HashMap.MERGED}}
-									&nbsp;- Merged {{HashMap.type}}: {{HashMap.MERGED}}
-									{{/HashMap.MERGED}}<br />
-								{{#HashMap.FAILED}} 
-								 <b>Failed {{HashMap.type}} : {{HashMap.FAILED}}</b> <br />
-								{{/HashMap.FAILED}}
-								 
-								{{#HashMap.TRACKMISING}} 
-									&nbsp;- Wrong track value or track not found in agile : {{HashMap.TRACKMISING}}<br /> 
-								{{/HashMap.TRACKMISING}}
-								
-								{{#HashMap.NAMEMISSING}} 
-									&nbsp;- Deal Name is missing : {{HashMap.NAMEMISSING}} 
-								{{/HashMap.NAMEMISSING}}
-								
-								{{#HashMap.MILESTONE}} 
-									&nbsp;- Wrong milestone : {{HashMap.MILESTONE}} 
-								{{/HashMap.MILESTONE}}
-								{{#HashMap.ACCESS_DENIED}} 
-									&nbsp;- Access denied to create/update : {{HashMap.ACCESS_DENIED}} 
-								{{/HashMap.ACCESS_DENIED}}
-								
-							</td>
-						</tr>
-					</tbody>
-				</table>
-				<p style="font-weight: bold;">Have questions or need help?</p>
-				<p>Our customer service and support team is here to help you any
-					way we can. Please email us at care@agilecrm.com</p>
-				<p>Thanks for being a valued customer.</p>
-				<div style="height: 80px">
-				<div style="float:left">
-				<br /> Best Wishes, <br /> AgileCRM Support. <br />
-				http://www.agilecrm.com
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>AgileCRM</title>
+    
+  </head>
+  <body>
+    <table border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color:#edf1f2;padding:6% 10%">
+      <tr>
+        <td align="center">
+          <table border="0" cellpadding="0" cellspacing="0" align="center" bgcolor="#FFFFFF" style="border:1px solid #ccc;border-radius:2px">
+            <tr>
+              <td style="font-size: 0; line-height: 0; padding: 0 10px; border-bottom:1px solid #ccc" height="70" align="center" class="responsive-image">
+                <img width="150" alt="AgileCRM" src="https://doxhze3l6s7v9.cloudfront.net/img/agile-crm-logo-1.png">
+              </td>
+            </tr>
+            <tr>
+				<td style="line-height: 20px; font-size: 14px; font-family: sans-serif;padding: 15px 25px 25px 25px">		
+					<div style="padding-bottom:10px;font-size:14px;font-weight:bold">Total {{HashMap.type}} in CSV File: {{HashMap.TOTAL}} </div> 
+					<div style="padding-bottom:10px;font-size:14px;font-weight:bold">Successfully Saved: {{HashMap.SAVED}}</div>
+					{{#HashMap.NEW}}
+						<div style="padding-bottom:5px;font-size:14px;padding-left:15px;font-family:sans-serif">- New {{HashMap.type}}: {{HashMap.NEW}}</div>
+						{{/HashMap.NEW}}
+						
+						{{#HashMap.MERGED}}
+							<div style="padding-bottom:5px;font-size:14px;padding-left:15px;font-family:sans-serif">- Merged {{HashMap.type}}: {{HashMap.MERGED}}</div>
+							{{/HashMap.MERGED}}
+						
+					{{#HashMap.FAILED}} 
+						 <div style="padding-bottom:10px;font-size:14px;font-weight:bold">Failed {{HashMap.type}} : {{HashMap.FAILED}}</div>
+						{{/HashMap.FAILED}}
+					 
+					{{#HashMap.TRACKMISING}} 
+							<div style="padding-bottom:10px;font-size:14px;font-weight:bold;padding-left:15px">- Wrong track value or track not found in Agile : {{HashMap.TRACKMISING}}</div>
+						{{/HashMap.TRACKMISING}}
+					
+					{{#HashMap.NAMEMISSING}} 
+							<div style="padding-bottom:5px;font-size:14px;padding-left:15px;font-family:sans-serif">- Deal Name is Missing : {{HashMap.NAMEMISSING}} </div>
+						{{/HashMap.NAMEMISSING}}
+					
+					{{#HashMap.MILESTONE}} 
+							<div style="padding-bottom:5px;font-size:14px;padding-left:15px;font-family:sans-serif">- Wrong Milestone : {{HashMap.MILESTONE}} </div>
+						{{/HashMap.MILESTONE}}
+					
+					{{#HashMap.ACCESS_DENIED}} 
+							<div style="padding-bottom:5px;font-size:14px;padding-left:15px;font-family:sans-serif">- Access Denied to Create/Update : {{HashMap.ACCESS_DENIED}} </div>
+						{{/HashMap.ACCESS_DENIED}}
+				
+				<div style="font-family:sans-serif;font-size:14px;padding-bottom:12px">
+					Should you have any questions or need assistance, don't hesitate to get in touch with us at any time by sending an email to <font color="blue"><a href="mailto:support@agilecrm.com" target="_blank">support@agilecrm.com</a></font>
 				</div>
-				<div style="text-align: right;float:right">
-					<a href="{{DomainUser.domain}}.agilecrm.com" target="_blank"> <img
-						style="border: 0; margin-top: 10px"
-						src="https://s3.amazonaws.com/agilecrm/panel/uploaded-logo/1383722651000?id=upload-container"
-						alt="Logo for AgileCRM" />
-					</a>
-					</div>
-				</div>
-				</div>
-			</div>
-		</div>
-	</div>
-</body>
+				<div style="font-weight: bold; font-size: 12px;">
+						The Crew at Agile CRM  <br />
+					  </div>
+					  <div><a target="_blank" href="https://www.agilecrm.com" style="color:blue">https://www.agilecrm.com</a></div>
+				</td>
+			</tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

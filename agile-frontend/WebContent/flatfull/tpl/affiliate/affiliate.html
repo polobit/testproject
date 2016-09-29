@@ -1,0 +1,366 @@
+<script id="affiliate-template" type="text/html">
+  <div id="affiliate-container" class="bg-light lter b-b wrapper-md">
+    <h1 class="pull-left font-thin h3">{{agile_lng_translate 'affiliate' 'affiliate-program'}}<small> <span class="label label-sm bg-danger">{{agile_lng_translate 'deal-view' 'beta'}}</span></small></h1>
+    <div id="affiliate-datepicker" class="pull-right"></div>
+    <div class="clearfix"></div>    
+  </div>
+  <div class="hbox hbox-auto-xs hbox-auto-sm bg-light agile-tab">
+	<div id="affiliate-tabs" class="col w b-r">
+     <div class="vbox">
+      <div class="row-row">
+		<div class="list-group list-group-lg no-radius no-border no-bg m-b-none">
+			<a href="#commission" class="commission-details-tab list-group-item select">{{agile_lng_translate 'affiliate' 'commission-details'}}</a>
+			<a href="#affiliate" class="referrals-tab list-group-item">{{agile_lng_translate 'affiliate' 'referrals'}}</a>
+			<a href="#creatives" class="tools-tab list-group-item">{{agile_lng_translate 'affiliate' 'affiliate-tools'}}</a>
+		</div>
+	  </div>
+	 </div>
+	</div>
+	<div class="tab-content wrapper-md ">
+	  <div class="tabs" id="affiliate-tabs-content"></div>
+	</div>
+  </div>
+</script>
+
+
+
+
+<script id="affiliate-collection-template" type="text/html">
+{{#unless this.length}}
+	<div class="alert bg-white ">
+        <div class="slate-content p-md">
+            <div class="box-left pull-left m-r-md">
+                <img alt="Clipboard" src="/img/clipboard.png">
+            </div>
+            <div class="box-right pull-left">
+                <h4 class="text-lg" style="opacity:0.8;">{{agile_lng_translate 'affiliate' 'no-affiliates'}} </h4>
+            </div>
+			<div class="clearfix">
+			</div>
+        </div>
+    </div>
+{{/unless}}
+{{#if this.length}}
+<div class="panel panel-default">
+ <div class="panel-heading">
+	<div class="pull-left  m-t-xs">{{agile_lng_translate 'affiliate' 'referrals'}}</div>
+	<div class="pull-right m-t-xs">
+		<span><span class="p-r-xs">{{agile_lng_translate 'affiliate' 'total-count'}}:</span><span id="aff-count"></span></span>
+		<span class="p-l-sm"><span class="p-r-xs">{{agile_lng_translate 'affiliate' 'total-commission'}}:</span>$<span id="aff-commission"></span></span>
+	</div>
+	<div class="clearfix"></div>
+ </div>
+<div class="row">
+<div class="col-md-12 col-sm-12">
+	    <div class=" table-responsive"> 
+	    <table class="table table-striped agile-table panel table-layout-mob-view">
+	        <thead>
+	            <tr>
+	                <th style="width:20%" class="header">{{agile_lng_translate 'affiliate' 'email'}}</th>
+					<th style="width:15%" class="header">{{agile_lng_translate 'affiliate' 'domain'}}</th>
+					<th style="width:20%" class="header">{{agile_lng_translate 'affiliate' 'plan'}}</th>
+	                <th style="width:15%" class="header">{{agile_lng_translate 'affiliate' 'commission'}}</th>
+					<th style="width:25%">{{agile_lng_translate 'affiliate' 'created-time'}}</th>  
+	            </tr>
+	         </thead>
+	         <tbody id='affiliate-model-list'>
+	         </tbody>
+	    </table>
+	    </div>
+    </div>
+</div>
+</div>
+{{/if}}
+</script>
+
+<script id="affiliate-model-template" type="text/html">
+	<td>
+		<div class="table-resp">
+		<div class="text-base text-ellipsis">{{email}}</div>
+		</div>
+	</td>
+	<td>
+		<div class="table-resp">
+		<div class="text-base text-ellipsis">{{domain}}</div>
+		</div>
+	</td>
+	<td>
+		<div class="table-resp">
+		<div class="text-base text-ellipsis">{{usersCount}} x {{getFullAccountPlanName plan}}</div>
+		</div>
+	</td>
+	<td>
+		<div class="table-resp">
+		<div class="text-base text-ellipsis">${{affiliateCommission amount commission}}</div>
+		</div>
+	</td>
+	<td class="text-muted">
+		<div class="table-resp">
+			<i class="fa fa-clock-o m-r-xs"></i>
+			<time class="document-created-time b-b-dotted" value="{{createdTime}}" datetime="{{epochToHumanDate "" createdTime}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" createdTime}}</time>
+		</div>
+	</td>
+</script>
+
+<script id="affiliate-tools-template" type="text/html">
+  <div class="row">
+  	<div class="col-md-4 text-center">
+  		<img alt="AgileCRM" src="https://doxhze3l6s7v9.cloudfront.net/img/banners/250X250/agilecrm-affiliate.gif">
+  		<div class="panel m-t-sm p-xs pos-rlt m-b-none">
+  			<span id="referral_url1" class="word-break">{{getAffiliateLink "https://doxhze3l6s7v9.cloudfront.net/img/banners/250X250/agilecrm-affiliate.gif"}}</span>
+  		</div>
+      <a id="url_clip_button1" class="btn btn-default btn-lg text-base w-full m-b-md b-n r-n b-t no-shadow" data-clipboard-text="{{getAffiliateLink 'https://doxhze3l6s7v9.cloudfront.net/img/banners/250X250/agilecrm-affiliate.gif'}}">
+        Copy to Clipboard
+      </a>
+  	</div>
+  	<div class="col-md-4 text-center {{#is_mobile}}{{else}} p-t-xxl{{/is_mobile}}">
+  		<img alt="AgileCRM" src="https://doxhze3l6s7v9.cloudfront.net/img/banners/200X200/agilecrm-affiliate.gif">
+  		<div class="panel m-t-sm p-xs pos-rlt m-b-none">
+  			<span id="referral_url2" class="word-break">{{getAffiliateLink "https://doxhze3l6s7v9.cloudfront.net/img/banners/200X200/agilecrm-affiliate.gif"}}</span>
+  		</div>
+      <a id="url_clip_button2" class="btn btn-default btn-lg text-base w-full m-b-md b-n r-n b-t no-shadow" data-clipboard-text="{{getAffiliateLink 'https://doxhze3l6s7v9.cloudfront.net/img/banners/200X200/agilecrm-affiliate.gif'}}">
+        Copy to Clipboard
+      </a>
+  	</div>
+  	<div class="col-md-4 text-center {{#is_mobile}}{{else}} p-t-xxl{{/is_mobile}}">
+  		<img alt="AgileCRM" src="https://doxhze3l6s7v9.cloudfront.net/img/banners/200X200/agilecrm-affiliate-1.gif">
+  		<div class="panel m-t-sm p-xs pos-rlt m-b-none">
+  			<span id="referral_url3" class="word-break">{{getAffiliateLink "https://doxhze3l6s7v9.cloudfront.net/img/banners/200X200/agilecrm-affiliate-1.gif"}}</span>
+  		</div>
+      <a id="url_clip_button3" class="btn btn-default btn-lg text-base w-full m-b-md b-n r-n b-t no-shadow" data-clipboard-text="{{getAffiliateLink 'https://doxhze3l6s7v9.cloudfront.net/img/banners/200X200/agilecrm-affiliate-1.gif'}}">
+        Copy to Clipboard
+      </a>
+  	 </div> 
+  </div>
+  <div class="line  b-b m-t-sm m-b-lg"></div>
+  <div class="row">
+  	<div class="col-md-6 text-center">
+  		<img alt="AgileCRM" src="https://doxhze3l6s7v9.cloudfront.net/img/banners/300X250/agilecrm-affiliate.gif">
+  		<div class="panel m-t-sm p-xs pos-rlt m-b-none">
+  			<span id="referral_url4" class="word-break">{{getAffiliateLink "https://doxhze3l6s7v9.cloudfront.net/img/banners/300X250/agilecrm-affiliate.gif"}}</span>
+  		</div>
+      <a id="url_clip_button4" class="btn btn-default btn-lg text-base w-full m-b-md b-n r-n b-t no-shadow" data-clipboard-text="{{getAffiliateLink 'https://doxhze3l6s7v9.cloudfront.net/img/banners/300X250/agilecrm-affiliate.gif'}}">
+        Copy to Clipboard
+      </a>
+  	</div>
+  	<div class="col-md-6 text-center">
+  		<img alt="AgileCRM" src="https://doxhze3l6s7v9.cloudfront.net/img/banners/300X250/agilecrm-affiliate-1.gif">
+  		<div class="panel m-t-sm p-xs pos-rlt m-b-none">
+  			<span id="referral_url5" class="word-break">{{getAffiliateLink "https://doxhze3l6s7v9.cloudfront.net/img/banners/300X250/agilecrm-affiliate-1.gif"}}</span>
+  		</div>
+      <a id="url_clip_button5" class="btn btn-default btn-lg text-base w-full m-b-md b-n r-n b-t no-shadow" data-clipboard-text="{{getAffiliateLink 'https://doxhze3l6s7v9.cloudfront.net/img/banners/300X250/agilecrm-affiliate-1.gif'}}">
+        Copy to Clipboard
+      </a>
+  	</div>
+  </div>
+  <div class="line  b-b m-t-sm m-b-lg"></div>
+  <div class="row">
+  	<div class="col-md-6 text-center">
+  		<img alt="AgileCRM" src="https://doxhze3l6s7v9.cloudfront.net/img/banners/336X280/agilecrm-affiliate.gif">
+  		<div class="panel m-t-sm p-xs pos-rlt m-b-none">
+  			<span id="referral_url6" class="word-break">{{getAffiliateLink "https://doxhze3l6s7v9.cloudfront.net/img/banners/336X280/agilecrm-affiliate.gif"}}</span>
+  		</div>
+      <a id="url_clip_button6" class="btn btn-default btn-lg text-base w-full m-b-md b-n r-n b-t no-shadow" data-clipboard-text="{{getAffiliateLink 'https://doxhze3l6s7v9.cloudfront.net/img/banners/336X280/agilecrm-affiliate.gif'}}">
+        Copy to Clipboard
+      </a>
+  	</div>
+  	<div class="col-md-6 text-center">
+  		<img alt="AgileCRM" src="https://doxhze3l6s7v9.cloudfront.net/img/banners/336X280/agilecrm-affiliate-1.gif">
+  		<div class="panel m-t-sm p-xs pos-rlt m-b-none">
+  			<span id="referral_url7" class="word-break">{{getAffiliateLink "https://doxhze3l6s7v9.cloudfront.net/img/banners/336X280/agilecrm-affiliate-1.gif"}}</span>
+  		</div>
+      <a id="url_clip_button7" class="btn btn-default btn-lg text-base w-full m-b-md b-n r-n b-t no-shadow" data-clipboard-text="{{getAffiliateLink 'https://doxhze3l6s7v9.cloudfront.net/img/banners/336X280/agilecrm-affiliate-1.gif'}}">
+        Copy to Clipboard
+      </a>
+  	</div>
+  </div>
+  <div class="line  b-b m-t-sm m-b-lg"></div>
+  <div class="row">
+    <div class="col-md-6 text-center">
+      <img alt="AgileCRM" src="https://doxhze3l6s7v9.cloudfront.net/img/banners/250X250/agilecrm-affiliate-1.gif">
+      <div class="panel m-t-sm p-xs pos-rlt m-b-none">
+        <span id="referral_url8" class="word-break">{{getAffiliateLink "https://doxhze3l6s7v9.cloudfront.net/img/banners/250X250/agilecrm-affiliate-1.gif"}}</span>
+      </div>
+      <a id="url_clip_button8" class="btn btn-default btn-lg text-base w-full m-b-md b-n r-n b-t no-shadow" data-clipboard-text="{{getAffiliateLink 'https://doxhze3l6s7v9.cloudfront.net/img/banners/250X250/agilecrm-affiliate-1.gif'}}">
+        Copy to Clipboard
+      </a>
+    </div>
+    <div class="col-md-6 text-center">
+      <img alt="AgileCRM" {{#is_mobile}}{{else}}style="padding-top: 150px;"{{/is_mobile}} src="https://doxhze3l6s7v9.cloudfront.net/img/banners/320X100/agilecrm-affiliate.gif">
+      <div class="panel m-t-sm p-xs pos-rlt m-b-none">
+        <span id="referral_url9" class="word-break">{{getAffiliateLink "https://doxhze3l6s7v9.cloudfront.net/img/banners/320X100/agilecrm-affiliate.gif"}}</span>
+      </div>
+      <a id="url_clip_button9" class="btn btn-default btn-lg text-base w-full m-b-md b-n r-n b-t no-shadow" data-clipboard-text="{{getAffiliateLink 'https://doxhze3l6s7v9.cloudfront.net/img/banners/320X100/agilecrm-affiliate.gif'}}">
+        Copy to Clipboard
+      </a>
+    </div>
+  </div>
+  <div class="line  b-b m-t-sm m-b-lg"></div>
+  <div class="row">
+  	<div class="col-md-4 text-center">
+  		<img alt="AgileCRM" src="https://doxhze3l6s7v9.cloudfront.net/img/banners/160X600/agilecrm-affiliate.gif">
+  		<div class="panel m-t-sm p-xs pos-rlt m-b-none">
+  			<span id="referral_url10" class="word-break">{{getAffiliateLink "https://doxhze3l6s7v9.cloudfront.net/img/banners/160X600/agilecrm-affiliate.gif"}}</span>
+  		</div>
+      <a id="url_clip_button10" class="btn btn-default btn-lg text-base w-full m-b-md b-n r-n b-t no-shadow" data-clipboard-text="{{getAffiliateLink 'https://doxhze3l6s7v9.cloudfront.net/img/banners/160X600/agilecrm-affiliate.gif'}}">
+        Copy to Clipboard
+      </a>
+  	</div>
+  	<div class="col-md-4 text-center">
+  		<img alt="AgileCRM" src="https://doxhze3l6s7v9.cloudfront.net/img/banners/160X600/agilecrm-affiliate-1.gif">
+  		<div class="panel m-t-sm p-xs pos-rlt m-b-none">
+  			<span id="referral_url11" class="word-break">{{getAffiliateLink "https://doxhze3l6s7v9.cloudfront.net/img/banners/160X600/agilecrm-affiliate-1.gif"}}</span>
+			</div>
+      <a id="url_clip_button11" class="btn btn-default btn-lg text-base w-full m-b-md b-n r-n b-t no-shadow" data-clipboard-text="{{getAffiliateLink 'https://doxhze3l6s7v9.cloudfront.net/img/banners/160X600/agilecrm-affiliate-1.gif'}}">
+        Copy to Clipboard
+      </a>
+  	</div>
+  	<div class="col-md-4 text-center">
+  		<img alt="AgileCRM" src="https://doxhze3l6s7v9.cloudfront.net/img/banners/120X600/agilecrm-affiliate.gif">
+  		<div class="panel m-t-sm p-xs pos-rlt m-b-none">
+  			<span id="referral_url12" class="word-break">{{getAffiliateLink "https://doxhze3l6s7v9.cloudfront.net/img/banners/120X600/agilecrm-affiliate.gif"}}</span>
+  		</div>
+      <a id="url_clip_button12" class="btn btn-default btn-lg text-base w-full m-b-md b-n r-n b-t no-shadow" data-clipboard-text="{{getAffiliateLink 'https://doxhze3l6s7v9.cloudfront.net/img/banners/120X600/agilecrm-affiliate.gif'}}">
+        Copy to Clipboard
+      </a>
+  	</div>
+  </div>
+  <div class="line  b-b m-t-sm m-b-lg"></div>
+  <div class="row">
+  	<div class="col-md-6 text-center">
+  		<img alt="AgileCRM" src="https://doxhze3l6s7v9.cloudfront.net/img/banners/300X600/agilecrm-affiliate.gif">
+  		<div class="panel m-t-sm p-xs pos-rlt m-b-none">
+  			<span id="referral_url13" class="word-break">{{getAffiliateLink "https://doxhze3l6s7v9.cloudfront.net/img/banners/300X600/agilecrm-affiliate.gif"}}</span>
+			</div>
+      <a id="url_clip_button13" class="btn btn-default btn-lg text-base w-full m-b-md b-n r-n b-t no-shadow" data-clipboard-text="{{getAffiliateLink 'https://doxhze3l6s7v9.cloudfront.net/img/banners/300X600/agilecrm-affiliate.gif'}}">
+        Copy to Clipboard
+      </a>
+  	</div>
+  	<div class="col-md-6 text-center">
+  		<img alt="AgileCRM" src="https://doxhze3l6s7v9.cloudfront.net/img/banners/300X600/agilecrm-affiliate-1.gif">
+  		<div class="panel m-t-sm p-xs pos-rlt m-b-none">
+  			<span id="referral_url14" class="word-break">{{getAffiliateLink "https://doxhze3l6s7v9.cloudfront.net/img/banners/300X600/agilecrm-affiliate-1.gif"}}</span>
+  		</div>
+      <a id="url_clip_button14" class="btn btn-default btn-lg text-base w-full m-b-md b-n r-n b-t no-shadow" data-clipboard-text="{{getAffiliateLink 'https://doxhze3l6s7v9.cloudfront.net/img/banners/300X600/agilecrm-affiliat1.gif'}}">
+        Copy to Clipboard
+      </a>
+  	</div>
+  </div>
+  <div class="line  b-b m-t-sm m-b-lg"></div>
+  <div class="row">
+  	<div class="col-md-6 text-center">
+  		<img alt="AgileCRM" {{#is_mobile}}{{else}}style="padding-top: 50px;"{{/is_mobile}} src="https://doxhze3l6s7v9.cloudfront.net/img/banners/320X50/agilecrm-affiliate.gif">
+  		<div class="panel m-t-sm p-xs pos-rlt m-b-none">
+  			<span id="referral_url15" class="word-break">{{getAffiliateLink "https://doxhze3l6s7v9.cloudfront.net/img/banners/320X50/agilecrm-affiliate.gif"}}</span>
+  		</div>
+      <a id="url_clip_button15" class="btn btn-default btn-lg text-base w-full m-b-md b-n r-n b-t no-shadow" data-clipboard-text="{{getAffiliateLink 'https://doxhze3l6s7v9.cloudfront.net/img/banners/320X50/agilecrm-affiliate.gif'}}">
+        Copy to Clipboard
+      </a>
+  	</div>
+  	<div class="col-md-6 text-center">
+      <img alt="AgileCRM" src="https://doxhze3l6s7v9.cloudfront.net/img/banners/320X100/agilecrm-affiliate-1.gif">
+      <div class="panel m-t-sm p-xs pos-rlt m-b-none">
+        <span id="referral_url16" class="word-break">{{getAffiliateLink "https://doxhze3l6s7v9.cloudfront.net/img/banners/320X100/agilecrm-affiliate-1.gif"}}</span>
+      </div>
+      <a id="url_clip_button16" class="btn btn-default btn-lg text-base w-full m-b-md b-n r-n b-t no-shadow" data-clipboard-text="{{getAffiliateLink 'https://doxhze3l6s7v9.cloudfront.net/img/banners/320X100/agilecrm-affiliate-1.gif'}}">
+        Copy to Clipboard
+      </a>
+    </div>
+  </div>
+  <div class="line  b-b m-t-sm m-b-lg"></div>
+  <div class="row">
+  	<div class="col-md-6 text-center">
+  		<img alt="AgileCRM" class="w-full" src="https://doxhze3l6s7v9.cloudfront.net/img/banners/468X60/agilecrm-affiliate.gif">
+  		<div class="panel m-t-sm p-xs pos-rlt m-b-none">
+  			<span id="referral_url17" class="word-break">{{getAffiliateLink "https://doxhze3l6s7v9.cloudfront.net/img/banners/468X60/agilecrm-affiliate.gif"}}</span>
+			</div>
+      <a id="url_clip_button17" class="btn btn-default btn-lg text-base w-full m-b-md b-n r-n b-t no-shadow" data-clipboard-text="{{getAffiliateLink 'https://doxhze3l6s7v9.cloudfront.net/img/banners/468X60/agilecrm-affiliate.gif'}}">
+        Copy to Clipboard
+      </a>
+  	</div>
+    <div class="col-md-6 text-center">
+      <img alt="AgileCRM" class="w-full" src="https://doxhze3l6s7v9.cloudfront.net/img/banners/728X90/agilecrm-affiliate-1.gif">
+      <div class="panel m-t-sm p-xs pos-rlt m-b-none">
+        <span id="referral_url18" class="word-break">{{getAffiliateLink "https://doxhze3l6s7v9.cloudfront.net/img/banners/728X90/agilecrm-affiliate-1.gif"}}</span>
+      </div>
+      <a id="url_clip_button18" class="btn btn-default btn-lg text-base w-full m-b-md b-n r-n b-t no-shadow" data-clipboard-text="{{getAffiliateLink 'https://doxhze3l6s7v9.cloudfront.net/img/banners/728X90/agilecrm-affiliate-1.gif'}}">
+        Copy to Clipboard
+      </a>
+    </div>
+  </div>
+  <div class="line  b-b m-t-sm m-b-lg"></div>
+  <div class="row">
+  	<div class="col-md-6 text-center">
+  		<img alt="AgileCRM" class="w-full" src="https://doxhze3l6s7v9.cloudfront.net/img/banners/970X90/agilecrm-affiliate.gif">
+  		<div class="panel m-t-sm p-xs pos-rlt m-b-none">
+  			<span id="referral_url19" class="word-break">{{getAffiliateLink "https://doxhze3l6s7v9.cloudfront.net/img/banners/970X90/agilecrm-affiliate.gif"}}</span>
+			</div>
+      <a id="url_clip_button19" class="btn btn-default btn-lg text-base w-full m-b-md b-n r-n b-t no-shadow" data-clipboard-text="{{getAffiliateLink 'https://doxhze3l6s7v9.cloudfront.net/img/banners/970X90/agilecrm-affiliate.gif'}}">
+        Copy to Clipboard
+      </a>
+  	</div>
+    <div class="col-md-6 text-center">
+      <img alt="AgileCRM" class="w-full" src="https://doxhze3l6s7v9.cloudfront.net/img/banners/970X90/agilecrm-affiliate-1.gif">
+      <div class="panel m-t-sm p-xs pos-rlt m-b-none">
+        <span id="referral_url20" class="word-break">{{getAffiliateLink "https://doxhze3l6s7v9.cloudfront.net/img/banners/970X90/agilecrm-affiliate-1.gif"}}</span>
+      </div>
+      <a id="url_clip_button20" class="btn btn-default btn-lg text-base w-full m-b-md b-n r-n b-t no-shadow" data-clipboard-text="{{getAffiliateLink 'https://doxhze3l6s7v9.cloudfront.net/img/banners/970X90/agilecrm-affiliate-1.gif'}}">
+        Copy to Clipboard
+      </a>
+    </div>
+  </div>
+  <div class="line  b-b m-t-sm m-b-lg"></div>
+  <div class="row">
+    <div class="col-md-6 text-center">
+      <img alt="AgileCRM" class="w-full" src="https://doxhze3l6s7v9.cloudfront.net/img/banners/728X90/agilecrm-affiliate.gif">
+      <div class="panel m-t-sm p-xs pos-rlt m-b-none">
+        <span id="referral_ur21" class="word-break">{{getAffiliateLink "https://doxhze3l6s7v9.cloudfront.net/img/banners/728X90/agilecrm-affiliate.gif"}}</span>
+      </div>
+      <a id="url_clip_button21" class="btn btn-default btn-lg text-base w-full m-b-md b-n r-n b-t no-shadow" data-clipboard-text="{{getAffiliateLink 'https://doxhze3l6s7v9.cloudfront.net/img/banners/728X90/agilecrm-affiliate.gif'}}">
+        Copy to Clipboard
+      </a>
+    </div>
+  </div>
+</script>
+
+<script id="affiliate-datepicker-template" type="text/html">
+<div id="reportrange" class="pull-right m-r-xs p-t-xs p-b-xs p-l-sm p-r-sm" style="box-shadow: 0 0px 0px rgba(0, 0, 0, 0), inset 0 -0 0 rgba(0, 0, 0, .1);border: 1px solid rgb(207, 218, 221);padding-top: 3px;padding-bottom: 3px;">
+     <i class="icon-calendar icon-large"></i>
+     <span id="range">{{date-range "today" "-6"}}</span>
+</div>
+</script>
+
+<script id="affiliate-commission-details-template" type="text/html">
+	<div class="row">
+    <div class="col-md-4">
+        <div class="panel panel-default">
+            <div class="panel-heading text-lg">
+              {{agile_lng_translate 'affiliate' 'total-count'}}
+            </div>
+            <div class="panel-body text-center m-t-xl m-b-xl">
+              <h2 class="m-t-sm">{{this.count}}</h2>
+            </div>
+        </div>
+      </div>
+		<div class="col-md-4">
+	  		<div class="panel panel-default">
+	          <div class="panel-heading text-lg">
+	            {{agile_lng_translate 'affiliate' 'total-commission'}}
+	          </div>
+	          <div class="panel-body text-center m-t-xl m-b-xl" >
+	            <h2 class="m-t-sm">${{numeric_operation commission 100 "/"}}</h2>
+	          </div>
+	      </div>
+	  	</div>
+	  	<div class="col-md-4">
+	  		<div class="panel panel-default">
+	          <div class="panel-heading text-lg">
+	            {{agile_lng_translate 'affiliate' 'amount-added-to-your-account'}}
+	          </div>
+	          <div class="panel-body text-center m-t-xl m-b-xl">
+	            <h2 class="m-t-sm">${{numeric_operation amountAdded 100 "/"}}</h2>
+	          </div>
+	      </div>
+	  	</div>
+	</div>
+</script>

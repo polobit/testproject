@@ -96,7 +96,7 @@ public class TaskReminderDeferredTask implements DeferredTask
 		return;
 
 	    // Returns the due tasks of that day.
-
+	    System.out.println("Domain_TaskReminder"+domain);
 	    List<Task> taskList = TaskUtil.getPendingTasksToRemind(1, domainuserid, timezone);
 
 	    if (taskList.isEmpty())

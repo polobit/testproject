@@ -68,14 +68,14 @@ public class OpportunityAccessControl extends UserAccessControl
 	// opportunity and current owner is different
     if(!isNew())
     {
-    	if(hasMenuScope(NavbarConstants.DEALS) && (hasScope(UserAccessScopes.MANAGE_DEALS) || (isOldOwner() && checkOwner()) ))
+    	if(hasMenuScope(NavbarConstants.DEALS) && (hasScope(UserAccessScopes.UPDATE_DEALS) || (isOldOwner() && checkOwner()) ))
     	{
     		return true;
     	}
     }
     else
     {
-    	if(hasMenuScope(NavbarConstants.DEALS) && (hasScope(UserAccessScopes.MANAGE_DEALS) || checkOwner()))
+    	if(hasMenuScope(NavbarConstants.DEALS) && (hasScope(UserAccessScopes.CREATE_DEALS) || checkOwner()))
     	{
     		return true;
     	}
@@ -88,7 +88,7 @@ public class OpportunityAccessControl extends UserAccessControl
     {
 	// Delete condition is checked only if current user is not owner of the
 	// opportunity
-	if(!isNew() && hasMenuScope(NavbarConstants.DEALS) && (hasScope(UserAccessScopes.MANAGE_DEALS) || checkOwner()))
+	if(!isNew() && hasMenuScope(NavbarConstants.DEALS) && hasScope(UserAccessScopes.DELETE_DEALS))
 	{
 		return true;
 	}

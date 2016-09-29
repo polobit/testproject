@@ -12,6 +12,14 @@
 		
 		return false;
 	};
+
+		company_util.isCompanyContact = function(){
+		
+		if(App_Companies.contacts_Company_List && Current_Route == "company/" + App_Companies.companyDetailView.model.get('id'))
+			return true;
+		
+		return false;
+	};
 	
 	company_util.updateDocumentsList = function(document, isCompany){
 
@@ -237,7 +245,7 @@
 		
 		var map_view=_agile_get_prefs('MAP_VIEW');
 		if(map_view=="disabled"){
-			$("#map_view_action",el).html("<i class='icon-plus text-sm c-p' title='Show map' id='enable_map_view'></i>");
+			$("#map_view_action",el).html("<i class='icon-plus text-sm c-p' title='"+_agile_get_translated_val('contact-details','show-map')+"' id='enable_map_view'></i>");
 			return;
 		}
 			
@@ -262,7 +270,7 @@
 	    head.js(LIB_PATH + 'lib/jquery.raty.min.js', function(){
 	    	
 	    	var company_model  =  App_Companies.companyDetailView.model;
-	    	
+	    	var count_clicks=0;
 	    	// If contact update is not allowed then start rating does not allow user to change it
 	    	if(App_Companies.companyDetailView.model.get('owner') && !canEditContact(App_Companies.companyDetailView.model.get('owner').id))
 	    	{
@@ -292,8 +300,30 @@
 	        		// Save model
 	           		contact_model.save();*/
 	           		
-	        		App_Companies.companyDetailView.model.set({'star_value': score}, {silent : true});
-	        		company_model =  App_Companies.companyDetailView.model.toJSON();
+	 App_Companies.companyDetailView.model.set({'star_value': score}, {silent : true});
+	 		company_model =  App_Companies.companyDetailView.model.toJSON();
+
+
+
+        		
+            if(company_model && company_model.star_value == 1)         
+             {
+              count_clicks++;
+              $(this.children[0]).attr('src','img/star-on.png');
+              
+                if(count_clicks==2)
+                  {
+              App_Companies.companyDetailView.model.set({'star_value': 0}, {silent : true});
+	 		company_model =  App_Companies.companyDetailView.model.toJSON();
+              
+              count_clicks=0;
+              $(this.children[0]).attr('src','img/star-off.png');
+              $(this).find('input').attr('value',0);
+              console.log("count_clicks="+count_clicks);
+                  }   
+             }
+             else count_clicks=0;
+           
 	        		var new_model = new Backbone.Model();
 	        		new_model.url = 'core/api/contacts';
 	        		new_model.save(company_model, {
@@ -588,13 +618,11 @@
             sortKey:"created_time",
             descending: true,
             postRenderCallback: function(el) {
-            	head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
-            		$(".deal-created-time", el).timeago();
-            		$(el).find('ul li').each(function(){
-				    $(this).addClass("deal-color");
-				    $(this).addClass($(this).find("input").attr("class"));
-			        });
-            	})
+            	agileTimeAgoWithLngConversion($(".deal-created-time", el));
+            	$(el).find('ul li').each(function(){
+			    	$(this).addClass("deal-color");
+			    	$(this).addClass($(this).find("input").attr("class"));
+		        });
             }
         });
         dealsView.collection.fetch();
@@ -613,9 +641,7 @@
             sortKey:"created_time",
             descending: true,
             postRenderCallback: function(el) {
-            	head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
-            		 $(".deal-created-time", el).timeago();
-            	})
+            	agileTimeAgoWithLngConversion($(".deal-created-time", el));
             }
         });
 		casesView.collection.fetch();
@@ -634,14 +660,13 @@
             sortKey:"created_time",
             descending: true,
             postRenderCallback: function(el) {
-            	head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
-            		 $(".note-created-time", el).timeago();
-              	})
+
+				agileTimeAgoWithLngConversion($(".note-created-time", el));
               	contact_detail_page_infi_scroll($('#infinite-scroller-company-details', App_Companies.companyDetailView.el), notesView);
             },
              appendItemCallback : function(el) {
 					includeTimeAgo(el);
-				}
+			}
         });
         notesView.collection.fetch();
         $('#company-notes', App_Companies.companyDetailView.el).html(notesView.render().el);
@@ -659,10 +684,7 @@
 	            sortKey:"uploaded_time",
 	            descending: true,
 	            postRenderCallback: function(el) {
-	            	head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
-	            		 $(".document-created-time", el).timeago();
-	              	});
-	            
+	            	agileTimeAgoWithLngConversion($(".document-created-time", el));       
 	            }
 	        });
 		    documentsView.collection.fetch();
@@ -681,9 +703,8 @@
 	            sortKey:"created_time",
 	            descending: true,
 	            postRenderCallback: function(el) {
-	            	head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
-	            		 $(".event-created-time", el).timeago();
-	              	});
+	            	agileTimeAgoWithLngConversion($(".event-created-time", el));
+	          
 	            	$('li',el).each(function(){
 	            	if($(this).find('.priority_type').text().trim() == "High") {
             			$(this).css("border-left","3px solid #f05050");
@@ -711,9 +732,7 @@
 		            sortKey:"created_time",
 		            descending: true,
 		            postRenderCallback: function(el) {
-		            	head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
-		            		 $(".task-created-time", el).timeago();
-		              	});
+		            	agileTimeAgoWithLngConversion($(".task-created-time", el));
 		            	$('li',el).each(function(){
 		            		if($(this).find('.priority_type').text().trim()== "HIGH") {
 		            			$(this).css("border-left","3px solid #f05050");
@@ -858,14 +877,9 @@ function company_fetchMails(company_detail_tab_scope,has_email_configured,mail_s
 	templateKey : "email-social-company", sort_collection : true, sortKey : "date_secs", descending : true, individual_tag_name : "li",
 	postRenderCallback : function(el)
 	{
+		
 		$('#company-mail', App_Companies.companyDetailView.el).find("#no-email").css('display','block');
-		head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
-		{
-			$(".email-sent-time", el).each(function(index, element)
-			{
-				$(element).timeago();
-			});
-		});
+		agileTimeAgoWithLngConversion($(".email-sent-time", el));
 		
 		if(email_server_type!="agilecrm")
 			company_detail_tab_scope.configured_sync_email = email_server_type;
@@ -974,13 +988,8 @@ function loadAllMailsView(company_detail_tab_scope,has_email_configured,fetched_
 	templateKey : "email-social-company", sort_collection : true, sortKey : "date_secs", descending : true, individual_tag_name : "li",
 	postRenderCallback : function(el)
 	{
-		head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
-		{
-			$(".email-sent-time", el).each(function(index, element)
-			{
-				$(element).timeago();
-			});
-		});
+		
+		agileTimeAgoWithLngConversion($(".email-sent-time", el));
 		
 		if(email_server_type!="agilecrm")
 			company_detail_tab_scope.configured_sync_email = email_server_type;
@@ -1055,7 +1064,7 @@ function fetch_mailserverurl_from_cookie(model)
 							final_url = 'core/api/social-prefs/google-emails?from_email='+email;
 							html = '<i class="icon-google-plus" style="margin-right:4px;font-size: 1.2em"></i>'+email;
 							if(shared)
-								html = html+ ' (Shared)';
+								html = html+ ' ('+_agile_get_translated_val('contact-details','shared')+')';
 						}
 					}
 					else if(email_server.toLowerCase()==='imap')
@@ -1089,7 +1098,7 @@ function fetch_mailserverurl_from_cookie(model)
 							final_url = 'core/api/imap/imap-emails?from_email='+email;
 							html = '<i class="icon-envelope-alt" style="margin-right:4px;font-size: 1.2em"></i>'+email;
 							if(shared)
-								html = html+ ' (Shared)';
+								html = html+ ' ('+_agile_get_translated_val('contact-details','shared')+')';
 						}
 					}
 					else if(email_server.toLowerCase()==='exchange')
@@ -1123,7 +1132,7 @@ function fetch_mailserverurl_from_cookie(model)
 							final_url = 'core/api/office/office365-emails?from_email='+email;
 							html = '<i class="icon-windows" style="margin-right:4px;font-size: 1.2em"></i>'+email;
 							if(shared)
-								html = html+ ' (Shared)';
+								html = html+ ' ('+_agile_get_translated_val('contact-details','shared')+')';
 						}
 					}
 					if(final_url)
@@ -1166,13 +1175,21 @@ function contact_detail_page_infi_scroll(element_id, targetCollection)
 				this.strict = true;
 				targetCollection.infiniScroll.disableFetch();
 			}
+			if($(targetCollection.el,element_id).find('#company-contacts-list-view-model-list').length>0)
+				$(targetCollection.el,element_id).find("#contacts-table").parent().find('.scroll-loading').remove();
+			else
 			// Remove loading icon
+			
 			$(targetCollection.infiniScroll.options.target).find('.scroll-loading').remove();
 		},
 		onFetch : function()
 		{
 			console.log('in fetch');
 			// Add loading icon
+				if($(targetCollection.el,element_id).find('#company-contacts-list-view-model-list').length>0)
+ 				$(targetCollection.el,element_id).find("#contacts-table").parent().
+ 			append('<div class="scroll-loading"> <img src="'+updateImageS3Path("/img/ajax-loader-cursor.gif") +'" style="margin-left: 44%;"> </div>');
+ 		else
 			$(targetCollection.infiniScroll.options.target).append(
 					'<div class="scroll-loading"> <img src="'+updateImageS3Path("/img/ajax-loader-cursor.gif") +'" style="margin-left: 44%;"> </div>');
 		}
@@ -1185,7 +1202,7 @@ function showMailsInfoMessages()
 	{
 		if(($('#all-emails-info',App_Companies.companyDetailView.el).length === 0))
 		{
-			$('#company-mails',App_Companies.companyDetailView.el).append('<div id="all-emails-info" class="alert alert-info">Showing relevant messages from all accounts. Maximum of 20 messages from each account </div>');
+			$('#company-mails',App_Companies.companyDetailView.el).append('<div id="all-emails-info" class="alert alert-info">'+_agile_get_translated_val('mails','show-mails-error')+' </div>');
 		}
 	}
 	$('#company-mail-account-types', App_Companies.companyDetailView.el).find('.all-mails-loading').remove();
@@ -1218,7 +1235,7 @@ function killAllPreviousRequests()
 }
 function show_no_email_alert()
 {
-	$('#company-mail', App_Companies.companyDetailView.el).html('<div class="alert alert-danger m-t-sm m-sm"><a class="close" data-dismiss="alert" href="#">&times;</a>Sorry! this company has no email to get the mails.</div>');
+	$('#company-mail', App_Companies.companyDetailView.el).html('<div class="alert alert-danger m-t-sm m-sm"><a class="close" data-dismiss="alert" href="#">&times;</a>'+_agile_get_translated_val('mails','mo-mails-error')+'</div>');
 }
 
 

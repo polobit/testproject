@@ -12,7 +12,7 @@ function showChargifyClient()
 {
 	if (EmailList.length == 0)
 	{
-		chargifyError(CHARGIFY_PLUGIN_NAME, "Please provide email for this contact");
+		chargifyError(CHARGIFY_PLUGIN_NAME, _agile_get_translated_val('widgets', 'pl-give-contact-email'));
 		return;
 	}
 	var emailArray = [];
@@ -36,13 +36,8 @@ function showChargifyClient()
 					  return;
 				
 				var template = $('#' + CHARGIFY_PLUGIN_NAME).html($(template_ui));
-				head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
-				{
-					$(".time-ago", template).timeago();
-				});
-
-
-
+				agileTimeAgoWithLngConversion($(".time-ago", template));
+				
 			}, "#" + CHARGIFY_PLUGIN_NAME);
 
 		}

@@ -33,6 +33,7 @@ import com.agilecrm.contact.sync.service.OneWaySyncService;
 import com.agilecrm.contact.sync.wrapper.IContactWrapper;
 import com.agilecrm.contact.sync.wrapper.impl.ShopifyContactWrapperImpl;
 import com.agilecrm.contact.util.NoteUtil;
+import com.agilecrm.util.FailedContactBean;
 
 /**
  * <code>ShopifySyncImpl</code> is Shopify client Implementation of Oneway sync
@@ -44,7 +45,7 @@ public class ShopifySyncImpl extends OneWaySyncService
 {
 
     /** shop name */
-    private static String shop;
+    private String shop;
 
     /**
      * set limit for max fetch result per call maximum allowed limit is 250
@@ -82,7 +83,7 @@ public class ShopifySyncImpl extends OneWaySyncService
 
 	    try
 	    {
-
+	    	List<FailedContactBean> mergedContacts = new ArrayList<FailedContactBean>();
 		while (true)
 		{
 		    ArrayList<LinkedHashMap<String, Object>> customers = new ArrayList<LinkedHashMap<String, Object>>();
@@ -141,7 +142,7 @@ public class ShopifySyncImpl extends OneWaySyncService
 			for (int i = 0; i < customers.size(); i++)
 			{
 
-			    Contact contact = wrapContactToAgileSchemaAndSave(customers.get(i));
+			    Contact contact = wrapContactToAgileSchemaAndSave(customers.get(i),mergedContacts);
 			    System.out.println("Contact-------" + contact);
 
 			    addCustomerRelatedNote(customers.get(i).get("note"), contact);
@@ -161,7 +162,7 @@ public class ShopifySyncImpl extends OneWaySyncService
 		// isLimitExceeded()
 		// otherwise we call mail notification from here
 		if (!limitExceeded)
-		    sendNotification(prefs.type.getNotificationEmailSubject());
+		    sendNotification(prefs.type.getNotificationEmailSubject(),mergedContacts);
 		System.out.println("After mail notification, updating last sync prefs");
 		updateLastSyncedInPrefs();
 	    }
@@ -169,7 +170,7 @@ public class ShopifySyncImpl extends OneWaySyncService
 	    {
 		System.out.println("After exception raised in initSync(), updating last sync prefs----- "
 			+ e.getMessage());
-		updateLastSyncedInPrefs();
+		//updateLastSyncedInPrefs();
 		e.printStackTrace();
 	    }
 
@@ -233,7 +234,7 @@ public class ShopifySyncImpl extends OneWaySyncService
 	    // retries when any problem happence
 	    System.out.println("After exception raised in updateLastSyncedInPrefs(), updating last sync prefs------- "
 		    + e.getMessage());
-	    updateLastSyncedInPrefs();
+	    //updateLastSyncedInPrefs();
 	    e.printStackTrace();
 	}
 

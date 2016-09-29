@@ -90,9 +90,12 @@ public class UnbounceWebhook extends HttpServlet
 
 	    if (owner != null)
 	    {
-		// Set contact owner, update properties and save contact
-		contact.setContactOwner(owner);
-		contact.properties = FormsUtil.updateContactProperties(properties, contact.properties);
+	    	// Set contact owner, update properties and save contact
+	    	if(contact.getContactOwner() == null)
+	    	{
+	    		contact.setContactOwner(owner);
+	    	}
+	    	contact.properties = FormsUtil.updateContactProperties(properties, contact.properties);
 
 		if(tags != null && tags.length > 0)
 		    contact.addTags(FormsUtil.getValidTags(tags));

@@ -6,6 +6,8 @@
  * 
  * author: Rammohan
  */
+var task_ids;
+var SELECT_ALL_TASKS = false ;
 
 $( document ).ready(function() {
 	/**
@@ -33,7 +35,6 @@ $( document ).ready(function() {
 		e.preventDefault();
 		save_task('updateTaskForm', 'updateTaskModal', true, this);
 	});	
-
 	/**
 	 * Shows activity modal with all the task create fields.
 	 */
@@ -54,19 +55,40 @@ $( document ).ready(function() {
 
 		agile_type_ahead("update_task_relates_to_deals", el, deals_typeahead, false,null,null,"core/api/search/deals",false, true);
 
-		$('.update-task-timepicker').timepicker({ defaultTime : get_hh_mm(true), showMeridian : false });
-		$('.update-task-timepicker').timepicker().on('show.timepicker', function(e)
-		{
-			if ($('.update-task-timepicker').prop('value') != "" && $('.update-task-timepicker').prop('value') != undefined)
-			{
-				if ($('.update-task-timepicker').prop('value').split(":")[0] != undefined)
-					e.time.hours = $('.update-task-timepicker').prop('value').split(":")[0];
-				if ($('.update-task-timepicker').prop('value').split(":")[0] != undefined)
-					e.time.minutes = $('.update-task-timepicker').prop('value').split(":")[1];
-			}
-			$('.bootstrap-timepicker-hour').val(e.time.hours);
-			$('.bootstrap-timepicker-minute').val(e.time.minutes);
-		});
+		head.js(CSS_PATH + 'css/businesshours/jquerytimepicker.css',
+				LIB_PATH + 'lib/businesshours/jquerytimepicker.js',
+				function(){
+		 			$('.update-task-timepicker').timepicker({ 'timeFormat' : 'H:i', 'step' : 15 });
+		 			
+		 			$('.update-task-timepicker').focus(function(){
+		 				$('#activityModal').css("overflow", "hidden");
+		 			});
+		 			
+		 			$('.update-task-timepicker').blur(function(){
+		 				$('#activityModal').css("overflow", "auto");
+		 			});
+
+		 			/**
+					 * Fills current time only when there is no time in the fields
+					 */
+					if ($('.update-task-timepicker', el).val() == '')
+						$('.update-task-timepicker', el).val(get_hh_mm());
+		 		}
+		);
+		
+		// $('.update-task-timepicker').timepicker({ defaultTime : get_hh_mm(true), showMeridian : false });
+		// $('.update-task-timepicker').timepicker().on('show.timepicker', function(e)
+		// {
+		// 	if ($('.update-task-timepicker').prop('value') != "" && $('.update-task-timepicker').prop('value') != undefined)
+		// 	{
+		// 		if ($('.update-task-timepicker').prop('value').split(":")[0] != undefined)
+		// 			e.time.hours = $('.update-task-timepicker').prop('value').split(":")[0];
+		// 		if ($('.update-task-timepicker').prop('value').split(":")[0] != undefined)
+		// 			e.time.minutes = $('.update-task-timepicker').prop('value').split(":")[1];
+		// 	}
+		// 	$('.bootstrap-timepicker-hour').val(e.time.hours);
+		// 	$('.bootstrap-timepicker-minute').val(e.time.minutes);
+		// });
 
 		// Fill details in form
 		setForm(el);
@@ -80,20 +102,32 @@ $( document ).ready(function() {
 function activateSliderAndTimerToTaskModal(el){
 
 	console.log("activateSliderAndTimerToTaskModal");
+
+	head.js(CSS_PATH + 'css/businesshours/jquerytimepicker.css',
+			LIB_PATH + 'lib/businesshours/jquerytimepicker.js',
+			function(){
+	 			$('.new-task-timepicker').timepicker({ 'timeFormat' : 'H:i', 'step' : 15 });
+	 		}
+	);
 	
-	$('.new-task-timepicker').timepicker({ defaultTime : '12:00', showMeridian : false });
-	$('.new-task-timepicker').timepicker().on('show.timepicker', function(e)
-	{
-		if ($('.new-task-timepicker').prop('value') != "" && $('.new-task-timepicker').prop('value') != undefined)
-		{
-			if ($('.new-task-timepicker').prop('value').split(":")[0] != undefined)
-				e.time.hours = $('.new-task-timepicker').prop('value').split(":")[0];
-			if ($('.new-task-timepicker').prop('value').split(":")[0] != undefined)
-				e.time.minutes = $('.new-task-timepicker').prop('value').split(":")[1];
-		}
-		$('.bootstrap-timepicker-hour').val(e.time.hours);
-		$('.bootstrap-timepicker-minute').val(e.time.minutes);
-	});
+	// sets the time in time picker if it is empty
+	if ($('.new-task-timepicker').val() == ''){
+		$('.new-task-timepicker').val(get_hh_mm());
+	}
+
+	// $('.new-task-timepicker').timepicker({ defaultTime : '12:00', showMeridian : false });
+	// $('.new-task-timepicker').timepicker().on('show.timepicker', function(e)
+	// {
+	// 	if ($('.new-task-timepicker').prop('value') != "" && $('.new-task-timepicker').prop('value') != undefined)
+	// 	{
+	// 		if ($('.new-task-timepicker').prop('value').split(":")[0] != undefined)
+	// 			e.time.hours = $('.new-task-timepicker').prop('value').split(":")[0];
+	// 		if ($('.new-task-timepicker').prop('value').split(":")[0] != undefined)
+	// 			e.time.minutes = $('.new-task-timepicker').prop('value').split(":")[1];
+	// 	}
+	// 	$('.bootstrap-timepicker-hour').val(e.time.hours);
+	// 	$('.bootstrap-timepicker-minute').val(e.time.minutes);
+	// });
 
 	console.log("loadProgressSlider");
 
@@ -104,8 +138,7 @@ function activateSliderAndTimerToTaskModal(el){
 	/**
 	 * Date Picker Activates datepicker for task due element
 	 */
-
-	// $('#task-date-1').datepicker({ format : CURRENT_USER_PREFS.dateFormat , weekStart : CALENDAR_WEEK_START_DAY});
+	 
 	$('#update-task-date-1').datepicker({ format : CURRENT_USER_PREFS.dateFormat , weekStart : CALENDAR_WEEK_START_DAY, autoclose: true});
 
 
@@ -185,8 +218,12 @@ function initializeTasksListeners(){
 	$('#tasks-list-template').on('click', '.is-task-complete', function(event)
 	{
 		event.preventDefault();
-		if(!confirm("Are you sure to complete this task ?"))
-			return;
+		if(!confirm(_agile_get_translated_val('tasks','confirm-delete')))
+		{
+			$(this).closest(".task-content-view").find(".taskComplete").attr("checked", false);
+				return;
+		}
+		
 		if(!getTaskListId(this)  && $(this).parent().attr('data')){
 			completeTask(getTaskId(this), $(this).parent().attr('data'), parseInt(getTaskListOwnerId(this)));
 		}
@@ -204,6 +241,187 @@ function initializeTasksListeners(){
 		else
 			editTask(getTaskId(this), getTaskListId(this), parseInt(getTaskListOwnerId(this)));
 	});
+	$('#tasks-list-template').off('click', '#bulk-change-owner , #bulk-change-priority , #bulk-change-status , #bulk-change-dueDate');
+	$('#tasks-list-template').on('click', '#bulk-change-owner , #bulk-change-priority , #bulk-change-status , #bulk-change-dueDate ', function(event)
+	{
+		task_ids = null ;
+		var tasksNumber = $('#tasks-list-template').find('#select_all_tasks').attr('data');
+		if(!tasksNumber)
+			task_ids = getTaskIds();
+		console.log(task_ids);
+		var taskAction = this.id ; 
+		if(taskAction == "bulk-change-status"){
+			$("#task-bulk-change-status").modal('show');
+			$("#task-bulk-change-status").find('.progress-slider').css('display','none');
+			}			
+		else if(taskAction == "bulk-change-priority")
+			$("#task-bulk-change-priority").modal('show');
+		else if(taskAction == "bulk-change-owner"){
+			var el = $('#bulkTaskOwnerForm');
+			$("#task-bulk-change-owner").modal('show');
+			populateUsers("owners-list", el, undefined, undefined, function(data)
+			{
+				$("#task-bulk-change-owner").find("#owners-list").html(data);
+				$("#owners-list", $("#task-bulk-change-owner")).closest('div').find('.loading-img').hide();
+			});
+		}
+		else {
+			$("#task-bulk-change-duedate").modal('show');
+			$('#task-date-1').datepicker({ format : CURRENT_USER_PREFS.dateFormat , weekStart : CALENDAR_WEEK_START_DAY , autoclose : true});
+			$('#task-date-1').datepicker('update');
+			head.js(CSS_PATH + 'css/businesshours/jquerytimepicker.css',
+					LIB_PATH + 'lib/businesshours/jquerytimepicker.js',
+					function(){
+			 			$('.new-task-timepicker').timepicker({ 'timeFormat' : 'H:i', 'step' : 15 });
+			 		}
+			);
+			
+			// sets the time in time picker if it is empty
+			if ($('.new-task-timepicker').val() == ''){
+				$('.new-task-timepicker').val(get_hh_mm());
+			}
+/*			var d1 = new Date ();
+			var d2 = new Date ( d1 );
+			d2.setHours(d1.getHours()+3)
+			$('.new-task-timepicker').timepicker({ defaultTime : d2.format("HH:MM") , showMeridian : false , autoclose : true });
+			$('.new-task-timepicker').timepicker().on('show.timepicker', function(e)
+			{
+			if ($('.new-task-timepicker').prop('value') != "" && $('.new-task-timepicker').prop('value') != undefined)
+			{
+				if ($('.new-task-timepicker').prop('value').split(":")[0] != undefined)
+					e.time.hours = $('.new-task-timepicker').prop('value').split(":")[0];
+				if ($('.new-task-timepicker').prop('value').split(":")[0] != undefined)
+					e.time.minutes = $('.new-task-timepicker').prop('value').split(":")[1];
+			}
+			$('.bootstrap-timepicker-hour').val(e.time.hours);
+			$('.bootstrap-timepicker-minute').val(e.time.minutes);
+			});*/
+		}
+
+	});
+	$('#task-bulk-change-status').off("shown.bs.modal");
+	$('#task-bulk-change-status').on("shown.bs.modal", function()
+	{	
+		var el = $('#bulkTaskStatusForm');
+		$('.progress-slider' ,el).append('<input id="progress_slider" type="slider" class="progress_slider" value="0" />');
+		loadProgressSlider(el);
+	//	$("#task-bulk-change-status").find('#status').val('YET_TO_START');
+	//	$("#task-bulk-change-status").find('.progress-slider').css('display','none');
+	});
+	$('#task-bulk-change-status').on("hidden.bs.modal", function()
+	{	
+		$(this).find('#bulkTaskStatusForm')[0].reset();
+		$("#task-bulk-change-status").find('.progress-slider').empty();
+	});
+	$('#task-bulk-change-owner, #task-bulk-change-status, #task-bulk-change-priority , #task-bulk-change-duedate').off('click', '#task_bulk_validate');
+	$('#task-bulk-change-owner, #task-bulk-change-status, #task-bulk-change-priority , #task-bulk-change-duedate').on('click', '#task_bulk_validate', function(e)
+	{
+		e.preventDefault();
+		//$('.bulk-task-action-model').find('#task_bulk_validate').addClass('disabled').text('changing');
+		var form_id = $(this).closest('.bulk-task-action-model').find('form').attr("id");
+
+		if ($(this).attr('disabled'))
+			return;
+		// Disables save button to prevent multiple click event issues
+		disable_save_button($(this));
+		if (!isValidForm('#' + form_id))
+		{
+			enable_save_button($(this));
+			return false;
+		}
+		var priorityJson = serializeForm(form_id);
+		if(form_id == "bulkTaskDuedateForm"){
+			var startarray = (priorityJson.task_ending_time).split(":");
+			priorityJson.due = new Date((priorityJson.due) * 1000).setHours(startarray[0], startarray[1]) / 1000.0;
+		}
+		else if(form_id == "bulkTaskStatusForm"){
+			var progress = $('#progress_slider').val() ; 
+			if(progress)
+				priorityJson['progress'] = $('#progress_slider').val() ;
+		}
+		enable_save_button($(this));
+		$('.bulk-task-action-model').modal('hide');
+		if(task_ids && task_ids.length < 50)
+			saveBulkTaskProperties(task_ids,priorityJson,form_id);
+		else{
+			saveBulkTaskAction(task_ids,priorityJson,form_id);
+		}
+	});
+	$('#tasks-list-template').off('click', '#bulk-delete-tasks');
+	$('#tasks-list-template').on('click', '#bulk-delete-tasks', function(e)
+	{
+		task_ids = null ; var priorityJson = null ;
+		var tasksNumber = $('#tasks-list-template').find('#select_all_tasks').attr('data');
+		if(!tasksNumber)
+			task_ids = getTaskIds();
+		console.log(task_ids);
+		var form_id = "bulkTaskDeleteForm" ; 
+		var confirm_msg = "Are you sure you want to delete?";
+		showAlertModal(confirm_msg, "confirm", function(){
+			if(task_ids && task_ids.length < 50)
+				saveBulkTaskProperties(task_ids,priorityJson,form_id);
+			else{
+				saveBulkTaskAction(task_ids,priorityJson,form_id);
+			}
+								
+			}, undefined, "Bulk Task Delete");
+	});
+	$('#tasks-list-template').off('click', '.tbody_check');
+	$('#tasks-list-template').on('click', '.tbody_check', function(event)
+	{
+		var isChecked  = false;
+		$('#tasks-list-template .thead_check').removeProp('checked');
+		$('#tasks-list-template').find('#select_all_tasks').empty().removeAttr('data');
+		$.each($('#tasks-list-template .tbody_check'), function(index, element)
+			{
+				if($(element).is(':checked')){
+					isChecked = true ; 
+					return ;
+				}
+			});
+		if(isChecked){
+			$('#tasks-list-template').find('.task_bulk_action').removeClass("disabled");
+		}
+		else{			
+			$('#tasks-list-template').find('.task_bulk_action').addClass("disabled");
+		}
+
+	});
+	$('#tasks-list-template').off('click', '.thead_check , #select_chosen_tasks');
+	$('#tasks-list-template').on('click', '.thead_check , #select_chosen_tasks', function(event)
+	{
+		if(this.checked || this.id == 'select_chosen_tasks'){
+			var taskCount = 0 ;
+			SELECT_ALL_TASKS = false ;
+			var totalTasks = getSimpleCount(window.App_Calendar.allTasksListView.collection.toJSON()) ;
+			$('#tasks-list-template').find('.task_bulk_action').removeClass("disabled");
+			$.each($('#tasks-list-template .tbody_check'), function(index, element)
+				{
+					$(element).attr('checked', "checked");
+					taskCount = taskCount + 1;
+				});
+			if(taskCount && totalTasks && totalTasks > 25 && taskCount < totalTasks )
+				$('#tasks-list-template').find('#select_all_tasks').html('Selected '+taskCount+' Tasks <a id="select_total_tasks" class="c-p text-info">Select all '+totalTasks+' tasks</a>').removeAttr('data');
+		}
+		else{
+			$('#tasks-list-template').find('.task_bulk_action').addClass("disabled");
+			$('#tasks-list-template').find('#select_all_tasks').empty().removeAttr('data');
+			$.each($('.tbody_check'), function(index, element)
+				{
+					$(element).attr('checked', "unchecked");
+				});
+		}
+
+	});
+	$('#tasks-list-template').off('click', '#select_total_tasks');
+	$('#tasks-list-template').on('click', '#select_total_tasks', function(event)
+	{
+		SELECT_ALL_TASKS = true ;	
+		$('#tasks-list-template').find('.task_bulk_action').removeClass("disabled");
+		var taskCount = getSimpleCount(window.App_Calendar.allTasksListView.collection.toJSON()) ;
+		$('#tasks-list-template').find('.tbody_check').attr('checked', "checked");
+		$('#tasks-list-template').find('#select_all_tasks').empty().html('All '+taskCount+' tasks Selected <a id="select_chosen_tasks" class="c-p text-info">Select chosen tasks only</a>').attr('data',taskCount);
+	});
 	
 	
 
@@ -220,6 +438,15 @@ function initializeTasksListeners(){
 		// Change UI and input field
 		applyDetailsFromGroupView();
 	});	
+	$('#tasks-list-template').on('click','.task-list-minimized',function(e)
+	 {
+	 	$(this).find(".expandbutton").trigger('click');
+	 	
+	 });
+	$("#tasks-list-template").on("click", "#taskheading", function(b) {
+        b.stopPropagation();
+        taskAutoWidth(this)
+    });
 
 	$('#tasks-list-template').on('click', '.tasks-list-image', function(event)
 			{
@@ -229,7 +456,18 @@ function initializeTasksListeners(){
 				routeToPage(url);
 				event.stopPropagation();
 				
-			});	
+			});
+	$('#tasks-list-template').on('click','.taskComplete',function(e){
+		if($(this).prop("checked") == true)
+		{
+			$(this).closest(".task-striped").find(".is-task-complete").trigger("click");
+		}
+	});
+	$('#tasks-list-template').on("click", ".expandbutton", function(e)
+	{	
+		e.stopPropagation();
+		taskAutoWidth(this);
+	});	
 	$('#tasks-list-template').on('click', '.view-task-details', function(event)
 	{
 		event.preventDefault();
@@ -395,7 +633,7 @@ function save_task(formId, modalId, isUpdate, saveBtn)
 							if (isUpdate)
 								App_Calendar.allTasksListView.collection.remove(json);
 
-							if ((old_owner_id == "All Categories" || old_owner_id.toUpperCase() == json.type) && (old_type == "All Tasks" || json.owner_id == CURRENT_DOMAIN_USER.id))
+							if ((old_owner_id == "All Categories" || old_owner_id.toUpperCase() == json.type) && (old_type == _agile_get_translated_val('tasks', 'All Tasks') || json.owner_id == CURRENT_DOMAIN_USER.id))
 								App_Calendar.allTasksListView.collection.add(data);
 
 							App_Calendar.allTasksListView.render(true);
@@ -408,8 +646,6 @@ function save_task(formId, modalId, isUpdate, saveBtn)
 							{
 								if (isUpdate)
 									App_Calendar.allTasksListView.collection.get(json).set(new BaseModel(data));
-								else
-									App_Calendar.allTasksListView.collection.add(new BaseModel(data));
 								App_Calendar.allTasksListView.render(true);
 								return;
 							}
@@ -631,6 +867,52 @@ function get_due(due)
 	// console.log("Today " + date + " Due " + due);
 	return Math.floor((due - date) / (24 * 3600));
 }
+function taskAutoWidth(el)
+{	
+	var arr = _agile_get_prefs("task-page-status");
+	if(!arr)
+		arr = [];
+	else 
+		arr = arr.split(",");
+
+	var id = $(el).closest(".task-trello-list").attr("id");
+	if(arr.indexOf(id) != -1)
+	{
+		delete arr[arr.indexOf(id)]
+	}
+
+	var expanded = $(el).closest(".task-trello-list").hasClass("compress");
+	if(expanded)
+	{
+		arr.push($(el).closest(".task-trello-list").attr("id"))
+		
+		$(el).children().removeClass("fa fa-expand")
+		$(el).children().addClass("fa fa-compress")
+	}
+
+	else
+	{
+		
+		$(el).children().removeClass("fa fa-compress")
+		$(el).children().addClass("fa fa-expand")
+		
+	}
+	$(el).closest(".task-trello-list").toggleClass("expand compress");
+	_agile_set_prefs('task-page-status' , arr.toString());
+		
+}
+
+function getTaskTrackAutoWidthCurrentState(track_name){
+   if(!track_name)
+   	  return "compress";
+
+   	// Get prefs form storage 
+   	var prefs = _agile_get_prefs("task-page-status");
+   	if(prefs && prefs.indexOf(track_name) != -1)
+   		 return "expand";
+
+   	return "compress";
+}
 
 function increaseCount(heading)
 {
@@ -833,6 +1115,22 @@ function complete_task(taskId, collection, ui, callback)
 			// execute the callback, passing parameters as necessary
 			callback(model);
 		}
+	},
+	error : function(model, response){
+		showModalConfirmation("Complete Task", 
+			'<span>'+response.responseText+'</span>', 
+			function (){
+				return;
+			}, 
+			function(){
+				return;
+			},
+			function (){
+				return;
+			},
+			'Cancel'
+		);
+		return;
 	} });
 
 	// Set is complete flag to be true
@@ -893,4 +1191,111 @@ function showTaskModal(forAddTask)
 			addTasklListDetails(forAddTask);
 		});
 	});
+}
+function getTaskIds(){
+	event.preventDefault();
+		var id_array = [];
+		var index_array = [];
+		var table = $('body').find('.showCheckboxes');
+
+		$(table).find('tr .tbody_check').each(function(index, element){
+			
+			// If element is checked store it's id in an array. !$(element).attr('disabled') included by Sasi to avoid disabled checkboxes
+			if($(element).is(':checked') && !$(element).attr('disabled')){
+				// Disables mouseenter once checked for delete(To avoid popover in deals when model is checked)
+				$(element).closest('tr').on("mouseenter", false);
+				index_array.push(index);
+				if(!$(element).closest('tr').hasClass("pseduo-row"))
+				{
+					id_array.push($(element).closest('tr').data().get('id'));
+				}
+			}
+		});
+		return id_array;
+}
+function saveBulkTaskProperties(task_ids,priorityJson,form_id){
+	var sendData = getsendDataJson(task_ids,priorityJson,form_id);
+	var url = 'core/api/tasks/changeBulkTasks';
+	if(sendData){
+		$.ajax({ url : url, method: "POST" ,
+			contentType: 'application/json', 
+			data : JSON.stringify(sendData),
+			success : function(data){				
+			//	showNotyPopUp('information', "Task scheduled", "top", 5000);
+			//	console.log(data);
+			SELECT_ALL_TASKS = false ;
+				if(data.length){
+					for (var i in data) {
+						App_Calendar.allTasksListView.collection.get(data[i].id).set(data[i]);
+					}
+					App_Calendar.allTasksListView.render(true);
+					showTaskNotyMessage(""+data.length+" {{agile_lng_translate 'bulk-task-noty' 'tasks-modified'}}","information","bottomRight",5000);
+				}
+				else{
+					var i;
+					var t = task_ids.length ;
+					for(i=0;i<t;i++){
+						App_Calendar.allTasksListView.collection.remove(task_ids[i]);
+					}
+					showTaskNotyMessage(""+t+" {{agile_lng_translate 'bulk-task-noty' 'tasks-deleted'}}","information","bottomRight",5000);
+					if(t){
+						var count = $('#tasks-list-template').find('.tasks-count').attr('data');
+						count = count - t ;
+						$('#tasks-list-template').find('.tasks-count').removeAttr('data');
+						$('#tasks-list-template').find('.tasks-count').attr('data' , count);
+						$('#tasks-list-template').find('.tasks-count').text('('+count+' ' +_agile_get_translated_val('other','total')+ ')');
+					}
+					App_Calendar.allTasksListView.render(true);
+				}
+			},
+			error: function(jqXHR, textStatus, errorThrown) {
+  				console.log(textStatus, errorThrown);
+  				SELECT_ALL_TASKS = false ;
+       		} 
+		});
+	}
+}
+function saveBulkTaskAction(task_ids,priorityJson,form_id){
+	var sendData = getsendDataJson(task_ids,priorityJson,form_id);
+	var url = "core/api/tasks/bulk/changeBulkTasksProperties" ;
+	var taskType = $('#tasks-list-template').find('.owner-task-button').find('.selected_name').text();
+	var criteria = "LIST" ;
+	var pending = false; var ownerId = null ;
+	if(taskType ){
+		if(taskType == "All Pending Tasks")
+			pending = true ;
+		else if (taskType == "My Tasks")
+			ownerId = CURRENT_DOMAIN_USER.id ;
+		else if (taskType == "My Pending Tasks"){
+			pending = true;
+			ownerId = CURRENT_DOMAIN_USER.id ;
+		}
+	}
+	sendData.criteria = criteria ;
+	sendData.pending = pending;
+	sendData.ownerId = ownerId ;
+	if(sendData){
+		$.ajax({ url : url, method: "POST" ,
+			contentType: 'application/json', 
+			data : JSON.stringify(sendData),
+			success : function(data){				
+				showNotyPopUp('information', "{{agile_lng_translate 'bulk-task-noty' 'task-scheduled'}}", "top", 5000);
+				console.log(data);
+				App_Calendar.allTasksListView.render(true);
+				SELECT_ALL_TASKS = false ;
+			},
+			error: function(jqXHR, textStatus, errorThrown) {
+  				console.log(textStatus, errorThrown);
+  				SELECT_ALL_TASKS = false ;
+       		} 
+		});
+	}
+
+}
+function getsendDataJson(task_ids,priorityJson,form_id){
+	var sendData = {};
+	sendData.IdJson = task_ids;
+	sendData.priority = priorityJson;
+	sendData.form_id = form_id;
+	return sendData;
 }

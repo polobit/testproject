@@ -2,19 +2,19 @@ jQuery.validator.addMethod("lpdomain", function(value, element) {
 	if(value == '')
 		return true;
 	return /^[a-zA-Z0-9][a-zA-Z0-9-]{1,61}[a-zA-Z0-9](?:\.[a-zA-Z]{2,})+$/.test(value);
-	 },"Invalid domain.");
+	 },"{{agile_lng_translate 'landingpages' 'invalid-domain'}}");
 	
 jQuery.validator.addMethod("lpsubdomain", function(value, element) {
 	if(value == '')
 		return true;
 	return /^[a-zA-Z0-9-]+$/.test(value);
-	},"Invalid sub domain.");
+	},"{{agile_lng_translate 'landingpages' 'invalid-sub-domain'}}");
 
 jQuery.validator.addMethod("lpdirectorypath", function(value, element) {
 	if(value == '')
 		return true;
 	return /^(\/\w+)+[a-z0-9-.]+$/.test("/"+value);
-	},"Invalid path.");
+	},"{{agile_lng_translate 'landingpages' 'invalid-path'}}");
 
 
 var LandingPages_Top_Header_Modal_Events = Base_Model_View.extend
@@ -55,7 +55,7 @@ function saveLandingPageToDataStore(isAutoSaved,pageId) {
 	if (isValidForm('#landingPageBuilderForm')) {
 		$(".saveLandingPageButton").prop("disabled",true);
 		
-		$(".saveLandingPageButtonText").html("Saving...");
+		$(".saveLandingPageButtonText").html("{{agile_lng_translate 'others' 'saving'}}");
 		    		
 		document.getElementById('landingPageBuilder').contentWindow.$('.icon-floppy-1:last').trigger("click");
 		if(App_LandingPageRouter.LandingPageCollectionView) {
@@ -182,7 +182,7 @@ function initializeLandingPageListeners(pageId) {
 				landingPageSaveCnameSettings(forPageId,"http://"+$("#sub_domain").val()+"."+mainDomain+"/"+$("#directory_path").val());
       			$btn.button('reset');
 			} else {
-				landingPageShowAlertMessage("You cannot add this ("+mainDomain+") domain. It is used in other agile CRM account.","alert-danger");
+				landingPageShowAlertMessage("{{agile_lng_translate 'landingpages' 'not-add'}} ("+mainDomain+") {{agile_lng_translate 'prefs-settings' 'domain'}}. {{agile_lng_translate 'landingpages' 'duplicate-error'}}","alert-danger");
 			}
 		});
 	});
@@ -244,9 +244,9 @@ function initializeLandingPageListeners(pageId) {
 		 			landingPageShowAlertMessage("CNAME is correct. Found " + data.cnames[0],"alert-success");
 		 		} else {
 		 			if(typeof data.cnames != "undefined" && typeof data.cnames[0] != "undefined") {
-		 				landingPageShowAlertMessage("CNAME is incorrect. Found " + data.cnames[0],"alert-danger");
+		 				landingPageShowAlertMessage("{{agile_lng_translate 'landingpages' 'cname-error'}} {{agile_lng_translate 'landingpages' 'cname-exists'}} " + data.cnames[0],"alert-danger");
 		 			} else {
-		 				landingPageShowAlertMessage("CNAME is not found.","alert-danger");
+		 				landingPageShowAlertMessage("{{agile_lng_translate 'landingpages' 'cname-not-found'}}","alert-danger");
 		 			}
 		 		}
 		 	});
@@ -289,13 +289,13 @@ function onLandingPageSaved(landingPage) {
     };
 
     var requestType = "post";
-    var message = "saved";
+    var message = "{{agile_lng_translate 'others' 'saved'}}";
 
     var cnameId = $("#cname_id").val();
     if(cnameId) {
         var requestType = "put";
         cnameSettings["id"] = cnameId;
-        message = "updated";
+        message = "{{agile_lng_translate 'others' 'updated'}}";
     }
       
 
@@ -307,9 +307,9 @@ function onLandingPageSaved(landingPage) {
         contentType: "application/json; charset=utf-8",
         success: function (obj) {
 	       	if(obj["isDuplicateCName"]) {
-				landingPageShowAlertMessage("Custom domain should be unique","alert-danger");
+				landingPageShowAlertMessage("{{agile_lng_translate 'landingpages' 'custom-domain-unique'}}","alert-danger");
 			} else {
-				landingPageShowAlertMessage("Custom domain "+message+" successfully","alert-success");
+				landingPageShowAlertMessage("{{agile_lng_translate 'landingpages' 'custom-domain'}} "+message+" {{agile_lng_translate 'others' 'successfully'}}","alert-success");
 				$("#cname_id").val(obj.id);
 				$("#cname").attr("href",CNAME);
 				$("#landingPageVerifyBtn").show();
@@ -366,4 +366,9 @@ function landingpagesCollection(sortKey)
             }});
         this.LandingPageCollectionView.collection.fetch();
         var collectiondata = this.LandingPageCollectionView.render().el;
+}
+
+function resetLandingPageButton(){
+	$(".saveLandingPageButton").prop("disabled",false);
+    $(".saveLandingPageButtonText").html("{{agile_lng_translate 'landing-pages' 'save-page'}}");
 }

@@ -68,8 +68,7 @@ calendar : function()
 					}, $('#calendar-listers').find("#calendar-filters"));
 		});
 		
-		head.js(LIB_PATH + 'lib/jquery-ui.min.js', LIB_PATH + 'lib/fullcalendar.min.js', function()
-		{
+		_agile_library_loader.load_fullcalendar_libs(function(){
 			$('#calendar_event').html('');
 			showCalendar([]);
 			hideTransitionBar();
@@ -91,14 +90,13 @@ tasks : function()
 		$('#content').html($(template_ui));	
 
 		fillSelect("owner-tasks", '/core/api/users/current-user', 'domainUser', function fillOwner()
-		{
-
-			$('#content').find("#owner-tasks").prepend("<li><a href=''>All Tasks</a></li>");
-			$('#content').find("#owner-tasks").append("<li><a href='my-pending-tasks'>My Pending Tasks</a></li>");
+		{ 
+			$('#content').find("#owner-tasks").prepend("<li><a href=''>" +_agile_get_translated_val('tasks', 'All Tasks') + "</a></li>");
+			$('#content').find("#owner-tasks").append("<li><a href='my-pending-tasks'>" +_agile_get_translated_val('tasks', 'My Pending Tasks')+ "</a></li>");
 
 			// To Updated task list based on user selection of type and owner
 			initOwnerslist();
-		}, "<li><a href='{{id}}'>My Tasks</a></li>", true);
+		}, "<li><a href='{{id}}'>" +_agile_get_translated_val('tasks', 'My Tasks')+ "</a></li>", true);
 
 		make_menu_item_active("tasksmenu");
 
@@ -119,9 +117,9 @@ tasks_new : function()
 
 		fillSelect("new-owner-tasks", '/core/api/users/current-user', 'domainUser', function fillOwner()
 		{
-			$('#tasks-list-template').find("#new-owner-tasks").prepend("<li><a href=''>All Tasks</a></li>");
-			$('#tasks-list-template').find("#new-owner-tasks").append("<li><a href='all-pending-tasks' class='hide-on-status'>All Pending Tasks</a></li>");
-			$('#tasks-list-template').find("#new-owner-tasks").append("<li><a href='my-pending-tasks' class='hide-on-owner hide-on-status'>My Pending Tasks</a></li>");
+			$('#tasks-list-template').find("#new-owner-tasks").prepend("<li><a href=''>" +_agile_get_translated_val('tasks', 'All Tasks')+ "</a></li>");
+			$('#tasks-list-template').find("#new-owner-tasks").append("<li><a href='all-pending-tasks' class='hide-on-status'>" +_agile_get_translated_val('tasks', 'All Pending Tasks')+ "</a></li>");
+			$('#tasks-list-template').find("#new-owner-tasks").append("<li><a href='my-pending-tasks' class='hide-on-owner hide-on-status'>" +_agile_get_translated_val('tasks', 'My Pending Tasks')+ "</a></li>");
 			initializeTasksListeners();
 			// Read stored selections from cookie and Creates nested collection
 			readDetailsFromCookie();
@@ -129,7 +127,7 @@ tasks_new : function()
 			bindDropdownEvents();
 			
 
-		}, "<li><a href='{{id}}' class='hide-on-owner'>My Tasks</a></li>", true);
+		}, "<li><a href='{{id}}' class='hide-on-owner'>" +_agile_get_translated_val('tasks', 'My Tasks')+ "</a></li>", true);
 
 		$('.loading').remove();
 
@@ -417,13 +415,13 @@ function show_model(id)
 		}
 		if (event.description)
 		{
-			var description = '<label class="control-label"><b>Description </b></label><div class="controls"><textarea id="description" name="description" rows="3" class="input form-control" placeholder="Add Description"></textarea></div>'
+			var description = '<label class="control-label"><b>'+_agile_get_translated_val('misc-keys','description')+' </b></label><div class="controls"><textarea id="description" name="description" rows="3" class="input form-control" placeholder="' +_agile_get_translated_val('misc-keys', 'add-description')+ '"></textarea></div>'
 			$("#event_desc").html(description);
 			$("textarea#description").val(event.description);
 		}
 		else
 		{
-			var desc = '<div class="row-fluid">' + '<div class="control-group form-group m-b-none">' + '<a href="#" id="add_event_desctiption"><i class="icon-plus"></i> Add Description </a>' + '<div class="controls event_discription hide">' + '<textarea id="description" name="description" rows="3" class="input form-control w-full col-md-8" placeholder="Add Description"></textarea>' + '</div></div></div>'
+			var desc = '<div class="row-fluid">' + '<div class="control-group form-group m-b-none">' + '<a href="#" id="add_event_desctiption"><i class="icon-plus"></i> ' +_agile_get_translated_val('misc-keys','add-description')+ ' </a>' + '<div class="controls event_discription hide">' + '<textarea id="description" name="description" rows="3" class="input form-control w-full col-md-8" placeholder="' +_agile_get_translated_val('misc-keys','add-description')+ '"></textarea>' + '</div></div></div>'
 			$("#event_desc").html(desc);
 		}
 		// Fills owner select element

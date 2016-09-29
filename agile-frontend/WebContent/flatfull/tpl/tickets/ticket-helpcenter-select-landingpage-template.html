@@ -5,9 +5,8 @@
         	<div class="panel panel-default">
         		<div class="panel-heading">
         			<div>
-                   
-                    Select Landing Page
-                     <a  href='/help' target="_blank" class="pull-right text-lg  text-info" style="margin-left: 5px; margin-top:-4px;">Access</a>                                   
+                    {{agile_lng_translate 'tickets' 'select-landing-page'}}
+                     <a  href='/help' target="_blank" class="pull-right text-lg  text-info" style="margin-left: 5px; margin-top:-4px;">{{agile_lng_translate 'widgets' 'access'}}</a>                                   
     			     </div>
                 </div>   
 
@@ -19,7 +18,7 @@
                     {{/if}}
                     <fieldset><br/>   
                     <div class="control-group form-group">
-                        <label class="control-label col-md-3" style="padding-top:8px;">Select Landing Page<span class="field_req">*</span></label> 
+                        <label class="control-label col-md-3" style="padding-top:8px;">{{agile_lng_translate 'tickets' 'select-landing-page'}}<span class="field_req">*</span></label> 
                         <div class="col-md-6 m-t-xs">
                 
                             <div class="controls">
@@ -37,10 +36,9 @@
                     <div class="form-group">
                             <div class="form-actions col-sm-offset-3 col-md-9">
                                 <div class="form-actions">
-                                    <a type="reset" href='javascript:history.back()' class="btn btn-default btn-sm">Cancel</a>
+                                    <a type="reset" href='javascript:history.back()' class="btn btn-default btn-sm">{{agile_lng_translate 'contact-details' 'cancel'}}</a>
                                 <a  href="javascript:void(0);" class="btn btn-primary btn-sm save" style="
-    margin-left: 8px;">Save Changes</a>
-    
+    margin-left: 8px;">{{agile_lng_translate 'prefs-settings' 'save-changes'}}</a>
                                 </div>
                             </div>
                         </div>
@@ -56,10 +54,12 @@
         </div>
  <div class="col w-md  wrapper pos-rlt track-milestone-text p-t-none" >
             <h4 class="m-t-none row h4 m-b-sm">
-               How to add a landing page to your Knowledge Base?
+               
+               {{agile_lng_translate 'tickets' 'add-landing-pages-to-your-knowlwdge-base'}}
             </h4>
             <p>
-              Create a landing page, add knowledge base elements, choose your landing page here, then access your knowledge base.
+              
+              {{agile_lng_translate 'tickets' 'details-for-adding-a-landing-page-to-knowledge-base'}}
             </p> 
            </div>
 

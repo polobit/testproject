@@ -19,22 +19,19 @@ String action = request.getParameter("action");
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
         <link href="css/template.editor.css?v=<%=_AGILE_VERSION%>" rel="stylesheet"/>
-        <link href="css/responsive-table.css" rel="stylesheet"/>
+        <link href="css/responsive-table.css?v=<%=_AGILE_VERSION%>" rel="stylesheet"/>
 
 <script>
 var AGILE_EB_ROOT = window.location.origin + "/";
 var AGILE_EB_OPTIONS = {};
 AGILE_EB_OPTIONS['action'] = "new";
 AGILE_EB_OPTIONS['templateId'] = "";
-
 <% if(action != null) { %>
     AGILE_EB_OPTIONS['action'] = '<%=action%>';
 <% } %>
-
 <% if(templateId != null) { %>
     AGILE_EB_OPTIONS['templateId'] = '<%=templateId%>';
 <% } %>
-
 </script>
 
         <!--[if lt IE 9]>
@@ -51,7 +48,6 @@ AGILE_EB_OPTIONS['templateId'] = "";
         <script type="text/javascript" src="js/template.editor.js?v=<%=_AGILE_VERSION%>"></script>
 
 <style>
-
 .mce-btn button {
     padding: 2px 4px !important;
 }
@@ -182,7 +178,6 @@ AGILE_EB_OPTIONS['templateId'] = "";
                                             $(el).next('.input-group-addon').css('background-color', '#' + hex);
                                             $(el).colpickHide();
                                         }
-
                                     }).keyup(function () {
                                         $(this).colpickSetColor(this.value);
                                     });
@@ -260,8 +255,19 @@ AGILE_EB_OPTIONS['templateId'] = "";
                                     <br>
                                 </div>
                             </div>
+                            <div class="row">
+                                <div class="col-xs-11" id="image-alt-text">
+                               <!--  <select id="select_alignment" class="form-control">
+                                          <option value="Center">Center</option>
+                                          <option value="Right">Right</option>
+                                           <option value="Left">Left</option>
+                                </select> -->
+                          <br>
+                          </div>
+                            </div>
 
                             <div class="row">
+                                <div id="image-width-height" style="display:none">
                                 <div class="col-xs-1">
                                     W:
                                 </div>
@@ -276,8 +282,8 @@ AGILE_EB_OPTIONS['templateId'] = "";
                                 <div class="col-xs-3">
                                     <input type="text" id="image-h"class="form-control" name="writer" />
                                 </div>
-
-                                <div class="col-xs-4">
+                                </div>
+                                <div class="col-xs-4" style="float: right">
 
                                     <a class="btn btn-warning" href="#" id="change-image"><i class="fa fa-edit"></i>&nbsp;Apply</a>
                                 </div>
@@ -334,6 +340,30 @@ AGILE_EB_OPTIONS['templateId'] = "";
                         </ul>
                     </div>
 
+                    <!-- <div id="user-poll">
+                        <h4 class="text text-info">User Poll</h4>
+                        <ul class="list-group" id="poll-list">
+                            <li class="hide" >
+                                <div class="input-group">
+                                <input type="text" class="form-control" name="poll_value" placeholder="poll" style="width:45%">
+                                <input type="text" class="form-control" name="poll_tag" placeholder="Related Tag" style="width:55%">
+                                <span class="input-group-addon delbutton"><a>x</a></span>
+                                </div>
+                            </li>
+                        </ul>
+                        <div>
+                                <div>
+                                    <button class="btn pull-right" id="add-poll">Add More</button>
+                                </div>
+                                <br><br><br>
+                                <div>
+                                <input type="text" class="form-control" name="poll_url" placeholder="Redirect URL">
+                                </div>
+                        </div>
+                        <br>
+                    </div> -->
+
+
                     <div id="buttons" style="max-width: 400px">
                         <h4 class="text text-info">Buttons</h4>
                         <div class="form-group">
@@ -365,45 +395,59 @@ AGILE_EB_OPTIONS['templateId'] = "";
                                      <div class="input-group " style="margin-bottom: 5px">
                                          <span class="input-group-addon"><i class="fa fa-font"></i></span>
                                          <input type="text" class="form-control fontstyle" name="fontstyle" readonly style="cursor:pointer;background-color: #fff"/>
-                                     </div>-->
+                                     </div>
                                         <label> Button Size</label>
                                         <div class="input-group " style="margin-bottom: 5px">
                                             <span class="input-group-addon button"  ><i class="fa fa-plus" style="  cursor : pointer;"></i></span>
                                             <input type="text" class="form-control text-center"  placeholder="Button Size"  name="ButtonSize"/>
                                             <span class="input-group-addon button"  ><i class="fa fa-minus" style="  cursor : pointer;"></i></span>
-                                        </div>
-                                        <label> Font Size</label>
-                                        <div class="input-group " style="margin-bottom: 5px">
+                                        </div>-->
+                                    <label> Font Size</label>
+                                    <div class="input-group " style="margin-bottom: 5px">
 
-                                            <span class="input-group-addon font"  ><i class="fa fa-plus" style="  cursor : pointer;"></i></span>
-                                            <input type="text" class="form-control text-center"  placeholder="Font Size"  name="FontSize"/>
-                                            <span class="input-group-addon font"  ><i class="fa fa-minus" style="  cursor : pointer;"></i></span>
-                                        </div>
-                                        <div class="input-group background" style="margin-bottom: 5px">
-                                            <span class="input-group-addon " style="width: 50px;">Background Color</span>
-                                            <span class="input-group-addon picker" data-color="bg"></span>
-                                        </div>
+                                        <span class="input-group-addon font"><i
+                                            class="fa fa-plus" style="cursor: pointer;"></i></span> <input
+                                            type="text" class="form-control text-center"
+                                            placeholder="Font Size" name="FontSize" /> <span
+                                            class="input-group-addon font"><i class="fa fa-minus"
+                                            style="cursor: pointer;"></i></span>
+                                    </div>
+                                    <div class="input-group background" style="margin-bottom: 5px">
+                                        <span class="input-group-addon " style="width: 50px;">Background
+                                            Color</span> <span class="input-group-addon picker" data-color="bg"></span>
+                                    </div>
 
-                                        <div class="input-group fontcolor" style="margin-bottom: 5px" >
-                                            <span class="input-group-addon" style="width: 50px;">Font Color</span>
-                                            <span class="input-group-addon picker" data-color="font"></span>
-                                            <script type="text/javascript">
+                                    <div class="input-group fontcolor" style="margin-bottom: 5px">
+                                        <span class="input-group-addon" style="width: 50px;">Font
+                                            Color</span> <span class="input-group-addon picker"
+                                            data-color="font"></span>
+                                        <script type="text/javascript">
                                                 $('.picker').colpick({
                                                     layout: 'hex',
                                                     // colorScheme: 'dark',
                                                     onBeforeShow: function () {
                                                         $(this).colpickSetColor(rgb2hex($(this).css('backgroundColor')).replace("#",""));
                                                     },
-                                                    onChange: function (hsb, hex, rgb, el, bySetColor) {
-                                                        if (!bySetColor)
+                                                    onChange: function (hsb, hex, rgb, el, bySetColor) {                     if (!bySetColor)
                                                             $(el).css('background-color', '#' + hex);
                                                         var color = $(el).data('color');
                                                         var indexBnt = getIndex($(el).parent().parent().parent().parent().parent(), $('#buttonslist li')) - 1;
+var length = $($('#' + $('#path').val()).find('table tbody tr td:eq(' + indexBnt + ') a span')).length;
                                                         if (color === 'bg') {
+                                                        //to make outlook responsive
+                                                        if(length > 0){
+                                                            $($('#' + $('#path').val()).find('table tbody tr td:eq(' + indexBnt + ') a')).css('border', '15px solid #' + hex);
+                                                             $($('#' + $('#path').val()).find('table tbody tr td:eq(' + indexBnt + ') a')).css('background-color', '#' + hex);
+                                                        }else{
                                                             $($('#' + $('#path').val()).find('table tbody tr td:eq(' + indexBnt + ') a')).css('background-color', '#' + hex);
+                                                        }
                                                             $(el).parent().parent().parent().parent().find('div.color-circle').css('background-color', '#' + hex);
-                                                        } else {
+                                                        }else {
+                                                        if(length > 0){
+                                                            $($('#' + $('#path').val()).find('table tbody tr td:eq(' + indexBnt + ') a span')).css('color', '#' + hex);
+                                                        }else{
                                                             $($('#' + $('#path').val()).find('table tbody tr td:eq(' + indexBnt + ') a')).css('color', '#' + hex);
+                                                        }
                                                             $(el).parent().parent().parent().parent().find('div.color-circle').css('color', '#' + hex);
                                                         }
 
@@ -427,97 +471,120 @@ AGILE_EB_OPTIONS['templateId'] = "";
                                                 });
                                             </script>
 
-                                        </div>
-                                        <div class="text text-right">
-                                            <a href="#" class="btn btn-xs btn-default confirm">Ok</a>
-                                        </div>
                                     </div>
-                                    <div class="fontselector" class="hide" style="min-width: 200px">
-                                        <ul class="list-group" style="overflow: auto ;display: block;max-height: 200px" >
-                                            <li class="list-group-item" style="font-family: arial">Arial</li>
-                                            <li class="list-group-item" style="font-family: verdana">Verdana</li>
-                                            <li class="list-group-item" style="font-family: helvetica">Helvetica</li>
-                                            <li class="list-group-item" style="font-family: times">Times</li>
-                                            <li class="list-group-item" style="font-family: georgia">Georgia</li>
-                                            <li class="list-group-item" style="font-family: tahoma">Tahoma</li>
-                                            <li class="list-group-item" style="font-family: pt sans">PT Sans</li>
-                                            <li class="list-group-item" style="font-family: Source Sans Pro">Source Sans Pro</li>
-                                            <li class="list-group-item" style="font-family: PT Serif">PT Serif</li>
-                                            <li class="list-group-item" style="font-family: Open Sans">Open Sans</li>
-                                            <li class="list-group-item" style="font-family: Josefin Slab">Josefin Slab</li>
-                                            <li class="list-group-item" style="font-family: Lato">Lato</li>
-                                            <li class="list-group-item" style="font-family: Arvo">Arvo</li>
-                                            <li class="list-group-item" style="font-family: Vollkorn">Vollkorn</li>
-                                            <li class="list-group-item" style="font-family: Abril Fatface">Abril Fatface</li>
-                                            <li class="list-group-item" style="font-family: Playfair Display">Playfair Display</li>
-                                            <li class="list-group-item" style="font-family: Yeseva One">Yeseva One</li>
-                                            <li class="list-group-item" style="font-family: Poiret One">Poiret One</li>
-                                            <li class="list-group-item" style="font-family: Comfortaa">Comfortaa</li>
-                                            <li class="list-group-item" style="font-family: Marck Script">Marck Script</li>
-                                            <li class="list-group-item" style="font-family: Pacifico">Pacifico</li>
-                                        </ul>
+                                    <div class="text text-right">
+                                        <a href="#" class="btn btn-xs btn-default confirm">Ok</a>
                                     </div>
-
+                                </div>
+                                <div class="fontselector" class="hide" style="min-width: 200px">
+                                    <ul class="list-group"
+                                        style="overflow: auto; display: block; max-height: 200px">
+                                        <li class="list-group-item" style="font-family: arial">Arial</li>
+                                        <li class="list-group-item" style="font-family: verdana">Verdana</li>
+                                        <li class="list-group-item" style="font-family: helvetica">Helvetica</li>
+                                        <li class="list-group-item" style="font-family: times">Times</li>
+                                        <li class="list-group-item" style="font-family: georgia">Georgia</li>
+                                        <li class="list-group-item" style="font-family: tahoma">Tahoma</li>
+                                        <li class="list-group-item" style="font-family: pt sans">PT
+                                            Sans</li>
+                                        <li class="list-group-item"
+                                            style="font-family: Source Sans Pro">Source Sans Pro</li>
+                                        <li class="list-group-item" style="font-family: PT Serif">PT
+                                            Serif</li>
+                                        <li class="list-group-item" style="font-family: Open Sans">Open
+                                            Sans</li>
+                                        <li class="list-group-item" style="font-family: Josefin Slab">Josefin
+                                            Slab</li>
+                                        <li class="list-group-item" style="font-family: Lato">Lato</li>
+                                        <li class="list-group-item" style="font-family: Arvo">Arvo</li>
+                                        <li class="list-group-item" style="font-family: Vollkorn">Vollkorn</li>
+                                        <li class="list-group-item" style="font-family: Abril Fatface">Abril
+                                            Fatface</li>
+                                        <li class="list-group-item"
+                                            style="font-family: Playfair Display">Playfair Display</li>
+                                        <li class="list-group-item" style="font-family: Yeseva One">Yeseva
+                                            One</li>
+                                        <li class="list-group-item" style="font-family: Poiret One">Poiret
+                                            One</li>
+                                        <li class="list-group-item" style="font-family: Comfortaa">Comfortaa</li>
+                                        <li class="list-group-item" style="font-family: Marck Script">Marck
+                                            Script</li>
+                                        <li class="list-group-item" style="font-family: Pacifico">Pacifico</li>
+                                    </ul>
                                 </div>
 
+                            </div>
 
-                            </li>
-                        </ul>
 
-                        <hr/>
-                        <div class="form-group">
-                            <a  class="btn btn-default form-control" href="#" id="add-button">Add one more button</a>
-                        </div>
+                        </li>
+                    </ul>
 
+                    <hr />
+                    <div class="form-group">
+                        <a class="btn btn-default form-control" href="#" id="add-button">Add
+                            one more button</a>
                     </div>
 
-                    <div id="buttonstxt" style="max-width: 400px">
-                        <h4 class="text text-info">Buttons</h4>
-                        <ul id="buttonstxtlist" class="list-group">
-                            <li class="hide" style="padding:10px; border:1px solid #DADFE1; border-radius: 4px">
-                                <span class="pull-right trashbutton"><i class="fa fa-trash"></i></span>
+                </div>
 
-                                <div class="form-group">
-                                    <input type="text" class="form-control" placeholder="Enter Button Title" name="btn_title"/>
+                <div id="buttonstxt" style="max-width: 400px">
+                    <h4 class="text text-info">Buttons</h4>
+                    <ul id="buttonstxtlist" class="list-group">
+                        <li class="hide"
+                            style="padding: 10px; border: 1px solid #DADFE1; border-radius: 4px">
+                            <span class="pull-right trashbutton"><i
+                                class="fa fa-trash"></i></span>
+
+                            <div class="form-group">
+                                <input type="text" class="form-control"
+                                    placeholder="Enter Button Title" name="btn_title" />
+                            </div>
+                            <div class="input-group">
+                                <span class="input-group-addon" id="basic-addon1"><i
+                                    class="fa fa-paperclip"></i></span> <input type="text"
+                                    class="form-control" placeholder="Add link to button"
+                                    aria-describedby="basic-addon1" name="btn_link" />
+                            </div>
+                            <div class="input-group" style="margin-top: 10px">
+                                <label for="buttonStyleTxt">Button Style</label>
+                                <div class="color-circle buttonStyleTxt" data-original-title=""
+                                    title="">
+                                    <i class="fa fa-font"></i>
                                 </div>
-                                <div class="input-group">
-                                    <span class="input-group-addon" id="basic-addon1"><i class="fa fa-paperclip"></i></span>
-                                    <input type="text" class="form-control"  placeholder="Add link to button" aria-describedby="basic-addon1" name="btn_link"/>
-                                </div>
-                                <div class="input-group" style="margin-top:10px">
-                                    <label for="buttonStyleTxt">Button Style</label>
-                                    <div   class="color-circle buttonStyleTxt" data-original-title="" title="">
-                                        <i class="fa fa-font"></i>
-                                    </div>
-                                    <div class="styleboxtxt hide" style="width:400px">
-                                        <!--
+                                <div class="styleboxtxt hide" style="width: 400px">
+                                    <!--
                                      <div class="input-group " style="margin-bottom: 5px">
                                          <span class="input-group-addon"><i class="fa fa-font"></i></span>
                                          <input type="text" class="form-control fontstyle" name="fontstyle" readonly style="cursor:pointer;background-color: #fff"/>
-                                     </div>-->
+                                     </div>
                                         <label> Button Size</label>
                                         <div class="input-group " style="margin-bottom: 5px">
                                             <span class="input-group-addon button"  ><i class="fa fa-plus" style="  cursor : pointer;"></i></span>
                                             <input type="text" class="form-control text-center"  placeholder="Button Size"  name="ButtonSize"/>
                                             <span class="input-group-addon button"  ><i class="fa fa-minus" style="  cursor : pointer;"></i></span>
-                                        </div>
-                                        <label> Font Size</label>
-                                        <div class="input-group " style="margin-bottom: 5px">
+                                        </div>-->
+                                    <label> Font Size</label>
+                                    <div class="input-group " style="margin-bottom: 5px">
 
-                                            <span class="input-group-addon font"  ><i class="fa fa-plus" style="  cursor : pointer;"></i></span>
-                                            <input type="text" class="form-control text-center"  placeholder="Font Size"  name="FontSize"/>
-                                            <span class="input-group-addon font"  ><i class="fa fa-minus" style="  cursor : pointer;"></i></span>
-                                        </div>
-                                        <div class="input-group background" style="margin-bottom: 5px">
-                                            <span class="input-group-addon " style="width: 50px;">Background Color</span>
-                                            <span class="input-group-addon pickerTxt" data-color="bg"></span>
-                                        </div>
+                                        <span class="input-group-addon font"><i
+                                            class="fa fa-plus" style="cursor: pointer;"></i></span> <input
+                                            type="text" class="form-control text-center"
+                                            placeholder="Font Size" name="FontSize" /> <span
+                                            class="input-group-addon font"><i class="fa fa-minus"
+                                            style="cursor: pointer;"></i></span>
+                                    </div>
+                                    <div class="input-group background" style="margin-bottom: 5px">
+                                        <span class="input-group-addon " style="width: 50px;">Background
+                                            Color</span> <span class="input-group-addon pickerTxt"
+                                            data-color="bg"></span>
+                                    </div>
 
-                                        <div class="input-group fontcolor" style="margin-bottom: 5px" >
-                                            <span class="input-group-addon" style="width: 50px;">Font Color</span>
-                                            <span class="input-group-addon pickerTxt" data-color="font"></span>
-                                            
-                                            <script type="text/javascript">
+                                    <div class="input-group fontcolor" style="margin-bottom: 5px">
+                                        <span class="input-group-addon" style="width: 50px;">Font
+                                            Color</span> <span class="input-group-addon pickerTxt"
+                                            data-color="font"></span>
+
+                                        <script type="text/javascript">
                                                 $('.pickerTxt').colpick({
                                                     layout: 'hex',
                                                     // colorScheme: 'dark',
@@ -529,14 +596,23 @@ AGILE_EB_OPTIONS['templateId'] = "";
                                                             $(el).css('background-color', '#' + hex);
                                                         var color = $(el).data('color');
                                                         var indexBnt = getIndex($(el).parent().parent().parent().parent().parent(), $('#buttonstxtlist li')) - 1;
+                            var length = $($('#' + $('#path').val()).find('table tbody tr td a.textbuttonsimg:eq(' + indexBnt + ') span')).length;
                                                         if (color === 'bg') {
+                                                        if(length > 0){
+                                                            $($('#' + $('#path').val()).find('table tbody tr td a.textbuttonsimg:eq(' + indexBnt + ')')).css('border', '15px solid #' + hex);
                                                             $($('#' + $('#path').val()).find('table tbody tr td a.textbuttonsimg:eq(' + indexBnt + ')')).css('background-color', '#' + hex);
+                                                        }else{
+                                                            $($('#' + $('#path').val()).find('table tbody tr td a.textbuttonsimg:eq(' + indexBnt + ')')).css('background-color', '#' + hex);
+                                                         }   
                                                             $(el).parent().parent().parent().parent().find('div.color-circle').css('background-color', '#' + hex);
                                                         } else {
-                                                            $($('#' + $('#path').val()).find('table tbody tr td a.textbuttonsimg:eq(' + indexBnt + ')')).css('color', '#' + hex);
+                                                        if(length >0 ){
+                                                            $($('#' + $('#path').val()).find('table tbody tr td a.textbuttonsimg:eq(' + indexBnt + ') span')).css('color', '#' + hex);
+                                                        }else{
+                                                             $($('#' + $('#path').val()).find('table tbody tr td a.textbuttonsimg:eq(' + indexBnt + ')')).css('color', '#' + hex);
+                                                        }
                                                             $(el).parent().parent().parent().parent().find('div.color-circle').css('color', '#' + hex);
                                                         }
-
                                                     },
                                                     onSubmit: function (hsb, hex, rgb, el) {
                                                         $(el).css('background-color', '#' + hex);
@@ -558,60 +634,70 @@ AGILE_EB_OPTIONS['templateId'] = "";
                                             </script>
 
 
-                                        </div>
-                                        <div class="text text-right">
-                                            <a href="#" class="btn btn-xs btn-default confirm">Ok</a>
-                                        </div>
                                     </div>
-                                    <div class="fontselector" class="hide" style="min-width: 200px">
-                                        <ul class="list-group" style="overflow: auto ;display: block;max-height: 200px" >
-                                            <li class="list-group-item" style="font-family: arial">Arial</li>
-                                            <li class="list-group-item" style="font-family: verdana">Verdana</li>
-                                            <li class="list-group-item" style="font-family: helvetica">Helvetica</li>
-                                            <li class="list-group-item" style="font-family: times">Times</li>
-                                            <li class="list-group-item" style="font-family: georgia">Georgia</li>
-                                            <li class="list-group-item" style="font-family: tahoma">Tahoma</li>
-                                            <li class="list-group-item" style="font-family: pt sans">PT Sans</li>
-                                            <li class="list-group-item" style="font-family: Source Sans Pro">Source Sans Pro</li>
-                                            <li class="list-group-item" style="font-family: PT Serif">PT Serif</li>
-                                            <li class="list-group-item" style="font-family: Open Sans">Open Sans</li>
-                                            <li class="list-group-item" style="font-family: Josefin Slab">Josefin Slab</li>
-                                            <li class="list-group-item" style="font-family: Lato">Lato</li>
-                                            <li class="list-group-item" style="font-family: Arvo">Arvo</li>
-                                            <li class="list-group-item" style="font-family: Vollkorn">Vollkorn</li>
-                                            <li class="list-group-item" style="font-family: Abril Fatface">Abril Fatface</li>
-                                            <li class="list-group-item" style="font-family: Playfair Display">Playfair Display</li>
-                                            <li class="list-group-item" style="font-family: Yeseva One">Yeseva One</li>
-                                            <li class="list-group-item" style="font-family: Poiret One">Poiret One</li>
-                                            <li class="list-group-item" style="font-family: Comfortaa">Comfortaa</li>
-                                            <li class="list-group-item" style="font-family: Marck Script">Marck Script</li>
-                                            <li class="list-group-item" style="font-family: Pacifico">Pacifico</li>
-                                        </ul>
+                                    <div class="text text-right">
+                                        <a href="#" class="btn btn-xs btn-default confirm">Ok</a>
                                     </div>
-
+                                </div>
+                                <div class="fontselector" class="hide" style="min-width: 200px">
+                                    <ul class="list-group"
+                                        style="overflow: auto; display: block; max-height: 200px">
+                                        <li class="list-group-item" style="font-family: arial">Arial</li>
+                                        <li class="list-group-item" style="font-family: verdana">Verdana</li>
+                                        <li class="list-group-item" style="font-family: helvetica">Helvetica</li>
+                                        <li class="list-group-item" style="font-family: times">Times</li>
+                                        <li class="list-group-item" style="font-family: georgia">Georgia</li>
+                                        <li class="list-group-item" style="font-family: tahoma">Tahoma</li>
+                                        <li class="list-group-item" style="font-family: pt sans">PT
+                                            Sans</li>
+                                        <li class="list-group-item"
+                                            style="font-family: Source Sans Pro">Source Sans Pro</li>
+                                        <li class="list-group-item" style="font-family: PT Serif">PT
+                                            Serif</li>
+                                        <li class="list-group-item" style="font-family: Open Sans">Open
+                                            Sans</li>
+                                        <li class="list-group-item" style="font-family: Josefin Slab">Josefin
+                                            Slab</li>
+                                        <li class="list-group-item" style="font-family: Lato">Lato</li>
+                                        <li class="list-group-item" style="font-family: Arvo">Arvo</li>
+                                        <li class="list-group-item" style="font-family: Vollkorn">Vollkorn</li>
+                                        <li class="list-group-item" style="font-family: Abril Fatface">Abril
+                                            Fatface</li>
+                                        <li class="list-group-item"
+                                            style="font-family: Playfair Display">Playfair Display</li>
+                                        <li class="list-group-item" style="font-family: Yeseva One">Yeseva
+                                            One</li>
+                                        <li class="list-group-item" style="font-family: Poiret One">Poiret
+                                            One</li>
+                                        <li class="list-group-item" style="font-family: Comfortaa">Comfortaa</li>
+                                        <li class="list-group-item" style="font-family: Marck Script">Marck
+                                            Script</li>
+                                        <li class="list-group-item" style="font-family: Pacifico">Pacifico</li>
+                                    </ul>
                                 </div>
 
+                            </div>
 
-                            </li>
-                        </ul>
 
-                    </div>
+                        </li>
+                    </ul>
 
-                    <div id="common-settings">
-                        
-                        <h4  class="text text-info">Style</h4>
-                        <form id="background"  class="form-inline">
-                            <div class="form-group">
-                                <label for="bgcolor">Background</label>
-                                <div class="color-circle" id="bgcolor"></div>
-                                <script type="text/javascript">
+                </div>
+
+                <div id="common-settings">
+
+                    <h4 class="text text-info">Style</h4>
+                    <form id="background" class="form-inline">
+                        <div class="form-group">
+                            <label for="bgcolor">Background</label>
+                            <div class="color-circle" id="bgcolor"></div>
+                            <script type="text/javascript">
                                     $('#bgcolor').colpick({
                                         layout: 'hex',
                                         onBeforeShow: function () {
                                             $(this).colpickSetColor(rgb2hex($('#bgcolor').css('backgroundColor')).replace("#",""));
                                         },
                                         onChange: function (hsb, hex, rgb, el, bySetColor) {
-
                                             if (!bySetColor)
                                                 $(el).css('background-color', '#' + hex);
                                         },
@@ -626,76 +712,90 @@ AGILE_EB_OPTIONS['templateId'] = "";
                                         $(this).colpickSetColor(this.value);
                                     });
                                 </script>
-                            </div>
-                        </form>
-
-                        <form id="padding-setting" class="form-inline">
-                            <h4 class="text text-info">Padding</h4>
-                                <center>
-                                    <table>
-                                        <tbody>
-                                            <tr>
-                                                <td></td>
-                                                <td><input type="text" class="form-control" placeholder="top" value="15px" id="ptop" name="ptop" style="width: 60px; margin-right: 5px"></td>
-                                                <td></td>
-                                            </tr>
-                                            <tr>
-                                                <td><input type="text" class="form-control" placeholder="left" value="15px" id="pleft" name="mtop" style="width: 60px; margin-right: 5px"></td>
-                                                <td></td>
-                                                <td><input type="text" class="form-control" placeholder="right" value="15px" id="pright" name="mbottom" style="width: 60px; margin-right: 5px"></td>
-                                            </tr>
-                                            <tr>
-                                                <td></td>
-                                                <td><input type="text" class="form-control" placeholder="bottom" value="15px" id="pbottom" name="pbottom" style="width: 60px; margin-right: 5px"></td>
-                                                <td></td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </center>
-                        </form>
-                    </div>
-
-                    <div class="text text-right" style="margin-top:5px">
-                        <a href="#" id="saveElement" class="btn btn-info">done</a>
-                    </div>
-                </div>
-                <!-- END SETTINGS -->
-            </div>
-
-            <div id="download-layout"></div>
-        </div>
-
-        <!--/row-->
-
-
-        <!-- Modal -->
-        <div class="modal fade" id="previewModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" >
-            <div class="modal-dialog" role="document">
-                <div class="modal-content" style="min-width:120px">
-                    <div class="modal-header hidden">
-                        <input id="httphref" type="text" name="href" value="http://" class="form-control" />
-                    </div>
-                    <div class="modal-body" align="center">
-                        <div class="btn-group  previewActions">
-                            <a class="btn btn-default btn-sm active" href="#" data-val="iphone">smartphone</a>
-                            <a class="btn btn-default btn-sm " href="#" data-val="smalltablet">tablet</a>
-                            <a class="btn btn-default btn-sm " href="#" data-val="ipad">ipad</a>
                         </div>
-                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <iframe id="previewFrame"  class="iphone"></iframe>
-                    </div>
-                    <div class="modal-footer">
+                    </form>
 
-                        <button type="button" class="btn btn-info" data-dismiss="modal">Close</button>
+                    <form id="padding-setting" class="form-inline">
+                        <h4 class="text text-info">Padding</h4>
+                        <center>
+                            <table>
+                                <tbody>
+                                    <tr>
+                                        <td></td>
+                                        <td><input type="text" class="form-control"
+                                            placeholder="top" value="15px" id="ptop" name="ptop"
+                                            style="width: 60px; margin-right: 5px"></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td><input type="text" class="form-control"
+                                            placeholder="left" value="15px" id="pleft" name="mtop"
+                                            style="width: 60px; margin-right: 5px"></td>
+                                        <td></td>
+                                        <td><input type="text" class="form-control"
+                                            placeholder="right" value="15px" id="pright" name="mbottom"
+                                            style="width: 60px; margin-right: 5px"></td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td><input type="text" class="form-control"
+                                            placeholder="bottom" value="15px" id="pbottom" name="pbottom"
+                                            style="width: 60px; margin-right: 5px"></td>
+                                        <td></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </center>
+                    </form>
+                </div>
+
+                <div class="text text-right" style="margin-top: 5px">
+                    <a href="#" id="saveElement" class="btn btn-info">done</a>
+                </div>
+            </div>
+            <!-- END SETTINGS -->
+        </div>
+
+        <div id="download-layout"></div>
+    </div>
+
+    <!--/row-->
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="previewModal" tabindex="-1" role="dialog"
+        aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content" style="min-width: 120px">
+                <div class="modal-header hidden">
+                    <input id="httphref" type="text" name="href" value="http://"
+                        class="form-control" />
+                </div>
+                <div class="modal-body" align="center">
+                    <div class="btn-group  previewActions">
+                        <a class="btn btn-default btn-sm active" href="#"
+                            data-val="iphone">smartphone</a> <a
+                            class="btn btn-default btn-sm " href="#" data-val="smalltablet">tablet</a>
+                        <a class="btn btn-default btn-sm " href="#" data-val="ipad">ipad</a>
                     </div>
+                    <button type="button" class="close" data-dismiss="modal"
+                        aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <iframe id="previewFrame" class="iphone"></iframe>
+                </div>
+                <div class="modal-footer">
+
+                    <button type="button" class="btn btn-info" data-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>
-        <textarea id="imageid" class="hide"></textarea>
-        <textarea id="download" class="hide"></textarea>
-        <textarea id="selector" class="hide"></textarea>
-        <textarea  id="path" class="hide"></textarea>
-        <a class="hide" id="sendTestEmail" href="#">.</a>
-    </body>
+    </div>
+    <textarea id="imageid" class="hide"></textarea>
+    <textarea id="download" class="hide"></textarea>
+    <textarea id="selector" class="hide"></textarea>
+    <textarea id="path" class="hide"></textarea>
+    <a class="hide" id="sendTestEmail" href="#">.</a>
+</body>
 
 </html>

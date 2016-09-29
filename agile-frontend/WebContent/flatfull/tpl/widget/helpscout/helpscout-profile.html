@@ -2,14 +2,14 @@
 	<div>
 		<form  id="helpscout_login_form" name="helpscout_login_form">
 	    	<fieldset>
-				<p>Resolve issues, create conversations, and manage conversation history of your customers.</p>
+				<p >{{agile_lng_translate 'widgets' 'HelpScout-content'}} </p>
 				
-				<label><b>Enter your API key</b></label>
-				<div class="control-group form-group"><div class="controls"><input type="text" id="helpscout_api_key" class="input-medium required form-control" placeholder="API Key" value="" name="helpscout_api_key" onkeydown="if (event.keyCode == 13) { event.preventDefault(); }"></input></div></div>
+				<label><b>{{agile_lng_translate 'widgets' 'enter-your-api-key'}}</b></label>
+				<div class="control-group form-group"><div class="controls"><input type="text" id="helpscout_api_key" class="input-medium required form-control" placeholder="{{agile_lng_translate 'admin-settings-integrations' 'api-key'}}" value="" name="helpscout_api_key" onkeydown="if (event.keyCode == 13) { event.preventDefault(); }"></input></div></div>
 				<div class="text-center">
-				<a href="#add-widget" class="btn btn-default btn-sm">Cancel</a>
-				<a href="#" id="save_api_key" class="save-agile-widget btn btn-sm btn-primary ml_5">Save</a>
-				<p class="p-xs">Don't have an API key? <a href="https://www.helpscout.net" target="_blank" class="text-info"> SignUp </a></p>
+				<a href="#add-widget" class="btn btn-default btn-sm">{{agile_lng_translate 'other' 'cancel'}}</a>
+				<a href="#" id="save_api_key" class="save-agile-widget btn btn-sm btn-primary ml_5">{{agile_lng_translate 'portlets' 'save'}}</a>
+				<p class="p-xs">{{agile_lng_translate 'widgets' 'do-not-have-an-api-key'}} <a href="https://www.helpscout.net" target="_blank" class="text-info"> {{agile_lng_translate 'widgets' 'signup'}} </a></p>
 				</div>
      </div>
 			</fieldset>
@@ -31,15 +31,15 @@
 </div>
 <div class="clearfix"></div>
 <div class="clearfix m-t-xs">
-	<a  id="add_conv" class="btn btn-xs btn-default">New Conversation</a>
-	<p id="helpscout_loading" style="display:none;" >Please wait...</p>
-	<p id="helpscout_error" style="display:none;" >Please Try agian.</p>
+	<a  id="add_conv" class="btn btn-xs btn-default">{{agile_lng_translate 'widgets' 'new-conversation'}}</a>
+	<p id="helpscout_loading" style="display:none;" >{{agile_lng_translate 'widgets' 'please-wait'}}</p>
+	<p id="helpscout_error" style="display:none;" >{{agile_lng_translate 'widgets' 'please-try-again'}}</p>
 </div>						
 </div>
 <div class="clearfix" id="add-conv-error-panel" style="display:none;">
 </div>
 <div class="wrapper-sm b-t b-light">
-	<h4 class="h4 text-sm m-t-none m-b-none">Conversations</h4>
+	<h4 class="h4 text-sm m-t-none m-b-none">{{agile_lng_translate 'widgets' 'conversations'}}</h4>
 </div>
 <ul class="list-group m-b-none text-base" id="all_conv_panel">
 	
@@ -92,7 +92,8 @@
 					<input name="customerId" type="hidden" value="{{customerId}}" />
 	                <input name="email" type="hidden" value="{{email}}" />
 					<div class="control-group">	           
-						<label class="control-label"><b>Mailbox: </b><span class="field_req">*</span></label>         
+						<label class="control-label"><b>{{agile_lng_translate 'widgets' 'mailbox'}}: 
+						</b><span class="field_req">*</span></label>         
 	                    <div class="controls">
 							<select name="mailbox" class="form-control">
 							{{#isArray mailboxes}}
@@ -104,7 +105,7 @@
 	                    </div>
 	                </div>
 					<div class="control-group">	      
-						<label class="control-label"><b>Type: </b><span class="field_req">*</span></label>	              
+						<label class="control-label"><b>{{agile_lng_translate 'deal-view' 'type'}}: </b><span class="field_req">*</span></label>	              
 	                    <div class="controls">
 							<div class="btn-group" data-toggle="buttons">
   								<label class="btn btn-sm btn-primary active">
@@ -118,7 +119,7 @@
 	                </div>
 
  					<div class="control-group">	                    
-						<label class="control-label"><b>Assign to: </b><span class="field_req">*</span></label>	
+						<label class="control-label"><b>{{agile_lng_translate 'widgets' 'assign-to'}}: </b><span class="field_req">*</span></label>	
 	                    <div class="controls">
 							<select name="assignTo" class="form-control">
 							{{#isArray assignees}}
@@ -130,7 +131,7 @@
 	                    </div>
 	                </div>
 				<div class="control-group" id="tags_source_continue_contact">
-                    <label class="control-label"><b>Tags: </b></label>
+                    <label class="control-label"><b>{{agile_lng_translate 'other' 'tags'}}: </b></label>
                     <div class="controls">
                         <input name="tags" type="text" id="tags-new-person" class="tags-typeahead form-control" />
                     </div>
@@ -138,22 +139,23 @@
 
 
 	                <div class="control-group">	                    
-						<label class="control-label"><b>Subject: </b><span class="field_req">*</span></label>	
+						<label class="control-label"><b>{{agile_lng_translate 'contact-details' 'subject'}}: </b><span class="field_req">*</span></label>	
 	                    <div class="controls">
-							<input type="text" placeholder="Subject" name="subject" id="subject" class="required span4 form-control" onkeydown="if (event.keyCode == 13) { event.preventDefault(); }"/>
+							<input type="text" placeholder="{{agile_lng_translate 'contact-details' 'subject'}}" name="subject" id="subject" class="required span4 form-control" onkeydown="if (event.keyCode == 13) { event.preventDefault(); }"/>
 	                    </div>
 	                </div>
 	                <div class="control-group">
-	                    <label class="control-label"><b>Message: </b><span class="field_req">*</span></label>
+	                    <label class="control-label"><b>{{agile_lng_translate 'other' 'message'}}: </b>
+	                    <span class="field_req">*</span></label>
 	                    <div class="controls">
-							<textarea rows="4" class="input col-md-12 form-control required" placeholder="Detailed Message" name="message" id="message"></textarea>
+							<textarea rows="4" class="input col-md-12 form-control required" placeholder="{{agile_lng_translate 'widgets' 'detailed-message'}}" name="message" id="message"></textarea>
 	                    </div>
 	                </div>
 	            </fieldset>
 	        </form>
 	    </div>
 	    <div class="modal-footer">
-	        <a class="btn btn-sm btn-primary" id="helpscout_send_request">Save</a>
+	        <a class="btn btn-sm btn-primary" id="helpscout_send_request">{{agile_lng_translate 'portlets' 'save'}}</a>
 	        <span class="save-status"></span>
 	    </div>
 	</div>

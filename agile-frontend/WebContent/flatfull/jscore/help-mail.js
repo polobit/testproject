@@ -56,7 +56,7 @@ $(function() {
 							});
 			
 							// Show message and gif while sending mail and fadeout
-							$save_info = $('<span class="text-success" style="color:#008000; font-size:15px; display:inline-block"><i> Email Sent</i></span>');
+							$save_info = $('<span class="text-success" style="color:#008000; font-size:15px; display:inline-block"><i> {{agile_lng_translate "emailbuilder" "sent-email"}}</i></span>');
 							$('#msg').append($save_info);
 							$save_info.show().delay(1000).fadeOut("slow", function(){
 				

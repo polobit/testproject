@@ -2,7 +2,7 @@
 {{#unless this.length}}
 <div class="slate m-t" style="padding:5px 2px;">
     <div class="slate-content" style="text-align:center;">
-        <h4 class="h4">You have no Events</h4>
+        <h4 class="h4">{{agile_lng_translate 'events' 'you-have-no-events'}}</h4>
     </div>
 </div>
 {{/unless}}
@@ -10,19 +10,19 @@
 <div class="future_event_group">
        
         <table class="table hide table-striped " style="overflow:hidden!important">
-            <div id="today-heading" style="display: none"><b>Today</b></div>
+            <div id="today-heading" style="display: none"><b>{{agile_lng_translate 'calendar' 'Today'}}</b></div>
             
             <tbody id="today-event" style="display: inline;display: table;width: 100%;"></tbody>
         </table>
 
         <table class="table hide table-striped" style="overflow:hidden!important;">
-            <div id="tomorrow-heading" style="display: none"><b>Tomorrow</b></div>
+            <div id="tomorrow-heading" style="display: none"><b{{agile_lng_translate 'tasks' 'Tomorrow'}}</b></div>
             
             <tbody id="tomorrow-event" style="display: inline;display: table;width: 100%;"></tbody>
         </table>
 
         <table class="table hide table-striped" style="overflow:hidden!important;">
-            <div id="next-week-heading" style="display: none"><b>Later</b></div>
+            <div id="next-week-heading" style="display: none"><b>{{agile_lng_translate 'tasks' 'Later'}}</b></div>
             <tbody id="next-week-event" style="display: inline;display: table;width: 100%;"></tbody>
         </table>
 
@@ -81,14 +81,14 @@
 {{#unless this.length}}
 <div class="slate m-t" style="padding:5px 2px;">
     <div class="slate-content" style="text-align:center;">
-        <h4 class="h4">You have no Events</h4>
+        <h4 class="h4">{{agile_lng_translate 'events' 'you-have-no-events'}}</h4>
     </div>
 </div>
 {{/unless}}
 {{#if this.length}}
 <div class="table-responsive">
 		<div class="panel panel-default">
-			    <div class="panel-heading">Event List</div>		
+			    <div class="panel-heading">{{agile_lng_translate 'calendar' 'event-list'}}</div>		
         <table class="table table-striped" style="overflow:hidden!important;">
             <tbody id="eventAll" style="display: table;width:100%"></tbody>
         </table>
@@ -144,14 +144,14 @@
 {{#unless this.length}}
 <div class="slate m-t" style="padding:5px 2px;">
     <div class="slate-content" style="text-align:center;">
-        <h4 class="h4">You have no Events</h4>
+        <h4 class="h4">{{agile_lng_translate 'events' 'you-have-no-events'}}</h4>
     </div>
 </div>
 {{/unless}}
 {{#if this.length}}
 	<div class="table-responsive">
 		<div class="panel panel-default">
-		<div class="panel-heading">Event List</div>
+		<div class="panel-heading">{{agile_lng_translate 'calendar' 'event-list'}}</div>
         <table class="table table-striped" style="overflow:hidden!important;">
             <tbody id="google_event" style="display: table;width:100%"></tbody>
         </table>
@@ -167,7 +167,7 @@
 			{{title}}
 		</div>
 		<div class="pull-right text-right text-ellipsis p-b-xs" style="width:20%">
-			<span class="label bg-light dk text-tiny">Google Event</span>
+			<span class="label bg-light dk text-tiny">{{agile_lng_translate 'calendar' 'google-events'}}</span>
 		</div>
 	</div>
 	<div class="row m-b-xs m-l-none m-r-none">
@@ -192,7 +192,7 @@
 {{#unless this.length}}
 <div class="slate m-t" style="padding:5px 2px;">
     <div class="slate-content" style="text-align:center;">
-        <h4 class="h4">You have no Events</h4>
+        <h4 class="h4">{{agile_lng_translate 'events' 'you-have-no-events'}}</h4>
     </div>
 </div>
 {{/unless}}
@@ -200,19 +200,19 @@
 <div class="future_event_group">
        
         <table class="table hide table-striped" style="overflow:hidden!important">
-            <div id="today-heading" style="display: none"><b>Today</b></div>
+            <div id="today-heading" style="display: none"><b>{{agile_lng_translate 'calendar' 'Today'}}</b></div>
             
             <tbody id="today-event" style="display: inline;display: table;width: 100%;"></tbody>
         </table>
 
         <table class="table hide table-striped" style="overflow:hidden!important;">
-            <div id="tomorrow-heading" style="display: none"><b>Tomorrow</b></div>
+            <div id="tomorrow-heading" style="display: none"><b>{{agile_lng_translate 'tasks' 'Tomorrow'}}</b></div>
             
             <tbody id="tomorrow-event" style="display: inline;display: table;width: 100%;"></tbody>
         </table>
 
         <table class="table hide table-striped" style="overflow:hidden!important;">
-            <div id="next-week-heading" style="display: none"><b>Later</b></div>
+            <div id="next-week-heading" style="display: none"><b>{{agile_lng_translate 'tasks' 'Later'}}</b></div>
             <tbody id="next-week-event" style="display: inline;display: table;width: 100%;"></tbody>
         </table>
 
@@ -226,7 +226,7 @@
 <div class="span8" style="overflow: hidden;">{{title}}</div>
 <div class="span4 pull-right" style="text-align:right;">
 <div class="ellipsis-multiline" style="line-height:20px !important;height: auto !important; word-break:keep-all;">  
-<span class="label">Google Event</span></div>
+<span class="label">{{agile_lng_translate 'calendar' 'google-events'}}</span></div>
 </div>
 
 </div>

@@ -11,7 +11,7 @@ function hasScope(scope)
 
 function showContactsImportAccessDeniedMessage(el)
 {
-   $(el).html("<h4>Access denied to sync contacts. Please contact Admin</h4>");	
+   $(el).html("<h4>" +_agile_get_translated_val('acls','access-denied')+ "</h4>");	
 }
 
 function hasScope(scope_constant)

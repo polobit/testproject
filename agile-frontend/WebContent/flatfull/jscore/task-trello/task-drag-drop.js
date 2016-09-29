@@ -19,9 +19,18 @@ function setup_sortable_tasks()
 					start: function(e, ui){
 				        ui.placeholder.height(ui.item.height());
 				    },
+				    beforeStart : function(event, ui) {
+                          console.log("start");
+                          if($(ui).hasClass("ui-state-disabled"))
+							return false;
+
+					},
 					
 					beforeStop : function(event, ui)
 					{
+						if ($(ui.helper).hasClass('ui-state-disabled')){
+							return false;
+						}
 						// If sender and receiver is same
 						if ($(ui.helper).closest('.task-trello-list').find('.list-header').attr('attr') === $(ui.placeholder).closest('.task-trello-list').find('.list-header').attr(
 								'attr'))

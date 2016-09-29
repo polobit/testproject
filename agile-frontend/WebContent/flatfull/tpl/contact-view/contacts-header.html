@@ -18,7 +18,7 @@
 										<div class="panel panel-default m-b-none">
 											<div class="panel-body">
 												<div class="control-group lhs-row-filter p-n" style="border-bottom:1px solid #dee5e7;position:relative;border-bottom-width:0px;font-size:10px;">
-													<a id="lhs-filters-header" class="c-p text-l-none text-l-none-hover txt-lg-label block">
+													<a id="lhs-customfilters-header" class="c-p text-l-none text-l-none-hover txt-lg-label block">
 														Saved Filters
 														<i class="fa inline pos-abs pos-r-0 fa-plus-square-o"></i>
 													</a>
@@ -30,9 +30,8 @@
 									</div>
 									<div class="wrapper bg-light p-b-xs p-t-xs">
 										<div class="panel panel-default m-b-sm">
-											<div class="p-t-sm p-b-sm text-center" style="padding-top: 8px; padding-bottom: 8px;">
-												<a href='#contact-filters' class="text-info">Add or Edit Filter</a>
-											</div>
+												<a href='#contact-filters' class="text-info block p-t-sm p-b-sm text-center" style="padding-top: 8px; padding-bottom: 8px;">Add or Edit Filter</a>
+											
 										</div>
 									</div>
 								</div>
@@ -41,6 +40,10 @@
 					</div>
 				</div>
 			</div>
+
+			<div class="btn-group m-r-xs m-t-n-sm w-full text-center" id="contact-sorter" style="margin-bottom: 7px;">
+			</div>
+
 			<div class="">
 				<div id="right-pane">
 		 			<div class="route_Portlet b-b" style="display:none">
@@ -70,7 +73,7 @@
 	    					<div class="filters-drp-down btn-group dropdown m-l-none" style="float: none;">
 	    						<div class="">
 	    							<h4 class="inline-block m-n">
-	    								Contacts
+	    								{{agile_lng_translate 'contact-details' 'Contacts'}}
 	    								<div class="inline-block" id="filter-list"></div>
 	    								<span id="contacts-count" class=""></span>
 	    								<a id="contacts-left-filters-toggle" class="m-l-xs text-lg "  onclick="Agile_GA_Event_Tracker.track_event('Hide/Expand Filters')">
@@ -85,24 +88,24 @@
 								<div id="view-list" class="pull-left btn-group">
 									{{#hasRestrictedMenuScope 'CREATE_CONTACT'}}
 										<div class="btn-group">
-											<button href="#contacts" onclick="$('.person').click();Agile_GA_Event_Tracker.track_event('Add Contact');" class="btn btn-default btn-sm disabled"><i class="icon-plus-sign"></i> Add Contact</button>
+											<button href="#contacts" onclick="$('.person').click();Agile_GA_Event_Tracker.track_event('Add Contact');" class="btn btn-default btn-sm disabled"><i class="icon-plus-sign"></i> {{agile_lng_translate 'contacts-view' 'add-contact'}}</button>
         									<button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
 											<ul class="dropdown-menu pull-right" role="menu">
 												{{#hasRestrictedMenuScope 'IMPORT_CONTACTS'}} {{else}}
-													<li><a href="#import" onclick="Agile_GA_Event_Tracker.track_event('Import Contact');">Import</a></li>
+													<li><a href="#import" onclick="Agile_GA_Event_Tracker.track_event('Import Contact');">{{agile_lng_translate 'contacts-view' 'import'}}</a></li>
 												{{/hasRestrictedMenuScope}}
-												<li><a href="#add-dashlet" onclick="Agile_GA_Event_Tracker.track_event('Contacts Add Dashlets')">Add Dashlet</a></li>
+												<li><a href="#add-dashlet" onclick="Agile_GA_Event_Tracker.track_event('Contacts Add Dashlets')">{{agile_lng_translate 'portlets' 'add-dashlet'}}</a></li>
 											</ul>
 										</div>
     								{{else}}
 										<div class="btn-group">
-											<button href="#contacts" onclick="$('.person').click();Agile_GA_Event_Tracker.track_event('Add Contact');" class="btn btn-default btn-sm "><i class="icon-plus-sign"></i> Add Contact</button>
+											<button href="#contacts" onclick="$('.person').click();Agile_GA_Event_Tracker.track_event('Add Contact');" class="btn btn-default btn-sm "><i class="icon-plus-sign"></i> {{agile_lng_translate 'contacts-view' 'add-contact'}}</button>
 											<button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
 											<ul class="dropdown-menu pull-right" role="menu">
 												{{#hasRestrictedMenuScope 'IMPORT_CONTACTS'}} {{else}}
-													<li><a href="#import" onclick="Agile_GA_Event_Tracker.track_event('Import Contact');">Import</a></li>
+													<li><a href="#import" onclick="Agile_GA_Event_Tracker.track_event('Import Contact');">{{agile_lng_translate 'contacts-view' 'import'}}</a></li>
 												{{/hasRestrictedMenuScope}}
-												<li><a href="#add-dashlet" onclick="Agile_GA_Event_Tracker.track_event('Contacts Add Dashlets')">Add Dashlet</a></li>
+												<li><a href="#add-dashlet" onclick="Agile_GA_Event_Tracker.track_event('Contacts Add Dashlets')">{{agile_lng_translate 'portlets' 'add-dashlet'}}</a></li>
 											</ul>
     									</div>
 									{{/hasRestrictedMenuScope}}
@@ -134,20 +137,20 @@
 				                	<i></i>                
 				          		</label>
 							</span>
-							<button id="bulk-tags" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled txt-small">Add Tags</button>
-						    <button id="bulk-tags-remove" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled txt-small">Remove Tags</button>
+							<button id="bulk-tags" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled txt-small">{{agile_lng_translate 'contacts-view' 'add-tags'}}</button>
+						    <button id="bulk-tags-remove" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled txt-small">{{agile_lng_translate 'contacts-view' 'remove-tags'}}</button>
 						    {{#hasMenuScope 'CAMPAIGN'}}
-						    	<button id="bulk-campaigns" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled txt-small" onclick="Agile_GA_Event_Tracker.track_event('Add to Campaign');">Add to Campaign</button>
+						    	<button id="bulk-campaigns" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled txt-small" onclick="Agile_GA_Event_Tracker.track_event('Add to Campaign');">{{agile_lng_translate 'contacts-view' 'add-to-campaign'}}</button>
 						    {{/hasMenuScope}}
-						    <button id="show-callcampaignModal" class="btn btn-default bulk-action-btn btn-sm disabled txt-small">Start Call Campaign</button>
-						    <button id="bulk-email" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled txt-small" onclick="Agile_GA_Event_Tracker.track_event('Send Email');">Send Email</button>
-						    <button id="bulk-owner" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled txt-small">Change Owner</button>
+						    <button id="show-callcampaignModal" class="btn btn-default bulk-action-btn btn-sm disabled txt-small">{{agile_lng_translate 'contacts-view' 'start-call-campaign'}}</button>
+						    <button id="bulk-email" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled txt-small" onclick="Agile_GA_Event_Tracker.track_event('Send Email');">{{agile_lng_translate 'contacts-view' 'send-email'}}</button>
+						    <button id="bulk-owner" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled txt-small">{{agile_lng_translate 'contacts-view' 'change-owner'}}</button>
 						    {{#hasScope "EXPORT_CONTACTS"}}
-						    	<button id="bulk-contacts-export" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled txt-small" onclick="Agile_GA_Event_Tracker.track_event('Export as CSV');">Export as CSV</button>
+						    	<button id="bulk-contacts-export" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled txt-small" onclick="Agile_GA_Event_Tracker.track_event('Export as CSV');">{{agile_lng_translate 'deal-view' 'export-as-csv'}}</button>
 						    {{/hasScope}}
 						    {{#hasRestrictedMenuScope 'DELETE_CONTACT'}}
 						    {{else}}
-						    	<button class="btn btn-default bulk-action-btn delete-checked-contacts btn-sm disabled txt-small">Delete</button>
+						    	<button class="btn btn-default bulk-action-btn delete-checked-contacts btn-sm disabled txt-small">{{agile_lng_translate 'contacts-view' 'delete'}}</button>
 							{{/hasRestrictedMenuScope}}
 							<div class="btn-group dropdown pull-right {{#iscompactTabel 'PERSON'}}compact {{/iscompactTabel}} multiple-checkbox" style="padding-right: 10px;" id="contact-custom-coloumns">
 								<div class="btn-group dropdown  multiple-checkbox" style="padding-right: 10px;position:absolute;right:0px;" id="contact-custom-coloumns">

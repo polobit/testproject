@@ -65,7 +65,7 @@ $(function(){
 		
 		if(!$(table_element).hasClass('noDelete')){
 			
-			$(table).after('<div><div class="select-none"></div></div><footer class="panel-footer"><a href="#" class="btn btn-danger btn-sm" id="delete-checked"> Delete</a></footer>');
+			$(table).after('<div><div class="select-none"></div></div><footer class="panel-footer"><a href="#" class="btn btn-danger btn-sm" id="delete-checked"> '+_agile_get_translated_val('contact-details','delete')+'</a></footer>');
 			
 		}
 			
@@ -111,8 +111,9 @@ $(function(){
 				toggle_admin_user_bulk_actions_delete(this, true,$(this).parents('table').attr('id'));		
 
 		else
-			toggle_contacts_bulk_actions_dropdown(this, true,$(this).parents('table').attr('id'));
-		
+			if(Current_Route != 'tasks'){
+				toggle_contacts_bulk_actions_dropdown(this, true,$(this).parents('table').attr('id'));
+			}
 	});
 	
    /**
@@ -134,7 +135,9 @@ $(function(){
 		else if(Current_Route == 'users')			
 				toggle_admin_user_bulk_actions_delete(this, true,$(this).parents('table').attr('id'));
 		else
-			toggle_contacts_bulk_actions_dropdown(this,false,$(this).parents('table').attr("id"));
+			if(Current_Route != 'tasks'){
+				toggle_contacts_bulk_actions_dropdown(this,false,$(this).parents('table').attr("id"));
+			}
 	});
 });
 
@@ -153,7 +156,7 @@ function append_checkboxes(el)
 	}
 
 	// If select all is chosen then all the upcomming models with in table should have checked checkboxes
-	if(SELECT_ALL == true || (Current_Route == 'deals' && SELECT_ALL_DEALS==true) || SUBSCRIBERS_SELECT_ALL == true)
+	if(SELECT_ALL == true || (Current_Route == 'deals' && SELECT_ALL_DEALS==true) || SUBSCRIBERS_SELECT_ALL == true || SELECT_ALL_TASKS)
 	{
 		$.each($('tr td:nth-child(1)', el).not(".checkbox"), function(key, value){
 			$(this).closest('tr').prepend('<td class="checkbox"><label class="i-checks i-checks-sm"><input class="tbody_check" type="checkbox" checked="checked"/><i></i></label></td>');

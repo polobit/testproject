@@ -22,7 +22,7 @@ public class RegistrationGlobals
     public static final String COMPANY_SIZE = "company_size";
     public static final String REGISTRATION_COMPANY_TYPE = "company_type";
     public static final String USER_ROLE = "role";
-    public static final String PHONE_NUMBER = "phone_number";
+    public static final String PHONE_NUMBER = "phone";
     public static final String PLAN_TYPE = "plan_type";
     public static final String USER_COUNT = "users_count";
 

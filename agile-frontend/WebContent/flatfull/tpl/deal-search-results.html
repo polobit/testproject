@@ -1,23 +1,23 @@
-	<script id="deal-search-model-template" type="text/html">
-	<td></td>
-	<td class="data" data="{{id}}">
+    <script id="deal-search-model-template" type="text/html">
+    <td></td>
+    <td class="data" data="{{id}}">
     <div class="table-resp">
-    	<div class="agile-thumb agile-thumb-view" style="width:calc(100% - 60px);">
-        	<div class="text-cap custom-link"> {{name}}</div> 
-    	</div>
-       </div>
-	</td>
-   
-	<td><div class="text-ellipsis" style="width:10em">
-		{{#if expected_value}}{{currencySymbol}}{{numberWithCommas expected_value}}{{else}}-{{/if}}
+        <div class="agile-thumb agile-thumb-view" style="width:calc(100% - 60px);">
+            <div class="text-cap custom-link"> {{name}}</div> 
         </div>
-	</td>
-	<td>
-		<div class="text-ellipsis">
-			{{milestone}} ({{probability}}%) 
-		</div>
-	</td>
-	<td><div class="text-ellipsis">
+       </div>
+    </td>
+   
+    <td><div class="text-ellipsis" style="width:10em">
+        {{#if expected_value}}{{currencySymbol}}{{numberWithCommas expected_value}}{{else}}-{{/if}}
+        </div>
+    </td>
+    <td>
+        <div class="text-ellipsis">
+            {{milestone}} ({{probability}}%) 
+        </div>
+    </td>
+    <td><div class="text-ellipsis">
 
         {{#if close_date}}<i class="fa fa-clock-o m-r-xs"></i><time class="deal-close-time" value="{{close_date}}" datetime="{{epochToHumanDate "" close_date}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" close_date}}</time>{{/if}}
 
@@ -55,9 +55,9 @@
                     </button>
                     <ul class="dropdown-menu" id="view-actions" role="menu">
                         <li><a href="#" id="bulk-owner">Change owner</a></li>
-						{{#hasMenuScope 'CAMPAIGN'}}
+                        {{#hasMenuScope 'CAMPAIGN'}}
                         <li><a href="#" id="bulk-campaigns">Add to campaign</a></li>
-						{{/hasMenuScope}}
+                        {{/hasMenuScope}}
                         <li class="hide"><a href="#" id="bulk-email">Send email</a></li>
                         <li><a href="#" id="bulk-tags">Add tags</a></li>
                     </ul>
@@ -67,11 +67,11 @@
                     <thead>
                         <tr>
 
-							<th style="width:2%;"></th>
-                            <th style="width:25%;">Opportunity</th>
-                            <th style="width:25%;">Value</th>
-                            <th style="width:30%;">Milestone</th>
-                            <th style="width:25%;">Close Date</th>
+                            <th style="width:2%;"></th>
+                            <th style="width:25%;">{{agile_lng_translate 'deal-view' 'opportunity'}}</th>
+                            <th style="width:25%;">{{agile_lng_translate 'contacts-view' 'value'}}</th>
+                            <th style="width:30%;">{{agile_lng_translate 'admin-settings-tasks' 'Milestone'}}</th>
+                            <th style="width:25%;">{{agile_lng_translate 'deal-view' 'close-date'}}</th>
 
                         </tr>
                     </thead>
@@ -81,7 +81,9 @@
                 </div>
             </div>
         </div>
-        <div><a href="#" class="searchFetchNext pull-right text-info p-r-sm">More..</a></div>
+
+        <div><a href="#" class="searchFetchNext pull-right text-info p-r-sm p-t-sm">{{agile_lng_translate 'others' 'moreresults'}}</a></div>
+
         {{/if}}
     </div>
    

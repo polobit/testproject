@@ -31,8 +31,11 @@ var Form_Collection_Events = Base_Collection_View.extend({
 		 	$codeShareModalEl.find("#iframeArea").text(iframe);
 
 		 	//embed code
-		 	var embed = "<div id=\""+window.location.hostname.split(".")[0]+"_"+$(e.currentTarget).data("formid")+"\" class=\"agile_crm_form_embed\"><span style=\"display:none\">Fill out my <a href=\""+link+"\">online form</a></span></div>";
-			$codeShareModalEl.find("#embedCodeArea").text(embed);
+		 	var json = {};
+		 	json.host = window.location.hostname.split(".")[0];
+		 	json.formid = $(e.currentTarget).data("formid");
+		 	json.link = link;
+		 	$codeShareModalEl.find("#embedCodeArea").text(getTemplate("js-form-embed", json));
 		});
 
 	},

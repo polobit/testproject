@@ -259,4 +259,12 @@ public class AppengineSearch<T>
 
 	return new ArrayList();
     }
+    /**
+     * Calls delete method in respective builder document
+     * @param id
+     */
+    public void bulkDelete(String... ids)
+    {
+    	builder.bulkDelete(ids);
+    }
 }

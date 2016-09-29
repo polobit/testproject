@@ -840,7 +840,7 @@ AGILE_LP_OPTIONS['templateId'] = "";
         </script>
 
         <script src="public/js/builder.min.js?v=<%=_AGILE_VERSION%>"></script>
-        <script src="public/js/vendor/ace/ace.js"></script>
+        <script src="https://s3.amazonaws.com/agilecrm/pagebuilder/static/js/ace/ace.js" charset="utf-8"></script>
 
     </div>
 

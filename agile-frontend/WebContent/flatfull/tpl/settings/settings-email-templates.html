@@ -3,10 +3,10 @@
 	<div class="hbox h-auto m-b-lg">
     <div class="panel panel-default">
         <div class="panel-heading">
-            <div class="pull-left m-t-xs">Email Templates</div>
+            <div class="pull-left m-t-xs">{{agile_lng_translate 'preferences' 'email-templates'}}</div>
 			<div class="pull-right">
             	<a href="#emailbuilder-templates" class="btn btn-default btn-sm btn-addon" id="addEmailTemplate">
-           		 <span><i class="icon-plus-sign" /></span> New</a>
+           		 <span><i class="icon-plus-sign" /></span> {{agile_lng_translate 'menu' 'new'}}</a>
 			</div>
 			<div class="clearfix"></div>
         </div>
@@ -14,15 +14,15 @@
 	<div id="slate"></div>
 	{{#if this.length}}
     <div class="table-responsive">
-        <table class="table table-striped showCheckboxes panel agile-table table-layout-mob-view email-mobile-view-templates tableHeader tab-layout {{#is_mobile}}emailTemplates{{/is_mobile}}"  url="core/api/email/templates/bulk" data-resizable-columns-id="settings-email">
+        <table class="table table-striped showCheckboxes panel agile-table table-layout-mob-view email-mobile-view-templates {{#is_mobile}}emailTemplates{{/is_mobile}}"  url="core/api/email/templates/bulk">
            
             <thead>
                 <tr>
-                    <th data-resizable-column-id="hide" class="hide">Id</th>                    
-					<th data-resizable-column-id="name" style="width:30%;" class="{{#is_mobile}} namethead {{/is_mobile}}">Name {{#is_mobile}} & Subject {{/is_mobile}} </th>
+                    <th class="hide">Id</th>                    
+					<th style="width:30%;" class="{{#is_mobile}} namethead {{/is_mobile}}">{{agile_lng_translate 'other' 'name'}} {{#is_mobile}} & Subject {{/is_mobile}} </th>
                     {{#is_mobile}}
                     {{else}}
-                    <th style="width:30%;">Subject</th>
+                    <th style="width:30%;">{{agile_lng_translate 'other' 'subject'}}</th>
                     <th style="width:40%;"></th>
                     {{/is_mobile}}
                 </tr>
@@ -40,14 +40,14 @@
         <div class="data-block">
         <div class="p-l p-r">
             <h4 class="m-t-none">
-                Email Templates
+                {{agile_lng_translate 'preferences' 'email-templates'}}
             </h4>
             
             <p>
-                Personalize and customize email templates for every scenario in the sales cycle. Make sure you send a great looking email every single time.
+                {{agile_lng_translate 'prefs-email-templates' 'email-templates-desc-1'}}
             </p>
             <p>
-                You can create custom email template for every sales scenario.
+                {{agile_lng_translate 'prefs-email-templates' 'email-templates-desc-2'}}
             </p>
            </div>
         </div>
@@ -76,7 +76,7 @@
     <td class="text-muted" style="color: #b2b0b1;">
        {{#if created_time}}
           <div class="text-muted table-resp text-xs"> <i class="fa fa-clock-o m-r-xs"></i>
-    	       Created <time class="created_time time-ago" value="{{created_time}}" datetime="{{epochToHumanDate "" created_time}}">{{epochToHumanDate "ddd mmm dd yyyy" created_time}}</time> by {{emailTemplateOwner.name}}
+    	       {{agile_lng_translate 'campaigns' 'created'}} <time class="created_time time-ago" value="{{created_time}}" datetime="{{epochToHumanDate "" created_time}}">{{epochToHumanDate "ddd mmm dd yyyy" created_time}}</time> {{agile_lng_translate 'contact-details' 'by'}} {{emailTemplateOwner.name}}
           </div>
        {{/if}}
     </td>

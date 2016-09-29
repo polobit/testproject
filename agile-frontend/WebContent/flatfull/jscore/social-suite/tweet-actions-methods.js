@@ -83,7 +83,7 @@ function requestAction(urlForGet, actionType, modelStream, modelTweet, tweetOwne
 		// Favorite is Unsuccessful.
 		if (data == "Unsuccessful" || data == "false")
 		{
-			showNotyPopUp('information', "Retry after sometime.", "top", 5000);
+			showNotyPopUp('information', "{{agile_lng_translate 'socialsuite' 'retry-after'}}", "top", 5000);
 			return;
 		}
 
@@ -141,25 +141,25 @@ function reflectActionOnTweet(data, actionType, modelStream, modelTweet, tweetOw
 		case "followuser":
 		{
 			if (data == "true")
-				showNotyPopUp('information', "Now you are following @" + tweetOwner, "top", 5000);
+				showNotyPopUp('information', "{{agile_lng_translate 'socialsuite' 'now-follow'}} @" + tweetOwner, "top", 5000);
 		}
 			break;
 		case "unfollowuser":
 		{
 			if (data == "Unfollowed")
-				showNotyPopUp('information', "Now you are not following @" + tweetOwner, "top", 5000);
+				showNotyPopUp('information', "{{agile_lng_translate 'socialsuite' 'now-not-follow'}} @" + tweetOwner, "top", 5000);
 		}
 			break;
 		case "blockuser":
 		{
 			if (data == "true")
-				showNotyPopUp('information', "You just blocked @" + tweetOwner, "top", 5000);
+				showNotyPopUp('information', "{{agile_lng_translate 'socialsuite' 'now-blocked'}} @" + tweetOwner, "top", 5000);
 		}
 			break;
 		case "unblockuser":
 		{
 			if (data == "Unblock")
-				showNotyPopUp('information', "You just unblock @" + tweetOwner, "top", 5000);
+				showNotyPopUp('information', "{{agile_lng_translate 'socialsuite' 'now-unblocked'}} @" + tweetOwner, "top", 5000);
 		}
 			break;
 
@@ -182,11 +182,11 @@ function displayError(modalToDisplay, data)
 
 	// Error message is shown if error occurs
 	if (result.trim() == "Status is a duplicate.")
-		showNotyPopUp('information', "Whoops! You already tweeted that...", "top", 5000);
+		showNotyPopUp('information', "{{agile_lng_translate 'socialsuite' 'tweeted-already'}}", "top", 5000);
 	else if(result.trim() == "Sorry, that page does not exist")
-		showNotyPopUp('information', "Sorry, that tweet does not exist.", "top", 5000);
+		showNotyPopUp('information', "{{agile_lng_translate 'socialsuite' 'tweeted-no-exists'}}", "top", 5000);
 	else
-		showNotyPopUp('information', "Retry after sometime.", "top", 5000);
+		showNotyPopUp('information', "{{agile_lng_translate 'socialsuite' 'retry-after'}}", "top", 5000);
 
 	console.log(data.responseText);
 }

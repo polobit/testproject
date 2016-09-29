@@ -40,24 +40,26 @@ define([
 					{ 
 					for ( var i = 0; i < fields.length; i++)
 						{
-							var value = {};
-							value.value = fields[i].field_label;
-							value.label = fields[i].field_label;
-							value.selected = false;
+							if(fields[i].field_type == "TEXT" || fields[i].field_type == "TEXTAREA" || fields[i].field_type == "LIST"){
+								var value = {};
+								value.value = fields[i].field_label;
+								value.label = fields[i].field_label;
+								value.selected = false;
 
-							for ( var j = 0; j < saveform.length; j++){
-							if(saveform[j].fields.agilefield){							
-							var field = saveform[j].fields.agilefield.value;
-							if(field.length>15 && count == 0){
-								for(var k=field.length; k>15; k--)
-									field.pop(field[k]);								
-							}								
-							field.push(value);
-							count++;		
-						}
-					}
-				}
-			}else{
+								for ( var j = 0; j < saveform.length; j++){
+									if(saveform[j].fields.agilefield){							
+										var field = saveform[j].fields.agilefield.value;
+										if(field.length>15 && count == 0){
+											for(var k=field.length; k>15; k--)
+												field.pop(field[k]);								
+										}								
+										field.push(value);
+										count++;		
+									}
+						        }
+				            }
+				        }
+			    }else{
 						for ( var i = 0; i < saveform.length; i++){
 							
 							if(saveform[i].fields.agilefield){		

@@ -5,21 +5,21 @@
     <form>
       <div class="ref-log">  
 
-	 <div id="today-heading" style="display: none" class="p-b-xs m-b-xs"><b>Today</b></div>
+	 <div id="today-heading" style="display: none" class="p-b-xs m-b-xs"><b>{{agile_lng_translate 'portlets' 'today'}}</b></div>
 
 	 <div id="contact-activity-today-list-log-model-list" style="display: inline;"></div>
 	<!--<tbody id="contact-activity-today-list-log-model-list"  class="contacts-model-list" route="contact/" style="overflow: scroll;overflow:hidden;">
 	</tbody>
 	-->
 
-	<div id="yesterday-heading" style="display: none" class="p-b-xs m-b-xs"><b>Yesterday</b></div>
+	<div id="yesterday-heading" style="display: none" class="p-b-xs m-b-xs"><b>{{agile_lng_translate 'portlets' 'yesterday'}}</b></div>
  <div id="contact-activity-yesterday-list-log-model-list" style="display: inline;"></div>
 	<!--
 	<tbody id="contact-activity-yesterday-list-log-model-list"  class="contacts-model-list" route="contact/" style="overflow: scroll;overflow:hidden;">
 	</tbody>
 	-->
 
-	<div id="earlier-heading" style="display: none" class="p-b-xs m-b-xs b-light"><b>Earlier</b></div>
+	<div id="earlier-heading" style="display: none" class="p-b-xs m-b-xs b-light"><b>{{agile_lng_translate 'portlets' 'earlier'}}</b></div>
 	<div id="contact-activity-earlier-list-log-model-list" style="display: inline;"></div>
 	<!--
 	<tbody id="contact-activity-earlier-list-log-model-list"  class="contacts-model-list" route="contact/" style="overflow: scroll;overflow:hidden;">
@@ -39,8 +39,8 @@
  	           		<img alt="Clipboard" src="{{getS3ImagePath '/img/clipboard.png'}}">
 				</div>
 				<div class="box-right pull-left">
-            <h4 class="m-t-none">No Contact activity recorded yet.</h4>
-            <div class="text">Web and Campaign activity of your contacts is shown here.</div>
+            <h4 class="m-t-none">{{agile_lng_translate 'contact-details' 'no-contact-activity-recorded-yet'}}</h4>
+            <div class="text">{{agile_lng_translate 'contact-details' 'web-and-campaign-activity-desc'}}</div>
 			<div class="clearfix">
 			</div>
         </div>
@@ -66,43 +66,44 @@
 		<div class="custom-link">
 			{{#if_equals "null" log_time}}
 				 {{#if contact}} 
-					<a href="#contact/{{contact.id}}" data="{{contact.id}}" class="popover_contact">{{getPropertyValue contact.properties "first_name"}} {{getPropertyValue contact.properties "last_name"}}</a> visited your website 
+					<a href="#contact/{{contact.id}}" data="{{contact.id}}" class="popover_contact">{{getPropertyValue contact.properties "first_name"}} {{getPropertyValue contact.properties "last_name"}}
+					</a> {{agile_lng_translate 'contact-details' 'visited-your-website'}}
 				{{else}}
-					Someone visited your website 
+					{{agile_lng_translate 'contact-details' 'someone-visited-your-website'}} 
 				{{/if}}<br>
 				<span class="activities_second_line m-t-none">  
 					<i class="icon-link"></i> 
 					<a href={{get_url url}}>{{get_url url}}</a>
 					{{#unless contact}}
-						. This contact may have been deleted
+						. {{agile_lng_translate 'contact-details' 'contact-deleted-desc'}}
 					{{/unless}}
 
 			{{else}}
 				{{#if_equals "EMAIL_OPENED" log_type}}
 					{{#if contact}} 
-						<a href="#contact/{{contact.id}}" data="{{contact.id}}" class="popover_contact">{{getPropertyValue contact.properties "first_name"}} {{getPropertyValue contact.properties "last_name"}}</a> opened an email
+						<a href="#contact/{{contact.id}}" data="{{contact.id}}" class="popover_contact">{{getPropertyValue contact.properties "first_name"}} {{getPropertyValue contact.properties "last_name"}}</a> {{agile_lng_translate 'contact-details' 'opened-an-email'}}
 					{{else}}
-						Someone opened an email
+						{{agile_lng_translate 'contact-details' 'someone-opened-an-email'}}
 					{{/if}}<br>
 					<span class="activities_second_line m-t-none">  
 					<i class="icon-envelope-alt"></i> 
-					Email from campaign '{{get_limiter message "Email Opened of campaign "}}'
+					{{agile_lng_translate 'contact-details' 'email-from-campaign'}} '{{get_limiter message "Email Opened of campaign "}}'
 					{{#unless contact}}
-						. This contact may have been deleted
+						. {{agile_lng_translate 'contact-details' 'contact-deleted-desc'}}
 					{{/unless}}
 				{{/if_equals}}
 					
 				{{#if_equals "EMAIL_CLICKED" log_type}}
 					{{#if contact}} 
-						<a href="#contact/{{contact.id}}" data="{{contact.id}}" class="popover_contact">{{getPropertyValue contact.properties "first_name"}} {{getPropertyValue contact.properties "last_name"}} </a> clicked an email
+						<a href="#contact/{{contact.id}}" data="{{contact.id}}" class="popover_contact">{{getPropertyValue contact.properties "first_name"}} {{getPropertyValue contact.properties "last_name"}} </a> {{agile_lng_translate 'contact-details' 'clicked-an-email'}}
 					{{else}}
-						Someone clicked an email
+						{{agile_lng_translate 'contact-details' 'someone-clicked-an-email'}}
 					{{/if}}<br>
 					<span class="activities_second_line m-t-none">  
 					<i class="icon-hand-up"></i> 
-					Link clicked in campaign '{{campaign_name}}'
+					{{agile_lng_translate 'contact-details' 'link-clicked-in-campaign'}} '{{campaign_name}}'
 	 				{{#unless contact}}
-						. This contact may have been deleted
+						. {{agile_lng_translate 'contact-details' 'contact-deleted-desc'}}
 					{{/unless}}
 				{{/if_equals}}
 					
@@ -110,76 +111,76 @@
 					{{#if contact}} 
 			        	<a href="#contact/{{contact.id}}" data="{{contact.id}}" class="popover_contact">{{getPropertyValue contact.properties "first_name"}} {{getPropertyValue contact.properties "last_name"}} </a>
 					{{else}}
-						Someone 
+						{{agile_lng_translate 'contact-details' 'someone'}} 
 					{{/if}}
 					{{#if_equals "Unsubscribed from all campaigns" message}}
-						unsubscribed from all campaigns
+						{{agile_lng_translate 'contact-details' 'unsubscribed-from-all-campaigns'}}
 					{{else}} 
-						unsubscribed from a campaign
+						{{agile_lng_translate 'contact-details' 'unsubscribed-from-all-campaigns'}}
 					{{/if_equals}}<br>
 					<span class="activities_second_line m-t-none">  
 						<i class="icon-minus-sign"></i> 
-						Unsubscribe link clicked from campaign '{{campaign_name}}'
+						{{agile_lng_translate 'contact-details' 'unsubscribe-link-clicked-from-campaign'}} '{{campaign_name}}'
 						{{#unless contact}}
-							. This contact may have been deleted
+							. {{agile_lng_translate 'contact-details' 'contact-deleted-desc'}}
 						{{/unless}}
 				{{/if_equals}}
 	
 				{{#if_equals "EMAIL_SPAM" log_type}}
 					{{#if contact}} 
-						<a href="#contact/{{contact.id}}" data="{{contact.id}}" class="popover_contact">{{getPropertyValue contact.properties "first_name"}} {{getPropertyValue contact.properties "last_name"}} </a> marked an email as Spam
+						<a href="#contact/{{contact.id}}" data="{{contact.id}}" class="popover_contact">{{getPropertyValue contact.properties "first_name"}} {{getPropertyValue contact.properties "last_name"}} </a> {{agile_lng_translate 'contact-details' 'marked-an-email-as-spam'}}
 					{{else}}
-						Someone marked an email as Spam
+						{{agile_lng_translate 'contact-details' 'someone-marked-an-email-as-spam'}}
 					{{/if}}<br>
 					<span class="activities_second_line m-t-none">  
 						<i class="icon-ban-circle"></i> 
-						Email '{{get_limiter message "Email subject: "}}' in '{{campaign_name}}'
+						{{agile_lng_translate 'other' 'email'}} '{{get_limiter message "Email subject: "}}' {{agile_lng_translate 'contacts-view' 'in'}} '{{campaign_name}}'
 						{{#unless contact}}
-							. This contact may have been deleted
+							. {{agile_lng_translate 'contact-details' 'contact-deleted-desc'}}
 						{{/unless}}	
 				{{/if_equals}}
 		
 				{{#if_equals "EMAIL_HARD_BOUNCED" log_type}}
 					{{#if contact}} 
-						<a href="#contact/{{contact.id}}" data="{{contact.id}}" class="popover_contact">{{getPropertyValue contact.properties "first_name"}} {{getPropertyValue contact.properties "last_name"}} </a> - Email bounced
+						<a href="#contact/{{contact.id}}" data="{{contact.id}}" class="popover_contact">{{getPropertyValue contact.properties "first_name"}} {{getPropertyValue contact.properties "last_name"}} </a> - {{agile_lng_translate 'contact-details' 'email-bounced'}}
 						<br>
 						<span class="activities_second_line">  
 							<i class="icon-undo"></i> 
-							There was a hard bounce for email  {{getPropertyValue contact.properties "email"}}
+							{{agile_lng_translate 'contact-details' 'there-was-a-hard-bounce-for-email'}}  {{getPropertyValue contact.properties "email"}}
 					{{else}}
-						Someone's Email bounced
+						{{agile_lng_translate 'contact-details' 'someones-email-bounced'}}
 						<span class="activities_second_line m-t-none">  
 						<br>
-						This contact may have been deleted
+						{{agile_lng_translate 'contact-details' 'contact-deleted-desc'}}
 					{{/if}}
 				{{/if_equals}}
 
 				{{#if_equals "EMAIL_SOFT_BOUNCED" log_type}}
 					{{#if contact}} 
-						<a href="#contact/{{contact.id}}" data="{{contact.id}}" class="popover_contact">{{getPropertyValue contact.properties "first_name"}} {{getPropertyValue contact.properties "last_name"}} </a> - Email bounced
+						<a href="#contact/{{contact.id}}" data="{{contact.id}}" class="popover_contact">{{getPropertyValue contact.properties "first_name"}} {{getPropertyValue contact.properties "last_name"}} </a> - {{agile_lng_translate 'contact-details' 'email-bounced'}}
 						<br>
 						<span class="activities_second_line m-t-none">  
 						<i class="icon-undo"></i> 
-						There was a soft bounce for email  {{getPropertyValue contact.properties "email"}}
+						{{agile_lng_translate 'contact-details' 'there-was-a-soft-bounce-for-email'}}  {{getPropertyValue contact.properties "email"}}
 					{{else}}
-						Someone's Email bounced
+						{{agile_lng_translate 'contact-details' 'someones-email-bounced'}}
 						<span class="activities_second_line m-t-none">  
 						<br>
-						This contact may have been deleted
+						{{agile_lng_translate 'contact-details' 'contact-deleted-desc'}}
 					{{/if}}
 				{{/if_equals}}
 	
 				{{#unless log_time}}
 					{{#if contact}} 
-						<a href="#contact/{{contact.id}}" data="{{contact.id}}" class="popover_contact">{{getPropertyValue contact.properties "first_name"}} {{getPropertyValue contact.properties "last_name"}} </a> visited your website
+						<a href="#contact/{{contact.id}}" data="{{contact.id}}" class="popover_contact">{{getPropertyValue contact.properties "first_name"}} {{getPropertyValue contact.properties "last_name"}} </a> {{agile_lng_translate 'contact-details' 'visited-your-website'}}
 					{{else}}
-						Someone visited your website
+						{{agile_lng_translate 'contact-details' 'someone-visited-your-website'}}
 					{{/if}}<br>
 					<span class="activities_second_line m-t-none">  
 					<i class="icon-link"></i> 
 					<a href={{get_url url}}>{{get_url url}}</a>
 					{{#unless contact}}
-						. This contact may have been deleted
+						. {{agile_lng_translate 'contact-details' 'contact-deleted-desc'}}
 					{{/unless}}	
 				{{/unless}}
 		{{/if_equals}}
@@ -202,29 +203,29 @@
 		<div class="row">
  			<div class="col-md-12" id="contact_activity_header">
            		<h3 class="contact-activity-heading font-thin h3  pull-left">
-					<span>Contact Activities</span>&nbsp;<small class="contact-activity-sub-heading" ></small>&nbsp;<small class="contact-activity-user" ></small>
+					<span>{{agile_lng_translate 'report-view' 'contact-activities'}}</span>&nbsp;<small class="contact-activity-sub-heading" ></small>&nbsp;<small class="contact-activity-user" ></small>
 				</h3>
 				
 				<div class="pull-right">
 					<div class="btn-group pull-right type-task-button c-p" ><!--style="cursor:pointer;margin-right:15px;top: -28px;">-->
-               			<div class="btn btn-default btn-sm selected_name" id ="log-filter-title">All Activities</div>
+               			<div class="btn btn-default btn-sm selected_name" id ="log-filter-title">{{agile_lng_translate 'report-view' 'all-activities'}}</div>
                 		<a class="btn btn-default dropdown-toggle btn-sm" data-toggle="dropdown" href="#">
                 			<span class="caret"></span>
                			</a>
               			<ul class="dropdown-menu" role="menu">
-							<li><a href="#contact-activities/all" >All Activities</a></li> 
-								<li><a href="#contact-activities/page-views" >Page Views</a></li>
-							<li><a href="#contact-activities/email-opens" >Email Opens</a></li>
-							<li><a href="#contact-activities/email-clicks" >Email Clicks</a></li>
-							<li><a href="#contact-activities/unsubscriptions">Unsubscriptions</a></li>
-							<li><a href="#contact-activities/spam-reports">Spam Reports</a></li>
-							<li><a href="#contact-activities/hard-bounces">Hard Bounces</a></li>
-							<li><a href="#contact-activities/soft-bounces">Soft Bounces</a></li>              
+							<li><a href="#contact-activities/all" >{{agile_lng_translate 'report-view' 'all-activities'}}</a></li> 
+							<li><a href="#contact-activities/page-views">{{agile_lng_translate 'contact-details' 'page-views'}}</a></li>
+							<li><a href="#contact-activities/email-opens" >{{agile_lng_translate 'portlets' 'email-opens'}}</a></li>
+							<li><a href="#contact-activities/email-clicks" >{{agile_lng_translate 'contact-details' 'email-clicks'}}</a></li>
+							<li><a href="#contact-activities/unsubscriptions">{{agile_lng_translate 'campaigns' 'unsubscriptions'}}</a></li>
+							<li><a href="#contact-activities/spam-reports">{{agile_lng_translate 'contact-details' 'spam-reports'}}</a></li>
+							<li><a href="#contact-activities/hard-bounces">{{agile_lng_translate 'campaigns' 'hard-bounces'}}</a></li>
+							<li><a href="#contact-activities/soft-bounces">{{agile_lng_translate 'campaigns' 'soft-bounces'}}</a></li>              
                			</ul>
             		</div> 
             		<div class="btn-group pull-right m-r" role="group">
-                		<a href="#activities" class="btn btn-default btn-sm" onclick="$(this).next().removeClass('bg-light')">User Activities</a> 
-                		<a href="#contact-activities" class="btn btn-default btn-sm bg-light">Contact Activities</a>
+                		<a href="#activities" class="btn btn-default btn-sm" onclick="$(this).next().removeClass('bg-light')">{{agile_lng_translate 'report-view' 'user-activities'}}</a> 
+                		<a href="#contact-activities" class="btn btn-default btn-sm bg-light">{{agile_lng_translate 'report-view' 'contact-activities'}}</a>
             		</div>
           		</div>
 				<div class="clearfix"></div>

@@ -36,6 +36,23 @@ $(function()
 				resetCallLogVariables();
 		});  
 		
+		// This method is called when the add-note modal is closed .....
+		//This will check if the if the activities is saved or not
+			$('#logCallModal').on('shown.bs.modal', function (e) {
+				$("#phoneLogForm #status-wait").html('<img class="loading-img" src="../../img/21-0.gif" style="width: 40px;margin-left: 40px;"></img>');
+				getTelephonyStatus(function(status){
+					var statusHtml="";
+					$.each(status,function(index,stats){
+					var labelName = stats.label.toLocaleLowerCase();	
+					statusHtml = statusHtml +	'<li><a id = "statusValue"  value ="'+labelName+'" >'+stats.label +'</a></li>';
+					});
+					$("#phoneLogForm #statusValue-ul").html(statusHtml);
+					$("#phoneLogForm #status-wait").html("");
+				});
+			});
+		
+
+		
 /**
  * select box change functionality on number change
  * @id = "logPhone_number_option"
@@ -69,15 +86,6 @@ $(function()
 				var optHtml = $(this).html();
 				$("#"+formName + " #callStatus").html(optHtml);
 				$("#"+formName + " #callStatus").attr("value", opt);
-				if(opt == 'busy' || opt == 'failed' || opt == 'missed'){
-					$("#hour").attr('disabled','disabled');
-					$("#min").attr('disabled','disabled');
-					$("#sec").attr('disabled','disabled');
-				}else{
-					$("#hour").removeAttr('disabled');
-					$("#min").removeAttr('disabled');
-					$("#sec").removeAttr('disabled');
-				}
 			});
 	
 	/**
@@ -136,13 +144,7 @@ $(function()
 		var m = json.min;
 		var s =	json.sec;
 		var duration = 0;
-			if(json['status'] == 'busy' || json['status'] == 'failed' || json['status'] == 'missed' ){
-				duration = 0;
-			}else{
-				if(!h || !m || !s){
-					$("#"+formName +" #logPhone_duration_error1").show().delay(5000).hide(1);
-					return;
-				}
+
 				if(isNaN(h) || isNaN(m) || isNaN(s)){
 					$("#"+formName +" #logPhone_duration_error1").show().delay(5000).hide(1);
 					return;
@@ -160,15 +162,13 @@ $(function()
 					s = parseInt(s);
 					duration = (h*3600)+(m*60)+(s*1);
 					
-					if(json['status'] == 'answered' || json['status'] == 'inquiry' || json['status'] == 'interest' || json['status'] == 'new opportunity' || json['status'] == 'meeting scheduled'){
-						if(duration <= 0){
+						if(duration < 0){
 							$("#"+formName +" #logPhone_duration_error2").show().delay(5000).hide(1);
 							return;
 						}
-					}
 					
 				}
-			}
+
 		
 
 		disable_save_button($(this));
@@ -219,12 +219,6 @@ $(function()
 			$("#phoneLogForm #callStatus").attr("value", logPhone.status);
 			$("#phoneLogForm #callStatus").html(toTitleCase(logPhone.status));
 
-			if(logPhone.status == 'busy' || logPhone.status == 'failed' || logPhone.status == 'missed'){
-				$("#phoneLogForm #hour").attr('disabled','disabled');
-				$("#phoneLogForm #min").attr('disabled','disabled');
-				$("#phoneLogForm #sec").attr('disabled','disabled');
-			}
-			
 			$("#logCallModal").modal('show');
 			agile_type_ahead("call_related_to", $("#phoneLogForm", '#logCallModal'), contacts_typeahead);
 			/*var contact_html="";
@@ -395,18 +389,18 @@ function saveLogPhone(form, modal, element, logPhone)
 		var logPhone = data.toJSON();
 
 try{
-	var contactDetailsObj;
+	var contactDetailsObjId;
 	if(CallLogVariables.id){
-		contactDetailsObj = CallLogVariables.id;
+		contactDetailsObjId = CallLogVariables.id;
 	}else{
-		contactDetailsObj = agile_crm_get_contact();	
+		contactDetailsObjId = agile_crm_get_contact().id;	
 	}
 	
 	if($("#saveActivity",form).val() == "true"){
 		try{
 			var data1 ={};
-			data1.url = "/core/api/notes/save_logPhoneActivity";
-			data1.id = contactDetailsObj.id;
+			data1.url = "/core/api/notes/save_logPhoneActivity?note_id="+logPhone.id;
+			data1.id = contactDetailsObjId;
 			data1.callType = logPhone.callType;
 			data1.number = logPhone.phone;
 			data1.status = logPhone.status;
@@ -420,16 +414,11 @@ try{
 	}else
 		{
 			try{
-				var contactDetailsObj;
-				if(CallLogVariables.id){
-					contactDetailsObj = CallLogVariables.id;
-				}else{
-					contactDetailsObj = agile_crm_get_contact();	
-				}
+				
 				var data1 ={};
 				data1.url = "/core/api/notes/update_logPhoneActivity?note_id="+
 				logPhone.id+'&subject='+logPhone.subject;
-				data1.id = contactDetailsObj.id;
+				data1.id = contactDetailsObjId;
 				data1.callType = logPhone.callType;
 				data1.number = logPhone.phone;
 				data1.status = logPhone.status;
@@ -437,17 +426,15 @@ try{
 				data1.widget = $("#callWidgetName",form).val();
 				CallLogVariables.callActivitySaved = true;
 				saveLogPhoneActivity(data1);
-
-
 			}catch(e){
 				console.log("activities not saved AS CONTACT NOT FOUND");
 			}
 		}
 		
 	
-	if(logPhone.status == 'answered' || logPhone.status == 'inquiry' || logPhone.status == 'interest' || logPhone.status == 'no interest' || logPhone.status == 'incorrect referral' || logPhone.status == 'voicemail' || logPhone.status == 'new opportunity' || logPhone.status == 'meeting scheduled'){
+	if(logPhone.status != 'busy' || logPhone.status == 'failed' || logPhone.status == 'missed'){
 		if(!$("#callWidgetName",form).val()){
-			twilioIOSaveContactedTime(contactDetailsObj.id);
+			twilioIOSaveContactedTime(contactDetailsObjId);
 		}
 	}
 }catch (e) {}
@@ -583,4 +570,21 @@ function showDynamicCallLogs(data)
 		$('#logCallModal').modal('hide');
 		console.log ("an error has occured");
 	}
+}
+
+
+
+function getTelephonyStatus(callback){
+		$.ajax({
+			url: 'core/api/categories?entity_type=TELEPHONY_STATUS',
+			type: 'GET',
+			dataType: 'json',
+			success: function(status){
+				if (callback && typeof (callback) === "function"){
+					callback(status);
+				}else{
+					console.log("irrevalent backend fetch for getTelephonyStatus");
+				}
+			}
+		});
 }

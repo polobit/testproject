@@ -12,7 +12,7 @@
   	<div class="clearfix"></div>
     <td>
     	<span id="source-{{id}}" data-clipboard-text="{{group_email}}">{{group_email}}</span>
-   		<a id="grp-{{id}}" class="m-xs a-frwd-email" href="javascript:void(0);" data-toggle="tooltip" data-placement="top" data-copied-text="Email copied to clipboard">
+   		<a id="grp-{{id}}" class="m-xs a-frwd-email" href="javascript:void(0);" data-toggle="tooltip" data-placement="top" data-copied-text="{{agile_lng_translate 'misc-keys' 'clip-email-copied'}}">
      			<i class="icon-copy copy_email_clipboard_icon" ></i>
      	</a>
 	</td>
@@ -20,7 +20,7 @@
         <div class="table-resp">
             <small class="edit-hover text-muted"> 
 				<i class="fa fa-clock-o m-r-xs"></i>
-		        <span>Last updated on&nbsp;</span>
+		        <span>{{agile_lng_translate 'tickets' 'last-updated-on'}}&nbsp;</span>
                 <time class="campaign-created-time b-b-dotted" datetime="{{epochToHumanDate "" updated_time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM" updated_time}}</time>
             </small>
         </div>

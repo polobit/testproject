@@ -16,10 +16,10 @@ var Widget_Model_Events = Base_Model_View.extend({
       var widgetType = $('#widget-settings').attr('widget-type');
       if(widgetType == "CUSTOM"){  
         if(e){      
-          showNotyPopUp("success" , "Custom widget saved successfully.", "bottomRight");
+          showNotyPopUp("success" , "{{agile_lng_translate 'widgets' 'saved-success'}}", "bottomRight");
           window.location.href = "#add-widget";
         }else{
-          showNotyPopUp("error" , "Widget name already in use.", "bottomRight");
+          showNotyPopUp("error" , "{{agile_lng_translate 'widgets' 'widgetname-exists'}}", "bottomRight");
         }
       }
     }
@@ -30,10 +30,41 @@ var Widget_Model_Events = Base_Model_View.extend({
    	  "click .save-agile-widget" : "saveWidgetPrefs",
    	  "click .connect_shopify" : "connectShopify",
    	  "click .revoke-widget" : "revokeWidget",
-      "change #script_type" : "scriptType",
-      "click #cancel_custom_widget" : "cancelWidget"
+      "change #script_type" : "scriptType",      
+      "click #cancel_custom_widget" : "cancelWidget",
+      "click .deleteWidget" : "deleteWidget"
 
    },
+
+  deleteWidget : function(e){
+     var ele = $(e.currentTarget);
+    // Fetch widget name from the widget on which delete is clicked
+    var widget_name = $(ele).attr('widget-name');
+    var widgetNameDisplay = $(ele).attr('widget-displayname');
+
+    // If not confirmed to delete, return
+    var displayName;
+    
+    if(widgetNameDisplay){
+      displayName = widgetNameDisplay;
+    }else{
+      displayName = widgetDisplayname[widget_name];
+      if(!displayName){
+        displayName = widget_name;
+      } 
+    }
+    
+
+    showAlertModal("Are you sure to delete " + displayName + "?", "confirm", function(){
+      delete_widget(widget_name);
+
+      if(widget_name == "Linkedin")
+        $('#Linkedin-container').hide();
+      
+      if(widget_name == "Twilio")
+        $('#Twilio-container').hide();
+    },undefined, "Delete Widget");
+  },
 
   scriptType: function(){
       var script_type = $('#script_type').val();
@@ -95,13 +126,13 @@ var Widget_Model_Events = Base_Model_View.extend({
 		if($(ele).attr("disabled"))
 			  return;
 
-		$(ele).attr("disabled", "disabled").val("Saving...");
+		$(ele).attr("disabled", "disabled").val("{{agile_lng_translate 'others' 'saving'}}");
 
       if(widgetName != "TwilioIO"){
          // Saves the preferences into widget with name
          save_widget_prefs(widgetName, JSON.stringify(prefs), function(data){
             console.log(data);
-            $(ele).removeAttr("disabled").val("Save");
+            $(ele).removeAttr("disabled").val("{{agile_lng_translate 'modals' 'save'}}");
          });
       }else{
          createAppSid(prefs, function(data){
@@ -111,7 +142,7 @@ var Widget_Model_Events = Base_Model_View.extend({
                // Saves the preferences into widget with name
                save_widget_prefs(widgetName, JSON.stringify(prefs), function(data){
                   console.log(data);
-                  $(ele).removeAttr("disabled").val("Save");
+                  $(ele).removeAttr("disabled").val("{{agile_lng_translate 'modals' 'save'}}");
                });
          });
       }

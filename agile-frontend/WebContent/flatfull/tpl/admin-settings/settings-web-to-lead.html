@@ -12,12 +12,12 @@
 
 		 {{else}}
 
-		 <li><a href="#web-to-lead-tab" data-toggle="tab"  class="b-l-none">Web to Lead</a></li>
-         <li><a href="#e-commerce-tab" data-toggle="tab" >Ecommerce</a></li>
-		 <li><a href="#cms-tab" data-toggle="tab" >CMS</a></li>
-		 <li><a href="#email-gateways-tab" data-toggle="tab" >Email</a></li>
-		 <li><a href="#sms-gateways-tab" data-toggle="tab" >SMS</a></li>
-		 <li><a href="#web-app-integrations-tab" data-toggle="tab" >Misc</a></li>
+		 <li><a href="#web-to-lead-tab" data-toggle="tab"  class="b-l-none">{{agile_lng_translate 'admin-settings-integrations' 'web-to-lead'}}</a></li>
+         <li><a href="#e-commerce-tab" data-toggle="tab" >{{agile_lng_translate 'campaigns' 'ecommerce'}}</a></li>
+		 <li><a href="#cms-tab" data-toggle="tab" >{{agile_lng_translate 'admin-settings-integrations' 'cms'}}</a></li>
+		 <li><a href="#email-gateways-tab" data-toggle="tab" >{{agile_lng_translate 'other' 'email'}}</a></li>
+		 <li><a href="#sms-gateways-tab" data-toggle="tab" >{{agile_lng_translate 'admin-settings-integrations' 'sms'}}</a></li>
+		 <li><a href="#web-app-integrations-tab" data-toggle="tab" >{{agile_lng_translate 'admin-settings-integrations' 'misc'}}</a></li>
 		 {{/is_mobile}}
 
        </ul>
@@ -31,15 +31,16 @@
 					<center>
 					<span style="font-size: 24px; height: 47px; text-align:center;vertical-align: middle;">
 					<span style="margin-top:6px; display:inline-block; padding-bottom:7px;">
-					<img  src="{{getS3ImagePath 'img/crm-plugins/form-bulider-logo-small.png'}}" class="img-responsive inline-block" style=" margin-top:-5px; width:25px; height:25px;">Form Builder</span>
+					<img  src="{{getS3ImagePath 'img/crm-plugins/form-bulider-logo-small.png'}}" class="img-responsive inline-block" style=" margin-top:-5px; width:25px; height:25px;">
+					{{agile_lng_translate 'admin-settings-integrations' 'form-builder'}}</span>
 					</span>
 					</center>
 				</div>
 				<div class="panel-body">
-					<div class="text-flow-ellipsis line-clamp line-clamp-3 widget-text m-b" style="height:60px"  rel="tooltip" title="Build your form using our form builder.">
-						Build your form using our form builder.
+					<div class="text-flow-ellipsis line-clamp line-clamp-3 widget-text m-b" style="height:60px"  rel="tooltip" title="{{agile_lng_translate 'admin-settings-integrations' 'form-builder-content'}}">
+						{{agile_lng_translate 'admin-settings-integrations' 'form-builder-content'}}
 					</div>
-					<div class="text-center"><a href="#forms"  class="block text-info">Launch Form Builder</a></div>
+					<div class="text-center"><a href="#forms"  class="block text-info">{{agile_lng_translate 'admin-settings-integrations' 'launch-form-builder'}}</a></div>
 				</div>
 				</div>
 			</div>
@@ -55,10 +56,10 @@
 					</center>
 				</div>
 				<div class="panel-body">
-	    			<div class="text-flow-ellipsis line-clamp line-clamp-3 widget-text m-b" style="height:60px" rel="tooltip" title="Use our JS API to push data into Agile from your web forms.">
-						Use our JS API to push data into Agile from your web forms.
+	    			<div class="text-flow-ellipsis line-clamp line-clamp-3 widget-text m-b" style="height:60px" rel="tooltip" title="{{agile_lng_translate 'admin-settings-integrations' 'js-api-content'}}">
+						{{agile_lng_translate 'admin-settings-integrations' 'js-api-content'}}
 					</div>
-					<div class="text-center"><a href="https://github.com/agilecrm/javascript-api" target="_blank" class="m-t-md block text-info">Learn More</a></div>
+					<div class="text-center"><a href="https://github.com/agilecrm/javascript-api" target="_blank" class="m-t-md block text-info">{{agile_lng_translate 'admin-settings-integrations' 'learn-more'}}</a></div>
 				</div>
 				</div>
 			</div>
@@ -72,10 +73,10 @@
 	                  </a>
 	             </div>
 	             <div class="panel-body">
-	    			<div class="text-flow-ellipsis line-clamp line-clamp-3 widget-text m-b" style="height:60px" rel="tooltip" title="Push form submissions in Wufoo as a contact in Agile.">
-						Push form submissions in Wufoo as a contact in Agile.
+	    			<div class="text-flow-ellipsis line-clamp line-clamp-3 widget-text m-b" style="height:60px" rel="tooltip" title="{{agile_lng_translate 'admin-settings-integrations' 'wufoo-content'}}">
+						{{agile_lng_translate 'admin-settings-integrations' 'wufoo-content'}}
 					</div>
-					<div class="text-center"><a href="https://www.agilecrm.com/wufoo.html" target="_blank" class="block text-info" style="margin-bottom:2px">Learn More</a></div>
+					<div class="text-center"><a href="https://www.agilecrm.com/wufoo.html" target="_blank" class="block text-info" style="margin-bottom:2px">{{agile_lng_translate 'admin-settings-integrations' 'learn-more'}}</a></div>
 				</div>
 				</div>
 			</div>
@@ -92,10 +93,10 @@
 					</a>
 				</div>
 				<div class="panel-body">
-					<div class="text-flow-ellipsis line-clamp line-clamp-3 widget-text m-b" style="height:60px" rel="tooltip" title="Push Unbounce landing page form data as a contact in Agile.">
-						Push Unbounce landing page form data as a contact in Agile.
+					<div class="text-flow-ellipsis line-clamp line-clamp-3 widget-text m-b" style="height:60px" rel="tooltip" title="{{agile_lng_translate 'admin-settings-integrations' 'unbounce-content'}}">
+						{{agile_lng_translate 'admin-settings-integrations' 'unbounce-content'}}
 					</div>
-					<div class="text-center"><a href="https://www.agilecrm.com/unbounce.html" target="_blank" class="block text-info">Learn More</a></div>
+					<div class="text-center"><a href="https://www.agilecrm.com/unbounce.html" target="_blank" class="block text-info">{{agile_lng_translate 'admin-settings-integrations' 'learn-more'}}</a></div>
 				</div>
 				</div>
 			</div>
@@ -112,9 +113,9 @@
 					</div>
 					</div>
 					<div class="panel-body">
-					<div class="text-flow-ellipsis line-clamp line-clamp-3 widget-text m-b" style="height:60px"  rel="tooltip" title="Advanced forms plugin for Wordpress.">
-						Advanced forms plugin for Wordpress.
-					</div><div class="text-center"><a href="https://www.agilecrm.com/gravity-forms" target="_blank" class="text-info">Learn More</a></div>
+					<div class="text-flow-ellipsis line-clamp line-clamp-3 widget-text m-b" style="height:60px"  rel="tooltip" title="{{agile_lng_translate 'admin-settings-integrations' 'wordpress-content'}}">
+						{{agile_lng_translate 'admin-settings-integrations' 'wordpress-content'}}
+					</div><div class="text-center"><a href="https://www.agilecrm.com/gravity-forms" target="_blank" class="text-info">{{agile_lng_translate 'admin-settings-integrations' 'learn-more'}}</a></div>
 				</div>
 				</div>
 			</div>
@@ -133,8 +134,8 @@
 					</div>
 					<div class="panel-body">
 					<div class="text-flow-ellipsis line-clamp line-clamp-3 widget-text m-b" style="height:60px"  rel="tooltip" title="Capture leads directly from your Facebook page.">
-						Capture leads directly from your Facebook page.
-					</div><div class="text-center"><a href="#facebook-integration" class="text-info">Manage Pages</a></div>
+						{{agile_lng_translate 'admin-settings-integrations' 'capture-leads-desc'}}
+					</div><div class="text-center"><a href="#facebook-integration" class="text-info">{{agile_lng_translate 'admin-settings-integrations' 'manage-pages'}}</a></div>
 				</div>
 				</div>
 			</div>
@@ -153,11 +154,11 @@
 				</a>
 			</div>
 			<div class="panel-body">
-				
-				<div class="text-flow-ellipsis line-clamp line-clamp-4 widget-text m-b" style="height:80px" rel="tooltip" title="Using the Shopify integration, you can add web rules, sync data, add event triggers and do much more to increase conversions dramatically.">
-					Using the Shopify integration, you can add web rules, sync data, add event triggers and do much more to increase conversions dramatically.
+			
+				<div class="text-flow-ellipsis line-clamp line-clamp-4 widget-text m-b" style="height:80px" rel="tooltip" title="{{agile_lng_translate 'widgets' 'shopify-desc'}}">
+					{{agile_lng_translate 'widgets' 'shopify-desc'}}
 
-				</div><div class="text-center"><a href="https://www.agilecrm.com/shopify-integration" target="_blank" class="text-info">Learn More</a></div>
+				</div><div class="text-center"><a href="https://www.agilecrm.com/shopify-integration" target="_blank" class="text-info">{{agile_lng_translate 'admin-settings-integrations' 'learn-more'}}</a></div>
 			</div>
 			</div>
 		</div>
@@ -175,11 +176,10 @@
 				</div>
 			</div>
 			<div class="panel-body">
-			
-				<div rel="tooltip" class="text-flow-ellipsis line-clamp line-clamp-4 widget-text m-b" style="height:80px" title="Agile's Magento plugin offers a proven all-in-one solution for building your customer base, increasing sales, and taking your business to the next level.">
-					Agile's Magento plugin offers a proven all-in-one solution for building your customer base, increasing sales, and taking your business to the next level.
+				<div rel="tooltip" class="text-flow-ellipsis line-clamp line-clamp-4 widget-text m-b" style="height:80px" title="{{agile_lng_translate 'admin-settings-integrations' 'magento-content'}}">
+					{{agile_lng_translate 'admin-settings-integrations' 'magento-content'}}
 
-				</div><div class="text-center"><a href="https://www.agilecrm.com/magento-crm" target="_blank" class="text-info">Learn More</a></div>
+				</div><div class="text-center"><a href="https://www.agilecrm.com/magento-crm" target="_blank" class="text-info">{{agile_lng_translate 'admin-settings-integrations' 'learn-more'}}</a></div>
 			</div>
 			</div>
 		</div>
@@ -196,11 +196,12 @@
 					</div>
                  </div>  
 				<div class="panel-body">
-				<div class="text-flow-ellipsis line-clamp line-clamp-4 widget-text m-b" style="height:80px" rel="tooltip" title="CRM integration helps to scale up with the right blend of customer management, smart campaigns, and personalized web engagement.">
-					CRM integration helps to scale up with the right blend of customer management, smart campaigns, and personalized web engagement.
+				<div class="text-flow-ellipsis line-clamp line-clamp-4 widget-text m-b" style="height:80px" rel="tooltip" title="{{agile_lng_translate 'admin-settings-integrations' 'woocommerce-content'}}">
+					{{agile_lng_translate 'admin-settings-integrations' 'woocommerce-content'}}
 				</div>
                  
-				<div class="text-center"><a href="https://www.agilecrm.com/woocommerce-crm" target="_blank" class="text-info">Learn More</a></div>
+				<div class="text-center"><a href="https://www.agilecrm.com/woocommerce-crm" target="_blank" class="text-info">{{agile_lng_translate 'admin-settings-integrations' 'learn-more'}}
+				</a></div>
 			</div>
 		</div>
 		</div>
@@ -217,9 +218,9 @@
                 </center>
 				</div>
 				<div class="panel-body">
-				<div class="m-b" rel="tooltip" title="The WordPress plugin helps integrate your WordPress website or blog with Agile CRM to engage your visitors with web-to-lead technology.">
-					The WordPress plugin helps integrate your WordPress website or blog with Agile CRM to engage your visitors with web-to-lead technology.
-				</div><div class="text-center"><a href="https://www.agilecrm.com/wordpress-integration" target="_blank" class="text-info">Learn More</a></div>
+				<div class="m-b" rel="tooltip" title="{{agile_lng_translate 'admin-settings-integrations' 'cms-wordPress-content'}}">
+					{{agile_lng_translate 'admin-settings-integrations' 'cms-wordPress-content'}}
+				</div><div class="text-center"><a href="https://www.agilecrm.com/wordpress-integration" target="_blank" class="text-info">{{agile_lng_translate 'admin-settings-integrations' 'learn-more'}}</a></div>
 			</div>
 			</div>
 		</div>
@@ -237,9 +238,9 @@
                 </center>
             </div>
             <div class="panel-body">
-				<div class="text-flow-ellipsis line-clamp line-clamp-4 widget-text" style="height:85px" rel="tooltip" title="Zapier is the easiest way to connect hundreds of SaaS apps you use to easily move your data and automate tedious tasks.">
-					Zapier is the easiest way to connect hundreds of SaaS apps you use to easily move your data and automate tedious tasks.
-				</div><div class="text-center"><a href="https://zapier.com/zapbook/agile-crm/" target="_blank" class="text-info">Try Zapier App</a></div>
+				<div class="text-flow-ellipsis line-clamp line-clamp-4 widget-text" style="height:85px" rel="tooltip" title="{{agile_lng_translate 'admin-settings-integrations' 'zapier-content'}}">
+					{{agile_lng_translate 'admin-settings-integrations' 'zapier-content'}}
+				</div><div class="text-center"><a href="https://zapier.com/zapbook/agile-crm/" target="_blank" class="text-info">{{agile_lng_translate 'admin-settings-integrations' 'try-zapier-app'}}</a></div>
 			</div>
 		</div>
 		</div>
@@ -260,28 +261,29 @@
 					</div>
 					</div>
 					<div class="panel-body">
-					<div class="text-flow-ellipsis line-clamp line-clamp-4 widget-text m-b" style="height:78px" rel="tooltip" title="Send Emails, view stats, minimize costs and scale up your deliverability with Mandrill integration. High value, high speed and enhanced deliverability.">
-					Send Emails, view stats, minimize costs and scale up your deliverability with Mandrill integration. High value, high speed and enhanced deliverability.
+					<div class="text-flow-ellipsis line-clamp line-clamp-4 widget-text m-b" style="height:78px" rel="tooltip" title="{{agile_lng_translate 'admin-settings-integrations' 'mandrill-content'}}">
+					{{agile_lng_translate 'admin-settings-integrations' 'mandrill-content'}}
 					</div>
 					<div class="text-center">
 						{{#if this.length}}	
 							{{#gateway_exists "MANDRILL" this}}
-								<a href="#" class="btn btn-sm btn-danger " id="email-gateway-delete">Disable</a>
-								<a href="#email-gateways/mandrill" class="btn btn-sm btn-default">Settings</a>
+								<a href="#" class="btn btn-sm btn-danger " id="email-gateway-delete">{{agile_lng_translate 'prefs-email' 'disable'}}</a>
+								<a href="#email-gateways/mandrill" class="btn btn-sm btn-default">
+								{{agile_lng_translate 'preferences' 'settings'}}</a>
 							{{else}}
 								 {{#isAllowedInCurrentPlan "is_email_gateway_allowed"}}
 					                <div>
-                      					<a href="#email-gateways/mandrill" class="btn btn-sm btn-default">Enable</a> 
+                      					<a href="#email-gateways/mandrill" class="btn btn-sm btn-default">{{agile_lng_translate 'prefs-email' 'enable'}}</a> 
                 					</div>
            						 {{else}}
             						<div>
             						<div style="display:none;width: 65%;left: 18%;z-index: 9;border: 1px solid #E2E29C;background-color: #F7F7D0;" class="mandrill-upgrade fade in p-xs m-b-xs pos-abs">
-        									Please  
-        									<strong><a href="#subscribe-plan" style="color:#337ab7;" class='c-p'>upgrade</a></strong> to Enterprise plan
+        									{{agile_lng_translate 'contact-details' 'please'}}  
+        									<strong><a href="#subscribe-plan" style="color:#337ab7;" class='c-p'>{{agile_lng_translate 'widgets' 'upgrade'}}</a></strong> {{agile_lng_translate 'widgets' 'to-enterprise-plan'}}
         							</div>
 
         							<div class="clearfix"></div>
-            						<div class="btn btn-sm btn-default _upgrade" id="mandrill-upgrade">Enable</div>
+            						<div class="btn btn-sm btn-default _upgrade" id="mandrill-upgrade">{{agile_lng_translate 'prefs-email' 'enable'}}</div>
                  					<!--<div style="display:inline;float:right;display:none;" class="text-right mandrill-upgrade" ><p><i>{{toSafeString message}}</i><p>
 	                 						</div>-->
 	                 				</div>
@@ -290,17 +292,17 @@
 						{{else}}
 							 {{#isAllowedInCurrentPlan "is_email_gateway_allowed"}}
 					                <div>
-                      					<a href="#email-gateways/mandrill" class="btn btn-sm btn-default">Enable</a> 
+                      					<a href="#email-gateways/mandrill" class="btn btn-sm btn-default">{{agile_lng_translate 'prefs-email' 'enable'}}</a> 
                 					</div>
            						 {{else}}
             						<div>
             						<div style="display:none;width: 65%;left: 18%;z-index: 9;border: 1px solid #E2E29C;background-color: #F7F7D0;" class="mandrill-upgrade fade in p-xs m-b-xs pos-abs">
-        								Please  
-        									<strong><a href="#subscribe-plan" style="color:#337ab7;" class='c-p'>upgrade</a></strong> to Enterprise plan
+        								{{agile_lng_translate 'contact-details' 'please'}}  
+        									<strong><a href="#subscribe-plan" style="color:#337ab7;" class='c-p'>{{agile_lng_translate 'widgets' 'upgrade'}}</a></strong> {{agile_lng_translate 'widgets' 'to-enterprise-plan'}}
         							</div>
 
         							<div class="clearfix"></div>
-            						<div class="btn btn-sm btn-default _upgrade" id="mandrill-upgrade">Enable</div>
+            						<div class="btn btn-sm btn-default _upgrade" id="mandrill-upgrade">{{agile_lng_translate 'prefs-email' 'enable'}}</div>
                  					<!--<div style="display:inline;float:right;display:none;" class="text-right mandrill-upgrade" ><p><i>{{toSafeString message}}</i><p>
 	                 						</div>-->
 	                 				</div>
@@ -323,28 +325,28 @@
 				</div>
 				</div>
 				<div class="panel-body">
-				<div class="text-flow-ellipsis line-clamp line-clamp-4 widget-text m-b" style="height:75px" rel="tooltip" title="Send Emails, score & tag contacts, conduct split testing and design and send autoresponders from Agile CRM using SendGrid.">
-				Send Emails, score & tag contacts, conduct split testing and design and send autoresponders from Agile CRM using SendGrid.
+				<div class="text-flow-ellipsis line-clamp line-clamp-4 widget-text m-b" style="height:75px" rel="tooltip" title="{{agile_lng_translate 'admin-settings-integrations' 'sendgrid-content'}}">
+				{{agile_lng_translate 'admin-settings-integrations' 'sendgrid-content'}}
 				</div>
 				<div class="text-center"> 
 					{{#if this.length}}	
 						{{#gateway_exists "SEND_GRID" this}}
-							<a href="#integrations" class="btn btn-sm btn-danger " id="email-gateway-delete"  data={{id}} >Disable</a>
-							<a href="#email-gateways/sendgrid" class="btn btn-sm btn-default">Settings</a>
+							<a href="#integrations" class="btn btn-sm btn-danger " id="email-gateway-delete"  data={{id}} >{{agile_lng_translate 'prefs-email' 'disable'}}</a>
+							<a href="#email-gateways/sendgrid" class="btn btn-sm btn-default">{{agile_lng_translate 'preferences' 'settings'}}</a>
 						{{else}}
 							 {{#isAllowedInCurrentPlan "is_email_gateway_allowed"}}
 					         	<div>
-                      				<a href="#email-gateways/sendgrid" class="btn btn-sm btn-default">Enable</a>
+                      				<a href="#email-gateways/sendgrid" class="btn btn-sm btn-default">{{agile_lng_translate 'prefs-email' 'enable'}}</a>
                 			 	</div>
            					 {{else}}
             					<div>
             						<div style="display:none;width: 65%;left: 18%;z-index: 9;border: 1px solid #E2E29C;background-color: #F7F7D0;" class="sendgrid-upgrade fade in p-xs m-b-xs pos-abs">
-        									Please  
-        									<strong><a href="#subscribe-plan" style="color:#337ab7;" class='c-p'>upgrade</a></strong> to Enterprise plan
+        									{{agile_lng_translate 'contact-details' 'please'}}  
+        									<strong><a href="#subscribe-plan" style="color:#337ab7;" class='c-p'>{{agile_lng_translate 'widgets' 'upgrade'}}</a></strong> {{agile_lng_translate 'widgets' 'to-enterprise-plan'}}
         							</div>
 
         							<div class="clearfix"></div>
-            						<div class="btn btn-sm btn-default _upgrade" id="sendgrid-upgrade">Enable</div>
+            						<div class="btn btn-sm btn-default _upgrade" id="sendgrid-upgrade">{{agile_lng_translate 'prefs-email' 'enable'}}</div>
                  					<!--<div style="display:inline;float:right;display:none;" class="text-right sendgrid-upgrade" calc(100% - 100px);"><i>{{toSafeString message}}</i>
 	                 				</div>-->
 	                 			</div>
@@ -353,17 +355,17 @@
 					{{else}}
 						{{#isAllowedInCurrentPlan "is_email_gateway_allowed"}}
 					    	<div>
-                      			<a href="#email-gateways/sendgrid" class="btn btn-sm btn-default">Enable</a>
+                      			<a href="#email-gateways/sendgrid" class="btn btn-sm btn-default">{{agile_lng_translate 'prefs-email' 'enable'}}</a>
                 			</div>
            				{{else}}
             				<div>
             				    <div style="display:none;width: 65%;left: 18%;z-index: 9;border: 1px solid #E2E29C;background-color: #F7F7D0;" class="sendgrid-upgrade fade in p-xs m-b-xs pos-abs">
-        									Please  
-        									<strong><a href="#subscribe-plan" style="color:#337ab7;" class='c-p'>upgrade</a></strong> to Enterprise plan
+        									{{agile_lng_translate 'contact-details' 'please'}}  
+        									<strong><a href="#subscribe-plan" style="color:#337ab7;" class='c-p'>{{agile_lng_translate 'widgets' 'upgrade'}}</a></strong> {{agile_lng_translate 'widgets' 'to-enterprise-plan'}}
         							</div>
 
         						<div class="clearfix"></div>
-            					<div class="btn btn-sm btn-default _upgrade" id="sendgrid-upgrade">Enable</div>
+            					<div class="btn btn-sm btn-default _upgrade" id="sendgrid-upgrade">{{agile_lng_translate 'prefs-email' 'enable'}}</div>
                  				<!--<div style="display:inline;float:right;display:none;width: calc(100% - 100px);" class="text-right sendgrid-upgrade"><i>{{toSafeString message}}</i>
 	                 			</div>-->
 	                 		</div>
@@ -385,28 +387,28 @@
 				</div>
 				</div>
 				<div class="panel-body">
-				<div class="text-flow-ellipsis line-clamp line-clamp-4 widget-text m-b" style="height:75px" rel="tooltip" title="Send automated Emails to your customers via the easy and cost-effective Amazon Simple Email Service (SES) gateway integration.">
-				Send automated Emails to your customers via the easy and cost-effective Amazon Simple Email Service (SES) gateway integration.
+				<div class="text-flow-ellipsis line-clamp line-clamp-4 widget-text m-b" style="height:75px" rel="tooltip" title="{{agile_lng_translate 'admin-settings-integrations' 'amazon-content'}}">
+				{{agile_lng_translate 'admin-settings-integrations' 'amazon-content'}}
 				</div>
 				<div class="text-center"> 
 					{{#if this.length}}	
 						{{#gateway_exists "SES" this}}
-							<a href="#integrations" class="btn btn-sm btn-danger " id="email-gateway-delete"  data={{id}} >Disable</a>
-							<a href="#email-gateways/ses" class="btn btn-sm btn-default">Settings</a>
+							<a href="#integrations" class="btn btn-sm btn-danger " id="email-gateway-delete"  data={{id}} >{{agile_lng_translate 'web-rules' 'disable'}}</a>
+							<a href="#email-gateways/ses" class="btn btn-sm btn-default">{{agile_lng_translate 'preferences' 'settings'}}</a>
 						{{else}}
 							 {{#isAllowedInCurrentPlan "is_email_gateway_allowed"}}
 					         	<div>
-                      				<a href="#email-gateways/ses" class="btn btn-sm btn-default">Enable</a>
+                      				<a href="#email-gateways/ses" class="btn btn-sm btn-default">{{agile_lng_translate 'prefs-email' 'enable'}}</a>
                 			 	</div>
            					 {{else}}
             					<div>
             						<div style="display:none;width: 65%;left: 18%;z-index: 9;border: 1px solid #E2E29C;background-color: #F7F7D0;" class="ses-upgrade fade in p-xs m-b-xs pos-abs">
-        									Please  
-        									<strong><a href="#subscribe-plan" style="color:#337ab7;" class='c-p'>upgrade</a></strong> to Enterprise plan
+        									{{agile_lng_translate 'contact-details' 'please'}}  
+        									<strong><a href="#subscribe-plan" style="color:#337ab7;" class='c-p'>{{agile_lng_translate 'widgets' 'upgrade'}}</a></strong> {{agile_lng_translate 'widgets' 'to-enterprise-plan'}}
         							</div>
 
         							<div class="clearfix"></div>
-            						<div class="btn btn-sm btn-default _upgrade" id="ses-upgrade">Enable</div>
+            						<div class="btn btn-sm btn-default _upgrade" id="ses-upgrade">{{agile_lng_translate 'prefs-email' 'enable'}}</div>
                  					<!--<div style="display:inline;float:right;display:none;" class="text-right ses-upgrade" calc(100% - 100px);"><i>{{toSafeString message}}</i></div>-->
 	                 			</div>
             				 {{/isAllowedInCurrentPlan}}
@@ -414,16 +416,16 @@
 					{{else}}
 						{{#isAllowedInCurrentPlan "is_email_gateway_allowed"}}
 					    	<div>
-                      			<a href="#email-gateways/ses" class="btn btn-sm btn-default">Enable</a>
+                      			<a href="#email-gateways/ses" class="btn btn-sm btn-default">{{agile_lng_translate 'prefs-email' 'enable'}}</a>
                 			</div>
            				{{else}}
             				<div>
             					<div style="display:none;width: 65%;left: 18%;z-index: 9;border: 1px solid #E2E29C;background-color: #F7F7D0;" class="ses-upgrade fade in p-xs m-b-xs pos-abs">
-        									Please  
-        									<strong><a href="#subscribe-plan" style="color:#337ab7;" class='c-p'>upgrade</a></strong> to Enterprise plan
+        									{{agile_lng_translate 'contact-details' 'please'}}  
+        									<strong><a href="#subscribe-plan" style="color:#337ab7;" class='c-p'>{{agile_lng_translate 'widgets' 'upgrade'}}</a></strong> {{agile_lng_translate 'widgets' 'to-enterprise-plan'}}
         						</div>
         						<div class="clearfix"></div>
-        						<div class="btn btn-sm btn-default _upgrade" id="ses-upgrade">Enable</div>
+        						<div class="btn btn-sm btn-default _upgrade" id="ses-upgrade">{{agile_lng_translate 'prefs-email' 'enable'}}</div>
                  				<!--<div style="display:inline;float:right;display:none;width: calc(100% - 100px);" class="text-right ses-upgrade"><i>{{toSafeString message}}</i>
 	                 			</div> -->
 	                 		</div>
@@ -447,28 +449,32 @@
 					</div>
 					</div>
 					<div class="panel-body">
-					<div class="text-flow-ellipsis line-clamp line-clamp-4 widget-text m-b" style="height:75px" rel="tooltip" title="Mailgun is a transactional email product by MailChimp.">
-					Send your emails via your Mailgun account. Mailgun is a scalable and affordable email infrastructure service.
+					<div class="text-flow-ellipsis line-clamp line-clamp-4 widget-text m-b" style="height:75px" rel="tooltip" title="{{agile_lng_translate 'other' 'mail-gun-is-transactional-product-by-mailchimp'}}">
+					
+					{{agile_lng_translate 'other' 'mail-gun-description'}}
 					</div>
 					<div class="text-center">
 						{{#if this.length}}	
 							{{#gateway_exists "MAILGUN" this}}
-								<a href="#" class="btn btn-sm btn-danger " id="email-gateway-delete">Disable</a>
-								<a href="#email-gateways/mailgun" class="btn btn-sm btn-default">Settings</a>
+								<a href="#" class="btn btn-sm btn-danger " id="email-gateway-delete">
+								{{agile_lng_translate 'web-rules' 'disable'}}</a>
+								<a href="#email-gateways/mailgun" class="btn btn-sm btn-default">
+								{{agile_lng_translate 'preferences' 'settings'}}</a>
 							{{else}}
 								 {{#isAllowedInCurrentPlan "is_email_gateway_allowed"}}
 					                <div>
-                      					<a href="#email-gateways/mailgun" class="btn btn-sm btn-default">Enable</a> 
+                      					<a href="#email-gateways/mailgun" class="btn btn-sm btn-default">
+                      					{{agile_lng_translate 'prefs-email' 'enable'}}</a> 
                 					</div>
            						 {{else}}
             						<div>
             						<div style="display:none;width: 65%;left: 18%;z-index: 9;border: 1px solid #E2E29C;background-color: #F7F7D0;" class="mailgun-upgrade fade in p-xs m-b-xs pos-abs">
         									Please  
-        									<strong><a href="#subscribe-plan" style="color:#337ab7;" class='c-p'>upgrade</a></strong> to Enterprise plan
+        									<strong><a href="#subscribe-plan" style="color:#337ab7;" class='c-p'>{{agile_lng_translate 'portlets' 'upgrade'}}</a></strong> {{agile_lng_translate 'widgets' 'to-enterprise-plan'}}
         							</div>
 
         							<div class="clearfix"></div>
-            						<div class="btn btn-sm btn-default _upgrade" id="mailgun-upgrade">Enable</div>
+            						<div class="btn btn-sm btn-default _upgrade" id="mailgun-upgrade">{{agile_lng_translate 'prefs-email' 'enable'}}</div>
                  					<!--<div style="display:inline;float:right;display:none;" class="text-right mandrill-upgrade" ><p><i>{{toSafeString message}}</i><p>
 	                 						</div>-->
 	                 				</div>
@@ -477,17 +483,17 @@
 						{{else}}
 							 {{#isAllowedInCurrentPlan "is_email_gateway_allowed"}}
 					                <div>
-                      					<a href="#email-gateways/mailgun" class="btn btn-sm btn-default">Enable</a> 
+                      					<a href="#email-gateways/mailgun" class="btn btn-sm btn-default">{{agile_lng_translate 'prefs-email' 'enable'}}</a> 
                 					</div>
            						 {{else}}
             						<div>
             						<div style="display:none;width: 65%;left: 18%;z-index: 9;border: 1px solid #E2E29C;background-color: #F7F7D0;" class="mailgun-upgrade fade in p-xs m-b-xs pos-abs">
         								Please  
-        									<strong><a href="#subscribe-plan" style="color:#337ab7;" class='c-p'>upgrade</a></strong> to Enterprise plan
+        									<strong><a href="#subscribe-plan" style="color:#337ab7;" class='c-p'>{{agile_lng_translate 'portlets' 'upgrade'}}</a></strong> {{agile_lng_translate 'widgets' 'to-enterprise-plan'}}
         							</div>
 
         							<div class="clearfix"></div>
-            						<div class="btn btn-sm btn-default _upgrade" id="mailgun-upgrade">Enable</div>
+            						<div class="btn btn-sm btn-default _upgrade" id="mailgun-upgrade">{{agile_lng_translate 'prefs-email' 'enable'}}</div>
                  					<!--<div style="display:inline;float:right;display:none;" class="text-right mandrill-upgrade" ><p><i>{{toSafeString message}}</i><p>
 	                 						</div>-->
 	                 				</div>
@@ -515,27 +521,27 @@
 				</div>
 			</div>
 			<div class="panel-body">
-				<div rel="tooltip" title="With Agile's Twilio integration, You can run personalised mobile campaigns and also add voice calling into your web interface." class="text-flow-ellipsis line-clamp line-clamp-4 widget-text m-b" style="height:75px">
-				With Agile's Twilio integration, You can run personalised mobile campaigns and also add voice calling into your web interface.
+				<div rel="tooltip" title="{{agile_lng_translate 'admin-settings-integrations' 'twilio-content'}}" class="text-flow-ellipsis line-clamp line-clamp-4 widget-text m-b" style="height:75px">
+				{{agile_lng_translate 'admin-settings-integrations' 'twilio-content'}}
 				</div>
 				<div class="text-center"> 
 					{{#if this.length}}	
 						{{#gateway_exists "TWILIO" this}}
-							<a href="#integrations" class="btn btn-sm btn-danger " id="sms-gateway-delete"  data={{id}} >Disable</a>
-								<a href="#sms-gateways/twilio" class="btn btn-sm btn-default">Settings</a>
+							<a href="#integrations" class="btn btn-sm btn-danger " id="sms-gateway-delete"  data={{id}} >{{agile_lng_translate 'prefs-email' 'disable'}}</a>
+								<a href="#sms-gateways/twilio" class="btn btn-sm btn-default">{{agile_lng_translate 'preferences' 'settings'}}</a>
 						{{else}}
 							{{#isAllowedInCurrentPlan "is_sms_gateway_allowed"}}
 					            <div>
-                      					<a href="#sms-gateways/twilio" class="btn btn-sm btn-default">Enable</a>
+                      					<a href="#sms-gateways/twilio" class="btn btn-sm btn-default">{{agile_lng_translate 'prefs-email' 'enable'}}</a>
                 					</div>
            						 {{else}}
             						<div>
 										<div style="display:none;width: 65%;left: 18%;z-index: 9;border: 1px solid #E2E29C;background-color: #F7F7D0;" class="twilio-upgrade fade in p-xs m-b-xs pos-abs">
-											 Please  
-									      <strong><a href="#subscribe-plan" style="color:#337ab7;" class='c-p'>upgrade</a></strong> to Regular or Enterprise plan
+											 {{agile_lng_translate 'contact-details' 'please'}}  
+									      <strong><a href="#subscribe-plan" style="color:#337ab7;" class='c-p'>{{agile_lng_translate 'widgets' 'upgrade'}}</a></strong>{{agile_lng_translate 'admin-settings-integrations' 'to-regular-or-enterprise-plan'}}
 										</div>
 										<div class="clearfix"></div>
-										<div class="btn btn-sm btn-default _upgrade" id="twilio-upgrade">Enable</div>
+										<div class="btn btn-sm btn-default _upgrade" id="twilio-upgrade">{{agile_lng_translate 'prefs-email' 'enable'}}</div>
 									</div>
             				{{/isAllowedInCurrentPlan}}	
 						{{/gateway_exists}}
@@ -543,16 +549,16 @@
 			
 						{{#isAllowedInCurrentPlan "is_sms_gateway_allowed"}}
 					            <div>
-                      					<a href="#sms-gateways/twilio" class="btn btn-sm btn-default">Enable</a>
+                      					<a href="#sms-gateways/twilio" class="btn btn-sm btn-default">{{agile_lng_translate 'prefs-email' 'enable'}}</a>
                 					</div>
            						 {{else}}
             						<div>
 										<div style="display:none;width: 65%;left: 18%;z-index: 9;border: 1px solid #E2E29C;background-color: #F7F7D0;" class="twilio-upgrade fade in p-xs m-b-xs pos-abs">
-											 Please  
-									      <strong><a href="#subscribe-plan" style="color:#337ab7;" class='c-p'>upgrade</a></strong> to Regular or Enterprise plan
+											 {{agile_lng_translate 'contact-details' 'please'}}  
+									      <strong><a href="#subscribe-plan" style="color:#337ab7;" class='c-p'>{{agile_lng_translate 'widgets' 'upgrade'}}</a></strong> {{agile_lng_translate 'admin-settings-integrations' 'to-regular-or-enterprise-plan'}}
 										</div>
 										<div class="clearfix"></div>
-										<div class="btn btn-sm btn-default _upgrade" id="twilio-upgrade">Enable</div>
+										<div class="btn btn-sm btn-default _upgrade" id="twilio-upgrade">{{agile_lng_translate 'prefs-email' 'enable'}}</div>
 									</div>
             				{{/isAllowedInCurrentPlan}}
 
@@ -572,43 +578,43 @@
 				</div>
 				</div>
 				<div class="panel-body">
-				<div class="text-flow-ellipsis line-clamp line-clamp-4 widget-text m-b" style="height:80px"  rel="tooltip" title="With Agile's Plivo integration, you can now run behavior-based mobile campaigns and can text your contacts as a part of automated campaigns.">
-				With Agile's Plivo integration, you can now run behavior-based mobile campaigns and can text your contacts as a part of automated campaigns.
+				<div class="text-flow-ellipsis line-clamp line-clamp-4 widget-text m-b" style="height:80px"  rel="tooltip" title="{{agile_lng_translate 'admin-settings-integrations' 'plivo-content'}}">
+				{{agile_lng_translate 'admin-settings-integrations' 'plivo-content'}}
 				</div>
 				<div class="text-center"> 
 					{{#if this.length}}	
 						{{#gateway_exists "PLIVO" this}}
-							<a href="#integrations" class="btn btn-sm btn-danger " id="sms-gateway-delete"  data={{id}} >Disable</a>
-								<a href="#sms-gateways/plivo" class="btn btn-sm btn-default">Settings</a>
+							<a href="#integrations" class="btn btn-sm btn-danger " id="sms-gateway-delete"  data={{id}} >{{agile_lng_translate 'prefs-email' 'disable'}}</a>
+								<a href="#sms-gateways/plivo" class="btn btn-sm btn-default">{{agile_lng_translate 'preferences' 'settings'}}</a>
 						{{else}}
 							 {{#isAllowedInCurrentPlan "is_sms_gateway_allowed"}}
 					                <div>
-                      					<a href="#sms-gateways/plivo" class="btn btn-sm btn-default">Enable</a>
+                      					<a href="#sms-gateways/plivo" class="btn btn-sm btn-default">{{agile_lng_translate 'prefs-email' 'enable'}}</a>
                 					</div>
            						 {{else}}
             						<div>
 			                          <div style="display:none;width: 65%;left: 18%;z-index: 9;border: 1px solid #E2E29C;background-color: #F7F7D0;" class="plivo-upgrade fade in p-xs m-b-xs pos-abs">
-			                            Please  
-			                              <strong><a href="#subscribe-plan" style="color:#337ab7;" class='c-p'>upgrade</a></strong> to Regular or Enterprise plan
+			                            {{agile_lng_translate 'contact-details' 'please'}}  
+			                              <strong><a href="#subscribe-plan" style="color:#337ab7;" class='c-p'>{{agile_lng_translate 'widgets' 'upgrade'}}</a></strong> {{agile_lng_translate 'admin-settings-integrations' 'to-regular-or-enterprise-plan'}}
 			                          </div>
 			                          <div class="clearfix"></div>
-			            			  <div class="btn btn-sm btn-default _upgrade" id="plivo-upgrade">Enable</div>		
+			            			  <div class="btn btn-sm btn-default _upgrade" id="plivo-upgrade">{{agile_lng_translate 'prefs-email' 'enable'}}</div>		
 				                 	</div>
             				{{/isAllowedInCurrentPlan}}
 						{{/gateway_exists}}
 					{{else}}
 					 {{#isAllowedInCurrentPlan "is_sms_gateway_allowed"}}
 					            <div>
-                      					<a href="#sms-gateways/plivo" class="btn btn-sm btn-default">Enable</a>
+                      					<a href="#sms-gateways/plivo" class="btn btn-sm btn-default">{{agile_lng_translate 'prefs-email' 'enable'}}</a>
                 					</div>
            						 {{else}}
             						<div>
                           				<div style="display:none;width: 65%;left: 18%;z-index: 9;border: 1px solid #E2E29C;background-color: #F7F7D0;" class="plivo-upgrade fade in p-xs m-b-xs pos-abs">
-                            				Please  
-                              				<strong><a href="#subscribe-plan" style="color:#337ab7;" class='c-p'>upgrade</a></strong> to Regular or Enterprise plan
+                            				{{agile_lng_translate 'contact-details' 'please'}}   
+                              				<strong><a href="#subscribe-plan" style="color:#337ab7;" class='c-p'>{{agile_lng_translate 'widgets' 'upgrade'}}</a></strong> {{agile_lng_translate 'admin-settings-integrations' 'to-regular-or-enterprise-plan'}}
                           				</div>
                           				<div class="clearfix"></div>
-            						  <div class="btn btn-sm btn-default _upgrade" id="plivo-upgrade">Enable</div>		
+            						  <div class="btn btn-sm btn-default _upgrade" id="plivo-upgrade">{{agile_lng_translate 'prefs-email' 'enable'}}</div>		
 	                 				</div>
             				{{/isAllowedInCurrentPlan}}
 					{{/if}}
@@ -633,27 +639,28 @@
 	type="text/html">
 <div class="row">
 	<div class="col-md-12">
-          <h4 class="m-b-sm m-t-none h4"> Web to Lead <small></small></h3>
+          <h4 class="m-b-sm m-t-none h4"> {{agile_lng_translate 'admin-settings-integrations' 'web-to-lead'}} <small></small></h3>
 	  <div class="row">
 		<div class="col-md-4 col-sm-6 col-xs-12 text-center" >
 			<div class="panel wrapper text-center b-a" >
-			<div class="text-2x pos-rlt thumb-xl w-full">Form Builder</div>
+			<div class="text-2x pos-rlt thumb-xl w-full">{{agile_lng_translate 'admin-settings-integrations' 'form-builder'}}</div>
 				<div class="m-t"  rel="tooltip" title="Build your form using our form builder.">
-					Build your form using our form builder.
+					{{agile_lng_translate 'admin-settings-integrations' 'form-builder-content'}}
 				</div>
 <br>
 <br>
-<a href="#forms"  class="block text-info">Launch Form Builder</a>
+<a href="#forms"  class="block text-info">{{agile_lng_translate 'admin-settings-integrations' 'launch-form-builder'}}</a>
 			</div>
 		</div>
 		<div class="col-md-4 col-sm-6 col-xs-12 text-center" >
 			<div class="panel wrapper text-center b-a " >
-				<div class="text-2x thumb-xl w-full">JS API</div>
-    			<div  rel="tooltip" class="m-t" title="Use our JS API to push data into Agile from your web forms.">
-					Use our JS API to push data into Agile from your web forms.
+				<div class="text-2x thumb-xl w-full">{{agile_lng_translate 'admin-settings-integrations' 'JS-API'}}</div>
+    			<div  rel="tooltip" class="m-t" title="{{agile_lng_translate 'admin-settings-integrations' 'js-api-content'}}">
+					{{agile_lng_translate 'admin-settings-integrations' 'js-api-content'}}
 				</div>
 <br>
-<a href="https://github.com/agilecrm/javascript-api" target="_blank" class="m-t-md block text-info">Learn More</a>
+<a href="https://github.com/agilecrm/javascript-api" target="_blank" class="m-t-md block text-info">
+{{agile_lng_translate 'admin-settings-integrations' 'learn-more'}}</a>
 			</div>
 		</div>
 		<div class="col-md-4 col-sm-6 col-xs-12 text-center" >
@@ -663,12 +670,12 @@
 					<img alt="wufoo-integration" src="{{getS3ImagePath 'img/crm-plugins/wufoo.png'}}" class="m-b-md img-responsive thumb-xl">
 				</center>
                   </a>
-    			<div  rel="tooltip" title="Push form submissions in Wufoo as a contact in Agile.">
-					Push form submissions in Wufoo as a contact in Agile.
+    			<div  rel="tooltip" title="{{agile_lng_translate 'admin-settings-integrations' 'wufoo-content'}}">
+					{{agile_lng_translate 'admin-settings-integrations' 'wufoo-content'}}
 				</div>
 <br>
 <br>
-<a href="https://www.agilecrm.com/wufoo.html" target="_blank" class="block text-info" style="margin-bottom:2px">Learn More</a>
+<a href="https://www.agilecrm.com/wufoo.html" target="_blank" class="block text-info" style="margin-bottom:2px">{{agile_lng_translate 'admin-settings-integrations' 'learn-more'}}</a>
 			</div>
 		</div>
 		</div>
@@ -680,12 +687,12 @@
 					<img alt="unbounce-integration" src="{{getS3ImagePath 'img/crm-plugins/unbounce.png'}}" class="img-responsive m-b-md thumb-xl">
                  </center>
 				</a>
-				<div rel="tooltip" title="Push Unbounce landing page form data as a contact in Agile.">
-					Push Unbounce landing page form data as a contact in Agile.
+				<div rel="tooltip" title="{{agile_lng_translate 'admin-settings-integrations' 'unbounce-content'}}">
+					{{agile_lng_translate 'admin-settings-integrations' 'unbounce-content'}}
 				</div>
 <br>
 <br>
-<a href="https://www.agilecrm.com/unbounce.html" target="_blank" class="block text-info">Learn More</a>
+<a href="https://www.agilecrm.com/unbounce.html" target="_blank" class="block text-info">{{agile_lng_translate 'admin-settings-integrations' 'learn-more'}}</a>
 			</div>
 		</div>
 		<div class="col-md-4 col-sm-6 col-xs-12 text-center">
@@ -699,9 +706,9 @@
 					<div class="clearfix"></div>
 				</div>
 				<br/>
-				<div class="ellipsis-multiline m-t-sm" style="-webkit-line-clamp: 3;word-break: break-word;width: 220px !important;height: 45px !important;"  rel="tooltip" title="Advanced forms plugin for Wordpress.">
-					Advanced forms plugin for Wordpress.
-				</div><br/><a href="https://www.agilecrm.com/gravity-forms" target="_blank" class="text-info">Learn More</a>
+				<div class="ellipsis-multiline m-t-sm" style="-webkit-line-clamp: 3;word-break: break-word;width: 220px !important;height: 45px !important;"  rel="tooltip" title="{{agile_lng_translate 'admin-settings-integrations' 'wordpress-content'}}">
+					{{agile_lng_translate 'admin-settings-integrations' 'wordpress-content'}}
+				</div><br/><a href="https://www.agilecrm.com/gravity-forms" target="_blank" class="text-info">{{agile_lng_translate 'admin-settings-integrations' 'learn-more'}}</a>
 			</div>
 		</div>
 		
@@ -716,9 +723,9 @@
 					<div class="clearfix"></div>
 				</div>
 				<br/>
-				<div class="ellipsis-multiline m-t-sm" style="-webkit-line-clamp: 3;word-break: break-word;width: 220px !important;height: 45px !important;"  rel="tooltip" title="Add a form to your Facebook page and gather leads.">
-					Add a form to your Facebook page and gather leads.
-				</div><br/><a href="#fbpagetab" class="btn btn-sm btn-default">Enable</a>
+				<div class="ellipsis-multiline m-t-sm" style="-webkit-line-clamp: 3;word-break: break-word;width: 220px !important;height: 45px !important;"  rel="tooltip" title="{{agile_lng_translate 'admin-settings-integrations' 'add-a-for-to-fb-page'}}">
+					{{agile_lng_translate 'admin-settings-integrations' 'add-a-for-to-fb-page'}}
+				</div><br/><a href="#fbpagetab" class="btn btn-sm btn-default">{{agile_lng_translate 'prefs-email' 'enable'}}</a>
 			</div>
 		</div> -->
 		
@@ -728,7 +735,7 @@
 </div>
 <div class="row">
 	<div class="col-md-12">
-          <h4 class="m-b-sm"> E-commerce <small></small></h4>
+          <h4 class="m-b-sm"> {{agile_lng_translate 'campaigns' 'e-commerce'}} <small></small></h4>
 	  <div class="row">
 		<div class="col-md-4 col-sm-6 col-xs-12 text-center">
 			<div class="panel wrapper text-center b-a">
@@ -738,9 +745,9 @@
                  </center>
 				</a>
 				<br/><br/>
-				<div rel="tooltip" title="Shopify is a powerful ecommerce solution that includes everything you need to create an online store.">
-					Shopify is a powerful ecommerce solution that includes everything you need to create an online store.
-				</div><br/><br/><a href="https://www.agilecrm.com/shopify-integration" target="_blank" class="text-info">Learn More</a>
+				<div rel="tooltip" title="{{agile_lng_translate 'widgets' 'shopify-desc'}}">
+					{{agile_lng_translate 'widgets' 'shopify-desc'}}
+				</div><br/><br/><a href="https://www.agilecrm.com/shopify-integration" target="_blank" class="text-info">{{agile_lng_translate 'admin-settings-integrations' 'learn-more'}}</a>
 			</div>
 		</div>
 
@@ -757,9 +764,9 @@
 			<br>
 			
 				<br/>
-				<div rel="tooltip" title="Magento is the open-source ecommerce software and platform trusted by the world's leading brands.">
-					Magento is the open-source ecommerce software and platform trusted by the world's leading brands.
-				</div><br/><a href="https://www.agilecrm.com/magento-crm" target="_blank" class="text-info">Learn More</a>
+				<div rel="tooltip" title="{{agile_lng_translate 'admin-settings-integrations' 'magento-content'}}">
+					{{agile_lng_translate 'admin-settings-integrations' 'magento-content'}}
+				</div><br/><a href="https://www.agilecrm.com/magento-crm" target="_blank" class="text-info">{{agile_lng_translate 'admin-settings-integrations' 'learn-more'}}</a>
 			</div>
 		</div>
 		<div class="col-md-4 col-sm-6 col-xs-12 text-center">
@@ -776,11 +783,11 @@
                     
 				
 				<br><br>
-				<div rel="tooltip" title="WooCommerce is a popular and free ecommerce plugin for Wordpress.">
-					WooCommerce is a popular and free ecommerce plugin for Wordpress.
+				<div rel="tooltip" title="{{agile_lng_translate 'admin-settings-integrations' 'woocommerce-content'}}">
+					{{agile_lng_translate 'admin-settings-integrations' 'woocommerce-content'}}
 				</div><br><br>
                  
-<a href="https://www.agilecrm.com/woocommerce-crm" target="_blank" class="text-info">Learn More</a>
+<a href="https://www.agilecrm.com/woocommerce-crm" target="_blank" class="text-info">{{agile_lng_translate 'admin-settings-integrations' 'learn-more'}}</a>
 			</div>
 		</div>
 	  </div>
@@ -788,7 +795,7 @@
 </div>
 <div class="row">
 	<div class="col-md-12">
-          <h4 class="m-b-sm"> CMS <small></small></h4>
+          <h4 class="m-b-sm"> {{agile_lng_translate 'admin-settings-integrations' 'cms'}} <small></small></h4>
 	  <div class="row">
 		<div class="col-md-4 col-sm-6 col-xs-12 text-center">
 			<div class="panel wrapper text-center b-a">
@@ -797,9 +804,9 @@
               <img alt="cms-integration" src="{{getS3ImagePath 'img/crm-plugins/wordpress.png'}}" class="img-responsive thumb-xl">
                 </center>
 				<br/><br/>
-				<div  rel="tooltip" title="WordPress is a free and open source blogging tool and a content management system (CMS) based on PHP and MySQL, which runs on a web hosting service.">
-					WordPress is a free and open source blogging tool and a content management system (CMS) based on PHP and MySQL, which runs on a web hosting service.
-				</div><br/><a href="https://www.agilecrm.com/wordpress-integration" target="_blank" class="text-info">Learn More</a>
+				<div  rel="tooltip" title="{{agile_lng_translate 'admin-settings-integrations' 'cms-wordPress-content'}}">
+					{{agile_lng_translate 'admin-settings-integrations' 'cms-wordPress-content'}}
+				</div><br/><a href="https://www.agilecrm.com/wordpress-integration" target="_blank" class="text-info">{{agile_lng_translate 'admin-settings-integrations' 'learn-more'}}</a>
 			</div>
 		</div>
 	  </div>
@@ -807,7 +814,7 @@
 </div>
 <div class="row">
 	<div class="col-md-12">
-          <h4 class="m-b-sm"> Web App Integrations <small></small></h4>
+          <h4 class="m-b-sm"> {{agile_lng_translate 'admin-settings-integrations' 'web-app-integrations'}} <small></small></h4>
 	  <div class="row">
 		<div class="col-md-4 col-sm-6 col-xs-12 text-center">
 			<div class="panel wrapper text-center b-a">
@@ -816,9 +823,9 @@
                 <img alt="cms-integration" src="{{getS3ImagePath 'img/crm-plugins/zapier.png'}}" class="img-responsive thumb-xl">
                 </center>
 				<br/><br/>
-				<div rel="tooltip" title="With our Zapier integration, you can connect all your SaaS apps, choose triggers and easily move your data and automate tedious tasks.">
-					With our Zapier 
-				</div><br/><a href="https://zapier.com/zapbook/agile-crm/" target="_blank" class="text-info">Try Zapier App</a>
+				<div rel="tooltip" title="{{agile_lng_translate 'admin-settings-integrations' 'zapier-content'}}">
+					{{agile_lng_translate 'admin-settings-integrations' 'zapier-content'}}
+				</div><br/><a href="https://zapier.com/zapbook/agile-crm/" target="_blank" class="text-info">{{agile_lng_translate 'admin-settings-integrations' 'try-zapier-app'}}</a>
 			</div>
 		</div>
 	  </div>
@@ -827,7 +834,7 @@
 <!-- Email Gateways -->
 <div class="row">
 	<div class="col-md-12">
-		<h4 class="m-b-sm">Email Gateways</h4>
+		<h4 class="m-b-sm">{{agile_lng_translate 'admin-settings-integrations' 'email-gateways'}}</h4>
 		<div class="row">
 			<!-- Mandrill -->
 			<div class="col-md-4 col-sm-6 col-xs-12 text-center" id="mandrill-email-api-integration">
@@ -839,28 +846,28 @@
                         <div class="clearfix"></div>
 					</div>
 					<br>
-					<div rel="tooltip" title="Mandrill is a transactional email product by MailChimp.">
-					Send your emails via your Mandrill account. Mandrill is a scalable and affordable email infrastructure service.
+					<div rel="tooltip" title="{{agile_lng_translate 'admin-settings-integrations' 'mandrill-tooltip-content'}}">
+					{{agile_lng_translate 'admin-settings-integrations' 'mandrill-content'}}
 					</div><br/>
 					<div>
 						{{#if this.length}}	
 							{{#gateway_exists "MANDRILL" this}}
-								<a href="#" class="btn btn-sm btn-danger " id="email-gateway-delete">Disable</a>
+								<a href="#" class="btn btn-sm btn-danger " id="email-gateway-delete">{{agile_lng_translate 'prefs-email' 'disable'}}</a>
 								<a href="#email-gateways/mandrill" class="btn btn-sm btn-default">Settings</a>
 							{{else}}
 								 {{#isAllowedInCurrentPlan "is_email_gateway_allowed"}}
 					                <div>
-                      					<a href="#email-gateways/mandrill" class="btn btn-sm btn-default">Enable</a> 
+                      					<a href="#email-gateways/mandrill" class="btn btn-sm btn-default">{{agile_lng_translate 'prefs-email' 'enable'}}</a> 
                 					</div>
            						 {{else}}
             						<div>
             						<div style="display:none;width: 65%;left: 18%;z-index: 9;border: 1px solid #E2E29C;background-color: #F7F7D0;" class="mandrill-upgrade fade in p-xs m-b-xs pos-abs">
-        									Please  
-        									<strong><a href="#subscribe-plan" style="color:#337ab7;" class='c-p'>upgrade</a></strong> to Enterprise plan
+        									{{agile_lng_translate 'contact-details' 'please'}}  
+        									<strong><a href="#subscribe-plan" style="color:#337ab7;" class='c-p'>{{agile_lng_translate 'widgets' 'upgrade'}}</a></strong> {{agile_lng_translate 'widgets' 'to-enterprise-plan'}}
         							</div>
 
         							<div class="clearfix"></div>
-            						<div class="btn btn-sm btn-default _upgrade" id="mandrill-upgrade">Enable</div>
+            						<div class="btn btn-sm btn-default _upgrade" id="mandrill-upgrade">{{agile_lng_translate 'prefs-email' 'enable'}}</div>
                  					<!--<div style="display:inline;float:right;display:none;" class="text-right mandrill-upgrade" ><p><i>{{toSafeString message}}</i><p>
 	                 						</div>-->
 	                 				</div>
@@ -869,17 +876,17 @@
 						{{else}}
 							 {{#isAllowedInCurrentPlan "is_email_gateway_allowed"}}
 					                <div>
-                      					<a href="#email-gateways/mandrill" class="btn btn-sm btn-default">Enable</a> 
+                      					<a href="#email-gateways/mandrill" class="btn btn-sm btn-default">{{agile_lng_translate 'prefs-email' 'enable'}}</a> 
                 					</div>
            						 {{else}}
             						<div>
             						<div style="display:none;width: 65%;left: 18%;z-index: 9;border: 1px solid #E2E29C;background-color: #F7F7D0;" class="mandrill-upgrade fade in p-xs m-b-xs pos-abs">
-        								Please  
-        									<strong><a href="#subscribe-plan" style="color:#337ab7;" class='c-p'>upgrade</a></strong> to Enterprise plan
+        								{{agile_lng_translate 'contact-details' 'please'}}  
+        									<strong><a href="#subscribe-plan" style="color:#337ab7;" class='c-p'>{{agile_lng_translate 'widgets' 'upgrade'}}</a></strong> {{agile_lng_translate 'widgets' 'to-enterprise-plan'}}
         							</div>
 
         							<div class="clearfix"></div>
-            						<div class="btn btn-sm btn-default _upgrade" id="mandrill-upgrade">Enable</div>
+            						<div class="btn btn-sm btn-default _upgrade" id="mandrill-upgrade">{{agile_lng_translate 'prefs-email' 'enable'}}</div>
                  					<!--<div style="display:inline;float:right;display:none;" class="text-right mandrill-upgrade" ><p><i>{{toSafeString message}}</i><p>
 	                 						</div>-->
 	                 				</div>
@@ -899,28 +906,28 @@
 					<div class="clearfix"></div>
 				</div>
 				<br>
-				<div class="m-t-sm" rel="tooltip" ">
-				Send your emails via your SendGrid account. Sendgrid is a reliable platform to deliver transactional and marketing emails.
+				<div class="m-t-sm" rel="tooltip">
+				{{agile_lng_translate 'admin-settings-integrations' 'sendgrid-content'}}
 				</div><br/>
 				<div> 
 					{{#if this.length}}	
 						{{#gateway_exists "SEND_GRID" this}}
-							<a href="#integrations" class="btn btn-sm btn-danger " id="email-gateway-delete"  data={{id}} >Disable</a>
+							<a href="#integrations" class="btn btn-sm btn-danger " id="email-gateway-delete"  data={{id}} >{{agile_lng_translate 'prefs-email' 'disable'}}</a>
 							<a href="#email-gateways/sendgrid" class="btn btn-sm btn-default">Settings</a>
 						{{else}}
 							 {{#isAllowedInCurrentPlan "is_email_gateway_allowed"}}
 					         	<div>
-                      				<a href="#email-gateways/sendgrid" class="btn btn-sm btn-default">Enable</a>
+                      				<a href="#email-gateways/sendgrid" class="btn btn-sm btn-default">{{agile_lng_translate 'prefs-email' 'enable'}}</a>
                 			 	</div>
            					 {{else}}
             					<div>
             						<div style="display:none;width: 65%;left: 18%;z-index: 9;border: 1px solid #E2E29C;background-color: #F7F7D0;" class="sendgrid-upgrade fade in p-xs m-b-xs pos-abs">
-        									Please  
-        									<strong><a href="#subscribe-plan" style="color:#337ab7;" class='c-p'>upgrade</a></strong> to Enterprise plan
+        									{{agile_lng_translate 'contact-details' 'please'}}  
+        									<strong><a href="#subscribe-plan" style="color:#337ab7;" class='c-p'>{{agile_lng_translate 'widgets' 'upgrade'}}</a></strong> {{agile_lng_translate 'widgets' 'to-enterprise-plan'}}
         							</div>
 
         							<div class="clearfix"></div>
-            						<div class="btn btn-sm btn-default _upgrade" id="sendgrid-upgrade">Enable</div>
+            						<div class="btn btn-sm btn-default _upgrade" id="sendgrid-upgrade">{{agile_lng_translate 'prefs-email' 'enable'}}</div>
                  					<!--<div style="display:inline;float:right;display:none;" class="text-right sendgrid-upgrade" calc(100% - 100px);"><i>{{toSafeString message}}</i>
 	                 				</div>-->
 	                 			</div>
@@ -929,17 +936,17 @@
 					{{else}}
 						{{#isAllowedInCurrentPlan "is_email_gateway_allowed"}}
 					    	<div>
-                      			<a href="#email-gateways/sendgrid" class="btn btn-sm btn-default">Enable</a>
+                      			<a href="#email-gateways/sendgrid" class="btn btn-sm btn-default">{{agile_lng_translate 'prefs-email' 'enable'}}</a>
                 			</div>
            				{{else}}
             				<div>
             				    <div style="display:none;width: 65%;left: 18%;z-index: 9;border: 1px solid #E2E29C;background-color: #F7F7D0;" class="sendgrid-upgrade fade in p-xs m-b-xs pos-abs">
-        									Please  
-        									<strong><a href="#subscribe-plan" style="color:#337ab7;" class='c-p'>upgrade</a></strong> to Enterprise plan
+        									{{agile_lng_translate 'contact-details' 'please'}}  
+        									<strong><a href="#subscribe-plan" style="color:#337ab7;" class='c-p'>{{agile_lng_translate 'widgets' 'upgrade'}}</a></strong>{{agile_lng_translate 'widgets' 'to-enterprise-plan'}}
         							</div>
 
         						<div class="clearfix"></div>
-            					<div class="btn btn-sm btn-default _upgrade" id="sendgrid-upgrade">Enable</div>
+            					<div class="btn btn-sm btn-default _upgrade" id="sendgrid-upgrade">{{agile_lng_translate 'prefs-email' 'enable'}}</div>
                  				<!--<div style="display:inline;float:right;display:none;width: calc(100% - 100px);" class="text-right sendgrid-upgrade"><i>{{toSafeString message}}</i>
 	                 			</div>-->
 	                 		</div>
@@ -959,27 +966,29 @@
 				</div>
 				<br>
 				<div class="m-t-sm" rel="tooltip">
-				Amazon SES is an easy and cost-effective email gateway service to send automated emails to your customers.
+				{{agile_lng_translate 'admin-settings-integrations' 'amazon-content'}}
 				</div><br/>
 				<div> 
 					{{#if this.length}}	
 						{{#gateway_exists "SES" this}}
-							<a href="#integrations" class="btn btn-sm btn-danger " id="email-gateway-delete"  data={{id}} >Disable</a>
-							<a href="#email-gateways/ses" class="btn btn-sm btn-default">Settings</a>
+							<a href="#integrations" class="btn btn-sm btn-danger " id="email-gateway-delete"  data={{id}} >{{agile_lng_translate 'web-rules' 'disable'}}</a>
+							<a href="#email-gateways/ses" class="btn btn-sm btn-default">{{agile_lng_translate 'preferences' 'settings'}}</a>
 						{{else}}
 							 {{#isAllowedInCurrentPlan "is_email_gateway_allowed"}}
 					         	<div>
-                      				<a href="#email-gateways/ses" class="btn btn-sm btn-default">Enable</a>
+                      				<a href="#email-gateways/ses" class="btn btn-sm btn-default">
+                      				{{agile_lng_translate 'prefs-email' 'enable'}}</a>
                 			 	</div>
            					 {{else}}
             					<div>
             						<div style="display:none;width: 65%;left: 18%;z-index: 9;border: 1px solid #E2E29C;background-color: #F7F7D0;" class="ses-upgrade fade in p-xs m-b-xs pos-abs">
-        									Please  
-        									<strong><a href="#subscribe-plan" style="color:#337ab7;" class='c-p'>upgrade</a></strong> to Enterprise plan
+        									{{agile_lng_translate 'contact-details' 'please'}}  
+        									<strong><a href="#subscribe-plan" style="color:#337ab7;" class='c-p'>{{agile_lng_translate 'widgets' 'upgrade'}}</a></strong> {{agile_lng_translate 'widgets' 'to-enterprise-plan'}}
         							</div>
 
         							<div class="clearfix"></div>
-            						<div class="btn btn-sm btn-default _upgrade" id="ses-upgrade">Enable</div>
+            						<div class="btn btn-sm btn-default _upgrade" id="ses-upgrade">
+            						{{agile_lng_translate 'prefs-email' 'enable'}}</div>
                  					<!--<div style="display:inline;float:right;display:none;" class="text-right ses-upgrade" calc(100% - 100px);"><i>{{toSafeString message}}</i></div>-->
 	                 			</div>
             				 {{/isAllowedInCurrentPlan}}
@@ -987,16 +996,18 @@
 					{{else}}
 						{{#isAllowedInCurrentPlan "is_email_gateway_allowed"}}
 					    	<div>
-                      			<a href="#email-gateways/ses" class="btn btn-sm btn-default">Enable</a>
+                      			<a href="#email-gateways/ses" class="btn btn-sm btn-default">
+                      			{{agile_lng_translate 'prefs-email' 'enable'}}</a>
                 			</div>
            				{{else}}
             				<div>
             					<div style="display:none;width: 65%;left: 18%;z-index: 9;border: 1px solid #E2E29C;background-color: #F7F7D0;" class="ses-upgrade fade in p-xs m-b-xs pos-abs">
-        									Please  
-        									<strong><a href="#subscribe-plan" style="color:#337ab7;" class='c-p'>upgrade</a></strong> to Enterprise plan
+        									{{agile_lng_translate 'contact-details' 'please'}}  
+        									<strong><a href="#subscribe-plan" style="color:#337ab7;" class='c-p'>{{agile_lng_translate 'widgets' 'upgrade'}}</a></strong> {{agile_lng_translate 'widgets' 'to-enterprise-plan'}}
         						</div>
         						<div class="clearfix"></div>
-        						<div class="btn btn-sm btn-default _upgrade" id="ses-upgrade">Enable</div>
+        						<div class="btn btn-sm btn-default _upgrade" id="ses-upgrade">
+        						{{agile_lng_translate 'prefs-email' 'enable'}}</div>
                  				<!--<div style="display:inline;float:right;display:none;width: calc(100% - 100px);" class="text-right ses-upgrade"><i>{{toSafeString message}}</i>
 	                 			</div> -->
 	                 		</div>
@@ -1013,7 +1024,7 @@
 
 <div class="row">
 	<div class="col-md-12" id="SMSGateway">
-	<h4 class="m-b-sm">SMS Gateways</h4>
+	<h4 class="m-b-sm">{{agile_lng_translate 'admin-settings-integrations' 'sms-gateways'}}</h4>
 		<!-- Twilio -->
 <div class="row">
 		<div class="col-md-4 col-sm-6 col-xs-12 text-center"  id="twilio-sms-api-integration">
@@ -1027,26 +1038,26 @@
 				</div>
 				<br>
 				<div >
-				Twilio provides APIs for text messages and VoIP. Use your Twilio account to send SMS from Campaigns.
+				{{agile_lng_translate 'admin-settings-integrations' 'twilio-content'}}
 				</div><br/>
 				<div> 
 					{{#if this.length}}	
 						{{#gateway_exists "TWILIO" this}}
-							<a href="#integrations" class="btn btn-sm btn-danger " id="sms-gateway-delete"  data={{id}} >Disable</a>
+							<a href="#integrations" class="btn btn-sm btn-danger " id="sms-gateway-delete"  data={{id}} >{{agile_lng_translate 'prefs-email' 'disable'}}</a>
 								<a href="#sms-gateways/twilio" class="btn btn-sm btn-default">Settings</a>
 						{{else}}
 							{{#isAllowedInCurrentPlan "is_sms_gateway_allowed"}}
 					            <div>
-                      					<a href="#sms-gateways/twilio" class="btn btn-sm btn-default">Enable</a>
+                      					<a href="#sms-gateways/twilio" class="btn btn-sm btn-default">{{agile_lng_translate 'prefs-email' 'disable'}}</a>
                 					</div>
            						 {{else}}
             						<div>
 										<div style="display:none;width: 65%;left: 18%;z-index: 9;border: 1px solid #E2E29C;background-color: #F7F7D0;" class="twilio-upgrade fade in p-xs m-b-xs pos-abs">
-											 Please  
-									      <strong><a href="#subscribe-plan" style="color:#337ab7;" class='c-p'>upgrade</a></strong> to Regular or Enterprise plan
+											 {{agile_lng_translate 'contact-details' 'please'}}  
+									      <strong><a href="#subscribe-plan" style="color:#337ab7;" class='c-p'>{{agile_lng_translate 'widgets' 'upgrade'}}</a></strong> {{agile_lng_translate 'admin-settings-integrations' 'to-regular-or-enterprise-plan'}}
 										</div>
 										<div class="clearfix"></div>
-										<div class="btn btn-sm btn-default _upgrade" id="twilio-upgrade">Enable</div>
+										<div class="btn btn-sm btn-default _upgrade" id="twilio-upgrade">{{agile_lng_translate 'prefs-email' 'enable'}}</div>
 									</div>
             				{{/isAllowedInCurrentPlan}}	
 						{{/gateway_exists}}
@@ -1054,16 +1065,16 @@
 			
 						{{#isAllowedInCurrentPlan "is_sms_gateway_allowed"}}
 					            <div>
-                      					<a href="#sms-gateways/twilio" class="btn btn-sm btn-default">Enable</a>
+                      					<a href="#sms-gateways/twilio" class="btn btn-sm btn-default">{{agile_lng_translate 'prefs-email' 'enable'}}</a>
                 					</div>
            						 {{else}}
             						<div>
 										<div style="display:none;width: 65%;left: 18%;z-index: 9;border: 1px solid #E2E29C;background-color: #F7F7D0;" class="twilio-upgrade fade in p-xs m-b-xs pos-abs">
-											 Please  
-									      <strong><a href="#subscribe-plan" style="color:#337ab7;" class='c-p'>upgrade</a></strong> to Regular or Enterprise plan
+											  {{agile_lng_translate 'contact-details' 'please'}}  
+									      <strong><a href="#subscribe-plan" style="color:#337ab7;" class='c-p'>{{agile_lng_translate 'widgets' 'upgrade'}}</a></strong>{{agile_lng_translate 'admin-settings-integrations' 'to-regular-or-enterprise-plan'}}
 										</div>
 										<div class="clearfix"></div>
-										<div class="btn btn-sm btn-default _upgrade" id="twilio-upgrade">Enable</div>
+										<div class="btn btn-sm btn-default _upgrade" id="twilio-upgrade">{{agile_lng_translate 'prefs-email' 'enable'}}</div>
 									</div>
             				{{/isAllowedInCurrentPlan}}
 
@@ -1083,42 +1094,42 @@
 				</div>
 				<br>
 				<div class="m-t-sm"   rel="tooltip" ">
-				Plivo provides Voice and SMS API for businesses of all sizes.  Use your Plivo account to send SMS from Campaigns.
+				{{agile_lng_translate 'admin-settings-integrations' 'plivo-content'}}
 				</div><br/>
 				<div> 
 					{{#if this.length}}	
 						{{#gateway_exists "PLIVO" this}}
-							<a href="#integrations" class="btn btn-sm btn-danger " id="sms-gateway-delete"  data={{id}} >Disable</a>
+							<a href="#integrations" class="btn btn-sm btn-danger " id="sms-gateway-delete"  data={{id}} >{{agile_lng_translate 'prefs-email' 'disable'}}</a>
 								<a href="#sms-gateways/plivo" class="btn btn-sm btn-default">Settings</a>
 						{{else}}
 							 {{#isAllowedInCurrentPlan "is_sms_gateway_allowed"}}
 					                <div>
-                      					<a href="#sms-gateways/plivo" class="btn btn-sm btn-default">Enable</a>
+                      					<a href="#sms-gateways/plivo" class="btn btn-sm btn-default">{{agile_lng_translate 'prefs-email' 'enable'}}</a>
                 					</div>
            						 {{else}}
             						<div>
 			                          <div style="display:none;width: 65%;left: 18%;z-index: 9;border: 1px solid #E2E29C;background-color: #F7F7D0;" class="plivo-upgrade fade in p-xs m-b-xs pos-abs">
-			                            Please  
-			                              <strong><a href="#subscribe-plan" style="color:#337ab7;" class='c-p'>upgrade</a></strong> to Regular or Enterprise plan
+			                            {{agile_lng_translate 'contact-details' 'please'}}  
+			                              <strong><a href="#subscribe-plan" style="color:#337ab7;" class='c-p'>{{agile_lng_translate 'widgets' 'upgrade'}}</a></strong> {{agile_lng_translate 'admin-settings-integrations' 'to-regular-or-enterprise-plan'}}
 			                          </div>
 			                          <div class="clearfix"></div>
-			            			  <div class="btn btn-sm btn-default _upgrade" id="plivo-upgrade">Enable</div>		
+			            			  <div class="btn btn-sm btn-default _upgrade" id="plivo-upgrade">{{agile_lng_translate 'prefs-email' 'enable'}}</div>		
 				                 	</div>
             				{{/isAllowedInCurrentPlan}}
 						{{/gateway_exists}}
 					{{else}}
 					 {{#isAllowedInCurrentPlan "is_sms_gateway_allowed"}}
 					            <div>
-                      					<a href="#sms-gateways/plivo" class="btn btn-sm btn-default">Enable</a>
+                      					<a href="#sms-gateways/plivo" class="btn btn-sm btn-default">{{agile_lng_translate 'prefs-email' 'enable'}}</a>
                 					</div>
            						 {{else}}
             						<div>
                           				<div style="display:none;width: 65%;left: 18%;z-index: 9;border: 1px solid #E2E29C;background-color: #F7F7D0;" class="plivo-upgrade fade in p-xs m-b-xs pos-abs">
-                            				Please  
-                              				<strong><a href="#subscribe-plan" style="color:#337ab7;" class='c-p'>upgrade</a></strong> to Regular or Enterprise plan
+                            				{{agile_lng_translate 'contact-details' 'please'}}  
+                              				<strong><a href="#subscribe-plan" style="color:#337ab7;" class='c-p'>{{agile_lng_translate 'widgets' 'upgrade'}}</a></strong> {{agile_lng_translate 'admin-settings-integrations' 'to-regular-or-enterprise-plan'}}
                           				</div>
                           				<div class="clearfix"></div>
-            						  <div class="btn btn-sm btn-default _upgrade" id="plivo-upgrade">Enable</div>		
+            						  <div class="btn btn-sm btn-default _upgrade" id="plivo-upgrade">{{agile_lng_translate 'prefs-email' 'enable'}}</div>		
 	                 				</div>
             				{{/isAllowedInCurrentPlan}}
 					{{/if}}
@@ -1147,7 +1158,7 @@
 		</div>
 		<div class="modal-footer">
 			<span class="sms-integrations-footer m-r-xs"></span>
-				<a href="#" class="btn btn-sm btn-primary" data-dismiss="modal">OK</a>
+				<a href="#" class="btn btn-sm btn-primary" data-dismiss="modal">{{agile_lng_translate 'admin-settings-integrations' 'ok'}}</a>
 		</div>
 	</div>
 	</div>
@@ -1157,12 +1168,12 @@
 <script id="web-to-lead-settings-template"	type="text/html">
 	<div class="tab-container m-b-none integrations_inner">
        <ul class="nav nav-tabs">
-         <li><a href="#web-to-lead-tab" data-toggle="tab"  class="b-l-none">Web to Lead</a></li>
-         <li><a href="#e-commerce-tab" data-toggle="tab" >Ecommerce</a></li>
-		 <li><a href="#cms-tab" data-toggle="tab" >CMS</a></li>
-		 <li><a href="#email-gateways-tab" data-toggle="tab" >Email</a></li>
-		 <li><a href="#sms-gateways-tab" data-toggle="tab" >SMS</a></li>
-		 <li><a href="#web-app-integrations-tab" data-toggle="tab" >Misc</a></li>
+         <li><a href="#web-to-lead-tab" data-toggle="tab"  class="b-l-none">{{agile_lng_translate 'admin-settings-integrations' 'web-to-lead'}}</a></li>
+         <li><a href="#e-commerce-tab" data-toggle="tab" >{{agile_lng_translate 'campaigns' 'e-commerce'}}</a></li>
+		 <li><a href="#cms-tab" data-toggle="tab" >{{agile_lng_translate 'admin-settings-integrations' 'cms'}}</a></li>
+		 <li><a href="#email-gateways-tab" data-toggle="tab" >{{agile_lng_translate 'other' 'email'}}</a></li>
+		 <li><a href="#sms-gateways-tab" data-toggle="tab" >{{agile_lng_translate 'admin-settings-integrations' 'sms'}}</a></li>
+		 <li><a href="#web-app-integrations-tab" data-toggle="tab" >{{agile_lng_translate 'admin-settings-integrations' 'misc'}}</a></li>
        </ul>
 	</div>
 	<div class="tab-content wrapper-md panel">

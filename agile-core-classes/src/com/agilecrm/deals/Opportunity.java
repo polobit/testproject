@@ -329,7 +329,10 @@ public class Opportunity extends Cursor implements Serializable
     @Embedded
     @Indexed
     public ArrayList<Tag> tagsWithTime = new ArrayList<Tag>();
-
+    
+    public void setContact_ids(List<String> contact_ids) {
+		this.contact_ids = contact_ids;
+	}
 
     /**
      * Default Constructor.
@@ -545,7 +548,7 @@ public class Opportunity extends Cursor implements Serializable
     {
 	if (contact_ids != null)
 	{
-	    for (String contact_id : this.contact_ids)
+		for (String contact_id : this.contact_ids)
 	    {
 		this.related_contacts.add(new Key<Contact>(Contact.class, Long.parseLong(contact_id)));
 	    }
@@ -1217,6 +1220,17 @@ public class Opportunity extends Cursor implements Serializable
     {
 	System.out.println("Custom filed received is = " + field);
 	addCustomDataWithoutSaving(field);
+	save();
+
+    }
+    
+    /* Zapier use - can be use in many other operation.*/
+    public void addAllCustomData(List<CustomFieldData> input_custom_field)
+    {
+	System.out.println("Custom filed received is = " + input_custom_field);
+	for(int i = 0; i < input_custom_field.size() ; i++){
+	    addCustomDataWithoutSaving(input_custom_field.get(i));
+	}
 	save();
 
     }

@@ -49,7 +49,9 @@ function loadMiscScripts() {
     });
 
     if(!agile_is_mobile_browser())
-		load_urls_on_ajax_stop('lib/user-voice.js');
+		load_urls_on_ajax_stop('lib/user-voice.js', function(){
+			
+		});
 
 	// load_clickdesk_code();
 

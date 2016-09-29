@@ -104,7 +104,7 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
 	var id = $('#' + form_id + ' input[name=id]').val();
 
     var man_delet  = $("#" + form_id + " #Manual_delete").val();
-	//Surce of the contact
+	// Surce of the contact
 	var contact_source = $('#' + form_id + ' input[name=source]').attr('data');
 
 	// Makes created time constant
@@ -118,7 +118,7 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
 
 	// Object to save
 	var obj = {};
-	//to check if it manually added
+	// to check if it manually added
 
 	// Stores all the property objects
 	var properties = [];
@@ -177,7 +177,7 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
 			{
 				if ($(this).parent().find("ul").find("li").length == 0)
 				{
-					$(this).parent().append('<span for="fname" generated="true" class="help-inline">This field is required.</span>');
+					$(this).parent().append('<span for="fname" generated="true" class="help-inline">'+_agile_get_translated_val('validation-msgs','required')+'</span>');
 					var that = this;
 					setTimeout(function(){
 						$(that).parent().find('span').remove();
@@ -205,10 +205,11 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
 		// Stores person's continue editing form template key
 		template = 'continue-contact';
 		obj.type = 'PERSON';
-        /*@priyanka
-        *saving first_name,last_name,picture and its TwitterId Pre-populate into the saving
-        * person model and continue saving it will also appers with same field
-        */
+        /*
+		 * @priyanka saving first_name,last_name,picture and its TwitterId
+		 * Pre-populate into the saving person model and continue saving it will
+		 * also appers with same field
+		 */
 		if(contact_source)
 			obj.source = contact_source ;
 
@@ -223,7 +224,8 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
 		// if(form_id == "personForm")
 		if (isValidField(form_id + ' #image'))
 			properties.push(property_JSON('image', form_id + ' #image'));
-        //checking the condition for the when tweeterId is saving into the datastore
+        // checking the condition for the when tweeterId is saving into the
+		// datastore
         if(isValidField(form_id +' #handle'))
         	properties.push({ "name" : "website", "value" :$('#handle').val(), "subtype" : "TWITTER" })
 
@@ -243,7 +245,7 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
 		{
 			if ($form.find('#contact_company').prop('value').length > 100)
 			{
-				show_error(modal_id, form_id, 'duplicate-email', 'Company name too long. Please restrict upto 100 characters.');
+				show_error(modal_id, form_id, 'duplicate-email', _agile_get_translated_val('companies','name-length-error'));
 				enable_save_button($(saveBtn));// Remove loading image
 				return;
 			}
@@ -259,8 +261,10 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
 		if (isValidField(form_id + ' #phone'))
 			properties.push(property_JSON('phone', form_id + ' #phone'));
 		
-/*		if (isValidField(form_id + ' #skypePhone'))
-			properties.push(property_JSON('skypePhone', form_id + ' #skypePhone'));*/
+/*
+ * if (isValidField(form_id + ' #skypePhone'))
+ * properties.push(property_JSON('skypePhone', form_id + ' #skypePhone'));
+ */
 
 		if (isValidField(form_id + ' #job_title'))
 			properties.push(property_JSON('title', form_id + ' #job_title'));
@@ -363,7 +367,7 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
 			if (companyName.length > 100)
 			{
 				// Company name too long, show error and return;
-				show_error(modal_id, form_id, 'duplicate-email', 'Company name too long. Please restrict upto 100 characters.');
+				show_error(modal_id, form_id, 'duplicate-email', _agile_get_translated_val('companies','name-length-error'));
 
 				enable_save_button($(saveBtn));// Remove loading image
 				return;
@@ -374,7 +378,7 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
 
 					if (status)
 					{
-						show_error(modal_id, form_id, 'duplicate-email', 'Company name already exists.');
+						show_error(modal_id, form_id, 'duplicate-email', _agile_get_translated_val('companies','name-exists'));
 
 						enable_save_button($(saveBtn));// Remove loading image
 						return;
@@ -449,7 +453,8 @@ function serialize_contact_properties_and_save(e, form_id, obj, properties, moda
 
 					if (is_new) {
 						tag_objects_temp.push({ "tag" : value });
-						//check if tags are valid if they are newly adding to the contact.
+						// check if tags are valid if they are newly adding to
+						// the contact.
 						if(!isValidTag(value, false)) {
 							tags_valid = false;
 							return false;
@@ -481,13 +486,15 @@ function serialize_contact_properties_and_save(e, form_id, obj, properties, moda
 		{
 			var addressJSON = {};
 			var subtype;
-			/*var remote_addr=false; */ 
+			/* var remote_addr=false; */ 
 			$.each($(element).find(":input,select"), function(index, subelement)
 			{
 
 				if ($(subelement).val() == undefined || $(subelement).val().length == 0)
-					{  /*remote_addr =true;
-						addressJSON['remote_add'] = remote_addr;*/
+					{  /*
+						 * remote_addr =true; addressJSON['remote_add'] =
+						 * remote_addr;
+						 */
 						return;}
 
 				if ($(subelement).attr('name') == 'address-type')
@@ -523,8 +530,8 @@ function serialize_contact_properties_and_save(e, form_id, obj, properties, moda
 	/*
 	 * Check whether there are any properties in existing contact, which can get
 	 * lost in contact update form. There are chances user adds a property(may
-	 * be stripe id..) using developers API and contact image saved as CUSTOM type,
-	 * in order not to loose them following verification is done
+	 * be stripe id..) using developers API and contact image saved as CUSTOM
+	 * type, in order not to loose them following verification is done
 	 */
 	if (obj.properties)
 	{
@@ -657,7 +664,7 @@ function serialize_contact_properties_and_save(e, form_id, obj, properties, moda
 				if(!CALL_CAMPAIGN.start && Current_Route != "contact/" + data.id)
 				App_Contacts.navigate("contact/" + data.id, { trigger : true });
 			} else {
-				//Update all the existed contacts with mapped this company
+				// Update all the existed contacts with mapped this company
 				var companyJSON = data.toJSON();
 				if(App_Contacts.contactsListView)
 				{
@@ -686,7 +693,7 @@ function serialize_contact_properties_and_save(e, form_id, obj, properties, moda
 		}
 
 		// Hides the modal
-		if(CallLogVariables.dynamicData != null){
+		if(CallLogVariables.callWidget){
 			CallLogVariables.processed = true;
 		}
 		$('#' + modal_id).modal('hide');
@@ -709,12 +716,34 @@ function serialize_contact_properties_and_save(e, form_id, obj, properties, moda
 					dynamicData.contact_name = getContactName(jsonData1);
 					dynamicData.contId = jsonData1.id;
 					showDynamicCallLogs(dynamicData);
+				}else if(CallLogVariables.callWidget && CallLogVariables.subject){
+					var jsonData1 = data.toJSON();
+					$.post( "/core/api/widgets/twilio/autosavenote", {
+						subject: CallLogVariables.subject,
+						message: "",
+						contactid: jsonData1.id,
+						phone: CallLogVariables.phone,
+						callType: CallLogVariables.callType,
+						status: CallLogVariables.status,
+						duration: 0},
+						function(noteData){
+						
+						$.post( "/core/api/widgets/" + CallLogVariables.callWidget.toLowerCase() + "/savecallactivityById?note_id="+noteData.id,{
+							id:jsonData1.id,
+							direction: CallLogVariables.callType, 
+							phone: CallLogVariables.phone, 
+							status : CallLogVariables.status,
+							duration : 0 
+							});
+						resetCallLogVariables();
+						});
 				}
 			}
 		}catch(e){}
 		
 		
-		//added for call campaign - functionality after updating fom call campaign
+		// added for call campaign - functionality after updating fom call
+		// campaign
 			if(CALL_CAMPAIGN.start ){
 				var id = $('#continueform input[name=id]').val();
 				if(CALL_CAMPAIGN.contact_update){
@@ -760,9 +789,9 @@ function serialize_contact_properties_and_save(e, form_id, obj, properties, moda
 		else if (response.status == 403)
 		{
 			if(form_id == 'companyForm')
-				show_error_in_formactions(modal_id, form_id, 'form-action-error', "You do not have permission to create Companies.");
+				show_error_in_formactions(modal_id, form_id, 'form-action-error', _agile_get_translated_val('companies','no-perm-to-add'));
 			else if(form_id == 'continueCompanyForm')
-				show_error_in_formactions(modal_id, form_id, 'form-action-error', "You do not have permission to update Companies.");
+				show_error_in_formactions(modal_id, form_id, 'form-action-error', _agile_get_translated_val('companies','no-perm-to-update'));
 			else
 				show_error_in_formactions(modal_id, form_id, 'form-action-error', response.responseText);
 		}
@@ -783,7 +812,7 @@ function serialize_contact_properties_and_save(e, form_id, obj, properties, moda
  * @param {String}
  *            template template key to load the form
  */
-function deserialize_contact(contact, template)
+function deserialize_contact(contact, template, callback)
 {
 
 	// Loads the form based on template value
@@ -793,7 +822,7 @@ function deserialize_contact(contact, template)
 			
 		var form = $('#content').html($(template_ui));	
 		// Add placeholder and date picker to date custom fields
-		$('.date_input').attr("placeholder", "Select Date");
+		$('.date_input').attr("placeholder", _agile_get_translated_val("contacts", "select-date"));
 
 		$('.date_input').datepicker({ format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY, autoclose: true});
 
@@ -855,7 +884,7 @@ function deserialize_contact(contact, template)
 				});
 			}
 		}
-		agile_type_ahead("contact_company", $('#content'), contacts_typeahead, fxn_display_company, 'type=COMPANY', '<b>No Results</b> <br/> Will add a new one');
+		agile_type_ahead("contact_company", $('#content'), contacts_typeahead, fxn_display_company, 'type=COMPANY', '<b>'+_agile_get_translated_val("others","no-results")+'</b> <br/> ' + _agile_get_translated_val("others","add-new-one"));
 
 		if (contact.contact_company_id && contact.contact_company_id.length > 0)
 		{
@@ -924,7 +953,9 @@ function deserialize_contact(contact, template)
 
 		initializeEditContactListeners($('form', $('#content')).attr("id"));
 		
-
+		if (callback && typeof (callback) === "function"){
+			callback();
+		}
 	}, "#content");
 
 	
@@ -958,24 +989,21 @@ function fill_multi_options(field_element, element)
 			var name = $(sub_field_element).attr('name');
 			if (name == 'address-type')
 				$(sub_field_element).val(element.subtype);
-			//Commented this block to maintain consistency with country in address
-			/*else if (name == 'country')
-			{
-				if (json[name] && json[name].length > 2)
-				{
-					$("#country").remove();
-					$(field_element).append('<input type="text" name="country" id="country" class="form-control m-b-sm" placeholder="country">');
-					$("#country").val(json[name]);
-				}
-				else
-					$(sub_field_element).val(json[name]);
-			}*/
+			// Commented this block to maintain consistency with country in
+			// address
+			/*
+			 * else if (name == 'country') { if (json[name] && json[name].length >
+			 * 2) { $("#country").remove(); $(field_element).append('<input
+			 * type="text" name="country" id="country" class="form-control
+			 * m-b-sm" placeholder="country">'); $("#country").val(json[name]); }
+			 * else $(sub_field_element).val(json[name]); }
+			 */
 			else
 				$(sub_field_element).val(json[name]);
 
 			if(name == 'country' && !$(sub_field_element).val())
 			{
-				var warning_msg_tpl = Handlebars.compile("<span class='country-mismatch-error' style='color:#B94A48; font-size:14px'><i>Country '{{country}}' doesn't match with our standard records. Please update the country using the dropdown.</i></span>");
+				var warning_msg_tpl = Handlebars.compile("<span class='country-mismatch-error' style='color:#B94A48; font-size:14px'><i>{{agile_lng_translate 'contacts-view' 'country'}} {{country}} {{agile_lng_translate 'country' 'not-found-error'}}</i></span>");
 				$(sub_field_element).after(warning_msg_tpl(json));
 			}
 		});
@@ -1080,11 +1108,12 @@ $(function()
 						flag = true ;
 					if(!flag){
 						$("#content .address-type,#address,#city,#state,#zip,#country").val('');
-						/*$("#content #address").val('');
-						$("#content #city").val('');
-						$("#content #state").val('');
-						$("#content #zip").val('');
-						$("#content #country").val('');*/
+						/*
+						 * $("#content #address").val(''); $("#content
+						 * #city").val(''); $("#content #state").val('');
+						 * $("#content #zip").val(''); $("#content
+						 * #country").val('');
+						 */
 					}
 				}
 			}
@@ -1126,7 +1155,45 @@ $(function()
 	{
 		e.preventDefault();
 		var id = $('#continueform input[name=id]').val();
-		//added for call campaign - functionality after updating fom call campaign
+		var fName = $('#continueform input[name=fname]').val();
+		var lName = $('#continueform input[name=lname]').val();
+		try{
+			if(CallLogVariables.callWidget){
+				if(CallLogVariables.dynamicData != null){
+					var name = fName + lName;
+					var dynamicData = CallLogVariables.dynamicData;
+					dynamicData.contact_name = name;
+					dynamicData.contId = id;
+					showDynamicCallLogs(dynamicData);
+				}else if(CallLogVariables.callWidget && CallLogVariables.subject){
+					var jsonData1 = data.toJSON();
+					$.post( "/core/api/widgets/twilio/autosavenote", {
+						subject: CallLogVariables.subject,
+						message: "",
+						contactid: jsonData1.id,
+						phone: CallLogVariables.phone,
+						callType: CallLogVariables.callType,
+						status: CallLogVariables.status,
+						duration: 0},
+						function(noteData){
+						
+						$.post( "/core/api/widgets/" + CallLogVariables.callWidget.toLowerCase() + "/savecallactivityById?note_id="+noteData.id,{
+							id:jsonData1.id,
+							direction: CallLogVariables.callType, 
+							phone: CallLogVariables.phone, 
+							status : CallLogVariables.status,
+							duration : 0 
+							});
+						resetCallLogVariables();
+						});
+				}
+			}
+		}catch(e){}
+
+
+	
+		// added for call campaign - functionality after updating fom call
+		// campaign
 		if(CALL_CAMPAIGN.start && CALL_CAMPAIGN.contact_update){
 			CALL_CAMPAIGN.contact_update = false;
 			Backbone.history.loadUrl("#contact/" + id);
@@ -1170,7 +1237,7 @@ function add_contact_to_view(appView, model, isUpdate)
 
 	if (model.get('type') == 'COMPANY')
 	{
-		//Change the entity type to company
+		// Change the entity type to company
 		model.set({ "entity_type" : "company_entity" }, { silent : true });
 		if (appView.collection.get(model.id) != null) // update existing model
 			appView.collection.get(model.id).set(model);
@@ -1186,7 +1253,8 @@ function add_contact_to_view(appView, model, isUpdate)
 	{
 		if (!_agile_get_prefs('company_filter')) // check if in contacts view
 		{
-			if (!_agile_get_prefs('contact_filter')) // add model only if its in
+			if (!_agile_get_prefs('contact_filter')) // add model only if its
+														// in
 			// plain contact view, otherwise
 			// always hard reload
 			{

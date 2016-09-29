@@ -15,6 +15,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
 import org.json.JSONArray;
@@ -116,6 +117,11 @@ public class EmailsAPI
 	{
 	    throw new WebApplicationException(Response.status(javax.ws.rs.core.Response.Status.BAD_REQUEST)
 		    .entity(e.getMessage()).build());
+	}
+	catch(Exception e)
+	{
+		System.out.println("Error occured while sending email in EmailsAPI...");
+		System.out.println(ExceptionUtils.getFullStackTrace(e));
 	}
     }
 

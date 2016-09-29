@@ -435,6 +435,9 @@
     <servlet-name>SystemServiceServlet</servlet-name>
     <url-pattern>/_ah/spi/*</url-pattern>
   </servlet-mapping>
+  <listener>
+	<listener-class>com.agilecrm.normalBulk.AgileServletContextListener</listener-class>
+  </listener>
   <!-- <servlet>
     <servlet-name>OAuthServlet</servlet-name>
     <servlet-class>com.agilecrm.oauth.OAuthServlet</servlet-class>

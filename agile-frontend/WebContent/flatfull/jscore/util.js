@@ -141,7 +141,7 @@ function _fillSelectCallback(collection, selectId, callback, template, isUlDropd
 		else
 		{
 			if (!defaultSelectOption)
-				defaultSelectOption = "Select...";
+				defaultSelectOption = "{{agile_lng_translate 'contact-details' 'select'}}";
 
 			$("#" + selectId, el).empty().append('<option class="default-select" value="">' + defaultSelectOption + '</option>');
 		}
@@ -200,7 +200,7 @@ function _fillSelectCallback(collection, selectId, callback, template, isUlDropd
 function fillTokenizedSelect(selectId, array, callback, defaultSelectOption)
 {
 	if (!defaultSelectOption)
-		defaultSelectOption = "Select...";
+		defaultSelectOption = '{{agile_lng_translate "contact-details" "select"}}';
 
 	$("#" + selectId).empty().append('<option value="">' + defaultSelectOption + '</option>');
 
@@ -743,11 +743,11 @@ function  printCurrentDateMillis(type){
 }
 
 function  startFunctionTimer(name){
-	try{console.time(name);	}catch(e){}
+	try{if(!HANDLEBARS_PRECOMPILATION)console.time(name);	}catch(e){}
 }
 
 function endFunctionTimer(name){
-	try{console.timeEnd(name);	}catch(e){}
+	try{if(!HANDLEBARS_PRECOMPILATION)console.timeEnd(name);	}catch(e){}
 }
 
 function loadServiceLibrary(callback){
@@ -756,7 +756,7 @@ function loadServiceLibrary(callback){
 		hideTransitionBar();
 		return;
 	}
-	head.js(CLOUDFRONT_PATH + 'jscore/min/' + FLAT_FULL_PATH +'tickets-min.js' + "?_=" + (_AGILE_VERSION + '1'), function(){
+	head.js(CLOUDFRONT_PATH + 'jscore/min/locales/' + _LANGUAGE +'/tickets-min.js' + "?_=" + (_AGILE_VERSION + '1'), function(){
 
 		if(callback)
 			callback();
@@ -848,5 +848,19 @@ function updateSortKeyTemplate(sort_key, el) {
 
 function make_menu_item_active(ele_id){
     $(".active", $("#agile-menu-navigation-container")).removeClass("active");
+    $(".active a", $("#agile-menu-navigation-container")).blur();
 	$("#" + ele_id).addClass("active");
+}
+
+function agileTimeAgoWithLngConversion(el, callback){
+	head.js(LIB_PATH + 'lib/jquery.timeago.js', LIB_PATH + 'lib/jquery.timeago.'+_LANGUAGE+'.js', function() {
+		if(el){
+			$(el).each(function(index, element) {
+       			$(element).timeago();
+       		});	
+		}
+
+        if(callback)
+        	 callback();
+    });
 }

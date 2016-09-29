@@ -99,25 +99,25 @@
 	<div>
 		
 		<div class="pull-left">
-			<h3 class="m-n font-thin h3"><span id="contact-heading">Contacts</span><span id="contacts-count" class="m-l-xs">{{contacts_count}}</span></h3>
+			<h3 class="m-n font-thin h3"><span id="contact-heading">{{agile_lng_translate 'contact-details' 'Contacts'}}</span><span id="contacts-count" class="m-l-xs">{{contacts_count}}</span></h3>
 			<div class="btn-group m-l-md inline-block" id="bulk-actions"
 				style="display: none;">
-					<div class="btn btn-sm btn-default">Bulk Actions</div>
+					<div class="btn btn-sm btn-default">{{agile_lng_translate 'contacts-view' 'bulk-actions'}}</div>
 					<a class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" href="#">
 						<span class="caret"></span>
 					</a>
 					<ul class="dropdown-menu" id="view-actions">
-						<li><a href="#" id="bulk-tags" class="_contact_bulk_action">Add Tags</a></li>
-						<li><a href="#" id="bulk-tags-remove" class="_contact_bulk_action">Remove Tags</a></li>
+						<li><a href="#" id="bulk-tags" class="_contact_bulk_action">{{agile_lng_translate 'contacts-view' 'add-tags'}}</a></li>
+						<li><a href="#" id="bulk-tags-remove" class="_contact_bulk_action">{{agile_lng_translate 'contacts-view' 'remove-tags'}}</a></li>
                         <li class='divider'></li>  
-						<li><a href="#" id="bulk-campaigns" class="_contact_bulk_action">Add to Campaign</a></li>
-						<li><a href="#" id="bulk-email" class="_contact_bulk_action">Send Email</a></li>
+						<li><a href="#" id="bulk-campaigns" class="_contact_bulk_action">{{agile_lng_translate 'web-rules' 'add-to-campaign'}}</a></li>
+						<li><a href="#" id="bulk-email" class="_contact_bulk_action">{{agile_lng_translate 'other' 'send-email'}}</a></li>
                         <li class='divider'></li>
-						<li><a href="#" id="bulk-owner" class="_contact_bulk_action">Change Owner</a></li>
+						<li><a href="#" id="bulk-owner" class="_contact_bulk_action">{{agile_lng_translate 'contacts-view' 'change-owner'}}</a></li>
                         {{#hasScope "EXPORT_CONTACTS"}}
-                        <li><a href="#" id="bulk-contacts-export" class="_contact_bulk_action">Export Contacts as CSV</a></li>
+                        <li><a href="#" id="bulk-contacts-export" class="_contact_bulk_action">{{agile_lng_translate 'contacts-view' 'export-contacts-as-csv'}}</a></li>
                         {{/hasScope}}
-						<li><a href="#" class="delete-checked-contacts">Delete</a></li>
+						<li><a href="#" class="delete-checked-contacts">{{agile_lng_translate 'contact-details' 'delete'}}</a></li>
 					</ul>
 					<div  class="btn-group p-l p-t-xs inline-block" style="display: none;" id="bulk-select"></div>
 					</div>
@@ -156,7 +156,7 @@
 			<div class="data-container"></div>
             <div class="table-responsive">
 			<div class="panel panel-default">
-			    <div class="panel-heading">Contacts List</div>
+			    <div class="panel-heading">{{agile_lng_translate 'contacts-view' 'contacts-list'}}</div>
 			<table id="contacts-table" class="table table-striped showCheckboxes  no-sorting panel"
 				url="core/api/contacts/delete?action=DELETE">
 				
@@ -164,10 +164,10 @@
 				<thead>
 					<tr>
 						<th><label class="i-checks i-checks-sm"><input class="thead_check" type="checkbox"/><i></i></label></th>
-						<th>Name</th>
-						<th>Work</th>
-						<th>Tags</th>
-						<th>Lead Score</th>
+						<th>{{agile_lng_translate 'deal-view' 'name'}}</th>
+						<th>{{agile_lng_translate 'other' 'work'}}</th>
+						<th>{{agile_lng_translate 'contact-details' 'tags'}}</th>
+						<th>{{agile_lng_translate 'contacts-view' 'Lead score'}}</th>
 					</tr>
 				</thead>
 				<tbody id="contacts-model-list" class="contacts-model-list"
@@ -242,19 +242,19 @@
 	<div class="col-md-12">
 		
 		<div class="pull-left">
-			<h3 class="inline-block font-thin h3"><span id="contact-heading">Companies</span><span id="contacts-count" class="m-l-xs"><small>{{count}}</small></span></h3>
+			<h3 class="inline-block font-thin h3"><span id="contact-heading">{{agile_lng_translate 'companies-view' 'companies'}}</span><span id="contacts-count" class="m-l-xs"><small>{{count}}</small></span></h3>
 			<div class="inline-block">
 			<div class="btn-group m-l-md inline-block" id="bulk-actions" style="display: none;">
-					<div class="btn btn-default btn-sm">Bulk Actions</div>
+					<div class="btn btn-default btn-sm">{{agile_lng_translate 'contacts-view' 'bulk-actions'}}</div>
 					<a class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" href="#">
 						<span class="caret"></span>
 					</a>
 					<ul class="dropdown-menu" id="view-actions">
-						<li><a href="#" id="bulk-email">Send Email</a></li>
+						<li><a href="#" id="bulk-email">{{agile_lng_translate 'other' 'send-email'}}</a></li>
                         <li class='divider'></li>
-						<li><a href="#" id="bulk-owner">Change Owner</a></li>
-						<li><a href="#" id="bulk-companies-export">Export Companies as CSV</a></li>
-						<li><a href="#" class="delete-checked-contacts">Delete</a></li>
+						<li><a href="#" id="bulk-owner">{{agile_lng_translate 'contacts-view' 'change-owner'}}</a></li>
+						<li><a href="#" id="bulk-companies-export">{{agile_lng_translate 'companies-view' 'export-companies-as-csv'}}</a></li>
+						<li><a href="#" class="delete-checked-contacts">{{agile_lng_translate 'contact-details' 'delete'}}</a></li>
 					</ul>
 					<div  class="btn-group p-l p-t-xs inline-block" style="display: none;" id="bulk-select"></div>
 			</div>
@@ -290,7 +290,7 @@
 			<div class="data-container"></div>
 			<div class="table-responsive">
 			<div class="panel panel-default">
-			<div class="panel-heading">Companies List</div>
+			<div class="panel-heading">{{agile_lng_translate 'companies-view' 'companies-list'}}</div>
 			<table id="companies" class="table table-striped showCheckboxes panel"
 				url="core/api/bulk/update?action_type=DELETE">
 				<div class="filter-criteria">
@@ -298,9 +298,9 @@
 				</div>
 				<thead>
 					<tr>
-						<th>Name</th>
-						<th>Star Value</th>
-						<th>Owner</th>
+						<th>{{agile_lng_translate 'deal-view' 'name'}}</th>
+						<th>{{agile_lng_translate 'contacts-view' 'Star value'}}</th>
+						<th>{{agile_lng_translate 'contact-details' 'owner'}}</th>
 					</tr>
 				</thead>
 				<tbody id="companies-model-list" class="companies-model-list"
@@ -325,7 +325,7 @@
 		<div class="data">
 			<div class="data-container"></div>
 			<div class="panel panel-default">
-			    <div class="panel-heading">Contacts List</div>
+			    <div class="panel-heading">{{agile_lng_translate 'contacts-view' 'contacts-list'}}</div>
 			<table id="contacts-table" class="table table-striped showCheckboxes agile-ellipsis-dynamic no-sorting"
 				url="core/api/bulk/update?action_type=DELETE">
 				<col width="30px">
@@ -337,10 +337,11 @@
 				<thead>
 					<tr>
 						<th><label class="i-checks i-checks-sm"><input class="thead_check" type="checkbox"/><i></i></label></th>
-						<th>Name</th>
-						<th>Work</th>
-						<th>Tags</th>
-						<th>Lead Score</th>
+						<th>{{agile_lng_translate 'deal-view' 'name'}}</th>
+						<th>{{agile_lng_translate 'contact-details' 'work'}}</th>
+						<th>{{agile_lng_translate 'contact-details' 'tags'}}</th>
+						<th>{{agile_lng_translate 'contacts-view' 'Lead score'}}</th>
+
 					</tr>
 				</thead>
 				<tbody id="contacts-table-model-list" class="contacts-table-model-list"
@@ -363,7 +364,7 @@
 		<div class="data">
 			<div class="data-container"></div>
 			<div class="panel panel-default">
-			<div class="panel-heading">Companies List</div>
+			<div class="panel-heading">{{agile_lng_translate 'companies-view' 'companies-list'}}</div>
 			<table id="companies" class="table table-striped showCheckboxes"
 				url="core/api/bulk/update?action_type=DELETE">
 				<div class="filter-criteria">
@@ -371,10 +372,10 @@
 				</div>
 				<thead>
 					<tr>
-						<th>Name</th>
-						<th>Star Value</th>
-						<th>Owner</th>
-					</tr>
+						<th>{{agile_lng_translate 'deal-view' 'name'}}</th>
+						<th>{{agile_lng_translate 'contacts-view' 'Star value'}}</th>
+						<th>{{agile_lng_translate 'contact-details' 'owner'}}</th>
+				</tr>
 				</thead>
 				<tbody id="companies-table-model-list" class="companies-table-model-list"
 					route="contact/">

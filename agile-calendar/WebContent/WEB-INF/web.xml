@@ -35,6 +35,10 @@
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
 	
+	<listener>
+		<listener-class>com.agilecrm.calendar.AgileServletContextListener</listener-class>
+	</listener>
+	
 	<security-constraint>
 		<web-resource-collection>
 			<url-pattern>/*</url-pattern>

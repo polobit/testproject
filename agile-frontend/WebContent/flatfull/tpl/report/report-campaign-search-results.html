@@ -30,7 +30,7 @@
     <div class="col-md-12">
         
             
-            <h1 class="m-n font-thin h3 pull-left">Report Results  {{contacts_count}} </h1>
+            <h1 class="m-n font-thin h3 pull-left">{{agile_lng_translate 'Campaigns' 'report-results'}}  {{contacts_count}} </h1>
             
        <!--     <div class="btn-group right pos-rlt" id="view-list" style="top:-29px;">
             </div>
@@ -47,24 +47,24 @@
         <div class="data">
             <div class="data-container">
                 <div class="btn-group right pos-rlt" id="bulk-actions" style="display: none">
-                    <button class="btn btn-sm btn-default">Bulk Actions</button>
+                    <button class="btn btn-sm btn-default">{{agile_lng_translate 'contacts-view' 'bulk-actions'}}</button>
                     <button class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" id="view-actions">
                     <span class="caret"></span>
                     </button>
                     <ul class="dropdown-menu" id="view-actions">
-                        <li><a href="#" id="bulk-owner">Change owner</a></li>
+                        <li><a href="#" id="bulk-owner">{{agile_lng_translate 'deal-view' 'change-owner'}}</a></li>
                         {{#hasMenuScope 'CAMPAIGN'}}
-                        <li><a href="#" id="bulk-campaigns">Add to campaign</a></li>
+                        <li><a href="#" id="bulk-campaigns">{{agile_lng_translate 'web-rules' 'add-to-campaign'}}</a></li>
                         {{/hasMenuScope}}
-                        <li class="hide"><a href="#" id="bulk-email">Send email</a></li>
-                        <li><a href="#" id="bulk-tags">Add tags</a></li>
+                        <li class="hide"><a href="#" id="bulk-email">{{agile_lng_translate 'contact-details' 'send-email'}}</a></li>
+                        <li><a href="#" id="bulk-tags">{{agile_lng_translate 'contacts-view' 'add-tags'}}</a></li>
                     </ul>
                 </div>
                 <div class="wrapper-md">
                 <div>
                 <div>
                 <div class="panel panel-default m-b-none">
-                <div class="panel-heading">Report Results List</div>
+                <div class="panel-heading">{{agile_lng_translate 'Campaigns' 'report-results-list'}}</div>
                 <div style="overflow-x:auto">
                 <div class="table-responsive">
                 <table id="contacts_search" class="table table-striped m-b-none agile-table panel onlySorting" url="core/api/contacts/bulk" style="table-layout:auto">
@@ -91,8 +91,9 @@
                         <img alt="Clipboard" src="{{getS3ImagePath '/img/clipboard.png'}}">
                     </div>
                 <div class="box-right pull-left">
-                    <h4 class="m-t-none">No results found !</h4>
-                    <div class="text">Your search criteria did not match any of your contacts.</div>
+                    <h4 class="m-t-none">{{agile_lng_translate 'Campaigns' 'report-results-list'}}!</h4>
+                    <div class="text">
+                    {{agile_lng_translate 'Campaigns' 'your-search-criteria-did-not-match'}}</div>
                 </div>
             </div>
             <div class="clearfix">

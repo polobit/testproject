@@ -124,6 +124,16 @@ public class ContactSavePreprocessor
 	{
 	    newContact.setContactOwner(oldContact.getContactOwnerKey());
 	}
+	
+	try
+	{
+		if(newContact != null && oldContact != null)
+		System.out.println("New contact owner key " + newContact.getContactOwnerKey() + " Old Contact owner key " + oldContact.getContactOwnerKey());
+	}
+	catch(Exception e)
+	{
+		System.err.println("Exception occured in println " + e.getMessage());
+	}
     }
 
     private void validateTags()

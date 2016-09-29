@@ -229,7 +229,7 @@ function saveDocument(form_id, modal_id, saveBtn, isUpdate, json, contact_id)
 		{
 			$('#' + form_id).find('#network_type').closest(".controls").find(".icon-ok").css("display", "none");
 			$('#' + form_id).find('#network_type').closest(".controls").find("div.link").css("background-color", "#FFFFFF");
-			$('#' + form_id).find('#error').html('<div class="alert alert-danger col-sm-offset-3 col-sm-7">Sorry! Document not attached properly.</div>');
+			$('#' + form_id).find('#error').html('<div class="alert alert-danger col-sm-offset-3 col-sm-7">{{agile_lng_translate "documents" "not-attached"}}</div>');
 			enable_save_button($(saveBtn));
 			return;
 		}
@@ -385,6 +385,11 @@ function saveDocument(form_id, modal_id, saveBtn, isUpdate, json, contact_id)
 				{
 					// Removes the contact id from related to contacts
 					json.contact_ids.splice(json.contact_ids.indexOf(contact_id), 1);
+				}
+				if(!modal_id && json && json.deal_ids && App_Deal_Details.dealDetailView && Current_Route == "deal/"+ App_Deal_Details.dealDetailView.model.id)
+				{
+					// Removes the contact id from related to contacts
+					json.deal_ids.splice(json.deal_ids.indexOf(App_Deal_Details.dealDetailView.model.id), 1);
 				}
 				var $ele = saveBtn.parent().find(".save-status");
 				$ele.html("<i style='color:#B94A48;'>"+Handlebars.compile('{{name}}')({name : response.responseText})+"</i>");

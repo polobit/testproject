@@ -26,12 +26,15 @@ var Contacts_And_Companies_Events_View = Base_Model_View.extend({
 
     	'click .contacts-view' : 'toggleContactsView',
     	'click #contactTabelView' : 'toggleContactsListView',
-    	'click .contactcoloumn' : 'addOrRemoveContactColumns',
+    	'click .contacts-div .contactcoloumn' : 'addOrRemoveContactColumns',
     	'click .toggle-contact-filters' : 'toggleContactFilters',
     	'click #companiesTabelView' : 'toggleCompaniesListView',
     	'click .companycoloumn' : 'addOrRemoveCompanyColumns',
     	'click .toggle-company-filters' : 'toggleCompanyFilters',
-    	
+
+    	'click #lhs-customfilters-header' : 'toggleMobileCustomFilters',
+    	'click #lhs-company-customfilters-header' : 'toggleMobileCustomFilters',
+
     },
 
     /*onContactDeleteAction : function(e){
@@ -39,6 +42,16 @@ var Contacts_And_Companies_Events_View = Base_Model_View.extend({
     	event.stopPropagation();
     	contact_delete_action.onContactDelete(e);
 	},*/
+	toggleMobileCustomFilters : function(e){
+		e.preventDefault();
+		$(e.currentTarget).find('i').toggleClass('fa-plus-square-o').toggleClass('fa-minus-square-o');
+		$(e.currentTarget).next().toggleClass('hide');
+	},
+	toggleMobileCustomFilters : function(e){
+		e.preventDefault();
+		$(e.currentTarget).find('i').toggleClass('fa-plus-square-o').toggleClass('fa-minus-square-o');
+		$(e.currentTarget).next().toggleClass('hide');
+	},
 
     bulkActionCompaniesSortByName : function(e){
 
@@ -234,7 +247,22 @@ var Contacts_And_Companies_Events_View = Base_Model_View.extend({
 		var appCount = 0;
 		var limitValue = 10000;		
 
-		if(company_util.isCompany()){
+		if(company_util.isCompanyContact()){
+			resultCount = App_Companies.contacts_Company_List.collection.length;
+			appCount = getAvailableContacts();
+
+			if(resultCount > limitValue){
+					resultCount = limitValue + "+";
+				}
+
+				if(appCount > limitValue){
+					appCount = limitValue + "+";
+				}
+
+			html = "Selected " + resultCount + " contacts. <a href='#'  id='select-all-available-contacts' class='c-p text-info-important'>Select all " + appCount + " contacts</a>";
+       }	
+
+		else if(company_util.isCompany()){
 
 			resultCount = App_Companies.companiesListView.collection.length;
 			appCount = getAvailableContacts();
@@ -339,10 +367,10 @@ var Contacts_And_Companies_Events_View = Base_Model_View.extend({
     toggleContactFilters : function(e){
     	if (_agile_get_prefs("hide_contacts_lhs_filter")) {
             _agile_delete_prefs("hide_contacts_lhs_filter");
-            $(e.currentTarget).attr("data-original-title", "Hide Filters").tooltip("hide");
+            $(e.currentTarget).attr("data-original-title", "{{agile_lng_translate 'tickets' 'hide-filters'}}").tooltip("hide");
         } else {
             _agile_set_prefs("hide_contacts_lhs_filter", true);
-            $(e.currentTarget).attr("data-original-title", "Show Filters").tooltip("hide");
+            $(e.currentTarget).attr("data-original-title", "{{agile_lng_translate 'tickets' 'show-filters'}}").tooltip("hide");
         }
 
         if ($('#contacts-lhs-filters-toggle', $("#contacts-listener-container")).is(':visible'))
@@ -405,10 +433,10 @@ var Contacts_And_Companies_Events_View = Base_Model_View.extend({
     	if (_agile_get_prefs("companiesFilterStatus") == "display:none") 
         {
             _agile_delete_prefs("companiesFilterStatus");
-            $(e.currentTarget).attr("data-original-title", "Hide Filters").tooltip("hide");
+            $(e.currentTarget).attr("data-original-title", "{{agile_lng_translate 'tickets' 'hide-filters'}}").tooltip("hide");
         } else {
             _agile_set_prefs("companiesFilterStatus", "display:none");
-            $(e.currentTarget).attr("data-original-title", "Show Filters").tooltip("hide");
+            $(e.currentTarget).attr("data-original-title", "{{agile_lng_translate 'tickets' 'show-filters'}}").tooltip("hide");
         }
     }
 

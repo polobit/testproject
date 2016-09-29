@@ -1,5 +1,7 @@
 package com.agilecrm.account.util;
 
+import static com.agilecrm.AgileQueues.AMAZON_SES_EMAIL_PULL_QUEUE;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -16,11 +18,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.agilecrm.AgileQueues;
-import com.agilecrm.Globals;
-import com.thirdparty.mailgun.util.MailgunUtil;
 import com.agilecrm.account.EmailGateway;
 import com.agilecrm.account.EmailGateway.EMAIL_API;
 import com.agilecrm.contact.email.EmailSender;
+import com.agilecrm.contact.email.util.ContactEmailUtil;
 import com.agilecrm.db.GoogleSQL;
 import com.agilecrm.mandrill.util.MandrillUtil;
 import com.agilecrm.mandrill.util.deferred.MailDeferredTask;
@@ -37,10 +38,11 @@ import com.campaignio.logger.util.CampaignLogsSQLUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.blobstore.BlobKey;
 import com.google.appengine.api.taskqueue.TaskHandle;
+import com.thirdparty.mailgun.MailgunNew;
+import com.thirdparty.mailgun.util.MailgunUtil;
 import com.thirdparty.mandrill.Mandrill;
 import com.thirdparty.sendgrid.SendGrid;
 import com.thirdparty.ses.util.AmazonSESUtil;
-import com.thirdparty.mailgun.MailgunNew;
 
 /**
  * <code>EmailGatewayUtil</code> is the utility class for EmailGateway. It
@@ -371,6 +373,12 @@ public class EmailGatewayUtil
     {
 	try
 	{
+		to = ContactEmailUtil.normalizeEmailIds(to);
+    	if(StringUtils.isBlank(to)) return;
+    	
+    	cc = ContactEmailUtil.normalizeEmailIds(cc);
+    	bcc = ContactEmailUtil.normalizeEmailIds(bcc);
+    	
 	    // If no gateway setup, sends email through Agile's default
 	    if (emailGateway == null || (EMAIL_API.SES.equals(emailGateway.email_api))
 	    		&& ((documentIds != null && documentIds.size() != 0) 
@@ -468,15 +476,18 @@ public class EmailGatewayUtil
 	    String domain, String fromEmail, String fromName, String to, String cc, String bcc, String subject,
 	    String replyTo, String html, String text, String mandrillMetadata, String subscriberId, String campaignId)
     {
-	MailDeferredTask mailDeferredTask = new MailDeferredTask(emailGatewayType, apiUser, apiKey, domain, fromEmail,
-		fromName, to, cc, bcc, subject, replyTo, html, text, mandrillMetadata, subscriberId, campaignId);
-	
-	// Add to pull queue with from email as Tag
-	if(emailGatewayType!=null && emailGatewayType.equalsIgnoreCase("SES")){
-		queueName = "amazon-ses-pull-queue";
-	}
-	PullQueueUtil.addToPullQueue(queueName, mailDeferredTask, fromEmail);
-	
+    	to = ContactEmailUtil.normalizeEmailIds(to);
+    	if(!StringUtils.isBlank(to)) {
+			MailDeferredTask mailDeferredTask = new MailDeferredTask(emailGatewayType, apiUser, apiKey, domain, fromEmail,
+					fromName, to, ContactEmailUtil.normalizeEmailIds(cc), ContactEmailUtil.normalizeEmailIds(bcc), 
+					subject, replyTo, html, text, mandrillMetadata, subscriberId, campaignId);
+			
+			// Add to pull queue with from email as Tag
+			if(emailGatewayType!=null && emailGatewayType.equalsIgnoreCase("SES")){
+				queueName = AMAZON_SES_EMAIL_PULL_QUEUE;
+			}
+			PullQueueUtil.addToPullQueue(queueName, mailDeferredTask, fromEmail);
+    	}	
     }
 
     /**

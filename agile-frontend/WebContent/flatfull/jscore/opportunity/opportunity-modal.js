@@ -19,7 +19,7 @@ $(function()
 	{
 
 		// Add placeholder and date picker to date custom fields
-		$('.date_input').attr("placeholder","Select Date");
+		$('.date_input').attr("placeholder",_agile_get_translated_val("contacts", "select-date"));
     
 		$('.date_input').datepicker({
 			format: CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY, autoclose: true
@@ -172,7 +172,7 @@ $(function()
 												$('#' + id + ' .deal-options').find('.deal-edit').remove();
 												$('#' + id + ' .deal-options')
 														.prepend(
-																'<a title="Restore" class="deal-restore" style="cursor:pointer;text-decoration:none;"> <i style="width: 0.9em!important;" class="icon-mail-reply"></i> </a>');
+																'<a title="{{agile_lng_translate "deal-view" "restore"}}" class="deal-restore" style="cursor:pointer;text-decoration:none;"> <i style="width: 0.9em!important;" class="icon-mail-reply"></i> </a>');
 											}
 											console.log('archived deal----', model);
 											// Shows Milestones Pie
@@ -312,8 +312,8 @@ $(function()
 											else
 											{
 												$('#' + id + ' .deal-options').find('.deal-restore').remove();
-												var htmllinks = '<a title="Archive" class="deal-archive" style="cursor:pointer;text-decoration:none;"> <i style="width: 0.9em!important;" class="icon-archive"></i> </a>';
-												htmllinks += '<a title="Edit" class="deal-edit" style="cursor:pointer;text-decoration:none;"> <i style="width: 0.9em!important;" class="icon-pencil"></i> </a>';
+												var htmllinks = '<a title="{{agile_lng_translate "deal-view" "archive"}}" class="deal-archive" style="cursor:pointer;text-decoration:none;"> <i style="width: 0.9em!important;" class="icon-archive"></i> </a>';
+												htmllinks += '<a title="{{agile_lng_translate "contact-details" "edit"}}" class="deal-edit" style="cursor:pointer;text-decoration:none;"> <i style="width: 0.9em!important;" class="icon-pencil"></i> </a>';
 												$('#' + id + ' .deal-options').prepend(htmllinks);
 											}
 											console.log('archived deal----', model);
@@ -398,7 +398,7 @@ $(function()
 	$('body').on('click', '#deal_lost_reason_save', function(e){
 		e.preventDefault();
 		$(this).attr('disabled',true);
-		$(this).text('Saving...');
+		$(this).text("{{agile_lng_translate 'others' 'saving'}}");
 		var dealPipelineModel = DEALS_LIST_COLLECTION.collection.where({ heading : App_Deals.newMilestone });
 		var dealModel = dealPipelineModel[0].get('dealCollection').get(App_Deals.lost_reason_milesone_id);
 		dealModel.collection.get(App_Deals.lost_reason_milesone_id).set({ "lost_reason_id" : $(this).closest('.modal').find('form').find('#lost_reason').val() });

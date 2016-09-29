@@ -340,8 +340,16 @@ function set_up_portlets(el, portlets_el){
 
         				var pos = '' + this.$resized_widget.attr('data-col')+''+this.$resized_widget.attr('data-row');
         				var height = this.$resized_widget.find('.portlet_body').height();
-        				var width=this.$resized_widget.find('.portlet_body').width()
-        				callschart[parseInt(pos)].setSize(width,callschart[parseInt(pos)].xAxis[0].categories.length*30+(height-30),false);
+        				var width=this.$resized_widget.find('.portlet_body').width();
+        				callschart[parseInt(pos)].setSize(width, height);
+        				var max = callschart[parseInt(pos)].xAxis[0].max,
+									    min = callschart[parseInt(pos)].xAxis[0].min,
+									    height_chart = callschart[parseInt(pos)].xAxis[0].height;
+
+									 if (height_chart-(max-min)*28<=0) {
+									    callschart[parseInt(pos)].setSize(width, height+(max-min)*20)
+									  }
+        				//callschart[parseInt(pos)].setSize(width,callschart[parseInt(pos)].xAxis[0].categories.length*30+(height-30),false);
         			}
         			else if(tempModel.get("name")=="Task Report")
         			{
@@ -438,7 +446,7 @@ function set_up_portlets(el, portlets_el){
               					  });
 		            		   }
 		            		   else{
-					var weeksArray = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+		            var weeksArray = $.fn.datepicker.dates['en'].daysShort;
 					$(this).find('#calendar_container').find('.fc-widget-header').each(function(index)
 					{
 						$(this).text(weeksArray[index]);
@@ -467,7 +475,7 @@ function set_up_portlets(el, portlets_el){
 function hidePortletSettingsAfterSave(modal_id){
 
 	var modal=$('#'+modal_id+ '> .modal-dialog > .modal-content > .modal-footer > a');
-	modal.text('Save');
+	modal.text('{{agile_lng_translate "modals" "save"}}');
 	modal.attr('disabled',false);
 	$('#'+modal_id).modal('hide');
 	$('.modal-backdrop').hide();
@@ -492,7 +500,7 @@ function initBlogPortletSync(el)
 							+ entry.contentSnippet.replace('<a', '<a target="_blank"') + '</p>';
 						 },
 							onComplete : function(e){
-							$('#portlet_blog_sync_container',el).append('<span class="pull-right"><a href="https://www.agilecrm.com/blog" target="_blank">Agile CRM Blog</a></span>');
+							$('#portlet_blog_sync_container',el).append('<span class="pull-right"><a href="https://www.agilecrm.com/blog" target="_blank">{{agile_lng_translate "portlets" "agile-crm-blog"}}</a></span>');
 							}
 						});
 		});
@@ -558,7 +566,7 @@ function loadGoogleEventsForPortlets(p_el,startTime,endTime){
 			setTimeout(function(){
 				if($(p_el).parent().parent().find('#normal-events').find('table').find('tr').length==0 && $(p_el).parent().parent().find('#google-events').find('table').find('tr').length==0)
 				{
-					$(p_el).parent().parent().find('#normal-events').html('<div class="portlet-error-message">No calendar events</div>');
+					$(p_el).parent().parent().find('#normal-events').html('<div class="portlet-error-message">{{agile_lng_translate "portlets" "no-calendar-events"}}</div>');
 				}
 			},1000);
 		}
@@ -608,7 +616,7 @@ function googledataforEvents(p_el,response,startTime,endTime)
 								setTimeout(function(){
 									if($(p_el).parent().parent().find('#normal-events').find('table').find('tr').length==0 && $(p_el).parent().parent().find('#google-events').find('table').find('tr').length==0)
 									{
-										$(p_el).parent().parent().find('#normal-events').html('<div class="portlet-error-message">No calendar events</div>');
+										$(p_el).parent().parent().find('#normal-events').html('<div class="portlet-error-message">{{agile_lng_translate "portlets" "no-calendar-events"}}</div>');
 									}
 								},1000);
 							} });

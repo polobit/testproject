@@ -3,7 +3,7 @@
 		<div class="wrapper-sm">
 
 			<div class="word-break p-n text-base" id="skype_no_phone">
-				There is no phone number associated.
+				{{agile_lng_translate 'widgets' 'no-phone-number-associated'}}
 			</div>
 
 		</div>
@@ -51,7 +51,7 @@
 						<i class="icon pull-left icon-phone text-muted text-md m-r-xs m-t-xxs v-middle twilio-widget-answer"></i>
 					{{/if_equals}}
 				
-<div class="pull-left text-sm">{{#if_equals duration "0"}}Call unanswered{{else}}Call connected{{/if_equals}}</div>
+<div class="pull-left text-sm">{{#if_equals duration "0"}}{{agile_lng_translate 'widgets' 'call-unanswered'}}{{else}}{{agile_lng_translate 'widgets' 'call-connected'}}{{/if_equals}}</div>
 				
 <div class="pull-right">{{#is_string duration}}{{toProperFormat duration}}{{else}}0s{{/is_string}}</div>
 				
@@ -64,7 +64,7 @@
 		{{/each}}
 	{{else}}
 		<li class="list-group-item wrapper-md r-none b-l-none b-r-none text-center">
-	    	Sorry, we could not find any call data
+	    	{{agile_lng_translate 'widgets' 'sorry-we-could-not-find-any-call-data'}}
 		</li>
 	{{/if}}
 
@@ -75,28 +75,28 @@
 	<form class="p-xs" id="skype_login_form" name="skype_login_form" method="post">
     	<fieldset>
 				<p class="m-t-sm" style=" margin: 0px;margin-bottom: 20px;">
-                    Make and receive calls with your customers using Skype account.
+                    {{agile_lng_translate 'widgets' 'Skype-content'}}
 			  </p>	
 				
 				<p style="font-size: 13px;margin-bottom: 15px">
-					Please follow these steps 			
+					{{agile_lng_translate 'widgets' 'please-follow-these-steps'}} 			
 				</p>
 
 				<div class="m-t-sm m-b-none text-sm" style="font-size: 12px;">
-				<p>1) Agile needs an executable on your Windows PC to communicate with Skype. You can download it <a href="#" class="text-info" target="_blank" id="downloadCallJar" style="color:red;"> here.</a> 
-				<span>*&nbsp;</span><span style="font-size: 9px;color:grey;">Support for Windows only</span>
+				<p>{{agile_lng_translate 'widgets' 'skype-download-desc'}} <a href="#" class="text-info" target="_blank" id="downloadCallJar" style="color:red;"> {{agile_lng_translate 'widgets' 'here'}}</a> 
+				<span>*&nbsp;</span><span style="font-size: 9px;color:grey;">{{agile_lng_translate 'widgets' 'support-for-windows-only'}}</span>
 				</p>
-  				<p>2) Save the widget by clicking on the save button below. </p>
-				<p>3) Open Skype executable and follow the steps.</p>
+  				<p>{{agile_lng_translate 'widgets' 'bria-desc-2'}} </p>
+				<p>{{agile_lng_translate 'widgets' 'skype-desc-3'}}</p>
 				</div>
 
               	<div style="margin-top: 18px">
 					<p style="font-size: 13px; margin-top:5px;">
-						You should be able to now make and receive calls using Skype.	
+						{{agile_lng_translate 'widgets' 'skype-desc-4'}}	
 					</p>
 				<div class="text-center">
-				<a href="#add-widget" class="btn btn-default btn-sm ml_5">Cancel</a>
-				<a href="#" id="save_prefs" class="save-agile-widget btn btn-sm btn-primary">Save</a>
+				<a href="#add-widget" class="btn btn-default btn-sm ml_5">{{agile_lng_translate 'other' 'cancel'}}</a>
+				<a href="#" id="save_prefs" class="save-agile-widget btn btn-sm btn-primary">{{agile_lng_translate 'portlets' 'save'}}</a>
 				</div>
               </div>
 		 </fieldset>

@@ -3,7 +3,8 @@
 <div class="row" style="display: none;">
 <div class="col-md-12">
 <div align="center" class="p-b-xl">
-You can integrate a maximum of 3 email accounts irrespective of the type of account (Gmail/IMAP/Office365).
+
+{{agile_lng_translate 'settings' 'type-of-integrations'}}
 </div>
 </div>
 </div>
@@ -33,12 +34,12 @@ You can integrate a maximum of 3 email accounts irrespective of the type of acco
 		<div  style="min-height: 85px;">
 		{{#if id}}
 		   <div>
-		   	  <div class="l-h word-break">Server: {{server_name}}</div>
-			  <div class="l-h word-break">Email: {{user_name}}</div>
+		   	  <div class="l-h word-break">{{agile_lng_translate 'settings' 'server'}}: {{server_name}}</div>
+			  <div class="l-h word-break">{{agile_lng_translate 'portlets' 'emails'}}: {{user_name}}</div>
 		   </div>
 		{{else}}
-    	<div class="m-b-sm" rel="tooltip" title="Just link your IMAP account and Agile will show emails below a contact from your Inbox.">
-			Just link your IMAP account and Agile will show emails below a contact from your Inbox and Sent folders.
+    	<div class="m-b-sm" rel="tooltip" title="{{agile_lng_translate 'prefs-email' 'imap-content'}}">
+			{{agile_lng_translate 'prefs-email' 'imap-content'}}
 		</div>
 		
         {{/if}}
@@ -46,19 +47,20 @@ You can integrate a maximum of 3 email accounts irrespective of the type of acco
 		<center>
 			{{#if id}}
                 <div class="">
-				<a class="btn btn-sm btn-danger" href="#" id="imap-prefs-delete" name="imap" oid={{id}}>Disable</a>
-				<a class="btn btn-sm btn-default" href="#imap/{{id}}">Settings</a>
+				<a class="btn btn-sm btn-danger" href="#" id="imap-prefs-delete" name="imap" oid={{id}}>{{agile_lng_translate 'web-rules' 'disable'}}</a>
+				<a class="btn btn-sm btn-default" href="#imap/{{id}}">{{agile_lng_translate 'preferences' 'settings'}}</a>
                 </div>
 			{{else}}
 			<div>
 			    {{#has_email_account_limit_reached}}
 			    {{#if_non_pro_plan}}
-				<div class="p-xs" style="border: 1px solid #E2E29C;background-color: #F7F7D0;"> Please <strong><a class="text-info" href="#subscribe">upgrade</a></strong> to Enterprise plan</div>
+				<div class="p-xs" style="border: 1px solid #E2E29C;background-color: #F7F7D0;"> {{agile_lng_translate 'portlets' 'please'}} <strong><a class="text-info" href="#subscribe">{{agile_lng_translate 'portlets' 'upgrade'}}</a></strong> {{agile_lng_translate 'widgets' 'to-enterprise-plan'}}</div>
 				{{/if_non_pro_plan}}
 				<!--<a class="btn btn-sm btn-default m-t-sm" disabled="disabled">Enable</a>-->
 				
 				{{else}}
-				<a class="btn btn-sm btn-default" href="#imap">Enable</a>
+				<a class="btn btn-sm btn-default" href="#imap">{{agile_lng_translate 'prefs-email' 'enable'}}
+				</a>
 				{{/has_email_account_limit_reached}}
 			</div>
 			{{/if}}
@@ -83,28 +85,28 @@ You can integrate a maximum of 3 email accounts irrespective of the type of acco
 		<div  style="min-height: 85px;"> 
 			{{#if id}}
 			  <div class="m-b-md p-b-xs">
-		   	  <div class="l-h word-break">Server: {{server_url}}</div>
-		   	  <div class="l-h word-break">Email: {{user_name}}</div>
+		   	  <div class="l-h word-break">{{agile_lng_translate 'settings' 'server'}}: {{server_url}}</div>
+		   	  <div class="l-h word-break">{{agile_lng_translate 'portlets' 'emails'}}: {{user_name}}</div>
 		   </div>
 			{{else}}
-			<div class="m-b-sm" rel="tooltip" title="See all emails related to a contact from your Office365 account.">
-				See all emails related to a contact from your Office365 account.
+			<div class="m-b-sm" rel="tooltip" title="{{agile_lng_translate 'prefs-email' 'office365-content'}}">
+				{{agile_lng_translate 'prefs-email' 'office365-content'}}
 			</div>
 			{{/if}}
 		</div>
         <center>
 			{{#if id}}
-				<a class="btn btn-sm btn-danger" href="#" id="office-prefs-delete" name="office" oid={{id}}>Disable</a>
-				<a class="btn btn-sm btn-default" href="#office/{{id}}">Settings</a>
+				<a class="btn btn-sm btn-danger" href="#" id="office-prefs-delete" name="office" oid={{id}}>{{agile_lng_translate 'web-rules' 'disable'}}</a>
+				<a class="btn btn-sm btn-default" href="#office/{{id}}">{{agile_lng_translate 'preferences' 'settings'}}</a>
 			{{else}}
 				<div>
 			    {{#has_email_account_limit_reached}}
 			    {{#if_non_pro_plan}}
-				<div class="p-xs" style="border: 1px solid #E2E29C;background-color: #F7F7D0;"> Please <strong><a class="text-info" href="#subscribe">upgrade</a></strong> to Enterprise plan</div>				
+				<div class="p-xs" style="border: 1px solid #E2E29C;background-color: #F7F7D0;"> {{agile_lng_translate 'portlets' 'please'}} <strong><a class="text-info" href="#subscribe">{{agile_lng_translate 'portlets' 'upgrade'}}</a></strong> {{agile_lng_translate 'widgets' 'to-enterprise-plan'}}</div>				
 				{{/if_non_pro_plan}}
 				<!--<a class="btn m-t-sm btn-sm btn-default" disabled="disabled">Enable</a>-->
 				{{else}}
-				<a class="btn btn-sm btn-default" href="#office">Enable</a>
+				<a class="btn btn-sm btn-default" href="#office">{{agile_lng_translate 'prefs-email' 'enable'}}</a>
 				{{/has_email_account_limit_reached}}
 				</div>
 			{{/if}}

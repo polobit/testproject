@@ -21,6 +21,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.agilecrm.activities.util.EventUtil;
+import com.agilecrm.affiliate.AffiliateDetails;
+import com.agilecrm.affiliate.util.AffiliateDetailsUtil;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.deals.util.OpportunityUtil;
 import com.agilecrm.document.util.DocumentUtil;
@@ -663,4 +665,40 @@ public class AdminPanelAPI
     		NamespaceManager.set(oldNamespace);
     	}
     }
+    
+    @Path("affiliateDetails")
+    @GET
+	@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+	public AffiliateDetails getAffiliateDetails(@QueryParam("d") String namespace, @QueryParam("id") Long userId){
+		try {
+			String oldNamespace = NamespaceManager.get();
+			NamespaceManager.set(namespace);
+			try{
+				return AffiliateDetailsUtil.getAffiliateDetailsbyUserId(userId);
+			}finally{
+				NamespaceManager.set(oldNamespace);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new WebApplicationException(Response
+					.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+					.build());
+		}
+	}
+    
+    @Path("affiliate/addAmount")
+    @POST
+	public void addAffiliateAmountAmount(@QueryParam("id") Long userId, @QueryParam("amount") int amount){
+    	try {
+    		AffiliateDetails details = AffiliateDetailsUtil.getAffiliateDetailsbyUserId(userId);
+    		details.setAmount(details.getAmount() + amount * 100);
+    		details.save();
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new WebApplicationException(Response
+					.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+					.build());
+		}
+	}
+    
 }

@@ -498,12 +498,31 @@
     </servlet-mapping>
     
     <servlet>
+        <servlet-name>AffiliateReportServlet</servlet-name>
+        <servlet-class>com.agilecrm.affiliate.cron.AffiliateReportServlet</servlet-class>
+    </servlet>   
+ 
+    <servlet-mapping>
+        <servlet-name>AffiliateReportServlet</servlet-name>
+        <url-pattern>/backend/cron/affiliateReport</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
         <servlet-name>TwilioIOTwiml</servlet-name>
         <servlet-class>com.thirdparty.twilio.TwilioIOTwiml</servlet-class>
     </servlet> 
     <servlet-mapping>
         <servlet-name>TwilioIOTwiml</servlet-name>
         <url-pattern>/twiml</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>TwilioIOConfTwiml</servlet-name>
+        <servlet-class>com.thirdparty.twilio.TwilioIOConferenceTwiml</servlet-class>
+    </servlet> 
+    <servlet-mapping>
+        <servlet-name>TwilioIOConfTwiml</servlet-name>
+        <url-pattern>/conftwiml</url-pattern>
     </servlet-mapping>
     
 	<servlet>
@@ -556,6 +575,10 @@
 	  <servlet-name>appstats</servlet-name>
 	  <url-pattern>/appstats/*</url-pattern>
 	</servlet-mapping>
+	
+	<listener>
+		<listener-class>com.agilecrm.frontend.AgileServletContextListener</listener-class>
+	</listener>
 	
 	<security-constraint>
 	  <web-resource-collection>
@@ -999,15 +1022,6 @@
 		<url-pattern>/OAuthServlet</url-pattern>
 	</servlet-mapping>
 
-	<!-- <servlet>
-		<servlet-name>WebEventCalendar</servlet-name>
-		<jsp-file>/web-event-calendar.jsp</jsp-file>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>WebEventCalendar</servlet-name>
-		<url-pattern>/calendar/*</url-pattern>
-	</servlet-mapping> -->
-	
 	<servlet>
 		<servlet-name>NormalInstantiator</servlet-name>
 		<servlet-class>com.agilecrm.test.NormalIntantiator</servlet-class>
@@ -1017,7 +1031,16 @@
 		<url-pattern>/normal-instantiator</url-pattern>
 	</servlet-mapping>
 	
-	<!-- <servlet>
+	<!-- Online Calendar in localhost -->
+	<servlet>
+		<servlet-name>WebEventCalendar</servlet-name>
+		<jsp-file>/web-event-calendar.jsp</jsp-file>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>WebEventCalendar</servlet-name>
+		<url-pattern>/calendar-version/*</url-pattern>
+	</servlet-mapping> 
+	<servlet>
 		<servlet-name>CancelWebAppointment</servlet-name>
 		<jsp-file>/cancel-web-appointment.jsp</jsp-file>
 	</servlet>
@@ -1033,7 +1056,9 @@
 		<servlet-name>WebAppointmentCancelled</servlet-name>
 		<url-pattern>/appointment/confirmation</url-pattern>
 	</servlet-mapping>
-	 --><servlet>
+	<!-- End of Online Calendar in localhost -->
+
+	<servlet>
 		<servlet-name>EcommerceWebhook</servlet-name>
 		<servlet-class>com.thirdparty.ecommerce.EcommerceWebhook</servlet-class>
 	</servlet>
@@ -1225,6 +1250,14 @@
 		<servlet-name>TicketsPdfServlet</servlet-name>
 		<url-pattern>/ticketsPdfServlet</url-pattern>
 	</servlet-mapping>
+	<servlet>
+		<servlet-name>EmailPollServlet</servlet-name>
+		<servlet-class>com.agilecrm.emailbuilder.EmailPollServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>EmailPollServlet</servlet-name>
+		<url-pattern>/emailPollServlet</url-pattern>
+	</servlet-mapping>
 	
     <servlet>
     
@@ -1392,6 +1425,15 @@
 		<url-pattern>/querysubmit</url-pattern>
 	</servlet-mapping>
 	
+	<servlet>
+		<servlet-name>WebruleServlet</servlet-name>
+		<servlet-class>com.agilecrm.webrules.WebruleServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>WebruleServlet</servlet-name>
+		<url-pattern>/push_notification</url-pattern>
+	</servlet-mapping>
+	
 	<!-- SSO feature -->
 	<servlet>
 		<servlet-name>SingleSignOn</servlet-name>
@@ -1409,7 +1451,6 @@
 		<servlet-name>ContactsDeleteServlet</servlet-name>
 		<url-pattern>/backend/cron/deleteContactsFromTextSearch</url-pattern>
 	</servlet-mapping>
-
 	<servlet>
 		<servlet-name>PageBuilder</servlet-name>
 		<jsp-file>/misc/pagebuilder/pagebuilder.jsp</jsp-file>
@@ -1427,5 +1468,33 @@
 	<servlet-mapping>
 		<servlet-name>AmazonSESWebhook</servlet-name>
 		<url-pattern>/backend/amazonseswebhook</url-pattern>
+	</servlet-mapping>
+	<!-- Push notification -->
+    <servlet>
+        <servlet-name>PushNotification</servlet-name>
+        <servlet-class>com.agilecrm.notification.push.PushNotificationServlet</servlet-class>
+    </servlet>  
+    <servlet-mapping>
+        <servlet-name>PushNotification</servlet-name>
+        <url-pattern>/push</url-pattern>
+    </servlet-mapping>
+    
+     <servlet>
+        <servlet-name>PushNotificationDownload</servlet-name>
+        <servlet-class>com.agilecrm.notification.push.PushNotificationDownloadServlet</servlet-class>
+    </servlet>  
+    <servlet-mapping>
+        <servlet-name>PushNotificationDownload</servlet-name>
+        <url-pattern>/downloadpush</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+		<servlet-name>FormSubmitServlet</servlet-name>
+		<servlet-class>com.agilecrm.forms.FormSubmitServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>FormSubmitServlet</servlet-name>
+		<url-pattern>/formtrigger</url-pattern>
 	</servlet-mapping>
 </web-app>

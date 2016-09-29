@@ -210,6 +210,8 @@ var en;
 // Fetch/Create contact from our domain
 var Agile_Contact = {};
 
+var _LANGUAGE = "en";
+
 
 // head.ready('library', function() {
 

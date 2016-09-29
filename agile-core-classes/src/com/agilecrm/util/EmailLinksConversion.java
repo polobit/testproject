@@ -172,7 +172,7 @@ public class EmailLinksConversion
      *            - campaign id
      * @return String
      */
-    public static String convertLinksUsingRegex(String input, String subscriberId, String campaignId, boolean doPush)
+    public static String convertLinksUsingRegex(String input, String subscriberId, String campaignId, String pushParam)
     {
 	Pattern p = Pattern.compile(HTTP_URL_REGEX);
 	Matcher m = p.matcher(input);
@@ -202,9 +202,14 @@ public class EmailLinksConversion
 	    // Add campaign id as param if not empty
 	    if (!StringUtils.isBlank(campaignId))
 		cid = "&c=" + URLEncoder.encode(campaignId, "UTF-8");
-
-	    if (doPush)
-		push = "&p=" + URLEncoder.encode(AGILE_EMAIL_PUSH, "UTF-8");
+	    
+	    // Push parameter
+	    if (StringUtils.isNotBlank(pushParam) && StringUtils.containsIgnoreCase(pushParam, "yes_and_push"))
+	    {
+	    	String param = getPushParam(pushParam);
+	    		
+	    	push = "&p=" + URLEncoder.encode(param, "UTF-8");
+	    }
 
 	    // Iterate over matches
 	    while (m.find())

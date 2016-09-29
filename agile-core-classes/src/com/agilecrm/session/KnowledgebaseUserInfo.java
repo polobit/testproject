@@ -2,10 +2,7 @@ package com.agilecrm.session;
 
 import java.io.Serializable;
 
-import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
-import com.agilecrm.user.DomainUser;
-import com.agilecrm.user.util.DomainUserUtil;
-import com.google.appengine.repackaged.org.codehaus.jackson.map.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class KnowledgebaseUserInfo implements Serializable
 {
