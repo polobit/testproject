@@ -146,7 +146,7 @@ var portlet_graph_utility = {
 									data.push([ value,
 											campaignValuesList[index] ]);
 								});
-								if(!emptyFlag)
+								if(emptyFlag)
 									data[0][1]=1;
 								$('#' + selector)
 										.highcharts(
