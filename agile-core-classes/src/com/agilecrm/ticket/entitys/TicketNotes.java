@@ -20,6 +20,7 @@ import com.agilecrm.ticket.utils.TicketNotesUtil;
 import com.agilecrm.ticket.utils.TicketsUtil;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
+import com.agilecrm.util.HTMLUtil;
 import com.agilecrm.workflows.triggers.util.TicketTriggerUtil;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.NotSaved;
@@ -278,14 +279,9 @@ public class TicketNotes
 			String startTag = "<script>";
 		    String endTag = "</script>";
 
-		    String plainText = plain_text;
+		   
 		    //removing the text between script
-		    if(plain_text.indexOf(startTag) != -1){
-		    sb.replace(plain_text.indexOf(startTag) + startTag.length(), plain_text.indexOf(endTag), "");
-		    
-		     plainText = sb.toString();
-		    }
-
+		    String plainText = HTMLUtil.removeScriptFromPlaintext(plain_text);
 			// Logging notes activity
 			ActivityUtil.createTicketActivity(activityType, ticket.contactID, ticket.id, plainText, html_text,
 					"html_text", false);
@@ -320,17 +316,8 @@ public class TicketNotes
 		if (assignee_key != null)
 			assignee_id = assignee_key.getId();
 		
-		//removing script from plain text
-		StringBuilder sb = new StringBuilder(plain_text);
-		String startTag = "<script>";
-	    String endTag = "</script>";
-
-	    //removing the text between script
-	    if(plain_text.indexOf(startTag) != -1){
-	    sb.replace(plain_text.indexOf(startTag) + startTag.length(), plain_text.indexOf(endTag), "");
-	    
-	    plain_text = sb.toString();
-	    }
+		plain_text = HTMLUtil.removeScriptFromPlaintext(plain_text);
+			    
 	}
 
 	/**

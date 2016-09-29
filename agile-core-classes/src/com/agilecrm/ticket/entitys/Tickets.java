@@ -32,6 +32,7 @@ import com.agilecrm.ticket.utils.TicketsUtil;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.CacheUtil;
+import com.agilecrm.util.HTMLUtil;
 import com.agilecrm.workflows.triggers.util.TicketTriggerUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.datastore.EntityNotFoundException;
@@ -451,14 +452,7 @@ public class Tickets extends Cursor implements Serializable
 			// Create search document
 			new TicketsDocument().add(this);
 
-			StringBuilder sb = new StringBuilder(plain_text);
-			String startTag = "<script>";
-		    String endTag = "</script>";
-
-		    //removing the text between script
-		    sb.replace(plain_text.indexOf(startTag) + startTag.length(), plain_text.indexOf(endTag), "");
-
-		    String plainText = sb.toString();
+			String plainText = HTMLUtil.removeScriptFromPlaintext(plain_text);
 			// Logging ticket created activity
 			ActivityUtil.createTicketActivity(ActivityType.TICKET_CREATED, this.contactID, this.id, "", plainText,
 					"last_reply_text", true);
