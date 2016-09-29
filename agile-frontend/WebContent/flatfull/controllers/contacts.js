@@ -155,7 +155,8 @@ var ContactsRouter = Backbone.Router.extend({
 
 				var el = $(template_ui);
 				$("#content").html(el);
-
+				if(dashboard_name=="MarketingDashboard")
+					$('#automation-video').show();
 				$('[data-toggle="tooltip"]').tooltip();
 				if ((navigator.userAgent.toLowerCase().indexOf('chrome') > -1&&navigator.userAgent.toLowerCase().indexOf('opr/') == -1) && !document.getElementById('agilecrm_extension'))
 				{

@@ -1398,6 +1398,9 @@
 				<a href="#add-dashlet" id="add-portlet" class="btn btn-default btn-sm btn-addon add-portlet add-stream-tab pos-rlt">
 					<i class="icon icon-plus-sign"></i> {{agile_lng_translate 'portlets' 'add-dashlet'}}
 				</a>
+				<a id="automation-video" class="btn btn-sm btn-default" data-toggle="modal"   style="display:none;">
+					<i class="icon-facetime-video"></i>
+				</a>
 				<!-- <a href="#dashboards" id="dashboards" class="btn btn-default btn-sm btn-addon dashboards add-stream-tab pos-rlt">
 					<i class="icon icon-plus-sign"></i> Add/Edit Dashboard
 				</a> -->
@@ -2966,4 +2969,21 @@ Created a new Company {{#if this.entityObject}}<a href="#contact/{{entity_id}}" 
 	<div class="portlets" id="{{id}}">&nbsp;</div>
 	<div class="column_position" style="display:none">{{column_position}}</div>
 	<div class="row_position" style="display:none">{{row_position}}</div>	
+</script>
+
+
+<script id="marketing-video-modal-template" type="text/html">
+ <div class="modal-dialog">
+    <div class="modal-content">
+    	<div class="modal-header">
+	        <button class="close" data-dismiss="modal">x</button>
+	        <h3 class="modal-title"><i class="icon-play-sign"></i>Marketing Automation</h3>	        
+    	</div>
+        <div class="modal-body">
+            <div id="workflow-video-dashboard" class="m-l-xxl">
+                <iframe width="420" height="345" src="//www.youtube.com/embed/aBUQVVXrf2I?enablejsapi=10&autoplay=1" frameborder="0" allowfullscreen></iframe>
+            </div>
+        </div>
+    </div>
+</div>
 </script>

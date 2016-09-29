@@ -331,6 +331,24 @@ function initializePortletsListeners() {
     			},100);	
     			});
 
+	 if($('#automation-video').css("display")!="none"){
+    	$('#dashlet_heading').off("click").on('click', '#automation-video',	function(e) {		
+   			e.preventDefault();
+
+	        getTemplate('marketing-video-modal', {}, undefined, function(template_ui){
+	            if(!template_ui)
+	                  return;           
+
+	            $("#marketing-dashboard-video-modal").html($(template_ui)).modal('show');
+
+	            // Stops video on modal hide
+	            $("#marketing-dashboard-video-modal").on("hide.bs.modal", function(){
+	                $(this).html("");
+	            });
+
+	        }, null);
+    	});
+    }
 	$('.modal-body').off("click").on('click', '#category-select-all',
 			function(e) {
 				e.preventDefault();
@@ -1009,6 +1027,10 @@ $('.portlet_body')
 				_agile_set_prefs("dashboard_"+CURRENT_DOMAIN_USER.id, id);
 				gridster = undefined;
 				loadPortlets(id, $('#content'));
+				if(id=="MarketingDashboard")
+					$("#automation-video").show();
+				else
+					$("#automation-video").hide();
 		    }
 		    else if(!$(this).hasClass("predefined-dashboard") && dashboard_name && dashboard_name != id){
 				e.preventDefault();
