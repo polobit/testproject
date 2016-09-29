@@ -793,6 +793,11 @@ function addTagsTypeaheadLhsFilters(tagsJSON, element)
 			this.$element.val(item);
 			this.$element.trigger('custom_blur');
 			this.hide();
+
+			setTimeout(function(ele){
+				ele.$menu.hide();
+			},20, this);
+
 			return item;
 		} }).attr('placeholder', "{{agile_lng_translate 'contacts-view' 'Enter Tag'}}");
 }
