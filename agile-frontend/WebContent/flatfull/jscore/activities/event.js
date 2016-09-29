@@ -523,7 +523,7 @@ $(function()
 	    });
 
 	  $('body').on('click',".chromeExtension",function(e){
-	  	if (document.getElementById('extension-is-installed')) {
+	  	if (document.getElementById('agilecrm_extension')) {
  		  $('#chrome-extension').addClass("chrome-extenstion-disabled");
  		 
  		}
