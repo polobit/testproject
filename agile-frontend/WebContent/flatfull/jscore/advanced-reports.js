@@ -73,8 +73,8 @@ function initFunnelCharts(callback)
 		sources.collection.fetch({
 			success: function(data){
 				var jsonModel = data.toJSON();
-				var html =  '<option class="default-select" value="">{{agile_lng_translate 'report-add' 'all-sources'}}</option>'+
-				            '<option class="default-select" value="1">{{agile_lng_translate 'report-add' 'unknown'}}</option>';
+				var html =  '<option class="default-select" value="">'+_agile_get_translated_val('report-add','all-sources')+'</option>' + 
+							'<option class="default-select" value="1">'+_agile_get_translated_val('report-add','unknown')+'</option>';
 				
 				$.each(jsonModel,function(index,dealSource){
 					html+='<option class="default-select" value="'+dealSource.id+'">'+dealSource.label+'</option>';
