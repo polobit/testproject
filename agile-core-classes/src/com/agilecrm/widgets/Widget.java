@@ -255,10 +255,10 @@ public class Widget {
 			user = new Key<AgileUser>(AgileUser.class, agileUserID);
 		}
 
-		if(this.widget_type.equals(WidgetType.INTEGRATIONS)){
+		if(this.widget_type != null && this.widget_type.equals(WidgetType.INTEGRATIONS)){
 			dao.put(this);
 		}else{
-			if (this.id == null && this.widget_type == WidgetType.CUSTOM) {
+			if (this.id == null && this.widget_type != null && this.widget_type.equals(WidgetType.CUSTOM)) {
 				this.name = this.display_name.replaceAll("[^a-zA-Z0-9]+", "");
 			}
 			
