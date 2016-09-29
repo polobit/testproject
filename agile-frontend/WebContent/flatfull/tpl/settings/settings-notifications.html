@@ -81,20 +81,35 @@
                         <div class="controls col-sm-8">
                             <div class="checkbox">
 <label class="i-checks i-checks-sm">
-                            <input type="checkbox" id="deal_created" name="deal_created" value="true" /><i></i> 
+                            <input type="checkbox" id="deal_created" name="deal_created" value="true" 
+                            {{#hasMenuScope "DEALS"}}   
+
+                            {{else}}
+                                    disabled="disabled"
+                            {{/hasMenuScope}}/><i></i> 
+                            
                             {{agile_lng_translate 'prefs-notifications' 'deal-is-created'}}
                             </label>
-</div>
+                            </div>
+                         
                             <div class="checkbox">
 <label class="i-checks i-checks-sm">
-                            <input type="checkbox" id="deal_closed" name="deal_closed" value="true" /><i></i> 
+                            <input type="checkbox" id="deal_closed" name="deal_closed"  
+                            {{#hasMenuScope "DEALS"}}        
+                            {{else}}
+                                    disabled="disabled"
+                            {{/hasMenuScope}}/><i></i> 
                            {{agile_lng_translate 'prefs-notifications' 'deal-is-closed'}}
                             </label>
-</div>
+                            </div>
 
                     <div class="checkbox">
-        <label class="i-checks i-checks-sm">
-        <input type="checkbox" id="deal_closed_email" name="deal_closed_email" checked= "unchecked"/><i></i> 
+                    <label class="i-checks i-checks-sm">
+                    <input type="checkbox" id="deal_closed_email" name="deal_closed_email" checked= "unchecked" 
+                    {{#hasMenuScope "DEALS"}}        
+                            {{else}}
+                                    disabled="disabled"
+                            {{/hasMenuScope}}/><i></i> 
         {{agile_lng_translate 'prefs-notifications' 'deal-is-closed-email'}}
         </label>
                     </div>
