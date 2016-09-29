@@ -138,7 +138,8 @@ String logo_url = accountPrefs.logo;
 // Bg Image
 int randomBGImageInteger = MathUtil.randomWithInRange(1, 9);
 
-
+// Mobile push
+String registrationId = request.getParameter("registrationId");
 %>
 <!DOCTYPE html>
 
@@ -377,6 +378,10 @@ if(isSafari && isWin)
 						<input class="hide" id="browser_Name" name="browser_Name"></input>
 						<input class="hide" id="browser_version" name="browser_version"></input>
 						<input class="hide" id="browser_os" name="browser_os"></input>
+						<%if(StringUtils.isNotBlank(registrationId)) {%>
+						 <input class="hide" id="registrationId" name="registrationId" value="<%=registrationId%>"></input>
+						<%} %>
+
 						</div>
 							<label class="checkbox" style="display:none;">
 							    <input type="checkbox" checked="checked" name="signin">Keep me signed in 

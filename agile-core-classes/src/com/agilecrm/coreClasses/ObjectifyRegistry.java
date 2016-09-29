@@ -5,6 +5,7 @@ import com.agilecrm.affiliate.AffiliateDetails;
 import com.agilecrm.affiliate.AffiliateDeal;
 import com.agilecrm.notification.NotificationTemplate;
 import com.agilecrm.notification.push.PushNotificationMessage;
+import com.agilecrm.user.push.AgileUserPushNotificationId;
 import com.agilecrm.workflows.WorkflowBackup;
 import com.googlecode.objectify.ObjectifyService;
 /**
@@ -25,6 +26,9 @@ public class ObjectifyRegistry {
 		ObjectifyService.register(AffiliateDetails.class);
 		ObjectifyService.register(AffiliateDeal.class);
 		ObjectifyService.register(WorkflowBackup.class);
+		ObjectifyService.register(WorkflowBackup.class);
+		// Agile Push 
+		ObjectifyService.register(AgileUserPushNotificationId.class);
 		
 	}
 }

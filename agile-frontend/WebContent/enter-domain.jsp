@@ -22,6 +22,12 @@ It checks if any user exists in that domain,
 if user exists,it is redirected to login page in the same domain otherwise it is redirected to register page.
 */
 
+// Get registration ID
+String registrationId = request.getParameter("registrationId");
+if(StringUtils.isNotBlank(registrationId)){
+	// Add a global cookie
+}
+
 //If Email is present
 
 String flatfull_path="/flatfull";
@@ -31,7 +37,12 @@ if(redirectTo  != null)
 {
 	if(!StringUtils.isEmpty(domain))
 	{
-		response.sendRedirect("https://" + domain + ".agilecrm.com/" + redirectTo);
+		String redirectURL = VersioningUtil.getURL(domain, request) + redirectTo;
+		if(StringUtils.isNotBlank(registrationId)){
+			redirectURL += (redirectURL.indexOf("?") == -1 ? "?" : "&") + "registrationId=" + registrationId;
+		}
+		
+		response.sendRedirect(redirectURL);
 		return;
 	}
 }

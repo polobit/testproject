@@ -472,6 +472,8 @@ public class DealsAPI
 	    ActivitySave.createDealDeleteActivity(opportunity);
 	    if (!opportunity.getNotes().isEmpty())
 		NoteUtil.deleteBulkNotes(opportunity.getNotes());
+	    // Send Notification
+	    DealNotificationPrefsUtil.executeNotificationForDeleteDeal(new JSONArray().put(opportunity.id));
 	    opportunity.delete();
 	}
     }
