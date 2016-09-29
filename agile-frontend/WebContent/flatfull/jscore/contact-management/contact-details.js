@@ -775,12 +775,9 @@ show and hide the input for editing the contact name and saving that
 				// Showing updated owner
 				show_owner(); 
 				App_Contacts.contactDetailView.model = model;
-				
-		    }});
-
+				CONTACTS_HARD_RELOAD = true;
         Backbone.history.navigate("contacts",{trigger: true});
-        location.reload(); 
-    	   
+		    }});
     },
 
     // Deletes a contact from database
@@ -1429,9 +1426,6 @@ enterCompanyScore: function(e){
 		$('#change-owner-ul').css('display', 'none');
 		
 		company_detail_tab.changeOwner($(targetEl));
-
-    Backbone.history.navigate("companies",{trigger: true});
-    location.reload();
 	},
 	
 	/**

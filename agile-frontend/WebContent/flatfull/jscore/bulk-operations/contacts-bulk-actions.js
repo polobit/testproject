@@ -662,7 +662,6 @@ function show_bulk_owner_change_page()
 			postBulkOperationData(url, json, $form, undefined, function(data)
 			{
 				enable_save_button(saveButton);
-				location.reload();
 			}, _agile_get_translated_val('bulk-actions','owner-change-scheduled'))
 		});
 
@@ -1363,11 +1362,16 @@ function postBulkOperationData(url, data, form, contentType, callback, error_mes
 
 		if(App_Companies.Company_detail_route!="")
 			Backbone.history.navigate(App_Companies.Company_detail_route,{trigger : true});
-		else if(!company_util.isCompany())
+		else if(!company_util.isCompany()){
 			// On save back to contacts list
+			CONTACTS_HARD_RELOAD = true;
 			Backbone.history.navigate("contacts", { trigger : true });
-		else
+		}
+
+		else{
+			COMPANIES_HARD_RELOAD = true;
 			Backbone.history.navigate("companies", { trigger : true });
+		}
 
 		// If no_noty is given as error message, neglect noty
 		if (error_message === "no_noty")

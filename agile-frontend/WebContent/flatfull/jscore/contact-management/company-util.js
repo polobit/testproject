@@ -516,7 +516,8 @@
 				// Showing updated owner
 				show_owner(); 
 				App_Companies.companyDetailView.model = model;
-				
+				COMPANIES_HARD_RELOAD = true;
+    			Backbone.history.navigate("companies",{trigger: true});
 		    }});
    	};
 	
