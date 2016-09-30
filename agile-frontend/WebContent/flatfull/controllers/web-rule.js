@@ -68,7 +68,7 @@ var WebreportsRouter = Backbone.Router.extend({
 					{
 						chainWebRules(el, undefined, true);
 						$("#content").html(el);
-						if($('#LHS :selected').val()=="page")
+						if($('#LHS select').val()=="page")
 							$('#RHS input').val("http");
 					}, true);
 
@@ -183,7 +183,7 @@ var WebreportsRouter = Backbone.Router.extend({
 					{
 						chainWebRules(el, undefined, true);
 						$("#content").html(el);
-						if($('#LHS :selected').val()=="page")
+						if($('#LHS select').val()=="page")
 							$('#RHS input').val("http");
 						loadSavedTemplate(path, function(data) {
 							$("#tiny_mce_webrules_link").trigger('click');
@@ -227,7 +227,7 @@ var WebreportsRouter = Backbone.Router.extend({
 					{
 						chainWebRules(el, undefined, true);
 						$("#content").html(el);
-						if($('#LHS :selected').val()=="page")
+						if($('#LHS select').val()=="page")
 							$('#RHS input').val("http");
 						$("#tinyMCEhtml_email").text(" ");
 						$("#tiny_mce_webrules_link").trigger('click');
