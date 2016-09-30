@@ -37,16 +37,17 @@ var WebreportsRouter = Backbone.Router.extend({
 								
 								$('#webrule-analysis-tabs-content').html($(template_ui1));
 
-								if(id == "all") {
+								if(id == "all")
+								 {
 									var webRuleId = $("#webrule-reports-select option")[1].value;
 									$("#webrule-reports-select").val(webRuleId);
 									id = webRuleId;
 
-								}
+								 }
 								
-								// Set the name
-								// $('#reports-webrule-name').text(workflowName);
-								initWebruleChartsUI(function()
+								   // Set the name
+								   // $('#reports-webrule-name').text(workflowName);
+								 initWebruleChartsUI(function()
 								{
 									// Updates table data
 									get_webrule_table_reports(id);
@@ -54,8 +55,6 @@ var WebreportsRouter = Backbone.Router.extend({
 									// shows graphs by default week date range.
 									showWebruleGraphs(id);
 								});
-
-						
 
 							}, "#webrule-analysis-tabs-content");
 
@@ -98,7 +97,15 @@ var WebreportsRouter = Backbone.Router.extend({
 							  callback();
 
 							$('#content').on('change', '#webrule-reports-select', function (e) {
-		                            get_webrule_table_reports($(this).val());
+								e.preventDefault();
+                                 var targetEl = $(e.currentTarget);
+                                 Backbone.history.navigate("webrule-report/"+$(targetEl).val() , 
+                                 {
+                                  trigger: true
+                                  });
+
+		                          //  get_webrule_table_reports($(this).val());
+		                            //showWebruleGraphs($(this).val());
 
 	                        });
 
