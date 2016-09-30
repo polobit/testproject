@@ -128,6 +128,7 @@ var WorkflowsRouter = Backbone.Router
 						}
 						else
 						{
+							window.location.href  = window.location.origin+"/#workflow-templates";
 							el.find('#campaign_logs').attr('href','#workflows');
 							return;
 						}
