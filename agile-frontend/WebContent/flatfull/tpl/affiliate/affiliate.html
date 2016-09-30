@@ -5,9 +5,11 @@
     <a href="#affiliate-register-deal" style="display: none;" id="affiliate-register-deal" class="btn btn-default pull-right btn-sm btn-addon">
           <i class="icon icon-plus-sign"></i> {{agile_lng_translate 'other' 'add'}}
     </a>
-    <div class="clearfix"></div>    
+    <div class="clearfix"></div> 
   </div>
   <div class="hbox hbox-auto-xs hbox-auto-sm bg-light agile-tab">
+  {{#if isAdminPanel}}
+  {{else}}
 	<div id="affiliate-tabs" class="col w b-r">
      <div class="vbox">
       <div class="row-row">
@@ -20,6 +22,7 @@
 	  </div>
 	 </div>
 	</div>
+  {{/if}}
 	<div class="tab-content wrapper-md ">
 	  <div class="tabs" id="affiliate-tabs-content"></div>
 	</div>

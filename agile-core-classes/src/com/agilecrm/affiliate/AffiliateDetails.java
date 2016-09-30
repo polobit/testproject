@@ -33,6 +33,16 @@ public class AffiliateDetails {
 	private Long userId;
 	
 	/**
+	 * email
+	 */
+	private String email;
+	
+	/**
+	 * domain name
+	 */
+	private String domain;
+	
+	/**
 	 * paypal  Id of user
 	 */
 	@NotSaved(IfDefault.class)
@@ -105,6 +115,20 @@ public class AffiliateDetails {
 	 */
 	public String getPaypalId() {
 		return paypalId;
+	}
+
+	/**
+	 * @return the email
+	 */
+	public String getEmail() {
+		return email;
+	}
+
+	/**
+	 * @param email the email to set
+	 */
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
 	/**
@@ -258,5 +282,19 @@ public class AffiliateDetails {
 	 */
 	public void setAmount(int amount) {
 		this.amount = amount;
+	}
+
+	/**
+	 * @return the domain
+	 */
+	public String getDomain() {
+		return domain;
+	}
+
+	/**
+	 * @param domain the domain to set
+	 */
+	public void setDomain(String domain) {
+		this.domain = domain;
 	}
 }
