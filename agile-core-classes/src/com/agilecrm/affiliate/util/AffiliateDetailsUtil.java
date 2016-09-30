@@ -58,14 +58,12 @@ public class AffiliateDetailsUtil {
 		}
 	}
 	
-	public static List<AffiliateDetails> getAffiliateDetailsList(Long userId, Long startTime, Long endTime, int max, String cursor, String orderBy, String filterBy){
+	public static List<AffiliateDetails> getAffiliateDetailsList(Long startTime, Long endTime, int max, String cursor, String orderBy, String filterBy){
 		Map<String, Object> map = new HashMap<String, Object>();
 		if(startTime != null && endTime != null && filterBy != null){
 			map.put(filterBy+" >=", startTime);
 			map.put(filterBy+" <=", endTime);
 		}
-		if(userId != null)
-			map.put("userId", userId);
 		return dao.fetchAllByOrder(max, cursor, map, true, false, orderBy);
 	}
 	

@@ -59,11 +59,11 @@ public class AffiliateDetailsApi {
 	@Path("/list")
 	@POST
 	@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-	public List<AffiliateDetails> getAffiliateDetailsList(@FormParam("cursor") String cursor, @FormParam("userId") Long userId, @FormParam("page_size") String count, @FormParam("startTime") Long startTime, @FormParam("endTime") Long endTime, @FormParam("filter_by") String filterBy){
+	public List<AffiliateDetails> getAffiliateDetailsList(@FormParam("cursor") String cursor, @FormParam("page_size") String count, @FormParam("startTime") Long startTime, @FormParam("endTime") Long endTime, @FormParam("filter_by") String filterBy){
 		String sortFieldName = null;
 		if(filterBy != null)
 			sortFieldName = "-"+filterBy;
-		List<AffiliateDetails> affiliateDetailList = AffiliateDetailsUtil.getAffiliateDetailsList(userId, startTime, endTime, (Integer.parseInt(count)), cursor, sortFieldName, filterBy);
+		List<AffiliateDetails> affiliateDetailList = AffiliateDetailsUtil.getAffiliateDetailsList(startTime, endTime, (Integer.parseInt(count)), cursor, sortFieldName, filterBy);
 		return affiliateDetailList;
 	}
 	
