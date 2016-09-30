@@ -11,6 +11,7 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
+import org.jboss.resteasy.util.Encode;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -45,6 +46,7 @@ import com.agilecrm.util.VersioningUtil;
 import com.agilecrm.util.email.MustacheUtil;
 import com.agilecrm.util.email.SendMail;
 import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
+import com.campaignio.urlshortener.util.Base62;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.googlecode.objectify.Key;
@@ -410,7 +412,19 @@ public class TicketNotesUtil
 		
 		JSONObject json = new JSONObject();
 
+		
+
+		
 		if(count == 0){
+			
+		//creating encoded urls for feedback
+		for(int i=1;i<=5;i++ ){
+			
+			String url= Base62.fromDecimalToOtherBase(62, i)+"-"+Base62.fromDecimalToOtherBase(62, notes.id)+"-"+Base62.fromDecimalToOtherBase(62, contact.id);
+	
+			json.put("url"+i, url);
+		}
+		
 		json.put("count", true);
 		json.put("namespace", oldNamespace);
 		json.put("note_id", notes.id);

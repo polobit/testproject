@@ -173,7 +173,7 @@
 
 								//Get closest div with row class to set left alignment. Table row left doesn't work as table have scrolling.
 								var $closest_div = $that.closest('div.row');
-								var top = 0, left = $closest_div.offset().left + 280 + 'px';
+								var top = 0, left = $closest_div.offset().left + 500 + 'px';
 
 								if (window.innerHeight - ($that.offset().top - $(window).scrollTop()) >= 250)
 									top = $that.offset().top + 35 + 'px';

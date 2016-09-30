@@ -121,9 +121,63 @@ var Ticket_Reports = {
 	    end_time += (((23*60*60)+(59*60)+59)*1000);
 	    end_time=end_time+(d.getTimezoneOffset()*60*1000);
 		
-		Ticket_Reports.pieforReports('/core/api/tickets/reports/feedback?start_time=' + start_time + '&end_time=' + end_time,
+		Ticket_Reports.pieforfeedbackReport('/core/api/tickets/reports/feedback?start_time=' + start_time + '&end_time=' + end_time,
 			'feedback', '', true);
 		
+	},
+	pieforfeedbackReport: function(url, selector, name){
+
+
+		$('#' + selector).html("<div class='text-center v-middle opa-half'>" + 
+			"<img src='../flatfull/img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' /></div>");
+
+		var chart;
+		var AllData=[];
+
+		setupCharts(function()
+		{
+			fetchReportData(url, function(data)
+			{
+				// Convert into labels and data as required by Highcharts
+				var pieData = [];
+				var total = 0;
+				var count = 0;
+
+				// Iterates through data and calculate total number
+				$.each(data, function(k, v)
+				{
+					var totalData=[];
+					totalData.push(k);
+					totalData.push(v.count);
+					totalData.push(v.total);
+					AllData.push(totalData);
+					total += v.count;
+					count ++;
+				});
+				AllData.push(total);
+
+				console.log(data,total);
+				// Iterates through data, gets each tag, count and
+				// calculate
+				// percentage of each tag
+				$.each(data, function(k, v)
+				{
+					var item = [];
+
+					
+					// Push tag name in to array
+					item.push(k);
+
+					item.push(v.count/ total * 100);
+					item.push(total);
+					pieData.push(item);
+				});
+
+				var animation = count > 20 ? false : true;
+
+				Ticket_Reports.createAPieChartforFeedback(selector, name, animation, AllData, pieData);
+			});
+		});
 	},
 
 	avgFirstRespTime: function(){
@@ -185,6 +239,83 @@ var Ticket_Reports = {
 		// pie('/core/api/tickets/reports/sla-report?start_time=' + start_time + '&end_time=' + end_time,
 		// 	'sla-report-chart', '');
 	},
+	createAPieChartforFeedback: function(selector, name, animation, AllData, pieData){
+
+		var newname = "Tickets";
+		if(selector == "feedback")
+		{
+			newname = "Feedback";
+		}
+		chart = new Highcharts.Chart({
+				chart : { renderTo : selector, type : 'pie', plotBackgroundColor : null, plotBorderWidth : null, plotShadow : false,
+					marginBottom:30, marginTop:20, marginLeft: 70, marginRight: 70},
+				colors: ['#7266ba','#23b7e5','#27c24c','#fad733','#f05050','#FF9900','#7AF168','#167F80','#0560A2','#D3E6C7'],
+				title : { text : name },
+				tooltip: {
+					formatter:  function(){
+						return  '<div>' + 
+	                        '<div class="p-n">'+this.series.name+': <b>'+ getNumberWithCommasForCharts(AllData[this.point.x][1]) + '</b></div>' +
+	                        '</div>'+
+	                        '<div class="p-n">{{agile_lng_translate "other" "total"}}: <b>' + AllData[5]+ '</b></div>';
+					},
+					shared: true,
+					useHTML: true,
+					borderWidth : 1,
+					backgroundColor : '#313030',
+					shadow : false,
+					borderColor: '#000',
+					borderRadius : 3,
+					style : {
+						color : '#EFEFEF'
+					}
+				},
+				legend : { itemWidth : 75},
+				plotOptions : {
+					pie : {
+						animation: animation,
+						allowPointSelect : true,
+						cursor : 'pointer',
+						borderWidth : 0,
+						dataLabels : { 
+							enabled : true,
+							useHTML: true,
+							formatter : function()
+							{
+								return 	'<div class="text-center text-cap"><span style="color:'+this.point.color+';display:block"><b>'+this.point.name+'</b></span>' +
+    							'<span style="color:'+this.point.color+'"><b>'+Math.round(this.point.percentage)+'%</b></span></div>';
+							}, 
+							distance : 25 
+						}, 
+						showInLegend : false,
+						size: '90%',
+						innerSize : '65%',
+						shadow : false, 
+						borderWidth : 0
+					},
+					series : { events : { mouseOver : function()
+						{
+							$('.tooltip-default-message').hide();
+						}, mouseOut : function(e)
+						{
+							$('.tooltip-default-message').show();
+						} },
+						borderWidth : 0
+					}
+				},
+
+				series : [{ type : 'pie', name : 'Feedback', data : pieData, startAngle : 90 }], 
+				exporting : { enabled : false },
+				lang: { noData: "{{agile_lng_translate 'tickets' 'no-data-found'}}"},
+				noData: {
+					style: {
+						fontSize: '14px',
+						fontWeight : 'normal',
+						color : '#98A6AD'
+					},
+					position :{y: 5},
+				}
+		});
+	},
 
 	pieforReports: function(url, selector, name){
 
@@ -243,11 +374,6 @@ var Ticket_Reports = {
 
 	createAPieChart: function(selector, name, animation, AllData, pieData){
 
-		var newname = "Tickets";
-		if(selector == "feedback")
-		{
-			newname = "Feedback";
-		}
 		chart = new Highcharts.Chart({
 				chart : { renderTo : selector, type : 'pie', plotBackgroundColor : null, plotBorderWidth : null, plotShadow : false,
 					marginBottom:30, marginTop:20, marginLeft: 70, marginRight: 70},
@@ -255,10 +381,11 @@ var Ticket_Reports = {
 				title : { text : name },
 				tooltip: {
 					formatter:  function(){
+		
 						return  '<div>' + 
 	                        '<div class="p-n">'+this.series.name+': <b>'+ getNumberWithCommasForCharts(AllData[this.point.x][1]) + '</b></div>' +
 	                        '</div>'+
-	                        '<div class="p-n">{{agile_lng_translate "other" "total"}}: <b>' + AllData[3]+ '</b></div>';
+	                        '<div class="p-n">{{agile_lng_translate "other" "total"}}: <b>' + AllData[(AllData.length-1)]+ '</b></div>';
 					},
 					shared: true,
 					useHTML: true,

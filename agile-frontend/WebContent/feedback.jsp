@@ -6,6 +6,8 @@
 <%@page import="java.lang.*"%>
 <%@page import="com.agilecrm.account.util.AccountPrefsUtil"%>
 <%@page import="com.agilecrm.account.AccountPrefs"%>
+<%@page import="com.campaignio.urlshortener.util.Base62;"%>
+
 <%
 //flatfull path
 String flatfull_path="/flatfull";
@@ -13,8 +15,13 @@ String flatfull_path="/flatfull";
 String error = "", success = "";
 System.out.println(success);
 String feedback = request.getParameter("feedback");
-Long note_id = Long.parseLong(request.getParameter("note"));
-String feedback_rating = feedback;
+System.out.println(feedback+"feedback");
+
+String[] split = feedback.split("-");
+
+Long note_id = Base62.fromOtherBaseToDecimal(62,split[1]);
+
+String feedback_rating = split[0];
 
 // Users can show their company logo on login page. 
 AccountPrefs accountPrefs = AccountPrefsUtil.getAccountPrefs();
@@ -152,7 +159,6 @@ var id = <%=note_id%>
 <body>
 <div class="container">
 
-		
 		<div class="row"></div><br>
 
 		<!-- Already have an account -->
@@ -290,7 +296,7 @@ function changeFeedback(e,objButton){
 					document.getElementById("addfeedback-message").innerHTML = "<div style=font-size:20px;padding-left:40px;text-align:center;>Your feedback submitted successfully!</div>";
 				},
 				error:function(){
-					document.getElementById("addfeedback-message").innerHTML = "<div style=font-size:20px;padding-left:40px;text-align:center;>Sorry, Cannot submit you feedback!</div>";
+					document.getElementById("addfeedback-message").innerHTML = "<div style=font-size:20px;padding-left:40px;text-align:center;>Sorry, Cannot submit your feedback!</div>";
 				}
 				
 		});
