@@ -257,7 +257,7 @@ if(isSafari && isWin)
 	<div>
 		<small><%=LanguageUtil.getLocaleJSONValue(localeJSON, "already-have-account")%>?
 		</small>
-		<a href="/enter-domain?to=login&lang=<%=_LANGUAGE%>" class="tags-color text-white"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "login")%></a>
+		<a href="/enter-domain?to=login&lang=<%=_LANGUAGE%>" class="tags-color text-white"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "sign-in")%></a>
 	</div>
 	<div>
 		<small><%=LanguageUtil.getLocaleJSONValue(localeJSON, "forgot")%></small> 
