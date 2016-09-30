@@ -523,7 +523,15 @@ public class DealsAPI
 	ActivitySave.createLogForBulkDeletes(EntityType.DEAL, oppJSONArray,
 		String.valueOf(oppJSONArray.length()), "");
 	Opportunity.dao.deleteBulkByIds(oppJSONArray);
-	new AppengineSearch<Opportunity>(Opportunity.class).bulkDelete(oppJSONArray.toString());
+	List<String> list = new ArrayList<String>();
+	for (int i=0; i<oppJSONArray.length(); i++) {
+	    list.add( oppJSONArray.getString(i) );
+	}
+	if(list.size()>0)
+	{
+		String[] stringArray = list.toArray(new String[list.size()]);
+	new AppengineSearch<Opportunity>(Opportunity.class).bulkDelete(stringArray);
+	}
 	return contactIdsList;
     }
 
