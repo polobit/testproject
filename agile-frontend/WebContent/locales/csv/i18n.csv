@@ -5329,7 +5329,8 @@ login.login-with-yahoo,Login with Yahoo,Inicia sesión con Yahoo
 login.dont-have-account,Do not have an account,No tiene una cuenta
 login.sign-up,Sign Up,Regístrate
 login.forgot,Forgot,Olvidó
-login.already-have-account,Already have an account,Ya tengo una cuenta
+register.already-have-account,Already have an account,Ya tengo una cuenta
+register.sign-in,Sign In,Registrarse
 forgot-domain.forgot-domain,Forgot Domain,Olvidé el dominio
 forgot-domain.user-not-found,We are not able to find any user,No podemos encontrar ningún usuario
 forgot-domain.enter-email,Enter Your Email,Inserta tu correo
