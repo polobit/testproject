@@ -1987,8 +1987,8 @@ public class PortletUtil {
 	    Portlet dummyMarketiPortlet = new Portlet("Dummy Marketing Blog",PortletType.RSS,1,1,1,1,Portlet.PortletRoute.MarketingDashboard.toString());
 	    Portlet campaignStatsMarketingPortlet = new Portlet("Campaign stats",PortletType.USERACTIVITY,1,1,1,1,Portlet.PortletRoute.MarketingDashboard.toString());
 	    Portlet campaignGraphMarketingPortlet = new Portlet("Campaign graph",PortletType.USERACTIVITY,2,1,1,1,Portlet.PortletRoute.MarketingDashboard.toString());
-	    Portlet webstatVisitsMarketingPortlet = new Portlet("Webstat Visits",PortletType.USERACTIVITY,1,2,1,1,Portlet.PortletRoute.MarketingDashboard.toString());
-	    Portlet referralurlStatsMarketingPortlet = new Portlet("Referralurl stats",PortletType.USERACTIVITY,2,2,1,1,Portlet.PortletRoute.MarketingDashboard.toString());
+	    /*Portlet webstatVisitsMarketingPortlet = new Portlet("Webstat Visits",PortletType.USERACTIVITY,1,2,1,1,Portlet.PortletRoute.MarketingDashboard.toString());
+	    Portlet referralurlStatsMarketingPortlet = new Portlet("Referralurl stats",PortletType.USERACTIVITY,2,2,1,1,Portlet.PortletRoute.MarketingDashboard.toString());*/
 	    Portlet emailOpenedMarketingPortlet = new Portlet("Emails Opened",PortletType.USERACTIVITY,1,3,1,1,Portlet.PortletRoute.MarketingDashboard.toString());
 	    
 	    JSONObject campaignStatsMarketingPortletJSON = new JSONObject();
@@ -2001,13 +2001,13 @@ public class PortletUtil {
 	    campaignGraphMarketingPortletJSON.put("campaign_type", "All");
 	    campaignGraphMarketingPortlet.prefs = campaignGraphMarketingPortletJSON.toString();
 	    
-	    JSONObject webstatVisitsMarketingPortletJSON = new JSONObject();
+	   /* JSONObject webstatVisitsMarketingPortletJSON = new JSONObject();
 	    webstatVisitsMarketingPortletJSON.put("duration","today");
-	    webstatVisitsMarketingPortlet.prefs = webstatVisitsMarketingPortletJSON.toString();
+	    webstatVisitsMarketingPortlet.prefs = webstatVisitsMarketingPortletJSON.toString();*/
 	    
-	    JSONObject referralurlStatsMarketingPortletJSON = new JSONObject();
+	    /*JSONObject referralurlStatsMarketingPortletJSON = new JSONObject();
 	    referralurlStatsMarketingPortletJSON.put("duration","yesterday");
-	    referralurlStatsMarketingPortlet.prefs = referralurlStatsMarketingPortletJSON.toString();
+	    referralurlStatsMarketingPortlet.prefs = referralurlStatsMarketingPortletJSON.toString();*/
 	    
 	    JSONObject emailOpenedMarketingPortletJSON = new JSONObject();
 	    emailOpenedMarketingPortletJSON.put("duration","2-days");
@@ -2018,8 +2018,8 @@ public class PortletUtil {
 		campaignStatsMarketingPortlet.save();
 		campaignGraphMarketingPortlet.save();
 		emailOpenedMarketingPortlet.save();
-		webstatVisitsMarketingPortlet.save();
-		referralurlStatsMarketingPortlet.save();
+		//webstatVisitsMarketingPortlet.save();
+		//referralurlStatsMarketingPortlet.save();
 		dummyMarketiPortlet.save();		
 		onboardingMarketingPortlet.save();
 		
