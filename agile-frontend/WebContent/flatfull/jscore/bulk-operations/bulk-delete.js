@@ -20,7 +20,9 @@ $(function(){
 		var data_array = [];
 		var checked = false;
 		var table = $('body').find('.showCheckboxes');
-
+		App_Companies.Company_detail_route="";
+			 if (company_util.isCompanyContact())
+				App_Companies.Company_detail_route = Current_Route;
 		$(table).find('tr .tbody_check').each(function(index, element){
 			
 			// If element is checked store it's id in an array. !$(element).attr('disabled') included by Sasi to avoid disabled checkboxes
