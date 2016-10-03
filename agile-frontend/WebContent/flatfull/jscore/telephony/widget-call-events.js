@@ -14,6 +14,7 @@ $(function()
 	$('#content').on('click', '.Asterisk_call', function(e)
 	{
 	  	e.preventDefault();
+	  	e.stopPropagation(); 
 
 		if(checkForActiveCall()){
 			$('#callInfoModal').html(getTemplate("callStatusModal"));
