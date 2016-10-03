@@ -150,7 +150,7 @@ public class RecaptchaGatewayUtil {
 			}
 		  
 		  if(response.contains("invalid-input-secret"))
-		    throw new Exception("Error Saving: API Key or Site Key is invalid.");
+		    throw new Exception("Error Saving:Site key and Secrete key is invalid.");
 		  
 		  return "";
 			  

@@ -1090,7 +1090,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 					template : 'settings-recaptcha-gateway', postRenderCallback : function(el)
 					{
 						initializeIntegrationsTabListeners("integrations_tab", "integrations");
-							$("#integrations-image",el).attr("src","img/crm-plugins/recaptcha_logo.png");						
+							$("#integrations-image",el).attr("src","img/crm-plugins/grecaptcha.png");						
 						
 					}, saveCallback : function()
 					{

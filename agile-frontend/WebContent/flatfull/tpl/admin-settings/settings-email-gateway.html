@@ -104,9 +104,7 @@
 
 				<div class="panel panel-default">
 				<div class="panel-heading">
-					<center>
-						<img  alt="recaptcha-integration" id="integrations-image" style="height: 46px;" /><span style=" color: #c70000; font-size: 22px; font-weight: bold;"> reCAPTCHA</span>
-					</center>
+						<img  alt="recaptcha-integration" class ="img-responsive" id="integrations-image" style="height: 46px;" />
 				</div>
 				<div class="panel-body">
 				<input type="hidden" name="recaptcha_api" value="{{recaptcha_api}}">
@@ -118,7 +116,7 @@
 				<div class="control-group form-group">
 						<div class="controls">
 							
-								<input type="text" autocomplete="off" class="input-medium form-control required" placeholder="{{agile_lng_translate 'admin-settings-integrations' 'access-key'}}" value="{{site_key}}"  name="site_key"/>
+								<input type="text" autocomplete="off" class="input-medium form-control required" placeholder="{{agile_lng_translate 'admin-settings-integrations' 'site-key'}}" value="{{site_key}}"  name="site_key"/>
 						</div>
 				</div>
 			
@@ -126,6 +124,10 @@
 					<a type="reset" class="btn btn-default btn-sm" href="#integrations">{{agile_lng_translate 'other' 'cancel'}}</a>
                		<a type="submit" href="#" class="save btn btn-sm btn-primary">{{agile_lng_translate 'report-add' 'save'}}</a>
             	</div>
+            	
+            	<div class="form-actions text-center" style="margin-top:10px;">
+               <a class="block text-info" href="https://www.google.com/recaptcha/admin" onclick='window.open("https://");' target="_blank">Generate Your API Key Click Here</a>
+               </div>
             	</div>
 			 </fieldset>
 	    </form>
