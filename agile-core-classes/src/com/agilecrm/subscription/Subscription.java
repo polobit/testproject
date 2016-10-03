@@ -448,10 +448,13 @@ public class Subscription {
 	 * 
 	 * @throws Exception
 	 */
-	public void purchaseEmailCredits(Integer quantity) throws Exception {
+	public void purchaseEmailCredits(int quantity) throws Exception {
+		purchaseEmailCredits(quantity, 0);
+	}
+	public void purchaseEmailCredits(int quantity, int decrementCount) throws Exception {
 		String invoiceItemId = getAgileBilling().purchaseEmailCredits(billing_data, quantity);
 		BillingRestriction restriction = BillingRestrictionUtil.getBillingRestrictionFromDB();
-		restriction.incrementEmailCreditsCount(quantity*1000);
+		restriction.incrementEmailCreditsCount((quantity*1000) - decrementCount);
 		System.out.println("last_credit_id:: "+invoiceItemId+" Credits count:: "+restriction.email_credits_count+" at:: "+System.currentTimeMillis());
 		restriction.last_credit_id = invoiceItemId;
 		restriction.lastAutoRechargeTime = System.currentTimeMillis();
