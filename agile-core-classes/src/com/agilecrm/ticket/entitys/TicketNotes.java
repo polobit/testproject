@@ -60,9 +60,21 @@ public class TicketNotes
 	@NotSaved
 	public Long group_id = null;
 
+	
+	
+	public String feedback_comment = "";
 	/**
 	 * Stores user ID to whom ticket is assigned
 	 */
+	
+	/**
+	 * Stores feed back for a note
+	 */
+	public String feed_back;
+	
+	
+	
+	
 	private Key<DomainUser> assignee_key = null;
 
 	/**
@@ -75,12 +87,15 @@ public class TicketNotes
 	{
 		AGENT, REQUESTER
 	};
-
+	
+	public boolean feedback_flag = false;
+	
 	/**
 	 * Stores last updated by text either agent or customer
 	 */
 	public CREATED_BY created_by = CREATED_BY.REQUESTER;
 
+	
 	/**
 	 * Stores name of customer who created ticket
 	 */
@@ -273,17 +288,13 @@ public class TicketNotes
 					// Execute note created by agent trigger
 					TicketTriggerUtil.executeTriggerForNewNoteAddedByCustomer(ticket);
 			}
-			
-			//removing script from plain text
-			StringBuilder sb = new StringBuilder(plain_text);
-			String startTag = "<script>";
-		    String endTag = "</script>";
-
-		   
 		    //removing the text between script
 		    String plainText = HTMLUtil.removeScriptFromPlaintext(plain_text);
-			// Logging notes activity
-			ActivityUtil.createTicketActivity(activityType, ticket.contactID, ticket.id, plainText, html_text,
+		  //removing the text between script
+		    String htmlText = HTMLUtil.removeScriptFromPlaintext(html_text);
+			
+		    // Logging notes activity
+			ActivityUtil.createTicketActivity(activityType, ticket.contactID, ticket.id, plainText, htmlText,
 					"html_text", false);
 		}
 		catch (Exception e)
@@ -317,7 +328,8 @@ public class TicketNotes
 			assignee_id = assignee_key.getId();
 		
 		plain_text = HTMLUtil.removeScriptFromPlaintext(plain_text);
-			    
+		
+		html_text =HTMLUtil.removeScriptFromHtmltext(html_text); 	    
 	}
 
 	/**
