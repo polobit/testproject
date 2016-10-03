@@ -60,14 +60,14 @@ public class FormRenderingServlet extends HttpServlet
 		    {
    	        String tempReplace = StringUtils.substringBetween(htmlBody, "<script type=\"text/javascript\">", "</script>");
 		    
-		    String captchaValidator = "var onSuccess=function(a){var b=document.getElementById('captcha-error-msg');b.parentNode.removeChild(b)}; function validateCaptcha(){var a=grecaptcha.getResponse();if(0==a.length){var b=document.getElementsByClassName(\"g-recaptcha\")[0],c=document.createElement(\"p\");return c.setAttribute(\"id\",\"captcha-error-msg\"),c.innerHTML=\"<span style='color:red;font-size: small;'>Please verify that you are not a robot.</span>\",null==document.getElementById(\"captcha-error-msg\")&&b.appendChild(c),!1}return!0}";
+		    String captchaValidator = "var agileGCaptchaOnSuccess=function(a){var b=document.getElementById('captcha-error-msg');b.parentNode.removeChild(b)}; function validateCaptcha(){var a=grecaptcha.getResponse();if(0==a.length){var b=document.getElementsByClassName(\"g-recaptcha\")[0],c=document.createElement(\"p\");return c.setAttribute(\"id\",\"captcha-error-msg\"),c.innerHTML=\"<span style='color:red;font-size: small;'>Please verify that you are not a robot.</span>\",null==document.getElementById(\"captcha-error-msg\")&&b.appendChild(c),!1}return!0}";
 		    htmlBody = StringUtils.replace(htmlBody, tempReplace, captchaValidator);
 		    
 		    htmlBody = StringUtils.replaceOnce(htmlBody, "<form","<form onsubmit='return validateCaptcha()'");
 		    
 		    htmlBody = StringUtils.replaceOnce(htmlBody, recaptchaGateway.site_key, RecaptchaGatewayUtil.GOOGLE_RECAPTCHA_DATA_SITE_KEY);
 		    
-		    htmlBody = StringUtils.replaceOnce(htmlBody, "</fieldset>", "<input type='' name='_agile_is_permanent_link' value='yes' /></fieldset>");
+		    htmlBody = StringUtils.replaceOnce(htmlBody, "</fieldset>", "<input type='hidden' name='_agile_is_permanent_link' value='yes' style='display:none' /></fieldset>");
 		    
 		  }
     }
