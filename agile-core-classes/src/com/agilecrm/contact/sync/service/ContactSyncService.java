@@ -488,7 +488,7 @@ public abstract class ContactSyncService implements IContactSyncService
 		
 	    if (prefs.type == Type.GOOGLE){
 	    	 contact = mergeContacts(contact,object);
-	    ContactField googleContactfield = contact.getContactFieldByName("Contact type");
+	    ContactField googleContactfield = contact.getContactFieldByName("Google_Sync_Type");
 
 		// Does not create contact if it is already imported form google
 		if (googleContactfield != null && "Agile_Google".equals(googleContactfield.value))

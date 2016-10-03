@@ -583,7 +583,7 @@ public class GoogleSyncImpl extends TwoWaySyncService
 				Contact contact_update=ContactUtil.searchContactByEmail(email.getAddress());
 				if(contact_update!=null){
 					ContactField field= new ContactField("Google_Sync_Type", "Agile_Google", "home");
-					contact_update.addProperty(field);
+					contact_update.properties.add(field);
 					contact_update.save();
 				}
 			}
