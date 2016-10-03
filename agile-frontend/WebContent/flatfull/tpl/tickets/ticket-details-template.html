@@ -320,7 +320,7 @@
           <a class="link-color text-sm"  id="macro_list" data-toggle="dropdown" aria-expanded="false">{{agile_lng_translate 'tickets' 'canned-responses'}} <span class="caret"></span></a>
           <ul class="dropdown-menu">
             {{#each canned_responses}}
-            <li class="text-cap" id="ticket_canned_response" rel="{{id}}"><a href="javascript:void(0);" id={{id}}>{{title}}<div class="pull-right ellipsis" style="width:20%;text-overflow: ellipsis;overflow: hidden;">{{owner_name}}</div></a></li>
+            <li class="text-cap" id="ticket_canned_response" rel="{{id}}"><a href="javascript:void(0);" id={{id}}><span>{{title}}  <span class="text-muted" style="width:40%;text-overflow: ellipsis;overflow: hidden; text-muted">({{owner_name}})</span></a></li>
             {{/each}}
           </ul>
         </div>
