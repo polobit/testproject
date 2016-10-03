@@ -461,7 +461,7 @@ public class ReportsUtil {
 				 if (!field.contains("custom"))
 						continue;
 				 String field_name = field.split("custom_")[1];
-				 if (customField.field_label.equals(field_name))
+				 if (customField.field_label.equals(field_name)){
 					 if(customField.field_type.equals(CustomFieldDef.Type.CONTACT) || customField.field_type.equals(CustomFieldDef.Type.COMPANY))
 					 {
 						 typeSpecificFields.add(field_name);
@@ -470,6 +470,7 @@ public class ReportsUtil {
 					 {
 						 dateFields.add(field_name);
 					 }
+				 }
 				 }
 			 }	
 
