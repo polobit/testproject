@@ -605,14 +605,14 @@ public class NotificationPrefsUtil
     }
     
     public static boolean isNotificationEnabledToSend(AgileUserPushNotificationId notifierId, JSONObject messageJSON) {
-    	System.out.println("isNotificationEnabledToSend");
+    	System.out.println("isNotificationEnabledToSend = " + messageJSON);
     	
     	if(notifierId == null || messageJSON == null || !messageJSON.has("type"))
     		  return false;
     	
     	AgileUser agileUser = AgileUser.getCurrentAgileUserFromDomainUser(notifierId.domainUserId);
     	NotificationPrefs prefs =  NotificationPrefsUtil.getNotificationPrefs(agileUser);
-    	if(prefs == null || !prefs.push_mobile_notification)
+    	if(prefs == null || !prefs.control_notifications || !prefs.push_mobile_notification)
     		return false;
     	
     	System.out.println("type = " + prefs);
