@@ -188,19 +188,21 @@ function agile_formCallback(error, button, url, agile_form, contact_id, form_dat
 		agile_form.setAttribute("method","POST");
 		agile_form.submit();*/
 		
-		if(typeof redirectEmailParam != "undefined") {
+		var emailVal = agile_guid.get_email();
+		if(typeof emailVal != "undefined") {
 			if(url && url != "#"){
+				var emailParam = encodeURIComponent("{\"email\":\""+emailVal+"\"}");	
 				var index = url.indexOf("?");
 				if(index!=-1){
-				window.location = url+"&"+redirectEmailParam;	
+					window.location = url+"&"+"fwd=cd&data="+emailParam;	
 				}
 				else{
-					window.location = url+"?"+redirectEmailParam;
+					window.location = url+"?"+"fwd=cd&data="+emailParam;
 				}
 			}
 		} else {
 			if(url && url != "#"){
-			window.location = url;
+				window.location = url;
 			}
 		}			
 		
