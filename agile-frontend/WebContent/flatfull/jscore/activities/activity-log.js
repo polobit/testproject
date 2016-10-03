@@ -11,9 +11,20 @@ function includeTimeAgo(element)
 
 function buildActivityFilters(name,valueid,clickedFrom){
    
+   		console.log("name = "+name);
 		if(clickedFrom=='entityDropDown'){
-		ACTIVITY_FILTER_JSON.entity=name;
-		ACTIVITY_FILTER_JSON.entityId=valueid;
+			var dashboard_name = _agile_get_prefs("dashboard_"+CURRENT_DOMAIN_USER.id);
+			var dashboard = dashboard_name;
+			var entities = {entity:name,entityId:valueid};
+			if(!ACTIVITY_FILTER_JSON.hasOwnProperty(dashboard_name)){
+
+				ACTIVITY_FILTER_JSON[dashboard] = entities;
+			}
+			if(ACTIVITY_FILTER_JSON[dashboard_name].entity != name){
+				ACTIVITY_FILTER_JSON[dashboard] = entities;
+			}
+		/*ACTIVITY_FILTER_JSON.entity=name;
+		ACTIVITY_FILTER_JSON.entityId=valueid;*/
 		}
 		else if(clickedFrom=='userDropDown'){
 		ACTIVITY_FILTER_JSON.user=name;
@@ -79,6 +90,7 @@ function getActivityFilterParameters(loadingFirstTime,campaignHistory)
 	var entitytype=null;
 	// Get Date Range
 	var range = $('#activities_date_range #range').html().split("-");
+	var dashboard_name = _agile_get_prefs("dashboard_"+CURRENT_DOMAIN_USER.id);
 
 	if (range)
 	{
@@ -108,10 +120,17 @@ function getActivityFilterParameters(loadingFirstTime,campaignHistory)
 		var activityFilters=JSON.parse(_agile_get_prefs(ACTIVITY_FILTER));
 		if(activityFilters)
 		{
+			var entityId;
+			var entitytype_dashboard;
 			user=activityFilters.userId;
-			if(activityFilters.entityId)
+			if(activityFilters[dashboard_name] != undefined){
+				entityId = activityFilters[dashboard_name].entityId;
+				entitytype_dashboard = activityFilters[dashboard_name].entity;
+				console.log("saddfasda");
+			}
+			if(entityId)
 			{
-				entitytype=activityFilters.entityId;
+				entitytype=entityId;
 				if(campaignHistory)
 				{
 					entitytype='ALL';
@@ -221,6 +240,14 @@ function getActivityFilterParameters(loadingFirstTime,campaignHistory)
 	}
 
 	else if (entitytype == 'EVENT')
+	{
+		params += ("&entity_type=" + entitytype);
+		b.push(entitytype);
+		listItems = b.join(",");
+		params += ("&activityTypeArray=" +listItems);
+		return params;
+	}
+	else if (entitytype == 'EMAIL_SENT')
 	{
 		params += ("&entity_type=" + entitytype);
 		b.push(entitytype);

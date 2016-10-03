@@ -73,14 +73,24 @@ var ActivitylogRouter = Backbone.Router.extend({
 
                     var activityFilters = JSON.parse(_agile_get_prefs(ACTIVITY_FILTER));
 
+                    var entityId;
+                    var entitytype_dashboard;
+                    if(activityFilters){
+                        if(activityFilters[dashboard_name] != undefined){
+                                entityId = activityFilters[dashboard_name].entityId;
+                                entitytype_dashboard = activityFilters[dashboard_name].entity;
+                                console.log("saddfasda");
+                        }
+                    }
+
                     var optionsTemplate = "<li><a  href='{{id}}'>{{name}}</li>";
 
                     // fill workflows
                     fillSelect('user-select', 'core/api/users', 'domainuser', function fillActivities() {
                         $('#activities-listners').find("#user-select").append("<li><a href=''>" + _agile_get_translated_val('report-view', 'all-users') + "</a></li>");
-                        if (activityFilters && (activityFilters.user || activityFilters.entity)) {
+                        if (activityFilters &&  (activityFilters.user || entitytype_dashboard)) {
                             $('ul#user-select li a').closest("ul").data("selected_item", activityFilters.userId);
-                            $('ul#entity_type li a').closest("ul").data("selected_item", activityFilters.entityId);
+                            $('ul#entity_type li a').closest("ul").data("selected_item", entityId);
                             $('#selectedusername').html(activityFilters.user);
 
                                     //Campaing History
@@ -90,8 +100,8 @@ var ActivitylogRouter = Backbone.Router.extend({
                                    activityFilters.entity = _agile_get_translated_val("menu", "menu-campaigns");
                             }
                             
-                                $('#selectedentity_type').html(activityFilters.entity);
-                                $('.activity-sub-heading').html(activityFilters.entity);
+                                $('#selectedentity_type').html(entitytype_dashboard);
+                                $('.activity-sub-heading').html(entitytype_dashboard);
 
                         }
 
