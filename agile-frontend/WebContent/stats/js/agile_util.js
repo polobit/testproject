@@ -183,10 +183,33 @@ function agile_formCallback(error, button, url, agile_form, contact_id, form_dat
 		if (button)
 			button.removeAttribute("disabled");
 
-		if (!agile_form.getAttribute("action") || agile_form.getAttribute("action") == "#" || agile_form.getAttribute("action").indexOf("/formsubmit") != -1)
+		/*if (!agile_form.getAttribute("action") || agile_form.getAttribute("action") == "#" || agile_form.getAttribute("action").indexOf("/formsubmit") != -1)
 			agile_form.setAttribute("action", url);
 		agile_form.setAttribute("method","POST");
-		agile_form.submit();
+		agile_form.submit();*/
+		if(url) {
+			if(url != "#")
+			{
+				var index = url.indexOf("?");
+				if(index!=-1){
+				window.location = url+"&"+redirectEmailParam;	
+				}
+				else{
+					window.location = url+"?"+redirectEmailParam;
+				}
+			}
+			
+			else if(url == "#"){
+				var index = window.location.href.indexOf("?fwd=cd");
+				if(index != -1){
+				    str = window.location.href.substr(0,index);
+				    window.location = str + "?"+ redirectEmailParam;
+				}
+				else    
+				    window.location = window.location.href +"?" +redirectEmailParam;
+			}
+			return;
+		}
 	}, 1500);
 }
 
