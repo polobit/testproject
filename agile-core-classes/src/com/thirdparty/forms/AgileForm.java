@@ -79,6 +79,7 @@ public class AgileForm extends HttpServlet
 	    if(newContact)
 	    {
 	    contact.setContactOwner(owner);
+	    contact.source="form";
 	    }
 	    String[] tags = getContactTags(formJson);
 	    
