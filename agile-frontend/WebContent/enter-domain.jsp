@@ -164,9 +164,13 @@ padding-left:10px!important;
 		<form name='choose_domain' id="choose_domain" method='post'>
 			<div id="domain-error"></div>
 			<div class="list-group list-group-sm">
-				<div class="list-group-item">
-          			<input id='subdomain' type="text" placeholder='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "Company")%>'
-						   	   name="subdomain" class="input-xlarge  required form-control no-border w pull-left" autocapitalize="off"><div class="inline-block m-t-xs">.agilecrm.com</div><div class="clearfix"></div>
+				<div class="list-group-item"> 
+					<div class="input-group"> 
+						<input id='subdomain' type="text" placeholder='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "Company")%>'
+						   	   name="subdomain" class="input-xlarge  required form-control no-border" autocapitalize="off"> 
+						<span class="input-group-addon no-border" id="basic-addon2" style="background: #fff;">.agilecrm.com</span> 
+					</div>
+          			<div class="clearfix"></div>
 				</div>
 			</div>
 			<input class="btn btn-lg btn-primary btn-block" type="submit" value='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "submit")%>'>
