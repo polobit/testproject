@@ -493,7 +493,7 @@ public class NotificationPrefsUtil
 
 	case "CONTACT_ADDED": 
 		if(StringUtils.equalsIgnoreCase(type, "PERSON"))
-			mssg = "'" + getContactPropertyValue(json, "first_name") + " " + getContactPropertyValue(json, "last_name") + "' Contact Added" + addOwnerInfo(json);
+			mssg = getContactName(json) +  " Contact Added" + addOwnerInfo(json);
 		else 
 			mssg = "'" + getContactPropertyValue(json, "name") + "' Company Added" + addOwnerInfo(json);
 		pushURL = hostName + "#contacts/" + JSONUtil.getJSONValue(json, "id");
@@ -501,13 +501,13 @@ public class NotificationPrefsUtil
 	
 	case "CONTACT_DELETED": 
 		if(StringUtils.equalsIgnoreCase(type, "PERSON"))
-			mssg = "'" + getContactPropertyValue(json, "first_name") + " " + getContactPropertyValue(json, "last_name") + "' Contact Deleted" + addOwnerInfo(json);
+			mssg = getContactName(json) + " Contact Deleted" + addOwnerInfo(json);
 		else 
 			mssg = "'" + getContactPropertyValue(json, "name") + "' Company Deleted" + addOwnerInfo(json);
 		break;
 		
 	case "CAMPAIGN_NOTIFY":
-		mssg  = getContactPropertyValue(json, "first_name") + " " + getContactPropertyValue(json, "last_name") + " ";
+		mssg  = getContactName(json);
 		try {
 			customVal = JSONUtil.getJSONValue(json, "custom_value");
 			try {
@@ -529,9 +529,9 @@ public class NotificationPrefsUtil
 		}
 		
 		if(!customJSON.has("workflow_name"))
-			mssg = "clicked link '" + JSONUtil.getJSONValue(customJSON, "url_clicked") + "'";
+			mssg = getContactName(json) + "clicked link '" + JSONUtil.getJSONValue(customJSON, "url_clicked") + "'";
 		else
-			mssg = "clicked link '" + JSONUtil.getJSONValue(customJSON, "url_clicked") + "' of campaign '" + JSONUtil.getJSONValue(customJSON, "workflow_name") + "'";
+			mssg = getContactName(json) + "clicked link '" + JSONUtil.getJSONValue(customJSON, "url_clicked") + "' of campaign '" + JSONUtil.getJSONValue(customJSON, "workflow_name") + "'";
 		break;
 		
 	case "OPENED_EMAIL":
@@ -543,9 +543,9 @@ public class NotificationPrefsUtil
 		}
 		
 		if(customJSON.has("workflow_name"))
-			mssg = "opened email of campaign '" + JSONUtil.getJSONValue(customJSON, "workflow_name") + "'";
+			mssg = getContactName(json) + "opened email of campaign '" + JSONUtil.getJSONValue(customJSON, "workflow_name") + "'";
 		else
-			mssg = "opened email with subject '" + JSONUtil.getJSONValue(customJSON, "email_subject") + "'";
+			mssg = getContactName(json) + "opened email with subject '" + JSONUtil.getJSONValue(customJSON, "email_subject") + "'";
 		break;
 		
 	/*
@@ -589,6 +589,15 @@ public class NotificationPrefsUtil
     			if(field.getString("name").equalsIgnoreCase(key))
     				  return field.getString("value");
     		}
+		} catch (Exception e) {
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+		}
+    	return "";
+    }
+    
+    private static String getContactName(JSONObject json){
+    	try {
+    		return "'" + getContactPropertyValue(json, "first_name") + " " + getContactPropertyValue(json, "last_name") + "' ";
 		} catch (Exception e) {
 			System.out.println(ExceptionUtils.getFullStackTrace(e));
 		}
