@@ -200,15 +200,19 @@ function contactTableView(base_model,customDatefields,view,customContactfields,c
 						}
 						return;
 					}
-					if(!_agile_get_prefs("contactTabelView"))
+					if(!_agile_get_prefs("contactTabelView") && (window.location.hash=="#contacts"))
 					{
 						if(field_name == "first_name" || field_name == "last_name" || field_name == "email")
 							return ;
 					}
-
 					if( (window.location.hash=="#companies") && (_agile_get_prefs("companyTabelView")== null))
 					{
 						if(field_name == "name" || field_name == "url")
+							return ;
+					}
+					if(!_agile_get_prefs("contactCompanyTabelView") && (window.location.hash.indexOf("#company/") != -1))
+					{
+						if(field_name == "first_name" || field_name == "last_name" || field_name == "email")
 							return ;
 					}
 					getTemplate('contacts-custom-view-' + field_name, contact, undefined, function(template_ui){
