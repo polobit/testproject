@@ -26,7 +26,6 @@ public class ObjectifyRegistry {
 		ObjectifyService.register(AffiliateDetails.class);
 		ObjectifyService.register(AffiliateDeal.class);
 		ObjectifyService.register(WorkflowBackup.class);
-		ObjectifyService.register(WorkflowBackup.class);
 		// Agile Push 
 		ObjectifyService.register(AgileUserPushNotificationId.class);
 		

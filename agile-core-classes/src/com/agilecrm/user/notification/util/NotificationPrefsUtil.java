@@ -605,13 +605,17 @@ public class NotificationPrefsUtil
     }
     
     public static boolean isNotificationEnabledToSend(AgileUserPushNotificationId notifierId, JSONObject messageJSON) {
+    	System.out.println("isNotificationEnabledToSend");
+    	
     	if(notifierId == null || messageJSON == null || !messageJSON.has("type"))
     		  return false;
     	
     	AgileUser agileUser = AgileUser.getCurrentAgileUserFromDomainUser(notifierId.domainUserId);
     	NotificationPrefs prefs =  NotificationPrefsUtil.getNotificationPrefs(agileUser);
-    	if(prefs == null || !prefs.control_notifications)
+    	if(prefs == null || !prefs.push_mobile_notification)
     		return false;
+    	
+    	System.out.println("type = " + prefs);
     	
     	String type = JSONUtil.getJSONValue(messageJSON, "type");
     	if(StringUtils.isBlank(type))
@@ -644,6 +648,7 @@ public class NotificationPrefsUtil
     private static String getTitle(String title){
     	if(StringUtils.isBlank(title))
     		return title;
+    	
     	title = title.replace(" ", "_").toUpperCase();
     	
     	switch (title) {

@@ -75,6 +75,8 @@ public class MobileNotificationsDeferredTask implements DeferredTask {
 				if(!NotificationPrefsUtil.isNotificationEnabledToSend(agileUserPushNotificationId, new JSONObject(message)))
 					return;
 				
+				System.out.println("Success");
+				
 				HTTPUtil.accessURL(getURL(agileUserPushNotificationId.registrationId));
 			}
 
@@ -103,6 +105,7 @@ public class MobileNotificationsDeferredTask implements DeferredTask {
 		serverURL = serverURL.replace("$regId", regId);
 		serverURL = serverURL.replace("$platform", channel_type);
 
+		System.out.println("serverURL = " + serverURL);
 		return serverURL;
 	}
 

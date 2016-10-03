@@ -41,6 +41,8 @@ public class AgileUserPushNotificationId {
 	private static ObjectifyGenericDao<AgileUserPushNotificationId> dao = new ObjectifyGenericDao<AgileUserPushNotificationId>(
 			AgileUserPushNotificationId.class);
 
+	public AgileUserPushNotificationId(){
+	}
 	/**
 	 * Creates a push notification identifier with the details
 	 * 
