@@ -33,7 +33,7 @@ public class HTMLUtil
 				}
 			}
 			
-			html = doc.body().text().replaceAll("_br2n_", "\n");
+			html = doc.body().toString().replaceAll("_br2n_", "\n");
 	
 		 return html;
 		
