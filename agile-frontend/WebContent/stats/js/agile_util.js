@@ -187,9 +187,9 @@ function agile_formCallback(error, button, url, agile_form, contact_id, form_dat
 			agile_form.setAttribute("action", url);
 		agile_form.setAttribute("method","POST");
 		agile_form.submit();*/
-		if(url) {
-			if(url != "#")
-			{
+		
+		if(typeof redirectEmailParam != "undefined") {
+			if(url && url != "#"){
 				var index = url.indexOf("?");
 				if(index!=-1){
 				window.location = url+"&"+redirectEmailParam;	
@@ -198,18 +198,12 @@ function agile_formCallback(error, button, url, agile_form, contact_id, form_dat
 					window.location = url+"?"+redirectEmailParam;
 				}
 			}
-			
-			else if(url == "#"){
-				var index = window.location.href.indexOf("?fwd=cd");
-				if(index != -1){
-				    str = window.location.href.substr(0,index);
-				    window.location = str + "?"+ redirectEmailParam;
-				}
-				else    
-				    window.location = window.location.href +"?" +redirectEmailParam;
+		} else {
+			if(url && url != "#"){
+			window.location = url;
 			}
-			return;
-		}
+		}			
+		
 	}, 1500);
 }
 
