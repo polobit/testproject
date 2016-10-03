@@ -7589,6 +7589,11 @@ Handlebars.registerHelper('if_asc_sork_key', function(value, options)
   		}
   		else 
   		{
+  			if(!_agile_get_prefs("contactCompanyTabelView"))
+  			{
+  				if(element == "first_name" || element =="last_name" || element == "email")
+							return ; 
+  			}
 			element = element.replace("_", " ");
 			cls = "";
 	 	}
