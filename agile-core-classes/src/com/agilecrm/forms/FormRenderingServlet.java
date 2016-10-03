@@ -67,6 +67,8 @@ public class FormRenderingServlet extends HttpServlet
 		    
 		    htmlBody = StringUtils.replaceOnce(htmlBody, recaptchaGateway.site_key, RecaptchaGatewayUtil.GOOGLE_RECAPTCHA_DATA_SITE_KEY);
 		    
+		    htmlBody = StringUtils.replaceOnce(htmlBody, "</fieldset>", "<input type='' name='_agile_is_permanent_link' value='yes' /></fieldset>");
+		    
 		  }
     }
 	    
