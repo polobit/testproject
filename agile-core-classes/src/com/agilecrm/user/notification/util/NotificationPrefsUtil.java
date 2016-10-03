@@ -420,7 +420,7 @@ public class NotificationPrefsUtil
     JSONObject notificationJSON = new JSONObject();
 	try
 	{
-		notificationJSON.put("title", json.getString("notification").replace("_", " "));
+		notificationJSON.put("title", getTitle(json.getString("notification").replace("_", " ")));
 
 	    // Insert notification-type into json
 		JSONObject dataJSON = getMobileNotificationMessage(json, domain);
@@ -639,5 +639,22 @@ public class NotificationPrefsUtil
   		  	return true;
     	
     	return true;
+    }
+    
+    private static String getTitle(String title){
+    	if(StringUtils.isBlank(title))
+    		return title;
+    	title = title.replace(" ", "_").toUpperCase();
+    	
+    	switch (title) {
+	    	case "CLICKED_LINK":
+	    		title = "LINK CLICKED";
+	    		break;
+	    		
+	    	case "OPENED_EMAIL":
+	    		title = "EMAIL OPENED";
+	    		break;
+    	}
+    	return title;
     }
 }
