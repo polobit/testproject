@@ -4,6 +4,8 @@
  	"register-with-free": "{{agile_lng_translate 'register' 'register-with-free'}}",
  	
  	"sign-up": "{{agile_lng_translate 'login' 'sign-up'}}",
+ 	"sign-in": "{{agile_lng_translate 'login' 'sign-in'}}",
+ 	"sign-in": "{{agile_lng_translate 'forgot-password' 'already-have-account'}}",
  	
  	"full-name": "{{agile_lng_translate 'register' 'full-name'}}",
  	"email-address": "{{agile_lng_translate 'register' 'email-address'}}",
