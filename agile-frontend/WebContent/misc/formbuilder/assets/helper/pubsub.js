@@ -57,9 +57,9 @@ var addAgileApi = function(json, api, callback)
 	formemailnotification.value = [{value : false, selected : true, label : "false"}, {value : true, selected : false, label: "true"}];
     //Adding the Recaptcha for the website 
 
-   var integrationUrl = window.location.protocol + '//' + window.location.host +'/#integrations' ;
+   //var integrationUrl = window.location.protocol + '//' + window.location.host +'/#integrations' ;
    var agileformcaptcha = {};
-	agileformcaptcha.label = "Enable reCaptcha <p style='font-size: 10px;'>Please enable the reCaptcha integration <a href='"+integrationUrl+"' onclick='window.open('https://');' target='_blank'> here.</a></p>" ;
+	agileformcaptcha.label = "Enable reCaptcha <p style='font-size: 10px;'>Please enable the reCaptcha integration <a href='/#integrations' target='_blank'> here.</a></p>" ;
 	agileformcaptcha.type = "select";
 	agileformcaptcha.value = [{value : false, selected : true, label : "false"}, {value : true, selected : false, label: "true"}];
 
