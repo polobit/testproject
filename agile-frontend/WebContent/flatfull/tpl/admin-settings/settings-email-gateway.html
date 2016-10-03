@@ -110,24 +110,24 @@
 				</div>
 				<div class="panel-body">
 				<input type="hidden" name="recaptcha_api" value="{{recaptcha_api}}">
-				<div class="control-group form-group">
-						<div class="controls">
-							<input type="text" autocomplete="off" class="input-medium required form-control" placeholder="{{agile_lng_translate 'admin-settings-integrations' 'secret-key'}}" value="{{api_key}}" name="api_key">
-						</div>
-				</div>
+				
 				<div class="control-group form-group">
 						<div class="controls">
 							
 								<input type="text" autocomplete="off" class="input-medium form-control required" placeholder="{{agile_lng_translate 'admin-settings-integrations' 'site-key'}}" value="{{site_key}}"  name="site_key"/>
 						</div>
 				</div>
-			
+				<div class="control-group form-group">
+						<div class="controls">
+							<input type="text" autocomplete="off" class="input-medium required form-control" placeholder="{{agile_lng_translate 'admin-settings-integrations' 'secret-key'}}" value="{{api_key}}" name="api_key">
+						</div>
+				</div>			
 				<div class="form-actions text-center">
 					<a type="reset" class="btn btn-default btn-sm" href="#integrations">{{agile_lng_translate 'other' 'cancel'}}</a>
                		<a type="submit" href="#" class="save btn btn-sm btn-primary">{{agile_lng_translate 'report-add' 'save'}}</a>
             	</div>
-            	<div class="form-actions text-center" style="margin-top:10px;">Generate your API Key click 
-               <a class="text-info" href="https://www.google.com/recaptcha/admin" onclick='window.open("https://");' target="_blank"> here</a>
+            	<div class="form-actions text-center" style="margin-top:10px;">Please generate your API Key 
+               <a class="text-info" href="https://www.google.com/recaptcha/admin" onclick='window.open("https://");' target="_blank"> here.</a>
                </div>
             	</div>
 			 </fieldset>
