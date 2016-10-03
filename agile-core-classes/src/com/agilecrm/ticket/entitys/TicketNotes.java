@@ -291,7 +291,7 @@ public class TicketNotes
 		    //removing the text between script
 		    String plainText = HTMLUtil.removeScriptFromPlaintext(plain_text);
 		  //removing the text between script
-		    String htmlText = HTMLUtil.removeScriptFromPlaintext(html_text);
+		    String htmlText = HTMLUtil.removeScriptFromHtmltext(html_text);
 			
 		    // Logging notes activity
 			ActivityUtil.createTicketActivity(activityType, ticket.contactID, ticket.id, plainText, htmlText,
