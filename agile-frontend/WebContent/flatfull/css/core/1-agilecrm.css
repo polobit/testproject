@@ -4713,6 +4713,6 @@ div.list-tasks.panel-body:hover
   background-color: #fff!important;
 }
 
-#admin-affiliate-detail-model-list:hover{
+#admin-affiliate-detail-model-list tr:hover{
   cursor: pointer;
 }
