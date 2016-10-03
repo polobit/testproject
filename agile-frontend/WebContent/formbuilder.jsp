@@ -1,5 +1,5 @@
 <%
-String formId = request.getParameter("form");
+String formId = request.getPara<br><br>meter("form");
 String template = request.getParameter("template");
 %>
 
@@ -28,7 +28,7 @@ String template = request.getParameter("template");
    </head>
    <body>
       <div class="container">
-         <br>
+         <br><br><br>
          <div class="row">
             <!-- Building Form. -->
             <div class="col-md-6">
@@ -65,6 +65,6 @@ String template = request.getParameter("template");
          </div>
       </div>
       <!-- /container back -->
-      <script data-main="misc/formbuilder/main-built.js" src="misc/formbuilder/assets/lib/require.js?v=3" ></script>
+      <script data-main="misc/formbuilder/main.js" src="misc/formbuilder/assets/lib/require.js?v=3" ></script>
    </body>
 </html>
