@@ -19,9 +19,9 @@ git checkout .
 
 git stash
 
-git checkout sandbox_live_maven
+git checkout version30-5
 
-git pull origin sandbox_live_maven
+git pull origin version30-5
 
 ant create-target  -DRELEASE_VERSION=$2 -DPRODUCTION=true;
 
