@@ -41,7 +41,6 @@ import com.agilecrm.activities.util.EventUtil;
 import com.agilecrm.activities.util.TaskUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Note;
-import com.agilecrm.contact.Tag;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.NoteUtil;
 import com.agilecrm.deals.CustomFieldData;
@@ -297,50 +296,48 @@ public class DealsAPI
     @POST
     @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public Opportunity createOpportunity(Opportunity opportunity)
-    {
-	List<String> conIds = opportunity.getContact_ids();
-    List<String> modifiedConIds = UserAccessControlUtil.checkUpdateAndmodifyRelatedContacts(conIds);
-    if(conIds != null && modifiedConIds != null && conIds.size() != modifiedConIds.size())
-    {
-    	throw new AccessDeniedException("Deal cannot be created because you do not have permission to update associated contact(s).");
-    }
-	if (opportunity.pipeline_id == null || opportunity.pipeline_id == 0L)
-	    opportunity.pipeline_id = MilestoneUtil.getMilestones().id;
-	// Some times milestone comes as null from client side, if it is null we
-	// can'tsave it.
-	if (opportunity != null && (opportunity.milestone == null || !StringUtils.isNotEmpty(opportunity.milestone)))
-	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-		    .entity("Deal not saved properly.").build());
-	}
-	if(opportunity.tagsWithTime.size() > 0){
-		opportunity.updateDealTagsEntity(opportunity);
-	}
-	opportunity.save();
-	try
-	{
-	    ActivitySave.createDealAddActivity(opportunity);
-	}
-	catch (JSONException e)
-	{
-	    // TODO Auto-generated catch block
-	    e.printStackTrace();
-	}
-	if(opportunity != null &&(opportunity.getContact_ids()!= null && opportunity.getContact_ids().size() > 0)){
-		List<String> contactIds = opportunity.getContact_ids();
-		for(String s : contactIds){
-			try{
-				Contact contact = ContactUtil.getContact(Long.parseLong(s));
-				contact.forceSearch = true;
-				contact.save();
-			}
-			catch(Exception e){
-				
+    public Opportunity createOpportunity(Opportunity opportunity){
+		List<String> conIds = opportunity.getContact_ids();
+	    List<String> modifiedConIds = UserAccessControlUtil.checkUpdateAndmodifyRelatedContacts(conIds);
+	    if(conIds != null && modifiedConIds != null && conIds.size() != modifiedConIds.size())
+	    {
+	    	throw new AccessDeniedException("Deal cannot be created because you do not have permission to update associated contact(s).");
+	    }
+		if (opportunity.pipeline_id == null || opportunity.pipeline_id == 0L)
+		    opportunity.pipeline_id = MilestoneUtil.getMilestones().id;
+		// Some times milestone comes as null from client side, if it is null we
+		// can'tsave it.
+		if (opportunity != null && (opportunity.milestone == null || !StringUtils.isNotEmpty(opportunity.milestone)))
+		{
+		    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+			    .entity("Deal not saved properly.").build());
+		}
+		if(opportunity.tagsWithTime.size() > 0){
+			opportunity.updateDealTagsEntity(opportunity);
+		}
+		opportunity.save();
+		try
+		{
+		    ActivitySave.createDealAddActivity(opportunity);
+		}
+		catch (JSONException e)
+		{
+		    // TODO Auto-generated catch block
+		    e.printStackTrace();
+		}
+		if(opportunity != null &&(opportunity.getContact_ids()!= null && opportunity.getContact_ids().size() > 0)){
+			List<String> contactIds = opportunity.getContact_ids();
+			for(String s : contactIds){
+				try{
+					Contact contact = ContactUtil.getContact(Long.parseLong(s));
+					contact.forceSearch = true;
+					contact.save();
+				}catch(Exception e){
+					System.out.println("Exception occured while saving contacts in Deals API : "+e.getMessage());
+				}
 			}
 		}
-	}
-	return opportunity;
+		return opportunity;
     }
 
     /**
