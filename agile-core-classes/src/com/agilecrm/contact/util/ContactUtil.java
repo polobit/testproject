@@ -364,6 +364,7 @@ public class ContactUtil
 		{
 			for (ContactField emailField : contact.getContactPropertiesList(Contact.EMAIL))
 			{
+
 				if(email.equalsIgnoreCase(emailField.value))
 					return contact;
 			}
@@ -648,9 +649,24 @@ public class ContactUtil
      */
     public static int searchContactCountByEmail(String email)
     {
-	return dao.ofy().query(Contact.class).filter("properties.name = ", Contact.EMAIL)
-		.filter("type", Contact.Type.PERSON).filter("properties.value = ", email).count();
-
+    	if(email==null) return 0;
+    	Query<Contact> q = dao.ofy().query(Contact.class);
+    	q.filter("properties.name", Contact.EMAIL);
+    	q.filter("type", Type.PERSON).filter("properties.value = ", email);
+    	int count=0;
+    	
+    	List<Contact> contacts= dao.fetchAll(q);
+		for(Contact contact : contacts)
+		{
+			for (ContactField emailField : contact.getContactPropertiesList(Contact.EMAIL))
+			{
+				if(email.equalsIgnoreCase(emailField.value))
+					count++;
+			}
+		}
+	//return dao.ofy().query(Contact.class).filter("properties.name = ", Contact.EMAIL)
+	//	.filter("type", Contact.Type.PERSON).filter("properties.value = ", email).count();
+		return count;
     }
 
     /**
@@ -659,8 +675,23 @@ public class ContactUtil
 
     public static int searchContactCountByEmailAndType(String email, Type type)
     {
-	return dao.ofy().query(Contact.class).filter("properties.name = ", Contact.EMAIL)
-		.filter("properties.value = ", email.toLowerCase()).filter("type", type).count();
+    	if(email==null) return 0;
+    	int count=0;
+    	Query<Contact> q = dao.ofy().query(Contact.class).filter("properties.name = ", Contact.EMAIL)
+    			.filter("properties.value = ", email.toLowerCase()).filter("type", type);
+    	
+    	List<Contact> contacts= dao.fetchAll(q);
+		for(Contact contact : contacts)
+		{
+			for (ContactField emailField : contact.getContactPropertiesList(Contact.EMAIL))
+			{
+				if(email.equalsIgnoreCase(emailField.value))
+					count++;
+			}
+		}
+		return count;
+		//return dao.ofy().query(Contact.class).filter("properties.name = ", Contact.EMAIL)
+		//.filter("properties.value = ", email.toLowerCase()).filter("type", type).count();
 
     }
 
@@ -670,9 +701,23 @@ public class ContactUtil
 
     public static Contact searchContactByEmailAndType(String email, Type type)
     {
-	return dao.ofy().query(Contact.class).filter("properties.name = ", Contact.EMAIL)
-		.filter("properties.value = ", email.toLowerCase()).filter("type", type).get();
-
+    	
+    	if(email==null) return null;
+    	Query<Contact> q = dao.ofy().query(Contact.class).filter("properties.name = ", Contact.EMAIL)
+    				.filter("properties.value = ", email.toLowerCase()).filter("type", type);
+    	
+    	List<Contact> contacts= dao.fetchAll(q);
+		for(Contact contact : contacts)
+		{
+			for (ContactField emailField : contact.getContactPropertiesList(Contact.EMAIL))
+			{
+				if(email.equalsIgnoreCase(emailField.value))
+					return contact;
+			}
+		}
+	//return dao.ofy().query(Contact.class).filter("properties.name = ", Contact.EMAIL)
+	//	.filter("properties.value = ", email.toLowerCase()).filter("type", type).get();
+		return null;
     }
 
     /**
