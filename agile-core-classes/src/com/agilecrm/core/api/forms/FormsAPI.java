@@ -110,9 +110,7 @@ public class FormsAPI
 			 + "<div class='g-recaptcha' style=\"transform:scale(0.91);-webkit-transform:scale(0.91);transform-origin:0 0;-webkit-transform-origin:0 0; width='304px';\" data-sitekey='" + recaptchaGateway.site_key + "' data-callback='onSuccess'></div></div></div>");
 		   }
 	    }
-		 else{
-		    	html = html.replaceFirst("<div class='g-recaptcha' data-sitekey='6LcBZCgTAAAAAKxJ8QbSrfRh6Js_QpNsPAykamLZ'></div>", "</fieldset></fieldset>");
-	    }
+
 	    if (StringUtils.isBlank(name) || !Character.isLetter(name.charAt(0)))
 	    {
 		response.sendError(HttpServletResponse.SC_BAD_REQUEST);
