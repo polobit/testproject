@@ -41,7 +41,7 @@ function getTimeFromDatePicker(){
 }
 
 function showCommission(userId, time, el){
-	getCommission(CURRENT_DOMAIN_USER.id, time, function(data){
+	getCommission(userId, time, function(data){
 		$("#aff-count", el).html(data.count);
 		$("#aff-commission", el).html((data.commission/100).toFixed(2));
 	});
@@ -49,6 +49,9 @@ function showCommission(userId, time, el){
 
 function getCommission(userId, time, callback){
 	var url = 'core/api/affiliate/total?startTime='+time.start+'&endTime='+time.end;
+	if(CURRENT_DOMAIN_USER.domain == "admin"){
+		url = url + '&domain='+admin_affiliate_domain;
+	}
 	if(userId)
 		url = url + '&userId='+userId;
 	$.ajax({ url : url, type : 'GET', success : function(data)

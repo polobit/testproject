@@ -68,7 +68,11 @@ public class AffiliateApi {
 	@Path("total")
 	@GET
 	@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-	public String getTotalcommisionAmount(@QueryParam("userId") Long userId, @QueryParam("startTime") Long startTime, @QueryParam("endTime") Long endTime){
+	public String getTotalcommisionAmount(@QueryParam("userId") Long userId, @QueryParam("startTime") Long startTime, @QueryParam("endTime") Long endTime, @QueryParam("domain") String namespace){
+		if(namespace == null)
+			namespace = NamespaceManager.get();
+		String oldNamespace = NamespaceManager.get();
+		NamespaceManager.set(namespace);
 		try{
 			return AffiliateUtil.getTotalCommisionAmount(userId, startTime, endTime);
 		}catch (Exception e) {
@@ -76,6 +80,8 @@ public class AffiliateApi {
 			throw new WebApplicationException(Response
 					.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
 					.build());
+		}finally{
+			NamespaceManager.set(oldNamespace);
 		}
 	}
 	

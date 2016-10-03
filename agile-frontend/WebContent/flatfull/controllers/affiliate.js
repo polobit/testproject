@@ -104,17 +104,19 @@ var AffiliateRouter = Backbone.Router.extend({
 	{
 		var time = getTimeFromDatePicker();
 		var url = 'core/api/affiliate?startTime='+time.start+'&endTime='+time.end
-		if(CURRENT_DOMAIN_USER.domain == "admin")
-			url = url+"&userId="+admin_affiliate_id+"&domain="+admin_affiliate_domain;
-		else
-			url = url+"&userId="+CURRENT_DOMAIN_USER.id;
+		var userId = CURRENT_DOMAIN_USER.id;
+		if(CURRENT_DOMAIN_USER.domain == "admin"){
+			userId = admin_affiliate_id;
+			url = url+"&domain="+admin_affiliate_domain;
+		}
+		url = url+"&userId="+userId;
 		this.affiliateCollectionView = new Base_Collection_View({ url : url, sort_collection : false, templateKey : "affiliate",
 			cursor : true, page_size : 25, individual_tag_name : 'tr', postRenderCallback : function(el){
 				head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
 				{
 					$("time", el).timeago();
 				});
-				showCommission(undefined, time, el);
+				showCommission(userId, time, el);
 			}
 		});
 		this.affiliateCollectionView.collection.fetch();
