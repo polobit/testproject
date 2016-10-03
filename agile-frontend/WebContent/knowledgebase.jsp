@@ -92,6 +92,7 @@ pageEncoding="UTF-8"%>
 	  CLOUDFRONT_STATIC_FILES_PATHd = FLAT_FULL_PATHd;
 	  CLOUDFRONT_TEMPLATE_LIB_PATHd = "";	
 	  CSS_PATHd = FLAT_FULL_PATHd;
+    
   }
 %>
 
