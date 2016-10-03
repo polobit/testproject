@@ -107,7 +107,7 @@ public class FormsAPI
 		    	html = html.replaceFirst("<!--recaptcha aglignment-->", " <!--recaptcha aglignment--><div class=\"agile-group\">"
 			 + "<label class=\"agile-label\"></label>"
 			 + "<div class=\"agile-field-xlarge agile-field\">"
-			 + "<div class='g-recaptcha' style=\"transform:scale(0.91);-webkit-transform:scale(0.91);transform-origin:0 0;-webkit-transform-origin:0 0; width='304px';\" data-sitekey='" + recaptchaGateway.site_key + "' data-callback='onSuccess'></div></div></div>");
+			 + "<div class='g-recaptcha' style=\"transform:scale(0.91);-webkit-transform:scale(0.91);transform-origin:0 0;-webkit-transform-origin:0 0; width='304px';\" data-sitekey='" + recaptchaGateway.site_key + "' data-callback='agileGCaptchaOnSuccess'></div></div></div>");
 		   }
 	    }
 
