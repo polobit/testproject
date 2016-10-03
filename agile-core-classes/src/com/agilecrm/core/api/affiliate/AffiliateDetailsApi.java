@@ -20,6 +20,7 @@ import com.agilecrm.affiliate.AffiliateDetails;
 import com.agilecrm.affiliate.util.AffiliateDetailsUtil;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
+import com.google.appengine.api.NamespaceManager;
 
 /**
  * @author Santhosh
@@ -63,8 +64,14 @@ public class AffiliateDetailsApi {
 		String sortFieldName = null;
 		if(filterBy != null)
 			sortFieldName = "-"+filterBy;
-		List<AffiliateDetails> affiliateDetailList = AffiliateDetailsUtil.getAffiliateDetailsList(startTime, endTime, (Integer.parseInt(count)), cursor, sortFieldName, filterBy);
-		return affiliateDetailList;
+		String oldNamespace = NamespaceManager.get();
+		NamespaceManager.set("");
+		try{
+			List<AffiliateDetails> affiliateDetailList = AffiliateDetailsUtil.getAffiliateDetailsList(startTime, endTime, (Integer.parseInt(count)), cursor, sortFieldName, filterBy);
+			return affiliateDetailList;
+		}finally{
+			NamespaceManager.set(oldNamespace);
+		}
 	}
 	
 	/**
