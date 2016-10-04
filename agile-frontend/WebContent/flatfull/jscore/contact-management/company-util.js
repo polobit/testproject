@@ -606,7 +606,18 @@
 			});
 		}
 	};
-	
+	company_detail_tab.openCompanyTimeLine = function(e){
+	  		
+			$('div.tab-content', App_Companies.companyDetailView.el).find('div.active').removeClass('active');
+			$("#timeline").append("<div id='line-container'><div id='line'></div></div>");
+			$('#company-timeline', App_Companies.companyDetailView.el).addClass('active');
+			if($("#timeline", App_Companies.companyDetailView.el).hasClass('isotope'))
+			{
+				$("#timeline", App_Companies.companyDetailView.el).isotope( 'reLayout', function(){} )
+				return;
+			}
+			load_company_timeline_details(App_Companies.companyDetailView.el, App_Companies.companyDetailView.model.get('id'));
+	};
 	company_detail_tab.load_company_deals = function ()
 	{
 		id = App_Companies.companyDetailView.model.id;

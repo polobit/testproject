@@ -37,11 +37,10 @@ var _agile_synch_form_v4 = function()
 		var field_value = agile_form[i].value;
 		var field_id = agile_form[i].getAttribute("id");
 		var field_type = agile_form[i].getAttribute("type");
-
 		if (field_type == "hidden")
 			agile_form[i].setAttribute("disabled", "disabled");
 
-		if ((field_type == "radio") && !agile_form[i].checked)
+		if ((field_type == "radio" || field_type == "checkbox") && !agile_form[i].checked)
 			continue;
          /*recaptcha will identify the user input on the basis of the id*/
 		if(field_id == "g-recaptcha-response")

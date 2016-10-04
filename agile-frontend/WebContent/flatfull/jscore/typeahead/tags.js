@@ -133,6 +133,7 @@ function setup_tags_typeahead(callback) {
 	       			
 	       			else if(company_util.isCompany()){
 	       				App_Companies.companyDetailView.model.set(data.toJSON(), {silent : true});
+                        addTagToTimelineDynamically(tag, data.get("tagsWithTime"));
 	       			// Append to the list, when no match is found 
 		       			if ($.inArray(tag, old_tags) == -1) {
                             var template = Handlebars.compile('<li class="tag btn btn-xs btn-default m-r-xs m-b-xs inline-block" data="{{name}}"><span><a class="anchor m-r-xs" href="#tags/{{name}}" >{{name}}</a><a class="close remove-tags" id="{{name}}" tag="{{name}}">&times</a></span></li>');
