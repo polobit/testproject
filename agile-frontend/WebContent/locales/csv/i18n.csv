@@ -460,7 +460,7 @@ contact-details.setup-telephony-social-helpdesk,Setup telephony&#44,Previene el 
 prefs-data-sync.widget-sync-customer-data-desc,Sync customer data and Agile CRM as contacts along with purchase history., social&#44, helpdesk&#44, billing and enhance your contact view.,Configurar telefonía&#44, social&#44, help desk&#44, cobranza y mejora tu vista de contactos,,,,,,,
 bulk-actions.add-subscribers,You can add subscribers from Contacts tab - using the Bulk Actions option,Sincronizar los datos del cliente y agile CRM como contactos junto con el historial de compras.,,,,,,,,,,,,,
 report-view.lost-deals-description,Get insights into why deals were lost. Filter by owner&#44,Puede añadir los suscriptores desde la pestaña Contactos - utilizando la opción de acciones a granel,,,,,,,,,,,,,
-report-view.trackandsource,Get insights into why deals were lost. Filter by owner&#44, track and source.,Conocer por qué se pierde una oferta. Filtrar por dueño&#44, registro y fuente,,,,,,,,,,,
+report-view.trackandsource,Get insights into why deals were lost. Filter by owner&#44track and source., track and source.,Conocer por qué se pierde una oferta. Filtrar por dueño&#44, registro y fuente,,,,,,,,,,,
 campaigns.all-subscribers-pad-content-desc,You can add subscribers from Contacts tab - using the Bulk Actions option, track and source.,Obtener una visión de por qué se perdieron ofertas. Filtrar por el propietario&#44, la pista y la fuente.,,,,,,,,,,,
 portlets.deal-filters-pad-content-desc,Filters are used to sort deals with a specific criteria to find patterns.,Puede añadir los suscriptores desde la pestaña Contactos - utilizando la opción de acciones a granel,,,,,,,,,,,,,
 portlets.leaderboard-desc,A leaderboard for your team based on revenue won&#44,Los filtros se utilizan para ordenar ofertas mediante un criterio específico para encontrar patrones.,,,,,,,,,,,,,
@@ -5556,4 +5556,3 @@ campaigns.keyword-tooltip,Enter the Keyword to be looked out for in the Incoming
 campaigns.setuptwilio,Please enable your Twilio integration ,,,,,,,,,,,,,,
 campaigns.here,here.,,,,,,,,,,,,,,
 campaigns.all-campaigns-stats,All Campaign Emails,,,,,,,,,,,,,,
-
