@@ -777,6 +777,13 @@ show and hide the input for editing the contact name and saving that
 				App_Contacts.contactDetailView.model = model;
 				CONTACTS_HARD_RELOAD = true;
         Backbone.history.navigate("contacts",{trigger: true});
+
+        if (window.history && window.history.pushState) {
+            window.history.pushState('forward', null, './#contacts');
+            $(window).on('popstate', function() {
+              location.reload();
+            });
+          }
 		    }});
     },
 

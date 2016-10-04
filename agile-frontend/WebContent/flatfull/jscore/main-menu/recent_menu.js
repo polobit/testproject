@@ -99,12 +99,14 @@ function modelAction(elem)
 	
 	if(type=='contact_entity')
 	{
+		location.reload();
 		App_Contacts.navigate("contact/"+id,{trigger:true});
 		$('#contactsmenu').parent().find('.active').removeClass('active');
 		$('#contactsmenu').addClass('active');
 	}
 	else if(type=='company_entity')
 	{
+		location.reload();
 		App_Contacts.navigate("company/"+id,{trigger:true});
 		$('#companiesmenu').parent().find('.active').removeClass('active');
 		$('#companiesmenu').addClass('active');
