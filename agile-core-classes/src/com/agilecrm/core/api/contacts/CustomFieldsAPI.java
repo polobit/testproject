@@ -65,7 +65,8 @@ public class CustomFieldsAPI
     List<CustomFieldDef> customFieldsList = new ArrayList<CustomFieldDef>();
 	try
 	{
-	    List<CustomFieldDef> cusList = CustomFieldDefUtil.getAllCustomFields();
+	    //List<CustomFieldDef> cusList = CustomFieldDefUtil.getAllCustomFields();
+		List<CustomFieldDef> cusList = CustomFieldDefUtil.getCustomFieldsByPosition();
 	    if (cusList != null)
 	    {
 	    	for (CustomFieldDef customFieldDef : cusList)
