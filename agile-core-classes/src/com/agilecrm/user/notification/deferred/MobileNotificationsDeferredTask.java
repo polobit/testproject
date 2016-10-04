@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.json.JSONObject;
 
 import com.agilecrm.user.AgileUser;
@@ -14,6 +15,7 @@ import com.agilecrm.user.notification.util.NotificationPrefsUtil;
 import com.agilecrm.user.push.AgileUserPushNotificationId;
 import com.agilecrm.util.HTTPUtil;
 import com.agilecrm.util.VersioningUtil;
+import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.taskqueue.DeferredTask;
 
 /**
@@ -72,6 +74,9 @@ public class MobileNotificationsDeferredTask implements DeferredTask {
 			if(StringUtils.isBlank(new JSONObject(message).getString("message")))
 				return;
 			
+			// Set Namespace
+			NamespaceManager.set(domain);
+			
 			// Get all users
 			List<AgileUserPushNotificationId> prefs = AgileUserPushNotificationId.getNotifiers(domain);
 			for (AgileUserPushNotificationId agileUserPushNotificationId : prefs) {
@@ -104,6 +109,9 @@ public class MobileNotificationsDeferredTask implements DeferredTask {
 	
 	private void addSound(NotificationPrefs notificationPrefs){
 		try {
+			ObjectMapper mapper = new ObjectMapper();
+			System.out.println(mapper.writeValueAsString(notificationPrefs));
+			
 			JSONObject messageJSON = new JSONObject(message);
 			String soundType = notificationPrefs.notification_sound;
 			
