@@ -115,7 +115,7 @@
                       
                     <input type="text" style="width:70%;float:left"class="form-control text-xs" id="ticket_change_sla" placeholder="{{agile_lng_translate 'contacts-view' 'select-date'}}" value="{{#if due_time}}{{epochToHumanDate "mm/dd/yyyy" due_time}}{{/if}}" {{#if_equals status "CLOSED"}}disabled="disabled"{{/if_equals}}/>
                     
-                    <input type="text" style="width:30%;float:right" class="form-control text-xs ticket_change_slatime" placeholder="Time" {{#if_equals status "CLOSED"}}disabled="disabled"{{/if_equals}}/>
+                    <input type="text" style="width:40%;float:right" class="form-control text-xs ticket_change_slatime" placeholder="Time" {{#if_equals status "CLOSED"}}disabled="disabled"{{/if_equals}}/>
                    
                     <div class="col-md-12 p-n">
                       <div class="col-md-3 p-n">
@@ -320,7 +320,7 @@
           <a class="link-color text-sm"  id="macro_list" data-toggle="dropdown" aria-expanded="false">{{agile_lng_translate 'tickets' 'canned-responses'}} <span class="caret"></span></a>
           <ul class="dropdown-menu">
             {{#each canned_responses}}
-            <li class="text-cap" id="ticket_canned_response" rel="{{id}}"><a href="javascript:void(0);" id={{id}}><span>{{title}}  <span class="text-muted" style="width:40%;text-overflow: ellipsis;overflow: hidden; text-muted">({{owner_name}})</span></a></li>
+            <li class="text-cap" id="ticket_canned_response" rel="{{id}}"><a href="javascript:void(0);" id={{id}}><div style="padding-left:15px;">{{title}}  <div class="text-muted" style="width:50%;text-overflow: ellipsis;overflow: hidden;float: right;">({{owner_name}})</div></a></li>
             {{/each}}
           </ul>
         </div>
