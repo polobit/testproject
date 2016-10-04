@@ -7839,3 +7839,13 @@ Handlebars.registerHelper("convertToi18ForCall",function(value)
 	return value;
 	
 });
+Handlebars.registerHelper('if_won_milestone', function(id,milestone,options)
+{
+	var track ; 
+	if(id)
+		track = trackListView.collection.get(id);
+	if(milestone && track && track.get('won_milestone') && milestone == track.get('won_milestone'))
+		return options.fn(this);
+	else
+		return options.inverse(this); 
+});

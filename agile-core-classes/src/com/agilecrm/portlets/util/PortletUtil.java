@@ -51,10 +51,8 @@ import com.agilecrm.subscription.Subscription;
 import com.agilecrm.subscription.SubscriptionUtil;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
-import com.agilecrm.user.UserPrefs;
 import com.agilecrm.user.access.exception.AccessDeniedException;
 import com.agilecrm.user.util.DomainUserUtil;
-import com.agilecrm.user.util.UserPrefsUtil;
 import com.agilecrm.util.DateUtil;
 import com.agilecrm.workflows.Workflow;
 import com.agilecrm.workflows.status.CampaignStatus;
@@ -847,12 +845,8 @@ public class PortletUtil {
 			totalCallsCountList.add(totalCallsCount);
 			callsDurationList.add(callsDuration);
 			domainUserNamesList.add(domainUser.name);
-			AgileUser agileUser = AgileUser.getCurrentAgileUserFromDomainUser(domainUser.id);
-			UserPrefs userPrefs = null;
-			if(agileUser!=null)
-				userPrefs = UserPrefsUtil.getUserPrefs(agileUser);
-			if(userPrefs!=null)
-				domainUserImgList.add(userPrefs.pic);
+			if(domainUser.pic != null)
+				domainUserImgList.add(domainUser.pic);
 			else
 				domainUserImgList.add("no image-"+i);
 			i++;
@@ -1001,14 +995,8 @@ public class PortletUtil {
 						else
 							splitByMap.put(category.getLabel(),0);
 					}
-					AgileUser agileUser = AgileUser.getCurrentAgileUserFromDomainUser(domainUser.id);
-					
-					UserPrefs userPrefs = null;
-					
-					if(agileUser!=null)
-						userPrefs = UserPrefsUtil.getUserPrefs(agileUser);
-					if(userPrefs!=null)
-						groupByList.add(userPrefs.pic);
+					if(domainUser.pic !=null)
+						groupByList.add(domainUser.pic);
 					else
 						groupByList.add("no image-"+i);
 					splitByList.add(splitByMap);
@@ -1026,14 +1014,8 @@ public class PortletUtil {
 						else
 							splitByMap.put(status.name(),0);
 					}
-					AgileUser agileUser = AgileUser.getCurrentAgileUserFromDomainUser(domainUser.id);
-					
-					UserPrefs userPrefs = null;
-					
-					if(agileUser!=null)
-						userPrefs = UserPrefsUtil.getUserPrefs(agileUser);
-					if(userPrefs!=null)
-						groupByList.add(userPrefs.pic);
+					if(domainUser.pic !=null)
+						groupByList.add(domainUser.pic);
 					else
 						groupByList.add("no image-"+i);
 					splitByList.add(splitByMap);
@@ -1347,14 +1329,8 @@ public class PortletUtil {
 						else
 							cateJson.put("isDomainUser", false);
 						
-						AgileUser agileUser = AgileUser.getCurrentAgileUserFromDomainUser(domainUser.id);
-						
-						UserPrefs userPrefs = null;
-						
-						if(agileUser!=null)
-							userPrefs = UserPrefsUtil.getUserPrefs(agileUser);
-						if(userPrefs!=null)
-							cateJson.put("userPic",userPrefs.pic);
+						if(domainUser.pic!=null)
+							cateJson.put("userPic",domainUser.pic);
 						else
 							cateJson.put("userPic","");
 						cateList.add(cateJson);
@@ -1382,14 +1358,8 @@ public class PortletUtil {
 						else
 							cateJson.put("isDomainUser", false);
 						
-						AgileUser agileUser = AgileUser.getCurrentAgileUserFromDomainUser(domainUser.id);
-						
-						UserPrefs userPrefs = null;
-						
-						if(agileUser!=null)
-							userPrefs = UserPrefsUtil.getUserPrefs(agileUser);
-						if(userPrefs!=null)
-							cateJson.put("userPic",userPrefs.pic);
+						if(domainUser.pic!=null)
+							cateJson.put("userPic",domainUser.pic);
 						else
 							cateJson.put("userPic","");
 						cateList.add(cateJson);
@@ -1419,14 +1389,8 @@ public class PortletUtil {
 						else
 							cateJson.put("isDomainUser", false);
 						
-						AgileUser agileUser = AgileUser.getCurrentAgileUserFromDomainUser(domainUser.id);
-						
-						UserPrefs userPrefs = null;
-						
-						if(agileUser!=null)
-							userPrefs = UserPrefsUtil.getUserPrefs(agileUser);
-						if(userPrefs!=null)
-							cateJson.put("userPic",userPrefs.pic);
+						if(domainUser.pic!=null)
+							cateJson.put("userPic",domainUser.pic);
 						else
 							cateJson.put("userPic","");
 						cateList.add(cateJson);
@@ -1459,14 +1423,8 @@ public class PortletUtil {
 						else
 							cateJson.put("isDomainUser", false);
 						
-						AgileUser agileUser = AgileUser.getCurrentAgileUserFromDomainUser(domainUser.id);
-						
-						UserPrefs userPrefs = null;
-						
-						if(agileUser!=null)
-							userPrefs = UserPrefsUtil.getUserPrefs(agileUser);
-						if(userPrefs!=null)
-							cateJson.put("userPic",userPrefs.pic);
+						if(domainUser.pic!=null)
+							cateJson.put("userPic",domainUser.pic);
 						else
 							cateJson.put("userPic","");
 						cateList.add(cateJson);
@@ -1813,14 +1771,8 @@ public class PortletUtil {
 					}
 
 			}
-			AgileUser agileUser = AgileUser.getCurrentAgileUserFromDomainUser(domainUser.id);
-			
-			UserPrefs userPrefs = null;
-			
-			if(agileUser!=null)
-				userPrefs = UserPrefsUtil.getUserPrefs(agileUser);
-			if(userPrefs!=null)
-				groupByList.add(userPrefs.pic);
+			if(domainUser.pic!=null)
+				groupByList.add(domainUser.pic);
 			else
 				groupByList.add("no image-"+i);
 			splitByList.add(splitByMap);
