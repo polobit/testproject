@@ -681,15 +681,15 @@ function getContactCustomProperties(items)
 		{
 			if(fieldName=='')
 				fieldName=items[i].name;
-			//fields.push(items[i]);
-			temp_fields[position_arr[items[i].name]] = items[i];
+			fields.push(items[i]);
+			//temp_fields[position_arr[items[i].name]] = items[i];
 			datajson[''+items[i].name]=items[i].value;
 		}
 	}
 	
 	for (var i = 0; i < temp_fields.length; i++){
 		if(temp_fields[i]!=undefined && temp_fields[i]!=""){
-			fields.push(temp_fields[i]);
+			//fields.push(temp_fields[i]);
 		}
 	}
 
@@ -848,15 +848,15 @@ function getCompanyCustomProperties(items)
 		{
 			if(fieldName=='')
 				fieldName=items[i].name;
-			//fields.push(items[i]);
-			temp_fields[position_arr[items[i].name]] = items[i];
+			fields.push(items[i]);
+			//temp_fields[position_arr[items[i].name]] = items[i];
 			datajson[''+items[i].name]=items[i].value;
 		}
 	}
 	
 	for (var i = 0; i < temp_fields.length; i++){
 		if(temp_fields[i]!=undefined && temp_fields[i]!=""){
-			fields.push(temp_fields[i]);
+			//fields.push(temp_fields[i]);
 		}
 	}
 
