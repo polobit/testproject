@@ -66,7 +66,10 @@ public class UpdateContactsOfDomainDeferredTask implements DeferredTask
 		{
 			ContactSchemaUpdateStats contactSchemaUpdateStats = getStats();
 			if(contactSchemaUpdateStats != null) {
-				count = contactSchemaUpdateStats.count;
+				if(contactSchemaUpdateStats.count != null )
+				    count = contactSchemaUpdateStats.count;
+				else 
+				     count =0;
 				previousCursor = contactSchemaUpdateStats.cursor;
 				failedIds = contactSchemaUpdateStats.failedIds;
 				updateStats(previousCursor,failedIds, "RUNNING");

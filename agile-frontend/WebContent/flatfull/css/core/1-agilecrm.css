@@ -4776,3 +4776,15 @@ ul#recent-menu-model-list li:nth-child(even)
   pointer-events:none;
   opacity: 0.65;
 }
+.call-log-input:focus{
+  border-color: rgba(82,168,236,.8) !important;
+}
+.w-83{
+  width: 83% !important;
+}
+.p-l-15{
+  padding-left: 15px !important;
+}
+.p-t-7{
+  padding-top: 7px;
+}

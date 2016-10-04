@@ -841,7 +841,7 @@ function showHide_UnsubscribeEmail_Status(alertMsg){
 }
 
 /**
-* Returns campaign modify changes
+* Returns campaign modify changes. Please refer workflow rules json accordingly
 *
 * @param updated_workflow_json - updated workflow rules json
 * @param old_workflow_json - old workflow rules json
@@ -908,17 +908,27 @@ function get_campaign_changes(updated_workflow_json, old_workflow_json, callback
                         if(!field_equal)
                         {
                             try
-                            {
-                                var modified_field_ui_obj = search_ui_obj(old_node.NodeDefinition.ui, key_identity);
-                                     
+                            {        
                                 var modified_data = {};
-                
                                 modified_data.node_name = update_node.displayname;
-                                modified_data.name = get_modified_name(modified_field_ui_obj);
-                                modified_data.old_value = get_modified_value(modified_field_ui_obj, updated_node_field.name
+
+                                // If Node name is changed, it doesn't comes under ui
+                                if(updated_node_field.name == "nodename" && key_identity == "nodename")
+                                {
+                                    modified_data.name = "Node Name";
+                                    modified_data.old_value = old_node_field.value;
+                                    modified_data.new_value = updated_node_field.value;
+                                }
+                                else
+                                {
+                                    var modified_field_ui_obj = search_ui_obj(old_node.NodeDefinition.ui, key_identity);
+
+                                    modified_data.name = get_modified_name(modified_field_ui_obj);
+                                    modified_data.old_value = get_modified_value(modified_field_ui_obj, updated_node_field.name
                                                                 , old_node_field.value);
-                                modified_data.new_value = get_modified_value(modified_field_ui_obj, updated_node_field.name
+                                    modified_data.new_value = get_modified_value(modified_field_ui_obj, updated_node_field.name
                                                                 , updated_node_field.value);
+                                }
 
 
                                 modified_field_values.push(modified_data);
