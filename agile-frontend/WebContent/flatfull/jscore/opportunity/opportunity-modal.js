@@ -5,7 +5,7 @@ $(function()
 	/**
 	 * To avoid showing previous errors of the modal.
 	 */
-	$('#opportunityModal, #opportunityUpdateModal').on('show.bs.modal', function()
+	$('#opportunityModal, #opportunityUpdateModal, #newDealModal').on('show.bs.modal', function()
 	{
 
 		// Removes alert message of error related date and time.
@@ -15,9 +15,8 @@ $(function()
 		$('#' + this.id).find('.error').removeClass('error');
 	});
 
-	$('#opportunityModal, #opportunityUpdateModal').on("shown.bs.modal", function()
+	$('#opportunityModal, #opportunityUpdateModal, #newDealModal').on("shown.bs.modal", function()
 	{
-
 		// Add placeholder and date picker to date custom fields
 		$('.date_input').attr("placeholder",_agile_get_translated_val("contacts", "select-date"));
     
@@ -32,7 +31,7 @@ $(function()
 	 * "Hide" event of note modal to remove contacts appended to related to
 	 * field and validation errors
 	 */
-	$('#opportunityModal').on('hidden.bs.modal', function()
+	$('#opportunityModal, #newDealModal').on('hidden.bs.modal', function()
 	{
 
 		// Removes appended contacts from related-to field

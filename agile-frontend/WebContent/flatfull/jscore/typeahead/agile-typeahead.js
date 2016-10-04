@@ -124,7 +124,7 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
 								 */
 								if (data.length == 0)
 								{
-									var txt = '<b>{{agile_lng_translate "others" "no-reults-found"}}</b>';
+									var txt = '<b>{{agile_lng_translate "others" "no-results-found"}}</b>';
 
 									if (noResultText && noResultText.length)
 										txt = noResultText;

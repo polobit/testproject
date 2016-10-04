@@ -69,7 +69,8 @@ function getInvoices(accessToken){
 		$.ajax({
 			headers : {
 				"Accept-Language" : "en_US",
-				"Authorization" : tok
+				"Authorization" : tok,
+				"bn" : "AgileCRM_SP"
 			},
 			url : "https://api.paypal.com/v1/invoicing/search",
 			type : "POST",

@@ -2429,6 +2429,9 @@ JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "page
 <script>
 
 function showAgileCRMForm(formJson,formHolderId) { 
+    var gCaptchaSrc = document.getElementById("gRecaptchaSrc");
+   if(gCaptchaSrc) document.getElementById(formHolderId).removeChild(gCaptchaSrc);
+
     var iframe="";
     $("iframe").each(function(i) { 
          if($("iframe")[i].hasAttribute('data-originalurl')){
@@ -2443,25 +2446,52 @@ function showAgileCRMForm(formJson,formHolderId) {
                         $('#'+iframe_id).contents().find('#agileform_div').empty();
                         var div = $("<div class='agile_crm_form_embed' id='"+window.CURRENT_AGILE_DOMAIN+"_"+formJson.id+"' ></div>");
                         div.html(formJson.formHtml); 
+                        recaptcha(formJson,iframe_id);
                         $('#'+iframe_id).contents().find('#agileform_div').append(div);
-                    }            
+                        //$('#'+iframe_id).contents().find('#agileform_div').innerHTML=div;
+                        }            
                     return;
                 } 
                 else {            
                     if(window.current_agileform!=null){
                         replace_form_class.attr("id",window.CURRENT_AGILE_DOMAIN+"_"+formJson.id); 
                         replace_form_class.html(formJson.formHtml);
+                        recaptcha(formJson,iframe_id);
                     }  
                     else if(replace_form_class.attr("id").includes(formJson.id)){
                         replace_form_class.html(formJson.formHtml);
+                        recaptcha(formJson,iframe_id);
                     }                    
                     return;
-                } 
+                }         
                 }catch(err){}   
             }
          }
     });
 }
+
+function recaptcha(formJson,frameId)
+{
+     var formJsonObj = JSON.parse(formJson.formJson);
+     
+        /*for (var key in formJsonObj[0].fields.agileformcaptcha["value"]) { 
+                if(formJsonObj[0].fields.agileformcaptcha["value"][key]["selected"]) {
+                    if(formJsonObj[0].fields.agileformcaptcha["value"][key]["value"]=="true") {
+                        var gCaptcha = document.createElement("script");
+                        gCaptcha.type="text/javascript";
+                        gCaptcha.src = "https://www.google.com/recaptcha/api.js";
+                        document.body.appendChild(gCaptcha);
+                    }
+                
+                }
+
+           }*/
+           console.log("testing recaptcha for new buider");
+           $.getScript("https://www.google.com/recaptcha/api.js");
+
+ }
+
+
 </script>
     <script src="<%=BUILD_PATH%>js/builder.min.js?v=<%=AGILE_VERSION%>" charset="utf-8"></script>
     <script src="/locales/html5/localize.js?v=<%=AGILE_VERSION%>" charset="utf-8"></script>
