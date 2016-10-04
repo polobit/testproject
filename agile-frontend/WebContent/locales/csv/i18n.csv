@@ -2356,7 +2356,7 @@ campaigns.customer-deleted,Customer deleted,cliente eliminado
 report-add.add-email-reports,Add Email Report,Añadir Informe de e-mail
 plan-and-upgrade.nicolas-woirhaye,Nicolas Woirhaye,Nicolas Woirhaye
 report-view.campaignreports,Campaign Reports,Informes de campaña
-others.no-reults-found,No Results Found,No se han encontrado resultados
+others.no-results-found,No Results Found,No se han encontrado resultados
 portlets.emails-per-month,emails per month,correos electrónicos por mes
 visitors.sync-new-signups,Sync new Signups,Sincronizar los nuevos registros
 emails.unsubscribing,Unsubscribing...,Darse de baja ...
@@ -3646,7 +3646,7 @@ admin-settings-custom-fields.DATE,Date Field,campo de fecha
 help.start-chat,Start chat,Comenzar chat
 admin-settings-users.last-login,Last login,Último acceso
 portlets.select-all,Select all,Seleccionar todo
-others.no-reults,No Results,No hay resultados
+others.no-results,No Results,No hay resultados
 portlets.last-month,Last Month,El mes pasado
 admin-settings-deals.new-source,New Source,Nueva fuente
 admin-settings-tags.lead-score,Lead Score,Puntuación de lead
@@ -3876,7 +3876,7 @@ contact-details.campaigns,Campaigns,campañas
 portlets.send-rate,Send Rate,Enviar Tasa
 plan-and-upgrade.plan-with,plan with,plan con
 contact-edit.add-email,Add Email,Añadir Correo
-others.add-new,+ Add new,+ Add new
+others.add-new,#NAME?,#NAME?
 widgets.ClickDesk,ClickDesk,ClickDesk
 contacts-view.condition,Condition,Condición
 modals.edit-note,Edit Note,Editar nota
@@ -4824,7 +4824,7 @@ currency.Euro,Euro,Euro
 deal-view.name,Name,Nombre
 tasks.High,High,Alta
 menu.help,Help,Ayuda
-portlets.+add,+ Add new,+ Add new
+portlets.+add,#NAME?,#NAME?
 portlets.tags,Tags,Etiquetas
 report-add.name,Name,Nombre
 contact-edit.main,Main,Principal
