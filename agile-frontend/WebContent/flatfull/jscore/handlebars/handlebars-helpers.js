@@ -3138,6 +3138,12 @@ $(function()
 				if (prefs.sms_api == value)
 					return options.fn(target[i]);
 			}
+
+			if (target[i].name == "RecaptchaGateway")
+			{
+				if (prefs.recaptcha_api == value)
+					return options.fn(target[i]);
+			}
 		}
 		return options.inverse(this);
 	});
@@ -3181,6 +3187,12 @@ $(function()
 			if (target[i].name == "SMS-Gateway")
 			{
 				if (prefs.sms_api == value)
+					return options.fn(target[i]);
+			}
+
+			 if (target[i].name == "RecaptchaGateway")
+			{
+				if (prefs.recaptcha_api == value)
 					return options.fn(target[i]);
 			}
 		}
@@ -5150,6 +5162,12 @@ $(function()
 				if (prefs.sms_api == value)
 					return options.fn(target[i]);
 			}
+
+		    if (target[i].name == "RecaptchaGateway")
+			{
+				if (prefs.recaptcha_api == value)
+					return options.fn(target[i]);
+			}
 		}
 		return options.inverse(this);
 	});
@@ -5193,6 +5211,12 @@ $(function()
 			if (target[i].name == "SMS-Gateway")
 			{
 				if (prefs.sms_api == value)
+					return options.fn(target[i]);
+			}
+
+			if (target[i].name == "RecaptchaGateway")
+			{
+				if (prefs.recaptcha_api == value)
 					return options.fn(target[i]);
 			}
 		}

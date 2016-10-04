@@ -426,6 +426,20 @@ $(function(){
 		});
 	});
 
+	$("#content").on('click', '#recaptcha-gateway-delete', function(e){ 
+		e.preventDefault();
+		var id=$(this).attr('data');
+    	showAlertModal("delete", "confirm", function(){
+    		$.ajax({
+				url: 'core/api/recaptcha-gateway',
+				type: 'DELETE',
+				success: function(){
+					location.reload(true);
+				}
+			});
+		});
+	});
+
 	$("#prefs-tabs-content .widgets_inner ul li").off("click");
 	$("#prefs-tabs-content").on("click",".widgets_inner ul li",function(){
 		var temp = $(this).find("a").attr("href").split("#");
