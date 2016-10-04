@@ -6,7 +6,6 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.json.JSONObject;
 
 import com.agilecrm.user.AgileUser;
@@ -109,8 +108,6 @@ public class MobileNotificationsDeferredTask implements DeferredTask {
 	
 	private void addSound(NotificationPrefs notificationPrefs){
 		try {
-			ObjectMapper mapper = new ObjectMapper();
-			System.out.println(mapper.writeValueAsString(notificationPrefs));
 			
 			JSONObject messageJSON = new JSONObject(message);
 			String soundType = notificationPrefs.notification_sound;
