@@ -5,8 +5,11 @@ import java.net.URLEncoder;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.json.JSONObject;
 
+import com.agilecrm.user.AgileUser;
+import com.agilecrm.user.notification.NotificationPrefs;
 import com.agilecrm.user.notification.util.NotificationPrefsUtil;
 import com.agilecrm.user.push.AgileUserPushNotificationId;
 import com.agilecrm.util.HTTPUtil;
@@ -72,7 +75,20 @@ public class MobileNotificationsDeferredTask implements DeferredTask {
 			// Get all users
 			List<AgileUserPushNotificationId> prefs = AgileUserPushNotificationId.getNotifiers(domain);
 			for (AgileUserPushNotificationId agileUserPushNotificationId : prefs) {
-				if(!NotificationPrefsUtil.isNotificationEnabledToSend(agileUserPushNotificationId, new JSONObject(message)))
+				
+				// new JSONObject(message)
+				AgileUser agileUser = AgileUser.getCurrentAgileUserFromDomainUser(agileUserPushNotificationId.domainUserId);
+				if(agileUser == null)
+					continue;
+				
+		    	NotificationPrefs notificationPrefs =  NotificationPrefsUtil.getNotificationPrefs(agileUser);
+		    	if(notificationPrefs == null)
+		    		continue;
+		    	
+		    	// Add Sound Name
+		    	addSound(notificationPrefs);
+		    	
+				if(!NotificationPrefsUtil.isNotificationEnabledToSend(notificationPrefs, new JSONObject(message)))
 					return;
 				
 				System.out.println("Success");
@@ -84,6 +100,25 @@ public class MobileNotificationsDeferredTask implements DeferredTask {
 			e.printStackTrace();
 			System.out.println("Got exception in NotificationDeferredTask " + e);
 		}
+	}
+	
+	private void addSound(NotificationPrefs notificationPrefs){
+		try {
+			JSONObject messageJSON = new JSONObject(message);
+			String soundType = notificationPrefs.notification_sound;
+			
+			if(StringUtils.isBlank(soundType) || "no_sound".equals(soundType))
+				 return;
+			
+			messageJSON.put("sound_type", soundType);
+			
+			// Reset message
+			this.message = messageJSON.toString();
+		} catch (Exception e) {
+			// TODO: handle exception
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+		}
+		
 	}
 
 	private String getURL(String regId) {
