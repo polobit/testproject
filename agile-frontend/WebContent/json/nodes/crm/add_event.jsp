@@ -1,3 +1,4 @@
+<%@page import="com.agilecrm.util.TimeZoneUtil"%>
 {
     "name": "Add Event",
     "thumbnail": "json/nodes/images/crm/add_event.png",
@@ -115,24 +116,7 @@
 	            "name": "time_zone",
 	            "title": "Select the time zone ",
 	            "options": {
-	            	<%@page import="java.util.Arrays"%>
-                    <%@page import="java.util.TimeZone"%>
-                    <%
-					String[] allTimeZones = TimeZone.getAvailableIDs();    
-					Arrays.sort(allTimeZones);  
-					
-				    for (int i = 0; i < allTimeZones.length; i++)
-				    {  
-						String option = allTimeZones[i];
-						
-						if(i == allTimeZones.length -1 )
-						out.println("\"" + option +  "\":\"" + option + "\"");
-						else
-						out.println("\"" + option +  "\":\"" + option + "\",");
-							
-					}  
-					%>
-	            	
+	            	<%= TimeZoneUtil.getJavaTimeZones(null, null, false) %>
 	            },
 	            "fieldType": "select",
 	            "type": "select" 
