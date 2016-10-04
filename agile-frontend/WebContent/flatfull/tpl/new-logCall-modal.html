@@ -106,13 +106,13 @@
                       <a href="" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false"> 
       				          <button id="statusButton" type="button" class="btn btn-default w-full text-left">
   								        <span  id="callStatus" class="callStatus" name="status" value = ""> {{agile_lng_translate 'deal-view' 'select'}} </span>
+                          <span id="status-wait"></span>
            				   		  <i class="caret pull-right" style="margin-top:8px"></i>
    							        </button>
 						          </a>
       								<ul id="statusValue-ul" class="dropdown-menu" style="{{#is_mobile}} left: 15px;width: 93% {{else}} top:32px;left: 15px;width: 91%; {{/is_mobile}}" role="menu">
       								</ul>
-                      <div id="logPhone_status_error" style="color:#d9534f;display:none;">{{agile_lng_translate 'campaigns' 'status-not-declared'}}</div>
-						            <span id="status-wait"></span>	
+                      <div id="logPhone_status_error" style="color:#d9534f;display:none;">{{agile_lng_translate 'campaigns' 'status-not-declared'}}</div>	
                     </div>
                 </div>
                 
@@ -127,7 +127,7 @@
                         <div class="input-group">
                           <input type="text" name="hour" id="hour" value="0" class="form-control">
                           <span class="input-group-btn">
-                            <button class="btn btn-secondary" type="button" style="padding: 6px 10px;background-color: #F5FAFC;border-color: #cfdadd;">{{agile_lng_translate 'portlets' 'Hours'}}</button>
+                            <button class="btn btn-secondary disabled" type="button" style="padding: 6px 10px;background-color: #F5FAFC;border-color: #c3c3c3;">{{agile_lng_translate 'portlets' 'Hours'}}</button>
                           </span>
                         </div>
                       </div>
@@ -135,7 +135,7 @@
                         <div class="input-group">
                           <input type="text" name="min" id="min" value="0" class="form-control">
                           <span class="input-group-btn">
-                            <button class="btn btn-secondary" type="button" style="{{#is_mobile}} padding: 6px 5px {{else}} padding: 6px 8px {{/is_mobile}};background-color: #F5FAFC;border-color: #cfdadd;">{{agile_lng_translate 'portlets' 'Minutes'}}</button>
+                            <button class="btn btn-secondary disabled" type="button" style="{{#is_mobile}} padding: 6px 5px {{else}} padding: 6px 8px {{/is_mobile}};background-color: #F5FAFC;border-color: #c3c3c3;">{{agile_lng_translate 'portlets' 'Minutes'}}</button>
                           </span>
                         </div>
                       </div>
@@ -143,7 +143,7 @@
                         <div class="input-group">
                           <input type="text" name="sec" id="sec" value="0" class="form-control">
                           <span class="input-group-btn">
-                            <button class="btn btn-secondary" type="button" style="{{#is_mobile}} padding: 6px 4px {{else}} padding: 6px 6px {{/is_mobile}};background-color: #F5FAFC;border-color: #cfdadd;">{{agile_lng_translate 'portlets' 'Seconds'}}</button>
+                            <button class="btn btn-secondary disabled" type="button" style="{{#is_mobile}} padding: 6px 4px {{else}} padding: 6px 6px {{/is_mobile}};background-color: #F5FAFC;border-color: #c3c3c3;">{{agile_lng_translate 'portlets' 'Seconds'}}</button>
                           </span>
                         </div>
                       </div>
