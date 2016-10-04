@@ -1173,7 +1173,6 @@ public class TwilioUtil
 		return number;
 	}
 	
-}
 	public static String createSMSAppSidTwilioIO(String accountSID, String authToken, String numberSid) throws Exception
 	{
             	
