@@ -978,8 +978,8 @@ if (typeof jQuery === 'undefined') {
   Modal.BACKDROP_TRANSITION_DURATION = 150
 
   Modal.DEFAULTS = {
-    backdrop: true,
-    keyboard: true,
+    backdrop: "static",
+    keyboard: false,
     show: true
   }
 
