@@ -131,15 +131,8 @@ public class DealTriggerUtil
 			{
 				 map.put("user", user);
 				 NotificationPrefs NotePref = NotificationPrefsUtil.getNotificationPrefs(AgileUser.getCurrentAgileUserFromDomainUser(user.id));
-				if( user.menu_scopes.contains(NavbarConstants.DEALS) && NotePref.deal_closed_email)
-				{
+				 if(user.menu_scopes.contains(NavbarConstants.DEALS) && NotePref.deal_closed_email)
 					SendMail.sendMail(user.email," Deal Won Alert", SendMail.Deal_Won_status,map);
-				}
-				
-				/*else
-					 SendMail.sendMail(user.email," Deal Won Alert", SendMail.Deal_Won_status,map);
-				 if(NotePref.deal_closed_email)
-					 SendMail.sendMail(user.email," Deal Won Alert", SendMail.Deal_Won_status,map);*/
 			}
 			}
 			// execute trigger for deal milestone change.
