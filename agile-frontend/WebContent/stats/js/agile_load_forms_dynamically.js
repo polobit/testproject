@@ -3,8 +3,8 @@ function loadAgileCRMForm(id){
 	var agileDomain = id[0];
 	var formId = id[id.length-1];
 	var script = document.createElement('script');
-    //script.src = window.location.protocol+'//'+agileDomain+'.agilecrm.com/core/api/forms/form/js/'+formId;
-    script.src = "http://localhost:8888/core/api/forms/form/js/"+formId;
+    script.src = window.location.protocol+'//'+agileDomain+'.agilecrm.com/core/api/forms/form/js/'+formId;
+   // script.src = "http://localhost:8888/core/api/forms/form/js/"+formId;
 
     //script.src = "https://"+agileDomain+"-dot-sandbox-dot-agilecrmbeta.appspot.com/core/api/forms/form/js/"+formId;
     document.body.appendChild(script);      
