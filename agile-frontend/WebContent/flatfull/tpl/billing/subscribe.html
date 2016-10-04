@@ -390,46 +390,7 @@ Proceed to Trial
 <!-- end of purchase email -->
 <div style="flex: 1 0;position: relative;">
 {{#getSubscriptionBasedOnPlan billingData emailPlan}}
-<!-- Detailedinfo first dashlet -->
-		<div class="col-md-12 col-sm-12 col-xs-12 pos-abs pos-t-0">
-			<div class="panel panel-default m-t-sm">
-				<div class="panel-heading ">
-				{{agile_lng_translate 'plan-and-upgrade' 'free-emails'}}
-				</div>
-				<div class="panel-body p-md">
-			    	<form class="bs-example form-horizontal">
-		           		<div class="form-group m-b-sm">
-		              		<label class="col-sm-6 control-label p-t-none">
-		              		{{agile_lng_translate 'plan-and-upgrade' 'free-emails'}}
-		              		</label>
-		              		<div class="col-sm-6">
-		                	{{getFreeEmailsCount}} 
-		              		</div>
-		            	</div>
-		            	<div class="form-group m-b-sm">
-			              		<label class="col-sm-6 control-label p-t-none ">
-			              		{{agile_lng_translate 'plan-and-upgrade' 'emails-remaining'}}
-			              		</label>
-			              		<div class="col-sm-6">
-			               		{{getRemaininaEmails}} 
-			               			{{#is_paid_emails}}
-			               			{{else}}
-			               				<span class="text-muted text-xs block">
-			               				({{agile_lng_translate 'plan-and-upgrade' 'next-renewal'}}
-			               					<span id="next_emails_renewal">{{emails_next_renewal_time}}</span>)
-			               				</span> 
-			               			{{/is_paid_emails}}
-			              		</div>
-			           	</div>
-			           	<p class="text-xs p-t-sm">
-			           	Please note that once you have purchased the email subscription, all the branded emails will be removed from your account.
-			           	</p>
-					</form>
-			    </div>
-			</div>
-		</div>
-<!-- End of detailed Info first dashlet-->
-{{else}}
+
 <!-- Detailedinfo second dashlet -->
 			<div class="col-md-12 col-sm-12 col-xs-12 pos-abs pos-t-0">
 				<div class="panel panel-default m-t-sm">
@@ -483,6 +444,47 @@ Proceed to Trial
 				</div>
 <!--end of second onfo dashlet -->
 
+
+{{else}}
+<!-- Detailedinfo first dashlet -->
+		<div class="col-md-12 col-sm-12 col-xs-12 pos-abs pos-t-0">
+			<div class="panel panel-default m-t-sm">
+				<div class="panel-heading ">
+				{{agile_lng_translate 'plan-and-upgrade' 'free-emails'}}
+				</div>
+				<div class="panel-body p-md">
+			    	<form class="bs-example form-horizontal">
+		           		<div class="form-group m-b-sm">
+		              		<label class="col-sm-6 control-label p-t-none">
+		              		{{agile_lng_translate 'plan-and-upgrade' 'free-emails'}}
+		              		</label>
+		              		<div class="col-sm-6">
+		                	{{getFreeEmailsCount}} 
+		              		</div>
+		            	</div>
+		            	<div class="form-group m-b-sm">
+			              		<label class="col-sm-6 control-label p-t-none ">
+			              		{{agile_lng_translate 'plan-and-upgrade' 'emails-remaining'}}
+			              		</label>
+			              		<div class="col-sm-6">
+			               		{{getRemaininaEmails}} 
+			               			{{#is_paid_emails}}
+			               			{{else}}
+			               				<span class="text-muted text-xs block">
+			               				({{agile_lng_translate 'plan-and-upgrade' 'next-renewal'}}
+			               					<span id="next_emails_renewal">{{emails_next_renewal_time}}</span>)
+			               				</span> 
+			               			{{/is_paid_emails}}
+			              		</div>
+			           	</div>
+			           	<p class="text-xs p-t-sm">
+			           	Please note that once you have purchased the email subscription, all the branded emails will be removed from your account.
+			           	</p>
+					</form>
+			    </div>
+			</div>
+		</div>
+<!-- End of detailed Info first dashlet-->
 {{/getSubscriptionBasedOnPlan}}
 <!-- start of email credits dashlet -->
 <div class="col-md-12 col-sm-12 col-xs-12 pos-b-0 pos-abs" >
