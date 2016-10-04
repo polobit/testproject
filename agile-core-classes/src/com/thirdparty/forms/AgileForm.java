@@ -1,6 +1,8 @@
 package com.thirdparty.forms;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -105,14 +107,16 @@ public class AgileForm extends HttpServlet
 	    
 	    runFormTrigger(contact, newContact, form, formJson);
 
-	    try
+	    /*try
 	    {
-		request.setAttribute("url", getNormalizedRedirectURL(agileRedirectURL, contact, request));
-		request.getRequestDispatcher("/agileformredirect").forward(request, response);
+	    	request.setAttribute("url", getNormalizedRedirectURL(agileRedirectURL, contact, request));
+			request.getRequestDispatcher("/agileformredirect").forward(request, response);
+		
 	    }
 	    catch (ServletException e)
 	    {
-	    }
+	    }*/
+	    response.sendRedirect(getNormalizedRedirectURL(agileRedirectURL, contact, request));
 	    return;
 	}
 	catch (org.json.JSONException e)
@@ -389,11 +393,29 @@ public class AgileForm extends HttpServlet
 	        .replaceAll("\n", "") : request.getRequestURL().toString()
 	        .replaceAll("formsubmit", "agileform_thankyou.jsp");
 
-	String params = "?fwd=cd";
+	/*String params = "?fwd=cd";
 	if (StringUtils.contains(normalizedRedirectURL, "?"))
 	    params = "&fwd=cd";
 
-	params = params + TrackClickUtil.appendContactPropertiesToParams(contact);
+	params = params + TrackClickUtil.appendContactPropertiesToParams(contact);*/
+    String params = "";
+	if(externalRedirect){
+		params = "?fwd=cd";
+		if (StringUtils.contains(normalizedRedirectURL, "?"))
+		    params = "&fwd=cd";
+		String emailValue = contact.getContactFieldValue(Contact.EMAIL);
+		String emailJson = "{\"email\":\""+emailValue+"\"}";
+		String emailJsonEncode = "";
+		try {
+			emailJsonEncode = URLEncoder.encode(emailJson, "UTF-8");
+			System.out.println("emailJsonEncode:::"+emailJsonEncode);
+			params = params + "&data=" +emailJsonEncode;
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
 	return normalizedRedirectURL + params;
     }
 
