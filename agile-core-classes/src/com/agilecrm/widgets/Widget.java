@@ -121,7 +121,7 @@ public class Widget {
 	 * 
 	 */
 	public static enum IntegrationType {
-		EMAIL, SMS
+		EMAIL, SMS, RECAPTCHA
 	};
 
 	/**

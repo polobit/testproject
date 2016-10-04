@@ -34,6 +34,7 @@ define([
         that.$el.append(snippet);
       });
       $("#render").val(that.renderForm({preload : FormSettings.getSetting("agilepreloadfields"),
+    captcha : FormSettings.getSetting("agileformcaptcha"),
     agileformtransbg : FormSettings.getSetting("agiletransparentbackground"),
 	  agilethme : FormSettings.getSetting("agiletheme"),
     action : window.location.protocol + '//' + window.location.host + '/formsubmit',
