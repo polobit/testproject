@@ -113,7 +113,10 @@
 	  CSS_PATH = FLAT_FULL_PATH;
   }
 
+
 %>
+<link rel="stylesheet" type="text/css" href="flatfull/css/min/css-all-min.css?_=<%=_AGILE_VERSION%>"></link>
+<link rel="stylesheet" type="text/css" href="flatfull/css/lib/helpcenter.css?_=<%=_AGILE_VERSION%>"></link>
 <!DOCTYPE html>
 <html lang="en">
 <head>
