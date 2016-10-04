@@ -5465,3 +5465,5 @@ upload-google-doc.select-doc,Select Document,Seleccionar documento
 upload-voicemail.upload-wav-file,Upload WAV File,Upload WAV FileDocument
 upload-voicemail.not-a-wav-file,File selected is not a WAV file,Archivo seleccionado no es un archivo WAV
 upload-voicemail.wav-file-info,You may upload a recorded voice (.wav) file here,Usted puede cargar una grabación de voz ( .wav) aquí
+modals.phone-number-ext, Phone Number;Ext,
+validation-msgs.Pls-enter-a-valid-ext-no,Please enter a valid extension.The extension can be numeric,* or #.

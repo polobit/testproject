@@ -315,6 +315,16 @@ $(function()
 					$("#phoneLogForm #logPhone_number_error").show().delay(5000).hide(1);
 					return;
 				}
+				if(phone){
+					var regE1 = new RegExp("^(.*[;]+.*)$");
+					var regE2 = new RegExp("^(.+[\;][0-9\*\#]+)$");
+					if(regE1.test(value)){
+						if(!regE2.test(value)){
+							$("#phoneLogForm #logPhone_number_ext_error").show().delay(5000).hide(1);
+							return;
+						}
+					}
+				}
 				var prop = property_JSON('phone', 'phoneLogForm #contact_phone');
 				prop['subtype'] = "";
 			if(company_util.isCompany()){

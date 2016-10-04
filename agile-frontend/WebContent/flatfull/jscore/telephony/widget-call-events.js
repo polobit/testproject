@@ -19,7 +19,9 @@ $(function()
 		}
 		var action ={};
 	  	action['command'] = "startCall";
-	  	action['number'] = $(this).closest(".contact-make-call").attr("phone");
+	  	var callNumber = $(this).closest(".contact-make-call").attr("phone");
+	  	generateNumberAndExtension(callNumber, action);
+	  	//action['number'] = $(this).closest(".contact-make-call").attr("phone");
 	  	action['callId'] = "";
 
 	  	
@@ -45,7 +47,9 @@ $(function()
 			  	e.preventDefault();
 				var action ={};
 			  	action['command'] = "startCall";
-			  	action['number'] = $(this).closest(".contact-make-call-div").children().first().attr("phone");
+			  	var callNumber = $(this).closest(".contact-make-call-div").children().first().attr("phone");
+			  	generateNumberAndExtension(callNumber, action);
+			  	//action['number'] = $(this).closest(".contact-make-call-div").children().first().attr("phone");
 			  	action['callId'] = "";
 			  	
 				if(checkForActiveCall()){
@@ -318,6 +322,11 @@ function sendActionToClient(action){
 	var number = action.number;
 	var callid = action.callId;
 	var client = globalCall.calledFrom;
+	var extension = "";
+	
+	if(action['extension']){
+		extension = action['extension'];
+	}
 	
 	if(command == "startCall"){
 		var btns = [];
@@ -363,7 +372,22 @@ function sendActionToClient(action){
 			return;
 		}
 	};
-	image.src = "http://localhost:33333/"+ new Date().getTime() +"?command="+command+";number="+number+";callid="+callid+";domain="+domain+";userid="+id+";type="+client+"?";
+	image.src = "http://localhost:33333/"+ new Date().getTime() +"?command="+command+";number="+number+";callid="+callid+";domain="+domain+";userid="+id+";type="+client+";extension="+extension+"?";
 }
 
 
+function generateNumberAndExtension(number, json){
+	var num = "";
+	var ext = "";
+	
+	if(number && number.indexOf(";") != -1){
+		ext = number.split(";")[1];
+		num = number.split(";")[0];
+	}else{
+		num = number;
+	}
+
+	json['number'] = num;
+	json['extension'] = ext;
+	return;
+}
