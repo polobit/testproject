@@ -960,7 +960,7 @@ public class CSVUtil
 		e.printStackTrace();
 
 		failedCompany++;
-
+		continue;
 	    }
 
 	    if (isMerged)
