@@ -51,6 +51,7 @@ import com.agilecrm.deals.util.MilestoneUtil;
 import com.agilecrm.deals.util.OpportunityUtil;
 import com.agilecrm.projectedpojos.ContactPartial;
 import com.agilecrm.reports.ReportsUtil;
+import com.agilecrm.search.AppengineSearch;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.user.DomainUser;
@@ -522,6 +523,15 @@ public class DealsAPI
 	ActivitySave.createLogForBulkDeletes(EntityType.DEAL, oppJSONArray,
 		String.valueOf(oppJSONArray.length()), "");
 	Opportunity.dao.deleteBulkByIds(oppJSONArray);
+	List<String> list = new ArrayList<String>();
+	for (int i=0; i<oppJSONArray.length(); i++) {
+	    list.add( oppJSONArray.getString(i) );
+	}
+	if(list.size()>0)
+	{
+		String[] stringArray = list.toArray(new String[list.size()]);
+	new AppengineSearch<Opportunity>(Opportunity.class).bulkDelete(stringArray);
+	}
 	return contactIdsList;
     }
 
