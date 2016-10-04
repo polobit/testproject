@@ -254,8 +254,15 @@ if(isSafari && isWin)
 
 <input type='submit' id="register_account" value='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "sign-up")%>' class='btn btn-lg btn-primary btn-block'>
 <div class="text-center text-white m-t m-b">
-	<small><%=LanguageUtil.getLocaleJSONValue(localeJSON, "forgot")%></small> 
-	<a href="/forgot-domain?lang=<%=_LANGUAGE%>" class="text-white"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "domain")%>?</a>
+	<div>
+		<small><%=LanguageUtil.getLocaleJSONValue(localeJSON, "already-have-account")%>?
+		</small>
+		<a href="/enter-domain?to=login&lang=<%=_LANGUAGE%>" class="tags-color text-white"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "sign-in")%></a>
+	</div>
+	<div>
+		<small><%=LanguageUtil.getLocaleJSONValue(localeJSON, "forgot")%></small> 
+		<a href="/forgot-domain?lang=<%=_LANGUAGE%>" class="text-white"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "domain")%>?</a>
+	</div>
 </div>
 </form>
 					

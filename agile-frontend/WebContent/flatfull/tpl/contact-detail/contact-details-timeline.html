@@ -377,7 +377,7 @@
             <div class="date">{{epochToTaskDate time}}</div>
             <div class="body">
                 <div class="text-xs " >{{user.name}}</div>
-                <div class="text-xs " >{{callActivityFriendlyStatus custom3 custom2}}{{#if custom4}}{{secondsToFriendlyTime custom4}}{{/if}}</div>
+                <div class="text-xs " >{{callActivityFriendlyStatus custom3 custom2}}{{#if custom4}}{{secondsToCallActivitiesTime custom4}}{{/if}}</div>
             </div>
          {{/if_equals}}
         {{#if_equals "outgoing" custom2}}
@@ -414,7 +414,7 @@
             <div class="date">{{epochToTaskDate time}}</div>
             <div class="body">
                 <div class="text-xs">{{user.name}}</div>
-                <div class="text-xs">{{callActivityFriendlyStatus custom3 custom2}}{{#if custom4}}{{secondsToFriendlyTime custom4}}{{/if}}</div>
+                <div class="text-xs">{{callActivityFriendlyStatus custom3 custom2}}{{#if custom4}}{{secondsToCallActivitiesTime custom4}}{{/if}}</div>
             </div>	
         {{/if_equals}}
         {{/if_equals}}

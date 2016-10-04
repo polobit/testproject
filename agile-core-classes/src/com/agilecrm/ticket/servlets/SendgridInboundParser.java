@@ -36,10 +36,9 @@ import com.agilecrm.ticket.entitys.TicketDocuments;
 import com.agilecrm.ticket.entitys.TicketGroups;
 import com.agilecrm.ticket.entitys.TicketLabels;
 import com.agilecrm.ticket.entitys.TicketNotes;
-import com.agilecrm.ticket.entitys.TicketStats;
-import com.agilecrm.ticket.entitys.TicketsBackup;
 import com.agilecrm.ticket.entitys.TicketNotes.CREATED_BY;
 import com.agilecrm.ticket.entitys.TicketNotes.NOTE_TYPE;
+import com.agilecrm.ticket.entitys.TicketStats;
 import com.agilecrm.ticket.entitys.Tickets;
 import com.agilecrm.ticket.entitys.Tickets.CreatedBy;
 import com.agilecrm.ticket.entitys.Tickets.LAST_UPDATED_BY;
@@ -47,6 +46,7 @@ import com.agilecrm.ticket.entitys.Tickets.Priority;
 import com.agilecrm.ticket.entitys.Tickets.Source;
 import com.agilecrm.ticket.entitys.Tickets.Status;
 import com.agilecrm.ticket.entitys.Tickets.Type;
+import com.agilecrm.ticket.entitys.TicketsBackup;
 import com.agilecrm.ticket.rest.TicketBulkActionsBackendsRest;
 import com.agilecrm.ticket.utils.TicketGroupUtil;
 import com.agilecrm.ticket.utils.TicketNotesUtil;
@@ -57,6 +57,7 @@ import com.agilecrm.workflows.triggers.util.TicketTriggerUtil;
 import com.google.agile.repackaged.appengine.tools.cloudstorage.GcsFileOptions;
 import com.google.agile.repackaged.appengine.tools.cloudstorage.GcsOutputChannel;
 import com.google.appengine.api.NamespaceManager;
+import com.google.apphosting.api.ApiProxy;
 import com.googlecode.objectify.Key;
 
 /**
@@ -83,6 +84,9 @@ public class SendgridInboundParser extends HttpServlet
 	 */
 	private static final long serialVersionUID = 1L;
 
+	
+	private static boolean IS_ATTACHMENT_MORE_THAN_1MB = false;
+	
 	/**
 	 * List of content types to avoid base64 conversion
 	 */
@@ -118,6 +122,7 @@ public class SendgridInboundParser extends HttpServlet
 			boolean isMultipart = ServletFileUpload.isMultipartContent(request);
 
 			System.out.println("isMultipart: " + isMultipart);
+			IS_ATTACHMENT_MORE_THAN_1MB = false;
 
 			try
 			{
@@ -137,13 +142,20 @@ public class SendgridInboundParser extends HttpServlet
 					if (toAddressArray.length < 2)
 						return;
 
-					// Adding record to tickets backup db
-					backupKey = new TicketsBackup(json.toString(), toAddressArray[0]).save();
+					try {
+						// Adding record to tickets backup db
+						backupKey = new TicketsBackup(json.toString(), toAddressArray[0]).save();
+					} catch(Exception e) {
+						if( e instanceof ApiProxy.RequestTooLargeException)
+							IS_ATTACHMENT_MORE_THAN_1MB = true;
+						
+						System.out.println("Error while trying to save ticket backup: " + ExceptionUtils.getFullStackTrace(e));
+					}
 
 					saveTicket(json, toAddressArray);
 
 					// Removing backup if everything is ok
-					TicketsBackup.delete(backupKey);
+					if( backupKey != null )	TicketsBackup.delete(backupKey);
 				}
 			}
 			catch (Exception e)
@@ -354,6 +366,22 @@ public class SendgridInboundParser extends HttpServlet
 			TicketTriggerUtil.executeTriggerForNewNoteAddedByCustomer(ticket);
 		}
 
+		/*
+		 * If size of attachments is more than 1MB. Remove attachment-info from json object.
+		 */
+		if( IS_ATTACHMENT_MORE_THAN_1MB )
+		{
+			String msg = "This field is removed as the total size of attachments is very large";
+			json.put("attachment-info", msg);
+			
+			int count = json.getInt("attachments");
+
+			for (int i = 1; i <= count; i++)
+			{
+				json.put("attachment" + i, msg);
+			}
+		}
+		
 		// Creating new Notes in TicketNotes table
 		TicketNotes notes = new TicketNotes(ticket.id, ticketGroup.id, ticket.assigneeID, CREATED_BY.REQUESTER,
 				nameEmail[0], nameEmail[1], plainText, htmlText, NOTE_TYPE.PUBLIC, documentsList, json.toString(),
@@ -580,7 +608,7 @@ public class SendgridInboundParser extends HttpServlet
 				 * any number from 1-9). If so we need to encode content with
 				 * Base64Encoder.
 				 */
-				if (fieldName.matches("^attachment\\d$") && !ignoreBase64Conversion.contains(contentType))
+				if (fieldName.matches("^attachment\\d+$") && !ignoreBase64Conversion.contains(contentType))
 				{
 					System.out.println("Encoding to base64....");
 

@@ -523,7 +523,10 @@ $(function()
 	    });
 
 	  $('body').on('click',".chromeExtension",function(e){
-	  	
+	  	if (document.getElementById('agilecrm_extension')) {
+ 		  $('#chrome-extension').addClass("chrome-extenstion-disabled");
+ 		 
+ 		}
 	  	// e.stopImmediatePropagation();
 	  	$(this).parents(".popover").popover('hide');
 	  	e.stopPropagation();

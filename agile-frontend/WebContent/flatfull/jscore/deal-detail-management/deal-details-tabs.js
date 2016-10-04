@@ -856,6 +856,13 @@ function load_deal_tab(el, dealJSON)
 	var position = _agile_get_prefs(deal_tab_position_cookie_name);
 	if (position)
 	{
+		//Any tab is saved as cookie and if that tab doesn't have permissions,
+		//change the tab position to contacts
+		if($('#deal-details-tab a[href="#'+position+'"]', el).length == 0)
+		{
+			position = "dealactivities";
+		}
+
 		if (position == "dealactivities")
 		{
 			$('#deal-details-tab a[href="#dealactivities"]', el).tab('show');

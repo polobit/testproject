@@ -1,3 +1,4 @@
+/*global  _AGILE_LOCALE_JSON*/
 (function (){
     "use strict";
 
@@ -623,7 +624,7 @@
             styleeditor.selectLinksInernal.innerHTML = '';
 
             newOption = document.createElement('OPTION');
-            newOption.innerText = "Choose a block";
+            newOption.innerText = _AGILE_LOCALE_JSON['choose-a-block'];
             newOption.setAttribute('value', '#');
             styleeditor.selectLinksInernal.appendChild(newOption);
 
@@ -714,7 +715,7 @@
             styleeditor.selectLinksPages.innerHTML = '';
 
             newOption = document.createElement('OPTION');
-            newOption.innerText = "Choose a page";
+            newOption.innerText = _AGILE_LOCALE_JSON['choose-a-page'];
             newOption.setAttribute('value', '#');
             styleeditor.selectLinksPages.appendChild(newOption);
 

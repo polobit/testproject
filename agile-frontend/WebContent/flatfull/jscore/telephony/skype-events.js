@@ -124,7 +124,10 @@ function _getMessageSkype(message, callback){
 			globalCall.callStatus = "Answered"; //change form completed
 		}else if(globalCall.callStatus && globalCall.callStatus == "Connecting"){
 			globalCall.callStatus = "Busy";
-		}else if(globalCall.callStatus == "Failed" || globalCall.callStatus == "REFUSED" || globalCall.callStatus == "Ringing" || globalCall.callStatus == "Missed"){
+		}else if(globalCall.callStatus && globalCall.callStatus == "Ringing"){
+			globalCall.callStatus = "Missed";
+		}else if(globalCall.callStatus == "Failed" || globalCall.callStatus == "REFUSED" || globalCall.callStatus == "Missed"){
+			//resetglobalCallVariables();	
 			return;
 		}
 		

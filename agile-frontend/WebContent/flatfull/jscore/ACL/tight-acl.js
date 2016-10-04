@@ -98,6 +98,16 @@
 	tight_acl.checkPermission = function(scope){
 		return CURRENT_DOMAIN_USER.menu_scopes.indexOf(scope) > -1;
 	}
+
+	/*
+	 * Check the permission based up on the given scope.
+	 */
+	tight_acl.isRestrictedScope = function(scope){
+		if(!CURRENT_DOMAIN_USER.restricted_menu_scopes)
+			 return false;
+
+		return $.inArray(scope, CURRENT_DOMAIN_USER.restricted_menu_scopes) != -1;
+	}
 }(window.tight_acl = window.tight_acl || {}, $));
 
 (function(acl_util, $, undefined) {

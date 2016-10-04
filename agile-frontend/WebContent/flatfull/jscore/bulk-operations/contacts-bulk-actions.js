@@ -1279,7 +1279,7 @@ function getSelectionCriteria()
 
 	var filter_id = undefined;
 	
-	if(App_Companies.Company_detail_route!="")
+	if(App_Companies.Company_detail_route && App_Companies.Company_detail_route!="")
 		filter_id = undefined;
 	else if(company_util.isCompany())
 		filter_id = $('.filter-criteria', $(App_Companies.companiesListView.el)).attr("_filter");

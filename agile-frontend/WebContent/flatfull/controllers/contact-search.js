@@ -73,6 +73,10 @@ var ContactSearchRouter = Backbone.Router.extend({
 
 								agileTimeAgoWithLngConversion($("time", el));
 							},
+							appendItemCallback: function(el) 
+							{
+                            	agileTimeAgoWithLngConversion($("time", el));
+                        	},
 							infini_scroll_cbk : function(ele)
 							{
 								//This will update the table sorting functionality with added new rows

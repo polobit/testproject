@@ -657,6 +657,24 @@ function getContactCustomProperties(items)
 		curr_route = "DEAL";
 	}
 
+	var position_arr = {};
+	var position_max = 0;
+	if(App_Contacts.customFieldsList!=undefined && App_Contacts.customFieldsList!=null){
+		position_max = App_Contacts.customFieldsList.collection.models.length+1;
+		for(var i=0;i<App_Contacts.customFieldsList.collection.models.length;i++){
+			curr_scope = App_Contacts.customFieldsList.collection.models[i].get("scope");
+			if(curr_route==curr_scope){
+				if(App_Contacts.customFieldsList.collection.models[i].get("position")==0 || App_Contacts.customFieldsList.collection.models[i].get("position")==""){
+					position_arr[''+App_Contacts.customFieldsList.collection.models[i].get("field_label")] = position_max;
+					position_max++;
+				}else{
+					position_arr[''+App_Contacts.customFieldsList.collection.models[i].get("field_label")] = App_Contacts.customFieldsList.collection.models[i].get("position");
+				}
+			}
+		}
+	}
+
+	var temp_fields = [];
 	for (var i = 0; i < items.length; i++)
 	{
 		if (items[i].type == "CUSTOM" && items[i].name != "image")
@@ -664,7 +682,14 @@ function getContactCustomProperties(items)
 			if(fieldName=='')
 				fieldName=items[i].name;
 			fields.push(items[i]);
+			//temp_fields[position_arr[items[i].name]] = items[i];
 			datajson[''+items[i].name]=items[i].value;
+		}
+	}
+	
+	for (var i = 0; i < temp_fields.length; i++){
+		if(temp_fields[i]!=undefined && temp_fields[i]!=""){
+			//fields.push(temp_fields[i]);
 		}
 	}
 
@@ -799,6 +824,24 @@ function getCompanyCustomProperties(items)
 		curr_route = "DEAL";
 	}
 
+	var position_arr = {};
+	var position_max = 0;
+	if(App_Companies.customFieldsList!=undefined && App_Companies.customFieldsList!=null){
+		position_max = App_Companies.customFieldsList.collection.models.length+1;
+		for(var i=0;i<App_Companies.customFieldsList.collection.models.length;i++){
+			curr_scope = App_Companies.customFieldsList.collection.models[i].get("scope");
+			if(curr_route==curr_scope){
+				if(App_Companies.customFieldsList.collection.models[i].get("position")==0 || App_Companies.customFieldsList.collection.models[i].get("position")==""){
+					position_arr[''+App_Companies.customFieldsList.collection.models[i].get("field_label")] = position_max;
+					position_max++;
+				}else{
+					position_arr[''+App_Companies.customFieldsList.collection.models[i].get("field_label")] = App_Companies.customFieldsList.collection.models[i].get("position");
+				}
+			}
+		}
+	}
+
+	var temp_fields = [];
 	for (var i = 0; i < items.length; i++)
 	{
 		if (items[i].type == "CUSTOM" && items[i].name != "image")
@@ -806,7 +849,14 @@ function getCompanyCustomProperties(items)
 			if(fieldName=='')
 				fieldName=items[i].name;
 			fields.push(items[i]);
+			//temp_fields[position_arr[items[i].name]] = items[i];
 			datajson[''+items[i].name]=items[i].value;
+		}
+	}
+	
+	for (var i = 0; i < temp_fields.length; i++){
+		if(temp_fields[i]!=undefined && temp_fields[i]!=""){
+			//fields.push(temp_fields[i]);
 		}
 	}
 
