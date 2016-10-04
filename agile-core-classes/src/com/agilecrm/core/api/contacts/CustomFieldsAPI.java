@@ -65,7 +65,8 @@ public class CustomFieldsAPI
     List<CustomFieldDef> customFieldsList = new ArrayList<CustomFieldDef>();
 	try
 	{
-	    List<CustomFieldDef> cusList = CustomFieldDefUtil.getAllCustomFields();
+	    //List<CustomFieldDef> cusList = CustomFieldDefUtil.getAllCustomFields();
+		List<CustomFieldDef> cusList = CustomFieldDefUtil.getCustomFieldsByPosition();
 	    if (cusList != null)
 	    {
 	    	for (CustomFieldDef customFieldDef : cusList)
@@ -219,7 +220,8 @@ public class CustomFieldsAPI
 	    if (scope == null)
 		CustomFieldDefUtil.getSearchableCustomFields();
 
-	    List<CustomFieldDef> cusList = CustomFieldDefUtil.getCustomFieldsByScope(scope);
+	    //List<CustomFieldDef> cusList = CustomFieldDefUtil.getCustomFieldsByScope(scope);
+	    List<CustomFieldDef> cusList = CustomFieldDefUtil.getCustomFieldsByScopeAndPosition(scope);
 	    if (cusList != null)
 	    {
 	    	for (CustomFieldDef customFieldDef : cusList)
