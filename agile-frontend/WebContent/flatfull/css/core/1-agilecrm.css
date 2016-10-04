@@ -4776,3 +4776,12 @@ ul#recent-menu-model-list li:nth-child(even)
   pointer-events:none;
   opacity: 0.65;
 }
+
+
+.filter-dynamic-scrollbar::-webkit-scrollbar {
+  width: 5px;
+}
+.filter-dynamic-scrollbar::-webkit-scrollbar-thumb {
+  background:#ccc;
+  border-radius:10px;
+}
