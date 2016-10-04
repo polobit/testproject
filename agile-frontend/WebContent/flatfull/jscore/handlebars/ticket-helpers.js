@@ -453,7 +453,7 @@ Handlebars.registerHelper('convert_to_html', function(str, options) {
 
 	return str;
 });
-Handlebars.registerHelper('replace_newline_with_br', function(str, options) {
+Handlebars.registerHelper('replace_newline_with_ticket_br', function(str, options) {
 
 	if(!str)
 		return "";
