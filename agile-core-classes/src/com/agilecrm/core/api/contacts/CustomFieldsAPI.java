@@ -220,7 +220,8 @@ public class CustomFieldsAPI
 	    if (scope == null)
 		CustomFieldDefUtil.getSearchableCustomFields();
 
-	    List<CustomFieldDef> cusList = CustomFieldDefUtil.getCustomFieldsByScope(scope);
+	    //List<CustomFieldDef> cusList = CustomFieldDefUtil.getCustomFieldsByScope(scope);
+	    List<CustomFieldDef> cusList = CustomFieldDefUtil.getCustomFieldsByScopeAndPosition(scope);
 	    if (cusList != null)
 	    {
 	    	for (CustomFieldDef customFieldDef : cusList)
