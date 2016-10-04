@@ -437,7 +437,11 @@ Handlebars.registerHelper('convert_to_html', function(str, options) {
 
 	if(!str)
 		return "";
+
 	str = str.replace(/<script.*?>.*?<\/script>/igm, '');
+	str = str.replace(/ action="[^"]*"/igm, '');
+	str = str.replace(/value="[^"]*"/igm, '');
+	str = str.replace(/ on\w+="[^"]*"/igm, '');
 	str = str.trim();
 
 	//str = str.replace(/(?:\r\n)/g, '<br/>');
@@ -459,7 +463,11 @@ Handlebars.registerHelper('replace_newline_with_ticket_br', function(str, option
 		return "";
 
 	str = str.trim();
+	
 	str = str.replace(/(?:\r\n|\r|\n)/g, '<br />');
+	str = str.replace(/ on\w+="[^"]*"/igm, '');
+	str = str.replace(/action="[^"]*"/igm, '');
+	str = str.replace(/value="[^"]*"/igm, '');
     str = str.replace(/<script.*?>.*?<\/script>/igm, '')
     return str;
 });
