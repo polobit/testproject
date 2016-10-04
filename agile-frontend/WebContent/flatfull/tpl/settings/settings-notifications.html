@@ -252,7 +252,7 @@
                         <div class="controls col-sm-8">
                             <div class="checkbox">
                                 <label class="i-checks i-checks-sm">
-                                <input type="checkbox" id="push_mobile_notification" name="push_mobile_notification" /><i></i> 
+                                <input type="checkbox" id="push_mobile_notification" name="push_mobile_notification" value="true" {{#if control_notifications}} {{else}}disabled="disabled"{{/if}} /><i></i> 
                                 {{agile_lng_translate 'others' 'mobile-notication-help-text'}}
                                 </label>
                                 <p class="help-block m-b-none" style="font-size:12px;">{{agile_lng_translate 'others' 'mobile-notication-help-text-new-apk'}}</p>

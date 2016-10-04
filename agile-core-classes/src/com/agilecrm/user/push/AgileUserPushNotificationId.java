@@ -69,6 +69,7 @@ public class AgileUserPushNotificationId {
 			return dao.getByProperty("registrationId", registrationId);
 		} catch (Exception e) {
 			// TODO: handle exception
+			e.printStackTrace();
 		} finally {
 			NamespaceManager.set(oldDomainName);
 		}

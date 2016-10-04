@@ -335,6 +335,7 @@ public class LoginServlet extends HttpServlet {
  		if(StringUtils.isNotBlank(registrationId)){
  			new AgileUserPushNotificationId(domainUser.id, registrationId, NamespaceManager.get()).save();
  		}
+ 		
 		
 		hash = (String) request.getSession().getAttribute(
 				RETURN_PATH_SESSION_HASH);
