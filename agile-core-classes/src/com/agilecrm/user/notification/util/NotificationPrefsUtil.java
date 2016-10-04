@@ -423,7 +423,7 @@ public class NotificationPrefsUtil
     JSONObject notificationJSON = new JSONObject();
 	try
 	{
-		notificationJSON.put("title", getTitle(json.getString("notification").replace("_", " ")));
+		notificationJSON.put("title", getTitle(json.getString("notification")));
 
 	    // Insert notification-type into json
 		JSONObject dataJSON = getMobileNotificationMessage(json, domain);
@@ -535,6 +535,7 @@ public class NotificationPrefsUtil
 			mssg = getContactName(json) + "clicked link '" + JSONUtil.getJSONValue(customJSON, "url_clicked") + "'";
 		else
 			mssg = getContactName(json) + "clicked link '" + JSONUtil.getJSONValue(customJSON, "url_clicked") + "' of campaign '" + JSONUtil.getJSONValue(customJSON, "workflow_name") + "'";
+		pushURL = hostName + "#contacts/" + JSONUtil.getJSONValue(json, "id");
 		break;
 		
 	case "OPENED_EMAIL":
@@ -549,6 +550,7 @@ public class NotificationPrefsUtil
 			mssg = getContactName(json) + "opened email of campaign '" + JSONUtil.getJSONValue(customJSON, "workflow_name") + "'";
 		else
 			mssg = getContactName(json) + "opened email with subject '" + JSONUtil.getJSONValue(customJSON, "email_subject") + "'";
+		pushURL = hostName + "#contacts/" + JSONUtil.getJSONValue(json, "id");
 		break;
 		
 	/*
@@ -663,6 +665,7 @@ public class NotificationPrefsUtil
 	    		title = "EMAIL OPENED";
 	    		break;
     	}
-    	return title;
+    	
+    	return title.replace("_", " ");
     }
 }
