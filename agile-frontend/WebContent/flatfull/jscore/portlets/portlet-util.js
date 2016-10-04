@@ -120,8 +120,13 @@ var portlet_utility = {
 	get_campaign_stats_portlet_header : function(base_model, callback) {
 		var campaign_id = base_model.get("settings").campaign_type;
 
-		if (campaign_id == 'All')
-			return callback('{{agile_lng_translate "campaigns" "all-campaigns"}}');
+		if (campaign_id == 'All'){
+			if(base_model.attributes.name=="Campaign stats")
+				return callback('{{agile_lng_translate "campaigns" "all-campaigns-stats"}}');
+			else
+				return callback('{{agile_lng_translate "campaigns" "all-campaigns"}}');
+		}
+			
 		else {
 			var campaign = $.ajax({
 				type : 'GET',
