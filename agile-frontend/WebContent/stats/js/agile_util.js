@@ -183,10 +183,39 @@ function agile_formCallback(error, button, url, agile_form, contact_id, form_dat
 		if (button)
 			button.removeAttribute("disabled");
 
-		if (!agile_form.getAttribute("action") || agile_form.getAttribute("action") == "#" || agile_form.getAttribute("action").indexOf("/formsubmit") != -1)
+		/*if (!agile_form.getAttribute("action") || agile_form.getAttribute("action") == "#" || agile_form.getAttribute("action").indexOf("/formsubmit") != -1)
 			agile_form.setAttribute("action", url);
 		agile_form.setAttribute("method","POST");
-		agile_form.submit();
+		agile_form.submit();*/
+		
+		var emailVal = agile_guid.get_email();
+		if(typeof emailVal != "undefined") {
+			if(url && url != "#"){
+				var emailParam = encodeURIComponent("{\"email\":\""+emailVal+"\"}");	
+				var index = url.indexOf("?");
+				if(index!=-1)
+					window.location = url+"&"+"fwd=cd&data="+emailParam;	
+				else
+					window.location = url+"?"+"fwd=cd&data="+emailParam;
+			}	
+			else if(url && url == "#"){
+				document.getElementById("agile-error-msg").innerHTML = '<span style="color:green">Form submitted successfully</span>';
+				var agile_form = document.forms["agile-form"];
+				agile_form.reset();
+			}
+		
+		} else {
+			if(url && url != "#")
+				window.location = url;
+			else if(url && url == "#"){
+				document.getElementById("agile-error-msg").innerHTML = '<span style="color:green">Form submitted successfully</span>';
+				var agile_form = document.forms["agile-form"];
+				agile_form.reset();
+				
+			}
+		}	
+
+		
 	}, 1500);
 }
 

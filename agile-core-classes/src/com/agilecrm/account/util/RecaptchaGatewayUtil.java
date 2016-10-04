@@ -4,6 +4,7 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 
 import org.codehaus.jackson.map.ObjectMapper;
+import org.json.JSONObject;
 
 import com.agilecrm.account.RecaptchaGateway;
 import com.agilecrm.util.CacheUtil;
@@ -24,7 +25,8 @@ public class RecaptchaGatewayUtil {
 	/**
 	 * This site key is used for permanent link
 	 */
-	public final static String GOOGLE_RECAPTCHA_DATA_SITE_KEY = "6Ldk9AcUAAAAAGFWY_ZB_y36DrE_8ee5wa08-jdG";
+	public final static String GOOGLE_RECAPTCHA_DATA_SITE_KEY = "6LdKRAgUAAAAACPUAQ1tucU2KWssU2xnvBqqDG3w";
+	public final static String GOOGLE_RECAPTCHA_DATA_SECRET = "6LdKRAgUAAAAAL_W6yjkfV5oBzNXQWcux5l_NI3a";
 	
 	private final static String GOOGLE_RECAPTCHA_URL = "https://www.google.com/recaptcha/api/siteverify";
 	
@@ -155,4 +157,26 @@ public class RecaptchaGatewayUtil {
 		  return "";
 			  
 		 }
+	  
+	  public static boolean isGoogleVerifiedUser(String secret,String gRecaptchaResponse)
+	  {
+          String url = GOOGLE_RECAPTCHA_URL + "?secret=" + secret + "&response=" + gRecaptchaResponse;
+          String response = "";
+          
+          try {
+            response = HTTPUtil.accessURLUsingPost(url, null);
+            System.out.println("Response for Google for captcha verification : " + response);
+            
+            JSONObject captchaResp = new JSONObject(response);
+            if(captchaResp.has("success")) {
+              return captchaResp.getBoolean("success");
+            }
+              
+          } catch (Exception e) {
+            e.printStackTrace();
+          }
+          
+          return false;
+              
+         }
 }
