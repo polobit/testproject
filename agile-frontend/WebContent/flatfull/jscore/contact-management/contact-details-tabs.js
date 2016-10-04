@@ -455,9 +455,9 @@ function load_company_tab(el, contactJSON)
 	//timeline_collection_view = null;
 	var position = _agile_get_prefs(company_tab_position_cookie_name);
 	if (position == null || position == undefined || position == "")
-		position = "contacts";
+		position = "timeline";
 
-	if(position == "contacts" && agile_is_mobile_browser())
+	if(position == "timeline" && agile_is_mobile_browser())
 			return;
 
 	//Any tab is saved as cookie and if that tab doesn't have permissions,
@@ -469,10 +469,14 @@ function load_company_tab(el, contactJSON)
 
 	$('#contactDetailsTab a[href="#company-' + position + '"]', el).tab('show');
 
-	if (!position || position == "contacts")
+	if (!position || position == "timeline")
 	{
-		activate_company_contact_tab()
-		company_detail_tab.load_fill_company_related_contacts
+		$('#contactDetailsTab').find('li.active').removeClass('active');
+		$('#contactDetailsTab li:first-child').addClass('active');
+		$('div.tab-content').find('div.active').removeClass('active');
+		$('div.tab-content > div:first-child',App_Companies.companyDetailView.el).addClass('active');
+		$('#company-timeline').addClass('active');
+		company_detail_tab.openCompanyTimeLine(el);
 		return;
 	}
 

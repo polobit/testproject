@@ -7839,6 +7839,16 @@ Handlebars.registerHelper("convertToi18ForCall",function(value)
 	return value;
 	
 });
+
+Handlebars.registerHelper('isExtensionInstalled', function(options)
+{
+	if (document.getElementById('agilecrm_extension')) 
+		return options.fn(this);
+
+	return options.inverse(this);
+ 		 
+});
+
 Handlebars.registerHelper('if_won_milestone', function(id,milestone,options)
 {
 	var track ; 
@@ -7848,4 +7858,5 @@ Handlebars.registerHelper('if_won_milestone', function(id,milestone,options)
 		return options.fn(this);
 	else
 		return options.inverse(this); 
+
 });
