@@ -70,7 +70,7 @@ $("#webhook_accordian").on('click', function(e) {
         },500)
        
     });
-
+/*
  $("sendgrid-dkim_accordian").off('click');
  $("#sendgrid-dkim_accordian").on('click', function(e) {
     e.preventDefault();
@@ -96,7 +96,7 @@ $("#webhook_accordian").on('click', function(e) {
        });
     $("#sendgrid-dkim-restriction-template").html(view.render().el);
     return;
-    });
+    });*/
 
 $("#js-security_accordian").on('click', function(e) {
         e.preventDefault();
