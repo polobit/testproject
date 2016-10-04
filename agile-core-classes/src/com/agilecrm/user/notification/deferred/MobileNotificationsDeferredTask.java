@@ -94,7 +94,7 @@ public class MobileNotificationsDeferredTask implements DeferredTask {
 		// Get Server URL
 		String serverURL = "http://localhost:8181" + urlParams;
 		if (!VersioningUtil.isDevelopmentEnv()) {
-			serverURL = "http://env-2813083.mycloud.by/" + urlParams;
+			serverURL = "http://env-6106674.mycloud.by/" + urlParams;
 		}
 
 		try {

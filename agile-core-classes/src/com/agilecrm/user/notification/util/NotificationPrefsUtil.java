@@ -124,6 +124,9 @@ public class NotificationPrefsUtil
 	notificationsDeferredTask, null);
 	
 	// Add Mobile Notofication
+	if(AgileUserPushNotificationId.getNotifiersCount(domain) == 0)
+		 return;
+	
 	JSONObject pushMessageJSON = optimizeObjectForMobileNotification(json, domain, type);
 	System.out.println("pushMessageJSON= " + pushMessageJSON);
 	

@@ -93,6 +93,25 @@ public class AgileUserPushNotificationId {
 		}
 		return null;
 	}
+	
+	/**
+	 * Gets list from registraion id
+	 * 
+	 * @param registrationId
+	 * @return
+	 */
+	public static int getNotifiersCount(String domainName) {
+		String oldDomainName = NamespaceManager.get();
+		NamespaceManager.set("");
+		try {
+			return dao.getCountByProperty("domain", domainName);
+		} catch (Exception e) {
+			// TODO: handle exception
+		} finally {
+			NamespaceManager.set(oldDomainName);
+		}
+		return 0;
+	}
 
 	/**
 	 * Stores an agile user in database
