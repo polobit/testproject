@@ -400,6 +400,7 @@ var Contact_Details_Model_Events = Base_Model_View.extend({
     	'blur #Contact-input' : 'contact_inline_edit' ,       /** End of inliner edits **/
 
     	/** Company events **/
+      'click #contactDetailsTab a[href="#company-timeline"]' : 'onCompanyTimelineOpen',
     	'click #contactDetailsTab a[href="#company-contacts"]' : 'listCompanyContacts',
     	'click #contactDetailsTab a[href="#company-deals"]' : 'listCompanyDeals',
     	'click #contactDetailsTab a[href="#company-cases"]' : 'listCompanyCases',
@@ -1303,7 +1304,11 @@ enterCompanyScore: function(e){
 	    var target = $("#contactDetailsTab");
 	    target.animate({ scrollLeft : (target.scrollLeft() - 270)},1000);
 	  },
-
+    onCompanyTimelineOpen : function(e){
+    e.preventDefault();
+    save_company_tab_position_in_cookie("timeline");
+    company_detail_tab.openCompanyTimeLine(e);
+    },
 	  listCompanyContacts :  function(e)
 	{
 		e.preventDefault();
@@ -1436,7 +1441,7 @@ enterCompanyScore: function(e){
 		var targetEl = $(e.currentTarget);
 
 		var tag = $(targetEl).attr("tag");
-		//removeItemFromTimeline($("#" +  tag.replace(/ +/g, '') + '-tag-timeline-element', $('#timeline')).parent('.inner'))
+		removeItemFromTimeline($("#" +  tag.replace(/ +/g, '') + '-tag-timeline-element', $('#timeline')).parent('.inner'))
 		console.log($(targetEl).closest("li").parent('ul').append(getRandomLoadingImg()));
 		
      	var json = App_Companies.companyDetailView.model.toJSON();
