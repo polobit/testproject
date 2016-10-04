@@ -12,6 +12,7 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.ticket.utils.TicketCannedMessagesUtil;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.util.DomainUserUtil;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.NotSaved;
 
@@ -39,6 +40,7 @@ public class TicketCannedMessages
 	 */
 	public String title = "";
 
+	public Boolean is_public = false;
 	/**
 	 * Stores canned message
 	 */
@@ -55,7 +57,11 @@ public class TicketCannedMessages
 	 */
 	@NotSaved
 	public List<Long> labels = new ArrayList<Long>();
+	
+	@NotSaved
+	public String owner_name;
 
+	
 	/**
 	 * Stores last updated time
 	 */
@@ -94,9 +100,11 @@ public class TicketCannedMessages
 	@javax.persistence.PostLoad
 	private void PostLoad()
 	{
-		if (owner_key != null)
+		if (owner_key != null){
 			owner_id = owner_key.getId();
-
+			DomainUser DU = DomainUserUtil.getDomainUser(owner_id);
+			owner_name = DU.name;
+		}	
 		if (labels_keys_list != null)
 		{
 			for (Key<TicketLabels> key : labels_keys_list)
@@ -105,6 +113,7 @@ public class TicketCannedMessages
 			}
 		}
 
+		
 	}
 
 	@JsonIgnore
