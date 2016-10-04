@@ -191,6 +191,19 @@ $(function()
 		return options.fn(exclusive_fields)
 
 	});
+
+	/**
+	 * 
+	 */
+	Handlebars.registerHelper('getCompanyCustomProperties', function(items, options)
+	{
+		var fields = getCompanyCustomProperties(items);
+		if (fields.length == 0)
+			return options.inverse(fields);
+
+		return options.fn(fields);
+
+	});
 	
 	/**
 	 * Returns custom fields without few fields like LINKEDIN or TWITTER or
