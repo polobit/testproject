@@ -595,6 +595,8 @@ function show_deal()
 			"modal"
 		]);
 		$("#custom-field-deals", $("#opportunityModal")).html($(el_custom_fields));
+		$('.date_input',$("#opportunityModal")).datepicker({ format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY, autoclose: true});
+
 
 		$('.contact_input', e).each(function(){
 			agile_type_ahead($(this).attr("id"), $('#custom_contact_'+$(this).attr("id"), e), contacts_typeahead, undefined, 'type=PERSON');
