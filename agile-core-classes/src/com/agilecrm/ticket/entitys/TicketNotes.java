@@ -288,13 +288,12 @@ public class TicketNotes
 					// Execute note created by agent trigger
 					TicketTriggerUtil.executeTriggerForNewNoteAddedByCustomer(ticket);
 			}
-		    //removing the text between script
-		    String plainText = HTMLUtil.removeScriptFromPlaintext(plain_text);
+		    
 		  //removing the text between script
 		    String htmlText = HTMLUtil.removeScriptFromHtmltext(html_text);
 			
 		    // Logging notes activity
-			ActivityUtil.createTicketActivity(activityType, ticket.contactID, ticket.id, plainText, htmlText,
+			ActivityUtil.createTicketActivity(activityType, ticket.contactID, ticket.id, plain_text, htmlText,
 					"html_text", false);
 		}
 		catch (Exception e)
@@ -326,8 +325,6 @@ public class TicketNotes
 
 		if (assignee_key != null)
 			assignee_id = assignee_key.getId();
-		
-		plain_text = HTMLUtil.removeScriptFromPlaintext(plain_text);
 		
 		html_text =HTMLUtil.removeScriptFromHtmltext(html_text); 	    
 	}

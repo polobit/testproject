@@ -452,9 +452,8 @@ public class Tickets extends Cursor implements Serializable
 			// Create search document
 			new TicketsDocument().add(this);
 
-			String plainText = HTMLUtil.removeScriptFromPlaintext(plain_text);
 			// Logging ticket created activity
-			ActivityUtil.createTicketActivity(ActivityType.TICKET_CREATED, this.contactID, this.id, "", plainText,
+			ActivityUtil.createTicketActivity(ActivityType.TICKET_CREATED, this.contactID, this.id, "", plain_text,
 					"last_reply_text", true);
 
 			// Execute triggers

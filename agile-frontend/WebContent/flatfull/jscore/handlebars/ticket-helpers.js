@@ -437,7 +437,7 @@ Handlebars.registerHelper('convert_to_html', function(str, options) {
 
 	if(!str)
 		return "";
-
+	str = str.replace(/<script.*?>.*?<\/script>/igm, '');
 	str = str.trim();
 
 	//str = str.replace(/(?:\r\n)/g, '<br/>');
@@ -459,8 +459,8 @@ Handlebars.registerHelper('replace_newline_with_br', function(str, options) {
 		return "";
 
 	str = str.trim();
-
 	str = str.replace(/(?:\r\n|\r|\n)/g, '<br />');
+    str = str.replace(/<script.*?>.*?<\/script>/igm, '')
     return str;
 });
 

@@ -13,10 +13,10 @@ public class HTMLUtil
 	  * */	
 	 public static String removeScriptFromPlaintext(String html)
 	{
+	
 		 html = html.replaceAll("\n", "_br2n_");
-		 html = html.replaceAll("&lt;", "<");
-		 html = html.replaceAll("&gt;", ">");
-		 Document doc = Jsoup.parseBodyFragment(html, "UTF-8");
+		 
+		 Document doc = Jsoup.parseBodyFragment(html);
 		 doc.select("script").remove();
 		
 		 Elements all = doc.select("*");
@@ -32,10 +32,10 @@ public class HTMLUtil
 					}
 				}
 			}
-			
+
 			html = doc.body().toString().replaceAll("_br2n_", "\n");
-	
-		 return html;
+			
+			return html;
 		
 	}
 	 public static String removeScriptFromHtmltext(String html)
