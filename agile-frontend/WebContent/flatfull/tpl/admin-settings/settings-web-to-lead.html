@@ -139,8 +139,50 @@
 				</div>
 				</div>
 			</div>
-			
 			</div>
+
+<!-- Recaptcha integration template-->
+       <div class="row">
+	    <div class="col-md-4 col-sm-6 col-xs-12" id="recaptcha-api-integration">
+			<div class="panel panel-default b-a" style="height:230px;">
+				<div class="panel-heading">
+					<div class="pos-rlt">
+	                    <center>
+								<img class="thumb-xl img-responsive" alt="cms-integration" src="{{getS3ImagePath 'img/crm-plugins/grecaptcha.png'}}">
+						</center>	
+	                    <div class="clearfix"></div>
+					</div>
+				</div>
+				<div class="panel-body">
+					<div class="text-flow-ellipsis line-clamp line-clamp-4 widget-text m-b" style="height:75px" rel="tooltip" title="{{agile_lng_translate 'other' 'recaptcha-description'}}.">
+						
+						{{agile_lng_translate 'other' 'recaptcha-description'}}.
+					</div>
+					<div class="text-center">
+							{{#if this.length}}	
+								{{#gateway_exists "RECAPTCHA" this}}
+									<a href="#" class="btn btn-sm btn-danger " id="recaptcha-gateway-delete">
+									{{agile_lng_translate 'web-rules' 'disable'}}</a>
+									<a href="#recaptcha-gateways/RECAPTCHA" class="btn btn-sm btn-default">
+									{{agile_lng_translate 'preferences' 'settings'}}</a>
+								{{else}}
+									  <div>
+	                      					<a href="#recaptcha-gateways/RECAPTCHA" class="btn btn-sm btn-default">
+	                      					{{agile_lng_translate 'prefs-email' 'enable'}}</a> 
+	                					</div>
+	           						 {{/gateway_exists}}
+										{{else}}
+						                <div>
+	                      					<a href="#recaptcha-gateways/RECAPTCHA" class="btn btn-sm btn-default">{{agile_lng_translate 'prefs-email' 'enable'}}</a> 
+	                					</div>
+							{{/if}}
+						</div>
+						<div class="clearfix"></div>
+					</div>
+					</div>
+				</div>
+          </div>
+
 		</div>
 		<div class="tab-pane" id="e-commerce-tab">
 			<div class="row">

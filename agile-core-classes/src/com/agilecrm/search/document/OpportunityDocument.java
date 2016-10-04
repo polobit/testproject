@@ -541,6 +541,6 @@ public class OpportunityDocument extends com.agilecrm.search.document.Document i
 	}
 	public void bulkDelete(String... id)
     {
-		// TODO Auto-generated method stub
+		index.delete(id);
     }
 }

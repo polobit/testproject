@@ -50,10 +50,18 @@ var addAgileApi = function(json, api, callback)
 	agilepreloadfields.type = "select";
 	agilepreloadfields.value = [{value : false, selected : true, label : "no"}, {value : true, selected : false, label: "yes"}];
    // adding the tag for the TO SEND EMAIL Notification 
+
 	var formemailnotification = {};
 	formemailnotification.label = "Email Notification";
 	formemailnotification.type = "select";
 	formemailnotification.value = [{value : false, selected : true, label : "false"}, {value : true, selected : false, label: "true"}];
+    //Adding the Recaptcha for the website 
+
+   //var integrationUrl = window.location.protocol + '//' + window.location.host +'/#integrations' ;
+   var agileformcaptcha = {};
+	agileformcaptcha.label = "Enable reCaptcha <p style='font-size: 10px;'>Please enable the reCaptcha integration <a href='/#integrations' target='_blank'> here.</a></p>" ;
+	agileformcaptcha.type = "select";
+	agileformcaptcha.value = [{value : false, selected : true, label : "false"}, {value : true, selected : false, label: "true"}];
 
 	var agileformidtag = {};
 	agileformidtag.label = "Form Tags";
@@ -79,6 +87,7 @@ var addAgileApi = function(json, api, callback)
 		json[b].fields["agilepreloadfields"] = agilepreloadfields;
 		json[b].fields["agileformidtag"] = agileformidtag;
 		json[b].fields["formemailnotification"] = formemailnotification;
+		json[b].fields["agileformcaptcha"]=agileformcaptcha;
 		json[b].fields["agiletransparentbackground"] = agiletransparentbackground;
 		json[b].fields["agiletheme"] = agiletheme;
 	}
@@ -132,3 +141,17 @@ var addAgileFields = function(json, fields, callback)
 };
 
 var saveform = [];
+
+var checkCaptchaIntegration = function (callback){
+	console.log("recaptcha integration cchecking");
+	var url = window.location.protocol + '//' + window.location.host + '/core/api/recaptcha-gateway';
+   var captchaAllow = false;
+	$.ajax({ type : 'GET', url : url, asynch : true, dataType : 'json', success : function(data)
+	{
+		console.log("Recaptcha"+data);
+		if(data)
+			captchaAllow = true;
+
+		callback(captchaAllow);
+	} });
+}
