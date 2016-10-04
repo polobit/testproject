@@ -1839,7 +1839,7 @@ other.thinngs-you-need-to-do,Things you need to do,Cosas que hay que hacer
 prefs-notifications.default-notifications,Default Notifications,Notificaciones por defecto
 prefs-settings.new-case-cases-page,New Case (Cases Page),Nuevo caso (Página de casos)
 contacts-view.has-been-forwarded-to,has been forwarded to,se ha reenviado a
-portlets.no-customer-activities,No Customer activites,No hay actividades de los clientes
+portlets.no-customer-activities,No Customer activities,No hay actividades de los clientes
 workflows.what-are-automations,What are Automations?,¿Cuáles son Automations?
 other.existing-card-details,Existing Card Details,Tarjeta existente detalles
 contacts-view.task-owner-changed-to,Task Owner changed to,Propietario de la tarea cambió a
@@ -3876,7 +3876,7 @@ contact-details.campaigns,Campaigns,campañas
 portlets.send-rate,Send Rate,Enviar Tasa
 plan-and-upgrade.plan-with,plan with,plan con
 contact-edit.add-email,Add Email,Añadir Correo
-others.add-new,+ Add new,+ Añadir nuevo
+others.add-new,#NAME?,#NAME?
 widgets.ClickDesk,ClickDesk,ClickDesk
 contacts-view.condition,Condition,Condición
 modals.edit-note,Edit Note,Editar nota
@@ -3907,7 +3907,7 @@ campaigns.auto-dial,Auto Dial,Marcación automática
 help.importing,importing,importador
 tickets.requester,Requester,Solicitante
 landing-pages.save-page,Save Page,Guardar página
-portlets.activites,Activites,actividades
+portlets.activites,Activities,actividades
 widgets.Braintree-displayName,Braintree,Braintree
 tasks.All Tasks,All Tasks,Todas las tareas
 web-rules.templates,Templates,Plantillas
@@ -4824,7 +4824,7 @@ currency.Euro,Euro,Euro
 deal-view.name,Name,Nombre
 tasks.High,High,Alta
 menu.help,Help,Ayuda
-portlets.+add,+Add,+Agregar
+portlets.+add,#NAME?,#NAME?
 portlets.tags,Tags,Etiquetas
 report-add.name,Name,Nombre
 contact-edit.main,Main,Principal
@@ -5273,36 +5273,168 @@ widgets.FullContact-enter-your-api-key,Enter your FullContact API Key,
 widgets.newcall,New Call,
 widgets.select-contact-update,Please select a related contact to update.,
 widgets.continue,Continue,
-prefs-online-calendar.welcome-message-bulk,Welcome to our scheduling page. Please follow the instructions to book an appointment.,Bienvenido a nuestra página de planificación . Por favor&#44; siga las instrucciones para reservar una cita .		
-prefs-online-calendar.select-a-person,Select a Person,Seleccionar una persona		
-prefs-online-calendar.welcome-message-single,Welcome to my scheduling page. Please follow the instructions to book an appointment.,Bienvenidos a mi programación page. Por favor&#44; siga las instrucciones para reservar una cita .		
-prefs-online-calendar.holiday-today,Today is holiday,Hoy es día festivo		
-prefs-online-calendar.choose-time-slot,Choose a Time Slot,Elija un intervalo de tiempo		
-prefs-online-calendar.select-date-time,Select Date and Time,Seleccione Fecha y hora		
-prefs-online-calendar.on-availability,Availability on,Disponibilidad bajo		
-prefs-online-calendar.sendconfirmation,Send me a confirmation email,Envíame un correo electrónico de confirmación		
-prefs-online-calendar.user-phone-details,Notes (Phone number/Skype details),Notas (número de teléfono / datos de Skype )		
-prefs-online-calendar.email-format,Your email address must be in the format of name@domain.com,Su dirección de correo electrónico debe estar en el formato de name@domain.com		
-prefs-online-calendar.name-validation,Please specify your name,Por favor&#44; indique su nombre		
-prefs-online-calendar.email-validation,We need your email address to contact you,Necesitamos su dirección de correo electrónico para comunicarse con usted		
-prefs-online-calendar.no-working-hrs,No working hours,No hay horas de trabajo		
-common-words.for,for,para		
-common-words.mins-on,mins on,en minutos		
-common-words.with,with,con		
-prefs-online-calendar.online-appointment-cancellation,Online Appointment Cancellation,Designación de cancelación en línea		
-prefs-online-calendar.event-starts,Event starts,Evento comienza 		
-prefs-online-calendar.cancel-appointment,Cancel Appointment,Revocar la designación		
-prefs-online-calendar.cancelled-already,Looks like this appointment is already cancelled.,Parece que esta cita ya está cancelada .		
-prefs-online-calendar.cancelled-appointment,Appointment Cancelled,Cita cancelada		
-prefs-online-calendar.your-appointment-with,Your appointment with,Su cita con		
-prefs-online-calendar.is-cancelled,is cancelled,está cancelado		
-prefs-online-calendar.schedule-new,Schedule new appointment,Programar nueva cita		
-prefs-online-calendar.something-wrong,Something is wrong,Algo está mal		
-prefs-online-calendar.reasong-for-cancel,Reason for cancellation,Razón de la cancelación		
-others.chat-with-us,Chat With Us,Habla con nosotros		
+prefs-online-calendar.welcome-message-bulk,Welcome to our scheduling page. Please follow the instructions to book an appointment.,Bienvenido a nuestra página de planificación . Por favor&#44; siga las instrucciones para reservar una cita .
+prefs-online-calendar.select-a-person,Select a Person,Seleccionar una persona
+prefs-online-calendar.welcome-message-single,Welcome to my scheduling page. Please follow the instructions to book an appointment.,Bienvenidos a mi programación page. Por favor&#44; siga las instrucciones para reservar una cita .
+prefs-online-calendar.holiday-today,Today is holiday,Hoy es día festivo
+prefs-online-calendar.choose-time-slot,Choose a Time Slot,Elija un intervalo de tiempo
+prefs-online-calendar.select-date-time,Select Date and Time,Seleccione Fecha y hora
+prefs-online-calendar.on-availability,Availability on,Disponibilidad bajo
+prefs-online-calendar.sendconfirmation,Send me a confirmation email,Envíame un correo electrónico de confirmación
+prefs-online-calendar.user-phone-details,Notes (Phone number/Skype details),Notas (número de teléfono / datos de Skype )
+prefs-online-calendar.email-format,Your email address must be in the format of name@domain.com,Su dirección de correo electrónico debe estar en el formato de name@domain.com
+prefs-online-calendar.name-validation,Please specify your name,Por favor&#44; indique su nombre
+prefs-online-calendar.email-validation,We need your email address to contact you,Necesitamos su dirección de correo electrónico para comunicarse con usted
+prefs-online-calendar.no-working-hrs,No working hours,No hay horas de trabajo
+common-words.for,for,para
+common-words.mins-on,mins on,en minutos
+common-words.with,with,con
+prefs-online-calendar.online-appointment-cancellation,Online Appointment Cancellation,Designación de cancelación en línea
+prefs-online-calendar.event-starts,Event starts,Evento comienza 
+prefs-online-calendar.cancel-appointment,Cancel Appointment,Revocar la designación
+prefs-online-calendar.cancelled-already,Looks like this appointment is already cancelled.,Parece que esta cita ya está cancelada .
+prefs-online-calendar.cancelled-appointment,Appointment Cancelled,Cita cancelada
+prefs-online-calendar.your-appointment-with,Your appointment with,Su cita con
+prefs-online-calendar.is-cancelled,is cancelled,está cancelado
+prefs-online-calendar.schedule-new,Schedule new appointment,Programar nueva cita
+prefs-online-calendar.something-wrong,Something is wrong,Algo está mal
+prefs-online-calendar.reasong-for-cancel,Reason for cancellation,Razón de la cancelación
 widgets.create-your-own-custom,Create your own custom web forms easily and place them on your website to update web visitor details.,
+bulk-task.change-priority,Change priority of tasks,
+bulk-task.change-status,Change status of tasks,
+bulk-task.change-owner,Change owner of tasks,
+bulk-task.change-duedate,Change due date of tasks,
+bulk-task.duedate,Change Due Date,
+bulk-task.priority,Change Priority,
+bulk-task.status,Change status,
+bulk-task-noty.tasks-deleted,task(s) deleted,
+bulk-task-noty.tasks-modified,task(s) modified,
+bulk-task-noty.task-scheduled,Bulk Task scheduled ,
+activity.tasks-assigned,Tasks assigned to ,
+activity.task-bulk-status,Task status changed to ,
+activity.tasks-bulk-status,Tasks status changed to ,
+activity.task-bulk-priority,Task priority changed to ,
+activity.tasks-bulk-priority,Tasks priority changed to ,
+activity.tasks-bulk-delete,Tasks deleted.,
+activity.task-bulk-duedate,Task due date changed to ,
+activity.tasks-bulk-duedate,Tasks due date changed to ,
+login.duplicate-login,We had to log you out as you seem to have logged in from some other browser,Tuvimos realice la desconexión ya que parecen haber iniciado sesión desde otro navegador
+login.login,Login,Iniciar sesión
+login.signin-using-registration,Sign in using your registered account,Entra con tu cuenta registrada
+login.user-id-your-email,User ID (Your Email Address),ID de usuario (su dirección de correo electrónico )
+login.sign-in,Sign In,Registrarse
+login.login-with,Login with,Inicia con
+login.login-with-google,Login with Google,Ingresar con Google
+login.login-with-yahoo,Login with Yahoo,Inicia sesión con Yahoo
+login.dont-have-account,Do not have an account,No tiene una cuenta
+login.sign-up,Sign Up,Regístrate
+login.forgot,Forgot,Olvidó
+forgot-domain.forgot-domain,Forgot Domain,Olvidé el dominio
+forgot-domain.user-not-found,We are not able to find any user,No podemos encontrar ningún usuario
+forgot-domain.enter-email,Enter Your Email,Inserta tu correo
+forgot-domain.register,Register,Registrarse
+enter-domain.enter-your-domain,Enter Your Domain,Inserta tu dominio
+enter-domain.enter-your-domain-at,Enter your domain at ,Inserta tu dominio en
+enter-domain.new-user,New User,Nuevo usuario
+enter-domain.common-domain-issue,Common domain cannot be created.,Dominio común no puede ser creado
+enter-domain.domain-name-issue,Name should be between 2-20 characters in length. Both letters and numbers are allowed but it should start with a letter. Cannot contain special characters other than '_' and '-',Nombre debe ser entre 4-20 caracteres de longitud . Letras y números están permitidos pero deben comenzar con una letra . No pueden contener caracteres especiales que no sean '_' y '-'
+enter-domain.domain-name-length-error,Domain should be 2 to 20 characters.,El dominio debe tener entre 2 y 20 caracteres
+forgot-password.we-sent-email,We have sent you an email,Te hemos enviado un correo
+forgot-password.signed-up-with-oauth2,You have signed-up using your Google/Yahoo account. Please sign-in through the same account,Has ingresado usando tu cuenta de google/yahoo. Por favor ingresa a través de la misma cuenta
+forgot-password.forgot-password,Forgot Password,Olvidó su contraseña
+forgot-password.resend-password,Resend password,Reenviar contraseña
+forgot-password.already-have-account,Already have an account,Ya tengo una cuenta
+html5Validations.invalid-default,Please fill out this field.,Por favor rellena el campo
+html5Validations.invalid-email,Please include an '@' in the email address. $1 is missing '@'.,Por favor incluye un '@' en el correo electrónico. Se perdió $1 '@'
+html5Validations.invalid-password,Please lengthen this text to $1 characters or more (you are currently using $2 characters).,Por favor alargue este texto $1 caracteres o más (por ahora estás usando $2 caracteres)
+otp-auth.info,Please enter the verification code sent to your email ID to access the account.,Por favor inserta eñ código de verificacion enviado a tu dirección de correo electrónico para acceder a la cuenta
+otp-auth.enter-code,Enter Verification Code,Inserte el código de verificación
+otp-auth.resend-code,Resend Verfication Code,Reenviar el código de verificación
+otp-auth.resend-code-success,We have re-sent the verification code to your registered email. Please enter the code below to get access.,Te hemos enviado el código de verificación a tu correo registrado. Por favor inserta un código válido debajo para acceder
+register.register-with-free,Register your FREE account,Registra tu cuenta GRATUITA
+register.name-validation,Name should be at least 3 characters,El nombre debe tener al menos 3 caracteres
+register.invalid-pattern,Please match the requested format.,Por favor coloca el formato requerido
+register.full-name,Full Name,Nombre completo
+register.email-address,Email Address (User ID),Correo electrónico (Identificación del usuario)
+register.click-signing-info,By clicking sign up&#44 I agree to Agile CRM's,Al clicar inscríbete&#44 Estoy de acuerdo con My CRM's
+register.terms-of-service,Terms of Service,Terminos del servicio
+register.wait-info-while-setting,Please wait while we are setting up your account...,Por favor espera mientras configuramos tu cuenta...
+register.time-to-configure,It's time to configure your account,Es hora de configurar tu cuenta
+register.domain-name-validation,Name should be between 4-20 characters in length. Both letters and numbers are allowed but it should start with a letter. Cannot contain special characters other than '_' and '-'.,El nombre debe estar entre 4-20 caracteres. Tanto letras como números están permitidos pero debe comenzar con una letra. No puede contener caracteres especiales aparte de '_' y '-'
+register.domain-name-helptext,This is where you and your users will log in to your account,Aquí es donde tu y tus usuarios se conectaran  en tu cuenta
+register.choose-plan,Choose Plan,Escoger plan
+register.role-helptext,We will create unique experience based on your role and company,Crearemos una experiencia única basada en tu rol y compañía
+register.role-and-company,Role & Company,Rol & Compañía
+register.ceo,CEO,CEO
+register.vp,VP,VP
+register.vp-sales,VP&#44 Sales,VP&#44 Ventas
+register.vp-marketing,VP&#44 Marketing,VP&#44 Marketing
+register.cus-suc-manager,Customer Success Manager,Representante del Éxito del Consumidor
+register.sales-manager,Sales Manager,Representante de Ventas
+register.marketing-manager,Marketing Manager,Representante de Marketing
+register.consultant,Consultant,Consultor
+register.reseller,Reseller,Revendedor
+register.recruiter,Recruiter,Reclutador
+register.developer,Developer,Desarrollador
+register.other,Other,Otro
+register.select-type,Select Type,Seleccionar tipo
+register.b2b,B2B,B2B
+register.saas,SaaS,ScuS
+register.ecommerce,Ecommerce,Comercio electrónico
+register.marketing-agency,Marketing Agency,Agencia de Marketing
+register.contact-centers,Contact Centers,Centros de contacto
+register.realty,Realty,Bienes raíces
+register.media,Media,Medios
+register.tech-consulting,Technology Consulting,Consulta de tecnología
+register.pnone-num-validation,Please enter valid number,Por favor inserta un número válido
+forgot-domain.email-invalid-after-@,Please enter a part following '@'. '$1' is incomplete.,Por favor introduzca una parte siguiente '@' . '$1' Es incompleta .
+html5Validations.invalid-select-one,Please select an item in the list.,Por favor seleccione un elemento de la lista.
+html5Validations.enter-number-only,Please enter a number,Por favor introduzca un número
+affiliate.affiliate-program,Affiliate Program,
+affiliate.commission-details,Commission Details,
+affiliate.referrals,Referrals,
+affiliate.affiliate-tools,Creatives,
+affiliate.no-affiliates,There are no Referrals,
+affiliate.total-count,Total Referrals,
+affiliate.total-commission,Total Commission,
+affiliate.email,Email,
+affiliate.domain,Domain,
+affiliate.plan,Plan,
+affiliate.commission,Commission,
+affiliate.created-time,Created Time,
+affiliate.amount-added-to-your-account,Total Paid Commission,
+affiliate.name,Name,
+affiliate.paypal-id,Paypal ID,
+affiliate.phone,Phone,
+affiliate.business, Partner Type,
+affiliate.select-type,Select Type,
+affiliate.affiliate,Affiliate,
+affiliate.reseller,Reseller,
+affiliate.managed_service_partner, Managed Service Partner,
+affiliate.register,Register,
+affiliate.click_register,By clicking register&#44; I agree to Agile CRM's Affiliate,
+affiliate.terms_and_conditions,Terms & Conditions,
+affiliate.p1,You can now earn money easily by participating in Agile's Affiliate Program.,
+affiliate.ph2,What will you earn?,
+affiliate.p2,Our clear-cut and attractive commission structure is transparent and has no hidden clauses. You'll get 20% for each customer that starts a paid subscription with Agile CRM.,
+affiliate.ph3,Why should you join?,
+affiliate.p3,Agile CRM is a popular Sales&#44; Marketing & Support solution with a rapidly growing customer base. It was featured in Entrepreneur&#44; CXO&#44; Tech In Asia among other leading technology & review sites. It is widely admired by its users as well as the industry&#44; in general.,
+affiliate.ph4,How will you promote Agile from your website or blog?,
+affiliate.p4,By joining our affiliate program&#44; you'll get access to our best propagative materials with above-average industry CTRs.,
+affiliate.ph5,How would we support you?,
+affiliate.p5,We'll take good care of your leads and improve conversion rates by providing them with onboarding materials and support from the sales team&#44; if required. As an affiliate&#44; you'll also get support and tips from our experienced Agile Affiliate managers.,
+affiliate.ph6,How will you track sales?,
+affiliate.p6,Gain access to real-time reports on paid subscriptions and commissions.,
+affiliate.p7-1,For any queries about Agile's affiliate program&#44; please contact:,
+affiliate.p7-2,affiliates@agilecrm.com,
+affiliate.earn_20,Get 20% on each sale!,
+webrules.push-popup,Request Push Popup,
+web-rules.Pushnoty,Push Notification,
+others.chat-with-us,Chat With Us,Habla con nosotros
+menu.menu-add,Add,Añadir
+menu.home,Home,Casa
 portlets.email-subscription,Email Subscription,
-portlets.branded-emails,Email Subscription Details,
+portlets.branded-emails-details,Email Subscription Details,
 plan-and-upgrade.andymailwain,Andy McIlwain,
 plan-and-upgrade.content-community,Content & Community,
 plan-and-upgrade.andymailwain-desc,Agile CRM has delivered significant improvements in efficiency and reliability for us. In the first month of integration&#44;  our business grew 270 percent.,
@@ -5320,3 +5452,4 @@ plan-and-upgrade.jeri-murphy-co-founder,Co Founder – WhichAddOn,
 plan-and-upgrade.jeri-murphy-desc,We absolutely love Agile CRM. We recently upgraded to Enterprise and just working through to make sure we are using it the best of our ability. We will be in touch with further questions I'm sure. ,
 plan-and-upgrade.free-emails,Free Email ,
 plan-and-upgrade.free-emails-first-text,Please note that once you have purchased the email subscription&#44;  all the branded emails will be removed from your account.&#44;,
+plan-and-upgrade.free-emails-branded,Free Emails (Branded),
