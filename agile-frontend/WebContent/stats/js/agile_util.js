@@ -193,18 +193,28 @@ function agile_formCallback(error, button, url, agile_form, contact_id, form_dat
 			if(url && url != "#"){
 				var emailParam = encodeURIComponent("{\"email\":\""+emailVal+"\"}");	
 				var index = url.indexOf("?");
-				if(index!=-1){
+				if(index!=-1)
 					window.location = url+"&"+"fwd=cd&data="+emailParam;	
-				}
-				else{
+				else
 					window.location = url+"?"+"fwd=cd&data="+emailParam;
-				}
+			}	
+			else if(url && url == "#"){
+				document.getElementById("agile-error-msg").innerHTML = '<span style="color:green">Form submitted successfully</span>';
+				var agile_form = document.forms["agile-form"];
+				agile_form.reset();
 			}
+		
 		} else {
-			if(url && url != "#"){
+			if(url && url != "#")
 				window.location = url;
+			else if(url && url == "#"){
+				document.getElementById("agile-error-msg").innerHTML = '<span style="color:green">Form submitted successfully</span>';
+				var agile_form = document.forms["agile-form"];
+				agile_form.reset();
+				
 			}
-		}			
+		}	
+
 		
 	}, 1500);
 }
