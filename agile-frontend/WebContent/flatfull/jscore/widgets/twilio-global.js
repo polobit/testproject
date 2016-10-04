@@ -1421,6 +1421,11 @@ function twiliocall(phoneNumber, toName,conferenceName, contact)
 	console.log("In twilio call finction after makingcall function and starting call");
 	
 	var num = phoneNumber;
+	var extension;
+	if(num.indexOf(";") != -1){
+		extension = num.split(";")[1];
+		num = num.split(";")[0];
+	}
 	var cont = contact;
 	var numberToDial = getFormattedPhone(num, cont);
 	// converting number to dial i 164 format...
@@ -1428,7 +1433,11 @@ function twiliocall(phoneNumber, toName,conferenceName, contact)
 	if(conferenceName){
 		params = { "from" : Verfied_Number, "PhoneNumber" : numberToDial, "conference" : conferenceName};
 	}else{
-		params = { "from" : Verfied_Number, "PhoneNumber" : numberToDial};
+		if(extension){
+			params = { "from" : Verfied_Number, "PhoneNumber" : numberToDial,"extension":extension};
+		}else{
+			params = { "from" : Verfied_Number, "PhoneNumber" : numberToDial};
+		}
 	}
 	
 	// if call campaign is running then modify call container	
@@ -1511,7 +1520,7 @@ function closeTwilioNoty()
 		return;
 
 	globalconnection = undefined;
-	To_Number = undefined;
+	//To_Number = undefined;
 	To_Name = "";
 	closeCallNoty(true);
 	// Close noty
@@ -1574,7 +1583,8 @@ function showNoteAfterCall(callRespJson,messageObj,paramJson)
 	var friendlyStatus = "";
 	var phoneNumber = "";
 	if(TWILIO_DIRECTION == "outbound-dial"){
-		phoneNumber = TWILIO_CALLED_NO;
+		phoneNumber = To_Number;
+		//phoneNumber = TWILIO_CALLED_NO;
 	}else{
 		phoneNumber = callRespJson.from;
 	}
@@ -1628,7 +1638,8 @@ function showNoteAfterCall(callRespJson,messageObj,paramJson)
 
 			if(TWILIO_DIRECTION == "outbound-dial") {
 		//				phoneNumber = callRespJson.to;
-						phoneNumber = TWILIO_CALLED_NO;
+						phoneNumber = To_Number;
+						//phoneNumber = TWILIO_CALLED_NO;
 						//TWILIO_CALLED_NO = "";
 					}else{
 						phoneNumber = callRespJson.from;
