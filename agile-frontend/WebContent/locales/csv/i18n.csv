@@ -3040,7 +3040,7 @@ contacts-view.added-tag-to,Added  tag to,Se añadió la etiqueta a
 countries.FO,Faroe Islands,Islas Feore
 countries.GW,Guinea-Bissau,Guinea-Bissau
 modals.document-name,Document Name,nombre del documento
-logcall.edit-call-log,Edit call log,Editar el registro de llamadas
+logcall.edit-call-log,Edit Call Log,Editar el registro de llamadas
 report-view.calls-by-user,Calls by User,Llamadas por usuario
 countries.LI,Liechtenstein,Liechtenstein
 preferences.notifications,Notifications,Notificaciones
@@ -3235,7 +3235,7 @@ tickets.greater-than,Greater Than,Mayor a
 contact-edit.phone-number,Phone number,Número de teléfono
 report-add.updated-date,Updated Date,Fecha actualizada
 tickets.satisfaction,Satisfaction,Satisfacción
-contact-details.add-call-log,Add Call-log,Añadir registro de llamadas
+contact-details.add-call-log,Add Call Log,Añadir registro de llamadas
 modals.company-name,Company Name,nombre de empresa
 tasks.name-of-task,Name of Task,Nombre de la Tarea
 contacts-view.deleted-deal,Deleted Deal,Oferta eliminada
@@ -3518,7 +3518,7 @@ countries.TL,Timor-Leste,Timor-Leste
 portlets.activities,Activities,Actividades
 admin-settings-integrations.account-id,Account ID,ID de la cuenta
 tickets.loading,Loading...,Cargando…
-call-log.log-a-call,Log a call,Ingrese una llamada
+call-log.log-a-call,Log a Call,Ingrese una llamada
 admin-settings-integrations.auth-token,Auth Token,Token de autorización
 widgets.QuickBooks-name,QuickBooks,QuickBooks
 portlets.contact-filters-btn-text,Add Filter,Agregar filtro
@@ -5555,3 +5555,6 @@ campaigns.keyword-tooltip,Enter the Keyword to be looked out for in the Incoming
 campaigns.setuptwilio,Please enable your Twilio integration 
 campaigns.here,here.
 Help-center.mark-as-public-cannedmessage,Mark as Public
+portlets.Hours,Hours,
+portlets.Minutes,Minutes,
+portlets.Seconds,Seconds,

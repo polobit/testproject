@@ -57,21 +57,21 @@
                   			{{/if}}
                   		{{else}}
                   				<a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false"> 
-                    	     		<button id="phoneButton" type="button" class="btn btn-default">
+                    	     		<button id="phoneButton" type="button" class="btn btn-default w-full text-left">
                     						<span id="contact_logPhone_number" 
                                   class="contact_logPhone_number" name="contact_logPhone_number" value = ""> {{agile_lng_translate 'deal-view' 'select'}} 
                                 </span>
-                           			<span class="caret"></span>
+                           			<i class="caret pull-right" style="margin-top:8px"></i>
                     	        </button>
                   				</a>
-                  						<ul class="dropdown-menu" style="top:39px;left: 15px; 
-                              {{#is_mobile}} top:39px;left: 127px; {{/is_mobile}}" role="menu">
+                  						<ul class="dropdown-menu" style=" 
+                              {{#is_mobile}} left: 15px;width: 93% {{else}} top:39px;left: 15px;width: 91% {{/is_mobile}}" role="menu">
                   							{{#each num}}<li><a id = "logPhone_number_option" value = "{{this}}">{{this}}</a></li> {{/each}}
                   						</ul>
                   		{{/if_equals}}	
                       {{/if_equals}}	
               						<span id="contact-add-phone-span" class="none"> 
-              								<input type="text" id="contact_phone" style="border: 1px solid #ccc;height:34px;border-radius:2px;" class="col-sm-10 {{#is_mobile}} w-83 {{/is_mobile}}"/> 
+              								<input type="text" id="contact_phone" style="border: 1px solid #ccc;height:34px;border-radius:2px;" class="col-sm-10 {{#is_mobile}} w-88 {{/is_mobile}}"/> 
               								<a class= "btn btn-primary btn-sm contact_phone_add {{#is_mobile}} m-l-none {{/is_mobile}}" style="height:33px;margin-left:11px">{{agile_lng_translate 'other' 'add'}} 
                               </a>   
               						</span>		
@@ -104,12 +104,12 @@
                     <span class="field_req">*</span></label>
                     <div class="controls col-sm-7">
                       <a href="" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false"> 
-      				          <button id="statusButton" type="button" class="btn btn-default w-half text-left">
+      				          <button id="statusButton" type="button" class="btn btn-default w-full text-left">
   								        <span  id="callStatus" class="callStatus" name="status" value = ""> {{agile_lng_translate 'deal-view' 'select'}} </span>
            				   		  <i class="caret pull-right" style="margin-top:8px"></i>
    							        </button>
 						          </a>
-      								<ul id="statusValue-ul" class="dropdown-menu" style="top:32px;left: 15px;{{#is_mobile}} left: 76px{{/is_mobile}}" role="menu">
+      								<ul id="statusValue-ul" class="dropdown-menu" style="{{#is_mobile}} left: 15px;width: 93% {{else}} top:32px;left: 15px;width: 91%; {{/is_mobile}}" role="menu">
       								</ul>
                       <div id="logPhone_status_error" style="color:#d9534f;display:none;">{{agile_lng_translate 'campaigns' 'status-not-declared'}}</div>
 						            <span id="status-wait"></span>	
@@ -122,13 +122,36 @@
                       <span class="field_req">*</span>
                   </label>
                   <div class="controls col-sm-7">
-                      <input type="text" name="hour" id="hour" value="0" style = "max-width:42px;border-radius:2px;border:1px solid #ccc;padding:4px" class="call-log-input"/><span class="label label-default" style="background-color:#ccc !important;margin-left:2px;margin-right:3px">{{agile_lng_translate 'portlets' 'houe-small'}}</span> 
-                      <input type="text" name="min" id="min" value="0" style = "max-width:42px;border-radius:2px;border:1px solid #ccc;padding:4px" class="call-log-input"/><span class="label label-default" style="background-color:#ccc !important;margin-left:2px;margin-right:3px">{{agile_lng_translate 'portlets' 'minutes'}}</span> 
-                      <input type="text" name="sec" id="sec" value="0" style = "max-width:42px;border-radius:2px;border:1px solid #ccc;padding:4px" class="call-log-input"/><span class="label label-default" style="background-color:#ccc !important;margin-left:2px">{{agile_lng_translate 'portlets' 'seconds'}}</span>
-                      <div id="logPhone_duration_error" style="color:#d9534f;display:none;">{{agile_lng_translate 'portlets' 'for-a-minute-and-second-please-enter-a-value'}}</div>
-                      <div id="logPhone_duration_error1" style="color:#d9534f;display:none;">{{agile_lng_translate 'portlets' 'duriation-should-be-in-only-positive-values'}}</div>
-                      <div id="logPhone_duration_error2" style="color:#d9534f;display:none;">{{agile_lng_translate 'portlets' 'duriation-cannot-be-zero'}}.</div>
+                    <div class="row">
+                      <div class="col-sm-4 {{#is_mobile}} m-b {{else}} p-r-none {{/is_mobile}}">
+                        <div class="input-group">
+                          <input type="text" name="hour" id="hour" value="0" class="form-control">
+                          <span class="input-group-btn">
+                            <button class="btn btn-secondary" type="button" style="padding: 6px 10px;background-color: #F5FAFC;border-color: #cfdadd;">{{agile_lng_translate 'portlets' 'Hours'}}</button>
+                          </span>
+                        </div>
                       </div>
+                      <div class="col-sm-4 {{#is_mobile}} m-b {{else}} p-r-xs p-l-xs {{/is_mobile}}">
+                        <div class="input-group">
+                          <input type="text" name="min" id="min" value="0" class="form-control">
+                          <span class="input-group-btn">
+                            <button class="btn btn-secondary" type="button" style="{{#is_mobile}} padding: 6px 5px {{else}} padding: 6px 8px {{/is_mobile}};background-color: #F5FAFC;border-color: #cfdadd;">{{agile_lng_translate 'portlets' 'Minutes'}}</button>
+                          </span>
+                        </div>
+                      </div>
+                      <div class="col-sm-4 {{#is_mobile}} {{else}} p-l-none {{/is_mobile}}">
+                        <div class="input-group">
+                          <input type="text" name="sec" id="sec" value="0" class="form-control">
+                          <span class="input-group-btn">
+                            <button class="btn btn-secondary" type="button" style="{{#is_mobile}} padding: 6px 4px {{else}} padding: 6px 6px {{/is_mobile}};background-color: #F5FAFC;border-color: #cfdadd;">{{agile_lng_translate 'portlets' 'Seconds'}}</button>
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                    <div id="logPhone_duration_error" style="color:#d9534f;display:none;">{{agile_lng_translate 'portlets' 'for-a-minute-and-second-please-enter-a-value'}}</div>
+                    <div id="logPhone_duration_error1" style="color:#d9534f;display:none;">{{agile_lng_translate 'portlets' 'duriation-should-be-in-only-positive-values'}}</div>
+                    <div id="logPhone_duration_error2" style="color:#d9534f;display:none;">{{agile_lng_translate 'portlets' 'duriation-cannot-be-zero'}}.</div>
+                  </div>
                 </div>
                 <div class="control-group form-group">
                     <label class="control-label col-sm-3">
