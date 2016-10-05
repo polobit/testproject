@@ -8,59 +8,37 @@ import org.jsoup.select.Elements;
 
 public class HTMLUtil
 {
-	 /*Removes Script from html 
-	  * @params String html
-	  * */	
-	 public static String removeScriptFromPlaintext(String html)
+
+	/**
+	 * Removes Script from HTML content
+	 * 
+	 * @param html
+	 * @return
+	 */
+	public static String removeScriptFromHtmltext(String html)
 	{
-	
-		 html = html.replaceAll("\n", "_br2n_");
-		 
-		 Document doc = Jsoup.parseBodyFragment(html);
-		 doc.select("script").remove();
+		Document doc = Jsoup.parseBodyFragment(html, "UTF-8");
 		
-		 Elements all = doc.select("*");
-			
-			for (Element el : all)
+		//removes script element from HTML content
+		doc.select("script").remove();
+		
+		//removes onclick events from HTML content
+		Elements all = doc.select("*");
+		for (Element el : all)
+		{
+			for (Attribute attr : el.attributes())
 			{
-				for (Attribute attr : el.attributes())
+				String attrKey = attr.getKey();
+				if (attrKey.startsWith("on"))
 				{
-					String attrKey = attr.getKey();
-					if (attrKey.startsWith("on"))
-					{
-						el.removeAttr(attrKey);
-					}
+					el.removeAttr(attrKey);
 				}
 			}
-
-			html = doc.body().toString().replaceAll("_br2n_", "\n");
-			
-			return html;
-		
-	}
-	 public static String removeScriptFromHtmltext(String html)
-		{
-			 Document doc = Jsoup.parseBodyFragment(html, "UTF-8");
-			 doc.select("script").remove();
-			
-			 Elements all = doc.select("*");
-				
-				for (Element el : all)
-				{
-					for (Attribute attr : el.attributes())
-					{
-						String attrKey = attr.getKey();
-						if (attrKey.startsWith("on"))
-						{
-							el.removeAttr(attrKey);
-						}
-					}
-				}
-				
-				html = doc.body().html();
-		
-			 return html;
-			
 		}
-	
+
+		html = doc.body().html();
+
+		return html;
+	}
+
 }
