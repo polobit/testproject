@@ -103,7 +103,9 @@ public class TicketCannedMessages
 		if (owner_key != null){
 			owner_id = owner_key.getId();
 			DomainUser DU = DomainUserUtil.getDomainUser(owner_id);
-			owner_name = DU.name;
+			
+			if(DU != null)
+				owner_name = DU.name;
 		}	
 		if (labels_keys_list != null)
 		{
