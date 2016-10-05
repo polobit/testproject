@@ -768,15 +768,29 @@ show and hide the input for editing the contact name and saving that
 		    contactModel.url = '/core/api/contacts/change-owner/' + new_owner_id + "/" + App_Contacts.contactDetailView.model.get('id');
 		    contactModel.save(App_Contacts.contactDetailView.model.toJSON(), {success: function(model){
 
-		    	// Replaces old owner details with changed one
-				$('#contact-owner').text(new_owner_name);
-				$('#contact-owner').attr('data', new_owner_id);
-				
-				// Showing updated owner
-				show_owner(); 
-				App_Contacts.contactDetailView.model = model;
-				CONTACTS_HARD_RELOAD = true;
-        Backbone.history.navigate("contacts",{trigger: true});
+    		    	// Replaces old owner details with changed one
+    				$('#contact-owner').text(new_owner_name);
+    				$('#contact-owner').attr('data', new_owner_id);
+    				
+    				// Showing updated owner
+    				show_owner(); 
+    				App_Contacts.contactDetailView.model = model;
+    				CONTACTS_HARD_RELOAD = true;
+            Backbone.history.navigate("contacts",{trigger: true});
+            if(!hasScope("VIEW_CONTACTS")){
+              var storageItems = JSON.parse(localStorage.recentItems);
+              var arr = [];
+              localStorage.removeItem("recentItems");
+              for(var i=0;i<storageItems.length;i++){
+                if(storageItems[i].id != App_Contacts.contactDetailView.model.get('id')){
+                  arr.push(storageItems[i]);
+                }else{
+                  recent_view.collection.remove(storageItems[i].id);
+                }
+              }
+              localStorage.setItem("recentItems", JSON.stringify(arr));
+              recent_view_update_required = true;
+            }
 		    }});
     },
 
