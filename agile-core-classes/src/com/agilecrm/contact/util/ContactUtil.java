@@ -364,7 +364,7 @@ public class ContactUtil
 			{
 				for (ContactField emailField : contact.getContactPropertiesList(Contact.EMAIL))
 				{
-					if(email==emailField.value)
+					if(email.equalsIgnoreCase(emailField.value))
 						return contact;
 				}
 			}
