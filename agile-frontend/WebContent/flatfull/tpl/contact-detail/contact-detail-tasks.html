@@ -27,34 +27,73 @@
 
 
 <script id="contact-tasks-model-template" type="text/html">
-<div class="activity block pos-rlt">
-	{{#if is_complete}}
-		<div>
-	{{else}}
-		<div>
-	{{/if}}	
-	<div class="activity-block-owner thumb-xs pull-right avatar">
-		{{#if taskOwner.pic}}
-			<img class="user-img r r-2x" alt="" src="{{taskOwner.pic}}" >
+	<div class="activity block pos-rlt">
+		{{#if is_complete}}
+			<div>
 		{{else}}
-			<img class="user-img r r-2x" src="{{defaultGravatarurl 40}}">
+			<div>
+		{{/if}}	
+		<div class="activity-block-owner thumb-xs pull-right avatar">
+			{{#if taskOwner.pic}}
+				<img class="user-img r r-2x" alt="" src="{{taskOwner.pic}}" >
+			{{else}}
+				<img class="user-img r r-2x" src="{{defaultGravatarurl 40}}">
+			{{/if}}
+		</div>
+	<span class="hidden">{{taskOwner.name}}</span>
+	<div class="pull-left rightThumbView">
+	<div class="pull-left  text-md text-cap {{#is_mobile}} w-full {{/is_mobile}}">
+	    {{#if is_complete}}
+			<div>
+				{{#is_mobile}} 
+				{{else}}
+					<span>
+						<i class="fa fa-check"></i>
+					</span>
+				{{/is_mobile}}				
+				<div class="task-subject {{#is_mobile}} block text-ellipsis w-full m-l-none {{else}} inline m-l-sm {{/is_mobile}} text-l-t">
+					<a  href="#task/{{id}}" class="space-normal">
+						{{subject}}
+					</a>
+				</div>
+				{{#if_equals priority_type "NORMAL"}}
+				{{else}}
+					<span class="label hidden label-{{task_label_color priority_type}}">{{ucfirst priority_type}}</span>
+				{{/if_equals}}
+	            <span {{#is_mobile}} class="block" {{/is_mobile}}>
+	           		<label class="label bg-light text-tiny">
+	           			<!-- <i class="fa {{icons type}} hide"></i>&nbsp; -->{{ucfirst type}}
+	           		</label>
+	           	</span>
+			</div>
+		{{else}}
+			<div>
+				{{#is_mobile}} 
+				{{else}}
+					<label class="i-checks i-checks-sm">
+						<input data="{{id}}" class="complete-task form-control" type="checkbox"/>
+						<i></i>
+					</label>
+				{{/is_mobile}}
+				<a class="space-normal" href="#task/{{id}}">
+					<span class="task-subject {{#is_mobile}}block text-ellipsis w-full{{else}}word-break-all white-space-normal w-full{{/is_mobile}}">				
+						{{subject}}
+					</span>
+				</a>
+				{{#if_equals priority_type "NORMAL"}}
+				{{else}}
+					<span class="label hidden label-{{task_label_color priority_type}}">
+						{{ucfirst priority_type}}
+					</span>
+				{{/if_equals}}
+	            <span {{#is_mobile}} class="block" {{/is_mobile}}>
+	            	<label class="label bg-light text-tiny">
+	            		<!-- <i class="fa {{icons type}}"></i>&nbsp; -->{{ucfirst type}}
+	            	</label>
+	            </span>
+			</div>
 		{{/if}}
 	</div>
-<span class="hidden">{{taskOwner.name}}</span>
-<div class="pull-left rightThumbView">
-<div class="pull-left  text-md text-cap {{#is_mobile}} w-full {{/is_mobile}}">
-    {{#if is_complete}}
-			<div>{{#is_mobile}} {{else}}<span><i class="fa fa-check"></i></span>{{/is_mobile}}<div class="task-subject {{#is_mobile}} block text-ellipsis w-full m-l-none {{else}} inline m-l-sm {{/is_mobile}} text-l-t"><a  href="#task/{{id}}" class="space-normal">{{subject}}</a></div>{{#if_equals priority_type "NORMAL"}}{{else}}
-					<span class="label hidden label-{{task_label_color priority_type}}">{{ucfirst priority_type}}</span>{{/if_equals}}
-                   <span {{#is_mobile}} class="block" {{/is_mobile}}><label class="label bg-light text-tiny"><!-- <i class="fa {{icons type}} hide"></i>&nbsp; -->{{ucfirst type}}</label></span>
-				</div>
-		{{else}}
-			<div> {{#is_mobile}} {{else}}<label class="i-checks i-checks-sm"><input data="{{id}}" class="complete-task form-control" type="checkbox"/><i></i></label>{{/is_mobile}}<div class="task-subject {{#is_mobile}}block text-ellipsis w-full{{else}}text-ellipsis pos-rlt pos-t-xs inline-block{{/is_mobile}}"><a class="space-normal" href="#task/{{id}}">{{subject}}</a></div>{{#if_equals priority_type "NORMAL"}}{{else}}
-					<span class="label hidden label-{{task_label_color priority_type}}">{{ucfirst priority_type}}</span>{{/if_equals}}
-                    <span {{#is_mobile}} class="block" {{/is_mobile}}><label class="label bg-light text-tiny"><!-- <i class="fa {{icons type}}"></i>&nbsp; -->{{ucfirst type}}</label></span>
-				</div>
-	{{/if}}
-</div>
     
      <div class="clearfix"></div>
  
