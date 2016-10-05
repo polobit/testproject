@@ -576,10 +576,11 @@ public class NotificationPrefsUtil
     
     private static String addOwnerInfo(JSONObject json) {
     	String userName = "";
-    	if(json.has("owner_name"))
-    		userName = JSONUtil.getJSONValue(json, "owner_name");
-    	else if(json.has("current_user_name"))
+    	if(json.has("current_user_name"))
     		userName = JSONUtil.getJSONValue(json, "current_user_name");
+    	else if(json.has("owner_name"))
+    		userName = JSONUtil.getJSONValue(json, "owner_name");
+    	
     	
     	if(StringUtils.isNotBlank(userName))
     		return  " by " + userName;
