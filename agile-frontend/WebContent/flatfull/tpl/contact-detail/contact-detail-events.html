@@ -37,7 +37,7 @@
 			<span class="owner-name hidden">{{owner.name}}</span>
 	</div>
 <div class="pull-left rightThumbView">	
-	<div class="event-title pull-left text-md text-cap contact-title-dynamic custom-color text-ellipsis">{{title}} <span class="hidden label label-{{task_label_color color}}">{{event_priority color}}</span></div><div class="pull-right"><span class="text-muted"><i class="fa fa-clock-o"></i> <time datetime="{{epochToHumanDate "" start}}" class="event-created-time">{{epochToHumanDate "dd mmm yyyy' - 'hh:MM tt" start}}</time></span></div>
+	<div class="event-title pull-left text-md text-cap contact-title-dynamic custom-color text-ellipsis">{{title}} <span class="hidden label label-{{task_label_color color}}">{{event_priority color}}</span></div><div class="pull-right"><span class="text-muted"><i class="fa fa-clock-o"></i> <time datetime="{{epochToHumanDate "" created_time}}" class="event-created-time">{{epochToHumanDate "dd mmm yyyy' - 'hh:MM tt" created_time}}</time></span></div>
 <div class="clearfix"></div>
 <!-- <div class="m-b-xs">
 	<span>StartTime : <i class="fa fa-clock-o m-r-xs text-muted"></i><time class="event-created-time text-muted" datetime="{{epochToHumanDate "" start}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" start}}</time></span>
@@ -66,10 +66,15 @@
 		</div>
 <div class="clearfix"></div>
 	<div class="m-t-xs">
-		<div class="pull-left hide">
-		 <small class="edit-hover m-l-xxl text-muted"> 
-			<i class="fa fa-clock-o m-r-xs"></i> <time class="event-created-time text-base" datetime="{{epochToHumanDate "" created_time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created_time}}</time>
-		</small>
+		<div class="pull-left">
+		 <div><small class="edit-hover m-l-xl text-muted"> StartTime : 
+			<i class="fa fa-clock-o m-r-xs hide"></i> <time class="event-created-time text-base" datetime="{{epochToHumanDate "" start}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" start}}</time>
+		</small>{{#if allDay}} ( all day ) {{/if}}</div>
+		{{#if allDay}}
+		{{else}}
+		<div><small class="edit-hover m-l-xl text-muted"> EndTime : 
+			<i class="fa fa-clock-o m-r-xs hide"></i> <time class="event-created-time text-base" datetime="{{epochToHumanDate "" end}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" end}}</time>
+		</small></div>{{/if}}
 		</div>
 		<div class="pull-right pos-abs pos-r-0 pos-b-0 m-r-xs icons-text-sm">
 		<span class="actions">
