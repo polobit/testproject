@@ -14,7 +14,7 @@ function  _agile_get_contact_display_name(first_name, last_name, prop_key){
 	}
 
 	if(user_contact_display_type == "ftl")
-    	return first_name + last_name;
+    	return first_name + " " + last_name;
 
     return last_name + " " + first_name;
 }
