@@ -465,9 +465,9 @@ function sendActionToClient(action, manager, asterisk, long_details){
 	};
 	if(client == "Asterisk"){
 		if(command == "startCall"){
-			image.src = "http://localhost:44444/"+ new Date().getTime() +"?command="+command+";number="+number+";callid="+callid+";domain="+domain+";userid="+id+";type=Asterisk;mName="+manager.id+";mPass="+manager.password+";ip=" +manager.hostname+";channel="+asterisk.channel+";context="+asterisk.context+";exten="+asterisk.extension+";callerId="+asterisk.callerId+";timeout="+asterisk.timeout+";priority="+asterisk.priority+";variables="+long_details.variables+"?";	
+			image.src = "http://localhost:33333/"+ new Date().getTime() +"?command="+command+";number="+number+";callid="+callid+";domain="+domain+";userid="+id+";type=Asterisk;mName="+manager.id+";mPass="+manager.password+";ip=" +manager.hostname+";channel="+asterisk.channel+";context="+asterisk.context+";exten="+asterisk.extension+";callerId="+asterisk.callerId+";timeout="+asterisk.timeout+";priority="+asterisk.priority+";variables="+long_details.variables+"?";	
 		}else{
-			image.src = "http://localhost:44444/"+ new Date().getTime() +"?command="+command+";number="+number+";callid="+callid+";domain="+domain+";userid="+id+";type=Asterisk?";	
+			image.src = "http://localhost:33333/"+ new Date().getTime() +"?command="+command+";number="+number+";callid="+callid+";domain="+domain+";userid="+id+";type=Asterisk?";	
 		}
 	return;	
 	}
