@@ -416,7 +416,7 @@ function sendActionToClient(action, manager, asterisk, long_details){
 		var btns = [];
 		showDraggableNoty(client, globalCall.contactedContact , "dialing", globalCall.callNumber, btns);
 		globalCall.callDirection = "Outgoing";
-		globalCall.callStatus = "Dialing";
+		globalCall.callStatus = "dialing";
 		globalCall.callNumber = number;
 	}
 	var image = new Image();
