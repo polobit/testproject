@@ -63,11 +63,13 @@ public class NotificationPrefsUtil
      */
     public static NotificationPrefs getNotificationPrefs(AgileUser agileUser)
     {
+    	System.out.println("domain = " + NamespaceManager.get());
 	Objectify ofy = ObjectifyService.begin();
 	Key<AgileUser> userKey = new Key<AgileUser>(AgileUser.class, agileUser.id);
 
 	NotificationPrefs notifications = ofy.query(NotificationPrefs.class).ancestor(userKey).get();
 
+	System.out.println("notifications = " + notifications);
 	if (notifications == null)
 	    return getDefaultNotifications(agileUser);
 

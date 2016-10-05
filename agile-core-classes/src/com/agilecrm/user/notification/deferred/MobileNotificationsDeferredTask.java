@@ -73,6 +73,7 @@ public class MobileNotificationsDeferredTask implements DeferredTask {
 			if(StringUtils.isBlank(new JSONObject(message).getString("message")))
 				return;
 			
+			System.out.println("domain = " + domain);
 			// Set Namespace
 			NamespaceManager.set(domain);
 			
@@ -84,6 +85,9 @@ public class MobileNotificationsDeferredTask implements DeferredTask {
 				AgileUser agileUser = AgileUser.getCurrentAgileUserFromDomainUser(agileUserPushNotificationId.domainUserId);
 				if(agileUser == null)
 					continue;
+				
+				// Set Namespace
+				NamespaceManager.set(domain);
 				
 		    	NotificationPrefs notificationPrefs =  NotificationPrefsUtil.getNotificationPrefs(agileUser);
 		    	if(notificationPrefs == null)
@@ -111,6 +115,10 @@ public class MobileNotificationsDeferredTask implements DeferredTask {
 			
 			JSONObject messageJSON = new JSONObject(message);
 			String soundType = notificationPrefs.notification_sound;
+
+			System.out.println("control_notifications = " + notificationPrefs.control_notifications);
+			System.out.println("push_mobile_notification = " + notificationPrefs.push_mobile_notification);
+			System.out.println("soundType = " + soundType);
 			
 			if(StringUtils.isBlank(soundType) || "no_sound".equals(soundType))
 				 return;
