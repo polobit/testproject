@@ -5545,7 +5545,7 @@ landingpage-builder.Move,Move,Movimiento
 other.recaptcha-description,Protect your website from spam and abuse while letting real people pass through with ease
 admin-settings-integrations.site-key,Site Key
 campaigns.reply-yes,Yes
-campaigns.reply-sms,Reply SMS
+campaigns.reply-sms,Inbound SMS
 campaigns.reply-sms-desc,Run a Campaign on a contact when a SMS with specified keyword is received on your Twilio Number.
 campaigns.sms_trigger,SMS
 campaigns.reply-no,No
