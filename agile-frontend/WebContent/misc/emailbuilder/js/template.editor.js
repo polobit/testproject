@@ -391,14 +391,8 @@ function handleObjects() {
     });
 }
 
-function addhttp(url) {
-     if (url.substr(0, 7) != 'http://' && url.substr(0, 8) != 'https://') {
-         url = 'http://' + url;
-    }
-       // (url.substr(url.length - 1, 1) != '/') {
-       // url = url + '/';
-       // }
-    return url;
+function addhttp(linkUrl) {
+    return /^[A-Za-z][A-Za-z0-9+-.]*\:[\/\/]?/.test(linkUrl) ? linkUrl : 'http://' + linkUrl;
 }
 
 function handleButtons(obj) {
