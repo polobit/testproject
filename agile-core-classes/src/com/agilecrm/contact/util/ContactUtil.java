@@ -359,13 +359,22 @@ public class ContactUtil
 
 	try
 	{
-	    return dao.get(q.getKey());
+		List<Contact> contacts= dao.fetchAll(q);
+		for(Contact contact : contacts)
+		{
+			for (ContactField emailField : contact.getContactPropertiesList(Contact.EMAIL))
+			{
+				if(email.equalsIgnoreCase(emailField.value))
+					return contact;
+			}
+		}
+	    //return dao.get(q.getKey());
 	}
 	catch (Exception e)
 	{
 	    return null;
 	}
-
+	return null;
     }
     
     public static Contact searchContactByEmailID(String email)
