@@ -4615,7 +4615,15 @@ div.list-tasks.panel-body:hover
 {
   width:150px;
 }
-
+.h-230{
+  height: 230px;
+}
+.w-140{
+  width: 140px;
+}
+.icon-sun-p{
+  padding: 6px 5px;
+}
 /* start of dialler */
 
 	.keyPad:hover{
