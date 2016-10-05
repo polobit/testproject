@@ -31,12 +31,12 @@ var addAgileApi = function(json, api, callback)
 {
 	json = JSON.parse(json);
 	var agileapi = {};
-	agileapi.label = "Agile API";
+	agileapi.label = "";
 	agileapi.type = "input";
 	agileapi.value = api.js_api_key;
 
 	var agiledomain = {};
-	agiledomain.label = "Agile Domain";
+	agiledomain.label = "";
 	agiledomain.type = "input";
 	agiledomain.value = window.location.hostname.split('.')[0];
 
@@ -44,6 +44,13 @@ var addAgileApi = function(json, api, callback)
 	agileredirecturl.label = "Form Action / Redirect URL";
 	agileredirecturl.type = "input";
 	agileredirecturl.value = "#";
+
+	//adding for the inline submit
+	var agileinlinesubmit = {};
+	agileinlinesubmit.label = "Form Action / Custome Message";
+	agileinlinesubmit.type = "input";
+	agileinlinesubmit.value = "";
+
 
 	var agilepreloadfields = {};
 	agilepreloadfields.label = "Preload Fields";
@@ -84,6 +91,7 @@ var addAgileApi = function(json, api, callback)
 		json[b].fields["agileapi"] = agileapi;
 		json[b].fields["agiledomain"] = agiledomain;
 		json[b].fields["agileredirecturl"] = agileredirecturl;
+        json[b].fields["agileinlinesubmit"] = agileinlinesubmit;
 		json[b].fields["agilepreloadfields"] = agilepreloadfields;
 		json[b].fields["agileformidtag"] = agileformidtag;
 		json[b].fields["formemailnotification"] = formemailnotification;

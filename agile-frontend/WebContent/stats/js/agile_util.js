@@ -157,6 +157,7 @@ function agile_formCallback(error, button, url, agile_form, contact_id, form_dat
 {
 	if (!error[0])
 	{
+	  document.getElementById("agile_inline_submit").innerHTML = document.getElementById("_agile_custome_submit").value;
 		if (contact_id)
 		{
 			var id_check;
@@ -169,7 +170,7 @@ function agile_formCallback(error, button, url, agile_form, contact_id, form_dat
 			var params = "contactid=" + contact_id + "&formname=" + encodeURIComponent(form_name) + "&formdata=" + encodeURIComponent(JSON
                     .stringify(form_data)) + "&new=" + new_contact+"&checkId="+id_check;
 			var trigger_url="https://"+ agile_id.getNamespace()+".agilecrm.com/formtrigger";
-			sendRequest(trigger_url,"",params);
+			sendRequest(trigger_url,"",params);				
 		}
 	}
 	else if (error[1])
@@ -199,9 +200,16 @@ function agile_formCallback(error, button, url, agile_form, contact_id, form_dat
 					window.location = url+"?"+"fwd=cd&data="+emailParam;
 			}	
 			else if(url && url == "#"){
+				if(document.getElementById("agile_inline_submit").innerHTML==""){
 				document.getElementById("agile-error-msg").innerHTML = '<span style="color:green">Form submitted successfully</span>';
+				}
+				else
+			  {
+                 document.getElementById("agile_inline_submit").innerHTML = document.getElementById("_agile_custome_submit").value;
+			  }
 				var agile_form = document.forms["agile-form"];
 				agile_form.reset();
+			
 			}
 		
 		} else {
