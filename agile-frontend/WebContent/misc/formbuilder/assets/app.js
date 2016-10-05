@@ -36,6 +36,9 @@ define(
 
 					new TabView({ title : "<b>Source code</b>", content : renderTab });
 
+					if($("b").text()=="Source code"){
+						$("b").parent().parent().css("display","none");
+					}
 					// Make the first tab active!
 					$("#components .tab-pane").first().addClass("active");
 					$("#formtabs li").first().addClass("active");

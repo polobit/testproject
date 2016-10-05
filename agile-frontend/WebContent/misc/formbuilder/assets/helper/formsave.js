@@ -11,7 +11,41 @@ define([
 		var form = {};
 		form.formName = saveform[0].fields.name.value;
 		form.formJson = saveform;
+		/*var themeVal= $( "input:checked" ).val()*/;
+		var themeVal=null;
+		var themeDivArr=$(".themeDiv");
+                    $.each(themeDivArr,function(index,value){
+                      if($(this).find("i").hasClass("fa") &&
+                      $(this).find("i").hasClass("fa-check")){
+                      	themeVal=$(this).find(".themeEle").text();
+                      }
+                      
+                     });
+		
+		 $("#formContent").html($("#render").val());
+		 $("#formContent .form-view").addClass(themeVal);
+		 console.log("Before::::"+$("#formContent .form-view"));
+		 $.ajax({
+			type : 'POST',
+			url :  window.location.protocol + '//' + window.location.host + '/' + 'core/api/themes/getCustomThemeByName',
+			async : false,
+			contentType : 'application/json',
+			data : themeVal,
+			success: function(data){
+				console.log("DATA COMING!!!"+data);
+				if(!(data==""||data==undefined)){
+				var style='<style id="'+data.name+data.id+'" type="text/css">'+data.themeCss+'</style>';
+				$("#formContent").append(style);
+				}
+			},
+			error: function(e){
+				console.log("Theme not found!!"+e);
+			}
+		});
+
+		$("#render").val($("#formContent").html());
 		form.formHtml = $("#render").val();
+		console.log("render val:::"+form.formHtml);
 		if(formNumber){
 			form.id = formNumber;
 		}
