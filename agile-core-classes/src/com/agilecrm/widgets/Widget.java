@@ -248,6 +248,8 @@ public class Widget {
 	 * differentiate widgets based on {@link AgileUser}
 	 */
 	public void save() {
+		System.out.println("Position"+this.name);
+		System.out.println(this.position);
 		// User is not added, Adding the Current user obj.
 		AgileUser agileUser = AgileUser.getCurrentAgileUser();
 		Long agileUserID = agileUser.id;
