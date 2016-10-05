@@ -421,22 +421,29 @@ function isValidContactCustomField(id) {
     	return true;
     }
 }
-jQuery.extend(jQuery.validator.messages, {
-    required: _agile_get_translated_val("validation-msgs",'required'),
-    remote: _agile_get_translated_val("validation-msgs",'remote'),
-    email: _agile_get_translated_val("validation-msgs",'email'),
-    url: _agile_get_translated_val("validation-msgs",'url'),
-    date: _agile_get_translated_val("validation-msgs",'date'),
-    dateISO: _agile_get_translated_val("validation-msgs",'dateISO'),
-    number: _agile_get_translated_val("validation-msgs",'number'),
-    digits: _agile_get_translated_val("validation-msgs",'digits'),
-    creditcard: _agile_get_translated_val("validation-msgs",'creditcard'),
-    equalTo: _agile_get_translated_val("validation-msgs",'equalTo'),
-    accept: _agile_get_translated_val("validation-msgs",'accept'),
-    maxlength: jQuery.validator.format(_agile_get_translated_val("validation-msgs",'maxlength')),
-    minlength: jQuery.validator.format(_agile_get_translated_val("validation-msgs",'minlength')),
-    rangelength: jQuery.validator.format(_agile_get_translated_val("validation-msgs",'rangelength')),
-    range: jQuery.validator.format(_agile_get_translated_val("validation-msgs",'range')),
-    max: jQuery.validator.format(_agile_get_translated_val("validation-msgs",'max')),
-    min: jQuery.validator.format(_agile_get_translated_val("validation-msgs",'min'))
+
+function localizeValidationMessages(){
+	jQuery.extend(jQuery.validator.messages, {
+	    required: _agile_get_translated_val("validation-msgs",'required'),
+	    remote: _agile_get_translated_val("validation-msgs",'remote'),
+	    email: _agile_get_translated_val("validation-msgs",'email'),
+	    url: _agile_get_translated_val("validation-msgs",'url'),
+	    date: _agile_get_translated_val("validation-msgs",'date'),
+	    dateISO: _agile_get_translated_val("validation-msgs",'dateISO'),
+	    number: _agile_get_translated_val("validation-msgs",'number'),
+	    digits: _agile_get_translated_val("validation-msgs",'digits'),
+	    creditcard: _agile_get_translated_val("validation-msgs",'creditcard'),
+	    equalTo: _agile_get_translated_val("validation-msgs",'equalTo'),
+	    accept: _agile_get_translated_val("validation-msgs",'accept'),
+	    maxlength: jQuery.validator.format(_agile_get_translated_val("validation-msgs",'maxlength')),
+	    minlength: jQuery.validator.format(_agile_get_translated_val("validation-msgs",'minlength')),
+	    rangelength: jQuery.validator.format(_agile_get_translated_val("validation-msgs",'rangelength')),
+	    range: jQuery.validator.format(_agile_get_translated_val("validation-msgs",'range')),
+	    max: jQuery.validator.format(_agile_get_translated_val("validation-msgs",'max')),
+	    min: jQuery.validator.format(_agile_get_translated_val("validation-msgs",'min'))
+	});	
+}
+
+$(function(){
+	localizeValidationMessages();	
 });

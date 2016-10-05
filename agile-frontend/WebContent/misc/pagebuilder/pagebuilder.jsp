@@ -2442,9 +2442,10 @@ function showAgileCRMForm(formJson,formHolderId) {
                     if(window.current_agileform!=null){
                         $('#'+iframe_id).contents().find('#agileform_div').empty();
                         var div = $("<div class='agile_crm_form_embed' id='"+window.CURRENT_AGILE_DOMAIN+"_"+formJson.id+"' ></div>");
-                        div.html(formJson.formHtml); 
+                         div.html(formJson.formHtml); 
                         $('#'+iframe_id).contents().find('#agileform_div').append(div);
-                    }            
+                        //$('#'+iframe_id).contents().find('#agileform_div').innerHTML=div;
+                        }            
                     return;
                 } 
                 else {            
@@ -2456,7 +2457,7 @@ function showAgileCRMForm(formJson,formHolderId) {
                         replace_form_class.html(formJson.formHtml);
                     }                    
                     return;
-                } 
+                }         
                 }catch(err){}   
             }
          }

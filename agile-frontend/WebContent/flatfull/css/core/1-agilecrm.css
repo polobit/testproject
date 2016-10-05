@@ -4337,7 +4337,7 @@ border-bottom-right-radius:3px;
 text-align:center;
 border: 1px solid #e5e5e5;
 }
-.extensionPopovers
+.extension-popover li
 {
 
   width:60px !important;
@@ -4350,7 +4350,7 @@ border: 1px solid #e5e5e5;
 
 }
 .grid-sub-nav li#betasuccess {
-    width: 213px;
+    width: 213px !important;
 }
 @-moz-document url-prefix(){
     .grid-sub-nav li{
@@ -4432,7 +4432,15 @@ border: 1px solid #e5e5e5;
 .update-drag-deal + .tooltip{
   width: auto!important;
 }
-
+.call-log-input:focus{
+  border-color: rgba(82,168,236,.8) !important;
+}
+.w-88{
+  width: 88% !important;
+}
+.p-l-15{
+  padding-left: 15px !important;
+}
 @media (max-width: 767px){
   #affiliate-datepicker {
     ext-align: center;
@@ -4772,7 +4780,21 @@ ul#recent-menu-model-list li:nth-child(even)
   background-color: #fff!important;
 }
 
-.chrome-extenstion-disabled{
-  pointer-events:none;
+.disable-chrome-extenstion
+{
   opacity: 0.65;
+  cursor: not-allowed;
 }
+.call-log-input:focus{
+  border-color: rgba(82,168,236,.8) !important;
+}
+.w-83{
+  width: 83% !important;
+}
+.p-l-15{
+  padding-left: 15px !important;
+}
+.p-t-7{
+  padding-top: 7px;
+}
+

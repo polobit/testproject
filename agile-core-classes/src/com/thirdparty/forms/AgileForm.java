@@ -22,7 +22,9 @@ import org.apache.commons.lang.StringUtils;
 import org.json.JSONException;
 
 import com.agilecrm.account.APIKey;
+import com.agilecrm.account.RecaptchaGateway;
 import com.agilecrm.account.util.APIKeyUtil;
+import com.agilecrm.account.util.RecaptchaGatewayUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.ContactField.FieldType;
@@ -69,6 +71,39 @@ public class AgileForm extends HttpServlet
 	    String agileFormName = formJson.getString("_agile_form_name");
 	    if(formJson.has("_agile_form_id"))
 		 agileFormId = formJson.getString("_agile_form_id");
+	    
+	    Form form =null;
+        if(!agileFormId.isEmpty()&& agileFormId.contains("[0-9]+"))
+        form = FormUtil.getFormById(Long.parseLong(agileFormId));
+        else
+        form = FormUtil.getFormByName(agileFormName);       
+        
+        if (form == null)
+        {
+        response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Form with name does not exist");
+        return;
+        }
+        
+        //Check whether Google has verified the user, when captcha is enabled
+        if(form.agileformcaptcha) {
+          RecaptchaGateway recaptcha = RecaptchaGatewayUtil.getRecaptchaGateway();
+          if(recaptcha != null) {
+            String gRecaptchaResponse = request.getParameter("g-recaptcha-response");
+            
+            String secret = recaptcha.api_key;
+            
+            String isPermanentLink = request.getParameter("_agile_is_permanent_link");
+            if("yes".equals(isPermanentLink)) {
+              secret = RecaptchaGatewayUtil.GOOGLE_RECAPTCHA_DATA_SECRET;
+            }
+            
+            if(!RecaptchaGatewayUtil.isGoogleVerifiedUser(secret, gRecaptchaResponse)) {
+              response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Google reCaptcha verification is failed");
+              return;
+            }
+          }
+        }
+	    
 	    com.googlecode.objectify.Key<DomainUser> owner = getDomainUserKeyFromInputKey(apiKey);
 
 	    org.json.JSONObject reqFormJson = getReqFormJson(formJson);
@@ -87,20 +122,8 @@ public class AgileForm extends HttpServlet
 	    
 		 
 	    updateContactWithOldTag(contact, tags);
-
-	    addNotesToContact(contact, owner, formJson);   	   
+	    addNotesToContact(contact, owner, formJson);  
 	    
-	    Form form =null;
-	    if(!agileFormId.isEmpty()&& agileFormId.contains("[0-9]+"))
-		form = FormUtil.getFormById(Long.parseLong(agileFormId));
-	    else
-		form = FormUtil.getFormByName(agileFormName);	    
-	    
-	    if (form == null)
-	    {
-		response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Form with name does not exist");
-		return;
-	    }
 	    //creating the emailNotification for the new contact  
 	    if(form.emailNotification && newContact)
 	    	 FormUtil.sendMailToContactOwner(contact, agileFormName);

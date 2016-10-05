@@ -123,9 +123,10 @@ public class CSVUtil
 	//if (!VersioningUtil.isLocalHost())
 	//{
 	    GcsFileOptions options = new GcsFileOptions.Builder().mimeType("text/csv").contentEncoding("UTF-8")
-		    .acl("public-read").addUserMetadata("domain", "local").build();
 
-	    service = new GCSServiceAgile("local"+ "_failed_contacts_" + GoogleSQL.getFutureDate()
+	    		.acl("public-read").addUserMetadata("domain", NamespaceManager.get()).build();
+
+	    service = new GCSServiceAgile(NamespaceManager.get() + "_failed_contacts_" + GoogleSQL.getFutureDate()
 		    + ".csv", "agile-exports", options);
 	//}
 
@@ -723,6 +724,7 @@ public class CSVUtil
 	boolean limitCrossed = false;
 
 	List<String[]> companies = getCSVDataFromStream(blobStream, "UTF-8");
+	List<FailedContactBean> failedCompanies = new ArrayList<FailedContactBean>();
 
 	if (companies.isEmpty())
 	    return;
@@ -836,6 +838,7 @@ public class CSVUtil
 		    if (isInvalid)
 		    {
 			tagInvalid++;
+			failedCompanies.add(new FailedContactBean(getDummyContact(properties, csvValues) , "Invalid tag added"));
 			break;
 		    }
 		    continue;
@@ -917,6 +920,7 @@ public class CSVUtil
 
 		if (ContactUtil.isCompanyExist(companyName))
 		{
+			failedCompanies.add(new FailedContactBean(getDummyContact(properties, csvValues) , "Company is merged"));
 		    tempContact = ContactUtil.mergeCompanyFields(tempContact);
 		    isMerged = true;
 		}
@@ -924,6 +928,7 @@ public class CSVUtil
 	    else
 	    {
 		++nameMissing;
+		failedCompanies.add(new FailedContactBean(getDummyContact(properties, csvValues) , "Company name is missing"));
 		continue;
 	    }
 
@@ -942,6 +947,7 @@ public class CSVUtil
 	    if (limitCrossed)
 	    {
 		++limitExceeded;
+		failedCompanies.add(new FailedContactBean(getDummyContact(properties, csvValues) , "Error! limit is exceeded"));
 		continue;
 	    }
 
@@ -958,7 +964,11 @@ public class CSVUtil
 	    {
 		System.out.println("exception raised while saving company");
 		e.printStackTrace();
-
+		if (tempContact.id != null)
+		{
+		    failedCompanies.add(new FailedContactBean(getDummyContact(properties, csvValues),
+			    "Error! Exception raise while saving company"));
+		}
 		failedCompany++;
 
 	    }
@@ -1044,8 +1054,9 @@ public class CSVUtil
 	// Sends notification on CSV import completion
 	dBbillingRestriction.send_warning_message();
 
-	SendMail.sendMail(domainUser.email, "CSV Companies Import Status", SendMail.CSV_IMPORT_NOTIFICATION,
-		new Object[] { domainUser, status });
+	/*SendMail.sendMail(domainUser.email, "CSV Companies Import Status", SendMail.CSV_IMPORT_NOTIFICATION,
+		new Object[] { domainUser, status });*/
+	buildFailedCompanies(domainUser, failedCompanies, headings, status);
 
 	if (savedCompany != 0 || mergedCompany != 0)
 	    ActivityUtil.createLogForImport(ActivityType.COMPANY_IMPORT, EntityType.CONTACT, savedCompany,
@@ -1739,6 +1750,66 @@ public class CSVUtil
 	}
 
     }
+    
+    private void buildFailedCompanies(DomainUser domainUser, List<FailedContactBean> failedCompanies, String[] headings,
+    	    Map<Object, Object> status)
+        {
+    	String path = null;
+    	try
+    	{
+    	    System.out.println("Export functionality email" + failedCompanies);
+    	    if (failedCompanies == null || failedCompanies.size() == 0)
+    	    {
+    		System.out.println("no failed conditions");
+    		// Send every partition as separate email
+    		sendFailedCompaniesImportFile(domainUser, null, 0, status);
+    		return;
+    	    }
+
+    	    System.out.println("writing file service");
+
+    	    // Builds Contact CSV
+    	    writeFailedContactsInCSV(getCSVWriterForFailedContacts(), failedCompanies, headings);
+
+    	    System.out.println("wrote files to CSV");
+    	    byte[] data=null;
+    	    
+    	    try{
+
+    	    service.getOutputchannel().close();
+
+    	    System.out.println("closing stream");
+
+    	    
+    	    data = service.getDataFromFile();
+
+    	    System.out.println("byte data");
+
+    	    System.out.println(data.length);
+    	    }
+    	    catch(Exception e)
+    	    {
+    	    	e.printStackTrace();
+    	    }
+    	    System.out.println(domainUser.email);
+    	    
+    	    if(data==null)
+    	    {
+    	    	sendFailedCompaniesImportFile(domainUser, "", failedCompanies.size(), status);
+    	    }
+    	    // Send every partition as separate email
+    	    else
+    	    	sendFailedCompaniesImportFile(domainUser, new String(data, "UTF-8"), failedCompanies.size(), status);
+
+    	    service.deleteFile();
+
+    	}
+    	catch (Exception e)
+    	{
+    	    e.printStackTrace();
+    	}
+
+        }
 
     /**
      * write contacts in csv file
@@ -1849,7 +1920,7 @@ public class CSVUtil
     	stats.put("end_time", dateTimeFormat.format(time));
 	if (totalRecords >= 1)
 	{
-	    String[] strArr = { "text/csv", "FailedContacts.csv", csvData };
+	    String[] strArr = { "text/csv", "Import_Contacts_Remarks.csv", csvData };
 	    SendMail.sendMail(domainUser.email, "CSV Contacts Import Status", SendMail.CSV_IMPORT_NOTIFICATION,
 		    new Object[] { domainUser, status }, SendMail.AGILE_FROM_EMAIL, SendMail.AGILE_FROM_NAME, strArr);
 	}
@@ -1862,6 +1933,29 @@ public class CSVUtil
 		    new Object[] { stats});
 
     }
+  //send failed companies import file  
+    public void sendFailedCompaniesImportFile(DomainUser domainUser, String csvData, int totalRecords,
+    	    Map<Object, Object> status)
+        {
+
+    	/*
+    	 * HashMap<String, String> map = new HashMap<String, String>();
+    	 * map.put("count", totalRecords);
+    	 */
+
+    	if (totalRecords >= 1)
+    	{
+    	    String[] strArr = { "text/csv", "Import_Companies_Remarks.csv", csvData };
+    	    SendMail.sendMail(domainUser.email, "CSV Companies Import Status", SendMail.CSV_IMPORT_NOTIFICATION,
+    		    new Object[] { domainUser, status }, SendMail.AGILE_FROM_EMAIL, SendMail.AGILE_FROM_NAME, strArr);
+    	}
+    	else
+    	{
+    	    SendMail.sendMail(domainUser.email, "CSV Companies Import Status", SendMail.CSV_IMPORT_NOTIFICATION,
+    		    new Object[] { domainUser, status });
+    	}
+
+        }
 
     /**
      * Helper function create dummy contact

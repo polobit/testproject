@@ -11,6 +11,7 @@ var Tickets_Notes = {
 			  highlight : function(element, errorClass) {
 			   $(element).closest('div').addClass('has-error');
 			  },
+
 			 unhighlight : function(element, errorClass) {
 			   $(element).closest('div').removeClass('has-error');
 			  },
@@ -20,6 +21,7 @@ var Tickets_Notes = {
 		});
 
 		if(!$("#send-reply").valid()){
+
 
 			if($(e.target).hasClass('forward'))
 				this.forwardTicket(json, $save_btn, false);

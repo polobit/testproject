@@ -85,6 +85,7 @@
     "saved-successfully" : "{{agile_lng_translate 'landingpage-builder' 'saved-successfully'}}",
     "publish-title" : "{{agile_lng_translate 'landingpage-builder' 'publish-title'}}",
     "create-copy" : "{{agile_lng_translate 'landingpage-builder' 'create-copy'}}",
+    "delete-block" : "{{agile_lng_translate 'landingpage-builder' 'delete-block'}}",
     
     // Custom validations
     "invalid-default": "{{agile_lng_translate 'html5Validations' 'invalid-default'}}",

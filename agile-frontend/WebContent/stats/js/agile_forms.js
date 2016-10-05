@@ -40,7 +40,10 @@ var _agile_synch_form_v4 = function()
 		if (field_type == "hidden")
 			agile_form[i].setAttribute("disabled", "disabled");
 
-		if ((field_type == "radio") && !agile_form[i].checked)
+		if ((field_type == "radio" || field_type == "checkbox") && !agile_form[i].checked)
+			continue;
+         /*recaptcha will identify the user input on the basis of the id*/
+		if(field_id == "g-recaptcha-response")
 			continue;
 
 		if (field_name && field_value)

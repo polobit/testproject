@@ -60,7 +60,7 @@ function agile_validations(){
  						}	
  					}
 	
- 					if(inputNode.value.length >250 && (inputNode.nodeName=="TEXTAREA" || inputNode.type=="text" )){
+ 					if(inputNode.value.length >250 && ((inputNode.nodeName=="TEXTAREA" && inputNode.id!='g-recaptcha-response') || inputNode.type=="text" )){
  						document.getElementById("agile_span"+i).innerHTML = "Please enter upto 250 characters.";
  						count++;
  						isValid = false;
@@ -116,7 +116,7 @@ function agile_validations(){
  						}
 
  					}	
- 					if(inputNode.value.length >250 && (inputNode.nodeName=="TEXTAREA" || inputNode.type=="text" )){
+ 					if(inputNode.value.length >250 && ((inputNode.nodeName=="TEXTAREA" && inputNode.id!='g-recaptcha-response') || inputNode.type=="text" )){
  						var spanTag = document.createElement("span");
 						spanTag.innerHTML = "Please enter upto 250 characters.";
 						spanTag.id = "agile_span"+i;
@@ -141,8 +141,29 @@ function agile_validations(){
 			if(count != null){	// if form having spans 
 					isValid =false;
 				}
-   	}
 
+   	/*
+   	*recaptcha validation when response come from the
+   	* server side as 
+   	*/
+	   	if(inputId == "g-recaptcha-response"){
+	   		var status=validateCaptcha();
+	   		if(status!=true ){
+
+		   		var captchaEl = document.getElementsByClassName("g-recaptcha")[0];
+		        var errorText = document.createElement('p');
+		        errorText.setAttribute("id","captcha-error-msg");
+		        errorText.innerHTML = "<span style='color:red;font-size: small;'>Please verify that you are not a robot.</span>";
+		       // if($("#captcha-error-msg")!=null)
+		        if(document.getElementById('captcha-error-msg')==null)
+		        captchaEl.appendChild(errorText);
+
+		   		isValid = false;
+		   		count++;    //if span created then we will increase by on
+		   		continue;
+	   		}
+	   }
+  }//for loop closed
 	return isValid;
 }
 
@@ -165,4 +186,23 @@ function validatePhonenumber(str)
 	else
 		return false;
 }
+//validate the captcha input at client side on 
+//the basis of response key
+function  validateCaptcha(){
+			var captcha_response_key = grecaptcha.getResponse();
+			if(captcha_response_key.length == 0)
+			{
+			        return false;
+			    }
+			  else
+			    { 
+			    	return true;
 
+			    	//var response = $.ajax({ type : 'GET', url : captchaURL, async : false }).responseText;
+			     }
+ }
+//adding this function for the removing the error msg line when user selects the recaptcha box
+var agileGCaptchaOnSuccess = function(recaptcha){
+var element = document.getElementById("captcha-error-msg");
+element.parentNode.removeChild(element);
+};

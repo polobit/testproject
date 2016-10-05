@@ -102,7 +102,7 @@ public class ChangeDealMilestone extends TaskletAdapter {
 			Map<String, String> fromMilestoneDetails,
 			Map<String, String> toMilestoneDetails, Long ownerId) {
 		// Get list of opportunities
-		List<Opportunity> deals = OpportunityUtil.getOpportunitiesByFilter(
+		List<Opportunity> deals = OpportunityUtil.getOpportunitiesByFilterWithoutDefaultPipeLine(
 				ownerId == null ? null : ownerId.toString(),
 				fromMilestoneDetails.get("milestone"),
 				contactId,

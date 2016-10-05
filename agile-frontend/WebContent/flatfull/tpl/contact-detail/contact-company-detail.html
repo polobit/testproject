@@ -255,11 +255,11 @@
 							{{#property_is_exists "address" properties}}
 									<div class="widget_container" id="{{name}}-container">
 									{{else}}
-										{{#getContactCustomProperties properties}}
+										{{#getCompanyCustomProperties properties}}
 											<div class="widget_container" id="{{name}}-container">
 											{{else}}
 												<div class="widget_container hide" id="{{name}}-container"> 
-										{{/getContactCustomProperties }}
+										{{/getCompanyCustomProperties }}
 							{{/property_is_exists}} 
 					{{/property_is_exists}}
 		{{/property_is_exists}}
@@ -679,11 +679,11 @@
 							{{#property_is_exists "address" properties}}
 									<div class="widget_container" id="{{name}}-container">
 									{{else}}
-										{{#getContactCustomProperties properties}}
+										{{#getCompanyCustomProperties properties}}
 											<div class="widget_container" id="{{name}}-container">
 											{{else}}
 												<div class="widget_container hide" id="{{name}}-container"> 
-										{{/getContactCustomProperties }}
+										{{/getCompanyCustomProperties }}
 							{{/property_is_exists}} 
 					{{/property_is_exists}}
 		{{/property_is_exists}}
@@ -853,6 +853,7 @@
 <div class="row-row" style="display:block">
 	<div class="tab-container">
 			<ul class="nav nav-tabs  bg-light" id="contactDetailsTab">
+			<li class=""><a data-toggle="tab" role="tab" href="#company-timeline" onclick="setTimeout(function(){$(window).resize()}, 1000)">{{agile_lng_translate 'contact-details' 'timeline'}}</a></li>
 				<li class="active"><a data-toggle="tab" href="#company-contacts">{{agile_lng_translate 'contact-details' 'Contacts'}}</a></li>
 				<li class=""><a data-toggle="tab" href="#company-deals">{{agile_lng_translate 'contact-details' 'deals'}}</a></li>
 				{{#isNewVersionDomainUser}} {{else}}
@@ -868,6 +869,39 @@
 			</ul>
 			</div>
 			<div class="tab-content" id="contact-tab-content">
+				<div class="tab-pane" id="company-timeline">
+					<div class="timeline-loading-img overflow-hidden" style="width:35px;max-height:30px;">
+						<!-- <img class="loading-img" src="{{getS3ImagePath 'img/21-0-new.gif'}}"></img> -->
+						<!-- <img class="loading-img-log" src="{{getS3ImagePath 'img/21-0-new.gif'}}"></img>
+						<img class="loading-img-email" src="{{getS3ImagePath 'img/21-0-new.gif'}}"></img>
+						<img class="loading-img" src="{{getS3ImagePath 'img/21-0-new.gif'}}"></img>
+						<img class="loading-img-stats" src="{{getS3ImagePath 'img/21-0-new.gif'}}"></img> -->
+					</div>
+
+					<div class="alert<" id="timeline-slate"
+						style="display: none">
+						<div class="slate-content">
+							<div class="box-left pull-left m-r-md">
+								<img alt="Clipboard" src="{{getS3ImagePath '/img/clipboard.png'}}" />
+							</div>
+							<div class="box-right pull-left">
+								<h4 class="m-t-none">{{getPropertyValue properties "name"}} {{agile_lng_translate 'contacts-view' 'has-no-entities-desc'}}</h4>
+								<div class="text">{{agile_lng_translate 'contacts-view' 'add-entities-desc'}}</div>
+								<a href="#">{{agile_lng_translate 'contacts-view' 'click-here-to-learn-more'}}</a> <br />
+							</div>
+							<div class="clearfix">
+							</div>
+						</div>
+					</div>
+
+					<div class="m-auto">
+						<div id="timeline" style="float:left;">
+							<div id="line-container">
+								<div id="line"></div>
+							</div>
+						</div>
+					</div>
+				</div>
 				<div class="tab-pane" id="company-contacts">...</div>
 				<div class="tab-pane" id="company-deals">...</div>
 				<div class="tab-pane" id="company-cases">...</div>
