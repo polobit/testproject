@@ -105,10 +105,6 @@ public class BillingRestriction
     
     // Life time emails
     public Integer email_credits_count = 0;
-    
-    //Latest invoiceItem id of email credits
-    @NotSaved(IfDefault.class)
-    public String last_credit_id = null;
 
     /**
      * This field is not saved in database, it is used to have a backup emails
@@ -162,8 +158,6 @@ public class BillingRestriction
   	
   	@NotSaved(IfDefault.class)
   	public Boolean isAutoRenewalEnabled = false;
-  	
-  	public Long lastAutoRechargeTime = 0L;
 
     public static ObjectifyGenericDao<BillingRestriction> dao = new ObjectifyGenericDao<BillingRestriction>(
 	    BillingRestriction.class);
@@ -443,12 +437,6 @@ public class BillingRestriction
 	// Updating backup count from that of DB entity
 	this.one_time_emails_backup = one_time_emails_count;
 	this.email_credits_backup = email_credits_count;
-	
-	if(this.lastAutoRechargeTime <= restriction.lastAutoRechargeTime || this.email_credits_count < restriction.email_credits_count){
-		this.lastAutoRechargeTime = restriction.lastAutoRechargeTime;
-		this.last_credit_id = restriction.last_credit_id;
-		this.email_credits_count = restriction.email_credits_count;
-	}
 
     }
 
@@ -494,8 +482,6 @@ public class BillingRestriction
     @PostLoad
     private void postLoad()
     {
-    if(last_credit_id == null)
-    	last_credit_id = NamespaceManager.get()+"_credit";
     
 	if (one_time_emails_count == null)
 	    one_time_emails_count = 0;
@@ -616,19 +602,8 @@ public class BillingRestriction
     	BillingRestriction restriction = BillingRestrictionUtil.getBillingRestrictionFromDB();
     	restriction.email_credits_count -= decrementCount;
     	if(restriction.email_credits_count <= restriction.autoRenewalPoint){	
-			try {
-				RenewalCreditsDeferredTask task = new RenewalCreditsDeferredTask(NamespaceManager.get(), quantity, decrementCount);
-				
-				// Add to queue
-				/*Queue queue = QueueFactory.getQueue(AgileQueues.CREDITS_AUTO_RENEWAL_QUEUE);
-				queue.add(TaskOptions.Builder.withTaskName(restriction.last_credit_id).payload(task));*/
-				
-				task.run();
-			} catch (Exception e) {
-				// TODO: handle exception
-				System.out.println("Task already created with domain: "+restriction.last_credit_id);
-				e.printStackTrace();
-			}
+			RenewalCreditsDeferredTask task = new RenewalCreditsDeferredTask(NamespaceManager.get(), quantity, decrementCount);			
+			task.run();
     	}
 	}
 }

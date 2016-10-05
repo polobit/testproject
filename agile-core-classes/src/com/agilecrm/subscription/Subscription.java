@@ -18,7 +18,6 @@ import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.subscription.limits.PlanLimits;
 import com.agilecrm.subscription.restrictions.db.BillingRestriction;
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
-import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil.ErrorMessages;
 import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
 import com.agilecrm.subscription.stripe.StripeImpl;
 import com.agilecrm.subscription.stripe.StripeUtil;
@@ -35,7 +34,6 @@ import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.condition.IfDefault;
 import com.stripe.model.Customer;
 import com.stripe.model.Invoice;
-import com.stripe.model.InvoiceItem;
 
 /**
  * <code>Subscription</code> class represents subscription details of a domain.
@@ -452,12 +450,9 @@ public class Subscription {
 		purchaseEmailCredits(quantity, 0);
 	}
 	public void purchaseEmailCredits(int quantity, int decrementCount) throws Exception {
-		String invoiceItemId = getAgileBilling().purchaseEmailCredits(billing_data, quantity);
+		getAgileBilling().purchaseEmailCredits(billing_data, quantity);
 		BillingRestriction restriction = BillingRestrictionUtil.getBillingRestrictionFromDB();
 		restriction.incrementEmailCreditsCount((quantity*1000) - decrementCount);
-		System.out.println("last_credit_id:: "+invoiceItemId+" Credits count:: "+restriction.email_credits_count+" at:: "+System.currentTimeMillis());
-		restriction.last_credit_id = invoiceItemId;
-		restriction.lastAutoRechargeTime = System.currentTimeMillis();
 		restriction.save();
 		System.out.println("Credits purchased successfully ::"+System.currentTimeMillis());
 	}
