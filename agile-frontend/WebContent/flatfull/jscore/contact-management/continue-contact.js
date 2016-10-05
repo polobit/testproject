@@ -91,7 +91,8 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
 	{
 		var ele = $(saveBtn).closest('form').find('.single-error').first();
 		var container = $form;
-		$('body').scrollTop(ele.offset().top - container.offset().top + container.scrollTop());
+		if(ele.offset() && container.offset())
+			$('body').scrollTop(ele.offset().top - container.offset().top + container.scrollTop());
 		return;
 	}
 	// Disables save button to prevent multiple click event issues
