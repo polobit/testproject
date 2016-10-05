@@ -203,6 +203,6 @@ function  validateCaptcha(){
  }
 //adding this function for the removing the error msg line when user selects the recaptcha box
 var agileGCaptchaOnSuccess = function(recaptcha){
-var element = document.getElementById("captcha-error-msg");
-element.parentNode.removeChild(element);
+	var element = document.getElementById("captcha-error-msg");
+	if(typeof element != "undefined" && element != null) element.parentNode.removeChild(element);
 };
