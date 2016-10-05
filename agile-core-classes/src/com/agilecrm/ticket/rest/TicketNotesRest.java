@@ -146,6 +146,7 @@ public class TicketNotesRest
 								: false, notes.close_ticket, false);
 
 				// Creating new Notes in TicketNotes table
+
 				ticketNotes = new TicketNotes(ticket.id, ticket.groupID, ticket.assigneeID, CREATED_BY.AGENT,
 						ticket.requester_name, ticket.requester_email, plain_text, html_text, notes.note_type,
 						new ArrayList<TicketDocuments>(), "", false);
