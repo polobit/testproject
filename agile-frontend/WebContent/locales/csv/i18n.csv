@@ -2356,7 +2356,7 @@ campaigns.customer-deleted,Customer deleted,cliente eliminado
 report-add.add-email-reports,Add Email Report,Añadir Informe de e-mail
 plan-and-upgrade.nicolas-woirhaye,Nicolas Woirhaye,Nicolas Woirhaye
 report-view.campaignreports,Campaign Reports,Informes de campaña
-others.no-results-found,No Results Found,No se han encontrado resultados
+others.no-reults-found,No Results Found,No se han encontrado resultados
 portlets.emails-per-month,emails per month,correos electrónicos por mes
 visitors.sync-new-signups,Sync new Signups,Sincronizar los nuevos registros
 emails.unsubscribing,Unsubscribing...,Darse de baja ...
@@ -3040,7 +3040,7 @@ contacts-view.added-tag-to,Added  tag to,Se añadió la etiqueta a
 countries.FO,Faroe Islands,Islas Feore
 countries.GW,Guinea-Bissau,Guinea-Bissau
 modals.document-name,Document Name,nombre del documento
-logcall.edit-call-log,Edit Call Log,Editar el registro de llamadas
+logcall.edit-call-log,Edit call log,Editar el registro de llamadas
 report-view.calls-by-user,Calls by User,Llamadas por usuario
 countries.LI,Liechtenstein,Liechtenstein
 preferences.notifications,Notifications,Notificaciones
@@ -3235,7 +3235,7 @@ tickets.greater-than,Greater Than,Mayor a
 contact-edit.phone-number,Phone number,Número de teléfono
 report-add.updated-date,Updated Date,Fecha actualizada
 tickets.satisfaction,Satisfaction,Satisfacción
-contact-details.add-call-log,Add Call Log,Añadir registro de llamadas
+contact-details.add-call-log,Add Call-log,Añadir registro de llamadas
 modals.company-name,Company Name,nombre de empresa
 tasks.name-of-task,Name of Task,Nombre de la Tarea
 contacts-view.deleted-deal,Deleted Deal,Oferta eliminada
@@ -3518,7 +3518,7 @@ countries.TL,Timor-Leste,Timor-Leste
 portlets.activities,Activities,Actividades
 admin-settings-integrations.account-id,Account ID,ID de la cuenta
 tickets.loading,Loading...,Cargando…
-call-log.log-a-call,Log a Call,Ingrese una llamada
+call-log.log-a-call,Log a call,Ingrese una llamada
 admin-settings-integrations.auth-token,Auth Token,Token de autorización
 widgets.QuickBooks-name,QuickBooks,QuickBooks
 portlets.contact-filters-btn-text,Add Filter,Agregar filtro
@@ -3646,7 +3646,7 @@ admin-settings-custom-fields.DATE,Date Field,campo de fecha
 help.start-chat,Start chat,Comenzar chat
 admin-settings-users.last-login,Last login,Último acceso
 portlets.select-all,Select all,Seleccionar todo
-others.no-results,No Results,No hay resultados
+others.no-reults,No Results,No hay resultados
 portlets.last-month,Last Month,El mes pasado
 admin-settings-deals.new-source,New Source,Nueva fuente
 admin-settings-tags.lead-score,Lead Score,Puntuación de lead
@@ -3876,7 +3876,7 @@ contact-details.campaigns,Campaigns,campañas
 portlets.send-rate,Send Rate,Enviar Tasa
 plan-and-upgrade.plan-with,plan with,plan con
 contact-edit.add-email,Add Email,Añadir Correo
-others.add-new,#NAME?,#NAME?
+others.add-new,+ Add new,+ Add new
 widgets.ClickDesk,ClickDesk,ClickDesk
 contacts-view.condition,Condition,Condición
 modals.edit-note,Edit Note,Editar nota
@@ -4824,7 +4824,7 @@ currency.Euro,Euro,Euro
 deal-view.name,Name,Nombre
 tasks.High,High,Alta
 menu.help,Help,Ayuda
-portlets.+add,#NAME?,#NAME?
+portlets.+add,+ Add new,+ Add new
 portlets.tags,Tags,Etiquetas
 report-add.name,Name,Nombre
 contact-edit.main,Main,Principal
@@ -5542,19 +5542,16 @@ landingpage-builder.saved-successfully,Landing page have been saved successfully
 landingpage-builder.publish-title,You can publish your page with a custom domain.,Puede publicar su página con un dominio personalizado .
 landingpage-builder.source,source,fuente
 landingpage-builder.Move,Move,Movimiento
-other.recaptcha-description,Protect your website from spam and abuse while letting real people pass through with ease,
-admin-settings-integrations.site-key,Site Key,
-campaigns.reply-yes,Yes,
-campaigns.reply-sms,Inbound SMS,
-campaigns.reply-sms-desc,Run a Campaign on a contact when a SMS with specified keyword is received on your Twilio Number.,
-campaigns.sms_trigger,SMS,
-campaigns.reply-no,No,
-campaigns.reply-number,Select a number,
-campaigns.enter-keyword,Enter a keyword,
-campaigns.keyword-tooltip,Enter the Keyword to be looked out for in the Incoming SMS.,
-campaigns.setuptwilio,Please enable your Twilio integration ,
-campaigns.here,here.,
-Help-center.mark-as-public-cannedmessage,Mark as Public,
-portlets.Hours,Hours,
-portlets.Minutes,Minutes,
-portlets.Seconds,Seconds,
+other.recaptcha-description,Protect your website from spam and abuse while letting real people pass through with ease
+admin-settings-integrations.site-key,Site Key
+campaigns.reply-yes,Yes
+campaigns.reply-sms,Reply SMS
+campaigns.reply-sms-desc,Run a Campaign on a contact when a SMS with specified keyword is received on your Twilio Number.
+campaigns.sms_trigger,SMS
+campaigns.reply-no,No
+campaigns.reply-number,Select a number
+campaigns.enter-keyword,Enter a keyword
+campaigns.keyword-tooltip,Enter the Keyword to be looked out for in the Incoming SMS.
+campaigns.setuptwilio,Please enable your Twilio integration 
+campaigns.here,here.
+Help-center.mark-as-public-cannedmessage,Mark as Public
