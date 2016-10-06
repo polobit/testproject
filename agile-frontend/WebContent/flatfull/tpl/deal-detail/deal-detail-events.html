@@ -40,9 +40,9 @@
 	<div class="event-title pull-left text-md text-cap contact-title-dynamic custom-color text-ellipsis">{{title}} <span class="hidden label label-{{task_label_color color}}">{{event_priority color}}</span></div><div class="pull-right"><span class="text-muted"><i class="fa fa-clock-o"></i> <time datetime="{{epochToHumanDate "" created_time}}" class="event-created-time">{{epochToHumanDate "dd mmm yyyy' - 'hh:MM tt" created_time}}</time></span></div>
 <div class="clearfix"></div>
  <div class="m-b-xs">
-	<small class="edit-hover">{{epochToHumanDate "mmm dd yyyy HH:MM" start}}</small>{{#if allDay}} ( All Day )
+	<span class="edit-hover">{{epochToHumanDate "mmm dd yyyy HH:MM" start}}</span>{{#if allDay}} ( All Day )
 		{{else}}
-		<small class="edit-hover"> - {{epochToHumanDate "mmm dd yyyy HH:MM" end}}</small>
+		<span class="edit-hover"> - {{epochToHumanDate "mmm dd yyyy HH:MM" end}}</span>
 		{{/if}}
 </div> 
 <div>	
