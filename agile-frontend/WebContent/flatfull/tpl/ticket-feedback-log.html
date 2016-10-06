@@ -64,11 +64,11 @@
 
 <table class="table table-striped   table-layout-mob-view">
       <thead>
-            <tr>
-                <th style="width: 15%;"></th>
-                <th>Feedback</th>
-                <th>Subject</th>
-                <th>Ticket Note</th>
+            <tr><th width="10%"></th>
+                <th  width="20%" style="max-width:20%;vertical-align:middle">Contact</th>
+                <th width="10%" style="max-width:10%;vertical-align:middle">Feedback</th>
+                <th width="35%" style="vertical-align:middle">Comment</th>
+                <th width="20%" style="max-width:20%;vertical-align:middle"></th>
             </tr>             
         </thead>  
         <tbody id="ticket-feedback-log-model-list"></tbody>
@@ -78,7 +78,9 @@
 </script>
 <script id="ticket-feedback-log-model-template" type="text/html">
 
-<td>
+<td></td>
+
+<td style="vertical-align:middle">
 	
     <div class="avatar thumb-sm">
                 
@@ -90,32 +92,26 @@
                 {{first_name}} {{last_name}}  
               </div>
     </td>
-    <td>
+    <td style="padding-left:30px;vertical-align:middle">
         
-          <input type="image" src={{#get_feedback feedback 1}}{{/get_feedback}} style="width:19px;float:left" class="transperantbutton" id="1_Image" value="1"  onclick="changeFee9back(event,this);"/>
-                              <input type="image" src={{#get_feedback feedback 2}}{{/get_feedback}}  style="width:19px;float:left" class="transperantbutton" id="2_Image" value="2" /> 
-                              <input type="image" src={{#get_feedback feedback 3}}{{/get_feedback}}  style="width:19px;float:left" class="transperantbutton" id="3_Image" value="3" ;/>
-                              <input type="image" src={{#get_feedback feedback 4}}{{/get_feedback}} style="width:19px;float:left" class="transperantbutton" id="4_Image" value="4" />
-                              <input type="image" src= {{#get_feedback feedback 5}}{{/get_feedback}} style="width:19px;float:left" class="transperantbutton" id="5_Image" value="5"/>
-
-        
-
-    </td>          
-     <td>        
-              
-                 <div class="text-ellipsis pull-left" style="max-width: 20em;">
-                 <small class="activities_second_line m-t-none text-sm"> 
-                <a href="#ticket/{{ticket_id}}">ticket#{{ticket_id}}</a>  
-                 </small><br/>
-                 {{ticket_subject}}</div> 
-              </div>
-     </td>         
-     <td id="ticket_note" data-id="{{id}}">        
-              <div>
-              
-               {{{replace_br_with_space_feedback note}}}
-              </div>  
+        {{#if feedback}}
+          <img src = "/img/agile-emoj{{feedback}}-1.png"  style="width:25px;"/>
+        {{/if}}                      
+    </td>
+    <td style="vertical-align:middle">                   
+       {{#if_equals feedback_comment ""}}
+       <div id="recent-reply-notes" class="recent-reply-notes">
+              No comment available. 
             </div>
+       {{else}}
+      
+      <div class="feedback_comment overflow-hidden line-clamp line-clamp-1 no-wrap">
+               {{{replace_newline_with_br_feedback feedback_comment}}}
+            </div>
+       {{/if_equals}}     </td>              
+     <td  style="vertical-align:middle" id="ticket_note" data-id="{{id}}">        
+          <a href="" class="ticket-feedback-notes" data-id="{{id}}">View Note</a>      
+            
       </td>      
               
 	</div>
@@ -142,7 +138,7 @@
 </script>
 
 
-<script id="ticket-feedback-popup-template" type="text/html">
+<!--<script id="ticket-feedback-popup-template" type="text/html">
 <div id="ticket-feedback-comment" class="ticket-feedback-comment animated popup-fadeInUp" style=style="max-height: {{#if_equals feedback_comment ""}}170px;{{else}}270px;{{/if_equals}};">
     <div class="row m-n mar-btm-md">
           <div class="col-md-12 p-b-sm">
@@ -153,9 +149,38 @@
             </div>
        {{else}}
       
-      <div >
+      <div style="width:100px" class="text-e">
                {{{replace_newline_with_br_feedback feedback_comment}}}
             </div>
        {{/if_equals}}
           </div>
+</script>
+  -->
+
+<script id="ticket-note-feedback-modal-template" type="text/html">
+<div class="modal fade infoModal" id="ticket_note_feedback_modal">
+  <div class="modal-dialog">
+      <div class="modal-content">
+      <div class="modal-header">
+          <button class="close" data-dismiss="modal">x</button>
+          <h3>Ticket Details</h3>
+      </div>
+      <div class="modal-body">
+      <div class="word-break-all bold-text" style="margin-bottom:5px;text-weight:bold">
+        Ticket#{{ticket_id}}
+       </div>
+       <div class="word-break-all" style="margin-bottom:5px;">
+        <span class="bold-text">{{agile_lng_translate 'tickets' 'feedback-subject'}}:</span> {{ticket_subject}}
+       </div>
+       <div class="word-break-all" style="margin-bottom:5px;">
+       <span class="bold-text">{{agile_lng_translate 'tickets' 'feedback-created-time'}}:</span> {{epochToHumanDate  "" created_time}}
+       </div>
+
+       <hr>
+       <div class="word-break-all" style="margin-bottom:5px;">
+        {{{note}}}
+       </div>
+      </div> 
+  </div>
+</div>
 </script>

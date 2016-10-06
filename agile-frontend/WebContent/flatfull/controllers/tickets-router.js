@@ -142,58 +142,86 @@
 				if(image.src.includes("star-off.png") )
 					image.src="/flatfull/img/star-on.png";
 			}			
-		$(el)
-			.on('mouseover mouseout', 'tbody#ticket-feedback-log-model-list> tr>td#ticket_note',
-				function(event) {
+		
+			/*Ticket related click event to show the modal when requester or assignee replies*/
+			$(".ticket-feedback-notes").on('click', function(e) 
+			{
+				e.preventDefault();
+			   	var id = $(this).data("id");
+			    
+			    var activity_ticket_feedback_notes = App_Ticket_Module.feedbackollection.collection.get(id).toJSON();;
 
-					clearTimeout(popoverFunction);
+				getTemplate("ticket-note-feedback-modal", activity_ticket_feedback_notes, undefined, function(template_ui){
+
+					if(!template_ui)
+						  return;
+
+					var emailinfo = $(template_ui);
+
+					emailinfo.modal('show');
+				}, null);
+
+			});
+			$(".feedback_comment").on('click', function(e) 
+			{
+				e.preventDefault();
+			 	$(this).removeClass("overflow-hidden line-clamp line-clamp-1");  
+			 	$(this).parent().css( "width", "200px" );	
+
+			});
+
+		// $(el)
+		// 	.on('mouseover mouseout', 'tbody#ticket-feedback-log-model-list> tr>td#ticket_note',
+		// 		function(event) {
+
+		// 			clearTimeout(popoverFunction);
 					
 					    
-					if (event.type == 'mouseover'){
+		// 			if (event.type == 'mouseover'){
 
-						var $that = $(this);
+		// 				var $that = $(this);
 						
-						popoverFunction = setTimeout(function(){
+		// 				popoverFunction = setTimeout(function(){
 
-							var id = $that.data("id");
-							var ticketJSON = App_Ticket_Module.feedbackollection.collection.get(id).toJSON();
+		// 					var id = $that.data("id");
+		// 					var ticketJSON = App_Ticket_Module.feedbackollection.collection.get(id).toJSON();
 
-							getTemplate("ticket-feedback-popup", ticketJSON, undefined, function(template_ui){
+		// 					getTemplate("ticket-feedback-popup", ticketJSON, undefined, function(template_ui){
 
                                
                                
-                            	  if(!template_ui)
-							  		return;
+  //                           	  if(!template_ui)
+		// 					  		return;
 
-								$('body').append($(template_ui));
+		// 						$('body').append($(template_ui));
 								
 								         
-								if(Current_Ticket_ID || Current_Route.indexOf('ticket') == -1)
-									return;
+		// 						if(Current_Ticket_ID || Current_Route.indexOf('ticket') == -1)
+		// 							return;
 
-								//Get closest div with row class to set left alignment. Table row left doesn't work as table have scrolling.
-								var $closest_div = $that.closest('div.row');
-								var top = 0, left = $closest_div.offset().left + 500 + 'px';
+		// 						//Get closest div with row class to set left alignment. Table row left doesn't work as table have scrolling.
+		// 						var $closest_div = $that.closest('div.row');
+		// 						var top = 0, left = $closest_div.offset().left + 500 + 'px';
 
-								if (window.innerHeight - ($that.offset().top - $(window).scrollTop()) >= 250)
-									top = $that.offset().top + 35 + 'px';
-								else
-									top = $that.offset().top - $('#ticket-feedback-comment').height() + 'px';
+		// 						if (window.innerHeight - ($that.offset().top - $(window).scrollTop()) >= 250)
+		// 							top = $that.offset().top + 35 + 'px';
+		// 						else
+		// 							top = $that.offset().top - $('#ticket-feedback-comment').height() + 'px';
                                 
-                                Ticket_Utils.loadTimeAgoPlugin(function(){
-					        	     var x = $("time","#ticket-feedback-comment").timeago();
-					        	 });
+  //                               Ticket_Utils.loadTimeAgoPlugin(function(){
+		// 			        	     var x = $("time","#ticket-feedback-comment").timeago();
+		// 			        	 });
 								 
                                 
-								$('#ticket-feedback-comment').css('top', top).css('left', left).css('display', 'block');
-							});
-						},600);
+		// 						$('#ticket-feedback-comment').css('top', top).css('left', left).css('display', 'block');
+		// 					});
+		// 				},600);
 						
-					}else{
-						$('div.ticket-feedback-comment').remove();
-					}
+		// 			}else{
+		// 				$('div.ticket-feedback-comment').remove();
+		// 			}
 
-			});	
+			//});	
 
 			}
 
