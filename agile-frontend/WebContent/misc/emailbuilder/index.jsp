@@ -299,18 +299,6 @@ AGILE_EB_OPTIONS['templateId'] = "";
                                 </div>
                             </div>
 
-                            
-                            <div class="row">
-                                <div class="col-xs-11" id="image-alt-text">
-                               <!--  <select id="select_alignment" class="form-control">
-                                          <option value="Center">Center</option>
-                                          <option value="Right">Right</option>
-                                           <option value="Left">Left</option>
-                                </select> -->
-                                    <br>
-                                </div>
-                            </div>
-
                             <div class="row">
                                 <div id="image-width-height" style="display:none">
                                 <div class="col-xs-1">
