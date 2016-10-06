@@ -46,7 +46,23 @@
 		<span class="m-l-md">EndTime :<i class="fa fa-clock-o m-r-xs text-muted"></i> <time class="event-created-time text-muted" datetime="{{epochToHumanDate "" end}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" end}}</time></span>
 		{{/if}}
 </div> -->
-<div>	
+
+		</div>
+		<div class="pull-left">
+		<small class="edit-hover text-muted">{{epochToHumanDate "mmm dd yyyy HH:MM" start}}
+		</small>{{#if allDay}}( all day )
+		{{else}} 
+		<small class="edit-hover text-muted"> - {{epochToHumanDate "mmm dd yyyy HH:MM" end}}
+		</small>{{/if}}
+		</div>
+		<div class="pull-right pos-abs pos-r-0 pos-b-0 m-r-xs icons-text-sm">
+		<span class="actions">
+			<a title="{{agile_lng_translate 'contact-details' 'edit'}}"  data="{{id}}" class="c-p text-l-none event-edit-contact-tab p-r-sm"> <i class="fa fa-edit"></i> </a>
+            <a title="{{agile_lng_translate 'contact-details' 'delete'}}" class="c-p text-l-none"><span class="activity-delete icon-trash" id="{{id}}" url="core/api/events/bulk"><i></i></span></a>
+        </span>
+        </div>   
+        <div class="clearfix"></div>     
+	<div class="m-l-xl">	
 		{{#each contacts}}
            	{{#if id}}
 				{{#isDuplicateContactProperty properties "email"}}
@@ -63,26 +79,6 @@
            	{{/if}}
        	{{/each}}
 		</div>
-		</div>
-<div class="clearfix"></div>
-	<div class="m-t-xs">
-		<div class="pull-left">
-		 <div><small class="edit-hover m-l-xl text-muted"> StartTime : 
-			<i class="fa fa-clock-o m-r-xs hide"></i> <time class="event-created-time text-base" datetime="{{epochToHumanDate "" start}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" start}}</time>
-		</small>{{#if allDay}} ( all day ) {{/if}}</div>
-		{{#if allDay}}
-		{{else}}
-		<div><small class="edit-hover m-l-xl text-muted"> EndTime : 
-			<i class="fa fa-clock-o m-r-xs hide"></i> <time class="event-created-time text-base" datetime="{{epochToHumanDate "" end}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" end}}</time>
-		</small></div>{{/if}}
-		</div>
-		<div class="pull-right pos-abs pos-r-0 pos-b-0 m-r-xs icons-text-sm">
-		<span class="actions">
-			<a title="{{agile_lng_translate 'contact-details' 'edit'}}"  data="{{id}}" class="c-p text-l-none event-edit-contact-tab p-r-sm"> <i class="fa fa-edit"></i> </a>
-            <a title="{{agile_lng_translate 'contact-details' 'delete'}}" class="c-p text-l-none"><span class="activity-delete icon-trash" id="{{id}}" url="core/api/events/bulk"><i></i></span></a>
-        </span>
-        </div>        
-	</div>
 	<div class="clearfix"></div>
 <div class="clearfix"></div>
 </div>
