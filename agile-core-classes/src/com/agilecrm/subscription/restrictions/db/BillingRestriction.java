@@ -602,7 +602,7 @@ public class BillingRestriction
     	BillingRestriction restriction = BillingRestrictionUtil.getBillingRestrictionFromDB();
     	restriction.email_credits_count -= decrementCount;
     	if(restriction.email_credits_count <= restriction.autoRenewalPoint){	
-			RenewalCreditsDeferredTask task = new RenewalCreditsDeferredTask(NamespaceManager.get(), quantity, decrementCount);			
+			RenewalCreditsDeferredTask task = new RenewalCreditsDeferredTask(NamespaceManager.get(), 0, decrementCount);			
 			task.run();
     	}
 	}
