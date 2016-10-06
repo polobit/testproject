@@ -249,8 +249,9 @@ if(message.state == "connected"){
 			globalCall.contactedId = currentContact.id;
 		}
 
+		var btns= [];
 		if(widgetype !=  "asterisk"){
-			var btns = [{"id":"", "class":"btn btn-primary noty_"+widgetype+"_answer","title":"Answer"},{"id":"","class":"btn btn-danger noty_"+widgetype+"_ignore","title":'{{agile_lng_translate "contacts-view" "ignore"}}'}];
+			btns = [{"id":"", "class":"btn btn-primary noty_"+widgetype+"_answer","title":"Answer"},{"id":"","class":"btn btn-danger noty_"+widgetype+"_ignore","title":'{{agile_lng_translate "contacts-view" "ignore"}}'}];
 		}
 		
 		var json = {"callId": callId};
@@ -262,7 +263,10 @@ if(message.state == "connected"){
 	
 }else if(message.state == "connecting"){
 	
-	var btns = [{"id":"", "class":"btn btn-default btn-sm noty_"+widgetype+"_cancel","title":'{{agile_lng_translate "contacts-view" "cancel"}}'}];
+	var btns= [];
+		if(widgetype !=  "asterisk"){
+			btns = [{"id":"", "class":"btn btn-default btn-sm noty_"+widgetype+"_cancel","title":'{{agile_lng_translate "contacts-view" "cancel"}}'}];
+		}
 	var json = {"callId": callId};
 	showDraggableNoty(widgetype, globalCall.contactedContact , "outgoing", globalCall.callNumber, btns, json);
 	

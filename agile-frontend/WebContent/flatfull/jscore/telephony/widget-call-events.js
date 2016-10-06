@@ -455,11 +455,11 @@ function sendActionToClient(action, manager, asterisk, long_details){
 			closeCallNoty(true);
 			return;
 		}else if(client == "Asterisk"){
+			closeCallNoty(true);
 			$('#callInfoModal').html(getTemplate("callInfoModal"));
 			$('#callInfoModal').modal('show');
 			$('#callModal_title').html("{{agile_lng_translate 'widgets' 'asterisk'}}");
-			$('#downloadCallJar_widget').setAttr("widget-name","Asterisk");
-			closeCallNoty(true);
+			$('#downloadCallJar_widget').attr("widget-name","Asterisk");
 			return;
 		}
 	};
