@@ -1447,7 +1447,6 @@ var portlet_utility = {
 
 		// Hide previous error messages
 		$('.help-inline').hide();
-		$('.modal').find('form')[0].reset();
 		switch (portlet_name) {
 		case "Filter Based": {
 			$('#filter', elData).find('option').remove();
@@ -2078,6 +2077,7 @@ var portlet_utility = {
 	 * should be open.
 	 */
 	addPortletSettingsModalContent : function(base_model, modal_id) {
+		$('#' + modal_id).find('form')[0].reset();
 		$('#' + modal_id).modal('show');
 		$('.datepicker').hide();
 		$(
