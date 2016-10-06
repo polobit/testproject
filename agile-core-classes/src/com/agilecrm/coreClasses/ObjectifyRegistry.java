@@ -3,6 +3,7 @@ package com.agilecrm.coreClasses;
 import com.agilecrm.affiliate.Affiliate;
 import com.agilecrm.affiliate.AffiliateDetails;
 import com.agilecrm.affiliate.AffiliateDeal;
+import com.agilecrm.customthemes.CustomTheme;
 import com.agilecrm.notification.NotificationTemplate;
 import com.agilecrm.notification.push.PushNotificationMessage;
 import com.agilecrm.workflows.WorkflowBackup;
@@ -25,6 +26,7 @@ public class ObjectifyRegistry {
 		ObjectifyService.register(AffiliateDetails.class);
 		ObjectifyService.register(AffiliateDeal.class);
 		ObjectifyService.register(WorkflowBackup.class);
+		ObjectifyService.register(CustomTheme.class);
 		
 	}
 }

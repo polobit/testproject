@@ -84,7 +84,7 @@ height: 61px;
 .selected{
 background-color:#3E8AD8;	
 }
-select{
+.outerSelectTheme select{
 	height:25px;
 }
 .ulDiv p{
