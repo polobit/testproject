@@ -91,9 +91,17 @@
         </copy>
         <copy todir="${TARGET_DIR}/${ant.project.name}.war/flatfull/jscore">
                <fileset dir="WebContent/flatfull/jscore/backbone" />
+        </copy>
+        <copy todir="${TARGET_DIR}/${ant.project.name}.war/flatfull/jscore">
                <fileset dir="WebContent/flatfull/jscore/form" />
+        </copy>
+        <copy todir="${TARGET_DIR}/${ant.project.name}.war/flatfull/jscore">
                <fileset dir="WebContent/flatfull/jscore/handlebars" />
+        </copy>
+        <copy todir="${TARGET_DIR}/${ant.project.name}.war/flatfull/jscore">
                <fileset dir="WebContent/flatfull/jscore/helpcenter" />
+        </copy>
+        <copy todir="${TARGET_DIR}/${ant.project.name}.war/flatfull/jscore">
                <fileset dir="WebContent/flatfull/jscore/wysihtml" />
         </copy>
         <!--Copy application libraries to target -->
