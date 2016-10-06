@@ -776,7 +776,9 @@ show and hide the input for editing the contact name and saving that
     				show_owner(); 
     				App_Contacts.contactDetailView.model = model;
     				CONTACTS_HARD_RELOAD = true;
-            Backbone.history.navigate("contacts",{trigger: true});
+            if(!hasScope("VIEW_CONTACTS") && !CURRENT_DOMAIN_USER.is_admin)
+              Backbone.history.navigate("contacts",{trigger: true});
+
             if(!hasScope("VIEW_CONTACTS")){
               var storageItems = JSON.parse(localStorage.recentItems);
               var arr = [];
