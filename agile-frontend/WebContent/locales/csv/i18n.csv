@@ -3518,7 +3518,7 @@ countries.TL,Timor-Leste,Timor-Leste
 portlets.activities,Activities,Actividades
 admin-settings-integrations.account-id,Account ID,ID de la cuenta
 tickets.loading,Loading...,Cargando…
-call-log.log-a-call,Log a Call,Ingrese una llamada
+call-log.log-a-call,Call Log,Ingrese una llamada
 admin-settings-integrations.auth-token,Auth Token,Token de autorización
 widgets.QuickBooks-name,QuickBooks,QuickBooks
 portlets.contact-filters-btn-text,Add Filter,Agregar filtro
@@ -5558,3 +5558,4 @@ Help-center.mark-as-public-cannedmessage,Mark as Public,
 portlets.Hours,Hours,
 portlets.Minutes,Minutes,
 portlets.Seconds,Seconds,
+deal-view.detailed-notes,Detailed Notes
