@@ -34,7 +34,19 @@ var ActivitylogRouter = Backbone.Router.extend({
                     var dashboard_name = _agile_get_prefs("dashboard_"+CURRENT_DOMAIN_USER.id);
                     var activities_list;
                     if(!dashboard_name){
-                        dashboard_name = "SalesDashboard";
+                        var role = CURRENT_DOMAIN_USER.role;
+                        switch(role){
+                            case "SALES" :
+                                dashboard_name = "SalesDashboard";
+                                break;
+                            case "MARKETING" :
+                                dashboard_name = "MarketingDashboard";
+                                break;
+                            case "SERVICE" :
+                                dashboard_name = "dashboard";
+                                break;
+                        }
+                        
                     }
                     switch(dashboard_name){
                          case "SalesDashboard" :
