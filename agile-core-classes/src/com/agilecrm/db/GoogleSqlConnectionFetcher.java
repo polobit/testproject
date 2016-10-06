@@ -559,6 +559,8 @@ public class GoogleSqlConnectionFetcher // implements Cloneable
 	// String url =
 	// "jdbc:mysql://173.194.107.65:3306/stats2?user=root&password=sqlrocks123";
 	
+    System.out.println("Getting Sandbox connection from pool.....");
+    
 	if (sandbox_cpds != null)
 	    return sandbox_cpds.getConnection();
 	
@@ -586,6 +588,8 @@ public class GoogleSqlConnectionFetcher // implements Cloneable
 	sandbox_cpds.setAcquireIncrement(2);
 	sandbox_cpds.setMaxPoolSize(10);
 	sandbox_cpds.setMaxIdleTime(1200000); // In milli-seconds
+	sandbox_cpds.setTestConnectionOnCheckin(true);
+	sandbox_cpds.setTestConnectionOnCheckout(true);
 	System.out.println(sandbox_cpds.getMaxIdleTime());
 	System.out.println(sandbox_cpds.getMaxStatementsPerConnection());
 	System.out.println(sandbox_cpds.getMaxIdleTime());
