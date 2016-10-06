@@ -132,7 +132,7 @@ public class NotificationPrefsUtil
 	JSONObject pushMessageJSON = optimizeObjectForMobileNotification(json, domain, type);
 	System.out.println("pushMessageJSON= " + pushMessageJSON);
 	
-	MobileNotificationsDeferredTask mobileTask = new MobileNotificationsDeferredTask("GCM", pushMessageJSON.toString(), domain);
+	MobileNotificationsDeferredTask mobileTask = new MobileNotificationsDeferredTask("GCM", pushMessageJSON.toString(), domain, json.toString());
 	AgilePushQueuesUtil.addTask("mobile-notification-queue", mobileTask);
 
 	//Queue queue = QueueFactory.getQueue("notification-queue");
@@ -312,8 +312,11 @@ public class NotificationPrefsUtil
 	    json.put("type", contactJSON.getString("type"));
 	    json.put("properties", getContactProperties(contactJSON));
 
-	    if (contactJSON.has("owner") && !contactJSON.isNull("owner"))
-			json.put("owner_name", contactJSON.getJSONObject("owner").getString("name"));
+	    if (contactJSON.has("owner") && !contactJSON.isNull("owner")){
+	    	json.put("owner_name", contactJSON.getJSONObject("owner").getString("name"));
+	    	json.put("owner_id", contactJSON.getJSONObject("owner").getString("id"));
+	    }
+			
 
 	    return json;
 	}
@@ -612,7 +615,7 @@ public class NotificationPrefsUtil
     	return "";
     }
     
-    public static boolean isNotificationEnabledToSend(NotificationPrefs prefs, JSONObject messageJSON) {
+    public static boolean isNotificationEnabledToSend(NotificationPrefs prefs, JSONObject messageJSON, String raw_message, AgileUser agileUser) {
     	System.out.println("isNotificationEnabledToSend = " + messageJSON);
     	
     	if(messageJSON == null || !messageJSON.has("type"))
@@ -648,6 +651,14 @@ public class NotificationPrefsUtil
     	if(type.equalsIgnoreCase("CAMPAIGN_NOTIFY"))
   		  	return true;
     	
+    	if(type.equalsIgnoreCase("CLICKED_LINK")){
+    		return conditionalCheckWithOptions(prefs.link_clicked, raw_message, agileUser);
+    	}
+    	
+    	if(type.equalsIgnoreCase("OPENED_EMAIL")){
+    		return conditionalCheckWithOptions(prefs.email_opened, raw_message, agileUser);
+    	}
+    	
     	return true;
     }
     
@@ -669,4 +680,31 @@ public class NotificationPrefsUtil
     	
     	return title.replace("_", " ");
     }
+    
+    private static boolean conditionalCheckWithOptions(String condition, String raw_message, AgileUser agileUser){
+    	if(agileUser == null || raw_message == null)
+    		  return true;
+    	
+    	if(condition.equals("ANY_CONTACT"))
+			return true;
+    	
+    	try {
+    		JSONObject rawJSON = new JSONObject(raw_message);
+			Long ownerId = rawJSON.getLong("owner_id");
+			
+			if(condition.equals("CONTACT_ASSIGNED"))
+				  return agileUser.domain_user_id.equals(ownerId);
+			
+			if(condition.equals("CONTACT_ASSIGNED_AND_STARRED")){
+				int star_value = Integer.parseInt(rawJSON.getString("star_value"));
+				
+				return (agileUser.domain_user_id.equals(ownerId) && star_value > 0);
+			}	
+		} catch (Exception e) {
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+		}
+    	return true;
+    }
+    
+    
 }

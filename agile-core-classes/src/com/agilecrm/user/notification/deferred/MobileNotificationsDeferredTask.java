@@ -46,6 +46,11 @@ public class MobileNotificationsDeferredTask implements DeferredTask {
 	 * Domain Name
 	 */
 	String domain = null;
+	
+	/**
+	 * Raw message
+	 */
+	String raw_message = null;
 
 	/**
 	 * Constructs a new {@link MobileNotificationsDeferredTask}.
@@ -56,10 +61,11 @@ public class MobileNotificationsDeferredTask implements DeferredTask {
 	 *            Object like Contact, Deals etc.
 	 * 
 	 */
-	public MobileNotificationsDeferredTask(String channel_type, String message, String domain) {
+	public MobileNotificationsDeferredTask(String channel_type, String message, String domain, String raw_message) {
 		this.channel_type = channel_type;
 		this.message = message;
 		this.domain = domain;
+		this.raw_message = raw_message;
 	}
 
 	/*
@@ -96,7 +102,7 @@ public class MobileNotificationsDeferredTask implements DeferredTask {
 		    	// Add Sound Name
 		    	addSound(notificationPrefs);
 		    	
-				if(!NotificationPrefsUtil.isNotificationEnabledToSend(notificationPrefs, new JSONObject(message)))
+				if(!NotificationPrefsUtil.isNotificationEnabledToSend(notificationPrefs, new JSONObject(message), raw_message, agileUser))
 					return;
 				
 				System.out.println("Success");
