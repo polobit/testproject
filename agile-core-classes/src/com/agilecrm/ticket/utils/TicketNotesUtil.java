@@ -66,7 +66,15 @@ public class TicketNotesUtil
 	 */
 	public static TicketNotes getTicketNotesByID(Long notesID) throws EntityNotFoundException
 	{
-		return TicketNotes.ticketNotesDao.get(notesID);
+		try{
+			
+			return TicketNotes.ticketNotesDao.get(notesID);
+		}
+		
+		catch(Exception e){
+			
+			return null;
+		}
 	}
 
 	/**
@@ -77,7 +85,7 @@ public class TicketNotesUtil
 	 * @throws EntityNotFoundException
 	 */
 	public static TicketNotesPartial getTicketNotesPartialByID(Long notesID) throws EntityNotFoundException
-	{
+	{			
 		return TicketNotes.partialDAO.get(notesID);
 	}
 

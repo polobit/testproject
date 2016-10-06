@@ -648,6 +648,31 @@ Handlebars.registerHelper('get_ticket_translated_text', function(module, key, op
 	return get_ticket_translated_text(module, key);
 	
 });
+
+Handlebars.registerHelper('return_feedback_title', function(feedback,options) {
+
+	var feedback_title= ""
+	
+	switch (feedback[0]) {
+	    case "1":
+	        feedback_title = "{{agile_lng_translate 'tickets' 'unacceptable'}}";
+	        break;
+	    case "2":
+	        feedback_title = "{{agile_lng_translate 'tickets' 'can_improve'}}";
+	        break;
+	    case "3":
+	        feedback_title = "{{agile_lng_translate 'tickets' 'acceptable'}}";
+	        break;
+	    case "4":
+	        feedback_title = "{{agile_lng_translate 'tickets' 'meets_expectations'}}";
+	        break;
+	    case "5":
+	        feedback_title = "{{agile_lng_translate 'tickets' 'exceptional'}}";
+	}
+
+	return feedback_title;        
+	
+});
 /** End of ticketing handlebars* */
 
 function get_ticket_translated_text(module, key){

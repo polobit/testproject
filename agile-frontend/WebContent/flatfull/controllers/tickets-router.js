@@ -123,6 +123,7 @@
 	},	 	
 
 	renderfeedbacktemplate :function(start_time,end_time,feedback,group,assignee){
+		
 		//Rendering root template	
 		App_Ticket_Module.feedbackollection = new Base_Collection_View({
 			url : '/core/api/tickets/notes/feedback/?start_time=' + start_time + '&end_time=' 
@@ -162,11 +163,23 @@
 				}, null);
 
 			});
-			$(".feedback_comment").on('click', function(e) 
+			$(".ticket-feedback-comment").on('click', function(e) 
 			{
+				
 				e.preventDefault();
-			 	$(this).removeClass("overflow-hidden line-clamp line-clamp-1");  
-			 	$(this).parent().css( "width", "200px" );	
+			   	var id = $(this).data("id");
+			    
+			    var activity_ticket_feedback_notes = App_Ticket_Module.feedbackollection.collection.get(id).toJSON();;
+
+				getTemplate("ticket-feedback-comment-modal", activity_ticket_feedback_notes, undefined, function(template_ui){
+
+					if(!template_ui)
+						  return;
+
+					var emailinfo = $(template_ui);
+
+					emailinfo.modal('show');
+				}, null);	
 
 			});
 
@@ -234,6 +247,7 @@
 	},
 
 	renderfeedbackmodel: function(el){
+		
 		var range = $('#range',el).html().split("-");
 		var start_time = getUTCMidNightEpochFromDate(new Date(range[0]));
 	    var d = new Date();

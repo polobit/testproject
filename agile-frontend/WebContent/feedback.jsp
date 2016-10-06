@@ -1,3 +1,4 @@
+<%@page import="com.agilecrm.ticket.entitys.TicketNotes"%>
 <%@page import="com.agilecrm.util.VersioningUtil"%>
 <%@page import="com.agilecrm.user.util.DomainUserUtil"%>
 <%@page import="org.apache.commons.lang.StringUtils"%>
@@ -20,7 +21,12 @@ System.out.println(feedback+"feedback");
 String[] split = feedback.split("-");
 
 Long note_id = Base62.fromOtherBaseToDecimal(62,split[1]);
-
+ 
+TicketNotes tn = TicketNotesUtil.getTicketNotesByID(note_id);
+Boolean note_exists = Boolean.TRUE;
+if(tn == null){
+ note_exists = Boolean.FALSE;
+}
 String feedback_rating = split[0];
 
 // Users can show their company logo on login page. 
@@ -215,6 +221,8 @@ var id = <%=note_id%>
 </head>
    <body>
    	<div id="successmessage">
+
+   	<%if(note_exists){%>
       <div class="agile-crm-logo p-t-80 p-t-40" style="margin: 0px auto;text-align: center;width: 125px;border-radius: 3px">
       	<%if(logo_url != null){%>
         <img class="logo" alt="AgileCRM" src=<%=logo_url%>>
@@ -227,20 +235,22 @@ var id = <%=note_id%>
             <div class="rating">
 				
 				<span class="m-r-5"  data-toggle="tooltip" title="Unacceptable" data-placement="bottom">
-					<img value="1" id="1" style="width:40px" src="/img/agile-emoj1.png" onmouseover="changeFeedback(event,this)"/></span>
+					<img value="1" id="1" style="width:40px" src="/img/agile-emoj1.png" onmouseover="changefeedbackimg(event,this)" onmouseout="changefeedbackimg(event,this)" onclick ="changeFeedback(event,this)"/></span>
 				
 				<span class="m-r-5"  data-toggle="tooltip" title="Can Improve" data-placement="bottom">
-					<img id="2" value="2" style="width:40px" src="/img/agile-emoj2.png" onmouseover="changeFeedback(event,this)"/></span>
+					<img id="2" value="2" style="width:40px" src="/img/agile-emoj2.png" onmouseover="changefeedbackimg(event,this)" onmouseout="changefeedbackimg(event,this)"
+          onclick ="changeFeedback(event,this)"/></span>
 				
 				<span class="m-r-5"  data-toggle="tooltip" title="Acceptable" data-placement="bottom">
-					<img  id="3" value="3" style="width:40px" src="/img/agile-emoj3.png" onmouseover="changeFeedback(event,this)"/></span>
+					<img  id="3" value="3" style="width:40px" src="/img/agile-emoj3.png" 
+          onmouseover="changefeedbackimg(event,this)" onmouseout="changefeedbackimg(event,this)" onclick ="changeFeedback(event,this)"/></span>
 				
 				<span class="m-r-5" data-toggle="tooltip" title="Meets Expectations" data-placement="bottom">
-					<img id="4" value="4" style="width:40px" src="/img/agile-emoj4.png" onmouseover="changeFeedback(event,this)"/></span>
+					<img id="4" value="4" style="width:40px" src="/img/agile-emoj4.png" onmouseover="changefeedbackimg(event,this)" onmouseout="changefeedbackimg(event,this)" onclick ="changeFeedback(event,this)"/></span>
 				
 				<span data-toggle="tooltip" title="Exceptional" data-placement="bottom">
 
-					<img style="width:40px" value="5" id="5" src="/img/agile-emoj5.png" onmouseover="changeFeedback(event,this)"/></span>
+					<img style="width:40px" value="5" id="5" src="/img/agile-emoj5.png" onmouseover="changefeedbackimg(event,this)" onmouseout="changefeedbackimg(event,this)" onclick ="changeFeedback(event,this)"/></span>
 			</div>
           </div>
           <div style="padding-bottom: 5px" class="f-w-600">Comments:</div>
@@ -271,25 +281,55 @@ document.getElementById("addfeedback-message").innerHTML = "<div style=font-size
 
 }
 
+function changefeedbackimg(e,objButton){
+    
+    e.preventDefault();
+    
+    var i = objButton.id;
+    
+      var image = document.getElementById(i);
+
+      if(image.className == "selected")
+        return;
+
+      if(image.src.includes("/img/agile-emoj"+i+"-1.png")){ 
+        
+        image.src = "/img/agile-emoj"+i+".png";
+    
+    }   
+    else{
+
+        image.src = "/img/agile-emoj"+i+"-1.png"
+    }
+    
+}
+      
+              
+
 function changeFeedback(e,objButton){
-	e.preventDefault();
-	var i = objButton.id;
-	
-	feedback_rating = ""+objButton.id;
+ 
+  	e.preventDefault();
+ 
+  	var i = objButton.id; 	
+  	feedback_rating = ""+objButton.id;
 
-	var j;
-	for(j=1;j<=5;j++){
-	image = document.getElementById(j);
-		if(j == i){	
-			image.src = "/img/agile-emoj"+i+"-1.png";
-	
-	}		
-	else{
+  	var j;
+  	for(j=1;j<=5;j++){
+  	
+      image = document.getElementById(j);
+  		
+    if(j == i){	
+      image.src = "/img/agile-emoj"+i+"-1.png";
 
+      image.className = "selected";
+  	}		
+  	else{
 			image.src = "/img/agile-emoj"+j+".png"
-	}
+  	   
+      image.className = ""; 
+    }
 		
-	}
+}
 			
 							
 }
@@ -325,5 +365,9 @@ function changeFeedback(e,objButton){
 			
 		    
 </script>
+<%}else{%>
+
+ <div style=font-size:20px;padding-left:40px;padding-top:40px;text-align:center;>Sorry, cannot submit your feedback as the URL expired!</div></div>
+<% }%>
 </body>
 </html>
