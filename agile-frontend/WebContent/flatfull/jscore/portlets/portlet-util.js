@@ -1447,7 +1447,7 @@ var portlet_utility = {
 
 		// Hide previous error messages
 		$('.help-inline').hide();
-
+		$('.modal').find('form')[0].reset();
 		switch (portlet_name) {
 		case "Filter Based": {
 			$('#filter', elData).find('option').remove();
