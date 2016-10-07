@@ -136,7 +136,7 @@ var portlet_graph_utility = {
 								if (value > 0)
 									emptyFlag = false;
 							});
-							if (campaignStatusList.length == 0 || emptyFlag) {
+							if (campaignStatusList.length == 0) {
 								$('#' + selector)
 										.html(
 												'<div class="portlet-error-message">{{agile_lng_translate "campaigns" "no-subscribers-found"}}</div>');
@@ -146,6 +146,9 @@ var portlet_graph_utility = {
 									data.push([ value,
 											campaignValuesList[index] ]);
 								});
+								//pass dummy data for creating graph
+								if(emptyFlag)
+									data[0][1]=1;
 								$('#' + selector)
 										.highcharts(
 												{
@@ -1399,12 +1402,12 @@ var portlet_graph_utility = {
 	emailsOpenedPieChart : function(selector, data, emailsSentCount,
 			emailsOpenedCount) {
 setupCharts(function(){
-							if (emailsSentCount == 0 && emailsOpenedCount == 0) {
+							/*if (emailsSentCount == 0 && emailsOpenedCount == 0) {
 								$('#' + selector)
 										.html(
 												'<div class="portlet-error-message">{{agile_lng_translate "portlets" "no-email-activity"}}</div>');
 								return;
-							}
+							}*/
 
 							$('#' + selector)
 									.highcharts(
