@@ -248,6 +248,8 @@ public class Widget {
 	 * differentiate widgets based on {@link AgileUser}
 	 */
 	public void save() {
+		System.out.println("Position"+this.name);
+		System.out.println(this.position);
 		// User is not added, Adding the Current user obj.
 		AgileUser agileUser = AgileUser.getCurrentAgileUser();
 		Long agileUserID = agileUser.id;
@@ -255,10 +257,10 @@ public class Widget {
 			user = new Key<AgileUser>(AgileUser.class, agileUserID);
 		}
 
-		if(this.widget_type.equals(WidgetType.INTEGRATIONS)){
+		if(this.widget_type != null && this.widget_type.equals(WidgetType.INTEGRATIONS)){
 			dao.put(this);
 		}else{
-			if (this.id == null && this.widget_type == WidgetType.CUSTOM) {
+			if (this.id == null && this.widget_type != null && this.widget_type.equals(WidgetType.CUSTOM)) {
 				this.name = this.display_name.replaceAll("[^a-zA-Z0-9]+", "");
 			}
 			

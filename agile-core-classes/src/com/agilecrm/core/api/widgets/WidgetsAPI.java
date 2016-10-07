@@ -235,7 +235,6 @@ public class WidgetsAPI {
 	@Path("positions")
 	@POST
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public void savePositions(List<Widget> widgets) {
 		if (widgets != null) {
 			// UI sends only ID and Position
