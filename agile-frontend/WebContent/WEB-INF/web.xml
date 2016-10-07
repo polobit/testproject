@@ -508,6 +508,16 @@
     </servlet-mapping>
     
     <servlet>
+        <servlet-name>AffiliateDetailsEditServlet</servlet-name>
+        <servlet-class>com.agilecrm.affiliate.AffiliateDetailsEditServlet</servlet-class>
+    </servlet>   
+ 
+    <servlet-mapping>
+        <servlet-name>AffiliateDetailsEditServlet</servlet-name>
+        <url-pattern>/editAffiliateDetails</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
         <servlet-name>TwilioIOTwiml</servlet-name>
         <servlet-class>com.thirdparty.twilio.TwilioIOTwiml</servlet-class>
     </servlet> 

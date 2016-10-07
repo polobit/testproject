@@ -736,6 +736,9 @@ function initializeTriggerListEventListners(id,trigger_type)
 		if (type !== 'INBOUND_CALL' || type !== 'OUTBOUND_CALL'){
 			$('form#addTriggerForm').find('div#CALL').closest('div.control-group').css('display', 'none');
 		}
+
+		if(type !== 'REPLY_SMS')
+			$('form#addTriggerForm').find('div#SMS').closest('div.control-group').css('display', 'none');
 			
 		if(type != 'FORM_SUBMIT'){
 			$('form#addTriggerForm').find('select#trigger-form-event').closest('div.control-group').css('display', 'none');
@@ -812,6 +815,13 @@ function initializeTriggerListEventListners(id,trigger_type)
 
 		if(type == 'UNSUBSCRIBED')
 			show_email_tracking_campaigns();
+		if(type == 'REPLY_SMS')
+		{
+			populate_sms_trigger_options($('form#addTriggerForm'));
+			$('form#addTriggerForm').find('#trigger-custom-keyword').closest('div.control-group').css('display', '');
+
+		}
+		
 
 	});
 }
