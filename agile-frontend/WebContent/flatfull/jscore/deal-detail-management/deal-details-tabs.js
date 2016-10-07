@@ -716,13 +716,16 @@ var Deal_Modal_Event_View = Base_Model_View.extend({
 		{
 			var id = $(targetEl).attr('data');
 			var that = targetEl;
-			complete_task(id, dealTasksView.collection, undefined, function(data)
+			showAlertModal("complete_task", "confirm", function() 
 			{
-				$(that).parent().siblings(".task-subject").css("text-decoration", "line-through");
-				console.log($(that).parents('.activity-text-block').css("background-color", "#FFFAFA"));
-				$(that).parent().replaceWith('<span style="margin-right:9px;"><i class="fa fa-check"></i></span>');
-				dealTasksView.collection.add(data, { silent : true });
-			});
+				complete_task(id, dealTasksView.collection, undefined, function(data)
+				{
+					$(that).parent().siblings(".task-subject").css("text-decoration", "line-through");
+					console.log($(that).parents('.activity-text-block').css("background-color", "#FFFAFA"));
+					$(that).parent().replaceWith('<span style="margin-right:9px;"><i class="fa fa-check"></i></span>');
+					dealTasksView.collection.add(data, { silent : true });
+				});
+			 });
 		}
 	},
 

@@ -91,6 +91,7 @@ var contact_details_documentandtasks_actions = {
 			{
 				var id = $(targetEl).attr('data');
 				var that = targetEl;
+				showAlertModal("complete_task", "confirm", function() {
 				complete_task(id, tasksView.collection, undefined, function(data)
 				{
 					$(that).parent().siblings(".task-subject").css("text-decoration", "line-through");
@@ -98,6 +99,7 @@ var contact_details_documentandtasks_actions = {
 					$(that).parent().replaceWith('<span style="margin-right:9px;"><i class="fa fa-check"></i></span>');
 					tasksView.collection.add(data, { silent : true });
 				});
+			});
 			}
         },
 
