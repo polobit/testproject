@@ -122,13 +122,19 @@ function checkContactUpdated(){
 		});
 }
 
+function validateCompanyName(value){
+  var custvals = /^\s*[_a-zA-Z0-9\s]+\s*$/;
+    return custvals.test(value);
+}
+
    function inlineCompanyNameChange(el){
     
     console.log("inlineCompanyNameChange");
     var companyInlineName = $("#company-inline-input").val();
       companyname = companyInlineName.trim();
+          var isVaildCompanyName = validateCompanyName(companyname);
     console.log(companyname);
-    if(!companyname)
+    if(!companyname || !isVaildCompanyName)
     {
       $("#company-inline-input").addClass("error-inputfield");
       return;
