@@ -931,6 +931,7 @@ var portlet_graph_data_utility = {
 							emailsOpenedCount = data["emailsOpenedCount"];
 
 							var series = [];
+							//pass dummy data to create graph
 							if(emailsSentCount==0 && emailsOpenedCount==0)
 								series.push([ "Emails Sent",1]);
 							else

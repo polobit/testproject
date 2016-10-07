@@ -146,6 +146,7 @@ var portlet_graph_utility = {
 									data.push([ value,
 											campaignValuesList[index] ]);
 								});
+								//pass dummy data for creating graph
 								if(emptyFlag)
 									data[0][1]=1;
 								$('#' + selector)
