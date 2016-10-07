@@ -29,6 +29,7 @@ import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.user.util.UserPrefsUtil;
 import com.agilecrm.util.IcalendarUtil;
 import com.agilecrm.util.VersioningUtil;
+import com.amazonaws.services.route53domains.model.ContactType;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Query;
 
@@ -682,7 +683,8 @@ public class EventUtil
     
     public static void sendEmailForEventContacts(List<String> contactIds, Event event){
     	List<Contact> contactsList =  ContactUtil.getContactsByIds(contactIds);
-    	DomainUser user = DomainUserUtil.getCurrentDomainUser();
+    	long domainUserID = Long.parseLong(event.owner_id);
+    	DomainUser user = DomainUserUtil.getDomainUser(domainUserID);
     	String domainUserEmail = user.email;
     	net.fortuna.ical4j.model.Calendar agileUseiCal = IcalendarUtil.getICalFromEvent(event, user, user.email, user.name);
     	String[] attachments = { "text/calendar", "mycalendar.ics", agileUseiCal.toString() };
@@ -705,21 +707,50 @@ public class EventUtil
    					}
    					usermail.append("<p><a href=" + cancel_link+ ">Cancel this appointment</a></p>");
    					usermail.append("<p>This event has been scheduled using <a href=" + link +">Agile CRM</a></p>");
-   							
+   			
+   			StringBuilder contactList = new StringBuilder();
+   			StringBuilder companiesList = new StringBuilder();
+   					
    	    	if(contactsList != null){
    	    		for (Contact contact : contactsList) {
    	    			ContactField emailField = contact.getContactFieldByName(Contact.EMAIL);
-   	    			String contactEmail = emailField.value;
-   	    			if(contactEmail != null){    				
-   	    				EmailGatewayUtil.sendEmail(null, user.email, user.name, contactEmail, null, null, "Appointment Scheduled",
-   	    						null, usermail.toString(), null, null, null, null, attachments);
+   	    			if(emailField != null){
+	   	    			String contactEmail = emailField.value;
+	   	    			if(contactEmail != null){ 
+	   	    				if(contact.type.equals(ContactType.PERSON)){
+	   	    					String contactName = "";
+	   	    					if(contact.first_name != null){
+	   	    						contactName += contact.first_name;
+	   	    					}
+	   	    					if(contact.last_name != null){
+	   	    						contactName += contact.last_name;
+	   	    					}
+	   	    					contactList.append("<a href="+domain_url+"#contact/"+contact.id+">"+ contactName+"</a>");
+	   	    				}else if(contact.type.equals(ContactType.COMPANY)){
+	   	    					companiesList.append("<a href="+domain_url+"#company/"+contact.id+">"+ contact.name +"</a>");
+	   	    				}
+	   	    				
+	   	    				EmailGatewayUtil.sendEmail(null, user.email, user.name, contactEmail, null, null, "Appointment Scheduled",
+	   	    						null, usermail.toString(), null, null, null, null, attachments);
+	   	    			}
    	    			}
    	    		}
    	    	}
    	    	
-   	    	if(domainUserEmail != null){			
+   	    	if(domainUserEmail != null){	
+   	    		StringBuilder domainMailTempalte = new StringBuilder("<p>Event has been scheduled with ");
+   	    		domainMailTempalte.append(contactList.toString());
+   	    		domainMailTempalte.append(companiesList.toString());
+   	    		domainMailTempalte.append("</p>");
+   	    		domainMailTempalte.append("<span>Title : '" + event.title +"</span><br/>");
+   	    		domainMailTempalte.append("<span>Duration : '" + minsInStr +"</span><br/>");
+   	    		if(event.description != null && event.description.length() > 0){
+   	    			domainMailTempalte.append("<span>Description: "+ event.description + "</span><br/>");
+   	    		}
+   	    		domainMailTempalte.append("<p><a href=https://" + user.domain + ".agilecrm.com/#calendar>View this new event in Agile Calendar</a></p>");
+   	    		
    				EmailGatewayUtil.sendEmail(null, user.email, user.name, domainUserEmail, null, null, "Appointment Scheduled",
-   						null, usermail.toString(), null, null, null, null, attachments);		
+   						null, domainMailTempalte.toString(), null, null, null, null, attachments);		
    	    	} 
    		}
     	   	
