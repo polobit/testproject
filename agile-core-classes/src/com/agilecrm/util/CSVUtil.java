@@ -935,7 +935,6 @@ public class CSVUtil
 		continue;
 	    }
 	    if(!invalidName){
-	    	++failedCompany;
 	    	continue ;
 	    }
 
