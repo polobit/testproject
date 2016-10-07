@@ -4712,6 +4712,7 @@ div.list-tasks.panel-body:hover
   color: #58666e!important;
   background-color: #fff!important;
 }
+
 ul#recent-menu-model-list li:nth-child(even)
 {
   background-color: #f9f9f9;
@@ -4776,3 +4777,8 @@ ul#recent-menu-model-list li:nth-child(even)
   pointer-events:none;
   opacity: 0.65;
 }
+
+#admin-affiliate-detail-model-list tr:hover{
+  cursor: pointer;
+}
+
