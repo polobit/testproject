@@ -87,9 +87,9 @@
     text-overflow: ellipsis;">
                 
         {{#if contact_id}}
-                <a href="#contact/{{contact_id}}" data="{{contact_id}}" class="popover_contact"><img class="user-img ref-roundedimg" src="{{img_url}}"/>
+                <a href="#contact/{{contact_id}}" data="{{contact_id}}" class="popover_contact"><img class="user-img ref-roundedimg" src="{{img_url}}" target="_blank"/>
         {{else}}
-                <a href="#contact/{{contact_id}}" data="{{contact_id}}" class="popover_contact"><img class="user-img ref-roundedimg" src="{{defaultGravatarurl 40}}"/>
+                <a href="#contact/{{contact_id}}" data="{{contact_id}}" class="popover_contact"><img class="user-img ref-roundedimg" target="_blank" src="{{defaultGravatarurl 40}}"/>
         {{/if}} 
     
                 {{first_name}} {{last_name}}  </a>

@@ -123,8 +123,8 @@ var id = <%=note_id%>
           padding: 30px 30px 25px 30px;
         }
         .logo{
-        width: 100px;
-        height: 30px;
+        width: 93px;
+        height: auto;
         margin-bottom: 15px;
     }
     .footer-logo img{

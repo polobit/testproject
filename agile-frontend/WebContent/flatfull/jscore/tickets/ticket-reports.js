@@ -125,6 +125,15 @@ var Ticket_Reports = {
 			'feedback', '', true);
 		
 	},
+	getTicketFeedbackTitleFromValue: function(val) {
+
+		if( val == "1")		return "{{agile_lng_translate 'tickets' 'unacceptable'}}";
+		if( val == "2" )	return "{{agile_lng_translate 'tickets' 'can_improve'}}";
+		if( val == "3" )	return "{{agile_lng_translate 'tickets' 'acceptable'}}";
+		if( val == "4" )	return "{{agile_lng_translate 'tickets' 'meets_expectations'}}";
+		if( val == "5" )	return "{{agile_lng_translate 'tickets' 'exceptional'}}";
+	},
+
 	pieforfeedbackReport: function(url, selector, name){
 
 
@@ -166,7 +175,7 @@ var Ticket_Reports = {
 
 					
 					// Push tag name in to array
-					item.push(k);
+					item.push(Ticket_Reports.getTicketFeedbackTitleFromValue(k));
 
 					item.push(v.count/ total * 100);
 					item.push(total);
@@ -179,7 +188,7 @@ var Ticket_Reports = {
 			});
 		});
 	},
-
+	
 	avgFirstRespTime: function(){
 
 		var range = $('#range').html().split("-");
@@ -241,14 +250,18 @@ var Ticket_Reports = {
 	},
 	createAPieChartforFeedback: function(selector, name, animation, AllData, pieData){
 
-		var newname = "Tickets";
-		if(selector == "feedback")
-		{
-			newname = "Feedback";
-		}
-		chart = new Highcharts.Chart({
-				chart : { renderTo : selector, type : 'pie', plotBackgroundColor : null, plotBorderWidth : null, plotShadow : false,
-					marginBottom:30, marginTop:20, marginLeft: 70, marginRight: 70},
+				console.log(AllData);
+				chart = new Highcharts.Chart({
+				chart : { renderTo : selector, 
+							type : 'pie', 
+							plotBackgroundColor : null, 
+							plotBorderWidth : null, 
+							plotShadow : false,
+							marginBottom:30, 
+							marginTop:20, 
+							marginLeft: 70, 
+							marginRight: 70
+						},
 				colors: ['#7266ba','#23b7e5','#27c24c','#fad733','#f05050','#FF9900','#7AF168','#167F80','#0560A2','#D3E6C7'],
 				title : { text : name },
 				tooltip: {
